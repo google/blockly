@@ -29,6 +29,7 @@ goog.provide('Blockly.Block');
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Connection');
+goog.require('Blockly.Extensions');
 goog.require('Blockly.Input');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.Warning');
@@ -157,8 +158,13 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   }
   // Bind an onchange function, if it exists.
   if (goog.isFunction(this.onchange)) {
-    this.onchangeWrapper_ = this.onchange.bind(this);
-    this.workspace.addChangeListener(this.onchangeWrapper_);
+    this.setOnChange(this.onchange);
+  }
+  // Apply extensions, if any.
+  if (Array.isArray(this.extensions)) {
+    for (var i = 0; i < this.extensions.length; ++i) {
+      Blockly.Extensions.apply(this.extensions[i], this);
+    }
   }
 };
 
@@ -642,6 +648,27 @@ Blockly.Block.prototype.setColour = function(colour) {
 };
 
 /**
+ * Sets a callback function to use whenever the block's parent workspace changes.
+ * Usually only called from the constructor, the block type initializer function, or
+ * an extension initializer function.
+ * @param {function(Blockly.Events.Abstract)} onchangeFn The callback to call
+ *     when the block's workspace changes.
+ */
+Blockly.Block.prototype.setOnChange = function(onchangeFn) {
+  if (onchange && !goog.isFunction(onchangeFn)) {
+    throw new AssertionError("onchange must be a function.");
+  }
+  if (this.onchangeWrapper_) {
+    this.workspace.removeChangeListener(this.onchangeWrapper_);
+  }
+  this.onchange = onchangeFn;
+  if (onchangeFn) {
+    this.onchangeWrapper_ = onchange.bind(this);
+    this.workspace.addChangeListener(this.onchangeWrapper_);
+  }
+}
+
+/**
  * Returns the named field from a block.
  * @param {string} name The name of the field.
  * @return {Blockly.Field} Named field, or null if field does not exist.
@@ -1000,6 +1027,13 @@ Blockly.Block.prototype.jsonInit = function(json) {
     var rawValue = json['helpUrl'];
     var localizedValue = Blockly.utils.replaceMessageReferences(rawValue);
     this.setHelpUrl(localizedValue);
+  }
+  if (Array.isArray(json['extensions'])) {
+    var extensionNames = json['extensions'];
+    for (i = 0; i < extensionNames.length; ++i) {      
+      var extensionName = extensionNames[i];
+      Blockly.Extensions.apply(extensionName, this);
+    }
   }
 };
 

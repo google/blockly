@@ -301,6 +301,25 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(false);
   }
+  
+  // find last block on workspace to add new blocks at the bottom 
+  var blocks = workspace.getAllBlocks();
+  var bottomY =0; // container for the y of the bottom block
+  // sort the blocks in reverse order
+  if (blocks.length > 1) {
+	 blocks.sort(function(a, b) { // sort the block acording to their position and height
+     var aXY = a.getRelativeToSurfaceXY(); // top left corner of block a
+  	 var bXY = b.getRelativeToSurfaceXY();
+	 var aH = a.height; // height of block a
+	 var bH = b.height;
+	 return (bXY.y + bH) - (aXY.y + aH); // sort in reverse order
+	});
+  }
+  if (blocks.length > 0) {
+	  bottomY = blocks[0].getRelativeToSurfaceXY().y + blocks[0].height ;
+  }
+  // end
+  
   for (var i = 0; i < childCount; i++) {
     var xmlChild = xml.childNodes[i];
     var name = xmlChild.nodeName.toLowerCase();
@@ -311,7 +330,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
       // to be moved to a nested destination in the next operation.
       var block = Blockly.Xml.domToBlock(xmlChild, workspace);
       var blockX = parseInt(xmlChild.getAttribute('x'), 10);
-      var blockY = parseInt(xmlChild.getAttribute('y'), 10);
+      var blockY = parseInt(xmlChild.getAttribute('y'), 10) + bottomY; // add bottomY to be below all blocks
       if (!isNaN(blockX) && !isNaN(blockY)) {
         block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
       }

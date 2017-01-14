@@ -1342,3 +1342,26 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
 Blockly.Block.prototype.makeConnection_ = function(type) {
   return new Blockly.Connection(this, type);
 };
+
+/**
+ * Checks whether all inputs are filled.
+ * @return {boolean} True if all inputs are filled.
+ */
+Blockly.Block.prototype.isFilled = function() {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    if (!input.connection) {
+      continue;
+    }
+    var target = input.connection.targetBlock();
+    if (!target || !target.isFilled()) {
+      return false;
+    }
+  }
+
+  var next = this.getNextBlock();
+  if (next) {
+    return next.isFilled();
+  }
+
+  return true;
+};

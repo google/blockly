@@ -432,31 +432,25 @@ Blockly.Blocks['logic_negate'] = {
   }
 };
 
-Blockly.Blocks['logic_boolean'] = {
-  /**
-   * Block for boolean data type: true and false.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": "%1",
-      "args0": [
-        {
-          "type": "field_dropdown",
-          "name": "BOOL",
-          "options": [
-            ["%{bky_logic_boolean_true}", "TRUE"],
-            ["%{bky_logic_boolean_false}", "FALSE"]
-          ]
-        }
-      ],
-      "output": "Boolean",
-      "colour": Blockly.Blocks.logic.HUE,
-      "tooltip": Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP,
-      "helpUrl": Blockly.Msg.LOGIC_BOOLEAN_HELPURL
-    });
-  }
-};
+// Block for boolean data type: true and false.
+Blockly.defineBlocksWithJsonArray([{
+  "type": "logic_boolean",
+  "message0": "%1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "BOOL",
+      "options": [
+        ["%{BKY_LOGIC_BOOLEAN_TRUE}", "TRUE"],
+        ["%{BKY_LOGIC_BOOLEAN_FALSE}", "FALSE"]
+      ]
+    }
+  ],
+  "output": "Boolean",
+  "colour": "%{BKY_LOGIC_HUE}",
+  "tooltip": "%{BKY_LOGIC_BOOLEAN_TOOLTIP}",
+  "helpUrl": "%{BKY_LOGIC_BOOLEAN_HELPURL}"
+}]);
 
 Blockly.Blocks['logic_null'] = {
   /**

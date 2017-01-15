@@ -641,7 +641,7 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
  */
  Blockly.Scrollbar.prototype.updateDisplay_ = function() {
   var show = true;
-  // Check whether our parent/container is visible. 
+  // Check whether our parent/container is visible.
   if (!this.containerVisible_) {
     show = false;
   } else {

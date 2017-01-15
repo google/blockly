@@ -36,7 +36,7 @@ goog.require('goog.userAgent');
 
 
 /**
- * Add a CSS class to a element.
+ * Add a CSS class to an element.
  * Similar to Closure's goog.dom.classes.add, except it handles SVG elements.
  * @param {!Element} element DOM element to add class to.
  * @param {string} className Name of class to add.
@@ -55,7 +55,7 @@ Blockly.utils.addClass = function(element, className) {
 };
 
 /**
- * Remove a CSS class from a element.
+ * Remove a CSS class from an element.
  * Similar to Closure's goog.dom.classes.remove, except it handles SVG elements.
  * @param {!Element} element DOM element to remove class from.
  * @param {string} className Name of class to remove.
@@ -84,14 +84,14 @@ Blockly.utils.removeClass = function(element, className) {
 /**
  * Checks if an element has the specified CSS class.
  * Similar to Closure's goog.dom.classes.has, except it handles SVG elements.
- * @param {!Element} element DOM element to check.    
- * @param {string} className Name of class to check.    
- * @return {boolean} True if class exists, false otherwise.   
- * @private   
- */   
- Blockly.utils.hasClass = function(element, className) {    
-   var classes = element.getAttribute('class');    
-   return (' ' + classes + ' ').indexOf(' ' + className + ' ') != -1;    
+ * @param {!Element} element DOM element to check.
+ * @param {string} className Name of class to check.
+ * @return {boolean} True if class exists, false otherwise.
+ * @private
+ */
+ Blockly.utils.hasClass = function(element, className) {
+   var classes = element.getAttribute('class');
+   return (' ' + classes + ' ').indexOf(' ' + className + ' ') != -1;
  };
 
 /**
@@ -144,7 +144,7 @@ Blockly.utils.getRelativeXY = function(element) {
     }
   }
 
-  // Then check for style = transform: translate(...) or translate3d(...) 
+  // Then check for style = transform: translate(...) or translate3d(...)
   var style = element.getAttribute('style');
   if (style && style.indexOf('translate') > -1) {
     var styleComponents = style.match(Blockly.utils.getRelativeXY.XY_2D_REGEX_);
@@ -164,7 +164,7 @@ Blockly.utils.getRelativeXY = function(element) {
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
- * the div blockly was injected into. 
+ * the div blockly was injected into.
  * @param {!Element} element SVG element to find the coordinates of. If this is
  *     not a child of the div blockly was injected into, the behaviour is
  *     undefined.
@@ -185,19 +185,19 @@ Blockly.utils.getInjectionDivXY_ = function(element) {
     }
     element = element.parentNode;
   }
-  return new goog.math.Coordinate(x, y);    
+  return new goog.math.Coordinate(x, y);
 };
 
 /**
  * Return the scale of this element.
  * @param {!Element} element  The element to find the coordinates of.
- * @return {!number} number represending the scale applied to the element.
+ * @return {!number} Number representing the scale applied to the element.
  * @private
  */
 Blockly.utils.getScale_ = function(element) {
-  var scale = 1;  
+  var scale = 1;
   var transform = element.getAttribute('transform');
-   if (transform) {
+  if (transform) {
     var transformComponents =
         transform.match(Blockly.utils.getScale_.REGEXP_);
     if (transformComponents && transformComponents[0]) {
@@ -415,11 +415,11 @@ Blockly.utils.replaceMessageReferences = function(message) {
   var interpolatedResult = Blockly.utils.tokenizeInterpolation_(message, false);
   // When parseInterpolationTokens == false, interpolatedResult should be at
   // most length 1.
-  return interpolatedResult.length ? interpolatedResult[0] : "";
+  return interpolatedResult.length ? interpolatedResult[0] : '';
 }
 
 /**
- * Internal implemention of the message reference and interpolation token
+ * Internal implementation of the message reference and interpolation token
  * parsing used by tokenizeInterpolation() and replaceMessageReferences().
  * @param {string} message Text which might contain string table references and
  *     interpolation tokens.
@@ -506,12 +506,12 @@ Blockly.utils.tokenizeInterpolation_ = function(message, parseInterpolationToken
             // No entry found in the string table. Pass reference as string.
             tokens.push('%{' + rawKey + '}');
           }
-          buffer.length = 0;  // Clear the array
+          buffer.length = 0;  // Clear the array.
           state = 0;
         } else {
           tokens.push('%{' + rawKey + '}');
           buffer.length = 0;
-          state = 0; // and parse as string literal.
+          state = 0;  // And parse as string literal.
         }
       }
     }

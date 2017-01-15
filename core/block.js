@@ -1344,11 +1344,15 @@ Blockly.Block.prototype.makeConnection_ = function(type) {
  * @return {boolean} True if all inputs are filled, false otherwise.
  */
 Blockly.Block.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled) {
-  // Handle the default value for the optional argument.
+  // Account for the shadow block filledness toggle.
   if (opt_shadowBlocksAreFilled === undefined) {
     opt_shadowBlocksAreFilled = true;
   }
+  if (!opt_shadowBlocksAreFilled && this.isShadow()) {
+    return false;
+  }
 
+  // Recursively check each input block of the current block.
   for (var i = 0, input; input = this.inputList[i]; i++) {
     if (!input.connection) {
       continue;
@@ -1357,11 +1361,9 @@ Blockly.Block.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled) {
     if (!target || !target.allInputsFilled(opt_shadowBlocksAreFilled)) {
       return false;
     }
-    if (!opt_shadowBlocksAreFilled && target.isShadow()) {
-      return false;
-    }
   }
 
+  // Recursively check the next block after the current block.
   var next = this.getNextBlock();
   if (next) {
     return next.allInputsFilled(opt_shadowBlocksAreFilled);

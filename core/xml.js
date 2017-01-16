@@ -302,24 +302,6 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     workspace.setResizesEnabled(false);
   }
   
-  // find last block on workspace to add new blocks at the bottom 
-  var blocks = workspace.getAllBlocks();
-  var bottomY =0; // container for the y of the bottom block
-  // sort the blocks in reverse order
-  if (blocks.length > 1) {
-	 blocks.sort(function(a, b) { // sort the block acording to their position and height
-     var aXY = a.getRelativeToSurfaceXY(); // top left corner of block a
-  	 var bXY = b.getRelativeToSurfaceXY();
-	 var aH = a.height; // height of block a
-	 var bH = b.height;
-	 return (bXY.y + bH) - (aXY.y + aH); // sort in reverse order
-	});
-  }
-  if (blocks.length > 0) {
-	  bottomY = blocks[0].getRelativeToSurfaceXY().y + blocks[0].height ;
-  }
-  // end
-  
   for (var i = 0; i < childCount; i++) {
     var xmlChild = xml.childNodes[i];
     var name = xmlChild.nodeName.toLowerCase();
@@ -330,7 +312,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
       // to be moved to a nested destination in the next operation.
       var block = Blockly.Xml.domToBlock(xmlChild, workspace);
       var blockX = parseInt(xmlChild.getAttribute('x'), 10);
-      var blockY = parseInt(xmlChild.getAttribute('y'), 10) + bottomY; // add bottomY to be below all blocks
+      var blockY = parseInt(xmlChild.getAttribute('y'), 10); // add bottomY to be below all blocks
       if (!isNaN(blockX) && !isNaN(blockY)) {
         block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
       }
@@ -338,6 +320,122 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
       goog.asserts.fail('Shadow block cannot be a top-level block.');
     }
   }
+  if (!existingGroup) {
+    Blockly.Events.setGroup(false);
+  }
+  Blockly.Field.stopCache();
+
+  workspace.updateVariableList(false);
+  // Re-enable workspace resizing.
+  if (workspace.setResizesEnabled) {
+    workspace.setResizesEnabled(true);
+  }
+};
+
+/**
+ * Decode an XML DOM and create blocks on the workspace.
+ * Blocks are added below existing blocks and align to the existing blocks
+ * @param {!Element} xml XML DOM.
+ * @param {!Blockly.Workspace} workspace The workspace.
+ */
+Blockly.Xml.domToWorkspaceAlign = function(xml, workspace) {
+  if (xml instanceof Blockly.Workspace) {
+    var swap = xml;
+    xml = workspace;
+    workspace = swap;
+    console.warn('Deprecated call to Blockly.Xml.domToWorkspace, ' +
+                 'swap the arguments.');
+  }
+  var width;  // Not used in LTR.
+  if (workspace.RTL) {
+    width = workspace.getWidth();
+  }
+  Blockly.Field.startCache();
+  // Safari 7.1.3 is known to provide node lists with extra references to
+  // children beyond the lists' length.  Trust the length, do not use the
+  // looping pattern of checking the index for an object.
+  var childCount = xml.childNodes.length;
+  var existingGroup = Blockly.Events.getGroup();
+  if (!existingGroup) {
+    Blockly.Events.setGroup(true);
+  }
+
+  // Disable workspace resizes as an optimization.
+  if (workspace.setResizesEnabled) {
+    workspace.setResizesEnabled(false);
+  }
+  
+  // find bottom position and alignment of the current blocks to add new blocks at the bottom 
+  //var blocks = workspace.getAllBlocks();
+  var blocks = workspace.getTopBlocks();
+  var offsetY = 0; // container for the y of the bottom block
+  var offsetX = 0; // align the code with the existing one
+
+  if (blocks.length > 0) {
+	  // initialize the position of the corners using position 
+	  // of the first block
+	  var bHW = blocks[0].getHeightWidth();
+	  var bXY = blocks[0].getRelativeToSurfaceXY();
+	  var topX = bXY.x;
+	  var farY = bXY.y + bHW.height;
+	  // loop over remaining blocks
+	  for (var i = 1; i < blocks.length; i++) {
+		  bHW = blocks[i].getHeightWidth();
+		  bXY = blocks[i].getRelativeToSurfaceXY();
+		  if (bXY.x < topX) {
+			  topX = bXY.x;
+		  }
+		  if (bXY.y + bHW.height > farY ) {
+			  farY =bXY.y + bHW.height;
+		  }
+	  }
+   }
+
+  // Load new blocks keeping track of them in a list
+  var newblocks = []; //list of new blocks
+  var initX = []; // list of new block x
+  var initY = []; // list of new block y
+  var newX = parseInt(xml.childNodes[0].getAttribute('x'), 10); // x of top corner
+  var newY = parseInt(xml.childNodes[0].getAttribute('y'), 10); // y of top corner
+  for (var i = 0; i < childCount; i++) {
+    var xmlChild = xml.childNodes[i];
+    var name = xmlChild.nodeName.toLowerCase();
+    if (name == 'block' ||
+        (name == 'shadow' && !Blockly.Events.recordUndo)) {
+      // Allow top-level shadow blocks if recordUndo is disabled since
+      // that means an undo is in progress.  Such a block is expected
+      // to be moved to a nested destination in the next operation.
+      var block = Blockly.Xml.domToBlock(xmlChild, workspace);
+	  var blockX = parseInt(xmlChild.getAttribute('x'), 10);
+      var blockY = parseInt(xmlChild.getAttribute('y'), 10);
+      initX.push(blockX);
+      initY.push(blockY);
+	  newblocks.push(block);
+	  if (blockX < newX) {
+		  newX = blockX;
+	  }
+	  if (blockY < newY) {
+		  newY = blockY;
+	  }
+	  
+    } else if (name == 'shadow') {
+      goog.asserts.fail('Shadow block cannot be a top-level block.');
+    }
+  }
+  
+  // compute the offset
+  if (blocks.length>0) {
+    offsetY = farY - newY;
+    offsetX = topX - newX;
+  }
+  
+  // move the blocks
+  for (var i =0; i<newblocks.length; i++) {
+	  if (!isNaN(initX[i]) && !isNaN(initY[i])) {
+        block.moveBy(workspace.RTL ? width - (initX[i]+offsetX) : (initX[i]+offsetX), initY[i]+offsetY);
+      }
+  }
+  
   if (!existingGroup) {
     Blockly.Events.setGroup(false);
   }

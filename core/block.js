@@ -1342,3 +1342,39 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
 Blockly.Block.prototype.makeConnection_ = function(type) {
   return new Blockly.Connection(this, type);
 };
+
+/**
+ * Recursively checks whether all statement and value inputs are filled with
+ * blocks. Also checks all following statement blocks in this stack.
+ * @param {boolean=} opt_shadowBlocksAreFilled An optional argument controlling
+ *     whether shadow blocks are counted as filled. Defaults to true.
+ * @return {boolean} True if all inputs are filled, false otherwise.
+ */
+Blockly.Block.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled) {
+  // Account for the shadow block filledness toggle.
+  if (opt_shadowBlocksAreFilled === undefined) {
+    opt_shadowBlocksAreFilled = true;
+  }
+  if (!opt_shadowBlocksAreFilled && this.isShadow()) {
+    return false;
+  }
+
+  // Recursively check each input block of the current block.
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    if (!input.connection) {
+      continue;
+    }
+    var target = input.connection.targetBlock();
+    if (!target || !target.allInputsFilled(opt_shadowBlocksAreFilled)) {
+      return false;
+    }
+  }
+
+  // Recursively check the next block after the current block.
+  var next = this.getNextBlock();
+  if (next) {
+    return next.allInputsFilled(opt_shadowBlocksAreFilled);
+  }
+
+  return true;
+};

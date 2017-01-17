@@ -298,7 +298,7 @@ Blockly.Dart['text_prompt'] = Blockly.Dart['text_prompt_ext'];
 
 Blockly.Dart['text_count'] = function(block) {
   var text = Blockly.Dart.valueToCode(block, 'TEXT',
-      Blockly.Dart.ORDER_MEMBER) || '\'\'';
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
   var sub = Blockly.Dart.valueToCode(block, 'SUB',
       Blockly.Dart.ORDER_NONE) || '\'\'';
   // Substring count is not a native Dart function.  Define one.
@@ -318,18 +318,18 @@ Blockly.Dart['text_count'] = function(block) {
         '  return count;',
         '}']);
   var code = functionName + '(' + text + ')';
-  return [code, Blockly.Dart.ORDER_SUBTRACTION];
+  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
 Blockly.Dart['text_replace'] = function(block) {
   var text = Blockly.Dart.valueToCode(block, 'TEXT',
-      Blockly.Dart.ORDER_MEMBER) || '\'\'';
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
   var from = Blockly.Dart.valueToCode(block, 'FROM',
       Blockly.Dart.ORDER_NONE) || '\'\'';
   var to = Blockly.Dart.valueToCode(block, 'TO',
       Blockly.Dart.ORDER_NONE) || '\'\'';
   var code = text + '.replaceAll(' + from + ', ' + to + ')';
-  return [code, Blockly.Dart.ORDER_MEMBER];
+  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
 Blockly.Dart['text_reverse'] = function(block) {
@@ -337,24 +337,24 @@ Blockly.Dart['text_reverse'] = function(block) {
   // http://stackoverflow.com/a/21613700/3529104
   // Implementing something is possibly better than not implementing anything?
   var text = Blockly.Dart.valueToCode(block, 'TEXT',
-      Blockly.Dart.ORDER_MEMBER) || '\'\'';
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
   var code = 'new String.fromCharCodes(' + text + '.runes.toList().reversed)';
   // XXX What should the operator precedence be for a `new`?
-  return [code, Blockly.Dart.ORDER_MEMBER];
+  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
 Blockly.Dart['text_split'] = function(block) {
   var text = Blockly.Dart.valueToCode(block, 'TEXT',
-      Blockly.Dart.ORDER_MEMBER) || '\'\'';
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
   var code = text + '.split(new RegExp(\'\\\\s+\'))';
-  return [code, Blockly.Dart.ORDER_MEMBER];
+  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
 Blockly.Dart['text_split_on'] = function(block) {
   var text = Blockly.Dart.valueToCode(block, 'TEXT',
-      Blockly.Dart.ORDER_MEMBER) || '\'\'';
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
   var sep = Blockly.Dart.valueToCode(block, 'SEP',
       Blockly.Dart.ORDER_NONE) || '\'\'';
   var code = text + '.split(' + sep + ')';
-  return [code, Blockly.Dart.ORDER_MEMBER];
+  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };

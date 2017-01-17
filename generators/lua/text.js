@@ -292,3 +292,10 @@ Blockly.Lua['text_prompt_ext'] = function(block) {
 };
 
 Blockly.Lua['text_prompt'] = Blockly.Lua['text_prompt_ext'];
+
+Blockly.Lua['text_reverse'] = function(block) {
+  var text = Blockly.Lua.valueToCode(block, 'TEXT',
+      Blockly.Lua.ORDER_HIGH) || '\'\'';
+  var code = text + '.reverse()';
+  return [code, Blockly.Lua.ORDER_HIGH];
+};

@@ -317,7 +317,7 @@ Blockly.Dart['text_count'] = function(block) {
         '  }',
         '  return count;',
         '}']);
-  var code = functionName + '(' + text + ')';
+  var code = functionName + '(' + text + ', ' + sub + ')';
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 

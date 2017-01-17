@@ -37,8 +37,8 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
             [attr.aria-labelledby]="workspaceTitle.id"
             (keydown)="onKeypress($event, tree)"
             (focus)="speakLocation(i)">
-          <blockly-workspace-tree [level]="0" [block]="block" [tree]="tree" [isTopLevel]="true">
-          </blockly-workspace-tree>
+          <blockly-workspace-block [level]="0" [block]="block" [tree]="tree" [isTopLevel]="true">
+          </blockly-workspace-block>
         </ol>
 
         <span *ngIf="workspace.topBlocks_.length === 0">
@@ -55,7 +55,7 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
       </div>
     </div>
   `,
-  directives: [blocklyApp.WorkspaceTreeComponent],
+  directives: [blocklyApp.WorkspaceBlockComponent],
   pipes: [blocklyApp.TranslatePipe]
 })
 .Class({

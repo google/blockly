@@ -24,8 +24,8 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
-blocklyApp.WorkspaceTreeComponent = ng.core.Component({
-  selector: 'blockly-workspace-tree',
+blocklyApp.WorkspaceBlockComponent = ng.core.Component({
+  selector: 'blockly-workspace-block',
   template: `
     <li [id]="idMap['blockRoot']" role="treeitem" class="blocklyHasChildren"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummary'], 'blockly-translate-workspace-block')"
@@ -44,10 +44,10 @@ blocklyApp.WorkspaceTreeComponent = ng.core.Component({
             </blockly-field-segment>
           </li>
 
-          <blockly-workspace-tree *ngIf="blockInput.connection && blockInput.connection.targetBlock()"
-                                  [block]="blockInput.connection.targetBlock()" [level]="level + 1"
-                                  [tree]="tree">
-          </blockly-workspace-tree>
+          <blockly-workspace-block *ngIf="blockInput.connection && blockInput.connection.targetBlock()"
+                                   [block]="blockInput.connection.targetBlock()" [level]="level + 1"
+                                   [tree]="tree">
+          </blockly-workspace-block>
           <li #inputList [id]="idMap['inputList' + i]" role="treeitem"
               *ngIf="blockInput.connection && !blockInput.connection.targetBlock()"
               [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['inputMenuLabel' + i], 'blockly-submenu-indicator')"
@@ -65,13 +65,13 @@ blocklyApp.WorkspaceTreeComponent = ng.core.Component({
       </ol>
     </li>
 
-    <blockly-workspace-tree *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
-                            [block]="block.nextConnection.targetBlock()"
-                            [level]="level" [tree]="tree">
-    </blockly-workspace-tree>
+    <blockly-workspace-block *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
+                             [block]="block.nextConnection.targetBlock()"
+                             [level]="level" [tree]="tree">
+    </blockly-workspace-block>
   `,
   directives: [blocklyApp.FieldSegmentComponent, ng.core.forwardRef(function() {
-    return blocklyApp.WorkspaceTreeComponent;
+    return blocklyApp.WorkspaceBlockComponent;
   })],
   inputs: ['block', 'level', 'tree', 'isTopLevel'],
   pipes: [blocklyApp.TranslatePipe]

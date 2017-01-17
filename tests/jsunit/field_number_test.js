@@ -32,13 +32,17 @@ function test_fieldnumber_constructor() {
   assertEquals(field.max_, Infinity);
   assertEquals(field.precision_, 0);
 
-  // Numeric value
+  // Numeric values
   field = new Blockly.FieldNumber(1);
   assertEquals(field.getValue(), "1");
+  field = new Blockly.FieldNumber(1.5);
+  assertEquals(field.getValue(), "1.5");
 
   // String value
   field = new Blockly.FieldNumber("2");
   assertEquals(field.getValue(), "2");
+  field = new Blockly.FieldNumber("2.5");
+  assertEquals(field.getValue(), "2.5");
 
   // All values
   field = new Blockly.FieldNumber(

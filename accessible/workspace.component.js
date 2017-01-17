@@ -39,6 +39,7 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
             (focus)="speakLocation(i)">
           <blockly-workspace-block [level]="0" [block]="block" [tree]="tree" [isTopLevel]="true">
           </blockly-workspace-block>
+          {{tree.id}}
         </ol>
 
         <span *ngIf="workspace.topBlocks_.length === 0">

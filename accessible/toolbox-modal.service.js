@@ -152,27 +152,17 @@ blocklyApp.ToolboxModalService = ng.core.Class({
     this.showModal_(selectedToolboxCategories, function(block) {
       var blockDescription = that.utilsService.getBlockDescription(block);
 
-      // Clean up the active desc for the destination tree.
-      var oldDestinationTreeId = that.treeService.getTreeIdForBlock(
+      // Clear the active desc for the destination tree, so that it can be
+      // cleanly reinstated after the new block is attached.
+      var destinationTreeId = that.treeService.getTreeIdForBlock(
           that.blockConnectionService.getMarkedConnectionSourceBlock().id);
-      that.treeService.clearActiveDesc(oldDestinationTreeId);
+      that.treeService.clearActiveDesc(destinationTreeId);
       var newBlockId = that.blockConnectionService.attachToMarkedConnection(
           block);
 
       // Invoke a digest cycle, so that the DOM settles.
       setTimeout(function() {
         that.treeService.focusOnBlock(newBlockId);
-
-        var newDestinationTreeId = that.treeService.getTreeIdForBlock(
-            newBlockId);
-        if (newDestinationTreeId != oldDestinationTreeId) {
-          // It is possible for the tree ID for the pasted block to change
-          // after the paste operation, e.g. when inserting a block between two
-          // existing blocks that are joined together. In this case, we need to
-          // also reset the active desc for the old destination tree.
-          that.treeService.initActiveDesc(oldDestinationTreeId);
-        }
-
         that.notificationsService.speak(
             'Attached. Now on, ' + blockDescription + ', block in workspace.');
       });
@@ -187,6 +177,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
       var xml = Blockly.Xml.blockToDom(block);
       var newBlockId = Blockly.Xml.domToBlock(blocklyApp.workspace, xml).id;
 
+      // Invoke a digest cycle, so that the DOM settles.
       setTimeout(function() {
         that.treeService.focusOnBlock(newBlockId);
         that.notificationsService.speak(

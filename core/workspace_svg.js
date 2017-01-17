@@ -1000,7 +1000,7 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
   // TODO: Remove terminateDrag and compensate for coordinate skew during zoom.
   Blockly.terminateDrag_();
   // The vertical scroll distance that corresponds to a click of a zoom button.
-  const PIXELS_PER_ZOOM_STEP = 50;
+  var PIXELS_PER_ZOOM_STEP = 50;
   var delta = -e.deltaY / PIXELS_PER_ZOOM_STEP;
   var position = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
       this.getInverseScreenCTM());

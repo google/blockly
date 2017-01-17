@@ -45,7 +45,7 @@ goog.require('goog.math');
  */
 Blockly.FieldNumber =
     function(opt_value, opt_min, opt_max, opt_precision, opt_validator) {
-  opt_value = goog.isNumber(opt_value) ? String(opt_value) : "0";
+  opt_value = (opt_value && !isNaN(opt_value)) ? String(opt_value) : "0";
   Blockly.FieldNumber.superClass_.constructor.call(
       this, opt_value, opt_validator);
   this.setConstraints(opt_min, opt_max, opt_precision);

@@ -19,7 +19,7 @@
  */
 
  /**
- * @fileoverview Tests for Blockly.FieldNumber
+ * @fileoverview Tests for Blockly.FieldAngle
  * @author Anm@anm.me (Andrew n marshall)
  */
 'use strict';

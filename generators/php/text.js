@@ -248,3 +248,46 @@ Blockly.PHP['text_prompt_ext'] = function(block) {
 };
 
 Blockly.PHP['text_prompt'] = Blockly.PHP['text_prompt_ext'];
+
+Blockly.PHP['text_count'] = function(block) {
+  var text = Blockly.PHP.valueToCode(block, 'TEXT',
+      Blockly.PHP.ORDER_MEMBER) || '\'\'';
+  var sub = Blockly.PHP.valueToCode(block, 'SUB',
+      Blockly.PHP.ORDER_NONE) || '\'\'';
+  var code = 'substr_count(' + text + ', ' + sub + ')';
+  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+};
+
+Blockly.PHP['text_replace'] = function(block) {
+  var text = Blockly.PHP.valueToCode(block, 'TEXT',
+      Blockly.PHP.ORDER_MEMBER) || '\'\'';
+  var from = Blockly.PHP.valueToCode(block, 'FROM',
+      Blockly.PHP.ORDER_NONE) || '\'\'';
+  var to = Blockly.PHP.valueToCode(block, 'TO',
+      Blockly.PHP.ORDER_NONE) || '\'\'';
+  var code = 'str_replace(' + from + ', ' + to + ', ' + text + ')';
+  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+};
+
+Blockly.PHP['text_reverse'] = function(block) {
+  var text = Blockly.PHP.valueToCode(block, 'TEXT',
+      Blockly.PHP.ORDER_MEMBER) || '\'\'';
+  var code = 'strrev(' + text + ')';
+  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+};
+
+Blockly.PHP['text_split'] = function(block) {
+  var text = Blockly.PHP.valueToCode(block, 'TEXT',
+      Blockly.PHP.ORDER_MEMBER) || '\'\'';
+  var code = 'preg_split(\'/\\s+/\', ' + text + ')';
+  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+};
+
+Blockly.PHP['text_split_on'] = function(block) {
+  var text = Blockly.PHP.valueToCode(block, 'TEXT',
+      Blockly.PHP.ORDER_MEMBER) || '\'\'';
+  var sep = Blockly.PHP.valueToCode(block, 'SEP',
+      Blockly.PHP.ORDER_NONE) || '\'\'';
+  var code = 'explode(' + sep + ', ' + text + ')';
+  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+};

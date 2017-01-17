@@ -295,3 +295,66 @@ Blockly.Dart['text_prompt_ext'] = function(block) {
 };
 
 Blockly.Dart['text_prompt'] = Blockly.Dart['text_prompt_ext'];
+
+Blockly.Dart['text_count'] = function(block) {
+  var text = Blockly.Dart.valueToCode(block, 'TEXT',
+      Blockly.Dart.ORDER_MEMBER) || '\'\'';
+  var sub = Blockly.Dart.valueToCode(block, 'SUB',
+      Blockly.Dart.ORDER_NONE) || '\'\'';
+  // Substring count is not a native Dart function.  Define one.
+  var functionName = Blockly.Dart.provideFunction_(
+      'text_count',
+      ['int ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
+        '(String string, String search) {',
+        '  int index = 0;',
+        '  int count = 0;',
+        '  while (index != -1) {',
+        '    index = string.indexOf(search, index);',
+        '    if (index != -1) {',
+        '      count++;',
+        '     index += search.length;',
+        '    }',
+        '  }',
+        '  return count;',
+        '}']);
+  var code = functionName + '(' + text + ')';
+  return [code, Blockly.Dart.ORDER_SUBTRACTION];
+};
+
+Blockly.Dart['text_replace'] = function(block) {
+  var text = Blockly.Dart.valueToCode(block, 'TEXT',
+      Blockly.Dart.ORDER_MEMBER) || '\'\'';
+  var from = Blockly.Dart.valueToCode(block, 'FROM',
+      Blockly.Dart.ORDER_NONE) || '\'\'';
+  var to = Blockly.Dart.valueToCode(block, 'TO',
+      Blockly.Dart.ORDER_NONE) || '\'\'';
+  var code = text + '.replaceAll(' + from + ', ' + to + ')';
+  return [code, Blockly.Dart.ORDER_MEMBER];
+};
+
+Blockly.Dart['text_reverse'] = function(block) {
+  // There isn't a sensible way to do this in Dart. See:
+  // http://stackoverflow.com/a/21613700/3529104
+  // Implementing something is possibly better than not implementing anything?
+  var text = Blockly.Dart.valueToCode(block, 'TEXT',
+      Blockly.Dart.ORDER_MEMBER) || '\'\'';
+  var code = 'new String.fromCharCodes(' + text + '.runes.toList().reversed)';
+  // XXX What should the operator precedence be for a `new`?
+  return [code, Blockly.Dart.ORDER_MEMBER];
+};
+
+Blockly.Dart['text_split'] = function(block) {
+  var text = Blockly.Dart.valueToCode(block, 'TEXT',
+      Blockly.Dart.ORDER_MEMBER) || '\'\'';
+  var code = text + '.split(new RegExp(\'\\\\s+\'))';
+  return [code, Blockly.Dart.ORDER_MEMBER];
+};
+
+Blockly.Dart['text_split_on'] = function(block) {
+  var text = Blockly.Dart.valueToCode(block, 'TEXT',
+      Blockly.Dart.ORDER_MEMBER) || '\'\'';
+  var sep = Blockly.Dart.valueToCode(block, 'SEP',
+      Blockly.Dart.ORDER_NONE) || '\'\'';
+  var code = text + '.split(' + sep + ')';
+  return [code, Blockly.Dart.ORDER_MEMBER];
+};

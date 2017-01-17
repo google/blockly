@@ -302,3 +302,46 @@ Blockly.JavaScript['text_prompt_ext'] = function(block) {
 };
 
 Blockly.JavaScript['text_prompt'] = Blockly.JavaScript['text_prompt_ext'];
+
+Blockly.JavaScript['text_count'] = function(block) {
+  var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
+      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
+  var sub = Blockly.JavaScript.valueToCode(block, 'SUB',
+      Blockly.JavaScript.ORDER_NONE) || '\'\'';
+  var code = text + '.split(' + sub + ').length - 1';
+  return [code, Blockly.JavaScript.ORDER_SUBTRACTION];
+};
+
+Blockly.JavaScript['text_replace'] = function(block) {
+  var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
+      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
+  var from = Blockly.JavaScript.valueToCode(block, 'FROM',
+      Blockly.JavaScript.ORDER_NONE) || '\'\'';
+  var to = Blockly.JavaScript.valueToCode(block, 'TO',
+      Blockly.JavaScript.ORDER_NONE) || '\'\'';
+  var code = text + '.replace(' + from + ', ' + to + ')';
+  return [code, Blockly.JavaScript.ORDER_MEMBER];
+};
+
+Blockly.JavaScript['text_reverse'] = function(block) {
+  var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
+      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
+  var code = text + '.split(\'\').reverse().join(\'\')';
+  return [code, Blockly.JavaScript.ORDER_MEMBER];
+};
+
+Blockly.JavaScript['text_split'] = function(block) {
+  var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
+      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
+  var code = text + '.split(/\\s+/g)';
+  return [code, Blockly.JavaScript.ORDER_MEMBER];
+};
+
+Blockly.JavaScript['text_split_on'] = function(block) {
+  var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
+      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
+  var sep = Blockly.JavaScript.valueToCode(block, 'SEP',
+      Blockly.JavaScript.ORDER_NONE) || '\'\'';
+  var code = text + '.split(' + sep + ')';
+  return [code, Blockly.JavaScript.ORDER_MEMBER];
+};

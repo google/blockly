@@ -160,12 +160,6 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   if (goog.isFunction(this.onchange)) {
     this.setOnChange(this.onchange);
   }
-  // Apply extensions, if any.
-  if (Array.isArray(this.extensions)) {
-    for (var i = 0; i < this.extensions.length; ++i) {
-      Blockly.Extensions.apply(this.extensions[i], this);
-    }
-  }
 };
 
 /**
@@ -648,25 +642,27 @@ Blockly.Block.prototype.setColour = function(colour) {
 };
 
 /**
- * Sets a callback function to use whenever the block's parent workspace changes.
- * Usually only called from the constructor, the block type initializer function, or
- * an extension initializer function.
+ * Sets a callback function to use whenever the block's parent workspace
+ * changes, replacing any prior onchange handler. This is usually only called
+ * from the constructor, the block type initializer function, or an extension
+ * initializer function.
  * @param {function(Blockly.Events.Abstract)} onchangeFn The callback to call
  *     when the block's workspace changes.
+ * @throws {Error} if onchangeFn is not falsey or a function.
  */
 Blockly.Block.prototype.setOnChange = function(onchangeFn) {
-  if (onchange && !goog.isFunction(onchangeFn)) {
-    throw new AssertionError("onchange must be a function.");
+  if (onchangeFn && !goog.isFunction(onchangeFn)) {
+    throw new Error("onchange must be a function.");
   }
   if (this.onchangeWrapper_) {
     this.workspace.removeChangeListener(this.onchangeWrapper_);
   }
   this.onchange = onchangeFn;
-  if (onchangeFn) {
+  if (this.onchange) {
     this.onchangeWrapper_ = onchangeFn.bind(this);
     this.workspace.addChangeListener(this.onchangeWrapper_);
   }
-}
+};
 
 /**
  * Returns the named field from a block.

@@ -56,14 +56,15 @@ Blockly.Extensions.register = function(name, initFn) {
   if (!goog.isFunction(initFn)) {
     throw new Error('Error: Extension "' + name + '" must be a function');
   }
-Blockly.Extensions.ALL_[name] = initFn;
+  Blockly.Extensions.ALL_[name] = initFn;
 };
 
 /**
- * Applies an extension init method to a block.
+ * Applies an extension method to a block. This should only be called during
+ * block construction.
  * @param {string} name The name of the extension.
- * @param {!Blocky.Block} block The block to initialize with the named
- *     extension.
+ * @param {!Blockly.Block} block The block to apply the named extension to.
+ * @throws {Error} if the extension is not found.
  */
 Blockly.Extensions.apply = function(name, block) {
   var extensionFn = Blockly.Extensions.ALL_[name];
@@ -71,4 +72,4 @@ Blockly.Extensions.apply = function(name, block) {
     throw new Error('Error: Extension "' + name + '" not found.');
   }
   extensionFn.apply(block);
-}
+};

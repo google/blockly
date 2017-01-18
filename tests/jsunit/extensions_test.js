@@ -51,14 +51,14 @@ function test_extension() {
 
     assert(goog.isFunction(Blockly.Extensions.ALL_['extensions_test_before']));
     assert(goog.isFunction(Blockly.Extensions.ALL_['extensions_test_after']));
-    assertEquals(numCallsToBefore, 0);
-    assertEquals(numCallsToAfter, 0);
+    assertEquals(0, numCallsToBefore);
+    assertEquals(0, numCallsToAfter);
 
     var workspace = new Blockly.Workspace();
     var block = new Blockly.Block(workspace, 'extension_test_block');
 
-    assertEquals(numCallsToBefore, 1);
-    assertEquals(numCallsToAfter, 1);
+    assertEquals(1, numCallsToBefore);
+    assertEquals(1, numCallsToAfter);
     assert(block.extendedWithBefore);
     assert(block.extendedWithAfter);
  } finally {

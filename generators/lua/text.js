@@ -315,7 +315,7 @@ Blockly.Lua['text_count'] = function(block) {
         '  return count',
         'end',
       ]);
-  var code = functionName + '(' + text + + ', ' + sub + ')';
+  var code = functionName + '(' + text + ', ' + sub + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 
@@ -346,7 +346,7 @@ Blockly.Lua['text_replace'] = function(block) {
         '  return table.concat(buf)',
         'end',
       ]);
-  var code = functionName + '(' + text + + ', ' + from + ', ' + to + ')';
+  var code = functionName + '(' + text + ', ' + from + ', ' + to + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 

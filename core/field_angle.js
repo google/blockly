@@ -34,7 +34,7 @@ goog.require('goog.userAgent');
 /**
  * Class for an editable angle field.
  * @param {(string|number)=} opt_value The initial content of the field. The
- *     value should cast to a number, and if it does not, "0" will be used.
+ *     value should cast to a number, and if it does not, '0' will be used.
  * @param {Function=} opt_validator An optional function that is called
  *     to validate any constraints on what the user entered.  Takes the new
  *     text as an argument and returns the accepted text or null to abort
@@ -43,11 +43,11 @@ goog.require('goog.userAgent');
  * @constructor
  */
 Blockly.FieldAngle = function(opt_value, opt_validator) {
-  // Add degree symbol: "360°" (LTR) or "°360" (RTL)
+  // Add degree symbol: '360°'' (LTR) or '°360' (RTL)
   this.symbol_ = Blockly.utils.createSvgElement('tspan', {}, null);
   this.symbol_.appendChild(document.createTextNode('\u00B0'));
 
-  opt_value = (opt_value && !isNaN(opt_value)) ? String(opt_value) : "0";
+  opt_value = (opt_value && !isNaN(opt_value)) ? String(opt_value) : '0';
   Blockly.FieldAngle.superClass_.constructor.call(
       this, opt_value, opt_validator);
 };

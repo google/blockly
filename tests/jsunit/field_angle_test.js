@@ -25,15 +25,15 @@
 'use strict';
 
 function test_fieldangle_constructor() {
-  assertEquals(new Blockly.FieldAngle().getValue(), "0");
-  assertEquals(new Blockly.FieldAngle(null).getValue(), "0");
-  assertEquals(new Blockly.FieldAngle(undefined).getValue(), "0");
-  assertEquals(new Blockly.FieldAngle(1).getValue(), "1");
-  assertEquals(new Blockly.FieldAngle(1.5).getValue(), "1.5");
-  assertEquals(new Blockly.FieldAngle("2").getValue(), "2");
-  assertEquals(new Blockly.FieldAngle("2.5").getValue(), "2.5");
+  assertEquals(new Blockly.FieldAngle().getValue(), '0');
+  assertEquals(new Blockly.FieldAngle(null).getValue(), '0');
+  assertEquals(new Blockly.FieldAngle(undefined).getValue(), '0');
+  assertEquals(new Blockly.FieldAngle(1).getValue(), '1');
+  assertEquals(new Blockly.FieldAngle(1.5).getValue(), '1.5');
+  assertEquals(new Blockly.FieldAngle('2').getValue(), '2');
+  assertEquals(new Blockly.FieldAngle('2.5').getValue(), '2.5');
 
   // Bad values
-  assertEquals(new Blockly.FieldAngle("bad").getValue(), "0");
-  assertEquals(new Blockly.FieldAngle(NaN).getValue(), "0");
+  assertEquals(new Blockly.FieldAngle('bad').getValue(), '0');
+  assertEquals(new Blockly.FieldAngle(NaN).getValue(), '0');
 }

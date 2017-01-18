@@ -27,22 +27,22 @@
 function test_fieldnumber_constructor() {
   // No arguments
   var field = new Blockly.FieldNumber();
-  assertEquals(field.getValue(), "0");
+  assertEquals(field.getValue(), '0');
   assertEquals(field.min_, -Infinity);
   assertEquals(field.max_, Infinity);
   assertEquals(field.precision_, 0);
 
   // Numeric values
   field = new Blockly.FieldNumber(1);
-  assertEquals(field.getValue(), "1");
+  assertEquals(field.getValue(), '1');
   field = new Blockly.FieldNumber(1.5);
-  assertEquals(field.getValue(), "1.5");
+  assertEquals(field.getValue(), '1.5');
 
   // String value
-  field = new Blockly.FieldNumber("2");
-  assertEquals(field.getValue(), "2");
-  field = new Blockly.FieldNumber("2.5");
-  assertEquals(field.getValue(), "2.5");
+  field = new Blockly.FieldNumber('2');
+  assertEquals(field.getValue(), '2');
+  field = new Blockly.FieldNumber('2.5');
+  assertEquals(field.getValue(), '2.5');
 
   // All values
   field = new Blockly.FieldNumber(
@@ -50,14 +50,14 @@ function test_fieldnumber_constructor() {
     /* min */ -128,
     /* max */ 127,
     /* precision */ 1);
-  assertEquals(field.getValue(), "0");
+  assertEquals(field.getValue(), '0');
   assertEquals(field.min_, -128);
   assertEquals(field.max_, 127);
   assertEquals(field.precision_, 1);
 
-  // Bad value defaults to "0"
-  field = new Blockly.FieldNumber("bad");
-  assertEquals(field.getValue(), "0");
+  // Bad value defaults to '0'
+  field = new Blockly.FieldNumber('bad');
+  assertEquals(field.getValue(), '0');
   field = new Blockly.FieldNumber(NaN);
-  assertEquals(field.getValue(), "0");
+  assertEquals(field.getValue(), '0');
 }

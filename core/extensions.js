@@ -73,3 +73,24 @@ Blockly.Extensions.apply = function(name, block) {
   }
   extensionFn.apply(block);
 };
+
+/**
+ * Configures the tooltip to mimic the parent block when connected. Otherwise,
+ * uses the tooltip text at the time this extension is initialized. This takes
+ * advantage of the fact that all other values from JSON are initialized before
+ * extensions.
+ * @this {Blockly.Block}
+ * @private
+ */
+Blockly.Extensions.extensionParentTooltip_ = function() {
+  this.tooltipWhenNotConnected_ = this.tooltip;
+  this.setTooltip(function() {
+    var parent = this.getParent();
+    return (parent &&
+      parent.getInputsInline() &&
+      parent.tooltip) ||
+      this.tooltipWhenNotConnected_;
+  }.bind(this));
+};
+Blockly.Extensions.register('parent_tooltip_when_inline',
+    Blockly.Extensions.extensionParentTooltip_);

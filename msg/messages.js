@@ -770,25 +770,25 @@ Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT = 'Prompt for user for some text.';
 Blockly.Msg.TEXT_COUNT_MESSAGE0 = 'count %1 in %2';
 /// url - Information about counting how many times a string appears in another string.
 Blockly.Msg.TEXT_COUNT_HELPURL = '';
-/// tooltip - See [https://github.com/google/blockly/wiki/Text#printing-text
-/// https://github.com/google/blockly/wiki/Text#printing-text].
-Blockly.Msg.TEXT_COUNT_TOOLTIP = 'Count how many times a string occurs in another string.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Text
+/// https://github.com/google/blockly/wiki/Text].
+Blockly.Msg.TEXT_COUNT_TOOLTIP = 'Count how many times some text occurs within some other text.';
 
 /// message0 interpolation string
 Blockly.Msg.TEXT_REPLACE_MESSAGE0 = 'replace %1 with %2 in %3';
 /// url - Information about replacing a string within another string.
 Blockly.Msg.TEXT_REPLACE_HELPURL = '';
-/// tooltip - See [https://github.com/google/blockly/wiki/Text#printing-text
-/// https://github.com/google/blockly/wiki/Text#printing-text].
-Blockly.Msg.TEXT_REPLACE_TOOLTIP = 'Replace a string within another string.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Text
+/// https://github.com/google/blockly/wiki/Text].
+Blockly.Msg.TEXT_REPLACE_TOOLTIP = 'Replace all occurances of some text within some other text.';
 
 /// message0 interpolation string
 Blockly.Msg.TEXT_REVERSE_MESSAGE0 = 'reverse %1';
 /// url - Information about reversing a string.
 Blockly.Msg.TEXT_REVERSE_HELPURL = '';
-/// tooltip - See [https://github.com/google/blockly/wiki/Text#printing-text
-/// https://github.com/google/blockly/wiki/Text#printing-text].
-Blockly.Msg.TEXT_REVERSE_TOOLTIP = 'Reverses the characters in a string.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Text
+/// https://github.com/google/blockly/wiki/Text].
+Blockly.Msg.TEXT_REVERSE_TOOLTIP = 'Reverses the order of the characters in the text.';
 
 // Lists Blocks.
 /// url - Information on empty lists.

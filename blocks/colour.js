@@ -21,10 +21,10 @@
 /**
  * @fileoverview Colour blocks for Blockly.
  *
- * This file is scrapped to extract .json file definitions. The array passed to
+ * This file is scraped to extract .json file definitions. The array passed to
  * defineBlocksWithJsonArray(..) must be strict JSON: double quotes only, no
- * outside references, no functions, etc. The one exception is end-of-line
- * comments, which the scrapper will remove.
+ * outside references, no functions, no trailing commasa, etc. The one
+ * exception is end-of-line comments, which the scraper will remove.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
@@ -128,4 +128,4 @@ Blockly.defineBlocksWithJsonArray([
     "helpUrl": "%{BKY_COLOUR_BLEND_HELPURL}",
     "tooltip": "%{BKY_COLOUR_BLEND_TOOLTIP}"
   }
-]);  // End defineBlocksWithJsonArray(...)
+]);  // End of defineBlocksWithJsonArray(...) DO NOT DELETE

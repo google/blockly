@@ -36,6 +36,7 @@ goog.require('Blockly.Blocks');
 
 /**
  * Common HSV hue for all blocks in this category.
+ * This should be the same as Blockly.Msg.COLOUR_HUE.
  */
 Blockly.Blocks.colour.HUE = 20;
 

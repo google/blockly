@@ -47,16 +47,16 @@ Blockly.Extensions.ALL_ = {};
  *     registered, or extensionFn is not a function.
  */
 Blockly.Extensions.register = function(name, initFn) {
-    if (!goog.isString(name) || goog.string.isEmptyOrWhitespace(name)) {
-        throw new Error('Error: Invalid extension name "' + name + '"');
-    }
-    if (Blockly.Extensions.ALL_[name]) {
-        throw new Error('Error: Extension "' + name + '" is already registered.');
-    }
-    if (!goog.isFunction(initFn)) {
-        throw new Error('Error: Extension "' + name + '" must be a function');
-    }
-    Blockly.Extensions.ALL_[name] = initFn;
+  if (!goog.isString(name) || goog.string.isEmptyOrWhitespace(name)) {
+    throw new Error('Error: Invalid extension name "' + name + '"');
+  }
+  if (Blockly.Extensions.ALL_[name]) {
+    throw new Error('Error: Extension "' + name + '" is already registered.');
+  }
+  if (!goog.isFunction(initFn)) {
+    throw new Error('Error: Extension "' + name + '" must be a function');
+  }
+Blockly.Extensions.ALL_[name] = initFn;
 };
 
 /**
@@ -65,9 +65,9 @@ Blockly.Extensions.register = function(name, initFn) {
  * @param {Blocky.Block} block The block to initialize with the named extension.
  */
 Blockly.Extensions.apply = function(name, block) {
-    var extensionFn = Blockly.Extensions.ALL_[name];
-    if (!goog.isFunction(extensionFn)) {
-        throw new Error('Error: Extension "' + name + '" not found.');
-    }
-    extensionFn.apply(block);
+  var extensionFn = Blockly.Extensions.ALL_[name];
+  if (!goog.isFunction(extensionFn)) {
+    throw new Error('Error: Extension "' + name + '" not found.');
+  }
+  extensionFn.apply(block);
 }

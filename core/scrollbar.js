@@ -38,8 +38,10 @@ goog.require('goog.events');
  */
 Blockly.ScrollbarPair = function(workspace) {
   this.workspace_ = workspace;
-  this.hScroll = new Blockly.Scrollbar(workspace, true, true, 'blocklyScrollbarPair');
-  this.vScroll = new Blockly.Scrollbar(workspace, false, true, 'blocklyScrollbarPair');
+  this.hScroll = new Blockly.Scrollbar(workspace, true, true,
+    'blocklyMainWorkspaceScrollbar');
+  this.vScroll = new Blockly.Scrollbar(workspace, false, true,
+    'blocklyMainWorkspaceScrollbar');
   this.corner_ = Blockly.utils.createSvgElement('rect',
       {'height': Blockly.Scrollbar.scrollbarThickness,
       'width': Blockly.Scrollbar.scrollbarThickness,

@@ -306,6 +306,9 @@ Blockly.Dart['text_count'] = function(block) {
       'text_count',
       ['int ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
         '(String string, String search) {',
+        '  if (search.length == 0) {',
+        '    return string.length + 1;',
+        '  }',
         '  int index = 0;',
         '  int count = 0;',
         '  while (index != -1) {',

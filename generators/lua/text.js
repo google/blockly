@@ -302,6 +302,9 @@ Blockly.Lua['text_count'] = function(block) {
       'text_count',
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_
         + '(str, needle)',
+        '  if #needle == 0 then',
+        '    return #str + 1',
+        '  end',
         '  local index = 1',
         '  local count = 0',
         '  while true do',
@@ -329,7 +332,7 @@ Blockly.Lua['text_replace'] = function(block) {
   var functionName = Blockly.Lua.provideFunction_(
       'text_replace',
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_
-        + '(str, needle, haystack)',
+        + '(str, needle, replacement)',
         '  local buf = {}',
         '  local i = 1',
         '  while i <= #str do',

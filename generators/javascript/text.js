@@ -308,7 +308,17 @@ Blockly.JavaScript['text_count'] = function(block) {
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
   var sub = Blockly.JavaScript.valueToCode(block, 'SUB',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
-  var code = text + '.split(' + sub + ').length - 1';
+  var functionName = Blockly.JavaScript.provideFunction_(
+      'textCount',
+      ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          '(string, search) {',
+       '  if (search.length === 0) {',
+       '    return string.length + 1;',
+       '  } else {',
+       '    return string.split(search).length - 1;',
+       '  }',
+       '}']);
+  var code = functionName + '(' + text + ', ' + sub + ')';
   return [code, Blockly.JavaScript.ORDER_SUBTRACTION];
 };
 
@@ -319,7 +329,17 @@ Blockly.JavaScript['text_replace'] = function(block) {
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
   var to = Blockly.JavaScript.valueToCode(block, 'TO',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
-  var code = text + '.replace(' + from + ', ' + to + ')';
+  // The regex escaping code below is taken from the implementation of
+  // goog.string.regExpEscape.
+  var functionName = Blockly.JavaScript.provideFunction_(
+      'textReplace',
+      ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          '(string, f, r) {',
+       '  f = f.replace(/([-()\\[\\]{}+?*.$\\^|,:#<!\\\\])/g,"\\\\$1")',
+       '       .replace(/\\x08/g,"\\\\x08");',
+       '  return string.replace(new RegExp(f, \'g\'), r);',
+       '}']);
+  var code = functionName + '(' + text + ', ' + from + ', ' + to + ')';
   return [code, Blockly.JavaScript.ORDER_MEMBER];
 };
 

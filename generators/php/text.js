@@ -254,8 +254,10 @@ Blockly.PHP['text_count'] = function(block) {
       Blockly.PHP.ORDER_MEMBER) || '\'\'';
   var sub = Blockly.PHP.valueToCode(block, 'SUB',
       Blockly.PHP.ORDER_NONE) || '\'\'';
-  var code = 'substr_count(' + text + ', ' + sub + ')';
-  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+  var code = 'strlen(' + sub + ') === 0'
+    + ' ? strlen(' + text + ') + 1'
+    + ' : substr_count(' + text + ', ' + sub + ')';
+  return [code, Blockly.PHP.ORDER_CONDITIONAL];
 };
 
 Blockly.PHP['text_replace'] = function(block) {

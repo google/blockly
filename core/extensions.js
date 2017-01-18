@@ -62,7 +62,8 @@ Blockly.Extensions.ALL_[name] = initFn;
 /**
  * Applies an extension init method to a block.
  * @param {string} name The name of the extension.
- * @param {Blocky.Block} block The block to initialize with the named extension.
+ * @param {!Blocky.Block} block The block to initialize with the named
+ *     extension.
  */
 Blockly.Extensions.apply = function(name, block) {
   var extensionFn = Blockly.Extensions.ALL_[name];

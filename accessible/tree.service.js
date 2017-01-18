@@ -292,7 +292,7 @@ blocklyApp.TreeService = ng.core.Class({
               block);
 
           that.removeBlockAndSetFocus(block, blockRootNode, function() {
-            block.dispose(true);
+            block.dispose(false);
           });
 
           // Invoke a digest cycle, so that the DOM settles.

@@ -386,10 +386,17 @@ Blockly.Css.CONTENT = [
     'fill-opacity: .8;',
   '}',
 
+  '.blocklyScrollbarPair {',
+    'z-index: 20;',
+  '}',
+
+  '.blocklyFlyoutScrollbar {',
+    'z-index: 30;',
+  '}',
+  
   '.blocklyScrollbarHorizontal, .blocklyScrollbarVertical {',
     'position: absolute;',
     'outline: none;',
-    'z-index: 30;',
   '}',
 
   '.blocklyScrollbarBackground {',

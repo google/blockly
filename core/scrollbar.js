@@ -38,8 +38,8 @@ goog.require('goog.events');
  */
 Blockly.ScrollbarPair = function(workspace) {
   this.workspace_ = workspace;
-  this.hScroll = new Blockly.Scrollbar(workspace, true, true);
-  this.vScroll = new Blockly.Scrollbar(workspace, false, true);
+  this.hScroll = new Blockly.Scrollbar(workspace, true, true, 'blocklyScrollbarPair');
+  this.vScroll = new Blockly.Scrollbar(workspace, false, true, 'blocklyScrollbarPair');
   this.corner_ = Blockly.utils.createSvgElement('rect',
       {'height': Blockly.Scrollbar.scrollbarThickness,
       'width': Blockly.Scrollbar.scrollbarThickness,
@@ -182,15 +182,16 @@ Blockly.ScrollbarPair.prototype.getRatio_ = function(handlePosition, viewSize) {
  * @param {!Blockly.Workspace} workspace Workspace to bind the scrollbar to.
  * @param {boolean} horizontal True if horizontal, false if vertical.
  * @param {boolean=} opt_pair True if scrollbar is part of a horiz/vert pair.
+ * @param {string} opt_class A class to be applied to this scrollbar.
  * @constructor
  */
-Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
+Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
   this.workspace_ = workspace;
   this.pair_ = opt_pair || false;
   this.horizontal_ = horizontal;
   this.oldHostMetrics_ = null;
 
-  this.createDom_();
+  this.createDom_(opt_class);
 
   /**
    * The upper left corner of the scrollbar's svg group.
@@ -565,11 +566,12 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
 /**
  * Create all the DOM elements required for a scrollbar.
  * The resulting widget is not sized.
+ * @param {string} opt_class A class to be applied to this scrollbar.
  * @private
  */
-Blockly.Scrollbar.prototype.createDom_ = function() {
+Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
   /* Create the following DOM:
-  <svg class="blocklyScrollbarHorizontal">
+  <svg class="blocklyScrollbarHorizontal  optionalClass">
     <g>
       <rect class="blocklyScrollbarBackground" />
       <rect class="blocklyScrollbarHandle" rx="8" ry="8" />
@@ -578,6 +580,9 @@ Blockly.Scrollbar.prototype.createDom_ = function() {
   */
   var className = 'blocklyScrollbar' +
       (this.horizontal_ ? 'Horizontal' : 'Vertical');
+  if (opt_class) {
+    className += ' ' + opt_class;
+  }
   this.outerSvg_ = Blockly.utils.createSvgElement('svg', {'class': className},
                                                   null);
   this.svgGroup_ = Blockly.utils.createSvgElement('g', {}, this.outerSvg_);

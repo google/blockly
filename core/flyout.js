@@ -308,7 +308,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.workspace_.targetWorkspace = targetWorkspace;
   // Add scrollbar.
   this.scrollbar_ = new Blockly.Scrollbar(this.workspace_,
-      this.horizontalLayout_, false);
+      this.horizontalLayout_, false, 'blocklyFlyoutScrollbar');
 
   this.hide();
 

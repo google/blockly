@@ -320,7 +320,6 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
    *   [Trashcan and/or flyout may go here]
    *   <g class="blocklyBlockCanvas"></g>
    *   <g class="blocklyBubbleCanvas"></g>
-   *   [Scrollbars may go here]
    * </g>
    * @type {SVGElement}
    */

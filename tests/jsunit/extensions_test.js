@@ -98,7 +98,7 @@ function test_extension_not_a_function() {
     // Expected.
     exceptionWasThrown = true;
   } finally {
-    delete Blockly.Blocks['extension_just_a_string'];
+    delete Blockly.Extensions.ALL_['extension_just_a_string'];
   }
   assert(exceptionWasThrown);
 
@@ -110,7 +110,7 @@ function test_extension_not_a_function() {
     // Expected.
     exceptionWasThrown = true;
   } finally {
-    delete Blockly.Blocks['extension_is_null'];
+    delete Blockly.Extensions.ALL_['extension_is_null'];
   }
   assert(exceptionWasThrown);
 
@@ -122,7 +122,63 @@ function test_extension_not_a_function() {
     // Expected.
     exceptionWasThrown = true;
   } finally {
-    delete Blockly.Blocks['extension_is_undefined'];
+    delete Blockly.Extensions.ALL_['extension_is_undefined'];
   }
   assert(exceptionWasThrown);
+}
+
+function test_parent_tooltip_when_inline() {
+  var defaultTooltip = "defaultTooltip";
+  var parentTooltip = "parentTooltip";
+  try {
+    Blockly.defineBlocksWithJsonArray([
+      {
+        "type": "test_parent_tooltip_when_inline",
+        "message0": "test_parent_tooltip_when_inline",
+        "output": true,
+        "tooltip": defaultTooltip,
+        "extensions": ["parent_tooltip_when_inline"]
+      },
+      {
+        "type": "test_parent",
+        "message0": "%1",
+        "args0": [
+          {
+            "type": "input_value",
+            "name": "INPUT"
+          }
+        ],
+        "tooltip": parentTooltip
+      }
+    ]);
+
+    var workspace = new Blockly.Workspace();
+    var block = new Blockly.Block(workspace, 'test_parent_tooltip_when_inline');
+
+    // Tooltip is dynamic after extension initialization.
+    assert(goog.isFunction(block.tooltip));
+    assertEquals(block.tooltip(), defaultTooltip);
+
+    // Tooltip is normal before connected to parent.
+    var parent = new Blockly.Block(workspace, 'test_parent');
+    assertEquals(parent.tooltip, parentTooltip);
+    assertFalse(!!parent.inputsInline);
+
+    // Tooltip is normal when parent is not inline.
+    parent.getInput('INPUT').connection.connect(block.outputConnection);
+    assertEquals(block.getParent(), parent);
+    assertEquals(block.tooltip(), defaultTooltip);
+
+    // Tooltip is parent's when parent is inline.
+    parent.setInputsInline(true);
+    assertEquals(block.tooltip(), parentTooltip);
+
+    // Tooltip revert when disconnected.
+    parent.getInput('INPUT').connection.disconnect();
+    assert(!block.getParent());
+    assertEquals(block.tooltip(), defaultTooltip);
+  } finally {
+    delete Blockly.Blocks['test_parent_tooltip_when_inline'];
+    delete Blockly.Blocks['test_parent'];
+  }
 }

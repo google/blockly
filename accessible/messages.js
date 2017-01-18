@@ -56,3 +56,6 @@ Blockly.Msg.ADDED_LINK_MSG = 'Added link.';
 Blockly.Msg.ATTACHED_BLOCK_TO_LINK_MSG = 'attached to link. ';
 Blockly.Msg.COPIED_BLOCK_MSG = 'copied. ';
 Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG = 'pasted. ';
+
+Blockly.Msg.PRESS_ENTER_TO_EDIT_NUMBER = 'Press Enter to edit number. ';
+Blockly.Msg.PRESS_ENTER_TO_EDIT_TEXT = 'Press Enter to edit text. ';

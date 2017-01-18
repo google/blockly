@@ -34,28 +34,28 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
     <template [ngIf]="mainField">
       <template [ngIf]="isTextInput()">
         {{getPrefixText()}}
-        <input [id]="mainFieldId" type="text" [disabled]="disabled"
-               [ngModel]="mainField.getValue()" (ngModelChange)="mainField.setValue($event)"
-               [attr.aria-label]="getFieldDescription() + (disabled ? 'Disabled text field' : 'Press Enter to edit text')"
+        <input [id]="mainFieldId" type="text"
+               [ngModel]="mainField.getValue()" (ngModelChange)="setTextValue($event)"
+               [attr.aria-label]="getFieldDescription() + '. ' + ('PRESS_ENTER_TO_EDIT_TEXT'|translate)"
                tabindex="-1">
       </template>
 
       <template [ngIf]="isNumberInput()">
         {{getPrefixText()}}
-        <input [id]="mainFieldId" type="number" [disabled]="disabled"
+        <input [id]="mainFieldId" type="number"
                [ngModel]="mainField.getValue()" (ngModelChange)="setNumberValue($event)"
-               [attr.aria-label]="getFieldDescription() + (disabled ? 'Disabled number field' : 'Press Enter to edit number')"
+               [attr.aria-label]="getFieldDescription() + '. ' + ('PRESS_ENTER_TO_EDIT_NUMBER'|translate)"
                tabindex="-1">
       </template>
 
       <template [ngIf]="isDropdown()">
         {{getPrefixText()}}
-        <select [id]="mainFieldId" [name]="mainFieldId" tabindex="-1"
-                [ngModel]="mainField.getValue()"
-                (ngModelChange)="handleDropdownChange(mainField, $event)">
-          <option *ngFor="#optionValue of getOptions()" value="{{optionValue}}"
-                  [selected]="mainField.getValue() == optionValue">
-            {{optionText[optionValue]}}
+        <select [id]="mainFieldId" [name]="mainFieldId"
+                [ngModel]="mainField.getValue()" (ngModelChange)="setDropdownValue($event)"
+                tabindex="-1">
+          <option *ngFor="#option of dropdownOptions" value="{{option.value}}"
+                  [selected]="mainField.getValue() == option.value">
+            {{option.text}}
           </option>
         </select>
       </template>
@@ -68,17 +68,21 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
   constructor: [
       blocklyApp.NotificationsService, blocklyApp.UtilsService,
       function(_notificationsService, _utilsService) {
-    this.optionText = {
-      keys: []
-    };
     this.notificationsService = _notificationsService;
     this.utilsService = _utilsService;
+
+    this.dropdownOptions = [];
   }],
   ngOnInit: function() {
-    var elementsNeedingIds = this.generateElementNames(this.mainField);
-    // Warning: this assumes that the elements returned by
-    // this.generateElementNames() are unique.
-    this.idMap = this.utilsService.generateIds(elementsNeedingIds);
+    if (this.isDropdown()) {
+      var rawOptions = this.mainField.getOptions_();
+      this.dropdownOptions = rawOptions.map(function(valueAndText) {
+        return {
+          text: valueAndText[0],
+          value: valueAndText[1]
+        };
+      });
+    }
   },
   getPrefixText: function() {
     var prefixTexts = this.prefixFields.map(function(prefixField) {
@@ -93,68 +97,43 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
     }
     return description;
   },
-  setNumberValue: function(newValue) {
-    // Do not permit a residual value of NaN after a backspace event.
-    this.mainField.setValue(newValue || 0);
-  },
-  generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
-    return mainLabel + ' ' + secondLabel;
-  },
-  generateElementNames: function() {
-    var elementNames = [];
-    if (this.isDropdown()) {
-      var keys = this.getOptions();
-      for (var i = 0; i < keys.length; i++){
-        elementNames.push(keys[i], keys[i] + 'Button');
-      }
-    }
-    return elementNames;
-  },
-  isNumberInput: function() {
-    return this.mainField instanceof Blockly.FieldNumber;
-  },
   isTextInput: function() {
     return this.mainField instanceof Blockly.FieldTextInput &&
         !(this.mainField instanceof Blockly.FieldNumber);
   },
+  isNumberInput: function() {
+    return this.mainField instanceof Blockly.FieldNumber;
+  },
   isDropdown: function() {
     return this.mainField instanceof Blockly.FieldDropdown;
   },
-  isCheckbox: function() {
-    return this.mainField instanceof Blockly.FieldCheckbox;
+  setTextValue: function(newValue) {
+    this.mainField.setValue(newValue);
   },
-  isTextField: function() {
-    return !(this.mainField instanceof Blockly.FieldTextInput) &&
-        !(this.mainField instanceof Blockly.FieldDropdown) &&
-        !(this.mainField instanceof Blockly.FieldCheckbox);
+  setNumberValue: function(newValue) {
+    // Do not permit a residual value of NaN after a backspace event.
+    this.mainField.setValue(newValue || 0);
   },
-  hasVisibleText: function() {
-    var text = this.mainField.getText().trim();
-    return !!text;
-  },
-  getOptions: function() {
-    if (this.optionText.keys.length) {
-      return this.optionText.keys;
-    }
-    var options = this.mainField.getOptions_();
-    for (var i = 0; i < options.length; i++) {
-      var tuple = options[i];
-      this.optionText[tuple[1]] = tuple[0];
-      this.optionText.keys.push(tuple[1]);
-    }
-    return this.optionText.keys;
-  },
-  handleDropdownChange: function(field, optionValue) {
+  setDropdownValue: function(optionValue) {
     if (optionValue == 'NO_ACTION') {
       return;
     }
-    if (this.mainField instanceof Blockly.FieldVariable) {
-      Blockly.FieldVariable.dropdownChange.call(this.mainField, optionValue);
-    } else {
-      this.mainField.setValue(optionValue);
+
+    this.mainField.setValue(optionValue);
+    var optionText = undefined;
+    for (var i = 0; i < this.dropdownOptions.length; i++) {
+      if (this.dropdownOptions[i].value == optionValue) {
+        optionText = this.dropdownOptions[i].text;
+        break;
+      }
     }
 
-    this.notificationsService.speak(
-        'Selected option ' + this.optionText[optionValue]);
+    if (!optionText) {
+      throw Error(
+          'There is no option text corresponding to the value: ' +
+          optionValue);
+    }
+
+    this.notificationsService.speak('Selected option ' + optionText);
   }
 });

@@ -663,7 +663,7 @@ Blockly.Block.prototype.setOnChange = function(onchangeFn) {
   }
   this.onchange = onchangeFn;
   if (onchangeFn) {
-    this.onchangeWrapper_ = onchange.bind(this);
+    this.onchangeWrapper_ = onchangeFn.bind(this);
     this.workspace.addChangeListener(this.onchangeWrapper_);
   }
 }

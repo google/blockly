@@ -1024,9 +1024,14 @@ Blockly.Block.prototype.jsonInit = function(json) {
     var localizedValue = Blockly.utils.replaceMessageReferences(rawValue);
     this.setHelpUrl(localizedValue);
   }
+  if (goog.isString(json['extensions'])) {
+    console.warn('JSON attribute \'extensions\' should be an array of ' +
+      'strings. Found raw string in JSON for \'' + json['type'] + '\' block.');
+    json['extensions'] = [json['extensions']];  // Correct and continue.
+  }
   if (Array.isArray(json['extensions'])) {
     var extensionNames = json['extensions'];
-    for (var i = 0; i < extensionNames.length; ++i) {      
+    for (var i = 0; i < extensionNames.length; ++i) {
       var extensionName = extensionNames[i];
       Blockly.Extensions.apply(extensionName, this);
     }

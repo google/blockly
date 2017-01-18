@@ -34,31 +34,23 @@ goog.require('Blockly.Blocks');
  */
 Blockly.Blocks.math.HUE = 230;
 
-// Block for numeric value.
-Blockly.defineBlocksWithJsonArray([{
-  "type": "math_number",
-  "message0": "%1",
-  "args0": [{
-    "type": "field_number",
-    "name": "NUM",
-    "value": 0
-  }],
-  "output": "Number",
-  "colour": "%{BKY_MATH_HUE}",
-  "helpUrl": "%{BKY_MATH_NUMBER_HELPURL}",
-  "extensions": ["math_number_tooltip"]
-}]);
-
-Blockly.Extensions.register('math_number_tooltip', function() {
-  // Use the parent's tooltip when attached to an inline value input.
-  this.setTooltip(function() {
-    var parent = this.getParent();
-    return (parent &&
-      parent.getInputsInline() &&
-      parent.tooltip) ||
-      Blockly.Msg.MATH_NUMBER_TOOLTIP;
-  }.bind(this));
-});
+Blockly.defineBlocksWithJsonArray([
+  // Block for numeric value.
+  {
+    "type": "math_number",
+    "message0": "%1",
+    "args0": [{
+      "type": "field_number",
+      "name": "NUM",
+      "value": 0
+    }],
+    "output": "Number",
+    "colour": "%{BKY_MATH_HUE}",
+    "helpUrl": "%{BKY_MATH_NUMBER_HELPURL}",
+    "tooltip": "%{BKY_MATH_NUMBER_TOOLTIP}",
+    "extensions": ["parent_tooltip_when_inline"]
+  }
+]);
 
 Blockly.Blocks['math_arithmetic'] = {
   /**

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-01-17 15:37:30.720135",
+		"lastupdated": "2017-01-18 10:58:30.631169",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -262,12 +262,6 @@
 	"TEXT_REVERSE_MESSAGE0": "reverse %1",
 	"TEXT_REVERSE_HELPURL": "",
 	"TEXT_REVERSE_TOOLTIP": "Reverses the characters in a string.",
-	"TEXT_SPLIT_MESSAGE0": "split %1 on space",
-	"TEXT_SPLIT_HELPURL": "",
-	"TEXT_SPLIT_TOOLTIP": "Split a string into a list on whitespace.",
-	"TEXT_SPLIT_ON_MESSAGE0": "split %1 on %2",
-	"TEXT_SPLIT_ON_HELPURL": "",
-	"TEXT_SPLIT_ON_TOOLTIP": "Split a string into a list using the separator.",
 	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "create empty list",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Returns a list, of length 0, containing no data records",

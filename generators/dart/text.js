@@ -342,19 +342,3 @@ Blockly.Dart['text_reverse'] = function(block) {
   // XXX What should the operator precedence be for a `new`?
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
-
-Blockly.Dart['text_split'] = function(block) {
-  var text = Blockly.Dart.valueToCode(block, 'TEXT',
-      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
-  var code = text + '.split(new RegExp(\'\\\\s+\'))';
-  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
-};
-
-Blockly.Dart['text_split_on'] = function(block) {
-  var text = Blockly.Dart.valueToCode(block, 'TEXT',
-      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
-  var sep = Blockly.Dart.valueToCode(block, 'SEP',
-      Blockly.Dart.ORDER_NONE) || '\'\'';
-  var code = text + '.split(' + sep + ')';
-  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
-};

@@ -790,22 +790,6 @@ Blockly.Msg.TEXT_REVERSE_HELPURL = '';
 /// https://github.com/google/blockly/wiki/Text#printing-text].
 Blockly.Msg.TEXT_REVERSE_TOOLTIP = 'Reverses the characters in a string.';
 
-/// message0 interpolation string
-Blockly.Msg.TEXT_SPLIT_MESSAGE0 = 'split %1 on space';
-/// url - Information about splitting a string on whitespace.
-Blockly.Msg.TEXT_SPLIT_HELPURL = '';
-/// tooltip - See [https://github.com/google/blockly/wiki/Text#printing-text
-/// https://github.com/google/blockly/wiki/Text#printing-text].
-Blockly.Msg.TEXT_SPLIT_TOOLTIP = 'Split a string into a list on whitespace.';
-
-/// message0 interpolation string
-Blockly.Msg.TEXT_SPLIT_ON_MESSAGE0 = 'split %1 on %2';
-/// url - Information about splitting a string on whitespace.
-Blockly.Msg.TEXT_SPLIT_ON_HELPURL = '';
-/// tooltip - See [https://github.com/google/blockly/wiki/Text#printing-text
-/// https://github.com/google/blockly/wiki/Text#printing-text].
-Blockly.Msg.TEXT_SPLIT_ON_TOOLTIP = 'Split a string into a list using the separator.';
-
 // Lists Blocks.
 /// url - Information on empty lists.
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = 'https://github.com/google/blockly/wiki/Lists#create-empty-list';

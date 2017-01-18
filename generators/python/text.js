@@ -278,19 +278,3 @@ Blockly.Python['text_reverse'] = function(block) {
   var code = text + '[::-1]';
   return [code, Blockly.Python.ORDER_MEMBER];
 };
-
-Blockly.Python['text_split'] = function(block) {
-  var text = Blockly.Python.valueToCode(block, 'TEXT',
-      Blockly.Python.ORDER_MEMBER) || '\'\'';
-  var code = text + '.split()';
-  return [code, Blockly.Python.ORDER_MEMBER];
-};
-
-Blockly.Python['text_split_on'] = function(block) {
-  var text = Blockly.Python.valueToCode(block, 'TEXT',
-      Blockly.Python.ORDER_MEMBER) || '\'\'';
-  var sep = Blockly.Python.valueToCode(block, 'SEP',
-      Blockly.Python.ORDER_NONE) || '\'\'';
-  var code = text + '.split(' + sep + ')';
-  return [code, Blockly.Python.ORDER_MEMBER];
-};

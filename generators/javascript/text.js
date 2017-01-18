@@ -329,19 +329,3 @@ Blockly.JavaScript['text_reverse'] = function(block) {
   var code = text + '.split(\'\').reverse().join(\'\')';
   return [code, Blockly.JavaScript.ORDER_MEMBER];
 };
-
-Blockly.JavaScript['text_split'] = function(block) {
-  var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
-      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
-  var code = text + '.split(/\\s+/g)';
-  return [code, Blockly.JavaScript.ORDER_MEMBER];
-};
-
-Blockly.JavaScript['text_split_on'] = function(block) {
-  var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
-      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
-  var sep = Blockly.JavaScript.valueToCode(block, 'SEP',
-      Blockly.JavaScript.ORDER_NONE) || '\'\'';
-  var code = text + '.split(' + sep + ')';
-  return [code, Blockly.JavaScript.ORDER_MEMBER];
-};

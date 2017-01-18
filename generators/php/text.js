@@ -275,19 +275,3 @@ Blockly.PHP['text_reverse'] = function(block) {
   var code = 'strrev(' + text + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
-
-Blockly.PHP['text_split'] = function(block) {
-  var text = Blockly.PHP.valueToCode(block, 'TEXT',
-      Blockly.PHP.ORDER_MEMBER) || '\'\'';
-  var code = 'preg_split(\'/\\s+/\', ' + text + ')';
-  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
-};
-
-Blockly.PHP['text_split_on'] = function(block) {
-  var text = Blockly.PHP.valueToCode(block, 'TEXT',
-      Blockly.PHP.ORDER_MEMBER) || '\'\'';
-  var sep = Blockly.PHP.valueToCode(block, 'SEP',
-      Blockly.PHP.ORDER_NONE) || '\'\'';
-  var code = 'explode(' + sep + ', ' + text + ')';
-  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
-};

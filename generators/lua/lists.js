@@ -368,6 +368,15 @@ Blockly.Lua['lists_reverse'] = function(block) {
   // Block for reversing a list.
   var list = Blockly.Lua.valueToCode(block, 'LIST',
       Blockly.Lua.ORDER_NONE) || '{}';
-  var code = 'table.Reverse(' + list + ')';
+  var functionName = Blockly.Lua.provideFunction_(
+      'list_reverse',
+      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(l)',
+       '  local t = {}',
+       '  for i = #l, 1, -1 do',
+       '    table.insert(t, l[i])',
+       '  end',
+       '  return t',
+       'end']);
+  var code = 'list_reverse(' + list + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };

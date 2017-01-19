@@ -363,3 +363,11 @@ Blockly.Lua['lists_split'] = function(block) {
   var code = functionName + '(' + input + ', ' + delimiter + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
+
+Blockly.Lua['lists_reverse'] = function(block) {
+  // Block for reversing a list.
+  var list = Blockly.Lua.valueToCode(block, 'LIST',
+      Blockly.Lua.ORDER_NONE) || '{}';
+  var code = 'table.Reverse(' + list + ')';
+  return [code, Blockly.Lua.ORDER_HIGH];
+};

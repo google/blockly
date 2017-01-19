@@ -1015,6 +1015,13 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = 'Split text into a list of texts, breaki
 /// https://github.com/google/blockly/wiki/Lists#make-text-from-list] for more information.
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = 'Join a list of texts into one text, separated by a delimiter.';
 
+/// url - Information describing reversing a list.
+Blockly.Msg.LISTS_REVERSE_HELPURL = '';
+/// Reverse a list of items %1.
+Blockly.Msg.LISTS_REVERSE_MESSAGE0 = 'reverse %1';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#reversing-a-list].
+Blockly.Msg.LISTS_REVERSE_TOOLTIP = 'Reverse a copy of a list.';
+
 /// grammar - Text that follows an ordinal number (a number that indicates
 /// position relative to other numbers).  In most languages, such text appears
 /// before the number, so this should be blank.  An exception is Hungarian.

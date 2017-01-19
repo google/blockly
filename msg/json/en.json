@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-01-12 13:53:04.889198",
+		"lastupdated": "2017-01-20 09:40:15.080443",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -334,6 +334,9 @@
 	"LISTS_SPLIT_WITH_DELIMITER": "with delimiter",
 	"LISTS_SPLIT_TOOLTIP_SPLIT": "Split text into a list of texts, breaking at each delimiter.",
 	"LISTS_SPLIT_TOOLTIP_JOIN": "Join a list of texts into one text, separated by a delimiter.",
+	"LISTS_REVERSE_HELPURL": "",
+	"LISTS_REVERSE_MESSAGE0": "reverse %1",
+	"LISTS_REVERSE_TOOLTIP": "Reverse a copy of a list.",
 	"ORDINAL_NUMBER_SUFFIX": "",
 	"VARIABLES_GET_HELPURL": "https://github.com/google/blockly/wiki/Variables#get",
 	"VARIABLES_GET_TOOLTIP": "Returns the value of this variable.",

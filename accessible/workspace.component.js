@@ -31,24 +31,24 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
       <h3 #workspaceTitle id="blockly-workspace-title">{{'WORKSPACE'|translate}}</h3>
 
       <div *ngIf="workspace" class="blocklyWorkspace">
-        <ol #tree *ngFor="#block of workspace.topBlocks_; #i = index"
+        <ol #tree *ngFor="#topBlock of workspace.topBlocks_; #groupIndex = index"
             tabindex="0" role="tree" class="blocklyTree blocklyWorkspaceFocusTarget"
             [attr.aria-activedescendant]="getActiveDescId(tree.id)"
             [attr.aria-labelledby]="workspaceTitle.id"
             (keydown)="onKeypress($event, tree)"
-            (focus)="speakLocation(i)">
-          <blockly-workspace-block [level]="0" [block]="block" [tree]="tree" [isTopLevel]="true">
+            (focus)="speakLocation(groupIndex, tree.id)">
+          <blockly-workspace-block [level]="0" [block]="topBlock" [tree]="tree">
           </blockly-workspace-block>
         </ol>
 
         <span *ngIf="workspace.topBlocks_.length === 0">
           <p id="emptyWorkspaceBtnLabel">
-            There are no blocks in the workspace.
+            {{'NO_BLOCKS_IN_WORKSPACE'|translate}}
             <button (click)="showToolboxModalForCreateNewGroup()"
                     class="blocklyWorkspaceFocusTarget"
                     id="{{ID_FOR_EMPTY_WORKSPACE_BTN}}"
                     aria-describedby="emptyWorkspaceBtnLabel">
-              Create new block group...
+              {{'CREATE_NEW_BLOCK_GROUP'|translate}}
             </button>
           </p>
         </span>
@@ -68,8 +68,8 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
       this.toolboxModalService = toolboxModalService;
       this.treeService = treeService;
 
-      this.workspace = blocklyApp.workspace;
       this.ID_FOR_EMPTY_WORKSPACE_BTN = blocklyApp.ID_FOR_EMPTY_WORKSPACE_BTN;
+      this.workspace = blocklyApp.workspace;
     }
   ],
   getActiveDescId: function(treeId) {
@@ -82,9 +82,9 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
     this.toolboxModalService.showToolboxModalForCreateNewGroup(
         this.ID_FOR_EMPTY_WORKSPACE_BTN);
   },
-  speakLocation: function(index) {
+  speakLocation: function(groupIndex, treeId) {
     this.notificationsService.speak(
-        'Now in workspace group ' + (index + 1) + ' of ' +
+        'Now in workspace group ' + (groupIndex + 1) + ' of ' +
         this.workspace.topBlocks_.length);
   }
 });

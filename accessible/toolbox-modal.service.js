@@ -58,11 +58,11 @@ blocklyApp.ToolboxModalService = ng.core.Class({
       if (toolboxCategoryElts.length) {
         this.allToolboxCategories = Array.from(toolboxCategoryElts).map(
           function(categoryElt) {
-            var workspace = new Blockly.Workspace();
-            Blockly.Xml.domToWorkspace(categoryElt, workspace);
+            var tmpWorkspace = new Blockly.Workspace();
+            Blockly.Xml.domToWorkspace(categoryElt, tmpWorkspace);
             return {
               categoryName: categoryElt.attributes.name.value,
-              blocks: workspace.topBlocks_
+              blocks: tmpWorkspace.topBlocks_
             };
           }
         );
@@ -74,14 +74,14 @@ blocklyApp.ToolboxModalService = ng.core.Class({
         setTimeout(function() {
           // If there are no top-level categories, we create a single category
           // containing all the top-level blocks.
-          var workspace = new Blockly.Workspace();
+          var tmpWorkspace = new Blockly.Workspace();
           Array.from(toolboxXmlElt.children).forEach(function(topLevelNode) {
-            Blockly.Xml.domToBlock(workspace, topLevelNode);
+            Blockly.Xml.domToBlock(tmpWorkspace, topLevelNode);
           });
 
           that.allToolboxCategories = [{
             categoryName: '',
-            blocks: workspace.topBlocks_
+            blocks: tmpWorkspace.topBlocks_
           }];
 
           that.computeCategoriesForCreateNewGroupModal_();

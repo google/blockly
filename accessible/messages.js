@@ -31,6 +31,7 @@ Blockly.Msg.WORKSPACE_BLOCK =
 Blockly.Msg.ATTACH_NEW_BLOCK_TO_LINK = 'Attach new block to link...';
 Blockly.Msg.CREATE_NEW_BLOCK_GROUP = 'Create new block group...';
 Blockly.Msg.ERASE_WORKSPACE = 'Erase Workspace';
+Blockly.Msg.NO_BLOCKS_IN_WORKSPACE = 'There are no blocks in the workspace.';
 
 Blockly.Msg.COPY_BLOCK = 'Copy block';
 Blockly.Msg.DELETE = 'Delete block';

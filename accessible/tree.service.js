@@ -426,24 +426,6 @@ blocklyApp.TreeService = ng.core.Class({
       this.audioService.playOopsSound();
     }
   },
-  // Notify the user about the tree they'll land on, if it's within the
-  // workspace or sidebar.
-  notifyUserAboutTabDestination_: function(sourceTreeId, shiftKeyIsPressed) {
-    var targetId = shiftKeyIsPressed ?
-        this.getPreviousFocusTargetId_(sourceTreeId) :
-        this.getNextFocusTargetId_(sourceTreeId);
-    if (targetId) {
-      var workspaceFocusTargets = this.getWorkspaceFocusTargets_();
-      for (var i = 0; i < workspaceFocusTargets.length; i++) {
-        if (workspaceFocusTargets[i].id == targetId) {
-          this.notificationsService.speak(
-              'Now in workspace group ' + (i + 1) + ' of ' +
-              workspaceFocusTargets.length);
-          return;
-        }
-      }
-    }
-  },
   onKeypress: function(e, tree) {
     // TODO(sll): Instead of this, have a common ActiveContextService which
     // returns true if at least one modal is shown, and false otherwise.
@@ -470,10 +452,8 @@ blocklyApp.TreeService = ng.core.Class({
         // Return the focus to the workspace tree containing the input field.
         document.getElementById(treeId).focus();
 
-        if (e.keyCode == 9) {
-          // Allow Tab events to propagate through.
-          this.notifyUserAboutTabDestination_(treeId, e.shiftKey);
-        } else if (e.keyCode == 27) {
+        // Note that Tab events are allowed to propagate through.
+        if (e.keyCode == 27) {
           e.preventDefault();
           e.stopPropagation();
         }
@@ -528,7 +508,6 @@ blocklyApp.TreeService = ng.core.Class({
         }
       } else if (e.keyCode == 9) {
         // Tab key. The event is allowed to propagate through.
-        this.notifyUserAboutTabDestination_(treeId, e.shiftKey);
       } else if ([27, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) !== -1) {
         if (e.keyCode == 27 || e.keyCode == 37) {
           // Esc or left arrow key. Go up a level, if possible.

@@ -73,7 +73,7 @@ blocklyApp.WorkspaceBlockComponent = ng.core.Component({
   directives: [blocklyApp.FieldSegmentComponent, ng.core.forwardRef(function() {
     return blocklyApp.WorkspaceBlockComponent;
   })],
-  inputs: ['block', 'level', 'tree', 'isTopLevel'],
+  inputs: ['block', 'level', 'tree'],
   pipes: [blocklyApp.TranslatePipe]
 })
 .Class({
@@ -176,10 +176,10 @@ blocklyApp.WorkspaceBlockComponent = ng.core.Component({
     // Angular change detection.)
     var that = this;
     setTimeout(function() {
-      if (that.tree && that.isTopLevel && !that.tree.id) {
-        that.tree.id = that.utilsService.generateUniqueId();
+      if (that.tree && that.level === 0 && !that.tree.id) {
+        that.tree.id = 'blockly-' + Blockly.utils.genUid();
       }
-      if (that.tree && that.isTopLevel &&
+      if (that.tree && that.level === 0 &&
           !that.treeService.getActiveDescId(that.tree.id)) {
         that.treeService.setActiveDesc(that.idMap['blockRoot'], that.tree.id);
       }
@@ -198,8 +198,7 @@ blocklyApp.WorkspaceBlockComponent = ng.core.Component({
     }
   },
   generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
-    return this.utilsService.generateAriaLabelledByAttr(
-        mainLabel, secondLabel);
+    return mainLabel + (secondLabel ? ' ' + secondLabel : '');
   },
   getBlockNeededLabel: function(blockInput) {
     // The input type name, or 'any' if any official input type qualifies.

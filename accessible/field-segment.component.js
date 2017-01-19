@@ -66,11 +66,8 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
 })
 .Class({
   constructor: [
-      blocklyApp.NotificationsService, blocklyApp.UtilsService,
-      function(_notificationsService, _utilsService) {
-    this.notificationsService = _notificationsService;
-    this.utilsService = _utilsService;
-
+      blocklyApp.NotificationsService, function(notificationsService) {
+    this.notificationsService = notificationsService;
     this.dropdownOptions = [];
   }],
   ngOnInit: function() {

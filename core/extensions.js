@@ -101,20 +101,8 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
     var thisBlock = this;
 
     if (this.type && !blockTypesChecked.includes(this.type)) {
-      // Validate all dropdown options have values.
-      var dropdown = this.getField(dropdownName);
-      if (!dropdown.isOptionListDynamic()) {
-        var options = dropdown.getOptions();
-        for (var i = 0; i < options.length; ++i) {
-          var optionKey = options[i][1]; // label, then value
-          if (!lookupTable[optionKey]) {
-            console.warn('No tooltip mapping for value ' +
-                optionKey + ' of field ' + dropdownName +
-                ' of block type ' + this.type);
-          }
-        }
-      }
-
+      Blockly.Extensions.checkDropdownOptionsInTable_(
+        this, dropdownName, lookupTable);
       blockTypesChecked.push(this.type);
     }
 
@@ -123,7 +111,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
       var tooltip = lookupTable[value];
       if (tooltip == null) {
         if (!blockTypesChecked.includes(thisBlock.type)) {
-          // Warn for missing values on gnereated tooltips
+          // Warn for missing values on generated tooltips
           var warning = 'No tooltip mapping for value ' + value +
               ' of field ' + dropdownName;
           if (thisBlock.type) {
@@ -139,6 +127,31 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
     });
   };
 };
+
+/**
+ * Checks all options keys are present in the provided string lookup table.
+ * Emits console warnings when they are not.
+ * @param {!Blockly.Block} block The block containing the dropdown
+ * @param {string} dropdownName The name of the dropdown
+ * @param {!Object<string, string>} lookupTable The string lookup table
+ */
+Blockly.Extensions.checkDropdownOptionsInTable_ =
+  function(block, dropdownName, lookupTable) {
+    // Validate all dropdown options have values.
+    var dropdown = block.getField(dropdownName);
+    if (!dropdown.isOptionListDynamic()) {
+      var options = dropdown.getOptions();
+      for (var i = 0; i < options.length; ++i) {
+        var optionKey = options[i][1]; // label, then value
+        if (lookupTable[optionKey] == null) {
+          console.warn('No tooltip mapping for value ' + optionKey +
+            ' of field ' + dropdownName + ' of block type ' + block.type);
+        } else {
+
+        }
+      }
+    }
+  };
 
 /**
  * Configures the tooltip to mimic the parent block when connected. Otherwise,

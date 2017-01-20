@@ -419,8 +419,8 @@ Blockly.utils.replaceMessageReferences = function(message) {
 };
 
 /**
- * Validates any %{BKY_...} references in the message refer to strings found in
- * Blockly.Msg.
+ * Validates that any %{BKY_...} references in the message refer to keys of
+ * the Blockly.Msg string table.
  * @param {string} message Text which might contain string table references.
  * @return {boolean} True if all message references have matching values.
  *     Otherwise, false.
@@ -434,6 +434,7 @@ Blockly.utils.checkMessageReferences = function(message) {
     var msgKey = match[1];
     if (Blockly.Msg[msgKey] == null) {
       console.log('WARNING: No message string for %{BKY_' + msgKey + '}.');
+      isValid = false;
     }
 
     // Re-run on remainder of sting.

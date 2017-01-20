@@ -68,17 +68,19 @@ function test_domToWorkspace() {
     }
   };
 
+  var workspace = new Blockly.Workspace();
   try {
     var dom = Blockly.Xml.textToDom(
         '<xml xmlns="http://www.w3.org/1999/xhtml">' +
         '  <block type="test_block" inline="true" x="21" y="23">' +
         '  </block>' +
         '</xml>');
-    var workspace = new Blockly.Workspace();
     Blockly.Xml.domToWorkspace(dom, workspace);
     assertEquals('Block count', 1, workspace.getAllBlocks().length);
   } finally {
     delete Blockly.Blocks.test_block;
+
+    workspace.dispose();
   }
 }
 

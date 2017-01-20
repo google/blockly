@@ -42,7 +42,7 @@ blocklyApp.TreeService = ng.core.Class({
       this.utilsService = utilsService;
 
       // The suffix used for all IDs of block root elements.
-      this.BLOCK_ROOT_ID_SUFFIX_ = 'blockRoot';
+      this.BLOCK_ROOT_ID_SUFFIX_ = blocklyApp.BLOCK_ROOT_ID_SUFFIX;
       // Maps tree IDs to the IDs of their active descendants.
       this.activeDescendantIds_ = {};
       // Array containing all the sidebar button elements.
@@ -245,7 +245,8 @@ blocklyApp.TreeService = ng.core.Class({
   },
   safelyRemoveBlock_: function(block, deleteBlockFunc) {
     // Runs the given deleteBlockFunc (which should have the effect of deleting
-    // the given block) and then does one of two things:
+    // the given block, and possibly others after it) and then does one of two
+    // things:
     // - If the deleted block was an isolated top-level block, this means the
     //   current tree has no more blocks after the deletion. So, pick a new
     //   tree to focus on.
@@ -284,11 +285,10 @@ blocklyApp.TreeService = ng.core.Class({
       var blockRootElement = document.getElementById(blockRootId);
 
       // Find the new active desc for the current tree by trying the following
-      // possibilities in order: the parent, the next sibling, and the previous
-      // sibling.
+      // possibilities in order: the parent, and the previous sibling. (The
+      // next sibling would be moved together with the moved block.)
       var newActiveDesc =
           this.getParentLi_(blockRootElement) ||
-          this.getNextSiblingLi_(blockRootElement) ||
           this.getPreviousSiblingLi_(blockRootElement);
 
       this.clearActiveDesc(treeId);
@@ -356,7 +356,7 @@ blocklyApp.TreeService = ng.core.Class({
           var newBlockId = that.blockConnectionService.attachToMarkedConnection(
               block);
           that.safelyRemoveBlock_(block, function() {
-            block.dispose(true);
+            block.dispose(false);
           });
 
           // Invoke a digest cycle, so that the DOM settles.
@@ -373,13 +373,19 @@ blocklyApp.TreeService = ng.core.Class({
               // that was originally first, not second as might be expected.
               // Here, we double-check to ensure that all affected trees have
               // an active desc set.
-              if (document.getElementById(oldDestinationTreeId) &&
-                  !that.getActiveDescId(oldDestinationTreeId)) {
+              if (document.getElementById(oldDestinationTreeId)) {
+                var activeDescId = that.getActiveDescId(oldDestinationTreeId);
+                var activeDescTreeId = null;
+                if (activeDescId) {
+                  var oldDestinationBlock = that.getContainingBlock_(
+                      document.getElementById(activeDescId));
+                  activeDescTreeId = that.getTreeIdForBlock(
+                      oldDestinationBlock);
+                  if (activeDescTreeId != oldDestinationTreeId) {
+                    that.clearActiveDesc(oldDestinationTreeId);
+                  }
+                }
                 that.initActiveDesc(oldDestinationTreeId);
-              }
-              if (document.getElementById(newDestinationTreeId) &&
-                  !that.getActiveDescId(newDestinationTreeId)) {
-                that.initActiveDesc(newDestinationTreeId);
               }
             }
 

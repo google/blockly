@@ -18,49 +18,53 @@
  */
 
 /**
- * @fileoverview Angular2 Component that details how Blockly.Block's are
- * rendered in the workspace in AccessibleBlockly. Also handles any
- * interactions with the blocks.
+ * @fileoverview Angular2 Component representing a Blockly.Block in the
+ * workspace.
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
 blocklyApp.WorkspaceBlockComponent = ng.core.Component({
   selector: 'blockly-workspace-block',
   template: `
-    <li [id]="idMap['blockRoot']" role="treeitem" class="blocklyHasChildren"
-        [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummary'], 'blockly-translate-workspace-block')"
+    <li [id]="componentIds.blockRoot" role="treeitem"
+        [attr.aria-labelledBy]="generateAriaLabelledByAttr(componentIds.blockSummary, 'blockly-translate-workspace-block')"
         [attr.aria-level]="level">
-      <label [id]="idMap['blockSummary']">{{getBlockDescription()}}</label>
+      <label #blockSummaryLabel [id]="componentIds.blockSummary">{{getBlockDescription()}}</label>
 
       <ol role="group">
         <template ngFor #blockInput [ngForOf]="block.inputList" #i="index">
-          <li role="treeitem" [id]="idMap['listItem' + i]" [attr.aria-level]="level + 1" *ngIf="blockInput.fieldRow.length"
-              [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['fieldLabel' + i])">
+          <li [id]="componentIds.inputs[i].inputLi" role="treeitem"
+              *ngIf="blockInput.fieldRow.length"
+              [attr.aria-labelledBy]="generateAriaLabelledByAttr(componentIds.inputs[i].fieldLabel)"
+              [attr.aria-level]="level + 1">
             <blockly-field-segment *ngFor="#fieldSegment of inputListAsFieldSegments[i]"
                                    [prefixFields]="fieldSegment.prefixFields"
                                    [mainField]="fieldSegment.mainField"
-                                   [mainFieldId]="idMap['fieldLabel' + i]"
+                                   [mainFieldId]="componentIds.inputs[i].fieldLabel"
                                    [level]="level + 2">
             </blockly-field-segment>
           </li>
 
-          <blockly-workspace-block *ngIf="blockInput.connection && blockInput.connection.targetBlock()"
-                                   [block]="blockInput.connection.targetBlock()" [level]="level + 1"
-                                   [tree]="tree">
-          </blockly-workspace-block>
-          <li #inputList [id]="idMap['inputList' + i]" role="treeitem"
-              *ngIf="blockInput.connection && !blockInput.connection.targetBlock()"
-              [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['inputMenuLabel' + i], 'blockly-submenu-indicator')"
-              [attr.aria-level]="level + 1">
-            <label [id]="idMap['inputMenuLabel' + i]">
-              {{getBlockNeededLabel(blockInput)}}
-            </label>
-            <button [id]="idMap[fieldButtonsInfo[0].baseIdKey + 'Button' + i]"
-                    (click)="fieldButtonsInfo[0].action(blockInput.connection)"
-                    [disabled]="fieldButtonsInfo[0].isDisabled(blockInput.connection)" tabindex="-1">
-              {{fieldButtonsInfo[0].translationIdForText|translate}}
-            </button>
-          </li>
+          <template [ngIf]="blockInput.connection">
+            <blockly-workspace-block *ngIf="blockInput.connection.targetBlock()"
+                                     [block]="blockInput.connection.targetBlock()"
+                                     [level]="level + 1"
+                                     [tree]="tree">
+            </blockly-workspace-block>
+            <li [id]="componentIds.inputs[i].actionButtonLi" role="treeitem"
+                *ngIf="!blockInput.connection.targetBlock()"
+                [attr.aria-labelledBy]="generateAriaLabelledByAttr(componentIds.inputs[i].buttonLabel)"
+                [attr.aria-level]="level + 1">
+              <label [id]="componentIds.inputs[i].label">
+                {{getBlockNeededLabel(blockInput)}}
+              </label>
+              <button [id]="componentIds.inputs[i].actionButton"
+                      (click)="addInteriorLink(blockInput.connection)"
+                      tabindex="-1">
+                {{'MARK_THIS_SPOT'|translate}}
+              </button>
+            </li>
+          </template>
         </template>
       </ol>
     </li>
@@ -90,13 +94,11 @@ blocklyApp.WorkspaceBlockComponent = ng.core.Component({
     }
   ],
   ngOnInit: function() {
-    var SUPPORTED_FIELDS = [
-        Blockly.FieldTextInput, Blockly.FieldDropdown,
-        Blockly.FieldCheckbox];
+    var SUPPORTED_FIELDS = [Blockly.FieldTextInput, Blockly.FieldDropdown];
     this.inputListAsFieldSegments = this.block.inputList.map(function(input) {
-      // Converts the input to a list of field segments. Each field segment
-      // represents a user-editable field, prefixed by any number of
-      // non-editable fields.
+      // Converts the input list to an array of field segments. Each field
+      // segment represents a user-editable field, prefixed by an arbitrary
+      // number of non-editable fields.
       var fieldSegments = [];
 
       var bufferedFields = [];
@@ -131,59 +133,41 @@ blocklyApp.WorkspaceBlockComponent = ng.core.Component({
       return fieldSegments;
     });
 
-    // Make a list of all the id keys.
-    this.idKeys = ['blockRoot', 'blockSummary', 'listItem', 'label'];
-
-    // Generate a list of action buttons.
-    this.fieldButtonsInfo = [{
-      baseIdKey: 'markSpot',
-      translationIdForText: 'MARK_THIS_SPOT',
-      action: function(connection) {
-        that.blockConnectionService.markConnection(connection);
-      },
-      isDisabled: function() {
-        return false;
-      }
-    }];
+    // Generate unique IDs for elements in this component.
+    this.componentIds = {};
+    this.componentIds.blockRoot =
+        this.block.id + blocklyApp.BLOCK_ROOT_ID_SUFFIX;
+    this.componentIds.blockSummary = this.block.id + '-blockSummary';
 
     var that = this;
-    this.fieldButtonsInfo.forEach(function(buttonInfo) {
-      for (var i = 0; i < that.block.inputList.length; i++) {
-        that.idKeys.push(
-            buttonInfo.baseIdKey + i, buttonInfo.baseIdKey + 'Button' + i);
+    this.componentIds.inputs = this.block.inputList.map(function(input, i) {
+      var idsToGenerate = ['inputLi', 'fieldLabel'];
+      if (input.connection && !input.connection.targetBlock()) {
+        idsToGenerate.push('actionButtonLi', 'actionButton', 'buttonLabel');
       }
+
+      var inputIds = {};
+      idsToGenerate.forEach(function(idBaseString) {
+        inputIds[idBaseString] = [that.block.id, i, idBaseString].join('-');
+      });
+
+      return inputIds;
     });
-    for (var i = 0; i < this.block.inputList.length; i++) {
-      var blockInput = this.block.inputList[i];
-      that.idKeys.push(
-          'inputList' + i, 'inputMenuLabel' + i, 'listItem' + i,
-          'fieldLabel' + i);
-    }
-  },
-  ngDoCheck: function() {
-    // Generate a unique id for each id key. This needs to be done every time
-    // changes happen, but after the first ng-init, in order to force the
-    // element ids to change in cases where, e.g., a block is inserted in the
-    // middle of a sequence of blocks.
-    this.idMap = {};
-    for (var i = 0; i < this.idKeys.length; i++) {
-      this.idMap[this.idKeys[i]] = this.block.id + this.idKeys[i];
-    }
   },
   ngAfterViewInit: function() {
-    // If this is a top-level tree in the workspace, set its id and active
-    // descendant. (Note that a timeout is needed here in order to trigger
-    // Angular change detection.)
+    // If this is a top-level tree in the workspace, ensure that it has an
+    // active descendant. (Note that a timeout is needed here in order to
+    // trigger Angular change detection.)
     var that = this;
     setTimeout(function() {
-      if (that.tree && that.level === 0 && !that.tree.id) {
-        that.tree.id = 'blockly-' + Blockly.utils.genUid();
-      }
-      if (that.tree && that.level === 0 &&
-          !that.treeService.getActiveDescId(that.tree.id)) {
-        that.treeService.setActiveDesc(that.idMap['blockRoot'], that.tree.id);
+      if (that.level === 0 && !that.treeService.getActiveDescId(that.tree.id)) {
+        that.treeService.setActiveDesc(
+            that.componentIds.blockRoot, that.tree.id);
       }
     });
+  },
+  addInteriorLink: function(connection) {
+    this.blockConnectionService.markConnection(connection);
   },
   getBlockDescription: function() {
     var blockDescription = this.utilsService.getBlockDescription(this.block);
@@ -197,9 +181,6 @@ blocklyApp.WorkspaceBlockComponent = ng.core.Component({
       return blockDescription;
     }
   },
-  generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
-    return mainLabel + (secondLabel ? ' ' + secondLabel : '');
-  },
   getBlockNeededLabel: function(blockInput) {
     // The input type name, or 'any' if any official input type qualifies.
     var inputTypeLabel = (
@@ -209,5 +190,8 @@ blocklyApp.WorkspaceBlockComponent = ng.core.Component({
         blockInput.type == Blockly.NEXT_STATEMENT ?
         Blockly.Msg.BLOCK : Blockly.Msg.VALUE);
     return inputTypeLabel + ' ' + blockTypeLabel + ' needed:';
+  },
+  generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
+    return mainLabel + (secondLabel ? ' ' + secondLabel : '');
   }
 });

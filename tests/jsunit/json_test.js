@@ -163,6 +163,76 @@ function test_json_dropdown() {
     assertEquals(dropdown, block.getField(FIELD_NAME));
     assertEquals(Blockly.FieldDropdown, dropdown.constructor);
     assertEquals(VALUE0, dropdown.getValue());
+
+    var options = dropdown.getOptions_();
+    assertEquals(LABEL0, options[0][0]);
+    assertEquals(VALUE0, options[0][1]);
+    assertEquals(LABEL1, options[1][0]);
+    assertEquals(VALUE1, options[1][1]);
+  } finally {
+    block && block.dispose();  // Disposes of dropdown, too.
+    workspace.dispose();
+    delete Blockly.Blocks[BLOCK_TYPE];
+  }
+}
+
+function test_json_dropdown_image() {
+  var BLOCK_TYPE = 'test_json_dropdown';
+  var FIELD_NAME = 'FIELD_NAME';
+  var IMAGE0 = {
+    'width': 12,
+    'height': 34,
+    'src': 'http://image0.src',
+    'alt': 'IMAGE0 alt text'
+  };
+  var VALUE0 = 'VALUE0';
+  var IMAGE1 = {
+    'width': 56,
+    'height': 78,
+    'src': 'http://image0.src'
+  };
+  var VALUE1 = 'VALUE1';
+
+  var workspace = new Blockly.Workspace();
+  var block;
+  try {
+    Blockly.defineBlocksWithJsonArray([{
+      "type": BLOCK_TYPE,
+      "message0": "%1",
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": FIELD_NAME,
+          "options": [
+            [IMAGE0, VALUE0],
+            [IMAGE1, VALUE1]
+          ]
+        }
+      ]
+    }]);
+
+    block = new Blockly.Block(workspace, BLOCK_TYPE);
+    assertEquals(1, block.inputList.length);
+    assertEquals(1, block.inputList[0].fieldRow.length);
+    var dropdown = block.inputList[0].fieldRow[0];
+    assertEquals(dropdown, block.getField(FIELD_NAME));
+    assertEquals(Blockly.FieldDropdown, dropdown.constructor);
+    assertEquals(VALUE0, dropdown.getValue());
+
+    var options = dropdown.getOptions_();
+    var image0 = options[0][0];
+    assertEquals(IMAGE0.width, image0.width);
+    assertEquals(IMAGE0.height, image0.height);
+    assertEquals(IMAGE0.src, image0.src);
+    assertEquals(IMAGE0.alt, image0.alt);
+    assertEquals(VALUE0, options[0][1]);
+
+    var image1 = options[1][0];
+    assertEquals(IMAGE1.width, image1.width);
+    assertEquals(IMAGE1.height, image1.height);
+    assertEquals(IMAGE1.src, image1.src);
+    assert(image1.alt == null);  // No alt specified.
+    assertEquals(VALUE1, options[1][1]);
   } finally {
     block && block.dispose();  // Disposes of dropdown, too.
     workspace.dispose();

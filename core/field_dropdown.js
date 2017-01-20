@@ -246,9 +246,11 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   }
   // Replace message strings.
   for (var i = 0; i < options.length; i++) {
-    var rawText = options[i][0];
-    var localizedText = Blockly.utils.replaceMessageReferences(rawText);
-    options[i][0] = localizedText;
+    if (typeof text == 'string') {
+      var rawText = options[i][0];
+      var localizedText = Blockly.utils.replaceMessageReferences(rawText);
+      options[i][0] = localizedText;
+    }
   }
   if (options.length < 2) {
     return;  // Nothing to trim.

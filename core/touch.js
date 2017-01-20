@@ -103,12 +103,29 @@ Blockly.longStop_ = function() {
  */
 Blockly.onMouseUp_ = function(e) {
   var workspace = Blockly.getMainWorkspace();
+  if (workspace.dragMode_ == Blockly.DRAG_BEGIN ||
+      !workspace.scrollbar && workspace.dragMode_ == Blockly.DRAG_NONE) {
+    // Workspace is not scrollable
+    if (workspace.dragMode_ == Blockly.DRAG_NONE) {
+      var dx = e.clientX - workspace.startDragMouseX;
+      var dy = e.clientY - workspace.startDragMouseY;
+      // If the mouse moved too far, don't broadcast a click on mouse up.
+      if (Math.sqrt(dx * dx + dy * dy) > Blockly.DRAG_RADIUS) {
+        return;
+      }
+      Blockly.Touch.clearTouchIdentifier();
+    }
+    if (Blockly.selected && !Blockly.selected.isMovable()) {
+      Blockly.Events.fire(new Blockly.Events.Ui(Blockly.selected, 'click',
+          undefined, undefined));
+    }
+  }
   if (workspace.dragMode_ == Blockly.DRAG_NONE) {
     return;
   }
   Blockly.Touch.clearTouchIdentifier();
 
-  // TODO(#781): Check whether this needs to be called for all drag modes. 
+  // TODO(#781): Check whether this needs to be called for all drag modes.
   workspace.resetDragSurface();
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   workspace.dragMode_ = Blockly.DRAG_NONE;
@@ -130,6 +147,10 @@ Blockly.onMouseUp_ = function(e) {
  */
 Blockly.onMouseMove_ = function(e) {
   var workspace = Blockly.getMainWorkspace();
+  // Workspace isn't scrollable, so a mouse move is meaningless.
+  if (!workspace.scrollbar) {
+    return;
+  }
   if (workspace.dragMode_ != Blockly.DRAG_NONE) {
     var dx = e.clientX - workspace.startDragMouseX;
     var dy = e.clientY - workspace.startDragMouseY;

@@ -311,11 +311,11 @@ Blockly.JavaScript['text_count'] = function(block) {
   var functionName = Blockly.JavaScript.provideFunction_(
       'textCount',
       ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-          '(string, search) {',
-       '  if (search.length === 0) {',
-       '    return string.length + 1;',
+          '(haystack, needle) {',
+       '  if (needle.length === 0) {',
+       '    return haystack.length + 1;',
        '  } else {',
-       '    return string.split(search).length - 1;',
+       '    return haystack.split(needle).length - 1;',
        '  }',
        '}']);
   var code = functionName + '(' + text + ', ' + sub + ')';
@@ -334,10 +334,11 @@ Blockly.JavaScript['text_replace'] = function(block) {
   var functionName = Blockly.JavaScript.provideFunction_(
       'textReplace',
       ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-          '(string, f, r) {',
-       '  f = f.replace(/([-()\\[\\]{}+?*.$\\^|,:#<!\\\\])/g,"\\\\$1")',
-       '       .replace(/\\x08/g,"\\\\x08");',
-       '  return string.replace(new RegExp(f, \'g\'), r);',
+          '(haystack, needle, replacement) {',
+       '  needle = ' +
+           'needle.replace(/([-()\\[\\]{}+?*.$\\^|,:#<!\\\\])/g,"\\\\$1")',
+       '                 .replace(/\\x08/g,"\\\\x08");',
+       '  return haystack.replace(new RegExp(needle, \'g\'), replacement);',
        '}']);
   var code = functionName + '(' + text + ', ' + from + ', ' + to + ')';
   return [code, Blockly.JavaScript.ORDER_MEMBER];

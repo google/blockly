@@ -452,9 +452,10 @@ blocklyApp.TreeService = ng.core.Class({
       return;
     }
 
-    if (document.activeElement.tagName == 'INPUT') {
-      // For input fields, only Esc and Tab keystrokes are handled specially.
-      if (e.keyCode == 27 || e.keyCode == 9) {
+    if (document.activeElement.tagName == 'INPUT' ||
+        document.activeElement.tagName == 'SELECT') {
+      // For input fields, Esc, Enter, and Tab keystrokes are handled specially.
+      if (e.keyCode == 9 || e.keyCode == 13 || e.keyCode == 27) {
         // Return the focus to the workspace tree containing the input field.
         document.getElementById(treeId).focus();
 

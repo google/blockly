@@ -113,6 +113,7 @@ Blockly.onMouseUp_ = function(e) {
       if (Math.sqrt(dx * dx + dy * dy) > Blockly.DRAG_RADIUS) {
         return;
       }
+      Blockly.Touch.clearTouchIdentifier();
     }
     if (Blockly.selected && !Blockly.selected.isMovable()) {
       Blockly.Events.fire(new Blockly.Events.Ui(Blockly.selected, 'click',

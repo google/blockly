@@ -370,12 +370,12 @@ Blockly.Lua['lists_reverse'] = function(block) {
       Blockly.Lua.ORDER_NONE) || '{}';
   var functionName = Blockly.Lua.provideFunction_(
       'list_reverse',
-      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(l)',
-       '  local t = {}',
-       '  for i = #l, 1, -1 do',
-       '    table.insert(t, l[i])',
+      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(input)',
+       '  local reversed = {}',
+       '  for i = #input, 1, -1 do',
+       '    table.insert(reversed, input[i])',
        '  end',
-       '  return t',
+       '  return reversed',
        'end']);
   var code = 'list_reverse(' + list + ')';
   return [code, Blockly.Lua.ORDER_HIGH];

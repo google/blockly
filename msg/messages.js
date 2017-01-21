@@ -1016,10 +1016,10 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = 'Split text into a list of texts, breaki
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = 'Join a list of texts into one text, separated by a delimiter.';
 
 /// url - Information describing reversing a list.
-Blockly.Msg.LISTS_REVERSE_HELPURL = '';
-/// Reverse a list of items %1.
+Blockly.Msg.LISTS_REVERSE_HELPURL = 'https://github.com/google/blockly/wiki/Lists#reversing-a-list';
+/// block text - Title of block that returns a copy of a list (%1) with the order of items reversed.
 Blockly.Msg.LISTS_REVERSE_MESSAGE0 = 'reverse %1';
-/// tooltip - See [https://github.com/google/blockly/wiki/Lists#reversing-a-list].
+/// tooltip - Short description for a block that reverses a copy of a list.
 Blockly.Msg.LISTS_REVERSE_TOOLTIP = 'Reverse a copy of a list.';
 
 /// grammar - Text that follows an ordinal number (a number that indicates

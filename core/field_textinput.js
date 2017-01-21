@@ -216,7 +216,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
   var text = htmlInput.value;
   if (text !== htmlInput.oldValue_) {
     htmlInput.oldValue_ = text;
-    this.setText(text);
+    this.setValue(text);
     this.validate_();
   } else if (goog.userAgent.WEBKIT) {
     // Cursor key.  Render the source block to show the caret moving.

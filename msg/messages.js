@@ -766,6 +766,30 @@ Blockly.Msg.TEXT_PROMPT_TOOLTIP_NUMBER = 'Prompt for user for a number.';
 /// https://github.com/google/blockly/wiki/Text#printing-text].
 Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT = 'Prompt for user for some text.';
 
+/// block text - Title of a block that counts the number of instances of
+/// a smaller pattern (%1) inside a longer string (%2).
+Blockly.Msg.TEXT_COUNT_MESSAGE0 = 'count %1 in %2';
+/// url - Information about counting how many times a string appears in another string.
+Blockly.Msg.TEXT_COUNT_HELPURL = 'https://github.com/google/blockly/wiki/Text#counting-substrings';
+/// tooltip - Short description of a block that counts how many times some text occurs within some other text.
+Blockly.Msg.TEXT_COUNT_TOOLTIP = 'Count how many times some text occurs within some other text.';
+
+/// block text - Title of a block that returns a copy of text (%3) with all
+/// instances of some smaller text (%1) replaced with other text (%2).
+Blockly.Msg.TEXT_REPLACE_MESSAGE0 = 'replace %1 with %2 in %3';
+/// url - Information about replacing each copy text (or string, in computer lingo) with other text.
+Blockly.Msg.TEXT_REPLACE_HELPURL = 'https://github.com/google/blockly/wiki/Text#replacing-substrings';
+/// tooltip - Short description of a block that replaces copies of text in a large text with other text.
+Blockly.Msg.TEXT_REPLACE_TOOLTIP = 'Replace all occurances of some text within some other text.';
+
+/// block text - Title of block that returns a copy of text (%1) with the order
+/// of letters and characters reversed.
+Blockly.Msg.TEXT_REVERSE_MESSAGE0 = 'reverse %1';
+/// url - Information about reversing a letters/characters in text.
+Blockly.Msg.TEXT_REVERSE_HELPURL = 'https://github.com/google/blockly/wiki/Text#reversing-text';
+/// tooltip - See [https://github.com/google/blockly/wiki/Text].
+Blockly.Msg.TEXT_REVERSE_TOOLTIP = 'Reverses the order of the characters in the text.';
+
 // Lists Blocks.
 /// url - Information on empty lists.
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = 'https://github.com/google/blockly/wiki/Lists#create-empty-list';

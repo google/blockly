@@ -32,6 +32,7 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
 
       <div *ngIf="workspace" class="blocklyWorkspace">
         <ol #tree *ngFor="#topBlock of workspace.topBlocks_; #groupIndex = index"
+            [id]="tree.id || getNewTreeId()"
             tabindex="0" role="tree" class="blocklyTree blocklyWorkspaceFocusTarget"
             [attr.aria-activedescendant]="getActiveDescId(tree.id)"
             [attr.aria-labelledby]="workspaceTitle.id"
@@ -70,8 +71,13 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
 
       this.ID_FOR_EMPTY_WORKSPACE_BTN = blocklyApp.ID_FOR_EMPTY_WORKSPACE_BTN;
       this.workspace = blocklyApp.workspace;
+      this.currentTreeId = 0;
     }
   ],
+  getNewTreeId: function() {
+    this.currentTreeId++;
+    return 'blockly-tree-' + this.currentTreeId;
+  },
   getActiveDescId: function(treeId) {
     return this.treeService.getActiveDescId(treeId);
   },

@@ -25,6 +25,8 @@
 'use strict';
 
 function test_extension() {
+  var workspace = new Blockly.Workspace();
+  var block;
   try {
     assertUndefined(Blockly.Extensions.ALL_['extensions_test']);
 
@@ -54,14 +56,16 @@ function test_extension() {
     assertEquals(0, numCallsToBefore);
     assertEquals(0, numCallsToAfter);
 
-    var workspace = new Blockly.Workspace();
-    var block = new Blockly.Block(workspace, 'extension_test_block');
+    block = new Blockly.Block(workspace, 'extension_test_block');
 
     assertEquals(1, numCallsToBefore);
     assertEquals(1, numCallsToAfter);
     assert(block.extendedWithBefore);
     assert(block.extendedWithAfter);
- } finally {
+  } finally {
+    block && block.dispose();
+    workspace.dispose();
+
     delete Blockly.Extensions.ALL_['extensions_test_before'];
     delete Blockly.Extensions.ALL_['extensions_test_after'];
     delete Blockly.Blocks['extension_test_block'];
@@ -69,6 +73,8 @@ function test_extension() {
 }
 
 function test_extension_missing() {
+  var workspace = new Blockly.Workspace();
+  var block;
   var exceptionWasThrown = false;
   try {
     assertUndefined(Blockly.Extensions.ALL_['missing_extension']);
@@ -78,12 +84,13 @@ function test_extension_missing() {
       "extensions": ["missing_extension"]
     }]);
 
-    var workspace = new Blockly.Workspace();
-    var block = new Blockly.Block(workspace, 'missing_extension_block');
+    block = new Blockly.Block(workspace, 'missing_extension_block');
   } catch (e) {
     // Expected.
     exceptionWasThrown = true;
   } finally {
+    block && block.dispose();
+    workspace.dispose();
     delete Blockly.Blocks['missing_extension_block'];
   }
   assert(exceptionWasThrown);
@@ -130,6 +137,9 @@ function test_extension_not_a_function() {
 function test_parent_tooltip_when_inline() {
   var defaultTooltip = "defaultTooltip";
   var parentTooltip = "parentTooltip";
+
+  var workspace = new Blockly.Workspace();
+  var block;
   try {
     Blockly.defineBlocksWithJsonArray([
       {
@@ -152,8 +162,7 @@ function test_parent_tooltip_when_inline() {
       }
     ]);
 
-    var workspace = new Blockly.Workspace();
-    var block = new Blockly.Block(workspace, 'test_parent_tooltip_when_inline');
+    block = new Blockly.Block(workspace, 'test_parent_tooltip_when_inline');
 
     // Tooltip is dynamic after extension initialization.
     assert(goog.isFunction(block.tooltip));
@@ -178,6 +187,9 @@ function test_parent_tooltip_when_inline() {
     assert(!block.getParent());
     assertEquals(block.tooltip(), defaultTooltip);
   } finally {
+    block && block.dispose();
+    workspace.dispose();
+
     delete Blockly.Blocks['test_parent_tooltip_when_inline'];
     delete Blockly.Blocks['test_parent'];
   }

@@ -841,3 +841,27 @@ Blockly.Blocks['lists_split'] = {
     this.updateType_(xmlElement.getAttribute('mode'));
   }
 };
+
+Blockly.Blocks['lists_reverse'] = {
+  /**
+   * Block for reversing a list.
+   * @this Blockly.Block
+   **/
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.LISTS_REVERSE_MESSAGE0,
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "LIST",
+          "check": "Array"
+        }
+      ],
+      "output": "Array",
+      "inputsInline": true,
+      "colour": Blockly.Blocks.lists.HUE,
+      "tooltip": Blockly.Msg.LISTS_REVERSE_TOOLTIP,
+      "helpUrl": Blockly.Msg.LISTS_REVERSE_HELPURL
+    });
+  }
+};

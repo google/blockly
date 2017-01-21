@@ -689,3 +689,90 @@ Blockly.Blocks['text_prompt'] = {
   mutationToDom: Blockly.Blocks['text_prompt_ext'].mutationToDom,
   domToMutation: Blockly.Blocks['text_prompt_ext'].domToMutation
 };
+
+Blockly.Blocks['text_count'] = {
+  /**
+   * Block for counting how many times one string appears within another string.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.TEXT_COUNT_MESSAGE0,
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "SUB",
+          "check": "String"
+        },
+        {
+          "type": "input_value",
+          "name": "TEXT",
+          "check": "String"
+        }
+      ],
+      "output": "Number",
+      "inputsInline": true,
+      "colour": Blockly.Blocks.math.HUE,
+      "tooltip": Blockly.Msg.TEXT_COUNT_TOOLTIP,
+      "helpUrl": Blockly.Msg.TEXT_COUNT_HELPURL
+    });
+  }
+};
+
+Blockly.Blocks['text_replace'] = {
+  /**
+   * Block for replacing one string with another in the text.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.TEXT_REPLACE_MESSAGE0,
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "FROM",
+          "check": "String"
+        },
+        {
+          "type": "input_value",
+          "name": "TO",
+          "check": "String"
+        },
+        {
+          "type": "input_value",
+          "name": "TEXT",
+          "check": "String"
+        },
+      ],
+      "output": "String",
+      "inputsInline": true,
+      "colour": Blockly.Blocks.texts.HUE,
+      "tooltip": Blockly.Msg.TEXT_REPLACE_TOOLTIP,
+      "helpUrl": Blockly.Msg.TEXT_REPLACE_HELPURL
+    });
+  }
+};
+
+Blockly.Blocks['text_reverse'] = {
+  /**
+   * Block for reversing a string.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.TEXT_REVERSE_MESSAGE0,
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "TEXT",
+          "check": "String"
+        },
+      ],
+      "output": "String",
+      "inputsInline": true,
+      "colour": Blockly.Blocks.texts.HUE,
+      "tooltip": Blockly.Msg.TEXT_REVERSE_TOOLTIP,
+      "helpUrl": Blockly.Msg.TEXT_REVERSE_HELPURL
+    });
+  }
+};

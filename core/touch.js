@@ -108,7 +108,7 @@ Blockly.onMouseUp_ = function(e) {
   }
   Blockly.Touch.clearTouchIdentifier();
 
-  // TODO(#781): Check whether this needs to be called for all drag modes. 
+  // TODO(#781): Check whether this needs to be called for all drag modes.
   workspace.resetDragSurface();
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   workspace.dragMode_ = Blockly.DRAG_NONE;
@@ -196,7 +196,7 @@ Blockly.Touch.checkTouchIdentifier = function(e) {
         e.changedTouches[0].identifier != null) ?
         e.changedTouches[0].identifier : 'mouse';
 
-  // if (Blockly.touchIdentifier_ )is insufficient because android touch
+  // if (Blockly.touchIdentifier_ ) is insufficient because android touch
   // identifiers may be zero.
   if (Blockly.Touch.touchIdentifier_ != undefined &&
       Blockly.Touch.touchIdentifier_ != null) {

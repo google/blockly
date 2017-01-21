@@ -639,6 +639,20 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     // Click, not drag, so stop waiting for other touches from this identifier.
     Blockly.Touch.clearTouchIdentifier();
   } else if (!this.isMovable()) {
+    // Click handler for immovable blocks.
+    var mouseupWrapper = Blockly.bindEvent_(document,
+        'mouseup', this, function(e) {
+            Blockly.unbindEvent_(mouseupWrapper);
+            if (this.workspace) {
+              // Only fire a click event if the workpace hasn't dragged much.
+              var dx = e.clientX - this.workspace.startDragMouseX;
+              var dy = e.clientY - this.workspace.startDragMouseY;
+              if (Math.sqrt(dx * dx + dy * dy) < Blockly.DRAG_RADIUS) {
+                Blockly.Events.fire(
+                    new Blockly.Events.Ui(this, 'click', undefined, undefined));
+              }
+            }
+    });
     // Allow immovable blocks to be selected and context menued, but not
     // dragged.  Let this event bubble up to document, so the workspace may be
     // dragged instead.
@@ -709,7 +723,8 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
       // Don't throw an object in the trash can if it just got connected.
       this.workspace.trashcan.close();
     }
-  } else if (deleteArea && !this.getParent() && Blockly.selected.isDeletable()) {
+  } else if (deleteArea && !this.getParent() &&
+             Blockly.selected.isDeletable()) {
     // We didn't connect the block, and it was over the trash can or the
     // toolbox.  Delete it.
     var trashcan = this.workspace.trashcan;

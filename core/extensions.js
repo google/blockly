@@ -114,11 +114,10 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
           // Warn for missing values on generated tooltips
           var warning = 'No tooltip mapping for value ' + value +
               ' of field ' + dropdownName;
-          if (thisBlock.type) {
+          if (thisBlock.type != null) {
             warning += (' of block type ' + thisBlock.type);
           }
-          warning += '.';
-          console.warn(warning);
+          console.warn(warning + '.');
         }
       } else {
         tooltip = Blockly.utils.replaceMessageReferences(tooltip);
@@ -146,8 +145,6 @@ Blockly.Extensions.checkDropdownOptionsInTable_ =
         if (lookupTable[optionKey] == null) {
           console.warn('No tooltip mapping for value ' + optionKey +
             ' of field ' + dropdownName + ' of block type ' + block.type);
-        } else {
-
         }
       }
     }

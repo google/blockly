@@ -75,6 +75,82 @@ Blockly.Extensions.apply = function(name, block) {
 };
 
 /**
+ * Builds an extension function that will map a dropdown value to a tooltip string.
+ * Tooltip strings will be passed through Blockly.utils.checkMessageReferences(..)
+ * immediately and Blockly.utils.replaceMessageReferences(..) at display time.
+ * @param {string} dropdownName The name of the field whose value is the key
+ *     to the lookup table.
+ * @param {!Object<string, string>} lookupTable The table of field values to
+ *     tooltip text.
+ * @return {Function} The extension function.
+ */
+Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable) {
+  // List of block types already validated, to minimize duplicate warnings.
+  var blockTypesChecked = [];
+
+  // Validate message strings early.
+  for (var key in lookupTable) {
+    Blockly.utils.checkMessageReferences(lookupTable[key]);
+  }
+
+  /**
+   * The actual extension.
+   * @this {Blockly.Block}
+   */
+  return function() {
+    var thisBlock = this;
+
+    if (this.type && !blockTypesChecked.includes(this.type)) {
+      Blockly.Extensions.checkDropdownOptionsInTable_(
+        this, dropdownName, lookupTable);
+      blockTypesChecked.push(this.type);
+    }
+
+    this.setTooltip(function() {
+      var value = thisBlock.getFieldValue(dropdownName);
+      var tooltip = lookupTable[value];
+      if (tooltip == null) {
+        if (!blockTypesChecked.includes(thisBlock.type)) {
+          // Warn for missing values on generated tooltips
+          var warning = 'No tooltip mapping for value ' + value +
+              ' of field ' + dropdownName;
+          if (thisBlock.type != null) {
+            warning += (' of block type ' + thisBlock.type);
+          }
+          console.warn(warning + '.');
+        }
+      } else {
+        tooltip = Blockly.utils.replaceMessageReferences(tooltip);
+      }
+      return tooltip;
+    });
+  };
+};
+
+/**
+ * Checks all options keys are present in the provided string lookup table.
+ * Emits console warnings when they are not.
+ * @param {!Blockly.Block} block The block containing the dropdown
+ * @param {string} dropdownName The name of the dropdown
+ * @param {!Object<string, string>} lookupTable The string lookup table
+ */
+Blockly.Extensions.checkDropdownOptionsInTable_ =
+  function(block, dropdownName, lookupTable) {
+    // Validate all dropdown options have values.
+    var dropdown = block.getField(dropdownName);
+    if (!dropdown.isOptionListDynamic()) {
+      var options = dropdown.getOptions();
+      for (var i = 0; i < options.length; ++i) {
+        var optionKey = options[i][1]; // label, then value
+        if (lookupTable[optionKey] == null) {
+          console.warn('No tooltip mapping for value ' + optionKey +
+            ' of field ' + dropdownName + ' of block type ' + block.type);
+        }
+      }
+    }
+  };
+
+/**
  * Configures the tooltip to mimic the parent block when connected. Otherwise,
  * uses the tooltip text at the time this extension is initialized. This takes
  * advantage of the fact that all other values from JSON are initialized before

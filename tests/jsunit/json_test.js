@@ -179,6 +179,8 @@ function test_json_dropdown() {
 function test_json_dropdown_image() {
   var BLOCK_TYPE = 'test_json_dropdown';
   var FIELD_NAME = 'FIELD_NAME';
+  var IMAGE1_ALT_TEXT = 'Localized message.';
+  Blockly.Msg['ALT_TEXT'] = IMAGE1_ALT_TEXT;
   var IMAGE0 = {
     'width': 12,
     'height': 34,
@@ -189,9 +191,16 @@ function test_json_dropdown_image() {
   var IMAGE1 = {
     'width': 56,
     'height': 78,
-    'src': 'http://image0.src'
+    'src': 'http://image1.src',
+    'alt': '%{BKY_ALT_TEXT}'
   };
   var VALUE1 = 'VALUE1';
+  var IMAGE2 = {
+    'width': 90,
+    'height': 123,
+    'src': 'http://image2.src'
+  };
+  var VALUE2 = 'VALUE2';
 
   var workspace = new Blockly.Workspace();
   var block;
@@ -205,7 +214,8 @@ function test_json_dropdown_image() {
           "name": FIELD_NAME,
           "options": [
             [IMAGE0, VALUE0],
-            [IMAGE1, VALUE1]
+            [IMAGE1, VALUE1],
+            [IMAGE2, VALUE2]
           ]
         }
       ]
@@ -231,12 +241,20 @@ function test_json_dropdown_image() {
     assertEquals(IMAGE1.width, image1.width);
     assertEquals(IMAGE1.height, image1.height);
     assertEquals(IMAGE1.src, image1.src);
-    assert(image1.alt == null);  // No alt specified.
+    assertEquals(IMAGE1.alt, IMAGE1_ALT_TEXT);  // Via Msg reference
     assertEquals(VALUE1, options[1][1]);
+
+    var image2 = options[2][0];
+    assertEquals(IMAGE2.width, image2.width);
+    assertEquals(IMAGE2.height, image2.height);
+    assertEquals(IMAGE2.src, image2.src);
+    assert(image2.alt == null);  // No alt specified.
+    assertEquals(VALUE2, options[2][1]);
   } finally {
     block && block.dispose();  // Disposes of dropdown, too.
     workspace.dispose();
     delete Blockly.Blocks[BLOCK_TYPE];
+    delete Blockly.Msg['ALTTEXT'];
   }
 }
 

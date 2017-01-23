@@ -244,22 +244,26 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   if (!goog.isArray(options)) {
     return;
   }
-  // Replace message strings.
+  var hasImages = false;
+
+  // Localize label text and image alt text.
   for (var i = 0; i < options.length; i++) {
-    var rawText = options[i][0];
-    var localizedText = Blockly.utils.replaceMessageReferences(rawText);
-    options[i][0] = localizedText;
+    var label = options[i][0];
+    if (typeof label == 'string') {
+      options[i][0] = Blockly.utils.replaceMessageReferences(label);
+    } else {
+      if (label.alt != null) {
+        options[i][0].alt = Blockly.utils.replaceMessageReferences(label.alt);
+      }
+      hasImages = true;
+    }
   }
-  if (options.length < 2) {
-    return;  // Nothing to trim.
+  if (hasImages || options.length < 2) {
+    return;  // Do nothing if too few items or at least one label is an image.
   }
   var strings = [];
   for (var i = 0; i < options.length; i++) {
-    var text = options[i][0];
-    if (typeof text != 'string') {
-      return;  // No text splitting if there is an image in the list.
-    }
-    strings.push(text);
+    strings.push(options[i][0]);
   }
   var shortest = Blockly.utils.shortestStringLength(strings);
   var prefixLength = Blockly.utils.commonWordPrefix(strings, shortest);

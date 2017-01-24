@@ -726,14 +726,13 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   this.hide();
   this.clearOldBlocks_();
 
-  if (xmlList == Blockly.Variables.NAME_TYPE) {
-    // Special category for variables.
-    xmlList =
-        Blockly.Variables.flyoutCategory(this.workspace_.targetWorkspace);
-  } else if (xmlList == Blockly.Procedures.NAME_TYPE) {
-    // Special category for procedures.
-    xmlList =
-        Blockly.Procedures.flyoutCategory(this.workspace_.targetWorkspace);
+  // Handle dynamic categories, represented by a name instead of a list of XML.
+  // Look up the correct category generation function and call that to get a
+  // valid XML list.
+  if (typeof xmlList == 'string') {
+    var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
+        xmlList);
+    xmlList = fnToApply(this.workspace_.targetWorkspace);
   }
 
   this.setVisible(true);

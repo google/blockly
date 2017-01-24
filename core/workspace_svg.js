@@ -89,6 +89,11 @@ Blockly.WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface
    * @private
    */
   this.highlightedBlocks_ = [];
+
+  this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
+      Blockly.Variables.flyoutCategory);
+  this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
+      Blockly.Procedures.flyoutCategory);
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -241,6 +246,14 @@ Blockly.WorkspaceSvg.prototype.lastRecordedPageScroll_ = null;
  * @private
  */
 Blockly.WorkspaceSvg.prototype.flyoutButtonCallbacks_ = {};
+
+/**
+ * Map from function names to callbacks, for deciding what to do when a custom
+ * toolbox category is opened.
+ * @type {!Object<string, function(!Blockly.Workspace):!Array<!Element>>}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.toolboxCategoryCallbacks_ = {};
 
 /**
  * Inverted screen CTM, for use in mouseToSvg.
@@ -1664,6 +1677,30 @@ Blockly.WorkspaceSvg.prototype.registerButtonCallback = function(key, func) {
  */
 Blockly.WorkspaceSvg.prototype.getButtonCallback = function(key) {
   return this.flyoutButtonCallbacks_[key];
+};
+
+/**
+ * Register a callback function associated with a given key, for populating
+ * custom toolbox categories in this workspace.  See the variable and procedure
+ * categories as an example.
+ * @param {string} key The name to use to look up this function.
+ * @param {function(!Blockly.Workspace):!Array<!Element>} func The function to
+ *     call when the given toolbox category is opened.
+ */
+Blockly.WorkspaceSvg.prototype.registerToolboxCategoryCallback = function(key,
+    func) {
+  this.toolboxCategoryCallbacks_[key] = func;
+};
+
+/**
+ * Get the callback function associated with a given key, for populating
+ * custom toolbox categories in this workspace.
+ * @param {string} key The name to use to look up the function.
+ * @return {function(!Blockly.Workspace):!Array<!Element>} The function
+ *     corresponding to the given key for this workspace.
+ */
+Blockly.WorkspaceSvg.prototype.getToolboxCategoryCallback = function(key) {
+  return this.toolboxCategoryCallbacks_[key];
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.

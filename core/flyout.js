@@ -732,7 +732,11 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   if (typeof xmlList == 'string') {
     var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
         xmlList);
+    goog.asserts.assert(goog.isFunction(fnToApply),
+        'Couldn\'t find a callback function when opening a toolbox category.');
     xmlList = fnToApply(this.workspace_.targetWorkspace);
+    goog.asserts.assert(goog.isArray(xmlList),
+        'The result of a toolbox category callback must be an array.');
   }
 
   this.setVisible(true);

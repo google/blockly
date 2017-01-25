@@ -746,7 +746,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
     var backpackOption = {
       enabled:true,
       text: Blockly.Msg.COPY_TO_BACKPACK +
-        " (" + Blockly.getMainWorkspace().backpack.count() + ")",
+        " (" + Blockly.getMainWorkspace().backpack_.count() + ")",
       callback: function() {
         if (Blockly.selected && Blockly.selected.isDeletable() &&
             Blockly.selected.workspace == Blockly.mainWorkspace) {

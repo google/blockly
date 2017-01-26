@@ -164,7 +164,7 @@ function test_json_dropdown() {
     assertEquals(Blockly.FieldDropdown, dropdown.constructor);
     assertEquals(VALUE0, dropdown.getValue());
 
-    var options = dropdown.getOptions_();
+    var options = dropdown.getOptions();
     assertEquals(LABEL0, options[0][0]);
     assertEquals(VALUE0, options[0][1]);
     assertEquals(LABEL1, options[1][0]);
@@ -229,7 +229,7 @@ function test_json_dropdown_image() {
     assertEquals(Blockly.FieldDropdown, dropdown.constructor);
     assertEquals(VALUE0, dropdown.getValue());
 
-    var options = dropdown.getOptions_();
+    var options = dropdown.getOptions();
     var image0 = options[0][0];
     assertEquals(IMAGE0.width, image0.width);
     assertEquals(IMAGE0.height, image0.height);

@@ -836,17 +836,23 @@ Blockly.utils.insertAfter_ = function(newNode, refNode) {
 };
 
 /**
- * Calls a function after the document has loaded, possibly immediately.
+ * Calls a function after the page has loaded, possibly immediately.
+ *
+ * This function does not run in a Node.js environment due to lack of document
+ * object.
  * @param {function()} fn Function to run.
+ * @throws Error Will throw if no global document can be found (e.g., Node.js).
  */
-Blockly.utils.runAfterLoad = function(fn) {
-  if (document.readyState === "complete") {
-    // Page has already loaded. Call immediately.
-    fn();
+Blockly.utils.runAfterPageLoad = function(fn) {
+  if (document == null) {
+    throw new Error('Blockly.utils.runAfterPageLoad() requires browser document.');
+  }
+  if (document.readyState === 'complete') {
+    fn();  // Page has already loaded. Call immediately.
   } else {
     // Poll readyState.
     var readyStateCheckInterval = setInterval(function() {
-      if (document.readyState === "complete") {
+      if (document.readyState === 'complete') {
           clearInterval(readyStateCheckInterval);
           fn();
       }

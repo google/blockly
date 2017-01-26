@@ -89,6 +89,11 @@ Blockly.WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface
    * @private
    */
   this.highlightedBlocks_ = [];
+
+  this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
+      Blockly.Variables.flyoutCategory);
+  this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
+      Blockly.Procedures.flyoutCategory);
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -241,6 +246,14 @@ Blockly.WorkspaceSvg.prototype.lastRecordedPageScroll_ = null;
  * @private
  */
 Blockly.WorkspaceSvg.prototype.flyoutButtonCallbacks_ = {};
+
+/**
+ * Map from function names to callbacks, for deciding what to do when a custom
+ * toolbox category is opened.
+ * @type {!Object<string, function(!Blockly.Workspace):!Array<!Element>>}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.toolboxCategoryCallbacks_ = {};
 
 /**
  * Inverted screen CTM, for use in mouseToSvg.
@@ -409,6 +422,13 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   if (this.zoomControls_) {
     this.zoomControls_.dispose();
     this.zoomControls_ = null;
+  }
+
+  if (this.toolboxCategoryCallbacks_) {
+    this.toolboxCategoryCallbacks_ = null;
+  }
+  if (this.flyoutButtonCallbacks_) {
+    this.flyoutButtonCallbacks_ = null;
   }
   if (!this.options.parentWorkspace) {
     // Top-most workspace.  Dispose of the div that the
@@ -1652,6 +1672,8 @@ Blockly.WorkspaceSvg.prototype.clear = function() {
  *     given button is clicked.
  */
 Blockly.WorkspaceSvg.prototype.registerButtonCallback = function(key, func) {
+  goog.asserts.assert(goog.isFunction(func),
+      'Button callbacks must be functions.');
   this.flyoutButtonCallbacks_[key] = func;
 };
 
@@ -1659,11 +1681,56 @@ Blockly.WorkspaceSvg.prototype.registerButtonCallback = function(key, func) {
  * Get the callback function associated with a given key, for clicks on buttons
  * and labels in the flyout.
  * @param {string} key The name to use to look up the function.
- * @return {function(!Blockly.FlyoutButton)} The function corresponding to the
- *     given key for this workspace.
+ * @return {?function(!Blockly.FlyoutButton)} The function corresponding to the
+ *     given key for this workspace; null if no callback is registered.
  */
 Blockly.WorkspaceSvg.prototype.getButtonCallback = function(key) {
-  return this.flyoutButtonCallbacks_[key];
+  var result = this.flyoutButtonCallbacks_[key];
+  return result ? result : null;
+};
+
+/**
+ * Remove a callback for a click on a button in the flyout.
+ * @param {string} key The name associated with the callback function.
+ */
+Blockly.WorkspaceSvg.prototype.removeButtonCallback = function(key) {
+  this.flyoutButtonCallbacks_[key] = null;
+};
+
+/**
+ * Register a callback function associated with a given key, for populating
+ * custom toolbox categories in this workspace.  See the variable and procedure
+ * categories as an example.
+ * @param {string} key The name to use to look up this function.
+ * @param {function(!Blockly.Workspace):!Array<!Element>} func The function to
+ *     call when the given toolbox category is opened.
+ */
+Blockly.WorkspaceSvg.prototype.registerToolboxCategoryCallback = function(key,
+    func) {
+  goog.asserts.assert(goog.isFunction(func),
+      'Toolbox category callbacks must be functions.');
+  this.toolboxCategoryCallbacks_[key] = func;
+};
+
+/**
+ * Get the callback function associated with a given key, for populating
+ * custom toolbox categories in this workspace.
+ * @param {string} key The name to use to look up the function.
+ * @return {?function(!Blockly.Workspace):!Array<!Element>} The function
+ *     corresponding to the given key for this workspace, or null if no function
+ *     is registered.
+ */
+Blockly.WorkspaceSvg.prototype.getToolboxCategoryCallback = function(key) {
+  var result = this.toolboxCategoryCallbacks_[key];
+  return result ? result : null;
+};
+
+/**
+ * Remove a callback for a click on a custom category's name in the toolbox.
+ * @param {string} key The name associated with the callback function.
+ */
+Blockly.WorkspaceSvg.prototype.removeToolboxCategoryCallback = function(key) {
+  this.toolboxCategoryCallbacks_[key] = null;
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.

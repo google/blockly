@@ -75,6 +75,7 @@ Blockly.Extensions.registerMixin = function(name, mixinObj) {
     this.mixin(mixinObj);
   });
 };
+
 /**
  * Applies an extension method to a block. This should only be called during
  * block construction.

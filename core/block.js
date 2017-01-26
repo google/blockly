@@ -1023,6 +1023,10 @@ Blockly.Block.prototype.jsonInit = function(json) {
     var localizedText = Blockly.utils.replaceMessageReferences(rawValue);
     this.setTooltip(localizedText);
   }
+  if (json['enableContextMenu'] !== undefined) {
+    var rawValue = json['enableContextMenu'];
+    this.contextMenu = !!rawValue;
+  }
   if (json['helpUrl'] !== undefined) {
     var rawValue = json['helpUrl'];
     var localizedValue = Blockly.utils.replaceMessageReferences(rawValue);
@@ -1102,7 +1106,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
     }
   }
   goog.asserts.assert(indexCount == args.length,
-      'Message does not reference all %s arg(s).', args.length);
+      'block "%s": Message does not reference all %s arg(s).', this.type, args.length);
   // Add last dummy input if needed.
   if (elements.length && (typeof elements[elements.length - 1] == 'string' ||
       goog.string.startsWith(elements[elements.length - 1]['type'],
@@ -1443,4 +1447,17 @@ Blockly.Block.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled) {
   }
 
   return true;
+};
+
+Blockly.Block.prototype.describe = function() {
+  var msg;
+  if (this.type) {
+    msg = '"' + this.type + '" block';
+  } else {
+    msg = 'Block';
+  }
+  if (this.id) {
+    msg += ' (id="' + this.id + '")';
+  }
+  return msg;
 };

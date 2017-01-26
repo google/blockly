@@ -40,7 +40,7 @@ goog.require('Blockly.Blocks');
  */
 Blockly.Blocks.colour.HUE = 20;
 
-Blockly.defineBlocksWithJsonArray([
+Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for colour picker.
   {
     "type": "colour_picker",
@@ -128,4 +128,4 @@ Blockly.defineBlocksWithJsonArray([
     "helpUrl": "%{BKY_COLOUR_BLEND_HELPURL}",
     "tooltip": "%{BKY_COLOUR_BLEND_TOOLTIP}"
   }
-]);  // End of defineBlocksWithJsonArray(...) (Do not delete this comment.)
+]);  // END JSON EXTRACT (Do not delete this comment.)

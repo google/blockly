@@ -834,3 +834,22 @@ Blockly.utils.insertAfter_ = function(newNode, refNode) {
     parentNode.appendChild(newNode);
   }
 };
+
+/**
+ * Calls a function after the document has loaded, possibly immediately.
+ * @param {function()} fn Function to run.
+ */
+Blockly.utils.runAfterLoad = function(fn) {
+  if (document.readyState === "complete") {
+    // Page has already loaded. Call immediately.
+    fn();
+  } else {
+    // Poll readyState.
+    var readyStateCheckInterval = setInterval(function() {
+      if (document.readyState === "complete") {
+          clearInterval(readyStateCheckInterval);
+          fn();
+      }
+    }, 10);
+  }
+};

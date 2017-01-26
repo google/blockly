@@ -88,16 +88,23 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
   // List of block types already validated, to minimize duplicate warnings.
   var blockTypesChecked = [];
 
-  // Validate message strings early.
-  for (var key in lookupTable) {
-    Blockly.utils.checkMessageReferences(lookupTable[key]);
+  // Check the tooltip string messages for invalid references.
+  // Wait for load, in case Blockly.Msg is not yet populated.
+  // runAfterPageLoad() does not run in a Node.js environment due to lack of
+  // document object, in which case skip the validation.
+  if (document) { // Relies on document.readyState
+    Blockly.utils.runAfterPageLoad(function() {
+      for (var key in lookupTable) {
+        Blockly.utils.checkMessageReferences(lookupTable[key]);
+      }
+    });
   }
 
   /**
    * The actual extension.
    * @this {Blockly.Block}
    */
-  return function() {
+  var extensionFn = function() {
     var thisBlock = this;
 
     if (this.type && !blockTypesChecked.includes(this.type)) {
@@ -125,6 +132,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
       return tooltip;
     });
   };
+  return extensionFn;
 };
 
 /**

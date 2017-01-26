@@ -834,3 +834,25 @@ Blockly.utils.insertAfter_ = function(newNode, refNode) {
     parentNode.appendChild(newNode);
   }
 };
+
+/**
+ * Calls a function after the page has loaded, possibly immediately.
+ * @param {function()} fn Function to run.
+ * @throws Error Will throw if no global document can be found (e.g., Node.js).
+ */
+Blockly.utils.runAfterPageLoad = function(fn) {
+  if (!document) {
+    throw new Error('Blockly.utils.runAfterPageLoad() requires browser document.');
+  }
+  if (document.readyState === 'complete') {
+    fn();  // Page has already loaded. Call immediately.
+  } else {
+    // Poll readyState.
+    var readyStateCheckInterval = setInterval(function() {
+      if (document.readyState === 'complete') {
+          clearInterval(readyStateCheckInterval);
+          fn();
+      }
+    }, 10);
+  }
+};

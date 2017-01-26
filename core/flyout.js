@@ -37,6 +37,17 @@ goog.require('goog.events');
 goog.require('goog.math.Rect');
 goog.require('goog.userAgent');
 
+/**
+  * Database for Custom Flyout Categories (like : Procedure and Variable)
+  * @type {Object<String,function(!Blockly.Workspace):!Array.<!Element>>}
+  */
+Blockly.flyoutCategories = {} ;
+Blockly.registerFlyoutCategory = function(category,flyout) {
+	Blockly.flyoutCategories[category] = flyout ;	
+}
+// Register Procedure and Variable Flyout Categories :
+Blockly.registerFlyoutCategory(Blockly.Variables.NAME_TYPE,Blockly.Variables.flyoutCategory) ;
+Blockly.registerFlyoutCategory(Blockly.Procedures.NAME_TYPE,Blockly.Procedures.flyoutCategory) ;
 
 /**
  * Class for a flyout.
@@ -726,14 +737,9 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   this.hide();
   this.clearOldBlocks_();
 
-  if (xmlList == Blockly.Variables.NAME_TYPE) {
-    // Special category for variables.
-    xmlList =
-        Blockly.Variables.flyoutCategory(this.workspace_.targetWorkspace);
-  } else if (xmlList == Blockly.Procedures.NAME_TYPE) {
-    // Special category for procedures.
-    xmlList =
-        Blockly.Procedures.flyoutCategory(this.workspace_.targetWorkspace);
+  if ((typeof Blockly.flyoutCategories == 'object') && Blockly.flyoutCategories.hasOwnProperty(xmlList)) {
+    // Special flyout category :
+    xmlList = Blockly.flyoutCategories[xmlList](this.workspace_.targetWorkspace); 
   }
 
   this.setVisible(true);

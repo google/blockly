@@ -68,7 +68,7 @@ Blockly.Field.cacheReference_ = 0;
 /**
  * Name of field.  Unique within each block.
  * Static labels are usually unnamed.
- * @type {string=}
+ * @type {string|undefined}
  */
 Blockly.Field.prototype.name = undefined;
 

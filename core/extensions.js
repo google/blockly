@@ -107,7 +107,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
   var extensionFn = function() {
     var thisBlock = this;
 
-    if (this.type && !blockTypesChecked.includes(this.type)) {
+    if (this.type && blockTypesChecked.indexOf(this.type) === -1) {
       Blockly.Extensions.checkDropdownOptionsInTable_(
         this, dropdownName, lookupTable);
       blockTypesChecked.push(this.type);
@@ -117,7 +117,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
       var value = thisBlock.getFieldValue(dropdownName);
       var tooltip = lookupTable[value];
       if (tooltip == null) {
-        if (!blockTypesChecked.includes(thisBlock.type)) {
+        if (blockTypesChecked.indexOf(thisBlock.type) === -1) {
           // Warn for missing values on generated tooltips
           var warning = 'No tooltip mapping for value ' + value +
               ' of field ' + dropdownName;

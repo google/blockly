@@ -165,6 +165,11 @@ Blockly.Comment.prototype.resizeBubble_ = function() {
  * @param {boolean} visible True if the bubble should be visible.
  */
 Blockly.Comment.prototype.setVisible = function(visible) {
+  if (!this.block_.workspace.rendered) {
+    this.rendered = false;
+    this.visible = visible;
+    return;
+  }
   if (visible == this.isVisible()) {
     // No change.
     return;

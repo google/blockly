@@ -388,7 +388,7 @@ Blockly.prompt = function(message, defaultValue, callback) {
  * Helper function for defining a block from JSON.  The resulting function has
  * the correct value of jsonDef at the point in code where jsonInit is called.
  * @param {!Object} jsonDef The JSON definition of a block.
- * @return {function} A function that calls jsonInit with the correct value
+ * @return {function()} A function that calls jsonInit with the correct value
  *     of jsonDef.
  * @private
  */

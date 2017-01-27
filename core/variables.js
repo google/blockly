@@ -233,8 +233,8 @@ Blockly.Variables.generateUniqueName = function(workspace) {
  * Create a new variable on the given workspace.
  * @param {!Blockly.Workspace} workspace The workspace on which to create the
  *     variable.
- * @param {function(null|undefined|string)=} opt_callback A callback. It will
- *     return an acceptable new variable name, or null if change is to be
+ * @param {function(?string=)=} opt_callback A callback. It will
+ *     be passed an acceptable new variable name, or null if change is to be
  *     aborted (cancel button), or undefined if an existing variable was chosen.
  */
 Blockly.Variables.createVariable = function(workspace, opt_callback) {

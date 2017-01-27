@@ -214,6 +214,16 @@ blocklyApp.TreeService = ng.core.Class({
           ' is invalid.');
     }
   },
+  clearAllActiveDescs: function() {
+    for (var treeId in this.activeDescendantIds_) {
+      var activeDesc = document.getElementById(this.getActiveDescId(treeId));
+      if (activeDesc) {
+        activeDesc.classList.remove('blocklyActiveDescendant');
+      }
+    }
+
+    this.activeDescendantIds_ = {};
+  },
 
   isTreeRoot_: function(element) {
     return element.classList.contains('blocklyTree');

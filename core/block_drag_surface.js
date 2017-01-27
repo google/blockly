@@ -143,9 +143,9 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurface = function(x, y) {
   // fuzzy while they are being dragged on the drag surface.
   x = x.toFixed(0);
   y = y.toFixed(0);
-  var transform =
-    'transform: translate3d(' + x + 'px, ' + y + 'px, 0px); display: block;';
-  Blockly.utils.setCssTransform(this.SVG_, transform);
+  this.SVG_.style.display = 'block';
+  Blockly.utils.setCssTransform(this.SVG_,
+      'translate3d(' + x + 'px, ' + y + 'px, 0px)');
 };
 
 /**

@@ -648,7 +648,7 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
  */
  Blockly.Scrollbar.prototype.updateDisplay_ = function() {
   var show = true;
-  // Check whether our parent/container is visible. 
+  // Check whether our parent/container is visible.
   if (!this.containerVisible_) {
     show = false;
   } else {
@@ -823,8 +823,8 @@ Blockly.Scrollbar.prototype.set = function(value) {
  * Set the origin of the upper left of the scrollbar. This if for times
  * when the scrollbar is used in an object whose origin isn't the same
  * as the main workspace (e.g. in a flyout.)
- * @ param {number} x The x coordinate of the scrollbar's origin.
- * @ param {number} y The y coordinate of the scrollbar's origin.
+ * @param {number} x The x coordinate of the scrollbar's origin.
+ * @param {number} y The y coordinate of the scrollbar's origin.
  */
 Blockly.Scrollbar.prototype.setOrigin = function(x, y) {
   this.origin_ = new goog.math.Coordinate(x, y);

@@ -137,16 +137,15 @@ Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y, sc
  * @param {number} y Y translation for the entire surface.
  */
 Blockly.BlockDragSurfaceSvg.prototype.translateSurface = function(x, y) {
-  var transform;
   x *= this.scale_;
   y *= this.scale_;
   // This is a work-around to prevent a the blocks from rendering
   // fuzzy while they are being dragged on the drag surface.
   x = x.toFixed(0);
   y = y.toFixed(0);
-  transform =
+  var transform =
     'transform: translate3d(' + x + 'px, ' + y + 'px, 0px); display: block;';
-  this.SVG_.setAttribute('style', transform);
+  Blockly.utils.setCssTransform(this.SVG_, transform);
 };
 
 /**

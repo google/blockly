@@ -52,12 +52,14 @@ goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
 /**
  * The menu item index for the rename variable option.
  * @type {number}
+ * @private
  */
 Blockly.FieldVariable.prototype.renameVarItemIndex_ = -1;
 
 /**
  * The menu item index for the delete variable option.
  * @type {number}
+ * @private
  */
 Blockly.FieldVariable.prototype.deleteVarItemIndex_ = -1;
 

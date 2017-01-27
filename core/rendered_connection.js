@@ -393,3 +393,17 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
     }
   }
 };
+
+/**
+ * Function to be called when this connection's compatible types have changed.
+ * @private
+ */
+Blockly.RenderedConnection.prototype.onCheckChanged_ = function() {
+  // The new value type may not be compatible with the existing connection.
+  if (this.isConnected() && !this.checkType_(this.targetConnection)) {
+    var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
+    child.unplug();
+    // Bump away.
+    this.sourceBlock_.bumpNeighbours_();
+  }
+};

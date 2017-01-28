@@ -244,6 +244,9 @@ blocklyApp.TreeService = ng.core.Class({
         0, blockRootId.length - this.BLOCK_ROOT_ID_SUFFIX_.length);
     return blocklyApp.workspace.getBlockById(blockId);
   },
+  isTopLevelBlock_: function(block) {
+    return !block.getParent();
+  },
   // Returns whether the given block is at the top level, and has no siblings.
   isIsolatedTopLevelBlock_: function(block) {
     var blockHasNoSiblings = (
@@ -251,19 +254,23 @@ blocklyApp.TreeService = ng.core.Class({
          !block.nextConnection.targetConnection) &&
         (!block.previousConnection ||
          !block.previousConnection.targetConnection));
-    return !block.getParent() && blockHasNoSiblings;
+    return this.isTopLevelBlock_(block) && blockHasNoSiblings;
   },
-  safelyRemoveBlock_: function(block, deleteBlockFunc) {
+  safelyRemoveBlock_: function(block, deleteBlockFunc, areNextBlocksRemoved) {
     // Runs the given deleteBlockFunc (which should have the effect of deleting
-    // the given block, and possibly others after it) and then does one of two
-    // things:
-    // - If the deleted block was an isolated top-level block, this means the
-    //   current tree has no more blocks after the deletion. So, pick a new
+    // the given block, and possibly others after it if `areNextBlocksRemoved`
+    // is true) and then does one of two things:
+    // - If the deleted block was an isolated top-level block, or it is a top-
+    //   level block and the next blocks are going to be removed, this means
+    //   the current tree has no more blocks after the deletion. So, pick a new
     //   tree to focus on.
     // - Otherwise, set the correct new active desc for the current tree.
     var treeId = this.getTreeIdForBlock(block.id);
 
-    if (this.isIsolatedTopLevelBlock_(block)) {
+    var treeCeasesToExist = areNextBlocksRemoved ?
+        this.isTopLevelBlock_(block) : this.isIsolatedTopLevelBlock_(block);
+
+    if (treeCeasesToExist) {
       // Find the node to focus on after the deletion happens.
       var nextElementToFocusOn = null;
       var focusTargets = this.getWorkspaceFocusTargets_();
@@ -295,11 +302,19 @@ blocklyApp.TreeService = ng.core.Class({
       var blockRootElement = document.getElementById(blockRootId);
 
       // Find the new active desc for the current tree by trying the following
-      // possibilities in order: the parent, and the previous sibling. (The
-      // next sibling would be moved together with the moved block.)
-      var newActiveDesc =
-          this.getParentLi_(blockRootElement) ||
-          this.getPreviousSiblingLi_(blockRootElement);
+      // possibilities in order: the parent, the next sibling, and the previous
+      // sibling. (If `areNextBlocksRemoved` is true, the next sibling would be
+      // moved together with the moved block, so we don't check it.)
+      if (areNextBlocksRemoved) {
+        var newActiveDesc =
+            this.getParentLi_(blockRootElement) ||
+            this.getPreviousSiblingLi_(blockRootElement);
+      } else {
+        var newActiveDesc =
+            this.getParentLi_(blockRootElement) ||
+            this.getNextSiblingLi_(blockRootElement) ||
+            this.getPreviousSiblingLi_(blockRootElement);
+      }
 
       this.clearActiveDesc(treeId);
       deleteBlockFunc();
@@ -367,7 +382,7 @@ blocklyApp.TreeService = ng.core.Class({
               block);
           that.safelyRemoveBlock_(block, function() {
             block.dispose(false);
-          });
+          }, true);
 
           // Invoke a digest cycle, so that the DOM settles.
           setTimeout(function() {
@@ -416,7 +431,7 @@ blocklyApp.TreeService = ng.core.Class({
         that.safelyRemoveBlock_(block, function() {
           block.dispose(true);
           that.audioService.playDeleteSound();
-        });
+        }, false);
 
         setTimeout(function() {
           var message = blockDescription + ' deleted. ' + (

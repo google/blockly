@@ -412,7 +412,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
 /**
  * Update two connections to target each other.
  * @param {Blockly.Connection} first The first connection to update.
- * @param {Blockly.Connection} second The second conneciton to update.
+ * @param {Blockly.Connection} second The second connection to update.
  * @private
  */
 Blockly.Connection.connectReciprocally_ = function(first, second) {

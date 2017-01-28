@@ -91,68 +91,76 @@ blocklyApp.WorkspaceBlockComponent = ng.core.Component({
       this.blockConnectionService = blockConnectionService;
       this.treeService = treeService;
       this.utilsService = utilsService;
+      this.cachedBlockId = null;
     }
   ],
-  ngOnInit: function() {
-    var SUPPORTED_FIELDS = [Blockly.FieldTextInput, Blockly.FieldDropdown];
-    this.inputListAsFieldSegments = this.block.inputList.map(function(input) {
-      // Converts the input list to an array of field segments. Each field
-      // segment represents a user-editable field, prefixed by an arbitrary
-      // number of non-editable fields.
-      var fieldSegments = [];
+  ngDoCheck: function() {
+    // The block ID can change if, for example, a block is spliced between two
+    // linked blocks. We need to refresh the fields and component IDs when this
+    // happens.
+    if (this.cachedBlockId != this.block.id) {
+      this.cachedBlockId = this.block.id;
 
-      var bufferedFields = [];
-      input.fieldRow.forEach(function(field) {
-        var fieldIsSupported = SUPPORTED_FIELDS.some(function(fieldType) {
-          return (field instanceof fieldType);
-        });
+      var SUPPORTED_FIELDS = [Blockly.FieldTextInput, Blockly.FieldDropdown];
+      this.inputListAsFieldSegments = this.block.inputList.map(function(input) {
+        // Converts the input list to an array of field segments. Each field
+        // segment represents a user-editable field, prefixed by an arbitrary
+        // number of non-editable fields.
+        var fieldSegments = [];
 
-        if (fieldIsSupported) {
-          var fieldSegment = {
-            prefixFields: [],
-            mainField: field
-          };
-          bufferedFields.forEach(function(bufferedField) {
-            fieldSegment.prefixFields.push(bufferedField);
+        var bufferedFields = [];
+        input.fieldRow.forEach(function(field) {
+          var fieldIsSupported = SUPPORTED_FIELDS.some(function(fieldType) {
+            return (field instanceof fieldType);
           });
-          fieldSegments.push(fieldSegment);
-          bufferedFields = [];
-        } else {
-          bufferedFields.push(field);
-        }
-      });
 
-      // Handle leftover text at the end.
-      if (bufferedFields.length) {
-        fieldSegments.push({
-          prefixFields: bufferedFields,
-          mainField: null
+          if (fieldIsSupported) {
+            var fieldSegment = {
+              prefixFields: [],
+              mainField: field
+            };
+            bufferedFields.forEach(function(bufferedField) {
+              fieldSegment.prefixFields.push(bufferedField);
+            });
+            fieldSegments.push(fieldSegment);
+            bufferedFields = [];
+          } else {
+            bufferedFields.push(field);
+          }
         });
-      }
 
-      return fieldSegments;
-    });
+        // Handle leftover text at the end.
+        if (bufferedFields.length) {
+          fieldSegments.push({
+            prefixFields: bufferedFields,
+            mainField: null
+          });
+        }
 
-    // Generate unique IDs for elements in this component.
-    this.componentIds = {};
-    this.componentIds.blockRoot =
-        this.block.id + blocklyApp.BLOCK_ROOT_ID_SUFFIX;
-    this.componentIds.blockSummary = this.block.id + '-blockSummary';
-
-    var that = this;
-    this.componentIds.inputs = this.block.inputList.map(function(input, i) {
-      var idsToGenerate = ['inputLi', 'fieldLabel'];
-      if (input.connection && !input.connection.targetBlock()) {
-        idsToGenerate.push('actionButtonLi', 'actionButton', 'buttonLabel');
-      }
-
-      var inputIds = {};
-      idsToGenerate.forEach(function(idBaseString) {
-        inputIds[idBaseString] = [that.block.id, i, idBaseString].join('-');
+        return fieldSegments;
       });
 
-      return inputIds;
-    });
+      // Generate unique IDs for elements in this component.
+      this.componentIds = {};
+      this.componentIds.blockRoot =
+          this.block.id + blocklyApp.BLOCK_ROOT_ID_SUFFIX;
+      this.componentIds.blockSummary = this.block.id + '-blockSummary';
+
+      var that = this;
+      this.componentIds.inputs = this.block.inputList.map(function(input, i) {
+        var idsToGenerate = ['inputLi', 'fieldLabel'];
+        if (input.connection && !input.connection.targetBlock()) {
+          idsToGenerate.push('actionButtonLi', 'actionButton', 'buttonLabel');
+        }
+
+        var inputIds = {};
+        idsToGenerate.forEach(function(idBaseString) {
+          inputIds[idBaseString] = [that.block.id, i, idBaseString].join('-');
+        });
+
+        return inputIds;
+      });
+    }
   },
   ngAfterViewInit: function() {
     // If this is a top-level tree in the workspace, ensure that it has an

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": ["blockly"],
+  "main": "blockly.js",
   "scripts": {
     "lint": "jshint ."
   },

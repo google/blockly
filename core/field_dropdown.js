@@ -50,8 +50,7 @@ goog.require('goog.userAgent');
  * @constructor
  */
 Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
-  this.menuGenerator_ = menuGenerator;
-  this.trimOptions_();
+  this.setMenuGenerator_(menuGenerator);
   var firstTuple = this.getOptions()[0];
 
   // Call parent's constructor.
@@ -317,6 +316,35 @@ Blockly.FieldDropdown.prototype.getOptions = function() {
  */
 Blockly.FieldDropdown.prototype.getValue = function() {
   return this.value_;
+};
+
+/**
+ * @return {(!Array.<!Array>|!Function)} The menuGenerator function or array
+ * used to populate the choices of the dropdown.
+ **/
+Blockly.FieldDropdown.prototype.getMenuGenerator = function() {
+  return this.menuGenerator_;
+};
+
+/**
+ * Set the list of 2-tuples or function used to generate the options for the
+ * dropdown field.
+ * @param {(!Array.<!Array>|!Function)} menuGenerator An array of options
+ *     for a dropdown list, or a function which generates these options.
+ **/
+Blockly.FieldDropdown.prototype.setMenuGenerator = function(menuGenerator) {
+  this.setMenuGenerator_(menuGenerator);
+  this.setValue(this.getOptions()[0][1]);
+};
+
+/**
+ * @param {(!Array.<!Array>|!Function)} menuGenerator An array of options
+ *     for a dropdown list, or a function which generates these options.
+ * @private
+ **/
+Blockly.FieldDropdown.prototype.setMenuGenerator_ = function(menuGenerator) {
+  this.menuGenerator_ = menuGenerator;
+  this.trimOptions_();
 };
 
 /**

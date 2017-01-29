@@ -25,6 +25,8 @@
     "gulp-concat": "^2.6.1",
     "gulp-shell": "^0.5.2",
     "jshint": "latest"
+    "gulp": "^3.9.1",
+    "gulp-shell": "^0.5.2",
   },
   "jshintConfig": {
     "globalstrict": true,

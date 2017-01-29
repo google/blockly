@@ -1,11 +1,4 @@
 {
-	"@metadata": {
-		"authors": [
-			"Espertus",
-			"Liuxinyu970226",
-			"Shirayuki"
-		]
-	},
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
 	"TODAY": "button text - Button that sets a calendar to today's date.\n{{Identical|Today}}",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}",
@@ -254,6 +247,15 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "dropdown - Specifies that a number should be requested from the user with the following message.  See [https://github.com/google/blockly/wiki/Text#printing-text https://github.com/google/blockly/wiki/Text#printing-text].",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "dropdown - Precedes the message with which the user should be prompted for a number.  See [https://github.com/google/blockly/wiki/Text#printing-text https://github.com/google/blockly/wiki/Text#printing-text].",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "dropdown - Precedes the message with which the user should be prompted for some text. See [https://github.com/google/blockly/wiki/Text#printing-text https://github.com/google/blockly/wiki/Text#printing-text].",
+	"TEXT_COUNT_MESSAGE0": "message0 interpolation string",
+	"TEXT_COUNT_HELPURL": "url - Information about counting how many times a string appears in another string.",
+	"TEXT_COUNT_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Text#printing-text https://github.com/google/blockly/wiki/Text#printing-text].",
+	"TEXT_REPLACE_MESSAGE0": "message0 interpolation string",
+	"TEXT_REPLACE_HELPURL": "url - Information about replacing a string within another string.",
+	"TEXT_REPLACE_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Text#printing-text https://github.com/google/blockly/wiki/Text#printing-text].",
+	"TEXT_REVERSE_MESSAGE0": "message0 interpolation string",
+	"TEXT_REVERSE_HELPURL": "url - Information about reversing a string.",
+	"TEXT_REVERSE_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Text#printing-text https://github.com/google/blockly/wiki/Text#printing-text].",
 	"LISTS_CREATE_EMPTY_HELPURL": "url - Information on empty lists.",
 	"LISTS_CREATE_EMPTY_TITLE": "block text - See [https://github.com/google/blockly/wiki/Lists#create-empty-list https://github.com/google/blockly/wiki/Lists#create-empty-list].",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "block text - See [https://github.com/google/blockly/wiki/Lists#create-empty-list https://github.com/google/blockly/wiki/Lists#create-empty-list].",
@@ -335,6 +337,9 @@
 	"LISTS_SPLIT_WITH_DELIMITER": "block text - Prompts for a letter to be used as a separator when splitting or joining text.",
 	"LISTS_SPLIT_TOOLTIP_SPLIT": "tooltip - See [https://github.com/google/blockly/wiki/Lists#make-list-from-text https://github.com/google/blockly/wiki/Lists#make-list-from-text] for more information.",
 	"LISTS_SPLIT_TOOLTIP_JOIN": "tooltip - See [https://github.com/google/blockly/wiki/Lists#make-text-from-list https://github.com/google/blockly/wiki/Lists#make-text-from-list] for more information.",
+	"LISTS_REVERSE_HELPURL": "url - Information describing reversing a list.",
+	"LISTS_REVERSE_MESSAGE0": "Reverse a list of items %1.",
+	"LISTS_REVERSE_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#reversing-a-list].",
 	"ORDINAL_NUMBER_SUFFIX": "grammar - Text that follows an ordinal number (a number that indicates position relative to other numbers).  In most languages, such text appears before the number, so this should be blank.  An exception is Hungarian. See [[Translating:Blockly#Ordinal_numbers]] for more information.",
 	"VARIABLES_GET_HELPURL": "url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.",
 	"VARIABLES_GET_TOOLTIP": "tooltip - This gets the value of the named variable without modifying it.",

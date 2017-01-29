@@ -54,6 +54,11 @@
                                                                         <next>
                                                                           <block type="procedures_callnoreturn">
                                                                             <mutation name="test sort numeric"></mutation>
+                                                                            <next>
+                                                                              <block type="procedures_callnoreturn">
+                                                                                <mutation name="test reverse"></mutation>
+                                                                              </block>
+                                                                            </next>
                                                                           </block>
                                                                         </next>
                                                                       </block>
@@ -8124,6 +8129,151 @@
                     </value>
                   </block>
                 </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="13" y="20463">
+    <field name="NAME">test reverse</field>
+    <comment pinned="false" h="80" w="160">Tests the "list reverse" block.</comment>
+    <statement name="STACK">
+      <block type="variables_set">
+        <field name="VAR">list</field>
+        <value name="VALUE">
+          <block type="lists_create_with" inline="true">
+            <mutation items="4"></mutation>
+            <value name="ADD0">
+              <block type="math_number">
+                <field name="NUM">8</field>
+              </block>
+            </value>
+            <value name="ADD1">
+              <block type="math_number">
+                <field name="NUM">18</field>
+              </block>
+            </value>
+            <value name="ADD2">
+              <block type="math_number">
+                <field name="NUM">-1</field>
+              </block>
+            </value>
+            <value name="ADD3">
+              <block type="math_number">
+                <field name="NUM">64</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <value name="MESSAGE">
+              <block type="text">
+                <field name="TEXT">reverse a copy</field>
+              </block>
+            </value>
+            <value name="ACTUAL">
+              <block type="lists_reverse">
+                <value name="LIST">
+                  <block type="variables_get">
+                    <field name="VAR">list</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="lists_create_with" inline="true">
+                <mutation items="4"></mutation>
+                <value name="ADD0">
+                  <block type="math_number">
+                    <field name="NUM">64</field>
+                  </block>
+                </value>
+                <value name="ADD1">
+                  <block type="math_number">
+                    <field name="NUM">-1</field>
+                  </block>
+                </value>
+                <value name="ADD2">
+                  <block type="math_number">
+                    <field name="NUM">18</field>
+                  </block>
+                </value>
+                <value name="ADD3">
+                  <block type="math_number">
+                    <field name="NUM">8</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <value name="MESSAGE">
+                  <block type="text">
+                    <field name="TEXT">reverse a copy original</field>
+                  </block>
+                </value>
+                <value name="ACTUAL">
+                  <block type="variables_get">
+                    <field name="VAR">list</field>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="lists_create_with" inline="true">
+                    <mutation items="4"></mutation>
+                    <value name="ADD0">
+                      <block type="math_number">
+                        <field name="NUM">8</field>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="math_number">
+                        <field name="NUM">18</field>
+                      </block>
+                    </value>
+                    <value name="ADD2">
+                      <block type="math_number">
+                        <field name="NUM">-1</field>
+                      </block>
+                    </value>
+                    <value name="ADD3">
+                      <block type="math_number">
+                        <field name="NUM">64</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set">
+                    <field name="VAR">list</field>
+                    <value name="VALUE">
+                      <block type="lists_create_empty"></block>
+                    </value>
+                    <next>
+                      <block type="unittest_assertequals" inline="false">
+                        <value name="MESSAGE">
+                          <block type="text">
+                            <field name="TEXT">empty list</field>
+                          </block>
+                        </value>
+                        <value name="ACTUAL">
+                          <block type="lists_reverse">
+                            <value name="LIST">
+                              <block type="variables_get">
+                                <field name="VAR">list</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="EXPECTED">
+                          <block type="lists_create_empty"></block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
               </block>
             </next>
           </block>

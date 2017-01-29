@@ -18,31 +18,19 @@
  */
 
 /**
- * @fileoverview Angular2 utility service for multiple components. All
- * functions in this service should be stateless, since this is a singleton
- * service that is used for the entire application.
+ * @fileoverview Angular2 utility service for multiple components. This is a
+ * singleton service that is used for the entire application. In general, it
+ * should only be used as a stateless adapter for native Blockly functions.
  *
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
 var blocklyApp = {};
 blocklyApp.ID_FOR_EMPTY_WORKSPACE_BTN = 'blocklyEmptyWorkspaceBtn';
+blocklyApp.BLOCK_ROOT_ID_SUFFIX = '-blockRoot';
 
 blocklyApp.UtilsService = ng.core.Class({
   constructor: [function() {}],
-  generateUniqueId: function() {
-    return 'blockly-' + Blockly.utils.genUid();
-  },
-  generateIds: function(elementsList) {
-    var idMap = {};
-    for (var i = 0; i < elementsList.length; i++){
-      idMap[elementsList[i]] = this.generateUniqueId();
-    }
-    return idMap;
-  },
-  generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
-    return mainLabel + (secondLabel ? ' ' + secondLabel : '');
-  },
   getBlockDescription: function(block) {
     // We use 'BLANK' instead of the default '?' so that the string is read
     // out. (By default, screen readers tend to ignore punctuation.)

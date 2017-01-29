@@ -29,6 +29,7 @@ goog.provide('Blockly.Block');
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Connection');
+goog.require('Blockly.Extensions');
 goog.require('Blockly.Input');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.Warning');
@@ -157,8 +158,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   }
   // Bind an onchange function, if it exists.
   if (goog.isFunction(this.onchange)) {
-    this.onchangeWrapper_ = this.onchange.bind(this);
-    this.workspace.addChangeListener(this.onchangeWrapper_);
+    this.setOnChange(this.onchange);
   }
 };
 
@@ -642,6 +642,29 @@ Blockly.Block.prototype.setColour = function(colour) {
 };
 
 /**
+ * Sets a callback function to use whenever the block's parent workspace
+ * changes, replacing any prior onchange handler. This is usually only called
+ * from the constructor, the block type initializer function, or an extension
+ * initializer function.
+ * @param {function(Blockly.Events.Abstract)} onchangeFn The callback to call
+ *     when the block's workspace changes.
+ * @throws {Error} if onchangeFn is not falsey or a function.
+ */
+Blockly.Block.prototype.setOnChange = function(onchangeFn) {
+  if (onchangeFn && !goog.isFunction(onchangeFn)) {
+    throw new Error("onchange must be a function.");
+  }
+  if (this.onchangeWrapper_) {
+    this.workspace.removeChangeListener(this.onchangeWrapper_);
+  }
+  this.onchange = onchangeFn;
+  if (this.onchange) {
+    this.onchangeWrapper_ = onchangeFn.bind(this);
+    this.workspace.addChangeListener(this.onchangeWrapper_);
+  }
+};
+
+/**
  * Returns the named field from a block.
  * @param {string} name The name of the field.
  * @return {Blockly.Field} Named field, or null if field does not exist.
@@ -1001,6 +1024,18 @@ Blockly.Block.prototype.jsonInit = function(json) {
     var localizedValue = Blockly.utils.replaceMessageReferences(rawValue);
     this.setHelpUrl(localizedValue);
   }
+  if (goog.isString(json['extensions'])) {
+    console.warn('JSON attribute \'extensions\' should be an array of ' +
+      'strings. Found raw string in JSON for \'' + json['type'] + '\' block.');
+    json['extensions'] = [json['extensions']];  // Correct and continue.
+  }
+  if (Array.isArray(json['extensions'])) {
+    var extensionNames = json['extensions'];
+    for (var i = 0; i < extensionNames.length; ++i) {
+      var extensionName = extensionNames[i];
+      Blockly.Extensions.apply(extensionName, this);
+    }
+  }
 };
 
 /**
@@ -1022,9 +1057,9 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
     var token = tokens[i];
     if (typeof token == 'number') {
       goog.asserts.assert(token > 0 && token <= args.length,
-          'Message index "%s" out of range.', token);
+          'Message index %%s out of range.', token);
       goog.asserts.assert(!indexDup[token],
-          'Message index "%s" duplicated.', token);
+          'Message index %%s duplicated.', token);
       indexDup[token] = true;
       indexCount++;
       elements.push(args[token - 1]);
@@ -1341,4 +1376,40 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
  */
 Blockly.Block.prototype.makeConnection_ = function(type) {
   return new Blockly.Connection(this, type);
+};
+
+/**
+ * Recursively checks whether all statement and value inputs are filled with
+ * blocks. Also checks all following statement blocks in this stack.
+ * @param {boolean=} opt_shadowBlocksAreFilled An optional argument controlling
+ *     whether shadow blocks are counted as filled. Defaults to true.
+ * @return {boolean} True if all inputs are filled, false otherwise.
+ */
+Blockly.Block.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled) {
+  // Account for the shadow block filledness toggle.
+  if (opt_shadowBlocksAreFilled === undefined) {
+    opt_shadowBlocksAreFilled = true;
+  }
+  if (!opt_shadowBlocksAreFilled && this.isShadow()) {
+    return false;
+  }
+
+  // Recursively check each input block of the current block.
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    if (!input.connection) {
+      continue;
+    }
+    var target = input.connection.targetBlock();
+    if (!target || !target.allInputsFilled(opt_shadowBlocksAreFilled)) {
+      return false;
+    }
+  }
+
+  // Recursively check the next block after the current block.
+  var next = this.getNextBlock();
+  if (next) {
+    return next.allInputsFilled(opt_shadowBlocksAreFilled);
+  }
+
+  return true;
 };

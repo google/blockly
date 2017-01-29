@@ -41,6 +41,13 @@ blocklyApp.AudioService = ng.core.Class({
       }
 
       this.cachedAudioFiles_ = {};
+      // Store callback references here so that they can be removed if a new
+      // call to this.play_() comes in.
+      this.onEndedCallbacks_ = {
+        'connect': [],
+        'delete': [],
+        'oops': []
+      };
     }
   ],
   play_: function(audioId, onEndedCallback) {
@@ -48,11 +55,18 @@ blocklyApp.AudioService = ng.core.Class({
       if (!this.cachedAudioFiles_.hasOwnProperty(audioId)) {
         this.cachedAudioFiles_[audioId] = new Audio(this.AUDIO_PATHS_[audioId]);
       }
+
       if (onEndedCallback) {
+        this.onEndedCallbacks_[audioId].push(onEndedCallback);
         this.cachedAudioFiles_[audioId].addEventListener(
             'ended', onEndedCallback);
       } else {
-        this.cachedAudioFiles_[audioId].removeEventListener('ended');
+        var that = this;
+        this.onEndedCallbacks_[audioId].forEach(function(callback) {
+          that.cachedAudioFiles_[audioId].removeEventListener(
+              'ended', callback);
+        });
+        this.onEndedCallbacks_[audioId].length = 0;
       }
 
       this.cachedAudioFiles_[audioId].play();

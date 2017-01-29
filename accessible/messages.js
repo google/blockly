@@ -31,6 +31,7 @@ Blockly.Msg.WORKSPACE_BLOCK =
 Blockly.Msg.ATTACH_NEW_BLOCK_TO_LINK = 'Attach new block to link...';
 Blockly.Msg.CREATE_NEW_BLOCK_GROUP = 'Create new block group...';
 Blockly.Msg.ERASE_WORKSPACE = 'Erase Workspace';
+Blockly.Msg.NO_BLOCKS_IN_WORKSPACE = 'There are no blocks in the workspace.';
 
 Blockly.Msg.COPY_BLOCK = 'Copy block';
 Blockly.Msg.DELETE = 'Delete block';
@@ -56,3 +57,6 @@ Blockly.Msg.ADDED_LINK_MSG = 'Added link.';
 Blockly.Msg.ATTACHED_BLOCK_TO_LINK_MSG = 'attached to link. ';
 Blockly.Msg.COPIED_BLOCK_MSG = 'copied. ';
 Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG = 'pasted. ';
+
+Blockly.Msg.PRESS_ENTER_TO_EDIT_NUMBER = 'Press Enter to edit number. ';
+Blockly.Msg.PRESS_ENTER_TO_EDIT_TEXT = 'Press Enter to edit text. ';

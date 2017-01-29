@@ -25,6 +25,8 @@ gulp.task('watch', function() {
 	// or the code the blocks compile into, Rebuild
 	gulp.watch('generators/javascript/*.js', ['build']);
 
+  gulp.watch('javascript_compressed.js', ['js']);
+
 });
 
 gulp.task('default', ['watch', 'build']);

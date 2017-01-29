@@ -62,8 +62,8 @@ function test_menuGenerator_getter_setter_constructor() {
 
   // Change to use an array instead.
   field.setMenuGenerator(OPTIONS_ARRAY);
-  assertTrue(field.isOptionListDynamic());
+  assertFalse(field.isOptionListDynamic());
   menuGenerator = field.getMenuGenerator();
-  assertFalse(Array.isArray(menuGenerator));
+  assertTrue(Array.isArray(menuGenerator));
   assertEquals('1', field.getValue());
 };

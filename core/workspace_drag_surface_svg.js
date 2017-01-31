@@ -113,9 +113,9 @@ Blockly.workspaceDragSurfaceSvg.prototype.translateSurface = function(x, y) {
   x = x.toFixed(0);
   y = y.toFixed(0);
 
-  var transform =
-    'transform: translate3d(' + x + 'px, ' + y + 'px, 0px); display: block;';
-  Blockly.utils.setCssTransform(this.SVG_, transform);
+  this.SVG_.style.display = 'block';
+  Blockly.utils.setCssTransform(this.SVG_,
+    'translate3d(' + x + 'px, ' + y + 'px, 0px)');
 };
 
 /**

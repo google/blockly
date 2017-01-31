@@ -292,7 +292,7 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
     return;
   }
   var svgRoot = this.getSvgRoot();
-  if (this.parentBlock_ && svgRoot) {
+  if (this.parentBlock_ && svgRoot && this.workspace.getCanvas()) {
     // Move this block up the DOM.  Keep track of x/y translations.
     var xy = this.getRelativeToSurfaceXY();
     this.workspace.getCanvas().appendChild(svgRoot);

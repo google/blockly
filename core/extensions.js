@@ -27,6 +27,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.Extensions
+ * @namespace
+ **/
 goog.provide('Blockly.Extensions');
 
 

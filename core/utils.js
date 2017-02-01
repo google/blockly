@@ -26,6 +26,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.utils
+ * @namespace
+ **/
 goog.provide('Blockly.utils');
 
 goog.require('Blockly.Touch');

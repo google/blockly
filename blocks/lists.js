@@ -304,7 +304,7 @@ Blockly.Blocks['lists_indexOf'] = {
     var thisBlock = this;
     this.setTooltip(function() {
       return Blockly.Msg.LISTS_INDEX_OF_TOOLTIP.replace('%1',
-          this.workspace.options.oneBasedIndex ? '0' : '-1');
+          thisBlock.workspace.options.oneBasedIndex ? '0' : '-1');
     });
   }
 };

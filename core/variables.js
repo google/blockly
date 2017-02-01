@@ -24,6 +24,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.Variables
+ * @namespace
+ **/
 goog.provide('Blockly.Variables');
 
 goog.require('Blockly.Blocks');

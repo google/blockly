@@ -25,6 +25,10 @@
 
 'use strict';
 
+/**
+ * @name Blockly.BlockSvg
+ * @namespace
+ */
 goog.provide('Blockly.BlockSvg.render');
 
 goog.require('Blockly.BlockSvg');

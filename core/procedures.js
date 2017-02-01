@@ -24,6 +24,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.Procedures
+ * @namespace
+ **/
 goog.provide('Blockly.Procedures');
 
 goog.require('Blockly.Blocks');

@@ -24,6 +24,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.Touch
+ * @namespace
+ **/
 goog.provide('Blockly.Touch');
 
 goog.require('goog.events');

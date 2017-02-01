@@ -24,6 +24,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.Xml
+ * @namespace
+ **/
 goog.provide('Blockly.Xml');
 
 goog.require('goog.asserts');

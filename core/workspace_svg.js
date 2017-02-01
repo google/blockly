@@ -683,6 +683,15 @@ Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
     return;
   }
 
+  // This can happen if the user starts a drag, mouses up outside of the
+  // document where the mouseup listener is registered (e.g. outside of an
+  // iframe) and then moves the mouse back in the workspace.  On mobile and ff, 
+  // we get the mouseup outside the frame. On chrome and safari desktop we do
+  // not.
+  if (this.isDragSurfaceActive_) {
+    return;
+  }
+
   this.isDragSurfaceActive_ = true;
 
   // Figure out where we want to put the canvas back.  The order

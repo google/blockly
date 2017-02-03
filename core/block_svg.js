@@ -842,7 +842,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       callback: function() {
         if (Blockly.selected && Blockly.selected.isDeletable() &&
             Blockly.selected.workspace == Blockly.mainWorkspace) {
-          Blockly.getMainWorkspace().backpack.addToBackpack(Blockly.selected);
+          Blockly.getMainWorkspace().getBackpack().addToBackpack(Blockly.selected);
         }
       }
     };

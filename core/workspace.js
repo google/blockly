@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Workspace');
 
+goog.require('goog.array');
 goog.require('goog.math');
 
 
@@ -37,7 +38,7 @@ goog.require('goog.math');
  */
 Blockly.Workspace = function(opt_options) {
   /** @type {string} */
-  this.id = Blockly.genUid();
+  this.id = Blockly.utils.genUid();
   Blockly.Workspace.WorkspaceDB_[this.id] = this;
   /** @type {!Blockly.Options} */
   this.options = opt_options || {};
@@ -74,7 +75,7 @@ Blockly.Workspace = function(opt_options) {
    */
   this.blockDB_ = Object.create(null);
   /*
-   * @type {!Array.<!string>}
+   * @type {!Array.<string>}
    * A list of all of the named variables in the workspace, including variables
    * that are not currently in use.
    */
@@ -82,14 +83,14 @@ Blockly.Workspace = function(opt_options) {
 };
 
 /**
- * Workspaces may be headless.
- * @type {boolean} True if visible.  False if headless.
+ * Returns `true` if the workspace is visible and `false` if it's headless.
+ * @type {boolean}
  */
 Blockly.Workspace.prototype.rendered = false;
 
 /**
- * Maximum number of undo events in stack.
- * @type {number} 0 to turn off undo, Infinity for unlimited.
+ * Maximum number of undo events in stack. `0` turns off undo, `Infinity` sets it to unlimited.
+ * @type {number}
  */
 Blockly.Workspace.prototype.MAX_UNDO = 1024;
 
@@ -136,15 +137,7 @@ Blockly.Workspace.prototype.addTopBlock = function(block) {
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.Workspace.prototype.removeTopBlock = function(block) {
-  var found = false;
-  for (var child, i = 0; child = this.topBlocks_[i]; i++) {
-    if (child == block) {
-      this.topBlocks_.splice(i, 1);
-      found = true;
-      break;
-    }
-  }
-  if (!found) {
+  if (!goog.array.remove(this.topBlocks_, block)) {
     throw 'Block not present in workspace\'s list of top-most blocks.';
   }
 };
@@ -258,9 +251,9 @@ Blockly.Workspace.prototype.renameVariable = function(oldName, newName) {
     this.variableList[variableIndex] = newName;
   } else if (variableIndex != -1 && newVariableIndex != -1) {
     // Renaming one existing variable to another existing variable.
-    this.variableList.splice(variableIndex, 1);
-    // The case might have changed.
+    // The case might have changed, so we update the destination ID.
     this.variableList[newVariableIndex] = newName;
+    this.variableList.splice(variableIndex, 1);
   } else {
     this.variableList.push(newName);
     console.log('Tried to rename an non-existent variable.');
@@ -309,33 +302,45 @@ Blockly.Workspace.prototype.getVariableUses = function(name) {
  */
 Blockly.Workspace.prototype.deleteVariable = function(name) {
   var variableIndex = this.variableIndexOf(name);
-  if (variableIndex != -1) {
-    var uses = this.getVariableUses(name);
-    if (uses.length > 1) {
-      for (var i = 0, block; block = uses[i]; i++) {
-        if (block.type == 'procedures_defnoreturn' ||
-          block.type == 'procedures_defreturn') {
-          var procedureName = block.getFieldValue('NAME');
-          window.alert(
-              Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE.replace('%1', name).
-              replace('%2', procedureName));
-          return;
-        }
-      }
-      var ok = window.confirm(
-          Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1', uses.length).
-          replace('%2', name));
-      if (!ok) {
-        return;
-      }
+  if (variableIndex == -1) {
+    return;
+  }
+  // Check whether this variable is a function parameter before deleting.
+  var uses = this.getVariableUses(name);
+  for (var i = 0, block; block = uses[i]; i++) {
+    if (block.type == 'procedures_defnoreturn' ||
+      block.type == 'procedures_defreturn') {
+      var procedureName = block.getFieldValue('NAME');
+      Blockly.alert(
+          Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE.
+          replace('%1', name).
+          replace('%2', procedureName));
+      return;
     }
+  }
 
+  var workspace = this;
+  function doDeletion() {
     Blockly.Events.setGroup(true);
     for (var i = 0; i < uses.length; i++) {
       uses[i].dispose(true, false);
     }
     Blockly.Events.setGroup(false);
-    this.variableList.splice(variableIndex, 1);
+    workspace.variableList.splice(variableIndex, 1);
+  }
+  if (uses.length > 1) {
+    // Confirm before deleting multiple blocks.
+    Blockly.confirm(
+        Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1', uses.length).
+        replace('%2', name),
+        function(ok) {
+          if (ok) {
+            doDeletion();
+          }
+        });
+  } else {
+    // No confirmation necessary for a single block.
+    doDeletion();
   }
 };
 
@@ -369,7 +374,7 @@ Blockly.Workspace.prototype.getWidth = function() {
  * Obtain a newly created block.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
- * @param {=string} opt_id Optional ID.  Use this ID if provided, otherwise
+ * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new id.
  * @return {!Blockly.Block} The created block.
  */
@@ -444,10 +449,7 @@ Blockly.Workspace.prototype.addChangeListener = function(func) {
  * @param {Function} func Function to stop calling.
  */
 Blockly.Workspace.prototype.removeChangeListener = function(func) {
-  var i = this.listeners_.indexOf(func);
-  if (i != -1) {
-    this.listeners_.splice(i, 1);
-  }
+  goog.array.remove(this.listeners_, func);
 };
 
 /**

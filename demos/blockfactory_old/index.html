@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="target-densitydpi=device-dpi, height=660, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Blockly Demo: Block Factory</title>
+  <script src="/storage.js"></script>
+  <script src="factory.js"></script>
+  <script src="../../blockly_compressed.js"></script>
+  <script src="../../msg/messages.js"></script>
+  <script src="blocks.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+    }
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+      margin: 0 5px;
+      overflow: hidden
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    h3 {
+      margin-top: 5px;
+      margin-bottom: 0;
+    }
+    table {
+      height: 100%;
+      width: 100%;
+    }
+    td {
+      vertical-align: top;
+      padding: 0;
+    }
+    #blockly {
+      position: fixed;
+    }
+    #blocklyMask {
+      background-color: #000;
+      cursor: not-allowed;
+      display: none;
+      position: fixed;
+      opacity: 0.2;
+      z-index: 9;
+    }
+    #preview {
+      position: absolute;
+    }
+    pre,
+    #languageTA {
+      border: #ddd 1px solid;
+      margin-top: 0;
+      position: absolute;
+      overflow: scroll;
+    }
+    #languageTA {
+      display: none;
+      font-family: monospace;
+      font-size: 10pt;
+    }
+
+    button {
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      background-color: #eee;
+      color: #000;
+      padding: 10px;
+      margin: 0 5px;
+      font-size: large;
+    }
+    button:hover:not(:disabled) {
+      box-shadow: 2px 2px 5px #888;
+    }
+    button:disabled {
+      opacity: 0.6;
+    }
+    button>* {
+      opacity: 0.6;
+      vertical-align: text-bottom;
+    }
+    button:hover:not(:disabled)>* {
+      opacity: 1;
+    }
+    #linkButton {
+      display: none;
+    }
+  </style>
+  <link rel="stylesheet" href="../prettify.css">
+  <script src="../prettify.js"></script>
+</head>
+<body>
+  <table>
+    <tr>
+      <td width="50%" height="5%">
+        <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+          <a href="../index.html">Demos</a> &gt; Block Factory</h1>
+      </td>
+      <td width="50%" height="5%">
+        <table>
+          <tr>
+            <td style="vertical-align: bottom;">
+              <h3>Preview:
+                <select id="direction">
+                  <option value="ltr">LTR</option>
+                  <option value="rtl">RTL</option>
+                </select>
+              </h3>
+            </td>
+            <td style="vertical-align: middle; text-align: right;">
+              <button id="linkButton" title="Save and link to blocks.">
+                <img src="link.png" height="21" width="21">
+              </button>
+              <button id="linkButton" title="Save and link to blocks.">
+                <img src="link.png" height="21" width="21">
+              </button>
+              <button id="helpButton" title="View documentation in new window.">
+                <span>Help</span>
+              </button>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td width="50%" height="95%" style="padding: 2px;">
+        <div id="blockly"></div>
+        <div id="blocklyMask"></div>
+      </td>
+      <td width="50%" height="95%">
+        <table>
+          <tr>
+            <td height="30%">
+              <div id="preview"></div>
+            </td>
+          </tr>
+          <tr>
+            <td height="5%">
+              <h3>Language code:
+                <select id="format">
+                  <option value="JSON">JSON</option>
+                  <option value="JavaScript">JavaScript</option>
+                  <option value="Manual">Manual edit&hellip;</option>
+                </select>
+              </h3>
+            </td>
+          </tr>
+          <tr>
+            <td height="30%">
+              <pre id="languagePre"></pre>
+              <textarea id="languageTA"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td height="5%">
+              <h3>Generator stub:
+                <select id="language">
+                  <option value="JavaScript">JavaScript</option>
+                  <option value="Python">Python</option>
+                  <option value="PHP">PHP</option>
+                  <option value="Lua">Lua</option>
+                  <option value="Dart">Dart</option>
+                </select>
+              </h3>
+            </td>
+          </tr>
+          <tr>
+            <td height="30%">
+              <pre id="generatorPre"></pre>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <xml id="toolbox" style="display: none">
+    <category name="Input">
+      <block type="input_value">
+        <value name="TYPE">
+          <shadow type="type_null"></shadow>
+        </value>
+      </block>
+      <block type="input_statement">
+        <value name="TYPE">
+          <shadow type="type_null"></shadow>
+        </value>
+      </block>
+      <block type="input_dummy"></block>
+    </category>
+    <category name="Field">
+      <block type="field_static"></block>
+      <block type="field_input"></block>
+      <block type="field_number"></block>
+      <block type="field_angle"></block>
+      <block type="field_dropdown"></block>
+      <block type="field_checkbox"></block>
+      <block type="field_colour"></block>
+      <!--
+      Date picker commented out since it increases footprint by 60%.
+      Add it only if you need it.  See also goog.require in blockly.js.
+      <block type="field_date"></block>
+      -->
+      <block type="field_variable"></block>
+      <block type="field_image"></block>
+    </category>
+    <category name="Type">
+      <block type="type_group"></block>
+      <block type="type_null"></block>
+      <block type="type_boolean"></block>
+      <block type="type_number"></block>
+      <block type="type_string"></block>
+      <block type="type_list"></block>
+      <block type="type_other"></block>
+    </category>
+    <category name="Colour" id="colourCategory">
+      <block type="colour_hue"><mutation colour="20"></mutation><field name="HUE">20</field></block>
+      <block type="colour_hue"><mutation colour="65"></mutation><field name="HUE">65</field></block>
+      <block type="colour_hue"><mutation colour="120"></mutation><field name="HUE">120</field></block>
+      <block type="colour_hue"><mutation colour="160"></mutation><field name="HUE">160</field></block>
+      <block type="colour_hue"><mutation colour="210"></mutation><field name="HUE">210</field></block>
+      <block type="colour_hue"><mutation colour="230"></mutation><field name="HUE">230</field></block>
+      <block type="colour_hue"><mutation colour="260"></mutation><field name="HUE">260</field></block>
+      <block type="colour_hue"><mutation colour="290"></mutation><field name="HUE">290</field></block>
+      <block type="colour_hue"><mutation colour="330"></mutation><field name="HUE">330</field></block>
+    </category>
+  </xml>
+</body>
+</html>

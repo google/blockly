@@ -257,6 +257,9 @@ Blockly.Blocks['controls_flow_statements'] = {
    * @this Blockly.Block
    */
   onchange: function(e) {
+    if (!this.workspace.isDragging || this.workspace.isDragging()) {
+      return;  // Don't change state at the start of a drag.
+    }
     var legal = false;
     // Is the block nested in a loop?
     var block = this;
@@ -269,8 +272,14 @@ Blockly.Blocks['controls_flow_statements'] = {
     } while (block);
     if (legal) {
       this.setWarningText(null);
+      if (!this.isInFlyout) {
+        this.setDisabled(false);
+      }
     } else {
       this.setWarningText(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING);
+      if (!this.isInFlyout && !this.getInheritedDisabled()) {
+        this.setDisabled(true);
+      }
     }
   },
   /**

@@ -43,7 +43,7 @@ goog.require('goog.userAgent');
  */
 Blockly.FieldAngle = function(text, opt_validator) {
   // Add degree symbol: "360°" (LTR) or "°360" (RTL)
-  this.symbol_ = Blockly.createSvgElement('tspan', {}, null);
+  this.symbol_ = Blockly.utils.createSvgElement('tspan', {}, null);
   this.symbol_.appendChild(document.createTextNode('\u00B0'));
 
   Blockly.FieldAngle.superClass_.constructor.call(this, text, opt_validator);
@@ -130,11 +130,11 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
   Blockly.FieldAngle.superClass_.showEditor_.call(this, noFocus);
   var div = Blockly.WidgetDiv.DIV;
   if (!div.firstChild) {
-    // Mobile interface uses window.prompt.
+    // Mobile interface uses Blockly.prompt.
     return;
   }
   // Build the SVG DOM.
-  var svg = Blockly.createSvgElement('svg', {
+  var svg = Blockly.utils.createSvgElement('svg', {
     'xmlns': 'http://www.w3.org/2000/svg',
     'xmlns:html': 'http://www.w3.org/1999/xhtml',
     'xmlns:xlink': 'http://www.w3.org/1999/xlink',
@@ -142,20 +142,20 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
     'height': (Blockly.FieldAngle.HALF * 2) + 'px',
     'width': (Blockly.FieldAngle.HALF * 2) + 'px'
   }, div);
-  var circle = Blockly.createSvgElement('circle', {
+  var circle = Blockly.utils.createSvgElement('circle', {
     'cx': Blockly.FieldAngle.HALF, 'cy': Blockly.FieldAngle.HALF,
     'r': Blockly.FieldAngle.RADIUS,
     'class': 'blocklyAngleCircle'
   }, svg);
-  this.gauge_ = Blockly.createSvgElement('path',
+  this.gauge_ = Blockly.utils.createSvgElement('path',
       {'class': 'blocklyAngleGauge'}, svg);
-  this.line_ = Blockly.createSvgElement('line',
+  this.line_ = Blockly.utils.createSvgElement('line',
       {'x1': Blockly.FieldAngle.HALF,
       'y1': Blockly.FieldAngle.HALF,
       'class': 'blocklyAngleLine'}, svg);
   // Draw markers around the edge.
   for (var angle = 0; angle < 360; angle += 15) {
-    Blockly.createSvgElement('line', {
+    Blockly.utils.createSvgElement('line', {
       'x1': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS,
       'y1': Blockly.FieldAngle.HALF,
       'x2': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS -
@@ -167,12 +167,18 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
     }, svg);
   }
   svg.style.marginLeft = (15 - Blockly.FieldAngle.RADIUS) + 'px';
+
+  // The angle picker is different from other fields in that it updates on
+  // mousemove even if it's not in the middle of a drag.  In future we may
+  // change this behavior.  For now, using bindEvent_ instead of
+  // bindEventWithChecks_ allows it to work without a mousedown/touchstart.
   this.clickWrapper_ =
       Blockly.bindEvent_(svg, 'click', this, Blockly.WidgetDiv.hide);
   this.moveWrapper1_ =
       Blockly.bindEvent_(circle, 'mousemove', this, this.onMouseMove);
   this.moveWrapper2_ =
-      Blockly.bindEvent_(this.gauge_, 'mousemove', this, this.onMouseMove);
+      Blockly.bindEvent_(this.gauge_, 'mousemove', this,
+      this.onMouseMove);
   this.updateGraph_();
 };
 
@@ -186,7 +192,7 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
   var dy = e.clientY - bBox.top - Blockly.FieldAngle.HALF;
   var angle = Math.atan(-dy / dx);
   if (isNaN(angle)) {
-    // This shouldn't happen, but let's not let this error propogate further.
+    // This shouldn't happen, but let's not let this error propagate further.
     return;
   }
   angle = goog.math.toDegrees(angle);

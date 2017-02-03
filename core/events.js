@@ -24,8 +24,13 @@
  */
 'use strict';
 
+/**
+ * Events fired as a result of actions in Blockly's editor.
+ * @namespace Blockly.Events
+ */
 goog.provide('Blockly.Events');
 
+goog.require('goog.array');
 goog.require('goog.math.Coordinate');
 
 
@@ -229,7 +234,7 @@ Blockly.Events.getGroup = function() {
  */
 Blockly.Events.setGroup = function(state) {
   if (typeof state == 'boolean') {
-    Blockly.Events.group_ = state ? Blockly.genUid() : '';
+    Blockly.Events.group_ = state ? Blockly.utils.genUid() : '';
   } else {
     Blockly.Events.group_ = state;
   }

@@ -20,77 +20,71 @@
 /**
  * @fileoverview Angular2 Component that details how a Blockly.Workspace is
  * rendered in AccessibleBlockly.
+ *
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
-blocklyApp.WorkspaceComponent = ng.core
-  .Component({
-    selector: 'blockly-workspace',
-    template: `
+blocklyApp.WorkspaceComponent = ng.core.Component({
+  selector: 'blockly-workspace',
+  template: `
     <div class="blocklyWorkspaceColumn">
       <h3 #workspaceTitle id="blockly-workspace-title">{{'WORKSPACE'|translate}}</h3>
 
       <div *ngIf="workspace" class="blocklyWorkspace">
         <ol #tree *ngFor="#block of workspace.topBlocks_; #i = index"
-            tabindex="0" role="tree" class="blocklyTree blocklyWorkspaceTree"
+            tabindex="0" role="tree" class="blocklyTree blocklyWorkspaceFocusTarget"
             [attr.aria-activedescendant]="getActiveDescId(tree.id)"
             [attr.aria-labelledby]="workspaceTitle.id"
-            (keydown)="onKeypress($event, tree)">
-          <blockly-workspace-tree [level]=1 [block]="block" [tree]="tree" [isTopLevel]="true">
+            (keydown)="onKeypress($event, tree)"
+            (focus)="speakLocation(i)">
+          <blockly-workspace-tree [level]="0" [block]="block" [tree]="tree" [isTopLevel]="true">
           </blockly-workspace-tree>
         </ol>
-      </div>
-    </div>
 
-    <div class="blocklyToolbarColumn">
-      <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event)">
-        <span *ngFor="#buttonConfig of toolbarButtonConfig">
-          <button (click)="buttonConfig.action()"
-                  class="blocklyTree blocklyWorkspaceToolbarButton">
-            {{buttonConfig.text}}
-          </button>
+        <span *ngIf="workspace.topBlocks_.length === 0">
+          <p id="emptyWorkspaceBtnLabel">
+            There are no blocks in the workspace.
+            <button (click)="showToolboxModalForCreateNewGroup()"
+                    class="blocklyWorkspaceFocusTarget"
+                    id="{{ID_FOR_EMPTY_WORKSPACE_BTN}}"
+                    aria-describedby="emptyWorkspaceBtnLabel">
+              Create new block group...
+            </button>
+          </p>
         </span>
-        <button id="clear-workspace" (click)="clearWorkspace()"
-                [attr.aria-disabled]="isWorkspaceEmpty()"
-                class="blocklyTree blocklyWorkspaceToolbarButton">
-          {{'CLEAR_WORKSPACE'|translate}}
-        </button>
       </div>
     </div>
-    `,
-    directives: [blocklyApp.WorkspaceTreeComponent],
-    pipes: [blocklyApp.TranslatePipe]
-  })
-  .Class({
-    constructor: [
-        blocklyApp.TreeService, blocklyApp.UtilsService,
-        function(_treeService, _utilsService) {
-      // ACCESSIBLE_GLOBALS is a global variable defined by the containing
-      // page. It should contain a key, toolbarButtonConfig, whose
-      // corresponding value is an Array with two keys: 'text' and 'action'.
-      // The first is the text to display on the button, and the second is the
-      // function that gets run when the button is clicked.
-      this.toolbarButtonConfig =
-          ACCESSIBLE_GLOBALS && ACCESSIBLE_GLOBALS.toolbarButtonConfig ?
-          ACCESSIBLE_GLOBALS.toolbarButtonConfig : [];
+  `,
+  directives: [blocklyApp.WorkspaceTreeComponent],
+  pipes: [blocklyApp.TranslatePipe]
+})
+.Class({
+  constructor: [
+    blocklyApp.NotificationsService,
+    blocklyApp.ToolboxModalService,
+    blocklyApp.TreeService,
+    function(notificationsService, toolboxModalService, treeService) {
+      this.notificationsService = notificationsService;
+      this.toolboxModalService = toolboxModalService;
+      this.treeService = treeService;
+
       this.workspace = blocklyApp.workspace;
-      this.treeService = _treeService;
-      this.utilsService = _utilsService;
-    }],
-    clearWorkspace: function() {
-      this.workspace.clear();
-    },
-    getActiveDescId: function(treeId) {
-      return this.treeService.getActiveDescId(treeId);
-    },
-    onWorkspaceToolbarKeypress: function(e) {
-      this.treeService.onWorkspaceToolbarKeypress(
-          e, document.activeElement.id);
-    },
-    onKeypress: function(e, tree) {
-      this.treeService.onKeypress(e, tree);
-    },
-    isWorkspaceEmpty: function() {
-      return this.utilsService.isWorkspaceEmpty();
+      this.ID_FOR_EMPTY_WORKSPACE_BTN = blocklyApp.ID_FOR_EMPTY_WORKSPACE_BTN;
     }
-  });
+  ],
+  getActiveDescId: function(treeId) {
+    return this.treeService.getActiveDescId(treeId);
+  },
+  onKeypress: function(e, tree) {
+    this.treeService.onKeypress(e, tree);
+  },
+  showToolboxModalForCreateNewGroup: function() {
+    this.toolboxModalService.showToolboxModalForCreateNewGroup(
+        this.ID_FOR_EMPTY_WORKSPACE_BTN);
+  },
+  speakLocation: function(index) {
+    this.notificationsService.speak(
+        'Now in workspace group ' + (index + 1) + ' of ' +
+        this.workspace.topBlocks_.length);
+  }
+});

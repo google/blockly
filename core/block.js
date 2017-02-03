@@ -46,14 +46,14 @@ goog.require('goog.string');
  * @param {!Blockly.Workspace} workspace The block's workspace.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
- * @param {=string} opt_id Optional ID.  Use this ID if provided, otherwise
+ * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new id.
  * @constructor
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {
   /** @type {string} */
   this.id = (opt_id && !workspace.getBlockById(opt_id)) ?
-      opt_id : Blockly.genUid();
+      opt_id : Blockly.utils.genUid();
   workspace.blockDB_[this.id] = this;
   /** @type {Blockly.Connection} */
   this.outputConnection = null;
@@ -341,7 +341,7 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
   if (rootBlock.isInFlyout) {
     return;  // Don't move blocks around in a flyout.
   }
-  // Loop though every connection on this block.
+  // Loop through every connection on this block.
   var myConnections = this.getConnections_(false);
   for (var i = 0, connection; connection = myConnections[i]; i++) {
     // Spider down from this block bumping all sub-blocks.
@@ -454,18 +454,7 @@ Blockly.Block.prototype.setParent = function(newParent) {
   }
   if (this.parentBlock_) {
     // Remove this block from the old parent's child list.
-    var children = this.parentBlock_.childBlocks_;
-    for (var child, x = 0; child = children[x]; x++) {
-      if (child == this) {
-        children.splice(x, 1);
-        break;
-      }
-      if (child.errorIcon) {
-        var data = child.errorIcon.getIconLocation();
-        data.bubble = child.errorIcon;
-        this.draggedBubbles_.push(data);
-      }
-    }
+    goog.array.remove(this.parentBlock_.childBlocks_, this);
 
     // Disconnect from superior blocks.
     if (this.previousConnection && this.previousConnection.isConnected()) {
@@ -645,7 +634,7 @@ Blockly.Block.prototype.getColour = function() {
  * @param {number|string} colour HSV hue value, or #RRGGBB string.
  */
 Blockly.Block.prototype.setColour = function(colour) {
-  var hue = parseFloat(colour);
+  var hue = Number(colour);
   if (!isNaN(hue)) {
     this.colour_ = Blockly.hueToRgb(hue);
   } else if (goog.isString(colour) && colour.match(/^#[0-9a-fA-F]{6}$/)) {
@@ -718,17 +707,6 @@ Blockly.Block.prototype.getFieldValue = function(name) {
 };
 
 /**
- * Returns the language-neutral value from the field of a block.
- * @param {string} name The name of the field.
- * @return {?string} Value from the field or null if field does not exist.
- * @deprecated December 2013
- */
-Blockly.Block.prototype.getTitleValue = function(name) {
-  console.warn('Deprecated call to getTitleValue, use getFieldValue instead.');
-  return this.getFieldValue(name);
-};
-
-/**
  * Change the field value for a block (e.g. 'CHOOSE' or 'REMOVE').
  * @param {string} newValue Value to be the new field.
  * @param {string} name The name of the field.
@@ -737,17 +715,6 @@ Blockly.Block.prototype.setFieldValue = function(newValue, name) {
   var field = this.getField(name);
   goog.asserts.assertObject(field, 'Field "%s" not found.', name);
   field.setValue(newValue);
-};
-
-/**
- * Change the field value for a block (e.g. 'CHOOSE' or 'REMOVE').
- * @param {string} newValue Value to be the new field.
- * @param {string} name The name of the field.
- * @deprecated December 2013
- */
-Blockly.Block.prototype.setTitleValue = function(newValue, name) {
-  console.warn('Deprecated call to setTitleValue, use setFieldValue instead.');
-  this.setFieldValue(newValue, name);
 };
 
 /**
@@ -1048,7 +1015,7 @@ Blockly.Block.prototype.jsonInit = function(json) {
  * @param {string} message Text contains interpolation tokens (%1, %2, ...)
  *     that match with fields or inputs defined in the args array.
  * @param {!Array} args Array of arguments to be interpolated.
- * @param {=string} lastDummyAlign If a dummy input is added at the end,
+ * @param {string=} lastDummyAlign If a dummy input is added at the end,
  *     how should it be aligned?
  * @private
  */
@@ -1079,7 +1046,8 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
       'Message does not reference all %s arg(s).', args.length);
   // Add last dummy input if needed.
   if (elements.length && (typeof elements[elements.length - 1] == 'string' ||
-      elements[elements.length - 1]['type'].indexOf('field_') == 0)) {
+      goog.string.startsWith(elements[elements.length - 1]['type'],
+                             'field_'))) {
     var dummyInput = {type: 'input_dummy'};
     if (lastDummyAlign) {
       dummyInput['align'] = lastDummyAlign;

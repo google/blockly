@@ -7,7 +7,8 @@
 			"Gbonanome",
 			"Gianfranco",
 			"Federico Mugnaini",
-			"JackLantern"
+			"JackLantern",
+			"Selven"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
@@ -274,6 +275,7 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "da # dalla fine",
 	"LISTS_GET_SUBLIST_END_LAST": "dagli ultimi",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Crea una copia della porzione specificata di una lista.",
+	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
 	"LISTS_SORT_TITLE": "ordinamento %1 %2 %3",
 	"LISTS_SORT_TOOLTIP": "Ordina una copia di un elenco.",
 	"LISTS_SORT_ORDER_ASCENDING": "crescente",

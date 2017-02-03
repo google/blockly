@@ -102,7 +102,7 @@ Blockly.PHP['text_indexOf'] = function(block) {
       Blockly.PHP.ORDER_NONE) || '\'\'';
   var text = Blockly.PHP.valueToCode(block, 'VALUE',
       Blockly.PHP.ORDER_NONE) || '\'\'';
-  if (Blockly.PHP.ONE_BASED_INDEXING) {
+  if (block.workspace.options.oneBasedIndex) {
     var errorIndex = ' 0';
     var indexAdjustment = ' + 1';
   } else {

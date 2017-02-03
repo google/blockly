@@ -40,8 +40,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this Blockly.Block
    */
   init: function() {
-    var nameField = new Blockly.FieldTextInput(
-        Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE,
+    var nameField = new Blockly.FieldTextInput('',
         Blockly.Procedures.rename);
     nameField.setSpellcheck(false);
     this.appendDummyInput()
@@ -49,7 +48,10 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         .appendField(nameField, 'NAME')
         .appendField('', 'PARAMS');
     this.setMutator(new Blockly.Mutator(['procedures_mutatorarg']));
-    if (Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT) {
+    if ((this.workspace.options.comments ||
+         (this.workspace.options.parentWorkspace &&
+          this.workspace.options.parentWorkspace.options.comments)) &&
+        Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT) {
       this.setCommentText(Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT);
     }
     this.setColour(Blockly.Blocks.procedures.HUE);
@@ -331,8 +333,7 @@ Blockly.Blocks['procedures_defreturn'] = {
    * @this Blockly.Block
    */
   init: function() {
-    var nameField = new Blockly.FieldTextInput(
-        Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE,
+    var nameField = new Blockly.FieldTextInput('',
         Blockly.Procedures.rename);
     nameField.setSpellcheck(false);
     this.appendDummyInput()
@@ -343,7 +344,10 @@ Blockly.Blocks['procedures_defreturn'] = {
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
     this.setMutator(new Blockly.Mutator(['procedures_mutatorarg']));
-    if (Blockly.Msg.PROCEDURES_DEFRETURN_COMMENT) {
+    if ((this.workspace.options.comments ||
+         (this.workspace.options.parentWorkspace &&
+          this.workspace.options.parentWorkspace.options.comments)) &&
+        Blockly.Msg.PROCEDURES_DEFRETURN_COMMENT) {
       this.setCommentText(Blockly.Msg.PROCEDURES_DEFRETURN_COMMENT);
     }
     this.setColour(Blockly.Blocks.procedures.HUE);
@@ -437,8 +441,8 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    */
   createNewVar_: function(newText) {
     var source = this.sourceBlock_;
-    if (source && source.workspace && source.workspace.options
-        && source.workspace.options.parentWorkspace) {
+    if (source && source.workspace && source.workspace.options &&
+        source.workspace.options.parentWorkspace) {
       source.workspace.options.parentWorkspace.createVariable(newText);
     }
   }
@@ -837,6 +841,9 @@ Blockly.Blocks['procedures_ifreturn'] = {
    * @this Blockly.Block
    */
   onchange: function(e) {
+    if (!this.workspace.isDragging || this.workspace.isDragging()) {
+      return;  // Don't change state at the start of a drag.
+    }
     var legal = false;
     // Is the block nested in a procedure?
     var block = this;
@@ -852,18 +859,24 @@ Blockly.Blocks['procedures_ifreturn'] = {
       if (block.type == 'procedures_defnoreturn' && this.hasReturnValue_) {
         this.removeInput('VALUE');
         this.appendDummyInput('VALUE')
-          .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
+            .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
         this.hasReturnValue_ = false;
       } else if (block.type == 'procedures_defreturn' &&
                  !this.hasReturnValue_) {
         this.removeInput('VALUE');
         this.appendValueInput('VALUE')
-          .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
+            .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
         this.hasReturnValue_ = true;
       }
       this.setWarningText(null);
+      if (!this.isInFlyout) {
+        this.setDisabled(false);
+      }
     } else {
       this.setWarningText(Blockly.Msg.PROCEDURES_IFRETURN_WARNING);
+      if (!this.isInFlyout && !this.getInheritedDisabled()) {
+        this.setDisabled(true);
+      }
     }
   },
   /**

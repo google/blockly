@@ -19,15 +19,19 @@
   <script src="../../accessible/libs/angular2-all.umd.min.js"></script>
 
   <script src="../../accessible/utils.service.js"></script>
-  <script src="../../accessible/audio.service.js"></script>
   <script src="../../accessible/notifications.service.js"></script>
-  <script src="../../accessible/clipboard.service.js"></script>
+  <script src="../../accessible/audio.service.js"></script>
+  <script src="../../accessible/block-connection.service.js"></script>
+  <script src="../../accessible/block-options-modal.service.js"></script>
+  <script src="../../accessible/keyboard-input.service.js"></script>
   <script src="../../accessible/tree.service.js"></script>
+  <script src="../../accessible/toolbox-modal.service.js"></script>
   <script src="../../accessible/translate.pipe.js"></script>
 
-  <script src="../../accessible/field.component.js"></script>
-  <script src="../../accessible/toolbox-tree.component.js"></script>
-  <script src="../../accessible/toolbox.component.js"></script>
+  <script src="../../accessible/field-segment.component.js"></script>
+  <script src="../../accessible/block-options-modal.component.js"></script>
+  <script src="../../accessible/toolbox-modal.component.js"></script>
+  <script src="../../accessible/sidebar.component.js"></script>
   <script src="../../accessible/workspace-tree.component.js"></script>
   <script src="../../accessible/workspace.component.js"></script>
   <script src="../../accessible/app.component.js"></script>
@@ -37,6 +41,7 @@
     body {
       background-color: #fff;
       font-family: sans-serif;
+      margin-left: 30px;
     }
     h1 {
       font-weight: normal;
@@ -54,13 +59,16 @@
     <a href="../index.html">Demos</a> &gt; Accessible Blockly
   </h1>
 
-  <p>This is a simple demo of a version of Blockly designed for screen readers.</p>
-
   <p>
-    In Blockly, you can move blocks from the toolbox to the workspace and join
-    them to create programs. To navigate between components, use Tab or
-    Shift-Tab. When you're on a block, move right to access its submenus, and
-    move up or down to go to the next or previous block in the sequence.
+    This is a demo of a version of Blockly designed for screen readers,
+    optimized for NVDA on Firefox. It allows users to create programs in a
+    workspace by manipulating groups of blocks.
+    <ul>
+      <li>To explore a group of blocks, use the arrow keys.</li>
+      <li>To navigate between groups, use Tab or Shift-Tab.</li>
+      <li>To add new blocks, use the buttons in the menu on the right.</li>
+      <li>To delete or add links to existing blocks, press Enter while you're on that block.</li>
+    </ul>
   </p>
 
   <!--
@@ -71,14 +79,13 @@
 
   <script>
     var ACCESSIBLE_GLOBALS = {
-      // Additional buttons for the workspace toolbar that
-      // go before the "Clear Workspace" button.
-      toolbarButtonConfig: [],
       // Prefix of path to sound files.
-      mediaPathPrefix: '../../accessible/media/'
+      mediaPathPrefix: '../../accessible/media/',
+      // Additional buttons for the sidebar.
+      customSidebarButtons: []
     };
     document.addEventListener('DOMContentLoaded', function() {
-      ng.platform.browser.bootstrap(blocklyApp.AppView);
+      ng.platform.browser.bootstrap(blocklyApp.AppComponent);
     });
   </script>
 

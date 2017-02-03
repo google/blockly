@@ -96,7 +96,7 @@ Blockly.JavaScript['text_indexOf'] = function(block) {
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
   var code = text + '.' + operator + '(' + substring + ')';
   // Adjust index if using one-based indices.
-  if (Blockly.JavaScript.ONE_BASED_INDEXING) {
+  if (block.workspace.options.oneBasedIndex) {
     return [code + ' + 1', Blockly.JavaScript.ORDER_ADDITION];
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];

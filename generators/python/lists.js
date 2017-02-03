@@ -76,7 +76,7 @@ Blockly.Python['lists_indexOf'] = function(block) {
       Blockly.Python.ORDER_NONE) || '[]';
   var list = Blockly.Python.valueToCode(block, 'VALUE',
       Blockly.Python.ORDER_NONE) || '\'\'';
-  if (Blockly.Python.ONE_BASED_INDEXING) {
+  if (block.workspace.options.oneBasedIndex) {
     var errorIndex = ' 0';
     var firstIndexAdjustment = ' + 1';
     var lastIndexAdjustment = '';

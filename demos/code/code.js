@@ -314,7 +314,7 @@ Code.renderContent = function() {
     var code = Blockly.JavaScript.workspaceToCode(Code.workspace);
     content.textContent = code;
     if (typeof prettyPrintOne == 'function') {
-      code = content.innerHTML;
+      code = content.textContent;
       code = prettyPrintOne(code, 'js');
       content.innerHTML = code;
     }
@@ -322,7 +322,7 @@ Code.renderContent = function() {
     code = Blockly.Python.workspaceToCode(Code.workspace);
     content.textContent = code;
     if (typeof prettyPrintOne == 'function') {
-      code = content.innerHTML;
+      code = content.textContent;
       code = prettyPrintOne(code, 'py');
       content.innerHTML = code;
     }
@@ -330,7 +330,7 @@ Code.renderContent = function() {
     code = Blockly.PHP.workspaceToCode(Code.workspace);
     content.textContent = code;
     if (typeof prettyPrintOne == 'function') {
-      code = content.innerHTML;
+      code = content.textContent;
       code = prettyPrintOne(code, 'php');
       content.innerHTML = code;
     }
@@ -338,7 +338,7 @@ Code.renderContent = function() {
     code = Blockly.Dart.workspaceToCode(Code.workspace);
     content.textContent = code;
     if (typeof prettyPrintOne == 'function') {
-      code = content.innerHTML;
+      code = content.textContent;
       code = prettyPrintOne(code, 'dart');
       content.innerHTML = code;
     }
@@ -346,7 +346,7 @@ Code.renderContent = function() {
     code = Blockly.Lua.workspaceToCode(Code.workspace);
     content.textContent = code;
     if (typeof prettyPrintOne == 'function') {
-      code = content.innerHTML;
+      code = content.textContent;
       code = prettyPrintOne(code, 'lua');
       content.innerHTML = code;
     }
@@ -386,7 +386,7 @@ Code.init = function() {
   // Interpolate translated messages into toolbox.
   var toolboxText = document.getElementById('toolbox').outerHTML;
   toolboxText = toolboxText.replace(/{(\w+)}/g,
-      function(m, p1) {return MSG[p1]});
+      function(m, p1) {return MSG[p1];});
   var toolboxXml = Blockly.Xml.textToDom(toolboxText);
 
   Code.workspace = Blockly.inject('content_blocks',

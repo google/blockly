@@ -161,7 +161,7 @@ Blockly.RenderedConnection.prototype.tighten_ = function() {
     if (!svgRoot) {
       throw 'block is not rendered.';
     }
-    var xy = Blockly.getRelativeXY_(svgRoot);
+    var xy = Blockly.utils.getRelativeXY(svgRoot);
     block.getSvgRoot().setAttribute('transform',
         'translate(' + (xy.x - dx) + ',' + (xy.y - dy) + ')');
     block.moveConnections_(-dx, -dy);
@@ -196,7 +196,7 @@ Blockly.RenderedConnection.prototype.highlight = function() {
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();
   var x = this.x_ - xy.x;
   var y = this.y_ - xy.y;
-  Blockly.Connection.highlightedPath_ = Blockly.createSvgElement('path',
+  Blockly.Connection.highlightedPath_ = Blockly.utils.createSvgElement('path',
       {'class': 'blocklyHighlightedConnectionPath',
        'd': steps,
        transform: 'translate(' + x + ',' + y + ')' +

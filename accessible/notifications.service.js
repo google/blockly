@@ -18,29 +18,41 @@
  */
 
 /**
- * @fileoverview Angular2 Service that notifies the user about actions that
- * they have taken, by updating an ARIA live region.
+ * @fileoverview Angular2 Service for updating the ARIA live region that
+ * allows screenreaders to notify the user about actions that they have taken.
  * @author sll@google.com (Sean Lip)
  */
 
-blocklyApp.NotificationsService = ng.core
-  .Class({
-    constructor: [function() {
-      this.statusMessage_ = '';
-    }],
-    getStatusMessage: function() {
-      return this.statusMessage_;
-    },
-    setStatusMessage: function(newMessage) {
-      // Introduce a temporary status message, so that if, e.g., two "copy"
-      // operations are done in succession, both messages will be read.
-      this.statusMessage_ = '';
+blocklyApp.NotificationsService = ng.core.Class({
+  constructor: [function() {
+    this.currentMessage = '';
+    this.timeouts = [];
+  }],
+  setDisplayedMessage_: function(newMessage) {
+    this.currentMessage = newMessage;
+  },
+  getDisplayedMessage: function() {
+    return this.currentMessage;
+  },
+  speak: function(newMessage) {
+    // Clear and reset any existing timeouts.
+    this.timeouts.forEach(function(timeout) {
+      clearTimeout(timeout);
+    });
+    this.timeouts.length = 0;
 
-      // We need a non-zero timeout here, otherwise NVDA does not read the
-      // notification messages properly.
-      var that = this;
-      setTimeout(function() {
-        that.statusMessage_ = newMessage;
-      }, 20);
-    }
-  });
+    // Clear the current message, so that if, e.g., two operations of the same
+    // type are performed, both messages will be read in succession.
+    this.setDisplayedMessage_('');
+
+    // We need a non-zero timeout here, otherwise NVDA does not read the
+    // notification messages properly.
+    var that = this;
+    this.timeouts.push(setTimeout(function() {
+      that.setDisplayedMessage_(newMessage);
+    }, 20));
+    this.timeouts.push(setTimeout(function() {
+      that.setDisplayedMessage_('');
+    }, 5000));
+  }
+});

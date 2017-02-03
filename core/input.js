@@ -121,19 +121,6 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
 };
 
 /**
- * Add an item to the end of the input's field row.
- * @param {*} field Something to add as a field.
- * @param {string=} opt_name Language-neutral identifier which may used to find
- *     this field again.  Should be unique to the host block.
- * @return {!Blockly.Input} The input being append to (to allow chaining).
- * @deprecated December 2013
- */
-Blockly.Input.prototype.appendTitle = function(field, opt_name) {
-  console.warn('Deprecated call to appendTitle, use appendField instead.');
-  return this.appendField(field, opt_name);
-};
-
-/**
  * Remove a field from this input.
  * @param {string} name The name of the field.
  * @throws {goog.asserts.AssertionError} if the field is not present.

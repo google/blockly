@@ -6,7 +6,8 @@
 			"Igor Zavadsky",
 			"Lxlalexlxl",
 			"아라",
-			"Visem"
+			"Visem",
+			"Piramidion"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "елемент",
@@ -32,8 +33,11 @@
 	"CHANGE_VALUE_TITLE": "Змінити значення:",
 	"RENAME_VARIABLE": "Перейменувати змінну...",
 	"RENAME_VARIABLE_TITLE": "Перейменувати усі змінні \"%1\" до:",
-	"NEW_VARIABLE": "Нова змінна...",
+	"NEW_VARIABLE": "Створити змінну...",
 	"NEW_VARIABLE_TITLE": "Нова назва змінної:",
+	"VARIABLE_ALREADY_EXISTS": "Змінна з назвою '%1' вже існує.",
+	"DELETE_VARIABLE_CONFIRMATION": "Вилучити %1 використання змінної '%2'?",
+	"DELETE_VARIABLE": "Вилучити змінну '%1'",
 	"COLOUR_PICKER_HELPURL": "https://uk.wikipedia.org/wiki/Колір",
 	"COLOUR_PICKER_TOOLTIP": "Вибрати колір з палітри.",
 	"COLOUR_RANDOM_TITLE": "випадковий колір",

@@ -4,7 +4,8 @@
 			"Christian List",
 			"RickiRunge",
 			"MGA73",
-			"Mads Haupt"
+			"Mads Haupt",
+			"Tjernobyl"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -267,6 +268,10 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "til # fra slutningen",
 	"LISTS_GET_SUBLIST_END_LAST": "til sidste",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Opretter en kopi af den angivne del af en liste.",
+	"LISTS_SORT_ORDER_ASCENDING": "stigende",
+	"LISTS_SORT_ORDER_DESCENDING": "faldende",
+	"LISTS_SORT_TYPE_NUMERIC": "nummerorden",
+	"LISTS_SORT_TYPE_TEXT": "alfabetisk",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "lav tekst til liste",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "lav liste til tekst",
 	"LISTS_SPLIT_WITH_DELIMITER": "med skilletegn",

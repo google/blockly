@@ -211,7 +211,7 @@ Blockly.WorkspaceSvg.prototype.workspaceDragSurface_ = null;
   * @type {boolean}
   * @private
   */
- Blockly.WorkspaceSvg.prototype.useWorkspaceDragSurface_ = false;
+Blockly.WorkspaceSvg.prototype.useWorkspaceDragSurface_ = false;
 
 /**
  * Whether the drag surface is actively in use. When true, calls to
@@ -688,8 +688,8 @@ Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
   // Figure out where we want to put the canvas back.  The order
   // in the is important because things are layered.
   var previousElement = this.svgBlockCanvas_.previousSibling;
-  var width = this.getParentSvg().getAttribute("width")
-  var height = this.getParentSvg().getAttribute("height")
+  var width = this.getParentSvg().getAttribute("width");
+  var height = this.getParentSvg().getAttribute("height");
   var coord = Blockly.utils.getRelativeXY(this.svgBlockCanvas_);
   this.workspaceDragSurface_.setContentsAndShow(this.svgBlockCanvas_,
       this.svgBubbleCanvas_, previousElement, width, height, this.scale);

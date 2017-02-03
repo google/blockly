@@ -854,8 +854,8 @@ Blockly.utils.runAfterPageLoad = function(fn) {
     // Poll readyState.
     var readyStateCheckInterval = setInterval(function() {
       if (document.readyState === 'complete') {
-          clearInterval(readyStateCheckInterval);
-          fn();
+        clearInterval(readyStateCheckInterval);
+        fn();
       }
     }, 10);
   }

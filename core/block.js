@@ -1338,7 +1338,7 @@ Blockly.Block.prototype.setCommentText = function(text) {
  * Set this block's warning text.
  * @param {?string} text The text, or null to delete.
  */
-Blockly.Block.prototype.setWarningText = function(text) {
+Blockly.Block.prototype.setWarningText = function(/* text */) {
   // NOP.
 };
 
@@ -1346,7 +1346,7 @@ Blockly.Block.prototype.setWarningText = function(text) {
  * Give this block a mutator dialog.
  * @param {Blockly.Mutator} mutator A mutator dialog instance or null to remove.
  */
-Blockly.Block.prototype.setMutator = function(mutator) {
+Blockly.Block.prototype.setMutator = function(/* mutator */) {
   // NOP.
 };
 

@@ -364,9 +364,9 @@ Blockly.Scrollbar.prototype.setScrollViewSize_ = function(newSize) {
 };
 
 /**
-+ * Set whether this scrollbar's container is visible.
-+ * @param {boolean} visible Whether the container is visible.
-+ */
+ * Set whether this scrollbar's container is visible.
+ * @param {boolean} visible Whether the container is visible.
+ */
 Blockly.ScrollbarPair.prototype.setContainerVisible = function(visible) {
   this.hScroll.setContainerVisible(visible);
   this.vScroll.setContainerVisible(visible);
@@ -646,7 +646,7 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
  * We cannot rely on the containing workspace being hidden to hide us
  * because it is not necessarily our parent in the dom.
  */
- Blockly.Scrollbar.prototype.updateDisplay_ = function() {
+Blockly.Scrollbar.prototype.updateDisplay_ = function() {
   var show = true;
   // Check whether our parent/container is visible.
   if (!this.containerVisible_) {

@@ -194,3 +194,113 @@ function test_parent_tooltip_when_inline() {
     delete Blockly.Blocks['test_parent'];
   }
 }
+
+function test_mixin_extension() {
+  var TEST_MIXIN = {
+    field: 'FIELD',
+    method: function() {
+      console.log('TEXT_MIXIN method()');
+    }
+  };
+
+  var workspace = new Blockly.Workspace();
+  var block;
+  try {
+    assertUndefined(Blockly.Extensions.ALL_['mixin_test']);
+
+    // Extension defined before the block type is defined.
+    Blockly.Extensions.registerMixin('mixin_test', TEST_MIXIN);
+    assert(goog.isFunction(Blockly.Extensions.ALL_['mixin_test']));
+
+    Blockly.defineBlocksWithJsonArray([{
+      "type": "test_block_mixin",
+      "message0": "test_block_mixin",
+      "extensions": ["mixin_test"]
+    }]);
+
+    block = new Blockly.Block(workspace, 'test_block_mixin');
+
+    assertEquals(TEST_MIXIN.field, block.field);
+    assertEquals(TEST_MIXIN.method, block.method);
+  } finally {
+    block && block.dispose();
+    workspace.dispose();
+
+    delete Blockly.Extensions.ALL_['mixin_test'];
+    delete Blockly.Blocks['test_block_mixin'];
+  }
+}
+
+function test_bad_mixin_overwrites_local_value() {
+  var TEST_MIXIN_BAD_INPUTLIST = {
+    inputList: 'bad inputList'  // Defined in constructor
+  };
+
+  var workspace = new Blockly.Workspace();
+  var block;
+  try {
+    assertUndefined(Blockly.Extensions.ALL_['mixin_bad_inputList']);
+
+    // Extension defined before the block type is defined.
+    Blockly.Extensions.registerMixin('mixin_bad_inputList', TEST_MIXIN_BAD_INPUTLIST);
+    assert(goog.isFunction(Blockly.Extensions.ALL_['mixin_bad_inputList']));
+
+    Blockly.defineBlocksWithJsonArray([{
+      "type": "test_block_bad_inputList",
+      "message0": "test_block_bad_inputList",
+      "extensions": ["mixin_bad_inputList"]
+    }]);
+
+    try {
+      block = new Blockly.Block(workspace, 'test_block_bad_inputList');
+    } catch (e) {
+      // Expected Error
+      assert(e.message.indexOf('inputList') >= 0);  // Reference the conflict
+      return;
+    }
+    fail('Expected error when constructing block');
+  } finally {
+    block && block.dispose();
+    workspace.dispose();
+
+    delete Blockly.Extensions.ALL_['mixin_bad_inputList'];
+    delete Blockly.Blocks['test_block_bad_inputList'];
+  }
+}
+
+function test_bad_mixin_overwrites_prototype() {
+  var TEST_MIXIN_BAD_COLOUR = {
+    colour_: 'bad colour_' // Defined on prototype
+  };
+
+  var workspace = new Blockly.Workspace();
+  var block;
+  try {
+    assertUndefined(Blockly.Extensions.ALL_['mixin_bad_colour_']);
+
+    // Extension defined before the block type is defined.
+    Blockly.Extensions.registerMixin('mixin_bad_colour_', TEST_MIXIN_BAD_COLOUR);
+    assert(goog.isFunction(Blockly.Extensions.ALL_['mixin_bad_colour_']));
+
+    Blockly.defineBlocksWithJsonArray([{
+      "type": "test_block_bad_colour",
+      "message0": "test_block_bad_colour",
+      "extensions": ["mixin_bad_colour_"]
+    }]);
+
+    try {
+      block = new Blockly.Block(workspace, 'test_block_bad_colour');
+    } catch (e) {
+      // Expected Error
+      assert(e.message.indexOf('colour_') >= 0);  // Reference the conflict
+      return;
+    }
+    fail('Expected error when constructing block');
+  } finally {
+    block && block.dispose();
+    workspace.dispose();
+
+    delete Blockly.Extensions.ALL_['mixin_bad_colour_'];
+    delete Blockly.Blocks['test_block_bad_colour'];
+  }
+}

@@ -1043,6 +1043,33 @@ Blockly.Block.prototype.jsonInit = function(json) {
 };
 
 /**
+ * Add key/values from mixinObj to this block object. By default, this method
+ * will check that the keys in mixinObj will not overwrite existing values in
+ * the block, including prototype values. This provides some insurance against
+ * mixin / extension incompatibilities with future block features. This check
+ * can be disabled by passing true as the second argument.
+ * @param {!Object} mixinObj The key/values pairs to add to this block object.
+ * @param {boolean=} optDisableCheck Option flag to disable overwrite checks.
+ */
+Blockly.Block.prototype.mixin = function(mixinObj, optDisableCheck) {
+  if (goog.isDef(optDisableCheck) && !goog.isBoolean(optDisableCheck)) {
+    throw new Error("optDisableCheck must be a boolean if provided");
+  }
+  if (!optDisableCheck) {
+    var overwrites = [];
+    for (var key in mixinObj) {
+      if (this[key] !== undefined) {
+        overwrites.push(key);
+      }
+    }
+    if (overwrites.length > 0) {
+      throw new Error("Mixin will overwrite block members: " + overwrites.toString());
+    }
+  }
+  goog.mixin(this, mixinObj);
+};
+
+/**
  * Interpolate a message description onto the block.
  * @param {string} message Text contains interpolation tokens (%1, %2, ...)
  *     that match with fields or inputs defined in the args array.

@@ -1049,21 +1049,21 @@ Blockly.Block.prototype.jsonInit = function(json) {
  * mixin / extension incompatibilities with future block features. This check
  * can be disabled by passing true as the second argument.
  * @param {!Object} mixinObj The key/values pairs to add to this block object.
- * @param {boolean=} optDisableCheck Option flag to disable overwrite checks.
+ * @param {boolean=} opt_disableCheck Option flag to disable overwrite checks.
  */
-Blockly.Block.prototype.mixin = function(mixinObj, optDisableCheck) {
-  if (goog.isDef(optDisableCheck) && !goog.isBoolean(optDisableCheck)) {
-    throw new Error("optDisableCheck must be a boolean if provided");
+Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
+  if (goog.isDef(opt_disableCheck) && !goog.isBoolean(opt_disableCheck)) {
+    throw new Error("opt_disableCheck must be a boolean if provided");
   }
-  if (!optDisableCheck) {
+  if (!opt_disableCheck) {
     var overwrites = [];
     for (var key in mixinObj) {
       if (this[key] !== undefined) {
         overwrites.push(key);
       }
     }
-    if (overwrites.length > 0) {
-      throw new Error("Mixin will overwrite block members: " + overwrites.toString());
+    if (overwrites.length) {
+      throw new Error('Mixin will overwrite block members: ' + overwrites);
     }
   }
   goog.mixin(this, mixinObj);

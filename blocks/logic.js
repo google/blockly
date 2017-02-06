@@ -456,7 +456,8 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
 };
 
 /**
- * Adds mutator, shape updating methods, and dynamic tooltip to "controls_if" blocks.
+ * "controls_if" extension function. Adds mutator, shape updating methods, and
+ * dynamic tooltip to "controls_if" blocks.
  * @this Blockly.Block
  * @mixes Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN
  * @package
@@ -550,8 +551,9 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
 };
 
 /**
- * Corrects direction of operators in the dropdown labels. Adds type left and
- * right side type checking.
+ * "logic_compare" extension function. Corrects direction of operators in the
+ * dropdown labels, and adds type left and right side type checking to
+ * "logic_compare" blocks.
  * @this Blockly.Block
  * @mixes Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN
  * @package

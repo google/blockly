@@ -195,6 +195,17 @@ Blockly.Field.prototype.updateEditable = function() {
 };
 
 /**
+ * Check whether this field is currently editable.  Some fields are never
+ * editable (e.g. text labels).  Those fields are not serialized to XML.  Other
+ * fields may be editable, and therefore serialized, but may exist on
+ * non-editable blocks.
+ * @return {boolean} whether this field is editable and on an editable block
+ */
+Blockly.Field.prototype.isCurrentlyEditable = function() {
+  return this.EDITABLE && !!this.sourceBlock_ && this.sourceBlock_.isEditable();
+};
+
+/**
  * Gets whether this editable field is visible or not.
  * @return {boolean} True if visible.
  */

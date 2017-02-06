@@ -1510,7 +1510,7 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
       if (!newText) {
         this.warning.dispose();
       }
-      changedState = oldText == newText;
+      changedState = oldText != newText;
     }
   }
   if (changedState && this.rendered) {

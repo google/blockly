@@ -7,7 +7,7 @@
 			"Robin van der Vliet"
 		]
 	},
-	"VARIABLES_DEFAULT_NAME": "ero",
+	"VARIABLES_DEFAULT_NAME": "elemento",
 	"TODAY": "Hodiaŭ",
 	"DUPLICATE_BLOCK": "Duobligi",
 	"ADD_COMMENT": "Aldoni komenton",
@@ -17,6 +17,7 @@
 	"DELETE_BLOCK": "Forigi blokon",
 	"DELETE_X_BLOCKS": "Forigi %1 blokojn",
 	"DELETE_ALL_BLOCKS": "Ĉu forigi ĉiujn %1 blokojn?",
+	"CLEAN_UP": "Purigi blokojn",
 	"COLLAPSE_BLOCK": "Faldi blokon",
 	"COLLAPSE_ALL": "Faldi blokojn",
 	"EXPAND_BLOCK": "Malfaldi blokon",
@@ -26,7 +27,7 @@
 	"HELP": "Helpo",
 	"UNDO": "Malfari",
 	"REDO": "Refari",
-	"CHANGE_VALUE_TITLE": "Ŝangi valaron:",
+	"CHANGE_VALUE_TITLE": "Ŝangi valoron:",
 	"RENAME_VARIABLE": "Renomi varianton...",
 	"RENAME_VARIABLE_TITLE": "Renomi ĉiujn '%1' variantojn kiel:",
 	"NEW_VARIABLE": "Nova varianto...",

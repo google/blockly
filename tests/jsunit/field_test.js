@@ -24,54 +24,76 @@
  */
 'use strict';
 
-function test_field_iseditable() {
+function test_field_isEditable_simple() {
   var field = new Blockly.Field("Dummy text");
   // EDITABLE is true by default, but without a source block a field can't be
   // edited.
-  assertFalse('Field without a block is not editable', field.isEditable());
+  assertFalse('Field without a block is not editable',
+      field.isCurrentlyEditable());
+}
 
+function test_field_isEditable_false() {
   // Setting EDITABLE to false doesn't matter.
-  field = new Blockly.Field("Dummy text");
+  var field = new Blockly.Field("Dummy text");
   field.EDITABLE = false;
-  assertFalse('Field without a block is not editable', field.isEditable());
+  assertFalse('Field without a block is not editable',
+      field.isCurrentlyEditable());
+}
 
-  // Tests with an editable source block.
+function test_field_isEditable_editableBlock() {
   var editableBlock = {
     isEditable: function() {
       return true;
     }
   };
 
-  field = new Blockly.Field("Dummy text");
+  var field = new Blockly.Field("Dummy text");
   field.sourceBlock_ = editableBlock;
 
   assertTrue('Editable field with editable block is editable',
-      field.isEditable());
+      field.isCurrentlyEditable());
+}
 
-  field = new Blockly.Field("Dummy text");
+function test_field_isEditable_editableBlock_false() {
+  var editableBlock = {
+    isEditable: function() {
+      return true;
+    }
+  };
+
+  var field = new Blockly.Field("Dummy text");
   field.sourceBlock_ = editableBlock;
   field.EDITABLE = false;
 
   assertFalse('Non-editable field with editable block is not editable',
-      field.isEditable());
+      field.isCurrentlyEditable());
+}
 
-  // Tests with a non-editable source block.
+function test_field_isEditable_nonEditableBlock() {
   var nonEditableBlock = {
     isEditable: function() {
       return false;
     }
   };
 
-  field = new Blockly.Field("Dummy text");
+  var field = new Blockly.Field("Dummy text");
   field.sourceBlock_ = nonEditableBlock;
 
   assertFalse('Editable field with non-editable block is not editable',
-      field.isEditable());
+      field.isCurrentlyEditable());
+}
 
-  field = new Blockly.Field("Dummy text");
+function test_field_isEditable_nonEditableBlock_false() {
+  var nonEditableBlock = {
+    isEditable: function() {
+      return false;
+    }
+  };
+
+  var field = new Blockly.Field("Dummy text");
   field.sourceBlock_ = nonEditableBlock;
   field.EDITABLE = false;
 
   assertFalse('Non-editable field with non-editable block is not editable',
-      field.isEditable());
+      field.isCurrentlyEditable());
 }

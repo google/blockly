@@ -201,7 +201,7 @@ Blockly.Field.prototype.updateEditable = function() {
  * non-editable blocks.
  * @return {boolean} whether this field is editable and on an editable block
  */
-Blockly.Field.prototype.isEditable = function() {
+Blockly.Field.prototype.isCurrentlyEditable = function() {
   return this.EDITABLE && !!this.sourceBlock_ && this.sourceBlock_.isEditable();
 };
 

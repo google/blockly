@@ -67,7 +67,7 @@ Blockly.Extensions.register = function(name, initFn) {
  * Registers a new extension function that adds all key/value of mixinObj.
  * @param {string} name The name of this extension.
  * @param {!Object} mixinObj The values to mix in.
- * @throws {Error} if the extension name is empty, the extension is already
+ * @throws {Error} if the extension name is empty or the extension is already
  *     registered.
  */
 Blockly.Extensions.registerMixin = function(name, mixinObj) {
@@ -75,6 +75,7 @@ Blockly.Extensions.registerMixin = function(name, mixinObj) {
     this.mixin(mixinObj);
   });
 };
+
 /**
  * Applies an extension method to a block. This should only be called during
  * block construction.

@@ -29,16 +29,20 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.logic');
+goog.provide('Blockly.Blocks.logic');  // Deprecated
+goog.provide('Blockly.Constants.Logic');
 
 goog.require('Blockly.Blocks');
 
 
 /**
  * Common HSV hue for all blocks in this category.
- * Should be the same as Blockly.Msg.LOGIC_HUE
+ * Should be the same as Blockly.Msg.LOGIC_HUE.
+ * @readonly
  */
-Blockly.Blocks.logic.HUE = 210;
+Blockly.Constants.Logic.HUE = 210;
+/** @deprecated Use Blockly.Constants.Logic.HUE */
+Blockly.Blocks.logic.HUE = Blockly.Constants.Logic.HUE;
 
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for boolean data type: true and false.
@@ -111,9 +115,9 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "previousStatement": null,
     "nextStatement": null,
-    "colour": Blockly.Blocks.logic.HUE,
-    "tooltip": Blockly.Msg.CONTROLS_IF_TOOLTIP_2,
-    "helpUrl": Blockly.Msg.CONTROLS_IF_HELPURL
+    "colour": "%{BKY_LOGIC_HUE}",
+    "tooltip": "%{BKYCONTROLS_IF_TOOLTIP_2}",
+    "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}"
   },
   // Block for comparison operator.
   {
@@ -233,7 +237,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_LOGIC_TERNARY_HELPURL}",
     "extensions": ["logic_ternary"]
   }
- ]);  // END JSON EXTRACT (Do not delete this comment.)
+]);  // END JSON EXTRACT (Do not delete this comment.)
 
 Blockly.defineBlocksWithJsonArray([ // Mutator blocks. Do not extract.
   // Block representing the if statement in the controls_if mutator.
@@ -266,7 +270,40 @@ Blockly.defineBlocksWithJsonArray([ // Mutator blocks. Do not extract.
   }
 ]);
 
-Blockly.Blocks.logic.CONTROLS_IF_MUTATOR_MIXIN_ = {
+/**
+ * Tooltip text, keyed by block OP value. Used by logic_compare and
+ * logic_operation blocks.
+ *
+ * Messages are not dereferenced here in order to capture possible language
+ * changes.
+ * @package
+ * @readonly
+ */
+Blockly.Constants.Logic.LOGIC_OP_TOOLTIPS = {
+  // logic_compare
+  'EQ': '%{BKY_LOGIC_COMPARE_TOOLTIP_EQ}',
+  'NEQ': '%{BKY_LOGIC_COMPARE_TOOLTIP_NEQ}',
+  'LT': '%{BKY_LOGIC_COMPARE_TOOLTIP_LT}',
+  'LTE': '%{BKY_LOGIC_COMPARE_TOOLTIP_LTE}',
+  'GT': '%{BKY_LOGIC_COMPARE_TOOLTIP_GT}',
+  'GTE': '%{BKY_LOGIC_COMPARE_TOOLTIP_GTE}',
+
+  // logic_operation
+  'AND': '%{BKY_LOGIC_OPERATION_TOOLTIP_AND}',
+  'OR': '%{BKY_LOGIC_OPERATION_TOOLTIP_OR}'
+};
+Blockly.Extensions.register("logic_op_tooltip",
+  Blockly.Extensions.buildTooltipForDropdown(
+    'OP', Blockly.Constants.Logic.LOGIC_OP_TOOLTIPS));
+
+
+/**
+ * Mutator methods added to controls_if blocks.
+ * @mixin
+ * @package
+ * @readonly
+ */
+Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   /**
    * Create XML to represent the number of else-if and else inputs.
    * @return {Element} XML storage element.
@@ -389,8 +426,8 @@ Blockly.Blocks.logic.CONTROLS_IF_MUTATOR_MIXIN_ = {
   },
   /**
    * Modify this block to have the correct number of inputs.
-   * @private
    * @this Blockly.Block
+   * @private
    */
   updateShape_: function() {
     // Delete everything.
@@ -417,33 +454,41 @@ Blockly.Blocks.logic.CONTROLS_IF_MUTATOR_MIXIN_ = {
     }
   }
 };
+
+/**
+ * Adds mutator, shape updating methods, and dynamic tooltip to "controls_if" blocks.
+ * @this Blockly.Block
+ * @mixes Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN
+ * @package
+ */
+Blockly.Constants.Logic.CONTROLS_IF_EXTENSION = function() {
+  this.setMutator(new Blockly.Mutator(['controls_if_elseif', 'controls_if_else']));
+  this.mixin(Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN);
+  this.elseifCount_ = 0;
+  this.elseCount_ = 0;
+
+  this.setTooltip(function() {
+    if (!this.elseifCount_ && !this.elseCount_) {
+      return Blockly.Msg.CONTROLS_IF_TOOLTIP_1;
+    } else if (!this.elseifCount_ && this.elseCount_) {
+      return Blockly.Msg.CONTROLS_IF_TOOLTIP_2;
+    } else if (this.elseifCount_ && !this.elseCount_) {
+      return Blockly.Msg.CONTROLS_IF_TOOLTIP_3;
+    } else if (this.elseifCount_ && this.elseCount_) {
+      return Blockly.Msg.CONTROLS_IF_TOOLTIP_4;
+    }
+    return '';
+  }.bind(this));
+};
 Blockly.Extensions.register("controls_if",
-  /**
-   * Adds mutator and shape updating methods to "controls_if" blocks.
-   * @this {Blockly.Block}
-   */
-  function() {
-    this.setMutator(new Blockly.Mutator(['controls_if_elseif',
-                                         'controls_if_else']));
-    this.mixin(Blockly.Blocks.logic.CONTROLS_IF_MUTATOR_MIXIN_);
-    this.elseifCount_ = 0;
-    this.elseCount_ = 0;
+  Blockly.Constants.Logic.CONTROLS_IF_EXTENSION);
 
-    this.setTooltip(function() {
-      if (!this.elseifCount_ && !this.elseCount_) {
-        return Blockly.Msg.CONTROLS_IF_TOOLTIP_1;
-      } else if (!this.elseifCount_ && this.elseCount_) {
-        return Blockly.Msg.CONTROLS_IF_TOOLTIP_2;
-      } else if (this.elseifCount_ && !this.elseCount_) {
-        return Blockly.Msg.CONTROLS_IF_TOOLTIP_3;
-      } else if (this.elseifCount_ && this.elseCount_) {
-        return Blockly.Msg.CONTROLS_IF_TOOLTIP_4;
-      }
-      return '';
-    }.bind(this));
-  });
-
-Blockly.Blocks.logic.fixLogicCompareRtlOpLabels_ =
+/**
+ * Corrects the logic_compate dropdown label with respect to language direction.
+ * @this Blockly.Block
+ * @package
+ */
+Blockly.Constants.Logic.fixLogicCompareRtlOpLabels =
   function() {
     var rtlOpLabels = {
       'LT': '\u200F<\u200F',
@@ -466,7 +511,13 @@ Blockly.Blocks.logic.fixLogicCompareRtlOpLabels_ =
     }
   };
 
-Blockly.Blocks.logic.LOGIC_COMPARE_ONCHANGE_MIXIN_ = {
+/**
+ * Adds dynamic type validation for the left and right sides of a logic_compate block.
+ * @mixin
+ * @package
+ * @readonly
+ */
+Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
   prevBlocks_: [null, null],
 
   /**
@@ -499,41 +550,32 @@ Blockly.Blocks.logic.LOGIC_COMPARE_ONCHANGE_MIXIN_ = {
 };
 
 /**
- * Mapping of logic_compare block OP value to tooltip message.
- *
- * Messages are not dereferenced here in order to capture possible language
- * changes.
- * @private
+ * Corrects direction of operators in the dropdown labels. Adds type left and
+ * right side type checking.
+ * @this Blockly.Block
+ * @mixes Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN
+ * @package
+ * @readonly
  */
-Blockly.Blocks.logic.LOGIC_OP_TOOLTIPS_ = {
-  // logic_compare
-  'EQ': '%{BKY_LOGIC_COMPARE_TOOLTIP_EQ}',
-  'NEQ': '%{BKY_LOGIC_COMPARE_TOOLTIP_NEQ}',
-  'LT': '%{BKY_LOGIC_COMPARE_TOOLTIP_LT}',
-  'LTE': '%{BKY_LOGIC_COMPARE_TOOLTIP_LTE}',
-  'GT': '%{BKY_LOGIC_COMPARE_TOOLTIP_GT}',
-  'GTE': '%{BKY_LOGIC_COMPARE_TOOLTIP_GTE}',
+Blockly.Constants.Logic.LOGIC_COMPARE_EXTENSION = function() {
+  // Fix operator labels in RTL
+  if (this.RTL) {
+    Blockly.Constants.Logic.fixLogicCompareRtlOpLabels.apply(this);
+  }
 
-  // logic_operation
-  'AND': '%{BKY_LOGIC_OPERATION_TOOLTIP_AND}',
-  'OR': '%{BKY_LOGIC_OPERATION_TOOLTIP_OR}'
+  // Add onchange handler to ensure types are compatable.
+  this.mixin(Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN);
 };
-Blockly.Extensions.register("logic_op_tooltip",
-  Blockly.Extensions.buildTooltipForDropdown(
-    'OP', Blockly.Blocks.logic.LOGIC_OP_TOOLTIPS_));
-
 Blockly.Extensions.register("logic_compare",
-  function() {
-    // Fix operator labels in RTL
-    if (this.RTL) {
-      Blockly.Blocks.logic.fixLogicCompareRtlOpLabels_.apply(this);
-    }
+  Blockly.Constants.Logic.LOGIC_COMPARE_EXTENSION);
 
-    // Add onchange handler to ensure types are compatable.
-    this.mixin(Blockly.Blocks.logic.LOGIC_COMPARE_ONCHANGE_MIXIN_);
-  });
-
-Blockly.Blocks.logic.LOGIC_TERNARY_ONCHANGE_MIXIN_ = {
+/**
+ * Adds type coordination between inputs and output.
+ * @mixin
+ * @package
+ * @readonly
+ */
+Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
   prevParentConnection_: null,
 
   /**
@@ -566,7 +608,6 @@ Blockly.Blocks.logic.LOGIC_TERNARY_ONCHANGE_MIXIN_ = {
     }
     this.prevParentConnection_ = parentConnection;
   }
-}
-
+};
 Blockly.Extensions.registerMixin("logic_ternary",
-  Blockly.Blocks.logic.LOGIC_TERNARY_ONCHANGE_MIXIN_);
+  Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN);

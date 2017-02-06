@@ -412,7 +412,7 @@ Blockly.Blocks.math.TOOLTIPS_BY_OP_ = {
   'MEDIAN': '%{BKY_MATH_ONLIST_TOOLTIP_MEDIAN}',
   'MODE': '%{BKY_MATH_ONLIST_TOOLTIP_MODE}',
   'STD_DEV': '%{BKY_MATH_ONLIST_TOOLTIP_STD_DEV}',
-  'RANDOM': '%{BKY_MATH_ONLIST_TOOLTIP_RANDOM}',
+  'RANDOM': '%{BKY_MATH_ONLIST_TOOLTIP_RANDOM}'
 };
 Blockly.Extensions.register("math_op_tooltip",
   Blockly.Extensions.buildTooltipForDropdown(

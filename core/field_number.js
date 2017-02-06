@@ -31,7 +31,7 @@ goog.require('goog.math');
 
 /**
  * Class for an editable number field.
- * @param {(string|number)=} value The initial content of the field. The value
+ * @param {(string|number)=} opt_value The initial content of the field. The value
  *     should cast to a number, and if it does not, '0' will be used.
  * @param {(string|number)=} opt_min Minimum value.
  * @param {(string|number)=} opt_max Maximum value.
@@ -43,8 +43,8 @@ goog.require('goog.math');
  * @extends {Blockly.FieldTextInput}
  * @constructor
  */
-Blockly.FieldNumber =
-    function(opt_value, opt_min, opt_max, opt_precision, opt_validator) {
+Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
+    opt_validator) {
   opt_value = (opt_value && !isNaN(opt_value)) ? String(opt_value) : '0';
   Blockly.FieldNumber.superClass_.constructor.call(
       this, opt_value, opt_validator);

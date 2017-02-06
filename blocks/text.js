@@ -742,7 +742,7 @@ Blockly.Blocks['text_replace'] = {
           "type": "input_value",
           "name": "TEXT",
           "check": "String"
-        },
+        }
       ],
       "output": "String",
       "inputsInline": true,
@@ -766,7 +766,7 @@ Blockly.Blocks['text_reverse'] = {
           "type": "input_value",
           "name": "TEXT",
           "check": "String"
-        },
+        }
       ],
       "output": "String",
       "inputsInline": true,

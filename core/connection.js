@@ -330,7 +330,9 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
     case Blockly.Connection.REASON_TARGET_NULL:
       throw 'Target connection is null.';
     case Blockly.Connection.REASON_CHECKS_FAILED:
-      throw 'Connection checks failed.';
+      var msg = 'Connection checks failed. ';
+      msg += this.describe() + ' expected '  + this.check_ + ', found ' + target.check_;
+      throw msg;
     case Blockly.Connection.REASON_SHADOW_PARENT:
       throw 'Connecting non-shadow to shadow block.';
     default:
@@ -618,4 +620,33 @@ Blockly.Connection.prototype.setShadowDom = function(shadow) {
  */
 Blockly.Connection.prototype.getShadowDom = function() {
   return this.shadowDom_;
+};
+
+/**
+ * @return {string} A human-readable description of this Connection.
+ */
+Blockly.Connection.prototype.describe = function() {
+  var msg;
+  var block = this.sourceBlock_;
+  if (!block) {
+    return 'Orphan Connection';
+  } else if (block.outputConnection === this) {
+    msg = 'Output Connection of ';
+  } else if (block.previousConnection === this) {
+    msg = 'Previous Connection of ';
+  } else if (block.nextConnection === this) {
+    msg = 'Next Connection of ';
+  } else {
+    for (var i = 0; i < block.inputList.length; ++i) {
+      var input = block.inputList[i];
+      if (input.connection === this) {
+        msg = 'Input "' + input.name + '" connection on ';
+      }
+    }
+    if (!msg) {
+      console.warn('Connection not actually connected to sourceBlock_');
+      return 'Orphan Connection';
+    }
+  }
+  return msg + block.describe();
 };

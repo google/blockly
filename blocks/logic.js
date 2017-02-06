@@ -504,7 +504,7 @@ Blockly.Constants.Logic.fixLogicCompareRtlOpLabels =
         var tuple = options[i];
         var op = tuple[1];
         var rtlLabel = rtlOpLabels[op];
-        if (goog.isString(tuple[0]) && rtlLabel !== undefined) {
+        if (goog.isString(tuple[0]) && rtlLabel) {
           // Replace LTR text label
           tuple[0] = rtlLabel;
         }

@@ -40,7 +40,7 @@ goog.require('Blockly.Blocks');
  */
 Blockly.Blocks.math.HUE = 230;
 
-Blockly.defineBlocksWithJsonArray([
+Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for numeric value.
   {
     "type": "math_number",
@@ -370,7 +370,7 @@ Blockly.defineBlocksWithJsonArray([
     "tooltip": "%{BKY_MATH_RANDOM_FLOAT_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_RANDOM_FLOAT_HELPURL}"
   }
-]);  // End of defineBlocksWithJsonArray(...) (Do not delete this comment.)
+]);  // END JSON EXTRACT (Do not delete this comment.)
 
 /**
  * Mapping of math block OP value to tooltip message for blocks
@@ -378,6 +378,7 @@ Blockly.defineBlocksWithJsonArray([
  *
  * Messages are not dereferenced here in order to capture possible language
  * changes.
+ * @private
  */
 Blockly.Blocks.math.TOOLTIPS_BY_OP_ = {
   // math_arithmetic

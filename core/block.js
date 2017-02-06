@@ -1023,6 +1023,10 @@ Blockly.Block.prototype.jsonInit = function(json) {
     var localizedText = Blockly.utils.replaceMessageReferences(rawValue);
     this.setTooltip(localizedText);
   }
+  if (json['enableContextMenu'] !== undefined) {
+    var rawValue = json['enableContextMenu'];
+    this.contextMenu = !!rawValue;
+  }
   if (json['helpUrl'] !== undefined) {
     var rawValue = json['helpUrl'];
     var localizedValue = Blockly.utils.replaceMessageReferences(rawValue);

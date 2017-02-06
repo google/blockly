@@ -1451,11 +1451,15 @@ Blockly.Block.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled) {
 };
 
 /**
- * A method the describes this Block as a string, in developer terms (type name
- * and ID; English only).  Intended to on be used in console logs and errors.
+ * This method returns a string describing this Block in developer terms (type
+ * name and ID; English only).
+ *
+ * Intended to on be used in console logs and errors. If you need a string that
+ * uses the user's native language (including block text, field values, and
+ * child blocks), use [toString()]{@link Blockly.Block#toString}.
  * @return {string} The description.
  */
-Blockly.Block.prototype.describe = function() {
+Blockly.Block.prototype.toDevString = function() {
   var msg = this.type ? '"' + this.type + '" block' : 'Block';
   if (this.id) {
     msg += ' (id="' + this.id + '")';

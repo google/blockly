@@ -623,11 +623,11 @@ Blockly.Connection.prototype.getShadowDom = function() {
 };
 
 /**
- * A method the describes this Connection as a string, in developer terms
+ * This method returns a string describing this Connection in developer terms
  * (English only). Intended to on be used in console logs and errors.
  * @return {string} The description.
  */
-Blockly.Connection.prototype.describe = function() {
+Blockly.Connection.prototype.toString = function() {
   var msg;
   var block = this.sourceBlock_;
   if (!block) {
@@ -649,5 +649,5 @@ Blockly.Connection.prototype.describe = function() {
       return 'Orphan Connection';
     }
   }
-  return msg + block.describe();
+  return msg + block.toDevString();
 };

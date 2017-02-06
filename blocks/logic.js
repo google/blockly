@@ -292,6 +292,7 @@ Blockly.Constants.Logic.LOGIC_OP_TOOLTIPS = {
   'AND': '%{BKY_LOGIC_OPERATION_TOOLTIP_AND}',
   'OR': '%{BKY_LOGIC_OPERATION_TOOLTIP_OR}'
 };
+
 Blockly.Extensions.register("logic_op_tooltip",
   Blockly.Extensions.buildTooltipForDropdown(
     'OP', Blockly.Constants.Logic.LOGIC_OP_TOOLTIPS));
@@ -481,6 +482,7 @@ Blockly.Constants.Logic.CONTROLS_IF_EXTENSION = function() {
     return '';
   }.bind(this));
 };
+
 Blockly.Extensions.register("controls_if",
   Blockly.Constants.Logic.CONTROLS_IF_EXTENSION);
 
@@ -568,6 +570,7 @@ Blockly.Constants.Logic.LOGIC_COMPARE_EXTENSION = function() {
   // Add onchange handler to ensure types are compatable.
   this.mixin(Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN);
 };
+
 Blockly.Extensions.register("logic_compare",
   Blockly.Constants.Logic.LOGIC_COMPARE_EXTENSION);
 
@@ -611,5 +614,6 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
     this.prevParentConnection_ = parentConnection;
   }
 };
+
 Blockly.Extensions.registerMixin("logic_ternary",
   Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN);

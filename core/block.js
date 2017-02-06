@@ -1063,7 +1063,8 @@ Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
       }
     }
     if (overwrites.length) {
-      throw new Error('Mixin will overwrite block members: ' + overwrites);
+      throw new Error('Mixin will overwrite block members: ' +
+        JSON.stringify(overwrites));
     }
   }
   goog.mixin(this, mixinObj);

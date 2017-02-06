@@ -406,7 +406,7 @@ Blockly.jsonInitFactory_ = function(jsonDef) {
 Blockly.defineBlocksWithJsonArray = function(jsonArray) {
   for (var i = 0, elem; elem = jsonArray[i]; i++) {
     var typename = elem.type;
-    if (typename == null || typename === "") {
+    if (typename == null || typename === '') {
       console.warn('Block definition #' + i +
         ' in JSON array is missing a type attribute. Skipping.');
     } else {

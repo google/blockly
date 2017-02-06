@@ -623,27 +623,28 @@ Blockly.Connection.prototype.getShadowDom = function() {
 };
 
 /**
- * @return {string} A human-readable description of this Connection.
+ * A method the describes this Connection as a string, in developer terms
+ * (English only). Intended to on be used in console logs and errors.
+ * @return {string} The description.
  */
 Blockly.Connection.prototype.describe = function() {
   var msg;
   var block = this.sourceBlock_;
   if (!block) {
     return 'Orphan Connection';
-  } else if (block.outputConnection === this) {
+  } else if (block.outputConnection == this) {
     msg = 'Output Connection of ';
-  } else if (block.previousConnection === this) {
+  } else if (block.previousConnection == this) {
     msg = 'Previous Connection of ';
-  } else if (block.nextConnection === this) {
+  } else if (block.nextConnection == this) {
     msg = 'Next Connection of ';
   } else {
-    for (var i = 0; i < block.inputList.length; ++i) {
-      var input = block.inputList[i];
-      if (input.connection === this) {
-        msg = 'Input "' + input.name + '" connection on ';
-      }
-    }
-    if (!msg) {
+    var parentInput = goog.array.find(block.inputList, function(input) {
+      return input.connection == this;
+    }, this);
+    if (parentInput) {
+      msg = 'Input "' + parentInput.name + '" connection on ';
+    } else {
       console.warn('Connection not actually connected to sourceBlock_');
       return 'Orphan Connection';
     }

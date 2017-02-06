@@ -467,7 +467,7 @@ Blockly.Extensions.register("math_is_divisibleby_mutator",
    * @this {Blockly.Block}
    */
   function() {
-    goog.mixin(this, Blockly.Blocks.math.IS_DIVISIBLEBY_MUTATOR_MIXIN_);
+    this.mixin(Blockly.Blocks.math.IS_DIVISIBLEBY_MUTATOR_MIXIN_);
     this.getField('PROPERTY').setValidator(function(option) {
       var divisorInput = (option == 'DIVISIBLE_BY');
       this.sourceBlock_.updateShape_(divisorInput);
@@ -526,9 +526,8 @@ Blockly.Extensions.register("math_modes_of_list_mutator",
    * @this {Blockly.Block}
    */
   function() {
-    var thisBlock = this;
-    goog.mixin(this, Blockly.Blocks.math.LIST_MODES_MUTATOR_MIXIN_);
+    this.mixin(Blockly.Blocks.math.LIST_MODES_MUTATOR_MIXIN_);
     this.getField('OP').setValidator(function(newOp) {
-      thisBlock.updateType_(newOp);
-    });
+      this.updateType_(newOp);
+    }.bind(this));
   });

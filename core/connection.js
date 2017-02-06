@@ -331,7 +331,7 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
       throw 'Target connection is null.';
     case Blockly.Connection.REASON_CHECKS_FAILED:
       var msg = 'Connection checks failed. ';
-      msg += this.describe() + ' expected '  + this.check_ + ', found ' + target.check_;
+      msg += this + ' expected '  + this.check_ + ', found ' + target.check_;
       throw msg;
     case Blockly.Connection.REASON_SHADOW_PARENT:
       throw 'Connecting non-shadow to shadow block.';

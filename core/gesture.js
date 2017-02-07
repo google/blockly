@@ -33,6 +33,7 @@ goog.require('Blockly.FlyoutDragger');
 goog.require('Blockly.WorkspaceDragger');
 goog.require('goog.asserts');
 
+
 /**
  * NB: In this file "start" refers to touchstart, mousedown, and pointerstart
  * events.  "End" refers to touchend, mouseup, and pointerend events.
@@ -267,6 +268,15 @@ Blockly.Gesture.prototype.updateIsDraggingBlock_ = function() {
  * @return {boolean} true if anything is being dragged.
  */
 Blockly.Gesture.prototype.updateIsDragging_ = function() {
+  goog.assert(!this.isDragging(),
+      'Don\'t call updateIsDragging_ when a drag is already in progress.');
+  var startBlockMovable = this.startBlock_ && this.startBlock_.isMovable();
+  if (startBlockMovable && this.currentDragDelta_ > Blockly.DRAG_RADIUS) {
+    this.isDraggingBlock_ = true;
+    return true;
+  }
+
+  var workspaceMovable = this.startWorkspace_ && this.startWorkspace_.isMovable();
   // TODO: Assert that the most recent event was a move?
   goog.asserts.assert(!this.isDragging(),
       'Don\'t call updateIsDragging_ when a drag is already in progress.');

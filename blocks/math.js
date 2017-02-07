@@ -29,7 +29,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.math');
+goog.provide('Blockly.Blocks.math');  // Deprecated/
+goog.provide('Blockly.Constants.Math');
 
 goog.require('Blockly.Blocks');
 
@@ -37,8 +38,11 @@ goog.require('Blockly.Blocks');
 /**
  * Common HSV hue for all blocks in this category.
  * Should be the same as Blockly.Msg.MATH_HUE
+ * @readonly
  */
-Blockly.Blocks.math.HUE = 230;
+Blockly.Constants.Math.HUE = 230;
+/** @deprecated Use Blockly.Constants.Math.HUE */
+Blockly.Blocks.math.HUE = Blockly.Constants.Math.HUE;
 
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for numeric value.
@@ -378,9 +382,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
  *
  * Messages are not dereferenced here in order to capture possible language
  * changes.
- * @private
+ * @package
+ * @readonly
  */
-Blockly.Blocks.math.TOOLTIPS_BY_OP_ = {
+Blockly.Constants.Math.TOOLTIPS_BY_OP = {
   // math_arithmetic
   'ADD': '%{BKY_MATH_ARITHMETIC_TOOLTIP_ADD}',
   'MINUS': '%{BKY_MATH_ARITHMETIC_TOOLTIP_MINUS}',
@@ -415,12 +420,18 @@ Blockly.Blocks.math.TOOLTIPS_BY_OP_ = {
   'STD_DEV': '%{BKY_MATH_ONLIST_TOOLTIP_STD_DEV}',
   'RANDOM': '%{BKY_MATH_ONLIST_TOOLTIP_RANDOM}'
 };
-Blockly.Extensions.register("math_op_tooltip",
+
+Blockly.Extensions.register('math_op_tooltip',
   Blockly.Extensions.buildTooltipForDropdown(
-    'OP', Blockly.Blocks.math.TOOLTIPS_BY_OP_));
+    'OP', Blockly.Constants.Math.TOOLTIPS_BY_OP));
 
 
-Blockly.Blocks.math.IS_DIVISIBLEBY_MUTATOR_MIXIN_ = {
+/**
+ * Mixin for mutator functions in the 'math_is_divisibleby_mutator'
+ * extension.
+ * @mixin
+ */
+Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
   /**
    * Create XML to represent whether the 'divisorInput' should be present.
    * @return {Element} XML storage element.
@@ -461,34 +472,48 @@ Blockly.Blocks.math.IS_DIVISIBLEBY_MUTATOR_MIXIN_ = {
   }
 };
 
-Blockly.Extensions.register("math_is_divisibleby_mutator",
-  /**
-   * Update shape (add/remove divisor input) based on whether property is
-   * "divisble by".
-   * @this {Blockly.Block}
-   */
-  function() {
-    this.mixin(Blockly.Blocks.math.IS_DIVISIBLEBY_MUTATOR_MIXIN_);
-    this.getField('PROPERTY').setValidator(function(option) {
-      var divisorInput = (option == 'DIVISIBLE_BY');
-      this.sourceBlock_.updateShape_(divisorInput);
-    });
+/**
+ * 'math_is_divisibleby_mutator' extension to the 'math_property' block that
+ * can update the block shape (add/remove divisor input) based on whether
+ * property is "divisble by".
+ * @this {Blockly.Block}
+ * @mixes Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN
+ * @package
+ */
+Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION = function() {
+  this.mixin(Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN);
+  this.getField('PROPERTY').setValidator(function(option) {
+    var divisorInput = (option == 'DIVISIBLE_BY');
+    this.sourceBlock_.updateShape_(divisorInput);
   });
+};
 
-Blockly.Extensions.register("math_change_tooltip",
-  /**
-   * Update tooltip with named variable.
-   * @this {Blockly.Block}
-   */
-  function() {
-    var thisBlock = this;
-    this.setTooltip(function() {
-      return Blockly.Msg.MATH_CHANGE_TOOLTIP.replace('%1',
-          thisBlock.getFieldValue('VAR'));
-    });
-  });
+Blockly.Extensions.register('math_is_divisibleby_mutator',
+  Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION);
 
-Blockly.Blocks.math.LIST_MODES_MUTATOR_MIXIN_ = {
+/**
+ * Update the tooltip of 'math_change' block to reference the variable.
+ * @this {Blockly.Block}
+ * @package
+ */
+Blockly.Constants.Math.CHANGE_TOOLTIP_EXTENSION = function() {
+  this.setTooltip(function() {
+    return Blockly.Msg.MATH_CHANGE_TOOLTIP.replace('%1',
+        this.getFieldValue('VAR'));
+  }.bind(this));
+};
+
+Blockly.Extensions.register('math_change_tooltip',
+  Blockly.Constants.Math.CHANGE_TOOLTIP_EXTENSION);
+
+/**
+ * Mixin with mutator methods to support alternate output based if the
+ * 'math_on_list' block uses the 'MODE' operation.
+ * @mixin
+ * @package
+ * @readonly
+ */
+Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
   /**
    * Modify this block to have the correct output type.
    * @param {string} newOp Either 'MODE' or some op than returns a number.
@@ -521,14 +546,20 @@ Blockly.Blocks.math.LIST_MODES_MUTATOR_MIXIN_ = {
     this.updateType_(xmlElement.getAttribute('op'));
   }
 };
-Blockly.Extensions.register("math_modes_of_list_mutator",
-  /**
-   * Update output type based on whether the operator is "mode".
-   * @this {Blockly.Block}
-   */
-  function() {
-    this.mixin(Blockly.Blocks.math.LIST_MODES_MUTATOR_MIXIN_);
-    this.getField('OP').setValidator(function(newOp) {
-      this.updateType_(newOp);
-    }.bind(this));
-  });
+
+/**
+ * Extension to 'math_on_list' blocks that allows support of
+ * modes operation (outputs a list of numbers).
+ * @this {Blockly.Block}
+ * @mixes Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN
+ * @package
+ */
+Blockly.Constants.Math.LIST_MODES_MUTATOR_EXTENSION = function() {
+  this.mixin(Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN);
+  this.getField('OP').setValidator(function(newOp) {
+    this.updateType_(newOp);
+  }.bind(this));
+};
+
+Blockly.Extensions.register('math_modes_of_list_mutator',
+  Blockly.Constants.Math.LIST_MODES_MUTATOR_EXTENSION);

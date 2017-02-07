@@ -29,7 +29,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.colour');
+goog.provide('Blockly.Blocks.colour');  // Deprecated
+goog.provide('Blockly.Constants.Colour');
 
 goog.require('Blockly.Blocks');
 
@@ -37,8 +38,11 @@ goog.require('Blockly.Blocks');
 /**
  * Common HSV hue for all blocks in this category.
  * This should be the same as Blockly.Msg.COLOUR_HUE.
+ * @readonly
  */
-Blockly.Blocks.colour.HUE = 20;
+Blockly.Constants.Colour.HUE = 20;
+/** @deprecated Use Blockly.Constants.Colour.HUE */
+Blockly.Blocks.colour.HUE = Blockly.Constants.Colour.HUE;
 
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for colour picker.

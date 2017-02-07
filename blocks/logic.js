@@ -279,7 +279,7 @@ Blockly.defineBlocksWithJsonArray([ // Mutator blocks. Do not extract.
  * @package
  * @readonly
  */
-Blockly.Constants.Logic.LOGIC_OP_TOOLTIPS = {
+Blockly.Constants.Logic.TOOLTIPS_BY_OP = {
   // logic_compare
   'EQ': '%{BKY_LOGIC_COMPARE_TOOLTIP_EQ}',
   'NEQ': '%{BKY_LOGIC_COMPARE_TOOLTIP_NEQ}',
@@ -293,9 +293,9 @@ Blockly.Constants.Logic.LOGIC_OP_TOOLTIPS = {
   'OR': '%{BKY_LOGIC_OPERATION_TOOLTIP_OR}'
 };
 
-Blockly.Extensions.register("logic_op_tooltip",
+Blockly.Extensions.register('logic_op_tooltip',
   Blockly.Extensions.buildTooltipForDropdown(
-    'OP', Blockly.Constants.Logic.LOGIC_OP_TOOLTIPS));
+    'OP', Blockly.Constants.Logic.TOOLTIPS_BY_OP));
 
 
 /**
@@ -483,7 +483,7 @@ Blockly.Constants.Logic.CONTROLS_IF_EXTENSION = function() {
   }.bind(this));
 };
 
-Blockly.Extensions.register("controls_if",
+Blockly.Extensions.register('controls_if',
   Blockly.Constants.Logic.CONTROLS_IF_EXTENSION);
 
 /**
@@ -571,7 +571,7 @@ Blockly.Constants.Logic.LOGIC_COMPARE_EXTENSION = function() {
   this.mixin(Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN);
 };
 
-Blockly.Extensions.register("logic_compare",
+Blockly.Extensions.register('logic_compare',
   Blockly.Constants.Logic.LOGIC_COMPARE_EXTENSION);
 
 /**
@@ -615,5 +615,5 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
   }
 };
 
-Blockly.Extensions.registerMixin("logic_ternary",
+Blockly.Extensions.registerMixin('logic_ternary',
   Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN);

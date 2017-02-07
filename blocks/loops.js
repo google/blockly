@@ -20,74 +20,83 @@
 
 /**
  * @fileoverview Loop blocks for Blockly.
+ *
+ * This file is scraped to extract a .json file of block definitions. The array
+ * passed to defineBlocksWithJsonArray(..) must be strict JSON: double quotes
+ * only, no outside references, no functions, no trailing commas, etc. The one
+ * exception is end-of-line comments, which the scraper will remove.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.loops');
+goog.provide('Blockly.Blocks.loops');  // Deprecated
+goog.provide('Blockly.Constants.Loops');
 
 goog.require('Blockly.Blocks');
 
 
 /**
  * Common HSV hue for all blocks in this category.
+ * Should be the same as Blockly.Msg.LOOPS_HUE
+ * @readonly
  */
-Blockly.Blocks.loops.HUE = 120;
+Blockly.Constants.Loops.HUE = 120;
+/** @deprecated Use Blockly.Constants.Loops.HUE */
+Blockly.Blocks.loops.HUE = Blockly.Constants.Loops.HUE;
 
-Blockly.Blocks['controls_repeat_ext'] = {
-  /**
-   * Block for repeat n times (external number).
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.CONTROLS_REPEAT_TITLE,
-      "args0": [
-        {
-          "type": "input_value",
-          "name": "TIMES",
-          "check": "Number"
-        }
-      ],
-      "previousStatement": null,
-      "nextStatement": null,
-      "colour": Blockly.Blocks.loops.HUE,
-      "tooltip": Blockly.Msg.CONTROLS_REPEAT_TOOLTIP,
-      "helpUrl": Blockly.Msg.CONTROLS_REPEAT_HELPURL
-    });
-    this.appendStatementInput('DO')
-        .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
+Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
+  // Block for repeat n times (external number).
+  {
+    "type": "controls_repeat_ext",
+    "message0": "%{BKY_CONTROLS_REPEAT_TITLE}",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "TIMES",
+        "check": "Number"
+      }
+    ],
+    "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "DO"
+      }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": "%{BKY_LOOPS_HUE}",
+    "tooltip": "%{BKY_CONTROLS_REPEAT_TOOLTIP}",
+    "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}"
+  },
+  // Block for repeat n times (internal number).
+  // The 'controls_repeat_ext' block is preferred as it is more flexible.
+  {
+    "type": "controls_repeat",
+    "message0": "%{BKY_CONTROLS_REPEAT_TITLE}",
+    "args0": [
+      {
+        "type": "field_number",
+        "name": "TIMES",
+        "value": 10,
+        "min": 0,
+        "precision": 1
+      }
+    ],
+    "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "DO"
+      }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": "%{BKY_LOOPS_HUE}",
+    "tooltip": "%{BKY_CONTROLS_REPEAT_TOOLTIP}",
+    "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}"
   }
-};
-
-Blockly.Blocks['controls_repeat'] = {
-  /**
-   * Block for repeat n times (internal number).
-   * The 'controls_repeat_ext' block is preferred as it is more flexible.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.CONTROLS_REPEAT_TITLE,
-      "args0": [
-        {
-          "type": "field_number",
-          "name": "TIMES",
-          "value": 10,
-          "min": 0,
-          "precision": 1
-        }
-      ],
-      "previousStatement": null,
-      "nextStatement": null,
-      "colour": Blockly.Blocks.loops.HUE,
-      "tooltip": Blockly.Msg.CONTROLS_REPEAT_TOOLTIP,
-      "helpUrl": Blockly.Msg.CONTROLS_REPEAT_HELPURL
-    });
-    this.appendStatementInput('DO')
-        .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
-  }
-};
+]);    // END JSON EXTRACT (Do not delete this comment.)
 
 Blockly.Blocks['controls_whileUntil'] = {
   /**

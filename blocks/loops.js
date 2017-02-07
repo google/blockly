@@ -49,20 +49,16 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   {
     "type": "controls_repeat_ext",
     "message0": "%{BKY_CONTROLS_REPEAT_TITLE}",
-    "args0": [
-      {
-        "type": "input_value",
-        "name": "TIMES",
-        "check": "Number"
-      }
-    ],
+    "args0": [{
+      "type": "input_value",
+      "name": "TIMES",
+      "check": "Number"
+    }],
     "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
-    "args1": [
-      {
-        "type": "input_statement",
-        "name": "DO"
-      }
-    ],
+    "args1": [{
+      "type": "input_statement",
+      "name": "DO"
+    }],
     "previousStatement": null,
     "nextStatement": null,
     "colour": "%{BKY_LOOPS_HUE}",
@@ -74,60 +70,72 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   {
     "type": "controls_repeat",
     "message0": "%{BKY_CONTROLS_REPEAT_TITLE}",
-    "args0": [
-      {
-        "type": "field_number",
-        "name": "TIMES",
-        "value": 10,
-        "min": 0,
-        "precision": 1
-      }
-    ],
+    "args0": [{
+      "type": "field_number",
+      "name": "TIMES",
+      "value": 10,
+      "min": 0,
+      "precision": 1
+    }],
     "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
-    "args1": [
-      {
-        "type": "input_statement",
-        "name": "DO"
-      }
-    ],
+    "args1": [{
+      "type": "input_statement",
+      "name": "DO"
+    }],
     "previousStatement": null,
     "nextStatement": null,
     "colour": "%{BKY_LOOPS_HUE}",
     "tooltip": "%{BKY_CONTROLS_REPEAT_TOOLTIP}",
     "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}"
+  },
+  // Block for 'do while/until' loop.
+  {
+    "type": "controls_whileUntil",
+    "message0": "%1 %2",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "MODE",
+        "options": [
+          ["%{BKY_CONTROLS_WHILEUNTIL_OPERATOR_WHILE}", "WHILE"],
+          ["%{BKY_CONTROLS_WHILEUNTIL_OPERATOR_UNTIL}", "UNTIL"]
+        ]
+      },
+      {
+        "type": "input_value",
+        "name": "BOOL",
+        "check": "Boolean"
+      }
+    ],
+    "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+    "args1": [{
+      "type": "input_statement",
+      "name": "DO"
+    }],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": "%{BKY_LOOPS_HUE}",
+    "helpUrl": "%{BKY_CONTROLS_WHILEUNTIL_HELPURL}",
+    "extensions": ["controls_whileUntil_tooltip"]
   }
 ]);    // END JSON EXTRACT (Do not delete this comment.)
 
-Blockly.Blocks['controls_whileUntil'] = {
-  /**
-   * Block for 'do while/until' loop.
-   * @this Blockly.Block
-   */
-  init: function() {
-    var OPERATORS =
-        [[Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE, 'WHILE'],
-         [Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL, 'UNTIL']];
-    this.setHelpUrl(Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL);
-    this.setColour(Blockly.Blocks.loops.HUE);
-    this.appendValueInput('BOOL')
-        .setCheck('Boolean')
-        .appendField(new Blockly.FieldDropdown(OPERATORS), 'MODE');
-    this.appendStatementInput('DO')
-        .appendField(Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
-    this.setTooltip(function() {
-      var op = thisBlock.getFieldValue('MODE');
-      var TOOLTIPS = {
-        'WHILE': Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE,
-        'UNTIL': Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL
-      };
-      return TOOLTIPS[op];
-    });
-  }
+/**
+ * Tooltips for the 'controls_whileUntil' block, keyed by MODE value.
+ *
+ * Messages are not dereferenced here in order to capture possible language
+ * changes.
+ * @package
+ * @readonly
+ */
+Blockly.Constants.Loops.TOOLTIPS_BY_MODE = {
+  'WHILE': '%{BKY_CONTROLS_WHILEUNTIL_TOOLTIP_WHILE}',
+  'UNTIL': '%{BKY_CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL}'
 };
+
+Blockly.Extensions.register('controls_whileUntil_tooltip',
+  Blockly.Extensions.buildTooltipForDropdown(
+    'MODE', Blockly.Constants.Loops.TOOLTIPS_BY_MODE));
 
 Blockly.Blocks['controls_for'] = {
   /**

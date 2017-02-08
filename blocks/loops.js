@@ -117,8 +117,52 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "colour": "%{BKY_LOOPS_HUE}",
     "helpUrl": "%{BKY_CONTROLS_WHILEUNTIL_HELPURL}",
     "extensions": ["controls_whileUntil_tooltip"]
+  },
+  // Block for 'for' loop.
+  {
+    "type": "controls_for",
+    "message0": "%{BKY_CONTROLS_FOR_TITLE}",
+    "args0": [
+      {
+        "type": "field_variable",
+        "name": "VAR",
+        "variable": null
+      },
+      {
+        "type": "input_value",
+        "name": "FROM",
+        "check": "Number",
+        "align": "RIGHT"
+      },
+      {
+        "type": "input_value",
+        "name": "TO",
+        "check": "Number",
+        "align": "RIGHT"
+      },
+      {
+        "type": "input_value",
+        "name": "BY",
+        "check": "Number",
+        "align": "RIGHT"
+      }
+    ],
+    "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+    "args1": [{
+      "type": "input_statement",
+      "name": "DO"
+    }],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": "%{BKY_LOOPS_HUE}",
+    "helpUrl": "%{BKY_CONTROLS_FOR_HELPURL}",
+    "extensions": [
+      "contextMenu_newGetVariableBlock",
+      "controls_for_tooltip"
+    ]
   }
-]);    // END JSON EXTRACT (Do not delete this comment.)
+]);  // END JSON EXTRACT (Do not delete this comment.)
 
 /**
  * Tooltips for the 'controls_whileUntil' block, keyed by MODE value.
@@ -128,74 +172,34 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
  * @package
  * @readonly
  */
-Blockly.Constants.Loops.TOOLTIPS_BY_MODE = {
+Blockly.Constants.Loops.WHILE_UNTIL_TOOLTIPS = {
   'WHILE': '%{BKY_CONTROLS_WHILEUNTIL_TOOLTIP_WHILE}',
   'UNTIL': '%{BKY_CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL}'
 };
 
 Blockly.Extensions.register('controls_whileUntil_tooltip',
   Blockly.Extensions.buildTooltipForDropdown(
-    'MODE', Blockly.Constants.Loops.TOOLTIPS_BY_MODE));
+    'MODE', Blockly.Constants.Loops.WHILE_UNTIL_TOOLTIPS));
 
-Blockly.Blocks['controls_for'] = {
+/**
+ * Mixin to add a context menu item to create a 'variables_get' block.
+ * @mixin
+ * @augments Blockly.Block
+ */
+Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
   /**
-   * Block for 'for' loop.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.CONTROLS_FOR_TITLE,
-      "args0": [
-        {
-          "type": "field_variable",
-          "name": "VAR",
-          "variable": null
-        },
-        {
-          "type": "input_value",
-          "name": "FROM",
-          "check": "Number",
-          "align": "RIGHT"
-        },
-        {
-          "type": "input_value",
-          "name": "TO",
-          "check": "Number",
-          "align": "RIGHT"
-        },
-        {
-          "type": "input_value",
-          "name": "BY",
-          "check": "Number",
-          "align": "RIGHT"
-        }
-      ],
-      "inputsInline": true,
-      "previousStatement": null,
-      "nextStatement": null,
-      "colour": Blockly.Blocks.loops.HUE,
-      "helpUrl": Blockly.Msg.CONTROLS_FOR_HELPURL
-    });
-    this.appendStatementInput('DO')
-        .appendField(Blockly.Msg.CONTROLS_FOR_INPUT_DO);
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
-    this.setTooltip(function() {
-      return Blockly.Msg.CONTROLS_FOR_TOOLTIP.replace('%1',
-          thisBlock.getFieldValue('VAR'));
-    });
-  },
-  /**
-   * Add menu option to create getter block for loop variable.
+   * Add context menu option to create getter block for the loop's variable.
+   * (customContextMenu support limited to web BlockSvg.)
    * @param {!Array} options List of menu options to add to.
    * @this Blockly.Block
    */
-  customContextMenu: function(options) {
-    if (!this.isCollapsed()) {
+  customContextMenu: function() {
+    var varName = this.getFieldValue('VAR');
+    if (!this.isCollapsed() && varName != null) {
       var option = {enabled: true};
-      var name = this.getFieldValue('VAR');
-      option.text = Blockly.Msg.VARIABLES_SET_CREATE_GET.replace('%1', name);
-      var xmlField = goog.dom.createDom('field', null, name);
+      option.text =
+        Blockly.Msg.VARIABLES_SET_CREATE_GET.replace('%1', varName);
+      var xmlField = goog.dom.createDom('field', null, varName);
       xmlField.setAttribute('name', 'VAR');
       var xmlBlock = goog.dom.createDom('block', null, xmlField);
       xmlBlock.setAttribute('type', 'variables_get');
@@ -204,6 +208,13 @@ Blockly.Blocks['controls_for'] = {
     }
   }
 };
+
+Blockly.Extensions.registerMixin('contextMenu_newGetVariableBlock',
+  Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN);
+
+Blockly.Extensions.register('controls_for_tooltip',
+  Blockly.Extensions.buildTooltipWithFieldValue(
+    Blockly.Msg.CONTROLS_FOR_TOOLTIP, 'VAR'));
 
 Blockly.Blocks['controls_forEach'] = {
   /**
@@ -267,6 +278,7 @@ Blockly.Blocks['controls_flow_statements'] = {
       return TOOLTIPS[op];
     });
   },
+
   /**
    * Called whenever anything on the workspace changes.
    * Add warning if this flow block is not nested inside a loop.

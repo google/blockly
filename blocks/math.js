@@ -379,9 +379,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
 /**
  * Mapping of math block OP value to tooltip message for blocks
  * math_arithmetic, math_simple, math_trig, and math_on_lists.
- *
- * Messages are not dereferenced here in order to capture possible language
- * changes.
+ * @see {Blockly.Extensions#buildTooltipForDropdown}
  * @package
  * @readonly
  */
@@ -430,6 +428,8 @@ Blockly.Extensions.register('math_op_tooltip',
  * Mixin for mutator functions in the 'math_is_divisibleby_mutator'
  * extension.
  * @mixin
+ * @augments Blockly.Block
+ * @package
  */
 Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
   /**
@@ -476,8 +476,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
  * 'math_is_divisibleby_mutator' extension to the 'math_property' block that
  * can update the block shape (add/remove divisor input) based on whether
  * property is "divisble by".
- * @this {Blockly.Block}
- * @mixes Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN
+ * @this Blockly.Block
  * @package
  */
 Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION = function() {
@@ -493,7 +492,7 @@ Blockly.Extensions.register('math_is_divisibleby_mutator',
 
 /**
  * Update the tooltip of 'math_change' block to reference the variable.
- * @this {Blockly.Block}
+ * @this Blockly.Block
  * @package
  */
 Blockly.Constants.Math.CHANGE_TOOLTIP_EXTENSION = function() {
@@ -504,12 +503,14 @@ Blockly.Constants.Math.CHANGE_TOOLTIP_EXTENSION = function() {
 };
 
 Blockly.Extensions.register('math_change_tooltip',
-  Blockly.Constants.Math.CHANGE_TOOLTIP_EXTENSION);
+  Blockly.Extensions.buildTooltipWithFieldValue(
+    Blockly.Msg.MATH_CHANGE_TOOLTIP, 'VAR'));
 
 /**
  * Mixin with mutator methods to support alternate output based if the
  * 'math_on_list' block uses the 'MODE' operation.
  * @mixin
+ * @augments Blockly.Block
  * @package
  * @readonly
  */
@@ -550,8 +551,7 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
 /**
  * Extension to 'math_on_list' blocks that allows support of
  * modes operation (outputs a list of numbers).
- * @this {Blockly.Block}
- * @mixes Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN
+ * @this Blockly.Block
  * @package
  */
 Blockly.Constants.Math.LIST_MODES_MUTATOR_EXTENSION = function() {

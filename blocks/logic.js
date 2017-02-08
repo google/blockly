@@ -273,9 +273,7 @@ Blockly.defineBlocksWithJsonArray([ // Mutator blocks. Do not extract.
 /**
  * Tooltip text, keyed by block OP value. Used by logic_compare and
  * logic_operation blocks.
- *
- * Messages are not dereferenced here in order to capture possible language
- * changes.
+ * @see {Blockly.Extensions#buildTooltipForDropdown}
  * @package
  * @readonly
  */
@@ -297,10 +295,10 @@ Blockly.Extensions.register('logic_op_tooltip',
   Blockly.Extensions.buildTooltipForDropdown(
     'OP', Blockly.Constants.Logic.TOOLTIPS_BY_OP));
 
-
 /**
  * Mutator methods added to controls_if blocks.
  * @mixin
+ * @augments Blockly.Block
  * @package
  * @readonly
  */
@@ -460,7 +458,6 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
  * "controls_if" extension function. Adds mutator, shape updating methods, and
  * dynamic tooltip to "controls_if" blocks.
  * @this Blockly.Block
- * @mixes Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN
  * @package
  */
 Blockly.Constants.Logic.CONTROLS_IF_EXTENSION = function() {
@@ -517,6 +514,7 @@ Blockly.Constants.Logic.fixLogicCompareRtlOpLabels =
 /**
  * Adds dynamic type validation for the left and right sides of a logic_compate block.
  * @mixin
+ * @augments Blockly.Block
  * @package
  * @readonly
  */
@@ -557,7 +555,6 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
  * dropdown labels, and adds type left and right side type checking to
  * "logic_compare" blocks.
  * @this Blockly.Block
- * @mixes Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN
  * @package
  * @readonly
  */
@@ -577,6 +574,7 @@ Blockly.Extensions.register('logic_compare',
 /**
  * Adds type coordination between inputs and output.
  * @mixin
+ * @augments Blockly.Block
  * @package
  * @readonly
  */

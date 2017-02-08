@@ -92,9 +92,18 @@ Blockly.Extensions.apply = function(name, block) {
 };
 
 /**
- * Builds an extension function that will map a dropdown value to a tooltip string.
- * Tooltip strings will be passed through Blockly.utils.checkMessageReferences(..)
- * immediately and Blockly.utils.replaceMessageReferences(..) at display time.
+ * Builds an extension function that will map a dropdown value to a tooltip
+ * string.
+ *
+ * This method includes multiple checks to ensure tooltips, dropdown options,
+ * and message references are aligned. This aims to catch errors as early as
+ * possible, without requiring developers to manually test tooltips under each
+ * option. After the page is loaded, each tooltip text string will be checked
+ * for matching message keys in the internationalized string table. Deferring
+ * this until the page is loaded decouples loading dependencies. Later, upon
+ * loading the first block of any given type, the extension will validate every
+ * dropdown option has a matching tooltip in the lookupTable.  Errors are
+ * reported as warnings in the console, and are never fatal.
  * @param {string} dropdownName The name of the field whose value is the key
  *     to the lookup table.
  * @param {!Object<string, string>} lookupTable The table of field values to
@@ -112,6 +121,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
   if (document) { // Relies on document.readyState
     Blockly.utils.runAfterPageLoad(function() {
       for (var key in lookupTable) {
+        // Will print warnings is reference is missing.
         Blockly.utils.checkMessageReferences(lookupTable[key]);
       }
     });
@@ -122,8 +132,6 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
    * @this {Blockly.Block}
    */
   var extensionFn = function() {
-    var thisBlock = this;
-
     if (this.type && blockTypesChecked.indexOf(this.type) === -1) {
       Blockly.Extensions.checkDropdownOptionsInTable_(
         this, dropdownName, lookupTable);
@@ -131,15 +139,15 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
     }
 
     this.setTooltip(function() {
-      var value = thisBlock.getFieldValue(dropdownName);
+      var value = this.getFieldValue(dropdownName);
       var tooltip = lookupTable[value];
       if (tooltip == null) {
-        if (blockTypesChecked.indexOf(thisBlock.type) === -1) {
+        if (blockTypesChecked.indexOf(this.type) === -1) {
           // Warn for missing values on generated tooltips
           var warning = 'No tooltip mapping for value ' + value +
               ' of field ' + dropdownName;
-          if (thisBlock.type != null) {
-            warning += (' of block type ' + thisBlock.type);
+          if (this.type != null) {
+            warning += (' of block type ' + this.type);
           }
           console.warn(warning + '.');
         }
@@ -147,7 +155,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
         tooltip = Blockly.utils.replaceMessageReferences(tooltip);
       }
       return tooltip;
-    });
+    }.bind(this));
   };
   return extensionFn;
 };
@@ -158,6 +166,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
  * @param {!Blockly.Block} block The block containing the dropdown
  * @param {string} dropdownName The name of the dropdown
  * @param {!Object<string, string>} lookupTable The string lookup table
+ * @private
  */
 Blockly.Extensions.checkDropdownOptionsInTable_ =
   function(block, dropdownName, lookupTable) {
@@ -173,6 +182,41 @@ Blockly.Extensions.checkDropdownOptionsInTable_ =
         }
       }
     }
+  };
+
+/**
+ * Builds an extension function that will install a dynamic tooltip. The
+ * tooltip message should include the string '%1' and that string will be
+ * replaced with the value of the named field.
+ * @param {string} msgTemplate The template form to of the message text, with
+ *     %1 placeholder.
+ * @param {string} fieldName The field with the replacement value.
+ * @returns {Function} The extension function.
+ */
+Blockly.Extensions.buildTooltipWithFieldValue =
+  function(msgTemplate, fieldName) {
+    // Check the tooltip string messages for invalid references.
+    // Wait for load, in case Blockly.Msg is not yet populated.
+    // runAfterPageLoad() does not run in a Node.js environment due to lack of
+    // document object, in which case skip the validation.
+    if (document) { // Relies on document.readyState
+      Blockly.utils.runAfterPageLoad(function() {
+        // Will print warnings is reference is missing.
+        Blockly.utils.checkMessageReferences(msgTemplate);
+      });
+    }
+
+    /**
+     * The actual extension.
+     * @this {Blockly.Block}
+     */
+    var extensionFn = function() {
+      this.setTooltip(function() {
+        return Blockly.utils.replaceMessageReferences(msgTemplate)
+            .replace('%1', this.getFieldValue(fieldName));
+      }.bind(this));
+    };
+    return extensionFn;
   };
 
 /**

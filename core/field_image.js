@@ -43,6 +43,19 @@ goog.require('goog.userAgent');
  */
 Blockly.FieldImage = function(src, width, height, opt_alt) {
   this.sourceBlock_ = null;
+
+  // Replace any message references in the arguments.
+  src = Blockly.utils.replaceMessageReferences(src)
+  if (goog.isString(height)) {
+    height = Blockly.utils.replaceMessageReferences(height);
+  }
+  if (goog.isString(width)) {
+    width = Blockly.utils.replaceMessageReferences(width);
+  }
+  if (goog.isString(opt_alt)) {
+    opt_alt = Blockly.utils.replaceMessageReferences(opt_alt);
+  }
+
   // Ensure height and width are numbers.  Strings are bad at math.
   this.height_ = Number(height);
   this.width_ = Number(width);

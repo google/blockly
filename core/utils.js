@@ -531,7 +531,9 @@ Blockly.utils.tokenizeInterpolation_ = function(message, parseInterpolationToken
               keyUpper.substring(4) : null;
           if (bklyKey && bklyKey in Blockly.Msg) {
             var rawValue = Blockly.Msg[bklyKey];
-            var subTokens = Blockly.utils.tokenizeInterpolation(rawValue);
+            var subTokens = goog.isString(rawValue) ?
+                Blockly.utils.tokenizeInterpolation(rawValue) :
+                parseInterpolationTokens ? String(rawValue) : rawValue;
             tokens = tokens.concat(subTokens);
           } else {
             // No entry found in the string table. Pass reference as string.

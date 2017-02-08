@@ -231,7 +231,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "name": "ELSE"
       }
     ],
-    "output": true,
+    "output": null,
     "colour": "%{BKY_LOGIC_HUE}",
     "tooltip": "%{BKY_LOGIC_TERNARY_TOOLTIP}",
     "helpUrl": "%{BKY_LOGIC_TERNARY_HELPURL}",

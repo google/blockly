@@ -28,6 +28,7 @@
 goog.provide('Blockly.Gesture');
 
 goog.require('goog.math.Coordinate');
+goog.require('goog.asserts');
 
 /**
  * Class for one gesture.
@@ -54,6 +55,12 @@ Blockly.Gesture = function(e, touchId) {
    * private
    */
   this.currentDragDelta_ = 0;
+
+  /**
+   * @type {goog.math.Coordinate}
+   * private
+   */
+  this.currentDragDeltaXY_ = 0;
 
   /**
    * @type {Blockly.Field}
@@ -121,26 +128,51 @@ Blockly.Gesture = function(e, touchId) {
    * @private
    */
   this.mostRecentEvent_ = e;
+
+  // TODO: Doc
+  this.startDragMetrics_ = null;
+
+  // TODO: Doc
+  this.startScrollXY_ = null;
+
+  // TODO: Doc
+  this.onMoveWrapper_ = null;
+
+  // TODO: Doc
+  this.onUpWrapper_ = null;
 };
 
 Blockly.Gesture.prototype.dispose = function() {
+  if (this.onMoveWrapper_) {
+    Blockly.unbindEvent_(this.onMoveWrapper_);
+  }
+  if (this.onUpWrapper_) {
+    Blockly.unbindEvent_(this.onUpWrapper_);
+  }
 };
 
 Blockly.Gesture.prototype.update = function(e) {
   this.updateDragDelta_(e);
-  if (!this.isDragging()) {
+  if (!this.isDragging_()) {
     this.updateIsDragging_();
   }
+  this.mostRecentEvent_ = e;
 };
 
 /**
  * DO MATH to set currentDragDelta_ based on the most recent mouse position.
  * TODO: Figure out what units the coordinates are in.
- * @return {goog.math.Coordinate} the new drag delta.
+ * @param {!Event} e The event for the most recent mouse/touch move.
+ * @return {number} the new drag delta.
  * @private
  */
 Blockly.Gesture.prototype.updateDragDelta_ = function(e) {
-  this.hasExceededDragRadius_ = false;
+  this.currentXY_ = new goog.math.Coordinate(e.clientX, e.clientY);
+  this.currentDragDeltaXY_ = goog.math.Coordinate.difference(this.currentXY_,
+      this.mouseDownXY_);
+  this.currentDragDelta_ = goog.math.Coordinate.magnitude(
+      this.currentDragDeltaXY_);
+  this.hasExceededDragRadius_ = this.currentDragDelta_ > Blockly.DRAG_RADIUS;
   return this.currentDragDelta_;
 };
 
@@ -152,17 +184,20 @@ Blockly.Gesture.prototype.updateDragDelta_ = function(e) {
  */
 Blockly.Gesture.prototype.updateIsDragging_ = function() {
   // TODO: Assert that the most recent event was a move?
-  goog.assert(!this.isDragging(),
+  goog.asserts.assert(!this.isDragging_(),
       'Don\'t call updateIsDragging_ when a drag is already in progress.');
   var startBlockMovable = this.startBlock_ && this.startBlock_.isMovable();
   if (startBlockMovable && this.hasExceededDragRadius_) {
     this.isDraggingBlock_ = true;
+    console.log('dragging block');
     return true;
   }
 
   var wsMovable = this.startWorkspace_ && this.startWorkspace_.isDraggable();
   if (wsMovable && this.hasExceededDragRadius_) {
     this.isDraggingWorkspace_ = true;
+    console.log('dragging workspace');
+    this.startWorkspaceDrag();
     return true;
   }
   return false;
@@ -242,10 +277,22 @@ Blockly.Gesture.prototype.setStartBlock = function(block) {
  * Record the workspace that a gesture started on.
  * @param {Blockly.WorkspaceSvg} ws The workspace the gesture started on.
  */
-Blockly.Gesture.prototype.setStartBlock = function(ws) {
+Blockly.Gesture.prototype.setStartWorkspace = function(ws) {
   if (!this.startWorkspace_) {
     this.startWorkspace_ = ws;
   }
+};
+
+/**
+ * Set the coordinate for the start of this gesture.
+ * @param {!Event} e The event that starts the gesture.
+ * @param {!Blockly.WorkspaceSvg} ws The workspace on which the gesture started.
+ */
+Blockly.Gesture.prototype.setStartLocation = function(e, ws) {
+  this.mouseDownXY_ = new goog.math.Coordinate(e.clientX, e.clientY);
+  // TODO: Do I need the start drag metrics to manage a workspace drag?
+  this.startDragMetrics_ = ws.getMetrics();
+  this.startScrollXY_ = new goog.math.Coordinate(ws.scrollX, ws.scrollY);
 };
 
 /**
@@ -253,9 +300,11 @@ Blockly.Gesture.prototype.setStartBlock = function(ws) {
  * @param {!Event} e A mouse move or touch move event.
  */
 Blockly.Gesture.prototype.handleMove = function(e) {
+  console.log('handlemove');
   this.update(e);
   if (this.isDraggingWorkspace_) {
     // Move the visible workspace
+    this.dragWorkspace();
   } else if (this.isDraggingBlock_) {
     // Move the dragging block.
   }
@@ -266,10 +315,12 @@ Blockly.Gesture.prototype.handleMove = function(e) {
  * @param {!Event} e A mouse up or touch end event.
  */
 Blockly.Gesture.prototype.handleUp = function(e) {
+  console.log('handleup');
   this.update(e);
   if (this.isDraggingBlock_) {
     // Terminate block drag.
   } else if (this.isDraggingWorkspace_) {
+    this.endWorkspaceDrag();
     // Terminate workspace drag.
   } else if (this.isFieldClick_()) {
     // End field click.
@@ -278,5 +329,51 @@ Blockly.Gesture.prototype.handleUp = function(e) {
   } else if (this.isWorkspaceClick_()) {
     // Click the workspace.
   }
-  // None of the above--no actions to take, but it still ends the gesture.
+  // End the gesture.
+
+  Blockly.GestureHandler.removeGestureForId(this.touchIdentifier_);
+};
+
+Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
+  console.log('handlewsstart');
+  this.setStartWorkspace(ws);
+  this.setStartLocation(e, ws);
+  this.mostRecentEvent_ = e;
+
+  this.onMoveWrapper_ = Blockly.bindEvent_(
+      document, 'mousemove', null, this.handleMove.bind(this));
+
+  this.onUpWrapper_ = Blockly.bindEvent_(
+      document, 'mouseup', null, this.handleUp.bind(this));
+};
+
+
+Blockly.Gesture.prototype.startWorkspaceDrag = function() {
+  // TODO: set cursor.
+  this.startWorkspace_.setupDragSurface();
+};
+
+
+Blockly.Gesture.prototype.endWorkspaceDrag = function() {
+  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
+  this.startWorkspace_.resetDragSurface();
+};
+
+Blockly.Gesture.prototype.dragWorkspace = function() {
+  var metrics = this.startDragMetrics_;
+  var newXY = goog.math.Coordinate.sum(
+      this.startScrollXY_, this.currentDragDeltaXY_);
+
+  // Bound the new XY based on workspace bounds.
+  // TODO: Make this a separate function--is it called anywhere else?
+  var x = Math.min(newXY.x, -metrics.contentLeft);
+  var y = Math.min(newXY.y, -metrics.contentTop);
+  x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
+               metrics.contentWidth);
+  y = Math.max(y, metrics.viewHeight - metrics.contentTop -
+               metrics.contentHeight);
+
+  // Move the scrollbars and the page will scroll automatically.
+  this.startWorkspace_.scrollbar.set(-x - metrics.contentLeft,
+                          -y - metrics.contentTop);
 };

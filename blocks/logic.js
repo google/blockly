@@ -274,8 +274,7 @@ Blockly.defineBlocksWithJsonArray([ // Mutator blocks. Do not extract.
  * Tooltip text, keyed by block OP value. Used by logic_compare and
  * logic_operation blocks.
  *
- * Messages are not dereferenced here in order to capture possible language
- * changes.
+ * Messages references are replaced just before displayed.
  * @package
  * @readonly
  */

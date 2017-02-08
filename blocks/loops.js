@@ -191,14 +191,32 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "contextMenu_newGetVariableBlock",
       "controls_forEach_tooltip"
     ]
+  },
+  // Block for flow statements: continue, break.
+  {
+    "type": "controls_flow_statements",
+    "message0": "%1",
+    "args0": [{
+      "type": "field_dropdown",
+      "name": "FLOW",
+      "options": [
+        ["%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK}", "BREAK"],
+        ["%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE}", "CONTINUE"]
+      ]
+    }],
+    "previousStatement": null,
+    "colour": "%{BKY_LOOPS_HUE}",
+    "helpUrl": "%{BKY_CONTROLS_FLOW_STATEMENTS_HELPURL}",
+    "extensions": [
+      "controls_flow_tooltip",
+      "controls_flow_in_loop_check"
+    ]
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
 /**
  * Tooltips for the 'controls_whileUntil' block, keyed by MODE value.
- *
- * Messages are not dereferenced here in order to capture possible language
- * changes.
+ * Messages references are replaced just before displayed.
  * @package
  * @readonly
  */
@@ -212,10 +230,27 @@ Blockly.Extensions.register('controls_whileUntil_tooltip',
     'MODE', Blockly.Constants.Loops.WHILE_UNTIL_TOOLTIPS));
 
 /**
+ * Tooltips for the 'controls_flow_statements' block, keyed by FLOW value.
+ * Messages references are replaced just before displayed.
+ * @package
+ * @readonly
+ */
+Blockly.Constants.Loops.BREAK_CONTINUE_TOOLTIPS = {
+  'BREAK': '%{BKY_CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK}',
+  'CONTINUE': '%{BKY_CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE}'
+};
+
+Blockly.Extensions.register('controls_flow_tooltip',
+  Blockly.Extensions.buildTooltipForDropdown(
+    'FLOW', Blockly.Constants.Loops.BREAK_CONTINUE_TOOLTIPS));
+
+/**
  * Mixin to add a context menu item to create a 'variables_get' block.
  * Used by blocks 'controls_for' and 'controls_forEach'.
  * @mixin
  * @augments Blockly.Block
+ * @package
+ * @readonly
  */
 Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
   /**
@@ -251,31 +286,22 @@ Blockly.Extensions.register('controls_forEach_tooltip',
   Blockly.Extensions.buildTooltipWithFieldValue(
     Blockly.Msg.CONTROLS_FOREACH_TOOLTIP, 'VAR'));
 
-Blockly.Blocks['controls_flow_statements'] = {
+/**
+ * This mixin adds a check to make sure the 'controls_flow_statements' block
+ * is contained in a loop. Otherwise a warning is added to the block.
+ * @mixin
+ * @augments Blockly.Block
+ * @package
+ * @readonly
+ */
+Blockly.Constants.Loops.CONTROL_FLOW_CHECK_IN_LOOP_MIXIN = {
   /**
-   * Block for flow statements: continue, break.
-   * @this Blockly.Block
+   * List of block types that are loops and thus do not need warnings.
+   * To add a new loop type add this to your code:
+   * Blockly.Blocks['controls_flow_statements'].LOOP_TYPES.push('custom_loop');
    */
-  init: function() {
-    var OPERATORS =
-        [[Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK, 'BREAK'],
-         [Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE, 'CONTINUE']];
-    this.setHelpUrl(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_HELPURL);
-    this.setColour(Blockly.Blocks.loops.HUE);
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown(OPERATORS), 'FLOW');
-    this.setPreviousStatement(true);
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
-    this.setTooltip(function() {
-      var op = thisBlock.getFieldValue('FLOW');
-      var TOOLTIPS = {
-        'BREAK': Blockly.Msg.CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK,
-        'CONTINUE': Blockly.Msg.CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE
-      };
-      return TOOLTIPS[op];
-    });
-  },
+  LOOP_TYPES: ['controls_repeat', 'controls_repeat_ext', 'controls_forEach',
+      'controls_for', 'controls_whileUntil'],
 
   /**
    * Called whenever anything on the workspace changes.
@@ -308,12 +334,8 @@ Blockly.Blocks['controls_flow_statements'] = {
         this.setDisabled(true);
       }
     }
-  },
-  /**
-   * List of block types that are loops and thus do not need warnings.
-   * To add a new loop type add this to your code:
-   * Blockly.Blocks['controls_flow_statements'].LOOP_TYPES.push('custom_loop');
-   */
-  LOOP_TYPES: ['controls_repeat', 'controls_repeat_ext', 'controls_forEach',
-      'controls_for', 'controls_whileUntil']
-};
+  }
+}
+
+Blockly.Extensions.registerMixin('controls_flow_in_loop_check',
+  Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN);

@@ -380,8 +380,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
  * Mapping of math block OP value to tooltip message for blocks
  * math_arithmetic, math_simple, math_trig, and math_on_lists.
  *
- * Messages are not dereferenced here in order to capture possible language
- * changes.
+ * Messages references are replaced just before displayed.
  * @package
  * @readonly
  */
@@ -478,7 +477,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
  * 'math_is_divisibleby_mutator' extension to the 'math_property' block that
  * can update the block shape (add/remove divisor input) based on whether
  * property is "divisble by".
- * @this {Blockly.Block}
+ * @this Blockly.Block
  * @package
  */
 Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION = function() {
@@ -494,7 +493,7 @@ Blockly.Extensions.register('math_is_divisibleby_mutator',
 
 /**
  * Update the tooltip of 'math_change' block to reference the variable.
- * @this {Blockly.Block}
+ * @this Blockly.Block
  * @package
  */
 Blockly.Constants.Math.CHANGE_TOOLTIP_EXTENSION = function() {
@@ -553,7 +552,7 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
 /**
  * Extension to 'math_on_list' blocks that allows support of
  * modes operation (outputs a list of numbers).
- * @this {Blockly.Block}
+ * @this Blockly.Block
  * @package
  */
 Blockly.Constants.Math.LIST_MODES_MUTATOR_EXTENSION = function() {

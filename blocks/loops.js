@@ -161,6 +161,36 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "contextMenu_newGetVariableBlock",
       "controls_for_tooltip"
     ]
+  },
+  // Block for 'for each' loop.
+  {
+    "type": "controls_forEach",
+    "message0": "%{BKY_CONTROLS_FOREACH_TITLE}",
+    "args0": [
+      {
+        "type": "field_variable",
+        "name": "VAR",
+        "variable": null
+      },
+      {
+        "type": "input_value",
+        "name": "LIST",
+        "check": "Array"
+      }
+    ],
+    "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+    "args1": [{
+      "type": "input_statement",
+      "name": "DO"
+    }],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": "%{BKY_LOOPS_HUE}",
+    "helpUrl": "%{BKY_CONTROLS_FOREACH_HELPURL}",
+    "extensions": [
+      "contextMenu_newGetVariableBlock",
+      "controls_forEach_tooltip"
+    ]
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
@@ -183,6 +213,7 @@ Blockly.Extensions.register('controls_whileUntil_tooltip',
 
 /**
  * Mixin to add a context menu item to create a 'variables_get' block.
+ * Used by blocks 'controls_for' and 'controls_forEach'.
  * @mixin
  * @augments Blockly.Block
  */
@@ -216,42 +247,9 @@ Blockly.Extensions.register('controls_for_tooltip',
   Blockly.Extensions.buildTooltipWithFieldValue(
     Blockly.Msg.CONTROLS_FOR_TOOLTIP, 'VAR'));
 
-Blockly.Blocks['controls_forEach'] = {
-  /**
-   * Block for 'for each' loop.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.CONTROLS_FOREACH_TITLE,
-      "args0": [
-        {
-          "type": "field_variable",
-          "name": "VAR",
-          "variable": null
-        },
-        {
-          "type": "input_value",
-          "name": "LIST",
-          "check": "Array"
-        }
-      ],
-      "previousStatement": null,
-      "nextStatement": null,
-      "colour": Blockly.Blocks.loops.HUE,
-      "helpUrl": Blockly.Msg.CONTROLS_FOREACH_HELPURL
-    });
-    this.appendStatementInput('DO')
-        .appendField(Blockly.Msg.CONTROLS_FOREACH_INPUT_DO);
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
-    this.setTooltip(function() {
-      return Blockly.Msg.CONTROLS_FOREACH_TOOLTIP.replace('%1',
-          thisBlock.getFieldValue('VAR'));
-    });
-  },
-  customContextMenu: Blockly.Blocks['controls_for'].customContextMenu
-};
+Blockly.Extensions.register('controls_forEach_tooltip',
+  Blockly.Extensions.buildTooltipWithFieldValue(
+    Blockly.Msg.CONTROLS_FOREACH_TOOLTIP, 'VAR'));
 
 Blockly.Blocks['controls_flow_statements'] = {
   /**

@@ -216,7 +216,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
 
 /**
  * Tooltips for the 'controls_whileUntil' block, keyed by MODE value.
- * Messages references are replaced just before displayed.
+ * @see {Blockly.Extensions#buildTooltipForDropdown}
  * @package
  * @readonly
  */
@@ -231,7 +231,7 @@ Blockly.Extensions.register('controls_whileUntil_tooltip',
 
 /**
  * Tooltips for the 'controls_flow_statements' block, keyed by FLOW value.
- * Messages references are replaced just before displayed.
+ * @see {Blockly.Extensions#buildTooltipForDropdown}
  * @package
  * @readonly
  */
@@ -259,7 +259,7 @@ Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
    * @param {!Array} options List of menu options to add to.
    * @this Blockly.Block
    */
-  customContextMenu: function() {
+  customContextMenu: function(options) {
     var varName = this.getFieldValue('VAR');
     if (!this.isCollapsed() && varName != null) {
       var option = {enabled: true};
@@ -301,7 +301,7 @@ Blockly.Constants.Loops.CONTROL_FLOW_CHECK_IN_LOOP_MIXIN = {
    * Blockly.Blocks['controls_flow_statements'].LOOP_TYPES.push('custom_loop');
    */
   LOOP_TYPES: ['controls_repeat', 'controls_repeat_ext', 'controls_forEach',
-      'controls_for', 'controls_whileUntil'],
+    'controls_for', 'controls_whileUntil'],
 
   /**
    * Called whenever anything on the workspace changes.
@@ -335,7 +335,7 @@ Blockly.Constants.Loops.CONTROL_FLOW_CHECK_IN_LOOP_MIXIN = {
       }
     }
   }
-}
+};
 
 Blockly.Extensions.registerMixin('controls_flow_in_loop_check',
   Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN);

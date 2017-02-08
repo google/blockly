@@ -92,9 +92,18 @@ Blockly.Extensions.apply = function(name, block) {
 };
 
 /**
- * Builds an extension function that will map a dropdown value to a tooltip string.
- * Tooltip strings will be passed through Blockly.utils.checkMessageReferences(..)
- * immediately and Blockly.utils.replaceMessageReferences(..) at display time.
+ * Builds an extension function that will map a dropdown value to a tooltip
+ * string.
+ *
+ * This method includes multiple checks to ensure tooltips, dropdown options,
+ * and message references are aligned. This aims to catch errors as early as
+ * possible, without requiring developers to manually test tooltips under each
+ * option. After the page is loaded, each tooltip text string will be checked
+ * for matching message keys in the internationalized string table. Deferring
+ * this until the page is loaded decouples loading dependencies. Later, upon
+ * loading the first block of any given type, the extension will validate every
+ * dropdown option has a matching tooltip in the lookupTable.  Errors are
+ * reported as warnings in the console, and are never fatal.
  * @param {string} dropdownName The name of the field whose value is the key
  *     to the lookup table.
  * @param {!Object<string, string>} lookupTable The table of field values to
@@ -177,12 +186,12 @@ Blockly.Extensions.checkDropdownOptionsInTable_ =
 
 /**
  * Builds an extension function that will install a dynamic tooltip. The
- * tooltip message should include a the string '%1' and that string will be
+ * tooltip message should include the string '%1' and that string will be
  * replaced with the value of the named field.
- * @param msgTemplate {string} The template form to of the message text, with
+ * @param {string} msgTemplate The template form to of the message text, with
  *     %1 placeholder.
- * @param fieldName {string} The field with the replacement value.
- * @return {Function}
+ * @param {string} fieldName The field with the replacement value.
+ * @returns {Function} The extension function.
  */
 Blockly.Extensions.buildTooltipWithFieldValue =
   function(msgTemplate, fieldName) {
@@ -204,7 +213,7 @@ Blockly.Extensions.buildTooltipWithFieldValue =
     var extensionFn = function() {
       this.setTooltip(function() {
         return Blockly.utils.replaceMessageReferences(msgTemplate)
-            .replace('%1', this.getFieldValue('VAR'));
+            .replace('%1', this.getFieldValue(fieldName));
       }.bind(this));
     };
     return extensionFn;

@@ -273,8 +273,7 @@ Blockly.defineBlocksWithJsonArray([ // Mutator blocks. Do not extract.
 /**
  * Tooltip text, keyed by block OP value. Used by logic_compare and
  * logic_operation blocks.
- *
- * Messages references are replaced just before displayed.
+ * @see {Blockly.Extensions#buildTooltipForDropdown}
  * @package
  * @readonly
  */
@@ -295,7 +294,6 @@ Blockly.Constants.Logic.TOOLTIPS_BY_OP = {
 Blockly.Extensions.register('logic_op_tooltip',
   Blockly.Extensions.buildTooltipForDropdown(
     'OP', Blockly.Constants.Logic.TOOLTIPS_BY_OP));
-
 
 /**
  * Mutator methods added to controls_if blocks.

@@ -379,8 +379,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
 /**
  * Mapping of math block OP value to tooltip message for blocks
  * math_arithmetic, math_simple, math_trig, and math_on_lists.
- *
- * Messages references are replaced just before displayed.
+ * @see {Blockly.Extensions#buildTooltipForDropdown}
  * @package
  * @readonly
  */

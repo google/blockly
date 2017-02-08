@@ -123,8 +123,11 @@ Blockly.Gesture = function(e, touchId) {
   this.mostRecentEvent_ = e;
 };
 
+Blockly.Gesture.prototype.dispose = function() {
+};
+
 Blockly.Gesture.prototype.update = function(e) {
-  this.updateDragDelta_();
+  this.updateDragDelta_(e);
   if (!this.isDragging()) {
     this.updateIsDragging_();
   }
@@ -136,7 +139,8 @@ Blockly.Gesture.prototype.update = function(e) {
  * @return {goog.math.Coordinate} the new drag delta.
  * @private
  */
-Blockly.Gesture.prototype.updateDragDelta_ = function() {
+Blockly.Gesture.prototype.updateDragDelta_ = function(e) {
+  this.hasExceededDragRadius_ = false;
   return this.currentDragDelta_;
 };
 
@@ -147,17 +151,21 @@ Blockly.Gesture.prototype.updateDragDelta_ = function() {
  * @return {boolean} true if anything is being dragged.
  */
 Blockly.Gesture.prototype.updateIsDragging_ = function() {
+  // TODO: Assert that the most recent event was a move?
   goog.assert(!this.isDragging(),
       'Don\'t call updateIsDragging_ when a drag is already in progress.');
   var startBlockMovable = this.startBlock_ && this.startBlock_.isMovable();
-  if (startBlockMovable && this.currentDragDelta_ > Blockly.DRAG_RADIUS) {
+  if (startBlockMovable && this.hasExceededDragRadius_) {
     this.isDraggingBlock_ = true;
     return true;
   }
 
-  var workspaceMovable = this.startWorkspace_ && this.startWorkspace_.isMovable();
-  // TODO: Assert that the most recent event was a move?
-  return true;
+  var wsMovable = this.startWorkspace_ && this.startWorkspace_.isDraggable();
+  if (wsMovable && this.hasExceededDragRadius_) {
+    this.isDraggingWorkspace_ = true;
+    return true;
+  }
+  return false;
 };
 
 /**
@@ -245,14 +253,30 @@ Blockly.Gesture.prototype.setStartBlock = function(ws) {
  * @param {!Event} e A mouse move or touch move event.
  */
 Blockly.Gesture.prototype.handleMove = function(e) {
-  this.updateDragDelta_();
-  if (!this.isDragging()) {
-    this.updateIsDragging_();
-  }
-
+  this.update(e);
   if (this.isDraggingWorkspace_) {
-
+    // Move the visible workspace
   } else if (this.isDraggingBlock_) {
-
+    // Move the dragging block.
   }
+};
+
+/**
+ * Handle a mouse up or touch end event.
+ * @param {!Event} e A mouse up or touch end event.
+ */
+Blockly.Gesture.prototype.handleUp = function(e) {
+  this.update(e);
+  if (this.isDraggingBlock_) {
+    // Terminate block drag.
+  } else if (this.isDraggingWorkspace_) {
+    // Terminate workspace drag.
+  } else if (this.isFieldClick_()) {
+    // End field click.
+  } else if (this.isBlockClick_()) {
+    // Click the block.
+  } else if (this.isWorkspaceClick_()) {
+    // Click the workspace.
+  }
+  // None of the above--no actions to take, but it still ends the gesture.
 };

@@ -430,6 +430,8 @@ Blockly.Extensions.register('math_op_tooltip',
  * Mixin for mutator functions in the 'math_is_divisibleby_mutator'
  * extension.
  * @mixin
+ * @augments Blockly.Block
+ * @package
  */
 Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
   /**
@@ -477,7 +479,6 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
  * can update the block shape (add/remove divisor input) based on whether
  * property is "divisble by".
  * @this {Blockly.Block}
- * @mixes Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN
  * @package
  */
 Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION = function() {
@@ -504,12 +505,14 @@ Blockly.Constants.Math.CHANGE_TOOLTIP_EXTENSION = function() {
 };
 
 Blockly.Extensions.register('math_change_tooltip',
-  Blockly.Constants.Math.CHANGE_TOOLTIP_EXTENSION);
+  Blockly.Extensions.buildTooltipWithFieldValue(
+    Blockly.Msg.MATH_CHANGE_TOOLTIP, 'VAR'));
 
 /**
  * Mixin with mutator methods to support alternate output based if the
  * 'math_on_list' block uses the 'MODE' operation.
  * @mixin
+ * @augments Blockly.Block
  * @package
  * @readonly
  */
@@ -551,7 +554,6 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
  * Extension to 'math_on_list' blocks that allows support of
  * modes operation (outputs a list of numbers).
  * @this {Blockly.Block}
- * @mixes Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN
  * @package
  */
 Blockly.Constants.Math.LIST_MODES_MUTATOR_EXTENSION = function() {

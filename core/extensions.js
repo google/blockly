@@ -112,6 +112,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
   if (document) { // Relies on document.readyState
     Blockly.utils.runAfterPageLoad(function() {
       for (var key in lookupTable) {
+        // Will print warnings is reference is missing.
         Blockly.utils.checkMessageReferences(lookupTable[key]);
       }
     });
@@ -122,8 +123,6 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
    * @this {Blockly.Block}
    */
   var extensionFn = function() {
-    var thisBlock = this;
-
     if (this.type && blockTypesChecked.indexOf(this.type) === -1) {
       Blockly.Extensions.checkDropdownOptionsInTable_(
         this, dropdownName, lookupTable);
@@ -131,15 +130,15 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
     }
 
     this.setTooltip(function() {
-      var value = thisBlock.getFieldValue(dropdownName);
+      var value = this.getFieldValue(dropdownName);
       var tooltip = lookupTable[value];
       if (tooltip == null) {
-        if (blockTypesChecked.indexOf(thisBlock.type) === -1) {
+        if (blockTypesChecked.indexOf(this.type) === -1) {
           // Warn for missing values on generated tooltips
           var warning = 'No tooltip mapping for value ' + value +
               ' of field ' + dropdownName;
-          if (thisBlock.type != null) {
-            warning += (' of block type ' + thisBlock.type);
+          if (this.type != null) {
+            warning += (' of block type ' + this.type);
           }
           console.warn(warning + '.');
         }
@@ -147,7 +146,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
         tooltip = Blockly.utils.replaceMessageReferences(tooltip);
       }
       return tooltip;
-    });
+    }.bind(this));
   };
   return extensionFn;
 };
@@ -158,6 +157,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
  * @param {!Blockly.Block} block The block containing the dropdown
  * @param {string} dropdownName The name of the dropdown
  * @param {!Object<string, string>} lookupTable The string lookup table
+ * @private
  */
 Blockly.Extensions.checkDropdownOptionsInTable_ =
   function(block, dropdownName, lookupTable) {
@@ -173,6 +173,41 @@ Blockly.Extensions.checkDropdownOptionsInTable_ =
         }
       }
     }
+  };
+
+/**
+ * Builds an extension function that will install a dynamic tooltip. The
+ * tooltip message should include a the string '%1' and that string will be
+ * replaced with the value of the named field.
+ * @param msgTemplate {string} The template form to of the message text, with
+ *     %1 placeholder.
+ * @param fieldName {string} The field with the replacement value.
+ * @return {Function}
+ */
+Blockly.Extensions.buildTooltipWithFieldValue =
+  function(msgTemplate, fieldName) {
+    // Check the tooltip string messages for invalid references.
+    // Wait for load, in case Blockly.Msg is not yet populated.
+    // runAfterPageLoad() does not run in a Node.js environment due to lack of
+    // document object, in which case skip the validation.
+    if (document) { // Relies on document.readyState
+      Blockly.utils.runAfterPageLoad(function() {
+        // Will print warnings is reference is missing.
+        Blockly.utils.checkMessageReferences(msgTemplate);
+      });
+    }
+
+    /**
+     * The actual extension.
+     * @this {Blockly.Block}
+     */
+    var extensionFn = function() {
+      this.setTooltip(function() {
+        return Blockly.utils.replaceMessageReferences(msgTemplate)
+            .replace('%1', this.getFieldValue('VAR'));
+      }.bind(this));
+    };
+    return extensionFn;
   };
 
 /**

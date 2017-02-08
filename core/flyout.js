@@ -326,10 +326,8 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.targetWorkspace_ = targetWorkspace;
   this.workspace_.targetWorkspace = targetWorkspace;
   // Add scrollbar.
-  if (this.workspace_.options.hasScrollbars) {
-    this.scrollbar_ = new Blockly.Scrollbar(this.workspace_,
-        this.horizontalLayout_, false);
-  }
+  this.scrollbar_ = new Blockly.Scrollbar(this.workspace_,
+      this.horizontalLayout_, false);
 
   this.hide();
 
@@ -1050,6 +1048,9 @@ Blockly.Flyout.prototype.onMouseUp_ = function(e) {
  * @private
  */
 Blockly.Flyout.prototype.onMouseMove_ = function(e) {
+  if (!this.isVisible()) {
+    return;  // flyout not visible
+  }
   var metrics = this.getMetrics_();
   if (this.horizontalLayout_) {
     if (metrics.contentWidth - metrics.viewWidth < 0) {

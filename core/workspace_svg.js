@@ -1011,6 +1011,14 @@ Blockly.WorkspaceSvg.prototype.isDragging = function() {
 };
 
 /**
+ * Is this workspace draggable and scrollable?
+ * @return {boolean} True if this workspace may be dragged.
+ */
+Blockly.WorkspaceSvg.prototype.isDraggable = function() {
+  return !!this.scrollbar;
+};
+
+/**
  * Handle a mouse-wheel on SVG drawing surface.
  * @param {!Event} e Mouse wheel event.
  * @private

@@ -19,6 +19,7 @@
  */
 'use strict';
 
+
 var XML_TEXT = ['<xml xmlns="http://www.w3.org/1999/xhtml">',
   '  <block type="controls_repeat_ext" inline="true" x="21" y="23">',
   '    <value name="TIMES">',
@@ -45,7 +46,8 @@ var XML_TEXT = ['<xml xmlns="http://www.w3.org/1999/xhtml">',
   '    </statement>',
   '  </block>',
   '</xml>'].join('\n');
-
+  
+  
 function test_textToDom() {
   var dom = Blockly.Xml.textToDom(XML_TEXT);
   assertEquals('XML tag', 'xml', dom.nodeName);
@@ -75,8 +77,35 @@ function test_domToWorkspace() {
         '  </block>' +
         '</xml>');
     var workspace = new Blockly.Workspace();
-    Blockly.Xml.domToWorkspace(dom, workspace);
+	Blockly.Xml.domToWorkspace(dom, workspace);
     assertEquals('Block count', 1, workspace.getAllBlocks().length);
+	Blockly.Xml.domToWorkspace(dom, workspace,[50,50]);
+	assertEquals('Block count', 2, workspace.getAllBlocks().length);
+  } finally {
+    delete Blockly.Blocks.test_block;
+  }
+}
+
+function test_appendDomToWorkspace() {
+  Blockly.Blocks.test_block = {
+    init: function() {
+      this.jsonInit({
+        message0: 'test',
+      });
+    }
+  };
+
+  try {
+    var dom = Blockly.Xml.textToDom(
+        '<xml xmlns="http://www.w3.org/1999/xhtml">' +
+        '  <block type="test_block" inline="true" x="21" y="23">' +
+        '  </block>' +
+        '</xml>');
+    var workspaceA = new Blockly.Workspace();
+    Blockly.Xml.appendDomToWorkspace(dom, workspaceA);
+    assertEquals('Block count', 1, workspaceA.getAllBlocks().length);
+	Blockly.Xml.appendDomToWorkspace(dom, workspaceA);
+	assertEquals('Block count', 2, workspaceA.getAllBlocks().length);
   } finally {
     delete Blockly.Blocks.test_block;
   }

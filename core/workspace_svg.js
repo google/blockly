@@ -997,10 +997,17 @@ Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
  * @return {boolean} True if currently dragging or scrolling.
  */
 Blockly.WorkspaceSvg.prototype.isDragging = function() {
-  return Blockly.dragMode_ == Blockly.DRAG_FREE ||
-      (Blockly.Flyout.startFlyout_ &&
-          Blockly.Flyout.startFlyout_.dragMode_ == Blockly.DRAG_FREE) ||
-      this.dragMode_ == Blockly.DRAG_FREE;
+  var gesturesOnWs = Blockly.GestureHandler.getGesturesOnWorkspace(this);
+  for (var i = 0, item; item = gesturesOnWs[i]; i++) {
+    if (item.isDragging()) {
+      return true;
+    }
+  }
+  return false;
+  // return Blockly.dragMode_ == Blockly.DRAG_FREE ||
+  //     (Blockly.Flyout.startFlyout_ &&
+  //         Blockly.Flyout.startFlyout_.dragMode_ == Blockly.DRAG_FREE) ||
+  //     this.dragMode_ == Blockly.DRAG_FREE;
 };
 
 /**

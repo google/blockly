@@ -275,12 +275,15 @@ Blockly.Gesture.prototype.endGesture = function(e) {
   e.stopPropagation();
 };
 
-// Called externally.
-Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
+Blockly.Gesture.prototype.doStart = function(e) {
   // TODO: Blockly.longStart_()
-  console.log('handlewsstart');
-  this.setStartWorkspace(ws);
-  this.setStartLocation(e, ws);
+  this.workspace.updateScreenCalculationsIfScrolled();
+  this.workspace.markFocused();
+  if (this.startBlock_) {
+    this.startBlock_.select();
+  }
+
+  this.setStartLocation(e, this.startWorkspace_);
   this.mostRecentEvent_ = e;
 
   this.onMoveWrapper_ = Blockly.bindEvent_(
@@ -291,6 +294,14 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
 
   e.preventDefault();
   e.stopPropagation();
+};
+
+// Called externally.
+Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
+  console.log('handlewsstart');
+  this.setStartWorkspace(ws);
+  this.mostRecentEvent_ = e;
+  this.doStart(e);
 };
 
 Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
@@ -314,6 +325,7 @@ Blockly.Gesture.prototype.startBlockDrag = function() {
   this.startBlock_.setDragging_(true);
   // TODO: Consider where moveToDragSurface should live.
   this.startBlock_.moveToDragSurface_();
+  Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
   this.dragBlock();
 };
 
@@ -325,6 +337,7 @@ Blockly.Gesture.prototype.endBlockDrag = function() {
   this.startBlock_.moveOffDragSurface_();
   this.startBlock_.setDragging_(false);
   this.startBlock_.render();
+  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   //Blockly.terminateDrag_();
 };
 

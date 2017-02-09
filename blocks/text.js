@@ -82,6 +82,7 @@ Blockly.Blocks['text_join'] = {
     this.setHelpUrl(Blockly.Msg.TEXT_JOIN_HELPURL);
     this.setColour(Blockly.Blocks.texts.HUE);
     this.itemCount_ = 2;
+    this.mixin(Blockly.Constants.Text.QUOTE_IMAGE_MIXIN);
     this.updateShape_();
     this.setOutput(true, 'String');
     this.setMutator(new Blockly.Mutator(['text_create_join_item']));
@@ -195,15 +196,6 @@ Blockly.Blocks['text_join'] = {
       this.removeInput('ADD' + i);
       i++;
     }
-  },
-  // TODO: REMOVE:
-  newQuote_: function(open) {
-    if (open == this.RTL) {
-      var file = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAAqUlEQVQI1z3KvUpCcRiA8ef9E4JNHhI0aFEacm1o0BsI0Slx8wa8gLauoDnoBhq7DcfWhggONDmJJgqCPA7neJ7p934EOOKOnM8Q7PDElo/4x4lFb2DmuUjcUzS3URnGib9qaPNbuXvBO3sGPHJDRG6fGVdMSeWDP2q99FQdFrz26Gu5Tq7dFMzUvbXy8KXeAj57cOklgA+u1B5AoslLtGIHQMaCVnwDnADZIFIrXsoXrgAAAABJRU5ErkJggg==';
-    } else {
-      var file = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAAn0lEQVQI1z3OMa5BURSF4f/cQhAKjUQhuQmFNwGJEUi0RKN5rU7FHKhpjEH3TEMtkdBSCY1EIv8r7nFX9e29V7EBAOvu7RPjwmWGH/VuF8CyN9/OAdvqIXYLvtRaNjx9mMTDyo+NjAN1HNcl9ZQ5oQMM3dgDUqDo1l8DzvwmtZN7mnD+PkmLa+4mhrxVA9fRowBWmVBhFy5gYEjKMfz9AylsaRRgGzvZAAAAAElFTkSuQmCC';
-    }
-    return new Blockly.FieldImage(file, 12, 12, '"');
   }
 };
 
@@ -314,9 +306,10 @@ Blockly.Blocks['text_indexOf'] = {
    * @this Blockly.Block
    */
   init: function() {
-    var OPERATORS =
-        [[Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST, 'FIRST'],
-         [Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST, 'LAST']];
+    var OPERATORS = [
+      [Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST, 'FIRST'],
+      [Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST, 'LAST']
+    ];
     this.setHelpUrl(Blockly.Msg.TEXT_INDEXOF_HELPURL);
     this.setColour(Blockly.Blocks.texts.HUE);
     this.setOutput(true, 'Number');
@@ -345,12 +338,13 @@ Blockly.Blocks['text_charAt'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.WHERE_OPTIONS =
-        [[Blockly.Msg.TEXT_CHARAT_FROM_START, 'FROM_START'],
-         [Blockly.Msg.TEXT_CHARAT_FROM_END, 'FROM_END'],
-         [Blockly.Msg.TEXT_CHARAT_FIRST, 'FIRST'],
-         [Blockly.Msg.TEXT_CHARAT_LAST, 'LAST'],
-         [Blockly.Msg.TEXT_CHARAT_RANDOM, 'RANDOM']];
+    this.WHERE_OPTIONS = [
+      [Blockly.Msg.TEXT_CHARAT_FROM_START, 'FROM_START'],
+      [Blockly.Msg.TEXT_CHARAT_FROM_END, 'FROM_END'],
+      [Blockly.Msg.TEXT_CHARAT_FIRST, 'FIRST'],
+      [Blockly.Msg.TEXT_CHARAT_LAST, 'LAST'],
+      [Blockly.Msg.TEXT_CHARAT_RANDOM, 'RANDOM']
+    ];
     this.setHelpUrl(Blockly.Msg.TEXT_CHARAT_HELPURL);
     this.setColour(Blockly.Blocks.texts.HUE);
     this.setOutput(true, 'String');
@@ -444,14 +438,16 @@ Blockly.Blocks['text_getSubstring'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this['WHERE_OPTIONS_1'] =
-        [[Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_START, 'FROM_START'],
-         [Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_END, 'FROM_END'],
-         [Blockly.Msg.TEXT_GET_SUBSTRING_START_FIRST, 'FIRST']];
-    this['WHERE_OPTIONS_2'] =
-        [[Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_START, 'FROM_START'],
-         [Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_END, 'FROM_END'],
-         [Blockly.Msg.TEXT_GET_SUBSTRING_END_LAST, 'LAST']];
+    this['WHERE_OPTIONS_1'] = [
+      [Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_START, 'FROM_START'],
+      [Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_END, 'FROM_END'],
+      [Blockly.Msg.TEXT_GET_SUBSTRING_START_FIRST, 'FIRST']
+    ];
+    this['WHERE_OPTIONS_2'] = [
+      [Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_START, 'FROM_START'],
+      [Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_END, 'FROM_END'],
+      [Blockly.Msg.TEXT_GET_SUBSTRING_END_LAST, 'LAST']
+    ];
     this.setHelpUrl(Blockly.Msg.TEXT_GET_SUBSTRING_HELPURL);
     this.setColour(Blockly.Blocks.texts.HUE);
     this.appendValueInput('STRING')
@@ -552,10 +548,11 @@ Blockly.Blocks['text_changeCase'] = {
    * @this Blockly.Block
    */
   init: function() {
-    var OPERATORS =
-        [[Blockly.Msg.TEXT_CHANGECASE_OPERATOR_UPPERCASE, 'UPPERCASE'],
-         [Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE, 'LOWERCASE'],
-         [Blockly.Msg.TEXT_CHANGECASE_OPERATOR_TITLECASE, 'TITLECASE']];
+    var OPERATORS = [
+      [Blockly.Msg.TEXT_CHANGECASE_OPERATOR_UPPERCASE, 'UPPERCASE'],
+      [Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE, 'LOWERCASE'],
+      [Blockly.Msg.TEXT_CHANGECASE_OPERATOR_TITLECASE, 'TITLECASE']
+    ];
     this.setHelpUrl(Blockly.Msg.TEXT_CHANGECASE_HELPURL);
     this.setColour(Blockly.Blocks.texts.HUE);
     this.appendValueInput('TEXT')
@@ -572,10 +569,11 @@ Blockly.Blocks['text_trim'] = {
    * @this Blockly.Block
    */
   init: function() {
-    var OPERATORS =
-        [[Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH, 'BOTH'],
-         [Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT, 'LEFT'],
-         [Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT, 'RIGHT']];
+    var OPERATORS = [
+      [Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH, 'BOTH'],
+      [Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT, 'LEFT'],
+      [Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT, 'RIGHT']
+    ];
     this.setHelpUrl(Blockly.Msg.TEXT_TRIM_HELPURL);
     this.setColour(Blockly.Blocks.texts.HUE);
     this.appendValueInput('TEXT')
@@ -615,9 +613,10 @@ Blockly.Blocks['text_prompt_ext'] = {
    * @this Blockly.Block
    */
   init: function() {
-    var TYPES =
-        [[Blockly.Msg.TEXT_PROMPT_TYPE_TEXT, 'TEXT'],
-         [Blockly.Msg.TEXT_PROMPT_TYPE_NUMBER, 'NUMBER']];
+    var TYPES = [
+      [Blockly.Msg.TEXT_PROMPT_TYPE_TEXT, 'TEXT'],
+      [Blockly.Msg.TEXT_PROMPT_TYPE_NUMBER, 'NUMBER']
+    ];
     this.setHelpUrl(Blockly.Msg.TEXT_PROMPT_HELPURL);
     this.setColour(Blockly.Blocks.texts.HUE);
     // Assign 'this' to a variable for use in the closures below.
@@ -670,9 +669,12 @@ Blockly.Blocks['text_prompt'] = {
    * @this Blockly.Block
    */
   init: function() {
-    var TYPES =
-        [[Blockly.Msg.TEXT_PROMPT_TYPE_TEXT, 'TEXT'],
-         [Blockly.Msg.TEXT_PROMPT_TYPE_NUMBER, 'NUMBER']];
+    this.mixin(Blockly.Constants.Text.QUOTE_IMAGE_MIXIN);
+    var TYPES = [
+      [Blockly.Msg.TEXT_PROMPT_TYPE_TEXT, 'TEXT'],
+      [Blockly.Msg.TEXT_PROMPT_TYPE_NUMBER, 'NUMBER']
+    ];
+
     // Assign 'this' to a variable for use in the closures below.
     var thisBlock = this;
     this.setHelpUrl(Blockly.Msg.TEXT_PROMPT_HELPURL);
@@ -692,7 +694,6 @@ Blockly.Blocks['text_prompt'] = {
           Blockly.Msg.TEXT_PROMPT_TOOLTIP_NUMBER;
     });
   },
-  newQuote_: Blockly.Blocks['text'].newQuote_,
   updateType_: Blockly.Blocks['text_prompt_ext'].updateType_,
   mutationToDom: Blockly.Blocks['text_prompt_ext'].mutationToDom,
   domToMutation: Blockly.Blocks['text_prompt_ext'].domToMutation
@@ -784,3 +785,25 @@ Blockly.Blocks['text_reverse'] = {
     });
   }
 };
+
+/**
+ * Mixin to add a helper function that generates a FieldImage of an opening or
+ * closing double quote. The selected quote will be adapted for RTL blocks.
+ * @param {boolean} open If the image should be open (“ in LTR). Otherwise, a
+ *                       closing quote is used (” in LTR).
+ * @returns {!Blockly.FiledImage}
+ * @package
+ * @readonly
+ */
+Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
+  newQuote_: function(open) {
+    var dataUri = (open == this.RTL) ?
+      Blockly.Msg.OPENING_QUOTE_IMAGE :
+      Blockly.Msg.CLOSING_QUOTE_IMAGE;
+    return new Blockly.FieldImage(
+      dataUri,
+      Blockly.Msg.QUOTE_IMAGE_SIZE,
+      Blockly.Msg.QUOTE_IMAGE_SIZE, '"');
+  }
+};
+

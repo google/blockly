@@ -81,6 +81,13 @@ Blockly.BlockDragSurfaceSvg.prototype.container_ = null;
 Blockly.BlockDragSurfaceSvg.prototype.scale_ = 1;
 
 /**
+ * Cached value for the translation of the drag surface.
+ * @type {goog.math.Coordinate}
+ * @private
+ */
+Blockly.BlockDragSurfaceSvg.prototype.surfaceXY_ = null;
+
+/**
  * Create the drag surface and inject it into the container.
  */
 Blockly.BlockDragSurfaceSvg.prototype.createDom = function() {
@@ -109,6 +116,7 @@ Blockly.BlockDragSurfaceSvg.prototype.setBlocksAndShow = function(blocks) {
   // appendChild removes the blocks from the previous parent
   this.dragGroup_.appendChild(blocks);
   this.SVG_.style.display = 'block';
+  this.surfaceXY_ = new goog.math.Coordinate(0, 0);
 };
 
 /**
@@ -139,6 +147,38 @@ Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y, sc
 Blockly.BlockDragSurfaceSvg.prototype.translateSurface = function(x, y) {
   x *= this.scale_;
   y *= this.scale_;
+
+  this.surfaceXY_ = new goog.math.Coordinate(x, y);
+  // This is a work-around to prevent a the blocks from rendering
+  // fuzzy while they are being dragged on the drag surface.
+  x = x.toFixed(0);
+  y = y.toFixed(0);
+  this.SVG_.style.display = 'block';
+  Blockly.utils.setCssTransform(this.SVG_,
+      'translate3d(' + x + 'px, ' + y + 'px, 0px)');
+};
+
+/**
+ * Translate the entire drag surface by the given amount during a drag.
+ * We translate the drag surface instead of the blocks inside the surface
+ * so that the browser avoids repainting the SVG.
+ * Because of this, the drag coordinates must be adjusted by scale.
+ * @param {number} dx X translation delta for the entire surface.
+ * @param {number} dy Y translation delta for the entire surface.
+ * @package
+ */
+Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceBy = function(dx, dy) {
+  goog.asserts.assert(this.surfaceXY_,
+      'Cannot translate block drag surface by a delta when xy_ is null');
+
+  dx *= this.scale_;
+  dy *= this.scale_;
+
+  this.surfaceXY_.x += dx;
+  this.surfaceXY_.y += dy;
+
+  var x = this.surfaceXY_.x;
+  var y = this.surfaceXY_.y;
   // This is a work-around to prevent a the blocks from rendering
   // fuzzy while they are being dragged on the drag surface.
   x = x.toFixed(0);
@@ -188,4 +228,5 @@ Blockly.BlockDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   this.SVG_.style.display = 'none';
   goog.asserts.assert(this.dragGroup_.childNodes.length == 0,
     'Drag group was not cleared.');
+  this.surfaceXY_ = null;
 };

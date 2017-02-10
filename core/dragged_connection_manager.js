@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview
+ * @fileoverview Class that controls updates to connections during drags.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
@@ -28,65 +28,135 @@ goog.provide('Blockly.DraggedConnectionManager');
 
 goog.require('Blockly.RenderedConnection');
 
+goog.require('goog.math.Coordinate');
+
+
 /**
- * TODO: Doc
+ * Class that controls updates to connections during drags.  It is primarily
+ * responsible for finding the closest eligible connection and highlighting or
+ * unhiglighting it as needed during a drag.
+ * @param {!Blockly.BlockSvg} block The top block in the stack being dragged.
  * @constructor
  */
 Blockly.DraggedConnectionManager = function(block) {
+  /**
+   * The top block in the stack being dragged.
+   * Does not change during a drag.
+   * @type {!Blockly.Block}
+   * @private
+   */
   this.topBlock_ = block;
 
-  Blockly.selected = block;
+  /**
+   * The workspace on which these connections are being dragged.
+   * Does not change during a drag.
+   * @type {!Blockly.WorkspaceSvg}
+   * @private
+   */
   this.workspace_ = block.workspace;
 
+  /**
+   * The connections on the dragging blocks that are available to connect to
+   * other blocks.  This includes all open connections on the top block, as well
+   * as the last connection on the block stack.
+   * Does not change during a drag.
+   * @type {!Array.<!Blockly.RenderedConnection>}
+   * @private
+   */
   this.availableConnections_ = [];
-  this.availableConnectionsCached_ = false;
 
-  this.allDraggedConnections_ = [];
-
+  /**
+   * The connection that this block would connect to if released immediately.
+   * Updated on every mouse move.
+   * @type {Blockly.RenderedConnection}
+   * @private
+   */
   this.closestConnection_ = null;
 
+  /**
+   * The connection that would connect to this.closestConnection_ if this block
+   * were released immediately.
+   * Updated on every mouse move.
+   * @type {Blockly.RenderedConnection}
+   * @private
+   */
   this.localConnection_ = null;
 
-  this.radiusConnection_ = -1;
+  /**
+   * The distance between this.closestConnection_ and this.localConnection_.
+   * Updated on every mouse move.
+   * @type {number}
+   * @private
+   */
+  this.radiusConnection_ = 0;
 
-  this.wouldDeleteBlock_ = false;
-
-  this.setAvailableConnections();
+  this.setAvailableConnections_();
+  Blockly.selected = block;
 };
 
-Blockly.DraggedConnectionManager.prototype.setAvailableConnections = function() {
-  if (!this.availableConnectionsCached_) {
-    // TODO: remove?
-    this.availableConnections_ = this.topBlock_.getConnections_(false);
-    // Also check the last connection on this stack
-    var lastOnStack = this.topBlock_.lastConnectionInStack_();
-    if (lastOnStack && lastOnStack != this.topBlock_.nextConnection) {
-      this.availableConnections_.push(lastOnStack);
+/**
+ * Update highlighted connections and the cursor based on the most recent move
+ * event.
+ * @param {!Event} e Mouse move event to respond to.
+ * @param {!goog.math.Coordinate} dxy Position relative to drag start.
+ */
+Blockly.DraggedConnectionManager.prototype.update = function(e, dxy) {
+  var oldClosestConnection = this.closestConnection_;
+  var closestConnectionChanged = this.updateClosest_(dxy);
+
+  if (closestConnectionChanged) {
+    if (oldClosestConnection) {
+      oldClosestConnection.unhighlight();
     }
-    this.availableConnectionsCached_ = true;
-  } else {
-    console.trace('Tried to set available connections too many times.');
+  }
+
+  var wouldDeleteBlock = this.updateCursor_(e);
+
+  if (!wouldDeleteBlock && closestConnectionChanged &&
+      this.closestConnection_) {
+    this.addConnectionHighlighting();
   }
 };
 
-Blockly.DraggedConnectionManager.prototype.getAvailableConnections = function() {
-  return this.availableConnections_;
+/**
+ * Remove highlighting from the currently highlighted connection, if it exists.
+ */
+Blockly.DraggedConnectionManager.prototype.removeConnectionHighlighting = function() {
+  if (this.closestConnection_) {
+    this.closestConnection_.unhighlight();
+  }
 };
 
-Blockly.DraggedConnectionManager.prototype.addDraggedConnections = function(block) {
-  this.allDraggedConnections_ = this.allDraggedConnections_.concat(block.getConnections_(true));
+/**
+ * Add highlighting to the closest connection, if it exists.
+ */
+Blockly.DraggedConnectionManager.prototype.addConnectionHighlighting = function() {
+  if (this.closestConnection_) {
+    this.closestConnection_.highlight();
+  }
 };
 
-Blockly.DraggedConnectionManager.prototype.clearDraggedConnections = function() {
-  this.allDraggedConnections_ = [];
+/**
+ * Populate the list of available connections on this block stack.  This should
+ * only be called once, at the beginning of a drag.
+ * @private
+ */
+Blockly.DraggedConnectionManager.prototype.setAvailableConnections_ = function() {
+  this.availableConnections_ = this.topBlock_.getConnections_(false);
+  // Also check the last connection on this stack
+  var lastOnStack = this.topBlock_.lastConnectionInStack_();
+  if (lastOnStack && lastOnStack != this.topBlock_.nextConnection) {
+    this.availableConnections_.push(lastOnStack);
+  }
 };
 
-Blockly.DraggedConnectionManager.prototype.getDraggedConnections = function() {
-  return this.allDraggedConnections_;
-};
-
-Blockly.DraggedConnectionManager.prototype.updateClosestConnection = function(e,
-    dxy) {
+/**
+ * Find the new closest connection, and update internal state in response.
+ * @param {!goog.math.Coordinate} dxy Position relative to the drag start.
+ * @return {boolean} Whether the closest connection has changed.
+ * @private
+ */
+Blockly.DraggedConnectionManager.prototype.updateClosest_ = function(dxy) {
   var oldClosestConnection = this.closestConnection_;
 
   this.closestConnection_ = null;
@@ -101,37 +171,8 @@ Blockly.DraggedConnectionManager.prototype.updateClosestConnection = function(e,
       this.radiusConnection_ = neighbour.radius;
     }
   }
-
-  var closestConnectionChanged =
-      oldClosestConnection != this.closestConnection_;
-
-  if (closestConnectionChanged) {
-    if (oldClosestConnection) {
-      oldClosestConnection.unhighlight();
-    }
-  }
-
-  var wouldDeleteBlock = this.updateCursor(e);
-
-  if (!wouldDeleteBlock && closestConnectionChanged &&
-      this.closestConnection_) {
-    this.closestConnection_.highlight();
-  }
-
+  return oldClosestConnection != this.closestConnection_;
 };
-
-Blockly.DraggedConnectionManager.prototype.removeConnectionHighlighting = function() {
-  if (this.closestConnection_) {
-    this.closestConnection_.unhighlight();
-  }
-};
-
-Blockly.DraggedConnectionManager.prototype.addConnectionHighlighting = function() {
-  if (this.closestConnection_) {
-    this.closestConnection_.highlight();
-  }
-};
-
 
 /**
  * Provide visual indication of whether the block will be deleted if
@@ -141,8 +182,9 @@ Blockly.DraggedConnectionManager.prototype.addConnectionHighlighting = function(
  * @param {!Event} e Mouse move event.
  * @return {boolean} True if the block would be deleted if dropped here,
  *     otherwise false.
+ * @private
  */
-Blockly.DraggedConnectionManager.prototype.updateCursor = function(e) {
+Blockly.DraggedConnectionManager.prototype.updateCursor_ = function(e) {
   var deleteArea = this.workspace_.isDeleteArea(e);
   var wouldConnect = this.closestConnection_ &&
       deleteArea != Blockly.DELETE_AREA_TOOLBOX;

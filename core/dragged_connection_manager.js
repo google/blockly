@@ -218,4 +218,5 @@ Blockly.DraggedConnectionManager.prototype.updateClosest_ = function(dxy) {
     }
   }
   return oldClosestConnection != this.closestConnection_;
+
 };

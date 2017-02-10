@@ -700,16 +700,21 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
 
   var deleteArea = this.workspace.isDeleteArea(e);
 
+
+  var manager = Blockly.draggedConnectionManager_;
+  var highlightedConnection = manager.closestConnection_;
+  var localConnection = manager.localConnection_;
+
   // Connect to a nearby block, but not if it's over the toolbox.
-  if (Blockly.selected && Blockly.highlightedConnection_ &&
+  if (Blockly.selected && highlightedConnection &&
       deleteArea != Blockly.DELETE_AREA_TOOLBOX) {
     // Connect two blocks together.
-    Blockly.localConnection_.connect(Blockly.highlightedConnection_);
+    localConnection.connect(highlightedConnection);
     if (this.rendered) {
       // Trigger a connection animation.
       // Determine which connection is inferior (lower in the source stack).
-      var inferiorConnection = Blockly.localConnection_.isSuperior() ?
-          Blockly.highlightedConnection_ : Blockly.localConnection_;
+      var inferiorConnection = localConnection.isSuperior() ?
+          highlightedConnection : localConnection;
       inferiorConnection.getSourceBlock().connectionUiEffect();
     }
     if (this.workspace.trashcan) {
@@ -728,10 +733,6 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     }
 
     Blockly.selected.dispose(false, true);
-  }
-  if (Blockly.highlightedConnection_) {
-    Blockly.highlightedConnection_.unhighlight();
-    Blockly.highlightedConnection_ = null;
   }
   if (!Blockly.WidgetDiv.isVisible()) {
     Blockly.Events.setGroup(false);
@@ -984,6 +985,14 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       }
       this.setDragging_(true);
       this.moveToDragSurface_();
+
+
+      if (!Blockly.draggedConnectionManager_) {
+        Blockly.draggedConnectionManager_ = new Blockly.DraggedConnectionManager();
+        console.log('creating new connection manager');
+      }
+      var manager = Blockly.draggedConnectionManager_;
+      manager.setAvailableConnections(this);
     }
   }
   if (Blockly.dragMode_ == Blockly.DRAG_FREE) {
@@ -1003,44 +1012,48 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
           goog.math.Coordinate.sum(commentData, dxy));
     }
 
-    // Check to see if any of this block's connections are within range of
-    // another block's connection.
-    var myConnections = this.getConnections_(false);
-    // Also check the last connection on this stack
-    var lastOnStack = this.lastConnectionInStack_();
-    if (lastOnStack && lastOnStack != this.nextConnection) {
-      myConnections.push(lastOnStack);
-    }
-    var closestConnection = null;
-    var localConnection = null;
-    var radiusConnection = Blockly.SNAP_RADIUS;
-    for (var i = 0; i < myConnections.length; i++) {
-      var myConnection = myConnections[i];
-      var neighbour = myConnection.closest(radiusConnection, dxy);
-      if (neighbour.connection) {
-        closestConnection = neighbour.connection;
-        localConnection = myConnection;
-        radiusConnection = neighbour.radius;
-      }
-    }
+    var manager = Blockly.draggedConnectionManager_;
+    manager.updateClosestConnection(e, dxy);
 
-    // Remove connection highlighting if needed.
-    if (Blockly.highlightedConnection_ &&
-        Blockly.highlightedConnection_ != closestConnection) {
-      Blockly.highlightedConnection_.unhighlight();
-      Blockly.highlightedConnection_ = null;
-      Blockly.localConnection_ = null;
-    }
+    // // Check to see if any of this block's connections are within range of
+    // // another block's connection.
+    // var myConnections = this.getConnections_(false);
+    // // Also check the last connection on this stack
+    // var lastOnStack = this.lastConnectionInStack_();
+    // if (lastOnStack && lastOnStack != this.nextConnection) {
+    //   myConnections.push(lastOnStack);
+    // }
 
-    var wouldDeleteBlock = this.updateCursor_(e, closestConnection);
+    // var closestConnection = null;
+    // var localConnection = null;
+    // var radiusConnection = Blockly.SNAP_RADIUS;
+    // for (var i = 0; i < myConnections.length; i++) {
+    //   var myConnection = myConnections[i];
+    //   var neighbour = myConnection.closest(radiusConnection, dxy);
+    //   if (neighbour.connection) {
+    //     closestConnection = neighbour.connection;
+    //     localConnection = myConnection;
+    //     radiusConnection = neighbour.radius;
+    //   }
+    // }
 
-    // Add connection highlighting if needed.
-    if (!wouldDeleteBlock && closestConnection &&
-        closestConnection != Blockly.highlightedConnection_) {
-      closestConnection.highlight();
-      Blockly.highlightedConnection_ = closestConnection;
-      Blockly.localConnection_ = localConnection;
-    }
+    // // Remove connection highlighting if needed.
+    // if (Blockly.highlightedConnection_ &&
+    //     Blockly.highlightedConnection_ != closestConnection) {
+    //   Blockly.highlightedConnection_.unhighlight();
+    //   Blockly.highlightedConnection_ = null;
+    //   Blockly.localConnection_ = null;
+    // }
+
+    // var wouldDeleteBlock = this.updateCursor_(e, closestConnection);
+
+    // // Add connection highlighting if needed.
+    // if (!wouldDeleteBlock && closestConnection &&
+    //     closestConnection != Blockly.highlightedConnection_) {
+    //   closestConnection.highlight();
+    //   Blockly.highlightedConnection_ = closestConnection;
+    //   Blockly.localConnection_ = localConnection;
+    // }
   }
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();
@@ -1070,7 +1083,7 @@ Blockly.BlockSvg.prototype.updateCursor_ = function(e, closestConnection) {
   if (showDeleteCursor) {
     Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
                       'blocklyDraggingDelete');
-    
+
     if (this.workspace.toolbox_) {
       // Change the cursor to a hand with an 'x'
       this.workspace.toolbox_.addDeleteStyle();

@@ -1190,6 +1190,12 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     Blockly.dragMode_ = Blockly.DRAG_FREE;
     block.setDragging_(true);
     block.moveToDragSurface_();
+    if (!Blockly.draggedConnectionManager_) {
+      Blockly.draggedConnectionManager_ = new Blockly.DraggedConnectionManager();
+      console.log('creating new connection manager');
+    }
+    var manager = Blockly.draggedConnectionManager_;
+    manager.setAvailableConnections(block);
   };
 };
 

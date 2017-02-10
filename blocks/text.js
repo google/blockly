@@ -791,7 +791,7 @@ Blockly.Blocks['text_reverse'] = {
  * closing double quote. The selected quote will be adapted for RTL blocks.
  * @param {boolean} open If the image should be open (“ in LTR). Otherwise, a
  *                       closing quote is used (” in LTR).
- * @returns {!Blockly.FiledImage}
+ * @returns {!Blockly.FieldImage}
  * @package
  * @readonly
  */

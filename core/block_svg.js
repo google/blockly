@@ -987,7 +987,8 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
 
 
       if (!Blockly.draggedConnectionManager_) {
-        Blockly.draggedConnectionManager_ = new Blockly.DraggedConnectionManager(this);
+        Blockly.draggedConnectionManager_ =
+            new Blockly.DraggedConnectionManager(this);
       }
     }
   }
@@ -1008,7 +1009,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
           goog.math.Coordinate.sum(commentData, dxy));
     }
 
-    Blockly.draggedConnectionManager_.updateClosestConnection(e, dxy);
+    Blockly.draggedConnectionManager_.update(e, dxy);
   }
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();

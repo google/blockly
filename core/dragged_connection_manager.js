@@ -32,10 +32,11 @@ goog.require('Blockly.RenderedConnection');
  * TODO: Doc
  * @constructor
  */
-Blockly.DraggedConnectionManager = function() {
-  this.topBlock_ = null;
+Blockly.DraggedConnectionManager = function(block) {
+  this.topBlock_ = block;
 
-  this.workspace_ = null;
+  Blockly.selected = block;
+  this.workspace_ = block.workspace;
 
   this.availableConnections_ = [];
   this.availableConnectionsCached_ = false;
@@ -49,20 +50,17 @@ Blockly.DraggedConnectionManager = function() {
   this.radiusConnection_ = -1;
 
   this.wouldDeleteBlock_ = false;
+
+  this.setAvailableConnections();
 };
 
-Blockly.DraggedConnectionManager.prototype.setAvailableConnections = function(
-    block) {
+Blockly.DraggedConnectionManager.prototype.setAvailableConnections = function() {
   if (!this.availableConnectionsCached_) {
-    console.trace('Setting available connections.');
     // TODO: remove?
-    Blockly.selected = block;
-    this.workspace_ = block.workspace;
-    this.topBlock_ = block;
-    this.availableConnections_ = block.getConnections_(false);
+    this.availableConnections_ = this.topBlock_.getConnections_(false);
     // Also check the last connection on this stack
-    var lastOnStack = block.lastConnectionInStack_();
-    if (lastOnStack && lastOnStack != block.nextConnection) {
+    var lastOnStack = this.topBlock_.lastConnectionInStack_();
+    if (lastOnStack && lastOnStack != this.topBlock_.nextConnection) {
       this.availableConnections_.push(lastOnStack);
     }
     this.availableConnectionsCached_ = true;

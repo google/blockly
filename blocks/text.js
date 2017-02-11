@@ -43,35 +43,30 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for text value
   {
     "type": "text",
-    "message0": "%1 %2 %3",
-    "args0": [
-      {
-        "type": "field_image",
-        "src": "%{BKY_OPENING_QUOTE_IMAGE}",
-        "width": "%{BKY_QUOTE_IMAGE_SIZE}",
-        "height": "%{BKY_QUOTE_IMAGE_SIZE}",
-        "alt": "\u201C"
-      },
-      {
-        "type": "field_input",
-        "name": "TEXT"
-      },
-      {
-        "type": "field_image",
-        "src": "%{BKY_CLOSING_QUOTE_IMAGE}",
-        "width": "%{BKY_QUOTE_IMAGE_SIZE}",
-        "height": "%{BKY_QUOTE_IMAGE_SIZE}",
-        "alt": "\u201D"
-      }
-    ],
+    "message0": "%1",
+    "args0": [{
+      "type": "field_input",
+      "name": "TEXT"
+    }],
     "output": "String",
     "colour": "%{BKY_TEXTS_HUE}",
     "helpUrl": "%{BKY_TEXT_TEXT_HELPURL}",
     "tooltip": "%{BKY_TEXT_TEXT_TOOLTIP}",
-    "extensions": ["parent_tooltip_when_inline"]
+    "extensions": [
+      "text_quotes",
+      "parent_tooltip_when_inline"
+    ]
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
+/** Wraps TEXT field with images of double quote characters. */
+Blockly.Constants.Text.textQuotesExtension = function() {
+  this.mixin(Blockly.Constants.Text.QUOTE_IMAGE_MIXIN);
+  this.quoteField_('TEXT');
+};
+
+Blockly.Extensions.register('text_quotes',
+  Blockly.Constants.Text.textQuotesExtension);
 
 Blockly.Blocks['text_join'] = {
   /**
@@ -787,23 +782,68 @@ Blockly.Blocks['text_reverse'] = {
 };
 
 /**
- * Mixin to add a helper function that generates a FieldImage of an opening or
- * closing double quote. The selected quote will be adapted for RTL blocks.
- * @param {boolean} open If the image should be open (“ in LTR). Otherwise, a
- *                       closing quote is used (” in LTR).
- * @returns {!Blockly.FieldImage}
+ *
+ * @mixin
  * @package
  * @readonly
  */
 Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
+  /**
+   * Image data URI of an LTR opening double quote (same as RTL closing couble quote).
+   * @readonly
+   */
+  QUOTE_IMAGE_LEFT_DATAURI:
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAAn0lEQVQI1z3OMa5BURSF4f/cQhAKjUQhuQmFNwGJEUi0RKN5rU7FHKhpjEH3TEMtkdBSCY1EIv8r7nFX9e29V7EBAOvu7RPjwmWGH/VuF8CyN9/OAdvqIXYLvtRaNjx9mMTDyo+NjAN1HNcl9ZQ5oQMM3dgDUqDo1l8DzvwmtZN7mnD+PkmLa+4mhrxVA9fRowBWmVBhFy5gYEjKMfz9AylsaRRgGzvZAAAAAElFTkSuQmCC',
+  /**
+   * Image data URI of an LTR closing double quote (same as RTL opening couble quote).
+   * @readonly
+   */
+  QUOTE_IMAGE_RIGHT_DATAURI:
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAAqUlEQVQI1z3KvUpCcRiA8ef9E4JNHhI0aFEacm1o0BsI0Slx8wa8gLauoDnoBhq7DcfWhggONDmJJgqCPA7neJ7p934EOOKOnM8Q7PDElo/4x4lFb2DmuUjcUzS3URnGib9qaPNbuXvBO3sGPHJDRG6fGVdMSeWDP2q99FQdFrz26Gu5Tq7dFMzUvbXy8KXeAj57cOklgA+u1B5AoslLtGIHQMaCVnwDnADZIFIrXsoXrgAAAABJRU5ErkJggg==',
+  /**
+   * Pixel width of QUOTE_IMAGE_LEFT_DATAURI and QUOTE_IMAGE_RIGHT_DATAURI.
+   * @readonly
+   */
+  QUOTE_IMAGE_WIDTH: 12,
+  /**
+   * Pixel height of QUOTE_IMAGE_LEFT_DATAURI and QUOTE_IMAGE_RIGHT_DATAURI.
+   * @readonly
+   */
+  QUOTE_IMAGE_HEIGHT: 12,
+
+  /**
+   * Inserts appropriate quote images before and after the named field.
+   */
+  quoteField_: function(fieldName) {
+    for (var i = 0, input; input = this.inputList[i]; i++) {
+      for (var j = 0, field; field = input.fieldRow[j]; j++) {
+        if (fieldName == field.name) {
+          input.insertFieldAt(j, this.newQuote_(true));
+          input.insertFieldAt(j + 2, this.newQuote_(false));
+          return;
+        }
+      }
+    }
+    console.warn('field named "' + fieldName + '" not found in ' + this.toDevString());
+  },
+
+  /**
+   * A helper function that generates a FieldImage of an opening or
+   * closing double quote. The selected quote will be adapted for RTL blocks.
+   * @param {boolean} open If the image should be open quote (“ in LTR).
+   *                       Otherwise, a closing quote is used (” in LTR).
+   * @returns {!Blockly.FieldImage}
+   */
   newQuote_: function(open) {
-    var dataUri = (open == this.RTL) ?
-      Blockly.Msg.OPENING_QUOTE_IMAGE :
-      Blockly.Msg.CLOSING_QUOTE_IMAGE;
+    var isLeft = (open == this.RTL);
+    var dataUri = isLeft ?
+      this.QUOTE_IMAGE_LEFT_DATAURI :
+      this.QUOTE_IMAGE_RIGHT_DATAURI;
     return new Blockly.FieldImage(
       dataUri,
-      Blockly.Msg.QUOTE_IMAGE_SIZE,
-      Blockly.Msg.QUOTE_IMAGE_SIZE, '"');
+      this.QUOTE_IMAGE_WIDTH,
+      this.QUOTE_IMAGE_HEIGHT,
+      isLeft ? '\u201C' : '\u201D');
   }
 };
 

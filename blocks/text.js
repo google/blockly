@@ -46,7 +46,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "message0": "%1",
     "args0": [{
       "type": "field_input",
-      "name": "TEXT"
+      "name": "TEXT",
+      "text": ""
     }],
     "output": "String",
     "colour": "%{BKY_TEXTS_HUE}",

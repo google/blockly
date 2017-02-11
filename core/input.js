@@ -85,7 +85,7 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
 /**
  * Inserts a field (or label from string), and all prefix and suffix fields, at
  * the location of the input's field row.
- * @param {index}
+ * @param {number} index The index at which to insert field.
  * @param {string|!Blockly.Field} field Something to add as a field.
  * @param {string=} opt_name Language-neutral identifier which may used to find
  *     this field again.  Should be unique to the host block.

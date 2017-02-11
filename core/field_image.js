@@ -45,7 +45,7 @@ Blockly.FieldImage = function(src, width, height, opt_alt) {
   this.sourceBlock_ = null;
 
   // Replace any message references in the arguments.
-  src = Blockly.utils.replaceMessageReferences(src)
+  src = Blockly.utils.replaceMessageReferences(src);
   if (goog.isString(height)) {
     height = Blockly.utils.replaceMessageReferences(height);
   }
@@ -86,9 +86,13 @@ Blockly.FieldImage.prototype.init = function() {
     this.fieldGroup_.style.display = 'none';
   }
   /** @type {SVGElement} */
-  this.imageElement_ = Blockly.utils.createSvgElement('image',
-      {'height': this.height_ + 'px',
-       'width': this.width_ + 'px'}, this.fieldGroup_);
+  this.imageElement_ = Blockly.utils.createSvgElement(
+    'image',
+    {
+      'height': this.height_ + 'px',
+      'width': this.width_ + 'px'
+    },
+    this.fieldGroup_);
   this.setValue(this.src_);
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
 

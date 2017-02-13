@@ -201,7 +201,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   {
     "type": "logic_null",
     "message0": "%{BKY_LOGIC_NULL}",
-    "output": "null",
+    "output": null,
     "colour": "%{BKY_LOGIC_HUE}",
     "tooltip": "%{BKY_LOGIC_NULL_TOOLTIP}",
     "helpUrl": "%{BKY_LOGIC_NULL_HELPURL}"

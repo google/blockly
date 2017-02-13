@@ -28,6 +28,7 @@
 goog.provide('Blockly.Gesture');
 
 goog.require('goog.math.Coordinate');
+goog.require('Blockly.DraggedConnectionManager');
 goog.require('goog.asserts');
 
 /**
@@ -146,6 +147,10 @@ Blockly.Gesture = function(e, touchId) {
 
   // TODO: Doc
   this.onUpWrapper_ = null;
+
+  // TODO: Doc
+  // Only non-null if this is a block drag.
+  this.draggedConnectionManager_ = null;
 };
 
 Blockly.Gesture.prototype.dispose = function() {
@@ -277,8 +282,8 @@ Blockly.Gesture.prototype.endGesture = function(e) {
 
 Blockly.Gesture.prototype.doStart = function(e) {
   // TODO: Blockly.longStart_()
-  this.workspace.updateScreenCalculationsIfScrolled();
-  this.workspace.markFocused();
+  this.startWorkspace_.updateScreenCalculationsIfScrolled();
+  this.startWorkspace_.markFocused();
   if (this.startBlock_) {
     this.startBlock_.select();
   }
@@ -323,6 +328,8 @@ Blockly.Gesture.prototype.startBlockDrag = function() {
   }
   // TODO: Make setDragging_ package.
   this.startBlock_.setDragging_(true);
+  this.draggedConnectionManager_ = new Blockly.DraggedConnectionManager(
+      this.startBlock_);
   // TODO: Consider where moveToDragSurface should live.
   this.startBlock_.moveToDragSurface_();
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
@@ -348,6 +355,8 @@ Blockly.Gesture.prototype.dragBlock = function() {
         this.currentDragDeltaXY_.x, this.currentDragDeltaXY_.y);
   }
   // TODO: Handle the case when we aren't using the drag surface.
+  this.draggedConnectionManager_.update(this.mostRecentEvent_,
+      this.currentDragDeltaXY_);
 };
 
 // Workspace drags

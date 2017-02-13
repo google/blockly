@@ -623,6 +623,22 @@ Blockly.Connection.prototype.getShadowDom = function() {
 };
 
 /**
+ * Find all nearby compatible connections to this connection.
+ * Type checking does not apply, since this function is used for bumping.
+ *
+ * Headless configurations (the default) do not have neighboring connection,
+ * and always return an empty list (the default).
+ * {@link Blockly.RenderedConnection} overrides this behavior with a list
+ * computed from the rendered positioning.
+ * @param {number} maxLimit The maximum radius to another connection.
+ * @return {!Array.<!Blockly.Connection>} List of connections.
+ * @private
+ */
+Blockly.Connection.prototype.neighbours_ = function(/* maxLimit */) {
+  return [];
+};
+
+/**
  * This method returns a string describing this Connection in developer terms
  * (English only). Intended to on be used in console logs and errors.
  * @return {string} The description.

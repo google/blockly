@@ -74,6 +74,7 @@ Blockly.mainWorkspace = null;
 Blockly.selected = null;
 
 /**
+ * TODO: Consider deleting this.
  * Currently highlighted connection (during a drag).
  * @type {Blockly.Connection}
  * @private
@@ -81,6 +82,7 @@ Blockly.selected = null;
 Blockly.highlightedConnection_ = null;
 
 /**
+ * TODO: Consider deleting this.
  * Connection on dragged block that matches the highlighted connection.
  * @type {Blockly.Connection}
  * @private
@@ -88,6 +90,7 @@ Blockly.highlightedConnection_ = null;
 Blockly.localConnection_ = null;
 
 /**
+ * TODO: Consider deleting this.
  * All of the connections on blocks that are currently being dragged.
  * @type {!Array.<!Blockly.Connection>}
  * @private
@@ -109,6 +112,7 @@ Blockly.clipboardXml_ = null;
 Blockly.clipboardSource_ = null;
 
 /**
+ * TODO: Consider deleting this.
  * Is the mouse dragging a block?
  * DRAG_NONE - No drag operation.
  * DRAG_STICKY - Still inside the sticky DRAG_RADIUS.

@@ -330,6 +330,7 @@ Blockly.Block.prototype.lastConnectionInStack_ = function() {
  * connected should not coincidentally line up on screen.
  * @private
  */
+// TODO: Refactor to return early in headless mode.
 Blockly.Block.prototype.bumpNeighbours_ = function() {
   if (!this.workspace) {
     return;  // Deleted block.

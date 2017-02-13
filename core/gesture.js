@@ -51,6 +51,8 @@ Blockly.Gesture = function(e, touchId) {
    * @private
    */
   this.mouseDownXY_ = null;
+
+  this.blockRelativeToSurfaceXY_ = null;
   /**
    * @type {goog.math.Coordinate}
    * @private
@@ -318,6 +320,7 @@ Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
 // Block drags
 Blockly.Gesture.prototype.startBlockDrag = function() {
   console.log('start block drag');
+  this.blockRelativeToSurfaceXY_ = this.startBlock_.getRelativeToSurfaceXY();
   // Workspace.startDrag just records the start position, which we already know.
   // TODO: Figure out where to get the list of bubbles to move when dragging.
   this.startWorkspace_.setResizesEnabled(false);
@@ -343,6 +346,7 @@ Blockly.Gesture.prototype.endBlockDrag = function() {
   // TODO: Consider where moveOffDragSurface should live.
   this.startBlock_.moveOffDragSurface_();
   this.startBlock_.setDragging_(false);
+  // this.maybeConnect
   this.startBlock_.render();
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   //Blockly.terminateDrag_();
@@ -351,8 +355,10 @@ Blockly.Gesture.prototype.endBlockDrag = function() {
 Blockly.Gesture.prototype.dragBlock = function() {
   if (this.startBlock_.useDragSurface_) {
     console.log(this.currentDragDeltaXY_);
+    var newLoc = goog.math.Coordinate.sum(this.blockRelativeToSurfaceXY_,
+      this.currentDragDeltaXY_);
     this.startWorkspace_.blockDragSurface_.translateSurface(
-        this.currentDragDeltaXY_.x, this.currentDragDeltaXY_.y);
+        newLoc.x, newLoc.y);
   }
   // TODO: Handle the case when we aren't using the drag surface.
   this.draggedConnectionManager_.update(this.mostRecentEvent_,

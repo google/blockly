@@ -63,7 +63,7 @@ Blockly.DraggedConnectionManager = function(block) {
    * @type {!Array.<!Blockly.RenderedConnection>}
    * @private
    */
-  this.availableConnections_ = [];
+  this.availableConnections_ = this.initAvailableConnections_();
 
   /**
    * The connection that this block would connect to if released immediately.
@@ -90,7 +90,6 @@ Blockly.DraggedConnectionManager = function(block) {
    */
   this.radiusConnection_ = 0;
 
-  this.setAvailableConnections_();
   Blockly.selected = block;
 };
 
@@ -104,10 +103,8 @@ Blockly.DraggedConnectionManager.prototype.update = function(e, dxy) {
   var oldClosestConnection = this.closestConnection_;
   var closestConnectionChanged = this.updateClosest_(dxy);
 
-  if (closestConnectionChanged) {
-    if (oldClosestConnection) {
-      oldClosestConnection.unhighlight();
-    }
+  if (closestConnectionChanged && oldClosestConnection) {
+    oldClosestConnection.unhighlight();
   }
 
   var wouldDeleteBlock = this.updateCursor_(e);
@@ -139,15 +136,18 @@ Blockly.DraggedConnectionManager.prototype.addConnectionHighlighting = function(
 /**
  * Populate the list of available connections on this block stack.  This should
  * only be called once, at the beginning of a drag.
+ * @return {!Array.<!Blockly.RenderedConnection>} a list of available
+ *     connections.
  * @private
  */
-Blockly.DraggedConnectionManager.prototype.setAvailableConnections_ = function() {
-  this.availableConnections_ = this.topBlock_.getConnections_(false);
+Blockly.DraggedConnectionManager.prototype.initAvailableConnections_ = function() {
+  var available = this.topBlock_.getConnections_(false);
   // Also check the last connection on this stack
   var lastOnStack = this.topBlock_.lastConnectionInStack_();
   if (lastOnStack && lastOnStack != this.topBlock_.nextConnection) {
-    this.availableConnections_.push(lastOnStack);
+    available.push(lastOnStack);
   }
+  return available;
 };
 
 /**

@@ -137,6 +137,22 @@ Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y, sc
 };
 
 /**
+ * Translate the drag surface's SVG based on its internal state.
+ * @private
+ */
+Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
+  var x = this.surfaceXY_.x;
+  var y = this.surfaceXY_.y;
+  // This is a work-around to prevent a the blocks from rendering
+  // fuzzy while they are being dragged on the drag surface.
+  x = x.toFixed(0);
+  y = y.toFixed(0);
+  this.SVG_.style.display = 'block';
+  Blockly.utils.setCssTransform(this.SVG_,
+      'translate3d(' + x + 'px, ' + y + 'px, 0px)');
+};
+
+/**
  * Translate the entire drag surface during a drag.
  * We translate the drag surface instead of the blocks inside the surface
  * so that the browser avoids repainting the SVG.
@@ -149,13 +165,7 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurface = function(x, y) {
   y *= this.scale_;
 
   this.surfaceXY_ = new goog.math.Coordinate(x, y);
-  // This is a work-around to prevent a the blocks from rendering
-  // fuzzy while they are being dragged on the drag surface.
-  x = x.toFixed(0);
-  y = y.toFixed(0);
-  this.SVG_.style.display = 'block';
-  Blockly.utils.setCssTransform(this.SVG_,
-      'translate3d(' + x + 'px, ' + y + 'px, 0px)');
+  this.translateSurfaceInternal_();
 };
 
 /**
@@ -171,21 +181,10 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceBy = function(dx, dy) {
   goog.asserts.assert(this.surfaceXY_,
       'Cannot translate block drag surface by a delta when xy_ is null');
 
-  dx *= this.scale_;
-  dy *= this.scale_;
+  this.surfaceXY_.x += (dx * this.scale_);
+  this.surfaceXY_.y += (dy * this.scale_);
 
-  this.surfaceXY_.x += dx;
-  this.surfaceXY_.y += dy;
-
-  var x = this.surfaceXY_.x;
-  var y = this.surfaceXY_.y;
-  // This is a work-around to prevent a the blocks from rendering
-  // fuzzy while they are being dragged on the drag surface.
-  x = x.toFixed(0);
-  y = y.toFixed(0);
-  this.SVG_.style.display = 'block';
-  Blockly.utils.setCssTransform(this.SVG_,
-      'translate3d(' + x + 'px, ' + y + 'px, 0px)');
+  this.translateSurfaceInternal_();
 };
 
 /**

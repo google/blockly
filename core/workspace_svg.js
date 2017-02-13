@@ -128,6 +128,7 @@ Blockly.WorkspaceSvg.prototype.isFlyout = false;
 Blockly.WorkspaceSvg.prototype.isMutator = false;
 
 /**
+ * TODO: Consider deleting this.
  * Is this workspace currently being dragged around?
  * DRAG_NONE - No drag operation.
  * DRAG_BEGIN - Still inside the initial DRAG_RADIUS.

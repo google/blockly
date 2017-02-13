@@ -1169,7 +1169,9 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
               field = new Blockly.FieldColour(element['colour']);
               break;
             case 'field_variable':
-              field = new Blockly.FieldVariable(element['variable']);
+              var varname =
+                Blockly.utils.replaceMessageReferences(element['variable']);
+              field = new Blockly.FieldVariable(varname);
               break;
             case 'field_dropdown':
               field = new Blockly.FieldDropdown(element['options']);

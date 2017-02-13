@@ -309,7 +309,7 @@ Blockly.Block.prototype.getConnections_ = function() {
 /**
  * Walks down a stack of blocks and finds the last next connection on the stack.
  * @return {Blockly.Connection} The last next connection on the stack, or null.
- * @private
+ * @package
  */
 Blockly.Block.prototype.lastConnectionInStack_ = function() {
   var nextConnection = this.nextConnection;

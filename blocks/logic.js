@@ -86,7 +86,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "nextStatement": null,
     "colour": "%{BKY_LOGIC_HUE}",
     "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
-    "extensions": ["controls_if"]
+    "extensions": ["controls_if_mutator"]
   },
   // If/else block that does not use a mutator.
   {
@@ -480,7 +480,7 @@ Blockly.Constants.Logic.CONTROLS_IF_EXTENSION = function() {
   }.bind(this));
 };
 
-Blockly.Extensions.register('controls_if',
+Blockly.Extensions.register('controls_if_mutator',
   Blockly.Constants.Logic.CONTROLS_IF_EXTENSION);
 
 /**

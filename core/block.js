@@ -1220,18 +1220,10 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
  */
 Blockly.Block.newFieldImageFromJson_ = function(options) {
   var src = Blockly.utils.replaceMessageReferences(options['src']);
-  var width = options['width'];
-  if (goog.isString(width)) {
-    width = Number(Blockly.utils.replaceMessageReferences(width));
-  }
-  var height = options['height'];
-  if (goog.isString(height)) {
-    height = Number(Blockly.utils.replaceMessageReferences(height));
-  }
-  var alt = options['alt'];
-  if (goog.isString(alt)) {
-    alt = Blockly.utils.replaceMessageReferences(alt);
-  }
+  var width = Number(Blockly.utils.replaceMessageReferences(options['width']));
+  var height =
+    Number(Blockly.utils.replaceMessageReferences(options['height']));
+  var alt = Blockly.utils.replaceMessageReferences(options['alt']);
   return new Blockly.FieldImage(src, width, height, alt);
 };
 
@@ -1272,10 +1264,7 @@ Blockly.Block.newFieldTextInputFromJson_ = function(options) {
  * @private
  */
 Blockly.Block.newFieldVariableFromJson_ = function(options) {
-  var varname = options['variable'];
-  if (goog.isString(varname)) {
-    varname = Blockly.utils.replaceMessageReferences(varname);
-  }
+  var varname = Blockly.utils.replaceMessageReferences(options['variable']);
   return new Blockly.FieldVariable(varname);
 };
 

@@ -259,7 +259,7 @@ Blockly.utils.getRelativeXY.XY_2D_REGEX_ =
  *     context (scale...).
  * @return {!SVGElement} Newly created SVG element.
  */
-Blockly.utils.createSvgElement = function(name, attrs, parent, opt_workspace) {
+Blockly.utils.createSvgElement = function(name, attrs, parent /*, opt_workspace */) {
   var e = /** @type {!SVGElement} */ (
       document.createElementNS(Blockly.SVG_NS, name));
   for (var key in attrs) {
@@ -409,13 +409,17 @@ Blockly.utils.tokenizeInterpolation = function(message) {
 };
 
 /**
- * Replaces string table references in a message string. For example,
- * %{bky_my_msg} and %{BKY_MY_MSG} will both be replaced with the value in
- * Blockly.Msg['MY_MSG'].
- * @param {string} message Text which might contain string table references.
+ * Replaces string table references in a message, if the message is a string.
+ * For example, "%{bky_my_msg}" and "%{BKY_MY_MSG}" will both be replaced with
+ * the value in Blockly.Msg['MY_MSG'].
+ * @param {string|?} message Message, which may be a string that contains
+ *                           string table references.
  * @return {!string} String with message references replaced.
  */
 Blockly.utils.replaceMessageReferences = function(message) {
+  if (!goog.isString(message)) {
+    return message;
+  }
   var interpolatedResult = Blockly.utils.tokenizeInterpolation_(message, false);
   // When parseInterpolationTokens == false, interpolatedResult should be at
   // most length 1.

@@ -57,7 +57,7 @@ goog.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
  * Round angles to the nearest 15 degrees when using mouse.
  * Set to 0 to disable rounding.
  */
-Blockly.FieldAngle.ROUND = 15;
+Blockly.FieldAngle.ROUND = 1;
 
 /**
  * Half the width of protractor image.
@@ -155,7 +155,8 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
   this.line_ = Blockly.utils.createSvgElement('line',
       {'x1': Blockly.FieldAngle.HALF,
       'y1': Blockly.FieldAngle.HALF,
-      'class': 'blocklyAngleLine'}, svg);
+      'class': 'blocklyAngleLine',
+      'style': 'pointer-events: none;'}, svg);
   // Draw markers around the edge.
   for (var angle = 0; angle < 360; angle += 15) {
     Blockly.utils.createSvgElement('line', {

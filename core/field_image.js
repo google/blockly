@@ -35,26 +35,14 @@ goog.require('goog.userAgent');
 /**
  * Class for an image on a block.
  * @param {string} src The URL of the image.
- * @param {number|string} width Width of the image, possibly via reference.
- * @param {number|string} height Height of the image, possibly via reference.
+ * @param {number} width Width of the image.
+ * @param {number} height Height of the image.
  * @param {string=} opt_alt Optional alt text for when block is collapsed.
  * @extends {Blockly.Field}
  * @constructor
  */
 Blockly.FieldImage = function(src, width, height, opt_alt) {
   this.sourceBlock_ = null;
-
-  // Replace any message references in the arguments.
-  src = Blockly.utils.replaceMessageReferences(src);
-  if (goog.isString(height)) {
-    height = Blockly.utils.replaceMessageReferences(height);
-  }
-  if (goog.isString(width)) {
-    width = Blockly.utils.replaceMessageReferences(width);
-  }
-  if (goog.isString(opt_alt)) {
-    opt_alt = Blockly.utils.replaceMessageReferences(opt_alt);
-  }
 
   // Ensure height and width are numbers.  Strings are bad at math.
   this.height_ = Number(height);

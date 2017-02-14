@@ -1150,13 +1150,10 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
               input = this.appendDummyInput(element['name']);
               break;
             case 'field_label':
-              field = new Blockly.FieldLabel(element['text'], element['class']);
+              field = Blockly.Block.newFieldLabelFromJson_(element);
               break;
             case 'field_input':
-              field = new Blockly.FieldTextInput(element['text']);
-              if (typeof element['spellcheck'] == 'boolean') {
-                field.setSpellcheck(element['spellcheck']);
-              }
+              field = Blockly.Block.newFieldTextInputFromJson_(element);
               break;
             case 'field_angle':
               field = new Blockly.FieldAngle(element['angle']);
@@ -1169,16 +1166,13 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
               field = new Blockly.FieldColour(element['colour']);
               break;
             case 'field_variable':
-              var varname =
-                Blockly.utils.replaceMessageReferences(element['variable']);
-              field = new Blockly.FieldVariable(varname);
+              field = Blockly.Block.newFieldVariableFromJson_(element);
               break;
             case 'field_dropdown':
               field = new Blockly.FieldDropdown(element['options']);
               break;
             case 'field_image':
-              field = new Blockly.FieldImage(element['src'],
-                  element['width'], element['height'], element['alt']);
+              field = Blockly.Block.newFieldImageFromJson_(element);
               break;
             case 'field_number':
               field = new Blockly.FieldNumber(element['value'],
@@ -1216,6 +1210,70 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
     }
   }
 };
+
+/**
+ * Helper function to construct a FieldImage from a JSON arg object,
+ * dereferncing any string table references.
+ * @param {!Object} options A set of options (src, width, height, and alt).
+ * @returns {!Blockly.FieldImage} The new image.
+ */
+Blockly.Block.newFieldImageFromJson_ = function(options) {
+  var src = Blockly.utils.replaceMessageReferences(options['src']);
+  var width = options['width'];
+  if (goog.isString(width)) {
+    width = Number(Blockly.utils.replaceMessageReferences(width));
+  }
+  var height = options['height'];
+  if (goog.isString(height)) {
+    height = Number(Blockly.utils.replaceMessageReferences(height));
+  }
+  var alt = options['alt'];
+  if (goog.isString(alt)) {
+    alt = Blockly.utils.replaceMessageReferences(alt);
+  }
+  return new Blockly.FieldImage(src, width, height, alt);
+};
+
+/**
+ * Helper function to construct a FieldLabel from a JSON arg object,
+ * dereferncing any string table references.
+ * @param {!Object} options A set of options (text, and class).
+ * @returns {!Blockly.FieldImage} The new image.
+ */
+Blockly.Block.newFieldLabelFromJson_ = function(options) {
+  var text = Blockly.utils.replaceMessageReferences(options['text']);
+  return new Blockly.FieldLabel(text, options['class']);
+};
+
+/**
+ * Helper function to construct a FieldTextInput from a JSON arg object,
+ * dereferncing any string table references.
+ * @param {!Object} options A set of options (text, class, and spellcheck).
+ * @returns {!Blockly.FieldImage} The new image.
+ */
+Blockly.Block.newFieldTextInputFromJson_ = function(options) {
+  var text = Blockly.utils.replaceMessageReferences(options['text']);
+  var field = new Blockly.FieldTextInput(text, options['class']);
+  if (typeof options['spellcheck'] == 'boolean') {
+    field.setSpellcheck(options['spellcheck']);
+  }
+  return field;
+};
+
+/**
+ * Helper function to construct a FieldVariable from a JSON arg object,
+ * dereferncing any string table references.
+ * @param {!Object} options A set of options (variable).
+ * @returns {!Blockly.FieldImage} The new image.
+ */
+Blockly.Block.newFieldVariableFromJson_ = function(options) {
+  var varname = options['variable'];
+  if (goog.isString(varname)) {
+    varname = Blockly.utils.replaceMessageReferences(varname);
+  }
+  return new Blockly.FieldVariable(varname);;
+};
+
 
 /**
  * Add a value input, statement input or local variable to this block.

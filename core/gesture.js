@@ -153,6 +153,12 @@ Blockly.Gesture = function(e, touchId) {
   // TODO: Doc
   // Only non-null if this is a block drag.
   this.draggedConnectionManager_ = null;
+
+  // Only non-null if this is a block drag.
+  this.deleteArea_ = null;
+
+  // Only important if this is a block drag.
+  this.wouldDeleteBlock_ = false;
 };
 
 Blockly.Gesture.prototype.dispose = function() {
@@ -234,7 +240,6 @@ Blockly.Gesture.prototype.setStartLocation = function(e, ws) {
  * @param {!Event} e A mouse move or touch move event.
  */
 Blockly.Gesture.prototype.handleMove = function(e) {
-  console.log('handlemove');
   this.update(e);
   // TODO: I should probably only call this once, when first exceeding the drag
   // radius.
@@ -257,10 +262,11 @@ Blockly.Gesture.prototype.handleMove = function(e) {
  * @param {!Event} e A mouse up or touch end event.
  */
 Blockly.Gesture.prototype.handleUp = function(e) {
-  console.log('handleup');
   this.update(e);
   Blockly.longStop_();
   if (this.isDraggingBlock_) {
+    // Make sure internal state is fresh
+    this.dragBlock();
     // Terminate block drag.
     this.endBlockDrag();
   } else if (this.isDraggingWorkspace_) {
@@ -348,21 +354,59 @@ Blockly.Gesture.prototype.endBlockDrag = function() {
   this.startBlock_.setDragging_(false);
   // this.maybeConnect
   this.startBlock_.render();
+  var deleted = this.maybeDeleteBlock();
+  if (!deleted) {
+    this.draggedConnectionManager_.applyConnections();
+  }
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   //Blockly.terminateDrag_();
 };
 
 Blockly.Gesture.prototype.dragBlock = function() {
   if (this.startBlock_.useDragSurface_) {
-    console.log(this.currentDragDeltaXY_);
     var newLoc = goog.math.Coordinate.sum(this.blockRelativeToSurfaceXY_,
       this.currentDragDeltaXY_);
     this.startWorkspace_.blockDragSurface_.translateSurface(
         newLoc.x, newLoc.y);
   }
+  this.deleteArea_ = this.startWorkspace_.isDeleteArea(this.mostRecentEvent_);
   // TODO: Handle the case when we aren't using the drag surface.
   this.draggedConnectionManager_.update(this.mostRecentEvent_,
-      this.currentDragDeltaXY_);
+      this.currentDragDeltaXY_, this.deleteArea_);
+  this.updateCursorDuringBlockDrag_();
+};
+
+Blockly.Gesture.prototype.maybeDeleteBlock = function() {
+  var trashcan = this.startWorkspace_.trashcan;
+
+  if (this.wouldDeleteBlock_) {
+    if (trashcan) {
+      goog.Timer.callOnce(trashcan.close, 100, trashcan);
+    }
+    this.startBlock_.dispose(false, true);
+  } else if (trashcan) {
+    // Make sure the trash can is closed.
+    trashcan.close();
+  }
+  return this.wouldDeleteBlock_;
+};
+
+Blockly.Gesture.prototype.updateCursorDuringBlockDrag_ = function() {
+  this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
+  if (this.wouldDeleteBlock_) {
+    // Update the cursor, regardless of whether it's over the trash can or the
+    // toolbox.
+    Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
+    if (this.deleteArea_ == Blockly.DELETE_AREA_TRASH &&
+        this.startWorkspace_.trashcan) {
+      this.startWorkspace_.trashcan.setOpen_(true);
+    }
+  } else {
+    Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
+    if (this.startWorkspace_.trashcan) {
+      this.startWorkspace_.trashcan.setOpen_(false);
+    }
+  }
 };
 
 // Workspace drags

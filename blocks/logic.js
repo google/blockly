@@ -303,6 +303,9 @@ Blockly.Extensions.register('logic_op_tooltip',
  * @readonly
  */
 Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
+  elseifCount_: 0,
+  elseCount_: 0,
+
   /**
    * Create XML to represent the number of else-if and else inputs.
    * @return {Element} XML storage element.
@@ -460,11 +463,9 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
  * @this Blockly.Block
  * @package
  */
-Blockly.Constants.Logic.CONTROLS_IF_EXTENSION = function() {
+Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_EXTENSION = function() {
   this.setMutator(new Blockly.Mutator(['controls_if_elseif', 'controls_if_else']));
   this.mixin(Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN);
-  this.elseifCount_ = 0;
-  this.elseCount_ = 0;
 
   this.setTooltip(function() {
     if (!this.elseifCount_ && !this.elseCount_) {
@@ -481,7 +482,7 @@ Blockly.Constants.Logic.CONTROLS_IF_EXTENSION = function() {
 };
 
 Blockly.Extensions.register('controls_if_mutator',
-  Blockly.Constants.Logic.CONTROLS_IF_EXTENSION);
+  Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_EXTENSION);
 
 /**
  * Corrects the logic_compate dropdown label with respect to language direction.

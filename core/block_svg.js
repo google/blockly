@@ -732,18 +732,6 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
             highlightedConnection : localConnection;
         inferiorConnection.getSourceBlock().connectionUiEffect();
       }
-      if (this.workspace.trashcan) {
-        // Don't throw an object in the trash can if it just got connected.
-        this.workspace.trashcan.close();
-      }
-    } else if (deleteArea && !this.getParent() && Blockly.selected.isDeletable()) {
-      // We didn't connect the block, and it was over the trash can or the
-      // toolbox.  Delete it.
-      var trashcan = this.workspace.trashcan;
-      if (trashcan) {
-        goog.Timer.callOnce(trashcan.close, 100, trashcan);
-      }
-      Blockly.selected.dispose(false, true);
     }
   }
 

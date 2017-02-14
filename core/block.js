@@ -1213,9 +1213,10 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
 
 /**
  * Helper function to construct a FieldImage from a JSON arg object,
- * dereferncing any string table references.
- * @param {!Object} options A set of options (src, width, height, and alt).
+ * dereferencing any string table references.
+ * @param {!Object} options A JSON object with options (src, width, height, and alt).
  * @returns {!Blockly.FieldImage} The new image.
+ * @private
  */
 Blockly.Block.newFieldImageFromJson_ = function(options) {
   var src = Blockly.utils.replaceMessageReferences(options['src']);
@@ -1236,9 +1237,10 @@ Blockly.Block.newFieldImageFromJson_ = function(options) {
 
 /**
  * Helper function to construct a FieldLabel from a JSON arg object,
- * dereferncing any string table references.
- * @param {!Object} options A set of options (text, and class).
+ * dereferencing any string table references.
+ * @param {!Object} options A JSON object with options (text, and class).
  * @returns {!Blockly.FieldImage} The new image.
+ * @private
  */
 Blockly.Block.newFieldLabelFromJson_ = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
@@ -1247,9 +1249,11 @@ Blockly.Block.newFieldLabelFromJson_ = function(options) {
 
 /**
  * Helper function to construct a FieldTextInput from a JSON arg object,
- * dereferncing any string table references.
- * @param {!Object} options A set of options (text, class, and spellcheck).
+ * dereferencing any string table references.
+ * @param {!Object} options A JSON object with options (text, class, and
+ *                          spellcheck).
  * @returns {!Blockly.FieldImage} The new image.
+ * @private
  */
 Blockly.Block.newFieldTextInputFromJson_ = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
@@ -1262,16 +1266,17 @@ Blockly.Block.newFieldTextInputFromJson_ = function(options) {
 
 /**
  * Helper function to construct a FieldVariable from a JSON arg object,
- * dereferncing any string table references.
- * @param {!Object} options A set of options (variable).
+ * dereferencing any string table references.
+ * @param {!Object} options A JSON object with options (variable).
  * @returns {!Blockly.FieldImage} The new image.
+ * @private
  */
 Blockly.Block.newFieldVariableFromJson_ = function(options) {
   var varname = options['variable'];
   if (goog.isString(varname)) {
     varname = Blockly.utils.replaceMessageReferences(varname);
   }
-  return new Blockly.FieldVariable(varname);;
+  return new Blockly.FieldVariable(varname);
 };
 
 

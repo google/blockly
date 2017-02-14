@@ -484,8 +484,9 @@ blocklyApp.TreeService = ng.core.Class({
         // Return the focus to the workspace tree containing the input field.
         document.getElementById(treeId).focus();
 
-        // Note that Tab events are allowed to propagate through.
-        if (e.keyCode == 27) {
+        // Note that Tab and Enter events stop propagating, this behavior is
+        // handled on other listeners.
+        if (e.keyCode == 27 || e.keyCode == 13) {
           e.preventDefault();
           e.stopPropagation();
         }

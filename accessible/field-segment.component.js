@@ -70,7 +70,7 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
     this.notificationsService = notificationsService;
     this.dropdownOptions = [];
   }],
-  ngOnInit: function() {
+  ngDoCheck: function() {
     if (this.isDropdown()) {
       var rawOptions = this.mainField.getOptions_();
       this.dropdownOptions = rawOptions.map(function(valueAndText) {

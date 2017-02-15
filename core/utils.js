@@ -535,10 +535,18 @@ Blockly.utils.tokenizeInterpolation_ = function(message, parseInterpolationToken
               keyUpper.substring(4) : null;
           if (bklyKey && bklyKey in Blockly.Msg) {
             var rawValue = Blockly.Msg[bklyKey];
-            var subTokens = goog.isString(rawValue) ?
-                Blockly.utils.tokenizeInterpolation(rawValue) :
-                parseInterpolationTokens ? String(rawValue) : rawValue;
-            tokens = tokens.concat(subTokens);
+            if (goog.isString(rawValue)) {
+              // Attempt to dereference substrings, too, appending to the end.
+              Array.prototype.push.apply(tokens,
+                Blockly.utils.tokenizeInterpolation(rawValue));
+            } else if (parseInterpolationTokens) {
+              // When parsing interpolation tokens, numbers are special
+              // placeholders (%1, %2, etc). Make sure all other values are
+              // strings.
+              tokens.push(String(rawValue));
+            } else {
+              tokens.push(rawValue);
+            }
           } else {
             // No entry found in the string table. Pass reference as string.
             tokens.push('%{' + rawKey + '}');

@@ -207,6 +207,12 @@ Blockly.TOOLBOX_AT_LEFT = 2;
  */
 Blockly.TOOLBOX_AT_RIGHT = 3;
 
+/**
+ * ENUM representing that an event is not in any delete areas.
+ * Null for backwards compatibility reasons.
+ * @const
+ */
+Blockly.DELETE_AREA_NONE = null;
 
 /**
  * ENUM representing that an event is in the delete area of the trash can.

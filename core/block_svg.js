@@ -293,10 +293,6 @@ Blockly.BlockSvg.terminateDrag = function() {
   }
   Blockly.dragMode_ = Blockly.DRAG_NONE;
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-
-  if (Blockly.draggedConnectionManager_) {
-    Blockly.draggedConnectionManager_ = null;
-  }
 };
 
 /**
@@ -707,33 +703,7 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     Blockly.Events.fire(
         new Blockly.Events.Ui(this, 'click', undefined, undefined));
   }
-  // This must be before terminateDrag, which deletes the manager.
-  var manager = Blockly.draggedConnectionManager_;
-  if (manager) {
-    var wasDragging = true;
-    var highlightedConnection = manager.closestConnection_;
-    var localConnection = manager.localConnection_;
-    manager.removeConnectionHighlighting();
-  }
   Blockly.terminateDrag_();
-
-  var deleteArea = this.workspace.isDeleteArea(e);
-
-  if (wasDragging) {
-    // Connect to a nearby block, but not if it's over the toolbox.
-    if (Blockly.selected && highlightedConnection &&
-        deleteArea != Blockly.DELETE_AREA_TOOLBOX) {
-      // Connect two blocks together.
-      localConnection.connect(highlightedConnection);
-      if (this.rendered) {
-        // Trigger a connection animation.
-        // Determine which connection is inferior (lower in the source stack).
-        var inferiorConnection = localConnection.isSuperior() ?
-            highlightedConnection : localConnection;
-        inferiorConnection.getSourceBlock().connectionUiEffect();
-      }
-    }
-  }
 
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   if (!Blockly.WidgetDiv.isVisible()) {

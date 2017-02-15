@@ -52,12 +52,13 @@ Blockly.Gesture = function(e, touchId) {
    */
   this.mouseDownXY_ = null;
 
-  this.blockRelativeToSurfaceXY_ = null;
   /**
+   * The location of the top left corner of the dragging block as returned by
+   * {@link Blockly.BlockSvg#getRelativeToSurfaceXY}.
    * @type {goog.math.Coordinate}
    * @private
    */
-  this.currentXY_ = null;
+  this.blockRelativeToSurfaceXY_ = null;
 
   /**
    * @type {number}
@@ -150,14 +151,31 @@ Blockly.Gesture = function(e, touchId) {
   // TODO: Doc
   this.onUpWrapper_ = null;
 
-  // TODO: Doc
+  /**
+   * Object that keeps track of connections on dragged blocks.
+   * Only non-null if this is a block drag.
+   * @type {Blockly.DraggedConnectionManager}
+   * @private
+   */
   // Only non-null if this is a block drag.
   this.draggedConnectionManager_ = null;
 
-  // Only non-null if this is a block drag.
+  /**
+   * Which delete area the mouse pointer is over, if any.
+   * One of {@link Blockly.DELETE_AREA_TRASH},
+   * {@link Blockly.DELETE_AREA_TOOLBOX}, or {@link Blockly.DELETE_AREA_NONE}.
+   * Only relevant if this is a block drag.
+   * @type {?number}
+   * @private
+   */
   this.deleteArea_ = null;
 
-  // Only important if this is a block drag.
+  /**
+   * Whether the block would be deleted if dropped immediately.
+   * @type {boolean}
+   * Only relevant if this is a block drag.
+   * @private
+   */
   this.wouldDeleteBlock_ = false;
 };
 
@@ -179,20 +197,18 @@ Blockly.Gesture.prototype.update = function(e) {
 };
 
 /**
- * DO MATH to set currentDragDelta_ based on the most recent mouse position.
+ * DO MATH to set currentDragDeltaXY_ based on the most recent mouse position.
  * TODO: Figure out what units the coordinates are in.
  * @param {!Event} e The event for the most recent mouse/touch move.
- * @return {number} the new drag delta.
  * @private
  */
 Blockly.Gesture.prototype.updateDragDelta_ = function(e) {
-  this.currentXY_ = new goog.math.Coordinate(e.clientX, e.clientY);
-  this.currentDragDeltaXY_ = goog.math.Coordinate.difference(this.currentXY_,
+  var currentXY = new goog.math.Coordinate(e.clientX, e.clientY);
+  this.currentDragDeltaXY_ = goog.math.Coordinate.difference(currentXY,
       this.mouseDownXY_);
-  this.currentDragDelta_ = goog.math.Coordinate.magnitude(
+  var currentDragDelta = goog.math.Coordinate.magnitude(
       this.currentDragDeltaXY_);
-  this.hasExceededDragRadius_ = this.currentDragDelta_ > Blockly.DRAG_RADIUS;
-  return this.currentDragDelta_;
+  this.hasExceededDragRadius_ = currentDragDelta > Blockly.DRAG_RADIUS;
 };
 
 /**
@@ -352,9 +368,8 @@ Blockly.Gesture.prototype.endBlockDrag = function() {
   // TODO: Consider where moveOffDragSurface should live.
   this.startBlock_.moveOffDragSurface_();
   this.startBlock_.setDragging_(false);
-  // this.maybeConnect
   this.startBlock_.render();
-  var deleted = this.maybeDeleteBlock();
+  var deleted = this.maybeDeleteBlock_();
   if (!deleted) {
     this.draggedConnectionManager_.applyConnections();
   }
@@ -376,6 +391,12 @@ Blockly.Gesture.prototype.dragBlock = function() {
   this.updateCursorDuringBlockDrag_();
 };
 
+/**
+ * Shut the trash can and, if necessary, delete the dragging block.
+ * Should be called at the end of a block drag.
+ * @return {boolean} whether the block was deleted.
+ * @private
+ */
 Blockly.Gesture.prototype.maybeDeleteBlock = function() {
   var trashcan = this.startWorkspace_.trashcan;
 
@@ -391,6 +412,11 @@ Blockly.Gesture.prototype.maybeDeleteBlock = function() {
   return this.wouldDeleteBlock_;
 };
 
+/**
+ * Update the cursor (and possibly the trash can lid) to reflect whether the
+ * dragging block would be deleted if released immediately.
+ * @private
+ */
 Blockly.Gesture.prototype.updateCursorDuringBlockDrag_ = function() {
   this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
   if (this.wouldDeleteBlock_) {

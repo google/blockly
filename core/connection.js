@@ -241,12 +241,13 @@ Blockly.Connection.prototype.dispose = function() {
   if (this.inDB_) {
     this.db_.removeConnection_(this);
   }
-  if (Blockly.highlightedConnection_ == this) {
-    Blockly.highlightedConnection_ = null;
-  }
-  if (Blockly.localConnection_ == this) {
-    Blockly.localConnection_ = null;
-  }
+  // TODO: If any pending drags refer to this connection, notice and respond.
+  // if (Blockly.highlightedConnection_ == this) {
+  //   Blockly.highlightedConnection_ = null;
+  // }
+  // if (Blockly.localConnection_ == this) {
+  //   Blockly.localConnection_ = null;
+  // }
   this.db_ = null;
   this.dbOpposite_ = null;
 };

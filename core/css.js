@@ -397,7 +397,7 @@ Blockly.Css.CONTENT = [
   '.blocklyFlyoutScrollbar {',
     'z-index: 30;',
   '}',
-  
+
   '.blocklyScrollbarHorizontal, .blocklyScrollbarVertical {',
     'position: absolute;',
     'outline: none;',
@@ -464,6 +464,7 @@ Blockly.Css.CONTENT = [
     'stroke: #f00;',
     'stroke-width: 2;',
     'stroke-linecap: round;',
+    'pointer-events: none;',
   '}',
 
   '.blocklyContextMenu {',

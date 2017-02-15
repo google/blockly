@@ -921,7 +921,7 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   if (this.deleteAreaToolbox_ && this.deleteAreaToolbox_.contains(xy)) {
     return Blockly.DELETE_AREA_TOOLBOX;
   }
-  return null;
+  return Blockly.DELETE_AREA_NONE;
 };
 
 /**

@@ -99,12 +99,6 @@ Blockly.DraggedConnectionManager = function(block) {
   this.wouldDeleteBlock_ = false;
 
   Blockly.selected = block;
-
-  /**
-   * TODO: Doc.
-   *
-   */
-  this.wouldDeleteBlock_ = false;
 };
 
 /**
@@ -156,7 +150,7 @@ Blockly.DraggedConnectionManager.prototype.update = function(dxy, deleteArea) {
       deleteArea != Blockly.DELETE_AREA_TOOLBOX;
   var wouldDelete = !!deleteArea && !this.topBlock_.getParent() &&
       this.topBlock_.isDeletable();
-  this.wouldDeleteBlock_ = wouldDelete && !wouldConnect;\
+  this.wouldDeleteBlock_ = wouldDelete && !wouldConnect;
 
   if (!this.wouldDeleteBlock_ && closestConnectionChanged &&
       this.closestConnection_) {

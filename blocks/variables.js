@@ -111,7 +111,7 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
       var contextMenuMsg = Blockly.Msg.VARIABLES_SET_CREATE_GET;
     }
 
-    var option = {enabled: true};
+    var option = {enabled: this.workspace.remainingCapacity() > 0};
     var name = this.getFieldValue('VAR');
     option.text = contextMenuMsg.replace('%1', name);
     var xmlField = goog.dom.createDom('field', null, name);

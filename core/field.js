@@ -28,6 +28,9 @@
 
 goog.provide('Blockly.Field');
 
+goog.require('Blockly.Gesture');
+goog.require('Blockly.GestureHandler');
+
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Size');
@@ -152,9 +155,12 @@ Blockly.Field.prototype.init = function() {
 
   this.updateEditable();
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
-  this.mouseUpWrapper_ =
-      Blockly.bindEventWithChecks_(this.fieldGroup_, 'mouseup', this,
-      this.onMouseUp_);
+  this.mouseDownWrapper_ =
+      Blockly.bindEventWithChecks_(this.fieldGroup_, 'mousedown', this,
+      this.onMouseDown_);
+  // this.mouseUpWrapper_ =
+  //     Blockly.bindEventWithChecks_(this.fieldGroup_, 'mouseup', this,
+  //     this.onMouseUp_);
   // Force a render.
   this.render_();
 };
@@ -170,9 +176,9 @@ Blockly.Field.prototype.initModel = function() {
  * Dispose of all DOM objects belonging to this editable field.
  */
 Blockly.Field.prototype.dispose = function() {
-  if (this.mouseUpWrapper_) {
-    Blockly.unbindEvent_(this.mouseUpWrapper_);
-    this.mouseUpWrapper_ = null;
+  if (this.mouseDownWrapper_) {
+    Blockly.unbindEvent_(this.mouseDownWrapper_);
+    this.mouseDownWrapper_ = null;
   }
   this.sourceBlock_ = null;
   goog.dom.removeNode(this.fieldGroup_);
@@ -525,6 +531,17 @@ Blockly.Field.prototype.onMouseUp_ = function(e) {
     // The next onMouseUp is responsible for nulling it out.
   }
 };
+
+/**
+ * Handle a mouse down event on a field.
+ * @param {!Event} e Mouse down event.
+ * @private
+ */
+Blockly.Field.prototype.onMouseDown_ = function(e) {
+  var gesture = Blockly.GestureHandler.gestureForEvent(e);
+  gesture.setStartField(this);
+};
+
 
 /**
  * Change the tooltip text for this field.

@@ -639,19 +639,9 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   Blockly.terminateDrag_();
   this.select();
   Blockly.hideChaff();
-  if (Blockly.utils.isRightButton(e)) {
-    // Right-click.
-    this.showContextMenu_(e);
-    // Click, not drag, so stop waiting for other touches from this identifier.
-    Blockly.Touch.clearTouchIdentifier();
-      // This event has been handled.  No need to bubble up to the document.
-    e.stopPropagation();
-    e.preventDefault();
-  } else {
 
-    var gesture = Blockly.GestureHandler.gestureForEvent(e);
-    gesture.handleBlockStart(e, this);
-  }
+  var gesture = Blockly.GestureHandler.gestureForEvent(e);
+  gesture.handleBlockStart(e, this);
 
 
   // if (!this.isMovable()) {

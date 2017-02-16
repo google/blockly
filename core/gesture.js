@@ -232,7 +232,6 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
   var wsMovable = this.startWorkspace_ && this.startWorkspace_.isDraggable();
   if (wsMovable && this.hasExceededDragRadius_) {
     this.isDraggingWorkspace_ = true;
-    console.log('dragging workspace');
     this.startWorkspaceDrag();
     return true;
   }
@@ -290,6 +289,7 @@ Blockly.Gesture.prototype.handleUp = function(e) {
     // Terminate workspace drag.
   } else if (this.isFieldClick_()) {
     // End field click.
+    this.endFieldClick();
   } else if (this.isBlockClick_()) {
     // Click the block.
   } else if (this.isWorkspaceClick_()) {
@@ -308,12 +308,17 @@ Blockly.Gesture.prototype.doStart = function(e) {
   // TODO: Blockly.longStart_()
   this.startWorkspace_.updateScreenCalculationsIfScrolled();
   this.startWorkspace_.markFocused();
+  this.mostRecentEvent_ = e;
+
+  if (Blockly.utils.isRightButton(e)) {
+    this.handleRightClick(e);
+    return;
+  }
   if (this.startBlock_) {
     this.startBlock_.select();
   }
 
   this.setStartLocation(e, this.startWorkspace_);
-  this.mostRecentEvent_ = e;
 
   this.onMoveWrapper_ = Blockly.bindEvent_(
       document, 'mousemove', null, this.handleMove.bind(this));
@@ -323,6 +328,16 @@ Blockly.Gesture.prototype.doStart = function(e) {
 
   e.preventDefault();
   e.stopPropagation();
+};
+
+Blockly.Gesture.prototype.handleRightClick = function(e) {
+  // handle right click
+  if (this.startBlock_) {
+    this.startBlock_.showContextMenu_(e);
+  } else if (this.startWorkspace_) {
+    this.startWorkspace_.showContextMenu_(e);
+  }
+  this.endGesture(e);
 };
 
 // Called externally.
@@ -337,6 +352,12 @@ Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
   console.log('handle block start');
   this.setStartBlock(block);
   this.mostRecentEvent_ = e;
+};
+
+// Field clicks
+Blockly.Gesture.prototype.endFieldClick = function() {
+  console.log("end field click");
+  this.startField_.showEditor_();
 };
 
 // Block drags
@@ -361,22 +382,6 @@ Blockly.Gesture.prototype.startBlockDrag = function() {
   this.dragBlock();
 };
 
-Blockly.Gesture.prototype.endBlockDrag = function() {
-  Blockly.BlockSvg.disconnectUiStop_();
-  console.log('end block drag');
-  this.startWorkspace_.setResizesEnabled(true);
-  // TODO: Consider where moveOffDragSurface should live.
-  this.startBlock_.moveOffDragSurface_();
-  this.startBlock_.setDragging_(false);
-  this.startBlock_.render();
-  var deleted = this.maybeDeleteBlock_();
-  if (!deleted) {
-    this.draggedConnectionManager_.applyConnections();
-  }
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-  //Blockly.terminateDrag_();
-};
-
 Blockly.Gesture.prototype.dragBlock = function() {
   if (this.startBlock_.useDragSurface_) {
     var newLoc = goog.math.Coordinate.sum(this.blockRelativeToSurfaceXY_,
@@ -386,9 +391,48 @@ Blockly.Gesture.prototype.dragBlock = function() {
   }
   this.deleteArea_ = this.startWorkspace_.isDeleteArea(this.mostRecentEvent_);
   // TODO: Handle the case when we aren't using the drag surface.
-  this.draggedConnectionManager_.update(this.mostRecentEvent_,
-      this.currentDragDeltaXY_, this.deleteArea_);
+  this.draggedConnectionManager_.update(this.currentDragDeltaXY_,
+      this.deleteArea_);
   this.updateCursorDuringBlockDrag_();
+};
+
+Blockly.Gesture.prototype.endBlockDrag = function() {
+  Blockly.BlockSvg.disconnectUiStop_();
+  console.log('end block drag');
+  // TODO: Consider where moveOffDragSurface should live.
+  this.startBlock_.moveConnections_(this.currentDragDeltaXY_.x,
+      this.currentDragDeltaXY_.y);
+  this.startBlock_.moveOffDragSurface_();
+  this.startWorkspace_.setResizesEnabled(true);
+  this.startBlock_.setDragging_(false);
+  var deleted = this.maybeDeleteBlock_();
+  if (!deleted) {
+    this.draggedConnectionManager_.applyConnections();
+    this.startBlock_.render();
+  }
+  this.fireMoveEvent();
+  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
+};
+
+Blockly.Gesture.prototype.fireMoveEvent = function() {
+  // TODO: Make this work
+  return;
+  var event = new Blockly.Events.Move(this.topBlock_);
+  event.oldCoordinate = this.mouseDownXY_;
+  event.recordNew();
+  Blockly.Events.fire(event);
+  // Ensure that any snap and bump are part of this move's event group.
+  var group = Blockly.Events.getGroup();
+  setTimeout(function() {
+    Blockly.Events.setGroup(group);
+    this.topBlock_.snapToGrid();
+    Blockly.Events.setGroup(false);
+  }, Blockly.BUMP_DELAY / 2);
+  setTimeout(function() {
+    Blockly.Events.setGroup(group);
+    this.topBlock_.bumpNeighbours_();
+    Blockly.Events.setGroup(false);
+  }, Blockly.BUMP_DELAY);
 };
 
 /**
@@ -397,7 +441,7 @@ Blockly.Gesture.prototype.dragBlock = function() {
  * @return {boolean} whether the block was deleted.
  * @private
  */
-Blockly.Gesture.prototype.maybeDeleteBlock = function() {
+Blockly.Gesture.prototype.maybeDeleteBlock_ = function() {
   var trashcan = this.startWorkspace_.trashcan;
 
   if (this.wouldDeleteBlock_) {
@@ -478,6 +522,7 @@ Blockly.Gesture.prototype.dragWorkspace = function() {
  * @param {Blockly.Field} field The field the gesture started on.
  */
 Blockly.Gesture.prototype.setStartField = function(field) {
+  console.log("set start field");
   if (!this.startField_) {
     this.startField_ = field;
   }
@@ -554,7 +599,6 @@ Blockly.Gesture.prototype.isBlockDrag_ = function() {
 Blockly.Gesture.prototype.isDragging = function() {
   return this.isDraggingWorkspace_ || this.isDraggingBlock_;
 };
-
 
 /**
  * Check whether this gesture started on the given workspace.

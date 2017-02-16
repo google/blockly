@@ -639,40 +639,6 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   var gesture = Blockly.GestureHandler.gestureForEvent(e);
   gesture.handleBlockStart(e, this);
 
-
-  // if (!this.isMovable()) {
-  //   // Allow immovable blocks to be selected and context menued, but not
-  //   // dragged.  Let this event bubble up to document, so the workspace may be
-  //   // dragged instead.
-  //   return;
-  // } else {
-  //   if (!Blockly.Events.getGroup()) {
-  //     Blockly.Events.setGroup(true);
-  //   }
-  //   // Left-click (or middle click)
-  //   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
-
-  //   this.dragStartXY_ = this.getRelativeToSurfaceXY();
-  //   this.workspace.startDrag(e, this.dragStartXY_);
-
-  //   Blockly.dragMode_ = Blockly.DRAG_STICKY;
-  //   Blockly.BlockSvg.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
-  //       'mouseup', this, this.onMouseUp_);
-  //   Blockly.BlockSvg.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(
-  //       document, 'mousemove', this, this.onMouseMove_);
-  //   // Build a list of bubbles that need to be moved and where they started.
-  //   this.draggedBubbles_ = [];
-  //   var descendants = this.getDescendants();
-  //   for (var i = 0, descendant; descendant = descendants[i]; i++) {
-  //     var icons = descendant.getIcons();
-  //     for (var j = 0; j < icons.length; j++) {
-  //       var data = icons[j].getIconLocation();
-  //       data.bubble = icons[j];
-  //       this.draggedBubbles_.push(data);
-  //     }
-  //   }
-  // }
-
 };
 
 /**

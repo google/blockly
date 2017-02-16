@@ -49,17 +49,8 @@ Blockly.Gesture = function(e, touchId) {
   /**
    * @type {goog.math.Coordinate}
    * TODO: In what units?
-   * @private
    */
-  this.mouseDownXY_ = null;
-
-  /**
-   * The location of the top left corner of the dragging block as returned by
-   * {@link Blockly.BlockSvg#getRelativeToSurfaceXY}.
-   * @type {goog.math.Coordinate}
-   * @private
-   */
-  this.blockRelativeToSurfaceXY_ = null;
+  this.mouseDownXY = null;
 
   /**
    * @type {number}
@@ -156,9 +147,6 @@ Blockly.Gesture = function(e, touchId) {
 };
 
 Blockly.Gesture.prototype.dispose = function() {
-  if (this.blockDragger_) {
-    this.blockDragger_.dispose();
-  }
   if (this.onMoveWrapper_) {
     Blockly.unbindEvent_(this.onMoveWrapper_);
   }
@@ -184,7 +172,7 @@ Blockly.Gesture.prototype.update = function(e) {
 Blockly.Gesture.prototype.updateDragDelta_ = function(e) {
   var currentXY = new goog.math.Coordinate(e.clientX, e.clientY);
   this.currentDragDeltaXY_ = goog.math.Coordinate.difference(currentXY,
-      this.mouseDownXY_);
+      this.mouseDownXY);
   var currentDragDelta = goog.math.Coordinate.magnitude(
       this.currentDragDeltaXY_);
   this.hasExceededDragRadius_ = currentDragDelta > Blockly.DRAG_RADIUS;
@@ -206,6 +194,8 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
     console.log('dragging block');
     this.blockDragger_ = new Blockly.BlockDragger(this);
     this.blockDragger_.startBlockDrag();
+    this.blockDragger_.dragBlock(this.mostRecentEvent_,
+        this.currentDragDeltaXY_);
     return true;
   }
 
@@ -224,7 +214,7 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
  * @param {!Blockly.WorkspaceSvg} ws The workspace on which the gesture started.
  */
 Blockly.Gesture.prototype.setStartLocation = function(e, ws) {
-  this.mouseDownXY_ = new goog.math.Coordinate(e.clientX, e.clientY);
+  this.mouseDownXY = new goog.math.Coordinate(e.clientX, e.clientY);
   // TODO: Do I need the start drag metrics to manage a workspace drag?
   this.startDragMetrics_ = ws.getMetrics();
   this.startScrollXY_ = new goog.math.Coordinate(ws.scrollX, ws.scrollY);
@@ -246,7 +236,8 @@ Blockly.Gesture.prototype.handleMove = function(e) {
     this.dragWorkspace();
   } else if (this.isDraggingBlock_) {
     // Move the dragging block.
-    this.blockDragger_.dragBlock();
+    this.blockDragger_.dragBlock(this.mostRecentEvent_,
+        this.currentDragDeltaXY_);
   }
   e.preventDefault();
   e.stopPropagation();
@@ -260,10 +251,8 @@ Blockly.Gesture.prototype.handleUp = function(e) {
   this.update(e);
   Blockly.longStop_();
   if (this.isDraggingBlock_) {
-    // Make sure internal state is fresh
-    this.blockDragger_.dragBlock();
     // Terminate block drag.
-    this.blockDragger_.endBlockDrag();
+    this.blockDragger_.endBlockDrag(e, this.currentDragDeltaXY_);
   } else if (this.isDraggingWorkspace_) {
     this.endWorkspaceDrag();
     // Terminate workspace drag.
@@ -395,7 +384,11 @@ Blockly.Gesture.prototype.setStartField = function(field) {
  */
 Blockly.Gesture.prototype.setStartBlock = function(block) {
   if (!this.startBlock_) {
-    this.startBlock_ = block;
+    if (block.isShadow()) {
+      this.setStartBlock(block.parentBlock_);
+    } else {
+      this.startBlock_ = block;
+    }
   }
 };
 

@@ -944,24 +944,10 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     // Clicking on the document clears the selection.
     Blockly.selected.unselect();
   }
-  if (Blockly.utils.isRightButton(e)) {
-    // Right-click.
-    this.showContextMenu_(e);
-    // This is to handle the case where the event is pretending to be a right
-    // click event but it was really a long press. In that case, we want to make
-    // sure any in progress drags are stopped.
-    Blockly.onMouseUp_(e);
-    // Since this was a click, not a drag, end the gesture immediately.
-    Blockly.Touch.clearTouchIdentifier();
-  } else {
-    var gesture = Blockly.GestureHandler.gestureForEvent(e);
-    gesture.handleWsStart(e, this);
-    // It was a click, but the workspace isn't draggable.
-    //Blockly.Touch.clearTouchIdentifier();
-  }
-  // This event has been handled.  No need to bubble up to the document.
-  e.stopPropagation();
-  e.preventDefault();
+
+  var gesture = Blockly.GestureHandler.gestureForEvent(e);
+  gesture.handleWsStart(e, this);
+
 };
 
 /**

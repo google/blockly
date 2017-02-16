@@ -28,6 +28,7 @@
 goog.provide('Blockly.Gesture');
 
 goog.require('goog.math.Coordinate');
+goog.require('Blockly.BlockDragger');
 goog.require('Blockly.DraggedConnectionManager');
 goog.require('goog.asserts');
 
@@ -151,35 +152,13 @@ Blockly.Gesture = function(e, touchId) {
   // TODO: Doc
   this.onUpWrapper_ = null;
 
-  /**
-   * Object that keeps track of connections on dragged blocks.
-   * Only non-null if this is a block drag.
-   * @type {Blockly.DraggedConnectionManager}
-   * @private
-   */
-  // Only non-null if this is a block drag.
-  this.draggedConnectionManager_ = null;
-
-  /**
-   * Which delete area the mouse pointer is over, if any.
-   * One of {@link Blockly.DELETE_AREA_TRASH},
-   * {@link Blockly.DELETE_AREA_TOOLBOX}, or {@link Blockly.DELETE_AREA_NONE}.
-   * Only relevant if this is a block drag.
-   * @type {?number}
-   * @private
-   */
-  this.deleteArea_ = null;
-
-  /**
-   * Whether the block would be deleted if dropped immediately.
-   * @type {boolean}
-   * Only relevant if this is a block drag.
-   * @private
-   */
-  this.wouldDeleteBlock_ = false;
+  this.blockDragger_ = null;
 };
 
 Blockly.Gesture.prototype.dispose = function() {
+  if (this.blockDragger_) {
+    this.blockDragger_.dispose();
+  }
   if (this.onMoveWrapper_) {
     Blockly.unbindEvent_(this.onMoveWrapper_);
   }
@@ -225,7 +204,8 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
   if (startBlockMovable && this.hasExceededDragRadius_) {
     this.isDraggingBlock_ = true;
     console.log('dragging block');
-    this.startBlockDrag();
+    this.blockDragger_ = new Blockly.BlockDragger(this);
+    this.blockDragger_.startBlockDrag();
     return true;
   }
 
@@ -266,7 +246,7 @@ Blockly.Gesture.prototype.handleMove = function(e) {
     this.dragWorkspace();
   } else if (this.isDraggingBlock_) {
     // Move the dragging block.
-    this.dragBlock();
+    this.blockDragger_.dragBlock();
   }
   e.preventDefault();
   e.stopPropagation();
@@ -281,9 +261,9 @@ Blockly.Gesture.prototype.handleUp = function(e) {
   Blockly.longStop_();
   if (this.isDraggingBlock_) {
     // Make sure internal state is fresh
-    this.dragBlock();
+    this.blockDragger_.dragBlock();
     // Terminate block drag.
-    this.endBlockDrag();
+    this.blockDragger_.endBlockDrag();
   } else if (this.isDraggingWorkspace_) {
     this.endWorkspaceDrag();
     // Terminate workspace drag.
@@ -342,14 +322,12 @@ Blockly.Gesture.prototype.handleRightClick = function(e) {
 
 // Called externally.
 Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
-  console.log('handlewsstart');
   this.setStartWorkspace(ws);
   this.mostRecentEvent_ = e;
   this.doStart(e);
 };
 
 Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
-  console.log('handle block start');
   this.setStartBlock(block);
   this.mostRecentEvent_ = e;
 };
@@ -360,124 +338,7 @@ Blockly.Gesture.prototype.endFieldClick = function() {
   this.startField_.showEditor_();
 };
 
-// Block drags
-Blockly.Gesture.prototype.startBlockDrag = function() {
-  console.log('start block drag');
-  this.blockRelativeToSurfaceXY_ = this.startBlock_.getRelativeToSurfaceXY();
-  // Workspace.startDrag just records the start position, which we already know.
-  // TODO: Figure out where to get the list of bubbles to move when dragging.
-  this.startWorkspace_.setResizesEnabled(false);
-  // TODO: Add getParent() to blockSvg.
-  if (this.startBlock_.parentBlock_) {
-    this.startBlock_.unplug();
-    this.startBlock_.disconnectUiEffect();
-  }
-  // TODO: Make setDragging_ package.
-  this.startBlock_.setDragging_(true);
-  this.draggedConnectionManager_ = new Blockly.DraggedConnectionManager(
-      this.startBlock_);
-  // TODO: Consider where moveToDragSurface should live.
-  this.startBlock_.moveToDragSurface_();
-  Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
-  this.dragBlock();
-};
 
-Blockly.Gesture.prototype.dragBlock = function() {
-  if (this.startBlock_.useDragSurface_) {
-    var newLoc = goog.math.Coordinate.sum(this.blockRelativeToSurfaceXY_,
-      this.currentDragDeltaXY_);
-    this.startWorkspace_.blockDragSurface_.translateSurface(
-        newLoc.x, newLoc.y);
-  }
-  this.deleteArea_ = this.startWorkspace_.isDeleteArea(this.mostRecentEvent_);
-  // TODO: Handle the case when we aren't using the drag surface.
-  this.draggedConnectionManager_.update(this.currentDragDeltaXY_,
-      this.deleteArea_);
-  this.updateCursorDuringBlockDrag_();
-};
-
-Blockly.Gesture.prototype.endBlockDrag = function() {
-  Blockly.BlockSvg.disconnectUiStop_();
-  console.log('end block drag');
-  // TODO: Consider where moveOffDragSurface should live.
-  this.startBlock_.moveConnections_(this.currentDragDeltaXY_.x,
-      this.currentDragDeltaXY_.y);
-  this.startBlock_.moveOffDragSurface_();
-  this.startWorkspace_.setResizesEnabled(true);
-  this.startBlock_.setDragging_(false);
-  var deleted = this.maybeDeleteBlock_();
-  if (!deleted) {
-    this.draggedConnectionManager_.applyConnections();
-    this.startBlock_.render();
-  }
-  this.fireMoveEvent();
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-};
-
-Blockly.Gesture.prototype.fireMoveEvent = function() {
-  // TODO: Make this work
-  return;
-  var event = new Blockly.Events.Move(this.topBlock_);
-  event.oldCoordinate = this.mouseDownXY_;
-  event.recordNew();
-  Blockly.Events.fire(event);
-  // Ensure that any snap and bump are part of this move's event group.
-  var group = Blockly.Events.getGroup();
-  setTimeout(function() {
-    Blockly.Events.setGroup(group);
-    this.topBlock_.snapToGrid();
-    Blockly.Events.setGroup(false);
-  }, Blockly.BUMP_DELAY / 2);
-  setTimeout(function() {
-    Blockly.Events.setGroup(group);
-    this.topBlock_.bumpNeighbours_();
-    Blockly.Events.setGroup(false);
-  }, Blockly.BUMP_DELAY);
-};
-
-/**
- * Shut the trash can and, if necessary, delete the dragging block.
- * Should be called at the end of a block drag.
- * @return {boolean} whether the block was deleted.
- * @private
- */
-Blockly.Gesture.prototype.maybeDeleteBlock_ = function() {
-  var trashcan = this.startWorkspace_.trashcan;
-
-  if (this.wouldDeleteBlock_) {
-    if (trashcan) {
-      goog.Timer.callOnce(trashcan.close, 100, trashcan);
-    }
-    this.startBlock_.dispose(false, true);
-  } else if (trashcan) {
-    // Make sure the trash can is closed.
-    trashcan.close();
-  }
-  return this.wouldDeleteBlock_;
-};
-
-/**
- * Update the cursor (and possibly the trash can lid) to reflect whether the
- * dragging block would be deleted if released immediately.
- * @private
- */
-Blockly.Gesture.prototype.updateCursorDuringBlockDrag_ = function() {
-  this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
-  if (this.wouldDeleteBlock_) {
-    // Update the cursor, regardless of whether it's over the trash can or the
-    // toolbox.
-    Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
-    if (this.deleteArea_ == Blockly.DELETE_AREA_TRASH &&
-        this.startWorkspace_.trashcan) {
-      this.startWorkspace_.trashcan.setOpen_(true);
-    }
-  } else {
-    Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
-    if (this.startWorkspace_.trashcan) {
-      this.startWorkspace_.trashcan.setOpen_(false);
-    }
-  }
-};
 
 // Workspace drags
 Blockly.Gesture.prototype.startWorkspaceDrag = function() {

@@ -129,7 +129,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function() {
  * display accordingly.
  * @param {!Event} e The most recent move event.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
- *     moved from the position at the start of the drag.
+ *     moved from the position at the start of the drag, in pixel coordinates.
  */
 Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
   if (this.useDragSurface_) {
@@ -147,7 +147,7 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
  * Finish a block drag and put the block back on the workspace.
  * @param {!Event} e The mouseup/touchend event.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
- *     moved from the position at the start of the drag.
+ *     moved from the position at the start of the drag, in pixel coordinates.
  */
 Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   // Make sure internal state is fresh.

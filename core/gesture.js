@@ -194,7 +194,7 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
     console.log('dragging block');
     this.blockDragger_ = new Blockly.BlockDragger(this.startBlock_,
         this.startWorkspace_);
-    this.blockDragger_.startBlockDrag();
+    this.blockDragger_.startBlockDrag(this.currentDragDeltaXY_);
     this.blockDragger_.dragBlock(this.mostRecentEvent_,
         this.currentDragDeltaXY_);
     return true;
@@ -324,7 +324,6 @@ Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
 
 // Field clicks
 Blockly.Gesture.prototype.endFieldClick = function() {
-  console.log("end field click");
   this.startField_.showEditor_();
 };
 

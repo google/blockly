@@ -108,6 +108,9 @@ Blockly.BlockDragger = function(block, workspace) {
  * Start dragging a block.  This includes moving it to the drag surface.
  */
 Blockly.BlockDragger.prototype.startBlockDrag = function() {
+  if (!Blockly.Events.getGroup()) {
+    Blockly.Events.setGroup(true);
+  }
   // Workspace.startDrag just records the start position, which we already know.
   // TODO: Figure out where to get the list of bubbles to move when dragging.
   // TODO: Can setResizesEnabled be done at the same time for both types of drags?
@@ -167,6 +170,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   }
   this.workspace_.setResizesEnabled(true);
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
+  Blockly.Events.setGroup(false);
 };
 
 /**

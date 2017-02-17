@@ -192,7 +192,8 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
   if (startBlockMovable && this.hasExceededDragRadius_) {
     this.isDraggingBlock_ = true;
     console.log('dragging block');
-    this.blockDragger_ = new Blockly.BlockDragger(this);
+    this.blockDragger_ = new Blockly.BlockDragger(this.startBlock_,
+        this.startWorkspace_);
     this.blockDragger_.startBlockDrag();
     this.blockDragger_.dragBlock(this.mostRecentEvent_,
         this.currentDragDeltaXY_);

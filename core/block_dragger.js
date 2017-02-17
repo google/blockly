@@ -19,31 +19,42 @@
  */
 
 /**
- * @fileoverview
+ * @fileoverview Methods for dragging a block visually.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
 goog.provide('Blockly.BlockDragger');
 
-goog.require('goog.math.Coordinate');
 goog.require('Blockly.DraggedConnectionManager');
+
+goog.require('goog.math.Coordinate');
 goog.require('goog.asserts');
 
-Blockly.BlockDragger = function(gesture) {
+
+/**
+ * Class for a block dragger.  It moves blocks around the workspace when they
+ * are being dragged by a mouse or touch.
+ * @param {!Blockly.Block} block The block to drag.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace to drag on.
+ * @param {!goog.math.Coordinate} startCoordinate The position of the block at
+ *     the beginning of the drag.
+ * @constructor
+ */
+Blockly.BlockDragger = function(block, workspace, startCoordinate) {
   /**
    * The top block in the stack that is being dragged.
    * @type {!Blockly.BlockSvg}
    * @private
    */
-  this.draggingBlock_ = gesture.startBlock_;
+  this.draggingBlock_ = block;
 
   /**
    * The workspace on which the block is being dragged.
    * @type {!Blockly.WorkspaceSvg}
    * @private
    */
-  this.workspace_ = gesture.startWorkspace_;
+  this.workspace_ = workspace;
 
   /**
    * Object that keeps track of connections on dragged blocks.
@@ -57,7 +68,6 @@ Blockly.BlockDragger = function(gesture) {
    * Which delete area the mouse pointer is over, if any.
    * One of {@link Blockly.DELETE_AREA_TRASH},
    * {@link Blockly.DELETE_AREA_TOOLBOX}, or {@link Blockly.DELETE_AREA_NONE}.
-   * Only relevant if this is a block drag.
    * @type {?number}
    * @private
    */
@@ -66,7 +76,6 @@ Blockly.BlockDragger = function(gesture) {
   /**
    * Whether the block would be deleted if dropped immediately.
    * @type {boolean}
-   * Only relevant if this is a block drag.
    * @private
    */
   this.wouldDeleteBlock_ = false;
@@ -86,7 +95,7 @@ Blockly.BlockDragger = function(gesture) {
    * @private
    */
   this.dragSurface_ = this.useDragSurface_ ?
-      gesture.startWorkspace_.blockDragSurface_ : null;
+      workspace.blockDragSurface_ : null;
 
   /**
    * The location of the top left corner of the dragging block at the beginning
@@ -97,11 +106,11 @@ Blockly.BlockDragger = function(gesture) {
   this.blockRelativeToSurfaceXY_ = this.draggingBlock_.getRelativeToSurfaceXY();
 
   /**
-   * The coordinate of the block at the beginning of the drag.
+   * The coordinates of the block at the beginning of the drag.
    * @type {!goog.math.Coordinate}
    * @private
    */
-  this.startCoordinate_ = gesture.mouseDownXY;
+  this.startCoordinate_ = startCoordinate;
 };
 
 /**

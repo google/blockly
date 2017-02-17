@@ -90,16 +90,52 @@ Blockly.DraggedConnectionManager = function(block) {
    */
   this.radiusConnection_ = 0;
 
+  /**
+   * Whether the block would be deleted if it were dropped immediately.
+   * Updated on every mouse move.
+   * @type {boolean}
+   * @private
+   */
+  this.wouldDeleteBlock_ = false;
+
   Blockly.selected = block;
 };
 
 /**
- * Update highlighted connections and the cursor based on the most recent move
- * event.
- * @param {!Event} e Mouse move event to respond to.
- * @param {!goog.math.Coordinate} dxy Position relative to drag start.
+ * Return whether the block would be deleted if dropped immediately, based on
+ * information from the most recent move event.
+ * @return {boolean} true if the block would be deleted if dropped immediately.
  */
-Blockly.DraggedConnectionManager.prototype.update = function(e, dxy) {
+Blockly.DraggedConnectionManager.prototype.wouldDeleteBlock = function() {
+  return this.wouldDeleteBlock_;
+};
+
+/**
+ * Connect to the closest connection and render the results.
+ * This should be called at the end of a drag.
+ */
+Blockly.DraggedConnectionManager.prototype.applyConnections = function() {
+  if (this.closestConnection_) {
+    // Connect two blocks together.
+    this.localConnection_.connect(this.closestConnection_);
+    if (this.rendered) {
+      // Trigger a connection animation.
+      // Determine which connection is inferior (lower in the source stack).
+      var inferiorConnection = this.localConnection_.isSuperior() ?
+          this.closestConnection_ : this.localConnection_;
+      inferiorConnection.getSourceBlock().connectionUiEffect();
+    }
+    this.removeHighlighting_();
+  }
+};
+
+/**
+ * Update highlighted connections based on the most recent move location.
+ * @param {!goog.math.Coordinate} dxy Position relative to drag start.
+ * @param {?number} deleteArea One of {@link Blockly.DELETE_AREA_TRASH},
+ *     {@link Blockly.DELETE_AREA_TOOLBOX}, or {@link Blockly.DELETE_AREA_NONE}.
+ */
+Blockly.DraggedConnectionManager.prototype.update = function(dxy, deleteArea) {
   var oldClosestConnection = this.closestConnection_;
   var closestConnectionChanged = this.updateClosest_(dxy);
 
@@ -107,18 +143,25 @@ Blockly.DraggedConnectionManager.prototype.update = function(e, dxy) {
     oldClosestConnection.unhighlight();
   }
 
-  var wouldDeleteBlock = this.updateCursor_(e);
+ // Prefer connecting over dropping into the trash can, but prefer dragging to
+ // the toolbox over connecting to other blocks.
+  var wouldConnect = !!this.closestConnection_ &&
+      deleteArea != Blockly.DELETE_AREA_TOOLBOX;
+  var wouldDelete = !!deleteArea && !this.topBlock_.getParent() &&
+      this.topBlock_.isDeletable();
+  this.wouldDeleteBlock_ = wouldDelete && !wouldConnect;
 
-  if (!wouldDeleteBlock && closestConnectionChanged &&
+  if (!this.wouldDeleteBlock_ && closestConnectionChanged &&
       this.closestConnection_) {
-    this.addConnectionHighlighting();
+    this.addHighlighting_();
   }
 };
 
 /**
  * Remove highlighting from the currently highlighted connection, if it exists.
+ * @private
  */
-Blockly.DraggedConnectionManager.prototype.removeConnectionHighlighting = function() {
+Blockly.DraggedConnectionManager.prototype.removeHighlighting_ = function() {
   if (this.closestConnection_) {
     this.closestConnection_.unhighlight();
   }
@@ -126,8 +169,9 @@ Blockly.DraggedConnectionManager.prototype.removeConnectionHighlighting = functi
 
 /**
  * Add highlighting to the closest connection, if it exists.
+ * @private
  */
-Blockly.DraggedConnectionManager.prototype.addConnectionHighlighting = function() {
+Blockly.DraggedConnectionManager.prototype.addHighlighting_ = function() {
   if (this.closestConnection_) {
     this.closestConnection_.highlight();
   }
@@ -172,37 +216,4 @@ Blockly.DraggedConnectionManager.prototype.updateClosest_ = function(dxy) {
     }
   }
   return oldClosestConnection != this.closestConnection_;
-};
-
-/**
- * Provide visual indication of whether the block will be deleted if
- * dropped here.
- * Prefer connecting over dropping into the trash can, but prefer dragging to
- * the toolbox over connecting to other blocks.
- * @param {!Event} e Mouse move event.
- * @return {boolean} True if the block would be deleted if dropped here,
- *     otherwise false.
- * @private
- */
-Blockly.DraggedConnectionManager.prototype.updateCursor_ = function(e) {
-  var deleteArea = this.workspace_.isDeleteArea(e);
-  var wouldConnect = this.closestConnection_ &&
-      deleteArea != Blockly.DELETE_AREA_TOOLBOX;
-  var wouldDelete = deleteArea && !this.topBlock_.getParent() &&
-      this.topBlock_.isDeletable();
-  var showDeleteCursor = wouldDelete && !wouldConnect;
-
-  if (showDeleteCursor) {
-    Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
-    if (deleteArea == Blockly.DELETE_AREA_TRASH && this.workspace_.trashcan) {
-      this.workspace_.trashcan.setOpen_(true);
-    }
-    return true;
-  } else {
-    Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
-    if (this.workspace_.trashcan) {
-      this.workspace_.trashcan.setOpen_(false);
-    }
-    return false;
-  }
 };

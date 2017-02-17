@@ -37,11 +37,9 @@ goog.require('goog.asserts');
  * are being dragged by a mouse or touch.
  * @param {!Blockly.Block} block The block to drag.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to drag on.
- * @param {!goog.math.Coordinate} startCoordinate The position of the block at
- *     the beginning of the drag.
  * @constructor
  */
-Blockly.BlockDragger = function(block, workspace, startCoordinate) {
+Blockly.BlockDragger = function(block, workspace) {
   /**
    * The top block in the stack that is being dragged.
    * @type {!Blockly.BlockSvg}
@@ -99,18 +97,11 @@ Blockly.BlockDragger = function(block, workspace, startCoordinate) {
 
   /**
    * The location of the top left corner of the dragging block at the beginning
-   * of the drag.
+   * of the drag, relative to the surface that it started on.
    * @type {!goog.math.Coordinate}
    * @private
    */
   this.blockRelativeToSurfaceXY_ = this.draggingBlock_.getRelativeToSurfaceXY();
-
-  /**
-   * The coordinates of the block at the beginning of the drag.
-   * @type {!goog.math.Coordinate}
-   * @private
-   */
-  this.startCoordinate_ = startCoordinate;
 };
 
 /**
@@ -184,7 +175,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
  */
 Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
   var event = new Blockly.Events.Move(this.draggingBlock_);
-  event.oldCoordinate = this.startCoordinate_;
+  event.oldCoordinate = this.blockRelativeToSurfaceXY_;
   event.recordNew();
   Blockly.Events.fire(event);
   var draggingBlock = this.draggingBlock_;

@@ -126,8 +126,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
   // TODO: Figure out where to get the list of bubbles to move when dragging.
   // TODO: Can setResizesEnabled be done at the same time for both types of drags?
   this.workspace_.setResizesEnabled(false);
-  // TODO: Add getParent() to blockSvg.
-  if (this.draggingBlock_.parentBlock_) {
+  if (this.draggingBlock_.getParent()) {
     this.draggingBlock_.unplug();
     this.svgGroup_ = this.draggingBlock_.getSvgRoot();
     var newLoc = goog.math.Coordinate.sum(this.blockRelativeToSurfaceXY_,
@@ -160,7 +159,6 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
         this.svgGroup_.translate_ + this.svgGroup_.skew_);
   }
   this.deleteArea_ = this.workspace_.isDeleteArea(e);
-  // TODO: Handle the case when we aren't using the drag surface.
   this.draggedConnectionManager_.update(currentDragDeltaXY, this.deleteArea_);
   this.updateCursorDuringBlockDrag_();
 };

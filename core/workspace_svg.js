@@ -930,13 +930,11 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
-  this.markFocused();
   if (Blockly.utils.isTargetInput(e)) {
     Blockly.Touch.clearTouchIdentifier();
     return;
   }
   Blockly.terminateDrag_();  // In case mouse-up event was lost.
-  Blockly.hideChaff();
   var isTargetWorkspace = e.target && e.target.nodeName &&
       (e.target.nodeName.toLowerCase() == 'svg' ||
        e.target == this.svgBackground_);
@@ -946,8 +944,9 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
   }
 
   var gesture = Blockly.GestureHandler.gestureForEvent(e);
-  gesture.handleWsStart(e, this);
-
+  if (gesture) {
+    gesture.handleWsStart(e, this);
+  }
 };
 
 /**

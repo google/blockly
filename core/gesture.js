@@ -29,7 +29,7 @@ goog.provide('Blockly.Gesture');
 
 goog.require('goog.math.Coordinate');
 goog.require('Blockly.BlockDragger');
-goog.require('Blockly.DraggedConnectionManager');
+goog.require('Blockly.WorkspaceDragger');
 goog.require('goog.asserts');
 
 /**
@@ -50,13 +50,7 @@ Blockly.Gesture = function(e, touchId) {
    * @type {goog.math.Coordinate}
    * TODO: In what units?
    */
-  this.mouseDownXY = null;
-
-  /**
-   * @type {number}
-   * private
-   */
-  this.currentDragDelta_ = 0;
+  this.mouseDownXY_ = null;
 
   /**
    * @type {goog.math.Coordinate}
@@ -132,18 +126,13 @@ Blockly.Gesture = function(e, touchId) {
   this.mostRecentEvent_ = e;
 
   // TODO: Doc
-  this.startDragMetrics_ = null;
-
-  // TODO: Doc
-  this.startScrollXY_ = null;
-
-  // TODO: Doc
   this.onMoveWrapper_ = null;
 
   // TODO: Doc
   this.onUpWrapper_ = null;
 
   this.blockDragger_ = null;
+  this.workspaceDragger_ = null;
 };
 
 Blockly.Gesture.prototype.dispose = function() {
@@ -152,6 +141,12 @@ Blockly.Gesture.prototype.dispose = function() {
   }
   if (this.onUpWrapper_) {
     Blockly.unbindEvent_(this.onUpWrapper_);
+  }
+  if (this.blockDragger_) {
+    this.blockDragger_ = null;
+  }
+  if (this.workspaceDragger_) {
+    this.workspaceDragger_ = null;
   }
 };
 
@@ -172,7 +167,7 @@ Blockly.Gesture.prototype.update = function(e) {
 Blockly.Gesture.prototype.updateDragDelta_ = function(e) {
   var currentXY = new goog.math.Coordinate(e.clientX, e.clientY);
   this.currentDragDeltaXY_ = goog.math.Coordinate.difference(currentXY,
-      this.mouseDownXY);
+      this.mouseDownXY_);
   var currentDragDelta = goog.math.Coordinate.magnitude(
       this.currentDragDeltaXY_);
   this.hasExceededDragRadius_ = currentDragDelta > Blockly.DRAG_RADIUS;
@@ -188,6 +183,8 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
   // TODO: Assert that the most recent event was a move?
   goog.asserts.assert(!this.isDragging(),
       'Don\'t call updateIsDragging_ when a drag is already in progress.');
+
+  // First check if it was a block drag.
   var startBlockMovable = this.startBlock_ && this.startBlock_.isMovable();
   if (startBlockMovable && this.hasExceededDragRadius_) {
     this.isDraggingBlock_ = true;
@@ -200,25 +197,43 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
     return true;
   }
 
+  // Then check if it's a workspace drag.
   var wsMovable = this.startWorkspace_ && this.startWorkspace_.isDraggable();
   if (wsMovable && this.hasExceededDragRadius_) {
     this.isDraggingWorkspace_ = true;
-    this.startWorkspaceDrag();
+    this.workspaceDragger_ = new Blockly.WorkspaceDragger(this.startWorkspace_);
+    this.workspaceDragger_.startDrag();
     return true;
   }
   return false;
 };
 
-/**
- * Set the coordinate for the start of this gesture.
- * @param {!Event} e The event that starts the gesture.
- * @param {!Blockly.WorkspaceSvg} ws The workspace on which the gesture started.
- */
-Blockly.Gesture.prototype.setStartLocation = function(e, ws) {
-  this.mouseDownXY = new goog.math.Coordinate(e.clientX, e.clientY);
-  // TODO: Do I need the start drag metrics to manage a workspace drag?
-  this.startDragMetrics_ = ws.getMetrics();
-  this.startScrollXY_ = new goog.math.Coordinate(ws.scrollX, ws.scrollY);
+Blockly.Gesture.prototype.doStart = function(e) {
+  // TODO: Blockly.longStart_()
+  this.startWorkspace_.updateScreenCalculationsIfScrolled();
+  this.startWorkspace_.markFocused();
+  this.mostRecentEvent_ = e;
+
+  Blockly.hideChaff();
+
+  if (Blockly.utils.isRightButton(e)) {
+    this.handleRightClick(e);
+    return;
+  }
+  if (this.startBlock_) {
+    this.startBlock_.select();
+  }
+
+  this.mouseDownXY_ = new goog.math.Coordinate(e.clientX, e.clientY);
+
+  this.onMoveWrapper_ = Blockly.bindEvent_(
+      document, 'mousemove', null, this.handleMove.bind(this));
+
+  this.onUpWrapper_ = Blockly.bindEvent_(
+      document, 'mouseup', null, this.handleUp.bind(this));
+
+  e.preventDefault();
+  e.stopPropagation();
 };
 
 /**
@@ -234,7 +249,7 @@ Blockly.Gesture.prototype.handleMove = function(e) {
   }
   if (this.isDraggingWorkspace_) {
     // Move the visible workspace
-    this.dragWorkspace();
+    this.workspaceDragger_.drag(this.currentDragDeltaXY_);
   } else if (this.isDraggingBlock_) {
     // Move the dragging block.
     this.blockDragger_.dragBlock(this.mostRecentEvent_,
@@ -255,7 +270,7 @@ Blockly.Gesture.prototype.handleUp = function(e) {
     // Terminate block drag.
     this.blockDragger_.endBlockDrag(e, this.currentDragDeltaXY_);
   } else if (this.isDraggingWorkspace_) {
-    this.endWorkspaceDrag();
+    this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
     // Terminate workspace drag.
   } else if (this.isFieldClick_()) {
     // End field click.
@@ -274,31 +289,7 @@ Blockly.Gesture.prototype.endGesture = function(e) {
   e.stopPropagation();
 };
 
-Blockly.Gesture.prototype.doStart = function(e) {
-  // TODO: Blockly.longStart_()
-  this.startWorkspace_.updateScreenCalculationsIfScrolled();
-  this.startWorkspace_.markFocused();
-  this.mostRecentEvent_ = e;
 
-  if (Blockly.utils.isRightButton(e)) {
-    this.handleRightClick(e);
-    return;
-  }
-  if (this.startBlock_) {
-    this.startBlock_.select();
-  }
-
-  this.setStartLocation(e, this.startWorkspace_);
-
-  this.onMoveWrapper_ = Blockly.bindEvent_(
-      document, 'mousemove', null, this.handleMove.bind(this));
-
-  this.onUpWrapper_ = Blockly.bindEvent_(
-      document, 'mouseup', null, this.handleUp.bind(this));
-
-  e.preventDefault();
-  e.stopPropagation();
-};
 
 Blockly.Gesture.prototype.handleRightClick = function(e) {
   // handle right click
@@ -326,44 +317,6 @@ Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
 Blockly.Gesture.prototype.endFieldClick = function() {
   this.startField_.showEditor_();
 };
-
-
-
-// Workspace drags
-Blockly.Gesture.prototype.startWorkspaceDrag = function() {
-  // TODO: set cursor.
-  this.startWorkspace_.setupDragSurface();
-};
-
-
-Blockly.Gesture.prototype.endWorkspaceDrag = function() {
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-  this.startWorkspace_.resetDragSurface();
-};
-
-/**
- * Move the workspace based on the most recent mouse movements.
- */
-Blockly.Gesture.prototype.dragWorkspace = function() {
-  var metrics = this.startDragMetrics_;
-  var newXY = goog.math.Coordinate.sum(
-      this.startScrollXY_, this.currentDragDeltaXY_);
-
-  // Bound the new XY based on workspace bounds.
-  // TODO: Make this a separate function--is it called anywhere else?
-  var x = Math.min(newXY.x, -metrics.contentLeft);
-  var y = Math.min(newXY.y, -metrics.contentTop);
-  x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
-               metrics.contentWidth);
-  y = Math.max(y, metrics.viewHeight - metrics.contentTop -
-               metrics.contentHeight);
-
-  // Move the scrollbars and the page will scroll automatically.
-  this.startWorkspace_.scrollbar.set(-x - metrics.contentLeft,
-                          -y - metrics.contentTop);
-};
-
-
 
 // Simple setters
 

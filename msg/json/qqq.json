@@ -202,7 +202,7 @@
 	"TEXT_CREATE_JOIN_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Text#text-creation https://github.com/google/blockly/wiki/Text#text-creation], specifically the last picture in the 'Text creation' section.",
 	"TEXT_CREATE_JOIN_ITEM_TOOLTIP": "block text - See [https://github.com/google/blockly/wiki/Text#text-creation https://github.com/google/blockly/wiki/Text#text-creation], specifically the last picture in the 'Text creation' section.",
 	"TEXT_APPEND_HELPURL": "url - This and the other text-related URLs are going to be hard to translate.  As always, it is okay to leave untranslated or paste in the English-language URL.  For these URLs, you might also consider a general URL about how computers represent text (such as the translation of [https://en.wikipedia.org/wiki/String_(computer_science) this Wikipedia page]).",
-	"TEXT_APPEND_TO": "block input text - Message preceding the name of a variable to which text should be appended. [[File:blockly-append-text.png]]",
+	"TEXT_APPEND_TO": "block input text - Message preceding the name of a variable to which text should be appended. [[File:blockly-append-text.png]]\n{{Identical|To}}",
 	"TEXT_APPEND_APPENDTEXT": "block input text - Message following the variable and preceding the piece of text that should be appended, as shown below. [[File:blockly-append-text.png]]",
 	"TEXT_APPEND_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Text#text-modification https://github.com/google/blockly/wiki/Text#text-modification] for more information.\n\nParameters:\n* %1 - the name of the variable to which text should be appended",
 	"TEXT_LENGTH_HELPURL": "url - Information about text on computers (usually referred to as 'strings').",

@@ -274,11 +274,13 @@ Blockly.Gesture.prototype.handleUp = function(e) {
     // Terminate workspace drag.
   } else if (this.isFieldClick_()) {
     // End field click.
-    this.endFieldClick();
+    this.doFieldClick_();
   } else if (this.isBlockClick_()) {
     // Click the block.
+    this.doBlockClick_();
   } else if (this.isWorkspaceClick_()) {
     // Click the workspace.
+    this.doWorkspaceClick_();
   }
   this.endGesture(e);
 };
@@ -292,7 +294,6 @@ Blockly.Gesture.prototype.endGesture = function(e) {
 
 
 Blockly.Gesture.prototype.handleRightClick = function(e) {
-  // handle right click
   if (this.startBlock_) {
     this.startBlock_.showContextMenu_(e);
   } else if (this.startWorkspace_) {
@@ -314,8 +315,18 @@ Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
 };
 
 // Field clicks
-Blockly.Gesture.prototype.endFieldClick = function() {
+Blockly.Gesture.prototype.doFieldClick_ = function() {
   this.startField_.showEditor_();
+};
+
+// Block clicks
+Blockly.Gesture.prototype.doBlockClick_ = function() {
+  // TODO: Implement.
+};
+
+// Field clicks
+Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
+  // TODO: Implement.
 };
 
 // Simple setters

@@ -985,10 +985,6 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
  * @param {!Object} json Structured data describing the block.
  */
 Blockly.Block.prototype.jsonInit = function(json) {
-  // Add the mutator to the block
-  if (json['mutator'] !== undefined) {
-    Blockly.Extensions.apply(json['mutator'], this);
-  }
 
   // Validate inputs.
   goog.asserts.assert(json['output'] == undefined ||
@@ -1043,11 +1039,17 @@ Blockly.Block.prototype.jsonInit = function(json) {
       'strings. Found raw string in JSON for \'' + json['type'] + '\' block.');
     json['extensions'] = [json['extensions']];  // Correct and continue.
   }
+
+  // Add the mutator to the block
+  if (json['mutator'] !== undefined) {
+    Blockly.Extensions.apply(json['mutator'], this, true);
+  }
+
   if (Array.isArray(json['extensions'])) {
     var extensionNames = json['extensions'];
     for (var i = 0; i < extensionNames.length; ++i) {
       var extensionName = extensionNames[i];
-      Blockly.Extensions.apply(extensionName, this);
+      Blockly.Extensions.apply(extensionName, this, false);
     }
   }
 };

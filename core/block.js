@@ -876,16 +876,15 @@ Blockly.Block.prototype.setDisabled = function(disabled) {
  * @return {boolean} True if disabled.
  */
 Blockly.Block.prototype.getInheritedDisabled = function() {
-  var block = this;
-  while (true) {
-    block = block.getSurroundParent();
-    if (!block) {
-      // Ran off the top.
-      return false;
-    } else if (block.disabled) {
+  var ancestor = this.getSurroundParent();
+  while (ancestor) {
+    if (ancestor.disabled) {
       return true;
     }
+    ancestor = ancestor.getSurroundParent();
   }
+  // Ran off the top.
+  return false;
 };
 
 /**
@@ -1231,7 +1230,7 @@ Blockly.Block.newFieldImageFromJson_ = function(options) {
  * Helper function to construct a FieldLabel from a JSON arg object,
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (text, and class).
- * @returns {!Blockly.FieldImage} The new image.
+ * @returns {!Blockly.FieldLabel} The new label.
  * @private
  */
 Blockly.Block.newFieldLabelFromJson_ = function(options) {
@@ -1244,7 +1243,7 @@ Blockly.Block.newFieldLabelFromJson_ = function(options) {
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (text, class, and
  *                          spellcheck).
- * @returns {!Blockly.FieldImage} The new image.
+ * @returns {!Blockly.FieldTextInput} The new text input.
  * @private
  */
 Blockly.Block.newFieldTextInputFromJson_ = function(options) {
@@ -1260,7 +1259,7 @@ Blockly.Block.newFieldTextInputFromJson_ = function(options) {
  * Helper function to construct a FieldVariable from a JSON arg object,
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (variable).
- * @returns {!Blockly.FieldImage} The new image.
+ * @returns {!Blockly.FieldVariable} The variable field.
  * @private
  */
 Blockly.Block.newFieldVariableFromJson_ = function(options) {

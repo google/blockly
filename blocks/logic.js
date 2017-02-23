@@ -86,7 +86,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "nextStatement": null,
     "colour": "%{BKY_LOGIC_HUE}",
     "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
-    "extensions": ["controls_if_mutator"]
+    "mutator": "controls_if_mutator",
+    "extensions": ["controls_if_tooltip"]
   },
   // If/else block that does not use a mutator.
   {
@@ -457,15 +458,16 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   }
 };
 
+Blockly.Extensions.registerMutator('controls_if_mutator',
+    Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN,
+    ['controls_if_elseif', 'controls_if_else']);
 /**
  * "controls_if" extension function. Adds mutator, shape updating methods, and
  * dynamic tooltip to "controls_if" blocks.
  * @this Blockly.Block
  * @package
  */
-Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_EXTENSION = function() {
-  this.setMutator(new Blockly.Mutator(['controls_if_elseif', 'controls_if_else']));
-  this.mixin(Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN);
+Blockly.Constants.Logic.CONTROLS_IF_TOOLTIP_EXTENSION = function() {
 
   this.setTooltip(function() {
     if (!this.elseifCount_ && !this.elseCount_) {
@@ -481,11 +483,11 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_EXTENSION = function() {
   }.bind(this));
 };
 
-Blockly.Extensions.register('controls_if_mutator',
-  Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_EXTENSION);
+Blockly.Extensions.register('controls_if_tooltip',
+  Blockly.Constants.Logic.CONTROLS_IF_TOOLTIP_EXTENSION);
 
 /**
- * Corrects the logic_compate dropdown label with respect to language direction.
+ * Corrects the logic_compare dropdown label with respect to language direction.
  * @this Blockly.Block
  * @package
  */
@@ -513,7 +515,7 @@ Blockly.Constants.Logic.fixLogicCompareRtlOpLabels =
   };
 
 /**
- * Adds dynamic type validation for the left and right sides of a logic_compate block.
+ * Adds dynamic type validation for the left and right sides of a logic_compare block.
  * @mixin
  * @augments Blockly.Block
  * @package

@@ -985,6 +985,11 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
  * @param {!Object} json Structured data describing the block.
  */
 Blockly.Block.prototype.jsonInit = function(json) {
+  // Add the mutator to the block
+  if (json['mutator'] !== undefined) {
+    Blockly.Extensions.apply(json['mutator'], this);
+  }
+
   // Validate inputs.
   goog.asserts.assert(json['output'] == undefined ||
       json['previousStatement'] == undefined,

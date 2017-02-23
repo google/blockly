@@ -77,6 +77,60 @@ Blockly.Extensions.registerMixin = function(name, mixinObj) {
 };
 
 /**
+ * Registers a new extension function that adds a mutator to the block.
+ * A mutator must have, at minimum, domToMutation and mutationToDom.  When
+ * mixing it into a block, the wrapper will check that domToMutation and
+ * mutationToDom are not already defined on that block.
+ * The wrapper may also add a mutator dialog to the block.
+ * @param {string} name The name of this mutator extension.
+ * @param {!Object} mixinObj The values to mix in.
+ * @param {Array.<string>=} opt_blockList A list of blocks to appear in the flyout
+ *     of the mutator dialog.  If a list is passed in, the extension will also
+ *     add a mutator dialog to the block.
+ * @throws {Error} if the extension name is empty; the extension is already
+ *     registered; or domToMutation and mutationToDom are wrong.
+ */
+Blockly.Extensions.registerMutator = function(name, mixinObj, opt_blockList) {
+  Blockly.Extensions.register(name, function() {
+    // Check that the mixin object makese sense.
+    if (!mixinObj.hasOwnProperty('domToMutation')) {
+      throw new Error('Error: mutation name "' + name + '" is missing domToMutation');
+    } else if (typeof mixinObj['domToMutation'] !== "function") {
+      throw new Error('Error: mutation name "' + name +
+          '" has a domToMutation that is not a function');
+    }
+
+    if (!mixinObj.hasOwnProperty('mutationToDom')) {
+      throw new Error('Error: mutation name "' + name + '" is missing mutationToDom');
+    } else if (typeof mixinObj['mutationToDom'] !== "function") {
+      throw new Error('Error: mutation name "' + name +
+          '" has a mutationToDom that is not a function');
+    }
+
+    // Check that we're not overwriting anything.
+    if (this.hasOwnProperty('domToMutation')) {
+      throw new Error('Error: tried to apply mutation "' + name +
+          '" to a block that already has a domToMutation function.  Block id: ' +
+          this.id);
+    }
+
+    if (this.hasOwnProperty('mutationToDom')) {
+      throw new Error('Error: tried to apply mutation "' + name +
+          '" to a block that already has a domToMutation function.  Block id: ' +
+          this.id);
+    }
+
+    // Possibly add a mutator dialog.
+    if (opt_blockList) {
+      this.setMutator(new Blockly.Mutator(opt_blockList));
+    }
+
+    // Finally, mixin the object.
+    this.mixin(mixinObj);
+  });
+};
+
+/**
  * Applies an extension method to a block. This should only be called during
  * block construction.
  * @param {string} name The name of the extension.

@@ -94,7 +94,7 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
   text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
   // Inject CSS tag at start of head.
   var cssNode = document.createElement('style');
-  document.head.insertBefore(cssNode, document.head.firstChild);
+  document.head.appendChild(cssNode);
 
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
@@ -111,7 +111,7 @@ Blockly.Css.setCursor = function(cursor) {
     return;
   }
   Blockly.Css.currentCursor_ = cursor;
-  var url = 'url(' + Blockly.Css.mediaPath_ + '/' + cursor + '.cur), auto';
+  var url = 'url(' + Blockly.Css.mediaPath_ + '/' + cursor + '.cur) 8 5, auto';
   // There are potentially hundreds of draggable objects.  Changing their style
   // properties individually is too slow, so change the CSS rule instead.
   var rule = '.blocklyDraggable {\n  cursor: ' + url + ';\n}\n';

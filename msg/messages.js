@@ -48,6 +48,23 @@ goog.require('Blockly.Msg');
  * them to msg/json/qqq.json, and they show up in the translation console.
  */
 
+/// {{Notranslate}} Hue value for all logic blocks.
+Blockly.Msg.LOGIC_HUE = '210';
+/// {{Notranslate}} Hue value for all loop blocks.
+Blockly.Msg.LOOPS_HUE = '120';
+/// {{Notranslate}} Hue value for all math blocks.
+Blockly.Msg.MATH_HUE = '230';
+/// {{Notranslate}} Hue value for all text blocks.
+Blockly.Msg.TEXTS_HUE = '160';
+/// {{Notranslate}} Hue value for all list blocks.
+Blockly.Msg.LISTS_HUE = '260';
+/// {{Notranslate}} Hue value for all colour blocks.
+Blockly.Msg.COLOUR_HUE = '20';
+/// {{Notranslate}} Hue value for all variable blocks.
+Blockly.Msg.VARIABLES_HUE = '330';
+/// {{Notranslate}} Hue value for all procedure blocks.
+Blockly.Msg.PROCEDURES_HUE = '290';
+
 /// default name - A simple, general default name for a variable, preferably short.
 /// For more context, see
 /// [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}
@@ -222,7 +239,7 @@ Blockly.Msg.CONTROLS_IF_TOOLTIP_3 = 'If the first value is true, then do the fir
 /// tooltip - Describes [https://github.com/google/blockly/wiki/IfElse#if-else-if-else-blocks if-else-if-else blocks].  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_statement https://en.wikipedia.org/wiki/If_statement], if present.
 Blockly.Msg.CONTROLS_IF_TOOLTIP_4 = 'If the first value is true, then do the first block of statements. Otherwise, if the second value is true, do the second block of statements. If none of the values are true, do the last block of statements.';
 /// block text - See [https://github.com/google/blockly/wiki/IfElse https://github.com/google/blockly/wiki/IfElse].
-/// It is recommended, but not essential, that this have text in common with the translation of 'else if'
+/// It is recommended, but not essential, that this have text in common with the translation of 'else if'\n{{Identical|If}}
 Blockly.Msg.CONTROLS_IF_MSG_IF = 'if';
 /// block text - See [https://github.com/google/blockly/wiki/IfElse https://github.com/google/blockly/wiki/IfElse].  The English words "otherwise if" would probably be clearer than "else if", but the latter is used because it is traditional and shorter.
 Blockly.Msg.CONTROLS_IF_MSG_ELSEIF = 'else if';
@@ -749,6 +766,30 @@ Blockly.Msg.TEXT_PROMPT_TOOLTIP_NUMBER = 'Prompt for user for a number.';
 /// https://github.com/google/blockly/wiki/Text#printing-text].
 Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT = 'Prompt for user for some text.';
 
+/// block text - Title of a block that counts the number of instances of
+/// a smaller pattern (%1) inside a longer string (%2).
+Blockly.Msg.TEXT_COUNT_MESSAGE0 = 'count %1 in %2';
+/// url - Information about counting how many times a string appears in another string.
+Blockly.Msg.TEXT_COUNT_HELPURL = 'https://github.com/google/blockly/wiki/Text#counting-substrings';
+/// tooltip - Short description of a block that counts how many times some text occurs within some other text.
+Blockly.Msg.TEXT_COUNT_TOOLTIP = 'Count how many times some text occurs within some other text.';
+
+/// block text - Title of a block that returns a copy of text (%3) with all
+/// instances of some smaller text (%1) replaced with other text (%2).
+Blockly.Msg.TEXT_REPLACE_MESSAGE0 = 'replace %1 with %2 in %3';
+/// url - Information about replacing each copy text (or string, in computer lingo) with other text.
+Blockly.Msg.TEXT_REPLACE_HELPURL = 'https://github.com/google/blockly/wiki/Text#replacing-substrings';
+/// tooltip - Short description of a block that replaces copies of text in a large text with other text.
+Blockly.Msg.TEXT_REPLACE_TOOLTIP = 'Replace all occurances of some text within some other text.';
+
+/// block text - Title of block that returns a copy of text (%1) with the order
+/// of letters and characters reversed.
+Blockly.Msg.TEXT_REVERSE_MESSAGE0 = 'reverse %1';
+/// url - Information about reversing a letters/characters in text.
+Blockly.Msg.TEXT_REVERSE_HELPURL = 'https://github.com/google/blockly/wiki/Text#reversing-text';
+/// tooltip - See [https://github.com/google/blockly/wiki/Text].
+Blockly.Msg.TEXT_REVERSE_TOOLTIP = 'Reverses the order of the characters in the text.';
+
 // Lists Blocks.
 /// url - Information on empty lists.
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = 'https://github.com/google/blockly/wiki/Lists#create-empty-list';
@@ -966,7 +1007,7 @@ Blockly.Msg.LISTS_GET_SUBLIST_TAIL = '';
 /// [[File:Blockly-get-sublist.png]]
 Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion of a list.';
 
-/// url - Information describing sorting a list.
+/// {{optional}}\nurl - Information describing sorting a list.
 Blockly.Msg.LISTS_SORT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#sorting-a-list';
 /// Sort as type %1 (numeric or alphabetic) in order %2 (ascending or descending) a list of items %3.\n{{Identical|Sort}}
 Blockly.Msg.LISTS_SORT_TITLE = 'sort %1 %2 %3';
@@ -997,6 +1038,13 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = 'Split text into a list of texts, breaki
 /// tooltip - See [https://github.com/google/blockly/wiki/Lists#make-text-from-list
 /// https://github.com/google/blockly/wiki/Lists#make-text-from-list] for more information.
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = 'Join a list of texts into one text, separated by a delimiter.';
+
+/// url - Information describing reversing a list.
+Blockly.Msg.LISTS_REVERSE_HELPURL = 'https://github.com/google/blockly/wiki/Lists#reversing-a-list';
+/// block text - Title of block that returns a copy of a list (%1) with the order of items reversed.
+Blockly.Msg.LISTS_REVERSE_MESSAGE0 = 'reverse %1';
+/// tooltip - Short description for a block that reverses a copy of a list.
+Blockly.Msg.LISTS_REVERSE_TOOLTIP = 'Reverse a copy of a list.';
 
 /// grammar - Text that follows an ordinal number (a number that indicates
 /// position relative to other numbers).  In most languages, such text appears
@@ -1107,7 +1155,7 @@ Blockly.Msg.PROCEDURES_CREATE_DO = 'Create "%1"';
 /// tooltip - If the first value is true, this causes the second value to be returned
 /// immediately from the enclosing function.
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = 'If a value is true, then return a second value.';
-/// url - Information about guard clauses.
+/// {{optional}}\nurl - Information about guard clauses.
 Blockly.Msg.PROCEDURES_IFRETURN_HELPURL = 'http://c2.com/cgi/wiki?GuardClause';
 /// warning - This appears if the user tries to use this block outside of a function definition.
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = 'Warning: This block may be used only within a function definition.';

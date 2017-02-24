@@ -35,7 +35,7 @@ Blockly.Python['controls_if'] = function(block) {
   var code = '', branchCode, conditionCode;
   do {
     conditionCode = Blockly.Python.valueToCode(block, 'IF' + n,
-      Blockly.Python.ORDER_NONE) || 'false';
+        Blockly.Python.ORDER_NONE) || 'False';
     branchCode = Blockly.Python.statementToCode(block, 'DO' + n) ||
         Blockly.Python.PASS;
     code += (n == 0 ? 'if ' : 'elif ' ) + conditionCode + ':\n' + branchCode;

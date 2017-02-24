@@ -502,3 +502,11 @@ Blockly.PHP['lists_split'] = function(block) {
   var code = functionName + '(' + value_delim + ', ' + value_input + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
+
+Blockly.PHP['lists_reverse'] = function(block) {
+  // Block for reversing a list.
+  var list = Blockly.PHP.valueToCode(block, 'LIST',
+      Blockly.PHP.ORDER_COMMA) || '[]';
+  var code = 'array_reverse(' + list + ')';
+  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+};

@@ -450,3 +450,12 @@ Blockly.Dart['lists_split'] = function(block) {
   var code = input + '.' + functionName + '(' + delimiter + ')';
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
+
+Blockly.Dart['lists_reverse'] = function(block) {
+  // Block for reversing a list.
+  var list = Blockly.Dart.valueToCode(block, 'LIST',
+      Blockly.Dart.ORDER_NONE) || '[]';
+  // XXX What should the operator precedence be for a `new`?
+  var code = 'new List.from(' + list + '.reversed)';
+  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+};

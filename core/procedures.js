@@ -24,18 +24,18 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.Procedures
+ * @namespace
+ **/
 goog.provide('Blockly.Procedures');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly.constants');
 goog.require('Blockly.Field');
 goog.require('Blockly.Names');
 goog.require('Blockly.Workspace');
 
-
-/**
- * Category to separate procedure names from variables and generated functions.
- */
-Blockly.Procedures.NAME_TYPE = 'PROCEDURE';
 
 /**
  * Find all user-created procedure definitions in a workspace.
@@ -132,7 +132,7 @@ Blockly.Procedures.isLegalName_ = function(name, workspace, opt_exclude) {
  * Rename a procedure.  Called by the editable field.
  * @param {string} name The proposed new name.
  * @return {string} The accepted name.
- * @this {!Blockly.Field}
+ * @this {Blockly.Field}
  */
 Blockly.Procedures.rename = function(name) {
   // Strip leading and trailing whitespace.  Beyond this, all names are legal.

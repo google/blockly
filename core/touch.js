@@ -24,6 +24,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.Touch
+ * @namespace
+ **/
 goog.provide('Blockly.Touch');
 
 goog.require('goog.events');
@@ -77,8 +81,15 @@ Blockly.longPid_ = 0;
  */
 Blockly.longStart_ = function(e, uiObject) {
   Blockly.longStop_();
+  // Punt on multitouch events.
+  if (e.changedTouches.length != 1) {
+    return;
+  }
   Blockly.longPid_ = setTimeout(function() {
     e.button = 2;  // Simulate a right button click.
+    // e was a touch event.  It needs to pretend to be a mouse event.
+    e.clientX = e.changedTouches[0].clientX;
+    e.clientY = e.changedTouches[0].clientY;
     uiObject.onMouseDown_(e);
   }, Blockly.LONGPRESS);
 };
@@ -108,7 +119,7 @@ Blockly.onMouseUp_ = function(e) {
   }
   Blockly.Touch.clearTouchIdentifier();
 
-  // TODO(#781): Check whether this needs to be called for all drag modes. 
+  // TODO(#781): Check whether this needs to be called for all drag modes.
   workspace.resetDragSurface();
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   workspace.dragMode_ = Blockly.DRAG_NONE;

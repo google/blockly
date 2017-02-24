@@ -84,11 +84,13 @@ Blockly.FieldCheckbox.prototype.getValue = function() {
 };
 
 /**
- * Set the checkbox to be checked if strBool is 'TRUE', unchecks otherwise.
- * @param {string} strBool New state.
+ * Set the checkbox to be checked if newBool is 'TRUE' or true,
+ * unchecks otherwise.
+ * @param {string|boolean} newBool New state.
  */
-Blockly.FieldCheckbox.prototype.setValue = function(strBool) {
-  var newState = (strBool.toUpperCase() == 'TRUE');
+Blockly.FieldCheckbox.prototype.setValue = function(newBool) {
+  var newState = (typeof newBool == 'string') ?
+      (newBool.toUpperCase() == 'TRUE') : !!newBool;
   if (this.state_ !== newState) {
     if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
       Blockly.Events.fire(new Blockly.Events.Change(

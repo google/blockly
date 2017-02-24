@@ -24,6 +24,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.ContextMenu
+ * @namespace
+ */
 goog.provide('Blockly.ContextMenu');
 
 goog.require('goog.dom');

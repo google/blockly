@@ -34,18 +34,20 @@ blocklyApp.BlockConnectionService = ng.core.Class({
     // link is stored here.
     this.markedConnection_ = null;
   }],
-  findCompatibleConnection_: function(block) {
+  findCompatibleConnection_: function(block, targetConnection) {
     // Locates and returns a connection on the given block that is compatible
-    // with the marked connection, if one exists. Returns null if no such
+    // with the target connection, if one exists. Returns null if no such
     // connection exists.
-    // Note: this currently ignores input connections on the given block, since
-    // one doesn't usually mark an output connection and attach a block to it.
-    if (!this.markedConnection_ ||
-        !this.markedConnection_.getSourceBlock().workspace) {
+    // Note: the targetConnection is assumed to be the markedConnection_, or
+    // possibly its counterpart (in the case where the marked connection is
+    // currently attached to another connection). This method therefore ignores
+    // input connections on the given block, since one doesn't usually mark an
+    // output connection and attach a block to it.
+    if (!targetConnection || !targetConnection.getSourceBlock().workspace) {
       return null;
     }
 
-    var desiredType = Blockly.OPPOSITE_TYPE[this.markedConnection_.type];
+    var desiredType = Blockly.OPPOSITE_TYPE[targetConnection.type];
     var potentialConnection = (
         desiredType == Blockly.OUTPUT_VALUE ? block.outputConnection :
         desiredType == Blockly.PREVIOUS_STATEMENT ? block.previousConnection :
@@ -53,7 +55,7 @@ blocklyApp.BlockConnectionService = ng.core.Class({
         null);
 
     if (potentialConnection &&
-        potentialConnection.checkType_(this.markedConnection_)) {
+        potentialConnection.checkType_(targetConnection)) {
       return potentialConnection;
     } else {
       return null;
@@ -67,7 +69,8 @@ blocklyApp.BlockConnectionService = ng.core.Class({
         this.markedConnection_.getSourceBlock() : null;
   },
   canBeAttachedToMarkedConnection: function(block) {
-    return Boolean(this.findCompatibleConnection_(block));
+    return Boolean(
+        this.findCompatibleConnection_(block, this.markedConnection_));
   },
   canBeMovedToMarkedConnection: function(block) {
     if (!this.markedConnection_) {
@@ -94,9 +97,24 @@ blocklyApp.BlockConnectionService = ng.core.Class({
     var xml = Blockly.Xml.blockToDom(block);
     var reconstitutedBlock = Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
 
-    var connection = this.findCompatibleConnection_(reconstitutedBlock);
+    var targetConnection = null;
+    if (this.markedConnection_.targetBlock() &&
+        this.markedConnection_.type == Blockly.PREVIOUS_STATEMENT) {
+      // Is the marked connection a 'previous' connection that is already
+      // connected? If so, find the block that's currently connected to it, and
+      // use that block's 'next' connection as the new marked connection.
+      // Otherwise, splicing does not happen correctly, and inserting a block
+      // in the middle of a group of two linked blocks will split the group.
+      targetConnection = this.markedConnection_.targetConnection;
+    } else {
+      targetConnection = this.markedConnection_;
+    }
+
+    var connection = this.findCompatibleConnection_(
+      reconstitutedBlock, targetConnection);
     if (connection) {
-      this.markedConnection_.connect(connection);
+      targetConnection.connect(connection);
+
       this.markedConnection_ = null;
       this.audioService.playConnectSound();
       return reconstitutedBlock.id;

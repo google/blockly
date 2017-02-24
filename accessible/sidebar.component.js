@@ -90,6 +90,7 @@ blocklyApp.SidebarComponent = ng.core.Component({
   },
   clearWorkspace: function() {
     blocklyApp.workspace.clear();
+    this.treeService.clearAllActiveDescs();
     // The timeout is needed in order to give the blocks time to be cleared
     // from the workspace, and for the 'workspace is empty' button to show up.
     setTimeout(function() {

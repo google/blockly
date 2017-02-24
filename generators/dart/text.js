@@ -295,3 +295,53 @@ Blockly.Dart['text_prompt_ext'] = function(block) {
 };
 
 Blockly.Dart['text_prompt'] = Blockly.Dart['text_prompt_ext'];
+
+Blockly.Dart['text_count'] = function(block) {
+  var text = Blockly.Dart.valueToCode(block, 'TEXT',
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
+  var sub = Blockly.Dart.valueToCode(block, 'SUB',
+      Blockly.Dart.ORDER_NONE) || '\'\'';
+  // Substring count is not a native Dart function.  Define one.
+  var functionName = Blockly.Dart.provideFunction_(
+      'text_count',
+      ['int ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
+        '(String haystack, String needle) {',
+        '  if (needle.length == 0) {',
+        '    return haystack.length + 1;',
+        '  }',
+        '  int index = 0;',
+        '  int count = 0;',
+        '  while (index != -1) {',
+        '    index = haystack.indexOf(needle, index);',
+        '    if (index != -1) {',
+        '      count++;',
+        '     index += needle.length;',
+        '    }',
+        '  }',
+        '  return count;',
+        '}']);
+  var code = functionName + '(' + text + ', ' + sub + ')';
+  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+};
+
+Blockly.Dart['text_replace'] = function(block) {
+  var text = Blockly.Dart.valueToCode(block, 'TEXT',
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
+  var from = Blockly.Dart.valueToCode(block, 'FROM',
+      Blockly.Dart.ORDER_NONE) || '\'\'';
+  var to = Blockly.Dart.valueToCode(block, 'TO',
+      Blockly.Dart.ORDER_NONE) || '\'\'';
+  var code = text + '.replaceAll(' + from + ', ' + to + ')';
+  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+};
+
+Blockly.Dart['text_reverse'] = function(block) {
+  // There isn't a sensible way to do this in Dart. See:
+  // http://stackoverflow.com/a/21613700/3529104
+  // Implementing something is possibly better than not implementing anything?
+  var text = Blockly.Dart.valueToCode(block, 'TEXT',
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
+  var code = 'new String.fromCharCodes(' + text + '.runes.toList().reversed)';
+  // XXX What should the operator precedence be for a `new`?
+  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+};

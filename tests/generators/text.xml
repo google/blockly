@@ -1,5 +1,5 @@
 <xml xmlns="http://www.w3.org/1999/xhtml">
-  <block type="unittest_main" x="13" y="13">
+  <block type="unittest_main" x="13" y="-63">
     <statement name="DO">
       <block type="procedures_callnoreturn">
         <mutation name="test length"></mutation>
@@ -36,6 +36,21 @@
                                                 <next>
                                                   <block type="procedures_callnoreturn">
                                                     <mutation name="test trim"></mutation>
+                                                    <next>
+                                                      <block type="procedures_callnoreturn">
+                                                        <mutation name="test count"></mutation>
+                                                        <next>
+                                                          <block type="procedures_callnoreturn">
+                                                            <mutation name="test reverse"></mutation>
+                                                            <next>
+                                                              <block type="procedures_callnoreturn">
+                                                                <mutation name="test replace"></mutation>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
                                                   </block>
                                                 </next>
                                               </block>
@@ -4074,6 +4089,547 @@
                                 <value name="EXPECTED">
                                   <block type="text">
                                     <field name="TEXT">   abc def</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="13" y="12088">
+    <field name="NAME">test count</field>
+    <comment pinned="false" h="80" w="160">Tests the "trim" block.</comment>
+    <statement name="STACK">
+      <block type="variables_set">
+        <field name="VAR">text</field>
+        <value name="VALUE">
+          <block type="text">
+            <field name="TEXT">woolloomooloo</field>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <value name="MESSAGE">
+              <block type="text">
+                <field name="TEXT">len 1</field>
+              </block>
+            </value>
+            <value name="ACTUAL">
+              <block type="text_count">
+                <value name="SUB">
+                  <block type="text">
+                    <field name="TEXT">o</field>
+                  </block>
+                </value>
+                <value name="TEXT">
+                  <block type="variables_get">
+                    <field name="VAR">text</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="math_number">
+                <field name="NUM">8</field>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <value name="MESSAGE">
+                  <block type="text">
+                    <field name="TEXT">len 2</field>
+                  </block>
+                </value>
+                <value name="ACTUAL">
+                  <block type="text_count">
+                    <value name="SUB">
+                      <block type="text">
+                        <field name="TEXT">oo</field>
+                      </block>
+                    </value>
+                    <value name="TEXT">
+                      <block type="variables_get">
+                        <field name="VAR">text</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="math_number">
+                    <field name="NUM">4</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="unittest_assertequals" inline="false">
+                    <value name="MESSAGE">
+                      <block type="text">
+                        <field name="TEXT">len 3</field>
+                      </block>
+                    </value>
+                    <value name="ACTUAL">
+                      <block type="text_count">
+                        <value name="SUB">
+                          <block type="text">
+                            <field name="TEXT">loo</field>
+                          </block>
+                        </value>
+                        <value name="TEXT">
+                          <block type="variables_get">
+                            <field name="VAR">text</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="EXPECTED">
+                      <block type="math_number">
+                        <field name="NUM">2</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="unittest_assertequals" inline="false">
+                        <value name="MESSAGE">
+                          <block type="text">
+                            <field name="TEXT">start</field>
+                          </block>
+                        </value>
+                        <value name="ACTUAL">
+                          <block type="text_count">
+                            <value name="SUB">
+                              <block type="text">
+                                <field name="TEXT">wool</field>
+                              </block>
+                            </value>
+                            <value name="TEXT">
+                              <block type="variables_get">
+                                <field name="VAR">text</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="EXPECTED">
+                          <block type="math_number">
+                            <field name="NUM">1</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="unittest_assertequals" inline="false">
+                            <value name="MESSAGE">
+                              <block type="text">
+                                <field name="TEXT">missing</field>
+                              </block>
+                            </value>
+                            <value name="ACTUAL">
+                              <block type="text_count">
+                                <value name="SUB">
+                                  <block type="text">
+                                    <field name="TEXT">chicken</field>
+                                  </block>
+                                </value>
+                                <value name="TEXT">
+                                  <block type="variables_get">
+                                    <field name="VAR">text</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="EXPECTED">
+                              <block type="math_number">
+                                <field name="NUM">0</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="unittest_assertequals" inline="false">
+                                <value name="MESSAGE">
+                                  <block type="text">
+                                    <field name="TEXT">empty needle</field>
+                                  </block>
+                                </value>
+                                <value name="ACTUAL">
+                                  <block type="text_count">
+                                    <value name="SUB">
+                                      <block type="text">
+                                        <field name="TEXT"></field>
+                                      </block>
+                                    </value>
+                                    <value name="TEXT">
+                                      <block type="variables_get">
+                                        <field name="VAR">text</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <value name="EXPECTED">
+                                  <block type="math_number">
+                                    <field name="NUM">14</field>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="unittest_assertequals" inline="false">
+                                    <value name="MESSAGE">
+                                      <block type="text">
+                                        <field name="TEXT">empty source</field>
+                                      </block>
+                                    </value>
+                                    <value name="ACTUAL">
+                                      <block type="text_count">
+                                        <value name="SUB">
+                                          <block type="text">
+                                            <field name="TEXT">chicken</field>
+                                          </block>
+                                        </value>
+                                        <value name="TEXT">
+                                          <block type="text">
+                                            <field name="TEXT"></field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <value name="EXPECTED">
+                                      <block type="math_number">
+                                        <field name="NUM">0</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="12" y="12812">
+    <field name="NAME">test reverse</field>
+    <comment pinned="false" h="80" w="160">Tests the "trim" block.</comment>
+    <statement name="STACK">
+      <block type="unittest_assertequals" inline="false">
+        <value name="MESSAGE">
+          <block type="text">
+            <field name="TEXT">empty string</field>
+          </block>
+        </value>
+        <value name="ACTUAL">
+          <block type="text_reverse">
+            <value name="TEXT">
+              <block type="text">
+                <field name="TEXT"></field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <value name="EXPECTED">
+          <block type="text">
+            <field name="TEXT"></field>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <value name="MESSAGE">
+              <block type="text">
+                <field name="TEXT">len 1</field>
+              </block>
+            </value>
+            <value name="ACTUAL">
+              <block type="text_reverse">
+                <value name="TEXT">
+                  <block type="text">
+                    <field name="TEXT">a</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="text">
+                <field name="TEXT">a</field>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <value name="MESSAGE">
+                  <block type="text">
+                    <field name="TEXT">len 2</field>
+                  </block>
+                </value>
+                <value name="ACTUAL">
+                  <block type="text_reverse">
+                    <value name="TEXT">
+                      <block type="text">
+                        <field name="TEXT">ab</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="text">
+                    <field name="TEXT">ba</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="unittest_assertequals" inline="false">
+                    <value name="MESSAGE">
+                      <block type="text">
+                        <field name="TEXT">longer</field>
+                      </block>
+                    </value>
+                    <value name="ACTUAL">
+                      <block type="text_reverse">
+                        <value name="TEXT">
+                          <block type="text">
+                            <field name="TEXT">woolloomooloo</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="EXPECTED">
+                      <block type="text">
+                        <field name="TEXT">ooloomoolloow</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="12" y="13237">
+    <field name="NAME">test replace</field>
+    <comment pinned="false" h="80" w="160">Tests the "trim" block.</comment>
+    <statement name="STACK">
+      <block type="unittest_assertequals" inline="false">
+        <value name="MESSAGE">
+          <block type="text">
+            <field name="TEXT">replace all instances 1</field>
+          </block>
+        </value>
+        <value name="ACTUAL">
+          <block type="text_replace">
+            <value name="FROM">
+              <block type="text">
+                <field name="TEXT">oo</field>
+              </block>
+            </value>
+            <value name="TO">
+              <block type="text">
+                <field name="TEXT">123</field>
+              </block>
+            </value>
+            <value name="TEXT">
+              <block type="text">
+                <field name="TEXT">woolloomooloo</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <value name="EXPECTED">
+          <block type="text">
+            <field name="TEXT">w123ll123m123l123</field>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <value name="MESSAGE">
+              <block type="text">
+                <field name="TEXT">literal string replacement</field>
+              </block>
+            </value>
+            <value name="ACTUAL">
+              <block type="text_replace">
+                <value name="FROM">
+                  <block type="text">
+                    <field name="TEXT">.oo</field>
+                  </block>
+                </value>
+                <value name="TO">
+                  <block type="text">
+                    <field name="TEXT">X</field>
+                  </block>
+                </value>
+                <value name="TEXT">
+                  <block type="text">
+                    <field name="TEXT">woolloomooloo</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="text">
+                <field name="TEXT">woolloomooloo</field>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <value name="MESSAGE">
+                  <block type="text">
+                    <field name="TEXT">not found</field>
+                  </block>
+                </value>
+                <value name="ACTUAL">
+                  <block type="text_replace">
+                    <value name="FROM">
+                      <block type="text">
+                        <field name="TEXT">abc</field>
+                      </block>
+                    </value>
+                    <value name="TO">
+                      <block type="text">
+                        <field name="TEXT">X</field>
+                      </block>
+                    </value>
+                    <value name="TEXT">
+                      <block type="text">
+                        <field name="TEXT">woolloomooloo</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="text">
+                    <field name="TEXT">woolloomooloo</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="unittest_assertequals" inline="false">
+                    <value name="MESSAGE">
+                      <block type="text">
+                        <field name="TEXT">empty replacement 1</field>
+                      </block>
+                    </value>
+                    <value name="ACTUAL">
+                      <block type="text_replace">
+                        <value name="FROM">
+                          <block type="text">
+                            <field name="TEXT">o</field>
+                          </block>
+                        </value>
+                        <value name="TO">
+                          <block type="text">
+                            <field name="TEXT"></field>
+                          </block>
+                        </value>
+                        <value name="TEXT">
+                          <block type="text">
+                            <field name="TEXT">woolloomooloo</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="EXPECTED">
+                      <block type="text">
+                        <field name="TEXT">wllml</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="unittest_assertequals" inline="false">
+                        <value name="MESSAGE">
+                          <block type="text">
+                            <field name="TEXT">empty replacement 2</field>
+                          </block>
+                        </value>
+                        <value name="ACTUAL">
+                          <block type="text_replace">
+                            <value name="FROM">
+                              <block type="text">
+                                <field name="TEXT">aaaaa</field>
+                              </block>
+                            </value>
+                            <value name="TO">
+                              <block type="text">
+                                <field name="TEXT"></field>
+                              </block>
+                            </value>
+                            <value name="TEXT">
+                              <block type="text">
+                                <field name="TEXT">aaaaa</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="EXPECTED">
+                          <block type="text">
+                            <field name="TEXT"></field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="unittest_assertequals" inline="false">
+                            <value name="MESSAGE">
+                              <block type="text">
+                                <field name="TEXT">empty replacement 3</field>
+                              </block>
+                            </value>
+                            <value name="ACTUAL">
+                              <block type="text_replace">
+                                <value name="FROM">
+                                  <block type="text">
+                                    <field name="TEXT">a</field>
+                                  </block>
+                                </value>
+                                <value name="TO">
+                                  <block type="text">
+                                    <field name="TEXT"></field>
+                                  </block>
+                                </value>
+                                <value name="TEXT">
+                                  <block type="text">
+                                    <field name="TEXT">aaaaa</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="EXPECTED">
+                              <block type="text">
+                                <field name="TEXT"></field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="unittest_assertequals" inline="false">
+                                <value name="MESSAGE">
+                                  <block type="text">
+                                    <field name="TEXT">empty source</field>
+                                  </block>
+                                </value>
+                                <value name="ACTUAL">
+                                  <block type="text_replace">
+                                    <value name="FROM">
+                                      <block type="text">
+                                        <field name="TEXT">a</field>
+                                      </block>
+                                    </value>
+                                    <value name="TO">
+                                      <block type="text">
+                                        <field name="TEXT">chicken</field>
+                                      </block>
+                                    </value>
+                                    <value name="TEXT">
+                                      <block type="text">
+                                        <field name="TEXT"></field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <value name="EXPECTED">
+                                  <block type="text">
+                                    <field name="TEXT"></field>
                                   </block>
                                 </value>
                               </block>

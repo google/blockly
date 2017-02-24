@@ -5,10 +5,15 @@
         <mutation name="test repeat"></mutation>
         <next>
           <block type="procedures_callnoreturn">
-            <mutation name="test while"></mutation>
+            <mutation name="test repeat_ext"></mutation>
             <next>
               <block type="procedures_callnoreturn">
-                <mutation name="test foreach"></mutation>
+                <mutation name="test while"></mutation>
+                <next>
+                  <block type="procedures_callnoreturn">
+                    <mutation name="test foreach"></mutation>
+                  </block>
+                </next>
               </block>
             </next>
           </block>
@@ -236,9 +241,57 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="397" y="628">
+  <block type="procedures_defnoreturn" x="397" y="448">
     <mutation></mutation>
     <field name="NAME">test repeat</field>
+    <statement name="STACK">
+      <block type="variables_set" inline="false">
+        <field name="VAR">count</field>
+        <value name="VALUE">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <next>
+          <block type="controls_repeat" inline="true">
+            <field name="TIMES">10</field>
+            <statement name="DO">
+              <block type="math_change" inline="false">
+                <field name="VAR">count</field>
+                <value name="DELTA">
+                  <block type="math_number">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">repeat 10</field>
+                   </block>
+                 </value>
+                <value name="ACTUAL">
+                  <block type="variables_get">
+                    <field name="VAR">count</field>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="math_number">
+                    <field name="NUM">10</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="397" y="668">
+    <mutation></mutation>
+    <field name="NAME">test repeat_ext</field>
     <statement name="STACK">
       <block type="variables_set" inline="false">
         <field name="VAR">count</field>

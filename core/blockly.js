@@ -388,7 +388,7 @@ Blockly.prompt = function(message, defaultValue, callback) {
  * Helper function for defining a block from JSON.  The resulting function has
  * the correct value of jsonDef at the point in code where jsonInit is called.
  * @param {!Object} jsonDef The JSON definition of a block.
- * @return {function} A function that calls jsonInit with the correct value
+ * @return {function()} A function that calls jsonInit with the correct value
  *     of jsonDef.
  * @private
  */
@@ -405,9 +405,15 @@ Blockly.jsonInitFactory_ = function(jsonDef) {
  */
 Blockly.defineBlocksWithJsonArray = function(jsonArray) {
   for (var i = 0, elem; elem = jsonArray[i]; i++) {
-    Blockly.Blocks[elem.type] = {
-      init: Blockly.jsonInitFactory_(elem)
-    };
+    var typename = elem.type;
+    if (typename == null || typename === '') {
+      console.warn('Block definition #' + i +
+        ' in JSON array is missing a type attribute. Skipping.');
+    } else {
+      Blockly.Blocks[typename] = {
+        init: Blockly.jsonInitFactory_(elem)
+      };
+    }
   }
 };
 

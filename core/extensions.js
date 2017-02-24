@@ -92,11 +92,14 @@ Blockly.Extensions.registerMixin = function(name, mixinObj) {
  * decompose are defined on the mixin.
  * @param {string} name The name of this mutator extension.
  * @param {!Object} mixinObj The values to mix in.
- * @param {Array.<string>=} opt_blockList A list of blocks to appear in the flyout
- *     of the mutator dialog.
+ * @param {function()=} opt_helperFn An optional function to apply after mixing
+ *     in the object.
+ * @param {Array.<string>=} opt_blockList A list of blocks to appear in the
+ *     flyout of the mutator dialog.
  * @throws {Error} if the mutation is invalid or can't be applied to the block.
  */
-Blockly.Extensions.registerMutator = function(name, mixinObj, opt_blockList) {
+Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
+    opt_blockList) {
   var errorPrefix = 'Error when registering mutator "' + name + '": ';
 
   // Sanity check the mixin object before registering it.
@@ -106,13 +109,21 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_blockList) {
   var hasMutatorDialog = Blockly.Extensions.checkMutatorDialog(mixinObj,
     errorPrefix);
 
+  if (opt_helperFn && !goog.isFunction(opt_helperFn)) {
+    throw new Error('Extension "' + name + '" is not a function');
+  }
+
   // Sanity checks passed.
   Blockly.Extensions.register(name, function() {
     if (hasMutatorDialog) {
       this.setMutator(new Blockly.Mutator(opt_blockList));
     }
-    // Finally, mixin the object.
+    // Mixin the object.
     this.mixin(mixinObj);
+
+    if (opt_helperFn) {
+      opt_helperFn.apply(this);
+    }
   });
 };
 

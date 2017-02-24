@@ -304,3 +304,354 @@ function test_bad_mixin_overwrites_prototype() {
     delete Blockly.Blocks['test_block_bad_colour'];
   }
 }
+
+function test_mutator_mixin() {
+  var workspace = new Blockly.Workspace();
+  var block;
+
+  try {
+    Blockly.defineBlocksWithJsonArray([{
+      "type": "mutator_test_block",
+      "message0": "mutator_test_block",
+      "mutator": "mutator_test"
+    }]);
+
+    // Events code calls mutationToDom and expects it to give back a meaningful
+    // value.
+    Blockly.Events.disable();
+    Blockly.Extensions.registerMutator('mutator_test',
+      {
+        domToMutation: function() {
+          return 'domToMutationFn';
+        },
+        mutationToDom: function() {
+          return 'mutationToDomFn';
+        },
+        compose: function() {
+          return 'composeFn';
+        },
+        decompose: function() {
+          return 'decomposeFn';
+        }
+      });
+
+    block = new Blockly.Block(workspace, 'mutator_test_block');
+
+    // Make sure all of the functions were installed correctly.
+    assertEquals(block.domToMutation(), 'domToMutationFn');
+    assertEquals(block.mutationToDom(), 'mutationToDomFn');
+    assertEquals(block.compose(), 'composeFn');
+    assertEquals(block.decompose(), 'decomposeFn');
+  } finally {
+    if (block) {
+      block.dispose();
+    }
+    workspace.dispose();
+    Blockly.Events.enable();
+    delete Blockly.Extensions.ALL_['mutator_test'];
+  }
+}
+
+function test_mutator_mixin_no_dialog() {
+  var workspace = new Blockly.Workspace();
+  var block;
+
+  try {
+    Blockly.defineBlocksWithJsonArray([{
+      "type": "mutator_test_block",
+      "message0": "mutator_test_block",
+      "mutator": "mutator_test"
+    }]);
+
+    // Events code calls mutationToDom and expects it to give back a meaningful
+    // value.
+    Blockly.Events.disable();
+    assertUndefined(Blockly.Extensions.ALL_['mutator_test']);
+    Blockly.Extensions.registerMutator('mutator_test',
+      {
+        domToMutation: function() {
+          return 'domToMutationFn';
+        },
+        mutationToDom: function() {
+          return 'mutationToDomFn';
+        }
+      });
+
+    block = new Blockly.Block(workspace, 'mutator_test_block');
+
+    // Make sure all of the functions were installed correctly.
+    assertEquals(block.domToMutation(), 'domToMutationFn');
+    assertEquals(block.mutationToDom(), 'mutationToDomFn');
+    assertFalse(block.hasOwnProperty('compose'));
+    assertFalse(block.hasOwnProperty('decompose'));
+  } finally {
+    if (block) {
+      block.dispose();
+    }
+    workspace.dispose();
+    Blockly.Events.enable();
+    delete Blockly.Extensions.ALL_['mutator_test'];
+  }
+}
+
+// Explicitly check all four things that could be missing.
+function test_mutator_mixin_no_decompose_fails() {
+  var exceptionWasThrown = false;
+  try {
+    Blockly.Extensions.registerMutator('mutator_test',
+      {
+        domToMutation: function() {
+          return 'domToMutationFn';
+        },
+        mutationToDom: function() {
+          return 'mutationToDomFn';
+        },
+        compose: function() {
+          return 'composeFn';
+        }
+      });
+  } catch (e) {
+    // Expected.
+    exceptionWasThrown = true;
+  } finally {
+    delete Blockly.Extensions.ALL_['mutator_test'];
+  }
+  assertTrue(exceptionWasThrown);
+}
+
+function test_mutator_mixin_no_compose_fails() {
+  var exceptionWasThrown = false;
+  try {
+    Blockly.Extensions.registerMutator('mutator_test',
+      {
+        domToMutation: function() {
+          return 'domToMutationFn';
+        },
+        mutationToDom: function() {
+          return 'mutationToDomFn';
+        },
+        decompose: function() {
+          return 'decomposeFn';
+        }
+      });
+  } catch (e) {
+    // Expected.
+    exceptionWasThrown = true;
+  } finally {
+    delete Blockly.Extensions.ALL_['mutator_test'];
+  }
+  assertTrue(exceptionWasThrown);
+}
+
+function test_mutator_mixin_no_domToMutation_fails() {
+  var exceptionWasThrown = false;
+  try {
+    Blockly.Extensions.registerMutator('mutator_test',
+      {
+        mutationToDom: function() {
+          return 'mutationToDomFn';
+        },
+        compose: function() {
+          return 'composeFn';
+        },
+        decompose: function() {
+          return 'decomposeFn';
+        }
+      });
+  } catch (e) {
+    // Expected.
+    exceptionWasThrown = true;
+  } finally {
+    delete Blockly.Extensions.ALL_['mutator_test'];
+  }
+  assertTrue(exceptionWasThrown);
+}
+
+function test_mutator_mixin_no_mutationToDom_fails() {
+  var exceptionWasThrown = false;
+  try {
+    Blockly.Extensions.registerMutator('mutator_test',
+      {
+        domToMutation: function() {
+          return 'domToMutationFn';
+        },
+        compose: function() {
+          return 'composeFn';
+        },
+        decompose: function() {
+          return 'decomposeFn';
+        }
+      });
+  } catch (e) {
+    // Expected.
+    exceptionWasThrown = true;
+  } finally {
+    delete Blockly.Extensions.ALL_['mutator_test'];
+  }
+  assertTrue(exceptionWasThrown);
+}
+
+function test_use_mutator_as_extension_fails() {
+  var workspace = new Blockly.Workspace();
+  var block;
+  var exceptionWasThrown = false;
+
+  try {
+    Blockly.defineBlocksWithJsonArray([{
+      "type": "mutator_test_block",
+      "message0": "mutator_test_block",
+      "extensions": ["mutator_test"]
+    }]);
+
+    Blockly.Events.disable();
+    assertUndefined(Blockly.Extensions.ALL_['mutator_test']);
+    Blockly.Extensions.registerMutator('mutator_test',
+      {
+        domToMutation: function() {
+          return 'domToMutationFn';
+        },
+        mutationToDom: function() {
+          return 'mutationToDomFn';
+        }
+      });
+
+    // Events code calls mutationToDom and expects it to give back a meaningful
+    // value.
+    block = new Blockly.Block(workspace, 'mutator_test_block');
+  } catch (e) {
+    // Expected
+    exceptionWasThrown = true;
+    // Should have failed on apply, not on register.
+    assertNotNull(Blockly.Extensions.ALL_['mutator_test']);
+  } finally {
+    if (block) {
+      block.dispose();
+    }
+    workspace.dispose();
+    Blockly.Events.enable();
+    delete Blockly.Extensions.ALL_['mutator_test'];
+  }
+  assertTrue(exceptionWasThrown);
+}
+
+function test_use_mutator_mixin_as_extension_fails() {
+  var workspace = new Blockly.Workspace();
+  var block;
+  var exceptionWasThrown = false;
+
+  try {
+    Blockly.defineBlocksWithJsonArray([{
+      "type": "mutator_test_block",
+      "message0": "mutator_test_block",
+      "extensions": ["mutator_test"]
+    }]);
+
+    // Events code calls mutationToDom and expects it to give back a meaningful
+    // value.
+    Blockly.Events.disable();
+    assertUndefined(Blockly.Extensions.ALL_['mutator_test']);
+    Blockly.Extensions.registerMixin('mutator_test',
+      {
+        domToMutation: function() {
+          return 'domToMutationFn';
+        },
+        mutationToDom: function() {
+          return 'mutationToDomFn';
+        }
+      });
+
+    block = new Blockly.Block(workspace, 'mutator_test_block');
+  } catch (e) {
+    // Expected
+    exceptionWasThrown = true;
+    // Should have failed on apply, not on register.
+    assertNotNull(Blockly.Extensions.ALL_['mutator_test']);
+  } finally {
+    if (block) {
+      block.dispose();
+    }
+    workspace.dispose();
+    Blockly.Events.enable();
+    delete Blockly.Extensions.ALL_['mutator_test'];
+  }
+  assertTrue(exceptionWasThrown);
+}
+
+function test_use_extension_as_mutator_fails() {
+  var workspace = new Blockly.Workspace();
+  var block;
+  var exceptionWasThrown = false;
+
+  try {
+    Blockly.defineBlocksWithJsonArray([{
+      "type": "mutator_test_block",
+      "message0": "mutator_test_block",
+      "mutator": ["extensions_test"]
+    }]);
+
+    // Events code calls mutationToDom and expects it to give back a meaningful
+    // value.
+    Blockly.Events.disable();
+    assertUndefined(Blockly.Extensions.ALL_['extensions_test']);
+    Blockly.Extensions.register('extensions_test', function() {
+      return 'extensions_test_fn';
+    });
+
+    block = new Blockly.Block(workspace, 'mutator_test_block');
+  } catch (e) {
+    // Expected
+    exceptionWasThrown = true;
+    // Should have failed on apply, not on register.
+    assertNotNull(Blockly.Extensions.ALL_['extensions_test']);
+  } finally {
+    if (block) {
+      block.dispose();
+    }
+    workspace.dispose();
+    Blockly.Events.enable();
+    delete Blockly.Extensions.ALL_['extensions_test'];
+  }
+  assertTrue(exceptionWasThrown);
+}
+
+function test_mutator_mixin_plus_function() {
+  var workspace = new Blockly.Workspace();
+  var block;
+  var fnWasCalled = false;
+
+  try {
+    Blockly.defineBlocksWithJsonArray([{
+      "type": "mutator_test_block",
+      "message0": "mutator_test_block",
+      "mutator": ["extensions_test"]
+    }]);
+
+    Blockly.Events.disable();
+    assertUndefined(Blockly.Extensions.ALL_['extensions_test']);
+    Blockly.Extensions.registerMutator('extensions_test',
+      {
+        domToMutation: function() {
+          return 'domToMutationFn';
+        },
+        mutationToDom: function() {
+          return 'mutationToDomFn';
+        }
+      },
+      function() {
+        fnWasCalled = true;
+      }
+    );
+
+    // Events code calls mutationToDom and expects it to give back a meaningful
+    // value.
+    block = new Blockly.Block(workspace, 'mutator_test_block');
+  } finally {
+    if (block) {
+      block.dispose();
+    }
+    workspace.dispose();
+    Blockly.Events.enable();
+    delete Blockly.Extensions.ALL_['extensions_test'];
+  }
+  assertTrue(fnWasCalled);
+}

@@ -625,6 +625,30 @@ Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
   },
 };
 
+Blockly.Blocks['robot_manipulation_open_gripper'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("open gripper");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('Opens the gripper.');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['robot_manipulation_close_gripper'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("close gripper");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('Closes the gripper.');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['robot_manipulation_set_gripper'] = {
   init: function() {
     this.appendDummyInput()

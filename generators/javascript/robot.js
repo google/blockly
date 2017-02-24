@@ -151,6 +151,16 @@ Blockly.JavaScript['robot_manipulation_place_default'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
+Blockly.JavaScript['robot_manipulation_open_gripper'] = function(block) {
+  var code = 'robot.setGripper(0, 1, 0);\n';
+  return code;
+};
+
+Blockly.JavaScript['robot_manipulation_close_gripper'] = function(block) {
+  var code = 'robot.setGripper(0, 2, 0);\n';
+  return code;
+};
+
 Blockly.JavaScript['robot_manipulation_set_gripper'] = function(block) {
   var dropdown_action = block.getFieldValue('ACTION') || 'OPEN';
   var dropdown_side = block.getFieldValue('SIDE') || 'LEFT';

@@ -412,7 +412,7 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
     } else {
       if (Blockly.Blocks[typename]) {
         console.warn('Block definition #' + i +
-          ' in JSON array overwrites prior definition of "' + typename + '"');
+          ' in JSON array overwrites prior definition of "' + typename + '".');
       }
       Blockly.Blocks[typename] = {
         init: Blockly.jsonInitFactory_(elem)

@@ -144,24 +144,28 @@ Blockly.WorkspaceSvg.prototype.resizesEnabled_ = true;
 
 /**
  * Current horizontal scrolling offset.
+ * Coordinate system: pixel coordinates.
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.scrollX = 0;
 
 /**
  * Current vertical scrolling offset.
+ * Coordinate system: pixel coordinates.
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.scrollY = 0;
 
 /**
  * Horizontal scroll value when scrolling started.
+ * Coordinate system: pixel coordinates.
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.startScrollX = 0;
 
 /**
  * Vertical scroll value when scrolling started.
+ * Coordinate system: pixel coordinates.
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.startScrollY = 0;
@@ -1037,6 +1041,7 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
 
 /**
  * Calculate the bounding box for the blocks on the workspace.
+ * Coordinate system: workspace coordinates.
  *
  * @return {Object} Contains the position and size of the bounding box
  *   containing the blocks on the workspace.
@@ -1522,6 +1527,7 @@ Blockly.WorkspaceSvg.prototype.updateGridPattern_ = function() {
 /**
  * Return an object with all the metrics required to size scrollbars for a
  * top level workspace.  The following properties are computed:
+ * Coordinate system: pixel coordinates.
  * .viewHeight: Height of the visible rectangle,
  * .viewWidth: Width of the visible rectangle,
  * .contentHeight: Height of the contents,

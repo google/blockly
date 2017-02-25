@@ -51,14 +51,15 @@ Blockly.WorkspaceDragger = function(workspace) {
   /**
    * The workspace's metrics object at the beginning of the drag.  Contains size
    * and position metrics of a workspace.
+   * Coordinate system: pixel coordinates.
    * @type {!Object}
    * @private
    */
   this.startDragMetrics_ = workspace.getMetrics();
 
   /**
-   * The scroll position of the workspace at the beginning of the drag, in
-   * workspace units.
+   * The scroll position of the workspace at the beginning of the drag.
+   * Coordinate system: pixel coordinates.
    * @type {!goog.math.Coordinate}
    * @private
    */

@@ -387,7 +387,7 @@ Blockly.Msg.MATH_SINGLE_TOOLTIP_NEG = 'Return the negation of a number.';
 Blockly.Msg.MATH_SINGLE_TOOLTIP_LN = 'Return the natural logarithm of a number.';
 /// tooltip - Calculates the [https://en.wikipedia.org/wiki/Common_logarithm common logarithm] of its single numeric input.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_LOG10 = 'Return the base 10 logarithm of a number.';
-/// tooltip - Multiplies [https://en.wikipedia.org/wiki/E_%28mathematical_constant%29 e] by itself n times, where n is the single numeric input.
+/// tooltip - Multiplies [https://en.wikipedia.org/wiki/E_(mathematical_constant) e] by itself n times, where n is the single numeric input.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_EXP = 'Return e to the power of a number.';
 /// tooltip - Multiplies 10 by itself n times, where n is the single numeric input.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_POW10 = 'Return 10 to the power of a number.';
@@ -494,7 +494,7 @@ Blockly.Msg.MATH_MODULO_TITLE = 'remainder of %1 ÷ %2';
 Blockly.Msg.MATH_MODULO_TOOLTIP = 'Return the remainder from dividing the two numbers.';
 
 /// url - Information about constraining a numeric value to be in a specific range.  (The English URL is not ideal.  Recall that translating URLs is the lowest priority.)
-Blockly.Msg.MATH_CONSTRAIN_HELPURL = 'https://en.wikipedia.org/wiki/Clamping_%28graphics%29';
+Blockly.Msg.MATH_CONSTRAIN_HELPURL = 'https://en.wikipedia.org/wiki/Clamping_(graphics)';
 /// block text - The title of the block that '''constrain'''s (forces) a number to be in a given range.
 ///For example, if the number 150 is constrained to be between 5 and 100, the result will be 100.
 ///\n\nParameters:\n* %1 - the value to constrain (e.g., 150)\n* %2 - the minimum value (e.g., 5)\n* %3 - the maximum value (e.g., 100).
@@ -1072,8 +1072,8 @@ Blockly.Msg.VARIABLES_SET_TOOLTIP = 'Sets this variable to be equal to the input
 Blockly.Msg.VARIABLES_SET_CREATE_GET = 'Create "get %1"';
 
 // Procedures Blocks.
-/// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not have return values.
-Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
+/// url - Information about defining [https://en.wikipedia.org/wiki/Subroutine functions] that do not have return values.
+Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subroutine';
 /// block text - This precedes the name of the function when defining it.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#c84aoc this sample
 /// function definition].
@@ -1100,8 +1100,8 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_DO = '';
 Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP = 'Creates a function with no output.';
 /// Placeholder text that the user is encouraged to replace with a description of what their function does.
 Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = 'Describe this function...';
-/// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that have return values.
-Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
+/// url - Information about defining [https://en.wikipedia.org/wiki/Subroutine functions] that have return values.
+Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subroutine';
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
@@ -1119,13 +1119,13 @@ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = 'allow statements';
 /// alert - The user has created a function with two parameters that have the same name.  Every parameter must have a different name.
 Blockly.Msg.PROCEDURES_DEF_DUPLICATE_WARNING = 'Warning: This function has duplicate parameters.';
 
-/// url - Information about calling [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not return values.
-Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
+/// url - Information about calling [https://en.wikipedia.org/wiki/Subroutine functions] that do not return values.
+Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subroutine';
 /// tooltip - This block causes the body (blocks inside) of the named function definition to be run.
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = 'Run the user-defined function "%1".';
 
-/// url - Information about calling [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that return values.
-Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
+/// url - Information about calling [https://en.wikipedia.org/wiki/Subroutine functions] that return values.
+Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subroutine';
 /// tooltip - This block causes the body (blocks inside) of the named function definition to be run.\n\nParameters:\n* %1 - the name of the function.
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = 'Run the user-defined function "%1" and use its output.';
 

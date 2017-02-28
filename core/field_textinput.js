@@ -95,27 +95,6 @@ Blockly.FieldTextInput.prototype.setValue = function(newValue) {
 };
 
 /**
- * Set the text in this field and fire a change event.
- * @param {*} newText New text.
- */
-Blockly.FieldTextInput.prototype.setText = function(newText) {
-  if (newText === null) {
-    // No change if null.
-    return;
-  }
-  newText = String(newText);
-  if (newText === this.text_) {
-    // No change.
-    return;
-  }
-  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(new Blockly.Events.Change(
-        this.sourceBlock_, 'field', this.name, this.text_, newText));
-  }
-  Blockly.Field.prototype.setText.call(this, newText);
-};
-
-/**
  * Set whether this field is spellchecked by the browser.
  * @param {boolean} check True if checked.
  */
@@ -216,7 +195,6 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
   var text = htmlInput.value;
   if (text !== htmlInput.oldValue_) {
     htmlInput.oldValue_ = text;
-    this.setValue(text);
     this.validate_();
   } else if (goog.userAgent.WEBKIT) {
     // Cursor key.  Render the source block to show the caret moving.
@@ -303,7 +281,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
         }
       }
     }
-    thisField.setText(text);
+    thisField.setValue(text);
     thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
     Blockly.unbindEvent_(htmlInput.onKeyDownWrapper_);
     Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Blockly Drag Tests</title>
+<script src="../blockly_uncompressed.js"></script>
+<script src="../msg/messages.js"></script>
+<script src="../blocks/logic.js"></script>
+<script src="../blocks/loops.js"></script>
+<script src="../blocks/math.js"></script>
+<script src="../blocks/text.js"></script>
+<script src="../blocks/lists.js"></script>
+<script src="../blocks/colour.js"></script>
+<script src="../blocks/variables.js"></script>
+<script src="../blocks/procedures.js"></script>
+<script src="drag_tests.js"></script>
+
+<style>
+html, body {
+  height: 100%;
+}
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+#blocklyDiv {
+  float: right;
+  height: 100%;
+  width: 75%;
+}
+.workspace_xml {
+  display: none;
+}
+</style>
+</head>
+<body onload="start();">
+  <div id="blocklyDiv"></div>
+
+  <div id="test_picker"> </div>
+  <input type="button" value="Select all" onclick="setAllCheckboxes(true)">
+  <input type="button" value="Select none" onclick="setAllCheckboxes(false)">
+  <input type="button" value="Select failing!" onclick="selectFailing()">
+  <input type="button" value="Run!" onclick="addCheckedTests();startTesting()">
+  <br/>
+  <label for="run_speed">Speed</label>
+  <input type="range" min="1" max="10" value="10" id="run_speed">
+
+  <xml id="drag_to_next_twice_initial" class="workspace_xml">
+    <block type="variables_set" id="a" x="63" y="363">
+      <field name="VAR">item</field>
+    </block>
+    <block type="math_change" id="b" x="63" y="463">
+      <field name="VAR">item</field>
+    </block>
+    <block type="text_print" id="c" x="63" y="563"></block>
+  </xml>
+
+  <xml id="drag_to_next_twice_golden" class="workspace_xml">
+    <block type="variables_set" id="a" x="0" y="0">
+      <field name="VAR">item</field>
+      <next>
+        <block type="math_change" id="b">
+          <field name="VAR">item</field>
+          <next>
+            <block type="text_print" id="c"></block>
+          </next>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+  <xml id="drag_to_next_initial" class="workspace_xml">
+    <block type="variables_set" id="a" x="63" y="363">
+      <field name="VAR">item</field>
+    </block>
+    <block type="math_change" id="b" x="63" y="463">
+      <field name="VAR">item</field>
+    </block>
+  </xml>
+
+  <xml id="drag_to_next_golden" class="workspace_xml">
+    <block type="variables_set" id="a" x="0" y="0">
+        <field name="VAR">item</field>
+      <next>
+        <block type="math_change" id="b">
+          <field name="VAR">item</field>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+  <xml id="drag_to_next_by_inferior_initial" class="workspace_xml">
+    <block type="variables_set" id="a" x="63" y="363">
+      <field name="VAR">item</field>
+    </block>
+    <block type="math_change" id="b" x="63" y="463">
+      <field name="VAR">item</field>
+    </block>
+  </xml>
+
+  <xml id="drag_to_next_by_inferior_golden" class="workspace_xml">
+    <block type="variables_set" id="a" x="0" y="0">
+        <field name="VAR">item</field>
+      <next>
+        <block type="math_change" id="b">
+          <field name="VAR">item</field>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+  <xml id="drag_between_initial" class="workspace_xml">
+    <block type="variables_set" id="a" x="63" y="363">
+      <field name="VAR">item</field>
+    </block>
+    <block type="math_change" id="b" x="63" y="463">
+      <field name="VAR">item</field>
+    </block>
+    <block type="text_print" id="c" x="63" y="563"></block>
+  </xml>
+
+  <xml id="drag_between_golden" class="workspace_xml">
+    <block type="variables_set" id="a" x="0" y="0">
+      <field name="VAR">item</field>
+      <next>
+        <block type="text_print" id="c">
+          <next>
+            <block type="math_change" id="b">
+              <field name="VAR">item</field>
+            </block>
+          </next>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+  <xml id="drag_to_input_with_shadow_by_inferior_initial" class="workspace_xml">
+    <block type="math_change" id="change_by" x="163" y="163">
+      <field name="VAR">item</field>
+      <value name="DELTA">
+        <shadow type="math_number" id="shadow_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_number" id="number" x="362" y="387">
+      <field name="NUM">0</field>
+    </block>
+  </xml>
+
+  <xml id="drag_to_input_with_shadow_by_inferior_golden" class="workspace_xml">
+    <block type="math_change" id="change_by" x="0" y="0">
+      <field name="VAR">item</field>
+      <value name="DELTA">
+        <shadow type="math_number" id="shadow_number">
+          <field name="NUM">1</field>
+        </shadow>
+        <block type="math_number" id="number">
+          <field name="NUM">0</field>
+        </block>
+      </value>
+    </block>
+  </xml>
+
+  <xml id="drag_to_input_with_shadow_initial" class="workspace_xml">
+    <block type="math_change" id="change_by" x="163" y="163">
+      <field name="VAR">item</field>
+      <value name="DELTA">
+        <shadow type="math_number" id="shadow_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_number" id="number" x="362" y="387">
+      <field name="NUM">0</field>
+    </block>
+  </xml>
+
+  <xml id="drag_to_input_with_shadow_golden" class="workspace_xml">
+    <block type="math_change" id="change_by" x="0" y="0">
+      <field name="VAR">item</field>
+      <value name="DELTA">
+        <shadow type="math_number" id="shadow_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_number" id="number" x="1" y="1">
+      <field name="NUM">0</field>
+    </block>
+  </xml>
+
+  <xml id="drag_to_statement_input_initial" class="workspace_xml">
+    <block type="controls_repeat_ext" id="loop" x="113" y="138">
+      <value name="TIMES">
+        <shadow type="math_number" id="shadow_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="variables_set" id="statement" x="87" y="263">
+      <field name="VAR">item</field>
+    </block>
+  </xml>
+
+  <xml id="drag_to_statement_input_golden" class="workspace_xml">
+    <block type="controls_repeat_ext" id="loop" x="0" y="0">
+      <value name="TIMES">
+        <shadow type="math_number" id="shadow_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+      <statement name="DO">
+        <block type="variables_set" id="statement">
+          <field name="VAR">item</field>
+        </block>
+      </statement>
+    </block>
+  </xml>
+
+  <xml id="drag_to_statement_input_by_inferior_initial" class="workspace_xml">
+    <block type="controls_repeat_ext" id="loop" x="113" y="138">
+      <value name="TIMES">
+        <shadow type="math_number" id="shadow_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="variables_set" id="statement" x="87" y="263">
+      <field name="VAR">item</field>
+    </block>
+  </xml>
+
+  <xml id="drag_to_statement_input_by_inferior_golden" class="workspace_xml">
+    <block type="controls_repeat_ext" id="loop" x="0" y="0">
+      <value name="TIMES">
+        <shadow type="math_number" id="shadow_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+      <statement name="DO">
+        <block type="variables_set" id="statement">
+          <field name="VAR">item</field>
+        </block>
+      </statement>
+    </block>
+  </xml>
+
+  <xml id="drag_over_shadow_statement_initial" class="workspace_xml">
+    <block type="controls_repeat_ext" id="loop" x="13" y="162">
+      <value name="TIMES">
+        <shadow type="math_number" id="shadow_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+      <statement name="DO">
+        <shadow type="variables_set" id="shadow_statement">
+          <field name="VAR">item</field>
+        </shadow>
+      </statement>
+    </block>
+    <block type="math_change" id="statement" x="12" y="262">
+      <field name="VAR">item</field>
+      <value name="DELTA">
+        <shadow type="math_number" id="shadow_number_2">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+  </xml>
+
+    <xml id="drag_over_shadow_statement_golden" class="workspace_xml">
+      <block type="controls_repeat_ext" id="loop" x="0" y="0">
+        <value name="TIMES">
+          <shadow type="math_number" id="shadow_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <statement name="DO">
+          <shadow type="variables_set" id="shadow_statement">
+            <field name="VAR">item</field>
+          </shadow>
+          <block type="math_change" id="statement">
+            <field name="VAR">item</field>
+            <value name="DELTA">
+              <shadow type="math_number" id="shadow_number_2">
+                <field name="NUM">1</field>
+              </shadow>
+            </value>
+          </block>
+        </statement>
+      </block>
+    </xml>
+
+  <xml id="drag_over_shadow_statement_then_away_initial" class="workspace_xml">
+    <block type="controls_repeat_ext" id="loop" x="13" y="162">
+      <value name="TIMES">
+        <shadow type="math_number" id="shadow_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+      <statement name="DO">
+        <shadow type="variables_set" id="shadow_statement">
+          <field name="VAR">item</field>
+        </shadow>
+      </statement>
+    </block>
+    <block type="math_change" id="statement" x="12" y="262">
+      <field name="VAR">item</field>
+      <value name="DELTA">
+        <shadow type="math_number" id="shadow_number_2">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+  </xml>
+
+  <xml id="drag_over_shadow_statement_then_away_golden" class="workspace_xml">
+    <block type="controls_repeat_ext" id="loop" x="0" y="0">
+      <value name="TIMES">
+        <shadow type="math_number" id="shadow_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+      <statement name="DO">
+        <shadow type="variables_set" id="shadow_statement">
+          <field name="VAR">item</field>
+        </shadow>
+      </statement>
+    </block>
+    <block type="math_change" id="statement" x="1" y="1">
+      <field name="VAR">item</field>
+      <value name="DELTA">
+        <shadow type="math_number" id="shadow_number_2">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+  </xml>
+
+  <xml id="drag_to_input_with_shadow_by_inferior_then_away_initial" class="workspace_xml">
+    <block type="math_change" id="change_by" x="163" y="163">
+      <field name="VAR">item</field>
+      <value name="DELTA">
+        <shadow type="math_number" id="shadow_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_number" id="number" x="362" y="387">
+      <field name="NUM">0</field>
+    </block>
+  </xml>
+
+  <xml id="drag_to_input_with_shadow_by_inferior_then_away_golden" class="workspace_xml">
+    <block type="math_change" id="change_by" x="0" y="0">
+      <field name="VAR">item</field>
+      <value name="DELTA">
+        <shadow type="math_number" id="shadow_number">
+          <field name="NUM">142</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_number" id="number" x="1" y="1">
+      <field name="NUM">0</field>
+    </block>
+  </xml>
+
+</body>
+</html>

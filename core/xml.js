@@ -279,9 +279,9 @@ Blockly.Xml.textToDom = function(text) {
  * Decode an XML DOM and create blocks on the workspace.
  * @param {!Element} xml XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace.
- * @param {Array} offset array with x and y offset for the new blocks, default [0,0]
+ * @return {Array.<string>} An array containing new block ids.
  */
-Blockly.Xml.domToWorkspace = function(xml, workspace, offset) {
+Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (xml instanceof Blockly.Workspace) {
     var swap = xml;
     xml = workspace;
@@ -289,15 +289,12 @@ Blockly.Xml.domToWorkspace = function(xml, workspace, offset) {
     console.warn('Deprecated call to Blockly.Xml.domToWorkspace, ' +
                  'swap the arguments.');
   }
-  if (offset === undefined) { offset = [0,0];}
-  if (offset.constructor !== Array) { offset = [0,0];}
-  if (offset.length !== 2) { offset = [0,0];}
-  
   
   var width;  // Not used in LTR.
   if (workspace.RTL) {
     width = workspace.getWidth();
   }
+  var newblockids = []; // list of new block ids
   Blockly.Field.startCache();
   // Safari 7.1.3 is known to provide node lists with extra references to
   // children beyond the lists' length.  Trust the length, do not use the
@@ -321,10 +318,11 @@ Blockly.Xml.domToWorkspace = function(xml, workspace, offset) {
       // that means an undo is in progress.  Such a block is expected
       // to be moved to a nested destination in the next operation.
       var block = Blockly.Xml.domToBlock(xmlChild, workspace);
+      newblockids.push(block.id);
       var blockX = parseInt(xmlChild.getAttribute('x'), 10);
       var blockY = parseInt(xmlChild.getAttribute('y'), 10);
       if (!isNaN(blockX) && !isNaN(blockY)) {
-        block.moveBy(workspace.RTL ? width - (blockX + offset[0]) : blockX + offset[0], blockY + offset[1]);
+        block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
       }
     } else if (name == 'shadow') {
       goog.asserts.fail('Shadow block cannot be a top-level block.');
@@ -340,6 +338,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace, offset) {
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(true);
   }
+  return newblockids;
 };
 
 /**
@@ -349,63 +348,56 @@ Blockly.Xml.domToWorkspace = function(xml, workspace, offset) {
  * @param {!Blockly.Workspace} workspace The workspace.
  */
 Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
-  
-  // find bottom position and alignment of the current blocks  
-  //var blocks = workspace.getAllBlocks();
-  var blocks = workspace.getTopBlocks();
-  var offsetY = 0; // container for the y of the bottom block
-  var offsetX = 0; 
-  var blocksCount = blocks.length;
-  if (blocksCount > 0) {
-	// initialize the position of the corners using position 
-	// of the first block
-	var bHW = (("height" in blocks[0])? blocks[0].getHeightWidth() : {height: 0, width: 0});
-	var bXY = blocks[0].getRelativeToSurfaceXY();
-	var topX = bXY.x;
-	var farY = bXY.y + bHW.height;
-	// loop over remaining blocks
-	for (var i = 1; i < blocksCount; i++) {
-	  bHW = (("height" in blocks[i])? blocks[i].getHeightWidth() : {height: 0, width: 0});
-	  bXY = blocks[i].getRelativeToSurfaceXY();
-	  if (bXY.x < topX) {
-	    topX = bXY.x;
-	  }
-	  if (bXY.y + bHW.height > farY ) {
-		farY =bXY.y + bHW.height;
-	  }
+  // first check if we have a workspaceSvg otherwise the block have no shape
+  // and the position does not matter
+  //if (typeof workspace.getBlocksBoundingBox() === undefined) {
+  if (workspace.hasOwnProperty('scale')) {
+    var savetab = Blockly.BlockSvg.TAB_WIDTH;
+    try {
+      Blockly.BlockSvg.TAB_WIDTH = 0;
+      var bbox = workspace.getBlocksBoundingBox();
+    } finally {
+      Blockly.BlockSvg.TAB_WIDTH = savetab;
+    } 
+    if (bbox.height > 0) { // check if any previous block
+      var offsetY = 0; // offset to add to y of the new block
+      var offsetX = 0; 
+      // check for existing open output connection of the top block
+      var blocks = workspace.getTopBlocks(true);
+      var farY = bbox.y + bbox.height;
+      var topX = bbox.x;
+      // load the new blocks into the workspace and get the ids of the new blocks
+      var newblockids = Blockly.Xml.domToWorkspace(xml,workspace);
+      // check position of the new blocks
+      var newX = Infinity; // x of top corner
+      var newY = Infinity; // y of top corner
+      for (var i = 0; i < newblockids.length; i++) {
+        var blockXY = workspace.getBlockById(newblockids[i]).getRelativeToSurfaceXY();
+        if (blockXY.y < newY) {
+          newY = blockXY.y; 
+        }
+        if (blockXY.x  < newX) { //if we align also on x
+          newX = blockXY.x;
+        }
+      }
+      offsetY = farY - newY;
+      offsetX = topX - newX;
+      // move the new blocks to append them at the bottom
+      var width;  // Not used in LTR.
+      if (workspace.RTL) {
+        width = workspace.getWidth();
+      }
+      for (var i = 0; i < newblockids.length; i++) {
+        var block = workspace.getBlockById(newblockids[i]);
+        block.moveBy(workspace.RTL ? width - offsetX : offsetX, offsetY);
+      }
+    } else {
+      Blockly.Xml.domToWorkspace(xml,workspace);
     }
-	// compute position of the new blocks
-	var childCount = xml.childNodes.length;
-    var newX = Infinity; // x of top corner
-    var newY = Infinity; // y of top corner
-	for (var i = 0; i < childCount; i++) {
-      var xmlChild = xml.childNodes[i];
-      var name = xmlChild.nodeName.toLowerCase();
-      if (name == 'block' ||
-        (name == 'shadow' && !Blockly.Events.recordUndo)) {
-      // Allow top-level shadow blocks if recordUndo is disabled since
-      // that means an undo is in progress.  Such a block is expected
-      // to be moved to a nested destination in the next operation.
-        var blockX = parseInt(xmlChild.getAttribute('x'), 10);
-        var blockY = parseInt(xmlChild.getAttribute('y'), 10);
-	    if (blockY < newY) {
-		  newY = blockY; 
-		  //newX = blockX; //if we align on top block
-	    }
-	    if (bXY.x < newX) { //if we align also on x
-		  newX = blockX;
-	    }
-	  }
-	}
-	if (newX === Infinity) { newX = 0; }
-	if (newY === Infinity) { newY = 0; }
-	offsetY = farY - newY;
-    offsetX = topX - newX;
+  } else {
+    Blockly.Xml.domToWorkspace(xml,workspace);
   }
-  // Insert blocks into the workspace 
-  Blockly.Xml.domToWorkspace(xml,workspace,[offsetX, offsetY]);
 }
-
 
 /**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the

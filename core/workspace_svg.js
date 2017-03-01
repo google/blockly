@@ -345,16 +345,21 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
    */
   this.svgGroup_ = Blockly.utils.createSvgElement('g',
       {'class': 'blocklyWorkspace'}, null);
-  if (opt_backgroundClass) {
-    /** @type {SVGElement} */
-    this.svgBackground_ = Blockly.utils.createSvgElement('rect',
-        {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
-        this.svgGroup_);
-    if (opt_backgroundClass == 'blocklyMainBackground') {
-      this.svgBackground_.style.fill =
-          'url(#' + this.options.gridPattern.id + ')';
-    }
+
+  // Always add a rectangle to the blocklyWorkspace <g>, even if no background
+  // was specified.  A <g> alone does not receive mouse events--it must have a
+  // valid target inside it.
+  opt_backgroundClass = opt_backgroundClass || "blocklyTransparentBackground";
+
+  /** @type {SVGElement} */
+  this.svgBackground_ = Blockly.utils.createSvgElement('rect',
+      {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
+      this.svgGroup_);
+  if (opt_backgroundClass == 'blocklyMainBackground') {
+    this.svgBackground_.style.fill =
+        'url(#' + this.options.gridPattern.id + ')';
   }
+
   /** @type {SVGElement} */
   this.svgBlockCanvas_ = Blockly.utils.createSvgElement('g',
       {'class': 'blocklyBlockCanvas'}, this.svgGroup_, this);
@@ -369,12 +374,12 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     bottom = this.addZoomControls_(bottom);
   }
 
+  Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
+      this.onMouseDown_);
+  var thisWorkspace = this;
+  Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
+                     function(e) {Blockly.longStart_(e, thisWorkspace);});
   if (!this.isFlyout) {
-    Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
-        this.onMouseDown_);
-    var thisWorkspace = this;
-    Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
-                       function(e) {Blockly.longStart_(e, thisWorkspace);});
     if (this.options.zoomOptions && this.options.zoomOptions.wheel) {
       // Mouse-wheel.
       Blockly.bindEventWithChecks_(this.svgGroup_, 'wheel', this,

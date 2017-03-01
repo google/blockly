@@ -29,6 +29,7 @@ goog.provide('Blockly.Gesture');
 
 goog.require('goog.math.Coordinate');
 goog.require('Blockly.BlockDragger');
+goog.require('Blockly.FlyoutDragger');
 goog.require('Blockly.WorkspaceDragger');
 goog.require('goog.asserts');
 
@@ -47,12 +48,13 @@ goog.require('goog.asserts');
 Blockly.Gesture = function(e, touchId) {
 
   /**
+   * Coordinate system: pixel coordinates.
    * @type {goog.math.Coordinate}
-   * TODO: In what units?
    */
   this.mouseDownXY_ = null;
 
   /**
+   * Coordinate system: pixel coordinates.
    * @type {goog.math.Coordinate}
    * private
    */
@@ -106,6 +108,8 @@ Blockly.Gesture = function(e, touchId) {
    */
   this.isDraggingWorkspace_ = false;
 
+  this.isDraggingFlyout_ = false;
+
   /**
    * @type {boolean}
    * @private
@@ -133,6 +137,8 @@ Blockly.Gesture = function(e, touchId) {
 
   this.blockDragger_ = null;
   this.workspaceDragger_ = null;
+
+  this.flyout_ = null;
 };
 
 Blockly.Gesture.prototype.dispose = function() {
@@ -160,7 +166,6 @@ Blockly.Gesture.prototype.update = function(e) {
 
 /**
  * DO MATH to set currentDragDeltaXY_ based on the most recent mouse position.
- * TODO: Figure out what units the coordinates are in.
  * @param {!Event} e The event for the most recent mouse/touch move.
  * @private
  */
@@ -171,6 +176,22 @@ Blockly.Gesture.prototype.updateDragDelta_ = function(e) {
   var currentDragDelta = goog.math.Coordinate.magnitude(
       this.currentDragDeltaXY_);
   this.hasExceededDragRadius_ = currentDragDelta > Blockly.DRAG_RADIUS;
+};
+
+
+Blockly.Gesture.prototype.updateIsDraggingBlock_ = function() {
+  var startBlockMovable = this.startBlock_ && this.startBlock_.isMovable();
+  if (startBlockMovable && this.hasExceededDragRadius_) {
+    this.isDraggingBlock_ = true;
+    console.log('dragging block');
+    this.blockDragger_ = new Blockly.BlockDragger(this.startBlock_,
+        this.startWorkspace_);
+    this.blockDragger_.startBlockDrag(this.currentDragDeltaXY_);
+    this.blockDragger_.dragBlock(this.mostRecentEvent_,
+        this.currentDragDeltaXY_);
+    return true;
+  }
+  return false;
 };
 
 /**
@@ -185,23 +206,25 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
       'Don\'t call updateIsDragging_ when a drag is already in progress.');
 
   // First check if it was a block drag.
-  var startBlockMovable = this.startBlock_ && this.startBlock_.isMovable();
-  if (startBlockMovable && this.hasExceededDragRadius_) {
-    this.isDraggingBlock_ = true;
-    console.log('dragging block');
-    this.blockDragger_ = new Blockly.BlockDragger(this.startBlock_,
-        this.startWorkspace_);
-    this.blockDragger_.startBlockDrag(this.currentDragDeltaXY_);
-    this.blockDragger_.dragBlock(this.mostRecentEvent_,
-        this.currentDragDeltaXY_);
+  if (this.updateIsDraggingBlock_()) {
     return true;
   }
 
   // Then check if it's a workspace drag.
-  var wsMovable = this.startWorkspace_ && this.startWorkspace_.isDraggable();
+  var wsMovable = this.flyout_ ? this.flyout_ && (this.flyout_.scrollbar_ != null):
+      this.startWorkspace_ && this.startWorkspace_.isDraggable();
+  console.log("Checking for workspace drag: " + wsMovable);
   if (wsMovable && this.hasExceededDragRadius_) {
+    console.log("starting workspace drag");
     this.isDraggingWorkspace_ = true;
-    this.workspaceDragger_ = new Blockly.WorkspaceDragger(this.startWorkspace_);
+
+    if (this.flyout_) {
+      this.isDraggingFlyout_ = true;
+      this.workspaceDragger_ = new Blockly.FlyoutDragger(this.flyout_);
+    } else {
+      this.workspaceDragger_ = new Blockly.WorkspaceDragger(this.startWorkspace_);
+    }
+
     this.workspaceDragger_.startDrag();
     return true;
   }
@@ -324,7 +347,7 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
   // TODO: Implement.
 };
 
-// Field clicks
+// Workspace clicks
 Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
   // TODO: Implement.
 };
@@ -336,7 +359,6 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
  * @param {Blockly.Field} field The field the gesture started on.
  */
 Blockly.Gesture.prototype.setStartField = function(field) {
-  console.log("set start field");
   if (!this.startField_) {
     this.startField_ = field;
   }
@@ -363,6 +385,16 @@ Blockly.Gesture.prototype.setStartBlock = function(block) {
 Blockly.Gesture.prototype.setStartWorkspace = function(ws) {
   if (!this.startWorkspace_) {
     this.startWorkspace_ = ws;
+  }
+};
+
+/**
+ * Record the flyout that a gesture started on.
+ * @param {Blockly.Flyout} flyout The flyout the gesture started on.
+ */
+Blockly.Gesture.prototype.setFlyout = function(flyout) {
+  if (!this.flyout_) {
+    this.flyout_ = flyout;
   }
 };
 

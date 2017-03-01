@@ -409,6 +409,10 @@ Blockly.Css.CONTENT = [
     'fill-opacity: .8;',
   '}',
 
+  '.blocklyTransparentBackground {',
+    'opacity: 0;',
+  '}',
+
   '.blocklyMainWorkspaceScrollbar {',
     'z-index: 20;',
   '}',

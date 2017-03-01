@@ -24,74 +24,52 @@
  */
 'use strict';
 
-goog.provide('Blockly.WorkspaceDragger');
+goog.provide('Blockly.FlyoutDragger');
+
+goog.require('Blockly.WorkspaceDragger');
 
 goog.require('goog.math.Coordinate');
 goog.require('goog.asserts');
 
 
 /**
- * Class for a workspace dragger.  It moves the workspace around when it is
+ * Class for a flyout dragger.  It moves a flyout workspace around when it is
  * being dragged by a mouse or touch.
  * Note that the workspace itself manages whether or not it has a drag surface
  * and how to do translations based on that.  This simply passes the right
  * commands based on events.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace to drag.
+ * @param {!Blockly.Flyout} flyout The flyout to drag.
  * @constructor
  */
-Blockly.WorkspaceDragger = function(workspace) {
-  /**
-   * @type {!Blockly.WorkspaceSvg}
-   * @private
-   */
-  this.workspace_ = workspace;
+Blockly.FlyoutDragger = function(flyout) {
+  Blockly.FlyoutDragger.superClass_.constructor.call(this,
+      flyout.getWorkspace());
 
   /**
-   * The workspace's metrics object at the beginning of the drag.  Contains size
-   * and position metrics of a workspace.
-   * Coordinate system: pixel coordinates.
-   * @type {!Object}
+   * The scrollbar to update to move the flyout.
+   * Unlike the main workspace, the flyout has only one scrollbar, in either the
+   * horizontal or the vertical direction.
+   * @type {!Blockly.Scrollbar}
    * @private
    */
-  this.startDragMetrics_ = workspace.getMetrics();
+  this.scrollbar_ = flyout.scrollbar_;
 
   /**
-   * The scroll position of the workspace at the beginning of the drag.
-   * Coordinate system: pixel coordinates.
-   * @type {!goog.math.Coordinate}
+   * Whether the flyout scrolls horizontally.  If false, the flyout scrolls
+   * vertically.
+   * @type {boolean}
    * @private
    */
-  this.startScrollXY_ = new goog.math.Coordinate(workspace.scrollX,
-        workspace.scrollY);
+  this.horizontalLayout_ = flyout.horizontalLayout_;
 };
+goog.inherits(Blockly.FlyoutDragger, Blockly.WorkspaceDragger);
 
 /**
- * Start dragging the workspace.
- */
-Blockly.WorkspaceDragger.prototype.startDrag = function() {
-  Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
-  this.workspace_.setupDragSurface();
-};
-
-/**
- * Finish dragging the workspace and put everything back where it belongs.
+ * Move the flyout based on the most recent mouse movements.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel coordinates.
  */
-Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
-  // Make sure everything is up to date.
-  this.drag(currentDragDeltaXY);
-
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-  this.workspace_.resetDragSurface();
-};
-
-/**
- * Move the workspace based on the most recent mouse movements.
- * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
- *     moved from the position at the start of the drag, in pixel coordinates.
- */
-Blockly.WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
+Blockly.FlyoutDragger.prototype.drag = function(currentDragDeltaXY) {
   var metrics = this.startDragMetrics_;
   var newXY = goog.math.Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
 
@@ -103,7 +81,16 @@ Blockly.WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
   y = Math.max(y, metrics.viewHeight - metrics.contentTop -
                metrics.contentHeight);
 
-  // Move the scrollbars and the page will scroll automatically.
-  this.workspace_.scrollbar.set(-x - metrics.contentLeft,
-                          -y - metrics.contentTop);
+  // TODO: Understand why the output is the negative of the value for a main
+  // workspace.  This means that the flyout's metrics are bad.
+  // The same math should work for both.
+  x *= -1;
+  y *= -1;
+
+  // Move the scrollbar and the flyout will scroll automatically.
+  if (this.horizontalLayout_) {
+    this.scrollbar_.set(-x);
+  } else {
+    this.scrollbar_.set(-y);
+  }
 };

@@ -30,6 +30,7 @@ goog.require('Blockly.Block');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Events');
 goog.require('Blockly.FlyoutButton');
+goog.require('Blockly.Gesture');
 goog.require('Blockly.Touch');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('goog.dom');
@@ -46,6 +47,7 @@ goog.require('goog.userAgent');
 Blockly.Flyout = function(workspaceOptions) {
   workspaceOptions.getMetrics = this.getMetrics_.bind(this);
   workspaceOptions.setMetrics = this.setMetrics_.bind(this);
+
   /**
    * @type {!Blockly.Workspace}
    * @private
@@ -318,9 +320,10 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
     this.filterWrapper_ = this.filterForCapacity_.bind(this);
     this.targetWorkspace_.addChangeListener(this.filterWrapper_);
   }
+
   // Dragging the flyout up and down.
   Array.prototype.push.apply(this.eventWrappers_,
-      Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
+      Blockly.bindEventWithChecks_(this.workspace_.svgGroup_, 'mousedown', this,
       this.onMouseDown_));
 };
 
@@ -366,6 +369,15 @@ Blockly.Flyout.prototype.getWidth = function() {
  */
 Blockly.Flyout.prototype.getHeight = function() {
   return this.height_;
+};
+
+/**
+ * Get the workspace inside the flyout.
+ * @return {!Blockly.WorkspaceSvg} The workspace inside the flyout.
+ * @package
+ */
+Blockly.Flyout.prototype.getWorkspace = function() {
+  return this.workspace_;
 };
 
 /**
@@ -984,6 +996,11 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
  * @private
  */
 Blockly.Flyout.prototype.onMouseDown_ = function(e) {
+  var gesture = Blockly.GestureHandler.gestureForEvent(e);
+  gesture.setFlyout(this);
+  return;
+
+
   if (Blockly.utils.isRightButton(e)) {
     // Don't start drags with right clicks.
     Blockly.Touch.clearTouchIdentifier();

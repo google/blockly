@@ -86,8 +86,8 @@ function test_appendDomToWorkspace() {
     var blocks =  workspace.getAllBlocks();
     assertEquals('Block 1 position x',21,blocks[0].getRelativeToSurfaceXY().x);
     assertEquals('Block 1 position y',23,blocks[0].getRelativeToSurfaceXY().y);
-    assertEquals('Block 1 position x',21,blocks[1].getRelativeToSurfaceXY().x);
-    assertNotEquals('Block 2 position y',23,blocks[1].getRelativeToSurfaceXY().y);
+    assertEquals('Block 2 position x',21,blocks[1].getRelativeToSurfaceXY().x);
+    assertEquals('Block 2 position y',23 + blocks[0].getHeightWidth().height,blocks[1].getRelativeToSurfaceXY().y);
   } finally {
     workspace.dispose();
   }

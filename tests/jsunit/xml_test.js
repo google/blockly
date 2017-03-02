@@ -19,7 +19,6 @@
  */
 'use strict';
 
-
 var XML_TEXT = ['<xml xmlns="http://www.w3.org/1999/xhtml">',
   '  <block type="controls_repeat_ext" inline="true" x="21" y="23">',
   '    <value name="TIMES">',
@@ -46,7 +45,7 @@ var XML_TEXT = ['<xml xmlns="http://www.w3.org/1999/xhtml">',
   '    </statement>',
   '  </block>',
   '</xml>'].join('\n');
-  
+
 function test_textToDom() {
   var dom = Blockly.Xml.textToDom(XML_TEXT);
   assertEquals('XML tag', 'xml', dom.nodeName);
@@ -78,11 +77,18 @@ function test_domToWorkspace() {
         '</xml>');
     Blockly.Xml.domToWorkspace(dom, workspace);
     assertEquals('Block count', 1, workspace.getAllBlocks().length);
-    Blockly.Xml.domToWorkspace(dom, workspace);
-    assertEquals('Block count', 2, workspace.getAllBlocks().length);
   } finally {
     delete Blockly.Blocks.test_block;
+
+    workspace.dispose();
   }
+}
+
+function test_domToPrettyText() {
+  var dom = Blockly.Xml.textToDom(XML_TEXT);
+  var text = Blockly.Xml.domToPrettyText(dom);
+  assertEquals('Round trip', XML_TEXT.replace(/\s+/g, ''),
+      text.replace(/\s+/g, ''));
 }
 
 function test_appendDomToWorkspace() {
@@ -105,15 +111,13 @@ function test_appendDomToWorkspace() {
     assertEquals('Block count', 1, workspace.getAllBlocks().length);
     Blockly.Xml.appendDomToWorkspace(dom, workspace);
     assertEquals('Block count', 2, workspace.getAllBlocks().length);
+    var blocks =  workspace.getAllBlocks();
+    assertEquals('Block 1 position x',21,blocks[0].getRelativeToSurfaceXY().x);
+    assertEquals('Block 1 position y',23,blocks[0].getRelativeToSurfaceXY().y);
+    assertEquals('Block 2 position x',21,blocks[1].getRelativeToSurfaceXY().x);
+    assertEquals('Block 2 position y',23,blocks[1].getRelativeToSurfaceXY().y);
   } finally {
     delete Blockly.Blocks.test_block;
     workspace.dispose();
   }
-}
-
-function test_domToPrettyText() {
-  var dom = Blockly.Xml.textToDom(XML_TEXT);
-  var text = Blockly.Xml.domToPrettyText(dom);
-  assertEquals('Round trip', XML_TEXT.replace(/\s+/g, ''),
-      text.replace(/\s+/g, ''));
 }

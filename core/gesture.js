@@ -180,10 +180,29 @@ Blockly.Gesture.prototype.updateDragDelta_ = function(e) {
 
 
 Blockly.Gesture.prototype.updateIsDraggingBlock_ = function() {
-  var startBlockMovable = this.startBlock_ && this.startBlock_.isMovable();
-  if (startBlockMovable && this.hasExceededDragRadius_) {
-    this.isDraggingBlock_ = true;
-    console.log('dragging block');
+  var startBlockInFlyout = this.startBlock_ && this.flyout_;
+  if (startBlockInFlyout) {
+    if (this.flyout_.isDragTowardWorkspace_(this.currentDragDeltaXY_.x,
+        this.currentDragDeltaXY_.y)) {
+      Blockly.Events.disable();
+      this.flyout_.targetWorkspace_.setResizesEnabled(false);
+      try {
+        this.startBlock_ = this.flyout_.placeNewBlock_(this.startBlock_);
+        this.startBlock_.render();
+        this.startWorkspace_ = this.flyout_.targetWorkspace_;
+        this.isDraggingBlock_ = true;
+      } finally {
+        Blockly.Events.enable();
+      }
+    }
+  } else {
+    var startBlockMovable = this.startBlock_ && this.startBlock_.isMovable();
+    if (startBlockMovable && this.hasExceededDragRadius_) {
+      this.isDraggingBlock_ = true;
+    }
+  }
+
+  if (this.isDraggingBlock_) {
     this.blockDragger_ = new Blockly.BlockDragger(this.startBlock_,
         this.startWorkspace_);
     this.blockDragger_.startBlockDrag(this.currentDragDeltaXY_);
@@ -211,11 +230,11 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
   }
 
   // Then check if it's a workspace drag.
-  var wsMovable = this.flyout_ ? this.flyout_ && (this.flyout_.scrollbar_ != null):
+  var wsMovable = this.flyout_ ?
+      this.flyout_ && (this.flyout_.scrollbar_ != null) &&
+      this.flyout_.scrollbar_.isVisible() :
       this.startWorkspace_ && this.startWorkspace_.isDraggable();
-  console.log("Checking for workspace drag: " + wsMovable);
   if (wsMovable && this.hasExceededDragRadius_) {
-    console.log("starting workspace drag");
     this.isDraggingWorkspace_ = true;
 
     if (this.flyout_) {

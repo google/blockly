@@ -103,7 +103,18 @@ Blockly.WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
   y = Math.max(y, metrics.viewHeight - metrics.contentTop -
                metrics.contentHeight);
 
-  // Move the scrollbars and the page will scroll automatically.
-  this.workspace_.scrollbar.set(-x - metrics.contentLeft,
-                          -y - metrics.contentTop);
+  x = -x - metrics.contentLeft;
+  y = -y - metrics.contentTop;
+
+  this.updateScroll_(x, y);
+};
+
+/**
+ * Move the scrollbars to drag the workspace.
+ * x and y are in pixels.
+ * @param {number} x The new x position to move the scrollbar to.
+ * @param {number} y The new y position to move the scrollbar to.
+ */
+Blockly.WorkspaceDragger.prototype.updateScroll_ = function(x, y) {
+  this.workspace_.scrollbar.set(x, y);
 };

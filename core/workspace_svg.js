@@ -935,6 +935,7 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
+  console.log('workspace mouse down');
   if (Blockly.utils.isTargetInput(e)) {
     Blockly.Touch.clearTouchIdentifier();
     return;

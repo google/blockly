@@ -65,22 +65,14 @@ Blockly.FlyoutDragger = function(flyout) {
 goog.inherits(Blockly.FlyoutDragger, Blockly.WorkspaceDragger);
 
 /**
- * Move the flyout based on the most recent mouse movements.
- * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
- *     moved from the position at the start of the drag, in pixel coordinates.
+ * Move the appropriate scrollbar to drag the flyout.
+ * Since flyouts only scroll in one direction at a time, this will discard one
+ * of the calculated values.
+ * x and y are in pixels.
+ * @param {number} x The new x position to move the scrollbar to.
+ * @param {number} y The new y position to move the scrollbar to.
  */
-Blockly.FlyoutDragger.prototype.drag = function(currentDragDeltaXY) {
-  var metrics = this.startDragMetrics_;
-  var newXY = goog.math.Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
-
-  // Bound the new XY based on workspace bounds.
-  var x = Math.min(newXY.x, -metrics.contentLeft);
-  var y = Math.min(newXY.y, -metrics.contentTop);
-  x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
-               metrics.contentWidth);
-  y = Math.max(y, metrics.viewHeight - metrics.contentTop -
-               metrics.contentHeight);
-
+Blockly.FlyoutDragger.prototype.updateScroll_ = function(x, y) {
   // TODO: Understand why the output is the negative of the value for a main
   // workspace.  This means that the flyout's metrics are bad.
   // The same math should work for both.

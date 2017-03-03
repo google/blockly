@@ -341,10 +341,10 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
 };
 
 /**
- * Decode an XML DOM and create blocks on the workspace.
- * Append the new blocks at the bottom of the existing blocks
- * @param {!Element} xml XML DOM.
- * @param {!Blockly.Workspace} workspace The workspace.
+ * Decode an XML DOM and create blocks on the workspace. Position the new
+ * blocks immediately below prior blocks, aligned by their starting edge.
+ * @param {!Element} xml The XML DOM.
+ * @param {!Blockly.Workspace} workspace The workspace to add to.
  * @return {Array.<string>} An array containing new block ids.
  */
 Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {

@@ -1,0 +1,196 @@
+﻿Merge remote-tracking branch 'refs/remotes/google/develop' into Change_domToWorkspace_QN
+
+# Conflicts:
+#	tests/jsunit/xml_test.js
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch Change_domToWorkspace_QN
+# Your branch is up-to-date with 'origin/Change_domToWorkspace_QN'.
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   README.md
+#	modified:   accessible/audio.service.js
+#	modified:   accessible/block-connection.service.js
+#	modified:   accessible/block-options-modal.component.js
+#	modified:   accessible/block-options-modal.service.js
+#	modified:   accessible/field-segment.component.js
+#	new file:   accessible/libs/README
+#	modified:   accessible/libs/Rx.umd.min.js
+#	modified:   accessible/libs/angular2-all.umd.min.js
+#	modified:   accessible/libs/angular2-polyfills.min.js
+#	modified:   accessible/messages.js
+#	modified:   accessible/sidebar.component.js
+#	modified:   accessible/toolbox-modal.component.js
+#	modified:   accessible/toolbox-modal.service.js
+#	modified:   accessible/tree.service.js
+#	modified:   accessible/utils.service.js
+#	new file:   accessible/workspace-block.component.js
+#	deleted:    accessible/workspace-tree.component.js
+#	modified:   accessible/workspace.component.js
+#	modified:   appengine/app.yaml
+#	modified:   blockly_compressed.js
+#	modified:   blockly_uncompressed.js
+#	modified:   blocks/colour.js
+#	modified:   blocks/lists.js
+#	modified:   blocks/logic.js
+#	modified:   blocks/loops.js
+#	modified:   blocks/math.js
+#	modified:   blocks/procedures.js
+#	modified:   blocks/text.js
+#	modified:   blocks/variables.js
+#	modified:   blocks_compressed.js
+#	modified:   build.py
+#	modified:   core/block.js
+#	modified:   core/block_drag_surface.js
+#	modified:   core/block_render_svg.js
+#	modified:   core/block_svg.js
+#	modified:   core/blockly.js
+#	modified:   core/blocks.js
+#	modified:   core/connection.js
+#	modified:   core/constants.js
+#	modified:   core/contextmenu.js
+#	modified:   core/css.js
+#	modified:   core/events.js
+#	new file:   core/extensions.js
+#	modified:   core/field.js
+#	modified:   core/field_angle.js
+#	modified:   core/field_checkbox.js
+#	modified:   core/field_dropdown.js
+#	modified:   core/field_image.js
+#	modified:   core/field_number.js
+#	modified:   core/field_textinput.js
+#	modified:   core/field_variable.js
+#	modified:   core/flyout.js
+#	modified:   core/inject.js
+#	modified:   core/input.js
+#	modified:   core/procedures.js
+#	modified:   core/rendered_connection.js
+#	modified:   core/scrollbar.js
+#	modified:   core/toolbox.js
+#	modified:   core/tooltip.js
+#	modified:   core/touch.js
+#	modified:   core/utils.js
+#	modified:   core/variables.js
+#	modified:   core/widgetdiv.js
+#	modified:   core/workspace.js
+#	modified:   core/workspace_drag_surface_svg.js
+#	modified:   core/workspace_svg.js
+#	modified:   core/xml.js
+#	modified:   demos/accessible/index.html
+#	modified:   demos/blockfactory/workspacefactory/wfactory_controller.js
+#	modified:   demos/mirror/index.html
+#	modified:   generators/dart/lists.js
+#	modified:   generators/dart/text.js
+#	modified:   generators/javascript/lists.js
+#	modified:   generators/javascript/text.js
+#	modified:   generators/lua/lists.js
+#	modified:   generators/lua/text.js
+#	modified:   generators/php/lists.js
+#	modified:   generators/php/text.js
+#	modified:   generators/python.js
+#	modified:   generators/python/lists.js
+#	modified:   generators/python/logic.js
+#	modified:   generators/python/text.js
+#	modified:   i18n/create_messages.py
+#	modified:   i18n/js_to_json.py
+#	modified:   msg/js/ar.js
+#	modified:   msg/js/az.js
+#	modified:   msg/js/ba.js
+#	modified:   msg/js/bcc.js
+#	modified:   msg/js/be-tarask.js
+#	modified:   msg/js/bg.js
+#	modified:   msg/js/bn.js
+#	modified:   msg/js/br.js
+#	modified:   msg/js/ca.js
+#	modified:   msg/js/cs.js
+#	modified:   msg/js/da.js
+#	modified:   msg/js/de.js
+#	modified:   msg/js/diq.js
+#	modified:   msg/js/el.js
+#	modified:   msg/js/en-gb.js
+#	modified:   msg/js/en.js
+#	modified:   msg/js/es.js
+#	modified:   msg/js/et.js
+#	modified:   msg/js/fa.js
+#	modified:   msg/js/fi.js
+#	modified:   msg/js/fr.js
+#	modified:   msg/js/he.js
+#	modified:   msg/js/hi.js
+#	modified:   msg/js/hrx.js
+#	modified:   msg/js/hu.js
+#	modified:   msg/js/ia.js
+#	modified:   msg/js/id.js
+#	modified:   msg/js/is.js
+#	modified:   msg/js/it.js
+#	modified:   msg/js/ja.js
+#	modified:   msg/js/ko.js
+#	modified:   msg/js/lb.js
+#	modified:   msg/js/lki.js
+#	modified:   msg/js/lrc.js
+#	modified:   msg/js/lt.js
+#	modified:   msg/js/mk.js
+#	modified:   msg/js/ms.js
+#	modified:   msg/js/nb.js
+#	modified:   msg/js/nl.js
+#	modified:   msg/js/oc.js
+#	modified:   msg/js/pl.js
+#	modified:   msg/js/pms.js
+#	modified:   msg/js/pt-br.js
+#	modified:   msg/js/pt.js
+#	modified:   msg/js/ro.js
+#	modified:   msg/js/ru.js
+#	modified:   msg/js/sc.js
+#	modified:   msg/js/sd.js
+#	modified:   msg/js/shn.js
+#	modified:   msg/js/sk.js
+#	modified:   msg/js/sl.js
+#	modified:   msg/js/sq.js
+#	modified:   msg/js/sr.js
+#	modified:   msg/js/sv.js
+#	modified:   msg/js/ta.js
+#	modified:   msg/js/tcy.js
+#	modified:   msg/js/th.js
+#	modified:   msg/js/tl.js
+#	modified:   msg/js/tlh.js
+#	modified:   msg/js/tr.js
+#	modified:   msg/js/uk.js
+#	modified:   msg/js/vi.js
+#	modified:   msg/js/zh-hans.js
+#	modified:   msg/js/zh-hant.js
+#	new file:   msg/json/constants.json
+#	modified:   msg/json/en.json
+#	modified:   msg/json/qqq.json
+#	modified:   msg/messages.js
+#	modified:   package.json
+#	modified:   python_compressed.js
+#	new file:   tests/blocks/index.html
+#	new file:   tests/blocks/logic_ternary_test.js
+#	modified:   tests/generators/index.html
+#	modified:   tests/generators/lists.xml
+#	modified:   tests/generators/logic.xml
+#	modified:   tests/generators/loops1.xml
+#	modified:   tests/generators/text.xml
+#	new file:   tests/jsunit/extensions_test.js
+#	new file:   tests/jsunit/field_angle_test.js
+#	new file:   tests/jsunit/field_number_test.js
+#	new file:   tests/jsunit/field_test.js
+#	modified:   tests/jsunit/index.html
+#	new file:   tests/jsunit/input_test.js
+#	new file:   tests/jsunit/json_test.js
+#	modified:   tests/jsunit/utils_test.js
+#	modified:   tests/jsunit/workspace_test.js
+#	modified:   tests/jsunit/xml_test.js
+#	modified:   tests/playground.html
+#	new file:   tests/workspace_svg/index.html
+#	new file:   tests/workspace_svg/workspace_svg_test.js
+#
+

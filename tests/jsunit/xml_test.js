@@ -77,6 +77,9 @@ function test_domToWorkspace() {
         '</xml>');
     Blockly.Xml.domToWorkspace(dom, workspace);
     assertEquals('Block count', 1, workspace.getAllBlocks().length);
+    var newBlockIds = Blockly.Xml.appendDomToWorkspace(dom, workspace);
+    assertEquals('Block count', 2, workspace.getAllBlocks().length);
+    assertEquals('Number of new block ids',1,newBlockIds.length);
   } finally {
     delete Blockly.Blocks.test_block;
 
@@ -109,13 +112,9 @@ function test_appendDomToWorkspace() {
     var workspace = new Blockly.Workspace();
     Blockly.Xml.appendDomToWorkspace(dom, workspace);
     assertEquals('Block count', 1, workspace.getAllBlocks().length);
-    Blockly.Xml.appendDomToWorkspace(dom, workspace);
+    var newBlockIds = Blockly.Xml.appendDomToWorkspace(dom, workspace);
     assertEquals('Block count', 2, workspace.getAllBlocks().length);
-    var blocks =  workspace.getAllBlocks();
-    assertEquals('Block 1 position x',21,blocks[0].getRelativeToSurfaceXY().x);
-    assertEquals('Block 1 position y',23,blocks[0].getRelativeToSurfaceXY().y);
-    assertEquals('Block 2 position x',21,blocks[1].getRelativeToSurfaceXY().x);
-    assertEquals('Block 2 position y',23,blocks[1].getRelativeToSurfaceXY().y);
+    assertEquals('Number of new block ids',1,newBlockIds.length);
   } finally {
     delete Blockly.Blocks.test_block;
     workspace.dispose();

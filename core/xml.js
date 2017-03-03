@@ -623,7 +623,7 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
         newX = blockXY.x;
       }
     }
-    offsetY = farY - newY;
+    offsetY = farY - newY + Blockly.BlockSvg.SEP_SPACE_Y;
     offsetX = topX - newX;
     // move the new blocks to append them at the bottom
     var width;  // Not used in LTR.
@@ -636,7 +636,7 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
     }
   } 
   return newBlockIds;
-}
+};
 
 // Export symbols that would otherwise be renamed by Closure compiler.
 if (!goog.global['Blockly']) {

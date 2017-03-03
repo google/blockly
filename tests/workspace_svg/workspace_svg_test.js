@@ -71,6 +71,7 @@ function test_flatWorkspace() {
   }
 }
 
+/** Tests the alignment of appendDomToWorkspace with WorkspaceSvg. */
 function test_appendDomToWorkspace() {
   var workspace = helper_createWorkspaceWithToolbox();
   try {

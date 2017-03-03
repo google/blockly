@@ -91,7 +91,11 @@ function test_domToPrettyText() {
       text.replace(/\s+/g, ''));
 }
 
-function test_appendDomToWorkspace() {
+/**
+ * Tests the that appendDomToWorkspace works in a headless mode.
+ * Also see test_appendDomToWorkspace() in workspace_svg_test.js.
+ */
+unction test_appendDomToWorkspace() {
   Blockly.Blocks.test_block = {
     init: function() {
       this.jsonInit({

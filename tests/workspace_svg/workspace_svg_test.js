@@ -70,3 +70,26 @@ function test_flatWorkspace() {
     workspace.dispose();
   }
 }
+
+/** Tests the alignment of appendDomToWorkspace with WorkspaceSvg. */
+function test_appendDomToWorkspace() {
+  var workspace = helper_createWorkspaceWithToolbox();
+  try {
+    var dom = Blockly.Xml.textToDom(
+      '<xml xmlns="http://www.w3.org/1999/xhtml">' +
+      '  <block type="math_random_float" inline="true" x="21" y="23">' +
+      '  </block>' +
+      '</xml>');
+    Blockly.Xml.appendDomToWorkspace(dom, workspace);
+    assertEquals('Block count', 1, workspace.getAllBlocks().length);
+    Blockly.Xml.appendDomToWorkspace(dom, workspace);
+    assertEquals('Block count', 2, workspace.getAllBlocks().length);
+    var blocks =  workspace.getAllBlocks();
+    assertEquals('Block 1 position x',21,blocks[0].getRelativeToSurfaceXY().x);
+    assertEquals('Block 1 position y',23,blocks[0].getRelativeToSurfaceXY().y);
+    assertEquals('Block 2 position x',21,blocks[1].getRelativeToSurfaceXY().x);
+    assertEquals('Block 2 position y',23 + blocks[0].getHeightWidth().height + Blockly.BlockSvg.SEP_SPACE_Y,blocks[1].getRelativeToSurfaceXY().y);
+  } finally {
+    workspace.dispose();
+  }
+}

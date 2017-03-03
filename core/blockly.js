@@ -27,7 +27,7 @@
 /**
  * The top level namespace used to access the Blockly library.
  * @namespace Blockly
- */
+ **/
 goog.provide('Blockly');
 
 goog.require('Blockly.BlockSvg.render');

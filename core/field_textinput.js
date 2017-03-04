@@ -173,11 +173,13 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
   var tabKey = 9, enterKey = 13, escKey = 27;
   if (e.keyCode == enterKey) {
+    this.setValue(this.getText());
     Blockly.WidgetDiv.hide();
   } else if (e.keyCode == escKey) {
     htmlInput.value = htmlInput.defaultValue;
     Blockly.WidgetDiv.hide();
   } else if (e.keyCode == tabKey) {
+    this.setValue(this.getText());
     Blockly.WidgetDiv.hide();
     this.sourceBlock_.tab(this, !e.shiftKey);
     e.preventDefault();
@@ -195,6 +197,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
   var text = htmlInput.value;
   if (text !== htmlInput.oldValue_) {
     htmlInput.oldValue_ = text;
+    this.setText(text);
     this.validate_();
   } else if (goog.userAgent.WEBKIT) {
     // Cursor key.  Render the source block to show the caret moving.

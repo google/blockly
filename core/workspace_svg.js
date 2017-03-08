@@ -1369,23 +1369,29 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
     Blockly.mainWorkspace = this;
     // We call e.preventDefault in many event handlers which means we
     // need to explicitly grab focus (e.g from a textarea) because
-    // the browser will not do it for us.  How to do this is browser dependant
-    // as noted below.
-    
-    // Blur whatever was focused since explcitly grabbing focus below does not
-    // work in Edge.
-    if (document.activeElement) {
-      document.activeElement.blur();
-    }
-    try {
-      // Focus the workspace SVG - this is for Chrome and Firefox.
-      this.getParentSvg().focus();
-    }  catch (e) {
-      // IE and Edge do not support focus on SVG elements. When that fails
-      // above, get the injectionDiv (the workspace's parent) and focus that
-      // instead.  This doesn't work in Chrome.
-      this.getParentSvg().parentNode.focus();
-    }
+    // the browser will not do it for us.  How to do this is browser dependant.
+    this.setBrowserFocus();
+  }
+};
+
+/**
+ * Set the workspace to have focus in the browser.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
+  // Blur whatever was focused since explcitly grabbing focus below does not
+  // work in Edge.
+  if (document.activeElement) {
+    document.activeElement.blur();
+  }
+  try {
+    // Focus the workspace SVG - this is for Chrome and Firefox.
+    this.getParentSvg().focus();
+  }  catch (e) {
+    // IE and Edge do not support focus on SVG elements. When that fails
+    // above, get the injectionDiv (the workspace's parent) and focus that
+    // instead.  This doesn't work in Chrome.
+    this.getParentSvg().parentNode.focus();
   }
 };
 

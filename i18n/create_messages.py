@@ -111,7 +111,10 @@ goog.provide('Blockly.Msg.{0}');
 
 goog.require('Blockly.Msg');
 
-""".format(target_lang.replace('-', '.')))
+Blockly.Msg.{0}.switch_blockly_language_to_{1} = {{
+init: function() {{
+
+""".format(target_lang.replace('-', '.'), target_lang.replace('-', '_')))
         # For each key in the source language file, output the target value
         # if present; otherwise, output the source language value with a
         # warning comment.
@@ -140,6 +143,7 @@ goog.require('Blockly.Msg');
                   filename, ', '.join(synonym_keys)))
 
         outfile.write(synonym_text)
+        outfile.write("\n\n}\n};\n")
 
       if not args.quiet:
         print('Created {0}.'.format(outname))

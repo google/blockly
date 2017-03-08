@@ -6,6 +6,9 @@ goog.provide('Blockly.Msg.tcy');
 
 goog.require('Blockly.Msg');
 
+Blockly.Msg.tcy.switch_blockly_language_to_tcy = {
+init: function() {
+
 Blockly.Msg.ADD_COMMENT = "ಟಿಪ್ಪಣಿ ಸೇರ್ಸಲೆ";
 Blockly.Msg.CHANGE_VALUE_TITLE = "ಮೌಲ್ಯೊದ ಬದಲಾವಣೆ";
 Blockly.Msg.CLEAN_UP = "ನಿರ್ಬಂದೊಲೆನ್ ಸ್ವೊಚ್ಚೊ ಮಲ್ಪುಲೆ";
@@ -62,8 +65,8 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "ಈ ತಿರ್ತ್‍ದ �
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "ಈ ತಿರ್ತ್‌ದ ಸರಿ ಇತ್ತ್ಂಡಲಾ, ಬುಕ್ಕೊದ ಕೆಲವು ಹೇಳಿಕೆಲೆನ್ ಮಲ್ಪುಲ";
 Blockly.Msg.DELETE_ALL_BLOCKS = "ಮಾತ %1 ನಿರ್ಬಂದೊಲೆನ್ ದೆತ್ತ್ ಪಾಡ್ಲೆ ?";
 Blockly.Msg.DELETE_BLOCK = "ಮಾಜಯರ ತಡೆಯಾತ್ಂಡ್";
-Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
-Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the '%2' variable?";  // untranslated
+Blockly.Msg.DELETE_VARIABLE = "ಬದಲಾಯಿನೆಡ್ದ್ %1 ಮಾಜಲೆ";
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "ಗಳಸ್‍ನ '%2' ಬದಲಾವನೆಡ್ %1 ಮಾಜಲೆ?";
 Blockly.Msg.DELETE_X_BLOCKS = "ಮಾಜಯರ ಶೇಕಡಾ ೧ ತಡೆಯಾತ್ಂಡ್";
 Blockly.Msg.DISABLE_BLOCK = "ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಾದ್ ತಡೆಪತ್ತುನೆ";
 Blockly.Msg.DUPLICATE_BLOCK = "ನಕಲ್";
@@ -123,7 +126,7 @@ Blockly.Msg.LISTS_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/List
 Blockly.Msg.LISTS_ISEMPTY_TITLE = "%1 ಕಾಲಿ";
 Blockly.Msg.LISTS_ISEMPTY_TOOLTIP = "ಪಟ್ಯೊ ಕಾಲಿ ಪನ್ಪುನವು ಸತ್ಯೊ ಆಂಡ ಪಿರಕೊರು.";
 Blockly.Msg.LISTS_LENGTH_HELPURL = "https://github.com/google/blockly/wiki/Lists#length-of";  // untranslated
-Blockly.Msg.LISTS_LENGTH_TITLE = "೧% ಉದ್ದೊ";
+Blockly.Msg.LISTS_LENGTH_TITLE = "%1 ಉದ್ದೊ";
 Blockly.Msg.LISTS_LENGTH_TOOLTIP = "ಪಟ್ಟಿದ ಉದ್ದೊನು ಪಿರಕೊರು.";
 Blockly.Msg.LISTS_REPEAT_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-list-with";  // untranslated
 Blockly.Msg.LISTS_REPEAT_TITLE = "%1 ಪಿರೊರ %2 ಕಾಲೊಡು ಪಟ್ಟಿಲೆನ ಅಂಸೊನು ರಚಿಸಲೆ.";
@@ -158,7 +161,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "ಸುಲ್ಲು";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "ಪೂರ ಸತ್ಯೊ ಅತ್ತಂಡ ಸುಲ್ಲು ಆಂಡ ಪಿರಕೊರು";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "ಸತ್ಯೊ";
-Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(mathematics)";  // untranslated
+Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(mathematics)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "ರಡ್ಡ್ ಅತ್ತಂದೆ ಬೇತೆ ಸೂಚನೆಲು ನಿಜೊಕ್ಕುಲಾ ಸಮೊ ಇತ್ತ್ಂಡ ಪಿರ ಕೊರ್ಲೆ.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "ಸುರುತ ಅತ್ತಂದೆ ರಡ್ಡನೆದ ಸೂಚನೆಡ್ದ್ ನಿಜೊಕ್ಕುಲಾ ಮಲ್ಲೆ ಆದಿತ್ತ್ಂಡ ಪಿರ ಕೊರ್ಲೆ";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE = "ಸುರುತ ಅತ್ತಂದೆ ರಡ್ಡನೆದ ಸೂಚನೆ ನಿಜೊಕ್ಕುಲಾ ದಿಂಜ ಮಲ್ಲೆ ಅತ್ತಂಡ ಸಮೊ ಆದಿತ್ತ್ಂಡ ಪಿರ ಕೊರ್ಲೆ";
@@ -188,7 +191,7 @@ Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_DIVIDE = "ಸಂಖ್ಯೆದ ಭಾಗಲ
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MINUS = "ಸಂಖ್ಯೆದ ವ್ಯತ್ಯಾಸೊನು ಪರಕೊರು.";
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MULTIPLY = "ಸಂಖ್ಯೆದ ಉತ್ಪನ್ನೊನು ಪಿರ ಕೊರು.";
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_POWER = "ಒಂಜನೆ ಸಂಖ್ಯೆದ ಶಕ್ತಿನ್ ರಡ್ಡನೆ ಸಂಖ್ಯೆಡ್ದ್ ಪಿರ ಹೆಚ್ಚಿಗೆ ಮಲ್ಪುಲೆ.";
-Blockly.Msg.MATH_CHANGE_HELPURL = "https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter";  // untranslated
+Blockly.Msg.MATH_CHANGE_HELPURL = "https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter";
 Blockly.Msg.MATH_CHANGE_TITLE = "%1 ಡ್ದ್ %2 ಬದಲಾಯಿಸವೊಲಿ";
 Blockly.Msg.MATH_CHANGE_TOOLTIP = "'%1' ಬದಲ್ ಮಲ್ಪುನಂಚಿನ ಒಂಜಿ ನಂಬರ್‍ನ್ ಸೇರಾವು";
 Blockly.Msg.MATH_CONSTANT_HELPURL = "https://en.wikipedia.org/wiki/ಗಣಿತ_ನಿರಂತರ";
@@ -264,7 +267,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "ಸಂಖ್ಯೆದ ಆರ್ಕ್ಟ�
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "ಪದವಿದ ಸಹ ಚಿಹ್ನೆನ್ ಪಿರಕೊರು";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "ಪದವಿದ ಚಿಹ್ನೆನ್ ಪಿರಕೊರು";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "ಪದವಿದ ಸ್ಪರ್ಶಕೊನು ಪಿರಕೊರು";
-Blockly.Msg.NEW_VARIABLE = "ಪೊಸ ಬದಲಾವಣೆ";
+Blockly.Msg.NEW_VARIABLE = "ಬದಲ್ ಮಲ್ಪೊಡಾಯಿನೆನ್ ರಚಿಸಲೆ";
 Blockly.Msg.NEW_VARIABLE_TITLE = "ಪುದರ್‍ದ ಪೊಸ ಬದಲಾವಣೆ:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "ಹೇಳಿಕೆಗ್ ಅವಕಾಸೊ";
@@ -368,7 +371,7 @@ Blockly.Msg.VARIABLES_SET = "%1 ಡ್ದು %2 ಮಲ್ಪುಲೆ";
 Blockly.Msg.VARIABLES_SET_CREATE_GET = "'%1' ರಚನೆ ಮಲ್ಪುಲೆ";
 Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 Blockly.Msg.VARIABLES_SET_TOOLTIP = "ಉಲಯಿ ಬರ್ಪುನವು ಸಮಪಾಲ್ ಇಪ್ಪುನಂಚ ವ್ಯತ್ಯಾಸೊ ಮಾಲ್ಪು";
-Blockly.Msg.VARIABLE_ALREADY_EXISTS = "A variable named '%1' already exists.";  // untranslated
+Blockly.Msg.VARIABLE_ALREADY_EXISTS = "ಬದಲ್ ಮಲ್ಪೊಡಾಯಿನ '%1' ಇತ್ತೆನೆ ಅಸ್ತಿತ್ವೊಡು ಉಂಡು.";
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -389,3 +392,6 @@ Blockly.Msg.TEXT_APPEND_VARIABLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 Blockly.Msg.PROCEDURES_DEFRETURN_COMMENT = Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT;
+
+}
+};

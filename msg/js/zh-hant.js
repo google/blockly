@@ -6,9 +6,12 @@ goog.provide('Blockly.Msg.zh.hant');
 
 goog.require('Blockly.Msg');
 
+Blockly.Msg.zh.hant.switch_blockly_language_to_zh_hant = {
+init: function() {
+
 Blockly.Msg.ADD_COMMENT = "加入註解";
-Blockly.Msg.CHANGE_VALUE_TITLE = "修改值:";
-Blockly.Msg.CLEAN_UP = "清理積木";
+Blockly.Msg.CHANGE_VALUE_TITLE = "修改值：";
+Blockly.Msg.CLEAN_UP = "整理積木";
 Blockly.Msg.COLLAPSE_ALL = "收合積木";
 Blockly.Msg.COLLAPSE_BLOCK = "收合積木";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "顏色 1";
@@ -58,20 +61,20 @@ Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = "多次執行一些語句";
 Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = "https://github.com/google/blockly/wiki/Loops#repeat";  // untranslated
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "重複 直到";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "重複 當";
-Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "當值為否時，執行一些語句";
-Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "當值為真時，執行一些語句";
-Blockly.Msg.DELETE_ALL_BLOCKS = "刪除共 %1 塊積木？";
+Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "當值為 false 時，執行一些陳述式。";
+Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "當值為 true 時，執行一些陳述式。";
+Blockly.Msg.DELETE_ALL_BLOCKS = "刪除共 %1 個積木？";
 Blockly.Msg.DELETE_BLOCK = "刪除積木";
-Blockly.Msg.DELETE_VARIABLE = "刪除%1變數";
-Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "刪除%1使用的%2變數？";
-Blockly.Msg.DELETE_X_BLOCKS = "刪除 %1 塊積木";
+Blockly.Msg.DELETE_VARIABLE = "刪除「%1」變數";
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "刪除%1使用的「%2」變數？";
+Blockly.Msg.DELETE_X_BLOCKS = "刪除 %1 個積木";
 Blockly.Msg.DISABLE_BLOCK = "停用積木";
 Blockly.Msg.DUPLICATE_BLOCK = "複製";
 Blockly.Msg.ENABLE_BLOCK = "啟用積木";
 Blockly.Msg.EXPAND_ALL = "展開積木";
 Blockly.Msg.EXPAND_BLOCK = "展開積木";
 Blockly.Msg.EXTERNAL_INPUTS = "多行輸入";
-Blockly.Msg.HELP = "說明";
+Blockly.Msg.HELP = "幫助";
 Blockly.Msg.INLINE_INPUTS = "單行輸入";
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "建立空列表";
@@ -265,7 +268,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "返回指定角度的餘弦值(非弧度）
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "返回指定角度的正弦值(非弧度）。";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "返回指定角度的正切值(非弧度）。";
 Blockly.Msg.NEW_VARIABLE = "建立變數...";
-Blockly.Msg.NEW_VARIABLE_TITLE = "新變數名稱:";
+Blockly.Msg.NEW_VARIABLE_TITLE = "新變數名稱：";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "允許語句";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "與：";
@@ -296,7 +299,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "添加、刪除或重新排�
 Blockly.Msg.REDO = "重試";
 Blockly.Msg.REMOVE_COMMENT = "移除註解";
 Blockly.Msg.RENAME_VARIABLE = "重新命名變數...";
-Blockly.Msg.RENAME_VARIABLE_TITLE = "將所有 \"%1\" 變數重新命名為:";
+Blockly.Msg.RENAME_VARIABLE_TITLE = "將所有「%1」變數重新命名為：";
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "後加入文字";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "在";
@@ -359,7 +362,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "消除左側空格";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "消除右側空格";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "複製這段文字的同時刪除兩端多餘的空格。";
 Blockly.Msg.TODAY = "今天";
-Blockly.Msg.UNDO = "還原";
+Blockly.Msg.UNDO = "復原";
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "變數";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "建立 '設定 %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated
@@ -368,7 +371,7 @@ Blockly.Msg.VARIABLES_SET = "賦值 %1 到 %2";
 Blockly.Msg.VARIABLES_SET_CREATE_GET = "建立 '取得 %1'";
 Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 Blockly.Msg.VARIABLES_SET_TOOLTIP = "設定此變數，好和輸入值相等。";
-Blockly.Msg.VARIABLE_ALREADY_EXISTS = "一個名為%1的變數已存在。";
+Blockly.Msg.VARIABLE_ALREADY_EXISTS = "一個名為「%1」的變數已存在。";
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -389,3 +392,6 @@ Blockly.Msg.TEXT_APPEND_VARIABLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 Blockly.Msg.PROCEDURES_DEFRETURN_COMMENT = Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT;
+
+}
+};

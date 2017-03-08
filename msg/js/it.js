@@ -6,6 +6,9 @@ goog.provide('Blockly.Msg.it');
 
 goog.require('Blockly.Msg');
 
+Blockly.Msg.it.switch_blockly_language_to_it = {
+init: function() {
+
 Blockly.Msg.ADD_COMMENT = "Aggiungi commento";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Modifica valore:";
 Blockly.Msg.CLEAN_UP = "Pulisci i blocchi";
@@ -389,3 +392,6 @@ Blockly.Msg.TEXT_APPEND_VARIABLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 Blockly.Msg.PROCEDURES_DEFRETURN_COMMENT = Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT;
+
+}
+};

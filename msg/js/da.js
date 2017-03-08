@@ -6,6 +6,9 @@ goog.provide('Blockly.Msg.da');
 
 goog.require('Blockly.Msg');
 
+Blockly.Msg.da.switch_blockly_language_to_da = {
+init: function() {
+
 Blockly.Msg.ADD_COMMENT = "Tilføj kommentar";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Skift værdi:";
 Blockly.Msg.CLEAN_UP = "Ryd op i blokke";
@@ -389,3 +392,6 @@ Blockly.Msg.TEXT_APPEND_VARIABLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 Blockly.Msg.PROCEDURES_DEFRETURN_COMMENT = Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT;
+
+}
+};

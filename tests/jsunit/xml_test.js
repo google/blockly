@@ -95,7 +95,7 @@ function test_domToPrettyText() {
  * Tests the that appendDomToWorkspace works in a headless mode.
  * Also see test_appendDomToWorkspace() in workspace_svg_test.js.
  */
-unction test_appendDomToWorkspace() {
+function test_appendDomToWorkspace() {
   Blockly.Blocks.test_block = {
     init: function() {
       this.jsonInit({

@@ -314,6 +314,15 @@ Blockly.Css.CONTENT = [
     'display: none;',
   '}',
 
+  '.badBlock>.blocklyPath {',
+  '  stroke-width: 3px;',
+  '  stroke: #f00;',
+  '}',
+
+  '.badBlock>.blocklyPathLight {',
+  '  display: none;',
+  '}',
+
   '.blocklyDragging>.blocklyPath,',
   '.blocklyDragging>.blocklyPathLight {',
     'fill-opacity: .8;',

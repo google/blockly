@@ -126,8 +126,13 @@ Blockly.Msg.LISTS_LENGTH_HELPURL = "https://github.com/google/blockly/wiki/Lists
 Blockly.Msg.LISTS_LENGTH_TITLE = "長度 %1";
 Blockly.Msg.LISTS_LENGTH_TOOLTIP = "返回清單的長度（項目數）。";
 Blockly.Msg.LISTS_REPEAT_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-list-with";  // untranslated
+<<<<<<< HEAD
 Blockly.Msg.LISTS_REPEAT_TITLE = "建立清單使用項目 %1 重複 %2 次";
 Blockly.Msg.LISTS_REPEAT_TOOLTIP = "建立一個清單，項目中包含指定重複次數的值。";
+=======
+Blockly.Msg.LISTS_REPEAT_TITLE = "建立列表使用項目 %1 重複 %2 次數";
+Blockly.Msg.LISTS_REPEAT_TOOLTIP = "建立包含指定重複次數的 值 的列表。";
+>>>>>>> nit
 Blockly.Msg.LISTS_REVERSE_HELPURL = "https://github.com/google/blockly/wiki/Lists#reversing-a-list";  // untranslated
 Blockly.Msg.LISTS_REVERSE_MESSAGE0 = "reverse %1";  // untranslated
 Blockly.Msg.LISTS_REVERSE_TOOLTIP = "Reverse a copy of a list.";  // untranslated
@@ -321,7 +326,11 @@ Blockly.Msg.TEXT_CHARAT_TOOLTIP = "返回位於指定位置的字元。";
 Blockly.Msg.TEXT_COUNT_HELPURL = "https://github.com/google/blockly/wiki/Text#counting-substrings";  // untranslated
 Blockly.Msg.TEXT_COUNT_MESSAGE0 = "count %1 in %2";  // untranslated
 Blockly.Msg.TEXT_COUNT_TOOLTIP = "Count how many times some text occurs within some other text.";  // untranslated
+<<<<<<< HEAD
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "添加一個項目到字串中。";
+=======
+Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "將一個項目加入到字串中。";
+>>>>>>> nit
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "加入";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "添加、刪除或重新排列各區塊以重新配置這個文字積木。";
 Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_END = "到 倒數第 # 個字元";

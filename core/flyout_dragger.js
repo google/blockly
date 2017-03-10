@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Methods for dragging a workspace visually.
+ * @fileoverview Methods for dragging a flyout visually.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
@@ -28,8 +28,8 @@ goog.provide('Blockly.FlyoutDragger');
 
 goog.require('Blockly.WorkspaceDragger');
 
-goog.require('goog.math.Coordinate');
 goog.require('goog.asserts');
+goog.require('goog.math.Coordinate');
 
 
 /**

@@ -108,8 +108,6 @@ Blockly.Gesture = function(e, touchId) {
    */
   this.isDraggingWorkspace_ = false;
 
-  this.isDraggingFlyout_ = false;
-
   /**
    * @type {boolean}
    * @private
@@ -178,7 +176,14 @@ Blockly.Gesture.prototype.updateDragDelta_ = function(e) {
   this.hasExceededDragRadius_ = currentDragDelta > Blockly.DRAG_RADIUS;
 };
 
-
+/**
+ * Update this gesture to record whether a block is being dragged.
+ * This function should be called on mouse/touch move events if isDragging
+ * fields have not yet been set.
+ * If a block should be dragged, either from the flyout or in the workspace,
+ * this function creates the necessary BlockDragger and starts the drag.
+ * @return {boolean} true if a block is being dragged.
+ */
 Blockly.Gesture.prototype.updateIsDraggingBlock_ = function() {
   var startBlockInFlyout = this.startBlock_ && this.flyout_;
   if (startBlockInFlyout) {
@@ -240,7 +245,6 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
     this.isDraggingWorkspace_ = true;
 
     if (this.flyout_) {
-      this.isDraggingFlyout_ = true;
       this.workspaceDragger_ = new Blockly.FlyoutDragger(this.flyout_);
     } else {
       this.workspaceDragger_ = new Blockly.WorkspaceDragger(this.startWorkspace_);
@@ -252,6 +256,10 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
   return false;
 };
 
+/**
+ * Start a gesture: update the workspace to indicate that a gesture is in
+ * progress and bind mousemove and mouseup handlers.
+ */
 Blockly.Gesture.prototype.doStart = function(e) {
   // TODO: Blockly.longStart_()
   this.startWorkspace_.updateScreenCalculationsIfScrolled();
@@ -329,14 +337,21 @@ Blockly.Gesture.prototype.handleUp = function(e) {
   this.endGesture(e);
 };
 
+/**
+ * End the gesture associated with the given event, and remove it from the
+ * gesture database.
+ * @param {!Event} e A mouse move or touch move event.
+ */
 Blockly.Gesture.prototype.endGesture = function(e) {
   Blockly.GestureDB.removeGestureForId(this.touchIdentifier_);
   e.preventDefault();
   e.stopPropagation();
 };
 
-
-
+/**
+ * Handle a right-click event by showing a context menu.
+ * @param {!Event} e A mouse move or touch move event.
+ */
 Blockly.Gesture.prototype.handleRightClick = function(e) {
   if (this.startBlock_) {
     this.startBlock_.showContextMenu_(e);
@@ -347,17 +362,32 @@ Blockly.Gesture.prototype.handleRightClick = function(e) {
 };
 
 // Called externally.
+/**
+ * Handle a mousedown/touchstart event on a workspace.
+ * @param {!Event} e A mouse down or touch start event.
+ * @param {!Blockly.Workspace} ws The workspace the event hit.
+ */
 Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
   this.setStartWorkspace(ws);
   this.mostRecentEvent_ = e;
   this.doStart(e);
 };
 
+/**
+ * Handle a mousedown/touchstart event on a flyout.
+ * @param {!Event} e A mouse down or touch start event.
+ * @param {!Blockly.Flyout} flyout The flyout the event hit.
+ */
 Blockly.Gesture.prototype.handleFlyoutStart = function(e, flyout) {
   this.setStartFlyout(flyout);
   this.handleWsStart(e, flyout.getWorkspace());
 };
 
+/**
+ * Handle a mousedown/touchstart event on a block.
+ * @param {!Event} e A mouse down or touch start event.
+ * @param {!Blockly.BlockSvg} block The block the event hit.
+ */
 Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
   this.setStartBlock(block);
   this.mostRecentEvent_ = e;

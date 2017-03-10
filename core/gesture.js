@@ -330,7 +330,7 @@ Blockly.Gesture.prototype.handleUp = function(e) {
 };
 
 Blockly.Gesture.prototype.endGesture = function(e) {
-  Blockly.GestureHandler.removeGestureForId(this.touchIdentifier_);
+  Blockly.GestureDB.removeGestureForId(this.touchIdentifier_);
   e.preventDefault();
   e.stopPropagation();
 };

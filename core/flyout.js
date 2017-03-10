@@ -1001,7 +1001,7 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
 Blockly.Flyout.prototype.onMouseDown_ = function(e) {
   console.log('flyout mouse down');
   var gesture = Blockly.GestureHandler.gestureForEvent(e);
-  gesture.setFlyout(this);
+  gesture.handleFlyoutStart(e, this);
   return;
 
 

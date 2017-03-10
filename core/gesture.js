@@ -191,6 +191,8 @@ Blockly.Gesture.prototype.updateIsDraggingBlock_ = function() {
         this.startBlock_.render();
         this.startWorkspace_ = this.flyout_.targetWorkspace_;
         this.isDraggingBlock_ = true;
+        // Close the flyout.
+        Blockly.hideChaff();
       } finally {
         Blockly.Events.enable();
       }
@@ -256,7 +258,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
   this.startWorkspace_.markFocused();
   this.mostRecentEvent_ = e;
 
-  Blockly.hideChaff();
+  Blockly.hideChaff(!!this.flyout_);
 
   if (Blockly.utils.isRightButton(e)) {
     this.handleRightClick(e);
@@ -351,6 +353,11 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
   this.doStart(e);
 };
 
+Blockly.Gesture.prototype.handleFlyoutStart = function(e, flyout) {
+  this.setStartFlyout(flyout);
+  this.handleWsStart(e, flyout.getWorkspace());
+};
+
 Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
   this.setStartBlock(block);
   this.mostRecentEvent_ = e;
@@ -411,7 +418,7 @@ Blockly.Gesture.prototype.setStartWorkspace = function(ws) {
  * Record the flyout that a gesture started on.
  * @param {Blockly.Flyout} flyout The flyout the gesture started on.
  */
-Blockly.Gesture.prototype.setFlyout = function(flyout) {
+Blockly.Gesture.prototype.setStartFlyout = function(flyout) {
   if (!this.flyout_) {
     this.flyout_ = flyout;
   }

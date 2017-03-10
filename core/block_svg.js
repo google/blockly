@@ -636,7 +636,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   this.select();
   Blockly.hideChaff();
 
-  var gesture = Blockly.GestureHandler.gestureForEvent(e);
+  var gesture = Blockly.GestureDB.gestureForEvent(e);
   gesture.handleBlockStart(e, this);
 
 };

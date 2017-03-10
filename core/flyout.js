@@ -969,23 +969,9 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
       Blockly.Flyout.blockRightClick_(e, block);
     } else {
       console.log('block mouse down');
-      var gesture = Blockly.GestureHandler.gestureForEvent(e);
+      var gesture = Blockly.GestureDB.gestureForEvent(e);
       gesture.setStartBlock(block);
       return;
-      // Blockly.terminateDrag_();
-      // Blockly.hideChaff(true);
-      // // Left-click (or middle click)
-      // Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
-      // // Record the current mouse position.
-      // flyout.startDragMouseY_ = e.clientY;
-      // flyout.startDragMouseX_ = e.clientX;
-      // Blockly.Flyout.startDownEvent_ = e;
-      // Blockly.Flyout.startBlock_ = block;
-      // Blockly.Flyout.startFlyout_ = flyout;
-      // Blockly.Flyout.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
-      //     'mouseup', flyout, flyout.onMouseUp_);
-      // Blockly.Flyout.onMouseMoveBlockWrapper_ = Blockly.bindEventWithChecks_(
-      //     document, 'mousemove', flyout, flyout.onMouseMoveBlock_);
     }
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
@@ -1000,52 +986,8 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
  */
 Blockly.Flyout.prototype.onMouseDown_ = function(e) {
   console.log('flyout mouse down');
-  var gesture = Blockly.GestureHandler.gestureForEvent(e);
+  var gesture = Blockly.GestureDB.gestureForEvent(e);
   gesture.handleFlyoutStart(e, this);
-  return;
-
-
-  // if (Blockly.utils.isRightButton(e)) {
-  //   // Don't start drags with right clicks.
-  //   Blockly.Touch.clearTouchIdentifier();
-  //   return;
-  // }
-  // Blockly.hideChaff(true);
-  // this.dragMode_ = Blockly.DRAG_FREE;
-  // this.startDragMouseY_ = e.clientY;
-  // this.startDragMouseX_ = e.clientX;
-  // Blockly.Flyout.startFlyout_ = this;
-  // Blockly.Flyout.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
-  //     'mousemove', this, this.onMouseMove_);
-  // Blockly.Flyout.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
-  //     'mouseup', this, Blockly.Flyout.terminateDrag_);
-  // // This event has been handled.  No need to bubble up to the document.
-  // e.preventDefault();
-  // e.stopPropagation();
-};
-
-/**
- * Handle a mouse-up anywhere in the SVG pane.  Is only registered when a
- * block is clicked.  We can't use mouseUp on the block since a fast-moving
- * cursor can briefly escape the block before it catches up.
- * @param {!Event} e Mouse up event.
- * @private
- */
-Blockly.Flyout.prototype.onMouseUp_ = function(e) {
-  console.log('deprecated');
-  if (!this.workspace_.isDragging()) {
-    // This was a click, not a drag.  End the gesture.
-    Blockly.Touch.clearTouchIdentifier();
-    if (this.autoClose) {
-      this.createBlockFunc_(Blockly.Flyout.startBlock_)(
-          Blockly.Flyout.startDownEvent_);
-    } else if (!Blockly.WidgetDiv.isVisible()) {
-      Blockly.Events.fire(
-          new Blockly.Events.Ui(Blockly.Flyout.startBlock_, 'click',
-                                undefined, undefined));
-    }
-  }
-  Blockly.terminateDrag_();
 };
 
 /**

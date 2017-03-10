@@ -19,17 +19,17 @@
  */
 
 /**
- * @fileoverview The class that handles gestures (drags, clicks, etc) across
+ * @fileoverview The class that tracks gestures (drags, clicks, etc) across
  * all of Blockly, including multiple workspaces.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
 /**
- * @name Blockly.GestureHandler
+ * @name Blockly.GestureDB
  * @namespace
  */
-goog.provide('Blockly.GestureHandler');
+goog.provide('Blockly.GestureDB');
 
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Touch');
@@ -40,21 +40,21 @@ goog.require('Blockly.Touch');
  * @type {!Object<string, Blockly.Gesture>}
  * @private
  */
-Blockly.GestureHandler.gestureMap_ = Object.create(null);
+Blockly.GestureDB.gestureMap_ = Object.create(null);
 
 /**
  * How many gestures are currently being tracked.
  * @type {number}
  * @private
  */
-Blockly.GestureHandler.numGesturesInProgress_ = 0;
+Blockly.GestureDB.numGesturesInProgress_ = 0;
 
 /**
  * The maximum allowable number of concurrent gestures.
  * @type {number}
  * @const
  */
-Blockly.GestureHandler.MAX_GESTURES = 1;
+Blockly.GestureDB.MAX_GESTURES = 1;
 
 /**
  * Look up the gesture that is tracking this touch stream.  May create a new
@@ -63,13 +63,13 @@ Blockly.GestureHandler.MAX_GESTURES = 1;
  * @return {Blockly.Gesture} The gesture that is tracking this touch stream,
  *     or null if no valid gesture exists.
  */
-Blockly.GestureHandler.gestureForEvent = function(e) {
+Blockly.GestureDB.gestureForEvent = function(e) {
   var id = Blockly.Touch.getTouchIdentifierFromEvent(e);
-  var gesture = Blockly.GestureHandler.gestureMap_[id];
+  var gesture = Blockly.GestureDB.gestureMap_[id];
   if (gesture) {
     return gesture;
-  } else if (Blockly.GestureHandler.numGesturesInProgress_ >=
-      Blockly.GestureHandler.MAX_GESTURES) {
+  } else if (Blockly.GestureDB.numGesturesInProgress_ >=
+      Blockly.GestureDB.MAX_GESTURES) {
     return null;
   }
 
@@ -77,8 +77,8 @@ Blockly.GestureHandler.gestureForEvent = function(e) {
   // new gesture.
   if (e.type == 'mousedown' || e.type == 'touchstart') {
     gesture = new Blockly.Gesture(e, id);
-    Blockly.GestureHandler.gestureMap_[id] = gesture;
-    Blockly.GestureHandler.numGesturesInProgress_++;
+    Blockly.GestureDB.gestureMap_[id] = gesture;
+    Blockly.GestureDB.numGesturesInProgress_++;
     return gesture;
   }
   // No gesture existed and this event couldn't be the start of a new gesture.
@@ -89,13 +89,13 @@ Blockly.GestureHandler.gestureForEvent = function(e) {
  * Delete the current gesture for the specified touch identifier.
  * @param {string} id The touch id whose gesture should be deleted.
  */
-Blockly.GestureHandler.removeGestureForId = function(id) {
-  var gesture = Blockly.GestureHandler.gestureMap_[id];
+Blockly.GestureDB.removeGestureForId = function(id) {
+  var gesture = Blockly.GestureDB.gestureMap_[id];
   if (gesture) {
     gesture.dispose();
-    Blockly.GestureHandler.numGesturesInProgress_--;
+    Blockly.GestureDB.numGesturesInProgress_--;
   }
-  Blockly.GestureHandler.gestureMap_[id] = null;
+  Blockly.GestureDB.gestureMap_[id] = null;
 };
 
 /**
@@ -103,13 +103,13 @@ Blockly.GestureHandler.removeGestureForId = function(id) {
  * @param {!Blockly.WorkspaceSvg} ws The workspace to look for.
  * @return {!Array.<!Blockly.Gesture>} A list of all gestures on this workspace.
  */
-Blockly.GestureHandler.getGesturesOnWorkspace = function(ws) {
+Blockly.GestureDB.getGesturesOnWorkspace = function(ws) {
   // TODO: Consider naming inconsistency between "getGesturesOnWorkspace" and
   // "removeGestureForId", "gestureForEvent".
   var result = [];
   // TODO: Speed of for ... in?
-  for (var id in Blockly.GestureHandler.gestureMap_) {
-    var gesture = Blockly.GestureHandler.gestureMap_[id];
+  for (var id in Blockly.GestureDB.gestureMap_) {
+    var gesture = Blockly.GestureDB.gestureMap_[id];
     if (gesture && gesture.isOnWorkspace(ws)) {
       result.push(gesture);
     }

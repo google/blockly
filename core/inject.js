@@ -65,7 +65,8 @@ Blockly.inject = function(container, opt_options) {
   var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
       workspaceDragSurface);
   Blockly.init_(workspace);
-  workspace.markFocused();
+  Blockly.mainWorkspace = workspace;
+
   Blockly.svgResize(workspace);
   return workspace;
 };
@@ -212,7 +213,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface, workspac
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
-  mainWorkspace.markFocused();
+  Blockly.mainWorkspace = mainWorkspace;
 
   if (!options.readOnly && !options.hasScrollbars) {
     var workspaceChanged = function() {

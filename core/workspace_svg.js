@@ -31,7 +31,7 @@ goog.provide('Blockly.WorkspaceSvg');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
 goog.require('Blockly.Gesture');
-goog.require('Blockly.GestureHandler');
+goog.require('Blockly.GestureDB');
 goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Touch');
@@ -949,7 +949,7 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     Blockly.selected.unselect();
   }
 
-  var gesture = Blockly.GestureHandler.gestureForEvent(e);
+  var gesture = Blockly.GestureDB.gestureForEvent(e);
   if (gesture) {
     gesture.handleWsStart(e, this);
   }
@@ -989,17 +989,13 @@ Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
  * @return {boolean} True if currently dragging or scrolling.
  */
 Blockly.WorkspaceSvg.prototype.isDragging = function() {
-  var gesturesOnWs = Blockly.GestureHandler.getGesturesOnWorkspace(this);
+  var gesturesOnWs = Blockly.GestureDB.getGesturesOnWorkspace(this);
   for (var i = 0, item; item = gesturesOnWs[i]; i++) {
     if (item.isDragging()) {
       return true;
     }
   }
   return false;
-  // return Blockly.dragMode_ == Blockly.DRAG_FREE ||
-  //     (Blockly.Flyout.startFlyout_ &&
-  //         Blockly.Flyout.startFlyout_.dragMode_ == Blockly.DRAG_FREE) ||
-  //     this.dragMode_ == Blockly.DRAG_FREE;
 };
 
 /**

@@ -374,12 +374,12 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     bottom = this.addZoomControls_(bottom);
   }
 
-  Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
-      this.onMouseDown_);
-  var thisWorkspace = this;
-  Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
-                     function(e) {Blockly.longStart_(e, thisWorkspace);});
   if (!this.isFlyout) {
+    Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
+        this.onMouseDown_);
+    var thisWorkspace = this;
+    Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
+                       function(e) {Blockly.longStart_(e, thisWorkspace);});
     if (this.options.zoomOptions && this.options.zoomOptions.wheel) {
       // Mouse-wheel.
       Blockly.bindEventWithChecks_(this.svgGroup_, 'wheel', this,

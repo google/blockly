@@ -127,15 +127,42 @@ Blockly.Gesture = function(e, touchId) {
    */
   this.mostRecentEvent_ = e;
 
-  // TODO: Doc
+  /**
+   * A handle to use to unbind a mouse move listener at the end of a drag.
+   * Opaque data returned from Blockly.bindEventWithChecks_.
+   * @type {Array.<!Array>}
+   * @private
+   */
   this.onMoveWrapper_ = null;
 
-  // TODO: Doc
+  /**
+   * A handle to use to unbind a mouse up listener at the end of a drag.
+   * Opaque data returned from Blockly.bindEventWithChecks_.
+   * @type {Array.<!Array>}
+   * @private
+   */
   this.onUpWrapper_ = null;
 
+  /**
+   * The object tracking a block drag, or null if none is in progress.
+   * @type {Blockly.BlockDragger}
+   * @private
+   */
   this.blockDragger_ = null;
+
+  /**
+   * The object tracking a workspace or flyout workspace drag, or null if none
+   * is in progress.
+   * @type {Blockly.WorkspaceDragger}
+   * @private
+   */
   this.workspaceDragger_ = null;
 
+  /**
+   * The flyout a gesture started in, if any.
+   * @type {Blockly.Flyout}
+   * @private
+   */
   this.flyout_ = null;
 };
 
@@ -146,15 +173,16 @@ Blockly.Gesture.prototype.dispose = function() {
   if (this.onUpWrapper_) {
     Blockly.unbindEvent_(this.onUpWrapper_);
   }
-  if (this.blockDragger_) {
-    this.blockDragger_ = null;
-  }
-  if (this.workspaceDragger_) {
-    this.workspaceDragger_ = null;
-  }
+  this.blockDragger_ = null;
+  this.workspaceDragger_ = null;
 };
 
-Blockly.Gesture.prototype.update = function(e) {
+/**
+ * Update internal state based on an event.
+ * @param {!Event} e The most recent mouse or touch event.
+ * @private
+ */
+Blockly.Gesture.prototype.update_ = function(e) {
   this.updateDragDelta_(e);
   if (!this.isDragging()) {
     this.updateIsDragging_();
@@ -259,6 +287,7 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
 /**
  * Start a gesture: update the workspace to indicate that a gesture is in
  * progress and bind mousemove and mouseup handlers.
+ * @param {!Event} e A mouse down or touch start event.
  */
 Blockly.Gesture.prototype.doStart = function(e) {
   // TODO: Blockly.longStart_()
@@ -293,7 +322,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
  * @param {!Event} e A mouse move or touch move event.
  */
 Blockly.Gesture.prototype.handleMove = function(e) {
-  this.update(e);
+  this.update_(e);
   // TODO: I should probably only call this once, when first exceeding the drag
   // radius.
   if (this.hasExceededDragRadius_) {
@@ -316,7 +345,7 @@ Blockly.Gesture.prototype.handleMove = function(e) {
  * @param {!Event} e A mouse up or touch end event.
  */
 Blockly.Gesture.prototype.handleUp = function(e) {
-  this.update(e);
+  this.update_(e);
   Blockly.longStop_();
   if (this.isDraggingBlock_) {
     // Terminate block drag.

@@ -73,16 +73,10 @@ goog.inherits(Blockly.FlyoutDragger, Blockly.WorkspaceDragger);
  * @param {number} y The new y position to move the scrollbar to.
  */
 Blockly.FlyoutDragger.prototype.updateScroll_ = function(x, y) {
-  // TODO: Understand why the output is the negative of the value for a main
-  // workspace.  This means that the flyout's metrics are bad.
-  // The same math should work for both.
-  x *= -1;
-  y *= -1;
-
   // Move the scrollbar and the flyout will scroll automatically.
   if (this.horizontalLayout_) {
-    this.scrollbar_.set(-x);
+    this.scrollbar_.set(x);
   } else {
-    this.scrollbar_.set(-y);
+    this.scrollbar_.set(y);
   }
 };

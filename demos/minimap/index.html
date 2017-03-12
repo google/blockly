@@ -30,7 +30,7 @@
         <div id="masterDiv" style="height: 480px; width: 900px;"></div>
       </td>
       <td>
-        <div id="mapDiv" style="height: 480px; width: 100px;"></div>
+        <div id="mapDiv" style="height: 480px; width: 200px;"></div>
       </td>
     </tr>
   </table>
@@ -51,7 +51,6 @@
   <script>
 
   // Inject master workspace.
-  var PADDING = 5;
   var masterWorkspace = Blockly.inject('masterDiv',{
     media: '../../media/',
     scrollbars: true,
@@ -65,8 +64,8 @@
      zoom:
       {controls: false,
       wheel: true,
-      startScale: 0.20, //you can change this accorting to your needs
-      maxScale: 0.20,
+      startScale: 0.1, //you can change this accorting to your needs.
+      maxScale: 0.1,
       minScale: 0.01
       }});
 

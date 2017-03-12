@@ -37,23 +37,14 @@ Minimap.init = function(workspace, minimap){
   this.workspace = workspace;
   this.minimap = minimap;
 
-  //Adding scroll callback functionlity to vScroll just for this demo.
+  //Adding scroll callback functionlity to vScroll and hScroll just for this demo.
   //IMPORTANT: This should be changed when there is proper UI event handling
   //           api available and should be handled by workspace's event listeners.
-  this.workspace.scrollbar.vScroll.onScroll_ = function(){
-    var ratio = this.handlePosition_ / this.scrollViewSize_;
-    if (isNaN(ratio)) {
-      ratio = 0;
-    }
-    var xyRatio = {};
-    if (this.horizontal_) {
-      xyRatio.x = ratio;
-    } else {
-      xyRatio.y = ratio;
-    }
-    this.workspace_.setMetrics(xyRatio);
+  this.workspace.scrollbar.vScroll.setHandlePosition = function(newPosition){
+    this.handlePosition_ = newPosition;
+    this.svgHandle_.setAttribute(this.positionAttribute_, this.handlePosition_);
 
-    // Code above is same as the original onScroll_ function in core/scrollbar.js.
+    // Code above is same as the original setHandlePosition function in core/scrollbar.js.
     // New code starts from here.
 
     // Get the absolutePosition.
@@ -63,8 +54,21 @@ Minimap.init = function(workspace, minimap){
     Minimap.onScrollChange(absolutePosition, this.horizontal_);
   };
 
-  // Used as left padding in the minimap.
-  this.PADDING = 5;
+  // Adding call back for horizontal scroll.
+  this.workspace.scrollbar.hScroll.setHandlePosition = function(newPosition){
+    this.handlePosition_ = newPosition;
+    this.svgHandle_.setAttribute(this.positionAttribute_, this.handlePosition_);
+
+    // Code above is same as the original setHandlePosition function in core/scrollbar.js.
+    // New code starts from here.
+
+    // Get the absolutePosition.
+    var absolutePosition = (this.handlePosition_ / this.ratio_);
+
+    // Firing the scroll change listener.
+    Minimap.onScrollChange(absolutePosition, this.horizontal_);
+  };
+
 
   // Required to stop a positive feedback loop when user clicks minimap
   // and the scroll changes, which inturn may change minimap.
@@ -152,6 +156,7 @@ Minimap.mirrorEvent = function(event){
   minimapEvent.run(true);
   Minimap.scaleMinimap();
   Minimap.setDraggerHeight();
+  Minimap.setDraggerWidth();
 };
 
 /**
@@ -164,7 +169,7 @@ Minimap.repositionMinimap = function(){
 };
 
 /**
-* Updates the rectangle's height and position.
+* Updates the rectangle's height .
 */
 Minimap.setDraggerHeight = function(){
   var workspaceMetrics = Minimap.workspace.getMetrics();
@@ -175,6 +180,20 @@ Minimap.setDraggerHeight = function(){
   }
   Minimap.mapDragger.setAttribute("height", draggerHeight);
 };
+
+/**
+* Updates the rectangle's width.
+*/
+Minimap.setDraggerWidth = function(){
+  var workspaceMetrics = Minimap.workspace.getMetrics();
+  var draggerWidth = (workspaceMetrics.viewWidth / Minimap.workspace.scale) * Minimap.minimap.scale;
+  // It's zero when first block is placed.
+  if(draggerWidth == 0){
+    return;
+  }
+  Minimap.mapDragger.setAttribute("width", draggerWidth);
+};
+
 
 /**
 * Updates the overall position of the viewport of the minimap by appropriately
@@ -189,6 +208,7 @@ Minimap.scaleMinimap = function(){
   //Scaling the mimimap such that all the blocks can be seen in the viewport.
   //This padding is default because this is how to scrollbar(in main workspace) is implemented.
   var topPadding = (workspaceMetrics.viewHeight) * Minimap.minimap.scale / (2 * Minimap.workspace.scale);
+  var sidePadding = (workspaceMetrics.viewWidth) * Minimap.minimap.scale / (2 * Minimap.workspace.scale);
 
   // If actual padding is more than half view ports height, change it to actual padding.
   if((workspaceBoundingBox.y * Minimap.workspace.scale - workspaceMetrics.contentTop)
@@ -196,12 +216,20 @@ Minimap.scaleMinimap = function(){
     topPadding = (workspaceBoundingBox.y * Minimap.workspace.scale - workspaceMetrics.contentTop)
     * Minimap.minimap.scale / Minimap.workspace.scale;
   }
-  var scalex = (minimapMetrics.viewWidth - Minimap.PADDING) / minimapBoundingBox.width;
+
+  // If actual padding is more than half view ports height, change it to actual padding.
+  if((workspaceBoundingBox.x * Minimap.workspace.scale - workspaceMetrics.contentLeft)
+      * Minimap.minimap.scale / Minimap.workspace.scale > sidePadding){
+    sidePadding = (workspaceBoundingBox.x * Minimap.workspace.scale - workspaceMetrics.contentLeft)
+    * Minimap.minimap.scale / Minimap.workspace.scale;
+  }
+
+  var scalex = (minimapMetrics.viewWidth - 2 * sidePadding) / minimapBoundingBox.width;
   var scaley = (minimapMetrics.viewHeight - 2 * topPadding) / minimapBoundingBox.height;
   Minimap.minimap.setScale(Math.min(scalex, scaley));
 
   // Translating the minimap.
-  Minimap.minimap.translate( - minimapBoundingBox.x * Minimap.minimap.scale+Minimap.PADDING,
+  Minimap.minimap.translate( - minimapMetrics.contentLeft * Minimap.minimap.scale + sidePadding,
                           - minimapMetrics.contentTop * Minimap.minimap.scale + topPadding);
 };
 
@@ -211,24 +239,44 @@ Minimap.scaleMinimap = function(){
 */
 Minimap.updateMapDragger = function(e){
   var y = e.clientY;
+  var x = e.clientX;
   var draggerHeight = Minimap.mapDragger.getAttribute("height");
+  var draggerWidth = Minimap.mapDragger.getAttribute("width");
+
   var finalY = y - Minimap.rect.top - draggerHeight / 2;
+  var finalX = x - Minimap.rect.left - draggerWidth / 2;
+
   var maxValidY = (Minimap.workspace.getMetrics().contentHeight - Minimap.workspace.getMetrics().viewHeight)
                   * Minimap.minimap.scale;
+  var maxValidX = (Minimap.workspace.getMetrics().contentWidth - Minimap.workspace.getMetrics().viewWidth)
+                  * Minimap.minimap.scale;
+
   if(y + draggerHeight / 2 > Minimap.rect.bottom){
     finalY = Minimap.rect.bottom - Minimap.rect.top - draggerHeight;
   }else if(y < Minimap.rect.top + draggerHeight / 2){
     finalY = 0;
   }
+
+  if(x + draggerWidth / 2 > Minimap.rect.right){
+    finalX = Minimap.rect.right - Minimap.rect.left - draggerWidth;
+  }else if(x < Minimap.rect.left + draggerWidth / 2){
+    finalX = 0;
+  }
+
   // Do not go below loew bound of scrollbar.
   if(finalY > maxValidY){
     finalY = maxValidY;
   }
-  Minimap.mapDragger.setAttribute("y", finalY);
 
+  if(finalX > maxValidX){
+    finalX = maxValidX;
+  }
+  Minimap.mapDragger.setAttribute("y", finalY);
+  Minimap.mapDragger.setAttribute("x", finalX);
   // Required, otherwise creates a feedback loop.
   Minimap.disableScrollChange = true;
   Minimap.workspace.scrollbar.vScroll.set((finalY * Minimap.workspace.scale) / Minimap.minimap.scale);
+  Minimap.workspace.scrollbar.hScroll.set((finalX * Minimap.workspace.scale) / Minimap.minimap.scale);
   Minimap.disableScrollChange = false;
 };
 
@@ -245,12 +293,13 @@ Minimap.onScrollChange = function(position, horizontal){
     return;
   }
 
-  // Currently the minimap automatically scales (see function Minimap.scaleMinimap) if the new block is created/moved
-  // beyond the width of the minimap. Compelete horizontal view is always visible in the minimap.
-  if(horizontal){
-    return;
-  }
-
   var newDraggerPosition = (position * Minimap.minimap.scale / Minimap.workspace.scale);
-  Minimap.mapDragger.setAttribute("y", newDraggerPosition);
+  if(horizontal){
+    // Change the horizontal position of dragger.
+    Minimap.mapDragger.setAttribute("x", newDraggerPosition);
+  }
+  else{
+    // Change the vertical position of dragger.
+    Minimap.mapDragger.setAttribute("y", newDraggerPosition);
+  }
 };

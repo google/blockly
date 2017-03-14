@@ -105,9 +105,6 @@ Minimap.init = function(workspace, minimap){
 
   // Adding mouse events to the rectangle, to make it Draggable.
   this.mapDragger.addEventListener("mousedown", Minimap.mousedown,false);
-  this.mapDragger.addEventListener("mouseup", Minimap.mouseup);
-  this.mapDragger.addEventListener("mousemove", Minimap.mouseover);
-  this.mapDragger.addEventListener("mouseout", Minimap.mouseout);
 
   //When the window change, we need to resize the minimap window.
   window.addEventListener('resize', Minimap.repositionMinimap);
@@ -120,25 +117,25 @@ Minimap.init = function(workspace, minimap){
 };
 
 Minimap.mousedown = function(e){
+  document.addEventListener("mousemove", Minimap.mousemove);
+  document.addEventListener("mouseup", Minimap.mouseup);
   Minimap.isDragging=true;
   e.stopPropagation();
 };
 
 Minimap.mouseup = function(e){
   Minimap.isDragging = false;
+  document.removeEventListener("mousemove", Minimap.mousemove);
+  document.removeEventListener("mouseup", Minimap.mouseup);
   Minimap.updateMapDragger(e);
   e.stopPropagation();
 };
 
-Minimap.mouseout = function(){
-  Minimap.isDragging = false;
-};
-
-Minimap.mouseover = function(e){
+Minimap.mousemove = function(e){
   if(Minimap.isDragging){
     Minimap.updateMapDragger(e);
+    e.stopPropagation();
   }
-  e.stopPropagation();
 };
 
 /**
@@ -263,7 +260,7 @@ Minimap.updateMapDragger = function(e){
     finalX = 0;
   }
 
-  // Do not go below loew bound of scrollbar.
+  // Do not go below lower bound of scrollbar.
   if(finalY > maxValidY){
     finalY = maxValidY;
   }

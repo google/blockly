@@ -292,10 +292,32 @@ Blockly.Field.prototype.render_ = function() {
 
   // Replace the text.
   goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
-  var textNode = document.createTextNode(this.getDisplayText_());
-  this.textElement_.appendChild(textNode);
+  
+  var foreignElement = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+    foreignElement.setAttribute("class","blocklyText");
+    foreignElement.setAttribute("transform","translate(34,5)");
+    foreignElement.style.color = "white";
+  
+  var bodyElement = document.createElement("body")
+  bodyElement.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+  
+  var htmlElement = document.createElement("span");
+  htmlElement.innerHTML = this.getDisplayText_();
+  
+  bodyElement.appendChild(htmlElement);
+  foreignElement.appendChild(bodyElement);                                               
+  
+  var parentElement = this.textElement_.parentElement;    
+  var parentChildren = parentElement.childNodes;
+  
+  //Replace the foreignElement
+  if (parentChildren[5] !== undefined)    
+     parentElement.removeChild(parentChildren[5]);
+  parentElement.appendChild(foreignElement);
+  
+  this.textElement_.style.display = "none";    
 
-  var width = Blockly.Field.getCachedWidth(this.textElement_);
+  var width = Blockly.Field.getCachedWidth(foreignElement);
   if (this.borderRect_) {
     this.borderRect_.setAttribute('width',
         width + Blockly.BlockSvg.SEP_SPACE_X);

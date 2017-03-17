@@ -153,3 +153,10 @@ Blockly.FieldImage.prototype.setText = function(alt) {
 Blockly.FieldImage.prototype.render_ = function() {
   // NOP
 };
+/**
+ * Images are fixed width, no need to update.
+ * @private
+ */
+Blockly.FieldImage.prototype.updateWidth = function() {
+ // NOP
+};

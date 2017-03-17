@@ -1185,6 +1185,17 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     } else {
       flyout.filterForCapacity_();
     }
+
+    // Re-render the blocks before starting the drag:
+    // Force a render on IE and Edge to get around the issue described in
+    // Blockly.Field.getCachedWidth
+    if (goog.userAgent.IE || goog.userAgent.EDGE) {
+      var blocks = block.getDescendants();
+      for (var i = blocks.length - 1; i >= 0; i--) {
+        blocks[i].render(false);
+      }
+    }
+
     // Start a dragging operation on the new block.
     block.onMouseDown_(e);
     Blockly.dragMode_ = Blockly.DRAG_FREE;

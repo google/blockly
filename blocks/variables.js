@@ -33,6 +33,8 @@ goog.require('Blockly.Blocks');
  * Common HSV hue for all blocks in this category.
  */
 Blockly.Blocks.variables.HUE = 330;
+Blockly.Blocks.variables.GET_HUE = null;
+Blockly.Blocks.variables.SET_HUE = null;
 
 Blockly.Blocks['variables_get'] = {
   /**
@@ -41,7 +43,8 @@ Blockly.Blocks['variables_get'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
-    this.setColour(Blockly.Blocks.variables.HUE);
+    this.setColour(Blockly.Blocks.variables.GET_HUE === null ?
+        Blockly.Blocks.variables.HUE : Blockly.Blocks.variables.GET_HUE);
     this.appendDummyInput()
         .appendField(new Blockly.FieldVariable(
         Blockly.Msg.VARIABLES_DEFAULT_NAME), 'VAR');
@@ -89,7 +92,8 @@ Blockly.Blocks['variables_set'] = {
       ],
       "previousStatement": null,
       "nextStatement": null,
-      "colour": Blockly.Blocks.variables.HUE,
+      "colour": Blockly.Blocks.variables.SET_HUE === null ?
+        Blockly.Blocks.variables.HUE : Blockly.Blocks.variables.SET_HUE,
       "tooltip": Blockly.Msg.VARIABLES_SET_TOOLTIP,
       "helpUrl": Blockly.Msg.VARIABLES_SET_HELPURL
     });

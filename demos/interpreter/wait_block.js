@@ -1,0 +1,53 @@
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2012 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @fileoverview Example "wait" block that will pause the interpretter for a
+ * number of seconds.
+ */
+Blockly.defineBlocksWithJsonArray([{
+  "type": "wait_seconds",
+  "message0": " wait %1 seconds",
+  "args0": [{
+    "type": "field_number",
+    "name": "SECONDS",
+    "min": 0,
+    "max": 600,
+    "value": 1
+  }],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": "%{BKY_LOOPS_HUE}"
+}]);
+
+Blockly.JavaScript['wait_seconds'] = function(block) {
+  var seconds = Number(block.getFieldValue('SECONDS'));
+  var code = 'waitForSeconds(' + seconds + ');\n';
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+
+// Register the interpreter asynchronous wrapper for the wait block.
+function initInterpretterWaitForSeconds(interpreter, scope) {
+  var wrapper = interpreter.createAsyncFunction(function(timeInSeconds, callback) {
+    // Delay the call to the callback.
+    setTimeout(callback, timeInSeconds * 1000);
+  });
+  interpreter.setProperty(scope, "waitForSeconds", wrapper);
+}

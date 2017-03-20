@@ -8,6 +8,7 @@
   <script src="../../blocks_compressed.js"></script>
   <script src="../../javascript_compressed.js"></script>
   <script src="../../msg/js/en.js"></script>
+  <script src="wait_block.js"></script>
   <style>
     body {
       background-color: #fff;
@@ -66,6 +67,9 @@
           <block type="text"></block>
         </value>
       </block>
+    </category>
+    <category name="Wait">
+      <block type="wait_seconds"></block>
     </category>
     <category name="Variables" custom="VARIABLE"></category>
     <category name="Functions" custom="PROCEDURE"></category>
@@ -146,6 +150,9 @@
       interpreter.setProperty(scope, 'prompt',
           interpreter.createNativeFunction(wrapper));
 
+      // Add an API for the wait block.  See wait_block.js
+      initInterpretterWaitForSeconds(interpreter, scope);
+
       // Add an API function for highlighting blocks.
       var wrapper = function(id) {
         id = id ? id.toString() : '';
@@ -167,6 +174,7 @@
       Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
       Blockly.JavaScript.addReservedWords('highlightBlock');
       var code = Blockly.JavaScript.workspaceToCode(workspace);
+      console.log(code);
       myInterpreter = new Interpreter(code, initApi);
 
       alert('Ready to execute this code:\n\n' + code);

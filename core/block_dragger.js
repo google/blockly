@@ -79,32 +79,6 @@ Blockly.BlockDragger = function(block, workspace) {
   this.wouldDeleteBlock_ = false;
 
   /**
-   * True if there is a {Blockly.BlockDragSurfaceSvg} that can be used to drag
-   * the block.
-   * @type {boolean}
-   * @private
-   */
-  this.useDragSurface_ = this.draggingBlock_.useDragSurface_;
-
-  /**
-   * The drag surface that should be used to drag the block, or null if none is
-   * being used.
-   * @type {BlockDragSurfaceSvg}
-   * @private
-   */
-  this.dragSurface_ = this.useDragSurface_ ?
-      workspace.blockDragSurface_ : null;
-
-  /**
-   * The root SVG group of the dragging block, or null if a drag surface is
-   * being used for block translation instead.
-   * @type {Element}
-   * @private
-   */
-  this.svgGroup_ = this.useDragSurface_ ?
-      null : this.draggingBlock_.getSvgRoot();
-
-  /**
    * The location of the top left corner of the dragging block at the beginning
    * of the drag, relative to the surface that it started on.
    * @type {!goog.math.Coordinate}
@@ -128,10 +102,9 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
   this.workspace_.setResizesEnabled(false);
   if (this.draggingBlock_.getParent()) {
     this.draggingBlock_.unplug();
-    this.svgGroup_ = this.draggingBlock_.getSvgRoot();
     var newLoc = goog.math.Coordinate.sum(this.blockRelativeToSurfaceXY_,
         currentDragDeltaXY);
-    this.svgGroup_.translate_ = 'translate(' + newLoc.x + ',' + newLoc.y + ')';
+    this.draggingBlock_.translate(newLoc.x, newLoc.y);
     this.draggingBlock_.disconnectUiEffect();
   }
   // TODO: Make setDragging_ package.
@@ -151,15 +124,11 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
 Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
   var newLoc = goog.math.Coordinate.sum(this.blockRelativeToSurfaceXY_,
       currentDragDeltaXY);
-  if (this.useDragSurface_) {
-    this.dragSurface_.translateSurface(newLoc.x, newLoc.y);
-  } else {
-    this.svgGroup_.translate_ = 'translate(' + newLoc.x + ',' + newLoc.y + ')';
-    this.svgGroup_.setAttribute('transform',
-        this.svgGroup_.translate_ + this.svgGroup_.skew_);
-  }
+  this.draggingBlock_.moveDuringDrag(newLoc);
+
   this.deleteArea_ = this.workspace_.isDeleteArea(e);
   this.draggedConnectionManager_.update(currentDragDeltaXY, this.deleteArea_);
+
   this.updateCursorDuringBlockDrag_();
 };
 

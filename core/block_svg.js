@@ -421,6 +421,24 @@ Blockly.BlockSvg.prototype.moveOffDragSurface_ = function() {
 };
 
 /**
+ * Move this block during a drag, taking into account whether we are using a
+ * drag surface to translate blocks.
+ * This block must be a top-level block.
+ * @param {!goog.math.Coordinate} newLoc The location to translate to, in pixels
+ *     relative to the workspace's SVG origin.
+ * @package
+ */
+Blockly.BlockSvg.prototype.moveDuringDrag = function(newLoc) {
+  if (this.useDragSurface_) {
+    this.workspace.blockDragSurface_.translateSurface(newLoc.x, newLoc.y);
+  } else {
+    this.svgGroup_.translate_ = 'translate(' + newLoc.x + ',' + newLoc.y + ')';
+    this.svgGroup_.setAttribute('transform',
+        this.svgGroup_.translate_ + this.svgGroup_.skew_);
+  }
+};
+
+/**
  * Clear the block of transform="..." attributes.
  * Used when the block is switching from 3d to 2d transform or vice versa.
  * @private

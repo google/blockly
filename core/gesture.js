@@ -182,8 +182,9 @@ Blockly.Gesture.prototype.dispose = function() {
  * @param {!Event} e The most recent mouse or touch event.
  * @private
  */
-Blockly.Gesture.prototype.update_ = function(e) {
-  this.updateDragDelta_(e);
+Blockly.Gesture.prototype.updateFromEvent_ = function(e) {
+  var currentXY = new goog.math.Coordinate(e.clientX, e.clientY);
+  this.updateDragDelta_(currentXY);
   if (!this.isDragging()) {
     this.updateIsDragging_();
   }
@@ -192,16 +193,43 @@ Blockly.Gesture.prototype.update_ = function(e) {
 
 /**
  * DO MATH to set currentDragDeltaXY_ based on the most recent mouse position.
- * @param {!Event} e The event for the most recent mouse/touch move.
+ * @param {!goog.math.Coordinate} currentXY The most recent mouse/pointer
+ *     position, in pixel coordinates.
  * @private
  */
-Blockly.Gesture.prototype.updateDragDelta_ = function(e) {
-  var currentXY = new goog.math.Coordinate(e.clientX, e.clientY);
+Blockly.Gesture.prototype.updateDragDelta_ = function(currentXY) {
   this.currentDragDeltaXY_ = goog.math.Coordinate.difference(currentXY,
       this.mouseDownXY_);
   var currentDragDelta = goog.math.Coordinate.magnitude(
       this.currentDragDeltaXY_);
   this.hasExceededDragRadius_ = currentDragDelta > Blockly.DRAG_RADIUS;
+};
+
+/**
+ * Update this gesture to record whether a block is being dragged from the
+ * flyout.
+ * This function should be called on mouse/touch move events if isDragging
+ * fields have not yet been set.
+ * If a block should be dragged from the flyout this function creates the new
+ * block on the main workspace and updates startBlock_ and startWorkspace_.
+ * @private
+ */
+Blockly.Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
+  if (this.flyout_.isDragTowardWorkspace_(this.currentDragDeltaXY_.x,
+      this.currentDragDeltaXY_.y)) {
+    Blockly.Events.disable();
+    this.flyout_.targetWorkspace_.setResizesEnabled(false);
+    try {
+      this.startBlock_ = this.flyout_.placeNewBlock_(this.startBlock_);
+      this.startBlock_.render();
+      this.startWorkspace_ = this.flyout_.targetWorkspace_;
+      this.isDraggingBlock_ = true;
+      // Close the flyout.
+      Blockly.hideChaff();
+    } finally {
+      Blockly.Events.enable();
+    }
+  }
 };
 
 /**
@@ -215,21 +243,7 @@ Blockly.Gesture.prototype.updateDragDelta_ = function(e) {
 Blockly.Gesture.prototype.updateIsDraggingBlock_ = function() {
   var startBlockInFlyout = this.startBlock_ && this.flyout_;
   if (startBlockInFlyout) {
-    if (this.flyout_.isDragTowardWorkspace_(this.currentDragDeltaXY_.x,
-        this.currentDragDeltaXY_.y)) {
-      Blockly.Events.disable();
-      this.flyout_.targetWorkspace_.setResizesEnabled(false);
-      try {
-        this.startBlock_ = this.flyout_.placeNewBlock_(this.startBlock_);
-        this.startBlock_.render();
-        this.startWorkspace_ = this.flyout_.targetWorkspace_;
-        this.isDraggingBlock_ = true;
-        // Close the flyout.
-        Blockly.hideChaff();
-      } finally {
-        Blockly.Events.enable();
-      }
-    }
+    this.updateIsDraggingFromFlyout_();
   } else {
     var startBlockMovable = this.startBlock_ && this.startBlock_.isMovable();
     if (startBlockMovable && this.hasExceededDragRadius_) {
@@ -238,11 +252,7 @@ Blockly.Gesture.prototype.updateIsDraggingBlock_ = function() {
   }
 
   if (this.isDraggingBlock_) {
-    this.blockDragger_ = new Blockly.BlockDragger(this.startBlock_,
-        this.startWorkspace_);
-    this.blockDragger_.startBlockDrag(this.currentDragDeltaXY_);
-    this.blockDragger_.dragBlock(this.mostRecentEvent_,
-        this.currentDragDeltaXY_);
+    this.startDraggingBlock_();
     return true;
   }
   return false;
@@ -285,6 +295,20 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
 };
 
 /**
+ * Create a block dragger and start dragging the selected block.
+ * TODO(fenichel): Consider folding all of this into the BlockDragger
+ * constructor.
+ * @private
+ */
+Blockly.Gesture.prototype.startDraggingBlock_ = function() {
+  this.blockDragger_ = new Blockly.BlockDragger(this.startBlock_,
+      this.startWorkspace_);
+  this.blockDragger_.startBlockDrag(this.currentDragDeltaXY_);
+  this.blockDragger_.dragBlock(this.mostRecentEvent_,
+      this.currentDragDeltaXY_);
+};
+
+/**
  * Start a gesture: update the workspace to indicate that a gesture is in
  * progress and bind mousemove and mouseup handlers.
  * @param {!Event} e A mouse down or touch start event.
@@ -322,7 +346,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
  * @param {!Event} e A mouse move or touch move event.
  */
 Blockly.Gesture.prototype.handleMove = function(e) {
-  this.update_(e);
+  this.updateFromEvent_(e);
   // TODO: I should probably only call this once, when first exceeding the drag
   // radius.
   if (this.hasExceededDragRadius_) {
@@ -345,22 +369,21 @@ Blockly.Gesture.prototype.handleMove = function(e) {
  * @param {!Event} e A mouse up or touch end event.
  */
 Blockly.Gesture.prototype.handleUp = function(e) {
-  this.update_(e);
+  this.updateFromEvent_(e);
   Blockly.longStop_();
+
+  // The ordering of these checks is important: drags have higher priority than
+  // clicks.  Fields have higher priority than blocks; blocks have higher
+  // priority than workspaces.
   if (this.isDraggingBlock_) {
-    // Terminate block drag.
     this.blockDragger_.endBlockDrag(e, this.currentDragDeltaXY_);
   } else if (this.isDraggingWorkspace_) {
     this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
-    // Terminate workspace drag.
   } else if (this.isFieldClick_()) {
-    // End field click.
     this.doFieldClick_();
   } else if (this.isBlockClick_()) {
-    // Click the block.
     this.doBlockClick_();
   } else if (this.isWorkspaceClick_()) {
-    // Click the workspace.
     this.doWorkspaceClick_();
   }
   this.endGesture(e);

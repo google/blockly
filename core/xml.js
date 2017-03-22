@@ -32,7 +32,6 @@ goog.provide('Blockly.Xml');
 
 goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.userAgent');
 
 
 /**
@@ -430,11 +429,6 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
       setTimeout(function() {
         if (topBlock.workspace) {  // Check that the block hasn't been deleted.
           topBlock.setConnectionsHidden(false);
-          // Force a render on IE and Edge to get around the issue described in
-          // Blockly.Field.getCachedWidth
-          if (goog.userAgent.IE || goog.userAgent.EDGE) {
-            topBlock.render();
-          }
         }
       }, 1);
       topBlock.updateDisabled();

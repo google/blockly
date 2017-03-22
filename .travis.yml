@@ -8,4 +8,8 @@ before_install:
 # Symlink closure library
 - ln -s $(npm root)/google-closure-library ../closure-library
 script:
-  ./build.py
+  ./build.pyaddons:
+addons:
+  browserstack:
+    username: "qitan1"
+    access_key: "zRqN1zfoJ8vzNnfCmZy9"

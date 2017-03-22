@@ -12,5 +12,6 @@ before_install:
 script:
   pwd
   ls -l ../
-  ls -l 
+  ls -l
+  echo $PATH
   ./build.py

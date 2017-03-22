@@ -7,8 +7,6 @@ before_install:
 # Symlink closure library
 - ln -s $(npm root)/google-closure-library ../closure-library
 script:
-  pwd
   ls -l ../
-  ls -l
   echo $PATH
   ./build.py

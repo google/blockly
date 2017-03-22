@@ -3,9 +3,6 @@ node_js:
 - "4"
 - "stable"
 sudo: false
-cache:
-  directories:
-  - node_modules
 before_install:
 # Symlink closure library
 - ln -s $(npm root)/google-closure-library ../closure-library

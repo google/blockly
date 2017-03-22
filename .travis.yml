@@ -8,5 +8,4 @@ before_install:
 # Symlink closure library
 - ln -s $(npm root)/google-closure-library ../closure-library
 script:
-  ls -l ../closure-library
   ./build.py

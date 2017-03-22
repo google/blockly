@@ -1,6 +1,11 @@
-
 language: node_js
 node_js:
-  - "iojs"
-  - "7"
-script: jsunit tests/jsunit/index.html
+- "4"
+- "stable"
+sudo: false
+before_install:
+# Symlink closure library
+- ln -s $(npm root)/google-closure-library ../closure-library
+script: ./build.py
+after_script:
+

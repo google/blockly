@@ -4,6 +4,7 @@ node_js:
 - "stable"
 sudo: false
 before_install:
+npm install google-closure-library
 # Symlink closure library
 - ln -s $(npm root)/google-closure-library ../closure-library
 script:

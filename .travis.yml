@@ -9,6 +9,8 @@ cache:
 before_install:
 # Symlink closure library
 - ln -s $(npm root)/google-closure-library ../closure-library
-script: 
+script:
+  pwd
+  ls -l ../
   ls -l 
   ./build.py

@@ -118,7 +118,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "nextStatement": null,
     "colour": "%{BKY_LOGIC_HUE}",
     "tooltip": "%{BKYCONTROLS_IF_TOOLTIP_2}",
-    "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}"
+    "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
+    "extensions": ["controls_if_tooltip"]
   },
   // Block for comparison operator.
   {

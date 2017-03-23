@@ -29,18 +29,22 @@ blocklyApp.VariableModalService = ng.core.Class({
       this.modalIsShown = false;
     }
   ],
+  // Registers a hook to be called before the modal is shown.
   registerPreShowHook: function(preShowHook) {
     this.preShowHook = function(oldName) {
       preShowHook(oldName);
     };
   },
+  // Returns true if the variable modal is shown.
   isModalShown: function() {
     return this.modalIsShown;
   },
+  // Show the variable modal.
   showModal_: function(oldName) {
     this.preShowHook(oldName);
     this.modalIsShown = true;
   },
+  // Hide the variable modal.
   hideModal: function() {
     this.modalIsShown = false;
   }

@@ -138,7 +138,8 @@ blocklyApp.VariableModalComponent = ng.core.Component({
   },
   // Gets all the interactive elements for the modal.
   getInteractiveElements: function() {
-    return Array.prototype.filter.call(document.getElementById("varForm").elements,  function(element) {
+    return Array.prototype.filter.call(
+      document.getElementById("varForm").elements, function(element) {
       if (element.type === 'hidden') {
         return false;
       }

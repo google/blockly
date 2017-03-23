@@ -75,6 +75,7 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
     this.dropdownOptions = [];
     this.rawOptions = [];
   }],
+  // Angular2 hook - called to check if the cached component needs an update.
   ngDoCheck: function() {
     if (this.isDropdown() && this.shouldBreakCache()) {
       this.optionValue = this.mainField.getValue();
@@ -87,6 +88,7 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
       });
     }
   },
+  // Returns whether the mutable, cached information needs to be refreshed.
   shouldBreakCache: function() {
     var newOptions = this.mainField.getOptions();
     if (newOptions.length != this.rawOptions.length) {
@@ -102,12 +104,14 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
 
     return false;
   },
+  // Gets the prefix text, to be printed before a field.
   getPrefixText: function() {
     var prefixTexts = this.prefixFields.map(function(prefixField) {
       return prefixField.getText();
     });
     return prefixTexts.join(' ');
   },
+  // Gets the description, for labeling a field.
   getFieldDescription: function() {
     var description = this.mainField.getText();
     if (this.prefixFields.length > 0) {
@@ -115,28 +119,35 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
     }
     return description;
   },
+  // Returns true if the field is text input, false otherwise.
   isTextInput: function() {
     return this.mainField instanceof Blockly.FieldTextInput &&
         !(this.mainField instanceof Blockly.FieldNumber);
   },
+  // Returns true if the field is number input, false otherwise.
   isNumberInput: function() {
     return this.mainField instanceof Blockly.FieldNumber;
   },
+  // Returns true if the field is a dropdown, false otherwise.
   isDropdown: function() {
     return this.mainField instanceof Blockly.FieldDropdown;
   },
+  // Sets the text value on the underlying field.
   setTextValue: function(newValue) {
     this.mainField.setValue(newValue);
   },
+  // Sets the number value on the underlying field.
   setNumberValue: function(newValue) {
     // Do not permit a residual value of NaN after a backspace event.
     this.mainField.setValue(newValue || 0);
   },
+  // Confirm a selection for dropdown fields.
   selectOption: function() {
     if (this.optionValue == Blockly.Msg.RENAME_VARIABLE) {
       this.variableModalService.showModal_(this.mainField.getValue());
     }
   },
+  // Sets the value on a dropdown input.
   setDropdownValue: function(optionValue) {
     this.optionValue = optionValue
     if (this.optionValue == 'NO_ACTION') {

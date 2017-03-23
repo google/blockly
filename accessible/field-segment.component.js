@@ -52,6 +52,7 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
         {{getPrefixText()}}
         <select [id]="mainFieldId" [name]="mainFieldId"
                 [ngModel]="mainField.getValue()" (ngModelChange)="setDropdownValue($event)"
+                (keydown.enter)="selectOption()"
                 tabindex="-1">
           <option *ngFor="#option of dropdownOptions" value="{{option.value}}"
                   [selected]="mainField.getValue() == option.value">
@@ -66,20 +67,40 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
 })
 .Class({
   constructor: [
-      blocklyApp.NotificationsService, function(notificationsService) {
+      blocklyApp.NotificationsService,
+      blocklyApp.VariableModalService,
+      function(notificationsService, variableModalService) {
     this.notificationsService = notificationsService;
+    this.variableModalService = variableModalService;
     this.dropdownOptions = [];
+    this.rawOptions = [];
   }],
   ngDoCheck: function() {
-    if (this.isDropdown()) {
-      var rawOptions = this.mainField.getOptions_();
-      this.dropdownOptions = rawOptions.map(function(valueAndText) {
+    if (this.isDropdown() && this.shouldBreakCache()) {
+      this.optionValue = this.mainField.getValue();
+      this.rawOptions = this.mainField.getOptions();
+      this.dropdownOptions = this.rawOptions.map(function(valueAndText) {
         return {
           text: valueAndText[0],
           value: valueAndText[1]
         };
       });
     }
+  },
+  shouldBreakCache: function() {
+    var newOptions = this.mainField.getOptions();
+    if (newOptions.length != this.rawOptions.length) {
+      return true;
+    }
+
+    for (var i = 0; i < this.rawOptions.length; i++) {
+      // Compare the value of the cached options with the values in the field.
+      if (newOptions[i][1] != this.rawOptions[i][1]) {
+        return true;
+      }
+    }
+
+    return false;
   },
   getPrefixText: function() {
     var prefixTexts = this.prefixFields.map(function(prefixField) {
@@ -111,12 +132,21 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
     // Do not permit a residual value of NaN after a backspace event.
     this.mainField.setValue(newValue || 0);
   },
+  selectOption: function() {
+    if (this.optionValue == Blockly.Msg.RENAME_VARIABLE) {
+      this.variableModalService.showModal_(this.mainField.getValue());
+    }
+  },
   setDropdownValue: function(optionValue) {
-    if (optionValue == 'NO_ACTION') {
+    this.optionValue = optionValue
+    if (this.optionValue == 'NO_ACTION') {
       return;
     }
 
-    this.mainField.setValue(optionValue);
+    if (this.optionValue != Blockly.Msg.RENAME_VARIABLE) {
+      this.mainField.setValue(this.optionValue);
+    }
+
     var optionText = undefined;
     for (var i = 0; i < this.dropdownOptions.length; i++) {
       if (this.dropdownOptions[i].value == optionValue) {
@@ -128,7 +158,7 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
     if (!optionText) {
       throw Error(
           'There is no option text corresponding to the value: ' +
-          optionValue);
+          this.optionValue);
     }
 
     this.notificationsService.speak('Selected option ' + optionText);

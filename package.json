@@ -17,10 +17,15 @@
   "author": {
     "name": "Neil Fraser"
   },
+  "scripts": {
+    "prepublish": "python build.py"
+  },
+
   "license": "Apache-2.0",
   "private": true,
   "devDependencies": {
-    "jshint": "latest"
+    "jshint": "latest",
+    "google-closure-library": "latest"
   },
   "jshintConfig": {
     "globalstrict": true,

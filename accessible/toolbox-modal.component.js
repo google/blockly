@@ -89,6 +89,8 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
           that.onSelectBlockCallback = onSelectBlockCallback;
           that.onDismissCallback = onDismissCallback;
 
+          // The indexes of the buttons corresponding to the first block in
+          // each category, as well as the 'cancel' button at the end.
           that.firstBlockIndexes = [];
           that.activeButtonIndex = -1;
           that.totalNumBlocks = 0;
@@ -126,10 +128,15 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
 
               that.focusOnOption(that.activeButtonIndex);
             },
-            // Enter key: selects an action, performs it, and closes the modal.
+            // Enter key: selects a block (or the 'Cancel' button), and closes
+            // the modal.
             '13': function(evt) {
               evt.preventDefault();
               evt.stopPropagation();
+
+              if (that.activeButtonIndex == -1) {
+                return;
+              }
 
               var button = document.getElementById(
                   that.getOptionId(that.activeButtonIndex));

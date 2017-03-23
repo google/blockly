@@ -113,9 +113,9 @@ Blockly.workspaceDragSurfaceSvg.prototype.translateSurface = function(x, y) {
   x = x.toFixed(0);
   y = y.toFixed(0);
 
-  var transform =
-    'transform: translate3d(' + x + 'px, ' + y + 'px, 0px); display: block;';
-  this.SVG_.setAttribute('style', transform);
+  this.SVG_.style.display = 'block';
+  Blockly.utils.setCssTransform(this.SVG_,
+    'translate3d(' + x + 'px, ' + y + 'px, 0px)');
 };
 
 /**
@@ -158,7 +158,7 @@ Blockly.workspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   this.SVG_.style.display = 'none';
   goog.asserts.assert(this.SVG_.childNodes.length == 0,
     'Drag surface was not cleared.');
-  this.SVG_.style.transform = '';
+  Blockly.utils.setCssTransform(this.SVG_, '');
   this.previousSibling_ = null;
 };
 

@@ -29,6 +29,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.Tooltip
+ * @namespace
+ **/
 goog.provide('Blockly.Tooltip');
 
 goog.require('goog.dom');

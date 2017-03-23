@@ -38,8 +38,10 @@ goog.require('goog.events');
  */
 Blockly.ScrollbarPair = function(workspace) {
   this.workspace_ = workspace;
-  this.hScroll = new Blockly.Scrollbar(workspace, true, true);
-  this.vScroll = new Blockly.Scrollbar(workspace, false, true);
+  this.hScroll = new Blockly.Scrollbar(workspace, true, true,
+    'blocklyMainWorkspaceScrollbar');
+  this.vScroll = new Blockly.Scrollbar(workspace, false, true,
+    'blocklyMainWorkspaceScrollbar');
   this.corner_ = Blockly.utils.createSvgElement('rect',
       {'height': Blockly.Scrollbar.scrollbarThickness,
       'width': Blockly.Scrollbar.scrollbarThickness,
@@ -182,15 +184,16 @@ Blockly.ScrollbarPair.prototype.getRatio_ = function(handlePosition, viewSize) {
  * @param {!Blockly.Workspace} workspace Workspace to bind the scrollbar to.
  * @param {boolean} horizontal True if horizontal, false if vertical.
  * @param {boolean=} opt_pair True if scrollbar is part of a horiz/vert pair.
+ * @param {string} opt_class A class to be applied to this scrollbar.
  * @constructor
  */
-Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
+Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
   this.workspace_ = workspace;
   this.pair_ = opt_pair || false;
   this.horizontal_ = horizontal;
   this.oldHostMetrics_ = null;
 
-  this.createDom_();
+  this.createDom_(opt_class);
 
   /**
    * The upper left corner of the scrollbar's svg group.
@@ -361,9 +364,9 @@ Blockly.Scrollbar.prototype.setScrollViewSize_ = function(newSize) {
 };
 
 /**
-+ * Set whether this scrollbar's container is visible.
-+ * @param {boolean} visible Whether the container is visible.
-+ */
+ * Set whether this scrollbar's container is visible.
+ * @param {boolean} visible Whether the container is visible.
+ */
 Blockly.ScrollbarPair.prototype.setContainerVisible = function(visible) {
   this.hScroll.setContainerVisible(visible);
   this.vScroll.setContainerVisible(visible);
@@ -381,7 +384,7 @@ Blockly.Scrollbar.prototype.setPosition = function(x, y) {
   var tempX = this.position_.x + this.origin_.x;
   var tempY = this.position_.y + this.origin_.y;
   var transform = 'translate(' + tempX + 'px,' + tempY + 'px)';
-  this.outerSvg_.style.transform = transform;
+  Blockly.utils.setCssTransform(this.outerSvg_, transform);
 };
 
 /**
@@ -565,11 +568,12 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
 /**
  * Create all the DOM elements required for a scrollbar.
  * The resulting widget is not sized.
+ * @param {string} opt_class A class to be applied to this scrollbar.
  * @private
  */
-Blockly.Scrollbar.prototype.createDom_ = function() {
+Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
   /* Create the following DOM:
-  <svg class="blocklyScrollbarHorizontal">
+  <svg class="blocklyScrollbarHorizontal  optionalClass">
     <g>
       <rect class="blocklyScrollbarBackground" />
       <rect class="blocklyScrollbarHandle" rx="8" ry="8" />
@@ -578,6 +582,9 @@ Blockly.Scrollbar.prototype.createDom_ = function() {
   */
   var className = 'blocklyScrollbar' +
       (this.horizontal_ ? 'Horizontal' : 'Vertical');
+  if (opt_class) {
+    className += ' ' + opt_class;
+  }
   this.outerSvg_ = Blockly.utils.createSvgElement('svg', {'class': className},
                                                   null);
   this.svgGroup_ = Blockly.utils.createSvgElement('g', {}, this.outerSvg_);
@@ -639,9 +646,9 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
  * We cannot rely on the containing workspace being hidden to hide us
  * because it is not necessarily our parent in the dom.
  */
- Blockly.Scrollbar.prototype.updateDisplay_ = function() {
+Blockly.Scrollbar.prototype.updateDisplay_ = function() {
   var show = true;
-  // Check whether our parent/container is visible. 
+  // Check whether our parent/container is visible.
   if (!this.containerVisible_) {
     show = false;
   } else {
@@ -816,8 +823,8 @@ Blockly.Scrollbar.prototype.set = function(value) {
  * Set the origin of the upper left of the scrollbar. This if for times
  * when the scrollbar is used in an object whose origin isn't the same
  * as the main workspace (e.g. in a flyout.)
- * @ param {number} x The x coordinate of the scrollbar's origin.
- * @ param {number} y The y coordinate of the scrollbar's origin.
+ * @param {number} x The x coordinate of the scrollbar's origin.
+ * @param {number} y The y coordinate of the scrollbar's origin.
  */
 Blockly.Scrollbar.prototype.setOrigin = function(x, y) {
   this.origin_ = new goog.math.Coordinate(x, y);

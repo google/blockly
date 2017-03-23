@@ -35,6 +35,15 @@ def string_is_ascii(s):
   except UnicodeEncodeError:
     return False
   
+def load_constants(filename):
+  """Read in constants file, which must be output in every language."""
+  constant_defs = read_json_file(filename);
+  constants_text = '\n'
+  for key in constant_defs:
+    value = constant_defs[key]
+    value = value.replace('"', '\\"')
+    constants_text += '\nBlockly.Msg.{0} = \"{1}\";'.format(key, value)  
+  return constants_text
 
 def main():
   """Generate .js files defining Blockly core and language messages."""
@@ -49,6 +58,9 @@ def main():
   parser.add_argument('--source_synonym_file',
                       default=os.path.join('json', 'synonyms.json'),
                       help='Path to .json file with synonym definitions')
+  parser.add_argument('--source_constants_file',
+                      default=os.path.join('json', 'constants.json'),
+                      help='Path to .json file with constant definitions')
   parser.add_argument('--output_dir', default='js/',
                       help='relative directory for output files')
   parser.add_argument('--key_file', default='keys.json',
@@ -78,11 +90,14 @@ def main():
   synonym_text = '\n'.join(['Blockly.Msg.{0} = Blockly.Msg.{1};'.format(
       key, synonym_defs[key]) for key in synonym_defs])
 
+  # Read in constants file, which must be output in every language.
+  constants_text = load_constants(os.path.join(os.curdir, args.source_constants_file))
+
   # Create each output file.
   for arg_file in args.files:
     (_, filename) = os.path.split(arg_file)
     target_lang = filename[:filename.index('.')]
-    if target_lang not in ('qqq', 'keys', 'synonyms'):
+    if target_lang not in ('qqq', 'keys', 'synonyms', 'constants'):
       target_defs = read_json_file(os.path.join(os.curdir, arg_file))
 
       # Verify that keys are 'ascii'
@@ -140,6 +155,7 @@ goog.require('Blockly.Msg');
                   filename, ', '.join(synonym_keys)))
 
         outfile.write(synonym_text)
+        outfile.write(constants_text)
 
       if not args.quiet:
         print('Created {0}.'.format(outname))

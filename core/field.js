@@ -195,6 +195,17 @@ Blockly.Field.prototype.updateEditable = function() {
 };
 
 /**
+ * Check whether this field is currently editable.  Some fields are never
+ * editable (e.g. text labels).  Those fields are not serialized to XML.  Other
+ * fields may be editable, and therefore serialized, but may exist on
+ * non-editable blocks.
+ * @return {boolean} whether this field is editable and on an editable block
+ */
+Blockly.Field.prototype.isCurrentlyEditable = function() {
+  return this.EDITABLE && !!this.sourceBlock_ && this.sourceBlock_.isEditable();
+};
+
+/**
  * Gets whether this editable field is visible or not.
  * @return {boolean} True if visible.
  */
@@ -295,6 +306,15 @@ Blockly.Field.prototype.render_ = function() {
   var textNode = document.createTextNode(this.getDisplayText_());
   this.textElement_.appendChild(textNode);
 
+  this.updateWidth();
+};
+
+/**
+ * Updates thw width of the field. This calls getCachedWidth which won't cache
+ * the approximated width on IE/Edge when `getComputedTextLength` fails. Once
+ * it eventually does succeed, the result will be cached.
+ **/
+Blockly.Field.prototype.updateWidth = function() {
   var width = Blockly.Field.getCachedWidth(this.textElement_);
   if (this.borderRect_) {
     this.borderRect_.setAttribute('width',
@@ -306,23 +326,35 @@ Blockly.Field.prototype.render_ = function() {
 /**
  * Gets the width of a text element, caching it in the process.
  * @param {!Element} textElement An SVG 'text' element.
- * @retur {number} Width of element.
+ * @return {number} Width of element.
  */
 Blockly.Field.getCachedWidth = function(textElement) {
   var key = textElement.textContent + '\n' + textElement.className.baseVal;
-  if (Blockly.Field.cacheWidths_ && Blockly.Field.cacheWidths_[key]) {
-    var width = Blockly.Field.cacheWidths_[key];
-  } else {
-    try {
-      var width = textElement.getComputedTextLength();
-    } catch (e) {
-      // MSIE 11 is known to throw "Unexpected call to method or property
-      // access." if Blockly is hidden.
-      var width = textElement.textContent.length * 8;
+  var width;
+
+  // Return the cached width if it exists.
+  if (Blockly.Field.cacheWidths_) {
+    width = Blockly.Field.cacheWidths_[key];
+    if (width) {
+      return width;
     }
-    if (Blockly.Field.cacheWidths_) {
-      Blockly.Field.cacheWidths_[key] = width;
-    }
+  }
+
+  // Attempt to compute fetch the width of the SVG text element.
+  try {
+    width = textElement.getComputedTextLength();
+  } catch (e) {
+    // MSIE 11 and Edge are known to throw "Unexpected call to method or
+    // property access." if the block is hidden. Instead, use an
+    // approximation and do not cache the result. At some later point in time
+    // when the block is inserted into the visible DOM, this method will be
+    // called again and, at that point in time, will not throw an exception.
+    return textElement.textContent.length * 8;
+  }
+
+  // Cache the computed width and return.
+  if (Blockly.Field.cacheWidths_) {
+    Blockly.Field.cacheWidths_[key] = width;
   }
   return width;
 };

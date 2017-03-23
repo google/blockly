@@ -275,8 +275,8 @@ Blockly.Flyout.prototype.dragAngleRange_ = 70;
 
 /**
  * Creates the flyout's DOM.  Only needs to be called once.  The flyout can
- * either exist as its own <svg> element or be a <g> nested inside a separate
- * <svg> element.
+ * either exist as its own svg element or be a g element nested inside a
+ * separate svg element.
  * @param {string} tagName The type of tag to put the flyout in. This
  *     should be <svg> or <g>.
  * @return {!Element} The flyout's SVG group.
@@ -308,7 +308,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.workspace_.targetWorkspace = targetWorkspace;
   // Add scrollbar.
   this.scrollbar_ = new Blockly.Scrollbar(this.workspace_,
-      this.horizontalLayout_, false);
+      this.horizontalLayout_, false, 'blocklyFlyoutScrollbar');
 
   this.hide();
 
@@ -500,7 +500,7 @@ Blockly.Flyout.prototype.position = function() {
   this.svgGroup_.setAttribute("width", this.width_);
   this.svgGroup_.setAttribute("height", this.height_);
   var transform = 'translate(' + x + 'px,' + y + 'px)';
-  this.svgGroup_.style.transform = transform;
+  Blockly.utils.setCssTransform(this.svgGroup_, transform);
 
   // Update the scrollbar (if one exists).
   if (this.scrollbar_) {
@@ -726,14 +726,17 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   this.hide();
   this.clearOldBlocks_();
 
-  if (xmlList == Blockly.Variables.NAME_TYPE) {
-    // Special category for variables.
-    xmlList =
-        Blockly.Variables.flyoutCategory(this.workspace_.targetWorkspace);
-  } else if (xmlList == Blockly.Procedures.NAME_TYPE) {
-    // Special category for procedures.
-    xmlList =
-        Blockly.Procedures.flyoutCategory(this.workspace_.targetWorkspace);
+  // Handle dynamic categories, represented by a name instead of a list of XML.
+  // Look up the correct category generation function and call that to get a
+  // valid XML list.
+  if (typeof xmlList == 'string') {
+    var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
+        xmlList);
+    goog.asserts.assert(goog.isFunction(fnToApply),
+        'Couldn\'t find a callback function when opening a toolbox category.');
+    xmlList = fnToApply(this.workspace_.targetWorkspace);
+    goog.asserts.assert(goog.isArray(xmlList),
+        'The result of a toolbox category callback must be an array.');
   }
 
   this.setVisible(true);
@@ -1182,6 +1185,17 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     } else {
       flyout.filterForCapacity_();
     }
+
+    // Re-render the blocks before starting the drag:
+    // Force a render on IE and Edge to get around the issue described in
+    // Blockly.Field.getCachedWidth
+    if (goog.userAgent.IE || goog.userAgent.EDGE) {
+      var blocks = block.getDescendants();
+      for (var i = blocks.length - 1; i >= 0; i--) {
+        blocks[i].render(false);
+      }
+    }
+
     // Start a dragging operation on the new block.
     block.onMouseDown_(e);
     Blockly.dragMode_ = Blockly.DRAG_FREE;

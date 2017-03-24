@@ -19,6 +19,7 @@
   },
   "scripts": {
     "prepublish": "python build.py"
+    "test": "./node_modules/.bin/karma"
   },
 
   "license": "Apache-2.0",

@@ -25,7 +25,13 @@
   "private": true,
   "devDependencies": {
     "jshint": "latest",
-    "google-closure-library": "latest"
+    "google-closure-library": "latest",
+    "karma": "^1.1.2",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-qunit": "^1.2.0",
+    "load-grunt-tasks": "^3.1.0",
+    "qunitjs": "^2.0.1"
   },
   "jshintConfig": {
     "globalstrict": true,

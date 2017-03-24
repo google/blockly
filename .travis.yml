@@ -17,3 +17,9 @@ addons:
   browserstack:
     username: "qitan1"
     access_key: "zRqN1zfoJ8vzNnfCmZy9"
+  firefox: latest
+  apt:
+    sources:
+    - google-chrome
+    packages:
+    - google-chrome-stable

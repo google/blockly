@@ -18,7 +18,7 @@
     "name": "Neil Fraser"
   },
   "scripts": {
-    "prepublish": "python build.py"
+    "prepublish": "python build.py",
     "test": "./node_modules/.bin/karma"
   },
 

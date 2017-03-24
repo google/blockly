@@ -970,6 +970,11 @@ Blockly.Flyout.blockRightClick_ = function(e, block) {
 Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
   var flyout = this;
   return function(e) {
+    if (block.workspace.targetWorkspace.options.readOnly) {
+      e.stopPropagation();
+      e.preventDefault();
+      return;
+    }
     if (Blockly.utils.isRightButton(e)) {
       Blockly.Flyout.blockRightClick_(e, block);
     } else {

@@ -786,7 +786,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
                   (cursorY + row.height));
           highlightSteps.push('H', inputRows.rightEdge);
         }
-        cursorY+=8;
+        this.height += 8;
       } else {
         steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
         var v = row.height - Blockly.BlockSvg.TAB_HEIGHT

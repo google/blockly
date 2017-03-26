@@ -37,13 +37,18 @@ Blockly.defineBlocksWithJsonArray([{
   "colour": "%{BKY_LOOPS_HUE}"
 }]);
 
+/**
+ * Generator for wait block creates call to new method <code>waitForSeconds()</code>.
+ */
 Blockly.JavaScript['wait_seconds'] = function(block) {
   var seconds = Number(block.getFieldValue('SECONDS'));
   var code = 'waitForSeconds(' + seconds + ');\n';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return code;
 };
 
-// Register the interpreter asynchronous wrapper for the wait block.
+/**
+ * Register the interpreter asynchronous function <code>waitForSeconds()</code>.
+ */
 function initInterpretterWaitForSeconds(interpreter, scope) {
   var wrapper = interpreter.createAsyncFunction(function(timeInSeconds, callback) {
     // Delay the call to the callback.

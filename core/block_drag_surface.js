@@ -82,6 +82,8 @@ Blockly.BlockDragSurfaceSvg.prototype.scale_ = 1;
 
 /**
  * Cached value for the translation of the drag surface.
+ * This translation is in pixel units, because the scale is applied to the
+ * drag group rather than the top-level SVG.
  * @type {goog.math.Coordinate}
  * @private
  */
@@ -120,10 +122,10 @@ Blockly.BlockDragSurfaceSvg.prototype.setBlocksAndShow = function(blocks) {
 };
 
 /**
- * Translate and scale the entire drag surface group to keep in sync with the
- * workspace.
- * @param {number} x X translation
- * @param {number} y Y translation
+ * Translate and scale the entire drag surface group to the given position, to
+ * keep in sync with the workspace.
+ * @param {number} x X translation in workspace coordinates.
+ * @param {number} y Y translation in workspace coordinates.
  * @param {number} scale Scale of the group.
  */
 Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y, scale) {
@@ -148,6 +150,7 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
   x = x.toFixed(0);
   y = y.toFixed(0);
   this.SVG_.style.display = 'block';
+
   Blockly.utils.setCssTransform(this.SVG_,
       'translate3d(' + x + 'px, ' + y + 'px, 0px)');
 };
@@ -161,29 +164,7 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
  * @param {number} y Y translation for the entire surface.
  */
 Blockly.BlockDragSurfaceSvg.prototype.translateSurface = function(x, y) {
-  x *= this.scale_;
-  y *= this.scale_;
-
-  this.surfaceXY_ = new goog.math.Coordinate(x, y);
-  this.translateSurfaceInternal_();
-};
-
-/**
- * Translate the entire drag surface by the given amount during a drag.
- * We translate the drag surface instead of the blocks inside the surface
- * so that the browser avoids repainting the SVG.
- * Because of this, the drag coordinates must be adjusted by scale.
- * @param {number} dx X translation delta for the entire surface.
- * @param {number} dy Y translation delta for the entire surface.
- * @package
- */
-Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceBy = function(dx, dy) {
-  goog.asserts.assert(this.surfaceXY_,
-      'Cannot translate block drag surface by a delta when xy_ is null');
-
-  this.surfaceXY_.x += (dx * this.scale_);
-  this.surfaceXY_.y += (dy * this.scale_);
-
+  this.surfaceXY_ = new goog.math.Coordinate(x * this.scale_, y * this.scale_);
   this.translateSurfaceInternal_();
 };
 

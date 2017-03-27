@@ -80,30 +80,30 @@ Blockly.BlockDragger = function(block, workspace) {
 
   /**
    * The location of the top left corner of the dragging block at the beginning
-   * of the drag, relative to the surface that it started on.
+   * of the drag in workspace coordinates.
    * @type {!goog.math.Coordinate}
    * @private
    */
-  this.blockRelativeToSurfaceXY_ = this.draggingBlock_.getRelativeToSurfaceXY();
+  this.startXY_ = this.draggingBlock_.getRelativeToSurfaceXY();
 };
 
 /**
  * Start dragging a block.  This includes moving it to the drag surface.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
- *     moved from the position at mouse down, in pixel coordinates.
+ *     moved from the position at mouse down, in pixel units.
  */
 Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
   if (!Blockly.Events.getGroup()) {
     Blockly.Events.setGroup(true);
   }
-  // Workspace.startDrag just records the start position, which we already know.
   // TODO: Figure out where to get the list of bubbles to move when dragging.
   // TODO: Can setResizesEnabled be done at the same time for both types of drags?
   this.workspace_.setResizesEnabled(false);
   if (this.draggingBlock_.getParent()) {
     this.draggingBlock_.unplug();
-    var newLoc = goog.math.Coordinate.sum(this.blockRelativeToSurfaceXY_,
-        currentDragDeltaXY);
+    var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+    var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
+
     this.draggingBlock_.translate(newLoc.x, newLoc.y);
     this.draggingBlock_.disconnectUiEffect();
   }
@@ -119,15 +119,16 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
  * display accordingly.
  * @param {!Event} e The most recent move event.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
- *     moved from the position at the start of the drag, in pixel coordinates.
+ *     moved from the position at the start of the drag, in pixel units.
  */
 Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
-  var newLoc = goog.math.Coordinate.sum(this.blockRelativeToSurfaceXY_,
-      currentDragDeltaXY);
+  var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+  var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
+
   this.draggingBlock_.moveDuringDrag(newLoc);
 
   this.deleteArea_ = this.workspace_.isDeleteArea(e);
-  this.draggedConnectionManager_.update(currentDragDeltaXY, this.deleteArea_);
+  this.draggedConnectionManager_.update(delta, this.deleteArea_);
 
   this.updateCursorDuringBlockDrag_();
 };
@@ -136,16 +137,19 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
  * Finish a block drag and put the block back on the workspace.
  * @param {!Event} e The mouseup/touchend event.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
- *     moved from the position at the start of the drag, in pixel coordinates.
+ *     moved from the position at the start of the drag, in pixel units.
  */
 Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   // Make sure internal state is fresh.
   this.dragBlock(e, currentDragDeltaXY);
+
   Blockly.BlockSvg.disconnectUiStop_();
   // TODO: Consider where moveOffDragSurface should live.
-  this.draggingBlock_.moveConnections_(currentDragDeltaXY.x,
-      currentDragDeltaXY.y);
   this.draggingBlock_.moveOffDragSurface_();
+
+  var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+  this.draggingBlock_.moveConnections_(delta.x, delta.y);
+
   var deleted = this.maybeDeleteBlock_();
   if (!deleted) {
     // setDragging_ is expensive and doesn't need to be done if we're deleting.
@@ -165,7 +169,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
  */
 Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
   var event = new Blockly.Events.Move(this.draggingBlock_);
-  event.oldCoordinate = this.blockRelativeToSurfaceXY_;
+  event.oldCoordinate = this.startXY_;
   event.recordNew();
   Blockly.Events.fire(event);
   var draggingBlock = this.draggingBlock_;
@@ -226,4 +230,20 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
       trashcan.setOpen_(false);
     }
   }
+};
+
+/**
+ * TODO (fenichel): Consider putting this in utils.
+ * Convert a coordinate object from pixels to workspace units.
+ * This function does not consider differing origins.  It simply scales the
+ * input's x and y values.
+ * @param {!goog.math.Coordinate} pixelCoord A coordinate with x and y values
+ *     in css pixel units.
+ * @return {!goog.math.Coordinate} The input coordinate divided by the workspace
+ *     scale.
+ * @private
+ */
+Blockly.BlockDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
+  return new goog.math.Coordinate(pixelCoord.x / this.workspace_.scale,
+      pixelCoord.y / this.workspace_.scale);
 };

@@ -32,6 +32,7 @@
     "karma-firefox-launcher": "^1.0.0",
     "karma-qunit": "^1.2.0",
     "load-grunt-tasks": "^3.1.0",
+    "browserstack-runner": "*",
     "qunitjs": "^2.0.1"
   },
   "jshintConfig": {

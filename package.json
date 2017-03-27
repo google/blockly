@@ -18,8 +18,9 @@
     "name": "Neil Fraser"
   },
   "scripts": {
-    "test": "./node_modules/.bin/browserstack-runner"
+    'test': './node_modules/.bin/karma start --single-run --browsers chrome'
   },
+
 
 
   "license": "Apache-2.0",

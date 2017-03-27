@@ -967,15 +967,13 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
   return function(e) {
     if (Blockly.utils.isRightButton(e)) {
       Blockly.Flyout.blockRightClick_(e, block);
+      // This event has been handled.  No need to bubble up to the document.
+      e.stopPropagation();
+      e.preventDefault();
     } else {
-      console.log('block mouse down');
       var gesture = Blockly.GestureDB.gestureForEvent(e);
       gesture.setStartBlock(block);
-      return;
     }
-    // This event has been handled.  No need to bubble up to the document.
-    e.stopPropagation();
-    e.preventDefault();
   };
 };
 
@@ -985,38 +983,8 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
  * @private
  */
 Blockly.Flyout.prototype.onMouseDown_ = function(e) {
-  console.log('flyout mouse down');
   var gesture = Blockly.GestureDB.gestureForEvent(e);
   gesture.handleFlyoutStart(e, this);
-};
-
-/**
- * Handle a mouse-move to vertically drag the flyout.
- * @param {!Event} e Mouse move event.
- * @private
- */
-Blockly.Flyout.prototype.onMouseMove_ = function(e) {
-  console.log('deprecated');
-  var metrics = this.getMetrics_();
-  if (this.horizontalLayout_) {
-    if (metrics.contentWidth - metrics.viewWidth < 0) {
-      return;
-    }
-    var dx = e.clientX - this.startDragMouseX_;
-    this.startDragMouseX_ = e.clientX;
-    var x = metrics.viewLeft - dx;
-    x = goog.math.clamp(x, 0, metrics.contentWidth - metrics.viewWidth);
-    this.scrollbar_.set(x);
-  } else {
-    if (metrics.contentHeight - metrics.viewHeight < 0) {
-      return;
-    }
-    var dy = e.clientY - this.startDragMouseY_;
-    this.startDragMouseY_ = e.clientY;
-    var y = metrics.viewTop - dy;
-    y = goog.math.clamp(y, 0, metrics.contentHeight - metrics.viewHeight);
-    this.scrollbar_.set(y);
-  }
 };
 
 /**
@@ -1027,6 +995,7 @@ Blockly.Flyout.prototype.onMouseMove_ = function(e) {
  * @private
  */
 Blockly.Flyout.prototype.onMouseMoveBlock_ = function(e) {
+  console.log("deprecated: you shouldn't be seeing this line");
   if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&
       e.button == 0) {
     /* HACK:
@@ -1427,6 +1396,7 @@ Blockly.Flyout.prototype.reflowVertical = function(blocks) {
         block.flyoutRect_.setAttribute('y', blockXY.y);
       }
     }
+    console.log(flyoutWidth);
     // Record the width for .getMetrics_ and .position.
     this.width_ = flyoutWidth;
     // Call this since it is possible the trash and zoom buttons need

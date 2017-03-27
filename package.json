@@ -18,8 +18,9 @@
     "name": "Neil Fraser"
   },
   "scripts": {
-    "prepublish": "python build.py"
+    "test": "./node_modules/.bin/browserstack-runner"
   },
+
 
   "license": "Apache-2.0",
   "private": true,

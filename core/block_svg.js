@@ -400,6 +400,7 @@ Blockly.BlockSvg.prototype.moveToDragSurface_ = function() {
   // The translation for drag surface blocks,
   // is equal to the current relative-to-surface position,
   // to keep the position in sync as it move on/off the surface.
+  // This is in workspace coordinates.
   var xy = this.getRelativeToSurfaceXY();
   this.clearTransformAttributes_();
   this.workspace.blockDragSurface_.translateSurface(xy.x, xy.y);
@@ -428,8 +429,8 @@ Blockly.BlockSvg.prototype.moveOffDragSurface_ = function() {
  * Move this block during a drag, taking into account whether we are using a
  * drag surface to translate blocks.
  * This block must be a top-level block.
- * @param {!goog.math.Coordinate} newLoc The location to translate to, in pixels
- *     relative to the workspace's SVG origin.
+ * @param {!goog.math.Coordinate} newLoc The location to translate to, in
+ *     workspace coordinates.
  * @package
  */
 Blockly.BlockSvg.prototype.moveDuringDrag = function(newLoc) {
@@ -885,82 +886,6 @@ Blockly.BlockSvg.prototype.setDragging_ = function(adding) {
   for (var i = 0; i < this.childBlocks_.length; i++) {
     this.childBlocks_[i].setDragging_(adding);
   }
-};
-
-/**
- * Drag this block to follow the mouse.
- * @param {!Event} e Mouse move event.
- * @private
- */
-Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
-  if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&
-      e.button == 0) {
-    /* HACK:
-     Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove
-     events on certain touch actions. Ignore events with these signatures.
-     This may result in a one-pixel blind spot in other browsers,
-     but this shouldn't be noticeable. */
-    e.stopPropagation();
-    return;
-  }
-
-  var oldXY = this.getRelativeToSurfaceXY();
-  var newXY = this.workspace.moveDrag(e);
-
-  if (Blockly.dragMode_ == Blockly.DRAG_STICKY) {
-    // Still dragging within the sticky DRAG_RADIUS.
-    var dr = goog.math.Coordinate.distance(oldXY, newXY) * this.workspace.scale;
-    if (dr > Blockly.DRAG_RADIUS) {
-      // Switch to unrestricted dragging.
-      Blockly.dragMode_ = Blockly.DRAG_FREE;
-      Blockly.longStop_();
-      this.workspace.setResizesEnabled(false);
-
-      var disconnectEffect = !!this.parentBlock_;
-      // If in a stack, either split the stack, or pull out single block.
-      var healStack = !Blockly.DRAG_STACK;
-      if (e.altKey || e.ctrlKey || e.metaKey) {
-        healStack = !healStack;
-      }
-      // Push this block to the very top of the stack.
-      this.unplug(healStack);
-      if (disconnectEffect) {
-        var group = this.getSvgRoot();
-        group.translate_ = 'translate(' + newXY.x + ',' + newXY.y + ')';
-        this.disconnectUiEffect();
-      }
-      this.setDragging_(true);
-      this.moveToDragSurface_();
-
-
-      if (!Blockly.draggedConnectionManager_) {
-        Blockly.draggedConnectionManager_ =
-            new Blockly.DraggedConnectionManager(this);
-      }
-    }
-  }
-  if (Blockly.dragMode_ == Blockly.DRAG_FREE) {
-    // Unrestricted dragging.
-    var dxy = goog.math.Coordinate.difference(oldXY, this.dragStartXY_);
-    var group = this.getSvgRoot();
-    if (this.useDragSurface_) {
-      this.workspace.blockDragSurface_.translateSurface(newXY.x, newXY.y);
-    } else {
-      group.translate_ = 'translate(' + newXY.x + ',' + newXY.y + ')';
-      group.setAttribute('transform', group.translate_ + group.skew_);
-    }
-    // Drag all the nested bubbles.
-    for (var i = 0; i < this.draggedBubbles_.length; i++) {
-      var commentData = this.draggedBubbles_[i];
-      commentData.bubble.setIconLocation(
-          goog.math.Coordinate.sum(commentData, dxy));
-    }
-
-    Blockly.draggedConnectionManager_.update(e, dxy);
-  }
-  // This event has been handled.  No need to bubble up to the document.
-  e.stopPropagation();
-  e.preventDefault();
 };
 
 /**

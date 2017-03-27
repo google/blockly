@@ -168,6 +168,7 @@ Blockly.RenderedConnection.prototype.tighten_ = function() {
     if (!svgRoot) {
       throw 'block is not rendered.';
     }
+    // Workspace coordinates.
     var xy = Blockly.utils.getRelativeXY(svgRoot);
     block.getSvgRoot().setAttribute('transform',
         'translate(' + (xy.x - dx) + ',' + (xy.y - dy) + ')');
@@ -177,7 +178,7 @@ Blockly.RenderedConnection.prototype.tighten_ = function() {
 
 /**
  * Find the closest compatible connection to this connection.
- * All parameters are in workspace units
+ * All parameters are in workspace units.
  * @param {number} maxLimit The maximum radius to another connection.
  * @param {number} dx Horizontal offset between this connection's location
  *     in the database and the current location (as a result of dragging).

@@ -83,7 +83,8 @@ Blockly.DraggedConnectionManager = function(block) {
   this.localConnection_ = null;
 
   /**
-   * The distance between this.closestConnection_ and this.localConnection_.
+   * The distance between this.closestConnection_ and this.localConnection_,
+   * in workspace units.
    * Updated on every mouse move.
    * @type {number}
    * @private
@@ -132,11 +133,12 @@ Blockly.DraggedConnectionManager.prototype.applyConnections = function() {
 /**
  * Update highlighted connections based on the most recent move location.
  * @param {!goog.math.Coordinate} dxy Position relative to drag start,
- *     in pixel coordinates.
+ *     in workspace units.
  * @param {?number} deleteArea One of {@link Blockly.DELETE_AREA_TRASH},
  *     {@link Blockly.DELETE_AREA_TOOLBOX}, or {@link Blockly.DELETE_AREA_NONE}.
  */
 Blockly.DraggedConnectionManager.prototype.update = function(dxy, deleteArea) {
+  // TODO (fenichel): Possibly scale this by workspace.scale.
   var oldClosestConnection = this.closestConnection_;
   var closestConnectionChanged = this.updateClosest_(dxy);
 
@@ -198,7 +200,7 @@ Blockly.DraggedConnectionManager.prototype.initAvailableConnections_ = function(
 /**
  * Find the new closest connection, and update internal state in response.
  * @param {!goog.math.Coordinate} dxy Position relative to the drag start,
- *     in pixel coordinates
+ *     in workspace units.
  * @return {boolean} Whether the closest connection has changed.
  * @private
  */

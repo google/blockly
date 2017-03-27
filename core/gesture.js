@@ -48,13 +48,15 @@ goog.require('goog.asserts');
 Blockly.Gesture = function(e, touchId) {
 
   /**
-   * Coordinate system: pixel coordinates.
+   * The position of the mouse when the gesture started.  Units are css pixels,
+   * with (0, 0) at the top left of the browser window (mouseEvent clientX/Y).
    * @type {goog.math.Coordinate}
    */
   this.mouseDownXY_ = null;
 
   /**
-   * Coordinate system: pixel coordinates.
+   * How far the mouse has moved during this drag, in pixel units.
+   * (0, 0) is at this.mouseDownXY_.
    * @type {goog.math.Coordinate}
    * private
    */
@@ -194,7 +196,7 @@ Blockly.Gesture.prototype.updateFromEvent_ = function(e) {
 /**
  * DO MATH to set currentDragDeltaXY_ based on the most recent mouse position.
  * @param {!goog.math.Coordinate} currentXY The most recent mouse/pointer
- *     position, in pixel coordinates.
+ *     position, in pixel units, with (0, 0) at the window's top left corner.
  * @private
  */
 Blockly.Gesture.prototype.updateDragDelta_ = function(currentXY) {

@@ -18,7 +18,7 @@
     "name": "Neil Fraser"
   },
   "scripts": {
-    "test": "./node_modules/.bin/karma start --single-run --browsers chrome"
+    "test": "./node_modules/.bin/karma start --single-run --browsers Chrome"
   },
 
 

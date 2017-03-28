@@ -323,7 +323,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
 
   // Dragging the flyout up and down.
   Array.prototype.push.apply(this.eventWrappers_,
-      Blockly.bindEventWithChecks_(this.workspace_.svgGroup_, 'mousedown', this,
+      Blockly.bindEventWithChecks_(this.svgBackground_, 'mousedown', this,
       this.onMouseDown_));
 };
 
@@ -964,6 +964,7 @@ Blockly.Flyout.blockRightClick_ = function(e, block) {
  * @private
  */
 Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
+  var flyout = this;
   return function(e) {
     if (Blockly.utils.isRightButton(e)) {
       Blockly.Flyout.blockRightClick_(e, block);
@@ -973,6 +974,7 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
     } else {
       var gesture = Blockly.GestureDB.gestureForEvent(e);
       gesture.setStartBlock(block);
+      gesture.handleFlyoutStart(e, flyout);
     }
   };
 };
@@ -985,41 +987,6 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
 Blockly.Flyout.prototype.onMouseDown_ = function(e) {
   var gesture = Blockly.GestureDB.gestureForEvent(e);
   gesture.handleFlyoutStart(e, this);
-};
-
-/**
- * Mouse button is down on a block in a non-closing flyout.  Create the block
- * if the mouse moves beyond a small radius.  This allows one to play with
- * fields without instantiating blocks that instantly self-destruct.
- * @param {!Event} e Mouse move event.
- * @private
- */
-Blockly.Flyout.prototype.onMouseMoveBlock_ = function(e) {
-  console.log("deprecated: you shouldn't be seeing this line");
-  if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&
-      e.button == 0) {
-    /* HACK:
-     Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove events
-     on certain touch actions. Ignore events with these signatures.
-     This may result in a one-pixel blind spot in other browsers,
-     but this shouldn't be noticeable. */
-    e.stopPropagation();
-    return;
-  }
-  var dx = e.clientX - Blockly.Flyout.startDownEvent_.clientX;
-  var dy = e.clientY - Blockly.Flyout.startDownEvent_.clientY;
-
-  var createBlock = this.determineDragIntention_(dx, dy);
-  if (createBlock) {
-    Blockly.longStop_();
-    this.createBlockFunc_(Blockly.Flyout.startBlock_)(
-        Blockly.Flyout.startDownEvent_);
-  } else if (this.dragMode_ == Blockly.DRAG_FREE) {
-    Blockly.longStop_();
-    // Do a scroll.
-    this.onMouseMove_(e);
-  }
-  e.stopPropagation();
 };
 
 /**
@@ -1396,7 +1363,6 @@ Blockly.Flyout.prototype.reflowVertical = function(blocks) {
         block.flyoutRect_.setAttribute('y', blockXY.y);
       }
     }
-    console.log(flyoutWidth);
     // Record the width for .getMetrics_ and .position.
     this.width_ = flyoutWidth;
     // Call this since it is possible the trash and zoom buttons need

@@ -28,8 +28,9 @@ goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.ContextMenu');
-goog.require('Blockly.Touch');
 goog.require('Blockly.RenderedConnection');
+goog.require('Blockly.Touch');
+goog.require('Blockly.utils');
 goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.dom');
@@ -425,7 +426,7 @@ Blockly.BlockSvg.prototype.moveOffDragSurface_ = function() {
  * @private
  */
 Blockly.BlockSvg.prototype.clearTransformAttributes_ = function() {
-  this.getSvgRoot().removeAttribute('transform');
+  Blockly.utils.removeAttribute(this.getSvgRoot(), 'transform');
 };
 
 /**
@@ -1569,7 +1570,7 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
         'url(#' + this.workspace.options.embossFilterId + ')');
     this.svgPathLight_.style.display = 'none';
   } else {
-    this.svgPath_.removeAttribute('filter');
+    Blockly.utils.removeAttribute(this.svgPath_, 'filter');
     delete this.svgPathLight_.style.display;
   }
 };

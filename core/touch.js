@@ -113,7 +113,6 @@ Blockly.longStop_ = function() {
  * @private
  */
 Blockly.onMouseUp_ = function(e) {
-  console.log('on mouse up');
   var workspace = Blockly.getMainWorkspace();
   if (workspace.dragMode_ == Blockly.DRAG_NONE) {
     return;

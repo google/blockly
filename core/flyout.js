@@ -1204,7 +1204,6 @@ Blockly.Flyout.prototype.reflowVertical = function(blocks) {
         block.flyoutRect_.setAttribute('y', blockXY.y);
       }
     }
-    console.log(flyoutWidth);
     // Record the width for .getMetrics_ and .position.
     this.width_ = flyoutWidth;
     // Call this since it is possible the trash and zoom buttons need

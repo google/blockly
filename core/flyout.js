@@ -110,20 +110,6 @@ Blockly.Flyout = function(workspaceOptions) {
    * @private
    */
   this.permanentlyDisabled_ = [];
-
-  /**
-   * y coordinate of mousedown - used to calculate scroll distances.
-   * @type {number}
-   * @private
-   */
-  this.startDragMouseY_ = 0;
-
-  /**
-   * x coordinate of mousedown - used to calculate scroll distances.
-   * @type {number}
-   * @private
-   */
-  this.startDragMouseX_ = 0;
 };
 
 /**
@@ -133,44 +119,6 @@ Blockly.Flyout = function(workspaceOptions) {
  * @private
  */
 Blockly.Flyout.startFlyout_ = null;
-
-/**
- * Event that started a drag. Used to determine the drag distance/direction and
- * also passed to BlockSvg.onMouseDown_() after creating a new block.
- * @type {Event}
- * @private
- */
-Blockly.Flyout.startDownEvent_ = null;
-
-/**
- * Flyout block where the drag/click was initiated. Used to fire click events or
- * create a new block.
- * @type {Event}
- * @private
- */
-Blockly.Flyout.startBlock_ = null;
-
-/**
- * Wrapper function called when a mouseup occurs during a background or block
- * drag operation.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.Flyout.onMouseUpWrapper_ = null;
-
-/**
- * Wrapper function called when a mousemove occurs during a background drag.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.Flyout.onMouseMoveWrapper_ = null;
-
-/**
- * Wrapper function called when a mousemove occurs during a block drag.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.Flyout.onMouseMoveBlockWrapper_ = null;
 
 /**
  * Does the flyout automatically close when a block is created?
@@ -1254,20 +1202,7 @@ Blockly.Flyout.terminateDrag_ = function() {
     Blockly.Flyout.startFlyout_.dragMode_ = Blockly.DRAG_NONE;
     Blockly.Flyout.startFlyout_ = null;
   }
-  if (Blockly.Flyout.onMouseUpWrapper_) {
-    Blockly.unbindEvent_(Blockly.Flyout.onMouseUpWrapper_);
-    Blockly.Flyout.onMouseUpWrapper_ = null;
-  }
-  if (Blockly.Flyout.onMouseMoveBlockWrapper_) {
-    Blockly.unbindEvent_(Blockly.Flyout.onMouseMoveBlockWrapper_);
-    Blockly.Flyout.onMouseMoveBlockWrapper_ = null;
-  }
-  if (Blockly.Flyout.onMouseMoveWrapper_) {
-    Blockly.unbindEvent_(Blockly.Flyout.onMouseMoveWrapper_);
-    Blockly.Flyout.onMouseMoveWrapper_ = null;
-  }
   Blockly.Flyout.startDownEvent_ = null;
-  Blockly.Flyout.startBlock_ = null;
 };
 
 /**

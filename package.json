@@ -2,10 +2,9 @@
   "name": "blockly",
   "version": "1.0.0",
   "description": "Blockly is a library for building visual programming editors.",
-  "keywords": ["blockly"],
-  "scripts": {
-    "lint": "jshint ."
-  },
+  "keywords": [
+    "blockly"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/google/blockly.git"
@@ -18,30 +17,33 @@
     "name": "Neil Fraser"
   },
   "scripts": {
-    "test": "./node_modules/.bin/karma start --single-run --browsers Chrome"
+    "test": "./node_modules/.bin/karma start  karma.conf.js --browsers Chrome"
   },
-
-
-
   "license": "Apache-2.0",
   "private": true,
   "devDependencies": {
+    "google-closure-library": "^20170218.0.1",
+    "jasmine": "^2.5.3",
     "jshint": "latest",
-    "google-closure-library": "latest",
-    "karma": "^1.1.2",
-    "karma-chrome-launcher": "^2.0.0",
+    "karma": "latest",
+    "karma-chrome-launcher": "latest",
+    "karma-cli": "latest",
+    "karma-closure": "latest",
     "karma-firefox-launcher": "^1.0.0",
-    "karma-qunit": "^1.2.0",
-    "load-grunt-tasks": "^3.1.0",
-    "browserstack-runner": "*",
-    "qunitjs": "^2.0.1"
+    "karma-jasmine": "~0.3"
   },
   "jshintConfig": {
     "globalstrict": true,
-    "predef": ["Blockly", "goog", "window", "document", "soy", "XMLHttpRequest"],
+    "predef": [
+      "Blockly",
+      "goog",
+      "window",
+      "document",
+      "soy",
+      "XMLHttpRequest"
+    ],
     "sub": true,
     "undef": true,
     "unused": true
   }
-  
 }

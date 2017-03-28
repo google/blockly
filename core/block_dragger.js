@@ -234,7 +234,8 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
 
 /**
  * TODO (fenichel): Consider putting this in utils.
- * Convert a coordinate object from pixels to workspace units.
+ * Convert a coordinate object from pixels to workspace units, including a
+ * correction for mutator workspaces.
  * This function does not consider differing origins.  It simply scales the
  * input's x and y values.
  * @param {!goog.math.Coordinate} pixelCoord A coordinate with x and y values
@@ -244,6 +245,15 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
  * @private
  */
 Blockly.BlockDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
-  return new goog.math.Coordinate(pixelCoord.x / this.workspace_.scale,
+  var result = new goog.math.Coordinate(pixelCoord.x / this.workspace_.scale,
       pixelCoord.y / this.workspace_.scale);
+  if (this.workspace_.isMutator) {
+    // If we're in a mutator, its scale is always 1, purely because of some
+    // oddities in our rendering optimizations.  The actual scale is the same as
+    // the scale on the parent workspace.
+    // Fix that for dragging.
+    var mainScale = this.workspace_.options.parentWorkspace.scale;
+    result = result.scale(1 / mainScale);
+  }
+  return result;
 };

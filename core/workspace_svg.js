@@ -346,20 +346,20 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   this.svgGroup_ = Blockly.utils.createSvgElement('g',
       {'class': 'blocklyWorkspace'}, null);
 
-  // Always add a rectangle to the blocklyWorkspace <g>, even if no background
-  // was specified.  A <g> alone does not receive mouse events--it must have a
-  // valid target inside it.
-  opt_backgroundClass = opt_backgroundClass || "blocklyTransparentBackground";
+  // Note that a <g> alone does not receive mouse events--it must have a
+  // valid target inside it.  If no background class is specified, as in the
+  // flyout, the workspace will not receive mouse events.
+  if (opt_backgroundClass) {
+    /** @type {SVGElement} */
+    this.svgBackground_ = Blockly.utils.createSvgElement('rect',
+        {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
+        this.svgGroup_);
 
-  /** @type {SVGElement} */
-  this.svgBackground_ = Blockly.utils.createSvgElement('rect',
-      {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
-      this.svgGroup_);
-  if (opt_backgroundClass == 'blocklyMainBackground') {
-    this.svgBackground_.style.fill =
-        'url(#' + this.options.gridPattern.id + ')';
+    if (opt_backgroundClass == 'blocklyMainBackground') {
+      this.svgBackground_.style.fill =
+          'url(#' + this.options.gridPattern.id + ')';
+    }
   }
-
   /** @type {SVGElement} */
   this.svgBlockCanvas_ = Blockly.utils.createSvgElement('g',
       {'class': 'blocklyBlockCanvas'}, this.svgGroup_, this);
@@ -935,7 +935,6 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
-  console.log('workspace mouse down');
   if (Blockly.utils.isTargetInput(e)) {
     Blockly.Touch.clearTouchIdentifier();
     return;

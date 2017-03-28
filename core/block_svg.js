@@ -328,7 +328,8 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
  * Return the coordinates of the top-left corner of this block relative to the
  * drawing surface's origin (0,0), in workspace units.
  * This does not change with workspace scale.
- * @return {!goog.math.Coordinate} Object with .x and .y properties.
+ * @return {!goog.math.Coordinate} Object with .x and .y properties in
+ *     workspace coordinates.
  */
 Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
   var x = 0;

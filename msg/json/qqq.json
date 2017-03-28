@@ -1,4 +1,11 @@
 {
+	"@metadata": {
+		"authors": [
+			"Espertus",
+			"Liuxinyu970226",
+			"Shirayuki"
+		]
+	},
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
 	"TODAY": "button text - Button that sets a calendar to today's date.\n{{Identical|Today}}",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}",
@@ -253,7 +260,7 @@
 	"TEXT_REPLACE_MESSAGE0": "block text - Title of a block that returns a copy of text (%3) with all instances of some smaller text (%1) replaced with other text (%2).",
 	"TEXT_REPLACE_HELPURL": "url - Information about replacing each copy text (or string, in computer lingo) with other text.",
 	"TEXT_REPLACE_TOOLTIP": "tooltip - Short description of a block that replaces copies of text in a large text with other text.",
-	"TEXT_REVERSE_MESSAGE0": "block text - Title of block that returns a copy of text (%1) with the order of letters and characters reversed.",
+	"TEXT_REVERSE_MESSAGE0": "block text - Title of block that returns a copy of text (%1) with the order of letters and characters reversed.\n{{Identical|Reverse}}",
 	"TEXT_REVERSE_HELPURL": "url - Information about reversing a letters/characters in text.",
 	"TEXT_REVERSE_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Text].",
 	"LISTS_CREATE_EMPTY_HELPURL": "url - Information on empty lists.",
@@ -338,7 +345,7 @@
 	"LISTS_SPLIT_TOOLTIP_SPLIT": "tooltip - See [https://github.com/google/blockly/wiki/Lists#make-list-from-text https://github.com/google/blockly/wiki/Lists#make-list-from-text] for more information.",
 	"LISTS_SPLIT_TOOLTIP_JOIN": "tooltip - See [https://github.com/google/blockly/wiki/Lists#make-text-from-list https://github.com/google/blockly/wiki/Lists#make-text-from-list] for more information.",
 	"LISTS_REVERSE_HELPURL": "url - Information describing reversing a list.",
-	"LISTS_REVERSE_MESSAGE0": "block text - Title of block that returns a copy of a list (%1) with the order of items reversed.",
+	"LISTS_REVERSE_MESSAGE0": "block text - Title of block that returns a copy of a list (%1) with the order of items reversed.\n{{Identical|Reverse}}",
 	"LISTS_REVERSE_TOOLTIP": "tooltip - Short description for a block that reverses a copy of a list.",
 	"ORDINAL_NUMBER_SUFFIX": "grammar - Text that follows an ordinal number (a number that indicates position relative to other numbers).  In most languages, such text appears before the number, so this should be blank.  An exception is Hungarian. See [[Translating:Blockly#Ordinal_numbers]] for more information.",
 	"VARIABLES_GET_HELPURL": "url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.",

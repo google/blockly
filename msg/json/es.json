@@ -8,7 +8,8 @@
 			"Codynguyen1116",
 			"Indiralena",
 			"Rubentl134",
-			"Martineduardo"
+			"Martineduardo",
+			"Julián L"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
@@ -220,6 +221,10 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "solicitar número con el mensaje",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Solicitar al usuario un número.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Solicitar al usuario un texto.",
+	"TEXT_REPLACE_MESSAGE0": "reemplaza %1 con %2 en %3",
+	"TEXT_REVERSE_MESSAGE0": "revertir %1",
+	"TEXT_REVERSE_HELPURL": "https://github.com/google/blockly/wiki/Text#reversing-text",
+	"TEXT_REVERSE_TOOLTIP": "Invierte el orden de los caracteres en el texto.",
 	"LISTS_CREATE_EMPTY_TITLE": "crear lista vacía",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Devuelve una lista, de longitud 0, sin ningún dato",
 	"LISTS_CREATE_WITH_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-list-with",
@@ -291,6 +296,7 @@
 	"LISTS_SPLIT_WITH_DELIMITER": "con delimitador",
 	"LISTS_SPLIT_TOOLTIP_SPLIT": "Dividir el texto en una lista de textos, separando en cada delimitador.",
 	"LISTS_SPLIT_TOOLTIP_JOIN": "Unir una lista de textos en un solo texto, separado por un delimitador.",
+	"LISTS_REVERSE_MESSAGE0": "revertir %1",
 	"VARIABLES_GET_TOOLTIP": "Devuelve el valor de esta variable.",
 	"VARIABLES_GET_CREATE_SET": "Crear 'establecer %1'",
 	"VARIABLES_SET": "establecer %1 a %2",

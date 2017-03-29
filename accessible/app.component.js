@@ -38,7 +38,8 @@ blocklyApp.AppComponent = ng.core.Component({
 
     <blockly-block-options-modal></blockly-block-options-modal>
     <blockly-toolbox-modal></blockly-toolbox-modal>
-    <blockly-variable-modal></blockly-variable-modal>
+    <blockly-rename-variable-modal></blockly-rename-variable-modal>
+    <blockly-remove-variable-modal></blockly-remove-variable-modal>
 
     <label id="blockly-translate-button" aria-hidden="true" hidden>
       {{'BUTTON'|translate}}
@@ -51,7 +52,8 @@ blocklyApp.AppComponent = ng.core.Component({
     blocklyApp.BlockOptionsModalComponent,
     blocklyApp.SidebarComponent,
     blocklyApp.ToolboxModalComponent,
-    blocklyApp.VariableModalComponent,
+    blocklyApp.VariableRenameModalComponent,
+    blocklyApp.VariableRemoveModalComponent,
     blocklyApp.WorkspaceComponent
   ],
   pipes: [blocklyApp.TranslatePipe],

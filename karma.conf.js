@@ -5,7 +5,7 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: './',
+    //basePath: './',
 
 
     // frameworks to use
@@ -23,16 +23,18 @@ module.exports = function(config) {
       'tests/jsunit/*.js',
       // external deps
       {pattern: '../closure-library/closure/goog/deps.js', included: false, served: false},
+      {pattern: '../closure-library/closure/goog/**/*.js', included: false},
     ],
 
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'tests/jsunit/*.js': ['closure' ],
+      'tests/jsunit/*.js': ['closure'],
       'blockly_uncompressed.js':['closure'],
       'core/*.js':['closure'],
-      '../closure-library/closure/goog/deps.js': ['closure-deps']
+      '../closure-library/closure/goog/**/*.js':['closure'],
+      '../closure-library/closure/goog/deps.js':['closure-deps']
     },
     // test results reporter to use
     // possible values: 'dots', 'progress'

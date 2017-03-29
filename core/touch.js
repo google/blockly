@@ -42,13 +42,6 @@ goog.require('goog.string');
 Blockly.Touch.touchIdentifier_ = null;
 
 /**
- * Wrapper function called when a touch mouseUp occurs during a drag operation.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.Touch.onTouchUpWrapper_ = null;
-
-/**
  * The TOUCH_MAP lookup dictionary specifies additional touch events to fire,
  * in conjunction with mouse events.
  * @type {Object}
@@ -123,15 +116,6 @@ Blockly.onMouseUp_ = function(e) {
   workspace.resetDragSurface();
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   workspace.dragMode_ = Blockly.DRAG_NONE;
-  // Unbind the touch event if it exists.
-  if (Blockly.Touch.onTouchUpWrapper_) {
-    Blockly.unbindEvent_(Blockly.Touch.onTouchUpWrapper_);
-    Blockly.Touch.onTouchUpWrapper_ = null;
-  }
-  if (Blockly.onMouseMoveWrapper_) {
-    Blockly.unbindEvent_(Blockly.onMouseMoveWrapper_);
-    Blockly.onMouseMoveWrapper_ = null;
-  }
 };
 
 

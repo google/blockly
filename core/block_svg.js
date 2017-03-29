@@ -232,65 +232,11 @@ Blockly.BlockSvg.prototype.getIcons = function() {
 };
 
 /**
- * Wrapper function called when a mouseUp occurs during a drag operation.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.BlockSvg.onMouseUpWrapper_ = null;
-
-/**
- * Wrapper function called when a mouseMove occurs during a drag operation.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.BlockSvg.onMouseMoveWrapper_ = null;
-
-/**
- * Stop binding to the global mouseup and mousemove events.
+ * Stop any pending block disconnection animations and reset the cursor.
  * @package
  */
 Blockly.BlockSvg.terminateDrag = function() {
   Blockly.BlockSvg.disconnectUiStop_();
-  if (Blockly.BlockSvg.onMouseUpWrapper_) {
-    Blockly.unbindEvent_(Blockly.BlockSvg.onMouseUpWrapper_);
-    Blockly.BlockSvg.onMouseUpWrapper_ = null;
-  }
-  if (Blockly.BlockSvg.onMouseMoveWrapper_) {
-    Blockly.unbindEvent_(Blockly.BlockSvg.onMouseMoveWrapper_);
-    Blockly.BlockSvg.onMouseMoveWrapper_ = null;
-  }
-  var selected = Blockly.selected;
-  if (Blockly.dragMode_ == Blockly.DRAG_FREE) {
-    // Terminate a drag operation.
-    if (selected) {
-      // Update the connection locations.
-      var xy = selected.getRelativeToSurfaceXY();
-      var dxy = goog.math.Coordinate.difference(xy, selected.dragStartXY_);
-      var event = new Blockly.Events.Move(selected);
-      event.oldCoordinate = selected.dragStartXY_;
-      event.recordNew();
-      Blockly.Events.fire(event);
-
-      selected.moveConnections_(dxy.x, dxy.y);
-      delete selected.draggedBubbles_;
-      selected.setDragging_(false);
-      selected.moveOffDragSurface_();
-      selected.render();
-      selected.workspace.setResizesEnabled(true);
-      // Ensure that any snap and bump are part of this move's event group.
-      var group = Blockly.Events.getGroup();
-      setTimeout(function() {
-        Blockly.Events.setGroup(group);
-        selected.snapToGrid();
-        Blockly.Events.setGroup(false);
-      }, Blockly.BUMP_DELAY / 2);
-      setTimeout(function() {
-        Blockly.Events.setGroup(group);
-        selected.bumpNeighbours_();
-        Blockly.Events.setGroup(false);
-      }, Blockly.BUMP_DELAY);
-    }
-  }
   Blockly.dragMode_ = Blockly.DRAG_NONE;
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
 };
@@ -653,37 +599,11 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     this.workspace.resize();
   }
 
-  this.workspace.updateScreenCalculationsIfScrolled();
-  this.workspace.markFocused();
   Blockly.terminateDrag_();
-  this.select();
-  Blockly.hideChaff();
 
   var gesture = Blockly.GestureDB.gestureForEvent(e);
   gesture.handleBlockStart(e, this);
 
-};
-
-/**
- * Handle a mouse-up anywhere in the SVG pane.  Is only registered when a
- * block is clicked.  We can't use mouseUp on the block since a fast-moving
- * cursor can briefly escape the block before it catches up.
- * @param {!Event} e Mouse up event.
- * @private
- */
-Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
-  Blockly.Touch.clearTouchIdentifier();
-  if (Blockly.dragMode_ != Blockly.DRAG_FREE &&
-      !Blockly.WidgetDiv.isVisible()) {
-    Blockly.Events.fire(
-        new Blockly.Events.Ui(this, 'click', undefined, undefined));
-  }
-  Blockly.terminateDrag_();
-
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-  if (!Blockly.WidgetDiv.isVisible()) {
-    Blockly.Events.setGroup(false);
-  }
 };
 
 /**

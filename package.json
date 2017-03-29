@@ -28,7 +28,7 @@
     "karma": "latest",
     "karma-chrome-launcher": "latest",
     "karma-cli": "latest",
-    "karma-closure": "latest",
+    "karma-closure": "^0.1.1",
     "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "~0.3"
   },

@@ -15,14 +15,14 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'node_modules/google-closure-library/closure/goog/base.js',
+      '../closure-library/closure/goog/base.js',
       // include files - tests and blockly_uncompressed.js
       'blockly_uncompressed.js',
+      //'core/*.js',
       'tests/jsunit/index.html',
       'tests/jsunit/*.js',
       // external deps
-      {pattern: 'node_modules/google-closure-library/closure/goog/deps.js', included: false, served: false},
-      {pattern: 'node_modules/google-closure-library/closure/goog/**/*.js', included: false},
+      {pattern: '../closure-library/closure/goog/deps.js', included: false, served: false},
     ],
 
 
@@ -30,7 +30,9 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       'tests/jsunit/*.js': ['closure' ],
-      'node_modules/google-closure-library/closure/goog/deps.js': ['closure-deps']
+      'blockly_uncompressed.js':['closure'],
+      //'core/*.js':['closure'],
+      '../closure-library/closure/goog/deps.js': ['closure-deps']
     },
     // test results reporter to use
     // possible values: 'dots', 'progress'

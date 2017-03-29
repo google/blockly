@@ -18,7 +18,7 @@ module.exports = function(config) {
       '../closure-library/closure/goog/base.js',
       // include files - tests and blockly_uncompressed.js
       'blockly_uncompressed.js',
-      //'core/*.js',
+      'core/*.js',
       'tests/jsunit/index.html',
       'tests/jsunit/*.js',
       // external deps
@@ -31,7 +31,7 @@ module.exports = function(config) {
     preprocessors: {
       'tests/jsunit/*.js': ['closure' ],
       'blockly_uncompressed.js':['closure'],
-      //'core/*.js':['closure'],
+      'core/*.js':['closure'],
       '../closure-library/closure/goog/deps.js': ['closure-deps']
     },
     // test results reporter to use

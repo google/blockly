@@ -15,13 +15,3 @@ before_script:
   - sh -e /etc/init.d/xvfb start
 script:
   - ./node_modules/karma/bin/karma start test-app/karma.conf.js 
-addons:
-  browserstack:
-    username: "qitan1"
-    access_key: "zRqN1zfoJ8vzNnfCmZy9"
-  firefox: latest
-  apt:
-    sources:
-    - google-chrome
-    packages:
-    - google-chrome-stable

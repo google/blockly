@@ -214,6 +214,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "запытаць лічбу з падказкай",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Запытаць у карыстальніка лічбу.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Запытаць у карыстальніка тэкст.",
+	"TEXT_COUNT_MESSAGE0": "падлічыць %1 сярод %2",
 	"LISTS_CREATE_EMPTY_TITLE": "стварыць пусты сьпіс",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Вяртае сьпіс даўжынёй 0, які ня ўтрымлівае запісаў зьвестак",
 	"LISTS_CREATE_WITH_TOOLTIP": "Ставарае сьпіс зь любой колькасьцю элемэнтаў.",

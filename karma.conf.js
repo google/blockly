@@ -16,14 +16,14 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       '../closure-library/closure/goog/base.js',
-      // include files - tests and blockly_uncompressed.js
-      'blockly_uncompressed.js',
-      'core/*.js',
       'tests/jsunit/index.html',
-      'tests/jsunit/*.js',
+      {pattern: 'tests/jsunit/*.js',included:false},
+      // serve but don't include
+      {pattern: 'blockly_uncompressed.js', included:false},
+      {pattern: 'core/*.js', included: false},
       // external deps
-      {pattern: '../closure-library/closure/goog/deps.js', included: false, served: false},
-      {pattern: '../closure-library/closure/goog/**/*.js', included: false},
+      {pattern: 'node_modules/google-closure-library/closure/goog/deps.js', included: false, served: false},
+      {pattern: 'node_modules/google-closure-library/closure/goog/**/*.js', included: false},
     ],
 
 
@@ -33,8 +33,8 @@ module.exports = function(config) {
       'tests/jsunit/*.js': ['closure'],
       'blockly_uncompressed.js':['closure'],
       'core/*.js':['closure'],
-      '../closure-library/closure/goog/**/*.js':['closure'],
-      '../closure-library/closure/goog/deps.js':['closure-deps']
+      'node_modules/google-closure-library/closure/goog/**/*.js':['closure'],
+      'node_modules/google-closure-library/closure/goog/deps.js':['closure-deps']
     },
     // test results reporter to use
     // possible values: 'dots', 'progress'
@@ -52,7 +52,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_DEBUG,
 
 
     // enable / disable watching file and executing tests whenever any file changes

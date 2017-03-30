@@ -18,13 +18,13 @@
  */
 
 /**
- * @fileoverview Component representing the variable modal.
+ * @fileoverview Component representing the variable rename modal.
  *
  * @author corydiers@google.com (Cory Diers)
  */
 
-blocklyApp.VariableModalComponent = ng.core.Component({
-  selector: 'blockly-variable-modal',
+blocklyApp.VariableRenameModalComponent = ng.core.Component({
+  selector: 'blockly-rename-variable-modal',
   template: `
     <div *ngIf="modalIsVisible"class="blocklyModalCurtain"
          (click)="dismissModal()">
@@ -65,7 +65,7 @@ blocklyApp.VariableModalComponent = ng.core.Component({
       this.currentVariableName = "";
 
       var that = this;
-      this.variableModalService.registerPreShowHook(
+      this.variableModalService.registerPreRenameShowHook(
         function(oldName) {
           that.currentVariableName = oldName;
           that.modalIsVisible = true;

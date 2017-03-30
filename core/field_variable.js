@@ -73,6 +73,12 @@ Blockly.FieldVariable.prototype.init = function() {
     return;
   }
   Blockly.FieldVariable.superClass_.init.call(this);
+
+  // TODO (1010): Change from init/initModel to initView/initModel
+  this.initModel();
+};
+
+Blockly.FieldVariable.prototype.initModel = function() {
   if (!this.getValue()) {
     // Variables without names get uniquely named for this workspace.
     var workspace =

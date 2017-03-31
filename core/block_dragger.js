@@ -164,6 +164,8 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
   this.draggingBlock_.moveDuringDrag(newLoc);
   this.dragIcons_(delta);
 
+  this.dragIcons_(delta);
+
   this.deleteArea_ = this.workspace_.isDeleteArea(e);
   this.draggedConnectionManager_.update(delta, this.deleteArea_);
 

@@ -37,7 +37,6 @@ goog.require('goog.asserts');
 goog.require('goog.math.Coordinate');
 
 
-
 /**
  * NB: In this file "start" refers to touchstart, mousedown, and pointerstart
  * events.  "End" refers to touchend, mouseup, and pointerend events.
@@ -374,7 +373,6 @@ Blockly.Gesture.prototype.doStart = function(e) {
  */
 Blockly.Gesture.prototype.handleMove = function(e) {
   this.updateFromEvent_(e);
-
   if (this.isDraggingWorkspace_) {
     this.workspaceDragger_.drag(this.currentDragDeltaXY_);
   } else if (this.isDraggingBlock_) {

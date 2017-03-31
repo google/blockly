@@ -17,6 +17,6 @@ script:
   - set -x
   - pwd
   - ls 
-  - open ./tests/jsunit/index.html
+  - xdg-open ./tests/jsunit/index.html
 os:
   - linux 

@@ -14,7 +14,9 @@ before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 script:
+  -set -x
   - pwd
-  - open tests/jsunit/index.html
+  -ls -l 
+  - open shirletests/jsunit/index.html
 os:
   - linux 

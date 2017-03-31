@@ -16,7 +16,7 @@ before_script:
 script:
   - set -x
   - pwd
-  -ls 
+  - ls 
   - open /jsunit/index.html
 os:
   - linux 

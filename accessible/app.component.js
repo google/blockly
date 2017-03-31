@@ -38,6 +38,7 @@ blocklyApp.AppComponent = ng.core.Component({
 
     <blockly-block-options-modal></blockly-block-options-modal>
     <blockly-toolbox-modal></blockly-toolbox-modal>
+    <blockly-add-variable-modal></blockly-add-variable-modal>
     <blockly-rename-variable-modal></blockly-rename-variable-modal>
     <blockly-remove-variable-modal></blockly-remove-variable-modal>
 
@@ -52,6 +53,7 @@ blocklyApp.AppComponent = ng.core.Component({
     blocklyApp.BlockOptionsModalComponent,
     blocklyApp.SidebarComponent,
     blocklyApp.ToolboxModalComponent,
+    blocklyApp.VariableAddModalComponent,
     blocklyApp.VariableRenameModalComponent,
     blocklyApp.VariableRemoveModalComponent,
     blocklyApp.WorkspaceComponent

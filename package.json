@@ -17,7 +17,7 @@
     "name": "Neil Fraser"
   },
   "scripts": {
-    "test": "./node_modules/.bin/karma start  karma.conf.js --browsers Chrome"
+    "test": "open tests/jsunit/index.html"
   },
   "license": "Apache-2.0",
   "private": true,

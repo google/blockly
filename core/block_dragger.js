@@ -85,6 +85,42 @@ Blockly.BlockDragger = function(block, workspace) {
    * @private
    */
   this.startXY_ = this.draggingBlock_.getRelativeToSurfaceXY();
+
+  /**
+   * A list of all of the icons (comment, warning, and mutator) that are
+   * on this block and its descendants.  Moving an icon moves the bubble that
+   * extends from it if that bubble is open.
+   * @type {Array.<!Object>}
+   * @private
+   */
+  this.dragIconData_ = Blockly.BlockDragger.initIconData_(block);
+
+};
+
+/**
+ * Make a list of all of the icons (comment, warning, and mutator) that are
+ * on this block and its descendants.  Moving an icon moves the bubble that
+ * extends from it if that bubble is open.
+ * @param {!Blockly.BlockSvg} block The root block that is being dragged.
+ * @return {!Array.<!Object>} The list of all icons and their locations.
+ */
+Blockly.BlockDragger.initIconData_ = function(block) {
+  // Build a list of icons that need to be moved and where they started.
+  var dragIconData = [];
+  var descendants = block.getDescendants();
+  for (var i = 0, descendant; descendant = descendants[i]; i++) {
+    var icons = descendant.getIcons();
+    for (var j = 0; j < icons.length; j++) {
+      var data = {
+        // goog.math.Coordinate with x and y properties (workspace coordinates).
+        location: icons[j].getIconLocation(),
+        // Blockly.Icon
+        icon: icons[j]
+      };
+      dragIconData.push(data);
+    }
+  }
+  return dragIconData;
 };
 
 /**
@@ -96,7 +132,6 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
   if (!Blockly.Events.getGroup()) {
     Blockly.Events.setGroup(true);
   }
-  // TODO: Figure out where to get the list of bubbles to move when dragging.
   // TODO: Can setResizesEnabled be done at the same time for both types of drags?
   this.workspace_.setResizesEnabled(false);
   if (this.draggingBlock_.getParent()) {
@@ -127,6 +162,8 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
 
   this.draggingBlock_.moveDuringDrag(newLoc);
 
+  this.dragIcons_(delta);
+
   this.deleteArea_ = this.workspace_.isDeleteArea(e);
   this.draggedConnectionManager_.update(delta, this.deleteArea_);
 
@@ -142,6 +179,7 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
 Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   // Make sure internal state is fresh.
   this.dragBlock(e, currentDragDeltaXY);
+  this.dragIconData_ = null;
 
   Blockly.BlockSvg.disconnectUiStop_();
   // TODO: Consider where moveOffDragSurface should live.
@@ -256,4 +294,18 @@ Blockly.BlockDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
     result = result.scale(1 / mainScale);
   }
   return result;
+};
+
+/**
+ * Move all of the icons connected to this drag.
+ * @param {!goog.math.Coordinate} dxy How far to move the icons from their
+ *     original positions, in workspace units.
+ * @private
+ */
+Blockly.BlockDragger.prototype.dragIcons_ = function(dxy) {
+  // Moving icons moves their associated bubbles.
+  for (var i = 0; i < this.dragIconData_.length; i++) {
+    var data = this.dragIconData_[i];
+    data.icon.setIconLocation(goog.math.Coordinate.sum(data.location, dxy));
+  }
 };

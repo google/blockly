@@ -273,6 +273,8 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
 /**
  * Return the coordinates of the top-left corner of this block relative to the
  * drawing surface's origin (0,0), in workspace units.
+ * If the block is on the workspace, (0, 0) is the origin of the workspace
+ * coordinate system.
  * This does not change with workspace scale.
  * @return {!goog.math.Coordinate} Object with .x and .y properties in
  *     workspace coordinates.
@@ -434,7 +436,7 @@ Blockly.BlockSvg.prototype.snapToGrid = function() {
  * Returns a bounding box describing the dimensions of this block
  * and any blocks stacked below it.
  * @return {!{height: number, width: number}} Object with height and width
- *    properties.
+ *    properties in workspace units.
  */
 Blockly.BlockSvg.prototype.getHeightWidth = function() {
   var height = this.height;

@@ -27,11 +27,13 @@
 
 goog.provide('Blockly.Gesture');
 
-goog.require('goog.math.Coordinate');
 goog.require('Blockly.BlockDragger');
 goog.require('Blockly.FlyoutDragger');
+goog.require('Blockly.Touch');
 goog.require('Blockly.WorkspaceDragger');
+
 goog.require('goog.asserts');
+goog.require('goog.math.Coordinate');
 
 
 /**
@@ -344,10 +346,10 @@ Blockly.Gesture.prototype.doStart = function(e) {
 
   this.mouseDownXY_ = new goog.math.Coordinate(e.clientX, e.clientY);
 
-  this.onMoveWrapper_ = Blockly.bindEvent_(
+  this.onMoveWrapper_ = Blockly.bindEventWithChecks_(
       document, 'mousemove', null, this.handleMove.bind(this));
 
-  this.onUpWrapper_ = Blockly.bindEvent_(
+  this.onUpWrapper_ = Blockly.bindEventWithChecks_(
       document, 'mouseup', null, this.handleUp.bind(this));
 
   e.preventDefault();
@@ -360,6 +362,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
  */
 Blockly.Gesture.prototype.handleMove = function(e) {
   this.updateFromEvent_(e);
+  console.log(Blockly.Touch.getTouchIdentifierFromEvent(e));
   // TODO: I should probably only call this once, when first exceeding the drag
   // radius.
   if (this.hasExceededDragRadius_) {
@@ -411,6 +414,7 @@ Blockly.Gesture.prototype.endGesture = function(e) {
   Blockly.GestureDB.removeGestureForId(this.touchIdentifier_);
   e.preventDefault();
   e.stopPropagation();
+  Blockly.Touch.clearTouchIdentifier();
 };
 
 /**

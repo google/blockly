@@ -17,6 +17,7 @@ script:
   - set -x
   - pwd
   - ls 
-  - xdg-open ./tests/jsunit/index.html travis_wait 1 exit 0
+  - xdg-open ./tests/jsunit/index.html &
+  - exit 0
 os:
   - linux 

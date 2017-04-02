@@ -17,7 +17,8 @@ script:
   - set -x
   - pwd
   - ls 
-  - xdg-open ./tests/jsunit/index.html &
+  #- xdg-open ./tests/jsunit/index.html &
+  - node_modules/.bin/karma start karam.conf.js
   - exit 0
 os:
   - linux 

@@ -90,8 +90,8 @@ Minimap.init = function(workspace, minimap){
     'width': this.rect.right-this.rect.left,
     'class': 'minimap',
   }, document.getElementById('mapDiv'));
-  this.svg.style.top = this.rect.top;
-  this.svg.style.left = this.rect.left;
+  this.svg.style.top = this.rect.top + 'px';
+  this.svg.style.left = this.rect.left + 'px';
 
   // Creating a rectangle in the minimap that represents current view.
   Blockly.utils.createSvgElement('rect', {
@@ -104,7 +104,8 @@ Minimap.init = function(workspace, minimap){
   this.mapDragger = this.svg.childNodes[0];
 
   // Adding mouse events to the rectangle, to make it Draggable.
-  this.mapDragger.addEventListener("mousedown", Minimap.mousedown,false);
+  // Using Blockly.bindEvent_ to attach mouse/touch listeners.
+  Blockly.bindEvent_(this.mapDragger, "mousedown", null, Minimap.mousedown);
 
   //When the window change, we need to resize the minimap window.
   window.addEventListener('resize', Minimap.repositionMinimap);
@@ -117,16 +118,19 @@ Minimap.init = function(workspace, minimap){
 };
 
 Minimap.mousedown = function(e){
-  document.addEventListener("mousemove", Minimap.mousemove);
-  document.addEventListener("mouseup", Minimap.mouseup);
+  // Using Blockly.bindEvent_ to attach mouse/touch listeners.
+  Minimap.mouseMoveBindData = Blockly.bindEvent_(document,"mousemove", null, Minimap.mousemove);
+  Minimap.mouseUpBindData = Blockly.bindEvent_(document,"mouseup", null, Minimap.mouseup);
+
   Minimap.isDragging=true;
   e.stopPropagation();
 };
 
 Minimap.mouseup = function(e){
   Minimap.isDragging = false;
-  document.removeEventListener("mousemove", Minimap.mousemove);
-  document.removeEventListener("mouseup", Minimap.mouseup);
+  // Removing listeners.
+  Blockly.unbindEvent_(Minimap.mouseUpBindData);
+  Blockly.unbindEvent_(Minimap.mouseMoveBindData);
   Minimap.updateMapDragger(e);
   e.stopPropagation();
 };
@@ -161,8 +165,8 @@ Minimap.mirrorEvent = function(event){
 */
 Minimap.repositionMinimap = function(){
   Minimap.rect = document.getElementById('mapDiv').getBoundingClientRect();
-  Minimap.svg.style.top = Minimap.rect.top;
-  Minimap.svg.style.left = Minimap.rect.left;
+  Minimap.svg.style.top = Minimap.rect.top + 'px';
+  Minimap.svg.style.left = Minimap.rect.left + 'px';
 };
 
 /**

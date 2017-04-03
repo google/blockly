@@ -29,12 +29,19 @@ blocklyApp.VariableModalService = ng.core.Class({
       this.modalIsShown = false;
     }
   ],
-  // Registers a hook to be called before the modal is shown.
+  // Registers a hook to be called before the add modal is shown.
+  registerPreAddShowHook: function(preShowHook) {
+    this.preAddShowHook = function() {
+      preShowHook();
+    };
+  },
+  // Registers a hook to be called before the rename modal is shown.
   registerPreRenameShowHook: function(preShowHook) {
     this.preRenameShowHook = function(oldName) {
       preShowHook(oldName);
     };
   },
+  // Registers a hook to be called before the remove modal is shown.
   registerPreRemoveShowHook: function(preShowHook) {
     this.preRemoveShowHook = function(oldName, count) {
       preShowHook(oldName, count);
@@ -44,12 +51,17 @@ blocklyApp.VariableModalService = ng.core.Class({
   isModalShown: function() {
     return this.modalIsShown;
   },
-  // Show the variable modal.
+  // Show the add variable modal.
+  showAddModal_: function() {
+    this.preAddShowHook();
+    this.modalIsShown = true;
+  },
+  // Show the rename variable modal.
   showRenameModal_: function(oldName) {
     this.preRenameShowHook(oldName);
     this.modalIsShown = true;
   },
-  // Show the variable modal.
+  // Show the remove variable modal.
   showRemoveModal_: function(oldName) {
     var count = blocklyApp.workspace.getVariableUses(oldName).length;
     if (count > 1) {

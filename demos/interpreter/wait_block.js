@@ -2,7 +2,7 @@
  * @license
  * Visual Blocks Editor
  *
- * Copyright 2012 Google Inc.
+ * Copyright 2017 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Example "wait" block that will pause the interpretter for a
+ * @fileoverview Example "wait" block that will pause the interpreter for a
  * number of seconds.
  */
 Blockly.defineBlocksWithJsonArray([{
@@ -49,7 +49,7 @@ Blockly.JavaScript['wait_seconds'] = function(block) {
 /**
  * Register the interpreter asynchronous function <code>waitForSeconds()</code>.
  */
-function initInterpretterWaitForSeconds(interpreter, scope) {
+function initInterpreterWaitForSeconds(interpreter, scope) {
   var wrapper = interpreter.createAsyncFunction(function(timeInSeconds, callback) {
     // Delay the call to the callback.
     setTimeout(callback, timeInSeconds * 1000);

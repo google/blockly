@@ -151,7 +151,7 @@
           interpreter.createNativeFunction(wrapper));
 
       // Add an API for the wait block.  See wait_block.js
-      initInterpretterWaitForSeconds(interpreter, scope);
+      initInterpreterWaitForSeconds(interpreter, scope);
 
       // Add an API function for highlighting blocks.
       var wrapper = function(id) {
@@ -174,7 +174,6 @@
       Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
       Blockly.JavaScript.addReservedWords('highlightBlock');
       var code = Blockly.JavaScript.workspaceToCode(workspace);
-      console.log(code);
       myInterpreter = new Interpreter(code, initApi);
 
       alert('Ready to execute this code:\n\n' + code);

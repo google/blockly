@@ -36,10 +36,11 @@ blocklyApp.AppComponent = ng.core.Component({
       <span aria-live="polite" role="status">{{getAriaLiveReadout()}}</span>
     </div>
 
-    <blockly-block-options-modal></blockly-block-options-modal>
-    <blockly-toolbox-modal></blockly-toolbox-modal>
+    <blockly-add-variable-modal></blockly-add-variable-modal>
     <blockly-rename-variable-modal></blockly-rename-variable-modal>
     <blockly-remove-variable-modal></blockly-remove-variable-modal>
+    <blockly-toolbox-modal></blockly-toolbox-modal>
+    <blockly-block-options-modal></blockly-block-options-modal>
 
     <label id="blockly-translate-button" aria-hidden="true" hidden>
       {{'BUTTON'|translate}}
@@ -52,6 +53,7 @@ blocklyApp.AppComponent = ng.core.Component({
     blocklyApp.BlockOptionsModalComponent,
     blocklyApp.SidebarComponent,
     blocklyApp.ToolboxModalComponent,
+    blocklyApp.VariableAddModalComponent,
     blocklyApp.VariableRenameModalComponent,
     blocklyApp.VariableRemoveModalComponent,
     blocklyApp.WorkspaceComponent

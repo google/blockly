@@ -55,7 +55,7 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
                 (keydown.enter)="selectOption()"
                 tabindex="-1">
           <option *ngFor="#option of dropdownOptions" value="{{option.value}}"
-                  [selected]="mainField.getValue() == option.value">
+                  [attr.select]="optionValue === option.value ? true : null">
             {{option.text}}
           </option>
         </select>

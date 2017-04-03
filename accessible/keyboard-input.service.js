@@ -46,6 +46,9 @@ blocklyApp.KeyboardInputService = ng.core.Class({
   setOverride: function(newKeysToActions) {
     this.keysToActionsOverride = newKeysToActions;
   },
+  addOverride: function(keyCode, action) {
+    this.keysToActionsOverride[keyCode] = action;
+  },
   clearOverride: function() {
     this.keysToActionsOverride = null;
   }

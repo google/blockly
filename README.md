@@ -1,4 +1,5 @@
-# Blockly
+# Blockly [![Build Status]( https://travis-ci.org/shirletan/blockly.svg?branch=blockly-open-browser)](https://travis-ci.org/shirletan/blockly)
+
 
 Google's Blockly is a web-based, visual programming editor.  Users can drag
 blocks together to build programs.  All code is free and open source.

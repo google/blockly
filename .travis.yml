@@ -15,10 +15,6 @@ before_script:
   - sh -e /etc/init.d/xvfb start
 script:
   - set -x
-  - pwd
-  - ls 
-  #- xdg-open ./tests/jsunit/index.html &
-  - node_modules/.bin/karma start karam.conf.js
-  - exit 0
+  - xdg-open ./tests/jsunit/index.html &
 os:
   - linux 

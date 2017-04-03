@@ -27,7 +27,7 @@
     "karma": "latest",
     "karma-chrome-launcher": "latest",
     "karma-cli": "latest",
-    "karma-firefox-launcher": "^1.0.0",
+    "karma-firefox-launcher": "^1.0.0"
   },
   "jshintConfig": {
     "globalstrict": true,

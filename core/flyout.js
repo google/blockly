@@ -936,6 +936,7 @@ Blockly.Flyout.prototype.isDragTowardWorkspace = function(currentDragDeltaXY) {
 };
 
 /**
+ * // TODO (fenichel): Delete.
  * Create a copy of this block on the workspace.
  * @param {!Blockly.BlockSvg} originalBlock The block to copy from the flyout.
  * @return {Blockly.BlockSvg} The newly created block, or null if something
@@ -968,7 +969,6 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
     Blockly.Events.setGroup(true);
     Blockly.Events.fire(new Blockly.Events.Create(this.startBlock_));
   }
-
   if (this.autoClose) {
     this.hide();
   } else {

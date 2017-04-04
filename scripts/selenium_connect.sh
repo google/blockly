@@ -9,3 +9,7 @@ then
 fi
   
 java -jar -Dwebdriver.gecko.driver=../geckodriver ../webdriverio-test/selenium-server-standalone-3.0.1.jar &
+
+ps -aef |grep selenium
+
+lsof -ti tcp:4444

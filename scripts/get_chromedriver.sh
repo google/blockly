@@ -1,6 +1,6 @@
-#!/bin/bash
+s#!/bin/bash
 os_name=`uname`
-mkdir ../chromedriver
+mkdir chromedriver
 if [[ $os_name == 'Linux' ]]; then
   cd ../ && curl -L https://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip | tar xz
 elif [[ $os_name == 'Darwin' ]]; then

@@ -128,16 +128,6 @@ Blockly.WorkspaceSvg.prototype.isFlyout = false;
 Blockly.WorkspaceSvg.prototype.isMutator = false;
 
 /**
- * TODO: Consider deleting this.
- * Is this workspace currently being dragged around?
- * DRAG_NONE - No drag operation.
- * DRAG_BEGIN - Still inside the initial DRAG_RADIUS.
- * DRAG_FREE - Workspace has been dragged further than DRAG_RADIUS.
- * @private
- */
-Blockly.WorkspaceSvg.prototype.dragMode_ = Blockly.DRAG_NONE;
-
-/**
  * Whether this workspace has resizes enabled.
  * Disable during batch operations for a performance improvement.
  * @type {boolean}
@@ -146,29 +136,25 @@ Blockly.WorkspaceSvg.prototype.dragMode_ = Blockly.DRAG_NONE;
 Blockly.WorkspaceSvg.prototype.resizesEnabled_ = true;
 
 /**
- * Current horizontal scrolling offset.
- * Coordinate system: pixel coordinates.
+ * Current horizontal scrolling offset in pixel units.
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.scrollX = 0;
 
 /**
- * Current vertical scrolling offset.
- * Coordinate system: pixel coordinates.
+ * Current vertical scrolling offset in pixel units.
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.scrollY = 0;
 
 /**
- * Horizontal scroll value when scrolling started.
- * Coordinate system: pixel coordinates.
+ * Horizontal scroll value when scrolling started in pixel units.
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.startScrollX = 0;
 
 /**
- * Vertical scroll value when scrolling started.
- * Coordinate system: pixel coordinates.
+ * Vertical scroll value when scrolling started in pixel units.
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.startScrollY = 0;
@@ -377,9 +363,6 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (!this.isFlyout) {
     Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
         this.onMouseDown_);
-    var thisWorkspace = this;
-    Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
-                       function(e) {Blockly.longStart_(e, thisWorkspace);});
     if (this.options.zoomOptions && this.options.zoomOptions.wheel) {
       // Mouse-wheel.
       Blockly.bindEventWithChecks_(this.svgGroup_, 'wheel', this,
@@ -823,7 +806,7 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
       this.remainingCapacity()) {
     return;
   }
-  Blockly.terminateDrag_();  // Dragging while pasting?  No.
+  Blockly.GestureDB.cancelAllGestures();  // Dragging while pasting?  No.
   Blockly.Events.disable();
   try {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
@@ -888,7 +871,8 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
 Blockly.WorkspaceSvg.prototype.createVariable = function(name) {
   Blockly.WorkspaceSvg.superClass_.createVariable.call(this, name);
   // Don't refresh the toolbox if there's a drag in progress.
-  if (this.toolbox_ && this.toolbox_.flyout_ && !Blockly.Flyout.startFlyout_) {
+  // TODO: Decide if we need to check the equivalent of startFlyout_.
+  if (this.toolbox_ && this.toolbox_.flyout_) {//} && !Blockly.Flyout.startFlyout_) {
     this.toolbox_.refreshSelection();
   }
 };
@@ -1012,7 +996,7 @@ Blockly.WorkspaceSvg.prototype.isDraggable = function() {
  */
 Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
   // TODO: Remove terminateDrag and compensate for coordinate skew during zoom.
-  Blockly.terminateDrag_();
+  Blockly.GestureDB.cancelAllGestures();
   // The vertical scroll distance that corresponds to a click of a zoom button.
   var PIXELS_PER_ZOOM_STEP = 50;
   var delta = -e.deltaY / PIXELS_PER_ZOOM_STEP;

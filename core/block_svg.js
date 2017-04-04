@@ -140,9 +140,6 @@ Blockly.BlockSvg.prototype.initSvg = function() {
   if (!this.workspace.options.readOnly && !this.eventsInit_) {
     Blockly.bindEventWithChecks_(this.getSvgRoot(), 'mousedown', this,
                        this.onMouseDown_);
-    var thisBlock = this;
-    Blockly.bindEvent_(this.getSvgRoot(), 'touchstart', null,
-                       function(e) {Blockly.longStart_(e, thisBlock);});
   }
   this.eventsInit_ = true;
 
@@ -581,20 +578,6 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   if (this.workspace.options.readOnly) {
     return;
   }
-  if (this.isInFlyout) {
-    // longStart's simulation of right-clicks for longpresses on touch devices
-    // calls the onMouseDown_ function defined on the prototype of the object
-    // the was longpressed (in this case, a Blockly.BlockSvg).  In this case
-    // that behaviour is wrong, because Blockly.Flyout.prototype.blockMouseDown
-    // should be called for a mousedown on a block in the flyout, which blocks
-    // execution of the block's onMouseDown_ function.
-    if (e.type == 'touchstart' && Blockly.utils.isRightButton(e)) {
-      Blockly.Flyout.blockRightClick_(e, this);
-      e.stopPropagation();
-      e.preventDefault();
-    }
-    return;
-  }
   if (this.isInMutator) {
     // Mutator's coordinate system could be out of date because the bubble was
     // dragged, the block was moved, the parent workspace zoomed, etc.
@@ -881,7 +864,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   // If this block is being dragged, unlink the mouse events.
   if (Blockly.selected == this) {
     this.unselect();
-    Blockly.terminateDrag_();
+    Blockly.GestureDB.cancelAllGestures();
   }
   // If this block has a context menu open, close it.
   if (Blockly.ContextMenu.currentBlock == this) {

@@ -68,11 +68,9 @@ Blockly.longPid_ = 0;
  * which after about a second opens the context menu.  The tasks is killed
  * if the touch event terminates early.
  * @param {!Event} e Touch start event.
- * @param {!Blockly.Block|!Blockly.WorkspaceSvg} uiObject The block or workspace
- *     under the touchstart event.
  * @private
  */
-Blockly.longStart_ = function(e, uiObject) {
+Blockly.longStart_ = function(e) {
   Blockly.longStop_();
   // Punt on multitouch events.
   if (e.changedTouches.length != 1) {
@@ -83,7 +81,13 @@ Blockly.longStart_ = function(e, uiObject) {
     // e was a touch event.  It needs to pretend to be a mouse event.
     e.clientX = e.changedTouches[0].clientX;
     e.clientY = e.changedTouches[0].clientY;
-    uiObject.onMouseDown_(e);
+
+    // Let the gesture route the right-click correctly.
+    var gesture = Blockly.GestureDB.gestureForEvent(e);
+    if (gesture) {
+      gesture.handleRightClick(e);
+    }
+
   }, Blockly.LONGPRESS);
 };
 
@@ -98,26 +102,6 @@ Blockly.longStop_ = function() {
     Blockly.longPid_ = 0;
   }
 };
-
-
-/**
- * Handle a mouse-up anywhere on the page.
- * @param {!Event} e Mouse up event.
- * @private
- */
-Blockly.onMouseUp_ = function(e) {
-  var workspace = Blockly.getMainWorkspace();
-  if (workspace.dragMode_ == Blockly.DRAG_NONE) {
-    return;
-  }
-  Blockly.Touch.clearTouchIdentifier();
-
-  // TODO(#781): Check whether this needs to be called for all drag modes.
-  workspace.resetDragSurface();
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-  workspace.dragMode_ = Blockly.DRAG_NONE;
-};
-
 
 /**
  * Clear the touch identifier that tracks which touch stream to pay attention

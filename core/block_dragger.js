@@ -134,6 +134,8 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
   }
   // TODO: Can setResizesEnabled be done at the same time for both types of drags?
   this.workspace_.setResizesEnabled(false);
+  Blockly.BlockSvg.disconnectUiStop_();
+
   if (this.draggingBlock_.getParent()) {
     this.draggingBlock_.unplug();
     var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
@@ -190,7 +192,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
 
   var deleted = this.maybeDeleteBlock_();
   if (!deleted) {
-    // setDragging_ is expensive and doesn't need to be done if we're deleting.
+    // These are expensive and don't need to be done if we're deleting.
     this.draggingBlock_.setDragging_(false);
     this.draggedConnectionManager_.applyConnections();
     this.draggingBlock_.render();

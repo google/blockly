@@ -54,5 +54,5 @@ function initInterpreterWaitForSeconds(interpreter, scope) {
     // Delay the call to the callback.
     setTimeout(callback, timeInSeconds * 1000);
   });
-  interpreter.setProperty(scope, "waitForSeconds", wrapper);
+  interpreter.setProperty(scope, 'waitForSeconds', wrapper);
 }

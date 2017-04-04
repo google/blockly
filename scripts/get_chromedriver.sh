@@ -1,4 +1,4 @@
-s#!/bin/bash
+#!/bin/bash
 os_name=`uname`
 export SRC_DIR=`pwd`
 echo "current dir is $SRC_DIR"

@@ -15,6 +15,10 @@ before_script:
   - sh -e /etc/init.d/xvfb start
 script:
   - set -x
-  - xdg-open ./tests/jsunit/index.html &
+  - scripts/get_driver.sh
+  - scripts/get_selenium.sh
+  - scripts/selenium_connect.sh &
+  - node tests/jsunit/test_runner.sh
+
 os:
   - linux 

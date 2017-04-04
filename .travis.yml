@@ -18,6 +18,7 @@ script:
   - scripts/get_driver.sh
   - scripts/get_selenium.sh
   - scripts/get_chromedriver.sh
+  - ls -l chromedriver
   - scripts/selenium_connect.sh &
   - node tests/jsunit/test_runner.js
 

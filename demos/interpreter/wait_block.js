@@ -20,7 +20,8 @@
 
 /**
  * @fileoverview Example "wait" block that will pause the interpreter for a
- * number of seconds.
+ * number of seconds. Because wait is a blocking behavior, such blocks will
+ * only work in interpretted environments.
  */
 Blockly.defineBlocksWithJsonArray([{
   "type": "wait_seconds",

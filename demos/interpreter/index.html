@@ -111,12 +111,17 @@
             </block>
           </statement>
           <next>
-            <block type="text_print" inline="false">
-              <value name="TEXT">
-                <block type="variables_get">
-                  <field name="VAR">n</field>
+            <block type="wait_seconds">
+              <field name="SECONDS">3.0</field>
+              <next>
+                <block type="text_print" inline="false">
+                  <value name="TEXT">
+                    <block type="variables_get">
+                      <field name="VAR">n</field>
+                    </block>
+                  </value>
                 </block>
-              </value>
+              </next>
             </block>
           </next>
         </block>

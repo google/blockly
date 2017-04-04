@@ -22,6 +22,8 @@
  * @fileoverview Example "wait" block that will pause the interpreter for a
  * number of seconds. Because wait is a blocking behavior, such blocks will
  * only work in interpretted environments.
+ *
+ * See https://neil.fraser.name/software/JS-Interpreter/docs.html
  */
 Blockly.defineBlocksWithJsonArray([{
   "type": "wait_seconds",
@@ -39,7 +41,8 @@ Blockly.defineBlocksWithJsonArray([{
 }]);
 
 /**
- * Generator for wait block creates call to new method <code>waitForSeconds()</code>.
+ * Generator for wait block creates call to new method
+ * <code>waitForSeconds()</code>.
  */
 Blockly.JavaScript['wait_seconds'] = function(block) {
   var seconds = Number(block.getFieldValue('SECONDS'));
@@ -48,12 +51,14 @@ Blockly.JavaScript['wait_seconds'] = function(block) {
 };
 
 /**
- * Register the interpreter asynchronous function <code>waitForSeconds()</code>.
+ * Register the interpreter asynchronous function
+ * <code>waitForSeconds()</code>.
  */
 function initInterpreterWaitForSeconds(interpreter, scope) {
-  var wrapper = interpreter.createAsyncFunction(function(timeInSeconds, callback) {
-    // Delay the call to the callback.
-    setTimeout(callback, timeInSeconds * 1000);
-  });
+  var wrapper = interpreter.createAsyncFunction(
+    function(timeInSeconds, callback) {
+      // Delay the call to the callback.
+      setTimeout(callback, timeInSeconds * 1000);
+    });
   interpreter.setProperty(scope, 'waitForSeconds', wrapper);
 }

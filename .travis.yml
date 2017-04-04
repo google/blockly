@@ -18,7 +18,7 @@ script:
   - scripts/get_driver.sh
   - scripts/get_selenium.sh
   - scripts/selenium_connect.sh &
-  - node tests/jsunit/test_runner.sh
+  - node tests/jsunit/test_runner.js
 
 os:
   - linux 

@@ -280,7 +280,7 @@ Blockly.init_ = function(mainWorkspace) {
   var svg = mainWorkspace.getParentSvg();
 
   // Suppress the browser's context menu.
-  Blockly.bindEventWithChecks_(svg, 'contextmenu', null,
+  Blockly.bindEventWithChecks_(svg.parentNode, 'contextmenu', null,
       function(e) {
         if (!Blockly.utils.isTargetInput(e)) {
           e.preventDefault();

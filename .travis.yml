@@ -22,7 +22,7 @@ before_script:
   - sh -e /etc/init.d/xvfb start
 script:
   - set -x
-  - scripts/get_seleniumdriver.sh 
+  - scripts/get_geckdriver.sh 
   - scripts/get_selenium.sh 
   - scripts/get_chromedriver.sh 
   - scripts/selenium_connect.sh &

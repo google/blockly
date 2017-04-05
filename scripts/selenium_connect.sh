@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#check if selenium is running, kill it if so
+#check if selenium server is up running
 pid=`lsof -ti tcp:4444`
 if [ $? -eq 0 ]
 then

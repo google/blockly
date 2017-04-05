@@ -181,18 +181,20 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
 Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   // Make sure internal state is fresh.
   this.dragBlock(e, currentDragDeltaXY);
-  this.dragIconData_ = null;
+  this.dragIconData_ = [];
 
   Blockly.BlockSvg.disconnectUiStop_();
-  // TODO: Consider where moveOffDragSurface should live.
-  this.draggingBlock_.moveOffDragSurface_();
 
+  // TODO: Consider where moveOffDragSurface should live.
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  this.draggingBlock_.moveConnections_(delta.x, delta.y);
+  var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
+  this.draggingBlock_.moveOffDragSurface_(newLoc);
 
   var deleted = this.maybeDeleteBlock_();
   if (!deleted) {
     // These are expensive and don't need to be done if we're deleting.
+
+    this.draggingBlock_.moveConnections_(delta.x, delta.y);
     this.draggingBlock_.setDragging_(false);
     this.draggedConnectionManager_.applyConnections();
     this.draggingBlock_.render();

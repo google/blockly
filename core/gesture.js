@@ -243,6 +243,10 @@ Blockly.Gesture.prototype.updateDragDelta_ = function(currentXY) {
  * @private
  */
 Blockly.Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
+  // Disabled blocks may not be dragged from the flyout.
+  if (this.startBlock_.disabled) {
+    return false;
+  }
   if (!this.flyout_.isScrollable() ||
       this.flyout_.isDragTowardWorkspace(this.currentDragDeltaXY_)) {
     this.startWorkspace_ = this.flyout_.targetWorkspace_;
@@ -510,9 +514,25 @@ Blockly.Gesture.prototype.doFieldClick_ = function() {
 
 // Block clicks
 Blockly.Gesture.prototype.doBlockClick_ = function() {
-  // TODO: Implement.
-  Blockly.Events.fire(
-      new Blockly.Events.Ui(this.startBlock_, 'click', undefined, undefined));
+  if (this.flyout_) {
+    var newBlock = this.flyout_.createBlock(this.startBlock_);
+    // Ensure that any snap and bump are part of this move's event group.
+    var group = Blockly.Events.getGroup();
+    setTimeout(function() {
+      Blockly.Events.setGroup(group);
+      newBlock.snapToGrid();
+      Blockly.Events.setGroup(false);
+    }, Blockly.BUMP_DELAY / 2);
+    setTimeout(function() {
+      Blockly.Events.setGroup(group);
+      newBlock.bumpNeighbours_();
+      Blockly.Events.setGroup(false);
+    }, Blockly.BUMP_DELAY);
+  } else {
+    // TODO: Implement.
+    Blockly.Events.fire(
+        new Blockly.Events.Ui(this.startBlock_, 'click', undefined, undefined));
+  }
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   Blockly.Events.setGroup(false);
 };

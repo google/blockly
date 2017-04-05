@@ -120,6 +120,12 @@ Blockly.GestureDB.getGesturesOnWorkspace = function(ws) {
 Blockly.GestureDB.cancelAllGestures = function() {
   for (var id in Blockly.GestureDB.gestureMap_) {
     var gesture = Blockly.GestureDB.gestureMap_[id];
-    gesture.cancelGesture();
+    if (gesture) {
+      gesture.cancelGesture();
+    }
   }
+};
+
+Blockly.GestureDB.numGesturesInProgress = function() {
+  return Blockly.GestureDB.numGesturesInProgress_;
 };

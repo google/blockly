@@ -56,6 +56,7 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @private
    */
   this.svgGroup_ = Blockly.utils.createSvgElement('g', {}, null);
+  this.svgGroup_.translate_ = '';
 
   /**
    * @type {SVGElement}
@@ -357,16 +358,16 @@ Blockly.BlockSvg.prototype.moveToDragSurface_ = function() {
  * Move this block back to the workspace block canvas.
  * Generally should be called at the same time as setDragging_(false).
  * Does nothing if useDragSurface_ is false.
+ * @param {!goog.math.Coordinate} newXY The position the block should take on
+ *     on the workspace canvas, in workspace coordinates.
  * @private
  */
-Blockly.BlockSvg.prototype.moveOffDragSurface_ = function() {
+Blockly.BlockSvg.prototype.moveOffDragSurface_ = function(newXY) {
   if (!this.useDragSurface_) {
     return;
   }
   // Translate to current position, turning off 3d.
-  var xy = this.getRelativeToSurfaceXY();
-  this.clearTransformAttributes_();
-  this.translate(xy.x, xy.y);
+  this.translate(newXY.x, newXY.y);
   this.workspace.blockDragSurface_.clearAndHide(this.workspace.getCanvas());
 };
 
@@ -584,6 +585,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     this.workspace.resize();
   }
 
+  // Stop any current gesture associated with this touch identifier.
   Blockly.terminateDrag_();
 
   var gesture = Blockly.GestureDB.gestureForEvent(e);
@@ -864,7 +866,8 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   // If this block is being dragged, unlink the mouse events.
   if (Blockly.selected == this) {
     this.unselect();
-    Blockly.GestureDB.cancelAllGestures();
+    // TODO (fenichel): Decide what to do here.
+    //Blockly.GestureDB.cancelAllGestures();
   }
   // If this block has a context menu open, close it.
   if (Blockly.ContextMenu.currentBlock == this) {

@@ -936,26 +936,6 @@ Blockly.Flyout.prototype.isDragTowardWorkspace = function(currentDragDeltaXY) {
 };
 
 /**
- * // TODO (fenichel): Delete.
- * Create a copy of this block on the workspace.
- * @param {!Blockly.Block} originBlock The flyout block to copy.
- * @return {!Function} Function to call when block is clicked.
- * @private
- */
-Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
-  return function(e) {
-    if (Blockly.utils.isRightButton(e)) {
-      // Right-click.  Don't create a block, let the context menu show.
-      return;
-    }
-    if (originBlock.disabled) {
-      // Beyond capacity.
-      return;
-    }
-  };
-};
-
-/**
  * Create a copy of this block on the workspace.
  * @param {!Blockly.BlockSvg} originalBlock The block to copy from the flyout.
  * @return {Blockly.BlockSvg} The newly created block, or null if something
@@ -989,7 +969,6 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
     Blockly.Events.fire(new Blockly.Events.Create(this.startBlock_));
   }
 
-  // TODO: Does this code live here?
   if (this.autoClose) {
     this.hide();
   } else {
@@ -1084,7 +1063,8 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
 
 /**
  * Filter the blocks on the flyout to disable the ones that are above the
- * capacity limit.
+ * capacity limit.  For instance, if the user may only place two more blocks on
+ * the workspace, an "a + b" block that has two shadow blocks would be disabled.
  * @private
  */
 Blockly.Flyout.prototype.filterForCapacity_ = function() {

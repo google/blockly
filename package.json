@@ -44,6 +44,6 @@
     "chromedriver": "^2.28.0",
     "install": "^0.8.8",
     "npm": "^4.4.4",
-    "webdriverio": "^4.6.2",
+    "webdriverio": "^4.6.2"
   }
 }

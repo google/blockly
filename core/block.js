@@ -119,6 +119,8 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   this.comment = null;
 
   /**
+   * The block's position in workspace units.  (0, 0) is at the workspace's
+   * origin; scale does not change this value.
    * @type {!goog.math.Coordinate}
    * @private
    */
@@ -1445,7 +1447,7 @@ Blockly.Block.prototype.setMutator = function(/* mutator */) {
 
 /**
  * Return the coordinates of the top-left corner of this block relative to the
- * drawing surface's origin (0,0).
+ * drawing surface's origin (0,0), in workspace units.
  * @return {!goog.math.Coordinate} Object with .x and .y properties.
  */
 Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
@@ -1454,8 +1456,8 @@ Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
 
 /**
  * Move a block by a relative offset.
- * @param {number} dx Horizontal offset.
- * @param {number} dy Vertical offset.
+ * @param {number} dx Horizontal offset, in workspace units.
+ * @param {number} dy Vertical offset, in workspace units.
  */
 Blockly.Block.prototype.moveBy = function(dx, dy) {
   goog.asserts.assert(!this.parentBlock_, 'Block has parent.');

@@ -99,10 +99,12 @@ goog.inherits(Blockly.BlockSvg, Blockly.Block);
 
 /**
  * Height of this block, not including any statement blocks above or below.
+ * Height is in workspace units.
  */
 Blockly.BlockSvg.prototype.height = 0;
 /**
  * Width of this block, including any connected value blocks.
+ * Width is in workspace units.
  */
 Blockly.BlockSvg.prototype.width = 0;
 
@@ -324,8 +326,10 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
 
 /**
  * Return the coordinates of the top-left corner of this block relative to the
- * drawing surface's origin (0,0).
- * @return {!goog.math.Coordinate} Object with .x and .y properties.
+ * drawing surface's origin (0,0), in workspace units.
+ * This does not change with workspace scale.
+ * @return {!goog.math.Coordinate} Object with .x and .y properties in
+ *     workspace coordinates.
  */
 Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
   var x = 0;
@@ -358,8 +362,8 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
 
 /**
  * Move a block by a relative offset.
- * @param {number} dx Horizontal offset.
- * @param {number} dy Vertical offset.
+ * @param {number} dx Horizontal offset in workspace units.
+ * @param {number} dy Vertical offset in workspace units.
  */
 Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
   goog.asserts.assert(!this.parentBlock_, 'Block has parent.');
@@ -375,8 +379,8 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
 /**
  * Transforms a block by setting the translation on the transform attribute
  * of the block's SVG.
- * @param {number} x The x coordinate of the translation.
- * @param {number} y The y coordinate of the translation.
+ * @param {number} x The x coordinate of the translation in workspace units.
+ * @param {number} y The y coordinate of the translation in workspace units.
  */
 Blockly.BlockSvg.prototype.translate = function(x, y) {
   this.getSvgRoot().setAttribute('transform',
@@ -879,8 +883,10 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
 /**
  * Move the connections for this block and all blocks attached under it.
  * Also update any attached bubbles.
- * @param {number} dx Horizontal offset from current location.
- * @param {number} dy Vertical offset from current location.
+ * @param {number} dx Horizontal offset from current location, in workspace
+ *     units.
+ * @param {number} dy Vertical offset from current location, in workspace
+ *     units.
  * @private
  */
 Blockly.BlockSvg.prototype.moveConnections_ = function(dx, dy) {

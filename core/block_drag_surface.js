@@ -112,10 +112,10 @@ Blockly.BlockDragSurfaceSvg.prototype.setBlocksAndShow = function(blocks) {
 };
 
 /**
- * Translate and scale the entire drag surface group to keep in sync with the
- * workspace.
- * @param {number} x X translation
- * @param {number} y Y translation
+ * Translate and scale the entire drag surface group to the given position, to
+ * keep in sync with the workspace.
+ * @param {number} x X translation in workspace coordinates.
+ * @param {number} y Y translation in workspace coordinates.
  * @param {number} scale Scale of the group.
  */
 Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y, scale) {

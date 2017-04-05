@@ -25,10 +25,6 @@
   "devDependencies": {
     "google-closure-library": "^20170218.0.1",
     "jshint": "latest",
-    "karma": "latest",
-    "karma-chrome-launcher": "latest",
-    "karma-cli": "latest",
-    "karma-firefox-launcher": "^1.0.0"
   },
   "jshintConfig": {
     "globalstrict": true,
@@ -48,8 +44,6 @@
     "chromedriver": "^2.28.0",
     "install": "^0.8.8",
     "npm": "^4.4.4",
-    "phantomjs": "^2.1.7",
     "webdriverio": "^4.6.2",
-    "zombie": "^5.0.5"
   }
 }

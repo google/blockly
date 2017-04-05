@@ -6,7 +6,6 @@ var options = {
 };
 
 var path = process.cwd();
-console.log("path is " + path);
 //TODO: change pause to waitunitl
 var browser = webdriverio
     .remote(options)
@@ -17,14 +16,19 @@ var browser = webdriverio
 browser
 .getHTML('#closureTestRunnerLog')
 .then(function(result) {
-     // result is the html of div#closureTestRunnerLog
+   // call js to parse html
+   var regex = /[\d]+\spassed,\s([\d]+)\sfailed./i;
+   var numOfFailure = regex.exec(result)[1];
+  var regex2 = /Unit Tests for Blockly .*]/;
+  var testStatus = regex2.exec(result)[0];
+  console.log("================Blockly Unit Test Summary=================");
+   console.log(testStatus);
+   var regex3 = /\d+ passed,\s\d+ failed/;
+   var detail = regex3.exec(result)[0];
+   console.log(detail);
+   if ( parseInt(numOfFailure) !== 0) {
      console.log(result);
-     // call js to parse html
-     var regex = /[\d]+\spassed,\s([\d]+)\sfailed./i;
-     var numOfFailure = regex.exec(result)[1];
-     //console.log("number of failure is " + numOfFailure);
-     if ( parseInt(numOfFailure) !== 0) {
-         process.exit(1);
-     }
+     process.exit(1);
+    }
 })
 .catch(function(err) { console.log(err); process.exit(1); });

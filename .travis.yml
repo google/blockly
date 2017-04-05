@@ -23,7 +23,7 @@ before_script:
 script:
   - set -x
   - npm run preinstall
-  - npm test
+  - node tests/jsunit/test_runner.js
 
 os:
   - linux 

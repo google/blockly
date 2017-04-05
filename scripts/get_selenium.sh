@@ -7,7 +7,6 @@ if [ ! -d $DIR ]; then
 fi
   
 if [ ! -f $DIR/$FILE ]; then
-  echo "$FILE not exits already"
   cd $DIR  && curl -O http://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar
 fi
    

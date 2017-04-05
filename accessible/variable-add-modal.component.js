@@ -68,44 +68,7 @@ blocklyApp.VariableAddModalComponent = ng.core.Component({
         function() {
           that.modalIsVisible = true;
 
-          that.keyboardInputService.setOverride({
-            // Tab key: navigates to the previous or next item in the list.
-            '9': function(evt) {
-              evt.preventDefault();
-              evt.stopPropagation();
-
-              if (evt.shiftKey) {
-                // Move to the previous item in the list.
-                if (that.activeButtonIndex <= 0) {
-                  that.activeActionButtonIndex = 0;
-                  that.audioService.playOopsSound();
-                } else {
-                  that.activeButtonIndex--;
-                }
-              } else {
-                // Move to the next item in the list.
-                if (that.activeButtonIndex == that.numInteractiveElements() - 1) {
-                  that.audioService.playOopsSound();
-                } else {
-                  that.activeButtonIndex++;
-                }
-              }
-
-              that.focusOnOption(that.activeButtonIndex);
-            },
-            // Escape key: closes the modal.
-            '27': function() {
-              that.dismissModal();
-            },
-            // Up key: no-op.
-            '38': function(evt) {
-              evt.preventDefault();
-            },
-            // Down key: no-op.
-            '40': function(evt) {
-              evt.preventDefault();
-            }
-          });
+          Blockly.CommonModal.setupKeyboardOverrides(that);
 
           setTimeout(function() {
             document.getElementById('mainFieldId').focus();
@@ -119,36 +82,16 @@ blocklyApp.VariableAddModalComponent = ng.core.Component({
     this.variableName = newValue;
   },
   // Closes the modal (on both success and failure).
-  hideModal_: function() {
-    this.modalIsVisible = false;
-    this.keyboardInputService.clearOverride();
-  },
+  hideModal_: Blockly.CommonModal.hideModal,
   // Focuses on the button represented by the given index.
-  focusOnOption: function(index) {
-    var elements = this.getInteractiveElements();
-    var button = elements[index];
-    button.focus();
-  },
+  focusOnOption: Blockly.CommonModal.focusOnOption,
   // Counts the number of interactive elements for the modal.
-  numInteractiveElements: function() {
-    var elements = this.getInteractiveElements();
-    return elements.length;
-  },
+  numInteractiveElements: Blockly.CommonModal.numInteractiveElements,
   // Gets all the interactive elements for the modal.
-  getInteractiveElements: function() {
-    return Array.prototype.filter.call(
-      document.getElementById("varForm").elements, function(element) {
-      if (element.type === 'hidden') {
-        return false;
-      }
-      if (element.disabled) {
-        return false;
-      }
-      if (element.tabIndex < 0) {
-        return false;
-      }
-      return true;
-    });
+  getInteractiveElements: Blockly.CommonModal.getInteractiveElements,
+  // Gets the container with interactive elements.
+  getInteractiveContainer: function() {
+    return document.getElementById("varForm");
   },
   // Submits the name change for the variable.
   submit: function() {

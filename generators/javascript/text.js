@@ -302,3 +302,51 @@ Blockly.JavaScript['text_prompt_ext'] = function(block) {
 };
 
 Blockly.JavaScript['text_prompt'] = Blockly.JavaScript['text_prompt_ext'];
+
+Blockly.JavaScript['text_count'] = function(block) {
+  var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
+      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
+  var sub = Blockly.JavaScript.valueToCode(block, 'SUB',
+      Blockly.JavaScript.ORDER_NONE) || '\'\'';
+  var functionName = Blockly.JavaScript.provideFunction_(
+      'textCount',
+      ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          '(haystack, needle) {',
+       '  if (needle.length === 0) {',
+       '    return haystack.length + 1;',
+       '  } else {',
+       '    return haystack.split(needle).length - 1;',
+       '  }',
+       '}']);
+  var code = functionName + '(' + text + ', ' + sub + ')';
+  return [code, Blockly.JavaScript.ORDER_SUBTRACTION];
+};
+
+Blockly.JavaScript['text_replace'] = function(block) {
+  var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
+      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
+  var from = Blockly.JavaScript.valueToCode(block, 'FROM',
+      Blockly.JavaScript.ORDER_NONE) || '\'\'';
+  var to = Blockly.JavaScript.valueToCode(block, 'TO',
+      Blockly.JavaScript.ORDER_NONE) || '\'\'';
+  // The regex escaping code below is taken from the implementation of
+  // goog.string.regExpEscape.
+  var functionName = Blockly.JavaScript.provideFunction_(
+      'textReplace',
+      ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          '(haystack, needle, replacement) {',
+       '  needle = ' +
+           'needle.replace(/([-()\\[\\]{}+?*.$\\^|,:#<!\\\\])/g,"\\\\$1")',
+       '                 .replace(/\\x08/g,"\\\\x08");',
+       '  return haystack.replace(new RegExp(needle, \'g\'), replacement);',
+       '}']);
+  var code = functionName + '(' + text + ', ' + from + ', ' + to + ')';
+  return [code, Blockly.JavaScript.ORDER_MEMBER];
+};
+
+Blockly.JavaScript['text_reverse'] = function(block) {
+  var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
+      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
+  var code = text + '.split(\'\').reverse().join(\'\')';
+  return [code, Blockly.JavaScript.ORDER_MEMBER];
+};

@@ -33,7 +33,7 @@ goog.require('goog.userAgent');
 
 
 /**
- * Class for an image.
+ * Class for an image on a block.
  * @param {string} src The URL of the image.
  * @param {number} width Width of the image.
  * @param {number} height Height of the image.
@@ -43,6 +43,7 @@ goog.require('goog.userAgent');
  */
 Blockly.FieldImage = function(src, width, height, opt_alt) {
   this.sourceBlock_ = null;
+
   // Ensure height and width are numbers.  Strings are bad at math.
   this.height_ = Number(height);
   this.width_ = Number(width);
@@ -73,9 +74,13 @@ Blockly.FieldImage.prototype.init = function() {
     this.fieldGroup_.style.display = 'none';
   }
   /** @type {SVGElement} */
-  this.imageElement_ = Blockly.utils.createSvgElement('image',
-      {'height': this.height_ + 'px',
-       'width': this.width_ + 'px'}, this.fieldGroup_);
+  this.imageElement_ = Blockly.utils.createSvgElement(
+    'image',
+    {
+      'height': this.height_ + 'px',
+      'width': this.width_ + 'px'
+    },
+    this.fieldGroup_);
   this.setValue(this.src_);
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
 
@@ -147,4 +152,11 @@ Blockly.FieldImage.prototype.setText = function(alt) {
  */
 Blockly.FieldImage.prototype.render_ = function() {
   // NOP
+};
+/**
+ * Images are fixed width, no need to update.
+ * @private
+ */
+Blockly.FieldImage.prototype.updateWidth = function() {
+ // NOP
 };

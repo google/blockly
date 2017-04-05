@@ -33,7 +33,8 @@ goog.require('goog.userAgent');
 
 /**
  * Class for an editable angle field.
- * @param {string} text The initial content of the field.
+ * @param {(string|number)=} opt_value The initial content of the field. The
+ *     value should cast to a number, and if it does not, '0' will be used.
  * @param {Function=} opt_validator An optional function that is called
  *     to validate any constraints on what the user entered.  Takes the new
  *     text as an argument and returns the accepted text or null to abort
@@ -41,12 +42,14 @@ goog.require('goog.userAgent');
  * @extends {Blockly.FieldTextInput}
  * @constructor
  */
-Blockly.FieldAngle = function(text, opt_validator) {
-  // Add degree symbol: "360°" (LTR) or "°360" (RTL)
+Blockly.FieldAngle = function(opt_value, opt_validator) {
+  // Add degree symbol: '360°' (LTR) or '°360' (RTL)
   this.symbol_ = Blockly.utils.createSvgElement('tspan', {}, null);
   this.symbol_.appendChild(document.createTextNode('\u00B0'));
 
-  Blockly.FieldAngle.superClass_.constructor.call(this, text, opt_validator);
+  opt_value = (opt_value && !isNaN(opt_value)) ? String(opt_value) : '0';
+  Blockly.FieldAngle.superClass_.constructor.call(
+      this, opt_value, opt_validator);
 };
 goog.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 
@@ -149,10 +152,11 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
   }, svg);
   this.gauge_ = Blockly.utils.createSvgElement('path',
       {'class': 'blocklyAngleGauge'}, svg);
-  this.line_ = Blockly.utils.createSvgElement('line',
-      {'x1': Blockly.FieldAngle.HALF,
+  this.line_ = Blockly.utils.createSvgElement('line',{
+      'x1': Blockly.FieldAngle.HALF,
       'y1': Blockly.FieldAngle.HALF,
-      'class': 'blocklyAngleLine'}, svg);
+      'class': 'blocklyAngleLine',
+     }, svg);
   // Draw markers around the edge.
   for (var angle = 0; angle < 360; angle += 15) {
     Blockly.utils.createSvgElement('line', {

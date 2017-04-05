@@ -45,5 +45,8 @@
     "sub": true,
     "undef": true,
     "unused": true
+  },
+  "dependencies": {
+    "closure-library": "^1.43629075.2"
   }
 }

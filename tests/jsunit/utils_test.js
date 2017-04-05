@@ -188,3 +188,31 @@ function test_tokenizeInterpolation() {
   tokens = Blockly.utils.tokenizeInterpolation('before %{unclosed');
   assertArrayEquals('String table reference, with parameter', ['before %{unclosed'], tokens);
 }
+
+function test_replaceMessageReferences() {
+  Blockly.Msg = Blockly.Msg || {};
+  Blockly.Msg.STRING_REF = 'test string';
+
+  var resultString = Blockly.utils.replaceMessageReferences('');
+  assertEquals('Empty string produces empty string', '', resultString);
+
+  resultString = Blockly.utils.replaceMessageReferences('%{bky_string_ref}');
+  assertEquals('Message ref dereferenced.', 'test string', resultString);
+  resultString = Blockly.utils.replaceMessageReferences('before %{bky_string_ref} after');
+  assertEquals('Message ref dereferenced.', 'before test string after', resultString);
+
+  resultString = Blockly.utils.replaceMessageReferences('%1');
+  assertEquals('Interpolation tokens ignored.', '%1', resultString);
+  resultString = Blockly.utils.replaceMessageReferences('%1 %2');
+  assertEquals('Interpolation tokens ignored.', '%1 %2', resultString);
+  resultString = Blockly.utils.replaceMessageReferences('before %1 after');
+  assertEquals('Interpolation tokens ignored.', 'before %1 after', resultString);
+
+  resultString = Blockly.utils.replaceMessageReferences('%%');
+  assertEquals('Escaped %', '%', resultString);
+  resultString = Blockly.utils.replaceMessageReferences('%%{bky_string_ref}');
+  assertEquals('Escaped %', '%{bky_string_ref}', resultString);
+
+  resultString = Blockly.utils.replaceMessageReferences('%a');
+  assertEquals('Unrecognized % escape code treated as literal', '%a', resultString);
+}

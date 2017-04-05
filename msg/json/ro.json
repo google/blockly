@@ -4,7 +4,8 @@
 			"Minisarm",
 			"Ely en",
 			"Hugbear",
-			"아라"
+			"아라",
+			"Ykhwong"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -125,7 +126,7 @@
 	"MATH_SINGLE_TOOLTIP_LOG10": "Returnează logaritmul în baza 10 a unui număr.",
 	"MATH_SINGLE_TOOLTIP_EXP": "Returnează e la puterea unui număr.",
 	"MATH_SINGLE_TOOLTIP_POW10": "Returnează 10 la puterea unui număr.",
-	"MATH_TRIG_HELPURL": "https://en.wikipedia.org/wiki/Trigonometric_functions",
+	"MATH_TRIG_HELPURL": "https://ko.wikipedia.org/wiki/삼각함수",
 	"MATH_TRIG_TOOLTIP_SIN": "Întoarce cosinusul unui grad (nu radianul).",
 	"MATH_TRIG_TOOLTIP_COS": "Întoarce cosinusul unui grad (nu radianul).",
 	"MATH_TRIG_TOOLTIP_TAN": "Întoarce tangenta unui grad (nu radianul).",
@@ -298,7 +299,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "cu:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "cu:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Crează o funcţie cu nici o ieşire.",
-	"PROCEDURES_DEFRETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
+	"PROCEDURES_DEFRETURN_HELPURL": "https://ko.wikipedia.org/wiki/함수_(프로그래밍)",
 	"PROCEDURES_DEFRETURN_RETURN": "returnează",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Creează o funcţie cu o ieşire.",
 	"PROCEDURES_ALLOW_STATEMENTS": "permite declarațiile",

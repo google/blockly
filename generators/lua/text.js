@@ -292,3 +292,70 @@ Blockly.Lua['text_prompt_ext'] = function(block) {
 };
 
 Blockly.Lua['text_prompt'] = Blockly.Lua['text_prompt_ext'];
+
+Blockly.Lua['text_count'] = function(block) {
+  var text = Blockly.Lua.valueToCode(block, 'TEXT',
+      Blockly.Lua.ORDER_NONE) || '\'\'';
+  var sub = Blockly.Lua.valueToCode(block, 'SUB',
+      Blockly.Lua.ORDER_NONE) || '\'\'';
+  var functionName = Blockly.Lua.provideFunction_(
+      'text_count',
+      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_
+        + '(haystack, needle)',
+        '  if #needle == 0 then',
+        '    return #haystack + 1',
+        '  end',
+        '  local i = 1',
+        '  local count = 0',
+        '  while true do',
+        '    i = string.find(haystack, needle, i, true)',
+        '    if i == nil then',
+        '      break',
+        '    end',
+        '    count = count + 1',
+        '    i = i + #needle',
+        '  end',
+        '  return count',
+        'end',
+      ]);
+  var code = functionName + '(' + text + ', ' + sub + ')';
+  return [code, Blockly.Lua.ORDER_HIGH];
+};
+
+Blockly.Lua['text_replace'] = function(block) {
+  var text = Blockly.Lua.valueToCode(block, 'TEXT',
+      Blockly.Lua.ORDER_NONE) || '\'\'';
+  var from = Blockly.Lua.valueToCode(block, 'FROM',
+      Blockly.Lua.ORDER_NONE) || '\'\'';
+  var to = Blockly.Lua.valueToCode(block, 'TO',
+      Blockly.Lua.ORDER_NONE) || '\'\'';
+  var functionName = Blockly.Lua.provideFunction_(
+      'text_replace',
+      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_
+        + '(haystack, needle, replacement)',
+        '  local buf = {}',
+        '  local i = 1',
+        '  while i <= #haystack do',
+        '    if string.sub(haystack, i, i + #needle - 1) == needle then',
+        '      for j = 1, #replacement do',
+        '        table.insert(buf, string.sub(replacement, j, j))',
+        '      end',
+        '      i = i + #needle',
+        '    else',
+        '      table.insert(buf, string.sub(haystack, i, i))',
+        '      i = i + 1',
+        '    end',
+        '  end',
+        '  return table.concat(buf)',
+        'end',
+      ]);
+  var code = functionName + '(' + text + ', ' + from + ', ' + to + ')';
+  return [code, Blockly.Lua.ORDER_HIGH];
+};
+
+Blockly.Lua['text_reverse'] = function(block) {
+  var text = Blockly.Lua.valueToCode(block, 'TEXT',
+      Blockly.Lua.ORDER_HIGH) || '\'\'';
+  var code = 'string.reverse(' + text + ')';
+  return [code, Blockly.Lua.ORDER_HIGH];
+};

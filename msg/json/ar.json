@@ -7,12 +7,13 @@
 			"Diyariq",
 			"محمد أحمد عبد الفتاح",
 			"Moud hosny",
-			"ديفيد"
+			"ديفيد",
+			"Samir"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "البند",
 	"TODAY": "اليوم",
-	"DUPLICATE_BLOCK": "ادمج",
+	"DUPLICATE_BLOCK": "مكرر",
 	"ADD_COMMENT": "اضافة تعليق",
 	"REMOVE_COMMENT": "ازل التعليق",
 	"EXTERNAL_INPUTS": "ادخال خارجي",
@@ -233,6 +234,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "انتظر ادخال المستخدم لرقم ما مع اظهار رسالة",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "انتظر ادخال المستخذم لرقم ما.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "انتظر ادخال المستخدم لنص ما.",
+	"TEXT_REVERSE_TOOLTIP": "يعكس ترتيب حروف النص",
 	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "إنشئ قائمة فارغة",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "تقوم بإرجاع قائمة، طولها 0, لا تحتوي على أية سجلات البيانات",

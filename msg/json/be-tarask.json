@@ -218,6 +218,8 @@
 	"TEXT_COUNT_HELPURL": "https://github.com/google/blockly/wiki/Text#counting-substrings",
 	"TEXT_COUNT_TOOLTIP": "Падлічвае колькі разоў нейкі тэкст сустракаецца ўнутры нейкага іншага тэксту.",
 	"TEXT_REPLACE_MESSAGE0": "замяніць %1 на %2 у %3",
+	"TEXT_REPLACE_HELPURL": "https://github.com/google/blockly/wiki/Text#replacing-substrings",
+	"TEXT_REPLACE_TOOLTIP": "Замяняе ўсе выпадкі нейкага тэксту на іншы тэкст.",
 	"LISTS_CREATE_EMPTY_TITLE": "стварыць пусты сьпіс",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Вяртае сьпіс даўжынёй 0, які ня ўтрымлівае запісаў зьвестак",
 	"LISTS_CREATE_WITH_TOOLTIP": "Ставарае сьпіс зь любой колькасьцю элемэнтаў.",

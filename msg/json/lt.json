@@ -3,7 +3,8 @@
 		"authors": [
 			"Eitvys200",
 			"Jurgis",
-			"Zygimantus"
+			"Zygimantus",
+			"Nuodas"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elementas",
@@ -54,7 +55,7 @@
 	"CONTROLS_WHILEUNTIL_OPERATOR_UNTIL": "kartok, kol pasieksi",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_WHILE": "Kartoja veiksmus, kol sąlyga tenkinama.",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Kartoja veiksmus, kol bus pasiekta nurodyta sąlyga.",
-	"CONTROLS_FOR_TOOLTIP": "Kartoti veiksmus su kiekvienu sąrašo elementu, priskirtu kintamajam \"%1\".",
+	"CONTROLS_FOR_TOOLTIP": "Imama kintamoji '%1' reikšmė nuo pradinio skaičiaus iki pabaigos skaičiaus, skaičiuojant nustatytais intervalais ir atliekant nustatytus blokus.",
 	"CONTROLS_FOR_TITLE": "kartok, kai %1 kinta nuo %2 iki %3 po %4",
 	"CONTROLS_FOREACH_TITLE": "kartok su kiekvienu %1 iš sąrašo %2",
 	"CONTROLS_FOREACH_TOOLTIP": "Kartok veiksmus, kol kintamasis \"%1\" paeiliui gauna kiekvieną sąrašo reikšmę.",
@@ -75,8 +76,14 @@
 	"CONTROLS_IF_ELSE_TOOLTIP": "Pridėti veiksmų vykdymo variantą/\"šaką\", kai netenkinama nė viena sąlyga.",
 	"LOGIC_COMPARE_HELPURL": "https://en.wikipedia.org/wiki/Inequality_(mathematics)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Tenkinama, jei abu reiškiniai lygūs.",
+	"LOGIC_COMPARE_TOOLTIP_NEQ": "Grįžti tiesa, jeigu abi įvestys ne lygios tarpusavyje.",
+	"LOGIC_COMPARE_TOOLTIP_LT": "Grįžti tiesa, jei pirma įvestis mažesnė nei antra įvestis.",
+	"LOGIC_COMPARE_TOOLTIP_LTE": "Grįžti tiesa, jei pirma įvestis mažesnė arba lygi antrajai įvesčiai.",
+	"LOGIC_COMPARE_TOOLTIP_GT": "Grįžti tiesa, jei pirmoji įvestis didesnė nei antroji įvestis.",
+	"LOGIC_COMPARE_TOOLTIP_GTE": "Grįžti tiesa, jei pirma įvestis didesnė arba lygi antrajai įvesčiai.",
 	"LOGIC_OPERATION_TOOLTIP_AND": "Bus teisinga, kai abi sąlygos bus tenkinamos.",
 	"LOGIC_OPERATION_AND": "ir",
+	"LOGIC_OPERATION_TOOLTIP_OR": "Grįžti tiesa, jei bent viena įvestis teisinga.",
 	"LOGIC_OPERATION_OR": "arba",
 	"LOGIC_NEGATE_TITLE": "ne %1",
 	"LOGIC_BOOLEAN_TRUE": "tiesa",

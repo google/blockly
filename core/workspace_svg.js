@@ -871,8 +871,10 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
 Blockly.WorkspaceSvg.prototype.createVariable = function(name) {
   Blockly.WorkspaceSvg.superClass_.createVariable.call(this, name);
   // Don't refresh the toolbox if there's a drag in progress.
-  // TODO: Decide if we need to check the equivalent of startFlyout_.
-  if (this.toolbox_ && this.toolbox_.flyout_) {//} && !Blockly.Flyout.startFlyout_) {
+  // TODO: Decide if we need to check the equivalent of startFlyout_, to handle
+  // the case that a new variable is created on the workspace by dragging a
+  // block out of the flyout.
+  if (this.toolbox_ && this.toolbox_.flyout_) {
     this.toolbox_.refreshSelection();
   }
 };
@@ -924,6 +926,7 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     return;
   }
   Blockly.terminateDrag_();  // In case mouse-up event was lost.
+  // TODO: Understand this code.
   var isTargetWorkspace = e.target && e.target.nodeName &&
       (e.target.nodeName.toLowerCase() == 'svg' ||
        e.target == this.svgBackground_);
@@ -995,7 +998,8 @@ Blockly.WorkspaceSvg.prototype.isDraggable = function() {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
-  // TODO: Remove terminateDrag and compensate for coordinate skew during zoom.
+  // TODO: Remove cancelAllGestures and compensate for coordinate skew during
+  // zoom.
   Blockly.GestureDB.cancelAllGestures();
   // The vertical scroll distance that corresponds to a click of a zoom button.
   var PIXELS_PER_ZOOM_STEP = 50;

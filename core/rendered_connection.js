@@ -70,6 +70,7 @@ Blockly.RenderedConnection.prototype.distanceFrom = function(otherConnection) {
  */
 Blockly.RenderedConnection.prototype.bumpAwayFrom_ = function(staticConnection) {
   if (Blockly.GestureDB.numGesturesInProgress() != 0) {
+    // TODO (fenichel): Check for in-progress drags or in-progress gestures?
     // Don't move blocks around while the user is doing the same.
     return;
   }

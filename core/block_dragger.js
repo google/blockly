@@ -94,7 +94,6 @@ Blockly.BlockDragger = function(block, workspace) {
    * @private
    */
   this.dragIconData_ = Blockly.BlockDragger.initIconData_(block);
-
 };
 
 /**
@@ -163,7 +162,6 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
   var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
 
   this.draggingBlock_.moveDuringDrag(newLoc);
-
   this.dragIcons_(delta);
 
   this.deleteArea_ = this.workspace_.isDeleteArea(e);
@@ -193,7 +191,6 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   var deleted = this.maybeDeleteBlock_();
   if (!deleted) {
     // These are expensive and don't need to be done if we're deleting.
-
     this.draggingBlock_.moveConnections_(delta.x, delta.y);
     this.draggingBlock_.setDragging_(false);
     this.draggedConnectionManager_.applyConnections();

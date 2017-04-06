@@ -576,9 +576,6 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
  * @private
  */
 Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
-  if (this.workspace.options.readOnly) {
-    return;
-  }
   if (this.isInMutator) {
     // Mutator's coordinate system could be out of date because the bubble was
     // dragged, the block was moved, the parent workspace zoomed, etc.
@@ -590,7 +587,6 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
 
   var gesture = Blockly.GestureDB.gestureForEvent(e);
   gesture.handleBlockStart(e, this);
-
 };
 
 /**
@@ -867,7 +863,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   if (Blockly.selected == this) {
     this.unselect();
     // TODO (fenichel): Decide what to do here.
-    //Blockly.GestureDB.cancelAllGestures();
+    Blockly.terminateDrag_();
   }
   // If this block has a context menu open, close it.
   if (Blockly.ContextMenu.currentBlock == this) {

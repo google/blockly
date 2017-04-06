@@ -73,34 +73,16 @@ Blockly.Gesture = function(e, touchId) {
   this.startField_ = null;
 
   /**
-   * @type {Blockly.Field}
-   * @private
-   */
-  this.endField_ = null;
-
-  /**
    * @type {Blockly.BlockSvg}
    * @private
    */
   this.startBlock_ = null;
 
   /**
-   * @type {Blockly.BlockSvg}
-   * @private
-   */
-  this.endBlock_ = null;
-
-  /**
    * @type {Blockly.WorkspaceSvg}
    * @private
    */
   this.startWorkspace_ = null;
-
-  /**
-   * @type {Blockly.WorkspaceSvg}
-   * @private
-   */
-  this.endWorkspace_ = null;
 
   /**
    * @type {boolean}
@@ -177,6 +159,13 @@ Blockly.Gesture = function(e, touchId) {
    * @private
    */
   this.calledUpdateIsDragging_ = false;
+
+  /**
+   * Boolean for sanity-checking that some code is only called once.
+   * @type {boolean}
+   * @private
+   */
+  this.hasStarted_ = false;
 };
 
 Blockly.Gesture.prototype.dispose = function() {
@@ -186,8 +175,6 @@ Blockly.Gesture.prototype.dispose = function() {
   if (this.onUpWrapper_) {
     Blockly.unbindEvent_(this.onUpWrapper_);
   }
-  this.blockDragger_ = null;
-  this.workspaceDragger_ = null;
 };
 
 /**
@@ -347,6 +334,8 @@ Blockly.Gesture.prototype.startDraggingBlock_ = function() {
  * @param {!Event} e A mouse down or touch start event.
  */
 Blockly.Gesture.prototype.doStart = function(e) {
+  this.hasStarted_ = true;
+
   this.startWorkspace_.updateScreenCalculationsIfScrolled();
   this.startWorkspace_.markFocused();
   this.mostRecentEvent_ = e;
@@ -363,7 +352,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
     return;
   }
 
-  if (goog.string.startsWith(e.type, 'touch')) {
+  if (goog.string.caseInsensitiveEquals(e.type, 'touchstart')) {
     Blockly.longStart_(e);
   }
 
@@ -386,10 +375,8 @@ Blockly.Gesture.prototype.handleMove = function(e) {
   this.updateFromEvent_(e);
 
   if (this.isDraggingWorkspace_) {
-    // Move the visible workspace
     this.workspaceDragger_.drag(this.currentDragDeltaXY_);
   } else if (this.isDraggingBlock_) {
-    // Move the dragging block.
     this.blockDragger_.dragBlock(this.mostRecentEvent_,
         this.currentDragDeltaXY_);
   }
@@ -482,6 +469,9 @@ Blockly.Gesture.prototype.handleRightClick = function(e) {
  * @param {!Blockly.Workspace} ws The workspace the event hit.
  */
 Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
+  goog.asserts.assert(!this.hasStarted_,
+     'Tried to call gesture.handleWsStart, but the gesture had already been ' +
+     'started.');
   this.setStartWorkspace(ws);
   this.mostRecentEvent_ = e;
   this.doStart(e);
@@ -493,6 +483,9 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
  * @param {!Blockly.Flyout} flyout The flyout the event hit.
  */
 Blockly.Gesture.prototype.handleFlyoutStart = function(e, flyout) {
+  goog.asserts.assert(!this.hasStarted_,
+     'Tried to call gesture.handleFlyoutStart, but the gesture had already been ' +
+     'started.');
   this.setStartFlyout(flyout);
   this.handleWsStart(e, flyout.getWorkspace());
 };
@@ -503,6 +496,9 @@ Blockly.Gesture.prototype.handleFlyoutStart = function(e, flyout) {
  * @param {!Blockly.BlockSvg} block The block the event hit.
  */
 Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
+  goog.asserts.assert(!this.hasStarted_,
+     'Tried to call gesture.handleBlockStart, but the gesture had already been ' +
+     'started.');
   this.setStartBlock(block);
   this.mostRecentEvent_ = e;
 };
@@ -514,7 +510,7 @@ Blockly.Gesture.prototype.doFieldClick_ = function() {
 
 // Block clicks
 Blockly.Gesture.prototype.doBlockClick_ = function() {
-  if (this.flyout_) {
+  if (this.flyout_ && this.flyout_.autoClose) {
     var newBlock = this.flyout_.createBlock(this.startBlock_);
     // Ensure that any snap and bump are part of this move's event group.
     var group = Blockly.Events.getGroup();
@@ -529,7 +525,7 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
       Blockly.Events.setGroup(false);
     }, Blockly.BUMP_DELAY);
   } else {
-    // TODO: Implement.
+    // TODO: Check if anything else needs to happen on a block click.
     Blockly.Events.fire(
         new Blockly.Events.Ui(this.startBlock_, 'click', undefined, undefined));
   }
@@ -549,6 +545,9 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
  * @param {Blockly.Field} field The field the gesture started on.
  */
 Blockly.Gesture.prototype.setStartField = function(field) {
+  goog.asserts.assert(!this.hasStarted_,
+     'Tried to call gesture.setStartField, but the gesture had already been ' +
+     'started.');
   if (!this.startField_) {
     this.startField_ = field;
   }

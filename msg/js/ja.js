@@ -126,13 +126,8 @@ Blockly.Msg.LISTS_LENGTH_HELPURL = "https://github.com/google/blockly/wiki/Lists
 Blockly.Msg.LISTS_LENGTH_TITLE = "%1の長さ";
 Blockly.Msg.LISTS_LENGTH_TOOLTIP = "リストの長さを返します。";
 Blockly.Msg.LISTS_REPEAT_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-list-with";  // untranslated
-<<<<<<< HEAD
 Blockly.Msg.LISTS_REPEAT_TITLE = "項目%1を%2回繰り返したリストを作成";
 Blockly.Msg.LISTS_REPEAT_TOOLTIP = "与えられた値を指定された回数繰り返してリストを作成。";
-=======
-Blockly.Msg.LISTS_REPEAT_TITLE = "アイテム %1 と一緒にリストを作成し %2 回繰り";
-Blockly.Msg.LISTS_REPEAT_TOOLTIP = "指定された値をなんどか繰り返してリストを作ります。";
->>>>>>> nit
 Blockly.Msg.LISTS_REVERSE_HELPURL = "https://github.com/google/blockly/wiki/Lists#reversing-a-list";  // untranslated
 Blockly.Msg.LISTS_REVERSE_MESSAGE0 = "reverse %1";  // untranslated
 Blockly.Msg.LISTS_REVERSE_TOOLTIP = "Reverse a copy of a list.";  // untranslated
@@ -326,11 +321,7 @@ Blockly.Msg.TEXT_CHARAT_TOOLTIP = "指定された位置に文字を返します
 Blockly.Msg.TEXT_COUNT_HELPURL = "https://github.com/google/blockly/wiki/Text#counting-substrings";  // untranslated
 Blockly.Msg.TEXT_COUNT_MESSAGE0 = "count %1 in %2";  // untranslated
 Blockly.Msg.TEXT_COUNT_TOOLTIP = "Count how many times some text occurs within some other text.";  // untranslated
-<<<<<<< HEAD
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "テキストへ項目を追加。";
-=======
-Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "テキスト をアイテム追加します。";
->>>>>>> nit
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "結合";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "セクションを追加、削除、または順序変更して、ブロックを再構成。";
 Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_END = "文字列の＃ 終わりからの＃";
@@ -362,17 +353,10 @@ Blockly.Msg.TEXT_PRINT_HELPURL = "https://github.com/google/blockly/wiki/Text#pr
 Blockly.Msg.TEXT_PRINT_TITLE = "%1 を印刷します。";
 Blockly.Msg.TEXT_PRINT_TOOLTIP = "指定したテキスト、番号または他の値を印刷します。";
 Blockly.Msg.TEXT_PROMPT_HELPURL = "https://github.com/google/blockly/wiki/Text#getting-input-from-the-user";  // untranslated
-<<<<<<< HEAD
 Blockly.Msg.TEXT_PROMPT_TOOLTIP_NUMBER = "ユーザーに数値のインプットを求める。";
 Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT = "ユーザーにテキスト入力を求める。";
 Blockly.Msg.TEXT_PROMPT_TYPE_NUMBER = "メッセージで番号の入力を求める";
 Blockly.Msg.TEXT_PROMPT_TYPE_TEXT = "メッセージでテキスト入力を求める";
-=======
-Blockly.Msg.TEXT_PROMPT_TOOLTIP_NUMBER = "ユーザーにプロンプトして数字のインプットを求めます";
-Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT = "いくつかのテキストを、ユーザーに入力するようにプロンプト。";
-Blockly.Msg.TEXT_PROMPT_TYPE_NUMBER = "メッセージを送って番号の入力を求める";
-Blockly.Msg.TEXT_PROMPT_TYPE_TEXT = "メッセージをプロンプトしてにテキストを求める";
->>>>>>> nit
 Blockly.Msg.TEXT_REPLACE_HELPURL = "https://github.com/google/blockly/wiki/Text#replacing-substrings";  // untranslated
 Blockly.Msg.TEXT_REPLACE_MESSAGE0 = "replace %1 with %2 in %3";  // untranslated
 Blockly.Msg.TEXT_REPLACE_TOOLTIP = "Replace all occurances of some text within some other text.";  // untranslated

@@ -82,7 +82,6 @@ Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
   // Make sure everything is up to date.
   this.drag(currentDragDeltaXY);
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-  // TODO(#781): Check whether this needs to be called for all drag modes.
   this.workspace_.resetDragSurface();
 };
 

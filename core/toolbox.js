@@ -304,7 +304,11 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
     }
     switch (childIn.tagName.toUpperCase()) {
       case 'CATEGORY':
-        var childOut = this.tree_.createNode(childIn.getAttribute('name'));
+        // Decode the category name for any potential message references
+        // (eg. `%{BKY_CATEGORY_NAME_LOGIC}`).
+        var categoryName = Blockly.utils.replaceMessageReferences(
+          childIn.getAttribute('name'));
+        var childOut = this.tree_.createNode(categoryName);
         childOut.blocks = [];
         treeOut.add(childOut);
         var custom = childIn.getAttribute('custom');
@@ -317,7 +321,10 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
             openNode = newOpenNode;
           }
         }
-        var colour = childIn.getAttribute('colour');
+        // Decode the colour for any potential message references
+        // (eg. `%{BKY_MATH_HUE}`).
+        var colour = Blockly.utils.replaceMessageReferences(
+          childIn.getAttribute('colour'));
         if (goog.isString(colour)) {
           if (colour.match(/^#[0-9a-fA-F]{6}$/)) {
             childOut.hexColour = colour;

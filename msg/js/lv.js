@@ -7,6 +7,7 @@ goog.provide('Blockly.Msg.lv');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Pievienot komentāru";
+Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Mainīt vērtību:";
 Blockly.Msg.CLEAN_UP = "Sakopt blokus";
 Blockly.Msg.COLLAPSE_ALL = "Sakļaut blokus";
@@ -73,6 +74,19 @@ Blockly.Msg.EXPAND_BLOCK = "Izvērst bloku";
 Blockly.Msg.EXTERNAL_INPUTS = "Ārējie ievaddati";
 Blockly.Msg.HELP = "Palīdzība";
 Blockly.Msg.INLINE_INPUTS = "Iekšējie ievaddati";
+Blockly.Msg.IOS_CANCEL = "Cancel";  // untranslated
+Blockly.Msg.IOS_ERROR = "Error";  // untranslated
+Blockly.Msg.IOS_OK = "OK";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
+Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Add";  // untranslated
+Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
+Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Delete";  // untranslated
+Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
+Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Rename";  // untranslated
+Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Variable name";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "izveidot tukšu sarakstu";
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "Izveidot sarakstu bez elementiem tajā.";

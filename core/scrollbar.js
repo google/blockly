@@ -674,6 +674,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
   this.workspace_.markFocused();
   Blockly.Touch.clearTouchIdentifier();  // This is really a click.
   this.cleanUp_();
+  // TODO: This is the scrollbar right-click handling.
   if (Blockly.utils.isRightButton(e)) {
     // Right-click.
     // Scrollbars have no context menu.
@@ -713,6 +714,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
 Blockly.Scrollbar.prototype.onMouseDownHandle_ = function(e) {
   this.workspace_.markFocused();
   this.cleanUp_();
+  // TODO: this is the scrollbar right-click handling.
   if (Blockly.utils.isRightButton(e)) {
     // Right-click.
     // Scrollbars have no context menu.

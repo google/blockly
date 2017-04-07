@@ -44,6 +44,12 @@ goog.require('goog.ui.MenuItem');
 Blockly.ContextMenu.currentBlock = null;
 
 /**
+ * @type {Array.<!Array>} Opaque data that can be passed to unbindEvent_.
+ * @private
+ */
+Blockly.ContextMenu.eventWrapper_ = null;
+
+/**
  * Construct the menu based on the list of options and show the menu.
  * @param {!Event} e Mouse event.
  * @param {!Array.<!Object>} options Array of menu options.
@@ -123,6 +129,9 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
 Blockly.ContextMenu.hide = function() {
   Blockly.WidgetDiv.hideIfOwner(Blockly.ContextMenu);
   Blockly.ContextMenu.currentBlock = null;
+  if (Blockly.ContextMenu.eventWrapper_) {
+    Blockly.unbindEvent_(Blockly.ContextMenu.eventWrapper_);
+  }
 };
 
 /**

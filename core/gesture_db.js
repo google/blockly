@@ -116,3 +116,16 @@ Blockly.GestureDB.getGesturesOnWorkspace = function(ws) {
   }
   return result;
 };
+
+Blockly.GestureDB.cancelAllGestures = function() {
+  for (var id in Blockly.GestureDB.gestureMap_) {
+    var gesture = Blockly.GestureDB.gestureMap_[id];
+    if (gesture) {
+      gesture.cancelGesture();
+    }
+  }
+};
+
+Blockly.GestureDB.numGesturesInProgress = function() {
+  return Blockly.GestureDB.numGesturesInProgress_;
+};

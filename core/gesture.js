@@ -168,12 +168,29 @@ Blockly.Gesture = function(e, touchId) {
   this.hasStarted_ = false;
 };
 
+/**
+ * Sever all links from this object.
+ */
 Blockly.Gesture.prototype.dispose = function() {
   if (this.onMoveWrapper_) {
     Blockly.unbindEvent_(this.onMoveWrapper_);
   }
   if (this.onUpWrapper_) {
     Blockly.unbindEvent_(this.onUpWrapper_);
+  }
+
+  this.startField_ = null;
+  this.startBlock_ = null;
+  this.startWorkspace_ = null;
+  this.flyout_ = null;
+
+  if (this.blockDragger_) {
+    this.blockDragger_.dispose();
+    this.blockDragger_ = null;
+  }
+  if (this.workspaceDragger_) {
+    this.workspaceDragger_.dispose();
+    this.workspaceDragger_ = null;
   }
 };
 

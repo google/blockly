@@ -66,6 +66,13 @@ Blockly.WorkspaceDragger = function(workspace) {
 };
 
 /**
+ * Sever all links from this object.
+ */
+Blockly.WorkspaceDragger.prototype.dispose = function() {
+  this.workspace_ = null;
+};
+
+/**
  * Start dragging the workspace.
  */
 Blockly.WorkspaceDragger.prototype.startDrag = function() {

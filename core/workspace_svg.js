@@ -899,7 +899,6 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
 
 /**
  * Is the mouse event over a delete area (toolbox or non-closing flyout)?
- * Opens or closes the trashcan and sets the cursor as a side effect.
  * @param {!Event} e Mouse move event.
  * @return {?number} Null if not over a delete area, or an enum representing
  *     which delete area the event is over.

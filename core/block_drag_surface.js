@@ -200,11 +200,17 @@ Blockly.BlockDragSurfaceSvg.prototype.getCurrentBlock = function() {
 /**
  * Clear the group and hide the surface; move the blocks off onto the provided
  * element.
- * @param {!Element} newSurface Surface the dragging blocks should be moved to.
+ * @param {Element} opt_newSurface Surface the dragging blocks should be moved
+ *     to, or null if the blocks should be removed from this surface without
+ *     being moved to a different surface.
  */
-Blockly.BlockDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
-  // appendChild removes the node from this.dragGroup_
-  newSurface.appendChild(this.getCurrentBlock());
+Blockly.BlockDragSurfaceSvg.prototype.clearAndHide = function(opt_newSurface) {
+  if (opt_newSurface) {
+    // appendChild removes the node from this.dragGroup_
+    opt_newSurface.appendChild(this.getCurrentBlock());
+  } else {
+    this.dragGroup_.removeChild(this.getCurrentBlock());
+  }
   this.SVG_.style.display = 'none';
   goog.asserts.assert(this.dragGroup_.childNodes.length == 0,
     'Drag group was not cleared.');

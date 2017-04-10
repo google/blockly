@@ -6,7 +6,8 @@
 			"Mark",
 			"Kusavica",
 			"Genhis",
-			"Lexected"
+			"Lexected",
+			"Adams"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "prvok",
@@ -220,6 +221,12 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "výzva na zadanie čísla so správou",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Výzva pre používateľa na zadanie čísla.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Výzva pre používateľa na zadanie textu.",
+	"TEXT_COUNT_MESSAGE0": "počet výskytov %1 v %2",
+	"TEXT_COUNT_TOOLTIP": "Počet výskytov textu nachádzajúcom sa v inom texte.",
+	"TEXT_REPLACE_MESSAGE0": "zameniť %1 za %2 v reťazci %3",
+	"TEXT_REPLACE_TOOLTIP": "Zameniť všetky výskyty textu za iný text.",
+	"TEXT_REVERSE_MESSAGE0": "text odzadu %1",
+	"TEXT_REVERSE_TOOLTIP": "Obrátiť poradie písmen v texte.",
 	"LISTS_CREATE_EMPTY_TITLE": "prázdny zoznam",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Vráti zoznam nulovej dĺžky, ktorý neobsahuje žiadne prvky.",
 	"LISTS_CREATE_WITH_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-list-with",

@@ -27,7 +27,7 @@
 /**
  * The top level namespace used to access the Blockly library.
  * @namespace Blockly
- */
+ **/
 goog.provide('Blockly');
 
 goog.require('Blockly.BlockSvg.render');
@@ -405,9 +405,19 @@ Blockly.jsonInitFactory_ = function(jsonDef) {
  */
 Blockly.defineBlocksWithJsonArray = function(jsonArray) {
   for (var i = 0, elem; elem = jsonArray[i]; i++) {
-    Blockly.Blocks[elem.type] = {
-      init: Blockly.jsonInitFactory_(elem)
-    };
+    var typename = elem.type;
+    if (typename == null || typename === '') {
+      console.warn('Block definition #' + i +
+        ' in JSON array is missing a type attribute. Skipping.');
+    } else {
+      if (Blockly.Blocks[typename]) {
+        console.warn('Block definition #' + i +
+          ' in JSON array overwrites prior definition of "' + typename + '".');
+      }
+      Blockly.Blocks[typename] = {
+        init: Blockly.jsonInitFactory_(elem)
+      };
+    }
   }
 };
 

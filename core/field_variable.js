@@ -52,12 +52,14 @@ goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
 /**
  * The menu item index for the rename variable option.
  * @type {number}
+ * @private
  */
 Blockly.FieldVariable.prototype.renameVarItemIndex_ = -1;
 
 /**
  * The menu item index for the delete variable option.
  * @type {number}
+ * @private
  */
 Blockly.FieldVariable.prototype.deleteVarItemIndex_ = -1;
 
@@ -123,7 +125,7 @@ Blockly.FieldVariable.prototype.setValue = function(newValue) {
  * Return a sorted list of variable names for variable dropdown menus.
  * Include a special option at the end for creating a new variable name.
  * @return {!Array.<string>} Array of variable names.
- * @this {!Blockly.FieldVariable}
+ * @this {Blockly.FieldVariable}
  */
 Blockly.FieldVariable.dropdownCreate = function() {
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {
@@ -162,7 +164,6 @@ Blockly.FieldVariable.dropdownCreate = function() {
  * @param {!goog.ui.MenuItem} menuItem The MenuItem selected within menu.
  */
 Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
-  var menuLength = menu.getChildCount();
   var itemText = menuItem.getValue();
   if (this.sourceBlock_) {
     var workspace = this.sourceBlock_.workspace;

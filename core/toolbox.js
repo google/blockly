@@ -241,7 +241,6 @@ Blockly.Toolbox.prototype.position = function() {
     return;
   }
   var svg = this.workspace_.getParentSvg();
-  var svgPosition = goog.style.getPageOffset(svg);
   var svgSize = Blockly.svgSize(svg);
   if (this.horizontalLayout_) {
     treeDiv.style.left = '0';
@@ -633,8 +632,8 @@ Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
 Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
   if (this.tree.toolbox_.horizontalLayout_) {
     var map = {};
-    var next = goog.events.KeyCodes.DOWN
-    var prev = goog.events.KeyCodes.UP
+    var next = goog.events.KeyCodes.DOWN;
+    var prev = goog.events.KeyCodes.UP;
     map[goog.events.KeyCodes.RIGHT] = this.rightToLeft_ ? prev : next;
     map[goog.events.KeyCodes.LEFT] = this.rightToLeft_ ? next : prev;
     map[goog.events.KeyCodes.UP] = goog.events.KeyCodes.LEFT;

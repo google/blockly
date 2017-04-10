@@ -28,8 +28,9 @@ goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.ContextMenu');
-goog.require('Blockly.Touch');
 goog.require('Blockly.RenderedConnection');
+goog.require('Blockly.Touch');
+goog.require('Blockly.utils');
 goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.dom');
@@ -425,7 +426,7 @@ Blockly.BlockSvg.prototype.moveOffDragSurface_ = function() {
  * @private
  */
 Blockly.BlockSvg.prototype.clearTransformAttributes_ = function() {
-  this.getSvgRoot().removeAttribute('transform');
+  Blockly.utils.removeAttribute(this.getSvgRoot(), 'transform');
 };
 
 /**
@@ -690,7 +691,12 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
         new Blockly.Events.Ui(this, 'click', undefined, undefined));
   }
   Blockly.terminateDrag_();
-  if (Blockly.selected && Blockly.highlightedConnection_) {
+
+  var deleteArea = this.workspace.isDeleteArea(e);
+
+  // Connect to a nearby block, but not if it's over the toolbox.
+  if (Blockly.selected && Blockly.highlightedConnection_ &&
+      deleteArea != Blockly.DELETE_AREA_TOOLBOX) {
     // Connect two blocks together.
     Blockly.localConnection_.connect(Blockly.highlightedConnection_);
     if (this.rendered) {
@@ -704,8 +710,9 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
       // Don't throw an object in the trash can if it just got connected.
       this.workspace.trashcan.close();
     }
-  } else if (!this.getParent() && Blockly.selected.isDeletable() &&
-      this.workspace.isDeleteArea(e)) {
+  } else if (deleteArea && !this.getParent() && Blockly.selected.isDeletable()) {
+    // We didn't connect the block, and it was over the trash can or the
+    // toolbox.  Delete it.
     var trashcan = this.workspace.trashcan;
     if (trashcan) {
       goog.Timer.callOnce(trashcan.close, 100, trashcan);
@@ -950,9 +957,16 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       Blockly.dragMode_ = Blockly.DRAG_FREE;
       Blockly.longStop_();
       this.workspace.setResizesEnabled(false);
-      if (this.parentBlock_) {
-        // Push this block to the very top of the stack.
-        this.unplug();
+
+      var disconnectEffect = !!this.parentBlock_;
+      // If in a stack, either split the stack, or pull out single block.
+      var healStack = !Blockly.DRAG_STACK;
+      if (e.altKey || e.ctrlKey || e.metaKey) {
+        healStack = !healStack;
+      }
+      // Push this block to the very top of the stack.
+      this.unplug(healStack);
+      if (disconnectEffect) {
         var group = this.getSvgRoot();
         group.translate_ = 'translate(' + newXY.x + ',' + newXY.y + ')';
         this.disconnectUiEffect();
@@ -1006,22 +1020,55 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       Blockly.highlightedConnection_ = null;
       Blockly.localConnection_ = null;
     }
+
+    var wouldDeleteBlock = this.updateCursor_(e, closestConnection);
+
     // Add connection highlighting if needed.
-    if (closestConnection &&
+    if (!wouldDeleteBlock && closestConnection &&
         closestConnection != Blockly.highlightedConnection_) {
       closestConnection.highlight();
       Blockly.highlightedConnection_ = closestConnection;
       Blockly.localConnection_ = localConnection;
     }
-    // Provide visual indication of whether the block will be deleted if
-    // dropped here.
-    if (this.isDeletable()) {
-      this.workspace.isDeleteArea(e);
-    }
   }
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();
   e.preventDefault();
+};
+
+/**
+ * Provide visual indication of whether the block will be deleted if
+ * dropped here.
+ * Prefer connecting over dropping into the trash can, but prefer dragging to
+ * the toolbox over connecting to other blocks.
+ * @param {!Event} e Mouse move event.
+ * @param {Blockly.Connection} closestConnection The connection this block would
+ *     potentially connect to if dropped here, or null.
+ * @return {boolean} True if the block would be deleted if dropped here,
+ *     otherwise false.
+ * @private
+ */
+Blockly.BlockSvg.prototype.updateCursor_ = function(e, closestConnection) {
+  var deleteArea = this.workspace.isDeleteArea(e);
+  var wouldConnect = Blockly.selected && closestConnection &&
+      deleteArea != Blockly.DELETE_AREA_TOOLBOX;
+  var wouldDelete = deleteArea && !this.getParent() &&
+      Blockly.selected.isDeletable();
+  var showDeleteCursor = wouldDelete && !wouldConnect;
+
+  if (showDeleteCursor) {
+    Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
+    if (deleteArea == Blockly.DELETE_AREA_TRASH && this.workspace.trashcan) {
+      this.workspace.trashcan.setOpen_(true);
+    }
+    return true;
+  } else {
+    Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
+    if (this.workspace.trashcan) {
+      this.workspace.trashcan.setOpen_(false);
+    }
+    return false;
+  }
 };
 
 /**
@@ -1471,7 +1518,7 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
       if (!newText) {
         this.warning.dispose();
       }
-      changedState = oldText == newText;
+      changedState = oldText != newText;
     }
   }
   if (changedState && this.rendered) {
@@ -1523,7 +1570,7 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
         'url(#' + this.workspace.options.embossFilterId + ')');
     this.svgPathLight_.style.display = 'none';
   } else {
-    this.svgPath_.removeAttribute('filter');
+    Blockly.utils.removeAttribute(this.svgPath_, 'filter');
     delete this.svgPathLight_.style.display;
   }
 };

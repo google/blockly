@@ -42,6 +42,9 @@ blocklyApp.ToolboxModalService = ng.core.Class({
       this.selectedToolboxCategories = null;
       this.onSelectBlockCallback = null;
       this.onDismissCallback = null;
+      // The aim of the pre-show hook is to populate the modal component with
+      // the information it needs to display the modal (e.g., which categories
+      // and blocks to display).
       this.preShowHook = function() {
         throw Error(
             'A pre-show hook must be defined for the toolbox modal before it ' +
@@ -55,11 +58,11 @@ blocklyApp.ToolboxModalService = ng.core.Class({
       if (toolboxCategoryElts.length) {
         this.allToolboxCategories = Array.from(toolboxCategoryElts).map(
           function(categoryElt) {
-            var workspace = new Blockly.Workspace();
-            Blockly.Xml.domToWorkspace(categoryElt, workspace);
+            var tmpWorkspace = new Blockly.Workspace();
+            Blockly.Xml.domToWorkspace(categoryElt, tmpWorkspace);
             return {
               categoryName: categoryElt.attributes.name.value,
-              blocks: workspace.topBlocks_
+              blocks: tmpWorkspace.topBlocks_
             };
           }
         );
@@ -71,14 +74,14 @@ blocklyApp.ToolboxModalService = ng.core.Class({
         setTimeout(function() {
           // If there are no top-level categories, we create a single category
           // containing all the top-level blocks.
-          var workspace = new Blockly.Workspace();
+          var tmpWorkspace = new Blockly.Workspace();
           Array.from(toolboxXmlElt.children).forEach(function(topLevelNode) {
-            Blockly.Xml.domToBlock(workspace, topLevelNode);
+            Blockly.Xml.domToBlock(tmpWorkspace, topLevelNode);
           });
 
           that.allToolboxCategories = [{
             categoryName: '',
-            blocks: workspace.topBlocks_
+            blocks: tmpWorkspace.topBlocks_
           }];
 
           that.computeCategoriesForCreateNewGroupModal_();
@@ -106,10 +109,11 @@ blocklyApp.ToolboxModalService = ng.core.Class({
     });
   },
   registerPreShowHook: function(preShowHook) {
+    var that = this;
     this.preShowHook = function() {
       preShowHook(
-          this.selectedToolboxCategories, this.onSelectBlockCallback,
-          this.onDismissCallback);
+          that.selectedToolboxCategories, that.onSelectBlockCallback,
+          that.onDismissCallback);
     };
   },
   isModalShown: function() {
@@ -148,27 +152,17 @@ blocklyApp.ToolboxModalService = ng.core.Class({
     this.showModal_(selectedToolboxCategories, function(block) {
       var blockDescription = that.utilsService.getBlockDescription(block);
 
-      // Clean up the active desc for the destination tree.
-      var oldDestinationTreeId = that.treeService.getTreeIdForBlock(
+      // Clear the active desc for the destination tree, so that it can be
+      // cleanly reinstated after the new block is attached.
+      var destinationTreeId = that.treeService.getTreeIdForBlock(
           that.blockConnectionService.getMarkedConnectionSourceBlock().id);
-      that.treeService.clearActiveDesc(oldDestinationTreeId);
+      that.treeService.clearActiveDesc(destinationTreeId);
       var newBlockId = that.blockConnectionService.attachToMarkedConnection(
           block);
 
       // Invoke a digest cycle, so that the DOM settles.
       setTimeout(function() {
         that.treeService.focusOnBlock(newBlockId);
-
-        var newDestinationTreeId = that.treeService.getTreeIdForBlock(
-            newBlockId);
-        if (newDestinationTreeId != oldDestinationTreeId) {
-          // It is possible for the tree ID for the pasted block to change
-          // after the paste operation, e.g. when inserting a block between two
-          // existing blocks that are joined together. In this case, we need to
-          // also reset the active desc for the old destination tree.
-          that.treeService.initActiveDesc(oldDestinationTreeId);
-        }
-
         that.notificationsService.speak(
             'Attached. Now on, ' + blockDescription + ', block in workspace.');
       });
@@ -183,6 +177,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
       var xml = Blockly.Xml.blockToDom(block);
       var newBlockId = Blockly.Xml.domToBlock(blocklyApp.workspace, xml).id;
 
+      // Invoke a digest cycle, so that the DOM settles.
       setTimeout(function() {
         that.treeService.focusOnBlock(newBlockId);
         that.notificationsService.speak(

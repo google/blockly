@@ -353,3 +353,11 @@ Blockly.Python['lists_split'] = function(block) {
   }
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
+
+Blockly.Python['lists_reverse'] = function(block) {
+  // Block for reversing a list.
+  var list = Blockly.Python.valueToCode(block, 'LIST',
+      Blockly.Python.ORDER_NONE) || '[]';
+  var code = 'list(reversed(' + list + '))';
+  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
+};

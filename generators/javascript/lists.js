@@ -392,3 +392,11 @@ Blockly.JavaScript['lists_split'] = function(block) {
   var code = input + '.' + functionName + '(' + delimiter + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
+
+Blockly.JavaScript['lists_reverse'] = function(block) {
+  // Block for reversing a list.
+  var list = Blockly.JavaScript.valueToCode(block, 'LIST',
+      Blockly.JavaScript.ORDER_FUNCTION_CALL) || '[]';
+  var code = list + '.slice().reverse()';
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};

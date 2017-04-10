@@ -26,6 +26,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.utils
+ * @namespace
+ **/
 goog.provide('Blockly.utils');
 
 goog.require('Blockly.Touch');
@@ -34,6 +38,23 @@ goog.require('goog.events.BrowserFeature');
 goog.require('goog.math.Coordinate');
 goog.require('goog.userAgent');
 
+/**
+ * Remove an attribute from a element even if it's in IE 10.
+ * Similar to Element.removeAttribute() but it works on SVG elements in IE 10.
+ * Sets the attribute to null in IE 10, which treats removeAttribute as a no-op
+ * if it's called on an SVG element.
+ * @param {!Element} element DOM element to remove attribute from.
+ * @param {string} attributeName Name of attribute to remove.
+ */
+Blockly.utils.removeAttribute = function(element, attributeName) {
+  // goog.userAgent.isVersion is deprecated, but the replacement is
+  // goog.userAgent.isVersionOrHigher.
+  if (goog.userAgent.IE && goog.userAgent.isVersion('10.0')) {
+    element.setAttribute(attributeName, null);
+  } else {
+    element.removeAttribute(attributeName);
+  }
+};
 
 /**
  * Add a CSS class to a element.
@@ -76,7 +97,7 @@ Blockly.utils.removeClass = function(element, className) {
   if (classList.length) {
     element.setAttribute('class', classList.join(' '));
   } else {
-    element.removeAttribute('class');
+    Blockly.utils.removeAttribute(element, 'class');
   }
   return true;
 };
@@ -84,15 +105,15 @@ Blockly.utils.removeClass = function(element, className) {
 /**
  * Checks if an element has the specified CSS class.
  * Similar to Closure's goog.dom.classes.has, except it handles SVG elements.
- * @param {!Element} element DOM element to check.    
- * @param {string} className Name of class to check.    
- * @return {boolean} True if class exists, false otherwise.   
- * @private   
- */   
- Blockly.utils.hasClass = function(element, className) {    
-   var classes = element.getAttribute('class');    
-   return (' ' + classes + ' ').indexOf(' ' + className + ' ') != -1;    
- };
+ * @param {!Element} element DOM element to check.
+ * @param {string} className Name of class to check.
+ * @return {boolean} True if class exists, false otherwise.
+ * @private
+ */
+Blockly.utils.hasClass = function(element, className) {
+  var classes = element.getAttribute('class');
+  return (' ' + classes + ' ').indexOf(' ' + className + ' ') != -1;
+};
 
 /**
  * Don't do anything for this event, just halt propagation.
@@ -144,7 +165,7 @@ Blockly.utils.getRelativeXY = function(element) {
     }
   }
 
-  // Then check for style = transform: translate(...) or translate3d(...) 
+  // Then check for style = transform: translate(...) or translate3d(...)
   var style = element.getAttribute('style');
   if (style && style.indexOf('translate') > -1) {
     var styleComponents = style.match(Blockly.utils.getRelativeXY.XY_2D_REGEX_);
@@ -164,7 +185,7 @@ Blockly.utils.getRelativeXY = function(element) {
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
- * the div blockly was injected into. 
+ * the div blockly was injected into.
  * @param {!Element} element SVG element to find the coordinates of. If this is
  *     not a child of the div blockly was injected into, the behaviour is
  *     undefined.
@@ -185,7 +206,7 @@ Blockly.utils.getInjectionDivXY_ = function(element) {
     }
     element = element.parentNode;
   }
-  return new goog.math.Coordinate(x, y);    
+  return new goog.math.Coordinate(x, y);
 };
 
 /**
@@ -195,9 +216,9 @@ Blockly.utils.getInjectionDivXY_ = function(element) {
  * @private
  */
 Blockly.utils.getScale_ = function(element) {
-  var scale = 1;  
+  var scale = 1;
   var transform = element.getAttribute('transform');
-   if (transform) {
+  if (transform) {
     var transformComponents =
         transform.match(Blockly.utils.getScale_.REGEXP_);
     if (transformComponents && transformComponents[0]) {
@@ -255,7 +276,7 @@ Blockly.utils.getRelativeXY.XY_2D_REGEX_ =
  *     context (scale...).
  * @return {!SVGElement} Newly created SVG element.
  */
-Blockly.utils.createSvgElement = function(name, attrs, parent, opt_workspace) {
+Blockly.utils.createSvgElement = function(name, attrs, parent /*, opt_workspace */) {
   var e = /** @type {!SVGElement} */ (
       document.createElementNS(Blockly.SVG_NS, name));
   for (var key in attrs) {
@@ -315,7 +336,7 @@ Blockly.utils.shortestStringLength = function(array) {
   if (!array.length) {
     return 0;
   }
-  return array.reduce(function (a, b) {
+  return array.reduce(function(a, b) {
     return a.length < b.length ? a : b;
   }).length;
 };
@@ -392,11 +413,74 @@ Blockly.utils.commonWordSuffix = function(array, opt_shortest) {
 
 /**
  * Parse a string with any number of interpolation tokens (%1, %2, ...).
- * '%' characters may be self-escaped (%%).
- * @param {string} message Text containing interpolation tokens.
+ * It will also replace string table references (e.g., %{bky_my_msg} and
+ * %{BKY_MY_MSG} will both be replaced with the value in
+ * Blockly.Msg['MY_MSG']). Percentage sign characters '%' may be self-escaped
+ * (e.g., '%%').
+ * @param {string} message Text which might contain string table references and
+ *     interpolation tokens.
  * @return {!Array.<string|number>} Array of strings and numbers.
  */
 Blockly.utils.tokenizeInterpolation = function(message) {
+  return Blockly.utils.tokenizeInterpolation_(message, true);
+};
+
+/**
+ * Replaces string table references in a message, if the message is a string.
+ * For example, "%{bky_my_msg}" and "%{BKY_MY_MSG}" will both be replaced with
+ * the value in Blockly.Msg['MY_MSG'].
+ * @param {string|?} message Message, which may be a string that contains
+ *                           string table references.
+ * @return {!string} String with message references replaced.
+ */
+Blockly.utils.replaceMessageReferences = function(message) {
+  if (!goog.isString(message)) {
+    return message;
+  }
+  var interpolatedResult = Blockly.utils.tokenizeInterpolation_(message, false);
+  // When parseInterpolationTokens == false, interpolatedResult should be at
+  // most length 1.
+  return interpolatedResult.length ? interpolatedResult[0] : "";
+};
+
+/**
+ * Validates that any %{BKY_...} references in the message refer to keys of
+ * the Blockly.Msg string table.
+ * @param {string} message Text which might contain string table references.
+ * @return {boolean} True if all message references have matching values.
+ *     Otherwise, false.
+ */
+Blockly.utils.checkMessageReferences = function(message) {
+  var isValid = true; // True until a bad reference is found
+
+  var regex = /%{BKY_([a-zA-Z][a-zA-Z0-9_]*)}/g;
+  var match = regex.exec(message);
+  while (match != null) {
+    var msgKey = match[1];
+    if (Blockly.Msg[msgKey] == null) {
+      console.log('WARNING: No message string for %{BKY_' + msgKey + '}.');
+      isValid = false;
+    }
+
+    // Re-run on remainder of sting.
+    message = message.substring(match.index + msgKey.length + 1);
+    match = regex.exec(message);
+  }
+
+  return isValid;
+};
+
+/**
+ * Internal implemention of the message reference and interpolation token
+ * parsing used by tokenizeInterpolation() and replaceMessageReferences().
+ * @param {string} message Text which might contain string table references and
+ *     interpolation tokens.
+ * @param {boolean} parseInterpolationTokens Option to parse numeric
+ *     interpolation tokens (%1, %2, ...) when true.
+ * @return {!Array.<string|number>} Array of strings and numbers.
+ * @private
+ */
+Blockly.utils.tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
   var tokens = [];
   var chars = message.split('');
   chars.push('');  // End marker.
@@ -425,7 +509,7 @@ Blockly.utils.tokenizeInterpolation = function(message) {
       if (c == '%') {
         buffer.push(c);  // Escaped %: %%
         state = 0;
-      } else if ('0' <= c && c <= '9') {
+      } else if (parseInterpolationTokens && '0' <= c && c <= '9') {
         state = 2;
         number = c;
         var text = buffer.join('');
@@ -468,8 +552,18 @@ Blockly.utils.tokenizeInterpolation = function(message) {
               keyUpper.substring(4) : null;
           if (bklyKey && bklyKey in Blockly.Msg) {
             var rawValue = Blockly.Msg[bklyKey];
-            var subTokens = Blockly.utils.tokenizeInterpolation(rawValue);
-            tokens = tokens.concat(subTokens);
+            if (goog.isString(rawValue)) {
+              // Attempt to dereference substrings, too, appending to the end.
+              Array.prototype.push.apply(tokens,
+                Blockly.utils.tokenizeInterpolation(rawValue));
+            } else if (parseInterpolationTokens) {
+              // When parsing interpolation tokens, numbers are special
+              // placeholders (%1, %2, etc). Make sure all other values are
+              // strings.
+              tokens.push(String(rawValue));
+            } else {
+              tokens.push(rawValue);
+            }
           } else {
             // No entry found in the string table. Pass reference as string.
             tokens.push('%{' + rawKey + '}');
@@ -774,4 +868,38 @@ Blockly.utils.insertAfter_ = function(newNode, refNode) {
   } else {
     parentNode.appendChild(newNode);
   }
+};
+
+/**
+ * Calls a function after the page has loaded, possibly immediately.
+ * @param {function()} fn Function to run.
+ * @throws Error Will throw if no global document can be found (e.g., Node.js).
+ */
+Blockly.utils.runAfterPageLoad = function(fn) {
+  if (!document) {
+    throw new Error('Blockly.utils.runAfterPageLoad() requires browser document.');
+  }
+  if (document.readyState === 'complete') {
+    fn();  // Page has already loaded. Call immediately.
+  } else {
+    // Poll readyState.
+    var readyStateCheckInterval = setInterval(function() {
+      if (document.readyState === 'complete') {
+        clearInterval(readyStateCheckInterval);
+        fn();
+      }
+    }, 10);
+  }
+};
+
+/**
+ * Sets the CSS transform property on an element. This function sets the
+ * non-vendor-prefixed and vendor-prefixed versions for backwards compatibility
+ * with older browsers. See http://caniuse.com/#feat=transforms2d
+ * @param {!Element} node The node which the CSS transform should be applied.
+ * @param {string} transform The value of the CSS `transform` property.
+ */
+Blockly.utils.setCssTransform = function(node, transform) {
+  node.style['transform'] = transform;
+  node.style['-webkit-transform'] = transform;
 };

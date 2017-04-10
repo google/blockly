@@ -64,6 +64,8 @@ var workspace = null;
 var fakeDragStack = [];
 
 function start() {
+  setBackgroundColor();
+
   // Parse the URL arguments.
   var match = location.search.match(/dir=([^&]+)/);
   var rtl = match && match[1] == 'rtl';
@@ -115,6 +117,17 @@ function start() {
     logEvents(false);
   }
   taChange();
+}
+
+function setBackgroundColor() {
+  var lilac = '#d6d6ff';
+
+  var currentPage = window.location.href;
+  var regexFile = /^file[\S]*$/;
+
+  if (regexFile.test(currentPage)) {
+    document.getElementsByTagName('body')[0].style.backgroundColor = lilac;
+  }
 }
 
 function getToolboxElement() {
@@ -591,6 +604,30 @@ h1 {
           </shadow>
         </value>
       </block>
+      <block type="text_count">
+        <value name="SUB">
+          <shadow type="text"></shadow>
+        </value>
+        <value name="TEXT">
+          <shadow type="text"></shadow>
+        </value>
+      </block>
+      <block type="text_replace">
+        <value name="FROM">
+          <shadow type="text"></shadow>
+        </value>
+        <value name="TO">
+          <shadow type="text"></shadow>
+        </value>
+        <value name="TEXT">
+          <shadow type="text"></shadow>
+        </value>
+      </block>
+      <block type="text_reverse">
+        <value name="TEXT">
+          <shadow type="text"></shadow>
+        </value>
+      </block>
       <label text="Input/Output:" web-class="ioLabel"></label>
       <block type="text_print">
         <value name="TEXT">
@@ -657,6 +694,7 @@ h1 {
         </value>
       </block>
       <block type="lists_sort"></block>
+      <block type="lists_reverse"></block>
     </category>
     <category name="Colour" colour="20">
       <block type="colour_picker"></block>

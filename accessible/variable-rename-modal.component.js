@@ -33,6 +33,10 @@ blocklyApp.VariableRenameModalComponent = ng.core.Component({
       <div id="varModal" class="blocklyModal" role="alertdialog"
            (click)="$event.stopPropagation()" tabindex="0"
            aria-labelledby="variableModalHeading">
+          <h3 id="variableModalHeading">
+            Rename the "{{currentVariableName}}" variable...
+          </h3>
+
           <form id="varForm">
             <p id="inputLabel">New Variable Name:
               <input id="mainFieldId" type="text" [ngModel]="VALUE"
@@ -73,7 +77,7 @@ blocklyApp.VariableRenameModalComponent = ng.core.Component({
           Blockly.CommonModal.setupKeyboardOverrides(that);
 
           setTimeout(function() {
-            document.getElementById('mainFieldId').focus();
+            document.getElementById('varModal').focus();
           }, 150);
         }
       );

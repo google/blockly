@@ -33,10 +33,12 @@ blocklyApp.VariableRemoveModalComponent = ng.core.Component({
       <div id="varModal" class="blocklyModal" role="alertdialog"
            (click)="$event.stopPropagation()" tabindex="0"
            aria-labelledby="variableModalHeading">
+          <h3 id="variableModalHeading">
+            Delete {{getNumVariables()}} uses of the "{{currentVariableName}}"
+            variable?
+          </h3>
+
           <form id="varForm">
-            <p id="label">Remove {{count}} instances of
-              "{{currentVariableName}}" variable?
-            </p>
             <hr>
             <button id="yesButton" (click)="submit()">
               YES
@@ -73,7 +75,7 @@ blocklyApp.VariableRemoveModalComponent = ng.core.Component({
           Blockly.CommonModal.setupKeyboardOverrides(that);
 
           setTimeout(function() {
-            document.getElementById('label').focus();
+            document.getElementById('varModal').focus();
           }, 150);
         }
       );
@@ -90,6 +92,9 @@ blocklyApp.VariableRemoveModalComponent = ng.core.Component({
   // Gets the container with interactive elements.
   getInteractiveContainer: function() {
     return document.getElementById("varForm");
+  },
+  getNumVariables: function() {
+    return this.variableModalService.getNumVariables(this.currentVariableName);
   },
   // Submits the name change for the variable.
   submit: function() {

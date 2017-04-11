@@ -15,7 +15,8 @@
 			"Rogerio Melfi",
 			"Caçador de Palavras",
 			"Luk3",
-			"Cristofer Alves"
+			"Cristofer Alves",
+			"EVinente"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -226,6 +227,8 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "Pede um número com uma mensagem",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Pede ao usuário um número.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Pede ao usuário um texto.",
+	"TEXT_COUNT_MESSAGE0": "Contar %1 em %2",
+	"TEXT_COUNT_HELPURL": "https://github.com/google/blockly/wiki/Text#counting-substrings",
 	"LISTS_CREATE_EMPTY_TITLE": "criar lista vazia",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Retorna uma lista, de tamanho 0, contendo nenhum registro",
 	"LISTS_CREATE_WITH_TOOLTIP": "Cria uma lista com a quantidade de itens informada.",

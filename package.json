@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": ["blockly"],
+  "main": "blockly.js",
   "scripts": {
     "lint": "jshint ."
   },
@@ -20,7 +21,12 @@
   "license": "Apache-2.0",
   "private": true,
   "devDependencies": {
-    "jshint": "latest"
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-shell": "^0.5.2",
+    "jshint": "latest",
+    "gulp": "^3.9.1",
+    "gulp-shell": "^0.5.2"
   },
   "jshintConfig": {
     "globalstrict": true,

@@ -51,7 +51,7 @@ goog.require('goog.userAgent');
  * @param {!Blockly.Options} options Dictionary of options.
  * @param {Blockly.BlockDragSurfaceSvg=} opt_blockDragSurface Drag surface for
  *     blocks.
- * @param {Blockly.workspaceDragSurfaceSvg=} opt_wsDragSurface Drag surface for
+ * @param {Blockly.WorkspaceDragSurfaceSvg=} opt_wsDragSurface Drag surface for
  *     the workspace.
  * @extends {Blockly.Workspace}
  * @constructor

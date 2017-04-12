@@ -25,6 +25,7 @@ script:
   - scripts/get_geckdriver.sh 
   - scripts/get_selenium.sh 
   - scripts/get_chromedriver.sh 
+  - ls -l
   - scripts/selenium_connect.sh &
   - echo "check if selenum running"
   - lsof -ti tcp:4444

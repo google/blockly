@@ -27,6 +27,7 @@ script:
   - scripts/get_chromedriver.sh 
   - scripts/selenium_connect.sh &
   - echo "check if selenum running"
+  - lsof -ti tcp:4444
   - echo `lsof -ti tcp:4444`
   - node tests/jsunit/test_runner.js
 

@@ -25,7 +25,6 @@ script:
   - scripts/get_selenium.sh 
   - scripts/get_chromedriver.sh 
   - scripts/connect3.sh &
-  - echo "check to see selenum running"
   - echo `ps -aef |grep selenium`
   - node tests/jsunit/test_runner.js
 

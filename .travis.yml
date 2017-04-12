@@ -25,7 +25,6 @@ script:
   - scripts/get_geckdriver.sh 
   - scripts/get_selenium.sh 
   - scripts/get_chromedriver.sh 
-  - ls -l
   - scripts/connect3.sh &
   - echo "check if selenum running"
   - echo `ps -aef |grep selenium`

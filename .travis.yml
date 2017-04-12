@@ -4,6 +4,13 @@ node_js:
 - "stable"
 sudo: required
 dist: trusty
+addons:
+ apt:
+   sources:
+     - google-chrome
+   packages:
+     - google-chrome-stable
+
 before_install:
 - npm install google-closure-library
 # Symlink closure library
@@ -14,6 +21,12 @@ before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 script:
-  - ./node_modules/karma/bin/karma start karma.conf.js 
+  - set -x
+  - scripts/get_geckdriver.sh 
+  - scripts/get_selenium.sh 
+  - scripts/get_chromedriver.sh 
+  - scripts/selenium_connect.sh &
+  - node tests/jsunit/test_runner.js
+
 os:
   - linux 

@@ -24,7 +24,7 @@ script:
   - scripts/get_geckdriver.sh 
   - scripts/get_selenium.sh 
   - scripts/get_chromedriver.sh 
-  - scripts/connect3.sh &
+  - scripts/selenium_connect2.sh &
   - echo `ps -aef |grep selenium`
   - node tests/jsunit/test_runner.js
 

@@ -17,8 +17,13 @@
     "name": "Neil Fraser"
   },
   "scripts": {
+<<<<<<< HEAD
      "lint": "jshint .",
     "preinstall": "scripts/get_geckdriver.sh  && scripts/get_selenium.sh && scripts/get_chromedriver.sh && scripts/selenium_connect.sh &",
+=======
+    "lint": "jshint .",
+    "pretest": "scripts/test_setup.sh",
+>>>>>>> 2f15566e... put pretest target to test_setup.sh
     "test": "node tests/jsunit/test_runner.js"
   },
   "license": "Apache-2.0",

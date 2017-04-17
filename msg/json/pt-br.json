@@ -16,7 +16,8 @@
 			"Caçador de Palavras",
 			"Luk3",
 			"Cristofer Alves",
-			"EVinente"
+			"EVinente",
+			"Lowvy"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -229,6 +230,13 @@
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Pede ao usuário um texto.",
 	"TEXT_COUNT_MESSAGE0": "Contar %1 em %2",
 	"TEXT_COUNT_HELPURL": "https://github.com/google/blockly/wiki/Text#counting-substrings",
+	"TEXT_COUNT_TOOLTIP": "Calcule quantas vezes algum texto aparece centro de algum outro texto.",
+	"TEXT_REPLACE_MESSAGE0": "substituir %1 por %2 em %3",
+	"TEXT_REPLACE_HELPURL": "https://github.com/google/blockly/wiki/Texto#substituindo-substrings",
+	"TEXT_REPLACE_TOOLTIP": "Substitua todas as ocorrências de algum texto dentro de algum outro texto.",
+	"TEXT_REVERSE_MESSAGE0": "inverter %1",
+	"TEXT_REVERSE_HELPURL": "https://github.com/google/blockly/wiki/Texto#invertendo-texto",
+	"TEXT_REVERSE_TOOLTIP": "Inverter a ordem dos caracteres no texto.",
 	"LISTS_CREATE_EMPTY_TITLE": "criar lista vazia",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Retorna uma lista, de tamanho 0, contendo nenhum registro",
 	"LISTS_CREATE_WITH_TOOLTIP": "Cria uma lista com a quantidade de itens informada.",
@@ -299,6 +307,9 @@
 	"LISTS_SPLIT_WITH_DELIMITER": "com delimitador",
 	"LISTS_SPLIT_TOOLTIP_SPLIT": "Dividir o texto em uma lista de textos, separando-o em cada delimitador.",
 	"LISTS_SPLIT_TOOLTIP_JOIN": "Juntar uma lista de textos em um único texto, separado por um delimitador.",
+	"LISTS_REVERSE_HELPURL": "https://github.com/google/blockly/wiki/Listas#invertendo-uma-lista",
+	"LISTS_REVERSE_MESSAGE0": "inverter %1",
+	"LISTS_REVERSE_TOOLTIP": "Inverter uma cópia da lista.",
 	"VARIABLES_GET_TOOLTIP": "Retorna o valor desta variável.",
 	"VARIABLES_GET_CREATE_SET": "Criar \"definir %1\"",
 	"VARIABLES_SET": "definir %1 para %2",

@@ -77,6 +77,9 @@ Blockly.WorkspaceDragger.prototype.dispose = function() {
  */
 Blockly.WorkspaceDragger.prototype.startDrag = function() {
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
+  if (Blockly.selected) {
+    Blockly.selected.unselect();
+  }
   this.workspace_.setupDragSurface();
 };
 

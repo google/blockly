@@ -31,7 +31,6 @@ goog.provide('Blockly.WorkspaceSvg');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
 goog.require('Blockly.Gesture');
-goog.require('Blockly.GestureDB');
 goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Touch');
@@ -183,6 +182,12 @@ Blockly.WorkspaceSvg.prototype.trashcan = null;
  * @type {Blockly.ScrollbarPair}
  */
 Blockly.WorkspaceSvg.prototype.scrollbar = null;
+
+/**
+ * The current gesture in progress on this workspace, if any.
+ * @type {Blockly.Gesture}
+ */
+Blockly.WorkspaceSvg.prototype.currentGesture_ = null;
 
 /**
  * This workspace's surface for dragging blocks, if it exists.
@@ -391,6 +396,9 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
 Blockly.WorkspaceSvg.prototype.dispose = function() {
   // Stop rerendering.
   this.rendered = false;
+  if (this.currentGesture_) {
+    this.currentGesture_.cancel();
+  }
   Blockly.WorkspaceSvg.superClass_.dispose.call(this);
   if (this.svgGroup_) {
     goog.dom.removeNode(this.svgGroup_);
@@ -806,7 +814,9 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
       this.remainingCapacity()) {
     return;
   }
-  Blockly.GestureDB.cancelAllGestures();  // Dragging while pasting?  No.
+  if (this.currentGesture_) {
+    this.currentGesture_.cancel();  // Dragging while pasting?  No.
+  }
   Blockly.Events.disable();
   try {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
@@ -871,10 +881,7 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
 Blockly.WorkspaceSvg.prototype.createVariable = function(name) {
   Blockly.WorkspaceSvg.superClass_.createVariable.call(this, name);
   // Don't refresh the toolbox if there's a drag in progress.
-  // TODO: Decide if we need to check the equivalent of startFlyout_, to handle
-  // the case that a new variable is created on the workspace by dragging a
-  // block out of the flyout.
-  if (this.toolbox_ && this.toolbox_.flyout_) {
+  if (this.toolbox_ && this.toolbox_.flyout_ && !this.currentGesture_) {
     this.toolbox_.refreshSelection();
   }
 };
@@ -920,21 +927,7 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
-  if (Blockly.utils.isTargetInput(e)) {
-    Blockly.Touch.clearTouchIdentifier();
-    return;
-  }
-  Blockly.terminateDrag_();  // In case mouse-up event was lost.
-  // TODO: Understand this code.
-  var isTargetWorkspace = e.target && e.target.nodeName &&
-      (e.target.nodeName.toLowerCase() == 'svg' ||
-       e.target == this.svgBackground_);
-  if (isTargetWorkspace && Blockly.selected && !this.options.readOnly) {
-    // Clicking on the document clears the selection.
-    Blockly.selected.unselect();
-  }
-
-  var gesture = Blockly.GestureDB.gestureForEvent(e);
+  var gesture = this.getGesture(e);
   if (gesture) {
     gesture.handleWsStart(e, this);
   }
@@ -974,13 +967,7 @@ Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
  * @return {boolean} True if currently dragging or scrolling.
  */
 Blockly.WorkspaceSvg.prototype.isDragging = function() {
-  var gesturesOnWs = Blockly.GestureDB.getGesturesOnWorkspace(this);
-  for (var i = 0, item; item = gesturesOnWs[i]; i++) {
-    if (item.isDragging()) {
-      return true;
-    }
-  }
-  return false;
+  return this.currentGesture_ && this.currentGesture_.isDragging();
 };
 
 /**
@@ -997,9 +984,11 @@ Blockly.WorkspaceSvg.prototype.isDraggable = function() {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
-  // TODO: Remove cancelAllGestures and compensate for coordinate skew during
+  // TODO: Remove gesture cancellation and compensate for coordinate skew during
   // zoom.
-  Blockly.GestureDB.cancelAllGestures();
+  if (this.currentGesture_) {
+    this.currentGesture_.cancel();
+  }
   // The vertical scroll distance that corresponds to a click of a zoom button.
   var PIXELS_PER_ZOOM_STEP = 50;
   var delta = -e.deltaY / PIXELS_PER_ZOOM_STEP;
@@ -1081,6 +1070,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   var menuOptions = [];
   var topBlocks = this.getTopBlocks(true);
   var eventGroup = Blockly.utils.genUid();
+  var ws = this;
 
   // Options to undo/redo previous action.
   var undoOption = {};
@@ -1190,6 +1180,9 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
         Blockly.Msg.DELETE_X_BLOCKS.replace('%1', String(deleteList.length)),
     enabled: deleteList.length > 0,
     callback: function() {
+      if (ws.currentGesture_) {
+        ws.currentGesture_.cancel();
+      }
       if (deleteList.length < 2 ) {
         deleteNext();
       } else {
@@ -1749,6 +1742,54 @@ Blockly.WorkspaceSvg.prototype.getToolboxCategoryCallback = function(key) {
  */
 Blockly.WorkspaceSvg.prototype.removeToolboxCategoryCallback = function(key) {
   this.toolboxCategoryCallbacks_[key] = null;
+};
+
+/**
+ * Look up the gesture that is tracking this touch stream on this workspace.
+ * May create a new gesture.
+ * @param {!Event} e Mouse event or touch event
+ * @return {Blockly.Gesture} The gesture that is tracking this touch stream,
+ *     or null if no valid gesture exists.
+ */
+Blockly.WorkspaceSvg.prototype.getGesture = function(e) {
+  var isStart = (e.type == 'mousedown' || e.type == 'touchstart');
+
+  var gesture = this.currentGesture_;
+  if (gesture) {
+    if (isStart && gesture.hasStarted()) {
+      console.warn('tried to start the same gesture twice');
+      // That's funny.  We must have missed a mouse up.
+      // Cancel it, rather than try to retrieve all of the state we need.
+      gesture.cancel();
+      return null;
+    }
+    return gesture;
+  }
+
+  // No gesture existed on this workspace, but this looks like the start of a
+  // new gesture.
+  if (isStart) {
+    this.currentGesture_ = new Blockly.Gesture(e, this);
+    return this.currentGesture_;
+  }
+  // No gesture existed and this event couldn't be the start of a new gesture.
+  return null;
+};
+
+/**
+ * Clear the reference to the current gesture.
+ */
+Blockly.WorkspaceSvg.prototype.clearGesture = function() {
+  this.currentGesture_ = null;
+};
+
+/**
+ * Cancel the current gesture, if one exists.
+ */
+Blockly.WorkspaceSvg.prototype.cancelCurrentGesture = function() {
+  if (this.currentGesture_) {
+    this.currentGesture_.cancel();
+  }
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.

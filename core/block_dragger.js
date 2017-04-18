@@ -97,6 +97,21 @@ Blockly.BlockDragger = function(block, workspace) {
 };
 
 /**
+ * Sever all links from this object.
+ */
+Blockly.BlockDragger.prototype.dispose = function() {
+  this.draggingBlock_ = null;
+  this.workspace_ = null;
+  this.startWorkspace_ = null;
+  this.dragIconData_.length = 0;
+
+  if (this.draggedConnectionManager_) {
+    this.draggedConnectionManager_.dispose();
+    this.draggedConnectionManager_ = null;
+  }
+};
+
+/**
  * Make a list of all of the icons (comment, warning, and mutator) that are
  * on this block and its descendants.  Moving an icon moves the bubble that
  * extends from it if that bubble is open.

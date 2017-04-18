@@ -887,9 +887,11 @@ Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
 Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
   var flyout = this;
   return function(e) {
-    var gesture = Blockly.GestureDB.gestureForEvent(e);
-    gesture.setStartBlock(block);
-    gesture.handleFlyoutStart(e, flyout);
+    var gesture = flyout.targetWorkspace_.getGesture(e);
+    if (gesture) {
+      gesture.setStartBlock(block);
+      gesture.handleFlyoutStart(e, flyout);
+    }
   };
 };
 
@@ -899,8 +901,10 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
  * @private
  */
 Blockly.Flyout.prototype.onMouseDown_ = function(e) {
-  var gesture = Blockly.GestureDB.gestureForEvent(e);
-  gesture.handleFlyoutStart(e, this);
+  var gesture = this.targetWorkspace_.getGesture(e);
+  if (gesture) {
+    gesture.handleFlyoutStart(e, this);
+  }
 };
 
 /**
@@ -968,7 +972,6 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
     Blockly.Events.setGroup(true);
     Blockly.Events.fire(new Blockly.Events.Create(this.startBlock_));
   }
-
   if (this.autoClose) {
     this.hide();
   } else {

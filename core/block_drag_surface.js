@@ -200,6 +200,8 @@ Blockly.BlockDragSurfaceSvg.prototype.getCurrentBlock = function() {
 /**
  * Clear the group and hide the surface; move the blocks off onto the provided
  * element.
+ * If the block is being deleted it doesn't need to go back to the original
+ * surface, since it would be removed immediately during dispose.
  * @param {Element} opt_newSurface Surface the dragging blocks should be moved
  *     to, or null if the blocks should be removed from this surface without
  *     being moved to a different surface.

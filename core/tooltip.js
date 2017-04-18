@@ -196,7 +196,7 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
   if (!Blockly.Tooltip.element_ || !Blockly.Tooltip.element_.tooltip) {
     // No tooltip here to show.
     return;
-  } else if (Blockly.dragMode_ != Blockly.DRAG_NONE) {
+  } else if (Blockly.mainWorkspace.isDragging()) {
     // Don't display a tooltip during a drag.
     return;
   } else if (Blockly.WidgetDiv.isVisible()) {

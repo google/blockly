@@ -337,7 +337,7 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
   if (!this.workspace) {
     return;  // Deleted block.
   }
-  if (Blockly.dragMode_ != Blockly.DRAG_NONE) {
+  if (this.workspace.isDragging()) {
     return;  // Don't bump blocks during a drag.
   }
   var rootBlock = this.getRootBlock();

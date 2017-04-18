@@ -1527,3 +1527,56 @@ Blockly.Block.prototype.toDevString = function() {
   }
   return msg;
 };
+
+/**
+ * Search for the given keywords in the block's tooltip and fields.
+ * @param {!Array.<string>|string} searchTerms Array of keywords to search for,
+ *     or single string with keywords separated by spaces.
+ * @return {boolean} True if all keywords in searchTerms were found in block.
+ */
+Blockly.Block.prototype.search = function(searchTerms) {
+  // If searchTerms is a string, convert to an array of strings.
+  if (searchTerms instanceof String) {
+    searchTerms = searchTerms.trim().toLowerCase();
+    searchTerms = searchTerms.split(' ');
+  }
+
+  var blockText = '';
+  blockText += this.type.toLowerCase();
+  // If tooltip does not refer to a function, append it to blockText.
+  if (!(this.tooltip instanceof Function)) {
+    blockText += " " + this.tooltip.toLowerCase();
+  }
+  // Else, tooltip refers to a function, so call it.
+  // If tooltip() does not refer to another function, append it to blockText.
+  else if (!(this.tooltip() instanceof Function)) {
+    blockText += " " + this.tooltip().toLowerCase();
+  }
+  // Else, tooltip() refers to another function, so call it with tooltip()().
+  // This is the case for math_number blocks inside other blocks.
+  // If tooltip()() does not refer to another function, append it to blockText.
+  else if (!(this.tooltip()() instanceof Function)) {
+    blockText += " " + this.tooltip()().toLowerCase();
+  }
+
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    if (typeof input.name != 'undefined') {
+      blockText += ' ' + input.name.toLowerCase();
+    }
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (typeof field.name != 'undefined') {
+        blockText += ' ' + field.name.toLowerCase();
+      }
+      blockText += ' ' + field.getText().toLowerCase();
+      if (!(field instanceof Blockly.FieldImage)) {
+        blockText += ' ' + field.getValue().toLowerCase();
+      }
+    }
+  }
+
+  var result = true;
+  for (var i = 0; i < searchTerms.length; i++) {
+    result = result && blockText.includes(searchTerms[i]);
+  }
+  return result;
+};

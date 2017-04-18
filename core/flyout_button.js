@@ -234,9 +234,9 @@ Blockly.FlyoutButton.prototype.dispose = function() {
  * @private
  */
 Blockly.FlyoutButton.prototype.onMouseUp_ = function(e) {
-  var gesture = Blockly.GestureDB.gestureForEvent(e);
+  var gesture = this.targetWorkspace_.getGesture(e);
   if (gesture) {
-    gesture.cancelGesture();
+    gesture.cancel();
   }
 
   // Call the callback registered to this button.

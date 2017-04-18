@@ -29,7 +29,6 @@
 goog.provide('Blockly.Field');
 
 goog.require('Blockly.Gesture');
-goog.require('Blockly.GestureDB');
 
 goog.require('goog.asserts');
 goog.require('goog.dom');
@@ -508,8 +507,13 @@ Blockly.Field.prototype.setValue = function(newValue) {
  * @private
  */
 Blockly.Field.prototype.onMouseDown_ = function(e) {
-  var gesture = Blockly.GestureDB.gestureForEvent(e);
-  gesture.setStartField(this);
+  if (!this.sourceBlock_ || !this.sourceBlock_.workspace) {
+    return;
+  }
+  var gesture = this.sourceBlock_.workspace.getGesture(e);
+  if (gesture) {
+    gesture.setStartField(this);
+  }
 };
 
 

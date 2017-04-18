@@ -68,9 +68,10 @@ Blockly.longPid_ = 0;
  * which after about a second opens the context menu.  The tasks is killed
  * if the touch event terminates early.
  * @param {!Event} e Touch start event.
+ * @param {Blockly.Gesture} gesture The gesture that triggered this longStart.
  * @private
  */
-Blockly.longStart_ = function(e) {
+Blockly.longStart_ = function(e, gesture) {
   Blockly.longStop_();
   // Punt on multitouch events.
   if (e.changedTouches.length != 1) {
@@ -83,7 +84,6 @@ Blockly.longStart_ = function(e) {
     e.clientY = e.changedTouches[0].clientY;
 
     // Let the gesture route the right-click correctly.
-    var gesture = Blockly.GestureDB.gestureForEvent(e);
     if (gesture) {
       gesture.handleRightClick(e);
     }

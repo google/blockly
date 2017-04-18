@@ -90,7 +90,6 @@ Blockly.highlightedConnection_ = null;
 Blockly.localConnection_ = null;
 
 /**
- * TODO: Consider deleting this.
  * All of the connections on blocks that are currently being dragged.
  * @type {!Array.<!Blockly.Connection>}
  * @private
@@ -251,14 +250,6 @@ Blockly.onKeyDown_ = function(e) {
     }
     Blockly.Events.setGroup(false);
   }
-};
-
-/**
- * Stop binding to the global mouseup and mousemove events.
- * @private
- */
-Blockly.terminateDrag_ = function() {
-  Blockly.BlockSvg.terminateDrag();
 };
 
 /**

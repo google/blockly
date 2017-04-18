@@ -103,6 +103,17 @@ Blockly.DraggedConnectionManager = function(block) {
 };
 
 /**
+ * Sever all links from this object.
+ */
+Blockly.DraggedConnectionManager.prototype.dispose = function() {
+  this.topBlock_ = null;
+  this.workspace_ = null;
+  this.availableConnections_.length = 0;
+  this.closestConnection_ = null;
+  this.localConnection_ = null;
+};
+
+/**
  * Return whether the block would be deleted if dropped immediately, based on
  * information from the most recent move event.
  * @return {boolean} true if the block would be deleted if dropped immediately.

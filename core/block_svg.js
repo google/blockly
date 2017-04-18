@@ -230,16 +230,6 @@ Blockly.BlockSvg.prototype.getIcons = function() {
 };
 
 /**
- * Stop any pending block disconnection animations and reset the cursor.
- * @package
- */
-Blockly.BlockSvg.terminateDrag = function() {
-  Blockly.BlockSvg.disconnectUiStop_();
-  Blockly.dragMode_ = Blockly.DRAG_NONE;
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-};
-
-/**
  * Set parent of this block to be a new block or null.
  * @param {Blockly.BlockSvg} newParent New parent block.
  */
@@ -582,11 +572,10 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     this.workspace.resize();
   }
 
-  // Stop any current gesture associated with this touch identifier.
-  Blockly.terminateDrag_();
-
-  var gesture = Blockly.GestureDB.gestureForEvent(e);
-  gesture.handleBlockStart(e, this);
+  var gesture = this.workspace.getGesture(e);
+  if (gesture) {
+    gesture.handleBlockStart(e, this);
+  }
 };
 
 /**
@@ -862,8 +851,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   // If this block is being dragged, unlink the mouse events.
   if (Blockly.selected == this) {
     this.unselect();
-    // TODO (fenichel): Decide what to do here.
-    Blockly.terminateDrag_();
+    this.workspace.cancelCurrentGesture();
   }
   // If this block has a context menu open, close it.
   if (Blockly.ContextMenu.currentBlock == this) {

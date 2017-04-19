@@ -592,12 +592,16 @@ Blockly.Gesture.prototype.setStartField = function(field) {
 
 /**
  * Record the block that a gesture started on.
+ * If the block is a shadow, record the parent.  If the block is in the flyout,
+ * use the root block from the block group.
  * @param {Blockly.BlockSvg} block The block the gesture started on.
  */
 Blockly.Gesture.prototype.setStartBlock = function(block) {
   if (!this.startBlock_) {
     if (block.isShadow()) {
-      this.setStartBlock(block.parentBlock_);
+      this.setStartBlock(block.getParent());
+    } else if (block.isInFlyout && block != block.getRootBlock()) {
+      this.setStartBlock(block.getRootBlock());
     } else {
       this.startBlock_ = block;
     }

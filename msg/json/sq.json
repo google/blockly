@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"아라",
-			"Liridon"
+			"Liridon",
+			"Arianit"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "send",
@@ -228,6 +229,8 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "kerko nje numer me njoftim",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Kerkoji perdoruesit nje numer.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Kerkoji perdoruesit ca tekst.",
+	"TEXT_COUNT_MESSAGE0": "numro %1 në %2",
+	"TEXT_COUNT_HELPURL": "https://github.com/google/blockly/wiki/Text#counting-substrings",
 	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "krijo një listë të zbrazët",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Kthen një listë, te gjatësisë 0, duke mos përmbajtur asnjë regjistrim të të dhënave",

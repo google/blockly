@@ -1776,3 +1776,49 @@ Blockly.BlockSvg.prototype.getConnections_ = function(all) {
 Blockly.BlockSvg.prototype.makeConnection_ = function(type) {
   return new Blockly.RenderedConnection(this, type);
 };
+
+/**
+ * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
+ * connected should not coincidentally line up on screen.
+ * @private
+ */
+Blockly.BlockSvg.prototype.bumpNeighbours_ = function() {
+  if (!this.workspace) {
+    return;  // Deleted block.
+  }
+  if (Blockly.dragMode_ != Blockly.DRAG_NONE) {
+    return;  // Don't bump blocks during a drag.
+  }
+  var rootBlock = this.getRootBlock();
+  if (rootBlock.isInFlyout) {
+    return;  // Don't move blocks around in a flyout.
+  }
+  // Loop through every connection on this block.
+  var myConnections = this.getConnections_(false);
+  for (var i = 0, connection; connection = myConnections[i]; i++) {
+
+    // Spider down from this block bumping all sub-blocks.
+    if (connection.isConnected() && connection.isSuperior()) {
+      connection.targetBlock().bumpNeighbours_();
+    }
+
+    var neighbours = connection.neighbours_(Blockly.SNAP_RADIUS);
+    for (var j = 0, otherConnection; otherConnection = neighbours[j]; j++) {
+
+      // If both connections are connected, that's probably fine.  But if
+      // either one of them is unconnected, then there could be confusion.
+      if (!connection.isConnected() || !otherConnection.isConnected()) {
+        // Only bump blocks if they are from different tree structures.
+        if (otherConnection.getSourceBlock().getRootBlock() != rootBlock) {
+
+          // Always bump the inferior block.
+          if (connection.isSuperior()) {
+            otherConnection.bumpAwayFrom_(connection);
+          } else {
+            connection.bumpAwayFrom_(otherConnection);
+          }
+        }
+      }
+    }
+  }
+};

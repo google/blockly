@@ -41,6 +41,10 @@ goog.require('goog.asserts');
  * @constructor
  */
 Blockly.Input = function(type, name, block, connection) {
+  if (!name &&
+    (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT)) {
+    throw "Value inputs and statement inputs must have non-empty name.";
+  }
   /** @type {number} */
   this.type = type;
   /** @type {string} */

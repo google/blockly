@@ -141,7 +141,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   // Insert the flyout after the <rect> but before the block canvas so that
   // the flyout is underneath in z-order.  This makes blocks layering during
   // dragging work properly.
-  Blockly.utils.insertAfter_(flyoutSvg. this.workspace_.svgBlockCanvas_.flyoutSvg);
+  background.insertBefore(flyoutSvg, this.workspace_.svgBlockCanvas_);
   this.svgDialog_.appendChild(background);
 
   return this.svgDialog_;

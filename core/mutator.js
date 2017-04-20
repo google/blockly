@@ -329,7 +329,11 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
     if (block.rendered) {
       block.render();
     }
-    this.resizeBubble_();
+    // Don't update the bubble until the drag has ended, to avoid moving blocks
+    // under the cursor.
+    if (!this.workspace_.isDragging()) {
+      this.resizeBubble_();
+    }
     Blockly.Events.setGroup(false);
   }
 };

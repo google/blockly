@@ -375,6 +375,11 @@ Blockly.Gesture.prototype.doStart = function(e) {
 
   Blockly.BlockSvg.disconnectUiStop_();
   this.startWorkspace_.updateScreenCalculationsIfScrolled();
+  if (this.startWorkspace_.isMutator) {
+    // Mutator's coordinate system could be out of date because the bubble was
+    // dragged, the block was moved, the parent workspace zoomed, etc.
+    this.startWorkspace_.resize();
+  }
   this.startWorkspace_.markFocused();
   this.mostRecentEvent_ = e;
 

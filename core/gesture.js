@@ -30,6 +30,7 @@ goog.provide('Blockly.Gesture');
 goog.require('Blockly.BlockDragger');
 goog.require('Blockly.constants');
 goog.require('Blockly.FlyoutDragger');
+goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.WorkspaceDragger');
 
@@ -184,6 +185,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
  */
 Blockly.Gesture.prototype.dispose = function() {
   Blockly.Touch.clearTouchIdentifier();
+  Blockly.Tooltip.unblock();
   // Clear the owner's reference to this gesture.
   this.creatorWorkspace_.clearGesture();
 
@@ -385,6 +387,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
 
   // Hide chaff also hides the flyout, so don't do it if the click is in a flyout.
   Blockly.hideChaff(!!this.flyout_);
+  Blockly.Tooltip.block();
 
   if (this.startBlock_) {
     this.startBlock_.select();

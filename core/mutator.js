@@ -289,7 +289,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
  * @private
  */
 Blockly.Mutator.prototype.workspaceChanged_ = function() {
-  if (Blockly.dragMode_ == Blockly.DRAG_NONE) {
+  if (!this.workspace_.isDragging()) {
     var blocks = this.workspace_.getTopBlocks(false);
     var MARGIN = 20;
     for (var b = 0, block; block = blocks[b]; b++) {
@@ -333,7 +333,11 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
     if (block.rendered) {
       block.render();
     }
-    this.resizeBubble_();
+    // Don't update the bubble until the drag has ended, to avoid moving blocks
+    // under the cursor.
+    if (!this.workspace_.isDragging()) {
+      this.resizeBubble_();
+    }
     Blockly.Events.setGroup(false);
   }
 };

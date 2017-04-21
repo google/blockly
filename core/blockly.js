@@ -111,16 +111,6 @@ Blockly.clipboardXml_ = null;
 Blockly.clipboardSource_ = null;
 
 /**
- * TODO: Consider deleting this.
- * Is the mouse dragging a block?
- * DRAG_NONE - No drag operation.
- * DRAG_STICKY - Still inside the sticky DRAG_RADIUS.
- * DRAG_FREE - Freely draggable.
- * @private
- */
-Blockly.dragMode_ = Blockly.DRAG_NONE;
-
-/**
  * Cached value for whether 3D is supported.
  * @type {!boolean}
  * @private
@@ -209,10 +199,18 @@ Blockly.onKeyDown_ = function(e) {
     // Do this first to prevent an error in the delete code from resulting in
     // data loss.
     e.preventDefault();
+    // Don't delete while dragging.  Jeez.
+    if (Blockly.mainWorkspace.isDragging()) {
+      return;
+    }
     if (Blockly.selected && Blockly.selected.isDeletable()) {
       deleteBlock = true;
     }
   } else if (e.altKey || e.ctrlKey || e.metaKey) {
+    // Don't use meta keys during drags.
+    if (Blockly.mainWorkspace.isDragging()) {
+      return;
+    }
     if (Blockly.selected &&
         Blockly.selected.isDeletable() && Blockly.selected.isMovable()) {
       if (e.keyCode == 67) {
@@ -242,8 +240,7 @@ Blockly.onKeyDown_ = function(e) {
     // Common code for delete and cut.
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
-    var heal = Blockly.dragMode_ != Blockly.DRAG_FREE;
-    Blockly.selected.dispose(heal, true);
+    Blockly.selected.dispose(/* heal */ true, true);
     if (Blockly.highlightedConnection_) {
       Blockly.highlightedConnection_.unhighlight();
       Blockly.highlightedConnection_ = null;
@@ -259,9 +256,8 @@ Blockly.onKeyDown_ = function(e) {
  */
 Blockly.copy_ = function(block) {
   var xmlBlock = Blockly.Xml.blockToDom(block);
-  if (Blockly.dragMode_ != Blockly.DRAG_FREE) {
-    Blockly.Xml.deleteNext(xmlBlock);
-  }
+  // Copy only the selected block and internal blocks.
+  Blockly.Xml.deleteNext(xmlBlock);
   // Encode start position in XML.
   var xy = block.getRelativeToSurfaceXY();
   xmlBlock.setAttribute('x', block.RTL ? -xy.x : xy.x);

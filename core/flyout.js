@@ -182,15 +182,6 @@ Blockly.Flyout.prototype.width_ = 0;
 Blockly.Flyout.prototype.height_ = 0;
 
 /**
- * Is the flyout dragging (scrolling)?
- * DRAG_NONE - no drag is ongoing or state is undetermined.
- * DRAG_STICKY - still within the sticky drag radius.
- * DRAG_FREE - in scroll mode (never create a new block).
- * @private
- */
-Blockly.Flyout.prototype.dragMode_ = Blockly.DRAG_NONE;
-
-/**
  * Range of a drag angle from a flyout considered "dragging toward workspace".
  * Drags that are within the bounds of this many degrees from the orthogonal
  * line to the flyout edge are considered to be "drags toward the workspace".
@@ -258,6 +249,10 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   Array.prototype.push.apply(this.eventWrappers_,
       Blockly.bindEventWithChecks_(this.svgBackground_, 'mousedown', this,
       this.onMouseDown_));
+
+  // A flyout connected to a workspace doesn't have its own current gesture.
+  this.workspace_.getGesture =
+      this.targetWorkspace_.getGesture.bind(this.targetWorkspace_);
 };
 
 /**

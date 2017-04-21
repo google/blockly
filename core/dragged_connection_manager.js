@@ -149,7 +149,6 @@ Blockly.DraggedConnectionManager.prototype.applyConnections = function() {
  *     {@link Blockly.DELETE_AREA_TOOLBOX}, or {@link Blockly.DELETE_AREA_NONE}.
  */
 Blockly.DraggedConnectionManager.prototype.update = function(dxy, deleteArea) {
-  // TODO (fenichel): Possibly scale this by workspace.scale.
   var oldClosestConnection = this.closestConnection_;
   var closestConnectionChanged = this.updateClosest_(dxy);
 

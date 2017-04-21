@@ -965,7 +965,7 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
 
   if (Blockly.Events.isEnabled()) {
     Blockly.Events.setGroup(true);
-    Blockly.Events.fire(new Blockly.Events.Create(this.startBlock_));
+    Blockly.Events.fire(new Blockly.Events.Create(newBlock));
   }
   if (this.autoClose) {
     this.hide();

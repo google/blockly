@@ -211,6 +211,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
     this.draggedConnectionManager_.applyConnections();
     this.draggingBlock_.render();
     this.fireMoveEvent_();
+    this.draggingBlock_.scheduleSnapAndBump();
   }
   this.workspace_.setResizesEnabled(true);
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
@@ -226,19 +227,6 @@ Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
   event.oldCoordinate = this.startXY_;
   event.recordNew();
   Blockly.Events.fire(event);
-  var draggingBlock = this.draggingBlock_;
-  // Ensure that any snap and bump are part of this move's event group.
-  var group = Blockly.Events.getGroup();
-  setTimeout(function() {
-    Blockly.Events.setGroup(group);
-    draggingBlock.snapToGrid();
-    Blockly.Events.setGroup(false);
-  }, Blockly.BUMP_DELAY / 2);
-  setTimeout(function() {
-    Blockly.Events.setGroup(group);
-    draggingBlock.bumpNeighbours_();
-    Blockly.Events.setGroup(false);
-  }, Blockly.BUMP_DELAY);
 };
 
 /**
@@ -248,13 +236,14 @@ Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
  * @private
  */
 Blockly.BlockDragger.prototype.maybeDeleteBlock_ = function() {
-  // TODO: is there an event to fire?
   var trashcan = this.workspace_.trashcan;
 
   if (this.wouldDeleteBlock_) {
     if (trashcan) {
       goog.Timer.callOnce(trashcan.close, 100, trashcan);
     }
+    // Fire a move event, so we know where to go back to for an undo.
+    this.fireMoveEvent_();
     this.draggingBlock_.dispose(false, true);
   } else if (trashcan) {
     // Make sure the trash can is closed.

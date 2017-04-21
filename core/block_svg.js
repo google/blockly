@@ -292,7 +292,6 @@ Blockly.BlockSvg.terminateDrag = function() {
     }
   }
   Blockly.dragMode_ = Blockly.DRAG_NONE;
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
 };
 
 /**
@@ -653,8 +652,6 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
       Blockly.Events.setGroup(true);
     }
     // Left-click (or middle click)
-    Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
-
     this.dragStartXY_ = this.getRelativeToSurfaceXY();
     this.workspace.startDrag(e, this.dragStartXY_);
 
@@ -691,6 +688,11 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
   Blockly.Touch.clearTouchIdentifier();
   if (Blockly.dragMode_ != Blockly.DRAG_FREE &&
       !Blockly.WidgetDiv.isVisible()) {
+    // Move the block in front of the others. Do this at the end of a click
+    // instead of rearranging the dom on mousedown. This helps with
+    // performance and makes it easier to use psuedo element :active
+    // to set the cursor.
+    this.bringToFront_();
     Blockly.Events.fire(
         new Blockly.Events.Ui(this, 'click', undefined, undefined));
   }
@@ -721,13 +723,16 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     if (trashcan) {
       goog.Timer.callOnce(trashcan.close, 100, trashcan);
     }
+    if (this.workspace.toolbox_) {
+      this.workspace.toolbox_.removeDeleteStyle();
+    }
+
     Blockly.selected.dispose(false, true);
   }
   if (Blockly.highlightedConnection_) {
     Blockly.highlightedConnection_.unhighlight();
     Blockly.highlightedConnection_ = null;
   }
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   if (!Blockly.WidgetDiv.isVisible()) {
     Blockly.Events.setGroup(false);
   }
@@ -1063,15 +1068,27 @@ Blockly.BlockSvg.prototype.updateCursor_ = function(e, closestConnection) {
   var showDeleteCursor = wouldDelete && !wouldConnect;
 
   if (showDeleteCursor) {
-    Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
+    Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
+                      'blocklyDraggingDelete');
+    
+    if (this.workspace.toolbox_) {
+      // Change the cursor to a hand with an 'x'
+      this.workspace.toolbox_.addDeleteStyle();
+    }
+
     if (deleteArea == Blockly.DELETE_AREA_TRASH && this.workspace.trashcan) {
       this.workspace.trashcan.setOpen_(true);
     }
     return true;
   } else {
-    Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
     if (this.workspace.trashcan) {
       this.workspace.trashcan.setOpen_(false);
+    }
+    Blockly.utils.removeClass(/** @type {!Element} */ (this.svgGroup_),
+                      'blocklyDraggingDelete');
+    if (this.workspace.toolbox_) {
+      // Change the cursor on the toolbox
+      this.workspace.toolbox_.removeDeleteStyle();
     }
     return false;
   }
@@ -1587,13 +1604,6 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
 Blockly.BlockSvg.prototype.addSelect = function() {
   Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
                     'blocklySelected');
-  // Move the selected block to the top of the stack.
-  var block = this;
-  do {
-    var root = block.getSvgRoot();
-    root.parentNode.appendChild(root);
-    block = block.getParent();
-  } while (block);
 };
 
 /**
@@ -1619,6 +1629,21 @@ Blockly.BlockSvg.prototype.setColour = function(colour) {
   }
 };
 
+
+/**
+ * Move this block to the front of the visible workspace.
+ * <g> tags do not respect z-index so svg renders them in the
+ * order that they are in the dom.  By placing this block first within the
+ * block group's <g>, it will render on top of any other blocks.
+ */
+Blockly.BlockSvg.prototype.bringToFront_ = function() {
+  var block = this;
+  do {
+    var root = block.getSvgRoot();
+    root.parentNode.appendChild(root);
+    block = block.getParent();
+  } while (block);
+};
 /**
  * Set whether this block can chain onto the bottom of another block.
  * @param {boolean} newBoolean True if there can be a previous statement.

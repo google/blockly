@@ -30,6 +30,7 @@ goog.provide('Blockly.Gesture');
 goog.require('Blockly.BlockDragger');
 goog.require('Blockly.constants');
 goog.require('Blockly.FlyoutDragger');
+goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.WorkspaceDragger');
 
@@ -184,6 +185,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
  */
 Blockly.Gesture.prototype.dispose = function() {
   Blockly.Touch.clearTouchIdentifier();
+  Blockly.Tooltip.unblock();
   // Clear the owner's reference to this gesture.
   this.creatorWorkspace_.clearGesture();
 
@@ -375,11 +377,17 @@ Blockly.Gesture.prototype.doStart = function(e) {
 
   Blockly.BlockSvg.disconnectUiStop_();
   this.startWorkspace_.updateScreenCalculationsIfScrolled();
+  if (this.startWorkspace_.isMutator) {
+    // Mutator's coordinate system could be out of date because the bubble was
+    // dragged, the block was moved, the parent workspace zoomed, etc.
+    this.startWorkspace_.resize();
+  }
   this.startWorkspace_.markFocused();
   this.mostRecentEvent_ = e;
 
   // Hide chaff also hides the flyout, so don't do it if the click is in a flyout.
   Blockly.hideChaff(!!this.flyout_);
+  Blockly.Tooltip.block();
 
   if (this.startBlock_) {
     this.startBlock_.select();
@@ -592,12 +600,16 @@ Blockly.Gesture.prototype.setStartField = function(field) {
 
 /**
  * Record the block that a gesture started on.
+ * If the block is a shadow, record the parent.  If the block is in the flyout,
+ * use the root block from the block group.
  * @param {Blockly.BlockSvg} block The block the gesture started on.
  */
 Blockly.Gesture.prototype.setStartBlock = function(block) {
   if (!this.startBlock_) {
     if (block.isShadow()) {
-      this.setStartBlock(block.parentBlock_);
+      this.setStartBlock(block.getParent());
+    } else if (block.isInFlyout && block != block.getRootBlock()) {
+      this.setStartBlock(block.getRootBlock());
     } else {
       this.startBlock_ = block;
     }

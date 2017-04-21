@@ -821,7 +821,7 @@ Blockly.Events.disableOrphans = function(event) {
           child.setDisabled(false);
         }
       } else if ((block.outputConnection || block.previousConnection) &&
-                 Blockly.dragMode_ == Blockly.DRAG_NONE) {
+                 !workspace.isDragging()) {
         do {
           block.setDisabled(true);
           block = block.getNextBlock();

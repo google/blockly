@@ -272,6 +272,11 @@ Blockly.Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
   if (!this.flyout_.isScrollable() ||
       this.flyout_.isDragTowardWorkspace(this.currentDragDeltaXY_)) {
     this.startWorkspace_ = this.flyout_.targetWorkspace_;
+    // Start the event group now, so that the same event group is used for block
+    // creation and block dragging.
+    if (!Blockly.Events.getGroup()) {
+      Blockly.Events.setGroup(true);
+    }
     this.startBlock_ = this.flyout_.createBlock(this.startBlock_);
     this.startBlock_.select();
     return true;
@@ -553,19 +558,11 @@ Blockly.Gesture.prototype.doFieldClick_ = function() {
 // Block clicks
 Blockly.Gesture.prototype.doBlockClick_ = function() {
   if (this.flyout_ && this.flyout_.autoClose) {
+    if (!Blockly.Events.getGroup()) {
+      Blockly.Events.setGroup(true);
+    }
     var newBlock = this.flyout_.createBlock(this.startBlock_);
-    // Ensure that any snap and bump are part of this move's event group.
-    var group = Blockly.Events.getGroup();
-    setTimeout(function() {
-      Blockly.Events.setGroup(group);
-      newBlock.snapToGrid();
-      Blockly.Events.setGroup(false);
-    }, Blockly.BUMP_DELAY / 2);
-    setTimeout(function() {
-      Blockly.Events.setGroup(group);
-      newBlock.bumpNeighbours_();
-      Blockly.Events.setGroup(false);
-    }, Blockly.BUMP_DELAY);
+    newBlock.scheduleSnapAndBump();
   } else {
     // TODO: Check if anything else needs to happen on a block click.
     Blockly.Events.fire(

@@ -74,22 +74,6 @@ Blockly.mainWorkspace = null;
 Blockly.selected = null;
 
 /**
- * TODO: Consider deleting this.
- * Currently highlighted connection (during a drag).
- * @type {Blockly.Connection}
- * @private
- */
-Blockly.highlightedConnection_ = null;
-
-/**
- * TODO: Consider deleting this.
- * Connection on dragged block that matches the highlighted connection.
- * @type {Blockly.Connection}
- * @private
- */
-Blockly.localConnection_ = null;
-
-/**
  * All of the connections on blocks that are currently being dragged.
  * @type {!Array.<!Blockly.Connection>}
  * @private
@@ -241,10 +225,6 @@ Blockly.onKeyDown_ = function(e) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
     Blockly.selected.dispose(/* heal */ true, true);
-    if (Blockly.highlightedConnection_) {
-      Blockly.highlightedConnection_.unhighlight();
-      Blockly.highlightedConnection_ = null;
-    }
     Blockly.Events.setGroup(false);
   }
 };

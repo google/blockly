@@ -1473,3 +1473,26 @@ Blockly.BlockSvg.prototype.getConnections_ = function(all) {
 Blockly.BlockSvg.prototype.makeConnection_ = function(type) {
   return new Blockly.RenderedConnection(this, type);
 };
+
+/**
+ * Schedule snapping to grid and bumping neighbours to occur after a brief
+ * delay.
+ * @package
+ */
+Blockly.BlockSvg.prototype.scheduleSnapAndBump = function() {
+  var block = this;
+  // Ensure that any snap and bump are part of this move's event group.
+  var group = Blockly.Events.getGroup();
+
+  setTimeout(function() {
+    Blockly.Events.setGroup(group);
+    block.snapToGrid();
+    Blockly.Events.setGroup(false);
+  }, Blockly.BUMP_DELAY / 2);
+
+  setTimeout(function() {
+    Blockly.Events.setGroup(group);
+    block.bumpNeighbours_();
+    Blockly.Events.setGroup(false);
+  }, Blockly.BUMP_DELAY);
+};

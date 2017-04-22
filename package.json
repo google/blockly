@@ -18,13 +18,21 @@
   },
   "scripts": {
      "lint": "jshint .",
-    "preinstall": "scripts/get_geckdriver.sh  && scripts/get_selenium.sh && scripts/get_chromedriver.sh && scripts/selenium_connect.sh &",
+    "preinstall": "scripts/get_geckdriver.sh  && scripts/get_selenium.sh && scripts/get_chromedriver.sh && scripts/connect.sh  &",
     "test": "node tests/jsunit/test_runner.js"
   },
   "license": "Apache-2.0",
   "private": true,
   "devDependencies": {
-    "jshint": "latest"
+    "google-closure-library": "^20170218.0.1",
+    "jasmine": "^2.5.3",
+    "jshint": "latest",
+    "karma": "latest",
+    "karma-chrome-launcher": "latest",
+    "karma-cli": "latest",
+    "karma-closure": "^0.1.1",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-jasmine": "~0.3"
   },
   "jshintConfig": {
     "globalstrict": true,

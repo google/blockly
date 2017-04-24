@@ -17,7 +17,8 @@
 			"Luk3",
 			"Cristofer Alves",
 			"EVinente",
-			"Lowvy"
+			"Lowvy",
+			"Trigonometria87"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -32,7 +33,7 @@
 	"DELETE_ALL_BLOCKS": "Deletar todos os blocos %1?",
 	"CLEAN_UP": "Limpar blocos",
 	"COLLAPSE_BLOCK": "Colapsar Bloco",
-	"COLLAPSE_ALL": "Colapsar Bloco",
+	"COLLAPSE_ALL": "Colapsar Blocos",
 	"EXPAND_BLOCK": "Expandir bloco",
 	"EXPAND_ALL": "Expandir blocos",
 	"DISABLE_BLOCK": "Desabilitar bloco",
@@ -70,10 +71,10 @@
 	"CONTROLS_WHILEUNTIL_OPERATOR_UNTIL": "repita até",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_WHILE": "Enquanto um valor for verdadeiro, então faça algumas instruções.",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Enquanto um valor for falso, então faça algumas instruções.",
-	"CONTROLS_FOR_TOOLTIP": "Faz com que a variável '%1' assuma os valores do número inicial ao número final, contando de acordo com o intervalo especificado e executa os blocos especificados.",
+	"CONTROLS_FOR_TOOLTIP": "Faça com que a variável '%1' assuma os valores do número inicial ao número final, contando de acordo com o intervalo especificado e execute os blocos especificados.",
 	"CONTROLS_FOR_TITLE": "contar com %1 de %2 até %3 por %4",
 	"CONTROLS_FOREACH_TITLE": "para cada item %1 na lista %2",
-	"CONTROLS_FOREACH_TOOLTIP": "Para cada item em uma lista, atribuir o item à variável '%1' e então realiza algumas instruções.",
+	"CONTROLS_FOREACH_TOOLTIP": "Para cada item em uma lista, atribua o item à variável '%1' e então realize algumas instruções.",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "encerra o laço",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE": "continua com a próxima iteração do laço",
 	"CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK": "Encerra o laço.",

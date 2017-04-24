@@ -10,7 +10,8 @@
 			"Gchr",
 			"아라",
 			"Geraki",
-			"Ανώνυμος Βικιπαιδιστής"
+			"Ανώνυμος Βικιπαιδιστής",
+			"GR"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "αντικείμενο",
@@ -233,6 +234,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "πρότρεψε με μήνυμα για να δοθεί αριθμός",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Δημιουργεί προτροπή για τον χρήστη για να δώσει ένα αριθμό.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Δημιουργεί προτροπή για το χρήστη για να δώσει κάποιο κείμενο.",
+	"TEXT_COUNT_TOOLTIP": "Μετρά πόσες φορές κάποιο κείμενο εμφανίζεται μέσα σε ένα άλλο κείμενο.",
 	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "δημιούργησε κενή λίστα",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Επιστρέφει μια λίστα, με μήκος 0, η οποία δεν περιέχει εγγραφές δεδομένων",

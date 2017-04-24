@@ -129,8 +129,8 @@ Blockly.Msg.VARIABLE_ALREADY_EXISTS = 'A variable named "%1" already exists.'
 // Variable deletion.
 /// confirm -  Ask the user to confirm their deletion of multiple uses of a variable.
 Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = 'Delete %1 uses of the "%2" variable?';
-/// alert - Tell the user that they can't delete a variable because it's part of the definition of a procedure.
-Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = 'Can\'t delete the variable "%1" because it is part of the definition of the procedure "%2"';
+/// alert - Tell the user that they can't delete a variable because it's part of the definition of a function.
+Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = 'Can\'t delete the variable "%1" because it\'s part of the definition of the function "%2"';
 /// dropdown choice - Delete the currently selected variable.
 Blockly.Msg.DELETE_VARIABLE = 'Delete the "%1" variable';
 
@@ -255,6 +255,33 @@ Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = 'Add a condition to the if block.';
 Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE = Blockly.Msg.CONTROLS_IF_MSG_ELSE;
 /// tooltip - Describes the 'else' subblock during [https://github.com/google/blockly/wiki/IfElse#block-modification if block modification].
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = 'Add a final, catch-all condition to the if block.';
+
+/// button text - Text on a button inside a dialogue window, which will accept or acknowledge the contents of the dialogue when pressed.
+Blockly.Msg.IOS_OK = 'OK';
+/// button text - Text on a button inside a dialogue window, which will close or cancel the dialogue when pressed.
+Blockly.Msg.IOS_CANCEL = 'Cancel';
+/// alert - Title text for an error dialogue.
+Blockly.Msg.IOS_ERROR = 'Error';
+/// header text - Title of a section that displays a list of parameters (aka. "inputs") that have been defined for a procedure. This is used inside a dialogue window to configure a procedure.
+Blockly.Msg.IOS_PROCEDURES_INPUTS = 'INPUTS';
+/// button text - Text on a button which will add a parameter (aka. "input") to a procedure. This is used inside a dialogue window to configure a procedure. NOTE: The "+" should be preserved at the beginning of the text.
+Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = '+ Add Input';
+/// option text - Text describing an option to allow statements to be added within a procedure. This is used inside a dialogue window to configure a procedure.
+Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = 'Allow statements';
+/// alert - Error message when duplicate parameters (aka. "inputs") have been defined on a procedure. This is used inside a dialogue window to configure procedure parameters.
+Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = 'This function has duplicate inputs.';
+/// button text - Text on a button which will open a variable creation dialogue when pressed. NOTE: The "+" should be preserved at the beginning of the text.
+Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = '+ Add Variable';
+/// button text - Text on a button inside a variable creation dialogue, which will add a variable when pressed.
+Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = 'Add';
+/// button text - Text on a button inside a variable rename dialogue, which will rename a variable when pressed.
+Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = 'Rename';
+/// button text - Text on a button inside a variable deletion dialogue, which will delete a variable when pressed.
+Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = 'Delete';
+/// placeholder text - Placeholder text used inside a text input, where a variable name should be entered.
+Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = 'Variable name';
+/// alert - Error message that is displayed when the user attempts to create a variable without a name.
+Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = 'You can\'t use an empty variable name.';
 
 /// url - Information about comparisons.
 Blockly.Msg.LOGIC_COMPARE_HELPURL = 'https://en.wikipedia.org/wiki/Inequality_(mathematics)';

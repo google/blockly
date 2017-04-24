@@ -717,7 +717,7 @@ Blockly.Blocks['text_count'] = {
       ],
       "output": "Number",
       "inputsInline": true,
-      "colour": Blockly.Blocks.math.HUE,
+      "colour": Blockly.Blocks.texts.HUE,
       "tooltip": Blockly.Msg.TEXT_COUNT_TOOLTIP,
       "helpUrl": Blockly.Msg.TEXT_COUNT_HELPURL
     });

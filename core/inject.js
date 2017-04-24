@@ -60,7 +60,7 @@ Blockly.inject = function(container, opt_options) {
   // Create surfaces for dragging things. These are optimizations
   // so that the broowser does not repaint during the drag.
   var blockDragSurface = new Blockly.BlockDragSurfaceSvg(subContainer);
-  var workspaceDragSurface = new Blockly.workspaceDragSurfaceSvg(subContainer);
+  var workspaceDragSurface = new Blockly.WorkspaceDragSurfaceSvg(subContainer);
 
   var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
       workspaceDragSurface);
@@ -280,7 +280,7 @@ Blockly.init_ = function(mainWorkspace) {
   var svg = mainWorkspace.getParentSvg();
 
   // Suppress the browser's context menu.
-  Blockly.bindEventWithChecks_(svg, 'contextmenu', null,
+  Blockly.bindEventWithChecks_(svg.parentNode, 'contextmenu', null,
       function(e) {
         if (!Blockly.utils.isTargetInput(e)) {
           e.preventDefault();

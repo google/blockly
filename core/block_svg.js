@@ -89,7 +89,7 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @type {boolean}
    * @private
    */
-  this.useDragSurface_ = Blockly.utils.is3dSupported() && workspace.blockDragSurface_;
+  this.useDragSurface_ = Blockly.utils.is3dSupported() && !!workspace.blockDragSurface_;
 
   Blockly.Tooltip.bindMouseEvents(this.svgPath_);
   Blockly.BlockSvg.superClass_.constructor.call(this,
@@ -99,10 +99,12 @@ goog.inherits(Blockly.BlockSvg, Blockly.Block);
 
 /**
  * Height of this block, not including any statement blocks above or below.
+ * Height is in workspace units.
  */
 Blockly.BlockSvg.prototype.height = 0;
 /**
  * Width of this block, including any connected value blocks.
+ * Width is in workspace units.
  */
 Blockly.BlockSvg.prototype.width = 0;
 
@@ -290,7 +292,6 @@ Blockly.BlockSvg.terminateDrag = function() {
     }
   }
   Blockly.dragMode_ = Blockly.DRAG_NONE;
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
 };
 
 /**
@@ -324,8 +325,10 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
 
 /**
  * Return the coordinates of the top-left corner of this block relative to the
- * drawing surface's origin (0,0).
- * @return {!goog.math.Coordinate} Object with .x and .y properties.
+ * drawing surface's origin (0,0), in workspace units.
+ * This does not change with workspace scale.
+ * @return {!goog.math.Coordinate} Object with .x and .y properties in
+ *     workspace coordinates.
  */
 Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
   var x = 0;
@@ -358,8 +361,8 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
 
 /**
  * Move a block by a relative offset.
- * @param {number} dx Horizontal offset.
- * @param {number} dy Vertical offset.
+ * @param {number} dx Horizontal offset in workspace units.
+ * @param {number} dy Vertical offset in workspace units.
  */
 Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
   goog.asserts.assert(!this.parentBlock_, 'Block has parent.');
@@ -375,8 +378,8 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
 /**
  * Transforms a block by setting the translation on the transform attribute
  * of the block's SVG.
- * @param {number} x The x coordinate of the translation.
- * @param {number} y The y coordinate of the translation.
+ * @param {number} x The x coordinate of the translation in workspace units.
+ * @param {number} y The y coordinate of the translation in workspace units.
  */
 Blockly.BlockSvg.prototype.translate = function(x, y) {
   this.getSvgRoot().setAttribute('transform',
@@ -649,8 +652,6 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
       Blockly.Events.setGroup(true);
     }
     // Left-click (or middle click)
-    Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
-
     this.dragStartXY_ = this.getRelativeToSurfaceXY();
     this.workspace.startDrag(e, this.dragStartXY_);
 
@@ -687,6 +688,11 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
   Blockly.Touch.clearTouchIdentifier();
   if (Blockly.dragMode_ != Blockly.DRAG_FREE &&
       !Blockly.WidgetDiv.isVisible()) {
+    // Move the block in front of the others. Do this at the end of a click
+    // instead of rearranging the dom on mousedown. This helps with
+    // performance and makes it easier to use psuedo element :active
+    // to set the cursor.
+    this.bringToFront_();
     Blockly.Events.fire(
         new Blockly.Events.Ui(this, 'click', undefined, undefined));
   }
@@ -717,13 +723,16 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     if (trashcan) {
       goog.Timer.callOnce(trashcan.close, 100, trashcan);
     }
+    if (this.workspace.toolbox_) {
+      this.workspace.toolbox_.removeDeleteStyle();
+    }
+
     Blockly.selected.dispose(false, true);
   }
   if (Blockly.highlightedConnection_) {
     Blockly.highlightedConnection_.unhighlight();
     Blockly.highlightedConnection_ = null;
   }
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   if (!Blockly.WidgetDiv.isVisible()) {
     Blockly.Events.setGroup(false);
   }
@@ -879,8 +888,10 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
 /**
  * Move the connections for this block and all blocks attached under it.
  * Also update any attached bubbles.
- * @param {number} dx Horizontal offset from current location.
- * @param {number} dy Vertical offset from current location.
+ * @param {number} dx Horizontal offset from current location, in workspace
+ *     units.
+ * @param {number} dy Vertical offset from current location, in workspace
+ *     units.
  * @private
  */
 Blockly.BlockSvg.prototype.moveConnections_ = function(dx, dy) {
@@ -1057,15 +1068,27 @@ Blockly.BlockSvg.prototype.updateCursor_ = function(e, closestConnection) {
   var showDeleteCursor = wouldDelete && !wouldConnect;
 
   if (showDeleteCursor) {
-    Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
+    Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
+                      'blocklyDraggingDelete');
+    
+    if (this.workspace.toolbox_) {
+      // Change the cursor to a hand with an 'x'
+      this.workspace.toolbox_.addDeleteStyle();
+    }
+
     if (deleteArea == Blockly.DELETE_AREA_TRASH && this.workspace.trashcan) {
       this.workspace.trashcan.setOpen_(true);
     }
     return true;
   } else {
-    Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
     if (this.workspace.trashcan) {
       this.workspace.trashcan.setOpen_(false);
+    }
+    Blockly.utils.removeClass(/** @type {!Element} */ (this.svgGroup_),
+                      'blocklyDraggingDelete');
+    if (this.workspace.toolbox_) {
+      // Change the cursor on the toolbox
+      this.workspace.toolbox_.removeDeleteStyle();
     }
     return false;
   }
@@ -1581,13 +1604,6 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
 Blockly.BlockSvg.prototype.addSelect = function() {
   Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
                     'blocklySelected');
-  // Move the selected block to the top of the stack.
-  var block = this;
-  do {
-    var root = block.getSvgRoot();
-    root.parentNode.appendChild(root);
-    block = block.getParent();
-  } while (block);
 };
 
 /**
@@ -1613,6 +1629,21 @@ Blockly.BlockSvg.prototype.setColour = function(colour) {
   }
 };
 
+
+/**
+ * Move this block to the front of the visible workspace.
+ * <g> tags do not respect z-index so svg renders them in the
+ * order that they are in the dom.  By placing this block first within the
+ * block group's <g>, it will render on top of any other blocks.
+ */
+Blockly.BlockSvg.prototype.bringToFront_ = function() {
+  var block = this;
+  do {
+    var root = block.getSvgRoot();
+    root.parentNode.appendChild(root);
+    block = block.getParent();
+  } while (block);
+};
 /**
  * Set whether this block can chain onto the bottom of another block.
  * @param {boolean} newBoolean True if there can be a previous statement.
@@ -1769,4 +1800,50 @@ Blockly.BlockSvg.prototype.getConnections_ = function(all) {
  */
 Blockly.BlockSvg.prototype.makeConnection_ = function(type) {
   return new Blockly.RenderedConnection(this, type);
+};
+
+/**
+ * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
+ * connected should not coincidentally line up on screen.
+ * @private
+ */
+Blockly.BlockSvg.prototype.bumpNeighbours_ = function() {
+  if (!this.workspace) {
+    return;  // Deleted block.
+  }
+  if (Blockly.dragMode_ != Blockly.DRAG_NONE) {
+    return;  // Don't bump blocks during a drag.
+  }
+  var rootBlock = this.getRootBlock();
+  if (rootBlock.isInFlyout) {
+    return;  // Don't move blocks around in a flyout.
+  }
+  // Loop through every connection on this block.
+  var myConnections = this.getConnections_(false);
+  for (var i = 0, connection; connection = myConnections[i]; i++) {
+
+    // Spider down from this block bumping all sub-blocks.
+    if (connection.isConnected() && connection.isSuperior()) {
+      connection.targetBlock().bumpNeighbours_();
+    }
+
+    var neighbours = connection.neighbours_(Blockly.SNAP_RADIUS);
+    for (var j = 0, otherConnection; otherConnection = neighbours[j]; j++) {
+
+      // If both connections are connected, that's probably fine.  But if
+      // either one of them is unconnected, then there could be confusion.
+      if (!connection.isConnected() || !otherConnection.isConnected()) {
+        // Only bump blocks if they are from different tree structures.
+        if (otherConnection.getSourceBlock().getRootBlock() != rootBlock) {
+
+          // Always bump the inferior block.
+          if (connection.isSuperior()) {
+            otherConnection.bumpAwayFrom_(connection);
+          } else {
+            connection.bumpAwayFrom_(otherConnection);
+          }
+        }
+      }
+    }
+  }
 };

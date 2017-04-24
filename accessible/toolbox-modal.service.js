@@ -42,6 +42,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
       this.selectedToolboxCategories = null;
       this.onSelectBlockCallback = null;
       this.onDismissCallback = null;
+      this.hasVariableCategory = null;
       // The aim of the pre-show hook is to populate the modal component with
       // the information it needs to display the modal (e.g., which categories
       // and blocks to display).
@@ -118,6 +119,26 @@ blocklyApp.ToolboxModalService = ng.core.Class({
   },
   isModalShown: function() {
     return this.modalIsShown;
+  },
+  toolboxHasVariableCategory: function() {
+    if (this.hasVariableCategory === null) {
+      var toolboxXmlElt = document.getElementById('blockly-toolbox-xml');
+      var toolboxCategoryElts = toolboxXmlElt.getElementsByTagName('category');
+      var that = this;
+      Array.from(toolboxCategoryElts).forEach(
+        function(categoryElt) {
+          var custom = categoryElt.attributes.custom;
+          if (custom && custom.value == Blockly.VARIABLE_CATEGORY_NAME) {
+            that.hasVariableCategory = true;
+          }
+        });
+
+      if (this.hasVariableCategory === null) {
+        this.hasVariableCategory = false;
+      }
+    }
+
+    return this.hasVariableCategory;
   },
   showModal_: function(
       selectedToolboxCategories, onSelectBlockCallback, onDismissCallback) {

@@ -272,6 +272,7 @@ Blockly.Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
   if (!this.flyout_.isScrollable() ||
       this.flyout_.isDragTowardWorkspace(this.currentDragDeltaXY_)) {
     this.startWorkspace_ = this.flyout_.targetWorkspace_;
+    this.startWorkspace_.updateScreenCalculationsIfScrolled();
     // Start the event group now, so that the same event group is used for block
     // creation and block dragging.
     if (!Blockly.Events.getGroup()) {
@@ -494,12 +495,10 @@ Blockly.Gesture.prototype.cancel = function() {
  */
 Blockly.Gesture.prototype.handleRightClick = function(e) {
   if (this.startBlock_) {
-    if (this.flyout_) {
-      // TODO: Possibly hide chaff in the non-flyout case as well.
-      Blockly.hideChaff(true);
-    }
+    Blockly.hideChaff(this.flyout_);
     this.startBlock_.showContextMenu_(e);
   } else if (this.startWorkspace_ && !this.flyout_) {
+    Blockly.hideChaff();
     this.startWorkspace_.showContextMenu_(e);
   }
 

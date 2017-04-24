@@ -202,6 +202,7 @@ Blockly.Toolbox.prototype.init = function() {
   }
   this.addColour_();
   this.position();
+  Blockly.Search.init(workspace, this);
 };
 
 /**
@@ -241,6 +242,7 @@ Blockly.Toolbox.prototype.position = function() {
     return;
   }
   var svg = this.workspace_.getParentSvg();
+  var svgPosition = goog.style.getPageOffset(svg);
   var svgSize = Blockly.svgSize(svg);
   if (this.horizontalLayout_) {
     treeDiv.style.left = '0';
@@ -449,7 +451,7 @@ Blockly.Toolbox.prototype.getClientRect = function() {
 Blockly.Toolbox.prototype.refreshSelection = function() {
   var selectedItem = this.tree_.getSelectedItem();
   if (selectedItem && selectedItem.blocks) {
-    this.flyout_.show(selectedItem.blocks);
+    this.flyout_.show(selectedItem);
   }
 };
 
@@ -536,7 +538,7 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
   var oldNode = this.getSelectedItem();
   goog.ui.tree.TreeControl.prototype.setSelectedItem.call(this, node);
   if (node && node.blocks && node.blocks.length) {
-    toolbox.flyout_.show(node.blocks);
+    toolbox.flyout_.show(node);
     // Scroll the flyout to the top if the category has changed.
     if (toolbox.lastCategory_ != node) {
       toolbox.flyout_.scrollToStart();

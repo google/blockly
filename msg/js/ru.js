@@ -7,6 +7,7 @@ goog.provide('Blockly.Msg.ru');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Добавить комментарий";
+Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Измените значение:";
 Blockly.Msg.CLEAN_UP = "Убрать блоки";
 Blockly.Msg.COLLAPSE_ALL = "Свернуть блоки";
@@ -73,6 +74,19 @@ Blockly.Msg.EXPAND_BLOCK = "Развернуть блок";
 Blockly.Msg.EXTERNAL_INPUTS = "Вставки снаружи";
 Blockly.Msg.HELP = "Справка";
 Blockly.Msg.INLINE_INPUTS = "Вставки внутри";
+Blockly.Msg.IOS_CANCEL = "Cancel";  // untranslated
+Blockly.Msg.IOS_ERROR = "Error";  // untranslated
+Blockly.Msg.IOS_OK = "OK";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
+Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Add";  // untranslated
+Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
+Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Delete";  // untranslated
+Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
+Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Rename";  // untranslated
+Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Variable name";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "создать пустой список";
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "Возвращает список длины 0, не содержащий данных";
@@ -359,7 +373,7 @@ Blockly.Msg.TEXT_PROMPT_TYPE_NUMBER = "запросить число с подс
 Blockly.Msg.TEXT_PROMPT_TYPE_TEXT = "запросить текст с подсказкой";
 Blockly.Msg.TEXT_REPLACE_HELPURL = "https://github.com/google/blockly/wiki/Text#replacing-substrings";
 Blockly.Msg.TEXT_REPLACE_MESSAGE0 = "заменить %1 на %2 в %3";
-Blockly.Msg.TEXT_REPLACE_TOOLTIP = "Replace all occurances of some text within some other text.";  // untranslated
+Blockly.Msg.TEXT_REPLACE_TOOLTIP = "Заменить все вхождения некоторого текста другим текстом.";
 Blockly.Msg.TEXT_REVERSE_HELPURL = "https://github.com/google/blockly/wiki/Text#reversing-text";
 Blockly.Msg.TEXT_REVERSE_MESSAGE0 = "изменить порядок на обратный %1";
 Blockly.Msg.TEXT_REVERSE_TOOLTIP = "Меняет порядок символов в тексте на обратный.";

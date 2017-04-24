@@ -946,17 +946,14 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
   this.targetWorkspace_.setResizesEnabled(false);
   try {
     newBlock = this.placeNewBlock_(originalBlock);
-    newBlock.render();
-    // TODO: Possibly rerender all of the blocks (not just the top block):
-      // Re-render the blocks before starting the drag:
-      // Force a render on IE and Edge to get around the issue described in
-      // Blockly.Field.getCachedWidth
-      // if (goog.userAgent.IE || goog.userAgent.EDGE) {
-      //   var blocks = block.getDescendants();
-      //   for (var i = blocks.length - 1; i >= 0; i--) {
-      //     blocks[i].render(false);
-      //   }
-      // }
+    //Force a render on IE and Edge to get around the issue described in
+    //Blockly.Field.getCachedWidth
+    if (goog.userAgent.IE || goog.userAgent.EDGE) {
+      var blocks = newBlock.getDescendants();
+      for (var i = blocks.length - 1; i >= 0; i--) {
+        blocks[i].render(false);
+      }
+    }
     // Close the flyout.
     Blockly.hideChaff();
   } finally {

@@ -12,7 +12,8 @@
 			"Tacsipacsi",
 			"Rodrigo",
 			"Máté",
-			"BanKris"
+			"BanKris",
+			"Notramo"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "változó",
@@ -226,6 +227,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "Kérj be számot",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Számot kér be a felhasználótól.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Szöveget kér be a felhasználótól.",
+	"TEXT_REPLACE_MESSAGE0": "%1 cseréje %2-vel %3-ban",
 	"LISTS_CREATE_EMPTY_TITLE": "üres lista",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Elemeket nem tartalmazó üres listát ad eredményül",
 	"LISTS_CREATE_WITH_TOOLTIP": "Listát készít a megadott elemekből.",

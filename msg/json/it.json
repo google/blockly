@@ -8,7 +8,8 @@
 			"Gianfranco",
 			"Federico Mugnaini",
 			"JackLantern",
-			"Selven"
+			"Selven",
+			"Samuele2002"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
@@ -220,8 +221,10 @@
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Richiedi un numero all'utente.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Richiede del testo da parte dell'utente.",
 	"TEXT_COUNT_MESSAGE0": "conta %1 in %2",
+	"TEXT_COUNT_HELPURL": "https://github.com/google/blockly/wiki/Text#counting-substrings",
 	"TEXT_COUNT_TOOLTIP": "Contare quante volte una parte di testo si ripete all'interno di qualche altro testo.",
 	"TEXT_REPLACE_MESSAGE0": "sostituisci %1 con %2 in %3",
+	"TEXT_REPLACE_HELPURL": "https://github.com/google/blockly/wiki/Text#replacing-substrings",
 	"TEXT_REPLACE_TOOLTIP": "sostituisci tutte le occorrenze di un certo testo con qualche altro testo.",
 	"TEXT_REVERSE_MESSAGE0": "inverti %1",
 	"TEXT_REVERSE_TOOLTIP": "Inverte l'ordine dei caratteri nel testo.",

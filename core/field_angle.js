@@ -93,12 +93,34 @@ Blockly.FieldAngle.OFFSET = 0;
  */
 Blockly.FieldAngle.WRAP = 360;
 
-
 /**
  * Radius of protractor circle.  Slightly smaller than protractor size since
  * otherwise SVG crops off half the border at the edges.
  */
 Blockly.FieldAngle.RADIUS = Blockly.FieldAngle.HALF - 1;
+
+/**
+ * Adds degree symbol and recalculates width.
+ * Saves the computed width in a property.
+ * @private
+ */
+Blockly.FieldAngle.prototype.render_ = function() {
+  if (!this.visible_) {
+    this.size_.width = 0;
+    return;
+  }
+
+  // Update textElement.
+  this.textElement_.textContent = this.getDisplayText_();
+  
+  // Insert degree symbol.
+  if (this.sourceBlock_.RTL) {
+     this.textElement_.insertBefore(this.symbol_, this.textElement_.firstChild);
+   } else {
+     this.textElement_.appendChild(this.symbol_);
+   }
+  this.updateWidth();
+};
 
 /**
  * Clean up this FieldAngle, as well as the inherited FieldTextInput.
@@ -233,12 +255,6 @@ Blockly.FieldAngle.prototype.setText = function(text) {
     return;
   }
   this.updateGraph_();
-  // Insert degree symbol.
-  if (this.sourceBlock_.RTL) {
-    this.textElement_.insertBefore(this.symbol_, this.textElement_.firstChild);
-  } else {
-    this.textElement_.appendChild(this.symbol_);
-  }
   // Cached width is obsolete.  Clear it.
   this.size_.width = 0;
 };

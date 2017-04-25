@@ -121,7 +121,6 @@ Blockly.onMouseUp_ = function(e) {
 
   // TODO(#781): Check whether this needs to be called for all drag modes.
   workspace.resetDragSurface();
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   workspace.dragMode_ = Blockly.DRAG_NONE;
   // Unbind the touch event if it exists.
   if (Blockly.Touch.onTouchUpWrapper_) {
@@ -190,6 +189,20 @@ Blockly.Touch.shouldHandleEvent = function(e) {
 };
 
 /**
+ * Get the touch identifier from the given event.  If it was a mouse event, the
+ * identifier is the string 'mouse'.
+ * @param {!Event} e Mouse event or touch event.
+ * @return {string} The touch identifier from the first changed touch, if
+ *     defined.  Otherwise 'mouse'.
+ */
+Blockly.Touch.getTouchIdentifierFromEvent = function(e) {
+  return (e.changedTouches && e.changedTouches[0] &&
+      e.changedTouches[0].identifier != undefined &&
+      e.changedTouches[0].identifier != null) ?
+      e.changedTouches[0].identifier : 'mouse';
+};
+
+/**
  * Check whether the touch identifier on the event matches the current saved
  * identifier.  If there is no identifier, that means it's a mouse event and
  * we'll use the identifier "mouse".  This means we won't deal well with
@@ -202,10 +215,7 @@ Blockly.Touch.shouldHandleEvent = function(e) {
  *     saved identifier.
  */
 Blockly.Touch.checkTouchIdentifier = function(e) {
-  var identifier = (e.changedTouches && e.changedTouches[0] &&
-        e.changedTouches[0].identifier != undefined &&
-        e.changedTouches[0].identifier != null) ?
-        e.changedTouches[0].identifier : 'mouse';
+  var identifier = Blockly.Touch.getTouchIdentifierFromEvent(e);
 
   // if (Blockly.touchIdentifier_ )is insufficient because android touch
   // identifiers may be zero.

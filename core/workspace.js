@@ -297,7 +297,8 @@ Blockly.Workspace.prototype.getVariableUses = function(name) {
 };
 
 /**
- * Delete a variables and all of its uses from this workspace.
+ * Delete a variables and all of its uses from this workspace. May prompt the
+ * user for confirmation.
  * @param {string} name Name of variable to delete.
  */
 Blockly.Workspace.prototype.deleteVariable = function(name) {
@@ -320,14 +321,6 @@ Blockly.Workspace.prototype.deleteVariable = function(name) {
   }
 
   var workspace = this;
-  function doDeletion() {
-    Blockly.Events.setGroup(true);
-    for (var i = 0; i < uses.length; i++) {
-      uses[i].dispose(true, false);
-    }
-    Blockly.Events.setGroup(false);
-    workspace.variableList.splice(variableIndex, 1);
-  }
   if (uses.length > 1) {
     // Confirm before deleting multiple blocks.
     Blockly.confirm(
@@ -335,13 +328,29 @@ Blockly.Workspace.prototype.deleteVariable = function(name) {
         replace('%2', name),
         function(ok) {
           if (ok) {
-            doDeletion();
+            workspace.deleteVariableInternal_(name);
           }
         });
   } else {
     // No confirmation necessary for a single block.
-    doDeletion();
+    this.deleteVariableInternal_(name);
   }
+};
+
+/**
+ * Deletes a variable and all of its uses from this workspace without asking the
+ * user for confirmation.
+ * @private
+ */
+Blockly.Workspace.prototype.deleteVariableInternal_ = function(name) {
+  var uses = this.getVariableUses(name);
+  var variableIndex = this.variableIndexOf(name);
+  Blockly.Events.setGroup(true);
+  for (var i = 0; i < uses.length; i++) {
+    uses[i].dispose(true, false);
+  }
+  Blockly.Events.setGroup(false);
+  this.variableList.splice(variableIndex, 1);
 };
 
 /**

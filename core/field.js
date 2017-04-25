@@ -160,6 +160,13 @@ Blockly.Field.prototype.init = function() {
 };
 
 /**
+ * Initializes the model of the field after it has been installed on a block.
+ * No-op by default.
+ */
+Blockly.Field.prototype.initModel = function() {
+};
+
+/**
  * Dispose of all DOM objects belonging to this editable field.
  */
 Blockly.Field.prototype.dispose = function() {

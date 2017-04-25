@@ -7,6 +7,7 @@ goog.provide('Blockly.Msg.el');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Πρόσθεσε Το Σχόλιο";
+Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Άλλαξε την τιμή:";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Σύμπτυξτε Όλα Τα Μπλοκ";
@@ -73,6 +74,19 @@ Blockly.Msg.EXPAND_BLOCK = "Επέκτεινε Το Μπλοκ";
 Blockly.Msg.EXTERNAL_INPUTS = "Εξωτερικές Είσοδοι";
 Blockly.Msg.HELP = "Βοήθεια";
 Blockly.Msg.INLINE_INPUTS = "Εσωτερικές Είσοδοι";
+Blockly.Msg.IOS_CANCEL = "Cancel";  // untranslated
+Blockly.Msg.IOS_ERROR = "Error";  // untranslated
+Blockly.Msg.IOS_OK = "OK";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
+Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Add";  // untranslated
+Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
+Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Delete";  // untranslated
+Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
+Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Rename";  // untranslated
+Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Variable name";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "δημιούργησε κενή λίστα";
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "Επιστρέφει μια λίστα, με μήκος 0, η οποία δεν περιέχει εγγραφές δεδομένων";
@@ -320,7 +334,7 @@ Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Επιστρέφει το γράμμα στην καθορισμένη θέση.";
 Blockly.Msg.TEXT_COUNT_HELPURL = "https://github.com/google/blockly/wiki/Text#counting-substrings";  // untranslated
 Blockly.Msg.TEXT_COUNT_MESSAGE0 = "count %1 in %2";  // untranslated
-Blockly.Msg.TEXT_COUNT_TOOLTIP = "Count how many times some text occurs within some other text.";  // untranslated
+Blockly.Msg.TEXT_COUNT_TOOLTIP = "Μετρά πόσες φορές κάποιο κείμενο εμφανίζεται μέσα σε ένα άλλο κείμενο.";
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Προσθέτει ένα στοιχείο στο κείμενο.";
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "ένωσε";
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Προσθέτει, αφαιρεί ή αναδιατάσσει τους τομείς για να αναδιαμορφώσει αυτό το μπλοκ κειμένου.";

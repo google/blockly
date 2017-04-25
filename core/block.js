@@ -119,6 +119,8 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   this.comment = null;
 
   /**
+   * The block's position in workspace units.  (0, 0) is at the workspace's
+   * origin; scale does not change this value.
    * @type {!goog.math.Coordinate}
    * @private
    */
@@ -330,43 +332,9 @@ Blockly.Block.prototype.lastConnectionInStack_ = function() {
  * connected should not coincidentally line up on screen.
  * @private
  */
-// TODO: Refactor to return early in headless mode.
 Blockly.Block.prototype.bumpNeighbours_ = function() {
-  if (!this.workspace) {
-    return;  // Deleted block.
-  }
-  if (Blockly.dragMode_ != Blockly.DRAG_NONE) {
-    return;  // Don't bump blocks during a drag.
-  }
-  var rootBlock = this.getRootBlock();
-  if (rootBlock.isInFlyout) {
-    return;  // Don't move blocks around in a flyout.
-  }
-  // Loop through every connection on this block.
-  var myConnections = this.getConnections_(false);
-  for (var i = 0, connection; connection = myConnections[i]; i++) {
-    // Spider down from this block bumping all sub-blocks.
-    if (connection.isConnected() && connection.isSuperior()) {
-      connection.targetBlock().bumpNeighbours_();
-    }
-
-    var neighbours = connection.neighbours_(Blockly.SNAP_RADIUS);
-    for (var j = 0, otherConnection; otherConnection = neighbours[j]; j++) {
-      // If both connections are connected, that's probably fine.  But if
-      // either one of them is unconnected, then there could be confusion.
-      if (!connection.isConnected() || !otherConnection.isConnected()) {
-        // Only bump blocks if they are from different tree structures.
-        if (otherConnection.getSourceBlock().getRootBlock() != rootBlock) {
-          // Always bump the inferior block.
-          if (connection.isSuperior()) {
-            otherConnection.bumpAwayFrom_(connection);
-          } else {
-            connection.bumpAwayFrom_(otherConnection);
-          }
-        }
-      }
-    }
-  }
+  console.warn('Not expected to reach this bumpNeighbours_ function. The ' +
+    'BlockSvg function for bumpNeighbours_ was expected to be called instead.');
 };
 
 /**
@@ -1445,7 +1413,7 @@ Blockly.Block.prototype.setMutator = function(/* mutator */) {
 
 /**
  * Return the coordinates of the top-left corner of this block relative to the
- * drawing surface's origin (0,0).
+ * drawing surface's origin (0,0), in workspace units.
  * @return {!goog.math.Coordinate} Object with .x and .y properties.
  */
 Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
@@ -1454,8 +1422,8 @@ Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
 
 /**
  * Move a block by a relative offset.
- * @param {number} dx Horizontal offset.
- * @param {number} dy Vertical offset.
+ * @param {number} dx Horizontal offset, in workspace units.
+ * @param {number} dy Vertical offset, in workspace units.
  */
 Blockly.Block.prototype.moveBy = function(dx, dy) {
   goog.asserts.assert(!this.parentBlock_, 'Block has parent.');

@@ -383,10 +383,22 @@ Code.init = function() {
   };
   window.addEventListener('resize', onresize, false);
 
-  // Interpolate translated messages into toolbox.
+  // The toolbox XML specifies each category name using Blockly's messaging
+  // format (eg. `<category name="%{BKY_CATLOGIC}">`).
+  // These message keys need to be defined in `Blockly.Msg` in order to
+  // be decoded by the library. Therefore, we'll use the `MSG` dictionary that's
+  // been defined for each language to import each category name message 
+  // into `Blockly.Msg`.
+  // TODO: Clean up the message files so this is done explicitly instead of
+  // through this for-loop.
+  for (var messageKey in MSG) {
+    if (messageKey.startsWith('cat')) {
+      Blockly.Msg[messageKey.toUpperCase()] = MSG[messageKey];
+    }
+  }
+
+  // Construct the toolbox XML.
   var toolboxText = document.getElementById('toolbox').outerHTML;
-  toolboxText = toolboxText.replace(/{(\w+)}/g,
-      function(m, p1) {return MSG[p1];});
   var toolboxXml = Blockly.Xml.textToDom(toolboxText);
 
   Code.workspace = Blockly.inject('content_blocks',

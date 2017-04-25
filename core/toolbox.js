@@ -304,7 +304,11 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
     }
     switch (childIn.tagName.toUpperCase()) {
       case 'CATEGORY':
-        var childOut = this.tree_.createNode(childIn.getAttribute('name'));
+        // Decode the category name for any potential message references
+        // (eg. `%{BKY_CATEGORY_NAME_LOGIC}`).
+        var categoryName = Blockly.utils.replaceMessageReferences(
+          childIn.getAttribute('name'));
+        var childOut = this.tree_.createNode(categoryName);
         childOut.blocks = [];
         treeOut.add(childOut);
         var custom = childIn.getAttribute('custom');
@@ -317,7 +321,10 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
             openNode = newOpenNode;
           }
         }
-        var colour = childIn.getAttribute('colour');
+        // Decode the colour for any potential message references
+        // (eg. `%{BKY_MATH_HUE}`).
+        var colour = Blockly.utils.replaceMessageReferences(
+          childIn.getAttribute('colour'));
         if (goog.isString(colour)) {
           if (colour.match(/^#[0-9a-fA-F]{6}$/)) {
             childOut.hexColour = colour;
@@ -404,6 +411,24 @@ Blockly.Toolbox.prototype.addColour_ = function(opt_tree) {
  */
 Blockly.Toolbox.prototype.clearSelection = function() {
   this.tree_.setSelectedItem(null);
+};
+
+/**
+ * Adds styles on the toolbox indicating blocks will be deleted.
+ * @package
+ */
+Blockly.Toolbox.prototype.addDeleteStyle = function() {
+  Blockly.utils.addClass(/** @type {!Element} */ (this.HtmlDiv),
+                         'blocklyToolboxDelete');
+};
+
+/**
+ * Remove styles from the toolbox that indicate blocks will be deleted.  
+ * @package
+ */
+Blockly.Toolbox.prototype.removeDeleteStyle = function() {
+  Blockly.utils.removeClass(/** @type {!Element} */ (this.HtmlDiv),
+                            'blocklyToolboxDelete');
 };
 
 /**

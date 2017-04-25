@@ -134,6 +134,12 @@ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = 'Can\'t delete the variable "%1" 
 /// dropdown choice - Delete the currently selected variable.
 Blockly.Msg.DELETE_VARIABLE = 'Delete the "%1" variable';
 
+// Search category.
+/// button text - Text on the button used to launch the search dialogue.
+Blockly.Msg.SEARCH = 'Search...';
+/// prompt - Prompts the user to enter search terms
+Blockly.Msg.SEARCH_TITLE = 'Enter search phrase';
+
 // Colour Blocks.
 /// url - Information about colour.
 Blockly.Msg.COLOUR_PICKER_HELPURL = 'https://en.wikipedia.org/wiki/Color';

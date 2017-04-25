@@ -7,6 +7,7 @@ goog.provide('Blockly.Msg.ko');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "댓글 추가";
+Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "값 바꾸기:";
 Blockly.Msg.CLEAN_UP = "블록 정리";
 Blockly.Msg.COLLAPSE_ALL = "블록 축소";
@@ -73,6 +74,19 @@ Blockly.Msg.EXPAND_BLOCK = "블록 확장";
 Blockly.Msg.EXTERNAL_INPUTS = "외부 입력";
 Blockly.Msg.HELP = "도움말";
 Blockly.Msg.INLINE_INPUTS = "내부 입력";
+Blockly.Msg.IOS_CANCEL = "Cancel";  // untranslated
+Blockly.Msg.IOS_ERROR = "Error";  // untranslated
+Blockly.Msg.IOS_OK = "OK";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
+Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Add";  // untranslated
+Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
+Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Delete";  // untranslated
+Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
+Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Rename";  // untranslated
+Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Variable name";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "빈 리스트 생성";
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "데이터 레코드가 없는, 길이가 0인 목록을 반환합니다.";

@@ -505,6 +505,34 @@ Blockly.Workspace.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled
 };
 
 /**
+ * Disable every block in the workspace that is not a search hit for the given
+ * keywords. This function is intended to highlight search hits by disabling
+ * every unwanted block.
+ * @param {!Array.<string>} keywords Array of keywords to search for
+ */
+Blockly.Workspace.prototype.minimapSearch = function(keywords) {
+  var blocks = this.getAllBlocks();
+  for (var i = 0; i < blocks.length; i++) {
+    if (!(blocks[i].search(keywords))) {
+      blocks[i].setDisabled(true);
+    }
+    else {
+      blocks[i].setDisabled(false);
+    } 
+  }
+};
+
+/**
+ * Enable every block in the workspace.
+ */
+Blockly.Workspace.prototype.clearMinimapSearch = function() {
+  var blocks = this.getAllBlocks();
+  for (var i = 0; i < blocks.length; i++) {
+    blocks[i].setDisabled(false);
+  }
+};
+
+/**
  * Database of all workspaces.
  * @private
  */

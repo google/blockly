@@ -80,6 +80,18 @@ Blockly.Workspace = function(opt_options) {
    * that are not currently in use.
    */
   this.variableList = [];
+  /**
+   * Array of search results from calling Workspace.searchBlocksByKeywords().
+   * @type {!Array.<!Blockly.Block>}
+   * @private
+   */
+  this.searchResults_ = [];
+  /**
+   * Variable for indexing through Workspace.searchResults.
+   * @type {number}
+   * @private
+   */
+  this.searchResultIndex_ = -1;
 };
 
 /**
@@ -502,6 +514,74 @@ Blockly.Workspace.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled
     }
   }
   return true;
+};
+
+/**
+ * Search for a block in the workspace using one or more keywords.
+ * Uses the Block.search() function on each block.
+ * @param {!Array.<string>} keywords Array of keywords to search for
+ * @return {!Array.<!Blockly.Block>} Array of blocks containing the keywords
+ */
+Blockly.Workspace.prototype.searchBlocksByKeywords = function(keywords) {
+  var results = [];
+  var blocks = this.getAllBlocks();
+  for (var i = 0; i < blocks.length; i++) {
+    if (blocks[i].search(keywords)) {
+      results.push(blocks[i]);
+    }
+  }
+
+  this.searchResults_ = results;
+  this.searchResultIndex_ = -1;
+  return results;
+};
+
+/**
+ * Scrolls to and selects the next Block in the Workspace.searchResults array.
+ * @return {Blockly.Block|null} Next block in Workspace.searchResults()
+ * OR first block if the last block has already been returned
+ * OR null if the array is empty.
+ */
+Blockly.Workspace.prototype.nextSearchResult = function() {
+  if (this.searchResults_.length === 0) {
+    return null;
+  }
+  if (++this.searchResultIndex_ >= this.searchResults_.length) {
+    this.searchResultIndex_ = 0;
+  }
+
+  var currentBlock = this.searchResults_[this.searchResultIndex_];
+  currentBlock.select();
+  var x = currentBlock.getRelativeToSurfaceXY().x;
+  var y = currentBlock.getRelativeToSurfaceXY().y;
+  if (this.scrollbar !== null) {
+    this.scrollbar.set(x, y);
+  }
+  return currentBlock;
+};
+
+/**
+ * Scrolls to and selects previous Block in the Workspace.searchResults array.
+ * @return {Blockly.Block|null} Previous block in Workspace.searchResults()
+ * OR last block if the first block has already been returned
+ * OR null if the array is empty.
+ */
+Blockly.Workspace.prototype.prevSearchResult = function() {
+  if (this.searchResults_.length === 0) {
+    return null;
+  }
+  if (--this.searchResultIndex_ < 0) {
+    this.searchResultIndex_ = this.searchResults_.length - 1;
+  }
+
+  var currentBlock = this.searchResults_[this.searchResultIndex_];
+  currentBlock.select();
+  var x = currentBlock.getRelativeToSurfaceXY().x;
+  var y = currentBlock.getRelativeToSurfaceXY().y;
+  if (this.scrollbar !== null) {
+    this.scrollbar.set(x, y);
+  }
+  return currentBlock;
 };
 
 /**

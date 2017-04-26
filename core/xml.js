@@ -331,7 +331,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   }
   Blockly.Field.stopCache();
 
-  workspace.updateVariableList(false);
+  workspace.updateVariableMap(false);
   // Re-enable workspace resizing.
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(true);

@@ -88,7 +88,7 @@ Blockly.Variables.allVariables = function(root) {
                  'with a block instead of a workspace.  You may want ' +
                  'Blockly.Variables.allUsedVariables');
   }
-  return root.variableList;
+  return root.getVariablesOfType('');
 };
 
 /**
@@ -97,7 +97,7 @@ Blockly.Variables.allVariables = function(root) {
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 Blockly.Variables.flyoutCategory = function(workspace) {
-  var variableList = workspace.variableList;
+  var variableList = workspace.getVariablesOfType('');
   variableList.sort(goog.string.caseInsensitiveCompare);
 
   var xmlList = [];
@@ -162,7 +162,7 @@ Blockly.Variables.flyoutCategory = function(workspace) {
 * @return {string} New variable name.
 */
 Blockly.Variables.generateUniqueName = function(workspace) {
-  var variableList = workspace.variableList;
+  var variableList = workspace.getVariablesOfType('');
   var newName = '';
   if (variableList.length) {
     var nameSuffix = 1;
@@ -215,13 +215,21 @@ Blockly.Variables.createVariable = function(workspace, opt_callback) {
     Blockly.Variables.promptName(Blockly.Msg.NEW_VARIABLE_TITLE, defaultName,
       function(text) {
         if (text) {
-          if (workspace.variableIndexOf(text) != -1) {
+          if (workspace.getVariable(text)) {
             Blockly.alert(Blockly.Msg.VARIABLE_ALREADY_EXISTS.replace('%1',
                 text.toLowerCase()),
                 function() {
                   promptAndCheckWithAlert(text);  // Recurse
                 });
-          } else {
+          }
+          else if (!Blockly.Procedures.isLegalName_(text, workspace)) {
+            Blockly.alert(Blockly.Msg.PROCEDURE_ALREADY_EXISTS.replace('%1',
+                text.toLowerCase()),
+                function() {
+                  promptAndCheckWithAlert(text);  // Recurse
+                });
+          }
+          else {
             workspace.createVariable(text);
             if (opt_callback) {
               opt_callback(text);

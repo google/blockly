@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blockly Demo: Workspace Search</title>
+  <script src="../../blockly_uncompressed.js"></script>
+  <script src="../../blocks/logic.js"></script>
+  <script src="../../blocks/loops.js"></script>
+  <script src="../../blocks/math.js"></script>
+  <script src="../../blocks/text.js"></script>
+  <script src="../../blocks/lists.js"></script>
+  <script src="../../blocks/colour.js"></script>
+  <script src="../../blocks/variables.js"></script>
+  <script src="../../blocks/procedures.js"></script>
+  <script src="../../generators/javascript.js"></script>
+  <script src="../../generators/javascript/logic.js"></script>
+  <script src="../../generators/javascript/loops.js"></script>
+  <script src="../../generators/javascript/math.js"></script>
+  <script src="../../generators/javascript/text.js"></script>
+  <script src="../../generators/javascript/lists.js"></script>
+  <script src="../../generators/javascript/colour.js"></script>
+  <script src="../../generators/javascript/variables.js"></script>
+  <script src="../../generators/javascript/procedures.js"></script>
+  <script src="../../msg/messages.js"></script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+  </style>
+</head>
+<body>
+  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Workspace Search</h1>
+
+  <p>Demo of feature for searching main Blockly workspace. Derived from Blockly > Demos > Fixed.</p>
+
+  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+
+  <hr>
+
+  <input type="search" id="wsSearch" placeholder="Search Workspace...">
+  <button id="prevBtn">Previous</button>
+  <button id="nextBtn">Next</button>
+  <xml id="toolbox" style="display: none">
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+    <block type="controls_repeat_ext"></block>
+    <block type="math_number"></block>
+    <block type="math_arithmetic"></block>
+    <block type="text"></block>
+    <block type="text_print"></block>
+  </xml>
+
+  <script>
+    var workspace = Blockly.inject('blocklyDiv',
+      {media: '../../media/',
+      toolbox: document.getElementById('toolbox')});
+
+    document.getElementById("wsSearch").addEventListener("input", function() {
+      var searchTerms = document.getElementById("wsSearch").value;
+      searchTerms = searchTerms.trim().toLowerCase();
+      var words = searchTerms.split(" ");
+      workspace.searchBlocksByKeywords(words);
+      workspace.nextSearchResult();
+    });
+
+    document.getElementById("prevBtn").addEventListener("click", function() {
+      workspace.prevSearchResult();
+    });
+
+    document.getElementById("nextBtn").addEventListener("click", function() {
+      workspace.nextSearchResult();
+    });
+  </script>
+
+</body>
+</html>

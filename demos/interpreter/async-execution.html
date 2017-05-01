@@ -144,6 +144,7 @@
     var outputArea = document.getElementById('output');
     var runButton = document.getElementById('runButton');
     var myInterpreter = null;
+    var runner;
 
     function initApi(interpreter, scope) {
       // Add an API function for the alert() block, generated for "text_print" blocks.
@@ -171,10 +172,6 @@
       };
       interpreter.setProperty(scope, 'highlightBlock',
           interpreter.createNativeFunction(wrapper));
-
-      // Add an API function that signals the program completeion.
-      interpreter.setProperty(scope, 'exit',
-          interpreter.createNativeFunction(onProgramCompletion));
     }
 
     var highlightPause = false;
@@ -188,16 +185,11 @@
     function resetStepUi(clearOutput) {
       workspace.highlightBlock(null);
       highlightPause = false;
+      runButton.disabled = '';
 
       if (clearOutput) {
         outputArea.value = 'Program output:\n=================';
       }
-    }
-
-    function onProgramCompletion() {
-      myInterpreter = null;
-      resetStepUi(false);
-      runButton.disabled = '';
     }
 
     function generateCodeAndLoadIntoInterpreter() {
@@ -209,24 +201,47 @@
       resetStepUi(true);
     }
 
+    function resetInterpretter() {
+      myInterpreter = null;
+      if (runner) {
+        clearTimeout(runner);
+        runner = null;
+      }
+    }
+
     function runCode() {
       if (!myInterpreter) {
         // First statement of this code.
         // Clear the program output.
         resetStepUi(true);
-        var codeWithCompletion = latestCode + '\nexit();';
         runButton.disabled = 'disabled';
 
         // And then show generated code in an alert.
         // In a timeout to allow the outputArea.value to reset first.
         setTimeout(function() {
           alert('Ready to execute the following code\n' +
-            '===================================\n' + codeWithCompletion);
+            '===================================\n' +
+            latestCode);
 
           // Begin execution
           highlightPause = false;
-          myInterpreter = new Interpreter(codeWithCompletion, initApi);
-          myInterpreter.run();
+          myInterpreter = new Interpreter(latestCode, initApi);
+          runner = function() {
+            if (myInterpreter) {
+              var hasMore = myInterpreter.run();
+              if (hasMore) {
+                // Execution is currently blocked by some async call.
+                // Try again later.
+                setTimeout(runner, 10);
+              } else {
+                // Program is complete.
+                outputArea.value += '\n\n<< Program complete >>';
+                resetInterpretter();
+                resetStepUi(false);
+              }
+            }
+          };
+          runner();
         }, 1);
         return;
       }
@@ -237,6 +252,7 @@
     workspace.addChangeListener(function(event) {
       if (!(event instanceof Blockly.Events.Ui)) {
         // Something changed. Parser needs to be reloaded.
+        resetInterpretter();
         generateCodeAndLoadIntoInterpreter();
       }
     });

@@ -149,7 +149,7 @@
       interpreter.setProperty(scope, 'alert',
           interpreter.createNativeFunction(function(text) {
         text = text ? text.toString() : '';
-        outputArea.value = outputArea.value + '\n' + text;
+        outputArea.value += '\n' + text;
       }));
 
       // Add an API function for the prompt() block.
@@ -219,7 +219,7 @@
         } finally {
           if (!hasMoreCode) {
             // Program complete, no more code to execute.
-            outputArea.value = outputArea.value + '\n\n<< Program complete >>';
+            outputArea.value += '\n\n<< Program complete >>';
 
             myInterpreter = null;
             resetStepUi(false);

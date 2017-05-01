@@ -24,7 +24,7 @@
   <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
     <a href="../index.html">Demos</a> &gt; Asynchronous Execution with JS Interpreter</h1>
 
-  <p>This is a simple demo of executing code asychronously (e.g., waiting for delays or user input) using a sandboxed JavaScript interpreter.</p>
+  <p>This is a demo of executing code asychronously (e.g., waiting for delays or user input) using the JavaScript interpreter.</p>
 
   <p>&rarr; <a href="https://developers.google.com/blockly/guides/configure-blockly/web/running-javascript#js_interpreter">More info on running code with JS Interpreter</a></p>
 
@@ -201,7 +201,7 @@
       resetStepUi(true);
     }
 
-    function resetInterpretter() {
+    function resetInterpreter() {
       myInterpreter = null;
       if (runner) {
         clearTimeout(runner);
@@ -236,7 +236,7 @@
               } else {
                 // Program is complete.
                 outputArea.value += '\n\n<< Program complete >>';
-                resetInterpretter();
+                resetInterpreter();
                 resetStepUi(false);
               }
             }
@@ -252,7 +252,7 @@
     workspace.addChangeListener(function(event) {
       if (!(event instanceof Blockly.Events.Ui)) {
         // Something changed. Parser needs to be reloaded.
-        resetInterpretter();
+        resetInterpreter();
         generateCodeAndLoadIntoInterpreter();
       }
     });

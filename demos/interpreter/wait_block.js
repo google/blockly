@@ -61,7 +61,11 @@ function initInterpreterWaitForSeconds(interpreter, scope) {
   var wrapper = interpreter.createAsyncFunction(
     function(timeInSeconds, callback) {
       // Delay the call to the callback.
-      setTimeout(callback, timeInSeconds * 1000);
+//      setTimeout(callback, timeInSeconds * 1000);
+      setTimeout(function() {
+        console.log('end of wait_seconds');
+        callback();
+      }, timeInSeconds * 1000);
     });
   interpreter.setProperty(scope, 'waitForSeconds', wrapper);
 }

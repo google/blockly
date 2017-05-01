@@ -39,7 +39,13 @@
     <button onclick="stepCode()" id="stepButton">Step JavaScript</button>
   </p>
 
-  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+  <div style="width: 100%">
+    <div id="blocklyDiv"
+        style="display: inline-block; height: 480px; width: 58%"></div>
+    <textarea id="output" disabled="disabled"
+        style="display: inline-block; height: 480px; width: 38%;">
+    </textarea>
+  </div>
 
   <xml id="toolbox" style="display: none">
     <category name="Logic">
@@ -111,6 +117,15 @@
                   </value>
                 </block>
               </value>
+              <next>
+                <block type="text_print">
+                  <value name="TEXT">
+                    <block type="variables_get">
+                      <field name="VAR">n</field>
+                    </block>
+                  </value>
+                </block>
+              </next>
             </block>
           </statement>
         </block>
@@ -125,16 +140,17 @@
     Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
                                workspace);
 
+    var outputArea = document.getElementById('output');
+    var stepButton = document.getElementById('stepButton');
     var myInterpreter = null;
 
     function initApi(interpreter, scope) {
-      // Add an API function for the alert() block.
-      var wrapper = function(text) {
-        text = text ? text.toString() : '';
-        return interpreter.createPrimitive(alert(text));
-      };
+      // Add an API function for the alert() block, generated for "text_print" blocks.
       interpreter.setProperty(scope, 'alert',
-          interpreter.createNativeFunction(wrapper));
+          interpreter.createNativeFunction(function(text) {
+        text = text ? text.toString() : '';
+        outputArea.value = outputArea.value + '\n' + text;
+      }));
 
       // Add an API function for the prompt() block.
       var wrapper = function(text) {
@@ -161,9 +177,13 @@
       highlightPause = true;
     }
 
-    function resetStepUi() {
+    function resetStepUi(clearOutput) {
       workspace.highlightBlock(null);
       highlightPause = false;
+
+      if (clearOutput) {
+        outputArea.value = 'Program output:\n=================';
+      }
     }
 
     function generateCodeAndLoadIntoInterpreter() {
@@ -171,15 +191,26 @@
       Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
       Blockly.JavaScript.addReservedWords('highlightBlock');
       latestCode = Blockly.JavaScript.workspaceToCode(workspace);
-      myInterpreter = new Interpreter(latestCode, initApi);
 
-      resetStepUi();
+      resetStepUi(true);
     }
 
     function stepCode() {
-      if (!highlightPause) {
-        // First statement of this code. Show generated code.
-        alert('Ready to execute this code:\n\n' + latestCode);
+      if (!myInterpreter) {
+        // First statement of this code.
+        // Clear the program output.
+        resetStepUi(true);
+        myInterpreter = new Interpreter(latestCode, initApi);
+
+        // And then show generated code in an alert.
+        // In a timeout to allow the outputArea.value to reset first.
+        setTimeout(function() {
+          alert('Ready to execute the following code\n' +
+            '===================================\n' + latestCode);
+          highlightPause = true;
+          stepCode();
+        }, 1);
+        return;
       }
       highlightPause = false;
       do {
@@ -188,7 +219,17 @@
         } finally {
           if (!hasMoreCode) {
             // Program complete, no more code to execute.
-            resetStepUi();
+            outputArea.value = outputArea.value + '\n\n<< Program complete >>';
+
+            myInterpreter = null;
+            resetStepUi(false);
+
+            // Cool down, to discourage accidentally restarting the program.
+            stepButton.disabled = 'disabled';
+            setTimeout(function() {
+              stepButton.disabled = '';
+            }, 2000);
+
             return;
           }
         }

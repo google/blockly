@@ -286,17 +286,8 @@ function test_createVariable_AlreadyExists() {
   // Expect that when the variable already exists, the variableMap_ is unchanged.
   workspaceTest_setUp();
   var var_1 = this.createAndGetVariable('name1', 'type1', 'id1');
-  // Assert there is only one variable in the workspace.
-  var keys = Object.keys(workspace.variableMap_);
-  assertEquals(1, keys.length);
-  assertEquals(1, workspace.variableMap_[keys[0]].length);
-
   workspace.createVariable('name1');
   checkVariableValues('name1', 'type1', 'id1');
-  // Check that the size of the variableMap_ did not change.
-  assertEquals(1, keys.length);
-  var varMapLength = workspace.variableMap_[keys[0]].length;
-  assertEquals(1, varMapLength);
   workspaceTest_tearDown();
 }
 
@@ -478,7 +469,7 @@ function test_clear_Trivial() {
     workspace.clear();
     mockControl_.$verifyAll();
     var topBlocks_length = workspace.topBlocks_.length;
-    var varMapLength = Object.keys(workspace.variableMap_).length;
+    var varMapLength = Object.keys(workspace.variableMap_.variableMap_).length;
     assertEquals(0, topBlocks_length);
     assertEquals(0, varMapLength);
   }
@@ -498,7 +489,7 @@ function test_clear_NoVariables() {
     workspace.clear();
     mockSetGroup.$verify();
     var topBlocks_length = workspace.topBlocks_.length;
-    var varMapLength = Object.keys(workspace.variableMap_).length;
+    var varMapLength = Object.keys(workspace.variableMap_.variableMap_).length;
     assertEquals(0, topBlocks_length);
     assertEquals(0, varMapLength);
   }

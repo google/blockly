@@ -29,7 +29,7 @@
   where <code>%1</code> is the block id. The call to <code>highlightBlock()</code> will highlight the identified block
   and set the variable <code>highlightPause</code> to <code>true</code>.</p>
 
-  <p>"Parse JavaScript" will generate the code and load it into the interpreter. Then, aach press of the
+  <p>"Parse JavaScript" will generate the code and load it into the interpreter. Then, each press of the
   "Step JavaScript" button will run the interpreter one step until the <code>highlightPause</code> is true.
   That is, until <code>highlightBlock()</code> has highlighted the block that will be executed on the next step.</p>
 
@@ -85,7 +85,7 @@
   </xml>
 
   <xml id="startBlocks" style="display: none">
-    <block type="variables_set" inline="true" x="20" y="20">
+    <block type="variables_set" id="set_n_initial" inline="true" x="20" y="20">
       <field name="VAR">n</field>
       <value name="VALUE">
         <block type="math_number">
@@ -93,14 +93,14 @@
         </block>
       </value>
       <next>
-        <block type="controls_repeat_ext" inline="true">
+        <block type="controls_repeat_ext" id="repeat" inline="true">
           <value name="TIMES">
             <block type="math_number">
               <field name="NUM">4</field>
             </block>
           </value>
           <statement name="DO">
-            <block type="variables_set" inline="true">
+            <block type="variables_set" id="set_n_update" inline="true">
               <field name="VAR">n</field>
               <value name="VALUE">
                 <block type="math_arithmetic" inline="true">
@@ -118,7 +118,7 @@
                 </block>
               </value>
               <next>
-                <block type="text_print">
+                <block type="text_print" id="print">
                   <value name="TEXT">
                     <block type="variables_get">
                       <field name="VAR">n</field>

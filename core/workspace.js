@@ -76,13 +76,13 @@ Blockly.Workspace = function(opt_options) {
   this.blockDB_ = Object.create(null);
 
   /**
-   * @type {!Object<string, !Array.<Blockly.VariableModel>>}
+   * @type {!Blockly.VariableMap}
    * A map from variable type to list of variable names.  The lists contain all
    * of the named variables in the workspace, including variables
    * that are not currently in use.
    * @private
    */
-  this.variableMap_ = Object.create(null);
+  this.variableMap_ = new Blockly.VariableMap();
 };
 
 /**
@@ -195,7 +195,7 @@ Blockly.Workspace.prototype.clear = function() {
   if (!existingGroup) {
     Blockly.Events.setGroup(false);
   }
-  this.variableMap_ = Object.create(null);
+  this.variableMap_.clear();
 };
 
 /**
@@ -224,7 +224,7 @@ Blockly.Workspace.prototype.updateVariableStore = function(clear) {
     }
   }
   if (clear) {
-    this.variableMap_ = Object.create(null);
+    this.variableMap_.clear();
   }
   // Update the list in place so that the flyout's references stay correct.
   for (var i = 0, varDict; varDict = varList[i]; i++) {
@@ -244,9 +244,6 @@ Blockly.Workspace.prototype.updateVariableStore = function(clear) {
 Blockly.Workspace.prototype.renameVariableInternal_ = function(variable, newName) {
   var newVariable = this.getVariable(newName);
   var oldCase;
-  var variableIndex = -1;
-  var newVariableIndex = -1;
-  var type;
 
   // If they are different types, throw an error.
   if (variable && newVariable && variable.type != newVariable.type) {
@@ -254,23 +251,9 @@ Blockly.Workspace.prototype.renameVariableInternal_ = function(variable, newName
          '" and variable "' + newName + '" is type "' + newVariable.type +
          '". Both must be the same type.');
   }
-  if (variable || newVariable) {
-    type = (variable || newVariable).type;
-  }
-  else {
-    type = '';
-  }
-
-  var variableList = this.getVariablesOfType(type);
-  if (variable) {
-    variableIndex = variableList.indexOf(variable);
-  }
-  if (newVariable){
-    newVariableIndex = variableList.indexOf(newVariable);
-  }
 
   // Find if newVariable case is different.
-  if (newVariableIndex != -1 && newVariable.name != newName) {
+  if (newVariable && newVariable.name != newName) {
     oldCase = newVariable.name;
   }
 
@@ -285,20 +268,7 @@ Blockly.Workspace.prototype.renameVariableInternal_ = function(variable, newName
   }
   Blockly.Events.setGroup(false);
 
-  if (variableIndex == -1 && newVariableIndex == -1) {
-    this.createVariable(newName, '');
-    console.log('Tried to rename an non-existent variable.');
-  }
-  else if (variableIndex == newVariableIndex ||
-      variableIndex != -1 && newVariableIndex == -1) {
-    // Only changing case, or renaming to a completely novel name.
-    this.variableMap_[type][variableIndex].name = newName;
-  } else if (variableIndex != -1 && newVariableIndex != -1) {
-    // Renaming one existing variable to another existing variable.
-    // The case might have changed, so we update the destination ID.
-    this.variableMap_[type][newVariableIndex].name = newName;
-    this.variableMap_[type].splice(variableIndex, 1);
-  }
+  this.variableMap_.renameVariable(variable, newName);
 };
 
 
@@ -337,35 +307,7 @@ Blockly.Workspace.prototype.renameVariableById = function(id, newName) {
  *     a UUID.
  */
 Blockly.Workspace.prototype.createVariable = function(name, opt_type, opt_id) {
-  var variable = this.getVariable(name);
-  if (variable) {
-    if (opt_type && variable.type != opt_type) {
-      throw Error('Variable "' + name + '" is already in use and its type is "'
-                  + variable.type + '" which conflicts with the passed in ' +
-                  'type, "' + opt_type + '".');
-    }
-    if (opt_id && variable.getId() != opt_id) {
-      throw Error('Variable "' + name + '" is already in use and its id is "'
-                  + variable.getId() + '" which conflicts with the passed in ' +
-                  'id, "' + opt_id + '".');
-    }
-    return;
-  }
-  if (opt_id && this.getVariableById(opt_id)) {
-    throw Error('Variable id, "' + opt_id + '", is already in use.');
-  }
-  opt_id = opt_id || Blockly.utils.genUid();
-  opt_type = opt_type || '';
-
-  variable = new Blockly.VariableModel(name, opt_type, opt_id);
-  // If opt_type is not a key, create a new list.
-  if (!this.variableMap_[opt_type]) {
-    this.variableMap_[opt_type] = [variable];
-  }
-  // Else append the variable to the preexisting list.
-  else {
-    this.variableMap_[opt_type].push(variable);
-  }
+  this.variableMap_.createVariable(name, opt_type, opt_id);
 };
 
 /**
@@ -456,14 +398,7 @@ Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable) {
   }
   Blockly.Events.setGroup(false);
 
-  var type = variable.type;
-  for (var i = 0, tempVar; tempVar = this.variableMap_[type][i]; i++) {
-    if (Blockly.Names.equals(tempVar.name, variable.name)) {
-      delete this.variableMap_[type][i];
-      this.variableMap_[type].splice(i, 1);
-      return;
-    }
-  }
+  this.variableMap_.deleteVariable(variable);
 };
 
 /**
@@ -487,16 +422,7 @@ Blockly.Workspace.prototype.variableIndexOf = function(name) {
  * @return {?Blockly.VariableModel} the variable with the given name.
  */
 Blockly.Workspace.prototype.getVariable = function(name) {
-  var keys = Object.keys(this.variableMap_);
-  for (var i = 0; i < keys.length; i++ ) {
-    var key = keys[i];
-    for (var j = 0, variable; variable = this.variableMap_[key][j]; j++) {
-      if (Blockly.Names.equals(variable.name, name)) {
-        return variable;
-      }
-    }
-  }
-  return null;
+  return this.variableMap_.getVariable(name);
 };
 
 /**
@@ -506,14 +432,7 @@ Blockly.Workspace.prototype.getVariable = function(name) {
  * @return {?Blockly.VariableModel} The variable with the given id.
  */
 Blockly.Workspace.prototype.getVariableById = function(id) {
-  for (var key of Object.keys(this.variableMap_)) {
-    for (var variable of this.variableMap_[key]) {
-      if (variable.getId() == id) {
-        return variable;
-      }
-    }
-  }
-  return null;
+  return this.variableMap_.getVariableById(id);
 };
 
 /**
@@ -659,12 +578,7 @@ Blockly.Workspace.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled
  *     passed in type. An empty array if none are found.
  */
 Blockly.Workspace.prototype.getVariablesOfType = function(type) {
-  type = type || '';
-  var variable_list = this.variableMap_[type];
-  if (variable_list) {
-    return variable_list;
-  }
-  return [];
+  return this.variableMap_.getVariablesOfType(type);
 };
 
 /**
@@ -672,7 +586,7 @@ Blockly.Workspace.prototype.getVariablesOfType = function(type) {
  * @return {!Array.<string>} List of variable types.
  */
 Blockly.Workspace.prototype.getVariableTypes = function() {
-  return Object.keys(this.variableMap_);
+  return this.variableMap_.getVariableTypes();
 };
 
 /**
@@ -680,12 +594,7 @@ Blockly.Workspace.prototype.getVariableTypes = function() {
  * @return {!Array.<Blockly.VariableModel>} List of variable models.
  */
 Blockly.Workspace.prototype.getAllVariables = function() {
-  var all_variables = [];
-  var keys = Object.keys(this.variableMap_);
-  for (var i = 0; i < keys.length; i++ ) {
-    all_variables = all_variables.concat(this.variableMap_[keys[i]]);
-  }
-  return all_variables;
+  return this.variableMap_.getAllVariables();
 };
 
 /**

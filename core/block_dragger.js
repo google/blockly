@@ -162,7 +162,11 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
   this.draggingBlock_.setDragging_(true);
   // TODO: Consider where moveToDragSurface should live.
   this.draggingBlock_.moveToDragSurface_();
-  Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
+
+  if (this.workspace_.toolbox_) {
+    this.workspace_.toolbox_.addDeleteStyle();
+  }
+
 };
 
 /**
@@ -214,7 +218,10 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
     this.draggingBlock_.scheduleSnapAndBump();
   }
   this.workspace_.setResizesEnabled(true);
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
+
+  if (this.workspace_.toolbox_) {
+    this.workspace_.toolbox_.removeDeleteStyle();
+  }
   Blockly.Events.setGroup(false);
 };
 
@@ -261,14 +268,12 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
   this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
   var trashcan = this.workspace_.trashcan;
   if (this.wouldDeleteBlock_) {
-    // Update the cursor, regardless of whether it's over the trash can or the
-    // toolbox.
-    Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
+    this.draggingBlock_.setDeleteStyle(true);
     if (this.deleteArea_ == Blockly.DELETE_AREA_TRASH && trashcan) {
       trashcan.setOpen_(true);
     }
   } else {
-    Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
+    this.draggingBlock_.setDeleteStyle(false);
     if (trashcan) {
       trashcan.setOpen_(false);
     }

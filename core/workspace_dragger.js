@@ -76,7 +76,6 @@ Blockly.WorkspaceDragger.prototype.dispose = function() {
  * Start dragging the workspace.
  */
 Blockly.WorkspaceDragger.prototype.startDrag = function() {
-  Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
   if (Blockly.selected) {
     Blockly.selected.unselect();
   }
@@ -91,7 +90,6 @@ Blockly.WorkspaceDragger.prototype.startDrag = function() {
 Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
   // Make sure everything is up to date.
   this.drag(currentDragDeltaXY);
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   this.workspace_.resetDragSurface();
 };
 

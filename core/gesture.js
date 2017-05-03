@@ -494,6 +494,7 @@ Blockly.Gesture.prototype.cancel = function() {
  */
 Blockly.Gesture.prototype.handleRightClick = function(e) {
   if (this.startBlock_) {
+    this.bringBlockToFront_();
     if (this.flyout_) {
       // TODO: Possibly hide chaff in the non-flyout case as well.
       Blockly.hideChaff(true);
@@ -553,10 +554,12 @@ Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
 // Field clicks
 Blockly.Gesture.prototype.doFieldClick_ = function() {
   this.startField_.showEditor_();
+  this.bringBlockToFront_();
 };
 
 // Block clicks
 Blockly.Gesture.prototype.doBlockClick_ = function() {
+  // Block click in an autoclosing flyout.
   if (this.flyout_ && this.flyout_.autoClose) {
     if (!Blockly.Events.getGroup()) {
       Blockly.Events.setGroup(true);
@@ -568,7 +571,7 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
     Blockly.Events.fire(
         new Blockly.Events.Ui(this.startBlock_, 'click', undefined, undefined));
   }
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
+  this.bringBlockToFront_();
   Blockly.Events.setGroup(false);
 };
 
@@ -578,6 +581,18 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
     Blockly.selected.unselect();
   }
   // TODO: Does anything else happen on a workspace click?
+};
+
+/*
+ * Move the dragged/clicked block to the front of the workspace, so that it is
+ * not occluded by other blocks.
+ * @private
+ */
+Blockly.Gesture.prototype.bringBlockToFront_ = function() {
+  // Blocks in the flyout don't overlap, so skip the work.
+  if (this.startBlock_ && !this.flyout_) {
+    this.startBlock_.bringToFront();
+  }
 };
 
 // Simple setters

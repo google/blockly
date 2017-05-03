@@ -1294,6 +1294,21 @@ Blockly.BlockSvg.prototype.removeSelect = function() {
                        'blocklySelected');
 };
 
+/**
+ * Update the cursor over this block by adding or removing a class.
+ * @param {boolean} enable True if the delete cursor should be shown, false
+ *     otherwise.
+ */
+Blockly.BlockSvg.prototype.setDeleteStyle = function(enable) {
+  if (enable) {
+    Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
+        'blocklyDraggingDelete');
+  } else {
+    Blockly.utils.removeClass(/** @type {!Element} */ (this.svgGroup_),
+        'blocklyDraggingDelete');
+  }
+};
+
 // Overrides of functions on Blockly.Block that take into account whether the
 // block has been rendered.
 
@@ -1309,14 +1324,14 @@ Blockly.BlockSvg.prototype.setColour = function(colour) {
   }
 };
 
-
 /**
  * Move this block to the front of the visible workspace.
  * <g> tags do not respect z-index so svg renders them in the
  * order that they are in the dom.  By placing this block first within the
  * block group's <g>, it will render on top of any other blocks.
+ * @package
  */
-Blockly.BlockSvg.prototype.bringToFront_ = function() {
+Blockly.BlockSvg.prototype.bringToFront = function() {
   var block = this;
   do {
     var root = block.getSvgRoot();
@@ -1324,6 +1339,7 @@ Blockly.BlockSvg.prototype.bringToFront_ = function() {
     block = block.getParent();
   } while (block);
 };
+
 /**
  * Set whether this block can chain onto the bottom of another block.
  * @param {boolean} newBoolean True if there can be a previous statement.

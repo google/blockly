@@ -146,7 +146,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
   if (!Blockly.Events.getGroup()) {
     Blockly.Events.setGroup(true);
   }
-  // TODO: Can setResizesEnabled be done at the same time for both types of drags?
+
   this.workspace_.setResizesEnabled(false);
   Blockly.BlockSvg.disconnectUiStop_();
 
@@ -158,9 +158,10 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
     this.draggingBlock_.translate(newLoc.x, newLoc.y);
     this.draggingBlock_.disconnectUiEffect();
   }
-  // TODO: Make setDragging_ package.
-  this.draggingBlock_.setDragging_(true);
-  // TODO: Consider where moveToDragSurface should live.
+  this.draggingBlock_.setDragging(true);
+  // For future consideration: we may be able to put moveToDragSurface inside
+  // the block dragger, which would also let the block not track the block drag
+  // surface.
   this.draggingBlock_.moveToDragSurface_();
 
   if (this.workspace_.toolbox_) {
@@ -202,7 +203,6 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
 
   Blockly.BlockSvg.disconnectUiStop_();
 
-  // TODO: Consider where moveOffDragSurface should live.
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
   this.draggingBlock_.moveOffDragSurface_(newLoc);
@@ -211,7 +211,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   if (!deleted) {
     // These are expensive and don't need to be done if we're deleting.
     this.draggingBlock_.moveConnections_(delta.x, delta.y);
-    this.draggingBlock_.setDragging_(false);
+    this.draggingBlock_.setDragging(false);
     this.draggedConnectionManager_.applyConnections();
     this.draggingBlock_.render();
     this.fireMoveEvent_();
@@ -281,7 +281,6 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
 };
 
 /**
- * TODO (fenichel): Consider putting this in utils.
  * Convert a coordinate object from pixels to workspace units, including a
  * correction for mutator workspaces.
  * This function does not consider differing origins.  It simply scales the

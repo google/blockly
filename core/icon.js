@@ -126,7 +126,6 @@ Blockly.Icon.prototype.iconClick_ = function(e) {
     // Drag operation is concluding.  Don't open the editor.
     return;
   }
-  // TODO (fenichel): Decide if we need the right-click check now.
   if (!this.block_.isInFlyout && !Blockly.utils.isRightButton(e)) {
     this.setVisible(!this.isVisible());
   }

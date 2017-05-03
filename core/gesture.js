@@ -356,8 +356,6 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
 
 /**
  * Create a block dragger and start dragging the selected block.
- * TODO(fenichel): Consider folding all of this into the BlockDragger
- * constructor.
  * @private
  */
 Blockly.Gesture.prototype.startDraggingBlock_ = function() {
@@ -496,7 +494,6 @@ Blockly.Gesture.prototype.handleRightClick = function(e) {
   if (this.startBlock_) {
     this.bringBlockToFront_();
     if (this.flyout_) {
-      // TODO: Possibly hide chaff in the non-flyout case as well.
       Blockly.hideChaff(true);
     }
     this.startBlock_.showContextMenu_(e);
@@ -567,7 +564,6 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
     var newBlock = this.flyout_.createBlock(this.startBlock_);
     newBlock.scheduleSnapAndBump();
   } else {
-    // TODO: Check if anything else needs to happen on a block click.
     Blockly.Events.fire(
         new Blockly.Events.Ui(this.startBlock_, 'click', undefined, undefined));
   }
@@ -580,7 +576,6 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
   if (Blockly.selected) {
     Blockly.selected.unselect();
   }
-  // TODO: Does anything else happen on a workspace click?
 };
 
 /*
@@ -656,9 +651,6 @@ Blockly.Gesture.prototype.setStartFlyout = function(flyout) {
  * @return {boolean} whether this gesture was a click on a block.
  */
 Blockly.Gesture.prototype.isBlockClick_ = function() {
-  // TODO: Possibly have different behaviour for touch vs mouse.
-  // TODO: Possibly assert that the most recent event was an end.
-
   // A block click starts on a block, never escapes the drag radius, and is not
   // a field click.
   var hasStartBlock = !!this.startBlock_;
@@ -671,7 +663,6 @@ Blockly.Gesture.prototype.isBlockClick_ = function() {
  * @return {boolean} whether this gesture was a click on a field.
  */
 Blockly.Gesture.prototype.isFieldClick_ = function() {
-  // TODO: Assert that the most recent event was an end?
   var fieldEditable = this.startField_ ?
       this.startField_.isCurrentlyEditable() : false;
   return fieldEditable && !this.hasExceededDragRadius_;
@@ -683,7 +674,6 @@ Blockly.Gesture.prototype.isFieldClick_ = function() {
  * @return {boolean} whether this gesture was a click on a workspace.
  */
 Blockly.Gesture.prototype.isWorkspaceClick_ = function() {
-  // TODO: Possibly assert that the most recent event was an end?
   var onlyTouchedWorkspace = !this.startBlock_ && !this.startField_;
   return onlyTouchedWorkspace && !this.hasExceededDragRadius_;
 };

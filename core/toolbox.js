@@ -160,7 +160,6 @@ Blockly.Toolbox.prototype.init = function() {
   // Clicking on toolbox closes popups.
   Blockly.bindEventWithChecks_(this.HtmlDiv, 'mousedown', this,
       function(e) {
-        // TODO: Toolbox right-click handling.
         if (Blockly.utils.isRightButton(e) || e.target == this.HtmlDiv) {
           // Close flyout.
           Blockly.hideChaff(false);
@@ -424,7 +423,7 @@ Blockly.Toolbox.prototype.addDeleteStyle = function() {
 };
 
 /**
- * Remove styles from the toolbox that indicate blocks will be deleted.  
+ * Remove styles from the toolbox that indicate blocks will be deleted.
  * @package
  */
 Blockly.Toolbox.prototype.removeDeleteStyle = function() {

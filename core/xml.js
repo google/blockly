@@ -24,46 +24,60 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.Xml
+ * @namespace
+ **/
 goog.provide('Blockly.Xml');
 
-// TODO(scr): Fix circular dependencies
-// goog.require('Blockly.Block');
+goog.require('goog.asserts');
 goog.require('goog.dom');
 
 
 /**
  * Encode a block tree as XML.
  * @param {!Blockly.Workspace} workspace The workspace containing blocks.
+ * @param {boolean} opt_noId True if the encoder should skip the block ids.
  * @return {!Element} XML document.
  */
-Blockly.Xml.workspaceToDom = function(workspace) {
-  var width;  // Not used in LTR.
-  if (workspace.RTL) {
-    width = workspace.getWidth();
-  }
+Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
   var xml = goog.dom.createDom('xml');
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
-    var element = Blockly.Xml.blockToDom_(block);
-    var xy = block.getRelativeToSurfaceXY();
-    element.setAttribute('x', Math.round(workspace.RTL ? width - xy.x : xy.x));
-    element.setAttribute('y', Math.round(xy.y));
-    xml.appendChild(element);
+    xml.appendChild(Blockly.Xml.blockToDomWithXY(block, opt_noId));
   }
   return xml;
 };
 
 /**
+ * Encode a block subtree as XML with XY coordinates.
+ * @param {!Blockly.Block} block The root block to encode.
+ * @param {boolean} opt_noId True if the encoder should skip the block id.
+ * @return {!Element} Tree of XML elements.
+ */
+Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
+  var width;  // Not used in LTR.
+  if (block.workspace.RTL) {
+    width = block.workspace.getWidth();
+  }
+  var element = Blockly.Xml.blockToDom(block, opt_noId);
+  var xy = block.getRelativeToSurfaceXY();
+  element.setAttribute('x',
+      Math.round(block.workspace.RTL ? width - xy.x : xy.x));
+  element.setAttribute('y', Math.round(xy.y));
+  return element;
+};
+
+/**
  * Encode a block subtree as XML.
  * @param {!Blockly.Block} block The root block to encode.
+ * @param {boolean} opt_noId True if the encoder should skip the block id.
  * @return {!Element} Tree of XML elements.
- * @private
  */
-Blockly.Xml.blockToDom_ = function(block) {
+Blockly.Xml.blockToDom = function(block, opt_noId) {
   var element = goog.dom.createDom(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
-  if (Blockly.Realtime.isEnabled()) {
-    // Only used by realtime.
+  if (!opt_noId) {
     element.setAttribute('id', block.id);
   }
   if (block.mutationToDom) {
@@ -99,8 +113,6 @@ Blockly.Xml.blockToDom_ = function(block) {
   }
 
   if (block.data) {
-    // Optional text data that round-trips beween blocks and XML.
-    // Has no effect.  May be used by 3rd parties for meta information.
     var dataElement = goog.dom.createDom('data', null, block.data);
     element.appendChild(dataElement);
   }
@@ -122,7 +134,7 @@ Blockly.Xml.blockToDom_ = function(block) {
         container.appendChild(Blockly.Xml.cloneShadow_(shadow));
       }
       if (childBlock) {
-        container.appendChild(Blockly.Xml.blockToDom_(childBlock));
+        container.appendChild(Blockly.Xml.blockToDom(childBlock, opt_noId));
         empty = false;
       }
     }
@@ -140,7 +152,7 @@ Blockly.Xml.blockToDom_ = function(block) {
   if (block.disabled) {
     element.setAttribute('disabled', true);
   }
-  if (!block.isDeletable()) {
+  if (!block.isDeletable() && !block.isShadow()) {
     element.setAttribute('deletable', false);
   }
   if (!block.isMovable() && !block.isShadow()) {
@@ -153,7 +165,7 @@ Blockly.Xml.blockToDom_ = function(block) {
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
     var container = goog.dom.createDom('next', null,
-        Blockly.Xml.blockToDom_(nextBlock));
+        Blockly.Xml.blockToDom(nextBlock, opt_noId));
     element.appendChild(container);
   }
   var shadow = block.nextConnection && block.nextConnection.getShadowDom();
@@ -257,75 +269,178 @@ Blockly.Xml.textToDom = function(text) {
       dom.firstChild.nodeName.toLowerCase() != 'xml' ||
       dom.firstChild !== dom.lastChild) {
     // Whatever we got back from the parser is not XML.
-    throw 'Blockly.Xml.textToDom did not obtain a valid XML tree.';
+    goog.asserts.fail('Blockly.Xml.textToDom did not obtain a valid XML tree.');
   }
   return dom.firstChild;
 };
 
 /**
  * Decode an XML DOM and create blocks on the workspace.
- * @param {!Blockly.Workspace} workspace The workspace.
  * @param {!Element} xml XML DOM.
+ * @param {!Blockly.Workspace} workspace The workspace.
+ * @return {Array.<string>} An array containing new block ids.
  */
-Blockly.Xml.domToWorkspace = function(workspace, xml) {
+Blockly.Xml.domToWorkspace = function(xml, workspace) {
+  if (xml instanceof Blockly.Workspace) {
+    var swap = xml;
+    xml = workspace;
+    workspace = swap;
+    console.warn('Deprecated call to Blockly.Xml.domToWorkspace, ' +
+                 'swap the arguments.');
+  }
   var width;  // Not used in LTR.
   if (workspace.RTL) {
     width = workspace.getWidth();
   }
+  var newBlockIds = []; // A list of block ids added by this call.
   Blockly.Field.startCache();
   // Safari 7.1.3 is known to provide node lists with extra references to
   // children beyond the lists' length.  Trust the length, do not use the
   // looping pattern of checking the index for an object.
   var childCount = xml.childNodes.length;
+  var existingGroup = Blockly.Events.getGroup();
+  if (!existingGroup) {
+    Blockly.Events.setGroup(true);
+  }
+
+  // Disable workspace resizes as an optimization.
+  if (workspace.setResizesEnabled) {
+    workspace.setResizesEnabled(false);
+  }
   for (var i = 0; i < childCount; i++) {
     var xmlChild = xml.childNodes[i];
-    if (xmlChild.nodeName.toLowerCase() == 'block') {
-      var block = Blockly.Xml.domToBlock(workspace, xmlChild);
+    var name = xmlChild.nodeName.toLowerCase();
+    if (name == 'block' ||
+        (name == 'shadow' && !Blockly.Events.recordUndo)) {
+      // Allow top-level shadow blocks if recordUndo is disabled since
+      // that means an undo is in progress.  Such a block is expected
+      // to be moved to a nested destination in the next operation.
+      var block = Blockly.Xml.domToBlock(xmlChild, workspace);
+      newBlockIds.push(block.id);
       var blockX = parseInt(xmlChild.getAttribute('x'), 10);
       var blockY = parseInt(xmlChild.getAttribute('y'), 10);
       if (!isNaN(blockX) && !isNaN(blockY)) {
         block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
       }
+    } else if (name == 'shadow') {
+      goog.asserts.fail('Shadow block cannot be a top-level block.');
     }
   }
+  if (!existingGroup) {
+    Blockly.Events.setGroup(false);
+  }
   Blockly.Field.stopCache();
+
+  workspace.updateVariableStore(false);
+  // Re-enable workspace resizing.
+  if (workspace.setResizesEnabled) {
+    workspace.setResizesEnabled(true);
+  }
+  return newBlockIds;
+};
+
+/**
+ * Decode an XML DOM and create blocks on the workspace. Position the new
+ * blocks immediately below prior blocks, aligned by their starting edge.
+ * @param {!Element} xml The XML DOM.
+ * @param {!Blockly.Workspace} workspace The workspace to add to.
+ * @return {Array.<string>} An array containing new block ids.
+ */
+Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
+  var bbox; //bounding box of the current blocks
+  // first check if we have a workspaceSvg otherwise the block have no shape
+  // and the position does not matter
+  if (workspace.hasOwnProperty('scale')) {
+    var savetab = Blockly.BlockSvg.TAB_WIDTH;
+    try {
+      Blockly.BlockSvg.TAB_WIDTH = 0;
+      var bbox = workspace.getBlocksBoundingBox();
+    } finally {
+      Blockly.BlockSvg.TAB_WIDTH = savetab;
+    }
+  }
+  // load the new blocks into the workspace and get the ids of the new blocks
+  var newBlockIds = Blockly.Xml.domToWorkspace(xml,workspace);
+  if (bbox && bbox.height) { // check if any previous block
+    var offsetY = 0; // offset to add to y of the new block
+    var offsetX = 0;
+    var farY = bbox.y + bbox.height; //bottom position
+    var topX = bbox.x; // x of bounding box
+    // check position of the new blocks
+    var newX = Infinity; // x of top corner
+    var newY = Infinity; // y of top corner
+    for (var i = 0; i < newBlockIds.length; i++) {
+      var blockXY = workspace.getBlockById(newBlockIds[i]).getRelativeToSurfaceXY();
+      if (blockXY.y < newY) {
+        newY = blockXY.y;
+      }
+      if (blockXY.x  < newX) { //if we align also on x
+        newX = blockXY.x;
+      }
+    }
+    offsetY = farY - newY + Blockly.BlockSvg.SEP_SPACE_Y;
+    offsetX = topX - newX;
+    // move the new blocks to append them at the bottom
+    var width;  // Not used in LTR.
+    if (workspace.RTL) {
+      width = workspace.getWidth();
+    }
+    for (var i = 0; i < newBlockIds.length; i++) {
+      var block = workspace.getBlockById(newBlockIds[i]);
+      block.moveBy(workspace.RTL ? width - offsetX : offsetX, offsetY);
+    }
+  }
+  return newBlockIds;
 };
 
 /**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the
  * workspace.
- * @param {!Blockly.Workspace} workspace The workspace.
  * @param {!Element} xmlBlock XML block element.
- * @param {boolean=} opt_reuseBlock Optional arg indicating whether to
- *     reinitialize an existing block.
+ * @param {!Blockly.Workspace} workspace The workspace.
  * @return {!Blockly.Block} The root block created.
  */
-Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
+Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
+  if (xmlBlock instanceof Blockly.Workspace) {
+    var swap = xmlBlock;
+    xmlBlock = workspace;
+    workspace = swap;
+    console.warn('Deprecated call to Blockly.Xml.domToBlock, ' +
+                 'swap the arguments.');
+  }
   // Create top-level block.
-  var topBlock = Blockly.Xml.domToBlockHeadless_(workspace, xmlBlock,
-                                                 opt_reuseBlock);
-  if (workspace.rendered) {
-    // Hide connections to speed up assembly.
-    topBlock.setConnectionsHidden(true);
-    // Generate list of all blocks.
-    var blocks = topBlock.getDescendants();
-    // Render each block.
-    for (var i = blocks.length - 1; i >= 0; i--) {
-      blocks[i].initSvg();
-    }
-    for (var i = blocks.length - 1; i >= 0; i--) {
-      blocks[i].render(false);
-    }
-    // Populating the connection database may be defered until after the blocks
-    // have renderend.
-    setTimeout(function() {
-      if (topBlock.workspace) {  // Check that the block hasn't been deleted.
-        topBlock.setConnectionsHidden(false);
+  Blockly.Events.disable();
+  try {
+    var topBlock = Blockly.Xml.domToBlockHeadless_(xmlBlock, workspace);
+    if (workspace.rendered) {
+      // Hide connections to speed up assembly.
+      topBlock.setConnectionsHidden(true);
+      // Generate list of all blocks.
+      var blocks = topBlock.getDescendants();
+      // Render each block.
+      for (var i = blocks.length - 1; i >= 0; i--) {
+        blocks[i].initSvg();
       }
-    }, 1);
-    topBlock.updateDisabled();
-    // Fire an event to allow scrollbars to resize.
-    Blockly.fireUiEvent(window, 'resize');
+      for (var i = blocks.length - 1; i >= 0; i--) {
+        blocks[i].render(false);
+      }
+      // Populating the connection database may be deferred until after the
+      // blocks have rendered.
+      setTimeout(function() {
+        if (topBlock.workspace) {  // Check that the block hasn't been deleted.
+          topBlock.setConnectionsHidden(false);
+        }
+      }, 1);
+      topBlock.updateDisabled();
+      // Allow the scrollbars to resize and move based on the new contents.
+      // TODO(@picklesrus): #387. Remove when domToBlock avoids resizing.
+      workspace.resizeContents();
+    }
+  } finally {
+    Blockly.Events.enable();
+  }
+  if (Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.Create(topBlock));
   }
   return topBlock;
 };
@@ -333,39 +448,18 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
 /**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the
  * workspace.
- * @param {!Blockly.Workspace} workspace The workspace.
  * @param {!Element} xmlBlock XML block element.
- * @param {boolean=} opt_reuseBlock Optional arg indicating whether to
- *     reinitialize an existing block.
+ * @param {!Blockly.Workspace} workspace The workspace.
  * @return {!Blockly.Block} The root block created.
  * @private
  */
-Blockly.Xml.domToBlockHeadless_ =
-    function(workspace, xmlBlock, opt_reuseBlock) {
+Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   var block = null;
   var prototypeName = xmlBlock.getAttribute('type');
-  if (!prototypeName) {
-    throw 'Block type unspecified: \n' + xmlBlock.outerHTML;
-  }
+  goog.asserts.assert(prototypeName, 'Block type unspecified: %s',
+                      xmlBlock.outerHTML);
   var id = xmlBlock.getAttribute('id');
-  if (opt_reuseBlock && id) {
-    // Only used by realtime.
-    block = Blockly.Block.getById(id, workspace);
-    // TODO: The following is for debugging.  It should never actually happen.
-    if (!block) {
-      throw 'Couldn\'t get Block with id: ' + id;
-    }
-    var parentBlock = block.getParent();
-    // If we've already filled this block then we will dispose of it and then
-    // re-fill it.
-    if (block.workspace) {
-      block.dispose(true, false, true);
-    }
-    block.fill(workspace, prototypeName);
-    block.parent_ = parentBlock;
-  } else {
-    block = Blockly.Block.obtain(workspace, prototypeName);
-  }
+  block = workspace.newBlock(prototypeName, id);
 
   var blockChild = null;
   for (var i = 0, xmlChild; xmlChild = xmlBlock.childNodes[i]; i++) {
@@ -378,7 +472,6 @@ Blockly.Xml.domToBlockHeadless_ =
     // Find any enclosed blocks or shadows in this tag.
     var childBlockNode = null;
     var childShadowNode = null;
-    var shadowActive = false;
     for (var j = 0, grandchildNode; grandchildNode = xmlChild.childNodes[j];
          j++) {
       if (grandchildNode.nodeType == 1) {
@@ -392,7 +485,6 @@ Blockly.Xml.domToBlockHeadless_ =
     // Use the shadow block if there is no child block.
     if (!childBlockNode && childShadowNode) {
       childBlockNode = childShadowNode;
-      shadowActive = true;
     }
 
     var name = xmlChild.getAttribute('name');
@@ -402,7 +494,7 @@ Blockly.Xml.domToBlockHeadless_ =
         if (block.domToMutation) {
           block.domToMutation(xmlChild);
           if (block.initSvg) {
-            // Mutation may have added some elements that need initalizing.
+            // Mutation may have added some elements that need initializing.
             block.initSvg();
           }
         }
@@ -410,7 +502,7 @@ Blockly.Xml.domToBlockHeadless_ =
       case 'comment':
         block.setCommentText(xmlChild.textContent);
         var visible = xmlChild.getAttribute('pinned');
-        if (visible) {
+        if (visible && !block.isInFlyout) {
           // Give the renderer a millisecond to render and position the block
           // before positioning the comment bubble.
           setTimeout(function() {
@@ -427,8 +519,6 @@ Blockly.Xml.domToBlockHeadless_ =
         }
         break;
       case 'data':
-        // Optional text data that round-trips beween blocks and XML.
-        // Has no effect.  May be used by 3rd parties for meta information.
         block.data = xmlChild.textContent;
         break;
       case 'title':
@@ -455,14 +545,15 @@ Blockly.Xml.domToBlockHeadless_ =
           input.connection.setShadowDom(childShadowNode);
         }
         if (childBlockNode) {
-          blockChild = Blockly.Xml.domToBlockHeadless_(workspace,
-              childBlockNode, opt_reuseBlock);
+          blockChild = Blockly.Xml.domToBlockHeadless_(childBlockNode,
+              workspace);
           if (blockChild.outputConnection) {
             input.connection.connect(blockChild.outputConnection);
           } else if (blockChild.previousConnection) {
             input.connection.connect(blockChild.previousConnection);
           } else {
-            throw 'Child block does not have output or previous statement.';
+            goog.asserts.fail(
+                'Child block does not have output or previous statement.');
           }
         }
         break;
@@ -471,17 +562,15 @@ Blockly.Xml.domToBlockHeadless_ =
           block.nextConnection.setShadowDom(childShadowNode);
         }
         if (childBlockNode) {
-          if (!block.nextConnection) {
-            throw 'Next statement does not exist.';
-          } else if (block.nextConnection.targetConnection) {
-            // This could happen if there is more than one XML 'next' tag.
-            throw 'Next statement is already connected.';
-          }
-          blockChild = Blockly.Xml.domToBlockHeadless_(workspace,
-              childBlockNode, opt_reuseBlock);
-          if (!blockChild.previousConnection) {
-            throw 'Next block does not have previous statement.';
-          }
+          goog.asserts.assert(block.nextConnection,
+              'Next statement does not exist.');
+          // If there is more than one XML 'next' tag.
+          goog.asserts.assert(!block.nextConnection.isConnected(),
+              'Next statement is already connected.');
+          blockChild = Blockly.Xml.domToBlockHeadless_(childBlockNode,
+              workspace);
+          goog.asserts.assert(blockChild.previousConnection,
+              'Next block does not have previous statement.');
           block.nextConnection.connect(blockChild.previousConnection);
         }
         break;
@@ -516,11 +605,16 @@ Blockly.Xml.domToBlockHeadless_ =
     block.setCollapsed(collapsed == 'true');
   }
   if (xmlBlock.nodeName.toLowerCase() == 'shadow') {
+    // Ensure all children are also shadows.
+    var children = block.getChildren();
+    for (var i = 0, child; child = children[i]; i++) {
+      goog.asserts.assert(child.isShadow(),
+                          'Shadow block not allowed non-shadow child.');
+    }
+    // Ensure this block doesn't have any variable inputs.
+    goog.asserts.assert(block.getVars().length == 0,
+        'Shadow blocks cannot have variable fields.');
     block.setShadow(true);
-  }
-  // Give the block a chance to clean up any initial inputs.
-  if (block.validate) {
-    block.validate();
   }
   return block;
 };

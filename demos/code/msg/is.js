@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Keyra forritið sem kubbarnir á vinnusvæðinu mynda.",
   badCode: "Villa í forriti:\n%1",
   timeout: "Forritið hefur endurtekið sig of oft.",
-  discard: "Eyða öllum %1 kubbunum?",
   trashTooltip: "Fleygja öllum kubbum.",
   catLogic: "Rökvísi",
   catLoops: "Lykkjur",

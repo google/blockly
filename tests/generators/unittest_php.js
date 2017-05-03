@@ -78,45 +78,50 @@ Blockly.PHP['unittest_main'].defineAssert_ = function(block) {
         Blockly.Variables.NAME_TYPE);
     var functionName = Blockly.PHP.provideFunction_(
         'assertEquals',
-        [   '  function equals($a, $b) {',
-            '    if ($a === $b) {',
-            '      return true;',
-            '    } else if ((is_numeric($a)) && (is_numeric($b)) &&',
-            '        (round($a,15) == round($b,15))) {',
-            '      return true;',
-            '    } else if (is_array($a) && is_array($b)) {',
-            '      if (count($a) != count($b)) {',
-            '        return false;',
-            '      }',
-            '      for ($i = 0; $i < count($a); $i++) {',
-            '        if (!equals($a[$i], $b[$i])) {',
-            '          return false;',
-            '        }',
-            '      }',
-            '      return true;',
-            '    }',
-            '    return false;',
-            '  }',
-            'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
-            '($actual, $expected, $message) {',
-            'global ' + resultsVar + ';',
-            '  // Asserts that a value equals another value.',
-            '  if (!is_array(' + resultsVar + ')) {',
-            '    throw new Exception("Orphaned assert: " . $message);',
-            '  }',
-            '  if (equals($actual, $expected)) {',
-            '    array_push(' + resultsVar + ', [true, "OK", $message]);',
-            '  } else {',
-            '    array_push(' + resultsVar + ', [false, ' +
-            '"Expected: " . $expected . "\\nActual: " . $actual, $message]);',
-            '  }',
-            '}']);
+       ['  function equals($a, $b) {',
+        '    if ($a === $b) {',
+        '      return true;',
+        '    } else if ((is_numeric($a)) && (is_numeric($b)) &&',
+        '        (round($a,15) == round($b,15))) {',
+        '      return true;',
+        '    } else if (is_array($a) && is_array($b)) {',
+        '      if (count($a) != count($b)) {',
+        '        return false;',
+        '      }',
+        '      for ($i = 0; $i < count($a); $i++) {',
+        '        if (!equals($a[$i], $b[$i])) {',
+        '          return false;',
+        '        }',
+        '      }',
+        '      return true;',
+        '    }',
+        '    return false;',
+        '  }',
+        'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+        '($actual, $expected, $message) {',
+        'global ' + resultsVar + ';',
+        '  // Asserts that a value equals another value.',
+        '  if (!is_array(' + resultsVar + ')) {',
+        '    throw new Exception("Orphaned assert: " . $message);',
+        '  }',
+        '  if (equals($actual, $expected)) {',
+        '    array_push(' + resultsVar + ', [true, "OK", $message]);',
+        '  } else {',
+        '    $expected = is_array($expected) ? implode(" ", $expected) : ' +
+            '$expected;',
+        '    $actual = is_array($actual) ? implode(" ", $actual) : ' +
+            '$actual;',
+        '    array_push(' + resultsVar + ', [false, ' +
+        '"Expected: " . $expected . "\\nActual: " . $actual, $message]);',
+        '  }',
+        '}']);
     return functionName;
 };
 
 Blockly.PHP['unittest_assertequals'] = function(block) {
     // Asserts that a value equals another value.
-    var message = Blockly.PHP.quote_(block.getFieldValue('MESSAGE'));
+    var message = Blockly.PHP.valueToCode(block, 'MESSAGE',
+      Blockly.PHP.ORDER_NONE) || '';
     var actual = Blockly.PHP.valueToCode(block, 'ACTUAL',
             Blockly.PHP.ORDER_COMMA) || 'null';
     var expected = Blockly.PHP.valueToCode(block, 'EXPECTED',
@@ -127,7 +132,8 @@ Blockly.PHP['unittest_assertequals'] = function(block) {
 
 Blockly.PHP['unittest_assertvalue'] = function(block) {
     // Asserts that a value is true, false, or null.
-    var message = Blockly.PHP.quote_(block.getFieldValue('MESSAGE'));
+    var message = Blockly.PHP.valueToCode(block, 'MESSAGE',
+      Blockly.PHP.ORDER_NONE) || '';
     var actual = Blockly.PHP.valueToCode(block, 'ACTUAL',
             Blockly.PHP.ORDER_COMMA) || 'null';
     var expected = block.getFieldValue('EXPECTED');
@@ -146,7 +152,8 @@ Blockly.PHP['unittest_fail'] = function(block) {
     // Always assert an error.
     var resultsVar = Blockly.PHP.variableDB_.getName('unittestResults',
         Blockly.Variables.NAME_TYPE);
-    var message = Blockly.PHP.quote_(block.getFieldValue('MESSAGE'));
+    var message = Blockly.PHP.valueToCode(block, 'MESSAGE',
+      Blockly.PHP.ORDER_NONE) || '';
     var functionName = Blockly.PHP.provideFunction_(
         'unittest_fail',
         [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
@@ -159,4 +166,22 @@ Blockly.PHP['unittest_fail'] = function(block) {
             '  array_push(' + resultsVar + ', [false, "Fail.", $message]);',
             '}']);
     return functionName + '(' + message + ');\n';
+};
+
+Blockly.PHP['unittest_adjustindex'] = function(block) {
+  var index = Blockly.PHP.valueToCode(block, 'INDEX',
+      Blockly.PHP.ORDER_ADDITION) || '0';
+  // Adjust index if using one-based indexing.
+  if (block.workspace.options.oneBasedIndex) {
+    if (Blockly.isNumber(index)) {
+      // If the index is a naked number, adjust it right now.
+      return [parseFloat(index) + 1, Blockly.PHP.ORDER_ATOMIC];
+    } else {
+      // If the index is dynamic, adjust it in code.
+      index = index + ' + 1';
+    }
+  } else if (Blockly.isNumber(index)) {
+    return [index, Blockly.PHP.ORDER_ATOMIC];
+  }
+  return [index, Blockly.PHP.ORDER_ADDITION];
 };

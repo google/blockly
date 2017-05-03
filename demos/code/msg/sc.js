@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Arròllia su programa cumpostu de is brocus in s'àrea de traballu.",
   badCode: "Errori in su Programa:\n%1",
   timeout: "Giai lòmpius a su màssimu numeru de repicus.",
-  discard: "Scancellu su %1 de is brocus?",
   trashTooltip: "Boganci totu is brocus.",
   catLogic: "Lògica",
   catLoops: "Lòrigas",

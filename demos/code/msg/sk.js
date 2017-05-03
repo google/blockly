@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Spustiť program, zložený z dielcov na pracovnej ploche.",
   badCode: "Chyba v programe:\n%1",
   timeout: "Bol prekročený maximálny počet opakovaní.",
-  discard: "Zmazať všetkých %1 dielcov?",
   trashTooltip: "Zahodiť všetky dielce.",
   catLogic: "Logika",
   catLoops: "Cykly",

@@ -44,13 +44,45 @@ Blockly.Python = new Blockly.Generator('Python');
  */
 Blockly.Python.addReservedWords(
     // import keyword
-    // print ','.join(keyword.kwlist)
-    // http://docs.python.org/reference/lexical_analysis.html#keywords
-    'and,as,assert,break,class,continue,def,del,elif,else,except,exec,finally,for,from,global,if,import,in,is,lambda,not,or,pass,print,raise,return,try,while,with,yield,' +
-    //http://docs.python.org/library/constants.html
-    'True,False,None,NotImplemented,Ellipsis,__debug__,quit,exit,copyright,license,credits,' +
-    // http://docs.python.org/library/functions.html
-    'abs,divmod,input,open,staticmethod,all,enumerate,int,ord,str,any,eval,isinstance,pow,sum,basestring,execfile,issubclass,print,super,bin,file,iter,property,tuple,bool,filter,len,range,type,bytearray,float,list,raw_input,unichr,callable,format,locals,reduce,unicode,chr,frozenset,long,reload,vars,classmethod,getattr,map,repr,xrange,cmp,globals,max,reversed,zip,compile,hasattr,memoryview,round,__import__,complex,hash,min,set,apply,delattr,help,next,setattr,buffer,dict,hex,object,slice,coerce,dir,id,oct,sorted,intern');
+    // print(','.join(sorted(keyword.kwlist)))
+    // https://docs.python.org/3/reference/lexical_analysis.html#keywords
+    // https://docs.python.org/2/reference/lexical_analysis.html#keywords
+    'False,None,True,and,as,assert,break,class,continue,def,del,elif,else,' +
+    'except,exec,finally,for,from,global,if,import,in,is,lambda,nonlocal,not,' +
+    'or,pass,print,raise,return,try,while,with,yield,' +
+    // https://docs.python.org/3/library/constants.html
+    // https://docs.python.org/2/library/constants.html
+    'NotImplemented,Ellipsis,__debug__,quit,exit,copyright,license,credits,' +
+    // >>> print(','.join(sorted(dir(__builtins__))))
+    // https://docs.python.org/3/library/functions.html
+    // https://docs.python.org/2/library/functions.html
+    'ArithmeticError,AssertionError,AttributeError,BaseException,' +
+    'BlockingIOError,BrokenPipeError,BufferError,BytesWarning,' +
+    'ChildProcessError,ConnectionAbortedError,ConnectionError,' +
+    'ConnectionRefusedError,ConnectionResetError,DeprecationWarning,EOFError,' +
+    'Ellipsis,EnvironmentError,Exception,FileExistsError,FileNotFoundError,' +
+    'FloatingPointError,FutureWarning,GeneratorExit,IOError,ImportError,' +
+    'ImportWarning,IndentationError,IndexError,InterruptedError,' +
+    'IsADirectoryError,KeyError,KeyboardInterrupt,LookupError,MemoryError,' +
+    'ModuleNotFoundError,NameError,NotADirectoryError,NotImplemented,' +
+    'NotImplementedError,OSError,OverflowError,PendingDeprecationWarning,' +
+    'PermissionError,ProcessLookupError,RecursionError,ReferenceError,' +
+    'ResourceWarning,RuntimeError,RuntimeWarning,StandardError,' +
+    'StopAsyncIteration,StopIteration,SyntaxError,SyntaxWarning,SystemError,' +
+    'SystemExit,TabError,TimeoutError,TypeError,UnboundLocalError,' +
+    'UnicodeDecodeError,UnicodeEncodeError,UnicodeError,' +
+    'UnicodeTranslateError,UnicodeWarning,UserWarning,ValueError,Warning,' +
+    'ZeroDivisionError,_,__build_class__,__debug__,__doc__,__import__,' +
+    '__loader__,__name__,__package__,__spec__,abs,all,any,apply,ascii,' +
+    'basestring,bin,bool,buffer,bytearray,bytes,callable,chr,classmethod,cmp,' +
+    'coerce,compile,complex,copyright,credits,delattr,dict,dir,divmod,' +
+    'enumerate,eval,exec,execfile,exit,file,filter,float,format,frozenset,' +
+    'getattr,globals,hasattr,hash,help,hex,id,input,int,intern,isinstance,' +
+    'issubclass,iter,len,license,list,locals,long,map,max,memoryview,min,' +
+    'next,object,oct,open,ord,pow,print,property,quit,range,raw_input,reduce,' +
+    'reload,repr,reversed,round,set,setattr,slice,sorted,staticmethod,str,' +
+    'sum,super,tuple,type,unichr,unicode,vars,xrange,zip'
+);
 
 /**
  * Order of operation ENUMs.
@@ -59,8 +91,8 @@ Blockly.Python.addReservedWords(
 Blockly.Python.ORDER_ATOMIC = 0;            // 0 "" ...
 Blockly.Python.ORDER_COLLECTION = 1;        // tuples, lists, dictionaries
 Blockly.Python.ORDER_STRING_CONVERSION = 1; // `expression...`
-Blockly.Python.ORDER_MEMBER = 2;            // . []
-Blockly.Python.ORDER_FUNCTION_CALL = 2;     // ()
+Blockly.Python.ORDER_MEMBER = 2.1;          // . []
+Blockly.Python.ORDER_FUNCTION_CALL = 2.2;   // ()
 Blockly.Python.ORDER_EXPONENTIATION = 3;    // **
 Blockly.Python.ORDER_UNARY_SIGN = 4;        // + -
 Blockly.Python.ORDER_BITWISE_NOT = 4;       // ~
@@ -80,15 +112,41 @@ Blockly.Python.ORDER_LAMBDA = 16;           // lambda
 Blockly.Python.ORDER_NONE = 99;             // (...)
 
 /**
- * Empty loops or conditionals are not allowed in Python.
+ * List of outer-inner pairings that do NOT require parentheses.
+ * @type {!Array.<!Array.<number>>}
  */
-Blockly.Python.PASS = '  pass\n';
+Blockly.Python.ORDER_OVERRIDES = [
+  // (foo()).bar -> foo().bar
+  // (foo())[0] -> foo()[0]
+  [Blockly.Python.ORDER_FUNCTION_CALL, Blockly.Python.ORDER_MEMBER],
+  // (foo())() -> foo()()
+  [Blockly.Python.ORDER_FUNCTION_CALL, Blockly.Python.ORDER_FUNCTION_CALL],
+  // (foo.bar).baz -> foo.bar.baz
+  // (foo.bar)[0] -> foo.bar[0]
+  // (foo[0]).bar -> foo[0].bar
+  // (foo[0])[1] -> foo[0][1]
+  [Blockly.Python.ORDER_MEMBER, Blockly.Python.ORDER_MEMBER],
+  // (foo.bar)() -> foo.bar()
+  // (foo[0])() -> foo[0]()
+  [Blockly.Python.ORDER_MEMBER, Blockly.Python.ORDER_FUNCTION_CALL],
+
+  // not (not foo) -> not not foo
+  [Blockly.Python.ORDER_LOGICAL_NOT, Blockly.Python.ORDER_LOGICAL_NOT],
+  // a and (b and c) -> a and b and c
+  [Blockly.Python.ORDER_LOGICAL_AND, Blockly.Python.ORDER_LOGICAL_AND],
+  // a or (b or c) -> a or b or c
+  [Blockly.Python.ORDER_LOGICAL_OR, Blockly.Python.ORDER_LOGICAL_OR]
+];
 
 /**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.Python.init = function(workspace) {
+  /**
+   * Empty loops or conditionals are not allowed in Python.
+   */
+  Blockly.Python.PASS = this.INDENT + 'pass\n';
   // Create a dictionary of definitions to be printed before the code.
   Blockly.Python.definitions_ = Object.create(null);
   // Create a dictionary mapping desired function names in definitions_
@@ -103,7 +161,7 @@ Blockly.Python.init = function(workspace) {
   }
 
   var defvars = [];
-  var variables = Blockly.Variables.allVariables(workspace);
+  var variables = workspace.getAllVariables();
   for (var i = 0; i < variables.length; i++) {
     defvars[i] = Blockly.Python.variableDB_.getName(variables[i],
         Blockly.Variables.NAME_TYPE) + ' = None';
@@ -153,12 +211,21 @@ Blockly.Python.scrubNakedValue = function(line) {
  * @private
  */
 Blockly.Python.quote_ = function(string) {
-  // TODO: This is a quick hack.  Replace with goog.string.quote
+  // Can't use goog.string.quote since % must also be escaped.
   string = string.replace(/\\/g, '\\\\')
                  .replace(/\n/g, '\\\n')
-                 .replace(/\%/g, '\\%')
-                 .replace(/'/g, '\\\'');
-  return '\'' + string + '\'';
+                 .replace(/\%/g, '\\%');
+
+  // Follow the CPython behaviour of repr() for a non-byte string.
+  var quote = '\'';
+  if (string.indexOf('\'') !== -1) {
+    if (string.indexOf('"') === -1) {
+      quote = '"';
+    } else {
+      string = string.replace(/'/g, '\\\'');
+    }
+  };
+  return quote + string + quote;
 };
 
 /**
@@ -176,14 +243,20 @@ Blockly.Python.scrub_ = function(block, code) {
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
+    comment = Blockly.utils.wrap(comment, Blockly.Python.COMMENT_WRAP - 3);
     if (comment) {
-      commentCode += Blockly.Python.prefixLines(comment, '# ') + '\n';
+      if (block.getProcedureDef) {
+        // Use a comment block for function comments.
+        commentCode += '"""' + comment + '\n"""\n';
+      } else {
+        commentCode += Blockly.Python.prefixLines(comment + '\n', '# ');
+      }
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
-    for (var x = 0; x < block.inputList.length; x++) {
-      if (block.inputList[x].type == Blockly.INPUT_VALUE) {
-        var childBlock = block.inputList[x].connection.targetBlock();
+    for (var i = 0; i < block.inputList.length; i++) {
+      if (block.inputList[i].type == Blockly.INPUT_VALUE) {
+        var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           var comment = Blockly.Python.allNestedComments(childBlock);
           if (comment) {
@@ -196,4 +269,45 @@ Blockly.Python.scrub_ = function(block, code) {
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
   var nextCode = Blockly.Python.blockToCode(nextBlock);
   return commentCode + code + nextCode;
+};
+
+/**
+ * Gets a property and adjusts the value, taking into account indexing, and
+ * casts to an integer.
+ * @param {!Blockly.Block} block The block.
+ * @param {string} atId The property ID of the element to get.
+ * @param {number=} opt_delta Value to add.
+ * @param {boolean=} opt_negate Whether to negate the value.
+ * @return {string|number}
+ */
+Blockly.Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
+  var delta = opt_delta || 0;
+  if (block.workspace.options.oneBasedIndex) {
+    delta--;
+  }
+  var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
+  var atOrder = delta ? Blockly.Python.ORDER_ADDITIVE :
+      Blockly.Python.ORDER_NONE;
+  var at = Blockly.Python.valueToCode(block, atId, atOrder) || defaultAtIndex;
+
+  if (Blockly.isNumber(at)) {
+    // If the index is a naked number, adjust it right now.
+    at = parseInt(at, 10) + delta;
+    if (opt_negate) {
+      at = -at;
+    }
+  } else {
+    // If the index is dynamic, adjust it in code.
+    if (delta > 0) {
+      at = 'int(' + at + ' + ' + delta + ')';
+    } else if (delta < 0) {
+      at = 'int(' + at + ' - ' + -delta + ')';
+    } else {
+      at = 'int(' + at + ')';
+    }
+    if (opt_negate) {
+      at = '-' + at;
+    }
+  }
+  return at;
 };

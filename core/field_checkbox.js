@@ -32,21 +32,24 @@ goog.require('Blockly.Field');
 /**
  * Class for a checkbox field.
  * @param {string} state The initial state of the field ('TRUE' or 'FALSE').
- * @param {Function=} opt_changeHandler A function that is executed when a new
+ * @param {Function=} opt_validator A function that is executed when a new
  *     option is selected.  Its sole argument is the new checkbox state.  If
  *     it returns a value, this becomes the new checkbox state, unless the
  *     value is null, in which case the change is aborted.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldCheckbox = function(state, opt_changeHandler) {
-  Blockly.FieldCheckbox.superClass_.constructor.call(this, '');
-
-  this.setChangeHandler(opt_changeHandler);
+Blockly.FieldCheckbox = function(state, opt_validator) {
+  Blockly.FieldCheckbox.superClass_.constructor.call(this, '', opt_validator);
   // Set the initial state.
   this.setValue(state);
 };
 goog.inherits(Blockly.FieldCheckbox, Blockly.Field);
+
+/**
+ * Character for the checkmark.
+ */
+Blockly.FieldCheckbox.CHECK_CHAR = '\u2713';
 
 /**
  * Mouse cursor style when over the hotspot that initiates editability.
@@ -55,19 +58,19 @@ Blockly.FieldCheckbox.prototype.CURSOR = 'default';
 
 /**
  * Install this checkbox on a block.
- * @param {!Blockly.Block} block The block containing this text.
  */
-Blockly.FieldCheckbox.prototype.init = function(block) {
-  if (this.sourceBlock_) {
+Blockly.FieldCheckbox.prototype.init = function() {
+  if (this.fieldGroup_) {
     // Checkbox has already been initialized once.
     return;
   }
-  Blockly.FieldCheckbox.superClass_.init.call(this, block);
+  Blockly.FieldCheckbox.superClass_.init.call(this);
   // The checkbox doesn't use the inherited text element.
   // Instead it uses a custom checkmark element that is either visible or not.
-  this.checkElement_ = Blockly.createSvgElement('text',
-      {'class': 'blocklyText', 'x': -3, 'y': 14}, this.fieldGroup_);
-  var textNode = document.createTextNode('\u2713');
+  this.checkElement_ = Blockly.utils.createSvgElement('text',
+      {'class': 'blocklyText blocklyCheckbox', 'x': -3, 'y': 14},
+      this.fieldGroup_);
+  var textNode = document.createTextNode(Blockly.FieldCheckbox.CHECK_CHAR);
   this.checkElement_.appendChild(textNode);
   this.checkElement_.style.display = this.state_ ? 'block' : 'none';
 };
@@ -81,18 +84,21 @@ Blockly.FieldCheckbox.prototype.getValue = function() {
 };
 
 /**
- * Set the checkbox to be checked if strBool is 'TRUE', unchecks otherwise.
- * @param {string} strBool New state.
+ * Set the checkbox to be checked if newBool is 'TRUE' or true,
+ * unchecks otherwise.
+ * @param {string|boolean} newBool New state.
  */
-Blockly.FieldCheckbox.prototype.setValue = function(strBool) {
-  var newState = (strBool == 'TRUE');
+Blockly.FieldCheckbox.prototype.setValue = function(newBool) {
+  var newState = (typeof newBool == 'string') ?
+      (newBool.toUpperCase() == 'TRUE') : !!newBool;
   if (this.state_ !== newState) {
+    if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+      Blockly.Events.fire(new Blockly.Events.Change(
+          this.sourceBlock_, 'field', this.name, this.state_, newState));
+    }
     this.state_ = newState;
     if (this.checkElement_) {
       this.checkElement_.style.display = newState ? 'block' : 'none';
-    }
-    if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-      this.sourceBlock_.workspace.fireChangeEvent();
     }
   }
 };
@@ -103,15 +109,11 @@ Blockly.FieldCheckbox.prototype.setValue = function(strBool) {
  */
 Blockly.FieldCheckbox.prototype.showEditor_ = function() {
   var newState = !this.state_;
-  if (this.sourceBlock_ && this.changeHandler_) {
-    // Call any change handler, and allow it to override.
-    var override = this.changeHandler_(newState);
-    if (override !== undefined) {
-      newState = override;
-    }
+  if (this.sourceBlock_) {
+    // Call any validation function, and allow it to override.
+    newState = this.callValidator(newState);
   }
   if (newState !== null) {
-    this.sourceBlock_.setShadow(false);
     this.setValue(String(newState).toUpperCase());
   }
 };

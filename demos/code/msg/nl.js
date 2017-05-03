@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Voer het programma uit dat met de blokken in de werkruimte is gemaakt.",
   badCode: "Programmafout:\n%1",
   timeout: "Het maximale aantal iteraties is overschreden.",
-  discard: "Alle %1 blokken verwijderen?",
   trashTooltip: "Alle blokken verwijderen",
   catLogic: "Logica",
   catLoops: "Lussen",

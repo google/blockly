@@ -13,15 +13,6 @@
 <script src="../generators/javascript/colour.js"></script>
 <script src="../generators/javascript/variables.js"></script>
 <script src="../generators/javascript/procedures.js"></script>
-<script src="../generators/php.js"></script>
-<script src="../generators/php/logic.js"></script>
-<script src="../generators/php/loops.js"></script>
-<script src="../generators/php/math.js"></script>
-<script src="../generators/php/text.js"></script>
-<script src="../generators/php/lists.js"></script>
-<script src="../generators/php/colour.js"></script>
-<script src="../generators/php/variables.js"></script>
-<script src="../generators/php/procedures.js"></script>
 <script src="../generators/python.js"></script>
 <script src="../generators/python/logic.js"></script>
 <script src="../generators/python/loops.js"></script>
@@ -31,6 +22,24 @@
 <script src="../generators/python/colour.js"></script>
 <script src="../generators/python/variables.js"></script>
 <script src="../generators/python/procedures.js"></script>
+<script src="../generators/php.js"></script>
+<script src="../generators/php/logic.js"></script>
+<script src="../generators/php/loops.js"></script>
+<script src="../generators/php/math.js"></script>
+<script src="../generators/php/text.js"></script>
+<script src="../generators/php/lists.js"></script>
+<script src="../generators/php/colour.js"></script>
+<script src="../generators/php/variables.js"></script>
+<script src="../generators/php/procedures.js"></script>
+<script src="../generators/lua.js"></script>
+<script src="../generators/lua/logic.js"></script>
+<script src="../generators/lua/loops.js"></script>
+<script src="../generators/lua/math.js"></script>
+<script src="../generators/lua/text.js"></script>
+<script src="../generators/lua/lists.js"></script>
+<script src="../generators/lua/colour.js"></script>
+<script src="../generators/lua/variables.js"></script>
+<script src="../generators/lua/procedures.js"></script>
 <script src="../generators/dart.js"></script>
 <script src="../generators/dart/logic.js"></script>
 <script src="../generators/dart/loops.js"></script>
@@ -49,52 +58,81 @@
 <script src="../blocks/colour.js"></script>
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/procedures.js"></script>
-<!-- Load the Google Drive SDK Realtime libraries. -->
-<script src="https://apis.google.com/js/api.js"></script>
 <script>
 'use strict';
-// Depending on the URL argument, render as LTR or RTL.
-var rtl = (document.location.search == '?rtl');
 var workspace = null;
-
-function enableRealtimeSpecificUi() {
-  var realtimeDiv = document.getElementById('realtime');
-  realtimeDiv.display = 'block';
-}
+var fakeDragStack = [];
 
 function start() {
-  var toolbox = document.getElementById('toolbox');
+  setBackgroundColor();
+
+  // Parse the URL arguments.
+  var match = location.search.match(/dir=([^&]+)/);
+  var rtl = match && match[1] == 'rtl';
+  document.forms.options.elements.dir.selectedIndex = Number(rtl);
+  var toolbox = getToolboxElement();
+  document.forms.options.elements.toolbox.selectedIndex =
+      Number(toolbox.getElementsByTagName('category').length == 0);
+  match = location.search.match(/side=([^&]+)/);
+  var side = match ? match[1] : 'start';
+  document.forms.options.elements.side.value = side;
+  // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
           {comments: true,
-           disable: true,
            collapse: true,
+           disable: true,
            grid:
              {spacing: 25,
               length: 3,
               colour: '#ccc',
               snap: true},
+           horizontalLayout: side == 'top' || side == 'bottom',
+           maxBlocks: Infinity,
            media: '../media/',
+           oneBasedIndex: true,
            readOnly: false,
-           realtime: false,
-           realtimeOptions:
-             {clientId: 'YOUR CLIENT ID GOES HERE',
-              chatbox: {elementId: 'chatbox'},
-              collabElementId: 'collaborators'},
            rtl: rtl,
            scrollbars: true,
            toolbox: toolbox,
+           toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
            zoom:
-             {enabled: true,
-              controls: true,
+             {controls: true,
               wheel: true,
+              startScale: 1.0,
               maxScale: 4,
               minScale: .25,
-              scaleSpeed: 1.1
-             },
+              scaleSpeed: 1.1}
           });
-  if (Blockly.Realtime.isEnabled()) {
-    enableRealtimeSpecificUi();
+  // Restore previously displayed text.
+  if (sessionStorage) {
+    var text = sessionStorage.getItem('textarea');
+    if (text) {
+      document.getElementById('importExport').value = text;
+    }
+    // Restore event logging state.
+    var state = sessionStorage.getItem('logEvents');
+    logEvents(Boolean(Number(state)));
+  } else {
+    // MSIE 11 does not support sessionStorage on file:// URLs.
+    logEvents(false);
   }
+  taChange();
+}
+
+function setBackgroundColor() {
+  var lilac = '#d6d6ff';
+
+  var currentPage = window.location.href;
+  var regexFile = /^file[\S]*$/;
+
+  if (regexFile.test(currentPage)) {
+    document.getElementsByTagName('body')[0].style.backgroundColor = lilac;
+  }
+}
+
+function getToolboxElement() {
+  var match = location.search.match(/toolbox=([^&]+)/);
+  return document.getElementById('toolbox-' + (match ? match[1] : 'categories'));
 }
 
 function toXml() {
@@ -103,35 +141,130 @@ function toXml() {
   output.value = Blockly.Xml.domToPrettyText(xml);
   output.focus();
   output.select();
+  taChange();
 }
 
 function fromXml() {
   var input = document.getElementById('importExport');
   var xml = Blockly.Xml.textToDom(input.value);
-  Blockly.Xml.domToWorkspace(workspace, xml);
+  Blockly.Xml.domToWorkspace(xml, workspace);
+  taChange();
 }
 
 function toCode(lang) {
   var output = document.getElementById('importExport');
   output.value = Blockly[lang].workspaceToCode(workspace);
+  taChange();
+}
+
+// Disable the "Import from XML" button if the XML is invalid.
+// Preserve text between page reloads.
+function taChange() {
+  var textarea = document.getElementById('importExport');
+  if (sessionStorage) {
+    sessionStorage.setItem('textarea', textarea.value);
+  }
+  var valid = true;
+  try {
+    Blockly.Xml.textToDom(textarea.value);
+  } catch (e) {
+    valid = false;
+  }
+  document.getElementById('import').disabled = !valid;
+}
+
+function logEvents(state) {
+  var checkbox = document.getElementById('logCheck');
+  checkbox.checked = state;
+  if (sessionStorage) {
+    sessionStorage.setItem('logEvents', Number(state));
+  }
+  if (state) {
+    workspace.addChangeListener(logger);
+  } else {
+    workspace.removeChangeListener(logger);
+  }
+}
+
+function logger(e) {
+  console.log(e);
 }
 
 function airstrike(n) {
   var prototypes = [];
-  var toolbox = document.getElementById('toolbox');
+  var toolbox = getToolboxElement();
   var blocks = toolbox.getElementsByTagName('block');
   for (var i = 0, block; block = blocks[i]; i++) {
     prototypes.push(block.getAttribute('type'));
   }
   for (var i = 0; i < n; i++) {
     var prototype = prototypes[Math.floor(Math.random() * prototypes.length)];
-    var block = Blockly.Block.obtain(workspace, prototype);
+    var block = workspace.newBlock(prototype);
     block.initSvg();
     block.getSvgRoot().setAttribute('transform', 'translate(' +
         Math.round(Math.random() * 450 + 40) + ', ' +
         Math.round(Math.random() * 600 + 40) + ')');
     block.render();
   }
+}
+
+function fakeDrag(id, dx, dy, opt_workspace) {
+  var ws = opt_workspace || Blockly.getMainWorkspace();
+  var blockToDrag = ws.getBlockById(id);
+
+  if (!blockToDrag) {
+    fakeDragWrapper();
+    return;
+  }
+  var blockTop = blockToDrag.svgGroup_.getBoundingClientRect().top;
+  var blockLeft = blockToDrag.svgGroup_.getBoundingClientRect().left;
+
+  // Click somewhere on the block.
+  var mouseDownEvent = new MouseEvent('mousedown',
+      {clientX: blockLeft + 5, clientY: blockTop + 5});
+  blockToDrag.onMouseDown_(mouseDownEvent);
+
+  // Throw in a move for good measure.
+  setTimeout(
+    function() {
+      var mouseMoveEvent = new MouseEvent('mousemove',
+          {clientX: blockLeft + dx,
+          clientY: blockTop + dy});
+      blockToDrag.onMouseMove_(mouseMoveEvent);
+
+      // Drop at dx, dy.
+      setTimeout(
+        function() {
+          var mouseUpEvent = new MouseEvent('mouseup',
+              {clientX: blockLeft + dx,
+              clientY: blockTop + dy});
+          blockToDrag.onMouseUp_(mouseUpEvent);
+
+          setTimeout(fakeDragWrapper(), 100);
+        }, 30);
+    }, 30);
+};
+
+function fakeDragWrapper() {
+  var dragInfo = fakeDragStack.pop();
+  if (dragInfo) {
+    fakeDrag(dragInfo.id, dragInfo.dx, dragInfo.dy, dragInfo.workspace);
+  }
+}
+
+function fakeManyDrags() {
+  var blockList = workspace.getAllBlocks();
+  for (var i = 0; i < 2 * blockList.length; i++) {
+    fakeDragStack.push(
+      {
+        id: blockList[Math.round(Math.random() * (blockList.length - 1))].id,
+        // Move some blocks up and to the left, but mostly down and to the right.
+        dx: Math.round((Math.random() - 0.25) * 200),
+        dy: Math.round((Math.random() - 0.25) * 200),
+        workspace: workspace
+      });
+  }
+  fakeDragWrapper();
 }
 
 function spaghetti(n) {
@@ -143,7 +276,7 @@ function spaghetti(n) {
   xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
   var dom = Blockly.Xml.textToDom(xml);
   console.time('Spaghetti domToWorkspace');
-  Blockly.Xml.domToWorkspace(workspace, dom);
+  Blockly.Xml.domToWorkspace(dom, workspace);
   console.timeEnd('Spaghetti domToWorkspace');
 }
 var spaghettiXml = [
@@ -197,37 +330,99 @@ h1 {
   height: 95%;
   width: 70%;
 }
-#collaborators {
-  float: right;
-  width: 30px;
-  margin-left: 10px;
-}
-#collaborators > img {
-  margin-right: 5px;
-  height: 30px;
-  padding-bottom: 5px;
-  width: 30px;
-  border-radius: 3px;
-}
 #importExport {
   font-family: monospace;
 }
+
+.ioLabel>.blocklyFlyoutLabelText {
+  font-style: italic;
+}
+
 </style>
 </head>
 <body onload="start()">
 
-  <div id="collaborators"></div>
-
   <div id="blocklyDiv"></div>
 
-  <xml id="toolbox" style="display: none">
+  <h1>Blockly Playground</h1>
+
+  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
+   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
+
+  <form id="options">
+    <select name="dir" onchange="document.forms.options.submit()">
+      <option value="ltr">LTR</option>
+      <option value="rtl">RTL</option>
+    </select>
+    <select name="toolbox" onchange="document.forms.options.submit()">
+      <option value="categories">Categories</option>
+      <option value="simple">Simple</option>
+    </select>
+    <select name="side" onchange="document.forms.options.submit()">
+      <option value="start">Start</option>
+      <option value="end">End</option>
+      <option value="top">Top</option>
+      <option value="bottom">Bottom</option>
+    </select>
+  </form>
+
+  <p>
+    <input type="button" value="Export to XML" onclick="toXml()">
+    &nbsp;
+    <input type="button" value="Import from XML" onclick="fromXml()" id="import">
+    <br>
+    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
+    &nbsp;
+    <input type="button" value="To Python" onclick="toCode('Python')">
+    &nbsp;
+    <input type="button" value="To PHP" onclick="toCode('PHP')">
+    &nbsp;
+    <input type="button" value="To Lua" onclick="toCode('Lua')">
+    &nbsp;
+    <input type="button" value="To Dart" onclick="toCode('Dart')">
+    <br>
+    <textarea id="importExport" style="width: 26%; height: 12em"
+      onchange="taChange();" onkeyup="taChange()"></textarea>
+  </p>
+
+  <p>
+    Stress test: &nbsp;
+    <input type="button" value="Airstrike!" onclick="airstrike(100)">
+    <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
+    <input type="button" value="Fake some drags!" onclick="fakeManyDrags()">
+  </p>
+  <p>
+    Log events: &nbsp;
+    <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
+  </p>
+
+  <xml id="toolbox-simple" style="display: none">
+    <block type="controls_ifelse"></block>
+    <block type="logic_compare"></block>
+    <!-- <block type="control_repeat"></block> -->
+    <block type="logic_operation"></block>
+    <block type="controls_repeat_ext">
+      <value name="TIMES">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="logic_operation"></block>
+    <block type="logic_negate"></block>
+    <block type="logic_boolean"></block>
+    <block type="logic_null" disabled="true"></block>
+    <block type="logic_ternary"></block>
+  </xml>
+
+  <xml id="toolbox-categories" style="display: none">
     <category name="Logic" colour="210">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
       <block type="logic_negate"></block>
       <block type="logic_boolean"></block>
-      <block type="logic_null"></block>
+      <block type="logic_null" disabled="true"></block>
       <block type="logic_ternary"></block>
     </category>
     <category name="Loops" colour="120">
@@ -238,6 +433,7 @@ h1 {
           </shadow>
         </value>
       </block>
+      <block type="controls_repeat" disabled="true"></block>
       <block type="controls_whileUntil"></block>
       <block type="controls_for">
         <value name="FROM">
@@ -260,7 +456,7 @@ h1 {
       <block type="controls_flow_statements"></block>
     </category>
     <category name="Math" colour="230">
-      <block type="math_number"></block>
+      <block type="math_number" gap="32"></block>
       <block type="math_arithmetic">
         <value name="A">
           <shadow type="math_number">
@@ -292,13 +488,6 @@ h1 {
         <value name="NUMBER_TO_CHECK">
           <shadow type="math_number">
             <field name="NUM">0</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_change">
-        <value name="DELTA">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
           </shadow>
         </value>
       </block>
@@ -415,6 +604,31 @@ h1 {
           </shadow>
         </value>
       </block>
+      <block type="text_count">
+        <value name="SUB">
+          <shadow type="text"></shadow>
+        </value>
+        <value name="TEXT">
+          <shadow type="text"></shadow>
+        </value>
+      </block>
+      <block type="text_replace">
+        <value name="FROM">
+          <shadow type="text"></shadow>
+        </value>
+        <value name="TO">
+          <shadow type="text"></shadow>
+        </value>
+        <value name="TEXT">
+          <shadow type="text"></shadow>
+        </value>
+      </block>
+      <block type="text_reverse">
+        <value name="TEXT">
+          <shadow type="text"></shadow>
+        </value>
+      </block>
+      <label text="Input/Output:" web-class="ioLabel"></label>
       <block type="text_print">
         <value name="TEXT">
           <shadow type="text">
@@ -479,6 +693,8 @@ h1 {
           </shadow>
         </value>
       </block>
+      <block type="lists_sort"></block>
+      <block type="lists_reverse"></block>
     </category>
     <category name="Colour" colour="20">
       <block type="colour_picker"></block>
@@ -522,66 +738,5 @@ h1 {
     <category name="Variables" colour="330" custom="VARIABLE"></category>
     <category name="Functions" colour="290" custom="PROCEDURE"></category>
   </xml>
-
-  <h1>Blockly Playground</h1>
-
-  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
-   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
-
-  <script>
-    if (rtl) {
-      document.write('[ &larr; RTL. Switch to <A HREF="?ltr">LTR</A>. ]');
-    } else {
-      document.write('[ &rarr; LTR. Switch to <A HREF="?rtl">RTL</A>. ]');
-    }
-  </script>
-
-  <p>
-    <input type="button" value="Export to XML" onclick="toXml()">
-    &nbsp;
-    <input type="button" value="Import from XML" onclick="fromXml()">
-    <br>
-    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
-    &nbsp;
-    <input type="button" value="To Python" onclick="toCode('Python')">
-    &nbsp;
-    <input type="button" value="To PHP" onclick="toCode('PHP')">
-    &nbsp;
-    <input type="button" value="To Dart" onclick="toCode('Dart')">
-    <br>
-    <textarea id="importExport" style="width: 26%; height: 12em"></textarea>
-  </p>
-  <hr>
-
-  <p>
-    Stress test:
-    <input type="button" value="Airstrike!" onclick="airstrike(100)">
-    <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
-  </p>
-
-  <!-- Realtime setup buttons. -->
-
-  <div id="realtime" style="display: none">
-
-    <p>Test realtime collaboration by opening
-      <a target="_blank" href="#" onmouseover="this.href = window.location.href">
-        this link</a> in a separate browser window or tab and they will be
-      synchronized.  You can even share the link with a friend!.</p>
-
-    <br>
-    <br>
-
-    <!-- Undo and redo buttons. -->
-    <!-- TODO: Uncomment this when undo/redo are fixed. -->
-    <!--
-      <button id="undoButton" disabled>Undo</button>
-      <button id="redoButton" disabled>Redo</button>
-      <br />
-    -->
-
-    <!-- Text area that will be used for our collaborative chat box. -->
-    <textarea id="chatbox" style="width: 26%; height: 12em" disabled="true"></textarea>
-
-  </div>
 </body>
 </html>

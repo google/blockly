@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Run the program defined by the blocks in the workspace.",
   badCode: "Program error:\n%1",
   timeout: "Maximum execution iterations exceeded.",
-  discard: "Delete all %1 blocks?",
   trashTooltip: "Discard all blocks.",
   catLogic: "Logic",
   catLoops: "Loops",

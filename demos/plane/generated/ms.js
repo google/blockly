@@ -5,7 +5,7 @@ if (typeof planepage == 'undefined') { var planepage = {}; }
 
 
 planepage.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return '<div style="display: none"><span id="Plane_rows">Baris: %1</span><span id="Plane_getRows">baris (%1)</span><span id="Plane_rows1">Baris kelas pertama: %1</span><span id="Plane_getRows1">baris kelas pertama (%1)</span><span id="Plane_rows2">Baris kelas ke-2: %1</span><span id="Plane_getRows2">baris kelas ke-2 (%1)</span><span id="Plane_seats">Tempat duduk: %1</span><span id="Plane_placeholder">?</span><span id="Plane_setSeats">tempat duduk =</span></div>';
+  return '<div style="display: none"><span id="Plane_rows">Baris: %1</span><span id="Plane_getRows">baris (%1)</span><span id="Plane_rows1">Baris kelas pertama: %1</span><span id="Plane_getRows1">baris kelas pertama (%1)</span><span id="Plane_rows2">Baris kelas kedua: %1</span><span id="Plane_getRows2">baris kelas kedua (%1)</span><span id="Plane_seats">Tempat duduk: %1</span><span id="Plane_placeholder">?</span><span id="Plane_setSeats">tempat duduk =</span></div>';
 };
 
 
@@ -21,10 +21,10 @@ planepage.start = function(opt_data, opt_ignored, opt_ijData) {
       output += 'Sebuah kapal terbang mempunyai sebilangan baris tempat duduk penumpang. Setiap baris mengandungi empat tempat duduk.';
       break;
     case 2:
-      output += 'Sebuah kapal terbnag mempunyai tempat duduk di kokpit (untuk juruterbang dan pembantunya) dan sebilangan baris tempat duduk penumpang. Setiap baris mengandungi empat tempat duduk.';
+      output += 'Sebuah kapal terbang mempunyai tempat duduk di kokpit (untuk juruterbang dan pembantunya) dan sebilangan baris tempat duduk penumpang. Setiap baris mengandungi empat tempat duduk.';
       break;
     case 3:
-      output += 'Sebuah kapal terbnag mempunyai tempat duduk di kokpit (untuk juruterbang dan pembantunya) dan sebilangan baris tempat duduk penumpang kelas pertama dan kelas kedua. Setiap baris kelas pertama mengandungi empat tempat duduk. Setiap baris kelas pertama mengandungi lima tempat duduk.';
+      output += 'Sebuah kapal terbang mempunyai tempat duduk di kokpit (untuk juruterbang dan pembantunya) dan sebilangan baris tempat duduk penumpang kelas pertama dan kelas kedua. Setiap baris kelas pertama mengandungi empat tempat duduk. Setiap baris kelas pertama mengandungi lima tempat duduk.';
       break;
   }
   output += '</p><p>Wujudkan formula (di bawah) yang mengira jumlah tempat duduk di dalam kapal terbang sedangkan baris-barisnya diubah (di atas).</p><script src="../../blockly_compressed.js"><\/script><script src="../../blocks_compressed.js"><\/script><script src="../../javascript_compressed.js"><\/script><script src="../../msg/js/' + soy.$$escapeHtml(opt_ijData.lang) + '.js"><\/script><script src="blocks.js"><\/script>' + planepage.toolbox(null, null, opt_ijData) + '<div id="blockly"></div>';
@@ -33,5 +33,5 @@ planepage.start = function(opt_data, opt_ignored, opt_ijData) {
 
 
 planepage.toolbox = function(opt_data, opt_ignored, opt_ijData) {
-  return '<xml id="toolbox" style="display: none"><block type="math_number"></block><block type="math_arithmetic"></block><block type="math_arithmetic"><field name="OP">MULTIPLY</field></block>' + ((opt_ijData.level <= 2) ? '<block type="plane_get_rows"></block>' : '<block type="plane_get_rows1st"></block><block type="plane_get_rows2nd"></block>') + '</xml>';
+  return '<xml id="toolbox" style="display: none"><block type="math_number"></block><block type="math_arithmetic"><value name="A"><shadow type="math_number"><field name="NUM">1</field></shadow></value><value name="B"><shadow type="math_number"><field name="NUM">1</field></shadow></value></block><block type="math_arithmetic"><field name="OP">MULTIPLY</field><value name="A"><shadow type="math_number"><field name="NUM">1</field></shadow></value><value name="B"><shadow type="math_number"><field name="NUM">1</field></shadow></value></block>' + ((opt_ijData.level <= 2) ? '<block type="plane_get_rows"></block>' : '<block type="plane_get_rows1st"></block><block type="plane_get_rows2nd"></block>') + '</xml>';
 };

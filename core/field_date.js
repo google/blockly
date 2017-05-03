@@ -39,7 +39,7 @@ goog.require('goog.ui.DatePicker');
 /**
  * Class for a date input field.
  * @param {string} date The initial date.
- * @param {Function=} opt_changeHandler A function that is executed when a new
+ * @param {Function=} opt_validator A function that is executed when a new
  *     date is selected.  Its sole argument is the new date value.  Its
  *     return value becomes the selected date, unless it is undefined, in
  *     which case the new date stands, or it is null, in which case the change
@@ -47,13 +47,12 @@ goog.require('goog.ui.DatePicker');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldDate = function(date, opt_changeHandler) {
+Blockly.FieldDate = function(date, opt_validator) {
   if (!date) {
     date = new goog.date.Date().toIsoString(true);
   }
-  Blockly.FieldDate.superClass_.constructor.call(this, date);
+  Blockly.FieldDate.superClass_.constructor.call(this, date, opt_validator);
   this.setValue(date);
-  this.setChangeHandler(opt_changeHandler);
 };
 goog.inherits(Blockly.FieldDate, Blockly.Field);
 
@@ -83,11 +82,11 @@ Blockly.FieldDate.prototype.getValue = function() {
  * @param {string} date The new date.
  */
 Blockly.FieldDate.prototype.setValue = function(date) {
-  if (this.sourceBlock_ && this.changeHandler_) {
-    var validated = this.changeHandler_(date);
+  if (this.sourceBlock_) {
+    var validated = this.callValidator(date);
     // If the new date is invalid, validation returns null.
     // In this case we still want to display the illegal result.
-    if (validated !== null && validated !== undefined) {
+    if (validated !== null) {
       date = validated;
     }
   }
@@ -150,12 +149,9 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
       function(event) {
         var date = event.date ? event.date.toIsoString(true) : '';
         Blockly.WidgetDiv.hide();
-        if (thisField.sourceBlock_ && thisField.changeHandler_) {
-          // Call any change handler, and allow it to override.
-          var override = thisField.changeHandler_(date);
-          if (override !== undefined) {
-            date = override;
-          }
+        if (thisField.sourceBlock_) {
+          // Call any validation function, and allow it to override.
+          date = thisField.callValidator(date);
         }
         thisField.setValue(date);
       });
@@ -169,6 +165,7 @@ Blockly.FieldDate.widgetDispose_ = function() {
   if (Blockly.FieldDate.changeEventKey_) {
     goog.events.unlistenByKey(Blockly.FieldDate.changeEventKey_);
   }
+  Blockly.Events.setGroup(false);
 };
 
 /**
@@ -194,14 +191,14 @@ Blockly.FieldDate.loadLanguage_ = function() {
  */
 Blockly.FieldDate.CSS = [
   /* Copied from: goog/css/datepicker.css */
-  /*
+  /**
    * Copyright 2009 The Closure Library Authors. All Rights Reserved.
    *
    * Use of this source code is governed by the Apache License, Version 2.0.
    * See the COPYING file for details.
    */
 
-  /*
+  /**
    * Standard styling for a goog.ui.DatePicker.
    *
    * @author arv@google.com (Erik Arvidsson)

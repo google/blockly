@@ -38,6 +38,17 @@
 <script src="../../generators/php/variables.js"></script>
 <script src="../../generators/php/procedures.js"></script>
 
+<script src="../../generators/lua.js"></script>
+<script src="unittest_lua.js"></script>
+<script src="../../generators/lua/logic.js"></script>
+<script src="../../generators/lua/loops.js"></script>
+<script src="../../generators/lua/math.js"></script>
+<script src="../../generators/lua/text.js"></script>
+<script src="../../generators/lua/lists.js"></script>
+<script src="../../generators/lua/colour.js"></script>
+<script src="../../generators/lua/variables.js"></script>
+<script src="../../generators/lua/procedures.js"></script>
+
 <script src="../../generators/dart.js"></script>
 <script src="unittest_dart.js"></script>
 <script src="../../generators/dart/logic.js"></script>
@@ -66,7 +77,16 @@ var workspace = null;
 
 function start() {
   workspace = Blockly.inject('blocklyDiv',
-      {media: '../../media/', toolbox: document.getElementById('toolbox')});
+      {grid:
+         {spacing: 25,
+          length: 3,
+          colour: '#ccc',
+          snap: true},
+       media: '../../media/',
+       toolbox: document.getElementById('toolbox'),
+       zoom: {controls: true, wheel: true}
+       });
+  changeIndex();
 }
 
 function loadXml() {
@@ -116,7 +136,7 @@ function fromXml(xmlText) {
     alert('Error parsing XML:\n' + e);
     return;
   }
-  Blockly.Xml.domToWorkspace(workspace, xmlDoc);
+  Blockly.Xml.domToWorkspace(xmlDoc, workspace);
 }
 
 function setOutput(text) {
@@ -127,7 +147,7 @@ function setOutput(text) {
 }
 
 function toXml() {
-  var xmlDom = Blockly.Xml.workspaceToDom(workspace);
+  var xmlDom = Blockly.Xml.workspaceToDom(workspace, /* opt_noId */ true);
   var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
   xmlText = xmlText.replace(/ id="\d+"/g, '');
   setOutput(xmlText);
@@ -149,9 +169,20 @@ function toPhp() {
   setOutput(code);
 }
 
+function toLua() {
+  var code = Blockly.Lua.workspaceToCode(workspace);
+  setOutput(code);
+}
+
 function toDart() {
   var code = Blockly.Dart.workspaceToCode(workspace);
   setOutput(code);
+}
+
+function changeIndex() {
+  var oneBasedIndex = document.getElementById('indexing').checked;
+  workspace.options.oneBasedIndex = oneBasedIndex;
+  workspace.toolbox_.flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
 }
 </script>
 
@@ -186,14 +217,28 @@ h1 {
   <div id="blocklyDiv"></div>
 
   <xml id="toolbox" style="display: none">
-    <category name="Unit test">
+    <category name="Unit test" colour="65">
       <block type="unittest_main"></block>
-      <block type="unittest_assertequals"></block>
-      <block type="unittest_assertvalue"></block>
+      <block type="unittest_assertequals">
+        <value name="MESSAGE">
+          <block type="text">
+            <field name="TEXT"></field>
+          </block>
+        </value>
+      </block>
+      <block type="unittest_assertvalue">
+        <value name="MESSAGE">
+          <block type="text">
+            <field name="TEXT"></field>
+          </block>
+        </value>
+      </block>
       <block type="unittest_fail"></block>
+      <block type="unittest_adjustindex"></block>
     </category>
-    <category name="Logic">
+    <category name="Logic" colour="210">
       <block type="controls_if"></block>
+      <block type="controls_ifelse"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
       <block type="logic_negate"></block>
@@ -201,211 +246,73 @@ h1 {
       <block type="logic_null"></block>
       <block type="logic_ternary"></block>
     </category>
-    <category name="Loops">
-      <block type="controls_repeat_ext">
-        <value name="TIMES">
-          <block type="math_number">
-            <field name="NUM">10</field>
-          </block>
-        </value>
-      </block>
+    <category name="Loops" colour="120">
+      <block type="controls_repeat_ext"></block>
       <block type="controls_whileUntil"></block>
-      <block type="controls_for">
-        <value name="FROM">
-          <block type="math_number">
-            <field name="NUM">1</field>
-          </block>
-        </value>
-        <value name="TO">
-          <block type="math_number">
-            <field name="NUM">10</field>
-          </block>
-        </value>
-        <value name="BY">
-          <block type="math_number">
-            <field name="NUM">1</field>
-          </block>
-        </value>
-      </block>
+      <block type="controls_for"></block>
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
     </category>
-    <category name="Math">
+    <category name="Math" colour="230">
       <block type="math_number"></block>
       <block type="math_arithmetic"></block>
       <block type="math_single"></block>
       <block type="math_trig"></block>
       <block type="math_constant"></block>
       <block type="math_number_property"></block>
-      <block type="math_change">
-        <value name="DELTA">
-          <block type="math_number">
-            <field name="NUM">1</field>
-          </block>
-        </value>
-      </block>
       <block type="math_round"></block>
       <block type="math_on_list"></block>
       <block type="math_modulo"></block>
-      <block type="math_constrain">
-        <value name="LOW">
-          <block type="math_number">
-            <field name="NUM">1</field>
-          </block>
-        </value>
-        <value name="HIGH">
-          <block type="math_number">
-            <field name="NUM">100</field>
-          </block>
-        </value>
-      </block>
-      <block type="math_random_int">
-        <value name="FROM">
-          <block type="math_number">
-            <field name="NUM">1</field>
-          </block>
-        </value>
-        <value name="TO">
-          <block type="math_number">
-            <field name="NUM">100</field>
-          </block>
-        </value>
-      </block>
+      <block type="math_constrain"></block>
+      <block type="math_random_int"></block>
       <block type="math_random_float"></block>
     </category>
-    <category name="Text">
+    <category name="Text" colour="160">
       <block type="text"></block>
       <block type="text_join"></block>
-      <block type="text_append">
-        <value name="TEXT">
-          <block type="text"></block>
-        </value>
-      </block>
+      <block type="text_append"></block>
       <block type="text_length"></block>
       <block type="text_isEmpty"></block>
-      <block type="text_indexOf">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">text</field>
-          </block>
-        </value>
-      </block>
-      <block type="text_charAt">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">text</field>
-          </block>
-        </value>
-      </block>
-      <block type="text_getSubstring">
-        <value name="STRING">
-          <block type="variables_get">
-            <field name="VAR">text</field>
-          </block>
-        </value>
-      </block>
+      <block type="text_indexOf"></block>
+      <block type="text_charAt"></block>
+      <block type="text_getSubstring"></block>
       <block type="text_changeCase"></block>
       <block type="text_trim"></block>
       <block type="text_print"></block>
-      <block type="text_prompt_ext">
-        <value name="TEXT">
-          <block type="text"></block>
-        </value>
-      </block>
+      <block type="text_prompt_ext"></block>
+      <block type="text_count"></block>
+      <block type="text_replace"></block>
+      <block type="text_reverse"></block>
     </category>
-    <category name="Lists">
+    <category name="Lists" colour="260">
       <block type="lists_create_empty"></block>
       <block type="lists_create_with"></block>
-      <block type="lists_repeat">
-        <value name="NUM">
-          <block type="math_number">
-            <field name="NUM">5</field>
-          </block>
-        </value>
-      </block>
+      <block type="lists_repeat"></block>
       <block type="lists_length"></block>
       <block type="lists_isEmpty"></block>
-      <block type="lists_indexOf">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_getIndex">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_setIndex">
-        <value name="LIST">
-          <block type="variables_get">
-            <field name="VAR">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_getSublist">
-        <value name="LIST">
-          <block type="variables_get">
-            <field name="VAR">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_split">
-        <value name="DELIM">
-          <block type="text">
-            <field name="TEXT">,</field>
-          </block>
-        </value>
-      </block>
+      <block type="lists_indexOf"></block>
+      <block type="lists_getIndex"></block>
+      <block type="lists_setIndex"></block>
+      <block type="lists_getSublist"></block>
+      <block type="lists_sort"></block>
+      <block type="lists_split"></block>
+      <block type="lists_reverse"></block>
     </category>
-    <category name="Colour">
+    <category name="Colour" colour="20">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
-      <block type="colour_rgb">
-        <value name="RED">
-          <block type="math_number">
-            <field name="NUM">100</field>
-          </block>
-        </value>
-        <value name="GREEN">
-          <block type="math_number">
-            <field name="NUM">50</field>
-          </block>
-        </value>
-        <value name="BLUE">
-          <block type="math_number">
-            <field name="NUM">0</field>
-          </block>
-        </value>
-      </block>
-      <block type="colour_blend">
-        <value name="COLOUR1">
-          <block type="colour_picker">
-            <field name="COLOUR">#ff0000</field>
-          </block>
-        </value>
-        <value name="COLOUR2">
-          <block type="colour_picker">
-            <field name="COLOUR">#3333ff</field>
-          </block>
-        </value>
-        <value name="RATIO">
-          <block type="math_number">
-            <field name="NUM">0.5</field>
-          </block>
-        </value>
-      </block>
+      <block type="colour_rgb"></block>
+      <block type="colour_blend"></block>
     </category>
     <sep></sep>
-    <category name="Variables" custom="VARIABLE"></category>
-    <category name="Functions" custom="PROCEDURE"></category>
+    <category name="Variables" colour="330" custom="VARIABLE"></category>
+    <category name="Functions" colour="290" custom="PROCEDURE"></category>
   </xml>
 
   <table height="95%" width="30%"><tr><td valign="top">
     <h1>Blockly Generator Tests</h1>
+
+    <p><a href="https://developers.google.com/blockly/guides/modify/web/unit-testing">See the docs</a> for details on running the tests.
 
     <p>
       <select id="testUrl">
@@ -418,19 +325,40 @@ h1 {
         <option value="lists.xml">Lists</option>
         <option value="colour.xml">Colour</option>
         <option value="variables.xml">Variables</option>
-        <option value="procedures.xml">Procedures</option>
+        <option value="functions.xml">Functions</option>
         <option value="">Other...</option>
       </select>
       <input type="button" value="Load" onclick="loadXml()">
     </p>
 
     <p>
+      <input id="indexing" type="checkbox" onchange="changeIndex()" checked>
+      <label for="indexing">Generate with one-based indexing</label>
+    </p>
+
+    <p>
       Generate:
       <input type="button" value="XML" onclick="toXml()">
-      <input type="button" value="JavaScript" onclick="toJavaScript()">
-      <input type="button" value="Python" onclick="toPython()">
-      <input type="button" value="PHP" onclick="toPhp()">
-      <input type="button" value="Dart" onclick="toDart()">
+      <div style="display: inline-block;">
+        <input type="button" value="JavaScript" onclick="toJavaScript()">
+        <br><a target="_blank" href="https://repl.it/languages/javascript">interpreter</a>
+      </div>
+      <div style="display: inline-block;">
+        <input type="button" value="Python" onclick="toPython()">
+        <br><a target="_blank" href="https://repl.it/languages/python">interpreter</a>
+      </div>
+      <div style="display: inline-block;">
+        <input type="button" value="PHP" onclick="toPhp()">
+        <br><a target="_blank" href="https://repl.it/languages/php">interpreter</a>
+      </div>
+      <div style="display: inline-block;">
+        <input type="button" value="Lua" onclick="toLua()">
+        <br><a target="_blank" href="https://repl.it/languages/lua">interpreter</a>
+      </div>
+      <div style="display: inline-block;">
+        <input type="button" value="Dart" onclick="toDart()">
+        <br><a target="_blank" href="https://dartpad.dartlang.org/">interpreter</a>
+      </div>
     </p>
   </td></tr><tr><td height="99%">
     <textarea id="importExport" readonly="readonly" wrap="off"></textarea>

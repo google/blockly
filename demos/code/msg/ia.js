@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Executar le programma definite per le blocos in le spatio de travalio.",
   badCode: "Error del programma:\n%1",
   timeout: "Le numero de iterationes executate ha excedite le maximo.",
-  discard: "Deler tote le %1 blocos?",
   trashTooltip: "Abandonar tote le blocos.",
   catLogic: "Logica",
   catLoops: "Buclas",

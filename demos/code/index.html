@@ -11,6 +11,7 @@
   <script src="../../javascript_compressed.js"></script>
   <script src="../../python_compressed.js"></script>
   <script src="../../php_compressed.js"></script>
+  <script src="../../lua_compressed.js"></script>
   <script src="../../dart_compressed.js"></script>
   <script src="code.js"></script>
 </head>
@@ -39,6 +40,8 @@
             <td class="tabmin">&nbsp;</td>
             <td id="tab_php" class="taboff">PHP</td>
             <td class="tabmin">&nbsp;</td>
+            <td id="tab_lua" class="taboff">Lua</td>
+            <td class="tabmin">&nbsp;</td>
             <td id="tab_dart" class="taboff">Dart</td>
             <td class="tabmin">&nbsp;</td>
             <td id="tab_xml" class="taboff">XML</td>
@@ -64,13 +67,14 @@
   </table>
   <div id="content_blocks" class="content"></div>
   <pre id="content_javascript" class="content"></pre>
-  <pre id="content_php" class="content"></pre>
   <pre id="content_python" class="content"></pre>
+  <pre id="content_php" class="content"></pre>
+  <pre id="content_lua" class="content"></pre>
   <pre id="content_dart" class="content"></pre>
   <textarea id="content_xml" class="content" wrap="off"></textarea>
 
   <xml id="toolbox" style="display: none">
-    <category id="catLogic" colour="210">
+    <category name="%{BKY_CATLOGIC}" colour="%{BKY_LOGIC_HUE}">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
@@ -79,7 +83,7 @@
       <block type="logic_null"></block>
       <block type="logic_ternary"></block>
     </category>
-    <category id="catLoops" colour="120">
+    <category name="%{BKY_CATLOOPS}" colour="%{BKY_LOOPS_HUE}">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <shadow type="math_number">
@@ -108,7 +112,7 @@
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
     </category>
-    <category id="catMath" colour="230">
+    <category name="%{BKY_CATMATH}" colour="%{BKY_MATH_HUE}">
       <block type="math_number"></block>
       <block type="math_arithmetic">
         <value name="A">
@@ -141,13 +145,6 @@
         <value name="NUMBER_TO_CHECK">
           <shadow type="math_number">
             <field name="NUM">0</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_change">
-        <value name="DELTA">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
           </shadow>
         </value>
       </block>
@@ -202,7 +199,7 @@
       </block>
       <block type="math_random_float"></block>
     </category>
-    <category id="catText" colour="160">
+    <category name="%{BKY_CATTEXT}" colour="%{BKY_TEXTS_HUE}">
       <block type="text"></block>
       <block type="text_join"></block>
       <block type="text_append">
@@ -227,7 +224,7 @@
       <block type="text_indexOf">
         <value name="VALUE">
           <block type="variables_get">
-            <field name="VAR">text</field>
+            <field name="VAR">{textVariable}</field>
           </block>
         </value>
         <value name="FIND">
@@ -239,14 +236,14 @@
       <block type="text_charAt">
         <value name="VALUE">
           <block type="variables_get">
-            <field name="VAR">text</field>
+            <field name="VAR">{textVariable}</field>
           </block>
         </value>
       </block>
       <block type="text_getSubstring">
         <value name="STRING">
           <block type="variables_get">
-            <field name="VAR">text</field>
+            <field name="VAR">{textVariable}</field>
           </block>
         </value>
       </block>
@@ -279,7 +276,7 @@
         </value>
       </block>
     </category>
-    <category id="catLists" colour="260">
+    <category name="%{BKY_CATLISTS}" colour="%{BKY_LISTS_HUE}">
       <block type="lists_create_with">
         <mutation items="0"></mutation>
       </block>
@@ -296,28 +293,28 @@
       <block type="lists_indexOf">
         <value name="VALUE">
           <block type="variables_get">
-            <field name="VAR">list</field>
+            <field name="VAR">{listVariable}</field>
           </block>
         </value>
       </block>
       <block type="lists_getIndex">
         <value name="VALUE">
           <block type="variables_get">
-            <field name="VAR">list</field>
+            <field name="VAR">{listVariable}</field>
           </block>
         </value>
       </block>
       <block type="lists_setIndex">
         <value name="LIST">
           <block type="variables_get">
-            <field name="VAR">list</field>
+            <field name="VAR">{listVariable}</field>
           </block>
         </value>
       </block>
       <block type="lists_getSublist">
         <value name="LIST">
           <block type="variables_get">
-            <field name="VAR">list</field>
+            <field name="VAR">{listVariable}</field>
           </block>
         </value>
       </block>
@@ -328,8 +325,9 @@
           </shadow>
         </value>
       </block>
+      <block type="lists_sort"></block>
     </category>
-    <category id="catColour" colour="20">
+    <category name="%{BKY_CATCOLOUR}" colour="%{BKY_COLOUR_HUE}">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
       <block type="colour_rgb">
@@ -368,8 +366,8 @@
       </block>
     </category>
     <sep></sep>
-    <category id="catVariables" colour="330" custom="VARIABLE"></category>
-    <category id="catFunctions" colour="290" custom="PROCEDURE"></category>
+    <category name="%{BKY_CATVARIABLES}" colour="%{BKY_VARIABLES_HUE}" custom="VARIABLE"></category>
+    <category name="%{BKY_CATFUNCTIONS}" colour="%{BKY_PROCEDURES_HUE}" custom="PROCEDURE"></category>
   </xml>
 
 </body>

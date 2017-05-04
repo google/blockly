@@ -939,6 +939,7 @@ Blockly.Flyout.prototype.isDragTowardWorkspace = function(currentDragDeltaXY) {
  * @param {!Blockly.BlockSvg} originalBlock The block to copy from the flyout.
  * @return {Blockly.BlockSvg} The newly created block, or null if something
  *     went wrong with deserialization.
+ * @package
  */
 Blockly.Flyout.prototype.createBlock = function(originalBlock) {
   var newBlock = null;

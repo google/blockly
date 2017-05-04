@@ -67,6 +67,7 @@ Blockly.WorkspaceDragger = function(workspace) {
 
 /**
  * Sever all links from this object.
+ * @package
  */
 Blockly.WorkspaceDragger.prototype.dispose = function() {
   this.workspace_ = null;
@@ -74,6 +75,7 @@ Blockly.WorkspaceDragger.prototype.dispose = function() {
 
 /**
  * Start dragging the workspace.
+ * @package
  */
 Blockly.WorkspaceDragger.prototype.startDrag = function() {
   if (Blockly.selected) {
@@ -86,6 +88,7 @@ Blockly.WorkspaceDragger.prototype.startDrag = function() {
  * Finish dragging the workspace and put everything back where it belongs.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel coordinates.
+ * @package
  */
 Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
   // Make sure everything is up to date.
@@ -97,6 +100,7 @@ Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
  * Move the workspace based on the most recent mouse movements.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel coordinates.
+ * @package
  */
 Blockly.WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
   var metrics = this.startDragMetrics_;
@@ -121,6 +125,7 @@ Blockly.WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
  * x and y are in pixels.
  * @param {number} x The new x position to move the scrollbar to.
  * @param {number} y The new y position to move the scrollbar to.
+ * @private
  */
 Blockly.WorkspaceDragger.prototype.updateScroll_ = function(x, y) {
   this.workspace_.scrollbar.set(x, y);

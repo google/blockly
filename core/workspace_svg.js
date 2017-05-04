@@ -186,6 +186,7 @@ Blockly.WorkspaceSvg.prototype.scrollbar = null;
 /**
  * The current gesture in progress on this workspace, if any.
  * @type {Blockly.Gesture}
+ * @private
  */
 Blockly.WorkspaceSvg.prototype.currentGesture_ = null;
 
@@ -1758,6 +1759,7 @@ Blockly.WorkspaceSvg.prototype.removeToolboxCategoryCallback = function(key) {
  * @param {!Event} e Mouse event or touch event
  * @return {Blockly.Gesture} The gesture that is tracking this touch stream,
  *     or null if no valid gesture exists.
+ * @package
  */
 Blockly.WorkspaceSvg.prototype.getGesture = function(e) {
   var isStart = (e.type == 'mousedown' || e.type == 'touchstart');
@@ -1786,6 +1788,7 @@ Blockly.WorkspaceSvg.prototype.getGesture = function(e) {
 
 /**
  * Clear the reference to the current gesture.
+ * @package
  */
 Blockly.WorkspaceSvg.prototype.clearGesture = function() {
   this.currentGesture_ = null;
@@ -1793,6 +1796,7 @@ Blockly.WorkspaceSvg.prototype.clearGesture = function() {
 
 /**
  * Cancel the current gesture, if one exists.
+ * @package
  */
 Blockly.WorkspaceSvg.prototype.cancelCurrentGesture = function() {
   if (this.currentGesture_) {

@@ -1298,6 +1298,7 @@ Blockly.BlockSvg.prototype.removeSelect = function() {
  * Update the cursor over this block by adding or removing a class.
  * @param {boolean} enable True if the delete cursor should be shown, false
  *     otherwise.
+ * @package
  */
 Blockly.BlockSvg.prototype.setDeleteStyle = function(enable) {
   if (enable) {

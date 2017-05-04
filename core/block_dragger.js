@@ -98,6 +98,7 @@ Blockly.BlockDragger = function(block, workspace) {
 
 /**
  * Sever all links from this object.
+ * @package
  */
 Blockly.BlockDragger.prototype.dispose = function() {
   this.draggingBlock_ = null;
@@ -117,6 +118,7 @@ Blockly.BlockDragger.prototype.dispose = function() {
  * extends from it if that bubble is open.
  * @param {!Blockly.BlockSvg} block The root block that is being dragged.
  * @return {!Array.<!Object>} The list of all icons and their locations.
+ * @private
  */
 Blockly.BlockDragger.initIconData_ = function(block) {
   // Build a list of icons that need to be moved and where they started.
@@ -141,6 +143,7 @@ Blockly.BlockDragger.initIconData_ = function(block) {
  * Start dragging a block.  This includes moving it to the drag surface.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at mouse down, in pixel units.
+ * @package
  */
 Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
   if (!Blockly.Events.getGroup()) {
@@ -167,7 +170,6 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
   if (this.workspace_.toolbox_) {
     this.workspace_.toolbox_.addDeleteStyle();
   }
-
 };
 
 /**
@@ -176,6 +178,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
  * @param {!Event} e The most recent move event.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
+ * @package
  */
 Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
@@ -195,6 +198,7 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
  * @param {!Event} e The mouseup/touchend event.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
+ * @package
  */
 Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   // Make sure internal state is fresh.

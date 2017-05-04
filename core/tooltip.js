@@ -254,6 +254,7 @@ Blockly.Tooltip.hide = function() {
 /**
  * Hide any in-progress tooltips and block showing new tooltips until the next
  * call to unblock().
+ * @package
  */
 Blockly.Tooltip.block = function() {
   Blockly.Tooltip.hide();
@@ -263,6 +264,7 @@ Blockly.Tooltip.block = function() {
 /**
  * Unblock tooltips: allow them to be scheduled and shown according to their own
  * logic.
+ * @package
  */
 Blockly.Tooltip.unblock = function() {
   Blockly.Tooltip.blocked_ = false;

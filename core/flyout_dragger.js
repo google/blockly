@@ -71,6 +71,7 @@ goog.inherits(Blockly.FlyoutDragger, Blockly.WorkspaceDragger);
  * x and y are in pixels.
  * @param {number} x The new x position to move the scrollbar to.
  * @param {number} y The new y position to move the scrollbar to.
+ * @private
  */
 Blockly.FlyoutDragger.prototype.updateScroll_ = function(x, y) {
   // Move the scrollbar and the flyout will scroll automatically.

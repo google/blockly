@@ -39,6 +39,8 @@ goog.require('goog.math.Coordinate');
  * @constructor
  */
 Blockly.DraggedConnectionManager = function(block) {
+  Blockly.selected = block;
+
   /**
    * The top block in the stack being dragged.
    * Does not change during a drag.
@@ -98,12 +100,11 @@ Blockly.DraggedConnectionManager = function(block) {
    * @private
    */
   this.wouldDeleteBlock_ = false;
-
-  Blockly.selected = block;
 };
 
 /**
  * Sever all links from this object.
+ * @package
  */
 Blockly.DraggedConnectionManager.prototype.dispose = function() {
   this.topBlock_ = null;
@@ -117,6 +118,7 @@ Blockly.DraggedConnectionManager.prototype.dispose = function() {
  * Return whether the block would be deleted if dropped immediately, based on
  * information from the most recent move event.
  * @return {boolean} true if the block would be deleted if dropped immediately.
+ * @package
  */
 Blockly.DraggedConnectionManager.prototype.wouldDeleteBlock = function() {
   return this.wouldDeleteBlock_;
@@ -125,6 +127,7 @@ Blockly.DraggedConnectionManager.prototype.wouldDeleteBlock = function() {
 /**
  * Connect to the closest connection and render the results.
  * This should be called at the end of a drag.
+ * @package
  */
 Blockly.DraggedConnectionManager.prototype.applyConnections = function() {
   if (this.closestConnection_) {
@@ -147,6 +150,7 @@ Blockly.DraggedConnectionManager.prototype.applyConnections = function() {
  *     in workspace units.
  * @param {?number} deleteArea One of {@link Blockly.DELETE_AREA_TRASH},
  *     {@link Blockly.DELETE_AREA_TOOLBOX}, or {@link Blockly.DELETE_AREA_NONE}.
+ * @package
  */
 Blockly.DraggedConnectionManager.prototype.update = function(dxy, deleteArea) {
   var oldClosestConnection = this.closestConnection_;

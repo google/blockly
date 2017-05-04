@@ -387,12 +387,12 @@ Code.init = function() {
   // format (eg. `<category name="%{BKY_CATLOGIC}">`).
   // These message keys need to be defined in `Blockly.Msg` in order to
   // be decoded by the library. Therefore, we'll use the `MSG` dictionary that's
-  // been defined for each language to import each category name message 
+  // been defined for each language to import each category name message
   // into `Blockly.Msg`.
   // TODO: Clean up the message files so this is done explicitly instead of
   // through this for-loop.
   for (var messageKey in MSG) {
-    if (messageKey.startsWith('cat')) {
+    if (goog.string.startsWith(messageKey, 'cat')) {
       Blockly.Msg[messageKey.toUpperCase()] = MSG[messageKey];
     }
   }

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-04-24 16:26:37.852564",
+		"lastupdated": "2017-05-04 14:56:11.206000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -34,6 +34,8 @@
 	"DELETE_VARIABLE_CONFIRMATION": "Delete %1 uses of the '%2' variable?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Can't delete the variable '%1' because it's part of the definition of the function '%2'",
 	"DELETE_VARIABLE": "Delete the '%1' variable",
+	"SEARCH": "Search...",
+	"SEARCH_TITLE": "Enter search phrase",
 	"COLOUR_PICKER_HELPURL": "https://en.wikipedia.org/wiki/Color",
 	"COLOUR_PICKER_TOOLTIP": "Choose a colour from the palette.",
 	"COLOUR_RANDOM_HELPURL": "http://randomcolour.com",

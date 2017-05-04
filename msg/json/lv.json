@@ -82,6 +82,7 @@
 	"IOS_VARIABLES_ADD_BUTTON": "Pievienot",
 	"IOS_VARIABLES_RENAME_BUTTON": "Pārsaukt",
 	"IOS_VARIABLES_DELETE_BUTTON": "Dzēst",
+	"IOS_VARIABLES_VARIABLE_NAME": "Mainīgā nosaukums",
 	"LOGIC_COMPARE_HELPURL": "https://lv.wikipedia.org/wiki/Nevien%C4%81d%C4%ABba",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Patiess, ja abas puses ir vienādas.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Patiess, ja abas puses nav vienādas.",

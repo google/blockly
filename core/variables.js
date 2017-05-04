@@ -37,9 +37,17 @@ goog.require('goog.string');
 
 
 /**
+<<<<<<< HEAD
  * Category to separate variable names from procedures and generated functions.
  */
 Blockly.Variables.NAME_TYPE = 'VARIABLE';
+=======
+ * Constant to separate variable names from procedures and generated functions
+ * when running generators.
+ * @deprecated Use Blockly.VARIABLE_CATEGORY_NAME
+ */
+Blockly.Variables.NAME_TYPE = Blockly.VARIABLE_CATEGORY_NAME;
+>>>>>>> 388b32d0973d2f7dde3c30ebf0dee4268e32eeba
 
 /**
  * Find all user-created variables that are in use in the workspace.

@@ -18,7 +18,8 @@
 			"Cristofer Alves",
 			"EVinente",
 			"Lowvy",
-			"Trigonometria87"
+			"Trigonometria87",
+			"BarbaraAckles"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -48,6 +49,7 @@
 	"NEW_VARIABLE_TITLE": "Nome da nova variável:",
 	"VARIABLE_ALREADY_EXISTS": "A variável chamada '%1' já existe.",
 	"DELETE_VARIABLE_CONFIRMATION": "Deletar %1 usos da variável '%2'?",
+	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Funcoes'%n1' nao podem ser deletadas porque faz parte das definicoes'%2'",
 	"DELETE_VARIABLE": "Deletar a variável '%1'",
 	"COLOUR_PICKER_HELPURL": "https://pt.wikipedia.org/wiki/Cor",
 	"COLOUR_PICKER_TOOLTIP": "Escolher uma cor da palheta de cores.",
@@ -90,6 +92,11 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Acrescente, remova ou reordene seções para reconfigurar este bloco.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Acrescente uma condição para o bloco se.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Acrescente uma condição final para o bloco se.",
+	"IOS_OK": "Ok",
+	"IOS_CANCEL": "blockly:IOS Cancelar/pt-br",
+	"IOS_VARIABLES_RENAME_BUTTON": "Blockly:Renomear varioas botoens/pt-br",
+	"IOS_VARIABLES_DELETE_BUTTON": "Deletar",
+	"IOS_VARIABLES_VARIABLE_NAME": "Nome variavel",
 	"LOGIC_COMPARE_HELPURL": "https://pt.wikipedia.org/wiki/Inequa%C3%A7%C3%A3o",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Retorna verdadeiro se ambas as entradas forem iguais.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Retorna verdadeiro se ambas as entradas forem diferentes.",

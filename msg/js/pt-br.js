@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.pt.br');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Adicionar comentário";
-Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
+Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Funcoes'%n1' nao podem ser deletadas porque faz parte das definicoes'%2'";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Mudar valor:";
 Blockly.Msg.CLEAN_UP = "Limpar blocos";
 Blockly.Msg.COLLAPSE_ALL = "Colapsar Blocos";
@@ -74,19 +74,19 @@ Blockly.Msg.EXPAND_BLOCK = "Expandir bloco";
 Blockly.Msg.EXTERNAL_INPUTS = "Entradas externas";
 Blockly.Msg.HELP = "Ajuda";
 Blockly.Msg.INLINE_INPUTS = "Entradas incorporadas";
-Blockly.Msg.IOS_CANCEL = "Cancel";  // untranslated
+Blockly.Msg.IOS_CANCEL = "blockly:IOS Cancelar/pt-br";
 Blockly.Msg.IOS_ERROR = "Error";  // untranslated
-Blockly.Msg.IOS_OK = "OK";  // untranslated
+Blockly.Msg.IOS_OK = "Ok";
 Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
 Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
 Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
 Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
 Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Add";  // untranslated
 Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
-Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Delete";  // untranslated
+Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Deletar";
 Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
-Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Rename";  // untranslated
-Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Variable name";  // untranslated
+Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Blockly:Renomear varioas botoens/pt-br";
+Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Nome variavel";
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "criar lista vazia";
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "Retorna uma lista, de tamanho 0, contendo nenhum registro";

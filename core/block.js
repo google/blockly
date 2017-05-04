@@ -333,8 +333,8 @@ Blockly.Block.prototype.lastConnectionInStack_ = function() {
  * @private
  */
 Blockly.Block.prototype.bumpNeighbours_ = function() {
-  console.warn("Not expected to reach this bumpNeighbours_ function. The \
-    BlockSvg function for bumpNeighbours_ was expected to be called instead.")
+  console.warn('Not expected to reach this bumpNeighbours_ function. The ' +
+    'BlockSvg function for bumpNeighbours_ was expected to be called instead.');
 };
 
 /**

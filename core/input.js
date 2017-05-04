@@ -41,6 +41,9 @@ goog.require('goog.asserts');
  * @constructor
  */
 Blockly.Input = function(type, name, block, connection) {
+  if (type != Blockly.DUMMY_INPUT && !name) {
+    throw 'Value inputs and statement inputs must have non-empty name.';
+  }
   /** @type {number} */
   this.type = type;
   /** @type {string} */

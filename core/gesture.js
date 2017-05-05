@@ -77,12 +77,22 @@ Blockly.Gesture = function(e, creatorWorkspace) {
   this.startField_ = null;
 
   /**
-   * The block that the gesture started on, or null if it did not block on a
-   * field.
+   * The block that the gesture started on, or null if it did not start on a
+   * block.
    * @type {Blockly.BlockSvg}
    * @private
    */
   this.startBlock_ = null;
+
+  /**
+   * The block that this gesture targets.  If the gesture started on a
+   * shadow block, this is the first non-shadow parent of the block.  If the
+   * gesture started in the flyout, this is the root block of the block group
+   * that was clicked or dragged.
+   * @type {Blockly.BlockSvg}
+   * @private
+   */
+  this.targetBlock_ = null;
 
   /**
    * The workspace that the gesture started on.  There may be multiple
@@ -213,6 +223,7 @@ Blockly.Gesture.prototype.dispose = function() {
 
   this.startField_ = null;
   this.startBlock_ = null;
+  this.targetBlock_ = null;
   this.startWorkspace_ = null;
   this.flyout_ = null;
 
@@ -274,13 +285,13 @@ Blockly.Gesture.prototype.updateDragDelta_ = function(currentXY) {
  * This function should be called on a mouse/touch move event the first time the
  * drag radius is exceeded.  It should be called no more than once per gesture.
  * If a block should be dragged from the flyout this function creates the new
- * block on the main workspace and updates startBlock_ and startWorkspace_.
+ * block on the main workspace and updates targetBlock_ and startWorkspace_.
  * @return {boolean} True if a block is being dragged from the flyout.
  * @private
  */
 Blockly.Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
   // Disabled blocks may not be dragged from the flyout.
-  if (this.startBlock_.disabled) {
+  if (this.targetBlock_.disabled) {
     return false;
   }
   if (!this.flyout_.isScrollable() ||
@@ -292,8 +303,10 @@ Blockly.Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
     if (!Blockly.Events.getGroup()) {
       Blockly.Events.setGroup(true);
     }
-    this.startBlock_ = this.flyout_.createBlock(this.startBlock_);
-    this.startBlock_.select();
+    // The start block is no longer relevant, because this is a drag.
+    this.startBlock_ = null;
+    this.targetBlock_ = this.flyout_.createBlock(this.targetBlock_);
+    this.targetBlock_.select();
     return true;
   }
   return false;
@@ -309,13 +322,13 @@ Blockly.Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.updateIsDraggingBlock_ = function() {
-  if (!this.startBlock_) {
+  if (!this.targetBlock_) {
     return false;
   }
 
   if (this.flyout_) {
     this.isDraggingBlock_ = this.updateIsDraggingFromFlyout_();
-  } else if (this.startBlock_.isMovable()){
+  } else if (this.targetBlock_.isMovable()){
     this.isDraggingBlock_ = true;
   }
 
@@ -377,7 +390,7 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.startDraggingBlock_ = function() {
-  this.blockDragger_ = new Blockly.BlockDragger(this.startBlock_,
+  this.blockDragger_ = new Blockly.BlockDragger(this.targetBlock_,
       this.startWorkspace_);
   this.blockDragger_.startBlockDrag(this.currentDragDeltaXY_);
   this.blockDragger_.dragBlock(this.mostRecentEvent_,
@@ -411,8 +424,8 @@ Blockly.Gesture.prototype.doStart = function(e) {
   Blockly.hideChaff(!!this.flyout_);
   Blockly.Tooltip.block();
 
-  if (this.startBlock_) {
-    this.startBlock_.select();
+  if (this.targetBlock_) {
+    this.targetBlock_.select();
   }
 
   if (Blockly.utils.isRightButton(e)) {
@@ -514,10 +527,10 @@ Blockly.Gesture.prototype.cancel = function() {
  * @package
  */
 Blockly.Gesture.prototype.handleRightClick = function(e) {
-  if (this.startBlock_) {
+  if (this.targetBlock_) {
     this.bringBlockToFront_();
     Blockly.hideChaff(this.flyout_);
-    this.startBlock_.showContextMenu_(e);
+    this.targetBlock_.showContextMenu_(e);
   } else if (this.startWorkspace_ && !this.flyout_) {
     Blockly.hideChaff();
     this.startWorkspace_.showContextMenu_(e);
@@ -595,9 +608,10 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
     if (!Blockly.Events.getGroup()) {
       Blockly.Events.setGroup(true);
     }
-    var newBlock = this.flyout_.createBlock(this.startBlock_);
+    var newBlock = this.flyout_.createBlock(this.targetBlock_);
     newBlock.scheduleSnapAndBump();
   } else {
+    // Clicks events are on the start block, even if it was a shadow.
     Blockly.Events.fire(
         new Blockly.Events.Ui(this.startBlock_, 'click', undefined, undefined));
   }
@@ -625,8 +639,8 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
  */
 Blockly.Gesture.prototype.bringBlockToFront_ = function() {
   // Blocks in the flyout don't overlap, so skip the work.
-  if (this.startBlock_ && !this.flyout_) {
-    this.startBlock_.bringToFront();
+  if (this.targetBlock_ && !this.flyout_) {
+    this.targetBlock_.bringToFront();
   }
 };
 
@@ -647,21 +661,34 @@ Blockly.Gesture.prototype.setStartField = function(field) {
 };
 
 /**
- * Record the block that a gesture started on.
- * If the block is a shadow, record the parent.  If the block is in the flyout,
- * use the root block from the block group.
+ * Record the block that a gesture started on, and set the target block
+ * appropriately.
  * @param {Blockly.BlockSvg} block The block the gesture started on.
  * @package
  */
 Blockly.Gesture.prototype.setStartBlock = function(block) {
   if (!this.startBlock_) {
-    if (block.isShadow()) {
-      this.setStartBlock(block.getParent());
-    } else if (block.isInFlyout && block != block.getRootBlock()) {
-      this.setStartBlock(block.getRootBlock());
+    this.startBlock_ = block;
+    if (block.isInFlyout && block != block.getRootBlock()) {
+      this.setTargetBlock_(block.getRootBlock());
     } else {
-      this.startBlock_ = block;
+      this.setTargetBlock_(block);
     }
+  }
+};
+
+/**
+ * Record the block that a gesture targets, meaning the block that will be
+ * dragged if this turns into a drag.  If this block is a shadow, that will be
+ * its first non-shadow parent.
+ * @param {Blockly.BlockSvg} block The block the gesture targets.
+ * @private
+ */
+Blockly.Gesture.prototype.setTargetBlock_ = function(block) {
+  if (block.isShadow()) {
+    this.setTargetBlock_(block.getParent());
+  } else {
+    this.targetBlock_ = block;
   }
 };
 

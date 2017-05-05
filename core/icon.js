@@ -170,7 +170,7 @@ Blockly.Icon.prototype.renderIcon = function(cursorX) {
 
 /**
  * Notification that the icon has moved.  Update the arrow accordingly.
- * @param {!goog.math.Coordinate} xy Absolute location.
+ * @param {!goog.math.Coordinate} xy Absolute location in workspace coordinates.
  */
 Blockly.Icon.prototype.setIconLocation = function(xy) {
   this.iconXY_ = xy;
@@ -197,7 +197,8 @@ Blockly.Icon.prototype.computeIconLocation = function() {
 
 /**
  * Returns the center of the block's icon relative to the surface.
- * @return {!goog.math.Coordinate} Object with x and y properties.
+ * @return {!goog.math.Coordinate} Object with x and y properties in workspace
+ *     coordinates.
  */
 Blockly.Icon.prototype.getIconLocation = function() {
   return this.iconXY_;

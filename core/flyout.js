@@ -30,6 +30,7 @@ goog.require('Blockly.Block');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Events');
 goog.require('Blockly.FlyoutButton');
+goog.require('Blockly.Gesture');
 goog.require('Blockly.Touch');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('goog.dom');
@@ -46,6 +47,7 @@ goog.require('goog.userAgent');
 Blockly.Flyout = function(workspaceOptions) {
   workspaceOptions.getMetrics = this.getMetrics_.bind(this);
   workspaceOptions.setMetrics = this.setMetrics_.bind(this);
+
   /**
    * @type {!Blockly.Workspace}
    * @private
@@ -108,67 +110,7 @@ Blockly.Flyout = function(workspaceOptions) {
    * @private
    */
   this.permanentlyDisabled_ = [];
-
-  /**
-   * y coordinate of mousedown - used to calculate scroll distances.
-   * @type {number}
-   * @private
-   */
-  this.startDragMouseY_ = 0;
-
-  /**
-   * x coordinate of mousedown - used to calculate scroll distances.
-   * @type {number}
-   * @private
-   */
-  this.startDragMouseX_ = 0;
 };
-
-/**
- * When a flyout drag is in progress, this is a reference to the flyout being
- * dragged. This is used by Flyout.terminateDrag_ to reset dragMode_.
- * @type {Blockly.Flyout}
- * @private
- */
-Blockly.Flyout.startFlyout_ = null;
-
-/**
- * Event that started a drag. Used to determine the drag distance/direction and
- * also passed to BlockSvg.onMouseDown_() after creating a new block.
- * @type {Event}
- * @private
- */
-Blockly.Flyout.startDownEvent_ = null;
-
-/**
- * Flyout block where the drag/click was initiated. Used to fire click events or
- * create a new block.
- * @type {Event}
- * @private
- */
-Blockly.Flyout.startBlock_ = null;
-
-/**
- * Wrapper function called when a mouseup occurs during a background or block
- * drag operation.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.Flyout.onMouseUpWrapper_ = null;
-
-/**
- * Wrapper function called when a mousemove occurs during a background drag.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.Flyout.onMouseMoveWrapper_ = null;
-
-/**
- * Wrapper function called when a mousemove occurs during a block drag.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.Flyout.onMouseMoveBlockWrapper_ = null;
 
 /**
  * Does the flyout automatically close when a block is created?
@@ -196,13 +138,6 @@ Blockly.Flyout.prototype.containerVisible_ = true;
  * @const
  */
 Blockly.Flyout.prototype.CORNER_RADIUS = 8;
-
-/**
- * Number of pixels the mouse must move before a drag/scroll starts. Because the
- * drag-intention is determined when this is reached, it is larger than
- * Blockly.DRAG_RADIUS so that the drag-direction is clearer.
- */
-Blockly.Flyout.prototype.DRAG_RADIUS = 10;
 
 /**
  * Margin around the edges of the blocks in the flyout.
@@ -245,15 +180,6 @@ Blockly.Flyout.prototype.width_ = 0;
  * @private
  */
 Blockly.Flyout.prototype.height_ = 0;
-
-/**
- * Is the flyout dragging (scrolling)?
- * DRAG_NONE - no drag is ongoing or state is undetermined.
- * DRAG_STICKY - still within the sticky drag radius.
- * DRAG_FREE - in scroll mode (never create a new block).
- * @private
- */
-Blockly.Flyout.prototype.dragMode_ = Blockly.DRAG_NONE;
 
 /**
  * Range of a drag angle from a flyout considered "dragging toward workspace".
@@ -318,10 +244,15 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
     this.filterWrapper_ = this.filterForCapacity_.bind(this);
     this.targetWorkspace_.addChangeListener(this.filterWrapper_);
   }
+
   // Dragging the flyout up and down.
   Array.prototype.push.apply(this.eventWrappers_,
-      Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
+      Blockly.bindEventWithChecks_(this.svgBackground_, 'mousedown', this,
       this.onMouseDown_));
+
+  // A flyout connected to a workspace doesn't have its own current gesture.
+  this.workspace_.getGesture =
+      this.targetWorkspace_.getGesture.bind(this.targetWorkspace_);
 };
 
 /**
@@ -366,6 +297,15 @@ Blockly.Flyout.prototype.getWidth = function() {
  */
 Blockly.Flyout.prototype.getHeight = function() {
   return this.height_;
+};
+
+/**
+ * Get the workspace inside the flyout.
+ * @return {!Blockly.WorkspaceSvg} The workspace inside the flyout.
+ * @package
+ */
+Blockly.Flyout.prototype.getWorkspace = function() {
+  return this.workspace_;
 };
 
 /**
@@ -871,8 +811,10 @@ Blockly.Flyout.prototype.layout_ = function(contents, gaps) {
       var buttonSvg = button.createDom();
       button.moveTo(cursorX, cursorY);
       button.show();
-      Blockly.bindEventWithChecks_(buttonSvg, 'mouseup', button,
-          button.onMouseUp);
+      // Clicking on a flyout button or label is a lot like clicking on the
+      // flyout background.
+      this.listeners_.push(Blockly.bindEventWithChecks_(buttonSvg, 'mousedown',
+           this, this.onMouseDown_));
 
       this.buttons_.push(button);
       if (this.horizontalLayout_) {
@@ -932,20 +874,6 @@ Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
 };
 
 /**
- * Actions to take when a block in the flyout is right-clicked.
- * @param {!Event} e Event that triggered the right-click.  Could originate from
- *     a long-press in a touch environment.
- * @param {Blockly.BlockSvg} block The block that was clicked.
- */
-Blockly.Flyout.blockRightClick_ = function(e, block) {
-  Blockly.terminateDrag_();
-  Blockly.hideChaff(true);
-  block.showContextMenu_(e);
-  // This was a right-click, so end the gesture immediately.
-  Blockly.Touch.clearTouchIdentifier();
-};
-
-/**
  * Handle a mouse-down on an SVG block in a non-closing flyout.
  * @param {!Blockly.Block} block The flyout block to copy.
  * @return {!Function} Function to call when block is clicked.
@@ -954,26 +882,11 @@ Blockly.Flyout.blockRightClick_ = function(e, block) {
 Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
   var flyout = this;
   return function(e) {
-    if (Blockly.utils.isRightButton(e)) {
-      Blockly.Flyout.blockRightClick_(e, block);
-    } else {
-      Blockly.terminateDrag_();
-      Blockly.hideChaff(true);
-      // Left-click (or middle click)
-      // Record the current mouse position.
-      flyout.startDragMouseY_ = e.clientY;
-      flyout.startDragMouseX_ = e.clientX;
-      Blockly.Flyout.startDownEvent_ = e;
-      Blockly.Flyout.startBlock_ = block;
-      Blockly.Flyout.startFlyout_ = flyout;
-      Blockly.Flyout.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
-          'mouseup', flyout, flyout.onMouseUp_);
-      Blockly.Flyout.onMouseMoveBlockWrapper_ = Blockly.bindEventWithChecks_(
-          document, 'mousemove', flyout, flyout.onMouseMoveBlock_);
+    var gesture = flyout.targetWorkspace_.getGesture(e);
+    if (gesture) {
+      gesture.setStartBlock(block);
+      gesture.handleFlyoutStart(e, flyout);
     }
-    // This event has been handled.  No need to bubble up to the document.
-    e.stopPropagation();
-    e.preventDefault();
   };
 };
 
@@ -983,151 +896,24 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
  * @private
  */
 Blockly.Flyout.prototype.onMouseDown_ = function(e) {
-  if (Blockly.utils.isRightButton(e)) {
-    // Don't start drags with right clicks.
-    Blockly.Touch.clearTouchIdentifier();
-    return;
-  }
-  Blockly.hideChaff(true);
-  this.dragMode_ = Blockly.DRAG_FREE;
-  this.startDragMouseY_ = e.clientY;
-  this.startDragMouseX_ = e.clientX;
-  Blockly.Flyout.startFlyout_ = this;
-  Blockly.Flyout.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
-      'mousemove', this, this.onMouseMove_);
-  Blockly.Flyout.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
-      'mouseup', this, Blockly.Flyout.terminateDrag_);
-  // This event has been handled.  No need to bubble up to the document.
-  e.preventDefault();
-  e.stopPropagation();
-};
-
-/**
- * Handle a mouse-up anywhere in the SVG pane.  Is only registered when a
- * block is clicked.  We can't use mouseUp on the block since a fast-moving
- * cursor can briefly escape the block before it catches up.
- * @param {!Event} e Mouse up event.
- * @private
- */
-Blockly.Flyout.prototype.onMouseUp_ = function(e) {
-  if (!this.workspace_.isDragging()) {
-    // This was a click, not a drag.  End the gesture.
-    Blockly.Touch.clearTouchIdentifier();
-    if (this.autoClose) {
-      this.createBlockFunc_(Blockly.Flyout.startBlock_)(
-          Blockly.Flyout.startDownEvent_);
-    } else if (!Blockly.WidgetDiv.isVisible()) {
-      Blockly.Events.fire(
-          new Blockly.Events.Ui(Blockly.Flyout.startBlock_, 'click',
-                                undefined, undefined));
-    }
-  }
-  Blockly.terminateDrag_();
-};
-
-/**
- * Handle a mouse-move to vertically drag the flyout.
- * @param {!Event} e Mouse move event.
- * @private
- */
-Blockly.Flyout.prototype.onMouseMove_ = function(e) {
-  var metrics = this.getMetrics_();
-  if (this.horizontalLayout_) {
-    if (metrics.contentWidth - metrics.viewWidth < 0) {
-      return;
-    }
-    var dx = e.clientX - this.startDragMouseX_;
-    this.startDragMouseX_ = e.clientX;
-    var x = metrics.viewLeft - dx;
-    x = goog.math.clamp(x, 0, metrics.contentWidth - metrics.viewWidth);
-    this.scrollbar_.set(x);
-  } else {
-    if (metrics.contentHeight - metrics.viewHeight < 0) {
-      return;
-    }
-    var dy = e.clientY - this.startDragMouseY_;
-    this.startDragMouseY_ = e.clientY;
-    var y = metrics.viewTop - dy;
-    y = goog.math.clamp(y, 0, metrics.contentHeight - metrics.viewHeight);
-    this.scrollbar_.set(y);
-  }
-};
-
-/**
- * Mouse button is down on a block in a non-closing flyout.  Create the block
- * if the mouse moves beyond a small radius.  This allows one to play with
- * fields without instantiating blocks that instantly self-destruct.
- * @param {!Event} e Mouse move event.
- * @private
- */
-Blockly.Flyout.prototype.onMouseMoveBlock_ = function(e) {
-  if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&
-      e.button == 0) {
-    /* HACK:
-     Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove events
-     on certain touch actions. Ignore events with these signatures.
-     This may result in a one-pixel blind spot in other browsers,
-     but this shouldn't be noticeable. */
-    e.stopPropagation();
-    return;
-  }
-  var dx = e.clientX - Blockly.Flyout.startDownEvent_.clientX;
-  var dy = e.clientY - Blockly.Flyout.startDownEvent_.clientY;
-
-  var createBlock = this.determineDragIntention_(dx, dy);
-  if (createBlock) {
-    Blockly.longStop_();
-    this.createBlockFunc_(Blockly.Flyout.startBlock_)(
-        Blockly.Flyout.startDownEvent_);
-  } else if (this.dragMode_ == Blockly.DRAG_FREE) {
-    Blockly.longStop_();
-    // Do a scroll.
-    this.onMouseMove_(e);
-  }
-  e.stopPropagation();
-};
-
-/**
- * Determine the intention of a drag.
- * Updates dragMode_ based on a drag delta and the current mode,
- * and returns true if we should create a new block.
- * @param {number} dx X delta of the drag.
- * @param {number} dy Y delta of the drag.
- * @return {boolean} True if a new block should be created.
- * @private
- */
-Blockly.Flyout.prototype.determineDragIntention_ = function(dx, dy) {
-  if (this.dragMode_ == Blockly.DRAG_FREE) {
-    // Once in free mode, always stay in free mode and never create a block.
-    return false;
-  }
-  var dragDistance = Math.sqrt(dx * dx + dy * dy);
-  if (dragDistance < this.DRAG_RADIUS) {
-    // Still within the sticky drag radius.
-    this.dragMode_ = Blockly.DRAG_STICKY;
-    return false;
-  } else {
-    if (this.isDragTowardWorkspace_(dx, dy) || !this.scrollbar_.isVisible()) {
-      // Immediately create a block.
-      return true;
-    } else {
-      // Immediately move to free mode - the drag is away from the workspace.
-      this.dragMode_ = Blockly.DRAG_FREE;
-      return false;
-    }
+  var gesture = this.targetWorkspace_.getGesture(e);
+  if (gesture) {
+    gesture.handleFlyoutStart(e, this);
   }
 };
 
 /**
  * Determine if a drag delta is toward the workspace, based on the position
- * and orientation of the flyout. This is used in determineDragIntention_ to
- * determine if a new block should be created or if the flyout should scroll.
- * @param {number} dx X delta of the drag.
- * @param {number} dy Y delta of the drag.
+ * and orientation of the flyout. This to decide if a new block should be
+ * created or if the flyout should scroll.
+ * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
+ *     moved from the position at mouse down, in pixel units.
  * @return {boolean} true if the drag is toward the workspace.
- * @private
+ * @package
  */
-Blockly.Flyout.prototype.isDragTowardWorkspace_ = function(dx, dy) {
+Blockly.Flyout.prototype.isDragTowardWorkspace = function(currentDragDeltaXY) {
+  var dx = currentDragDeltaXY.x;
+  var dy = currentDragDeltaXY.y;
   // Direction goes from -180 to 180, with 0 toward the right and 90 on top.
   var dragDirection = Math.atan2(dy, dx) / Math.PI * 180;
 
@@ -1150,62 +936,46 @@ Blockly.Flyout.prototype.isDragTowardWorkspace_ = function(dx, dy) {
 
 /**
  * Create a copy of this block on the workspace.
- * @param {!Blockly.Block} originBlock The flyout block to copy.
- * @return {!Function} Function to call when block is clicked.
- * @private
+ * @param {!Blockly.BlockSvg} originalBlock The block to copy from the flyout.
+ * @return {Blockly.BlockSvg} The newly created block, or null if something
+ *     went wrong with deserialization.
+ * @package
  */
-Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
-  var flyout = this;
-  return function(e) {
-    if (Blockly.utils.isRightButton(e)) {
-      // Right-click.  Don't create a block, let the context menu show.
-      return;
-    }
-    if (originBlock.disabled) {
-      // Beyond capacity.
-      return;
-    }
-    Blockly.Events.disable();
-    // Disable workspace resizing. Reenable at the end of the drag. This avoids
-    // a spurious resize between creating the new block and placing it in the
-    // workspace.
-    flyout.targetWorkspace_.setResizesEnabled(false);
-    try {
-      var block = flyout.placeNewBlock_(originBlock);
-    } finally {
-      Blockly.Events.enable();
-    }
-    if (Blockly.Events.isEnabled()) {
-      Blockly.Events.setGroup(true);
-      Blockly.Events.fire(new Blockly.Events.Create(block));
-    }
-    if (flyout.autoClose) {
-      flyout.hide();
-    } else {
-      flyout.filterForCapacity_();
-    }
-
-    // Re-render the blocks before starting the drag:
-    // Force a render on IE and Edge to get around the issue described in
-    // Blockly.Field.getCachedWidth
+Blockly.Flyout.prototype.createBlock = function(originalBlock) {
+  var newBlock = null;
+  Blockly.Events.disable();
+  this.targetWorkspace_.setResizesEnabled(false);
+  try {
+    newBlock = this.placeNewBlock_(originalBlock);
+    //Force a render on IE and Edge to get around the issue described in
+    //Blockly.Field.getCachedWidth
     if (goog.userAgent.IE || goog.userAgent.EDGE) {
-      var blocks = block.getDescendants();
+      var blocks = newBlock.getDescendants();
       for (var i = blocks.length - 1; i >= 0; i--) {
         blocks[i].render(false);
       }
     }
+    // Close the flyout.
+    Blockly.hideChaff();
+  } finally {
+    Blockly.Events.enable();
+  }
 
-    // Start a dragging operation on the new block.
-    block.onMouseDown_(e);
-    Blockly.dragMode_ = Blockly.DRAG_FREE;
-    block.setDragging_(true);
-    block.moveToDragSurface_();
-  };
+  if (Blockly.Events.isEnabled()) {
+    Blockly.Events.setGroup(true);
+    Blockly.Events.fire(new Blockly.Events.Create(newBlock));
+  }
+  if (this.autoClose) {
+    this.hide();
+  } else {
+    this.filterForCapacity_();
+  }
+  return newBlock;
 };
 
 /**
  * Copy a block from the flyout to the workspace and position it correctly.
- * @param {!Blockly.Block} originBlock The flyout block to copy..
+ * @param {!Blockly.Block} originBlock The flyout block to copy.
  * @return {!Blockly.Block} The new block in the main workspace.
  * @private
  */
@@ -1289,7 +1059,8 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
 
 /**
  * Filter the blocks on the flyout to disable the ones that are above the
- * capacity limit.
+ * capacity limit.  For instance, if the user may only place two more blocks on
+ * the workspace, an "a + b" block that has two shadow blocks would be disabled.
  * @private
  */
 Blockly.Flyout.prototype.filterForCapacity_ = function() {
@@ -1334,35 +1105,6 @@ Blockly.Flyout.prototype.getClientRect = function() {
   } else {  // Right
     return new goog.math.Rect(x, -BIG_NUM, BIG_NUM + width, BIG_NUM * 2);
   }
-};
-
-/**
- * Stop binding to the global mouseup and mousemove events.
- * @private
- */
-Blockly.Flyout.terminateDrag_ = function() {
-  if (Blockly.Flyout.startFlyout_) {
-    // User was dragging the flyout background, and has stopped.
-    if (Blockly.Flyout.startFlyout_.dragMode_ == Blockly.DRAG_FREE) {
-      Blockly.Touch.clearTouchIdentifier();
-    }
-    Blockly.Flyout.startFlyout_.dragMode_ = Blockly.DRAG_NONE;
-    Blockly.Flyout.startFlyout_ = null;
-  }
-  if (Blockly.Flyout.onMouseUpWrapper_) {
-    Blockly.unbindEvent_(Blockly.Flyout.onMouseUpWrapper_);
-    Blockly.Flyout.onMouseUpWrapper_ = null;
-  }
-  if (Blockly.Flyout.onMouseMoveBlockWrapper_) {
-    Blockly.unbindEvent_(Blockly.Flyout.onMouseMoveBlockWrapper_);
-    Blockly.Flyout.onMouseMoveBlockWrapper_ = null;
-  }
-  if (Blockly.Flyout.onMouseMoveWrapper_) {
-    Blockly.unbindEvent_(Blockly.Flyout.onMouseMoveWrapper_);
-    Blockly.Flyout.onMouseMoveWrapper_ = null;
-  }
-  Blockly.Flyout.startDownEvent_ = null;
-  Blockly.Flyout.startBlock_ = null;
 };
 
 /**
@@ -1482,4 +1224,13 @@ Blockly.Flyout.prototype.reflow = function() {
   if (this.reflowWrapper_) {
     this.workspace_.addChangeListener(this.reflowWrapper_);
   }
+};
+
+/**
+ * @return {boolean} True if this flyout may be scrolled with a scrollbar or by
+ *     dragging.
+ * @package
+ */
+Blockly.Flyout.prototype.isScrollable = function() {
+  return this.scrollbar_ ? this.scrollbar_.isVisible() : false;
 };

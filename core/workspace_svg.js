@@ -30,6 +30,7 @@ goog.provide('Blockly.WorkspaceSvg');
 //goog.require('Blockly.BlockSvg');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
+goog.require('Blockly.Gesture');
 goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Touch');
@@ -126,15 +127,6 @@ Blockly.WorkspaceSvg.prototype.isFlyout = false;
 Blockly.WorkspaceSvg.prototype.isMutator = false;
 
 /**
- * Is this workspace currently being dragged around?
- * DRAG_NONE - No drag operation.
- * DRAG_BEGIN - Still inside the initial DRAG_RADIUS.
- * DRAG_FREE - Workspace has been dragged further than DRAG_RADIUS.
- * @private
- */
-Blockly.WorkspaceSvg.prototype.dragMode_ = Blockly.DRAG_NONE;
-
-/**
  * Whether this workspace has resizes enabled.
  * Disable during batch operations for a performance improvement.
  * @type {boolean}
@@ -143,25 +135,25 @@ Blockly.WorkspaceSvg.prototype.dragMode_ = Blockly.DRAG_NONE;
 Blockly.WorkspaceSvg.prototype.resizesEnabled_ = true;
 
 /**
- * Current horizontal scrolling offset.
+ * Current horizontal scrolling offset in pixel units.
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.scrollX = 0;
 
 /**
- * Current vertical scrolling offset.
+ * Current vertical scrolling offset in pixel units.
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.scrollY = 0;
 
 /**
- * Horizontal scroll value when scrolling started.
+ * Horizontal scroll value when scrolling started in pixel units.
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.startScrollX = 0;
 
 /**
- * Vertical scroll value when scrolling started.
+ * Vertical scroll value when scrolling started in pixel units.
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.startScrollY = 0;
@@ -190,6 +182,13 @@ Blockly.WorkspaceSvg.prototype.trashcan = null;
  * @type {Blockly.ScrollbarPair}
  */
 Blockly.WorkspaceSvg.prototype.scrollbar = null;
+
+/**
+ * The current gesture in progress on this workspace, if any.
+ * @type {Blockly.Gesture}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.currentGesture_ = null;
 
 /**
  * This workspace's surface for dragging blocks, if it exists.
@@ -338,11 +337,16 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
    */
   this.svgGroup_ = Blockly.utils.createSvgElement('g',
       {'class': 'blocklyWorkspace'}, null);
+
+  // Note that a <g> alone does not receive mouse events--it must have a
+  // valid target inside it.  If no background class is specified, as in the
+  // flyout, the workspace will not receive mouse events.
   if (opt_backgroundClass) {
     /** @type {SVGElement} */
     this.svgBackground_ = Blockly.utils.createSvgElement('rect',
         {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
         this.svgGroup_);
+
     if (opt_backgroundClass == 'blocklyMainBackground') {
       this.svgBackground_.style.fill =
           'url(#' + this.options.gridPattern.id + ')';
@@ -365,9 +369,6 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (!this.isFlyout) {
     Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
         this.onMouseDown_);
-    var thisWorkspace = this;
-    Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
-                       function(e) {Blockly.longStart_(e, thisWorkspace);});
     if (this.options.zoomOptions && this.options.zoomOptions.wheel) {
       // Mouse-wheel.
       Blockly.bindEventWithChecks_(this.svgGroup_, 'wheel', this,
@@ -396,6 +397,9 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
 Blockly.WorkspaceSvg.prototype.dispose = function() {
   // Stop rerendering.
   this.rendered = false;
+  if (this.currentGesture_) {
+    this.currentGesture_.cancel();
+  }
   Blockly.WorkspaceSvg.superClass_.dispose.call(this);
   if (this.svgGroup_) {
     goog.dom.removeNode(this.svgGroup_);
@@ -811,10 +815,20 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
       this.remainingCapacity()) {
     return;
   }
-  Blockly.terminateDrag_();  // Dragging while pasting?  No.
+  if (this.currentGesture_) {
+    this.currentGesture_.cancel();  // Dragging while pasting?  No.
+  }
   Blockly.Events.disable();
   try {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
+    // Rerender to get around problem with IE and Edge not measuring text
+    // correctly when it is hidden.
+    if (goog.userAgent.IE || goog.userAgent.EDGE) {
+      var blocks = block.getDescendants();
+      for (var i = blocks.length - 1; i >= 0; i--) {
+        blocks[i].render(false);
+      }
+    }
     // Move the duplicate to original position.
     var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
     var blockY = parseInt(xmlBlock.getAttribute('y'), 10);
@@ -876,7 +890,7 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
 Blockly.WorkspaceSvg.prototype.createVariable = function(name) {
   Blockly.WorkspaceSvg.superClass_.createVariable.call(this, name);
   // Don't refresh the toolbox if there's a drag in progress.
-  if (this.toolbox_ && this.toolbox_.flyout_ && !Blockly.Flyout.startFlyout_) {
+  if (this.toolbox_ && this.toolbox_.flyout_ && !this.currentGesture_) {
     this.toolbox_.refreshSelection();
   }
 };
@@ -901,7 +915,6 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
 
 /**
  * Is the mouse event over a delete area (toolbox or non-closing flyout)?
- * Opens or closes the trashcan and sets the cursor as a side effect.
  * @param {!Event} e Mouse move event.
  * @return {?number} Null if not over a delete area, or an enum representing
  *     which delete area the event is over.
@@ -914,7 +927,7 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   if (this.deleteAreaToolbox_ && this.deleteAreaToolbox_.contains(xy)) {
     return Blockly.DELETE_AREA_TOOLBOX;
   }
-  return null;
+  return Blockly.DELETE_AREA_NONE;
 };
 
 /**
@@ -923,60 +936,10 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
-  this.markFocused();
-  if (Blockly.utils.isTargetInput(e)) {
-    Blockly.Touch.clearTouchIdentifier();
-    return;
+  var gesture = this.getGesture(e);
+  if (gesture) {
+    gesture.handleWsStart(e, this);
   }
-  Blockly.terminateDrag_();  // In case mouse-up event was lost.
-  Blockly.hideChaff();
-  var isTargetWorkspace = e.target && e.target.nodeName &&
-      (e.target.nodeName.toLowerCase() == 'svg' ||
-       e.target == this.svgBackground_);
-  if (isTargetWorkspace && Blockly.selected && !this.options.readOnly) {
-    // Clicking on the document clears the selection.
-    Blockly.selected.unselect();
-  }
-  if (Blockly.utils.isRightButton(e)) {
-    // Right-click.
-    this.showContextMenu_(e);
-    // This is to handle the case where the event is pretending to be a right
-    // click event but it was really a long press. In that case, we want to make
-    // sure any in progress drags are stopped.
-    Blockly.onMouseUp_(e);
-    // Since this was a click, not a drag, end the gesture immediately.
-    Blockly.Touch.clearTouchIdentifier();
-  } else if (this.scrollbar) {
-    this.dragMode_ = Blockly.DRAG_BEGIN;
-    // Record the current mouse position.
-    this.startDragMouseX = e.clientX;
-    this.startDragMouseY = e.clientY;
-    this.startDragMetrics = this.getMetrics();
-    this.startScrollX = this.scrollX;
-    this.startScrollY = this.scrollY;
-
-    this.setupDragSurface();
-    // If this is a touch event then bind to the mouseup so workspace drag mode
-    // is turned off and double move events are not performed on a block.
-    // See comment in inject.js Blockly.init_ as to why mouseup events are
-    // bound to the document instead of the SVG's surface.
-    if ('mouseup' in Blockly.Touch.TOUCH_MAP) {
-      Blockly.Touch.onTouchUpWrapper_ = Blockly.Touch.onTouchUpWrapper_ || [];
-      Blockly.Touch.onTouchUpWrapper_ = Blockly.Touch.onTouchUpWrapper_.concat(
-          Blockly.bindEventWithChecks_(document, 'mouseup', null,
-          Blockly.onMouseUp_));
-    }
-    Blockly.onMouseMoveWrapper_ = Blockly.onMouseMoveWrapper_ || [];
-    Blockly.onMouseMoveWrapper_ = Blockly.onMouseMoveWrapper_.concat(
-        Blockly.bindEventWithChecks_(document, 'mousemove', null,
-        Blockly.onMouseMove_));
-  } else {
-    // It was a click, but the workspace isn't draggable.
-    Blockly.Touch.clearTouchIdentifier();
-  }
-  // This event has been handled.  No need to bubble up to the document.
-  e.stopPropagation();
-  e.preventDefault();
 };
 
 /**
@@ -1013,10 +976,7 @@ Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
  * @return {boolean} True if currently dragging or scrolling.
  */
 Blockly.WorkspaceSvg.prototype.isDragging = function() {
-  return Blockly.dragMode_ == Blockly.DRAG_FREE ||
-      (Blockly.Flyout.startFlyout_ &&
-          Blockly.Flyout.startFlyout_.dragMode_ == Blockly.DRAG_FREE) ||
-      this.dragMode_ == Blockly.DRAG_FREE;
+  return this.currentGesture_ && this.currentGesture_.isDragging();
 };
 
 /**
@@ -1033,8 +993,11 @@ Blockly.WorkspaceSvg.prototype.isDraggable = function() {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
-  // TODO: Remove terminateDrag and compensate for coordinate skew during zoom.
-  Blockly.terminateDrag_();
+  // TODO: Remove gesture cancellation and compensate for coordinate skew during
+  // zoom.
+  if (this.currentGesture_) {
+    this.currentGesture_.cancel();
+  }
   // The vertical scroll distance that corresponds to a click of a zoom button.
   var PIXELS_PER_ZOOM_STEP = 50;
   var delta = -e.deltaY / PIXELS_PER_ZOOM_STEP;
@@ -1046,6 +1009,7 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
 
 /**
  * Calculate the bounding box for the blocks on the workspace.
+ * Coordinate system: workspace coordinates.
  *
  * @return {Object} Contains the position and size of the bounding box
  *   containing the blocks on the workspace.
@@ -1115,6 +1079,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   var menuOptions = [];
   var topBlocks = this.getTopBlocks(true);
   var eventGroup = Blockly.utils.genUid();
+  var ws = this;
 
   // Options to undo/redo previous action.
   var undoOption = {};
@@ -1224,6 +1189,9 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
         Blockly.Msg.DELETE_X_BLOCKS.replace('%1', String(deleteList.length)),
     enabled: deleteList.length > 0,
     callback: function() {
+      if (ws.currentGesture_) {
+        ws.currentGesture_.cancel();
+      }
       if (deleteList.length < 2 ) {
         deleteNext();
       } else {
@@ -1564,6 +1532,7 @@ Blockly.WorkspaceSvg.prototype.updateGridPattern_ = function() {
 /**
  * Return an object with all the metrics required to size scrollbars for a
  * top level workspace.  The following properties are computed:
+ * Coordinate system: pixel coordinates.
  * .viewHeight: Height of the visible rectangle,
  * .viewWidth: Width of the visible rectangle,
  * .contentHeight: Height of the contents,
@@ -1600,6 +1569,7 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
   var MARGIN = Blockly.Flyout.prototype.CORNER_RADIUS - 1;
   var viewWidth = svgSize.width - MARGIN;
   var viewHeight = svgSize.height - MARGIN;
+
   var blockBox = this.getBlocksBoundingBox();
 
   // Fix scale.
@@ -1781,6 +1751,57 @@ Blockly.WorkspaceSvg.prototype.getToolboxCategoryCallback = function(key) {
  */
 Blockly.WorkspaceSvg.prototype.removeToolboxCategoryCallback = function(key) {
   this.toolboxCategoryCallbacks_[key] = null;
+};
+
+/**
+ * Look up the gesture that is tracking this touch stream on this workspace.
+ * May create a new gesture.
+ * @param {!Event} e Mouse event or touch event
+ * @return {Blockly.Gesture} The gesture that is tracking this touch stream,
+ *     or null if no valid gesture exists.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getGesture = function(e) {
+  var isStart = (e.type == 'mousedown' || e.type == 'touchstart');
+
+  var gesture = this.currentGesture_;
+  if (gesture) {
+    if (isStart && gesture.hasStarted()) {
+      console.warn('tried to start the same gesture twice');
+      // That's funny.  We must have missed a mouse up.
+      // Cancel it, rather than try to retrieve all of the state we need.
+      gesture.cancel();
+      return null;
+    }
+    return gesture;
+  }
+
+  // No gesture existed on this workspace, but this looks like the start of a
+  // new gesture.
+  if (isStart) {
+    this.currentGesture_ = new Blockly.Gesture(e, this);
+    return this.currentGesture_;
+  }
+  // No gesture existed and this event couldn't be the start of a new gesture.
+  return null;
+};
+
+/**
+ * Clear the reference to the current gesture.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.clearGesture = function() {
+  this.currentGesture_ = null;
+};
+
+/**
+ * Cancel the current gesture, if one exists.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.cancelCurrentGesture = function() {
+  if (this.currentGesture_) {
+    this.currentGesture_.cancel();
+  }
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.

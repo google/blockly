@@ -33,6 +33,13 @@ goog.provide('Blockly.constants');
 Blockly.DRAG_RADIUS = 5;
 
 /**
+ * Number of pixels the mouse must move before a drag/scroll starts from the
+ * flyout.  Because the drag-intention is determined when this is reached, it is
+ * larger than Blockly.DRAG_RADIUS so that the drag-direction is clearer.
+ */
+Blockly.FLYOUT_DRAG_RADIUS = 10;
+
+/**
  * Maximum misalignment between connections for them to snap together.
  */
 Blockly.SNAP_RADIUS = 20;
@@ -207,6 +214,12 @@ Blockly.TOOLBOX_AT_LEFT = 2;
  */
 Blockly.TOOLBOX_AT_RIGHT = 3;
 
+/**
+ * ENUM representing that an event is not in any delete areas.
+ * Null for backwards compatibility reasons.
+ * @const
+ */
+Blockly.DELETE_AREA_NONE = null;
 
 /**
  * ENUM representing that an event is in the delete area of the trash can.

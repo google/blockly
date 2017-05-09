@@ -10,7 +10,7 @@ var path = process.cwd();
 var browser = webdriverio
     .remote(options)
     .init()
-    .url("file://" + path + "/tests/jsunit/index.html").pause(3000);
+    .url("file://" + path + "/tests/jsunit/index.html").pause(5000);
 
 
 browser

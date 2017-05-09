@@ -134,30 +134,36 @@ Blockly.FieldVariable.prototype.setValue = function(newValue) {
  * @this {Blockly.FieldVariable}
  */
 Blockly.FieldVariable.dropdownCreate = function() {
+  var variableNameList = [];
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {
     // Get a copy of the list, so that adding rename and new variable options
     // doesn't modify the workspace's list.
-    var variableList = this.sourceBlock_.workspace.getVariablesOfType('');
-  } else {
-    var variableList = [];
+
+    var variableModelList = this.sourceBlock_.workspace.getVariablesOfType('');
+    for (var i = 0; i < variableModelList.length; i++) {
+      variableNameList.push(variableModelList[i].name);
+    }
   }
   // Ensure that the currently selected variable is an option.
   var name = this.getText();
-  if (name && variableList.indexOf(name) == -1) {
-    variableList.push(name);
+  if (name && variableNameList.indexOf(name) == -1) {
+    variableNameList.push(name);
   }
-  variableList.sort(goog.string.caseInsensitiveCompare);
+  variableNameList.sort(goog.string.caseInsensitiveCompare);
 
-  this.renameVarItemIndex_ = variableList.length;
-  variableList.push(Blockly.Msg.RENAME_VARIABLE);
+  this.renameVarItemIndex_ = variableNameList.length;
+  variableNameList.push(Blockly.Msg.RENAME_VARIABLE);
 
-  this.deleteVarItemIndex_ = variableList.length;
-  variableList.push(Blockly.Msg.DELETE_VARIABLE.replace('%1', name));
+  this.deleteVarItemIndex_ = variableNameList.length;
+  variableNameList.push(Blockly.Msg.DELETE_VARIABLE.replace('%1', name));
   // Variables are not language-specific, use the name as both the user-facing
   // text and the internal representation.
   var options = [];
-  for (var i = 0; i < variableList.length; i++) {
-    options[i] = [variableList[i], variableList[i]];
+  for (var i = 0; i < variableNameList.length; i++) {
+    // TODO(marisaleung): Set options[i] to [name, uuid]. This requires
+    // changes where the variable gets set since the initialized value would be
+    // id.
+    options[i] = [variableNameList[i], variableNameList[i]];
   }
   return options;
 };

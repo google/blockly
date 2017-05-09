@@ -31,10 +31,12 @@ goog.provide('Blockly.WorkspaceSvg');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
 goog.require('Blockly.Gesture');
+goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Touch');
 goog.require('Blockly.Trashcan');
+goog.require('Blockly.VerticalFlyout');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
@@ -501,7 +503,11 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
     toolboxPosition: this.options.toolboxPosition
   };
   /** @type {Blockly.Flyout} */
-  this.flyout_ = new Blockly.Flyout(workspaceOptions);
+  if (this.horizontalLayout) {
+    this.flyout_ = new Blockly.HorizontalFlyout(workspaceOptions);
+  } else {
+    this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
+  }
   this.flyout_.autoClose = false;
 
   // Return the element  so that callers can place it in their desired

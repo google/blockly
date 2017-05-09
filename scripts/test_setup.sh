@@ -19,4 +19,5 @@ check_command scripts/get_chromedriver.sh
 sleep 10
 check_command scripts/selenium_connect.sh 
 sleep 10
+
 exit $EXIT_STATUS

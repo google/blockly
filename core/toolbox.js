@@ -183,6 +183,7 @@ Blockly.Toolbox.prototype.init = function() {
    * @type {!Blockly.Flyout}
    * @private
    */
+  this.flyout_ = null;
   if (workspace.horizontalLayout) {
     this.flyout_ = new Blockly.HorizontalFlyout(workspaceOptions);
   } else {

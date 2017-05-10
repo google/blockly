@@ -31,16 +31,16 @@ goog.provide('Blockly.WorkspaceSvg');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
 goog.require('Blockly.Gesture');
-goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Touch');
 goog.require('Blockly.Trashcan');
-goog.require('Blockly.VerticalFlyout');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
+// WorkspaceSvg also depends on VerticalFlyout and HorizontalFlyout, but
+// requiring them induces a circular dependency.
 
 goog.require('goog.array');
 goog.require('goog.dom');
@@ -502,7 +502,11 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
     horizontalLayout: this.horizontalLayout,
     toolboxPosition: this.options.toolboxPosition
   };
-  /** @type {Blockly.Flyout} */
+  /**
+   * @type {Blockly.Flyout}
+   * @private
+   */
+  this.flyout_ = null;
   if (this.horizontalLayout) {
     this.flyout_ = new Blockly.HorizontalFlyout(workspaceOptions);
   } else {

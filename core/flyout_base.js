@@ -27,7 +27,6 @@
 goog.provide('Blockly.Flyout');
 
 goog.require('Blockly.Block');
-goog.require('Blockly.Comment');
 goog.require('Blockly.Events');
 goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.Gesture');
@@ -355,6 +354,28 @@ Blockly.Flyout.prototype.updateDisplay_ = function() {
 };
 
 /**
+ * Update the view based on coordinates calculated in position().
+ * @param {number} width The computed width of the flyout's SVG group
+ * @param {number} height The computed height of the flyout's SVG group.
+ * @param {number} x The computed x origin of the flyout's SVG group.
+ * @param {number} y The computed y origin of the flyout's SVG group.
+ * @private
+ */
+Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
+  this.svgGroup_.setAttribute("width", width);
+  this.svgGroup_.setAttribute("height", height);
+  var transform = 'translate(' + x + 'px,' + y + 'px)';
+  Blockly.utils.setCssTransform(this.svgGroup_, transform);
+
+  // Update the scrollbar (if one exists).
+  if (this.scrollbar_) {
+    // Set the scrollbars origin to be the top left of the flyout.
+    this.scrollbar_.setOrigin(x, y);
+    this.scrollbar_.resize();
+  }
+};
+
+/**
  * Hide and empty the flyout.
  */
 Blockly.Flyout.prototype.hide = function() {
@@ -586,6 +607,88 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
     this.filterForCapacity_();
   }
   return newBlock;
+};
+
+/**
+ * Initialize the given button: move it to the correct location,
+ * add listeners, etc.
+ * @param {!Blockly.FlyoutButton} button The button to initialize and place.
+ * @param {number} x The x position of the cursor during this layout pass.
+ * @param {number} y The y position of the cursor during this layout pass.
+ * @private
+ */
+Blockly.Flyout.prototype.initFlyoutButton_ = function(button, x, y) {
+  var buttonSvg = button.createDom();
+  button.moveTo(x, y);
+  button.show();
+  // Clicking on a flyout button or label is a lot like clicking on the
+  // flyout background.
+  this.listeners_.push(Blockly.bindEventWithChecks_(buttonSvg, 'mousedown',
+       this, this.onMouseDown_));
+
+  this.buttons_.push(button);
+};
+
+/**
+ * Create and place a rectangle corresponding to the given block.
+ * @param {!Blockly.Block} block The block to associate the rect to.
+ * @param {number} x The x position of the cursor during this layout pass.
+ * @param {number} y The y position of the cursor during this layout pass.
+ * @param {!{height: number, width: number}} blockHW The height and width of the
+ *     block.
+ * @param {number} index The index into the background buttons list where this
+ *     rect should be placed.
+ * @return {!SVGElement} Newly created SVG element for the rectangle behind the
+ *     block.
+ * @private
+ */
+Blockly.Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
+  // Create an invisible rectangle under the block to act as a button.  Just
+  // using the block as a button is poor, since blocks have holes in them.
+  var rect = Blockly.utils.createSvgElement('rect',
+    {
+      'fill-opacity': 0,
+      'x': x,
+      'y': y,
+      'height': blockHW.height,
+      'width': blockHW.width
+    }, null);
+  rect.tooltip = block;
+  Blockly.Tooltip.bindMouseEvents(rect);
+  // Add the rectangles under the blocks, so that the blocks' tooltips work.
+  this.workspace_.getCanvas().insertBefore(rect, block.getSvgRoot());
+
+  block.flyoutRect_ = rect;
+  this.backgroundButtons_[index] = rect;
+  return rect;
+};
+
+/**
+ * Move a rectangle to sit exactly behind a block, taking into account tabs,
+ * hats, and any other protrusions we invent.
+ * @param {!SVGElement} rect The rectangle to move directly behind the block.
+ * @param {!Blockly.BlockSvg} block The block the rectangle should be behind.
+ * @private
+ */
+Blockly.Flyout.prototype.moveRectToBlock_ = function(rect, block) {
+  var blockHW = block.getHeightWidth();
+  rect.setAttribute('width', blockHW.width);
+  rect.setAttribute('height', blockHW.height);
+
+  // Blocks with output tabs are shifted a bit.
+  var tab = block.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
+  var blockXY = block.getRelativeToSurfaceXY();
+  rect.setAttribute('y', blockXY.y);
+  rect.setAttribute('x',
+      this.RTL ? blockXY.x - blockHW.width + tab : blockXY.x - tab);
+
+  // For hat blocks we want to shift them down by the hat height
+  // since the y coordinate is the corner, not the top of the hat.
+  var hatOffset =
+      block.startHat_ ? Blockly.BlockSvg.START_HAT_HEIGHT : 0;
+  if (hatOffset) {
+    block.moveBy(0, hatOffset);
+  }
 };
 
 /**

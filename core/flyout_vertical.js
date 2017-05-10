@@ -411,6 +411,7 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
  * Compute width of flyout.  Position button under each block.
  * For RTL: Lay out the blocks right-aligned.
  * @param {!Array<!Blockly.Block>} blocks The blocks to reflow.
+ * @private
  */
 Blockly.VerticalFlyout.prototype.reflowInternal_ = function(blocks) {
   this.workspace_.scale = this.targetWorkspace_.scale;

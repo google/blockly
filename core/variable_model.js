@@ -26,15 +26,18 @@
 
 goog.provide('Blockly.VariableModel');
 
+goog.require('goog.string');
+
+
 /**
  * Class for a variable model.
- * Holds information for the variable including name, id, and type. 
+ * Holds information for the variable including name, id, and type.
  * @param {!string} name The name of the variable. This must be unique across
  *     variables and procedures.
  * @param {?string} opt_type The type of the variable like 'int' or 'string'.
  *     Does not need to be unique. Field_variable can filter variables based on
  *     their type. This will default to '' which is a specific type.
- * @param {?string} opt_id The unique id of the variable. This will default to 
+ * @param {?string} opt_id The unique id of the variable. This will default to
  *     a UUID.
  * @see {Blockly.FieldVariable}
  * @constructor
@@ -72,4 +75,14 @@ Blockly.VariableModel = function(name, opt_type, opt_id) {
  */
 Blockly.VariableModel.prototype.getId = function() {
   return this.id_;
+};
+
+/**
+ * A custom compare function for the VariableModel objects.
+ * @param {Blockly.VariableModel} var1 First variable to compare.
+ * @param {Blockly.VariableModel} var2 Second variable to compare.
+ * @package
+ */
+Blockly.VariableModel.compareByName = function(var1, var2) {
+  return goog.string.caseInsensitiveCompare(var1.name, var2.name)
 };

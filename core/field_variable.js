@@ -32,6 +32,8 @@ goog.require('Blockly.Variables');
 goog.require('goog.asserts');
 goog.require('goog.string');
 
+var RENAME_VARIABLE_ID = 'RENAME_VARIABLE';
+var DELETE_VARIABLE_ID = 'DELETE_VARIABLE';
 
 /**
  * Class for a variable's dropdown field.
@@ -48,21 +50,6 @@ Blockly.FieldVariable = function(varname, opt_validator) {
   this.setValue(varname || '');
 };
 goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
-
-/**
- * The menu item index for the rename variable option.
- * @type {number}
- * @private
- */
-Blockly.FieldVariable.prototype.renameVarItemIndex_ = -1;
-
-/**
- * The menu item index for the delete variable option.
- * @type {number}
- * @private
- */
-Blockly.FieldVariable.prototype.deleteVarItemIndex_ = -1;
-
 
 /**
  * Install this dropdown on a block.
@@ -150,21 +137,21 @@ Blockly.FieldVariable.dropdownCreate = function() {
     variableNameList.push(name);
   }
   variableNameList.sort(goog.string.caseInsensitiveCompare);
-
-  this.renameVarItemIndex_ = variableNameList.length;
-  variableNameList.push(Blockly.Msg.RENAME_VARIABLE);
-
-  this.deleteVarItemIndex_ = variableNameList.length;
-  variableNameList.push(Blockly.Msg.DELETE_VARIABLE.replace('%1', name));
-  // Variables are not language-specific, use the name as both the user-facing
-  // text and the internal representation.
   var options = [];
   for (var i = 0; i < variableNameList.length; i++) {
-    // TODO(marisaleung): Set options[i] to [name, uuid]. This requires
-    // changes where the variable gets set since the initialized value would be
-    // id.
-    options[i] = [variableNameList[i], variableNameList[i]];
+    if (this.sourceBlock_ && this.sourceBlock_.workspace) {
+      var variable = this.sourceBlock_.workspace.getVariable(
+        variableNameList[i]);
+      if (variable) {
+        // Set the uuid as the internal representation of the variable.
+        options[i] = [variableNameList[i], variable.getId()];
+      }
+    }
   }
+
+  options.push([Blockly.Msg.RENAME_VARIABLE, RENAME_VARIABLE_ID]);
+  options.push([Blockly.Msg.DELETE_VARIABLE.replace('%1', name),
+               DELETE_VARIABLE_ID]);
   return options;
 };
 
@@ -177,10 +164,14 @@ Blockly.FieldVariable.dropdownCreate = function() {
  */
 Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
   var itemText = menuItem.getValue();
-  if (this.sourceBlock_) {
+  if (this.sourceBlock_ && this.sourceBlock_.workspace) {
     var workspace = this.sourceBlock_.workspace;
-    if (this.renameVarItemIndex_ >= 0 &&
-        menu.getChildAt(this.renameVarItemIndex_) === menuItem) {
+    var variable = workspace.getVariableById(itemText);
+    // If the item selected is a variable, set itemText to the variable name.
+    if (variable) {
+      itemText = variable.name;
+    }
+    else if (itemText == RENAME_VARIABLE_ID) {
       // Rename variable.
       var oldName = this.getText();
       Blockly.hideChaff();
@@ -192,8 +183,7 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
             }
           });
       return;
-    } else if (this.deleteVarItemIndex_ >= 0 &&
-        menu.getChildAt(this.deleteVarItemIndex_) === menuItem) {
+    } else if (itemText == DELETE_VARIABLE_ID) {
       // Delete variable.
       workspace.deleteVariable(this.getText());
       return;

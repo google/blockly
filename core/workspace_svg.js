@@ -886,13 +886,15 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
  *     variable immediately.
  * TODO: #468
  * @param {string} name The new variable's name.
+ * @return {?Blockly.VariableModel} The newly created variable.
  */
 Blockly.WorkspaceSvg.prototype.createVariable = function(name) {
-  Blockly.WorkspaceSvg.superClass_.createVariable.call(this, name);
+  var newVar = Blockly.WorkspaceSvg.superClass_.createVariable.call(this, name);
   // Don't refresh the toolbox if there's a drag in progress.
   if (this.toolbox_ && this.toolbox_.flyout_ && !this.currentGesture_) {
     this.toolbox_.refreshSelection();
   }
+  return newVar;
 };
 
 /**

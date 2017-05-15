@@ -24,6 +24,7 @@
  */
 'use strict';
 
+goog.require('Blockly.VariableMap');
 goog.provide('Blockly.Workspace');
 
 goog.require('goog.array');

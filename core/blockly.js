@@ -253,7 +253,8 @@ Blockly.onKeyDown_ = function(e) {
       // 'v' for paste.
       if (Blockly.clipboardXml_) {
         Blockly.Events.setGroup(true);
-        Blockly.clipboardSource_.paste(Blockly.clipboardXml_);
+        var block = Blockly.clipboardSource_.paste(Blockly.clipboardXml_);
+        if (block) block.select();
         Blockly.Events.setGroup(false);
       }
     } else if (e.keyCode == 90) {
@@ -315,7 +316,8 @@ Blockly.duplicate_ = function(block) {
 
   // Create a duplicate via a copy/paste operation.
   Blockly.copy_(block);
-  block.workspace.paste(Blockly.clipboardXml_);
+  var newBlock = block.workspace.paste(Blockly.clipboardXml_);
+  if (newBlock) newBlock.select();
 
   // Restore the clipboard.
   Blockly.clipboardXml_ = clipboardXml;

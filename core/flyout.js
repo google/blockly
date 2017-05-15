@@ -758,6 +758,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   }
 
   this.setVisible(true);
+  this.workspace_.rendered = false;
   // Create the blocks to be shown in this flyout.
   var contents = [];
   var gaps = [];
@@ -800,6 +801,12 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       }
     }
   }
+  this.workspace_.rendered = true;
+  var blocks = goog.object.getValues(this.workspace_.blockDB_);
+  for (var i = 0; i < blocks.length; i++) {
+    blocks[i].initSvg();
+  }
+  this.workspace_.render();
 
   this.layout_(contents, gaps);
 

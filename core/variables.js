@@ -32,6 +32,7 @@ goog.provide('Blockly.Variables');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly.constants');
+goog.require('Blockly.VariableModel');
 goog.require('Blockly.Workspace');
 goog.require('goog.string');
 
@@ -105,12 +106,8 @@ Blockly.Variables.allVariables = function(root) {
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 Blockly.Variables.flyoutCategory = function(workspace) {
-  var variableNameList = [];
   var variableModelList = workspace.getVariablesOfType('');
-  for (var i = 0; i < variableModelList.length; i++) {
-    variableNameList.push(variableModelList[i].name);
-  }
-  variableNameList.sort(goog.string.caseInsensitiveCompare);
+  variableModelList.sort(Blockly.VariableModel.compareByName);
 
   var xmlList = [];
   var button = goog.dom.createDom('button');
@@ -123,12 +120,13 @@ Blockly.Variables.flyoutCategory = function(workspace) {
 
   xmlList.push(button);
 
-  if (variableNameList.length > 0) {
+  if (variableModelList.length > 0) {
+    var firstVariable = variableModelList[0];
     if (Blockly.Blocks['variables_set']) {
       var gap = Blockly.Blocks['math_change'] ? 8 : 24;
       var blockText = '<xml>' +
             '<block type="variables_set" gap="' + gap + '">' +
-            '<field name="VAR">' + variableNameList[0] + '</field>' +
+            Blockly.Variables.generateVariableFieldXml_(firstVariable) +
             '</block>' +
             '</xml>';
       var block = Blockly.Xml.textToDom(blockText).firstChild;
@@ -138,7 +136,7 @@ Blockly.Variables.flyoutCategory = function(workspace) {
       var gap = Blockly.Blocks['variables_get'] ? 20 : 8;
       var blockText = '<xml>' +
           '<block type="math_change" gap="' + gap + '">' +
-          '<field name="VAR">' + variableNameList[0] + '</field>' +
+          Blockly.Variables.generateVariableFieldXml_(firstVariable) +
           '<value name="DELTA">' +
           '<shadow type="math_number">' +
           '<field name="NUM">1</field>' +
@@ -150,11 +148,11 @@ Blockly.Variables.flyoutCategory = function(workspace) {
       xmlList.push(block);
     }
 
-    for (var i = 0; i < variableNameList.length; i++) {
+    for (var i = 0, variable; variable = variableModelList[i]; i++) {
       if (Blockly.Blocks['variables_get']) {
         var blockText = '<xml>' +
             '<block type="variables_get" gap="8">' +
-            '<field name="VAR">' + variableNameList[i] + '</field>' +
+            Blockly.Variables.generateVariableFieldXml_(variable) +
             '</block>' +
             '</xml>';
         var block = Blockly.Xml.textToDom(blockText).firstChild;
@@ -279,4 +277,19 @@ Blockly.Variables.promptName = function(promptText, defaultText, callback) {
     }
     callback(newVar);
   });
+};
+
+/**
+ * Generate XML string for variable field.
+ * @param {!Blockly.VariableModel} variableModel The variable model to generate
+ *     an XML string from.
+ * @return {string} The generated XML.
+ * @private
+ */
+Blockly.Variables.generateVariableFieldXml_ = function(variableModel) {
+  var xmlString = '<field name="VAR" ' + 'variableType="' +
+      variableModel.type + '" id="' + variableModel.getId() + '">'+
+      variableModel.name +
+      '</field>';
+  return xmlString;
 };

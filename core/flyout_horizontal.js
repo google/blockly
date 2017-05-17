@@ -233,7 +233,7 @@ Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
     pos = Math.max(pos, 0);
     this.scrollbar_.set(pos);
     // When the flyout moves from a wheel event, hide WidgetDiv.
-    Blockly.WidgetDiv.hide(true);
+    Blockly.WidgetDiv.hide();
   }
 
   // Don't scroll the page.

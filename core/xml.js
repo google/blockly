@@ -520,6 +520,8 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         break;
       case 'data':
         block.data = xmlChild.textContent;
+        if (block.handle_data)
+          block.handle_data();
         break;
       case 'title':
         // Titles were renamed to field in December 2013.

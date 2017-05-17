@@ -19,6 +19,12 @@
  */
 'use strict';
 
+goog.require('goog.testing');
+goog.require('goog.testing.MockControl');
+
+var mockControl_;
+var saved_msg = Blockly.Msg.DELETE_VARIABLE;
+var workspace;
 var XML_TEXT = ['<xml xmlns="http://www.w3.org/1999/xhtml">',
   '  <block type="controls_repeat_ext" inline="true" x="21" y="23">',
   '    <value name="TIMES">',
@@ -46,6 +52,52 @@ var XML_TEXT = ['<xml xmlns="http://www.w3.org/1999/xhtml">',
   '  </block>',
   '</xml>'].join('\n');
 
+
+function xmlTest_setUpWithMockBlocks() {
+  workspace = new Blockly.Workspace();
+  mockControl_ = new goog.testing.MockControl();
+  // Need to define this because field_variable's dropdownCreate() calls replace
+  // on undefined value, Blockly.Msg.DELETE_VARIABLE. To fix this, define
+  // Blockly.Msg.DELETE_VARIABLE as %1 so the replace function finds the %1 it
+  // expects.
+  Blockly.Msg.DELETE_VARIABLE = '%1';
+}
+
+function xmlTest_tearDownWithMockBlocks() {
+  mockControl_.$tearDown();
+  workspace.dispose();
+  delete Blockly.Blocks.field_variable_test_block;
+  Blockly.Msg.DELETE_VARIABLE = saved_msg;
+}
+
+/**
+ * Check the values of the non variable field dom.
+ * @param {!Element} fieldDom The xml dom of the non variable field.
+ * @param {!string} name The expected name of the variable.
+ * @param {!string} text The expected text of the variable.
+ */
+function xmlTest_checkNonVariableField(fieldDom, name, text) {
+  assertEquals(text, fieldDom.textContent);
+  assertEquals(name, fieldDom.getAttribute('name'));
+  assertNull(fieldDom.getAttribute('id'));
+  assertNull(fieldDom.getAttribute('variableType'));
+}
+
+/**
+ * Check the values of the field dom.
+ * @param {!Element} fieldDom The xml dom of the variable field.
+ * @param {!string} name The expected name of the variable.
+ * @param {!string} type The expected type of the variable.
+ * @param {!string} id The expected id of the variable.
+ * @param {!string} text The expected text of the variable.
+ */
+function xmlTest_checkVariableDomValues(fieldDom, name, type, id, text) {
+  assertEquals(name, fieldDom.getAttribute('name'));
+  assertEquals(type, fieldDom.getAttribute('variableType'));
+  assertEquals(id, fieldDom.getAttribute('id'));
+  assertEquals(text, fieldDom.textContent);
+}
+
 function test_textToDom() {
   var dom = Blockly.Xml.textToDom(XML_TEXT);
   assertEquals('XML tag', 'xml', dom.nodeName);
@@ -68,7 +120,7 @@ function test_domToWorkspace() {
     }
   };
 
-  var workspace = new Blockly.Workspace();
+  workspace = new Blockly.Workspace();
   try {
     var dom = Blockly.Xml.textToDom(
         '<xml xmlns="http://www.w3.org/1999/xhtml">' +
@@ -110,7 +162,7 @@ function test_appendDomToWorkspace() {
         '  <block type="test_block" inline="true" x="21" y="23">' +
         '  </block>' +
         '</xml>');
-    var workspace = new Blockly.Workspace();
+    workspace = new Blockly.Workspace();
     Blockly.Xml.appendDomToWorkspace(dom, workspace);
     assertEquals('Block count', 1, workspace.getAllBlocks().length);
     var newBlockIds = Blockly.Xml.appendDomToWorkspace(dom, workspace);
@@ -120,4 +172,70 @@ function test_appendDomToWorkspace() {
     delete Blockly.Blocks.test_block;
     workspace.dispose();
   }
+}
+
+function test_blockToDom_fieldToDom_trivial() {
+  Blockly.defineBlocksWithJsonArray([{
+    'type': 'field_variable_test_block',
+    'message0': '%1',
+    'args0': [
+      {
+        'type': 'field_variable',
+        'name': 'VAR',
+        'variable': 'item'
+      }
+    ],
+  }]);
+  xmlTest_setUpWithMockBlocks()
+  workspace.createVariable('name1', 'type1', 'id1');
+  var block = new Blockly.Block(workspace, 'field_variable_test_block');
+  block.inputList[0].fieldRow[0].setValue('name1');
+  var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
+  xmlTest_checkVariableDomValues(resultFieldDom, 'VAR', 'type1', 'id1', 'name1')
+  xmlTest_tearDownWithMockBlocks()
+}
+
+function test_blockToDom_fieldToDom_defaultCase() {
+  // Expect type is '' and id is '1' since we don't specify type and id.
+  Blockly.defineBlocksWithJsonArray([{
+    'type': 'field_variable_test_block',
+    'message0': '%1',
+    'args0': [
+      {
+        'type': 'field_variable',
+        'name': 'VAR',
+        'variable': 'item'
+      }
+    ],
+  }]);
+  xmlTest_setUpWithMockBlocks()
+  var mockGenUid = mockControl_.createMethodMock(Blockly.utils, 'genUid');
+  mockGenUid().$returns('1');
+  mockGenUid().$replay();
+  workspace.createVariable('name1');
+  var block = new Blockly.Block(workspace, 'field_variable_test_block');
+  block.inputList[0].fieldRow[0].setValue('name1');
+  var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
+  xmlTest_checkVariableDomValues(resultFieldDom, 'VAR', '', '1', 'name1')
+  xmlTest_tearDownWithMockBlocks()
+}
+
+function test_blockToDom_fieldToDom_notAFieldVariable() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "field_angle_test_block",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_angle",
+        "name": "VAR",
+        "angle": 90
+      }
+    ],
+  }]);
+  xmlTest_setUpWithMockBlocks()
+  var block = new Blockly.Block(workspace, 'field_angle_test_block');
+  var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
+  xmlTest_checkNonVariableField(resultFieldDom, 'VAR', '90');
+  delete Blockly.Blocks.field_angle_block;
+  xmlTest_tearDownWithMockBlocks()
 }

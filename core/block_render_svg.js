@@ -256,6 +256,28 @@ Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
     (Blockly.BlockSvg.DISTANCE_45_OUTSIDE + 0.5);
 
 /**
+ * Returns a bounding box describing the dimensions of this block
+ * and any blocks stacked below it.
+ * @return {!{height: number, width: number}} Object with height and width
+ *    properties in workspace units.
+ */
+Blockly.BlockSvg.prototype.getHeightWidth = function() {
+  var height = this.height;
+  var width = this.width;
+  // Recursively add size of subsequent blocks.
+  var nextBlock = this.getNextBlock();
+  if (nextBlock) {
+    var nextHeightWidth = nextBlock.getHeightWidth();
+    height += nextHeightWidth.height - 4;  // Height of tab.
+    width = Math.max(width, nextHeightWidth.width);
+  } else if (!this.nextConnection && !this.outputConnection) {
+    // Add a bit of margin under blocks with no bottom tab.
+    height += 2;
+  }
+  return {height: height, width: width};
+};
+
+/**
  * Render the block.
  * Lays out and reflows a block based on its contents and settings.
  * @param {boolean=} opt_bubble If false, just render this block.

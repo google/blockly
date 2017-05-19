@@ -91,6 +91,13 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
     if (field.name && field.EDITABLE) {
       var container = goog.dom.createDom('field', null, field.getValue());
       container.setAttribute('name', field.name);
+      if (field instanceof Blockly.FieldVariable) {
+        var variable = block.workspace.getVariable(field.getValue());
+        if (variable) {
+          container.setAttribute('id', variable.getId());
+          container.setAttribute('variableType', variable.type);
+        }
+      }
       element.appendChild(container);
     }
   }

@@ -147,7 +147,7 @@
 	"MATH_TRIG_TOOLTIP_ACOS": "返回一个数的反余弦值。",
 	"MATH_TRIG_TOOLTIP_ATAN": "返回指定角度的反正切值。",
 	"MATH_CONSTANT_HELPURL": "https://zh.wikipedia.org/wiki/数学常数",
-	"MATH_CONSTANT_TOOLTIP": "返回一个常见常量：π (3.141......)，e (2.718...)、φ (1.618...)、 sqrt(2) (1.414......)、sqrt(½) (0.707......)或 ∞（无穷大）。",
+	"MATH_CONSTANT_TOOLTIP": "返回一个常见常量：π (3.141…)、e (2.718…)、φ (1.618…)、平方根 (1.414…)、开平方根 (0.707…)或∞ (infinity)。",
 	"MATH_IS_EVEN": "是偶数",
 	"MATH_IS_ODD": "是奇数",
 	"MATH_IS_PRIME": "是质数",

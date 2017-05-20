@@ -11,7 +11,8 @@
 			"아라",
 			"Geraki",
 			"Ανώνυμος Βικιπαιδιστής",
-			"GR"
+			"GR",
+			"Stam.nikos"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "αντικείμενο",
@@ -21,11 +22,11 @@
 	"REMOVE_COMMENT": "Αφαίρεσε Το Σχόλιο",
 	"EXTERNAL_INPUTS": "Εξωτερικές Είσοδοι",
 	"INLINE_INPUTS": "Εσωτερικές Είσοδοι",
-	"DELETE_BLOCK": "Διέγραψε Το Μπλοκ",
-	"DELETE_X_BLOCKS": "Διέγραψε %1 Μπλοκ",
-	"DELETE_ALL_BLOCKS": "Να διαγραφούν και τα %1 μπλοκ?",
+	"DELETE_BLOCK": "Διάγραψε Το Μπλοκ",
+	"DELETE_X_BLOCKS": "Διάγραψε %1 Μπλοκ",
+	"DELETE_ALL_BLOCKS": "Να διαγραφούν και τα %1 μπλοκ;",
 	"COLLAPSE_BLOCK": "Σύμπτυξε Το Μπλοκ",
-	"COLLAPSE_ALL": "Σύμπτυξτε Όλα Τα Μπλοκ",
+	"COLLAPSE_ALL": "Σύμπτυξε Όλα Τα Μπλοκ",
 	"EXPAND_BLOCK": "Επέκτεινε Το Μπλοκ",
 	"EXPAND_ALL": "Επέκτεινε Όλα Τα Μπλοκ",
 	"DISABLE_BLOCK": "Απενεργοποίησε Το Μπλοκ",

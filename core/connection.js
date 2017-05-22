@@ -598,6 +598,7 @@ Blockly.Connection.prototype.setCheck = function(check) {
     if (!goog.isArray(check)) {
       check = [check];
     }
+    /** @type {Array.<string>} */
     this.check_ = check;
     this.onCheckChanged_();
   } else {

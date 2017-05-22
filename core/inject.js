@@ -362,15 +362,16 @@ Blockly.inject.bindDocumentEvents_ = function() {
  * @private
  */
 Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
-  workspace.loadAudio_(
+  var audioMgr = workspace.getAudioManager();
+  audioMgr.load(
       [pathToMedia + 'click.mp3',
        pathToMedia + 'click.wav',
        pathToMedia + 'click.ogg'], 'click');
-  workspace.loadAudio_(
+  audioMgr.load(
       [pathToMedia + 'disconnect.wav',
        pathToMedia + 'disconnect.mp3',
        pathToMedia + 'disconnect.ogg'], 'disconnect');
-  workspace.loadAudio_(
+  audioMgr.load(
       [pathToMedia + 'delete.mp3',
        pathToMedia + 'delete.ogg',
        pathToMedia + 'delete.wav'], 'delete');
@@ -381,7 +382,7 @@ Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
     while (soundBinds.length) {
       Blockly.unbindEvent_(soundBinds.pop());
     }
-    workspace.preloadAudio_();
+    audioMgr.preload();
   };
 
   // These are bound on mouse/touch events with Blockly.bindEventWithChecks_, so

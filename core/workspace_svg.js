@@ -36,6 +36,7 @@ goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Touch');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.Workspace');
+goog.require('Blockly.WorkspaceAudio');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
@@ -78,18 +79,19 @@ Blockly.WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface
       this.workspaceDragSurface_ && Blockly.utils.is3dSupported();
 
   /**
-   * Database of pre-loaded sounds.
-   * @private
-   * @const
-   */
-  this.SOUNDS_ = Object.create(null);
-  /**
    * List of currently highlighted blocks.  Block highlighting is often used to
    * visually mark blocks currently being executed.
    * @type !Array.<!Blockly.BlockSvg>
    * @private
    */
   this.highlightedBlocks_ = [];
+
+  /**
+   * Object in charge of loading, storing, and playing audio for a workspace.
+   * @type {Blockly.WorkspaceAudio}
+   * @private
+   */
+  this.audioManager_ = new Blockly.WorkspaceAudio(options.parentWorkspace);
 
   this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
       Blockly.Variables.flyoutCategory);
@@ -221,13 +223,6 @@ Blockly.WorkspaceSvg.prototype.useWorkspaceDragSurface_ = false;
  * @private
  */
 Blockly.WorkspaceSvg.prototype.isDragSurfaceActive_ = false;
-
-/**
- * Time that the last sound was played.
- * @type {Date}
- * @private
- */
-Blockly.WorkspaceSvg.prototype.lastSound_ = null;
 
 /**
  * Last known position of the page scroll.
@@ -1213,92 +1208,6 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
 };
 
 /**
- * Load an audio file.  Cache it, ready for instantaneous playing.
- * @param {!Array.<string>} filenames List of file types in decreasing order of
- *   preference (i.e. increasing size).  E.g. ['media/go.mp3', 'media/go.wav']
- *   Filenames include path from Blockly's root.  File extensions matter.
- * @param {string} name Name of sound.
- * @private
- */
-Blockly.WorkspaceSvg.prototype.loadAudio_ = function(filenames, name) {
-  if (!filenames.length) {
-    return;
-  }
-  try {
-    var audioTest = new window['Audio']();
-  } catch (e) {
-    // No browser support for Audio.
-    // IE can throw an error even if the Audio object exists.
-    return;
-  }
-  var sound;
-  for (var i = 0; i < filenames.length; i++) {
-    var filename = filenames[i];
-    var ext = filename.match(/\.(\w+)$/);
-    if (ext && audioTest.canPlayType('audio/' + ext[1])) {
-      // Found an audio format we can play.
-      sound = new window['Audio'](filename);
-      break;
-    }
-  }
-  if (sound && sound.play) {
-    this.SOUNDS_[name] = sound;
-  }
-};
-
-/**
- * Preload all the audio files so that they play quickly when asked for.
- * @private
- */
-Blockly.WorkspaceSvg.prototype.preloadAudio_ = function() {
-  for (var name in this.SOUNDS_) {
-    var sound = this.SOUNDS_[name];
-    sound.volume = .01;
-    sound.play();
-    sound.pause();
-    // iOS can only process one sound at a time.  Trying to load more than one
-    // corrupts the earlier ones.  Just load one and leave the others uncached.
-    if (goog.userAgent.IPAD || goog.userAgent.IPHONE) {
-      break;
-    }
-  }
-};
-
-/**
- * Play a named sound at specified volume.  If volume is not specified,
- * use full volume (1).
- * @param {string} name Name of sound.
- * @param {number=} opt_volume Volume of sound (0-1).
- */
-Blockly.WorkspaceSvg.prototype.playAudio = function(name, opt_volume) {
-  var sound = this.SOUNDS_[name];
-  if (sound) {
-    // Don't play one sound on top of another.
-    var now = new Date;
-    if (now - this.lastSound_ < Blockly.SOUND_LIMIT) {
-      return;
-    }
-    this.lastSound_ = now;
-    var mySound;
-    var ie9 = goog.userAgent.DOCUMENT_MODE &&
-              goog.userAgent.DOCUMENT_MODE === 9;
-    if (ie9 || goog.userAgent.IPAD || goog.userAgent.ANDROID) {
-      // Creating a new audio node causes lag in IE9, Android and iPad. Android
-      // and IE9 refetch the file from the server, iPad uses a singleton audio
-      // node which must be deleted and recreated for each new audio tag.
-      mySound = sound;
-    } else {
-      mySound = sound.cloneNode();
-    }
-    mySound.volume = (opt_volume === undefined ? 1 : opt_volume);
-    mySound.play();
-  } else if (this.options.parentWorkspace) {
-    // Maybe a workspace on a lower level knows about this sound.
-    this.options.parentWorkspace.playAudio(name, opt_volume);
-  }
-};
-
-/**
  * Modify the block tree on the existing toolbox.
  * @param {Node|string} tree DOM tree of blocks, or text representation of same.
  */
@@ -1804,6 +1713,15 @@ Blockly.WorkspaceSvg.prototype.cancelCurrentGesture = function() {
   if (this.currentGesture_) {
     this.currentGesture_.cancel();
   }
+};
+
+/**
+ * Get the audio manager for this workspace.
+ * @return {Blockly.WorkspaceAudio} The audio manager for this workspace.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getAudioManager = function() {
+  return this.audioManager_;
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.

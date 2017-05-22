@@ -884,7 +884,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
  * Play some UI effects (sound, animation) when disposing of a block.
  */
 Blockly.BlockSvg.prototype.disposeUiEffect = function() {
-  this.workspace.playAudio('delete');
+  this.workspace.getAudioManager().play('delete');
 
   var xy = this.workspace.getSvgXY(/** @type {!Element} */ (this.svgGroup_));
   // Deeply clone the current block.
@@ -933,7 +933,7 @@ Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl, start, workspaceScale) {
  * Play some UI effects (sound, ripple) after a connection has been established.
  */
 Blockly.BlockSvg.prototype.connectionUiEffect = function() {
-  this.workspace.playAudio('click');
+  this.workspace.getAudioManger().play('click');
   if (this.workspace.scale < 1) {
     return;  // Too small to care about visual effects.
   }
@@ -981,7 +981,7 @@ Blockly.BlockSvg.connectionUiStep_ = function(ripple, start, workspaceScale) {
  * Play some UI effects (sound, animation) when disconnecting a block.
  */
 Blockly.BlockSvg.prototype.disconnectUiEffect = function() {
-  this.workspace.playAudio('disconnect');
+  this.workspace.getAudioManager().play('disconnect');
   if (this.workspace.scale < 1) {
     return;  // Too small to care about visual effects.
   }

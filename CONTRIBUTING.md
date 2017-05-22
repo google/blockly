@@ -17,6 +17,8 @@ need to be sure of various other things—for instance that you'll tell us if yo
 know that your code infringes on other people's patents. You don't have to sign
 the CLA until after you've submitted your code for review and a member has
 approved it, but you must do it before we can put your code into our codebase.
+
+### Larger changes
 Before you start working on a larger contribution, you should get in touch with
 us first through the issue tracker with your idea so that we can help out and
 possibly guide you. Coordinating up front makes it much easier to avoid

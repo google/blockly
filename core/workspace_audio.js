@@ -129,7 +129,8 @@ Blockly.WorkspaceAudio.prototype.play = function(name, opt_volume) {
   if (sound) {
     // Don't play one sound on top of another.
     var now = new Date;
-    if (now - this.lastSound_ < Blockly.SOUND_LIMIT) {
+    if (this.lastSound_ != null &&
+        now - this.lastSound_ < Blockly.SOUND_LIMIT) {
       return;
     }
     this.lastSound_ = now;

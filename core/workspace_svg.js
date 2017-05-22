@@ -39,6 +39,8 @@ goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
+// WorkspaceSvg also depends on VerticalFlyout and HorizontalFlyout, but
+// requiring them induces a circular dependency.
 
 goog.require('goog.array');
 goog.require('goog.dom');
@@ -500,8 +502,16 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
     horizontalLayout: this.horizontalLayout,
     toolboxPosition: this.options.toolboxPosition
   };
-  /** @type {Blockly.Flyout} */
-  this.flyout_ = new Blockly.Flyout(workspaceOptions);
+  /**
+   * @type {Blockly.Flyout}
+   * @private
+   */
+  this.flyout_ = null;
+  if (this.horizontalLayout) {
+    this.flyout_ = new Blockly.HorizontalFlyout(workspaceOptions);
+  } else {
+    this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
+  }
   this.flyout_.autoClose = false;
 
   // Return the element  so that callers can place it in their desired

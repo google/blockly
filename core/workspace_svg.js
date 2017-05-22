@@ -423,6 +423,11 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.zoomControls_ = null;
   }
 
+  if (this.audioManager_) {
+    this.audioManager_.dispose();
+    this.audioManager_ = null;
+  }
+
   if (this.toolboxCategoryCallbacks_) {
     this.toolboxCategoryCallbacks_ = null;
   }

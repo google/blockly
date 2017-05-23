@@ -62,12 +62,12 @@ function workspaceTest_tearDownWithMockBlocks() {
 
 /**
  * Create a test get_var_block.
- * @param {?string} variable The string to put into the variable field.
+ * @param {?string} variable_name The string to put into the variable field.
  * @return {!Blockly.Block} The created block.
  */
-function createMockBlock(variable) {
+function createMockBlock(variable_name) {
   var block = new Blockly.Block(workspace, 'get_var_block');
-  block.inputList[0].fieldRow[0].setValue(variable);
+  block.inputList[0].fieldRow[0].setValue(variable_name);
   return block;
 }
 

@@ -186,13 +186,13 @@ function test_blockToDom_fieldToDom_trivial() {
       }
     ],
   }]);
-  xmlTest_setUpWithMockBlocks()
+  xmlTest_setUpWithMockBlocks();
   workspace.createVariable('name1', 'type1', 'id1');
   var block = new Blockly.Block(workspace, 'field_variable_test_block');
   block.inputList[0].fieldRow[0].setValue('name1');
   var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
-  xmlTest_checkVariableDomValues(resultFieldDom, 'VAR', 'type1', 'id1', 'name1')
-  xmlTest_tearDownWithMockBlocks()
+  xmlTest_checkVariableDomValues(resultFieldDom, 'VAR', 'type1', 'id1', 'name1');
+  xmlTest_tearDownWithMockBlocks();
 }
 
 function test_blockToDom_fieldToDom_defaultCase() {
@@ -207,7 +207,7 @@ function test_blockToDom_fieldToDom_defaultCase() {
       }
     ],
   }]);
-  xmlTest_setUpWithMockBlocks()
+  xmlTest_setUpWithMockBlocks();
   var mockGenUid = mockControl_.createMethodMock(Blockly.utils, 'genUid');
   mockGenUid().$returns('1');
   mockGenUid().$replay();
@@ -216,8 +216,8 @@ function test_blockToDom_fieldToDom_defaultCase() {
   block.inputList[0].fieldRow[0].setValue('name1');
   var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
   // Expect type is '' and id is '1' since we don't specify type and id.
-  xmlTest_checkVariableDomValues(resultFieldDom, 'VAR', '', '1', 'name1')
-  xmlTest_tearDownWithMockBlocks()
+  xmlTest_checkVariableDomValues(resultFieldDom, 'VAR', '', '1', 'name1');
+  xmlTest_tearDownWithMockBlocks();
 }
 
 function test_blockToDom_fieldToDom_notAFieldVariable() {
@@ -232,10 +232,10 @@ function test_blockToDom_fieldToDom_notAFieldVariable() {
       }
     ],
   }]);
-  xmlTest_setUpWithMockBlocks()
+  xmlTest_setUpWithMockBlocks();
   var block = new Blockly.Block(workspace, 'field_angle_test_block');
   var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
   xmlTest_checkNonVariableField(resultFieldDom, 'VAR', '90');
   delete Blockly.Blocks.field_angle_block;
-  xmlTest_tearDownWithMockBlocks()
+  xmlTest_tearDownWithMockBlocks();
 }

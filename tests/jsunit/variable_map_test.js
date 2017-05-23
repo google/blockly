@@ -103,7 +103,7 @@ function test_createVariableTrivial() {
 function test_createVariableAlreadyExists() {
   // Expect that when the variable already exists, the variableMap_ is unchanged.
   variableMapTest_setUp();
-  var var_1 = variable_map.createVariable('name1', 'type1', 'id1');
+  variable_map.createVariable('name1', 'type1', 'id1');
 
   // Assert there is only one variable in the variable_map.
   var keys = Object.keys(variable_map.variableMap_);

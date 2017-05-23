@@ -1671,6 +1671,15 @@ Blockly.WorkspaceSvg.prototype.getButtonCallback = function(key) {
   return this.flyoutButtonCallbacks_[key];
 };
 
+/**
+ * Convenience method to hide the scrollbars on the workspace. This method has
+ * no effect if the workspace's options had scrollbars set to false.
+ * @param {boolean} visible true to show the scrollbars, otherwise false.
+ */
+Blockly.WorkspaceSvg.prototype.setScrollbarsVisible = function(visible) {
+  this.scrollbar && this.scrollbar.setContainerVisible(visible)
+};
+
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.WorkspaceSvg.prototype['setVisible'] =
     Blockly.WorkspaceSvg.prototype.setVisible;

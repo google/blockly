@@ -711,7 +711,9 @@ Blockly.Flyout.prototype.updateDisplay_ = function() {
   this.svgGroup_.style.display = show ? 'block' : 'none';
   // Update the scrollbar's visiblity too since it should mimic the
   // flyout's visibility.
-  this.scrollbar_.setContainerVisible(show);
+  if (this.scrollbar_) {
+    this.scrollbar_.setContainerVisible(show);
+  }
 };
 
 /**
@@ -721,7 +723,9 @@ Blockly.Flyout.prototype.hide = function() {
   if (!this.isVisible()) {
     return;
   }
-  Blockly.mainWorkspace.scrollbar.setContainerVisible(true);
+  if (Blockly.mainWorkspace) {
+    Blockly.mainWorkspace.setScrollbarsVisible(true);
+  }
   this.setVisible(false);
   // Delete all the event listeners.
   for (var x = 0, listen; listen = this.listeners_[x]; x++) {
@@ -742,7 +746,9 @@ Blockly.Flyout.prototype.hide = function() {
  *     Variables and procedures have a custom set of blocks.
  */
 Blockly.Flyout.prototype.show = function(xmlList) {
-  Blockly.mainWorkspace.scrollbar.setContainerVisible(false);  // hide parent's scrollbars
+  if (Blockly.mainWorkspace) {
+    Blockly.mainWorkspace.setScrollbarsVisible(false);  // hide parent's scrollbars
+  }
   this.workspace_.setResizesEnabled(false);
   this.hide();
   this.clearOldBlocks_();

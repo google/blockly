@@ -22,6 +22,9 @@
  * @author sll@google.com (Sean Lip)
  */
 
+goog.provide('blocklyApp.TranslatePipe');
+
+
 blocklyApp.TranslatePipe = ng.core.Pipe({
   name: 'translate'
 })

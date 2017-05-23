@@ -71,13 +71,13 @@ class Gen_uncompressed(threading.Thread):
   """Generate a JavaScript file that loads Blockly's raw files.
   Runs in a separate thread.
   """
-  def __init__(self, search_paths):
+  def __init__(self, search_paths, target_filename):
     threading.Thread.__init__(self)
     self.search_paths = search_paths
+    self.target_filename = target_filename
 
   def run(self):
-    target_filename = 'blockly_uncompressed.js'
-    f = open(target_filename, 'w')
+    f = open(self.target_filename, 'w')
     f.write(HEADER)
     f.write("""
 var isNodeJS = !!(typeof module !== 'undefined' && module.exports &&
@@ -92,7 +92,7 @@ window.BLOCKLY_DIR = (function() {
   if (!isNodeJS) {
     // Find name of current directory.
     var scripts = document.getElementsByTagName('script');
-    var re = new RegExp('(.+)[\/]blockly_uncompressed\.js$');
+    var re = new RegExp('(.+)[\/]blockly_(.+)uncompressed\.js$');
     for (var i = 0, script; script = scripts[i]; i++) {
       var match = re.exec(script.src);
       if (match) {
@@ -159,7 +159,7 @@ if (isNodeJS) {
 }
 """)
     f.close()
-    print("SUCCESS: " + target_filename)
+    print("SUCCESS: " + self.target_filename)
 
 
 class Gen_compressed(threading.Thread):
@@ -174,6 +174,7 @@ class Gen_compressed(threading.Thread):
 
   def run(self):
     self.gen_core()
+    self.gen_accessible()
     self.gen_blocks()
     self.gen_generator("javascript")
     self.gen_generator("python")
@@ -197,6 +198,33 @@ class Gen_compressed(threading.Thread):
     # Read in all the source files.
     filenames = calcdeps.CalculateDependencies(self.search_paths,
         [os.path.join("core", "blockly.js")])
+    for filename in filenames:
+      # Filter out the Closure files (the compiler will add them).
+      if filename.startswith(os.pardir + os.sep):  # '../'
+        continue
+      f = open(filename)
+      params.append(("js_code", "".join(f.readlines())))
+      f.close()
+
+    self.do_compile(params, target_filename, filenames, "")
+
+  def gen_accessible(self):
+    target_filename = "blockly_accessible_compressed.js"
+    # Define the parameters for the POST request.
+    params = [
+        ("compilation_level", "SIMPLE_OPTIMIZATIONS"),
+        ("use_closure_library", "true"),
+        ("language_out", "ES5"),
+        ("output_format", "json"),
+        ("output_info", "compiled_code"),
+        ("output_info", "warnings"),
+        ("output_info", "errors"),
+        ("output_info", "statistics"),
+      ]
+
+    # Read in all the source files.
+    filenames = calcdeps.CalculateDependencies(self.search_paths,
+        [os.path.join("accessible", "app.component.js")])
     for filename in filenames:
       # Filter out the Closure files (the compiler will add them).
       if filename.startswith(os.pardir + os.sep):  # '../'
@@ -456,14 +484,17 @@ if __name__ == "__main__":
 developers.google.com/blockly/guides/modify/web/closure""")
     sys.exit(1)
 
-  search_paths = calcdeps.ExpandDirectories(
+  core_search_paths = calcdeps.ExpandDirectories(
       ["core", os.path.join(os.path.pardir, "closure-library")])
+  full_search_paths = calcdeps.ExpandDirectories(
+      ["accessible", "core", os.path.join(os.path.pardir, "closure-library")])
 
   # Run both tasks in parallel threads.
   # Uncompressed is limited by processor speed.
   # Compressed is limited by network and server speed.
-  Gen_uncompressed(search_paths).start()
-  Gen_compressed(search_paths).start()
+  Gen_uncompressed(core_search_paths, 'blockly_uncompressed.js').start()
+  Gen_uncompressed(full_search_paths, 'blockly_accessible_uncompressed.js').start()
+  Gen_compressed(full_search_paths).start()
 
   # This is run locally in a separate thread.
   Gen_langfiles().start()

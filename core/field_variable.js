@@ -30,6 +30,7 @@ goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.Msg');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Variables');
+goog.require('Blockly.VariableModel');
 goog.require('goog.asserts');
 goog.require('goog.string');
 

@@ -25,6 +25,16 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
+goog.provide('blocklyApp.TreeService');
+
+goog.require('blocklyApp.UtilsService');
+
+goog.require('blocklyApp.AudioService');
+goog.require('blocklyApp.BlockConnectionService');
+goog.require('blocklyApp.BlockOptionsModalService');
+goog.require('blocklyApp.NotificationsService');
+
+
 blocklyApp.TreeService = ng.core.Class({
   constructor: [
     blocklyApp.AudioService,

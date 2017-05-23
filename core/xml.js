@@ -42,11 +42,29 @@ goog.require('goog.dom');
  */
 Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
   var xml = goog.dom.createDom('xml');
+  xml.appendChild(Blockly.Xml.variablesToDom(workspace.getAllVariables()));
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
     xml.appendChild(Blockly.Xml.blockToDomWithXY(block, opt_noId));
   }
   return xml;
+};
+
+/**
+ * Encode a list of variables as XML.
+ * @param {!Array.<!Blockly.VariableModel>} variableList List of all variable
+ *     models.
+ * @return {!Element} List of XML elements.
+ */
+Blockly.Xml.variablesToDom = function(variableList) {
+  var variables = goog.dom.createDom('variables');
+  for (var i = 0, variable; variable = variableList[i]; i++) {
+    var element = goog.dom.createDom('variable', null, variable.name);
+    element.setAttribute('type', variable.type);
+    element.setAttribute('id', variable.getId());
+    variables.appendChild(element);
+  }
+  return variables;
 };
 
 /**

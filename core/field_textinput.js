@@ -67,6 +67,13 @@ Blockly.FieldTextInput.prototype.CURSOR = 'text';
 Blockly.FieldTextInput.prototype.spellcheck_ = true;
 
 /**
+ * The value of the field.
+ * @type {?string}
+ * @private
+ */
+Blockly.FieldTextInput.prototype.value_ = null;
+
+/**
  * Close the input widget if this input is being deleted.
  */
 Blockly.FieldTextInput.prototype.dispose = function() {
@@ -92,6 +99,18 @@ Blockly.FieldTextInput.prototype.setValue = function(newValue) {
     }
   }
   Blockly.Field.prototype.setValue.call(this, newValue);
+  if (newValue !== null) {
+    this.value_ = newValue;
+  }
+};
+
+/**
+ * Get the value of this field.
+ * @returns {?string}
+ * @override
+ */
+Blockly.FieldTextInput.prototype.getValue = function() {
+  return this.value_;
 };
 
 /**

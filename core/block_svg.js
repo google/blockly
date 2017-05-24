@@ -28,6 +28,7 @@ goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.ContextMenu');
+goog.require('Blockly.Grid');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -404,11 +405,11 @@ Blockly.BlockSvg.prototype.snapToGrid = function() {
   if (this.isInFlyout) {
     return;  // Don't move blocks around in a flyout.
   }
-  if (!this.workspace.options.gridOptions ||
-      !this.workspace.options.gridOptions['snap']) {
+  var grid = this.workspace.getGrid();
+  if (!grid || !grid.shouldSnap()) {
     return;  // Config says no snapping.
   }
-  var spacing = this.workspace.options.gridOptions['spacing'];
+  var spacing = grid.getSpacing();
   var half = spacing / 2;
   var xy = this.getRelativeToSurfaceXY();
   var dx = Math.round((xy.x - half) / spacing) * spacing + half - xy.x;

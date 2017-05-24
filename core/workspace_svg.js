@@ -31,6 +31,7 @@ goog.provide('Blockly.WorkspaceSvg');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
 goog.require('Blockly.Gesture');
+goog.require('Blockly.Grid');
 goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Touch');
@@ -92,6 +93,12 @@ Blockly.WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface
    * @private
    */
   this.audioManager_ = new Blockly.WorkspaceAudio(options.parentWorkspace);
+
+  /**
+   * TODO: Doc
+   */
+  this.grid_ = this.options.gridPattern ?
+      new Blockly.Grid(options.gridPattern, options.gridOptions) : null;
 
   this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
       Blockly.Variables.flyoutCategory);
@@ -342,9 +349,9 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
         {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
         this.svgGroup_);
 
-    if (opt_backgroundClass == 'blocklyMainBackground') {
+    if (opt_backgroundClass == 'blocklyMainBackground' && this.grid_) {
       this.svgBackground_.style.fill =
-          'url(#' + this.options.gridPattern.id + ')';
+          'url(#' + this.grid_.getPatternId() + ')';
     }
   }
   /** @type {SVGElement} */
@@ -380,7 +387,9 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
      */
     this.toolbox_ = new Blockly.Toolbox(this);
   }
-  this.updateGridPattern_();
+  if (this.grid_) {
+    this.grid_.update(this.scale);
+  }
   this.recordDeleteAreas();
   return this.svgGroup_;
 };
@@ -426,6 +435,11 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   if (this.audioManager_) {
     this.audioManager_.dispose();
     this.audioManager_ = null;
+  }
+
+  if (this.grid_) {
+    this.grid_.dispose();
+    this.grid_ = null;
   }
 
   if (this.toolboxCategoryCallbacks_) {
@@ -1395,7 +1409,9 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
     newScale = this.options.zoomOptions.minScale;
   }
   this.scale = newScale;
-  this.updateGridPattern_();
+  if (this.grid_) {
+    this.grid_.update(this.scale);
+  }
   if (this.scrollbar) {
     this.scrollbar.resize();
   } else {
@@ -1407,43 +1423,6 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
     this.flyout_.reflow();
   }
 };
-
-/**
- * Updates the grid pattern.
- * @private
- */
-Blockly.WorkspaceSvg.prototype.updateGridPattern_ = function() {
-  if (!this.options.gridPattern) {
-    return;  // No grid.
-  }
-  // MSIE freaks if it sees a 0x0 pattern, so set empty patterns to 100x100.
-  var safeSpacing = (this.options.gridOptions['spacing'] * this.scale) || 100;
-  this.options.gridPattern.setAttribute('width', safeSpacing);
-  this.options.gridPattern.setAttribute('height', safeSpacing);
-  var half = Math.floor(this.options.gridOptions['spacing'] / 2) + 0.5;
-  var start = half - this.options.gridOptions['length'] / 2;
-  var end = half + this.options.gridOptions['length'] / 2;
-  var line1 = this.options.gridPattern.firstChild;
-  var line2 = line1 && line1.nextSibling;
-  half *= this.scale;
-  start *= this.scale;
-  end *= this.scale;
-  if (line1) {
-    line1.setAttribute('stroke-width', this.scale);
-    line1.setAttribute('x1', start);
-    line1.setAttribute('y1', half);
-    line1.setAttribute('x2', end);
-    line1.setAttribute('y2', half);
-  }
-  if (line2) {
-    line2.setAttribute('stroke-width', this.scale);
-    line2.setAttribute('x1', half);
-    line2.setAttribute('y1', start);
-    line2.setAttribute('x2', half);
-    line2.setAttribute('y2', end);
-  }
-};
-
 
 /**
  * Return an object with all the metrics required to size scrollbars for a
@@ -1560,14 +1539,8 @@ Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
   var x = this.scrollX + metrics.absoluteLeft;
   var y = this.scrollY + metrics.absoluteTop;
   this.translate(x, y);
-  if (this.options.gridPattern) {
-    this.options.gridPattern.setAttribute('x', x);
-    this.options.gridPattern.setAttribute('y', y);
-    if (goog.userAgent.IE || goog.userAgent.EDGE) {
-      // IE/Edge doesn't notice that the x/y offsets have changed.
-      // Force an update.
-      this.updateGridPattern_();
-    }
+  if (this.grid_) {
+    this.grid_.moveTo(x, y);
   }
 };
 
@@ -1727,6 +1700,15 @@ Blockly.WorkspaceSvg.prototype.cancelCurrentGesture = function() {
  */
 Blockly.WorkspaceSvg.prototype.getAudioManager = function() {
   return this.audioManager_;
+};
+
+/**
+ * Get the grid object for this workspace, or null if there is none.
+ * @return {Blockly.Grid} The grid object for this workspace.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getGrid = function() {
+  return this.grid_;
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.

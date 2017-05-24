@@ -2,7 +2,7 @@
  * @license
  * Visual Blocks Editor
  *
- * Copyright 2014 Google Inc.
+ * Copyright 2017 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,14 +49,14 @@ Blockly.Grid = function(pattern, options) {
   this.gridPattern_ = pattern;
 
   /**
-   * The spacing of the grid lines.
+   * The spacing of the grid lines (in px).
    * @type {number}
    * @private
    */
   this.spacing_ = options['spacing'];
 
   /**
-   * How long the grid lines should be.
+   * How long the grid lines should be (in px).
    * @type {number}
    * @private
    */
@@ -86,6 +86,7 @@ Blockly.Grid = function(pattern, options) {
 
 /**
  * The scale of the grid, used to set stroke width on grid lines.
+ * This should always be the same as the workspace scale.
  * @type {number}
  * @private
  */
@@ -109,7 +110,7 @@ Blockly.Grid.prototype.shouldSnap = function() {
 };
 
 /**
- * Get the spacing of the grid points.
+ * Get the spacing of the grid points (in px).
  * @return {number} The spacing of the grid points.
  * @package
  */
@@ -129,7 +130,7 @@ Blockly.Grid.prototype.getPatternId = function() {
 
 /**
  * Update the grid with a new scale.
- * @param {number} scale The new grid scale.
+ * @param {number} scale The new workspace scale.
  * @package
  */
 Blockly.Grid.prototype.update = function(scale) {
@@ -154,18 +155,18 @@ Blockly.Grid.prototype.update = function(scale) {
 
 /**
  * Set the attributes on one of the lines in the grid.  Use this to update the
- * length and scale of the grid lines.
+ * length and stroke width of the grid lines.
  * @param {!SVGElement} line Which line to update.
- * @param {number} scale The new stroke size.
- * @param {number} x1 The new x start position of the line.
- * @param {number} x2 The new x end position of the line.
- * @param {number} y1 The new y start position of the line.
- * @param {number} y2 The new y end position of the line.
+ * @param {number} width The new stroke size (in px).
+ * @param {number} x1 The new x start position of the line (in px).
+ * @param {number} x2 The new x end position of the line (in px).
+ * @param {number} y1 The new y start position of the line (in px).
+ * @param {number} y2 The new y end position of the line (in px).
  * @private
  */
-Blockly.Grid.prototype.setLineAttributes_ = function(line, scale, x1, x2, y1, y2) {
+Blockly.Grid.prototype.setLineAttributes_ = function(line, width, x1, x2, y1, y2) {
   if (line) {
-    line.setAttribute('stroke-width', scale);
+    line.setAttribute('stroke-width', width);
     line.setAttribute('x1', x1);
     line.setAttribute('y1', y1);
     line.setAttribute('x2', x2);
@@ -175,8 +176,8 @@ Blockly.Grid.prototype.setLineAttributes_ = function(line, scale, x1, x2, y1, y2
 
 /**
  * Move the grid to a new x and y position, and make sure that change is visible.
- * @param {number} x The new x position of the grid.
- * @param {number} y The new y position ofthe grid.
+ * @param {number} x The new x position of the grid (in px).
+ * @param {number} y The new y position ofthe grid (in px).
  * @package
  */
 Blockly.Grid.prototype.moveTo = function(x, y) {

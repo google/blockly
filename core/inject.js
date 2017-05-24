@@ -28,6 +28,7 @@ goog.provide('Blockly.inject');
 
 goog.require('Blockly.BlockDragSurfaceSvg');
 goog.require('Blockly.Css');
+goog.require('Blockly.Grid');
 goog.require('Blockly.Options');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
@@ -164,27 +165,8 @@ Blockly.createDom_ = function(container, options) {
   Blockly.utils.createSvgElement('path',
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, disabledPattern);
   options.disabledPatternId = disabledPattern.id;
-  /*
-    <pattern id="blocklyGridPattern837493" patternUnits="userSpaceOnUse">
-      <rect stroke="#888" />
-      <rect stroke="#888" />
-    </pattern>
-  */
-  var gridPattern = Blockly.utils.createSvgElement('pattern',
-      {'id': 'blocklyGridPattern' + rnd,
-       'patternUnits': 'userSpaceOnUse'}, defs);
-  if (options.gridOptions['length'] > 0 && options.gridOptions['spacing'] > 0) {
-    Blockly.utils.createSvgElement('line',
-        {'stroke': options.gridOptions['colour']},
-        gridPattern);
-    if (options.gridOptions['length'] > 1) {
-      Blockly.utils.createSvgElement('line',
-          {'stroke': options.gridOptions['colour']},
-          gridPattern);
-    }
-    // x1, y1, x1, x2 properties will be set later in updateGridPattern_.
-  }
-  options.gridPattern = gridPattern;
+
+  options.gridPattern = Blockly.Grid.createDom(rnd, options.gridOptions, defs);
   return svg;
 };
 

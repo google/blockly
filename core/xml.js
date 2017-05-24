@@ -349,6 +349,14 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
       }
     } else if (name == 'shadow') {
       goog.asserts.fail('Shadow block cannot be a top-level block.');
+    }  else if (name == 'variables') {
+      if (i == 1) {
+        Blockly.Xml.domToVariables(xmlChild, workspace);
+      }
+      else {
+        throw Error('\'variables\' tag must be the first element in the' +
+          'workspace XML, but it was found in another location.');
+      }
     }
   }
   if (!existingGroup) {
@@ -471,6 +479,25 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
 };
 
 /**
+ * Decode an XML list of variables and add the variables to the workspace.
+ * @param {!Element} xmlVariables List of XML variable elements.
+ * @param {!Blockly.Workspace} workspace The workspace to which the variable
+ *     should be added.
+ */
+Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
+  for (var i = 0, xmlChild; xmlChild = xmlVariables.children[i]; i++) {
+    var type = xmlChild.getAttribute('type');
+    var id = xmlChild.getAttribute('id');
+    var name = xmlChild.textContent;
+
+    if (typeof(type) === undefined || type === null) {
+      throw Error('Variable with id, ' + id + ' is without a type');
+    }
+    workspace.createVariable(name, type, id);
+  }
+};
+
+/**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the
  * workspace.
  * @param {!Element} xmlBlock XML block element.
@@ -551,12 +578,32 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         // Fall through.
       case 'field':
         var field = block.getField(name);
+        var text = xmlChild.textContent;
+        if (field instanceof Blockly.FieldVariable) {
+          // TODO (marisaleung): When we change setValue and getValue to
+          // interact with id's instead of names, update this so that we get
+          // the variable based on id instead of textContent.
+          var type = xmlChild.getAttribute('variabletype') || '';
+          var variable = workspace.getVariable(text);
+          if (!variable) {
+            variable = workspace.createVariable(text, type,
+              xmlChild.getAttribute(id));
+          }
+          if (typeof(type) !== undefined && type !== null) {
+            if (type !== variable.type) {
+              throw Error('Serialized variable type with id \'' +
+                variable.getId() + '\' had type ' + variable.type + ', and ' +
+                'does not match variable field that references it: ' +
+                Blockly.Xml.domToText(xmlChild) + '.');
+            }
+          }
+        }
         if (!field) {
           console.warn('Ignoring non-existent field ' + name + ' in block ' +
                        prototypeName);
           break;
         }
-        field.setValue(xmlChild.textContent);
+        field.setValue(text);
         break;
       case 'value':
       case 'statement':

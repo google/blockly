@@ -253,6 +253,13 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   // A flyout connected to a workspace doesn't have its own current gesture.
   this.workspace_.getGesture =
       this.targetWorkspace_.getGesture.bind(this.targetWorkspace_);
+
+  // Get variables from the main workspace rather than the target workspace.
+  this.workspace_.getVariable =
+      this.targetWorkspace_.getVariable.bind(this.targetWorkspace_);
+
+  this.workspace_.getVariableById =
+      this.targetWorkspace_.getVariableById.bind(this.targetWorkspace_);
 };
 
 /**

@@ -59,6 +59,17 @@ function xmlTest_setUp() {
 
 function xmlTest_setUpWithMockBlocks() {
   xmlTest_setUp();
+  Blockly.defineBlocksWithJsonArray([{
+    'type': 'field_variable_test_block',
+    'message0': '%1',
+    'args0': [
+      {
+        'type': 'field_variable',
+        'name': 'VAR',
+        'variable': 'item'
+      }
+    ],
+  }]);
   // Need to define this because field_variable's dropdownCreate() calls replace
   // on undefined value, Blockly.Msg.DELETE_VARIABLE. To fix this, define
   // Blockly.Msg.DELETE_VARIABLE as %1 so the replace function finds the %1 it
@@ -118,6 +129,20 @@ function xmlTest_checkVariableDomValues(variableDom, type, id, text) {
   assertEquals(text, variableDom.textContent);
 }
 
+/**
+ * Check if a variable with the given values exists.
+ * @param {!string} name The expected name of the variable.
+ * @param {!string} type The expected type of the variable.
+ * @param {!string} id The expected id of the variable.
+ */
+function xmlTest_checkVariableValues(name, type, id) {
+  var variable = workspace.getVariable(name);
+  assertNotUndefined(variable);
+  assertEquals(name, variable.name);
+  assertEquals(type, variable.type);
+  assertEquals(id, variable.getId());
+}
+
 function test_textToDom() {
   var dom = Blockly.Xml.textToDom(XML_TEXT);
   assertEquals('XML tag', 'xml', dom.nodeName);
@@ -131,28 +156,116 @@ function test_domToText() {
       text.replace(/\s+/g, ''));
 }
 
-function test_domToWorkspace() {
-  Blockly.Blocks.test_block = {
-    init: function() {
-      this.jsonInit({
-        message0: 'test',
-      });
-    }
-  };
-
-  workspace = new Blockly.Workspace();
+function test_domToWorkspace_BackwardCompatibility() {
+  // Expect that workspace still loads without serialized variables.
+  xmlTest_setUpWithMockBlocks();
+  var mockGenUid = mockControl_.createMethodMock(Blockly.utils, 'genUid');
+  mockGenUid().$returns('1');
+  mockGenUid().$returns('1');
+  mockGenUid().$replay();
   try {
     var dom = Blockly.Xml.textToDom(
-        '<xml xmlns="http://www.w3.org/1999/xhtml">' +
-        '  <block type="test_block" inline="true" x="21" y="23">' +
+        '<xml>' +
+        '  <block type="field_variable_test_block" id="block_id">' +
+        '    <field name="VAR">name1</field>' +
         '  </block>' +
         '</xml>');
     Blockly.Xml.domToWorkspace(dom, workspace);
     assertEquals('Block count', 1, workspace.getAllBlocks().length);
+    xmlTest_checkVariableValues('name1', '', '1');
   } finally {
-    delete Blockly.Blocks.test_block;
+    xmlTest_tearDownWithMockBlocks();
+  }
+}
 
+function test_domToWorkspace_VariablesAtTop() {
+  // Expect that unused variables are preserved.
+  xmlTest_setUpWithMockBlocks();
+  try {
+    var dom = Blockly.Xml.textToDom(
+        '<xml>' +
+        '  <variables>' +
+        '    <variable type="type1" id="id1">name1</variable>' +
+        '    <variable type="type2" id="id2">name2</variable>' +
+        '    <variable type="" id="id3">name3</variable>' +
+        '  </variables>' +
+        '  <block type="field_variable_test_block">' +
+        '    <field name="VAR" id="id3" variabletype="">name3</field>' +
+        '  </block>' +
+        '</xml>');
+    Blockly.Xml.domToWorkspace(dom, workspace);
+    assertEquals('Block count', 1, workspace.getAllBlocks().length);
+    xmlTest_checkVariableValues('name1', 'type1', 'id1');
+    xmlTest_checkVariableValues('name2', 'type2', 'id2');
+    xmlTest_checkVariableValues('name3', '', 'id3');
+  } finally {
+    xmlTest_tearDownWithMockBlocks();
+  }
+}
+
+function test_domToWorkspace_VariablesAtTop_DuplicateVariablesTag() {
+  // Expect thrown Error because of duplicate 'variables' tag
+  xmlTest_setUpWithMockBlocks();
+  try {
+    var dom = Blockly.Xml.textToDom(
+        '<xml>' +
+        '  <variables>' +
+        '  </variables>' +
+        '  <variables>' +
+        '  </variables>' +
+        '</xml>');
+    Blockly.Xml.domToWorkspace(dom, workspace);
+    fail();
+  }
+  catch (e) {
+    // expected
+  } finally {
+    xmlTest_tearDownWithMockBlocks();
+  }
+}
+
+function test_domToWorkspace_VariablesAtTop_MissingType() {
+  // Expect thrown error when a variable tag is missing the type attribute.
+  workspace = new Blockly.Workspace();
+  try {
+    var dom = Blockly.Xml.textToDom(
+        '<xml>' +
+        '  <variables>' +
+        '    <variable id="id1">name1</variable>' +
+        '  </variables>' +
+        '  <block type="field_variable_test_block">' +
+        '    <field name="VAR" id="id1" variabletype="">name3</field>' +
+        '  </block>' +
+        '</xml>');
+    Blockly.Xml.domToWorkspace(dom, workspace);
+    fail();
+  } catch (e) {
+    // expected
+  } finally {
     workspace.dispose();
+  }
+}
+
+function test_domToWorkspace_VariablesAtTop_MismatchBlockType() {
+  // Expect thrown error when the serialized type of a variable does not match
+  // the type of a variable field that references it.
+  xmlTest_setUpWithMockBlocks();
+  try {
+    var dom = Blockly.Xml.textToDom(
+        '<xml>' +
+        '  <variables>' +
+        '    <variable type="type1" id="id1">name1</variable>' +
+        '  </variables>' +
+        '  <block type="field_variable_test_block">' +
+        '    <field name="VAR" id="id1" variabletype="">name1</field>' +
+        '  </block>' +
+        '</xml>');
+    Blockly.Xml.domToWorkspace(dom, workspace);
+    fail();
+  } catch (e) {
+    // expected
+  } finally {
+    xmlTest_tearDownWithMockBlocks();
   }
 }
 
@@ -195,17 +308,6 @@ function test_appendDomToWorkspace() {
 }
 
 function test_blockToDom_fieldToDom_trivial() {
-  Blockly.defineBlocksWithJsonArray([{
-    'type': 'field_variable_test_block',
-    'message0': '%1',
-    'args0': [
-      {
-        'type': 'field_variable',
-        'name': 'VAR',
-        'variable': 'item'
-      }
-    ],
-  }]);
   xmlTest_setUpWithMockBlocks()
   workspace.createVariable('name1', 'type1', 'id1');
   var block = new Blockly.Block(workspace, 'field_variable_test_block');
@@ -216,17 +318,6 @@ function test_blockToDom_fieldToDom_trivial() {
 }
 
 function test_blockToDom_fieldToDom_defaultCase() {
-  Blockly.defineBlocksWithJsonArray([{
-    'type': 'field_variable_test_block',
-    'message0': '%1',
-    'args0': [
-      {
-        'type': 'field_variable',
-        'name': 'VAR',
-        'variable': 'item'
-      }
-    ],
-  }]);
   xmlTest_setUpWithMockBlocks()
   var mockGenUid = mockControl_.createMethodMock(Blockly.utils, 'genUid');
   mockGenUid().$returns('1');
@@ -277,17 +368,6 @@ function test_variablesToDom_oneVariable() {
 }
 
 function test_variablesToDom_twoVariables_oneBlock() {
-   Blockly.defineBlocksWithJsonArray([{
-    'type': 'field_variable_test_block',
-    'message0': '%1',
-    'args0': [
-      {
-        'type': 'field_variable',
-        'name': 'VAR',
-        'variable': 'item'
-      }
-    ],
-  }]);
   xmlTest_setUpWithMockBlocks();
 
   workspace.createVariable('name1', 'type1', 'id1');
@@ -308,6 +388,6 @@ function test_variablesToDom_noVariables() {
   xmlTest_setUp();
   workspace.createVariable('name1');
   var resultDom = Blockly.Xml.variablesToDom(workspace.getAllVariables());
-  assertEquals(0, resultDom.children.length);
+  assertEquals(1, resultDom.children.length);
   xmlTest_tearDown();
 }

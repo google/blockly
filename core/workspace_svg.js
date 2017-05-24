@@ -95,7 +95,9 @@ Blockly.WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface
   this.audioManager_ = new Blockly.WorkspaceAudio(options.parentWorkspace);
 
   /**
-   * TODO: Doc
+   * This workspace's grid object or null.
+   * @type {Blockly.Grid}
+   * @private
    */
   this.grid_ = this.options.gridPattern ?
       new Blockly.Grid(options.gridPattern, options.gridOptions) : null;

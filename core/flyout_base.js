@@ -682,13 +682,6 @@ Blockly.Flyout.prototype.moveRectToBlock_ = function(rect, block) {
   rect.setAttribute('width', blockHW.width);
   rect.setAttribute('height', blockHW.height);
 
-  // Blocks with output tabs are shifted a bit.
-  var tab = block.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
-  var blockXY = block.getRelativeToSurfaceXY();
-  rect.setAttribute('y', blockXY.y);
-  rect.setAttribute('x',
-      this.RTL ? blockXY.x - blockHW.width + tab : blockXY.x - tab);
-
   // For hat blocks we want to shift them down by the hat height
   // since the y coordinate is the corner, not the top of the hat.
   var hatOffset =
@@ -696,6 +689,13 @@ Blockly.Flyout.prototype.moveRectToBlock_ = function(rect, block) {
   if (hatOffset) {
     block.moveBy(0, hatOffset);
   }
+
+  // Blocks with output tabs are shifted a bit.
+  var tab = block.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
+  var blockXY = block.getRelativeToSurfaceXY();
+  rect.setAttribute('y', blockXY.y);
+  rect.setAttribute('x',
+      this.RTL ? blockXY.x - blockHW.width + tab : blockXY.x - tab);
 };
 
 /**

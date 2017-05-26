@@ -16,7 +16,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This script generates two versions of Blockly's core files:
+# Usage: build.py <0 or more of accessible, core, generators, langfiles>
+# build.py with no parameters builds all files.
+# core builds blockly_compressed, blockly_uncompressed, and blocks_compressed.
+# accessible builds blockly_accessible_compressed,
+#  blockly_accessible_uncompressed, and blocks_compressed.
+# generators builds every <language>_compressed.js.
+# langfiles builds every msg/js/<LANG>.js file.
+
+# This script generates four versions of Blockly's core files. The first pair
+# are:
 #   blockly_compressed.js
 #   blockly_uncompressed.js
 # The compressed file is a concatenation of all of Blockly's core files which
@@ -27,6 +36,12 @@
 # when debugging code since line numbers are meaningful and variables haven't
 # been renamed.  The uncompressed file also allows for a faster developement
 # cycle since there is no need to rebuild or recompile, just reload.
+#
+# The second pair are:
+#  blockly_accessible_compressed.js
+#  blockly_accessible_uncompressed.js
+# These files are analogous to blockly_compressed and blockly_uncompressed,
+# but also include the visually-impaired module for Blockly.
 #
 # This script also generates:
 #   blocks_compressed.js: The compressed Blockly language blocks.
@@ -40,6 +55,14 @@ import sys
 if sys.version_info[0] != 2:
   raise Exception("Blockly build only compatible with Python 2.x.\n"
                   "You are using: " + sys.version)
+
+for arg in sys.argv[1:len(sys.argv)]:
+  if (arg != 'core' and
+      arg != 'accessible' and
+      arg != 'generators' and
+      arg != 'langfiles'):
+    raise Exception("Invalid argument: \"" + arg + "\". Usage: build.py <0 or more of accessible," +
+        " core, generators, langfiles>")
 
 import errno, glob, httplib, json, os, re, subprocess, threading, urllib
 
@@ -168,19 +191,27 @@ class Gen_compressed(threading.Thread):
   Uses the Closure Compiler's online API.
   Runs in a separate thread.
   """
-  def __init__(self, search_paths):
+  def __init__(self, search_paths, bundles):
     threading.Thread.__init__(self)
     self.search_paths = search_paths
+    self.bundles = bundles
 
   def run(self):
-    self.gen_core()
-    self.gen_accessible()
-    self.gen_blocks()
-    self.gen_generator("javascript")
-    self.gen_generator("python")
-    self.gen_generator("php")
-    self.gen_generator("dart")
-    self.gen_generator("lua")
+    if ('core' in self.bundles):
+      self.gen_core()
+
+    if ('accessible' in self.bundles):
+      self.gen_accessible()
+
+    if ('core' in self.bundles or 'accessible' in self.bundles):
+      self.gen_blocks()
+
+    if ('generators' in self.bundles):
+      self.gen_generator("javascript")
+      self.gen_generator("python")
+      self.gen_generator("php")
+      self.gen_generator("dart")
+      self.gen_generator("lua")
 
   def gen_core(self):
     target_filename = "blockly_compressed.js"
@@ -489,12 +520,22 @@ developers.google.com/blockly/guides/modify/web/closure""")
   full_search_paths = calcdeps.ExpandDirectories(
       ["accessible", "core", os.path.join(os.path.pardir, "closure-library")])
 
-  # Run both tasks in parallel threads.
-  # Uncompressed is limited by processor speed.
-  # Compressed is limited by network and server speed.
-  Gen_uncompressed(core_search_paths, 'blockly_uncompressed.js').start()
-  Gen_uncompressed(full_search_paths, 'blockly_accessible_uncompressed.js').start()
-  Gen_compressed(full_search_paths).start()
+  if (len(sys.argv) == 1):
+    args = ['core', 'accessible', 'generators', 'langfiles']
+  else:
+    args = sys.argv
 
-  # This is run locally in a separate thread.
-  Gen_langfiles().start()
+  # Uncompressed and compressed are run in parallel threads.
+  # Uncompressed is limited by processor speed.
+  if ('core' in args):
+    Gen_uncompressed(core_search_paths, 'blockly_uncompressed.js').start()
+
+  if ('accessible' in args):
+    Gen_uncompressed(full_search_paths, 'blockly_accessible_uncompressed.js').start()
+
+  # Compressed is limited by network and server speed.
+  Gen_compressed(full_search_paths, args).start()
+
+  # This is run locally in a separate thread
+  if ('langfiles' in args):
+    Gen_langfiles().start()

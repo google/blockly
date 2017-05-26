@@ -332,6 +332,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(false);
   }
+  var variablesFirst = true;
   for (var i = 0; i < childCount; i++) {
     var xmlChild = xml.childNodes[i];
     var name = xmlChild.nodeName.toLowerCase();
@@ -347,16 +348,20 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
       if (!isNaN(blockX) && !isNaN(blockY)) {
         block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
       }
+      variablesFirst = false;
     } else if (name == 'shadow') {
       goog.asserts.fail('Shadow block cannot be a top-level block.');
+      variablesFirst = false;
     }  else if (name == 'variables') {
-      if (i == 1) {
+      if (variablesFirst) {
         Blockly.Xml.domToVariables(xmlChild, workspace);
       }
       else {
-        throw Error('\'variables\' tag must be the first element in the' +
-          'workspace XML, but it was found in another location.');
+        throw Error('\'variables\' tag must exist once before block and ' +
+          'shadow tag elements in the workspace XML, but it was found in ' +
+          'another location.');
       }
+      variablesFirst = false;
     }
   }
   if (!existingGroup) {

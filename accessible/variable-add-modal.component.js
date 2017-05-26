@@ -23,6 +23,16 @@
  * @author corydiers@google.com (Cory Diers)
  */
 
+goog.provide('blocklyApp.VariableAddModalComponent');
+
+goog.require('blocklyApp.AudioService');
+goog.require('blocklyApp.KeyboardInputService');
+goog.require('blocklyApp.TranslatePipe');
+goog.require('blocklyApp.VariableModalService');
+
+goog.require('Blockly.CommonModal');
+
+
 blocklyApp.VariableAddModalComponent = ng.core.Component({
   selector: 'blockly-add-variable-modal',
   template: `

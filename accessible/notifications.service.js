@@ -23,6 +23,9 @@
  * @author sll@google.com (Sean Lip)
  */
 
+goog.provide('blocklyApp.NotificationsService');
+
+
 blocklyApp.NotificationsService = ng.core.Class({
   constructor: [function() {
     this.currentMessage = '';

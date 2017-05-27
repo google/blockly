@@ -937,6 +937,7 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
     button.dispose();
   }
   this.buttons_.length = 0;
+  this.lastBlockCreated = null;
 };
 
 /**
@@ -1051,8 +1052,12 @@ Blockly.Flyout.prototype.onMouseUp_ = function(e) {
     // This was a click, not a drag.  End the gesture.
     Blockly.Touch.clearTouchIdentifier();
     if (this.autoClose) {
-      this.createBlockFunc_(Blockly.Flyout.startBlock_)(
+      if (this.lastBlockCreated == null) {
+        this.createBlockFunc_(Blockly.Flyout.startBlock_)(
           Blockly.Flyout.startDownEvent_);
+      } else {
+        console.warn(new Error('Rejecting multiple block creation in flyout.'));
+      }
     } else if (!Blockly.WidgetDiv.isVisible()) {
       Blockly.Events.fire(
           new Blockly.Events.Ui(Blockly.Flyout.startBlock_, 'click',
@@ -1115,7 +1120,10 @@ Blockly.Flyout.prototype.onMouseMoveBlock_ = function(e) {
   var dy = e.clientY - Blockly.Flyout.startDownEvent_.clientY;
 
   var createBlock = this.determineDragIntention_(dx, dy);
-  if (createBlock) {
+  if (this.lastBlockCreated != null) {
+    Blockly.longStop_();
+    console.warn(new Error('Rejecting multiple block creation in flyout.'));
+  } else if (createBlock) {
     Blockly.longStop_();
     this.createBlockFunc_(Blockly.Flyout.startBlock_)(
         Blockly.Flyout.startDownEvent_);

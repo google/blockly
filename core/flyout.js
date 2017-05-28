@@ -723,13 +723,17 @@ Blockly.Flyout.prototype.hide = function() {
   if (!this.isVisible()) {
     return;
   }
-  if (Blockly.mainWorkspace) {
+  if (Blockly.mainWorkspace && !this.targetWorkspace_.isMutator) {
     Blockly.mainWorkspace.setScrollbarsVisible(true);
   }
   this.setVisible(false);
   // Delete all the event listeners.
   for (var x = 0, listen; listen = this.listeners_[x]; x++) {
-    Blockly.unbindEvent_(listen);
+    try {
+      Blockly.unbindEvent_(listen);
+    } catch(e) {
+      console.warn('Unable to unbind event listener during flyout.hide()', e);
+    }
   }
   this.listeners_.length = 0;
   if (this.reflowWrapper_) {
@@ -746,7 +750,7 @@ Blockly.Flyout.prototype.hide = function() {
  *     Variables and procedures have a custom set of blocks.
  */
 Blockly.Flyout.prototype.show = function(xmlList) {
-  if (Blockly.mainWorkspace) {
+  if (Blockly.mainWorkspace && !this.targetWorkspace_.isMutator) {
     Blockly.mainWorkspace.setScrollbarsVisible(false);  // hide parent's scrollbars
   }
   this.workspace_.setResizesEnabled(false);
@@ -1057,6 +1061,7 @@ Blockly.Flyout.prototype.onMouseUp_ = function(e) {
           Blockly.Flyout.startDownEvent_);
       } else {
         console.warn(new Error('Rejecting multiple block creation in flyout.'));
+        this.hide();
       }
     } else if (!Blockly.WidgetDiv.isVisible()) {
       Blockly.Events.fire(
@@ -1123,6 +1128,10 @@ Blockly.Flyout.prototype.onMouseMoveBlock_ = function(e) {
   if (this.lastBlockCreated != null) {
     Blockly.longStop_();
     console.warn(new Error('Rejecting multiple block creation in flyout.'));
+    Blockly.Flyout.terminateDrag_();
+    if (this.autoClose) {
+      this.hide();
+    }
   } else if (createBlock) {
     Blockly.longStop_();
     this.createBlockFunc_(Blockly.Flyout.startBlock_)(
@@ -1219,7 +1228,12 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     // workspace.
     flyout.targetWorkspace_.setResizesEnabled(false);
     try {
+      Blockly.Flyout.terminateDrag_();
       var block = flyout.placeNewBlock_(originBlock);
+      if (flyout.autoClose) {
+        // save this block as the last created block for this instantiation of the flyout
+        flyout.lastBlockCreated = block;
+      }
     } finally {
       Blockly.Events.enable();
     }

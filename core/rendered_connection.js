@@ -178,11 +178,7 @@ Blockly.RenderedConnection.prototype.tighten_ = function() {
 
 /**
  * Find the closest compatible connection to this connection.
-<<<<<<< HEAD
- * All parameters are in workspace units
-=======
  * All parameters are in workspace units.
->>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c
  * @param {number} maxLimit The maximum radius to another connection.
  * @param {number} dx Horizontal offset between this connection's location
  *     in the database and the current location (as a result of dragging).

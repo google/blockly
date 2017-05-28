@@ -889,29 +889,10 @@ Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
 Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
   var flyout = this;
   return function(e) {
-<<<<<<< HEAD
-    if (Blockly.utils.isRightButton(e)) {
-      Blockly.Flyout.blockRightClick_(e, block);
-    } else {
-      Blockly.terminateDrag_();
-      Blockly.hideChaff(true);
-      // Left-click (or middle click)
-      // Record the current mouse position.
-      flyout.startDragMouseY_ = e.clientY;
-      flyout.startDragMouseX_ = e.clientX;
-      Blockly.Flyout.startDownEvent_ = e;
-      Blockly.Flyout.startBlock_ = block;
-      Blockly.Flyout.startFlyout_ = flyout;
-      Blockly.Flyout.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
-          'mouseup', flyout, flyout.onMouseUp_);
-      Blockly.Flyout.onMouseMoveBlockWrapper_ = Blockly.bindEventWithChecks_(
-          document, 'mousemove', flyout, flyout.onMouseMoveBlock_);
-=======
     var gesture = flyout.targetWorkspace_.getGesture(e);
     if (gesture) {
       gesture.setStartBlock(block);
       gesture.handleFlyoutStart(e, flyout);
->>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c
     }
   };
 };

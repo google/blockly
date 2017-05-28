@@ -337,13 +337,8 @@ Blockly.Workspace.prototype.getVariableUses = function(name) {
 };
 
 /**
-<<<<<<< HEAD
- * Delete a variables and all of its uses from this workspace. May prompt the
- * user for confirmation.
-=======
  * Delete a variable by the passed in name and all of its uses from this
  * workspace. May prompt the user for confirmation.
->>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c
  * @param {string} name Name of variable to delete.
  */
 Blockly.Workspace.prototype.deleteVariable = function(name) {
@@ -362,10 +357,7 @@ Blockly.Workspace.prototype.deleteVariable = function(name) {
   }
 
   var workspace = this;
-<<<<<<< HEAD
-=======
   var variable = workspace.getVariable(name);
->>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c
   if (uses.length > 1) {
     // Confirm before deleting multiple blocks.
     Blockly.confirm(
@@ -373,18 +365,11 @@ Blockly.Workspace.prototype.deleteVariable = function(name) {
         replace('%2', name),
         function(ok) {
           if (ok) {
-<<<<<<< HEAD
-            workspace.deleteVariableInternal_(name);
-=======
             workspace.deleteVariableInternal_(variable);
->>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c
           }
         });
   } else {
     // No confirmation necessary for a single block.
-<<<<<<< HEAD
-    this.deleteVariableInternal_(name);
-=======
     this.deleteVariableInternal_(variable);
   }
 };
@@ -398,37 +383,24 @@ Blockly.Workspace.prototype.deleteVariableById = function(id) {
   var variable = this.getVariableById(id);
   if (variable) {
     this.deleteVariableInternal_(variable);
->>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c
   }
 };
 
 /**
  * Deletes a variable and all of its uses from this workspace without asking the
  * user for confirmation.
-<<<<<<< HEAD
- * @private
- */
-Blockly.Workspace.prototype.deleteVariableInternal_ = function(name) {
-  var uses = this.getVariableUses(name);
-  var variableIndex = this.variableIndexOf(name);
-=======
  * @param {Blockly.VariableModel} variable Variable to delete.
  * @private
  */
 Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable) {
   var uses = this.getVariableUses(variable.name);
->>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c
   Blockly.Events.setGroup(true);
   for (var i = 0; i < uses.length; i++) {
     uses[i].dispose(true, false);
   }
   Blockly.Events.setGroup(false);
-<<<<<<< HEAD
-  this.variableList.splice(variableIndex, 1);
-=======
 
   this.variableMap_.deleteVariable(variable);
->>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c
 };
 
 /**

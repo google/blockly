@@ -423,7 +423,11 @@ Blockly.Toolbox.prototype.addDeleteStyle = function() {
 };
 
 /**
+<<<<<<< HEAD
  * Remove styles from the toolbox that indicate blocks will be deleted.  
+=======
+ * Remove styles from the toolbox that indicate blocks will be deleted.
+>>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c
  * @package
  */
 Blockly.Toolbox.prototype.removeDeleteStyle = function() {

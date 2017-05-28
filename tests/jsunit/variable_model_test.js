@@ -75,4 +75,8 @@ function testInit_OnlyNameProvided() {
   assertEquals('', variable.type);
   assertNotNull(variable.id_);
   variableTest_tearDown();
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c

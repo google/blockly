@@ -22,6 +22,29 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
+goog.provide('blocklyApp.AppComponent');
+
+goog.require('Blockly');
+
+goog.require('blocklyApp.AudioService');
+goog.require('blocklyApp.BlockConnectionService');
+goog.require('blocklyApp.BlockOptionsModalComponent');
+goog.require('blocklyApp.BlockOptionsModalService');
+goog.require('blocklyApp.KeyboardInputService');
+goog.require('blocklyApp.NotificationsService');
+goog.require('blocklyApp.SidebarComponent');
+goog.require('blocklyApp.ToolboxModalComponent');
+goog.require('blocklyApp.ToolboxModalService');
+goog.require('blocklyApp.TranslatePipe');
+goog.require('blocklyApp.TreeService');
+goog.require('blocklyApp.UtilsService');
+goog.require('blocklyApp.VariableAddModalComponent');
+goog.require('blocklyApp.VariableModalService');
+goog.require('blocklyApp.VariableRenameModalComponent');
+goog.require('blocklyApp.VariableRemoveModalComponent');
+goog.require('blocklyApp.WorkspaceComponent');
+
+
 blocklyApp.workspace = new Blockly.Workspace();
 
 blocklyApp.AppComponent = ng.core.Component({

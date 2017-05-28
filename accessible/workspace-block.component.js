@@ -23,6 +23,17 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
+goog.provide('blocklyApp.WorkspaceBlockComponent');
+
+goog.require('blocklyApp.UtilsService');
+
+goog.require('blocklyApp.AudioService');
+goog.require('blocklyApp.BlockConnectionService');
+goog.require('blocklyApp.FieldSegmentComponent');
+goog.require('blocklyApp.TranslatePipe');
+goog.require('blocklyApp.TreeService');
+
+
 blocklyApp.WorkspaceBlockComponent = ng.core.Component({
   selector: 'blockly-workspace-block',
   template: `

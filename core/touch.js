@@ -42,13 +42,6 @@ goog.require('goog.string');
 Blockly.Touch.touchIdentifier_ = null;
 
 /**
- * Wrapper function called when a touch mouseUp occurs during a drag operation.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.Touch.onTouchUpWrapper_ = null;
-
-/**
  * The TOUCH_MAP lookup dictionary specifies additional touch events to fire,
  * in conjunction with mouse events.
  * @type {Object}
@@ -75,11 +68,10 @@ Blockly.longPid_ = 0;
  * which after about a second opens the context menu.  The tasks is killed
  * if the touch event terminates early.
  * @param {!Event} e Touch start event.
- * @param {!Blockly.Block|!Blockly.WorkspaceSvg} uiObject The block or workspace
- *     under the touchstart event.
+ * @param {Blockly.Gesture} gesture The gesture that triggered this longStart.
  * @private
  */
-Blockly.longStart_ = function(e, uiObject) {
+Blockly.longStart_ = function(e, gesture) {
   Blockly.longStop_();
   // Punt on multitouch events.
   if (e.changedTouches.length != 1) {
@@ -90,7 +82,12 @@ Blockly.longStart_ = function(e, uiObject) {
     // e was a touch event.  It needs to pretend to be a mouse event.
     e.clientX = e.changedTouches[0].clientX;
     e.clientY = e.changedTouches[0].clientY;
-    uiObject.onMouseDown_(e);
+
+    // Let the gesture route the right-click correctly.
+    if (gesture) {
+      gesture.handleRightClick(e);
+    }
+
   }, Blockly.LONGPRESS);
 };
 
@@ -106,6 +103,7 @@ Blockly.longStop_ = function() {
   }
 };
 
+<<<<<<< HEAD
 
 /**
  * Handle a mouse-up anywhere on the page.
@@ -166,6 +164,8 @@ Blockly.onMouseMove_ = function(e) {
   }
 };
 
+=======
+>>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c
 /**
  * Clear the touch identifier that tracks which touch stream to pay attention
  * to.  This ends the current drag/gesture and allows other pointers to be

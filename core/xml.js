@@ -484,6 +484,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
 };
 
 /**
+<<<<<<< HEAD
  * Decode an XML list of variables and add the variables to the workspace.
  * @param {!Element} xmlVariables List of XML variable elements.
  * @param {!Blockly.Workspace} workspace The workspace to which the variable
@@ -500,6 +501,26 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
     }
     workspace.createVariable(name, type, id);
   }
+=======
+ * Decode an XML block tag and create block on the workspace 
+ * without rendering it. Used by toolbox search.
+ * @param {!Element} xmlBlock XML block element.
+ * @param {!Blockly.Workspace} workspace The workspace.
+ * @return {!Blockly.Block} The block created.
+ */
+Blockly.Xml.domToInvisibleBlock = function(xmlBlock, workspace) {
+  // Create top-level block.
+  Blockly.Events.disable();
+  try {
+    var topBlock = Blockly.Xml.domToBlockHeadless_(xmlBlock, workspace);
+  } finally {
+    Blockly.Events.enable();
+  }
+  if (Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.Create(topBlock));
+  }
+  return topBlock;
+>>>>>>> master
 };
 
 /**

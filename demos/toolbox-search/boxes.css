@@ -1,0 +1,50 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100%;
+}
+
+#map {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 270px;
+    height: 100%;
+    z-index: 100;
+    opacity:0.1;
+}
+
+#slaveContainer {
+    position: fixed;
+    top: 4%;
+    right: 0;
+    width: 250px;
+    height: 135px;
+    z-index: 98;
+    background-color:orangered;
+
+}
+
+#slaveDiv {
+    position: fixed;
+    width: 2500px;
+    height: 1350px;
+    -webkit-transform: scale(.1);
+    -moz-transform: scale(.1);
+    transform: scale(.1);
+    transform-origin: top left;
+    z-index: 99;
+}
+
+#container {
+    position: relative;
+
+    top: 100px;
+
+    outline: 4px solid #222;
+    overflow: auto;
+    background-color:aqua;
+}

@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.pms');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Gionté un coment";
-Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
+Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "As peul nen eliminesse la variàbil '%1' përchè a l'é part ëd la definission dla fonsion '%2'";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Modifiché ël valor:";
 Blockly.Msg.CLEAN_UP = "Dëscancelé ij blòch";
 Blockly.Msg.COLLAPSE_ALL = "Arduve ij blòch";
@@ -74,19 +74,28 @@ Blockly.Msg.EXPAND_BLOCK = "Dësvlupé ël blòch";
 Blockly.Msg.EXTERNAL_INPUTS = "Imission esterne";
 Blockly.Msg.HELP = "Agiut";
 Blockly.Msg.INLINE_INPUTS = "Imission an linia";
-Blockly.Msg.IOS_CANCEL = "Cancel";  // untranslated
-Blockly.Msg.IOS_ERROR = "Error";  // untranslated
-Blockly.Msg.IOS_OK = "OK";  // untranslated
-Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
-Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
-Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
-Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
+Blockly.Msg.IOS_CANCEL = "Anulé";
+Blockly.Msg.IOS_ERROR = "Eror";
+Blockly.Msg.IOS_OK = "Va bin";
+Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Gionté n'imission";
+Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Përmëtte le diciairassion";
+Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "Costa imission a dj'imission duplicà.";
+Blockly.Msg.IOS_PROCEDURES_INPUTS = "IMISSION";
+<<<<<<< HEAD
 Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Add";  // untranslated
 Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
 Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Delete";  // untranslated
 Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
 Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Rename";  // untranslated
 Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Variable name";  // untranslated
+=======
+Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Gionté";
+Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Gionté na variàbil";
+Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Eliminé";
+Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "A peul nen dovré un nòm ëd variàbil veuid.";
+Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Arnominé";
+Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Nòm ëd la variàbil";
+>>>>>>> 388b32d0973d2f7dde3c30ebf0dee4268e32eeba
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "creé na lista veuida";
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "Smon-e na lista, ëd longheur 0, ch'a conten gnun-a argistrassion";
@@ -314,6 +323,8 @@ Blockly.Msg.REDO = "Fé torna";
 Blockly.Msg.REMOVE_COMMENT = "Scancelé un coment";
 Blockly.Msg.RENAME_VARIABLE = "Arnomé la variàbil...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Arnomé tute le variàbij '%1' 'me:";
+Blockly.Msg.SEARCH = "Search...";  // untranslated
+Blockly.Msg.SEARCH_TITLE = "Enter search phrase";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "taché ël test";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "a";

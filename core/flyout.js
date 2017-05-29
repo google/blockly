@@ -37,6 +37,7 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.math.Rect');
 goog.require('goog.userAgent');
+goog.require('goog.ui.tree.TreeNode');
 
 
 /**
@@ -665,25 +666,32 @@ Blockly.Flyout.prototype.hide = function() {
 
 /**
  * Show and populate the flyout.
- * @param {!Array|string} xmlList List of blocks to show.
+ * @param {!Array|string|goog.ui.tree.TreeNode} node List of blocks to show
+ *     or selected node.
  *     Variables and procedures have a custom set of blocks.
  */
-Blockly.Flyout.prototype.show = function(xmlList) {
+Blockly.Flyout.prototype.show = function(node) {
+  var xmlList = node;
+  if(node instanceof goog.ui.tree.TreeNode) {
+    xmlList = node.blocks;
+  }
   this.workspace_.setResizesEnabled(false);
   this.hide();
   this.clearOldBlocks_();
 
-  // Handle dynamic categories, represented by a name instead of a list of XML.
-  // Look up the correct category generation function and call that to get a
-  // valid XML list.
-  if (typeof xmlList == 'string') {
-    var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
-        xmlList);
-    goog.asserts.assert(goog.isFunction(fnToApply),
-        'Couldn\'t find a callback function when opening a toolbox category.');
-    xmlList = fnToApply(this.workspace_.targetWorkspace);
-    goog.asserts.assert(goog.isArray(xmlList),
-        'The result of a toolbox category callback must be an array.');
+  if (xmlList == Blockly.Variables.NAME_TYPE) {
+    // Special category for variables.
+    xmlList =
+        Blockly.Variables.flyoutCategory(this.workspace_.targetWorkspace);
+  } else if (xmlList == Blockly.Procedures.NAME_TYPE) {
+    // Special category for procedures.
+    xmlList =
+        Blockly.Procedures.flyoutCategory(this.workspace_.targetWorkspace);
+  } else if(xmlList == Blockly.Search.NAME_TYPE) {
+    // Special category for searches.
+    xmlList =
+        Blockly.Search.flyoutCategory(node, this.workspace_, this.workspace_.targetWorkspace);
+  node.blocks = Blockly.Search.NAME_TYPE;
   }
 
   this.setVisible(true);

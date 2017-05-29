@@ -335,21 +335,23 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
    * @this {Blockly.Block}
    */
   var extensionFn = function() {
-    if (this.type && blockTypesChecked.indexOf(this.type) === -1) {
+    var thisBlock=this;
+
+    if (this.type && blockTypesChecked.includes(this.type)) {
       Blockly.Extensions.checkDropdownOptionsInTable_(
         this, dropdownName, lookupTable);
       blockTypesChecked.push(this.type);
     }
 
     this.setTooltip(function() {
-      var value = this.getFieldValue(dropdownName);
+      var value = thisBlock.getFieldValue(dropdownName);
       var tooltip = lookupTable[value];
       if (tooltip == null) {
-        if (blockTypesChecked.indexOf(this.type) === -1) {
+        if (blockTypesChecked.includes(thisBlock.type)) {
           // Warn for missing values on generated tooltips
           var warning = 'No tooltip mapping for value ' + value +
               ' of field ' + dropdownName;
-          if (this.type != null) {
+          if (thisBlock.type != null) {
             warning += (' of block type ' + this.type);
           }
           console.warn(warning + '.');
@@ -358,7 +360,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName, lookupTable)
         tooltip = Blockly.utils.replaceMessageReferences(tooltip);
       }
       return tooltip;
-    }.bind(this));
+    });
   };
   return extensionFn;
 };
@@ -407,7 +409,7 @@ Blockly.Extensions.buildTooltipWithFieldValue =
         // Will print warnings is reference is missing.
         Blockly.utils.checkMessageReferences(msgTemplate);
       });
-    }
+    }    
 
     /**
      * The actual extension.
@@ -419,6 +421,7 @@ Blockly.Extensions.buildTooltipWithFieldValue =
             .replace('%1', this.getFieldValue(fieldName));
       }.bind(this));
     };
+    
     return extensionFn;
   };
 
@@ -442,5 +445,3 @@ Blockly.Extensions.extensionParentTooltip_ = function() {
 };
 Blockly.Extensions.register('parent_tooltip_when_inline',
     Blockly.Extensions.extensionParentTooltip_);
-
-

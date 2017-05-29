@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "parameternavn:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Tilføj en parameter til funktionen.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "parametre";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Tilføje, fjerne eller ændre rækkefølgen af parametre til denne funktion.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Fjern kommentar";
 Blockly.Msg.RENAME_VARIABLE = "Omdøb variabel...";

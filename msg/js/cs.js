@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "vstupní jméno:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Přidat vstupy do funkce.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "vstupy";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Přidat, odebrat nebo změnit pořadí vstupů této funkce.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Znovu";
 Blockly.Msg.REMOVE_COMMENT = "Odstranit komentář";
 Blockly.Msg.RENAME_VARIABLE = "Přejmenovat proměnnou...";

@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "változó:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Bemenet hozzáadása a függvényhez.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "paraméterek";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Bemenetek hozzáadása, eltávolítása vagy átrendezése ehhez a függvényhez.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Újra";
 Blockly.Msg.REMOVE_COMMENT = "Megjegyzés törlése";
 Blockly.Msg.RENAME_VARIABLE = "Változó átnevezése...";

@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "nom de l’entrée :";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Ajouter une entrée à la fonction.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "entrées";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Ajouter, supprimer, ou réarranger les entrées de cette fonction.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Refaire";
 Blockly.Msg.REMOVE_COMMENT = "Supprimer un commentaire";
 Blockly.Msg.RENAME_VARIABLE = "Renommer la variable…";

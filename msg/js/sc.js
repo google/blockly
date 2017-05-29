@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "nomini input:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Aciungi un input a sa funtzioni.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inputs";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Aciungi, fùlia, o assenta is inputs a custa funtzioni.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Fùlia unu cumentu";
 Blockly.Msg.RENAME_VARIABLE = "Muda nòmini a variabili...";

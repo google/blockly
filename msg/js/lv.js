@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "arguments:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Pievienot funkcijai argumentu.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "argumenti";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Pievienot, pārkārtot vai dzēst funkcijas argumentus.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Atcelt atsaukšanu";
 Blockly.Msg.REMOVE_COMMENT = "Noņemt komentāru";
 Blockly.Msg.RENAME_VARIABLE = "Pārdēvēt mainīgo...";

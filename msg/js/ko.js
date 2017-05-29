@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "매개 변수:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "함수에 값을 더합니다.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "매개 변수들";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "이 함수를 추가, 삭제, 혹은 재정렬합니다.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "다시 실행";
 Blockly.Msg.REMOVE_COMMENT = "내용 제거";
 Blockly.Msg.RENAME_VARIABLE = "변수 이름 바꾸기:";

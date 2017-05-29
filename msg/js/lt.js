@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "parametro pavadinimas:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Pridėti funkcijos parametrą (gaunamų duomenų pavadinimą).";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "gaunami duomenys (parametrai)";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Tvarkyti komandos gaunamus duomenis (parametrus).";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Atkurti";
 Blockly.Msg.REMOVE_COMMENT = "Pašalinti komentarą";
 Blockly.Msg.RENAME_VARIABLE = "Pervardyti kintamajį...";

@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "nazwa wejścia:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Dodaj dane wejściowe do funkcji.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "wejścia";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Dodaj, usuń lub zmień kolejność danych wejściowych dla tej funkcji.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Ponów";
 Blockly.Msg.REMOVE_COMMENT = "Usuń komentarz";
 Blockly.Msg.RENAME_VARIABLE = "Zmień nazwę zmiennej...";

@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "masukan Nama:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Tambahkan masukan ke fungsi.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "input";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Menambah, menghapus, atau menyusun ulang masukan untuk fungsi ini.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Lakukan ulang";
 Blockly.Msg.REMOVE_COMMENT = "Hapus Komentar";
 Blockly.Msg.RENAME_VARIABLE = "Ubah nama variabel...";

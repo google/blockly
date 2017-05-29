@@ -81,21 +81,12 @@ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Gionté n'imission";
 Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Përmëtte le diciairassion";
 Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "Costa imission a dj'imission duplicà.";
 Blockly.Msg.IOS_PROCEDURES_INPUTS = "IMISSION";
-<<<<<<< HEAD
-Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Add";  // untranslated
-Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
-Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Delete";  // untranslated
-Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
-Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Rename";  // untranslated
-Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Variable name";  // untranslated
-=======
 Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Gionté";
 Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Gionté na variàbil";
 Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Eliminé";
 Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "A peul nen dovré un nòm ëd variàbil veuid.";
 Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Arnominé";
 Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Nòm ëd la variàbil";
->>>>>>> 388b32d0973d2f7dde3c30ebf0dee4268e32eeba
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "creé na lista veuida";
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "Smon-e na lista, ëd longheur 0, ch'a conten gnun-a argistrassion";
@@ -319,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "nòm ëd l'imission:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Gionté n'imission a la fonsion.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "imission";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Gionté, gavé o riordiné j'imission ëd sa fonsion.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Fé torna";
 Blockly.Msg.REMOVE_COMMENT = "Scancelé un coment";
 Blockly.Msg.RENAME_VARIABLE = "Arnomé la variàbil...";

@@ -81,17 +81,10 @@ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
 Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
 Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
 Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
-<<<<<<< HEAD
-Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Add";  // untranslated
-Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
-Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Läschen";
-Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
-=======
 Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Derbäisetzen";
 Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Variabel derbäisetzen";
 Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Läschen";
 Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "Dir kënnt keen eidelen Numm fir eng Variabel benotzen.";
->>>>>>> 388b32d0973d2f7dde3c30ebf0dee4268e32eeba
 Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Ëmbenennen";
 Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Numm vun der Variabel";
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
@@ -317,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "input name:";  // untranslated
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inputs";  // untranslated
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Widderhuelen";
 Blockly.Msg.REMOVE_COMMENT = "Bemierkung ewechhuelen";
 Blockly.Msg.RENAME_VARIABLE = "Variabel ëmbenennen...";

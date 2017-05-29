@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "назва входу:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Додати до функції вхідні параметри.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "входи";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Додайте, вилучіть або змініть порядок вхідних параметрів для цієї функції.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Повторити";
 Blockly.Msg.REMOVE_COMMENT = "Видалити коментар";
 Blockly.Msg.RENAME_VARIABLE = "Перейменувати змінну...";

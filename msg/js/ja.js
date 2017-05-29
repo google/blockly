@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "入力名:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "関数への入力の追加。";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "入力";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "この関数への入力の追加、削除、順番変更。";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "やり直す";
 Blockly.Msg.REMOVE_COMMENT = "コメントを削除";
 Blockly.Msg.RENAME_VARIABLE = "変数の名前を変える…";

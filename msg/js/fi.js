@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "syötteen nimi:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Lisää sisääntulon funktioon.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "syötteet";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Lisää, poista tai järjestele uudelleen tämän toiminnon tulot.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Tee uudelleen";
 Blockly.Msg.REMOVE_COMMENT = "Poista kommentti";
 Blockly.Msg.RENAME_VARIABLE = "Nimeä uudelleen muuttuja...";

@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "שם הקלט:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "הוסף קלט לפונקציה";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "מקורות קלט";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "הוסף, הסר או סדר מחדש קלטים לפונקציה זו";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "ביצוע חוזר";
 Blockly.Msg.REMOVE_COMMENT = "הסר תגובה";
 Blockly.Msg.RENAME_VARIABLE = "שנה את שם המשתנה...";

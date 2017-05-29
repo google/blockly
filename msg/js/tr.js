@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "girdi adı:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "İşleve bir girdi ekleyin.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "girdiler";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Bu işlevin girdilerini ekleyin, çıkarın, ya da yeniden sıralayın.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Yinele";
 Blockly.Msg.REMOVE_COMMENT = "Yorumu Sil";
 Blockly.Msg.RENAME_VARIABLE = "Değişkeni yeniden adlandır...";

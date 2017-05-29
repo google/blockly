@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "nume de intrare:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Adaugă un parametru de intrare pentru funcție.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "intrări";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Adăugă, șterge sau reordonează parametrii de intrare ai acestei funcții.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Elimină comentariu";
 Blockly.Msg.RENAME_VARIABLE = "Redenumirea variabilei...";

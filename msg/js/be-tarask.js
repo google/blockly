@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "назва парамэтру:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Дадаць уваходныя парамэтры ў функцыю.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "парамэтры";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Дадаць, выдаліць ці запісаць чаргу ўваходных парамэтраў для гэтай функцыі.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Паўтарыць";
 Blockly.Msg.REMOVE_COMMENT = "Выдаліць камэнтар";
 Blockly.Msg.RENAME_VARIABLE = "Перайменаваць зьменную…";

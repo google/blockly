@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "इनपुट का नाम:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "फंगक्शन को इनपुट प्रदान करें।";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "इनपुट";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "फिर से करें";
 Blockly.Msg.REMOVE_COMMENT = "टिप्पणी हटायें";
 Blockly.Msg.RENAME_VARIABLE = "चर का नाम बदलें...";

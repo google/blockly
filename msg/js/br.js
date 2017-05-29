@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "Anv ar moned";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Ouzhpennañ ur moned d'an arc'hwel.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "Monedoù";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Ouzhpennañ, lemel, pe adkempenn monedoù an arc'hwel-mañ.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Adober";
 Blockly.Msg.REMOVE_COMMENT = "Lemel an evezhiadenn kuit";
 Blockly.Msg.RENAME_VARIABLE = "Adenvel an argemmenn...";

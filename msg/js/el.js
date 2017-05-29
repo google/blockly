@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "όνομα εισόδου:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Πρόσθεσε μια είσοδος στη συνάρτηση";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "είσοδοι";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Προσθέτει, αφαιρεί ή αναδιατάσσει εισόδους σε αυτήν τη λειτουργία";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Ακύρωση αναίρεσης";
 Blockly.Msg.REMOVE_COMMENT = "Αφαίρεσε Το Σχόλιο";
 Blockly.Msg.RENAME_VARIABLE = "Μετονόμασε τη μεταβλητή...";

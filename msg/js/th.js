@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "ชื่อนำเข้า:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "เพิ่มค่าป้อนเข้าฟังก์ชัน";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "นำเข้า";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "เพิ่ม, ลบ, หรือจัดเรียง ข้อมูลที่ป้อนเข้าฟังก์ชันนี้";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "ทำซ้ำ";
 Blockly.Msg.REMOVE_COMMENT = "เอาคำอธิบายออก";
 Blockly.Msg.RENAME_VARIABLE = "เปลี่ยนชื่อตัวแปร...";

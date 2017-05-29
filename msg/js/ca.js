@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "nom d'entrada:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Afegir una entrada per la funció.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "entrades";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Afegir, eliminar o canviar l'ordre de les entrades per aquesta funció.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Elimina el comentari";
 Blockly.Msg.RENAME_VARIABLE = "Reanomena variable...";

@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "inmatningsnamn:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Lägg till en inmatning till funktionen.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inmatningar";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Lägg till, ta bort och ändra ordningen för inmatningar till denna funktion.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Gör om";
 Blockly.Msg.REMOVE_COMMENT = "Radera kommentar";
 Blockly.Msg.RENAME_VARIABLE = "Byt namn på variabel...";

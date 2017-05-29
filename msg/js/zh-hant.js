@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "輸入名稱：";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "添加一個輸入區塊到函式。";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "輸入";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "添加、刪除或重新排列此函式的輸入。";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "重試";
 Blockly.Msg.REMOVE_COMMENT = "移除註解";
 Blockly.Msg.RENAME_VARIABLE = "重新命名變數...";

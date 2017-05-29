@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "heiti inntaks:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Bæta inntaki við fallið.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inntök";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Bæta við, fjarlægja eða umraða inntökum fyrir þetta fall.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Endurtaka";
 Blockly.Msg.REMOVE_COMMENT = "Fjarlægja skýringu";
 Blockly.Msg.RENAME_VARIABLE = "Endurnefna breytu...";

@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "பெயரை உள்ளிடு
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "செயல்கூறுக்கு ஒரு உள்ளீட்டை சேர்.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "உள்ளீடுகள்";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "செயல்கூறுகளின் உள்ளீட்டை சேர், நீக்கு, or மீண்டும் வரிசை செய்.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "கருத்தை நீக்கு";
 Blockly.Msg.RENAME_VARIABLE = "மாறிலியை மறுபெயரிடுக...";

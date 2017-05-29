@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "назив улаза:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Додајте улазна функција.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "улази";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Да додате, уклоните или переупорядочить улаза за ову функцију.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Понови";
 Blockly.Msg.REMOVE_COMMENT = "Уклони коментар";
 Blockly.Msg.RENAME_VARIABLE = "Преименуј променљиву…";

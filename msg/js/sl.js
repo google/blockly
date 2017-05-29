@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "ime vnosa:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Funkciji doda vnos.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "vnosi";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Doda, odstrani ali spremeni vrstni red vnosov te funkcije.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Ponovi";
 Blockly.Msg.REMOVE_COMMENT = "Odstrani komentar";
 Blockly.Msg.RENAME_VARIABLE = "Preimenuj spremenljivko...";

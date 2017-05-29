@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "sisend nimega:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Lisab funktsioonile sisendi.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "sisendid";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Funktsiooni sisendite lisamine, eemaldamine või järjestuse muutmine.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Tee uuesti";
 Blockly.Msg.REMOVE_COMMENT = "Eemalda kommentaar";
 Blockly.Msg.RENAME_VARIABLE = "Nimeta muutuja ümber ...";

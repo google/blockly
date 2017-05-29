@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "ಉಲಪರಿಪುದ ಪುದರ
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "ಕಾರ್ಯೊದ ಉಲಪರಿಪುನು ಸೇರಲೆ.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "ಉಲಪರಿಪು";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "ಸೇರಯರ, ದೆತ್ತ್‌ ಪಾಡೆರೆ ಅತ್ತಂಡ ಪಿರಕೋರಿಕೆದ ಉಲಪರಿಪುದ ಕಾರ್ಯೊನು ಮಲ್ಪುಲೆ.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "ಪಿರವುದಂಚ";
 Blockly.Msg.REMOVE_COMMENT = "ಟಿಪ್ಪಣಿನ್ ದೆತ್ತ್‌ಪಾಡ್ಲೆ";
 Blockly.Msg.RENAME_VARIABLE = "ಬದಲಾವಣೆ ಆಯಿನ ಪುದರ್‍ನ್ ನಾನೊರೊ ಪನ್ಲೆ";

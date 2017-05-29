@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "invoernaam:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Een invoer aan de functie toevoegen.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "ingangen";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Invoer van deze functie toevoegen, verwijderen of herordenen.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Opnieuw";
 Blockly.Msg.REMOVE_COMMENT = "Opmerking verwijderen";
 Blockly.Msg.RENAME_VARIABLE = "Variabele hernoemen...";

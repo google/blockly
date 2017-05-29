@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "biến:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Thêm một đầu vào cho hàm.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "các tham số";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Thêm, xóa hoặc sắp xếp lại các đầu vào cho hàm này.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Xóa Chú Giải";
 Blockly.Msg.RENAME_VARIABLE = "Thay tên biến...";

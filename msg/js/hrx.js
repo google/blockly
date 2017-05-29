@@ -310,6 +310,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "Markiear Funktionsblock";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Generier/erzeich \"Uffruf %1\"";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "Parameter";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Variable:";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Kommentar entferne";
 Blockly.Msg.RENAME_VARIABLE = "Die neie Variable sei Noome:";

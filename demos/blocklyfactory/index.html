@@ -1,0 +1,260 @@
+<!-- TODO(quacht): move the CSS out to a separate file -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="target-densitydpi=device-dpi, height=660, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Blockly Demo: Blockly Factory</title>
+  <script src="/storage.js"></script>
+  <script src="../../blockly_uncompressed.js"></script>
+  <script src="../../generators/javascript.js"></script>
+  <script src="../../../closure-library/closure/goog/base.js"></script>
+  <script src="factory.js"></script>
+  <script src="block_library_view.js"></script>
+  <script src="block_library_storage.js"></script>
+  <script src="block_library_controller.js"></script>
+  <script src="block_exporter_tools.js"></script>
+  <script src="block_exporter_view.js"></script>
+  <script src="block_exporter_controller.js"></script>
+  <script src="blocks.js"></script>
+  <script src="app_controller.js"></script>
+  <link rel="stylesheet" href="factory.css">
+  <link rel="stylesheet" href="../prettify.css">
+  <script src="../prettify.js"></script>
+  <script>
+    var blocklyFactory;
+    var init = function() {
+      blocklyFactory = new AppController();
+      blocklyFactory.init();
+    };
+    window.addEventListener('load', init);
+</script>
+</head>
+<body>
+  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Blockly Factory</h1>
+
+  <div id="tabContainer">
+    <div id="blockfactory_tab" class="tab tabon"> Block Factory</div>
+    <div class="tabGap"></div>
+    <div id="blocklibraryExporter_tab" class="tab taboff"> Block Library Exporter</div>
+  </div>
+
+  <div id="blockLibraryExporter">
+    <div id="exporterButtons">
+      <button id="clearSelectedButton"> Clear Blocks </button>
+      <button id="addAllButton"> Add All Stored Blocks </button>
+    </div>
+    <div id="helperTextDiv">
+      <p id="helperText"> Drag blocks into your workspace to select them for download.</p>
+    </div>
+    <!-- Inject exportSelectorWorkspace into this div -->
+    <div id="exportSelector"></div>
+    <!-- Users may customize export settings through this form -->
+    <div id="exportSettings">
+      <h3> Block Export Settings </h3>
+      <br>
+      <form id="exportSettingsForm">
+        Download Block Definition:
+        <input type="checkbox" id="blockDefCheck"><br>
+              Language code:
+                <select id="exportFormat">
+                  <option value="JSON">JSON</option>
+                  <option value="JavaScript">JavaScript</option>
+                </select><br>
+          Block Definition(s) File Name:<br>
+          <input type="text" id="blockDef_filename"><br>
+          <br>
+        Download Generator Stubs:
+        <input type="checkbox" id="genStubCheck"><br>
+                <select id="exportLanguage">
+                  <option value="JavaScript">JavaScript</option>
+                  <option value="Python">Python</option>
+                  <option value="PHP">PHP</option>
+                  <option value="Lua">Lua</option>
+                  <option value="Dart">Dart</option>
+                </select><br>
+          Block Generator Stub(s) File Name: <br>
+          <input type="text" id="generatorStub_filename"><br>
+          <br>
+      </form>
+        <button id="exporterSubmitButton"> Export </button>
+    </div>
+  </div>
+
+  <table id="blockFactoryContent">
+    <tr>
+      <td width="50%" height="5%">
+        <table>
+          <tr id="blockLibrary">
+            <td id="blockLibraryContainer">
+            <span>
+              <h3>Block Library:</h3>
+              <select id="blockLibraryDropdown">
+              </select>
+            </span>
+            </td>
+            <td id="blockLibraryControls">
+            <button id="saveToBlockLibraryButton" title="Save block xml to a local file.">
+              <span>Save to Block Library</span>
+            </button>
+            <button id="removeBlockFromLibraryButton" title="Remove block from library.">
+              <span>Remove Current Block from Library</span>
+            </button>
+            <button id="clearBlockLibraryButton" title="Clear Block Library below.">
+              <span>Clear Block Library</span>
+            </button>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td>
+        <table>
+          <tr>
+            <td id="previewContainer">
+              <h3>Preview:
+                <select id="direction">
+                  <option value="ltr">LTR</option>
+                  <option value="rtl">RTL</option>
+                </select>
+              </h3>
+            </td>
+            <td id="buttonContainer">
+              <button id="linkButton" title="Save and link to blocks.">
+                <img src="link.png" height="21" width="21">
+              </button>
+              <button id="linkButton" title="Save and link to blocks.">
+                <img src="link.png" height="21" width="21">
+              </button>
+              <button id="createNewBlockButton" title="Create a new block.">
+                <span> Create New Block</span>
+              </button>
+              <label for="files" class="buttonStyle">
+                <span class=>Import Block Library</span>
+              </label>
+              <input id="files" type="file" name="files"
+                  accept="application/xml">
+              <button id="localSaveButton" title="Save block library xml to a local file.">
+                <span>Download Block Library</span>
+              </button>
+              <button id="helpButton" title="View documentation in new window.">
+                <span>Help</span>
+              </button>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td id="blocklyWorkspaceContainer">
+        <div id="blockly"></div>
+        <div id="blocklyMask"></div>
+      </td>
+      <td width="50%" height="95%">
+        <table>
+          <tr>
+            <td height="30%">
+              <div id="preview"></div>
+            </td>
+          </tr>
+          <tr>
+            <td height="5%">
+              <h3>Language code:
+                <select id="format">
+                  <option value="JSON">JSON</option>
+                  <option value="JavaScript">JavaScript</option>
+                  <option value="Manual">Manual edit&hellip;</option>
+                </select>
+                <button class ="downloadButton" id="downloadBlocks"
+                        title="Download block definition to a file.">
+                 <span>Download</span>
+               </button>
+              </h3>
+            </td>
+          </tr>
+          <tr>
+            <td height="30%">
+              <pre id="languagePre"></pre>
+              <textarea id="languageTA"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td height="5%">
+              <h3>Generator stub:
+                <select id="language">
+                  <option value="JavaScript">JavaScript</option>
+                  <option value="Python">Python</option>
+                  <option value="PHP">PHP</option>
+                  <option value="Lua">Lua</option>
+                  <option value="Dart">Dart</option>
+                </select>
+                <button id="downloadGenerator" class="downloadButton"
+                        title="Downloadgenerator stub to a file.">
+                  <span>Download</span>
+                </button>
+              </h3>
+            </td>
+          </tr>
+          <tr>
+            <td height="30%">
+              <pre id="generatorPre"></pre>
+            </td>
+          </tr>
+        </table>
+      </td>
+  </table>
+
+  <xml id="toolbox">
+    <category name="Input">
+      <block type="input_value">
+        <value name="TYPE">
+          <shadow type="type_null"></shadow>
+        </value>
+      </block>
+      <block type="input_statement">
+        <value name="TYPE">
+          <shadow type="type_null"></shadow>
+        </value>
+      </block>
+      <block type="input_dummy"></block>
+    </category>
+    <category name="Field">
+      <block type="field_static"></block>
+      <block type="field_input"></block>
+      <block type="field_number"></block>
+      <block type="field_angle"></block>
+      <block type="field_dropdown"></block>
+      <block type="field_checkbox"></block>
+      <block type="field_colour"></block>
+      <!--
+      Date picker commented out since it increases footprint by 60%.
+      Add it only if you need it.  See also goog.require in blockly.js.
+      <block type="field_date"></block>
+      -->
+      <block type="field_variable"></block>
+      <block type="field_image"></block>
+    </category>
+    <category name="Type">
+      <block type="type_group"></block>
+      <block type="type_null"></block>
+      <block type="type_boolean"></block>
+      <block type="type_number"></block>
+      <block type="type_string"></block>
+      <block type="type_list"></block>
+      <block type="type_other"></block>
+    </category>
+    <category name="Colour" id="colourCategory">
+      <block type="colour_hue"><mutation colour="20"></mutation><field name="HUE">20</field></block>
+      <block type="colour_hue"><mutation colour="65"></mutation><field name="HUE">65</field></block>
+      <block type="colour_hue"><mutation colour="120"></mutation><field name="HUE">120</field></block>
+      <block type="colour_hue"><mutation colour="160"></mutation><field name="HUE">160</field></block>
+      <block type="colour_hue"><mutation colour="210"></mutation><field name="HUE">210</field></block>
+      <block type="colour_hue"><mutation colour="230"></mutation><field name="HUE">230</field></block>
+      <block type="colour_hue"><mutation colour="260"></mutation><field name="HUE">260</field></block>
+      <block type="colour_hue"><mutation colour="290"></mutation><field name="HUE">290</field></block>
+      <block type="colour_hue"><mutation colour="330"></mutation><field name="HUE">330</field></block>
+    </category>
+  </xml>
+</body>
+</html>

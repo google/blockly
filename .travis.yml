@@ -15,6 +15,7 @@ matrix:
 
 before_install:
 - npm install google-closure-library
+- npm install webdriverio
 # Symlink closure library
 - ln -s $(npm root)/google-closure-library ../closure-library
 

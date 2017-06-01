@@ -30,9 +30,10 @@ goog.provide('Blockly.VariableMap');
  * Class for a variable map.  This contains a dictionary data structure with
  * variable types as keys and lists of variables as values.  The list of
  * variables are the type indicated by the key.
+ * @param {!Blockly.Workspace} workspace The variable's workspace.
  * @constructor
  */
- Blockly.VariableMap = function() {
+ Blockly.VariableMap = function(workspace) {
  /**
    * @type {!Object<string, !Array.<Blockly.VariableModel>>}
    * A map from variable type to list of variable names.  The lists contain all
@@ -41,6 +42,12 @@ goog.provide('Blockly.VariableMap');
    * @private
    */
   this.variableMap_ = {};
+
+  /**
+   * The workspace the variable is in.
+   * @type {!Blockly.Workspace}
+   */
+  this.workspace = workspace;
 };
 
 /**
@@ -56,7 +63,8 @@ Blockly.VariableMap.prototype.clear = function() {
  * @param {?Blockly.VariableModel} variable Variable to rename.
  * @param {string} newName New variable name.
  */
-Blockly.VariableMap.prototype.renameVariable = function(variable, newName) {
+Blockly.VariableMap.prototype.renameVariable = function(variable,
+  newName) {
   var newVariable = this.getVariable(newName);
   var variableIndex = -1;
   var newVariableIndex = -1;
@@ -121,7 +129,7 @@ Blockly.VariableMap.prototype.createVariable = function(name, opt_type, opt_id) 
   opt_id = opt_id || Blockly.utils.genUid();
   opt_type = opt_type || '';
 
-  variable = new Blockly.VariableModel(name, opt_type, opt_id);
+  variable = new Blockly.VariableModel(this.workspace, name, opt_type, opt_id);
   // If opt_type is not a key, create a new list.
   if (!this.variableMap_[opt_type]) {
     this.variableMap_[opt_type] = [variable];

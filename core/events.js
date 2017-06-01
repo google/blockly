@@ -103,6 +103,24 @@ Blockly.Events.MOVE = 'move';
 Blockly.Events.BLOCK_MOVE = Blockly.Events.MOVE;
 
 /**
+ * Name of event that creates a variable.
+ * @const
+ */
+Blockly.Events.VAR_CREATE = 'var_create';
+
+/**
+ * Name of event that deletes a variable.
+ * @const
+ */
+Blockly.Events.VAR_DELETE = 'var_delete';
+
+/**
+ * Name of event that renames a variable.
+ * @const
+ */
+Blockly.Events.VAR_RENAME = 'var_rename';
+
+/**
  * Name of event that records a UI change.
  * @const
  */
@@ -300,6 +318,15 @@ Blockly.Events.fromJson = function(json, workspace) {
     case Blockly.Events.MOVE:
       event = new Blockly.Events.Move(null);
       break;
+    case Blockly.Events.VAR_CREATE:
+      event = new Blockly.Events.VarCreate(null);
+      break;
+    case Blockly.Events.VAR_DELETE:
+      event = new Blockly.Events.VarDelete(null);
+      break;
+    case Blockly.Events.VAR_RENAME:
+      event = new Blockly.Events.VarRename(null);
+      break;
     case Blockly.Events.UI:
       event = new Blockly.Events.Ui(null);
       break;
@@ -313,13 +340,16 @@ Blockly.Events.fromJson = function(json, workspace) {
 
 /**
  * Abstract class for an event.
- * @param {Blockly.Block} block The block.
+ * @param {Blockly.Block|Blockly.VariableModel} elem The block or variable.
  * @constructor
  */
-Blockly.Events.Abstract = function(block) {
-  if (block) {
-    this.blockId = block.id;
-    this.workspaceId = block.workspace.id;
+Blockly.Events.Abstract = function(elem) {
+  if (elem instanceof Blockly.Block) {
+    this.blockId = elem.id;
+    this.workspaceId = elem.workspace.id;
+  }
+  else if (elem instanceof Blockly.VariableModel){
+    this.workspaceId = elem.workspace.id;
   }
   this.group = Blockly.Events.group_;
   this.recordUndo = Blockly.Events.recordUndo;
@@ -860,6 +890,186 @@ Blockly.Events.Ui.prototype.fromJson = function(json) {
   Blockly.Events.Ui.superClass_.fromJson.call(this, json);
   this.element = json['element'];
   this.newValue = json['newValue'];
+};
+
+/**
+ * Class for a variable creation event.
+ * @param {Blockly.VariableModel} variable The created variable.
+ *     Null for a blank event.
+ * @extends {Blockly.Events.Abstract}
+ * @constructor
+ */
+Blockly.Events.VarCreate = function(variable) {
+  if (!variable) {
+    return;  // Blank event to be populated by fromJson.
+  }
+  Blockly.Events.VarCreate.superClass_.constructor.call(this, variable);
+  this.id = variable.getId();
+  this.varType = variable.type;
+  this.name = variable.name;
+};
+goog.inherits(Blockly.Events.VarCreate, Blockly.Events.Abstract);
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.VarCreate.prototype.type = Blockly.Events.VAR_CREATE;
+
+/**
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
+Blockly.Events.VarCreate.prototype.toJson = function() {
+  var json = Blockly.Events.VarCreate.superClass_.toJson.call(this);
+  json['id'] = this.id;
+  json['varType'] = this.varType;
+  json['name'] = this.name;
+  return json;
+};
+
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.VarCreate.prototype.fromJson = function(json) {
+  Blockly.Events.VarCreate.superClass_.fromJson.call(this, json);
+  this.id = json['id'];
+  this.varType = json['varType'];
+  this.name = json['name'];
+};
+
+/**
+ * Run a variable creation event.
+ * @param {boolean} forward True if run forward, false if run backward (undo).
+ */
+Blockly.Events.VarCreate.prototype.run = function(forward) {
+  var workspace = Blockly.Workspace.getById(this.workspaceId);
+  if (forward) {
+    workspace.createVariable(this.name, this.varType, this.id);
+  } else {
+    workspace.deleteVariableById(this.id);
+  }
+};
+
+/**
+ * Class for a variable deletion event.
+ * @param {Blockly.VariableModel} variable The deleted variable.
+ *     Null for a blank event.
+ * @extends {Blockly.Events.Abstract}
+ * @constructor
+ */
+Blockly.Events.VarDelete = function(variable) {
+  if (!variable) {
+    return;  // Blank event to be populated by fromJson.
+  }
+  Blockly.Events.VarDelete.superClass_.constructor.call(this, variable);
+  this.id = variable.getId();
+  this.varType = variable.type;
+  this.name = variable.name;
+};
+goog.inherits(Blockly.Events.VarDelete, Blockly.Events.Abstract);
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.VarDelete.prototype.type = Blockly.Events.VAR_DELETE;
+
+/**
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
+Blockly.Events.VarDelete.prototype.toJson = function() {
+  var json = Blockly.Events.VarDelete.superClass_.toJson.call(this);
+  json['id'] = this.id;
+  json['varType'] = this.varType;
+  json['name'] = this.name;
+  return json;
+};
+
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.VarDelete.prototype.fromJson = function(json) {
+  Blockly.Events.VarDelete.superClass_.fromJson.call(this, json);
+  this.id = json['id'];
+  this.varType = json['varType'];
+  this.name = json['name'];
+};
+
+/**
+ * Run a variable deletion event.
+ * @param {boolean} forward True if run forward, false if run backward (undo).
+ */
+Blockly.Events.VarDelete.prototype.run = function(forward) {
+  var workspace = Blockly.Workspace.getById(this.workspaceId);
+  if (forward) {
+    workspace.deleteVariableById(this.id);
+  } else {
+    workspace.createVariable(this.name, this.varType, this.id);
+  }
+};
+
+/**
+ * Class for a variable rename event.
+ * @param {Blockly.VariableModel} variable The deleted variable.
+ *     Null for a blank event.
+ * @extends {Blockly.Events.Abstract}
+ * @constructor
+ */
+Blockly.Events.VarRename = function(variable, newName) {
+  if (!variable) {
+    return;  // Blank event to be populated by fromJson.
+  }
+  Blockly.Events.VarRename.superClass_.constructor.call(this, variable);
+  this.id = variable.getId();
+  this.oldName = variable.name;
+  this.newName = newName;
+};
+goog.inherits(Blockly.Events.VarRename, Blockly.Events.Abstract);
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.VarRename.prototype.type = Blockly.Events.VAR_RENAME;
+
+/**
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
+Blockly.Events.VarRename.prototype.toJson = function() {
+  var json = Blockly.Events.VarRename.superClass_.toJson.call(this);
+  json['id'] = this.id;
+  json['oldName'] = this.oldName;
+  json['newName'] = this.newName;
+  return json;
+};
+
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.VarRename.prototype.fromJson = function(json) {
+  Blockly.Events.VarRename.superClass_.fromJson.call(this, json);
+  this.id = json['id'];
+  this.oldName = json['oldName'];
+  this.newName = json['newName'];
+};
+
+/**
+ * Run a variable rename event.
+ * @param {boolean} forward True if run forward, false if run backward (undo).
+ */
+Blockly.Events.VarRename.prototype.run = function(forward) {
+  var workspace = Blockly.Workspace.getById(this.workspaceId);
+  if (forward) {
+    workspace.renameVariableById(this.id, this.newName);
+  } else {
+    workspace.renameVariableById(this.id, this.oldName);
+  }
 };
 
 /**

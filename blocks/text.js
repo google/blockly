@@ -67,63 +67,50 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_TEXT_JOIN_TOOLTIP}",
     "mutator": "text_join_mutator"
 
+  },
+  {
+    "type": "text_create_join_container",
+    "message0": "%{BKY_TEXT_CREATE_JOIN_TITLE_JOIN} %1 %2",
+    "args0": [{
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_statement",
+      "name": "STACK"
+    }],
+    "colour": "%{BKY_TEXTS_HUE}",
+    "tooltip": "%{BKY_TEXT_CREATE_JOIN_TOOLTIP}",
+    "enableContextMenu": false
+  },
+  {
+    "type": "text_create_join_item",
+    "message0": "%{BKY_TEXT_CREATE_JOIN_ITEM_TITLE_ITEM}",
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": "%{BKY_TEXTS_HUE}",
+    "tooltip": "{%BKY_TEXT_CREATE_JOIN_ITEM_TOOLTIP}",
+    "enableContextMenu": false
+  },
+  {
+    "type": "text_append",
+    "message0": "%{BKY_TEXT_APPEND_TITLE}",
+    "args0": [{
+      "type": "field_variable",
+      "name": "VAR",
+      "variable": "%{BKY_TEXT_APPEND_VARIABLE}"
+    },
+    {
+      "type": "input_value",
+      "name": "TEXT"
+    }],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": "%{BKY_TEXTS_HUE}",
+    "extensions": [
+      "text_append_tooltip"
+    ]
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
-
-Blockly.Blocks['text_create_join_container'] = {
-  /**
-   * Mutator block for container.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.setColour(Blockly.Blocks.texts.HUE);
-    this.appendDummyInput()
-        .appendField(Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN);
-    this.appendStatementInput('STACK');
-    this.setTooltip(Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP);
-    this.contextMenu = false;
-  }
-};
-
-Blockly.Blocks['text_create_join_item'] = {
-  /**
-   * Mutator block for add items.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.setColour(Blockly.Blocks.texts.HUE);
-    this.appendDummyInput()
-        .appendField(Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TITLE_ITEM);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setTooltip(Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP);
-    this.contextMenu = false;
-  }
-};
-
-Blockly.Blocks['text_append'] = {
-  /**
-   * Block for appending to a variable in place.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.setHelpUrl(Blockly.Msg.TEXT_APPEND_HELPURL);
-    this.setColour(Blockly.Blocks.texts.HUE);
-    this.appendValueInput('TEXT')
-        .appendField(Blockly.Msg.TEXT_APPEND_TO)
-        .appendField(new Blockly.FieldVariable(
-        Blockly.Msg.TEXT_APPEND_VARIABLE), 'VAR')
-        .appendField(Blockly.Msg.TEXT_APPEND_APPENDTEXT);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
-    this.setTooltip(function() {
-      return Blockly.Msg.TEXT_APPEND_TOOLTIP.replace('%1',
-          thisBlock.getFieldValue('VAR'));
-    });
-  }
-};
 
 Blockly.Blocks['text_length'] = {
   /**
@@ -859,8 +846,21 @@ Blockly.Constants.Text.TEXT_JOIN_EXTENSION = function() {
   this.setMutator(new Blockly.Mutator(['text_create_join_item']));
 };
 
+Blockly.Constants.Text.TEXT_APPEND_TOOLTIP_EXTENSION = function() {
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    this.setTooltip(function() {
+      return Blockly.Msg.TEXT_APPEND_TOOLTIP.replace('%1',
+          thisBlock.getFieldValue('VAR'));
+    });
+    console.log("set tooltip for block " + this.type + " to " + this.tooltip);
+}
+
 Blockly.Extensions.register('text_quotes',
   Blockly.Constants.Text.TEXT_QUOTES_EXTENSION);
+
+Blockly.Extensions.register('text_append_tooltip',
+  Blockly.Constants.Text.TEXT_APPEND_TOOLTIP_EXTENSION);
 
 Blockly.Extensions.registerMutator('text_join_mutator',
   Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN,

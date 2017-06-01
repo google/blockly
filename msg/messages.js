@@ -568,13 +568,9 @@ Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = 'Add an item to the text.';
 
 /// url - This and the other text-related URLs are going to be hard to translate.  As always, it is okay to leave untranslated or paste in the English-language URL.  For these URLs, you might also consider a general URL about how computers represent text (such as the translation of [https://en.wikipedia.org/wiki/String_(computer_science) this Wikipedia page]).
 Blockly.Msg.TEXT_APPEND_HELPURL = 'https://github.com/google/blockly/wiki/Text#text-modification';
-/// block input text - Message preceding the name of a variable to which text should be appended.
+/// block input text - Message that the variable name at %1 will have the item at %2 appended to it.
 /// [[File:blockly-append-text.png]]
-Blockly.Msg.TEXT_APPEND_TO = 'to';
-/// block input text - Message following the variable and preceding the piece of text that should
-/// be appended, as shown below.
-/// [[File:blockly-append-text.png]]
-Blockly.Msg.TEXT_APPEND_APPENDTEXT = 'append text';
+Blockly.Msg.TEXT_APPEND_TITLE = 'to %1 append text %2';
 Blockly.Msg.TEXT_APPEND_VARIABLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /// tooltip - See [https://github.com/google/blockly/wiki/Text#text-modification https://github.com/google/blockly/wiki/Text#text-modification] for more information.\n\nParameters:\n* %1 - the name of the variable to which text should be appended
 Blockly.Msg.TEXT_APPEND_TOOLTIP = 'Append some text to variable "%1".';

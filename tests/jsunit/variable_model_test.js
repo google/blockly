@@ -25,8 +25,14 @@
 'use strict';
 
 var variable;
+var workspace;
 
-function variableTest_tearDown() {
+function variableModelTest_setUp() {
+  workspace = new Blockly.Workspace();
+}
+
+function variableModelTest_tearDown() {
+  workspace.dispose();
   variable = null;
 }
 
@@ -34,45 +40,52 @@ function variableTest_tearDown() {
  * These tests check the constructor of the variable model.
  */
 function testInit_Trivial() {
-  variable = new Blockly.VariableModel('test', 'test_type', 'test_id');
+  variableModelTest_setUp();
+  variable = new Blockly.VariableModel(workspace, 'test', 'test_type',
+    'test_id');
   assertEquals('test', variable.name);
   assertEquals('test_type', variable.type);
   assertEquals('test_id', variable.id_);
-  variableTest_tearDown();
+  variableModelTest_tearDown();
 }
 
 function testInit_NullType() {
-  variable = new Blockly.VariableModel('test', null, 'test_id');
+  variableModelTest_setUp();
+  variable = new Blockly.VariableModel(workspace, 'test', null, 'test_id');
   assertEquals('', variable.type);
-  variableTest_tearDown();
+  variableModelTest_tearDown();
 }
 
 function testInit_UndefinedType() {
-  variable = new Blockly.VariableModel('test', undefined, 'test_id');
+  variableModelTest_setUp();
+  variable = new Blockly.VariableModel(workspace, 'test', undefined, 'test_id');
   assertEquals('', variable.type);
-  variableTest_tearDown();
+  variableModelTest_tearDown();
 }
 
 function testInit_NullId() {
-  variable = new Blockly.VariableModel('test', 'test_type', null);
+  variableModelTest_setUp();
+  variable = new Blockly.VariableModel(workspace, 'test', 'test_type', null);
   assertEquals('test', variable.name);
   assertEquals('test_type', variable.type);
   assertNotNull(variable.id_);
-  variableTest_tearDown();
+  variableModelTest_tearDown();
 }
 
 function testInit_UndefinedId() {
-  variable = new Blockly.VariableModel('test', 'test_type', undefined);
+  variableModelTest_setUp();
+  variable = new Blockly.VariableModel(workspace, 'test', 'test_type', undefined);
   assertEquals('test', variable.name);
   assertEquals('test_type', variable.type);
   assertNotNull(variable.id_);
-  variableTest_tearDown();
+  variableModelTest_tearDown();
 }
 
 function testInit_OnlyNameProvided() {
-  variable = new Blockly.VariableModel('test');
+  variableModelTest_setUp();
+  variable = new Blockly.VariableModel(workspace, 'test');
   assertEquals('test', variable.name);
   assertEquals('', variable.type);
   assertNotNull(variable.id_);
-  variableTest_tearDown();
+  variableModelTest_tearDown();
 }

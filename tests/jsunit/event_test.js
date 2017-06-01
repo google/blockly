@@ -72,10 +72,20 @@ function test_abstract_constructor_block() {
   setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, '1');
   var block = new Blockly.Block(workspace, 'field_variable_test_block');
   var event = new Blockly.Events.Abstract(block);
-  assertEquals('1', event.blockId);
-  assertEquals(workspace.id, event.workspaceId);
-  assertEquals('', event.group);
-  assertEquals(true, event.recordUndo);
+  assertUndefined(event.variableId);
+  checkExactEventValues(event, {'blockId': '1', 'workspaceId': workspace.id,
+    'group': '', 'recordUndo': true});
+  eventTest_tearDownWithMockBlocks();
+}
+
+function test_abstract_constructor_variable() {
+  eventTest_setUpWithMockBlocks();
+  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, '1');
+  var variable = workspace.createVariable('name1', 'type1', 'id1');
+  var event = new Blockly.Events.Abstract(variable);
+  assertUndefined(event.blockId);
+  checkExactEventValues(event, {'variableId': 'id1',
+    'workspaceId': workspace.id, 'group': '', 'recordUndo': true});
   eventTest_tearDownWithMockBlocks();
 }
 
@@ -84,8 +94,7 @@ function test_abstract_constructor_null() {
   var event = new Blockly.Events.Abstract(null);
   assertUndefined(event.blockId);
   assertUndefined(event.workspaceId);
-  assertEquals('', event.group);
-  assertEquals(true, event.recordUndo);
+  checkExactEventValues(event, {'group': '', 'recordUndo': true});
   eventTest_tearDownWithMockBlocks();
 }
 
@@ -105,11 +114,25 @@ function checkDeleteEventValues(event, block, ids, type) {
   assertEquals(type, event.type);
 }
 
-function checkChangeAndMoveEventValues(event, values) {
+function checkExactEventValues(event, values) {
   var keys = Object.keys(values);
   for (var i = 0, field; field = keys[i]; i++) {
     assertEquals(values[field], event[field]);
   }
+}
+
+/**
+ * Check if a variable with the given values exists.
+ * @param {!string} name The expected name of the variable.
+ * @param {!string} type The expected type of the variable.
+ * @param {!string} id The expected id of the variable.
+ */
+function eventTest_checkVariableValues(name, type, id) {
+  var variable = workspace.getVariableById(id);
+  assertNotUndefined(variable);
+  assertEquals(name, variable.name);
+  assertEquals(type, variable.type);
+  assertEquals(id, variable.getId());
 }
 
 function test_create_constructor() {
@@ -154,7 +177,7 @@ function test_change_constructor() {
   setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
   var block = new Blockly.Block(workspace, 'field_variable_test_block');
   var event = new Blockly.Events.Change(block, 'field', 'VAR', 'item', 'item2');
-  checkChangeAndMoveEventValues(event, {'element': 'field', 'name': 'VAR',
+  checkExactEventValues(event, {'element': 'field', 'name': 'VAR',
     'oldValue': 'item', 'newValue': 'item2', 'type': 'change'});
   eventTest_tearDownWithMockBlocks();
 }
@@ -165,7 +188,7 @@ function test_blockChange_constructor() {
   var block = new Blockly.Block(workspace, 'field_variable_test_block');
   var event = new Blockly.Events.BlockChange(block, 'field', 'VAR', 'item',
     'item2');
-  checkChangeAndMoveEventValues(event, {'element': 'field', 'name': 'VAR',
+  checkExactEventValues(event, {'element': 'field', 'name': 'VAR',
     'oldValue': 'item', 'newValue': 'item2', 'type': 'change'});
   eventTest_tearDownWithMockBlocks();
 }
@@ -179,7 +202,7 @@ function test_move_constructorCoordinate() {
   block1.xy_ = coordinate;
 
   var event = new Blockly.Events.Move(block1);
-  checkChangeAndMoveEventValues(event, {'oldCoordinate': coordinate,
+  checkExactEventValues(event, {'oldCoordinate': coordinate,
     'type': 'move'});
   eventTest_tearDownWithMockBlocks();
 }
@@ -194,7 +217,7 @@ function test_move_constructoroldParentId() {
   block1.xy_ = new goog.math.Coordinate(3,4);
 
   var event = new Blockly.Events.Move(block1);
-  checkChangeAndMoveEventValues(event, {'oldCoordinate': undefined,
+  checkExactEventValues(event, {'oldCoordinate': undefined,
     'oldParentId': '2', 'type': 'move'});
   block1.parentBlock_ = null;
   eventTest_tearDownWithMockBlocks();
@@ -209,7 +232,7 @@ function test_blockMove_constructorCoordinate() {
   block1.xy_ = coordinate;
 
   var event = new Blockly.Events.BlockMove(block1);
-  checkChangeAndMoveEventValues(event, {'oldCoordinate': coordinate,
+  checkExactEventValues(event, {'oldCoordinate': coordinate,
     'type': 'move'});
   eventTest_tearDownWithMockBlocks();
 }
@@ -224,8 +247,169 @@ function test_blockMove_constructoroldParentId() {
   block1.xy_ = new goog.math.Coordinate(3,4);
 
   var event = new Blockly.Events.BlockMove(block1);
-  checkChangeAndMoveEventValues(event, {'oldCoordinate': undefined,
+  checkExactEventValues(event, {'oldCoordinate': undefined,
     'oldParentId': '2', 'type': 'move'});
   block1.parentBlock_ = null;
   eventTest_tearDownWithMockBlocks();
+}
+
+function test_varCreate_constructor() {
+  eventTest_setUp();
+  var variable = workspace.createVariable('name1', 'type1', 'id1');
+  var event = new Blockly.Events.VarCreate(variable);
+  checkExactEventValues(event, {'name': 'name1', 'varType': 'type1',
+    'type': 'var_create'});
+  eventTest_tearDown();
+}
+
+function test_varCreate_toJson() {
+  eventTest_setUp();
+  var variable = workspace.createVariable('name1', 'type1', 'id1');
+  var event = new Blockly.Events.VarCreate(variable);
+  var json = event.toJson();
+  var expectedJson = ({type: "var_create", variableId: "id1", varType: "type1",
+    name: "name1"});
+
+  assertEquals(JSON.stringify(expectedJson), JSON.stringify(json));
+  eventTest_tearDown();
+}
+
+function test_varCreate_fromJson() {
+  eventTest_setUp();
+  var variable = workspace.createVariable('name1', 'type1', 'id1');
+  var event = new Blockly.Events.VarCreate(variable);
+  var event2 = new Blockly.Events.VarCreate(null);
+  var json = event.toJson();
+  event2.fromJson(json);
+
+  assertEquals(JSON.stringify(json), JSON.stringify(event2.toJson()));
+  eventTest_tearDown();
+}
+
+function test_varCreate_runForward() {
+  eventTest_setUp();
+  var json = {type: "var_create", variableId: "id1", varType: "type1",
+    name: "name1"};
+  var event = Blockly.Events.fromJson(json, workspace);
+  assertNull(workspace.getVariableById('id1'));
+  event.run(true);
+  eventTest_checkVariableValues('name1', 'type1', 'id1');
+  eventTest_tearDown();
+}
+
+function test_varCreate_runBackwards() {
+  eventTest_setUp();
+  var variable = workspace.createVariable('name1', 'type1', 'id1');
+  var event = new Blockly.Events.VarCreate(variable);
+  assertNotNull(workspace.getVariableById('id1'));
+  event.run(false);
+  assertNull(workspace.getVariableById('id1'));
+  eventTest_tearDown();
+}
+
+function test_varDelete_constructor() {
+  eventTest_setUp();
+  var variable = workspace.createVariable('name1', 'type1', 'id1');
+  var event = new Blockly.Events.VarDelete(variable);
+  checkExactEventValues(event, {'name': 'name1', 'varType': 'type1',
+    'variableId':'id1', 'type': 'var_delete'});
+  eventTest_tearDown();
+}
+
+function test_varDelete_toJson() {
+  eventTest_setUp();
+  var variable = workspace.createVariable('name1', 'type1', 'id1');
+  var event = new Blockly.Events.VarDelete(variable);
+  var json = event.toJson();
+  var expectedJson = ({type: "var_delete", variableId: "id1", varType: "type1",
+    name: "name1"});
+
+  assertEquals(JSON.stringify(expectedJson), JSON.stringify(json));
+  eventTest_tearDown();
+}
+
+function test_varDelete_fromJson() {
+  eventTest_setUp();
+  var variable = workspace.createVariable('name1', 'type1', 'id1');
+  var event = new Blockly.Events.VarDelete(variable);
+  var event2 = new Blockly.Events.VarDelete(null);
+  var json = event.toJson();
+  event2.fromJson(json);
+
+  assertEquals(JSON.stringify(json), JSON.stringify(event2.toJson()));
+  eventTest_tearDown();
+}
+
+function test_varDelete_runForwards() {
+  eventTest_setUp();
+  var variable = workspace.createVariable('name1', 'type1', 'id1');
+  var event = new Blockly.Events.VarDelete(variable);
+  assertNotNull(workspace.getVariableById('id1'));
+  event.run(true);
+  assertNull(workspace.getVariableById('id1'));
+  eventTest_tearDown();
+}
+
+function test_varDelete_runBackwards() {
+  eventTest_setUp();
+  var json = {type: "var_delete", variableId: "id1", varType: "type1",
+    name: "name1"};
+  var event = Blockly.Events.fromJson(json, workspace);
+  assertNull(workspace.getVariableById('id1'));
+  event.run(false);
+  eventTest_checkVariableValues('name1', 'type1', 'id1');
+  eventTest_tearDown();
+}
+
+function test_varRename_constructor() {
+  eventTest_setUp();
+  var variable = workspace.createVariable('name1', 'type1', 'id1');
+  var event = new Blockly.Events.VarRename(variable, 'name2');
+  checkExactEventValues(event, {'variableId': 'id1', 'oldName': 'name1',
+    'newName': 'name2', 'type': 'var_rename'});
+  eventTest_tearDown();
+}
+
+function test_varRename_toJson() {
+  eventTest_setUp();
+  var variable = workspace.createVariable('name1', 'type1', 'id1');
+  var event = new Blockly.Events.VarRename(variable, 'name2');
+  var json = event.toJson();
+  var expectedJson = ({type: "var_rename", variableId: "id1", oldName: "name1",
+    newName: "name2"});
+
+  assertEquals(JSON.stringify(expectedJson), JSON.stringify(json));
+  eventTest_tearDown();
+}
+
+function test_varRename_fromJson() {
+  eventTest_setUp();
+  var variable = workspace.createVariable('name1', 'type1', 'id1');
+  var event = new Blockly.Events.VarRename(variable, '');
+  var event2 = new Blockly.Events.VarRename(null);
+  var json = event.toJson();
+  event2.fromJson(json);
+
+  assertEquals(JSON.stringify(json), JSON.stringify(event2.toJson()));
+  eventTest_tearDown();
+}
+
+function test_varRename_runForward() {
+  eventTest_setUp();
+  var variable = workspace.createVariable('name1', 'type1', 'id1');
+  var event = new Blockly.Events.VarRename(variable, 'name2');
+  event.run(true);
+  assertNull(workspace.getVariable('name1'));
+  eventTest_checkVariableValues('name2', 'type1', 'id1');
+  eventTest_tearDown();
+}
+
+function test_varBackard_runForward() {
+  eventTest_setUp();
+  var variable = workspace.createVariable('name1', 'type1', 'id1');
+  var event = new Blockly.Events.VarRename(variable, 'name2');
+  event.run(false);
+  assertNull(workspace.getVariable('name2'));
+  eventTest_checkVariableValues('name1', 'type1', 'id1');
+  eventTest_tearDown();
 }

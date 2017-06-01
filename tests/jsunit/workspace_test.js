@@ -72,18 +72,6 @@ function createMockBlock(variable_name) {
 }
 
 /**
- * Check that two arrays have the same content.
- * @param {!Array.<string>} array1 The first array.
- * @param {!Array.<string>} array2 The second array.
- */
-function isEqualArrays(array1, array2) {
-  assertEquals(array1.length, array2.length);
-  for (var i = 0; i < array1.length; i++) {
-    assertEquals(array1[i], array2[i]);
-  }
-}
-
-/**
  * Check if a variable with the given values exists.
  * @param {!string} name The expected name of the variable.
  * @param {!string} type The expected type of the variable.
@@ -95,27 +83,6 @@ function workspaceTest_checkVariableValues(name, type, id) {
   assertEquals(name, variable.name);
   assertEquals(type, variable.type);
   assertEquals(id, variable.getId());
-}
-
-/**
- * Creates a controlled MethodMock. Set the expected return values. Set the
- * method to replay.
- * @param {!Object} scope The scope of the method to be mocked out.
- * @param {!string} funcName The name of the function we're going to mock.
- * @param {Object} parameters The parameters to call the mock with.
- * @param {!Object} return_value The value to return when called.
- * @return {!goog.testing.MockInterface} The mocked method.
- */
-function setUpMockMethod(scope, funcName, parameters, return_value) {
-  var mockMethod = mockControl_.createMethodMock(scope, funcName);
-  if (parameters) {
-    mockMethod(parameters).$returns(return_value);
-  }
-  else {
-    mockMethod().$returns(return_value);
-  }
-  mockMethod.$replay();
-  return mockMethod;
 }
 
 function test_emptyWorkspace() {
@@ -242,12 +209,11 @@ function test_updateVariableStore_TrivialNoClear() {
   workspaceTest_setUp();
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
-  var mockAllUsedVariables = setUpMockMethod(Blockly.Variables,
-      'allUsedVariables', workspace, ['name1', 'name2']);
+  setUpMockMethod(mockControl_, Blockly.Variables, 'allUsedVariables',
+    [workspace], [['name1', 'name2']]);
 
   try {
     workspace.updateVariableStore();
-    mockAllUsedVariables.$verify();
     workspaceTest_checkVariableValues('name1', 'type1', 'id1');
     workspaceTest_checkVariableValues('name2', 'type2', 'id2');
   }
@@ -258,12 +224,12 @@ function test_updateVariableStore_TrivialNoClear() {
 
 function test_updateVariableStore_NameNotInvariableMap_NoClear() {
   workspaceTest_setUp();
-  setUpMockMethod(Blockly.Variables, 'allUsedVariables', workspace, ['name1']);
-  setUpMockMethod(Blockly.utils, 'genUid', null, '1');
+  setUpMockMethod(mockControl_, Blockly.Variables, 'allUsedVariables',
+    [workspace], [['name1']]);
+  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
 
   try {
     workspace.updateVariableStore();
-    mockControl_.$verifyAll();
     workspaceTest_checkVariableValues('name1', '', '1');
   }
   finally {
@@ -275,12 +241,11 @@ function test_updateVariableStore_ClearAndAllInUse() {
   workspaceTest_setUp();
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
-  var mockAllUsedVariables = setUpMockMethod(Blockly.Variables,
-    'allUsedVariables', workspace, ['name1', 'name2']);
+  setUpMockMethod(mockControl_, Blockly.Variables, 'allUsedVariables',
+    [workspace], [['name1', 'name2']]);
 
   try {
     workspace.updateVariableStore(true);
-    mockAllUsedVariables.$verify();
     workspaceTest_checkVariableValues('name1', 'type1', 'id1');
     workspaceTest_checkVariableValues('name2', 'type2', 'id2');
   }
@@ -293,12 +258,11 @@ function test_updateVariableStore_ClearAndOneInUse() {
   workspaceTest_setUp();
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
-  var mockAllUsedVariables = setUpMockMethod(Blockly.Variables,
-    'allUsedVariables', workspace, ['name1']);
+  setUpMockMethod(mockControl_, Blockly.Variables, 'allUsedVariables',
+    [workspace], [['name1']]);
 
   try {
     workspace.updateVariableStore(true);
-    mockAllUsedVariables.$verify();
     workspaceTest_checkVariableValues('name1', 'type1', 'id1');
     var variabe = workspace.getVariable('name2');
     assertNull(variable);
@@ -313,12 +277,12 @@ function test_addTopBlock_TrivialFlyoutIsTrue() {
   workspace.isFlyout = true;
   var block = createMockBlock();
   workspace.removeTopBlock(block);
-  setUpMockMethod(Blockly.Variables, 'allUsedVariables', block, ['name1']);
-  setUpMockMethod(Blockly.utils, 'genUid', null, '1');
+  setUpMockMethod(mockControl_, Blockly.Variables, 'allUsedVariables', [block],
+    [['name1']]);
+  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
 
   try {
     workspace.addTopBlock(block);
-    mockControl_.$verifyAll();
     workspaceTest_checkVariableValues('name1', '', '1');
   }
   finally {
@@ -330,14 +294,11 @@ function test_clear_Trivial() {
   workspaceTest_setUp();
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
-  var mockSetGroup = mockControl_.createMethodMock(Blockly.Events, 'setGroup');
-  mockSetGroup(true);
-  mockSetGroup(false);
-  mockSetGroup.$replay();
+  setUpMockMethod(mockControl_, Blockly.Events, 'setGroup', [true, false],
+    null);
 
   try {
     workspace.clear();
-    mockControl_.$verifyAll();
     var topBlocks_length = workspace.topBlocks_.length;
     var varMapLength = Object.keys(workspace.variableMap_.variableMap_).length;
     assertEquals(0, topBlocks_length);
@@ -350,14 +311,11 @@ function test_clear_Trivial() {
 
 function test_clear_NoVariables() {
   workspaceTest_setUp();
-  var mockSetGroup = mockControl_.createMethodMock(Blockly.Events, 'setGroup');
-  mockSetGroup(true);
-  mockSetGroup(false);
-  mockSetGroup.$replay();
+  setUpMockMethod(mockControl_, Blockly.Events, 'setGroup', [true, false],
+    null);
 
   try {
     workspace.clear();
-    mockSetGroup.$verify();
     var topBlocks_length = workspace.topBlocks_.length;
     var varMapLength = Object.keys(workspace.variableMap_.variableMap_).length;
     assertEquals(0, topBlocks_length);
@@ -373,17 +331,13 @@ function test_renameVariable_NoBlocks() {
   workspaceTest_setUp();
   var oldName = 'name1';
   var newName = 'name2';
-  var mockSetGroup = mockControl_.createMethodMock(Blockly.Events, 'setGroup');
-  var mockGenUid = mockControl_.createMethodMock(Blockly.utils, 'genUid');
-  // Mocked setGroup to ensure only one call to the mocked genUid.
-  mockSetGroup(true);
-  mockSetGroup(false);
-  mockGenUid().$returns('1');
-  mockControl_.$replayAll();
+    // Mocked setGroup to ensure only one call to the mocked genUid.
+  setUpMockMethod(mockControl_, Blockly.Events, 'setGroup', [true, false],
+    null);
+  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
 
   try {
     workspace.renameVariable(oldName, newName);
-    mockControl_.$verifyAll();
     workspaceTest_checkVariableValues('name2', '', '1');
     var variable = workspace.getVariable(oldName);
     assertNull(variable);

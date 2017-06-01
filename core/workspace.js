@@ -83,7 +83,7 @@ Blockly.Workspace = function(opt_options) {
    * that are not currently in use.
    * @private
    */
-  this.variableMap_ = new Blockly.VariableMap();
+  this.variableMap_ = new Blockly.VariableMap(this);
 };
 
 /**
@@ -383,6 +383,8 @@ Blockly.Workspace.prototype.deleteVariableById = function(id) {
   var variable = this.getVariableById(id);
   if (variable) {
     this.deleteVariableInternal_(variable);
+  } else {
+    console.warn("Can't delete non-existant variable: " + id);
   }
 };
 

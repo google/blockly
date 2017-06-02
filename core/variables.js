@@ -101,14 +101,12 @@ Blockly.Variables.allVariables = function(root) {
 };
 
 /**
- * Construct the blocks required by the flyout for the variable category.
+ * Construct the elements (blocks and button) required by the flyout for the
+ * variable category.
  * @param {!Blockly.Workspace} workspace The workspace contianing variables.
- * @return {!Array.<!Element>} Array of XML block elements.
+ * @return {!Array.<!Element>} Array of XML elements.
  */
 Blockly.Variables.flyoutCategory = function(workspace) {
-  var variableModelList = workspace.getVariablesOfType('');
-  variableModelList.sort(Blockly.VariableModel.compareByName);
-
   var xmlList = [];
   var button = goog.dom.createDom('button');
   button.setAttribute('text', Blockly.Msg.NEW_VARIABLE);
@@ -120,6 +118,21 @@ Blockly.Variables.flyoutCategory = function(workspace) {
 
   xmlList.push(button);
 
+  var blockList = Blockly.Variables.flyoutCategoryBlocks(workspace);
+  xmlList = xmlList.concat(blockList);
+  return xmlList;
+};
+
+/**
+ * Construct the blocks required by the flyout for the variable category.
+ * @param {!Blockly.Workspace} workspace The workspace contianing variables.
+ * @return {!Array.<!Element>} Array of XML block elements.
+ */
+Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
+  var variableModelList = workspace.getVariablesOfType('');
+  variableModelList.sort(Blockly.VariableModel.compareByName);
+
+  var xmlList = [];
   if (variableModelList.length > 0) {
     var firstVariable = variableModelList[0];
     if (Blockly.Blocks['variables_set']) {

@@ -234,7 +234,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
  * @private
  */
 Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
-  var event = new Blockly.Events.Move(this.draggingBlock_);
+  var event = new Blockly.Events.BlockMove(this.draggingBlock_);
   event.oldCoordinate = this.startXY_;
   event.recordNew();
   Blockly.Events.fire(event);

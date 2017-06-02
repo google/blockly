@@ -101,7 +101,7 @@ Blockly.FieldColour.prototype.getValue = function() {
 Blockly.FieldColour.prototype.setValue = function(colour) {
   if (this.sourceBlock_ && Blockly.Events.isEnabled() &&
       this.colour_ != colour) {
-    Blockly.Events.fire(new Blockly.Events.Change(
+    Blockly.Events.fire(new Blockly.Events.BlockChange(
         this.sourceBlock_, 'field', this.name, this.colour_, colour));
   }
   this.colour_ = colour;

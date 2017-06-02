@@ -687,7 +687,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       // Block is deleted or is in a flyout.
       return;
     }
-    if (event.type == Blockly.Events.CREATE &&
+    if (event.type == Blockly.Events.BLOCK_CREATE &&
         event.ids.indexOf(this.id) != -1) {
       // Look for the case where a procedure call was created (usually through
       // paste) and there is no matching definition.  In this case, create
@@ -730,7 +730,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         Blockly.Xml.domToWorkspace(xml, this.workspace);
         Blockly.Events.setGroup(false);
       }
-    } else if (event.type == Blockly.Events.DELETE) {
+    } else if (event.type == Blockly.Events.BLOCK_DELETE) {
       // Look for the case where a procedure definition has been deleted,
       // leaving this block (a procedure call) orphaned.  In this case, delete
       // the orphan.

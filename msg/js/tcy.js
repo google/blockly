@@ -7,6 +7,7 @@ goog.provide('Blockly.Msg.tcy');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "ಟಿಪ್ಪಣಿ ಸೇರ್ಸಲೆ";
+Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "ಮೌಲ್ಯೊದ ಬದಲಾವಣೆ";
 Blockly.Msg.CLEAN_UP = "ನಿರ್ಬಂದೊಲೆನ್ ಸ್ವೊಚ್ಚೊ ಮಲ್ಪುಲೆ";
 Blockly.Msg.COLLAPSE_ALL = "ಕುಗ್ಗಿಸಾದ್ ನಿರ್ಬಂಧಿಸಾಪುನೆ";
@@ -73,6 +74,19 @@ Blockly.Msg.EXPAND_BLOCK = "ವಿಸ್ತರಿಸಾದ್ ತಡೆಪತ್
 Blockly.Msg.EXTERNAL_INPUTS = "ಬಾಹ್ಯೊ ಪರಿಕರೊ";
 Blockly.Msg.HELP = "ಸಹಾಯೊ";
 Blockly.Msg.INLINE_INPUTS = "ಉಳಸಾಲ್‍ದ ಉಳಪರಿಪು";
+Blockly.Msg.IOS_CANCEL = "Cancel";  // untranslated
+Blockly.Msg.IOS_ERROR = "Error";  // untranslated
+Blockly.Msg.IOS_OK = "OK";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
+Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Add";  // untranslated
+Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
+Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Delete";  // untranslated
+Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
+Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Rename";  // untranslated
+Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Variable name";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "ಕಾಲಿ ಪಟ್ಟಿನ್ ಸ್ರಿಸ್ಟಿಸಲೆ";
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "ಒಂಜಿ ಪಟ್ಟಿ, ೦ದ ಉದ್ದೊ, ಒವ್ವೇ ಅಂಕಿಅಂಸೊ ಇದ್ಯಾಂತಿನ ದಾಖಲೆ ಪಿರಕೊರು.";

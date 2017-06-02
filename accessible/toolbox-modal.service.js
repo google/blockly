@@ -23,6 +23,15 @@
  * @author sll@google.com (Sean Lip)
  */
 
+goog.provide('blocklyApp.ToolboxModalService');
+
+goog.require('blocklyApp.UtilsService');
+
+goog.require('blocklyApp.BlockConnectionService');
+goog.require('blocklyApp.NotificationsService');
+goog.require('blocklyApp.TreeService');
+
+
 blocklyApp.ToolboxModalService = ng.core.Class({
   constructor: [
     blocklyApp.BlockConnectionService,

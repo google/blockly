@@ -25,7 +25,9 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
-var blocklyApp = {};
+goog.provide('blocklyApp.UtilsService');
+
+
 blocklyApp.ID_FOR_EMPTY_WORKSPACE_BTN = 'blocklyEmptyWorkspaceBtn';
 blocklyApp.BLOCK_ROOT_ID_SUFFIX = '-blockRoot';
 

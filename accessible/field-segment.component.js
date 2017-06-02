@@ -24,6 +24,13 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
+goog.provide('blocklyApp.FieldSegmentComponent');
+
+goog.require('blocklyApp.NotificationsService');
+goog.require('blocklyApp.TranslatePipe');
+goog.require('blocklyApp.VariableModalService');
+
+
 blocklyApp.FieldSegmentComponent = ng.core.Component({
   selector: 'blockly-field-segment',
   template: `

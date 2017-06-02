@@ -55,28 +55,52 @@ Blockly.Events.recordUndo = true;
 Blockly.Events.disabled_ = 0;
 
 /**
- * Name of event that creates a block.
+ * Name of event that creates a block. Will be deprecated for BLOCK_CREATE.
  * @const
  */
 Blockly.Events.CREATE = 'create';
 
 /**
- * Name of event that deletes a block.
+ * Name of event that creates a block.
+ * @const
+ */
+Blockly.Events.BLOCK_CREATE = Blockly.Events.CREATE;
+
+/**
+ * Name of event that deletes a block. Will be deprecated for BLOCK_DELETE.
  * @const
  */
 Blockly.Events.DELETE = 'delete';
 
 /**
- * Name of event that changes a block.
+ * Name of event that deletes a block.
+ * @const
+ */
+Blockly.Events.BLOCK_DELETE = Blockly.Events.DELETE;
+
+/**
+ * Name of event that changes a block. Will be deprecated for BLOCK_CHANGE.
  * @const
  */
 Blockly.Events.CHANGE = 'change';
 
 /**
- * Name of event that moves a block.
+ * Name of event that changes a block.
+ * @const
+ */
+Blockly.Events.BLOCK_CHANGE = Blockly.Events.CHANGE;
+
+/**
+ * Name of event that moves a block. Will be deprecated for BLOCK_MOVE.
  * @const
  */
 Blockly.Events.MOVE = 'move';
+
+/**
+ * Name of event that moves a block.
+ * @const
+ */
+Blockly.Events.BLOCK_MOVE = Blockly.Events.MOVE;
 
 /**
  * Name of event that records a UI change.
@@ -365,6 +389,14 @@ Blockly.Events.Create = function(block) {
 goog.inherits(Blockly.Events.Create, Blockly.Events.Abstract);
 
 /**
+ * Class for a block creation event.
+ * @param {Blockly.Block} block The created block. Null for a blank event.
+ * @extends {Blockly.Events.Abstract}
+ * @constructor
+ */
+Blockly.Events.BlockCreate = Blockly.Events.Create;
+
+/**
  * Type of this event.
  * @type {string}
  */
@@ -439,6 +471,14 @@ Blockly.Events.Delete = function(block) {
 goog.inherits(Blockly.Events.Delete, Blockly.Events.Abstract);
 
 /**
+ * Class for a block deletion event.
+ * @param {Blockly.Block} block The deleted block.  Null for a blank event.
+ * @extends {Blockly.Events.Abstract}
+ * @constructor
+ */
+Blockly.Events.BlockDelete = Blockly.Events.Delete;
+
+/**
  * Type of this event.
  * @type {string}
  */
@@ -507,6 +547,18 @@ Blockly.Events.Change = function(block, element, name, oldValue, newValue) {
   this.newValue = newValue;
 };
 goog.inherits(Blockly.Events.Change, Blockly.Events.Abstract);
+
+/**
+ * Class for a block change event.
+ * @param {Blockly.Block} block The changed block.  Null for a blank event.
+ * @param {string} element One of 'field', 'comment', 'disabled', etc.
+ * @param {?string} name Name of input or field affected, or null.
+ * @param {string} oldValue Previous value of element.
+ * @param {string} newValue New value of element.
+ * @extends {Blockly.Events.Abstract}
+ * @constructor
+ */
+Blockly.Events.BlockChange = Blockly.Events.Change;
 
 /**
  * Type of this event.
@@ -623,6 +675,15 @@ Blockly.Events.Move = function(block) {
   this.oldCoordinate = location.coordinate;
 };
 goog.inherits(Blockly.Events.Move, Blockly.Events.Abstract);
+
+
+/**
+ * Class for a block move event.  Created before the move.
+ * @param {Blockly.Block} block The moved block.  Null for a blank event.
+ * @extends {Blockly.Events.Abstract}
+ * @constructor
+ */
+Blockly.Events.BlockMove = Blockly.Events.Move;
 
 /**
  * Type of this event.
@@ -821,7 +882,7 @@ Blockly.Events.disableOrphans = function(event) {
           child.setDisabled(false);
         }
       } else if ((block.outputConnection || block.previousConnection) &&
-                 Blockly.dragMode_ == Blockly.DRAG_NONE) {
+                 !workspace.isDragging()) {
         do {
           block.setDisabled(true);
           block = block.getNextBlock();

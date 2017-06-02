@@ -2,10 +2,9 @@
   "name": "blockly",
   "version": "1.0.0",
   "description": "Blockly is a library for building visual programming editors.",
-  "keywords": ["blockly"],
-  "scripts": {
-    "lint": "jshint ."
-  },
+  "keywords": [
+    "blockly"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/google/blockly.git"
@@ -17,6 +16,11 @@
   "author": {
     "name": "Neil Fraser"
   },
+  "scripts": {
+    "lint": "jshint .",
+    "pretest": "scripts/test_setup.sh",
+    "test": "node tests/jsunit/test_runner.js"
+  },
   "license": "Apache-2.0",
   "private": true,
   "devDependencies": {
@@ -24,12 +28,22 @@
   },
   "jshintConfig": {
     "globalstrict": true,
-    "predef": ["Blockly", "goog", "window", "document", "soy", "XMLHttpRequest"],
+    "predef": [
+      "Blockly",
+      "goog",
+      "window",
+      "document",
+      "soy",
+      "XMLHttpRequest"
+    ],
     "sub": true,
     "undef": true,
     "unused": true
   },
   "dependencies": {
-    "closure-library": "^1.43629075.2"
+    "install": "^0.8.8",
+    "npm": "^4.4.4",
+    "closure-library": "^1.43629075.2",
+    "webdriverio": "^4.6.2"
   }
 }

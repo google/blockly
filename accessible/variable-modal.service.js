@@ -23,6 +23,9 @@
  * @author corydiers@google.com (Cory Diers)
  */
 
+goog.provide('blocklyApp.VariableModalService');
+
+
 blocklyApp.VariableModalService = ng.core.Class({
   constructor: [
     function() {

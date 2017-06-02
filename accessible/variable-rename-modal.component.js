@@ -23,6 +23,15 @@
  * @author corydiers@google.com (Cory Diers)
  */
 
+goog.provide('blocklyApp.VariableRenameModalComponent');
+
+goog.require('Blockly.CommonModal');
+goog.require('blocklyApp.AudioService');
+goog.require('blocklyApp.KeyboardInputService');
+goog.require('blocklyApp.TranslatePipe');
+goog.require('blocklyApp.VariableModalService');
+
+
 blocklyApp.VariableRenameModalComponent = ng.core.Component({
   selector: 'blockly-rename-variable-modal',
   template: `

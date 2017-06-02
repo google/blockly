@@ -225,6 +225,7 @@
 	"TEXT_COUNT_TOOLTIP": "Подсчитать, сколько раз отрывок текста появляется в другом тексте.",
 	"TEXT_REPLACE_MESSAGE0": "заменить %1 на %2 в %3",
 	"TEXT_REPLACE_HELPURL": "https://github.com/google/blockly/wiki/Text#replacing-substrings",
+	"TEXT_REPLACE_TOOLTIP": "Заменить все вхождения некоторого текста другим текстом.",
 	"TEXT_REVERSE_MESSAGE0": "изменить порядок на обратный %1",
 	"TEXT_REVERSE_HELPURL": "https://github.com/google/blockly/wiki/Text#reversing-text",
 	"TEXT_REVERSE_TOOLTIP": "Меняет порядок символов в тексте на обратный.",

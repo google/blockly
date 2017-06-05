@@ -267,9 +267,8 @@ Blockly.Workspace.prototype.renameVariableInternal_ = function(variable, newName
       blocks[i].renameVar(oldCase, newName);
     }
   }
-  Blockly.Events.setGroup(false);
-
   this.variableMap_.renameVariable(variable, newName);
+  Blockly.Events.setGroup(false);
 };
 
 
@@ -400,9 +399,8 @@ Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable) {
   for (var i = 0; i < uses.length; i++) {
     uses[i].dispose(true, false);
   }
-  Blockly.Events.setGroup(false);
-
   this.variableMap_.deleteVariable(variable);
+  Blockly.Events.setGroup(false);
 };
 
 /**

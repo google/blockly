@@ -20,39 +20,115 @@
 
 /**
  * @fileoverview List blocks for Blockly.
+ *
+ * This file is scraped to extract a .json file of block definitions. The array
+ * passed to defineBlocksWithJsonArray(..) must be strict JSON: double quotes
+ * only, no outside references, no functions, no trailing commas, etc. The one
+ * exception is end-of-line comments, which the scraper will remove.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.lists');
+goog.provide('Blockly.Blocks.lists');  // Deprecated
+goog.provide('Blockly.Constants.Lists');
 
 goog.require('Blockly.Blocks');
 
 
 /**
  * Common HSV hue for all blocks in this category.
+ * This should be the same as Blockly.Msg.LISTS_HUE.
+ * @readonly
  */
-Blockly.Blocks.lists.HUE = 260;
+Blockly.Constants.Lists.HUE = 260;
+/** @deprecated Use Blockly.Constants.Lists.HUE */
+Blockly.Blocks.lists.HUE = Blockly.Constants.Lists.HUE;
 
-Blockly.Blocks['lists_create_empty'] = {
-  /**
-   * Block for creating an empty list.
-   * The 'list_create_with' block is preferred as it is more flexible.
-   * <block type="lists_create_with">
-   *   <mutation items="0"></mutation>
-   * </block>
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.LISTS_CREATE_EMPTY_TITLE,
-      "output": "Array",
-      "colour": Blockly.Blocks.lists.HUE,
-      "tooltip": Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP,
-      "helpUrl": Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL
-    });
+
+Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
+  // Block for creating an empty list
+  // The 'list_create_with' block is preferred as it is more flexible.
+  // <block type="lists_create_with">
+  //   <mutation items="0"></mutation>
+  // </block>
+  {
+    "type": "lists_create_empty",
+    "message0": "%{BKY_LISTS_CREATE_EMPTY_TITLE}",
+    "output": "Array",
+    "colour": "%{BKY_LISTS_HUE}",
+    "tooltip": "%{BKY_LISTS_CREATE_EMPTY_TOOLTIP}",
+    "helpUrl": "%{BKY_LISTS_CREATE_EMPTY_HELPURL}"
+  },
+  // Block for creating a list with one element repeated.
+  {
+    "type": "lists_repeat",
+    "message0": "%{BKY_LISTS_REPEAT_TITLE}",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "ITEM"
+      },
+      {
+        "type": "input_value",
+        "name": "NUM",
+        "check": "Number"
+      }
+    ],
+    "output": "Array",
+    "colour": "%{BKY_LISTS_HUE}",
+    "tooltip": "%{BKY_LISTS_REPEAT_TOOLTIP}",
+    "helpUrl": "%{BKY_LISTS_REPEAT_HELPURL}"
+  },
+  // Block for reversing a list.
+  {
+    "type": "lists_reverse",
+    "message0": "%{BKY_LISTS_REVERSE_MESSAGE0}",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "LIST",
+        "check": "Array"
+      }
+    ],
+    "output": "Array",
+    "inputsInline": true,
+    "colour": "%{BKY_LISTS_HUE}",
+    "tooltip": "%{BKY_LISTS_REVERSE_TOOLTIP}",
+    "helpUrl": "%{BKY_LISTS_REVERSE_HELPURL}"
+  },
+  // Block for checking if a list is empty
+  {
+    "type": "lists_isEmpty",
+    "message0": "%{BKY_LISTS_ISEMPTY_TITLE}",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "VALUE",
+        "check": ["String", "Array"]
+      }
+    ],
+    "output": "Boolean",
+    "colour": "%{BKY_LISTS_HUE}",
+    "tooltip": "%{BKY_LISTS_ISEMPTY_TOOLTIP}",
+    "helpUrl": "%{BKY_LISTS_ISEMPTY_HELPURL}"
+  },
+  // Block for getting the list length
+  {
+    "type": "lists_length",
+    "message0": "%{BKY_LISTS_LENGTH_TITLE}",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "VALUE",
+        "check": ["String", "Array"]
+      }
+    ],
+    "output": "Number",
+    "colour": "%{BKY_LISTS_HUE}",
+    "tooltip": "%{BKY_LISTS_LENGTH_TOOLTIP}",
+    "helpUrl": "%{BKY_LISTS_LENGTH_HELPURL}"
   }
-};
+]);  // END JSON EXTRACT (Do not delete this comment.)
 
 Blockly.Blocks['lists_create_with'] = {
   /**
@@ -206,79 +282,6 @@ Blockly.Blocks['lists_create_with_item'] = {
     this.setNextStatement(true);
     this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_ITEM_TOOLTIP);
     this.contextMenu = false;
-  }
-};
-
-Blockly.Blocks['lists_repeat'] = {
-  /**
-   * Block for creating a list with one element repeated.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.LISTS_REPEAT_TITLE,
-      "args0": [
-        {
-          "type": "input_value",
-          "name": "ITEM"
-        },
-        {
-          "type": "input_value",
-          "name": "NUM",
-          "check": "Number"
-        }
-      ],
-      "output": "Array",
-      "colour": Blockly.Blocks.lists.HUE,
-      "tooltip": Blockly.Msg.LISTS_REPEAT_TOOLTIP,
-      "helpUrl": Blockly.Msg.LISTS_REPEAT_HELPURL
-    });
-  }
-};
-
-Blockly.Blocks['lists_length'] = {
-  /**
-   * Block for list length.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.LISTS_LENGTH_TITLE,
-      "args0": [
-        {
-          "type": "input_value",
-          "name": "VALUE",
-          "check": ['String', 'Array']
-        }
-      ],
-      "output": 'Number',
-      "colour": Blockly.Blocks.lists.HUE,
-      "tooltip": Blockly.Msg.LISTS_LENGTH_TOOLTIP,
-      "helpUrl": Blockly.Msg.LISTS_LENGTH_HELPURL
-    });
-  }
-};
-
-Blockly.Blocks['lists_isEmpty'] = {
-  /**
-   * Block for is the list empty?
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.LISTS_ISEMPTY_TITLE,
-      "args0": [
-        {
-          "type": "input_value",
-          "name": "VALUE",
-          "check": ['String', 'Array']
-        }
-      ],
-      "output": 'Boolean',
-      "colour": Blockly.Blocks.lists.HUE,
-      "tooltip": Blockly.Msg.LISTS_ISEMPTY_TOOLTIP,
-      "helpUrl": Blockly.Msg.LISTS_ISEMPTY_HELPURL
-    });
   }
 };
 
@@ -839,29 +842,5 @@ Blockly.Blocks['lists_split'] = {
    */
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('mode'));
-  }
-};
-
-Blockly.Blocks['lists_reverse'] = {
-  /**
-   * Block for reversing a list.
-   * @this Blockly.Block
-   **/
-  init: function() {
-    this.jsonInit({
-      "message0": Blockly.Msg.LISTS_REVERSE_MESSAGE0,
-      "args0": [
-        {
-          "type": "input_value",
-          "name": "LIST",
-          "check": "Array"
-        }
-      ],
-      "output": "Array",
-      "inputsInline": true,
-      "colour": Blockly.Blocks.lists.HUE,
-      "tooltip": Blockly.Msg.LISTS_REVERSE_TOOLTIP,
-      "helpUrl": Blockly.Msg.LISTS_REVERSE_HELPURL
-    });
   }
 };

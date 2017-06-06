@@ -25,6 +25,16 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
+goog.provide('blocklyApp.TreeService');
+
+goog.require('blocklyApp.UtilsService');
+
+goog.require('blocklyApp.AudioService');
+goog.require('blocklyApp.BlockConnectionService');
+goog.require('blocklyApp.BlockOptionsModalService');
+goog.require('blocklyApp.NotificationsService');
+
+
 blocklyApp.TreeService = ng.core.Class({
   constructor: [
     blocklyApp.AudioService,
@@ -484,8 +494,9 @@ blocklyApp.TreeService = ng.core.Class({
         // Return the focus to the workspace tree containing the input field.
         document.getElementById(treeId).focus();
 
-        // Note that Tab events are allowed to propagate through.
-        if (e.keyCode == 27) {
+        // Note that Tab and Enter events stop propagating, this behavior is
+        // handled on other listeners.
+        if (e.keyCode == 27 || e.keyCode == 13) {
           e.preventDefault();
           e.stopPropagation();
         }

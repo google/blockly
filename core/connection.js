@@ -241,12 +241,6 @@ Blockly.Connection.prototype.dispose = function() {
   if (this.inDB_) {
     this.db_.removeConnection_(this);
   }
-  if (Blockly.highlightedConnection_ == this) {
-    Blockly.highlightedConnection_ = null;
-  }
-  if (Blockly.localConnection_ == this) {
-    Blockly.localConnection_ = null;
-  }
   this.db_ = null;
   this.dbOpposite_ = null;
 };
@@ -620,6 +614,22 @@ Blockly.Connection.prototype.setShadowDom = function(shadow) {
  */
 Blockly.Connection.prototype.getShadowDom = function() {
   return this.shadowDom_;
+};
+
+/**
+ * Find all nearby compatible connections to this connection.
+ * Type checking does not apply, since this function is used for bumping.
+ *
+ * Headless configurations (the default) do not have neighboring connection,
+ * and always return an empty list (the default).
+ * {@link Blockly.RenderedConnection} overrides this behavior with a list
+ * computed from the rendered positioning.
+ * @param {number} maxLimit The maximum radius to another connection.
+ * @return {!Array.<!Blockly.Connection>} List of connections.
+ * @private
+ */
+Blockly.Connection.prototype.neighbours_ = function(/* maxLimit */) {
+  return [];
 };
 
 /**

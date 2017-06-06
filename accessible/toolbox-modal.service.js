@@ -23,6 +23,15 @@
  * @author sll@google.com (Sean Lip)
  */
 
+goog.provide('blocklyApp.ToolboxModalService');
+
+goog.require('blocklyApp.UtilsService');
+
+goog.require('blocklyApp.BlockConnectionService');
+goog.require('blocklyApp.NotificationsService');
+goog.require('blocklyApp.TreeService');
+
+
 blocklyApp.ToolboxModalService = ng.core.Class({
   constructor: [
     blocklyApp.BlockConnectionService,
@@ -42,6 +51,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
       this.selectedToolboxCategories = null;
       this.onSelectBlockCallback = null;
       this.onDismissCallback = null;
+      this.hasVariableCategory = null;
       // The aim of the pre-show hook is to populate the modal component with
       // the information it needs to display the modal (e.g., which categories
       // and blocks to display).
@@ -51,44 +61,57 @@ blocklyApp.ToolboxModalService = ng.core.Class({
             'can be shown.');
       };
 
-      // Populate the toolbox categories.
-      this.allToolboxCategories = [];
-      var toolboxXmlElt = document.getElementById('blockly-toolbox-xml');
-      var toolboxCategoryElts = toolboxXmlElt.getElementsByTagName('category');
-      if (toolboxCategoryElts.length) {
-        this.allToolboxCategories = Array.from(toolboxCategoryElts).map(
-          function(categoryElt) {
-            var tmpWorkspace = new Blockly.Workspace();
-            Blockly.Xml.domToWorkspace(categoryElt, tmpWorkspace);
-            return {
-              categoryName: categoryElt.attributes.name.value,
-              blocks: tmpWorkspace.topBlocks_
-            };
-          }
-        );
-        this.computeCategoriesForCreateNewGroupModal_();
-      } else {
-        // A timeout seems to be needed in order for the .children accessor to
-        // work correctly.
-        var that = this;
-        setTimeout(function() {
-          // If there are no top-level categories, we create a single category
-          // containing all the top-level blocks.
-          var tmpWorkspace = new Blockly.Workspace();
-          Array.from(toolboxXmlElt.children).forEach(function(topLevelNode) {
-            Blockly.Xml.domToBlock(tmpWorkspace, topLevelNode);
-          });
-
-          that.allToolboxCategories = [{
-            categoryName: '',
-            blocks: tmpWorkspace.topBlocks_
-          }];
-
-          that.computeCategoriesForCreateNewGroupModal_();
-        });
-      }
+      this.populateToolbox_();
     }
   ],
+  populateToolbox_: function() {
+    // Populate the toolbox categories.
+    this.allToolboxCategories = [];
+    var toolboxXmlElt = document.getElementById('blockly-toolbox-xml');
+    var toolboxCategoryElts = toolboxXmlElt.getElementsByTagName('category');
+    if (toolboxCategoryElts.length) {
+      this.allToolboxCategories = Array.from(toolboxCategoryElts).map(
+        function(categoryElt) {
+          var tmpWorkspace = new Blockly.Workspace();
+          var custom = categoryElt.attributes.custom
+          // TODO (corydiers): Implement custom flyouts once #1153 is solved.
+          if (custom && custom.value == Blockly.VARIABLE_CATEGORY_NAME) {
+            var varBlocks =
+              Blockly.Variables.flyoutCategoryBlocks(blocklyApp.workspace);
+            varBlocks.forEach(function(block) {
+              Blockly.Xml.domToBlock(block, tmpWorkspace);
+            });
+          } else {
+            Blockly.Xml.domToWorkspace(categoryElt, tmpWorkspace);
+          }
+          return {
+            categoryName: categoryElt.attributes.name.value,
+            blocks: tmpWorkspace.topBlocks_
+          };
+        }
+      );
+      this.computeCategoriesForCreateNewGroupModal_();
+    } else {
+      // A timeout seems to be needed in order for the .children accessor to
+      // work correctly.
+      var that = this;
+      setTimeout(function() {
+        // If there are no top-level categories, we create a single category
+        // containing all the top-level blocks.
+        var tmpWorkspace = new Blockly.Workspace();
+        Array.from(toolboxXmlElt.children).forEach(function(topLevelNode) {
+          Blockly.Xml.domToBlock(tmpWorkspace, topLevelNode);
+        });
+
+        that.allToolboxCategories = [{
+          categoryName: '',
+          blocks: tmpWorkspace.topBlocks_
+        }];
+
+        that.computeCategoriesForCreateNewGroupModal_();
+      });
+    }
+  },
   computeCategoriesForCreateNewGroupModal_: function() {
     // Precompute toolbox categories for blocks that have no output
     // connection (and that can therefore be used as the base block of a
@@ -119,6 +142,26 @@ blocklyApp.ToolboxModalService = ng.core.Class({
   isModalShown: function() {
     return this.modalIsShown;
   },
+  toolboxHasVariableCategory: function() {
+    if (this.hasVariableCategory === null) {
+      var toolboxXmlElt = document.getElementById('blockly-toolbox-xml');
+      var toolboxCategoryElts = toolboxXmlElt.getElementsByTagName('category');
+      var that = this;
+      Array.from(toolboxCategoryElts).forEach(
+        function(categoryElt) {
+          var custom = categoryElt.attributes.custom;
+          if (custom && custom.value == Blockly.VARIABLE_CATEGORY_NAME) {
+            that.hasVariableCategory = true;
+          }
+        });
+
+      if (this.hasVariableCategory === null) {
+        this.hasVariableCategory = false;
+      }
+    }
+
+    return this.hasVariableCategory;
+  },
   showModal_: function(
       selectedToolboxCategories, onSelectBlockCallback, onDismissCallback) {
     this.selectedToolboxCategories = selectedToolboxCategories;
@@ -135,6 +178,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
     var that = this;
 
     var selectedToolboxCategories = [];
+    this.populateToolbox_();
     this.allToolboxCategories.forEach(function(toolboxCategory) {
       var selectedBlocks = toolboxCategory.blocks.filter(function(block) {
         return that.blockConnectionService.canBeAttachedToMarkedConnection(
@@ -172,6 +216,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
   },
   showToolboxModalForCreateNewGroup: function(sourceButtonId) {
     var that = this;
+    this.populateToolbox_();
     this.showModal_(this.toolboxCategoriesForNewGroup, function(block) {
       var blockDescription = that.utilsService.getBlockDescription(block);
       var xml = Blockly.Xml.blockToDom(block);

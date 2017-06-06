@@ -64,6 +64,8 @@ var workspace = null;
 var fakeDragStack = [];
 
 function start() {
+  setBackgroundColor();
+
   // Parse the URL arguments.
   var match = location.search.match(/dir=([^&]+)/);
   var rtl = match && match[1] == 'rtl';
@@ -115,6 +117,17 @@ function start() {
     logEvents(false);
   }
   taChange();
+}
+
+function setBackgroundColor() {
+  var lilac = '#d6d6ff';
+
+  var currentPage = window.location.href;
+  var regexFile = /^file[\S]*$/;
+
+  if (regexFile.test(currentPage)) {
+    document.getElementsByTagName('body')[0].style.backgroundColor = lilac;
+  }
 }
 
 function getToolboxElement() {
@@ -228,8 +241,8 @@ function fakeDrag(id, dx, dy, opt_workspace) {
           blockToDrag.onMouseUp_(mouseUpEvent);
 
           setTimeout(fakeDragWrapper(), 100);
-        }, 30);
-    }, 30);
+        }, 100);
+    }, 100);
 };
 
 function fakeDragWrapper() {

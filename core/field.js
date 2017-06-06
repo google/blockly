@@ -28,6 +28,8 @@
 
 goog.provide('Blockly.Field');
 
+goog.require('Blockly.Gesture');
+
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Size');
@@ -152,20 +154,27 @@ Blockly.Field.prototype.init = function() {
 
   this.updateEditable();
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
-  this.mouseUpWrapper_ =
-      Blockly.bindEventWithChecks_(this.fieldGroup_, 'mouseup', this,
-      this.onMouseUp_);
+  this.mouseDownWrapper_ =
+      Blockly.bindEventWithChecks_(this.fieldGroup_, 'mousedown', this,
+      this.onMouseDown_);
   // Force a render.
   this.render_();
+};
+
+/**
+ * Initializes the model of the field after it has been installed on a block.
+ * No-op by default.
+ */
+Blockly.Field.prototype.initModel = function() {
 };
 
 /**
  * Dispose of all DOM objects belonging to this editable field.
  */
 Blockly.Field.prototype.dispose = function() {
-  if (this.mouseUpWrapper_) {
-    Blockly.unbindEvent_(this.mouseUpWrapper_);
-    this.mouseUpWrapper_ = null;
+  if (this.mouseDownWrapper_) {
+    Blockly.unbindEvent_(this.mouseDownWrapper_);
+    this.mouseDownWrapper_ = null;
   }
   this.sourceBlock_ = null;
   goog.dom.removeNode(this.fieldGroup_);
@@ -192,6 +201,17 @@ Blockly.Field.prototype.updateEditable = function() {
     Blockly.utils.removeClass(group, 'blocklyEditableText');
     this.fieldGroup_.style.cursor = '';
   }
+};
+
+/**
+ * Check whether this field is currently editable.  Some fields are never
+ * editable (e.g. text labels).  Those fields are not serialized to XML.  Other
+ * fields may be editable, and therefore serialized, but may exist on
+ * non-editable blocks.
+ * @return {boolean} whether this field is editable and on an editable block
+ */
+Blockly.Field.prototype.isCurrentlyEditable = function() {
+  return this.EDITABLE && !!this.sourceBlock_ && this.sourceBlock_.isEditable();
 };
 
 /**
@@ -482,31 +502,20 @@ Blockly.Field.prototype.setValue = function(newValue) {
 };
 
 /**
- * Handle a mouse up event on an editable field.
- * @param {!Event} e Mouse up event.
+ * Handle a mouse down event on a field.
+ * @param {!Event} e Mouse down event.
  * @private
  */
-Blockly.Field.prototype.onMouseUp_ = function(e) {
-  if ((goog.userAgent.IPHONE || goog.userAgent.IPAD) &&
-      !goog.userAgent.isVersionOrHigher('537.51.2') &&
-      e.layerX !== 0 && e.layerY !== 0) {
-    // Old iOS spawns a bogus event on the next touch after a 'prompt()' edit.
-    // Unlike the real events, these have a layerX and layerY set.
+Blockly.Field.prototype.onMouseDown_ = function(e) {
+  if (!this.sourceBlock_ || !this.sourceBlock_.workspace) {
     return;
-  } else if (Blockly.utils.isRightButton(e)) {
-    // Right-click.
-    return;
-  } else if (this.sourceBlock_.workspace.isDragging()) {
-    // Drag operation is concluding.  Don't open the editor.
-    return;
-  } else if (this.sourceBlock_.isEditable()) {
-    // Non-abstract sub-classes must define a showEditor_ method.
-    this.showEditor_();
-    // The field is handling the touch, but we also want the blockSvg onMouseUp
-    // handler to fire, so we will leave the touch identifier as it is.
-    // The next onMouseUp is responsible for nulling it out.
+  }
+  var gesture = this.sourceBlock_.workspace.getGesture(e);
+  if (gesture) {
+    gesture.setStartField(this);
   }
 };
+
 
 /**
  * Change the tooltip text for this field.

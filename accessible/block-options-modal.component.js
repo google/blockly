@@ -23,6 +23,16 @@
  * @author sll@google.com (Sean Lip)
  */
 
+goog.provide('blocklyApp.BlockOptionsModalComponent');
+
+goog.require('blocklyApp.AudioService');
+goog.require('blocklyApp.BlockOptionsModalService');
+goog.require('blocklyApp.KeyboardInputService');
+goog.require('blocklyApp.TranslatePipe');
+
+goog.require('Blockly.CommonModal');
+
+
 blocklyApp.BlockOptionsModalComponent = ng.core.Component({
   selector: 'blockly-block-options-modal',
   template: `
@@ -39,7 +49,7 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
                *ngFor="#buttonInfo of actionButtonsInfo; #buttonIndex=index">
             <button [id]="getOptionId(buttonIndex)"
                     (click)="buttonInfo.action(); hideModal();"
-                    [ngClass]="{activeButton: activeActionButtonIndex == buttonIndex}">
+                    [ngClass]="{activeButton: activeButtonIndex == buttonIndex}">
               {{buttonInfo.translationIdForText|translate}}
             </button>
           </div>
@@ -48,7 +58,7 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
         <div class="blocklyModalButtonContainer">
           <button [id]="getCancelOptionId()"
                   (click)="dismissModal()"
-                  [ngClass]="{activeButton: activeActionButtonIndex == actionButtonsInfo.length}">
+                  [ngClass]="{activeButton: activeButtonIndex == actionButtonsInfo.length}">
             {{'CANCEL'|translate}}
           </button>
         </div>
@@ -68,7 +78,7 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
 
       this.modalIsVisible = false;
       this.actionButtonsInfo = [];
-      this.activeActionButtonIndex = -1;
+      this.activeButtonIndex = -1;
       this.onDismissCallback = null;
 
       var that = this;
@@ -79,67 +89,26 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
           that.activeActionButtonIndex = -1;
           that.onDismissCallback = onDismissCallback;
 
-          that.keyboardInputService.setOverride({
-            // Tab key: navigates to the previous or next item in the list.
-            '9': function(evt) {
+          Blockly.CommonModal.setupKeyboardOverrides(that);
+          that.keyboardInputService.addOverride('13', function(evt) {
               evt.preventDefault();
               evt.stopPropagation();
 
-              if (evt.shiftKey) {
-                // Move to the previous item in the list.
-                if (that.activeActionButtonIndex <= 0) {
-                  that.activeActionButtonIndex = 0;
-                  that.audioService.playOopsSound();
-                } else {
-                  that.activeActionButtonIndex--;
-                }
-              } else {
-                // Move to the next item in the list.
-                if (that.activeActionButtonIndex ==
-                    that.actionButtonsInfo.length) {
-                  that.audioService.playOopsSound();
-                } else {
-                  that.activeActionButtonIndex++;
-                }
-              }
-
-              that.focusOnOption(that.activeActionButtonIndex);
-            },
-            // Enter key: selects an action, performs it, and closes the modal.
-            '13': function(evt) {
-              evt.preventDefault();
-              evt.stopPropagation();
-
-              if (that.activeActionButtonIndex == -1) {
+              if (that.activeButtonIndex == -1) {
                 return;
               }
 
               var button = document.getElementById(
-                  that.getOptionId(that.activeActionButtonIndex));
-              if (that.activeActionButtonIndex <
+                  that.getOptionId(that.activeButtonIndex));
+              if (that.activeButtonIndex <
                   that.actionButtonsInfo.length) {
-                that.actionButtonsInfo[that.activeActionButtonIndex].action();
+                that.actionButtonsInfo[that.activeButtonIndex].action();
               } else {
                 that.dismissModal();
               }
 
               that.hideModal();
-            },
-            // Escape key: closes the modal.
-            '27': function() {
-              that.dismissModal();
-            },
-            // Up key: no-op.
-            '38': function(evt) {
-              // Prevent the page from scrolling.
-              evt.preventDefault();
-            },
-            // Down key: no-op.
-            '40': function(evt) {
-              // Prevent the page from scrolling.
-              evt.preventDefault();
-            }
-          });
+            });
 
           setTimeout(function() {
             document.getElementById('blockOptionsModal').focus();
@@ -151,6 +120,10 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
   focusOnOption: function(index) {
     var button = document.getElementById(this.getOptionId(index));
     button.focus();
+  },
+  // Counts the number of interactive elements for the modal.
+  numInteractiveElements: function() {
+    return this.actionButtonsInfo.length + 1;
   },
   // Returns the ID for the corresponding option button.
   getOptionId: function(index) {

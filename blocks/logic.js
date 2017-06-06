@@ -86,7 +86,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "nextStatement": null,
     "colour": "%{BKY_LOGIC_HUE}",
     "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
-    "extensions": ["controls_if"]
+    "mutator": "controls_if_mutator",
+    "extensions": ["controls_if_tooltip"]
   },
   // If/else block that does not use a mutator.
   {
@@ -117,7 +118,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "nextStatement": null,
     "colour": "%{BKY_LOGIC_HUE}",
     "tooltip": "%{BKYCONTROLS_IF_TOOLTIP_2}",
-    "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}"
+    "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
+    "extensions": ["controls_if_tooltip"]
   },
   // Block for comparison operator.
   {
@@ -201,7 +203,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   {
     "type": "logic_null",
     "message0": "%{BKY_LOGIC_NULL}",
-    "output": "null",
+    "output": null,
     "colour": "%{BKY_LOGIC_HUE}",
     "tooltip": "%{BKY_LOGIC_NULL_TOOLTIP}",
     "helpUrl": "%{BKY_LOGIC_NULL_HELPURL}"
@@ -231,7 +233,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "name": "ELSE"
       }
     ],
-    "output": true,
+    "output": null,
     "colour": "%{BKY_LOGIC_HUE}",
     "tooltip": "%{BKY_LOGIC_TERNARY_TOOLTIP}",
     "helpUrl": "%{BKY_LOGIC_TERNARY_HELPURL}",
@@ -273,13 +275,11 @@ Blockly.defineBlocksWithJsonArray([ // Mutator blocks. Do not extract.
 /**
  * Tooltip text, keyed by block OP value. Used by logic_compare and
  * logic_operation blocks.
- *
- * Messages are not dereferenced here in order to capture possible language
- * changes.
+ * @see {Blockly.Extensions#buildTooltipForDropdown}
  * @package
  * @readonly
  */
-Blockly.Constants.Logic.LOGIC_OP_TOOLTIPS = {
+Blockly.Constants.Logic.TOOLTIPS_BY_OP = {
   // logic_compare
   'EQ': '%{BKY_LOGIC_COMPARE_TOOLTIP_EQ}',
   'NEQ': '%{BKY_LOGIC_COMPARE_TOOLTIP_NEQ}',
@@ -293,18 +293,21 @@ Blockly.Constants.Logic.LOGIC_OP_TOOLTIPS = {
   'OR': '%{BKY_LOGIC_OPERATION_TOOLTIP_OR}'
 };
 
-Blockly.Extensions.register("logic_op_tooltip",
+Blockly.Extensions.register('logic_op_tooltip',
   Blockly.Extensions.buildTooltipForDropdown(
-    'OP', Blockly.Constants.Logic.LOGIC_OP_TOOLTIPS));
-
+    'OP', Blockly.Constants.Logic.TOOLTIPS_BY_OP));
 
 /**
  * Mutator methods added to controls_if blocks.
  * @mixin
+ * @augments Blockly.Block
  * @package
  * @readonly
  */
 Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
+  elseifCount_: 0,
+  elseCount_: 0,
+
   /**
    * Create XML to represent the number of else-if and else inputs.
    * @return {Element} XML storage element.
@@ -456,18 +459,16 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   }
 };
 
+Blockly.Extensions.registerMutator('controls_if_mutator',
+    Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN, null,
+    ['controls_if_elseif', 'controls_if_else']);
 /**
  * "controls_if" extension function. Adds mutator, shape updating methods, and
  * dynamic tooltip to "controls_if" blocks.
  * @this Blockly.Block
- * @mixes Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN
  * @package
  */
-Blockly.Constants.Logic.CONTROLS_IF_EXTENSION = function() {
-  this.setMutator(new Blockly.Mutator(['controls_if_elseif', 'controls_if_else']));
-  this.mixin(Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN);
-  this.elseifCount_ = 0;
-  this.elseCount_ = 0;
+Blockly.Constants.Logic.CONTROLS_IF_TOOLTIP_EXTENSION = function() {
 
   this.setTooltip(function() {
     if (!this.elseifCount_ && !this.elseCount_) {
@@ -483,11 +484,11 @@ Blockly.Constants.Logic.CONTROLS_IF_EXTENSION = function() {
   }.bind(this));
 };
 
-Blockly.Extensions.register("controls_if",
-  Blockly.Constants.Logic.CONTROLS_IF_EXTENSION);
+Blockly.Extensions.register('controls_if_tooltip',
+  Blockly.Constants.Logic.CONTROLS_IF_TOOLTIP_EXTENSION);
 
 /**
- * Corrects the logic_compate dropdown label with respect to language direction.
+ * Corrects the logic_compare dropdown label with respect to language direction.
  * @this Blockly.Block
  * @package
  */
@@ -515,8 +516,9 @@ Blockly.Constants.Logic.fixLogicCompareRtlOpLabels =
   };
 
 /**
- * Adds dynamic type validation for the left and right sides of a logic_compate block.
+ * Adds dynamic type validation for the left and right sides of a logic_compare block.
  * @mixin
+ * @augments Blockly.Block
  * @package
  * @readonly
  */
@@ -557,7 +559,6 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
  * dropdown labels, and adds type left and right side type checking to
  * "logic_compare" blocks.
  * @this Blockly.Block
- * @mixes Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN
  * @package
  * @readonly
  */
@@ -571,12 +572,13 @@ Blockly.Constants.Logic.LOGIC_COMPARE_EXTENSION = function() {
   this.mixin(Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN);
 };
 
-Blockly.Extensions.register("logic_compare",
+Blockly.Extensions.register('logic_compare',
   Blockly.Constants.Logic.LOGIC_COMPARE_EXTENSION);
 
 /**
  * Adds type coordination between inputs and output.
  * @mixin
+ * @augments Blockly.Block
  * @package
  * @readonly
  */
@@ -615,5 +617,5 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
   }
 };
 
-Blockly.Extensions.registerMixin("logic_ternary",
+Blockly.Extensions.registerMixin('logic_ternary',
   Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN);

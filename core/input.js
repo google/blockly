@@ -41,6 +41,9 @@ goog.require('goog.asserts');
  * @constructor
  */
 Blockly.Input = function(type, name, block, connection) {
+  if (type != Blockly.DUMMY_INPUT && !name) {
+    throw 'Value inputs and statement inputs must have non-empty name.';
+  }
   /** @type {number} */
   this.type = type;
   /** @type {string} */
@@ -70,13 +73,32 @@ Blockly.Input.prototype.align = Blockly.ALIGN_LEFT;
 Blockly.Input.prototype.visible_ = true;
 
 /**
- * Add an item to the end of the input's field row.
+ * Add a field (or label from string), and all prefix and suffix fields, to the
+ * end of the input's field row.
  * @param {string|!Blockly.Field} field Something to add as a field.
  * @param {string=} opt_name Language-neutral identifier which may used to find
  *     this field again.  Should be unique to the host block.
  * @return {!Blockly.Input} The input being append to (to allow chaining).
  */
 Blockly.Input.prototype.appendField = function(field, opt_name) {
+  this.insertFieldAt(this.fieldRow.length, field, opt_name);
+  return this;
+};
+
+/**
+ * Inserts a field (or label from string), and all prefix and suffix fields, at
+ * the location of the input's field row.
+ * @param {number} index The index at which to insert field.
+ * @param {string|!Blockly.Field} field Something to add as a field.
+ * @param {string=} opt_name Language-neutral identifier which may used to find
+ *     this field again.  Should be unique to the host block.
+ * @return {number} The index following the last inserted field.
+ */
+Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
+  if (index < 0 || index > this.fieldRow.length) {
+    throw new Error('index ' + index + ' out of bounds.');
+  }
+
   // Empty string, Null or undefined generates no field, unless field is named.
   if (!field && !opt_name) {
     return this;
@@ -93,13 +115,14 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
 
   if (field.prefixField) {
     // Add any prefix.
-    this.appendField(field.prefixField);
+    index = this.insertFieldAt(index, field.prefixField);
   }
   // Add the field to the field row.
-  this.fieldRow.push(field);
+  this.fieldRow.splice(index, 0, field);
+  ++index;
   if (field.suffixField) {
     // Add any suffix.
-    this.appendField(field.suffixField);
+    index = this.insertFieldAt(index, field.suffixField);
   }
 
   if (this.sourceBlock_.rendered) {
@@ -107,7 +130,7 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
     // Adding a field will cause the block to change shape.
     this.sourceBlock_.bumpNeighbours_();
   }
-  return this;
+  return index;
 };
 
 /**

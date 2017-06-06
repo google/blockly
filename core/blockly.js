@@ -27,7 +27,7 @@
 /**
  * The top level namespace used to access the Blockly library.
  * @namespace Blockly
- */
+ **/
 goog.provide('Blockly');
 
 goog.require('Blockly.BlockSvg.render');
@@ -74,20 +74,6 @@ Blockly.mainWorkspace = null;
 Blockly.selected = null;
 
 /**
- * Currently highlighted connection (during a drag).
- * @type {Blockly.Connection}
- * @private
- */
-Blockly.highlightedConnection_ = null;
-
-/**
- * Connection on dragged block that matches the highlighted connection.
- * @type {Blockly.Connection}
- * @private
- */
-Blockly.localConnection_ = null;
-
-/**
  * All of the connections on blocks that are currently being dragged.
  * @type {!Array.<!Blockly.Connection>}
  * @private
@@ -107,15 +93,6 @@ Blockly.clipboardXml_ = null;
  * @private
  */
 Blockly.clipboardSource_ = null;
-
-/**
- * Is the mouse dragging a block?
- * DRAG_NONE - No drag operation.
- * DRAG_STICKY - Still inside the sticky DRAG_RADIUS.
- * DRAG_FREE - Freely draggable.
- * @private
- */
-Blockly.dragMode_ = Blockly.DRAG_NONE;
 
 /**
  * Cached value for whether 3D is supported.
@@ -206,10 +183,18 @@ Blockly.onKeyDown_ = function(e) {
     // Do this first to prevent an error in the delete code from resulting in
     // data loss.
     e.preventDefault();
+    // Don't delete while dragging.  Jeez.
+    if (Blockly.mainWorkspace.isDragging()) {
+      return;
+    }
     if (Blockly.selected && Blockly.selected.isDeletable()) {
       deleteBlock = true;
     }
   } else if (e.altKey || e.ctrlKey || e.metaKey) {
+    // Don't use meta keys during drags.
+    if (Blockly.mainWorkspace.isDragging()) {
+      return;
+    }
     if (Blockly.selected &&
         Blockly.selected.isDeletable() && Blockly.selected.isMovable()) {
       if (e.keyCode == 67) {
@@ -239,23 +224,9 @@ Blockly.onKeyDown_ = function(e) {
     // Common code for delete and cut.
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
-    var heal = Blockly.dragMode_ != Blockly.DRAG_FREE;
-    Blockly.selected.dispose(heal, true);
-    if (Blockly.highlightedConnection_) {
-      Blockly.highlightedConnection_.unhighlight();
-      Blockly.highlightedConnection_ = null;
-    }
+    Blockly.selected.dispose(/* heal */ true, true);
     Blockly.Events.setGroup(false);
   }
-};
-
-/**
- * Stop binding to the global mouseup and mousemove events.
- * @private
- */
-Blockly.terminateDrag_ = function() {
-  Blockly.BlockSvg.terminateDrag();
-  Blockly.Flyout.terminateDrag_();
 };
 
 /**
@@ -265,9 +236,8 @@ Blockly.terminateDrag_ = function() {
  */
 Blockly.copy_ = function(block) {
   var xmlBlock = Blockly.Xml.blockToDom(block);
-  if (Blockly.dragMode_ != Blockly.DRAG_FREE) {
-    Blockly.Xml.deleteNext(xmlBlock);
-  }
+  // Copy only the selected block and internal blocks.
+  Blockly.Xml.deleteNext(xmlBlock);
   // Encode start position in XML.
   var xy = block.getRelativeToSurfaceXY();
   xmlBlock.setAttribute('x', block.RTL ? -xy.x : xy.x);
@@ -410,6 +380,10 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
       console.warn('Block definition #' + i +
         ' in JSON array is missing a type attribute. Skipping.');
     } else {
+      if (Blockly.Blocks[typename]) {
+        console.warn('Block definition #' + i +
+          ' in JSON array overwrites prior definition of "' + typename + '".');
+      }
       Blockly.Blocks[typename] = {
         init: Blockly.jsonInitFactory_(elem)
       };

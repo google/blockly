@@ -119,6 +119,8 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   this.comment = null;
 
   /**
+   * The block's position in workspace units.  (0, 0) is at the workspace's
+   * origin; scale does not change this value.
    * @type {!goog.math.Coordinate}
    * @private
    */
@@ -309,7 +311,7 @@ Blockly.Block.prototype.getConnections_ = function() {
 /**
  * Walks down a stack of blocks and finds the last next connection on the stack.
  * @return {Blockly.Connection} The last next connection on the stack, or null.
- * @private
+ * @package
  */
 Blockly.Block.prototype.lastConnectionInStack_ = function() {
   var nextConnection = this.nextConnection;
@@ -331,41 +333,8 @@ Blockly.Block.prototype.lastConnectionInStack_ = function() {
  * @private
  */
 Blockly.Block.prototype.bumpNeighbours_ = function() {
-  if (!this.workspace) {
-    return;  // Deleted block.
-  }
-  if (Blockly.dragMode_ != Blockly.DRAG_NONE) {
-    return;  // Don't bump blocks during a drag.
-  }
-  var rootBlock = this.getRootBlock();
-  if (rootBlock.isInFlyout) {
-    return;  // Don't move blocks around in a flyout.
-  }
-  // Loop through every connection on this block.
-  var myConnections = this.getConnections_(false);
-  for (var i = 0, connection; connection = myConnections[i]; i++) {
-    // Spider down from this block bumping all sub-blocks.
-    if (connection.isConnected() && connection.isSuperior()) {
-      connection.targetBlock().bumpNeighbours_();
-    }
-
-    var neighbours = connection.neighbours_(Blockly.SNAP_RADIUS);
-    for (var j = 0, otherConnection; otherConnection = neighbours[j]; j++) {
-      // If both connections are connected, that's probably fine.  But if
-      // either one of them is unconnected, then there could be confusion.
-      if (!connection.isConnected() || !otherConnection.isConnected()) {
-        // Only bump blocks if they are from different tree structures.
-        if (otherConnection.getSourceBlock().getRootBlock() != rootBlock) {
-          // Always bump the inferior block.
-          if (connection.isSuperior()) {
-            otherConnection.bumpAwayFrom_(connection);
-          } else {
-            connection.bumpAwayFrom_(otherConnection);
-          }
-        }
-      }
-    }
-  }
+  console.warn('Not expected to reach this bumpNeighbours_ function. The ' +
+    'BlockSvg function for bumpNeighbours_ was expected to be called instead.');
 };
 
 /**
@@ -875,16 +844,15 @@ Blockly.Block.prototype.setDisabled = function(disabled) {
  * @return {boolean} True if disabled.
  */
 Blockly.Block.prototype.getInheritedDisabled = function() {
-  var block = this;
-  while (true) {
-    block = block.getSurroundParent();
-    if (!block) {
-      // Ran off the top.
-      return false;
-    } else if (block.disabled) {
+  var ancestor = this.getSurroundParent();
+  while (ancestor) {
+    if (ancestor.disabled) {
       return true;
     }
+    ancestor = ancestor.getSurroundParent();
   }
+  // Ran off the top.
+  return false;
 };
 
 /**
@@ -984,6 +952,7 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
  * @param {!Object} json Structured data describing the block.
  */
 Blockly.Block.prototype.jsonInit = function(json) {
+
   // Validate inputs.
   goog.asserts.assert(json['output'] == undefined ||
       json['previousStatement'] == undefined,
@@ -1037,11 +1006,17 @@ Blockly.Block.prototype.jsonInit = function(json) {
       'strings. Found raw string in JSON for \'' + json['type'] + '\' block.');
     json['extensions'] = [json['extensions']];  // Correct and continue.
   }
+
+  // Add the mutator to the block
+  if (json['mutator'] !== undefined) {
+    Blockly.Extensions.apply(json['mutator'], this, true);
+  }
+
   if (Array.isArray(json['extensions'])) {
     var extensionNames = json['extensions'];
     for (var i = 0; i < extensionNames.length; ++i) {
       var extensionName = extensionNames[i];
-      Blockly.Extensions.apply(extensionName, this);
+      Blockly.Extensions.apply(extensionName, this, false);
     }
   }
 };
@@ -1092,10 +1067,14 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
   for (var i = 0; i < tokens.length; i++) {
     var token = tokens[i];
     if (typeof token == 'number') {
-      goog.asserts.assert(token > 0 && token <= args.length,
-          'Message index %%s out of range.', token);
-      goog.asserts.assert(!indexDup[token],
-          'Message index %%s duplicated.', token);
+      if (token <= 0 || token > args.length) {
+        throw new Error('Block \"' + this.type + '\": ' +
+            'Message index %' + token + ' out of range.');
+      }
+      if (indexDup[token]) {
+        throw new Error('Block \"' + this.type + '\": ' +
+            'Message index %' + token + ' duplicated.');
+      }
       indexDup[token] = true;
       indexCount++;
       elements.push(args[token - 1]);
@@ -1106,8 +1085,10 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
       }
     }
   }
-  goog.asserts.assert(indexCount == args.length,
-      'block "%s": Message does not reference all %s arg(s).', this.type, args.length);
+  if(indexCount != args.length) {
+    throw new Error('Block \"' + this.type + '\": ' +
+        'Message does not reference all ' + args.length + ' arg(s).');
+  }
   // Add last dummy input if needed.
   if (elements.length && (typeof elements[elements.length - 1] == 'string' ||
       goog.string.startsWith(elements[elements.length - 1]['type'],
@@ -1149,13 +1130,10 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
               input = this.appendDummyInput(element['name']);
               break;
             case 'field_label':
-              field = new Blockly.FieldLabel(element['text'], element['class']);
+              field = Blockly.Block.newFieldLabelFromJson_(element);
               break;
             case 'field_input':
-              field = new Blockly.FieldTextInput(element['text']);
-              if (typeof element['spellcheck'] == 'boolean') {
-                field.setSpellcheck(element['spellcheck']);
-              }
+              field = Blockly.Block.newFieldTextInputFromJson_(element);
               break;
             case 'field_angle':
               field = new Blockly.FieldAngle(element['angle']);
@@ -1168,14 +1146,13 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
               field = new Blockly.FieldColour(element['colour']);
               break;
             case 'field_variable':
-              field = new Blockly.FieldVariable(element['variable']);
+              field = Blockly.Block.newFieldVariableFromJson_(element);
               break;
             case 'field_dropdown':
               field = new Blockly.FieldDropdown(element['options']);
               break;
             case 'field_image':
-              field = new Blockly.FieldImage(element['src'],
-                  element['width'], element['height'], element['alt']);
+              field = Blockly.Block.newFieldImageFromJson_(element);
               break;
             case 'field_number':
               field = new Blockly.FieldNumber(element['value'],
@@ -1213,6 +1190,64 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
     }
   }
 };
+
+/**
+ * Helper function to construct a FieldImage from a JSON arg object,
+ * dereferencing any string table references.
+ * @param {!Object} options A JSON object with options (src, width, height, and alt).
+ * @returns {!Blockly.FieldImage} The new image.
+ * @private
+ */
+Blockly.Block.newFieldImageFromJson_ = function(options) {
+  var src = Blockly.utils.replaceMessageReferences(options['src']);
+  var width = Number(Blockly.utils.replaceMessageReferences(options['width']));
+  var height =
+    Number(Blockly.utils.replaceMessageReferences(options['height']));
+  var alt = Blockly.utils.replaceMessageReferences(options['alt']);
+  return new Blockly.FieldImage(src, width, height, alt);
+};
+
+/**
+ * Helper function to construct a FieldLabel from a JSON arg object,
+ * dereferencing any string table references.
+ * @param {!Object} options A JSON object with options (text, and class).
+ * @returns {!Blockly.FieldLabel} The new label.
+ * @private
+ */
+Blockly.Block.newFieldLabelFromJson_ = function(options) {
+  var text = Blockly.utils.replaceMessageReferences(options['text']);
+  return new Blockly.FieldLabel(text, options['class']);
+};
+
+/**
+ * Helper function to construct a FieldTextInput from a JSON arg object,
+ * dereferencing any string table references.
+ * @param {!Object} options A JSON object with options (text, class, and
+ *                          spellcheck).
+ * @returns {!Blockly.FieldTextInput} The new text input.
+ * @private
+ */
+Blockly.Block.newFieldTextInputFromJson_ = function(options) {
+  var text = Blockly.utils.replaceMessageReferences(options['text']);
+  var field = new Blockly.FieldTextInput(text, options['class']);
+  if (typeof options['spellcheck'] == 'boolean') {
+    field.setSpellcheck(options['spellcheck']);
+  }
+  return field;
+};
+
+/**
+ * Helper function to construct a FieldVariable from a JSON arg object,
+ * dereferencing any string table references.
+ * @param {!Object} options A JSON object with options (variable).
+ * @returns {!Blockly.FieldVariable} The variable field.
+ * @private
+ */
+Blockly.Block.newFieldVariableFromJson_ = function(options) {
+  var varname = Blockly.utils.replaceMessageReferences(options['variable']);
+  return new Blockly.FieldVariable(varname);
+};
+
 
 /**
  * Add a value input, statement input or local variable to this block.
@@ -1384,7 +1419,7 @@ Blockly.Block.prototype.setMutator = function(/* mutator */) {
 
 /**
  * Return the coordinates of the top-left corner of this block relative to the
- * drawing surface's origin (0,0).
+ * drawing surface's origin (0,0), in workspace units.
  * @return {!goog.math.Coordinate} Object with .x and .y properties.
  */
 Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
@@ -1393,8 +1428,8 @@ Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
 
 /**
  * Move a block by a relative offset.
- * @param {number} dx Horizontal offset.
- * @param {number} dy Vertical offset.
+ * @param {number} dx Horizontal offset, in workspace units.
+ * @param {number} dy Vertical offset, in workspace units.
  */
 Blockly.Block.prototype.moveBy = function(dx, dy) {
   goog.asserts.assert(!this.parentBlock_, 'Block has parent.');

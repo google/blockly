@@ -23,6 +23,17 @@
  * @author sll@google.com (Sean Lip)
  */
 
+goog.provide('blocklyApp.ToolboxModalComponent');
+
+goog.require('Blockly.CommonModal');
+goog.require('blocklyApp.AudioService');
+goog.require('blocklyApp.KeyboardInputService');
+goog.require('blocklyApp.ToolboxModalService');
+goog.require('blocklyApp.TranslatePipe');
+goog.require('blocklyApp.TreeService');
+goog.require('blocklyApp.UtilsService');
+
+
 blocklyApp.ToolboxModalComponent = ng.core.Component({
   selector: 'blockly-toolbox-modal',
   template: `
@@ -103,34 +114,8 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
           that.firstBlockIndexes.push(cumulativeIndex);
           that.totalNumBlocks = cumulativeIndex;
 
-          that.keyboardInputService.setOverride({
-            // Tab key: navigates to the previous or next item in the list.
-            '9': function(evt) {
-              evt.preventDefault();
-              evt.stopPropagation();
-
-              if (evt.shiftKey) {
-                // Move to the previous item in the list.
-                if (that.activeButtonIndex <= 0) {
-                  that.activeActionButtonIndex = 0;
-                  that.audioService.playOopsSound();
-                } else {
-                  that.activeButtonIndex--;
-                }
-              } else {
-                // Move to the next item in the list.
-                if (that.activeButtonIndex == that.totalNumBlocks) {
-                  that.audioService.playOopsSound();
-                } else {
-                  that.activeButtonIndex++;
-                }
-              }
-
-              that.focusOnOption(that.activeButtonIndex);
-            },
-            // Enter key: selects a block (or the 'Cancel' button), and closes
-            // the modal.
-            '13': function(evt) {
+          Blockly.CommonModal.setupKeyboardOverrides(that);
+          that.keyboardInputService.addOverride('13', function(evt) {
               evt.preventDefault();
               evt.stopPropagation();
 
@@ -154,20 +139,7 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
 
               // The 'Cancel' button has been pressed.
               that.dismissModal();
-            },
-            // Escape key: closes the modal.
-            '27': function() {
-              that.dismissModal();
-            },
-            // Up key: no-op.
-            '38': function(evt) {
-              evt.preventDefault();
-            },
-            // Down key: no-op.
-            '40': function(evt) {
-              evt.preventDefault();
-            }
-          });
+            });
 
           setTimeout(function() {
             document.getElementById('toolboxModal').focus();
@@ -177,10 +149,15 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
     }
   ],
   // Closes the modal (on both success and failure).
-  hideModal_: function() {
-    this.modalIsVisible = false;
-    this.keyboardInputService.clearOverride();
-    this.toolboxModalService.hideModal();
+  hideModal_: Blockly.CommonModal.hideModal,
+  // Focuses on the button represented by the given index.
+  focusOnOption: function(index) {
+    var button = document.getElementById(this.getOptionId(index));
+    button.focus();
+  },
+  // Counts the number of interactive elements for the modal.
+  numInteractiveElements: function() {
+    return this.totalNumBlocks + 1;
   },
   getOverallIndex: function(categoryIndex, blockIndex) {
     return this.firstBlockIndexes[categoryIndex] + blockIndex;
@@ -190,11 +167,6 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
   },
   getBlockDescription: function(block) {
     return this.utilsService.getBlockDescription(block);
-  },
-  // Focuses on the button represented by the given index.
-  focusOnOption: function(index) {
-    var button = document.getElementById(this.getOptionId(index));
-    button.focus();
   },
   // Returns the ID for the corresponding option button.
   getOptionId: function(index) {

@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Aursani",
-			"Mehtab ahmed"
+			"Mehtab ahmed",
+			"Indus Asia"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "اسم",
@@ -21,6 +22,7 @@
 	"DISABLE_BLOCK": "بلاڪ کي غيرفعال بڻايو",
 	"ENABLE_BLOCK": "بلاڪ کي فعال بڻايو",
 	"HELP": "مدد",
+	"REDO": "ٻيهر ڪريو",
 	"CHANGE_VALUE_TITLE": "قدر بدلايو",
 	"RENAME_VARIABLE": "ڦرڻي کي نئون نالو ڏيو...",
 	"NEW_VARIABLE": "نئون ڦرڻو...",
@@ -89,6 +91,9 @@
 	"MATH_IS_NEGATIVE": "ڪاٽو آهي",
 	"MATH_IS_DIVISIBLE_BY": "سان ونڊجندڙ آهي",
 	"MATH_CHANGE_TITLE": "%1 کي %2 سان مَٽايو",
+	"MATH_ROUND_OPERATOR_ROUNDUP": "ويڙهيو (رائونڊ اَپ)",
+	"MATH_ROUND_OPERATOR_ROUNDDOWN": "هيٺ ڦيرايو (رائونڊ ڊائون)",
+	"MATH_ONLIST_OPERATOR_SUM": "فهرست جو وچور",
 	"MATH_ONLIST_OPERATOR_MIN": "لسٽ جو ننڍي ۾ ننڍو قدر",
 	"MATH_ONLIST_TOOLTIP_MIN": "لسٽ ۾ ننڍي کان ننڍو قدر ڄاڻايو.",
 	"MATH_ONLIST_OPERATOR_MAX": "لسٽ جو وڏي ۾ وڏو قدر",
@@ -97,6 +102,9 @@
 	"MATH_ONLIST_OPERATOR_MEDIAN": "لسٽ جو مڌيان",
 	"MATH_ONLIST_TOOLTIP_MEDIAN": "لسٽ جو مڌيان انگ ڄاڻايو.",
 	"TEXT_CREATE_JOIN_TITLE_JOIN": "شامل ٿيو",
+	"TEXT_INDEXOF_INPUT_INTEXT": "متن ۾",
+	"TEXT_CHARAT_INPUT_INTEXT": "متن ۾",
+	"TEXT_GET_SUBSTRING_INPUT_IN_TEXT": "متن ۾",
 	"TEXT_CHANGECASE_OPERATOR_UPPERCASE": "وڏن اکرن ڏانهن",
 	"TEXT_CHANGECASE_OPERATOR_LOWERCASE": "ننڍن اکر ڏانهن",
 	"TEXT_PRINT_TITLE": "ڇاپيو %1",

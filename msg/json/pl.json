@@ -12,7 +12,9 @@
 			"Cirasean",
 			"Fringoo",
 			"Chrumps",
-			"Woytecr"
+			"Woytecr",
+			"Liuxinyu970226",
+			"Krottyianock"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -240,6 +242,9 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "poproś o liczbę z tą wiadomością",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Zapytaj użytkownika  o liczbę.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Zapytaj użytkownika o jakiś tekst.",
+	"TEXT_COUNT_HELPURL": "https://github.com/google/blockly/wiki/Text#counting-substrings",
+	"TEXT_REVERSE_MESSAGE0": "odwróć %1",
+	"TEXT_REVERSE_HELPURL": "https://github.com/google/blockly/wiki/Text#reversing-text",
 	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "utwórz pustą listę",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Zwraca listę, o długości 0, nie zawierającą rekordów z danymi",

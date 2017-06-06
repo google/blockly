@@ -125,12 +125,14 @@ Blockly.Msg.NEW_VARIABLE = 'Create variable...';
 Blockly.Msg.NEW_VARIABLE_TITLE = 'New variable name:';
 /// alert - Tells the user that the name they entered is already in use.
 Blockly.Msg.VARIABLE_ALREADY_EXISTS = 'A variable named "%1" already exists.'
+/// alert - Tells the user that the name they entered is already in use for a procedure.
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = 'A procedure named "%1" already exists.'
 
 // Variable deletion.
 /// confirm -  Ask the user to confirm their deletion of multiple uses of a variable.
 Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = 'Delete %1 uses of the "%2" variable?';
-/// alert - Tell the user that they can't delete a variable because it's part of the definition of a procedure.
-Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = 'Can\'t delete the variable "%1" because it is part of the definition of the procedure "%2"';
+/// alert - Tell the user that they can't delete a variable because it's part of the definition of a function.
+Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = 'Can\'t delete the variable "%1" because it\'s part of the definition of the function "%2"';
 /// dropdown choice - Delete the currently selected variable.
 Blockly.Msg.DELETE_VARIABLE = 'Delete the "%1" variable';
 
@@ -255,6 +257,33 @@ Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = 'Add a condition to the if block.';
 Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE = Blockly.Msg.CONTROLS_IF_MSG_ELSE;
 /// tooltip - Describes the 'else' subblock during [https://github.com/google/blockly/wiki/IfElse#block-modification if block modification].
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = 'Add a final, catch-all condition to the if block.';
+
+/// button text - Text on a button inside a dialogue window, which will accept or acknowledge the contents of the dialogue when pressed.
+Blockly.Msg.IOS_OK = 'OK';
+/// button text - Text on a button inside a dialogue window, which will close or cancel the dialogue when pressed.
+Blockly.Msg.IOS_CANCEL = 'Cancel';
+/// alert - Title text for an error dialogue.
+Blockly.Msg.IOS_ERROR = 'Error';
+/// header text - Title of a section that displays a list of parameters (aka. "inputs") that have been defined for a procedure. This is used inside a dialogue window to configure a procedure.
+Blockly.Msg.IOS_PROCEDURES_INPUTS = 'INPUTS';
+/// button text - Text on a button which will add a parameter (aka. "input") to a procedure. This is used inside a dialogue window to configure a procedure. NOTE: The "+" should be preserved at the beginning of the text.
+Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = '+ Add Input';
+/// option text - Text describing an option to allow statements to be added within a procedure. This is used inside a dialogue window to configure a procedure.
+Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = 'Allow statements';
+/// alert - Error message when duplicate parameters (aka. "inputs") have been defined on a procedure. This is used inside a dialogue window to configure procedure parameters.
+Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = 'This function has duplicate inputs.';
+/// button text - Text on a button which will open a variable creation dialogue when pressed. NOTE: The "+" should be preserved at the beginning of the text.
+Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = '+ Add Variable';
+/// button text - Text on a button inside a variable creation dialogue, which will add a variable when pressed.
+Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = 'Add';
+/// button text - Text on a button inside a variable rename dialogue, which will rename a variable when pressed.
+Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = 'Rename';
+/// button text - Text on a button inside a variable deletion dialogue, which will delete a variable when pressed.
+Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = 'Delete';
+/// placeholder text - Placeholder text used inside a text input, where a variable name should be entered.
+Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = 'Variable name';
+/// alert - Error message that is displayed when the user attempts to create a variable without a name.
+Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = 'You can\'t use an empty variable name.';
 
 /// url - Information about comparisons.
 Blockly.Msg.LOGIC_COMPARE_HELPURL = 'https://en.wikipedia.org/wiki/Inequality_(mathematics)';
@@ -387,7 +416,7 @@ Blockly.Msg.MATH_SINGLE_TOOLTIP_NEG = 'Return the negation of a number.';
 Blockly.Msg.MATH_SINGLE_TOOLTIP_LN = 'Return the natural logarithm of a number.';
 /// tooltip - Calculates the [https://en.wikipedia.org/wiki/Common_logarithm common logarithm] of its single numeric input.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_LOG10 = 'Return the base 10 logarithm of a number.';
-/// tooltip - Multiplies [https://en.wikipedia.org/wiki/E_%28mathematical_constant%29 e] by itself n times, where n is the single numeric input.
+/// tooltip - Multiplies [https://en.wikipedia.org/wiki/E_(mathematical_constant) e] by itself n times, where n is the single numeric input.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_EXP = 'Return e to the power of a number.';
 /// tooltip - Multiplies 10 by itself n times, where n is the single numeric input.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_POW10 = 'Return 10 to the power of a number.';
@@ -494,7 +523,7 @@ Blockly.Msg.MATH_MODULO_TITLE = 'remainder of %1 ÷ %2';
 Blockly.Msg.MATH_MODULO_TOOLTIP = 'Return the remainder from dividing the two numbers.';
 
 /// url - Information about constraining a numeric value to be in a specific range.  (The English URL is not ideal.  Recall that translating URLs is the lowest priority.)
-Blockly.Msg.MATH_CONSTRAIN_HELPURL = 'https://en.wikipedia.org/wiki/Clamping_%28graphics%29';
+Blockly.Msg.MATH_CONSTRAIN_HELPURL = 'https://en.wikipedia.org/wiki/Clamping_(graphics)';
 /// block text - The title of the block that '''constrain'''s (forces) a number to be in a given range.
 ///For example, if the number 150 is constrained to be between 5 and 100, the result will be 100.
 ///\n\nParameters:\n* %1 - the value to constrain (e.g., 150)\n* %2 - the minimum value (e.g., 5)\n* %3 - the maximum value (e.g., 100).
@@ -539,13 +568,9 @@ Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = 'Add an item to the text.';
 
 /// url - This and the other text-related URLs are going to be hard to translate.  As always, it is okay to leave untranslated or paste in the English-language URL.  For these URLs, you might also consider a general URL about how computers represent text (such as the translation of [https://en.wikipedia.org/wiki/String_(computer_science) this Wikipedia page]).
 Blockly.Msg.TEXT_APPEND_HELPURL = 'https://github.com/google/blockly/wiki/Text#text-modification';
-/// block input text - Message preceding the name of a variable to which text should be appended.
+/// block input text - Message that the variable name at %1 will have the item at %2 appended to it.
 /// [[File:blockly-append-text.png]]
-Blockly.Msg.TEXT_APPEND_TO = 'to';
-/// block input text - Message following the variable and preceding the piece of text that should
-/// be appended, as shown below.
-/// [[File:blockly-append-text.png]]
-Blockly.Msg.TEXT_APPEND_APPENDTEXT = 'append text';
+Blockly.Msg.TEXT_APPEND_TITLE = 'to %1 append text %2';
 Blockly.Msg.TEXT_APPEND_VARIABLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /// tooltip - See [https://github.com/google/blockly/wiki/Text#text-modification https://github.com/google/blockly/wiki/Text#text-modification] for more information.\n\nParameters:\n* %1 - the name of the variable to which text should be appended
 Blockly.Msg.TEXT_APPEND_TOOLTIP = 'Append some text to variable "%1".';
@@ -1072,8 +1097,8 @@ Blockly.Msg.VARIABLES_SET_TOOLTIP = 'Sets this variable to be equal to the input
 Blockly.Msg.VARIABLES_SET_CREATE_GET = 'Create "get %1"';
 
 // Procedures Blocks.
-/// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not have return values.
-Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
+/// url - Information about defining [https://en.wikipedia.org/wiki/Subroutine functions] that do not have return values.
+Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subroutine';
 /// block text - This precedes the name of the function when defining it.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#c84aoc this sample
 /// function definition].
@@ -1100,8 +1125,8 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_DO = '';
 Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP = 'Creates a function with no output.';
 /// Placeholder text that the user is encouraged to replace with a description of what their function does.
 Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = 'Describe this function...';
-/// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that have return values.
-Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
+/// url - Information about defining [https://en.wikipedia.org/wiki/Subroutine functions] that have return values.
+Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subroutine';
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
@@ -1119,13 +1144,13 @@ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = 'allow statements';
 /// alert - The user has created a function with two parameters that have the same name.  Every parameter must have a different name.
 Blockly.Msg.PROCEDURES_DEF_DUPLICATE_WARNING = 'Warning: This function has duplicate parameters.';
 
-/// url - Information about calling [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not return values.
-Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
+/// url - Information about calling [https://en.wikipedia.org/wiki/Subroutine functions] that do not return values.
+Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subroutine';
 /// tooltip - This block causes the body (blocks inside) of the named function definition to be run.
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = 'Run the user-defined function "%1".';
 
-/// url - Information about calling [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that return values.
-Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
+/// url - Information about calling [https://en.wikipedia.org/wiki/Subroutine functions] that return values.
+Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subroutine';
 /// tooltip - This block causes the body (blocks inside) of the named function definition to be run.\n\nParameters:\n* %1 - the name of the function.
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = 'Run the user-defined function "%1" and use its output.';
 

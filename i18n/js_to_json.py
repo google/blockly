@@ -48,7 +48,7 @@ import re
 from common import write_files
 
 
-_INPUT_DEF_PATTERN = re.compile("""Blockly.Msg.(\w*)\s*=\s*'([^']*)';?$""")
+_INPUT_DEF_PATTERN = re.compile("""Blockly.Msg.(\w*)\s*=\s*'(.*)';?\r?$""")
 
 _INPUT_SYN_PATTERN = re.compile(
     """Blockly.Msg.(\w*)\s*=\s*Blockly.Msg.(\w*);""")
@@ -91,7 +91,7 @@ def main():
       match = _INPUT_DEF_PATTERN.match(line)
       if match:
         key = match.group(1)
-        value = match.group(2)
+        value = match.group(2).replace("\\'", "'")
         if not description:
           print('Warning: No description for ' + result['meaning'])
         if (description and _CONSTANT_DESCRIPTION_PATTERN.search(description)):

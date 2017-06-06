@@ -24,6 +24,17 @@
  * @author sll@google.com (Sean Lip)
  */
 
+goog.provide('blocklyApp.SidebarComponent');
+
+goog.require('blocklyApp.UtilsService');
+
+goog.require('blocklyApp.BlockConnectionService');
+goog.require('blocklyApp.ToolboxModalService');
+goog.require('blocklyApp.TranslatePipe');
+goog.require('blocklyApp.TreeService');
+goog.require('blocklyApp.VariableModalService');
+
+
 blocklyApp.SidebarComponent = ng.core.Component({
   selector: 'blockly-sidebar',
   template: `
@@ -52,6 +63,11 @@ blocklyApp.SidebarComponent = ng.core.Component({
               class="blocklySidebarButton">
         {{'ERASE_WORKSPACE'|translate}}
       </button>
+      <button *ngIf="hasVariableCategory()" id="add-variable"
+              (click)="showAddVariableModal()"
+              class="blocklySidebarButton">
+        Add Variable
+      </button>
     </div>
   `,
   pipes: [blocklyApp.TranslatePipe]
@@ -62,9 +78,10 @@ blocklyApp.SidebarComponent = ng.core.Component({
     blocklyApp.ToolboxModalService,
     blocklyApp.TreeService,
     blocklyApp.UtilsService,
+    blocklyApp.VariableModalService,
     function(
         blockConnectionService, toolboxModalService, treeService,
-        utilsService) {
+        utilsService, variableService) {
       // ACCESSIBLE_GLOBALS is a global variable defined by the containing
       // page. It should contain a key, customSidebarButtons, describing
       // additional buttons that should be displayed after the default ones.
@@ -77,6 +94,7 @@ blocklyApp.SidebarComponent = ng.core.Component({
       this.toolboxModalService = toolboxModalService;
       this.treeService = treeService;
       this.utilsService = utilsService;
+      this.variableModalService = variableService;
 
       this.ID_FOR_ATTACH_TO_LINK_BUTTON = 'blocklyAttachToLinkBtn';
       this.ID_FOR_CREATE_NEW_GROUP_BUTTON = 'blocklyCreateNewGroupBtn';
@@ -87,6 +105,9 @@ blocklyApp.SidebarComponent = ng.core.Component({
   },
   isWorkspaceEmpty: function() {
     return this.utilsService.isWorkspaceEmpty();
+  },
+  hasVariableCategory: function() {
+    return this.toolboxModalService.toolboxHasVariableCategory();
   },
   clearWorkspace: function() {
     blocklyApp.workspace.clear();
@@ -104,5 +125,8 @@ blocklyApp.SidebarComponent = ng.core.Component({
   showToolboxModalForCreateNewGroup: function() {
     this.toolboxModalService.showToolboxModalForCreateNewGroup(
         this.ID_FOR_CREATE_NEW_GROUP_BUTTON);
+  },
+  showAddVariableModal: function() {
+    this.variableModalService.showAddModal_("item");
   }
 });

@@ -258,6 +258,7 @@ class Gen_compressed(threading.Thread):
     # Read in all the source files.
     filenames = calcdeps.CalculateDependencies(self.search_paths,
         [os.path.join("accessible", "app.component.js")])
+    filenames.sort()  # Deterministic build.
     for filename in filenames:
       # Filter out the Closure files (the compiler will add them).
       if filename.startswith(os.pardir + os.sep):  # '../'
@@ -284,6 +285,7 @@ class Gen_compressed(threading.Thread):
     # Add Blockly.Blocks to be compatible with the compiler.
     params.append(("js_code", "goog.provide('Blockly.Blocks');"))
     filenames = glob.glob(os.path.join("blocks", "*.js"))
+    filenames.sort()  # Deterministic build.
     for filename in filenames:
       f = open(filename)
       params.append(("js_code", "".join(f.readlines())))
@@ -310,6 +312,7 @@ class Gen_compressed(threading.Thread):
     params.append(("js_code", "goog.provide('Blockly.Generator');"))
     filenames = glob.glob(
         os.path.join("generators", language, "*.js"))
+    filenames.sort()  # Deterministic build.
     filenames.insert(0, os.path.join("generators", language + ".js"))
     for filename in filenames:
       f = open(filename)

@@ -122,6 +122,7 @@ window.BLOCKLY_BOOT = function() {
     base_path = calcdeps.FindClosureBasePath(self.search_paths)
     for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
       add_dependency.append(calcdeps.GetDepsLine(dep, base_path))
+    add_dependency.sort()  # Deterministic build.
     add_dependency = '\n'.join(add_dependency)
     # Find the Blockly directory name and replace it with a JS variable.
     # This allows blockly_uncompressed.js to be compiled on one computer and be
@@ -135,7 +136,7 @@ window.BLOCKLY_BOOT = function() {
     for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
       if not dep.filename.startswith(os.pardir + os.sep):  # '../'
         provides.extend(dep.provides)
-    provides.sort()
+    provides.sort()  # Deterministic build.
     f.write('\n')
     f.write('// Load Blockly.\n')
     for provide in provides:
@@ -197,6 +198,7 @@ class Gen_compressed(threading.Thread):
     # Read in all the source files.
     filenames = calcdeps.CalculateDependencies(self.search_paths,
         [os.path.join("core", "blockly.js")])
+    filenames.sort()  # Deterministic build.
     for filename in filenames:
       # Filter out the Closure files (the compiler will add them).
       if filename.startswith(os.pardir + os.sep):  # '../'
@@ -458,6 +460,7 @@ developers.google.com/blockly/guides/modify/web/closure""")
 
   search_paths = calcdeps.ExpandDirectories(
       ["core", os.path.join(os.path.pardir, "closure-library")])
+  search_paths.sort()  # Deterministic build.
 
   # Run both tasks in parallel threads.
   # Uncompressed is limited by processor speed.

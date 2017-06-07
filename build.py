@@ -421,8 +421,9 @@ class Gen_langfiles(threading.Thread):
   Runs in a separate thread.
   """
 
-  def __init__(self):
+  def __init__(self, force_gen):
     threading.Thread.__init__(self)
+    self.force_gen = force_gen
 
   def _rebuild(self, srcs, dests):
     # Determine whether any of the files in srcs is newer than any in dests.
@@ -444,9 +445,10 @@ class Gen_langfiles(threading.Thread):
 
   def run(self):
     # The files msg/json/{en,qqq,synonyms}.json depend on msg/messages.js.
-    if self._rebuild([os.path.join("msg", "messages.js")],
-                     [os.path.join("msg", "json", f) for f in
-                      ["en.json", "qqq.json", "synonyms.json"]]):
+    if (self.force_gen or
+        self._rebuild([os.path.join("msg", "messages.js")],
+                      [os.path.join("msg", "json", f) for f in
+                      ["en.json", "qqq.json", "synonyms.json"]])):
       try:
         subprocess.check_call([
             "python",
@@ -521,7 +523,7 @@ developers.google.com/blockly/guides/modify/web/closure""")
       ["accessible", "core", os.path.join(os.path.pardir, "closure-library")])
 
   if (len(sys.argv) == 1):
-    args = ['core', 'accessible', 'generators', 'langfiles']
+    args = ['core', 'accessible', 'generators', 'defaultlangfiles']
   else:
     args = sys.argv
 
@@ -537,5 +539,7 @@ developers.google.com/blockly/guides/modify/web/closure""")
   Gen_compressed(full_search_paths, args).start()
 
   # This is run locally in a separate thread
-  if ('langfiles' in args):
-    Gen_langfiles().start()
+  # defaultlangfiles checks for changes in the msg files, while manually asking
+  # to build langfiles will force the messages to be rebuilt.
+  if ('langfiles' in args or 'defaultlangfiles' in args):
+    Gen_langfiles('langfiles' in args).start()

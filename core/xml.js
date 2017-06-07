@@ -333,42 +333,45 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     workspace.setResizesEnabled(false);
   }
   var variablesFirst = true;
-  for (var i = 0; i < childCount; i++) {
-    var xmlChild = xml.childNodes[i];
-    var name = xmlChild.nodeName.toLowerCase();
-    if (name == 'block' ||
-        (name == 'shadow' && !Blockly.Events.recordUndo)) {
-      // Allow top-level shadow blocks if recordUndo is disabled since
-      // that means an undo is in progress.  Such a block is expected
-      // to be moved to a nested destination in the next operation.
-      var block = Blockly.Xml.domToBlock(xmlChild, workspace);
-      newBlockIds.push(block.id);
-      var blockX = parseInt(xmlChild.getAttribute('x'), 10);
-      var blockY = parseInt(xmlChild.getAttribute('y'), 10);
-      if (!isNaN(blockX) && !isNaN(blockY)) {
-        block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
+  try {
+    for (var i = 0; i < childCount; i++) {
+      var xmlChild = xml.childNodes[i];
+      var name = xmlChild.nodeName.toLowerCase();
+      if (name == 'block' ||
+          (name == 'shadow' && !Blockly.Events.recordUndo)) {
+        // Allow top-level shadow blocks if recordUndo is disabled since
+        // that means an undo is in progress.  Such a block is expected
+        // to be moved to a nested destination in the next operation.
+        var block = Blockly.Xml.domToBlock(xmlChild, workspace);
+        newBlockIds.push(block.id);
+        var blockX = parseInt(xmlChild.getAttribute('x'), 10);
+        var blockY = parseInt(xmlChild.getAttribute('y'), 10);
+        if (!isNaN(blockX) && !isNaN(blockY)) {
+          block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
+        }
+        variablesFirst = false;
+      } else if (name == 'shadow') {
+        goog.asserts.fail('Shadow block cannot be a top-level block.');
+        variablesFirst = false;
+      }  else if (name == 'variables') {
+        if (variablesFirst) {
+          Blockly.Xml.domToVariables(xmlChild, workspace);
+        }
+        else {
+          throw Error('\'variables\' tag must exist once before block and ' +
+            'shadow tag elements in the workspace XML, but it was found in ' +
+            'another location.');
+        }
+        variablesFirst = false;
       }
-      variablesFirst = false;
-    } else if (name == 'shadow') {
-      goog.asserts.fail('Shadow block cannot be a top-level block.');
-      variablesFirst = false;
-    }  else if (name == 'variables') {
-      if (variablesFirst) {
-        Blockly.Xml.domToVariables(xmlChild, workspace);
-      }
-      else {
-        throw Error('\'variables\' tag must exist once before block and ' +
-          'shadow tag elements in the workspace XML, but it was found in ' +
-          'another location.');
-      }
-      variablesFirst = false;
     }
   }
-  if (!existingGroup) {
-    Blockly.Events.setGroup(false);
+  finally {
+    if (!existingGroup) {
+      Blockly.Events.setGroup(false);
+    }
+    Blockly.Field.stopCache();
   }
-  Blockly.Field.stopCache();
-
   workspace.updateVariableStore(false);
   // Re-enable workspace resizing.
   if (workspace.setResizesEnabled) {

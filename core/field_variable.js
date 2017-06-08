@@ -107,7 +107,7 @@ Blockly.FieldVariable.prototype.getValue = function() {
  */
 Blockly.FieldVariable.prototype.setValue = function(newValue) {
   if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(new Blockly.Events.Change(
+    Blockly.Events.fire(new Blockly.Events.BlockChange(
         this.sourceBlock_, 'field', this.name, this.value_, newValue));
   }
   if (this.sourceBlock_) {

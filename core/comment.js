@@ -119,7 +119,7 @@ Blockly.Comment.prototype.createEditor_ = function() {
   });
   Blockly.bindEventWithChecks_(textarea, 'change', this, function(e) {
     if (this.text_ != textarea.value) {
-      Blockly.Events.fire(new Blockly.Events.Change(
+      Blockly.Events.fire(new Blockly.Events.BlockChange(
         this.block_, 'comment', null, this.text_, textarea.value));
       this.text_ = textarea.value;
     }
@@ -257,7 +257,7 @@ Blockly.Comment.prototype.getText = function() {
  */
 Blockly.Comment.prototype.setText = function(text) {
   if (this.text_ != text) {
-    Blockly.Events.fire(new Blockly.Events.Change(
+    Blockly.Events.fire(new Blockly.Events.BlockChange(
       this.block_, 'comment', null, this.text_, text));
     this.text_ = text;
   }

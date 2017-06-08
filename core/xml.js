@@ -481,7 +481,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     Blockly.Events.enable();
   }
   if (Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(new Blockly.Events.Create(topBlock));
+    Blockly.Events.fire(new Blockly.Events.BlockCreate(topBlock));
   }
   return topBlock;
 };

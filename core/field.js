@@ -495,7 +495,7 @@ Blockly.Field.prototype.setValue = function(newValue) {
     return;
   }
   if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(new Blockly.Events.Change(
+    Blockly.Events.fire(new Blockly.Events.BlockChange(
         this.sourceBlock_, 'field', this.name, oldValue, newValue));
   }
   this.setText(newValue);

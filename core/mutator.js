@@ -320,7 +320,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
     var newMutationDom = block.mutationToDom();
     var newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);
     if (oldMutation != newMutation) {
-      Blockly.Events.fire(new Blockly.Events.Change(
+      Blockly.Events.fire(new Blockly.Events.BlockChange(
           block, 'mutation', null, oldMutation, newMutation));
       // Ensure that any bump is part of this mutation's event group.
       var group = Blockly.Events.getGroup();

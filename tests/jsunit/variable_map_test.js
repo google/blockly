@@ -24,13 +24,16 @@ goog.require('goog.testing.MockControl');
 
 var variable_map;
 var mockControl_;
+var workspace;
 
 function variableMapTest_setUp() {
-  variable_map = new Blockly.VariableMap();
+  workspace = new Blockly.Workspace();
+  variable_map = new Blockly.VariableMap(workspace);
   mockControl_ = new goog.testing.MockControl();
 }
 
 function variableMapTest_tearDown() {
+  workspace.dispose();
   mockControl_.$tearDown();
   variable_map = null;
 }
@@ -133,7 +136,7 @@ function test_createVariableNullAndUndefinedType() {
 
 function test_createVariableNullId() {
   variableMapTest_setUp();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
+  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '2']);
   try {
     variable_map.createVariable('name1', 'type1', null);
     variableMapTest_checkVariableValues('name1', 'type1', '1');
@@ -145,7 +148,7 @@ function test_createVariableNullId() {
 
 function test_createVariableUndefinedId() {
   variableMapTest_setUp();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
+  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '2']);
   try {
     variable_map.createVariable('name1', 'type1', undefined);
     variableMapTest_checkVariableValues('name1', 'type1', '1');

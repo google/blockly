@@ -516,8 +516,16 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
     horizontalLayout: this.horizontalLayout,
     toolboxPosition: this.options.toolboxPosition
   };
-  /** @type {Blockly.Flyout} */
-  this.flyout_ = new Blockly.Flyout(workspaceOptions);
+  /**
+   * @type {!Blockly.Flyout}
+   * @private
+   */
+  this.flyout_ = null;
+  if (this.horizontalLayout) {
+    this.flyout_ = new Blockly.HorizontalFlyout(workspaceOptions);
+  } else {
+    this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
+  }
   this.flyout_.autoClose = false;
 
   // Return the element  so that callers can place it in their desired

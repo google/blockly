@@ -599,7 +599,10 @@ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = 'Returns the index of the first/last occurren
 /// [https://github.com/google/blockly/wiki/Text#finding-text
 /// https://github.com/google/blockly/wiki/Text#finding-text].
 /// [[File:Blockly-find-text.png]].
-Blockly.Msg.TEXT_INDEXOF_INPUT_INTEXT = 'in text';
+/// In English the expanded message is "in text %1 find (first|last) occurance of text %3"
+/// where %1 and %3 are added by the user. See TEXT_INDEXOF_OPERATOR_FIRST and
+/// TEXT_INDEXOF_OPERATOR_LAST for the dropdown text that replaces %2.
+Blockly.Msg.TEXT_INDEXOF_TITLE = 'in text %1 %2 %3';
 /// dropdown - See [https://github.com/google/blockly/wiki/Text#finding-text
 /// https://github.com/google/blockly/wiki/Text#finding-text].
 /// [[File:Blockly-find-text.png]].
@@ -612,21 +615,17 @@ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = 'find first occurrence of text';
 /// https://translatewiki.net/wiki/Translating:Blockly#Drop-Down_Menus)].)
 /// [[File:Blockly-find-text.png]].
 Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = 'find last occurrence of text';
-/// block text - Optional text to follow the rightmost block in a
-/// [https://github.com/google/blockly/wiki/Text#finding-text
-/// https://github.com/google/blockly/wiki/Text#finding-text in text ... find block]
-/// (after the "a" in the below picture).  This will be the empty string in most languages.
-/// [[File:Blockly-find-text.png]].
-Blockly.Msg.TEXT_INDEXOF_TAIL = '';
 
 /// url - Information about extracting characters (letters, number, symbols, etc.) from text.
 Blockly.Msg.TEXT_CHARAT_HELPURL = 'https://github.com/google/blockly/wiki/Text#extracting-text';
-/// block text - Appears before the piece of text from which a letter (or number,
-/// punctuation character, etc.) should be extracted, as shown below.  See
+/// block text - Text for a block to extract a letter (or number,
+/// punctuation character, etc.) from a string, as shown below. %1 is added by
+/// the user and %2 is replaced by a dropdown of options, possibly followed by
+/// another user supplied string. TEXT_CHARAT_TAIL is then added to the end.  See
 /// [https://github.com/google/blockly/wiki/Text#extracting-a-single-character
 /// https://github.com/google/blockly/wiki/Text#extracting-a-single-character].
 /// [[File:Blockly-text-get.png]]
-Blockly.Msg.TEXT_CHARAT_INPUT_INTEXT = 'in text';
+Blockly.Msg.TEXT_CHARAT_TITLE = 'in text %1 %2'
 /// dropdown - Indicates that the letter (or number, punctuation character, etc.) with the
 /// specified index should be obtained from the preceding piece of text.  See
 /// [https://github.com/google/blockly/wiki/Text#extracting-a-single-character

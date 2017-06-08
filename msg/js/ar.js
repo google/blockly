@@ -310,13 +310,13 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "اسم الإدخال:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "أضف مدخلا إلى الوظيفة.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "المدخلات";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "إضافة أو إزالة أو إعادة ترتيب المدخلات لهذه المهمة.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "إعادة";
 Blockly.Msg.REMOVE_COMMENT = "ازل التعليق";
 Blockly.Msg.RENAME_VARIABLE = "إعادة تسمية المتغير...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "إعادة تسمية كافة المتغيرات '%1' إلى:";
-Blockly.Msg.TEXT_APPEND_APPENDTEXT = "إلصق نص";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-Blockly.Msg.TEXT_APPEND_TO = "إلى";
+Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
 Blockly.Msg.TEXT_APPEND_TOOLTIP = "إلصق جزءا من النص إلى متغير '%1'.";
 Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "الى حروف صغيرة";
@@ -327,10 +327,10 @@ Blockly.Msg.TEXT_CHARAT_FIRST = "احصل على الحرف الأول";
 Blockly.Msg.TEXT_CHARAT_FROM_END = "الحصول على الحرف # من نهاية";
 Blockly.Msg.TEXT_CHARAT_FROM_START = "الحصول على الحرف #";
 Blockly.Msg.TEXT_CHARAT_HELPURL = "https://github.com/google/blockly/wiki/Text#extracting-text";  // untranslated
-Blockly.Msg.TEXT_CHARAT_INPUT_INTEXT = "في النص";
 Blockly.Msg.TEXT_CHARAT_LAST = "احصل على آخر حرف";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "الحصول على حرف عشوائي";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
+Blockly.Msg.TEXT_CHARAT_TITLE = "in text %1 %2";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "يرجع حرف ما في الموضع المحدد.";
 Blockly.Msg.TEXT_COUNT_HELPURL = "https://github.com/google/blockly/wiki/Text#counting-substrings";  // untranslated
 Blockly.Msg.TEXT_COUNT_MESSAGE0 = "count %1 in %2";  // untranslated
@@ -349,10 +349,9 @@ Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_START = "الحصول على سلسل�
 Blockly.Msg.TEXT_GET_SUBSTRING_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_GET_SUBSTRING_TOOLTIP = "يرجع جزء معين من النص.";
 Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
-Blockly.Msg.TEXT_INDEXOF_INPUT_INTEXT = "في النص";
 Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "ابحث عن التواجد الأول للنص";
 Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "ابحث عن التواجد الأخير للنص";
-Blockly.Msg.TEXT_INDEXOF_TAIL = "";  // untranslated
+Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
 Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "تقوم بإرجاع مؤشر التواجد الأول/الأخير للنص الأول في النص الثاني.  تقوم بإرجاع %1 إذا لم يتم العثور على النص.";
 Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 فارغ";

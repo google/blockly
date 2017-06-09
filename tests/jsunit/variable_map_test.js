@@ -38,20 +38,6 @@ function variableMapTest_tearDown() {
   variable_map = null;
 }
 
-/**
- * Check if a variable with the given values exists.
- * @param {!string} name The expected name of the variable.
- * @param {!string} type The expected type of the variable.
- * @param {!string} id The expected id of the variable.
- */
-function variableMapTest_checkVariableValues(name, type, id) {
-  var variable = variable_map.getVariable(name);
-  assertNotUndefined(variable);
-  assertEquals(name, variable.name);
-  assertEquals(type, variable.type);
-  assertEquals(id, variable.getId());
-}
-
 function test_getVariable_Trivial() {
   variableMapTest_setUp();
   var var_1 = variable_map.createVariable('name1', 'type1', 'id1');
@@ -99,7 +85,7 @@ function test_getVariableById_NotFound() {
 function test_createVariableTrivial() {
   variableMapTest_setUp();
   variable_map.createVariable('name1', 'type1', 'id1');
-  variableMapTest_checkVariableValues('name1', 'type1', 'id1')
+  checkVariableValues(variable_map, 'name1', 'type1', 'id1');
   variableMapTest_tearDown();
 }
 
@@ -115,7 +101,7 @@ function test_createVariableAlreadyExists() {
   assertEquals(1, varMapLength);
 
   variable_map.createVariable('name1');
-  variableMapTest_checkVariableValues('name1', 'type1', 'id1');
+  checkVariableValues(variable_map, 'name1', 'type1', 'id1');
   // Check that the size of the variableMap_ did not change.
   keys = Object.keys(variable_map.variableMap_);
   assertEquals(1, keys.length);
@@ -129,8 +115,8 @@ function test_createVariableNullAndUndefinedType() {
   variable_map.createVariable('name1', null, 'id1');
   variable_map.createVariable('name2', undefined, 'id2');
 
-  variableMapTest_checkVariableValues('name1', '', 'id1');
-  variableMapTest_checkVariableValues('name2', '', 'id2');
+  checkVariableValues(variable_map, 'name1', '', 'id1');
+  checkVariableValues(variable_map, 'name2', '', 'id2');
   variableMapTest_tearDown();
 }
 
@@ -139,7 +125,7 @@ function test_createVariableNullId() {
   setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '2']);
   try {
     variable_map.createVariable('name1', 'type1', null);
-    variableMapTest_checkVariableValues('name1', 'type1', '1');
+    checkVariableValues(variable_map, 'name1', 'type1', '1');
   }
   finally {
     variableMapTest_tearDown();
@@ -151,7 +137,7 @@ function test_createVariableUndefinedId() {
   setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '2']);
   try {
     variable_map.createVariable('name1', 'type1', undefined);
-    variableMapTest_checkVariableValues('name1', 'type1', '1');
+    checkVariableValues(variable_map, 'name1', 'type1', '1');
   }
   finally {
     variableMapTest_tearDown();
@@ -193,8 +179,8 @@ function test_createVariableTwoSameTypes() {
   variable_map.createVariable('name1', 'type1', 'id1');
   variable_map.createVariable('name2', 'type1', 'id2');
 
-  variableMapTest_checkVariableValues('name1', 'type1', 'id1');
-  variableMapTest_checkVariableValues('name2', 'type1', 'id2');
+  checkVariableValues(variable_map, 'name1', 'type1', 'id1');
+  checkVariableValues(variable_map, 'name2', 'type1', 'id2');
   variableMapTest_tearDown();
 }
 

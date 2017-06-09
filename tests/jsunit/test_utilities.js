@@ -73,3 +73,19 @@ function setUpMockMethod(mockControl, scope, funcName, parameters,
   mockMethod.$replay();
   return mockMethod;
 }
+
+/**
+ * Check if a variable with the given values exists.
+ * @param {Blockly.Workspace|Blockly.VariableMap} container The workspace  or
+ *     variableMap the checked variable belongs to.
+ * @param {!string} name The expected name of the variable.
+ * @param {!string} type The expected type of the variable.
+ * @param {!string} id The expected id of the variable.
+ */
+function checkVariableValues(container, name, type, id) {
+  var variable = container.getVariableById(id);
+  assertNotUndefined(variable);
+  assertEquals(name, variable.name);
+  assertEquals(type, variable.type);
+  assertEquals(id, variable.getId());
+}

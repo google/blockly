@@ -121,20 +121,6 @@ function checkExactEventValues(event, values) {
   }
 }
 
-/**
- * Check if a variable with the given values exists.
- * @param {!string} name The expected name of the variable.
- * @param {!string} type The expected type of the variable.
- * @param {!string} id The expected id of the variable.
- */
-function eventTest_checkVariableValues(name, type, id) {
-  var variable = workspace.getVariableById(id);
-  assertNotUndefined(variable);
-  assertEquals(name, variable.name);
-  assertEquals(type, variable.type);
-  assertEquals(id, variable.getId());
-}
-
 function test_create_constructor() {
   eventTest_setUpWithMockBlocks();
   setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
@@ -293,7 +279,7 @@ function test_varCreate_runForward() {
   var event = Blockly.Events.fromJson(json, workspace);
   assertNull(workspace.getVariableById('id1'));
   event.run(true);
-  eventTest_checkVariableValues('name1', 'type1', 'id1');
+  checkVariableValues(workspace, 'name1', 'type1', 'id1');
   eventTest_tearDown();
 }
 
@@ -357,7 +343,7 @@ function test_varDelete_runBackwards() {
   var event = Blockly.Events.fromJson(json, workspace);
   assertNull(workspace.getVariableById('id1'));
   event.run(false);
-  eventTest_checkVariableValues('name1', 'type1', 'id1');
+  checkVariableValues(workspace, 'name1', 'type1', 'id1');
   eventTest_tearDown();
 }
 
@@ -400,7 +386,7 @@ function test_varRename_runForward() {
   var event = new Blockly.Events.VarRename(variable, 'name2');
   event.run(true);
   assertNull(workspace.getVariable('name1'));
-  eventTest_checkVariableValues('name2', 'type1', 'id1');
+  checkVariableValues(workspace, 'name2', 'type1', 'id1');
   eventTest_tearDown();
 }
 
@@ -410,6 +396,6 @@ function test_varBackard_runForward() {
   var event = new Blockly.Events.VarRename(variable, 'name2');
   event.run(false);
   assertNull(workspace.getVariable('name2'));
-  eventTest_checkVariableValues('name1', 'type1', 'id1');
+  checkVariableValues(workspace, 'name1', 'type1', 'id1');
   eventTest_tearDown();
 }

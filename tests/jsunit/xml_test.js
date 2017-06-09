@@ -129,20 +129,6 @@ function xmlTest_checkVariableDomValues(variableDom, type, id, text) {
   assertEquals(text, variableDom.textContent);
 }
 
-/**
- * Check if a variable with the given values exists.
- * @param {!string} name The expected name of the variable.
- * @param {!string} type The expected type of the variable.
- * @param {!string} id The expected id of the variable.
- */
-function xmlTest_checkVariableValues(name, type, id) {
-  var variable = workspace.getVariable(name);
-  assertNotUndefined(variable);
-  assertEquals(name, variable.name);
-  assertEquals(type, variable.type);
-  assertEquals(id, variable.getId());
-}
-
 function test_textToDom() {
   var dom = Blockly.Xml.textToDom(XML_TEXT);
   assertEquals('XML tag', 'xml', dom.nodeName);
@@ -169,7 +155,7 @@ function test_domToWorkspace_BackwardCompatibility() {
         '</xml>');
     Blockly.Xml.domToWorkspace(dom, workspace);
     assertEquals('Block count', 1, workspace.getAllBlocks().length);
-    xmlTest_checkVariableValues('name1', '', '1');
+    checkVariableValues(workspace, 'name1', '', '1');
   } finally {
     xmlTest_tearDownWithMockBlocks();
   }
@@ -192,9 +178,9 @@ function test_domToWorkspace_VariablesAtTop() {
         '</xml>');
     Blockly.Xml.domToWorkspace(dom, workspace);
     assertEquals('Block count', 1, workspace.getAllBlocks().length);
-    xmlTest_checkVariableValues('name1', 'type1', 'id1');
-    xmlTest_checkVariableValues('name2', 'type2', 'id2');
-    xmlTest_checkVariableValues('name3', '', 'id3');
+    checkVariableValues(workspace, 'name1', 'type1', 'id1');
+    checkVariableValues(workspace, 'name2', 'type2', 'id2');
+    checkVariableValues(workspace, 'name3', '', 'id3');
   } finally {
     xmlTest_tearDownWithMockBlocks();
   }

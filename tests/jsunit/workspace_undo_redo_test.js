@@ -29,9 +29,9 @@ goog.require('goog.testing');
 goog.require('goog.testing.events');
 goog.require('goog.testing.MockControl');
 
+
 var workspace;
 var mockControl_;
-var savedMsg = Blockly.Msg.DELETE_VARIABLE;
 var savedFireFunc = Blockly.Events.fire;
 Blockly.defineBlocksWithJsonArray([{
   "type": "get_var_block",
@@ -58,24 +58,10 @@ function undoRedoTest_setUp() {
   Blockly.Events.fire = temporary_fireEvent;
 }
 
-function undoRedoTest_setUpWithMockBlocks() {
-  undoRedoTest_setUp();
-  // Need to define this because field_variable's dropdownCreate() calls replace
-  // on undefined value, Blockly.Msg.DELETE_VARIABLE. To fix this, define
-  // Blockly.Msg.DELETE_VARIABLE as %1 so the replace function finds the %1 it
-  // expects.
-  Blockly.Msg.DELETE_VARIABLE = '%1';
-}
-
 function undoRedoTest_tearDown() {
   mockControl_.$tearDown();
   workspace.dispose();
   Blockly.Events.fire = savedFireFunc;
-}
-
-function undoRedoTest_tearDownWithMockBlocks() {
-  undoRedoTest_tearDown();
-  Blockly.Msg.DELETE_VARIABLE = savedMsg;
 }
 
 /**
@@ -159,7 +145,7 @@ function test_undoDeleteVariable_NoBlocks() {
 }
 
 function test_undoDeleteVariable_WithBlocks() {
-  undoRedoTest_setUpWithMockBlocks();
+  undoRedoTest_setUp();
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
   createMockBlock('name1');
@@ -177,7 +163,7 @@ function test_undoDeleteVariable_WithBlocks() {
   undoRedoTest_checkBlockVariableName(1, 'name1');
   checkVariableValues(workspace, 'name1', 'type1', 'id1');
   checkVariableValues(workspace, 'name2', 'type2', 'id2');
-  undoRedoTest_tearDownWithMockBlocks();
+  undoRedoTest_tearDown();
 }
 
 function test_redoAndUndoDeleteVariable() {
@@ -203,7 +189,7 @@ function test_redoAndUndoDeleteVariable() {
 }
 
 function test_redoAndUndoDeleteVariableWithBlocks() {
-  undoRedoTest_setUpWithMockBlocks();
+  undoRedoTest_setUp();
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
   createMockBlock('name1');
@@ -225,7 +211,7 @@ function test_redoAndUndoDeleteVariableWithBlocks() {
   undoRedoTest_checkBlockVariableName(0, 'name2');
   assertNull(workspace.getVariableById('id1'));
   checkVariableValues(workspace, 'name2', 'type2', 'id2');
-  undoRedoTest_tearDownWithMockBlocks();
+  undoRedoTest_tearDown();
 }
 
 function test_undoRedoRenameVariable_NeitherVariableExists() {
@@ -260,7 +246,7 @@ function test_undoRedoRenameVariable_OneExists_NoBlocks() {
 }
 
 function test_undoRedoRenameVariable_OneExists_WithBlocks() {
-  undoRedoTest_setUpWithMockBlocks();
+  undoRedoTest_setUp();
   workspace.createVariable('name1', '', 'id1');
   createMockBlock('name1');
   workspace.renameVariable('name1', 'name2');
@@ -273,7 +259,7 @@ function test_undoRedoRenameVariable_OneExists_WithBlocks() {
   workspace.undo(true);
   checkVariableValues(workspace, 'name2', '', 'id1');
   undoRedoTest_checkBlockVariableName(0, 'name2');
-  undoRedoTest_tearDownWithMockBlocks();
+  undoRedoTest_tearDown();
 }
 
 function test_undoRedoRenameVariable_BothExist_NoBlocks() {
@@ -292,7 +278,7 @@ function test_undoRedoRenameVariable_BothExist_NoBlocks() {
 }
 
 function test_undoRedoRenameVariable_BothExist_WithBlocks() {
-  undoRedoTest_setUpWithMockBlocks();
+  undoRedoTest_setUp();
   createTwoVarsEmptyType();
   createMockBlock('name1');
   createMockBlock('name2');
@@ -307,7 +293,7 @@ function test_undoRedoRenameVariable_BothExist_WithBlocks() {
   workspace.undo(true);
   undoRedoTest_checkBlockVariableName(0, 'name2');
   undoRedoTest_checkBlockVariableName(1, 'name2');
-  undoRedoTest_tearDownWithMockBlocks();
+  undoRedoTest_tearDown();
 }
 
 function test_undoRedoRenameVariable_BothExistCaseChange_NoBlocks() {
@@ -326,7 +312,7 @@ function test_undoRedoRenameVariable_BothExistCaseChange_NoBlocks() {
 }
 
 function test_undoRedoRenameVariable_BothExistCaseChange_WithBlocks() {
-  undoRedoTest_setUpWithMockBlocks();
+  undoRedoTest_setUp();
   createTwoVarsEmptyType();
   createMockBlock('name1');
   createMockBlock('name2');
@@ -343,7 +329,7 @@ function test_undoRedoRenameVariable_BothExistCaseChange_WithBlocks() {
   assertNull(workspace.getVariable('name1'));
   undoRedoTest_checkBlockVariableName(0, 'Name2');
   undoRedoTest_checkBlockVariableName(1, 'Name2');
-  undoRedoTest_tearDownWithMockBlocks();
+  undoRedoTest_tearDown();
 }
 
 function test_undoRedoRenameVariable_OnlyCaseChange_NoBlocks() {
@@ -360,7 +346,7 @@ function test_undoRedoRenameVariable_OnlyCaseChange_NoBlocks() {
 }
 
 function test_undoRedoRenameVariable_OnlyCaseChange_WithBlocks() {
-  undoRedoTest_setUpWithMockBlocks();
+  undoRedoTest_setUp();
   workspace.createVariable('name1', '', 'id1');
   createMockBlock('name1');
   workspace.renameVariable('name1', 'Name1');
@@ -372,5 +358,5 @@ function test_undoRedoRenameVariable_OnlyCaseChange_WithBlocks() {
   workspace.undo(true);
   checkVariableValues(workspace, 'Name1', '', 'id1');
   undoRedoTest_checkBlockVariableName(0, 'Name1');
-  undoRedoTest_tearDownWithMockBlocks();
+  undoRedoTest_tearDown();
 }

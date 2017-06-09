@@ -19,67 +19,55 @@
  */
 
  /**
- * @fileoverview Tests for Blockly.Field
+ * @fileoverview Tests for Blockly.FieldVariable
  * @author marisaleung@google.com (Marisa Leung)
  */
 'use strict';
 
 goog.require('goog.testing');
 
-var workspace;
-var saved_msg = Blockly.Msg.DELETE_VARIABLE;
 
-function fieldVariable_setUp() {
-  Blockly.Msg.DELETE_VARIABLE = 'Delete the "%1" variable';
-  workspace = new Blockly.Workspace();
-}
-
-function fieldVariable_tearDown() {
-  workspace.dispose();
-  Blockly.Msg.DELETE_VARIABLE = saved_msg;
-}
-
-function fieldVariable_mockBlock() {
+function fieldVariable_mockBlock(workspace) {
   return {'workspace': workspace, 'isShadow': function(){return false;}};
 }
 
 function test_fieldVariable_Constructor() {
-  fieldVariable_setUp();
+  var workspace = new Blockly.Workspace();
   var fieldVariable = new Blockly.FieldVariable('name1');
   assertEquals('name1', fieldVariable.getText());
-  fieldVariable_tearDown();
+  workspace.dispose();
 }
 
 function test_fieldVariable_setValueMatchId() {
   // Expect the fieldVariable value to be set to variable name
-  fieldVariable_setUp();
+  var workspace = new Blockly.Workspace();
   workspace.createVariable('name2', null, 'id1');
   var fieldVariable = new Blockly.FieldVariable('name1');
-  var mockBlock = fieldVariable_mockBlock();
+  var mockBlock = fieldVariable_mockBlock(workspace);
   fieldVariable.setSourceBlock(mockBlock);
   fieldVariable.setValue('id1');
   assertEquals('name2', fieldVariable.getText());
   assertEquals('id1', fieldVariable.value_);
-  fieldVariable_tearDown();
+  workspace.dispose();
 }
 
 function test_fieldVariable_setValueMatchName() {
   // Expect the fieldVariable value to be set to variable name
-  fieldVariable_setUp();
+  var workspace = new Blockly.Workspace();
   workspace.createVariable('name2', null, 'id2');
   var fieldVariable = new Blockly.FieldVariable('name1');
-  var mockBlock = fieldVariable_mockBlock();
+  var mockBlock = fieldVariable_mockBlock(workspace);
   fieldVariable.setSourceBlock(mockBlock);
   fieldVariable.setValue('name2');
   assertEquals('name2', fieldVariable.getText());
   assertEquals('id2', fieldVariable.value_);
-  fieldVariable_tearDown();
+  workspace.dispose();
 }
 
 function test_fieldVariable_setValueNoVariable() {
   // Expect the fieldVariable value to be set to the passed in string. No error
   // should be thrown.
-  fieldVariable_setUp();
+  var workspace = new Blockly.Workspace();
   var fieldVariable = new Blockly.FieldVariable('name1');
   var mockBlock = {'workspace': workspace,
     'isShadow': function(){return false;}};
@@ -87,5 +75,5 @@ function test_fieldVariable_setValueNoVariable() {
   fieldVariable.setValue('id1');
   assertEquals('id1', fieldVariable.getText());
   assertEquals('id1', fieldVariable.value_);
-  fieldVariable_tearDown();
+  workspace.dispose();
 }

@@ -23,7 +23,6 @@ goog.require('goog.testing');
 goog.require('goog.testing.MockControl');
 
 var mockControl_;
-var saved_msg = Blockly.Msg.DELETE_VARIABLE;
 var workspace;
 var XML_TEXT = ['<xml xmlns="http://www.w3.org/1999/xhtml">',
   '  <block type="controls_repeat_ext" inline="true" x="21" y="23">',
@@ -70,11 +69,6 @@ function xmlTest_setUpWithMockBlocks() {
       }
     ],
   }]);
-  // Need to define this because field_variable's dropdownCreate() calls replace
-  // on undefined value, Blockly.Msg.DELETE_VARIABLE. To fix this, define
-  // Blockly.Msg.DELETE_VARIABLE as %1 so the replace function finds the %1 it
-  // expects.
-  Blockly.Msg.DELETE_VARIABLE = '%1';
 }
 
 function xmlTest_tearDown() {
@@ -85,7 +79,6 @@ function xmlTest_tearDown() {
 function xmlTest_tearDownWithMockBlocks() {
   xmlTest_tearDown();
   delete Blockly.Blocks.field_variable_test_block;
-  Blockly.Msg.DELETE_VARIABLE = saved_msg;
 }
 
 /**

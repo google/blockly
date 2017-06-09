@@ -28,7 +28,6 @@ goog.require('goog.testing');
 goog.require('goog.testing.MockControl');
 
 var mockControl_;
-var saved_msg = Blockly.Msg.DELETE_VARIABLE;
 var workspace;
 
 function eventTest_setUp() {
@@ -49,11 +48,6 @@ function eventTest_setUpWithMockBlocks() {
       }
     ],
   }]);
-  // Need to define this because field_variable's dropdownCreate() calls replace
-  // on undefined value, Blockly.Msg.DELETE_VARIABLE. To fix this, define
-  // Blockly.Msg.DELETE_VARIABLE as %1 so the replace function finds the %1 it
-  // expects.
-  Blockly.Msg.DELETE_VARIABLE = '%1';
 }
 
 function eventTest_tearDown() {
@@ -64,7 +58,6 @@ function eventTest_tearDown() {
 function eventTest_tearDownWithMockBlocks() {
   eventTest_tearDown();
   delete Blockly.Blocks.field_variable_test_block;
-  Blockly.Msg.DELETE_VARIABLE = saved_msg;
 }
 
 function test_abstract_constructor_block() {

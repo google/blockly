@@ -24,7 +24,6 @@ goog.require('goog.testing.MockControl');
 
 var workspace;
 var mockControl_;
-var saved_msg = Blockly.Msg.DELETE_VARIABLE;
 Blockly.defineBlocksWithJsonArray([{
   "type": "get_var_block",
   "message0": "%1",
@@ -41,23 +40,9 @@ function workspaceTest_setUp() {
   mockControl_ = new goog.testing.MockControl();
 }
 
-function workspaceTest_setUpWithMockBlocks() {
-  workspaceTest_setUp();
-  // Need to define this because field_variable's dropdownCreate() calls replace
-  // on undefined value, Blockly.Msg.DELETE_VARIABLE. To fix this, define
-  // Blockly.Msg.DELETE_VARIABLE as %1 so the replace function finds the %1 it
-  // expects.
-  Blockly.Msg.DELETE_VARIABLE = '%1';
-}
-
 function workspaceTest_tearDown() {
   mockControl_.$tearDown();
   workspace.dispose();
-}
-
-function workspaceTest_tearDownWithMockBlocks() {
-  workspaceTest_tearDown();
-  Blockly.Msg.DELETE_VARIABLE = saved_msg;
 }
 
 /**
@@ -173,7 +158,7 @@ function test_getBlockById() {
 }
 
 function test_deleteVariable_InternalTrivial() {
-  workspaceTest_setUpWithMockBlocks();
+  workspaceTest_setUp();
   var var_1 = workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
   createMockBlock('name1');
@@ -186,7 +171,7 @@ function test_deleteVariable_InternalTrivial() {
   assertNull(variable);
   checkVariableValues(workspace, 'name2', 'type2', 'id2');
   assertEquals('name2', block_var_name);
-  workspaceTest_tearDownWithMockBlocks();
+  workspaceTest_tearDown();
 }
 
 // TODO(marisaleung): Test the alert for deleting a variable that is a procedure.
@@ -259,7 +244,7 @@ function test_updateVariableStore_ClearAndOneInUse() {
 }
 
 function test_addTopBlock_TrivialFlyoutIsTrue() {
-  workspaceTest_setUpWithMockBlocks();
+  workspaceTest_setUp();
   workspace.isFlyout = true;
   var block = createMockBlock();
   workspace.removeTopBlock(block);
@@ -272,7 +257,7 @@ function test_addTopBlock_TrivialFlyoutIsTrue() {
     checkVariableValues(workspace, 'name1', '', '1');
   }
   finally {
-    workspaceTest_tearDownWithMockBlocks();
+    workspaceTest_tearDown();
   }
 }
 
@@ -335,18 +320,18 @@ function test_renameVariable_NoBlocks() {
 
 function test_renameVariable_SameNameNoBlocks() {
   // Expect 'renameVariable' to create new variable with newName.
-  workspaceTest_setUpWithMockBlocks();
+  workspaceTest_setUp();
   var name = 'name1';
   workspace.createVariable(name, 'type1', 'id1');
 
   workspace.renameVariable(name, name);
   checkVariableValues(workspace, name, 'type1', 'id1');
-  workspaceTest_tearDownWithMockBlocks();
+  workspaceTest_tearDown();
 }
 
 function test_renameVariable_OnlyOldNameBlockExists() {
   // Expect 'renameVariable' to change oldName variable name to newName.
-  workspaceTest_setUpWithMockBlocks();
+  workspaceTest_setUp();
   var oldName = 'name1';
   var newName = 'name2';
   workspace.createVariable(oldName, 'type1', 'id1');
@@ -358,13 +343,13 @@ function test_renameVariable_OnlyOldNameBlockExists() {
   var block_var_name = workspace.topBlocks_[0].getVars()[0];
   assertNull(variable);
   assertEquals(newName, block_var_name);
-  workspaceTest_tearDownWithMockBlocks();
+  workspaceTest_tearDown();
 }
 
 function test_renameVariable_TwoVariablesSameType() {
   // Expect 'renameVariable' to change oldName variable name to newName.
   // Expect oldName block name to change to newName
-  workspaceTest_setUpWithMockBlocks();
+  workspaceTest_setUp();
   var oldName = 'name1';
   var newName = 'name2';
   workspace.createVariable(oldName, 'type1', 'id1');
@@ -380,12 +365,12 @@ function test_renameVariable_TwoVariablesSameType() {
   assertNull(variable);
   assertEquals(newName, block_var_name_1);
   assertEquals(newName, block_var_name_2);
-  workspaceTest_tearDownWithMockBlocks();
+  workspaceTest_tearDown();
 }
 
 function test_renameVariable_TwoVariablesDifferentType() {
   // Expect triggered error because of different types
-  workspaceTest_setUpWithMockBlocks();
+  workspaceTest_setUp();
   var oldName = 'name1';
   var newName = 'name2';
   workspace.createVariable(oldName, 'type1', 'id1');
@@ -405,12 +390,12 @@ function test_renameVariable_TwoVariablesDifferentType() {
   var block_var_name_2 = workspace.topBlocks_[1].getVars()[0];
   assertEquals(oldName, block_var_name_1);
   assertEquals(newName, block_var_name_2);
-  workspaceTest_tearDownWithMockBlocks();
+  workspaceTest_tearDown();
 }
 
 function test_renameVariable_OldCase() {
   // Expect triggered error because of different types
-  workspaceTest_setUpWithMockBlocks();
+  workspaceTest_setUp();
   var oldCase = 'Name1';
   var newName = 'name1';
   workspace.createVariable(oldCase, 'type1', 'id1');
@@ -420,12 +405,12 @@ function test_renameVariable_OldCase() {
   checkVariableValues(workspace, newName, 'type1', 'id1');
   var result_oldCase = workspace.getVariable(oldCase).name;
   assertNotEquals(oldCase, result_oldCase);
-  workspaceTest_tearDownWithMockBlocks();
+  workspaceTest_tearDown();
 }
 
 function test_renameVariable_TwoVariablesAndOldCase() {
   // Expect triggered error because of different types
-  workspaceTest_setUpWithMockBlocks();
+  workspaceTest_setUp();
   var oldName = 'name1';
   var oldCase = 'Name2';
   var newName = 'name2';
@@ -445,7 +430,7 @@ function test_renameVariable_TwoVariablesAndOldCase() {
   assertNotEquals(oldCase, result_oldCase);
   assertEquals(newName, block_var_name_1);
   assertEquals(newName, block_var_name_2);
-  workspaceTest_tearDownWithMockBlocks();
+  workspaceTest_tearDown();
 }
 
 // Extra testing not required for renameVariableById. It calls renameVariable
@@ -453,7 +438,7 @@ function test_renameVariable_TwoVariablesAndOldCase() {
 function test_renameVariableById_TwoVariablesSameType() {
   // Expect 'renameVariableById' to change oldName variable name to newName.
   // Expect oldName block name to change to newName
-  workspaceTest_setUpWithMockBlocks();
+  workspaceTest_setUp();
   var oldName = 'name1';
   var newName = 'name2';
   workspace.createVariable(oldName, 'type1', 'id1');
@@ -469,11 +454,11 @@ function test_renameVariableById_TwoVariablesSameType() {
   assertNull(variable);
   assertEquals(newName, block_var_name_1);
   assertEquals(newName, block_var_name_2);
-  workspaceTest_tearDownWithMockBlocks();
+  workspaceTest_tearDown();
 }
 
 function test_deleteVariable_Trivial() {
-  workspaceTest_setUpWithMockBlocks();
+  workspaceTest_setUp();
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type1', 'id2');
   createMockBlock('name1');
@@ -485,11 +470,11 @@ function test_deleteVariable_Trivial() {
   var block_var_name = workspace.topBlocks_[0].getVars()[0];
   assertNull(variable);
   assertEquals('name2', block_var_name);
-  workspaceTest_tearDownWithMockBlocks();
+  workspaceTest_tearDown();
 }
 
 function test_deleteVariableById_Trivial() {
-  workspaceTest_setUpWithMockBlocks();
+  workspaceTest_setUp();
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type1', 'id2');
   createMockBlock('name1');
@@ -501,5 +486,5 @@ function test_deleteVariableById_Trivial() {
   var block_var_name = workspace.topBlocks_[0].getVars()[0];
   assertNull(variable);
   assertEquals('name2', block_var_name);
-  workspaceTest_tearDownWithMockBlocks();
+  workspaceTest_tearDown();
 }

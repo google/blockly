@@ -75,6 +75,8 @@ Blockly.VariableModel = function(workspace, name, opt_type, opt_id) {
    * @private
    */
   this.id_ = opt_id || Blockly.utils.genUid();
+
+  Blockly.Events.fire(new Blockly.Events.VarCreate(this));
 };
 
 /**

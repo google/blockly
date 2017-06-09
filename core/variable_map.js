@@ -86,11 +86,19 @@ Blockly.VariableMap.prototype.renameVariable = function(variable, newName) {
   } else if (variableIndex == newVariableIndex ||
       variableIndex != -1 && newVariableIndex == -1) {
     // Only changing case, or renaming to a completely novel name.
-    this.variableMap_[type][variableIndex].name = newName;
+    var variableToRename = this.variableMap_[type][variableIndex];
+    Blockly.Events.fire(new Blockly.Events.VarRename(variableToRename,
+      newName));
+    variableToRename.name = newName;
   } else if (variableIndex != -1 && newVariableIndex != -1) {
     // Renaming one existing variable to another existing variable.
     // The case might have changed, so we update the destination ID.
-    this.variableMap_[type][newVariableIndex].name = newName;
+    var variableToRename = this.variableMap_[type][newVariableIndex];
+    Blockly.Events.fire(new Blockly.Events.VarRename(variableToRename,
+      newName));
+    var variableToDelete = this.variableMap_[type][variableIndex];
+    Blockly.Events.fire(new Blockly.Events.VarDelete(variableToDelete));
+    variableToRename.name = newName;
     this.variableMap_[type].splice(variableIndex, 1);
   }
 };
@@ -148,6 +156,7 @@ Blockly.VariableMap.prototype.deleteVariable = function(variable) {
   for (var i = 0, tempVar; tempVar = variableList[i]; i++) {
     if (tempVar.getId() == variable.getId()) {
       variableList.splice(i, 1);
+      Blockly.Events.fire(new Blockly.Events.VarDelete(variable));
       return;
     }
   }

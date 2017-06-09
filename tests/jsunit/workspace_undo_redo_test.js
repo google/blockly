@@ -166,7 +166,7 @@ function test_undoDeleteVariable_WithBlocks() {
   undoRedoTest_tearDown();
 }
 
-function test_redoAndUndoDeleteVariable() {
+function test_redoAndUndoDeleteVariable_NoBlocks() {
   undoRedoTest_setUp();
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
@@ -188,7 +188,7 @@ function test_redoAndUndoDeleteVariable() {
   undoRedoTest_tearDown();
 }
 
-function test_redoAndUndoDeleteVariableWithBlocks() {
+function test_redoAndUndoDeleteVariable_WithBlocks() {
   undoRedoTest_setUp();
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
@@ -211,6 +211,61 @@ function test_redoAndUndoDeleteVariableWithBlocks() {
   undoRedoTest_checkBlockVariableName(0, 'name2');
   assertNull(workspace.getVariableById('id1'));
   checkVariableValues(workspace, 'name2', 'type2', 'id2');
+  undoRedoTest_tearDown();
+}
+
+function test_redoAndUndoDeleteVariableTwice_NoBlocks() {
+  undoRedoTest_setUp();
+  workspace.createVariable('name1', 'type1', 'id1');
+  workspace.deleteVariableById('id1');
+  workspace.deleteVariableById('id1');
+
+  // Check the undoStack only recorded one delete event.
+  var undoStack = workspace.undoStack_;
+  assertEquals('var_delete', undoStack[undoStack.length-1].type);
+  assertNotEquals('var_delete', undoStack[undoStack.length-2].type);
+
+  // undo delete
+  workspace.undo();
+  checkVariableValues(workspace, 'name1', 'type1', 'id1');
+
+  // redo delete
+  workspace.undo(true);
+  assertNull(workspace.getVariableById('id1'));
+
+  // redo delete, nothing should happen
+  workspace.undo(true);
+  assertNull(workspace.getVariableById('id1'));
+  undoRedoTest_tearDown();
+}
+
+function test_redoAndUndoDeleteVariableTwice_WithBlocks() {
+  undoRedoTest_setUp();
+  workspace.createVariable('name1', 'type1', 'id1');
+  createMockBlock('name1');
+  workspace.deleteVariableById('id1');
+  workspace.deleteVariableById('id1');
+
+  // Check the undoStack only recorded one delete event.
+  var undoStack = workspace.undoStack_;
+  assertEquals('var_delete', undoStack[undoStack.length-1].type);
+  assertEquals('delete', undoStack[undoStack.length-2].type);
+  assertNotEquals('var_delete', undoStack[undoStack.length-3].type);
+
+  // undo delete
+  workspace.undo();
+  undoRedoTest_checkBlockVariableName(0, 'name1');
+  checkVariableValues(workspace, 'name1', 'type1', 'id1');
+
+  // redo delete
+  workspace.undo(true);
+  assertEquals(0, workspace.topBlocks_.length);
+  assertNull(workspace.getVariableById('id1'));
+
+  // redo delete, nothing should happen
+  workspace.undo(true);
+  assertEquals(0, workspace.topBlocks_.length);
+  assertNull(workspace.getVariableById('id1'));
   undoRedoTest_tearDown();
 }
 

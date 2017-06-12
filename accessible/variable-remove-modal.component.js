@@ -108,7 +108,8 @@ blocklyApp.VariableRemoveModalComponent = ng.core.Component({
   },
   // Submits the name change for the variable.
   submit: function() {
-    blocklyApp.workspace.deleteVariableInternal_(this.currentVariableName);
+    var variable = blocklyApp.workspace.getVariable(this.currentVariableName);
+    blocklyApp.workspace.deleteVariableInternal_(variable);
     this.hideModal_();
   },
   // Dismisses and closes the modal.

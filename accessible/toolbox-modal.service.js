@@ -60,8 +60,6 @@ blocklyApp.ToolboxModalService = ng.core.Class({
             'A pre-show hook must be defined for the toolbox modal before it ' +
             'can be shown.');
       };
-
-      this.populateToolbox_();
     }
   ],
   populateToolbox_: function() {

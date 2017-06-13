@@ -156,17 +156,16 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
   },
   // Confirm a selection for dropdown fields.
   selectOption: function() {
-    if (this.optionValue != Blockly.Msg.RENAME_VARIABLE && this.optionValue !=
-        Blockly.Msg.DELETE_VARIABLE.replace('%1', this.mainField.getValue())) {
+    if (this.optionValue != Blockly.RENAME_VARIABLE_ID && this.optionValue !=
+        Blockly.DELETE_VARIABLE_ID) {
       this.mainField.setValue(this.optionValue);
     }
 
-    if (this.optionValue == Blockly.Msg.RENAME_VARIABLE) {
+    if (this.optionValue == Blockly.RENAME_VARIABLE_ID) {
       this.variableModalService.showRenameModal_(this.mainField.getValue());
     }
 
-    if (this.optionValue ==
-        Blockly.Msg.DELETE_VARIABLE.replace('%1', this.mainField.getValue())) {
+    if (this.optionValue == Blockly.DELETE_VARIABLE_ID) {
       this.variableModalService.showRemoveModal_(this.mainField.getValue());
     }
   },

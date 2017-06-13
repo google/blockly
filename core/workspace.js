@@ -326,7 +326,7 @@ Blockly.Workspace.prototype.getVariableUses = function(name) {
       for (var j = 0; j < blockVariables.length; j++) {
         var varName = blockVariables[j];
         // Variable name may be null if the block is only half-built.
-        if (varName && Blockly.Names.equals(varName, name)) {
+        if (varName && name && Blockly.Names.equals(varName, name)) {
           uses.push(blocks[i]);
         }
       }

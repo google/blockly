@@ -71,7 +71,8 @@ blocklyApp.VariableModalService = ng.core.Class({
       this.preRemoveShowHook(oldName, count);
       this.modalIsShown = true;
     } else {
-      blocklyApp.workspace.deleteVariableInternal_(oldName);
+      var variable = blocklyApp.workspace.getVariable(oldName);
+      blocklyApp.workspace.deleteVariableInternal_(variable);
     }
   },
   getNumVariables: function(oldName) {

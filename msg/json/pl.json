@@ -15,7 +15,8 @@
 			"Woytecr",
 			"Liuxinyu970226",
 			"Krottyianock",
-			"Mazab IZW"
+			"Mazab IZW",
+			"Teeed"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -327,7 +328,7 @@
 	"LISTS_SPLIT_WITH_DELIMITER": "z separatorem",
 	"LISTS_SPLIT_TOOLTIP_SPLIT": "Rozdziela tekst na listę mniejszych tekstów, dzieląc na każdym separatorze.",
 	"LISTS_SPLIT_TOOLTIP_JOIN": "Łączy listę tekstów w jeden tekst, rozdzielany separatorem.",
-	"LISTS_REVERSE_MESSAGE0": "Odwróć %1.",
+	"LISTS_REVERSE_MESSAGE0": "odwróć %1",
 	"ORDINAL_NUMBER_SUFFIX": "",
 	"VARIABLES_GET_TOOLTIP": "Zwraca wartość tej zmiennej.",
 	"VARIABLES_GET_CREATE_SET": "Utwórz blok 'ustaw %1'",

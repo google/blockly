@@ -906,6 +906,62 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
 };
 
 /**
+ * Refresh the toolbox unless there's a drag in progress.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.refreshToolboxSelection_ = function() {
+  if (this.toolbox_ && this.toolbox_.flyout_ && !this.currentGesture_) {
+    this.toolbox_.refreshSelection();
+  }
+};
+
+/**
+ * Rename a variable by updating its name in the variable list.
+ * TODO: google/blockly:#468
+ * @param {string} oldName Variable to rename.
+ * @param {string} newName New variable name.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.renameVariable = function(oldName, newName) {
+  Blockly.WorkspaceSvg.superClass_.renameVariable.call(this, oldName, newName);
+  this.refreshToolboxSelection_();
+};
+
+/**
+ * Rename a variable by updating its name in the variable map.  Update the
+ *     flyout to show the renamed variable immediately.
+ * @param {string} id Id of the variable to rename.
+ * @param {string} newName New variable name.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.renameVariableById = function(id, newName) {
+  Blockly.WorkspaceSvg.superClass_.renameVariableById.call(this, id, newName);
+  this.refreshToolboxSelection_();
+};
+
+/**
+ * Delete a variable by the passed in name.   Update the flyout to show
+ *     immediately that the variable is deleted.
+ * @param {string} name Name of variable to delete.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.deleteVariable = function(name) {
+  Blockly.WorkspaceSvg.superClass_.deleteVariable.call(this, name);
+  this.refreshToolboxSelection_();
+};
+
+/**
+ * Delete a variable by the passed in id.   Update the flyout to show
+ *     immediately that the variable is deleted.
+ * @param {string} id Id of variable to delete.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.deleteVariableById = function(id) {
+  Blockly.WorkspaceSvg.superClass_.deleteVariableById.call(this, id);
+  this.refreshToolboxSelection_();
+};
+
+/**
  * Create a new variable with the given name.  Update the flyout to show the new
  *     variable immediately.
  * TODO: #468
@@ -916,14 +972,12 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
  * @param {string=} opt_id The unique id of the variable. This will default to
  *     a UUID.
  * @return {?Blockly.VariableModel} The newly created variable.
+ * @package
  */
 Blockly.WorkspaceSvg.prototype.createVariable = function(name, opt_type, opt_id) {
   var newVar = Blockly.WorkspaceSvg.superClass_.createVariable.call(this, name,
     opt_type, opt_id);
-  // Don't refresh the toolbox if there's a drag in progress.
-  if (this.toolbox_ && this.toolbox_.flyout_ && !this.currentGesture_) {
-    this.toolbox_.refreshSelection();
-  }
+  this.refreshToolboxSelection_();
   return newVar;
 };
 

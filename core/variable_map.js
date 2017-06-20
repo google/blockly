@@ -59,7 +59,6 @@ Blockly.VariableMap.prototype.clear = function() {
 
 /**
  * Rename the given variable by updating its name in the variable map.
- * TODO: #468
  * @param {?Blockly.VariableModel} variable Variable to rename.
  * @param {string} newName New variable name.
  */

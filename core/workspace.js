@@ -238,7 +238,6 @@ Blockly.Workspace.prototype.updateVariableStore = function(clear) {
 /**
  * Rename a variable by updating its name in the variable map. Identify the
  * variable to rename with the given variable.
- * TODO: #468
  * @param {?Blockly.VariableModel} variable Variable to rename.
  * @param {string} newName New variable name.
  */
@@ -275,7 +274,6 @@ Blockly.Workspace.prototype.renameVariableInternal_ = function(variable, newName
 /**
  * Rename a variable by updating its name in the variable map. Identify the
  * variable to rename with the given name.
- * TODO: #468
  * @param {string} oldName Variable to rename.
  * @param {string} newName New variable name.
  */

@@ -910,10 +910,16 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
  *     variable immediately.
  * TODO: #468
  * @param {string} name The new variable's name.
+ * @param {string=} opt_type The type of the variable like 'int' or 'string'.
+ *     Does not need to be unique. Field_variable can filter variables based on
+ *     their type. This will default to '' which is a specific type.
+ * @param {string=} opt_id The unique id of the variable. This will default to
+ *     a UUID.
  * @return {?Blockly.VariableModel} The newly created variable.
  */
-Blockly.WorkspaceSvg.prototype.createVariable = function(name) {
-  var newVar = Blockly.WorkspaceSvg.superClass_.createVariable.call(this, name);
+Blockly.WorkspaceSvg.prototype.createVariable = function(name, opt_type, opt_id) {
+  var newVar = Blockly.WorkspaceSvg.superClass_.createVariable.call(this, name,
+    opt_type, opt_id);
   // Don't refresh the toolbox if there's a drag in progress.
   if (this.toolbox_ && this.toolbox_.flyout_ && !this.currentGesture_) {
     this.toolbox_.refreshSelection();

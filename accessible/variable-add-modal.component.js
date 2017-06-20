@@ -108,10 +108,11 @@ blocklyApp.VariableAddModalComponent = ng.core.Component({
   // Submits the name change for the variable.
   submit: function() {
     this.workspace.createVariable(this.variableName);
-    this.hideModal_();
+    this.dismissModal();
   },
   // Dismisses and closes the modal.
   dismissModal: function() {
+    this.variableModalService.hideModal();
     this.hideModal_();
   }
 })

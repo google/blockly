@@ -28,6 +28,7 @@ goog.provide('blocklyApp.VariableRemoveModalComponent');
 goog.require('blocklyApp.AudioService');
 goog.require('blocklyApp.KeyboardInputService');
 goog.require('blocklyApp.TranslatePipe');
+goog.require('blocklyApp.TreeService');
 goog.require('blocklyApp.VariableModalService');
 
 goog.require('Blockly.CommonModal');
@@ -64,9 +65,13 @@ blocklyApp.VariableRemoveModalComponent = ng.core.Component({
 })
 .Class({
   constructor: [
-    blocklyApp.AudioService, blocklyApp.KeyboardInputService, blocklyApp.VariableModalService,
-    function(audioService, keyboardService, variableService) {
+    blocklyApp.AudioService,
+    blocklyApp.KeyboardInputService,
+    blocklyApp.TreeService,
+    blocklyApp.VariableModalService,
+    function(audioService, keyboardService, treeService, variableService) {
       this.workspace = blocklyApp.workspace;
+      this.treeService = treeService;
       this.variableModalService = variableService;
       this.audioService = audioService;
       this.keyboardInputService = keyboardService
@@ -110,10 +115,11 @@ blocklyApp.VariableRemoveModalComponent = ng.core.Component({
   submit: function() {
     var variable = blocklyApp.workspace.getVariable(this.currentVariableName);
     blocklyApp.workspace.deleteVariableInternal_(variable);
-    this.hideModal_();
+    this.dismissModal();
   },
   // Dismisses and closes the modal.
   dismissModal: function() {
+    this.variableModalService.hideModal();
     this.hideModal_();
   }
 })

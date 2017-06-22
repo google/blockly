@@ -33,6 +33,7 @@ goog.require('blocklyApp.AudioService');
 goog.require('blocklyApp.BlockConnectionService');
 goog.require('blocklyApp.BlockOptionsModalService');
 goog.require('blocklyApp.NotificationsService');
+goog.require('blocklyApp.VariableModalService');
 
 
 blocklyApp.TreeService = ng.core.Class({
@@ -42,14 +43,16 @@ blocklyApp.TreeService = ng.core.Class({
     blocklyApp.BlockOptionsModalService,
     blocklyApp.NotificationsService,
     blocklyApp.UtilsService,
+    blocklyApp.VariableModalService,
     function(
         audioService, blockConnectionService, blockOptionsModalService,
-        notificationsService, utilsService) {
+        notificationsService, utilsService, variableModalService) {
       this.audioService = audioService;
       this.blockConnectionService = blockConnectionService;
       this.blockOptionsModalService = blockOptionsModalService;
       this.notificationsService = notificationsService;
       this.utilsService = utilsService;
+      this.variableModalService = variableModalService;
 
       // The suffix used for all IDs of block root elements.
       this.BLOCK_ROOT_ID_SUFFIX_ = blocklyApp.BLOCK_ROOT_ID_SUFFIX;
@@ -217,11 +220,10 @@ blocklyApp.TreeService = ng.core.Class({
     var activeDesc = document.getElementById(this.getActiveDescId(treeId));
     if (activeDesc) {
       activeDesc.classList.remove('blocklyActiveDescendant');
+    }
+
+    if (this.activeDescendantIds_[treeId]) {
       delete this.activeDescendantIds_[treeId];
-    } else {
-      throw Error(
-          'The active desc element for the tree with ID ' + treeId +
-          ' is invalid.');
     }
   },
   clearAllActiveDescs: function() {
@@ -470,14 +472,16 @@ blocklyApp.TreeService = ng.core.Class({
   onKeypress: function(e, tree) {
     // TODO(sll): Instead of this, have a common ActiveContextService which
     // returns true if at least one modal is shown, and false otherwise.
-    if (this.blockOptionsModalService.isModalShown()) {
+    if (this.blockOptionsModalService.isModalShown() ||
+        this.variableModalService.isModalShown()) {
       return;
     }
 
     var treeId = tree.id;
     var activeDesc = document.getElementById(this.getActiveDescId(treeId));
     if (!activeDesc) {
-      console.error('ERROR: no active descendant for current tree.');
+      // The underlying Blockly instance may have decided blocks needed to
+      // be deleted. This is not necessarily an error, but needs to be repaired.
       this.initActiveDesc(treeId);
       activeDesc = document.getElementById(this.getActiveDescId(treeId));
     }

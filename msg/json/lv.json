@@ -79,6 +79,7 @@
 	"IOS_OK": "Labi",
 	"IOS_CANCEL": "Atcelt",
 	"IOS_ERROR": "Kļūda",
+	"IOS_VARIABLES_ADD_VARIABLE": "+ Pievienot mainīgo",
 	"IOS_VARIABLES_ADD_BUTTON": "Pievienot",
 	"IOS_VARIABLES_RENAME_BUTTON": "Pārsaukt",
 	"IOS_VARIABLES_DELETE_BUTTON": "Dzēst",

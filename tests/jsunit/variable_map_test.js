@@ -17,6 +17,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+ /**
+ * @fileoverview Tests for variable map.
+ * @author marisaleung@google.com (Marisa Leung)
+ */
 'use strict';
 
 goog.require('goog.testing');

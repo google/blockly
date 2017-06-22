@@ -741,7 +741,8 @@ Blockly.Gesture.prototype.isBlockClick_ = function() {
 Blockly.Gesture.prototype.isFieldClick_ = function() {
   var fieldEditable = this.startField_ ?
       this.startField_.isCurrentlyEditable() : false;
-  return fieldEditable && !this.hasExceededDragRadius_ && !this.flyout_;
+  return fieldEditable && !this.hasExceededDragRadius_ && (!this.flyout_ ||
+    !this.flyout_.autoClose);
 };
 
 /**

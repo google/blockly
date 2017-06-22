@@ -52,10 +52,10 @@ blocklyApp.VariableAddModalComponent = ng.core.Component({
                      aria-labelledby="inputLabel" />
             </p>
             <hr>
-            <button id="submitButton" (click)="submit()">
+            <button type="button" id="submitButton" (click)="submit()">
               SUBMIT
             </button>
-            <button id="cancelButton" (click)="dismissModal()">
+            <button type="button" id="cancelButton" (click)="dismissModal()">
               CANCEL
             </button>
           </form>

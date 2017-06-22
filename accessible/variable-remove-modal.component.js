@@ -50,10 +50,10 @@ blocklyApp.VariableRemoveModalComponent = ng.core.Component({
 
           <form id="varForm">
             <hr>
-            <button id="yesButton" (click)="submit()">
+            <button type="button" id="yesButton" (click)="submit()">
               YES
             </button>
-            <button id="noButton" (click)="dismissModal()">
+            <button type="button" id="noButton" (click)="dismissModal()">
               NO
             </button>
           </form>

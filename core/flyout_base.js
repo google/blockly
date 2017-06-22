@@ -253,6 +253,18 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
 
   this.workspace_.getVariableById =
       this.targetWorkspace_.getVariableById.bind(this.targetWorkspace_);
+
+  this.workspace_.deleteVariable =
+      this.targetWorkspace_.deleteVariable.bind(this.targetWorkspace_);
+
+  this.workspace_.deleteVariableById =
+      this.targetWorkspace_.deleteVariableById.bind(this.targetWorkspace_);
+
+  this.workspace_.renameVariable =
+      this.targetWorkspace_.renameVariable.bind(this.targetWorkspace_);
+
+  this.workspace_.renameVariableById =
+      this.targetWorkspace_.renameVariableById.bind(this.targetWorkspace_);
 };
 
 /**

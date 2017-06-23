@@ -4,7 +4,8 @@
 			"Alvaro Vidal-Abarca",
 			"Espertus",
 			"Hiperpobla",
-			"Jaumeortola"
+			"Jaumeortola",
+			"Fitoschido"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -26,7 +27,7 @@
 	"CHANGE_VALUE_TITLE": "Canvia valor:",
 	"RENAME_VARIABLE": "Reanomena variable...",
 	"RENAME_VARIABLE_TITLE": "Reanomena totes les variables '%1' a:",
-	"NEW_VARIABLE": "Nova variable...",
+	"NEW_VARIABLE": "Crea una variable…",
 	"NEW_VARIABLE_TITLE": "Nou nom de variable:",
 	"COLOUR_PICKER_HELPURL": "https://ca.wikipedia.org/wiki/Color",
 	"COLOUR_PICKER_TOOLTIP": "Escolliu un color de la paleta.",

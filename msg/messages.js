@@ -258,13 +258,13 @@ Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE = Blockly.Msg.CONTROLS_IF_MSG_ELSE;
 /// tooltip - Describes the 'else' subblock during [https://github.com/google/blockly/wiki/IfElse#block-modification if block modification].
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = 'Add a final, catch-all condition to the if block.';
 
-/// button text - Text on a button inside a dialogue window, which will accept or acknowledge the contents of the dialogue when pressed.
+/// button text - Text on a button inside a dialogue window, which will accept or acknowledge the contents of the dialogue when pressed.\n{{Identical|OK}}
 Blockly.Msg.IOS_OK = 'OK';
-/// button text - Text on a button inside a dialogue window, which will close or cancel the dialogue when pressed.
+/// button text - Text on a button inside a dialogue window, which will close or cancel the dialogue when pressed.\n{{Identical|Cancel}}
 Blockly.Msg.IOS_CANCEL = 'Cancel';
-/// alert - Title text for an error dialogue.
+/// alert - Title text for an error dialogue.\n{{Identical|Error}}
 Blockly.Msg.IOS_ERROR = 'Error';
-/// header text - Title of a section that displays a list of parameters (aka. "inputs") that have been defined for a procedure. This is used inside a dialogue window to configure a procedure.
+/// header text - Title of a section that displays a list of parameters (aka. "inputs") that have been defined for a procedure. This is used inside a dialogue window to configure a procedure.\n{{Identical|Input}}
 Blockly.Msg.IOS_PROCEDURES_INPUTS = 'INPUTS';
 /// button text - Text on a button which will add a parameter (aka. "input") to a procedure. This is used inside a dialogue window to configure a procedure. NOTE: The "+" should be preserved at the beginning of the text.
 Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = '+ Add Input';
@@ -274,11 +274,11 @@ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = 'Allow statements';
 Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = 'This function has duplicate inputs.';
 /// button text - Text on a button which will open a variable creation dialogue when pressed. NOTE: The "+" should be preserved at the beginning of the text.
 Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = '+ Add Variable';
-/// button text - Text on a button inside a variable creation dialogue, which will add a variable when pressed.
+/// button text - Text on a button inside a variable creation dialogue, which will add a variable when pressed.\n{{Identical|Add}}
 Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = 'Add';
-/// button text - Text on a button inside a variable rename dialogue, which will rename a variable when pressed.
+/// button text - Text on a button inside a variable rename dialogue, which will rename a variable when pressed.\n{{Identical|Rename}}
 Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = 'Rename';
-/// button text - Text on a button inside a variable deletion dialogue, which will delete a variable when pressed.
+/// button text - Text on a button inside a variable deletion dialogue, which will delete a variable when pressed.\n{{Identical|Delete}}
 Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = 'Delete';
 /// placeholder text - Placeholder text used inside a text input, where a variable name should be entered.
 Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = 'Variable name';
@@ -1156,7 +1156,7 @@ Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = 'Run the user-defined function "%1" 
 /// block text - This text appears on a block in a window that appears when the user clicks
 /// on the plus sign or star on a function definition block.  It refers to the set of parameters
 /// (referred to by the simpler term "inputs") to the function.  See
-/// [[Translating:Blockly#function_definitions]].
+/// [[Translating:Blockly#function_definitions]].\n{{Identical|Input}}
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = 'inputs';
 /// tooltip
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = 'Add, remove, or reorder inputs to this function.';

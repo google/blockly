@@ -254,6 +254,9 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.workspace_.getVariableById =
       this.targetWorkspace_.getVariableById.bind(this.targetWorkspace_);
 
+  this.workspace_.getVariablesOfType =
+      this.targetWorkspace_.getVariablesOfType.bind(this.targetWorkspace_);
+
   this.workspace_.deleteVariable =
       this.targetWorkspace_.deleteVariable.bind(this.targetWorkspace_);
 

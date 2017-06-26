@@ -202,18 +202,19 @@ Blockly.VariableMap.prototype.getVariableById = function(id) {
 
 /**
  * Get a list containing all of the variables of a specified type. If type is
- *     null, return list of variables with empty string type.
+ *     null, return list of variables with empty string type. If the type does
+ *     not exist, create an empty list and return it.
  * @param {?string} type Type of the variables to find.
  * @return {Array.<Blockly.VariableModel>} The sought after variables of the
  *     passed in type. An empty array if none are found.
  */
 Blockly.VariableMap.prototype.getVariablesOfType = function(type) {
   type = type || '';
-  var variable_list = this.variableMap_[type];
-  if (variable_list) {
-    return variable_list;
+  if (!this.variableMap_[type]) {
+    this.variableMap_[type] = [];
   }
-  return [];
+
+  return this.variableMap_[type];
 };
 
 /**

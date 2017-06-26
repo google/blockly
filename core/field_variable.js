@@ -159,8 +159,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
   }
   // Ensure that the currently selected variable is an option.
   if (createSelectedVariable && workspace) {
-    var newVar = workspace.createVariable(name);
-    variableModelList.push(newVar);
+    workspace.createVariable(name);
   }
   variableModelList.sort(Blockly.VariableModel.compareByName);
   var options = [];

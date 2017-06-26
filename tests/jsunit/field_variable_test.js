@@ -25,14 +25,27 @@
 'use strict';
 
 goog.require('goog.testing');
+goog.require('goog.testing.MockControl');
 
+var workspace;
+var mockControl_;
+
+function fieldVariableTestWithMocks_setUp() {
+  workspace = new Blockly.Workspace();
+  mockControl_ = new goog.testing.MockControl();
+}
+
+function fieldVariableTestWithMocks_tearDown() {
+  mockControl_.$tearDown();
+  workspace.dispose();
+}
 
 function fieldVariable_mockBlock(workspace) {
   return {'workspace': workspace, 'isShadow': function(){return false;}};
 }
 
 function test_fieldVariable_Constructor() {
-  var workspace = new Blockly.Workspace();
+  workspace = new Blockly.Workspace();
   var fieldVariable = new Blockly.FieldVariable('name1');
   assertEquals('name1', fieldVariable.getText());
   workspace.dispose();
@@ -40,7 +53,7 @@ function test_fieldVariable_Constructor() {
 
 function test_fieldVariable_setValueMatchId() {
   // Expect the fieldVariable value to be set to variable name
-  var workspace = new Blockly.Workspace();
+  workspace = new Blockly.Workspace();
   workspace.createVariable('name2', null, 'id1');
   var fieldVariable = new Blockly.FieldVariable('name1');
   var mockBlock = fieldVariable_mockBlock(workspace);
@@ -53,7 +66,7 @@ function test_fieldVariable_setValueMatchId() {
 
 function test_fieldVariable_setValueMatchName() {
   // Expect the fieldVariable value to be set to variable name
-  var workspace = new Blockly.Workspace();
+  workspace = new Blockly.Workspace();
   workspace.createVariable('name2', null, 'id2');
   var fieldVariable = new Blockly.FieldVariable('name1');
   var mockBlock = fieldVariable_mockBlock(workspace);
@@ -67,7 +80,7 @@ function test_fieldVariable_setValueMatchName() {
 function test_fieldVariable_setValueNoVariable() {
   // Expect the fieldVariable value to be set to the passed in string. No error
   // should be thrown.
-  var workspace = new Blockly.Workspace();
+  workspace = new Blockly.Workspace();
   var fieldVariable = new Blockly.FieldVariable('name1');
   var mockBlock = {'workspace': workspace,
     'isShadow': function(){return false;}};
@@ -76,4 +89,66 @@ function test_fieldVariable_setValueNoVariable() {
   assertEquals('id1', fieldVariable.getText());
   assertEquals('id1', fieldVariable.value_);
   workspace.dispose();
+}
+
+function test_fieldVariable_dropdownCreateVariablesExist() {
+  // Expect that the dropdown options will contain the variables that exist.
+  workspace = new Blockly.Workspace();
+  workspace.createVariable('name1', '', 'id1');
+  workspace.createVariable('name2', '', 'id2');
+  var result_options = Blockly.FieldVariable.dropdownCreate.call(
+    {
+      'sourceBlock_': {'workspace': workspace},
+      'getText': function(){return 'name1';}
+    });
+  assertEquals(result_options.length, 3);
+  isEqualArrays(result_options[0], ['name1', 'id1']);
+  isEqualArrays(result_options[1], ['name2', 'id2']);
+
+  workspace.dispose();
+}
+
+function test_fieldVariable_dropdownVariableAndTypeDoesNotExist() {
+  // Expect a variable will be created for the selected option. Expect the
+  // workspace variable map to contain the new variable once.
+  fieldVariableTestWithMocks_setUp();
+  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['id1', null]);
+
+  var result_options = Blockly.FieldVariable.dropdownCreate.call(
+    {
+      'sourceBlock_': {'workspace': workspace},
+      'getText': function(){return 'name1';}
+    });
+
+  // Check the options.
+  assertEquals(2, result_options.length);
+  isEqualArrays(result_options[0], ['name1', 'id1']);
+  // Check the variable map.
+  assertEquals(1, workspace.getAllVariables().length);
+  checkVariableValues(workspace, 'name1', '', 'id1');
+
+  fieldVariableTestWithMocks_tearDown();
+}
+
+function test_fieldVariable_dropdownVariableDoesNotExistTypeDoes() {
+  // Expect a variable will be created for the selected option. Expect the
+  // workspace variable map to contain the new variable once.
+  fieldVariableTestWithMocks_setUp();
+  workspace.createVariable('name1', '', 'id1');
+  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['id2', null]);
+
+  var result_options = Blockly.FieldVariable.dropdownCreate.call(
+    {
+      'sourceBlock_': {'workspace': workspace},
+      'getText': function(){return 'name2';}
+    });
+
+  assertEquals(3, result_options.length);
+  isEqualArrays(result_options[0], ['name1', 'id1']);
+  isEqualArrays(result_options[1], ['name2', 'id2']);
+  assertEquals(2, workspace.variableMap_.getAllVariables().length);
+  checkVariableValues(workspace, 'name1', '', 'id1');
+  checkVariableValues(workspace, 'name2', '', 'id2');
+
+  fieldVariableTestWithMocks_tearDown();
 }

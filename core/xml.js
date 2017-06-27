@@ -587,6 +587,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
       case 'field':
         var field = block.getField(name);
         var text = xmlChild.textContent;
+        var value = text;
         if (field instanceof Blockly.FieldVariable) {
           // TODO (marisaleung): When we change setValue and getValue to
           // interact with id's instead of names, update this so that we get
@@ -597,6 +598,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
             variable = workspace.createVariable(text, type,
               xmlChild.getAttribute(id));
           }
+          value = variable.getId();
           if (typeof(type) !== undefined && type !== null) {
             if (type !== variable.type) {
               throw Error('Serialized variable type with id \'' +
@@ -611,7 +613,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
                        prototypeName);
           break;
         }
-        field.setValue(text);
+        field.setValue(value);
         break;
       case 'value':
       case 'statement':

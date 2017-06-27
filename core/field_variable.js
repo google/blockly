@@ -120,6 +120,7 @@ Blockly.FieldVariable.prototype.setValue = function(newValue) {
     // TODO(marisaleung): Remove name lookup after converting all Field Variable
     //     instances to use id instead of name.
     else if (variable = this.sourceBlock_.workspace.getVariable(newValue)) {
+      console.log('here');
       this.setText(newValue);
       this.value_ = variable.getId();
       return;
@@ -187,13 +188,13 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
   var id = menuItem.getValue();
   // TODO(marisaleung): change setValue() to take in an id as the parameter.
   // Then remove itemText.
-  var itemText;
+  var itemValue;
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {
     var workspace = this.sourceBlock_.workspace;
     var variable = workspace.getVariableById(id);
-    // If the item selected is a variable, set itemText to the variable name.
+    // If the item selected is a variable, set itemValue to the variable id.
     if (variable) {
-      itemText = variable.name;
+      itemValue = variable.getId();
     }
     else if (id == Blockly.RENAME_VARIABLE_ID) {
       // Rename variable.
@@ -214,9 +215,9 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
     }
 
     // Call any validation function, and allow it to override.
-    itemText = this.callValidator(itemText);
+    itemValue = this.callValidator(itemValue);
   }
-  if (itemText !== null) {
-    this.setValue(itemText);
+  if (itemValue !== null) {
+    this.setValue(itemValue);
   }
 };

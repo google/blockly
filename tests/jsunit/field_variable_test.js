@@ -25,6 +25,20 @@
 'use strict';
 
 goog.require('goog.testing');
+goog.require('goog.testing.MockControl');
+
+var workspace;
+var mockControl_;
+
+function fieldVariableTest_setUp() {
+  workspace = new Blockly.Workspace();
+  mockControl_ = new goog.testing.MockControl();
+}
+
+function fieldVariableTest_tearDown() {
+  mockControl_.$tearDown();
+  workspace.dispose();
+}
 
 
 function fieldVariable_mockBlock(workspace) {
@@ -32,7 +46,7 @@ function fieldVariable_mockBlock(workspace) {
 }
 
 function test_fieldVariable_Constructor() {
-  var workspace = new Blockly.Workspace();
+  workspace = new Blockly.Workspace();
   var fieldVariable = new Blockly.FieldVariable('name1');
   assertEquals('name1', fieldVariable.getText());
   workspace.dispose();
@@ -40,40 +54,52 @@ function test_fieldVariable_Constructor() {
 
 function test_fieldVariable_setValueMatchId() {
   // Expect the fieldVariable value to be set to variable name
-  var workspace = new Blockly.Workspace();
-  workspace.createVariable('name2', null, 'id1');
-  var fieldVariable = new Blockly.FieldVariable('name1');
-  var mockBlock = fieldVariable_mockBlock(workspace);
-  fieldVariable.setSourceBlock(mockBlock);
-  fieldVariable.setValue('id1');
-  assertEquals('name2', fieldVariable.getText());
-  assertEquals('id1', fieldVariable.value_);
-  workspace.dispose();
-}
-
-function test_fieldVariable_setValueMatchName() {
-  // Expect the fieldVariable value to be set to variable name
-  var workspace = new Blockly.Workspace();
+  fieldVariableTest_setUp();
   workspace.createVariable('name2', null, 'id2');
   var fieldVariable = new Blockly.FieldVariable('name1');
   var mockBlock = fieldVariable_mockBlock(workspace);
   fieldVariable.setSourceBlock(mockBlock);
+  var event = new Blockly.Events.BlockChange(
+        mockBlock, 'field', undefined, 'name1', 'id2');
+  setUpMockMethod(mockControl_, Blockly.Events, 'fire', [event], null);
+
+  fieldVariable.setValue('id2');
+  assertEquals('name2', fieldVariable.getText());
+  assertEquals('id2', fieldVariable.value_);
+  fieldVariableTest_tearDown();
+}
+
+function test_fieldVariable_setValueMatchName() {
+  // Expect the fieldVariable value to be set to variable name
+  fieldVariableTest_setUp();
+  workspace.createVariable('name2', null, 'id2');
+  var fieldVariable = new Blockly.FieldVariable('name1');
+  var mockBlock = fieldVariable_mockBlock(workspace);
+  fieldVariable.setSourceBlock(mockBlock);
+  var event = new Blockly.Events.BlockChange(
+        mockBlock, 'field', undefined, 'name1', 'id2');
+  setUpMockMethod(mockControl_, Blockly.Events, 'fire', [event], null);
+
   fieldVariable.setValue('name2');
   assertEquals('name2', fieldVariable.getText());
   assertEquals('id2', fieldVariable.value_);
-  workspace.dispose();
+  fieldVariableTest_tearDown();
 }
 
 function test_fieldVariable_setValueNoVariable() {
   // Expect the fieldVariable value to be set to the passed in string. No error
   // should be thrown.
-  var workspace = new Blockly.Workspace();
+  fieldVariableTest_setUp();
   var fieldVariable = new Blockly.FieldVariable('name1');
   var mockBlock = {'workspace': workspace,
     'isShadow': function(){return false;}};
   fieldVariable.setSourceBlock(mockBlock);
+  var event = new Blockly.Events.BlockChange(
+        mockBlock, 'field', undefined, 'name1', 'id1');
+  setUpMockMethod(mockControl_, Blockly.Events, 'fire', [event], null);
+
   fieldVariable.setValue('id1');
   assertEquals('id1', fieldVariable.getText());
   assertEquals('id1', fieldVariable.value_);
-  workspace.dispose();
+  fieldVariableTest_tearDown();
 }

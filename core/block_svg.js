@@ -912,7 +912,7 @@ Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl, start, workspaceScale) {
  * Play some UI effects (sound, ripple) after a connection has been established.
  */
 Blockly.BlockSvg.prototype.connectionUiEffect = function() {
-  this.workspace.getAudioManger().play('click');
+  this.workspace.getAudioManager().play('click');
   if (this.workspace.scale < 1) {
     return;  // Too small to care about visual effects.
   }

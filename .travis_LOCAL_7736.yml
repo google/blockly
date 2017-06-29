@@ -1,0 +1,27 @@
+language: node_js
+node_js:
+- "stable"
+sudo: required
+dist: trusty
+addons:
+ apt:
+   sources:
+     - google-chrome
+   packages:
+     - google-chrome-stable
+
+before_install:
+- npm install google-closure-library
+# Symlink closure library
+- ln -s $(npm root)/google-closure-library ../closure-library
+
+before_script:
+  - export CHROME_BIN=/usr/bin/google-chrome
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+script:
+  - set -x
+  - npm test
+
+os:
+  - linux

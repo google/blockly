@@ -23,6 +23,19 @@
  * @author corydiers@google.com (Cory Diers)
  */
 
+<<<<<<< HEAD
+=======
+goog.provide('blocklyApp.VariableRemoveModalComponent');
+
+goog.require('blocklyApp.AudioService');
+goog.require('blocklyApp.KeyboardInputService');
+goog.require('blocklyApp.TranslatePipe');
+goog.require('blocklyApp.VariableModalService');
+
+goog.require('Blockly.CommonModal');
+
+
+>>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c
 blocklyApp.VariableRemoveModalComponent = ng.core.Component({
   selector: 'blockly-remove-variable-modal',
   template: `

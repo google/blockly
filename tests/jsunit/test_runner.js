@@ -10,7 +10,11 @@ var path = process.cwd();
 var browser = webdriverio
     .remote(options)
     .init()
+<<<<<<< HEAD
     .url("file://" + path + "/tests/jsunit/index.html").pause(3000);
+=======
+    .url("file://" + path + "/tests/jsunit/index.html").pause(5000);
+>>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c
 
 
 browser

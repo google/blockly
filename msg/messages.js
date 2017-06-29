@@ -125,6 +125,8 @@ Blockly.Msg.NEW_VARIABLE = 'Create variable...';
 Blockly.Msg.NEW_VARIABLE_TITLE = 'New variable name:';
 /// alert - Tells the user that the name they entered is already in use.
 Blockly.Msg.VARIABLE_ALREADY_EXISTS = 'A variable named "%1" already exists.'
+/// alert - Tells the user that the name they entered is already in use for a procedure.
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = 'A procedure named "%1" already exists.'
 
 // Variable deletion.
 /// confirm -  Ask the user to confirm their deletion of multiple uses of a variable.
@@ -133,6 +135,12 @@ Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = 'Delete %1 uses of the "%2" variable?
 Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = 'Can\'t delete the variable "%1" because it\'s part of the definition of the function "%2"';
 /// dropdown choice - Delete the currently selected variable.
 Blockly.Msg.DELETE_VARIABLE = 'Delete the "%1" variable';
+
+// Search category.
+/// button text - Text on the button used to launch the search dialogue.
+Blockly.Msg.SEARCH = 'Search...';
+/// prompt - Prompts the user to enter search terms
+Blockly.Msg.SEARCH_TITLE = 'Enter search phrase';
 
 // Colour Blocks.
 /// url - Information about colour.

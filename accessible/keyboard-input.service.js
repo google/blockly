@@ -23,6 +23,9 @@
  * @author sll@google.com (Sean Lip)
  */
 
+goog.provide('blocklyApp.KeyboardInputService');
+
+
 blocklyApp.KeyboardInputService = ng.core.Class({
   constructor: [function() {
     // Default custom actions for global keystrokes. The keys of this object

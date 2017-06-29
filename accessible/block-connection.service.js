@@ -23,6 +23,12 @@
  * @author sll@google.com (Sean Lip)
  */
 
+goog.provide('blocklyApp.BlockConnectionService');
+
+goog.require('blocklyApp.AudioService');
+goog.require('blocklyApp.NotificationsService');
+
+
 blocklyApp.BlockConnectionService = ng.core.Class({
   constructor: [
       blocklyApp.NotificationsService, blocklyApp.AudioService,

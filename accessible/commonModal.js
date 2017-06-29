@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+goog.provide('Blockly.CommonModal');
+
+
+>>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c
 Blockly.CommonModal = function() {};
 
 Blockly.CommonModal.setupKeyboardOverrides = function(component) {

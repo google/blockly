@@ -23,6 +23,9 @@
  * @author corydiers@google.com (Cory Diers)
  */
 
+goog.provide('blocklyApp.VariableModalService');
+
+
 blocklyApp.VariableModalService = ng.core.Class({
   constructor: [
     function() {
@@ -54,6 +57,7 @@ blocklyApp.VariableModalService = ng.core.Class({
   // Show the add variable modal.
   showAddModal_: function() {
     this.preAddShowHook();
+<<<<<<< HEAD
     this.modalIsShown = true;
   },
   // Show the rename variable modal.
@@ -61,6 +65,15 @@ blocklyApp.VariableModalService = ng.core.Class({
     this.preRenameShowHook(oldName);
     this.modalIsShown = true;
   },
+=======
+    this.modalIsShown = true;
+  },
+  // Show the rename variable modal.
+  showRenameModal_: function(oldName) {
+    this.preRenameShowHook(oldName);
+    this.modalIsShown = true;
+  },
+>>>>>>> 4c4cc7bb3b11d0a899730ae8135c0e9b01a5868c
   // Show the remove variable modal.
   showRemoveModal_: function(oldName) {
     var count = blocklyApp.workspace.getVariableUses(oldName).length;

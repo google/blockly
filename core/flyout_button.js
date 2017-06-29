@@ -116,6 +116,13 @@ Blockly.FlyoutButton.prototype.width = 0;
 Blockly.FlyoutButton.prototype.height = 0;
 
 /**
+ * Opaque data that can be passed to Blockly.unbindEvent_.
+ * @type {Array.<!Array>}
+ * @private
+ */
+Blockly.FlyoutButton.prototype.onMouseUpWrapper_ = null;
+
+/**
  * Create the button elements.
  * @return {!Element} The button's SVG group.
  */
@@ -163,6 +170,9 @@ Blockly.FlyoutButton.prototype.createDom = function() {
   svgText.setAttribute('y', this.height - Blockly.FlyoutButton.MARGIN);
 
   this.updateTransform_();
+
+  this.mouseUpWrapper_ = Blockly.bindEventWithChecks_(this.svgGroup_, 'mouseup',
+      this, this.onMouseUp_);
   return this.svgGroup_;
 };
 
@@ -207,6 +217,9 @@ Blockly.FlyoutButton.prototype.getTargetWorkspace = function() {
  * Dispose of this button.
  */
 Blockly.FlyoutButton.prototype.dispose = function() {
+  if (this.onMouseUpWrapper_) {
+    Blockly.unbindEvent_(this.onMouseUpWrapper_);
+  }
   if (this.svgGroup_) {
     goog.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
@@ -218,15 +231,13 @@ Blockly.FlyoutButton.prototype.dispose = function() {
 /**
  * Do something when the button is clicked.
  * @param {!Event} e Mouse up event.
+ * @private
  */
-Blockly.FlyoutButton.prototype.onMouseUp = function(e) {
-  // Don't scroll the page.
-  e.preventDefault();
-  // Don't propagate mousewheel event (zooming).
-  e.stopPropagation();
-  // Stop binding to mouseup and mousemove events--flyout mouseup would normally
-  // do this, but we're skipping that.
-  Blockly.Flyout.terminateDrag_();
+Blockly.FlyoutButton.prototype.onMouseUp_ = function(e) {
+  var gesture = this.targetWorkspace_.getGesture(e);
+  if (gesture) {
+    gesture.cancel();
+  }
 
   // Call the callback registered to this button.
   if (this.callback_) {

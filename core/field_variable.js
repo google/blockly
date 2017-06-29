@@ -148,7 +148,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
   if (workspace) {
     // Get a copy of the list, so that adding rename and new variable options
     // doesn't modify the workspace's list.
-    var variableModelList = workspace.getVariablesOfType('');
+    variableModelList = workspace.getVariablesOfType('');
     for (var i = 0; i < variableModelList.length; i++){
       if (createSelectedVariable &&
           goog.string.caseInsensitiveEquals(variableModelList[i].name, name)) {

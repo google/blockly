@@ -23,6 +23,8 @@
  * @author corydiers@google.com (Cory Diers)
  */
 
+goog.provide('blocklyApp.VariableModalService');
+
 blocklyApp.VariableModalService = ng.core.Class({
   constructor: [
     function() {
@@ -63,13 +65,24 @@ blocklyApp.VariableModalService = ng.core.Class({
   },
   // Show the remove variable modal.
   showRemoveModal_: function(oldName) {
-    var count = blocklyApp.workspace.getVariableUses(oldName).length;
+    var count = this.getNumVariables(oldName);
+    this.modalIsShown = true;
     if (count > 1) {
       this.preRemoveShowHook(oldName, count);
-      this.modalIsShown = true;
     } else {
-      blocklyApp.workspace.deleteVariableInternal_(oldName);
+      var variable = blocklyApp.workspace.getVariable(oldName);
+      blocklyApp.workspace.deleteVariableInternal_(variable);
+      // Allow the execution loop to finish before "closing" the modal. While
+      // the modal never opens, its being "open" should prevent other keypresses
+      // anyway.
+      var that = this;
+      setTimeout(function() {
+        that.modalIsShown = false;
+      });
     }
+  },
+  getNumVariables: function(oldName) {
+    return blocklyApp.workspace.getVariableUses(oldName).length;
   },
   // Hide the variable modal.
   hideModal: function() {

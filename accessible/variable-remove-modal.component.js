@@ -23,6 +23,17 @@
  * @author corydiers@google.com (Cory Diers)
  */
 
+goog.provide('blocklyApp.VariableRemoveModalComponent');
+
+goog.require('blocklyApp.AudioService');
+goog.require('blocklyApp.KeyboardInputService');
+goog.require('blocklyApp.TranslatePipe');
+goog.require('blocklyApp.TreeService');
+goog.require('blocklyApp.VariableModalService');
+
+goog.require('Blockly.CommonModal');
+
+
 blocklyApp.VariableRemoveModalComponent = ng.core.Component({
   selector: 'blockly-remove-variable-modal',
   template: `
@@ -33,15 +44,17 @@ blocklyApp.VariableRemoveModalComponent = ng.core.Component({
       <div id="varModal" class="blocklyModal" role="alertdialog"
            (click)="$event.stopPropagation()" tabindex="0"
            aria-labelledby="variableModalHeading">
+          <h3 id="variableModalHeading">
+            Delete {{getNumVariables()}} uses of the "{{currentVariableName}}"
+            variable?
+          </h3>
+
           <form id="varForm">
-            <p id="label">Remove {{count}} instances of
-              "{{currentVariableName}}" variable?
-            </p>
             <hr>
-            <button id="yesButton" (click)="submit()">
+            <button type="button" id="yesButton" (click)="submit()">
               YES
             </button>
-            <button id="noButton" (click)="dismissModal()">
+            <button type="button" id="noButton" (click)="dismissModal()">
               NO
             </button>
           </form>
@@ -52,9 +65,13 @@ blocklyApp.VariableRemoveModalComponent = ng.core.Component({
 })
 .Class({
   constructor: [
-    blocklyApp.AudioService, blocklyApp.KeyboardInputService, blocklyApp.VariableModalService,
-    function(audioService, keyboardService, variableService) {
+    blocklyApp.AudioService,
+    blocklyApp.KeyboardInputService,
+    blocklyApp.TreeService,
+    blocklyApp.VariableModalService,
+    function(audioService, keyboardService, treeService, variableService) {
       this.workspace = blocklyApp.workspace;
+      this.treeService = treeService;
       this.variableModalService = variableService;
       this.audioService = audioService;
       this.keyboardInputService = keyboardService
@@ -73,7 +90,7 @@ blocklyApp.VariableRemoveModalComponent = ng.core.Component({
           Blockly.CommonModal.setupKeyboardOverrides(that);
 
           setTimeout(function() {
-            document.getElementById('label').focus();
+            document.getElementById('varModal').focus();
           }, 150);
         }
       );
@@ -91,13 +108,18 @@ blocklyApp.VariableRemoveModalComponent = ng.core.Component({
   getInteractiveContainer: function() {
     return document.getElementById("varForm");
   },
+  getNumVariables: function() {
+    return this.variableModalService.getNumVariables(this.currentVariableName);
+  },
   // Submits the name change for the variable.
   submit: function() {
-    blocklyApp.workspace.deleteVariableInternal_(this.currentVariableName);
-    this.hideModal_();
+    var variable = blocklyApp.workspace.getVariable(this.currentVariableName);
+    blocklyApp.workspace.deleteVariableInternal_(variable);
+    this.dismissModal();
   },
   // Dismisses and closes the modal.
   dismissModal: function() {
+    this.variableModalService.hideModal();
     this.hideModal_();
   }
 })

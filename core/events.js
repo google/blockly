@@ -174,52 +174,44 @@ Blockly.Events.filter = function(queueIn, forward) {
     // Undo is merged in reverse order.
     queue.reverse();
   }
-  // Merge duplicates.  O(n^2), but n should be very small.
-  for (var i = 0, event1; event1 = queue[i]; i++) {
-    for (var j = i + 1, event2; event2 = queue[j]; j++) {
-      if (event1.type == event2.type &&
-          event1.blockId == event2.blockId &&
-          event1.workspaceId == event2.workspaceId) {
-        if (event1.type == Blockly.Events.MOVE) {
-          // Merge move events.
-          event1.newParentId = event2.newParentId;
-          event1.newInputName = event2.newInputName;
-          event1.newCoordinate = event2.newCoordinate;
-          queue.splice(j, 1);
-          j--;
-        } else if (event1.type == Blockly.Events.CHANGE &&
-            event1.element == event2.element &&
-            event1.name == event2.name) {
-          // Merge change events.
-          event1.newValue = event2.newValue;
-          queue.splice(j, 1);
-          j--;
-        } else if (event1.type == Blockly.Events.UI &&
-            event2.element == 'click' &&
-            (event1.element == 'commentOpen' ||
-             event1.element == 'mutatorOpen' ||
-             event1.element == 'warningOpen')) {
-          // Merge change events.
-          event1.newValue = event2.newValue;
-          queue.splice(j, 1);
-          j--;
-        }
+  var mergedQueue = [],
+      hash = {},
+      i, event;
+  // Merge duplicates.
+  for (i = 0; event = queue[i]; i++) {
+    if (!event.isNull()) {
+      var key = [event.type, event.blockId, event.workspaceId].join(' ');
+      if (hash[key] === undefined) {
+        hash[key] = event;
+        mergedQueue.push(event);
+      } else if (event.type == Blockly.Events.MOVE) {
+        // Merge move events.
+        hash[key].newParentId = event.newParentId;
+        hash[key].newInputName = event.newInputName;
+        hash[key].newCoordinate = event.newCoordinate;
+      } else if (event.type == Blockly.Events.CHANGE &&
+          event.element == hash[key].element &&
+          event.name == hash[key].name) {
+        // Merge change events.
+        hash[key].newValue = event.newValue;
+      } else if (event.type == Blockly.Events.UI &&
+          hash[key].element == 'click' &&
+          (event.element == 'commentOpen' ||
+           event.element == 'mutatorOpen' ||
+           event.element == 'warningOpen')) {
+        // Merge UI events.
+        hash[key].newValue = event.newValue;
       }
     }
   }
-  // Remove null events.
-  for (var i = queue.length - 1; i >= 0; i--) {
-    if (queue[i].isNull()) {
-      queue.splice(i, 1);
-    }
-  }
+  queue = mergedQueue;
   if (!forward) {
     // Restore undo order.
     queue.reverse();
   }
   // Move mutation events to the top of the queue.
   // Intentionally skip first event.
-  for (var i = 1, event; event = queue[i]; i++) {
+  for (i = 1; event = queue[i]; i++) {
     if (event.type == Blockly.Events.CHANGE &&
         event.element == 'mutation') {
       queue.unshift(queue.splice(i, 1)[0]);

@@ -783,14 +783,6 @@ Blockly.Constants.Text.TEXT_INDEXOF_TOOLTIP_EXTENSION = function() {
  * @package
  */
 Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
-  WHERE_OPTIONS: [
-      [Blockly.Msg.TEXT_CHARAT_FROM_START, 'FROM_START'],
-      [Blockly.Msg.TEXT_CHARAT_FROM_END, 'FROM_END'],
-      [Blockly.Msg.TEXT_CHARAT_FIRST, 'FIRST'],
-      [Blockly.Msg.TEXT_CHARAT_LAST, 'LAST'],
-      [Blockly.Msg.TEXT_CHARAT_RANDOM, 'RANDOM']
-  ],
-
   /**
    * Create XML to represent whether there is an 'AT' input.
    * @return {!Element} XML storage element.
@@ -856,6 +848,13 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
 
 // Does the initial mutator update of text_charAt and adds the tooltip
 Blockly.Constants.Text.TEXT_CHARAT_EXTENSION = function() {
+    this.WHERE_OPTIONS = [
+        [Blockly.Msg.TEXT_CHARAT_FROM_START, 'FROM_START'],
+        [Blockly.Msg.TEXT_CHARAT_FROM_END, 'FROM_END'],
+        [Blockly.Msg.TEXT_CHARAT_FIRST, 'FIRST'],
+        [Blockly.Msg.TEXT_CHARAT_LAST, 'LAST'],
+        [Blockly.Msg.TEXT_CHARAT_RANDOM, 'RANDOM']
+      ];
     this.updateAt_(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;

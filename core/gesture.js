@@ -604,7 +604,6 @@ Blockly.Gesture.prototype.doFieldClick_ = function() {
  */
 Blockly.Gesture.prototype.doBlockClick_ = function() {
   // Block click in an autoclosing flyout.
-  if (this.targetBlock_.disabled) return;
   if (this.flyout_ && this.flyout_.autoClose) {
     if (!this.targetBlock_.disabled) {
       if (!Blockly.Events.getGroup()) {

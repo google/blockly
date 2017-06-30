@@ -605,11 +605,13 @@ Blockly.Gesture.prototype.doFieldClick_ = function() {
 Blockly.Gesture.prototype.doBlockClick_ = function() {
   // Block click in an autoclosing flyout.
   if (this.flyout_ && this.flyout_.autoClose) {
-    if (!Blockly.Events.getGroup()) {
-      Blockly.Events.setGroup(true);
+    if (!this.targetBlock_.disabled) {
+      if (!Blockly.Events.getGroup()) {
+        Blockly.Events.setGroup(true);
+      }
+      var newBlock = this.flyout_.createBlock(this.targetBlock_);
+      newBlock.scheduleSnapAndBump();
     }
-    var newBlock = this.flyout_.createBlock(this.targetBlock_);
-    newBlock.scheduleSnapAndBump();
   } else {
     // Clicks events are on the start block, even if it was a shadow.
     Blockly.Events.fire(

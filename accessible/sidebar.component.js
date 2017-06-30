@@ -24,6 +24,17 @@
  * @author sll@google.com (Sean Lip)
  */
 
+goog.provide('blocklyApp.SidebarComponent');
+
+goog.require('blocklyApp.UtilsService');
+
+goog.require('blocklyApp.BlockConnectionService');
+goog.require('blocklyApp.ToolboxModalService');
+goog.require('blocklyApp.TranslatePipe');
+goog.require('blocklyApp.TreeService');
+goog.require('blocklyApp.VariableModalService');
+
+
 blocklyApp.SidebarComponent = ng.core.Component({
   selector: 'blockly-sidebar',
   template: `

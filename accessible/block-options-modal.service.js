@@ -23,6 +23,9 @@
  * @author sll@google.com (Sean Lip)
  */
 
+goog.provide('blocklyApp.BlockOptionsModalService');
+
+
 blocklyApp.BlockOptionsModalService = ng.core.Class({
   constructor: [function() {
     this.actionButtonsInfo = [];

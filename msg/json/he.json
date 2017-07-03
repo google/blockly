@@ -166,8 +166,6 @@
 	"TEXT_TEXT_TOOLTIP": "אות, מילה, או שורת טקסט.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "יצירת טקסט עם",
 	"TEXT_CREATE_JOIN_TITLE_JOIN": "צירוף",
-	"TEXT_APPEND_TO": "אל",
-	"TEXT_APPEND_APPENDTEXT": "הוספת טקסט",
 	"TEXT_INDEXOF_TOOLTIP": "מחזירה את האינדקס של המופע הראשון/האחרון בטקסט הראשון לתוך הטקסט השני. מחזירה %1 אם הטקסט אינו נמצא.",
 	"TEXT_GET_SUBSTRING_END_FROM_START": "לאות #",
 	"TEXT_GET_SUBSTRING_END_FROM_END": "לאות # מהסוף",

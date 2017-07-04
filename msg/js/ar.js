@@ -6,10 +6,10 @@ goog.provide('Blockly.Msg.ar');
 
 goog.require('Blockly.Msg');
 
-Blockly.Msg.ADD_COMMENT = "اضافة تعليق";
+Blockly.Msg.ADD_COMMENT = "أضف تعليقًا";
 Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "تغيير قيمة:";
-Blockly.Msg.CLEAN_UP = "مجموعات التنظيف";
+Blockly.Msg.CLEAN_UP = "ترتيب القطع";
 Blockly.Msg.COLLAPSE_ALL = "إخفاء القطع";
 Blockly.Msg.COLLAPSE_BLOCK = "إخفاء القطعة";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "اللون 1";
@@ -61,11 +61,11 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "اكرّر حتى";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "اكرّر طالما";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "بما ان القيمة خاطئة, نفّذ بعض الأوامر.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "بما ان القيمة صحيحة, نفّذ بعض الأوامر.";
-Blockly.Msg.DELETE_ALL_BLOCKS = "حذف كل مناعات %1؟";
-Blockly.Msg.DELETE_BLOCK = "إحذف القطعة";
+Blockly.Msg.DELETE_ALL_BLOCKS = "حذف %1 قطعة؟";
+Blockly.Msg.DELETE_BLOCK = "احذف القطعة";
 Blockly.Msg.DELETE_VARIABLE = "حذف المتغير %1";
 Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "حذف%1 1 استخدامات المتغير '%2'؟";
-Blockly.Msg.DELETE_X_BLOCKS = "إحذف قطع %1";
+Blockly.Msg.DELETE_X_BLOCKS = "احذف %1 قطع";
 Blockly.Msg.DISABLE_BLOCK = "عطّل القطعة";
 Blockly.Msg.DUPLICATE_BLOCK = "مكرر";
 Blockly.Msg.ENABLE_BLOCK = "أعد تفعيل القطعة";
@@ -74,19 +74,19 @@ Blockly.Msg.EXPAND_BLOCK = "وسٌّع القطعة";
 Blockly.Msg.EXTERNAL_INPUTS = "ادخال خارجي";
 Blockly.Msg.HELP = "مساعدة";
 Blockly.Msg.INLINE_INPUTS = "ادخال خطي";
-Blockly.Msg.IOS_CANCEL = "Cancel";  // untranslated
-Blockly.Msg.IOS_ERROR = "Error";  // untranslated
-Blockly.Msg.IOS_OK = "OK";  // untranslated
+Blockly.Msg.IOS_CANCEL = "ألغِ";
+Blockly.Msg.IOS_ERROR = "خطأ";
+Blockly.Msg.IOS_OK = "أوافق";
 Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
 Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
 Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
 Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
-Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Add";  // untranslated
+Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "أضف";
 Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
-Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Delete";  // untranslated
-Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
-Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Rename";  // untranslated
-Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Variable name";  // untranslated
+Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "احذف";
+Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "لا يمكنك استخدام اسم متغير فارغ.";
+Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "أعد التسمية";
+Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "اسم المتغير";
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "إنشئ قائمة فارغة";
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "تقوم بإرجاع قائمة، طولها 0, لا تحتوي على أية سجلات البيانات";
@@ -183,9 +183,9 @@ Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT = "يرجع صحيح إذا كان الإد
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE = "يرجع صحيح إذا كان الإدخال الأول أصغر من أو يساوي الإدخال الثاني.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ = "يرجع صحيح إذا كانت كلا المدخلات غير مساوية لبعضها البعض.";
 Blockly.Msg.LOGIC_NEGATE_HELPURL = "https://github.com/google/blockly/wiki/Logic#not";  // untranslated
-Blockly.Msg.LOGIC_NEGATE_TITLE = "ليس من %1";
+Blockly.Msg.LOGIC_NEGATE_TITLE = "ليس %1";
 Blockly.Msg.LOGIC_NEGATE_TOOLTIP = "يرجع صحيح إذا كان الإدخال خاطئ .  يرجع خاطئ إذا كان الإدخال صحيح.";
-Blockly.Msg.LOGIC_NULL = "ملغى";
+Blockly.Msg.LOGIC_NULL = "فارغ";
 Blockly.Msg.LOGIC_NULL_HELPURL = "https://en.wikipedia.org/wiki/Nullable_type";
 Blockly.Msg.LOGIC_NULL_TOOLTIP = "ترجع ملغى.";
 Blockly.Msg.LOGIC_OPERATION_AND = "و";
@@ -199,7 +199,7 @@ Blockly.Msg.LOGIC_TERNARY_IF_FALSE = "إذا كانت العبارة خاطئة"
 Blockly.Msg.LOGIC_TERNARY_IF_TRUE = "إذا كانت العبارة صحيحة";
 Blockly.Msg.LOGIC_TERNARY_TOOLTIP = "تحقق الشرط في 'الاختبار'. إذا كان الشرط صحيح، يقوم بإرجاع قيمة 'اذا كانت العبارة صحيحة'؛ خلاف ذلك يرجع قيمة 'اذا كانت العبارة خاطئة'.";
 Blockly.Msg.MATH_ADDITION_SYMBOL = "+";
-Blockly.Msg.MATH_ARITHMETIC_HELPURL = "https://en.wikipedia.org/wiki/Arithmetic";
+Blockly.Msg.MATH_ARITHMETIC_HELPURL = "https://ar.wikipedia.org/wiki/%D8%AD%D8%B3%D8%A7%D8%A8%D9%8A%D8%A7%D8%AA";
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_ADD = "يرجع مجموع الرقمين.";
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_DIVIDE = "يرجع حاصل قسمة الرقمين.";
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MINUS = "يرجع الفرق بين الرقمين.";
@@ -226,7 +226,7 @@ Blockly.Msg.MATH_MODULO_HELPURL = "https://en.wikipedia.org/wiki/Modulo_operatio
 Blockly.Msg.MATH_MODULO_TITLE = "باقي %1 ÷ %2";
 Blockly.Msg.MATH_MODULO_TOOLTIP = "يرجع الباقي من قسمة الرقمين.";
 Blockly.Msg.MATH_MULTIPLICATION_SYMBOL = "×";
-Blockly.Msg.MATH_NUMBER_HELPURL = "https://en.wikipedia.org/wiki/Number";
+Blockly.Msg.MATH_NUMBER_HELPURL = "https://ar.wikipedia.org/wiki/%D8%B9%D8%AF%D8%AF";
 Blockly.Msg.MATH_NUMBER_TOOLTIP = "عدد ما.";
 Blockly.Msg.MATH_ONLIST_HELPURL = "";  // untranslated
 Blockly.Msg.MATH_ONLIST_OPERATOR_AVERAGE = "متوسط القائمة";
@@ -257,11 +257,11 @@ Blockly.Msg.MATH_ROUND_OPERATOR_ROUND = "تقريب";
 Blockly.Msg.MATH_ROUND_OPERATOR_ROUNDDOWN = "تقريب إلى اصغر عدد صحيح";
 Blockly.Msg.MATH_ROUND_OPERATOR_ROUNDUP = "تقريب الى اكبر عدد صحيح";
 Blockly.Msg.MATH_ROUND_TOOLTIP = "تقريب الى اكبر عدد صحيح أو الى اصغر عدد صحيح.";
-Blockly.Msg.MATH_SINGLE_HELPURL = "https://en.wikipedia.org/wiki/Square_root";
+Blockly.Msg.MATH_SINGLE_HELPURL = "https://ar.wikipedia.org/wiki/%D8%AC%D8%B0%D8%B1_%D8%AA%D8%B1%D8%A8%D9%8A%D8%B9%D9%8A";
 Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE = "مطلق";
 Blockly.Msg.MATH_SINGLE_OP_ROOT = "الجذر التربيعي";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_ABS = "يرجع القيمة المطلقة لرقم.";
-Blockly.Msg.MATH_SINGLE_TOOLTIP_EXP = "يرجع  e الذي هو الاس المرفوع للرقم.";
+Blockly.Msg.MATH_SINGLE_TOOLTIP_EXP = "يرجع ه‍ (e) مرفوعا لأس بقيمة الرقم المدخل.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_LN = "يرجع اللوغاريتم الطبيعي لرقم.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_LOG10 = "يرجع لوغاريتم عدد معين للاساس 10.";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_NEG = "يرجع عدد سالب.";
@@ -286,9 +286,9 @@ Blockly.Msg.NEW_VARIABLE_TITLE = "اسم المتغير الجديد:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "اسمح بالبيانات";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "مع:";
-Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
+Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Subroutine";
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "تشغيل الدالة المعرفة من قبل المستخدم '%1'.";
-Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
+Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://en.wikipedia.org/wiki/Subroutine";
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "تشغيل الدالة المعرفة من قبل المستخدم %1 واستخدام  مخرجاتها.";
 Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "مع:";
 Blockly.Msg.PROCEDURES_CREATE_DO = "إنشئ '%1'";
@@ -310,13 +310,13 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "اسم الإدخال:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "أضف مدخلا إلى الوظيفة.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "المدخلات";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "إضافة أو إزالة أو إعادة ترتيب المدخلات لهذه المهمة.";
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 Blockly.Msg.REDO = "إعادة";
-Blockly.Msg.REMOVE_COMMENT = "ازل التعليق";
+Blockly.Msg.REMOVE_COMMENT = "أزل التعليق";
 Blockly.Msg.RENAME_VARIABLE = "إعادة تسمية المتغير...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "إعادة تسمية كافة المتغيرات '%1' إلى:";
-Blockly.Msg.TEXT_APPEND_APPENDTEXT = "إلصق نص";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-Blockly.Msg.TEXT_APPEND_TO = "إلى";
+Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
 Blockly.Msg.TEXT_APPEND_TOOLTIP = "إلصق جزءا من النص إلى متغير '%1'.";
 Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "الى حروف صغيرة";
@@ -327,10 +327,10 @@ Blockly.Msg.TEXT_CHARAT_FIRST = "احصل على الحرف الأول";
 Blockly.Msg.TEXT_CHARAT_FROM_END = "الحصول على الحرف # من نهاية";
 Blockly.Msg.TEXT_CHARAT_FROM_START = "الحصول على الحرف #";
 Blockly.Msg.TEXT_CHARAT_HELPURL = "https://github.com/google/blockly/wiki/Text#extracting-text";  // untranslated
-Blockly.Msg.TEXT_CHARAT_INPUT_INTEXT = "في النص";
 Blockly.Msg.TEXT_CHARAT_LAST = "احصل على آخر حرف";
 Blockly.Msg.TEXT_CHARAT_RANDOM = "الحصول على حرف عشوائي";
 Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
+Blockly.Msg.TEXT_CHARAT_TITLE = "in text %1 %2";  // untranslated
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = "يرجع حرف ما في الموضع المحدد.";
 Blockly.Msg.TEXT_COUNT_HELPURL = "https://github.com/google/blockly/wiki/Text#counting-substrings";  // untranslated
 Blockly.Msg.TEXT_COUNT_MESSAGE0 = "count %1 in %2";  // untranslated
@@ -349,10 +349,9 @@ Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_START = "الحصول على سلسل�
 Blockly.Msg.TEXT_GET_SUBSTRING_TAIL = "";  // untranslated
 Blockly.Msg.TEXT_GET_SUBSTRING_TOOLTIP = "يرجع جزء معين من النص.";
 Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
-Blockly.Msg.TEXT_INDEXOF_INPUT_INTEXT = "في النص";
 Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "ابحث عن التواجد الأول للنص";
 Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "ابحث عن التواجد الأخير للنص";
-Blockly.Msg.TEXT_INDEXOF_TAIL = "";  // untranslated
+Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
 Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "تقوم بإرجاع مؤشر التواجد الأول/الأخير للنص الأول في النص الثاني.  تقوم بإرجاع %1 إذا لم يتم العثور على النص.";
 Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 فارغ";

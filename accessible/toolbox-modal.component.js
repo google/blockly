@@ -23,6 +23,17 @@
  * @author sll@google.com (Sean Lip)
  */
 
+goog.provide('blocklyApp.ToolboxModalComponent');
+
+goog.require('Blockly.CommonModal');
+goog.require('blocklyApp.AudioService');
+goog.require('blocklyApp.KeyboardInputService');
+goog.require('blocklyApp.ToolboxModalService');
+goog.require('blocklyApp.TranslatePipe');
+goog.require('blocklyApp.TreeService');
+goog.require('blocklyApp.UtilsService');
+
+
 blocklyApp.ToolboxModalComponent = ng.core.Component({
   selector: 'blockly-toolbox-modal',
   template: `

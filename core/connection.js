@@ -219,7 +219,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
 
   var event;
   if (Blockly.Events.isEnabled()) {
-    event = new Blockly.Events.Move(childBlock);
+    event = new Blockly.Events.BlockMove(childBlock);
   }
   // Establish the connections.
   Blockly.Connection.connectReciprocally_(parentConnection, childConnection);
@@ -240,12 +240,6 @@ Blockly.Connection.prototype.dispose = function() {
   }
   if (this.inDB_) {
     this.db_.removeConnection_(this);
-  }
-  if (Blockly.highlightedConnection_ == this) {
-    Blockly.highlightedConnection_ = null;
-  }
-  if (Blockly.localConnection_ == this) {
-    Blockly.localConnection_ = null;
   }
   this.db_ = null;
   this.dbOpposite_ = null;
@@ -508,7 +502,7 @@ Blockly.Connection.prototype.disconnectInternal_ = function(parentBlock,
     childBlock) {
   var event;
   if (Blockly.Events.isEnabled()) {
-    event = new Blockly.Events.Move(childBlock);
+    event = new Blockly.Events.BlockMove(childBlock);
   }
   var otherConnection = this.targetConnection;
   otherConnection.targetConnection = null;

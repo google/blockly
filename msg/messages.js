@@ -125,6 +125,8 @@ Blockly.Msg.NEW_VARIABLE = 'Create variable...';
 Blockly.Msg.NEW_VARIABLE_TITLE = 'New variable name:';
 /// alert - Tells the user that the name they entered is already in use.
 Blockly.Msg.VARIABLE_ALREADY_EXISTS = 'A variable named "%1" already exists.'
+/// alert - Tells the user that the name they entered is already in use for a procedure.
+Blockly.Msg.PROCEDURE_ALREADY_EXISTS = 'A procedure named "%1" already exists.'
 
 // Variable deletion.
 /// confirm -  Ask the user to confirm their deletion of multiple uses of a variable.
@@ -256,13 +258,13 @@ Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE = Blockly.Msg.CONTROLS_IF_MSG_ELSE;
 /// tooltip - Describes the 'else' subblock during [https://github.com/google/blockly/wiki/IfElse#block-modification if block modification].
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = 'Add a final, catch-all condition to the if block.';
 
-/// button text - Text on a button inside a dialogue window, which will accept or acknowledge the contents of the dialogue when pressed.
+/// button text - Text on a button inside a dialogue window, which will accept or acknowledge the contents of the dialogue when pressed.\n{{Identical|OK}}
 Blockly.Msg.IOS_OK = 'OK';
-/// button text - Text on a button inside a dialogue window, which will close or cancel the dialogue when pressed.
+/// button text - Text on a button inside a dialogue window, which will close or cancel the dialogue when pressed.\n{{Identical|Cancel}}
 Blockly.Msg.IOS_CANCEL = 'Cancel';
-/// alert - Title text for an error dialogue.
+/// alert - Title text for an error dialogue.\n{{Identical|Error}}
 Blockly.Msg.IOS_ERROR = 'Error';
-/// header text - Title of a section that displays a list of parameters (aka. "inputs") that have been defined for a procedure. This is used inside a dialogue window to configure a procedure.
+/// header text - Title of a section that displays a list of parameters (aka. "inputs") that have been defined for a procedure. This is used inside a dialogue window to configure a procedure.\n{{Identical|Input}}
 Blockly.Msg.IOS_PROCEDURES_INPUTS = 'INPUTS';
 /// button text - Text on a button which will add a parameter (aka. "input") to a procedure. This is used inside a dialogue window to configure a procedure. NOTE: The "+" should be preserved at the beginning of the text.
 Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = '+ Add Input';
@@ -272,11 +274,11 @@ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = 'Allow statements';
 Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = 'This function has duplicate inputs.';
 /// button text - Text on a button which will open a variable creation dialogue when pressed. NOTE: The "+" should be preserved at the beginning of the text.
 Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = '+ Add Variable';
-/// button text - Text on a button inside a variable creation dialogue, which will add a variable when pressed.
+/// button text - Text on a button inside a variable creation dialogue, which will add a variable when pressed.\n{{Identical|Add}}
 Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = 'Add';
-/// button text - Text on a button inside a variable rename dialogue, which will rename a variable when pressed.
+/// button text - Text on a button inside a variable rename dialogue, which will rename a variable when pressed.\n{{Identical|Rename}}
 Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = 'Rename';
-/// button text - Text on a button inside a variable deletion dialogue, which will delete a variable when pressed.
+/// button text - Text on a button inside a variable deletion dialogue, which will delete a variable when pressed.\n{{Identical|Delete}}
 Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = 'Delete';
 /// placeholder text - Placeholder text used inside a text input, where a variable name should be entered.
 Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = 'Variable name';
@@ -566,13 +568,9 @@ Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = 'Add an item to the text.';
 
 /// url - This and the other text-related URLs are going to be hard to translate.  As always, it is okay to leave untranslated or paste in the English-language URL.  For these URLs, you might also consider a general URL about how computers represent text (such as the translation of [https://en.wikipedia.org/wiki/String_(computer_science) this Wikipedia page]).
 Blockly.Msg.TEXT_APPEND_HELPURL = 'https://github.com/google/blockly/wiki/Text#text-modification';
-/// block input text - Message preceding the name of a variable to which text should be appended.
+/// block input text - Message that the variable name at %1 will have the item at %2 appended to it.
 /// [[File:blockly-append-text.png]]
-Blockly.Msg.TEXT_APPEND_TO = 'to';
-/// block input text - Message following the variable and preceding the piece of text that should
-/// be appended, as shown below.
-/// [[File:blockly-append-text.png]]
-Blockly.Msg.TEXT_APPEND_APPENDTEXT = 'append text';
+Blockly.Msg.TEXT_APPEND_TITLE = 'to %1 append text %2';
 Blockly.Msg.TEXT_APPEND_VARIABLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /// tooltip - See [https://github.com/google/blockly/wiki/Text#text-modification https://github.com/google/blockly/wiki/Text#text-modification] for more information.\n\nParameters:\n* %1 - the name of the variable to which text should be appended
 Blockly.Msg.TEXT_APPEND_TOOLTIP = 'Append some text to variable "%1".';
@@ -601,7 +599,10 @@ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = 'Returns the index of the first/last occurren
 /// [https://github.com/google/blockly/wiki/Text#finding-text
 /// https://github.com/google/blockly/wiki/Text#finding-text].
 /// [[File:Blockly-find-text.png]].
-Blockly.Msg.TEXT_INDEXOF_INPUT_INTEXT = 'in text';
+/// In English the expanded message is "in text %1 find (first|last) occurance of text %3"
+/// where %1 and %3 are added by the user. See TEXT_INDEXOF_OPERATOR_FIRST and
+/// TEXT_INDEXOF_OPERATOR_LAST for the dropdown text that replaces %2.
+Blockly.Msg.TEXT_INDEXOF_TITLE = 'in text %1 %2 %3';
 /// dropdown - See [https://github.com/google/blockly/wiki/Text#finding-text
 /// https://github.com/google/blockly/wiki/Text#finding-text].
 /// [[File:Blockly-find-text.png]].
@@ -614,21 +615,17 @@ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = 'find first occurrence of text';
 /// https://translatewiki.net/wiki/Translating:Blockly#Drop-Down_Menus)].)
 /// [[File:Blockly-find-text.png]].
 Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = 'find last occurrence of text';
-/// block text - Optional text to follow the rightmost block in a
-/// [https://github.com/google/blockly/wiki/Text#finding-text
-/// https://github.com/google/blockly/wiki/Text#finding-text in text ... find block]
-/// (after the "a" in the below picture).  This will be the empty string in most languages.
-/// [[File:Blockly-find-text.png]].
-Blockly.Msg.TEXT_INDEXOF_TAIL = '';
 
 /// url - Information about extracting characters (letters, number, symbols, etc.) from text.
 Blockly.Msg.TEXT_CHARAT_HELPURL = 'https://github.com/google/blockly/wiki/Text#extracting-text';
-/// block text - Appears before the piece of text from which a letter (or number,
-/// punctuation character, etc.) should be extracted, as shown below.  See
+/// block text - Text for a block to extract a letter (or number,
+/// punctuation character, etc.) from a string, as shown below. %1 is added by
+/// the user and %2 is replaced by a dropdown of options, possibly followed by
+/// another user supplied string. TEXT_CHARAT_TAIL is then added to the end.  See
 /// [https://github.com/google/blockly/wiki/Text#extracting-a-single-character
 /// https://github.com/google/blockly/wiki/Text#extracting-a-single-character].
 /// [[File:Blockly-text-get.png]]
-Blockly.Msg.TEXT_CHARAT_INPUT_INTEXT = 'in text';
+Blockly.Msg.TEXT_CHARAT_TITLE = 'in text %1 %2'
 /// dropdown - Indicates that the letter (or number, punctuation character, etc.) with the
 /// specified index should be obtained from the preceding piece of text.  See
 /// [https://github.com/google/blockly/wiki/Text#extracting-a-single-character
@@ -1159,7 +1156,7 @@ Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = 'Run the user-defined function "%1" 
 /// block text - This text appears on a block in a window that appears when the user clicks
 /// on the plus sign or star on a function definition block.  It refers to the set of parameters
 /// (referred to by the simpler term "inputs") to the function.  See
-/// [[Translating:Blockly#function_definitions]].
+/// [[Translating:Blockly#function_definitions]].\n{{Identical|Input}}
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = 'inputs';
 /// tooltip
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = 'Add, remove, or reorder inputs to this function.';

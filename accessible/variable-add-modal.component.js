@@ -23,6 +23,16 @@
  * @author corydiers@google.com (Cory Diers)
  */
 
+goog.provide('blocklyApp.VariableAddModalComponent');
+
+goog.require('blocklyApp.AudioService');
+goog.require('blocklyApp.KeyboardInputService');
+goog.require('blocklyApp.TranslatePipe');
+goog.require('blocklyApp.VariableModalService');
+
+goog.require('Blockly.CommonModal');
+
+
 blocklyApp.VariableAddModalComponent = ng.core.Component({
   selector: 'blockly-add-variable-modal',
   template: `
@@ -33,6 +43,8 @@ blocklyApp.VariableAddModalComponent = ng.core.Component({
       <div id="varModal" class="blocklyModal" role="alertdialog"
            (click)="$event.stopPropagation()" tabindex="0"
            aria-labelledby="variableModalHeading">
+          <h3 id="variableModalHeading">Add a variable...</h3>
+
           <form id="varForm">
             <p id="inputLabel">New Variable Name:
               <input id="mainFieldId" type="text" [ngModel]="VALUE"
@@ -40,10 +52,10 @@ blocklyApp.VariableAddModalComponent = ng.core.Component({
                      aria-labelledby="inputLabel" />
             </p>
             <hr>
-            <button id="submitButton" (click)="submit()">
+            <button type="button" id="submitButton" (click)="submit()">
               SUBMIT
             </button>
-            <button id="cancelButton" (click)="dismissModal()">
+            <button type="button" id="cancelButton" (click)="dismissModal()">
               CANCEL
             </button>
           </form>
@@ -71,7 +83,7 @@ blocklyApp.VariableAddModalComponent = ng.core.Component({
           Blockly.CommonModal.setupKeyboardOverrides(that);
 
           setTimeout(function() {
-            document.getElementById('mainFieldId').focus();
+            document.getElementById('varModal').focus();
           }, 150);
         }
       );
@@ -96,10 +108,11 @@ blocklyApp.VariableAddModalComponent = ng.core.Component({
   // Submits the name change for the variable.
   submit: function() {
     this.workspace.createVariable(this.variableName);
-    this.hideModal_();
+    this.dismissModal();
   },
   // Dismisses and closes the modal.
   dismissModal: function() {
+    this.variableModalService.hideModal();
     this.hideModal_();
   }
 })

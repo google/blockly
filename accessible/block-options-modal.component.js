@@ -23,6 +23,16 @@
  * @author sll@google.com (Sean Lip)
  */
 
+goog.provide('blocklyApp.BlockOptionsModalComponent');
+
+goog.require('blocklyApp.AudioService');
+goog.require('blocklyApp.BlockOptionsModalService');
+goog.require('blocklyApp.KeyboardInputService');
+goog.require('blocklyApp.TranslatePipe');
+
+goog.require('Blockly.CommonModal');
+
+
 blocklyApp.BlockOptionsModalComponent = ng.core.Component({
   selector: 'blockly-block-options-modal',
   template: `

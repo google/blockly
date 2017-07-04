@@ -749,7 +749,7 @@ function injectCode(code, id) {
   var pre = document.getElementById(id);
   pre.textContent = code;
   code = pre.textContent;
-  code = prettyPrintOne(code, 'js');
+  code = PR.prettyPrintOne(code, 'js');
   pre.innerHTML = code;
 }
 

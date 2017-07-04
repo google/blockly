@@ -352,8 +352,8 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
 
   var tooltip = FactoryUtils.getTooltipFromRootBlock_(rootBlock);
   var helpUrl = FactoryUtils.getHelpUrlFromRootBlock_(rootBlock);
-  code.push("    this.setTooltip('" + tooltip + "');");
-  code.push("    this.setHelpUrl('" + helpUrl + "');");
+  code.push(' this.setTooltip(' + JSON.stringify(tooltip) + ');');
+  code.push(' this.setHelpUrl(' + JSON.stringify(helpUrl) + ');');
   code.push('  }');
   code.push('};');
   return code.join('\n');
@@ -875,7 +875,7 @@ FactoryUtils.injectCode = function(code, id) {
   var pre = document.getElementById(id);
   pre.textContent = code;
   code = pre.textContent;
-  code = prettyPrintOne(code, 'js');
+  code = PR.prettyPrintOne(code, 'js');
   pre.innerHTML = code;
 };
 

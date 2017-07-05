@@ -145,6 +145,7 @@ window.BLOCKLY_BOOT = function() {
     base_path = calcdeps.FindClosureBasePath(self.search_paths)
     for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
       add_dependency.append(calcdeps.GetDepsLine(dep, base_path))
+    add_dependency.sort()  # Deterministic build.
     add_dependency = '\n'.join(add_dependency)
     # Find the Blockly directory name and replace it with a JS variable.
     # This allows blockly_uncompressed.js to be compiled on one computer and be
@@ -158,7 +159,7 @@ window.BLOCKLY_BOOT = function() {
     for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
       if not dep.filename.startswith(os.pardir + os.sep):  # '../'
         provides.extend(dep.provides)
-    provides.sort()
+    provides.sort()  # Deterministic build.
     f.write('\n')
     f.write('// Load Blockly.\n')
     for provide in provides:
@@ -229,6 +230,7 @@ class Gen_compressed(threading.Thread):
     # Read in all the source files.
     filenames = calcdeps.CalculateDependencies(self.search_paths,
         [os.path.join("core", "blockly.js")])
+    filenames.sort()  # Deterministic build.
     for filename in filenames:
       # Filter out the Closure files (the compiler will add them).
       if filename.startswith(os.pardir + os.sep):  # '../'
@@ -256,6 +258,7 @@ class Gen_compressed(threading.Thread):
     # Read in all the source files.
     filenames = calcdeps.CalculateDependencies(self.search_paths,
         [os.path.join("accessible", "app.component.js")])
+    filenames.sort()  # Deterministic build.
     for filename in filenames:
       # Filter out the Closure files (the compiler will add them).
       if filename.startswith(os.pardir + os.sep):  # '../'
@@ -282,6 +285,7 @@ class Gen_compressed(threading.Thread):
     # Add Blockly.Blocks to be compatible with the compiler.
     params.append(("js_code", "goog.provide('Blockly.Blocks');"))
     filenames = glob.glob(os.path.join("blocks", "*.js"))
+    filenames.sort()  # Deterministic build.
     for filename in filenames:
       f = open(filename)
       params.append(("js_code", "".join(f.readlines())))
@@ -308,6 +312,7 @@ class Gen_compressed(threading.Thread):
     params.append(("js_code", "goog.provide('Blockly.Generator');"))
     filenames = glob.glob(
         os.path.join("generators", language, "*.js"))
+    filenames.sort()  # Deterministic build.
     filenames.insert(0, os.path.join("generators", language + ".js"))
     for filename in filenames:
       f = open(filename)
@@ -519,8 +524,10 @@ developers.google.com/blockly/guides/modify/web/closure""")
 
   core_search_paths = calcdeps.ExpandDirectories(
       ["core", os.path.join(os.path.pardir, "closure-library")])
+  core_search_paths.sort()  # Deterministic build.
   full_search_paths = calcdeps.ExpandDirectories(
       ["accessible", "core", os.path.join(os.path.pardir, "closure-library")])
+  full_search_paths.sort()  # Deterministic build.
 
   if (len(sys.argv) == 1):
     args = ['core', 'accessible', 'generators', 'defaultlangfiles']

@@ -196,15 +196,8 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
     }
     else if (id == Blockly.RENAME_VARIABLE_ID) {
       // Rename variable.
-      var oldName = this.getText();
-      Blockly.hideChaff();
-      Blockly.Variables.promptName(
-          Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', oldName), oldName,
-          function(newName) {
-            if (newName) {
-              workspace.renameVariable(oldName, newName);
-            }
-          });
+      var currentName = this.getText();
+      Blockly.FieldVariable.renameVariablePrompt(workspace, currentName);
       return;
     } else if (id == Blockly.DELETE_VARIABLE_ID) {
       // Delete variable.
@@ -218,4 +211,21 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
   if (itemText !== null) {
     this.setValue(itemText);
   }
+};
+
+/**
+ * Prompt the user to rename a variable.
+ * @param {Blockly.Workspace} workspace Workspace the variable to rename is in.
+ * @param {string} currentName Current name of the variable to rename.
+ */
+Blockly.FieldVariable.renameVariablePrompt = function(workspace, currentName) {
+  // Rename variable.
+  Blockly.hideChaff();
+  Blockly.Variables.promptName(
+      Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', currentName), currentName,
+      function(newName) {
+        if (newName) {
+          workspace.renameVariable(currentName, newName);
+        }
+      });
 };

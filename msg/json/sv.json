@@ -206,6 +206,7 @@
 	"TEXT_CREATE_JOIN_TITLE_JOIN": "sammanfoga",
 	"TEXT_CREATE_JOIN_TOOLTIP": "Lägg till, ta bort eller ändra ordningen för sektioner för att omkonfigurera detta textblock.",
 	"TEXT_CREATE_JOIN_ITEM_TOOLTIP": "Lägg till ett föremål till texten.",
+	"TEXT_APPEND_TITLE": "för att %1 lägga till text %2",
 	"TEXT_APPEND_TOOLTIP": "Lägg till lite text till variabeln '%1'.",
 	"TEXT_LENGTH_TITLE": "längden på %1",
 	"TEXT_LENGTH_TOOLTIP": "Ger tillbaka antalet bokstäver (inklusive mellanslag) i den angivna texten.",

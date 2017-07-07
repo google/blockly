@@ -755,7 +755,7 @@ Blockly.Flyout.prototype.isScrollable = function() {
 
 /**
  * Copy a block from the flyout to the workspace and position it correctly.
- * @param {!Blockly.Block} oldBlock The flyout block to copy..
+ * @param {!Blockly.Block} oldBlock The flyout block to copy.
  * @return {!Blockly.Block} The new block in the main workspace.
  * @private
  */

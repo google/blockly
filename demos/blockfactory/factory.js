@@ -95,9 +95,16 @@ BlockFactory.formatChange = function() {
     languageTA.focus();
     BlockFactory.updatePreview();
   } else {
+    // JCO Modified so always in editable mode
     mask.style.display = 'none';
-    languageTA.style.display = 'none';
-    languagePre.style.display = 'block';
+    //languageTA.style.display = 'none';
+    //languagePre.style.display = 'block';
+
+    languagePre.style.display = 'none';
+    languageTA.style.display = 'block';
+    var code = languagePre.textContent.trim();
+    languageTA.value = code;
+    
     BlockFactory.updateLanguage();
   }
   BlockFactory.disableEnableLink();
@@ -115,10 +122,21 @@ BlockFactory.updateLanguage = function() {
   if (!blockType) {
     blockType = BlockFactory.UNNAMED;
   }
-  var format = document.getElementById('format').value;
-  var code = FactoryUtils.getBlockDefinition(blockType, rootBlock, format,
-      BlockFactory.mainWorkspace);
-  FactoryUtils.injectCode(code, 'languagePre');
+  
+  if(!BlockFactory.updateBlocksFlag){  
+    var format = document.getElementById('format').value;
+    var code = FactoryUtils.getBlockDefinition(blockType, rootBlock, format,
+        BlockFactory.mainWorkspace);
+    FactoryUtils.injectCode(code, 'languagePre');
+
+    // JCO Modified to update editable text area always
+    console.log('UpdateEditor: '+BlockFactory.updateBlocksFlag2)
+    if(!BlockFactory.updateBlocksFlag2){
+      code = languagePre.textContent.trim();
+      languageTA.value = code;
+    }
+  }
+
   BlockFactory.updatePreview();
 };
 
@@ -163,7 +181,9 @@ BlockFactory.updatePreview = function() {
       format = 'JavaScript';
     }
   } else {
-    var code = document.getElementById('languagePre').textContent;
+    // JCO Always editable
+    // var code = document.getElementById('languagePre').textContent;
+    var code = document.getElementById('languageTA').value;
   }
   if (!code.trim()) {
     // Nothing to render.  Happens while cloud storage is loading.
@@ -232,7 +252,11 @@ BlockFactory.updatePreview = function() {
     } else {
       rootBlock.setWarningText(null);
     }
-
+  } catch(err) {
+    // JCO TODO: Show error on the UI
+    console.log(err)
+    BlockFactory.updateBlocksFlag = false
+    BlockFactory.updateBlocksFlag2 = false
   } finally {
     Blockly.Blocks = backupBlocks;
   }

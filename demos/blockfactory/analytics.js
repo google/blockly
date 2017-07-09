@@ -93,7 +93,7 @@ BlocklyDevTools.Analytics.onWarning = function(msg) {
 };
 
 /**
- * Asks the analytics framework to send any queued events to the server.
+ * Request the analytics framework to send any queued events to the server.
  */
 BlocklyDevTools.Analytics.sendQueued = function() {
   // stub

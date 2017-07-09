@@ -37,6 +37,7 @@ BlocklyDevTools.Analytics.init = function() {
 
 /**
  * Event noting the user navigated to a specific view.
+ * @param viewId {string} An identifier for the view state.
  */
 BlocklyDevTools.Analytics.onNavigateTo = function(viewId) {
   // stub

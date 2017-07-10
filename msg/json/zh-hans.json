@@ -199,6 +199,7 @@
 	"TEXT_CREATE_JOIN_TITLE_JOIN": "加入",
 	"TEXT_CREATE_JOIN_TOOLTIP": "添加、移除或重新排列各节来重新配置这个文本块。",
 	"TEXT_CREATE_JOIN_ITEM_TOOLTIP": "将一个项添加到文本中。",
+	"TEXT_APPEND_TITLE": "至%1附加文本%2",
 	"TEXT_APPEND_TOOLTIP": "将一些文本追加到变量“%1”。",
 	"TEXT_LENGTH_TITLE": "%1的长度",
 	"TEXT_LENGTH_TOOLTIP": "返回提供文本的字母数（包括空格）。",

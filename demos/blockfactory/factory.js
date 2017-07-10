@@ -95,11 +95,7 @@ BlockFactory.formatChange = function() {
     languageTA.focus();
     BlockFactory.updatePreview();
   } else {
-    // JCO Modified so always in editable mode
     mask.style.display = 'none';
-    //languageTA.style.display = 'none';
-    //languagePre.style.display = 'block';
-
     languagePre.style.display = 'none';
     languageTA.style.display = 'block';
     var code = languagePre.textContent.trim();
@@ -128,9 +124,6 @@ BlockFactory.updateLanguage = function() {
     var code = FactoryUtils.getBlockDefinition(blockType, rootBlock, format,
         BlockFactory.mainWorkspace);
     FactoryUtils.injectCode(code, 'languagePre');
-
-    // JCO Modified to update editable text area always
-    console.log('UpdateEditor: '+BlockFactory.updateBlocksFlag2)
     if(!BlockFactory.updateBlocksFlag2){
       code = languagePre.textContent.trim();
       languageTA.value = code;
@@ -181,8 +174,6 @@ BlockFactory.updatePreview = function() {
       format = 'JavaScript';
     }
   } else {
-    // JCO Always editable
-    // var code = document.getElementById('languagePre').textContent;
     var code = document.getElementById('languageTA').value;
   }
   if (!code.trim()) {
@@ -253,7 +244,7 @@ BlockFactory.updatePreview = function() {
       rootBlock.setWarningText(null);
     }
   } catch(err) {
-    // JCO TODO: Show error on the UI
+    // TODO: Show error on the UI
     console.log(err)
     BlockFactory.updateBlocksFlag = false
     BlockFactory.updateBlocksFlag2 = false

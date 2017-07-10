@@ -85,7 +85,6 @@ p {
   position: absolute;
 }
 
-/* Changed by JCO to use always editable text area */
 pre,
 #languageTA {
   border: #ddd 1px solid;

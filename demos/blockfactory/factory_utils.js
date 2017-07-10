@@ -77,17 +77,16 @@ FactoryUtils.cleanBlockType = function(blockType) {
  * @return {string} Generator code for multiple blocks.
  */
 FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
-  // JCO Build factory blocks from block
+  // Build factory blocks from block
   if (BlockFactory.updateBlocksFlag) {
     BlockFactory.mainWorkspace.clear();
-  //var xml = Blockly.Xml.textToDom();
     var xml = buildBlockFactoryDef(block)
     Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
     // Calculate timer to avoid infinite update loops
     BlockFactory.updateBlocksFlag = false
     setTimeout(function(){ BlockFactory.updateBlocksFlag2 = false }, 3000);
   }
-  BlockFactory.lastUpdatedBlock = block // For now I am using a global variable to share this value
+  BlockFactory.lastUpdatedBlock = block // For now uses this global variable to share the block value
   
   function makeVar(root, name) {
     name = name.toLowerCase().replace(/\W/g, '_');

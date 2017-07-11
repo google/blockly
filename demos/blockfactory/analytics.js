@@ -34,14 +34,14 @@ BlocklyDevTools.Analytics.LOG_TO_CONSOLE_ = false;
 /**
  * An import/export type id for a library of BlockFactory's original block
  * save files (each a serialized workspace of block definition blocks).
- * @public
+ * @package
  * @const
  */
 BlocklyDevTools.Analytics.BLOCK_FACTORY_LIBRARY = "Block Factory library";
 /**
  * An import/export type id for a standard Blockly library of block
  * definitions.
- * @public
+ * @package
  * @const
  */
 BlocklyDevTools.Analytics.BLOCK_DEFINITIONS = "Block definitions";
@@ -49,21 +49,21 @@ BlocklyDevTools.Analytics.BLOCK_DEFINITIONS = "Block definitions";
  * An import/export type id for a code generation function, or a
  * boilerplate stub of the same.
  *
- * @public
+ * @package
  * @const
  */
 BlocklyDevTools.Analytics.GENERATOR = "Generator";
 /**
  * An import/export type id for a Blockly Toolbox.
  *
- * @public
+ * @package
  * @const
  */
 BlocklyDevTools.Analytics.TOOLBOX = "Toolbox";
 /**
  * An import/export type id for the serialized contents of a workspace.
  *
- * @public
+ * @package
  * @const
  */
 BlocklyDevTools.Analytics.WORKSPACE_CONTENTS = "Workspace contents";
@@ -71,21 +71,21 @@ BlocklyDevTools.Analytics.WORKSPACE_CONTENTS = "Workspace contents";
 /**
  * Format id for imported/exported JavaScript resources.
  *
- * @public
+ * @package
  * @const
  */
 BlocklyDevTools.Analytics.FORMAT_JS = "JavaScript";
 /**
  * Format id for imported/exported JSON resources.
  *
- * @public
+ * @package
  * @const
  */
 BlocklyDevTools.Analytics.FORMAT_JSON = "JSON";
 /**
  * Format id for imported/exported XML resources.
  *
- * @public
+ * @package
  * @const
  */
 BlocklyDevTools.Analytics.FORMAT_XML = "XML";
@@ -93,21 +93,21 @@ BlocklyDevTools.Analytics.FORMAT_XML = "XML";
 /**
  * Platform id for resources exported for use in Android projects.
  *
- * @public
+ * @package
  * @const
  */
 BlocklyDevTools.Analytics.PLATFORM_ANDROID = "Android";
 /**
  * Platform id for resources exported for use in iOS projects.
  *
- * @public
+ * @package
  * @const
  */
 BlocklyDevTools.Analytics.PLATFORM_IOS = "iOS";
 /**
  * Platform id for resources exported for use in web projects.
  *
- * @public
+ * @package
  * @const
  */
 BlocklyDevTools.Analytics.PLATFORM_WEB = "web";
@@ -115,7 +115,7 @@ BlocklyDevTools.Analytics.PLATFORM_WEB = "web";
 /**
  * Initializes the analytics framework, including noting that the page/app was
  * opened.
- * @public
+ * @package
  */
 BlocklyDevTools.Analytics.init = function() {
   // stub
@@ -125,7 +125,7 @@ BlocklyDevTools.Analytics.init = function() {
 /**
  * Event noting the user navigated to a specific view.
  *
- * @public
+ * @package
  * @param viewId {string} An identifier for the view state.
  */
 BlocklyDevTools.Analytics.onNavigateTo = function(viewId) {
@@ -138,7 +138,7 @@ BlocklyDevTools.Analytics.onNavigateTo = function(viewId) {
  * Event noting a project resource was saved. In the web Block Factory, this
  * means saved to localStorage.
  *
- * @public
+ * @package
  * @param typeId {string} An identifying string for the saved type.
  */
 BlocklyDevTools.Analytics.onSave = function(typeId) {
@@ -149,7 +149,7 @@ BlocklyDevTools.Analytics.onSave = function(typeId) {
 /**
  * Event noting the user attempted to import a resource file.
  *
- * @public
+ * @package
  * @param typeId {string} An identifying string for the imported type.
  * @param optMetadata {Object} Metadata about the import, such as format and
  *                             platform.
@@ -164,7 +164,7 @@ BlocklyDevTools.Analytics.onImport = function(typeId, optMetadata) {
  * Event noting a project resource was saved. In the web Block Factory, this
  * means downloaded to the user's system.
  *
- * @public
+ * @package
  * @param typeId {string} An identifying string for the exported object type.
  * @param optMetadata {Object} Metadata about the import, such as format and
  *                             platform.
@@ -179,7 +179,7 @@ BlocklyDevTools.Analytics.onExport = function(typeId, optMetadata) {
  * Event noting the system encountered an error. It should attempt to send
  * immediately.
  *
- * @public
+ * @package
  * @param e {!Object} A value representing or describing the error.
  */
 BlocklyDevTools.Analytics.onError = function(e) {
@@ -191,7 +191,7 @@ BlocklyDevTools.Analytics.onError = function(e) {
 /**
  * Event noting the user was notified with a warning.
  *
- * @public
+ * @package
  * @param msg {string} The warning message, or a description thereof.
  */
 BlocklyDevTools.Analytics.onWarning = function(msg) {
@@ -201,7 +201,7 @@ BlocklyDevTools.Analytics.onWarning = function(msg) {
 
 /**
  * Request the analytics framework to send any queued events to the server.
- * @public
+ * @package
  */
 BlocklyDevTools.Analytics.sendQueued = function() {
   // stub

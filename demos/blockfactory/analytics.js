@@ -29,21 +29,30 @@ BlocklyDevTools.Analytics.LOG_TO_CONSOLE = false;
 /**
  * An import/export type id for a library of BlockFactory's original block
  * save files (each a serialized workspace of block definition blocks).
+ * @public
  */
 BlocklyDevTools.Analytics.BLOCK_FACTORY_LIBRARY = "Block Factory library";
 /**
  * An import/export type id for a standard Blockly library of block
  * definitions.
+ * @public
  */
 BlocklyDevTools.Analytics.BLOCK_DEFINITIONS = "Block definitions";
 /**
  * An import/export type id for a code generation function, or a
  * boilerplate stub of the same.
+ * @public
  */
 BlocklyDevTools.Analytics.GENERATOR = "Generator";
-/** An import/export type id for a Blockly Toolbox. */
+/**
+ * An import/export type id for a Blockly Toolbox.
+ * @public
+ */
 BlocklyDevTools.Analytics.TOOLBOX = "Toolbox";
-/** An import/export type id for the serialized contents of a workspace. */
+/**
+ * An import/export type id for the serialized contents of a workspace.
+ * @public
+ */
 BlocklyDevTools.Analytics.WORKSPACE_CONTENTS = "Workspace contents";
 
 BlocklyDevTools.Analytics.FORMAT_JS = "JavaScript";

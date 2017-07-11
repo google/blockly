@@ -355,17 +355,11 @@ WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
   if (exportMode == WorkspaceFactoryController.MODE_TOOLBOX) {
     BlocklyDevTools.Analytics.onExport(
         BlocklyDevTools.Analytics.TOOLBOX,
-        {
-          format: BlocklyDevTools.Analytics.FORMAT_XML,
-          platform: BlocklyDevTools.Analytics.PLATFORM_WEB
-        });
+        { format: BlocklyDevTools.Analytics.FORMAT_XML });
   } else if (exportMode == WorkspaceFactoryController.MODE_PRELOAD) {
     BlocklyDevTools.Analytics.onExport(
         BlocklyDevTools.Analytics.WORKSPACE_CONTENTS,
-        {
-          format: BlocklyDevTools.Analytics.FORMAT_XML,
-          platform: BlocklyDevTools.Analytics.PLATFORM_WEB
-        });
+        { format: BlocklyDevTools.Analytics.FORMAT_XML });
   }
 };
 

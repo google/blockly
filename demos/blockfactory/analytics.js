@@ -24,7 +24,7 @@
 
 goog.provide('BlocklyDevTools.Analytics');
 
-BlocklyDevTools.Analytics.LOG_TO_CONSOLE = true;
+BlocklyDevTools.Analytics.LOG_TO_CONSOLE = false;
 
 /**
  * An import/export type id for a library of BlockFactory's original block

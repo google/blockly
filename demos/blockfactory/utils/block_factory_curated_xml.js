@@ -163,10 +163,10 @@ var convertXmlToCode = function(xml){
   }
   parameters = parameters.slice(0,-2);
   var code = 'var '+blockType+'_xml = function(data'+parameters+') {\n';
-  code += "  var block1 = newNode('block', {type: '" + blockType +"'});";
+  code += "  var block1 = FactoryUtils.newNode('block', {type: '" + blockType +"'});";
   code += `
-  if(!firstStatement(data.dst.current)){
-    let nextBlock = newNode('next');
+  if(!FactoryUtils.firstStatement(data.dst.current)){
+    let nextBlock = FactoryUtils.newNode('next');
     data.dst.current.append(nextBlock);
     data.dst.current = nextBlock;
   }
@@ -176,14 +176,14 @@ var convertXmlToCode = function(xml){
     let child = childList[i];
     switch(child[0]){
       case 'mutation':
-        code += "  block1.append(newNode('mutation', {"+ child[1] +":"+ child[1] +"}));\n";
+        code += "  block1.append(FactoryUtils.newNode('mutation', {"+ child[1] +":"+ child[1] +"}));\n";
         break;
       case 'field':
-        code += "  block1.append(newNode('field', {name: '"+ child[1] +"'}, "+ child[1] +"));\n";
+        code += "  block1.append(FactoryUtils.newNode('field', {name: '"+ child[1] +"'}, "+ child[1] +"));\n";
         break;
       case 'statement':
       case 'value':
-        code += "  block1.append(data.dst.current = newNode('"+ child[0] +"', {name: '"+ child[1] +"'}));\n";
+        code += "  block1.append(data.dst.current = FactoryUtils.newNode('"+ child[0] +"', {name: '"+ child[1] +"'}));\n";
         code += "  "+ child[1] +"(data);\n"+
                 "  data.dst.current = block1;\n";
         break;

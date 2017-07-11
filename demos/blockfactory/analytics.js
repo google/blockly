@@ -24,11 +24,40 @@
 
 goog.provide('BlocklyDevTools.Analytics');
 
-BlocklyDevTools.Analytics.LOG_TO_CONSOLE = false;
+BlocklyDevTools.Analytics.LOG_TO_CONSOLE = true;
+
+/**
+ * An import/export type id for a library of BlockFactory's original block
+ * save files (each a serialized workspace of block definition blocks).
+ */
+BlocklyDevTools.Analytics.BLOCK_FACTORY_LIBRARY = "Block Factory library";
+/**
+ * An import/export type id for a standard Blockly library of block
+ * definitions.
+ */
+BlocklyDevTools.Analytics.BLOCK_DEFINITIONS = "Block definitions";
+/**
+ * An import/export type id for a code generation function, or a
+ * boilerplate stub of the same.
+ */
+BlocklyDevTools.Analytics.GENERATOR = "Generator";
+/** An import/export type id for a Blockly Toolbox. */
+BlocklyDevTools.Analytics.TOOLBOX = "Toolbox";
+/** An import/export type id for the serialized contents of a workspace. */
+BlocklyDevTools.Analytics.WORKSPACE_CONTENTS = "Workspace contents";
+
+BlocklyDevTools.Analytics.FORMAT_JS = "JavaScript";
+BlocklyDevTools.Analytics.FORMAT_JSON = "JSON";
+BlocklyDevTools.Analytics.FORMAT_XML = "XML";
+
+BlocklyDevTools.Analytics.PLATFORM_WEB = "web";
+BlocklyDevTools.Analytics.PLATFORM_ANDROID = "Android";
+BlocklyDevTools.Analytics.PLATFORM_IOS = "iOS";
 
 /**
  * Initializes the analytics framework, including noting that the page/app was
  * opened.
+ * @public
  */
 BlocklyDevTools.Analytics.init = function() {
   // stub
@@ -37,6 +66,8 @@ BlocklyDevTools.Analytics.init = function() {
 
 /**
  * Event noting the user navigated to a specific view.
+ *
+ * @public
  * @param viewId {string} An identifier for the view state.
  */
 BlocklyDevTools.Analytics.onNavigateTo = function(viewId) {
@@ -47,6 +78,8 @@ BlocklyDevTools.Analytics.onNavigateTo = function(viewId) {
 /**
  * Event noting a project resource was saved. In the web Block Factory, this
  * means saved to localStorage.
+ *
+ * @public
  * @param typeId {string} An identifying string for the saved type.
  */
 BlocklyDevTools.Analytics.onSave = function(typeId) {
@@ -56,26 +89,38 @@ BlocklyDevTools.Analytics.onSave = function(typeId) {
 
 /**
  * Event noting the user attempted to import a resource file.
+ *
+ * @public
  * @param typeId {string} An identifying string for the imported type.
+ * @param optMetadata {Object} Metadata about the import, such as format and
+ *                             platform.
  */
-BlocklyDevTools.Analytics.onImport = function(typeId) {
+BlocklyDevTools.Analytics.onImport = function(typeId, optMetadata) {
   // stub
-  this.LOG_TO_CONSOLE && console.log('Analytics.onImport(' + typeId + ')');
+  this.LOG_TO_CONSOLE && console.log('Analytics.onImport(' + typeId +
+      (optMetadata ? '): ' + JSON.stringify(optMetadata) : ')'));
 };
 
 /**
  * Event noting a project resource was saved. In the web Block Factory, this
  * means downloaded to the user's system.
- * @param typeId {string} An identifying string for the exported type.
+ *
+ * @public
+ * @param typeId {string} An identifying string for the exported object type.
+ * @param optMetadata {Object} Metadata about the import, such as format and
+ *                             platform.
  */
-BlocklyDevTools.Analytics.onExport = function(typeId, optFormatId) {
+BlocklyDevTools.Analytics.onExport = function(typeId, optMetadata) {
   // stub
   this.LOG_TO_CONSOLE && console.log('Analytics.onExport(' + typeId +
-      (optFormatId ? ', ' + optFormatId : '') + ')');
+      (optMetadata ? '): ' + JSON.stringify(optMetadata) : ')'));
 };
 
 /**
- * Event noting the system encountered an error.
+ * Event noting the system encountered an error. It should attempt to send
+ * immediately.
+ *
+ * @public
  * @param e {!Object} A value representing or describing the error.
  */
 BlocklyDevTools.Analytics.onError = function(e) {
@@ -85,7 +130,9 @@ BlocklyDevTools.Analytics.onError = function(e) {
 
 /**
  * Event noting the user was notified with a warning.
- * @param msg {strong} The warning message, or a description thereof.
+ *
+ * @public
+ * @param msg {string} The warning message, or a description thereof.
  */
 BlocklyDevTools.Analytics.onWarning = function(msg) {
   // stub
@@ -94,6 +141,7 @@ BlocklyDevTools.Analytics.onWarning = function(msg) {
 
 /**
  * Request the analytics framework to send any queued events to the server.
+ * @public
  */
 BlocklyDevTools.Analytics.sendQueued = function() {
   // stub

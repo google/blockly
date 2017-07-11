@@ -353,9 +353,19 @@ WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
   this.view.createAndDownloadFile(fileName, data);
 
   if (exportMode == WorkspaceFactoryController.MODE_TOOLBOX) {
-    BlocklyDevTools.Analytics.onExport('Toolbox.xml');
+    BlocklyDevTools.Analytics.onExport(
+        BlocklyDevTools.Analytics.TOOLBOX,
+        {
+          format: BlocklyDevTools.Analytics.FORMAT_XML,
+          platform: BlocklyDevTools.Analytics.PLATFORM_WEB
+        });
   } else if (exportMode == WorkspaceFactoryController.MODE_PRELOAD) {
-    BlocklyDevTools.Analytics.onExport('WorkspaceContents.xml');
+    BlocklyDevTools.Analytics.onExport(
+        BlocklyDevTools.Analytics.WORKSPACE_CONTENTS,
+        {
+          format: BlocklyDevTools.Analytics.FORMAT_XML,
+          platform: BlocklyDevTools.Analytics.PLATFORM_WEB
+        });
   }
 };
 
@@ -375,7 +385,13 @@ WorkspaceFactoryController.prototype.exportInjectFile = function() {
   var printableOptions = this.generator.generateInjectString()
   var data = new Blob([printableOptions], {type: 'text/javascript'});
   this.view.createAndDownloadFile(fileName, data);
-  BlockFactory.onExport('StarterCode.js');
+
+  BlocklyDevTools.Analytics.onExport(
+      BlocklyDevTools.Analytics.STARTER_CODE,
+      {
+        format: BlocklyDevTools.Analytics.FORMAT_JS,
+        platform: BlocklyDevTools.Analytics.PLATFORM_WEB
+      });
 };
 
 /**

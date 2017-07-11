@@ -114,8 +114,13 @@ BlockExporterController.prototype.export = function() {
       // Download the file, using .js file ending for JSON or Javascript.
       FactoryUtils.createAndDownloadFile(
           blockDefs, blockDef_filename, 'javascript');
-      BlocklyDevTools.Analytics.onExport('BlockDefinitions' +
-        (definitionFormat == 'JSON' ? '.json' : '.js'));
+      BlocklyDevTools.Analytics.onExport(
+          BlocklyDevTools.Analytics.BLOCK_DEFINITIONS,
+          {
+            format: (definitionFormat == 'JSON' ?
+                BlocklyDevTools.Analytics.FORMAT_JSON :
+                BlocklyDevTools.Analytics.FORMAT_JS)
+          });
     }
   }
 
@@ -135,8 +140,10 @@ BlockExporterController.prototype.export = function() {
       // Download the file.
       FactoryUtils.createAndDownloadFile(
           genStubs, generatorStub_filename, fileType);
-      BlocklyDevTools.Analytics.onExport('Generator' +
-          (fileType == 'javascript' ? '.js' : ''));
+      BlocklyDevTools.Analytics.onExport(
+          BlocklyDevTools.Analytics.GENERATOR,
+          (fileType == 'javascript' ?
+              { format: BlocklyDevTools.Analytics.FORMAT_JS } : undefined));
     }
   }
 

@@ -86,7 +86,9 @@ AppController.prototype.importBlockLibraryFromFile = function() {
   var files = document.getElementById('files');
   // If the file list is empty, the user likely canceled in the dialog.
   if (files.files.length > 0) {
-    BlocklyDevTools.Analytics.onImport('BlockFactoryLibrary.xml');
+    BlocklyDevTools.Analytics.onImport(
+        BlocklyDevTools.Analytics.BLOCK_FACTORY_LIBRARY,
+        { format: BlocklyDevTools.Analytics.FORMAT_XML });
 
     // The input tag doesn't have the "multiple" attribute
     // so the user can only choose 1 file.
@@ -140,7 +142,9 @@ AppController.prototype.exportBlockLibraryToFile = function() {
   // Download file if all necessary parameters are provided.
   if (filename) {
     FactoryUtils.createAndDownloadFile(blockLibText, filename, 'xml');
-    BlocklyDevTools.Analytics.onExport('BlockFactoryLibrary.xml');
+    BlocklyDevTools.Analytics.onExport(
+        BlocklyDevTools.Analytics.BLOCK_FACTORY_LIBRARY,
+        { format: BlocklyDevTools.Analytics.FORMAT_XML });
   } else {
     var msg = 'Could not export Block Library without file name under which ' +
       'to save library.';

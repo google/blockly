@@ -24,44 +24,93 @@
 
 goog.provide('BlocklyDevTools.Analytics');
 
-BlocklyDevTools.Analytics.LOG_TO_CONSOLE = false;
+/**
+ * Whether these stub methods should log analytics calls to the console.
+ * @private
+ * @const
+ */
+BlocklyDevTools.Analytics.LOG_TO_CONSOLE_ = false;
 
 /**
  * An import/export type id for a library of BlockFactory's original block
  * save files (each a serialized workspace of block definition blocks).
  * @public
+ * @const
  */
 BlocklyDevTools.Analytics.BLOCK_FACTORY_LIBRARY = "Block Factory library";
 /**
  * An import/export type id for a standard Blockly library of block
  * definitions.
  * @public
+ * @const
  */
 BlocklyDevTools.Analytics.BLOCK_DEFINITIONS = "Block definitions";
 /**
  * An import/export type id for a code generation function, or a
  * boilerplate stub of the same.
+ *
  * @public
+ * @const
  */
 BlocklyDevTools.Analytics.GENERATOR = "Generator";
 /**
  * An import/export type id for a Blockly Toolbox.
+ *
  * @public
+ * @const
  */
 BlocklyDevTools.Analytics.TOOLBOX = "Toolbox";
 /**
  * An import/export type id for the serialized contents of a workspace.
+ *
  * @public
+ * @const
  */
 BlocklyDevTools.Analytics.WORKSPACE_CONTENTS = "Workspace contents";
 
+/**
+ * Format id for imported/exported JavaScript resources.
+ *
+ * @public
+ * @const
+ */
 BlocklyDevTools.Analytics.FORMAT_JS = "JavaScript";
+/**
+ * Format id for imported/exported JSON resources.
+ *
+ * @public
+ * @const
+ */
 BlocklyDevTools.Analytics.FORMAT_JSON = "JSON";
+/**
+ * Format id for imported/exported XML resources.
+ *
+ * @public
+ * @const
+ */
 BlocklyDevTools.Analytics.FORMAT_XML = "XML";
 
-BlocklyDevTools.Analytics.PLATFORM_WEB = "web";
+/**
+ * Platform id for resources exported for use in Android projects.
+ *
+ * @public
+ * @const
+ */
 BlocklyDevTools.Analytics.PLATFORM_ANDROID = "Android";
+/**
+ * Platform id for resources exported for use in iOS projects.
+ *
+ * @public
+ * @const
+ */
 BlocklyDevTools.Analytics.PLATFORM_IOS = "iOS";
+/**
+ * Platform id for resources exported for use in web projects.
+ *
+ * @public
+ * @const
+ */
+BlocklyDevTools.Analytics.PLATFORM_WEB = "web";
 
 /**
  * Initializes the analytics framework, including noting that the page/app was
@@ -70,7 +119,7 @@ BlocklyDevTools.Analytics.PLATFORM_IOS = "iOS";
  */
 BlocklyDevTools.Analytics.init = function() {
   // stub
-  this.LOG_TO_CONSOLE && console.log('Analytics.init');
+  this.LOG_TO_CONSOLE_ && console.log('Analytics.init');
 };
 
 /**
@@ -81,7 +130,8 @@ BlocklyDevTools.Analytics.init = function() {
  */
 BlocklyDevTools.Analytics.onNavigateTo = function(viewId) {
   // stub
-  this.LOG_TO_CONSOLE && console.log('Analytics.onNavigateTo(' + viewId + ')');
+  this.LOG_TO_CONSOLE_ &&
+      console.log('Analytics.onNavigateTo(' + viewId + ')');
 };
 
 /**
@@ -93,7 +143,7 @@ BlocklyDevTools.Analytics.onNavigateTo = function(viewId) {
  */
 BlocklyDevTools.Analytics.onSave = function(typeId) {
   // stub
-  this.LOG_TO_CONSOLE && console.log('Analytics.onSave(' + typeId + ')');
+  this.LOG_TO_CONSOLE_ && console.log('Analytics.onSave(' + typeId + ')');
 };
 
 /**
@@ -106,7 +156,7 @@ BlocklyDevTools.Analytics.onSave = function(typeId) {
  */
 BlocklyDevTools.Analytics.onImport = function(typeId, optMetadata) {
   // stub
-  this.LOG_TO_CONSOLE && console.log('Analytics.onImport(' + typeId +
+  this.LOG_TO_CONSOLE_ && console.log('Analytics.onImport(' + typeId +
       (optMetadata ? '): ' + JSON.stringify(optMetadata) : ')'));
 };
 
@@ -121,7 +171,7 @@ BlocklyDevTools.Analytics.onImport = function(typeId, optMetadata) {
  */
 BlocklyDevTools.Analytics.onExport = function(typeId, optMetadata) {
   // stub
-  this.LOG_TO_CONSOLE && console.log('Analytics.onExport(' + typeId +
+  this.LOG_TO_CONSOLE_ && console.log('Analytics.onExport(' + typeId +
       (optMetadata ? '): ' + JSON.stringify(optMetadata) : ')'));
 };
 
@@ -134,7 +184,8 @@ BlocklyDevTools.Analytics.onExport = function(typeId, optMetadata) {
  */
 BlocklyDevTools.Analytics.onError = function(e) {
   // stub
-  this.LOG_TO_CONSOLE && console.log('Analytics.onError("' + e.toString() + '")');
+  this.LOG_TO_CONSOLE_ &&
+      console.log('Analytics.onError("' + e.toString() + '")');
 };
 
 /**
@@ -145,7 +196,7 @@ BlocklyDevTools.Analytics.onError = function(e) {
  */
 BlocklyDevTools.Analytics.onWarning = function(msg) {
   // stub
-  this.LOG_TO_CONSOLE && console.log('Analytics.onWarning("' + msg + '")');
+  this.LOG_TO_CONSOLE_ && console.log('Analytics.onWarning("' + msg + '")');
 };
 
 /**
@@ -154,6 +205,6 @@ BlocklyDevTools.Analytics.onWarning = function(msg) {
  */
 BlocklyDevTools.Analytics.sendQueued = function() {
   // stub
-  this.LOG_TO_CONSOLE && console.log('Analytics.sendQueued');
+  this.LOG_TO_CONSOLE_ && console.log('Analytics.sendQueued');
 };
 

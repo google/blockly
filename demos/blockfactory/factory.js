@@ -119,12 +119,12 @@ BlockFactory.updateLanguage = function() {
     blockType = BlockFactory.UNNAMED;
   }
   
-  if(!BlockFactory.updateBlocksFlag){  
+  if(!BlockFactory.updateBlocksFlag) {  
     var format = document.getElementById('format').value;
     var code = FactoryUtils.getBlockDefinition(blockType, rootBlock, format,
         BlockFactory.mainWorkspace);
     FactoryUtils.injectCode(code, 'languagePre');
-    if(!BlockFactory.updateBlocksFlag2){
+    if(!BlockFactory.updateBlocksFlag2) {
       code = languagePre.textContent.trim();
       languageTA.value = code;
     }
@@ -289,3 +289,12 @@ BlockFactory.isStarterBlock = function() {
       // The starter block has automatic inputs.
       rootBlock.getFieldValue('INLINE') != 'AUTO');
 };
+
+/**
+ * Update blocks after manually editing the js or json on the text area.
+ */
+BlockFactory.manualEdit = function() {
+  BlockFactory.updateBlocksFlag = true; // Avoid infinite update loop
+  BlockFactory.updateBlocksFlag2 = true;
+  BlockFactory.updateLanguage();
+}

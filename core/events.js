@@ -174,33 +174,33 @@ Blockly.Events.filter = function(queueIn, forward) {
     // Undo is merged in reverse order.
     queue.reverse();
   }
-  var mergedQueue = [],
-      hash = {},
-      i, event;
+  var mergedQueue = [];
+  var hash = Object.create(null);
   // Merge duplicates.
-  for (i = 0; event = queue[i]; i++) {
+  for (var i = 0, event; event = queue[i]; i++) {
     if (!event.isNull()) {
       var key = [event.type, event.blockId, event.workspaceId].join(' ');
-      if (hash[key] === undefined) {
+      var lastEvent = hash[key];
+      if (!lastEvent) {
         hash[key] = event;
         mergedQueue.push(event);
       } else if (event.type == Blockly.Events.MOVE) {
         // Merge move events.
-        hash[key].newParentId = event.newParentId;
-        hash[key].newInputName = event.newInputName;
-        hash[key].newCoordinate = event.newCoordinate;
+        lastEvent.newParentId = event.newParentId;
+        lastEvent.newInputName = event.newInputName;
+        lastEvent.newCoordinate = event.newCoordinate;
       } else if (event.type == Blockly.Events.CHANGE &&
-          event.element == hash[key].element &&
-          event.name == hash[key].name) {
+          event.element == lastEvent.element &&
+          event.name == lastEvent.name) {
         // Merge change events.
-        hash[key].newValue = event.newValue;
+        lastEvent.newValue = event.newValue;
       } else if (event.type == Blockly.Events.UI &&
-          hash[key].element == 'click' &&
-          (event.element == 'commentOpen' ||
-           event.element == 'mutatorOpen' ||
-           event.element == 'warningOpen')) {
-        // Merge UI events.
-        hash[key].newValue = event.newValue;
+          event.element == 'click' &&
+          (lastEvent.element == 'commentOpen' ||
+           lastEvent.element == 'mutatorOpen' ||
+           lastEvent.element == 'warningOpen')) {
+        // Merge click events.
+        lastEvent.newValue = event.newValue;
       }
     }
   }
@@ -211,7 +211,7 @@ Blockly.Events.filter = function(queueIn, forward) {
   }
   // Move mutation events to the top of the queue.
   // Intentionally skip first event.
-  for (i = 1; event = queue[i]; i++) {
+  for (var i = 1, event; event = queue[i]; i++) {
     if (event.type == Blockly.Events.CHANGE &&
         event.element == 'mutation') {
       queue.unshift(queue.splice(i, 1)[0]);

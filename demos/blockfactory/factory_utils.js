@@ -1048,7 +1048,7 @@ FactoryUtils.firstStatement = function(block) {
  * @param {string} FIELDNAME Name of the field.
  * @return {number} Returns 0.
  */
-FactoryUtils.field_dropdown_xml2 = function(data, options, FIELDNAME) {
+FactoryUtils.field_dropdown = function(data, options, FIELDNAME) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_dropdown'});
   var OPTIONS = '[';
   
@@ -1090,7 +1090,7 @@ FactoryUtils.field_dropdown_xml2 = function(data, options, FIELDNAME) {
  * @param {Array} types List of types of this type group.
  * @return {number} Returns 0.
  */
-FactoryUtils.type_group_xml2 = function(data, types) {
+FactoryUtils.type_group = function(data, types) {
   var block1 = FactoryUtils.newNode('block', {type: 'type_group'});
 
   if(!FactoryUtils.firstStatement(data.dst.current)) {
@@ -1121,22 +1121,22 @@ FactoryUtils.type_group_xml2 = function(data, types) {
 FactoryUtils.parseType = function(data, type) {
   switch(type) {
     case "Null":
-      type_null_xml(data);
+      BlockConstructors.type_null(data);
       break;
     case "Boolean":
-      type_boolean_xml(data);
+      BlockConstructors.type_boolean(data);
       break;
     case "Number":
-      type_number_xml(data);
+      BlockConstructors.type_number(data);
       break;
     case "String":
-      type_string_xml(data);
+      BlockConstructors.type_string(data);
       break;
     case "Array":
-      type_list_xml(data);
+      BlockConstructors.type_list(data);
       break;
     default:
-      type_other_xml(data, type);
+      BlockConstructors.type_other(data, type);
       break;
   }
 };
@@ -1152,7 +1152,7 @@ FactoryUtils.parseTypes = function(data) {
     if(curr.check_.length === 1) {
       FactoryUtils.parseType(data, curr.check_[0]);
     } else if(curr.check_.length > 1 ) {
-      type_group_xml2(data, curr.check_);
+      BlockUtils.type_group(data, curr.check_);
     }
   }
 };
@@ -1166,23 +1166,23 @@ FactoryUtils.parseFields = function(data) {
   for(let i=0; i<data.src.current.length; i++) {
     let field = data.src.current[i];
     if(field instanceof Blockly.FieldLabel) {
-      field_static_xml(data, field.text_);
+      BlockConstructors.field_static(data, field.text_);
     } else if(field instanceof Blockly.FieldTextInput) {
-      field_input_xml(data, field.text_, field.name);
+      BlockConstructors.field_input(data, field.text_, field.name);
     } else if(field instanceof Blockly.FieldNumber) {
-      field_number_xml(data, field.text_, field.name, field.min_, field.max_, field.presicion_);
+      BlockConstructors.field_number(data, field.text_, field.name, field.min_, field.max_, field.presicion_);
     } else if(field instanceof Blockly.FieldAngle) {
-      field_angle_xml(data, field.text_, field.name);
+      BlockConstructors.field_angle(data, field.text_, field.name);
     } else if(field instanceof Blockly.FieldDropdown) {
-      field_dropdown_xml2(data, field.menuGenerator_, field.name);
+      BlockConstructors.field_dropdown(data, field.menuGenerator_, field.name);
     } else if(field instanceof Blockly.FieldCheckbox) {
-      field_checkbox_xml(data, field.state_ , field.name);
+      BlockConstructors.field_checkbox(data, field.state_ , field.name);
     } else if(field instanceof Blockly.FieldColour) {
-      field_colour_xml(data, field.colour_ , field.name);
+      BlockConstructors.field_colour(data, field.colour_ , field.name);
     } else if(field instanceof Blockly.FieldVariable) {
-      field_variable_xml(data, field.text_, field.name);
+      BlockConstructors.field_variable(data, field.text_, field.name);
     } else if(field instanceof Blockly.FieldImage) {
-      field_image_xml(data, field.src_, field.width_, field.height_, field.text_);
+      BlockConstructors.field_image(data, field.src_, field.width_, field.height_, field.text_);
     }
   }
 };
@@ -1205,7 +1205,7 @@ FactoryUtils.parseInputs = function(data) {
     }
     switch(input.type) {
       case Blockly.INPUT_VALUE:
-        input_value_xml(data,
+        BlockConstructors.input_value(data,
           input.name, // NAME
           align,
           function(data) { 
@@ -1222,7 +1222,7 @@ FactoryUtils.parseInputs = function(data) {
           }); // TYPE
         break;
       case Blockly.NEXT_STATEMENT:
-        input_statement_xml(data,
+        BlockConstructors.input_statement(data,
           input.name, // NAME
           align,
           function(data) { 
@@ -1239,7 +1239,7 @@ FactoryUtils.parseInputs = function(data) {
           }); // TYPE
         break;
       case Blockly.DUMMY_INPUT:
-        input_dummy_xml(data,
+        BlockConstructors.input_dummy(data,
           align,
           function(data) { 
             let src = data.src.current;
@@ -1285,7 +1285,7 @@ FactoryUtils.buildBlockFactoryDef = function(block) {
       }
     }
   }
-  factory_base_xml(data, connections,
+  BlockConstructors.factory_base(data, connections,
     block.type, //NAME
     inline, //INLINE
     connections, //CONNECTIONS
@@ -1295,8 +1295,8 @@ FactoryUtils.buildBlockFactoryDef = function(block) {
       FactoryUtils.parseInputs(data);
       data.src.current = src;
     }, //INPUTS
-    function(data) {text_xml(data, data.src.current.tooltip);}, //TOOLTIP
-    function(data) {text_xml(data, data.src.current.helpUrl);}, //HELPURL
-    function(data) {colour_hue_xml(data, data.src.current.colour_, colour_hue);})
+    function(data) {BlockConstructors.text(data, data.src.current.tooltip);}, //TOOLTIP
+    function(data) {BlockConstructors.text(data, data.src.current.helpUrl);}, //HELPURL
+    function(data) {BlockConstructors.colour_hue(data, data.src.current.colour_, colour_hue);})
   return data.dst.root;
 };

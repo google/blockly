@@ -25,7 +25,7 @@
  * generator stub. Uses the Block Factory namespace. Depends on the FactoryUtils
  * for its code generation functions.
  *
- * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach)
+ * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach), JC-Orozco (Juan Carlos Orozco)
  */
 'use strict';
 
@@ -291,7 +291,7 @@ BlockFactory.isStarterBlock = function() {
 };
 
 /**
- * Update blocks after manually editing the js or json on the text area.
+ * Updates blocks from the manually edited js or json from their text area.
  */
 BlockFactory.manualEdit = function() {
   BlockFactory.updateBlocksFlag = true; // Avoid infinite update loop

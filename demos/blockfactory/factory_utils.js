@@ -33,6 +33,7 @@
  */
 goog.provide('FactoryUtils');
 
+goog.require('BlockConstructors');
 
 /**
  * Get block definition code for the current block.

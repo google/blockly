@@ -9,6 +9,7 @@
   <script src="../../msg/js/en.js"></script>
   <script src="../../blocks_compressed.js"></script>
   <script src="../../../closure-library/closure/goog/base.js"></script>
+  <script src="analytics.js"></script>
   <script src="./utils/block_factory_xml_build_lib.js"></script>
   <script src="factory_utils.js"></script>
   <script src="workspacefactory/wfactory_model.js"></script>
@@ -34,6 +35,8 @@
   <script>
     var blocklyFactory;
     var init = function() {
+      BlocklyDevTools.Analytics.init();
+
       blocklyFactory = new AppController();
       blocklyFactory.init();
       window.addEventListener('beforeunload', blocklyFactory.confirmLeavePage);

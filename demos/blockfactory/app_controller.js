@@ -562,13 +562,6 @@ AppController.prototype.addBlockFactoryEventListeners = function() {
 
   document.getElementById('direction')
       .addEventListener('change', BlockFactory.updatePreview);
-//   document.getElementById('languageTA')
-//      .addEventListener('change', BlockFactory.updatePreview);
-//   document.getElementById('languageTA')
-//      .addEventListener('keyup', BlockFactory.updatePreview);
-
-  //document.getElementById('languageTA')
-  //    .addEventListener('change', BlockFactory.manualEdit);
   document.getElementById('languageTA')
       .addEventListener('keyup', BlockFactory.manualEdit);
 

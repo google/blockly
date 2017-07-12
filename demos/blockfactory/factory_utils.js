@@ -1009,6 +1009,13 @@ FactoryUtils.getHelpUrlFromRootBlock_ = function(rootBlock) {
   return '';
 };
 
+/**
+ * Helper function to create a new DOM node
+ * @param {!string} name New node name.
+ * @param {Map} name New node attribute map.
+ * @param {string} text New node text.
+ * @return {Element} The newly created node.
+ */
 FactoryUtils.newNode = function(name, attrs, text) {
   var block1;
   if(name === 'block') {
@@ -1023,11 +1030,24 @@ FactoryUtils.newNode = function(name, attrs, text) {
   return block1;
 };
 
+/**
+ * Checks wether a given block is the first statement or not. Uses som adhoc heuristics to determine this.
+ * @param {!Element} block A block Element to test.
+ * @return {boolean} Returns true if this is the first statement.
+ */
 FactoryUtils.firstStatement = function(block) {
   return (block.tagName === 'STATEMENT' || block.tagName === 'XML' || block.tagName === 'VALUE');
 };
 
-// Manually edited function since the block mutated fields can not be detected by the generator. 
+/**
+ * Creates a dropdown field Element
+ * This is a manually edited function since the block mutated fields can not
+ * be detected by the generator.
+ * @param {!data} data Data structure that stores source and destination nodes with their corresponding current nodes.
+ * @param {Array} options List of options for the dropdown field.
+ * @param {string} FIELDNAME Name of the field.
+ * @return {number} Returns 0.
+ */
 FactoryUtils.field_dropdown_xml2 = function(data, options, FIELDNAME) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_dropdown'});
   var OPTIONS = '[';
@@ -1062,7 +1082,14 @@ FactoryUtils.field_dropdown_xml2 = function(data, options, FIELDNAME) {
   return 0;
 };
 
-// Manually edited function since the block mutated fields can not be detected by the generator. 
+/**
+ * Creates a group type Element
+ * This is a manually edited function since the block mutated fields can not
+ * be detected by the generator.
+ * @param {!data} data Data structure that stores source and destination nodes with their corresponding current nodes.
+ * @param {Array} types List of types of this type group.
+ * @return {number} Returns 0.
+ */
 FactoryUtils.type_group_xml2 = function(data, types) {
   var block1 = FactoryUtils.newNode('block', {type: 'type_group'});
 
@@ -1085,6 +1112,12 @@ FactoryUtils.type_group_xml2 = function(data, types) {
   return 0;
 };
 
+/**
+ * Creates a type Element
+ * @param {!data} data Data structure that stores source and destination nodes with their corresponding current nodes.
+ * @param {string} type Type name of element to be created.
+ * @return {number} Returns 0.
+ */
 FactoryUtils.parseType = function(data, type) {
   switch(type) {
     case "Null":
@@ -1108,6 +1141,11 @@ FactoryUtils.parseType = function(data, type) {
   }
 };
 
+/**
+ * Parses the data current src node to create the corresponding type elements.
+ * @param {!data} data Data structure that stores source and destination nodes with their corresponding current nodes.
+ * @return {number} Returns 0.
+ */
 FactoryUtils.parseTypes = function(data) {
   let curr = data.src.current;
   if(curr.check_) {
@@ -1119,6 +1157,11 @@ FactoryUtils.parseTypes = function(data) {
   }
 };
 
+/**
+ * Parses the data current src node to create the corresponding field elements.
+ * @param {!data} data Data structure that stores source and destination nodes with their corresponding current nodes.
+ * @return {number} Returns 0.
+ */
 FactoryUtils.parseFields = function(data) {
   for(let i=0; i<data.src.current.length; i++) {
     let field = data.src.current[i];
@@ -1144,6 +1187,11 @@ FactoryUtils.parseFields = function(data) {
   }
 };
 
+/**
+ * Parses the data current src node to create the corresponding input elements.
+ * @param {!data} data Data structure that stores source and destination nodes with their corresponding current nodes.
+ * @return {number} Returns 0.
+ */
 FactoryUtils.parseInputs = function(data) {
   for(let i=0; i<data.src.current.length; i++) {
     let input = data.src.current[i];
@@ -1204,6 +1252,11 @@ FactoryUtils.parseInputs = function(data) {
   }
 };
 
+/**
+ * Builds the block description of the given block.
+ * @param {!block} block Element that will be assigned as the data source element to generate the description blocks.
+ * @return {Element} Returns the data destination root element.
+ */
 FactoryUtils.buildBlockFactoryDef = function(block) {
   var data = {src: {root: block, current: block},
               dst: {}};
@@ -1245,6 +1298,5 @@ FactoryUtils.buildBlockFactoryDef = function(block) {
     function(data) {text_xml(data, data.src.current.tooltip);}, //TOOLTIP
     function(data) {text_xml(data, data.src.current.helpUrl);}, //HELPURL
     function(data) {colour_hue_xml(data, data.src.current.colour_, colour_hue);})
-  console.log(data.dst.root);
   return data.dst.root;
 };

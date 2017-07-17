@@ -103,7 +103,7 @@ Blockly.JavaScript['robot_perception_object_attributes'] = function(block) {
   } else if (dropdown_attribute === 'HEIGHT') {
     code = value_object + '.scale.z';
   } else {
-    code = 'null'; 
+    code = 'null';
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
   }
 
@@ -226,6 +226,11 @@ Blockly.JavaScript['robot_manipulation_run_pbd_action'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
+Blockly.JavaScript['robot_manipulation_set_torso'] = function(block) {
+  var value_height = Blockly.JavaScript.valueToCode(block, 'HEIGHT', Blockly.JavaScript.ORDER_ATOMIC);
+  var code = 'robot.setTorso(' + value_height + ');\n';
+  return code;
+};
 
 Blockly.JavaScript['robot_wait_for_seconds'] = function(block) {
   var value_seconds = Blockly.JavaScript.valueToCode(block, 'SECONDS', Blockly.JavaScript.ORDER_NONE) || 0;

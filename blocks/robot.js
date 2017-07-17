@@ -555,7 +555,7 @@ Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
     } else {
       this.setWarningText(null);
     }
-    
+
     for (var i=0; i<this.landmarks_.length; i++) {
       this.appendValueInput("LANDMARK" + i)
           .setCheck("String")
@@ -685,6 +685,19 @@ Blockly.Blocks['robot_manipulation_is_gripper_open'] = {
     this.setOutput(true, "Boolean");
     this.setColour(20);
     this.setTooltip('Checks if the gripper is open or closed.');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['robot_manipulation_set_torso'] = {
+  init: function() {
+    this.appendValueInput("HEIGHT")
+      .setCheck("Number")
+      .appendField("set torso height");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('Enter height between 0 and 0.4 meters');
     this.setHelpUrl('');
   }
 };

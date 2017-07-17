@@ -34,7 +34,8 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
   // a local parameter.
   var globals = [];
   var varName;
-  var variables = workspace.getAllVariables();
+  var workspace = block.workspace;
+  var variables = workspace.getAllVariables() || [];
   for (var i = 0, variable; variable = variables[i]; i++) {
     varName = variable.name;
     if (block.arguments_.indexOf(varName) == -1) {

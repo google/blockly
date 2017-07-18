@@ -42,7 +42,7 @@ goog.require('Blockly.Workspace');
  * when running generators.
  * @deprecated Use Blockly.PROCEDURE_CATEGORY_NAME
  */
-Blockly.Procedures.NAME_TYPE = Blockly.PROCEDURE_CATEOGORY_NAME;
+Blockly.Procedures.NAME_TYPE = Blockly.PROCEDURE_CATEGORY_NAME;
 
 /**
  * Find all user-created procedure definitions in a workspace.

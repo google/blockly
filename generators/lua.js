@@ -94,9 +94,8 @@ Blockly.Lua.ORDER_NONE = 99;
 
 /**
  * Initialise the database of variable names.
- * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
-Blockly.Lua.init = function(workspace) {
+Blockly.Lua.init = function() {
   // Create a dictionary of definitions to be printed before the code.
   Blockly.Lua.definitions_ = Object.create(null);
   // Create a dictionary mapping desired function names in definitions_

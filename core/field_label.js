@@ -60,10 +60,10 @@ Blockly.FieldLabel.prototype.init = function() {
     return;
   }
   // Build the DOM.
-  this.textElement_ = Blockly.createSvgElement('text',
+  this.textElement_ = Blockly.utils.createSvgElement('text',
       {'class': 'blocklyText', 'y': this.size_.height - 5}, null);
   if (this.class_) {
-    Blockly.addClass_(this.textElement_, this.class_);
+    Blockly.utils.addClass(this.textElement_, this.class_);
   }
   if (!this.visible_) {
     this.textElement_.style.display = 'none';
@@ -74,7 +74,7 @@ Blockly.FieldLabel.prototype.init = function() {
   this.textElement_.tooltip = this.sourceBlock_;
   Blockly.Tooltip.bindMouseEvents(this.textElement_);
   // Force a render.
-  this.updateTextNode_();
+  this.render_();
 };
 
 /**

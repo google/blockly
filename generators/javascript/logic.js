@@ -32,22 +32,25 @@ goog.require('Blockly.JavaScript');
 Blockly.JavaScript['controls_if'] = function(block) {
   // If/elseif/else condition.
   var n = 0;
-  var argument = Blockly.JavaScript.valueToCode(block, 'IF' + n,
+  var code = '', branchCode, conditionCode;
+  do {
+    conditionCode = Blockly.JavaScript.valueToCode(block, 'IF' + n,
       Blockly.JavaScript.ORDER_NONE) || 'false';
-  var branch = Blockly.JavaScript.statementToCode(block, 'DO' + n);
-  var code = 'if (' + argument + ') {\n' + branch + '}';
-  for (n = 1; n <= block.elseifCount_; n++) {
-    argument = Blockly.JavaScript.valueToCode(block, 'IF' + n,
-        Blockly.JavaScript.ORDER_NONE) || 'false';
-    branch = Blockly.JavaScript.statementToCode(block, 'DO' + n);
-    code += ' else if (' + argument + ') {\n' + branch + '}';
-  }
-  if (block.elseCount_) {
-    branch = Blockly.JavaScript.statementToCode(block, 'ELSE');
-    code += ' else {\n' + branch + '}';
+    branchCode = Blockly.JavaScript.statementToCode(block, 'DO' + n);
+    code += (n > 0 ? ' else ' : '') +
+        'if (' + conditionCode + ') {\n' + branchCode + '}';
+
+    ++n;
+  } while (block.getInput('IF' + n));
+
+  if (block.getInput('ELSE')) {
+    branchCode = Blockly.JavaScript.statementToCode(block, 'ELSE');
+    code += ' else {\n' + branchCode + '}';
   }
   return code + '\n';
 };
+
+Blockly.JavaScript['controls_ifelse'] = Blockly.JavaScript['controls_if'];
 
 Blockly.JavaScript['logic_compare'] = function(block) {
   // Comparison operator.

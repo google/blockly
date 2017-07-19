@@ -18,57 +18,27 @@
  */
 
 /**
- * @fileoverview Angular2 utility service for multiple components. All
- * functions in this service should be stateless, since this is a singleton
- * service that is used for the entire application.
+ * @fileoverview Angular2 utility service for multiple components. This is a
+ * singleton service that is used for the entire application. In general, it
+ * should only be used as a stateless adapter for native Blockly functions.
  *
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
-var blocklyApp = {};
+goog.provide('blocklyApp.UtilsService');
 
-blocklyApp.UtilsService = ng.core
-  .Class({
-    constructor: function() {},
-    generateUniqueId: function() {
-      return 'blockly-' + Blockly.genUid();
-    },
-    generateIds: function(elementsList) {
-      var idMap = {};
-      for (var i = 0; i < elementsList.length; i++){
-        idMap[elementsList[i]] = this.generateUniqueId();
-      }
-      return idMap;
-    },
-    generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
-      var attrValue = mainLabel + (secondLabel ? ' ' + secondLabel : '');
-      if (isDisabled) {
-        attrValue += ' blockly-disabled';
-      }
-      return attrValue;
-    },
-    getInputTypeLabel: function(connection) {
-      // Returns the input type name, or 'any' if any official input type
-      // qualifies.
-      if (connection.check_) {
-        return connection.check_.join(', ');
-      } else {
-        return Blockly.Msg.ANY;
-      }
-    },
-    getBlockTypeLabel: function(inputBlock) {
-      if (inputBlock.type == Blockly.NEXT_STATEMENT) {
-        return Blockly.Msg.STATEMENT;
-      } else {
-        return Blockly.Msg.VALUE;
-      }
-    },
-    getBlockDescription: function(block) {
-      // We use 'BLANK' instead of the default '?' so that the string is read
-      // out. (By default, screen readers tend to ignore punctuation.)
-      return block.toString(undefined, 'BLANK');
-    },
-    isWorkspaceEmpty: function() {
-      return !blocklyApp.workspace.topBlocks_.length;
-    }
-  });
+
+blocklyApp.ID_FOR_EMPTY_WORKSPACE_BTN = 'blocklyEmptyWorkspaceBtn';
+blocklyApp.BLOCK_ROOT_ID_SUFFIX = '-blockRoot';
+
+blocklyApp.UtilsService = ng.core.Class({
+  constructor: [function() {}],
+  getBlockDescription: function(block) {
+    // We use 'BLANK' instead of the default '?' so that the string is read
+    // out. (By default, screen readers tend to ignore punctuation.)
+    return block.toString(undefined, 'BLANK');
+  },
+  isWorkspaceEmpty: function() {
+    return !blocklyApp.workspace.topBlocks_.length;
+  }
+});

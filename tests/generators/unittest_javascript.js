@@ -166,7 +166,7 @@ Blockly.JavaScript['unittest_adjustindex'] = function(block) {
   var index = Blockly.JavaScript.valueToCode(block, 'INDEX',
       Blockly.JavaScript.ORDER_ADDITION) || '0';
   // Adjust index if using one-based indexing.
-  if (Blockly.JavaScript.ONE_BASED_INDEXING) {
+  if (block.workspace.options.oneBasedIndex) {
     if (Blockly.isNumber(index)) {
       // If the index is a naked number, adjust it right now.
       return [parseFloat(index) + 1, Blockly.JavaScript.ORDER_ATOMIC];

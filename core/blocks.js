@@ -19,15 +19,19 @@
  */
 
 /**
- * @fileoverview Empty name space for the Blocks singleton.
+ * @fileoverview A mapping of block type names to block prototype objects.
  * @author spertus@google.com (Ellen Spertus)
  */
 'use strict';
 
+/**
+ * A mapping of block type names to block prototype objects.
+ * @name Blockly.Blocks
+ */
 goog.provide('Blockly.Blocks');
 
-/**
- * Allow for switching between one and zero based indexing for lists and text,
- * one based by default.
+/*
+ * A mapping of block type names to block prototype objects.
+ * @type {!Object<string,Object>}
  */
-Blockly.Blocks.ONE_BASED_INDEXING = true;
+Blockly.Blocks = new Object(null);

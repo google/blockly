@@ -32,15 +32,18 @@ goog.require('goog.math.Coordinate');
 
 /**
  * Class for a button in the flyout.
- * @param {!Blockly.Workspace} workspace The workspace in which to place this
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to place this
  *     button.
- * @param {!Blockly.Workspace} targetWorkspace The flyout's target workspace.
- * @param {string} text The text to display on the button.
+ * @param {!Blockly.WorkspaceSvg} targetWorkspace The flyout's target workspace.
+ * @param {!Element} xml The XML specifying the label/button.
+ * @param {boolean} isLabel Whether this button should be styled as a label.
  * @constructor
  */
-Blockly.FlyoutButton = function(workspace, targetWorkspace, text) {
+Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
+  // Labels behave the same as buttons, but are styled differently.
+
   /**
-   * @type {!Blockly.Workspace}
+   * @type {!Blockly.WorkspaceSvg}
    * @private
    */
   this.workspace_ = workspace;
@@ -55,13 +58,44 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, text) {
    * @type {string}
    * @private
    */
-  this.text_ = text;
+  this.text_ = xml.getAttribute('text');
 
   /**
-   * @type {goog.math.Coordinate}
+   * @type {!goog.math.Coordinate}
    * @private
    */
   this.position_ = new goog.math.Coordinate(0, 0);
+
+  /**
+   * Whether this button should be styled as a label.
+   * @type {boolean}
+   * @private
+   */
+  this.isLabel_ = isLabel;
+
+  /**
+   * Function to call when this button is clicked.
+   * @type {function(!Blockly.FlyoutButton)}
+   * @private
+   */
+  this.callback_ = null;
+
+  var callbackKey = xml.getAttribute('callbackKey');
+  if (this.isLabel_ && callbackKey) {
+    console.warn('Labels should not have callbacks. Label text: ' + this.text_);
+  } else if (!this.isLabel_ &&
+      !(callbackKey && targetWorkspace.getButtonCallback(callbackKey))) {
+    console.warn('Buttons should have callbacks. Button text: ' + this.text_);
+  } else {
+    this.callback_ = targetWorkspace.getButtonCallback(callbackKey);
+  }
+
+  /**
+   * If specified, a CSS class to add to this button.
+   * @type {?string}
+   * @private
+   */
+  this.cssClass_ = xml.getAttribute('web-class') || null;
 };
 
 /**
@@ -82,28 +116,53 @@ Blockly.FlyoutButton.prototype.width = 0;
 Blockly.FlyoutButton.prototype.height = 0;
 
 /**
+ * Opaque data that can be passed to Blockly.unbindEvent_.
+ * @type {Array.<!Array>}
+ * @private
+ */
+Blockly.FlyoutButton.prototype.onMouseUpWrapper_ = null;
+
+/**
  * Create the button elements.
  * @return {!Element} The button's SVG group.
  */
 Blockly.FlyoutButton.prototype.createDom = function() {
-  this.svgGroup_ = Blockly.createSvgElement('g',
-      {'class': 'blocklyFlyoutButton'}, this.workspace_.getCanvas());
+  var cssClass = this.isLabel_ ? 'blocklyFlyoutLabel' : 'blocklyFlyoutButton';
+  if (this.cssClass_) {
+    cssClass += ' ' + this.cssClass_;
+  }
 
-  // Rect with rounded corners.
-  var rect = Blockly.createSvgElement('rect',
-      {'rx': 4, 'ry': 4,
-       'height': 0, 'width': 0},
-       this.svgGroup_);
+  this.svgGroup_ = Blockly.utils.createSvgElement('g', {'class': cssClass},
+      this.workspace_.getCanvas());
 
-  var svgText = Blockly.createSvgElement('text',
-      {'class': 'blocklyText', 'x': 0, 'y': 0,
-       'text-anchor': 'middle'}, this.svgGroup_);
+  if (!this.isLabel_) {
+    // Shadow rectangle (light source does not mirror in RTL).
+    var shadow = Blockly.utils.createSvgElement('rect',
+        {'class': 'blocklyFlyoutButtonShadow',
+         'rx': 4, 'ry': 4, 'x': 1, 'y': 1},
+         this.svgGroup_);
+  }
+  // Background rectangle.
+  var rect = Blockly.utils.createSvgElement('rect',
+      {'class': this.isLabel_ ?
+        'blocklyFlyoutLabelBackground' : 'blocklyFlyoutButtonBackground',
+        'rx': 4, 'ry': 4},
+      this.svgGroup_);
+
+  var svgText = Blockly.utils.createSvgElement('text',
+      {'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
+          'x': 0, 'y': 0, 'text-anchor': 'middle'},
+      this.svgGroup_);
   svgText.textContent = this.text_;
 
   this.width = svgText.getComputedTextLength() +
       2 * Blockly.FlyoutButton.MARGIN;
-  this.height = 20; // Can't compute it :(
+  this.height = 20;  // Can't compute it :(
 
+  if (!this.isLabel_) {
+    shadow.setAttribute('width', this.width);
+    shadow.setAttribute('height', this.height);
+  }
   rect.setAttribute('width', this.width);
   rect.setAttribute('height', this.height);
 
@@ -111,6 +170,9 @@ Blockly.FlyoutButton.prototype.createDom = function() {
   svgText.setAttribute('y', this.height - Blockly.FlyoutButton.MARGIN);
 
   this.updateTransform_();
+
+  this.mouseUpWrapper_ = Blockly.bindEventWithChecks_(this.svgGroup_, 'mouseup',
+      this, this.onMouseUp_);
   return this.svgGroup_;
 };
 
@@ -124,10 +186,11 @@ Blockly.FlyoutButton.prototype.show = function() {
 
 /**
  * Update svg attributes to match internal state.
+ * @private
  */
 Blockly.FlyoutButton.prototype.updateTransform_ = function() {
-  this.svgGroup_.setAttribute('transform', 'translate(' + this.position_.x +
-      ',' + this.position_.y + ')');
+  this.svgGroup_.setAttribute('transform',
+      'translate(' + this.position_.x + ',' + this.position_.y + ')');
 };
 
 /**
@@ -142,9 +205,21 @@ Blockly.FlyoutButton.prototype.moveTo = function(x, y) {
 };
 
 /**
+ * Get the button's target workspace.
+ * @return {!Blockly.WorkspaceSvg} The target workspace of the flyout where this
+ *     button resides.
+ */
+Blockly.FlyoutButton.prototype.getTargetWorkspace = function() {
+  return this.targetWorkspace_;
+};
+
+/**
  * Dispose of this button.
  */
 Blockly.FlyoutButton.prototype.dispose = function() {
+  if (this.onMouseUpWrapper_) {
+    Blockly.unbindEvent_(this.onMouseUpWrapper_);
+  }
   if (this.svgGroup_) {
     goog.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
@@ -156,14 +231,16 @@ Blockly.FlyoutButton.prototype.dispose = function() {
 /**
  * Do something when the button is clicked.
  * @param {!Event} e Mouse up event.
+ * @private
  */
-Blockly.FlyoutButton.prototype.onMouseUp = function(e) {
-  // Don't scroll the page.
-  e.preventDefault();
-  // Don't propagate mousewheel event (zooming).
-  e.stopPropagation();
-  // Stop binding to mouseup and mousemove events--flyout mouseup would normally
-  // do this, but we're skipping that.
-  Blockly.Flyout.terminateDrag_();
-  Blockly.Variables.createVariable(this.targetWorkspace_);
+Blockly.FlyoutButton.prototype.onMouseUp_ = function(e) {
+  var gesture = this.targetWorkspace_.getGesture(e);
+  if (gesture) {
+    gesture.cancel();
+  }
+
+  // Call the callback registered to this button.
+  if (this.callback_) {
+    this.callback_(this);
+  }
 };

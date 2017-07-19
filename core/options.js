@@ -104,8 +104,14 @@ Blockly.Options = function(options) {
     // 'path' is a deprecated option which has been replaced by 'media'.
     pathToMedia = options['path'] + 'media/';
   }
+  if (options['oneBasedIndex'] === undefined) {
+    var oneBasedIndex = true;
+  } else {
+    var oneBasedIndex = !!options['oneBasedIndex'];
+  }
 
   this.RTL = rtl;
+  this.oneBasedIndex = oneBasedIndex;
   this.collapse = hasCollapse;
   this.comments = hasComments;
   this.disable = hasDisable;
@@ -125,8 +131,8 @@ Blockly.Options = function(options) {
 };
 
 /**
- * @type {Blockly.Workspace} the parent of the current workspace, or null if
- *    there is no parent workspace.
+ * The parent of the current workspace, or null if there is no parent workspace.
+ * @type {Blockly.Workspace}
  **/
 Blockly.Options.prototype.parentWorkspace = null;
 

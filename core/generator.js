@@ -187,8 +187,9 @@ Blockly.Generator.prototype.blockToCode = function(block) {
         'Expecting string from statement block "%s".', block.type);
     return [this.scrub_(block, code[0]), code[1]];
   } else if (goog.isString(code)) {
+    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
     if (this.STATEMENT_PREFIX) {
-      code = this.STATEMENT_PREFIX.replace(/%1/g, '\'' + block.id + '\'') +
+      code = this.STATEMENT_PREFIX.replace(/%1/g, '\'' + id + '\'') +
           code;
     }
     return this.scrub_(block, code);
@@ -248,7 +249,7 @@ Blockly.Generator.prototype.valueToCode = function(block, name, outerOrder) {
       // In all known languages multiple such code blocks are not order
       // sensitive.  In fact in Python ('a' 'b') 'c' would fail.
     } else {
-      // The operators outside this code are stonger than the operators
+      // The operators outside this code are stronger than the operators
       // inside this code.  To prevent the code from being pulled apart,
       // wrap the code in parentheses.
       parensNeeded = true;
@@ -297,6 +298,7 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
  * @return {string} Loop contents, with infinite loop trap added.
  */
 Blockly.Generator.prototype.addLoopTrap = function(branch, id) {
+  id = id.replace(/\$/g, '$$$$');  // Issue 251.
   if (this.INFINITE_LOOP_TRAP) {
     branch = this.INFINITE_LOOP_TRAP.replace(/%1/g, '\'' + id + '\'') + branch;
   }
@@ -358,12 +360,56 @@ Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
     var codeText = code.join('\n').replace(
         this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);
     // Change all '  ' indents into the desired indent.
+    // To avoid an infinite loop of replacements, change all indents to '\0'
+    // character first, then replace them all with the indent.
+    // We are assuming that no provided functions contain a literal null char.
     var oldCodeText;
     while (oldCodeText != codeText) {
       oldCodeText = codeText;
-      codeText = codeText.replace(/^((  )*)  /gm, '$1' + this.INDENT);
+      codeText = codeText.replace(/^((  )*)  /gm, '$1\0');
     }
+    codeText = codeText.replace(/\0/g, this.INDENT);
     this.definitions_[desiredName] = codeText;
   }
   return this.functionNames_[desiredName];
 };
+
+/**
+ * Hook for code to run before code generation starts.
+ * Subclasses may override this, e.g. to initialise the database of variable
+ * names.
+ * @param {!Blockly.Workspace} workspace Workspace to generate code from.
+ */
+Blockly.Generator.prototype.init = undefined;
+
+/**
+ * Common tasks for generating code from blocks.  This is called from
+ * blockToCode and is called on every block, not just top level blocks.
+ * Subclasses may override this, e.g. to generate code for statements following
+ * the block, or to handle comments for the specified block and any connected
+ * value blocks.
+ * @param {!Blockly.Block} block The current block.
+ * @param {string} code The JavaScript code created for this block.
+ * @return {string} JavaScript code with comments and subsequent blocks added.
+ * @private
+ */
+Blockly.Generator.prototype.scrub_ = undefined;
+
+/**
+ * Hook for code to run at end of code generation.
+ * Subclasses may override this, e.g. to prepend the generated code with the
+ * variable definitions.
+ * @param {string} code Generated code.
+ * @return {string} Completed code.
+ */
+Blockly.Generator.prototype.finish = undefined;
+
+/**
+ * Naked values are top-level blocks with outputs that aren't plugged into
+ * anything.
+ * Subclasses may override this, e.g. if their language does not allow
+ * naked values.
+ * @param {string} line Line of generated code.
+ * @return {string} Legal line of code.
+ */
+Blockly.Generator.prototype.scrubNakedValue = undefined;

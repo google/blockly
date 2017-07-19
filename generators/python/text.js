@@ -103,7 +103,7 @@ Blockly.Python['text_indexOf'] = function(block) {
   var text = Blockly.Python.valueToCode(block, 'VALUE',
       Blockly.Python.ORDER_MEMBER) || '\'\'';
   var code = text + '.' + operator + '(' + substring + ')';
-  if (Blockly.Python.ONE_BASED_INDEXING) {
+  if (block.workspace.options.oneBasedIndex) {
     return [code + ' + 1', Blockly.Python.ORDER_ADDITIVE];
   }
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];
@@ -251,3 +251,30 @@ Blockly.Python['text_prompt_ext'] = function(block) {
 };
 
 Blockly.Python['text_prompt'] = Blockly.Python['text_prompt_ext'];
+
+Blockly.Python['text_count'] = function(block) {
+  var text = Blockly.Python.valueToCode(block, 'TEXT',
+      Blockly.Python.ORDER_MEMBER) || '\'\'';
+  var sub = Blockly.Python.valueToCode(block, 'SUB',
+      Blockly.Python.ORDER_NONE) || '\'\'';
+  var code = text + '.count(' + sub + ')';
+  return [code, Blockly.Python.ORDER_MEMBER];
+};
+
+Blockly.Python['text_replace'] = function(block) {
+  var text = Blockly.Python.valueToCode(block, 'TEXT',
+      Blockly.Python.ORDER_MEMBER) || '\'\'';
+  var from = Blockly.Python.valueToCode(block, 'FROM',
+      Blockly.Python.ORDER_NONE) || '\'\'';
+  var to = Blockly.Python.valueToCode(block, 'TO',
+      Blockly.Python.ORDER_NONE) || '\'\'';
+  var code = text + '.replace(' + from + ', ' + to + ')';
+  return [code, Blockly.Python.ORDER_MEMBER];
+};
+
+Blockly.Python['text_reverse'] = function(block) {
+  var text = Blockly.Python.valueToCode(block, 'TEXT',
+      Blockly.Python.ORDER_MEMBER) || '\'\'';
+  var code = text + '[::-1]';
+  return [code, Blockly.Python.ORDER_MEMBER];
+};

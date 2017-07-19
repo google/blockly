@@ -85,12 +85,6 @@ Blockly.Dart.ORDER_ASSIGNMENT = 16;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
 Blockly.Dart.ORDER_NONE = 99;          // (...)
 
 /**
- * Allow for switching between one and zero based indexing for lists and text,
- * one based by default.
- */
-Blockly.Dart.ONE_BASED_INDEXING = true;
-
-/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
@@ -109,10 +103,10 @@ Blockly.Dart.init = function(workspace) {
   }
 
   var defvars = [];
-  var variables = workspace.variableList;
+  var variables = workspace.getAllVariables();
   if (variables.length) {
     for (var i = 0; i < variables.length; i++) {
-      defvars[i] = Blockly.Dart.variableDB_.getName(variables[i],
+      defvars[i] = Blockly.Dart.variableDB_.getName(variables[i].name,
           Blockly.Variables.NAME_TYPE);
     }
     Blockly.Dart.definitions_['variables'] =
@@ -232,10 +226,10 @@ Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
     opt_order) {
   var delta = opt_delta || 0;
   var order = opt_order || Blockly.Dart.ORDER_NONE;
-  if (Blockly.Dart.ONE_BASED_INDEXING) {
+  if (block.workspace.options.oneBasedIndex) {
     delta--;
   }
-  var defaultAtIndex = Blockly.Dart.ONE_BASED_INDEXING ? '1' : '0';
+  var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
   if (delta) {
     var at = Blockly.Dart.valueToCode(block, atId,
         Blockly.Dart.ORDER_ADDITIVE) || defaultAtIndex;

@@ -19,55 +19,44 @@
  */
 
 /**
- * @fileoverview Accessible strings.
+ * @fileoverview Translatable string constants for Accessible Blockly.
  * @author madeeha@google.com (Madeeha Ghori)
  */
 'use strict';
 
-// The following are all Accessible Blockly strings.
-// None of the alert messages have periods on them. This is because the user
-// will have their punctuation setting set to 'all', which will result in any
-// punctuation being read out to them.
-Blockly.Msg.RUN_CODE = 'Run Code';
-Blockly.Msg.CLEAR_WORKSPACE = 'Clear Workspace';
-Blockly.Msg.BLOCK_ACTION_LIST = 'block action list';
-Blockly.Msg.CUT_BLOCK = 'cut block';
-Blockly.Msg.COPY_BLOCK = 'copy block';
-Blockly.Msg.PASTE_BEFORE = 'paste before';
-Blockly.Msg.PASTE_AFTER = 'paste after';
-Blockly.Msg.MARK_SPOT_BEFORE = 'mark spot before';
-Blockly.Msg.MARK_SPOT_AFTER = 'mark spot after';
-Blockly.Msg.MOVE_TO_MARKED_SPOT = 'move to marked spot';
-Blockly.Msg.DELETE = 'delete';
-Blockly.Msg.MARK_THIS_SPOT = 'mark this spot';
-Blockly.Msg.PASTE = 'paste';
-Blockly.Msg.TOOLBOX_LOAD_MSG = 'Loading Toolbox…';
-Blockly.Msg.WORKSPACE_LOAD_MSG = 'Loading Workspace…';
-Blockly.Msg.BLOCK_SUMMARY = 'block summary';
-Blockly.Msg.OPTION_LIST = 'option list';
-Blockly.Msg.ARGUMENT_OPTIONS_LIST = 'argument options list';
-Blockly.Msg.ARGUMENT_INPUT = 'argument input';
-Blockly.Msg.ARGUMENT_BLOCK_ACTION_LIST = 'argument block action list';
-Blockly.Msg.TEXT = 'text';
-Blockly.Msg.BUTTON = 'button';
-Blockly.Msg.DISABLED = 'disabled';
-Blockly.Msg.CURRENT_ARGUMENT_VALUE = 'current argument value:';
-Blockly.Msg.COPY_TO_WORKSPACE = 'create new group with this block';
-Blockly.Msg.COPY_TO_CLIPBOARD = 'copy to clipboard';
-Blockly.Msg.COPY_TO_MARKED_SPOT = 'copy to marked spot';
-Blockly.Msg.TOOLBOX = 'Toolbox';
 Blockly.Msg.WORKSPACE = 'Workspace';
+Blockly.Msg.WORKSPACE_BLOCK =
+    'workspace block. Move right to edit. Press Enter for more options.';
+
+Blockly.Msg.ATTACH_NEW_BLOCK_TO_LINK = 'Attach new block to link...';
+Blockly.Msg.CREATE_NEW_BLOCK_GROUP = 'Create new block group...';
+Blockly.Msg.ERASE_WORKSPACE = 'Erase Workspace';
+Blockly.Msg.NO_BLOCKS_IN_WORKSPACE = 'There are no blocks in the workspace.';
+
+Blockly.Msg.COPY_BLOCK = 'Copy block';
+Blockly.Msg.DELETE = 'Delete block';
+Blockly.Msg.MARK_SPOT_BEFORE = 'Add link before';
+Blockly.Msg.MARK_SPOT_AFTER = 'Add link after';
+Blockly.Msg.MARK_THIS_SPOT = 'Add link inside';
+Blockly.Msg.MOVE_TO_MARKED_SPOT = 'Move to existing link';
+Blockly.Msg.PASTE_AFTER = 'Paste after';
+Blockly.Msg.PASTE_BEFORE = 'Paste before';
+Blockly.Msg.PASTE_INSIDE = 'Paste inside';
+
+Blockly.Msg.BLOCK_OPTIONS = 'Block Options';
+Blockly.Msg.SELECT_A_BLOCK = 'Select a block...';
+Blockly.Msg.CANCEL = 'Cancel';
+
 Blockly.Msg.ANY = 'any';
+Blockly.Msg.BLOCK = 'block';
+Blockly.Msg.BUTTON = 'Button.';
 Blockly.Msg.FOR = 'for';
-Blockly.Msg.STATEMENT = 'statement';
 Blockly.Msg.VALUE = 'value';
-Blockly.Msg.CUT_BLOCK_MSG = 'Cut block: ';
-Blockly.Msg.COPIED_BLOCK_MSG = 'copied';
-Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG = 'pasted';
-Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG = 'moved to marked spot';
-Blockly.Msg.MARKED_SPOT_MSG = 'Marked spot';
-Blockly.Msg.BLOCK_MOVED_TO_MARKED_SPOT_MSB = 'Block moved to marked spot: ';
-Blockly.Msg.TOOLBOX_BLOCK = 'toolbox block';
-Blockly.Msg.WORKSPACE_BLOCK = 'workspace block';
-Blockly.Msg.SUBMENU_INDICATOR = 'move right to view submenu';
-Blockly.Msg.MORE_OPTIONS = 'More options';
+
+Blockly.Msg.ADDED_LINK_MSG = 'Added link.';
+Blockly.Msg.ATTACHED_BLOCK_TO_LINK_MSG = 'attached to link. ';
+Blockly.Msg.COPIED_BLOCK_MSG = 'copied. ';
+Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG = 'pasted. ';
+
+Blockly.Msg.PRESS_ENTER_TO_EDIT_NUMBER = 'Press Enter to edit number. ';
+Blockly.Msg.PRESS_ENTER_TO_EDIT_TEXT = 'Press Enter to edit text. ';

@@ -24,18 +24,25 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.Procedures
+ * @namespace
+ **/
 goog.provide('Blockly.Procedures');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly.constants');
 goog.require('Blockly.Field');
 goog.require('Blockly.Names');
 goog.require('Blockly.Workspace');
 
 
 /**
- * Category to separate procedure names from variables and generated functions.
+ * Constant to separate procedure names from variables and generated functions
+ * when running generators.
+ * @deprecated Use Blockly.PROCEDURE_CATEGORY_NAME
  */
-Blockly.Procedures.NAME_TYPE = 'PROCEDURE';
+Blockly.Procedures.NAME_TYPE = Blockly.PROCEDURE_CATEOGORY_NAME;
 
 /**
  * Find all user-created procedure definitions in a workspace.
@@ -132,7 +139,7 @@ Blockly.Procedures.isLegalName_ = function(name, workspace, opt_exclude) {
  * Rename a procedure.  Called by the editable field.
  * @param {string} name The proposed new name.
  * @return {string} The accepted name.
- * @this {!Blockly.Field}
+ * @this {Blockly.Field}
  */
 Blockly.Procedures.rename = function(name) {
   // Strip leading and trailing whitespace.  Beyond this, all names are legal.
@@ -161,17 +168,29 @@ Blockly.Procedures.rename = function(name) {
 Blockly.Procedures.flyoutCategory = function(workspace) {
   var xmlList = [];
   if (Blockly.Blocks['procedures_defnoreturn']) {
-    // <block type="procedures_defnoreturn" gap="16"></block>
+    // <block type="procedures_defnoreturn" gap="16">
+    //     <field name="NAME">do something</field>
+    // </block>
     var block = goog.dom.createDom('block');
     block.setAttribute('type', 'procedures_defnoreturn');
     block.setAttribute('gap', 16);
+    var nameField = goog.dom.createDom('field', null,
+        Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE);
+    nameField.setAttribute('name', 'NAME');
+    block.appendChild(nameField);
     xmlList.push(block);
   }
   if (Blockly.Blocks['procedures_defreturn']) {
-    // <block type="procedures_defreturn" gap="16"></block>
+    // <block type="procedures_defreturn" gap="16">
+    //     <field name="NAME">do something</field>
+    // </block>
     var block = goog.dom.createDom('block');
     block.setAttribute('type', 'procedures_defreturn');
     block.setAttribute('gap', 16);
+    var nameField = goog.dom.createDom('field', null,
+        Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE);
+    nameField.setAttribute('name', 'NAME');
+    block.appendChild(nameField);
     xmlList.push(block);
   }
   if (Blockly.Blocks['procedures_ifreturn']) {
@@ -259,7 +278,7 @@ Blockly.Procedures.mutateCallers = function(defBlock) {
       // undo action since it is deterministically tied to the procedure's
       // definition mutation.
       Blockly.Events.recordUndo = false;
-      Blockly.Events.fire(new Blockly.Events.Change(
+      Blockly.Events.fire(new Blockly.Events.BlockChange(
           caller, 'mutation', null, oldMutation, newMutation));
       Blockly.Events.recordUndo = oldRecordUndo;
     }

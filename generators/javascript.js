@@ -135,12 +135,6 @@ Blockly.JavaScript.ORDER_OVERRIDES = [
 ];
 
 /**
- * Allow for switching between one and zero based indexing for lists and text,
- * one based by default.
- */
-Blockly.JavaScript.ONE_BASED_INDEXING = true;
-
-/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
@@ -159,10 +153,10 @@ Blockly.JavaScript.init = function(workspace) {
   }
 
   var defvars = [];
-  var variables = workspace.variableList;
+  var variables = workspace.getAllVariables();
   if (variables.length) {
     for (var i = 0; i < variables.length; i++) {
-      defvars[i] = Blockly.JavaScript.variableDB_.getName(variables[i],
+      defvars[i] = Blockly.JavaScript.variableDB_.getName(variables[i].name,
           Blockly.Variables.NAME_TYPE);
     }
     Blockly.JavaScript.definitions_['variables'] =
@@ -272,10 +266,10 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
     opt_order) {
   var delta = opt_delta || 0;
   var order = opt_order || Blockly.JavaScript.ORDER_NONE;
-  if (Blockly.JavaScript.ONE_BASED_INDEXING) {
+  if (block.workspace.options.oneBasedIndex) {
     delta--;
   }
-  var defaultAtIndex = Blockly.JavaScript.ONE_BASED_INDEXING ? '1' : '0';
+  var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
   if (delta > 0) {
     var at = Blockly.JavaScript.valueToCode(block, atId,
         Blockly.JavaScript.ORDER_ADDITION) || defaultAtIndex;

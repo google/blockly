@@ -41,13 +41,16 @@ goog.require('goog.string');
  *     a unique variable name will be generated.
  * @param {Function=} opt_validator A function that is executed when a new
  *     option is selected.  Its sole argument is the new option value.
+ * @param {Array.<string>} opt_variableTypes A list of the types of variables to
+ *     include in the dropdown.
  * @extends {Blockly.FieldDropdown}
  * @constructor
  */
-Blockly.FieldVariable = function(varname, opt_validator) {
+Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes) {
   Blockly.FieldVariable.superClass_.constructor.call(this,
       Blockly.FieldVariable.dropdownCreate, opt_validator);
   this.setValue(varname || '');
+  this.variableTypes = opt_variableTypes;
 };
 goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
 
@@ -129,6 +132,31 @@ Blockly.FieldVariable.prototype.setValue = function(value) {
 };
 
 /**
+ * Return a list of variable types to include in the dropdown.
+ * @return {!Array.<string>} Array of variable types.
+ * @throws {Error} if variableTypes is an empty array.
+ * @private
+ */
+Blockly.FieldVariable.prototype.getVariableTypes_ = function() {
+  var variableTypes = this.variableTypes;
+  if (variableTypes === null) {
+    // If variableTypes is null, return all variable types.
+    if (this.sourceBlock_) {
+      var workspace = this.sourceBlock_.workspace;
+      return workspace.getVariableTypes();
+    }
+  }
+  variableTypes = variableTypes || [''];
+  if (variableTypes.length == 0) {
+    // Throw an error if variableTypes is an empty list.
+    var name = this.getText();
+    throw new Error('\'variableTypes\' of field variable ' +
+      name + ' was an empty list');
+  }
+  return variableTypes;
+};
+
+/**
  * Return a sorted list of variable names for variable dropdown menus.
  * Include a special option at the end for creating a new variable name.
  * @return {!Array.<string>} Array of variable names.
@@ -143,11 +171,16 @@ Blockly.FieldVariable.dropdownCreate = function() {
   if (this.sourceBlock_) {
     workspace = this.sourceBlock_.workspace;
   }
-
   if (workspace) {
+    var variableTypes = this.getVariableTypes_();
+    var variableModelList = [];
     // Get a copy of the list, so that adding rename and new variable options
     // doesn't modify the workspace's list.
-    variableModelList = workspace.getVariablesOfType('');
+    for (var i = 0; i < variableTypes.length; i++) {
+      var variableType = variableTypes[i];
+      var variables = workspace.getVariablesOfType(variableType);
+      variableModelList = variableModelList.concat(variables);
+    }
     for (var i = 0; i < variableModelList.length; i++){
       if (createSelectedVariable &&
           goog.string.caseInsensitiveEquals(variableModelList[i].name, name)) {
@@ -197,7 +230,8 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
     else if (id == Blockly.RENAME_VARIABLE_ID) {
       // Rename variable.
       var currentName = this.getText();
-      Blockly.FieldVariable.renameVariablePrompt(workspace, currentName);
+      variable = workspace.getVariable(currentName);
+      Blockly.Variables.renameVariable(workspace, variable);
       return;
     } else if (id == Blockly.DELETE_VARIABLE_ID) {
       // Delete variable.
@@ -211,21 +245,4 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
   if (itemText !== null) {
     this.setValue(itemText);
   }
-};
-
-/**
- * Prompt the user to rename a variable.
- * @param {Blockly.Workspace} workspace Workspace the variable to rename is in.
- * @param {string} currentName Current name of the variable to rename.
- */
-Blockly.FieldVariable.renameVariablePrompt = function(workspace, currentName) {
-  // Rename variable.
-  Blockly.hideChaff();
-  Blockly.Variables.promptName(
-      Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', currentName), currentName,
-      function(newName) {
-        if (newName) {
-          workspace.renameVariable(currentName, newName);
-        }
-      });
 };

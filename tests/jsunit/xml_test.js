@@ -166,7 +166,7 @@ function test_domToWorkspace_VariablesAtTop() {
         '    <variable type="" id="id3">name3</variable>' +
         '  </variables>' +
         '  <block type="field_variable_test_block">' +
-        '    <field name="VAR" id="id3" variabletype="">name3</field>' +
+        '    <field name="VAR" id="id3" variableType="">name3</field>' +
         '  </block>' +
         '</xml>');
     Blockly.Xml.domToWorkspace(dom, workspace);
@@ -210,7 +210,7 @@ function test_domToWorkspace_VariablesAtTop_MissingType() {
         '    <variable id="id1">name1</variable>' +
         '  </variables>' +
         '  <block type="field_variable_test_block">' +
-        '    <field name="VAR" id="id1" variabletype="">name3</field>' +
+        '    <field name="VAR" id="id1" variableType="">name3</field>' +
         '  </block>' +
         '</xml>');
     Blockly.Xml.domToWorkspace(dom, workspace);
@@ -233,7 +233,7 @@ function test_domToWorkspace_VariablesAtTop_MismatchBlockType() {
         '    <variable type="type1" id="id1">name1</variable>' +
         '  </variables>' +
         '  <block type="field_variable_test_block">' +
-        '    <field name="VAR" id="id1" variabletype="">name1</field>' +
+        '    <field name="VAR" id="id1" variableType="">name1</field>' +
         '  </block>' +
         '</xml>');
     Blockly.Xml.domToWorkspace(dom, workspace);

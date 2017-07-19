@@ -111,7 +111,8 @@ function test_fieldVariable_dropdownCreateVariablesExist() {
   var result_options = Blockly.FieldVariable.dropdownCreate.call(
     {
       'sourceBlock_': {'workspace': workspace},
-      'getText': function(){return 'name1';}
+      'getText': function(){return 'name1';},
+      'getVariableTypes_': function(){return [''];}
     });
   assertEquals(result_options.length, 3);
   isEqualArrays(result_options[0], ['name1', 'id1']);
@@ -128,7 +129,8 @@ function test_fieldVariable_dropdownCreateVariablesExist() {
   var result_options = Blockly.FieldVariable.dropdownCreate.call(
     {
       'sourceBlock_': {'workspace': workspace},
-      'getText': function(){return 'name1';}
+      'getText': function(){return 'name1';},
+      'getVariableTypes_': function(){return [''];}
     });
   assertEquals(result_options.length, 3);
   isEqualArrays(result_options[0], ['name1', 'id1']);
@@ -146,7 +148,8 @@ function test_fieldVariable_dropdownVariableAndTypeDoesNotExist() {
   var result_options = Blockly.FieldVariable.dropdownCreate.call(
     {
       'sourceBlock_': {'workspace': workspace},
-      'getText': function(){return 'name1';}
+      'getText': function(){return 'name1';},
+      'getVariableTypes_': function(){return [''];}
     });
 
   // Check the options.
@@ -169,7 +172,8 @@ function test_fieldVariable_dropdownVariableDoesNotExistTypeDoes() {
   var result_options = Blockly.FieldVariable.dropdownCreate.call(
     {
       'sourceBlock_': {'workspace': workspace},
-      'getText': function(){return 'name2';}
+      'getText': function(){return 'name2';},
+      'getVariableTypes_': function(){return [''];}
     });
 
   assertEquals(3, result_options.length);
@@ -180,4 +184,60 @@ function test_fieldVariable_dropdownVariableDoesNotExistTypeDoes() {
   checkVariableValues(workspace, 'name2', '', 'id2');
 
   fieldVariableTestWithMocks_tearDown();
+}
+
+function test_fieldVariable_getVariableTypes_undefinedVariableTypes() {
+  // Expect that since variableTypes is undefined, only type empty string
+  // will be returned.
+  workspace = new Blockly.Workspace();
+  workspace.createVariable('name1', 'type1');
+  workspace.createVariable('name2', 'type2');
+  var fieldVariable = new Blockly.FieldVariable('name1');
+  var resultTypes = fieldVariable.getVariableTypes_();
+  isEqualArrays(resultTypes, ['']);
+  workspace.dispose();
+}
+
+function test_fieldVariable_getVariableTypes_givenVariableTypes() {
+  // Expect that since variableTypes is undefined, only type empty string
+  // will be returned.
+  workspace = new Blockly.Workspace();
+  workspace.createVariable('name1', 'type1');
+  workspace.createVariable('name2', 'type2');
+  var fieldVariable = new Blockly.FieldVariable('name1', null, ['type1', 'type2']);
+  var resultTypes = fieldVariable.getVariableTypes_();
+  isEqualArrays(resultTypes, ['type1', 'type2']);
+  workspace.dispose();
+}
+
+function test_fieldVariable_getVariableTypes_nullVariableTypes() {
+  // Expect all variable types to be returned.
+  workspace = new Blockly.Workspace();
+  workspace.createVariable('name1', 'type1');
+  workspace.createVariable('name2', 'type2');
+  var fieldVariable = new Blockly.FieldVariable('name1');
+  var mockBlock = fieldVariable_mockBlock(workspace);
+  fieldVariable.setSourceBlock(mockBlock);
+  fieldVariable.variableTypes = null;
+  var resultTypes = fieldVariable.getVariableTypes_();
+  isEqualArrays(resultTypes, ['type1', 'type2']);
+  workspace.dispose();
+}
+
+function test_fieldVariable_getVariableTypes_emptyListVariableTypes() {
+  // Expect an error to be thrown.
+  workspace = new Blockly.Workspace();
+  workspace.createVariable('name1', 'type1');
+  workspace.createVariable('name2', 'type2');
+  var fieldVariable = new Blockly.FieldVariable('name1');
+  var mockBlock = fieldVariable_mockBlock(workspace);
+  fieldVariable.setSourceBlock(mockBlock);
+  fieldVariable.variableTypes = [];
+  try {
+    fieldVariable.getVariableTypes_();
+  } catch (e) {
+    //expected
+  } finally {
+    workspace.dispose();
+  }
 }

@@ -591,7 +591,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
           // TODO (marisaleung): When we change setValue and getValue to
           // interact with id's instead of names, update this so that we get
           // the variable based on id instead of textContent.
-          var type = xmlChild.getAttribute('variabletype') || '';
+          var type = xmlChild.getAttribute('variableType') || '';
           var variable = workspace.getVariable(text);
           if (!variable) {
             variable = workspace.createVariable(text, type,

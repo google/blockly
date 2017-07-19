@@ -122,22 +122,37 @@ Blockly.Blocks['robot_movement_go_to'] = {
 
 Blockly.robot.locations = [['<Select a location>', '<Select a location>']];
 Blockly.robot.getLocations = function() {
-  var options = [];
-  var client = new ROSLIB.Service({
-    ros: ROS,
-    name: '/location_db/list',
-    serviceType : 'location_server/ListPoses'
-  });
+  if (!Blockly.robot.locationListener) {
+    Blockly.robot.locationListener = new ROSLIB.Topic({
+      ros: ROS,
+      name: '/pose_names',
+      messageType: 'map_annotator/PoseNames'
+    });
+    Blockly.robot.locationListener.subscribe(function(msg) {
+      var options = [];
+      for (var i = 0; i < msg.names.length; ++i) {
+        var name = msg.names[i];
+        options.push([name, name]);
+      }
+      Blockly.robot.locations = options;
+    });
+  }
+  // var options = [];
+  // var client = new ROSLIB.Service({
+  //  ros: ROS,
+  //  name: '/location_db/list',
+  //  serviceType : 'location_server/ListPoses'
+  //});
 
-  var request = new ROSLIB.ServiceRequest({});
-  client.callService(request, function(result) {
-    for (var i=0; i<result.names.length; ++i) {
-      var name = result.names[i];
-      options.push([name, name]);
-    }
-    Blockly.robot.locations = options;
-    return options;
-  });
+  // var request = new ROSLIB.ServiceRequest({});
+  // client.callService(request, function(result) {
+  //  for (var i=0; i<result.names.length; ++i) {
+  //    var name = result.names[i];
+  //    options.push([name, name]);
+  //  }
+  //  Blockly.robot.locations = options;
+  //  return options;
+  //});
 };
 
 Blockly.robot.getLocations();

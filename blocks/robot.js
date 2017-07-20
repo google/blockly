@@ -125,7 +125,7 @@ Blockly.robot.getLocations = function() {
   if (!Blockly.robot.locationListener) {
     Blockly.robot.locationListener = new ROSLIB.Topic({
       ros: ROS,
-      name: '/pose_names',
+      name: '/map_annotator/pose_names',
       messageType: 'map_annotator/PoseNames'
     });
     Blockly.robot.locationListener.subscribe(function(msg) {

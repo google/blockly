@@ -1043,79 +1043,6 @@ FactoryUtils.firstStatement = function(block) {
 };
 
 /**
- * Creates a dropdown field Element
- * This is a manually edited function since the block mutated fields can not
- * be detected by the generator.
- * @param {!data} data Data structure that stores source and destination nodes with their corresponding current nodes.
- * @param {Array} options List of options for the dropdown field.
- * @param {string} FIELDNAME Name of the field.
- * @return {number} Returns 0.
- */
-FactoryUtils.field_dropdown = function(data, options, FIELDNAME) {
-  var block1 = FactoryUtils.newNode('block', {type: 'field_dropdown'});
-  var OPTIONS = '[';
-  
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
-    let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
-  }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
-  var mutation = FactoryUtils.newNode('mutation'); 
-  block1.append(mutation);
-  block1.append(FactoryUtils.newNode('field', {name: 'FIELDNAME'}, FIELDNAME));
-  for (let i=0; i<options.length; i++) {
-    let option = options[i];
-    if (typeof option[0] === "string") {
-      OPTIONS+='&quot;text&quot;,'
-      block1.append(FactoryUtils.newNode('field', {name: 'USER'+i}, option[0]));
-    } else {
-      OPTIONS+='&quot;image&quot;,';
-      block1.append(FactoryUtils.newNode('field', {name: 'SRC'+i}, option[0].src));
-      block1.append(FactoryUtils.newNode('field', {name: 'WIDTH'+i}, option[0].width));
-      block1.append(FactoryUtils.newNode('field', {name: 'HEIGHT'+i}, option[0].height));
-      block1.append(FactoryUtils.newNode('field', {name: 'ALT'+i}, option[0].alt));
-    }
-    block1.append(FactoryUtils.newNode('field', {name: 'CPU'+i}, option[1]));
-  }
-  OPTIONS = OPTIONS.slice(0,-1); // Drop last comma 
-  OPTIONS += ']';
-  mutation.setAttribute('options', OPTIONS);
-  return 0;
-};
-
-/**
- * Creates a group type Element
- * This is a manually edited function since the block mutated fields can not
- * be detected by the generator.
- * @param {!data} data Data structure that stores source and destination nodes with their corresponding current nodes.
- * @param {Array} types List of types of this type group.
- * @return {number} Returns 0.
- */
-FactoryUtils.type_group = function(data, types) {
-  var block1 = FactoryUtils.newNode('block', {type: 'type_group'});
-
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
-    let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
-  }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
-  block1.append(FactoryUtils.newNode('mutation', {types:types.length}));
-  for (let i=0; i<types.length; i++) {
-    let type = types[i];
-    let value = FactoryUtils.newNode('value', {name:'TYPE'+i});
-    block1.append(value);
-    data.dst.current = value;
-    FactoryUtils.parseType(data, type);
-  }
-  data.dst.current = block1;
-  return 0;
-};
-
-/**
  * Creates a type Element
  * @param {!data} data Data structure that stores source and destination nodes with their corresponding current nodes.
  * @param {string} type Type name of element to be created.
@@ -1155,7 +1082,7 @@ FactoryUtils.parseTypes = function(data) {
     if (curr.check_.length === 1) {
       FactoryUtils.parseType(data, curr.check_[0]);
     } else if (curr.check_.length > 1 ) {
-      BlockUtils.type_group(data, curr.check_);
+      BlockConstructors.typeGroup(data, curr.check_);
     }
   }
 };

@@ -39,7 +39,7 @@ goog.provide('BlockConstructors');
  * @param COLOUR
  * @return {number} Returns 0 
  */
-BlockConstructors.factory_base = function(data, connections, NAME, INLINE, CONNECTIONS, INPUTS, TOOLTIP, HELPURL, COLOUR) {
+BlockConstructors.factoryBase = function(data, connections, NAME, INLINE, CONNECTIONS, INPUTS, TOOLTIP, HELPURL, COLOUR) {
   var block1 = FactoryUtils.newNode('block', {type: 'factory_base'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -78,7 +78,7 @@ BlockConstructors.factory_base = function(data, connections, NAME, INLINE, CONNE
  * @param FIELDS
  * @return {number} Returns 0 
  */
-BlockConstructors.input_dummy = function(data, ALIGN, FIELDS) {
+BlockConstructors.inputDummy = function(data, ALIGN, FIELDS) {
   var block1 = FactoryUtils.newNode('block', {type: 'input_dummy'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -107,7 +107,7 @@ BlockConstructors.input_dummy = function(data, ALIGN, FIELDS) {
  * @param TYPE
  * @return {number} Returns 0 
  */
-BlockConstructors.input_statement = function(data, INPUTNAME, ALIGN, FIELDS, TYPE) {
+BlockConstructors.inputStatement = function(data, INPUTNAME, ALIGN, FIELDS, TYPE) {
   var block1 = FactoryUtils.newNode('block', {type: 'input_statement'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -140,7 +140,7 @@ BlockConstructors.input_statement = function(data, INPUTNAME, ALIGN, FIELDS, TYP
  * @param TYPE
  * @return {number} Returns 0 
  */
-BlockConstructors.input_value = function(data, INPUTNAME, ALIGN, FIELDS, TYPE) {
+BlockConstructors.inputValue = function(data, INPUTNAME, ALIGN, FIELDS, TYPE) {
   var block1 = FactoryUtils.newNode('block', {type: 'input_value'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -170,7 +170,7 @@ BlockConstructors.input_value = function(data, INPUTNAME, ALIGN, FIELDS, TYPE) {
  * @param TEXT
  * @return {number} Returns 0 
  */
-BlockConstructors.field_static = function(data, TEXT) {
+BlockConstructors.fieldStatic = function(data, TEXT) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_static'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -194,7 +194,7 @@ BlockConstructors.field_static = function(data, TEXT) {
  * @param FIELDNAME
  * @return {number} Returns 0 
  */
-BlockConstructors.field_input = function(data, TEXT, FIELDNAME) {
+BlockConstructors.fieldInput = function(data, TEXT, FIELDNAME) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_input'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -222,7 +222,7 @@ BlockConstructors.field_input = function(data, TEXT, FIELDNAME) {
  * @param PRECISION
  * @return {number} Returns 0 
  */
-BlockConstructors.field_number = function(data, VALUE, FIELDNAME, MIN, MAX, PRECISION) {
+BlockConstructors.fieldNumber = function(data, VALUE, FIELDNAME, MIN, MAX, PRECISION) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_number'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -250,7 +250,7 @@ BlockConstructors.field_number = function(data, VALUE, FIELDNAME, MIN, MAX, PREC
  * @param FIELDNAME
  * @return {number} Returns 0 
  */
-BlockConstructors.field_angle = function(data, ANGLE, FIELDNAME) {
+BlockConstructors.fieldAngle = function(data, ANGLE, FIELDNAME) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_angle'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -281,7 +281,7 @@ BlockConstructors.field_angle = function(data, ANGLE, FIELDNAME) {
  * @param CPU2
  * @return {number} Returns 0 
  */
-BlockConstructors.field_dropdown = function(data, options, FIELDNAME, USER0, CPU0, USER1, CPU1, USER2, CPU2) {
+BlockConstructors.fielDropdown = function(data, options, FIELDNAME, USER0, CPU0, USER1, CPU1, USER2, CPU2) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_dropdown'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -312,7 +312,7 @@ BlockConstructors.field_dropdown = function(data, options, FIELDNAME, USER0, CPU
  * @param FIELDNAME
  * @return {number} Returns 0 
  */
-BlockConstructors.field_checkbox = function(data, CHECKED, FIELDNAME) {
+BlockConstructors.fieldCheckbox = function(data, CHECKED, FIELDNAME) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_checkbox'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -337,7 +337,7 @@ BlockConstructors.field_checkbox = function(data, CHECKED, FIELDNAME) {
  * @param FIELDNAME
  * @return {number} Returns 0 
  */
-BlockConstructors.field_colour = function(data, COLOUR, FIELDNAME) {
+BlockConstructors.fieldColour = function(data, COLOUR, FIELDNAME) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_colour'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -362,7 +362,7 @@ BlockConstructors.field_colour = function(data, COLOUR, FIELDNAME) {
  * @param FIELDNAME
  * @return {number} Returns 0 
  */
-BlockConstructors.field_variable = function(data, TEXT, FIELDNAME) {
+BlockConstructors.fieldVariable = function(data, TEXT, FIELDNAME) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_variable'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -389,7 +389,7 @@ BlockConstructors.field_variable = function(data, TEXT, FIELDNAME) {
  * @param ALT
  * @return {number} Returns 0 
  */
-BlockConstructors.field_image = function(data, SRC, WIDTH, HEIGHT, ALT) {
+BlockConstructors.fieldImage = function(data, SRC, WIDTH, HEIGHT, ALT) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_image'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -415,7 +415,7 @@ BlockConstructors.field_image = function(data, SRC, WIDTH, HEIGHT, ALT) {
  * @param types
  * @return {number} Returns 0 
  */
-BlockConstructors.type_group = function(data, types) {
+BlockConstructors.typeGroup = function(data, types) {
   var block1 = FactoryUtils.newNode('block', {type: 'type_group'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -437,7 +437,7 @@ BlockConstructors.type_group = function(data, types) {
  *     nodes.
  * @return {number} Returns 0 
  */
-BlockConstructors.type_null = function(data) {
+BlockConstructors.typeNull = function(data) {
   var block1 = FactoryUtils.newNode('block', {type: 'type_null'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -458,7 +458,7 @@ BlockConstructors.type_null = function(data) {
  *     nodes.
  * @return {number} Returns 0 
  */
-BlockConstructors.type_boolean = function(data) {
+BlockConstructors.typeBoolean = function(data) {
   var block1 = FactoryUtils.newNode('block', {type: 'type_boolean'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -479,7 +479,7 @@ BlockConstructors.type_boolean = function(data) {
  *     nodes.
  * @return {number} Returns 0 
  */
-BlockConstructors.type_number = function(data) {
+BlockConstructors.typeNumber = function(data) {
   var block1 = FactoryUtils.newNode('block', {type: 'type_number'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -500,7 +500,7 @@ BlockConstructors.type_number = function(data) {
  *     nodes.
  * @return {number} Returns 0 
  */
-BlockConstructors.type_string = function(data) {
+BlockConstructors.typeString = function(data) {
   var block1 = FactoryUtils.newNode('block', {type: 'type_string'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -521,7 +521,7 @@ BlockConstructors.type_string = function(data) {
  *     nodes.
  * @return {number} Returns 0 
  */
-BlockConstructors.type_list = function(data) {
+BlockConstructors.typeList = function(data) {
   var block1 = FactoryUtils.newNode('block', {type: 'type_list'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -543,7 +543,7 @@ BlockConstructors.type_list = function(data) {
  * @param TYPE
  * @return {number} Returns 0 
  */
-BlockConstructors.type_other = function(data, TYPE) {
+BlockConstructors.typeOther = function(data, TYPE) {
   var block1 = FactoryUtils.newNode('block', {type: 'type_other'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -567,7 +567,7 @@ BlockConstructors.type_other = function(data, TYPE) {
  * @param HUE
  * @return {number} Returns 0 
  */
-BlockConstructors.colour_hue = function(data, colour, HUE) {
+BlockConstructors.colourHue = function(data, colour, HUE) {
   var block1 = FactoryUtils.newNode('block', {type: 'colour_hue'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');

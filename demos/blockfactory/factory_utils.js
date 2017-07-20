@@ -1124,22 +1124,22 @@ FactoryUtils.type_group = function(data, types) {
 FactoryUtils.parseType = function(data, type) {
   switch (type) {
     case "Null":
-      BlockConstructors.type_null(data);
+      BlockConstructors.typeNull(data);
       break;
     case "Boolean":
-      BlockConstructors.type_boolean(data);
+      BlockConstructors.typeBoolean(data);
       break;
     case "Number":
-      BlockConstructors.type_number(data);
+      BlockConstructors.typeNumber(data);
       break;
     case "String":
-      BlockConstructors.type_string(data);
+      BlockConstructors.typeString(data);
       break;
     case "Array":
-      BlockConstructors.type_list(data);
+      BlockConstructors.typeList(data);
       break;
     default:
-      BlockConstructors.type_other(data, type);
+      BlockConstructors.typeOther(data, type);
       break;
   }
 };
@@ -1169,23 +1169,23 @@ FactoryUtils.parseFields = function(data) {
   for (let i=0; i<data.src.current.length; i++) {
     let field = data.src.current[i];
     if (field instanceof Blockly.FieldLabel) {
-      BlockConstructors.field_static(data, field.text_);
+      BlockConstructors.fieldStatic(data, field.text_);
     } else if (field instanceof Blockly.FieldTextInput) {
-      BlockConstructors.field_input(data, field.text_, field.name);
+      BlockConstructors.fieldInput(data, field.text_, field.name);
     } else if (field instanceof Blockly.FieldNumber) {
-      BlockConstructors.field_number(data, field.text_, field.name, field.min_, field.max_, field.presicion_);
+      BlockConstructors.fieldNumber(data, field.text_, field.name, field.min_, field.max_, field.presicion_);
     } else if (field instanceof Blockly.FieldAngle) {
-      BlockConstructors.field_angle(data, field.text_, field.name);
+      BlockConstructors.fieldAngle(data, field.text_, field.name);
     } else if (field instanceof Blockly.FieldDropdown) {
-      BlockConstructors.field_dropdown(data, field.menuGenerator_, field.name);
+      BlockConstructors.fieldDropdown(data, field.menuGenerator_, field.name);
     } else if (field instanceof Blockly.FieldCheckbox) {
-      BlockConstructors.field_checkbox(data, field.state_ , field.name);
+      BlockConstructors.fieldCheckbox(data, field.state_ , field.name);
     } else if (field instanceof Blockly.FieldColour) {
-      BlockConstructors.field_colour(data, field.colour_ , field.name);
+      BlockConstructors.fieldColour(data, field.colour_ , field.name);
     } else if (field instanceof Blockly.FieldVariable) {
-      BlockConstructors.field_variable(data, field.text_, field.name);
+      BlockConstructors.fieldVariable(data, field.text_, field.name);
     } else if (field instanceof Blockly.FieldImage) {
-      BlockConstructors.field_image(data, field.src_, field.width_, field.height_, field.text_);
+      BlockConstructors.fieldImage(data, field.src_, field.width_, field.height_, field.text_);
     }
   }
 };
@@ -1208,7 +1208,7 @@ FactoryUtils.parseInputs = function(data) {
     }
     switch (input.type) {
       case Blockly.INPUT_VALUE:
-        BlockConstructors.input_value(data,
+        BlockConstructors.inputValue(data,
           input.name, // NAME
           align,
           function(data) { 
@@ -1225,7 +1225,7 @@ FactoryUtils.parseInputs = function(data) {
           }); // TYPE
         break;
       case Blockly.NEXT_STATEMENT:
-        BlockConstructors.input_statement(data,
+        BlockConstructors.inputStatement(data,
           input.name, // NAME
           align,
           function(data) { 
@@ -1242,7 +1242,7 @@ FactoryUtils.parseInputs = function(data) {
           }); // TYPE
         break;
       case Blockly.DUMMY_INPUT:
-        BlockConstructors.input_dummy(data,
+        BlockConstructors.inputDummy(data,
           align,
           function(data) { 
             let src = data.src.current;
@@ -1288,7 +1288,7 @@ FactoryUtils.buildBlockFactoryDef = function(block) {
       }
     }
   }
-  BlockConstructors.factory_base(data, connections,
+  BlockConstructors.factoryBase(data, connections,
     block.type, //NAME
     inline, //INLINE
     connections, //CONNECTIONS
@@ -1303,7 +1303,7 @@ FactoryUtils.buildBlockFactoryDef = function(block) {
     function(data) {BlockConstructors.text(data, data.src.current.helpUrl);},
     //HELPURL
     function(data) {
-      BlockConstructors.colour_hue(data, data.src.current.colour_, colour_hue);
+      BlockConstructors.colourHue(data, data.src.current.colour_, colour_hue);
     });
   return data.dst.root;
 };

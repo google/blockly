@@ -1,3 +1,4 @@
+/*jslint passfail: false, vars: true, indent: 2, maxlen: 80, maxerr: 100*/
 /**
  * @license
  * Blockly Demos: Block Factory
@@ -25,7 +26,8 @@
  * generator stub. Uses the Block Factory namespace. Depends on the FactoryUtils
  * for its code generation functions.
  *
- * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach), JC-Orozco (Juan Carlos Orozco)
+ * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach), JC-Orozco
+ * (Juan Carlos Orozco)
  */
 'use strict';
 
@@ -85,7 +87,7 @@ BlockFactory.formatChange = function() {
   var mask = document.getElementById('blocklyMask');
   var languagePre = document.getElementById('languagePre');
   var languageTA = document.getElementById('languageTA');
-  if (document.getElementById('format').value == 'Manual') {
+  if (document.getElementById('format').value === 'Manual') {
     Blockly.hideChaff();
     mask.style.display = 'block';
     languagePre.style.display = 'none';
@@ -119,12 +121,14 @@ BlockFactory.updateLanguage = function() {
     blockType = BlockFactory.UNNAMED;
   }
   
-  if(!BlockFactory.updateBlocksFlag) {  
+  if (!BlockFactory.updateBlocksFlag) {
     var format = document.getElementById('format').value;
     var code = FactoryUtils.getBlockDefinition(blockType, rootBlock, format,
         BlockFactory.mainWorkspace);
     FactoryUtils.injectCode(code, 'languagePre');
-    if(!BlockFactory.updateBlocksFlag2) {
+    if (!BlockFactory.updateBlocksFlag2) {
+      var languagePre = document.getElementById('languagePre');
+      var languageTA = document.getElementById('languageTA');
       code = languagePre.textContent.trim();
       languageTA.value = code;
     }

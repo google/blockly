@@ -84,10 +84,10 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
     var xml = FactoryUtils.buildBlockFactoryDef(block)
     Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
     // Calculate timer to avoid infinite update loops
-    BlockFactory.updateBlocksFlag = false
+    BlockFactory.updateBlocksFlag = false;
     setTimeout(function() { BlockFactory.updateBlocksFlag2 = false }, 3000);
   }
-  BlockFactory.lastUpdatedBlock = block // For now uses this global variable to share the block value
+  BlockFactory.lastUpdatedBlock = block; // Variable to share the block value
   
   function makeVar(root, name) {
     name = name.toLowerCase().replace(/\W/g, '_');
@@ -1012,6 +1012,8 @@ FactoryUtils.getHelpUrlFromRootBlock_ = function(rootBlock) {
 
 /**
  * Helper function to create a new DOM node
+ * Temporary function while goog.dom.createDom is able to create nodes
+ * with attributes.
  * @param {!string} name New node name.
  * @param {Map} name New node attribute map.
  * @param {string} text New node text.
@@ -1053,7 +1055,7 @@ FactoryUtils.field_dropdown = function(data, options, FIELDNAME) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_dropdown'});
   var OPTIONS = '[';
   
-  if(!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     data.dst.current.append(nextBlock);
     data.dst.current = nextBlock;
@@ -1063,9 +1065,9 @@ FactoryUtils.field_dropdown = function(data, options, FIELDNAME) {
   var mutation = FactoryUtils.newNode('mutation'); 
   block1.append(mutation);
   block1.append(FactoryUtils.newNode('field', {name: 'FIELDNAME'}, FIELDNAME));
-  for(let i=0; i<options.length; i++) {
+  for (let i=0; i<options.length; i++) {
     let option = options[i];
-    if(typeof option[0] === "string") {
+    if (typeof option[0] === "string") {
       OPTIONS+='&quot;text&quot;,'
       block1.append(FactoryUtils.newNode('field', {name: 'USER'+i}, option[0]));
     } else {
@@ -1094,7 +1096,7 @@ FactoryUtils.field_dropdown = function(data, options, FIELDNAME) {
 FactoryUtils.type_group = function(data, types) {
   var block1 = FactoryUtils.newNode('block', {type: 'type_group'});
 
-  if(!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     data.dst.current.append(nextBlock);
     data.dst.current = nextBlock;
@@ -1102,7 +1104,7 @@ FactoryUtils.type_group = function(data, types) {
   data.dst.current.append(block1);
   data.dst.current = block1;
   block1.append(FactoryUtils.newNode('mutation', {types:types.length}));
-  for(let i=0; i<types.length; i++) {
+  for (let i=0; i<types.length; i++) {
     let type = types[i];
     let value = FactoryUtils.newNode('value', {name:'TYPE'+i});
     block1.append(value);
@@ -1120,7 +1122,7 @@ FactoryUtils.type_group = function(data, types) {
  * @return {number} Returns 0.
  */
 FactoryUtils.parseType = function(data, type) {
-  switch(type) {
+  switch (type) {
     case "Null":
       BlockConstructors.type_null(data);
       break;
@@ -1149,10 +1151,10 @@ FactoryUtils.parseType = function(data, type) {
  */
 FactoryUtils.parseTypes = function(data) {
   let curr = data.src.current;
-  if(curr.check_) {
-    if(curr.check_.length === 1) {
+  if (curr.check_) {
+    if (curr.check_.length === 1) {
       FactoryUtils.parseType(data, curr.check_[0]);
-    } else if(curr.check_.length > 1 ) {
+    } else if (curr.check_.length > 1 ) {
       BlockUtils.type_group(data, curr.check_);
     }
   }
@@ -1164,25 +1166,25 @@ FactoryUtils.parseTypes = function(data) {
  * @return {number} Returns 0.
  */
 FactoryUtils.parseFields = function(data) {
-  for(let i=0; i<data.src.current.length; i++) {
+  for (let i=0; i<data.src.current.length; i++) {
     let field = data.src.current[i];
-    if(field instanceof Blockly.FieldLabel) {
+    if (field instanceof Blockly.FieldLabel) {
       BlockConstructors.field_static(data, field.text_);
-    } else if(field instanceof Blockly.FieldTextInput) {
+    } else if (field instanceof Blockly.FieldTextInput) {
       BlockConstructors.field_input(data, field.text_, field.name);
-    } else if(field instanceof Blockly.FieldNumber) {
+    } else if (field instanceof Blockly.FieldNumber) {
       BlockConstructors.field_number(data, field.text_, field.name, field.min_, field.max_, field.presicion_);
-    } else if(field instanceof Blockly.FieldAngle) {
+    } else if (field instanceof Blockly.FieldAngle) {
       BlockConstructors.field_angle(data, field.text_, field.name);
-    } else if(field instanceof Blockly.FieldDropdown) {
+    } else if (field instanceof Blockly.FieldDropdown) {
       BlockConstructors.field_dropdown(data, field.menuGenerator_, field.name);
-    } else if(field instanceof Blockly.FieldCheckbox) {
+    } else if (field instanceof Blockly.FieldCheckbox) {
       BlockConstructors.field_checkbox(data, field.state_ , field.name);
-    } else if(field instanceof Blockly.FieldColour) {
+    } else if (field instanceof Blockly.FieldColour) {
       BlockConstructors.field_colour(data, field.colour_ , field.name);
-    } else if(field instanceof Blockly.FieldVariable) {
+    } else if (field instanceof Blockly.FieldVariable) {
       BlockConstructors.field_variable(data, field.text_, field.name);
-    } else if(field instanceof Blockly.FieldImage) {
+    } else if (field instanceof Blockly.FieldImage) {
       BlockConstructors.field_image(data, field.src_, field.width_, field.height_, field.text_);
     }
   }
@@ -1194,17 +1196,17 @@ FactoryUtils.parseFields = function(data) {
  * @return {number} Returns 0.
  */
 FactoryUtils.parseInputs = function(data) {
-  for(let i=0; i<data.src.current.length; i++) {
+  for (let i=0; i<data.src.current.length; i++) {
     let input = data.src.current[i];
     let align = 'LEFT'; // This seems to be the default Blockly.ALIGN_LEFT
-    if(input.align || input.align === 0) {
-      if(input.align === Blockly.ALIGN_CENTRE) {
+    if (input.align || input.align === 0) {
+      if (input.align === Blockly.ALIGN_CENTRE) {
         align = 'CENTRE';
-      } else if(input.align === Blockly.ALIGN_RIGHT) {
+      } else if (input.align === Blockly.ALIGN_RIGHT) {
         align = 'RIGHT';
       }
     }
-    switch(input.type) {
+    switch (input.type) {
       case Blockly.INPUT_VALUE:
         BlockConstructors.input_value(data,
           input.name, // NAME
@@ -1255,33 +1257,33 @@ FactoryUtils.parseInputs = function(data) {
 
 /**
  * Builds the block description of the given block.
- * @param {!block} block Element that will be assigned as the data source element to generate the description blocks.
+ * @param {!Element} block Element that will be assigned as the data source element to generate the description blocks.
  * @return {Element} Returns the data destination root element.
  */
 FactoryUtils.buildBlockFactoryDef = function(block) {
   var data = {src: {root: block, current: block},
               dst: {}};
-  data.dst.root = FactoryUtils.newNode('xml');
+  data.dst.root = goog.dom.createDom('xml');
   data.dst.current = data.dst.root;
-
-  let colour_hue = Math.floor(goog.color.hexToHsv(data.src.current.colour_)[0]); // Convert to hue value 0-360 degrees
+  // Convert colour_ to hue value 0-360 degrees
+  let colour_hue = Math.floor(goog.color.hexToHsv(data.src.current.colour_)[0]);
   let inline = 'AUTO'; // When block.inputsInlineDefault === undefined
-  if(block.inputsInlineDefault === true) {
+  if (block.inputsInlineDefault === true) {
     inline = 'INT';
-  } else if(block.inputsInlineDefault === false) {
+  } else if (block.inputsInlineDefault === false) {
     inline = 'EXT';
   }   
   let connections = 'NONE';
-  if(block.outputConnection) {
+  if (block.outputConnection) {
     connections = 'LEFT';
   } else {
-    if(block.prevConnection && block.nextConnection) {
+    if (block.prevConnection && block.nextConnection) {
       connections = 'BOTH';
     } else {
-      if(block.prevConnection) {
+      if (block.prevConnection) {
         connections = 'TOP';
       }
-      if(block.nextConnection) {
+      if (block.nextConnection) {
         connections = 'BOTTOM';
       }
     }
@@ -1296,8 +1298,12 @@ FactoryUtils.buildBlockFactoryDef = function(block) {
       FactoryUtils.parseInputs(data);
       data.src.current = src;
     }, //INPUTS
-    function(data) {BlockConstructors.text(data, data.src.current.tooltip);}, //TOOLTIP
-    function(data) {BlockConstructors.text(data, data.src.current.helpUrl);}, //HELPURL
-    function(data) {BlockConstructors.colour_hue(data, data.src.current.colour_, colour_hue);})
+    function(data) {BlockConstructors.text(data, data.src.current.tooltip);},
+    //TOOLTIP
+    function(data) {BlockConstructors.text(data, data.src.current.helpUrl);},
+    //HELPURL
+    function(data) {
+      BlockConstructors.colour_hue(data, data.src.current.colour_, colour_hue);
+    });
   return data.dst.root;
 };

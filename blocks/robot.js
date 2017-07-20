@@ -137,23 +137,11 @@ Blockly.robot.getLocations = function() {
       Blockly.robot.locations = options;
     });
   }
-  // var options = [];
-  // var client = new ROSLIB.Service({
-  //  ros: ROS,
-  //  name: '/location_db/list',
-  //  serviceType : 'location_server/ListPoses'
-  //});
-
-  // var request = new ROSLIB.ServiceRequest({});
-  // client.callService(request, function(result) {
-  //  for (var i=0; i<result.names.length; ++i) {
-  //    var name = result.names[i];
-  //    options.push([name, name]);
-  //  }
-  //  Blockly.robot.locations = options;
-  //  return options;
-  //});
 };
+
+function getLocations() {
+  return Blockly.robot.locations;
+}
 
 Blockly.robot.getLocations();
 
@@ -161,7 +149,7 @@ Blockly.Blocks['robot_movement_locations'] = {
   init: function() {
     Blockly.robot.getLocations();
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown(Blockly.robot.locations), "NAME");
+        .appendField(new Blockly.FieldDropdown(getLocations), "NAME");
     this.setOutput(true, "String");
     this.setColour(160);
     this.setTooltip('The list of locations the robot knows about.');

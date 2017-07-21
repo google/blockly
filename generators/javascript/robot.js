@@ -10,14 +10,14 @@ goog.require('Blockly.JavaScript');
 
 Blockly.JavaScript['robot_display_message_h2'] = function(block) {
   var value_text = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_COMMA);
-  var code = 'robot.displayMessage(' + value_text + ', \'\', 0);\n';
+  var code = 'robot.displayMessage(' + value_text + ', \'\');\n';
   return code;
 };
 
 Blockly.JavaScript['robot_display_message_h1h2_no_timeout'] = function(block) {
   var value_h1_text = Blockly.JavaScript.valueToCode(block, 'H1_TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
   var value_h2_text = Blockly.JavaScript.valueToCode(block, 'H2_TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
-  var code = 'robot.displayMessage(' + value_h1_text + ', ' + value_h2_text + ', 0);\n';
+  var code = 'robot.displayMessage(' + value_h1_text + ', ' + value_h2_text + ');\n';
   return code;
 };
 
@@ -152,12 +152,12 @@ Blockly.JavaScript['robot_manipulation_place_default'] = function(block) {
 };
 
 Blockly.JavaScript['robot_manipulation_open_gripper'] = function(block) {
-  var code = 'robot.setGripper(0, 1, 0);\n';
+  var code = 'robot.openGripper();\n';
   return code;
 };
 
 Blockly.JavaScript['robot_manipulation_close_gripper'] = function(block) {
-  var code = 'robot.setGripper(0, 2, 0);\n';
+  var code = 'robot.closeGripper();\n';
   return code;
 };
 
@@ -165,39 +165,41 @@ Blockly.JavaScript['robot_manipulation_set_gripper'] = function(block) {
   var dropdown_action = block.getFieldValue('ACTION') || 'OPEN';
   var dropdown_side = block.getFieldValue('SIDE') || 'LEFT';
   var side = 0;
+  var side = '';
   if (dropdown_side === 'LEFT') {
-    side = 1;
+    side = 'Left';
   } else if (dropdown_side === 'RIGHT') {
-    side = 2;
+    side = 'Right';
   }
-  var action = 0;
+  var action = '';
   if (dropdown_action === 'OPEN') {
-    action = 1;
+    action = 'open';
   } else if (dropdown_action === 'CLOSE') {
-    action = 2;
+    action = 'close';
   }
-  var max_effort = -1;
-  var code = 'robot.setGripper(' + side + ', ' + action + ', ' + max_effort + ');\n';
+  var code = 'robot.' + action + side + 'Gripper();\n';
   return code;
 };
 
 Blockly.JavaScript['robot_manipulation_set_right_gripper_with_effort'] = function(block) {
   var number_force = block.getFieldValue('FORCE') || -1;
-  var side = 2; // Right side
-  var action = 2; // Close action
-  var code = 'robot.setGripper(' + side + ', ' + action + ', ' + number_force + ');\n';
+  var code = 'robot.closeRightGripper(' + number_force + ');\n';
   return code;
 };
 
 Blockly.JavaScript['robot_manipulation_is_gripper_open'] = function(block) {
   var dropdown_gripper = block.getFieldValue('GRIPPER') || '';
   var dropdown_state = block.getFieldValue('STATE') || 'OPEN';
-  var code = '';
+  var side = '';
+  if (dropdown_gripper === 'LEFT') {
+    side = 'Left';
+  } else if (dropdown_gripper === 'RIGHT') {
+    side = 'Right';
+  }
+  var code = 'robot.is' + side + 'GripperOpen()';
   var order = Blockly.JavaScript.ORDER_FUNCTION_CALL;
-  if (dropdown_state === 'OPEN') {
-    code = 'robot.isGripperOpen(' + Blockly.JavaScript.quote_(dropdown_gripper) + ')';
-  } else {
-    code = '!robot.isGripperOpen(' + Blockly.JavaScript.quote_(dropdown_gripper) + ')';
+  if (dropdown_state !== 'OPEN') {
+    code = '!' + code;
     order = Blockly.JavaScript.ORDER_LOGICAL_NOT;
   }
   return [code, order];

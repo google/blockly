@@ -226,6 +226,18 @@ Blockly.JavaScript['robot_manipulation_run_pbd_action'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
+Blockly.JavaScript['robot_manipulation_run_pbd_program'] = function(block) {
+  var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_NONE) || '\'\'';
+  var code = 'robot.runPbdProgram(' + value_name + ')';
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+
+Blockly.JavaScript['robot_manipulation_pbd_programs'] = function(block) {
+  var dropdown_name = block.getFieldValue('NAME');
+  var code = Blockly.JavaScript.quote_(dropdown_name);
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
 Blockly.JavaScript['robot_manipulation_set_torso'] = function(block) {
   var value_height = Blockly.JavaScript.valueToCode(block, 'HEIGHT', Blockly.JavaScript.ORDER_ATOMIC);
   var code = 'robot.setTorso(' + value_height + ');\n';

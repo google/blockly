@@ -15,6 +15,7 @@
 goog.provide('BlockConstructors');
 
 /**
+ * Used to read or write a DOM data structure.
  * @typedef {{root: Element, current: Element}} ElementPointers
  */
 

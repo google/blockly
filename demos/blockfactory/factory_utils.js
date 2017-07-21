@@ -1218,7 +1218,6 @@ FactoryUtils.buildBlockFactoryDef = function(block) {
   BlockConstructors.factoryBase(data, connections,
     block.type, //NAME
     inline, //INLINE
-    connections, //CONNECTIONS
     function(data) {
       let src = data.src.current;
       data.src.current = data.src.current.inputList;

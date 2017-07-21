@@ -36,10 +36,14 @@ goog.provide('BlockConstructors');
  * @param {nodeChainCallback} inputsCB
  * @param {nodeChainCallback} tooltipCB
  * @param {nodeChainCallback} helpUrlCB
+ * @param {nodeChainCallback} outputTypeCB
+ * @param {nodeChainCallback} topTypeCB
+ * @param {nodeChainCallback} bottomTypeCB
  * @param {nodeChainCallback} colourCB
  */
 BlockConstructors.factoryBase = function(data, connections, name, inline,
-    inputsCB, tooltipCB, helpUrlCB, colourCB) {
+    inputsCB, tooltipCB, helpUrlCB, outputTypeCB, topTypeCB, bottomTypeCB,
+    colourCB) {
   var block1 = FactoryUtils.newNode('block', {type: 'factory_base'});
   if (!FactoryUtils.firstStatement(data.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
@@ -65,6 +69,25 @@ BlockConstructors.factoryBase = function(data, connections, name, inline,
       data.dst.current = FactoryUtils.newNode('value', {name: 'HELPURL'}));
   helpUrlCB(data);
   data.dst.current = block1;
+  if (connections === 'LEFT') {
+    block1.append(
+      data.dst.current = FactoryUtils.newNode('value', {name: 'OUTPUTTYPE'}));
+    outputTypeCB(data);
+    data.dst.current = block1;
+  } else {
+    if (connections === 'UP' || connections === 'BOTH') {
+      block1.append(
+        data.dst.current = FactoryUtils.newNode('value', {name: 'TOPTYPE'}));
+      topTypeCB(data);
+      data.dst.current = block1;      
+    }
+    if (connections === 'DOWN' || connections === 'BOTH') {
+      block1.append(
+        data.dst.current = FactoryUtils.newNode('value', {name: 'BOTTOMTYPE'}));
+      bottomTypeCB(data);
+      data.dst.current = block1;      
+    }
+  }
   block1.append(
       data.dst.current = FactoryUtils.newNode('value', {name: 'COLOUR'}));
   colourCB(data);

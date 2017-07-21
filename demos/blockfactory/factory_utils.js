@@ -24,7 +24,8 @@
  * Exporter applications within Blockly Factory. Holds functions to generate
  * block definitions and generator stubs and to create and download files.
  *
- * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach), JC-Orozco (Juan Carlos Orozco)
+ * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach), JC-Orozco
+ * (Juan Carlos Orozco)
  */
  'use strict';
 
@@ -34,6 +35,10 @@
 goog.provide('FactoryUtils');
 
 goog.require('BlockConstructors');
+
+/**
+ * @typedef {{root: Element, current: Element}} ElementPointers
+ */
 
 /**
  * Get block definition code for the current block.
@@ -1012,8 +1017,6 @@ FactoryUtils.getHelpUrlFromRootBlock_ = function(rootBlock) {
 
 /**
  * Helper function to create a new DOM node
- * Temporary function while goog.dom.createDom is able to create nodes
- * with attributes.
  * @param {!string} name New node name.
  * @param {Map} name New node attribute map.
  * @param {string} text New node text.
@@ -1034,19 +1037,22 @@ FactoryUtils.newNode = function(name, attrs, text) {
 };
 
 /**
- * Checks wether a given block is the first statement or not. Uses som adhoc heuristics to determine this.
+ * Checks wether a given block is the first statement or not. Uses som adhoc 
+ * heuristics to determine this.
  * @param {!Element} block A block Element to test.
  * @return {boolean} Returns true if this is the first statement.
  */
 FactoryUtils.firstStatement = function(block) {
-  return (block.tagName === 'STATEMENT' || block.tagName === 'XML' || block.tagName === 'VALUE');
+  return (block.tagName === 'STATEMENT' || block.tagName === 'XML' || 
+      block.tagName === 'VALUE');
 };
 
 /**
  * Creates a type Element
- * @param {!data} data Data structure that stores source and destination nodes with their corresponding current nodes.
+ * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
+ *     that stores source and destination nodes with their corresponding current
+ *     nodes.
  * @param {string} type Type name of element to be created.
- * @return {number} Returns 0.
  */
 FactoryUtils.parseType = function(data, type) {
   switch (type) {
@@ -1073,18 +1079,19 @@ FactoryUtils.parseType = function(data, type) {
 
 /**
  * Parses the data current src node to create the corresponding type elements.
- * @param {!data} data Data structure that stores source and destination nodes with their corresponding current nodes.
- * @return {number} Returns 0.
+ * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
+ *     that stores source and destination nodes with their corresponding current
+ *     nodes.
+ * @node {Blockly.RenderedConnection} connection
  */
-FactoryUtils.parseTypes = function(data) {
-  let curr = data.src.current;
-  if (curr.check_) {
-    if (curr.check_.length < 1) {
+FactoryUtils.parseTypes = function(data, connection) {
+  if (connection.check_) {
+    if (connection.check_.length < 1) {
       BlockConstructors.typeNullShadow(data);
-    } else if (curr.check_.length === 1) {
-      FactoryUtils.parseType(data, curr.check_[0]);
-    } else if (curr.check_.length > 1 ) {
-      BlockConstructors.typeGroup(data, curr.check_);
+    } else if (connection.check_.length === 1) {
+      FactoryUtils.parseType(data, connection.check_[0]);
+    } else if (connection.check_.length > 1 ) {
+      BlockConstructors.typeGroup(data, connection.check_);
     }
   } else {
     BlockConstructors.typeNullShadow(data);
@@ -1093,8 +1100,9 @@ FactoryUtils.parseTypes = function(data) {
 
 /**
  * Parses the data current src node to create the corresponding field elements.
- * @param {!data} data Data structure that stores source and destination nodes with their corresponding current nodes.
- * @return {number} Returns 0.
+ * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
+ *     that stores source and destination nodes with their corresponding current
+ *     nodes.
  */
 FactoryUtils.parseFields = function(data) {
   for (let i=0; i<data.src.current.length; i++) {
@@ -1104,7 +1112,8 @@ FactoryUtils.parseFields = function(data) {
     } else if (field instanceof Blockly.FieldTextInput) {
       BlockConstructors.fieldInput(data, field.text_, field.name);
     } else if (field instanceof Blockly.FieldNumber) {
-      BlockConstructors.fieldNumber(data, field.text_, field.name, field.min_, field.max_, field.presicion_);
+      BlockConstructors.fieldNumber(data, field.text_, field.name, field.min_,
+          field.max_, field.presicion_);
     } else if (field instanceof Blockly.FieldAngle) {
       BlockConstructors.fieldAngle(data, field.text_, field.name);
     } else if (field instanceof Blockly.FieldDropdown) {
@@ -1116,15 +1125,17 @@ FactoryUtils.parseFields = function(data) {
     } else if (field instanceof Blockly.FieldVariable) {
       BlockConstructors.fieldVariable(data, field.text_, field.name);
     } else if (field instanceof Blockly.FieldImage) {
-      BlockConstructors.fieldImage(data, field.src_, field.width_, field.height_, field.text_);
+      BlockConstructors.fieldImage(data, field.src_, field.width_,
+          field.height_, field.text_);
     }
   }
 };
 
 /**
  * Parses the data current src node to create the corresponding input elements.
- * @param {!data} data Data structure that stores source and destination nodes with their corresponding current nodes.
- * @return {number} Returns 0.
+ * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
+ *     that stores source and destination nodes with their corresponding current
+ *     nodes.
  */
 FactoryUtils.parseInputs = function(data) {
   for (let i=0; i<data.src.current.length; i++) {
@@ -1151,7 +1162,7 @@ FactoryUtils.parseInputs = function(data) {
           function(data) {
             let src = data.src.current;
             data.src.current = input.connection;
-            FactoryUtils.parseTypes(data);
+            FactoryUtils.parseTypes(data, data.src.current);
             data.src.current = src;
           }); // TYPE
         break;
@@ -1168,7 +1179,7 @@ FactoryUtils.parseInputs = function(data) {
           function(data) {
             let src = data.src.current;
             data.src.current = input.connection;
-            FactoryUtils.parseTypes(data);
+            FactoryUtils.parseTypes(data, data.src.current);
             data.src.current = src;
           }); // TYPE
         break;
@@ -1188,10 +1199,16 @@ FactoryUtils.parseInputs = function(data) {
 
 /**
  * Builds the block description of the given block.
- * @param {!Element} block Element that will be assigned as the data source element to generate the description blocks.
+ * @param {!Element} block Element that will be assigned as the data source
+ *     element to generate the description blocks.
  * @return {Element} Returns the data destination root element.
  */
 FactoryUtils.buildBlockFactoryDef = function(block) {
+  /**
+   * @type {{src: ElementPointers, dst: ElementPointers}} data Data structure
+   *     that stores source and destination nodes with their corresponding
+   *      current nodes.
+   */
   var data = {src: {root: block, current: block},
               dst: {}};
   data.dst.root = goog.dom.createDom('xml');
@@ -1208,10 +1225,10 @@ FactoryUtils.buildBlockFactoryDef = function(block) {
   if (block.outputConnection) {
     connections = 'LEFT';
   } else {
-    if (block.prevConnection && block.nextConnection) {
+    if (block.previousConnection && block.nextConnection) {
       connections = 'BOTH';
     } else {
-      if (block.prevConnection) {
+      if (block.previousConnection) {
         connections = 'TOP';
       }
       if (block.nextConnection) {
@@ -1220,18 +1237,40 @@ FactoryUtils.buildBlockFactoryDef = function(block) {
     }
   }
   BlockConstructors.factoryBase(data, connections,
-    block.type, //NAME
-    inline, //INLINE
+    block.type,
+    inline,
     function(data) {
       let src = data.src.current;
       data.src.current = data.src.current.inputList;
       FactoryUtils.parseInputs(data);
       data.src.current = src;
-    }, //INPUTS
+    },
     function(data) {BlockConstructors.text(data, data.src.current.tooltip);},
-    //TOOLTIP
     function(data) {BlockConstructors.text(data, data.src.current.helpUrl);},
-    //HELPURL
+    function(data) {
+      if (block.outputConnection) {
+        let src = data.src.current;
+        data.src.current = block.outputConnection;
+        FactoryUtils.parseTypes(data, data.src.current);
+        data.src.current = src;
+      }
+    },
+    function(data) {
+      if (block.previousConnection) {
+        let src = data.src.current;
+        data.src.current = block.previousConnection;
+        FactoryUtils.parseTypes(data, data.src.current);
+        data.src.current = src;
+      }
+    },
+    function(data) {
+      if (block.nextConnection) {
+        let src = data.src.current;
+        data.src.current = block.nextConnection;
+        FactoryUtils.parseTypes(data, data.src.current);
+        data.src.current = src;
+      }
+    },
     function(data) {
       BlockConstructors.colourHue(data, data.src.current.colour_, colour_hue);
     });

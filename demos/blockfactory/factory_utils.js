@@ -1153,37 +1153,37 @@ FactoryUtils.parseInputs = function(data) {
     switch (input.type) {
       case Blockly.INPUT_VALUE:
         BlockConstructors.inputValue(data,
-          input.name, // NAME
+          input.name,
           align,
           function(data) { 
             let src = data.src.current;
             data.src.current = input.fieldRow;
             FactoryUtils.parseFields(data);
             data.src.current = src;
-          }, // FIELDS
+          },
           function(data) {
             let src = data.src.current;
             data.src.current = input.connection;
             FactoryUtils.parseTypes(data, data.src.current);
             data.src.current = src;
-          }); // TYPE
+          });
         break;
       case Blockly.NEXT_STATEMENT:
         BlockConstructors.inputStatement(data,
-          input.name, // NAME
+          input.name,
           align,
           function(data) { 
             let src = data.src.current;
             data.src.current = input.fieldRow;
             FactoryUtils.parseFields(data);
             data.src.current = src;
-          }, // FIELDS
+          },
           function(data) {
             let src = data.src.current;
             data.src.current = input.connection;
             FactoryUtils.parseTypes(data, data.src.current);
             data.src.current = src;
-          }); // TYPE
+          });
         break;
       case Blockly.DUMMY_INPUT:
         BlockConstructors.inputDummy(data,
@@ -1193,7 +1193,7 @@ FactoryUtils.parseInputs = function(data) {
             data.src.current = input.fieldRow;
             FactoryUtils.parseFields(data);
             data.src.current = src;
-          }); // FIELDS
+          });
         break;
     }
   }

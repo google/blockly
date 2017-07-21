@@ -1079,11 +1079,15 @@ FactoryUtils.parseType = function(data, type) {
 FactoryUtils.parseTypes = function(data) {
   let curr = data.src.current;
   if (curr.check_) {
-    if (curr.check_.length === 1) {
+    if (curr.check_.length < 1) {
+      BlockConstructors.typeNullShadow(data);
+    } else if (curr.check_.length === 1) {
       FactoryUtils.parseType(data, curr.check_[0]);
     } else if (curr.check_.length > 1 ) {
       BlockConstructors.typeGroup(data, curr.check_);
     }
+  } else {
+    BlockConstructors.typeNullShadow(data);
   }
 };
 

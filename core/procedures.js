@@ -119,6 +119,18 @@ Blockly.Procedures.findLegalName = function(name, block) {
  * @private
  */
 Blockly.Procedures.isLegalName_ = function(name, workspace, opt_exclude) {
+  return !Blockly.Procedures.isNameUsed(name, workspace, opt_exclude);
+};
+
+/**
+ * Return if the given name is already a procedure name.
+ * @param {string} name The questionable name.
+ * @param {!Blockly.Workspace} workspace The workspace to scan for collisions.
+ * @param {Blockly.Block=} opt_exclude Optional block to exclude from
+ *     comparisons (one doesn't want to collide with oneself).
+ * @return {boolean} True if the name is used, otherwise return false.
+ */
+Blockly.Procedures.isNameUsed = function(name, workspace, opt_exclude) {
   var blocks = workspace.getAllBlocks();
   // Iterate through every block and check the name.
   for (var i = 0; i < blocks.length; i++) {

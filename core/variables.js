@@ -234,6 +234,7 @@ Blockly.Variables.generateUniqueName = function(workspace) {
  *     aborted (cancel button), or undefined if an existing variable was chosen.
  */
 Blockly.Variables.createVariable = function(workspace, opt_callback) {
+  // This function needs to be named so it can be called recursively.
   var promptAndCheckWithAlert = function(defaultName) {
     Blockly.Variables.promptName(Blockly.Msg.NEW_VARIABLE_TITLE, defaultName,
       function(text) {
@@ -245,7 +246,7 @@ Blockly.Variables.createVariable = function(workspace, opt_callback) {
                   promptAndCheckWithAlert(text);  // Recurse
                 });
           }
-          else if (!Blockly.Procedures.isLegalName_(text, workspace)) {
+          else if (!Blockly.Procedures.isNameUsed(text, workspace)) {
             Blockly.alert(Blockly.Msg.PROCEDURE_ALREADY_EXISTS.replace('%1',
                 text.toLowerCase()),
                 function() {
@@ -256,6 +257,55 @@ Blockly.Variables.createVariable = function(workspace, opt_callback) {
             workspace.createVariable(text);
             if (opt_callback) {
               opt_callback(text);
+            }
+          }
+        } else {
+          // User canceled prompt without a value.
+          if (opt_callback) {
+            opt_callback(null);
+          }
+        }
+      });
+  };
+  promptAndCheckWithAlert('');
+};
+
+/**
+ * Rename a variable with the given workspace, variableType, and oldName.
+ * @param {!Blockly.Workspace} workspace The workspace on which to rename the
+ *     variable.
+ * @param {?Blockly.VariableModel} variable Variable to rename.
+ * @param {function(?string=)=} opt_callback A callback. It will
+ *     be passed an acceptable new variable name, or null if change is to be
+ *     aborted (cancel button), or undefined if an existing variable was chosen.
+ */
+Blockly.Variables.renameVariable = function(workspace, variable,
+  opt_callback) {
+  // This function needs to be named so it can be called recursively.
+  var promptAndCheckWithAlert = function(defaultName) {
+    Blockly.Variables.promptName(
+      Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', variable.name), defaultName,
+      function(newName) {
+        if (newName) {
+          var newVariable = workspace.getVariable(newName);
+          if (newVariable && newVariable.type != variable.type) {
+            Blockly.alert(Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE.replace('%1',
+                newName.toLowerCase()).replace('%2', newVariable.type),
+                function() {
+                  promptAndCheckWithAlert(newName);  // Recurse
+                });
+          }
+          else if (!Blockly.Procedures.isNameUsed(newName, workspace)) {
+            Blockly.alert(Blockly.Msg.PROCEDURE_ALREADY_EXISTS.replace('%1',
+                newName.toLowerCase()),
+                function() {
+                  promptAndCheckWithAlert(newName);  // Recurse
+                });
+          }
+          else {
+            workspace.renameVariable(variable.name, newName);
+            if (opt_callback) {
+              opt_callback(newName);
             }
           }
         } else {

@@ -37,6 +37,7 @@ goog.provide('FactoryUtils');
 goog.require('BlockConstructors');
 
 /**
+ * Used to read or write a DOM data structure.
  * @typedef {{root: Element, current: Element}} ElementPointers
  */
 
@@ -90,7 +91,8 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
     Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
     // Calculate timer to avoid infinite update loops
     BlockFactory.updateBlocksFlag = false;
-    setTimeout(function() { BlockFactory.updateBlocksFlag2 = false }, 3000);
+    setTimeout(
+        function() { BlockFactory.updateBlocksFlagDelayed = false }, 3000);
   }
   BlockFactory.lastUpdatedBlock = block; // Variable to share the block value
   
@@ -1205,9 +1207,10 @@ FactoryUtils.parseInputs = function(data) {
  */
 FactoryUtils.buildBlockFactoryDef = function(block) {
   /**
-   * @type {{src: ElementPointers, dst: ElementPointers}} data Data structure
-   *     that stores source and destination nodes with their corresponding
-   *      current nodes.
+   * Data structure that stores source and destination nodes with their
+   * corresponding current nodes. Initialize src to block being converted to
+   * block definition that will be stored in dst.
+   * @var {{src: ElementPointers, dst: ElementPointers}} data
    */
   var data = {src: {root: block, current: block},
               dst: {}};

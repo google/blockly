@@ -126,7 +126,7 @@ BlockFactory.updateLanguage = function() {
     var code = FactoryUtils.getBlockDefinition(blockType, rootBlock, format,
         BlockFactory.mainWorkspace);
     FactoryUtils.injectCode(code, 'languagePre');
-    if (!BlockFactory.updateBlocksFlag2) {
+    if (!BlockFactory.updateBlocksFlagDelayed) {
       var languagePre = document.getElementById('languagePre');
       var languageTA = document.getElementById('languageTA');
       code = languagePre.textContent.trim();
@@ -251,7 +251,7 @@ BlockFactory.updatePreview = function() {
     // TODO: Show error on the UI
     console.log(err)
     BlockFactory.updateBlocksFlag = false
-    BlockFactory.updateBlocksFlag2 = false
+    BlockFactory.updateBlocksFlagDelayed = false
   } finally {
     Blockly.Blocks = backupBlocks;
   }
@@ -298,7 +298,17 @@ BlockFactory.isStarterBlock = function() {
  * Updates blocks from the manually edited js or json from their text area.
  */
 BlockFactory.manualEdit = function() {
-  BlockFactory.updateBlocksFlag = true; // Avoid infinite update loop
-  BlockFactory.updateBlocksFlag2 = true;
+  /**
+   * Flag to avoid infinite update loop when changing js or JSON block
+   * definition manually.
+   * {boolean} BlockFactory.updateBlocksFlag
+   */
+  BlockFactory.updateBlocksFlag = true;
+  /**
+   * Delayed flag to avoid infinite update loop when changing js or JSON block
+   * definition manually.
+   * {boolean} BlockFactory.updateBlocksFlagDelayed
+   */
+  BlockFactory.updateBlocksFlagDelayed = true;
   BlockFactory.updateLanguage();
 }

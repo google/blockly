@@ -405,7 +405,7 @@ BlockConstructors.fieldImage = function(data, src, width, height, alt) {
 };
 
 /**
- * Creates a group type Element
+ * Creates a type group Element
  * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
  *     that stores source and destination nodes with their corresponding current
  *     nodes.

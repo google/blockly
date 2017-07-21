@@ -232,8 +232,10 @@ Blockly.Variables.generateUniqueName = function(workspace) {
  * @param {function(?string=)=} opt_callback A callback. It will
  *     be passed an acceptable new variable name, or null if change is to be
  *     aborted (cancel button), or undefined if an existing variable was chosen.
+ * @param {?string} opt_type The type of the variable like 'int', 'string', or
+ *     ''. This will default to '', which is a specific type.
  */
-Blockly.Variables.createVariable = function(workspace, opt_callback) {
+Blockly.Variables.createVariable = function(workspace, opt_callback, opt_type) {
   // This function needs to be named so it can be called recursively.
   var promptAndCheckWithAlert = function(defaultName) {
     Blockly.Variables.promptName(Blockly.Msg.NEW_VARIABLE_TITLE, defaultName,
@@ -254,7 +256,7 @@ Blockly.Variables.createVariable = function(workspace, opt_callback) {
                 });
           }
           else {
-            workspace.createVariable(text);
+            workspace.createVariable(text, opt_type);
             if (opt_callback) {
               opt_callback(text);
             }

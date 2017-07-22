@@ -1230,8 +1230,10 @@ FactoryUtils.buildBlockFactoryDef = function(block) {
   BlockConstructors.factoryBase(connections, block.type, inline,
     FactoryUtils.chainNodesCB('inputs', 
         FactoryUtils.treeSrcDst.src.current.inputList),
-    function() {BlockConstructors.text(FactoryUtils.treeSrcDst.src.current.tooltip);},
-    function() {BlockConstructors.text(FactoryUtils.treeSrcDst.src.current.helpUrl);},
+    function() {
+        BlockConstructors.text(FactoryUtils.treeSrcDst.src.current.tooltip);},
+    function() {
+        BlockConstructors.text(FactoryUtils.treeSrcDst.src.current.helpUrl);},
     FactoryUtils.chainNodesCB('types', block.outputConnection),
     FactoryUtils.chainNodesCB('types', block.previousConnection),
     FactoryUtils.chainNodesCB('types', block.nextConnection),

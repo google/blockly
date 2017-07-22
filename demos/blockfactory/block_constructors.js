@@ -93,7 +93,8 @@ BlockConstructors.factoryBase = function(connections, name, inline,
  */
 BlockConstructors.inputDummy = function(align, fieldsCB) {
   var block1 = FactoryUtils.newNode('block', {type: 'input_dummy'});
-  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(
+      FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;

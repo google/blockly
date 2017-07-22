@@ -1039,12 +1039,11 @@ FactoryUtils.newNode = function(name, attrs, text) {
 };
 
 /**
- * Checks wether a given block is the first statement or not. Uses som adhoc 
- * heuristics to determine this.
+ * Checks wether a given block can contain statements or not.
  * @param {!Element} block A block Element to test.
- * @return {boolean} Returns true if this is the first statement.
+ * @return {boolean} Returns true if this block can contain statements.
  */
-FactoryUtils.firstStatement = function(block) {
+FactoryUtils.isStatementsContainer = function(block) {
   return (block.tagName === 'STATEMENT' || block.tagName === 'XML' || 
       block.tagName === 'VALUE');
 };

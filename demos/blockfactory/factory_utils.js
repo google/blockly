@@ -1196,7 +1196,7 @@ FactoryUtils.treeSrcDst = {};
  * @param {!Element} block Element that will be assigned as the
  *     FactoryUtils.treeSrcDst source element to generate the description
  *     blocks.
- * @return {Element} Returns A workspace DOM for the Block Definition 
+ * @return {Element} Returns a workspace DOM for the Block Definition 
  *     workspace.
  */
 FactoryUtils.buildBlockFactoryDef = function(block) {

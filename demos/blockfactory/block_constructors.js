@@ -37,7 +37,7 @@ BlockConstructors.factoryBase = function(connections, name, inline,
     inputsCB, tooltipCB, helpUrlCB, outputTypeCB, topTypeCB, bottomTypeCB,
     colourCB) {
   var block1 = FactoryUtils.newNode('block', {type: 'factory_base'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -93,7 +93,7 @@ BlockConstructors.factoryBase = function(connections, name, inline,
  */
 BlockConstructors.inputDummy = function(align, fieldsCB) {
   var block1 = FactoryUtils.newNode('block', {type: 'input_dummy'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -117,7 +117,7 @@ BlockConstructors.inputDummy = function(align, fieldsCB) {
 BlockConstructors.inputStatement =
     function(inputName, align, fieldsCB, typeCB) {
   var block1 = FactoryUtils.newNode('block', {type: 'input_statement'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -145,7 +145,7 @@ BlockConstructors.inputStatement =
  */
 BlockConstructors.inputValue = function(inputName, align, fieldsCB, typeCB) {
   var block1 = FactoryUtils.newNode('block', {type: 'input_value'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -170,7 +170,7 @@ BlockConstructors.inputValue = function(inputName, align, fieldsCB, typeCB) {
  */
 BlockConstructors.fieldStatic = function(text) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_static'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -187,7 +187,7 @@ BlockConstructors.fieldStatic = function(text) {
  */
 BlockConstructors.fieldInput = function(text, fieldName) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_input'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -209,7 +209,7 @@ BlockConstructors.fieldInput = function(text, fieldName) {
 BlockConstructors.fieldNumber =
     function(value, fieldName, min, max, precision) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_number'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -230,7 +230,7 @@ BlockConstructors.fieldNumber =
  */
 BlockConstructors.fieldAngle = function(angle, fieldName) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_angle'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -250,7 +250,7 @@ BlockConstructors.fieldDropdown = function(options, fieldName) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_dropdown'});
   var optionsStr = '[';
   
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -290,7 +290,7 @@ BlockConstructors.fieldDropdown = function(options, fieldName) {
  */
 BlockConstructors.fieldCheckbox = function(checked, fieldName) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_checkbox'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -308,7 +308,7 @@ BlockConstructors.fieldCheckbox = function(checked, fieldName) {
  */
 BlockConstructors.fieldColour = function(colour, fieldName) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_colour'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -326,7 +326,7 @@ BlockConstructors.fieldColour = function(colour, fieldName) {
  */
 BlockConstructors.fieldVariable = function(text, fieldName) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_variable'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -346,7 +346,7 @@ BlockConstructors.fieldVariable = function(text, fieldName) {
  */
 BlockConstructors.fieldImage = function(src, width, height, alt) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_image'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -366,7 +366,7 @@ BlockConstructors.fieldImage = function(src, width, height, alt) {
 BlockConstructors.typeGroup = function(types) {
   var block1 = FactoryUtils.newNode('block', {type: 'type_group'});
 
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -389,7 +389,7 @@ BlockConstructors.typeGroup = function(types) {
  */
 BlockConstructors.typeNullShadow = function() {
   var block1 = FactoryUtils.newNode('shadow', {type: 'type_null'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -403,7 +403,7 @@ BlockConstructors.typeNullShadow = function() {
  */
 BlockConstructors.typeNull = function() {
   var block1 = FactoryUtils.newNode('block', {type: 'type_null'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -417,7 +417,7 @@ BlockConstructors.typeNull = function() {
  */
 BlockConstructors.typeBoolean = function() {
   var block1 = FactoryUtils.newNode('block', {type: 'type_boolean'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -431,7 +431,7 @@ BlockConstructors.typeBoolean = function() {
  */
 BlockConstructors.typeNumber = function() {
   var block1 = FactoryUtils.newNode('block', {type: 'type_number'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -445,7 +445,7 @@ BlockConstructors.typeNumber = function() {
  */
 BlockConstructors.typeString = function() {
   var block1 = FactoryUtils.newNode('block', {type: 'type_string'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -459,7 +459,7 @@ BlockConstructors.typeString = function() {
  */
 BlockConstructors.typeList = function() {
   var block1 = FactoryUtils.newNode('block', {type: 'type_list'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -474,7 +474,7 @@ BlockConstructors.typeList = function() {
  */
 BlockConstructors.typeOther = function(type) {
   var block1 = FactoryUtils.newNode('block', {type: 'type_other'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -491,7 +491,7 @@ BlockConstructors.typeOther = function(type) {
  */
 BlockConstructors.colourHue = function(colour, hue) {
   var block1 = FactoryUtils.newNode('block', {type: 'colour_hue'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;
@@ -508,7 +508,7 @@ BlockConstructors.colourHue = function(colour, hue) {
  */
 BlockConstructors.text = function(text) {
   var block1 = FactoryUtils.newNode('block', {type: 'text'});
-  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
+  if (!FactoryUtils.isStatementsContainer(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
     FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
     FactoryUtils.treeSrcDst.dst.current = nextBlock;

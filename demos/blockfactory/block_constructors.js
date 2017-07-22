@@ -4,36 +4,27 @@
  */
 
 /**
- * @fileoverview Block element construction functions
+ * @fileoverview Block element construction functions.
  * @author JC-Orozco (Juan Carlos Orozco)
  */
 'use strict';
 
 /**
- * Namespace for BlockConstructors
+ * Namespace for BlockConstructors.
  */
 goog.provide('BlockConstructors');
 
 /**
- * Used to read or write a DOM data structure.
- * @typedef {{root: Element, current: Element}} ElementPointers
- */
-
-/**
- * Callback to chain node three
+ * Callback to chain node tree.
  * @callback nodeChainCallback
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
  */
 
 /**
- * Creates a factory_base Element
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the factory_base block.
  * @param {string} connections Define block connections. Options: NONE, LEFT,
- *     UP, DOWN, BOTH
- * @param {string} name Block name
- * @param {boolean} inline Block layout inline or not
+ *     UP, DOWN, BOTH.
+ * @param {string} name Block name.
+ * @param {boolean} inline Block layout inline or not.
  * @param {nodeChainCallback} inputsCB
  * @param {nodeChainCallback} tooltipCB
  * @param {nodeChainCallback} helpUrlCB
@@ -42,191 +33,173 @@ goog.provide('BlockConstructors');
  * @param {nodeChainCallback} bottomTypeCB
  * @param {nodeChainCallback} colourCB
  */
-BlockConstructors.factoryBase = function(data, connections, name, inline,
+BlockConstructors.factoryBase = function(connections, name, inline,
     inputsCB, tooltipCB, helpUrlCB, outputTypeCB, topTypeCB, bottomTypeCB,
     colourCB) {
   var block1 = FactoryUtils.newNode('block', {type: 'factory_base'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   block1.append(FactoryUtils.newNode('mutation', {connections: connections}));
   block1.append(FactoryUtils.newNode('field', {name: 'NAME'}, name));
   block1.append(FactoryUtils.newNode('field', {name: 'INLINE'}, inline));
   block1.append(
       FactoryUtils.newNode('field', {name: 'CONNECTIONS'}, connections));
-  block1.append(
-      data.dst.current = FactoryUtils.newNode('statement', {name: 'INPUTS'}));
-  inputsCB(data);
-  data.dst.current = block1;
-  block1.append(
-      data.dst.current = FactoryUtils.newNode('value', {name: 'TOOLTIP'}));
-  tooltipCB(data);
-  data.dst.current = block1;
-  block1.append(
-      data.dst.current = FactoryUtils.newNode('value', {name: 'HELPURL'}));
-  helpUrlCB(data);
-  data.dst.current = block1;
+  block1.append(FactoryUtils.treeSrcDst.dst.current =
+      FactoryUtils.newNode('statement', {name: 'INPUTS'}));
+  inputsCB();
+  FactoryUtils.treeSrcDst.dst.current = block1;
+  block1.append(FactoryUtils.treeSrcDst.dst.current =
+      FactoryUtils.newNode('value', {name: 'TOOLTIP'}));
+  tooltipCB();
+  FactoryUtils.treeSrcDst.dst.current = block1;
+  block1.append(FactoryUtils.treeSrcDst.dst.current =
+      FactoryUtils.newNode('value', {name: 'HELPURL'}));
+  helpUrlCB();
+  FactoryUtils.treeSrcDst.dst.current = block1;
   if (connections === 'LEFT') {
     block1.append(
-      data.dst.current = FactoryUtils.newNode('value', {name: 'OUTPUTTYPE'}));
-    outputTypeCB(data);
-    data.dst.current = block1;
+      FactoryUtils.treeSrcDst.dst.current = FactoryUtils.newNode('value', {name: 'OUTPUTTYPE'}));
+    outputTypeCB();
+    FactoryUtils.treeSrcDst.dst.current = block1;
   } else {
     if (connections === 'UP' || connections === 'BOTH') {
-      block1.append(
-        data.dst.current = FactoryUtils.newNode('value', {name: 'TOPTYPE'}));
-      topTypeCB(data);
-      data.dst.current = block1;      
+      block1.append(FactoryUtils.treeSrcDst.dst.current =
+         FactoryUtils.newNode('value', {name: 'TOPTYPE'}));
+      topTypeCB();
+      FactoryUtils.treeSrcDst.dst.current = block1;      
     }
     if (connections === 'DOWN' || connections === 'BOTH') {
-      block1.append(
-        data.dst.current = FactoryUtils.newNode('value', {name: 'BOTTOMTYPE'}));
-      bottomTypeCB(data);
-      data.dst.current = block1;      
+      block1.append(FactoryUtils.treeSrcDst.dst.current =
+          FactoryUtils.newNode('value', {name: 'BOTTOMTYPE'}));
+      bottomTypeCB();
+      FactoryUtils.treeSrcDst.dst.current = block1;      
     }
   }
-  block1.append(
-      data.dst.current = FactoryUtils.newNode('value', {name: 'COLOUR'}));
-  colourCB(data);
-  data.dst.current = block1;
+  block1.append(FactoryUtils.treeSrcDst.dst.current =
+      FactoryUtils.newNode('value', {name: 'COLOUR'}));
+  colourCB();
+  FactoryUtils.treeSrcDst.dst.current = block1;
 };
 
 /**
- * Creates a input_dummy Element
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
- * @param {string} align Can be left, right or centre
+ * Creates a block Element for the input_dummy block.
+ * @param {string} align Can be left, right or centre.
  * @param {nodeChainCallback} fieldsCB
  */
-BlockConstructors.inputDummy = function(data, align, fieldsCB) {
+BlockConstructors.inputDummy = function(align, fieldsCB) {
   var block1 = FactoryUtils.newNode('block', {type: 'input_dummy'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   block1.append(FactoryUtils.newNode('field', {name: 'ALIGN'}, align));
-  block1.append(data.dst.current =
+  block1.append(FactoryUtils.treeSrcDst.dst.current =
       FactoryUtils.newNode('statement', {name: 'FIELDS'}));
-  fieldsCB(data);
-  data.dst.current = block1;
+  fieldsCB();
+  FactoryUtils.treeSrcDst.dst.current = block1;
 };
 
 /**
- * Creates a input_statement Element
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
- * @param {string} inputName Input statement name
- * @param {string} align Can be left, right or centre
+ * Creates a block Element for the input_statement block.
+ * @param {string} inputName Input statement name.
+ * @param {string} align Can be left, right or centre.
  * @param {nodeChainCallback} fieldsCB
  * @param {nodeChainCallback} typeCB
  */
 BlockConstructors.inputStatement =
-    function(data, inputName, align, fieldsCB, typeCB) {
+    function(inputName, align, fieldsCB, typeCB) {
   var block1 = FactoryUtils.newNode('block', {type: 'input_statement'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   block1.append(FactoryUtils.newNode('field', {name: 'INPUTNAME'}, inputName));
   block1.append(FactoryUtils.newNode('field', {name: 'ALIGN'}, align));
-  block1.append(
-      data.dst.current = FactoryUtils.newNode('statement', {name: 'FIELDS'}));
-  fieldsCB(data);
-  data.dst.current = block1;
-  block1.append(
-      data.dst.current = FactoryUtils.newNode('value', {name: 'TYPE'}));
-  typeCB(data);
-  data.dst.current = block1;
+  block1.append(FactoryUtils.treeSrcDst.dst.current =
+      FactoryUtils.newNode('statement', {name: 'FIELDS'}));
+  fieldsCB();
+  FactoryUtils.treeSrcDst.dst.current = block1;
+  block1.append(FactoryUtils.treeSrcDst.dst.current =
+      FactoryUtils.newNode('value', {name: 'TYPE'}));
+  typeCB();
+  FactoryUtils.treeSrcDst.dst.current = block1;
 };
 
 /**
- * Creates a input_value Element
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
- * @param {string} inputName Input value name
- * @param {string} align Can be left, right or centre
+ * Creates a block Element for the input_value block.
+ * @param {string} inputName Input value name.
+ * @param {string} align Can be left, right or centre.
  * @param {nodeChainCallback} fieldsCB
  * @param {nodeChainCallback} typeCB
  */
-BlockConstructors.inputValue =
-    function(data, inputName, align, fieldsCB, typeCB) {
+BlockConstructors.inputValue = function(inputName, align, fieldsCB, typeCB) {
   var block1 = FactoryUtils.newNode('block', {type: 'input_value'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   block1.append(FactoryUtils.newNode('field', {name: 'INPUTNAME'}, inputName));
   block1.append(FactoryUtils.newNode('field', {name: 'ALIGN'}, align));
-  block1.append(data.dst.current =
+  block1.append(FactoryUtils.treeSrcDst.dst.current =
       FactoryUtils.newNode('statement', {name: 'FIELDS'}));
-  fieldsCB(data);
-  data.dst.current = block1;
-  block1.append(data.dst.current = FactoryUtils.newNode('value', {name: 'TYPE'}));
-  typeCB(data);
-  data.dst.current = block1;
+  fieldsCB();
+  FactoryUtils.treeSrcDst.dst.current = block1;
+  block1.append(FactoryUtils.treeSrcDst.dst.current =
+      FactoryUtils.newNode('value', {name: 'TYPE'}));
+  typeCB();
+  FactoryUtils.treeSrcDst.dst.current = block1;
 };
 
 /**
- * Creates a field_static Element
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the field_static block. 
  * @param {string} text
  */
-BlockConstructors.fieldStatic = function(data, text) {
+BlockConstructors.fieldStatic = function(text) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_static'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   block1.append(FactoryUtils.newNode('field', {name: 'TEXT'}, text));
 };
 
 /**
- * Creates a field_input Element
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the field_input block.
  * @param {string} text
  * @param {string} fieldName
  */
-BlockConstructors.fieldInput = function(data, text, fieldName) {
+BlockConstructors.fieldInput = function(text, fieldName) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_input'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   block1.append(FactoryUtils.newNode('field', {name: 'TEXT'}, text));
   block1.append(FactoryUtils.newNode('field', {name: 'FIELDNAME'}, fieldName));
 };
 
 /**
- * Creates a field_number Element
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the field_number block.
  * @param {number} value
  * @param {string} fieldName
  * @param {number} min
@@ -234,15 +207,15 @@ BlockConstructors.fieldInput = function(data, text, fieldName) {
  * @param {number} precision
  */
 BlockConstructors.fieldNumber =
-    function(data, value, fieldName, min, max, precision) {
+    function(value, fieldName, min, max, precision) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_number'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   block1.append(FactoryUtils.newNode('field', {name: 'VALUE'}, value));
   block1.append(FactoryUtils.newNode('field', {name: 'FIELDNAME'}, fieldName));
   block1.append(FactoryUtils.newNode('field', {name: 'MIN'}, min));
@@ -251,45 +224,39 @@ BlockConstructors.fieldNumber =
 };
 
 /**
- * Creates a field_angle Element
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the field_angle block.
  * @param {number} angle
  * @param {string} fieldName
  */
-BlockConstructors.fieldAngle = function(data, angle, fieldName) {
+BlockConstructors.fieldAngle = function(angle, fieldName) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_angle'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   block1.append(FactoryUtils.newNode('field', {name: 'ANGLE'}, angle));
   block1.append(FactoryUtils.newNode('field', {name: 'FIELDNAME'}, fieldName));
 };
 
 /**
- * Creates a dropdown field Element
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the field_dropdown block.
  * @param {Array<string>} options List of options for the dropdown field.
  * @param {string} fieldName Name of the field.
  */
-BlockConstructors.fieldDropdown = function(data, options, fieldName) {
+BlockConstructors.fieldDropdown = function(options, fieldName) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_dropdown'});
   var optionsStr = '[';
   
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   var mutation = FactoryUtils.newNode('mutation'); 
   block1.append(mutation);
   block1.append(FactoryUtils.newNode('field', {name: 'FIELDNAME'}, fieldName));
@@ -317,87 +284,75 @@ BlockConstructors.fieldDropdown = function(data, options, fieldName) {
 };
 
 /**
- * Creates a field_checkbox Element
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the field_checkbox block.
  * @param {string} checked Can be true or false
  * @param {string} fieldName
  */
-BlockConstructors.fieldCheckbox = function(data, checked, fieldName) {
+BlockConstructors.fieldCheckbox = function(checked, fieldName) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_checkbox'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   block1.append(FactoryUtils.newNode('field', {name: 'CHECKED'}, checked));
   block1.append(FactoryUtils.newNode('field', {name: 'FIELDNAME'}, fieldName));
 };
 
 /**
- * Creates a field_colour Element
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the field_colour block.
  * @param {number} colour
  * @param {string} fieldName
  */
-BlockConstructors.fieldColour = function(data, COLOUR, FIELDNAME) {
+BlockConstructors.fieldColour = function(colour, fieldName) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_colour'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   block1.append(FactoryUtils.newNode('field', {name: 'COLOUR'}, colour));
   block1.append(FactoryUtils.newNode('field', {name: 'FIELDNAME'}, fieldName));
 };
 
 /**
- * Creates a field_variable Element
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the field_variable block.
  * @param {string} text
  * @param {string} fieldName
  */
-BlockConstructors.fieldVariable = function(data, text, fieldName) {
+BlockConstructors.fieldVariable = function(text, fieldName) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_variable'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   block1.append(FactoryUtils.newNode('field', {name: 'TEXT'}, text));
   block1.append(FactoryUtils.newNode('field', {name: 'FIELDNAME'}, fieldName));
 };
 
 /**
- * Creates a field_image Element
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
- * @param {string} src Image src URL
+ * Creates a block Element for the field_image block.
+ * @param {string} src Image src URL.
  * @param {number} width
  * @param {number} height
- * @param {string} alt Alterante text to describe image
+ * @param {string} alt Alterante text to describe image.
  */
-BlockConstructors.fieldImage = function(data, src, width, height, alt) {
+BlockConstructors.fieldImage = function(src, width, height, alt) {
   var block1 = FactoryUtils.newNode('block', {type: 'field_image'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   block1.append(FactoryUtils.newNode('field', {name: 'SRC'}, src));
   block1.append(FactoryUtils.newNode('field', {name: 'WIDTH'}, width));
   block1.append(FactoryUtils.newNode('field', {name: 'HEIGHT'}, height));
@@ -405,208 +360,160 @@ BlockConstructors.fieldImage = function(data, src, width, height, alt) {
 };
 
 /**
- * Creates a type group Element
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the type_group block.
  * @param {Array<string>} types List of types of this type group.
  */
-BlockConstructors.typeGroup = function(data, types) {
+BlockConstructors.typeGroup = function(types) {
   var block1 = FactoryUtils.newNode('block', {type: 'type_group'});
 
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   block1.append(FactoryUtils.newNode('mutation', {types:types.length}));
   for (let i=0; i<types.length; i++) {
     let type = types[i];
     let value = FactoryUtils.newNode('value', {name:'TYPE'+i});
     block1.append(value);
-    data.dst.current = value;
-    FactoryUtils.parseType(data, type);
+    FactoryUtils.treeSrcDst.dst.current = value;
+    FactoryUtils.parseType(type);
   }
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current = block1;
 };
 
 /**
- * Creates a type_null shadow Element
- * This is an automaticaly generated function
- * The first parameter is data plus an autogenerated parameter list
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a shadow Element for the type_null block.
  */
-BlockConstructors.typeNullShadow = function(data) {
+BlockConstructors.typeNullShadow = function() {
   var block1 = FactoryUtils.newNode('shadow', {type: 'type_null'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
 };
 
 /**
- * Creates a type_null Element
- * This is an automaticaly generated function
- * The first parameter is data plus an autogenerated parameter list
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the type_null block.
  */
-BlockConstructors.typeNull = function(data) {
+BlockConstructors.typeNull = function() {
   var block1 = FactoryUtils.newNode('block', {type: 'type_null'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
 };
 
 /**
- * Creates a type_boolean Element
- * This is an automaticaly generated function
- * The first parameter is data plus an autogenerated parameter list
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the type_boolean block.
  */
-BlockConstructors.typeBoolean = function(data) {
+BlockConstructors.typeBoolean = function() {
   var block1 = FactoryUtils.newNode('block', {type: 'type_boolean'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
 };
 
 /**
- * Creates a type_number Element
- * This is an automaticaly generated function
- * The first parameter is data plus an autogenerated parameter list
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the type_number block.
  */
-BlockConstructors.typeNumber = function(data) {
+BlockConstructors.typeNumber = function() {
   var block1 = FactoryUtils.newNode('block', {type: 'type_number'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
 };
 
 /**
- * Creates a type_string Element
- * This is an automaticaly generated function
- * The first parameter is data plus an autogenerated parameter list
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the type_string block.
  */
-BlockConstructors.typeString = function(data) {
+BlockConstructors.typeString = function() {
   var block1 = FactoryUtils.newNode('block', {type: 'type_string'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
 };
 
 /**
- * Creates a type_list Element
- * This is an automaticaly generated function
- * The first parameter is data plus an autogenerated parameter list
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the type_list block.
  */
-BlockConstructors.typeList = function(data) {
+BlockConstructors.typeList = function() {
   var block1 = FactoryUtils.newNode('block', {type: 'type_list'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
 };
 
 /**
- * Creates a type_other Element
- * This is an automaticaly generated function
- * The first parameter is data plus an autogenerated parameter list
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
- * @param TYPE
+ * Creates a block Element for the type_other block.
+ * @param {string} type Name of a custom type.
  */
-BlockConstructors.typeOther = function(data, TYPE) {
+BlockConstructors.typeOther = function(type) {
   var block1 = FactoryUtils.newNode('block', {type: 'type_other'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
-  block1.append(FactoryUtils.newNode('field', {name: 'TYPE'}, TYPE));
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
+  block1.append(FactoryUtils.newNode('field', {name: 'TYPE'}, type));
 };
 
 /**
- * Creates a colour_hue Element
- * This is an automaticaly generated function
- * The first parameter is data plus an autogenerated parameter list
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
+ * Creates a block Element for the color_hue block.
  * @param colour
- * @param HUE
+ * @param hue
  */
-BlockConstructors.colourHue = function(data, colour, HUE) {
+BlockConstructors.colourHue = function(colour, hue) {
   var block1 = FactoryUtils.newNode('block', {type: 'colour_hue'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
   block1.append(FactoryUtils.newNode('mutation', {colour:colour.toString()}));
-  block1.append(FactoryUtils.newNode('field', {name: 'HUE'}, HUE.toString()));
+  block1.append(FactoryUtils.newNode('field', {name: 'HUE'}, hue.toString()));
 };
 
 /**
- * Creates a text Element
- * This is an automaticaly generated function
- * The first parameter is data plus an autogenerated parameter list
- * @param {{src: ElementPointers, dst: ElementPointers}} data Data structure
- *     that stores source and destination nodes with their corresponding current
- *     nodes.
- * @param TEXT
+ * Creates a block Element for the text block.
+ * @param text
  */
-BlockConstructors.text = function(data, TEXT) {
+BlockConstructors.text = function(text) {
   var block1 = FactoryUtils.newNode('block', {type: 'text'});
-  if (!FactoryUtils.firstStatement(data.dst.current)) {
+  if (!FactoryUtils.firstStatement(FactoryUtils.treeSrcDst.dst.current)) {
     let nextBlock = FactoryUtils.newNode('next');
-    data.dst.current.append(nextBlock);
-    data.dst.current = nextBlock;
+    FactoryUtils.treeSrcDst.dst.current.append(nextBlock);
+    FactoryUtils.treeSrcDst.dst.current = nextBlock;
   }
-  data.dst.current.append(block1);
-  data.dst.current = block1;
-  block1.append(FactoryUtils.newNode('field', {name: 'TEXT'}, TEXT));
+  FactoryUtils.treeSrcDst.dst.current.append(block1);
+  FactoryUtils.treeSrcDst.dst.current = block1;
+  block1.append(FactoryUtils.newNode('field', {name: 'TEXT'}, text));
 };

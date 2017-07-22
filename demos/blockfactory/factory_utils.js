@@ -37,11 +37,6 @@ goog.provide('FactoryUtils');
 goog.require('BlockConstructors');
 
 /**
- * Used to read or write a DOM data structure.
- * @typedef {{root: Element, current: Element}} ElementPointers
- */
-
-/**
  * Get block definition code for the current block.
  * @param {string} blockType Type of block.
  * @param {!Blockly.Block} rootBlock RootBlock from main workspace in which
@@ -1142,53 +1137,52 @@ FactoryUtils.parseInputs = function() {
     }
     switch (input.type) {
       case Blockly.INPUT_VALUE:
-        BlockConstructors.inputValue(
-          input.name,
-          align,
-          function() { 
-            let src = FactoryUtils.treeSrcDst.src.current;
-            FactoryUtils.treeSrcDst.src.current = input.fieldRow;
-            FactoryUtils.parseFields();
-            FactoryUtils.treeSrcDst.src.current = src;
-          },
-          function() {
-            let src = FactoryUtils.treeSrcDst.src.current;
-            FactoryUtils.treeSrcDst.src.current = input.connection;
-            FactoryUtils.parseTypes(FactoryUtils.treeSrcDst.src.current);
-            FactoryUtils.treeSrcDst.src.current = src;
-          });
+        BlockConstructors.inputValue(input.name, align,
+            FactoryUtils.chainNodesCB('fields', input.fieldRow),
+            FactoryUtils.chainNodesCB('types', input.connection));
         break;
       case Blockly.NEXT_STATEMENT:
-        BlockConstructors.inputStatement(
-          input.name,
-          align,
-          function() { 
-            let src = FactoryUtils.treeSrcDst.src.current;
-            FactoryUtils.treeSrcDst.src.current = input.fieldRow;
-            FactoryUtils.parseFields();
-            FactoryUtils.treeSrcDst.src.current = src;
-          },
-          function() {
-            let src = FactoryUtils.treeSrcDst.src.current;
-            FactoryUtils.treeSrcDst.src.current = input.connection;
-            FactoryUtils.parseTypes(FactoryUtils.treeSrcDst.src.current);
-            FactoryUtils.treeSrcDst.src.current = src;
-          });
+        BlockConstructors.inputStatement(input.name, align,
+            FactoryUtils.chainNodesCB('fields', input.fieldRow),
+            FactoryUtils.chainNodesCB('types', input.connection));
         break;
       case Blockly.DUMMY_INPUT:
-        BlockConstructors.inputDummy(
-          align,
-          function() { 
-            let src = FactoryUtils.treeSrcDst.src.current;
-            FactoryUtils.treeSrcDst.src.current = input.fieldRow;
-            FactoryUtils.parseFields();
-            FactoryUtils.treeSrcDst.src.current = src;
-          });
+        BlockConstructors.inputDummy(align,
+            FactoryUtils.chainNodesCB('fields', input.fieldRow));
         break;
     }
   }
 };
 
+/**
+ * Callback function generator based on the chained nodes type
+ * @param {string} nodesType Type of nodes to be chained
+ * @param {Element} currentSrcNode Pass the current source node
+ * @return {Function} Returns a callback function to chain
+ */
+FactoryUtils.chainNodesCB = function(nodesType, currentSrcNode) {
+  return function() {
+    var src = FactoryUtils.treeSrcDst.src.current;
+    FactoryUtils.treeSrcDst.src.current = currentSrcNode;
+    switch (nodesType) {
+      case 'fields':
+        FactoryUtils.parseFields();
+        break;
+      case 'types':
+        FactoryUtils.parseTypes(FactoryUtils.treeSrcDst.src.current);
+        break;
+      case 'inputs':
+        FactoryUtils.parseInputs();
+        break;
+    }
+    FactoryUtils.treeSrcDst.src.current = src;
+  }
+};
+
+/**
+ * Used to read or write a DOM data structure.
+ * @typedef {{root: Element, current: Element}} ElementPointers
+ */
 /**
  * Data structure that stores source and destination tree nodes with their
  * corresponding current nodes. Initialize src to block being converted to
@@ -1202,16 +1196,16 @@ FactoryUtils.treeSrcDst = {};
  * @param {!Element} block Element that will be assigned as the
  *     FactoryUtils.treeSrcDst source element to generate the description
  *     blocks.
- * @return {Element} Returns the FactoryUtils.treeSrcDst destination root
- *     element.
+ * @return {Element} Returns A workspace DOM for the Block Definition 
+ *     workspace.
  */
 FactoryUtils.buildBlockFactoryDef = function(block) {
-  FactoryUtils.treeSrcDst = {src: {root: block, current: block},
-              dst: {}};
+  FactoryUtils.treeSrcDst = {src: {root: block, current: block}, dst: {}};
   FactoryUtils.treeSrcDst.dst.root = goog.dom.createDom('xml');
   FactoryUtils.treeSrcDst.dst.current = FactoryUtils.treeSrcDst.dst.root;
   // Convert colour_ to hue value 0-360 degrees
-  let colour_hue = Math.floor(goog.color.hexToHsv(FactoryUtils.treeSrcDst.src.current.colour_)[0]);
+  let colour_hue = Math.floor(
+      goog.color.hexToHsv(FactoryUtils.treeSrcDst.src.current.colour_)[0]);
   let inline = 'AUTO'; // When block.inputsInlineDefault === undefined
   if (block.inputsInlineDefault === true) {
     inline = 'INT';
@@ -1233,41 +1227,14 @@ FactoryUtils.buildBlockFactoryDef = function(block) {
       }
     }
   }
-  BlockConstructors.factoryBase(connections,
-    block.type,
-    inline,
-    function() {
-      let src = FactoryUtils.treeSrcDst.src.current;
-      FactoryUtils.treeSrcDst.src.current = FactoryUtils.treeSrcDst.src.current.inputList;
-      FactoryUtils.parseInputs();
-      FactoryUtils.treeSrcDst.src.current = src;
-    },
+  BlockConstructors.factoryBase(connections, block.type, inline,
+    FactoryUtils.chainNodesCB('inputs', 
+        FactoryUtils.treeSrcDst.src.current.inputList),
     function() {BlockConstructors.text(FactoryUtils.treeSrcDst.src.current.tooltip);},
     function() {BlockConstructors.text(FactoryUtils.treeSrcDst.src.current.helpUrl);},
-    function() {
-      if (block.outputConnection) {
-        let src = FactoryUtils.treeSrcDst.src.current;
-        FactoryUtils.treeSrcDst.src.current = block.outputConnection;
-        FactoryUtils.parseTypes(FactoryUtils.treeSrcDst.src.current);
-        FactoryUtils.treeSrcDst.src.current = src;
-      }
-    },
-    function() {
-      if (block.previousConnection) {
-        let src = FactoryUtils.treeSrcDst.src.current;
-        FactoryUtils.treeSrcDst.src.current = block.previousConnection;
-        FactoryUtils.parseTypes(FactoryUtils.treeSrcDst.src.current);
-        FactoryUtils.treeSrcDst.src.current = src;
-      }
-    },
-    function() {
-      if (block.nextConnection) {
-        let src = FactoryUtils.treeSrcDst.src.current;
-        FactoryUtils.treeSrcDst.src.current = block.nextConnection;
-        FactoryUtils.parseTypes(FactoryUtils.treeSrcDst.src.current);
-        FactoryUtils.treeSrcDst.src.current = src;
-      }
-    },
+    FactoryUtils.chainNodesCB('types', block.outputConnection),
+    FactoryUtils.chainNodesCB('types', block.previousConnection),
+    FactoryUtils.chainNodesCB('types', block.nextConnection),
     function() {
       BlockConstructors.colourHue(FactoryUtils.treeSrcDst.src.current.colour_, colour_hue);
     });

@@ -1018,7 +1018,7 @@ FactoryUtils.getHelpUrlFromRootBlock_ = function(rootBlock) {
 };
 
 /**
- * Helper function to create a new DOM node
+ * Helper function to create a new DOM node.
  * @param {!string} name New node name.
  * @param {Map} name New node attribute map.
  * @param {string} text New node text.

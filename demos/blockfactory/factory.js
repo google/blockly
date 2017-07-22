@@ -1,4 +1,3 @@
-/*jslint passfail: false, vars: true, indent: 2, maxlen: 80, maxerr: 100*/
 /**
  * @license
  * Blockly Demos: Block Factory

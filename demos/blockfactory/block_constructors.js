@@ -24,9 +24,10 @@ goog.provide('BlockConstructors');
  * the block preview data structure.
  */
 BlockConstructors.BlockDefinitionExtractor = class {
-  /** Initialize the treeSrcDst structure */
+  /** Initialize the src and dst structure */
   constructor() {
-    this.treeSrcDst = {}; 
+    this.src = {};
+    this.dst = {};
   }
   
   /**
@@ -111,8 +112,8 @@ BlockConstructors.BlockDefinitionExtractor = class {
    * corresponding field elements.
    */
   parseFields_() {
-    for (let i=0; i<this.treeSrcDst.src.current.length; i++) {
-      let field = this.treeSrcDst.src.current[i];
+    for (let i=0; i<this.src.current.length; i++) {
+      let field = this.src.current[i];
       if (field instanceof Blockly.FieldLabel) {
         this.fieldStatic_(field.text_);
       } else if (field instanceof Blockly.FieldTextInput) {
@@ -142,8 +143,8 @@ BlockConstructors.BlockDefinitionExtractor = class {
    * corresponding input elements.
    */
   parseInputs_() {
-    for (let i=0; i<this.treeSrcDst.src.current.length; i++) {
-      let input = this.treeSrcDst.src.current[i];
+    for (let i=0; i<this.src.current.length; i++) {
+      let input = this.src.current[i];
       let align = 'LEFT'; // This seems to be the default Blockly.ALIGN_LEFT
       if (input.align || input.align === 0) {
         if (input.align === Blockly.ALIGN_CENTRE) {
@@ -180,20 +181,20 @@ BlockConstructors.BlockDefinitionExtractor = class {
   chainNodesCB_(nodesType, currentSrcNode) {
     var this_ = this;
     return function() {
-      var src = this_.treeSrcDst.src.current;
-      this_.treeSrcDst.src.current = currentSrcNode;
+      var src = this_.src.current;
+      this_.src.current = currentSrcNode;
       switch (nodesType) {
         case 'fields':
           this_.parseFields_();
           break;
         case 'types':
-          this_.parseTypes_(this_.treeSrcDst.src.current);
+          this_.parseTypes_(this_.src.current);
           break;
         case 'inputs':
           this_.parseInputs_();
           break;
       }
-      this_.treeSrcDst.src.current = src;
+      this_.src.current = src;
     }
   }
 
@@ -215,53 +216,53 @@ BlockConstructors.BlockDefinitionExtractor = class {
       inputsCB, tooltipCB, helpUrlCB, outputTypeCB, topTypeCB, bottomTypeCB,
       colourCB) {
     var block1 = this.newNode_('block', {type: 'factory_base'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('mutation', {connections: connections}));
     block1.append(this.newNode_('field', {name: 'NAME'}, name));
     block1.append(this.newNode_('field', {name: 'INLINE'}, inline));
     block1.append(
         this.newNode_('field', {name: 'CONNECTIONS'}, connections));
-    block1.append(this.treeSrcDst.dst.current =
+    block1.append(this.dst.current =
         this.newNode_('statement', {name: 'INPUTS'}));
     inputsCB();
-    this.treeSrcDst.dst.current = block1;
-    block1.append(this.treeSrcDst.dst.current =
+    this.dst.current = block1;
+    block1.append(this.dst.current =
         this.newNode_('value', {name: 'TOOLTIP'}));
     tooltipCB();
-    this.treeSrcDst.dst.current = block1;
-    block1.append(this.treeSrcDst.dst.current =
+    this.dst.current = block1;
+    block1.append(this.dst.current =
         this.newNode_('value', {name: 'HELPURL'}));
     helpUrlCB();
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current = block1;
     if (connections === 'LEFT') {
       block1.append(
-        this.treeSrcDst.dst.current = this.newNode_('value', {name: 'OUTPUTTYPE'}));
+        this.dst.current = this.newNode_('value', {name: 'OUTPUTTYPE'}));
       outputTypeCB();
-      this.treeSrcDst.dst.current = block1;
+      this.dst.current = block1;
     } else {
       if (connections === 'UP' || connections === 'BOTH') {
-        block1.append(this.treeSrcDst.dst.current =
+        block1.append(this.dst.current =
            this.newNode_('value', {name: 'TOPTYPE'}));
         topTypeCB();
-        this.treeSrcDst.dst.current = block1;      
+        this.dst.current = block1;      
       }
       if (connections === 'DOWN' || connections === 'BOTH') {
-        block1.append(this.treeSrcDst.dst.current =
+        block1.append(this.dst.current =
             this.newNode_('value', {name: 'BOTTOMTYPE'}));
         bottomTypeCB();
-        this.treeSrcDst.dst.current = block1;      
+        this.dst.current = block1;      
       }
     }
-    block1.append(this.treeSrcDst.dst.current =
+    block1.append(this.dst.current =
         this.newNode_('value', {name: 'COLOUR'}));
     colourCB();
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current = block1;
   };
 
   /**
@@ -272,18 +273,18 @@ BlockConstructors.BlockDefinitionExtractor = class {
   inputDummy_(align, fieldsCB) {
     var block1 = this.newNode_('block', {type: 'input_dummy'});
     if (!this.isStatementsContainer_(
-        this.treeSrcDst.dst.current)) {
+        this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('field', {name: 'ALIGN'}, align));
-    block1.append(this.treeSrcDst.dst.current =
+    block1.append(this.dst.current =
         this.newNode_('statement', {name: 'FIELDS'}));
     fieldsCB();
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current = block1;
   };
 
   /**
@@ -295,23 +296,23 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   inputStatement_(inputName, align, fieldsCB, typeCB) {
     var block1 = this.newNode_('block', {type: 'input_statement'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('field', {name: 'INPUTNAME'}, inputName));
     block1.append(this.newNode_('field', {name: 'ALIGN'}, align));
-    block1.append(this.treeSrcDst.dst.current =
+    block1.append(this.dst.current =
         this.newNode_('statement', {name: 'FIELDS'}));
     fieldsCB();
-    this.treeSrcDst.dst.current = block1;
-    block1.append(this.treeSrcDst.dst.current =
+    this.dst.current = block1;
+    block1.append(this.dst.current =
         this.newNode_('value', {name: 'TYPE'}));
     typeCB();
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current = block1;
   }
 
   /**
@@ -323,23 +324,23 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   inputValue_(inputName, align, fieldsCB, typeCB) {
     var block1 = this.newNode_('block', {type: 'input_value'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('field', {name: 'INPUTNAME'}, inputName));
     block1.append(this.newNode_('field', {name: 'ALIGN'}, align));
-    block1.append(this.treeSrcDst.dst.current =
+    block1.append(this.dst.current =
         this.newNode_('statement', {name: 'FIELDS'}));
     fieldsCB();
-    this.treeSrcDst.dst.current = block1;
-    block1.append(this.treeSrcDst.dst.current =
+    this.dst.current = block1;
+    block1.append(this.dst.current =
         this.newNode_('value', {name: 'TYPE'}));
     typeCB();
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current = block1;
   }
 
   /**
@@ -348,13 +349,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   fieldStatic_(text) {
     var block1 = this.newNode_('block', {type: 'field_static'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('field', {name: 'TEXT'}, text));
   }
 
@@ -365,13 +366,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   fieldInput_(text, fieldName) {
     var block1 = this.newNode_('block', {type: 'field_input'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('field', {name: 'TEXT'}, text));
     block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
   }
@@ -386,13 +387,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   fieldNumber_(value, fieldName, min, max, precision) {
     var block1 = this.newNode_('block', {type: 'field_number'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('field', {name: 'VALUE'}, value));
     block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
     block1.append(this.newNode_('field', {name: 'MIN'}, min));
@@ -407,13 +408,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   fieldAngle_(angle, fieldName) {
     var block1 = this.newNode_('block', {type: 'field_angle'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('field', {name: 'ANGLE'}, angle));
     block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
   }
@@ -427,13 +428,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
     var block1 = this.newNode_('block', {type: 'field_dropdown'});
     var optionsStr = '[';
 
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     var mutation = this.newNode_('mutation'); 
     block1.append(mutation);
     block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
@@ -467,13 +468,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   fieldCheckbox_(checked, fieldName) {
     var block1 = this.newNode_('block', {type: 'field_checkbox'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('field', {name: 'CHECKED'}, checked));
     block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
   }
@@ -485,13 +486,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   fieldColour_(colour, fieldName) {
     var block1 = this.newNode_('block', {type: 'field_colour'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('field', {name: 'COLOUR'}, colour));
     block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
   }
@@ -503,13 +504,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   fieldVariable_(text, fieldName) {
     var block1 = this.newNode_('block', {type: 'field_variable'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('field', {name: 'TEXT'}, text));
     block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
   };
@@ -523,13 +524,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   fieldImage_(src, width, height, alt) {
     var block1 = this.newNode_('block', {type: 'field_image'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('field', {name: 'SRC'}, src));
     block1.append(this.newNode_('field', {name: 'WIDTH'}, width));
     block1.append(this.newNode_('field', {name: 'HEIGHT'}, height));
@@ -543,22 +544,22 @@ BlockConstructors.BlockDefinitionExtractor = class {
   typeGroup_(types) {
     var block1 = this.newNode_('block', {type: 'type_group'});
 
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('mutation', {types:types.length}));
     for (let i=0; i<types.length; i++) {
       let type = types[i];
       let value = this.newNode_('value', {name:'TYPE'+i});
       block1.append(value);
-      this.treeSrcDst.dst.current = value;
+      this.dst.current = value;
       this.parseType_(type);
     }
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current = block1;
   }
 
   /**
@@ -566,13 +567,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   typeNullShadow_() {
     var block1 = this.newNode_('shadow', {type: 'type_null'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
   }
 
   /**
@@ -580,13 +581,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   typeNull_() {
     var block1 = this.newNode_('block', {type: 'type_null'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
   }
 
   /**
@@ -594,13 +595,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   typeBoolean_() {
     var block1 = this.newNode_('block', {type: 'type_boolean'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
   }
 
   /**
@@ -608,13 +609,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   typeNumber_() {
     var block1 = this.newNode_('block', {type: 'type_number'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
   }
 
   /**
@@ -622,13 +623,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   typeString_() {
     var block1 = this.newNode_('block', {type: 'type_string'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
   }
 
   /**
@@ -636,13 +637,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   typeList_() {
     var block1 = this.newNode_('block', {type: 'type_list'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
   }
 
   /**
@@ -651,13 +652,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   typeOther_(type) {
     var block1 = this.newNode_('block', {type: 'type_other'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('field', {name: 'TYPE'}, type));
   }
 
@@ -668,13 +669,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   colourHue_(colour, hue) {
     var block1 = this.newNode_('block', {type: 'colour_hue'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('mutation', {colour:colour.toString()}));
     block1.append(this.newNode_('field', {name: 'HUE'}, hue.toString()));
   }
@@ -685,13 +686,13 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   text_(text) {
     var block1 = this.newNode_('block', {type: 'text'});
-    if (!this.isStatementsContainer_(this.treeSrcDst.dst.current)) {
+    if (!this.isStatementsContainer_(this.dst.current)) {
       let nextBlock = this.newNode_('next');
-      this.treeSrcDst.dst.current.append(nextBlock);
-      this.treeSrcDst.dst.current = nextBlock;
+      this.dst.current.append(nextBlock);
+      this.dst.current = nextBlock;
     }
-    this.treeSrcDst.dst.current.append(block1);
-    this.treeSrcDst.dst.current = block1;
+    this.dst.current.append(block1);
+    this.dst.current = block1;
     block1.append(this.newNode_('field', {name: 'TEXT'}, text));
   }
 
@@ -705,12 +706,12 @@ BlockConstructors.BlockDefinitionExtractor = class {
    */
   buildBlockFactoryDef(block) {
     var this_ = this;
-    this.treeSrcDst = {src: {root: block, current: block}, dst: {}};
-    this.treeSrcDst.dst.root = goog.dom.createDom('xml');
-    this.treeSrcDst.dst.current = this.treeSrcDst.dst.root;
+    this.src = {root: block, current: block};
+    this.dst.root = goog.dom.createDom('xml');
+    this.dst.current = this.dst.root;
     // Convert colour_ to hue value 0-360 degrees
     let colour_hue = Math.floor(
-        goog.color.hexToHsv(this.treeSrcDst.src.current.colour_)[0]);
+        goog.color.hexToHsv(this.src.current.colour_)[0]);
     let inline = 'AUTO'; // When block.inputsInlineDefault === undefined
     if (block.inputsInlineDefault === true) {
       inline = 'INT';
@@ -734,17 +735,17 @@ BlockConstructors.BlockDefinitionExtractor = class {
     }
     this.factoryBase_(connections, block.type, inline,
       this.chainNodesCB_('inputs', 
-          this_.treeSrcDst.src.current.inputList),
+          this_.src.current.inputList),
       function() {
-          this_.text_(this_.treeSrcDst.src.current.tooltip);},
+          this_.text_(this_.src.current.tooltip);},
       function() {
-          this_.text_(this_.treeSrcDst.src.current.helpUrl);},
+          this_.text_(this_.src.current.helpUrl);},
       this.chainNodesCB_('types', block.outputConnection),
       this.chainNodesCB_('types', block.previousConnection),
       this.chainNodesCB_('types', block.nextConnection),
       function() {
-        this_.colourHue_(this_.treeSrcDst.src.current.colour_, colour_hue);
+        this_.colourHue_(this_.src.current.colour_, colour_hue);
       });
-    return this.treeSrcDst.dst.root;
+    return this.dst.root;
   }
 };

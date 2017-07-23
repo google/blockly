@@ -93,8 +93,12 @@ pre,
   overflow: scroll;
 }
 
+#languagePre {
+  display: none;  
+}
+
 #languageTA {
-  display: none;
+  display: block;
   font: 10pt monospace;
 }
 

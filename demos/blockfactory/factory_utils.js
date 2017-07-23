@@ -24,7 +24,8 @@
  * Exporter applications within Blockly Factory. Holds functions to generate
  * block definitions and generator stubs and to create and download files.
  *
- * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach)
+ * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach), JC-Orozco
+ * (Juan Carlos Orozco)
  */
  'use strict';
 
@@ -32,7 +33,6 @@
  * Namespace for FactoryUtils.
  */
 goog.provide('FactoryUtils');
-
 
 /**
  * Get block definition code for the current block.
@@ -77,6 +77,18 @@ FactoryUtils.cleanBlockType = function(blockType) {
  * @return {string} Generator code for multiple blocks.
  */
 FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
+  // Build factory blocks from block
+  if (BlockFactory.updateBlocksFlag) {
+    BlockFactory.mainWorkspace.clear();
+    var xml = BlockFactory.blockDefinitionExtractor.buildBlockFactoryDef(block)
+    Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
+    // Calculate timer to avoid infinite update loops
+    BlockFactory.updateBlocksFlag = false;
+    setTimeout(
+        function() { BlockFactory.updateBlocksFlagDelayed = false }, 3000);
+  }
+  BlockFactory.lastUpdatedBlock = block; // Variable to share the block value
+  
   function makeVar(root, name) {
     name = name.toLowerCase().replace(/\W/g, '_');
     return '  var ' + root + '_' + name;

@@ -25,7 +25,8 @@
  * generator stub. Uses the Block Factory namespace. Depends on the FactoryUtils
  * for its code generation functions.
  *
- * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach)
+ * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach), JC-Orozco
+ * (Juan Carlos Orozco)
  */
 'use strict';
 
@@ -36,7 +37,7 @@ goog.provide('BlockFactory');
 
 goog.require('FactoryUtils');
 goog.require('StandardCategories');
-
+goog.require('BlockDefinitionExtractor');
 
 /**
  * Workspace for user to build block.
@@ -78,6 +79,12 @@ BlockFactory.STARTER_BLOCK_XML_TEXT = '<xml><block type="factory_base" ' +
     '<field name="HUE">230</field>' +
     '</block></value></block></xml>';
 
+/*
+ * Instantiate BlockDefinitionExtractor class.
+ */
+BlockFactory.blockDefinitionExtractor =
+    new BlockDefinitionExtractor.Class();
+
 /**
  * Change the language code format.
  */
@@ -85,7 +92,7 @@ BlockFactory.formatChange = function() {
   var mask = document.getElementById('blocklyMask');
   var languagePre = document.getElementById('languagePre');
   var languageTA = document.getElementById('languageTA');
-  if (document.getElementById('format').value == 'Manual') {
+  if (document.getElementById('format').value === 'Manual') {
     Blockly.hideChaff();
     mask.style.display = 'block';
     languagePre.style.display = 'none';
@@ -96,8 +103,11 @@ BlockFactory.formatChange = function() {
     BlockFactory.updatePreview();
   } else {
     mask.style.display = 'none';
-    languageTA.style.display = 'none';
-    languagePre.style.display = 'block';
+    languagePre.style.display = 'none';
+    languageTA.style.display = 'block';
+    var code = languagePre.textContent.trim();
+    languageTA.value = code;
+    
     BlockFactory.updateLanguage();
   }
   BlockFactory.disableEnableLink();
@@ -115,10 +125,20 @@ BlockFactory.updateLanguage = function() {
   if (!blockType) {
     blockType = BlockFactory.UNNAMED;
   }
-  var format = document.getElementById('format').value;
-  var code = FactoryUtils.getBlockDefinition(blockType, rootBlock, format,
-      BlockFactory.mainWorkspace);
-  FactoryUtils.injectCode(code, 'languagePre');
+  
+  if (!BlockFactory.updateBlocksFlag) {
+    var format = document.getElementById('format').value;
+    var code = FactoryUtils.getBlockDefinition(blockType, rootBlock, format,
+        BlockFactory.mainWorkspace);
+    FactoryUtils.injectCode(code, 'languagePre');
+    if (!BlockFactory.updateBlocksFlagDelayed) {
+      var languagePre = document.getElementById('languagePre');
+      var languageTA = document.getElementById('languageTA');
+      code = languagePre.textContent.trim();
+      languageTA.value = code;
+    }
+  }
+
   BlockFactory.updatePreview();
 };
 
@@ -163,7 +183,7 @@ BlockFactory.updatePreview = function() {
       format = 'JavaScript';
     }
   } else {
-    var code = document.getElementById('languagePre').textContent;
+    var code = document.getElementById('languageTA').value;
   }
   if (!code.trim()) {
     // Nothing to render.  Happens while cloud storage is loading.
@@ -232,7 +252,11 @@ BlockFactory.updatePreview = function() {
     } else {
       rootBlock.setWarningText(null);
     }
-
+  } catch(err) {
+    // TODO: Show error on the UI
+    console.log(err)
+    BlockFactory.updateBlocksFlag = false
+    BlockFactory.updateBlocksFlagDelayed = false
   } finally {
     Blockly.Blocks = backupBlocks;
   }
@@ -274,3 +298,22 @@ BlockFactory.isStarterBlock = function() {
       // The starter block has automatic inputs.
       rootBlock.getFieldValue('INLINE') != 'AUTO');
 };
+
+/**
+ * Updates blocks from the manually edited js or json from their text area.
+ */
+BlockFactory.manualEdit = function() {
+  /**
+   * Flag to avoid infinite update loop when changing js or JSON block
+   * definition manually.
+   * {boolean} BlockFactory.updateBlocksFlag
+   */
+  BlockFactory.updateBlocksFlag = true;
+  /**
+   * Delayed flag to avoid infinite update loop when changing js or JSON block
+   * definition manually.
+   * {boolean} BlockFactory.updateBlocksFlagDelayed
+   */
+  BlockFactory.updateBlocksFlagDelayed = true;
+  BlockFactory.updateLanguage();
+}

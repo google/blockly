@@ -10,9 +10,9 @@
 'use strict';
 
 /**
- * Namespace for BlockConstructors.
+ * Namespace for BlockDefinitionExtractor.
  */
-goog.provide('BlockConstructors');
+goog.provide('BlockDefinitionExtractor');
 
 /**
  * Callback to chain node tree.
@@ -23,11 +23,13 @@ goog.provide('BlockConstructors');
  * Class to contain all functions needed to extract block definition from 
  * the block preview data structure.
  */
-BlockConstructors.BlockDefinitionExtractor = class {
-  /** Initialize the src and dst structure */
+BlockDefinitionExtractor.Class = class {
+  /** Initialize the src and dst data structures */
   constructor() {
-    this.src = {};
-    this.dst = {};
+    /** @type {{root: Blockly.Block, current: Blockly.Block}} */
+    this.src = {root: null, current: null};
+    /** @type {{root: Element, current: Element}} */
+    this.dst = {root: null, current: null};
   }
   
   /**

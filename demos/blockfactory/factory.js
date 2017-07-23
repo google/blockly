@@ -37,7 +37,7 @@ goog.provide('BlockFactory');
 
 goog.require('FactoryUtils');
 goog.require('StandardCategories');
-
+goog.require('BlockConstructors');
 
 /**
  * Workspace for user to build block.
@@ -78,6 +78,12 @@ BlockFactory.STARTER_BLOCK_XML_TEXT = '<xml><block type="factory_base" ' +
     '<mutation colour="#5b67a5"></mutation>' +
     '<field name="HUE">230</field>' +
     '</block></value></block></xml>';
+
+/*
+ * Instantiate BlockDefinitionExtractor class.
+ */
+BlockFactory.blockDefinitionExtractor =
+    new BlockConstructors.BlockDefinitionExtractor;
 
 /**
  * Change the language code format.

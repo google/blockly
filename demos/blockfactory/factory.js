@@ -37,7 +37,7 @@ goog.provide('BlockFactory');
 
 goog.require('FactoryUtils');
 goog.require('StandardCategories');
-goog.require('BlockConstructors');
+goog.require('BlockDefinitionExtractor');
 
 /**
  * Workspace for user to build block.
@@ -83,7 +83,7 @@ BlockFactory.STARTER_BLOCK_XML_TEXT = '<xml><block type="factory_base" ' +
  * Instantiate BlockDefinitionExtractor class.
  */
 BlockFactory.blockDefinitionExtractor =
-    new BlockConstructors.BlockDefinitionExtractor;
+    new BlockDefinitionExtractor.Class();
 
 /**
  * Change the language code format.

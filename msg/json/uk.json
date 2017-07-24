@@ -7,7 +7,8 @@
 			"Lxlalexlxl",
 			"아라",
 			"Visem",
-			"Piramidion"
+			"Piramidion",
+			"SimondR"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "елемент",
@@ -36,6 +37,7 @@
 	"NEW_VARIABLE": "Створити змінну...",
 	"NEW_VARIABLE_TITLE": "Нова назва змінної:",
 	"VARIABLE_ALREADY_EXISTS": "Змінна з назвою '%1' вже існує.",
+	"PROCEDURE_ALREADY_EXISTS": "Процес з назвою '%1' вже існує.",
 	"DELETE_VARIABLE_CONFIRMATION": "Вилучити %1 використання змінної '%2'?",
 	"DELETE_VARIABLE": "Вилучити змінну '%1'",
 	"COLOUR_PICKER_HELPURL": "https://uk.wikipedia.org/wiki/Колір",
@@ -81,6 +83,13 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Додайте, вилучіть або змініть порядок секцій, щоб переналаштувати цей блок 'якщо'.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Додайте умову до блока 'якщо'.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Додати остаточну, всеосяжну умову до блоку 'якщо'.",
+	"IOS_CANCEL": "Скасувати",
+	"IOS_ERROR": "Помилка",
+	"IOS_VARIABLES_ADD_VARIABLE": "+ Додати змінну",
+	"IOS_VARIABLES_ADD_BUTTON": "Додати",
+	"IOS_VARIABLES_RENAME_BUTTON": "Перейменувати",
+	"IOS_VARIABLES_DELETE_BUTTON": "Видалити",
+	"IOS_VARIABLES_VARIABLE_NAME": "Назва змінної",
 	"LOGIC_COMPARE_HELPURL": "https://uk.wikipedia.org/wiki/Нерівність",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Повертає істину, якщо обидва входи рівні один одному.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Повертає істину, якщо обидва входи не дорівнюють один одному.",

@@ -34,6 +34,9 @@
  */
 goog.provide('FactoryUtils');
 
+goog.require('BlockDefinitionExtractor');
+
+
 /**
  * Get block definition code for the current block.
  * @param {string} blockType Type of block.
@@ -78,9 +81,9 @@ FactoryUtils.cleanBlockType = function(blockType) {
  */
 FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
   // Build factory blocks from block
-  if (BlockFactory.updateBlocksFlag) {
+  if (BlockFactory.updateBlocksFlag) {  // TODO: Move this to updatePreview()
     BlockFactory.mainWorkspace.clear();
-    var xml = BlockFactory.blockDefinitionExtractor.buildBlockFactoryDef(block)
+    var xml = new BlockDefinitionExtractor().buildBlockFactoryDef(block);
     Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
     // Calculate timer to avoid infinite update loops
     BlockFactory.updateBlocksFlag = false;
@@ -88,7 +91,7 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
         function() { BlockFactory.updateBlocksFlagDelayed = false }, 3000);
   }
   BlockFactory.lastUpdatedBlock = block; // Variable to share the block value
-  
+
   function makeVar(root, name) {
     name = name.toLowerCase().replace(/\W/g, '_');
     return '  var ' + root + '_' + name;

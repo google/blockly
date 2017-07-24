@@ -37,7 +37,6 @@ goog.provide('BlockFactory');
 
 goog.require('FactoryUtils');
 goog.require('StandardCategories');
-goog.require('BlockDefinitionExtractor');
 
 /**
  * Workspace for user to build block.
@@ -79,12 +78,6 @@ BlockFactory.STARTER_BLOCK_XML_TEXT = '<xml><block type="factory_base" ' +
     '<field name="HUE">230</field>' +
     '</block></value></block></xml>';
 
-/*
- * Instantiate BlockDefinitionExtractor class.
- */
-BlockFactory.blockDefinitionExtractor =
-    new BlockDefinitionExtractor.Class();
-
 /**
  * Change the language code format.
  */
@@ -107,7 +100,7 @@ BlockFactory.formatChange = function() {
     languageTA.style.display = 'block';
     var code = languagePre.textContent.trim();
     languageTA.value = code;
-    
+
     BlockFactory.updateLanguage();
   }
   BlockFactory.disableEnableLink();
@@ -125,7 +118,7 @@ BlockFactory.updateLanguage = function() {
   if (!blockType) {
     blockType = BlockFactory.UNNAMED;
   }
-  
+
   if (!BlockFactory.updateBlocksFlag) {
     var format = document.getElementById('format').value;
     var code = FactoryUtils.getBlockDefinition(blockType, rootBlock, format,

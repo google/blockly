@@ -25,8 +25,7 @@
  * generator stub. Uses the Block Factory namespace. Depends on the FactoryUtils
  * for its code generation functions.
  *
- * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach), JC-Orozco
- * (Juan Carlos Orozco)
+ * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach)
  */
 'use strict';
 
@@ -52,13 +51,29 @@ BlockFactory.previewWorkspace = null;
 
 /**
  * Name of block if not named.
+ * @type string
  */
 BlockFactory.UNNAMED = 'unnamed';
 
 /**
  * Existing direction ('ltr' vs 'rtl') of preview.
+ * @type string
  */
 BlockFactory.oldDir = null;
+
+/**
+ * Flag to avoid infinite update loop when changing js or JSON block
+ * definition manually.
+ * @type boolean
+ */
+BlockFactory.updateBlocksFlag = false;
+
+/**
+ * Delayed flag to avoid infinite update loop when changing js or JSON block
+ * definition manually.
+ * @type boolean
+ */
+BlockFactory.updateBlocksFlagDelayed = false;
 
 /*
  * The starting XML for the Block Factory main workspace. Contains the
@@ -96,8 +111,8 @@ BlockFactory.formatChange = function() {
     BlockFactory.updatePreview();
   } else {
     mask.style.display = 'none';
-    languagePre.style.display = 'none';
-    languageTA.style.display = 'block';
+    languageTA.style.display = 'none';
+    languagePre.style.display = 'block';
     var code = languagePre.textContent.trim();
     languageTA.value = code;
 
@@ -201,7 +216,13 @@ BlockFactory.updatePreview = function() {
         }
       };
     } else if (format == 'JavaScript') {
-      eval(code);
+      try {
+        eval(code);
+      } catch (e) {
+        // TODO: Display error in the UI
+        console.error("Error while evaluating JavaScript formated block definition", e);
+        return;
+      }
     } else {
       throw 'Unknown format: ' + format;
     }
@@ -296,17 +317,7 @@ BlockFactory.isStarterBlock = function() {
  * Updates blocks from the manually edited js or json from their text area.
  */
 BlockFactory.manualEdit = function() {
-  /**
-   * Flag to avoid infinite update loop when changing js or JSON block
-   * definition manually.
-   * {boolean} BlockFactory.updateBlocksFlag
-   */
   BlockFactory.updateBlocksFlag = true;
-  /**
-   * Delayed flag to avoid infinite update loop when changing js or JSON block
-   * definition manually.
-   * {boolean} BlockFactory.updateBlocksFlagDelayed
-   */
   BlockFactory.updateBlocksFlagDelayed = true;
   BlockFactory.updateLanguage();
 }

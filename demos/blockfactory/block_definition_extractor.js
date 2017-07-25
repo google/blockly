@@ -115,8 +115,8 @@ BlockDefinitionExtractor.prototype.parseTypes_ = function(connection) {
  * Parses the current src node to create the corresponding field elements.
  */
 BlockDefinitionExtractor.prototype.parseFields_ = function() {
-  for (let i=0; i<this.src.current.length; i++) {
-    let field = this.src.current[i];
+  for (var i=0; i<this.src.current.length; i++) {
+    var field = this.src.current[i];
     if (field instanceof Blockly.FieldLabel) {
       this.fieldStatic_(field.text_);
     } else if (field instanceof Blockly.FieldTextInput) {
@@ -145,9 +145,9 @@ BlockDefinitionExtractor.prototype.parseFields_ = function() {
  * Parses the current src node to create the corresponding input elements.
  */
 BlockDefinitionExtractor.prototype.parseInputs_ = function() {
-  for (let i=0; i<this.src.current.length; i++) {
-    let input = this.src.current[i];
-    let align = 'LEFT'; // This seems to be the default Blockly.ALIGN_LEFT
+  for (var i=0; i<this.src.current.length; i++) {
+    var input = this.src.current[i];
+    var align = 'LEFT'; // This seems to be the default Blockly.ALIGN_LEFT
     if (input.align || input.align === 0) {
       if (input.align === Blockly.ALIGN_CENTRE) {
         align = 'CENTRE';
@@ -225,7 +225,7 @@ BlockDefinitionExtractor.prototype.factoryBase_ =
 {
   var block1 = this.newNode_('block', {type: 'factory_base'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -282,7 +282,7 @@ BlockDefinitionExtractor.prototype.inputDummy_ = function(align, fieldsCB) {
   var block1 = this.newNode_('block', {type: 'input_dummy'});
   if (!this.isStatementsContainer_(
       this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -308,7 +308,7 @@ BlockDefinitionExtractor.prototype.inputStatement_ =
 {
   var block1 = this.newNode_('block', {type: 'input_statement'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -339,7 +339,7 @@ BlockDefinitionExtractor.prototype.inputValue_ =
 {
   var block1 = this.newNode_('block', {type: 'input_value'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -364,7 +364,7 @@ BlockDefinitionExtractor.prototype.inputValue_ =
 BlockDefinitionExtractor.prototype.fieldStatic_ = function(text) {
   var block1 = this.newNode_('block', {type: 'field_static'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -382,7 +382,7 @@ BlockDefinitionExtractor.prototype.fieldStatic_ = function(text) {
 BlockDefinitionExtractor.prototype.fieldInput_ = function(text, fieldName) {
   var block1 = this.newNode_('block', {type: 'field_input'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -406,7 +406,7 @@ BlockDefinitionExtractor.prototype.fieldNumber_ =
 {
   var block1 = this.newNode_('block', {type: 'field_number'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -428,7 +428,7 @@ BlockDefinitionExtractor.prototype.fieldNumber_ =
 BlockDefinitionExtractor.prototype.fieldAngle_ = function(angle, fieldName) {
   var block1 = this.newNode_('block', {type: 'field_angle'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -451,7 +451,7 @@ BlockDefinitionExtractor.prototype.fieldDropdown_ =
   var optionsStr = '[';
 
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -460,8 +460,8 @@ BlockDefinitionExtractor.prototype.fieldDropdown_ =
   var mutation = this.newNode_('mutation');
   block1.append(mutation);
   block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
-  for (let i=0; i<options.length; i++) {
-    let option = options[i];
+  for (var i=0; i<options.length; i++) {
+    var option = options[i];
     if (typeof option[0] === "string") {
       optionsStr+='&quot;text&quot;,'
       block1.append(this.newNode_('field', {name: 'USER'+i}, option[0]));
@@ -494,7 +494,7 @@ BlockDefinitionExtractor.prototype.fieldCheckbox_ =
 {
   var block1 = this.newNode_('block', {type: 'field_checkbox'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -513,7 +513,7 @@ BlockDefinitionExtractor.prototype.fieldCheckbox_ =
 BlockDefinitionExtractor.prototype.fieldColour_ = function(colour, fieldName) {
   var block1 = this.newNode_('block', {type: 'field_colour'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -532,7 +532,7 @@ BlockDefinitionExtractor.prototype.fieldColour_ = function(colour, fieldName) {
 BlockDefinitionExtractor.prototype.fieldVariable_ = function(text, fieldName) {
   var block1 = this.newNode_('block', {type: 'field_variable'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -555,7 +555,7 @@ BlockDefinitionExtractor.prototype.fieldImage_ =
 {
   var block1 = this.newNode_('block', {type: 'field_image'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -576,16 +576,16 @@ BlockDefinitionExtractor.prototype.typeGroup_ = function(types) {
   var block1 = this.newNode_('block', {type: 'type_group'});
 
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
   block1.append(this.newNode_('mutation', {types:types.length}));
-  for (let i=0; i<types.length; i++) {
-    let type = types[i];
-    let value = this.newNode_('value', {name:'TYPE'+i});
+  for (var i=0; i<types.length; i++) {
+    var type = types[i];
+    var value = this.newNode_('value', {name:'TYPE'+i});
     block1.append(value);
     this.dst.current = value;
     this.parseType_(type);
@@ -599,7 +599,7 @@ BlockDefinitionExtractor.prototype.typeGroup_ = function(types) {
 BlockDefinitionExtractor.prototype.typeNullShadow_ = function() {
   var block1 = this.newNode_('shadow', {type: 'type_null'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -613,7 +613,7 @@ BlockDefinitionExtractor.prototype.typeNullShadow_ = function() {
 BlockDefinitionExtractor.prototype.typeNull_ = function() {
   var block1 = this.newNode_('block', {type: 'type_null'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -627,7 +627,7 @@ BlockDefinitionExtractor.prototype.typeNull_ = function() {
 BlockDefinitionExtractor.prototype.typeBoolean_ = function() {
   var block1 = this.newNode_('block', {type: 'type_boolean'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -641,7 +641,7 @@ BlockDefinitionExtractor.prototype.typeBoolean_ = function() {
 BlockDefinitionExtractor.prototype.typeNumber_ = function() {
   var block1 = this.newNode_('block', {type: 'type_number'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -655,7 +655,7 @@ BlockDefinitionExtractor.prototype.typeNumber_ = function() {
 BlockDefinitionExtractor.prototype.typeString_ = function() {
   var block1 = this.newNode_('block', {type: 'type_string'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -669,7 +669,7 @@ BlockDefinitionExtractor.prototype.typeString_ = function() {
 BlockDefinitionExtractor.prototype.typeList_ = function() {
   var block1 = this.newNode_('block', {type: 'type_list'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -685,7 +685,7 @@ BlockDefinitionExtractor.prototype.typeList_ = function() {
 BlockDefinitionExtractor.prototype.typeOther_ = function(type) {
   var block1 = this.newNode_('block', {type: 'type_other'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -704,7 +704,7 @@ BlockDefinitionExtractor.prototype.colourHue_ =
 {
   var block1 = this.newNode_('block', {type: 'colour_hue'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -722,7 +722,7 @@ BlockDefinitionExtractor.prototype.colourHue_ =
 BlockDefinitionExtractor.prototype.text_ = function(text) {
   var block1 = this.newNode_('block', {type: 'text'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    let nextBlock = this.newNode_('next');
+    var nextBlock = this.newNode_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -747,15 +747,15 @@ BlockDefinitionExtractor.prototype.buildBlockFactoryDef =
   this.dst.root = goog.dom.createDom('xml');
   this.dst.current = this.dst.root;
   // Convert colour_ to hue value 0-360 degrees
-  let colour_hue = Math.floor(
+  var colour_hue = Math.floor(
       goog.color.hexToHsv(this.src.current.colour_)[0]);
-  let inline = 'AUTO'; // When block.inputsInlineDefault === undefined
+  var inline = 'AUTO'; // When block.inputsInlineDefault === undefined
   if (block.inputsInlineDefault === true) {
     inline = 'INT';
   } else if (block.inputsInlineDefault === false) {
     inline = 'EXT';
   }
-  let connections = 'NONE';
+  var connections = 'NONE';
   if (block.outputConnection) {
     connections = 'LEFT';
   } else {

@@ -247,7 +247,7 @@ BlockFactory.updatePreview = function() {
     }
   } catch(err) {
     // TODO: Show error on the UI
-    console.log(err)
+    console.log(err);
     BlockFactory.updateBlocksFlag = false
     BlockFactory.updateBlocksFlagDelayed = false
   } finally {

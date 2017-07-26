@@ -207,6 +207,7 @@ BlockDefinitionExtractor.prototype.chainNodesCB_ =
  * Creates the root factory_base block for the block definition editing
  * workspace.
  *
+ * @param {Blockly.Block} block The example block for the extracted style.
  * @param {string} connections Define block connections. Options: NONE, LEFT,
  *     UP, DOWN, BOTH.
  * @param {string} name Block name.
@@ -218,59 +219,61 @@ BlockDefinitionExtractor.prototype.chainNodesCB_ =
  * @param {nodeChainCallback} topTypeCB
  * @param {nodeChainCallback} bottomTypeCB
  * @param {nodeChainCallback} colourCB
+ * @return {Element} The factory_base block element.
  */
 BlockDefinitionExtractor.prototype.factoryBase_ =
-  function(connections, name, inline, inputsCB, tooltipCB, helpUrlCB,
+  function(block, connections, name, inline, inputsCB, tooltipCB, helpUrlCB,
            outputTypeCB, topTypeCB, bottomTypeCB, colourCB)
 {
-  var block1 = this.newNode_('block', {type: 'factory_base'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
-  block1.append(this.newNode_('mutation', {connections: connections}));
-  block1.append(this.newNode_('field', {name: 'NAME'}, name));
-  block1.append(this.newNode_('field', {name: 'INLINE'}, inline));
-  block1.append(
+  this.src = {root: block, current: block};
+  var factoryBaseEl = this.newNode_('block', {type: 'factory_base'});
+  // if (!this.isStatementsContainer_(this.dst.current)) {
+  //   var nextBlock = this.newNode_('next');
+  //   this.dst.current.append(nextBlock);
+  //   this.dst.current = nextBlock;
+  // }
+  this.dst = Object.create(null);
+  this.dst.current = factoryBaseEl;
+  factoryBaseEl.append(this.newNode_('mutation', {connections: connections}));
+  factoryBaseEl.append(this.newNode_('field', {name: 'NAME'}, name));
+  factoryBaseEl.append(this.newNode_('field', {name: 'INLINE'}, inline));
+  factoryBaseEl.append(
       this.newNode_('field', {name: 'CONNECTIONS'}, connections));
-  block1.append(this.dst.current =
+  factoryBaseEl.append(this.dst.current =
       this.newNode_('statement', {name: 'INPUTS'}));
   inputsCB();
-  this.dst.current = block1;
-  block1.append(this.dst.current =
+  this.dst.current = factoryBaseEl;
+  factoryBaseEl.append(this.dst.current =
       this.newNode_('value', {name: 'TOOLTIP'}));
   tooltipCB();
-  this.dst.current = block1;
-  block1.append(this.dst.current =
+  this.dst.current = factoryBaseEl;
+  factoryBaseEl.append(this.dst.current =
       this.newNode_('value', {name: 'HELPURL'}));
   helpUrlCB();
-  this.dst.current = block1;
+  this.dst.current = factoryBaseEl;
   if (connections === 'LEFT') {
-    block1.append(
+    factoryBaseEl.append(
       this.dst.current = this.newNode_('value', {name: 'OUTPUTTYPE'}));
     outputTypeCB();
-    this.dst.current = block1;
+    this.dst.current = factoryBaseEl;
   } else {
     if (connections === 'UP' || connections === 'BOTH') {
-      block1.append(this.dst.current =
+      factoryBaseEl.append(this.dst.current =
          this.newNode_('value', {name: 'TOPTYPE'}));
       topTypeCB();
-      this.dst.current = block1;
+      this.dst.current = factoryBaseEl;
     }
     if (connections === 'DOWN' || connections === 'BOTH') {
-      block1.append(this.dst.current =
+      factoryBaseEl.append(this.dst.current =
           this.newNode_('value', {name: 'BOTTOMTYPE'}));
       bottomTypeCB();
-      this.dst.current = block1;
+      this.dst.current = factoryBaseEl;
     }
   }
-  block1.append(this.dst.current =
+  factoryBaseEl.append(this.dst.current =
       this.newNode_('value', {name: 'COLOUR'}));
   colourCB();
-  this.dst.current = block1;
+  return factoryBaseEl;
 };
 
 /**
@@ -743,12 +746,10 @@ BlockDefinitionExtractor.prototype.buildBlockFactoryDef =
   function(block)
 {
   var this_ = this;
-  this.src = {root: block, current: block};
-  this.dst.root = goog.dom.createDom('xml');
-  this.dst.current = this.dst.root;
+  var workspaceXml = goog.dom.createDom('xml');
   // Convert colour_ to hue value 0-360 degrees
   var colour_hue = Math.floor(
-      goog.color.hexToHsv(this.src.current.colour_)[0]);
+      goog.color.hexToHsv(block.colour_)[0]);
   var inline = 'AUTO'; // When block.inputsInlineDefault === undefined
   if (block.inputsInlineDefault === true) {
     inline = 'INT';
@@ -770,18 +771,22 @@ BlockDefinitionExtractor.prototype.buildBlockFactoryDef =
       }
     }
   }
-  this.factoryBase_(connections, block.type, inline,
-    this.chainNodesCB_('inputs',
-        this_.src.current.inputList),
+  var factoryBaseXml = this.factoryBase_(block, connections, block.type, inline,
+    this.chainNodesCB_('inputs', block.inputList),
     function() {
-        this_.text_(this_.src.current.tooltip);},
+      this.text_(block.tooltip);
+    }.bind(this),
     function() {
-        this_.text_(this_.src.current.helpUrl);},
+      this.text_(block.helpUrl);
+    }.bind(this),
     this.chainNodesCB_('types', block.outputConnection),
     this.chainNodesCB_('types', block.previousConnection),
     this.chainNodesCB_('types', block.nextConnection),
     function() {
-      this_.colourHue_(this_.src.current.colour_, colour_hue);
-    });
-  return this.dst.root;
+      this_.colourHue_(block.colour_, colour_hue);
+    }.bind(this)
+  );
+  workspaceXml.append(factoryBaseXml);
+
+  return workspaceXml;
 };

@@ -126,9 +126,9 @@ BlockOption.prototype.showPreviewBlock = function() {
   var blockOptPreviewID = this.dom.id + '_workspace';
 
   // Inject preview block.
-  var workspace = Blockly.inject(blockOptPreviewID, {readOnly:true});
-  Blockly.Xml.domToWorkspace(this.previewBlockXml, workspace);
-  this.previewWorkspace = workspace;
+  var demoWorkspace = Blockly.inject(blockOptPreviewID, {readOnly:true});
+  Blockly.Xml.domToWorkspace(this.previewBlockXml, demoWorkspace);
+  this.previewWorkspace = demoWorkspace;
 
   // Center the preview block in the workspace.
   this.centerBlock();

@@ -73,10 +73,10 @@
 <script>
 'use strict';
 
-var workspace = null;
+var demoWorkspace = null;
 
 function start() {
-  workspace = Blockly.inject('blocklyDiv',
+  demoWorkspace = Blockly.inject('blocklyDiv',
       {grid:
          {spacing: 25,
           length: 3,
@@ -129,14 +129,14 @@ function fromXml(xmlText) {
   output.value = xmlText;
   output.scrollTop = 0;
   output.scrollLeft = 0;
-  workspace.clear();
+  demoWorkspace.clear();
   try {
     var xmlDoc = Blockly.Xml.textToDom(xmlText);
   } catch (e) {
     alert('Error parsing XML:\n' + e);
     return;
   }
-  Blockly.Xml.domToWorkspace(xmlDoc, workspace);
+  Blockly.Xml.domToWorkspace(xmlDoc, demoWorkspace);
 }
 
 function setOutput(text) {
@@ -147,7 +147,8 @@ function setOutput(text) {
 }
 
 function toXml() {
-  var xmlDom = Blockly.Xml.workspaceToDom(workspace, /* opt_noId */ true);
+  var xmlDom = Blockly.Xml.workspaceToDom(demoWorkspace,
+    /* opt_noId */ true);
   var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
   xmlText = xmlText.replace(/ id="\d+"/g, '');
   setOutput(xmlText);
@@ -155,34 +156,34 @@ function toXml() {
 
 function toJavaScript() {
   var code = '\'use strict\';\n\n'
-  code += Blockly.JavaScript.workspaceToCode(workspace);
+  code += Blockly.JavaScript.workspaceToCode(demoWorkspace);
   setOutput(code);
 }
 
 function toPython() {
-  var code = Blockly.Python.workspaceToCode(workspace);
+  var code = Blockly.Python.workspaceToCode(demoWorkspace);
   setOutput(code);
 }
 
 function toPhp() {
-  var code = Blockly.PHP.workspaceToCode(workspace);
+  var code = Blockly.PHP.workspaceToCode(demoWorkspace);
   setOutput(code);
 }
 
 function toLua() {
-  var code = Blockly.Lua.workspaceToCode(workspace);
+  var code = Blockly.Lua.workspaceToCode(demoWorkspace);
   setOutput(code);
 }
 
 function toDart() {
-  var code = Blockly.Dart.workspaceToCode(workspace);
+  var code = Blockly.Dart.workspaceToCode(demoWorkspace);
   setOutput(code);
 }
 
 function changeIndex() {
   var oneBasedIndex = document.getElementById('indexing').checked;
-  workspace.options.oneBasedIndex = oneBasedIndex;
-  workspace.toolbox_.flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
+  demoWorkspace.options.oneBasedIndex = oneBasedIndex;
+  demoWorkspace.toolbox_.flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
 }
 </script>
 

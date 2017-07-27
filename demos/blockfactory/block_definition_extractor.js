@@ -64,50 +64,50 @@ BlockDefinitionExtractor.prototype.isStatementsContainer_ = function(block) {
 };
 
 /**
- * Creates an connection constraint type Element for the request type name.
+ * Creates an connection constraint type <block> Element for the requested type.
  *
  * @param {string} type Type name of element to be created.
+ * @retrun {Element} The XML element for the Block representing the type.
  */
-BlockDefinitionExtractor.prototype.parseType_ = function(type) {
+BlockDefinitionExtractor.prototype.buildBlockForType_ = function(type) {
   switch (type) {
     case 'Null':
-      this.typeNull_();
-      break;
+      return this.typeNull_();
     case 'Boolean':
-      this.typeBoolean_();
-      break;
+      return this.typeBoolean_();
     case 'Number':
-      this.typeNumber_();
-      break;
+      return this.typeNumber_();
     case 'String':
-      this.typeString_();
-      break;
+      return this.typeString_();
     case 'Array':
-      this.typeList_();
-      break;
+      return this.typeList_();
     default:
-      this.typeOther_(type);
-      break;
+      return this.typeOther_(type);
   }
 };
 
 /**
  * Parses the current src node to create the corresponding type elements.
  *
- * @param {Blockly.RenderedConnection} connection
+ * @retrun {Element} The XML elements for the Block representing the type
+ *     constraints.
  */
-BlockDefinitionExtractor.prototype.parseTypes_ = function(connection) {
+BlockDefinitionExtractor.prototype.buildTypeConstraintBlockForConnection_ =
+    function(connection)
+{
+  var typeBlock;
   if (connection.check_) {
     if (connection.check_.length < 1) {
-      this.typeNullShadow_();
+      typeBlock = this.typeNullShadow_();
     } else if (connection.check_.length === 1) {
-      this.parseType_(connection.check_[0]);
+      typeBlock = this.buildBlockForType_(connection.check_[0]);
     } else if (connection.check_.length > 1 ) {
-      this.typeGroup_(connection.check_);
+      typeBlock = this.typeGroup_(connection.check_);
     }
   } else {
-    this.typeNullShadow_();
+    typeBlock = this.typeNullShadow_();
   }
+  return typeBlock;
 };
 
 /**
@@ -144,9 +144,10 @@ BlockDefinitionExtractor.prototype.parseFields_ = function() {
  * Parses the current src node to create the corresponding input elements.
  */
 BlockDefinitionExtractor.prototype.parseInputs_ = function() {
+  var lastInputDefElement = null;
   for (var i=0; i<this.src.current.length; i++) {
     var input = this.src.current[i];
-    var align = 'LEFT'; // This seems to be the default Blockly.ALIGN_LEFT
+    var align = 'LEFT'; // Left alignment is the default.
     if (input.align || input.align === 0) {
       if (input.align === Blockly.ALIGN_CENTRE) {
         align = 'CENTRE';
@@ -154,22 +155,16 @@ BlockDefinitionExtractor.prototype.parseInputs_ = function() {
         align = 'RIGHT';
       }
     }
-    switch (input.type) {
-      case Blockly.INPUT_VALUE:
-        this.inputValue_(input.name, align,
-            this.chainNodesCB_('fields', input.fieldRow),
-            this.chainNodesCB_('types', input.connection));
-        break;
-      case Blockly.NEXT_STATEMENT:
-        this.inputStatement_(input.name, align,
-            this.chainNodesCB_('fields', input.fieldRow),
-            this.chainNodesCB_('types', input.connection));
-        break;
-      case Blockly.DUMMY_INPUT:
-        this.inputDummy_(align,
-            this.chainNodesCB_('fields', input.fieldRow));
-        break;
+    var inputDefElement = this.input_(input, align,
+        this.chainNodesCB_('fields', input.fieldRow));
+    if (lastInputDefElement) {
+      var next = this.newElement_('next');
+      next.append(inputDefElement);
+      lastInputDefElement.append(next);
+    } else {
+      this.dst.current.append(inputDefElement);
     }
+    lastInputDefElement = inputDefElement;
   }
 };
 
@@ -183,23 +178,19 @@ BlockDefinitionExtractor.prototype.parseInputs_ = function() {
 BlockDefinitionExtractor.prototype.chainNodesCB_ =
   function(nodesType, currentSrcNode)
 {
-  var this_ = this;
   return function() {
-    var src = this_.src.current;
-    this_.src.current = currentSrcNode;
+    var src = this.src.current;
+    this.src.current = currentSrcNode;
     switch (nodesType) {
       case 'fields':
-        this_.parseFields_();
-        break;
-      case 'types':
-        this_.parseTypes_(this_.src.current);
+        this.parseFields_();
         break;
       case 'inputs':
-        this_.parseInputs_();
+        this.parseInputs_();
         break;
-    }
-    this_.src.current = src;
-  }
+    };
+    this.src.current = src;
+  }.bind(this);
 };
 
 /**
@@ -213,15 +204,11 @@ BlockDefinitionExtractor.prototype.chainNodesCB_ =
  * @param {boolean} inline Block layout inline or not.
  * @param {nodeChainCallback} tooltipCB
  * @param {nodeChainCallback} helpUrlCB
- * @param {nodeChainCallback} outputTypeCB
- * @param {nodeChainCallback} topTypeCB
- * @param {nodeChainCallback} bottomTypeCB
  * @param {nodeChainCallback} colourCB
  * @return {Element} The factory_base block element.
  */
 BlockDefinitionExtractor.prototype.factoryBase_ =
-  function(block, connections, name, inline, tooltipCB, helpUrlCB,
-           outputTypeCB, topTypeCB, bottomTypeCB, colourCB)
+  function(block, connections, name, inline, tooltipCB, helpUrlCB, colourCB)
 {
   this.src = {root: block, current: block};
   var factoryBaseEl = this.newElement_('block', {type: 'factory_base'});
@@ -245,22 +232,22 @@ BlockDefinitionExtractor.prototype.factoryBase_ =
   helpUrlCB();
   this.dst.current = factoryBaseEl;
   if (connections === 'LEFT') {
-    factoryBaseEl.append(
-      this.dst.current = this.newElement_('value', {name: 'OUTPUTTYPE'}));
-    outputTypeCB();
-    this.dst.current = factoryBaseEl;
+    var inputValue = this.newElement_('value', {name: 'OUTPUTTYPE'});
+    inputValue.append(this.buildTypeConstraintBlockForConnection_(
+        block.outputConnection));
+    factoryBaseEl.append(inputValue);
   } else {
     if (connections === 'UP' || connections === 'BOTH') {
-      factoryBaseEl.append(this.dst.current =
-         this.newElement_('value', {name: 'TOPTYPE'}));
-      topTypeCB();
-      this.dst.current = factoryBaseEl;
+      var inputValue = this.newElement_('value', {name: 'TOPTYPE'});
+      inputValue.append(this.buildTypeConstraintBlockForConnection_(
+          block.previousConnection));
+      factoryBaseEl.append(inputValue);
     }
     if (connections === 'DOWN' || connections === 'BOTH') {
-      factoryBaseEl.append(this.dst.current =
-          this.newElement_('value', {name: 'BOTTOMTYPE'}));
-      bottomTypeCB();
-      this.dst.current = factoryBaseEl;
+      var inputValue = this.newElement_('value', {name: 'BOTTOMTYPE'});
+      inputValue.append(this.buildTypeConstraintBlockForConnection_(
+          block.nextConnection));
+      factoryBaseEl.append(inputValue);
     }
   }
   factoryBaseEl.append(this.dst.current =
@@ -270,87 +257,37 @@ BlockDefinitionExtractor.prototype.factoryBase_ =
 };
 
 /**
- * Creates a block Element for the input_dummy block.
- * @param {string} align Can be left, right or centre.
- * @param {nodeChainCallback} fieldsCB
- */
-BlockDefinitionExtractor.prototype.inputDummy_ = function(align, fieldsCB) {
-  var block1 = this.newElement_('block', {type: 'input_dummy'});
-  if (!this.isStatementsContainer_(
-      this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
-  block1.append(this.newElement_('field', {name: 'ALIGN'}, align));
-  block1.append(this.dst.current =
-      this.newElement_('statement', {name: 'FIELDS'}));
-  fieldsCB();
-  this.dst.current = block1;
-};
-
-/**
  * Creates a block Element for the input_statement block.
  *
- * @param {string} inputName Input statement name.
+ * @param {Blockly.Input} input The input object.
  * @param {string} align Can be left, right or centre.
  * @param {nodeChainCallback} fieldsCB
- * @param {nodeChainCallback} typeCB
+ * @return {Element} The <block> element that defines the input.
  */
-BlockDefinitionExtractor.prototype.inputStatement_ =
-  function(inputName, align, fieldsCB, typeCB)
+BlockDefinitionExtractor.prototype.input_ =
+  function(input, align, fieldsCB)
 {
-  var block1 = this.newElement_('block', {type: 'input_statement'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
-  block1.append(this.newElement_('field', {name: 'INPUTNAME'}, inputName));
-  block1.append(this.newElement_('field', {name: 'ALIGN'}, align));
-  block1.append(this.dst.current =
-      this.newElement_('statement', {name: 'FIELDS'}));
-  fieldsCB();
-  this.dst.current = block1;
-  block1.append(this.dst.current =
-      this.newElement_('value', {name: 'TYPE'}));
-  typeCB();
-  this.dst.current = block1;
-};
+  var inputTypeAttr = (input.type === Blockly.INPUT_VALUE) ? 'input_value' :
+      (input.type === Blockly.INPUT_STATEMENT) ? 'input_statement' :
+      /* input.type === Blockly.INPUT_DUMMY */ 'input_dummy';
+  var inputDefBlock = this.newElement_('block', {type: inputTypeAttr});
 
-/**
- * Creates a block Element for the input_value block.
- *
- * @param {string} inputName Input value name.
- * @param {string} align Can be left, right or centre.
- * @param {nodeChainCallback} fieldsCB
- * @param {nodeChainCallback} typeCB
- */
-BlockDefinitionExtractor.prototype.inputValue_ =
-  function(inputName, align, fieldsCB, typeCB)
-{
-  var block1 = this.newElement_('block', {type: 'input_value'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
-  block1.append(this.newElement_('field', {name: 'INPUTNAME'}, inputName));
-  block1.append(this.newElement_('field', {name: 'ALIGN'}, align));
-  block1.append(this.dst.current =
-      this.newElement_('statement', {name: 'FIELDS'}));
+  inputDefBlock.append(this.newElement_('field', {name: 'INPUTNAME'}, input.name));
+  inputDefBlock.append(this.newElement_('field', {name: 'ALIGN'}, align));
+
+  var parentDst = this.dst.current;  // TODO: Replace with flattened call.
+  var fieldsDef = this.dst.current = this.newElement_('statement', {name: 'FIELDS'});
   fieldsCB();
-  this.dst.current = block1;
-  block1.append(this.dst.current =
-      this.newElement_('value', {name: 'TYPE'}));
-  typeCB();
-  this.dst.current = block1;
+  inputDefBlock.append(fieldsDef);
+  this.dst.current = parentDst;
+
+  if (input.type != Blockly.DUMMY_INPUT) {
+    var typeValue = this.newElement_('value', {name: 'TYPE'});
+    typeValue.append(this.buildTypeConstraintBlockForConnection_(input.connection));
+    inputDefBlock.append(typeValue);
+  }
+
+  return inputDefBlock;
 };
 
 /**
@@ -567,127 +504,76 @@ BlockDefinitionExtractor.prototype.fieldImage_ =
  * Creates a block Element for the type_group block.
  *
  * @param {Array<string>} types List of types of this type group.
+ * @return {Element} A "any" type group for child types.
  */
 BlockDefinitionExtractor.prototype.typeGroup_ = function(types) {
-  var block1 = this.newElement_('block', {type: 'type_group'});
-
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
-  block1.append(this.newElement_('mutation', {types:types.length}));
+  var typeGroupBlock = this.newElement_('block', {type: 'type_group'});
+  typeGroupBlock.append(this.newElement_('mutation', {types:types.length}));
   for (var i=0; i<types.length; i++) {
-    var type = types[i];
-    var value = this.newElement_('value', {name:'TYPE'+i});
-    block1.append(value);
-    this.dst.current = value;
-    this.parseType_(type);
+    var typeBlock = this.buildBlockForType_(types[i]);
+    var valueBlock = this.newElement_('value', {name:'TYPE'+i});
+    valueBlock.append(typeBlock);
+    typeGroupBlock.append(valueBlock);
   }
-  this.dst.current = block1;
+  return typeGroupBlock;
 };
 
 /**
  * Creates a shadow Element for the type_null block.
+ * @return The shadow element for the null type.
  */
 BlockDefinitionExtractor.prototype.typeNullShadow_ = function() {
-  var block1 = this.newElement_('shadow', {type: 'type_null'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
+  return this.newElement_('shadow', {type: 'type_null'});
 };
 
 /**
  * Creates a block Element for the type_null block.
+ * @return The element for the null type.
  */
 BlockDefinitionExtractor.prototype.typeNull_ = function() {
-  var block1 = this.newElement_('block', {type: 'type_null'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
+  return this.newElement_('block', {type: 'type_null'});
 };
 
 /**
  * Creates a block Element for the type_boolean block.
+ * @return The element for the boolean type.
  */
 BlockDefinitionExtractor.prototype.typeBoolean_ = function() {
-  var block1 = this.newElement_('block', {type: 'type_boolean'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
+  return this.newElement_('block', {type: 'type_boolean'});
 };
 
 /**
  * Creates a block Element for the type_number block.
+ * @return The element for the number type.
  */
 BlockDefinitionExtractor.prototype.typeNumber_ = function() {
-  var block1 = this.newElement_('block', {type: 'type_number'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
+  return this.newElement_('block', {type: 'type_number'});
 };
 
 /**
  * Creates a block Element for the type_string block.
+ * @return The element for the string type.
  */
 BlockDefinitionExtractor.prototype.typeString_ = function() {
-  var block1 = this.newElement_('block', {type: 'type_string'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
+  return this.newElement_('block', {type: 'type_string'});
 };
 
 /**
  * Creates a block Element for the type_list block.
+ * @return The element for the list type.
  */
 BlockDefinitionExtractor.prototype.typeList_ = function() {
-  var block1 = this.newElement_('block', {type: 'type_list'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
+  return this.newElement_('block', {type: 'type_list'});
 };
 
 /**
  * Creates a block Element for the type_other block.
- *
- * @param {string} type Name of a custom type.
+ * @return The element for a custom type.
  */
 BlockDefinitionExtractor.prototype.typeOther_ = function(type) {
-  var block1 = this.newElement_('block', {type: 'type_other'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
-  block1.append(this.newElement_('field', {name: 'TYPE'}, type));
+  var block = this.newElement_('block', {type: 'type_other'});
+  block.append(this.newElement_('field', {name: 'TYPE'}, type));
+  return block;
 };
 
 /**
@@ -771,9 +657,6 @@ BlockDefinitionExtractor.prototype.buildBlockFactoryDef =
     function() {
       this.text_(block.helpUrl);
     }.bind(this),
-    this.chainNodesCB_('types', block.outputConnection),
-    this.chainNodesCB_('types', block.previousConnection),
-    this.chainNodesCB_('types', block.nextConnection),
     function() {
       this_.colourHue_(block.colour_, colour_hue);
     }.bind(this)

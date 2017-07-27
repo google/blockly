@@ -220,7 +220,7 @@ BlockFactory.updatePreview = function() {
         eval(code);
       } catch (e) {
         // TODO: Display error in the UI
-        console.error("Error while evaluating JavaScript formated block definition", e);
+        console.error("Error while evaluating JavaScript formatted block definition", e);
         return;
       }
     } else {

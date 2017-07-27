@@ -32,13 +32,13 @@ BlockDefinitionExtractor = function() {
 };
 
 /**
- * Helper function to create a new DOM node.
- * @param {!string} name New node name.
- * @param {Map} name New node attribute map.
- * @param {string} text New node text.
- * @return {Element} The newly created node.
+ * Helper function to create a new DOM element.
+ * @param {!string} name New element tag name.
+ * @param {Map} name New element's attributes.
+ * @param {string} text New element's inner text.
+ * @return {Element} The newly created element.
  */
-BlockDefinitionExtractor.prototype.newNode_ = function(name, attrs, text) {
+BlockDefinitionExtractor.prototype.newElement_ = function(name, attrs, text) {
   var block1;
   if(name === 'block') {
     block1 = goog.dom.createDom('block');
@@ -225,47 +225,47 @@ BlockDefinitionExtractor.prototype.factoryBase_ =
            outputTypeCB, topTypeCB, bottomTypeCB, colourCB)
 {
   this.src = {root: block, current: block};
-  var factoryBaseEl = this.newNode_('block', {type: 'factory_base'});
+  var factoryBaseEl = this.newElement_('block', {type: 'factory_base'});
   this.dst = Object.create(null);
   this.dst.current = factoryBaseEl;
-  factoryBaseEl.append(this.newNode_('mutation', {connections: connections}));
-  factoryBaseEl.append(this.newNode_('field', {name: 'NAME'}, name));
-  factoryBaseEl.append(this.newNode_('field', {name: 'INLINE'}, inline));
+  factoryBaseEl.append(this.newElement_('mutation', {connections: connections}));
+  factoryBaseEl.append(this.newElement_('field', {name: 'NAME'}, name));
+  factoryBaseEl.append(this.newElement_('field', {name: 'INLINE'}, inline));
   factoryBaseEl.append(
-      this.newNode_('field', {name: 'CONNECTIONS'}, connections));
+      this.newElement_('field', {name: 'CONNECTIONS'}, connections));
   factoryBaseEl.append(this.dst.current =
-      this.newNode_('statement', {name: 'INPUTS'}));
+      this.newElement_('statement', {name: 'INPUTS'}));
   this.chainNodesCB_('inputs', block.inputList)();
   this.dst.current = factoryBaseEl;
   factoryBaseEl.append(this.dst.current =
-      this.newNode_('value', {name: 'TOOLTIP'}));
+      this.newElement_('value', {name: 'TOOLTIP'}));
   tooltipCB();
   this.dst.current = factoryBaseEl;
   factoryBaseEl.append(this.dst.current =
-      this.newNode_('value', {name: 'HELPURL'}));
+      this.newElement_('value', {name: 'HELPURL'}));
   helpUrlCB();
   this.dst.current = factoryBaseEl;
   if (connections === 'LEFT') {
     factoryBaseEl.append(
-      this.dst.current = this.newNode_('value', {name: 'OUTPUTTYPE'}));
+      this.dst.current = this.newElement_('value', {name: 'OUTPUTTYPE'}));
     outputTypeCB();
     this.dst.current = factoryBaseEl;
   } else {
     if (connections === 'UP' || connections === 'BOTH') {
       factoryBaseEl.append(this.dst.current =
-         this.newNode_('value', {name: 'TOPTYPE'}));
+         this.newElement_('value', {name: 'TOPTYPE'}));
       topTypeCB();
       this.dst.current = factoryBaseEl;
     }
     if (connections === 'DOWN' || connections === 'BOTH') {
       factoryBaseEl.append(this.dst.current =
-          this.newNode_('value', {name: 'BOTTOMTYPE'}));
+          this.newElement_('value', {name: 'BOTTOMTYPE'}));
       bottomTypeCB();
       this.dst.current = factoryBaseEl;
     }
   }
   factoryBaseEl.append(this.dst.current =
-      this.newNode_('value', {name: 'COLOUR'}));
+      this.newElement_('value', {name: 'COLOUR'}));
   colourCB();
   return factoryBaseEl;
 };
@@ -276,18 +276,18 @@ BlockDefinitionExtractor.prototype.factoryBase_ =
  * @param {nodeChainCallback} fieldsCB
  */
 BlockDefinitionExtractor.prototype.inputDummy_ = function(align, fieldsCB) {
-  var block1 = this.newNode_('block', {type: 'input_dummy'});
+  var block1 = this.newElement_('block', {type: 'input_dummy'});
   if (!this.isStatementsContainer_(
       this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('field', {name: 'ALIGN'}, align));
+  block1.append(this.newElement_('field', {name: 'ALIGN'}, align));
   block1.append(this.dst.current =
-      this.newNode_('statement', {name: 'FIELDS'}));
+      this.newElement_('statement', {name: 'FIELDS'}));
   fieldsCB();
   this.dst.current = block1;
 };
@@ -303,22 +303,22 @@ BlockDefinitionExtractor.prototype.inputDummy_ = function(align, fieldsCB) {
 BlockDefinitionExtractor.prototype.inputStatement_ =
   function(inputName, align, fieldsCB, typeCB)
 {
-  var block1 = this.newNode_('block', {type: 'input_statement'});
+  var block1 = this.newElement_('block', {type: 'input_statement'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('field', {name: 'INPUTNAME'}, inputName));
-  block1.append(this.newNode_('field', {name: 'ALIGN'}, align));
+  block1.append(this.newElement_('field', {name: 'INPUTNAME'}, inputName));
+  block1.append(this.newElement_('field', {name: 'ALIGN'}, align));
   block1.append(this.dst.current =
-      this.newNode_('statement', {name: 'FIELDS'}));
+      this.newElement_('statement', {name: 'FIELDS'}));
   fieldsCB();
   this.dst.current = block1;
   block1.append(this.dst.current =
-      this.newNode_('value', {name: 'TYPE'}));
+      this.newElement_('value', {name: 'TYPE'}));
   typeCB();
   this.dst.current = block1;
 };
@@ -334,22 +334,22 @@ BlockDefinitionExtractor.prototype.inputStatement_ =
 BlockDefinitionExtractor.prototype.inputValue_ =
   function(inputName, align, fieldsCB, typeCB)
 {
-  var block1 = this.newNode_('block', {type: 'input_value'});
+  var block1 = this.newElement_('block', {type: 'input_value'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('field', {name: 'INPUTNAME'}, inputName));
-  block1.append(this.newNode_('field', {name: 'ALIGN'}, align));
+  block1.append(this.newElement_('field', {name: 'INPUTNAME'}, inputName));
+  block1.append(this.newElement_('field', {name: 'ALIGN'}, align));
   block1.append(this.dst.current =
-      this.newNode_('statement', {name: 'FIELDS'}));
+      this.newElement_('statement', {name: 'FIELDS'}));
   fieldsCB();
   this.dst.current = block1;
   block1.append(this.dst.current =
-      this.newNode_('value', {name: 'TYPE'}));
+      this.newElement_('value', {name: 'TYPE'}));
   typeCB();
   this.dst.current = block1;
 };
@@ -359,15 +359,15 @@ BlockDefinitionExtractor.prototype.inputValue_ =
  * @param {string} text
  */
 BlockDefinitionExtractor.prototype.fieldStatic_ = function(text) {
-  var block1 = this.newNode_('block', {type: 'field_static'});
+  var block1 = this.newElement_('block', {type: 'field_static'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('field', {name: 'TEXT'}, text));
+  block1.append(this.newElement_('field', {name: 'TEXT'}, text));
 };
 
 /**
@@ -377,16 +377,16 @@ BlockDefinitionExtractor.prototype.fieldStatic_ = function(text) {
  * @param {string} fieldName
  */
 BlockDefinitionExtractor.prototype.fieldInput_ = function(text, fieldName) {
-  var block1 = this.newNode_('block', {type: 'field_input'});
+  var block1 = this.newElement_('block', {type: 'field_input'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('field', {name: 'TEXT'}, text));
-  block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
+  block1.append(this.newElement_('field', {name: 'TEXT'}, text));
+  block1.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
 };
 
 /**
@@ -401,19 +401,19 @@ BlockDefinitionExtractor.prototype.fieldInput_ = function(text, fieldName) {
 BlockDefinitionExtractor.prototype.fieldNumber_ =
   function(value, fieldName, min, max, precision)
 {
-  var block1 = this.newNode_('block', {type: 'field_number'});
+  var block1 = this.newElement_('block', {type: 'field_number'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('field', {name: 'VALUE'}, value));
-  block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
-  block1.append(this.newNode_('field', {name: 'MIN'}, min));
-  block1.append(this.newNode_('field', {name: 'MAX'}, max));
-  block1.append(this.newNode_('field', {name: 'PRECISION'}, precision));
+  block1.append(this.newElement_('field', {name: 'VALUE'}, value));
+  block1.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+  block1.append(this.newElement_('field', {name: 'MIN'}, min));
+  block1.append(this.newElement_('field', {name: 'MAX'}, max));
+  block1.append(this.newElement_('field', {name: 'PRECISION'}, precision));
 };
 
 /**
@@ -423,16 +423,16 @@ BlockDefinitionExtractor.prototype.fieldNumber_ =
  * @param {string} fieldName
  */
 BlockDefinitionExtractor.prototype.fieldAngle_ = function(angle, fieldName) {
-  var block1 = this.newNode_('block', {type: 'field_angle'});
+  var block1 = this.newElement_('block', {type: 'field_angle'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('field', {name: 'ANGLE'}, angle));
-  block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
+  block1.append(this.newElement_('field', {name: 'ANGLE'}, angle));
+  block1.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
 };
 
 /**
@@ -444,36 +444,36 @@ BlockDefinitionExtractor.prototype.fieldAngle_ = function(angle, fieldName) {
 BlockDefinitionExtractor.prototype.fieldDropdown_ =
   function(options, fieldName)
 {
-  var block1 = this.newNode_('block', {type: 'field_dropdown'});
+  var block1 = this.newElement_('block', {type: 'field_dropdown'});
   var optionsStr = '[';
 
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  var mutation = this.newNode_('mutation');
+  var mutation = this.newElement_('mutation');
   block1.append(mutation);
-  block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
+  block1.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
   for (var i=0; i<options.length; i++) {
     var option = options[i];
     if (typeof option[0] === "string") {
       optionsStr+='&quot;text&quot;,'
-      block1.append(this.newNode_('field', {name: 'USER'+i}, option[0]));
+      block1.append(this.newElement_('field', {name: 'USER'+i}, option[0]));
     } else {
       optionsStr+='&quot;image&quot;,';
       block1.append(
-          this.newNode_('field', {name: 'SRC'+i}, option[0].src));
+          this.newElement_('field', {name: 'SRC'+i}, option[0].src));
       block1.append(
-          this.newNode_('field', {name: 'WIDTH'+i}, option[0].width));
+          this.newElement_('field', {name: 'WIDTH'+i}, option[0].width));
       block1.append(
-          this.newNode_('field', {name: 'HEIGHT'+i}, option[0].height));
+          this.newElement_('field', {name: 'HEIGHT'+i}, option[0].height));
       block1.append(
-          this.newNode_('field', {name: 'ALT'+i}, option[0].alt));
+          this.newElement_('field', {name: 'ALT'+i}, option[0].alt));
     }
-    block1.append(this.newNode_('field', {name: 'CPU'+i}, option[1]));
+    block1.append(this.newElement_('field', {name: 'CPU'+i}, option[1]));
   }
   optionsStr = optionsStr.slice(0,-1); // Drop last comma
   optionsStr += ']';
@@ -489,16 +489,16 @@ BlockDefinitionExtractor.prototype.fieldDropdown_ =
 BlockDefinitionExtractor.prototype.fieldCheckbox_ =
   function(checked, fieldName)
 {
-  var block1 = this.newNode_('block', {type: 'field_checkbox'});
+  var block1 = this.newElement_('block', {type: 'field_checkbox'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('field', {name: 'CHECKED'}, checked));
-  block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
+  block1.append(this.newElement_('field', {name: 'CHECKED'}, checked));
+  block1.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
 };
 
 /**
@@ -508,16 +508,16 @@ BlockDefinitionExtractor.prototype.fieldCheckbox_ =
  * @param {string} fieldName
  */
 BlockDefinitionExtractor.prototype.fieldColour_ = function(colour, fieldName) {
-  var block1 = this.newNode_('block', {type: 'field_colour'});
+  var block1 = this.newElement_('block', {type: 'field_colour'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('field', {name: 'COLOUR'}, colour));
-  block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
+  block1.append(this.newElement_('field', {name: 'COLOUR'}, colour));
+  block1.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
 };
 
 /**
@@ -527,16 +527,16 @@ BlockDefinitionExtractor.prototype.fieldColour_ = function(colour, fieldName) {
  * @param {string} fieldName
  */
 BlockDefinitionExtractor.prototype.fieldVariable_ = function(text, fieldName) {
-  var block1 = this.newNode_('block', {type: 'field_variable'});
+  var block1 = this.newElement_('block', {type: 'field_variable'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('field', {name: 'TEXT'}, text));
-  block1.append(this.newNode_('field', {name: 'FIELDNAME'}, fieldName));
+  block1.append(this.newElement_('field', {name: 'TEXT'}, text));
+  block1.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
 };
 
 /**
@@ -550,18 +550,18 @@ BlockDefinitionExtractor.prototype.fieldVariable_ = function(text, fieldName) {
 BlockDefinitionExtractor.prototype.fieldImage_ =
   function(src, width, height, alt)
 {
-  var block1 = this.newNode_('block', {type: 'field_image'});
+  var block1 = this.newElement_('block', {type: 'field_image'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('field', {name: 'SRC'}, src));
-  block1.append(this.newNode_('field', {name: 'WIDTH'}, width));
-  block1.append(this.newNode_('field', {name: 'HEIGHT'}, height));
-  block1.append(this.newNode_('field', {name: 'ALT'}, alt));
+  block1.append(this.newElement_('field', {name: 'SRC'}, src));
+  block1.append(this.newElement_('field', {name: 'WIDTH'}, width));
+  block1.append(this.newElement_('field', {name: 'HEIGHT'}, height));
+  block1.append(this.newElement_('field', {name: 'ALT'}, alt));
 };
 
 /**
@@ -570,19 +570,19 @@ BlockDefinitionExtractor.prototype.fieldImage_ =
  * @param {Array<string>} types List of types of this type group.
  */
 BlockDefinitionExtractor.prototype.typeGroup_ = function(types) {
-  var block1 = this.newNode_('block', {type: 'type_group'});
+  var block1 = this.newElement_('block', {type: 'type_group'});
 
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('mutation', {types:types.length}));
+  block1.append(this.newElement_('mutation', {types:types.length}));
   for (var i=0; i<types.length; i++) {
     var type = types[i];
-    var value = this.newNode_('value', {name:'TYPE'+i});
+    var value = this.newElement_('value', {name:'TYPE'+i});
     block1.append(value);
     this.dst.current = value;
     this.parseType_(type);
@@ -594,9 +594,9 @@ BlockDefinitionExtractor.prototype.typeGroup_ = function(types) {
  * Creates a shadow Element for the type_null block.
  */
 BlockDefinitionExtractor.prototype.typeNullShadow_ = function() {
-  var block1 = this.newNode_('shadow', {type: 'type_null'});
+  var block1 = this.newElement_('shadow', {type: 'type_null'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -608,9 +608,9 @@ BlockDefinitionExtractor.prototype.typeNullShadow_ = function() {
  * Creates a block Element for the type_null block.
  */
 BlockDefinitionExtractor.prototype.typeNull_ = function() {
-  var block1 = this.newNode_('block', {type: 'type_null'});
+  var block1 = this.newElement_('block', {type: 'type_null'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -622,9 +622,9 @@ BlockDefinitionExtractor.prototype.typeNull_ = function() {
  * Creates a block Element for the type_boolean block.
  */
 BlockDefinitionExtractor.prototype.typeBoolean_ = function() {
-  var block1 = this.newNode_('block', {type: 'type_boolean'});
+  var block1 = this.newElement_('block', {type: 'type_boolean'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -636,9 +636,9 @@ BlockDefinitionExtractor.prototype.typeBoolean_ = function() {
  * Creates a block Element for the type_number block.
  */
 BlockDefinitionExtractor.prototype.typeNumber_ = function() {
-  var block1 = this.newNode_('block', {type: 'type_number'});
+  var block1 = this.newElement_('block', {type: 'type_number'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -650,9 +650,9 @@ BlockDefinitionExtractor.prototype.typeNumber_ = function() {
  * Creates a block Element for the type_string block.
  */
 BlockDefinitionExtractor.prototype.typeString_ = function() {
-  var block1 = this.newNode_('block', {type: 'type_string'});
+  var block1 = this.newElement_('block', {type: 'type_string'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -664,9 +664,9 @@ BlockDefinitionExtractor.prototype.typeString_ = function() {
  * Creates a block Element for the type_list block.
  */
 BlockDefinitionExtractor.prototype.typeList_ = function() {
-  var block1 = this.newNode_('block', {type: 'type_list'});
+  var block1 = this.newElement_('block', {type: 'type_list'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
@@ -680,15 +680,15 @@ BlockDefinitionExtractor.prototype.typeList_ = function() {
  * @param {string} type Name of a custom type.
  */
 BlockDefinitionExtractor.prototype.typeOther_ = function(type) {
-  var block1 = this.newNode_('block', {type: 'type_other'});
+  var block1 = this.newElement_('block', {type: 'type_other'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('field', {name: 'TYPE'}, type));
+  block1.append(this.newElement_('field', {name: 'TYPE'}, type));
 };
 
 /**
@@ -699,16 +699,16 @@ BlockDefinitionExtractor.prototype.typeOther_ = function(type) {
 BlockDefinitionExtractor.prototype.colourHue_ =
   function(colour, hue)
 {
-  var block1 = this.newNode_('block', {type: 'colour_hue'});
+  var block1 = this.newElement_('block', {type: 'colour_hue'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('mutation', {colour:colour.toString()}));
-  block1.append(this.newNode_('field', {name: 'HUE'}, hue.toString()));
+  block1.append(this.newElement_('mutation', {colour:colour.toString()}));
+  block1.append(this.newElement_('field', {name: 'HUE'}, hue.toString()));
 };
 
 /**
@@ -717,15 +717,15 @@ BlockDefinitionExtractor.prototype.colourHue_ =
  * @param text
  */
 BlockDefinitionExtractor.prototype.text_ = function(text) {
-  var block1 = this.newNode_('block', {type: 'text'});
+  var block1 = this.newElement_('block', {type: 'text'});
   if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newNode_('next');
+    var nextBlock = this.newElement_('next');
     this.dst.current.append(nextBlock);
     this.dst.current = nextBlock;
   }
   this.dst.current.append(block1);
   this.dst.current = block1;
-  block1.append(this.newNode_('field', {name: 'TEXT'}, text));
+  block1.append(this.newElement_('field', {name: 'TEXT'}, text));
 };
 
 /**

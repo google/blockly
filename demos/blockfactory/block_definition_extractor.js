@@ -5,7 +5,7 @@
 
 /**
  * @fileoverview Block element construction functions.
- * @author JC-Orozco (Juan Carlos Orozco)
+ * @author JC-Orozco (Juan Carlos Orozco), AnmAtAnm (Andrew n marshall)
  */
 'use strict';
 
@@ -212,7 +212,6 @@ BlockDefinitionExtractor.prototype.chainNodesCB_ =
  *     UP, DOWN, BOTH.
  * @param {string} name Block name.
  * @param {boolean} inline Block layout inline or not.
- * @param {nodeChainCallback} inputsCB
  * @param {nodeChainCallback} tooltipCB
  * @param {nodeChainCallback} helpUrlCB
  * @param {nodeChainCallback} outputTypeCB
@@ -222,16 +221,11 @@ BlockDefinitionExtractor.prototype.chainNodesCB_ =
  * @return {Element} The factory_base block element.
  */
 BlockDefinitionExtractor.prototype.factoryBase_ =
-  function(block, connections, name, inline, inputsCB, tooltipCB, helpUrlCB,
+  function(block, connections, name, inline, tooltipCB, helpUrlCB,
            outputTypeCB, topTypeCB, bottomTypeCB, colourCB)
 {
   this.src = {root: block, current: block};
   var factoryBaseEl = this.newNode_('block', {type: 'factory_base'});
-  // if (!this.isStatementsContainer_(this.dst.current)) {
-  //   var nextBlock = this.newNode_('next');
-  //   this.dst.current.append(nextBlock);
-  //   this.dst.current = nextBlock;
-  // }
   this.dst = Object.create(null);
   this.dst.current = factoryBaseEl;
   factoryBaseEl.append(this.newNode_('mutation', {connections: connections}));
@@ -241,7 +235,7 @@ BlockDefinitionExtractor.prototype.factoryBase_ =
       this.newNode_('field', {name: 'CONNECTIONS'}, connections));
   factoryBaseEl.append(this.dst.current =
       this.newNode_('statement', {name: 'INPUTS'}));
-  inputsCB();
+  this.chainNodesCB_('inputs', block.inputList)();
   this.dst.current = factoryBaseEl;
   factoryBaseEl.append(this.dst.current =
       this.newNode_('value', {name: 'TOOLTIP'}));
@@ -772,7 +766,6 @@ BlockDefinitionExtractor.prototype.buildBlockFactoryDef =
     }
   }
   var factoryBaseXml = this.factoryBase_(block, connections, block.type, inline,
-    this.chainNodesCB_('inputs', block.inputList),
     function() {
       this.text_(block.tooltip);
     }.bind(this),

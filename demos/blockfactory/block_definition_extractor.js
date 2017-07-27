@@ -113,31 +113,46 @@ BlockDefinitionExtractor.prototype.buildTypeConstraintBlockForConnection_ =
 /**
  * Parses the current src node to create the corresponding field elements.
  */
-BlockDefinitionExtractor.prototype.parseFields_ = function() {
-  for (var i=0; i<this.src.current.length; i++) {
-    var field = this.src.current[i];
+BlockDefinitionExtractor.prototype.parseFields_ = function(fieldRow) {
+  var firstFieldDefElement = null;
+  var lastFieldDefElement = null;
+
+  for (var i = 0; i < fieldRow.length; i++) {
+    var field = fieldRow[i];
+    var fieldDefElement = null;
     if (field instanceof Blockly.FieldLabel) {
-      this.fieldStatic_(field.text_);
+      fieldDefElement = this.fieldLabel_(field.text_);
     } else if (field instanceof Blockly.FieldTextInput) {
-      this.fieldInput_(field.text_, field.name);
+      fieldDefElement = this.fieldInput_(field.name, field.text_);
     } else if (field instanceof Blockly.FieldNumber) {
-      this.fieldNumber_(field.text_, field.name, field.min_,
-          field.max_, field.presicion_);
+      fieldDefElement = this.fieldNumber_(
+          field.name, field.text_, field.min_, field.max_, field.presicion_);
     } else if (field instanceof Blockly.FieldAngle) {
-      this.fieldAngle_(field.text_, field.name);
+      fieldDefElement = this.fieldAngle_(field.name, field.text_);
     } else if (field instanceof Blockly.FieldDropdown) {
-      this.fieldDropdown_(field.menuGenerator_, field.name);
+      fieldDefElement = this.fieldDropdown_(field.menuGenerator_, field.name);
     } else if (field instanceof Blockly.FieldCheckbox) {
-      this.fieldCheckbox_(field.state_ , field.name);
+      fieldDefElement = this.fieldCheckbox_(field.name, field.state_);
     } else if (field instanceof Blockly.FieldColour) {
-      this.fieldColour_(field.colour_ , field.name);
+      fieldDefElement = this.fieldColour_(field.name, field.colour_);
     } else if (field instanceof Blockly.FieldVariable) {
-      this.fieldVariable_(field.text_, field.name);
+      fieldDefElement = this.fieldVariable_(field.name, field.text_);
     } else if (field instanceof Blockly.FieldImage) {
-      this.fieldImage_(field.src_, field.width_,
-          field.height_, field.text_);
+      fieldDefElement = this.fieldImage_(
+          field.src_, field.width_, field.height_, field.text_);
     }
+
+    if (lastFieldDefElement) {
+      var next = this.newElement_('next');
+      next.append(fieldDefElement);
+      lastFieldDefElement.append(next);
+    } else {
+      firstFieldDefElement = fieldDefElement;
+    }
+    lastFieldDefElement = fieldDefElement;
   }
+
+  return firstFieldDefElement;
 };
 
 /**
@@ -149,7 +164,7 @@ BlockDefinitionExtractor.prototype.parseFields_ = function() {
 BlockDefinitionExtractor.prototype.parseInputs_ = function(block) {
   var firstInputDefElement = null;
   var lastInputDefElement = null;
-  for (var i=0; i < block.inputList.length; i++) {
+  for (var i = 0; i < block.inputList.length; i++) {
     var input = block.inputList[i];
     var align = 'LEFT'; // Left alignment is the default.
     if (input.align || input.align === 0) {
@@ -160,44 +175,17 @@ BlockDefinitionExtractor.prototype.parseInputs_ = function(block) {
       }
     }
 
-    var inputDefElement = this.input_(input, align,
-        this.chainNodesCB_('fields', input.fieldRow));
+    var inputDefElement = this.input_(input, align);
     if (lastInputDefElement) {
       var next = this.newElement_('next');
       next.append(inputDefElement);
       lastInputDefElement.append(next);
     } else {
-      this.dst.current.append(inputDefElement);
-    }
-
-    if (!firstInputDefElement) {
       firstInputDefElement = inputDefElement;
     }
     lastInputDefElement = inputDefElement;
   }
   return firstInputDefElement;
-};
-
-/**
- * Callback function generator based on the chained nodes type.
- *
- * @param {string} nodesType Type of nodes to be chained
- * @param {Element} currentSrcNode Pass the current source node
- * @return {Function} Returns a callback function to chain
- */
-BlockDefinitionExtractor.prototype.chainNodesCB_ =
-  function(nodesType, currentSrcNode)
-{
-  return function() {
-    var src = this.src.current;
-    this.src.current = currentSrcNode;
-    switch (nodesType) {
-      case 'fields':
-        this.parseFields_();
-        break;
-    };
-    this.src.current = src;
-  }.bind(this);
 };
 
 /**
@@ -266,7 +254,8 @@ BlockDefinitionExtractor.prototype.factoryBase_ =
 };
 
 /**
- * Creates a block Element for the input_statement block.
+ * Creates a block Element for the input_value, input_statement, or input_dummy
+ * blocks.
  *
  * @param {Blockly.Input} input The input object.
  * @param {string} align Can be left, right or centre.
@@ -281,14 +270,16 @@ BlockDefinitionExtractor.prototype.input_ =
       /* input.type === Blockly.INPUT_DUMMY */ 'input_dummy';
   var inputDefBlock = this.newElement_('block', {type: inputTypeAttr});
 
-  inputDefBlock.append(this.newElement_('field', {name: 'INPUTNAME'}, input.name));
+  if (input.type != Blockly.DUMMY_INPUT) {
+    inputDefBlock.append(
+        this.newElement_('field', {name: 'INPUTNAME'}, input.name));
+  }
   inputDefBlock.append(this.newElement_('field', {name: 'ALIGN'}, align));
 
-  var parentDst = this.dst.current;  // TODO: Replace with flattened call.
   var fieldsDef = this.dst.current = this.newElement_('statement', {name: 'FIELDS'});
-  fieldsCB();
+  var fieldsXml = this.parseFields_(input.fieldRow);
+  fieldsDef.append(fieldsXml);
   inputDefBlock.append(fieldsDef);
-  this.dst.current = parentDst;
 
   if (input.type != Blockly.DUMMY_INPUT) {
     var typeValue = this.newElement_('value', {name: 'TYPE'});
@@ -300,188 +291,152 @@ BlockDefinitionExtractor.prototype.input_ =
 };
 
 /**
- * Creates a block Element for the field_static block.
+ * Creates the XML for a FieldLabel definition.
  * @param {string} text
+ * @return {Element} The XML for FieldLabel definition.
  */
-BlockDefinitionExtractor.prototype.fieldStatic_ = function(text) {
-  var block1 = this.newElement_('block', {type: 'field_static'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
-  block1.append(this.newElement_('field', {name: 'TEXT'}, text));
+BlockDefinitionExtractor.prototype.fieldLabel_ = function(text) {
+  var fieldBlock = this.newElement_('block', {type: 'field_static'});
+  fieldBlock.append(this.newElement_('field', {name: 'TEXT'}, text));
+  return fieldBlock;
 };
 
 /**
- * Creates a block Element for the field_input block.
+ * Creates the XML for a FieldInput (text input) definition.
  *
- * @param {string} text
- * @param {string} fieldName
+ * @param {string} fieldName The identifying name of the field.
+ * @param {string} text The default text string.
+ * @return {Element} The XML for FieldInput definition.
  */
-BlockDefinitionExtractor.prototype.fieldInput_ = function(text, fieldName) {
-  var block1 = this.newElement_('block', {type: 'field_input'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
-  block1.append(this.newElement_('field', {name: 'TEXT'}, text));
-  block1.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+BlockDefinitionExtractor.prototype.fieldInput_ = function(fieldName, text) {
+  var fieldInput = this.newElement_('block', {type: 'field_input'});
+  fieldInput.append(this.newElement_('field', {name: 'TEXT'}, text));
+  fieldInput.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+  return fieldInput;
 };
 
 /**
- * Creates a block Element for the field_number block.
+ * Creates the XML for a FieldNumber definition.
  *
- * @param {number} value
- * @param {string} fieldName
- * @param {number} min
- * @param {number} max
- * @param {number} precision
+ * @param {string} fieldName The identifying name of the field.
+ * @param {number} value The field's default value.
+ * @param {number} min The minimum allowed value, or negative infinity.
+ * @param {number} max The maximum allowed value, or positive infinity.
+ * @param {number} precision The precision allowed for the number.
+ * @return {Element} The XML for FieldNumber definition.
  */
 BlockDefinitionExtractor.prototype.fieldNumber_ =
-  function(value, fieldName, min, max, precision)
+  function(fieldName, value, min, max, precision)
 {
-  var block1 = this.newElement_('block', {type: 'field_number'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
-  block1.append(this.newElement_('field', {name: 'VALUE'}, value));
-  block1.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
-  block1.append(this.newElement_('field', {name: 'MIN'}, min));
-  block1.append(this.newElement_('field', {name: 'MAX'}, max));
-  block1.append(this.newElement_('field', {name: 'PRECISION'}, precision));
+  var fieldNumber = this.newElement_('block', {type: 'field_number'});
+  fieldNumber.append(this.newElement_('field', {name: 'VALUE'}, value));
+  fieldNumber.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+  fieldNumber.append(this.newElement_('field', {name: 'MIN'}, min));
+  fieldNumber.append(this.newElement_('field', {name: 'MAX'}, max));
+  fieldNumber.append(this.newElement_('field', {name: 'PRECISION'}, precision));
+  return fieldNumber;
 };
 
 /**
- * Creates a block Element for the field_angle block.
+ * Creates the XML for a FieldAngle definition.
  *
- * @param {number} angle
- * @param {string} fieldName
+ * @param {string} fieldName The identifying name of the field.
+ * @param {number} angle The field's default value.
+ * @return {Element} The XML for FieldAngle definition.
  */
 BlockDefinitionExtractor.prototype.fieldAngle_ = function(angle, fieldName) {
-  var block1 = this.newElement_('block', {type: 'field_angle'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
-  block1.append(this.newElement_('field', {name: 'ANGLE'}, angle));
-  block1.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+  var fieldAngle = this.newElement_('block', {type: 'field_angle'});
+  fieldAngle.append(this.newElement_('field', {name: 'ANGLE'}, angle));
+  fieldAngle.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+  return fieldAngle;
 };
 
 /**
- * Creates a block Element for the field_dropdown block.
+ * Creates the XML for a FieldDropdown definition.
  *
+ * @param {string} fieldName The identifying name of the field.
  * @param {Array<string>} options List of options for the dropdown field.
- * @param {string} fieldName Name of the field.
+ * @return {Element} The XML for FieldDropdown definition.
  */
 BlockDefinitionExtractor.prototype.fieldDropdown_ =
-  function(options, fieldName)
+  function(fieldName, options)
 {
-  var block1 = this.newElement_('block', {type: 'field_dropdown'});
+  var fieldDropdown = this.newElement_('block', {type: 'field_dropdown'});
   var optionsStr = '[';
 
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
   var mutation = this.newElement_('mutation');
-  block1.append(mutation);
-  block1.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+  fieldDropdown.append(mutation);
+  fieldDropdown.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
   for (var i=0; i<options.length; i++) {
     var option = options[i];
     if (typeof option[0] === "string") {
-      optionsStr+='&quot;text&quot;,'
-      block1.append(this.newElement_('field', {name: 'USER'+i}, option[0]));
+      optionsStr += '"text",'
+      fieldDropdown.append(this.newElement_('field', {name: 'USER'+i}, option[0]));
     } else {
-      optionsStr+='&quot;image&quot;,';
-      block1.append(
+      optionsStr += '"image",';
+      fieldDropdown.append(
           this.newElement_('field', {name: 'SRC'+i}, option[0].src));
-      block1.append(
+      fieldDropdown.append(
           this.newElement_('field', {name: 'WIDTH'+i}, option[0].width));
-      block1.append(
+      fieldDropdown.append(
           this.newElement_('field', {name: 'HEIGHT'+i}, option[0].height));
-      block1.append(
+      fieldDropdown.append(
           this.newElement_('field', {name: 'ALT'+i}, option[0].alt));
     }
-    block1.append(this.newElement_('field', {name: 'CPU'+i}, option[1]));
+    fieldDropdown.append(this.newElement_('field', {name: 'CPU'+i}, option[1]));
   }
   optionsStr = optionsStr.slice(0,-1); // Drop last comma
   optionsStr += ']';
   mutation.setAttribute('options', optionsStr);
+
+  return fieldDropdown;
 };
 
 /**
  * Creates a block Element for the field_checkbox block.
  *
- * @param {string} checked Can be true or false
- * @param {string} fieldName
+ * @param {string} fieldName The identifying name of the field.
+ * @param {string} checked The field's default value, true or false.
+ * @return {Element} The XML for FieldCheckbox definition.
  */
 BlockDefinitionExtractor.prototype.fieldCheckbox_ =
-  function(checked, fieldName)
+  function(fieldName, checked)
 {
-  var block1 = this.newElement_('block', {type: 'field_checkbox'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
-  block1.append(this.newElement_('field', {name: 'CHECKED'}, checked));
-  block1.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+  var fieldCheckbox = this.newElement_('block', {type: 'field_checkbox'});
+  fieldCheckbox.append(this.newElement_('field', {name: 'CHECKED'}, checked));
+  fieldCheckbox.append(
+    this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+  return fieldCheckbox;
 };
 
 /**
  * Creates a block Element for the field_colour block.
  *
- * @param {number} colour
- * @param {string} fieldName
+ * @param {string} fieldName The identifying name of the field.
+ * @param {string} colour The field's default value as a string.
+ * @return {Element} The XML for FieldColour definition.
  */
-BlockDefinitionExtractor.prototype.fieldColour_ = function(colour, fieldName) {
-  var block1 = this.newElement_('block', {type: 'field_colour'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
-  block1.append(this.newElement_('field', {name: 'COLOUR'}, colour));
-  block1.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+BlockDefinitionExtractor.prototype.fieldColour_ =
+    function(fieldName, colour)
+{
+  var fieldColour = this.newElement_('block', {type: 'field_colour'});
+  fieldColour.append(this.newElement_('field', {name: 'COLOUR'}, colour));
+  fieldColour.append(
+    this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+  return fieldColour;
 };
 
 /**
  * Creates a block Element for the field_variable block.
  *
+ * @param {string} fieldName The identifying name of the field.
  * @param {string} text
- * @param {string} fieldName
  */
-BlockDefinitionExtractor.prototype.fieldVariable_ = function(text, fieldName) {
-  var block1 = this.newElement_('block', {type: 'field_variable'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
-  block1.append(this.newElement_('field', {name: 'TEXT'}, text));
-  block1.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+BlockDefinitionExtractor.prototype.fieldVariable_ = function(fieldName, text) {
+  var fieldVar = this.newElement_('block', {type: 'field_variable'});
+  fieldVar.append(this.newElement_('field', {name: 'TEXT'}, text));
+  fieldVar.append(this.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+  return fieldVar;
 };
 
 /**

@@ -142,11 +142,15 @@ BlockDefinitionExtractor.prototype.parseFields_ = function() {
 
 /**
  * Parses the current src node to create the corresponding input elements.
+ *
+ * @param {Blockly.Block} The source block to copy the inputs of.
+ * @return {Element} The XML for the stack of input definition blocks.
  */
-BlockDefinitionExtractor.prototype.parseInputs_ = function() {
+BlockDefinitionExtractor.prototype.parseInputs_ = function(block) {
+  var firstInputDefElement = null;
   var lastInputDefElement = null;
-  for (var i=0; i<this.src.current.length; i++) {
-    var input = this.src.current[i];
+  for (var i=0; i < block.inputList.length; i++) {
+    var input = block.inputList[i];
     var align = 'LEFT'; // Left alignment is the default.
     if (input.align || input.align === 0) {
       if (input.align === Blockly.ALIGN_CENTRE) {
@@ -155,6 +159,7 @@ BlockDefinitionExtractor.prototype.parseInputs_ = function() {
         align = 'RIGHT';
       }
     }
+
     var inputDefElement = this.input_(input, align,
         this.chainNodesCB_('fields', input.fieldRow));
     if (lastInputDefElement) {
@@ -164,8 +169,13 @@ BlockDefinitionExtractor.prototype.parseInputs_ = function() {
     } else {
       this.dst.current.append(inputDefElement);
     }
+
+    if (!firstInputDefElement) {
+      firstInputDefElement = inputDefElement;
+    }
     lastInputDefElement = inputDefElement;
   }
+  return firstInputDefElement;
 };
 
 /**
@@ -184,9 +194,6 @@ BlockDefinitionExtractor.prototype.chainNodesCB_ =
     switch (nodesType) {
       case 'fields':
         this.parseFields_();
-        break;
-      case 'inputs':
-        this.parseInputs_();
         break;
     };
     this.src.current = src;
@@ -219,9 +226,11 @@ BlockDefinitionExtractor.prototype.factoryBase_ =
   factoryBaseEl.append(this.newElement_('field', {name: 'INLINE'}, inline));
   factoryBaseEl.append(
       this.newElement_('field', {name: 'CONNECTIONS'}, connections));
-  factoryBaseEl.append(this.dst.current =
-      this.newElement_('statement', {name: 'INPUTS'}));
-  this.chainNodesCB_('inputs', block.inputList)();
+
+  var inputsStatement = this.newElement_('statement', {name: 'INPUTS'});
+  inputsStatement.append(this.parseInputs_(block));
+  factoryBaseEl.append(inputsStatement);
+
   this.dst.current = factoryBaseEl;
   factoryBaseEl.append(this.dst.current =
       this.newElement_('value', {name: 'TOOLTIP'}));

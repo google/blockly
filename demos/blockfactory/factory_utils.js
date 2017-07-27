@@ -27,7 +27,7 @@
  * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach), JC-Orozco
  * (Juan Carlos Orozco)
  */
- 'use strict';
+'use strict';
 
 /**
  * Namespace for FactoryUtils.

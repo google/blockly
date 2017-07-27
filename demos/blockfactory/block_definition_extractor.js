@@ -60,8 +60,7 @@ BlockDefinitionExtractor.prototype.newElement_ = function(name, attrs, text) {
  * @return {boolean} Returns true if this block can contain statements.
  */
 BlockDefinitionExtractor.prototype.isStatementsContainer_ = function(block) {
-  return (block.tagName === 'STATEMENT' || block.tagName === 'XML' ||
-      block.tagName === 'VALUE');
+  return (block.tagName === 'STATEMENT' || block.tagName === 'VALUE');
 };
 
 /**

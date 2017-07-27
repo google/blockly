@@ -55,7 +55,7 @@ BlockDefinitionExtractor.prototype.newElement_ = function(name, attrs, text) {
 };
 
 /**
- * Checks wether a given block can contain statements or not.
+ * Checks whether a given block can contain statements or not.
  * @param {!Element} block A block Element to test.
  * @return {boolean} Returns true if this block can contain statements.
  */

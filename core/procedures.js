@@ -140,11 +140,11 @@ Blockly.Procedures.isNameUsed = function(name, workspace, opt_exclude) {
     if (blocks[i].getProcedureDef) {
       var procName = blocks[i].getProcedureDef();
       if (Blockly.Names.equals(procName[0], name)) {
-        return false;
+        return true;
       }
     }
   }
-  return true;
+  return false;
 };
 
 /**

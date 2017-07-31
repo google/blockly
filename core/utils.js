@@ -197,7 +197,7 @@ Blockly.utils.getInjectionDivXY_ = function(element) {
   var scale = 1;
   while (element) {
     var xy = Blockly.utils.getRelativeXY(element);
-    var scale = Blockly.utils.getScale_(element);
+    scale = Blockly.utils.getScale_(element);
     x = (x * scale) + xy.x;
     y = (y * scale) + xy.y;
     var classes = element.getAttribute('class') || '';

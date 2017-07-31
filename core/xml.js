@@ -395,7 +395,7 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
     var savetab = Blockly.BlockSvg.TAB_WIDTH;
     try {
       Blockly.BlockSvg.TAB_WIDTH = 0;
-      var bbox = workspace.getBlocksBoundingBox();
+      bbox = workspace.getBlocksBoundingBox();
     } finally {
       Blockly.BlockSvg.TAB_WIDTH = savetab;
     }

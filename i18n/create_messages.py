@@ -34,7 +34,7 @@ def string_is_ascii(s):
     return True
   except UnicodeEncodeError:
     return False
-  
+
 def load_constants(filename):
   """Read in constants file, which must be output in every language."""
   constant_defs = read_json_file(filename);
@@ -42,7 +42,7 @@ def load_constants(filename):
   for key in constant_defs:
     value = constant_defs[key]
     value = value.replace('"', '\\"')
-    constants_text += '\nBlockly.Msg.{0} = \"{1}\";'.format(key, value)  
+    constants_text += '\nBlockly.Msg["{0}"] = "{1}";'.format(key, value)
   return constants_text
 
 def main():
@@ -139,7 +139,7 @@ goog.require('Blockly.Msg');
             value = source_defs[key]
             comment = '  // untranslated'
           value = value.replace('"', '\\"')
-          outfile.write(u'Blockly.Msg.{0} = "{1}";{2}\n'.format(
+          outfile.write(u'Blockly.Msg["{0}"] = "{1}";{2}\n'.format(
               key, value, comment))
 
         # Announce any keys defined only for target language.

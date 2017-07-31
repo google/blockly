@@ -1,5 +1,6 @@
 {
 	"@metadata": {
+<<<<<<< HEAD
                "authors": [
                        "Espertus",
                        "Liuxinyu970226",
@@ -7,6 +8,15 @@
                        "Shirayuki"
                ]
        },
+=======
+		"authors": [
+			"Espertus",
+			"Liuxinyu970226",
+			"Robby",
+			"Shirayuki"
+		]
+	},
+>>>>>>> google/master
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
 	"TODAY": "button text - Button that sets a calendar to today's date.\n{{Identical|Today}}",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}",
@@ -218,7 +228,10 @@
 	"TEXT_CREATE_JOIN_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Text#text-creation https://github.com/google/blockly/wiki/Text#text-creation], specifically the last picture in the 'Text creation' section.",
 	"TEXT_CREATE_JOIN_ITEM_TOOLTIP": "block text - See [https://github.com/google/blockly/wiki/Text#text-creation https://github.com/google/blockly/wiki/Text#text-creation], specifically the last picture in the 'Text creation' section.",
 	"TEXT_APPEND_HELPURL": "url - This and the other text-related URLs are going to be hard to translate.  As always, it is okay to leave untranslated or paste in the English-language URL.  For these URLs, you might also consider a general URL about how computers represent text (such as the translation of [https://en.wikipedia.org/wiki/String_(computer_science) this Wikipedia page]).",
+<<<<<<< HEAD
 	"TEXT_APPEND_TITLE": "block input text - Message that the variable name at %1 will have the item at %2 appended to it. [[File:blockly-append-text.png]]",
+=======
+>>>>>>> google/master
 	"TEXT_APPEND_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Text#text-modification https://github.com/google/blockly/wiki/Text#text-modification] for more information.\n\nParameters:\n* %1 - the name of the variable to which text should be appended",
 	"TEXT_LENGTH_HELPURL": "url - Information about text on computers (usually referred to as 'strings').",
 	"TEXT_LENGTH_TITLE": "block text - See [https://github.com/google/blockly/wiki/Text#text-length https://github.com/google/blockly/wiki/Text#text-length]. \n\nParameters:\n* %1 - the piece of text to take the length of",
@@ -228,11 +241,17 @@
 	"TEXT_ISEMPTY_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Text#checking-for-empty-text https://github.com/google/blockly/wiki/Text#checking-for-empty-text].",
 	"TEXT_INDEXOF_HELPURL": "url - Information about finding a character in a piece of text.",
 	"TEXT_INDEXOF_TOOLTIP": "tooltip - %1 will be replaced by either the number 0 or -1 depending on the indexing mode. See [https://github.com/google/blockly/wiki/Text#finding-text https://github.com/google/blockly/wiki/Text#finding-text].",
+<<<<<<< HEAD
 	"TEXT_INDEXOF_TITLE": "block text - Title of blocks allowing users to find text.  See [https://github.com/google/blockly/wiki/Text#finding-text https://github.com/google/blockly/wiki/Text#finding-text]. [[File:Blockly-find-text.png]]. In English the expanded message is 'in text %1 find (first|last) occurance of text %3' where %1 and %3 are added by the user. See TEXT_INDEXOF_OPERATOR_FIRST and TEXT_INDEXOF_OPERATOR_LAST for the dropdown text that replaces %2.",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "dropdown - See [https://github.com/google/blockly/wiki/Text#finding-text https://github.com/google/blockly/wiki/Text#finding-text]. [[File:Blockly-find-text.png]].",
 	"TEXT_INDEXOF_OPERATOR_LAST": "dropdown - See [https://github.com/google/blockly/wiki/Text#finding-text https://github.com/google/blockly/wiki/Text#finding-text].  This would replace 'find first occurrence of text' below.  (For more information on how common text is factored out of dropdown menus, see [https://translatewiki.net/wiki/Translating:Blockly#Drop-Down_Menus https://translatewiki.net/wiki/Translating:Blockly#Drop-Down_Menus)].) [[File:Blockly-find-text.png]].",
 	"TEXT_CHARAT_HELPURL": "url - Information about extracting characters (letters, number, symbols, etc.) from text.",
 	"TEXT_CHARAT_TITLE": "block text - Text for a block to extract a letter (or number, punctuation character, etc.) from a string, as shown below. %1 is added by the user and %2 is replaced by a dropdown of options, possibly followed by another user supplied string. TEXT_CHARAT_TAIL is then added to the end.  See [https://github.com/google/blockly/wiki/Text#extracting-a-single-character https://github.com/google/blockly/wiki/Text#extracting-a-single-character]. [[File:Blockly-text-get.png]]",
+=======
+	"TEXT_INDEXOF_OPERATOR_FIRST": "dropdown - See [https://github.com/google/blockly/wiki/Text#finding-text https://github.com/google/blockly/wiki/Text#finding-text]. [[File:Blockly-find-text.png]].",
+	"TEXT_INDEXOF_OPERATOR_LAST": "dropdown - See [https://github.com/google/blockly/wiki/Text#finding-text https://github.com/google/blockly/wiki/Text#finding-text].  This would replace 'find first occurrence of text' below.  (For more information on how common text is factored out of dropdown menus, see [https://translatewiki.net/wiki/Translating:Blockly#Drop-Down_Menus https://translatewiki.net/wiki/Translating:Blockly#Drop-Down_Menus)].) [[File:Blockly-find-text.png]].",
+	"TEXT_CHARAT_HELPURL": "url - Information about extracting characters (letters, number, symbols, etc.) from text.",
+>>>>>>> google/master
 	"TEXT_CHARAT_FROM_START": "dropdown - Indicates that the letter (or number, punctuation character, etc.) with the specified index should be obtained from the preceding piece of text.  See [https://github.com/google/blockly/wiki/Text#extracting-a-single-character https://github.com/google/blockly/wiki/Text#extracting-a-single-character]. [[File:Blockly-text-get.png]]",
 	"TEXT_CHARAT_FROM_END": "block text - Indicates that the letter (or number, punctuation character, etc.) with the specified index from the end of a given piece of text should be obtained. See [https://github.com/google/blockly/wiki/Text#extracting-a-single-character https://github.com/google/blockly/wiki/Text#extracting-a-single-character]. [[File:Blockly-text-get.png]]",
 	"TEXT_CHARAT_FIRST": "block text - Indicates that the first letter of the following piece of text should be retrieved.  See [https://github.com/google/blockly/wiki/Text#extracting-a-single-character https://github.com/google/blockly/wiki/Text#extracting-a-single-character]. [[File:Blockly-text-get.png]]",

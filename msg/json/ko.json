@@ -232,6 +232,7 @@
 	"TEXT_INDEXOF_OPERATOR_FIRST": "에서 다음 문장이 처음으로 나타난 위치 찾기 :",
 	"TEXT_INDEXOF_OPERATOR_LAST": "에서 다음 문장이 마지막으로 나타난 위치 찾기 :",
 	"TEXT_CHARAT_HELPURL": "https://github.com/google/blockly/wiki/Text#extracting-text",
+	"TEXT_CHARAT_TITLE": "텍스트 %1 %2에서",
 	"TEXT_CHARAT_FROM_START": "에서, 앞에서부터 # 번째 위치의 문자 얻기",
 	"TEXT_CHARAT_FROM_END": "에서, 마지막부터 # 번째 위치의 문자 얻기",
 	"TEXT_CHARAT_FIRST": "에서, 첫 번째 문자 얻기",

@@ -3,7 +3,8 @@
 		"authors": [
 			"Anzeljg",
 			"Miloš Košir",
-			"Dbc334"
+			"Dbc334",
+			"HairyFotr"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -82,6 +83,10 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Dodaj, odstrani ali spremeni vrstni red odsekov za ponovno nastavitev »če« kocke.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Dodaj pogoj »če« kocki.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Dodaj končni pogoj »če« kocki.",
+	"IOS_OK": "V redu",
+	"IOS_CANCEL": "Prekliči",
+	"IOS_ERROR": "Napaka",
+	"IOS_VARIABLES_VARIABLE_NAME": "Ime spremenljivke",
 	"LOGIC_COMPARE_HELPURL": "https://en.wikipedia.org/wiki/Inequality_(mathematics)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Vrne resnično, če sta vnosa enaka.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Vrne resnično, če vnosa nista enaka.",

@@ -109,7 +109,6 @@
 	"TEXT_TEXT_TOOLTIP": "একটি অক্ষর, শব্দ অথবা বাক্য।",
 	"TEXT_CREATE_JOIN_TITLE_JOIN": "যোগ",
 	"TEXT_CREATE_JOIN_ITEM_TOOLTIP": "লেখাটিতে একটি পদ যোগ করুন।",
-	"TEXT_APPEND_TO": "এতে",
 	"TEXT_LENGTH_TITLE": "%1-এর দৈর্ঘ্য",
 	"TEXT_ISEMPTY_TITLE": "%1 খালি",
 	"TEXT_ISEMPTY_TOOLTIP": "পাঠাবে সত্য যদি সরবরাহকৃত লেখাটি খালি হয়।",

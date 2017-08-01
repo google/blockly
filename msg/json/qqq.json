@@ -1,12 +1,4 @@
 {
-	"@metadata": {
-               "authors": [
-                       "Espertus",
-                       "Liuxinyu970226",
-                       "Robby",
-                       "Shirayuki"
-               ]
-       },
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
 	"TODAY": "button text - Button that sets a calendar to today's date.\n{{Identical|Today}}",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}",
@@ -33,6 +25,7 @@
 	"NEW_VARIABLE": "button text - Text on the button used to launch the variable creation dialogue.",
 	"NEW_VARIABLE_TITLE": "prompt - Prompts the user to enter the name for a new variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].",
 	"VARIABLE_ALREADY_EXISTS": "alert - Tells the user that the name they entered is already in use.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "alert - Tells the user that the name they entered is already in use for another type.",
 	"PROCEDURE_ALREADY_EXISTS": "alert - Tells the user that the name they entered is already in use for a procedure.",
 	"DELETE_VARIABLE_CONFIRMATION": "confirm -  Ask the user to confirm their deletion of multiple uses of a variable.",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "alert - Tell the user that they can't delete a variable because it's part of the definition of a function.",

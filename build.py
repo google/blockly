@@ -269,6 +269,33 @@ class Gen_compressed(threading.Thread):
 
     self.do_compile(params, target_filename, filenames, "")
 
+  def gen_accessible(self):
+    target_filename = "blockly_accessible_compressed.js"
+    # Define the parameters for the POST request.
+    params = [
+        ("compilation_level", "SIMPLE_OPTIMIZATIONS"),
+        ("use_closure_library", "true"),
+        ("language_out", "ES5"),
+        ("output_format", "json"),
+        ("output_info", "compiled_code"),
+        ("output_info", "warnings"),
+        ("output_info", "errors"),
+        ("output_info", "statistics"),
+      ]
+
+    # Read in all the source files.
+    filenames = calcdeps.CalculateDependencies(self.search_paths,
+        [os.path.join("accessible", "app.component.js")])
+    for filename in filenames:
+      # Filter out the Closure files (the compiler will add them).
+      if filename.startswith(os.pardir + os.sep):  # '../'
+        continue
+      f = open(filename)
+      params.append(("js_code", "".join(f.readlines())))
+      f.close()
+
+    self.do_compile(params, target_filename, filenames, "")
+
   def gen_blocks(self):
     target_filename = "blocks_compressed.js"
     # Define the parameters for the POST request.

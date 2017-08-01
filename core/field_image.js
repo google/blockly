@@ -38,7 +38,7 @@ goog.require('goog.userAgent');
  * @param {number} width Width of the image.
  * @param {number} height Height of the image.
  * @param {string=} opt_alt Optional alt text for when block is collapsed.
- * @param {function=} opt_onClick Optional function to be called when image is clicked
+ * @param {Function=} opt_onClick Optional function to be called when image is clicked
  * @extends {Blockly.Field}
  * @constructor
  */

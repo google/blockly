@@ -145,6 +145,7 @@ window.BLOCKLY_BOOT = function() {
     base_path = calcdeps.FindClosureBasePath(self.search_paths)
     for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
       add_dependency.append(calcdeps.GetDepsLine(dep, base_path))
+    add_dependency.sort()  # Deterministic build.
     add_dependency = '\n'.join(add_dependency)
     # Find the Blockly directory name and replace it with a JS variable.
     # This allows blockly_uncompressed.js to be compiled on one computer and be
@@ -158,7 +159,7 @@ window.BLOCKLY_BOOT = function() {
     for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
       if not dep.filename.startswith(os.pardir + os.sep):  # '../'
         provides.extend(dep.provides)
-    provides.sort()
+    provides.sort()  # Deterministic build.
     f.write('\n')
     f.write('// Load Blockly.\n')
     for provide in provides:
@@ -229,6 +230,35 @@ class Gen_compressed(threading.Thread):
     # Read in all the source files.
     filenames = calcdeps.CalculateDependencies(self.search_paths,
         [os.path.join("core", "blockly.js")])
+    filenames.sort()  # Deterministic build.
+    for filename in filenames:
+      # Filter out the Closure files (the compiler will add them).
+      if filename.startswith(os.pardir + os.sep):  # '../'
+        continue
+      f = open(filename)
+      params.append(("js_code", "".join(f.readlines())))
+      f.close()
+
+    self.do_compile(params, target_filename, filenames, "")
+
+  def gen_accessible(self):
+    target_filename = "blockly_accessible_compressed.js"
+    # Define the parameters for the POST request.
+    params = [
+        ("compilation_level", "SIMPLE_OPTIMIZATIONS"),
+        ("use_closure_library", "true"),
+        ("language_out", "ES5"),
+        ("output_format", "json"),
+        ("output_info", "compiled_code"),
+        ("output_info", "warnings"),
+        ("output_info", "errors"),
+        ("output_info", "statistics"),
+      ]
+
+    # Read in all the source files.
+    filenames = calcdeps.CalculateDependencies(self.search_paths,
+        [os.path.join("accessible", "app.component.js")])
+    filenames.sort()  # Deterministic build.
     for filename in filenames:
       # Filter out the Closure files (the compiler will add them).
       if filename.startswith(os.pardir + os.sep):  # '../'
@@ -282,6 +312,7 @@ class Gen_compressed(threading.Thread):
     # Add Blockly.Blocks to be compatible with the compiler.
     params.append(("js_code", "goog.provide('Blockly.Blocks');"))
     filenames = glob.glob(os.path.join("blocks", "*.js"))
+    filenames.sort()  # Deterministic build.
     for filename in filenames:
       f = open(filename)
       params.append(("js_code", "".join(f.readlines())))
@@ -308,6 +339,7 @@ class Gen_compressed(threading.Thread):
     params.append(("js_code", "goog.provide('Blockly.Generator');"))
     filenames = glob.glob(
         os.path.join("generators", language, "*.js"))
+    filenames.sort()  # Deterministic build.
     filenames.insert(0, os.path.join("generators", language + ".js"))
     for filename in filenames:
       f = open(filename)
@@ -372,31 +404,6 @@ class Gen_compressed(threading.Thread):
 
       code = HEADER + "\n" + json_data["compiledCode"]
       code = code.replace(remove, "")
-
-      # Trim down Google's Apache licences.
-      # The Closure Compiler used to preserve these until August 2015.
-      # Delete this in a few months if the licences don't return.
-      LICENSE = re.compile("""/\\*
-
- [\w ]+
-
- (Copyright \\d+ Google Inc.)
- https://developers.google.com/blockly/
-
- Licensed under the Apache License, Version 2.0 \(the "License"\);
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-\\*/""")
-      code = re.sub(LICENSE, r"\n// \1  Apache License 2.0", code)
-
       stats = json_data["statistics"]
       original_b = stats["originalSize"]
       compressed_b = stats["compressedSize"]
@@ -519,8 +526,10 @@ developers.google.com/blockly/guides/modify/web/closure""")
 
   core_search_paths = calcdeps.ExpandDirectories(
       ["core", os.path.join(os.path.pardir, "closure-library")])
+  core_search_paths.sort()  # Deterministic build.
   full_search_paths = calcdeps.ExpandDirectories(
       ["accessible", "core", os.path.join(os.path.pardir, "closure-library")])
+  full_search_paths.sort()  # Deterministic build.
 
   if (len(sys.argv) == 1):
     args = ['core', 'accessible', 'generators', 'defaultlangfiles']

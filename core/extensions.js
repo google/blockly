@@ -55,7 +55,7 @@ Blockly.Extensions.MUTATOR_PROPERTIES_ =
  * handlers and mutators. These are applied using Block.applyExtension(), or
  * the JSON "extensions" array attribute.
  * @param {string} name The name of this extension.
- * @param {function} initFn The function to initialize an extended block.
+ * @param {Function} initFn The function to initialize an extended block.
  * @throws {Error} if the extension name is empty, the extension is already
  *     registered, or extensionFn is not a function.
  */
@@ -92,7 +92,7 @@ Blockly.Extensions.registerMixin = function(name, mixinObj) {
  * decompose are defined on the mixin.
  * @param {string} name The name of this mutator extension.
  * @param {!Object} mixinObj The values to mix in.
- * @param {function()=} opt_helperFn An optional function to apply after mixing
+ * @param {(function())=} opt_helperFn An optional function to apply after mixing
  *     in the object.
  * @param {Array.<string>=} opt_blockList A list of blocks to appear in the
  *     flyout of the mutator dialog.
@@ -103,8 +103,10 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
   var errorPrefix = 'Error when registering mutator "' + name + '": ';
 
   // Sanity check the mixin object before registering it.
-  Blockly.Extensions.checkHasFunction_(errorPrefix, mixinObj, 'domToMutation');
-  Blockly.Extensions.checkHasFunction_(errorPrefix, mixinObj, 'mutationToDom');
+  Blockly.Extensions.checkHasFunction_(errorPrefix, mixinObj.domToMutation,
+                                       'domToMutation');
+  Blockly.Extensions.checkHasFunction_(errorPrefix, mixinObj.mutationToDom,
+                                       'mutationToDom');
 
   var hasMutatorDialog = Blockly.Extensions.checkMutatorDialog_(mixinObj,
     errorPrefix);
@@ -162,20 +164,19 @@ Blockly.Extensions.apply = function(name, block, isMutator) {
 };
 
 /**
- * Check that the given object has a property with the given name, and that the
- * property is a function.
+ * Check that the given value is a function.
  * @param {string} errorPrefix The string to prepend to any error message.
- * @param {!Object} object The object to check.
+ * @param {*} func Function to check.
  * @param {string} propertyName Which property to check.
  * @throws {Error} if the property does not exist or is not a function.
  * @private
  */
-Blockly.Extensions.checkHasFunction_ = function(errorPrefix, object,
+Blockly.Extensions.checkHasFunction_ = function(errorPrefix, func,
     propertyName) {
-  if (!object.hasOwnProperty(propertyName)) {
+  if (!func) {
     throw new Error(errorPrefix +
         'missing required property "' + propertyName + '"');
-  } else if (typeof object[propertyName] !== "function") {
+  } else if (typeof func != 'function') {
     throw new Error(errorPrefix +
       '" required property "' + propertyName + '" must be a function');
   }
@@ -442,5 +443,3 @@ Blockly.Extensions.extensionParentTooltip_ = function() {
 };
 Blockly.Extensions.register('parent_tooltip_when_inline',
     Blockly.Extensions.extensionParentTooltip_);
-
-

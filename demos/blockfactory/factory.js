@@ -100,7 +100,8 @@ BlockFactory.formatChange = function() {
   var mask = document.getElementById('blocklyMask');
   var languagePre = document.getElementById('languagePre');
   var languageTA = document.getElementById('languageTA');
-  if (document.getElementById('format').value === 'Manual') {
+  if (document.getElementById('format').value == 'Manual-JSON' ||
+      document.getElementById('format').value == 'Manual-JS') {
     Blockly.hideChaff();
     mask.style.display = 'block';
     languagePre.style.display = 'none';
@@ -136,6 +137,12 @@ BlockFactory.updateLanguage = function() {
 
   if (!BlockFactory.updateBlocksFlag) {
     var format = document.getElementById('format').value;
+    if (format == 'Manual-JSON') {
+      format = JSON;
+    } else if (format == 'Manual-JS') {
+      format = 'JavaScript';
+    }
+
     var code = FactoryUtils.getBlockDefinition(blockType, rootBlock, format,
         BlockFactory.mainWorkspace);
     FactoryUtils.injectCode(code, 'languagePre');
@@ -179,23 +186,26 @@ BlockFactory.updatePreview = function() {
   }
   BlockFactory.previewWorkspace.clear();
 
-  // Fetch the code and determine its format (JSON or JavaScript).
-  var format = document.getElementById('format').value;
-  if (format == 'Manual') {
-    var code = document.getElementById('languageTA').value;
-    // If the code is JSON, it will parse, otherwise treat as JS.
-    try {
-      JSON.parse(code);
-      format = 'JSON';
-    } catch (e) {
-      format = 'JavaScript';
-    }
-  } else {
-    var code = document.getElementById('languageTA').value;
-  }
+  var rawFormat = document.getElementById('format').value;
+  var isManual = rawFormat.substr(0, 6) == 'Manual';
+
+  var code = document.getElementById('languageTA').value;
   if (!code.trim()) {
     // Nothing to render.  Happens while cloud storage is loading.
     return;
+  }
+
+  switch (rawFormat) {
+    case 'JSON':
+    case 'Manual-JSON':
+      var format = 'JSON';
+      break;
+    case 'JavaScript':
+    case 'Manual-JS':
+      var format = 'JavaScript';
+      break;
+    default:
+      throw 'Unknown format: ' + format;
   }
 
   // Backup Blockly.Blocks object so that main workspace and preview don't
@@ -223,8 +233,6 @@ BlockFactory.updatePreview = function() {
         console.error("Error while evaluating JavaScript formatted block definition", e);
         return;
       }
-    } else {
-      throw 'Unknown format: ' + format;
     }
 
     // Look for a block on Blockly.Blocks that does not match the backup.
@@ -283,7 +291,7 @@ BlockFactory.disableEnableLink = function() {
   var linkButton = document.getElementById('linkButton');
   var saveBlockButton = document.getElementById('localSaveButton');
   var saveToLibButton = document.getElementById('saveToBlockLibraryButton');
-  var disabled = document.getElementById('format').value == 'Manual';
+  var disabled = document.getElementById('format').value.substr(0, 6) == 'Manual';
   linkButton.disabled = disabled;
   saveBlockButton.disabled = disabled;
   saveToLibButton.disabled = disabled;

@@ -130,7 +130,7 @@ BlockDefinitionExtractor.prototype.parseFields_ = function(fieldRow) {
     } else if (field instanceof Blockly.FieldAngle) {
       fieldDefElement = this.fieldAngle_(field.name, field.text_);
     } else if (field instanceof Blockly.FieldDropdown) {
-      fieldDefElement = this.fieldDropdown_(field.menuGenerator_, field.name);
+      fieldDefElement = this.fieldDropdown_(field.name, field.menuGenerator_);
     } else if (field instanceof Blockly.FieldCheckbox) {
       fieldDefElement = this.fieldCheckbox_(field.name, field.state_);
     } else if (field instanceof Blockly.FieldColour) {
@@ -197,13 +197,10 @@ BlockDefinitionExtractor.prototype.parseInputs_ = function(block) {
  *     UP, DOWN, BOTH.
  * @param {string} name Block name.
  * @param {boolean} inline Block layout inline or not.
- * @param {nodeChainCallback} tooltipCB
- * @param {nodeChainCallback} helpUrlCB
- * @param {nodeChainCallback} colourCB
  * @return {Element} The factory_base block element.
  */
 BlockDefinitionExtractor.prototype.factoryBase_ =
-  function(block, connections, name, inline, tooltipCB, helpUrlCB, colourCB)
+  function(block, connections, name, inline)
 {
   this.src = {root: block, current: block};
   var factoryBaseEl = this.newElement_('block', {type: 'factory_base'});
@@ -219,15 +216,14 @@ BlockDefinitionExtractor.prototype.factoryBase_ =
   inputsStatement.append(this.parseInputs_(block));
   factoryBaseEl.append(inputsStatement);
 
-  this.dst.current = factoryBaseEl;
-  factoryBaseEl.append(this.dst.current =
-      this.newElement_('value', {name: 'TOOLTIP'}));
-  tooltipCB();
-  this.dst.current = factoryBaseEl;
-  factoryBaseEl.append(this.dst.current =
-      this.newElement_('value', {name: 'HELPURL'}));
-  helpUrlCB();
-  this.dst.current = factoryBaseEl;
+  var tooltipValue = this.newElement_('value', {name: 'TOOLTIP'});
+  tooltipValue.append(this.text_(block.tooltip));
+  factoryBaseEl.append(tooltipValue);
+
+  var helpUrlValue = this.newElement_('value', {name: 'HELPURL'});
+  helpUrlValue.append(this.text_(block.helpUrl));
+  factoryBaseEl.append(helpUrlValue);
+
   if (connections === 'LEFT') {
     var inputValue = this.newElement_('value', {name: 'OUTPUTTYPE'});
     inputValue.append(this.buildTypeConstraintBlockForConnection_(
@@ -249,7 +245,13 @@ BlockDefinitionExtractor.prototype.factoryBase_ =
   }
   factoryBaseEl.append(this.dst.current =
       this.newElement_('value', {name: 'COLOUR'}));
-  colourCB();
+
+  // Convert colour_ to hue value 0-360 degrees
+  // TODO(#1247): Solve off-by-one errors.
+  // TODO: Deal with colors that don't map to standard hues. (Needs improved block definitions.)
+  var colour_hue = Math.floor(
+      goog.color.hexToHsv(block.colour_)[0]);  // This is off by one... sometimes
+  this.colourHue_(block.colour_, colour_hue)
   return factoryBaseEl;
 };
 
@@ -355,11 +357,12 @@ BlockDefinitionExtractor.prototype.fieldAngle_ = function(angle, fieldName) {
  * Creates the XML for a FieldDropdown definition.
  *
  * @param {string} fieldName The identifying name of the field.
- * @param {Array<string>} options List of options for the dropdown field.
+ * @param {(!Array<!Array>|!Function)} fieldDropdown_ List of options, or a
+ *     function that generates the same.
  * @return {Element} The XML for FieldDropdown definition.
  */
 BlockDefinitionExtractor.prototype.fieldDropdown_ =
-  function(fieldName, options)
+  function(fieldName, menuGenerator_)
 {
   var fieldDropdown = this.newElement_('block', {type: 'field_dropdown'});
   var optionsStr = '[';
@@ -563,18 +566,14 @@ BlockDefinitionExtractor.prototype.colourHue_ =
 /**
  * Creates a block Element for the text block.
  *
- * @param text
+ * @param text The text value of the block.
  */
 BlockDefinitionExtractor.prototype.text_ = function(text) {
-  var block1 = this.newElement_('block', {type: 'text'});
-  if (!this.isStatementsContainer_(this.dst.current)) {
-    var nextBlock = this.newElement_('next');
-    this.dst.current.append(nextBlock);
-    this.dst.current = nextBlock;
-  }
-  this.dst.current.append(block1);
-  this.dst.current = block1;
-  block1.append(this.newElement_('field', {name: 'TEXT'}, text));
+  var textBlock = this.newElement_('block', {type: 'text'});
+  if (text) {
+    textBlock.append(this.newElement_('field', {name: 'TEXT'}, text));
+  } // Else, use empty string default.
+  return textBlock;
 };
 
 /**
@@ -585,14 +584,10 @@ BlockDefinitionExtractor.prototype.text_ = function(text) {
  * @return {Element} Returns a workspace DOM for the Block Definition
  *     workspace.
  */
-BlockDefinitionExtractor.prototype.buildBlockFactoryDef =
+BlockDefinitionExtractor.prototype.buildBlockFactoryWorkspace =
   function(block)
 {
-  var this_ = this;
   var workspaceXml = goog.dom.createDom('xml');
-  // Convert colour_ to hue value 0-360 degrees
-  var colour_hue = Math.floor(
-      goog.color.hexToHsv(block.colour_)[0]);
   var inline = 'AUTO'; // When block.inputsInlineDefault === undefined
   if (block.inputsInlineDefault === true) {
     inline = 'INT';
@@ -614,17 +609,8 @@ BlockDefinitionExtractor.prototype.buildBlockFactoryDef =
       }
     }
   }
-  var factoryBaseXml = this.factoryBase_(block, connections, block.type, inline,
-    function() {
-      this.text_(block.tooltip);
-    }.bind(this),
-    function() {
-      this.text_(block.helpUrl);
-    }.bind(this),
-    function() {
-      this_.colourHue_(block.colour_, colour_hue);
-    }.bind(this)
-  );
+  var this_ = this;
+  var factoryBaseXml = this.factoryBase_(block, connections, block.type, inline);
   workspaceXml.append(factoryBaseXml);
 
   return workspaceXml;

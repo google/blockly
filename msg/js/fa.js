@@ -7,7 +7,11 @@ goog.provide('Blockly.Msg.fa');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "افزودن نظر";
+<<<<<<< HEAD
+Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
+=======
 Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "متغیر '%1' را نمی‌توان پاک کرد، زیرا جزیی از تعریف متغیر '%2' می‌باشد";
+>>>>>>> google/master
 Blockly.Msg.CHANGE_VALUE_TITLE = "تغییر مقدار:";
 Blockly.Msg.CLEAN_UP = "تمیز کردن بلوک‌ها";
 Blockly.Msg.COLLAPSE_ALL = "فروپاشی بلوک‌ها";
@@ -74,6 +78,21 @@ Blockly.Msg.EXPAND_BLOCK = "گسترش بلوک";
 Blockly.Msg.EXTERNAL_INPUTS = "ورودی‌های خارجی";
 Blockly.Msg.HELP = "راهنما";
 Blockly.Msg.INLINE_INPUTS = "ورودی‌های درون خطی";
+<<<<<<< HEAD
+Blockly.Msg.IOS_CANCEL = "Cancel";  // untranslated
+Blockly.Msg.IOS_ERROR = "Error";  // untranslated
+Blockly.Msg.IOS_OK = "OK";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
+Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
+Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Add";  // untranslated
+Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
+Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Delete";  // untranslated
+Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
+Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Rename";  // untranslated
+Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Variable name";  // untranslated
+=======
 Blockly.Msg.IOS_CANCEL = "لغو";
 Blockly.Msg.IOS_ERROR = "خطا";
 Blockly.Msg.IOS_OK = "تأیید";
@@ -87,6 +106,7 @@ Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "حذف";
 Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "نام متغیر نمی‌تواند خالی باشد";
 Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "تغییر نام";
 Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "نام متغیر";
+>>>>>>> google/master
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "ایجاد فهرست خالی";
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "فهرستی با طول صفر شامل هیچ رکورد داده‌ای بر می‌گرداند.";
@@ -311,7 +331,11 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "اضافه کردن ورودی به
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "ورودی‌ها";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "افزودن، حذف یا دوباره مرتب‌کردن ورودی این تابع.";
 Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
+<<<<<<< HEAD
+Blockly.Msg.REDO = "واگردانی";
+=======
 Blockly.Msg.REDO = "انجام دوباره";
+>>>>>>> google/master
 Blockly.Msg.REMOVE_COMMENT = "حذف نظر";
 Blockly.Msg.RENAME_VARIABLE = "تغییر نام متغیر...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "تغییر نام همهٔ متغیرهای «%1» به:";

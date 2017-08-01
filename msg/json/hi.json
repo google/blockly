@@ -18,7 +18,10 @@
 	"DELETE_BLOCK": "ब्लॉक हटाएँ",
 	"DELETE_X_BLOCKS": "%1 ब्लॉक हटाएँ",
 	"DELETE_ALL_BLOCKS": "सभी %1 खानों को हटा दें?",
+<<<<<<< HEAD
+=======
 	"CLEAN_UP": "खानों को साफ करें",
+>>>>>>> google/master
 	"COLLAPSE_BLOCK": "ब्लॉक को संक्षिप्त करें",
 	"COLLAPSE_ALL": "ब्लॉक संक्षिप्त करें",
 	"EXPAND_BLOCK": "ब्लॉक का विस्तार करें",

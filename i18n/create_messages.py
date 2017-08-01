@@ -87,7 +87,7 @@ def main():
   # Read in synonyms file, which must be output in every language.
   synonym_defs = read_json_file(os.path.join(
       os.curdir, args.source_synonym_file))
-  synonym_text = '\n'.join(['Blockly.Msg.{0} = Blockly.Msg.{1};'.format(
+  synonym_text = '\n'.join(['Blockly.Msg["{0}"] = Blockly.Msg["{1}"];'.format(
       key, synonym_defs[key]) for key in synonym_defs])
 
   # Read in constants file, which must be output in every language.

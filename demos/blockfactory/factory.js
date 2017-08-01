@@ -62,17 +62,19 @@ BlockFactory.UNNAMED = 'unnamed';
 BlockFactory.oldDir = null;
 
 /**
- * Flag to avoid infinite update loop when changing js or JSON block
+ * Flag to signal that an update came from a manual update to the JSON or JavaScript.
  * definition manually.
  * @type boolean
  */
+// TODO: Replace global state with parameter passed to functions.
 BlockFactory.updateBlocksFlag = false;
 
 /**
- * Delayed flag to avoid infinite update loop when changing js or JSON block
+ * Delayed flag to avoid infinite update after updating the JSON or JavaScript.
  * definition manually.
  * @type boolean
  */
+// TODO: Replace global state with parameter passed to functions.
 BlockFactory.updateBlocksFlagDelayed = false;
 
 /*
@@ -325,6 +327,8 @@ BlockFactory.isStarterBlock = function() {
  * Updates blocks from the manually edited js or json from their text area.
  */
 BlockFactory.manualEdit = function() {
+  // TODO: Replace these global state flags with parameters passed to the right
+  //       functions.
   BlockFactory.updateBlocksFlag = true;
   BlockFactory.updateBlocksFlagDelayed = true;
   BlockFactory.updateLanguage();

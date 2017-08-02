@@ -205,8 +205,8 @@ Blockly.Extensions.checkNoMutatorProperties_ = function(mutationName, block) {
  * @private
  */
 Blockly.Extensions.checkMutatorDialog_ = function(object, errorPrefix) {
-  var hasCompose = typeof object.compose !== 'undefined';
-  var hasDecompose = typeof object.decompose !== 'undefined';
+  var hasCompose = object.compose !== undefined;
+  var hasDecompose = object.decompose !== undefined;
 
   if (hasCompose && hasDecompose) {
     if (typeof object.compose !== 'function') {
@@ -255,16 +255,16 @@ Blockly.Extensions.getMutatorProperties_ = function(block) {
   var result = [];
   // List each function explicitly by reference to allow for renaming
   // during compilation.
-  if (typeof block.domToMutation != 'undefined') {
+  if (block.domToMutation !== undefined) {
     result.push(block.domToMutation);
   }
-  if (typeof block.mutationToDom != 'undefined') {
+  if (block.mutationToDom !== undefined) {
     result.push(block.mutationToDom);
   }
-  if (typeof block.compose != 'undefined') {
+  if (block.compose !== undefined) {
     result.push(block.compose);
   }
-  if (typeof block.decompose != 'undefined') {
+  if (block.decompose !== undefined) {
     result.push(block.decompose);
   }
   return result;

@@ -49,7 +49,7 @@ goog.require('goog.string');
 Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes) {
   Blockly.FieldVariable.superClass_.constructor.call(this,
       Blockly.FieldVariable.dropdownCreate, opt_validator);
-  this.setValue(varname || '');
+  this.setText(varname || '');
   this.variableTypes = opt_variableTypes;
 };
 goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
@@ -69,19 +69,21 @@ Blockly.FieldVariable.prototype.init = function() {
 };
 
 Blockly.FieldVariable.prototype.initModel = function() {
+  var workspace =
+    this.sourceBlock_.isInFlyout ?
+        this.sourceBlock_.workspace.targetWorkspace :
+        this.sourceBlock_.workspace;
   if (!this.getValue()) {
     // Variables without names get uniquely named for this workspace.
-    var workspace =
-        this.sourceBlock_.isInFlyout ?
-            this.sourceBlock_.workspace.targetWorkspace :
-            this.sourceBlock_.workspace;
-    this.setValue(Blockly.Variables.generateUniqueName(workspace));
+    var variable = workspace.createVariable(
+      Blockly.Variables.generateUniqueName(workspace));
+    this.setValue(variable.getId());
   }
   // If the selected variable doesn't exist yet, create it.
   // For instance, some blocks in the toolbox have variable dropdowns filled
   // in by default.
   if (!this.sourceBlock_.isInFlyout) {
-    this.sourceBlock_.workspace.createVariable(this.getValue());
+    this.sourceBlock_.workspace.createVariable(this.getText());
   }
 };
 
@@ -93,6 +95,11 @@ Blockly.FieldVariable.prototype.setSourceBlock = function(block) {
   goog.asserts.assert(!block.isShadow(),
       'Variable fields are not allowed to exist on shadow blocks.');
   Blockly.FieldVariable.superClass_.setSourceBlock.call(this, block);
+  // Set the value_ of this field since we now have access to a workspace.
+  var variable = block.workspace.getVariable(this.getText());
+  if (variable) {
+    this.setValue(variable.getId());
+  }
 };
 
 /**
@@ -105,30 +112,25 @@ Blockly.FieldVariable.prototype.getValue = function() {
 };
 
 /**
- * Set the variable name.
+ * Set the field value and if the value is a valid variable, update the text.
  * @param {string} value New text.
  */
 Blockly.FieldVariable.prototype.setValue = function(value) {
   var newValue = value;
   var newText = value;
 
-  if (this.sourceBlock_) {
+  if (this.hasSourceBlockWorkspace_()) {
     var variable = this.sourceBlock_.workspace.getVariableById(value);
     if (variable) {
       newText = variable.name;
-    }
-    // TODO(marisaleung): Remove name lookup after converting all Field Variable
-    //     instances to use id instead of name.
-    else if (variable = this.sourceBlock_.workspace.getVariable(value)) {
-      newValue = variable.getId();
     }
     if (Blockly.Events.isEnabled()) {
       Blockly.Events.fire(new Blockly.Events.BlockChange(
           this.sourceBlock_, 'field', this.name, this.value_, newValue));
     }
+    this.setText(newText);
   }
   this.value_ = newValue;
-  this.setText(newText);
 };
 
 /**
@@ -141,7 +143,7 @@ Blockly.FieldVariable.prototype.getVariableTypes_ = function() {
   var variableTypes = this.variableTypes;
   if (variableTypes === null) {
     // If variableTypes is null, return all variable types.
-    if (this.sourceBlock_) {
+    if (this.hasSourceBlockWorkspace_()) {
       var workspace = this.sourceBlock_.workspace;
       return workspace.getVariableTypes();
     }
@@ -217,32 +219,31 @@ Blockly.FieldVariable.dropdownCreate = function() {
  */
 Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
   var id = menuItem.getValue();
-  // TODO(marisaleung): change setValue() to take in an id as the parameter.
-  // Then remove itemText.
-  var itemText;
-  if (this.sourceBlock_ && this.sourceBlock_.workspace) {
+  if (this.hasSourceBlockWorkspace_()) {
     var workspace = this.sourceBlock_.workspace;
     var variable = workspace.getVariableById(id);
-    // If the item selected is a variable, set itemText to the variable name.
+    // If the item selected is a variable, set itemId to the variable id.
     if (variable) {
-      itemText = variable.name;
-    }
-    else if (id == Blockly.RENAME_VARIABLE_ID) {
+      var itemId = variable.getId();
+      this.setValue(itemId);
+    } else if (id == Blockly.RENAME_VARIABLE_ID) {
       // Rename variable.
       var currentName = this.getText();
       variable = workspace.getVariable(currentName);
       Blockly.Variables.renameVariable(workspace, variable);
-      return;
     } else if (id == Blockly.DELETE_VARIABLE_ID) {
       // Delete variable.
       workspace.deleteVariable(this.getText());
-      return;
     }
+  }
+};
 
-    // Call any validation function, and allow it to override.
-    itemText = this.callValidator(itemText);
-  }
-  if (itemText !== null) {
-    this.setValue(itemText);
-  }
+/**
+ * Returns whether this field variable has a source block with a workspace.
+ * @return {boolean} True if it has a sourceblock with a workspace. False
+ *     otherwise.
+ * @private
+ */
+Blockly.FieldVariable.prototype.hasSourceBlockWorkspace_ = function() {
+  return (this.sourceBlock_ && this.sourceBlock_.workspace);
 };

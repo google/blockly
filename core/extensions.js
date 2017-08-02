@@ -41,15 +41,6 @@ goog.provide('Blockly.Extensions');
 Blockly.Extensions.ALL_ = {};
 
 /**
- * The set of properties on a block that may only be set by a mutator.
- * @type {!Array.<string>}
- * @private
- * @constant
- */
-Blockly.Extensions.MUTATOR_PROPERTIES_ =
-    ['domToMutation', 'mutationToDom', 'compose', 'decompose'];
-
-/**
  * Registers a new extension function. Extensions are functions that help
  * initialize blocks, usually adding dynamic behavior such as onchange
  * handlers and mutators. These are applied using Block.applyExtension(), or
@@ -193,13 +184,11 @@ Blockly.Extensions.checkHasFunction_ = function(errorPrefix, func,
  * @private
  */
 Blockly.Extensions.checkNoMutatorProperties_ = function(mutationName, block) {
-  for (var i = 0; i < Blockly.Extensions.MUTATOR_PROPERTIES_.length; i++) {
-    var propertyName = Blockly.Extensions.MUTATOR_PROPERTIES_[i];
-    if (block.hasOwnProperty(propertyName)) {
-      throw new Error('Error: tried to apply mutation "' + mutationName +
-          '" to a block that already has a "' + propertyName +
-          '" function.  Block id: ' + block.id);
-    }
+  var properties = Blockly.Extensions.getMutatorProperties_(block);
+  if (properties.length) {
+    throw new Error('Error: tried to apply mutation "' + mutationName +
+        '" to a block that already has mutator functions.' +
+        '  Block id: ' + block.id);
   }
 };
 
@@ -216,13 +205,13 @@ Blockly.Extensions.checkNoMutatorProperties_ = function(mutationName, block) {
  * @private
  */
 Blockly.Extensions.checkMutatorDialog_ = function(object, errorPrefix) {
-  var hasCompose = object.hasOwnProperty('compose');
-  var hasDecompose = object.hasOwnProperty('decompose');
+  var hasCompose = typeof object.compose !== 'undefined';
+  var hasDecompose = typeof object.decompose !== 'undefined';
 
   if (hasCompose && hasDecompose) {
-    if (typeof object['compose'] !== "function") {
+    if (typeof object.compose !== 'function') {
       throw new Error(errorPrefix + 'compose must be a function.');
-    } else if (typeof object['decompose'] !== "function") {
+    } else if (typeof object['decompose'] !== 'function') {
       throw new Error(errorPrefix + 'decompose must be a function.');
     }
     return true;
@@ -243,10 +232,10 @@ Blockly.Extensions.checkMutatorDialog_ = function(object, errorPrefix) {
  */
 Blockly.Extensions.checkBlockHasMutatorProperties_ = function(errorPrefix,
     block) {
-  if (!block.hasOwnProperty('domToMutation')) {
+  if (typeof block.domToMutation !== 'function') {
     throw new Error(errorPrefix + 'Applying a mutator didn\'t add "domToMutation"');
   }
-  if (!block.hasOwnProperty('mutationToDom')) {
+  if (typeof block.mutationToDom !== 'function') {
     throw new Error(errorPrefix + 'Applying a mutator didn\'t add "mutationToDom"');
   }
 
@@ -264,8 +253,19 @@ Blockly.Extensions.checkBlockHasMutatorProperties_ = function(errorPrefix,
  */
 Blockly.Extensions.getMutatorProperties_ = function(block) {
   var result = [];
-  for (var i = 0; i < Blockly.Extensions.MUTATOR_PROPERTIES_.length; i++) {
-    result.push(block[Blockly.Extensions.MUTATOR_PROPERTIES_[i]]);
+  // List each function explicitly by reference to allow for renaming
+  // during compilation.
+  if (block.domToMutation) {
+    result.push(block.domToMutation);
+  }
+  if (block.mutationToDom) {
+    result.push(block.mutationToDom);
+  }
+  if (block.compose) {
+    result.push(block.compose);
+  }
+  if (block.decompose) {
+    result.push(block.decompose);
   }
   return result;
 };

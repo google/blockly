@@ -152,7 +152,7 @@ window.BLOCKLY_BOOT = function() {
     # used on another, even if the directory name differs.
     m = re.search('[\\/]([^\\/]+)[\\/]core[\\/]blockly.js', add_dependency)
     add_dependency = re.sub('([\\/])' + re.escape(m.group(1)) +
-        '([\\/]core[\\/])', '\\1" + dir + "\\2', add_dependency)
+        '([\\/](core|accessible)[\\/])', '\\1" + dir + "\\2', add_dependency)
     f.write(add_dependency + '\n')
 
     provides = []

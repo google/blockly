@@ -145,7 +145,7 @@ Blockly.Extensions.apply = function(name, block, isMutator) {
 
   if (isMutator) {
     var errorPrefix = 'Error after applying mutator "' + name + '": ';
-    Blockly.Extensions.checkBlockHasMutatorProperties_(name, block, errorPrefix);
+    Blockly.Extensions.checkBlockHasMutatorProperties_(errorPrefix, block);
   } else {
     if (!Blockly.Extensions.mutatorPropertiesMatch_(mutatorProperties, block)) {
       throw new Error('Error when applying extension "' + name +
@@ -247,24 +247,24 @@ Blockly.Extensions.checkBlockHasMutatorProperties_ = function(errorPrefix,
 /**
  * Get a list of values of mutator properties on the given block.
  * @param {!Blockly.Block} block The block to inspect.
- * @return {!Array.<Object>} a list with all of the properties, which should be
- *     functions or undefined, but are not guaranteed to be.
+ * @return {!Array.<Object>} a list with all of the defined properties, which
+ *     should be functions, but may be anything other than undefined.
  * @private
  */
 Blockly.Extensions.getMutatorProperties_ = function(block) {
   var result = [];
   // List each function explicitly by reference to allow for renaming
   // during compilation.
-  if (block.domToMutation) {
+  if (typeof block.domToMutation != 'undefined') {
     result.push(block.domToMutation);
   }
-  if (block.mutationToDom) {
+  if (typeof block.mutationToDom != 'undefined') {
     result.push(block.mutationToDom);
   }
-  if (block.compose) {
+  if (typeof block.compose != 'undefined') {
     result.push(block.compose);
   }
-  if (block.decompose) {
+  if (typeof block.decompose != 'undefined') {
     result.push(block.decompose);
   }
   return result;

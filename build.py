@@ -223,8 +223,9 @@ class Gen_compressed(threading.Thread):
     # Define the parameters for the POST request.
     params = [
         # TODO switch to advanced
-        ("compilation_level", "SIMPLE_OPTIMIZATIONS"),
+        ("compilation_level", "ADVANCED_OPTIMIZATIONS"),
         ("use_closure_library", "true"),
+        ("generate_exports", "true"),
         ("output_format", "json"),
         ("output_info", "compiled_code"),
         ("output_info", "warnings"),

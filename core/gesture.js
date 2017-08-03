@@ -38,11 +38,12 @@ goog.require('goog.asserts');
 goog.require('goog.math.Coordinate');
 
 
-/**
- * NB: In this file "start" refers to touchstart, mousedown, and pointerstart
+/*
+ * Note: In this file "start" refers to touchstart, mousedown, and pointerstart
  * events.  "End" refers to touchend, mouseup, and pointerend events.
- * TODO: Consider touchcancel/pointercancel.
  */
+// TODO: Consider touchcancel/pointercancel.
+
 
 /**
  * Class for one gesture.

@@ -231,6 +231,10 @@ class Gen_compressed(threading.Thread):
         ("output_info", "warnings"),
         ("output_info", "errors"),
         ("output_info", "statistics"),
+        # debug options (to make the uglified code readable)
+        ("formatting", "pretty_print"),
+        ("formatting", "print_input_delimiter"),
+        ("debug", "true"),
       ]
 
     # Read in all the source files.

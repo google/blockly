@@ -222,7 +222,6 @@ class Gen_compressed(threading.Thread):
     target_filename = os.path.join("demos", "fixed-advanced", "main_compressed.js")
     # Define the parameters for the POST request.
     params = [
-        # TODO switch to advanced
         ("compilation_level", "ADVANCED_OPTIMIZATIONS"),
         ("use_closure_library", "true"),
         ("generate_exports", "true"),

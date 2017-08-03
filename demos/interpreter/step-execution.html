@@ -134,11 +134,11 @@
   </xml>
 
   <script>
-    var workspace = Blockly.inject('blocklyDiv',
+    var demoWorkspace = Blockly.inject('blocklyDiv',
         {media: '../../media/',
          toolbox: document.getElementById('toolbox')});
     Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
-                               workspace);
+                               demoWorkspace);
 
     var outputArea = document.getElementById('output');
     var stepButton = document.getElementById('stepButton');
@@ -173,12 +173,12 @@
     var latestCode = '';
 
     function highlightBlock(id) {
-      workspace.highlightBlock(id);
+      demoWorkspace.highlightBlock(id);
       highlightPause = true;
     }
 
     function resetStepUi(clearOutput) {
-      workspace.highlightBlock(null);
+      demoWorkspace.highlightBlock(null);
       highlightPause = false;
 
       if (clearOutput) {
@@ -190,7 +190,7 @@
       // Generate JavaScript code and parse it.
       Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
       Blockly.JavaScript.addReservedWords('highlightBlock');
-      latestCode = Blockly.JavaScript.workspaceToCode(workspace);
+      latestCode = Blockly.JavaScript.workspaceToCode(demoWorkspace);
 
       resetStepUi(true);
     }
@@ -240,7 +240,7 @@
 
     // Load the interpreter now, and upon future changes.
     generateCodeAndLoadIntoInterpreter();
-    workspace.addChangeListener(function(event) {
+    demoWorkspace.addChangeListener(function(event) {
       if (!(event instanceof Blockly.Events.Ui)) {
         // Something changed. Parser needs to be reloaded.
         generateCodeAndLoadIntoInterpreter();

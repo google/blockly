@@ -41,15 +41,6 @@ goog.provide('Blockly.Extensions');
 Blockly.Extensions.ALL_ = {};
 
 /**
- * The set of properties on a block that may only be set by a mutator.
- * @type {!Array.<string>}
- * @private
- * @constant
- */
-Blockly.Extensions.MUTATOR_PROPERTIES_ =
-    ['domToMutation', 'mutationToDom', 'compose', 'decompose'];
-
-/**
  * Registers a new extension function. Extensions are functions that help
  * initialize blocks, usually adding dynamic behavior such as onchange
  * handlers and mutators. These are applied using Block.applyExtension(), or
@@ -154,7 +145,7 @@ Blockly.Extensions.apply = function(name, block, isMutator) {
 
   if (isMutator) {
     var errorPrefix = 'Error after applying mutator "' + name + '": ';
-    Blockly.Extensions.checkBlockHasMutatorProperties_(name, block, errorPrefix);
+    Blockly.Extensions.checkBlockHasMutatorProperties_(errorPrefix, block);
   } else {
     if (!Blockly.Extensions.mutatorPropertiesMatch_(mutatorProperties, block)) {
       throw new Error('Error when applying extension "' + name +
@@ -193,13 +184,11 @@ Blockly.Extensions.checkHasFunction_ = function(errorPrefix, func,
  * @private
  */
 Blockly.Extensions.checkNoMutatorProperties_ = function(mutationName, block) {
-  for (var i = 0; i < Blockly.Extensions.MUTATOR_PROPERTIES_.length; i++) {
-    var propertyName = Blockly.Extensions.MUTATOR_PROPERTIES_[i];
-    if (block.hasOwnProperty(propertyName)) {
-      throw new Error('Error: tried to apply mutation "' + mutationName +
-          '" to a block that already has a "' + propertyName +
-          '" function.  Block id: ' + block.id);
-    }
+  var properties = Blockly.Extensions.getMutatorProperties_(block);
+  if (properties.length) {
+    throw new Error('Error: tried to apply mutation "' + mutationName +
+        '" to a block that already has mutator functions.' +
+        '  Block id: ' + block.id);
   }
 };
 
@@ -216,13 +205,13 @@ Blockly.Extensions.checkNoMutatorProperties_ = function(mutationName, block) {
  * @private
  */
 Blockly.Extensions.checkMutatorDialog_ = function(object, errorPrefix) {
-  var hasCompose = object.hasOwnProperty('compose');
-  var hasDecompose = object.hasOwnProperty('decompose');
+  var hasCompose = object.compose !== undefined;
+  var hasDecompose = object.decompose !== undefined;
 
   if (hasCompose && hasDecompose) {
-    if (typeof object['compose'] !== "function") {
+    if (typeof object.compose !== 'function') {
       throw new Error(errorPrefix + 'compose must be a function.');
-    } else if (typeof object['decompose'] !== "function") {
+    } else if (typeof object['decompose'] !== 'function') {
       throw new Error(errorPrefix + 'decompose must be a function.');
     }
     return true;
@@ -243,10 +232,10 @@ Blockly.Extensions.checkMutatorDialog_ = function(object, errorPrefix) {
  */
 Blockly.Extensions.checkBlockHasMutatorProperties_ = function(errorPrefix,
     block) {
-  if (!block.hasOwnProperty('domToMutation')) {
+  if (typeof block.domToMutation !== 'function') {
     throw new Error(errorPrefix + 'Applying a mutator didn\'t add "domToMutation"');
   }
-  if (!block.hasOwnProperty('mutationToDom')) {
+  if (typeof block.mutationToDom !== 'function') {
     throw new Error(errorPrefix + 'Applying a mutator didn\'t add "mutationToDom"');
   }
 
@@ -258,14 +247,25 @@ Blockly.Extensions.checkBlockHasMutatorProperties_ = function(errorPrefix,
 /**
  * Get a list of values of mutator properties on the given block.
  * @param {!Blockly.Block} block The block to inspect.
- * @return {!Array.<Object>} a list with all of the properties, which should be
- *     functions or undefined, but are not guaranteed to be.
+ * @return {!Array.<Object>} a list with all of the defined properties, which
+ *     should be functions, but may be anything other than undefined.
  * @private
  */
 Blockly.Extensions.getMutatorProperties_ = function(block) {
   var result = [];
-  for (var i = 0; i < Blockly.Extensions.MUTATOR_PROPERTIES_.length; i++) {
-    result.push(block[Blockly.Extensions.MUTATOR_PROPERTIES_[i]]);
+  // List each function explicitly by reference to allow for renaming
+  // during compilation.
+  if (block.domToMutation !== undefined) {
+    result.push(block.domToMutation);
+  }
+  if (block.mutationToDom !== undefined) {
+    result.push(block.mutationToDom);
+  }
+  if (block.compose !== undefined) {
+    result.push(block.compose);
+  }
+  if (block.decompose !== undefined) {
+    result.push(block.decompose);
   }
   return result;
 };

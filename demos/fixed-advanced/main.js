@@ -22,8 +22,8 @@ goog.require('Blockly.Msg.en');
 
 Demo.init = function() {
   Blockly.inject('blocklyDiv', {
-    media: '../../media/',
-    toolbox: document.getElementById('toolbox')
+    'media': '../../media/',
+    'toolbox': document.getElementById('toolbox')
   });
 }
 

@@ -38,6 +38,17 @@ goog.require('goog.events.BrowserFeature');
 goog.require('goog.math.Coordinate');
 goog.require('goog.userAgent');
 
+
+/**
+ * To allow ADVANCED_OPTIMIZATIONS, combining variable.name and variable['name'] is not possible.
+ * To access the exported Blockly.Msg.Something it needs to be accessed through the exact name that was exported. Note, that all the exports are happening as the last thing in the generated js files, so they won't be accessible before javascript loads!
+ * @return {!Object<string, string>}
+ * @private
+ */
+Blockly.utils.getMessageArray_ = function() {
+  return window['Blockly']['Msg'];
+};
+
 /**
  * Remove an attribute from a element even if it's in IE 10.
  * Similar to Element.removeAttribute() but it works on SVG elements in IE 10.
@@ -457,7 +468,7 @@ Blockly.utils.checkMessageReferences = function(message) {
   var match = regex.exec(message);
   while (match != null) {
     var msgKey = match[1];
-    if (Blockly.Msg[msgKey] == null) {
+    if (Blockly.utils.getMessageArray_()[msgKey] == null) {
       console.log('WARNING: No message string for %{BKY_' + msgKey + '}.');
       isValid = false;
     }
@@ -550,8 +561,8 @@ Blockly.utils.tokenizeInterpolation_ = function(message, parseInterpolationToken
           // are defined in ../msgs/ files.
           var bklyKey = goog.string.startsWith(keyUpper, 'BKY_') ?
               keyUpper.substring(4) : null;
-          if (bklyKey && bklyKey in Blockly.Msg) {
-            var rawValue = Blockly.Msg[bklyKey];
+          if (bklyKey && bklyKey in Blockly.utils.getMessageArray_()) {
+            var rawValue = Blockly.utils.getMessageArray_()[bklyKey];
             if (goog.isString(rawValue)) {
               // Attempt to dereference substrings, too, appending to the end.
               Array.prototype.push.apply(tokens,

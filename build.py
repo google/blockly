@@ -249,6 +249,12 @@ class Gen_compressed(threading.Thread):
       params.append(("js_code", "".join(f.readlines())))
       f.close()
 
+    externs = [os.path.join("externs", "svg-externs.js")]
+    for filename in externs:
+      f = open(filename)
+      params.append(("js_externs", "".join(f.readlines())))
+      f.close()
+
     self.do_compile(params, target_filename, filenames, "")
 
   def gen_core(self):

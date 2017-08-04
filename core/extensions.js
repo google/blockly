@@ -211,7 +211,7 @@ Blockly.Extensions.checkMutatorDialog_ = function(object, errorPrefix) {
   if (hasCompose && hasDecompose) {
     if (typeof object.compose !== 'function') {
       throw new Error(errorPrefix + 'compose must be a function.');
-    } else if (typeof object['decompose'] !== 'function') {
+    } else if (typeof object.decompose !== 'function') {
       throw new Error(errorPrefix + 'decompose must be a function.');
     }
     return true;

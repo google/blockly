@@ -44,7 +44,8 @@ goog.require('goog.ui.MenuItem');
 Blockly.ContextMenu.currentBlock = null;
 
 /**
- * @type {Array.<!Array>} Opaque data that can be passed to unbindEvent_.
+ * Opaque data that can be passed to unbindEvent_.
+ * @type {Array.<!Array>}
  * @private
  */
 Blockly.ContextMenu.eventWrapper_ = null;

@@ -86,9 +86,10 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
     var xml = BlockDefinitionExtractor.buildBlockFactoryWorkspace(block);
     Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
     // Calculate timer to avoid infinite update loops
+    // TODO(#1267): Remove the global variables and any infinite loops.
     BlockFactory.updateBlocksFlag = false;
     setTimeout(
-        function() { BlockFactory.updateBlocksFlagDelayed = false }, 3000);
+        function() { BlockFactory.updateBlocksFlagDelayed = false}, 3000);
   }
   BlockFactory.lastUpdatedBlock = block; // Variable to share the block value
 

@@ -87,18 +87,18 @@ BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
  * @param {string?} opt_text Optional inner text.
  * @return {Element} The newly created element.
  */
-BlockDefinitionExtractor.newElement_ = function(name, opt_attrs, opt_text) {
+BlockDefinitionExtractor.newDomElement_ = function(name, opt_attrs, opt_text) {
   // Avoid createDom(..)'s attributes argument for being too HTML specific.
-  var block1 = goog.dom.createDom(name);
+  var elem = goog.dom.createDom(name);
   if (opt_attrs) {
     for (var key in attrs) {
-      block1.setAttribute(key, attrs[key]);
+      elem.setAttribute(key, attrs[key]);
     }
   }
   if (opt_text) {
-    block1.append(opt_text);
+    elem.append(opt_text);
   }
-  return block1;
+  return elem;
 };
 
 /**
@@ -143,7 +143,8 @@ BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_ =
     if (connection.check_.length < 1) {
       typeBlock = BlockDefinitionExtractor.typeNullShadow_();
     } else if (connection.check_.length === 1) {
-      typeBlock = BlockDefinitionExtractor.buildBlockForType_(connection.check_[0]);
+      typeBlock = BlockDefinitionExtractor.buildBlockForType_(
+          connection.check_[0]);
     } else if (connection.check_.length > 1 ) {
       typeBlock = BlockDefinitionExtractor.typeGroup_(connection.check_);
     }
@@ -154,7 +155,7 @@ BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_ =
 };
 
 /**
- * Constructs a sequence <block> elements representing the field definition block
+ * Constructs a sequence <block> elements representing the field definition.
  * @param {Array<Blockly.Field>} fieldRow A list of fields in a Blockly.Input.
  * @return {Element} The fist <block> element of the sequence
  *     (and the root of the constructed DOM).
@@ -170,28 +171,33 @@ BlockDefinitionExtractor.parseFields_ = function(fieldRow) {
     if (field instanceof Blockly.FieldLabel) {
       fieldDefElement = BlockDefinitionExtractor.fieldLabel_(field.text_);
     } else if (field instanceof Blockly.FieldTextInput) {
-      fieldDefElement = BlockDefinitionExtractor.fieldInput_(field.name, field.text_);
+      fieldDefElement =
+          BlockDefinitionExtractor.fieldInput_(field.name, field.text_);
     } else if (field instanceof Blockly.FieldNumber) {
       fieldDefElement = BlockDefinitionExtractor.fieldNumber_(
           field.name, field.text_, field.min_, field.max_, field.presicion_);
     } else if (field instanceof Blockly.FieldAngle) {
-      fieldDefElement = BlockDefinitionExtractor.fieldAngle_(field.name, field.text_);
+      fieldDefElement =
+          BlockDefinitionExtractor.fieldAngle_(field.name, field.text_);
     } else if (field instanceof Blockly.FieldCheckbox) {
-      fieldDefElement = BlockDefinitionExtractor.fieldCheckbox_(field.name, field.state_);
+      fieldDefElement =
+          BlockDefinitionExtractor.fieldCheckbox_(field.name, field.state_);
     } else if (field instanceof Blockly.FieldColour) {
-      fieldDefElement = BlockDefinitionExtractor.fieldColour_(field.name, field.colour_);
+      fieldDefElement =
+          BlockDefinitionExtractor.fieldColour_(field.name, field.colour_);
     } else if (field instanceof Blockly.FieldImage) {
       fieldDefElement = BlockDefinitionExtractor.fieldImage_(
           field.src_, field.width_, field.height_, field.text_);
     } else if (field instanceof Blockly.FieldVariable) {
       // FieldVariable must be before FieldDropdown.
-      fieldDefElement = BlockDefinitionExtractor.fieldVariable_(field.name, field.text_);
+      fieldDefElement =
+          BlockDefinitionExtractor.fieldVariable_(field.name, field.text_);
     } else if (field instanceof Blockly.FieldDropdown) {
       fieldDefElement = BlockDefinitionExtractor.fieldDropdown_(field);
     }
 
     if (lastFieldDefElement) {
-      var next = BlockDefinitionExtractor.newElement_('next');
+      var next = BlockDefinitionExtractor.newDomElement_('next');
       next.append(fieldDefElement);
       lastFieldDefElement.append(next);
     } else {
@@ -228,7 +234,7 @@ BlockDefinitionExtractor.parseInputs_ = function(block) {
 
     var inputDefElement = BlockDefinitionExtractor.input_(input, align);
     if (lastInputDefElement) {
-      var next = BlockDefinitionExtractor.newElement_('next');
+      var next = BlockDefinitionExtractor.newDomElement_('next');
       next.append(inputDefElement);
       lastInputDefElement.append(next);
     } else {
@@ -254,52 +260,67 @@ BlockDefinitionExtractor.factoryBase_ =
   function(block, connections, name, inline)
 {
   BlockDefinitionExtractor.src = {root: block, current: block};
-  var factoryBaseEl = BlockDefinitionExtractor.newElement_('block', {type: 'factory_base'});
-  factoryBaseEl.append(BlockDefinitionExtractor.newElement_('mutation', {connections: connections}));
-  factoryBaseEl.append(BlockDefinitionExtractor.newElement_('field', {name: 'NAME'}, name));
-  factoryBaseEl.append(BlockDefinitionExtractor.newElement_('field', {name: 'INLINE'}, inline));
-  factoryBaseEl.append(
-      BlockDefinitionExtractor.newElement_('field', {name: 'CONNECTIONS'}, connections));
+  var factoryBaseEl =
+      BlockDefinitionExtractor.newDomElement_('block', {type: 'factory_base'});
+  factoryBaseEl.append(BlockDefinitionExtractor.newDomElement_(
+      'mutation', {connections: connections}));
+  factoryBaseEl.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'NAME'}, name));
+  factoryBaseEl.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'INLINE'}, inline));
+  factoryBaseEl.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'CONNECTIONS'}, connections));
 
-  var inputsStatement = BlockDefinitionExtractor.newElement_('statement', {name: 'INPUTS'});
+  var inputsStatement = BlockDefinitionExtractor.newDomElement_(
+      'statement', {name: 'INPUTS'});
   inputsStatement.append(BlockDefinitionExtractor.parseInputs_(block));
   factoryBaseEl.append(inputsStatement);
 
-  var tooltipValue = BlockDefinitionExtractor.newElement_('value', {name: 'TOOLTIP'});
+  var tooltipValue =
+      BlockDefinitionExtractor.newDomElement_('value', {name: 'TOOLTIP'});
   tooltipValue.append(BlockDefinitionExtractor.text_(block.tooltip));
   factoryBaseEl.append(tooltipValue);
 
-  var helpUrlValue = BlockDefinitionExtractor.newElement_('value', {name: 'HELPURL'});
+  var helpUrlValue =
+      BlockDefinitionExtractor.newDomElement_('value', {name: 'HELPURL'});
   helpUrlValue.append(BlockDefinitionExtractor.text_(block.helpUrl));
   factoryBaseEl.append(helpUrlValue);
 
   if (connections === 'LEFT') {
-    var inputValue = BlockDefinitionExtractor.newElement_('value', {name: 'OUTPUTTYPE'});
-    inputValue.append(BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_(
-        block.outputConnection));
+    var inputValue =
+        BlockDefinitionExtractor.newDomElement_('value', {name: 'OUTPUTTYPE'});
+    inputValue.append(
+        BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_(
+            block.outputConnection));
     factoryBaseEl.append(inputValue);
   } else {
     if (connections === 'UP' || connections === 'BOTH') {
-      var inputValue = BlockDefinitionExtractor.newElement_('value', {name: 'TOPTYPE'});
-      inputValue.append(BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_(
-          block.previousConnection));
+      var inputValue =
+          BlockDefinitionExtractor.newDomElement_('value', {name: 'TOPTYPE'});
+      inputValue.append(
+          BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_(
+              block.previousConnection));
       factoryBaseEl.append(inputValue);
     }
     if (connections === 'DOWN' || connections === 'BOTH') {
-      var inputValue = BlockDefinitionExtractor.newElement_('value', {name: 'BOTTOMTYPE'});
-      inputValue.append(BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_(
-          block.nextConnection));
+      var inputValue = BlockDefinitionExtractor.newDomElement_(
+          'value', {name: 'BOTTOMTYPE'});
+      inputValue.append(
+          BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_(
+              block.nextConnection));
       factoryBaseEl.append(inputValue);
     }
   }
 
   // Convert colour_ to hue value 0-360 degrees
   // TODO(#1247): Solve off-by-one errors.
-  // TODO: Deal with colors that don't map to standard hues. (Needs improved block definitions.)
+  // TODO: Deal with colors that don't map to standard hues. (Needs improved
+  //     block definitions.)
   var colour_hue = Math.floor(
-      goog.color.hexToHsv(block.colour_)[0]);  // This is off by one... sometimes
+      goog.color.hexToHsv(block.colour_)[0]);  // Off by one... sometimes
   var colourBlock = BlockDefinitionExtractor.colourBlockFromHue_(colour_hue);
-  var colourInputValue = BlockDefinitionExtractor.newElement_('value', {name: 'COLOUR'});
+  var colourInputValue =
+      BlockDefinitionExtractor.newDomElement_('value', {name: 'COLOUR'});
   colourInputValue.append(colourBlock);
   factoryBaseEl.append(colourInputValue);
   return factoryBaseEl;
@@ -317,22 +338,28 @@ BlockDefinitionExtractor.input_ = function(input, align) {
   var inputTypeAttr = (input.type === Blockly.INPUT_VALUE) ? 'input_value' :
       (input.type === Blockly.INPUT_STATEMENT) ? 'input_statement' :
       /* input.type === Blockly.INPUT_DUMMY */ 'input_dummy';
-  var inputDefBlock = BlockDefinitionExtractor.newElement_('block', {type: inputTypeAttr});
+  var inputDefBlock =
+      BlockDefinitionExtractor.newDomElement_('block', {type: inputTypeAttr});
 
   if (input.type != Blockly.DUMMY_INPUT) {
-    inputDefBlock.append(
-        BlockDefinitionExtractor.newElement_('field', {name: 'INPUTNAME'}, input.name));
+    inputDefBlock.append(BlockDefinitionExtractor.newDomElement_(
+        'field', {name: 'INPUTNAME'}, input.name));
   }
-  inputDefBlock.append(BlockDefinitionExtractor.newElement_('field', {name: 'ALIGN'}, align));
+  inputDefBlock.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'ALIGN'}, align));
 
-  var fieldsDef = BlockDefinitionExtractor.newElement_('statement', {name: 'FIELDS'});
+  var fieldsDef = BlockDefinitionExtractor.newDomElement_(
+      'statement', {name: 'FIELDS'});
   var fieldsXml = BlockDefinitionExtractor.parseFields_(input.fieldRow);
   fieldsDef.append(fieldsXml);
   inputDefBlock.append(fieldsDef);
 
   if (input.type != Blockly.DUMMY_INPUT) {
-    var typeValue = BlockDefinitionExtractor.newElement_('value', {name: 'TYPE'});
-    typeValue.append(BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_(input.connection));
+    var typeValue = BlockDefinitionExtractor.newDomElement_(
+        'value', {name: 'TYPE'});
+    typeValue.append(
+        BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_(
+            input.connection));
     inputDefBlock.append(typeValue);
   }
 
@@ -346,8 +373,10 @@ BlockDefinitionExtractor.input_ = function(input, align) {
  * @private
  */
 BlockDefinitionExtractor.fieldLabel_ = function(text) {
-  var fieldBlock = BlockDefinitionExtractor.newElement_('block', {type: 'field_static'});
-  fieldBlock.append(BlockDefinitionExtractor.newElement_('field', {name: 'TEXT'}, text));
+  var fieldBlock =
+      BlockDefinitionExtractor.newDomElement_('block', {type: 'field_static'});
+  fieldBlock.append(
+      BlockDefinitionExtractor.newDomElement_('field', {name: 'TEXT'}, text));
   return fieldBlock;
 };
 
@@ -360,9 +389,12 @@ BlockDefinitionExtractor.fieldLabel_ = function(text) {
  * @private
  */
 BlockDefinitionExtractor.fieldInput_ = function(fieldName, text) {
-  var fieldInput = BlockDefinitionExtractor.newElement_('block', {type: 'field_input'});
-  fieldInput.append(BlockDefinitionExtractor.newElement_('field', {name: 'TEXT'}, text));
-  fieldInput.append(BlockDefinitionExtractor.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+  var fieldInput =
+      BlockDefinitionExtractor.newDomElement_('block', {type: 'field_input'});
+  fieldInput.append(
+      BlockDefinitionExtractor.newDomElement_('field', {name: 'TEXT'}, text));
+  fieldInput.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'FIELDNAME'}, fieldName));
   return fieldInput;
 };
 
@@ -380,12 +412,18 @@ BlockDefinitionExtractor.fieldInput_ = function(fieldName, text) {
 BlockDefinitionExtractor.fieldNumber_ =
   function(fieldName, value, min, max, precision)
 {
-  var fieldNumber = BlockDefinitionExtractor.newElement_('block', {type: 'field_number'});
-  fieldNumber.append(BlockDefinitionExtractor.newElement_('field', {name: 'VALUE'}, value));
-  fieldNumber.append(BlockDefinitionExtractor.newElement_('field', {name: 'FIELDNAME'}, fieldName));
-  fieldNumber.append(BlockDefinitionExtractor.newElement_('field', {name: 'MIN'}, min));
-  fieldNumber.append(BlockDefinitionExtractor.newElement_('field', {name: 'MAX'}, max));
-  fieldNumber.append(BlockDefinitionExtractor.newElement_('field', {name: 'PRECISION'}, precision));
+  var fieldNumber =
+      BlockDefinitionExtractor.newDomElement_('block', {type: 'field_number'});
+  fieldNumber.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'VALUE'}, value));
+  fieldNumber.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'FIELDNAME'}, fieldName));
+  fieldNumber.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'MIN'}, min));
+  fieldNumber.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'MAX'}, max));
+  fieldNumber.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'PRECISION'}, precision));
   return fieldNumber;
 };
 
@@ -398,9 +436,12 @@ BlockDefinitionExtractor.fieldNumber_ =
  * @private
  */
 BlockDefinitionExtractor.fieldAngle_ = function(angle, fieldName) {
-  var fieldAngle = BlockDefinitionExtractor.newElement_('block', {type: 'field_angle'});
-  fieldAngle.append(BlockDefinitionExtractor.newElement_('field', {name: 'ANGLE'}, angle));
-  fieldAngle.append(BlockDefinitionExtractor.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+  var fieldAngle =
+      BlockDefinitionExtractor.newDomElement_('block', {type: 'field_angle'});
+  fieldAngle.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'ANGLE'}, angle));
+  fieldAngle.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'FIELDNAME'}, fieldName));
   return fieldAngle;
 };
 
@@ -408,7 +449,7 @@ BlockDefinitionExtractor.fieldAngle_ = function(angle, fieldName) {
  * Creates a <block> element representing a FieldDropdown definition.
  *
  * @param {Blockly.FieldDropdown} dropdown
- * @return {Element} The <block> XML representing a similar FieldDropdown definition.
+ * @return {Element} The <block> element representing a similar FieldDropdown.
  * @private
  */
 BlockDefinitionExtractor.fieldDropdown_ = function(dropdown) {
@@ -421,29 +462,34 @@ BlockDefinitionExtractor.fieldDropdown_ = function(dropdown) {
     throw new Error('Unrecognized type of menuGenerator: ' + menuGenerator);
   }
 
-  var fieldDropdown = BlockDefinitionExtractor.newElement_('block', {type: 'field_dropdown'});
+  var fieldDropdown = BlockDefinitionExtractor.newDomElement_(
+      'block', {type: 'field_dropdown'});
   var optionsStr = '[';
 
-  var mutation = BlockDefinitionExtractor.newElement_('mutation');
+  var mutation = BlockDefinitionExtractor.newDomElement_('mutation');
   fieldDropdown.append(mutation);
-  fieldDropdown.append(BlockDefinitionExtractor.newElement_('field', {name: 'FIELDNAME'}, dropdown.name));
+  fieldDropdown.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'FIELDNAME'}, dropdown.name));
   for (var i=0; i<options.length; i++) {
     var option = options[i];
     if (typeof option[0] === "string") {
       optionsStr += '"text",'
-      fieldDropdown.append(BlockDefinitionExtractor.newElement_('field', {name: 'USER'+i}, option[0]));
+      fieldDropdown.append(BlockDefinitionExtractor.newDomElement_(
+          'field', {name: 'USER'+i}, option[0]));
     } else {
       optionsStr += '"image",';
       fieldDropdown.append(
-          BlockDefinitionExtractor.newElement_('field', {name: 'SRC'+i}, option[0].src));
-      fieldDropdown.append(
-          BlockDefinitionExtractor.newElement_('field', {name: 'WIDTH'+i}, option[0].width));
-      fieldDropdown.append(
-          BlockDefinitionExtractor.newElement_('field', {name: 'HEIGHT'+i}, option[0].height));
-      fieldDropdown.append(
-          BlockDefinitionExtractor.newElement_('field', {name: 'ALT'+i}, option[0].alt));
+          BlockDefinitionExtractor.newDomElement_(
+          'field', {name: 'SRC'+i}, option[0].src));
+      fieldDropdown.append(BlockDefinitionExtractor.newDomElement_(
+          'field', {name: 'WIDTH'+i}, option[0].width));
+      fieldDropdown.append(BlockDefinitionExtractor.newDomElement_(
+          'field', {name: 'HEIGHT'+i}, option[0].height));
+      fieldDropdown.append(BlockDefinitionExtractor.newDomElement_(
+          'field', {name: 'ALT'+i}, option[0].alt));
     }
-    fieldDropdown.append(BlockDefinitionExtractor.newElement_('field', {name: 'CPU'+i}, option[1]));
+    fieldDropdown.append(BlockDefinitionExtractor.newDomElement_(
+        'field', {name: 'CPU'+i}, option[1]));
   }
   optionsStr = optionsStr.slice(0,-1); // Drop last comma
   optionsStr += ']';
@@ -463,10 +509,12 @@ BlockDefinitionExtractor.fieldDropdown_ = function(dropdown) {
 BlockDefinitionExtractor.fieldCheckbox_ =
   function(fieldName, checked)
 {
-  var fieldCheckbox = BlockDefinitionExtractor.newElement_('block', {type: 'field_checkbox'});
-  fieldCheckbox.append(BlockDefinitionExtractor.newElement_('field', {name: 'CHECKED'}, checked));
-  fieldCheckbox.append(
-    BlockDefinitionExtractor.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+  var fieldCheckbox = BlockDefinitionExtractor.newDomElement_(
+      'block', {type: 'field_checkbox'});
+  fieldCheckbox.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'CHECKED'}, checked));
+  fieldCheckbox.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'FIELDNAME'}, fieldName));
   return fieldCheckbox;
 };
 
@@ -481,10 +529,12 @@ BlockDefinitionExtractor.fieldCheckbox_ =
 BlockDefinitionExtractor.fieldColour_ =
     function(fieldName, colour)
 {
-  var fieldColour = BlockDefinitionExtractor.newElement_('block', {type: 'field_colour'});
-  fieldColour.append(BlockDefinitionExtractor.newElement_('field', {name: 'COLOUR'}, colour));
-  fieldColour.append(
-    BlockDefinitionExtractor.newElement_('field', {name: 'FIELDNAME'}, fieldName));
+  var fieldColour = BlockDefinitionExtractor.newDomElement_(
+      'block', {type: 'field_colour'});
+  fieldColour.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'COLOUR'}, colour));
+  fieldColour.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'FIELDNAME'}, fieldName));
   return fieldColour;
 };
 
@@ -497,11 +547,11 @@ BlockDefinitionExtractor.fieldColour_ =
  * @private
  */
 BlockDefinitionExtractor.fieldVariable_ = function(fieldName, varName) {
-  var fieldVar = BlockDefinitionExtractor.newElement_(
+  var fieldVar = BlockDefinitionExtractor.newDomElement_(
       'block', {type: 'field_variable'});
-  fieldVar.append(BlockDefinitionExtractor.newElement_(
+  fieldVar.append(BlockDefinitionExtractor.newDomElement_(
       'field', {name: 'FIELDNAME'}, fieldName));
-  fieldVar.append(BlockDefinitionExtractor.newElement_(
+  fieldVar.append(BlockDefinitionExtractor.newDomElement_(
       'field', {name: 'TEXT'}, varName));
   return fieldVar;
 };
@@ -518,11 +568,16 @@ BlockDefinitionExtractor.fieldVariable_ = function(fieldName, varName) {
 BlockDefinitionExtractor.fieldImage_ =
   function(src, width, height, alt)
 {
-  var block1 = BlockDefinitionExtractor.newElement_('block', {type: 'field_image'});
-  block1.append(BlockDefinitionExtractor.newElement_('field', {name: 'SRC'}, src));
-  block1.append(BlockDefinitionExtractor.newElement_('field', {name: 'WIDTH'}, width));
-  block1.append(BlockDefinitionExtractor.newElement_('field', {name: 'HEIGHT'}, height));
-  block1.append(BlockDefinitionExtractor.newElement_('field', {name: 'ALT'}, alt));
+  var block1 = BlockDefinitionExtractor.newDomElement_(
+      'block', {type: 'field_image'});
+  block1.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'SRC'}, src));
+  block1.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'WIDTH'}, width));
+  block1.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'HEIGHT'}, height));
+  block1.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'ALT'}, alt));
 };
 
 /**
@@ -534,11 +589,14 @@ BlockDefinitionExtractor.fieldImage_ =
  * @private
  */
 BlockDefinitionExtractor.typeGroup_ = function(types) {
-  var typeGroupBlock = BlockDefinitionExtractor.newElement_('block', {type: 'type_group'});
-  typeGroupBlock.append(BlockDefinitionExtractor.newElement_('mutation', {types:types.length}));
+  var typeGroupBlock = BlockDefinitionExtractor.newDomElement_(
+      'block', {type: 'type_group'});
+  typeGroupBlock.append(BlockDefinitionExtractor.newDomElement_(
+      'mutation', {types:types.length}));
   for (var i=0; i<types.length; i++) {
     var typeBlock = BlockDefinitionExtractor.buildBlockForType_(types[i]);
-    var valueBlock = BlockDefinitionExtractor.newElement_('value', {name:'TYPE'+i});
+    var valueBlock = BlockDefinitionExtractor.newDomElement_(
+        'value', {name:'TYPE'+i});
     valueBlock.append(typeBlock);
     typeGroupBlock.append(valueBlock);
   }
@@ -553,7 +611,8 @@ BlockDefinitionExtractor.typeGroup_ = function(types) {
  * @private
  */
 BlockDefinitionExtractor.typeNullShadow_ = function() {
-  return BlockDefinitionExtractor.newElement_('shadow', {type: 'type_null'});
+  return BlockDefinitionExtractor.newDomElement_(
+      'shadow', {type: 'type_null'});
 };
 
 /**
@@ -563,7 +622,7 @@ BlockDefinitionExtractor.typeNullShadow_ = function() {
  * @private
  */
 BlockDefinitionExtractor.typeNull_ = function() {
-  return BlockDefinitionExtractor.newElement_('block', {type: 'type_null'});
+  return BlockDefinitionExtractor.newDomElement_('block', {type: 'type_null'});
 };
 
 /**
@@ -574,7 +633,8 @@ BlockDefinitionExtractor.typeNull_ = function() {
  * @private
  */
 BlockDefinitionExtractor.typeBoolean_ = function() {
-  return BlockDefinitionExtractor.newElement_('block', {type: 'type_boolean'});
+  return BlockDefinitionExtractor.newDomElement_(
+      'block', {type: 'type_boolean'});
 };
 
 /**
@@ -585,7 +645,8 @@ BlockDefinitionExtractor.typeBoolean_ = function() {
  * @private
  */
 BlockDefinitionExtractor.typeNumber_ = function() {
-  return BlockDefinitionExtractor.newElement_('block', {type: 'type_number'});
+  return BlockDefinitionExtractor.newDomElement_(
+      'block', {type: 'type_number'});
 };
 
 /**
@@ -596,7 +657,8 @@ BlockDefinitionExtractor.typeNumber_ = function() {
  * @private
  */
 BlockDefinitionExtractor.typeString_ = function() {
-  return BlockDefinitionExtractor.newElement_('block', {type: 'type_string'});
+  return BlockDefinitionExtractor.newDomElement_(
+      'block', {type: 'type_string'});
 };
 
 /**
@@ -607,7 +669,7 @@ BlockDefinitionExtractor.typeString_ = function() {
  * @private
  */
 BlockDefinitionExtractor.typeList_ = function() {
-  return BlockDefinitionExtractor.newElement_('block', {type: 'type_list'});
+  return BlockDefinitionExtractor.newDomElement_('block', {type: 'type_list'});
 };
 
 /**
@@ -620,9 +682,10 @@ BlockDefinitionExtractor.typeList_ = function() {
  * @private
  */
 BlockDefinitionExtractor.typeOther_ = function(type) {
-  var block = BlockDefinitionExtractor.newElement_(
+  var block = BlockDefinitionExtractor.newDomElement_(
       'block', {type: 'type_other'});
-  block.append(BlockDefinitionExtractor.newElement_('field', {name: 'TYPE'}, type));
+  block.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'TYPE'}, type));
   return block;
 };
 
@@ -634,12 +697,12 @@ BlockDefinitionExtractor.typeOther_ = function(type) {
  * @private
  */
 BlockDefinitionExtractor.colourBlockFromHue_ = function(hue) {
-  var colourBlock = BlockDefinitionExtractor.newElement_(
+  var colourBlock = BlockDefinitionExtractor.newDomElement_(
       'block', {type: 'colour_hue'});
-  colourBlock.append(BlockDefinitionExtractor.newElement_('mutation', {
+  colourBlock.append(BlockDefinitionExtractor.newDomElement_('mutation', {
     colour: Blockly.hueToRgb(hue)
   }));
-  colourBlock.append(BlockDefinitionExtractor.newElement_(
+  colourBlock.append(BlockDefinitionExtractor.newDomElement_(
       'field', {name: 'HUE'}, hue.toString()));
   return colourBlock;
 };
@@ -653,9 +716,9 @@ BlockDefinitionExtractor.colourBlockFromHue_ = function(hue) {
  */
 BlockDefinitionExtractor.text_ = function(text) {
   var textBlock =
-      BlockDefinitionExtractor.newElement_('block', {type: 'text'});
+      BlockDefinitionExtractor.newDomElement_('block', {type: 'text'});
   if (text) {
-    textBlock.append(BlockDefinitionExtractor.newElement_(
+    textBlock.append(BlockDefinitionExtractor.newDomElement_(
       'field', {name: 'TEXT'}, text));
   } // Else, use empty string default.
   return textBlock;

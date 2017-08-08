@@ -140,7 +140,7 @@ BlockFactory.updateLanguage = function() {
   if (!BlockFactory.updateBlocksFlag) {
     var format = document.getElementById('format').value;
     if (format == 'Manual-JSON') {
-      format = JSON;
+      format = 'JSON';
     } else if (format == 'Manual-JS') {
       format = 'JavaScript';
     }
@@ -188,26 +188,11 @@ BlockFactory.updatePreview = function() {
   }
   BlockFactory.previewWorkspace.clear();
 
-  var rawFormat = document.getElementById('format').value;
-  var isManual = rawFormat.substr(0, 6) == 'Manual';
-
+  var format = BlockFactory.getBlockDefinitionFormat();
   var code = document.getElementById('languageTA').value;
   if (!code.trim()) {
     // Nothing to render.  Happens while cloud storage is loading.
     return;
-  }
-
-  switch (rawFormat) {
-    case 'JSON':
-    case 'Manual-JSON':
-      var format = 'JSON';
-      break;
-    case 'JavaScript':
-    case 'Manual-JS':
-      var format = 'JavaScript';
-      break;
-    default:
-      throw 'Unknown format: ' + format;
   }
 
   // Backup Blockly.Blocks object so that main workspace and preview don't
@@ -287,6 +272,26 @@ BlockFactory.updatePreview = function() {
 };
 
 /**
+ * Gets the format from the Block Definitions' format selector/drop-down.
+ * @return Either 'JavaScript' or 'JSON'.
+ * @throws If selector value is not recognized.
+ */
+BlockFactory.getBlockDefinitionFormat = function() {
+  switch (document.getElementById('format').value) {
+    case 'JSON':
+    case 'Manual-JSON':
+      return 'JSON';
+
+    case 'JavaScript':
+    case 'Manual-JS':
+      return 'JavaScript';
+
+    default:
+      throw 'Unknown format: ' + format;
+  }
+}
+
+/**
  * Disable link and save buttons if the format is 'Manual', enable otherwise.
  */
 BlockFactory.disableEnableLink = function() {
@@ -327,8 +332,8 @@ BlockFactory.isStarterBlock = function() {
  * Updates blocks from the manually edited js or json from their text area.
  */
 BlockFactory.manualEdit = function() {
-  // TODO: Replace these global state flags with parameters passed to the right
-  //       functions.
+  // TODO(#1267): Replace these global state flags with parameters passed to
+  //              the right functions.
   BlockFactory.updateBlocksFlag = true;
   BlockFactory.updateBlocksFlagDelayed = true;
   BlockFactory.updateLanguage();

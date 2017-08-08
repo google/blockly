@@ -83,7 +83,7 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
   // Build factory blocks from block
   if (BlockFactory.updateBlocksFlag) {  // TODO: Move this to updatePreview()
     BlockFactory.mainWorkspace.clear();
-    var xml = new BlockDefinitionExtractor().buildBlockFactoryWorkspace(block);
+    var xml = BlockDefinitionExtractor.buildBlockFactoryWorkspace(block);
     Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
     // Calculate timer to avoid infinite update loops
     BlockFactory.updateBlocksFlag = false;

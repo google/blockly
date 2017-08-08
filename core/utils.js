@@ -40,13 +40,16 @@ goog.require('goog.userAgent');
 
 
 /**
- * To allow ADVANCED_OPTIMIZATIONS, combining variable.name and variable['name'] is not possible.
- * To access the exported Blockly.Msg.Something it needs to be accessed through the exact name that was exported. Note, that all the exports are happening as the last thing in the generated js files, so they won't be accessible before javascript loads!
+ * To allow ADVANCED_OPTIMIZATIONS, combining variable.name and variable['name']
+ * is not possible. To access the exported Blockly.Msg.Something it needs to be
+ * accessed through the exact name that was exported. Note, that all the exports
+ * are happening as the last thing in the generated js files, so they won't be
+ * accessible before javascript loads!
  * @return {!Object<string, string>}
  * @private
  */
 Blockly.utils.getMessageArray_ = function() {
-  return window['Blockly']['Msg'];
+  return goog.global['Blockly']['Msg'];
 };
 
 /**

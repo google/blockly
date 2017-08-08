@@ -929,7 +929,6 @@ Blockly.WorkspaceSvg.prototype.refreshToolboxSelection_ = function() {
 
 /**
  * Rename a variable by updating its name in the variable list.
- * TODO: google/blockly:#468
  * @param {string} oldName Variable to rename.
  * @param {string} newName New variable name.
  * @package

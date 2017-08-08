@@ -5,6 +5,8 @@
 
 goog.provide('Demo');
 
+// messages (in some language)
+goog.require('Blockly.Msg.en');
 // core
 goog.require('Blockly');
 // blocks
@@ -16,8 +18,6 @@ goog.require('Blockly.Constants.Math');
 goog.require('Blockly.Blocks.procedures');
 goog.require('Blockly.Constants.Text');
 goog.require('Blockly.Constants.Variables');
-// messages (in some language)
-goog.require('Blockly.Msg.en');
 
 
 Demo.init = function() {

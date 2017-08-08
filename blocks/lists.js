@@ -33,6 +33,7 @@ goog.provide('Blockly.Blocks.lists');  // Deprecated
 goog.provide('Blockly.Constants.Lists');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly');
 
 
 /**

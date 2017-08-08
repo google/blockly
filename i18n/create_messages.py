@@ -42,7 +42,8 @@ def load_constants(filename):
   for key in constant_defs:
     value = constant_defs[key]
     value = value.replace('"', '\\"')
-    constants_text += '\nBlockly.Msg["{0}"] = "{1}";'.format(key, value)
+    constants_text += u'\n/** @export */ Blockly.Msg.{0} = \"{1}\";'.format(
+        key, value)
   return constants_text
 
 def main():
@@ -87,8 +88,8 @@ def main():
   # Read in synonyms file, which must be output in every language.
   synonym_defs = read_json_file(os.path.join(
       os.curdir, args.source_synonym_file))
-  synonym_text = '\n'.join(['Blockly.Msg["{0}"] = Blockly.Msg["{1}"];'.format(
-      key, synonym_defs[key]) for key in synonym_defs])
+  synonym_text = '\n'.join([u'/** @export */ Blockly.Msg.{0} = Blockly.Msg.{1};'
+      .format(key, synonym_defs[key]) for key in synonym_defs])
 
   # Read in constants file, which must be output in every language.
   constants_text = load_constants(os.path.join(os.curdir, args.source_constants_file))
@@ -139,8 +140,8 @@ goog.require('Blockly.Msg');
             value = source_defs[key]
             comment = '  // untranslated'
           value = value.replace('"', '\\"')
-          outfile.write(u'Blockly.Msg["{0}"] = "{1}";{2}\n'.format(
-              key, value, comment))
+          outfile.write(u'/** @export */ Blockly.Msg.{0} = "{1}";{2}\n'
+              .format(key, value, comment))
 
         # Announce any keys defined only for target language.
         if target_defs:

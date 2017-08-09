@@ -90,8 +90,8 @@ BlockDefinitionExtractor.newDomElement_ = function(name, opt_attrs, opt_text) {
   // Avoid createDom(..)'s attributes argument for being too HTML specific.
   var elem = goog.dom.createDom(name);
   if (opt_attrs) {
-    for (var key in attrs) {
-      elem.setAttribute(key, attrs[key]);
+    for (var key in opt_attrs) {
+      elem.setAttribute(key, opt_attrs[key]);
     }
   }
   if (opt_text) {

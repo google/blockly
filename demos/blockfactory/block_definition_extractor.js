@@ -70,7 +70,6 @@ BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
       }
     }
   }
-  var this_ = this;
   var factoryBaseXml = BlockDefinitionExtractor.factoryBase_(
       block, connections, block.type, inline);
   workspaceXml.append(factoryBaseXml);

@@ -10,7 +10,8 @@
 			"SNuutti",
 			"PStudios",
 			"Mikahama",
-			"Pyscowicz"
+			"Pyscowicz",
+			"Pahkiqaz"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "kohde",
@@ -83,6 +84,7 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Lisää, poista tai järjestele osioita tässä \"jos\" lohkossa.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Lisää ehto \"jos\" lohkoon.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Lisää lopullinen \"muuten\" lohko \"jos\" lohkoon.",
+	"IOS_CANCEL": "Peruuta",
 	"IOS_ERROR": "Virhe",
 	"IOS_VARIABLES_ADD_VARIABLE": "+ Lisää muuttuja",
 	"IOS_VARIABLES_ADD_BUTTON": "Lisää",

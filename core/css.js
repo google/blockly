@@ -146,7 +146,7 @@ Blockly.Css.CONTENT = [
     'top: 0;',
     'left: 0;',
   '}',
-  /* Added as a separate rule with mulitple classes to make it more specific
+  /* Added as a separate rule with multiple classes to make it more specific
      than a bootstrap rule that selects svg:root. See issue #1275 for context.
   */
   '.blocklyWsDragSurface.blocklyOverflowVisible {',

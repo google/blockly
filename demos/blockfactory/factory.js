@@ -37,7 +37,6 @@ goog.provide('BlockFactory');
 goog.require('FactoryUtils');
 goog.require('StandardCategories');
 
-
 /**
  * Workspace for user to build block.
  * @type {Blockly.Workspace}
@@ -52,13 +51,31 @@ BlockFactory.previewWorkspace = null;
 
 /**
  * Name of block if not named.
+ * @type string
  */
 BlockFactory.UNNAMED = 'unnamed';
 
 /**
  * Existing direction ('ltr' vs 'rtl') of preview.
+ * @type string
  */
 BlockFactory.oldDir = null;
+
+/**
+ * Flag to signal that an update came from a manual update to the JSON or JavaScript.
+ * definition manually.
+ * @type boolean
+ */
+// TODO: Replace global state with parameter passed to functions.
+BlockFactory.updateBlocksFlag = false;
+
+/**
+ * Delayed flag to avoid infinite update after updating the JSON or JavaScript.
+ * definition manually.
+ * @type boolean
+ */
+// TODO: Replace global state with parameter passed to functions.
+BlockFactory.updateBlocksFlagDelayed = false;
 
 /*
  * The starting XML for the Block Factory main workspace. Contains the
@@ -85,7 +102,8 @@ BlockFactory.formatChange = function() {
   var mask = document.getElementById('blocklyMask');
   var languagePre = document.getElementById('languagePre');
   var languageTA = document.getElementById('languageTA');
-  if (document.getElementById('format').value == 'Manual') {
+  if (document.getElementById('format').value == 'Manual-JSON' ||
+      document.getElementById('format').value == 'Manual-JS') {
     Blockly.hideChaff();
     mask.style.display = 'block';
     languagePre.style.display = 'none';
@@ -98,6 +116,9 @@ BlockFactory.formatChange = function() {
     mask.style.display = 'none';
     languageTA.style.display = 'none';
     languagePre.style.display = 'block';
+    var code = languagePre.textContent.trim();
+    languageTA.value = code;
+
     BlockFactory.updateLanguage();
   }
   BlockFactory.disableEnableLink();
@@ -115,10 +136,26 @@ BlockFactory.updateLanguage = function() {
   if (!blockType) {
     blockType = BlockFactory.UNNAMED;
   }
-  var format = document.getElementById('format').value;
-  var code = FactoryUtils.getBlockDefinition(blockType, rootBlock, format,
-      BlockFactory.mainWorkspace);
-  FactoryUtils.injectCode(code, 'languagePre');
+
+  if (!BlockFactory.updateBlocksFlag) {
+    var format = document.getElementById('format').value;
+    if (format == 'Manual-JSON') {
+      format = 'JSON';
+    } else if (format == 'Manual-JS') {
+      format = 'JavaScript';
+    }
+
+    var code = FactoryUtils.getBlockDefinition(blockType, rootBlock, format,
+        BlockFactory.mainWorkspace);
+    FactoryUtils.injectCode(code, 'languagePre');
+    if (!BlockFactory.updateBlocksFlagDelayed) {
+      var languagePre = document.getElementById('languagePre');
+      var languageTA = document.getElementById('languageTA');
+      code = languagePre.textContent.trim();
+      languageTA.value = code;
+    }
+  }
+
   BlockFactory.updatePreview();
 };
 
@@ -151,20 +188,8 @@ BlockFactory.updatePreview = function() {
   }
   BlockFactory.previewWorkspace.clear();
 
-  // Fetch the code and determine its format (JSON or JavaScript).
-  var format = document.getElementById('format').value;
-  if (format == 'Manual') {
-    var code = document.getElementById('languageTA').value;
-    // If the code is JSON, it will parse, otherwise treat as JS.
-    try {
-      JSON.parse(code);
-      format = 'JSON';
-    } catch (e) {
-      format = 'JavaScript';
-    }
-  } else {
-    var code = document.getElementById('languagePre').textContent;
-  }
+  var format = BlockFactory.getBlockDefinitionFormat();
+  var code = document.getElementById('languageTA').value;
   if (!code.trim()) {
     // Nothing to render.  Happens while cloud storage is loading.
     return;
@@ -188,9 +213,13 @@ BlockFactory.updatePreview = function() {
         }
       };
     } else if (format == 'JavaScript') {
-      eval(code);
-    } else {
-      throw 'Unknown format: ' + format;
+      try {
+        eval(code);
+      } catch (e) {
+        // TODO: Display error in the UI
+        console.error("Error while evaluating JavaScript formatted block definition", e);
+        return;
+      }
     }
 
     // Look for a block on Blockly.Blocks that does not match the backup.
@@ -232,11 +261,35 @@ BlockFactory.updatePreview = function() {
     } else {
       rootBlock.setWarningText(null);
     }
-
+  } catch(err) {
+    // TODO: Show error on the UI
+    console.log(err);
+    BlockFactory.updateBlocksFlag = false
+    BlockFactory.updateBlocksFlagDelayed = false
   } finally {
     Blockly.Blocks = backupBlocks;
   }
 };
+
+/**
+ * Gets the format from the Block Definitions' format selector/drop-down.
+ * @return Either 'JavaScript' or 'JSON'.
+ * @throws If selector value is not recognized.
+ */
+BlockFactory.getBlockDefinitionFormat = function() {
+  switch (document.getElementById('format').value) {
+    case 'JSON':
+    case 'Manual-JSON':
+      return 'JSON';
+
+    case 'JavaScript':
+    case 'Manual-JS':
+      return 'JavaScript';
+
+    default:
+      throw 'Unknown format: ' + format;
+  }
+}
 
 /**
  * Disable link and save buttons if the format is 'Manual', enable otherwise.
@@ -245,7 +298,7 @@ BlockFactory.disableEnableLink = function() {
   var linkButton = document.getElementById('linkButton');
   var saveBlockButton = document.getElementById('localSaveButton');
   var saveToLibButton = document.getElementById('saveToBlockLibraryButton');
-  var disabled = document.getElementById('format').value == 'Manual';
+  var disabled = document.getElementById('format').value.substr(0, 6) == 'Manual';
   linkButton.disabled = disabled;
   saveBlockButton.disabled = disabled;
   saveToLibButton.disabled = disabled;
@@ -265,12 +318,25 @@ BlockFactory.showStarterBlock = function() {
  */
 BlockFactory.isStarterBlock = function() {
   var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
-  // The starter block does not have blocks nested into the factory_base block.
-  return !(rootBlock.getChildren().length > 0 ||
+  return rootBlock && !(
+      // The starter block does not have blocks nested into the factory_base block.
+      rootBlock.getChildren().length > 0 ||
       // The starter block's name is the default, 'block_type'.
       rootBlock.getFieldValue('NAME').trim().toLowerCase() != 'block_type' ||
       // The starter block has no connections.
       rootBlock.getFieldValue('CONNECTIONS') != 'NONE' ||
       // The starter block has automatic inputs.
-      rootBlock.getFieldValue('INLINE') != 'AUTO');
+      rootBlock.getFieldValue('INLINE') != 'AUTO'
+      );
 };
+
+/**
+ * Updates blocks from the manually edited js or json from their text area.
+ */
+BlockFactory.manualEdit = function() {
+  // TODO(#1267): Replace these global state flags with parameters passed to
+  //              the right functions.
+  BlockFactory.updateBlocksFlag = true;
+  BlockFactory.updateBlocksFlagDelayed = true;
+  BlockFactory.updateLanguage();
+}

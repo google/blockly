@@ -268,12 +268,10 @@ BlockDefinitionExtractor.parseInputs_ = function(block) {
   for (var i = 0; i < block.inputList.length; i++) {
     var input = block.inputList[i];
     var align = 'LEFT'; // Left alignment is the default.
-    if (input.align || input.align === 0) {
-      if (input.align === Blockly.ALIGN_CENTRE) {
-        align = 'CENTRE';
-      } else if (input.align === Blockly.ALIGN_RIGHT) {
-        align = 'RIGHT';
-      }
+    if (input.align === Blockly.ALIGN_CENTRE) {
+      align = 'CENTRE';
+    } else if (input.align === Blockly.ALIGN_RIGHT) {
+      align = 'RIGHT';
     }
 
     var inputDefElement = BlockDefinitionExtractor.input_(input, align);
@@ -366,14 +364,14 @@ BlockDefinitionExtractor.buildFields_ = function(fieldRow) {
  */
 BlockDefinitionExtractor.buildFieldElement_ = function(field) {
   if (field instanceof Blockly.FieldLabel) {
-    return BlockDefinitionExtractor.buildFieldLabel(field.text_);
+    return BlockDefinitionExtractor.buildFieldLabel_(field.text_);
   } else if (field instanceof Blockly.FieldTextInput) {
-     return BlockDefinitionExtractor.buildFieldInput(field.name, field.text_);
+     return BlockDefinitionExtractor.buildFieldInput_(field.name, field.text_);
   } else if (field instanceof Blockly.FieldNumber) {
-    return BlockDefinitionExtractor.buildFieldNumber(
+    return BlockDefinitionExtractor.buildFieldNumber_(
         field.name, field.text_, field.min_, field.max_, field.presicion_);
   } else if (field instanceof Blockly.FieldAngle) {
-    return BlockDefinitionExtractor.buildFieldAngle(field.name, field.text_);
+    return BlockDefinitionExtractor.buildFieldAngle_(field.name, field.text_);
   } else if (field instanceof Blockly.FieldCheckbox) {
     return BlockDefinitionExtractor.buildFieldCheckbox_(field.name, field.state_);
   } else if (field instanceof Blockly.FieldColour) {
@@ -398,7 +396,7 @@ BlockDefinitionExtractor.buildFieldElement_ = function(field) {
  * @return {Element} The XML for FieldLabel definition.
  * @private
  */
-BlockDefinitionExtractor.buildFieldLabel = function(text) {
+BlockDefinitionExtractor.buildFieldLabel_ = function(text) {
   var fieldBlock =
       BlockDefinitionExtractor.newDomElement_('block', {type: 'field_static'});
   fieldBlock.append(
@@ -414,7 +412,7 @@ BlockDefinitionExtractor.buildFieldLabel = function(text) {
  * @return {Element} The XML for FieldInput definition.
  * @private
  */
-BlockDefinitionExtractor.buildFieldInput = function(fieldName, text) {
+BlockDefinitionExtractor.buildFieldInput_ = function(fieldName, text) {
   var fieldInput =
       BlockDefinitionExtractor.newDomElement_('block', {type: 'field_input'});
   fieldInput.append(
@@ -435,7 +433,7 @@ BlockDefinitionExtractor.buildFieldInput = function(fieldName, text) {
  * @return {Element} The XML for FieldNumber definition.
  * @private
  */
-BlockDefinitionExtractor.buildFieldNumber =
+BlockDefinitionExtractor.buildFieldNumber_ =
   function(fieldName, value, min, max, precision)
 {
   var fieldNumber =
@@ -461,7 +459,7 @@ BlockDefinitionExtractor.buildFieldNumber =
  * @return {Element} The XML for FieldAngle definition.
  * @private
  */
-BlockDefinitionExtractor.buildFieldAngle = function(angle, fieldName) {
+BlockDefinitionExtractor.buildFieldAngle_ = function(angle, fieldName) {
   var fieldAngle =
       BlockDefinitionExtractor.newDomElement_('block', {type: 'field_angle'});
   fieldAngle.append(BlockDefinitionExtractor.newDomElement_(

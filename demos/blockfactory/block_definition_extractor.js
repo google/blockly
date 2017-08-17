@@ -4,18 +4,6 @@
  */
 
 /**
- * @fileoverview Block element construction functions.
- * @author JC-Orozco (Juan Carlos Orozco), AnmAtAnm (Andrew n marshall)
- */
-'use strict';
-
-/**
- * Namespace for BlockDefinitionExtractor.
- */
-goog.provide('BlockDefinitionExtractor');
-
-
-/**
  * @fileoverview
  * The BlockDefinitionExtractor is a class that generates a workspace DOM
  * suitable for the BlockFactory's block editor, derived from an example
@@ -29,7 +17,16 @@ goog.provide('BlockDefinitionExtractor');
  *
  * The <code>exampleBlocklyBlock</code> is usually the block loaded into the
  * preview workspace after manually entering the block definition.
+ *
+ * @author JC-Orozco (Juan Carlos Orozco), AnmAtAnm (Andrew n marshall)
  */
+'use strict';
+
+/**
+ * Namespace for BlockDefinitionExtractor.
+ */
+goog.provide('BlockDefinitionExtractor');
+
 
 /**
  * Class to contain all functions needed to extract block definition from
@@ -44,35 +41,13 @@ BlockDefinitionExtractor = BlockDefinitionExtractor || Object.create(null);
  *
  * @param {!Blockly.Block} block The reference block from which the definition
  *     will be extracted.
- * @return {Element} Returns the root workspace DOM <xml> for the block editor
+ * @return {!Element} Returns the root workspace DOM <xml> for the block editor
  *     workspace.
  */
 BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
   var workspaceXml = goog.dom.createDom('xml');
-  var inline = 'AUTO'; // When block.inputsInlineDefault === undefined
-  if (block.inputsInlineDefault === true) {
-    inline = 'INT';
-  } else if (block.inputsInlineDefault === false) {
-    inline = 'EXT';
-  }
-  var connections = 'NONE';
-  if (block.outputConnection) {
-    connections = 'LEFT';
-  } else {
-    if (block.previousConnection && block.nextConnection) {
-      connections = 'BOTH';
-    } else {
-      if (block.previousConnection) {
-        connections = 'TOP';
-      }
-      if (block.nextConnection) {
-        connections = 'BOTTOM';
-      }
-    }
-  }
-  var factoryBaseXml = BlockDefinitionExtractor.factoryBase_(
-      block, connections, block.type, inline);
-  workspaceXml.append(factoryBaseXml);
+  workspaceXml.append(
+      BlockDefinitionExtractor.factoryBase_(block, block.type));
 
   return workspaceXml;
 };
@@ -84,7 +59,8 @@ BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
  * @param {string} name New element tag name.
  * @param {Map<String,String>} opt_attrs Optional list of attributes.
  * @param {string?} opt_text Optional inner text.
- * @return {Element} The newly created element.
+ * @return {!Element} The newly created element.
+ * @private
  */
 BlockDefinitionExtractor.newDomElement_ = function(name, opt_attrs, opt_text) {
   // Avoid createDom(..)'s attributes argument for being too HTML specific.
@@ -105,7 +81,7 @@ BlockDefinitionExtractor.newDomElement_ = function(name, opt_attrs, opt_text) {
  * requested type.
  *
  * @param {string} type Type name of desired connection constraint.
- * @return {Element} The <block> representing the the constraint type.
+ * @return {!Element} The <block> representing the the constraint type.
  * @private
  */
 BlockDefinitionExtractor.buildBlockForType_ = function(type) {
@@ -129,9 +105,9 @@ BlockDefinitionExtractor.buildBlockForType_ = function(type) {
  * Constructs a <block> element representing the type constraints of the
  * provided connection.
  *
- * @param {Blockly.Connection} connection The connection with desired
+ * @param {!Blockly.Connection} connection The connection with desired
  *     connection constraints.
- * @return {Element} The root <block> element of the constraint definition.
+ * @return {!Element} The root <block> element of the constraint definition.
  * @private
  */
 BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_ =
@@ -154,65 +130,134 @@ BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_ =
 };
 
 /**
- * Constructs a sequence <block> elements representing the field definition.
- * @param {Array<Blockly.Field>} fieldRow A list of fields in a Blockly.Input.
- * @return {Element} The fist <block> element of the sequence
- *     (and the root of the constructed DOM).
+ * Creates the root "factory_base" <block> element for the block definition.
+ *
+ * @param {!Blockly.Block} block The example block from which to extract the
+ *     definition.
+ * @param {string} name Block name.
+ * @return {!Element} The factory_base block element.
  * @private
  */
-BlockDefinitionExtractor.parseFields_ = function(fieldRow) {
-  var firstFieldDefElement = null;
-  var lastFieldDefElement = null;
+BlockDefinitionExtractor.factoryBase_ = function(block, name) {
+  BlockDefinitionExtractor.src = {root: block, current: block};
+  var factoryBaseEl =
+      BlockDefinitionExtractor.newDomElement_('block', {type: 'factory_base'});
+  factoryBaseEl.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'NAME'}, name));
+  factoryBaseEl.append(BlockDefinitionExtractor.buildInlineField_(block));
 
-  for (var i = 0; i < fieldRow.length; i++) {
-    var field = fieldRow[i];
-    var fieldDefElement = null;
-    if (field instanceof Blockly.FieldLabel) {
-      fieldDefElement = BlockDefinitionExtractor.fieldLabel_(field.text_);
-    } else if (field instanceof Blockly.FieldTextInput) {
-      fieldDefElement =
-          BlockDefinitionExtractor.fieldInput_(field.name, field.text_);
-    } else if (field instanceof Blockly.FieldNumber) {
-      fieldDefElement = BlockDefinitionExtractor.fieldNumber_(
-          field.name, field.text_, field.min_, field.max_, field.presicion_);
-    } else if (field instanceof Blockly.FieldAngle) {
-      fieldDefElement =
-          BlockDefinitionExtractor.fieldAngle_(field.name, field.text_);
-    } else if (field instanceof Blockly.FieldCheckbox) {
-      fieldDefElement =
-          BlockDefinitionExtractor.fieldCheckbox_(field.name, field.state_);
-    } else if (field instanceof Blockly.FieldColour) {
-      fieldDefElement =
-          BlockDefinitionExtractor.fieldColour_(field.name, field.colour_);
-    } else if (field instanceof Blockly.FieldImage) {
-      fieldDefElement = BlockDefinitionExtractor.fieldImage_(
-          field.src_, field.width_, field.height_, field.text_);
-    } else if (field instanceof Blockly.FieldVariable) {
-      // FieldVariable must be before FieldDropdown.
-      fieldDefElement =
-          BlockDefinitionExtractor.fieldVariable_(field.name, field.text_);
-    } else if (field instanceof Blockly.FieldDropdown) {
-      fieldDefElement = BlockDefinitionExtractor.fieldDropdown_(field);
-    }
+  BlockDefinitionExtractor.buildConnections_(block, factoryBaseEl);
 
-    if (lastFieldDefElement) {
-      var next = BlockDefinitionExtractor.newDomElement_('next');
-      next.append(fieldDefElement);
-      lastFieldDefElement.append(next);
-    } else {
-      firstFieldDefElement = fieldDefElement;
+  var inputsStatement = BlockDefinitionExtractor.newDomElement_(
+      'statement', {name: 'INPUTS'});
+  inputsStatement.append(BlockDefinitionExtractor.parseInputs_(block));
+  factoryBaseEl.append(inputsStatement);
+
+  var tooltipValue =
+      BlockDefinitionExtractor.newDomElement_('value', {name: 'TOOLTIP'});
+  tooltipValue.append(BlockDefinitionExtractor.text_(block.tooltip));
+  factoryBaseEl.append(tooltipValue);
+
+  var helpUrlValue =
+      BlockDefinitionExtractor.newDomElement_('value', {name: 'HELPURL'});
+  helpUrlValue.append(BlockDefinitionExtractor.text_(block.helpUrl));
+  factoryBaseEl.append(helpUrlValue);
+
+  // Convert colour_ to hue value 0-360 degrees
+  // TODO(#1247): Solve off-by-one errors.
+  // TODO: Deal with colors that don't map to standard hues. (Needs improved
+  //     block definitions.)
+  var colour_hue = Math.floor(
+      goog.color.hexToHsv(block.colour_)[0]);  // Off by one... sometimes
+  var colourBlock = BlockDefinitionExtractor.colourBlockFromHue_(colour_hue);
+  var colourInputValue =
+      BlockDefinitionExtractor.newDomElement_('value', {name: 'COLOUR'});
+  colourInputValue.append(colourBlock);
+  factoryBaseEl.append(colourInputValue);
+  return factoryBaseEl;
+};
+
+/**
+ * Generates the appropriate <field> element for the block definition's
+ * CONNECTIONS field, which determines the next, previous, and output
+ * connections.
+ *
+ * @param {!Blockly.Block} block The example block from which to extract the
+ *     definition.
+ * @param {!Element} factoryBaseEl The root of the block definition.
+ * @private
+ */
+BlockDefinitionExtractor.buildConnections_ = function(block, factoryBaseEl) {
+  var connections = 'NONE';
+  if (block.outputConnection) {
+    connections = 'LEFT';
+  } else {
+    if (block.previousConnection) {
+      if (block.nextConnection) {
+        connections = 'BOTH';
+      } else {
+        connections = 'TOP';
+      }
+    } else if (block.nextConnection) {
+      connections = 'BOTTOM';
     }
-    lastFieldDefElement = fieldDefElement;
   }
+  factoryBaseEl.append(BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'CONNECTIONS'}, connections));
 
-  return firstFieldDefElement;
+  if (connections === 'LEFT') {
+    var inputValue =
+        BlockDefinitionExtractor.newDomElement_('value', {name: 'OUTPUTTYPE'});
+    inputValue.append(
+        BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_(
+            block.outputConnection));
+    factoryBaseEl.append(inputValue);
+  } else {
+    if (connections === 'UP' || connections === 'BOTH') {
+      var inputValue =
+          BlockDefinitionExtractor.newDomElement_('value', {name: 'TOPTYPE'});
+      inputValue.append(
+          BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_(
+              block.previousConnection));
+      factoryBaseEl.append(inputValue);
+    }
+    if (connections === 'DOWN' || connections === 'BOTH') {
+      var inputValue = BlockDefinitionExtractor.newDomElement_(
+          'value', {name: 'BOTTOMTYPE'});
+      inputValue.append(
+          BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_(
+              block.nextConnection));
+      factoryBaseEl.append(inputValue);
+    }
+  }
+};
+
+/**
+ * Generates the appropriate <field> element for the block definition's INLINE
+ * field.
+ *
+ * @param {!Blockly.Block} block The example block from which to extract the
+ *     definition.
+ * @return {Element} The INLINE <field> with value 'AUTO', 'INT' (internal) or
+ *     'EXT' (external).
+ * @private
+ */
+BlockDefinitionExtractor.buildInlineField_ = function(block) {
+  var inline = 'AUTO'; // When block.inputsInlineDefault === undefined
+  if (block.inputsInlineDefault === true) {
+    inline = 'INT';
+  } else if (block.inputsInlineDefault === false) {
+    inline = 'EXT';
+  }
+  return BlockDefinitionExtractor.newDomElement_(
+      'field', {name: 'INLINE'}, inline);
 };
 
 /**
  * Constructs a sequence of <block> elements that represent the inputs of the
  * provided block.
  *
- * @param {Blockly.Block} block The source block to copy the inputs of.
+ * @param {!Blockly.Block} block The source block to copy the inputs of.
  * @return {Element} The fist <block> element of the sequence
  *     (and the root of the constructed DOM).
  * @private
@@ -245,102 +290,22 @@ BlockDefinitionExtractor.parseInputs_ = function(block) {
 };
 
 /**
- * Creates the root "factory_base" <block> element for the block definition.
- *
- * @param {Blockly.Block} block The example block for the extracted style.
- * @param {string} connections Define block connections. Options: NONE, LEFT,
- *     UP, DOWN, BOTH.
- * @param {string} name Block name.
- * @param {boolean} inline Block layout inline or not.
- * @return {Element} The factory_base block element.
- * @private
- */
-BlockDefinitionExtractor.factoryBase_ =
-  function(block, connections, name, inline)
-{
-  BlockDefinitionExtractor.src = {root: block, current: block};
-  var factoryBaseEl =
-      BlockDefinitionExtractor.newDomElement_('block', {type: 'factory_base'});
-  factoryBaseEl.append(BlockDefinitionExtractor.newDomElement_(
-      'mutation', {connections: connections}));
-  factoryBaseEl.append(BlockDefinitionExtractor.newDomElement_(
-      'field', {name: 'NAME'}, name));
-  factoryBaseEl.append(BlockDefinitionExtractor.newDomElement_(
-      'field', {name: 'INLINE'}, inline));
-  factoryBaseEl.append(BlockDefinitionExtractor.newDomElement_(
-      'field', {name: 'CONNECTIONS'}, connections));
-
-  var inputsStatement = BlockDefinitionExtractor.newDomElement_(
-      'statement', {name: 'INPUTS'});
-  inputsStatement.append(BlockDefinitionExtractor.parseInputs_(block));
-  factoryBaseEl.append(inputsStatement);
-
-  var tooltipValue =
-      BlockDefinitionExtractor.newDomElement_('value', {name: 'TOOLTIP'});
-  tooltipValue.append(BlockDefinitionExtractor.text_(block.tooltip));
-  factoryBaseEl.append(tooltipValue);
-
-  var helpUrlValue =
-      BlockDefinitionExtractor.newDomElement_('value', {name: 'HELPURL'});
-  helpUrlValue.append(BlockDefinitionExtractor.text_(block.helpUrl));
-  factoryBaseEl.append(helpUrlValue);
-
-  if (connections === 'LEFT') {
-    var inputValue =
-        BlockDefinitionExtractor.newDomElement_('value', {name: 'OUTPUTTYPE'});
-    inputValue.append(
-        BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_(
-            block.outputConnection));
-    factoryBaseEl.append(inputValue);
-  } else {
-    if (connections === 'UP' || connections === 'BOTH') {
-      var inputValue =
-          BlockDefinitionExtractor.newDomElement_('value', {name: 'TOPTYPE'});
-      inputValue.append(
-          BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_(
-              block.previousConnection));
-      factoryBaseEl.append(inputValue);
-    }
-    if (connections === 'DOWN' || connections === 'BOTH') {
-      var inputValue = BlockDefinitionExtractor.newDomElement_(
-          'value', {name: 'BOTTOMTYPE'});
-      inputValue.append(
-          BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_(
-              block.nextConnection));
-      factoryBaseEl.append(inputValue);
-    }
-  }
-
-  // Convert colour_ to hue value 0-360 degrees
-  // TODO(#1247): Solve off-by-one errors.
-  // TODO: Deal with colors that don't map to standard hues. (Needs improved
-  //     block definitions.)
-  var colour_hue = Math.floor(
-      goog.color.hexToHsv(block.colour_)[0]);  // Off by one... sometimes
-  var colourBlock = BlockDefinitionExtractor.colourBlockFromHue_(colour_hue);
-  var colourInputValue =
-      BlockDefinitionExtractor.newDomElement_('value', {name: 'COLOUR'});
-  colourInputValue.append(colourBlock);
-  factoryBaseEl.append(colourInputValue);
-  return factoryBaseEl;
-};
-
-/**
  * Creates a <block> element representing a block input.
  *
- * @param {Blockly.Input} input The input object.
+ * @param {!Blockly.Input} input The input object.
  * @param {string} align Can be left, right or centre.
- * @return {Element} The <block> element that defines the input.
+ * @return {!Element} The <block> element that defines the input.
  * @private
  */
 BlockDefinitionExtractor.input_ = function(input, align) {
-  var inputTypeAttr = (input.type === Blockly.INPUT_VALUE) ? 'input_value' :
-      (input.type === Blockly.INPUT_STATEMENT) ? 'input_statement' :
-      /* input.type === Blockly.INPUT_DUMMY */ 'input_dummy';
+  var isDummy = (input.type === Blockly.DUMMY_INPUT);
+  var inputTypeAttr =
+      isDummy ? 'input_dummy' :
+      (input.type === Blockly.INPUT_VALUE) ? 'input_value' : 'input_statement';
   var inputDefBlock =
       BlockDefinitionExtractor.newDomElement_('block', {type: inputTypeAttr});
 
-  if (input.type != Blockly.DUMMY_INPUT) {
+  if (!isDummy) {
     inputDefBlock.append(BlockDefinitionExtractor.newDomElement_(
         'field', {name: 'INPUTNAME'}, input.name));
   }
@@ -349,11 +314,11 @@ BlockDefinitionExtractor.input_ = function(input, align) {
 
   var fieldsDef = BlockDefinitionExtractor.newDomElement_(
       'statement', {name: 'FIELDS'});
-  var fieldsXml = BlockDefinitionExtractor.parseFields_(input.fieldRow);
+  var fieldsXml = BlockDefinitionExtractor.buildFields_(input.fieldRow);
   fieldsDef.append(fieldsXml);
   inputDefBlock.append(fieldsDef);
 
-  if (input.type != Blockly.DUMMY_INPUT) {
+  if (!isDummy) {
     var typeValue = BlockDefinitionExtractor.newDomElement_(
         'value', {name: 'TYPE'});
     typeValue.append(
@@ -366,12 +331,74 @@ BlockDefinitionExtractor.input_ = function(input, align) {
 };
 
 /**
+ * Constructs a sequence <block> elements representing the field definition.
+ * @param {Array<Blockly.Field>} fieldRow A list of fields in a Blockly.Input.
+ * @return {Element} The fist <block> element of the sequence
+ *     (and the root of the constructed DOM).
+ * @private
+ */
+BlockDefinitionExtractor.buildFields_ = function(fieldRow) {
+  var firstFieldDefElement = null;
+  var lastFieldDefElement = null;
+
+  for (var i = 0; i < fieldRow.length; i++) {
+    var field = fieldRow[i];
+    var fieldDefElement = BlockDefinitionExtractor.buildFieldElement_(field);
+
+    if (lastFieldDefElement) {
+      var next = BlockDefinitionExtractor.newDomElement_('next');
+      next.append(fieldDefElement);
+      lastFieldDefElement.append(next);
+    } else {
+      firstFieldDefElement = fieldDefElement;
+    }
+    lastFieldDefElement = fieldDefElement;
+  }
+
+  return firstFieldDefElement;
+};
+
+/**
+ * Constructs a <field> element that describes the provided Blockly.Field.
+ * @param {!Blockly.Field} field The field from which the definition is copied.
+ * @param {!Element} A <field> for the Field definition.
+ * @private
+ */
+BlockDefinitionExtractor.buildFieldElement_ = function(field) {
+  if (field instanceof Blockly.FieldLabel) {
+    return BlockDefinitionExtractor.buildFieldLabel(field.text_);
+  } else if (field instanceof Blockly.FieldTextInput) {
+     return BlockDefinitionExtractor.buildFieldInput(field.name, field.text_);
+  } else if (field instanceof Blockly.FieldNumber) {
+    return BlockDefinitionExtractor.buildFieldNumber(
+        field.name, field.text_, field.min_, field.max_, field.presicion_);
+  } else if (field instanceof Blockly.FieldAngle) {
+    return BlockDefinitionExtractor.buildFieldAngle(field.name, field.text_);
+  } else if (field instanceof Blockly.FieldCheckbox) {
+    return BlockDefinitionExtractor.buildFieldCheckbox_(field.name, field.state_);
+  } else if (field instanceof Blockly.FieldColour) {
+    return BlockDefinitionExtractor.buildFieldColour_(field.name, field.colour_);
+  } else if (field instanceof Blockly.FieldImage) {
+    return BlockDefinitionExtractor.buildFieldImage_(
+        field.src_, field.width_, field.height_, field.text_);
+  } else if (field instanceof Blockly.FieldVariable) {
+    // FieldVariable must be before FieldDropdown, because FieldVariable is a
+    // subclass.
+    return BlockDefinitionExtractor.buildFieldVariable_(field.name, field.text_);
+  } else if (field instanceof Blockly.FieldDropdown) {
+    return BlockDefinitionExtractor.buildFieldDropdown_(field);
+  }
+  throw Error('Unrecognized field class: ' + field.constructor.name);
+};
+
+
+/**
  * Creates a <block> element representing a FieldLabel definition.
  * @param {string} text
  * @return {Element} The XML for FieldLabel definition.
  * @private
  */
-BlockDefinitionExtractor.fieldLabel_ = function(text) {
+BlockDefinitionExtractor.buildFieldLabel = function(text) {
   var fieldBlock =
       BlockDefinitionExtractor.newDomElement_('block', {type: 'field_static'});
   fieldBlock.append(
@@ -387,7 +414,7 @@ BlockDefinitionExtractor.fieldLabel_ = function(text) {
  * @return {Element} The XML for FieldInput definition.
  * @private
  */
-BlockDefinitionExtractor.fieldInput_ = function(fieldName, text) {
+BlockDefinitionExtractor.buildFieldInput = function(fieldName, text) {
   var fieldInput =
       BlockDefinitionExtractor.newDomElement_('block', {type: 'field_input'});
   fieldInput.append(
@@ -408,7 +435,7 @@ BlockDefinitionExtractor.fieldInput_ = function(fieldName, text) {
  * @return {Element} The XML for FieldNumber definition.
  * @private
  */
-BlockDefinitionExtractor.fieldNumber_ =
+BlockDefinitionExtractor.buildFieldNumber =
   function(fieldName, value, min, max, precision)
 {
   var fieldNumber =
@@ -434,7 +461,7 @@ BlockDefinitionExtractor.fieldNumber_ =
  * @return {Element} The XML for FieldAngle definition.
  * @private
  */
-BlockDefinitionExtractor.fieldAngle_ = function(angle, fieldName) {
+BlockDefinitionExtractor.buildFieldAngle = function(angle, fieldName) {
   var fieldAngle =
       BlockDefinitionExtractor.newDomElement_('block', {type: 'field_angle'});
   fieldAngle.append(BlockDefinitionExtractor.newDomElement_(
@@ -451,7 +478,7 @@ BlockDefinitionExtractor.fieldAngle_ = function(angle, fieldName) {
  * @return {Element} The <block> element representing a similar FieldDropdown.
  * @private
  */
-BlockDefinitionExtractor.fieldDropdown_ = function(dropdown) {
+BlockDefinitionExtractor.buildFieldDropdown_ = function(dropdown) {
   var menuGenerator = dropdown.menuGenerator_;
   if (typeof menuGenerator === 'function') {
     var options = menuGenerator();
@@ -505,7 +532,7 @@ BlockDefinitionExtractor.fieldDropdown_ = function(dropdown) {
  * @return {Element} The XML for FieldCheckbox definition.
  * @private
  */
-BlockDefinitionExtractor.fieldCheckbox_ =
+BlockDefinitionExtractor.buildFieldCheckbox_ =
   function(fieldName, checked)
 {
   var fieldCheckbox = BlockDefinitionExtractor.newDomElement_(
@@ -525,7 +552,7 @@ BlockDefinitionExtractor.fieldCheckbox_ =
  * @return {Element} The XML for FieldColour definition.
  * @private
  */
-BlockDefinitionExtractor.fieldColour_ =
+BlockDefinitionExtractor.buildFieldColour_ =
     function(fieldName, colour)
 {
   var fieldColour = BlockDefinitionExtractor.newDomElement_(
@@ -545,7 +572,7 @@ BlockDefinitionExtractor.fieldColour_ =
  * @return {Element} The <block> element representing the FieldVariable.
  * @private
  */
-BlockDefinitionExtractor.fieldVariable_ = function(fieldName, varName) {
+BlockDefinitionExtractor.buildFieldVariable_ = function(fieldName, varName) {
   var fieldVar = BlockDefinitionExtractor.newDomElement_(
       'block', {type: 'field_variable'});
   fieldVar.append(BlockDefinitionExtractor.newDomElement_(
@@ -564,7 +591,7 @@ BlockDefinitionExtractor.fieldVariable_ = function(fieldName, varName) {
  * @param {string} alt Alterante text to describe image.
  * @private
  */
-BlockDefinitionExtractor.fieldImage_ =
+BlockDefinitionExtractor.buildFieldImage_ =
   function(src, width, height, alt)
 {
   var block1 = BlockDefinitionExtractor.newDomElement_(

@@ -76,7 +76,7 @@ FactoryUtils.cleanBlockType = function(blockType) {
  * Get the generator code for a given block.
  * @param {!Blockly.Block} block Rendered block in preview workspace.
  * @param {string} generatorLanguage 'JavaScript', 'Python', 'PHP', 'Lua',
- *   'Dart'.
+ *     or 'Dart'.
  * @return {string} Generator code for multiple blocks.
  */
 FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
@@ -89,9 +89,9 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
     // TODO(#1267): Remove the global variables and any infinite loops.
     BlockFactory.updateBlocksFlag = false;
     setTimeout(
-        function() { BlockFactory.updateBlocksFlagDelayed = false}, 3000);
+        function() {BlockFactory.updateBlocksFlagDelayed = false;}, 3000);
   }
-  BlockFactory.lastUpdatedBlock = block; // Variable to share the block value
+  BlockFactory.lastUpdatedBlock = block; // Variable to share the block value.
 
   function makeVar(root, name) {
     name = name.toLowerCase().replace(/\W/g, '_');

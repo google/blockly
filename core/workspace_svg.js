@@ -553,7 +553,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
  * @return {Blockly.Flyout} The flyout on this workspace.
  * @package
  */
-Blockly.WorkspaceSvg.prototype.getFlyout_ = function() {
+Blockly.WorkspaceSvg.prototype.getFlyout = function() {
   if (this.flyout_) {
     return this.flyout_;
   }
@@ -770,8 +770,8 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
 
   // Tell the flyout whether its container is visible so it can
   // tell when to hide itself.
-  if (this.getFlyout_()) {
-    this.getFlyout_().setContainerVisible(isVisible);
+  if (this.getFlyout()) {
+    this.getFlyout().setContainerVisible(isVisible);
   }
 
   this.getParentSvg().style.display = isVisible ? 'block' : 'none';

@@ -40,6 +40,7 @@
 	"NEW_VARIABLE": "创建变量...",
 	"NEW_VARIABLE_TITLE": "新变量的名称：",
 	"VARIABLE_ALREADY_EXISTS": "已存在名为“%1”的变量。",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "名叫“%1”的变量已存在，但作为另一个变量类型“%2”存在。",
 	"PROCEDURE_ALREADY_EXISTS": "已存在名为“%1”的步骤。",
 	"DELETE_VARIABLE_CONFIRMATION": "删除“%2”变量的%1用途么？",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "不能删除变量“%1”，因为它是功能“%2”定义的一部分",

@@ -124,55 +124,10 @@ Blockly.FieldDropdown.prototype.init = function() {
  */
 Blockly.FieldDropdown.prototype.showEditor_ = function() {
   Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, null);
-  var thisField = this;
 
-  function callback(e) {
-    var menu = this;
-    var menuItem = e.target;
-    if (menuItem) {
-      thisField.onItemSelected(menu, menuItem);
-    }
-    Blockly.WidgetDiv.hideIfOwner(thisField);
-    Blockly.Events.setGroup(false);
-  }
 
-  var menu = new goog.ui.Menu();
-  menu.setRightToLeft(this.sourceBlock_.RTL);
-  var options = this.getOptions();
-  for (var i = 0; i < options.length; i++) {
-    var content = options[i][0]; // Human-readable text or image.
-    var value = options[i][1];   // Language-neutral value.
-    if (typeof content == 'object') {
-      // An image, not text.
-      var image = new Image(content['width'], content['height']);
-      image.src = content['src'];
-      image.alt = content['alt'] || '';
-      content = image;
-    }
-    var menuItem = new goog.ui.MenuItem(content);
-    menuItem.setRightToLeft(this.sourceBlock_.RTL);
-    menuItem.setValue(value);
-    menuItem.setCheckable(true);
-    menu.addChild(menuItem, true);
-    menuItem.setChecked(value == this.value_);
-  }
-  // Listen for mouse/keyboard events.
-  goog.events.listen(menu, goog.ui.Component.EventType.ACTION, callback);
-  // Listen for touch events (why doesn't Closure handle this already?).
-  function callbackTouchStart(e) {
-    var control = this.getOwnerControl(/** @type {Node} */ (e.target));
-    // Highlight the menu item.
-    control.handleMouseDown(e);
-  }
-  function callbackTouchEnd(e) {
-    var control = this.getOwnerControl(/** @type {Node} */ (e.target));
-    // Activate the menu item.
-    control.performActionInternal(e);
-  }
-  menu.getHandler().listen(menu.getElement(), goog.events.EventType.TOUCHSTART,
-                           callbackTouchStart);
-  menu.getHandler().listen(menu.getElement(), goog.events.EventType.TOUCHEND,
-                           callbackTouchEnd);
+  var menu = this.createMenu_();
+  this.addEventHandlers_(menu);
 
   // Record windowSize and scrollOffset before adding menu.
   var windowSize = goog.dom.getViewportSize();
@@ -214,6 +169,100 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
                              this.sourceBlock_.RTL);
   menu.setAllowAutoFocus(true);
   menuDom.focus();
+};
+
+/**
+ * Add event listeners for actions on the items in the dropdown menu.
+ * @param {!goog.ui.Menu} menu The menu to add listeners to.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.addEventListeners_ = function(menu) {
+  this.addActionListener_(menu);
+  this.addTouchStartListener_(menu);
+  this.addTouchEndListener_(menu);
+};
+
+/**
+ * Add a listener for mouse and keyboard events in the menu and its items.
+ * @param {!goog.ui.Menu} menu The menu to add listeners to.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.addActionListener_ = function(menu) {
+  var thisField = this;
+
+  function callback(e) {
+    var menu = this;
+    var menuItem = e.target;
+    if (menuItem) {
+      thisField.onItemSelected(menu, menuItem);
+    }
+    Blockly.WidgetDiv.hideIfOwner(thisField);
+    Blockly.Events.setGroup(false);
+  }
+  // Listen for mouse/keyboard events.
+  goog.events.listen(menu, goog.ui.Component.EventType.ACTION, callback);
+};
+
+/**
+ * Add a listener for touch start events on menu items.
+ * @param {!goog.ui.Menu} menu The menu to add the listener to.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.addTouchStartListener_ = function(menu) {
+  // Listen for touch events (why doesn't Closure handle this already?).
+  function callback(e) {
+    var control = this.getOwnerControl(/** @type {Node} */ (e.target));
+    // Highlight the menu item.
+    control.handleMouseDown(e);
+  }
+  menu.getHandler().listen(menu.getElement(), goog.events.EventType.TOUCHSTART,
+                           callback);
+};
+
+/**
+ * Add a listener for touch end events on menu items.
+ * @param {!goog.ui.Menu} menu The menu to add the listener to.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.addTouchEndListener_ = function(menu) {
+  // Listen for touch events (why doesn't Closure handle this already?).
+  function callbackTouchEnd(e) {
+    var control = this.getOwnerControl(/** @type {Node} */ (e.target));
+    // Activate the menu item.
+    control.performActionInternal(e);
+  }
+  menu.getHandler().listen(menu.getElement(), goog.events.EventType.TOUCHEND,
+                           callbackTouchEnd);
+};
+
+/**
+ * Create and populate the menu and menu items for this dropdown, based on
+ * the options list.
+ * @return {!goog.ui.Menu} The populated dropdown menu.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.createMenu_ = function() {
+  var menu = new goog.ui.Menu();
+  menu.setRightToLeft(this.sourceBlock_.RTL);
+  var options = this.getOptions();
+  for (var i = 0; i < options.length; i++) {
+    var content = options[i][0]; // Human-readable text or image.
+    var value = options[i][1];   // Language-neutral value.
+    if (typeof content == 'object') {
+      // An image, not text.
+      var image = new Image(content['width'], content['height']);
+      image.src = content['src'];
+      image.alt = content['alt'] || '';
+      content = image;
+    }
+    var menuItem = new goog.ui.MenuItem(content);
+    menuItem.setRightToLeft(this.sourceBlock_.RTL);
+    menuItem.setValue(value);
+    menuItem.setCheckable(true);
+    menu.addChild(menuItem, true);
+    menuItem.setChecked(value == this.value_);
+  }
+  return menu;
 };
 
 /**

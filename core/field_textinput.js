@@ -169,6 +169,16 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
     htmlInput.select();
   }
 
+  this.bindEvents_(htmlInput);
+};
+
+/**
+ * Bind handlers for user input on this field and size changes on the workspace.
+ * @param {!HTMLInputElement} htmlInput The htmlInput created in showEditor, to
+ *     which event handlers will be bound.
+ * @private
+ */
+Blockly.FieldTextInput.prototype.bindEvents_ = function(htmlInput) {
   // Bind to keydown -- trap Enter without IME and Esc to hide.
   htmlInput.onKeyDownWrapper_ =
       Blockly.bindEventWithChecks_(htmlInput, 'keydown', this,
@@ -183,6 +193,19 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
       this.onHtmlInputChange_);
   htmlInput.onWorkspaceChangeWrapper_ = this.resizeEditor_.bind(this);
   this.workspace_.addChangeListener(htmlInput.onWorkspaceChangeWrapper_);
+};
+
+/**
+ * Unbind handlers for user input and workspace size changes.
+ * @param {!HTMLInputElement} htmlInput The html for this text input.
+ * @private
+ */
+Blockly.FieldTextInput.prototype.unbindEvents_ = function(htmlInput) {
+  Blockly.unbindEvent_(htmlInput.onKeyDownWrapper_);
+  Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);
+  Blockly.unbindEvent_(htmlInput.onKeyPressWrapper_);
+  this.workspace_.removeChangeListener(
+      htmlInput.onWorkspaceChangeWrapper_);
 };
 
 /**
@@ -305,11 +328,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     }
     thisField.setText(text);
     thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
-    Blockly.unbindEvent_(htmlInput.onKeyDownWrapper_);
-    Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);
-    Blockly.unbindEvent_(htmlInput.onKeyPressWrapper_);
-    thisField.workspace_.removeChangeListener(
-        htmlInput.onWorkspaceChangeWrapper_);
+    thisField.unbindEvents_(htmlInput);
     Blockly.FieldTextInput.htmlInput_ = null;
     Blockly.Events.setGroup(false);
     // Delete style properties.

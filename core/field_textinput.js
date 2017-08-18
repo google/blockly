@@ -56,9 +56,18 @@ goog.inherits(Blockly.FieldTextInput, Blockly.Field);
 Blockly.FieldTextInput.FONTSIZE = 11;
 
 /**
+ * The HTML input element for the user to type, or null if no FieldTextInput
+ * editor is currently open.
+ * @type {HTMLInputElement}
+ * @private
+ */
+Blockly.FieldTextInput.htmlInput_ = null;
+
+/**
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
 Blockly.FieldTextInput.prototype.CURSOR = 'text';
+
 
 /**
  * Allow browser to spellcheck this field.
@@ -156,7 +165,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
       (Blockly.FieldTextInput.FONTSIZE * this.workspace_.scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
-  /** @type {!HTMLInputElement} */
+
   Blockly.FieldTextInput.htmlInput_ = htmlInput;
   div.appendChild(htmlInput);
 
@@ -328,9 +337,11 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     }
     thisField.setText(text);
     thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
+
     thisField.unbindEvents_(htmlInput);
     Blockly.FieldTextInput.htmlInput_ = null;
     Blockly.Events.setGroup(false);
+
     // Delete style properties.
     var style = Blockly.WidgetDiv.DIV.style;
     style.width = 'auto';

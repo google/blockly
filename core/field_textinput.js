@@ -68,6 +68,7 @@ Blockly.FieldTextInput.htmlInput_ = null;
  */
 Blockly.FieldTextInput.prototype.CURSOR = 'text';
 
+
 /**
  * Allow browser to spellcheck this field.
  * @private

@@ -371,46 +371,54 @@ Blockly.FieldDropdown.prototype.render_ = function() {
   this.imageElement_ = null;
 
   if (this.imageJson_) {
-    // Image option is selected.
-    this.imageElement_ = Blockly.utils.createSvgElement('image',
-        {'y': 5,
-         'height': this.imageJson_.height + 'px',
-         'width': this.imageJson_.width + 'px'}, this.fieldGroup_);
-    this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
-                                      'xlink:href', this.imageJson_.src);
-    // Insert dropdown arrow.
-    this.textElement_.appendChild(this.arrow_);
-    var arrowWidth = Blockly.Field.getCachedWidth(this.arrow_);
-    this.size_.height = Number(this.imageJson_.height) + 19;
-    this.size_.width = Number(this.imageJson_.width) + arrowWidth;
-    if (this.sourceBlock_.RTL) {
-      this.imageElement_.setAttribute('x', arrowWidth);
-      this.textElement_.setAttribute('x', -1);
-    } else {
-      this.textElement_.setAttribute('text-anchor', 'end');
-      this.textElement_.setAttribute('x', this.size_.width + 1);
-    }
-
+    this.renderSelectedImage_();
   } else {
-    // Text option is selected.
-    // Replace the text.
-    var textNode = document.createTextNode(this.getDisplayText_());
-    this.textElement_.appendChild(textNode);
-    // Insert dropdown arrow.
-    if (this.sourceBlock_.RTL) {
-      this.textElement_.insertBefore(this.arrow_, this.textElement_.firstChild);
-    } else {
-      this.textElement_.appendChild(this.arrow_);
-    }
-    this.textElement_.setAttribute('text-anchor', 'start');
-    this.textElement_.setAttribute('x', 0);
-
-    this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y;
-    this.size_.width = Blockly.Field.getCachedWidth(this.textElement_);
+    this.renderSelectedText_();
   }
   this.borderRect_.setAttribute('height', this.size_.height - 9);
   this.borderRect_.setAttribute('width',
       this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
+};
+
+Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
+  // Image option is selected.
+  this.imageElement_ = Blockly.utils.createSvgElement('image',
+      {'y': 5,
+       'height': this.imageJson_.height + 'px',
+       'width': this.imageJson_.width + 'px'}, this.fieldGroup_);
+  this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
+                                    'xlink:href', this.imageJson_.src);
+  // Insert dropdown arrow.
+  this.textElement_.appendChild(this.arrow_);
+  var arrowWidth = Blockly.Field.getCachedWidth(this.arrow_);
+  this.size_.height = Number(this.imageJson_.height) + 19;
+  this.size_.width = Number(this.imageJson_.width) + arrowWidth;
+  if (this.sourceBlock_.RTL) {
+    this.imageElement_.setAttribute('x', arrowWidth);
+    this.textElement_.setAttribute('x', -1);
+  } else {
+    this.textElement_.setAttribute('text-anchor', 'end');
+    this.textElement_.setAttribute('x', this.size_.width + 1);
+  }
+
+};
+
+Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
+  // Text option is selected.
+  // Replace the text.
+  var textNode = document.createTextNode(this.getDisplayText_());
+  this.textElement_.appendChild(textNode);
+  // Insert dropdown arrow.
+  if (this.sourceBlock_.RTL) {
+    this.textElement_.insertBefore(this.arrow_, this.textElement_.firstChild);
+  } else {
+    this.textElement_.appendChild(this.arrow_);
+  }
+  this.textElement_.setAttribute('text-anchor', 'start');
+  this.textElement_.setAttribute('x', 0);
+
+  this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y;
+  this.size_.width = Blockly.Field.getCachedWidth(this.textElement_);
 };
 
 /**

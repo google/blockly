@@ -416,18 +416,12 @@ function test_events_filterForward() {
   var block1 = workspace.newBlock('field_variable_test_block', '1');
   var events = [
     new Blockly.Events.BlockCreate(block1),
-    new Blockly.Events.BlockMove(block1)
   ];
-  block1.xy_ = new goog.math.Coordinate(1, 1);
-  events[1].recordNew();
-  events.push(new Blockly.Events.BlockMove(block1));
-  block1.xy_ = new goog.math.Coordinate(2, 2);
-  events[2].recordNew();
-  events.push(new Blockly.Events.BlockMove(block1));
-  block1.xy_ = new goog.math.Coordinate(3, 3);
-  events[3].recordNew();
+  helper_addMoveEvent(events, block1, 1, 1);
+  helper_addMoveEvent(events, block1, 2, 2);
+  helper_addMoveEvent(events, block1, 3, 3);
   var filteredEvents = Blockly.Events.filter(events, true);
-  assertEquals(2, filteredEvents.length);  // duplicate event should have been removed.
+  assertEquals(2, filteredEvents.length);  // duplicate moves should have been removed.
   // test that the order hasn't changed
   assertTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
   assertTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
@@ -441,16 +435,10 @@ function test_events_filterBackward() {
   var block1 = workspace.newBlock('field_variable_test_block', '1');
   var events = [
     new Blockly.Events.BlockCreate(block1),
-    new Blockly.Events.BlockMove(block1)
   ];
-  block1.xy_ = new goog.math.Coordinate(1, 1);
-  events[1].recordNew();
-  events.push(new Blockly.Events.BlockMove(block1));
-  block1.xy_ = new goog.math.Coordinate(2, 2);
-  events[2].recordNew();
-  events.push(new Blockly.Events.BlockMove(block1));
-  block1.xy_ = new goog.math.Coordinate(3, 3);
-  events[3].recordNew();
+  helper_addMoveEvent(events, block1, 1, 1);
+  helper_addMoveEvent(events, block1, 2, 2);
+  helper_addMoveEvent(events, block1, 3, 3);
   var filteredEvents = Blockly.Events.filter(events, false);
   assertEquals(2, filteredEvents.length);  // duplicate event should have been removed.
   // test that the order hasn't changed
@@ -479,15 +467,13 @@ function test_events_filterDifferentBlocks() {
 function test_events_mergeMove() {
   eventTest_setUpWithMockBlocks();
   var block1 = workspace.newBlock('field_variable_test_block', '1');
-  var events = [
-    new Blockly.Events.BlockMove(block1)
-  ];
-  block1.xy_.translate(1, 1);
-  events.push(new Blockly.Events.BlockMove(block1));
+  var events = [];
+  helper_addMoveEvent(events, block1, 0, 0);
+  helper_addMoveEvent(events, block1, 1, 1);
   var filteredEvents = Blockly.Events.filter(events, true);
-  assertEquals(1, filteredEvents.length);
-  assertEquals(1, filteredEvents[0].oldCoordinate.x);
-  assertEquals(1, filteredEvents[0].oldCoordinate.y);
+  assertEquals(1, filteredEvents.length);  // second move event merged into first
+  assertEquals(1, filteredEvents[0].newCoordinate.x);
+  assertEquals(1, filteredEvents[0].newCoordinate.y);
   eventTest_tearDownWithMockBlocks();
 }
 
@@ -499,7 +485,7 @@ function test_events_mergeChange() {
     new Blockly.Events.Change(block1, 'field', 'VAR', 'item1', 'item2')
   ];
   var filteredEvents = Blockly.Events.filter(events, true);
-  assertEquals(1, filteredEvents.length);
+  assertEquals(1, filteredEvents.length);  // second change event merged into first
   assertEquals('item', filteredEvents[0].oldValue);
   assertEquals('item2', filteredEvents[0].newValue);
   eventTest_tearDownWithMockBlocks();
@@ -519,7 +505,7 @@ function test_events_mergeUi() {
     new Blockly.Events.Ui(block3, 'click', 'false', 'true')
   ];
   var filteredEvents = Blockly.Events.filter(events, true);
-  assertEquals(3, filteredEvents.length);
+  assertEquals(3, filteredEvents.length);  // click event merged into corresponding *Open event
   assertEquals('commentOpen', filteredEvents[0].element);
   assertEquals('mutatorOpen', filteredEvents[1].element);
   assertEquals('warningOpen', filteredEvents[2].element);
@@ -527,19 +513,15 @@ function test_events_mergeUi() {
 }
 
 /**
- * Tests that the creation/movement of many unique blocks does not have severe
- * performance impact. This is based on some issues observed in large projects
- * in MIT App Inventor.
+ * Helper function to simulate block move events.
+ *
+ * @param {!Array.<Blockly.Events.Abstract>} events a queue of events.
+ * @param {!Blockly.Block} block the block to be moved
+ * @param {number} newX new X coordinate of the block
+ * @param {number} newY new Y coordinate of the block
  */
-function test_events_filterMany() {
-  eventTest_setUpWithMockBlocks();
-  var topBlocks = 3000;
-  var events = [];
-  for (var i = 0; i < topBlocks; i++) {
-    var block = workspace.newBlock('field_variable_test_block');
-    events.push(new Blockly.Events.BlockCreate(block), new Blockly.Events.BlockMove(block));
-  }
-  var filteredEvents = Blockly.Events.filter(events, true);
-  assertEquals(2 * topBlocks, filteredEvents.length);
-  eventTest_tearDownWithMockBlocks();
+function helper_addMoveEvent(events, block, newX, newY) {
+  events.push(new Blockly.Events.BlockMove(block));
+  block.xy_ = new goog.math.Coordinate(newX, newY);
+  events[events.length-1].recordNew();
 }

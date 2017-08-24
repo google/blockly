@@ -586,15 +586,15 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         // Fall through.
       case 'field':
         var field = block.getField(name);
-        var text = xmlChild.textContent;
+        var value = xmlChild.textContent;
         if (field instanceof Blockly.FieldVariable) {
           // TODO (marisaleung): When we change setValue and getValue to
           // interact with id's instead of names, update this so that we get
           // the variable based on id instead of textContent.
           var type = xmlChild.getAttribute('variableType') || '';
-          var variable = workspace.getVariable(text);
+          var variable = workspace.getVariable(value);
           if (!variable) {
-            variable = workspace.createVariable(text, type,
+            variable = workspace.createVariable(value, type,
               xmlChild.getAttribute(id));
           }
           if (typeof(type) !== undefined && type !== null) {
@@ -605,13 +605,14 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
                 Blockly.Xml.domToText(xmlChild) + '.');
             }
           }
+          value = variable.getId();
         }
         if (!field) {
           console.warn('Ignoring non-existent field ' + name + ' in block ' +
                        prototypeName);
           break;
         }
-        field.setValue(text);
+        field.setValue(value);
         break;
       case 'value':
       case 'statement':

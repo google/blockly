@@ -676,7 +676,15 @@ Blockly.Block.prototype.renameVar = function(oldName, newName) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
       if (field instanceof Blockly.FieldVariable &&
           Blockly.Names.equals(oldName, field.getValue())) {
-        field.setValue(newName);
+        if (this.workspace) {
+          var variable = this.workspace.getVariable(newName);
+          if (variable && oldName.toLowerCase() !== newName.toLowerCase()) {
+            // If it is not just a case change, change the value.
+            field.setValue(variable.getId());
+            return;
+          }
+        }
+        field.setText(newName);
       }
     }
   }

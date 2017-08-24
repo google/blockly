@@ -59,7 +59,7 @@ function test_fieldVariable_setValueMatchId() {
   var mockBlock = fieldVariable_mockBlock(workspace);
   fieldVariable.setSourceBlock(mockBlock);
   var event = new Blockly.Events.BlockChange(
-        mockBlock, 'field', undefined, 'name1', 'id2');
+        mockBlock, 'field', undefined, 'RENAME_VARIABLE_ID', 'id2');
   setUpMockMethod(mockControl_, Blockly.Events, 'fire', [event], null);
 
   fieldVariable.setValue('id2');
@@ -76,10 +76,10 @@ function test_fieldVariable_setValueMatchName() {
   var mockBlock = fieldVariable_mockBlock(workspace);
   fieldVariable.setSourceBlock(mockBlock);
   var event = new Blockly.Events.BlockChange(
-        mockBlock, 'field', undefined, 'name1', 'id2');
+        mockBlock, 'field', undefined, 'RENAME_VARIABLE_ID', 'id2');
   setUpMockMethod(mockControl_, Blockly.Events, 'fire', [event], null);
 
-  fieldVariable.setValue('name2');
+  fieldVariable.setValue('id2');
   assertEquals('name2', fieldVariable.getText());
   assertEquals('id2', fieldVariable.value_);
   fieldVariableTestWithMocks_tearDown();
@@ -94,7 +94,7 @@ function test_fieldVariable_setValueNoVariable() {
     'isShadow': function(){return false;}};
   fieldVariable.setSourceBlock(mockBlock);
   var event = new Blockly.Events.BlockChange(
-        mockBlock, 'field', undefined, 'name1', 'id1');
+        mockBlock, 'field', undefined, 'RENAME_VARIABLE_ID', 'id1');
   setUpMockMethod(mockControl_, Blockly.Events, 'fire', [event], null);
 
   fieldVariable.setValue('id1');
@@ -240,4 +240,32 @@ function test_fieldVariable_getVariableTypes_emptyListVariableTypes() {
   } finally {
     workspace.dispose();
   }
+}
+
+function test_fieldVariable_setSourceBlock_ExistingVariable() {
+ // Expect that the fieldVariable's value is set to 'id1'
+  fieldVariableTestWithMocks_setUp();
+  workspace.createVariable('name1', null, 'id1');
+  var fieldVariable = new Blockly.FieldVariable('name1');
+  var mockBlock = fieldVariable_mockBlock(workspace);
+
+  fieldVariable.setSourceBlock(mockBlock);
+
+  assertEquals('name1', fieldVariable.getText());
+  assertEquals('id1', fieldVariable.value_);
+  fieldVariableTestWithMocks_tearDown();
+}
+
+function test_fieldVariable_setSourceBlock_NotExistingVariable() {
+ // Expect that the fieldVariable's value is set to the default
+ // 'RENAME_VARIABLE_ID'
+  fieldVariableTestWithMocks_setUp();
+  var fieldVariable = new Blockly.FieldVariable('name1');
+  var mockBlock = fieldVariable_mockBlock(workspace);
+
+  fieldVariable.setSourceBlock(mockBlock);
+
+  assertEquals('name1', fieldVariable.getText());
+  assertEquals('RENAME_VARIABLE_ID', fieldVariable.value_);
+  fieldVariableTestWithMocks_tearDown();
 }

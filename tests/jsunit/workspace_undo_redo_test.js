@@ -66,12 +66,13 @@ function undoRedoTest_tearDown() {
 
 /**
  * Create a test get_var_block.
- * @param {string} variableName The string to put into the variable field.
+ * @param {string} variableId The id of the variable to put into the variable
+ *     field.
  * @return {!Blockly.Block} The created block.
  */
-function createMockBlock(variableName) {
+function createMockBlock(variableId) {
   var block = new Blockly.Block(workspace, 'get_var_block');
-  block.inputList[0].fieldRow[0].setValue(variableName);
+  block.inputList[0].fieldRow[0].setValue(variableId);
   return block;
 }
 
@@ -148,8 +149,8 @@ function test_undoDeleteVariable_WithBlocks() {
   undoRedoTest_setUp();
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
-  createMockBlock('name1');
-  createMockBlock('name2');
+  createMockBlock('id1');
+  createMockBlock('id2');
   workspace.deleteVariableById('id1');
   workspace.deleteVariableById('id2');
 
@@ -192,8 +193,8 @@ function test_redoAndUndoDeleteVariable_WithBlocks() {
   undoRedoTest_setUp();
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
-  createMockBlock('name1');
-  createMockBlock('name2');
+  createMockBlock('id1');
+  createMockBlock('id2');
   workspace.deleteVariableById('id1');
   workspace.deleteVariableById('id2');
 
@@ -242,7 +243,7 @@ function test_redoAndUndoDeleteVariableTwice_NoBlocks() {
 function test_redoAndUndoDeleteVariableTwice_WithBlocks() {
   undoRedoTest_setUp();
   workspace.createVariable('name1', 'type1', 'id1');
-  createMockBlock('name1');
+  createMockBlock('id1');
   workspace.deleteVariableById('id1');
   workspace.deleteVariableById('id1');
 
@@ -303,7 +304,7 @@ function test_undoRedoRenameVariable_OneExists_NoBlocks() {
 function test_undoRedoRenameVariable_OneExists_WithBlocks() {
   undoRedoTest_setUp();
   workspace.createVariable('name1', '', 'id1');
-  createMockBlock('name1');
+  createMockBlock('id1');
   workspace.renameVariable('name1', 'name2');
 
   workspace.undo();
@@ -335,8 +336,8 @@ function test_undoRedoRenameVariable_BothExist_NoBlocks() {
 function test_undoRedoRenameVariable_BothExist_WithBlocks() {
   undoRedoTest_setUp();
   createTwoVarsEmptyType();
-  createMockBlock('name1');
-  createMockBlock('name2');
+  createMockBlock('id1');
+  createMockBlock('id2');
   workspace.renameVariable('name1', 'name2');
 
   workspace.undo();
@@ -369,8 +370,8 @@ function test_undoRedoRenameVariable_BothExistCaseChange_NoBlocks() {
 function test_undoRedoRenameVariable_BothExistCaseChange_WithBlocks() {
   undoRedoTest_setUp();
   createTwoVarsEmptyType();
-  createMockBlock('name1');
-  createMockBlock('name2');
+  createMockBlock('id1');
+  createMockBlock('id2');
   workspace.renameVariable('name1', 'Name2');
 
   workspace.undo();
@@ -403,7 +404,7 @@ function test_undoRedoRenameVariable_OnlyCaseChange_NoBlocks() {
 function test_undoRedoRenameVariable_OnlyCaseChange_WithBlocks() {
   undoRedoTest_setUp();
   workspace.createVariable('name1', '', 'id1');
-  createMockBlock('name1');
+  createMockBlock('id1');
   workspace.renameVariable('name1', 'Name1');
 
   workspace.undo();

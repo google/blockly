@@ -287,7 +287,7 @@ function test_blockToDom_fieldToDom_trivial() {
   xmlTest_setUpWithMockBlocks();
   workspace.createVariable('name1', 'type1', 'id1');
   var block = new Blockly.Block(workspace, 'field_variable_test_block');
-  block.inputList[0].fieldRow[0].setValue('name1');
+  block.inputList[0].fieldRow[0].setValue('id1');
   var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
   xmlTest_checkVariableFieldDomValues(resultFieldDom, 'VAR', 'type1', 'id1',
     'name1');
@@ -299,7 +299,7 @@ function test_blockToDom_fieldToDom_defaultCase() {
   setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '1']);
   workspace.createVariable('name1');
   var block = new Blockly.Block(workspace, 'field_variable_test_block');
-  block.inputList[0].fieldRow[0].setValue('name1');
+  block.inputList[0].fieldRow[0].setValue('1');
   var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
   // Expect type is '' and id is '1' since we don't specify type and id.
   xmlTest_checkVariableFieldDomValues(resultFieldDom, 'VAR', '', '1', 'name1');
@@ -346,7 +346,7 @@ function test_variablesToDom_twoVariables_oneBlock() {
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
   var block = new Blockly.Block(workspace, 'field_variable_test_block');
-  block.inputList[0].fieldRow[0].setValue('name1');
+  block.inputList[0].fieldRow[0].setValue('id1');
 
   var resultDom = Blockly.Xml.variablesToDom(workspace.getAllVariables());
   assertEquals(2, resultDom.children.length);

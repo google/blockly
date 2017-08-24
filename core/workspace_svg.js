@@ -39,7 +39,6 @@ goog.require('Blockly.Trashcan');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceAudio');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
-goog.require('Blockly.WorkspaceViewport');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
 
@@ -1506,6 +1505,121 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
   }
 };
 
+
+
+/**
+ * Get the dimensions of the given workspace component, in pixels.
+ * @param {Blockly.Toolbox|Blockly.Flyout} elem The element to get the
+ *     dimensions of, or null.  It should be a toolbox or flyout, and should
+ *     implement getWidth() and getHeight().
+ * @return {!Object} An object containing width and height attributes, which
+ *     will both be zero if elem did not exist.
+ * @private
+ */
+Blockly.WorkspaceSvg.getDimensionsPx_ = function(elem) {
+  var width = 0;
+  var height = 0;
+  if (elem) {
+    width = elem.getWidth();
+    height = elem.getHeight();
+  }
+  return {
+    width: width,
+    height: height
+  };
+};
+
+/**
+ * Get the content dimensions of the given workspace, taking into account
+ * whether or not it is scrollable and what size the workspace div is on screen.
+ * @param {!Blockly.WorkspaceSvg} ws The workspace to measure.
+ * @param {!Object} svgSize An object containing height and width attributes in
+ *     CSS pixels.  Together they specify the size of the visible workspace, not
+ *     including areas covered up by the toolbox.
+ * @return {!Object} The dimensions of the contents of the given workspace, as
+ *     an object containing at least
+ *     - height and width in pixels
+ *     - left and top in pixels relative to the workspace origin.
+ * @private
+ */
+Blockly.WorkspaceSvg.getContentDimensions_ = function(ws, svgSize) {
+  if (ws.scrollbar) {
+    return Blockly.WorkspaceSvg.getContentDimensionsBounded_(ws, svgSize);
+  } else {
+    return Blockly.WorkspaceSvg.getContentDimensionsExact_(ws);
+  }
+};
+
+/**
+ * Get the bounding box for all workspace contents, in pixels.
+ * @param {!Blockly.WorkspaceSvg} ws The workspace to inspect.
+ * @return {!Object} The dimensions of the contents of the given workspace, as
+ *     an object containing
+ *     - height and width in pixels
+ *     - left, right, top and bottom in pixels relative to the workspace origin.
+ * @private
+ */
+Blockly.WorkspaceSvg.getContentDimensionsExact_ = function(ws) {
+  // Block bounding box is in workspace coordinates.
+  var blockBox = ws.getBlocksBoundingBox();
+  var scale = ws.scale;
+
+  // Convert to pixels.
+  var width = blockBox.width * scale;
+  var height = blockBox.height * scale;
+  var left = blockBox.x * scale;
+  var top = blockBox.y * scale;
+
+  return {
+    left: left,
+    top: top,
+    right: left + width,
+    bottom: top + height,
+    width: width,
+    height: height
+  };
+};
+
+/**
+ * Calculate the size of a scrollable workspace, which should include room for a
+ * half screen border around the workspace contents.
+ * @param {!Blockly.WorkspaceSvg} ws The workspace to measure.
+ * @param {!Object} svgSize An object containing height and width attributes in
+ *     CSS pixels.  Together they specify the size of the visible workspace, not
+ *     including areas covered up by the toolbox.
+ * @return {!Object} The dimensions of the contents of the given workspace, as
+ *     an object containing
+ *     - height and width in pixels
+ *     - left and top in pixels relative to the workspace origin.
+ * @private
+ */
+Blockly.WorkspaceSvg.getContentDimensionsBounded_ = function(ws, svgSize) {
+  var content = Blockly.WorkspaceSvg.getContentDimensionsExact_(ws);
+
+  // View height and width are both in pixels, and are the same as the svg size.
+  var viewWidth = svgSize.width;
+  var viewHeight = svgSize.height;
+  var halfWidth = viewWidth / 2;
+  var halfHeight = viewHeight / 2;
+
+  // Add a border around the content that is at least half a screenful wide.
+  // Ensure border is wide enough that blocks can scroll over entire screen.
+  var left = Math.min(content.left - halfWidth, content.right - viewWidth);
+  var right = Math.max(content.right + halfWidth, content.left + viewWidth);
+
+  var top = Math.min(content.top - halfHeight, content.bottom - viewHeight);
+  var bottom = Math.max(content.bottom + halfHeight, content.top + viewHeight);
+
+  var dimensions = {
+    left: left,
+    top: top,
+    height: bottom - top,
+    width: right - left
+  };
+  return dimensions;
+};
+
+
 /**
  * Return an object with all the metrics required to size scrollbars for a
  * top level workspace.  The following properties are computed:
@@ -1533,9 +1647,9 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
 Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
 
   var toolboxDimensions =
-      Blockly.WorkspaceViewport.getDimensionsPx(this.toolbox_);
+      Blockly.WorkspaceSvg.getDimensionsPx_(this.toolbox_);
   var flyoutDimensions =
-      Blockly.WorkspaceViewport.getDimensionsPx(this.flyout_);
+      Blockly.WorkspaceSvg.getDimensionsPx_(this.flyout_);
 
   // Contains height and width in CSS pixels.
   // svgSize is equivalent to the size of the injectionDiv at this point.
@@ -1553,7 +1667,7 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
   // svgSize is now the space taken up by the Blockly workspace, not including
   // the toolbox.
   var contentDimensions =
-      Blockly.WorkspaceViewport.getContentDimensions(this, svgSize);
+      Blockly.WorkspaceSvg.getContentDimensions_(this, svgSize);
 
   var absoluteLeft = 0;
   if (this.toolbox_ && this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {

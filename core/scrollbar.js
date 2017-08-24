@@ -240,9 +240,9 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
 };
 
 /**
- * The coordinate of the upper left corner of the scrollbar SVG relative to the
- * injection div, in CSS pixels.  In general this is (0, 0).  When the scrollbar
- * is in a flyout it may have a different origin.
+ * The location of the origin of the workspace that the scrollbar is in,
+ * measured in CSS pixels relative to the injection div origin.  This is usually
+ * (0, 0).  When the scrollbar is in a flyout it may have a different origin.
  * @type {goog.math.Coordinate}
  * @private
  */
@@ -253,7 +253,7 @@ Blockly.Scrollbar.prototype.origin_ = new goog.math.Coordinate(0, 0);
  * the most recent drag.
  * Units are CSS pixels, with (0, 0) at the top left of the browser window.
  * For a horizontal scrollbar this is the x coordinate of the mouse down event;
- * for a vertical scrollbar it's the y coordinate of hte mouse down event.
+ * for a vertical scrollbar it's the y coordinate of the mouse down event.
  * @type {goog.math.Coordinate}
  */
 Blockly.Scrollbar.prototype.startDragMouse_ = 0;
@@ -395,11 +395,12 @@ Blockly.ScrollbarPair.prototype.setContainerVisible = function(visible) {
 
 /**
  * Set the position of the scrollbar's svg group in CSS pixels relative to the
- * scrollbar's origin.
+ * scrollbar's origin.  This sets the scrollbar's location within the workspace.
  * @param {number} x The new x coordinate.
  * @param {number} y The new y coordinate.
+ * @private
  */
-Blockly.Scrollbar.prototype.setPosition = function(x, y) {
+Blockly.Scrollbar.prototype.setPosition_ = function(x, y) {
   this.position_.x = x;
   this.position_.y = y;
 
@@ -487,7 +488,7 @@ Blockly.Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
   // Horizontal toolbar should always be just above the bottom of the workspace.
   var yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
       Blockly.Scrollbar.scrollbarThickness - 0.5;
-  this.setPosition(xCoordinate, yCoordinate);
+  this.setPosition_(xCoordinate, yCoordinate);
 
   // If the view has been resized, a content resize will also be necessary.  The
   // reverse is not true.
@@ -554,7 +555,7 @@ Blockly.Scrollbar.prototype.resizeViewVertical = function(hostMetrics) {
         Blockly.Scrollbar.scrollbarThickness - 1;
   }
   var yCoordinate = hostMetrics.absoluteTop + 0.5;
-  this.setPosition(xCoordinate, yCoordinate);
+  this.setPosition_(xCoordinate, yCoordinate);
 
   // If the view has been resized, a content resize will also be necessary.  The
   // reverse is not true.
@@ -844,9 +845,10 @@ Blockly.Scrollbar.prototype.set = function(value) {
 };
 
 /**
- * Set the origin of the upper left of the scrollbar, relative to the injection
- * div origin. This is for times when the scrollbar is used in an object whose
- * origin isn't the same as the main workspace (e.g. in a flyout.)
+ * Record the origin of the workspace that the scrollbar is in, in pixels
+ * relative to the injection div origin. This is for times when the scrollbar is
+ * used in an object whose origin isn't the same as the main workspace
+ * (e.g. in a flyout.)
  * @param {number} x The x coordinate of the scrollbar's origin, in CSS pixels.
  * @param {number} y The y coordinate of the scrollbar's origin, in CSS pixels.
  */

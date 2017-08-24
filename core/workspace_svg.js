@@ -1505,8 +1505,6 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
   }
 };
 
-
-
 /**
  * Get the dimensions of the given workspace component, in pixels.
  * @param {Blockly.Toolbox|Blockly.Flyout} elem The element to get the
@@ -1618,7 +1616,6 @@ Blockly.WorkspaceSvg.getContentDimensionsBounded_ = function(ws, svgSize) {
   };
   return dimensions;
 };
-
 
 /**
  * Return an object with all the metrics required to size scrollbars for a

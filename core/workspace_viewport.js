@@ -57,8 +57,10 @@ Blockly.WorkspaceViewport.getDimensionsPx = function(elem) {
  * whether or not it is scrollable and what size the workspace div is on screen.
  * @param {!Blockly.WorkspaceSvg} ws The workspace to measure.
  * @param {!Object} svgSize An object containing height and width attributes in
- *     CSS pixels.
- * @return {!Object} An object containing at least
+ *     CSS pixels.  Together they specify the size of the visible workspace, not
+ *     including areas covered up by the toolbox.
+ * @return {!Object} The dimensions of the contents of the given workspace, as
+ *     an object containing at least
  *     - height and width in pixels
  *     - left and top in pixels relative to the workspace origin.
  * @package
@@ -74,7 +76,8 @@ Blockly.WorkspaceViewport.getContentDimensions = function(ws, svgSize) {
 /**
  * Get the bounding box for all workspace contents, in pixels.
  * @param {!Blockly.WorkspaceSvg} ws The workspace to inspect.
- * @return {!Object} An object containing
+ * @return {!Object} The dimensions of the contents of the given workspace, as
+ *     an object containing
  *     - height and width in pixels
  *     - left, right, top and bottom in pixels relative to the workspace origin.
  * @private
@@ -105,8 +108,10 @@ Blockly.WorkspaceViewport.getContentDimensionsExact_ = function(ws) {
  * half screen border around the workspace contents.
  * @param {!Blockly.WorkspaceSvg} ws The workspace to measure.
  * @param {!Object} svgSize An object containing height and width attributes in
- *     CSS pixels.
- * @return {!Object} An object containing
+ *     CSS pixels.  Together they specify the size of the visible workspace, not
+ *     including areas covered up by the toolbox.
+ * @return {!Object} The dimensions of the contents of the given workspace, as
+ *     an object containing
  *     - height and width in pixels
  *     - left and top in pixels relative to the workspace origin.
  * @private

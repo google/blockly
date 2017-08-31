@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Amaziɣ maziɣ",
-			"Belkacem77"
+			"Belkacem77",
+			"Alem"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "aferdis",
@@ -14,8 +15,8 @@
 	"INLINE_INPUTS": "Inekcam srid",
 	"DELETE_BLOCK": "Kkes iḥder",
 	"DELETE_X_BLOCKS": "Kkes %1 n iḥder",
-	"DELETE_ALL_BLOCKS": "Kkes %1 n iḥ€dran meṛṛa?",
-	"CLEAN_UP": "Sfeḍ iḥ€dran",
+	"DELETE_ALL_BLOCKS": "Kkes %1 n iḥedran meṛṛa?",
+	"CLEAN_UP": "Sfeḍ iḥedran",
 	"COLLAPSE_BLOCK": "Fneẓ iḥder",
 	"COLLAPSE_ALL": "Fneẓ iḥedran",
 	"EXPAND_BLOCK": "Snefli iḥder",
@@ -45,7 +46,7 @@
 	"COLOUR_RGB_GREEN": "azegzaw",
 	"COLOUR_RGB_BLUE": "anili",
 	"COLOUR_RGB_TOOLTIP": "Rnu ini s tnecta yettunefk s tesmekta n uzeggaɣ, azegzaw, akked unili. Yessefk akk azalen ad ilin gar 0 akked 100.",
-	"COLOUR_BLEND_TITLE": "sexleḍ",
+	"COLOUR_BLEND_TITLE": "rkwec",
 	"COLOUR_BLEND_COLOUR1": "ini 1",
 	"COLOUR_BLEND_COLOUR2": "ini 2",
 	"COLOUR_BLEND_RATIO": "afmiḍi",

@@ -194,10 +194,10 @@ Blockly.Block.prototype.colour_ = '#000000';
 
 /**
  * Colour of the block as HSV hue value (0-360)
- * @type {number}
+ * @type {?number}
  * @private
   */
-Blockly.Block.prototype.hue_ = 0;
+Blockly.Block.prototype.hue_ = null;
 
 /**
  * Dispose of this block.
@@ -603,8 +603,8 @@ Blockly.Block.prototype.getColour = function() {
 };
 
 /**
- * Get the HSV hue value of a block.
- * @return {number} Hue value (0-360)
+ * Get the HSV hue value of a block. Null if hue not set.
+ * @return {?number} Hue value (0-360)
  */
 Blockly.Block.prototype.getHue = function() {
   return this.hue_;
@@ -621,8 +621,8 @@ Blockly.Block.prototype.setColour = function(colour) {
     this.colour_ = Blockly.hueToRgb(hue);
   } else if (goog.isString(colour) && colour.match(/^#[0-9a-fA-F]{6}$/)) {
     this.colour_ = colour;
-    var hsv = goog.color.hexToHsv(colour);
-    this.hue_ = Math.round(hsv[0]);
+    // Only store hue if colour is set as a hue
+    this.hue_ = null;
   } else {
     throw 'Invalid colour: ' + colour;
   }

@@ -35,9 +35,10 @@ Blockly.Lua['procedures_defreturn'] = function(block) {
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Lua.statementToCode(block, 'STACK');
   if (Blockly.Lua.STATEMENT_PREFIX) {
+    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
     branch = Blockly.Lua.prefixLines(
         Blockly.Lua.STATEMENT_PREFIX.replace(/%1/g,
-        '\'' + block.id + '\''), Blockly.Lua.INDENT) + branch;
+        '\'' + id + '\''), Blockly.Lua.INDENT) + branch;
   }
   if (Blockly.Lua.INFINITE_LOOP_TRAP) {
     branch = Blockly.Lua.INFINITE_LOOP_TRAP.replace(/%1/g,

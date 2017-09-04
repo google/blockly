@@ -49,9 +49,10 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.PHP.statementToCode(block, 'STACK');
   if (Blockly.PHP.STATEMENT_PREFIX) {
+    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
     branch = Blockly.PHP.prefixLines(
         Blockly.PHP.STATEMENT_PREFIX.replace(/%1/g,
-        '\'' + block.id + '\''), Blockly.PHP.INDENT) + branch;
+        '\'' + id + '\''), Blockly.PHP.INDENT) + branch;
   }
   if (Blockly.PHP.INFINITE_LOOP_TRAP) {
     branch = Blockly.PHP.INFINITE_LOOP_TRAP.replace(/%1/g,

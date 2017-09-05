@@ -530,8 +530,9 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
     }
   }
   // Delete any background buttons from a previous showing.
-  for (var j = 0, rect; rect = this.backgroundButtons_[j]; j++) {
-    goog.dom.removeNode(rect);
+  for (var j = 0; j < this.backgroundButtons_.length; j++) {
+    var rect = this.backgroundButtons_[j];
+    if (rect) goog.dom.removeNode(rect);
   }
   this.backgroundButtons_.length = 0;
 

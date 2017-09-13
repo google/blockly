@@ -1,10 +1,10 @@
-Thanks for submitting code to Blockly!
+Thanks for submitting code to Blockly!  Please fill out the following as part of your pull request so we can review your code more easily.
 
 ## The basics
 
-- [ ] You branched from develop, not master
-- [ ] This pull request is against develop, not master
-- [ ] Your code complies with the [style guide](https://developers.google.com/blockly/guides/modify/web/style-guide)
+- [ ] I branched from develop
+- [ ] My pull request is against develop
+- [ ] My code follows the [style guide](https://developers.google.com/blockly/guides/modify/web/style-guide)
 
 ## The details
 ### Resolves

@@ -2,7 +2,7 @@ Thanks for opening an issue for us!  Before you open an issue, please check if a
 
 If you're asking a question about how to use Blockly in your application, please ask questions on the [mailing list](https://groups.google.com/forum/#!forum/blockly) instead of filing issues.
 
-_Delete the above section and the instructions in the sections below before submitting.  If you don't do this, we'll assume you didn't bother to read the instructions or try to solve the problem before filing an issue.  If a section is not applicable, type "N/A" in that section._
+_Please delete the above section and the instructions in the sections below before submitting.  If a section is not applicable, type "N/A" in that section._
 
 ### Problem statement
 
@@ -37,20 +37,20 @@ Ignore any instances of "Uncaught (in promise) DOMException: The play() request 
 
 _Remove this hint: these checkboxes can be checked like this: [x]_
 
-Desktop:
-- [ ] Chrome
-- [ ] Firefox
-- [ ] Safari
-- [ ] Opera
-- [ ] IE 10+
-- [ ] IE 11
-- [ ] EDGE
+- [ ] Desktop:
+  - [ ] Chrome
+  - [ ] Firefox
+  - [ ] Safari
+  - [ ] Opera
+  - [ ] IE 10+
+  - [ ] IE 11
+  - [ ] EDGE
 
 - [ ] Smartphone (please complete the following information):
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+  - Device: [e.g. iPhone6]
+  - OS: [e.g. iOS8.1]
+  - Browser [e.g. stock browser, safari]
+  - Version [e.g. 22]
 
 ### Additional Information
 

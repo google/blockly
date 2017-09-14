@@ -46,7 +46,7 @@ _Remove this hint: these checkboxes can be checked like this: [x]_
   - [ ] IE 11
   - [ ] EDGE
 
-- [ ] Smartphone (please complete the following information):
+- [ ] Smartphone/Tablet/Chromebook (please complete the following information):
   - Device: [e.g. iPhone6]
   - OS: [e.g. iOS8.1]
   - Browser [e.g. stock browser, safari]

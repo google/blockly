@@ -23,6 +23,23 @@ _Explain why these changes should be made.  Include screenshots if applicable._
 
 _Please show how you have added tests to cover your changes, or tell us how you tested it and on which platforms._
 
+Tested on:
+_Remove this hint: these checkboxes can be checked like this: [x]_
+- [ ] Desktop:
+  - [ ] Chrome
+  - [ ] Firefox
+  - [ ] Safari
+  - [ ] Opera
+  - [ ] IE 10+
+  - [ ] IE 11
+  - [ ] EDGE
+
+- [ ] Smartphone/Tablet/Chromebook (please complete the following information):
+  - Device: [e.g. iPhone6]
+  - OS: [e.g. iOS8.1]
+  - Browser [e.g. stock browser, safari]
+  - Version [e.g. 22]
+  
 ### Additional Information
 
 _Anything else we should know?_

@@ -527,7 +527,7 @@ Blockly.Toolbox.TreeControl.prototype.handleTouchEvent_ = function(e) {
     // Fire asynchronously since onMouseDown takes long enough that the browser
     // would fire the default mouse event before this method returns.
     setTimeout(function() {
-      node.onMouseDown(e);  // Same behaviour for click and touch.
+      node.onClick_(e);  // Same behaviour for click and touch.
     }, 1);
   }
 };
@@ -629,7 +629,7 @@ Blockly.Toolbox.TreeNode.prototype.getExpandIconSafeHtml = function() {
  * @param {!goog.events.BrowserEvent} e The browser event.
  * @override
  */
-Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
+Blockly.Toolbox.TreeNode.prototype.onClick_ = function(e) {
   // Expand icon.
   if (this.hasChildren() && this.isUserCollapsible_) {
     this.toggle();
@@ -640,6 +640,16 @@ Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
     this.select();
   }
   this.updateRow();
+};
+
+/**
+ * Suppress the inherited mouse down behaviour.
+ * @param {!goog.events.BrowserEvent} e The browser event.
+ * @override
+ * @private
+ */
+Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
+  // NOPE.
 };
 
 /**

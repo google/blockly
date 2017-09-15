@@ -413,17 +413,20 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
       var content = options[i][0];
       if (typeof content == 'object') {
         this.imageJson_ = content;
-        this.setText(content.alt);
+        this.text_ = content.alt;
       } else {
         this.imageJson_ = null;
-        this.setText(content);
+        this.text_ = content;
       }
+      // Always rerender if either the value or the text has changed.
+      this.forceRerender();
       return;
     }
   }
   // Value not found.  Add it, maybe it will become valid once set
   // (like variable names).
-  this.setText(newValue);
+  this.text_ = newValue;
+  this.forceRerender();
 };
 
 /**

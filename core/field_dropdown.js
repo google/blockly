@@ -124,6 +124,28 @@ Blockly.FieldDropdown.prototype.init = function() {
  */
 Blockly.FieldDropdown.prototype.showEditor_ = function() {
   Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, null);
+  var menu = this.createMenu_();
+  this.addEventListeners_(menu);
+  this.positionMenu_(menu);
+};
+
+/**
+ * Add event listeners for actions on the items in the dropdown menu.
+ * @param {!goog.ui.Menu} menu The menu to add listeners to.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.addEventListeners_ = function(menu) {
+  this.addActionListener_(menu);
+  this.addTouchStartListener_(menu);
+  this.addTouchEndListener_(menu);
+};
+
+/**
+ * Add a listener for mouse and keyboard events in the menu and its items.
+ * @param {!goog.ui.Menu} menu The menu to add listeners to.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.addActionListener_ = function(menu) {
   var thisField = this;
 
   function callback(e) {
@@ -135,7 +157,49 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     Blockly.WidgetDiv.hideIfOwner(thisField);
     Blockly.Events.setGroup(false);
   }
+  // Listen for mouse/keyboard events.
+  goog.events.listen(menu, goog.ui.Component.EventType.ACTION, callback);
+};
 
+/**
+ * Add a listener for touch start events on menu items.
+ * @param {!goog.ui.Menu} menu The menu to add the listener to.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.addTouchStartListener_ = function(menu) {
+  // Listen for touch events (why doesn't Closure handle this already?).
+  function callback(e) {
+    var control = this.getOwnerControl(/** @type {Node} */ (e.target));
+    // Highlight the menu item.
+    control.handleMouseDown(e);
+  }
+  menu.getHandler().listen(menu.getElement(), goog.events.EventType.TOUCHSTART,
+                           callback);
+};
+
+/**
+ * Add a listener for touch end events on menu items.
+ * @param {!goog.ui.Menu} menu The menu to add the listener to.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.addTouchEndListener_ = function(menu) {
+  // Listen for touch events (why doesn't Closure handle this already?).
+  function callbackTouchEnd(e) {
+    var control = this.getOwnerControl(/** @type {Node} */ (e.target));
+    // Activate the menu item.
+    control.performActionInternal(e);
+  }
+  menu.getHandler().listen(menu.getElement(), goog.events.EventType.TOUCHEND,
+                           callbackTouchEnd);
+};
+
+/**
+ * Create and populate the menu and menu items for this dropdown, based on
+ * the options list.
+ * @return {!goog.ui.Menu} The populated dropdown menu.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.createMenu_ = function() {
   var menu = new goog.ui.Menu();
   menu.setRightToLeft(this.sourceBlock_.RTL);
   var options = this.getOptions();
@@ -156,24 +220,17 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     menu.addChild(menuItem, true);
     menuItem.setChecked(value == this.value_);
   }
-  // Listen for mouse/keyboard events.
-  goog.events.listen(menu, goog.ui.Component.EventType.ACTION, callback);
-  // Listen for touch events (why doesn't Closure handle this already?).
-  function callbackTouchStart(e) {
-    var control = this.getOwnerControl(/** @type {Node} */ (e.target));
-    // Highlight the menu item.
-    control.handleMouseDown(e);
-  }
-  function callbackTouchEnd(e) {
-    var control = this.getOwnerControl(/** @type {Node} */ (e.target));
-    // Activate the menu item.
-    control.performActionInternal(e);
-  }
-  menu.getHandler().listen(menu.getElement(), goog.events.EventType.TOUCHSTART,
-                           callbackTouchStart);
-  menu.getHandler().listen(menu.getElement(), goog.events.EventType.TOUCHEND,
-                           callbackTouchEnd);
+  return menu;
+};
 
+/**
+ * Place the menu correctly on the screen, taking into account the dimensions
+ * of the menu and the dimensions of the screen so that it doesn't run off any
+ * edges.
+ * @param {!goog.ui.Menu} menu The menu to position.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
   // Record windowSize and scrollOffset before adding menu.
   var windowSize = goog.dom.getViewportSize();
   var scrollOffset = goog.style.getViewportPageOffset(document);
@@ -281,19 +338,35 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   if (suffixLength) {
     this.suffixField = strings[0].substr(1 - suffixLength);
   }
-  // Remove the prefix and suffix from the options.
+
+  this.menuGenerator_ = Blockly.FieldDropdown.applyTrim_(options, prefixLength,
+      suffixLength);
+};
+
+/**
+ * Use the calculated prefix and suffix lengths to trim all of the options in
+ * the given array.
+ * @param {!Array.<!Array>} options Array of option tuples:
+ *     (human-readable text or image, language-neutral name).
+ * @param {number} prefixLength The length of the common prefix.
+ * @param {number} suffixLength The length of the common suffix
+ * @return {!Array.<!Array>} A new array with all of the option text trimmed.
+ */
+Blockly.FieldDropdown.applyTrim_ = function(options, prefixLength, suffixLength) {
   var newOptions = [];
+  // Remove the prefix and suffix from the options.
   for (var i = 0; i < options.length; i++) {
     var text = options[i][0];
     var value = options[i][1];
     text = text.substring(prefixLength, text.length - suffixLength);
     newOptions[i] = [text, value];
   }
-  this.menuGenerator_ = newOptions;
+  return newOptions;
 };
 
 /**
- * @return {boolean} True if the option list is generated by a function. Otherwise false.
+ * @return {boolean} True if the option list is generated by a function.
+ *     Otherwise false.
  */
 Blockly.FieldDropdown.prototype.isOptionListDynamic = function() {
   return goog.isFunction(this.menuGenerator_);
@@ -340,17 +413,20 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
       var content = options[i][0];
       if (typeof content == 'object') {
         this.imageJson_ = content;
-        this.setText(content.alt);
+        this.text_ = content.alt;
       } else {
         this.imageJson_ = null;
-        this.setText(content);
+        this.text_ = content;
       }
+      // Always rerender if either the value or the text has changed.
+      this.forceRerender();
       return;
     }
   }
   // Value not found.  Add it, maybe it will become valid once set
   // (like variable names).
-  this.setText(newValue);
+  this.text_ = newValue;
+  this.forceRerender();
 };
 
 /**
@@ -371,46 +447,61 @@ Blockly.FieldDropdown.prototype.render_ = function() {
   this.imageElement_ = null;
 
   if (this.imageJson_) {
-    // Image option is selected.
-    this.imageElement_ = Blockly.utils.createSvgElement('image',
-        {'y': 5,
-         'height': this.imageJson_.height + 'px',
-         'width': this.imageJson_.width + 'px'}, this.fieldGroup_);
-    this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
-                                      'xlink:href', this.imageJson_.src);
-    // Insert dropdown arrow.
-    this.textElement_.appendChild(this.arrow_);
-    var arrowWidth = Blockly.Field.getCachedWidth(this.arrow_);
-    this.size_.height = Number(this.imageJson_.height) + 19;
-    this.size_.width = Number(this.imageJson_.width) + arrowWidth;
-    if (this.sourceBlock_.RTL) {
-      this.imageElement_.setAttribute('x', arrowWidth);
-      this.textElement_.setAttribute('x', -1);
-    } else {
-      this.textElement_.setAttribute('text-anchor', 'end');
-      this.textElement_.setAttribute('x', this.size_.width + 1);
-    }
-
+    this.renderSelectedImage_();
   } else {
-    // Text option is selected.
-    // Replace the text.
-    var textNode = document.createTextNode(this.getDisplayText_());
-    this.textElement_.appendChild(textNode);
-    // Insert dropdown arrow.
-    if (this.sourceBlock_.RTL) {
-      this.textElement_.insertBefore(this.arrow_, this.textElement_.firstChild);
-    } else {
-      this.textElement_.appendChild(this.arrow_);
-    }
-    this.textElement_.setAttribute('text-anchor', 'start');
-    this.textElement_.setAttribute('x', 0);
-
-    this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y;
-    this.size_.width = Blockly.Field.getCachedWidth(this.textElement_);
+    this.renderSelectedText_();
   }
   this.borderRect_.setAttribute('height', this.size_.height - 9);
   this.borderRect_.setAttribute('width',
       this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
+};
+
+/**
+ * Renders the selected option, which must be an image.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
+  // Image option is selected.
+  this.imageElement_ = Blockly.utils.createSvgElement('image',
+      {'y': 5,
+       'height': this.imageJson_.height + 'px',
+       'width': this.imageJson_.width + 'px'}, this.fieldGroup_);
+  this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
+                                    'xlink:href', this.imageJson_.src);
+  // Insert dropdown arrow.
+  this.textElement_.appendChild(this.arrow_);
+  var arrowWidth = Blockly.Field.getCachedWidth(this.arrow_);
+  this.size_.height = Number(this.imageJson_.height) + 19;
+  this.size_.width = Number(this.imageJson_.width) + arrowWidth;
+  if (this.sourceBlock_.RTL) {
+    this.imageElement_.setAttribute('x', arrowWidth);
+    this.textElement_.setAttribute('x', -1);
+  } else {
+    this.textElement_.setAttribute('text-anchor', 'end');
+    this.textElement_.setAttribute('x', this.size_.width + 1);
+  }
+};
+
+/**
+ * Renders the selected option, which must be text.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
+  // Text option is selected.
+  // Replace the text.
+  var textNode = document.createTextNode(this.getDisplayText_());
+  this.textElement_.appendChild(textNode);
+  // Insert dropdown arrow.
+  if (this.sourceBlock_.RTL) {
+    this.textElement_.insertBefore(this.arrow_, this.textElement_.firstChild);
+  } else {
+    this.textElement_.appendChild(this.arrow_);
+  }
+  this.textElement_.setAttribute('text-anchor', 'start');
+  this.textElement_.setAttribute('x', 0);
+
+  this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y;
+  this.size_.width = Blockly.Field.getCachedWidth(this.textElement_);
 };
 
 /**

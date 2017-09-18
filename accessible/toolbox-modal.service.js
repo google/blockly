@@ -90,24 +90,20 @@ blocklyApp.ToolboxModalService = ng.core.Class({
       );
       this.computeCategoriesForCreateNewGroupModal_();
     } else {
-      // A timeout seems to be needed in order for the .children accessor to
-      // work correctly.
       var that = this;
-      setTimeout(function() {
-        // If there are no top-level categories, we create a single category
-        // containing all the top-level blocks.
-        var tmpWorkspace = new Blockly.Workspace();
-        Array.from(toolboxXmlElt.children).forEach(function(topLevelNode) {
-          Blockly.Xml.domToBlock(tmpWorkspace, topLevelNode);
-        });
-
-        that.allToolboxCategories = [{
-          categoryName: '',
-          blocks: tmpWorkspace.topBlocks_
-        }];
-
-        that.computeCategoriesForCreateNewGroupModal_();
+      // If there are no top-level categories, we create a single category
+      // containing all the top-level blocks.
+      var tmpWorkspace = new Blockly.Workspace();
+      Array.from(toolboxXmlElt.children).forEach(function(topLevelNode) {
+        Blockly.Xml.domToBlock(tmpWorkspace, topLevelNode);
       });
+
+      that.allToolboxCategories = [{
+        categoryName: '',
+        blocks: tmpWorkspace.topBlocks_
+      }];
+
+      that.computeCategoriesForCreateNewGroupModal_();
     }
   },
   computeCategoriesForCreateNewGroupModal_: function() {

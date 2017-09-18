@@ -446,6 +446,30 @@ class Gen_compressed(threading.Thread):
 
       code = HEADER + "\n" + json_data["compiledCode"]
       code = code.replace(remove, "")
+
+      # Trim down Google's (and only Google's) Apache licences.
+      # The Closure Compiler preserves these.
+      LICENSE = re.compile("""/\\*
+
+ [\w ]+
+
+ Copyright \\d+ Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 \(the "License"\);
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+\\*/""")
+      code = re.sub(LICENSE, "", code)
+
       stats = json_data["statistics"]
       original_b = stats["originalSize"]
       compressed_b = stats["compressedSize"]
@@ -590,6 +614,7 @@ developers.google.com/blockly/guides/modify/web/closure""")
     all_search_paths = calcdeps.ExpandDirectories(
         ["accessible", "core", "blocks", os.path.join("demos", "fixed-advanced"), os.path.join("msg", "js"), os.path.join(os.path.pardir, "closure-library")])
     all_search_paths.sort()  # Deterministic build.
+    print("Compressing " + str(len(all_search_paths)) + " files...")
     Gen_compressed(all_search_paths, args).start()
 
   else:

@@ -88,7 +88,6 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
      callback: Blockly.MakeItSo}
   */
   var menu = new goog.ui.Menu();
-  menu.setAllowAutoFocus(true);
   menu.setRightToLeft(rtl);
   for (var i = 0, option; option = options[i]; i++) {
     var menuItem = new goog.ui.MenuItem(option.text);
@@ -119,13 +118,9 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
     // Record windowSize and scrollOffset before adding menu.
   var windowSize = goog.dom.getViewportSize();
   var scrollOffset = goog.style.getViewportPageOffset(document);
-  var div = Blockly.WidgetDiv.DIV;
-  menu.render(div);
+
+  Blockly.ContextMenu.createWidget_(menu);
   var menuDom = menu.getElement();
-  Blockly.utils.addClass(menuDom, 'blocklyContextMenu');
-  // Prevent system context menu when right-clicking a Blockly context menu.
-  Blockly.bindEventWithChecks_(menuDom, 'contextmenu', null,
-                               Blockly.utils.noEvent);
   // Record menuSize after adding menu.
   var menuSize = goog.style.getSize(menuDom);
 
@@ -147,6 +142,27 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
     }
   }
   Blockly.WidgetDiv.position(x, y, windowSize, scrollOffset, rtl);
+  // Calling menuDom.focus() has to wait until after the menu has been placed
+  // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
+  // in view.  See issue #1329.
+  menuDom.focus();
+};
+
+/**
+ * Create and render the menu widget inside Blockly's widget div.
+ * @param {!goog.ui.Menu} menu The menu to add to the widget div.
+ * @private
+ */
+Blockly.ContextMenu.createWidget_ = function(menu) {
+  var div = Blockly.WidgetDiv.DIV;
+  menu.render(div);
+  var menuDom = menu.getElement();
+  Blockly.utils.addClass(menuDom, 'blocklyContextMenu');
+  // Prevent system context menu when right-clicking a Blockly context menu.
+  Blockly.bindEventWithChecks_(menuDom, 'contextmenu', null,
+                               Blockly.utils.noEvent);
+  // Enable autofocus after the initial render to avoid issue #1329.
+  menu.setAllowAutoFocus(true);
 };
 
 /**

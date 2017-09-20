@@ -236,10 +236,9 @@ Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
   var scrollOffset = goog.style.getViewportPageOffset(document);
   var xy = this.getAbsoluteXY_();
   var borderBBox = this.getScaledBBox_();
-  var div = Blockly.WidgetDiv.DIV;
-  menu.render(div);
+
+  this.createWidget_(menu);
   var menuDom = menu.getElement();
-  Blockly.utils.addClass(menuDom, 'blocklyDropdownMenu');
   // Record menuSize after adding menu.
   var menuSize = goog.style.getSize(menuDom);
   // Recalculate height for the total content, not only box height.
@@ -269,8 +268,20 @@ Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
   }
   Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset,
                              this.sourceBlock_.RTL);
-  menu.setAllowAutoFocus(true);
   menuDom.focus();
+};
+
+/**
+ * Create and render the menu widget inside Blockly's widget div.
+ * @param {!goog.ui.Menu} menu The menu to add to the widget div.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.createWidget_ = function(menu) {
+  var div = Blockly.WidgetDiv.DIV;
+  menu.render(div);
+  Blockly.utils.addClass(menu.getElement(), 'blocklyDropdownMenu');
+  // Enable autofocus after the initial render to avoid issue #1329.
+  menu.setAllowAutoFocus(true);
 };
 
 /**

@@ -101,11 +101,6 @@ Blockly.FieldDate.prototype.setValue = function(date) {
 Blockly.FieldDate.prototype.showEditor_ = function() {
   Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
       Blockly.FieldDate.widgetDispose_);
-  // Create the date picker using Closure.
-  Blockly.FieldDate.loadLanguage_();
-  var picker = new goog.ui.DatePicker();
-  picker.setAllowNone(false);
-  picker.setShowWeekNum(false);
 
   // Position the picker to line up with the field.
   // Record windowSize and scrollOffset before adding the picker.
@@ -113,9 +108,7 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
   var scrollOffset = goog.style.getViewportPageOffset(document);
   var xy = this.getAbsoluteXY_();
   var borderBBox = this.getScaledBBox_();
-  var div = Blockly.WidgetDiv.DIV;
-  picker.render(div);
-  picker.setDate(goog.date.fromIsoString(this.getValue()));
+  var picker = this.createWidget_();
   // Record pickerSize after adding the date picker.
   var pickerSize = goog.style.getSize(picker.getElement());
 
@@ -155,6 +148,23 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
         }
         thisField.setValue(date);
       });
+};
+
+/**
+ * Create a date picker widget and render it inside the widget div.
+ * @return {!goog.ui.DatePicker} The newly created date picker.
+ * @private
+ */
+Blockly.FieldDate.prototype.createWidget_ = function() {
+  // Create the date picker using Closure.
+  Blockly.FieldDate.loadLanguage_();
+  var picker = new goog.ui.DatePicker();
+  picker.setAllowNone(false);
+  picker.setShowWeekNum(false);
+  var div = Blockly.WidgetDiv.DIV;
+  picker.render(div);
+  picker.setDate(goog.date.fromIsoString(this.getValue()));
+  return picker;
 };
 
 /**

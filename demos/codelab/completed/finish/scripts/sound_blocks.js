@@ -28,8 +28,8 @@
             ["E4", "sounds/e4.m4a"],
             ["F4", "sounds/f4.m4a"],
             ["G4", "sounds/g4.m4a"],
-            ["A4", "sounds/a4.m4a"],
-            ["B4", "sounds/b4.m4a"],
+            ["A5", "sounds/a5.m4a"],
+            ["B5", "sounds/b5.m4a"],
             ["C5", "sounds/c5.m4a"]
           ]
         }

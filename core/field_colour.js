@@ -166,10 +166,6 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
 Blockly.FieldColour.prototype.showEditor_ = function() {
   Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
       Blockly.FieldColour.widgetDispose_);
-  // Create the palette using Closure.
-  var picker = new goog.ui.ColorPicker();
-  picker.setSize(this.columns_ || Blockly.FieldColour.COLUMNS);
-  picker.setColors(this.colours_ || Blockly.FieldColour.COLOURS);
 
   // Position the palette to line up with the field.
   // Record windowSize and scrollOffset before adding the palette.
@@ -177,10 +173,8 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
   var scrollOffset = goog.style.getViewportPageOffset(document);
   var xy = this.getAbsoluteXY_();
   var borderBBox = this.getScaledBBox_();
-  var div = Blockly.WidgetDiv.DIV;
-  picker.render(div);
-  picker.setSelectedColor(this.getValue());
   // Record paletteSize after adding the palette.
+  var picker = this.createWidget_();
   var paletteSize = goog.style.getSize(picker.getElement());
 
   // Flip the palette vertically if off the bottom.
@@ -221,6 +215,22 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
           thisField.setValue(colour);
         }
       });
+};
+
+/**
+ * Create a color picker widget and render it inside the widget div.
+ * @return {!goog.ui.ColorPicker} The newly created color picker.
+ * @private
+ */
+Blockly.FieldColour.prototype.createWidget_ = function() {
+  // Create the palette using Closure.
+  var picker = new goog.ui.ColorPicker();
+  picker.setSize(this.columns_ || Blockly.FieldColour.COLUMNS);
+  picker.setColors(this.colours_ || Blockly.FieldColour.COLOURS);
+  var div = Blockly.WidgetDiv.DIV;
+  picker.render(div);
+  picker.setSelectedColor(this.getValue());
+  return picker;
 };
 
 /**

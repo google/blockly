@@ -1148,6 +1148,7 @@ Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
  * Clean up the workspace by ordering all the blocks in a column.
  */
 Blockly.WorkspaceSvg.prototype.cleanUp = function() {
+  this.setResizesEnabled(false);
   Blockly.Events.setGroup(true);
   var topBlocks = this.getTopBlocks(true);
   var cursorY = 0;
@@ -1159,8 +1160,7 @@ Blockly.WorkspaceSvg.prototype.cleanUp = function() {
         block.getHeightWidth().height + Blockly.BlockSvg.MIN_BLOCK_Y;
   }
   Blockly.Events.setGroup(false);
-  // Fire an event to allow scrollbars to resize.
-  this.resizeContents();
+  this.setResizesEnabled(true);
 };
 
 /**

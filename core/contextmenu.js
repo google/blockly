@@ -115,37 +115,25 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
  * @private
  */
 Blockly.ContextMenu.position_ = function(menu, e, rtl) {
-    // Record windowSize and scrollOffset before adding menu.
-  var windowSize = goog.dom.getViewportSize();
-  var scrollOffset = goog.style.getViewportPageOffset(document);
+  // Record windowSize and scrollOffset before adding menu.
+  var viewportBBox = Blockly.utils.getViewportBBox();
+  // This one is just a point, but we'll pretend that it's a rect so we can use
+  // some helper functions.
+  var anchorBBox = {
+    top: e.clientY + viewportBBox.top,
+    bottom: e.clientY + viewportBBox.top,
+    left: e.clientX + viewportBBox.left,
+    right: e.clientX + viewportBBox.left
+  };
 
   Blockly.ContextMenu.createWidget_(menu);
-  var menuDom = menu.getElement();
-  // Record menuSize after adding menu.
-  var menuSize = goog.style.getSize(menuDom);
+  var menuSize = Blockly.ContextMenu.getMenuSize_(menu);
 
-  // Position the menu.
-  var x = e.clientX + scrollOffset.x;
-  var y = e.clientY + scrollOffset.y;
-  // Flip menu vertically if off the bottom.
-  if (e.clientY + menuSize.height >= windowSize.height) {
-    y -= menuSize.height;
-  }
-  // Flip menu horizontally if off the edge.
-  if (rtl) {
-    if (menuSize.width >= e.clientX) {
-      x += menuSize.width;
-    }
-  } else {
-    if (e.clientX + menuSize.width >= windowSize.width) {
-      x -= menuSize.width;
-    }
-  }
-  Blockly.WidgetDiv.position(x, y, windowSize, scrollOffset, rtl);
+  Blockly.WidgetDiv.positionMenu(viewportBBox, anchorBBox, menuSize, rtl);
   // Calling menuDom.focus() has to wait until after the menu has been placed
   // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
   // in view.  See issue #1329.
-  menuDom.focus();
+  menu.getElement().focus();
 };
 
 /**
@@ -163,6 +151,20 @@ Blockly.ContextMenu.createWidget_ = function(menu) {
                                Blockly.utils.noEvent);
   // Enable autofocus after the initial render to avoid issue #1329.
   menu.setAllowAutoFocus(true);
+};
+
+/**
+ * Get the size of the rendered menu inside the widget div.
+ * @param {!goog.ui.Menu} menu The menu inside the widget div.
+ * @return {!goog.math.Size} Object with width and height properties.
+ * @private
+ */
+Blockly.ContextMenu.getMenuSize_ = function(menu) {
+  var menuDom = menu.getElement();
+  var menuSize = goog.style.getSize(menuDom);
+  // Recalculate height for the total content, not only box height.
+  menuSize.height = menuDom.scrollHeight;
+  return menuSize;
 };
 
 /**

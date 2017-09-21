@@ -184,10 +184,9 @@ Blockly.WidgetDiv.positionInternal_ = function(x, y, height) {
  */
 Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
     widgetSize, rtl) {
-  var y = Blockly.WidgetDiv.calculateY_(anchorBBox,
-      widgetSize, viewportBBox);
-  var x = Blockly.WidgetDiv.calculateX_(anchorBBox,
-      widgetSize, viewportBBox, rtl);
+  var y = Blockly.WidgetDiv.calculateY_(viewportBBox, anchorBBox, widgetSize);
+  var x = Blockly.WidgetDiv.calculateX_(viewportBBox, anchorBBox, widgetSize,
+      rtl);
 
   Blockly.WidgetDiv.positionInternal_(x, y, widgetSize.height);
 };
@@ -207,9 +206,8 @@ Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
  *     horizontal alignment.
  * @package
  */
-Blockly.WidgetDiv.positionMenu = function(viewportBBox, anchorBBox,
-    menuSize, rtl) {
-
+Blockly.WidgetDiv.positionMenu = function(viewportBBox, anchorBBox, menuSize,
+    rtl) {
   // Flip menu horizontally if off the edge.
   if (rtl) {
     var x = anchorBBox.right;
@@ -222,31 +220,30 @@ Blockly.WidgetDiv.positionMenu = function(viewportBBox, anchorBBox,
       x = viewportBBox.right;
     }
   } else {
-    var x = Blockly.WidgetDiv.calculateX_(anchorBBox, menuSize,
-        viewportBBox, /*rtl*/ false);
+    var x = Blockly.WidgetDiv.calculateX_(viewportBBox, anchorBBox, menuSize,
+        /*rtl*/ false);
   }
 
-  var y = Blockly.WidgetDiv.calculateY_(anchorBBox, menuSize,
-      viewportBBox);
+  var y = Blockly.WidgetDiv.calculateY_(viewportBBox, anchorBBox, menuSize);
   Blockly.WidgetDiv.positionInternal_(x, y, menuSize.height);
 };
 
 /**
  * Calculate an x position (in window coordinates) such that the widget will not
  * be offscreen on the right or left.
+ * @param {!Object} viewportBBox The bounding rectangle of the current viewport,
+ *     in window coordinates.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
  * @param {goog.math.Size} widgetSize The dimensions of the widget inside the
  *     widget div.
- * @param {!Object} viewportBBox The bounding rectangle of the current viewport,
- *     in window coordinates.
  * @param {boolean} rtl Whether the Blockly workspace is in RTL mode.
  * @return {number} A valid x-coordinate for the top left corner of the widget
  *     div, in window coordinates.
  * @private
  */
-Blockly.WidgetDiv.calculateX_ = function(anchorBBox, widgetSize,
-    viewportBBox, rtl) {
+Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
+    rtl) {
   if (rtl) {
     // Try to align the right side of the field and the right side of the widget.
     var widgetLeft = anchorBBox.right - widgetSize.width;
@@ -267,18 +264,17 @@ Blockly.WidgetDiv.calculateX_ = function(anchorBBox, widgetSize,
 /**
  * Calculate a y position (in window coordinates) such that the widget will not
  * be offscreen on the top or bottom.
+ * @param {!Object} viewportBBox The bounding rectangle of the current viewport,
+ *     in window coordinates.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
  * @param {goog.math.Size} widgetSize The dimensions of the widget inside the
  *     widget div.
- * @param {!Object} viewportBBox The bounding rectangle of the current viewport,
- *     in window coordinates.
  * @return {number} A valid y-coordinate for the top left corner of the widget
  *     div, in window coordinates.
  * @private
  */
-Blockly.WidgetDiv.calculateY_ = function(anchorBBox, widgetSize,
-    viewportBBox) {
+Blockly.WidgetDiv.calculateY_ = function(viewportBBox, anchorBBox, widgetSize) {
   // Flip the widget vertically if off the bottom.
   if (anchorBBox.bottom + widgetSize.height >=
       viewportBBox.bottom) {

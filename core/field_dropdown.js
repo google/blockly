@@ -236,7 +236,7 @@ Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
   var anchorBBox = this.getAnchorDimensions_();
 
   this.createWidget_(menu);
-  var menuSize = this.getMenuSize_(menu);
+  var menuSize = Blockly.utils.getUiMenuSize(menu);
 
   // Position the menu.
   Blockly.WidgetDiv.positionMenu(viewportBBox, anchorBBox, menuSize,
@@ -258,20 +258,6 @@ Blockly.FieldDropdown.prototype.createWidget_ = function(menu) {
   Blockly.utils.addClass(menu.getElement(), 'blocklyDropdownMenu');
   // Enable autofocus after the initial render to avoid issue #1329.
   menu.setAllowAutoFocus(true);
-};
-
-/**
- * Get the size of the rendered menu inside the widget div.
- * @param {!goog.ui.Menu} menu The menu inside the widget div.
- * @return {!goog.math.Size} Object with width and height properties.
- * @private
- */
-Blockly.FieldDropdown.prototype.getMenuSize_ = function(menu) {
-  var menuDom = menu.getElement();
-  var menuSize = goog.style.getSize(menuDom);
-  // Recalculate height for the total content, not only box height.
-  menuSize.height = menuDom.scrollHeight;
-  return menuSize;
 };
 
 /**

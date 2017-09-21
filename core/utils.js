@@ -937,3 +937,17 @@ Blockly.utils.getViewportBBox = function() {
     left: scrollOffset.x
   };
 };
+
+/**
+ * Get the size of a rendered goog.ui.Menu.
+ * @param {!goog.ui.Menu} menu The menu to measure.
+ * @return {!goog.math.Size} Object with width and height properties.
+ * @package
+ */
+Blockly.utils.getUiMenuSize = function(menu) {
+  var menuDom = menu.getElement();
+  var menuSize = goog.style.getSize(menuDom);
+  // Recalculate height for the total content, not only box height.
+  menuSize.height = menuDom.scrollHeight;
+  return menuSize;
+};

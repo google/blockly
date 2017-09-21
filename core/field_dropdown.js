@@ -29,6 +29,9 @@
 goog.provide('Blockly.FieldDropdown');
 
 goog.require('Blockly.Field');
+goog.require('Blockly.utils');
+goog.require('Blockly.utils.uiMenu');
+
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.style');
@@ -236,10 +239,13 @@ Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
   var anchorBBox = this.getAnchorDimensions_();
 
   this.createWidget_(menu);
-  var menuSize = Blockly.utils.getUiMenuSize(menu);
+  var menuSize = Blockly.utils.uiMenu.getSize(menu);
 
+  if (this.sourceBlock_.RTL) {
+    Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox, menuSize);
+  }
   // Position the menu.
-  Blockly.WidgetDiv.positionMenu(viewportBBox, anchorBBox, menuSize,
+  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, menuSize,
       this.sourceBlock_.RTL);
   // Calling menuDom.focus() has to wait until after the menu has been placed
   // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
@@ -277,6 +283,7 @@ Blockly.FieldDropdown.prototype.getAnchorDimensions_ = function() {
   } else {
     boundingBox.left -= Blockly.FieldDropdown.CHECKMARK_OVERHANG;
   }
+
   return boundingBox;
 };
 

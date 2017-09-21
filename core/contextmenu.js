@@ -30,6 +30,9 @@
  */
 goog.provide('Blockly.ContextMenu');
 
+goog.require('Blockly.utils');
+goog.require('Blockly.utils.uiMenu');
+
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.style');
@@ -127,9 +130,13 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
   };
 
   Blockly.ContextMenu.createWidget_(menu);
-  var menuSize = Blockly.utils.getUiMenuSize(menu);
+  var menuSize = Blockly.utils.uiMenu.getSize(menu);
 
-  Blockly.WidgetDiv.positionMenu(viewportBBox, anchorBBox, menuSize, rtl);
+  if (rtl) {
+    Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox, menuSize);
+  }
+
+  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, menuSize, rtl);
   // Calling menuDom.focus() has to wait until after the menu has been placed
   // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
   // in view.  See issue #1329.

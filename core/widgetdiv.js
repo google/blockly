@@ -192,43 +192,6 @@ Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
 };
 
 /**
- * Position a widget div that contains a goog.ui.Menu, based on an anchor rectangle.
- * The widget should be placed adjacent to but not overlapping the anchor
- * rectangle.  The preferred position is directly below and aligned to the left
- * (ltr) or right (rtl) side of the anchor.
- * @param {!Object} viewportBBox The bounding rectangle of the current viewport,
- *     in window coordinates.
- * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
- *     coordinates.
- * @param {!goog.math.Size} menuSize The size of the menu that is inside the
- *     widget div, in window coordinates.
- * @param {boolean} rtl Whether the workspace is in RTL mode.  This determines
- *     horizontal alignment.
- * @package
- */
-Blockly.WidgetDiv.positionMenu = function(viewportBBox, anchorBBox, menuSize,
-    rtl) {
-  // Flip menu horizontally if off the edge.
-  if (rtl) {
-    var x = anchorBBox.right;
-    // Don't go offscreen left.
-    if (x < viewportBBox.left + menuSize.width) {
-      x = viewportBBox.left + menuSize.width;
-    }
-    // But really don't go offscreen right
-    if (x > viewportBBox.right) {
-      x = viewportBBox.right;
-    }
-  } else {
-    var x = Blockly.WidgetDiv.calculateX_(viewportBBox, anchorBBox, menuSize,
-        /*rtl*/ false);
-  }
-
-  var y = Blockly.WidgetDiv.calculateY_(viewportBBox, anchorBBox, menuSize);
-  Blockly.WidgetDiv.positionInternal_(x, y, menuSize.height);
-};
-
-/**
  * Calculate an x position (in window coordinates) such that the widget will not
  * be offscreen on the right or left.
  * @param {!Object} viewportBBox The bounding rectangle of the current viewport,

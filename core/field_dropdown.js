@@ -231,44 +231,20 @@ Blockly.FieldDropdown.prototype.createMenu_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
-  // Record windowSize and scrollOffset before adding menu.
-  var windowSize = goog.dom.getViewportSize();
-  var scrollOffset = goog.style.getViewportPageOffset(document);
-  var xy = this.getAbsoluteXY_();
-  var borderBBox = this.getScaledBBox_();
+  // Record viewport dimensions before adding the dropdown.
+  var viewportBBox = Blockly.utils.getViewportBBox();
+  var anchorBBox = this.getAnchorDimensions_();
 
   this.createWidget_(menu);
-  var menuDom = menu.getElement();
-  // Record menuSize after adding menu.
-  var menuSize = goog.style.getSize(menuDom);
-  // Recalculate height for the total content, not only box height.
-  menuSize.height = menuDom.scrollHeight;
+  var menuSize = this.getMenuSize_(menu);
 
   // Position the menu.
-  // Flip menu vertically if off the bottom.
-  if (xy.y + menuSize.height + borderBBox.height >=
-      windowSize.height + scrollOffset.y) {
-    xy.y -= menuSize.height + 2;
-  } else {
-    xy.y += borderBBox.height;
-  }
-  if (this.sourceBlock_.RTL) {
-    xy.x += borderBBox.width;
-    xy.x += Blockly.FieldDropdown.CHECKMARK_OVERHANG;
-    // Don't go offscreen left.
-    if (xy.x < scrollOffset.x + menuSize.width) {
-      xy.x = scrollOffset.x + menuSize.width;
-    }
-  } else {
-    xy.x -= Blockly.FieldDropdown.CHECKMARK_OVERHANG;
-    // Don't go offscreen right.
-    if (xy.x > windowSize.width + scrollOffset.x - menuSize.width) {
-      xy.x = windowSize.width + scrollOffset.x - menuSize.width;
-    }
-  }
-  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset,
-                             this.sourceBlock_.RTL);
-  menuDom.focus();
+  Blockly.WidgetDiv.positionMenu(viewportBBox, anchorBBox, menuSize,
+      this.sourceBlock_.RTL);
+  // Calling menuDom.focus() has to wait until after the menu has been placed
+  // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
+  // in view.  See issue #1329.
+  menu.getElement().focus();
 };
 
 /**
@@ -282,6 +258,40 @@ Blockly.FieldDropdown.prototype.createWidget_ = function(menu) {
   Blockly.utils.addClass(menu.getElement(), 'blocklyDropdownMenu');
   // Enable autofocus after the initial render to avoid issue #1329.
   menu.setAllowAutoFocus(true);
+};
+
+/**
+ * Get the size of the rendered menu inside the widget div.
+ * @param {!goog.ui.Menu} menu The menu inside the widget div.
+ * @return {!goog.math.Size} Object with width and height properties.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.getMenuSize_ = function(menu) {
+  var menuDom = menu.getElement();
+  var menuSize = goog.style.getSize(menuDom);
+  // Recalculate height for the total content, not only box height.
+  menuSize.height = menuDom.scrollHeight;
+  return menuSize;
+};
+
+/**
+ * Returns the coordinates of the anchor rectangle for the widget div.
+ * On a FieldDropdown we take the top-left corner of the field, then adjust for
+ * the size of the checkmark that is displayed next to the currently selected
+ * item. This means that the item text will be positioned directly under the
+ * field text, rather than offset slightly.
+ * @returns {!Object} The bounding rectangle of the anchor, in window
+ *     coordinates.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.getAnchorDimensions_ = function() {
+  var boundingBox = this.getScaledBBox_();
+  if (this.sourceBlock_.RTL) {
+    boundingBox.right += Blockly.FieldDropdown.CHECKMARK_OVERHANG;
+  } else {
+    boundingBox.left -= Blockly.FieldDropdown.CHECKMARK_OVERHANG;
+  }
+  return boundingBox;
 };
 
 /**

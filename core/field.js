@@ -405,16 +405,23 @@ Blockly.Field.prototype.getSize = function() {
 };
 
 /**
- * Returns the height and width of the field,
- * accounting for the workspace scaling.
- * @return {!goog.math.Size} Height and width.
+ * Returns the bounding box of the rendered field, accounting for workspace
+ * scaling.
+ * @return {!Object} An object with top, bottom, left, and right in pixels
+ *     relative to the top left corner of the page (window coordinates).
  * @private
  */
 Blockly.Field.prototype.getScaledBBox_ = function() {
   var bBox = this.borderRect_.getBBox();
-  // Create new object, as getBBox can return an uneditable SVGRect in IE.
-  return new goog.math.Size(bBox.width * this.sourceBlock_.workspace.scale,
-                            bBox.height * this.sourceBlock_.workspace.scale);
+  var scaledHeight = bBox.height * this.sourceBlock_.workspace.scale;
+  var scaledWidth = bBox.width * this.sourceBlock_.workspace.scale;
+  var xy = this.getAbsoluteXY_();
+  return {
+    top: xy.y,
+    bottom: xy.y + scaledHeight,
+    left: xy.x,
+    right: xy.x + scaledWidth
+  };
 };
 
 /**

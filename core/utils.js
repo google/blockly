@@ -917,3 +917,24 @@ Blockly.utils.setCssTransform = function(node, transform) {
   node.style['transform'] = transform;
   node.style['-webkit-transform'] = transform;
 };
+
+/**
+ * Get the position of the current viewport in window coordinates.  This takes
+ * scroll into account.
+ * @return {!Object} an object containing window width, height, and scroll
+ *     position in window coordinates.
+ * @package
+ */
+Blockly.utils.getViewportBBox = function() {
+  // Pixels.
+  var windowSize = goog.dom.getViewportSize();
+  // Pixels, in window coordinates.
+  var scrollOffset = goog.style.getViewportPageOffset(document);
+  return {
+    right: windowSize.width + scrollOffset.x,
+    bottom: windowSize.height + scrollOffset.y,
+    top: scrollOffset.y,
+    left: scrollOffset.x
+  };
+};
+

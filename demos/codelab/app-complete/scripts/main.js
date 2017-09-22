@@ -79,7 +79,7 @@
   enableMakerMode();
 
   Blockly.inject('blockly-div', {
-    media: '/media/',
+    media: '../../../media/',
     toolbox: document.getElementById('toolbox'),
     toolboxPosition: 'end',
     horizontalLayout: true,

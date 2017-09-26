@@ -32,6 +32,7 @@
 	"NEW_VARIABLE": "Стварыць зьменную…",
 	"NEW_VARIABLE_TITLE": "Імя новай зьменнай:",
 	"VARIABLE_ALREADY_EXISTS": "Зьменная з назвай «%1» ужо існуе.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Зьменная з назвай «%1» ужо існуе зь іншым тыпам «%2».",
 	"PROCEDURE_ALREADY_EXISTS": "Працэдура з назвай «%1» ужо існуе.",
 	"DELETE_VARIABLE_CONFIRMATION": "Выдаліць %1 выкарыстаньняў зьменнай «%2»?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Немагчыма выдаліць зьменную «%1», таму што яна зьяўляецца часткай вызначэньня функцыі «%2»",

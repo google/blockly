@@ -44,7 +44,6 @@ goog.require('goog.math.Coordinate');
  */
 // TODO: Consider touchcancel/pointercancel.
 
-
 /**
  * Class for one gesture.
  * @param {!Event} e The event that kicked off this gesture.

@@ -33,6 +33,7 @@
 	"NEW_VARIABLE": "Krouiñ un argemm nevez...",
 	"NEW_VARIABLE_TITLE": "Anv an argemmenn nevez :",
 	"VARIABLE_ALREADY_EXISTS": "Un argemm anvet '%1' zo anezhañ dija.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Un argemenn anvet '%1' zo c'hoazh evit un argemenn all eus ar seurt '%2'.",
 	"PROCEDURE_ALREADY_EXISTS": "Un argerzhadur anvet '%1' zo anezhañ dija.",
 	"DELETE_VARIABLE_CONFIRMATION": "Lemel %1 implij eus an argemm '%2' ?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Ne ch'aller ket dilemel an argemm \"%1\" dre m'eo lod eus dielfennadur an arc'hwel \"%2\"",

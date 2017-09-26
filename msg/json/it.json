@@ -9,7 +9,8 @@
 			"Federico Mugnaini",
 			"JackLantern",
 			"Selven",
-			"Samuele2002"
+			"Samuele2002",
+			"Greis"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
@@ -38,6 +39,7 @@
 	"NEW_VARIABLE": "Crea variabile...",
 	"NEW_VARIABLE_TITLE": "Nome della nuova variabile:",
 	"VARIABLE_ALREADY_EXISTS": "Una variabile denominata '%1' esiste già.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Una variabile nominata \"%1\" esiste già per un'altra variabile del tipo \"%2\".",
 	"PROCEDURE_ALREADY_EXISTS": "Una procedura denominata '%1' esiste già.",
 	"DELETE_VARIABLE_CONFIRMATION": "Cancella %1 usi della variabile '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Non si può cancellare la variabile '%1' perché è parte della definizione della funzione '%2'",

@@ -155,11 +155,11 @@ Blockly.FlyoutButton.prototype.createDom = function() {
       this.svgGroup_);
   svgText.textContent = this.text_;
 
-  this.width = svgText.getComputedTextLength() +
-      2 * Blockly.FlyoutButton.MARGIN;
+  this.width = svgText.getComputedTextLength();    
   this.height = 20;  // Can't compute it :(
 
   if (!this.isLabel_) {
+    this.width += 2 * Blockly.FlyoutButton.MARGIN;
     shadow.setAttribute('width', this.width);
     shadow.setAttribute('height', this.height);
   }

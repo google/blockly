@@ -339,12 +339,6 @@ Blockly.BlockSvg.prototype.renderFields_ =
       continue;
     }
 
-    // Force a width re-calculation on IE and Edge to get around the issue
-    // described in Blockly.Field.getCachedWidth
-    if (goog.userAgent.IE || goog.userAgent.EDGE) {
-      field.updateWidth();
-    }
-
     if (this.RTL) {
       cursorX -= field.renderSep + field.renderWidth;
       root.setAttribute('transform',

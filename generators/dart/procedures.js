@@ -35,9 +35,10 @@ Blockly.Dart['procedures_defreturn'] = function(block) {
       Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Dart.statementToCode(block, 'STACK');
   if (Blockly.Dart.STATEMENT_PREFIX) {
+    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
     branch = Blockly.Dart.prefixLines(
         Blockly.Dart.STATEMENT_PREFIX.replace(/%1/g,
-        '\'' + block.id + '\''), Blockly.Dart.INDENT) + branch;
+        '\'' + id + '\''), Blockly.Dart.INDENT) + branch;
   }
   if (Blockly.Dart.INFINITE_LOOP_TRAP) {
     branch = Blockly.Dart.INFINITE_LOOP_TRAP.replace(/%1/g,

@@ -27,6 +27,8 @@
 goog.provide('Blockly.FieldDate');
 
 goog.require('Blockly.Field');
+goog.require('Blockly.utils');
+
 goog.require('goog.date');
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -101,46 +103,18 @@ Blockly.FieldDate.prototype.setValue = function(date) {
 Blockly.FieldDate.prototype.showEditor_ = function() {
   Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
       Blockly.FieldDate.widgetDispose_);
-  // Create the date picker using Closure.
-  Blockly.FieldDate.loadLanguage_();
-  var picker = new goog.ui.DatePicker();
-  picker.setAllowNone(false);
-  picker.setShowWeekNum(false);
 
-  // Position the picker to line up with the field.
-  // Record windowSize and scrollOffset before adding the picker.
-  var windowSize = goog.dom.getViewportSize();
-  var scrollOffset = goog.style.getViewportPageOffset(document);
-  var xy = this.getAbsoluteXY_();
-  var borderBBox = this.getScaledBBox_();
-  var div = Blockly.WidgetDiv.DIV;
-  picker.render(div);
-  picker.setDate(goog.date.fromIsoString(this.getValue()));
-  // Record pickerSize after adding the date picker.
+  // Record viewport dimensions before adding the picker.
+  var viewportBBox = Blockly.utils.getViewportBBox();
+  var anchorBBox = this.getScaledBBox_();
+
+  // Create and add the date picker, then record the size.
+  var picker = this.createWidget_();
   var pickerSize = goog.style.getSize(picker.getElement());
 
-  // Flip the picker vertically if off the bottom.
-  if (xy.y + pickerSize.height + borderBBox.height >=
-      windowSize.height + scrollOffset.y) {
-    xy.y -= pickerSize.height - 1;
-  } else {
-    xy.y += borderBBox.height - 1;
-  }
-  if (this.sourceBlock_.RTL) {
-    xy.x += borderBBox.width;
-    xy.x -= pickerSize.width;
-    // Don't go offscreen left.
-    if (xy.x < scrollOffset.x) {
-      xy.x = scrollOffset.x;
-    }
-  } else {
-    // Don't go offscreen right.
-    if (xy.x > windowSize.width + scrollOffset.x - pickerSize.width) {
-      xy.x = windowSize.width + scrollOffset.x - pickerSize.width;
-    }
-  }
-  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset,
-                             this.sourceBlock_.RTL);
+  // Position the picker to line up with the field.
+  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, pickerSize,
+      this.sourceBlock_.RTL);
 
   // Configure event handler.
   var thisField = this;
@@ -155,6 +129,23 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
         }
         thisField.setValue(date);
       });
+};
+
+/**
+ * Create a date picker widget and render it inside the widget div.
+ * @return {!goog.ui.DatePicker} The newly created date picker.
+ * @private
+ */
+Blockly.FieldDate.prototype.createWidget_ = function() {
+  // Create the date picker using Closure.
+  Blockly.FieldDate.loadLanguage_();
+  var picker = new goog.ui.DatePicker();
+  picker.setAllowNone(false);
+  picker.setShowWeekNum(false);
+  var div = Blockly.WidgetDiv.DIV;
+  picker.render(div);
+  picker.setDate(goog.date.fromIsoString(this.getValue()));
+  return picker;
 };
 
 /**

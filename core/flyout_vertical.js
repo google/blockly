@@ -214,7 +214,7 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
       delta *= 10;
     }
     var metrics = this.getMetrics_();
-    var pos = metrics.viewTop + delta;
+    var pos = (metrics.viewTop - metrics.contentTop) + delta;
     var limit = metrics.contentHeight - metrics.viewHeight;
     pos = Math.min(pos, limit);
     pos = Math.max(pos, 0);

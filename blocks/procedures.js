@@ -27,6 +27,7 @@
 goog.provide('Blockly.Blocks.procedures');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly');
 
 
 /**
@@ -443,7 +444,14 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     var source = this.sourceBlock_;
     if (source && source.workspace && source.workspace.options &&
         source.workspace.options.parentWorkspace) {
-      source.workspace.options.parentWorkspace.createVariable(newText);
+      var workspace = source.workspace.options.parentWorkspace;
+      var variable = workspace.getVariable(newText);
+      // If there is a case change, rename the variable.
+      if (variable && variable.name !== newText) {
+        workspace.renameVariableById(variable.getId(), newText);
+      } else {
+        workspace.createVariable(newText);
+      }
     }
   }
 };

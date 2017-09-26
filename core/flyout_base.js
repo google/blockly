@@ -138,8 +138,9 @@ Blockly.Flyout.prototype.CORNER_RADIUS = 8;
  */
 Blockly.Flyout.prototype.MARGIN = Blockly.Flyout.prototype.CORNER_RADIUS;
 
+// TODO: Move GAP_X and GAP_Y to their appropriate files.
+
 /**
- * TODO: Move GAP_X and GAP_Y to their appropriate files.
  * Gap between items in horizontal flyouts. Can be overridden with the "sep"
  * element.
  * @const {number}
@@ -529,8 +530,9 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
     }
   }
   // Delete any background buttons from a previous showing.
-  for (var j = 0, rect; rect = this.backgroundButtons_[j]; j++) {
-    goog.dom.removeNode(rect);
+  for (var j = 0; j < this.backgroundButtons_.length; j++) {
+    var rect = this.backgroundButtons_[j];
+    if (rect) goog.dom.removeNode(rect);
   }
   this.backgroundButtons_.length = 0;
 
@@ -605,14 +607,6 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
   this.targetWorkspace_.setResizesEnabled(false);
   try {
     newBlock = this.placeNewBlock_(originalBlock);
-    //Force a render on IE and Edge to get around the issue described in
-    //Blockly.Field.getCachedWidth
-    if (goog.userAgent.IE || goog.userAgent.EDGE) {
-      var blocks = newBlock.getDescendants();
-      for (var i = blocks.length - 1; i >= 0; i--) {
-        blocks[i].render(false);
-      }
-    }
     // Close the flyout.
     Blockly.hideChaff();
   } finally {

@@ -52,6 +52,7 @@ Code.LANGUAGE_NAME = {
   'is': 'Íslenska',
   'it': 'Italiano',
   'ja': '日本語',
+  'kab': 'Kabyle',
   'ko': '한국어',
   'mk': 'Македонски',
   'ms': 'Bahasa Melayu',

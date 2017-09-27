@@ -153,7 +153,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
  * Mobile browsers have issues with in-line textareas (focus and keyboards).
  * @private
  */
-Blockly.FieldTextInput.showPromptEditor_ = function() {
+Blockly.FieldTextInput.prototype.showPromptEditor_ = function() {
   var fieldText = this;
   Blockly.prompt(Blockly.Msg.CHANGE_VALUE_TITLE, this.text_,
     function(newValue) {

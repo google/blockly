@@ -517,6 +517,7 @@ Blockly.Css.CONTENT = [
     'overflow-y: auto;',
     'position: absolute;',
     'z-index: 70;', /* so blocks go under toolbox when dragging */
+    '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
   '}',
 
   '.blocklyTreeRoot {',

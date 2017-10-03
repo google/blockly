@@ -139,6 +139,9 @@ Blockly.DraggedConnectionManager.prototype.applyConnections = function() {
       var inferiorConnection = this.localConnection_.isSuperior() ?
           this.closestConnection_ : this.localConnection_;
       inferiorConnection.getSourceBlock().connectionUiEffect();
+      // Bring the just-edited stack to the front.
+      var rootBlock = this.topBlock_.getRootBlock();
+      rootBlock.bringToFront();
     }
     this.removeHighlighting_();
   }

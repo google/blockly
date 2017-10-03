@@ -28,6 +28,7 @@ goog.provide('Blockly.Blocks.texts');  // Deprecated
 goog.provide('Blockly.Constants.Text');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly');
 
 
 /**

@@ -238,7 +238,7 @@
 	"LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "Přidat, odebrat nebo změnit pořadí oddílů tohoto seznamu bloku.",
 	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "Přidat položku do seznamu.",
 	"LISTS_REPEAT_TOOLTIP": "Vytváří seznam obsahující danou hodnotu n-krát.",
-	"LISTS_REPEAT_TITLE": "vytvoř seznam s položkou %1 opakovanou %1 krát",
+	"LISTS_REPEAT_TITLE": "vytvoř seznam s položkou %1 opakovanou %2 krát",
 	"LISTS_LENGTH_TITLE": "délka %1",
 	"LISTS_LENGTH_TOOLTIP": "Vrací počet položek v seznamu.",
 	"LISTS_ISEMPTY_TITLE": "%1 je prázdné",

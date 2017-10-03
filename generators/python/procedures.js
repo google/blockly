@@ -49,9 +49,10 @@ Blockly.Python['procedures_defreturn'] = function(block) {
       Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Python.statementToCode(block, 'STACK');
   if (Blockly.Python.STATEMENT_PREFIX) {
+    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
     branch = Blockly.Python.prefixLines(
         Blockly.Python.STATEMENT_PREFIX.replace(/%1/g,
-        '\'' + block.id + '\''), Blockly.Python.INDENT) + branch;
+        '\'' + id + '\''), Blockly.Python.INDENT) + branch;
   }
   if (Blockly.Python.INFINITE_LOOP_TRAP) {
     branch = Blockly.Python.INFINITE_LOOP_TRAP.replace(/%1/g,

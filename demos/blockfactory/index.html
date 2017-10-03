@@ -10,6 +10,7 @@
   <script src="../../blocks_compressed.js"></script>
   <script src="../../../closure-library/closure/goog/base.js"></script>
   <script src="analytics.js"></script>
+  <script src="block_definition_extractor.js"></script>
   <script src="factory_utils.js"></script>
   <script src="workspacefactory/wfactory_model.js"></script>
   <script src="standard_categories.js"></script>
@@ -354,10 +355,21 @@
           <tr>
             <td height="5%">
               <h3>Block Definition:
+                <!-- TODO(#1268): Separate concerns of format and editable.
+                  -               Add "Editable" state toggle button? -->
                 <select id="format">
                   <option value="JSON">JSON</option>
                   <option value="JavaScript">JavaScript</option>
-                  <option value="Manual">Manual edit&hellip;</option>
+                  <option value="Manual-JSON">Manual JSON&hellip;</option>
+                  <script>
+                    // Manual JavaScript works but requires use of eval().
+                    // TODO(#1269): Replace eval() with JS-Interpreter before
+                    //              re-enabling "Manual JavaScript" mode.
+                    if (document.location.href.indexOf('file://') == 0) {
+                      document.write(
+                          '<option value="Manual-JS">Manual JavaScript&hellip;</option>');
+                    }
+                  </script>
                 </select>
               </h3>
             </td>

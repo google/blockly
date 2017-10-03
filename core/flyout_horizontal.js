@@ -221,8 +221,9 @@ Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
   var delta = e.deltaX;
 
   if (delta) {
-    if (goog.userAgent.GECKO) {
-      // Firefox's deltas are a tenth that of Chrome/Safari.
+    // Firefox's mouse wheel deltas are a tenth that of Chrome/Safari.
+    // DeltaMode is 1 for a mouse wheel, but not for a trackpad scroll event
+    if (goog.userAgent.GECKO && (e.deltaMode === 1)) {
       delta *= 10;
     }
     // TODO: #1093

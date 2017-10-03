@@ -27,6 +27,8 @@
 goog.provide('Blockly.FieldColour');
 
 goog.require('Blockly.Field');
+goog.require('Blockly.utils');
+
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.style');
@@ -166,45 +168,18 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
 Blockly.FieldColour.prototype.showEditor_ = function() {
   Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
       Blockly.FieldColour.widgetDispose_);
-  // Create the palette using Closure.
-  var picker = new goog.ui.ColorPicker();
-  picker.setSize(this.columns_ || Blockly.FieldColour.COLUMNS);
-  picker.setColors(this.colours_ || Blockly.FieldColour.COLOURS);
 
-  // Position the palette to line up with the field.
-  // Record windowSize and scrollOffset before adding the palette.
-  var windowSize = goog.dom.getViewportSize();
-  var scrollOffset = goog.style.getViewportPageOffset(document);
-  var xy = this.getAbsoluteXY_();
-  var borderBBox = this.getScaledBBox_();
-  var div = Blockly.WidgetDiv.DIV;
-  picker.render(div);
-  picker.setSelectedColor(this.getValue());
-  // Record paletteSize after adding the palette.
+  // Record viewport dimensions before adding the widget.
+  var viewportBBox = Blockly.utils.getViewportBBox();
+  var anchorBBox = this.getScaledBBox_();
+
+  // Create and add the colour picker, then record the size.
+  var picker = this.createWidget_();
   var paletteSize = goog.style.getSize(picker.getElement());
 
-  // Flip the palette vertically if off the bottom.
-  if (xy.y + paletteSize.height + borderBBox.height >=
-      windowSize.height + scrollOffset.y) {
-    xy.y -= paletteSize.height - 1;
-  } else {
-    xy.y += borderBBox.height - 1;
-  }
-  if (this.sourceBlock_.RTL) {
-    xy.x += borderBBox.width;
-    xy.x -= paletteSize.width;
-    // Don't go offscreen left.
-    if (xy.x < scrollOffset.x) {
-      xy.x = scrollOffset.x;
-    }
-  } else {
-    // Don't go offscreen right.
-    if (xy.x > windowSize.width + scrollOffset.x - paletteSize.width) {
-      xy.x = windowSize.width + scrollOffset.x - paletteSize.width;
-    }
-  }
-  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset,
-                             this.sourceBlock_.RTL);
+  // Position the picker to line up with the field.
+  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, paletteSize,
+      this.sourceBlock_.RTL);
 
   // Configure event handler.
   var thisField = this;
@@ -221,6 +196,22 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
           thisField.setValue(colour);
         }
       });
+};
+
+/**
+ * Create a color picker widget and render it inside the widget div.
+ * @return {!goog.ui.ColorPicker} The newly created color picker.
+ * @private
+ */
+Blockly.FieldColour.prototype.createWidget_ = function() {
+  // Create the palette using Closure.
+  var picker = new goog.ui.ColorPicker();
+  picker.setSize(this.columns_ || Blockly.FieldColour.COLUMNS);
+  picker.setColors(this.colours_ || Blockly.FieldColour.COLOURS);
+  var div = Blockly.WidgetDiv.DIV;
+  picker.render(div);
+  picker.setSelectedColor(this.getValue());
+  return picker;
 };
 
 /**

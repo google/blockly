@@ -56,6 +56,14 @@ goog.inherits(Blockly.FieldTextInput, Blockly.Field);
 Blockly.FieldTextInput.FONTSIZE = 11;
 
 /**
+ * The HTML input element for the user to type, or null if no FieldTextInput
+ * editor is currently open.
+ * @type {HTMLInputElement}
+ * @private
+ */
+Blockly.FieldTextInput.htmlInput_ = null;
+
+/**
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
 Blockly.FieldTextInput.prototype.CURSOR = 'text';
@@ -134,18 +142,35 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
   var quietInput = opt_quietInput || false;
   if (!quietInput && (goog.userAgent.MOBILE || goog.userAgent.ANDROID ||
                       goog.userAgent.IPAD)) {
-    // Mobile browsers have issues with in-line textareas (focus & keyboards).
-    var fieldText = this;
-    Blockly.prompt(Blockly.Msg.CHANGE_VALUE_TITLE, this.text_,
-      function(newValue) {
-        if (fieldText.sourceBlock_) {
-          newValue = fieldText.callValidator(newValue);
-        }
-        fieldText.setValue(newValue);
-      });
-    return;
+    this.showPromptEditor_();
+  } else {
+    this.showInlineEditor_(quietInput);
   }
+};
 
+/**
+ * Create and show a text input editor that is a prompt (usually a popup).
+ * Mobile browsers have issues with in-line textareas (focus and keyboards).
+ * @private
+ */
+Blockly.FieldTextInput.prototype.showPromptEditor_ = function() {
+  var fieldText = this;
+  Blockly.prompt(Blockly.Msg.CHANGE_VALUE_TITLE, this.text_,
+    function(newValue) {
+      if (fieldText.sourceBlock_) {
+        newValue = fieldText.callValidator(newValue);
+      }
+      fieldText.setValue(newValue);
+    });
+};
+
+/**
+ * Create and show a text input editor that sits directly over the text input.
+ * @param {boolean} quietInput True if editor should be created without
+ *     focus.
+ * @private
+ */
+Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
   Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, this.widgetDispose_());
   var div = Blockly.WidgetDiv.DIV;
   // Create the input.
@@ -156,7 +181,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
       (Blockly.FieldTextInput.FONTSIZE * this.workspace_.scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
-  /** @type {!HTMLInputElement} */
+
   Blockly.FieldTextInput.htmlInput_ = htmlInput;
   div.appendChild(htmlInput);
 
@@ -169,6 +194,16 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
     htmlInput.select();
   }
 
+  this.bindEvents_(htmlInput);
+};
+
+/**
+ * Bind handlers for user input on this field and size changes on the workspace.
+ * @param {!HTMLInputElement} htmlInput The htmlInput created in showEditor, to
+ *     which event handlers will be bound.
+ * @private
+ */
+Blockly.FieldTextInput.prototype.bindEvents_ = function(htmlInput) {
   // Bind to keydown -- trap Enter without IME and Esc to hide.
   htmlInput.onKeyDownWrapper_ =
       Blockly.bindEventWithChecks_(htmlInput, 'keydown', this,
@@ -183,6 +218,19 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
       this.onHtmlInputChange_);
   htmlInput.onWorkspaceChangeWrapper_ = this.resizeEditor_.bind(this);
   this.workspace_.addChangeListener(htmlInput.onWorkspaceChangeWrapper_);
+};
+
+/**
+ * Unbind handlers for user input and workspace size changes.
+ * @param {!HTMLInputElement} htmlInput The html for this text input.
+ * @private
+ */
+Blockly.FieldTextInput.prototype.unbindEvents_ = function(htmlInput) {
+  Blockly.unbindEvent_(htmlInput.onKeyDownWrapper_);
+  Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);
+  Blockly.unbindEvent_(htmlInput.onKeyPressWrapper_);
+  this.workspace_.removeChangeListener(
+      htmlInput.onWorkspaceChangeWrapper_);
 };
 
 /**
@@ -289,35 +337,39 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
   return function() {
     var htmlInput = Blockly.FieldTextInput.htmlInput_;
     // Save the edit (if it validates).
-    var text = htmlInput.value;
-    if (thisField.sourceBlock_) {
-      var text1 = thisField.callValidator(text);
-      if (text1 === null) {
-        // Invalid edit.
-        text = htmlInput.defaultValue;
-      } else {
-        // Validation function has changed the text.
-        text = text1;
-        if (thisField.onFinishEditing_) {
-          thisField.onFinishEditing_(text);
-        }
-      }
-    }
-    thisField.setText(text);
-    thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
-    Blockly.unbindEvent_(htmlInput.onKeyDownWrapper_);
-    Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);
-    Blockly.unbindEvent_(htmlInput.onKeyPressWrapper_);
-    thisField.workspace_.removeChangeListener(
-        htmlInput.onWorkspaceChangeWrapper_);
+    thisField.maybeSaveEdit_();
+
+    thisField.unbindEvents_(htmlInput);
     Blockly.FieldTextInput.htmlInput_ = null;
     Blockly.Events.setGroup(false);
+
     // Delete style properties.
     var style = Blockly.WidgetDiv.DIV.style;
     style.width = 'auto';
     style.height = 'auto';
     style.fontSize = '';
   };
+};
+
+Blockly.FieldTextInput.prototype.maybeSaveEdit_ = function() {
+  var htmlInput = Blockly.FieldTextInput.htmlInput_;
+  // Save the edit (if it validates).
+  var text = htmlInput.value;
+  if (this.sourceBlock_) {
+    var text1 = this.callValidator(text);
+    if (text1 === null) {
+      // Invalid edit.
+      text = htmlInput.defaultValue;
+    } else {
+      // Validation function has changed the text.
+      text = text1;
+      if (this.onFinishEditing_) {
+        this.onFinishEditing_(text);
+      }
+    }
+  }
+  this.setText(text);
+  this.sourceBlock_.rendered && this.sourceBlock_.render();
 };
 
 /**

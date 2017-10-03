@@ -351,10 +351,13 @@ Blockly.Field.getCachedWidth = function(textElement) {
 
   // Attempt to compute fetch the width of the SVG text element.
   try {
-    width = textElement.getComputedTextLength();
+    if (goog.userAgent.IE || goog.userAgent.EDGE) {
+      width = textElement.getBBox().width;
+    } else {
+      width = textElement.getComputedTextLength();
+    }
   } catch (e) {
-    // MSIE 11 and Edge are known to throw "Unexpected call to method or
-    // property access." if the block is hidden. Instead, use an
+    // In other cases where we fail to geth the computed text. Instead, use an
     // approximation and do not cache the result. At some later point in time
     // when the block is inserted into the visible DOM, this method will be
     // called again and, at that point in time, will not throw an exception.
@@ -402,16 +405,23 @@ Blockly.Field.prototype.getSize = function() {
 };
 
 /**
- * Returns the height and width of the field,
- * accounting for the workspace scaling.
- * @return {!goog.math.Size} Height and width.
+ * Returns the bounding box of the rendered field, accounting for workspace
+ * scaling.
+ * @return {!Object} An object with top, bottom, left, and right in pixels
+ *     relative to the top left corner of the page (window coordinates).
  * @private
  */
 Blockly.Field.prototype.getScaledBBox_ = function() {
   var bBox = this.borderRect_.getBBox();
-  // Create new object, as getBBox can return an uneditable SVGRect in IE.
-  return new goog.math.Size(bBox.width * this.sourceBlock_.workspace.scale,
-                            bBox.height * this.sourceBlock_.workspace.scale);
+  var scaledHeight = bBox.height * this.sourceBlock_.workspace.scale;
+  var scaledWidth = bBox.width * this.sourceBlock_.workspace.scale;
+  var xy = this.getAbsoluteXY_();
+  return {
+    top: xy.y,
+    bottom: xy.y + scaledHeight,
+    left: xy.x,
+    right: xy.x + scaledWidth
+  };
 };
 
 /**
@@ -462,6 +472,17 @@ Blockly.Field.prototype.setText = function(newText) {
     return;
   }
   this.text_ = newText;
+  this.forceRerender();
+};
+
+/**
+ * Force a rerender of the block that this field is installed on, which will
+ * rerender this field and adjust for any sizing changes.
+ * Other fields on the same block will not rerender, because their sizes have
+ * already been recorded.
+ * @package
+ */
+Blockly.Field.prototype.forceRerender = function() {
   // Set width to 0 to force a rerender of this field.
   this.size_.width = 0;
 

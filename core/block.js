@@ -193,6 +193,13 @@ Blockly.Block.prototype.data = null;
 Blockly.Block.prototype.colour_ = '#000000';
 
 /**
+ * Colour of the block as HSV hue value (0-360)
+ * @type {?number}
+ * @private
+  */
+Blockly.Block.prototype.hue_ = null;
+
+/**
  * Dispose of this block.
  * @param {boolean} healStack If true, then try to heal any gap by connecting
  *     the next statement with the previous statement.  Otherwise, dispose of
@@ -596,15 +603,26 @@ Blockly.Block.prototype.getColour = function() {
 };
 
 /**
+ * Get the HSV hue value of a block. Null if hue not set.
+ * @return {?number} Hue value (0-360)
+ */
+Blockly.Block.prototype.getHue = function() {
+  return this.hue_;
+}
+
+/**
  * Change the colour of a block.
  * @param {number|string} colour HSV hue value, or #RRGGBB string.
  */
 Blockly.Block.prototype.setColour = function(colour) {
   var hue = Number(colour);
-  if (!isNaN(hue)) {
+  if (!isNaN(hue) && 0 <= hue && hue <= 360) {
+    this.hue_ = hue;
     this.colour_ = Blockly.hueToRgb(hue);
   } else if (goog.isString(colour) && colour.match(/^#[0-9a-fA-F]{6}$/)) {
     this.colour_ = colour;
+    // Only store hue if colour is set as a hue
+    this.hue_ = null;
   } else {
     throw 'Invalid colour: ' + colour;
   }

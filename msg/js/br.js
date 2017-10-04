@@ -140,7 +140,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_LENGTH_TITLE = "hirder %1";
 /** @export */ Blockly.Msg.LISTS_LENGTH_TOOLTIP = "Distreiñ hirder ul listenn.";
 /** @export */ Blockly.Msg.LISTS_REPEAT_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-list-with";  // untranslated
-/** @export */ Blockly.Msg.LISTS_REPEAT_TITLE = "Krouiñ ul listenn gant an elfenn %1 arreet div wech";
+/** @export */ Blockly.Msg.LISTS_REPEAT_TITLE = "Krouiñ ul listenn gant an elfenn %1 arreet %2 div wech";
 /** @export */ Blockly.Msg.LISTS_REPEAT_TOOLTIP = "Krouiñ ul listenn a c'hoarvez eus an dalvoudenn roet arreet an niver a wech meneget";
 /** @export */ Blockly.Msg.LISTS_REVERSE_HELPURL = "https://github.com/google/blockly/wiki/Lists#reversing-a-list";
 /** @export */ Blockly.Msg.LISTS_REVERSE_MESSAGE0 = "eilpennañ %1";

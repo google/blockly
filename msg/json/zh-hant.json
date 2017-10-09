@@ -10,7 +10,8 @@
 			"Kly",
 			"Dnowba",
 			"Dnow",
-			"和平至上"
+			"和平至上",
+			"Jessica1213"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "項目",
@@ -30,7 +31,7 @@
 	"EXPAND_ALL": "展開積木",
 	"DISABLE_BLOCK": "停用積木",
 	"ENABLE_BLOCK": "啟用積木",
-	"HELP": "幫助",
+	"HELP": "說明",
 	"UNDO": "還原",
 	"REDO": "重做",
 	"CHANGE_VALUE_TITLE": "修改值：",

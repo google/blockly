@@ -57,6 +57,7 @@ function test_DB_getNeighbours() {
 
   // Test block has no neighbours due to being out of range in the y direction
   result = helper_getNeighbours(db, 0, 19, 4);
+  assertEquals(result.length, 10);
   assertEquals(result.length, 0);
 
   // Test block has no neighbours due to being out of range diagonally

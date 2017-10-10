@@ -44,7 +44,7 @@ Blockly.Python['procedures_defreturn'] = function(block) {
           Blockly.Variables.NAME_TYPE));
     }
   }
-  globals = globals.length ? '  global ' + globals.join(', ') + '\n' : '';
+  globals = globals.length ? Blockly.Python.INDENT + 'global ' + globals.join(', ') + '\n' : '';
   var funcName = Blockly.Python.variableDB_.getName(block.getFieldValue('NAME'),
       Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Python.statementToCode(block, 'STACK');

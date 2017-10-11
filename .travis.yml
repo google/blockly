@@ -16,7 +16,7 @@ before_install:
 - npm install webdriverio
 # Symlink closure library
 - ln -s $(npm root)/google-closure-library ../closure-library
-- ls $(npm root)/google-closure-compiler
+- java -jar $(npm root)/google-closure-compiler/compiler.jar --version
 
 before_script:
   - export DISPLAY=:99.0

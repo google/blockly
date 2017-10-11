@@ -256,7 +256,5 @@ function test_json_dropdown_image() {
     delete Blockly.Blocks[BLOCK_TYPE];
     delete Blockly.Msg['ALTTEXT'];
   }
-
-  assertEquals(1111, 2222);
 }
 

@@ -4,6 +4,7 @@ cd tests/compile
 java -jar $(npm root)/google-closure-compiler/compiler.jar --js='main.js' \
   --js='../../**.js' \
   --js='!../../externs/**.js' \
+  --js='!../../node_modules/**.js' \
   --js='!../../msg/messages.js' \
   --js='../../../closure-library/closure/goog/**.js' \
   --js='../../../closure-library/third_party/closure/goog/**.js' \
@@ -12,5 +13,6 @@ java -jar $(npm root)/google-closure-compiler/compiler.jar --js='main.js' \
   --compilation_level ADVANCED_OPTIMIZATIONS \
   --dependency_mode=STRICT --entry_point=Main \
   --js_output_file main_compressed.js
+test -f main_compressed.js || exit 1
 ls -lag
 cd ../../

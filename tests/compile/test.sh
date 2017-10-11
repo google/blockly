@@ -1,4 +1,6 @@
 echo Hello World.
+# Test script for Travis.
+cd tests/compile
 java -jar $(npm root)/google-closure-compiler/compiler.jar --js='main.js' \
   --js='../../**.js' \
   --js='!../../externs/**.js' \
@@ -11,3 +13,4 @@ java -jar $(npm root)/google-closure-compiler/compiler.jar --js='main.js' \
   --dependency_mode=STRICT --entry_point=Main \
   --js_output_file main_compressed.js
 ls -lag
+cd ../../

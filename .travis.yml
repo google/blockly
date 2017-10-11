@@ -26,4 +26,4 @@ before_script:
 script:
   - set -x
   - npm test
-  - tests/compile/test.sh
+  - bash tests/compile/test.sh

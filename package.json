@@ -18,7 +18,7 @@
   },
   "scripts": {
     "lint": "jshint .",
-    "pretest": "scripts/test_setup.sh",
+    "pretest": "tests/scripts/test_setup.sh",
     "test": "node tests/jsunit/test_runner.js"
   },
   "license": "Apache-2.0",

@@ -25,6 +25,4 @@ function test_prefix() {
   assertEquals('Prefix a word.', '@Hello', generator.prefixLines('Hello', '@'));
   assertEquals('Prefix one line.', '12Hello\n', generator.prefixLines('Hello\n', '12'));
   assertEquals('Prefix two lines.', '***Hello\n***World\n', generator.prefixLines('Hello\nWorld\n', '***'));
-
-  assertEquals('Prefix fail.', '12Helo\n', generator.prefixLines('Hello\n', '12'));
 }

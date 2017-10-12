@@ -9,6 +9,9 @@ matrix:
         apt:
           packages:
           - google-chrome-stable
+    - os: osx
+      node_js: stable
+      osx_image: xcode8.3
 
 before_install:
 - npm install google-closure-library
@@ -26,4 +29,4 @@ before_script:
 script:
   - set -x
   - npm test
-  - tests/compile/travis.sh
+  - cd tests/compile; compile.sh; cd ..

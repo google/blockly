@@ -11,13 +11,13 @@ function check_command {
       fi
    }
 
-check_command scripts/get_geckdriver.sh
+check_command tests/scripts/get_geckdriver.sh
 sleep 5
-check_command scripts/get_selenium.sh 
+check_command tests/scripts/get_selenium.sh
 sleep 5
-check_command scripts/get_chromedriver.sh 
+check_command tests/scripts/get_chromedriver.sh
 sleep 10
-check_command scripts/selenium_connect.sh 
+check_command tests/scripts/selenium_connect.sh
 sleep 10
 
 exit $EXIT_STATUS

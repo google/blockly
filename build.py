@@ -60,10 +60,9 @@ for arg in sys.argv[1:len(sys.argv)]:
   if (arg != 'core' and
       arg != 'accessible' and
       arg != 'generators' and
-      arg != 'langfiles' and
-      arg != 'demo'):
-    raise Exception("Invalid argument: \"" + arg + "\". Usage: build.py <0 or more of accessible," +
-        " core, generators, langfiles, demo>")
+      arg != 'langfiles'):
+    raise Exception("Invalid argument: \"" + arg + "\". Usage: build.py "
+        "<0 or more of accessible, core, generators, langfiles>")
 
 import errno, glob, httplib, json, os, re, subprocess, threading, urllib
 
@@ -214,47 +213,6 @@ class Gen_compressed(threading.Thread):
       self.gen_generator("php")
       self.gen_generator("dart")
       self.gen_generator("lua")
-
-    if ('demo' in self.bundles):
-      self.gen_together()
-
-  def gen_together(self):
-    target_filename = os.path.join("demos", "fixed-advanced", "main_compressed.js")
-    # Define the parameters for the POST request.
-    params = [
-        ("compilation_level", "ADVANCED_OPTIMIZATIONS"),
-        ("use_closure_library", "true"),
-        ("generate_exports", "true"),
-        ("output_format", "json"),
-        ("output_info", "compiled_code"),
-        ("output_info", "warnings"),
-        ("output_info", "errors"),
-        ("output_info", "statistics"),
-        # debug options (to make the uglified code readable)
-        # ("formatting", "pretty_print"),
-        # ("formatting", "print_input_delimiter"),
-        # ("debug", "true"),
-      ]
-
-    # Read in all the source files.
-    filenames = calcdeps.CalculateDependencies(self.search_paths,
-        [os.path.join("demos", "fixed-advanced", "main.js")])
-    filenames.sort()  # Deterministic build.
-    for filename in filenames:
-      # Filter out the Closure files (the compiler will add them).
-      if filename.startswith(os.pardir + os.sep):  # '../'
-        continue
-      f = open(filename)
-      params.append(("js_code", "".join(f.readlines())))
-      f.close()
-
-    externs = [os.path.join("externs", "svg-externs.js")]
-    for filename in externs:
-      f = open(filename)
-      params.append(("js_externs", "".join(f.readlines())))
-      f.close()
-
-    self.do_compile(params, target_filename, filenames, "")
 
   def gen_core(self):
     target_filename = "blockly_compressed.js"
@@ -609,13 +567,6 @@ developers.google.com/blockly/guides/modify/web/closure""")
 
   if ('accessible' in args):
     Gen_uncompressed(full_search_paths, 'blockly_accessible_uncompressed.js').start()
-
-  if ('demo' in args):
-    all_search_paths = calcdeps.ExpandDirectories(
-        ["accessible", "core", "blocks", os.path.join("demos", "fixed-advanced"), os.path.join("msg", "js"), os.path.join(os.path.pardir, "closure-library")])
-    all_search_paths.sort()  # Deterministic build.
-    print("Compressing " + str(len(all_search_paths)) + " files...")
-    Gen_compressed(all_search_paths, args).start()
 
   else:
     # Compressed is limited by network and server speed.

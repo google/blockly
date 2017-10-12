@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Blockly Demo: Fixed Blockly built with Closure Compiler&apos;s advanced optimizations</title>
+  <title>Blockly: Advanced Compilation Test</title>
   <script src="main_compressed.js"></script>
   <style>
     body {
@@ -16,21 +16,16 @@
   </style>
 </head>
 <body>
-  <h1>
-    <a href="https://developers.google.com/blockly/">Blockly</a> &gt;
-    <a href="../index.html">Demos</a> &gt;
-    Fixed Blockly built with Closure Compiler&apos;s advanced optimizations
-  </h1>
+  <h1>Blockly: Advanced Compilation Test</h1>
 
-  <p>
-    This is a simple demo of injecting Blockly into a fixed-sized 'div' element
-    from a Closure-compiled source code with advanced optimizations.
-  </p>
+  <p>To run this test manually, download
+  <a href="https://dl.google.com/closure-compiler/compiler-latest.zip">closure-compiler-vxxxxxxxx.jar</a>,
+  place it in this directory, then run compile.js from the command line.</p>
 
-  <p>&rarr; More info on <a href="https://developers.google.com/blockly/guides/configure-blockly/web/fixed-size">injecting fixed-sized Blockly</a>&hellip;</p>
+  <p>Measure the size of main_compressed.js (295kb as of October 2017), then reload
+  this page and see if Blockly works.</p>
 
   <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
-
   <xml id="toolbox" style="display: none">
     <block type="controls_if"></block>
     <block type="logic_compare"></block>
@@ -40,6 +35,5 @@
     <block type="text"></block>
     <block type="text_print"></block>
   </xml>
-
 </body>
 </html>

@@ -42,14 +42,14 @@ function test_addClass() {
   assertEquals('Adding "three"', 'one two three', p.className);
 }
 
-function test_hasClass() {   
-   var p = document.createElement('p');    
-   p.className = ' one three  two three  ';    
-   assertTrue('Has "one"', Blockly.utils.hasClass(p, 'one'));   
-   assertTrue('Has "two"', Blockly.utils.hasClass(p, 'two'));   
-   assertTrue('Has "three"', Blockly.utils.hasClass(p, 'three'));   
-   assertFalse('Has no "four"', Blockly.utils.hasClass(p, 'four'));   
-   assertFalse('Has no "t"', Blockly.utils.hasClass(p, 't'));   
+function test_hasClass() {
+   var p = document.createElement('p');
+   p.className = ' one three  two three  ';
+   assertTrue('Has "one"', Blockly.utils.hasClass(p, 'one'));
+   assertTrue('Has "two"', Blockly.utils.hasClass(p, 'two'));
+   assertTrue('Has "three"', Blockly.utils.hasClass(p, 'three'));
+   assertFalse('Has no "four"', Blockly.utils.hasClass(p, 'four'));
+   assertFalse('Has no "t"', Blockly.utils.hasClass(p, 't'));
  }
 
 function test_removeClass() {
@@ -128,19 +128,19 @@ function test_tokenizeInterpolation() {
 
   tokens = Blockly.utils.tokenizeInterpolation('Hello');
   assertArrayEquals('No interpolation', ['Hello'], tokens);
-  
+
   tokens = Blockly.utils.tokenizeInterpolation('Hello%World');
   assertArrayEquals('Unescaped %.', ['Hello%World'], tokens);
-  
+
   tokens = Blockly.utils.tokenizeInterpolation('Hello%%World');
   assertArrayEquals('Escaped %.', ['Hello%World'], tokens);
-  
+
   tokens = Blockly.utils.tokenizeInterpolation('Hello %1 World');
   assertArrayEquals('Interpolation.', ['Hello ', 1, ' World'], tokens);
-  
+
   tokens = Blockly.utils.tokenizeInterpolation('%123Hello%456World%789');
   assertArrayEquals('Interpolations.', [123, 'Hello', 456, 'World', 789], tokens);
-  
+
   tokens = Blockly.utils.tokenizeInterpolation('%%%x%%0%00%01%');
   assertArrayEquals('Torture interpolations.', ['%%x%0', 0, 1, '%'], tokens);
 

@@ -248,7 +248,9 @@ Blockly.Tooltip.hide = function() {
       Blockly.Tooltip.DIV.style.display = 'none';
     }
   }
-  clearTimeout(Blockly.Tooltip.showPid_);
+  if (Blockly.Tooltip.showPid_) {
+    clearTimeout(Blockly.Tooltip.showPid_);
+  }
 };
 
 /**

@@ -47,7 +47,7 @@ Blockly.Lua['procedures_defreturn'] = function(block) {
   var returnValue = Blockly.Lua.valueToCode(block, 'RETURN',
       Blockly.Lua.ORDER_NONE) || '';
   if (returnValue) {
-    returnValue = '  return ' + returnValue + '\n';
+    returnValue = Blockly.Lua.INDENT + 'return ' + returnValue + '\n';
   } else if (!branch) {
     branch = '';
   }
@@ -103,9 +103,9 @@ Blockly.Lua['procedures_ifreturn'] = function(block) {
   if (block.hasReturnValue_) {
     var value = Blockly.Lua.valueToCode(block, 'VALUE',
         Blockly.Lua.ORDER_NONE) || 'nil';
-    code += '  return ' + value + '\n';
+    code += Blockly.Lua.INDENT + 'return ' + value + '\n';
   } else {
-    code += '  return\n';
+    code += Blockly.Lua.INDENT + 'return\n';
   }
   code += 'end\n';
   return code;

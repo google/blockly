@@ -54,7 +54,7 @@ Blockly.FieldImage = function(src, width, height, opt_alt, opt_onClick) {
   this.text_ = opt_alt || '';
   this.setValue(src);
 
-  if (typeof opt_onClick === "function") {
+  if (typeof opt_onClick == 'function') {
     this.clickHandler_ = opt_onClick;
   }
 };

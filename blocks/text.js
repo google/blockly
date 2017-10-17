@@ -876,18 +876,18 @@ Blockly.Constants.Text.TEXT_CHARAT_EXTENSION = function() {
 };
 
 Blockly.Extensions.register('text_indexOf_tooltip',
-  Blockly.Constants.Text.TEXT_INDEXOF_TOOLTIP_EXTENSION);
+    Blockly.Constants.Text.TEXT_INDEXOF_TOOLTIP_EXTENSION);
 
 Blockly.Extensions.register('text_quotes',
-  Blockly.Constants.Text.TEXT_QUOTES_EXTENSION);
+    Blockly.Constants.Text.TEXT_QUOTES_EXTENSION);
 
 Blockly.Extensions.register('text_append_tooltip',
-  Blockly.Constants.Text.TEXT_APPEND_TOOLTIP_EXTENSION);
+    Blockly.Constants.Text.TEXT_APPEND_TOOLTIP_EXTENSION);
 
 Blockly.Extensions.registerMutator('text_join_mutator',
-  Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN,
-  Blockly.Constants.Text.TEXT_JOIN_EXTENSION);
+    Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN,
+    Blockly.Constants.Text.TEXT_JOIN_EXTENSION);
 
 Blockly.Extensions.registerMutator('text_charAt_mutator',
-  Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN,
-  Blockly.Constants.Text.TEXT_CHARAT_EXTENSION);
+    Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN,
+    Blockly.Constants.Text.TEXT_CHARAT_EXTENSION);

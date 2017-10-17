@@ -422,8 +422,8 @@ Blockly.Constants.Math.TOOLTIPS_BY_OP = {
 };
 
 Blockly.Extensions.register('math_op_tooltip',
-  Blockly.Extensions.buildTooltipForDropdown(
-    'OP', Blockly.Constants.Math.TOOLTIPS_BY_OP));
+    Blockly.Extensions.buildTooltipForDropdown(
+        'OP', Blockly.Constants.Math.TOOLTIPS_BY_OP));
 
 
 /**
@@ -489,8 +489,8 @@ Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION = function() {
 };
 
 Blockly.Extensions.registerMutator('math_is_divisibleby_mutator',
-  Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN,
-  Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION);
+    Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN,
+    Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION);
 
 /**
  * Update the tooltip of 'math_change' block to reference the variable.
@@ -505,8 +505,8 @@ Blockly.Constants.Math.CHANGE_TOOLTIP_EXTENSION = function() {
 };
 
 Blockly.Extensions.register('math_change_tooltip',
-  Blockly.Extensions.buildTooltipWithFieldValue(
-    Blockly.Msg.MATH_CHANGE_TOOLTIP, 'VAR'));
+    Blockly.Extensions.buildTooltipWithFieldValue(
+        Blockly.Msg.MATH_CHANGE_TOOLTIP, 'VAR'));
 
 /**
  * Mixin with mutator methods to support alternate output based if the
@@ -563,5 +563,5 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_EXTENSION = function() {
 };
 
 Blockly.Extensions.registerMutator('math_modes_of_list_mutator',
-  Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN,
-  Blockly.Constants.Math.LIST_MODES_MUTATOR_EXTENSION);
+    Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN,
+    Blockly.Constants.Math.LIST_MODES_MUTATOR_EXTENSION);

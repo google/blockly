@@ -47,7 +47,7 @@ Blockly.Dart['procedures_defreturn'] = function(block) {
   var returnValue = Blockly.Dart.valueToCode(block, 'RETURN',
       Blockly.Dart.ORDER_NONE) || '';
   if (returnValue) {
-    returnValue = '  return ' + returnValue + ';\n';
+    returnValue = Blockly.Dart.INDENT + 'return ' + returnValue + ';\n';
   }
   var returnType = returnValue ? 'dynamic' : 'void';
   var args = [];
@@ -101,9 +101,9 @@ Blockly.Dart['procedures_ifreturn'] = function(block) {
   if (block.hasReturnValue_) {
     var value = Blockly.Dart.valueToCode(block, 'VALUE',
         Blockly.Dart.ORDER_NONE) || 'null';
-    code += '  return ' + value + ';\n';
+    code += Blockly.Dart.INDENT + 'return ' + value + ';\n';
   } else {
-    code += '  return;\n';
+    code += Blockly.Dart.INDENT + 'return;\n';
   }
   code += '}\n';
   return code;

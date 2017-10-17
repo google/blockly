@@ -248,7 +248,7 @@
 	"LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "Ouzhpennañ, lemel pe adurzhiañ ar rannoù evit kefluniañ ar bloc'h listenn-mañ.",
 	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "Ouzhpennañ un elfenn d'ar roll",
 	"LISTS_REPEAT_TOOLTIP": "Krouiñ ul listenn a c'hoarvez eus an dalvoudenn roet arreet an niver a wech meneget",
-	"LISTS_REPEAT_TITLE": "Krouiñ ul listenn gant an elfenn %1 arreet div wech",
+	"LISTS_REPEAT_TITLE": "Krouiñ ul listenn gant an elfenn %1 arreet %2 div wech",
 	"LISTS_LENGTH_TITLE": "hirder %1",
 	"LISTS_LENGTH_TOOLTIP": "Distreiñ hirder ul listenn.",
 	"LISTS_ISEMPTY_TITLE": "%1 zo goullo",

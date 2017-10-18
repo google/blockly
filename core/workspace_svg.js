@@ -521,16 +521,19 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculations_ = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.resizeContents = function() {
-  if (!this.resizesEnabled_ || !this.rendered) {
+  if (!this.resizesEnabled_ || !this.rendered || this.pendingResize_) {
     return;
   }
-  if (this.scrollbar) {
-    // TODO(picklesrus): Once rachel-fenichel's scrollbar refactoring
-    // is complete, call the method that only resizes scrollbar
-    // based on contents.
-    this.scrollbar.resize();
-  }
-  this.updateInverseScreenCTM();
+  this.pendingResize_ = setTimeout((function() {
+    if (this.scrollbar) {
+      // TODO(picklesrus): Once rachel-fenichel's scrollbar refactoring
+      // is complete, call the method that only resizes scrollbar
+      // based on contents.
+      this.scrollbar.resize();
+    }
+    this.updateInverseScreenCTM();
+    this.pendingResize_ = undefined;
+  }).bind(this));
 };
 
 /**

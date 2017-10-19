@@ -45,7 +45,7 @@ goog.require('goog.userAgent');
  * accessed through the exact name that was exported. Note, that all the exports
  * are happening as the last thing in the generated js files, so they won't be
  * accessible before JavaScript loads!
- * @return {!Object<string, string>}
+ * @return {!Object<string, string>} The message array.
  * @private
  */
 Blockly.utils.getMessageArray_ = function() {
@@ -493,8 +493,8 @@ Blockly.utils.checkMessageReferences = function(message) {
  * @return {!Array.<string|number>} Array of strings and numbers.
  * @private
  */
-Blockly.utils.tokenizeInterpolation_ =
-    function(message, parseInterpolationTokens) {
+Blockly.utils.tokenizeInterpolation_ = function(message,
+    parseInterpolationTokens) {
   var tokens = [];
   var chars = message.split('');
   chars.push('');  // End marker.

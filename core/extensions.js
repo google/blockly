@@ -89,8 +89,8 @@ Blockly.Extensions.registerMixin = function(name, mixinObj) {
  *     flyout of the mutator dialog.
  * @throws {Error} if the mutation is invalid or can't be applied to the block.
  */
-Blockly.Extensions.registerMutator =
-    function(name, mixinObj, opt_helperFn, opt_blockList) {
+Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
+    opt_blockList) {
   var errorPrefix = 'Error when registering mutator "' + name + '": ';
 
   // Sanity check the mixin object before registering it.
@@ -162,8 +162,8 @@ Blockly.Extensions.apply = function(name, block, isMutator) {
  * @throws {Error} if the property does not exist or is not a function.
  * @private
  */
-Blockly.Extensions.checkHasFunction_ =
-    function(errorPrefix, func, propertyName) {
+Blockly.Extensions.checkHasFunction_ = function(errorPrefix, func,
+    propertyName) {
   if (!func) {
     throw new Error(errorPrefix +
         'missing required property "' + propertyName + '"');
@@ -230,8 +230,8 @@ Blockly.Extensions.checkMutatorDialog_ = function(object, errorPrefix) {
  * @param {!Blockly.Block} block The block to inspect.
  * @private
  */
-Blockly.Extensions.checkBlockHasMutatorProperties_ =
-    function(errorPrefix, block) {
+Blockly.Extensions.checkBlockHasMutatorProperties_ = function(errorPrefix,
+    block) {
   if (typeof block.domToMutation != 'function') {
     throw new Error(errorPrefix +
                     'Applying a mutator didn\'t add "domToMutation"');
@@ -313,8 +313,8 @@ Blockly.Extensions.mutatorPropertiesMatch_ = function(oldProperties, block) {
  *     tooltip text.
  * @return {Function} The extension function.
  */
-Blockly.Extensions.buildTooltipForDropdown =
-    function(dropdownName, lookupTable) {
+Blockly.Extensions.buildTooltipForDropdown = function(dropdownName,
+    lookupTable) {
   // List of block types already validated, to minimize duplicate warnings.
   var blockTypesChecked = [];
 
@@ -372,8 +372,8 @@ Blockly.Extensions.buildTooltipForDropdown =
  * @param {!Object<string, string>} lookupTable The string lookup table
  * @private
  */
-Blockly.Extensions.checkDropdownOptionsInTable_ =
-    function(block, dropdownName, lookupTable) {
+Blockly.Extensions.checkDropdownOptionsInTable_ = function(block, dropdownName,
+    lookupTable) {
   // Validate all dropdown options have values.
   var dropdown = block.getField(dropdownName);
   if (!dropdown.isOptionListDynamic()) {
@@ -397,8 +397,8 @@ Blockly.Extensions.checkDropdownOptionsInTable_ =
  * @param {string} fieldName The field with the replacement value.
  * @returns {Function} The extension function.
  */
-Blockly.Extensions.buildTooltipWithFieldValue =
-    function(msgTemplate, fieldName) {
+Blockly.Extensions.buildTooltipWithFieldValue = function(msgTemplate,
+    fieldName) {
   // Check the tooltip string messages for invalid references.
   // Wait for load, in case Blockly.Msg is not yet populated.
   // runAfterPageLoad() does not run in a Node.js environment due to lack of

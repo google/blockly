@@ -372,15 +372,17 @@ Blockly.jsonInitFactory_ = function(jsonDef) {
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
  * @param {!Array.<!Object>} jsonArray An array of JSON block definitions.
+ * @param {boolean} ignoreRedefinitions True if redefinitions of blocks should
+ *     not generate warnings. False by default.
  */
-Blockly.defineBlocksWithJsonArray = function(jsonArray) {
+Blockly.defineBlocksWithJsonArray = function(jsonArray, ignoreRedefinitions) {
   for (var i = 0, elem; elem = jsonArray[i]; i++) {
     var typename = elem.type;
     if (typename == null || typename === '') {
       console.warn('Block definition #' + i +
         ' in JSON array is missing a type attribute. Skipping.');
     } else {
-      if (Blockly.Blocks[typename]) {
+      if (!ignoreRedefinitions && Blockly.Blocks[typename]) {
         console.warn('Block definition #' + i +
           ' in JSON array overwrites prior definition of "' + typename + '".');
       }

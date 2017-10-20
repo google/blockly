@@ -21,7 +21,7 @@ _Explain why these changes should be made.  Include screenshots if applicable._
 
 ### Test Coverage
 
-_Please show how you have added tests to cover your changes, or tell us how you tested it and on which platforms._
+_Please show how you have added tests to cover your changes, or tell us how you tested it and on which platforms.  If it's plaform-agnostic you can delete these checkboxes._
 
 Tested on:
 _Remove this hint: these checkboxes can be checked like this: [x]_

@@ -295,7 +295,7 @@ Blockly.Extensions.register('controls_forEach_tooltip',
  * @package
  * @readonly
  */
-Blockly.Constants.Loops.CONTROL_FLOW_CHECK_IN_LOOP_MIXIN = {
+Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
   /**
    * List of block types that are loops and thus do not need warnings.
    * To add a new loop type add this to your code:

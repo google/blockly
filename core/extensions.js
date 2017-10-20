@@ -325,7 +325,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName,
   if (document) { // Relies on document.readyState
     Blockly.utils.runAfterPageLoad(function() {
       for (var key in lookupTable) {
-        // Will print warnings is reference is missing.
+        // Will print warnings if reference is missing.
         Blockly.utils.checkMessageReferences(lookupTable[key]);
       }
     });
@@ -405,7 +405,7 @@ Blockly.Extensions.buildTooltipWithFieldValue = function(msgTemplate,
   // document object, in which case skip the validation.
   if (document) {  // Relies on document.readyState
     Blockly.utils.runAfterPageLoad(function() {
-      // Will print warnings is reference is missing.
+      // Will print warnings if reference is missing.
       Blockly.utils.checkMessageReferences(msgTemplate);
     });
   }

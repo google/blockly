@@ -119,6 +119,14 @@ Blockly.BlockSvg.prototype.width = 0;
 Blockly.BlockSvg.prototype.dragStartXY_ = null;
 
 /**
+ * Map from IDs for warnings text to PIDs of functions to apply them.
+ * Used to be able to maintain multiple warnings.
+ * @type {Object<string, number>}
+ * @private
+ */
+Blockly.BlockSvg.prototype.warningTextDb_ = null;
+
+/**
  * Constant for identifying rows that are to be rendered inline.
  * Don't collide with Blockly.INPUT_VALUE and friends.
  * @const
@@ -848,6 +856,14 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   // Stop rerendering.
   this.rendered = false;
 
+  // Clear pending warnings.
+  if (this.warningTextDb_) {
+    for (var n in this.warningTextDb_) {
+      clearTimeout(this.warningTextDb_[n]);
+    }
+    this.warningTextDb_ = null;
+  }
+
   Blockly.Events.disable();
   try {
     var icons = this.getIcons();
@@ -1140,30 +1156,30 @@ Blockly.BlockSvg.prototype.setCommentText = function(text) {
  *     maintain multiple warnings.
  */
 Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
-  if (!this.setWarningText.pid_) {
+  if (!this.warningTextDb_) {
     // Create a database of warning PIDs.
     // Only runs once per block (and only those with warnings).
-    this.setWarningText.pid_ = Object.create(null);
+    this.warningTextDb_ = Object.create(null);
   }
   var id = opt_id || '';
   if (!id) {
     // Kill all previous pending processes, this edit supersedes them all.
-    for (var n in this.setWarningText.pid_) {
-      clearTimeout(this.setWarningText.pid_[n]);
-      delete this.setWarningText.pid_[n];
+    for (var n in this.warningTextDb_) {
+      clearTimeout(this.warningTextDb_[n]);
+      delete this.warningTextDb_[n];
     }
-  } else if (this.setWarningText.pid_[id]) {
+  } else if (this.warningTextDb_[id]) {
     // Only queue up the latest change.  Kill any earlier pending process.
-    clearTimeout(this.setWarningText.pid_[id]);
-    delete this.setWarningText.pid_[id];
+    clearTimeout(this.warningTextDb_[id]);
+    delete this.warningTextDb_[id];
   }
   if (this.workspace.isDragging()) {
     // Don't change the warning text during a drag.
     // Wait until the drag finishes.
     var thisBlock = this;
-    this.setWarningText.pid_[id] = setTimeout(function() {
+    this.warningTextDb_[id] = setTimeout(function() {
       if (thisBlock.workspace) {  // Check block wasn't deleted.
-        delete thisBlock.setWarningText.pid_[id];
+        delete thisBlock.warningTextDb_[id];
         thisBlock.setWarningText(text, id);
       }
     }, 100);

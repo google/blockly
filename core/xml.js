@@ -498,7 +498,7 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
     var id = xmlChild.getAttribute('id');
     var name = xmlChild.textContent;
 
-    if (typeof(type) === undefined || type === null) {
+    if (type == null) {
       throw Error('Variable with id, ' + id + ' is without a type');
     }
     workspace.createVariable(name, type, id);
@@ -597,13 +597,11 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
             variable = workspace.createVariable(text, type,
               xmlChild.getAttribute(id));
           }
-          if (typeof(type) !== undefined && type !== null) {
-            if (type !== variable.type) {
-              throw Error('Serialized variable type with id \'' +
-                variable.getId() + '\' had type ' + variable.type + ', and ' +
-                'does not match variable field that references it: ' +
-                Blockly.Xml.domToText(xmlChild) + '.');
-            }
+          if (type != null && type !== variable.type) {
+            throw Error('Serialized variable type with id \'' +
+              variable.getId() + '\' had type ' + variable.type + ', and ' +
+              'does not match variable field that references it: ' +
+              Blockly.Xml.domToText(xmlChild) + '.');
           }
         }
         if (!field) {

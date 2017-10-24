@@ -322,7 +322,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName,
   // Wait for load, in case Blockly.Msg is not yet populated.
   // runAfterPageLoad() does not run in a Node.js environment due to lack of
   // document object, in which case skip the validation.
-  if (document) { // Relies on document.readyState
+  if (document) {  // Relies on document.readyState
     Blockly.utils.runAfterPageLoad(function() {
       for (var key in lookupTable) {
         // Will print warnings if reference is missing.

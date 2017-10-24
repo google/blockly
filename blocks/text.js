@@ -751,10 +751,10 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
 Blockly.Constants.Text.TEXT_JOIN_EXTENSION = function() {
   // Add the quote mixin for the itemCount_ = 0 case.
   this.mixin(Blockly.Constants.Text.QUOTE_IMAGE_MIXIN);
-  // initialize the mutator values
+  // Initialize the mutator values.
   this.itemCount_ = 2;
   this.updateShape_();
-  // Configure the mutator ui
+  // Configure the mutator UI.
   this.setMutator(new Blockly.Mutator(['text_create_join_item']));
 };
 

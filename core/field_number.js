@@ -29,6 +29,7 @@ goog.provide('Blockly.FieldNumber');
 goog.require('Blockly.FieldTextInput');
 goog.require('goog.math');
 
+
 /**
  * Class for an editable number field.
  * @param {(string|number)=} opt_value The initial content of the field. The value

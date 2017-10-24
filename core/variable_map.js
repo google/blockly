@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.VariableMap');
 
+
 /**
  * Class for a variable map.  This contains a dictionary data structure with
  * variable types as keys and lists of variables as values.  The list of
@@ -38,7 +39,7 @@ goog.provide('Blockly.VariableMap');
    * A map from variable type to list of variable names.  The lists contain all
    * of the named variables in the workspace, including variables
    * that are not currently in use.
-   * @type {!Object<string, !Array.<Blockly.VariableModel>>}
+   * @type {!Object.<string, !Array.<Blockly.VariableModel>>}
    * @private
    */
   this.variableMap_ = {};
@@ -59,7 +60,7 @@ Blockly.VariableMap.prototype.clear = function() {
 
 /**
  * Rename the given variable by updating its name in the variable map.
- * @param {?Blockly.VariableModel} variable Variable to rename.
+ * @param {Blockly.VariableModel} variable Variable to rename.
  * @param {string} newName New variable name.
  */
 Blockly.VariableMap.prototype.renameVariable = function(variable, newName) {
@@ -103,17 +104,18 @@ Blockly.VariableMap.prototype.renameVariable = function(variable, newName) {
 };
 
 /**
- * Create a variable with a given name, optional type, and optional id.
- * @param {!string} name The name of the variable. This must be unique across
+ * Create a variable with a given name, optional type, and optional ID.
+ * @param {string} name The name of the variable. This must be unique across
  *     variables and procedures.
- * @param {?string} opt_type The type of the variable like 'int' or 'string'.
+ * @param {string=} opt_type The type of the variable like 'int' or 'string'.
  *     Does not need to be unique. Field_variable can filter variables based on
  *     their type. This will default to '' which is a specific type.
- * @param {?string} opt_id The unique id of the variable. This will default to
+ * @param {string=} opt_id The unique ID of the variable. This will default to
  *     a UUID.
- * @return {?Blockly.VariableModel} The newly created variable.
+ * @return {Blockly.VariableModel} The newly created variable.
  */
-Blockly.VariableMap.prototype.createVariable = function(name, opt_type, opt_id) {
+Blockly.VariableMap.prototype.createVariable = function(name,
+    opt_type, opt_id) {
   var variable = this.getVariable(name);
   if (variable) {
     if (opt_type && variable.type != opt_type) {
@@ -122,11 +124,11 @@ Blockly.VariableMap.prototype.createVariable = function(name, opt_type, opt_id) 
                   'type, "' + opt_type + '".');
     }
     if (opt_id && variable.getId() != opt_id) {
-      throw Error('Variable "' + name + '" is already in use and its id is "'
-                  + variable.getId() + '" which conflicts with the passed in ' +
+      throw Error('Variable "' + name + '" is already in use and its id is "' +
+                  variable.getId() + '" which conflicts with the passed in ' +
                   'id, "' + opt_id + '".');
     }
-    // The variable already exists and has the same id and type.
+    // The variable already exists and has the same ID and type.
     return variable;
   }
   if (opt_id && this.getVariableById(opt_id)) {
@@ -148,7 +150,7 @@ Blockly.VariableMap.prototype.createVariable = function(name, opt_type, opt_id) 
 
 /**
  * Delete a variable.
- * @param {Blockly.VariableModel} variable Variable to delete.
+ * @param {!Blockly.VariableModel} variable Variable to delete.
  */
 Blockly.VariableMap.prototype.deleteVariable = function(variable) {
   var variableList = this.variableMap_[variable.type];
@@ -164,8 +166,8 @@ Blockly.VariableMap.prototype.deleteVariable = function(variable) {
 /**
  * Find the variable by the given name and return it. Return null if it is not
  *     found.
- * @param {!string} name The name to check for.
- * @return {?Blockly.VariableModel} The variable with the given name, or null if
+ * @param {string} name The name to check for.
+ * @return {Blockly.VariableModel} The variable with the given name, or null if
  *     it was not found.
  */
 Blockly.VariableMap.prototype.getVariable = function(name) {
@@ -182,10 +184,10 @@ Blockly.VariableMap.prototype.getVariable = function(name) {
 };
 
 /**
- * Find the variable by the given id and return it. Return null if it is not
+ * Find the variable by the given ID and return it. Return null if it is not
  *     found.
- * @param {!string} id The id to check for.
- * @return {?Blockly.VariableModel} The variable with the given id.
+ * @param {string} id The ID to check for.
+ * @return {Blockly.VariableModel} The variable with the given ID.
  */
 Blockly.VariableMap.prototype.getVariableById = function(id) {
   var keys = Object.keys(this.variableMap_);
@@ -204,7 +206,7 @@ Blockly.VariableMap.prototype.getVariableById = function(id) {
  * Get a list containing all of the variables of a specified type. If type is
  *     null, return list of variables with empty string type.
  * @param {?string} type Type of the variables to find.
- * @return {Array.<Blockly.VariableModel>} The sought after variables of the
+ * @return {!Array.<!Blockly.VariableModel>} The sought after variables of the
  *     passed in type. An empty array if none are found.
  */
 Blockly.VariableMap.prototype.getVariablesOfType = function(type) {
@@ -226,7 +228,7 @@ Blockly.VariableMap.prototype.getVariableTypes = function() {
 
 /**
  * Return all variables of all types.
- * @return {!Array.<Blockly.VariableModel>} List of variable models.
+ * @return {!Array.<!Blockly.VariableModel>} List of variable models.
  */
 Blockly.VariableMap.prototype.getAllVariables = function() {
   var all_variables = [];

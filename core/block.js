@@ -48,7 +48,7 @@ goog.require('goog.string');
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
- *     create a new id.
+ *     create a new ID.
  * @constructor
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {
@@ -261,7 +261,7 @@ Blockly.Block.prototype.dispose = function(healStack) {
 /**
  * Unplug this block from its superior block.  If this block is a statement,
  * optionally reconnect the block underneath with the block on top.
- * @param {boolean} opt_healStack Disconnect child statement and reconnect
+ * @param {boolean=} opt_healStack Disconnect child statement and reconnect
  *   stack.  Defaults to false.
  */
 Blockly.Block.prototype.unplug = function(opt_healStack) {
@@ -619,9 +619,9 @@ Blockly.Block.prototype.setColour = function(colour) {
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
     this.hue_ = hue;
     this.colour_ = Blockly.hueToRgb(hue);
-  } else if (goog.isString(colour) && colour.match(/^#[0-9a-fA-F]{6}$/)) {
+  } else if (goog.isString(colour) && /^#[0-9a-fA-F]{6}$/.test(colour)) {
     this.colour_ = colour;
-    // Only store hue if colour is set as a hue
+    // Only store hue if colour is set as a hue.
     this.hue_ = null;
   } else {
     throw 'Invalid colour: ' + colour;

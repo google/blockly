@@ -587,6 +587,7 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
   /**
    * Inserts appropriate quote images before and after the named field.
    * @param {string} fieldName The name of the field to wrap with quotes.
+   * @this Blockly.Block
    */
   quoteField_: function(fieldName) {
     for (var i = 0, input; input = this.inputList[i]; i++) {
@@ -607,6 +608,7 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
    * @param {boolean} open If the image should be open quote (“ in LTR).
    *                       Otherwise, a closing quote is used (” in LTR).
    * @returns {!Blockly.FieldImage} The new field.
+   * @this Blockly.Block
    */
   newQuote_: function(open) {
     var isLeft = this.RTL? !open : open;

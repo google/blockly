@@ -353,7 +353,7 @@ Blockly.HorizontalFlyout.prototype.getClientRect = function() {
 /**
  * Compute height of flyout.  Position button under each block.
  * For RTL: Lay out the blocks right-aligned.
- * @param {!Array<!Blockly.Block>} blocks The blocks to reflow.
+ * @param {!Array.<!Blockly.Block>} blocks The blocks to reflow.
  * @private
  */
 Blockly.HorizontalFlyout.prototype.reflowInternal_ = function(blocks) {

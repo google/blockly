@@ -30,6 +30,7 @@ goog.provide('Blockly.ScrollbarPair');
 goog.require('goog.dom');
 goog.require('goog.events');
 
+
 /**
  * A note on units: most of the numbers that are in CSS pixels are scaled if the
  * scrollbar is in a mutator.
@@ -189,7 +190,7 @@ Blockly.ScrollbarPair.prototype.getRatio_ = function(handlePosition, viewSize) {
  * @param {!Blockly.Workspace} workspace Workspace to bind the scrollbar to.
  * @param {boolean} horizontal True if horizontal, false if vertical.
  * @param {boolean=} opt_pair True if scrollbar is part of a horiz/vert pair.
- * @param {string} opt_class A class to be applied to this scrollbar.
+ * @param {string=} opt_class A class to be applied to this scrollbar.
  * @constructor
  */
 Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
@@ -591,7 +592,7 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
 /**
  * Create all the DOM elements required for a scrollbar.
  * The resulting widget is not sized.
- * @param {string} opt_class A class to be applied to this scrollbar.
+ * @param {string=} opt_class A class to be applied to this scrollbar.
  * @private
  */
 Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {

@@ -121,7 +121,7 @@ Blockly.Grid.prototype.getSpacing = function() {
 /**
  * Get the id of the pattern element, which should be randomized to avoid
  * conflicts with other Blockly instances on the page.
- * @return {string} The pattern id.
+ * @return {string} The pattern ID.
  * @package
  */
 Blockly.Grid.prototype.getPatternId = function() {

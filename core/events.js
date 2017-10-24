@@ -305,7 +305,7 @@ Blockly.Events.fromJson = function(json, workspace) {
       event = new Blockly.Events.Delete(null);
       break;
     case Blockly.Events.CHANGE:
-      event = new Blockly.Events.Change(null, '', null, null, null);
+      event = new Blockly.Events.Change(null, '', '', '', '');
       break;
     case Blockly.Events.MOVE:
       event = new Blockly.Events.Move(null);
@@ -339,8 +339,7 @@ Blockly.Events.Abstract = function(elem) {
   if (elem instanceof Blockly.Block) {
     this.blockId = elem.id;
     this.workspaceId = elem.workspace.id;
-  }
-  else if (elem instanceof Blockly.VariableModel){
+  } else if (elem instanceof Blockly.VariableModel) {
     this.workspaceId = elem.workspace.id;
     this.varId = elem.getId();
   }

@@ -76,7 +76,7 @@ Blockly.VariableMap.prototype.renameVariable = function(variable, newName) {
   if (variable) {
     variableIndex = variableList.indexOf(variable);
   }
-  if (newVariable){ // see if I can get rid of newVariable dependency
+  if (newVariable) { // see if I can get rid of newVariable dependency
     newVariableIndex = variableList.indexOf(newVariable);
   }
 

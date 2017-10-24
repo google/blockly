@@ -188,7 +188,7 @@ Blockly.FieldImage.prototype.updateWidth = function() {
  * call the handler.
  */
 Blockly.FieldImage.prototype.showEditor_ = function() {
-  if (this.clickHandler_){
+  if (this.clickHandler_) {
     this.clickHandler_(this);
   }
 };

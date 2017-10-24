@@ -217,8 +217,7 @@ Blockly.Workspace.prototype.updateVariableStore = function(clear) {
     if (tempVar) {
       varList.push({'name': tempVar.name, 'type': tempVar.type,
           'id': tempVar.getId()});
-    }
-    else {
+    } else {
       varList.push({'name': name, 'type': null, 'id': null});
       // TODO(marisaleung): Use variable.type and variable.getId() once variable
       // instances are storing more than just name.
@@ -241,7 +240,8 @@ Blockly.Workspace.prototype.updateVariableStore = function(clear) {
  * @param {?Blockly.VariableModel} variable Variable to rename.
  * @param {string} newName New variable name.
  */
-Blockly.Workspace.prototype.renameVariableInternal_ = function(variable, newName) {
+Blockly.Workspace.prototype.renameVariableInternal_ = function(
+    variable, newName) {
   var newVariable = this.getVariable(newName);
   var oldCase;
 

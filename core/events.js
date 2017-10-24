@@ -336,6 +336,26 @@ Blockly.Events.fromJson = function(json, workspace) {
  * @constructor
  */
 Blockly.Events.Abstract = function(elem) {
+  /**
+   * The string identifying the block this event pertains to, if appropriate
+   * for the event type.
+   * @type {string|undefined}
+   */
+  this.blockId = undefined;
+
+  /**
+   * The string identifying the variable this event pertains to. Only set in
+   * VarCreate, VarDelete, and VarRename events.
+   * @type {string|undefined}
+   */
+  this.varId = undefined;
+
+  /**
+   * The string identifying the workspace this event pertains to.
+   * @type {string|undefined}
+   */
+  this.workspaceId = undefined;
+
   if (elem instanceof Blockly.Block) {
     this.blockId = elem.id;
     this.workspaceId = elem.workspace.id;

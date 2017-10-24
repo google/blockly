@@ -181,7 +181,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
       var variables = workspace.getVariablesOfType(variableType);
       variableModelList = variableModelList.concat(variables);
     }
-    for (var i = 0; i < variableModelList.length; i++){
+    for (var i = 0; i < variableModelList.length; i++) {
       if (createSelectedVariable &&
           goog.string.caseInsensitiveEquals(variableModelList[i].name, name)) {
         createSelectedVariable = false;
@@ -197,13 +197,13 @@ Blockly.FieldVariable.dropdownCreate = function() {
   variableModelList.sort(Blockly.VariableModel.compareByName);
   var options = [];
   for (var i = 0; i < variableModelList.length; i++) {
-    // Set the uuid as the internal representation of the variable.
+    // Set the UUID as the internal representation of the variable.
     options[i] = [variableModelList[i].name, variableModelList[i].getId()];
   }
   options.push([Blockly.Msg.RENAME_VARIABLE, Blockly.RENAME_VARIABLE_ID]);
   if (Blockly.Msg.DELETE_VARIABLE) {
     options.push([Blockly.Msg.DELETE_VARIABLE.replace('%1', name),
-      Blockly.DELETE_VARIABLE_ID]);
+        Blockly.DELETE_VARIABLE_ID]);
   }
   return options;
 };
@@ -226,8 +226,7 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
     // If the item selected is a variable, set itemText to the variable name.
     if (variable) {
       itemText = variable.name;
-    }
-    else if (id == Blockly.RENAME_VARIABLE_ID) {
+    } else if (id == Blockly.RENAME_VARIABLE_ID) {
       // Rename variable.
       var currentName = this.getText();
       variable = workspace.getVariable(currentName);

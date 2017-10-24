@@ -30,6 +30,7 @@
  **/
 goog.provide('Blockly.utils.uiMenu');
 
+
 /**
  * Get the size of a rendered goog.ui.Menu.
  * @param {!goog.ui.Menu} menu The menu to measure.

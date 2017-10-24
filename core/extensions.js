@@ -309,7 +309,7 @@ Blockly.Extensions.mutatorPropertiesMatch_ = function(oldProperties, block) {
  * reported as warnings in the console, and are never fatal.
  * @param {string} dropdownName The name of the field whose value is the key
  *     to the lookup table.
- * @param {!Object<string, string>} lookupTable The table of field values to
+ * @param {!Object.<string, string>} lookupTable The table of field values to
  *     tooltip text.
  * @return {Function} The extension function.
  */
@@ -369,7 +369,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName,
  * Emits console warnings when they are not.
  * @param {!Blockly.Block} block The block containing the dropdown
  * @param {string} dropdownName The name of the dropdown
- * @param {!Object<string, string>} lookupTable The string lookup table
+ * @param {!Object.<string, string>} lookupTable The string lookup table
  * @private
  */
 Blockly.Extensions.checkDropdownOptionsInTable_ = function(block, dropdownName,

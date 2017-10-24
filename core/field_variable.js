@@ -41,8 +41,8 @@ goog.require('goog.string');
  *     a unique variable name will be generated.
  * @param {Function=} opt_validator A function that is executed when a new
  *     option is selected.  Its sole argument is the new option value.
- * @param {Array.<string>} opt_variableTypes A list of the types of variables to
- *     include in the dropdown.
+ * @param {Array.<string>=} opt_variableTypes A list of the types of variables
+ *     to include in the dropdown.
  * @extends {Blockly.FieldDropdown}
  * @constructor
  */
@@ -118,7 +118,7 @@ Blockly.FieldVariable.prototype.setValue = function(value) {
       newText = variable.name;
     }
     // TODO(marisaleung): Remove name lookup after converting all Field Variable
-    //     instances to use id instead of name.
+    //     instances to use ID instead of name.
     else if (variable = this.sourceBlock_.workspace.getVariable(value)) {
       newValue = variable.getId();
     }
@@ -217,7 +217,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
  */
 Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
   var id = menuItem.getValue();
-  // TODO(marisaleung): change setValue() to take in an id as the parameter.
+  // TODO(marisaleung): change setValue() to take in an ID as the parameter.
   // Then remove itemText.
   var itemText;
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {

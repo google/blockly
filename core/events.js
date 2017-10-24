@@ -482,7 +482,7 @@ Blockly.Events.Create.prototype.run = function(forward) {
         block.dispose(false, false);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
-        console.warn("Can't uncreate non-existant block: " + id);
+        console.warn("Can't uncreate non-existent block: " + id);
       }
     }
   }
@@ -558,7 +558,7 @@ Blockly.Events.Delete.prototype.run = function(forward) {
         block.dispose(false, false);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
-        console.warn("Can't delete non-existant block: " + id);
+        console.warn("Can't delete non-existent block: " + id);
       }
     }
   } else {
@@ -649,7 +649,7 @@ Blockly.Events.Change.prototype.run = function(forward) {
   var workspace = this.getEventWorkspace_();
   var block = workspace.getBlockById(this.blockId);
   if (!block) {
-    console.warn("Can't change non-existant block: " + this.blockId);
+    console.warn("Can't change non-existent block: " + this.blockId);
     return;
   }
   if (block.mutator) {
@@ -666,7 +666,7 @@ Blockly.Events.Change.prototype.run = function(forward) {
         field.callValidator(value);
         field.setValue(value);
       } else {
-        console.warn("Can't set non-existant field: " + this.name);
+        console.warn("Can't set non-existent field: " + this.name);
       }
       break;
     case 'comment':
@@ -818,7 +818,7 @@ Blockly.Events.Move.prototype.run = function(forward) {
   var workspace = this.getEventWorkspace_();
   var block = workspace.getBlockById(this.blockId);
   if (!block) {
-    console.warn("Can't move non-existant block: " + this.blockId);
+    console.warn("Can't move non-existent block: " + this.blockId);
     return;
   }
   var parentId = forward ? this.newParentId : this.oldParentId;
@@ -828,7 +828,7 @@ Blockly.Events.Move.prototype.run = function(forward) {
   if (parentId) {
     parentBlock = workspace.getBlockById(parentId);
     if (!parentBlock) {
-      console.warn("Can't connect to non-existant block: " + parentId);
+      console.warn("Can't connect to non-existent block: " + parentId);
       return;
     }
   }
@@ -852,7 +852,7 @@ Blockly.Events.Move.prototype.run = function(forward) {
     if (parentConnection) {
       blockConnection.connect(parentConnection);
     } else {
-      console.warn("Can't connect to non-existant input: " + inputName);
+      console.warn("Can't connect to non-existent input: " + inputName);
     }
   }
 };
@@ -861,8 +861,8 @@ Blockly.Events.Move.prototype.run = function(forward) {
  * Class for a UI event.
  * @param {Blockly.Block} block The affected block.
  * @param {string} element One of 'selected', 'comment', 'mutator', etc.
- * @param {string} oldValue Previous value of element.
- * @param {string} newValue New value of element.
+ * @param {*} oldValue Previous value of element.
+ * @param {*} newValue New value of element.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */

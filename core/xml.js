@@ -37,7 +37,7 @@ goog.require('goog.dom');
 /**
  * Encode a block tree as XML.
  * @param {!Blockly.Workspace} workspace The workspace containing blocks.
- * @param {boolean} opt_noId True if the encoder should skip the block ids.
+ * @param {boolean=} opt_noId True if the encoder should skip the block IDs.
  * @return {!Element} XML document.
  */
 Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
@@ -70,7 +70,7 @@ Blockly.Xml.variablesToDom = function(variableList) {
 /**
  * Encode a block subtree as XML with XY coordinates.
  * @param {!Blockly.Block} block The root block to encode.
- * @param {boolean} opt_noId True if the encoder should skip the block id.
+ * @param {boolean=} opt_noId True if the encoder should skip the block ID.
  * @return {!Element} Tree of XML elements.
  */
 Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
@@ -89,7 +89,7 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
 /**
  * Encode a block subtree as XML.
  * @param {!Blockly.Block} block The root block to encode.
- * @param {boolean} opt_noId True if the encoder should skip the block id.
+ * @param {boolean=} opt_noId True if the encoder should skip the block ID.
  * @return {!Element} Tree of XML elements.
  */
 Blockly.Xml.blockToDom = function(block, opt_noId) {
@@ -303,7 +303,7 @@ Blockly.Xml.textToDom = function(text) {
  * Decode an XML DOM and create blocks on the workspace.
  * @param {!Element} xml XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace.
- * @return {Array.<string>} An array containing new block ids.
+ * @return {Array.<string>} An array containing new block IDs.
  */
 Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (xml instanceof Blockly.Workspace) {
@@ -317,7 +317,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (workspace.RTL) {
     width = workspace.getWidth();
   }
-  var newBlockIds = []; // A list of block ids added by this call.
+  var newBlockIds = [];  // A list of block IDs added by this call.
   Blockly.Field.startCache();
   // Safari 7.1.3 is known to provide node lists with extra references to
   // children beyond the lists' length.  Trust the length, do not use the
@@ -385,12 +385,12 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
  * blocks immediately below prior blocks, aligned by their starting edge.
  * @param {!Element} xml The XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace to add to.
- * @return {Array.<string>} An array containing new block ids.
+ * @return {Array.<string>} An array containing new block IDs.
  */
 Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
-  var bbox; //bounding box of the current blocks
-  // first check if we have a workspaceSvg otherwise the block have no shape
-  // and the position does not matter
+  var bbox;  // Bounding box of the current blocks.
+  // First check if we have a workspaceSvg, otherwise the blocks have no shape
+  // and the position does not matter.
   if (workspace.hasOwnProperty('scale')) {
     var savetab = Blockly.BlockSvg.TAB_WIDTH;
     try {
@@ -400,22 +400,22 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
       Blockly.BlockSvg.TAB_WIDTH = savetab;
     }
   }
-  // load the new blocks into the workspace and get the ids of the new blocks
+  // Load the new blocks into the workspace and get the IDs of the new blocks.
   var newBlockIds = Blockly.Xml.domToWorkspace(xml,workspace);
-  if (bbox && bbox.height) { // check if any previous block
-    var offsetY = 0; // offset to add to y of the new block
+  if (bbox && bbox.height) {  // check if any previous block
+    var offsetY = 0;  // offset to add to y of the new block
     var offsetX = 0;
-    var farY = bbox.y + bbox.height; //bottom position
-    var topX = bbox.x; // x of bounding box
-    // check position of the new blocks
-    var newX = Infinity; // x of top corner
-    var newY = Infinity; // y of top corner
+    var farY = bbox.y + bbox.height;  // bottom position
+    var topX = bbox.x;  // x of bounding box
+    // Check position of the new blocks.
+    var newX = Infinity;  // x of top corner
+    var newY = Infinity;  // y of top corner
     for (var i = 0; i < newBlockIds.length; i++) {
       var blockXY = workspace.getBlockById(newBlockIds[i]).getRelativeToSurfaceXY();
       if (blockXY.y < newY) {
         newY = blockXY.y;
       }
-      if (blockXY.x  < newX) { //if we align also on x
+      if (blockXY.x  < newX) {  // if we align also on x
         newX = blockXY.x;
       }
     }
@@ -530,21 +530,21 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     var input;
 
     // Find any enclosed blocks or shadows in this tag.
-    var childBlockNode = null;
-    var childShadowNode = null;
+    var childBlockElement = null;
+    var childShadowElement = null;
     for (var j = 0, grandchildNode; grandchildNode = xmlChild.childNodes[j];
          j++) {
       if (grandchildNode.nodeType == 1) {
         if (grandchildNode.nodeName.toLowerCase() == 'block') {
-          childBlockNode = grandchildNode;
+          childBlockElement = /** @type {!Element} */ (grandchildNode);
         } else if (grandchildNode.nodeName.toLowerCase() == 'shadow') {
-          childShadowNode = grandchildNode;
+          childShadowElement = /** @type {!Element} */ (grandchildNode);
         }
       }
     }
     // Use the shadow block if there is no child block.
-    if (!childBlockNode && childShadowNode) {
-      childBlockNode = childShadowNode;
+    if (!childBlockElement && childShadowElement) {
+      childBlockElement = childShadowElement;
     }
 
     var name = xmlChild.getAttribute('name');
@@ -589,8 +589,8 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         var text = xmlChild.textContent;
         if (field instanceof Blockly.FieldVariable) {
           // TODO (marisaleung): When we change setValue and getValue to
-          // interact with id's instead of names, update this so that we get
-          // the variable based on id instead of textContent.
+          // interact with IDs instead of names, update this so that we get
+          // the variable based on ID instead of textContent.
           var type = xmlChild.getAttribute('variableType') || '';
           var variable = workspace.getVariable(text);
           if (!variable) {
@@ -619,11 +619,11 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
                        prototypeName);
           break;
         }
-        if (childShadowNode) {
-          input.connection.setShadowDom(childShadowNode);
+        if (childShadowElement) {
+          input.connection.setShadowDom(childShadowElement);
         }
-        if (childBlockNode) {
-          blockChild = Blockly.Xml.domToBlockHeadless_(childBlockNode,
+        if (childBlockElement) {
+          blockChild = Blockly.Xml.domToBlockHeadless_(childBlockElement,
               workspace);
           if (blockChild.outputConnection) {
             input.connection.connect(blockChild.outputConnection);
@@ -636,16 +636,16 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         }
         break;
       case 'next':
-        if (childShadowNode && block.nextConnection) {
-          block.nextConnection.setShadowDom(childShadowNode);
+        if (childShadowElement && block.nextConnection) {
+          block.nextConnection.setShadowDom(childShadowElement);
         }
-        if (childBlockNode) {
+        if (childBlockElement) {
           goog.asserts.assert(block.nextConnection,
               'Next statement does not exist.');
           // If there is more than one XML 'next' tag.
           goog.asserts.assert(!block.nextConnection.isConnected(),
               'Next statement is already connected.');
-          blockChild = Blockly.Xml.domToBlockHeadless_(childBlockNode,
+          blockChild = Blockly.Xml.domToBlockHeadless_(childBlockElement,
               workspace);
           goog.asserts.assert(blockChild.previousConnection,
               'Next block does not have previous statement.');

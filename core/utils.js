@@ -45,7 +45,7 @@ goog.require('goog.userAgent');
  * accessed through the exact name that was exported. Note, that all the exports
  * are happening as the last thing in the generated js files, so they won't be
  * accessible before JavaScript loads!
- * @return {!Object<string, string>} The message array.
+ * @return {!Object.<string, string>} The message array.
  * @private
  */
 Blockly.utils.getMessageArray_ = function() {
@@ -285,11 +285,9 @@ Blockly.utils.getRelativeXY.XY_2D_REGEX_ =
  * @param {string} name Element's tag name.
  * @param {!Object} attrs Dictionary of attribute names and values.
  * @param {Element} parent Optional parent on which to append the element.
- * @param {Blockly.Workspace=} opt_workspace Optional workspace for access to
- *     context (scale...).
  * @return {!SVGElement} Newly created SVG element.
  */
-Blockly.utils.createSvgElement = function(name, attrs, parent /*, opt_workspace */) {
+Blockly.utils.createSvgElement = function(name, attrs, parent) {
   var e = /** @type {!SVGElement} */ (
       document.createElementNS(Blockly.SVG_NS, name));
   for (var key in attrs) {
@@ -327,7 +325,7 @@ Blockly.utils.isRightButton = function(e) {
  * @param {!Event} e Mouse event.
  * @param {!Element} svg SVG element.
  * @param {SVGMatrix} matrix Inverted screen CTM to use.
- * @return {!Object} Object with .x and .y properties.
+ * @return {!SVGPoint} Object with .x and .y properties.
  */
 Blockly.utils.mouseToSvg = function(e, svg, matrix) {
   var svgPoint = svg.createSVGPoint();
@@ -453,7 +451,7 @@ Blockly.utils.replaceMessageReferences = function(message) {
   var interpolatedResult = Blockly.utils.tokenizeInterpolation_(message, false);
   // When parseInterpolationTokens == false, interpolatedResult should be at
   // most length 1.
-  return interpolatedResult.length ? interpolatedResult[0] : "";
+  return interpolatedResult.length ? interpolatedResult[0] : '';
 };
 
 /**
@@ -509,7 +507,7 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
   // 0 - Base case.
   // 1 - % found.
   // 2 - Digit found.
-  // 3 - Message ref found
+  // 3 - Message ref found.
   var state = 0;
   var buffer = [];
   var number = null;

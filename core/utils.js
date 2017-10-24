@@ -457,22 +457,29 @@ Blockly.utils.replaceMessageReferences = function(message) {
 };
 
 /**
- * Validates that any %{BKY_...} references in the message refer to keys of
+ * Validates that any %{MSG_KEY} references in the message refer to keys of
  * the Blockly.Msg string table.
  * @param {string} message Text which might contain string table references.
  * @return {boolean} True if all message references have matching values.
  *     Otherwise, false.
  */
 Blockly.utils.checkMessageReferences = function(message) {
-  var isValid = true;  // True until a bad reference is found.
+  var validSoFar = true;
 
-  var regex = /%{BKY_([a-zA-Z][a-zA-Z0-9_]*)}/g;
+  var msgTable = Blockly.utils.getMessageArray_();
+
+  // TODO(#1169): Implement support for other string tables, prefixes other than BKY_.
+  var regex = /%{(BKY_[A-Z][A-Z0-9_]*)}/gi;
   var match = regex.exec(message);
   while (match) {
     var msgKey = match[1];
-    if (Blockly.utils.getMessageArray_()[msgKey] == undefined) {
-      console.log('WARNING: No message string for %{BKY_' + msgKey + '}.');
-      isValid = false;
+    msgKey = msgKey.toUpperCase();
+    if (msgKey.substr(0, 4) != 'BKY_') {
+      console.log('WARNING: Unsupported message table prefix in %{' + match[1] + '}.');
+      validSoFar = false;  // Continue to report other errors.
+    } else if (msgTable[msgKey.substr(4)] == undefined) {
+      console.log('WARNING: No message string for %{' + match[1] + '}.');
+      validSoFar = false;  // Continue to report other errors.
     }
 
     // Re-run on remainder of string.
@@ -480,7 +487,7 @@ Blockly.utils.checkMessageReferences = function(message) {
     match = regex.exec(message);
   }
 
-  return isValid;
+  return validSoFar;
 };
 
 /**
@@ -569,7 +576,8 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
             if (goog.isString(rawValue)) {
               // Attempt to dereference substrings, too, appending to the end.
               Array.prototype.push.apply(tokens,
-                Blockly.utils.tokenizeInterpolation(rawValue));
+                  Blockly.utils.tokenizeInterpolation_(
+                      rawValue, parseInterpolationTokens));
             } else if (parseInterpolationTokens) {
               // When parsing interpolation tokens, numbers are special
               // placeholders (%1, %2, etc). Make sure all other values are

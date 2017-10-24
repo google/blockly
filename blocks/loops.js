@@ -281,11 +281,11 @@ Blockly.Extensions.registerMixin('contextMenu_newGetVariableBlock',
 
 Blockly.Extensions.register('controls_for_tooltip',
     Blockly.Extensions.buildTooltipWithFieldValue(
-        Blockly.Msg.CONTROLS_FOR_TOOLTIP, 'VAR'));
+        '%{BKY_CONTROLS_FOR_TOOLTIP}', 'VAR'));
 
 Blockly.Extensions.register('controls_forEach_tooltip',
     Blockly.Extensions.buildTooltipWithFieldValue(
-        Blockly.Msg.CONTROLS_FOREACH_TOOLTIP, 'VAR'));
+        '%{BKY_CONTROLS_FOREACH_TOOLTIP}', 'VAR'));
 
 /**
  * This mixin adds a check to make sure the 'controls_flow_statements' block

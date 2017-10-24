@@ -506,7 +506,7 @@ Blockly.Constants.Math.CHANGE_TOOLTIP_EXTENSION = function() {
 
 Blockly.Extensions.register('math_change_tooltip',
     Blockly.Extensions.buildTooltipWithFieldValue(
-        Blockly.Msg.MATH_CHANGE_TOOLTIP, 'VAR'));
+        '%{BKY_MATH_CHANGE_TOOLTIP}', 'VAR'));
 
 /**
  * Mixin with mutator methods to support alternate output based if the

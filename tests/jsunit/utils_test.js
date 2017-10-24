@@ -192,21 +192,12 @@ function test_tokenizeInterpolation() {
 function test_replaceMessageReferences() {
   Blockly.Msg = Blockly.Msg || {};
   Blockly.Msg.STRING_REF = 'test string';
+  Blockly.Msg.SUBREF = 'subref';
+  Blockly.Msg.STRING_REF_WITH_ARG = 'test %1 string';
+  Blockly.Msg.STRING_REF_WITH_SUBREF = 'test %{bky_subref} string';
 
   var resultString = Blockly.utils.replaceMessageReferences('');
   assertEquals('Empty string produces empty string', '', resultString);
-
-  resultString = Blockly.utils.replaceMessageReferences('%{bky_string_ref}');
-  assertEquals('Message ref dereferenced.', 'test string', resultString);
-  resultString = Blockly.utils.replaceMessageReferences('before %{bky_string_ref} after');
-  assertEquals('Message ref dereferenced.', 'before test string after', resultString);
-
-  resultString = Blockly.utils.replaceMessageReferences('%1');
-  assertEquals('Interpolation tokens ignored.', '%1', resultString);
-  resultString = Blockly.utils.replaceMessageReferences('%1 %2');
-  assertEquals('Interpolation tokens ignored.', '%1 %2', resultString);
-  resultString = Blockly.utils.replaceMessageReferences('before %1 after');
-  assertEquals('Interpolation tokens ignored.', 'before %1 after', resultString);
 
   resultString = Blockly.utils.replaceMessageReferences('%%');
   assertEquals('Escaped %', '%', resultString);
@@ -215,4 +206,29 @@ function test_replaceMessageReferences() {
 
   resultString = Blockly.utils.replaceMessageReferences('%a');
   assertEquals('Unrecognized % escape code treated as literal', '%a', resultString);
+
+  resultString = Blockly.utils.replaceMessageReferences('%1');
+  assertEquals('Interpolation tokens ignored.', '%1', resultString);
+  resultString = Blockly.utils.replaceMessageReferences('%1 %2');
+  assertEquals('Interpolation tokens ignored.', '%1 %2', resultString);
+  resultString = Blockly.utils.replaceMessageReferences('before %1 after');
+  assertEquals('Interpolation tokens ignored.', 'before %1 after', resultString);
+
+  // Blockly.Msg.STRING_REF cases:
+  resultString = Blockly.utils.replaceMessageReferences('%{bky_string_ref}');
+  assertEquals('Message ref dereferenced.', 'test string', resultString);
+  resultString = Blockly.utils.replaceMessageReferences('before %{bky_string_ref} after');
+  assertEquals('Message ref dereferenced.', 'before test string after', resultString);
+
+  // Blockly.Msg.STRING_REF_WITH_ARG cases:
+  resultString = Blockly.utils.replaceMessageReferences('%{bky_string_ref_with_arg}');
+  assertEquals('Message ref dereferenced with argument preserved.', 'test %1 string', resultString);
+  resultString = Blockly.utils.replaceMessageReferences('before %{bky_string_ref_with_arg} after');
+  assertEquals('Message ref dereferenced with argument preserved.', 'before test %1 string after', resultString);
+
+  // Blockly.Msg.STRING_REF_WITH_SUBREF cases:
+  resultString = Blockly.utils.replaceMessageReferences('%{bky_string_ref_with_subref}');
+  assertEquals('Message ref and subref dereferenced.', 'test subref string', resultString);
+  resultString = Blockly.utils.replaceMessageReferences('before %{bky_string_ref_with_subref} after');
+  assertEquals('Message ref and subref dereferenced.', 'before test subref string after', resultString);
 }

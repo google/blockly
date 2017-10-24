@@ -305,7 +305,7 @@ Blockly.Events.fromJson = function(json, workspace) {
       event = new Blockly.Events.Delete(null);
       break;
     case Blockly.Events.CHANGE:
-      event = new Blockly.Events.Change(null);
+      event = new Blockly.Events.Change(null, '', null, null, null);
       break;
     case Blockly.Events.MOVE:
       event = new Blockly.Events.Move(null);
@@ -317,7 +317,7 @@ Blockly.Events.fromJson = function(json, workspace) {
       event = new Blockly.Events.VarDelete(null);
       break;
     case Blockly.Events.VAR_RENAME:
-      event = new Blockly.Events.VarRename(null);
+      event = new Blockly.Events.VarRename(null, '');
       break;
     case Blockly.Events.UI:
       event = new Blockly.Events.Ui(null);
@@ -573,8 +573,8 @@ Blockly.Events.Delete.prototype.run = function(forward) {
  * @param {Blockly.Block} block The changed block.  Null for a blank event.
  * @param {string} element One of 'field', 'comment', 'disabled', etc.
  * @param {?string} name Name of input or field affected, or null.
- * @param {string} oldValue Previous value of element.
- * @param {string} newValue New value of element.
+ * @param {*} oldValue Previous value of element.
+ * @param {*} newValue New value of element.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
@@ -595,8 +595,8 @@ goog.inherits(Blockly.Events.Change, Blockly.Events.Abstract);
  * @param {Blockly.Block} block The changed block.  Null for a blank event.
  * @param {string} element One of 'field', 'comment', 'disabled', etc.
  * @param {?string} name Name of input or field affected, or null.
- * @param {string} oldValue Previous value of element.
- * @param {string} newValue New value of element.
+ * @param {*} oldValue Previous value of element.
+ * @param {*} newValue New value of element.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */

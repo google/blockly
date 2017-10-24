@@ -131,8 +131,7 @@ function test_createVariableNullId() {
   try {
     variable_map.createVariable('name1', 'type1', null);
     checkVariableValues(variable_map, 'name1', 'type1', '1');
-  }
-  finally {
+  } finally {
     variableMapTest_tearDown();
   }
 }
@@ -143,8 +142,7 @@ function test_createVariableUndefinedId() {
   try {
     variable_map.createVariable('name1', 'type1', undefined);
     checkVariableValues(variable_map, 'name1', 'type1', '1');
-  }
-  finally {
+  } finally {
     variableMapTest_tearDown();
   }
 }

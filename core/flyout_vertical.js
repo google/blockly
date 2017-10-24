@@ -188,7 +188,7 @@ Blockly.VerticalFlyout.prototype.setBackgroundPath_ = function(width, height) {
       atRight ? this.CORNER_RADIUS : -this.CORNER_RADIUS,
       this.CORNER_RADIUS);
   // Bottom.
-  path.push('h',  atRight ? width : -width);
+  path.push('h', atRight ? width : -width);
   path.push('z');
   this.svgBackground_.setAttribute('d', path.join(' '));
 };

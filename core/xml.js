@@ -353,11 +353,10 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
       } else if (name == 'shadow') {
         goog.asserts.fail('Shadow block cannot be a top-level block.');
         variablesFirst = false;
-      }  else if (name == 'variables') {
+      } else if (name == 'variables') {
         if (variablesFirst) {
           Blockly.Xml.domToVariables(xmlChild, workspace);
-        }
-        else {
+        } else {
           throw Error('\'variables\' tag must exist once before block and ' +
             'shadow tag elements in the workspace XML, but it was found in ' +
             'another location.');
@@ -365,8 +364,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         variablesFirst = false;
       }
     }
-  }
-  finally {
+  } finally {
     if (!existingGroup) {
       Blockly.Events.setGroup(false);
     }

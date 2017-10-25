@@ -42,7 +42,7 @@ goog.require('goog.math.Coordinate');
 Blockly.Events.group_ = '';
 
 /**
- * Sets whether events should be added to the undo stack.
+ * Sets whether the next event should be added to the undo stack.
  * @type {boolean}
  */
 Blockly.Events.recordUndo = true;
@@ -336,6 +336,40 @@ Blockly.Events.fromJson = function(json, workspace) {
  * @constructor
  */
 Blockly.Events.Abstract = function(elem) {
+  /**
+   * The block id for the block this event pertains to, if appropriate for the
+   * event type.
+   * @type {string|undefined}
+   */
+  this.blockId = undefined;
+
+  /**
+   * The variable id for the variable this event pertains to. Only set in
+   * VarCreate, VarDelete, and VarRename events.
+   * @type {string|undefined}
+   */
+  this.varId = undefined;
+
+  /**
+   * The workspace identifier for this event.
+   * @type {string|undefined}
+   */
+  this.workspaceId = undefined;
+
+  /**
+   * The event group id for the group this event belongs to. Groups define
+   * events that should be treated as an single action from the user's
+   * perspective, and should be undone together.
+   * @type {string}
+   */
+  this.group = undefined;
+
+  /**
+   * Sets whether the event should be added to the undo stack.
+   * @type {boolean}
+   */
+  this.recordUndo = undefined;
+
   if (elem instanceof Blockly.Block) {
     this.blockId = elem.id;
     this.workspaceId = elem.workspace.id;

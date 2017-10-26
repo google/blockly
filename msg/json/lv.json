@@ -189,6 +189,7 @@
 	"TEXT_ISEMPTY_TITLE": "%1 ir tukšs",
 	"TEXT_ISEMPTY_TOOLTIP": "Patiess, ja teksts ir tukšs.",
 	"TEXT_INDEXOF_TOOLTIP": "Meklē pirmā teksta rindu otrajā tekstā.\nAtgriež pozīciju otrajā tekstā, kurā sākas pirmais teksts.\nAtgriež %1 ja pirmā teksta rinda nav atrasta.",
+	"TEXT_INDEXOF_TITLE": "tekstā %1 %2 %3",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "meklēt pirmo vietu, kur sākas teksts",
 	"TEXT_INDEXOF_OPERATOR_LAST": "meklēt pēdējo vietu, kur sākas teksts",
 	"TEXT_CHARAT_FROM_START": "paņemt burtu #",

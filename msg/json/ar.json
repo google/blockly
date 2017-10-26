@@ -209,6 +209,7 @@
 	"TEXT_ISEMPTY_TITLE": "%1 فارغ",
 	"TEXT_ISEMPTY_TOOLTIP": "يرجع \"صحيح\" إذا كان النص المقدم فارغ.",
 	"TEXT_INDEXOF_TOOLTIP": "تقوم بإرجاع مؤشر التواجد الأول/الأخير للنص الأول في النص الثاني.  تقوم بإرجاع %1 إذا لم يتم العثور على النص.",
+	"TEXT_INDEXOF_TITLE": "في النص %1 %2 %3",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "ابحث عن التواجد الأول للنص",
 	"TEXT_INDEXOF_OPERATOR_LAST": "ابحث عن التواجد الأخير للنص",
 	"TEXT_CHARAT_FROM_START": "الحصول على الحرف #",

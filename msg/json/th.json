@@ -178,6 +178,7 @@
 	"TEXT_ISEMPTY_TITLE": "%1 ว่าง",
 	"TEXT_ISEMPTY_TOOLTIP": "คืนค่าจริง ถ้าข้อความยังว่าง",
 	"TEXT_INDEXOF_TOOLTIP": "คืนค่าตำแหน่งที่พบข้อความแรกอยู่ในข้อความที่สอง คืนค่า %1 ถ้าหาไม่พบ",
+	"TEXT_INDEXOF_TITLE": "ในข้อความ %1 %2 %3",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "หาข้อความแรกที่พบ",
 	"TEXT_INDEXOF_OPERATOR_LAST": "หาข้อความสุดท้ายที่พบ",
 	"TEXT_CHARAT_FROM_START": "ดึง ตัวอักษรตัวที่",

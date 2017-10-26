@@ -179,6 +179,7 @@
 	"TEXT_ISEMPTY_TITLE": "%1 yra tuščias",
 	"TEXT_ISEMPTY_TOOLTIP": "Grįžti tiesa, jei numatytas tekstas tuščias.",
 	"TEXT_INDEXOF_TOOLTIP": "Grąžina pirmą/paskutinę pirmo teksto reikšmę antrame tekste. Grąžina %1, jei tekstas nerastas.",
+	"TEXT_INDEXOF_TITLE": "tekste %1 %2 %3",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "rask,kur pirmą kartą paminėta",
 	"TEXT_INDEXOF_OPERATOR_LAST": "rask,kur paskutinį kartą paminėta",
 	"TEXT_CHARAT_FROM_START": "gauti raidę #",

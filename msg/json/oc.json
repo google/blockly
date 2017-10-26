@@ -87,6 +87,7 @@
 	"TEXT_CREATE_JOIN_TITLE_JOIN": "jónher",
 	"TEXT_LENGTH_TITLE": "longor de %1",
 	"TEXT_ISEMPTY_TITLE": "%1 es void",
+	"TEXT_INDEXOF_TITLE": "dins lo tèxte %1 %2 %3",
 	"TEXT_CHARAT_FROM_START": "obténer la letra #",
 	"TEXT_CHARAT_FROM_END": "obténer la letra # dempuèi la fin",
 	"TEXT_CHARAT_FIRST": "obténer la primièra letra",

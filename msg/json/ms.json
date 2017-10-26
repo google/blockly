@@ -185,6 +185,7 @@
 	"TEXT_ISEMPTY_TITLE": "%1 adalah kosong",
 	"TEXT_ISEMPTY_TOOLTIP": "Kembalikan benar jika teks yang disediakan adalah kosong.",
 	"TEXT_INDEXOF_TOOLTIP": "Kembalikan Indeks kejadian pertama/terakhir dari teks pertama ke dalam teks kedua.  Kembalikan %1 Jika teks tidak ditemui.",
+	"TEXT_INDEXOF_TITLE": "dalam teks %1 %2 %3",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "mencari kejadian pertama teks",
 	"TEXT_INDEXOF_OPERATOR_LAST": "mencari kejadian terakhir teks",
 	"TEXT_CHARAT_FROM_START": "get letter #",

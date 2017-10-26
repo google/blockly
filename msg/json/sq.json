@@ -195,6 +195,7 @@
 	"TEXT_ISEMPTY_TITLE": "%1 eshte bosh",
 	"TEXT_ISEMPTY_TOOLTIP": "Kthehet e vertete neqoftese teksti i dhene eshte bosh.",
 	"TEXT_INDEXOF_TOOLTIP": "Pergjigjet me indeksin e pare/fundit te rastisjes se tekstit te pare ne tekstin e dyte. Pergjigjet me %1 ne qofte se teksti nuk u gjet.",
+	"TEXT_INDEXOF_TITLE": "ne tekst %1 %2 %3",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "gjej rastisjen e pare te tekstit",
 	"TEXT_INDEXOF_OPERATOR_LAST": "gjej rastisjen e fundit te tekstit",
 	"TEXT_CHARAT_FROM_START": "merr shkronjen #",

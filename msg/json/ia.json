@@ -168,6 +168,7 @@
 	"TEXT_ISEMPTY_TITLE": "%1 es vacue",
 	"TEXT_ISEMPTY_TOOLTIP": "Retorna ver si le texto fornite es vacue.",
 	"TEXT_INDEXOF_TOOLTIP": "Retorna le indice del prime/ultime occurrentia del prime texto in le secunde texto. Retorna %1 si le texto non es trovate.",
+	"TEXT_INDEXOF_TITLE": "in le texto %1 %2 %3",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "cercar le prime occurrentia del texto",
 	"TEXT_INDEXOF_OPERATOR_LAST": "cercar le ultime occurrentia del texto",
 	"TEXT_CHARAT_FROM_START": "prender le littera №",

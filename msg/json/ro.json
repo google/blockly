@@ -192,6 +192,7 @@
 	"TEXT_ISEMPTY_TITLE": "%1 este gol",
 	"TEXT_ISEMPTY_TOOLTIP": "Returnează adevărat dacă textul furnizat este gol.",
 	"TEXT_INDEXOF_TOOLTIP": "Returnează indicele primei/ultimei apariţii din primul text în al doilea text.  Returnează %1 dacă textul nu este găsit.",
+	"TEXT_INDEXOF_TITLE": "în text %1 %2 %3",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "găseşte prima apariţie a textului",
 	"TEXT_INDEXOF_OPERATOR_LAST": "găseşte ultima apariţie a textului",
 	"TEXT_CHARAT_FROM_START": "obtine litera #",

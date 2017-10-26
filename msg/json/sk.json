@@ -201,6 +201,7 @@
 	"TEXT_ISEMPTY_TITLE": "%1 je prázdny",
 	"TEXT_ISEMPTY_TOOLTIP": "Vráti hodnotu pravda, ak zadaný text je prázdny.",
 	"TEXT_INDEXOF_TOOLTIP": "Vráti index prvého/posledného výskytu prvého textu v druhom texte. Ak nenájde, vráti %1.",
+	"TEXT_INDEXOF_TITLE": "v texte %1 %2 %3",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "nájdi prvý výskyt textu",
 	"TEXT_INDEXOF_OPERATOR_LAST": "nájdi posledný výskyt textu",
 	"TEXT_CHARAT_FROM_START": "zisti písmeno #",

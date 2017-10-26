@@ -195,6 +195,7 @@
 	"TEXT_ISEMPTY_TITLE": "%1 ಖಾಲಿ",
 	"TEXT_ISEMPTY_TOOLTIP": "ಕೊರಿನ ಪಟ್ಯೊ ಖಾಲಿ ಇತ್ತ್ಂಡ 'ನಿಜ'ನ್ ಪಿರಕೊರು.",
 	"TEXT_INDEXOF_TOOLTIP": "ರಡ್ಡನೆ ಪಟ್ಯೊಡು ಉಪ್ಪುನ ಸುರುತ ಪಟ್ಯೊ ಸುರುಕ್ಕು/ಅಕೇರಿಗ್ ಬತ್ತಿನೆತ್ತ ಸೂಚಿನ್ ಪಿರಕೊರು. ಪಟ್ಯೊ ತಿಕ್ಕಿಜ್ಜಾಂಡ %1 ನ್ ಪಿರಕೊರು.",
+	"TEXT_INDEXOF_TITLE": "ಪಟ್ಯೊಡು %1 %2 %3",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "ಪಟ್ಯೊ ಸುರುಕ್ಕು ಬತ್ತಿನೇನ್ ನಾಡ್",
 	"TEXT_INDEXOF_OPERATOR_LAST": "ಪಟ್ಯೊ ಅಕೇರಿಗ್ ಬತ್ತಿನೇನ್ ನಾಡ್",
 	"TEXT_CHARAT_TITLE": "%1 %2 ಪದೊಟ್ಟು",

@@ -201,10 +201,15 @@ Blockly.Events.filter = function(queueIn, forward) {
            lastEvent.element == 'warningOpen')) {
         // Merge click events.
         lastEvent.newValue = event.newValue;
+      } else {
+        // Collision: newer events should merge into this event to maintain order
+        hash[key] = event;
+        mergedQueue.push(event);
       }
     }
   }
-  queue = mergedQueue;
+  // Filter out any events that have become null due to merging.
+  queue = mergedQueue.filter(function(e) { return !e.isNull(); });
   if (!forward) {
     // Restore undo order.
     queue.reverse();

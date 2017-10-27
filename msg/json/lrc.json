@@ -95,6 +95,7 @@
 	"TEXT_JOIN_TITLE_CREATEWITH": "راس کردن متن وا",
 	"TEXT_CREATE_JOIN_TITLE_JOIN": "پیوسن",
 	"TEXT_ISEMPTY_TITLE": "%1 حالیه",
+	"TEXT_INDEXOF_TITLE": "د متن %1 %2 %3",
 	"TEXT_GET_SUBSTRING_INPUT_IN_TEXT": "د متن",
 	"TEXT_GET_SUBSTRING_END_FROM_START": "سی واج#",
 	"TEXT_GET_SUBSTRING_END_FROM_END": "سی واج# تا آخر",

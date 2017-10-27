@@ -174,6 +174,7 @@
 	"TEXT_LENGTH_TITLE": "оҙонлоғо %1",
 	"TEXT_LENGTH_TOOLTIP": "Бирелгән текстағы символдар һанын (буш урындар менән бергә) кире ҡайтара.",
 	"TEXT_ISEMPTY_TITLE": "%1 буш",
+	"TEXT_INDEXOF_TITLE": "текстҡа %1 %2 %3",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "текстың тәүге инеүен табырға",
 	"TEXT_INDEXOF_OPERATOR_LAST": "Текстың һуңғы инеүен табырға",
 	"TEXT_CHARAT_FROM_START": "хат алырға #",

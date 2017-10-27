@@ -34,7 +34,7 @@
 # The uncompressed file is a script that loads in each of Blockly's core files
 # one by one.  This takes much longer for a browser to load, but is useful
 # when debugging code since line numbers are meaningful and variables haven't
-# been renamed.  The uncompressed file also allows for a faster developement
+# been renamed.  The uncompressed file also allows for a faster development
 # cycle since there is no need to rebuild or recompile, just reload.
 #
 # The second pair are:
@@ -45,7 +45,7 @@
 #
 # This script also generates:
 #   blocks_compressed.js: The compressed Blockly language blocks.
-#   javascript_compressed.js: The compressed Javascript generator.
+#   javascript_compressed.js: The compressed JavaScript generator.
 #   python_compressed.js: The compressed Python generator.
 #   dart_compressed.js: The compressed Dart generator.
 #   lua_compressed.js: The compressed Lua generator.
@@ -361,7 +361,12 @@ class Gen_compressed(threading.Thread):
     conn.close()
 
     # Parse the JSON response.
-    json_data = json.loads(json_str)
+    try:
+      json_data = json.loads(json_str)
+    except ValueError:
+      print("ERROR: Could not parse JSON for %s.  Raw data:" % target_filename)
+      print(json_str)
+      return
 
     def file_lookup(name):
       if not name.startswith("Input_"):
@@ -568,9 +573,8 @@ developers.google.com/blockly/guides/modify/web/closure""")
   if ('accessible' in args):
     Gen_uncompressed(full_search_paths, 'blockly_accessible_uncompressed.js').start()
 
-  else:
-    # Compressed is limited by network and server speed.
-    Gen_compressed(full_search_paths, args).start()
+  # Compressed is limited by network and server speed.
+  Gen_compressed(full_search_paths, args).start()
 
   # This is run locally in a separate thread
   # defaultlangfiles checks for changes in the msg files, while manually asking

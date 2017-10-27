@@ -138,6 +138,9 @@ function test_tokenizeInterpolation() {
   tokens = Blockly.utils.tokenizeInterpolation('Hello %1 World');
   assertArrayEquals('Interpolation.', ['Hello ', 1, ' World'], tokens);
 
+  tokens = Blockly.utils.tokenizeInterpolation('Hello %1 World %2 again!');
+  assertArrayEquals('Interpolation.', ['Hello ', 1, ' World ', 2, ' again!'], tokens);
+
   tokens = Blockly.utils.tokenizeInterpolation('%123Hello%456World%789');
   assertArrayEquals('Interpolations.', [123, 'Hello', 456, 'World', 789], tokens);
 

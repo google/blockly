@@ -210,6 +210,7 @@
 	"TEXT_CREATE_JOIN_ITEM_TOOLTIP": "Додајте ставку у текст.",
 	"TEXT_APPEND_TITLE": "на %1 додај текст %2",
 	"TEXT_APPEND_TOOLTIP": "Додајте текст на променљиву „%1“.",
+	"TEXT_APPEND_TITLE": "на %1 додај текст %2",
 	"TEXT_LENGTH_TITLE": "дужина текста %1",
 	"TEXT_LENGTH_TOOLTIP": "Враћа број слова (уклјучујући размаке) у датом тексту.",
 	"TEXT_ISEMPTY_TITLE": "%1 је празан",

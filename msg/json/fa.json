@@ -8,7 +8,8 @@
 			"MohandesWiki",
 			"Dalba",
 			"Hamisun",
-			"Nhzandi"
+			"Nhzandi",
+			"Arash.pt"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "مورد",
@@ -37,6 +38,7 @@
 	"NEW_VARIABLE": "ایجاد متغیر...",
 	"NEW_VARIABLE_TITLE": "نام متغیر تازه:",
 	"VARIABLE_ALREADY_EXISTS": "متغیری با نام '%1' هم اکنون وجود دارد",
+	"PROCEDURE_ALREADY_EXISTS": "پروسیجری با نام '%1' هم اکنون وجود دارد.",
 	"DELETE_VARIABLE_CONFIRMATION": "تعداد %1 استفاده از متغیر '%2' پاک شود؟",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "متغیر '%1' را نمی‌توان پاک کرد، زیرا جزیی از تعریف متغیر '%2' می‌باشد",
 	"DELETE_VARIABLE": "متغیر '%1'را پاک کنید",
@@ -86,6 +88,8 @@
 	"IOS_ERROR": "خطا",
 	"IOS_PROCEDURES_INPUTS": "ورودی‌ها",
 	"IOS_PROCEDURES_ADD_INPUT": "+ افزودن ورودی",
+	"IOS_PROCEDURES_ALLOW_STATEMENTS": "اجازه اظهارات",
+	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "این تابع دارای ورودی‌های تکراری است.",
 	"IOS_VARIABLES_ADD_VARIABLE": "+ افزودن متغیر",
 	"IOS_VARIABLES_ADD_BUTTON": "افزودن",
 	"IOS_VARIABLES_RENAME_BUTTON": "تغییر نام",
@@ -288,6 +292,7 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "به # از انتها",
 	"LISTS_GET_SUBLIST_END_LAST": "به آخرین",
 	"LISTS_GET_SUBLIST_TOOLTIP": "کپی از قسمت مشخص‌شدهٔ لیست درست می‌کند.",
+	"LISTS_SORT_TOOLTIP": "یک کپی از لیست را مرتب کنید.",
 	"LISTS_SORT_ORDER_ASCENDING": "صعودی",
 	"LISTS_SORT_ORDER_DESCENDING": "نزولی",
 	"LISTS_SORT_TYPE_NUMERIC": "عددی",
@@ -297,6 +302,7 @@
 	"LISTS_SPLIT_TEXT_FROM_LIST": "ایجاد متن از فهرست",
 	"LISTS_SPLIT_WITH_DELIMITER": "همراه جداساز",
 	"LISTS_REVERSE_MESSAGE0": "معکوس %1",
+	"LISTS_REVERSE_TOOLTIP": "یک کپی از لیست را معکوس کنید.",
 	"VARIABLES_GET_TOOLTIP": "مقدار این متغیر را بر می‌گرداند.",
 	"VARIABLES_GET_CREATE_SET": "درست‌کردن «تنظیم %1»",
 	"VARIABLES_SET": "مجموعه %1 به %2",

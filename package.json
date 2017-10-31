@@ -17,7 +17,7 @@
     "name": "Neil Fraser"
   },
   "scripts": {
-    "lint": "jshint .",
+    "lint": "eslint .",
     "pretest": "tests/scripts/test_setup.sh",
     "test": "node tests/jsunit/test_runner.js"
   },
@@ -45,5 +45,8 @@
     "npm": "^4.4.4",
     "closure-library": "^1.43629075.2",
     "webdriverio": "^4.6.2"
+  },
+  "devDependencies": {
+    "eslint": "2.9.0"
   }
 }

@@ -28,5 +28,6 @@ before_script:
 
 script:
   - set -x
+  - npm run lint
   - npm test
   - cd tests/compile; compile.sh; cd ..

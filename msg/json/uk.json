@@ -37,7 +37,6 @@
 	"NEW_VARIABLE": "Створити змінну...",
 	"NEW_VARIABLE_TITLE": "Нова назва змінної:",
 	"VARIABLE_ALREADY_EXISTS": "Змінна з назвою '%1' вже існує.",
-	"PROCEDURE_ALREADY_EXISTS": "Процес з назвою '%1' вже існує.",
 	"DELETE_VARIABLE_CONFIRMATION": "Вилучити %1 використання змінної '%2'?",
 	"DELETE_VARIABLE": "Вилучити змінну '%1'",
 	"COLOUR_PICKER_HELPURL": "https://uk.wikipedia.org/wiki/Колір",

@@ -42,7 +42,6 @@
 	"NEW_VARIABLE_TITLE": "Uuden muuttujan nimi:",
 	"VARIABLE_ALREADY_EXISTS": "Muuttuja nimeltään '%1' jo olemassa.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Muuttuja nimeltä '%1' on jo olemassa toiselle muuttujalle tyypiltään '%2'.",
-	"PROCEDURE_ALREADY_EXISTS": "Toiminto nimeltään '%1' on jo olemassa.",
 	"DELETE_VARIABLE_CONFIRMATION": "Poistetaanko %1 käyttöä muuttujalta '%2'?",
 	"DELETE_VARIABLE": "Poista muuttuja '%1'",
 	"COLOUR_PICKER_HELPURL": "https://fi.wikipedia.org/wiki/V%C3%A4ri",

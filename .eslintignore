@@ -2,8 +2,11 @@
 *_uncompressed*.js
 /msg/*
 /core/css.js
+/tests/blocks/*
+/tests/compile/*
 /tests/jsunit/*
 /tests/generators/*
+/tests/workspace_svg/*
 /generators/*
 /demos/*
 /accessible/*

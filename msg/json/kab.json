@@ -33,7 +33,6 @@
 	"NEW_VARIABLE_TITLE": "Isem amaynut n wazal",
 	"VARIABLE_ALREADY_EXISTS": "Amutti s yisem '%1' yella yakan.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Amutti s yisem '%1' yella yakan i umutti-nniḍen s wanaw '%2'.",
-	"PROCEDURE_ALREADY_EXISTS": "Tasekkirt s yisem '%1' tella yakan.",
 	"DELETE_VARIABLE_CONFIRMATION": "Kkes %1 n useqdec n umutti '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Ur izmir ara ad yekkes amutti '%1' acku yedda di tbadut n twuri '%2'",
 	"DELETE_VARIABLE": "Kkes amutti '%1'",

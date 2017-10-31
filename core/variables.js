@@ -247,15 +247,7 @@ Blockly.Variables.createVariable = function(workspace, opt_callback, opt_type) {
                 function() {
                   promptAndCheckWithAlert(text);  // Recurse
                 });
-          }
-          else if (Blockly.Procedures.isNameUsed(text, workspace)) {
-            Blockly.alert(Blockly.Msg.PROCEDURE_ALREADY_EXISTS.replace('%1',
-                text.toLowerCase()),
-                function() {
-                  promptAndCheckWithAlert(text);  // Recurse
-                });
-          }
-          else {
+          } else {
             workspace.createVariable(text, opt_type);
             if (opt_callback) {
               opt_callback(text);
@@ -296,15 +288,7 @@ Blockly.Variables.renameVariable = function(workspace, variable,
                 function() {
                   promptAndCheckWithAlert(newName);  // Recurse
                 });
-          }
-          else if (Blockly.Procedures.isNameUsed(newName, workspace)) {
-            Blockly.alert(Blockly.Msg.PROCEDURE_ALREADY_EXISTS.replace('%1',
-                newName.toLowerCase()),
-                function() {
-                  promptAndCheckWithAlert(newName);  // Recurse
-                });
-          }
-          else {
+          } else {
             workspace.renameVariable(variable.name, newName);
             if (opt_callback) {
               opt_callback(newName);

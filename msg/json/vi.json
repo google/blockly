@@ -34,7 +34,6 @@
 	"NEW_VARIABLE": "Tạo biến...",
 	"NEW_VARIABLE_TITLE": "Tên của biến mới:",
 	"VARIABLE_ALREADY_EXISTS": "Một biến có tên '%1' đã tồn tại.",
-	"PROCEDURE_ALREADY_EXISTS": "Một hàm có tên '%1' đã tồn tại.",
 	"COLOUR_PICKER_HELPURL": "https://vi.wikipedia.org/wiki/M%C3%A0u_s%E1%BA%AFc",
 	"COLOUR_PICKER_TOOLTIP": "Chọn một màu từ bảng màu.",
 	"COLOUR_RANDOM_TITLE": "màu bất kỳ",

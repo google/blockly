@@ -43,7 +43,7 @@ goog.require('Blockly.Msg');
  */
 
 /**
- * Each message is preceded with a tripple-slash comment that becomes the
+ * Each message is preceded with a triple-slash comment that becomes the
  * message descriptor.  The build process extracts these descriptors, adds
  * them to msg/json/qqq.json, and they show up in the translation console.
  */
@@ -127,8 +127,6 @@ Blockly.Msg.NEW_VARIABLE_TITLE = 'New variable name:';
 Blockly.Msg.VARIABLE_ALREADY_EXISTS = 'A variable named "%1" already exists.';
 /// alert - Tells the user that the name they entered is already in use for another type.
 Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = 'A variable named "%1" already exists for another variable of type "%2".';
-/// alert - Tells the user that the name they entered is already in use for a procedure.
-Blockly.Msg.PROCEDURE_ALREADY_EXISTS = 'A procedure named "%1" already exists.';
 
 // Variable deletion.
 /// confirm -  Ask the user to confirm their deletion of multiple uses of a variable.

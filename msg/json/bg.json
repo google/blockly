@@ -36,7 +36,6 @@
 	"NEW_VARIABLE_TITLE": "Ново име на променливата:",
 	"VARIABLE_ALREADY_EXISTS": "Променлива с име '%1' вече съществува.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Променлива с име '%1' вече съществува за друга променлива от типа '%2'.",
-	"PROCEDURE_ALREADY_EXISTS": "Процедура с име '%1' вече съществува.",
 	"DELETE_VARIABLE_CONFIRMATION": "Изтриване на %1 използване на променлива '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Променливата '%1' не може да бъде изтрита, защото е част от определението на функцията '%2'",
 	"DELETE_VARIABLE": "Изтриване на променливата \"%1\"",

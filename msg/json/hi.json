@@ -36,7 +36,6 @@
 	"NEW_VARIABLE_TITLE": "नए चर का नाम:",
 	"VARIABLE_ALREADY_EXISTS": "प्राचल नाम '%1' पहले से मौजूद है।",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "'%1' नाम का एक चर पहले से '%2' प्रकार के अन्य चर के लिए मौजूद है।",
-	"PROCEDURE_ALREADY_EXISTS": "'%1' नाम की एक प्रक्रिया पहले से मौजूद है।",
 	"DELETE_VARIABLE_CONFIRMATION": "'%2' चर के %1 उपयोग को हटाएँ?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "चर '%1' को नहीं हटा सकता क्योंकि यह फ़ंक्शन '%2' की परिभाषा का हिस्सा है",
 	"DELETE_VARIABLE": "'%1' चर को हटाएँ",

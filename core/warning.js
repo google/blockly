@@ -139,7 +139,9 @@ Blockly.Warning.prototype.setVisible = function(visible) {
  * @param {!Event} e Mouse up event.
  * @private
  */
-Blockly.Warning.prototype.bodyFocus_ = function(e) {
+
+Blockly.Warning.prototype.bodyFocus_ = function(
+    /* eslint-disable no-unused-vars */ e /* eslint-enable no-unused-vars */) {
   this.bubble_.promote_();
 };
 

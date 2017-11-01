@@ -296,8 +296,9 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
 /**
  * Sync trees of the toolbox.
  * @param {!Node} treeIn DOM tree of blocks.
- * @param {!Blockly.Toolbox.TreeControl} treeOut
- * @param {string} pathToMedia
+ * @param {!Blockly.Toolbox.TreeControl} treeOut The TreeContorol object built
+ *  from treeIn.
+ * @param {string} pathToMedia The path to the Blockly media directory.
  * @return {Node} Tree node to open at startup (or null).
  * @private
  */
@@ -629,7 +630,8 @@ Blockly.Toolbox.TreeNode.prototype.getExpandIconSafeHtml = function() {
  * @param {!goog.events.BrowserEvent} e The browser event.
  * @override
  */
-Blockly.Toolbox.TreeNode.prototype.onClick_ = function(e) {
+Blockly.Toolbox.TreeNode.prototype.onClick_ = function(
+  /* eslint-disable no-unused-vars */ e /* eslint-disable no-unused-vars */) {
   // Expand icon.
   if (this.hasChildren() && this.isUserCollapsible_) {
     this.toggle();
@@ -648,7 +650,8 @@ Blockly.Toolbox.TreeNode.prototype.onClick_ = function(e) {
  * @override
  * @private
  */
-Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
+Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(
+  /* eslint-disable no-unused-vars */ e /* eslint-disable no-unused-vars */) {
   // NOPE.
 };
 
@@ -658,7 +661,8 @@ Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
  * @override
  * @private
  */
-Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
+Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(
+  /* eslint-disable no-unused-vars */ e /* eslint-disable no-unused-vars */) {
   // NOP.
 };
 

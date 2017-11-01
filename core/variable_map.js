@@ -34,7 +34,7 @@ goog.provide('Blockly.VariableMap');
  * @param {!Blockly.Workspace} workspace The workspace this map belongs to.
  * @constructor
  */
- Blockly.VariableMap = function(workspace) {
+Blockly.VariableMap = function(workspace) {
  /**
    * A map from variable type to list of variable names.  The lists contain all
    * of the named variables in the workspace, including variables

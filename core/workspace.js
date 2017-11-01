@@ -410,7 +410,9 @@ Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable) {
  *     not present.
  * @deprecated April 2017
  */
-Blockly.Workspace.prototype.variableIndexOf = function(name) {
+
+Blockly.Workspace.prototype.variableIndexOf = function(
+   /* eslint-disable no-unused-vars */name /* eslint-enable no-unused-vars */) {
   console.warn(
       'Deprecated call to Blockly.Workspace.prototype.variableIndexOf');
   return -1;

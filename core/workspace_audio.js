@@ -74,7 +74,6 @@ Blockly.WorkspaceAudio.prototype.dispose = function() {
  *   preference (i.e. increasing size).  E.g. ['media/go.mp3', 'media/go.wav']
  *   Filenames include path from Blockly's root.  File extensions matter.
  * @param {string} name Name of sound.
- * @package
  */
 Blockly.WorkspaceAudio.prototype.load = function(filenames, name) {
   if (!filenames.length) {

@@ -528,7 +528,7 @@ Blockly.Field.prototype.setValue = function(newValue) {
  * @private
  */
 Blockly.Field.prototype.onMouseDown_ = function(
-  /* eslint-disable no-unused-vars */ e /* eslint-enable no-unused-vars */) {
+    /* eslint-disable no-unused-vars */ e /* eslint-enable no-unused-vars */) {
   if (!this.sourceBlock_ || !this.sourceBlock_.workspace) {
     return;
   }
@@ -544,8 +544,8 @@ Blockly.Field.prototype.onMouseDown_ = function(
  *     link to for its tooltip.
  */
 Blockly.Field.prototype.setTooltip = function(
-  /* eslint-disable no-unused-vars */ newTip
-  /* eslint-enable no-unused-vars */) {
+    /* eslint-disable no-unused-vars */ newTip
+    /* eslint-enable no-unused-vars */) {
   // Non-abstract sub-classes may wish to implement this.  See FieldLabel.
 };
 

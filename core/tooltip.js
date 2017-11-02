@@ -185,7 +185,7 @@ Blockly.Tooltip.onMouseOver_ = function(e) {
  * @private
  */
 Blockly.Tooltip.onMouseOut_ = function(/* eslint-disable no-unused-vars */e
-  /* eslint-enable no-unused-vars */) {
+    /* eslint-enable no-unused-vars */) {
   if (Blockly.Tooltip.blocked_) {
     // Someone doesn't want us to show tooltips.
     return;

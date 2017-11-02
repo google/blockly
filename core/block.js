@@ -728,7 +728,7 @@ Blockly.Block.prototype.setFieldValue = function(newValue, name) {
 /**
  * Set whether this block can chain onto the bottom of another block.
  * @param {boolean} newBoolean True if there can be a previous statement.
- * @param {string|Array.<string>|null|undefined} opt_check Statement type or
+ * @param {(string|Array.<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
@@ -756,7 +756,7 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
 /**
  * Set whether another block can chain onto the bottom of this block.
  * @param {boolean} newBoolean True if there can be a next statement.
- * @param {string|Array.<string>|null|undefined} opt_check Statement type or
+ * @param {(string|Array.<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
@@ -781,7 +781,7 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
 /**
  * Set whether this block returns a value.
  * @param {boolean} newBoolean True if there is an output.
- * @param {string|Array.<string>|null|undefined} opt_check Returned type or list
+ * @param {(string|Array.<string>|null)=} opt_check Returned type or list
  *     of returned types.  Null or undefined if any type could be returned
  *     (e.g. variable get).
  */

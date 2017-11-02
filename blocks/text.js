@@ -188,8 +188,13 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "check": "String"
       },
       {
-        "type": "input_dummy",
-        "name": "AT"
+        "type": "field_dropdown",
+        "name": "WHERE",
+        "options": [[Blockly.Msg.TEXT_CHARAT_FROM_START, 'FROM_START'],
+            [Blockly.Msg.TEXT_CHARAT_FROM_END, 'FROM_END'],
+            [Blockly.Msg.TEXT_CHARAT_FIRST, 'FIRST'],
+            [Blockly.Msg.TEXT_CHARAT_LAST, 'LAST'],
+            [Blockly.Msg.TEXT_CHARAT_RANDOM, 'RANDOM']]
       }
     ],
     "output": "String",
@@ -816,7 +821,7 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
    */
   updateAt_: function(isAt) {
     // Destroy old 'AT' and 'ORDINAL' inputs.
-    this.removeInput('AT');
+    this.removeInput('AT', true);
     this.removeInput('ORDINAL', true);
     // Create either a value 'AT' input or a dummy input.
     if (isAt) {
@@ -825,56 +830,48 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
         this.appendDummyInput('ORDINAL')
             .appendField(Blockly.Msg.ORDINAL_NUMBER_SUFFIX);
       }
-    } else {
-      this.appendDummyInput('AT');
     }
     if (Blockly.Msg.TEXT_CHARAT_TAIL) {
       this.removeInput('TAIL', true);
       this.appendDummyInput('TAIL')
           .appendField(Blockly.Msg.TEXT_CHARAT_TAIL);
     }
-    var menu = new Blockly.FieldDropdown(this.WHERE_OPTIONS, function(value) {
-      var newAt = (value == 'FROM_START') || (value == 'FROM_END');
-      // The 'isAt' variable is available due to this function being a closure.
-      if (newAt != isAt) {
-        var block = this.sourceBlock_;
-        block.updateAt_(newAt);
-        // This menu has been destroyed and replaced.  Update the replacement.
-        block.setFieldValue(value, 'WHERE');
-        return null;
-      }
-      return undefined;
-    });
-    this.getInput('AT').appendField(menu, 'WHERE');
+
+    this.isAt_ = isAt;
   }
 };
 
 // Does the initial mutator update of text_charAt and adds the tooltip
 Blockly.Constants.Text.TEXT_CHARAT_EXTENSION = function() {
-    this.WHERE_OPTIONS = [
-        [Blockly.Msg.TEXT_CHARAT_FROM_START, 'FROM_START'],
-        [Blockly.Msg.TEXT_CHARAT_FROM_END, 'FROM_END'],
-        [Blockly.Msg.TEXT_CHARAT_FIRST, 'FIRST'],
-        [Blockly.Msg.TEXT_CHARAT_LAST, 'LAST'],
-        [Blockly.Msg.TEXT_CHARAT_RANDOM, 'RANDOM']
-      ];
-    this.updateAt_(true);
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
-    this.setTooltip(function() {
-      var where = thisBlock.getFieldValue('WHERE');
-      var tooltip = Blockly.Msg.TEXT_CHARAT_TOOLTIP;
-      if (where == 'FROM_START' || where == 'FROM_END') {
-        var msg = (where == 'FROM_START') ?
-            Blockly.Msg.LISTS_INDEX_FROM_START_TOOLTIP :
-            Blockly.Msg.LISTS_INDEX_FROM_END_TOOLTIP;
-        if (msg) {
-          tooltip += '  ' + msg.replace('%1',
-              thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
-        }
+  var dropdown = this.getField('WHERE');
+  dropdown.setValidator(function(value) {
+    var newAt = (value == 'FROM_START') || (value == 'FROM_END');
+    if (newAt != this.isAt_) {
+      var block = this.sourceBlock_;
+      block.updateAt_(newAt);
+      // This menu has been destroyed and replaced.  Update the replacement.
+      block.setFieldValue(value, 'WHERE');
+      return null;
+    }
+    return undefined;
+  });
+  this.updateAt_(true);
+  // Assign 'this' to a variable for use in the tooltip closure below.
+  var thisBlock = this;
+  this.setTooltip(function() {
+    var where = thisBlock.getFieldValue('WHERE');
+    var tooltip = Blockly.Msg.TEXT_CHARAT_TOOLTIP;
+    if (where == 'FROM_START' || where == 'FROM_END') {
+      var msg = (where == 'FROM_START') ?
+          Blockly.Msg.LISTS_INDEX_FROM_START_TOOLTIP :
+          Blockly.Msg.LISTS_INDEX_FROM_END_TOOLTIP;
+      if (msg) {
+        tooltip += '  ' + msg.replace('%1',
+            thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
       }
-      return tooltip;
-    });
+    }
+    return tooltip;
+  });
 };
 
 Blockly.Extensions.register('text_indexOf_tooltip',

@@ -843,36 +843,35 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
 
 // Does the initial mutator update of text_charAt and adds the tooltip
 Blockly.Constants.Text.TEXT_CHARAT_EXTENSION = function() {
-    var dropdown = this.getField('WHERE');
-    dropdown.setValidator(function(value) {
-      var newAt = (value == 'FROM_START') || (value == 'FROM_END');
-      // The 'isAt' variable is available due to this function being a closure.
-      if (newAt != this.isAt_) {
-        var block = this.sourceBlock_;
-        block.updateAt_(newAt);
-        // This menu has been destroyed and replaced.  Update the replacement.
-        block.setFieldValue(value, 'WHERE');
-        return null;
+  var dropdown = this.getField('WHERE');
+  dropdown.setValidator(function(value) {
+    var newAt = (value == 'FROM_START') || (value == 'FROM_END');
+    if (newAt != this.isAt_) {
+      var block = this.sourceBlock_;
+      block.updateAt_(newAt);
+      // This menu has been destroyed and replaced.  Update the replacement.
+      block.setFieldValue(value, 'WHERE');
+      return null;
+    }
+    return undefined;
+  });
+  this.updateAt_(true);
+  // Assign 'this' to a variable for use in the tooltip closure below.
+  var thisBlock = this;
+  this.setTooltip(function() {
+    var where = thisBlock.getFieldValue('WHERE');
+    var tooltip = Blockly.Msg.TEXT_CHARAT_TOOLTIP;
+    if (where == 'FROM_START' || where == 'FROM_END') {
+      var msg = (where == 'FROM_START') ?
+          Blockly.Msg.LISTS_INDEX_FROM_START_TOOLTIP :
+          Blockly.Msg.LISTS_INDEX_FROM_END_TOOLTIP;
+      if (msg) {
+        tooltip += '  ' + msg.replace('%1',
+            thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
       }
-      return undefined;
-    });
-    this.updateAt_(true);
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
-    this.setTooltip(function() {
-      var where = thisBlock.getFieldValue('WHERE');
-      var tooltip = Blockly.Msg.TEXT_CHARAT_TOOLTIP;
-      if (where == 'FROM_START' || where == 'FROM_END') {
-        var msg = (where == 'FROM_START') ?
-            Blockly.Msg.LISTS_INDEX_FROM_START_TOOLTIP :
-            Blockly.Msg.LISTS_INDEX_FROM_END_TOOLTIP;
-        if (msg) {
-          tooltip += '  ' + msg.replace('%1',
-              thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
-        }
-      }
-      return tooltip;
-    });
+    }
+    return tooltip;
+  });
 };
 
 Blockly.Extensions.register('text_indexOf_tooltip',

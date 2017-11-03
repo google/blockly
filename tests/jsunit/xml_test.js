@@ -364,3 +364,28 @@ function test_variablesToDom_noVariables() {
   assertEquals(1, resultDom.children.length);
   xmlTest_tearDown();
 }
+
+function test_variableFieldXml_caseSensitive() {
+  var id = 'testId';
+  var type = 'testType';
+  var name = 'testName';
+
+  var mockVariableModel = {
+    type: type,
+    name: name,
+    getId: function() {
+      return id;
+    }
+  };
+
+  var generatedXml = Blockly.Variables.generateVariableFieldXml_(mockVariableModel);
+  // The field contains this XML tag as a result of how we're generating this
+  // XML.  This is not desirable, but the goal of this test is to make sure
+  // we're preserving case-sensitivity.
+  var xmlns = 'xmlns="http://www.w3.org/1999/xhtml"';
+  var goldenXml =
+      '<field ' + xmlns + ' name="VAR"' +
+      ' variabletype="' + type + '"' +
+      ' id="' + id + '">' + name + '</field>';
+  assertEquals(goldenXml, generatedXml);
+}

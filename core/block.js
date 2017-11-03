@@ -297,7 +297,9 @@ Blockly.Block.prototype.unplug = function(opt_healStack) {
  * @return {!Array.<!Blockly.Connection>} Array of connections.
  * @private
  */
-Blockly.Block.prototype.getConnections_ = function(all) {
+Blockly.Block.prototype.getConnections_ = function(
+    /* eslint-disable no-unused-vars */ all
+    /* eslint-enable no-unused-vars */) {
   var myConnections = [];
   if (this.outputConnection) {
     myConnections.push(this.outputConnection);
@@ -609,7 +611,7 @@ Blockly.Block.prototype.getColour = function() {
  */
 Blockly.Block.prototype.getHue = function() {
   return this.hue_;
-}
+};
 
 /**
  * Change the colour of a block.
@@ -1427,7 +1429,9 @@ Blockly.Block.prototype.setCommentText = function(text) {
  * @param {string=} opt_id An optional ID for the warning text to be able to
  *     maintain multiple warnings.
  */
-Blockly.Block.prototype.setWarningText = function(text, opt_id) {
+Blockly.Block.prototype.setWarningText = function(text,
+    /* eslint-disable no-unused-vars */ opt_id
+    /* eslint-enable no-unused-vars */) {
   // NOP.
 };
 
@@ -1435,7 +1439,9 @@ Blockly.Block.prototype.setWarningText = function(text, opt_id) {
  * Give this block a mutator dialog.
  * @param {Blockly.Mutator} mutator A mutator dialog instance or null to remove.
  */
-Blockly.Block.prototype.setMutator = function(mutator) {
+Blockly.Block.prototype.setMutator = function(
+    /* eslint-disable no-unused-vars */ mutator
+    /* eslint-enable no-unused-vars */) {
   // NOP.
 };
 

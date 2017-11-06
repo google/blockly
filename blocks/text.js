@@ -190,11 +190,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "field_dropdown",
         "name": "WHERE",
-        "options": [[Blockly.Msg.TEXT_CHARAT_FROM_START, 'FROM_START'],
-            [Blockly.Msg.TEXT_CHARAT_FROM_END, 'FROM_END'],
-            [Blockly.Msg.TEXT_CHARAT_FIRST, 'FIRST'],
-            [Blockly.Msg.TEXT_CHARAT_LAST, 'LAST'],
-            [Blockly.Msg.TEXT_CHARAT_RANDOM, 'RANDOM']]
+        "options": [["%{BKY_TEXT_CHARAT_FROM_START}", "FROM_START"],
+            ["%{BKY_TEXT_CHARAT_FROM_END}", "FROM_END"],
+            ["%{BKY_TEXT_CHARAT_FIRST}", "FIRST"],
+            ["%{BKY_TEXT_CHARAT_LAST}", "LAST"],
+            ["%{BKY_TEXT_CHARAT_RANDOM}", "RANDOM"]]
       }
     ],
     "output": "String",

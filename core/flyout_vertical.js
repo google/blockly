@@ -326,14 +326,14 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
 };
 
 /**
- * Compute width of flyout.  Position button under each block.
- * For RTL: Lay out the blocks right-aligned.
- * @param {!Array.<!Blockly.Block>} blocks The blocks to reflow.
+ * Compute width of flyout.  Position mat under each block.
+ * For RTL: Lay out the blocks and buttons to be right-aligned.
  * @private
  */
-Blockly.VerticalFlyout.prototype.reflowInternal_ = function(blocks) {
+Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
   this.workspace_.scale = this.targetWorkspace_.scale;
   var flyoutWidth = 0;
+  var blocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     var width = block.getHeightWidth().width;
     if (block.outputConnection) {

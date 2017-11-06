@@ -516,7 +516,7 @@ Blockly.WorkspaceSvg.prototype.addZoomControls_ = function(bottom) {
 /**
  * Add a flyout element in an element with the given tag name.
  * @param {string} tagName What type of tag the flyout belongs in.
- * @return {!Element} The element containing the flyout dom.
+ * @return {!Element} The element containing the flyout DOM.
  * @private
  */
 Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
@@ -623,8 +623,8 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
  * scroll position.
  * @package
  */
-Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled
-    = function() {
+Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled =
+    function() {
   /* eslint-disable indent */
   var currScroll = goog.dom.getDocumentScroll();
   if (!goog.math.Coordinate.equals(this.lastRecordedPageScroll_,
@@ -691,7 +691,7 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
 
 /**
  * Called at the end of a workspace drag to take the contents
- * out of the drag surface and put them back into the workspace svg.
+ * out of the drag surface and put them back into the workspace SVG.
  * Does nothing if the workspace drag surface is not enabled.
  * @package
  */
@@ -705,8 +705,7 @@ Blockly.WorkspaceSvg.prototype.resetDragSurface = function() {
 
   var trans = this.workspaceDragSurface_.getSurfaceTranslation();
   this.workspaceDragSurface_.clearAndHide(this.svgGroup_);
-  var translation = 'translate(' + trans.x + ',' + trans.y + ') ' +
-        'scale(' + this.scale + ')';
+  var translation = 'translate' + trans + ' scale(' + this.scale + ')';
   this.svgBlockCanvas_.setAttribute('transform', translation);
   this.svgBubbleCanvas_.setAttribute('transform', translation);
 };
@@ -737,8 +736,8 @@ Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
   // Figure out where we want to put the canvas back.  The order
   // in the is important because things are layered.
   var previousElement = this.svgBlockCanvas_.previousSibling;
-  var width = this.getParentSvg().getAttribute("width");
-  var height = this.getParentSvg().getAttribute("height");
+  var width = this.getParentSvg().getAttribute('width');
+  var height = this.getParentSvg().getAttribute('height');
   var coord = Blockly.utils.getRelativeXY(this.svgBlockCanvas_);
   this.workspaceDragSurface_.setContentsAndShow(this.svgBlockCanvas_,
       this.svgBubbleCanvas_, previousElement, width, height, this.scale);

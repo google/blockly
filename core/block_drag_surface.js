@@ -20,10 +20,10 @@
 
 /**
  * @fileoverview A class that manages a surface for dragging blocks.  When a
- * block drag is started, we move the block (and children) to a separate dom
+ * block drag is started, we move the block (and children) to a separate DOM
  * element that we move around using translate3d. At the end of the drag, the
- * blocks are put back in into the svg they came from. This helps performance by
- * avoiding repainting the entire svg on every mouse move while dragging blocks.
+ * blocks are put back in into the SVG they came from. This helps performance by
+ * avoiding repainting the entire SVG on every mouse move while dragging blocks.
  * @author picklesrus
  */
 

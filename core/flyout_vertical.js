@@ -353,12 +353,21 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
       if (this.RTL) {
         // With the flyoutWidth known, right-align the blocks.
         var oldX = block.getRelativeToSurfaceXY().x;
-        var newX = flyoutWidth / this.workspace_.scale - this.MARGIN;
-        newX -= Blockly.BlockSvg.TAB_WIDTH;
+        var newX = flyoutWidth / this.workspace_.scale - this.MARGIN -
+            Blockly.BlockSvg.TAB_WIDTH;
         block.moveBy(newX - oldX, 0);
       }
       if (block.flyoutRect_) {
         this.moveRectToBlock_(block.flyoutRect_, block);
+      }
+    }
+    if (this.RTL) {
+      // With the flyoutWidth known, right-align the buttons.
+      for (var i = 0, button; button = this.buttons_[i]; i++) {
+        var y = button.getPosition().y;
+        var x = flyoutWidth - button.width - this.MARGIN -
+            Blockly.BlockSvg.TAB_WIDTH;
+        button.moveTo(x, y);
       }
     }
     // Record the width for .getMetrics_ and .position.

@@ -204,6 +204,14 @@ Blockly.FlyoutButton.prototype.moveTo = function(x, y) {
 };
 
 /**
+ * Location of the button.
+ * @return {!goog.math.Coordinate} x, y coordinates.
+ */
+Blockly.FlyoutButton.prototype.getPosition = function() {
+  return this.position_;
+};
+
+/**
  * Get the button's target workspace.
  * @return {!Blockly.WorkspaceSvg} The target workspace of the flyout where this
  *     button resides.

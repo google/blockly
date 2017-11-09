@@ -31,7 +31,6 @@
 	"NEW_VARIABLE_TITLE": "Новая назва пераменнай:",
 	"VARIABLE_ALREADY_EXISTS": "Пераменная з назвай '%1' ужо існуе.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Назва пераменнай '%1' ужо выкарыстоўваецца іншай пераменнай тыпу '%2'.",
-	"PROCEDURE_ALREADY_EXISTS": "Працэс з назвай '%1' ужо існуе.",
 	"DELETE_VARIABLE_CONFIRMATION": "Выдаліць %1 выкарыстання пераменнай '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Немагчыма выдаліць пераменную '%1', паколькі яна з'яўляецца часткай вызначэння функцыі '%2'",
 	"DELETE_VARIABLE": "Выдаліць пераменную '%1'",

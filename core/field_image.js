@@ -116,6 +116,10 @@ Blockly.FieldImage.prototype.maybeAddClickHandler_ = function() {
     this.mouseDownWrapper_ =
         Blockly.bindEventWithChecks_(this.fieldGroup_, 'mousedown', this,
         this.onMouseDown_);
+    // Change the cursor to a pointer if there is a click handler on the image.
+    if (this.imageElement_) {
+      this.imageElement_.style.cursor = 'pointer';
+    }
   }
 };
 

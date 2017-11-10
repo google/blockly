@@ -82,6 +82,7 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Додайте, вилучіть або змініть порядок секцій, щоб переналаштувати цей блок 'якщо'.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Додайте умову до блока 'якщо'.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Додати остаточну, всеосяжну умову до блоку 'якщо'.",
+	"IOS_OK": "Готово",
 	"IOS_CANCEL": "Скасувати",
 	"IOS_ERROR": "Помилка",
 	"IOS_VARIABLES_ADD_VARIABLE": "+ Додати змінну",

@@ -9,7 +9,8 @@
 			"Silovan",
 			"Redredsonia",
 			"Facenapalm",
-			"Helpau"
+			"Helpau",
+			"SimondR"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "элемент",
@@ -108,7 +109,7 @@
 	"LOGIC_OPERATION_TOOLTIP_OR": "Возвращает значение истина, если хотя бы одна из вставок истинна.",
 	"LOGIC_OPERATION_OR": "или",
 	"LOGIC_NEGATE_TITLE": "не %1",
-	"LOGIC_NEGATE_TOOLTIP": "Возвращает значение истина, если вставка ложна.  Возвращает значение ложь, если вставка истинна.",
+	"LOGIC_NEGATE_TOOLTIP": "Возвращает значение истина, если вставка ложна. Возвращает значение ложь, если вставка истинна.",
 	"LOGIC_BOOLEAN_TRUE": "истина",
 	"LOGIC_BOOLEAN_FALSE": "ложь",
 	"LOGIC_BOOLEAN_TOOLTIP": "Возвращает значение истина или ложь.",
@@ -226,7 +227,7 @@
 	"TEXT_CHANGECASE_OPERATOR_UPPERCASE": "в ЗАГЛАВНЫЕ БУКВЫ",
 	"TEXT_CHANGECASE_OPERATOR_LOWERCASE": "в строчные буквы",
 	"TEXT_CHANGECASE_OPERATOR_TITLECASE": "в Заглавные Начальные Буквы",
-	"TEXT_TRIM_TOOLTIP": "Возвращает копию текста с пробелами, удалеными с одного или обоих концов.",
+	"TEXT_TRIM_TOOLTIP": "Возвращает копию текста с пробелами, удалёнными с одного или обоих концов.",
 	"TEXT_TRIM_OPERATOR_BOTH": "обрезать пробелы с двух сторон",
 	"TEXT_TRIM_OPERATOR_LEFT": "обрезать пробелы слева",
 	"TEXT_TRIM_OPERATOR_RIGHT": "обрезать пробелы справа",
@@ -315,7 +316,7 @@
 	"LISTS_SPLIT_TEXT_FROM_LIST": "собрать текст из списка",
 	"LISTS_SPLIT_WITH_DELIMITER": "с разделителем",
 	"LISTS_SPLIT_TOOLTIP_SPLIT": "Разбивает текст в список текстов, по разделителям.",
-	"LISTS_SPLIT_TOOLTIP_JOIN": "Соединяет сптсок текстов в один текст с разделителями.",
+	"LISTS_SPLIT_TOOLTIP_JOIN": "Соединяет список текстов в один текст с разделителями.",
 	"LISTS_REVERSE_HELPURL": "https://github.com/google/blockly/wiki/Lists#reversing-a-list",
 	"LISTS_REVERSE_MESSAGE0": "изменить порядок на обратный %1",
 	"LISTS_REVERSE_TOOLTIP": "Изменить порядок списка на обратный.",

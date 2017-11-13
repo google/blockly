@@ -351,14 +351,14 @@ Blockly.HorizontalFlyout.prototype.getClientRect = function() {
 };
 
 /**
- * Compute height of flyout.  Position button under each block.
+ * Compute height of flyout.  Position mat under each block.
  * For RTL: Lay out the blocks right-aligned.
- * @param {!Array<!Blockly.Block>} blocks The blocks to reflow.
  * @private
  */
-Blockly.HorizontalFlyout.prototype.reflowInternal_ = function(blocks) {
+Blockly.HorizontalFlyout.prototype.reflowInternal_ = function() {
   this.workspace_.scale = this.targetWorkspace_.scale;
   var flyoutHeight = 0;
+  var blocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     flyoutHeight = Math.max(flyoutHeight, block.getHeightWidth().height);
   }

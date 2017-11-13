@@ -513,6 +513,48 @@ function test_events_mergeUi() {
 }
 
 /**
+ * Tests that events that collide on a (event, block, workspace) tuple
+ * but cannot be merged do not get dropped during filtering.
+ */
+function test_events_stackclick() {
+  eventTest_setUpWithMockBlocks();
+  var block = workspace.newBlock('field_variable_test_block', '1');
+  var events = [
+    new Blockly.Events.Ui(block, 'click', undefined, undefined),
+    new Blockly.Events.Ui(block, 'stackclick', undefined, undefined)
+  ];
+  var filteredEvents = Blockly.Events.filter(events, true);
+  // click and stackclick should both exist
+  assertEquals(2, filteredEvents.length);
+  assertEquals('click', filteredEvents[0].element);
+  assertEquals('stackclick', filteredEvents[1].element);
+  eventTest_tearDownWithMockBlocks();
+}
+
+/**
+ * Mutator composition could result in move events for blocks
+ * connected to the mutated block that were null operations. This
+ * leads to events in the undo/redo queue that do nothing, requiring
+ * an extra undo/redo to proceed to the next event. This test ensures
+ * that two move events that do get merged (disconnecting and
+ * reconnecting a block in response to a mutator change) are filtered
+ * from the queue.
+ */
+function test_events_filteraftermerge() {
+  eventTest_setUpWithMockBlocks();
+  var block = workspace.newBlock('field_variable_test_block', '1');
+  block.setParent(null);
+  var events = [];
+  helper_addMoveEventParent(events, block, null);
+  helper_addMoveEventParent(events, block, null);
+  var filteredEvents = Blockly.Events.filter(events, true);
+  // The two events should be merged, but because nothing has changed
+  // they will be filtered out.
+  assertEquals(0, filteredEvents.length);
+  eventTest_tearDownWithMockBlocks();
+}
+
+/**
  * Helper function to simulate block move events.
  *
  * @param {!Array.<Blockly.Events.Abstract>} events a queue of events.
@@ -523,5 +565,11 @@ function test_events_mergeUi() {
 function helper_addMoveEvent(events, block, newX, newY) {
   events.push(new Blockly.Events.BlockMove(block));
   block.xy_ = new goog.math.Coordinate(newX, newY);
+  events[events.length-1].recordNew();
+}
+
+function helper_addMoveEventParent(events, block, parent) {
+  events.push(new Blockly.Events.BlockMove(block));
+  block.setParent(parent);
   events[events.length-1].recordNew();
 }

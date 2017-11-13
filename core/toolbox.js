@@ -296,8 +296,9 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
 /**
  * Sync trees of the toolbox.
  * @param {!Node} treeIn DOM tree of blocks.
- * @param {!Blockly.Toolbox.TreeControl} treeOut
- * @param {string} pathToMedia
+ * @param {!Blockly.Toolbox.TreeControl} treeOut The TreeContorol object built
+ *     from treeIn.
+ * @param {string} pathToMedia The path to the Blockly media directory.
  * @return {Node} Tree node to open at startup (or null).
  * @private
  */
@@ -331,12 +332,12 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
         // Decode the colour for any potential message references
         // (eg. `%{BKY_MATH_HUE}`).
         var colour = Blockly.utils.replaceMessageReferences(
-          childIn.getAttribute('colour'));
+            childIn.getAttribute('colour'));
         if (goog.isString(colour)) {
-          if (colour.match(/^#[0-9a-fA-F]{6}$/)) {
+          if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
             childOut.hexColour = colour;
           } else {
-            childOut.hexColour = Blockly.hueToRgb(colour);
+            childOut.hexColour = Blockly.hueToRgb(Number(colour));
           }
           this.hasColours_ = true;
         } else {
@@ -388,7 +389,7 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
 
 /**
  * Recursively add colours to this toolbox.
- * @param {Blockly.Toolbox.TreeNode} opt_tree Starting point of tree.
+ * @param {Blockly.Toolbox.TreeNode=} opt_tree Starting point of tree.
  *     Defaults to the root node.
  * @private
  */
@@ -629,7 +630,8 @@ Blockly.Toolbox.TreeNode.prototype.getExpandIconSafeHtml = function() {
  * @param {!goog.events.BrowserEvent} e The browser event.
  * @override
  */
-Blockly.Toolbox.TreeNode.prototype.onClick_ = function(e) {
+Blockly.Toolbox.TreeNode.prototype.onClick_ = function(
+    /* eslint-disable no-unused-vars */ e /* eslint-disable no-unused-vars */) {
   // Expand icon.
   if (this.hasChildren() && this.isUserCollapsible_) {
     this.toggle();
@@ -648,7 +650,8 @@ Blockly.Toolbox.TreeNode.prototype.onClick_ = function(e) {
  * @override
  * @private
  */
-Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
+Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(
+    /* eslint-disable no-unused-vars */ e /* eslint-disable no-unused-vars */) {
   // NOPE.
 };
 
@@ -658,7 +661,8 @@ Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
  * @override
  * @private
  */
-Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
+Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(
+    /* eslint-disable no-unused-vars */ e /* eslint-disable no-unused-vars */) {
   // NOP.
 };
 
@@ -695,6 +699,6 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
  * @extends {Blockly.Toolbox.TreeNode}
  */
 Blockly.Toolbox.TreeSeparator = function(config) {
-  Blockly.Toolbox.TreeNode.call(this, null, '', config);
+  Blockly.Toolbox.TreeNode.call(this, null, goog.html.SafeHtml.EMPTY, config);
 };
 goog.inherits(Blockly.Toolbox.TreeSeparator, Blockly.Toolbox.TreeNode);

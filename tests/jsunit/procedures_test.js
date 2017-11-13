@@ -80,4 +80,3 @@ function test_isNameUsed_True() {
   assertTrue(result);
   proceduresTest_tearDownWithMockBlocks();
 }
-

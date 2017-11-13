@@ -48,7 +48,7 @@ goog.require('goog.string');
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
- *     create a new id.
+ *     create a new ID.
  * @constructor
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {
@@ -261,7 +261,7 @@ Blockly.Block.prototype.dispose = function(healStack) {
 /**
  * Unplug this block from its superior block.  If this block is a statement,
  * optionally reconnect the block underneath with the block on top.
- * @param {boolean} opt_healStack Disconnect child statement and reconnect
+ * @param {boolean=} opt_healStack Disconnect child statement and reconnect
  *   stack.  Defaults to false.
  */
 Blockly.Block.prototype.unplug = function(opt_healStack) {
@@ -293,10 +293,13 @@ Blockly.Block.prototype.unplug = function(opt_healStack) {
 
 /**
  * Returns all connections originating from this block.
+ * @param {boolean} all If true, return all connections even hidden ones.
  * @return {!Array.<!Blockly.Connection>} Array of connections.
  * @private
  */
-Blockly.Block.prototype.getConnections_ = function() {
+Blockly.Block.prototype.getConnections_ = function(
+    /* eslint-disable no-unused-vars */ all
+    /* eslint-enable no-unused-vars */) {
   var myConnections = [];
   if (this.outputConnection) {
     myConnections.push(this.outputConnection);
@@ -608,7 +611,7 @@ Blockly.Block.prototype.getColour = function() {
  */
 Blockly.Block.prototype.getHue = function() {
   return this.hue_;
-}
+};
 
 /**
  * Change the colour of a block.
@@ -619,9 +622,9 @@ Blockly.Block.prototype.setColour = function(colour) {
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
     this.hue_ = hue;
     this.colour_ = Blockly.hueToRgb(hue);
-  } else if (goog.isString(colour) && colour.match(/^#[0-9a-fA-F]{6}$/)) {
+  } else if (goog.isString(colour) && /^#[0-9a-fA-F]{6}$/.test(colour)) {
     this.colour_ = colour;
-    // Only store hue if colour is set as a hue
+    // Only store hue if colour is set as a hue.
     this.hue_ = null;
   } else {
     throw 'Invalid colour: ' + colour;
@@ -727,7 +730,7 @@ Blockly.Block.prototype.setFieldValue = function(newValue, name) {
 /**
  * Set whether this block can chain onto the bottom of another block.
  * @param {boolean} newBoolean True if there can be a previous statement.
- * @param {string|Array.<string>|null|undefined} opt_check Statement type or
+ * @param {(string|Array.<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
@@ -755,7 +758,7 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
 /**
  * Set whether another block can chain onto the bottom of this block.
  * @param {boolean} newBoolean True if there can be a next statement.
- * @param {string|Array.<string>|null|undefined} opt_check Statement type or
+ * @param {(string|Array.<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
@@ -780,7 +783,7 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
 /**
  * Set whether this block returns a value.
  * @param {boolean} newBoolean True if there is an output.
- * @param {string|Array.<string>|null|undefined} opt_check Returned type or list
+ * @param {(string|Array.<string>|null)=} opt_check Returned type or list
  *     of returned types.  Null or undefined if any type could be returned
  *     (e.g. variable get).
  */
@@ -1423,8 +1426,12 @@ Blockly.Block.prototype.setCommentText = function(text) {
 /**
  * Set this block's warning text.
  * @param {?string} text The text, or null to delete.
+ * @param {string=} opt_id An optional ID for the warning text to be able to
+ *     maintain multiple warnings.
  */
-Blockly.Block.prototype.setWarningText = function(/* text */) {
+Blockly.Block.prototype.setWarningText = function(text,
+    /* eslint-disable no-unused-vars */ opt_id
+    /* eslint-enable no-unused-vars */) {
   // NOP.
 };
 
@@ -1432,7 +1439,9 @@ Blockly.Block.prototype.setWarningText = function(/* text */) {
  * Give this block a mutator dialog.
  * @param {Blockly.Mutator} mutator A mutator dialog instance or null to remove.
  */
-Blockly.Block.prototype.setMutator = function(/* mutator */) {
+Blockly.Block.prototype.setMutator = function(
+    /* eslint-disable no-unused-vars */ mutator
+    /* eslint-enable no-unused-vars */) {
   // NOP.
 };
 

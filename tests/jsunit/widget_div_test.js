@@ -151,4 +151,3 @@ function test_widgetDiv_noXConflict_RTL() {
       anchorBBox, widgetDiv_test_widgetSize, true /* rtl */);
   assertEquals(anchorBBox.right - widgetDiv_test_widgetSize.width, calculated);
 }
-

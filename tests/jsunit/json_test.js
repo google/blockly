@@ -257,4 +257,3 @@ function test_json_dropdown_image() {
     delete Blockly.Msg['ALTTEXT'];
   }
 }
-

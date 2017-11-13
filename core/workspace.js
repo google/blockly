@@ -34,7 +34,7 @@ goog.require('goog.math');
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
- * @param {Blockly.Options} opt_options Dictionary of options.
+ * @param {!Blockly.Options=} opt_options Dictionary of options.
  * @constructor
  */
 Blockly.Workspace = function(opt_options) {
@@ -217,8 +217,7 @@ Blockly.Workspace.prototype.updateVariableStore = function(clear) {
     if (tempVar) {
       varList.push({'name': tempVar.name, 'type': tempVar.type,
           'id': tempVar.getId()});
-    }
-    else {
+    } else {
       varList.push({'name': name, 'type': null, 'id': null});
       // TODO(marisaleung): Use variable.type and variable.getId() once variable
       // instances are storing more than just name.
@@ -241,7 +240,8 @@ Blockly.Workspace.prototype.updateVariableStore = function(clear) {
  * @param {?Blockly.VariableModel} variable Variable to rename.
  * @param {string} newName New variable name.
  */
-Blockly.Workspace.prototype.renameVariableInternal_ = function(variable, newName) {
+Blockly.Workspace.prototype.renameVariableInternal_ = function(
+    variable, newName) {
   var newVariable = this.getVariable(newName);
   var oldCase;
 
@@ -285,8 +285,8 @@ Blockly.Workspace.prototype.renameVariable = function(oldName, newName) {
 
 /**
  * Rename a variable by updating its name in the variable map. Identify the
- * variable to rename with the given id.
- * @param {string} id Id of the variable to rename.
+ * variable to rename with the given ID.
+ * @param {string} id ID of the variable to rename.
  * @param {string} newName New variable name.
  */
 Blockly.Workspace.prototype.renameVariableById = function(id, newName) {
@@ -295,13 +295,13 @@ Blockly.Workspace.prototype.renameVariableById = function(id, newName) {
 };
 
 /**
- * Create a variable with a given name, optional type, and optional id.
+ * Create a variable with a given name, optional type, and optional ID.
  * @param {!string} name The name of the variable. This must be unique across
  *     variables and procedures.
- * @param {?string} opt_type The type of the variable like 'int' or 'string'.
+ * @param {string=} opt_type The type of the variable like 'int' or 'string'.
  *     Does not need to be unique. Field_variable can filter variables based on
  *     their type. This will default to '' which is a specific type.
- * @param {?string} opt_id The unique id of the variable. This will default to
+ * @param {string=} opt_id The unique ID of the variable. This will default to
  *     a UUID.
  * @return {?Blockly.VariableModel} The newly created variable.
  */
@@ -358,7 +358,8 @@ Blockly.Workspace.prototype.deleteVariable = function(name) {
   if (uses.length > 1) {
     // Confirm before deleting multiple blocks.
     Blockly.confirm(
-        Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1', uses.length).
+        Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1',
+                                                         String(uses.length)).
         replace('%2', name),
         function(ok) {
           if (ok) {
@@ -372,23 +373,23 @@ Blockly.Workspace.prototype.deleteVariable = function(name) {
 };
 
 /**
- * Delete a variables by the passed in id and all of its uses from this
+ * Delete a variables by the passed in ID and all of its uses from this
  * workspace. May prompt the user for confirmation.
- * @param {string} id Id of variable to delete.
+ * @param {string} id ID of variable to delete.
  */
 Blockly.Workspace.prototype.deleteVariableById = function(id) {
   var variable = this.getVariableById(id);
   if (variable) {
     this.deleteVariableInternal_(variable);
   } else {
-    console.warn("Can't delete non-existant variable: " + id);
+    console.warn("Can't delete non-existent variable: " + id);
   }
 };
 
 /**
  * Deletes a variable and all of its uses from this workspace without asking the
  * user for confirmation.
- * @param {Blockly.VariableModel} variable Variable to delete.
+ * @param {!Blockly.VariableModel} variable Variable to delete.
  * @private
  */
 Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable) {
@@ -409,7 +410,10 @@ Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable) {
  *     not present.
  * @deprecated April 2017
  */
-Blockly.Workspace.prototype.variableIndexOf = function(name) {
+
+Blockly.Workspace.prototype.variableIndexOf = function(
+    /* eslint-disable no-unused-vars */ name
+    /* eslint-enable no-unused-vars */) {
   console.warn(
       'Deprecated call to Blockly.Workspace.prototype.variableIndexOf');
   return -1;
@@ -426,10 +430,10 @@ Blockly.Workspace.prototype.getVariable = function(name) {
 };
 
 /**
- * Find the variable by the given id and return it. Return null if it is not
+ * Find the variable by the given ID and return it. Return null if it is not
  *     found.
- * @param {!string} id The id to check for.
- * @return {?Blockly.VariableModel} The variable with the given id.
+ * @param {!string} id The ID to check for.
+ * @return {?Blockly.VariableModel} The variable with the given ID.
  */
 Blockly.Workspace.prototype.getVariableById = function(id) {
   return this.variableMap_.getVariableById(id);
@@ -450,7 +454,7 @@ Blockly.Workspace.prototype.getWidth = function() {
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
- *     create a new id.
+ *     create a new ID.
  * @return {!Blockly.Block} The created block.
  */
 Blockly.Workspace.prototype.newBlock = function(prototypeName, opt_id) {
@@ -496,8 +500,7 @@ Blockly.Workspace.prototype.undo = function(redo) {
     for (var i = 0, event; event = events[i]; i++) {
       event.run(redo);
     }
-  }
-  finally {
+  } finally {
     Blockly.Events.recordUndo = true;
   }
 };

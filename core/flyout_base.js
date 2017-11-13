@@ -75,12 +75,12 @@ Blockly.Flyout = function(workspaceOptions) {
   this.eventWrappers_ = [];
 
   /**
-   * List of background buttons that lurk behind each block to catch clicks
+   * List of background mats that lurk behind each block to catch clicks
    * landing in the blocks' lakes and bays.
    * @type {!Array.<!Element>}
    * @private
    */
-  this.backgroundButtons_ = [];
+  this.mats_ = [];
 
   /**
    * List of visible buttons.
@@ -518,7 +518,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 };
 
 /**
- * Delete blocks and background buttons from a previous showing of the flyout.
+ * Delete blocks, mats and buttons from a previous showing of the flyout.
  * @private
  */
 Blockly.Flyout.prototype.clearOldBlocks_ = function() {
@@ -529,13 +529,15 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
       block.dispose(false, false);
     }
   }
-  // Delete any background buttons from a previous showing.
-  for (var j = 0; j < this.backgroundButtons_.length; j++) {
-    var rect = this.backgroundButtons_[j];
-    if (rect) goog.dom.removeNode(rect);
+  // Delete any mats from a previous showing.
+  for (var j = 0; j < this.mats_.length; j++) {
+    var rect = this.mats_[j];
+    if (rect) {
+      goog.dom.removeNode(rect);
+    }
   }
-  this.backgroundButtons_.length = 0;
-
+  this.mats_.length = 0;
+  // Delete any buttons from a previous showing.
   for (var i = 0, button; button = this.buttons_[i]; i++) {
     button.dispose();
   }
@@ -547,7 +549,7 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
  * @param {!Element} root The root node of the SVG group the block is in.
  * @param {!Blockly.Block} block The block to add listeners for.
  * @param {!Element} rect The invisible rectangle under the block that acts as
- *     a button for that block.
+ *     a mat for that block.
  * @private
  */
 Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
@@ -652,8 +654,8 @@ Blockly.Flyout.prototype.initFlyoutButton_ = function(button, x, y) {
  * @param {number} y The y position of the cursor during this layout pass.
  * @param {!{height: number, width: number}} blockHW The height and width of the
  *     block.
- * @param {number} index The index into the background buttons list where this
- *     rect should be placed.
+ * @param {number} index The index into the mats list where this rect should be
+ *     placed.
  * @return {!SVGElement} Newly created SVG element for the rectangle behind the
  *     block.
  * @private
@@ -675,7 +677,7 @@ Blockly.Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
   this.workspace_.getCanvas().insertBefore(rect, block.getSvgRoot());
 
   block.flyoutRect_ = rect;
-  this.backgroundButtons_[index] = rect;
+  this.mats_[index] = rect;
   return rect;
 };
 
@@ -725,14 +727,13 @@ Blockly.Flyout.prototype.filterForCapacity_ = function() {
 };
 
 /**
- * Reflow blocks and their buttons.
+ * Reflow blocks and their mats.
  */
 Blockly.Flyout.prototype.reflow = function() {
   if (this.reflowWrapper_) {
     this.workspace_.removeChangeListener(this.reflowWrapper_);
   }
-  var blocks = this.workspace_.getTopBlocks(false);
-  this.reflowInternal_(blocks);
+  this.reflowInternal_();
   if (this.reflowWrapper_) {
     this.workspace_.addChangeListener(this.reflowWrapper_);
   }

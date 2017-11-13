@@ -310,7 +310,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Een invoer aan de functie toevoegen.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "ingangen";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Invoer van deze functie toevoegen, verwijderen of herordenen.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "Er bestaat al een variabele met de naam \"%1\".";
 /** @export */ Blockly.Msg.REDO = "Opnieuw";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Opmerking verwijderen";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Variabele hernoemen...";
@@ -394,7 +393,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Verandert de waarde van de variabele naar de waarde van de invoer.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Er bestaat al een variabele met de naam \"%1\".";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Een variabele met de naam '%1' bestaat al voor een andere variabele van type '%2'.";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

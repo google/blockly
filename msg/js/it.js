@@ -310,7 +310,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Aggiungi un input alla funzione.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "input";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Aggiungi, rimuovi o riordina input alla funzione.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "Una procedura denominata '%1' esiste già.";
 /** @export */ Blockly.Msg.REDO = "Ripeti";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Rimuovi commento";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Rinomina variabile...";

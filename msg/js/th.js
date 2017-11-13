@@ -310,13 +310,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "เพิ่มค่าป้อนเข้าฟังก์ชัน";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "นำเข้า";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "เพิ่ม, ลบ, หรือจัดเรียง ข้อมูลที่ป้อนเข้าฟังก์ชันนี้";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "ทำซ้ำ";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "เอาคำอธิบายออก";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "เปลี่ยนชื่อตัวแปร...";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "เปลี่ยนชื่อตัวแปร '%1' ทั้งหมดเป็น:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "นำเอา %1 ต่อด้วยข้อความ %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "ต่อข้อความให้ตัวแปร \"%1\"";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "เปลี่ยนเป็น ตัวพิมพ์เล็ก";
@@ -351,7 +350,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "หาข้อความแรกที่พบ";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "หาข้อความสุดท้ายที่พบ";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "ในข้อความ %1 %2 %3";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "คืนค่าตำแหน่งที่พบข้อความแรกอยู่ในข้อความที่สอง คืนค่า %1 ถ้าหาไม่พบ";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 ว่าง";

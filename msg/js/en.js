@@ -310,7 +310,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inputs";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";
 /** @export */ Blockly.Msg.REDO = "Redo";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Remove Comment";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Rename variable...";

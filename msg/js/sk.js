@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.sk');
 goog.require('Blockly.Msg');
 
 /** @export */ Blockly.Msg.ADD_COMMENT = "Pridať komentár";
-/** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Nie je možné zmazať premennú „%1“, lebo je súčasťou definície funkcie „%2“";
+/** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Nie je možné zmazať premennú „%1“, pretože je súčasťou definície funkcie „%2“";
 /** @export */ Blockly.Msg.CHANGE_VALUE_TITLE = "Zmeniť hodnotu:";
 /** @export */ Blockly.Msg.CLEAN_UP = "Narovnať bloky";
 /** @export */ Blockly.Msg.COLLAPSE_ALL = "Zvinúť bloky";
@@ -78,7 +78,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.IOS_ERROR = "Chyba";
 /** @export */ Blockly.Msg.IOS_OK = "OK";
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Pridať vstup";
-/** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
+/** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Povoľujú príkazy";
 /** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "Táto funkcia obsahuje duplikáty vstupov.";
 /** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "Vstupy";
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Pridať";
@@ -143,8 +143,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_REPEAT_TITLE = "vytvor zoznam s prvkom %1 opakovaným %2 krát";
 /** @export */ Blockly.Msg.LISTS_REPEAT_TOOLTIP = "Vytvorí zoznam s niekoľkými rovnakými prvkami s danou hodnotou.";
 /** @export */ Blockly.Msg.LISTS_REVERSE_HELPURL = "https://github.com/google/blockly/wiki/Lists#reversing-a-list";  // untranslated
-/** @export */ Blockly.Msg.LISTS_REVERSE_MESSAGE0 = "reverse %1";  // untranslated
-/** @export */ Blockly.Msg.LISTS_REVERSE_TOOLTIP = "Reverse a copy of a list.";  // untranslated
+/** @export */ Blockly.Msg.LISTS_REVERSE_MESSAGE0 = "obrátiť %1";
+/** @export */ Blockly.Msg.LISTS_REVERSE_TOOLTIP = "Obrátiť kópiu zoznamu.";
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_HELPURL = "https://github.com/google/blockly/wiki/Lists#in-list--set";  // untranslated
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_INPUT_TO = "ako";
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_INSERT = "vložiť na";
@@ -310,13 +310,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Pridať vstup do funkcie.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "vstupy";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Pridať, odstrániť alebo zmeniť poradie vstupov tejto funkcie.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "Znova";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Odstrániť komentár";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Premenovať premennú...";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Premenovať všetky premenné '%1' na:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "do %1 pridaj text %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "Pridaj určitý text do premennej '%1'.";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "na malé písmená";
@@ -330,7 +329,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_CHARAT_LAST = "zisti posledné písmeno";
 /** @export */ Blockly.Msg.TEXT_CHARAT_RANDOM = "vyber náhodné písmeno";
 /** @export */ Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
-/** @export */ Blockly.Msg.TEXT_CHARAT_TITLE = "in text %1 %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_CHARAT_TITLE = "v texte %1 %2";
 /** @export */ Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Vráti písmeno na určenej pozícii.";
 /** @export */ Blockly.Msg.TEXT_COUNT_HELPURL = "https://github.com/google/blockly/wiki/Text#counting-substrings";  // untranslated
 /** @export */ Blockly.Msg.TEXT_COUNT_MESSAGE0 = "počet výskytov %1 v %2";
@@ -351,7 +350,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "nájdi prvý výskyt textu";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "nájdi posledný výskyt textu";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "v texte %1 %2 %3";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "Vráti index prvého/posledného výskytu prvého textu v druhom texte. Ak nenájde, vráti %1.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 je prázdny";
@@ -394,7 +393,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Nastaví túto premennú, aby sa rovnala vstupu.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Premenná s názvom %1 už existuje.";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Premenná s názvom '%1' už existuje pre inú premennú typu '%2'.";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

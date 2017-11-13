@@ -310,7 +310,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Tilføj en parameter til funktionen.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "parametre";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Tilføje, fjerne eller ændre rækkefølgen af parametre til denne funktion.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "En procedure navngivet »%1« findes allerede.";
 /** @export */ Blockly.Msg.REDO = "Omgør";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Fjern kommentar";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Omdøb variabel...";

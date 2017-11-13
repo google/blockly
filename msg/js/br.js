@@ -310,7 +310,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Ouzhpennañ ur moned d'an arc'hwel.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "Monedoù";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Ouzhpennañ, lemel, pe adkempenn monedoù an arc'hwel-mañ.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "Un argerzhadur anvet '%1' zo anezhañ dija.";
 /** @export */ Blockly.Msg.REDO = "Adober";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Lemel an evezhiadenn kuit";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Adenvel an argemmenn...";

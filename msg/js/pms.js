@@ -310,7 +310,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Gionté n'imission a la fonsion.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "imission";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Gionté, gavé o riordiné j'imission ëd sa fonsion.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "Na procedura ciamà '%1' a esist già.";
 /** @export */ Blockly.Msg.REDO = "Fé torna";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Scancelé un coment";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Arnomé la variàbil...";

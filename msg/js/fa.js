@@ -78,8 +78,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.IOS_ERROR = "خطا";
 /** @export */ Blockly.Msg.IOS_OK = "تأیید";
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ افزودن ورودی";
-/** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
-/** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
+/** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "اجازه اظهارات";
+/** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "این تابع دارای ورودی‌های تکراری است.";
 /** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "ورودی‌ها";
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "افزودن";
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ افزودن متغیر";
@@ -144,7 +144,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_REPEAT_TOOLTIP = "فهرستی شامل مقادیر داده‌شدهٔ تکرار شده عدد مشخص‌شده می‌سازد.";
 /** @export */ Blockly.Msg.LISTS_REVERSE_HELPURL = "https://github.com/google/blockly/wiki/Lists#reversing-a-list";  // untranslated
 /** @export */ Blockly.Msg.LISTS_REVERSE_MESSAGE0 = "معکوس %1";
-/** @export */ Blockly.Msg.LISTS_REVERSE_TOOLTIP = "Reverse a copy of a list.";  // untranslated
+/** @export */ Blockly.Msg.LISTS_REVERSE_TOOLTIP = "یک کپی از لیست را معکوس کنید.";
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_HELPURL = "https://github.com/google/blockly/wiki/Lists#in-list--set";  // untranslated
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_INPUT_TO = "به عنوان";
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_INSERT = "درج در";
@@ -161,7 +161,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_SORT_ORDER_ASCENDING = "صعودی";
 /** @export */ Blockly.Msg.LISTS_SORT_ORDER_DESCENDING = "نزولی";
 /** @export */ Blockly.Msg.LISTS_SORT_TITLE = "sort %1 %2 %3";  // untranslated
-/** @export */ Blockly.Msg.LISTS_SORT_TOOLTIP = "Sort a copy of a list.";  // untranslated
+/** @export */ Blockly.Msg.LISTS_SORT_TOOLTIP = "یک کپی از لیست را مرتب کنید.";
 /** @export */ Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE = "حروفی ، رد کردن مورد";
 /** @export */ Blockly.Msg.LISTS_SORT_TYPE_NUMERIC = "عددی";
 /** @export */ Blockly.Msg.LISTS_SORT_TYPE_TEXT = "حروفی ، الفبایی";
@@ -310,13 +310,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "اضافه کردن ورودی به تابع.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "ورودی‌ها";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "افزودن، حذف یا دوباره مرتب‌کردن ورودی این تابع.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "انجام دوباره";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "حذف نظر";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "تغییر نام متغیر...";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "تغییر نام همهٔ متغیرهای «%1» به:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "به %1 الحاق متن %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "الحاق متنی به متغیر «%1».";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "به حروف کوچک";
@@ -351,7 +350,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "اولین رخداد متن را بیاب";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "آخرین رخداد متن را بیاب";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "در متن %1 %2 %3";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "شاخصی از اولین آخرین رخ‌داد متن اول در متن دوم بر می‌گرداند. اگر متن یافت نشد %1 باز می‌گرداند.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 خالی است";

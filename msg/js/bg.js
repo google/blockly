@@ -310,7 +310,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Добавяне на параметър към функцията.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "вход";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Добави, премахни или пренареди входните параметри за тази функция.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "Процедура с име '%1' вече съществува.";
 /** @export */ Blockly.Msg.REDO = "Повторение";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Премахни коментар";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Преименувай променливата...";
@@ -394,7 +393,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Установява променливата със стойността на входа.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Променлива с име '%1' вече съществува.";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Променлива с име '%1' вече съществува за друга променлива от типа '%2'.";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

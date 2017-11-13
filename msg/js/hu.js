@@ -310,13 +310,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Bemenet hozzáadása a függvényhez.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "paraméterek";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Bemenetek hozzáadása, eltávolítása vagy átrendezése ehhez a függvényhez.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "Újra";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Megjegyzés eltávolítása";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Változó átnevezése…";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Minden „%1” változó átnevezése erre:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "A %1 szövegéhez fűzd hozzá %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "Szöveget fűz a \"%1\" változó értékéhez.";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "kisbetűs";
@@ -351,7 +350,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "szövegben az első előfordulásának helye";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "szövegben az utolsó előfordulásának helye";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "A(z) %1 %2 %3 szövegnek";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "A keresett szöveg első vagy utolsó előfordulásával tér vissza.  %1 esetén a szövegrészlet nem található.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 üres";

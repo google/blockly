@@ -310,13 +310,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "함수에 값을 더합니다.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "매개 변수들";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "이 함수를 추가, 삭제, 혹은 재정렬합니다.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "'%1' 함수는 이미 존재합니다.";
 /** @export */ Blockly.Msg.REDO = "다시 실행";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "내용 제거";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "변수 이름 바꾸기:";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "'%1' 변수 이름을 바꾸기:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "다음 %1 내용 덧붙이기 %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "'%1' 변수의 끝에 일부 텍스트를 덧붙입니다.";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "소문자로";
@@ -351,7 +350,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "에서 다음 문장이 처음으로 나타난 위치 찾기 :";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "에서 다음 문장이 마지막으로 나타난 위치 찾기 :";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "문장 %1 %2 %3";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "두 번째 텍스트에서 첫 번째 텍스트가 처음 또는 마지막으로 발생한 색인 위치를 반환합니다. 텍스트가 없으면 %1을 반환합니다.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1이 비어 있습니다";

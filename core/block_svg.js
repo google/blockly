@@ -252,7 +252,7 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
     // Move this block up the DOM.  Keep track of x/y translations.
     var xy = this.getRelativeToSurfaceXY();
     this.workspace.getCanvas().appendChild(svgRoot);
-    svgRoot.setAttribute('transform', 'translate' + xy);
+    svgRoot.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
   }
 
   Blockly.Field.startCache();
@@ -383,7 +383,7 @@ Blockly.BlockSvg.prototype.moveDuringDrag = function(newLoc) {
   if (this.useDragSurface_) {
     this.workspace.blockDragSurface_.translateSurface(newLoc.x, newLoc.y);
   } else {
-    this.svgGroup_.translate_ = 'translate' + newLoc;
+    this.svgGroup_.translate_ = 'translate(' + newLoc.x + ',' + newLoc.y + ')';
     this.svgGroup_.setAttribute('transform',
         this.svgGroup_.translate_ + this.svgGroup_.skew_);
   }

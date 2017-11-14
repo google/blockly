@@ -705,7 +705,8 @@ Blockly.WorkspaceSvg.prototype.resetDragSurface = function() {
 
   var trans = this.workspaceDragSurface_.getSurfaceTranslation();
   this.workspaceDragSurface_.clearAndHide(this.svgGroup_);
-  var translation = 'translate' + trans + ' scale(' + this.scale + ')';
+  var translation = 'translate(' + trans.x + ',' + trans.y + ') ' +
+      'scale(' + this.scale + ')';
   this.svgBlockCanvas_.setAttribute('transform', translation);
   this.svgBubbleCanvas_.setAttribute('transform', translation);
 };

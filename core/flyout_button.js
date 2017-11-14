@@ -189,7 +189,8 @@ Blockly.FlyoutButton.prototype.show = function() {
  * @private
  */
 Blockly.FlyoutButton.prototype.updateTransform_ = function() {
-  this.svgGroup_.setAttribute('transform', 'translate' + this.position_);
+  this.svgGroup_.setAttribute('transform',
+      'translate(' + this.position_.x + ',' + this.position_.y + ')');
 };
 
 /**

@@ -100,7 +100,7 @@ function loadXml() {
   }
   var xmlText = fetchFile(url);
   if (xmlText !== null) {
-    fromXml(xmlText);
+    fromXml(url, xmlText);
   }
 }
 
@@ -124,7 +124,11 @@ function fetchFile(xmlUrl) {
   return xmlHttp.responseText;
 }
 
-function fromXml(xmlText) {
+/**
+ * @param {string} filename The URL (or other name) of the XML, for reporting.
+ * @param {string} xmlText The actual XML text.
+ */
+function fromXml(filename, xmlText) {
   var output = document.getElementById('importExport');
   output.value = xmlText;
   output.scrollTop = 0;
@@ -132,11 +136,16 @@ function fromXml(xmlText) {
   demoWorkspace.clear();
   try {
     var xmlDoc = Blockly.Xml.textToDom(xmlText);
+    Blockly.Xml.domToWorkspace(xmlDoc, demoWorkspace);
   } catch (e) {
-    alert('Error parsing XML:\n' + e);
+    var msg = 'Error parsing XML: ' + filename + '\n\n\t' + e;
+    if (e.stack) {
+      msg += '\n\nSee console for stack trace details.'
+    }
+    console.error(e.stack ? e : msg);
+    alert(msg);
     return;
   }
-  Blockly.Xml.domToWorkspace(xmlDoc, demoWorkspace);
 }
 
 function setOutput(text) {

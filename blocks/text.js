@@ -806,7 +806,7 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
    */
   mutationToDom: function() {
     var container = document.createElement('mutation');
-    var isAt = this.getInput('AT').type == Blockly.INPUT_VALUE;
+    var isAt = !!this.isAt_; // coerce to boolean
     container.setAttribute('at', isAt);
     return container;
   },

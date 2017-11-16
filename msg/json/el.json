@@ -14,7 +14,8 @@
 			"GR",
 			"Stam.nikos",
 			"Themelis",
-			"KATRINE1992"
+			"KATRINE1992",
+			"Vicng"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "αντικείμενο",
@@ -324,7 +325,7 @@
 	"LISTS_GET_SUBLIST_END_LAST": "έως το τελευταίο",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Δημιουργεί ένα αντίγραφο του καθορισμένου τμήματος μιας λίστας.",
 	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
-	"LISTS_SORT_TITLE": "επιλογή %1 %2 % 3",
+	"LISTS_SORT_TITLE": "επιλογή %1 %2 %3",
 	"LISTS_SORT_TOOLTIP": "Επιλέξετε ένα αντίγραφο της λίστας.",
 	"LISTS_SORT_ORDER_ASCENDING": "Αύξουσα",
 	"LISTS_SORT_ORDER_DESCENDING": "Φθίνουσα",

@@ -115,10 +115,8 @@ Blockly.FieldDropdown.prototype.init = function() {
       ' ' + Blockly.FieldDropdown.ARROW_CHAR));
 
   Blockly.FieldDropdown.superClass_.init.call(this);
-  // Force a reset of the text to add the arrow.
-  var text = this.text_;
-  this.text_ = null;
-  this.setText(text);
+  // Make sure the arrow gets rendered.
+  this.forceRerender();
 };
 
 /**

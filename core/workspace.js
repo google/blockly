@@ -178,7 +178,7 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
 
 /**
  * Add a comment to the list of top comments.
- * @param {!Blockly.Comment} comment comment to add.
+ * @param {!Blockly.WorkspaceComment} comment comment to add.
  */
 Blockly.Workspace.prototype.addTopComment = function(comment) {
   this.topComments_.push(comment);
@@ -186,7 +186,7 @@ Blockly.Workspace.prototype.addTopComment = function(comment) {
 
 /**
  * Remove a comment from the list of top comments.
- * @param {!Blockly.Comment} comment comment to remove.
+ * @param {!Blockly.WorkspaceComment} comment comment to remove.
  */
 Blockly.Workspace.prototype.removeTopComment = function(comment) {
   if (!goog.array.remove(this.topComments_, comment)) {
@@ -198,7 +198,7 @@ Blockly.Workspace.prototype.removeTopComment = function(comment) {
  * Finds the top-level comments and returns them.  Comments are optionally sorted
  * by position; top to bottom (with slight LTR or RTL bias).
  * @param {boolean} ordered Sort the list if true.
- * @return {!Array.<!Blockly.Comment>} The top-level comment objects.
+ * @return {!Array.<!Blockly.WorkspaceComment>} The top-level comment objects.
  */
 Blockly.Workspace.prototype.getTopComments = function(ordered) {
   // Copy the topComments_ list.

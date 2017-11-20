@@ -28,8 +28,37 @@ goog.provide('Blockly.WorkspaceComment');
 
 /**
  * Class for a workspace comment.
+ * @param {!Blockly.Workspace} workspace The block's workspace.
+ * @param {string} content The content of this workspace comment.
+ * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
+ *     create a new ID.
  * @constructor
  */
-Blockly.WorkspaceComment = function() {
+Blockly.WorkspaceComment = function(workspace, content, opt_id) {
   console.log('New workspace comment!');
+  /** @type {string} */
+  this.id = opt_id;
+
+  /**
+   * The comment's position in workspace units.  (0, 0) is at the workspace's
+   * origin; scale does not change this value.
+   * @type {!goog.math.Coordinate}
+   * @private
+   */
+  this.xy_ = new goog.math.Coordinate(0, 0);
+
+  /** @type {!Blockly.Workspace} */
+  this.workspace = workspace;
+  
+  /** @type {!string} */
+  this.content = content;
+};
+
+/**
+ * Return the coordinates of the top-left corner of this comment relative to the
+ * drawing surface's origin (0,0), in workspace units.
+ * @return {!goog.math.Coordinate} Object with .x and .y properties.
+ */
+Blockly.WorkspaceComment.prototype.getRelativeToSurfaceXY = function() {
+  return this.xy_;
 };

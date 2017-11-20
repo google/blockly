@@ -57,6 +57,11 @@ Blockly.Workspace = function(opt_options) {
    */
   this.topBlocks_ = [];
   /**
+   * @type {!Array.<!Blockly.WorkspaceComment>}
+   * @private
+   */
+  this.topComments_ = [];
+  /**
    * @type {!Array.<!Function>}
    * @private
    */
@@ -169,6 +174,47 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
     });
   }
   return blocks;
+};
+
+/**
+ * Add a comment to the list of top comments.
+ * @param {!Blockly.WorkspaceComment} comment comment to add.
+ */
+Blockly.Workspace.prototype.addTopComment = function(comment) {
+  this.topComments_.push(comment);
+};
+
+/**
+ * Remove a comment from the list of top comments.
+ * @param {!Blockly.WorkspaceComment} comment comment to remove.
+ */
+Blockly.Workspace.prototype.removeTopComment = function(comment) {
+  if (!goog.array.remove(this.topComments_, comment)) {
+    throw 'Comment not present in workspace\'s list of top-most comments.';
+  }
+};
+
+/**
+ * Finds the top-level comments and returns them.  Comments are optionally sorted
+ * by position; top to bottom (with slight LTR or RTL bias).
+ * @param {boolean} ordered Sort the list if true.
+ * @return {!Array.<!Blockly.WorkspaceComment>} The top-level comment objects.
+ */
+Blockly.Workspace.prototype.getTopComments = function(ordered) {
+  // Copy the topComments_ list.
+  var comments = [].concat(this.topComments_);
+  if (ordered && comments.length > 1) {
+    var offset = Math.sin(goog.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
+    if (this.RTL) {
+      offset *= -1;
+    }
+    comments.sort(function(a, b) {
+      var aXY = a.getRelativeToSurfaceXY();
+      var bXY = b.getRelativeToSurfaceXY();
+      return (aXY.y + offset * aXY.x) - (bXY.y + offset * bXY.x);
+    });
+  }
+  return comments;
 };
 
 /**

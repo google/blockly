@@ -487,6 +487,19 @@ Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {
 };
 
 /**
+ * Obtain a newly created comment.
+ * @param {?string} content Content of the comment
+ * @param {?string} h Height of the comment
+ * @param {?string} w Width of the comment
+ * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
+ *     create a new ID.
+ * @return {!Blockly.BlockSvg} The created comment.
+ */
+Blockly.WorkspaceSvg.prototype.newComment = function(content, h, w, opt_id) {
+  return new Blockly.WorkspaceCommentSvg(this, content, h, w, opt_id);
+};
+
+/**
  * Add a trashcan.
  * @param {number} bottom Distance from workspace bottom to bottom of trashcan.
  * @return {number} Distance from workspace bottom to the top of trashcan.
@@ -1240,6 +1253,22 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
       toggleOption(false);
     };
     menuOptions.push(expandOption);
+
+    /**
+     * Option to add a workspace comment..
+     * @private
+     */
+    var addWsComment = function() {
+      // TODO: add workspace comment stub
+    };
+
+    // Option to add workspace comment.
+    var wsCommentOption = {enabled: true};
+    wsCommentOption.text = Blockly.Msg.ADD_COMMENT;
+    wsCommentOption.callback = function() {
+      addWsComment();
+    };
+    menuOptions.push(wsCommentOption);
   }
 
   // Option to delete all blocks.

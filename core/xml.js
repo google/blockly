@@ -42,9 +42,11 @@ goog.require('goog.dom');
  */
 Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
   var xml = goog.dom.createDom('xml');
-  var variables = Blockly.Variables.allUsedVarModels(workspace);
-  if (variables.length) {
-    xml.appendChild(Blockly.Xml.variablesToDom(variables));
+  xml.appendChild(Blockly.Xml.variablesToDom(
+      Blockly.Variables.allUsedVarModels(workspace)));
+  var comments = workspace.getTopComments(true);
+  for (var i = 0, comment; comment = comments[i]; i++) {
+    xml.appendChild(Blockly.Xml.commentToDomWithXY(comment, opt_noId));
   }
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
@@ -262,6 +264,39 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
 };
 
 /**
+ * Encode a comment subtree as XML with XY coordinates.
+ * @param {!Blockly.Comment} comment The workspace comment to encode.
+ * @param {boolean} opt_noId True if the encoder should skip the comment id.
+ * @return {!Element} Tree of XML elements.
+ */
+Blockly.Xml.commentToDomWithXY = function(comment, opt_noId) {
+  var width;  // Not used in LTR.
+  if (comment.workspace.RTL) {
+    width = comment.workspace.getWidth();
+  }
+  var element = Blockly.Xml.commentToDom(comment, opt_noId);
+  var xy = comment.getRelativeToSurfaceXY();
+  element.setAttribute('x',
+      Math.round(comment.workspace.RTL ? width - xy.x : xy.x));
+  element.setAttribute('y', Math.round(xy.y));
+  return element;
+};
+
+/**
+ * Encode a comment subtree as XML.
+ * @param {!Blockly.Comment} comment The workspace comment to encode.
+ * @param {boolean} opt_noId True if the encoder should skip the comment id.
+ * @return {!Element} Tree of XML elements.
+ */
+Blockly.Xml.commentToDom = function(comment, opt_noId) {
+  var commentElement = goog.dom.createDom('comment');
+  commentElement.setAttribute('h', comment.getHeight());
+  commentElement.setAttribute('w', comment.getWidth());
+  commentElement.textContent = comment.content;
+  return commentElement;
+};
+
+/**
  * Deeply clone the shadow's DOM so that changes don't back-wash to the block.
  * @param {!Element} shadow A tree of XML elements.
  * @return {!Element} A tree of XML elements.
@@ -413,6 +448,13 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
       } else if (name == 'shadow') {
         goog.asserts.fail('Shadow block cannot be a top-level block.');
         variablesFirst = false;
+      } else if (name == 'comment') {
+        var comment = Blockly.Xml.domToComment(xmlChild, workspace);
+        var commentX = parseInt(xmlChild.getAttribute('x'), 10);
+        var commentY = parseInt(xmlChild.getAttribute('y'), 10);
+        if (!isNaN(commentX) && !isNaN(commentY)) {
+          comment.moveBy(workspace.RTL ? width - commentX : commentX, commentY);
+        }
       } else if (name == 'variables') {
         if (variablesFirst) {
           Blockly.Xml.domToVariables(xmlChild, workspace);
@@ -555,6 +597,31 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     Blockly.Events.fire(new Blockly.Events.BlockCreate(topBlock));
   }
   return topBlock;
+};
+
+/**
+ * Decode an XML block tag and create a comment on the workspace.
+ * @param {!Element} xmlComment XML comment element.
+ * @param {!Blockly.Workspace} workspace The workspace.
+ * @return {!Blockly.Block} The root block created.
+ */
+Blockly.Xml.domToComment = function(xmlComment, workspace) {
+  // Create top-level comment.
+  Blockly.Events.disable();
+  try {
+    var comment = Blockly.Xml.domToCommentHeadless_(xmlComment, workspace);
+    if (workspace.rendered) {
+      comment.initSvg();
+      comment.render(false);
+    }
+  } finally {
+    Blockly.Events.enable();
+  }
+  // TODO: fire a comment create event
+  // if (Blockly.Events.isEnabled()) {
+  //   Blockly.Events.fire(new Blockly.Events.BlockCreate(topBlock));
+  // }
+  return comment;
 };
 
 /**
@@ -796,6 +863,32 @@ Blockly.Xml.domToField_ = function(block, fieldName, xml) {
   } else {
     field.setValue(text);
   }
+};
+
+/**
+ * Decode an XML comment tag and create a comment on the workspace.
+ * @param {!Element} xmlComment XML comment element.
+ * @param {!Blockly.Workspace} workspace The workspace.
+ * @return {!Blockly.Block} The root block created.
+ * @private
+ */
+Blockly.Xml.domToCommentHeadless_ = function(xmlComment, workspace) {
+  var comment = null;
+  var id = xmlComment.getAttribute('id');
+  var h = xmlComment.getAttribute('h');
+  var w = xmlComment.getAttribute('w');
+  var content = xmlComment.textContent;
+  comment = workspace.newWorkspaceComment(content, id);
+
+  var height = xmlComment.getAttribute('h');
+  if (height) {
+    comment.setHeight(height);
+  }
+  var width = xmlComment.getAttribute('w');
+  if (width) {
+    comment.setWidth(width);
+  }
+  return comment;
 };
 
 /**

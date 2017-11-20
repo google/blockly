@@ -36,3 +36,21 @@ goog.require('Blockly.WorkspaceComment');
 Blockly.WorkspaceCommentSvg = function() {
   console.log('New workspace comment SVG!');
 }; goog.inherits(Blockly.WorkspaceCommentSvg, Blockly.WorkspaceComment);
+
+
+/**
+ * Create and initialize the SVG representation of a workspace comment.
+ * May be called more than once.
+ */
+Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
+  // Initialize comment SVG
+}
+
+/**
+ * Move a comment by a relative offset.
+ * @param {number} dx Horizontal offset, in workspace units.
+ * @param {number} dy Vertical offset, in workspace units.
+ */
+Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
+  // Move comment by
+}

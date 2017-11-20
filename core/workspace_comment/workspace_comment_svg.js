@@ -65,7 +65,7 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width, opt_id
  */
 Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
   // Initialize comment SVG
-}
+};
 
 /**
  * Move a comment by a relative offset.
@@ -74,7 +74,7 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
  */
 Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
   // Move comment by
-}
+};
 
 /**
  * Get comment height.

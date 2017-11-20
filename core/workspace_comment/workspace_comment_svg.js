@@ -30,7 +30,7 @@ goog.require('Blockly.WorkspaceComment');
 
 /**
  * Class for a workspace comment's SVG representation.
- * Not normally called directly, workspace.newWorkspaceComment() is preferred.
+ * Not normally called directly, workspace.newComment() is preferred.
  * @param {!Blockly.Workspace} workspace The block's workspace.
  * @param {string} content The content of this workspace comment.
  * @param {number} height Height of the comment.

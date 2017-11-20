@@ -4,7 +4,8 @@
 			"Azpirin",
 			"Octahedron80",
 			"Horus",
-			"Roysheng"
+			"Roysheng",
+			"Aefgh39622"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "รายการ",
@@ -32,6 +33,11 @@
 	"RENAME_VARIABLE_TITLE": "เปลี่ยนชื่อตัวแปร '%1' ทั้งหมดเป็น:",
 	"NEW_VARIABLE": "สร้างตัวแปร...",
 	"NEW_VARIABLE_TITLE": "ชื่อตัวแปรใหม่:",
+	"VARIABLE_ALREADY_EXISTS": "มีตัวแปรชื่อ '%1' อยู่แล้ว",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "ตัวแปรชื่อ '%1' มีอยู่แล้วสำหรับตัวแปรอื่นของชนิด '%2'",
+	"DELETE_VARIABLE_CONFIRMATION": "ลบการใช้ตัวแปร %2 %1 ครั้งหรือไม่",
+	"CANNOT_DELETE_VARIABLE_PROCEDURE": "ไม่สามารถลบตัวแปร '%1' ได้เนื่องจากเป็นส่วนหนึ่งของนิยามของฟังก์ชัน '%2'",
+	"DELETE_VARIABLE": "ลบตัวแปร '%1'",
 	"COLOUR_PICKER_HELPURL": "https://th.wikipedia.org/wiki/สี",
 	"COLOUR_PICKER_TOOLTIP": "เลือกสีจากจานสี",
 	"COLOUR_RANDOM_TITLE": "สุ่มสี",
@@ -73,6 +79,9 @@
 	"CONTROLS_IF_IF_TOOLTIP": "เพิ่ม ลบ หรือจัดเรียงบล็อก \"ถ้า\" นี้ใหม่",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "กำหนดเงื่อนไขของบล็อก \"ถ้า\"",
 	"CONTROLS_IF_ELSE_TOOLTIP": "เพิ่มสิ่งสุดท้าย ที่จะตรวจจับความเป็นไปได้ทั้งหมดของบล็อก \"ถ้า\"",
+	"IOS_OK": "ตกลง",
+	"IOS_CANCEL": "ยกเลิก",
+	"IOS_ERROR": "ข้อผิดพลาด",
 	"LOGIC_COMPARE_HELPURL": "https://th.wikipedia.org/wiki/อสมการ",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "คืนค่าเป็น \"จริง\" ถ้าค่าที่ใส่ทั้งสองค่านั้นเท่ากัน",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "คืนค่าเป็น \"จริง\" ถ้าค่าที่ใส่ทั้งสองค่านั้นไม่เท่ากัน",

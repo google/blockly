@@ -30,11 +30,32 @@ goog.require('Blockly.WorkspaceComment');
 
 /**
  * Class for a workspace comment's SVG representation.
+ * Not normally called directly, workspace.newWorkspaceComment() is preferred.
+ * @param {!Blockly.Workspace} workspace The block's workspace.
+ * @param {string} content The content of this workspace comment.
+ * @param {number} height Height of the comment.
+ * @param {number} width Width of the comment.
+ * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
+ *     create a new ID.
  * @extends {Blockly.WorkspaceComment}
  * @constructor
  */
-Blockly.WorkspaceCommentSvg = function() {
+Blockly.WorkspaceCommentSvg = function(workspace, content, height, width, opt_id) {
   console.log('New workspace comment SVG!');
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.height_ = null;
+  /**
+   * @type {number}
+   * @private
+   */
+  this.width_ = null;
+
+  Blockly.WorkspaceCommentSvg.superClass_.constructor.call(this,
+      workspace, content, opt_id);
 }; goog.inherits(Blockly.WorkspaceCommentSvg, Blockly.WorkspaceComment);
 
 
@@ -54,3 +75,35 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
 Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
   // Move comment by
 }
+
+/**
+ * Get comment height.
+ * @return {number} comment height.
+ */
+Blockly.WorkspaceCommentSvg.prototype.getHeight = function() {
+  return this.height_;
+};
+
+/**
+ * Set comment height.
+ * @param {number} height comment height.
+ */
+Blockly.WorkspaceCommentSvg.prototype.setHeight = function(height) {
+  this.height_ = height;
+};
+
+/**
+ * Get comment width.
+ * @return {number} comment width.
+ */
+Blockly.WorkspaceCommentSvg.prototype.getWidth = function() {
+  return this.width_;
+};
+
+/**
+ * Set comment width.
+ * @param {number} width comment width.
+ */
+Blockly.WorkspaceCommentSvg.prototype.setWidth = function(width) {
+  this.width_ = width;
+};

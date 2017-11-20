@@ -510,7 +510,7 @@ Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {
  * @param {?string} w Width of the comment
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
- * @return {!Blockly.BlockSvg} The created comment.
+ * @return {!Blockly.WorkspaceCommentSvg} The created comment.
  */
 Blockly.WorkspaceSvg.prototype.newComment = function(content, h, w, opt_id) {
   return new Blockly.WorkspaceCommentSvg(this, content, h, w, opt_id);

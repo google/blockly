@@ -878,7 +878,7 @@ Blockly.Xml.domToCommentHeadless_ = function(xmlComment, workspace) {
   var h = xmlComment.getAttribute('h');
   var w = xmlComment.getAttribute('w');
   var content = xmlComment.textContent;
-  comment = workspace.newWorkspaceComment(content, h, w, id);
+  comment = workspace.newComment(content, h, w, id);
 
   var height = xmlComment.getAttribute('h');
   if (height) {

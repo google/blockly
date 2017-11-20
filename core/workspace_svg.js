@@ -513,7 +513,7 @@ Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {
  * @return {!Blockly.BlockSvg} The created comment.
  */
 Blockly.WorkspaceSvg.prototype.newWorkspaceComment = function(content, h, w, opt_id) {
-  return new Blockly.WorkspaceCommentSvg(this, content, opt_id);
+  return new Blockly.WorkspaceCommentSvg(this, content, h, w, opt_id);
 };
 
 /**

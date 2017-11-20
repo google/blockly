@@ -32,4 +32,47 @@ goog.provide('Blockly.WorkspaceComment');
  */
 Blockly.WorkspaceComment = function() {
   console.log('New workspace comment!');
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.height_ = null;
+  /**
+   * @type {number}
+   * @private
+   */
+  this.width_ = null;
+};
+
+/**
+ * Get comment height.
+ * @return {number} comment height.
+ */
+Blockly.WorkspaceComment.prototype.getHeight = function() {
+  return this.height_;
+};
+
+/**
+ * Set comment height.
+ * @param {number} height comment height.
+ */
+Blockly.WorkspaceComment.prototype.setHeight = function(height) {
+  this.height_ = height;
+};
+
+/**
+ * Get comment width.
+ * @return {number} comment width.
+ */
+Blockly.WorkspaceComment.prototype.getWidth = function() {
+  return this.width_;
+};
+
+/**
+ * Set comment width.
+ * @param {number} width comment width.
+ */
+Blockly.WorkspaceComment.prototype.setWidth = function(width) {
+  this.width_ = width;
 };

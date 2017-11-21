@@ -110,8 +110,23 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
  * @param {number} dy Vertical offset, in workspace units.
  */
 Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
-  console.log('unimplemented: move by ' + dx + ', ' + dy);
-  // Move comment by
+  //var event = new Blockly.Events.BlockMove(this);
+  var xy = this.getRelativeToSurfaceXY();
+  this.translate(xy.x + dx, xy.y + dy);
+  //event.recordNew();
+  this.workspace.resizeContents();
+  //Blockly.Events.fire(event);
+};
+
+/**
+ * Transforms a comment by setting the translation on the transform attribute
+ * of the block's SVG.
+ * @param {number} x The x coordinate of the translation in workspace units.
+ * @param {number} y The y coordinate of the translation in workspace units.
+ */
+Blockly.WorkspaceCommentSvg.prototype.translate = function(x, y) {
+  this.getSvgRoot().setAttribute('transform',
+      'translate(' + x + ',' + y + ')');
 };
 
 /**

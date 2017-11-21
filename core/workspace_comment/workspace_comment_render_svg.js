@@ -29,7 +29,7 @@ goog.provide('Blockly.WorkspaceCommentSvg.render');
 goog.require('Blockly.WorkspaceCommentSvg');
 
 Blockly.WorkspaceCommentSvg.prototype.render = function() {
-  this.rendered = true;
+  this.rendered_ = true;
 
   this.setPath_(this.getHeight(), this.getWidth());
 

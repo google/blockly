@@ -28,6 +28,21 @@ goog.provide('Blockly.WorkspaceCommentSvg.render');
 
 goog.require('Blockly.WorkspaceCommentSvg');
 
+
+/**
+ * Width of the border around the text area.
+ * @type {number}
+ * @const
+ */
+Blockly.WorkspaceCommentSvg.BORDER_WIDTH = 10;
+
+/**
+ * Offset from the foreignobject edge to the textarea edge.
+ * @type {number}
+ * @const
+ */
+Blockly.WorkspaceCommentSvg.TEXTAREA_OFFSET = 4;
+
 Blockly.WorkspaceCommentSvg.prototype.render = function() {
   this.rendered_ = true;
 
@@ -39,16 +54,17 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
   this.createEditor_();
   this.svgGroup_.appendChild(this.foreignObject_);
 
-  var borderWidth = Blockly.Bubble.BORDER_WIDTH;
+  var borderWidth = Blockly.WorkspaceCommentSvg.BORDER_WIDTH;
+  var textOffset = borderWidth + Blockly.WorkspaceCommentSvg.TEXTAREA_OFFSET;
 
   this.foreignObject_.setAttribute('width',
       this.getWidth() - borderWidth);
   this.foreignObject_.setAttribute('height',
       this.getHeight() - borderWidth);
   this.textarea_.style.width =
-      (this.getWidth() - borderWidth - 4) + 'px';
+      (this.getWidth() - textOffset) + 'px';
   this.textarea_.style.height =
-      (this.getHeight() - borderWidth - 4) + 'px';
+      (this.getHeight() - textOffset) + 'px';
 
   // Set the content
   this.textarea_.value = this.content_;
@@ -88,7 +104,8 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
     </foreignObject>
   */
   this.foreignObject_ = Blockly.utils.createSvgElement('foreignObject',
-      {'x': Blockly.Bubble.BORDER_WIDTH / 2, 'y': Blockly.Bubble.BORDER_WIDTH / 2},
+      {'x': Blockly.WorkspaceCommentSvg.BORDER_WIDTH / 2,
+       'y': Blockly.WorkspaceCommentSvg.BORDER_WIDTH / 2},
       null);
   var body = document.createElementNS(Blockly.HTML_NS, 'body');
   body.setAttribute('xmlns', Blockly.HTML_NS);

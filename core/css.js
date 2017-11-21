@@ -380,6 +380,7 @@ Blockly.Css.CONTENT = [
   '.blocklyCommentPath {',
     'fill: #fef49c;',
     'stroke: #bcA903;',
+    'stroke-width: 10;',
   '}',
 
   '.blocklyCommentTextarea {',

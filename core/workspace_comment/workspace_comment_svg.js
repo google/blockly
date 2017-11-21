@@ -71,6 +71,10 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
 
   Blockly.WorkspaceCommentSvg.superClass_.constructor.call(this,
       workspace, content, opt_id);
+
+  this.render();
+  Blockly.bindEventWithChecks_(this.svgPath_, 'mousedown', this,
+                   this.pathMouseDown_);
 }; goog.inherits(Blockly.WorkspaceCommentSvg, Blockly.WorkspaceComment);
 
 /**
@@ -106,6 +110,18 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
 
   if (!this.getSvgRoot().parentNode) {
     this.workspace.getCanvas().appendChild(this.getSvgRoot());
+  }
+};
+
+/**
+ * Handle a mouse-down on an SVG comment.
+ * @param {!Event} e Mouse down event or touch start event.
+ * @private
+ */
+Blockly.WorkspaceCommentSvg.prototype.pathMouseDown_ = function(e) {
+  var gesture = this.workspace.getGesture(e);
+  if (gesture) {
+    gesture.handleCommentStart(e, this);
   }
 };
 

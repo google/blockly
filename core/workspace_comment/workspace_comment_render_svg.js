@@ -33,6 +33,8 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
   this.setPath_(this.getHeight(), this.getWidth());
 
   // Add text area
+  // TODO: Does this need to happen every time?  Or are we orphaning foreign
+  // elements in the code?
   this.createEditor_();
   this.svgGroup_.appendChild(this.foreignObject_);
   var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;

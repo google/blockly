@@ -69,8 +69,11 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
    */
   this.width_ = width;
 
-  /** @type {boolean} */
-  this.rendered = false;
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.rendered_ = false;
 
   /**
    * Whether to move the comment to the drag surface when it is dragged.

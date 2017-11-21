@@ -7,11 +7,11 @@ goog.provide('Blockly.Msg.bn');
 goog.require('Blockly.Msg');
 
 /** @export */ Blockly.Msg.ADD_COMMENT = "মন্তব্য যোগ করুন";
-/** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
+/** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "'%1' চলক অপসারণ করা যাবে না কারণ এটি '%2' কার্যপ্রণালীর সংজ্ঞার অংশ";
 /** @export */ Blockly.Msg.CHANGE_VALUE_TITLE = "মান পরিবর্তন করুন:";
-/** @export */ Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
-/** @export */ Blockly.Msg.COLLAPSE_ALL = "Collapse Blocks";  // untranslated
-/** @export */ Blockly.Msg.COLLAPSE_BLOCK = "Collapse Block";  // untranslated
+/** @export */ Blockly.Msg.CLEAN_UP = "ব্লকসমূহ পরিস্কার করুন";
+/** @export */ Blockly.Msg.COLLAPSE_ALL = "ব্লকসমূহ সঙ্কুচিত করুন";
+/** @export */ Blockly.Msg.COLLAPSE_BLOCK = "ব্লক সঙ্কুচিত করুন";
 /** @export */ Blockly.Msg.COLOUR_BLEND_COLOUR1 = "রং ১";
 /** @export */ Blockly.Msg.COLOUR_BLEND_COLOUR2 = "রং ২";
 /** @export */ Blockly.Msg.COLOUR_BLEND_HELPURL = "http://meyerweb.com/eric/tools/color-blend/";  // untranslated
@@ -57,14 +57,14 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.CONTROLS_REPEAT_TITLE = "%1 বার পুনরাবৃত্তি করো";
 /** @export */ Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = "Do some statements several times.";  // untranslated
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = "https://github.com/google/blockly/wiki/Loops#repeat";  // untranslated
-/** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "repeat until";  // untranslated
-/** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "repeat while";  // untranslated
+/** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "অাবার করুন যতক্ষণ না";
+/** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "অাবার করুন যখন";
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "While a value is false, then do some statements.";  // untranslated
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "While a value is true, then do some statements.";  // untranslated
-/** @export */ Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";  // untranslated
+/** @export */ Blockly.Msg.DELETE_ALL_BLOCKS = "সব %1টি ব্লক অপসারণ করবেন?";
 /** @export */ Blockly.Msg.DELETE_BLOCK = "ব্লকটি মুছে ফেল";
-/** @export */ Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
-/** @export */ Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the '%2' variable?";  // untranslated
+/** @export */ Blockly.Msg.DELETE_VARIABLE = "'%1' চলকটি অপসারণ করুন";
+/** @export */ Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "'%2' চলকের '%1'টি ব্যবহার অপসারণ করবেন?";
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "%1 ব্লক অপসারণ কর";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "ব্লকটি বিকল কর";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "প্রতিলিপি";
@@ -313,7 +313,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.REDO = "পুনরায় করুন";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "মন্তব্য সরাও";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "চলকের নাম পরিবর্তন...";
-/** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Rename all '%1' variables to:";  // untranslated
+/** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "'%1' চলকগুলোর নতুন নাম দিন:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 /** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "Append some text to variable '%1'.";  // untranslated
@@ -392,8 +392,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_CREATE_GET = "'%1 নিন' তৈরি করুন";
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Sets this variable to be equal to the input.";  // untranslated
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "A variable named '%1' already exists.";  // untranslated
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "'%1' নামের চলক পূর্ব থেকে অাছে।";
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "'%1' নামের চলক '%2' ধরনের চলকের জন্য পূর্ব থেকেই অাছে।";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

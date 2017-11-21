@@ -295,6 +295,9 @@ Blockly.Xml.commentToDom = function(comment, opt_noId) {
   var commentElement = goog.dom.createDom('comment');
   commentElement.setAttribute('h', comment.getHeight());
   commentElement.setAttribute('w', comment.getWidth());
+  if (!opt_noId) {
+    commentElement.setAttribute('id', comment.id);
+  }
   commentElement.textContent = comment.content;
   return commentElement;
 };

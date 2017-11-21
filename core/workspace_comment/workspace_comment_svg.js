@@ -62,12 +62,12 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
    * @type {number}
    * @private
    */
-  this.height_ = null;
+  this.height_ = height;
   /**
    * @type {number}
    * @private
    */
-  this.width_ = null;
+  this.width_ = width;
 
   Blockly.WorkspaceCommentSvg.superClass_.constructor.call(this,
       workspace, content, opt_id);
@@ -94,6 +94,7 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
 /**
  * Create and initialize the SVG representation of a workspace comment.
  * May be called more than once.
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
   goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
@@ -109,9 +110,49 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
 };
 
 /**
+ * Return the coordinates of the top-left corner of this comment relative to the
+ * drawing surface's origin (0,0), in workspace units.
+ * If the comment is on the workspace, (0, 0) is the origin of the workspace
+ * coordinate system.
+ * This does not change with workspace scale.
+ * @return {!goog.math.Coordinate} Object with .x and .y properties in
+ *     workspace coordinates.
+ * @package
+ */
+Blockly.WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
+  var x = 0;
+  var y = 0;
+
+  var dragSurfaceGroup = this.useDragSurface_ ?
+      this.workspace.blockDragSurface_.getGroup() : null;
+
+  var element = this.getSvgRoot();
+  if (element) {
+    do {
+      // Loop through this block and every parent.
+      var xy = Blockly.utils.getRelativeXY(element);
+      x += xy.x;
+      y += xy.y;
+      // If this element is the current element on the drag surface, include
+      // the translation of the drag surface itself.
+      if (this.useDragSurface_ &&
+          this.workspace.blockDragSurface_.getCurrentBlock() == element) {
+        var surfaceTranslation = this.workspace.blockDragSurface_.getSurfaceTranslation();
+        x += surfaceTranslation.x;
+        y += surfaceTranslation.y;
+      }
+      element = element.parentNode;
+    } while (element && element != this.workspace.getCanvas() &&
+        element != dragSurfaceGroup);
+  }
+  return new goog.math.Coordinate(x, y);
+};
+
+/**
  * Move a comment by a relative offset.
  * @param {number} dx Horizontal offset, in workspace units.
  * @param {number} dy Vertical offset, in workspace units.
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
   //var event = new Blockly.Events.BlockMove(this);
@@ -127,6 +168,7 @@ Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
  * of the block's SVG.
  * @param {number} x The x coordinate of the translation in workspace units.
  * @param {number} y The y coordinate of the translation in workspace units.
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.translate = function(x, y) {
   this.getSvgRoot().setAttribute('transform',
@@ -136,6 +178,7 @@ Blockly.WorkspaceCommentSvg.prototype.translate = function(x, y) {
 /**
  * Get comment height.
  * @return {number} comment height.
+ * @public
  */
 Blockly.WorkspaceCommentSvg.prototype.getHeight = function() {
   return this.height_;
@@ -144,6 +187,7 @@ Blockly.WorkspaceCommentSvg.prototype.getHeight = function() {
 /**
  * Set comment height.
  * @param {number} height comment height.
+ * @public
  */
 Blockly.WorkspaceCommentSvg.prototype.setHeight = function(height) {
   this.height_ = height;
@@ -152,6 +196,7 @@ Blockly.WorkspaceCommentSvg.prototype.setHeight = function(height) {
 /**
  * Get comment width.
  * @return {number} comment width.
+ * @public
  */
 Blockly.WorkspaceCommentSvg.prototype.getWidth = function() {
   return this.width_;
@@ -160,6 +205,7 @@ Blockly.WorkspaceCommentSvg.prototype.getWidth = function() {
 /**
  * Set comment width.
  * @param {number} width comment width.
+ * @public
  */
 Blockly.WorkspaceCommentSvg.prototype.setWidth = function(width) {
   this.width_ = width;
@@ -168,7 +214,33 @@ Blockly.WorkspaceCommentSvg.prototype.setWidth = function(width) {
 /**
  * Return the root node of the SVG or null if none exists.
  * @return {Element} The root SVG node (probably a group).
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.getSvgRoot = function() {
   return this.svgGroup_;
+};
+
+/**
+ * Returns this comment's text.
+ * @return {string} Comment text.
+ * @public
+ */
+Blockly.WorkspaceCommentSvg.prototype.getContent = function() {
+  return this.textarea_ ? this.textarea_.value : this.content_;
+};
+
+/**
+ * Set this comment's content.
+ * @param {string} content Comment content.
+ * @public
+ */
+Blockly.WorkspaceCommentSvg.prototype.setContent = function(content) {
+  if (this.content_ != content) {
+    Blockly.Events.fire(new Blockly.Events.BlockChange(
+      this.block_, 'comment', null, this.text_, content));
+    this.text_ = content;
+  }
+  if (this.textarea_) {
+    this.textarea_.value = content;
+  }
 };

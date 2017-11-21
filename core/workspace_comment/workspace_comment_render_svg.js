@@ -36,19 +36,19 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
   this.createEditor_();
   this.svgGroup_.appendChild(this.foreignObject_);
 
-  var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
+  var borderWidth = Blockly.Bubble.BORDER_WIDTH;
 
   this.foreignObject_.setAttribute('width',
-      this.getWidth() - doubleBorderWidth);
+      this.getWidth() - borderWidth);
   this.foreignObject_.setAttribute('height',
-      this.getHeight() - doubleBorderWidth);
+      this.getHeight() - borderWidth);
   this.textarea_.style.width =
-      (this.getWidth() - doubleBorderWidth - 4) + 'px';
+      (this.getWidth() - borderWidth - 4) + 'px';
   this.textarea_.style.height =
-      (this.getHeight() - doubleBorderWidth - 4) + 'px';
+      (this.getHeight() - borderWidth - 4) + 'px';
 
   // Set the content
-  this.textarea_.value = this.content;
+  this.textarea_.value = this.content_;
 };
 
 /**
@@ -67,10 +67,6 @@ Blockly.WorkspaceCommentSvg.prototype.setPath_ = function(height, width) {
 
   var pathString = steps.join(' ');
   this.svgPath_.setAttribute('d', pathString);
-  if (this.RTL) {
-    // Mirror the block's path.
-    this.svgPath_.setAttribute('transform', 'scale(-1 1)');
-  }
 };
 
 /**
@@ -89,7 +85,7 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
     </foreignObject>
   */
   this.foreignObject_ = Blockly.utils.createSvgElement('foreignObject',
-      {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
+      {'x': Blockly.Bubble.BORDER_WIDTH / 2, 'y': Blockly.Bubble.BORDER_WIDTH / 2},
       null);
   var body = document.createElementNS(Blockly.HTML_NS, 'body');
   body.setAttribute('xmlns', Blockly.HTML_NS);
@@ -100,7 +96,6 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
   body.appendChild(textarea);
   this.textarea_ = textarea;
   this.foreignObject_.appendChild(body);
-  Blockly.bindEventWithChecks_(textarea, 'mouseup', this, this.textareaFocus_);
   // Don't zoom with mousewheel.
   Blockly.bindEventWithChecks_(textarea, 'wheel', this, function(e) {
     e.stopPropagation();
@@ -108,10 +103,10 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
   Blockly.bindEventWithChecks_(textarea, 'change', this, function(
       /* eslint-disable no-unused-vars */ e
       /* eslint-enable no-unused-vars */) {
-    if (this.text_ != textarea.value) {
+    if (this.content_ != textarea.value) {
       Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this.block_, 'comment', null, this.text_, textarea.value));
-      this.text_ = textarea.value;
+        this.block_, 'comment', null, this.content_, textarea.value));
+      this.content_ = textarea.value;
     }
   });
   setTimeout(function() {

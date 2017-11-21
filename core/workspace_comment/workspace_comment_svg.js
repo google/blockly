@@ -42,6 +42,20 @@ goog.require('Blockly.WorkspaceComment');
  */
 Blockly.WorkspaceCommentSvg = function(workspace, content, height, width, opt_id) {
   console.log('New workspace comment SVG!');
+  // Create core elements for the block.
+  /**
+   * @type {SVGElement}
+   * @private
+   */
+  this.svgGroup_ = Blockly.utils.createSvgElement('g', {}, null);
+  this.svgGroup_.translate_ = '';
+
+  /**
+   * @type {SVGElement}
+   * @private
+   */
+  this.svgPath_ = Blockly.utils.createSvgElement('path', {'class': 'blocklyCommentPath'},
+      this.svgGroup_);
 
   /**
    * @type {number}
@@ -78,7 +92,16 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
  * May be called more than once.
  */
 Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
-  // Initialize comment SVG
+  goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
+  // if (!this.workspace.options.readOnly && !this.eventsInit_) {
+  //   Blockly.bindEventWithChecks_(this.getSvgRoot(), 'mousedown', this,
+  //                      this.onMouseDown_);
+  // }
+  this.eventsInit_ = true;
+
+  if (!this.getSvgRoot().parentNode) {
+    this.workspace.getCanvas().appendChild(this.getSvgRoot());
+  }
 };
 
 /**
@@ -120,4 +143,12 @@ Blockly.WorkspaceCommentSvg.prototype.getWidth = function() {
  */
 Blockly.WorkspaceCommentSvg.prototype.setWidth = function(width) {
   this.width_ = width;
+};
+
+/**
+ * Return the root node of the SVG or null if none exists.
+ * @return {Element} The root SVG node (probably a group).
+ */
+Blockly.WorkspaceCommentSvg.prototype.getSvgRoot = function() {
+  return this.svgGroup_;
 };

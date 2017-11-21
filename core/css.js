@@ -383,6 +383,10 @@ Blockly.Css.CONTENT = [
     'padding: 0;',
   '}',
 
+  '.blocklyCommentPath {',
+    'fill: #ff0000;',
+  '}',
+
   '.blocklyCommentTextarea {',
     'background-color: #ffc;',
     'border: 0;',

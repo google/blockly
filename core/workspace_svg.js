@@ -1296,15 +1296,32 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
      */
     var addWsComment = function() {
       var comment = ws.newComment('', 100, 100);
-      var currentMouseCoords = new goog.math.Coordinate(e.clientX, e.clientY);
-      var coord = Blockly.utils.getRelativeXY(ws.svgBlockCanvas_);
-
+  
       var injectionDiv = ws.getInjectionDiv();
+      // Bounding rect coordinates are in client coordinates, meaning that they
+      // are in pixels relative to the upper left corner of the visible browser
+      // window.  These coordinates change when you scroll the browser window.
       var boundingRect = injectionDiv.getBoundingClientRect();
 
-      var commentX = currentMouseCoords.x - boundingRect.left - coord.x;
-      var commentY = currentMouseCoords.y - boundingRect.top - coord.y;
-      comment.moveBy(ws.RTL ? ws.getWidth() - commentX : commentX, commentY);
+      // The client coordinates offset by the injection div's upper left corner.
+      var clientOffsetPixels = new goog.math.Coordinate(e.clientX - boundingRect.left,
+          e.clientY - boundingRect.top);
+
+      // The offset in pixels between the main workspace's origin and the upper left
+      // corner of the injection div.
+      var mainOffsetPixels = ws.getOriginOffsetInPixels();
+
+      // The position of the new comment in pixels relative to the origin of the
+      // main workspace.
+      var finalOffsetPixels = goog.math.Coordinate.difference(clientOffsetPixels,
+          mainOffsetPixels);
+
+      // The position of the new comment in main workspace coordinates.
+      var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
+
+      var commentX = finalOffsetMainWs.x;
+      var commentY = finalOffsetMainWs.y;
+      comment.moveBy(ws.RTL ? commentX - comment.getWidth() : commentX, commentY);
       if (ws.rendered) {
         comment.initSvg();
         comment.render(false);

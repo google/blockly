@@ -295,7 +295,7 @@ Blockly.Xml.commentToDom = function(comment, opt_noId) {
   if (!opt_noId) {
     commentElement.setAttribute('id', comment.id);
   }
-  commentElement.textContent = comment.content;
+  commentElement.textContent = comment.getContent();
   return commentElement;
 };
 

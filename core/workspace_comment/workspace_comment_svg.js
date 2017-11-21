@@ -58,6 +58,20 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width, opt_id
       workspace, content, opt_id);
 }; goog.inherits(Blockly.WorkspaceCommentSvg, Blockly.WorkspaceComment);
 
+/**
+ * Dispose of this comment.
+ * @public
+ */
+Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
+  if (!this.workspace) {
+    // The comment has already been deleted.
+    return;
+  }
+
+  // TODO: Delete any SVG elements.
+
+  Blockly.WorkspaceCommentSvg.superClass_.dispose.call(this);
+};
 
 /**
  * Create and initialize the SVG representation of a workspace comment.
@@ -73,6 +87,7 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
  * @param {number} dy Vertical offset, in workspace units.
  */
 Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
+  console.log('unimplemented: move by ' + dx + ', ' + dy);
   // Move comment by
 };
 

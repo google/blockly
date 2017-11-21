@@ -28,6 +28,7 @@
 goog.provide('Blockly.Gesture');
 
 goog.require('Blockly.BlockDragger');
+goog.require('Blockly.CommentDragger');
 goog.require('Blockly.constants');
 goog.require('Blockly.FlyoutDragger');
 goog.require('Blockly.Tooltip');

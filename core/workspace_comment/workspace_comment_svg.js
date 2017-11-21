@@ -159,7 +159,7 @@ Blockly.WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
   var element = this.getSvgRoot();
   if (element) {
     do {
-      // Loop through this block and every parent.
+      // Loop through this comment and every parent.
       var xy = Blockly.utils.getRelativeXY(element);
       x += xy.x;
       y += xy.y;
@@ -258,6 +258,15 @@ Blockly.WorkspaceCommentSvg.prototype.moveDuringDrag = function(newLoc) {
     this.svgGroup_.setAttribute('transform',
         this.svgGroup_.translate_ + this.svgGroup_.skew_);
   }
+};
+
+/**
+ * Clear the comment of transform="..." attributes.
+ * Used when the comment is switching from 3d to 2d transform or vice versa.
+ * @private
+ */
+Blockly.WorkspaceCommentSvg.prototype.clearTransformAttributes_ = function() {
+  Blockly.utils.removeAttribute(this.getSvgRoot(), 'transform');
 };
 
 /**

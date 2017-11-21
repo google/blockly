@@ -49,6 +49,9 @@ Blockly.WorkspaceComment = function(workspace, content, opt_id) {
 
   /** @type {!Blockly.Workspace} */
   this.workspace = workspace;
+
+  /** @type {boolean} */
+  this.RTL = workspace.RTL;
   
   /** @type {!string} */
   this.content = content;

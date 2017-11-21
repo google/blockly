@@ -31,27 +31,24 @@ goog.require('Blockly.WorkspaceCommentSvg');
 Blockly.WorkspaceCommentSvg.prototype.render = function() {
   console.log('Rendering a comment!');
 
-  var cursorX = Blockly.BlockSvg.SEP_SPACE_X;
-  this.renderDraw_(cursorX);
+  this.renderDraw_();
 };
 
 /**
  * Draw the path of the block.
  * Move the fields to the correct locations.
- * @param {number} iconWidth Offset of first row due to icons.
- * @param {!Array.<!Array.<!Object>>} inputRows 2D array of objects, each
  *     containing position information.
  * @private
  */
-Blockly.WorkspaceCommentSvg.prototype.renderDraw_ = function(iconWidth) {
+Blockly.WorkspaceCommentSvg.prototype.renderDraw_ = function() {
   var steps = [];
 
   this.renderDrawTop_(steps, this.getWidth());
-  var cursorY = this.renderDrawRight_(steps);
-  this.renderDrawBottom_(steps, cursorY);
+  this.renderDrawRight_(steps);
+  this.renderDrawBottom_(steps);
   this.renderDrawLeft_(steps);
 
-  var pathString = steps.join(' ') + '\n' + inlineSteps.join(' ');
+  var pathString = steps.join(' ');
   this.svgPath_.setAttribute('d', pathString);
   if (this.RTL) {
     // Mirror the block's path.
@@ -91,7 +88,7 @@ Blockly.WorkspaceCommentSvg.prototype.renderDrawTop_ = function(steps,
  * Render the right edge of the comment.
  * @param {!Array.<string>} steps Path of comment outline.
  * @return {number} Height of comment.
- * @private  
+ * @private
  */
 Blockly.WorkspaceCommentSvg.prototype.renderDrawRight_ = function(steps) {
   var cursorY = this.getHeight();
@@ -105,8 +102,7 @@ Blockly.WorkspaceCommentSvg.prototype.renderDrawRight_ = function(steps) {
  * @param {number} cursorY Height of comment.
  * @private
  */
-Blockly.WorkspaceCommentSvg.prototype.renderDrawBottom_ = function(steps,
-    cursorY) {
+Blockly.WorkspaceCommentSvg.prototype.renderDrawBottom_ = function(steps) {
   steps.push('H 0');
 };
 

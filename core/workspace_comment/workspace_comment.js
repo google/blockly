@@ -57,7 +57,7 @@ Blockly.WorkspaceComment = function(workspace, content, opt_id) {
   this.RTL = workspace.RTL;
 
   /** @type {!string} */
-  this.content = content;
+  this.content_ = content;
 };
 
 /**
@@ -87,4 +87,33 @@ Blockly.WorkspaceComment.prototype.dispose = function() {
  */
 Blockly.WorkspaceComment.prototype.getRelativeToSurfaceXY = function() {
   return this.xy_;
+};
+
+/**
+ * Move a comment by a relative offset.
+ * @param {number} dx Horizontal offset, in workspace units.
+ * @param {number} dy Vertical offset, in workspace units.
+ */
+Blockly.WorkspaceComment.prototype.moveBy = function(dx, dy) {
+  // TODO: Fire an event for move
+  this.xy_.translate(dx, dy);
+};
+
+/**
+ * Returns this comment's text.
+ * @return {string} Comment text.
+ */
+Blockly.WorkspaceComment.prototype.getContent = function() {
+  return this.content_;
+};
+
+/**
+ * Set this comment's content.
+ * @param {string} content Comment content.
+ */
+Blockly.WorkspaceComment.prototype.setContent = function(content) {
+  if (this.content_ != content) {
+    // TODO: Fire a event for change
+    this.text_ = content;
+  }
 };

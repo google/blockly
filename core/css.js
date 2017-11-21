@@ -384,18 +384,17 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyCommentPath {',
-    'fill: #ff0000;',
+    'fill: #fef49c;',
+    'stroke: #bcA903;',
   '}',
 
   '.blocklyCommentTextarea {',
-    'background-color: #ffc;',
+    'background-color: #fef49c;',
     'border: 0;',
-    'outline: 0;',
     'margin: 0;',
     'padding: 2px;',
     'resize: none;',
-    'display: block;',
-    'overflow: hidden;',
+    'outline: none;',
   '}',
 
   '.blocklyHtmlInput {',

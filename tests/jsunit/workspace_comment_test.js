@@ -72,3 +72,15 @@ function test_getWorkspaceCommentById() {
     workspaceCommentTest_tearDown();
   }
 }
+
+function test_disposeWsCommentTwice() {
+  workspaceCommentTest_setUp();
+  try {
+    var comment = workspace.newComment('comment text', 'comment id');
+    comment.dispose();
+    // Nothing should go wrong the second time dispose is called.
+    comment.dispose();
+  }finally {
+    workspaceCommentTest_tearDown();
+  }
+}

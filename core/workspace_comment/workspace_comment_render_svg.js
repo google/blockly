@@ -45,12 +45,6 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
  */
 Blockly.WorkspaceCommentSvg.prototype.renderDraw_ = function(iconWidth) {
   var steps = [];
-  var inlineSteps = [];
-  // The highlighting applies to edges facing the upper-left corner.
-  // Since highlighting is a two-pixel wide border, it would normally overhang
-  // the edge of the block by a pixel. So undersize all measurements by a pixel.
-  var highlightSteps = [];
-  var highlightInlineSteps = [];
 
   this.renderDrawTop_(steps, this.getWidth());
   var cursorY = this.renderDrawRight_(steps);
@@ -108,7 +102,6 @@ Blockly.WorkspaceCommentSvg.prototype.renderDrawRight_ = function(steps) {
 /**
  * Render the bottom edge of the comment.
  * @param {!Array.<string>} steps Path of comment outline.
- * @param {!Array.<string>} highlightSteps Path of comment highlights.
  * @param {number} cursorY Height of comment.
  * @private
  */

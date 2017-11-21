@@ -35,7 +35,6 @@ goog.provide('Blockly.WorkspaceComment');
  * @constructor
  */
 Blockly.WorkspaceComment = function(workspace, content, opt_id) {
-  console.log('New workspace comment!');
   /** @type {string} */
   this.id = (opt_id && !workspace.getCommentById(opt_id)) ?
       opt_id : Blockly.utils.genUid();
@@ -56,7 +55,7 @@ Blockly.WorkspaceComment = function(workspace, content, opt_id) {
 
   /** @type {boolean} */
   this.RTL = workspace.RTL;
-  
+
   /** @type {!string} */
   this.content_ = content;
 };

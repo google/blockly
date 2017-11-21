@@ -110,6 +110,7 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
  * @param {number} dy Vertical offset, in workspace units.
  */
 Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
+  console.log('unimplemented: move by ' + dx + ', ' + dy);
   // Move comment by
 };
 

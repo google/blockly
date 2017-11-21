@@ -37,7 +37,11 @@ goog.provide('Blockly.WorkspaceComment');
 Blockly.WorkspaceComment = function(workspace, content, opt_id) {
   console.log('New workspace comment!');
   /** @type {string} */
-  this.id = opt_id;
+  this.id = (opt_id && !workspace.getCommentById(opt_id)) ?
+      opt_id : Blockly.utils.genUid();
+
+  workspace.addCommentById(this);
+  workspace.addTopComment(this);
 
   /**
    * The comment's position in workspace units.  (0, 0) is at the workspace's
@@ -56,6 +60,26 @@ Blockly.WorkspaceComment = function(workspace, content, opt_id) {
   /** @type {!string} */
   this.content = content;
 };
+
+/**
+ * Dispose of this comment.
+ * @public
+ */
+Blockly.WorkspaceComment.prototype.dispose = function() {
+  if (!this.workspace) {
+    // The comment has already been deleted.
+    return;
+  }
+
+  // TODO: Fire an event for deletion.
+
+  // Remove from the list of top comments.
+  this.workspace.removeTopComment(this);
+  // Remove from the comment DB.
+  this.workspace.removeCommentById(this.id);
+  this.workspace = null;
+};
+
 
 /**
  * Return the coordinates of the top-left corner of this comment relative to the

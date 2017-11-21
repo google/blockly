@@ -40,22 +40,23 @@ goog.require('Blockly.WorkspaceComment');
  * @extends {Blockly.WorkspaceComment}
  * @constructor
  */
-Blockly.WorkspaceCommentSvg = function(workspace, content, height, width, opt_id) {
-  console.log('New workspace comment SVG!');
+Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
+    opt_id) {
   // Create core elements for the block.
   /**
    * @type {SVGElement}
    * @private
    */
-  this.svgGroup_ = Blockly.utils.createSvgElement('g', {}, null);
+  this.svgGroup_ = Blockly.utils.createSvgElement('g',
+      {'class': 'blocklyComment'}, null);
   this.svgGroup_.translate_ = '';
 
   /**
    * @type {SVGElement}
    * @private
    */
-  this.svgPath_ = Blockly.utils.createSvgElement('path', {'class': 'blocklyCommentPath'},
-      this.svgGroup_);
+  this.svgPath_ = Blockly.utils.createSvgElement('path',
+      {'class': 'blocklyCommentPath'}, this.svgGroup_);
 
   /**
    * @type {number}
@@ -82,7 +83,10 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
     return;
   }
 
-  // TODO: Delete any SVG elements.
+  goog.dom.removeNode(this.svgGroup_);
+  // Sever JavaScript to DOM connections.
+  this.svgGroup_ = null;
+  this.svgPath_ = null;
 
   Blockly.WorkspaceCommentSvg.superClass_.dispose.call(this);
 };

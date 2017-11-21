@@ -310,7 +310,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "添加函数输入。";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "输入";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "添加、删除或重新排此函数的输入。";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "已存在名为“%1”的步骤。";
 /** @export */ Blockly.Msg.REDO = "重做";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "删除注释";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "重命名变量...";

@@ -310,7 +310,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "داده یا";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "Redo";  // untranslated
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "نظر جا وه جا کو";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "د نو نوم نیائن آلشتگر...";
@@ -351,7 +350,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "find first occurrence of text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "find last occurrence of text";  // untranslated
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "د متن %1 %2 %3";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "Returns the index of the first/last occurrence of the first text in the second text. Returns %1 if text is not found.";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 حالیه";

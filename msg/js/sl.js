@@ -310,13 +310,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Funkciji doda vnos.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "vnosi";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Doda, odstrani ali spremeni vrstni red vnosov te funkcije.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "Ponovi";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Odstrani komentar";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Preimenuj spremenljivko...";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Preimenuj vse spremenljivke '%1' v:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "k %1 dodaj besedilo %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "Doda besedilo k spremenljivki '%1'.";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "v male črke";
@@ -351,7 +350,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "najdi prvo pojavitev besedila";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "najdi zadnjo pojavitev besedila";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "v besedilu %1 %2 %3";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "Vrne mesto (indeks) prve/zadnje pojavitve drugega besedila v prvem besedilu. Če besedila ne najde, vrne %1.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 je prazno";

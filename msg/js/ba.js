@@ -310,7 +310,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "инеү";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "документтарҙы үҙгәртергә";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Аңлатмаларҙы юйырға";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Үҙгәреүсәндең исемен алмаштырырға...";
@@ -351,7 +350,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "текстың тәүге инеүен табырға";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "Текстың һуңғы инеүен табырға";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "текстҡа %1 %2 %3";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "Returns the index of the first/last occurrence of the first text in the second text. Returns %1 if text is not found.";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 буш";

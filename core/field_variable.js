@@ -41,8 +41,8 @@ goog.require('goog.string');
  *     a unique variable name will be generated.
  * @param {Function=} opt_validator A function that is executed when a new
  *     option is selected.  Its sole argument is the new option value.
- * @param {Array.<string>} opt_variableTypes A list of the types of variables to
- *     include in the dropdown.
+ * @param {Array.<string>=} opt_variableTypes A list of the types of variables
+ *     to include in the dropdown.
  * @extends {Blockly.FieldDropdown}
  * @constructor
  */
@@ -118,7 +118,7 @@ Blockly.FieldVariable.prototype.setValue = function(value) {
       newText = variable.name;
     }
     // TODO(marisaleung): Remove name lookup after converting all Field Variable
-    //     instances to use id instead of name.
+    //     instances to use ID instead of name.
     else if (variable = this.sourceBlock_.workspace.getVariable(value)) {
       newValue = variable.getId();
     }
@@ -181,7 +181,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
       var variables = workspace.getVariablesOfType(variableType);
       variableModelList = variableModelList.concat(variables);
     }
-    for (var i = 0; i < variableModelList.length; i++){
+    for (var i = 0; i < variableModelList.length; i++) {
       if (createSelectedVariable &&
           goog.string.caseInsensitiveEquals(variableModelList[i].name, name)) {
         createSelectedVariable = false;
@@ -197,13 +197,13 @@ Blockly.FieldVariable.dropdownCreate = function() {
   variableModelList.sort(Blockly.VariableModel.compareByName);
   var options = [];
   for (var i = 0; i < variableModelList.length; i++) {
-    // Set the uuid as the internal representation of the variable.
+    // Set the UUID as the internal representation of the variable.
     options[i] = [variableModelList[i].name, variableModelList[i].getId()];
   }
   options.push([Blockly.Msg.RENAME_VARIABLE, Blockly.RENAME_VARIABLE_ID]);
   if (Blockly.Msg.DELETE_VARIABLE) {
     options.push([Blockly.Msg.DELETE_VARIABLE.replace('%1', name),
-      Blockly.DELETE_VARIABLE_ID]);
+        Blockly.DELETE_VARIABLE_ID]);
   }
   return options;
 };
@@ -217,7 +217,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
  */
 Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
   var id = menuItem.getValue();
-  // TODO(marisaleung): change setValue() to take in an id as the parameter.
+  // TODO(marisaleung): change setValue() to take in an ID as the parameter.
   // Then remove itemText.
   var itemText;
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {
@@ -226,8 +226,7 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
     // If the item selected is a variable, set itemText to the variable name.
     if (variable) {
       itemText = variable.name;
-    }
-    else if (id == Blockly.RENAME_VARIABLE_ID) {
+    } else if (id == Blockly.RENAME_VARIABLE_ID) {
       // Rename variable.
       var currentName = this.getText();
       variable = workspace.getVariable(currentName);

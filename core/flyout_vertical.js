@@ -188,7 +188,7 @@ Blockly.VerticalFlyout.prototype.setBackgroundPath_ = function(width, height) {
       atRight ? this.CORNER_RADIUS : -this.CORNER_RADIUS,
       this.CORNER_RADIUS);
   // Bottom.
-  path.push('h',  atRight ? width : -width);
+  path.push('h', atRight ? width : -width);
   path.push('z');
   this.svgBackground_.setAttribute('d', path.join(' '));
 };
@@ -326,14 +326,14 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
 };
 
 /**
- * Compute width of flyout.  Position button under each block.
- * For RTL: Lay out the blocks right-aligned.
- * @param {!Array<!Blockly.Block>} blocks The blocks to reflow.
+ * Compute width of flyout.  Position mat under each block.
+ * For RTL: Lay out the blocks and buttons to be right-aligned.
  * @private
  */
-Blockly.VerticalFlyout.prototype.reflowInternal_ = function(blocks) {
+Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
   this.workspace_.scale = this.targetWorkspace_.scale;
   var flyoutWidth = 0;
+  var blocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     var width = block.getHeightWidth().width;
     if (block.outputConnection) {
@@ -353,12 +353,21 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function(blocks) {
       if (this.RTL) {
         // With the flyoutWidth known, right-align the blocks.
         var oldX = block.getRelativeToSurfaceXY().x;
-        var newX = flyoutWidth / this.workspace_.scale - this.MARGIN;
-        newX -= Blockly.BlockSvg.TAB_WIDTH;
+        var newX = flyoutWidth / this.workspace_.scale - this.MARGIN -
+            Blockly.BlockSvg.TAB_WIDTH;
         block.moveBy(newX - oldX, 0);
       }
       if (block.flyoutRect_) {
         this.moveRectToBlock_(block.flyoutRect_, block);
+      }
+    }
+    if (this.RTL) {
+      // With the flyoutWidth known, right-align the buttons.
+      for (var i = 0, button; button = this.buttons_[i]; i++) {
+        var y = button.getPosition().y;
+        var x = flyoutWidth - button.width - this.MARGIN -
+            Blockly.BlockSvg.TAB_WIDTH;
+        button.moveTo(x, y);
       }
     }
     // Record the width for .getMetrics_ and .position.

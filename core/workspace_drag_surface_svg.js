@@ -93,7 +93,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.createDom = function() {
     'xmlns:html': Blockly.HTML_NS,
     'xmlns:xlink': 'http://www.w3.org/1999/xlink',
     'version': '1.1',
-    'class': 'blocklyWsDragSurface blocklyOverflowVisible',
+    'class': 'blocklyWsDragSurface blocklyOverflowVisible'
   }, null);
   this.container_.appendChild(this.SVG_);
 };
@@ -168,9 +168,9 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
  * @param {!Element} blockCanvas The block canvas <g> element from the workspace.
  * @param {!Element} bubbleCanvas The <g> element that contains the bubbles.
  * @param {?Element} previousSibling The element to insert the block canvas &
-       bubble canvas after when it goes back in the dom at the end of a drag.
- * @param {number} width The width of the workspace svg element.
- * @param {number} height The height of the workspace svg element.
+       bubble canvas after when it goes back in the DOM at the end of a drag.
+ * @param {number} width The width of the workspace SVG element.
+ * @param {number} height The height of the workspace SVG element.
  * @param {number} scale The scale of the workspace being dragged.
  * @package
  */

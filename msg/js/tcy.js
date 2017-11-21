@@ -310,13 +310,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "ಕಾರ್ಯೊಗು ಒಂಜಿ ಉಲಪರಿಪುನು ಸೇರಲೆ.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "ಉಲಪರಿಪು";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "ಸೇರಾಲೆ, ದೆತ್ತ್‌ ಬುಡುಲೆ, ಅತ್ತಂಡ ಈ ಕಾರ್ಯೊಗು ಉಲಪರಿಪುಲೆನ್ ಕುಡ ಒತ್ತರೆ ಮಲ್ಪುಲೆ.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "'%1' ಪನ್ಪಿ ಪುದರ್‌ದ ಕಾರ್ಯೊವಿದಾನೊ ದುಂಬೆ ಅಸ್ತಿತ್ವೊಡು ಉಂಡು.";
 /** @export */ Blockly.Msg.REDO = "ಕುಡ ಮಲ್ಪು";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "ಟಿಪ್ಪಣಿನ್ ದೆತ್ತ್‌ದ್ ಬುಡ್ಲೆ";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "ವ್ಯತ್ಯಯೊಗು ಕುಡೊರ ಪುದರ್ ದೀಲೆ";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "ಮಾತಾ '%1' ವ್ಯತ್ಯಯೊಲೆನ ಪುದರ್‌ನ್ ನೆಕ್ಕ್ ಬದಲ್ ಮಲ್ಪುಲೆ:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "ಇಂದೆಕ್ %1 ಪಟ್ಯೊನು ಸೇರವೆ %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "%1 ವ್ಯತ್ಯಯೊಗು ಕೆಲವು ಪಟ್ಯೊಲೆನ್ ಸೇರಾವ್";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "ಎಲ್ಯ ಅಕ್ಷರೊಗು";
@@ -351,7 +350,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "ಪಟ್ಯೊ ಸುರುಕ್ಕು ಬತ್ತಿನೇನ್ ನಾಡ್";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "ಪಟ್ಯೊ ಅಕೇರಿಗ್ ಬತ್ತಿನೇನ್ ನಾಡ್";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "ಪಟ್ಯೊಡು %1 %2 %3";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "ರಡ್ಡನೆ ಪಟ್ಯೊಡು ಉಪ್ಪುನ ಸುರುತ ಪಟ್ಯೊ ಸುರುಕ್ಕು/ಅಕೇರಿಗ್ ಬತ್ತಿನೆತ್ತ ಸೂಚಿನ್ ಪಿರಕೊರು. ಪಟ್ಯೊ ತಿಕ್ಕಿಜ್ಜಾಂಡ %1 ನ್ ಪಿರಕೊರು.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 ಖಾಲಿ";

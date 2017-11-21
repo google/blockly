@@ -310,7 +310,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "rnu anekcam ar twuri-agi.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inekcam";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Rnu, kkes neɣ ales asmizzwer n inekcam i twuri-agi.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "Tasekkirt s yisem '%1' tella yakan.";
 /** @export */ Blockly.Msg.REDO = "Uɣal";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Kkes awennit";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Snifel isem n umutti...";

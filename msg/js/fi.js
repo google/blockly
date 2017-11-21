@@ -310,13 +310,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Lisää sisääntulon funktioon.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "syötteet";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Lisää, poista tai järjestele uudelleen tämän toiminnon tulot.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "Toiminto nimeltään '%1' on jo olemassa.";
 /** @export */ Blockly.Msg.REDO = "Tee uudelleen";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Poista kommentti";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Nimeä uudelleen muuttuja...";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Nimeä uudelleen kaikki '%1' muuttujaa:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "muuttujaan %1 lisää teksti %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "Lisää tekstiä muuttujaan '%1'.";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "pienet kirjaimet";

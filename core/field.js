@@ -146,7 +146,7 @@ Blockly.Field.prototype.init = function() {
        'ry': 4,
        'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
        'y': 0,
-       'height': 16}, this.fieldGroup_, this.sourceBlock_.workspace);
+       'height': 16}, this.fieldGroup_);
   /** @type {!Element} */
   this.textElement_ = Blockly.utils.createSvgElement('text',
       {'class': 'blocklyText', 'y': this.size_.height - 12.5},
@@ -527,7 +527,8 @@ Blockly.Field.prototype.setValue = function(newValue) {
  * @param {!Event} e Mouse down event.
  * @private
  */
-Blockly.Field.prototype.onMouseDown_ = function(e) {
+Blockly.Field.prototype.onMouseDown_ = function(
+    /* eslint-disable no-unused-vars */ e /* eslint-enable no-unused-vars */) {
   if (!this.sourceBlock_ || !this.sourceBlock_.workspace) {
     return;
   }
@@ -537,13 +538,14 @@ Blockly.Field.prototype.onMouseDown_ = function(e) {
   }
 };
 
-
 /**
  * Change the tooltip text for this field.
  * @param {string|!Element} newTip Text for tooltip or a parent element to
  *     link to for its tooltip.
  */
-Blockly.Field.prototype.setTooltip = function(newTip) {
+Blockly.Field.prototype.setTooltip = function(
+    /* eslint-disable no-unused-vars */ newTip
+    /* eslint-enable no-unused-vars */) {
   // Non-abstract sub-classes may wish to implement this.  See FieldLabel.
 };
 

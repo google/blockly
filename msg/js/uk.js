@@ -76,7 +76,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.INLINE_INPUTS = "Вбудовані входи";
 /** @export */ Blockly.Msg.IOS_CANCEL = "Скасувати";
 /** @export */ Blockly.Msg.IOS_ERROR = "Помилка";
-/** @export */ Blockly.Msg.IOS_OK = "OK";  // untranslated
+/** @export */ Blockly.Msg.IOS_OK = "Готово";
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
@@ -310,13 +310,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Додати до функції вхідні параметри.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "входи";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Додайте, вилучіть або змініть порядок вхідних параметрів для цієї функції.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "Процес з назвою '%1' вже існує.";
 /** @export */ Blockly.Msg.REDO = "Повторити";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Видалити коментар";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Перейменувати змінну...";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Перейменувати усі змінні \"%1\" до:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "до %1 додати текст %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "Додати деякий текст до змінної '%1'.";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "до нижнього регістру";
@@ -351,7 +350,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "знайти перше входження тексту";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "знайти останнє входження тексту";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "у тексті %1 %2 %3.";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "Повертає індекс першого/останнього входження першого тексту в другий. Повертає %1, якщо текст не знайдено.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 є порожнім";

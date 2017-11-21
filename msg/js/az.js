@@ -75,7 +75,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.HELP = "Kömək";
 /** @export */ Blockly.Msg.INLINE_INPUTS = "Sətiriçi girişlər";
 /** @export */ Blockly.Msg.IOS_CANCEL = "Cancel";  // untranslated
-/** @export */ Blockly.Msg.IOS_ERROR = "Error";  // untranslated
+/** @export */ Blockly.Msg.IOS_ERROR = "Xəta";
 /** @export */ Blockly.Msg.IOS_OK = "OK";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
@@ -85,7 +85,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
 /** @export */ Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Delete";  // untranslated
 /** @export */ Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
-/** @export */ Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Rename";  // untranslated
+/** @export */ Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Adını dəyiş";
 /** @export */ Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Variable name";  // untranslated
 /** @export */ Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 /** @export */ Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "boş siyahı düzəlt";
@@ -310,13 +310,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "girişlər";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "Redo";  // untranslated
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Şərhi sil";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Dəyişənin adını dəyiş...";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Bütün '%1' dəyişənlərinin adını buna dəyiş:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "bu mətnin sonuna: %1 bu mətni əlavə et: %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "'%1' dəyişəninin sonuna nəsə əlavə et.";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "kiçik hərflərlə";
@@ -351,7 +350,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "Bu mətn ilə ilk rastlaşmanı tap:";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "Bu mətn ilə son rastlaşmanı tap:";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "mətndə %1 %2 %3";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "Birinci mətnin ikinci mətndə ilk/son rastlaşma indeksini qaytarır. Əgər rastlaşma baş verməzsə, %1 qaytarır.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 boşdur";

@@ -1,57 +1,73 @@
-Thanks for opening an issue for us!  Before you open an issue, please check if a similar issue exists or has been closed before.
-
-If you're asking a question about how to use Blockly in your application, please ask questions on the [mailing list](https://groups.google.com/forum/#!forum/blockly) instead of filing issues.
-
-_Please delete the above section and the instructions in the sections below before submitting.  If a section is not applicable, type "N/A" in that section._
+<!--
+  - Thanks for opening an issue for us!  Before you open an issue,
+  - please check if a similar issue exists or has been closed before.
+  -
+  - If you're asking a question about how to use Blockly in your application,
+  - please ask questions on the mailing list, instead of filing issues:
+  -       https://groups.google.com/forum/#!forum/blockly
+  -->
 
 ### Problem statement
 
-_Remove this hint: these checkboxes can be checked like this: [x]_
-
-- [ ] Bug report
-- [ ] Feature request
-
-_What were you trying to do when you hit this bug?  Or, what do you want to do with Blockly that your proposed feature would enable?_
+<!-- TODO: Please describe the problem.
+  -        Is it a bug report (something didn't work the way you expected),
+  -        or a feature request (something new you think would improve Blockly)?
+  -->
 
 ### Expected Behavior
 
-_Please describe what should happen.  Include screenshots if applicable._
+<!-- TODO: Please describe what should happen.
+  -        Include screenshots if applicable.
+  -->
 
 ### Actual Behavior
 
-_Describe what actually happens.  Include screenshots if applicable._
+<!--  TODO: Describe what actually happens.
+  -         Include screenshots if applicable.
+  -->
 
 ### Steps to Reproduce
 
-_Explain what someone needs to do in order to see what's described in *Actual behavior* above_
+<!-- TODO: Explain what someone needs to do in order to see
+  -        what's described in *Actual behavior* above
+  -->
+
+1. Start by..
+2. Next, do..
 
 ### Stack Traces
 
-```
-Please open up the console.  If you see any Blockly-related errors, paste them here.
+<!-- TODO: Please open up the console.  If you see any Blockly-related errors,
+  -        paste them between the quotes below.
+  -
+  - Ignore any instances of...
+  - "Uncaught (in promise) DOMException: The play() request was interrupted by a call to pause()."
+  -->
 
-Ignore any instances of "Uncaught (in promise) DOMException: The play() request was interrupted by a call to pause()."
+```
+Replace with error stack trace.
 ```
 
 ### Operating System and Browser
 
-_Remove this hint: these checkboxes can be checked like this: [x]_
+<!-- TODO: If this issue is browser specific, uncomment the systems you have tested. -->
 
-- [ ] Desktop:
-  - [ ] Chrome
-  - [ ] Firefox
-  - [ ] Safari
-  - [ ] Opera
-  - [ ] IE 10+
-  - [ ] IE 11
-  - [ ] EDGE
+<!-- * Desktop Chrome -->
+<!-- * Desktop Firefox -->
+<!-- * Desktop Safari -->
+<!-- * Desktop Opera -->
+<!-- * Windows Internet Explorer 10 -->
+<!-- * Windows Internet Explorer 11 -->
+<!-- * Windows Edge -->
 
-- [ ] Smartphone/Tablet/Chromebook (please complete the following information):
-  - Device: [e.g. iPhone6]
-  - OS: [e.g. iOS8.1]
-  - Browser [e.g. stock browser, safari]
-  - Version [e.g. 22]
+<!--
+* Smartphone/Tablet/Chromebook (please complete the following information):
+  * Device: [e.g. iPhone6]
+  * OS: [e.g. iOS8.1]
+  * Browser [e.g. stock browser, safari]
+  * Version [e.g. 22]
+-->
 
 ### Additional Information
 
-_Anything else we should know?_
+<!-- Anything else we should know? -->

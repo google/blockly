@@ -310,13 +310,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Bæta inntaki við fallið.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inntök";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Bæta við, fjarlægja eða umraða inntökum fyrir þetta fall.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "Endurtaka";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Fjarlægja skýringu";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Endurnefna breytu...";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Endurnefna allar '%1' breyturnar:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "við %1 bæta texta %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "Bæta texta við breytuna '%1'.";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "í lágstafi";
@@ -351,7 +350,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "finna fyrsta tilfelli texta";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "finna síðasta tilfelli texta";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "í texta %1 %2 %3";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "Finnur fyrsta/síðasta tilfelli fyrri textans í seinni textanum og skilar sæti hans. Skilar %1 ef textinn finnst ekki.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 er tómur";

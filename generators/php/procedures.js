@@ -43,7 +43,7 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
           Blockly.Variables.NAME_TYPE));
     }
   }
-  globals = globals.length ? '  global ' + globals.join(', ') + ';\n' : '';
+  globals = globals.length ? Blockly.PHP.INDENT + 'global ' + globals.join(', ') + ';\n' : '';
 
   var funcName = Blockly.PHP.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
@@ -61,7 +61,7 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
   var returnValue = Blockly.PHP.valueToCode(block, 'RETURN',
       Blockly.PHP.ORDER_NONE) || '';
   if (returnValue) {
-    returnValue = '  return ' + returnValue + ';\n';
+    returnValue = Blockly.PHP.INDENT + 'return ' + returnValue + ';\n';
   }
   var args = [];
   for (var i = 0; i < block.arguments_.length; i++) {
@@ -115,9 +115,9 @@ Blockly.PHP['procedures_ifreturn'] = function(block) {
   if (block.hasReturnValue_) {
     var value = Blockly.PHP.valueToCode(block, 'VALUE',
         Blockly.PHP.ORDER_NONE) || 'null';
-    code += '  return ' + value + ';\n';
+    code += Blockly.PHP.INDENT + 'return ' + value + ';\n';
   } else {
-    code += '  return;\n';
+    code += Blockly.PHP.INDENT + 'return;\n';
   }
   code += '}\n';
   return code;

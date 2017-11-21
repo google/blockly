@@ -310,7 +310,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inputs";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "Redo";  // untranslated
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "ဢဝ်ဢွၵ်ႇ ၶေႃႈၵႂၢမ်း";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "လိုမ်ႉၶိုၼ်း ဢၼ်လၢႆႈမႂ်ႇ";

@@ -47,7 +47,7 @@ Blockly.JavaScript['procedures_defreturn'] = function(block) {
   var returnValue = Blockly.JavaScript.valueToCode(block, 'RETURN',
       Blockly.JavaScript.ORDER_NONE) || '';
   if (returnValue) {
-    returnValue = '  return ' + returnValue + ';\n';
+    returnValue = Blockly.JavaScript.INDENT + 'return ' + returnValue + ';\n';
   }
   var args = [];
   for (var i = 0; i < block.arguments_.length; i++) {
@@ -101,9 +101,9 @@ Blockly.JavaScript['procedures_ifreturn'] = function(block) {
   if (block.hasReturnValue_) {
     var value = Blockly.JavaScript.valueToCode(block, 'VALUE',
         Blockly.JavaScript.ORDER_NONE) || 'null';
-    code += '  return ' + value + ';\n';
+    code += Blockly.JavaScript.INDENT + 'return ' + value + ';\n';
   } else {
-    code += '  return;\n';
+    code += Blockly.JavaScript.INDENT + 'return;\n';
   }
   code += '}\n';
   return code;

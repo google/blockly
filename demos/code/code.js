@@ -387,13 +387,15 @@ Code.init = function() {
   // TODO: Clean up the message files so this is done explicitly instead of
   // through this for-loop.
   for (var messageKey in MSG) {
-    if (goog.string.startsWith(messageKey, 'cat')) {
+    if (messageKey.indexOf('cat') == 0) {
       Blockly.Msg[messageKey.toUpperCase()] = MSG[messageKey];
     }
   }
 
-  // Construct the toolbox XML.
+  // Construct the toolbox XML, replacing translated variable names.
   var toolboxText = document.getElementById('toolbox').outerHTML;
+  toolboxText = toolboxText.replace(/(^|[^%]){(\w+)}/g,
+      function(m, p1, p2) {return p1 + MSG[p2];});
   var toolboxXml = Blockly.Xml.textToDom(toolboxText);
 
   Code.workspace = Blockly.inject('content_blocks',

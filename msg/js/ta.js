@@ -310,13 +310,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "செயல்கூறுக்கு ஒரு உள்ளீட்டை சேர்.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "உள்ளீடுகள்";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "செயல்கூறுகளின் உள்ளீட்டை சேர், நீக்கு, or மீண்டும் வரிசை செய்.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "Redo";  // untranslated
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "கருத்தை நீக்கு";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "மாறிலியை மறுபெயரிடுக...";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "அனைத்து '%1' மாறிலிகளையும் பின்வருமாறு மறுபெயரிடுக:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "இந்த மாறியிற்கு %1 உரை சேர்க்க %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "'%1' மாறியில் உரையை சேர்";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "சின்ன எழுத்துக்கு மாற்று";
@@ -351,7 +350,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "உரையில் முதல் தோற்ற இடத்தை பின்கொடு";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "உரையில் கடைசி தோற்ற இடத்தை பின்கொடு";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "உரையில் %1 %2 %3";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "இரண்டாவது உரையில் முதல் உரையின் முதல்/கடை இருக்கை குறிஎண்ணை பின்கொடு.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 காலியானது";

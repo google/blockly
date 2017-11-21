@@ -310,7 +310,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Lägg till en inmatning till funktionen.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inmatningar";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Lägg till, ta bort och ändra ordningen för inmatningar till denna funktion.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "En procedur som heter \"%1\" finns redan.";
 /** @export */ Blockly.Msg.REDO = "Gör om";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Radera kommentar";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Byt namn på variabel...";

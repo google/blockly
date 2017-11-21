@@ -171,6 +171,12 @@ Blockly.DraggedConnectionManager.prototype.update = function(dxy, deleteArea) {
       this.topBlock_.isDeletable();
   this.wouldDeleteBlock_ = wouldDelete && !wouldConnect;
 
+  // Get rid of highlighting so we don't sent mixed messages.
+  if (wouldDelete && this.closestConnection_) {
+    this.closestConnection_.unhighlight();
+    this.closestConnection_ = null;
+  }
+
   if (!this.wouldDeleteBlock_ && closestConnectionChanged &&
       this.closestConnection_) {
     this.addHighlighting_();

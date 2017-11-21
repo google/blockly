@@ -177,13 +177,13 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
 };
 
 /**
-* Return a new variable name that is not yet being used. This will try to
-* generate single letter variable names in the range 'i' to 'z' to start with.
-* If no unique name is located it will try 'i' to 'z', 'a' to 'h',
-* then 'i2' to 'z2' etc.  Skip 'l'.
+ * Return a new variable name that is not yet being used. This will try to
+ * generate single letter variable names in the range 'i' to 'z' to start with.
+ * If no unique name is located it will try 'i' to 'z', 'a' to 'h',
+ * then 'i2' to 'z2' etc.  Skip 'l'.
  * @param {!Blockly.Workspace} workspace The workspace to be unique in.
-* @return {string} New variable name.
-*/
+ * @return {string} New variable name.
+ */
 Blockly.Variables.generateUniqueName = function(workspace) {
   var variableList = workspace.getAllVariables();
   var newName = '';
@@ -232,7 +232,7 @@ Blockly.Variables.generateUniqueName = function(workspace) {
  * @param {function(?string=)=} opt_callback A callback. It will
  *     be passed an acceptable new variable name, or null if change is to be
  *     aborted (cancel button), or undefined if an existing variable was chosen.
- * @param {?string} opt_type The type of the variable like 'int', 'string', or
+ * @param {string=} opt_type The type of the variable like 'int', 'string', or
  *     ''. This will default to '', which is a specific type.
  */
 Blockly.Variables.createVariable = function(workspace, opt_callback, opt_type) {
@@ -340,7 +340,7 @@ Blockly.Variables.generateVariableFieldXml_ = function(variableModel) {
   // to be escaped to create valid XML.
   var element = goog.dom.createDom('field');
   element.setAttribute('name', 'VAR');
-  element.setAttribute('variableType', variableModel.type);
+  element.setAttribute('variabletype', variableModel.type);
   element.setAttribute('id', variableModel.getId());
   element.textContent = variableModel.name;
 

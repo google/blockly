@@ -140,7 +140,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_LENGTH_TITLE = "hirder %1";
 /** @export */ Blockly.Msg.LISTS_LENGTH_TOOLTIP = "Distreiñ hirder ul listenn.";
 /** @export */ Blockly.Msg.LISTS_REPEAT_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-list-with";  // untranslated
-/** @export */ Blockly.Msg.LISTS_REPEAT_TITLE = "Krouiñ ul listenn gant an elfenn %1 arreet div wech";
+/** @export */ Blockly.Msg.LISTS_REPEAT_TITLE = "Krouiñ ul listenn gant an elfenn %1 arreet %2 div wech";
 /** @export */ Blockly.Msg.LISTS_REPEAT_TOOLTIP = "Krouiñ ul listenn a c'hoarvez eus an dalvoudenn roet arreet an niver a wech meneget";
 /** @export */ Blockly.Msg.LISTS_REVERSE_HELPURL = "https://github.com/google/blockly/wiki/Lists#reversing-a-list";
 /** @export */ Blockly.Msg.LISTS_REVERSE_MESSAGE0 = "eilpennañ %1";
@@ -310,7 +310,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Ouzhpennañ ur moned d'an arc'hwel.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "Monedoù";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Ouzhpennañ, lemel, pe adkempenn monedoù an arc'hwel-mañ.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "Un argerzhadur anvet '%1' zo anezhañ dija.";
 /** @export */ Blockly.Msg.REDO = "Adober";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Lemel an evezhiadenn kuit";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Adenvel an argemmenn...";

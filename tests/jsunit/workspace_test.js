@@ -66,8 +66,7 @@ function test_emptyWorkspace() {
     assertEquals('Empty workspace (4).', 0, workspace.getTopBlocks(true).length);
     assertEquals('Empty workspace (5).', 0, workspace.getTopBlocks(false).length);
     assertEquals('Empty workspace (6).', 0, workspace.getAllBlocks().length);
-  }
-  finally {
+  } finally {
     workspaceTest_tearDown();
   }
 }
@@ -187,8 +186,7 @@ function test_updateVariableStore_TrivialNoClear() {
     workspace.updateVariableStore();
     checkVariableValues(workspace, 'name1', 'type1', 'id1');
     checkVariableValues(workspace, 'name2', 'type2', 'id2');
-  }
-  finally {
+  } finally {
     workspaceTest_tearDown();
   }
 }
@@ -202,8 +200,7 @@ function test_updateVariableStore_NameNotInvariableMap_NoClear() {
   try {
     workspace.updateVariableStore();
     checkVariableValues(workspace, 'name1', '', '1');
-  }
-  finally {
+  } finally {
     workspaceTest_tearDown();
   }
 }
@@ -219,8 +216,7 @@ function test_updateVariableStore_ClearAndAllInUse() {
     workspace.updateVariableStore(true);
     checkVariableValues(workspace, 'name1', 'type1', 'id1');
     checkVariableValues(workspace, 'name2', 'type2', 'id2');
-  }
-  finally {
+  } finally {
     workspaceTest_tearDown();
   }
 }
@@ -237,8 +233,7 @@ function test_updateVariableStore_ClearAndOneInUse() {
     checkVariableValues(workspace, 'name1', 'type1', 'id1');
     var variabe = workspace.getVariable('name2');
     assertNull(variable);
-  }
-  finally {
+  } finally {
     workspaceTest_tearDown();
   }
 }
@@ -255,8 +250,7 @@ function test_addTopBlock_TrivialFlyoutIsTrue() {
   try {
     workspace.addTopBlock(block);
     checkVariableValues(workspace, 'name1', '', '1');
-  }
-  finally {
+  } finally {
     workspaceTest_tearDown();
   }
 }
@@ -274,8 +268,7 @@ function test_clear_Trivial() {
     var varMapLength = Object.keys(workspace.variableMap_.variableMap_).length;
     assertEquals(0, topBlocks_length);
     assertEquals(0, varMapLength);
-  }
-  finally {
+  } finally {
     workspaceTest_tearDown();
   }
 }
@@ -291,8 +284,7 @@ function test_clear_NoVariables() {
     var varMapLength = Object.keys(workspace.variableMap_.variableMap_).length;
     assertEquals(0, topBlocks_length);
     assertEquals(0, varMapLength);
-  }
-  finally {
+  } finally {
     workspaceTest_tearDown();
   }
 }
@@ -312,8 +304,7 @@ function test_renameVariable_NoBlocks() {
     checkVariableValues(workspace, 'name2', '', '1');
     var variable = workspace.getVariable(oldName);
     assertNull(variable);
-  }
-  finally {
+  } finally {
     workspaceTest_tearDown();
   }
 }

@@ -310,13 +310,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Pridėti funkcijos parametrą (gaunamų duomenų pavadinimą).";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "gaunami duomenys (parametrai)";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Tvarkyti komandos gaunamus duomenis (parametrus).";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "Atkurti";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Pašalinti komentarą";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Pervardyti kintamajį...";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Pervadinti visus '%1' kintamuosius į:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "prie %1 pridėk tekstą %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "Pridėti tekstą prie kintamojo '%1'.";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = " mažosiom raidėm";
@@ -351,7 +350,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "rask,kur pirmą kartą paminėta";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "rask,kur paskutinį kartą paminėta";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "tekste %1 %2 %3";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "Grąžina pirmą/paskutinę pirmo teksto reikšmę antrame tekste. Grąžina %1, jei tekstas nerastas.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 yra tuščias";

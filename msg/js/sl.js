@@ -81,11 +81,11 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
-/** @export */ Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Add";  // untranslated
-/** @export */ Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
-/** @export */ Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Delete";  // untranslated
+/** @export */ Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Dodaj";
+/** @export */ Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Dodaj spremenljivko";
+/** @export */ Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Izbriši";
 /** @export */ Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
-/** @export */ Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Rename";  // untranslated
+/** @export */ Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Preimenuj";
 /** @export */ Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Ime spremenljivke";
 /** @export */ Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 /** @export */ Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "ustvari prazen seznam";

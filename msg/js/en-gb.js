@@ -64,7 +64,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";
 /** @export */ Blockly.Msg.DELETE_BLOCK = "Delete Block";
 /** @export */ Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
-/** @export */ Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the '%2' variable?";  // untranslated
+/** @export */ Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the '%2' variable?";
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "Delete %1 Blocks";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "Disable Block";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "Duplicate";
@@ -281,7 +281,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Return the cosine of a degree (not radian).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Return the sine of a degree (not radian).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Return the tangent of a degree (not radian).";
-/** @export */ Blockly.Msg.NEW_VARIABLE = "New variable...";
+/** @export */ Blockly.Msg.NEW_VARIABLE = "Create variable...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "New variable name:";
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";  // untranslated
@@ -392,8 +392,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_CREATE_GET = "Create 'get %1'";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Sets this variable to be equal to the input.";  // untranslated
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "A variable named '%1' already exists.";  // untranslated
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "A variable named '%1' already exists.";
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

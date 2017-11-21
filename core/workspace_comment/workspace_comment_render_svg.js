@@ -30,23 +30,9 @@ goog.require('Blockly.WorkspaceCommentSvg');
 
 Blockly.WorkspaceCommentSvg.prototype.render = function() {
   console.log('Rendering a comment!');
-
-  this.renderDraw_();
-};
-
-/**
- * Draw the path of the block.
- * Move the fields to the correct locations.
- *     containing position information.
- * @private
- */
-Blockly.WorkspaceCommentSvg.prototype.renderDraw_ = function() {
   var steps = [];
 
-  this.renderDrawTop_(steps, this.getWidth());
-  this.renderDrawRight_(steps);
-  this.renderDrawBottom_(steps);
-  this.renderDrawLeft_(steps);
+  this.setPath_(steps, this.getHeight(), this.getWidth());
 
   var pathString = steps.join(' ');
   this.svgPath_.setAttribute('d', pathString);
@@ -71,47 +57,18 @@ Blockly.WorkspaceCommentSvg.prototype.renderDraw_ = function() {
 };
 
 /**
- * Render the top edge of the comment.
+ * Set the path of the comment outline.
  * @param {!Array.<string>} steps Path of comment outline.
- * @param {number} rightEdge Minimum width of comment.
+ * @param {number} height Height of the container.
+ * @param {number} width Width of the container.
  * @private
  */
-Blockly.WorkspaceCommentSvg.prototype.renderDrawTop_ = function(steps,
-  rightEdge) {
-  // Position the cursor at the top-left starting point.
+Blockly.WorkspaceCommentSvg.prototype.setPath_ = function(steps,
+    height, width) {
   steps.push('m 0,0');
-  steps.push('H', rightEdge);
-  this.width = rightEdge;
-};
-
-/**
- * Render the right edge of the comment.
- * @param {!Array.<string>} steps Path of comment outline.
- * @return {number} Height of comment.
- * @private
- */
-Blockly.WorkspaceCommentSvg.prototype.renderDrawRight_ = function(steps) {
-  var cursorY = this.getHeight();
-  steps.push('v', cursorY);
-  return cursorY;
-};
-
-/**
- * Render the bottom edge of the comment.
- * @param {!Array.<string>} steps Path of comment outline.
- * @param {number} cursorY Height of comment.
- * @private
- */
-Blockly.WorkspaceCommentSvg.prototype.renderDrawBottom_ = function(steps) {
+  steps.push('H', width);
+  steps.push('v', height);
   steps.push('H 0');
-};
-
-/**
- * Render the left edge of the comment.
- * @param {!Array.<string>} steps Path of comment outline.
- * @private
- */
-Blockly.WorkspaceCommentSvg.prototype.renderDrawLeft_ = function(steps) {
   steps.push('z');
 };
 

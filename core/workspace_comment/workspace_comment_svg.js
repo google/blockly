@@ -61,12 +61,12 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width, opt_id
    * @type {number}
    * @private
    */
-  this.height_ = null;
+  this.height_ = height;
   /**
    * @type {number}
    * @private
    */
-  this.width_ = null;
+  this.width_ = width;
 
   Blockly.WorkspaceCommentSvg.superClass_.constructor.call(this,
       workspace, content, opt_id);

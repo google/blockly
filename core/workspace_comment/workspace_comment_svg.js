@@ -69,6 +69,17 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
    */
   this.width_ = width;
 
+  /** @type {boolean} */
+  this.rendered = false;
+
+  /**
+   * Whether to move the block to the drag surface when it is dragged.
+   * True if it should move, false if it should be translated directly.
+   * @type {boolean}
+   * @private
+   */
+  this.useDragSurface_ = Blockly.utils.is3dSupported() && !!workspace.blockDragSurface_;
+
   Blockly.WorkspaceCommentSvg.superClass_.constructor.call(this,
       workspace, content, opt_id);
 
@@ -189,6 +200,79 @@ Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
 Blockly.WorkspaceCommentSvg.prototype.translate = function(x, y) {
   this.getSvgRoot().setAttribute('transform',
       'translate(' + x + ',' + y + ')');
+};
+
+/**
+ * Move this comment to its workspace's drag surface, accounting for positioning.
+ * Generally should be called at the same time as setDragging_(true).
+ * Does nothing if useDragSurface_ is false.
+ * @private
+ */
+Blockly.WorkspaceCommentSvg.prototype.moveToDragSurface_ = function() {
+  if (!this.useDragSurface_) {
+    return;
+  }
+  // The translation for drag surface blocks,
+  // is equal to the current relative-to-surface position,
+  // to keep the position in sync as it move on/off the surface.
+  // This is in workspace coordinates.
+  var xy = this.getRelativeToSurfaceXY();
+  this.clearTransformAttributes_();
+  this.workspace.blockDragSurface_.translateSurface(xy.x, xy.y);
+  // Execute the move on the top-level SVG component
+  this.workspace.blockDragSurface_.setBlocksAndShow(this.getSvgRoot());
+};
+
+/**
+ * Move this comment back to the workspace block canvas.
+ * Generally should be called at the same time as setDragging_(false).
+ * Does nothing if useDragSurface_ is false.
+ * @param {!goog.math.Coordinate} newXY The position the comment should take on
+ *     on the workspace canvas, in workspace coordinates.
+ * @private
+ */
+Blockly.WorkspaceCommentSvg.prototype.moveOffDragSurface_ = function(newXY) {
+  if (!this.useDragSurface_) {
+    return;
+  }
+  // Translate to current position, turning off 3d.
+  this.translate(newXY.x, newXY.y);
+  this.workspace.blockDragSurface_.clearAndHide(this.workspace.getCanvas());
+};
+
+/**
+ * Move this comment during a drag, taking into account whether we are using a
+ * drag surface to translate blocks.
+ * @param {!goog.math.Coordinate} newLoc The location to translate to, in
+ *     workspace coordinates.
+ * @package
+ */
+Blockly.WorkspaceCommentSvg.prototype.moveDuringDrag = function(newLoc) {
+  if (this.useDragSurface_) {
+    this.workspace.blockDragSurface_.translateSurface(newLoc.x, newLoc.y);
+  } else {
+    this.svgGroup_.translate_ = 'translate(' + newLoc.x + ',' + newLoc.y + ')';
+    this.svgGroup_.setAttribute('transform',
+        this.svgGroup_.translate_ + this.svgGroup_.skew_);
+  }
+};
+
+/**
+ * Recursively adds or removes the dragging class to this node and its children.
+ * @param {boolean} adding True if adding, false if removing.
+ * @package
+ */
+Blockly.WorkspaceCommentSvg.prototype.setDragging = function(adding) {
+  if (adding) {
+    var group = this.getSvgRoot();
+    group.translate_ = '';
+    group.skew_ = '';
+    Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
+                      'blocklyDragging');
+  } else {
+    Blockly.utils.removeClass(/** @type {!Element} */ (this.svgGroup_),
+                         'blocklyDragging');
+  }
 };
 
 /**

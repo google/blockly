@@ -245,6 +245,14 @@ Blockly.WorkspaceSvg.prototype.useWorkspaceDragSurface_ = false;
 Blockly.WorkspaceSvg.prototype.isDragSurfaceActive_ = false;
 
 /**
+ * The first parent div with 'injectionDiv' in the name, or null if not set.
+ * Access this with getInjectionDiv.
+ * @type {!Element}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.injectionDiv_ = null;
+
+/**
  * Last known position of the page scroll.
  * This is used to determine whether we have recalculated screen coordinate
  * stuff since the page scrolled.
@@ -351,6 +359,29 @@ Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
  */
 Blockly.WorkspaceSvg.prototype.getOriginOffsetInPixels = function() {
   return Blockly.utils.getInjectionDivXY_(this.svgBlockCanvas_);
+};
+
+/**
+ * Return the injection div that is a parent of this workspace.
+ * Walks the DOM the first time it's called, then returns a cached value.
+ * @return {!Element} The first parent div with 'injectionDiv' in the name.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getInjectionDiv = function() {
+  // NB: it would be better to pass this in at createDom, but is more likely to
+  // break existing uses of Blockly.
+  if (!this.injectionDiv_) {
+    var element = this.svgGroup_;
+    while (element) {
+      var classes = element.getAttribute('class') || '';
+      if ((' ' + classes + ' ').indexOf(' injectionDiv ') != -1) {
+        this.injectionDiv_ = element;
+        break;
+      }
+      element = element.parentNode;
+    }
+  }
+  return this.injectionDiv_;
 };
 
 /**
@@ -1281,7 +1312,20 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
      * @private
      */
     var addWsComment = function() {
-      // TODO: add workspace comment stub
+      var comment = ws.newComment('', 100, 100);
+      var currentMouseCoords = new goog.math.Coordinate(e.clientX, e.clientY);
+      var coord = Blockly.utils.getRelativeXY(ws.svgBlockCanvas_);
+
+      var injectionDiv = ws.getInjectionDiv();
+      var boundingRect = injectionDiv.getBoundingClientRect();
+
+      var commentX = currentMouseCoords.x - boundingRect.left - coord.x;
+      var commentY = currentMouseCoords.y - boundingRect.top - coord.y;
+      comment.moveBy(ws.RTL ? ws.getWidth() - commentX : commentX, commentY);
+      if (ws.rendered) {
+        comment.initSvg();
+        comment.render(false);
+      }
     };
 
     // Option to add workspace comment.

@@ -105,6 +105,44 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
 };
 
 /**
+ * Return the coordinates of the top-left corner of this comment relative to the
+ * drawing surface's origin (0,0), in workspace units.
+ * If the comment is on the workspace, (0, 0) is the origin of the workspace
+ * coordinate system.
+ * This does not change with workspace scale.
+ * @return {!goog.math.Coordinate} Object with .x and .y properties in
+ *     workspace coordinates.
+ */
+Blockly.WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
+  var x = 0;
+  var y = 0;
+
+  var dragSurfaceGroup = this.useDragSurface_ ?
+      this.workspace.blockDragSurface_.getGroup() : null;
+
+  var element = this.getSvgRoot();
+  if (element) {
+    do {
+      // Loop through this block and every parent.
+      var xy = Blockly.utils.getRelativeXY(element);
+      x += xy.x;
+      y += xy.y;
+      // If this element is the current element on the drag surface, include
+      // the translation of the drag surface itself.
+      if (this.useDragSurface_ &&
+          this.workspace.blockDragSurface_.getCurrentBlock() == element) {
+        var surfaceTranslation = this.workspace.blockDragSurface_.getSurfaceTranslation();
+        x += surfaceTranslation.x;
+        y += surfaceTranslation.y;
+      }
+      element = element.parentNode;
+    } while (element && element != this.workspace.getCanvas() &&
+        element != dragSurfaceGroup);
+  }
+  return new goog.math.Coordinate(x, y);
+};
+
+/**
  * Move a comment by a relative offset.
  * @param {number} dx Horizontal offset, in workspace units.
  * @param {number} dy Vertical offset, in workspace units.

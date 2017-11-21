@@ -29,20 +29,23 @@ goog.provide('Blockly.WorkspaceCommentSvg.render');
 goog.require('Blockly.WorkspaceCommentSvg');
 
 Blockly.WorkspaceCommentSvg.prototype.render = function() {
-  console.log('Rendering a comment!');
 
   this.setPath_(this.getHeight(), this.getWidth());
 
   // Add text area
   this.createEditor_();
   this.svgGroup_.appendChild(this.foreignObject_);
-  
+
   var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
 
-  this.foreignObject_.setAttribute('width', this.getWidth() - doubleBorderWidth);
-  this.foreignObject_.setAttribute('height', this.getHeight() - doubleBorderWidth);
-  this.textarea_.style.width = (this.getWidth() - doubleBorderWidth - 4) + 'px';
-  this.textarea_.style.height = (this.getHeight() - doubleBorderWidth - 4) + 'px';
+  this.foreignObject_.setAttribute('width',
+      this.getWidth() - doubleBorderWidth);
+  this.foreignObject_.setAttribute('height',
+      this.getHeight() - doubleBorderWidth);
+  this.textarea_.style.width =
+      (this.getWidth() - doubleBorderWidth - 4) + 'px';
+  this.textarea_.style.height =
+      (this.getHeight() - doubleBorderWidth - 4) + 'px';
 
   // Set the content
   this.textarea_.value = this.content;

@@ -664,7 +664,7 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
       this.cachedParentSvg_ = element;
       return element;
     }
-    element = element.parentElement;
+    element = element.parentNode;
   }
   return null;
 };

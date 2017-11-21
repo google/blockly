@@ -30,16 +30,8 @@ goog.require('Blockly.WorkspaceCommentSvg');
 
 Blockly.WorkspaceCommentSvg.prototype.render = function() {
   console.log('Rendering a comment!');
-  var steps = [];
 
-  this.setPath_(steps, this.getHeight(), this.getWidth());
-
-  var pathString = steps.join(' ');
-  this.svgPath_.setAttribute('d', pathString);
-  if (this.RTL) {
-    // Mirror the block's path.
-    this.svgPath_.setAttribute('transform', 'scale(-1 1)');
-  }
+  this.setPath_(this.getHeight(), this.getWidth());
 
   // Add text area
   this.createEditor_();
@@ -58,18 +50,24 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
 
 /**
  * Set the path of the comment outline.
- * @param {!Array.<string>} steps Path of comment outline.
  * @param {number} height Height of the container.
  * @param {number} width Width of the container.
  * @private
  */
-Blockly.WorkspaceCommentSvg.prototype.setPath_ = function(steps,
-    height, width) {
+Blockly.WorkspaceCommentSvg.prototype.setPath_ = function(height, width) {
+  var steps = [];
   steps.push('m 0,0');
   steps.push('H', width);
   steps.push('v', height);
   steps.push('H 0');
   steps.push('z');
+
+  var pathString = steps.join(' ');
+  this.svgPath_.setAttribute('d', pathString);
+  if (this.RTL) {
+    // Mirror the block's path.
+    this.svgPath_.setAttribute('transform', 'scale(-1 1)');
+  }
 };
 
 /**

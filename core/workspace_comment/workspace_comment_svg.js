@@ -188,7 +188,7 @@ Blockly.WorkspaceCommentSvg.prototype.translate = function(x, y) {
 
 /**
  * Move this comment to its workspace's drag surface, accounting for positioning.
- * Generally should be called at the same time as setDragging_(true).
+ * Generally should be called at the same time as setDragging(true).
  * Does nothing if useDragSurface_ is false.
  * @private
  */
@@ -209,7 +209,7 @@ Blockly.WorkspaceCommentSvg.prototype.moveToDragSurface_ = function() {
 
 /**
  * Move this comment back to the workspace block canvas.
- * Generally should be called at the same time as setDragging_(false).
+ * Generally should be called at the same time as setDragging(false).
  * Does nothing if useDragSurface_ is false.
  * @param {!goog.math.Coordinate} newXY The position the comment should take on
  *     on the workspace canvas, in workspace coordinates.

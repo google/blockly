@@ -111,26 +111,3 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
   }, 0);
   return this.foreignObject_;
 };
-
-/**
- * Returns this comment's text.
- * @return {string} Comment text.
- */
-Blockly.WorkspaceCommentSvg.prototype.getContent = function() {
-  return this.textarea_ ? this.textarea_.value : this.content_;
-};
-
-/**
- * Set this comment's content.
- * @param {string} content Comment content.
- */
-Blockly.WorkspaceCommentSvg.prototype.setContent = function(content) {
-  if (this.content_ != content) {
-    Blockly.Events.fire(new Blockly.Events.BlockChange(
-      this.block_, 'comment', null, this.text_, content));
-    this.text_ = content;
-  }
-  if (this.textarea_) {
-    this.textarea_.value = content;
-  }
-};

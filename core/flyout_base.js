@@ -621,10 +621,10 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
   if (variablesBeforeCreation.length != variablesAfterCreation.length) {
     for (var i = 0; i < variablesAfterCreation.length; i++) {
       var variable = variablesAfterCreation[i];
-      // for any variable that is present in the list of variables
+      // For any variable that is present in the list of variables
       // after creation but is not present in the list of variables before
       // creation, add the variable to the list we will traverse to
-      // fire the VarCreate event
+      // fire the VarCreate event.
       if (!variablesBeforeCreation.includes(variable)) {
         newVariables.push(variable);
       }

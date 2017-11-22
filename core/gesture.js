@@ -797,7 +797,6 @@ Blockly.Gesture.prototype.doCommentClick_ = function() {
   this.startComment_.setFocus();
 };
 
-
 /* End functions defining what actions to take to execute clicks on each type
  * of target. */
 

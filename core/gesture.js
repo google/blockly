@@ -524,6 +524,9 @@ Blockly.Gesture.prototype.doStart = function(e) {
   if (this.targetBlock_) {
     this.targetBlock_.select();
   }
+  if (this.startComment_) {
+    this.startComment_.select();
+  }
 
   // TODO: Select the start comment.
 
@@ -615,6 +618,8 @@ Blockly.Gesture.prototype.handleUp = function(e) {
     this.doBlockClick_();
   } else if (this.isWorkspaceClick_()) {
     this.doWorkspaceClick_();
+  } else if (this.isCommentClick_()) {
+    this.doCommentClick_();
   }
 
   e.preventDefault();
@@ -784,6 +789,16 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
   }
 };
 
+/**
+ * Execute a comment click.
+ * @private
+ */
+Blockly.Gesture.prototype.doCommentClick_ = function() {
+  //this.startComment_.select();
+  this.startComment_.setFocus();
+};
+
+
 /* End functions defining what actions to take to execute clicks on each type
  * of target. */
 
@@ -945,8 +960,20 @@ Blockly.Gesture.prototype.isFieldClick_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.isWorkspaceClick_ = function() {
-  var onlyTouchedWorkspace = !this.startBlock_ && !this.startField_;
+  var onlyTouchedWorkspace = !this.startBlock_ && !this.startComment_ && !this.startField_;
   return onlyTouchedWorkspace && !this.hasExceededDragRadius_;
+};
+
+/**
+ * Whether this gesture is a click on a comment.  This should only be called
+ * when ending a gesture (mouse up, touch end).
+ * @return {boolean} whether this gesture was a click on a workspace.
+ * @private
+ */
+Blockly.Gesture.prototype.isCommentClick_ = function() {
+  // A comment click starts on a comment, never escapes the drag radius
+  var hasStartComment = !!this.startComment_;
+  return hasStartComment && !this.hasExceededDragRadius_;
 };
 
 /* End helper functions defining types of clicks. */

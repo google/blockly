@@ -51,12 +51,11 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
       {'class': 'blocklyComment'}, null);
   this.svgGroup_.translate_ = '';
 
-  /**
-   * @type {SVGElement}
-   * @private
-   */
-  this.svgPath_ = Blockly.utils.createSvgElement('path',
-      {'class': 'blocklyCommentPath'}, this.svgGroup_);
+  this.svgRect_ = Blockly.utils.createSvgElement('rect',
+      {'class': 'blocklyCommentRect', 'x': 0, 'y': 0,
+      'rx': Blockly.WorkspaceCommentSvg.BORDER_RADIUS,
+      'ry': Blockly.WorkspaceCommentSvg.BORDER_RADIUS});
+  this.svgGroup_.appendChild(this.svgRect_);
 
   /**
    * @type {number}
@@ -87,8 +86,6 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
       workspace, content, opt_id);
 
   this.render();
-  Blockly.bindEventWithChecks_(this.svgPath_, 'mousedown', this,
-                   this.pathMouseDown_);
 }; goog.inherits(Blockly.WorkspaceCommentSvg, Blockly.WorkspaceComment);
 
 /**
@@ -100,11 +97,18 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
     // The comment has already been deleted.
     return;
   }
+  // If this comment is being dragged, unlink the mouse events.
+  if (Blockly.selected == this) {
+    this.unselect();
+    this.workspace.cancelCurrentGesture();
+  }
 
   goog.dom.removeNode(this.svgGroup_);
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;
-  this.svgPath_ = null;
+  this.svgRect_ = null;
+  // Dispose of any rendered components
+  this.disposeInternal_();
 
   Blockly.WorkspaceCommentSvg.superClass_.dispose.call(this);
 };
@@ -116,12 +120,13 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
  */
 Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
   goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
-  // if (!this.workspace.options.readOnly && !this.eventsInit_) {
-  //   Blockly.bindEventWithChecks_(this.getSvgRoot(), 'mousedown', this,
-  //                      this.onMouseDown_);
-  // }
+  if (!this.workspace.options.readOnly && !this.eventsInit_) {
+    Blockly.bindEventWithChecks_(this.svgRectTarget_, 'mousedown', this,
+                       this.pathMouseDown_);
+  }
   this.eventsInit_ = true;
 
+  this.updateMovable();
   if (!this.getSvgRoot().parentNode) {
     this.workspace.getCanvas().appendChild(this.getSvgRoot());
   }
@@ -137,6 +142,78 @@ Blockly.WorkspaceCommentSvg.prototype.pathMouseDown_ = function(e) {
   if (gesture) {
     gesture.handleCommentStart(e, this);
   }
+};
+
+/**
+ * Select this comment.  Highlight it visually.
+ */
+Blockly.WorkspaceCommentSvg.prototype.select = function() {
+  if (Blockly.selected == this) {
+    return;
+  }
+  var oldId = null;
+  if (Blockly.selected) {
+    oldId = Blockly.selected.id;
+    // Unselect any previously selected block.
+    Blockly.Events.disable();
+    try {
+      Blockly.selected.unselect();
+    } finally {
+      Blockly.Events.enable();
+    }
+  }
+  var event = new Blockly.Events.Ui(null, 'selected', oldId, this.id);
+  event.workspaceId = this.workspace.id;
+  Blockly.Events.fire(event);
+  Blockly.selected = this;
+  this.addSelect();
+};
+
+/**
+ * Unselect this comment.  Remove its highlighting.
+ */
+Blockly.WorkspaceCommentSvg.prototype.unselect = function() {
+  if (Blockly.selected != this) {
+    return;
+  }
+  var event = new Blockly.Events.Ui(null, 'selected', this.id, null);
+  event.workspaceId = this.workspace.id;
+  Blockly.Events.fire(event);
+  Blockly.selected = null;
+  this.removeSelect();
+  this.blurFocus();
+};
+
+/**
+ * Select this comment.  Highlight it visually.
+ */
+Blockly.WorkspaceCommentSvg.prototype.addSelect = function() {
+  Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
+                    'blocklySelected');
+};
+
+/**
+ * Unselect this comment.  Remove its highlighting.
+ */
+Blockly.WorkspaceCommentSvg.prototype.removeSelect = function() {
+  Blockly.utils.removeClass(/** @type {!Element} */ (this.svgGroup_),
+                       'blocklySelected');
+};
+
+/**
+ * Focus this comment.  Highlight it visually.
+ */
+Blockly.WorkspaceCommentSvg.prototype.addFocus = function() {
+  Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
+                    'blocklyFocused');
+};
+
+/**
+ * Unfocus this comment.  Remove its highlighting.
+ */
+Blockly.WorkspaceCommentSvg.prototype.removeFocus = function() {
+  Blockly.utils.removeClass(/** @type {!Element} */ (this.svgGroup_),
+                       'blocklyFocused');
 };
 
 /**
@@ -267,6 +344,60 @@ Blockly.WorkspaceCommentSvg.prototype.moveDuringDrag = function(newLoc) {
  */
 Blockly.WorkspaceCommentSvg.prototype.clearTransformAttributes_ = function() {
   Blockly.utils.removeAttribute(this.getSvgRoot(), 'transform');
+};
+
+
+/**
+ * Returns the coordinates of a bounding box describing the dimensions of this
+ * comment.
+ * Coordinate system: workspace coordinates.
+ * @return {!{topLeft: goog.math.Coordinate, bottomRight: goog.math.Coordinate}}
+ *    Object with top left and bottom right coordinates of the bounding box.
+ */
+Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
+  var blockXY = this.getRelativeToSurfaceXY(this);
+  var commentBounds = this.getHeightWidth();
+  var topLeft;
+  var bottomRight;
+  if (this.RTL) {
+    // Width has the tab built into it already so subtract it here.
+    topLeft = new goog.math.Coordinate(blockXY.x - (commentBounds.width),
+        blockXY.y);
+    // Add the width of the tab/puzzle piece knob to the x coordinate
+    // since X is the corner of the rectangle, not the whole puzzle piece.
+    bottomRight = new goog.math.Coordinate(blockXY.x,
+        blockXY.y + commentBounds.height);
+  } else {
+    // Subtract the width of the tab/puzzle piece knob to the x coordinate
+    // since X is the corner of the rectangle, not the whole puzzle piece.
+    topLeft = new goog.math.Coordinate(blockXY.x, blockXY.y);
+    // Width has the tab built into it already so subtract it here.
+    bottomRight = new goog.math.Coordinate(blockXY.x + commentBounds.width,
+        blockXY.y + commentBounds.height);
+  }
+  return {topLeft: topLeft, bottomRight: bottomRight};
+};
+
+/**
+ * Add or remove the UI indicating if this block is movable or not.
+ */
+Blockly.WorkspaceCommentSvg.prototype.updateMovable = function() {
+  if (this.isMovable()) {
+    Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
+                      'blocklyDraggable');
+  } else {
+    Blockly.utils.removeClass(/** @type {!Element} */ (this.svgGroup_),
+                         'blocklyDraggable');
+  }
+};
+
+/**
+ * Set whether this block is movable or not.
+ * @param {boolean} movable True if movable.
+ */
+Blockly.WorkspaceCommentSvg.prototype.setMovable = function(movable) {
+  Blockly.WorkspaceCommentSvg.superClass_.setMovable.call(this, movable);
+  this.updateMovable();
 };
 
 /**

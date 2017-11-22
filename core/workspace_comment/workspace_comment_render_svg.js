@@ -30,23 +30,46 @@ goog.require('Blockly.WorkspaceCommentSvg');
 
 
 /**
- * Width of the border around the text area.
+ * Size of the resize icon.
  * @type {number}
  * @const
  */
-Blockly.WorkspaceCommentSvg.BORDER_WIDTH = 10;
+Blockly.WorkspaceCommentSvg.RESIZE_SIZE = 8;
+
+/**
+ * Radius of the border around the comment.
+ * @type {number}
+ * @const
+ */
+Blockly.WorkspaceCommentSvg.BORDER_RADIUS = 3;
 
 /**
  * Offset from the foreignobject edge to the textarea edge.
  * @type {number}
  * @const
  */
-Blockly.WorkspaceCommentSvg.TEXTAREA_OFFSET = 4;
+Blockly.WorkspaceCommentSvg.TEXTAREA_OFFSET = 2;
+
+/**
+ * Offset from the top to make room for a top bar.
+ * @type {number}
+ * @const
+ */
+Blockly.WorkspaceCommentSvg.TOP_OFFSET = 10;
+
+/**
+ * Returns a bounding box describing the dimensions of this comment.
+ * @return {!{height: number, width: number}} Object with height and width
+ *    properties in workspace units.
+ */
+Blockly.WorkspaceCommentSvg.prototype.getHeightWidth = function() {
+  return { width: this.getWidth(), height: this.getHeight() };
+};
 
 Blockly.WorkspaceCommentSvg.prototype.render = function() {
-  this.rendered_ = true;
+  if (this.rendered_) return;
 
-  this.setPath_(this.getHeight(), this.getWidth());
+  var size = this.getHeightWidth();
 
   // Add text area
   // TODO: Does this need to happen every time?  Or are we orphaning foreign
@@ -54,38 +77,26 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
   this.createEditor_();
   this.svgGroup_.appendChild(this.foreignObject_);
 
-  var borderWidth = Blockly.WorkspaceCommentSvg.BORDER_WIDTH;
-  var textOffset = borderWidth + Blockly.WorkspaceCommentSvg.TEXTAREA_OFFSET;
+  this.svgRectTarget_ = Blockly.utils.createSvgElement('rect',
+    {'class': 'blocklyCommentTarget', 'x': 0, 'y': 0,
+    'rx': Blockly.WorkspaceCommentSvg.BORDER_RADIUS,
+    'ry': Blockly.WorkspaceCommentSvg.BORDER_RADIUS});
+  this.svgGroup_.appendChild(this.svgRectTarget_);
 
-  this.foreignObject_.setAttribute('width',
-      this.getWidth() - doubleBorderWidth);
-  this.foreignObject_.setAttribute('height',
-      this.getHeight() - doubleBorderWidth);
-  this.textarea_.style.width =
-      (this.getWidth() - textOffset) + 'px';
-  this.textarea_.style.height =
-      (this.getHeight() - textOffset) + 'px';
+  // Add the resize icon
+  this.addResizeDom_();
+
+  this.setSize_(size.width, size.height);
 
   // Set the content
   this.textarea_.value = this.content_;
-};
 
-/**
- * Set the path of the comment outline.
- * @param {number} height Height of the container.
- * @param {number} width Width of the container.
- * @private
- */
-Blockly.WorkspaceCommentSvg.prototype.setPath_ = function(height, width) {
-  var steps = [];
-  steps.push('m 0,0');
-  steps.push('H', width);
-  steps.push('v', height);
-  steps.push('H 0');
-  steps.push('z');
+  this.rendered_ = true;
 
-  var pathString = steps.join(' ');
-  this.svgPath_.setAttribute('d', pathString);
+  if (this.resizeGroup_) {
+    Blockly.bindEventWithChecks_(this.resizeGroup_, 'mousedown', this,
+      this.resizeMouseDown_);
+  }
 };
 
 /**
@@ -95,7 +106,7 @@ Blockly.WorkspaceCommentSvg.prototype.setPath_ = function(height, width) {
  */
 Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
   /* Create the editor.  Here's the markup that will be generated:
-    <foreignObject x="8" y="8" width="164" height="164">
+    <foreignObject class="blocklyCommentForeignObject" x="0" y="10" width="164" height="164">
       <body xmlns="http://www.w3.org/1999/xhtml" class="blocklyMinimalBody">
         <textarea xmlns="http://www.w3.org/1999/xhtml"
             class="blocklyCommentTextarea"
@@ -104,8 +115,9 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
     </foreignObject>
   */
   this.foreignObject_ = Blockly.utils.createSvgElement('foreignObject',
-      {'x': Blockly.WorkspaceCommentSvg.BORDER_WIDTH / 2,
-       'y': Blockly.WorkspaceCommentSvg.BORDER_WIDTH / 2},
+      {'x': 0,
+       'y': Blockly.WorkspaceCommentSvg.TOP_OFFSET,
+       'class': 'blocklyCommentForeignObject'},
       null);
   var body = document.createElementNS(Blockly.HTML_NS, 'body');
   body.setAttribute('xmlns', Blockly.HTML_NS);
@@ -129,8 +141,196 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
       this.content_ = textarea.value;
     }
   });
+  return this.foreignObject_;
+};
+
+/**
+ * Add the resize icon to the DOM
+ * @private
+ */
+Blockly.WorkspaceCommentSvg.prototype.addResizeDom_ = function() {
+  this.resizeGroup_ = Blockly.utils.createSvgElement('g',
+    {
+      'class': this.RTL ?
+        'blocklyResizeSW' : 'blocklyResizeSE'
+    },
+    this.svgGroup_);
+  var resizeSize = Blockly.WorkspaceCommentSvg.RESIZE_SIZE;
+  Blockly.utils.createSvgElement('polygon',
+    { 'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString()) },
+    this.resizeGroup_);
+  Blockly.utils.createSvgElement('line',
+    {
+      'class': 'blocklyResizeLine',
+      'x1': resizeSize / 3, 'y1': resizeSize - 1,
+      'x2': resizeSize - 1, 'y2': resizeSize / 3
+    }, this.resizeGroup_);
+  Blockly.utils.createSvgElement('line',
+    {
+      'class': 'blocklyResizeLine',
+      'x1': resizeSize * 2 / 3, 'y1': resizeSize - 1,
+      'x2': resizeSize - 1, 'y2': resizeSize * 2 / 3
+    }, this.resizeGroup_);
+};
+
+/**
+ * Handle a mouse-down on comment's resize corner.
+ * @param {!Event} e Mouse down event.
+ * @private
+ */
+Blockly.WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
+  //this.promote_();
+  this.unbindDragEvents_();
+  if (Blockly.utils.isRightButton(e)) {
+    // No right-click.
+    e.stopPropagation();
+    return;
+  }
+  // Left-click (or middle click)
+  this.workspace.startDrag(e, new goog.math.Coordinate(
+    this.workspace.RTL ? -this.width_ : this.width_, this.height_));
+
+  this.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
+    'mouseup', this, this.resizeMouseUp_);
+  this.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
+    'mousemove', this, this.resizeMouseMove_);
+  Blockly.hideChaff();
+  // This event has been handled.  No need to bubble up to the document.
+  e.stopPropagation();
+};
+
+/**
+ * Stop binding to the global mouseup and mousemove events.
+ * @private
+ */
+Blockly.WorkspaceCommentSvg.prototype.unbindDragEvents_ = function() {
+  if (this.onMouseUpWrapper_) {
+    Blockly.unbindEvent_(this.onMouseUpWrapper_);
+    this.onMouseUpWrapper_ = null;
+  }
+  if (this.onMouseMoveWrapper_) {
+    Blockly.unbindEvent_(this.onMouseMoveWrapper_);
+    this.onMouseMoveWrapper_ = null;
+  }
+};
+
+/*
+ * Handle a mouse-up event while dragging a comment's border or resize handle.
+ * @param {!Event} e Mouse up event.
+ * @private
+ */
+Blockly.WorkspaceCommentSvg.prototype.resizeMouseUp_ = function(/*e*/) {
+  Blockly.Touch.clearTouchIdentifier();
+  this.unbindDragEvents_();
+};
+
+/**
+ * Resize this comment to follow the mouse.
+ * @param {!Event} e Mouse move event.
+ * @private
+ */
+Blockly.WorkspaceCommentSvg.prototype.resizeMouseMove_ = function(e) {
+  this.autoLayout_ = false;
+  var newXY = this.workspace.moveDrag(e);
+  this.setSize_(this.RTL ? -newXY.x : newXY.x, newXY.y);
+};
+
+/**
+ * Callback function triggered when the comment has resized.
+ * Resize the text area accordingly.
+ * @private
+ */
+Blockly.WorkspaceCommentSvg.prototype.resizeComment_ = function() {
+  var size = this.getHeightWidth();
+  var topOffset = Blockly.WorkspaceCommentSvg.TOP_OFFSET;
+  var textOffset = Blockly.WorkspaceCommentSvg.TEXTAREA_OFFSET * 2;
+
+  this.foreignObject_.setAttribute('width',
+      size.width);
+  this.foreignObject_.setAttribute('height',
+      size.height - topOffset);
+  if (this.RTL) {
+    this.foreignObject_.setAttribute('x',
+        -size.width);
+  }
+  this.textarea_.style.width =
+      (size.width - textOffset) + 'px';
+  this.textarea_.style.height =
+      (size.height - textOffset - topOffset) + 'px';
+};
+
+/**
+ * Set size
+ * @param {number} width width of the container
+ * @param {number} height height of the container
+ * @private
+ */
+Blockly.WorkspaceCommentSvg.prototype.setSize_ = function(width, height) {
+  // Minimum size of a comment.
+  width = Math.max(width, 45);
+  height = Math.max(height, 20 + Blockly.WorkspaceCommentSvg.TOP_OFFSET);
+  this.width_ = width;
+  this.height_ = height;
+  this.svgRect_.setAttribute('width', width);
+  this.svgRect_.setAttribute('height', height);
+  this.svgRectTarget_.setAttribute('width', width);
+  this.svgRectTarget_.setAttribute('height', height);
+  if (this.RTL) {
+    this.svgRect_.setAttribute('transform', 'scale(-1 1)');
+    this.svgRectTarget_.setAttribute('transform', 'scale(-1 1)');
+  }
+
+  var resizeSize = Blockly.WorkspaceCommentSvg.RESIZE_SIZE;
+  if (this.resizeGroup_) {
+    if (this.RTL) {
+      // Mirror the resize group.
+      this.resizeGroup_.setAttribute('transform', 'translate(' +
+        (-width + resizeSize) + ',' + (height - resizeSize) + ') scale(-1 1)');
+    } else {
+      this.resizeGroup_.setAttribute('transform', 'translate(' +
+        (width - resizeSize) + ',' +
+        (height - resizeSize) + ')');
+    }
+  }
+
+  // Allow the contents to resize.
+  this.resizeComment_();
+};
+
+/**
+ * Dispose of any rendered comment components.
+ * @private
+ */
+Blockly.WorkspaceCommentSvg.prototype.disposeInternal_ = function() {
+  this.textarea_ = null;
+  this.foreignObject_ = null;
+  this.svgRectTarget_ = null;
+};
+
+/**
+ * Set the focus on the text area.
+ * @public
+ */
+Blockly.WorkspaceCommentSvg.prototype.setFocus = function() {
+  this.focused_ = true;
+  var textarea = this.textarea_;
+  this.svgRectTarget_.style.fill = "none";
   setTimeout(function() {
     textarea.focus();
   }, 0);
-  return this.foreignObject_;
+  this.addFocus();
+};
+
+/**
+ * Remove focus from the text area.
+ * @public
+ */
+Blockly.WorkspaceCommentSvg.prototype.blurFocus = function() {
+  this.focused_ = false;
+  var textarea = this.textarea_;
+  this.svgRectTarget_.style.fill = "transparent";
+  setTimeout(function() {
+    textarea.blur();
+  }, 0);
+  this.removeFocus();
 };

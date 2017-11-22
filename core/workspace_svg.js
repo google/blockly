@@ -1164,6 +1164,8 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
  */
 Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
   var topBlocks = this.getTopBlocks(false);
+  var topComments = this.getTopComments(false);
+  topBlocks = topBlocks.concat(topComments);
   // There are no blocks, return empty rectangle.
   if (!topBlocks.length) {
     return {x: 0, y: 0, width: 0, height: 0};
@@ -1241,6 +1243,54 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   redoOption.callback = this.undo.bind(this, true);
   menuOptions.push(redoOption);
 
+  // Option to add a workspace comment.
+  if (this.options.comments) {
+    /**
+     * Option to add a workspace comment..
+     * @private
+     */
+    var addWsComment = function() {
+      var comment = ws.newComment('', 100, 100);
+
+      var injectionDiv = ws.getInjectionDiv();
+      // Bounding rect coordinates are in client coordinates, meaning that they
+      // are in pixels relative to the upper left corner of the visible browser
+      // window.  These coordinates change when you scroll the browser window.
+      var boundingRect = injectionDiv.getBoundingClientRect();
+
+      // The client coordinates offset by the injection div's upper left corner.
+      var clientOffsetPixels = new goog.math.Coordinate(e.clientX - boundingRect.left,
+          e.clientY - boundingRect.top);
+
+      // The offset in pixels between the main workspace's origin and the upper left
+      // corner of the injection div.
+      var mainOffsetPixels = ws.getOriginOffsetInPixels();
+
+      // The position of the new comment in pixels relative to the origin of the
+      // main workspace.
+      var finalOffsetPixels = goog.math.Coordinate.difference(clientOffsetPixels,
+          mainOffsetPixels);
+
+      // The position of the new comment in main workspace coordinates.
+      var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
+
+      var commentX = finalOffsetMainWs.x;
+      var commentY = finalOffsetMainWs.y;
+      comment.moveBy(commentX, commentY);
+      if (ws.rendered) {
+        comment.initSvg();
+        comment.render(false);
+        comment.select();
+      }
+    };
+    var wsCommentOption = {enabled: true};
+    wsCommentOption.text = Blockly.Msg.ADD_COMMENT;
+    wsCommentOption.callback = function() {
+      addWsComment();
+    };
+    menuOptions.push(wsCommentOption);
+  }
+
   // Option to clean up blocks.
   if (this.scrollbar) {
     var cleanOption = {};
@@ -1299,52 +1349,6 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
       toggleOption(false);
     };
     menuOptions.push(expandOption);
-
-    /**
-     * Option to add a workspace comment..
-     * @private
-     */
-    var addWsComment = function() {
-      var comment = ws.newComment('', 100, 100);
-  
-      var injectionDiv = ws.getInjectionDiv();
-      // Bounding rect coordinates are in client coordinates, meaning that they
-      // are in pixels relative to the upper left corner of the visible browser
-      // window.  These coordinates change when you scroll the browser window.
-      var boundingRect = injectionDiv.getBoundingClientRect();
-
-      // The client coordinates offset by the injection div's upper left corner.
-      var clientOffsetPixels = new goog.math.Coordinate(e.clientX - boundingRect.left,
-          e.clientY - boundingRect.top);
-
-      // The offset in pixels between the main workspace's origin and the upper left
-      // corner of the injection div.
-      var mainOffsetPixels = ws.getOriginOffsetInPixels();
-
-      // The position of the new comment in pixels relative to the origin of the
-      // main workspace.
-      var finalOffsetPixels = goog.math.Coordinate.difference(clientOffsetPixels,
-          mainOffsetPixels);
-
-      // The position of the new comment in main workspace coordinates.
-      var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
-
-      var commentX = finalOffsetMainWs.x;
-      var commentY = finalOffsetMainWs.y;
-      comment.moveBy(ws.RTL ? commentX - comment.getWidth() : commentX, commentY);
-      if (ws.rendered) {
-        comment.initSvg();
-        comment.render(false);
-      }
-    };
-
-    // Option to add workspace comment.
-    var wsCommentOption = {enabled: true};
-    wsCommentOption.text = Blockly.Msg.ADD_COMMENT;
-    wsCommentOption.callback = function() {
-      addWsComment();
-    };
-    menuOptions.push(wsCommentOption);
   }
 
   // Option to delete all blocks.

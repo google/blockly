@@ -67,7 +67,9 @@ Blockly.WorkspaceCommentSvg.prototype.getHeightWidth = function() {
 };
 
 Blockly.WorkspaceCommentSvg.prototype.render = function() {
-  if (this.rendered_) return;
+  if (this.rendered_) {
+    return;
+  }
 
   var size = this.getHeightWidth();
 

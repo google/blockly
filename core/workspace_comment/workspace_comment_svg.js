@@ -346,7 +346,6 @@ Blockly.WorkspaceCommentSvg.prototype.clearTransformAttributes_ = function() {
   Blockly.utils.removeAttribute(this.getSvgRoot(), 'transform');
 };
 
-
 /**
  * Returns the coordinates of a bounding box describing the dimensions of this
  * comment.
@@ -360,7 +359,6 @@ Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
   var topLeft;
   var bottomRight;
   if (this.RTL) {
-    // Width has the tab built into it already so subtract it here.
     topLeft = new goog.math.Coordinate(blockXY.x - (commentBounds.width),
         blockXY.y);
     // Add the width of the tab/puzzle piece knob to the x coordinate
@@ -371,7 +369,6 @@ Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
     // Subtract the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
     topLeft = new goog.math.Coordinate(blockXY.x, blockXY.y);
-    // Width has the tab built into it already so subtract it here.
     bottomRight = new goog.math.Coordinate(blockXY.x + commentBounds.width,
         blockXY.y + commentBounds.height);
   }
@@ -379,7 +376,7 @@ Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
 };
 
 /**
- * Add or remove the UI indicating if this block is movable or not.
+ * Add or remove the UI indicating if this comment is movable or not.
  */
 Blockly.WorkspaceCommentSvg.prototype.updateMovable = function() {
   if (this.isMovable()) {
@@ -392,7 +389,7 @@ Blockly.WorkspaceCommentSvg.prototype.updateMovable = function() {
 };
 
 /**
- * Set whether this block is movable or not.
+ * Set whether this comment is movable or not.
  * @param {boolean} movable True if movable.
  */
 Blockly.WorkspaceCommentSvg.prototype.setMovable = function(movable) {

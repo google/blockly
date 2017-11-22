@@ -1150,18 +1150,18 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
 Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
   var topBlocks = this.getTopBlocks(false);
   var topComments = this.getTopComments(false);
-  topBlocks = topBlocks.concat(topComments);
+  var topElements = topBlocks.concat(topComments);
   // There are no blocks, return empty rectangle.
-  if (!topBlocks.length) {
+  if (!topElements.length) {
     return {x: 0, y: 0, width: 0, height: 0};
   }
 
   // Initialize boundary using the first block.
-  var boundary = topBlocks[0].getBoundingRectangle();
+  var boundary = topElements[0].getBoundingRectangle();
 
   // Start at 1 since the 0th block was used for initialization
-  for (var i = 1; i < topBlocks.length; i++) {
-    var blockBoundary = topBlocks[i].getBoundingRectangle();
+  for (var i = 1; i < topElements.length; i++) {
+    var blockBoundary = topElements[i].getBoundingRectangle();
     if (blockBoundary.topLeft.x < boundary.topLeft.x) {
       boundary.topLeft.x = blockBoundary.topLeft.x;
     }
@@ -1237,6 +1237,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     var addWsComment = function() {
       var comment = ws.newComment('', 100, 100);
 
+      // TODO: move this code into a helper function
       var injectionDiv = ws.getInjectionDiv();
       // Bounding rect coordinates are in client coordinates, meaning that they
       // are in pixels relative to the upper left corner of the visible browser

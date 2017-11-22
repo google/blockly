@@ -56,6 +56,18 @@ Blockly.WorkspaceComment = function(workspace, content, opt_id) {
   /** @type {boolean} */
   this.RTL = workspace.RTL;
 
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.deletable_ = true;
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.movable_ = true;
+
   /** @type {!string} */
   this.content_ = content;
 };
@@ -97,6 +109,40 @@ Blockly.WorkspaceComment.prototype.getRelativeToSurfaceXY = function() {
 Blockly.WorkspaceComment.prototype.moveBy = function(dx, dy) {
   // TODO: Fire an event for move
   this.xy_.translate(dx, dy);
+};
+
+/**
+ * Get whether this comment is deletable or not.
+ * @return {boolean} True if deletable.
+ */
+Blockly.WorkspaceComment.prototype.isDeletable = function() {
+  return this.deletable_ &&
+      !(this.workspace && this.workspace.options.readOnly);
+};
+
+/**
+ * Set whether this comment is deletable or not.
+ * @param {boolean} deletable True if deletable.
+ */
+Blockly.WorkspaceComment.prototype.setDeletable = function(deletable) {
+  this.deletable_ = deletable;
+};
+
+/**
+ * Get whether this comment is movable or not.
+ * @return {boolean} True if movable.
+ */
+Blockly.WorkspaceComment.prototype.isMovable = function() {
+  return this.movable_ &&
+      !(this.workspace && this.workspace.options.readOnly);
+};
+
+/**
+ * Set whether this comment is movable or not.
+ * @param {boolean} movable True if movable.
+ */
+Blockly.WorkspaceComment.prototype.setMovable = function(movable) {
+  this.movable_ = movable;
 };
 
 /**

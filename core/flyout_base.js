@@ -597,6 +597,33 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
 };
 
 /**
+ * Helper function to get the list of variables that have been added to the
+ * workspace after adding a new block, using the given list of variables that
+ * were in the workspace before the new block was added.
+ * @param {!Array.<!Blockly.VariableModel>} originalVariables The array of
+ *     variables that existed in the workspace before adding the new block.
+ * @return {!Array.<!Blockly.VariableModel>} The new array of variables that were
+ *     freshly added to the workspace after creating the new block, or [] if no
+ *     new variables were added to the workspace.
+ * @private
+ */
+Blockly.Flyout.prototype.getAddedVariables_ = function(originalVariables) {
+  var allCurrentVariables = this.targetWorkspace_.getAllVariables();
+  var addedVariables = [];
+  if (originalVariables.length != allCurrentVariables.length) {
+    for (var i = 0; i < allCurrentVariables.length; i++) {
+      var variable = allCurrentVariables[i];
+      // For any variable that is present in allCurrentVariables but not
+      // present in originalVariables, add the variable to addedVariables.
+      if (!originalVariables.includes(variable)) {
+        addedVariables.push(variable);
+      }
+    }
+  }
+  return addedVariables;
+};
+
+/**
  * Create a copy of this block on the workspace.
  * @param {!Blockly.BlockSvg} originalBlock The block to copy from the flyout.
  * @return {Blockly.BlockSvg} The newly created block, or null if something
@@ -606,6 +633,7 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
 Blockly.Flyout.prototype.createBlock = function(originalBlock) {
   var newBlock = null;
   Blockly.Events.disable();
+  var variablesBeforeCreation = this.targetWorkspace_.getAllVariables();
   this.targetWorkspace_.setResizesEnabled(false);
   try {
     newBlock = this.placeNewBlock_(originalBlock);
@@ -615,9 +643,16 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
     Blockly.Events.enable();
   }
 
+  var newVariables = this.getAddedVariables_(variablesBeforeCreation);
+
   if (Blockly.Events.isEnabled()) {
     Blockly.Events.setGroup(true);
     Blockly.Events.fire(new Blockly.Events.Create(newBlock));
+    // Fire a VarCreate event for each (if any) new variable created.
+    for(var i = 0; i < newVariables.length; i++) {
+      var thisVariable = newVariables[i];
+      Blockly.Events.fire(new Blockly.Events.VarCreate(thisVariable));
+    }
   }
   if (this.autoClose) {
     this.hide();

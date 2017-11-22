@@ -606,6 +606,7 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
 Blockly.Flyout.prototype.createBlock = function(originalBlock) {
   var newBlock = null;
   Blockly.Events.disable();
+  var variablesBeforeCreation = this.workspace_.getAllVariables();
   this.targetWorkspace_.setResizesEnabled(false);
   try {
     newBlock = this.placeNewBlock_(originalBlock);
@@ -615,9 +616,28 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
     Blockly.Events.enable();
   }
 
+  var variablesAfterCreation = this.workspace_.getAllVariables();
+  var variablesToFireVarCreate = [];
+  if (variablesBeforeCreation.length != variablesAfterCreation.length) {
+    for (var i = 0; i < variablesAfterCreation.length; i++) {
+      var variable = variablesAfterCreation[i];
+      // for any variable that is present in the list of variables
+      // after creation but is not present in the list of variables before
+      // creation, add the variable to the list we will traverse to
+      // fire the VarCreate event
+      if (!variablesBeforeCreation.includes(variable)) {
+        variablesToFireVarCreate.push(variable);
+      }
+    }
+  }
+
   if (Blockly.Events.isEnabled()) {
     Blockly.Events.setGroup(true);
     Blockly.Events.fire(new Blockly.Events.Create(newBlock));
+    for(var i = 0; i < variablesToFireVarCreate.length; i++) {
+      var thisVariable = variablesToFireVarCreate[i];
+      Blockly.Events.fire(new Blockly.Events.VarCreate(thisVariable));
+    }
   }
   if (this.autoClose) {
     this.hide();

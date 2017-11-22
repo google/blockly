@@ -783,7 +783,6 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.doCommentClick_ = function() {
-  //this.startComment_.select();
   this.startComment_.setFocus();
 };
 

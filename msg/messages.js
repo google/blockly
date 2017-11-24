@@ -62,6 +62,8 @@ Blockly.Msg.LISTS_HUE = '260';
 Blockly.Msg.COLOUR_HUE = '20';
 /// {{Notranslate}} Hue value for all variable blocks.
 Blockly.Msg.VARIABLES_HUE = '330';
+/// {{Notranslate}} Hue value for all variable dynamic blocks.
+Blockly.Msg.VARIABLES_DYNAMIC_HUE = '310';
 /// {{Notranslate}} Hue value for all procedure blocks.
 Blockly.Msg.PROCEDURES_HUE = '290';
 
@@ -121,6 +123,8 @@ Blockly.Msg.RENAME_VARIABLE_TITLE = 'Rename all "%1" variables to:';
 // Variable creation
 /// button text - Text on the button used to launch the variable creation dialogue.
 Blockly.Msg.NEW_VARIABLE = 'Create variable...';
+/// prompt - Prompts the user to enter the type for a variable.
+Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = 'New variable type:';
 /// prompt - Prompts the user to enter the name for a new variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].
 Blockly.Msg.NEW_VARIABLE_TITLE = 'New variable name:';
 /// alert - Tells the user that the name they entered is already in use.

@@ -131,7 +131,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_INDEX_OF_FIRST = "atrast pirmo elementu, kas vienāds ar";
 /** @export */ Blockly.Msg.LISTS_INDEX_OF_HELPURL = "https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list";  // untranslated
 /** @export */ Blockly.Msg.LISTS_INDEX_OF_LAST = "atrast pēdējo elementu, kas vienāds ar";
-/** @export */ Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = "Atgriež pozīciju sarakstā, kurā atrodas dotais objekts. Atgriež %1 ja objekts neatrodas sarakstā.";
+/** @export */ Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = "Atgriež pozīciju sarakstā, kurā atrodas dotais objekts.  Atgriež %1 ja objekts neatrodas sarakstā.";
 /** @export */ Blockly.Msg.LISTS_INLIST = "sarakstā";
 /** @export */ Blockly.Msg.LISTS_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#is-empty";  // untranslated
 /** @export */ Blockly.Msg.LISTS_ISEMPTY_TITLE = "%1 ir tukšs";
@@ -283,6 +283,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Tangenss no grādiem (nevis radiāniem).";
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Izveidot mainīgo...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Jaunā mainīgā vārds:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "atļaut apakškomandas";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "ar:";
@@ -310,13 +311,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Pievienot funkcijai argumentu.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "argumenti";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Pievienot, pārkārtot vai dzēst funkcijas argumentus.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "Atcelt atsaukšanu";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Noņemt komentāru";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Pārdēvēt mainīgo...";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Pārdēvējiet visus '%1' mainīgos:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "tekstam %1 pievienot tekstu %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "Pievienot tekstu mainīgajam '%1'.";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "kā mazie burti";
@@ -351,8 +351,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "meklēt pirmo vietu, kur sākas teksts";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "meklēt pēdējo vietu, kur sākas teksts";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "Meklē pirmā teksta rindu otrajā tekstā. Atgriež pozīciju otrajā tekstā, kurā sākas pirmais teksts. Atgriež %1 ja pirmā teksta rinda nav atrasta.";
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "tekstā %1 %2 %3";
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "Meklē pirmā teksta rindu otrajā tekstā.  Atgriež pozīciju otrajā tekstā, kurā sākas pirmais teksts. Atgriež %1 ja pirmā teksta rinda nav atrasta.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 ir tukšs";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TOOLTIP = "Patiess, ja teksts ir tukšs.";
@@ -395,6 +395,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Piešķirt mainīgajam vērtību.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Mainīgais '%1' jau eksistē.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -403,7 +404,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 /** @export */ Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
-/** @export */ Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
 /** @export */ Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF = Blockly.Msg.CONTROLS_IF_MSG_ELSEIF;
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
@@ -424,3 +424,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

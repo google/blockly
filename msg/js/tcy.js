@@ -283,6 +283,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "ಒಂಜಿ ಡಿಗ್ರಿದ ಟ್ಯಾನ್‌ಜೆಂಟ್ (tangent) ಪಿರಕೊರು (ರೇಡಿಯನ್ ಅತ್ತ್).";
 /** @export */ Blockly.Msg.NEW_VARIABLE = "ವ್ಯತ್ಯಯೊನು ಉಂಡು ಮಲ್ಪುಲೆ";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "ಪೊಸ ವ್ಯತ್ಯಯೊದ ಪುದರ್:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "ಹೇಳಿಕೆಗ್ ಅವಕಾಸೊ";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "ಒಟ್ಟುಗು:";
@@ -310,13 +311,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "ಕಾರ್ಯೊಗು ಒಂಜಿ ಉಲಪರಿಪುನು ಸೇರಲೆ.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "ಉಲಪರಿಪು";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "ಸೇರಾಲೆ, ದೆತ್ತ್‌ ಬುಡುಲೆ, ಅತ್ತಂಡ ಈ ಕಾರ್ಯೊಗು ಉಲಪರಿಪುಲೆನ್ ಕುಡ ಒತ್ತರೆ ಮಲ್ಪುಲೆ.";
-/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "'%1' ಪನ್ಪಿ ಪುದರ್‌ದ ಕಾರ್ಯೊವಿದಾನೊ ದುಂಬೆ ಅಸ್ತಿತ್ವೊಡು ಉಂಡು.";
 /** @export */ Blockly.Msg.REDO = "ಕುಡ ಮಲ್ಪು";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "ಟಿಪ್ಪಣಿನ್ ದೆತ್ತ್‌ದ್ ಬುಡ್ಲೆ";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "ವ್ಯತ್ಯಯೊಗು ಕುಡೊರ ಪುದರ್ ದೀಲೆ";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "ಮಾತಾ '%1' ವ್ಯತ್ಯಯೊಲೆನ ಪುದರ್‌ನ್ ನೆಕ್ಕ್ ಬದಲ್ ಮಲ್ಪುಲೆ:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "ಇಂದೆಕ್ %1 ಪಟ್ಯೊನು ಸೇರವೆ %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "%1 ವ್ಯತ್ಯಯೊಗು ಕೆಲವು ಪಟ್ಯೊಲೆನ್ ಸೇರಾವ್";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "ಎಲ್ಯ ಅಕ್ಷರೊಗು";
@@ -351,7 +351,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "ಪಟ್ಯೊ ಸುರುಕ್ಕು ಬತ್ತಿನೇನ್ ನಾಡ್";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "ಪಟ್ಯೊ ಅಕೇರಿಗ್ ಬತ್ತಿನೇನ್ ನಾಡ್";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "ಪಟ್ಯೊಡು %1 %2 %3";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "ರಡ್ಡನೆ ಪಟ್ಯೊಡು ಉಪ್ಪುನ ಸುರುತ ಪಟ್ಯೊ ಸುರುಕ್ಕು/ಅಕೇರಿಗ್ ಬತ್ತಿನೆತ್ತ ಸೂಚಿನ್ ಪಿರಕೊರು. ಪಟ್ಯೊ ತಿಕ್ಕಿಜ್ಜಾಂಡ %1 ನ್ ಪಿರಕೊರು.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 ಖಾಲಿ";
@@ -395,6 +395,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "ಈ ವ್ಯತ್ಯಯೊನು ಇನ್‌ಪುಟ್‌ಗ್ ಸಮ ಆಪಿಲೆಕ ಸೆಟ್ ಮಲ್ಪುಂಡು.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "'%1' ಪನ್ಪಿ ಪುದರ್‌ದ ವ್ಯತ್ಯಯೊ ದುಂಬೆ ಅಸ್ತಿತ್ವೊಡು ಉಂಡು.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -403,7 +404,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 /** @export */ Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
-/** @export */ Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
 /** @export */ Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF = Blockly.Msg.CONTROLS_IF_MSG_ELSEIF;
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
@@ -424,3 +424,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

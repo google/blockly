@@ -43,7 +43,7 @@ goog.require('Blockly');
 Blockly.Constants.VariablesDynamic.HUE = 310;
 
 Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
-    // Block for variable getter.
+  // Block for variable getter.
   {
     "type": "variables_get_dynamic",
     "message0": "%1",
@@ -58,7 +58,7 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_VARIABLES_GET_TOOLTIP}",
     "extensions": ["contextMenu_variableDynamicSetterGetter"]
   },
-    // Block for variable setter.
+  // Block for variable setter.
   {
     "type": "variables_set_dynamic",
     "message0": "%{BKY_VARIABLES_SET}",
@@ -71,7 +71,7 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
       "type": "input_value",
       "name": "VALUE"
     }
-        ],
+    ],
     "previousStatement": null,
     "nextStatement": null,
     "colour": "%{BKY_VARIABLES_DYNAMIC_HUE}",
@@ -91,13 +91,16 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
  * @readonly
  */
 Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
-    /**
+  /**
      * Add menu option to create getter/setter block for this setter/getter.
      * @param {!Array} options List of menu options to add to.
      * @this Blockly.Block
      */
   customContextMenu: function(options) {
-        // Getter blocks have the option to create a setter block, and vice versa.
+    // Getter blocks have the option to create a setter block, and vice versa.
+    if(this.isInFlyout){
+      return;
+    }
     var opposite_type ;
     var contextMenuMsg ;
     if (this.type == 'variables_get_dynamic') {
@@ -134,4 +137,4 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
 };
 
 Blockly.Extensions.registerMixin('contextMenu_variableDynamicSetterGetter',
-    Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);
+  Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);

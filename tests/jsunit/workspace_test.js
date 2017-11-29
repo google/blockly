@@ -158,17 +158,19 @@ function test_getBlockById() {
 
 function test_deleteVariable_InternalTrivial() {
   workspaceTest_setUp();
-  var var_1 = workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
+  // TODO (#1199): make a similar test where the variable is given a non-empty
+  // type.
+  var var_1 = workspace.createVariable('name1', '', 'id1');
+  workspace.createVariable('name2', '', 'id2');
   createMockBlock('name1');
   createMockBlock('name1');
   createMockBlock('name2');
 
   workspace.deleteVariableInternal_(var_1);
-  var variable = workspace.getVariable('name1');
+  var variable = workspace.getVariable('name1', '');
   var block_var_name = workspace.topBlocks_[0].getVars()[0];
   assertNull(variable);
-  checkVariableValues(workspace, 'name2', 'type2', 'id2');
+  checkVariableValues(workspace, 'name2', '', 'id2');
   assertEquals('name2', block_var_name);
   workspaceTest_tearDown();
 }
@@ -207,15 +209,18 @@ function test_updateVariableStore_NameNotInvariableMap_NoClear() {
 
 function test_updateVariableStore_ClearAndAllInUse() {
   workspaceTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
+  workspace.createVariable('name1', '', 'id1');
+  workspace.createVariable('name2', '', 'id2');
+  // TODO (#1199): make a similar test where the variable is given a non-empty
+  // type.
+  // TODO (#1199): get rid of updateVariableStore if possible.
   setUpMockMethod(mockControl_, Blockly.Variables, 'allUsedVariables',
     [workspace], [['name1', 'name2']]);
 
   try {
     workspace.updateVariableStore(true);
-    checkVariableValues(workspace, 'name1', 'type1', 'id1');
-    checkVariableValues(workspace, 'name2', 'type2', 'id2');
+    checkVariableValues(workspace, 'name1', '', 'id1');
+    checkVariableValues(workspace, 'name2', '', 'id2');
   } finally {
     workspaceTest_tearDown();
   }
@@ -223,15 +228,18 @@ function test_updateVariableStore_ClearAndAllInUse() {
 
 function test_updateVariableStore_ClearAndOneInUse() {
   workspaceTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
+  workspace.createVariable('name1', '', 'id1');
+  workspace.createVariable('name2', '', 'id2');
+  // TODO (#1199): make a similar test where the variable is given a non-empty
+  // type.
+  // TODO (#1199): get rid of updateVariableStore if possible.
   setUpMockMethod(mockControl_, Blockly.Variables, 'allUsedVariables',
     [workspace], [['name1']]);
 
   try {
     workspace.updateVariableStore(true);
-    checkVariableValues(workspace, 'name1', 'type1', 'id1');
-    var variabe = workspace.getVariable('name2');
+    checkVariableValues(workspace, 'name1', '', 'id1');
+    var variabe = workspace.getVariable('name2', '');
     assertNull(variable);
   } finally {
     workspaceTest_tearDown();
@@ -302,7 +310,7 @@ function test_renameVariable_NoBlocks() {
   try {
     workspace.renameVariable(oldName, newName);
     checkVariableValues(workspace, 'name2', '', '1');
-    var variable = workspace.getVariable(oldName);
+    var variable = workspace.getVariable(oldName, '');
     assertNull(variable);
   } finally {
     workspaceTest_tearDown();
@@ -325,12 +333,14 @@ function test_renameVariable_OnlyOldNameBlockExists() {
   workspaceTest_setUp();
   var oldName = 'name1';
   var newName = 'name2';
-  workspace.createVariable(oldName, 'type1', 'id1');
+  workspace.createVariable(oldName, '', 'id1');
   createMockBlock(oldName);
 
+  // TODO (#1199): make a similar test where the variable is given a non-empty
+  // type.
   workspace.renameVariable(oldName, newName);
-  checkVariableValues(workspace, newName, 'type1', 'id1');
-  var variable = workspace.getVariable(oldName);
+  checkVariableValues(workspace, newName, '', 'id1');
+  var variable = workspace.getVariable(oldName, '');
   var block_var_name = workspace.topBlocks_[0].getVars()[0];
   assertNull(variable);
   assertEquals(newName, block_var_name);
@@ -343,13 +353,15 @@ function test_renameVariable_TwoVariablesSameType() {
   workspaceTest_setUp();
   var oldName = 'name1';
   var newName = 'name2';
-  workspace.createVariable(oldName, 'type1', 'id1');
-  workspace.createVariable(newName, 'type1', 'id2');
+  // TODO (#1199): make a similar test where the variable is given a non-empty
+  // type.
+  workspace.createVariable(oldName, '', 'id1');
+  workspace.createVariable(newName, '', 'id2');
   createMockBlock(oldName);
   createMockBlock(newName);
 
   workspace.renameVariable(oldName, newName);
-  checkVariableValues(workspace, newName, 'type1', 'id2');
+  checkVariableValues(workspace, newName, '', 'id2');
   var variable = workspace.getVariable(oldName);
   var block_var_name_1 = workspace.topBlocks_[0].getVars()[0];
   var block_var_name_2 = workspace.topBlocks_[1].getVars()[0];
@@ -389,12 +401,14 @@ function test_renameVariable_OldCase() {
   workspaceTest_setUp();
   var oldCase = 'Name1';
   var newName = 'name1';
-  workspace.createVariable(oldCase, 'type1', 'id1');
+  // TODO (#1199): make a similar test where the variable is given a non-empty
+  // type.
+  workspace.createVariable(oldCase, '', 'id1');
   createMockBlock(oldCase);
 
   workspace.renameVariable(oldCase, newName);
-  checkVariableValues(workspace, newName, 'type1', 'id1');
-  var result_oldCase = workspace.getVariable(oldCase).name;
+  checkVariableValues(workspace, newName, '', 'id1');
+  var result_oldCase = workspace.getVariable(oldCase, '').name;
   assertNotEquals(oldCase, result_oldCase);
   workspaceTest_tearDown();
 }
@@ -405,14 +419,16 @@ function test_renameVariable_TwoVariablesAndOldCase() {
   var oldName = 'name1';
   var oldCase = 'Name2';
   var newName = 'name2';
-  workspace.createVariable(oldName, 'type1', 'id1');
-  workspace.createVariable(oldCase, 'type1', 'id2');
+  // TODO (#1199): make a similar test where the variable is given a non-empty
+  // type.
+  workspace.createVariable(oldName, '', 'id1');
+  workspace.createVariable(oldCase, '', 'id2');
   createMockBlock(oldName);
   createMockBlock(oldCase);
 
   workspace.renameVariable(oldName, newName);
 
-  checkVariableValues(workspace, newName, 'type1', 'id2');
+  checkVariableValues(workspace, newName, '', 'id2');
   var variable = workspace.getVariable(oldName);
   var result_oldCase = workspace.getVariable(oldCase).name;
   var block_var_name_1 = workspace.topBlocks_[0].getVars()[0];
@@ -432,13 +448,15 @@ function test_renameVariableById_TwoVariablesSameType() {
   workspaceTest_setUp();
   var oldName = 'name1';
   var newName = 'name2';
-  workspace.createVariable(oldName, 'type1', 'id1');
-  workspace.createVariable(newName, 'type1', 'id2');
+  // TODO (#1199): make a similar test where the variable is given a non-empty
+  // type.
+  workspace.createVariable(oldName, '', 'id1');
+  workspace.createVariable(newName, '', 'id2');
   createMockBlock(oldName);
   createMockBlock(newName);
 
   workspace.renameVariableById('id1', newName);
-  checkVariableValues(workspace, newName, 'type1', 'id2');
+  checkVariableValues(workspace, newName, '', 'id2');
   var variable = workspace.getVariable(oldName);
   var block_var_name_1 = workspace.topBlocks_[0].getVars()[0];
   var block_var_name_2 = workspace.topBlocks_[1].getVars()[0];
@@ -450,14 +468,16 @@ function test_renameVariableById_TwoVariablesSameType() {
 
 function test_deleteVariable_Trivial() {
   workspaceTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type1', 'id2');
+  // TODO (#1199): make a similar test where the variable is given a non-empty
+  // type.
+  workspace.createVariable('name1', '', 'id1');
+  workspace.createVariable('name2', '', 'id2');
   createMockBlock('name1');
   createMockBlock('name2');
 
-  workspace.deleteVariable('name1');
-  checkVariableValues(workspace, 'name2', 'type1', 'id2');
-  var variable = workspace.getVariable('name1');
+  workspace.deleteVariable('name1', '');
+  checkVariableValues(workspace, 'name2', '', 'id2');
+  var variable = workspace.getVariable('name1', '');
   var block_var_name = workspace.topBlocks_[0].getVars()[0];
   assertNull(variable);
   assertEquals('name2', block_var_name);
@@ -466,14 +486,15 @@ function test_deleteVariable_Trivial() {
 
 function test_deleteVariableById_Trivial() {
   workspaceTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type1', 'id2');
+  // TODO (#1199): Make a version of this test that uses different types.
+  workspace.createVariable('name1', '', 'id1');
+  workspace.createVariable('name2', '', 'id2');
   createMockBlock('name1');
   createMockBlock('name2');
 
   workspace.deleteVariableById('id1');
-  checkVariableValues(workspace, 'name2', 'type1', 'id2');
-  var variable = workspace.getVariable('name1');
+  checkVariableValues(workspace, 'name2', '', 'id2');
+  var variable = workspace.getVariable('name1', '');
   var block_var_name = workspace.topBlocks_[0].getVars()[0];
   assertNull(variable);
   assertEquals('name2', block_var_name);

@@ -713,16 +713,23 @@ Blockly.Xml.domToField_ = function(block, fieldName, xml) {
     return;
   }
 
+  var workspace = block.workspace;
   var text = xml.textContent;
   if (field instanceof Blockly.FieldVariable) {
     // TODO (#1199): When we change setValue and getValue to
     // interact with IDs instead of names, update this so that we get
     // the variable based on ID instead of textContent.
     var type = xml.getAttribute('variabletype') || '';
-    var variable = block.workspace.getVariable(text);
+    // TODO: Consider using a different name (varID?) because this is the
+    // node's ID.
+    var id = xml.id;
+    if (id) {
+      var variable = workspace.getVariableById(id);
+    } else {
+      var variable = workspace.getVariable(text, type);
+    }
     if (!variable) {
-      variable = block.workspace.createVariable(text, type,
-        xml.getAttribute('id'));
+      variable = workspace.createVariable(text, type, id);
     }
     if (type != null && type !== variable.type) {
       throw Error('Serialized variable type with id \'' +

@@ -146,8 +146,10 @@ function test_undoDeleteVariable_NoBlocks() {
 
 function test_undoDeleteVariable_WithBlocks() {
   undoRedoTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
+  // TODO (#1199): make a similar test where the variable is given a non-empty
+  // type.
+  workspace.createVariable('name1', '', 'id1');
+  workspace.createVariable('name2', '', 'id2');
   createMockBlock('name1');
   createMockBlock('name2');
   workspace.deleteVariableById('id1');
@@ -156,13 +158,13 @@ function test_undoDeleteVariable_WithBlocks() {
   workspace.undo();
   undoRedoTest_checkBlockVariableName(0, 'name2');
   assertNull(workspace.getVariableById('id1'));
-  checkVariableValues(workspace, 'name2', 'type2', 'id2');
+  checkVariableValues(workspace, 'name2', '', 'id2');
 
   workspace.undo();
   undoRedoTest_checkBlockVariableName(0, 'name2');
   undoRedoTest_checkBlockVariableName(1, 'name1');
-  checkVariableValues(workspace, 'name1', 'type1', 'id1');
-  checkVariableValues(workspace, 'name2', 'type2', 'id2');
+  checkVariableValues(workspace, 'name1', '', 'id1');
+  checkVariableValues(workspace, 'name2', '', 'id2');
   undoRedoTest_tearDown();
 }
 
@@ -190,8 +192,10 @@ function test_redoAndUndoDeleteVariable_NoBlocks() {
 
 function test_redoAndUndoDeleteVariable_WithBlocks() {
   undoRedoTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
+  // TODO (#1199): make a similar test where the variable is given a non-empty
+  // type.
+  workspace.createVariable('name1', '', 'id1');
+  workspace.createVariable('name2', '', 'id2');
   createMockBlock('name1');
   createMockBlock('name2');
   workspace.deleteVariableById('id1');
@@ -210,7 +214,7 @@ function test_redoAndUndoDeleteVariable_WithBlocks() {
   // Expect that variable 'id2' is recreated
   undoRedoTest_checkBlockVariableName(0, 'name2');
   assertNull(workspace.getVariableById('id1'));
-  checkVariableValues(workspace, 'name2', 'type2', 'id2');
+  checkVariableValues(workspace, 'name2', '', 'id2');
   undoRedoTest_tearDown();
 }
 
@@ -241,7 +245,9 @@ function test_redoAndUndoDeleteVariableTwice_NoBlocks() {
 
 function test_redoAndUndoDeleteVariableTwice_WithBlocks() {
   undoRedoTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
+  // TODO (#1199): make a similar test where the variable is given a non-empty
+  // type.
+  workspace.createVariable('name1', '', 'id1');
   createMockBlock('name1');
   workspace.deleteVariableById('id1');
   workspace.deleteVariableById('id1');
@@ -255,7 +261,7 @@ function test_redoAndUndoDeleteVariableTwice_WithBlocks() {
   // undo delete
   workspace.undo();
   undoRedoTest_checkBlockVariableName(0, 'name1');
-  checkVariableValues(workspace, 'name1', 'type1', 'id1');
+  checkVariableValues(workspace, 'name1', '', 'id1');
 
   // redo delete
   workspace.undo(true);

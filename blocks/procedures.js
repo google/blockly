@@ -260,6 +260,23 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     return this.arguments_;
   },
   /**
+   * Return all variables referenced by this block.
+   * @return {!Array.<string>} List of variable names.
+   * @this Blockly.Block
+   */
+  getVarModels: function() {
+    var vars = [];
+    for (var i = 0, argName; argName = this.arguments_[i]; i++) {
+      // TODO (#1199): When we switch to tracking variables by ID,
+      // update this.
+      var model = this.workspace.getVariable(argName, '');
+      if (model) {
+        vars.push(model);
+      }
+    }
+    return vars;
+  },
+  /**
    * Notification that a variable is renaming.
    * If the name matches one of this block's variables, rename it.
    * @param {string} oldName Previous name of variable.
@@ -376,6 +393,7 @@ Blockly.Blocks['procedures_defreturn'] = {
     return [this.getFieldValue('NAME'), this.arguments_, true];
   },
   getVars: Blockly.Blocks['procedures_defnoreturn'].getVars,
+  getVarModels: Blockly.Blocks['procedures_defnoreturn'].getVarModels,
   renameVar: Blockly.Blocks['procedures_defnoreturn'].renameVar,
   customContextMenu: Blockly.Blocks['procedures_defnoreturn'].customContextMenu,
   callType_: 'procedures_callreturn'

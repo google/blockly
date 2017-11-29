@@ -64,6 +64,7 @@ Blockly.Variables.allUsedVariables = function(root) {
   var variableHash = Object.create(null);
   // Iterate through every block and add each variable to the hash.
   for (var x = 0; x < blocks.length; x++) {
+    // TODO (#1199) Switch to IDs.
     var blockVariables = blocks[x].getVars();
     if (blockVariables) {
       for (var y = 0; y < blockVariables.length; y++) {
@@ -241,7 +242,7 @@ Blockly.Variables.createVariable = function(workspace, opt_callback, opt_type) {
     Blockly.Variables.promptName(Blockly.Msg.NEW_VARIABLE_TITLE, defaultName,
       function(text) {
         if (text) {
-          if (workspace.getVariable(text)) {
+          if (workspace.getVariable(text, opt_type)) {
             Blockly.alert(Blockly.Msg.VARIABLE_ALREADY_EXISTS.replace('%1',
                 text.toLowerCase()),
                 function() {
@@ -281,18 +282,9 @@ Blockly.Variables.renameVariable = function(workspace, variable,
       Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', variable.name), defaultName,
       function(newName) {
         if (newName) {
-          var newVariable = workspace.getVariable(newName);
-          if (newVariable && newVariable.type != variable.type) {
-            Blockly.alert(Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE.replace('%1',
-                newName.toLowerCase()).replace('%2', newVariable.type),
-                function() {
-                  promptAndCheckWithAlert(newName);  // Recurse
-                });
-          } else {
-            workspace.renameVariable(variable.name, newName);
-            if (opt_callback) {
-              opt_callback(newName);
-            }
+          workspace.renameVariable(variable.name, newName);
+          if (opt_callback) {
+            opt_callback(newName);
           }
         } else {
           // User canceled prompt without a value.

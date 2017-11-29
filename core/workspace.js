@@ -270,6 +270,7 @@ Blockly.Workspace.prototype.renameVariableInternal_ = function(
 /**
  * Rename a variable by updating its name in the variable map. Identify the
  * variable to rename with the given name.
+ * TODO (#1199): Possibly delete this function.
  * @param {string} oldName Variable to rename.
  * @param {string} newName New variable name.
  * @param {string=} opt_type The type of the variable.  If not provided it
@@ -311,6 +312,7 @@ Blockly.Workspace.prototype.createVariable = function(name, opt_type, opt_id) {
 
 /**
  * Find all the uses of a named variable.
+ * TODO (#1199): Possibly delete this function.
  * @param {string} name Name of variable.
  * @param {string=} opt_type The type of the variable.  If not provided it
  *     defaults to the empty string, which is a specific type.
@@ -344,6 +346,7 @@ Blockly.Workspace.prototype.getVariableUses = function(name, opt_type) {
 /**
  * Delete a variable by the passed in name and all of its uses from this
  * workspace. May prompt the user for confirmation.
+ * TODO (#1199): Possibly delete this function.
  * @param {string} name Name of variable to delete.
  * @param {string=} opt_type The type of the variable.  If not provided it
  *     defaults to the empty string, which is a specific type.
@@ -433,6 +436,7 @@ Blockly.Workspace.prototype.variableIndexOf = function(
 /**
  * Find the variable by the given name and return it. Return null if it is not
  *     found.
+ * TODO (#1199): Possibly delete this function.
  * @param {!string} name The name to check for.
  * @param {string=} opt_type The type of the variable.  If not provided it
  *     defaults to the empty string, which is a specific type.

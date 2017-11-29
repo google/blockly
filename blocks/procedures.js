@@ -261,7 +261,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   },
   /**
    * Return all variables referenced by this block.
-   * @return {!Array.<string>} List of variable names.
+   * @return {!Array.<!Blockly.VariableModel>} List of variable models.
    * @this Blockly.Block
    */
   getVarModels: function() {

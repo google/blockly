@@ -285,11 +285,13 @@ function test_appendDomToWorkspace() {
 
 function test_blockToDom_fieldToDom_trivial() {
   xmlTest_setUpWithMockBlocks();
-  workspace.createVariable('name1', 'type1', 'id1');
+  // TODO (#1199): make a similar test where the variable is given a non-empty
+  // type.
+  workspace.createVariable('name1', '', 'id1');
   var block = new Blockly.Block(workspace, 'field_variable_test_block');
   block.inputList[0].fieldRow[0].setValue('name1');
   var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
-  xmlTest_checkVariableFieldDomValues(resultFieldDom, 'VAR', 'type1', 'id1',
+  xmlTest_checkVariableFieldDomValues(resultFieldDom, 'VAR', '', 'id1',
     'name1');
   xmlTest_tearDownWithMockBlocks();
 }

@@ -687,6 +687,27 @@ Blockly.Block.prototype.getVars = function() {
 };
 
 /**
+ * Return all variables referenced by this block.
+ * @return {!Array.<!Blockly.VariableModel>} List of variable models.
+ */
+Blockly.Block.prototype.getVarModels = function() {
+  var vars = [];
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field instanceof Blockly.FieldVariable) {
+        // TODO (#1199): When we switch to tracking variables by ID,
+        // update this.
+        var model = this.workspace.getVariable(field.getValue(), '');
+        if (model) {
+          vars.push(model);
+        }
+      }
+    }
+  }
+  return vars;
+};
+
+/**
  * Notification that a variable is renaming.
  * If the name matches one of this block's variables, rename it.
  * @param {string} oldName Previous name of variable.

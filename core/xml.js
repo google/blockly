@@ -590,10 +590,16 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
           // interact with IDs instead of names, update this so that we get
           // the variable based on ID instead of textContent.
           var type = xmlChild.getAttribute('variabletype') || '';
-          var variable = workspace.getVariable(text);
+          // TODO: Consider using a different name (varID?) because this is the
+          // node's ID.
+          var id = xmlChild.id;
+          if (id) {
+            var variable = workspace.getVariableById(id);
+          } else {
+            var variable = workspace.getVariable(text, type);
+          }
           if (!variable) {
-            variable = workspace.createVariable(text, type,
-              xmlChild.getAttribute(id));
+            variable = workspace.createVariable(text, type, id);
           }
           if (type != null && type !== variable.type) {
             throw Error('Serialized variable type with id \'' +

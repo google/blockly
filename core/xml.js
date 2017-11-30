@@ -87,6 +87,50 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
 };
 
 /**
+ * Encode a field as XML.
+ * @param {!Blockly.Field} field The field to encode.
+ * @param {!Blockly.Workspace} workspace The workspace that the field is in.
+ * @return {?Element} XML element, or null if the field did not need to be
+ *     serialized.
+ * @private
+ */
+Blockly.Xml.fieldToDom_ = function(field, workspace) {
+  if (field.name && field.EDITABLE) {
+    var container = goog.dom.createDom('field', null, field.getValue());
+    container.setAttribute('name', field.name);
+    if (field instanceof Blockly.FieldVariable) {
+      var variable = workspace.getVariable(field.getValue());
+      if (variable) {
+        container.setAttribute('id', variable.getId());
+        container.setAttribute('variabletype', variable.type);
+      }
+    }
+    return container;
+  }
+  return null;
+};
+
+/**
+ * Encode all of a block's fields as XML and attach them to the given tree of
+ * XML elements.
+ * @param {!Blockly.Block} block A block with fields to be encoded.
+ * @param {!Element} element The XML element to which the field DOM should be
+ *     attached.
+ * @private
+ */
+Blockly.Xml.allFieldsToDom_ = function(block, element) {
+  var workspace = block.workspace;
+  for (var i = 0, input; input = block.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      var fieldDom = Blockly.Xml.fieldToDom_(field, workspace);
+      if (fieldDom) {
+        element.appendChild(fieldDom);
+      }
+    }
+  }
+};
+
+/**
  * Encode a block subtree as XML.
  * @param {!Blockly.Block} block The root block to encode.
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
@@ -105,25 +149,8 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
       element.appendChild(mutation);
     }
   }
-  function fieldToDom(field) {
-    if (field.name && field.EDITABLE) {
-      var container = goog.dom.createDom('field', null, field.getValue());
-      container.setAttribute('name', field.name);
-      if (field instanceof Blockly.FieldVariable) {
-        var variable = block.workspace.getVariable(field.getValue());
-        if (variable) {
-          container.setAttribute('id', variable.getId());
-          container.setAttribute('variabletype', variable.type);
-        }
-      }
-      element.appendChild(container);
-    }
-  }
-  for (var i = 0, input; input = block.inputList[i]; i++) {
-    for (var j = 0, field; field = input.fieldRow[j]; j++) {
-      fieldToDom(field);
-    }
-  }
+
+  Blockly.Xml.allFieldsToDom_(block, element);
 
   var commentText = block.getCommentText();
   if (commentText) {

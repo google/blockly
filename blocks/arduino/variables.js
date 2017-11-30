@@ -26,7 +26,7 @@ Blockly.Blocks['variables_set_type'] = {
    */
   init: function() {
     this.setHelpUrl('http://arduino.cc/en/Reference/HomePage');
-    this.setColour(Blockly.Blocks.variables.HUE);
+    this.setColour(100);
     this.appendValueInput('VARIABLE_SETTYPE_INPUT');
     this.appendDummyInput()
         .appendField(Blockly.Msg.ARD_VAR_AS)

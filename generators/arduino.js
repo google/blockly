@@ -41,7 +41,7 @@ Blockly.Arduino.addReservedWords(
     'noTone,shiftOut,shitIn,pulseIn,millis,micros,delay,delayMicroseconds,' +
     'min,max,abs,constrain,map,pow,sqrt,sin,cos,tan,randomSeed,random,' +
     'lowByte,highByte,bitRead,bitWrite,bitSet,bitClear,bit,attachInterrupt,' +
-    'detachInterrupt,interrupts,noInterrupts');
+    'detachInterrupt,interrupts,noInterrupts', 'user_main');
 
 /** Order of operation ENUMs. */
 Blockly.Arduino.ORDER_ATOMIC = 0;         // 0 "" ...
@@ -102,10 +102,6 @@ Blockly.Arduino.init = function(workspace) {
   // Create a dictionary mapping desired function names in definitions_
   // to actual function names (to avoid collisions with user functions)
   Blockly.Arduino.functionNames_ = Object.create(null);
-  // Create a dictionary of setups to be printed in the setup() function
-  Blockly.Arduino.setups_ = Object.create(null);
-  // Create a dictionary of pins to check if their use conflicts
-  Blockly.Arduino.pins_ = Object.create(null);
 
   if (!Blockly.Arduino.variableDB_) {
     Blockly.Arduino.variableDB_ =
@@ -133,7 +129,7 @@ Blockly.Arduino.init = function(workspace) {
  */
 Blockly.Arduino.finish = function(code) {
   // Convert the includes, definitions, and functions dictionaries into lists
-  var includes = [], definitions = [], variables = [], functions = [];
+  var includes = ['#include "OXOcardRunner.h"\n'], definitions = [], variables = [], functions = [];
   for (var name in Blockly.Arduino.includes_) {
     includes.push(Blockly.Arduino.includes_[name]);
   }
@@ -162,19 +158,6 @@ Blockly.Arduino.finish = function(code) {
     functions.push('\n');
   }
 
-  // userSetupCode added at the end of the setup function without leading spaces
-  var setups = [''], userSetupCode= '';
-  if (Blockly.Arduino.setups_['userSetupCode'] !== undefined) {
-    userSetupCode = '\n' + Blockly.Arduino.setups_['userSetupCode'];
-    delete Blockly.Arduino.setups_['userSetupCode'];
-  }
-  for (var name in Blockly.Arduino.setups_) {
-    setups.push(Blockly.Arduino.setups_[name]);
-  }
-  if (userSetupCode) {
-    setups.push(userSetupCode);
-  }
-
   // Clean up temporary data
   delete Blockly.Arduino.includes_;
   delete Blockly.Arduino.definitions_;
@@ -187,9 +170,8 @@ Blockly.Arduino.finish = function(code) {
 
   var allDefs = includes.join('\n') + variables.join('\n') +
       definitions.join('\n') + functions.join('\n\n');
-  var setup = 'void setup() {' + setups.join('\n  ') + '\n}\n\n';
-  var loop = 'void loop() {\n  ' + code.replace(/\n/g, '\n  ') + '\n}';
-  return allDefs + setup + loop;
+  var userMain = 'void user_main() {\n  ' + code.replace(/\n/g, '\n  ') + '\n}';
+  return allDefs + userMain;
 };
 
 /**

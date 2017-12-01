@@ -87,13 +87,17 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
 };
 
 Blockly.Xml.fieldToDomVariable_ = function(field, workspace) {
-  var potentialVariableMap = workspace.isFlyout ?
-      workspace.targetWorkspace.potentialVariableMap_ : null;
   // Ugh that's not true at all.
   var id = field.getValue();
   var variable = workspace.getVariableById(id);
-  if (!variable && potentialVariableMap) {
-    variable = potentialVariableMap.getVariableById(id);
+  if (!variable) {
+    if (workspace.isFlyout && workspace.targetWorkspace) {
+      var potentialVariableMap =
+          workspace.targetWorkspace.potentialVariableMap_;
+      if (potentialVariableMap) {
+        variable = potentialVariableMap.getVariableById(id);
+      }
+    }
   }
   if (variable) {
     var container = goog.dom.createDom('field', null, variable.name);

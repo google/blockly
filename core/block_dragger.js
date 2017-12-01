@@ -169,7 +169,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
 
   if (this.workspace_.toolbox_) {
     var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
-      'blocklyToolboxGrab';
+        'blocklyToolboxGrab';
     this.workspace_.toolbox_.addStyle(style);
   }
 };
@@ -227,7 +227,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
 
   if (this.workspace_.toolbox_) {
     var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
-      'blocklyToolboxGrab';
+        'blocklyToolboxGrab';
     this.workspace_.toolbox_.removeStyle(style);
   }
   Blockly.Events.setGroup(false);

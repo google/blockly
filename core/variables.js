@@ -269,7 +269,7 @@ Blockly.Variables.createVariable = function(workspace, opt_callback, opt_type) {
  * Rename a variable with the given workspace, variableType, and oldName.
  * @param {!Blockly.Workspace} workspace The workspace on which to rename the
  *     variable.
- * @param {?Blockly.VariableModel} variable Variable to rename.
+ * @param {Blockly.VariableModel} variable Variable to rename.
  * @param {function(?string=)=} opt_callback A callback. It will
  *     be passed an acceptable new variable name, or null if change is to be
  *     aborted (cancel button), or undefined if an existing variable was chosen.
@@ -282,7 +282,7 @@ Blockly.Variables.renameVariable = function(workspace, variable,
       Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', variable.name), defaultName,
       function(newName) {
         if (newName) {
-          workspace.renameVariable(variable.name, newName);
+          workspace.renameVariableById(variable.getId(), newName);
           if (opt_callback) {
             opt_callback(newName);
           }

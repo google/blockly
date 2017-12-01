@@ -162,33 +162,6 @@ Blockly.FieldVariable.prototype.getText = function() {
 };
 
 /**
- * Set the variable name. (DEPRECATED)
- * @param {string} value New text.
- */
-Blockly.FieldVariable.prototype.oldSetValue = function(value) {
-  var newValue = value;
-  var newText = value;
-
-  if (this.sourceBlock_) {
-    var variable = this.sourceBlock_.workspace.getVariableById(value);
-    if (variable) {
-      newText = variable.name;
-    }
-    // TODO(marisaleung): Remove name lookup after converting all Field Variable
-    //     instances to use ID instead of name.
-    else if (variable = this.sourceBlock_.workspace.getVariable(value)) {
-      newValue = variable.getId();
-    }
-    if (Blockly.Events.isEnabled()) {
-      Blockly.Events.fire(new Blockly.Events.BlockChange(
-          this.sourceBlock_, 'field', this.name, this.value_, newValue));
-    }
-  }
-  this.value_ = newValue;
-  this.setText(newText);
-};
-
-/**
  * Set the variable ID.
  * @param {string} id New variable ID, which must reference an existing
  *     variable.
@@ -319,17 +292,13 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
   var id = menuItem.getValue();
   // TODO(marisaleung): change setValue() to take in an ID as the parameter.
   // Then remove itemText.
-  var itemText;
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {
     var workspace = this.sourceBlock_.workspace;
     var variable = workspace.getVariableById(id);
     // If the item selected is a variable, set itemText to the variable name.
-    if (variable) {
-      itemText = variable.name;
-    } else if (id == Blockly.RENAME_VARIABLE_ID) {
+    if (id == Blockly.RENAME_VARIABLE_ID) {
       // Rename variable.
-      var currentName = this.getText();
-      variable = workspace.getVariable(currentName);
+      variable = this.variable_;
       Blockly.Variables.renameVariable(workspace, variable);
       return;
     } else if (id == Blockly.DELETE_VARIABLE_ID) {
@@ -338,10 +307,12 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
       return;
     }
 
-    // Call any validation function, and allow it to override.
-    itemText = this.callValidator(itemText);
+    // TODO: Call any validation function, and allow it to override.
+    // For now it's unclear whether the validator should act on the id.
+    //var validatedId = this.callValidator(variable.getId());
   }
-  if (itemText !== null) {
-    this.setValue(itemText);
-  }
+  // if (variable.getId() !== null) {
+  //   this.setValue(validatedId);
+  // }
+  this.setValue(id);
 };

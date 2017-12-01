@@ -356,6 +356,29 @@ Blockly.Workspace.prototype.getVariableUses = function(name, opt_type) {
 };
 
 /**
+ * Find all the uses of a named variable.
+ * TODO (#1199): Possibly delete this function.
+ * @param {string} id ID of the variable to find.
+ * @return {!Array.<!Blockly.Block>} Array of block usages.
+ */
+Blockly.Workspace.prototype.getVariableUsesById = function(id) {
+  var uses = [];
+  var blocks = this.getAllBlocks();
+  // Iterate through every block and check the name.
+  for (var i = 0; i < blocks.length; i++) {
+    var blockVariables = blocks[i].getVarModels();
+    if (blockVariables) {
+      for (var j = 0; j < blockVariables.length; j++) {
+        if (blockVariables[j].getId() == id) {
+          uses.push(blocks[i]);
+        }
+      }
+    }
+  }
+  return uses;
+};
+
+/**
  * Delete a variable by the passed in name and all of its uses from this
  * workspace. May prompt the user for confirmation.
  * TODO (#1199): Possibly delete this function.
@@ -419,7 +442,7 @@ Blockly.Workspace.prototype.deleteVariableById = function(id) {
  * @private
  */
 Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable) {
-  var uses = this.getVariableUses(variable.name);
+  var uses = this.getVariableUsesById(variable.getId());
   Blockly.Events.setGroup(true);
   for (var i = 0; i < uses.length; i++) {
     uses[i].dispose(true, false);

@@ -236,10 +236,12 @@ Blockly.FieldVariable.prototype.getVariableTypes_ = function() {
  * @this {Blockly.FieldVariable}
  */
 Blockly.FieldVariable.dropdownCreate = function() {
+  if (!this.variable_) {
+    throw new Error('Tried to call dropdownCreate on a variable field with no' +
+        ' variable selected.');
+  }
   var variableModelList = [];
   var name = this.getText();
-  // Don't create a new variable if there is nothing selected.
-  var createSelectedVariable = name ? true : false;
   var workspace = null;
   if (this.sourceBlock_) {
     workspace = this.sourceBlock_.workspace;
@@ -254,20 +256,9 @@ Blockly.FieldVariable.dropdownCreate = function() {
       var variables = workspace.getVariablesOfType(variableType);
       variableModelList = variableModelList.concat(variables);
     }
-    for (var i = 0; i < variableModelList.length; i++) {
-      if (createSelectedVariable &&
-          goog.string.caseInsensitiveEquals(variableModelList[i].name, name)) {
-        createSelectedVariable = false;
-        break;
-      }
-    }
-  }
-  // Ensure that the currently selected variable is an option.
-  if (createSelectedVariable && workspace) {
-    var newVar = workspace.createVariable(name);
-    variableModelList.push(newVar);
   }
   variableModelList.sort(Blockly.VariableModel.compareByName);
+
   var options = [];
   for (var i = 0; i < variableModelList.length; i++) {
     // Set the UUID as the internal representation of the variable.
@@ -278,6 +269,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
     options.push([Blockly.Msg.DELETE_VARIABLE.replace('%1', name),
         Blockly.DELETE_VARIABLE_ID]);
   }
+
   return options;
 };
 

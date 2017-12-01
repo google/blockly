@@ -330,12 +330,20 @@ Blockly.Variables.promptName = function(promptText, defaultText, callback) {
 Blockly.Variables.generateVariableFieldXml_ = function(variableModel) {
   // The variable name may be user input, so it may contain characters that need
   // to be escaped to create valid XML.
-  var element = goog.dom.createDom('field');
-  element.setAttribute('name', 'VAR');
-  element.setAttribute('variabletype', variableModel.type);
-  element.setAttribute('id', variableModel.getId());
-  element.textContent = variableModel.name;
+  var typeString = variableModel.type;
+  if (typeString == '') {
+    typeString = '\'\'';
+  }
+  var text = '<field name="VAR" id="' + variableModel.getId() +
+    '" variabletype="' + typeString +
+    '">' + variableModel.name + '</field>';
+  return text;
+  // var element = goog.dom.createDom('field');
+  // element.setAttribute('name', 'VAR');
+  // element.setAttribute('variabletype', variableModel.type);
+  // element.setAttribute('id', variableModel.getId());
+  // element.textContent = variableModel.name;
 
-  var xmlString = Blockly.Xml.domToText(element);
-  return xmlString;
+  // var xmlString = Blockly.Xml.domToText(element);
+  // return xmlString;
 };

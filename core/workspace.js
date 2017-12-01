@@ -84,6 +84,8 @@ Blockly.Workspace = function(opt_options) {
    * @private
    */
   this.variableMap_ = new Blockly.VariableMap(this);
+
+  this.potentialVariableMap_ = new Blockly.VariableMap(this);
 };
 
 /**

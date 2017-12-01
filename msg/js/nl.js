@@ -283,7 +283,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Geeft de tangens van een graad (geen radialen).";
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Variabele maken...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Nieuwe variabelenaam:";
-/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "statements toestaan";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "met:";
@@ -311,6 +310,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Een invoer aan de functie toevoegen.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "ingangen";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Invoer van deze functie toevoegen, verwijderen of herordenen.";
+/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "Er bestaat al een variabele met de naam \"%1\".";
 /** @export */ Blockly.Msg.REDO = "Opnieuw";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Opmerking verwijderen";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Variabele hernoemen...";
@@ -394,8 +394,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Verandert de waarde van de variabele naar de waarde van de invoer.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Er bestaat al een variabele met de naam \"%1\".";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Een variabele met de naam '%1' bestaat al voor een andere variabele van type '%2'.";
-/** @export */ Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -404,6 +403,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 /** @export */ Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
+/** @export */ Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
 /** @export */ Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF = Blockly.Msg.CONTROLS_IF_MSG_ELSEIF;
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
@@ -424,4 +424,3 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
-/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

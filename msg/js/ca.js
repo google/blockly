@@ -283,7 +283,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Retorna la tangent d'un grau (no radiant).";
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Crea una variable…";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Nou nom de variable:";
-/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "permetre declaracions";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "amb:";
@@ -311,12 +310,13 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Afegir una entrada per la funció.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "entrades";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Afegir, eliminar o canviar l'ordre de les entrades per aquesta funció.";
+/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "Redo";  // untranslated
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Elimina el comentari";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Reanomena variable...";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Reanomena totes les variables '%1' a:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "a %1 afegir text %2";
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "Afegir un text a la variable '%1'.";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "a minúscules";
@@ -351,7 +351,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "trobar la primera aparició del text";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "trobar l'última aparició del text";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "en el text %1 %2 %3";
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "Retorna l'índex de la primera/última aparició del primer text dins el segon. Retorna %1 si no es troba el text.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 està buit";
@@ -395,7 +395,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Modifica aquesta variable al valor introduït.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "A variable named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
-/** @export */ Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -404,6 +403,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 /** @export */ Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
+/** @export */ Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
 /** @export */ Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF = Blockly.Msg.CONTROLS_IF_MSG_ELSEIF;
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
@@ -424,4 +424,3 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
-/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

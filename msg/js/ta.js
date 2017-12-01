@@ -283,7 +283,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "டிகிரீ டேஞ்சன்டு மதிப்பை பின்கொடு";
 /** @export */ Blockly.Msg.NEW_VARIABLE = "புதிய மாறிலி...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "புதிய மாறிலியின் பெயர்:";
-/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "வாக்குமூலங்களை அனுமதிக்கவும்";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "இத்துடன்";
@@ -311,12 +310,13 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "செயல்கூறுக்கு ஒரு உள்ளீட்டை சேர்.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "உள்ளீடுகள்";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "செயல்கூறுகளின் உள்ளீட்டை சேர், நீக்கு, or மீண்டும் வரிசை செய்.";
+/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "Redo";  // untranslated
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "கருத்தை நீக்கு";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "மாறிலியை மறுபெயரிடுக...";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "அனைத்து '%1' மாறிலிகளையும் பின்வருமாறு மறுபெயரிடுக:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "இந்த மாறியிற்கு %1 உரை சேர்க்க %2";
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "'%1' மாறியில் உரையை சேர்";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "சின்ன எழுத்துக்கு மாற்று";
@@ -351,7 +351,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "உரையில் முதல் தோற்ற இடத்தை பின்கொடு";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "உரையில் கடைசி தோற்ற இடத்தை பின்கொடு";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "உரையில் %1 %2 %3";
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "இரண்டாவது உரையில் முதல் உரையின் முதல்/கடை இருக்கை குறிஎண்ணை பின்கொடு.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 காலியானது";
@@ -395,7 +395,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "மாறியின் மதிப்பாய் உள்ளீட்டு மதிப்பை வை.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "A variable named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
-/** @export */ Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -404,6 +403,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 /** @export */ Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
+/** @export */ Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
 /** @export */ Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF = Blockly.Msg.CONTROLS_IF_MSG_ELSEIF;
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
@@ -424,4 +424,3 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
-/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

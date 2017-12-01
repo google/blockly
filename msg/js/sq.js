@@ -283,7 +283,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Kthe tangentin e nje kendi (jo radiant).";
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Krijo variabël...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Emri i identifikatorit të ri:";
-/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "me:";
@@ -311,12 +310,13 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "Informacioni i futur";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
+/** @export */ Blockly.Msg.PROCEDURE_ALREADY_EXISTS = "A procedure named '%1' already exists.";  // untranslated
 /** @export */ Blockly.Msg.REDO = "Ribëj";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Fshij komentin";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Ndrysho emrin variables...";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Ndrysho emrin e te gjitha '%1' variablave ne :";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
-/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "ne %1 shto tekst %2";
+/** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "to %1 append text %2";  // untranslated
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "shto tekst tek varibla '%1'.";
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_HELPURL = "https://github.com/google/blockly/wiki/Text#adjusting-text-case";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = "me shkronja te vogla shtypi";
@@ -351,7 +351,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "gjej rastisjen e pare te tekstit";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "gjej rastisjen e fundit te tekstit";
-/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "ne tekst %1 %2 %3";
+/** @export */ Blockly.Msg.TEXT_INDEXOF_TITLE = "in text %1 %2 %3";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "Pergjigjet me indeksin e pare/fundit te rastisjes se tekstit te pare ne tekstin e dyte. Pergjigjet me %1 ne qofte se teksti nuk u gjet.";
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 eshte bosh";
@@ -395,7 +395,6 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Vendos kete variable te jete e barabarte me te dhenat ne hyrje.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Një variabël e quajtur '%1' tashmë ekziston.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
-/** @export */ Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -404,6 +403,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 /** @export */ Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
+/** @export */ Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
 /** @export */ Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF = Blockly.Msg.CONTROLS_IF_MSG_ELSEIF;
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
@@ -424,4 +424,3 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
-/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

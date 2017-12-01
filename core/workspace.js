@@ -248,6 +248,13 @@ Blockly.Workspace.prototype.renameVariableInternal_ = function(
     variable, newName, opt_type) {
   var type = variable ? variable.type : (opt_type || '');
   var newVariable = this.getVariable(newName, type);
+
+  // If a variable previously existed with the new name, we will coalesce  the
+  // variables and use the ID of the existing variable with the new name.
+  // Otherwise, we change the current variable's name but not its ID.
+  var oldId = variable.getId();
+  var newId = newVariable ? newVariable.getId() : oldId;
+
   var oldCase;
 
   // Find if newVariable case is different.
@@ -257,14 +264,17 @@ Blockly.Workspace.prototype.renameVariableInternal_ = function(
 
   Blockly.Events.setGroup(true);
   var blocks = this.getAllBlocks();
+  this.variableMap_.renameVariable(variable, newName, type);
+
+
   // Iterate through every block and update name.
   for (var i = 0; i < blocks.length; i++) {
-    blocks[i].renameVar(variable.name, newName);
+    blocks[i].renameVarById(oldId, newId);
     if (oldCase) {
-      blocks[i].renameVar(oldCase, newName);
+      blocks[i].renameVarById(newId, newId);
+      //blocks[i].renameVar(oldCase, newName);
     }
   }
-  this.variableMap_.renameVariable(variable, newName, type);
   Blockly.Events.setGroup(false);
 };
 

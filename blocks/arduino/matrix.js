@@ -6,7 +6,7 @@ goog.provide('Blockly.Blocks.oxocard.display');
 
 goog.require('Blockly.Blocks');
 
-Blockly.Blocks['oxocard_matrix_draw_image'] = {
+Blockly.Blocks.oxocard_matrix_draw_image = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
 		this.appendDummyInput()
@@ -24,7 +24,7 @@ Blockly.Blocks['oxocard_matrix_draw_image'] = {
 	}
 };
 
-Blockly.Blocks['oxocard_matrix_set_color'] = {
+Blockly.Blocks.oxocard_matrix_set_color = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
 		this.appendDummyInput()
@@ -37,7 +37,7 @@ Blockly.Blocks['oxocard_matrix_set_color'] = {
 	}
 };
 
-Blockly.Blocks['oxocard_matrix_update'] = {
+Blockly.Blocks.oxocard_matrix_update = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
 		this.appendDummyInput()

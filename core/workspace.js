@@ -241,12 +241,10 @@ Blockly.Workspace.prototype.updateVariableStore = function(clear) {
  * variable to rename with the given variable.
  * @param {?Blockly.VariableModel} variable Variable to rename.
  * @param {string} newName New variable name.
- * @param {string=} opt_type The type of the variable to create if variable was
- *     null.
  */
 Blockly.Workspace.prototype.renameVariableInternal_ = function(
-    variable, newName, opt_type) {
-  var type = variable ? variable.type : (opt_type || '');
+    variable, newName) {
+  var type = variable ? variable.type : '';
   var newVariable = this.getVariable(newName, type);
 
   // If a variable previously existed with the new name, we will coalesce  the
@@ -278,24 +276,6 @@ Blockly.Workspace.prototype.renameVariableInternal_ = function(
   Blockly.Events.setGroup(false);
 };
 
-
-/**
- * Rename a variable by updating its name in the variable map. Identify the
- * variable to rename with the given name.
- * TODO (#1199): Possibly delete this function.
- * @param {string} oldName Variable to rename.
- * @param {string} newName New variable name.
- * @param {string=} opt_type The type of the variable.  If not provided it
- *     defaults to the empty string, which is a specific type.
- */
-Blockly.Workspace.prototype.renameVariable = function(oldName, newName,
-    opt_type) {
-  var type = opt_type || '';
-  // Warning: Prefer to use renameVariableById.
-  var variable = this.getVariable(oldName, type);
-  this.renameVariableInternal_(variable, newName, opt_type);
-};
-
 /**
  * Rename a variable by updating its name in the variable map. Identify the
  * variable to rename with the given ID.
@@ -304,6 +284,9 @@ Blockly.Workspace.prototype.renameVariable = function(oldName, newName,
  */
 Blockly.Workspace.prototype.renameVariableById = function(id, newName) {
   var variable = this.getVariableById(id);
+  if (!variable) {
+    throw new Error('Tried to rename a variable that didn\'t exist. ID: ' + id);
+  }
   this.renameVariableInternal_(variable, newName);
 };
 

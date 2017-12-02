@@ -412,7 +412,7 @@ class Gen_compressed(threading.Thread):
       if not json_data.has_key("compiledCode"):
         print("FATAL ERROR: Compiler did not return compiledCode.")
         sys.exit(1)
-      print(json_data);
+
       code = HEADER + "\n" + json_data["compiledCode"]
       for code_statement in remove:
         code = code.replace(code_statement, "")
@@ -568,7 +568,7 @@ developers.google.com/blockly/guides/modify/web/closure""")
   full_search_paths.sort()  # Deterministic build.
 
   if (len(sys.argv) == 1):
-    args = ['core', 'accessible', 'generators', 'defaultlangfiles']
+    args = ['core', 'accessible', 'generators', 'defaultlangfiles', 'langfiles']
   else:
     args = sys.argv
 

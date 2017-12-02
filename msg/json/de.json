@@ -374,7 +374,7 @@
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Warnung: Dieser Block darf nur innerhalb eines Funktionsblocks genutzt werden.",
 
-		"arduino-specific-translation":{},
+		"arduino-specific-translation":"justacoment",
 
 	"ARD_TYPE_CHAR": "Character",
 	"ARD_TYPE_TEXT": "Text",
@@ -493,7 +493,7 @@
 	"NEW_INSTANCE_TITLE": "New instance name:",
 	"RENAME_INSTANCE_TITLE": "Rename all '%1' instances to:",
 
-		"oxocard-specific-translation":{},
+		"oxocard-specific-translation":"justacomment",
 
 	"OXOCARD_TURN_OXOCARD_OFF_TITLE": "OXOcard ausschalten",
 	"OXOCARD_TURN_OXOCARD_OFF_TIP": "Schaltet die OXOcard aus",

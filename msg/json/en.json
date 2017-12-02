@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-12-02 14:13:05.437670",
+		"lastupdated": "2017-12-02 14:54:47.457933",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -393,9 +393,6 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "If a value is true, then return a second value.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Warning: This block may be used only within a function definition.",
-
-	"arduino-specific-translations":{},
-
 	"ARD_TYPE_CHAR": "Character",
 	"ARD_TYPE_TEXT": "Text",
 	"ARD_TYPE_BOOL": "Boolean",
@@ -508,19 +505,6 @@
 	"ARD_TONE_WARNING": "Frequency must be in range 31 - 65535",
 	"ARD_NOTONE": "Turn off tone on pin #",
 	"ARD_NOTONE_TIP": "Turns the tone off on the selected pin",
-	"NEW_INSTANCE": "New instance...",
-	"RENAME_INSTANCE": "Rename instance...",
-	"NEW_INSTANCE_TITLE": "New instance name:",
-	"RENAME_INSTANCE_TITLE": "Rename all '%1' instances to:",
-
-	"oxocard-specific-translations":{},
-
-	"OXOCARD_MATRIX_DRAW_IMAGE_TITLE": "Draw image",
-	"OXOCARD_MATRIX_DRAW_IMAGE_TIP": "Turn on specific pixels",
-
-	"OXOCARD_MATRIX_UPDATE_TITLE": "Update matrix",
-	"OXOCARD_MATRIX_UPDATE_TIP": "Draws current image",
-
 	"OXOCARD_TURN_OXOCARD_OFF_TITLE": "Turn OXOcard off",
 	"OXOCARD_TURN_OXOCARD_OFF_TIP": "Turns off the card",
 	"OXOCARD_RESET_OXOCARD_TITLE": "Reset OXOcard",
@@ -543,6 +527,12 @@
 	"OXOCARD_PRINT_TIP": "Prints the given number or string to the console",
 	"OXOCARD_PRINTLN_TITLE": "Println",
 	"OXOCARD_PRINTLN_TIP": "Prints the given number or string to the console (with new line)",
+	"OXOCARD_MATRIX_DRAW_IMAGE_TITLE": "Draw image",
+	"OXOCARD_MATRIX_DRAW_IMAGE_TIP": "Turn on specific pixels.",
+	"OXOCARD_MATRIX_UPDATE_TITLE": "Update matrix",
+	"OXOCARD_MATRIX_UPDATE_TIP": "Draws current image.",
+	"OXOCARD_MATRIX_SET_COLOR_TITLE": "Foreground",
+	"OXOCARD_MATRIX_SET_COLOR_TIP": "The following draw-blocks will draw this color.",
 	"OXOCARD_TURN_DISPLAY_ON_TITLE": "Turn display on",
 	"OXOCARD_TURN_DISPLAY_ON_TIP": "Turn the whole display on",
 	"OXOCARD_CLEAR_DISPLAY_TITLE": "Clear display",
@@ -602,5 +592,9 @@
 	"OXOCARD_NO_TONE_TITLE": "No tone",
 	"OXOCARD_NO_TONE_TIP": "Stops the tone",
 	"OXOCARD_RANDOM_TITLE": "Random 0 to ",
-	"OXOCARD_RANDOM_TIP": "Returns a random number between 0 an the given value"
+	"OXOCARD_RANDOM_TIP": "Returns a random number between 0 an the given value",
+	"NEW_INSTANCE": "New instance...",
+	"RENAME_INSTANCE": "Rename instance...",
+	"NEW_INSTANCE_TITLE": "New instance name:",
+	"RENAME_INSTANCE_TITLE": "Rename all '%1' instances to:"
 }

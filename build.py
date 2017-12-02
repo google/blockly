@@ -65,7 +65,7 @@ for arg in sys.argv[1:len(sys.argv)]:
     raise Exception("Invalid argument: \"" + arg + "\". Usage: build.py "
         "<0 or more of accessible, core, generators, langfiles>")
 
-import errno, glob, httplib, json, os, re, subprocess, threading, urllib
+import errno, glob, httplib, fnmatch, json, os, re, subprocess, threading, urllib
 
 
 def import_path(fullpath):
@@ -241,7 +241,7 @@ class Gen_compressed(threading.Thread):
       params.append(("js_code", "".join(f.readlines())))
       f.close()
 
-    self.do_compile(params, target_filename, filenames, "")
+    self.do_compile(params, target_filename, filenames, [])
 
   def gen_accessible(self):
     target_filename = "blockly_accessible_compressed.js"
@@ -269,7 +269,7 @@ class Gen_compressed(threading.Thread):
       params.append(("js_code", "".join(f.readlines())))
       f.close()
 
-    self.do_compile(params, target_filename, filenames, "")
+    self.do_compile(params, target_filename, filenames, [])
 
   def gen_accessible(self):
     target_filename = "blockly_accessible_compressed.js"
@@ -296,7 +296,7 @@ class Gen_compressed(threading.Thread):
       params.append(("js_code", "".join(f.readlines())))
       f.close()
 
-    self.do_compile(params, target_filename, filenames, "")
+    self.do_compile(params, target_filename, filenames, [])
 
   def gen_blocks(self):
     target_filename = "blocks_compressed.js"
@@ -313,15 +313,18 @@ class Gen_compressed(threading.Thread):
     # Read in all the source files.
     # Add Blockly.Blocks to be compatible with the compiler.
     params.append(("js_code", "goog.provide('Blockly');goog.provide('Blockly.Blocks');"))
-    filenames = glob.glob(os.path.join("blocks", "*.js"))
-    filenames.sort()  # Deterministic build.
+    params.append(("js_code", "goog.provide('Blockly.Types');"))
+    filenames = []
+    for root, folders, files in os.walk("blocks"):
+        for filename in fnmatch.filter(files, "*.js"):
+            filenames.append(os.path.join(root, filename))
     for filename in filenames:
       f = open(filename)
       params.append(("js_code", "".join(f.readlines())))
       f.close()
 
     # Remove Blockly.Blocks to be compatible with Blockly.
-    remove = "var Blockly={Blocks:{}};"
+    remove = ["var Blockly={Blocks:{}};", "Blockly.Types={};"]
     self.do_compile(params, target_filename, filenames, remove)
 
   def gen_generator(self, language):
@@ -409,7 +412,7 @@ class Gen_compressed(threading.Thread):
       if not json_data.has_key("compiledCode"):
         print("FATAL ERROR: Compiler did not return compiledCode.")
         sys.exit(1)
-
+      print(json_data);
       code = HEADER + "\n" + json_data["compiledCode"]
       for code_statement in remove:
         code = code.replace(code_statement, "")

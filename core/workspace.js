@@ -238,13 +238,17 @@ Blockly.Workspace.prototype.updateVariableStore = function(clear) {
 
 /**
  * Rename a variable by updating its name in the variable map. Identify the
- * variable to rename with the given variable.
- * @param {?Blockly.VariableModel} variable Variable to rename.
+ * variable to rename with the given ID.
+ * @param {string} id ID of the variable to rename.
  * @param {string} newName New variable name.
  */
-Blockly.Workspace.prototype.renameVariableInternal_ = function(
-    variable, newName) {
-  var type = variable ? variable.type : '';
+Blockly.Workspace.prototype.renameVariableById = function(id, newName) {
+  var variable = this.getVariableById(id);
+  if (!variable) {
+    throw new Error('Tried to rename a variable that didn\'t exist. ID: ' + id);
+  }
+
+  var type = variable.type;
   var newVariable = this.getVariable(newName, type);
 
   // If a variable previously existed with the new name, we will coalesce  the
@@ -264,30 +268,14 @@ Blockly.Workspace.prototype.renameVariableInternal_ = function(
   var blocks = this.getAllBlocks();
   this.variableMap_.renameVariable(variable, newName, type);
 
-
   // Iterate through every block and update name.
   for (var i = 0; i < blocks.length; i++) {
     blocks[i].renameVarById(oldId, newId);
     if (oldCase) {
       blocks[i].renameVarById(newId, newId);
-      //blocks[i].renameVar(oldCase, newName);
     }
   }
   Blockly.Events.setGroup(false);
-};
-
-/**
- * Rename a variable by updating its name in the variable map. Identify the
- * variable to rename with the given ID.
- * @param {string} id ID of the variable to rename.
- * @param {string} newName New variable name.
- */
-Blockly.Workspace.prototype.renameVariableById = function(id, newName) {
-  var variable = this.getVariableById(id);
-  if (!variable) {
-    throw new Error('Tried to rename a variable that didn\'t exist. ID: ' + id);
-  }
-  this.renameVariableInternal_(variable, newName);
 };
 
 /**

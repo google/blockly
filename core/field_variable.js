@@ -168,13 +168,17 @@ Blockly.FieldVariable.prototype.getText = function() {
  */
 Blockly.FieldVariable.prototype.setValue = function(id) {
   var workspace = this.sourceBlock_.workspace;
-  //var variable = this.variableMap_.getVariableById(id);
-  var potentialVariableMap = workspace.isFlyout ?
-      workspace.targetWorkspace.potentialVariableMap_ : null;
   var variable = workspace.getVariableById(id);
-  if (!variable && potentialVariableMap) {
-    variable = potentialVariableMap.getVariableById(id);
+  if (!variable) {
+    if (workspace.isFlyout && workspace.targetWorkspace) {
+      var potentialVariableMap =
+          workspace.targetWorkspace.potentialVariableMap_;
+      if (potentialVariableMap) {
+        variable = potentialVariableMap.getVariableById(id);
+      }
+    }
   }
+
   if (!variable) {
     throw new Error('Variable id doesn\'t point to a real variable!  ID was ' +
         id);

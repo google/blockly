@@ -61,7 +61,8 @@ for arg in sys.argv[1:len(sys.argv)]:
   if (arg != 'core' and
       arg != 'accessible' and
       arg != 'generators' and
-      arg != 'langfiles'):
+      arg != 'langfiles' and
+      arg != 'dev'):
     raise Exception("Invalid argument: \"" + arg + "\". Usage: build.py "
         "<0 or more of accessible, core, generators, langfiles>")
 
@@ -239,7 +240,7 @@ class Gen_compressed(threading.Thread):
         continue
       f = open(filename)
       params.append(("js_code", "".join(f.readlines())))
-      f.close()
+      f.close()	
 
     self.do_compile(params, target_filename, filenames, [])
 
@@ -571,6 +572,11 @@ developers.google.com/blockly/guides/modify/web/closure""")
     args = ['core', 'accessible', 'generators', 'defaultlangfiles', 'langfiles']
   else:
     args = sys.argv
+
+  if('dev' in args):
+    Gen_uncompressed(core_search_paths, 'blockly_uncompressed.js').start()
+    Gen_langfiles('langfiles' in args).start()
+    sys.exit(0)
 
   # Uncompressed and compressed are run in parallel threads.
   # Uncompressed is limited by processor speed.

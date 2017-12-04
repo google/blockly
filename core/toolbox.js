@@ -422,21 +422,23 @@ Blockly.Toolbox.prototype.clearSelection = function() {
 };
 
 /**
- * Adds styles on the toolbox indicating blocks will be deleted.
+ * Adds a style on the toolbox. Usually used to change the cursor.
+ * @param {string} style The name of the class to add.
  * @package
  */
-Blockly.Toolbox.prototype.addDeleteStyle = function() {
+Blockly.Toolbox.prototype.addStyle = function(style) {
   Blockly.utils.addClass(/** @type {!Element} */ (this.HtmlDiv),
-                         'blocklyToolboxDelete');
+                         style);
 };
 
 /**
- * Remove styles from the toolbox that indicate blocks will be deleted.
+ * Removes a style from the toolbox. Usually used to change the cursor.
+ * @param {string} style The name of the class to remove.
  * @package
  */
-Blockly.Toolbox.prototype.removeDeleteStyle = function() {
+Blockly.Toolbox.prototype.removeStyle = function(style) {
   Blockly.utils.removeClass(/** @type {!Element} */ (this.HtmlDiv),
-                            'blocklyToolboxDelete');
+                            style);
 };
 
 /**

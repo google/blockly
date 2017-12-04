@@ -253,6 +253,12 @@ Blockly.Css.CONTENT = [
     'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
   '}',
 
+  '.blocklyToolboxGrab {',
+    'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
+    'cursor: grabbing;',
+    'cursor: -webkit-grabbing;',
+  '}',
+
   '.blocklyDragging>.blocklyPath,',
   '.blocklyDragging>.blocklyPathLight {',
     'fill-opacity: .8;',

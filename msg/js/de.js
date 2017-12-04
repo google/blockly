@@ -452,7 +452,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.OXOCARD_IS_ORIENTATION_UP_FIELD = "Auf";
 /** @export */ Blockly.Msg.OXOCARD_IS_ORIENTATION_VERTICALLY_FIELD = "Vertikal";
 /** @export */ Blockly.Msg.OXOCARD_MATRIX_DRAW_IMAGE_TIP = "Turn on specific pixels.";  // untranslated
-/** @export */ Blockly.Msg.OXOCARD_MATRIX_DRAW_IMAGE_TITLE = "Draw image";  // untranslated
+/** @export */ Blockly.Msg.OXOCARD_MATRIX_DRAW_IMAGE_TITLE = "Monochronic image";  // untranslated
 /** @export */ Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_TIP = "The following draw-blocks will draw this color.";  // untranslated
 /** @export */ Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_TITLE = "Foreground";  // untranslated
 /** @export */ Blockly.Msg.OXOCARD_MATRIX_UPDATE_TIP = "Draws current image.";  // untranslated

@@ -290,8 +290,8 @@ Blockly.Css.CONTENT = [
 
   '.blocklyNonEditableText>rect,',
   '.blocklyEditableText>rect {',
-    'fill: #fff;',
-    'fill-opacity: .6;',
+    'fill: #514f50;',
+	'fill-opacity: 1;',
   '}',
 
   '.blocklyNonEditableText>text,',

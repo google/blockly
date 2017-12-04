@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-12-02 15:08:48.675566",
+		"lastupdated": "2017-12-03 14:06:10.316629",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -527,7 +527,7 @@
 	"OXOCARD_PRINT_TIP": "Prints the given number or string to the console",
 	"OXOCARD_PRINTLN_TITLE": "Println",
 	"OXOCARD_PRINTLN_TIP": "Prints the given number or string to the console (with new line)",
-	"OXOCARD_MATRIX_DRAW_IMAGE_TITLE": "Draw image",
+	"OXOCARD_MATRIX_DRAW_IMAGE_TITLE": "Monochronic image",
 	"OXOCARD_MATRIX_DRAW_IMAGE_TIP": "Turn on specific pixels.",
 	"OXOCARD_MATRIX_UPDATE_TITLE": "Update matrix",
 	"OXOCARD_MATRIX_UPDATE_TIP": "Draws current image.",

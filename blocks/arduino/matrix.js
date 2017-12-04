@@ -17,10 +17,11 @@ Blockly.Blocks.oxocard_matrix_draw_image = {
 				input.appendField(new Blockly.FieldLed('FALSE'), i + '' + j);
 			}
 		}
+		this.appendDummyInput();
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_DRAW_IMAGE_TIP);
-		this.setColour(100);
+		this.setColour('#000000');
 	}
 };
 
@@ -30,10 +31,11 @@ Blockly.Blocks.oxocard_matrix_set_color = {
 		this.appendDummyInput()
 		.appendField(Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_TITLE)
 		.appendField(new Blockly.FieldColour(), 'COLOR');
+		this.appendDummyInput();
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_TIP);
-		this.setColour(100);
+		this.setColour('#000000');
 	}
 };
 
@@ -45,6 +47,6 @@ Blockly.Blocks.oxocard_matrix_update = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_UPDATE_TIP);
-		this.setColour(100);
+		this.setColour('#000000');
 	}
 };

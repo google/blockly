@@ -47,7 +47,7 @@ Blockly.BlockSvg.SEP_SPACE_Y = 10;
  * Vertical padding around inline elements.
  * @const
  */
-Blockly.BlockSvg.INLINE_PADDING_Y = 5;
+Blockly.BlockSvg.INLINE_PADDING_Y = 10;
 /**
  * Minimum height of a block.
  * @const
@@ -72,7 +72,7 @@ Blockly.BlockSvg.NOTCH_WIDTH = 30;
  * Rounded corner radius.
  * @const
  */
-Blockly.BlockSvg.CORNER_RADIUS = 8;
+Blockly.BlockSvg.CORNER_RADIUS = 1;
 /**
  * Do blocks with no previous or output connections have a 'hat' on top?
  * @const
@@ -120,18 +120,18 @@ Blockly.BlockSvg.DISTANCE_45_OUTSIDE = (1 - Math.SQRT1_2) *
  * SVG path for drawing next/previous notch from left to right.
  * @const
  */
-Blockly.BlockSvg.NOTCH_PATH_LEFT = 'l 6,4 3,0 6,-4';
+Blockly.BlockSvg.NOTCH_PATH_LEFT = 'l 7,7 7,-7';
 /**
  * SVG path for drawing next/previous notch from left to right with
  * highlighting.
  * @const
  */
-Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT = 'l 6,4 3,0 6,-4';
+Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT = 'l 7,7 7,-7';
 /**
  * SVG path for drawing next/previous notch from right to left.
  * @const
  */
-Blockly.BlockSvg.NOTCH_PATH_RIGHT = 'l -6,4 -3,0 -6,-4';
+Blockly.BlockSvg.NOTCH_PATH_RIGHT = 'l -7,7 -7,-7';
 /**
  * SVG path for drawing jagged teeth at the end of collapsed blocks.
  * @const

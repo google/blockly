@@ -1350,7 +1350,7 @@ Blockly.Msg.OXOCARD_PRINTLN_TIP = 'Prints the given number or string to the cons
 
 
 // Matrix
-Blockly.Msg.OXOCARD_MATRIX_DRAW_IMAGE_TITLE ='Draw image';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_IMAGE_TITLE ='Monochronic image';
 Blockly.Msg.OXOCARD_MATRIX_DRAW_IMAGE_TIP = 'Turn on specific pixels.';
 
 Blockly.Msg.OXOCARD_MATRIX_UPDATE_TITLE = 'Update matrix';

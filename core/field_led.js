@@ -8,18 +8,16 @@ Blockly.FieldLed = function(state, opt_validator) {
   Blockly.FieldLed.superClass_.constructor.call(this, '', opt_validator);
   // Set the initial state.
   this.setValue(state);
+
 };
 goog.inherits(Blockly.FieldLed, Blockly.Field);
 
-/**
- * Character for the checkmark.
- */
-Blockly.FieldLed.CHECK_CHAR = 'x';
+
 
 /**
  * Mouse cursor style when over the hotspot that initiates editability.
  */
-Blockly.FieldLed.prototype.CURSOR = 'default';
+Blockly.FieldLed.prototype.CURSOR = 'pointer';
 
 /**
  * Install this checkbox on a block.
@@ -34,17 +32,14 @@ Blockly.FieldLed.prototype.init = function() {
 
 
   Blockly.FieldLed.superClass_.init.call(this);
-  // The checkbox doesn't use the inherited text element.
-  // Instead it uses a custom checkmark element that is either visible or not.
-  //this.checkElement_ = Blockly.createSvgElement('text',{'class': 'blocklyText blocklyLed', 'x': -3, 'y': 14}, this.fieldGroup_);
-  var textNode = document.createTextNode("x");
+
 
     this.checkElement_ = Blockly.utils.createSvgElement('rect',
         {'height': 16,
-         'width': '14px',
-         'rx':4,
-         'ry':4,
-         'style': 'fill: red',
+         'width': 16,
+         'rx':0,
+         'ry':0,
+         'style': 'fill: #fff',
          'fill-opacity': 1,
          'x':-5
 }, this.fieldGroup_);

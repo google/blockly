@@ -89,3 +89,22 @@ function checkVariableValues(container, name, type, id) {
   assertEquals(type, variable.type);
   assertEquals(id, variable.getId());
 }
+
+/**
+ * Create a test get_var_block.
+ * Will fail if get_var_block isn't defined.
+ * TODO (fenichel): Rename to createMockVarBlock.
+ * @param {!string} variable_id The id of the variable to reference.
+ * @return {!Blockly.Block} The created block.
+ */
+function createMockBlock(variable_id) {
+  if (!Blockly.Blocks['get_var_block']) {
+    fail();
+  }
+  // Turn off events to avoid testing XML at the same time.
+  Blockly.Events.disable();
+  var block = new Blockly.Block(workspace, 'get_var_block');
+  block.inputList[0].fieldRow[0].setValue(variable_id);
+  Blockly.Events.enable();
+  return block;
+}

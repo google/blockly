@@ -266,7 +266,6 @@ Blockly.Workspace.prototype.renameVariableById = function(id, newName) {
 
   Blockly.Events.setGroup(true);
   var blocks = this.getAllBlocks();
-  this.variableMap_.renameVariable(variable, newName, type);
 
   // Iterate through every block and update name.
   for (var i = 0; i < blocks.length; i++) {
@@ -275,6 +274,8 @@ Blockly.Workspace.prototype.renameVariableById = function(id, newName) {
       blocks[i].renameVarById(newId, newId);
     }
   }
+
+  this.variableMap_.renameVariable(variable, newName, type);
   Blockly.Events.setGroup(false);
 };
 

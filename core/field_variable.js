@@ -167,6 +167,8 @@ Blockly.FieldVariable.prototype.getText = function() {
  *     variable.
  */
 Blockly.FieldVariable.prototype.setValue = function(id) {
+  // TODO: Handle undo a change to go back to the default value.
+  // TODO: Handle null ID, which means "use default".
   var workspace = this.sourceBlock_.workspace;
   var variable = workspace.getVariableById(id);
   if (!variable) {
@@ -188,6 +190,11 @@ Blockly.FieldVariable.prototype.setValue = function(id) {
   if (!this.typeIsAllowed_(type)) {
     throw new Error('Variable type doesn\'t match this field!  Type was ' +
         type);
+  }
+  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+    var oldValue = this.variable_ ? this.variable_.getId() : null;
+    Blockly.Events.fire(new Blockly.Events.BlockChange(
+        this.sourceBlock_, 'field', this.name, oldValue, variable.getId()));
   }
   this.variable_ = variable;
   this.setText(variable.name);

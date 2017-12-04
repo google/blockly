@@ -50,3 +50,21 @@ Blockly.Blocks['math_decrement'] = {
 	  return Blockly.Types.NUMBER;
 	}
   };
+
+  Blockly.Blocks['math_set_var_with'] = {
+  	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+  	init: function() {
+		this.appendDummyInput()
+			.appendField("Setze")
+			.appendField(new Blockly.FieldVariable(
+	        Blockly.Msg.VARIABLES_DEFAULT_NAME), 'VAR');
+		this.appendDummyInput()
+			.appendField("mit")
+  			.appendField(new Blockly.FieldMathInput('1*(1+2)'), 'TEXT')
+		this.setInputsInline(true);
+  		this.setPreviousStatement(true, null);
+  		this.setNextStatement(true, null);
+  		this.setTooltip("Tooltip");
+  		this.setColour('#000000');
+  	}
+  };

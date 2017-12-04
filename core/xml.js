@@ -87,7 +87,6 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
 };
 
 Blockly.Xml.fieldToDomVariable_ = function(field, workspace) {
-  // Ugh that's not true at all.
   var id = field.getValue();
   var variable = workspace.getVariableById(id);
   if (!variable) {
@@ -420,7 +419,6 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     }
     Blockly.Field.stopCache();
   }
-  workspace.updateVariableStore(false);
   // Re-enable workspace resizing.
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(true);

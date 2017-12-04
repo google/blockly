@@ -338,12 +338,4 @@ Blockly.Variables.generateVariableFieldXml_ = function(variableModel) {
     '" variabletype="' + typeString +
     '">' + variableModel.name + '</field>';
   return text;
-  // var element = goog.dom.createDom('field');
-  // element.setAttribute('name', 'VAR');
-  // element.setAttribute('variabletype', variableModel.type);
-  // element.setAttribute('id', variableModel.getId());
-  // element.textContent = variableModel.name;
-
-  // var xmlString = Blockly.Xml.domToText(element);
-  // return xmlString;
 };

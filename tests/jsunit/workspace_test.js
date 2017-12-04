@@ -24,40 +24,27 @@ goog.require('goog.testing.MockControl');
 
 var workspace;
 var mockControl_;
-Blockly.defineBlocksWithJsonArray([{
-  "type": "get_var_block",
-  "message0": "%1",
-  "args0": [
-    {
-      "type": "field_variable",
-      "name": "VAR",
-      "variableTypes": ["", "type1", "type2"]
-    }
-  ]
-}]);
 
 function workspaceTest_setUp() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "get_var_block",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_variable",
+        "name": "VAR",
+        "variableTypes": ["", "type1", "type2"]
+      }
+    ]
+  }]);
   workspace = new Blockly.Workspace();
   mockControl_ = new goog.testing.MockControl();
 }
 
 function workspaceTest_tearDown() {
+  delete Blockly.Blocks['get_var_block'];
   mockControl_.$tearDown();
   workspace.dispose();
-}
-
-/**
- * Create a test get_var_block.
- * @param {?string} variable_name The string to put into the variable field.
- * @return {!Blockly.Block} The created block.
- */
-function createMockBlock(variable_id) {
-  // Turn off events to avoid testing XML at the same time.
-  Blockly.Events.disable();
-  var block = new Blockly.Block(workspace, 'get_var_block');
-  block.inputList[0].fieldRow[0].setValue(variable_id);
-  Blockly.Events.enable();
-  return block;
 }
 
 function test_emptyWorkspace() {

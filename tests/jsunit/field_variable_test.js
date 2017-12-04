@@ -68,8 +68,9 @@ function test_fieldVariable_setValueMatchId() {
 
   var fieldVariable = fieldVariable_createAndInitField(workspace);
 
+  var oldId = fieldVariable.getValue();
   var event = new Blockly.Events.BlockChange(
-        fieldVariable.sourceBlock_, 'field', undefined, 'name1', 'id2');
+        fieldVariable.sourceBlock_, 'field', undefined, oldId, 'id2');
   setUpMockMethod(mockControl_, Blockly.Events, 'fire', [event], null);
 
   fieldVariable.setValue('id2');
@@ -86,10 +87,6 @@ function test_fieldVariable_setValueNoVariable() {
   mockBlock.isShadow = function() {
     return false;
   };
-
-  var event = new Blockly.Events.BlockChange(
-        mockBlock, 'field', undefined, 'name1', 'id1');
-  setUpMockMethod(mockControl_, Blockly.Events, 'fire', [event], null);
 
   try {
     fieldVariable.setValue('id1');

@@ -63,6 +63,7 @@ Blockly.FieldVariable.getOrCreateVariable = function(workspace, text, type,
     id) {
   var potentialVariableMap = workspace.isFlyout ?
       workspace.targetWorkspace.potentialVariableMap_ : null;
+
   if (id) {
     var variable = workspace.getVariableById(id);
     if (!variable && potentialVariableMap) {
@@ -76,6 +77,12 @@ Blockly.FieldVariable.getOrCreateVariable = function(workspace, text, type,
   }
   // Didn't find the variable.
   if (!variable) {
+    if (!text) {
+      var ws = workspace.isFlyout ? workspace.targetWorkspace : workspace;
+      // Variables without names get uniquely named for this workspace.
+      text = Blockly.Variables.generateUniqueName(ws);
+    }
+
     if (potentialVariableMap) {
       variable = potentialVariableMap.createVariable(text, type, id);
     } else {
@@ -126,7 +133,7 @@ Blockly.FieldVariable.prototype.initModel = function() {
   }
   this.workspace_ = this.sourceBlock_.workspace;
   var variable = Blockly.FieldVariable.getOrCreateVariable(
-      this.workspace_, this.defaultVariableName, this.defaultType_, null);
+      this.workspace_, name, this.defaultType_, null);
   this.setValue(variable.getId());
 };
 

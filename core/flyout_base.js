@@ -415,6 +415,7 @@ Blockly.Flyout.prototype.hide = function() {
     this.workspace_.removeChangeListener(this.reflowWrapper_);
     this.reflowWrapper_ = null;
   }
+
   // Do NOT delete the blocks here.  Wait until Flyout.show.
   // https://neil.fraser.name/news/2014/08/09/
 };
@@ -542,6 +543,9 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
     button.dispose();
   }
   this.buttons_.length = 0;
+
+  // Clear potential variables from the previous showing.
+  this.targetWorkspace_.potentialVariableMap_.clear();
 };
 
 /**

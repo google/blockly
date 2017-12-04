@@ -133,7 +133,7 @@ Blockly.FieldVariable.prototype.initModel = function() {
   }
   this.workspace_ = this.sourceBlock_.workspace;
   var variable = Blockly.FieldVariable.getOrCreateVariable(
-      this.workspace_, name, this.defaultType_, null);
+      this.workspace_, this.defaultVariableName, this.defaultType_, null);
   this.setValue(variable.getId());
 };
 

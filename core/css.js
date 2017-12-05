@@ -296,7 +296,7 @@ Blockly.Css.CONTENT = [
 
   '.blocklyNonEditableText>text,',
   '.blocklyEditableText>text {',
-    'fill: #000;',
+    'fill: #fff;',
   '}',
 
   '.blocklyEditableText:hover>rect {',

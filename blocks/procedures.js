@@ -266,6 +266,10 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    */
   getVarModels: function() {
     var vars = [];
+    // Not fully initialized.
+    if (!this.arguments_) {
+      return vars;
+    }
     for (var i = 0, argName; argName = this.arguments_[i]; i++) {
       // TODO (#1199): When we switch to tracking variables by ID,
       // update this.

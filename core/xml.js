@@ -730,8 +730,8 @@ Blockly.Xml.domToFieldVariable_ = function(workspace, xml, text, field) {
   // TODO: Consider using a different name (var_id?) because this is the
   // node's ID.
   var id = xml.id;
-  var variable = Blockly.FieldVariable.getOrCreateVariable(workspace, text,
-      type, id);
+  var variable =
+      Blockly.Variables.getOrCreateVariable(workspace, id, text, type);
 
   // This should never happen :)
   if (type != null && type !== variable.type) {

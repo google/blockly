@@ -60,7 +60,7 @@ Blockly.Blocks['math_decrement'] = {
 	        Blockly.Msg.VARIABLES_DEFAULT_NAME), 'VAR');
 		this.appendDummyInput()
 			.appendField("mit")
-  			.appendField(new Blockly.FieldMathInput('1*(1+2)'), 'TEXT')
+  			.appendField(new Blockly.FieldMathInput('1*(1+2)'), 'EXPRESSION')
 		this.setInputsInline(true);
   		this.setPreviousStatement(true, null);
   		this.setNextStatement(true, null);

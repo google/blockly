@@ -359,3 +359,12 @@ Blockly.Arduino['math_random_int'] = function(block) {
 Blockly.Arduino['math_random_float'] = function(block) {
   return ['(rand() / RAND_MAX)', Blockly.Arduino.ORDER_UNARY_POSTFIX];
 };
+
+
+Blockly.Arduino['math_set_var_with'] = function(block) {
+  var code = '';
+  var varName = Blockly.Arduino.variableDB_.getName(
+	  block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+  var expression= this.getFieldValue('EXPRESSION');
+  return code += varName+' = ' +expression +';\n';
+};

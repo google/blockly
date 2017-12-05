@@ -58,7 +58,7 @@ Blockly.FieldMathInput.prototype.spellcheck_ = false;
 Blockly.FieldMathInput.prototype.mathValidator = function(newText) {
 	// console.log("vali");
 	newText = String(newText);
-	var pattern = new RegExp("[^a-zA-Z0-9-+*/()%^ ]", "g")
+	var pattern = new RegExp("[^a-zA-Z0-9-+*/()%^ ]", "g");
 
 	var openBrackets = 0;
 	var closingBrackets = 0;
@@ -69,8 +69,11 @@ Blockly.FieldMathInput.prototype.mathValidator = function(newText) {
 			if(newText.charAt(i) == ')')
 				closingBrackets++;
 		}
-		// if(closingBrackets != openBrackets)
-		//TODO change text color to red
+		if(closingBrackets != openBrackets)
+			newText = null;
+		//TODO change text color
+	} else {
+		newText = null;
 	}
 
 	return newText;

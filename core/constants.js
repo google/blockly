@@ -247,7 +247,7 @@ Blockly.VARIABLE_CATEGORY_NAME = 'VARIABLE';
  * variable blocks.
  * @const {string}
  */
-Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME = 'VARIABLES_DYNAMIC';
+Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME = 'VARIABLE_DYNAMIC';
 
 /**
  * String for use in the "custom" attribute of a category in toolbox xml.

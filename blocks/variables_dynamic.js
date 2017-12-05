@@ -2,7 +2,7 @@
  * @license
  * Visual Blocks Editor
  *
- * Copyright 2012 Google Inc.
+ * Copyright 2017 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,48 +45,48 @@ Blockly.Constants.VariablesDynamic.HUE = 310;
 Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
   // Block for variable getter.
   {
-    "type": "variables_get_dynamic",
-    "message0": "%1",
-    "args0": [{
-      "type": "field_variable",
-      "name": "VAR",
-      "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
+    'type': 'variables_get_dynamic',
+    'message0': '%1',
+    'args0': [{
+      'type': 'field_variable',
+      'name': 'VAR',
+      'variable': '%{BKY_VARIABLES_DEFAULT_NAME}'
     }],
-    "output": null,
-    "colour": "%{BKY_VARIABLES_DYNAMIC_HUE}",
-    "helpUrl": "%{BKY_VARIABLES_GET_HELPURL}",
-    "tooltip": "%{BKY_VARIABLES_GET_TOOLTIP}",
-    "extensions": ["contextMenu_variableDynamicSetterGetter"],
-    "mutator":'contextMenu_variableDynamicMutation'
+    'output': null,
+    'colour': '%{BKY_VARIABLES_DYNAMIC_HUE}',
+    'helpUrl': '%{BKY_VARIABLES_GET_HELPURL}',
+    'tooltip': '%{BKY_VARIABLES_GET_TOOLTIP}',
+    'extensions': ['contextMenu_variableDynamicSetterGetter'],
+    'mutator':'contextMenu_variableDynamicMutation'
   },
   // Block for variable setter.
   {
-    "type": "variables_set_dynamic",
-    "message0": "%{BKY_VARIABLES_SET}",
-    "args0": [{
-      "type": "field_variable",
-      "name": "VAR",
-      "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
+    'type': 'variables_set_dynamic',
+    'message0': '%{BKY_VARIABLES_SET}',
+    'args0': [{
+      'type': 'field_variable',
+      'name': 'VAR',
+      'variable': '%{BKY_VARIABLES_DEFAULT_NAME}'
     },
     {
-      "type": "input_value",
-      "name": "VALUE"
+      'type': 'input_value',
+      'name': 'VALUE'
     }
     ],
-    "previousStatement": null,
-    "nextStatement": null,
-    "colour": "%{BKY_VARIABLES_DYNAMIC_HUE}",
-    "tooltip": "%{BKY_VARIABLES_SET_TOOLTIP}",
-    "helpUrl": "%{BKY_VARIABLES_SET_HELPURL}",
-    "extensions": ["contextMenu_variableDynamicSetterGetter"],
-    "mutator":'contextMenu_variableDynamicMutation'
+    'previousStatement': null,
+    'nextStatement': null,
+    'colour': '%{BKY_VARIABLES_DYNAMIC_HUE}',
+    'tooltip': '%{BKY_VARIABLES_SET_TOOLTIP}',
+    'helpUrl': '%{BKY_VARIABLES_SET_HELPURL}',
+    'extensions': ['contextMenu_variableDynamicSetterGetter'],
+    'mutator':'contextMenu_variableDynamicMutation'
   }
 ]); // END JSON EXTRACT (Do not delete this comment.)
 
 /**
  * Mixin to add context menu items to create getter/setter blocks for this
  * setter/getter.
- * Used by blocks 'variables_set' and 'variables_get'.
+ * Used by blocks 'variables_set_dynamic' and 'variables_get_dynamic'.
  * @mixin
  * @augments Blockly.Block
  * @package
@@ -128,11 +128,11 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
   onchange: function() {
     var name = this.getFieldValue('VAR');
     var variableModel = this.workspace.getVariable(name);
-    this.getField("VAR").variableTypes = [variableModel.type];
+    this.getField('VAR').variableTypes = [variableModel.type];
     if (this.type == 'variables_get_dynamic') {
       this.outputConnection.setCheck(variableModel.type);
     } else {
-      this.getInput("VALUE").connection.setCheck(variableModel.type);
+      this.getInput('VALUE').connection.setCheck(variableModel.type);
     }
   }
 };
@@ -150,7 +150,7 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_MUTATION = {
     if (this.type == 'variables_get_dynamic') {
       this.outputConnection.setCheck(variableModel.type);
     } else {
-      this.getInput("VALUE").connection.setCheck(variableModel.type);
+      this.getInput('VALUE').connection.setCheck(variableModel.type);
     }
     return container;
   },

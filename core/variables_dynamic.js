@@ -2,7 +2,7 @@
  * @license
  * Visual Blocks Editor
  *
- * Copyright 2012 Google Inc.
+ * Copyright 2017 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,9 +58,9 @@ Blockly.VariablesDynamic.onCreateVariableButtonClick = function(button) {
       Blockly.Variables.createVariable(button.getTargetWorkspace(), null, type);
     }
   });
-  // workspace.createVariable("abc", "string");
-  // workspace.createVariable("123", "number");
-  // workspace.createVariable("abcd", "string");
+  // workspace.createVariable('abc', 'string');
+  // workspace.createVariable('123', 'number');
+  // workspace.createVariable('abcd', 'string');
 };
 /**
  * Construct the elements (blocks and button) required by the flyout for the
@@ -96,11 +96,11 @@ Blockly.VariablesDynamic.flyoutCategoryBlocks = function(workspace) {
   if (variableModelList.length > 0) {
 
     var varTypes = workspace.getVariableTypes();
-    for (var i in varTypes) {
-      var varType = varTypes[i];
-      var variableModelListOfType = workspace.getVariablesOfType(varType);
-      var firstVariable = variableModelListOfType[0];
-      if (Blockly.Blocks['variables_set_dynamic']) {
+    if (Blockly.Blocks['variables_set_dynamic']) {
+      for (var i in varTypes) {
+        var varType = varTypes[i];
+        var variableModelListOfType = workspace.getVariablesOfType(varType);
+        var firstVariable = variableModelListOfType[0];
         var gap = i == varTypes.length - 1 ? 24 : 8;
         var blockText = '<xml>' +
                     '<block type="variables_set_dynamic" gap="' + gap + '">' +
@@ -111,8 +111,8 @@ Blockly.VariablesDynamic.flyoutCategoryBlocks = function(workspace) {
         xmlList.push(block);
       }
     }
-    for (var i = 0, variable; variable = variableModelList[i]; i++) {
-      if (Blockly.Blocks['variables_get_dynamic']) {
+    if (Blockly.Blocks['variables_get_dynamic']) {
+      for (var i = 0, variable; variable = variableModelList[i]; i++) {
         var blockText = '<xml>' +
                     '<block type="variables_get_dynamic" gap="8">' +
                     Blockly.Variables.generateVariableFieldXml_(variable) +

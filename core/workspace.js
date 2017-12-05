@@ -286,7 +286,7 @@ Blockly.Workspace.prototype.renameVariableById = function(id, newName) {
     }
   }
 
-  this.variableMap_.renameVariable(variable, newName, type);
+  this.variableMap_.renameVariable(variable, newName);
   Blockly.Events.setGroup(false);
 };
 
@@ -362,49 +362,6 @@ Blockly.Workspace.prototype.getVariableUsesById = function(id) {
 };
 
 /**
- * Delete a variable by the passed in name and all of its uses from this
- * workspace. May prompt the user for confirmation.
- * TODO (#1199): Possibly delete this function.
- * @param {string} name Name of variable to delete.
- * @param {string=} opt_type The type of the variable.  If not provided it
- *     defaults to the empty string, which is a specific type.
- */
-Blockly.Workspace.prototype.deleteVariable = function(name, opt_type) {
-  var type = opt_type || '';
-  // Check whether this variable is a function parameter before deleting.
-  var uses = this.getVariableUses(name, type);
-  for (var i = 0, block; block = uses[i]; i++) {
-    if (block.type == 'procedures_defnoreturn' ||
-      block.type == 'procedures_defreturn') {
-      var procedureName = block.getFieldValue('NAME');
-      Blockly.alert(
-          Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE.
-          replace('%1', name).
-          replace('%2', procedureName));
-      return;
-    }
-  }
-
-  var workspace = this;
-  var variable = workspace.getVariable(name, type);
-  if (uses.length > 1) {
-    // Confirm before deleting multiple blocks.
-    Blockly.confirm(
-        Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1',
-                                                         String(uses.length)).
-        replace('%2', name),
-        function(ok) {
-          if (ok) {
-            workspace.deleteVariableInternal_(variable);
-          }
-        });
-  } else {
-    // No confirmation necessary for a single block.
-    this.deleteVariableInternal_(variable);
-  }
-};
-
-/**
  * Delete a variables by the passed in ID and all of its uses from this
  * workspace. May prompt the user for confirmation.
  * @param {string} id ID of variable to delete.
@@ -412,7 +369,37 @@ Blockly.Workspace.prototype.deleteVariable = function(name, opt_type) {
 Blockly.Workspace.prototype.deleteVariableById = function(id) {
   var variable = this.getVariableById(id);
   if (variable) {
-    this.deleteVariableInternal_(variable);
+    // Check whether this variable is a function parameter before deleting.
+    var variableName = variable.name;
+    var uses = this.getVariableUsesById(id);
+    for (var i = 0, block; block = uses[i]; i++) {
+      if (block.type == 'procedures_defnoreturn' ||
+        block.type == 'procedures_defreturn') {
+        var procedureName = block.getFieldValue('NAME');
+        var deleteText = Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE.
+            replace('%1', variableName).
+            replace('%2', procedureName);
+        Blockly.alert(deleteText);
+        return;
+      }
+    }
+
+    var workspace = this;
+    if (uses.length > 1) {
+      // Confirm before deleting multiple blocks.
+      var confirmText = Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.
+          replace('%1', String(uses.length)).
+          replace('%2', variableName);
+      Blockly.confirm(confirmText,
+          function(ok) {
+            if (ok) {
+              workspace.deleteVariableInternal_(variable, uses);
+            }
+          });
+    } else {
+      // No confirmation necessary for a single block.
+      this.deleteVariableInternal_(variable, uses);
+    }
   } else {
     console.warn("Can't delete non-existent variable: " + id);
   }
@@ -422,10 +409,10 @@ Blockly.Workspace.prototype.deleteVariableById = function(id) {
  * Deletes a variable and all of its uses from this workspace without asking the
  * user for confirmation.
  * @param {!Blockly.VariableModel} variable Variable to delete.
+ * @param {!Array.<!Blockly.Block>} uses An array of uses of the variable.
  * @private
  */
-Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable) {
-  var uses = this.getVariableUsesById(variable.getId());
+Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable, uses) {
   Blockly.Events.setGroup(true);
   for (var i = 0; i < uses.length; i++) {
     uses[i].dispose(true, false);

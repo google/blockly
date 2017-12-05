@@ -155,7 +155,9 @@ function test_deleteVariable_InternalTrivial() {
   createMockBlock('id1');
   createMockBlock('id2');
 
-  workspace.deleteVariableInternal_(var_1);
+  var uses = workspace.getVariableUsesById(var_1.getId());
+  workspace.deleteVariableInternal_(var_1, uses);
+
   var variable = workspace.getVariableById('id1');
   var block_var_name = workspace.topBlocks_[0].getVarModels()[0].name;
   assertNull(variable);

@@ -64,7 +64,6 @@ Blockly.Variables.allUsedVariables = function(root) {
   var variableHash = Object.create(null);
   // Iterate through every block and add each variable to the hash.
   for (var x = 0; x < blocks.length; x++) {
-    // TODO (#1199) Switch to IDs.
     var blockVariables = blocks[x].getVarModels();
     if (blockVariables) {
       for (var y = 0; y < blockVariables.length; y++) {
@@ -275,24 +274,25 @@ Blockly.Variables.createVariable = function(workspace, opt_callback, opt_type) {
  *     aborted (cancel button), or undefined if an existing variable was chosen.
  */
 Blockly.Variables.renameVariable = function(workspace, variable,
-  opt_callback) {
+    opt_callback) {
   // This function needs to be named so it can be called recursively.
   var promptAndCheckWithAlert = function(defaultName) {
-    Blockly.Variables.promptName(
-      Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', variable.name), defaultName,
-      function(newName) {
-        if (newName) {
-          workspace.renameVariableById(variable.getId(), newName);
-          if (opt_callback) {
-            opt_callback(newName);
+    var promptText =
+        Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', variable.name);
+    Blockly.Variables.promptName(promptText, defaultName,
+        function(newName) {
+          if (newName) {
+            workspace.renameVariableById(variable.getId(), newName);
+            if (opt_callback) {
+              opt_callback(newName);
+            }
+          } else {
+            // User canceled prompt without a value.
+            if (opt_callback) {
+              opt_callback(null);
+            }
           }
-        } else {
-          // User canceled prompt without a value.
-          if (opt_callback) {
-            opt_callback(null);
-          }
-        }
-      });
+        });
   };
   promptAndCheckWithAlert('');
 };

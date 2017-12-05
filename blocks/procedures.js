@@ -467,12 +467,13 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     if (source && source.workspace && source.workspace.options &&
         source.workspace.options.parentWorkspace) {
       var workspace = source.workspace.options.parentWorkspace;
-      var variable = workspace.getVariable(newText);
+      var variableType = '';
+      var variable = workspace.getVariable(newText, variableType);
       // If there is a case change, rename the variable.
       if (variable && variable.name !== newText) {
         workspace.renameVariableById(variable.getId(), newText);
       } else {
-        workspace.createVariable(newText);
+        workspace.createVariable(newText, variableType);
       }
     }
   }

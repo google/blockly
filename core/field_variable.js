@@ -125,7 +125,6 @@ Blockly.FieldVariable.prototype.getValue = function() {
  * @return {string} Current text.
  */
 Blockly.FieldVariable.prototype.getText = function() {
-  //return this.getText();
   return this.variable_ ? this.variable_.name : '';
 };
 

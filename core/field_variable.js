@@ -47,11 +47,11 @@ goog.require('goog.string');
  * @constructor
  */
 Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes) {
-  // Don't call the FieldDropdown constructor.  It'll try too hard.
+  // The FieldDropdown constructor would call setValue, which might create a
+  // spurious variable.  Just do the relevant parts of the constructor.
   this.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;
   this.size_ = new goog.math.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
   this.setValidator(opt_validator);
-  //this.setValue(varname || '');
   // TODO: Add opt_default_type to match default value.  If not set, ''.
   this.defaultVariableName = (varname || '');
   this.defaultType_ = '';
@@ -59,42 +59,11 @@ Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes) {
 };
 goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
 
-Blockly.FieldVariable.getOrCreateVariable = function(workspace, text, type,
-    id) {
-  var potentialVariableMap = workspace.isFlyout ?
-      workspace.targetWorkspace.potentialVariableMap_ : null;
-
-  if (id) {
-    var variable = workspace.getVariableById(id);
-    if (!variable && potentialVariableMap) {
-      variable = potentialVariableMap.getVariableById(id);
-    }
-  } else {
-    var variable = workspace.getVariable(text, type);
-    if (!variable && potentialVariableMap) {
-      variable = potentialVariableMap.getVariable(text, type);
-    }
-  }
-  // Didn't find the variable.
-  if (!variable) {
-    if (!text) {
-      var ws = workspace.isFlyout ? workspace.targetWorkspace : workspace;
-      // Variables without names get uniquely named for this workspace.
-      text = Blockly.Variables.generateUniqueName(ws);
-    }
-
-    if (potentialVariableMap) {
-      variable = potentialVariableMap.createVariable(text, type, id);
-    } else {
-      variable = workspace.createVariable(text, type, id);
-    }
-  }
-
-  return variable;
-};
 
 /**
- * Install this dropdown on a block.
+ * Initialize everything needed to render this field.  This includes making sure
+ * that the field's value is valid.
+ * @public
  */
 Blockly.FieldVariable.prototype.init = function() {
   if (this.fieldGroup_) {
@@ -107,36 +76,26 @@ Blockly.FieldVariable.prototype.init = function() {
   this.initModel();
 };
 
+/**
+ * Initialize the model for this field if it has not already been initialized.
+ * If the value has not been set to a variable by the first render, we make up a
+ * variable rather than let the value be invalid.
+ * @package
+ */
 Blockly.FieldVariable.prototype.initModel = function() {
-  // this.workspace_ = this.sourceBlock_.isInFlyout ?
-  //     this.sourceBlock_.workspace.targetWorkspace :
-  //     this.sourceBlock_.workspace;
-  // // TODO: Describe how the potential variable map is different from the variable
-  // // map; use getters.
-  // this.variableMap_ = this.sourceBlock_.isInFlyout ?
-  //     this.workspace_.potentialVariableMap_ : this.workspace_.variableMap_;
-  // var name = this.defaultValue;
-  // if (!name) {
-  //   // Variables without names get uniquely named for this workspace.
-  //   name = Blockly.Variables.generateUniqueName(this.workspace_);
-  // }
-  // // If the selected variable doesn't exist yet, create it.
-  // // For instance, some blocks in the toolbox have variable dropdowns filled
-  // // in by default.
-
-  // var variable = this.variableMap_.getVariable(name, this.defaultType_);
-  // if (!variable) {
-  //   variable = this.variableMap_.createVariable(name, this.defaultType_);
-  // }
   if (this.variable_) {
     return; // Initialization already happened.
   }
   this.workspace_ = this.sourceBlock_.workspace;
-  var variable = Blockly.FieldVariable.getOrCreateVariable(
-      this.workspace_, this.defaultVariableName, this.defaultType_, null);
+  var variable = Blockly.Variables.getOrCreateVariable(
+      this.workspace_, null, this.defaultVariableName, this.defaultType_);
   this.setValue(variable.getId());
 };
 
+/**
+ * Dispose of this field.
+ * @public
+ */
 Blockly.FieldVariable.dispose = function() {
   Blockly.FieldVariable.superClass_.dispose.call(this);
   this.workspace_ = null;
@@ -154,15 +113,17 @@ Blockly.FieldVariable.prototype.setSourceBlock = function(block) {
 };
 
 /**
- * Get the variable's name (use a variableDB to convert into a real name).
- * Unline a regular dropdown, variables are literal and have no neutral value.
- * @return {string} Current text.
+ * Get the variable's ID.
+ * @return {string} Current variable's ID.
  */
 Blockly.FieldVariable.prototype.getValue = function() {
-  //return this.getText();
   return this.variable_ ? this.variable_.getId() : '';
 };
 
+/**
+ * Get the text from this field.
+ * @return {string} Current text.
+ */
 Blockly.FieldVariable.prototype.getText = function() {
   //return this.getText();
   return this.variable_ ? this.variable_.name : '';
@@ -177,16 +138,7 @@ Blockly.FieldVariable.prototype.setValue = function(id) {
   // TODO: Handle undo a change to go back to the default value.
   // TODO: Handle null ID, which means "use default".
   var workspace = this.sourceBlock_.workspace;
-  var variable = workspace.getVariableById(id);
-  if (!variable) {
-    if (workspace.isFlyout && workspace.targetWorkspace) {
-      var potentialVariableMap =
-          workspace.targetWorkspace.potentialVariableMap_;
-      if (potentialVariableMap) {
-        variable = potentialVariableMap.getVariableById(id);
-      }
-    }
-  }
+  var variable = Blockly.Variables.getVariable(workspace, id);
 
   if (!variable) {
     throw new Error('Variable id doesn\'t point to a real variable!  ID was ' +
@@ -207,6 +159,12 @@ Blockly.FieldVariable.prototype.setValue = function(id) {
   this.setText(variable.name);
 };
 
+/**
+ * Check whether the given variable type is allowed on this field.
+ * @param {string} type The type to check.
+ * @return {boolean} True if the type is in the list of allowed types.
+ * @private
+ */
 Blockly.FieldVariable.prototype.typeIsAllowed_ = function(type) {
   var typeList = this.getVariableTypes_();
   if (!typeList) {
@@ -300,16 +258,11 @@ Blockly.FieldVariable.dropdownCreate = function() {
  */
 Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
   var id = menuItem.getValue();
-  // TODO(marisaleung): change setValue() to take in an ID as the parameter.
-  // Then remove itemText.
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {
     var workspace = this.sourceBlock_.workspace;
-    var variable = workspace.getVariableById(id);
-    // If the item selected is a variable, set itemText to the variable name.
     if (id == Blockly.RENAME_VARIABLE_ID) {
       // Rename variable.
-      variable = this.variable_;
-      Blockly.Variables.renameVariable(workspace, variable);
+      Blockly.Variables.renameVariable(workspace, this.variable_);
       return;
     } else if (id == Blockly.DELETE_VARIABLE_ID) {
       // Delete variable.

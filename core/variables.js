@@ -65,13 +65,13 @@ Blockly.Variables.allUsedVariables = function(root) {
   // Iterate through every block and add each variable to the hash.
   for (var x = 0; x < blocks.length; x++) {
     // TODO (#1199) Switch to IDs.
-    var blockVariables = blocks[x].getVars();
+    var blockVariables = blocks[x].getVarModels();
     if (blockVariables) {
       for (var y = 0; y < blockVariables.length; y++) {
-        var varName = blockVariables[y];
-        // Variable name may be null if the block is only half-built.
-        if (varName) {
-          variableHash[varName.toLowerCase()] = varName;
+        var variable = blockVariables[y];
+        // Variable ID may be null if the block is only half-built.
+        if (variable.getId()) {
+          variableHash[variable.name.toLowerCase()] = variable.name;
         }
       }
     }
@@ -338,4 +338,107 @@ Blockly.Variables.generateVariableFieldXml_ = function(variableModel) {
     '" variabletype="' + typeString +
     '">' + variableModel.name + '</field>';
   return text;
+};
+
+/**
+ * Helper function to look up or create a variable on the given workspace.
+ * If no variable exists, creates and returns it.
+ * @param {!Blockly.Workspace} workspace The workspace to search for the
+ *     variable.  It may be a flyout workspace or main workspace.
+ * @param {string} id The ID to use to look up or create the variable, or null.
+ * @param {string} name The string to use to look up or create the variable,
+ * @param {string} type The type to use to look up or create the variable.
+ * @return {!Blockly.VariableModel} The variable corresponding to the given ID
+ *     or name + type combination.
+ * @package
+ */
+Blockly.Variables.getOrCreateVariable = function(workspace, id, name, type) {
+  var variable = Blockly.Variables.getVariable(workspace, id, name, type);
+  if (!variable) {
+    variable = Blockly.Variables.createVariable_(workspace, id, name, type);
+  }
+  return variable;
+};
+
+/**
+ * Look up  a variable on the given workspace.
+ * Always looks in the main workspace before looking in the flyout workspace.
+ * Always prefers lookup by ID to lookup by name + type.
+ * @param {!Blockly.Workspace} workspace The workspace to search for the
+ *     variable.  It may be a flyout workspace or main workspace.
+ * @param {string} id The ID to use to look up the variable, or null.
+ * @param {string=} opt_name The string to use to look up the variable.  Only
+ *     used if lookup by ID fails.
+ * @param {string=} opt_type The type to use to look up the variable.  Only used
+ *     if lookup by ID fails.
+ * @return {?Blockly.VariableModel} The variable corresponding to the given ID
+ *     or name + type combination, or null if not found.
+ * @private
+ */
+Blockly.Variables.getVariable = function(workspace, id, opt_name, opt_type) {
+  var potentialVariableMap =
+      Blockly.Variables.getPotentialVariableMap_(workspace);
+  // Try to just get the variable, by ID if possible.
+  if (id) {
+    // Look in the real variable map before checking the potential variable map.
+    var variable = workspace.getVariableById(id);
+    if (!variable && potentialVariableMap) {
+      variable = potentialVariableMap.getVariableById(id);
+    }
+  } else if (opt_name && (opt_type != undefined)){
+    // Otherwise look up by name and type.
+    var variable = workspace.getVariable(opt_name, opt_type);
+    if (!variable && potentialVariableMap) {
+      variable = potentialVariableMap.getVariable(opt_name, opt_type);
+    }
+  }
+  return variable;
+};
+
+/**
+ * Helper function to create a variable on the given workspace.
+ * @param {!Blockly.Workspace} workspace The workspace in which to create the
+ * variable.  It may be a flyout workspace or main workspace.
+ * @param {string} id The ID to use to create the variable, or null.
+ * @param {string} name The string to use to create the variable.
+ * @param {string} type The type to use to create the variable.
+ * @return {!Blockly.VariableModel} The variable corresponding to the given ID
+ *     or name + type combination.
+ * @private
+ */
+Blockly.Variables.createVariable_ = function(workspace, id, name, type) {
+  var potentialVariableMap =
+      Blockly.Variables.getPotentialVariableMap_(workspace);
+  // Variables without names get uniquely named for this workspace.
+  if (!name) {
+    var ws = workspace.isFlyout ? workspace.targetWorkspace : workspace;
+    name = Blockly.Variables.generateUniqueName(ws);
+  }
+
+  // Create a potential variable if in the flyout.
+  if (potentialVariableMap) {
+    var variable = potentialVariableMap.createVariable(name, type, id);
+  } else {  // In the main workspace, create a real variable.
+    var variable = workspace.createVariable(name, type, id);
+  }
+  return variable;
+};
+
+/**
+ * Blocks in the flyout can refer to variables that don't exist in the
+ * workspace.  For instance, the "get item in list" block refers to an "item"
+ * variable regardless of whether the variable has been created yet.
+ * A FieldVariable must always refer to a Blockly.VariableModel.  We reconcile
+ * these by tracking "potential" variables in the flyout.  These variables
+ * become real when references to them are dragged into the main workspace.
+ * @param {!Blockly.Workspace} workspace The workspace to get the potential
+ *     variable map from.
+ * @return {?Blockly.VariableMap} The potential variable map for the given
+ *     workspace, or null if it was not a flyout workspace.
+ * @private
+ */
+Blockly.Variables.getPotentialVariableMap_ = function(workspace) {
+  return workspace.isFlyout && workspace.targetWorkspace ?
+    workspace.targetWorkspace.getPotentialVariableMap() : null;
+
 };

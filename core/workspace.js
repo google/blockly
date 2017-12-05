@@ -85,6 +85,16 @@ Blockly.Workspace = function(opt_options) {
    */
   this.variableMap_ = new Blockly.VariableMap(this);
 
+  /**
+   * Blocks in the flyout can refer to variables that don't exist in the
+   * workspace.  For instance, the "get item in list" block refers to an "item"
+   * variable regardless of whether the variable has been created yet.
+   * A FieldVariable must always refer to a Blockly.VariableModel.  We reconcile
+   * these by tracking "potential" variables in the flyout.  These variables
+   * become real when references to them are dragged into the main workspace.
+   * @type {!Blockly.VariableMap}
+   * @private
+   */
   this.potentialVariableMap_ = new Blockly.VariableMap(this);
 };
 
@@ -199,6 +209,7 @@ Blockly.Workspace.prototype.clear = function() {
     Blockly.Events.setGroup(false);
   }
   this.variableMap_.clear();
+  this.potentialVariableMap_.clear();
 };
 
 /**
@@ -626,6 +637,18 @@ Blockly.Workspace.prototype.getVariableTypes = function() {
  */
 Blockly.Workspace.prototype.getAllVariables = function() {
   return this.variableMap_.getAllVariables();
+};
+
+/**
+ * Return the variable map that contains "potential" variables.  These exist in
+ * the flyout but not in the workspace.
+ * TODO: Decide if this can be stored on the flyout workspace instead of the
+ * main workspace.
+ * @return {?Blockly.VariableMap} The potential variable map.
+ * @package
+ */
+Blockly.Workspace.prototype.getPotentialVariableMap = function() {
+  return this.potentialVariableMap_;
 };
 
 /**

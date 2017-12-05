@@ -59,10 +59,19 @@ Blockly.FieldMathInput.prototype.mathValidator = function(newText) {
 	// console.log("vali");
 	newText = String(newText);
 	var pattern = new RegExp("[^a-zA-Z0-9-+*/()%^ ]", "g")
-	if (pattern.test(newText))
-		//TODO change text color or so
 
-	//TODO check for open and closing brackets
+	var openBrackets = 0;
+	var closingBrackets = 0;
+	if (!pattern.test(newText)) {
+		for (var i=0; i < newText.length; i++) {
+			if(newText.charAt(i) == '(')
+				openBrackets++;
+			if(newText.charAt(i) == ')')
+				closingBrackets++;
+		}
+		// if(closingBrackets != openBrackets)
+		//TODO change text color to red
+	}
 
 	return newText;
 }

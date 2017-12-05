@@ -213,41 +213,6 @@ Blockly.Workspace.prototype.clear = function() {
 };
 
 /**
- * Walk the workspace and update the map of variables to only contain ones in
- * use on the workspace.  Use when loading new workspaces from disk.
- * @param {boolean} clear True if the old variable map should be cleared.
- */
-Blockly.Workspace.prototype.updateVariableStore = function(clear) {
-  // TODO: Sort
-  if (this.isFlyout) {
-    return;
-  }
-  var variableNames = Blockly.Variables.allUsedVariables(this);
-  var varList = [];
-  for (var i = 0, name; name = variableNames[i]; i++) {
-    // Get variable model with the used variable name.
-    var tempVar = this.getVariable(name);
-    if (tempVar) {
-      varList.push({'name': tempVar.name, 'type': tempVar.type,
-          'id': tempVar.getId()});
-    } else {
-      varList.push({'name': name, 'type': null, 'id': null});
-      // TODO(marisaleung): Use variable.type and variable.getId() once variable
-      // instances are storing more than just name.
-    }
-  }
-  if (clear) {
-    this.variableMap_.clear();
-  }
-  // Update the list in place so that the flyout's references stay correct.
-  for (var i = 0, varDict; varDict = varList[i]; i++) {
-    if (!this.getVariable(varDict.name)) {
-      this.createVariable(varDict.name, varDict.type, varDict.id);
-    }
-  }
-};
-
-/**
  * Rename a variable by updating its name in the variable map. Identify the
  * variable to rename with the given ID.
  * @param {string} id ID of the variable to rename.
@@ -307,40 +272,6 @@ Blockly.Workspace.prototype.createVariable = function(name, opt_type, opt_id) {
 
 /**
  * Find all the uses of a named variable.
- * TODO (#1199): Possibly delete this function.
- * @param {string} name Name of variable.
- * @param {string=} opt_type The type of the variable.  If not provided it
- *     defaults to the empty string, which is a specific type.
- * @return {!Array.<!Blockly.Block>} Array of block usages.
- */
-Blockly.Workspace.prototype.getVariableUses = function(name, opt_type) {
-  var type = opt_type || '';
-  var uses = [];
-  var blocks = this.getAllBlocks();
-  // Iterate through every block and check the name.
-  for (var i = 0; i < blocks.length; i++) {
-    var blockVariables = blocks[i].getVarModels();
-    if (blockVariables) {
-      for (var j = 0; j < blockVariables.length; j++) {
-        var varModel = blockVariables[j];
-        var varName = varModel.name;
-        // Skip variables of the wrong type.
-        if (varModel.type != type) {
-          continue;
-        }
-        // Variable name may be null if the block is only half-built.
-        if (varName && name && Blockly.Names.equals(varName, name)) {
-          uses.push(blocks[i]);
-        }
-      }
-    }
-  }
-  return uses;
-};
-
-/**
- * Find all the uses of a named variable.
- * TODO (#1199): Possibly delete this function.
  * @param {string} id ID of the variable to find.
  * @return {!Array.<!Blockly.Block>} Array of block usages.
  */

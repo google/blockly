@@ -247,15 +247,12 @@ function test_renameVariable_ReferenceExists() {
   // Test renaming a variable when a reference to it exists.
   // Expect 'renameVariable' to change oldName variable name to newName.
   workspaceTest_setUp();
-  var id = 'id1';
-  var type = 'type1';
-  var oldName = 'name1';
   var newName = 'name2';
-  workspace.createVariable(oldName, type, id);
-  createMockBlock(id);
 
-  workspace.renameVariableById(id, newName);
-  checkVariableValues(workspace, newName, type, id);
+  createVariableAndBlock(workspace);
+
+  workspace.renameVariableById('id1', newName);
+  checkVariableValues(workspace, newName, 'type1', 'id1');
   // Renaming should not have created a new variable.
   assertEquals(1, workspace.getAllVariables().length);
   var block_var_name = workspace.topBlocks_[0].getVarModels()[0].name;
@@ -302,24 +299,13 @@ function test_renameVariable_TwoVariablesDifferentType() {
   // Expect the rename to succeed, because variables with different types are
   // allowed to have the same name.
   workspaceTest_setUp();
-  var id1 = 'id1';
-  var id2 = 'id2';
-  var type1 = 'type1';
-  var type2 = 'type2';
+  createTwoVariablesAndBlocks(workspace);
 
-  var oldName = 'name1';
   var newName = 'name2';
-  // Create two variables of different types.
-  workspace.createVariable(oldName, type1, id1);
-  workspace.createVariable(newName, type2, id2);
-  // Create blocks to refer to both of them.
-  createMockBlock(id1);
-  createMockBlock(id2);
+  workspace.renameVariableById('id1', newName);
 
-  workspace.renameVariableById(id1, newName);
-
-  checkVariableValues(workspace, newName, type1, id1);
-  checkVariableValues(workspace, newName, type2, id2);
+  checkVariableValues(workspace, newName, 'type1', 'id1');
+  checkVariableValues(workspace, newName, 'type2', 'id2');
 
   // References shoul have the correct names.
   var block_var_name_1 = workspace.topBlocks_[0].getVarModels()[0].name;
@@ -333,17 +319,14 @@ function test_renameVariable_TwoVariablesDifferentType() {
 function test_renameVariable_OldCase() {
   // Rename a variable with a single reference.  Update only the capitalization.
   workspaceTest_setUp();
-  var oldCase = 'Name1';
-  var newName = 'name1';
-  var type = 'type1';
-  var id = 'id1';
-  workspace.createVariable(oldCase, type, id);
-  createMockBlock(id);
+  var newName = 'Name1';
 
-  workspace.renameVariableById(id, newName);
-  checkVariableValues(workspace, newName, type, id);
-  var variable = workspace.getVariableById(id);
-  assertNotEquals(oldCase, id.name);
+  createVariableAndBlock(workspace);
+
+  workspace.renameVariableById('id1', newName);
+  checkVariableValues(workspace, newName, 'type1', 'id1');
+  var variable = workspace.getVariableById('id1');
+  assertNotEquals('name1', variable.name);
   workspaceTest_tearDown();
 }
 
@@ -389,10 +372,7 @@ function test_renameVariable_TwoVariablesAndOldCase() {
 
 function test_deleteVariableById_Trivial() {
   workspaceTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
-  createMockBlock('id1');
-  createMockBlock('id2');
+  createTwoVariablesAndBlocks(workspace);
 
   workspace.deleteVariableById('id1');
   checkVariableValues(workspace, 'name2', 'type2', 'id2');

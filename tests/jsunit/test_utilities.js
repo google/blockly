@@ -122,3 +122,21 @@ function createVariableAndBlock(workspace) {
   workspace.createVariable('name1', 'type1', 'id1');
   createMockBlock('id1');
 }
+
+function defineGetVarBlock() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "get_var_block",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_variable",
+        "name": "VAR",
+        "variableTypes": ["", "type1", "type2"]
+      }
+    ]
+  }]);
+}
+
+function undefineGetVarBlock() {
+  delete Blockly.Blocks['get_var_block'];
+}

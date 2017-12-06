@@ -64,9 +64,9 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @type {SVGElement}
    * @private
    */
-  this.svgPathDark_ = Blockly.utils.createSvgElement('path',
+ /* this.svgPathDark_ = Blockly.utils.createSvgElement('path',
       {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
-      this.svgGroup_);
+      this.svgGroup_);*/
 
   /**
    * @type {SVGElement}
@@ -79,9 +79,9 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @type {SVGElement}
    * @private
    */
-  this.svgPathLight_ = Blockly.utils.createSvgElement('path',
+  /*this.svgPathLight_ = Blockly.utils.createSvgElement('path',
       {'class': 'blocklyPathLight'}, this.svgGroup_);
-  this.svgPath_.tooltip = this;
+  this.svgPath_.tooltip = this;*/
 
   /** @type {boolean} */
   this.rendered = false;
@@ -830,8 +830,8 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;
   this.svgPath_ = null;
-  this.svgPathLight_ = null;
-  this.svgPathDark_ = null;
+  //this.svgPathLight_ = null;
+  //this.svgPathDark_ = null;
   Blockly.Field.stopCache();
 };
 
@@ -1015,14 +1015,14 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   if (this.isShadow()) {
     rgb = goog.color.lighten(rgb, 0.6);
     hexColour = goog.color.rgbArrayToHex(rgb);
-    this.svgPathLight_.style.display = 'none';
-    this.svgPathDark_.setAttribute('fill', hexColour);
+    //this.svgPathLight_.style.display = 'none';
+    //this.svgPathDark_.setAttribute('fill', hexColour);
   } else {
-    this.svgPathLight_.style.display = '';
+    //this.svgPathLight_.style.display = '';
     var hexLight = goog.color.rgbArrayToHex(goog.color.lighten(rgb, 0.3));
     var hexDark = goog.color.rgbArrayToHex(goog.color.darken(rgb, 0.2));
-    this.svgPathLight_.setAttribute('stroke', hexLight);
-    this.svgPathDark_.setAttribute('fill', hexDark);
+    //this.svgPathLight_.setAttribute('stroke', hexLight);
+    //this.svgPathDark_.setAttribute('fill', hexDark);
   }
   this.svgPath_.setAttribute('fill', hexColour);
 
@@ -1221,10 +1221,10 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
   if (highlighted) {
     this.svgPath_.setAttribute('filter',
         'url(#' + this.workspace.options.embossFilterId + ')');
-    this.svgPathLight_.style.display = 'none';
+    //this.svgPathLight_.style.display = 'none';
   } else {
     Blockly.utils.removeAttribute(this.svgPath_, 'filter');
-    delete this.svgPathLight_.style.display;
+    //delete this.svgPathLight_.style.display;
   }
 };
 

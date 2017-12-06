@@ -37,7 +37,6 @@ function proceduresTest_setUpWithMockBlocks() {
     'message0': '%1',
     'args0': [
       {
-        // TODO: Why is this a variable?  It shouldn't need to be.
         'type': 'field_variable',
         'name': 'NAME',
         'variable': 'item'

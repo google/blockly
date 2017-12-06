@@ -43,24 +43,14 @@ function temporary_fireEvent(event) {
 }
 
 function undoRedoTest_setUp() {
-  Blockly.defineBlocksWithJsonArray([{
-    "type": "get_var_block",
-    "message0": "%1",
-    "args0": [
-      {
-        "type": "field_variable",
-        "name": "VAR",
-        "variableTypes": ["", "type1", "type2"]
-      }
-    ]
-  }]);
+  defineGetVarBlock();
   workspace = new Blockly.Workspace();
   mockControl_ = new goog.testing.MockControl();
   Blockly.Events.fire = temporary_fireEvent;
 }
 
 function undoRedoTest_tearDown() {
-  delete Blockly.Blocks['get_var_block'];
+  undefineGetVarBlock();
   mockControl_.$tearDown();
   workspace.dispose();
   Blockly.Events.fire = savedFireFunc;

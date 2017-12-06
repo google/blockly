@@ -271,7 +271,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       return vars;
     }
     for (var i = 0, argName; argName = this.arguments_[i]; i++) {
-      // TODO (#1199): When we switch to tracking variables by ID,
+      // TODO (#1494): When we switch to tracking procedure arguments by ID,
       // update this.
       var model = this.workspace.getVariable(argName, '');
       if (model) {

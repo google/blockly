@@ -695,12 +695,7 @@ Blockly.Block.prototype.getVarModels = function() {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
       if (field instanceof Blockly.FieldVariable) {
-        // TODO (#1199): When we switch to tracking variables by ID,
-        // update this.
-        var model = this.workspace.getVariableById(field.getValue());
-        if (model) {
-          vars.push(model);
-        }
+        vars.push(this.workspace.getVariableById(field.getValue()));
       }
     }
   }

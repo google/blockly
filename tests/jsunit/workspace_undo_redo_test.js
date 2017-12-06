@@ -82,10 +82,14 @@ function createTwoVarsEmptyType() {
   workspace.createVariable('name2', '', 'id2');
 }
 
-function test_undoCreateVariable_Trivial() {
-  undoRedoTest_setUp();
+function createTwoVarsDifferentTypes() {
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
+}
+
+function test_undoCreateVariable_Trivial() {
+  undoRedoTest_setUp();
+  createTwoVarsDifferentTypes();
 
   workspace.undo();
   checkVariableValues(workspace, 'name1', 'type1', 'id1');
@@ -98,8 +102,7 @@ function test_undoCreateVariable_Trivial() {
 
 function test_redoAndUndoCreateVariable_Trivial() {
   undoRedoTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
+  createTwoVarsDifferentTypes();
 
   workspace.undo();
   workspace.undo(true);
@@ -120,8 +123,7 @@ function test_redoAndUndoCreateVariable_Trivial() {
 
 function test_undoDeleteVariable_NoBlocks() {
   undoRedoTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
+  createTwoVarsDifferentTypes();
   workspace.deleteVariableById('id1');
   workspace.deleteVariableById('id2');
 
@@ -137,10 +139,9 @@ function test_undoDeleteVariable_NoBlocks() {
 
 function test_undoDeleteVariable_WithBlocks() {
   undoRedoTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
-  createMockBlock('id1');
-  createMockBlock('id2');
+
+  createTwoVariablesAndBlocks(workspace);
+
   workspace.deleteVariableById('id1');
   workspace.deleteVariableById('id2');
 
@@ -159,8 +160,9 @@ function test_undoDeleteVariable_WithBlocks() {
 
 function test_redoAndUndoDeleteVariable_NoBlocks() {
   undoRedoTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
+
+  createTwoVarsDifferentTypes();
+
   workspace.deleteVariableById('id1');
   workspace.deleteVariableById('id2');
 
@@ -181,10 +183,9 @@ function test_redoAndUndoDeleteVariable_NoBlocks() {
 
 function test_redoAndUndoDeleteVariable_WithBlocks() {
   undoRedoTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
-  createMockBlock('id1');
-  createMockBlock('id2');
+
+  createTwoVariablesAndBlocks(workspace);
+
   workspace.deleteVariableById('id1');
   workspace.deleteVariableById('id2');
 
@@ -260,24 +261,6 @@ function test_redoAndUndoDeleteVariableTwice_WithBlocks() {
   assertNull(workspace.getVariableById(id));
   undoRedoTest_tearDown();
 }
-
-// TODO: Decide if this needs to be possible.
-// function test_undoRedoRenameVariable_NeitherVariableExists() {
-//   // Expect that a variable with the name, 'name2', and the generated UUID,
-//   // 'id2', to be created when rename is called. Undo removes this variable
-//   // and redo recreates it.
-//   undoRedoTest_setUp();
-//   setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null,
-//     ['rename_group', 'id2', 'delete_group']);
-//   workspace.renameVariable('name1', 'name2');
-
-//   workspace.undo();
-//   assertNull(workspace.getVariableById('id2'));
-
-//   workspace.undo(true);
-//   checkVariableValues(workspace, 'name2', '', 'id2');
-//   undoRedoTest_tearDown();
-// }
 
 function test_undoRedoRenameVariable_OneExists_NoBlocks() {
   undoRedoTest_setUp();

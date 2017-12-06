@@ -106,7 +106,7 @@ Blockly.Xml.fieldToDomVariable_ = function(field, workspace) {
     return container;
   } else {
     // something went wrong?
-    console.log('no variable in fieldtodom');
+    console.warn('no variable in fieldtodom');
     return null;
   }
 };
@@ -500,6 +500,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
   try {
     var topBlock = Blockly.Xml.domToBlockHeadless_(xmlBlock, workspace);
     if (workspace.rendered) {
+      // TODO (fenichel): Otherwise call initModel?
       // Hide connections to speed up assembly.
       topBlock.setConnectionsHidden(true);
       // Generate list of all blocks.
@@ -719,19 +720,25 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   return block;
 };
 
+/**
+ * Decode an XML variable field tag and set the value of that field.
+ * @param {!Blockly.Workspace} workspace The workspace that is currently being
+ *     deserialized.
+ * @param {!Element} xml The field tag to decode.
+ * @param {string} text The text content of the XML tag.
+ * @param {!Blockly.FieldVariable} field The field on which the value will be
+ *     set.
+ * @private
+ */
 Blockly.Xml.domToFieldVariable_ = function(workspace, xml, text, field) {
-  // TODO (#1199): When we change setValue and getValue to
-  // interact with IDs instead of names, update this so that we get
-  // the variable based on ID instead of textContent.
   var type = xml.getAttribute('variabletype') || '';
+  // TODO (fenichel): Does this need to be explicit or not?
   if (type == '\'\'') {
     type = '';
   }
-  // TODO: Consider using a different name (var_id?) because this is the
-  // node's ID.
-  var id = xml.id;
+
   var variable =
-      Blockly.Variables.getOrCreateVariable(workspace, id, text, type);
+      Blockly.Variables.getOrCreateVariable(workspace, xml.id, text, type);
 
   // This should never happen :)
   if (type != null && type !== variable.type) {

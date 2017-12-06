@@ -224,35 +224,7 @@ Blockly.Workspace.prototype.renameVariableById = function(id, newName) {
     throw new Error('Tried to rename a variable that didn\'t exist. ID: ' + id);
   }
 
-  var type = variable.type;
-  var newVariable = this.getVariable(newName, type);
-
-  // If a variable previously existed with the new name, we will coalesce  the
-  // variables and use the ID of the existing variable with the new name.
-  // Otherwise, we change the current variable's name but not its ID.
-  var oldId = variable.getId();
-  var newId = newVariable ? newVariable.getId() : oldId;
-
-  var oldCase;
-
-  // Find if newVariable case is different.
-  if (newVariable && newVariable.name != newName) {
-    oldCase = newVariable.name;
-  }
-
-  Blockly.Events.setGroup(true);
-  var blocks = this.getAllBlocks();
-
-  // Iterate through every block and update name.
-  for (var i = 0; i < blocks.length; i++) {
-    blocks[i].renameVarById(oldId, newId);
-    if (oldCase) {
-      blocks[i].renameVarById(newId, newId);
-    }
-  }
-
   this.variableMap_.renameVariable(variable, newName);
-  Blockly.Events.setGroup(false);
 };
 
 /**
@@ -567,6 +539,15 @@ Blockly.Workspace.prototype.getAllVariables = function() {
  */
 Blockly.Workspace.prototype.getPotentialVariableMap = function() {
   return this.potentialVariableMap_;
+};
+
+/**
+ * Return the map of all variables on the workspace.
+ * @return {?Blockly.VariableMap} The  variable map.
+ * @package
+ */
+Blockly.Workspace.prototype.getVariableMap = function() {
+  return this.variableMap_;
 };
 
 /**

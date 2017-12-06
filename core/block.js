@@ -709,6 +709,7 @@ Blockly.Block.prototype.getVarModels = function() {
 
 /**
  * Notification that a variable is renaming.
+ * TODO (fenichel): consider deleting this.
  * If the name matches one of this block's variables, rename it.
  * @param {string} oldName Previous name of variable.
  * @param {string} newName Renamed variable.
@@ -719,6 +720,23 @@ Blockly.Block.prototype.renameVar = function(oldName, newName) {
       if (field instanceof Blockly.FieldVariable &&
           Blockly.Names.equals(oldName, field.getValue())) {
         field.setValue(newName);
+      }
+    }
+  }
+};
+
+/**
+ * Notification that a variable is renaming but keeping the same ID.  If the
+ * variable is in use on this block, rerender to show the new name.
+ * @param {!Blockly.VariableModel} variable The variable being renamed.
+ * @public
+ */
+Blockly.Block.prototype.updateVarName = function(variable) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field instanceof Blockly.FieldVariable &&
+          variable.getId() == field.getValue()) {
+        field.setText(variable.name);
       }
     }
   }

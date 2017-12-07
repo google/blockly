@@ -52,7 +52,7 @@ Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes) {
   this.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;
   this.size_ = new goog.math.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
   this.setValidator(opt_validator);
-  // TODO: Add opt_default_type to match default value.  If not set, ''.
+  // TODO (#1499): Add opt_default_type to match default value.  If not set, ''.
   this.defaultVariableName = (varname || '');
   this.defaultType_ = '';
   this.variableTypes = opt_variableTypes;
@@ -135,8 +135,6 @@ Blockly.FieldVariable.prototype.getText = function() {
  *     variable.
  */
 Blockly.FieldVariable.prototype.setValue = function(id) {
-  // TODO: Handle undo a change to go back to the default value.
-  // TODO: Handle null ID, which means "use default".
   var workspace = this.sourceBlock_.workspace;
   var variable = Blockly.Variables.getVariable(workspace, id);
 

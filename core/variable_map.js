@@ -107,14 +107,16 @@ Blockly.VariableMap.prototype.renameVariableWithConflict_ = function(variable,
   var type = variable.type;
 
   Blockly.Events.setGroup(true);
-  Blockly.Events.fire(new Blockly.Events.VarRename(conflictVar, newName));
   var oldCase = conflictVar.name;
-  conflictVar.name = newName;
 
-  // These blocks refer to the same variable but the case may have changed.
-  // No change events should be fired here.
   var blocks = this.workspace.getAllBlocks();
   if (newName != oldCase) {
+    // Only fire a rename event if the case changed.
+    Blockly.Events.fire(new Blockly.Events.VarRename(conflictVar, newName));
+    conflictVar.name = newName;
+
+    // These blocks refer to the same variable but the case changed.
+    // No change events should be fired here.
     for (var i = 0; i < blocks.length; i++) {
       blocks[i].updateVarName(conflictVar);
     }

@@ -704,7 +704,7 @@ Blockly.Block.prototype.getVarModels = function() {
 
 /**
  * Notification that a variable is renaming.
- * TODO (fenichel): consider deleting this.
+ * TODO (#1498): consider deleting this.
  * If the name matches one of this block's variables, rename it.
  * @param {string} oldName Previous name of variable.
  * @param {string} newName Renamed variable.

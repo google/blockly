@@ -135,6 +135,8 @@ Blockly.FieldVariable.prototype.getText = function() {
  *     variable.
  */
 Blockly.FieldVariable.prototype.setValue = function(id) {
+  // What do I do when id is null?  That happens when undoing a change event
+  // for the first time the value was set.
   var workspace = this.sourceBlock_.workspace;
   var variable = Blockly.Variables.getVariable(workspace, id);
 

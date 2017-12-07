@@ -56,8 +56,7 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
     "colour": "%{BKY_VARIABLES_DYNAMIC_HUE}",
     "helpUrl": "%{BKY_VARIABLES_GET_HELPURL}",
     "tooltip": "%{BKY_VARIABLES_GET_TOOLTIP}",
-    "extensions": ["contextMenu_variableDynamicSetterGetter"],
-    "mutator":"contextMenu_variableDynamicMutation"
+    "extensions": ["contextMenu_variableDynamicSetterGetter"]
   },
   // Block for variable setter.
   {
@@ -78,8 +77,7 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
     "colour": "%{BKY_VARIABLES_DYNAMIC_HUE}",
     "tooltip": "%{BKY_VARIABLES_SET_TOOLTIP}",
     "helpUrl": "%{BKY_VARIABLES_SET_HELPURL}",
-    "extensions": ["contextMenu_variableDynamicSetterGetter"],
-    "mutator":"contextMenu_variableDynamicMutation"
+    "extensions": ["contextMenu_variableDynamicSetterGetter"]
   }
 ]); // END JSON EXTRACT (Do not delete this comment.)
 
@@ -128,7 +126,6 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
   onchange: function() {
     var name = this.getFieldValue('VAR');
     var variableModel = this.workspace.getVariable(name);
-    this.getField('VAR').variableTypes = [variableModel.type];
     if (this.type == 'variables_get_dynamic') {
       this.outputConnection.setCheck(variableModel.type);
     } else {
@@ -137,26 +134,5 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
   }
 };
 
-/**
- * This mutator make sure the type check work before any event trigger.
- * Some event handler check the type , and disconnect the connection which not match.
- * @readonly
- */
-Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_MUTATION = {
-  mutationToDom: function() {
-    var container = document.createElement('mutation');
-    var name = this.getFieldValue('VAR');
-    var variableModel = this.workspace.getVariable(name);
-    if (this.type == 'variables_get_dynamic') {
-      this.outputConnection.setCheck(variableModel.type);
-    } else {
-      this.getInput('VALUE').connection.setCheck(variableModel.type);
-    }
-    return container;
-  },
-  domToMutation: function() {}
-};
 Blockly.Extensions.registerMixin('contextMenu_variableDynamicSetterGetter',
   Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);
-Blockly.Extensions.registerMutator('contextMenu_variableDynamicMutation',
-  Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_MUTATION);

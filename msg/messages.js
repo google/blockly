@@ -123,6 +123,12 @@ Blockly.Msg.RENAME_VARIABLE_TITLE = 'Rename all "%1" variables to:';
 // Variable creation
 /// button text - Text on the button used to launch the variable creation dialogue.
 Blockly.Msg.NEW_VARIABLE = 'Create variable...';
+/// button text - Text on the button used to launch the variable creation dialogue.
+Blockly.Msg.NEW_STRING_VARIABLE = 'Create string variable...';
+/// button text - Text on the button used to launch the variable creation dialogue.
+Blockly.Msg.NEW_NUMBER_VARIABLE = 'Create number variable...';
+/// button text - Text on the button used to launch the variable creation dialogue.
+Blockly.Msg.NEW_COLOUR_VARIABLE = 'Create colour variable...';
 /// prompt - Prompts the user to enter the type for a variable.
 Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = 'New variable type:';
 /// prompt - Prompts the user to enter the name for a new variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].

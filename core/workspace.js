@@ -532,13 +532,11 @@ Blockly.Workspace.prototype.getAllVariables = function() {
 /**
  * Return the variable map that contains "potential" variables.  These exist in
  * the flyout but not in the workspace.
- * TODO: Decide if this can be stored on the flyout workspace instead of the
- * main workspace.
  * @return {?Blockly.VariableMap} The potential variable map.
  * @package
  */
 Blockly.Workspace.prototype.getPotentialVariableMap = function() {
-  return this.potentialVariableMap_;
+  return this.isFlyout ? this.potentialVariableMap_ : null;
 };
 
 /**

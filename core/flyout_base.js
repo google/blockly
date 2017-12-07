@@ -544,7 +544,7 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
   this.buttons_.length = 0;
 
   // Clear potential variables from the previous showing.
-  this.targetWorkspace_.potentialVariableMap_.clear();
+  this.workspace_.getPotentialVariableMap().clear();
 };
 
 /**

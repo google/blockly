@@ -376,8 +376,7 @@ Blockly.Variables.getOrCreateVariable = function(workspace, id, name, type) {
  * @private
  */
 Blockly.Variables.getVariable = function(workspace, id, opt_name, opt_type) {
-  var potentialVariableMap =
-      Blockly.Variables.getPotentialVariableMap_(workspace);
+  var potentialVariableMap = workspace.getPotentialVariableMap();
   // Try to just get the variable, by ID if possible.
   if (id) {
     // Look in the real variable map before checking the potential variable map.
@@ -407,8 +406,7 @@ Blockly.Variables.getVariable = function(workspace, id, opt_name, opt_type) {
  * @private
  */
 Blockly.Variables.createVariable_ = function(workspace, id, name, type) {
-  var potentialVariableMap =
-      Blockly.Variables.getPotentialVariableMap_(workspace);
+  var potentialVariableMap = workspace.getPotentialVariableMap();
   // Variables without names get uniquely named for this workspace.
   if (!name) {
     var ws = workspace.isFlyout ? workspace.targetWorkspace : workspace;
@@ -422,24 +420,6 @@ Blockly.Variables.createVariable_ = function(workspace, id, name, type) {
     var variable = workspace.createVariable(name, type, id);
   }
   return variable;
-};
-
-/**
- * Blocks in the flyout can refer to variables that don't exist in the
- * workspace.  For instance, the "get item in list" block refers to an "item"
- * variable regardless of whether the variable has been created yet.
- * A FieldVariable must always refer to a Blockly.VariableModel.  We reconcile
- * these by tracking "potential" variables in the flyout.  These variables
- * become real when references to them are dragged into the main workspace.
- * @param {!Blockly.Workspace} workspace The workspace to get the potential
- *     variable map from.
- * @return {?Blockly.VariableMap} The potential variable map for the given
- *     workspace, or null if it was not a flyout workspace.
- * @private
- */
-Blockly.Variables.getPotentialVariableMap_ = function(workspace) {
-  return workspace.isFlyout && workspace.targetWorkspace ?
-    workspace.targetWorkspace.getPotentialVariableMap() : null;
 };
 
 /**

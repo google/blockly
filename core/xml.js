@@ -91,8 +91,7 @@ Blockly.Xml.fieldToDomVariable_ = function(field, workspace) {
   var variable = workspace.getVariableById(id);
   if (!variable) {
     if (workspace.isFlyout && workspace.targetWorkspace) {
-      var potentialVariableMap =
-          workspace.targetWorkspace.potentialVariableMap_;
+      var potentialVariableMap = workspace.getPotentialVariableMap();
       if (potentialVariableMap) {
         variable = potentialVariableMap.getVariableById(id);
       }

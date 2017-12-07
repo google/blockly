@@ -497,6 +497,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
   }
   // Create top-level block.
   Blockly.Events.disable();
+  var variablesBeforeCreation = workspace.getAllVariables();
   try {
     var topBlock = Blockly.Xml.domToBlockHeadless_(xmlBlock, workspace);
     if (workspace.rendered) {
@@ -529,6 +530,13 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
   }
   if (Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.BlockCreate(topBlock));
+    var newVariables = Blockly.Variables.getAddedVariables(workspace,
+        variablesBeforeCreation);
+    // Fire a VarCreate event for each (if any) new variable created.
+    for(var i = 0; i < newVariables.length; i++) {
+      var thisVariable = newVariables[i];
+      Blockly.Events.fire(new Blockly.Events.VarCreate(thisVariable));
+    }
   }
   return topBlock;
 };

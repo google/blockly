@@ -440,5 +440,32 @@ Blockly.Variables.createVariable_ = function(workspace, id, name, type) {
 Blockly.Variables.getPotentialVariableMap_ = function(workspace) {
   return workspace.isFlyout && workspace.targetWorkspace ?
     workspace.targetWorkspace.getPotentialVariableMap() : null;
+};
 
+/**
+ * Helper function to get the list of variables that have been added to the
+ * workspace after adding a new block, using the given list of variables that
+ * were in the workspace before the new block was added.
+ * @param {!Blockly.Workspace} workspace The workspace to inspect.
+ * @param {!Array.<!Blockly.VariableModel>} originalVariables The array of
+ *     variables that existed in the workspace before adding the new block.
+ * @return {!Array.<!Blockly.VariableModel>} The new array of variables that were
+ *     freshly added to the workspace after creating the new block, or [] if no
+ *     new variables were added to the workspace.
+ * @package
+ */
+Blockly.Variables.getAddedVariables = function(workspace, originalVariables) {
+  var allCurrentVariables = workspace.getAllVariables();
+  var addedVariables = [];
+  if (originalVariables.length != allCurrentVariables.length) {
+    for (var i = 0; i < allCurrentVariables.length; i++) {
+      var variable = allCurrentVariables[i];
+      // For any variable that is present in allCurrentVariables but not
+      // present in originalVariables, add the variable to addedVariables.
+      if (!originalVariables.includes(variable)) {
+        addedVariables.push(variable);
+      }
+    }
+  }
+  return addedVariables;
 };

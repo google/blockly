@@ -56,6 +56,7 @@ Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes) {
   this.defaultVariableName = (varname || '');
   this.defaultType_ = '';
   this.variableTypes = opt_variableTypes;
+  this.value_ = null;
 };
 goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
 
@@ -155,6 +156,7 @@ Blockly.FieldVariable.prototype.setValue = function(id) {
         this.sourceBlock_, 'field', this.name, oldValue, variable.getId()));
   }
   this.variable_ = variable;
+  this.value_ = id;
   this.setText(variable.name);
 };
 

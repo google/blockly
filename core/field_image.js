@@ -176,6 +176,13 @@ Blockly.FieldImage.prototype.render_ = function() {
 };
 
 /**
+ * Images are fixed width, no need to render even if forced.
+ */
+Blockly.FieldImage.prototype.forceRerender = function() {
+  // NOP
+};
+
+/**
  * Images are fixed width, no need to update.
  * @private
  */

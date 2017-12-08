@@ -695,7 +695,12 @@ Blockly.Block.prototype.getVarModels = function() {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
       if (field instanceof Blockly.FieldVariable) {
-        vars.push(this.workspace.getVariableById(field.getValue()));
+        var model = this.workspace.getVariableById(field.getValue());
+        // Check if the variable actually exists (and isn't just a potential
+        // variable).
+        if (model) {
+          vars.push(model);
+        }
       }
     }
   }

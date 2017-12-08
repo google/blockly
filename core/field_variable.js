@@ -48,7 +48,7 @@ goog.require('goog.string');
  */
 Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes) {
   Blockly.FieldVariable.superClass_.constructor.call(this,
-    Blockly.FieldVariable.dropdownCreate, opt_validator);
+      Blockly.FieldVariable.dropdownCreate, opt_validator);
   this.setValue(varname || '');
   this.variableTypes = opt_variableTypes;
 };

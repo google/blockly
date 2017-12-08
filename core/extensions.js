@@ -33,6 +33,9 @@
  **/
 goog.provide('Blockly.Extensions');
 
+goog.require('Blockly.Mutator');
+goog.require('Blockly.utils');
+goog.require('goog.string');
 
 /**
  * The set of all registered extensions, keyed by extension name/id.

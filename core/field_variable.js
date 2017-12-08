@@ -73,8 +73,8 @@ Blockly.FieldVariable.prototype.initModel = function() {
     // Variables without names get uniquely named for this workspace.
     var workspace =
         this.sourceBlock_.isInFlyout ?
-          this.sourceBlock_.workspace.targetWorkspace :
-          this.sourceBlock_.workspace;
+            this.sourceBlock_.workspace.targetWorkspace :
+            this.sourceBlock_.workspace;
     this.setValue(Blockly.Variables.generateUniqueName(workspace));
   }
   // If the selected variable doesn't exist yet, create it.
@@ -91,7 +91,7 @@ Blockly.FieldVariable.prototype.initModel = function() {
  */
 Blockly.FieldVariable.prototype.setSourceBlock = function(block) {
   goog.asserts.assert(!block.isShadow(),
-    'Variable fields are not allowed to exist on shadow blocks.');
+      'Variable fields are not allowed to exist on shadow blocks.');
   Blockly.FieldVariable.superClass_.setSourceBlock.call(this, block);
 };
 
@@ -124,7 +124,7 @@ Blockly.FieldVariable.prototype.setValue = function(value) {
     }
     if (Blockly.Events.isEnabled()) {
       Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this.sourceBlock_, 'field', this.name, this.value_, newValue));
+          this.sourceBlock_, 'field', this.name, this.value_, newValue));
     }
   }
   this.value_ = newValue;
@@ -203,7 +203,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
   options.push([Blockly.Msg.RENAME_VARIABLE, Blockly.RENAME_VARIABLE_ID]);
   if (Blockly.Msg.DELETE_VARIABLE) {
     options.push([Blockly.Msg.DELETE_VARIABLE.replace('%1', name),
-      Blockly.DELETE_VARIABLE_ID]);
+        Blockly.DELETE_VARIABLE_ID]);
   }
   return options;
 };

@@ -104,6 +104,8 @@ Blockly.WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface
 
   this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
       Blockly.Variables.flyoutCategory);
+  this.registerToolboxCategoryCallback(Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME,
+      Blockly.VariablesDynamic.flyoutCategory);
   this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
       Blockly.Procedures.flyoutCategory);
 };

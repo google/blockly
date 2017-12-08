@@ -36,6 +36,7 @@ goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Touch');
 goog.require('Blockly.Trashcan');
+goog.require('Blockly.VariablesDynamic');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceAudio');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');

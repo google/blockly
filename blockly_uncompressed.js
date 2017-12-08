@@ -54,7 +54,7 @@ goog.addDependency("../../../" + dir + "/core/contextmenu.js", ['Blockly.Context
 goog.addDependency("../../../" + dir + "/core/css.js", ['Blockly.Css'], []);
 goog.addDependency("../../../" + dir + "/core/dragged_connection_manager.js", ['Blockly.DraggedConnectionManager'], ['Blockly.RenderedConnection', 'goog.math.Coordinate']);
 goog.addDependency("../../../" + dir + "/core/events.js", ['Blockly.Events'], ['goog.array', 'goog.math.Coordinate']);
-goog.addDependency("../../../" + dir + "/core/extensions.js", ['Blockly.Extensions'], []);
+goog.addDependency("../../../" + dir + "/core/extensions.js", ['Blockly.Extensions'], ['Blockly.Mutator', 'Blockly.utils', 'goog.string']);
 goog.addDependency("../../../" + dir + "/core/field.js", ['Blockly.Field'], ['Blockly.Gesture', 'goog.asserts', 'goog.dom', 'goog.math.Size', 'goog.style', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/field_angle.js", ['Blockly.FieldAngle'], ['Blockly.FieldTextInput', 'goog.math', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/field_checkbox.js", ['Blockly.FieldCheckbox'], ['Blockly.Field']);

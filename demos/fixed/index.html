@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Blockly Demo: Fixed Blockly</title>
-  <script src="../../blockly_compressed.js"></script>
+  <script src="../../blockly_uncompressed.js"></script>
   <script src="../../blocks_compressed.js"></script>
   <script src="../../msg/js/en.js"></script>
   <style>
@@ -28,19 +28,157 @@
   <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
 
   <xml id="toolbox" style="display: none">
-    <block type="controls_if"></block>
-    <block type="logic_compare"></block>
-    <block type="controls_repeat_ext"></block>
-    <block type="math_number"></block>
-    <block type="math_arithmetic"></block>
-    <block type="text"></block>
-    <block type="text_print"></block>
+    <block type="property_value"></block>
+    <block type="string_value"></block>
+    <block type="asset_id"></block>
+    <block type="number"></block>
+    <!-- <block type="robLists_create_with"></block> -->
   </xml>
 
   <script>
-    var demoWorkspace = Blockly.inject('blocklyDiv',
-        {media: '../../media/',
-         toolbox: document.getElementById('toolbox')});
+    Blockly.defineBlocksWithJsonArray(
+      [{
+        "type": "property_value",
+        "lastDummyAlign0": "RIGHT",
+        "message0": "Value of %1 %2",
+        "args0": [
+          {
+            "type": "input_dummy"
+          },
+          {
+            "type": "field_dropdown",
+            "name": "Hello",
+            "options": [
+              [
+                "option",
+                "OPTIONNAME"
+              ],
+              [
+                "option",
+                "OPTIONNAME"
+              ],
+              [
+                "option",
+                "OPTIONNAME"
+              ]
+            ]
+          }
+        ],
+        "inputsInline": true,
+        "output": "String",
+        "colour": "#94AAD6",
+        "tooltip": "Hello",
+        "helpUrl": ""
+      },
+      {
+        "type": "string_value",
+        "lastDummyAlign0": "RIGHT",
+        "message0": "%1",
+        "args0": [
+          {
+            "type": "field_input",
+            "name": "string",
+            "text": "Enter value"
+          }
+        ],
+        "inputsInline": true,
+        "output": "String",
+        "colour": "#94AAD6",
+        "tooltip": "Hello",
+        "helpUrl": ""
+      },
+      {
+        "type": "number",
+        "message0": "Numbers %1 %2",
+        "args0": [
+          {
+            "type": "input_dummy"
+          },
+          {
+            "type": "field_number",
+            "name": "number",
+            "value": 0
+          }
+        ],
+        "inputsInline": true,
+        "output": "Number",
+        "colour": "#94AAD6",
+        "tooltip": "",
+        "helpUrl": ""
+      },
+      {
+        "type": "asset_id",
+        "lastDummyAlign0": "RIGHT",
+        "message0": "Asset %1 %2",
+        "args0": [
+          {
+            "type": "input_dummy"
+          },
+          {
+            "type": "field_dropdown",
+            "name": "NAME",
+            "options": [
+              [
+                "option",
+                "OPTIONNAME"
+              ],
+              [
+                "option",
+                "OPTIONNAME"
+              ],
+              [
+                "option",
+                "OPTIONNAME"
+              ]
+            ]
+          }
+        ],
+        "inputsInline": true,
+        "output": "String",
+        "colour": "#94AAD6",
+        "tooltip": "",
+        "helpUrl": ""
+      },
+      {
+        "type": "concat_arrays",
+        "message0": "CONCAT_ARRAYS %1 Create an ordered list of values %2 %3 %4",
+        "args0": [
+          {
+            "type": "input_dummy"
+          },
+          {
+            "type": "input_dummy"
+          },
+          {
+            "type": "input_value",
+            "name": "elem_1",
+            "check": [
+              "Number",
+              "String",
+              "Boolean"
+            ]
+          },
+          {
+            "type": "input_value",
+            "name": "elem_2",
+            "check": [
+              "Number",
+              "String",
+              "Boolean"
+            ]
+          }
+        ],
+        "output": "Array",
+        "colour": "#94AAD6",
+        "tooltip": "",
+        "helpUrl": ""
+      }]
+    );
+
+    var demoWorkspace = Blockly.inject('blocklyDiv', {
+      media: '../../media/',
+      toolbox: document.getElementById('toolbox')
+    });
   </script>
 
 </body>

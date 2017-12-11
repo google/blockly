@@ -37,27 +37,37 @@ goog.require('goog.userAgent');
  * Horizontal space between elements.
  * @const
  */
-Blockly.BlockSvg.SEP_SPACE_X = 10;
+// Blockly.BlockSvg.SEP_SPACE_X = 10;
+// Blockly.BlockSvg.SEP_SPACE_X = 15;
+Blockly.BlockSvg.SEP_SPACE_X = 15;
 /**
  * Vertical space between elements.
  * @const
  */
-Blockly.BlockSvg.SEP_SPACE_Y = 10;
+// Blockly.BlockSvg.SEP_SPACE_Y = 10;
+// Blockly.BlockSvg.SEP_SPACE_Y = 20;
+Blockly.BlockSvg.SEP_SPACE_Y = 20;
 /**
  * Vertical padding around inline elements.
  * @const
  */
-Blockly.BlockSvg.INLINE_PADDING_Y = 5;
+// Blockly.BlockSvg.INLINE_PADDING_Y = 5;
+// Blockly.BlockSvg.INLINE_PADDING_Y = 10;
+Blockly.BlockSvg.INLINE_PADDING_Y = 10;
 /**
  * Minimum height of a block.
  * @const
  */
-Blockly.BlockSvg.MIN_BLOCK_Y = 25;
+// Blockly.BlockSvg.MIN_BLOCK_Y = 25;
+// Blockly.BlockSvg.MIN_BLOCK_Y = 35;
+Blockly.BlockSvg.MIN_BLOCK_Y = 35;
 /**
  * Height of horizontal puzzle tab.
  * @const
  */
-Blockly.BlockSvg.TAB_HEIGHT = 20;
+// Blockly.BlockSvg.TAB_HEIGHT = 20;
+// Blockly.BlockSvg.TAB_HEIGHT = 25;
+Blockly.BlockSvg.TAB_HEIGHT = 25;
 /**
  * Width of horizontal puzzle tab.
  * @const

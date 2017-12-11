@@ -695,9 +695,9 @@ Blockly.Block.prototype.getVarModels = function() {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
       if (field instanceof Blockly.FieldVariable) {
-        // TODO (#1199): When we switch to tracking variables by ID,
-        // update this.
-        var model = this.workspace.getVariable(field.getValue(), '');
+        var model = this.workspace.getVariableById(field.getValue());
+        // Check if the variable actually exists (and isn't just a potential
+        // variable).
         if (model) {
           vars.push(model);
         }
@@ -709,6 +709,7 @@ Blockly.Block.prototype.getVarModels = function() {
 
 /**
  * Notification that a variable is renaming.
+ * TODO (#1498): consider deleting this.
  * If the name matches one of this block's variables, rename it.
  * @param {string} oldName Previous name of variable.
  * @param {string} newName Renamed variable.
@@ -719,6 +720,41 @@ Blockly.Block.prototype.renameVar = function(oldName, newName) {
       if (field instanceof Blockly.FieldVariable &&
           Blockly.Names.equals(oldName, field.getValue())) {
         field.setValue(newName);
+      }
+    }
+  }
+};
+
+/**
+ * Notification that a variable is renaming but keeping the same ID.  If the
+ * variable is in use on this block, rerender to show the new name.
+ * @param {!Blockly.VariableModel} variable The variable being renamed.
+ * @public
+ */
+Blockly.Block.prototype.updateVarName = function(variable) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field instanceof Blockly.FieldVariable &&
+          variable.getId() == field.getValue()) {
+        field.setText(variable.name);
+      }
+    }
+  }
+};
+
+/**
+ * Notification that a variable is renaming.
+ * If the name matches one of this block's variables, rename it.
+ * @param {string} oldId ID of variable to rename.
+ * @param {string} newId ID of new variable.  May be the same as oldId, but with
+ *     an updated name.
+ */
+Blockly.Block.prototype.renameVarById = function(oldId, newId) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field instanceof Blockly.FieldVariable &&
+          oldId == field.getValue()) {
+        field.setValue(newId);
       }
     }
   }

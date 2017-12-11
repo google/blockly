@@ -266,8 +266,12 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    */
   getVarModels: function() {
     var vars = [];
+    // Not fully initialized.
+    if (!this.arguments_) {
+      return vars;
+    }
     for (var i = 0, argName; argName = this.arguments_[i]; i++) {
-      // TODO (#1199): When we switch to tracking variables by ID,
+      // TODO (#1494): When we switch to tracking procedure arguments by ID,
       // update this.
       var model = this.workspace.getVariable(argName, '');
       if (model) {
@@ -463,12 +467,13 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     if (source && source.workspace && source.workspace.options &&
         source.workspace.options.parentWorkspace) {
       var workspace = source.workspace.options.parentWorkspace;
-      var variable = workspace.getVariable(newText);
+      var variableType = '';
+      var variable = workspace.getVariable(newText, variableType);
       // If there is a case change, rename the variable.
       if (variable && variable.name !== newText) {
         workspace.renameVariableById(variable.getId(), newText);
       } else {
-        workspace.createVariable(newText);
+        workspace.createVariable(newText, variableType);
       }
     }
   }

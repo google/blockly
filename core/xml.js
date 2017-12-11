@@ -86,6 +86,30 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
   return element;
 };
 
+Blockly.Xml.fieldToDomVariable_ = function(field, workspace) {
+  var id = field.getValue();
+  var variable = workspace.getVariableById(id);
+  if (!variable) {
+    if (workspace.isFlyout && workspace.targetWorkspace) {
+      var potentialVariableMap = workspace.getPotentialVariableMap();
+      if (potentialVariableMap) {
+        variable = potentialVariableMap.getVariableById(id);
+      }
+    }
+  }
+  if (variable) {
+    var container = goog.dom.createDom('field', null, variable.name);
+    container.setAttribute('name', field.name);
+    container.setAttribute('id', variable.getId());
+    container.setAttribute('variabletype', variable.type);
+    return container;
+  } else {
+    // something went wrong?
+    console.warn('no variable in fieldtodom');
+    return null;
+  }
+};
+
 /**
  * Encode a field as XML.
  * @param {!Blockly.Field} field The field to encode.
@@ -96,16 +120,13 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
  */
 Blockly.Xml.fieldToDom_ = function(field, workspace) {
   if (field.name && field.EDITABLE) {
-    var container = goog.dom.createDom('field', null, field.getValue());
-    container.setAttribute('name', field.name);
     if (field instanceof Blockly.FieldVariable) {
-      var variable = workspace.getVariable(field.getValue());
-      if (variable) {
-        container.setAttribute('id', variable.getId());
-        container.setAttribute('variabletype', variable.type);
-      }
+      return Blockly.Xml.fieldToDomVariable_(field, workspace);
+    } else {
+      var container = goog.dom.createDom('field', null, field.getValue());
+      container.setAttribute('name', field.name);
+      return container;
     }
-    return container;
   }
   return null;
 };
@@ -397,7 +418,6 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     }
     Blockly.Field.stopCache();
   }
-  workspace.updateVariableStore(false);
   // Re-enable workspace resizing.
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(true);
@@ -476,9 +496,11 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
   }
   // Create top-level block.
   Blockly.Events.disable();
+  var variablesBeforeCreation = workspace.getAllVariables();
   try {
     var topBlock = Blockly.Xml.domToBlockHeadless_(xmlBlock, workspace);
     if (workspace.rendered) {
+      // TODO (fenichel): Otherwise call initModel?
       // Hide connections to speed up assembly.
       topBlock.setConnectionsHidden(true);
       // Generate list of all blocks.
@@ -507,6 +529,13 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
   }
   if (Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.BlockCreate(topBlock));
+    var newVariables = Blockly.Variables.getAddedVariables(workspace,
+        variablesBeforeCreation);
+    // Fire a VarCreate event for each (if any) new variable created.
+    for(var i = 0; i < newVariables.length; i++) {
+      var thisVariable = newVariables[i];
+      Blockly.Events.fire(new Blockly.Events.VarCreate(thisVariable));
+    }
   }
   return topBlock;
 };
@@ -699,6 +728,37 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
 };
 
 /**
+ * Decode an XML variable field tag and set the value of that field.
+ * @param {!Blockly.Workspace} workspace The workspace that is currently being
+ *     deserialized.
+ * @param {!Element} xml The field tag to decode.
+ * @param {string} text The text content of the XML tag.
+ * @param {!Blockly.FieldVariable} field The field on which the value will be
+ *     set.
+ * @private
+ */
+Blockly.Xml.domToFieldVariable_ = function(workspace, xml, text, field) {
+  var type = xml.getAttribute('variabletype') || '';
+  // TODO (fenichel): Does this need to be explicit or not?
+  if (type == '\'\'') {
+    type = '';
+  }
+
+  var variable =
+      Blockly.Variables.getOrCreateVariable(workspace, xml.id, text, type);
+
+  // This should never happen :)
+  if (type != null && type !== variable.type) {
+    throw Error('Serialized variable type with id \'' +
+      variable.getId() + '\' had type ' + variable.type + ', and ' +
+      'does not match variable field that references it: ' +
+      Blockly.Xml.domToText(xml) + '.');
+  }
+
+  field.setValue(variable.getId());
+};
+
+/**
  * Decode an XML field tag and set the value of that field on the given block.
  * @param {!Blockly.Block} block The block that is currently being deserialized.
  * @param {string} fieldName The name of the field on the block.
@@ -716,29 +776,10 @@ Blockly.Xml.domToField_ = function(block, fieldName, xml) {
   var workspace = block.workspace;
   var text = xml.textContent;
   if (field instanceof Blockly.FieldVariable) {
-    // TODO (#1199): When we change setValue and getValue to
-    // interact with IDs instead of names, update this so that we get
-    // the variable based on ID instead of textContent.
-    var type = xml.getAttribute('variabletype') || '';
-    // TODO: Consider using a different name (varID?) because this is the
-    // node's ID.
-    var id = xml.id;
-    if (id) {
-      var variable = workspace.getVariableById(id);
-    } else {
-      var variable = workspace.getVariable(text, type);
-    }
-    if (!variable) {
-      variable = workspace.createVariable(text, type, id);
-    }
-    if (type != null && type !== variable.type) {
-      throw Error('Serialized variable type with id \'' +
-        variable.getId() + '\' had type ' + variable.type + ', and ' +
-        'does not match variable field that references it: ' +
-        Blockly.Xml.domToText(xml) + '.');
-    }
+    Blockly.Xml.domToFieldVariable_(workspace, xml, text, field);
+  } else {
+    field.setValue(text);
   }
-  field.setValue(text);
 };
 
 /**

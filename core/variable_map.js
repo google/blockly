@@ -60,47 +60,78 @@ Blockly.VariableMap.prototype.clear = function() {
 
 /**
  * Rename the given variable by updating its name in the variable map.
- * @param {Blockly.VariableModel} variable Variable to rename.
+ * @param {!Blockly.VariableModel} variable Variable to rename.
  * @param {string} newName New variable name.
- * @param {string=} opt_type The type of the variable to create if variable was
- *     null.
+ * @package
  */
-Blockly.VariableMap.prototype.renameVariable = function(variable, newName,
-    opt_type) {
-  var type = variable ? variable.type : (opt_type || '');
-  var newVariable = this.getVariable(newName, type);
-  var variableIndex = -1;
-  var newVariableIndex = -1;
+Blockly.VariableMap.prototype.renameVariable = function(variable, newName) {
+  var type = variable.type;
+  var conflictVar = this.getVariable(newName, type);
+  var blocks = this.workspace.getAllBlocks();
+  Blockly.Events.setGroup(true);
+  // The IDs may match if the rename is a simple case change (name1 -> Name1).
+  if (!conflictVar || conflictVar.getId() == variable.getId()) {
+    this.renameVariableAndUses_(variable, newName, blocks);
+  } else {
+    this.renameVariableWithConflict_(variable, newName, conflictVar, blocks);
+  }
+  Blockly.Events.setGroup(false);
+};
 
+/**
+ * Update the name of the given variable and refresh all references to it.
+ * The new name must not conflict with any existing variable names.
+ * @param {!Blockly.VariableModel} variable Variable to rename.
+ * @param {string} newName New variable name.
+ * @param {!Array.<!Blockly.Block>} blocks The list of all blocks in the
+ *     workspace.
+ * @private
+ */
+Blockly.VariableMap.prototype.renameVariableAndUses_ = function(variable,
+    newName, blocks) {
+  Blockly.Events.fire(new Blockly.Events.VarRename(variable, newName));
+  variable.name = newName;
+  for (var i = 0; i < blocks.length; i++) {
+    blocks[i].updateVarName(variable);
+  }
+};
+
+/**
+ * Update the name of the given variable to the same name as an existing
+ * variable.  The two variables are coalesced into a single variable with the ID
+ * of the existing variable that was already using newName.
+ * Refresh all references to the variable.
+ * @param {!Blockly.VariableModel} variable Variable to rename.
+ * @param {string} newName New variable name.
+ * @param {!Blockly.VariableModel} conflictVar The variable that was already
+ *     using newName.
+ * @param {!Array.<!Blockly.Block>} blocks The list of all blocks in the
+ *     workspace.
+ * @private
+ */
+Blockly.VariableMap.prototype.renameVariableWithConflict_ = function(variable,
+    newName, conflictVar, blocks) {
+  var type = variable.type;
+  var oldCase = conflictVar.name;
+
+  if (newName != oldCase) {
+    // Simple rename to change the case and update references.
+    this.renameVariableAndUses_(conflictVar, newName, blocks);
+  }
+
+  // These blocks now refer to a different variable.
+  // These will fire change events.
+  for (var i = 0; i < blocks.length; i++) {
+    blocks[i].renameVarById(variable.getId(), conflictVar.getId());
+  }
+
+  // Finally delete the original variable, which is now unreferenced.
+  Blockly.Events.fire(new Blockly.Events.VarDelete(variable));
+  // And remove it from the list.
   var variableList = this.getVariablesOfType(type);
-  if (variable) {
-    variableIndex = variableList.indexOf(variable);
-  }
-  if (newVariable) { // see if I can get rid of newVariable dependency
-    newVariableIndex = variableList.indexOf(newVariable);
-  }
+  var variableIndex = variableList.indexOf(variable);
+  this.variableMap_[type].splice(variableIndex, 1);
 
-  if (variableIndex == -1 && newVariableIndex == -1) {
-    this.createVariable(newName, '');
-    console.log('Tried to rename an non-existent variable.');
-  } else if (variableIndex == newVariableIndex ||
-      variableIndex != -1 && newVariableIndex == -1) {
-    // Only changing case, or renaming to a completely novel name.
-    var variableToRename = this.variableMap_[type][variableIndex];
-    Blockly.Events.fire(new Blockly.Events.VarRename(variableToRename,
-      newName));
-    variableToRename.name = newName;
-  } else if (variableIndex != -1 && newVariableIndex != -1) {
-    // Renaming one existing variable to another existing variable.
-    // The case might have changed, so we update the destination ID.
-    var variableToRename = this.variableMap_[type][newVariableIndex];
-    Blockly.Events.fire(new Blockly.Events.VarRename(variableToRename,
-      newName));
-    var variableToDelete = this.variableMap_[type][variableIndex];
-    Blockly.Events.fire(new Blockly.Events.VarDelete(variableToDelete));
-    variableToRename.name = newName;
-    this.variableMap_[type].splice(variableIndex, 1);
-  }
 };
 
 /**

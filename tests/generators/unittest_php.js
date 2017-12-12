@@ -25,52 +25,49 @@
 'use strict';
 
 Blockly.PHP['unittest_main'] = function(block) {
-    // Container for unit tests.
-    var resultsVar = Blockly.PHP.variableDB_.getName('unittestResults',
-        Blockly.Variables.NAME_TYPE);
-    var functionName = Blockly.PHP.provideFunction_(
-        'unittest_report',
-        [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '() {',
-            'global ' + resultsVar + ';',
-            '  // Create test report.',
-            '  $report = array();',
-            '  $summary = array();',
-            '  $fails = 0;',
-            '  for ($x = 0; $x < count(' + resultsVar + '); $x++) {',
-            '    if (' + resultsVar + '[$x][0]) {',
-            '      array_push($summary, ".");',
-            '    } else {',
-            '      array_push($summary, "F");',
-            '      $fails++;',
-            '      array_push($report,"");',
-            '      array_push($report, "FAIL: " . ' + resultsVar + '[$x][2]);',
-            '      array_push($report, ' + resultsVar + '[$x][1]);',
-            '    }',
-            '  }',
-            '  array_unshift($report, implode("",$summary));',
-            '  array_push($report, "");',
-            '  array_push($report, "Number of tests run: " . count(' + resultsVar + '));',
-            '  array_push($report, "");',
-            '  if ($fails) {',
-            '    array_push($report, "FAILED (failures=" . $fails + ")");',
-            '  } else {',
-            '    array_push($report, "OK");',
-            '  }',
-            '  return implode("\\n", $report);',
-            '}']);
-    // Setup global to hold test results.
-    var code = resultsVar + ' = array();\n';
-    // Run tests (unindented).
-    code += Blockly.PHP.statementToCode(block, 'DO')
-        .replace(/^  /, '').replace(/\n  /g, '\n');
-    var reportVar = Blockly.PHP.variableDB_.getDistinctName(
-        'report', Blockly.Variables.NAME_TYPE);
-    code += reportVar + ' = ' + functionName + '();\n';
-    // Destroy results.
-    code += resultsVar + ' = null;\n';
-    // Send the report to the console (that's where errors will go anyway).
-    code += 'print(' + reportVar + ');\n';
-    return code;
+  // Container for unit tests.
+  var resultsVar = Blockly.PHP.variableDB_.getName('unittestResults',
+      Blockly.Variables.NAME_TYPE);
+  var functionName = Blockly.PHP.provideFunction_(
+      'unittest_report',
+      [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '() {',
+          'global ' + resultsVar + ';',
+          '  // Create test report.',
+          '  $report = array();',
+          '  $summary = array();',
+          '  $fails = 0;',
+          '  for ($x = 0; $x < count(' + resultsVar + '); $x++) {',
+          '    if (' + resultsVar + '[$x][0]) {',
+          '      array_push($summary, ".");',
+          '    } else {',
+          '      array_push($summary, "F");',
+          '      $fails++;',
+          '      array_push($report,"");',
+          '      array_push($report, "FAIL: " . ' + resultsVar + '[$x][2]);',
+          '      array_push($report, ' + resultsVar + '[$x][1]);',
+          '    }',
+          '  }',
+          '  array_unshift($report, implode("",$summary));',
+          '  array_push($report, "");',
+          '  array_push($report, "Number of tests run: " . count(' + resultsVar + '));',
+          '  array_push($report, "");',
+          '  if ($fails) {',
+          '    array_push($report, "FAILED (failures=" . $fails + ")");',
+          '  } else {',
+          '    array_push($report, "OK");',
+          '  }',
+          '  return implode("\\n", $report);',
+          '}']);
+  // Setup global to hold test results.
+  var code = resultsVar + ' = array();\n';
+  // Run tests (unindented).
+  code += Blockly.PHP.statementToCode(block, 'DO')
+      .replace(/^  /, '').replace(/\n  /g, '\n');
+  // Send the report to the console (that's where errors will go anyway).
+  code += 'print(' + functionName + '());\n';
+  // Destroy results.
+  code += resultsVar + ' = null;\n';
+  return code;
 };
 
 Blockly.PHP['unittest_main'].defineAssert_ = function(block) {

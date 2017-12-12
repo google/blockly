@@ -61,13 +61,10 @@ Blockly.Lua['unittest_main'] = function(block) {
   // Run tests (unindented).
   code += Blockly.Lua.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');
-  var reportVar = Blockly.Lua.variableDB_.getDistinctName(
-      'report', Blockly.Variables.NAME_TYPE);
-  code += reportVar + ' = ' + functionName + '()\n';
+  // Print the report.
+  code += 'print(' + functionName + '())\n';
   // Destroy results.
   code += resultsVar + ' = nil\n';
-  // Print the report.
-  code += 'print(' + reportVar + ')\n';
   return code;
 };
 

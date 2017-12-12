@@ -37,9 +37,9 @@
     <block type="string_value"></block>
     <block type="asset_id"></block>
     <block type="number"></block>
-    <block type="robLists_create_with">
-
-    </block>
+    <block type="concat_array"></block>
+    <block type="concat_values"></block>
+    <block type="substitute"></block>
   </xml>
 
   <script>
@@ -145,10 +145,40 @@
         "colour": "#94AAD6",
         "tooltip": "",
         "helpUrl": ""
+      },
+      {
+        "type": "substitute",
+        "message0": "Substitute %1 %2 in %3 %4",
+        "args0": [
+          {
+            "type": "input_dummy"
+          },
+          {
+            "type": "input_value",
+            "name": "value_to_substitute",
+            "check": [
+              "String",
+              "Number"
+            ]
+          },
+          {
+            "type": "input_dummy"
+          },
+          {
+            "type": "input_value",
+            "name": "value",
+            "check": "String"
+          }
+        ],
+        "inputsInline": true,
+        "output": "String",
+        "colour": "#94AAD6",
+        "tooltip": "",
+        "helpUrl": ""
       }]
     );
 
-    Blockly.Blocks['robLists_create_with'] = {
+    Blockly.Blocks['concat_array'] = {
       /**
        * Block for creating a list with any number of elements of any type.
        *
@@ -159,12 +189,11 @@
 
           this.appendValueInput('ADD0').appendField(Blockly.Msg.LISTS_CREATE_TITLE)
           this.setInputsInline(false);
-          this.appendValueInput('ADD1').setCheck('Number');
-          this.setOutput(true, 'Array_Number');
+          this.appendValueInput('ADD1');
+          this.setOutput(true, 'Array_String');
           this.setMutatorPlus(new Blockly.MutatorPlus(this));
           this.setMutatorMinus(new Blockly.MutatorMinus(this));
           this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
-          this.listType_ = 'Number';
           this.itemCount_ = 2;
       },
       /**
@@ -241,6 +270,105 @@
           }
           if (this.itemCount_ == 0) {
               this.appendDummyInput('EMPTY').appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
+              this.mutatorMinus.dispose();
+              this.mutatorMinus = null;
+          }
+          this.render();
+      }
+    }
+
+    Blockly.Blocks['concat_values'] = {
+      /**
+       * Block for creating a list with any number of elements of any type.
+       *
+       * @this Blockly.Block
+       */
+      init : function() {
+          this.setColour("#94AAD6");
+
+          this.appendValueInput('ADD0').appendField('Combine values')
+          this.setInputsInline(false);
+          this.appendValueInput('ADD1');
+          this.setOutput(true, 'Array_String');
+          this.setMutatorPlus(new Blockly.MutatorPlus(this));
+          this.setMutatorMinus(new Blockly.MutatorMinus(this));
+          this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
+          this.itemCount_ = 2;
+      },
+      /**
+       * Create XML to represent list inputs.
+       *
+       * @return {Element} XML storage element.
+       * @this Blockly.Block
+       */
+      mutationToDom : function() {
+          var container = document.createElement('mutation');
+          container.setAttribute('items', this.itemCount_);
+          return container;
+      },
+      /**
+       * Parse XML to restore the list inputs.
+       *
+       * @param {!Element}
+       *            xmlElement XML storage element.
+       * @this Blockly.Block
+       */
+      domToMutation : function(xmlElement) {
+          for (var x = 0; x < this.itemCount_; x++) {
+              this.removeInput('ADD' + x);
+          }
+          this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+
+          this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+          for (var x = 0; x < this.itemCount_; x++) {
+              if (x == 0) {
+                  this.appendValueInput('ADD0').appendField('Combine values');
+                  this.setInputsInline(false);
+              } else {
+                  this.appendValueInput('ADD' + x)
+              }
+          }
+          if (this.itemCount_ == 0) {
+              this.appendDummyInput('EMPTY').appendField("Combine values");
+              this.mutatorMinus.dispose();
+              this.mutatorMinus = null;
+          } else {
+              this.setMutatorMinus(new Blockly.MutatorMinus(this));
+          }
+      },
+
+      /**
+       * Update the shape according to the number of item inputs.
+       *
+       * @param {Number}
+       *            number of item inputs.
+       * @this Blockly.Block
+       */
+      updateShape_ : function(num) {
+          Blockly.dragMode_ = Blockly.DRAG_NONE;
+
+          if (num == 1) {
+              if (this.itemCount_ == 0) {
+                  this.removeInput('EMPTY');
+                  this.appendValueInput('ADD0').appendField('Combine values');
+                  this.setInputsInline(false);
+                  this.setMutatorMinus(new Blockly.MutatorMinus(this));
+              } else {
+                  this.appendValueInput('ADD' + this.itemCount_)
+              }
+
+              this.itemCount_++;
+          } else if (num == -1) {
+              this.itemCount_--;
+              var target = this.getInputTargetBlock('ADD' + this.itemCount_);
+              if (target) {
+                  target.unplug();
+                  target.dispose();
+              }
+              this.removeInput('ADD' + this.itemCount_);
+          }
+          if (this.itemCount_ == 0) {
+              this.appendDummyInput('EMPTY').appendField("Combine values");
               this.mutatorMinus.dispose();
               this.mutatorMinus = null;
           }

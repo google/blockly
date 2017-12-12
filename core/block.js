@@ -1446,6 +1446,22 @@ Blockly.Block.prototype.setMutator = function(
 };
 
 /**
+ * Give this block a mutatorPlus icon.
+ * @param {Blockly.Mutator} mutator A mutator icon instance or null to remove.
+ */
+Blockly.Block.prototype.setMutatorPlus = function(mutatorPlus) {
+  // NOP.
+};
+
+/**
+ * Give this block a mutatorMinus icon.
+ * @param {Blockly.Mutator} mutator A mutator icon instance or null to remove.
+ */
+Blockly.Block.prototype.setMutatorMinus = function(mutatorMinus) {
+  // NOP.
+};
+
+/**
  * Return the coordinates of the top-left corner of this block relative to the
  * drawing surface's origin (0,0), in workspace units.
  * @return {!goog.math.Coordinate} Object with .x and .y properties.

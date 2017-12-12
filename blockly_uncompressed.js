@@ -79,6 +79,8 @@ goog.addDependency("../../../" + dir + "/core/inject.js", ['Blockly.inject'], ['
 goog.addDependency("../../../" + dir + "/core/input.js", ['Blockly.Input'], ['Blockly.Connection', 'Blockly.FieldLabel', 'goog.asserts']);
 goog.addDependency("../../../" + dir + "/core/msg.js", ['Blockly.Msg'], []);
 goog.addDependency("../../../" + dir + "/core/mutator.js", ['Blockly.Mutator'], ['Blockly.Bubble', 'Blockly.Icon', 'Blockly.WorkspaceSvg', 'goog.Timer', 'goog.dom']);
+goog.addDependency("../../../" + dir + "/core/mutatorMinus.js", ['Blockly.MutatorMinus'], ['Blockly.Mutator', 'Blockly.Bubble', 'Blockly.Icon']);
+goog.addDependency("../../../" + dir + "/core/mutatorPlus.js", ['Blockly.MutatorPlus'], ['Blockly.Mutator', 'Blockly.Bubble', 'Blockly.Icon']);
 goog.addDependency("../../../" + dir + "/core/names.js", ['Blockly.Names'], []);
 goog.addDependency("../../../" + dir + "/core/options.js", ['Blockly.Options'], []);
 goog.addDependency("../../../" + dir + "/core/procedures.js", ['Blockly.Procedures'], ['Blockly.Blocks', 'Blockly.constants', 'Blockly.Field', 'Blockly.Names', 'Blockly.Workspace']);
@@ -1734,6 +1736,8 @@ goog.require('Blockly.Icon');
 goog.require('Blockly.Input');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Mutator');
+goog.require('Blockly.MutatorMinus');
+goog.require('Blockly.MutatorPlus');
 goog.require('Blockly.Names');
 goog.require('Blockly.Options');
 goog.require('Blockly.Procedures');

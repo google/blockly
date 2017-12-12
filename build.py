@@ -491,6 +491,7 @@ class Gen_langfiles(threading.Thread):
             "python",
             os.path.join("i18n", "js_to_json.py"),
             "--input_file", "msg/messages.js",
+            "--robInput_file", "robMsg/robMessages.js",
             "--output_dir", "msg/json/",
             "--quiet"])
       except (subprocess.CalledProcessError, OSError) as e:

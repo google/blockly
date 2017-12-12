@@ -47,7 +47,7 @@ Blockly.Icon.prototype.collapseHidden = true;
 /**
  * Height and width of icons.
  */
-Blockly.Icon.prototype.SIZE = 17;
+Blockly.Icon.prototype.SIZE = 10;
 
 /**
  * Bubble UI (if visible).

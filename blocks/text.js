@@ -63,7 +63,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "type": "text_join",
     "message0": "",
     "output": "String",
-    "colour": "%{BKY_TEXTS_HUE}",
+    "colour": "#94AAD6",
     "helpUrl": "%{BKY_TEXT_JOIN_HELPURL}",
     "tooltip": "%{BKY_TEXT_JOIN_TOOLTIP}",
     "mutator": "text_join_mutator"

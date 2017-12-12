@@ -41,7 +41,7 @@ goog.require('Blockly');
  * Should be the same as Blockly.Msg.MATH_HUE
  * @readonly
  */
-Blockly.Constants.Math.HUE = 230;
+Blockly.Constants.Math.HUE = "#065281";
 /** @deprecated Use Blockly.Constants.Math.HUE */
 Blockly.Blocks.math.HUE = Blockly.Constants.Math.HUE;
 
@@ -91,7 +91,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "colour": "#065281",
     "helpUrl": "%{BKY_MATH_ARITHMETIC_HELPURL}",
     "extensions": ["math_op_tooltip"]
   },
@@ -255,7 +255,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "colour": "#065281",
     "helpUrl": "%{BKY_MATH_ROUND_HELPURL}",
     "tooltip": "%{BKY_MATH_ROUND_TOOLTIP}"
   },

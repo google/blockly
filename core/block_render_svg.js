@@ -39,7 +39,7 @@ goog.require('goog.userAgent');
  */
 // Blockly.BlockSvg.SEP_SPACE_X = 10;
 // Blockly.BlockSvg.SEP_SPACE_X = 15;
-Blockly.BlockSvg.SEP_SPACE_X = 15;
+Blockly.BlockSvg.SEP_SPACE_X = 10;
 /**
  * Vertical space between elements.
  * @const

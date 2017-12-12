@@ -41,7 +41,7 @@ goog.require('Blockly');
  * Should be the same as Blockly.Msg.LOGIC_HUE.
  * @readonly
  */
-Blockly.Constants.Logic.HUE = 210;
+Blockly.Constants.Logic.HUE = "#2F1847";
 /** @deprecated Use Blockly.Constants.Logic.HUE */
 Blockly.Blocks.logic.HUE = Blockly.Constants.Logic.HUE;
 
@@ -76,18 +76,19 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "check": "Boolean"
       }
     ],
-    "message1": "%{BKY_CONTROLS_IF_MSG_THEN} %1",
+    "message1": "then %1",
     "args1": [
       {
-        "type": "input_statement",
+        "type": "input_value",
         "name": "DO0"
       }
     ],
-    "previousStatement": null,
-    "nextStatement": null,
-    "colour": "%{BKY_LOGIC_HUE}",
+    "output": null,
+    // "previousStatement": null,
+    // "nextStatement": null,
+    "colour": "#2F1847",
     "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
-    "mutator": "controls_if_mutator",
+    // "mutator": "controls_if_mutator",
     "extensions": ["controls_if_tooltip"]
   },
   // If/else block that does not use a mutator.
@@ -101,23 +102,22 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "check": "Boolean"
       }
     ],
-    "message1": "%{BKY_CONTROLS_IF_MSG_THEN} %1",
+    "message1": "then %1",
     "args1": [
       {
-        "type": "input_statement",
+        "type": "input_value",
         "name": "DO0"
       }
     ],
     "message2": "%{BKY_CONTROLS_IF_MSG_ELSE} %1",
     "args2": [
       {
-        "type": "input_statement",
+        "type": "input_value",
         "name": "ELSE"
       }
     ],
-    "previousStatement": null,
-    "nextStatement": null,
-    "colour": "%{BKY_LOGIC_HUE}",
+    "output": null,
+    "colour": "#2F1847",
     "tooltip": "%{BKYCONTROLS_IF_TOOLTIP_2}",
     "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
     "extensions": ["controls_if_tooltip"]
@@ -150,7 +150,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Boolean",
-    "colour": "%{BKY_LOGIC_HUE}",
+    "colour": "#2F1847",
     "helpUrl": "%{BKY_LOGIC_COMPARE_HELPURL}",
     "extensions": ["logic_compare", "logic_op_tooltip"]
   },
@@ -180,7 +180,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Boolean",
-    "colour": "%{BKY_LOGIC_HUE}",
+    "colour": "#2F1847",
     "helpUrl": "%{BKY_LOGIC_OPERATION_HELPURL}",
     "extensions": ["logic_op_tooltip"]
   },
@@ -196,7 +196,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Boolean",
-    "colour": "%{BKY_LOGIC_HUE}",
+    "colour": "#2F1847",
     "tooltip": "%{BKY_LOGIC_NEGATE_TOOLTIP}",
     "helpUrl": "%{BKY_LOGIC_NEGATE_HELPURL}"
   },

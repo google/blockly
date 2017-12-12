@@ -30,7 +30,7 @@
 
   <p>&rarr; More info on <a href="https://developers.google.com/blockly/guides/configure-blockly/web/fixed-size">injecting fixed-sized Blockly</a>&hellip;</p>
 
-  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+  <div id="blocklyDiv" style="height: 880px; width: 1000px;"></div>
 
   <xml id="toolbox" style="display: none">
     <block type="property_value"></block>
@@ -40,143 +40,70 @@
     <block type="concat_array"></block>
     <block type="concat_values"></block>
     <block type="substitute"></block>
+    <block type="lookup"></block>
+    <block type="controls_if"></block>
+    <block type="controls_ifelse"></block>
+    <block type="logic_compare"></block>
+    <block type="logic_operation"></block>
+    <block type="logic_negate"></block>
+    <block type="math_arithmetic"></block>
+    <block type="math_round"></block>
   </xml>
 
   <script>
-    Blockly.defineBlocksWithJsonArray(
-      [{
-        "type": "property_value",
-        "lastDummyAlign0": "RIGHT",
-        "message0": "Value of %1 %2",
-        "args0": [
-          {
-            "type": "input_dummy"
-          },
-          {
-            "type": "field_dropdown",
-            "name": "Hello",
-            "options": [
-              [
-                "option",
-                "OPTIONNAME"
-              ],
-              [
-                "option",
-                "OPTIONNAME"
-              ],
-              [
-                "option",
-                "OPTIONNAME"
-              ]
-            ]
-          }
-        ],
-        "inputsInline": true,
-        "output": "String",
-        "colour": "#94AAD6",
-        "tooltip": "Hello",
-        "helpUrl": ""
-      },
-      {
-        "type": "string_value",
-        "lastDummyAlign0": "RIGHT",
-        "message0": "%1",
-        "args0": [
-          {
-            "type": "field_input",
-            "name": "string",
-            "text": "Enter value"
-          }
-        ],
-        "inputsInline": true,
-        "output": "String",
-        "colour": "#94AAD6",
-        "tooltip": "Hello",
-        "helpUrl": ""
-      },
-      {
-        "type": "number",
-        "message0": "Numbers %1 %2",
-        "args0": [
-          {
-            "type": "input_dummy"
-          },
-          {
-            "type": "field_number",
-            "name": "number",
-            "value": 0
-          }
-        ],
-        "inputsInline": true,
-        "output": "Number",
-        "colour": "#94AAD6",
-        "tooltip": "",
-        "helpUrl": ""
-      },
-      {
-        "type": "asset_id",
-        "lastDummyAlign0": "RIGHT",
-        "message0": "Asset %1 %2",
-        "args0": [
-          {
-            "type": "input_dummy"
-          },
-          {
-            "type": "field_dropdown",
-            "name": "NAME",
-            "options": [
-              [
-                "option",
-                "OPTIONNAME"
-              ],
-              [
-                "option",
-                "OPTIONNAME"
-              ],
-              [
-                "option",
-                "OPTIONNAME"
-              ]
-            ]
-          }
-        ],
-        "inputsInline": true,
-        "output": "String",
-        "colour": "#94AAD6",
-        "tooltip": "",
-        "helpUrl": ""
-      },
-      {
-        "type": "substitute",
-        "message0": "Substitute %1 %2 in %3 %4",
-        "args0": [
-          {
-            "type": "input_dummy"
-          },
-          {
-            "type": "input_value",
-            "name": "value_to_substitute",
-            "check": [
-              "String",
-              "Number"
-            ]
-          },
-          {
-            "type": "input_dummy"
-          },
-          {
-            "type": "input_value",
-            "name": "value",
-            "check": "String"
-          }
-        ],
-        "inputsInline": true,
-        "output": "String",
-        "colour": "#94AAD6",
-        "tooltip": "",
-        "helpUrl": ""
-      }]
-    );
+    Blockly.Blocks['number'] = {
+      init : function() {
+          this.setColour("#94AAD6");
+          this.appendDummyInput()
+              .appendField("Number ");
+          this.appendDummyInput()
+              .appendField(new Blockly.FieldNumber(0), "number");
+          this.setInputsInline(true);
+          this.setOutput(true, "Number");
+      }
+    }
+
+    Blockly.Blocks['asset_id'] = {
+      init: function() {
+        this.setColour("#94AAD6");
+        this.appendDummyInput()
+            .appendField("Asset ");
+        this.appendDummyInput()
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField(new Blockly.FieldDropdown([["option","OPTIONNAME"], ["option","OPTIONNAME"], ["option","OPTIONNAME"]]), "NAME");
+        this.setInputsInline(true);
+        this.setOutput(true, "String");
+      }
+    }
+
+    Blockly.Blocks['property_value'] = {
+      init: function() {
+        this.setColour("#94AAD6");
+        this.appendDummyInput()
+            .appendField("Value of ");
+        this.appendDummyInput()
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField(new Blockly.FieldDropdown([["option","OPTIONNAME"], ["option","OPTIONNAME"], ["option","OPTIONNAME"]]), "Hello");
+        this.setInputsInline(true);
+        this.setOutput(true, "String");
+      }
+    }
+
+    Blockly.Blocks['substitute'] = {
+      init: function() {
+        this.setColour("#486DB6");
+        this.appendDummyInput()
+            .appendField("Substitute");
+        this.appendValueInput("value_to_substitute")
+            .setCheck(["String", "Number"]);
+        this.appendDummyInput()
+            .appendField("in");
+        this.appendValueInput("value")
+            .setCheck("String");
+        this.setInputsInline(true);
+        this.setOutput(true, "String");
+      }
+    }
 
     Blockly.Blocks['concat_array'] = {
       /**
@@ -185,7 +112,7 @@
        * @this Blockly.Block
        */
       init : function() {
-          this.setColour("#94AAD6");
+          this.setColour("#486DB6");
 
           this.appendValueInput('ADD0').appendField(Blockly.Msg.LISTS_CREATE_TITLE)
           this.setInputsInline(false);
@@ -278,13 +205,8 @@
     }
 
     Blockly.Blocks['concat_values'] = {
-      /**
-       * Block for creating a list with any number of elements of any type.
-       *
-       * @this Blockly.Block
-       */
       init : function() {
-          this.setColour("#94AAD6");
+          this.setColour("#486DB6");
 
           this.appendValueInput('ADD0').appendField('Combine values')
           this.setInputsInline(false);
@@ -375,6 +297,49 @@
           this.render();
       }
     }
+
+    Blockly.Blocks['lookup'] = {
+      init : function() {
+          this.setColour("#486DB6");
+
+          this.appendValueInput('value').appendField("Lookup value from excel")
+              .appendField("    (value)").appendField('\u2192').setCheck('String');
+          this.setInputsInline(false);
+          this.appendValueInput('url')
+              .appendField("                                 ")
+              .appendField("                (url)")
+              .appendField('\u2192')
+              .setCheck('String');
+          this.appendValueInput('column name')
+              .appendField("                        ")
+              .appendField("                 (column)")
+              .appendField('\u2192')
+              .setCheck('String');
+          this.setOutput(true, 'String');
+          this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
+          this.itemCount_ = 2;
+      }
+    }
+
+    Blockly.defineBlocksWithJsonArray(
+      [{
+        "type": "string_value",
+        "message0": "%1",
+        "args0": [{
+          "type": "field_input",
+          "name": "TEXT",
+          "text": ""
+        }],
+        "output": "String",
+        "colour": "#94AAD6",
+        "helpUrl": "%{BKY_TEXT_TEXT_HELPURL}",
+        "tooltip": "%{BKY_TEXT_TEXT_TOOLTIP}",
+        "extensions": [
+          "text_quotes",
+          "parent_tooltip_when_inline"
+        ]
+      }]
+    );
 
     var demoWorkspace = Blockly.inject('blocklyDiv', {
       media: '../../media/',

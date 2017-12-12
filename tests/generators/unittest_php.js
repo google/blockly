@@ -146,23 +146,22 @@ Blockly.PHP['unittest_assertvalue'] = function(block) {
 };
 
 Blockly.PHP['unittest_fail'] = function(block) {
-    // Always assert an error.
-    var resultsVar = Blockly.PHP.variableDB_.getName('unittestResults',
-        Blockly.Variables.NAME_TYPE);
-    var message = Blockly.PHP.valueToCode(block, 'MESSAGE',
-      Blockly.PHP.ORDER_NONE) || '';
-    var functionName = Blockly.PHP.provideFunction_(
-        'unittest_fail',
-        [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
-        '($message) {',
-            'global ' + resultsVar + ';',
-            '  // Always assert an error.',
-            '  if (!' + resultsVar + ') {',
-            '    throw new Exception("Orphaned assert fail: " . $message);',
-            '  }',
-            '  array_push(' + resultsVar + ', [false, "Fail.", $message]);',
-            '}']);
-    return functionName + '(' + message + ');\n';
+  // Always assert an error.
+  var resultsVar = Blockly.PHP.variableDB_.getName('unittestResults',
+      Blockly.Variables.NAME_TYPE);
+  var message = Blockly.PHP.quote_(block.getFieldValue('MESSAGE'));
+  var functionName = Blockly.PHP.provideFunction_(
+      'unittest_fail',
+      [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+      '($message) {',
+          'global ' + resultsVar + ';',
+          '  // Always assert an error.',
+          '  if (!' + resultsVar + ') {',
+          '    throw new Exception("Orphaned assert fail: " . $message);',
+          '  }',
+          '  array_push(' + resultsVar + ', [false, "Fail.", $message]);',
+          '}']);
+  return functionName + '(' + message + ');\n';
 };
 
 Blockly.PHP['unittest_adjustindex'] = function(block) {

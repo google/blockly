@@ -144,8 +144,7 @@ Blockly.JavaScript['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = Blockly.JavaScript.variableDB_.getName('unittestResults',
       Blockly.Variables.NAME_TYPE);
-  var message = Blockly.JavaScript.valueToCode(block, 'MESSAGE',
-      Blockly.JavaScript.ORDER_NONE) || '';
+  var message = Blockly.JavaScript.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.JavaScript.provideFunction_(
       'unittest_fail',
       [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +

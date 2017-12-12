@@ -140,8 +140,7 @@ Blockly.Dart['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = Blockly.Dart.variableDB_.getName('unittestResults',
       Blockly.Variables.NAME_TYPE);
-  var message = Blockly.Dart.valueToCode(block, 'MESSAGE',
-      Blockly.Dart.ORDER_NONE) || '';
+  var message = Blockly.Dart.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.Dart.provideFunction_(
       'unittest_fail',
       [ 'void ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +

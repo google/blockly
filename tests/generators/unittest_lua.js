@@ -150,8 +150,7 @@ Blockly.Lua['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = Blockly.Lua.variableDB_.getName('unittestResults',
       Blockly.Variables.NAME_TYPE);
-  var message = Blockly.Lua.valueToCode(block, 'MESSAGE',
-      Blockly.Lua.ORDER_NONE) || '';
+  var message = Blockly.Lua.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.Lua.provideFunction_(
       'unittest_fail',
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(message)',

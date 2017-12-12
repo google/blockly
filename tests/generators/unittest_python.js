@@ -118,8 +118,7 @@ Blockly.Python['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = Blockly.Python.variableDB_.getName('unittestResults',
       Blockly.Variables.NAME_TYPE);
-  var message = Blockly.Python.valueToCode(block, 'MESSAGE',
-      Blockly.Python.ORDER_NONE) || '';
+  var message = Blockly.Python.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.Python.provideFunction_(
       'fail',
       ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(message):',

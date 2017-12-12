@@ -3,9 +3,14 @@
 <head>
   <meta charset="utf-8">
   <title>Blockly Demo: Fixed Blockly</title>
-  <script src="../../blockly_compressed.js"></script>
+  <script src="../../blockly_uncompressed.js"></script>
   <script src="../../blocks_compressed.js"></script>
+  <script src="../../robMsg/robMessages.js"></script>
   <script src="../../msg/js/en.js"></script>
+
+  <!-- <script src="../../core/mutatorPlus.js"></script> -->
+  <!-- <script src="../../core/mutatorMinus.js"></script> -->
+  <!-- <script src="../../msg/js/en.js"></script> -->
   <style>
     body {
       background-color: #fff;
@@ -25,22 +30,321 @@
 
   <p>&rarr; More info on <a href="https://developers.google.com/blockly/guides/configure-blockly/web/fixed-size">injecting fixed-sized Blockly</a>&hellip;</p>
 
-  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+  <div id="blocklyDiv" style="height: 880px; width: 1000px;"></div>
 
   <xml id="toolbox" style="display: none">
+    <block type="property_value"></block>
+    <block type="string_value"></block>
+    <block type="asset_id"></block>
+    <block type="number"></block>
+    <block type="concat_array"></block>
+    <block type="concat_values"></block>
+    <block type="substitute"></block>
+    <block type="lookup"></block>
     <block type="controls_if"></block>
+    <block type="controls_ifelse"></block>
     <block type="logic_compare"></block>
-    <block type="controls_repeat_ext"></block>
-    <block type="math_number"></block>
+    <block type="logic_operation"></block>
+    <block type="logic_negate"></block>
     <block type="math_arithmetic"></block>
-    <block type="text"></block>
-    <block type="text_print"></block>
+    <block type="math_round"></block>
   </xml>
 
   <script>
-    var demoWorkspace = Blockly.inject('blocklyDiv',
-        {media: '../../media/',
-         toolbox: document.getElementById('toolbox')});
+    Blockly.Blocks['number'] = {
+      init : function() {
+          this.setColour("#94AAD6");
+          this.appendDummyInput()
+              .appendField("Number ");
+          this.appendDummyInput()
+              .appendField(new Blockly.FieldNumber(0), "number");
+          this.setInputsInline(true);
+          this.setOutput(true, "Number");
+      }
+    }
+
+    Blockly.Blocks['asset_id'] = {
+      init: function() {
+        this.setColour("#94AAD6");
+        this.appendDummyInput()
+            .appendField("Asset ");
+        this.appendDummyInput()
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField(new Blockly.FieldDropdown([["option","OPTIONNAME"], ["option","OPTIONNAME"], ["option","OPTIONNAME"]]), "NAME");
+        this.setInputsInline(true);
+        this.setOutput(true, "String");
+      }
+    }
+
+    Blockly.Blocks['property_value'] = {
+      init: function() {
+        this.setColour("#94AAD6");
+        this.appendDummyInput()
+            .appendField("Value of ");
+        this.appendDummyInput()
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField(new Blockly.FieldDropdown([["option","OPTIONNAME"], ["option","OPTIONNAME"], ["option","OPTIONNAME"]]), "Hello");
+        this.setInputsInline(true);
+        this.setOutput(true, "String");
+      }
+    }
+
+    Blockly.Blocks['substitute'] = {
+      init: function() {
+        this.setColour("#486DB6");
+        this.appendDummyInput()
+            .appendField("Substitute");
+        this.appendValueInput("value_to_substitute")
+            .setCheck(["String", "Number"]);
+        this.appendDummyInput()
+            .appendField("in");
+        this.appendValueInput("value")
+            .setCheck("String");
+        this.setInputsInline(true);
+        this.setOutput(true, "String");
+      }
+    }
+
+    Blockly.Blocks['concat_array'] = {
+      /**
+       * Block for creating a list with any number of elements of any type.
+       *
+       * @this Blockly.Block
+       */
+      init : function() {
+          this.setColour("#486DB6");
+
+          this.appendValueInput('ADD0').appendField(Blockly.Msg.LISTS_CREATE_TITLE)
+          this.setInputsInline(false);
+          this.appendValueInput('ADD1');
+          this.setOutput(true, 'Array_String');
+          this.setMutatorPlus(new Blockly.MutatorPlus(this));
+          this.setMutatorMinus(new Blockly.MutatorMinus(this));
+          this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
+          this.itemCount_ = 2;
+      },
+      /**
+       * Create XML to represent list inputs.
+       *
+       * @return {Element} XML storage element.
+       * @this Blockly.Block
+       */
+      mutationToDom : function() {
+          var container = document.createElement('mutation');
+          container.setAttribute('items', this.itemCount_);
+          return container;
+      },
+      /**
+       * Parse XML to restore the list inputs.
+       *
+       * @param {!Element}
+       *            xmlElement XML storage element.
+       * @this Blockly.Block
+       */
+      domToMutation : function(xmlElement) {
+          for (var x = 0; x < this.itemCount_; x++) {
+              this.removeInput('ADD' + x);
+          }
+          this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+
+          this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+          for (var x = 0; x < this.itemCount_; x++) {
+              if (x == 0) {
+                  this.appendValueInput('ADD0').appendField(Blockly.Msg.LISTS_CREATE_TITLE);
+                  this.setInputsInline(false);
+              } else {
+                  this.appendValueInput('ADD' + x)
+              }
+          }
+          if (this.itemCount_ == 0) {
+              this.appendDummyInput('EMPTY').appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
+              this.mutatorMinus.dispose();
+              this.mutatorMinus = null;
+          } else {
+              this.setMutatorMinus(new Blockly.MutatorMinus(this));
+          }
+      },
+
+      /**
+       * Update the shape according to the number of item inputs.
+       *
+       * @param {Number}
+       *            number of item inputs.
+       * @this Blockly.Block
+       */
+      updateShape_ : function(num) {
+          Blockly.dragMode_ = Blockly.DRAG_NONE;
+
+          if (num == 1) {
+              if (this.itemCount_ == 0) {
+                  this.removeInput('EMPTY');
+                  this.appendValueInput('ADD0').appendField(Blockly.Msg.LISTS_CREATE_TITLE);
+                  this.setInputsInline(false);
+                  this.setMutatorMinus(new Blockly.MutatorMinus(this));
+              } else {
+                  this.appendValueInput('ADD' + this.itemCount_)
+              }
+
+              this.itemCount_++;
+          } else if (num == -1) {
+              this.itemCount_--;
+              var target = this.getInputTargetBlock('ADD' + this.itemCount_);
+              if (target) {
+                  target.unplug();
+                  target.dispose();
+              }
+              this.removeInput('ADD' + this.itemCount_);
+          }
+          if (this.itemCount_ == 0) {
+              this.appendDummyInput('EMPTY').appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
+              this.mutatorMinus.dispose();
+              this.mutatorMinus = null;
+          }
+          this.render();
+      }
+    }
+
+    Blockly.Blocks['concat_values'] = {
+      init : function() {
+          this.setColour("#486DB6");
+
+          this.appendValueInput('ADD0').appendField('Combine values')
+          this.setInputsInline(false);
+          this.appendValueInput('ADD1');
+          this.setOutput(true, 'Array_String');
+          this.setMutatorPlus(new Blockly.MutatorPlus(this));
+          this.setMutatorMinus(new Blockly.MutatorMinus(this));
+          this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
+          this.itemCount_ = 2;
+      },
+      /**
+       * Create XML to represent list inputs.
+       *
+       * @return {Element} XML storage element.
+       * @this Blockly.Block
+       */
+      mutationToDom : function() {
+          var container = document.createElement('mutation');
+          container.setAttribute('items', this.itemCount_);
+          return container;
+      },
+      /**
+       * Parse XML to restore the list inputs.
+       *
+       * @param {!Element}
+       *            xmlElement XML storage element.
+       * @this Blockly.Block
+       */
+      domToMutation : function(xmlElement) {
+          for (var x = 0; x < this.itemCount_; x++) {
+              this.removeInput('ADD' + x);
+          }
+          this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+
+          this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+          for (var x = 0; x < this.itemCount_; x++) {
+              if (x == 0) {
+                  this.appendValueInput('ADD0').appendField('Combine values');
+                  this.setInputsInline(false);
+              } else {
+                  this.appendValueInput('ADD' + x)
+              }
+          }
+          if (this.itemCount_ == 0) {
+              this.appendDummyInput('EMPTY').appendField("Combine values");
+              this.mutatorMinus.dispose();
+              this.mutatorMinus = null;
+          } else {
+              this.setMutatorMinus(new Blockly.MutatorMinus(this));
+          }
+      },
+
+      /**
+       * Update the shape according to the number of item inputs.
+       *
+       * @param {Number}
+       *            number of item inputs.
+       * @this Blockly.Block
+       */
+      updateShape_ : function(num) {
+          Blockly.dragMode_ = Blockly.DRAG_NONE;
+
+          if (num == 1) {
+              if (this.itemCount_ == 0) {
+                  this.removeInput('EMPTY');
+                  this.appendValueInput('ADD0').appendField('Combine values');
+                  this.setInputsInline(false);
+                  this.setMutatorMinus(new Blockly.MutatorMinus(this));
+              } else {
+                  this.appendValueInput('ADD' + this.itemCount_)
+              }
+
+              this.itemCount_++;
+          } else if (num == -1) {
+              this.itemCount_--;
+              var target = this.getInputTargetBlock('ADD' + this.itemCount_);
+              if (target) {
+                  target.unplug();
+                  target.dispose();
+              }
+              this.removeInput('ADD' + this.itemCount_);
+          }
+          if (this.itemCount_ == 0) {
+              this.appendDummyInput('EMPTY').appendField("Combine values");
+              this.mutatorMinus.dispose();
+              this.mutatorMinus = null;
+          }
+          this.render();
+      }
+    }
+
+    Blockly.Blocks['lookup'] = {
+      init : function() {
+          this.setColour("#486DB6");
+
+          this.appendValueInput('value').appendField("Lookup value from excel")
+              .appendField("    (value)").appendField('\u2192').setCheck('String');
+          this.setInputsInline(false);
+          this.appendValueInput('url')
+              .appendField("                                 ")
+              .appendField("                (url)")
+              .appendField('\u2192')
+              .setCheck('String');
+          this.appendValueInput('column name')
+              .appendField("                        ")
+              .appendField("                 (column)")
+              .appendField('\u2192')
+              .setCheck('String');
+          this.setOutput(true, 'String');
+          this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
+          this.itemCount_ = 2;
+      }
+    }
+
+    Blockly.defineBlocksWithJsonArray(
+      [{
+        "type": "string_value",
+        "message0": "%1",
+        "args0": [{
+          "type": "field_input",
+          "name": "TEXT",
+          "text": ""
+        }],
+        "output": "String",
+        "colour": "#94AAD6",
+        "helpUrl": "%{BKY_TEXT_TEXT_HELPURL}",
+        "tooltip": "%{BKY_TEXT_TEXT_TOOLTIP}",
+        "extensions": [
+          "text_quotes",
+          "parent_tooltip_when_inline"
+        ]
+      }]
+    );
+
+    var demoWorkspace = Blockly.inject('blocklyDiv', {
+      media: '../../media/',
+      toolbox: document.getElementById('toolbox')
+    });
   </script>
 
 </body>

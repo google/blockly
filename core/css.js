@@ -112,6 +112,12 @@ Blockly.Css.setCursor = function(cursor) {
  * Array making up the CSS content for Blockly.
  */
 Blockly.Css.CONTENT = [
+  '@font-face {',
+    "font-family: 'proxima-nova';",
+    "src: url('../../media/ProximaNova-Regular.otf') format('opentype');",
+    "font-style: normal;",
+  '}',
+
   '.blocklySvg {',
     'background-color: #fff;',
     'outline: none;',
@@ -280,8 +286,8 @@ Blockly.Css.CONTENT = [
   '.blocklyText {',
     'cursor: default;',
     'fill: #fff;',
-    'font-family: sans-serif;',
-    'font-size: 11pt;',
+    'font-family: proxima-nova;',
+    'font-size: 10pt;',
   '}',
 
   '.blocklyNonEditableText>text {',
@@ -291,7 +297,6 @@ Blockly.Css.CONTENT = [
   '.blocklyNonEditableText>rect,',
   '.blocklyEditableText>rect {',
     'fill: #fff;',
-    'fill-opacity: .6;',
   '}',
 
   '.blocklyNonEditableText>text,',

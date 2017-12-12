@@ -88,7 +88,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Rename";
 /** @export */ Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Variable name";
 /** @export */ Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
-/** @export */ Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "create empty list";
+/** @export */ Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "Empty ordered list of values";
 /** @export */ Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "Returns a list, of length 0, containing no data records";
 /** @export */ Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD = "list";
 /** @export */ Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TOOLTIP = "Add, remove, or reorder sections to reconfigure this list block.";

@@ -71,6 +71,8 @@ def main():
                       help='input file')
   parser.add_argument('--quiet', action='store_true', default=False,
                       help='only display warnings, not routine info')
+  parser.add_argument('--robInput_file', default='robMessages.js',
+   97                        help='robInput file')
   args = parser.parse_args()
   if (not args.output_dir.endswith(os.path.sep)):
     args.output_dir += os.path.sep

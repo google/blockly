@@ -230,6 +230,12 @@ Blockly.BlockSvg.prototype.getIcons = function() {
   if (this.mutator) {
     icons.push(this.mutator);
   }
+  if (this.mutatorPlus) {
+    icons.push(this.mutatorPlus);
+  }
+  if (this.mutatorMinus) {
+    icons.push(this.mutatorMinus);
+  }
   if (this.comment) {
     icons.push(this.comment);
   }
@@ -1193,6 +1199,40 @@ Blockly.BlockSvg.prototype.setMutator = function(mutator) {
     mutator.block_ = this;
     this.mutator = mutator;
     mutator.createIcon();
+  }
+};
+
+/**
+ * Give this block a mutatorPlus button.
+ * @param {Blockly.MutatorPlus} mutatorPlus A mutatorPlus instance or null to remove.
+ */
+Blockly.BlockSvg.prototype.setMutatorPlus = function(mutatorPlus) {
+  if (this.mutatorPlus && this.mutatorPlus !== mutatorPlus) {
+    this.mutatorPlus.dispose();
+  }
+  if (mutatorPlus) {
+    mutatorPlus.block_ = this;
+    this.mutatorPlus = mutatorPlus;
+    if (this.rendered) {
+      this.mutatorPlus.createIcon();
+    }
+  }
+};
+
+/**
+ * Give this block a mutatorMinus button.
+ * @param {Blockly.MutatorMinus} mutatorMinus A mutatorMinus instance or null to remove.
+ */
+Blockly.BlockSvg.prototype.setMutatorMinus = function(mutatorMinus) {
+  if (this.mutatorMinus && this.mutatorMinus !== mutatorMinus) {
+    this.mutatorMinus.dispose();
+  }
+  if (mutatorMinus) {
+    mutatorMinus.block_ = this;
+    this.mutatorMinus = mutatorMinus;
+    if (this.rendered) {
+      this.mutatorMinus.createIcon();
+    }
   }
 };
 

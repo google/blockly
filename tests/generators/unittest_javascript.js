@@ -63,13 +63,10 @@ Blockly.JavaScript['unittest_main'] = function(block) {
   // Run tests (unindented).
   code += Blockly.JavaScript.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');
-  var reportVar = Blockly.JavaScript.variableDB_.getDistinctName(
-      'report', Blockly.Variables.NAME_TYPE);
-  code += 'var ' + reportVar + ' = ' + functionName + '();\n';
+  // Send the report to the console (that's where errors will go anyway).
+  code += 'console.log(' + functionName + '());\n';
   // Destroy results.
   code += resultsVar + ' = null;\n';
-  // Send the report to the console (that's where errors will go anyway).
-  code += 'console.log(' + reportVar + ');\n';
   return code;
 };
 
@@ -147,8 +144,7 @@ Blockly.JavaScript['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = Blockly.JavaScript.variableDB_.getName('unittestResults',
       Blockly.Variables.NAME_TYPE);
-  var message = Blockly.JavaScript.valueToCode(block, 'MESSAGE',
-      Blockly.JavaScript.ORDER_NONE) || '';
+  var message = Blockly.JavaScript.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.JavaScript.provideFunction_(
       'unittest_fail',
       [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +

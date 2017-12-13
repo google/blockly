@@ -74,7 +74,7 @@ Blockly.Extensions.register = function(name, initFn) {
  *     registered.
  */
 Blockly.Extensions.registerMixin = function(name, mixinObj) {
-  if(!goog.isObject(mixinObj)){
+  if (!goog.isObject(mixinObj)){
     throw new Error('Error: Mixin "' + name + '" must be a object');
   }
   Blockly.Extensions.register(name, function() {

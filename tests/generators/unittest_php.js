@@ -42,7 +42,7 @@ Blockly.PHP['unittest_main'] = function(block) {
           '    } else {',
           '      array_push($summary, "F");',
           '      $fails++;',
-          '      array_push($report,"");',
+          '      array_push($report, "");',
           '      array_push($report, "FAIL: " . ' + resultsVar + '[$x][2]);',
           '      array_push($report, ' + resultsVar + '[$x][1]);',
           '    }',

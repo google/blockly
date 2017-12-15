@@ -59,13 +59,10 @@ Blockly.Python['unittest_main'] = function(block) {
   // Run tests (unindented).
   code += Blockly.Python.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');
-  var reportVar = Blockly.Python.variableDB_.getDistinctName(
-      'report', Blockly.Variables.NAME_TYPE);
-  code += reportVar + ' = ' + functionName + '()\n';
+  // Print the report.
+  code += 'print(' + functionName + '())\n';
   // Destroy results.
   code += resultsVar + ' = None\n';
-  // Print the report.
-  code += 'print(' + reportVar + ')\n';
   return code;
 };
 
@@ -121,8 +118,7 @@ Blockly.Python['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = Blockly.Python.variableDB_.getName('unittestResults',
       Blockly.Variables.NAME_TYPE);
-  var message = Blockly.Python.valueToCode(block, 'MESSAGE',
-      Blockly.Python.ORDER_NONE) || '';
+  var message = Blockly.Python.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.Python.provideFunction_(
       'fail',
       ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(message):',

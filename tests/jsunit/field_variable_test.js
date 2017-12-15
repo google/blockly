@@ -175,7 +175,8 @@ function test_fieldVariable_getVariableTypes_nullVariableTypes() {
   fieldVariable.variableTypes = null;
 
   var resultTypes = fieldVariable.getVariableTypes_();
-  isEqualArrays(resultTypes, ['type1', 'type2']);
+  // The empty string is always one of the options.
+  isEqualArrays(resultTypes, ['type1', 'type2', '']);
   workspace.dispose();
 }
 

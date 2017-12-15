@@ -189,7 +189,7 @@ Blockly.FieldVariable.prototype.getVariableTypes_ = function() {
   // TODO: Why does this happen every time, instead of once when the workspace
   // is set?  Do we expect the variable types to change that much?
   var variableTypes = this.variableTypes;
-  if (variableTypes === null) {
+  if (variableTypes === null || variableTypes === undefined) {
     // If variableTypes is null, return all variable types.
     if (this.sourceBlock_) {
       var workspace = this.sourceBlock_.workspace;

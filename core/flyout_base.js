@@ -269,6 +269,9 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
 
   this.workspace_.renameVariableById =
       this.targetWorkspace_.renameVariableById.bind(this.targetWorkspace_);
+
+  this.workspace_.getVariableTypes =
+      this.targetWorkspace_.getVariableTypes.bind(this.targetWorkspace_);
 };
 
 /**

@@ -98,11 +98,11 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
      */
   customContextMenu: function(options) {
     // Getter blocks have the option to create a setter block, and vice versa.
-    if(this.isInFlyout){
+    if (this.isInFlyout) {
       return;
     }
-    var opposite_type ;
-    var contextMenuMsg ;
+    var opposite_type;
+    var contextMenuMsg;
     if (this.type == 'variables_get_dynamic') {
       opposite_type = 'variables_set_dynamic';
       contextMenuMsg = Blockly.Msg.VARIABLES_GET_CREATE_SET;
@@ -124,8 +124,8 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
     options.push(option);
   },
   onchange: function() {
-    var name = this.getFieldValue('VAR');
-    var variableModel = this.workspace.getVariable(name);
+    var id = this.getFieldValue('VAR');
+    var variableModel = this.workspace.getVariableById(id);
     if (this.type == 'variables_get_dynamic') {
       this.outputConnection.setCheck(variableModel.type);
     } else {

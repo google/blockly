@@ -62,13 +62,10 @@ Blockly.Dart['unittest_main'] = function(block) {
   // Run tests (unindented).
   code += Blockly.Dart.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');
-  var reportVar = Blockly.Dart.variableDB_.getDistinctName(
-      'report', Blockly.Variables.NAME_TYPE);
-  code += 'String ' + reportVar + ' = ' + functionName + '();\n';
+  // Print the report to the console (that's where errors will go anyway).
+  code += 'print(' + functionName + '());\n';
   // Destroy results.
   code += resultsVar + ' = null;\n';
-  // Print the report to the console (that's where errors will go anyway).
-  code += 'print(' + reportVar + ');\n';
   return code;
 };
 
@@ -143,8 +140,7 @@ Blockly.Dart['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = Blockly.Dart.variableDB_.getName('unittestResults',
       Blockly.Variables.NAME_TYPE);
-  var message = Blockly.Dart.valueToCode(block, 'MESSAGE',
-      Blockly.Dart.ORDER_NONE) || '';
+  var message = Blockly.Dart.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.Dart.provideFunction_(
       'unittest_fail',
       [ 'void ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +

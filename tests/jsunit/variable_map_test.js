@@ -269,14 +269,16 @@ function test_getVariableTypes_Trivial() {
   variable_map.createVariable('name3', 'type2', 'id3');
   variable_map.createVariable('name4', 'type3', 'id4');
   var result_array = variable_map.getVariableTypes();
-  isEqualArrays(['type1', 'type2', 'type3'], result_array);
+  // The empty string is always an option.
+  isEqualArrays(['type1', 'type2', 'type3', ''], result_array);
   variableMapTest_tearDown();
 }
 
 function test_getVariableTypes_None() {
   variableMapTest_setUp();
+  // The empty string is always an option.
   var result_array = variable_map.getVariableTypes();
-  isEqualArrays([], result_array);
+  isEqualArrays([''], result_array);
   variableMapTest_tearDown();
 }
 

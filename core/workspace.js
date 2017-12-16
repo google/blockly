@@ -212,6 +212,7 @@ Blockly.Workspace.prototype.clear = function() {
   this.potentialVariableMap_.clear();
 };
 
+/* Begin functions that are just pass-throughs to the variable map. */
 /**
  * Rename a variable by updating its name in the variable map. Identify the
  * variable to rename with the given ID.
@@ -219,12 +220,7 @@ Blockly.Workspace.prototype.clear = function() {
  * @param {string} newName New variable name.
  */
 Blockly.Workspace.prototype.renameVariableById = function(id, newName) {
-  var variable = this.getVariableById(id);
-  if (!variable) {
-    throw new Error('Tried to rename a variable that didn\'t exist. ID: ' + id);
-  }
-
-  this.variableMap_.renameVariable(variable, newName);
+  this.variableMap_.renameVariableById(id, newName);
 };
 
 /**
@@ -248,20 +244,7 @@ Blockly.Workspace.prototype.createVariable = function(name, opt_type, opt_id) {
  * @return {!Array.<!Blockly.Block>} Array of block usages.
  */
 Blockly.Workspace.prototype.getVariableUsesById = function(id) {
-  var uses = [];
-  var blocks = this.getAllBlocks();
-  // Iterate through every block and check the name.
-  for (var i = 0; i < blocks.length; i++) {
-    var blockVariables = blocks[i].getVarModels();
-    if (blockVariables) {
-      for (var j = 0; j < blockVariables.length; j++) {
-        if (blockVariables[j].getId() == id) {
-          uses.push(blocks[i]);
-        }
-      }
-    }
-  }
-  return uses;
+  return this.variableMap_.getVariableUsesById(id);
 };
 
 /**
@@ -270,42 +253,7 @@ Blockly.Workspace.prototype.getVariableUsesById = function(id) {
  * @param {string} id ID of variable to delete.
  */
 Blockly.Workspace.prototype.deleteVariableById = function(id) {
-  var variable = this.getVariableById(id);
-  if (variable) {
-    // Check whether this variable is a function parameter before deleting.
-    var variableName = variable.name;
-    var uses = this.getVariableUsesById(id);
-    for (var i = 0, block; block = uses[i]; i++) {
-      if (block.type == 'procedures_defnoreturn' ||
-        block.type == 'procedures_defreturn') {
-        var procedureName = block.getFieldValue('NAME');
-        var deleteText = Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE.
-            replace('%1', variableName).
-            replace('%2', procedureName);
-        Blockly.alert(deleteText);
-        return;
-      }
-    }
-
-    var workspace = this;
-    if (uses.length > 1) {
-      // Confirm before deleting multiple blocks.
-      var confirmText = Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.
-          replace('%1', String(uses.length)).
-          replace('%2', variableName);
-      Blockly.confirm(confirmText,
-          function(ok) {
-            if (ok) {
-              workspace.deleteVariableInternal_(variable, uses);
-            }
-          });
-    } else {
-      // No confirmation necessary for a single block.
-      this.deleteVariableInternal_(variable, uses);
-    }
-  } else {
-    console.warn("Can't delete non-existent variable: " + id);
-  }
+  this.variableMap_.deleteVariableById(id);
 };
 
 /**
@@ -316,12 +264,7 @@ Blockly.Workspace.prototype.deleteVariableById = function(id) {
  * @private
  */
 Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable, uses) {
-  Blockly.Events.setGroup(true);
-  for (var i = 0; i < uses.length; i++) {
-    uses[i].dispose(true, false);
-  }
-  this.variableMap_.deleteVariable(variable);
-  Blockly.Events.setGroup(false);
+  this.variableMap_.deleteVariableInternal_(variable, uses);
 };
 
 /**
@@ -363,6 +306,35 @@ Blockly.Workspace.prototype.getVariable = function(name, opt_type) {
 Blockly.Workspace.prototype.getVariableById = function(id) {
   return this.variableMap_.getVariableById(id);
 };
+
+/**
+ * Find the variable with the specified type. If type is null, return list of
+ *     variables with empty string type.
+ * @param {?string} type Type of the variables to find.
+ * @return {Array.<Blockly.VariableModel>} The sought after variables of the
+ *     passed in type. An empty array if none are found.
+ */
+Blockly.Workspace.prototype.getVariablesOfType = function(type) {
+  return this.variableMap_.getVariablesOfType(type);
+};
+
+/**
+ * Return all variable types.
+ * @return {!Array.<string>} List of variable types.
+ */
+Blockly.Workspace.prototype.getVariableTypes = function() {
+  return this.variableMap_.getVariableTypes();
+};
+
+/**
+ * Return all variables of all types.
+ * @return {!Array.<Blockly.VariableModel>} List of variable models.
+ */
+Blockly.Workspace.prototype.getAllVariables = function() {
+  return this.variableMap_.getAllVariables();
+};
+
+/* End functions that are just pass-throughs to the variable map. */
 
 /**
  * Returns the horizontal offset of the workspace.
@@ -500,33 +472,6 @@ Blockly.Workspace.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled
     }
   }
   return true;
-};
-
-/**
- * Find the variable with the specified type. If type is null, return list of
- *     variables with empty string type.
- * @param {?string} type Type of the variables to find.
- * @return {Array.<Blockly.VariableModel>} The sought after variables of the
- *     passed in type. An empty array if none are found.
- */
-Blockly.Workspace.prototype.getVariablesOfType = function(type) {
-  return this.variableMap_.getVariablesOfType(type);
-};
-
-/**
- * Return all variable types.
- * @return {!Array.<string>} List of variable types.
- */
-Blockly.Workspace.prototype.getVariableTypes = function() {
-  return this.variableMap_.getVariableTypes();
-};
-
-/**
- * Return all variables of all types.
- * @return {!Array.<Blockly.VariableModel>} List of variable models.
- */
-Blockly.Workspace.prototype.getAllVariables = function() {
-  return this.variableMap_.getAllVariables();
 };
 
 /**

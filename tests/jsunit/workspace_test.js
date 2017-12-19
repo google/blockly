@@ -167,8 +167,6 @@ function test_addTopBlock_TrivialFlyoutIsTrue() {
 
   // Flyout.init usually does this binding.
   workspace.variableMap_ = targetWorkspace.getVariableMap();
-  // workspace.getVariableById =
-  //     targetWorkspace.getVariableById.bind(targetWorkspace);
 
   try {
     var block = createMockBlock('1');

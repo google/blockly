@@ -531,7 +531,6 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     Blockly.Events.enable();
   }
   if (Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(new Blockly.Events.BlockCreate(topBlock));
     var newVariables = Blockly.Variables.getAddedVariables(workspace,
         variablesBeforeCreation);
     // Fire a VarCreate event for each (if any) new variable created.
@@ -539,6 +538,9 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
       var thisVariable = newVariables[i];
       Blockly.Events.fire(new Blockly.Events.VarCreate(thisVariable));
     }
+    // Block events come after var events, in case they refer to newly created
+    // variables.
+    Blockly.Events.fire(new Blockly.Events.BlockCreate(topBlock));
   }
   return topBlock;
 };

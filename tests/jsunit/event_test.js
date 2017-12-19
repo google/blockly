@@ -29,6 +29,15 @@ goog.require('goog.testing.MockControl');
 
 var mockControl_;
 var workspace;
+var savedFireFunc = Blockly.Events.fire;
+
+function temporary_fireEvent(event) {
+  if (!Blockly.Events.isEnabled()) {
+    return;
+  }
+  Blockly.Events.FIRE_QUEUE_.push(event);
+  Blockly.Events.fireNow_();
+}
 
 function eventTest_setUp() {
   workspace = new Blockly.Workspace();
@@ -661,4 +670,76 @@ function helper_addMoveEventParent(events, block, parent) {
   events.push(new Blockly.Events.BlockMove(block));
   block.setParent(parent);
   events[events.length-1].recordNew();
+}
+
+function test_events_newblock_newvar() {
+  eventTest_setUpWithMockBlocks();
+
+  Blockly.Events.fire = temporary_fireEvent;
+  temporary_fireEvent.firedEvents_ = [];
+  // Expect three calls to genUid: one to set the block's ID, one for the event
+  // group's id, and one for the variable's ID.
+  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '2', '3']);
+  try {
+    var block = workspace.newBlock('field_variable_test_block');
+
+    var firedEvents = workspace.undoStack_;
+    // Expect two events: varCreate and block create.
+    assertEquals(2, firedEvents.length);
+
+    var event0 = firedEvents[0];
+    var event1 = firedEvents[1];
+    assertEquals('var_create', event0.type);
+    assertEquals('create', event1.type);
+
+    // Expect the events to have the same group ID.
+    assertEquals(event0.group, event1.group);
+
+    // Expect the group ID to be the result of the second call to genUid.
+    assertEquals('2', event0.group);
+
+    // Expect the workspace to have a variable with ID '3'.
+    assertNotNull(workspace.getVariableById('3'));
+    assertEquals('3', event0.varId);
+  } finally {
+    eventTest_tearDownWithMockBlocks();
+    Blockly.Events.fire = savedFireFunc;
+  }
+}
+
+// The sequence of events should be the same whether the block was created from
+// XML or directly.
+function test_events_newblock_newvar_xml() {
+  eventTest_setUpWithMockBlocks();
+
+  Blockly.Events.fire = temporary_fireEvent;
+  temporary_fireEvent.firedEvents_ = [];
+  try {
+        var dom = Blockly.Xml.textToDom(
+        '<xml>' +
+        '  <block type="field_variable_test_block" id="block1">' +
+        '    <field name="VAR" id="id1" variabletype="">name1</field>' +
+        '  </block>' +
+        '</xml>');
+    Blockly.Xml.domToWorkspace(dom, workspace);
+
+    var firedEvents = workspace.undoStack_;
+    // Expect two events: varCreate and block create.
+    assertEquals(2, firedEvents.length);
+
+    var event0 = firedEvents[0];
+    var event1 = firedEvents[1];
+    assertEquals('var_create', event0.type);
+    assertEquals('create', event1.type);
+
+    // Expect the events to have the same group ID.
+    assertEquals(event0.group, event1.group);
+
+    // Expect the workspace to have a variable with ID 'id1'.
+    assertNotNull(workspace.getVariableById('id1'));
+    assertEquals('id1', event0.varId);
+  } finally {
+    eventTest_tearDownWithMockBlocks();
+    Blockly.Events.fire = savedFireFunc;
+  }
 }

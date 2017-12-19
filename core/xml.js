@@ -86,28 +86,31 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
   return element;
 };
 
+/**
+ * Encode a variable field as XML.
+ * @param {!Blockly.Field} field The field to encode.
+ * @param {!Blockly.Workspace} workspace The workspace that the field is in.
+ * @return {?Element} XML element, or null if the field did not need to be
+ *     serialized.
+ * @private
+ */
 Blockly.Xml.fieldToDomVariable_ = function(field, workspace) {
   var id = field.getValue();
-  var variable = workspace.getVariableById(id);
+  // The field had not been initialized fully before being serialized.
+  if (id == null) {
+    field.initModel();
+    id = field.getValue();
+  }
+  var variable = Blockly.Variables.getVariable(workspace, id);
+
   if (!variable) {
-    if (workspace.isFlyout && workspace.targetWorkspace) {
-      var potentialVariableMap = workspace.getPotentialVariableMap();
-      if (potentialVariableMap) {
-        variable = potentialVariableMap.getVariableById(id);
-      }
-    }
+    throw Error('Tried to serialize a variable field with no variable.');
   }
-  if (variable) {
-    var container = goog.dom.createDom('field', null, variable.name);
-    container.setAttribute('name', field.name);
-    container.setAttribute('id', variable.getId());
-    container.setAttribute('variabletype', variable.type);
-    return container;
-  } else {
-    // something went wrong?
-    console.warn('no variable in fieldtodom');
-    return null;
-  }
+  var container = goog.dom.createDom('field', null, variable.name);
+  container.setAttribute('name', field.name);
+  container.setAttribute('id', variable.getId());
+  container.setAttribute('variabletype', variable.type);
+  return container;
 };
 
 /**

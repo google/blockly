@@ -90,7 +90,15 @@ Blockly.FieldVariable.prototype.initModel = function() {
   this.workspace_ = this.sourceBlock_.workspace;
   var variable = Blockly.Variables.getOrCreateVariable(
       this.workspace_, null, this.defaultVariableName, this.defaultType_);
-  this.setValue(variable.getId());
+
+  // Don't fire a change event for this setValue.  It would have null as the
+  // old value, which is not valid.
+  Blockly.Events.disable();
+  try {
+    this.setValue(variable.getId());
+  } finally {
+    Blockly.Events.enable();
+  }
 };
 
 /**
@@ -118,7 +126,7 @@ Blockly.FieldVariable.prototype.setSourceBlock = function(block) {
  * @return {string} Current variable's ID.
  */
 Blockly.FieldVariable.prototype.getValue = function() {
-  return this.variable_ ? this.variable_.getId() : '';
+  return this.variable_ ? this.variable_.getId() : null;
 };
 
 /**

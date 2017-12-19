@@ -160,14 +160,13 @@ function test_deleteVariable_InternalTrivial() {
 
 function test_addTopBlock_TrivialFlyoutIsTrue() {
   workspaceTest_setUp();
-  workspace.isFlyout = true;
   var targetWorkspace = new Blockly.Workspace();
+  workspace.isFlyout = true;
   workspace.targetWorkspace = targetWorkspace;
   targetWorkspace.createVariable('name1', '', '1');
 
   // Flyout.init usually does this binding.
-  workspace.getVariableById =
-      targetWorkspace.getVariableById.bind(targetWorkspace);
+  workspace.variableMap_ = targetWorkspace.getVariableMap();
 
   try {
     var block = createMockBlock('1');
@@ -175,8 +174,11 @@ function test_addTopBlock_TrivialFlyoutIsTrue() {
     workspace.addTopBlock(block);
     checkVariableValues(workspace, 'name1', '', '1');
   } finally {
-    targetWorkspace.dispose();
     workspaceTest_tearDown();
+    // Have to dispose of the main workspace after the flyout workspace, because
+    // it holds the variable map.
+    // Normally the main workspace disposes of the flyout workspace.
+    targetWorkspace.dispose();
   }
 }
 

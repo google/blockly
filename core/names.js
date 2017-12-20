@@ -26,6 +26,11 @@
 
 goog.provide('Blockly.Names');
 
+/**
+ * Constant to separate developer variable names from user-defined variable
+ * names when running generators.
+ */
+Blockly.Names.DEVELOPER_VARIABLE_TYPE = 'DEVELOPER_VARIABLE';
 
 /**
  * Class for a database of entity names (variables, functions, etc).
@@ -62,6 +67,23 @@ Blockly.Names = function(reservedWords, opt_variablePrefix) {
 Blockly.Names.prototype.reset = function() {
   this.db_ = Object.create(null);
   this.dbReverse_ = Object.create(null);
+  this.variableMap_ = null;
+};
+
+Blockly.Names.prototype.setVariableMap = function(map) {
+  this.variableMap_ = map;
+};
+
+Blockly.Names.prototype.getNameForVariable = function(id) {
+  if (!this.variableMap_) {
+    return null;
+  }
+  var variable = this.variableMap_.getVariableById(id);
+  if (variable) {
+    return variable.name;
+  } else {
+    return null;
+  }
 };
 
 /**
@@ -72,9 +94,18 @@ Blockly.Names.prototype.reset = function() {
  * @return {string} An entity name legal for the exported language.
  */
 Blockly.Names.prototype.getName = function(name, type) {
+  if (type == Blockly.Variables.NAME_TYPE) {
+    var varName = this.getNameForVariable(name);
+    if (varName) {
+      name = varName;
+    }
+  }
   var normalized = name.toLowerCase() + '_' + type;
-  var prefix = (type == Blockly.Variables.NAME_TYPE) ?
-      this.variablePrefix_ : '';
+
+  var isVarType = type == Blockly.Variables.NAME_TYPE ||
+      type == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
+
+  var prefix = isVarType ? this.variablePrefix_ : '';
   if (normalized in this.db_) {
     return prefix + this.db_[normalized];
   }
@@ -103,8 +134,9 @@ Blockly.Names.prototype.getDistinctName = function(name, type) {
   }
   safeName += i;
   this.dbReverse_[safeName] = true;
-  var prefix = (type == Blockly.Variables.NAME_TYPE) ?
-      this.variablePrefix_ : '';
+  var isVarType = type == Blockly.Variables.NAME_TYPE ||
+      type == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
+  var prefix = isVarType ? this.variablePrefix_ : '';
   return prefix + safeName;
 };
 

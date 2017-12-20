@@ -101,6 +101,38 @@ Blockly.Variables.allVariables = function(root) {
 };
 
 /**
+ * Find all developer variables used by blocks in the workspace.
+ * Developer variables are never shown to the user, but are declared as global
+ * variables in the generated code.
+ * To declare developer variables, define the getDeveloperVariables function on
+ * your block and return a list of variable names.
+ * For use by generators.
+ * @param {!Blockly.Workspace} workspace The workspace to search.
+ * @return {!Array.<string>} A list of non-duplicated variable names.
+ * @package
+ */
+Blockly.Variables.allDeveloperVariables = function(workspace) {
+  var blocks = workspace.getAllBlocks();
+  var hash = {};
+  for (var i = 0; i < blocks.length; i++) {
+    var block = blocks[i];
+    if (block.getDeveloperVars) {
+      var devVars = block.getDeveloperVars();
+      for (var j = 0; j < devVars.length; j++) {
+        hash[devVars[j]] = devVars[j];
+      }
+    }
+  }
+
+  // Flatten the hash into a list.
+  var list = [];
+  for (var name in hash) {
+    list.push(hash[name]);
+  }
+  return list;
+};
+
+/**
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
  * @param {!Blockly.Workspace} workspace The workspace contianing variables.

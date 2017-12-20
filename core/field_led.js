@@ -13,6 +13,9 @@ Blockly.FieldLed = function(state, opt_validator) {
 goog.inherits(Blockly.FieldLed, Blockly.Field);
 
 
+Blockly.FieldLed.sizeWidth = 25;
+Blockly.FieldLed.sizeHeight = 25;
+
 
 /**
  * Mouse cursor style when over the hotspot that initiates editability.
@@ -28,25 +31,64 @@ Blockly.FieldLed.prototype.init = function() {
     return;
   }
 
+  // Build the DOM.
+  this.fieldGroup_ = Blockly.utils.createSvgElement('g', {}, null);
+  if (!this.visible_) {
+    this.fieldGroup_.style.display = 'none';
+  }
+
+  this.ledOnColor = '#ff0000';
+  this.ledOffColor = '#888888';
+  this.size_.height = Blockly.FieldLed.sizeHeight;
+  this.size_.width = Blockly.FieldLed.sizeWidth;
+
+this.customXSpacing = 4;
+this.customYSpacing = 4;
+//  Blockly.FieldLed.superClass_.init.call(this);
 
 
+	this.checkElement_ = Blockly.utils.createSvgElement('rect',{
+		'height': Blockly.FieldLed.sizeHeight,
+		'width': Blockly.FieldLed.sizeWidth,
+		'rx':0,
+		'ry':0,
+		'fill:': this.ledOffColor,
+		'fill-opacity': 1,
+		'x':0,
+		'y':0
+	}, this.fieldGroup_);
+	
+	
+	this.updateEditable();
 
-  Blockly.FieldLed.superClass_.init.call(this);
-
-
-    this.checkElement_ = Blockly.utils.createSvgElement('rect',
-        {'height': 16,
-         'width': 16,
-         'rx':0,
-         'ry':0,
-         'style': 'fill: #fff',
-         'fill-opacity': 1,
-         'x':-5
-}, this.fieldGroup_);
-
-//  this.checkElement_.appendChild(textNode);
-  this.checkElement_.style.display = this.state_ ? 'block' : 'none';
+	this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
+	this.mouseDownWrapper_ =
+		Blockly.bindEventWithChecks_(this.fieldGroup_, 'mousedown', this,
+		this.onMouseDown_);
+	// Force a render.
+	this.render_();
+	
 };
+
+/**
+ * Draws the border with the correct width.
+ * Saves the computed width in a property.
+ * @private
+ */
+Blockly.FieldLed.prototype.render_ = function() {
+this.updateWidth();
+  };
+
+Blockly.FieldLed.prototype.updateWidth = function() {
+
+	this.size_.width = Blockly.FieldLed.sizeWidth;
+  };
+
+  Blockly.FieldLed.prototype.getSize = function() {
+	return {width: Blockly.FieldLed.sizeWidth, height: Blockly.FieldLed.sizeHeight};
+
+  }
+
 
 /**
  * Return 'TRUE' if the checkbox is checked, 'FALSE' otherwise.
@@ -69,7 +111,7 @@ Blockly.FieldLed.prototype.setValue = function(strBool) {
     }
     this.state_ = newState;
     if (this.checkElement_) {
-      this.checkElement_.style.display = newState ? 'block' : 'none';
+      this.checkElement_.style.fill = newState ? (this.ledOnColor) :  (this.ledOffColor);
     }
   }
 };

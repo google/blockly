@@ -119,6 +119,9 @@ Blockly.Field.NBSP = '\u00A0';
  */
 Blockly.Field.prototype.EDITABLE = true;
 
+Blockly.Field.prototype.customXSpacing = null;
+Blockly.Field.prototype.customYSpacing = null;
+
 /**
  * Attach this field to a block.
  * @param {!Blockly.Block} block The block containing this field.

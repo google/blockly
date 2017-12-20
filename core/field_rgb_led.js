@@ -26,18 +26,7 @@ Blockly.FieldRGBLed.prototype.init = function() {
   
 	Blockly.FieldRGBLed.superClass_.init.call(this);
   
-  
-	  this.checkElement_ = Blockly.utils.createSvgElement('rect',
-		  {'height': 16,
-		   'width': 16,
-		   'rx':0,
-		   'ry':0,
-		   'style': 'fill: #f00',
-		   'fill-opacity': 1,
-		   'x':-5
-  }, this.fieldGroup_);
-
-  this.checkElement_.style.display = 'none';
+ 
 };
 
 Blockly.FieldRGBLed.prototype.setSource = function(source) {

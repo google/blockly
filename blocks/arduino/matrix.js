@@ -9,6 +9,7 @@ goog.require('Blockly.Blocks');
 Blockly.Blocks.oxocard_matrix_draw_image = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
+		
 		this.appendDummyInput()
 			.appendField(Blockly.Msg.OXOCARD_MATRIX_DRAW_IMAGE_TITLE);
 		for(var i=0, l=8; i<l; i++){

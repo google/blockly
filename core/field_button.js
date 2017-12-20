@@ -2,7 +2,7 @@
 
 goog.provide('Blockly.FieldButton');
 
-goog.require('Blockly.FieldLed');
+goog.require('Blockly.Field');
 
 Blockly.FieldButton = function(width, height, text, opt_validator) {
   Blockly.FieldButton.superClass_.constructor.call(this, '', opt_validator);
@@ -11,7 +11,7 @@ Blockly.FieldButton = function(width, height, text, opt_validator) {
 	this.size_.height = height;
 	this.text_ = text;
 };
-goog.inherits(Blockly.FieldButton, Blockly.FieldLed);
+goog.inherits(Blockly.FieldButton, Blockly.Field);
 
 
 Blockly.FieldButton.prototype.text_ = 'L1';
@@ -31,6 +31,7 @@ Blockly.FieldButton.prototype.init = function() {
   if (!this.visible_) {
     this.fieldGroup_.style.display = 'none';
   }
+  this.customXSpacing=14;
   this.borderRect_ = Blockly.utils.createSvgElement('rect',
       {'rx': 10,
        'ry': 10,

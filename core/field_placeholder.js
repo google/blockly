@@ -2,7 +2,7 @@
 
 goog.provide('Blockly.FieldPlaceholder');
 
-goog.require('Blockly.FieldLed');
+goog.require('Blockly.Field');
 
 Blockly.FieldPlaceholder = function(width, height, opt_validator) {
   Blockly.FieldPlaceholder.superClass_.constructor.call(this, '', opt_validator);
@@ -10,7 +10,7 @@ Blockly.FieldPlaceholder = function(width, height, opt_validator) {
 	this.size_.width = width;
 	this.size_.height = height;
 };
-goog.inherits(Blockly.FieldPlaceholder, Blockly.FieldLed);
+goog.inherits(Blockly.FieldPlaceholder, Blockly.Field);
 
 
 Blockly.FieldPlaceholder.prototype.EDITABLE = false;

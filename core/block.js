@@ -272,6 +272,23 @@ Blockly.Block.prototype.dispose = function(healStack) {
 };
 
 /**
+ * Call initModel on all fields on the block.
+ * May be called more than once.
+ * Either initModel or initSvg must be called after creating a block and before
+ * first interaction with it.
+ * @public
+ */
+Blockly.Block.prototype.initModel = function() {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field.initModel) {
+        field.initModel();
+      }
+    }
+  }
+};
+
+/**
  * Unplug this block from its superior block.  If this block is a statement,
  * optionally reconnect the block underneath with the block on top.
  * @param {boolean=} opt_healStack Disconnect child statement and reconnect

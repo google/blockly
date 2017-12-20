@@ -502,12 +502,11 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
   var variablesBeforeCreation = workspace.getAllVariables();
   try {
     var topBlock = Blockly.Xml.domToBlockHeadless_(xmlBlock, workspace);
+    // Generate list of all blocks.
+    var blocks = topBlock.getDescendants();
     if (workspace.rendered) {
-      // TODO (fenichel): Otherwise call initModel?
       // Hide connections to speed up assembly.
       topBlock.setConnectionsHidden(true);
-      // Generate list of all blocks.
-      var blocks = topBlock.getDescendants();
       // Render each block.
       for (var i = blocks.length - 1; i >= 0; i--) {
         blocks[i].initSvg();
@@ -526,6 +525,10 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
       // Allow the scrollbars to resize and move based on the new contents.
       // TODO(@picklesrus): #387. Remove when domToBlock avoids resizing.
       workspace.resizeContents();
+    } else {
+      for (var i = blocks.length - 1; i >= 0; i--) {
+        blocks[i].initModel();
+      }
     }
   } finally {
     Blockly.Events.enable();

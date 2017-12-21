@@ -153,9 +153,7 @@ Blockly.PHP.init = function(workspace) {
 
   var defvars = [];
   var varName;
-  // TODO (fenichel): Why does this use Variables.allVariables when the rest use
-  // workspace.getAllVariables()?
-  var variables = Blockly.Variables.allVariables(workspace);
+  var variables = workspace.getAllVariables();
   for (var i = 0, variable; variable = variables[i]; i++) {
     varName = variable.name;
     defvars[i] = Blockly.PHP.variableDB_.getName(varName,

@@ -76,6 +76,11 @@ Blockly.Names.prototype.setVariableMap = function(map) {
 
 Blockly.Names.prototype.getNameForVariable = function(id) {
   if (!this.variableMap_) {
+    console.log('Deprecated call to Blockly.Names.prototype.getName without ' +
+        'defining a variable map. To fix, add the folowing code in your ' +
+        'generator\'s init() function:\n' +
+        'Blockly.YourGeneratorName.variableDB_.setVariableMap(' +
+        'workspace.getVariableMap());');
     return null;
   }
   var variable = this.variableMap_.getVariableById(id);

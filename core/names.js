@@ -26,6 +26,14 @@
 
 goog.provide('Blockly.Names');
 
+/**
+ * Constant to separate developer variable names from user-defined variable
+ * names when running generators.
+ * A developer variable will be declared as a global in the generated code, but
+ * will never be shown to the user in the workspace or stored in the variable
+ * map.
+ */
+Blockly.Names.DEVELOPER_VARIABLE_TYPE = 'DEVELOPER_VARIABLE';
 
 /**
  * Class for a database of entity names (variables, functions, etc).
@@ -62,6 +70,41 @@ Blockly.Names = function(reservedWords, opt_variablePrefix) {
 Blockly.Names.prototype.reset = function() {
   this.db_ = Object.create(null);
   this.dbReverse_ = Object.create(null);
+  this.variableMap_ = null;
+};
+
+/**
+ * Set the variable map that maps from variable name to variable object.
+ * @param {!Blockly.VariableMap} map The map to track.
+ * @package
+ */
+Blockly.Names.prototype.setVariableMap = function(map) {
+  this.variableMap_ = map;
+};
+
+/**
+ * Get the name for a user-defined variable, based on its ID.
+ * This should only be used for variables of type Blockly.Variables.NAME_TYPE.
+ * @param {string} id The ID to look up in the variable map.
+ * @return {?string} The name of the referenced variable, or null if there was
+ *     no variable map or the variable was not found in the map.
+ * @private
+ */
+Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
+  if (!this.variableMap_) {
+    console.log('Deprecated call to Blockly.Names.prototype.getName without ' +
+        'defining a variable map. To fix, add the folowing code in your ' +
+        'generator\'s init() function:\n' +
+        'Blockly.YourGeneratorName.variableDB_.setVariableMap(' +
+        'workspace.getVariableMap());');
+    return null;
+  }
+  var variable = this.variableMap_.getVariableById(id);
+  if (variable) {
+    return variable.name;
+  } else {
+    return null;
+  }
 };
 
 /**
@@ -72,9 +115,18 @@ Blockly.Names.prototype.reset = function() {
  * @return {string} An entity name legal for the exported language.
  */
 Blockly.Names.prototype.getName = function(name, type) {
+  if (type == Blockly.Variables.NAME_TYPE) {
+    var varName = this.getNameForUserVariable_(name);
+    if (varName) {
+      name = varName;
+    }
+  }
   var normalized = name.toLowerCase() + '_' + type;
-  var prefix = (type == Blockly.Variables.NAME_TYPE) ?
-      this.variablePrefix_ : '';
+
+  var isVarType = type == Blockly.Variables.NAME_TYPE ||
+      type == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
+
+  var prefix = isVarType ? this.variablePrefix_ : '';
   if (normalized in this.db_) {
     return prefix + this.db_[normalized];
   }
@@ -103,8 +155,9 @@ Blockly.Names.prototype.getDistinctName = function(name, type) {
   }
   safeName += i;
   this.dbReverse_[safeName] = true;
-  var prefix = (type == Blockly.Variables.NAME_TYPE) ?
-      this.variablePrefix_ : '';
+  var isVarType = type == Blockly.Variables.NAME_TYPE ||
+      type == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
+  var prefix = isVarType ? this.variablePrefix_ : '';
   return prefix + safeName;
 };
 

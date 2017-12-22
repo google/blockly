@@ -183,6 +183,60 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
  * @package
  */
 Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
+  // Check if dragging block is changing workspace
+  var xy = new goog.math.Coordinate(e.clientX, e.clientY);
+  var rect = this.workspace_.getParentSvg().getBoundingClientRect();
+  rect = new goog.math.Rect(rect.x, rect.y, rect.width, rect.height);
+  if(!rect.contains(xy)) { // The dragging bloc is out of his workspace
+    // Find the new workspace
+    var workspaces = Object.values(Blockly.Workspace.WorkspaceDB_);
+    var workspace = workspaces.find(function(workspace) {
+      var rect = workspace.getParentSvg().getBoundingClientRect();
+      rect = new goog.math.Rect(rect.x, rect.y, rect.width, rect.height);
+      return rect.contains(xy);
+    });
+    if(workspace) {
+/*
+      // the dragging block is changing workspace, a new block will be created in the new workspace and will be deleted in the current workspace
+      var block = Blockly.Xml.domToBlock(Blockly.Xml.blockToDom(this.draggingBlock_), workspace);
+      this.draggingBlock_.dispose();
+
+      // TODO: start dragging the new block
+      eventFire(block.getSvgRoot(), 'click');
+/*/
+      var block = this.draggingBlock_;
+      var oldBoundingClientRect = this.workspace_.getCanvas().closest('.injectionDiv').getBoundingClientRect();
+      var newBoundingClientRect = workspace.getCanvas().closest('.injectionDiv').getBoundingClientRect();
+
+      // Update the current BlockDragger to the new workspace
+      this.workspace_.removeTopBlock(block);
+      workspace.addTopBlock(block);
+      block.svgGroup_.parentNode.removeChild(block.svgGroup_);
+      workspace.getCanvas().appendChild(block.svgGroup_);
+      this.draggedConnectionManager_ = new Blockly.DraggedConnectionManager(this.draggingBlock_);
+      this.startXY_.x += (oldBoundingClientRect.x-newBoundingClientRect.x) + ((this.workspace_.toolbox_?this.workspace_.toolbox_.getWidth():0) - (workspace.toolbox_?workspace.toolbox_.getWidth():0));
+      this.startXY_.y += (oldBoundingClientRect.y-newBoundingClientRect.y);
+      this.draggingBlock_ = block;
+      this.workspace_ = workspace;
+
+      function getAllBlocks(block) {
+        return block.getChildren().reduce(function(blocks, child) {
+          return blocks.concat(getAllBlocks(child));
+        }, [block]);
+      }
+      // Move all blocks from the old workspace to the new one
+      var blockDragger = this;
+      getAllBlocks(block).forEach(function(block) {
+        delete blockDragger.workspace_.blockDB_[block.id];
+        workspace.blockDB_[block.id] = block;
+        block.workspace = workspace;
+      });
+
+      this.startBlockDrag(currentDragDeltaXY);
+//*/
+    }
+  }
+
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
 

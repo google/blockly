@@ -60,7 +60,7 @@ Blockly.BlockDragger = function(block, workspace) {
    * @private
    */
   this.draggedConnectionManager_ = new Blockly.DraggedConnectionManager(
-      this.draggingBlock_);
+    this.draggingBlock_);
 
   /**
    * Which delete area the mouse pointer is over, if any.
@@ -169,7 +169,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
 
   if (this.workspace_.toolbox_) {
     var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
-        'blocklyToolboxGrab';
+      'blocklyToolboxGrab';
     this.workspace_.toolbox_.addStyle(style);
   }
 };
@@ -186,54 +186,59 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
   // Check if dragging block is changing workspace
   var xy = new goog.math.Coordinate(e.clientX, e.clientY);
   var rect = this.workspace_.getParentSvg().getBoundingClientRect();
-  rect = new goog.math.Rect(rect.x, rect.y, rect.width, rect.height);
+  rect = new goog.math.Rect(rect.left, rect.top, rect.width, rect.height);
   if(!rect.contains(xy)) { // The dragging bloc is out of his workspace
     // Find the new workspace
-    var workspaces = Object.values(Blockly.Workspace.WorkspaceDB_);
-    var workspace = workspaces.find(function(workspace) {
-      var rect = workspace.getParentSvg().getBoundingClientRect();
-      rect = new goog.math.Rect(rect.x, rect.y, rect.width, rect.height);
-      return rect.contains(xy);
-    });
+    var workspaces = [];
+    // loop used instead of Object.values cause of missing polyfill for IE
+    for (var workspaceId in Blockly.Workspace.WorkspaceDB_) {
+      workspaces.push(Blockly.Workspace.WorkspaceDB_[workspaceId]);
+    }
+    var workspace;
+    // loop used instead of Array.prototype.find cause of missing polyfill for IE
+    for(var i = 0; i<workspaces.length && workspace === undefined; i++) {
+      var rect = workspaces[i].getParentSvg().getBoundingClientRect();
+      rect = new goog.math.Rect(rect.left, rect.top, rect.width, rect.height);
+      if(rect.contains(xy)) {
+        workspace = workspaces[i];
+      }
+    }
     if(workspace) {
-/*
-      // the dragging block is changing workspace, a new block will be created in the new workspace and will be deleted in the current workspace
-      var block = Blockly.Xml.domToBlock(Blockly.Xml.blockToDom(this.draggingBlock_), workspace);
-      this.draggingBlock_.dispose();
-
-      // TODO: start dragging the new block
-      eventFire(block.getSvgRoot(), 'click');
-/*/
       var block = this.draggingBlock_;
-      var oldBoundingClientRect = this.workspace_.getCanvas().closest('.injectionDiv').getBoundingClientRect();
-      var newBoundingClientRect = workspace.getCanvas().closest('.injectionDiv').getBoundingClientRect();
+      var oldBoundingClientRect = this.workspace_.getCanvas().parentNode.getBoundingClientRect();
+      var newBoundingClientRect = workspace.getCanvas().parentNode.getBoundingClientRect();
 
       // Update the current BlockDragger to the new workspace
       this.workspace_.removeTopBlock(block);
       workspace.addTopBlock(block);
       block.svgGroup_.parentNode.removeChild(block.svgGroup_);
       workspace.getCanvas().appendChild(block.svgGroup_);
+      var oldWorkspaceToolboxWidth = this.workspace_.toolbox_?this.workspace_.toolbox_.getWidth():0;
+      var newWorkspaceToolboxWidth = workspace.toolbox_?workspace.toolbox_.getWidth():0;
+      var deltaX = (oldWorkspaceToolboxWidth - newWorkspaceToolboxWidth);
       this.draggedConnectionManager_ = new Blockly.DraggedConnectionManager(this.draggingBlock_);
-      this.startXY_.x += (oldBoundingClientRect.x-newBoundingClientRect.x) + ((this.workspace_.toolbox_?this.workspace_.toolbox_.getWidth():0) - (workspace.toolbox_?workspace.toolbox_.getWidth():0));
-      this.startXY_.y += (oldBoundingClientRect.y-newBoundingClientRect.y);
+      this.startXY_.x += (oldBoundingClientRect.left - newBoundingClientRect.left) + deltaX;
+      this.startXY_.y += (oldBoundingClientRect.top - newBoundingClientRect.top);
       this.draggingBlock_ = block;
       this.workspace_ = workspace;
 
-      function getAllBlocks(block) {
-        return block.getChildren().reduce(function(blocks, child) {
-          return blocks.concat(getAllBlocks(child));
-        }, [block]);
-      }
+      // Get alls blocks to move from the current workspace to the new one
+      var blocks = [block];
+      var i = 0;
+      do {
+        blocks = blocks.concat(blocks[i].getChildren());
+        i++;
+      } while(i !== blocks.length);
+
       // Move all blocks from the old workspace to the new one
       var blockDragger = this;
-      getAllBlocks(block).forEach(function(block) {
+      blocks.forEach(function(block) {
         delete blockDragger.workspace_.blockDB_[block.id];
         workspace.blockDB_[block.id] = block;
         block.workspace = workspace;
       });
 
       this.startBlockDrag(currentDragDeltaXY);
-//*/
     }
   }
 
@@ -281,7 +286,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
 
   if (this.workspace_.toolbox_) {
     var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
-        'blocklyToolboxGrab';
+      'blocklyToolboxGrab';
     this.workspace_.toolbox_.removeStyle(style);
   }
   Blockly.Events.setGroup(false);
@@ -331,7 +336,7 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
   var trashcan = this.workspace_.trashcan;
   if (this.wouldDeleteBlock_) {
     this.draggingBlock_.setDeleteStyle(true);
-    if (this.deleteArea_ == Blockly.DELETE_AREA_TRASH && trashcan) {
+    if (this.deleteArea_ === Blockly.DELETE_AREA_TRASH && trashcan) {
       trashcan.setOpen_(true);
     }
   } else {
@@ -355,7 +360,7 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
  */
 Blockly.BlockDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
   var result = new goog.math.Coordinate(pixelCoord.x / this.workspace_.scale,
-      pixelCoord.y / this.workspace_.scale);
+    pixelCoord.y / this.workspace_.scale);
   if (this.workspace_.isMutator) {
     // If we're in a mutator, its scale is always 1, purely because of some
     // oddities in our rendering optimizations.  The actual scale is the same as

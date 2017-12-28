@@ -207,6 +207,8 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
       var block = this.draggingBlock_;
       var oldBoundingClientRect = this.workspace_.getCanvas().parentNode.getBoundingClientRect();
       var newBoundingClientRect = workspace.getCanvas().parentNode.getBoundingClientRect();
+      var oldMetrics = this.workspace_.getMetrics();
+      var newMetrics = workspace.getMetrics();
 
       // Update the current BlockDragger to the new workspace
       this.workspace_.removeTopBlock(block);
@@ -216,9 +218,14 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
       var oldWorkspaceToolboxWidth = this.workspace_.toolbox_?this.workspace_.toolbox_.getWidth():0;
       var newWorkspaceToolboxWidth = workspace.toolbox_?workspace.toolbox_.getWidth():0;
       var deltaX = (oldWorkspaceToolboxWidth - newWorkspaceToolboxWidth);
+      var deltaY = 0;
+      deltaX += Math.min(newWorkspaceToolboxWidth, newMetrics.viewLeft);
+      deltaX -= Math.min(oldWorkspaceToolboxWidth, oldMetrics.viewLeft);
+      deltaY += Math.min(0, newMetrics.viewTop);
+      deltaY -= Math.min(0, oldMetrics.viewTop);
       this.draggedConnectionManager_ = new Blockly.DraggedConnectionManager(this.draggingBlock_);
       this.startXY_.x += (oldBoundingClientRect.left - newBoundingClientRect.left) + deltaX;
-      this.startXY_.y += (oldBoundingClientRect.top - newBoundingClientRect.top);
+      this.startXY_.y += (oldBoundingClientRect.top - newBoundingClientRect.top) + deltaY;
       this.draggingBlock_ = block;
       this.workspace_ = workspace;
 

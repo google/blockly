@@ -310,6 +310,49 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     }
   },
   /**
+   * Notification that a variable is renaming.
+   * If the name matches one of this block's variables, rename it.
+   * @param {string} oldId ID of variable to rename.
+   * @param {string} newId ID of new variable.  May be the same as oldId, but
+   *     with an updated name.  Guaranteed to be the same type as the old
+   *     variable.
+   * @this Blockly.Block
+   */
+  renameVarById: function(oldId, newId) {
+    var oldVariable = this.workspace.getVariableById(oldId);
+    if (oldVariable.type != '') {
+      // Procedure arguments always have the empty type.
+      return;
+    }
+    var oldName = oldVariable.name;
+    var newVar = this.workspace.getVariableById(newId);
+    if (!newVar) {
+      return;
+    }
+    var newName = newVar.name;
+
+    var change = false;
+    for (var i = 0; i < this.arguments_.length; i++) {
+      if (Blockly.Names.equals(oldName, this.arguments_[i])) {
+        this.arguments_[i] = newName;
+        change = true;
+      }
+    }
+    if (change) {
+      this.updateParams_();
+      // Update the mutator's variables if the mutator is open.
+      if (this.mutator.isVisible()) {
+        var blocks = this.mutator.workspace_.getAllBlocks();
+        for (var i = 0, block; block = blocks[i]; i++) {
+          if (block.type == 'procedures_mutatorarg' &&
+              Blockly.Names.equals(oldName, block.getFieldValue('NAME'))) {
+            block.setFieldValue(newName, 'NAME');
+          }
+        }
+      }
+    }
+  },
+  /**
    * Add custom menu options to this block's context menu.
    * @param {!Array} options List of menu options to add to.
    * @this Blockly.Block
@@ -701,6 +744,23 @@ Blockly.Blocks['procedures_callnoreturn'] = {
    */
   renameVar: function(oldName, newName) {
     for (var i = 0; i < this.arguments_.length; i++) {
+      // TODO: Fix.  This will rename the wrong variables.
+      if (Blockly.Names.equals(oldName, this.arguments_[i])) {
+        this.arguments_[i] = newName;
+        this.getField('ARGNAME' + i).setValue(newName);
+      }
+    }
+  },
+  /**
+   * Notification that a variable is renaming.
+   * If the name matches one of this block's variables, rename it.
+   * @param {string} oldName Previous name of variable.
+   * @param {string} newName Renamed variable.
+   * @this Blockly.Block
+   */
+  renameVarById: function(oldId, newId) {
+    for (var i = 0; i < this.arguments_.length; i++) {
+      // TODO: Fix.  This will rename the wrong variables.
       if (Blockly.Names.equals(oldName, this.arguments_[i])) {
         this.arguments_[i] = newName;
         this.getField('ARGNAME' + i).setValue(newName);

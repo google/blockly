@@ -152,11 +152,9 @@ Blockly.PHP.init = function(workspace) {
   Blockly.PHP.variableDB_.setVariableMap(workspace.getVariableMap());
 
   var defvars = [];
-  var varName;
   var variables = workspace.getAllVariables();
   for (var i = 0, variable; variable = variables[i]; i++) {
-    varName = variable.name;
-    defvars[i] = Blockly.PHP.variableDB_.getName(varName,
+    defvars[i] = Blockly.PHP.variableDB_.getName(variable.getId(),
         Blockly.Variables.NAME_TYPE) + ';';
   }
 

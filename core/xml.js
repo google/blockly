@@ -728,8 +728,8 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
                           'Shadow block not allowed non-shadow child.');
     }
     // Ensure this block doesn't have any variable inputs.
-    goog.asserts.assert(block.getVars().length == 0,
-        'Shadow blocks cannot have variable fields.');
+    goog.asserts.assert(block.getVarModels().length == 0,
+        'Shadow blocks cannot have variable references.');
     block.setShadow(true);
   }
   return block;

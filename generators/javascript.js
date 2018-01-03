@@ -158,7 +158,7 @@ Blockly.JavaScript.init = function(workspace) {
   // Add user variables.
   var variables = workspace.getAllVariables();
   for (var i = 0; i < variables.length; i++) {
-    defvars[i] = Blockly.JavaScript.variableDB_.getName(variables[i].name,
+    defvars[i] = Blockly.JavaScript.variableDB_.getName(variables[i].getId(),
         Blockly.Variables.NAME_TYPE);
   }
 

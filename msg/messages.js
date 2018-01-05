@@ -362,17 +362,17 @@ Blockly.Msg.MATH_NUMBER_HELPURL = 'https://en.wikipedia.org/wiki/Number';
 /// tooltip - Any positive or negative number, not necessarily an integer.
 Blockly.Msg.MATH_NUMBER_TOOLTIP = 'A number.';
 
-/// {{optional}}\nmath - The symbol for the binary operation addition.
+/// {{Optional}} math - The symbol for the binary operation addition.
 Blockly.Msg.MATH_ADDITION_SYMBOL = '+';
-/// {{optional}}\nmath - The symbol for the binary operation indicating that the right operand should be
+/// {{Optional}} math - The symbol for the binary operation indicating that the right operand should be
 /// subtracted from the left operand.
 Blockly.Msg.MATH_SUBTRACTION_SYMBOL = '-';
-/// {{optional}}\nmath - The binary operation indicating that the left operand should be divided by
+/// {{Optional}} math - The binary operation indicating that the left operand should be divided by
 /// the right operand.
 Blockly.Msg.MATH_DIVISION_SYMBOL = '÷';
-/// {{optional}}\nmath - The symbol for the binary operation multiplication.
+/// {{Optional}} math - The symbol for the binary operation multiplication.
 Blockly.Msg.MATH_MULTIPLICATION_SYMBOL = '×';
-/// {{optional}}\nmath - The symbol for the binary operation exponentiation.  Specifically, if the
+/// {{Optional}} math - The symbol for the binary operation exponentiation.  Specifically, if the
 /// value of the left operand is L and the value of the right operand (the exponent) is
 /// R, multiply L by itself R times.  (Fractional and negative exponents are also legal.)
 Blockly.Msg.MATH_POWER_SYMBOL = '^';
@@ -694,7 +694,7 @@ Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_START = 'get substring from letter #';
 /// position) of the beginning of the region of text that should be obtained from the preceding
 /// piece of text.  See [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text
 /// https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text].
-/// Note: If {{msg-Blockly|ORDINAL_NUMBER_SUFFIX}} is defined, it will
+/// Note: If {{msg-blockly|ORDINAL_NUMBER_SUFFIX}} is defined, it will
 /// automatically appear ''after'' this and any other
 /// [https://translatewiki.net/wiki/Translating:Blockly#Ordinal_numbers ordinal numbers]
 /// on this block.
@@ -909,7 +909,7 @@ Blockly.Msg.LISTS_GET_INDEX_GET_REMOVE = 'get and remove';
 Blockly.Msg.LISTS_GET_INDEX_REMOVE = 'remove';
 /// dropdown - Indicates that an index relative to the front of the list should be used to
 /// [https://github.com/google/blockly/wiki/Lists#getting-a-single-item get and/or remove
-/// an item from a list].  Note: If {{msg-Blockly|ORDINAL_NUMBER_SUFFIX}} is defined, it will
+/// an item from a list].  Note: If {{msg-blockly|ORDINAL_NUMBER_SUFFIX}} is defined, it will
 /// automatically appear ''after'' this number (and any other ordinal numbers on this block).
 /// See [[Translating:Blockly#Ordinal_numbers]] for more information on ordinal numbers in Blockly.
 /// [[File:Blockly-list-get-item.png]]
@@ -1002,7 +1002,7 @@ Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 /// to specify the beginning of the range from which to
 /// [https://github.com/google/blockly/wiki/Lists#getting-a-sublist get a sublist].
 /// [[File:Blockly-get-sublist.png]]
-/// Note: If {{msg-Blockly|ORDINAL_NUMBER_SUFFIX}} is defined, it will
+/// Note: If {{msg-blockly|ORDINAL_NUMBER_SUFFIX}} is defined, it will
 /// automatically appear ''after'' this number (and any other ordinal numbers on this block).
 /// See [[Translating:Blockly#Ordinal_numbers]] for more information on ordinal numbers in Blockly.
 Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_START = 'get sub-list from #';

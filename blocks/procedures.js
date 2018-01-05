@@ -219,9 +219,6 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       this.arguments_.push(varName);
       var variable = Blockly.Variables.getOrCreateVariable(this.workspace, null,
           varName, '');
-      if (!variable) {
-        console.warn('missing variable with name ' + varName);
-      }
       this.argumentVarModels_.push(variable);
       this.paramIds_.push(paramBlock.id);
       paramBlock = paramBlock.nextConnection &&
@@ -298,68 +295,48 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     }
     var oldName = oldVariable.name;
     var newVar = this.workspace.getVariableById(newId);
-    if (!newVar) {
-      return;
-    }
-    var newName = newVar.name;
 
     var change = false;
     for (var i = 0; i < this.argumentVarModels_.length; i++) {
-      //if (Blockly.Names.equals(oldName, this.arguments_[i])) {
       if (this.argumentVarModels_[i].getId() == oldId) {
-        this.arguments_[i] = newName;
+        this.arguments_[i] = newVar.name;
         this.argumentVarModels_[i] = newVar;
-
         change = true;
       }
     }
     if (change) {
-      this.updateParams_();
-      // Update the mutator's variables if the mutator is open.
-      if (this.mutator.isVisible()) {
-        var blocks = this.mutator.workspace_.getAllBlocks();
-        for (var i = 0, block; block = blocks[i]; i++) {
-          if (block.type == 'procedures_mutatorarg' &&
-              Blockly.Names.equals(oldName, block.getFieldValue('NAME'))) {
-            block.setFieldValue(newName, 'NAME');
-          }
-        }
-      }
+      this.displayRenamedVar_(oldName, newVar.name);
     }
   },
   updateVarName: function(variable) {
-  //       var oldVariable = this.workspace.getVariableById(oldId);
-  //   if (oldVariable.type != '') {
-  //     // Procedure arguments always have the empty type.
-  //     return;
-  //   }
-  //   var oldName = oldVariable.name;
-  //   var newVar = this.workspace.getVariableById(newId);
-  //   if (!newVar) {
-  //     return;
-  //   }
     var newName = variable.name;
-
     var change = false;
     for (var i = 0; i < this.argumentVarModels_.length; i++) {
-      //if (Blockly.Names.equals(oldName, this.arguments_[i])) {
       if (this.argumentVarModels_[i].getId() == variable.getId()) {
         var oldName = this.arguments_[i];
         this.arguments_[i] = newName;
-
         change = true;
       }
     }
     if (change) {
-      this.updateParams_();
-      // Update the mutator's variables if the mutator is open.
-      if (this.mutator.isVisible()) {
-        var blocks = this.mutator.workspace_.getAllBlocks();
-        for (var i = 0, block; block = blocks[i]; i++) {
-          if (block.type == 'procedures_mutatorarg' &&
-              Blockly.Names.equals(oldName, block.getFieldValue('NAME'))) {
-            block.setFieldValue(newName, 'NAME');
-          }
+      this.displayRenamedVar_(oldName, newName);
+    }
+  },
+  /**
+   * Update the display to reflect a newly renamed argument.
+   * @param {string} oldName The old display name of the argument.
+   * @param {string} newName The new display name of the argument.
+   * @private
+   */
+  displayRenamedVar_: function(oldName, newName) {
+    this.updateParams_();
+    // Update the mutator's variables if the mutator is open.
+    if (this.mutator.isVisible()) {
+      var blocks = this.mutator.workspace_.getAllBlocks();
+      for (var i = 0, block; block = blocks[i]; i++) {
+        if (block.type == 'procedures_mutatorarg' &&
+            Blockly.Names.equals(oldName, block.getFieldValue('NAME'))) {
+          block.setFieldValue(newName, 'NAME');
         }
       }
     }

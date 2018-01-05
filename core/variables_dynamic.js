@@ -48,7 +48,7 @@ Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour = function(button) {
 /**
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
- * @param {!Blockly.Workspace} workspace The workspace contianing variables.
+ * @param {!Blockly.Workspace} workspace The workspace containing variables.
  * @return {!Array.<!Element>} Array of XML elements.
  */
 Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
@@ -66,11 +66,11 @@ Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
   xmlList.push(button);
 
   workspace.registerButtonCallback('CREATE_VARIABLE_STRING',
-    Blockly.VariablesDynamic.onCreateVariableButtonClick_String);
+      Blockly.VariablesDynamic.onCreateVariableButtonClick_String);
   workspace.registerButtonCallback('CREATE_VARIABLE_NUMBER',
-    Blockly.VariablesDynamic.onCreateVariableButtonClick_Number);
+      Blockly.VariablesDynamic.onCreateVariableButtonClick_Number);
   workspace.registerButtonCallback('CREATE_VARIABLE_COLOUR',
-    Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour);
+      Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour);
 
 
   var blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace);
@@ -80,7 +80,7 @@ Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
 
 /**
  * Construct the blocks required by the flyout for the variable category.
- * @param {!Blockly.Workspace} workspace The workspace contianing variables.
+ * @param {!Blockly.Workspace} workspace The workspace containing variables.
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 Blockly.VariablesDynamic.flyoutCategoryBlocks = function(workspace) {
@@ -89,25 +89,24 @@ Blockly.VariablesDynamic.flyoutCategoryBlocks = function(workspace) {
 
   var xmlList = [];
   if (variableModelList.length > 0) {
-
     if (Blockly.Blocks['variables_set_dynamic']) {
       var firstVariable = variableModelList[0];
       var gap = 24;
       var blockText = '<xml>' +
-                    '<block type="variables_set_dynamic" gap="' + gap + '">' +
-                    Blockly.Variables.generateVariableFieldXml_(firstVariable) +
-                    '</block>' +
-                    '</xml>';
+          '<block type="variables_set_dynamic" gap="' + gap + '">' +
+          Blockly.Variables.generateVariableFieldXml_(firstVariable) +
+          '</block>' +
+          '</xml>';
       var block = Blockly.Xml.textToDom(blockText).firstChild;
       xmlList.push(block);
     }
-    for (var i = 0, variable; variable = variableModelList[i]; i++) {
-      if (Blockly.Blocks['variables_get_dynamic']) {
+    if (Blockly.Blocks['variables_get_dynamic']) {
+      for (var i = 0, variable; variable = variableModelList[i]; i++) {
         var blockText = '<xml>' +
-                    '<block type="variables_get_dynamic" gap="8">' +
-                    Blockly.Variables.generateVariableFieldXml_(variable) +
-                    '</block>' +
-                    '</xml>';
+            '<block type="variables_get_dynamic" gap="8">' +
+            Blockly.Variables.generateVariableFieldXml_(variable) +
+            '</block>' +
+            '</xml>';
         var block = Blockly.Xml.textToDom(blockText).firstChild;
         xmlList.push(block);
       }

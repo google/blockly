@@ -1041,7 +1041,7 @@ Blockly.Msg.LISTS_GET_SUBLIST_TAIL = '';
 /// [[File:Blockly-get-sublist.png]]
 Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion of a list.';
 
-/// {{optional}}\nurl - Information describing sorting a list.
+/// {{Optional}} url - Information describing sorting a list.
 Blockly.Msg.LISTS_SORT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#sorting-a-list';
 /// Sort as type %1 (numeric or alphabetic) in order %2 (ascending or descending) a list of items %3.\n{{Identical|Sort}}
 Blockly.Msg.LISTS_SORT_TITLE = 'sort %1 %2 %3';

@@ -52,5 +52,21 @@ Blockly.Arduino.oxocard_matrix_set_color = function() {
 
 
 Blockly.Arduino.oxocard_matrix_update = function() {
-	return 'oxocard.matrix->update();';
+	return 'oxocard.matrix->update();\n';
+};
+
+Blockly.Arduino.oxocard_matrix_draw_all = function(){
+	return 'oxocard.matrix->drawRectangle(0,0,8,8);\n';
+};
+
+Blockly.Arduino.oxocard_matrix_clear = function(){
+	return 'oxocard.matrix->clear();\n';
+};
+
+Blockly.Arduino.oxocard_matrix_set_fill = function(){
+	return 'oxocard.matrix->fill();\n';
+};
+
+Blockly.Arduino.oxocard_matrix_set_nofill = function(){
+	return 'oxocard.matrix->noFill();\n';
 };

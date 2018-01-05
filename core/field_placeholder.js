@@ -21,6 +21,7 @@ Blockly.Field.prototype.init = function() {
     // Field has already been initialized once.
     return;
   }
+
   // Build the DOM.
   this.fieldGroup_ = Blockly.utils.createSvgElement('g', {}, null);
   if (!this.visible_) {

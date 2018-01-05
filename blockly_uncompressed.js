@@ -57,7 +57,7 @@ goog.addDependency("../../../" + dir + "/core/events.js", ['Blockly.Events'], ['
 goog.addDependency("../../../" + dir + "/core/extensions.js", ['Blockly.Extensions'], []);
 goog.addDependency("../../../" + dir + "/core/field.js", ['Blockly.Field'], ['Blockly.Gesture', 'goog.asserts', 'goog.dom', 'goog.math.Size', 'goog.style', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/field_angle.js", ['Blockly.FieldAngle'], ['Blockly.FieldTextInput', 'goog.math', 'goog.userAgent']);
-goog.addDependency("../../../" + dir + "/core/field_button.js", ['Blockly.FieldButton'], ['Blockly.FieldLed']);
+goog.addDependency("../../../" + dir + "/core/field_button.js", ['Blockly.FieldButton'], ['Blockly.Field']);
 goog.addDependency("../../../" + dir + "/core/field_checkbox.js", ['Blockly.FieldCheckbox'], ['Blockly.Field']);
 goog.addDependency("../../../" + dir + "/core/field_colour.js", ['Blockly.FieldColour'], ['Blockly.Field', 'Blockly.utils', 'goog.dom', 'goog.events', 'goog.style', 'goog.ui.ColorPicker']);
 goog.addDependency("../../../" + dir + "/core/field_date.js", ['Blockly.FieldDate'], ['Blockly.Field', 'Blockly.utils', 'goog.date', 'goog.dom', 'goog.events', 'goog.i18n.DateTimeSymbols', 'goog.i18n.DateTimeSymbols_he', 'goog.style', 'goog.ui.DatePicker']);
@@ -67,7 +67,7 @@ goog.addDependency("../../../" + dir + "/core/field_label.js", ['Blockly.FieldLa
 goog.addDependency("../../../" + dir + "/core/field_led.js", ['Blockly.FieldLed'], ['Blockly.Field']);
 goog.addDependency("../../../" + dir + "/core/field_mathinput.js", ['Blockly.FieldMathInput'], ['Blockly.Field', 'Blockly.Msg', 'goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/field_number.js", ['Blockly.FieldNumber'], ['Blockly.FieldTextInput', 'goog.math']);
-goog.addDependency("../../../" + dir + "/core/field_placeholder.js", ['Blockly.FieldPlaceholder'], ['Blockly.FieldLed']);
+goog.addDependency("../../../" + dir + "/core/field_placeholder.js", ['Blockly.FieldPlaceholder'], ['Blockly.Field']);
 goog.addDependency("../../../" + dir + "/core/field_rgb_led.js", ['Blockly.FieldRGBLed'], ['Blockly.FieldLed']);
 goog.addDependency("../../../" + dir + "/core/field_textinput.js", ['Blockly.FieldTextInput'], ['Blockly.Field', 'Blockly.Msg', 'goog.asserts', 'goog.dom', 'goog.dom.TagName', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/field_variable.js", ['Blockly.FieldVariable'], ['Blockly.FieldDropdown', 'Blockly.Msg', 'Blockly.VariableModel', 'Blockly.Variables', 'Blockly.VariableModel', 'goog.asserts', 'goog.string']);

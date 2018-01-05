@@ -1353,12 +1353,46 @@ Blockly.Msg.OXOCARD_PRINTLN_TIP = 'Prints the given number or string to the cons
 Blockly.Msg.OXOCARD_MATRIX_DRAW_IMAGE_TITLE ='Monochronic image';
 Blockly.Msg.OXOCARD_MATRIX_DRAW_IMAGE_TIP = 'Turn on specific pixels.';
 
+Blockly.Msg.OXOCARD_MATRIX_DRAW_RGB_IMAGE_TITLE ='Multicolor image';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_RGB_IMAGE_TIP = 'Turn on specific pixels with color.';
+
 Blockly.Msg.OXOCARD_MATRIX_UPDATE_TITLE = 'Update matrix';
 Blockly.Msg.OXOCARD_MATRIX_UPDATE_TIP = 'Draws current image.';
 
-Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_TITLE = 'Foreground';
+Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_TITLE = 'Set pen color';
 Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_TIP = 'The following draw-blocks will draw this color.';
 
+Blockly.Msg.OXOCARD_MATRIX_DRAW_ALL_TITLE = 'Draw all pixels';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_ALL_TIP = 'Will draw all pixels.';
+
+Blockly.Msg.OXOCARD_MATRIX_CLEAR_TITLE = 'Clear';
+Blockly.Msg.OXOCARD_MATRIX_CLEAR_TIP = 'Will clear all pixels on the matrix.';
+
+Blockly.Msg.OXOCARD_MATRIX_DRAW_PIXEL_TITLE = 'Draw pixel';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_PIXEL_TIP = 'Draws the pixel on the coordinates defined.';
+
+Blockly.Msg.OXOCARD_MATRIX_DRAW_LINE_TITLE = 'Draw line';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_LINE_TIP = 'Draws a line based on the coordinates defined.';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_LINE_FROM = 'From';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_LINE_TO = 'To';
+
+Blockly.Msg.OXOCARD_MATRIX_DRAW_RECTANGLE_TITLE = 'Draw rectangle';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_RECTANGLE_TIP = 'Draws a rectangle based on given positions.';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_RECTANGLE_WIDTH = 'width';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_RECTANGLE_HEIGHT = 'height';
+
+Blockly.Msg.OXOCARD_MATRIX_DRAW_CIRCLE_TITLE = 'Draw circle';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_CIRCLE_TIP = 'Draws a circle based on given position and radius.';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_CIRCLE_RADIUS = 'radius';
+
+Blockly.Msg.OXOCARD_MATRIX_DRAW_TRIANGLE_TITLE = 'Draw triangle';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_TRIANGLE_TIP = 'Draws a triangle based on given positions.';
+
+Blockly.Msg.OXOCARD_MATRIX_SET_FILL_TITLE = 'Fill object';
+Blockly.Msg.OXOCARD_MATRIX_SET_FILL_TIP = 'Objects are filled when drawn.';
+
+Blockly.Msg.OXOCARD_MATRIX_SET_NOFILL_TITLE = 'Empty object';
+Blockly.Msg.OXOCARD_MATRIX_SET_NOFILL_TIP = 'Objects are not filled when drawn.';
 
 // Display
 Blockly.Msg.OXOCARD_TURN_DISPLAY_ON_TITLE = 'Turn display on';

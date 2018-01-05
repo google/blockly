@@ -59,6 +59,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     this.setTooltip(Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP);
     this.setHelpUrl(Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL);
     this.arguments_ = [];
+    this.argumentVarModels_ = [];
     this.setStatements_(true);
     this.statementConnection_ = null;
   },
@@ -153,9 +154,14 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    */
   domToMutation: function(xmlElement) {
     this.arguments_ = [];
+    this.argumentVarModels_ = [];
     for (var i = 0, childNode; childNode = xmlElement.childNodes[i]; i++) {
       if (childNode.nodeName.toLowerCase() == 'arg') {
-        this.arguments_.push(childNode.getAttribute('name'));
+        var varName = childNode.getAttribute('name');
+        this.arguments_.push(varName);
+        var variable = Blockly.Variables.getOrCreateVariable(this.workspace,
+            null, varName, '');
+        this.argumentVarModels_.push(variable);
       }
     }
     this.updateParams_();
@@ -206,9 +212,17 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     // Parameter list.
     this.arguments_ = [];
     this.paramIds_ = [];
+    this.argumentVarModels_ = [];
     var paramBlock = containerBlock.getInputTargetBlock('STACK');
     while (paramBlock) {
-      this.arguments_.push(paramBlock.getFieldValue('NAME'));
+      var varName = paramBlock.getFieldValue('NAME');
+      this.arguments_.push(varName);
+      var variable = Blockly.Variables.getOrCreateVariable(this.workspace, null,
+          varName, '');
+      if (!variable) {
+        console.warn('missing variable with name ' + varName);
+      }
+      this.argumentVarModels_.push(variable);
       this.paramIds_.push(paramBlock.id);
       paramBlock = paramBlock.nextConnection &&
           paramBlock.nextConnection.targetBlock();
@@ -265,49 +279,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this Blockly.Block
    */
   getVarModels: function() {
-    var vars = [];
-    // Not fully initialized.
-    if (!this.arguments_) {
-      return vars;
-    }
-    for (var i = 0, argName; argName = this.arguments_[i]; i++) {
-      // TODO (#1494): When we switch to tracking procedure arguments by ID,
-      // update this.
-      var model = this.workspace.getVariable(argName, '');
-      if (model) {
-        vars.push(model);
-      }
-    }
-    return vars;
-  },
-  /**
-   * Notification that a variable is renaming.
-   * If the name matches one of this block's variables, rename it.
-   * @param {string} oldName Previous name of variable.
-   * @param {string} newName Renamed variable.
-   * @this Blockly.Block
-   */
-  renameVar: function(oldName, newName) {
-    var change = false;
-    for (var i = 0; i < this.arguments_.length; i++) {
-      if (Blockly.Names.equals(oldName, this.arguments_[i])) {
-        this.arguments_[i] = newName;
-        change = true;
-      }
-    }
-    if (change) {
-      this.updateParams_();
-      // Update the mutator's variables if the mutator is open.
-      if (this.mutator.isVisible()) {
-        var blocks = this.mutator.workspace_.getAllBlocks();
-        for (var i = 0, block; block = blocks[i]; i++) {
-          if (block.type == 'procedures_mutatorarg' &&
-              Blockly.Names.equals(oldName, block.getFieldValue('NAME'))) {
-            block.setFieldValue(newName, 'NAME');
-          }
-        }
-      }
-    }
+    return this.argumentVarModels_;
   },
   /**
    * Notification that a variable is renaming.
@@ -332,9 +304,49 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     var newName = newVar.name;
 
     var change = false;
-    for (var i = 0; i < this.arguments_.length; i++) {
-      if (Blockly.Names.equals(oldName, this.arguments_[i])) {
+    for (var i = 0; i < this.argumentVarModels_.length; i++) {
+      //if (Blockly.Names.equals(oldName, this.arguments_[i])) {
+      if (this.argumentVarModels_[i].getId() == oldId) {
         this.arguments_[i] = newName;
+        this.argumentVarModels_[i] = newVar;
+
+        change = true;
+      }
+    }
+    if (change) {
+      this.updateParams_();
+      // Update the mutator's variables if the mutator is open.
+      if (this.mutator.isVisible()) {
+        var blocks = this.mutator.workspace_.getAllBlocks();
+        for (var i = 0, block; block = blocks[i]; i++) {
+          if (block.type == 'procedures_mutatorarg' &&
+              Blockly.Names.equals(oldName, block.getFieldValue('NAME'))) {
+            block.setFieldValue(newName, 'NAME');
+          }
+        }
+      }
+    }
+  },
+  updateVarName: function(variable) {
+  //       var oldVariable = this.workspace.getVariableById(oldId);
+  //   if (oldVariable.type != '') {
+  //     // Procedure arguments always have the empty type.
+  //     return;
+  //   }
+  //   var oldName = oldVariable.name;
+  //   var newVar = this.workspace.getVariableById(newId);
+  //   if (!newVar) {
+  //     return;
+  //   }
+    var newName = variable.name;
+
+    var change = false;
+    for (var i = 0; i < this.argumentVarModels_.length; i++) {
+      //if (Blockly.Names.equals(oldName, this.arguments_[i])) {
+      if (this.argumentVarModels_[i].getId() == variable.getId()) {
+        var oldName = this.arguments_[i];
+        this.arguments_[i] = newName;
+
         change = true;
       }
     }
@@ -419,6 +431,7 @@ Blockly.Blocks['procedures_defreturn'] = {
     this.setTooltip(Blockly.Msg.PROCEDURES_DEFRETURN_TOOLTIP);
     this.setHelpUrl(Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL);
     this.arguments_ = [];
+    this.argumentVarModels_ = [];
     this.setStatements_(true);
     this.statementConnection_ = null;
   },
@@ -441,7 +454,8 @@ Blockly.Blocks['procedures_defreturn'] = {
   },
   getVars: Blockly.Blocks['procedures_defnoreturn'].getVars,
   getVarModels: Blockly.Blocks['procedures_defnoreturn'].getVarModels,
-  renameVar: Blockly.Blocks['procedures_defnoreturn'].renameVar,
+  renameVarById: Blockly.Blocks['procedures_defnoreturn'].renameVarById,
+  updateVarName: Blockly.Blocks['procedures_defnoreturn'].updateVarName,
   customContextMenu: Blockly.Blocks['procedures_defnoreturn'].customContextMenu,
   callType_: 'procedures_callreturn'
 };
@@ -536,6 +550,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     // Tooltip is set in renameProcedure.
     this.setHelpUrl(Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL);
     this.arguments_ = [];
+    this.argumentVarModels_ = [];
     this.quarkConnections_ = {};
     this.quarkIds_ = null;
   },
@@ -634,6 +649,14 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     }
     // Rebuild the block's arguments.
     this.arguments_ = [].concat(paramNames);
+    // And rebuild the argument model list.
+    this.argumentVarModels_ = [];
+    for (var i = 0; i < this.arguments_.length; i++) {
+      var variable = Blockly.Variables.getOrCreateVariable(this.workspace, null,
+          this.arguments_[i], '');
+      this.argumentVarModels_.push(variable);
+    }
+
     this.updateShape_();
     this.quarkIds_ = paramIds;
     // Reconnect any child blocks.
@@ -738,34 +761,29 @@ Blockly.Blocks['procedures_callnoreturn'] = {
   /**
    * Notification that a variable is renaming.
    * If the name matches one of this block's variables, rename it.
-   * @param {string} oldName Previous name of variable.
-   * @param {string} newName Renamed variable.
+   * @param {string} oldId ID of variable to rename.
+   * @param {string} newId ID of new variable.  May be the same as oldId, but
+   *     with an updated name.  Guaranteed to be the same type as the old
+   *     variable.
    * @this Blockly.Block
    */
-  renameVar: function(oldName, newName) {
+  renameVarById: function(oldId, newId) {
+    var newVar = this.workspace.getVariableById(newId);
     for (var i = 0; i < this.arguments_.length; i++) {
-      // TODO: Fix.  This will rename the wrong variables.
-      if (Blockly.Names.equals(oldName, this.arguments_[i])) {
-        this.arguments_[i] = newName;
-        this.getField('ARGNAME' + i).setValue(newName);
+      if (oldId == this.argumentVarModels_[i].getId()) {
+        this.arguments_[i] = newVar.name;
+        this.argumentVarModels_[i] = newVar;
+        this.getField('ARGNAME' + i).setValue(newVar.name);
       }
     }
   },
   /**
-   * Notification that a variable is renaming.
-   * If the name matches one of this block's variables, rename it.
-   * @param {string} oldName Previous name of variable.
-   * @param {string} newName Renamed variable.
+   * Return all variables referenced by this block.
+   * @return {!Array.<!Blockly.VariableModel>} List of variable models.
    * @this Blockly.Block
    */
-  renameVarById: function(oldId, newId) {
-    for (var i = 0; i < this.arguments_.length; i++) {
-      // TODO: Fix.  This will rename the wrong variables.
-      if (Blockly.Names.equals(oldName, this.arguments_[i])) {
-        this.arguments_[i] = newName;
-        this.getField('ARGNAME' + i).setValue(newName);
-      }
-    }
+  getVarModels: function() {
+    return this.argumentVarModels_;
   },
   /**
    * Procedure calls cannot exist without the corresponding procedure
@@ -876,7 +894,7 @@ Blockly.Blocks['procedures_callreturn'] = {
   updateShape_: Blockly.Blocks['procedures_callnoreturn'].updateShape_,
   mutationToDom: Blockly.Blocks['procedures_callnoreturn'].mutationToDom,
   domToMutation: Blockly.Blocks['procedures_callnoreturn'].domToMutation,
-  renameVar: Blockly.Blocks['procedures_callnoreturn'].renameVar,
+  getVarModels: Blockly.Blocks['procedures_callnoreturn'].getVarModels,
   onchange: Blockly.Blocks['procedures_callnoreturn'].onchange,
   customContextMenu:
       Blockly.Blocks['procedures_callnoreturn'].customContextMenu,

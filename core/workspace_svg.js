@@ -473,7 +473,7 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   }
   if (!this.options.parentWorkspace) {
     // Top-most workspace.  Dispose of the div that the
-    // svg is injected into (i.e. injectionDiv).
+    // SVG is injected into (i.e. injectionDiv).
     goog.dom.removeNode(this.getParentSvg().parentNode);
   }
   if (this.resizeHandlerWrapper_) {
@@ -550,7 +550,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
   this.flyout_.autoClose = false;
 
   // Return the element  so that callers can place it in their desired
-  // spot in the dom.  For exmaple, mutator flyouts do not go in the same place
+  // spot in the DOM.  For example, mutator flyouts do not go in the same place
   // as main workspace flyouts.
   return this.flyout_.createDom(tagName);
 };
@@ -1595,7 +1595,7 @@ Blockly.WorkspaceSvg.getContentDimensionsExact_ = function(ws) {
 Blockly.WorkspaceSvg.getContentDimensionsBounded_ = function(ws, svgSize) {
   var content = Blockly.WorkspaceSvg.getContentDimensionsExact_(ws);
 
-  // View height and width are both in pixels, and are the same as the svg size.
+  // View height and width are both in pixels, and are the same as the SVG size.
   var viewWidth = svgSize.width;
   var viewHeight = svgSize.height;
   var halfWidth = viewWidth / 2;
@@ -1828,7 +1828,7 @@ Blockly.WorkspaceSvg.prototype.removeToolboxCategoryCallback = function(key) {
 /**
  * Look up the gesture that is tracking this touch stream on this workspace.
  * May create a new gesture.
- * @param {!Event} e Mouse event or touch event
+ * @param {!Event} e Mouse event or touch event.
  * @return {Blockly.Gesture} The gesture that is tracking this touch stream,
  *     or null if no valid gesture exists.
  * @package

@@ -433,6 +433,7 @@ Blockly.Blocks['procedures_defreturn'] = {
   getVarModels: Blockly.Blocks['procedures_defnoreturn'].getVarModels,
   renameVarById: Blockly.Blocks['procedures_defnoreturn'].renameVarById,
   updateVarName: Blockly.Blocks['procedures_defnoreturn'].updateVarName,
+  displayRenamedVar_: Blockly.Blocks['procedures_defnoreturn'].displayRenamedVar_,
   customContextMenu: Blockly.Blocks['procedures_defnoreturn'].customContextMenu,
   callType_: 'procedures_callreturn'
 };

@@ -33,6 +33,9 @@
  **/
 goog.provide('Blockly.Extensions');
 
+goog.require('Blockly.Mutator');
+goog.require('Blockly.utils');
+goog.require('goog.string');
 
 /**
  * The set of all registered extensions, keyed by extension name/id.
@@ -71,6 +74,9 @@ Blockly.Extensions.register = function(name, initFn) {
  *     registered.
  */
 Blockly.Extensions.registerMixin = function(name, mixinObj) {
+  if (!goog.isObject(mixinObj)){
+    throw new Error('Error: Mixin "' + name + '" must be a object');
+  }
   Blockly.Extensions.register(name, function() {
     this.mixin(mixinObj);
   });

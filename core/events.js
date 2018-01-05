@@ -428,7 +428,9 @@ Blockly.Events.Abstract.prototype.isNull = function() {
  * Run an event.
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
-Blockly.Events.Abstract.prototype.run = function(forward) {
+Blockly.Events.Abstract.prototype.run = function(
+    /* eslint-disable no-unused-vars */ forward
+    /* eslint-enable no-unused-vars */) {
   // Defined by subclasses.
 };
 

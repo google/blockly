@@ -36,6 +36,7 @@ goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Touch');
 goog.require('Blockly.Trashcan');
+goog.require('Blockly.VariablesDynamic');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceAudio');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
@@ -102,10 +103,18 @@ Blockly.WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface
   this.grid_ = this.options.gridPattern ?
       new Blockly.Grid(options.gridPattern, options.gridOptions) : null;
 
-  this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
-      Blockly.Variables.flyoutCategory);
-  this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
-      Blockly.Procedures.flyoutCategory);
+  if (Blockly.Variables && Blockly.Variables.flyoutCategory) {
+    this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
+        Blockly.Variables.flyoutCategory);
+  }
+  if (Blockly.VariablesDynamic && Blockly.VariablesDynamic.flyoutCategory) {
+    this.registerToolboxCategoryCallback(Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME,
+        Blockly.VariablesDynamic.flyoutCategory);
+  }
+  if (Blockly.Procedures && Blockly.Procedures.flyoutCategory) {
+    this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
+        Blockly.Procedures.flyoutCategory);
+  }
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -623,8 +632,8 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
  * scroll position.
  * @package
  */
-Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled
-    = function() {
+Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled =
+    function() {
   /* eslint-disable indent */
   var currScroll = goog.dom.getDocumentScroll();
   if (!goog.math.Coordinate.equals(this.lastRecordedPageScroll_,
@@ -664,7 +673,7 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
       this.cachedParentSvg_ = element;
       return element;
     }
-    element = element.parentElement;
+    element = element.parentNode;
   }
   return null;
 };
@@ -706,7 +715,7 @@ Blockly.WorkspaceSvg.prototype.resetDragSurface = function() {
   var trans = this.workspaceDragSurface_.getSurfaceTranslation();
   this.workspaceDragSurface_.clearAndHide(this.svgGroup_);
   var translation = 'translate(' + trans.x + ',' + trans.y + ') ' +
-        'scale(' + this.scale + ')';
+      'scale(' + this.scale + ')';
   this.svgBlockCanvas_.setAttribute('transform', translation);
   this.svgBubbleCanvas_.setAttribute('transform', translation);
 };
@@ -737,8 +746,8 @@ Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
   // Figure out where we want to put the canvas back.  The order
   // in the is important because things are layered.
   var previousElement = this.svgBlockCanvas_.previousSibling;
-  var width = this.getParentSvg().getAttribute("width");
-  var height = this.getParentSvg().getAttribute("height");
+  var width = this.getParentSvg().getAttribute('width');
+  var height = this.getParentSvg().getAttribute('height');
   var coord = Blockly.utils.getRelativeXY(this.svgBlockCanvas_);
   this.workspaceDragSurface_.setContentsAndShow(this.svgBlockCanvas_,
       this.svgBubbleCanvas_, previousElement, width, height, this.scale);

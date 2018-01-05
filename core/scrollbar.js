@@ -202,7 +202,7 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
   this.createDom_(opt_class);
 
   /**
-   * The upper left corner of the scrollbar's svg group in CSS pixels relative
+   * The upper left corner of the scrollbar's SVG group in CSS pixels relative
    * to the scrollbar's origin.  This is usually relative to the injection div
    * origin.
    * @type {goog.math.Coordinate}
@@ -395,7 +395,7 @@ Blockly.ScrollbarPair.prototype.setContainerVisible = function(visible) {
 };
 
 /**
- * Set the position of the scrollbar's svg group in CSS pixels relative to the
+ * Set the position of the scrollbar's SVG group in CSS pixels relative to the
  * scrollbar's origin.  This sets the scrollbar's location within the workspace.
  * @param {number} x The new x coordinate.
  * @param {number} y The new y coordinate.
@@ -668,7 +668,7 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
  * Update visibility of scrollbar based on whether it thinks it should
  * be visible and whether its containing workspace is visible.
  * We cannot rely on the containing workspace being hidden to hide us
- * because it is not necessarily our parent in the dom.
+ * because it is not necessarily our parent in the DOM.
  */
 Blockly.Scrollbar.prototype.updateDisplay_ = function() {
   var show = true;

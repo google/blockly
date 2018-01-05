@@ -1032,9 +1032,10 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   }
 
   // Bump every dropdown to change its colour.
+  // TODO (#1456)
   for (var x = 0, input; input = this.inputList[x]; x++) {
     for (var y = 0, field; field = input.fieldRow[y]; y++) {
-      field.setText(null);
+      field.forceRerender();
     }
   }
 };
@@ -1277,8 +1278,8 @@ Blockly.BlockSvg.prototype.setColour = function(colour) {
 
 /**
  * Move this block to the front of the visible workspace.
- * <g> tags do not respect z-index so svg renders them in the
- * order that they are in the dom.  By placing this block first within the
+ * <g> tags do not respect z-index so SVG renders them in the
+ * order that they are in the DOM.  By placing this block first within the
  * block group's <g>, it will render on top of any other blocks.
  * @package
  */
@@ -1294,12 +1295,11 @@ Blockly.BlockSvg.prototype.bringToFront = function() {
 /**
  * Set whether this block can chain onto the bottom of another block.
  * @param {boolean} newBoolean True if there can be a previous statement.
- * @param {string|Array.<string>|null|undefined} opt_check Statement type or
+ * @param {(string|Array.<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
-Blockly.BlockSvg.prototype.setPreviousStatement =
-    function(newBoolean, opt_check) {
-  /* eslint-disable indent */
+Blockly.BlockSvg.prototype.setPreviousStatement = function(newBoolean,
+    opt_check) {
   Blockly.BlockSvg.superClass_.setPreviousStatement.call(this, newBoolean,
       opt_check);
 
@@ -1307,12 +1307,12 @@ Blockly.BlockSvg.prototype.setPreviousStatement =
     this.render();
     this.bumpNeighbours_();
   }
-};  /* eslint-enable indent */
+};
 
 /**
  * Set whether another block can chain onto the bottom of this block.
  * @param {boolean} newBoolean True if there can be a next statement.
- * @param {string|Array.<string>|null|undefined} opt_check Statement type or
+ * @param {(string|Array.<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.BlockSvg.prototype.setNextStatement = function(newBoolean, opt_check) {
@@ -1328,7 +1328,7 @@ Blockly.BlockSvg.prototype.setNextStatement = function(newBoolean, opt_check) {
 /**
  * Set whether this block returns a value.
  * @param {boolean} newBoolean True if there is an output.
- * @param {string|Array.<string>|null|undefined} opt_check Returned type or list
+ * @param {(string|Array.<string>|null)=} opt_check Returned type or list
  *     of returned types.  Null or undefined if any type could be returned
  *     (e.g. variable get).
  */
@@ -1458,7 +1458,7 @@ Blockly.BlockSvg.prototype.bumpNeighbours_ = function() {
   if (!this.workspace) {
     return;  // Deleted block.
   }
-  if (Blockly.dragMode_ != Blockly.DRAG_NONE) {
+  if (this.workspace.isDragging()) {
     return;  // Don't bump blocks during a drag.
   }
   var rootBlock = this.getRootBlock();

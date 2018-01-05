@@ -340,7 +340,7 @@ Blockly.Variables.generateVariableFieldXml_ = function(variableModel) {
   // to be escaped to create valid XML.
   var element = goog.dom.createDom('field');
   element.setAttribute('name', 'VAR');
-  element.setAttribute('variableType', variableModel.type);
+  element.setAttribute('variabletype', variableModel.type);
   element.setAttribute('id', variableModel.getId());
   element.textContent = variableModel.name;
 

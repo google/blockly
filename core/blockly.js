@@ -58,7 +58,10 @@ goog.require('goog.userAgent');
 
 
 // Turn off debugging when compiled.
+// Unused within the Blockly library, but used in Closure.
+/* eslint-disable no-unused-vars */
 var CLOSURE_DEFINES = {'goog.DEBUG': false};
+/* eslint-enable no-unused-vars */
 
 /**
  * The main workspace most recently used.

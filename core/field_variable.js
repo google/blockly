@@ -139,7 +139,7 @@ Blockly.FieldVariable.prototype.setValue = function(value) {
  */
 Blockly.FieldVariable.prototype.getVariableTypes_ = function() {
   var variableTypes = this.variableTypes;
-  if (variableTypes === null) {
+  if (variableTypes === null || variableTypes === undefined) {
     // If variableTypes is null, return all variable types.
     if (this.sourceBlock_) {
       var workspace = this.sourceBlock_.workspace;

@@ -1324,29 +1324,13 @@ Blockly.Msg.ARD_NOTONE = 'Turn off tone on pin #';
 Blockly.Msg.ARD_NOTONE_TIP = 'Turns the tone off on the selected pin';
 
 /// OXOcard Blocks
-// System
-Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TITLE = 'Turn OXOcard off';
-Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TIP = 'Turns off the card';
-Blockly.Msg.OXOCARD_RESET_OXOCARD_TITLE = 'Reset OXOcard';
-Blockly.Msg.OXOCARD_RESET_OXOCARD_TIP = 'Reboots the card';
-Blockly.Msg.OXOCARD_AUTO_TURNOFF_WP_TITLE = 'Handle auto turnoff';
-Blockly.Msg.OXOCARD_AUTO_TURNOFF_WP_TIP = 'Enter sleep mode after 2 Minutes';
-Blockly.Msg.OXOCARD_AUTO_TURNOFF_TITLE = 'Handle auto turnoff';
-Blockly.Msg.OXOCARD_AUTO_TURNOFF_TIMEOUT_FIELD = 'with timeout';
-Blockly.Msg.OXOCARD_AUTO_TURNOFF_TIP = 'Enter sleep mode after given timeout';
-Blockly.Msg.OXOCARD_BUTTON_PRESSED_TITLE = 'Is button pressed?';
-Blockly.Msg.OXOCARD_BUTTON_PRESSED_LEFT_FIELD = 'Left';
-Blockly.Msg.OXOCARD_BUTTON_PRESSED_MIDDLE_FIELD = 'Middle';
-Blockly.Msg.OXOCARD_BUTTON_PRESSED_RIGHT_FIELD = 'Right';
-Blockly.Msg.OXOCARD_BUTTON_PRESSED_TIP = 'Yes(?) if button pressed';
-Blockly.Msg.OXOCARD_GET_TIMER_SECONDS_TITLE = 'Get timer seconds';
-Blockly.Msg.OXOCARD_GET_TIMER_SECONDS_TIP = 'Return the seconds value uf the timer';
-Blockly.Msg.OXOCARD_RESET_TIMER_TITLE = 'Reset timer';
-Blockly.Msg.OXOCARD_RESET_TIMER_TIP = 'Resets the timer';
-Blockly.Msg.OXOCARD_PRINT_TITLE = 'Print';
-Blockly.Msg.OXOCARD_PRINT_TIP = 'Prints the given number or string to the console';
-Blockly.Msg.OXOCARD_PRINTLN_TITLE = 'Println';
-Blockly.Msg.OXOCARD_PRINTLN_TIP = 'Prints the given number or string to the console (with new line)';
+
+// Math
+Blockly.Msg.OXOCARD_MATH_INCREMENT_TITLE ='Add 1 to';
+Blockly.Msg.OXOCARD_MATH_INCREMENT_TIP = 'Does increment the variable with the value 1.';
+
+Blockly.Msg.OXOCARD_MATH_DECREMENT_TITLE ='Substract';
+Blockly.Msg.OXOCARD_MATH_DECREMENT_TIP = 'Does decrement the variable with the value -1.';
 
 
 // Matrix
@@ -1394,6 +1378,32 @@ Blockly.Msg.OXOCARD_MATRIX_SET_FILL_TIP = 'Objects are filled when drawn.';
 Blockly.Msg.OXOCARD_MATRIX_SET_NOFILL_TITLE = 'Empty object';
 Blockly.Msg.OXOCARD_MATRIX_SET_NOFILL_TIP = 'Objects are not filled when drawn.';
 
+
+// System
+Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TITLE = 'Turn OXOcard off';
+Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TIP = 'Turns off the card';
+Blockly.Msg.OXOCARD_RESET_OXOCARD_TITLE = 'Reset OXOcard';
+Blockly.Msg.OXOCARD_RESET_OXOCARD_TIP = 'Reboots the card';
+Blockly.Msg.OXOCARD_AUTO_TURNOFF_WP_TITLE = 'Handle auto turnoff';
+Blockly.Msg.OXOCARD_AUTO_TURNOFF_WP_TIP = 'Enter sleep mode after 2 Minutes';
+Blockly.Msg.OXOCARD_AUTO_TURNOFF_TITLE = 'Handle auto turnoff';
+Blockly.Msg.OXOCARD_AUTO_TURNOFF_TIMEOUT_FIELD = 'with timeout';
+Blockly.Msg.OXOCARD_AUTO_TURNOFF_TIP = 'Enter sleep mode after given timeout';
+Blockly.Msg.OXOCARD_BUTTON_PRESSED_TITLE = 'Is button pressed?';
+Blockly.Msg.OXOCARD_BUTTON_PRESSED_LEFT_FIELD = 'Left';
+Blockly.Msg.OXOCARD_BUTTON_PRESSED_MIDDLE_FIELD = 'Middle';
+Blockly.Msg.OXOCARD_BUTTON_PRESSED_RIGHT_FIELD = 'Right';
+Blockly.Msg.OXOCARD_BUTTON_PRESSED_TIP = 'Yes(?) if button pressed';
+Blockly.Msg.OXOCARD_GET_TIMER_SECONDS_TITLE = 'Get timer seconds';
+Blockly.Msg.OXOCARD_GET_TIMER_SECONDS_TIP = 'Return the seconds value uf the timer';
+Blockly.Msg.OXOCARD_RESET_TIMER_TITLE = 'Reset timer';
+Blockly.Msg.OXOCARD_RESET_TIMER_TIP = 'Resets the timer';
+Blockly.Msg.OXOCARD_PRINT_TITLE = 'Print';
+Blockly.Msg.OXOCARD_PRINT_TIP = 'Prints the given number or string to the console';
+Blockly.Msg.OXOCARD_PRINTLN_TITLE = 'Println';
+Blockly.Msg.OXOCARD_PRINTLN_TIP = 'Prints the given number or string to the console (with new line)';
+
+
 // Display
 Blockly.Msg.OXOCARD_TURN_DISPLAY_ON_TITLE = 'Turn display on';
 Blockly.Msg.OXOCARD_TURN_DISPLAY_ON_TIP = 'Turn the whole display on';
@@ -1401,25 +1411,7 @@ Blockly.Msg.OXOCARD_CLEAR_DISPLAY_TITLE = 'Clear display';
 Blockly.Msg.OXOCARD_CLEAR_DISPLAY_TIP = 'Turn the whole display off';
 Blockly.Msg.OXOCARD_FILL_DISPLAY_TITLE = 'Fill display';
 Blockly.Msg.OXOCARD_FILL_DISPLAY_TIP = 'Write value between 0 and 255';
-Blockly.Msg.OXOCARD_DRAW_IMAGE_TITLE = 'Draw image';
-Blockly.Msg.OXOCARD_DRAW_IMAGE_BRIGHTNESS_FIELD = 'Brightness:';
-Blockly.Msg.OXOCARD_DRAW_IMAGE_TIP = 'Turn on specific pixels';
-Blockly.Msg.OXOCARD_DRAW_PIXEL_TITLE = 'Draw pixel';
-Blockly.Msg.OXOCARD_DRAW_PIXEL_TIP = 'Turn on specific pixels';
-Blockly.Msg.OXOCARD_DRAW_LINE_TITLE = 'Draw line';
-Blockly.Msg.OXOCARD_DRAW_LINE_TIP = 'Draw a line';
-Blockly.Msg.OXOCARD_DRAW_RECTANGLE_TITLE = 'Draw rectangle';
-Blockly.Msg.OXOCARD_DRAW_RECTANGLE_TIP = 'Draw a rectangle';
-Blockly.Msg.OXOCARD_DRAW_FILLED_RECTANGLE_TITLE = 'Draw filled rectangle';
-Blockly.Msg.OXOCARD_DRAW_FILLED_RECTANGLE_TIP = 'Draw a filled rectangle';
-Blockly.Msg.OXOCARD_DRAW_CIRCLE_TITLE = 'Draw circle';
-Blockly.Msg.OXOCARD_DRAW_CIRCLE_TIP = 'Draw a circle';
-Blockly.Msg.OXOCARD_DRAW_FILLED_CIRCLE_TITLE = 'Draw filled circle';
-Blockly.Msg.OXOCARD_DRAW_FILLED_CIRCLE_TIP = 'Draw a filled circle';
-Blockly.Msg.OXOCARD_DRAW_TRANGLE_TITLE = 'Draw triangle';
-Blockly.Msg.OXOCARD_DRAW_TRANGLE_TIP = 'Draw a triangle';
-Blockly.Msg.OXOCARD_DRAW_FILLED_TRANGLE_TITLE = 'Draw filled triangle';
-Blockly.Msg.OXOCARD_DRAW_FILLED_TRANGLE_TIP = 'Draw a filled triangle';
+
 Blockly.Msg.OXOCARD_DRAW_CHAR_TITLE = 'Draw char';
 Blockly.Msg.OXOCARD_DRAW_CHAR_TIP = 'Draw single character (A - Z)';
 Blockly.Msg.OXOCARD_DRAW_DIGIT_TITLE = 'Draw digit';

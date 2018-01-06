@@ -33,7 +33,7 @@ goog.require('Blockly.Types');
 /**
  * Common HSV hue for all blocks in this category.
  */
-Blockly.Blocks.math.HUE = 230;
+Blockly.Blocks.math.HUE = '#000000';
 
 Blockly.Blocks['math_number'] = {
   /**
@@ -44,10 +44,7 @@ Blockly.Blocks['math_number'] = {
     this.setHelpUrl(Blockly.Msg.MATH_NUMBER_HELPURL);
     this.setColour('#999999');
     this.appendDummyInput()
-        .appendField(
-            new Blockly.FieldTextInput(
-                '0', Blockly.FieldTextInput.numberValidator),
-            'NUM');
+        .appendField(new Blockly.FieldNumber(0),'NUM');
     this.setOutput(true, Blockly.Types.NUMBER.output);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;

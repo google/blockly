@@ -58,6 +58,7 @@ Blockly.Arduino['logic_compare'] = function(block) {
       Blockly.Arduino.ORDER_EQUALITY : Blockly.Arduino.ORDER_RELATIONAL;
   var argument0 = Blockly.Arduino.valueToCode(block, 'A', order) || '0';
   var argument1 = Blockly.Arduino.valueToCode(block, 'B', order) || '0';
+  console.log(argument0);
   var code = argument0 + ' ' + operator + ' ' + argument1;
   return [code, order];
 };

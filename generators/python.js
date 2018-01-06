@@ -165,7 +165,7 @@ Blockly.Python.init = function(workspace) {
   var defvars = [];
   var variables = workspace.getAllVariables();
   for (var i = 0; i < variables.length; i++) {
-    defvars[i] = Blockly.Python.variableDB_.getName(variables[i].name,
+    defvars[i] = Blockly.Python.variableDB_.getName(variables[i].getId(),
         Blockly.Variables.NAME_TYPE) + ' = None';
   }
 

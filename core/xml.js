@@ -89,19 +89,20 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
 /**
  * Encode a variable field as XML.
  * @param {!Blockly.Field} field The field to encode.
- * @param {!Blockly.Workspace} workspace The workspace that the field is in.
  * @return {?Element} XML element, or null if the field did not need to be
  *     serialized.
  * @private
  */
-Blockly.Xml.fieldToDomVariable_ = function(field, workspace) {
+Blockly.Xml.fieldToDomVariable_ = function(field) {
   var id = field.getValue();
   // The field had not been initialized fully before being serialized.
   if (id == null) {
     field.initModel();
     id = field.getValue();
   }
-  var variable = Blockly.Variables.getVariable(workspace, id);
+  // Get the variable directly from the field, instead of doing a lookup.  This
+  // will work even if the variable has already been deleted.
+  var variable = field.getVariable();
 
   if (!variable) {
     throw Error('Tried to serialize a variable field with no variable.');
@@ -121,10 +122,10 @@ Blockly.Xml.fieldToDomVariable_ = function(field, workspace) {
  *     serialized.
  * @private
  */
-Blockly.Xml.fieldToDom_ = function(field, workspace) {
+Blockly.Xml.fieldToDom_ = function(field) {
   if (field.name && field.EDITABLE) {
     if (field instanceof Blockly.FieldVariable) {
-      return Blockly.Xml.fieldToDomVariable_(field, workspace);
+      return Blockly.Xml.fieldToDomVariable_(field);
     } else {
       var container = goog.dom.createDom('field', null, field.getValue());
       container.setAttribute('name', field.name);
@@ -143,10 +144,9 @@ Blockly.Xml.fieldToDom_ = function(field, workspace) {
  * @private
  */
 Blockly.Xml.allFieldsToDom_ = function(block, element) {
-  var workspace = block.workspace;
   for (var i = 0, input; input = block.inputList[i]; i++) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
-      var fieldDom = Blockly.Xml.fieldToDom_(field, workspace);
+      var fieldDom = Blockly.Xml.fieldToDom_(field);
       if (fieldDom) {
         element.appendChild(fieldDom);
       }
@@ -728,8 +728,8 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
                           'Shadow block not allowed non-shadow child.');
     }
     // Ensure this block doesn't have any variable inputs.
-    goog.asserts.assert(block.getVars().length == 0,
-        'Shadow blocks cannot have variable fields.');
+    goog.asserts.assert(block.getVarModels().length == 0,
+        'Shadow blocks cannot have variable references.');
     block.setShadow(true);
   }
   return block;

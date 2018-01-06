@@ -144,6 +144,8 @@ Blockly.Workspace.prototype.addTopBlock = function(block) {
   var variableNames = Blockly.Variables.allUsedVariables(block);
   for (var i = 0, name; name = variableNames[i]; i++) {
     if (!this.getVariable(name)) {
+      // TODO (fenichel): Is this still necessary?  Is allUsedVariables still
+      // necessary?
       this.createVariable(name);
     }
   }

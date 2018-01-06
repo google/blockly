@@ -57,7 +57,7 @@ Blockly.Blocks['math_number'] = {
   },
 
   getBlockType: function() {
-    var numString = this.getFieldValue('NUM');
+	var numString = this.getFieldValue('NUM');
     return Blockly.Types.identifyNumber(numString);
   }
 };

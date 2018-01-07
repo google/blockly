@@ -644,7 +644,7 @@ Blockly.Extensions.registerMixin('logic_ternary',
 				['\u2265', 'GTE']
 			  ];
 		  this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
-		  this.setColour(Blockly.Blocks.logic.HUE);
+		  this.setColour('#999999');
 		  this.setOutput(true, Blockly.Types.BOOLEAN.output);
 		  this.appendValueInput('A');
 		  this.appendValueInput('B')
@@ -707,10 +707,10 @@ Blockly.Extensions.registerMixin('logic_ternary',
 		 */
 		init: function() {
 		  var OPERATORS =
-			  [[Blockly.Msg.LOGIC_OPERATION_AND, 'AND'],
-			   [Blockly.Msg.LOGIC_OPERATION_OR, 'OR']];
+			  [[Blockly.Msg.OXOCARD_LOGIC_OPERATION_AND, 'AND'],
+			   [Blockly.Msg.OXOCARD_LOGIC_OPERATION_OR, 'OR']];
 		  this.setHelpUrl(Blockly.Msg.LOGIC_OPERATION_HELPURL);
-		  this.setColour(Blockly.Blocks.logic.HUE);
+		  this.setColour('#999999');
 		  this.setOutput(true, Blockly.Types.BOOLEAN.output);
 		  this.appendValueInput('A')
 			  .setCheck(Blockly.Types.BOOLEAN.checkList);

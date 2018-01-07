@@ -1326,12 +1326,20 @@ Blockly.Msg.ARD_NOTONE_TIP = 'Turns the tone off on the selected pin';
 /// OXOcard Blocks
 
 // Math
-Blockly.Msg.OXOCARD_MATH_INCREMENT_TITLE ='Add 1 to';
+Blockly.Msg.OXOCARD_MATH_INCREMENT_TITLE = 'Add 1 to';
 Blockly.Msg.OXOCARD_MATH_INCREMENT_TIP = 'Does increment the variable with the value 1.';
 
-Blockly.Msg.OXOCARD_MATH_DECREMENT_TITLE ='Substract';
+Blockly.Msg.OXOCARD_MATH_DECREMENT_TITLE = 'Substract 1 from';
 Blockly.Msg.OXOCARD_MATH_DECREMENT_TIP = 'Does decrement the variable with the value -1.';
 
+// Logic
+
+Blockly.Msg.OXOCARD_LOGIC_IF_TITLE = 'If';
+Blockly.Msg.OXOCARD_LOGIC_IF_TIP = 'Do something if the condiation is tue.';
+Blockly.Msg.OXOCARD_LOGIC_IF_DO = 'do';
+
+Blockly.Msg.OXOCARD_LOGIC_OPERATION_AND = 'and';
+Blockly.Msg.OXOCARD_LOGIC_OPERATION_OR = 'or';
 
 // Matrix
 Blockly.Msg.OXOCARD_MATRIX_DRAW_IMAGE_TITLE ='Monochronic image';
@@ -1345,6 +1353,9 @@ Blockly.Msg.OXOCARD_MATRIX_UPDATE_TIP = 'Draws current image.';
 
 Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_TITLE = 'Set pen color';
 Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_TIP = 'The following draw-blocks will draw this color.';
+
+Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_VAR_TITLE = 'Set pen color';
+Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_VAR_TIP = 'The following draw-blocks will draw this color.';
 
 Blockly.Msg.OXOCARD_MATRIX_DRAW_ALL_TITLE = 'Draw all pixels';
 Blockly.Msg.OXOCARD_MATRIX_DRAW_ALL_TIP = 'Will draw all pixels.';

@@ -38,20 +38,29 @@ Blockly.Arduino.oxocard_matrix_draw_rgb_image = function() {
 
 Blockly.Arduino.oxocard_matrix_set_color = function() {
 	var code = 'oxocard.matrix->setForeColor(';
-	var value= this.getFieldValue('COLOR');
+	var value = this.getFieldValue('COLOR');
 	var r = parseInt(value.substring(1,3),16);
 	var g = parseInt(value.substring(3,5),16);
 	var b = parseInt(value.substring(5,7),16);
 	return code += 'makeRGBVal(' + r + ', ' + g + ', ' + b + '));\n';
 };
 
+Blockly.Arduino.oxocard_matrix_set_color_var = function() {
+	var code = 'oxocard.matrix->setForeColor(';
+	var r = Blockly.Arduino.valueToCode(this, 'R', Blockly.Arduino.ORDER_NONE);
+	var g = Blockly.Arduino.valueToCode(this, 'G', Blockly.Arduino.ORDER_NONE);
+	var b = Blockly.Arduino.valueToCode(this, 'B', Blockly.Arduino.ORDER_NONE);
+	return code += 'makeRGBVal(' + r + ', ' + g + ', ' + b + '));\n';
+};
 
 Blockly.Arduino.oxocard_matrix_update = function() {
 	return 'oxocard.matrix->update();\n';
 };
 
 Blockly.Arduino.oxocard_matrix_draw_all = function(){
-	return 'oxocard.matrix->drawRectangle(0,0,8,8);\n';
+	var code = 'oxocard.matrix->fill();\n';
+	code += 'oxocard.matrix->drawRectangle(0,0,8,8);\n';
+	return code;
 };
 
 Blockly.Arduino.oxocard_matrix_clear = function(){

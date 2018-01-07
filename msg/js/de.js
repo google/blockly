@@ -432,8 +432,13 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.OXOCARD_IS_ORIENTATION_TITLE = "Ist Orientierung";
 /** @export */ Blockly.Msg.OXOCARD_IS_ORIENTATION_UP_FIELD = "Auf";
 /** @export */ Blockly.Msg.OXOCARD_IS_ORIENTATION_VERTICALLY_FIELD = "Vertikal";
+/** @export */ Blockly.Msg.OXOCARD_LOGIC_IF_DO = "do";  // untranslated
+/** @export */ Blockly.Msg.OXOCARD_LOGIC_IF_TIP = "Do something if the condiation is tue.";  // untranslated
+/** @export */ Blockly.Msg.OXOCARD_LOGIC_IF_TITLE = "If";  // untranslated
+/** @export */ Blockly.Msg.OXOCARD_LOGIC_OPERATION_AND = "and";  // untranslated
+/** @export */ Blockly.Msg.OXOCARD_LOGIC_OPERATION_OR = "or";  // untranslated
 /** @export */ Blockly.Msg.OXOCARD_MATH_DECREMENT_TIP = "Does decrement the variable with the value -1.";  // untranslated
-/** @export */ Blockly.Msg.OXOCARD_MATH_DECREMENT_TITLE = "Substract";  // untranslated
+/** @export */ Blockly.Msg.OXOCARD_MATH_DECREMENT_TITLE = "Substract 1 from";  // untranslated
 /** @export */ Blockly.Msg.OXOCARD_MATH_INCREMENT_TIP = "Does increment the variable with the value 1.";  // untranslated
 /** @export */ Blockly.Msg.OXOCARD_MATH_INCREMENT_TITLE = "Add 1 to";  // untranslated
 /** @export */ Blockly.Msg.OXOCARD_MATRIX_CLEAR_TIP = "Will clear all pixels on the matrix.";  // untranslated
@@ -461,6 +466,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.OXOCARD_MATRIX_DRAW_TRIANGLE_TITLE = "Draw triangle";  // untranslated
 /** @export */ Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_TIP = "The following draw-blocks will draw this color.";  // untranslated
 /** @export */ Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_TITLE = "Set pen color";  // untranslated
+/** @export */ Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_VAR_TIP = "The following draw-blocks will draw this color.";  // untranslated
+/** @export */ Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_VAR_TITLE = "Set pen color";  // untranslated
 /** @export */ Blockly.Msg.OXOCARD_MATRIX_SET_FILL_TIP = "Objects are filled when drawn.";  // untranslated
 /** @export */ Blockly.Msg.OXOCARD_MATRIX_SET_FILL_TITLE = "Fill object";  // untranslated
 /** @export */ Blockly.Msg.OXOCARD_MATRIX_SET_NOFILL_TIP = "Objects are not filled when drawn.";  // untranslated

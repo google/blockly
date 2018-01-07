@@ -62,6 +62,25 @@ Blockly.Blocks.oxocard_matrix_set_color = {
 	}
 };
 
+Blockly.Blocks.oxocard_matrix_set_color_var = {
+	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+	init: function() {
+		this.appendDummyInput()
+			.appendField(Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_VAR_TITLE);
+		this.appendValueInput('R')
+			.setCheck(Blockly.Types.NUMBER.checkList).setAlign(Blockly.ALIGN_RIGHT);;
+		this.appendValueInput('G')
+			.setCheck(Blockly.Types.NUMBER.checkList).setAlign(Blockly.ALIGN_RIGHT);;
+		this.appendValueInput('B')
+			.setCheck(Blockly.Types.NUMBER.checkList).setAlign(Blockly.ALIGN_RIGHT);;
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setInputsInline(true);
+		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_VAR_TIP);
+		this.setColour('#000000');
+	}
+};
+
 Blockly.Blocks.oxocard_matrix_update = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {

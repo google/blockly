@@ -15,10 +15,9 @@ Blockly.Blocks.math_decrement = {
 	init: function() {
 		this.appendDummyInput()
 		.appendField(Blockly.Msg.OXOCARD_MATH_DECREMENT_TITLE);
-		this.appendValueInput('VAR', 'Variable')
-			.setCheck('Number').setAlign(Blockly.ALIGN_RIGHT);
-	
-
+		this.appendDummyInput()
+		  .appendField(new Blockly.FieldVariable(
+		  Blockly.Msg.VARIABLES_DEFAULT_NAME), 'VAR');
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
@@ -38,7 +37,7 @@ Blockly.Blocks.math_increment = {
 	init: function() {
 		this.appendDummyInput()
 		.appendField(Blockly.Msg.OXOCARD_MATH_INCREMENT_TITLE);
-		this.appendValueInput('VAR', 'Variable')
+		this.appendValueInput('VAR')
 			.setCheck('Number').setAlign(Blockly.ALIGN_RIGHT);
 
 		this.setInputsInline(true);
@@ -52,7 +51,7 @@ Blockly.Blocks.math_increment = {
 	}
 };
 
-Blockly.Blocks['math_set_var_with'] = {
+Blockly.Blocks.math_set_var_with = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
 		this.appendDummyInput()

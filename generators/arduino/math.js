@@ -262,12 +262,18 @@ Blockly.Arduino['math_change'] = function(block) {
  * @param {!Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Arduino['math_decrement'] = function(block) {
-  var argument0 = Blockly.Arduino.valueToCode(block, 'DELTA',
-      Blockly.Arduino.ORDER_ADDITIVE) || '0';
-  var varName = Blockly.Arduino.variableDB_.getName(
-      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
-  return varName + ' -= ' + argument0 + ';\n';
+Blockly.Arduino.math_decrement = function(block) {
+	console.log(block);
+	console.log(block.getFieldValue('VAR'));
+	var varName = Blockly.Arduino.variableDB_.getName(
+		block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+	return varName + ' --;\n';
+};
+
+Blockly.Arduino.math_increment = function(block) {
+	var varName = Blockly.Arduino.variableDB_.getName(
+		block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+	return varName + ' ++;\n';
 };
 
 /** Rounding functions have a single operand. */

@@ -267,3 +267,32 @@ Blockly.Blocks.oxocard_matrix_draw_triangle = {
 		this.setColour('#000000');
 	}
 };
+
+Blockly.Blocks.oxocard_matrix_draw_number = {
+	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+	init: function() {
+		this.appendValueInput('NUMBER')
+			.appendField("T_ Draw number").setCheck('Number').setAlign(Blockly.ALIGN_RIGHT);
+		this.setInputsInline(true);
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setTooltip("T_ Draws a number to the display");
+		this.setColour('#000000');
+	}
+};
+
+Blockly.Blocks.oxocard_matrix_draw_text = {
+	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+	init: function() {
+		this.appendValueInput('TEXT')
+			.appendField("T_ Draw Text").setCheck('Text').setAlign(Blockly.ALIGN_RIGHT);
+		this.appendDummyInput()
+			.appendField(new Blockly.FieldDropdown([["T_small-font", "FLASE"],
+				  ["T_big-font", "TRUE"]]), "BUTTON")
+		this.setInputsInline(true);
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setTooltip("T_ Draws a number to the display");
+		this.setColour('#000000');
+	}
+};

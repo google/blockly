@@ -872,6 +872,7 @@ Blockly.Blocks['procedures_callreturn'] = {
   updateShape_: Blockly.Blocks['procedures_callnoreturn'].updateShape_,
   mutationToDom: Blockly.Blocks['procedures_callnoreturn'].mutationToDom,
   domToMutation: Blockly.Blocks['procedures_callnoreturn'].domToMutation,
+  renameVarById: Blockly.Blocks['procedures_callnoreturn'].renameVarById,
   getVarModels: Blockly.Blocks['procedures_callnoreturn'].getVarModels,
   onchange: Blockly.Blocks['procedures_callnoreturn'].onchange,
   customContextMenu:

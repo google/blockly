@@ -155,8 +155,6 @@ Blockly.FieldVariable.prototype.getVariable = function() {
  *     variable.
  */
 Blockly.FieldVariable.prototype.setValue = function(id) {
-  // What do I do when id is null?  That happens when undoing a change event
-  // for the first time the value was set.
   var workspace = this.sourceBlock_.workspace;
   var variable = Blockly.Variables.getVariable(workspace, id);
 
@@ -291,12 +289,7 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
       return;
     }
 
-    // TODO: Call any validation function, and allow it to override.
-    // For now it's unclear whether the validator should act on the id.
-    //var validatedId = this.callValidator(variable.getId());
+    // TODO (#1529): Call any validation function, and allow it to override.
   }
-  // if (variable.getId() !== null) {
-  //   this.setValue(validatedId);
-  // }
   this.setValue(id);
 };

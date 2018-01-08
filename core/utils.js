@@ -896,7 +896,7 @@ Blockly.utils.insertAfter_ = function(newNode, refNode) {
  * @throws Error Will throw if no global document can be found (e.g., Node.js).
  */
 Blockly.utils.runAfterPageLoad = function(fn) {
-  if (!document) {
+  if (typeof document != 'object') {
     throw new Error('Blockly.utils.runAfterPageLoad() requires browser document.');
   }
   if (document.readyState === 'complete') {

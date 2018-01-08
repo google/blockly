@@ -26,7 +26,7 @@ Blockly.Blocks['oxocard_turn_off_with_buttons'] = {
 		.appendField(new Blockly.FieldPlaceholder(104,60))
 		.appendField(new Blockly.FieldButton(35,35,"R3"),"R3")
 		.appendField(new Blockly.FieldButton(35,35,"R2"),"R2")
-	// this.setInputsInline(true);
+		// this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip("Tooltip");
@@ -45,7 +45,7 @@ Blockly.Blocks['oxocard_statemachine'] = {
 		this.states_ = [];
 		//this.stateCount_ = 0;
 	},
-  
+
 	mutationToDom: function() {
 		if(!this.stateCount_) {
 			return null;
@@ -56,7 +56,7 @@ Blockly.Blocks['oxocard_statemachine'] = {
 		}
 		return container;
 	},
-  
+
 	domToMutation: function(xmlElement) {
 		this.stateCount_ = parseInt(xmlElement.getAttribute('state'), 10);
 		for (var i = 0; i < this.stateCount_; i++) {
@@ -76,7 +76,7 @@ Blockly.Blocks['oxocard_statemachine'] = {
 		}
 		return containerBlock;
 	},
-  
+
 	compose: function(containerBlock) {
 		for(var i=0; i<this.states_.length;i++){
 			this.removeInput('STATE' + i);
@@ -89,7 +89,7 @@ Blockly.Blocks['oxocard_statemachine'] = {
 				stateBlock = stateBlock.nextConnection && stateBlock.nextConnection.targetBlock();
 				continue;
 			}
-			
+
 			var stateInput = this.appendStatementInput('STATE' + this.states_.length).appendField(stateBlock.getFieldValue('NAME'));
 			this.states_.push(stateBlock.getFieldValue('NAME'));
 			if (stateBlock.statementConnection_) {

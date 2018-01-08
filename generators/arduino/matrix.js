@@ -13,7 +13,9 @@ Blockly.Arduino.oxocard_matrix_draw_image = function() {
 		code += ',';
 		if (i != l-1) code += '\n';
 	}
-	return code += ' 0, 0);\n';
+	var posX = Blockly.Arduino.valueToCode(this, 'X', Blockly.Arduino.ORDER_NONE) || '0';
+	var posY = Blockly.Arduino.valueToCode(this, 'Y', Blockly.Arduino.ORDER_NONE) || '0';
+	return code = code  +posX +',' +posY +');\n';
 };
 
 Blockly.Arduino.oxocard_matrix_draw_rgb_image = function() {
@@ -33,6 +35,8 @@ Blockly.Arduino.oxocard_matrix_draw_rgb_image = function() {
 		}
 		code += '';
 	}
+	// var posX = Blockly.Arduino.valueToCode(this, 'X', Blockly.Arduino.ORDER_NONE) || '0';
+	// var posY = Blockly.Arduino.valueToCode(this, 'Y', Blockly.Arduino.ORDER_NONE) || '0';
 	return code + '\n';
 };
 

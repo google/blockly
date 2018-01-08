@@ -9,7 +9,7 @@ goog.require('Blockly.Blocks');
 Blockly.Blocks.oxocard_matrix_draw_image = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
-		
+
 		this.appendDummyInput()
 			.appendField(Blockly.Msg.OXOCARD_MATRIX_DRAW_IMAGE_TITLE);
 		for(var i=0, l=8; i<l; i++){
@@ -18,7 +18,11 @@ Blockly.Blocks.oxocard_matrix_draw_image = {
 				input.appendField(new Blockly.FieldLed('FALSE'), i + '' + j);
 			}
 		}
-		this.appendDummyInput();
+		this.appendValueInput('X')
+			.appendField('x').setCheck('Number').setAlign(Blockly.ALIGN_RIGHT);
+		this.appendValueInput('Y')
+			.appendField('y').setCheck('Number').setAlign(Blockly.ALIGN_RIGHT);
+		// this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_DRAW_IMAGE_TIP);
@@ -42,6 +46,10 @@ Blockly.Blocks.oxocard_matrix_draw_rgb_image = {
 			}
 		}
 		this.appendDummyInput().appendField(theColor, 'COLOR');
+		// this.appendValueInput('X')
+		// 	.appendField('x').setCheck('Number').setAlign(Blockly.ALIGN_RIGHT);
+		// this.appendValueInput('Y')
+		// 	.appendField('y').setCheck('Number').setAlign(Blockly.ALIGN_RIGHT);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_DRAW_RGB_IMAGE_TIP);

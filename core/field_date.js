@@ -30,6 +30,7 @@ goog.require('Blockly.Field');
 goog.require('Blockly.utils');
 
 goog.require('goog.date');
+goog.require('goog.date.DateTime');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.i18n.DateTimeSymbols');
@@ -144,7 +145,7 @@ Blockly.FieldDate.prototype.createWidget_ = function() {
   picker.setShowWeekNum(false);
   var div = Blockly.WidgetDiv.DIV;
   picker.render(div);
-  picker.setDate(goog.date.fromIsoString(this.getValue()));
+  picker.setDate(goog.date.DateTime.fromIsoString(this.getValue()));
   return picker;
 };
 

@@ -43,6 +43,7 @@ goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
+goog.require('Blockly.FieldMathInput');
 goog.require('Blockly.FieldLed');
 goog.require('Blockly.FieldRGBLed');
 goog.require('Blockly.FieldPlaceholder');

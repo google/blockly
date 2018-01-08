@@ -11,11 +11,11 @@ Blockly.Blocks['oxocard_turn_off_with_buttons'] = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
 	this.appendDummyInput()
-	  .appendField("OXOcard ausschalten.")
+	  .appendField("T_ OXOcard ausschalten.")
 	this.appendDummyInput()
-		.appendField("Klicke die Tasten, mit denen du wieder")
+		.appendField("T_ Klicke die Tasten, mit denen du wieder")
 	this.appendDummyInput()
-		.appendField("einschalten möchtest:")
+		.appendField("T_ einschalten möchtest:")
 	this.appendDummyInput()
 		.appendField(new Blockly.FieldButton(35,35,"L1"),"L1")
 		.appendField(new Blockly.FieldPlaceholder(200,50))
@@ -30,6 +30,18 @@ Blockly.Blocks['oxocard_turn_off_with_buttons'] = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip("Tooltip");
+		this.setColour('#000000');
+	}
+};
+
+Blockly.Blocks.oxocard_connect_to_internet = {
+	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+	init: function() {
+		this.appendDummyInput()
+			.appendField("T_ Connect with internet");
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setTooltip("T_ Connect the OXOcard with the internet");
 		this.setColour('#000000');
 	}
 };

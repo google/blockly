@@ -1,4 +1,4 @@
-'use strict';
+// 'use strict';
 
 goog.provide('Blockly.FieldButton');
 
@@ -73,15 +73,19 @@ Blockly.FieldButton.prototype.onMouseDown_ = function(e) {
 	if (this.borderRect_) {
 		if(this.state_){
 			this.borderRect_.style.fill = '#fff';
-			// this.borderRect_.style.stroke = '#444';
-			// this.borderRect_.style.strokeWidth = 2;
 			this.textElement_.style.fill = '#000'
 		} else {
 			this.borderRect_.style.fill = '#444';
-			// this.borderRect_.style.stroke = '#fff';
-			// this.borderRect_.style.strokeWidth = 2;
 			this.textElement_.style.fill = '#fff'
 		}
 	}
   }
+};
+
+/**
+ * Return 'TRUE' if the button is checked, 'FALSE' otherwise.
+ * @return {string} Current state.
+ */
+Blockly.FieldButton.prototype.getValue = function() {
+  return String(this.state_).toUpperCase();
 };

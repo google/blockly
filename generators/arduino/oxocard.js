@@ -2,6 +2,14 @@
 
 goog.require('Blockly.Arduino');
 
+
+Blockly.Arduino.oxocard_button_ispressed = function() {
+  var dropdown_button = this.getFieldValue('BUTTON');
+  var code = 'isButton' + dropdown_button + 'Pressed()';
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+
 Blockly.Arduino['oxocard_turn_off_with_buttons'] = function(block) {
 	var valueL1= this.getFieldValue("L1").toLowerCase();
 	var valueL2= this.getFieldValue("L2").toLowerCase();

@@ -6,6 +6,22 @@ goog.require('Blockly.Blocks');
 goog.require('Blockly');
 
 
+Blockly.Blocks['oxocard_button_ispressed'] = {
+  helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+  init: function() {
+    this.appendDummyInput()
+        .appendField("T_ is button pressed?")
+        .appendField(new Blockly.FieldDropdown([["L1", "L1"],
+                      ["L2", "L2"],  ["L3", "L3"], ["R1", "R1"], ["R2", "R2"],
+                      ["R3", "R3"]]), "BUTTON");
+	this.setOutput(true, 'Boolean');
+    this.setTooltip("T_ Tip");
+    this.setColour('#000000');
+  },
+  getBlockType: function() {
+    return Blockly.Types.BOOLEAN;
+  }
+};
 
 Blockly.Blocks['oxocard_turn_off_with_buttons'] = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
@@ -167,7 +183,6 @@ Blockly.Blocks.oxocard_get_acceleration = {
     return Blockly.Types.NUMBER;
   }
 };
-
 
 Blockly.Blocks.oxocard_set_cursor = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',

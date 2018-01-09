@@ -374,3 +374,12 @@ Blockly.Arduino['math_set_var_with'] = function(block) {
   var expression= this.getFieldValue('EXPRESSION');
   return code += varName+' = ' +expression +';\n';
 };
+
+Blockly.Arduino['math_set_var_random'] = function(block) {
+  var code = '';
+  var varName = Blockly.Arduino.variableDB_.getName(
+	  block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+  var from = Blockly.Arduino.valueToCode(this, 'FROM', Blockly.Arduino.ORDER_NONE) || '0';
+  var to = Blockly.Arduino.valueToCode(this, 'TO', Blockly.Arduino.ORDER_NONE) || '0';
+  return code += varName+' = random(' +from +',' +to +'+1);\n';
+};

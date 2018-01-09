@@ -55,16 +55,40 @@ Blockly.Blocks.math_set_var_with = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
 		this.appendDummyInput()
-			.appendField("Setze")
+			.appendField("T_ Setze")
 			.appendField(new Blockly.FieldVariable(
 			Blockly.Msg.VARIABLES_DEFAULT_NAME), 'VAR');
 		this.appendDummyInput()
-			.appendField("mit")
+			.appendField("T_ mit")
 			.appendField(new Blockly.FieldMathInput('1*(1+2)'), 'EXPRESSION')
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setTooltip("Tooltip");
+		this.setTooltip("T_ Tooltip");
+		this.setColour('#000000');
+	}
+};
+
+
+Blockly.Blocks.math_set_var_random= {
+	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+	init: function() {
+		this.appendDummyInput()
+			.appendField("T_ Zufallszahl in")
+			.appendField(new Blockly.FieldVariable(
+			Blockly.Msg.VARIABLES_DEFAULT_NAME), 'VAR');
+			this.appendValueInput('FROM')
+				.appendField('T_ zw.')
+				.setCheck('Number')
+				.setAlign(Blockly.ALIGN_RIGHT);
+			this.appendValueInput('TO')
+				.appendField('T_ und')
+				.setCheck('Number')
+				.setAlign(Blockly.ALIGN_RIGHT);
+		this.setInputsInline(true);
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setTooltip("T_ Tooltip");
 		this.setColour('#000000');
 	}
 };

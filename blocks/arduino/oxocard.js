@@ -261,3 +261,69 @@ Blockly.Blocks.oxocard_set_cursor = {
 		this.setColour('#000000');
 	}
 };
+
+
+
+/* ---------- Weather ---------- */
+Blockly.Blocks.oxocard_get_weather = {
+  helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+  init: function() {
+    this.appendDummyInput()
+        .appendField("T_ Hole Wetter von")
+        .appendField(new Blockly.FieldDropdown([["Adelboden", "67350"],
+					["Basel", "66010"], ["Bern", "66310"], ["Chasseral", "66050"],
+					["Chur", "67860"], ["Genf", "67000"], ["Interlaken", "67340"],
+					["Jungfraujoch", "67300"], ["Lugano", "67700"], ["Luzern", "66500"],
+					["Schaffhausen", "66200"], ["Sion", "67200"], ["StGallen", "66810"],
+					["Zuerich", "66700"]]), "CITY")
+	this.setPreviousStatement(true, null);
+	this.setNextStatement(true, null);
+    this.setTooltip("T_ Tip");
+    this.setColour('#000000');
+  }
+};
+
+Blockly.Blocks.oxocard_weather_get_value = {
+  helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+  init: function() {
+    this.appendDummyInput()
+        .appendField("T_ Wetter: Hole ")
+        .appendField(new Blockly.FieldDropdown([["T_Temperatur", "Temparature"],
+					["T_Taupunkt", "DewPoint"], ["T_Luftfeuchtigkeit", "Humidity"],
+					["T_Wind", "Wind"], ["T_Niederschlag", "Precipitation"]]), "TYPE")
+    this.setOutput(true, 'Number');
+    this.setTooltip("T_ Tip");
+    this.setColour('#000000');
+  },
+  getBlockType: function() {
+    return Blockly.Types.NUMBER;
+  }
+};
+
+Blockly.Blocks.oxocard_weather_get_city = {
+  helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+  init: function() {
+    this.appendDummyInput()
+        .appendField("T_ Wetter: Hole Stadtname")
+    this.setOutput(true, 'Text');
+    this.setTooltip("T_ Tip");
+    this.setColour('#000000');
+  },
+  getBlockType: function() {
+    return Blockly.Types.TEXT;
+  }
+};
+
+Blockly.Blocks.oxocard_weather_get_icon = {
+  helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+  init: function() {
+    this.appendDummyInput()
+        .appendField("T_ Wetter: Hole Icon")
+    this.setOutput(true, 'Number');
+    this.setTooltip("T_ Tip");
+    this.setColour('#000000');
+  },
+  getBlockType: function() {
+    return Blockly.Types.NUMBER;
+  }
+};

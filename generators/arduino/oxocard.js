@@ -80,3 +80,26 @@ Blockly.Arduino.oxocard_set_cursor = function() {
 	var posY = Blockly.Arduino.valueToCode(this, 'Y', Blockly.Arduino.ORDER_NONE);
 	return 'oxocard.setAccelerometerRootCursor(' + posX + ',' + posY + ');\n';
 };
+
+
+/* ---------- Weather ---------- */
+Blockly.Arduino.oxocard_get_weather = function() {
+  var dropdown_button = this.getFieldValue('CITY');
+  return 'oxocard.weather->downloadWeatherForTown("' +dropdown_button +'");\n';
+};
+
+Blockly.Arduino.oxocard_weather_get_value = function() {
+  var dropdown_button = this.getFieldValue('TYPE');
+  var code = 'oxocard.weather->get' +dropdown_button +'()';
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Arduino.oxocard_weather_get_city = function() {;
+  var code = 'oxocard.weather->getName()';
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Arduino.oxocard_weather_get_icon = function() {
+  var code = 'oxocard.weather->getIcon()';
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};

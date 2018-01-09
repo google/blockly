@@ -9,6 +9,9 @@ Blockly.Arduino.oxocard_button_ispressed = function() {
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+Blockly.Arduino.oxocard_turn_off = function(block) {
+	 return 'oxocard.turnOff();\n';
+};
 
 Blockly.Arduino['oxocard_turn_off_with_buttons'] = function(block) {
 	var valueL1= this.getFieldValue("L1").toLowerCase();
@@ -21,6 +24,15 @@ Blockly.Arduino['oxocard_turn_off_with_buttons'] = function(block) {
 		+ valueL3 +', ' +valueR1 +', ' +valueR2 +', ' +valueR3 +');\n';
 };
 
+Blockly.Arduino.oxocard_handle_autoturnoff = function() {
+	Blockly.Arduino.includes_['oxocard_runner'] = '#include "OXOcardRunner.h"\n';
+  var timeout = Blockly.Arduino.valueToCode(this, 'TIMEOUT', Blockly.Arduino.ORDER_ATOMIC) || 0;
+	return 'oxocard.configureAutoTurnOff(' + timeout + ');\noxocard.enableAutoTurnOff();\n';
+};
+
+Blockly.Arduino.oxocard_disable_auto_turnoff = function(block) {
+	 return 'oxocard.disableAutoTurnOff();\n';
+};
 
 Blockly.Arduino.oxocard_connect_to_internet = function(block) {
 	 return 'oxocard.wifi->init();\noxocard.wifi->begin();\n';

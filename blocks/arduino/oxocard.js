@@ -23,6 +23,18 @@ Blockly.Blocks['oxocard_button_ispressed'] = {
   }
 };
 
+Blockly.Blocks.oxocard_turn_off = {
+	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+	init: function() {
+		this.appendDummyInput()
+			.appendField("T_ OXOcard ausschalten");
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setTooltip("T_ Tip");
+		this.setColour('#000000');
+	}
+};
+
 Blockly.Blocks['oxocard_turn_off_with_buttons'] = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
@@ -46,6 +58,33 @@ Blockly.Blocks['oxocard_turn_off_with_buttons'] = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip("Tooltip");
+		this.setColour('#000000');
+	}
+};
+
+Blockly.Blocks.oxocard_handle_autoturnoff = {
+	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+	init: function() {
+		this.appendDummyInput()
+			.appendField("T_ Automatisch ausschalten");
+		this.appendValueInput("TIMEOUT", 'Timeout')
+			.appendField("T_ mit Timeout")
+			.setCheck('Number');
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setTooltip("T_ Tip");
+		this.setColour('#000000');
+	}
+};
+
+Blockly.Blocks.oxocard_disable_auto_turnoff = {
+	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+	init: function() {
+		this.appendDummyInput()
+			.appendField("T_ Nie automatisch ausschalten");
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setTooltip("T_ Tip");
 		this.setColour('#000000');
 	}
 };

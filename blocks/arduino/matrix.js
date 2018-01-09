@@ -296,3 +296,15 @@ Blockly.Blocks.oxocard_matrix_draw_text = {
 		this.setColour('#000000');
 	}
 };
+
+Blockly.Blocks.oxocard_matrix_draw_weather = {
+	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+	init: function() {
+		this.appendDummyInput()
+			.appendField("T_ Zeichne Wetter Icon");
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setTooltip("T_ Tip");
+		this.setColour('#000000');
+	}
+};

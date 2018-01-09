@@ -296,7 +296,7 @@ Blockly.Blocks.oxocard_weather_get_value = {
     this.setColour('#000000');
   },
   getBlockType: function() {
-    return Blockly.Types.NUMBER;
+    return Blockly.Types.DECIMAL;
   }
 };
 

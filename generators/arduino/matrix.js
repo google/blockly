@@ -138,3 +138,10 @@ Blockly.Arduino.oxocard_matrix_draw_text = function() {
 	var isBigFont = this.getFieldValue('BUTTON').toLowerCase();
 	return 'oxocard.displayText(' +text +',' +isBigFont +');\n';
 };
+
+Blockly.Arduino.oxocard_matrix_draw_weather = function() {
+	return "oxocard.matrix->clear();\n"
+			+"oxocard.matrix->setForeColor(oxocard.weather->getDrawableIconColor());\n"
+			+"oxocard.matrix->drawImage(oxocard.weather->getDrawableIcon());\n"
+			+"oxocard.matrix->update();\n";
+};

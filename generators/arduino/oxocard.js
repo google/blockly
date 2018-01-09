@@ -64,9 +64,14 @@ Blockly.Arduino.oxocard_statemachine = function(block) {
 
 /* ---------- Accelerometer ---------- */
 Blockly.Arduino.oxocard_get_acceleration = function() {
-  Blockly.Arduino.includes_['oxocard_runner'] = '#include "OXOcardRunner.h"\n';
   var dropdown_button = this.getFieldValue('AXIS');
-  var code = 'getAccelerometer' + dropdown_button +'()';
+  var code = 'oxocard.getAccelerometer' +dropdown_button +'()';
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Arduino.oxocard_is_orientation = function() {
+  var dropdown_button = this.getFieldValue('DIRECTION');
+  var code = 'getOrientation() == LIS3DE::' +dropdown_button ;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 

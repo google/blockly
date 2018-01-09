@@ -223,6 +223,24 @@ Blockly.Blocks.oxocard_get_acceleration = {
   }
 };
 
+Blockly.Blocks['oxocard_is_orientation'] = {
+  helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+  init: function() {
+    this.appendDummyInput()
+        .appendField("T_ Ist Orientierung")
+        .appendField(new Blockly.FieldDropdown([["T_Auf", "UP"],
+                      ["T_Ab", "DOWN"],
+                      ["T_Horizontal", "HORIZONTALLY"],
+                      ["T_Vertikal", "VERTICALLY"]]), "DIRECTION")
+    this.setOutput(true, 'Boolean');
+    this.setTooltip("T_ Tip");
+    this.setColour('#000000');
+  },
+  getBlockType: function() {
+    return Blockly.Types.BOOLEAN;
+  }
+};
+
 Blockly.Blocks.oxocard_set_cursor = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {

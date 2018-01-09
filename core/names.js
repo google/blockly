@@ -112,7 +112,7 @@ Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
  * @param {string} name The Blockly entity name (no constraints).
  * @param {string} type The type of entity in Blockly
  *     ('VARIABLE', 'PROCEDURE', 'BUILTIN', etc...).
- * @return {string} An entity name legal for the exported language.
+ * @return {string} An entity name that is legal in the exported language.
  */
 Blockly.Names.prototype.getName = function(name, type) {
   if (type == Blockly.Variables.NAME_TYPE) {
@@ -143,7 +143,7 @@ Blockly.Names.prototype.getName = function(name, type) {
  * @param {string} name The Blockly entity name (no constraints).
  * @param {string} type The type of entity in Blockly
  *     ('VARIABLE', 'PROCEDURE', 'BUILTIN', etc...).
- * @return {string} An entity name legal for the exported language.
+ * @return {string} An entity name that is legal in the exported language.
  */
 Blockly.Names.prototype.getDistinctName = function(name, type) {
   var safeName = this.safeName_(name);

@@ -71,13 +71,16 @@ Blockly.VariableMap.prototype.renameVariable = function(variable, newName) {
   var conflictVar = this.getVariable(newName, type);
   var blocks = this.workspace.getAllBlocks();
   Blockly.Events.setGroup(true);
-  // The IDs may match if the rename is a simple case change (name1 -> Name1).
-  if (!conflictVar || conflictVar.getId() == variable.getId()) {
-    this.renameVariableAndUses_(variable, newName, blocks);
-  } else {
-    this.renameVariableWithConflict_(variable, newName, conflictVar, blocks);
+  try {
+    // The IDs may match if the rename is a simple case change (name1 -> Name1).
+    if (!conflictVar || conflictVar.getId() == variable.getId()) {
+      this.renameVariableAndUses_(variable, newName, blocks);
+    } else {
+      this.renameVariableWithConflict_(variable, newName, conflictVar, blocks);
+    }
+  } finally {
+    Blockly.Events.setGroup(false);
   }
-  Blockly.Events.setGroup(false);
 };
 
 /**
@@ -264,11 +267,14 @@ Blockly.VariableMap.prototype.deleteVariableById = function(id) {
 Blockly.VariableMap.prototype.deleteVariableInternal_ = function(variable,
     uses) {
   Blockly.Events.setGroup(true);
-  for (var i = 0; i < uses.length; i++) {
-    uses[i].dispose(true, false);
+  try {
+    for (var i = 0; i < uses.length; i++) {
+      uses[i].dispose(true, false);
+    }
+    this.deleteVariable(variable);
+  } finally {
+    Blockly.Events.setGroup(false);
   }
-  this.deleteVariable(variable);
-  Blockly.Events.setGroup(false);
 };
 
 /* End functions for variable deletion. */

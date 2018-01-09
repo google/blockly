@@ -275,7 +275,9 @@ Blockly.Block.prototype.dispose = function(healStack) {
  * Call initModel on all fields on the block.
  * May be called more than once.
  * Either initModel or initSvg must be called after creating a block and before
- * first interaction with it.
+ * the first interaction with it.  Interactions include UI actions
+ * (e.g. clicking and dragging) and firing events (e.g. create, delete, and
+ * change).
  * @public
  */
 Blockly.Block.prototype.initModel = function() {

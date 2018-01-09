@@ -150,3 +150,42 @@ Blockly.Blocks['oxocard_statemachine_state'] = {
 		this.contextMenu = false;
 	}
 };
+
+
+/* ---------- Accelerometer ---------- */
+Blockly.Blocks.oxocard_get_acceleration = {
+  helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+  init: function() {
+    this.appendDummyInput()
+        .appendField("T_ Acceleration")
+        .appendField(new Blockly.FieldDropdown([["X", "X"], ["Y", "Y"], ["Z", "Z"]]), "AXIS")
+    this.setOutput(true, 'Number');
+    this.setTooltip("T_ Tip");
+    this.setColour('#000000');
+  },
+  getBlockType: function() {
+    return Blockly.Types.NUMBER;
+  }
+};
+
+
+Blockly.Blocks.oxocard_set_cursor = {
+	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+	init: function() {
+		this.appendDummyInput()
+			.appendField("T_ Set cursor");
+		this.appendValueInput('X')
+			.appendField('x')
+			.setCheck('Number')
+			.setAlign(Blockly.ALIGN_RIGHT);
+		this.appendValueInput('Y')
+			.appendField('y')
+			.setCheck('Number')
+			.setAlign(Blockly.ALIGN_RIGHT);
+		this.setInputsInline(true);
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setTooltip("T_ Tip");
+		this.setColour('#000000');
+	}
+};

@@ -40,3 +40,18 @@ Blockly.Arduino.oxocard_statemachine = function(block) {
 
 	return code += '\n';
 };
+
+
+/* ---------- Accelerometer ---------- */
+Blockly.Arduino.oxocard_get_acceleration = function() {
+  Blockly.Arduino.includes_['oxocard_runner'] = '#include "OXOcardRunner.h"\n';
+  var dropdown_button = this.getFieldValue('AXIS');
+  var code = 'getAccelerometer' + dropdown_button +'()';
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Arduino.oxocard_set_cursor = function() {
+	var posX = Blockly.Arduino.valueToCode(this, 'X', Blockly.Arduino.ORDER_NONE);
+	var posY = Blockly.Arduino.valueToCode(this, 'Y', Blockly.Arduino.ORDER_NONE);
+	return 'oxocard.setAccelerometerRootCursor(' + posX + ',' + posY + ');\n';
+};

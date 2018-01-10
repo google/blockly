@@ -1332,6 +1332,15 @@ Blockly.Msg.OXOCARD_MATH_INCREMENT_TIP = 'Does increment the variable with the v
 Blockly.Msg.OXOCARD_MATH_DECREMENT_TITLE = 'Substract 1 from';
 Blockly.Msg.OXOCARD_MATH_DECREMENT_TIP = 'Does decrement the variable with the value -1.';
 
+Blockly.Msg.OXOCARD_MATH_SET_VAR_WITH_TITLE = 'Set';
+Blockly.Msg.OXOCARD_MATH_SET_VAR_WITH_TITLE2 = 'with';
+Blockly.Msg.OXOCARD_MATH_SET_VAR_WITH_TIP = 'Set a variable with an expressin (e.g. 1*(5/8))';
+
+Blockly.Msg.OXOCARD_MATH_SET_VAR_RANDOM_TITLE = 'Random number in';
+Blockly.Msg.OXOCARD_MATH_SET_VAR_RANDOM_TITLE2 = 'from';
+Blockly.Msg.OXOCARD_MATH_SET_VAR_RANDOM_TITLE3 = 'to';
+Blockly.Msg.OXOCARD_MATH_SET_VAR_RANDOM_TIP = 'Set a given variable with a random number between two numbers';
+
 // Logic
 
 Blockly.Msg.OXOCARD_LOGIC_IF_TITLE = 'If';
@@ -1360,7 +1369,7 @@ Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_VAR_TIP = 'The following draw-blocks will d
 Blockly.Msg.OXOCARD_MATRIX_DRAW_ALL_TITLE = 'Draw all pixels';
 Blockly.Msg.OXOCARD_MATRIX_DRAW_ALL_TIP = 'Will draw all pixels.';
 
-Blockly.Msg.OXOCARD_MATRIX_CLEAR_TITLE = 'Clear';
+Blockly.Msg.OXOCARD_MATRIX_CLEAR_TITLE = 'Clear display';
 Blockly.Msg.OXOCARD_MATRIX_CLEAR_TIP = 'Will clear all pixels on the matrix.';
 
 Blockly.Msg.OXOCARD_MATRIX_DRAW_PIXEL_TITLE = 'Draw pixel';
@@ -1389,10 +1398,21 @@ Blockly.Msg.OXOCARD_MATRIX_SET_FILL_TIP = 'Objects are filled when drawn.';
 Blockly.Msg.OXOCARD_MATRIX_SET_NOFILL_TITLE = 'Empty object';
 Blockly.Msg.OXOCARD_MATRIX_SET_NOFILL_TIP = 'Objects are not filled when drawn.';
 
+Blockly.Msg.OXOCARD_MATRIX_DRAW_NUMBER_TITLE = 'Draw number';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_NUMBER_TIP = 'Draws a number to the display';
+
+Blockly.Msg.OXOCARD_MATRIX_DRAW_TEXT_TITLE = 'Draw text';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_TEXT_SMALL_FONT = 'Small font';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_TEXT_BIG_FONT = 'Big font';
+Blockly.Msg.OXOCARD_MATRIX_DRAW_TEXT_TIP = 'Draws a given text to the display';
+
 
 // System
 Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TITLE = 'Turn OXOcard off';
+Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TITLE2 = 'Click to set the Buttons';
+Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TITLE3 = 'to turn on again';
 Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TIP = 'Turns off the card';
+Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TIP2 = 'Turns off the card and set the buttons able to wake the card up';
 Blockly.Msg.OXOCARD_RESET_OXOCARD_TITLE = 'Reset OXOcard';
 Blockly.Msg.OXOCARD_RESET_OXOCARD_TIP = 'Reboots the card';
 Blockly.Msg.OXOCARD_AUTO_TURNOFF_WP_TITLE = 'Handle auto turnoff';
@@ -1400,10 +1420,9 @@ Blockly.Msg.OXOCARD_AUTO_TURNOFF_WP_TIP = 'Enter sleep mode after 2 Minutes';
 Blockly.Msg.OXOCARD_AUTO_TURNOFF_TITLE = 'Handle auto turnoff';
 Blockly.Msg.OXOCARD_AUTO_TURNOFF_TIMEOUT_FIELD = 'with timeout';
 Blockly.Msg.OXOCARD_AUTO_TURNOFF_TIP = 'Enter sleep mode after given timeout';
+Blockly.Msg.OXOCARD_NO_AUTO_TURNOFF_TITLE = 'Disable anto turnoff';
+Blockly.Msg.OXOCARD_NO_AUTO_TURNOFF_TIP = 'Disable the auto turnoff functionality';
 Blockly.Msg.OXOCARD_BUTTON_PRESSED_TITLE = 'Is button pressed?';
-Blockly.Msg.OXOCARD_BUTTON_PRESSED_LEFT_FIELD = 'Left';
-Blockly.Msg.OXOCARD_BUTTON_PRESSED_MIDDLE_FIELD = 'Middle';
-Blockly.Msg.OXOCARD_BUTTON_PRESSED_RIGHT_FIELD = 'Right';
 Blockly.Msg.OXOCARD_BUTTON_PRESSED_TIP = 'Yes(?) if button pressed';
 Blockly.Msg.OXOCARD_GET_TIMER_SECONDS_TITLE = 'Get timer seconds';
 Blockly.Msg.OXOCARD_GET_TIMER_SECONDS_TIP = 'Return the seconds value uf the timer';
@@ -1445,6 +1464,8 @@ Blockly.Msg.OXOCARD_IS_ORIENTATION_DOWN_FIELD = 'Down';
 Blockly.Msg.OXOCARD_IS_ORIENTATION_HORIZONTALLY_FIELD = 'Horizontally';
 Blockly.Msg.OXOCARD_IS_ORIENTATION_VERTICALLY_FIELD = 'Vertically';
 Blockly.Msg.OXOCARD_IS_ORIENTATION_TIP = 'Return if the OXOcard is in the given orientation';
+Blockly.Msg.OXOCARD_SET_CURSOR_TITLE = 'Set cursor';
+Blockly.Msg.OXOCARD_SET_CURSOR_TIP = 'Set the position of the cursor';
 // Bluetooth
 Blockly.Msg.OXOCARD_SETUP_AS_IBEACON_TITLE = 'Setup the OXOcard as iBeacon';
 Blockly.Msg.OXOCARD_SETUP_AS_IBEACON_ID_FIELD = 'With the ID';
@@ -1460,9 +1481,26 @@ Blockly.Msg.OXOCARD_TONE_NO_DURATION_TITLE = 'Play tone';
 Blockly.Msg.OXOCARD_TONE_NO_DURATION_TIP = 'Plays a tone';
 Blockly.Msg.OXOCARD_NO_TONE_TITLE = 'No tone';
 Blockly.Msg.OXOCARD_NO_TONE_TIP = 'Stops the tone';
+// Weather
+Blockly.Msg.OXOCARD_WEATHER_GET_FROM_TITLE = 'Get weather from';
+Blockly.Msg.OXOCARD_WEATHER_GET_FROM_TIP = 'Get weather from the selected city';
+Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_TITLE = 'Weather: Get';
+Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_TEMP = 'Temperature';
+Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_DEWPOINT = 'Dew point';
+Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_HUMIDITY = 'Humidity';
+Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_WIND = 'Wind';
+Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_PRECIPITATION = 'Precipitation';
+Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_TIP = 'Get a value from the weather';
+Blockly.Msg.OXOCARD_WEATHER_GET_CITY_TITLE = 'Weather: get city name';
+Blockly.Msg.OXOCARD_WEATHER_GET_CITY_TIP = 'Get the name of the weather';
+Blockly.Msg.OXOCARD_WEATHER_GET_ICON_TITLE = 'Weather: get icon';
+Blockly.Msg.OXOCARD_WEATHER_GET_ICON_TIP = 'Get the icon number of the weather';
+
 // Other
 Blockly.Msg.OXOCARD_RANDOM_TITLE = 'Random 0 to ';
 Blockly.Msg.OXOCARD_RANDOM_TIP = 'Returns a random number between 0 an the given value';
+Blockly.Msg.OXOCARD_CONNECT_TO_INTERNET_TITLE = 'Connect with internet';
+Blockly.Msg.OXOCARD_CONNECT_TO_INTERNET_TIP = 'Opens a connection to the internet';
 
 /**
  * Ardublockly instances

@@ -10,12 +10,12 @@ Blockly.Blocks['oxocard_button_ispressed'] = {
   helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
   init: function() {
     this.appendDummyInput()
-        .appendField("T_ is button pressed?")
+        .appendField(Blockly.Msg.OXOCARD_BUTTON_PRESSED_TITLE)
         .appendField(new Blockly.FieldDropdown([["L1", "L1"],
                       ["L2", "L2"],  ["L3", "L3"], ["R1", "R1"], ["R2", "R2"],
                       ["R3", "R3"]]), "BUTTON");
 	this.setOutput(true, 'Boolean');
-    this.setTooltip("T_ Tip");
+    this.setTooltip(Blockly.Msg.OXOCARD_BUTTON_PRESSED_TIP);
     this.setColour('#000000');
   },
   getBlockType: function() {
@@ -27,10 +27,10 @@ Blockly.Blocks.oxocard_turn_off = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
 		this.appendDummyInput()
-			.appendField("T_ OXOcard ausschalten");
+			.appendField(Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TITLE);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setTooltip("T_ Tip");
+		this.setTooltip(Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TIP);
 		this.setColour('#000000');
 	}
 };
@@ -39,11 +39,11 @@ Blockly.Blocks['oxocard_turn_off_with_buttons'] = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
 	this.appendDummyInput()
-	  .appendField("T_ OXOcard ausschalten.")
+	  .appendField(Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TITLE)
 	this.appendDummyInput()
-		.appendField("T_ Klicke die Tasten, mit denen du wieder")
+		.appendField(Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TITLE2)
 	this.appendDummyInput()
-		.appendField("T_ einschalten möchtest:")
+		.appendField(Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TITLE3)
 	this.appendDummyInput()
 		.appendField(new Blockly.FieldButton(35,35,"L1"),"L1")
 		.appendField(new Blockly.FieldPlaceholder(200,50))
@@ -57,7 +57,7 @@ Blockly.Blocks['oxocard_turn_off_with_buttons'] = {
 		// this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setTooltip("Tooltip");
+		this.setTooltip(Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TIP2);
 		this.setColour('#000000');
 	}
 };
@@ -66,13 +66,13 @@ Blockly.Blocks.oxocard_handle_autoturnoff = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
 		this.appendDummyInput()
-			.appendField("T_ Automatisch ausschalten");
+			.appendField(Blockly.Msg.OXOCARD_AUTO_TURNOFF_TITLE);
 		this.appendValueInput("TIMEOUT", 'Timeout')
-			.appendField("T_ mit Timeout")
+			.appendField(Blockly.Msg.OXOCARD_AUTO_TURNOFF_TIMEOUT_FIELD)
 			.setCheck('Number');
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setTooltip("T_ Tip");
+		this.setTooltip(Blockly.Msg.OXOCARD_AUTO_TURNOFF_TIP);
 		this.setColour('#000000');
 	}
 };
@@ -81,10 +81,10 @@ Blockly.Blocks.oxocard_disable_auto_turnoff = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
 		this.appendDummyInput()
-			.appendField("T_ Nie automatisch ausschalten");
+			.appendField(Blockly.Msg.OXOCARD_NO_AUTO_TURNOFF_TITLE);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setTooltip("T_ Tip");
+		this.setTooltip(Blockly.Msg.OXOCARD_NO_AUTO_TURNOFF_TIP);
 		this.setColour('#000000');
 	}
 };
@@ -93,10 +93,10 @@ Blockly.Blocks.oxocard_connect_to_internet = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
 		this.appendDummyInput()
-			.appendField("T_ Connect with internet");
+			.appendField(Blockly.Msg.OXOCARD_CONNECT_TO_INTERNET_TITLE);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setTooltip("T_ Connect the OXOcard with the internet");
+		this.setTooltip(Blockly.Msg.OXOCARD_CONNECT_TO_INTERNET_TIP);
 		this.setColour('#000000');
 	}
 };
@@ -212,10 +212,10 @@ Blockly.Blocks.oxocard_get_acceleration = {
   helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
   init: function() {
     this.appendDummyInput()
-        .appendField("T_ Acceleration")
+        .appendField(Blockly.Msg.OXOCARD_GET_ACCELERATION_TITLE)
         .appendField(new Blockly.FieldDropdown([["X", "X"], ["Y", "Y"], ["Z", "Z"]]), "AXIS")
     this.setOutput(true, 'Number');
-    this.setTooltip("T_ Tip");
+    this.setTooltip(Blockly.Msg.OXOCARD_GET_ACCELERATION_TIP);
     this.setColour('#000000');
   },
   getBlockType: function() {
@@ -227,13 +227,13 @@ Blockly.Blocks['oxocard_is_orientation'] = {
   helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
   init: function() {
     this.appendDummyInput()
-        .appendField("T_ Ist Orientierung")
-        .appendField(new Blockly.FieldDropdown([["T_Auf", "UP"],
-                      ["T_Ab", "DOWN"],
-                      ["T_Horizontal", "HORIZONTALLY"],
-                      ["T_Vertikal", "VERTICALLY"]]), "DIRECTION")
+        .appendField(Blockly.Msg.OXOCARD_IS_ORIENTATION_TITLE)
+        .appendField(new Blockly.FieldDropdown([[Blockly.Msg.OXOCARD_IS_ORIENTATION_UP_FIELD, "UP"],
+                      [Blockly.Msg.OXOCARD_IS_ORIENTATION_DOWN_FIELD, "DOWN"],
+                      [Blockly.Msg.OXOCARD_IS_ORIENTATION_HORIZONTALLY_FIELD, "HORIZONTALLY"],
+                      [Blockly.Msg.OXOCARD_IS_ORIENTATION_VERTICALLY_FIELD, "VERTICALLY"]]), "DIRECTION")
     this.setOutput(true, 'Boolean');
-    this.setTooltip("T_ Tip");
+    this.setTooltip(Blockly.Msg.OXOCARD_IS_ORIENTATION_TIP);
     this.setColour('#000000');
   },
   getBlockType: function() {
@@ -245,7 +245,7 @@ Blockly.Blocks.oxocard_set_cursor = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
 		this.appendDummyInput()
-			.appendField("T_ Set cursor");
+			.appendField(Blockly.Msg.OXOCARD_SET_CURSOR_TITLE);
 		this.appendValueInput('X')
 			.appendField('x')
 			.setCheck('Number')
@@ -257,7 +257,7 @@ Blockly.Blocks.oxocard_set_cursor = {
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setTooltip("T_ Tip");
+		this.setTooltip(Blockly.Msg.OXOCARD_SET_CURSOR_TIP);
 		this.setColour('#000000');
 	}
 };
@@ -269,7 +269,7 @@ Blockly.Blocks.oxocard_get_weather = {
   helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
   init: function() {
     this.appendDummyInput()
-        .appendField("T_ Hole Wetter von")
+        .appendField(Blockly.Msg.OXOCARD_WEATHER_GET_FROM_TITLE)
         .appendField(new Blockly.FieldDropdown([["Adelboden", "67350"],
 					["Basel", "66010"], ["Bern", "66310"], ["Chasseral", "66050"],
 					["Chur", "67860"], ["Genf", "67000"], ["Interlaken", "67340"],
@@ -278,7 +278,7 @@ Blockly.Blocks.oxocard_get_weather = {
 					["Zuerich", "66700"]]), "CITY")
 	this.setPreviousStatement(true, null);
 	this.setNextStatement(true, null);
-    this.setTooltip("T_ Tip");
+    this.setTooltip(Blockly.Msg.OXOCARD_WEATHER_GET_FROM_TIP);
     this.setColour('#000000');
   }
 };
@@ -287,12 +287,14 @@ Blockly.Blocks.oxocard_weather_get_value = {
   helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
   init: function() {
     this.appendDummyInput()
-        .appendField("T_ Wetter: Hole ")
-        .appendField(new Blockly.FieldDropdown([["T_Temperatur", "Temparature"],
-					["T_Taupunkt", "DewPoint"], ["T_Luftfeuchtigkeit", "Humidity"],
-					["T_Wind", "Wind"], ["T_Niederschlag", "Precipitation"]]), "TYPE")
+        .appendField(Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_TITLE)
+        .appendField(new Blockly.FieldDropdown([[Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_TEMP, "Temparature"],
+					[Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_DEWPOINT, "DewPoint"],
+					[Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_HUMIDITY, "Humidity"],
+					[Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_WIND, "Wind"],
+					[Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_PRECIPITATION, "Precipitation"]]), "TYPE")
     this.setOutput(true, 'Number');
-    this.setTooltip("T_ Tip");
+    this.setTooltip(Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_TIP);
     this.setColour('#000000');
   },
   getBlockType: function() {
@@ -304,9 +306,9 @@ Blockly.Blocks.oxocard_weather_get_city = {
   helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
   init: function() {
     this.appendDummyInput()
-        .appendField("T_ Wetter: Hole Stadtname")
+        .appendField(Blockly.Msg.OXOCARD_WEATHER_GET_CITY_TITLE)
     this.setOutput(true, 'Text');
-    this.setTooltip("T_ Tip");
+    this.setTooltip(Blockly.Msg.OXOCARD_WEATHER_GET_CITY_TIP);
     this.setColour('#000000');
   },
   getBlockType: function() {
@@ -318,9 +320,9 @@ Blockly.Blocks.oxocard_weather_get_icon = {
   helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
   init: function() {
     this.appendDummyInput()
-        .appendField("T_ Wetter: Hole Icon")
+        .appendField(Blockly.Msg.OXOCARD_WEATHER_GET_ICON_TITLE)
     this.setOutput(true, 'Number');
-    this.setTooltip("T_ Tip");
+    this.setTooltip(Blockly.Msg.OXOCARD_WEATHER_GET_ICON_TIP);
     this.setColour('#000000');
   },
   getBlockType: function() {

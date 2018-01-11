@@ -705,6 +705,7 @@ Blockly.Block.prototype.getField = function(name) {
 /**
  * Return all variables referenced by this block.
  * @return {!Array.<string>} List of variable names.
+ * @package
  */
 Blockly.Block.prototype.getVars = function() {
   var vars = [];
@@ -721,6 +722,7 @@ Blockly.Block.prototype.getVars = function() {
 /**
  * Return all variables referenced by this block.
  * @return {!Array.<!Blockly.VariableModel>} List of variable models.
+ * @package
  */
 Blockly.Block.prototype.getVarModels = function() {
   var vars = [];
@@ -743,7 +745,7 @@ Blockly.Block.prototype.getVarModels = function() {
  * Notification that a variable is renaming but keeping the same ID.  If the
  * variable is in use on this block, rerender to show the new name.
  * @param {!Blockly.VariableModel} variable The variable being renamed.
- * @public
+ * @package
  */
 Blockly.Block.prototype.updateVarName = function(variable) {
   for (var i = 0, input; input = this.inputList[i]; i++) {
@@ -758,7 +760,7 @@ Blockly.Block.prototype.updateVarName = function(variable) {
 
 /**
  * Notification that a variable is renaming.
- * If the name matches one of this block's variables, rename it.
+ * If the ID matches one of this block's variables, rename it.
  * @param {string} oldId ID of variable to rename.
  * @param {string} newId ID of new variable.  May be the same as oldId, but with
  *     an updated name.

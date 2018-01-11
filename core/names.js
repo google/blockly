@@ -26,14 +26,6 @@
 
 goog.provide('Blockly.Names');
 
-/**
- * Constant to separate developer variable names from user-defined variable
- * names when running generators.
- * A developer variable will be declared as a global in the generated code, but
- * will never be shown to the user in the workspace or stored in the variable
- * map.
- */
-Blockly.Names.DEVELOPER_VARIABLE_TYPE = 'DEVELOPER_VARIABLE';
 
 /**
  * Class for a database of entity names (variables, functions, etc).
@@ -54,6 +46,15 @@ Blockly.Names = function(reservedWords, opt_variablePrefix) {
   }
   this.reset();
 };
+
+/**
+ * Constant to separate developer variable names from user-defined variable
+ * names when running generators.
+ * A developer variable will be declared as a global in the generated code, but
+ * will never be shown to the user in the workspace or stored in the variable
+ * map.
+ */
+Blockly.Names.DEVELOPER_VARIABLE_TYPE = 'DEVELOPER_VARIABLE';
 
 /**
  * When JavaScript (or most other languages) is generated, variable 'foo' and

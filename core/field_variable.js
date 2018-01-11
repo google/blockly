@@ -204,8 +204,7 @@ Blockly.FieldVariable.prototype.typeIsAllowed_ = function(type) {
  * @private
  */
 Blockly.FieldVariable.prototype.getVariableTypes_ = function() {
-  // TODO: Why does this happen every time, instead of once when the workspace
-  // is set?  Do we expect the variable types to change that much?
+  // TODO (#1513): Try to avoid calling this every time the field is edited.
   var variableTypes = this.variableTypes;
   if (variableTypes === null || variableTypes === undefined) {
     // If variableTypes is null, return all variable types.

@@ -433,12 +433,22 @@ Blockly.Gesture.prototype.doStart = function(e) {
     return;
   }
 
-  if (goog.string.caseInsensitiveEquals(e.type, 'touchstart')) {
+  if (goog.string.caseInsensitiveEquals(e.type, 'touchstart') ||
+      goog.string.caseInsensitiveEquals(e.type, 'pointerdown')) {
     Blockly.longStart_(e, this);
   }
 
   this.mouseDownXY_ = new goog.math.Coordinate(e.clientX, e.clientY);
 
+  this.bindMouseEvents(e);
+};
+
+/**
+ * Bind gesture events.
+ * @param {!Event} e A mouse down or touch start event.
+ * @package
+ */
+Blockly.Gesture.prototype.bindMouseEvents = function(e) {
   this.onMoveWrapper_ = Blockly.bindEventWithChecks_(
       document, 'mousemove', null, this.handleMove.bind(this));
   this.onUpWrapper_ = Blockly.bindEventWithChecks_(

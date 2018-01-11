@@ -1834,7 +1834,7 @@ Blockly.WorkspaceSvg.prototype.removeToolboxCategoryCallback = function(key) {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getGesture = function(e) {
-  var isStart = (e.type == 'mousedown' || e.type == 'touchstart');
+  var isStart = (e.type == 'mousedown' || e.type == 'touchstart' || e.type == 'pointerdown');
 
   var gesture = this.currentGesture_;
   if (gesture) {

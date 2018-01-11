@@ -130,8 +130,9 @@ Blockly.FieldVariable.prototype.getValue = function() {
 };
 
 /**
- * Get the text from this field.
- * @return {string} Current text.
+ * Get the text from this field, which is the selected variable's name.
+ * @return {string} The selected variable's name, or the empty string if no
+ *     variable is selected.
  */
 Blockly.FieldVariable.prototype.getText = function() {
   return this.variable_ ? this.variable_.name : '';
@@ -171,7 +172,7 @@ Blockly.FieldVariable.prototype.setValue = function(id) {
   if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
     var oldValue = this.variable_ ? this.variable_.getId() : null;
     Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this.sourceBlock_, 'field', this.name, oldValue, variable.getId()));
+        this.sourceBlock_, 'field', this.name, oldValue, id));
   }
   this.variable_ = variable;
   this.value_ = id;

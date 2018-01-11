@@ -88,7 +88,7 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
 
 /**
  * Encode a variable field as XML.
- * @param {!Blockly.Field} field The field to encode.
+ * @param {!Blockly.FieldVariable} field The field to encode.
  * @return {?Element} XML element, or null if the field did not need to be
  *     serialized.
  * @private
@@ -96,12 +96,18 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
 Blockly.Xml.fieldToDomVariable_ = function(field) {
   var id = field.getValue();
   // The field had not been initialized fully before being serialized.
+  // This can happen if a block is created directly through a call to
+  // workspace.newBlock instead of from XML.
+  // The new block will be serialized for the first time when firing a block
+  // creation event.
   if (id == null) {
     field.initModel();
     id = field.getValue();
   }
   // Get the variable directly from the field, instead of doing a lookup.  This
-  // will work even if the variable has already been deleted.
+  // will work even if the variable has already been deleted.  This can happen
+  // because the flyout defers deleting blocks until the next time the flyout is
+  // opened.
   var variable = field.getVariable();
 
   if (!variable) {

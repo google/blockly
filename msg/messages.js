@@ -1496,6 +1496,30 @@ Blockly.Msg.OXOCARD_WEATHER_GET_CITY_TIP = 'Get the name of the weather';
 Blockly.Msg.OXOCARD_WEATHER_GET_ICON_TITLE = 'Weather: get icon';
 Blockly.Msg.OXOCARD_WEATHER_GET_ICON_TIP = 'Get the icon number of the weather';
 
+// Communication
+Blockly.Msg.OXOCARD_COMM_ENABLE_TITLE = 'Enable short message';
+Blockly.Msg.OXOCARD_COMM_ENABLE_TIP = 'Enables the short messages';
+Blockly.Msg.OXOCARD_COMM_DISABLE_TITLE = 'Disable short message';
+Blockly.Msg.OXOCARD_COMM_DISABLE_TIP = 'Disables the short messages';
+Blockly.Msg.OXOCARD_COMM_WAIT_FOR_MESSAGE_TITLE = 'Wait for messages';
+Blockly.Msg.OXOCARD_COMM_WAIT_FOR_MESSAGE_TIP = 'Waits until a new message arives';
+Blockly.Msg.OXOCARD_COMM_WAIT_FOR_MESSAGE_TIMEOUT_FIELD = 'with timeout';
+Blockly.Msg.OXOCARD_COMM_WAIT_FOR_MESSAGE_TIMEOUT_TIP = 'Waits for a given time for a message';
+Blockly.Msg.OXOCARD_COMM_SEND_BROADCAST_MESSAGE_TITLE = 'Send broadcast message';
+Blockly.Msg.OXOCARD_COMM_SEND_BROADCAST_MESSAGE_TIP = 'Broadcast a message to all OXOcards';
+Blockly.Msg.OXOCARD_COMM_SEND_BROADCAST_NUMBER_TITLE = 'Send broadcast number';
+Blockly.Msg.OXOCARD_COMM_SEND_BROADCAST_NUMBER_TIP = 'Broadcast a number to all OXOcards';
+Blockly.Msg.OXOCARD_COMM_SEND_BROADCAST_NUMBER_FIELD = 'and number';
+Blockly.Msg.OXOCARD_COMM_SEND_BROADCAST_MESSAGE_AND_NUMBER_TIP = 'Broadcast a message and a number to all OXOcards';
+Blockly.Msg.OXOCARD_COMM_CHECK_FOR_BROADCAST_TITLE = 'Check for broadcast message';
+Blockly.Msg.OXOCARD_COMM_CHECK_FOR_BROADCAST_TIP = 'Checks if the received message was a broadcast message';
+Blockly.Msg.OXOCARD_COMM_COMPARE_BROADCAST_MESSAGE_TITLE = 'Compare broadcast message';
+Blockly.Msg.OXOCARD_COMM_COMPARE_BROADCAST_MESSAGE_TIP = 'Compares the broadcast message with the given message';
+Blockly.Msg.OXOCARD_COMM_COMPARE_BROADCAST_NUMBER_TITLE = 'Compare broadcast number';
+Blockly.Msg.OXOCARD_COMM_COMPARE_BROADCAST_NUMBER_TIP = 'Compares the broadcast number with the given number';
+Blockly.Msg.OXOCARD_COMM_GET_BROADCAST_NUMBER_TITLE = 'Get broadcast number';
+Blockly.Msg.OXOCARD_COMM_GET_BROADCAST_NUMBER_TIP = 'Reads the number from the broadcast message';
+
 // Other
 Blockly.Msg.OXOCARD_RANDOM_TITLE = 'Random 0 to ';
 Blockly.Msg.OXOCARD_RANDOM_TIP = 'Returns a random number between 0 an the given value';

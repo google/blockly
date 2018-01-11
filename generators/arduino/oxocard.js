@@ -25,7 +25,6 @@ Blockly.Arduino['oxocard_turn_off_with_buttons'] = function(block) {
 };
 
 Blockly.Arduino.oxocard_handle_autoturnoff = function() {
-	Blockly.Arduino.includes_['oxocard_runner'] = '#include "OXOcardRunner.h"\n';
   var timeout = Blockly.Arduino.valueToCode(this, 'TIMEOUT', Blockly.Arduino.ORDER_ATOMIC) || 0;
 	return 'oxocard.configureAutoTurnOff(' + timeout + ');\noxocard.enableAutoTurnOff();\n';
 };
@@ -101,5 +100,63 @@ Blockly.Arduino.oxocard_weather_get_city = function() {;
 
 Blockly.Arduino.oxocard_weather_get_icon = function() {
   var code = 'oxocard.weather->getIcon()';
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+
+/* ---------- Communication ---------- */
+Blockly.Arduino.oxocard_comm_enable = function(block) {
+	var name = Blockly.Arduino.valueToCode(this, 'NAME', Blockly.Arduino.ORDER_NONE) ||  '" "' ;
+	return 'oxocard.communication->start(' +name +');\n';
+};
+
+Blockly.Arduino.oxocard_comm_disable = function(block) {
+	return 'oxocard.communication->stop();\n';
+};
+
+Blockly.Arduino.oxocard_comm_wait_for_message = function(block) {
+	return 'oxocard.communication->waitForMessages();\n';
+};
+
+Blockly.Arduino.oxocard_comm_wait_for_message_timeout = function() {
+	var timeout = Blockly.Arduino.valueToCode(this, 'TIMEOUT', Blockly.Arduino.ORDER_ATOMIC) || 0;
+	return 'oxocard.communication->waitForMessages(' + timeout + ');\n';
+};
+
+Blockly.Arduino.oxocard_comm_send_broadcast_message = function(block) {
+	var msg = Blockly.Arduino.valueToCode(this, 'MSG', Blockly.Arduino.ORDER_NONE) ||  '""' ;
+	return 'oxocard.communication->sendBroadcastMessage(' +msg +');\n';
+};
+
+Blockly.Arduino.oxocard_comm_send_broadcast_number = function() {
+	var num = Blockly.Arduino.valueToCode(this, 'NUM', Blockly.Arduino.ORDER_ATOMIC) || 0;
+	return 'oxocard.communication->sendBroadcastNumber(' + num + ');\n';
+};
+
+Blockly.Arduino.oxocard_comm_send_broadcast_messageand_number = function(block) {
+	var msg = Blockly.Arduino.valueToCode(this, 'MSG', Blockly.Arduino.ORDER_NONE) ||  '""' ;
+	var num = Blockly.Arduino.valueToCode(this, 'NUM', Blockly.Arduino.ORDER_ATOMIC) || 0;
+	return 'oxocard.communication->sendBroadcastMessageAndNumber(' +msg +', ' +num +');\n';
+};
+
+Blockly.Arduino.oxocard_comm_check_for_broadcast = function() {
+	var code = 'oxocard.communication->isBroadcastMessage()';
+	return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Arduino.oxocard_comm_compare_broadcast_message = function() {
+	var msg = Blockly.Arduino.valueToCode(this, 'MSG', Blockly.Arduino.ORDER_NONE) ||  '""' ;
+	var code = 'oxocard.communication->compareBroadcastMessage(' +msg +')';
+	return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Arduino.oxocard_comm_compare_broadcast_number = function() {
+	var num = Blockly.Arduino.valueToCode(this, 'NUM', Blockly.Arduino.ORDER_ATOMIC) || 0;
+	var code = 'oxocard.communication->compareBroadcastNumber(' + num + ')';
+	return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Arduino.oxocard_comm_get_broadcast_number = function() {
+  var code = 'oxocard.communication->getBroadcastNumber()';
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };

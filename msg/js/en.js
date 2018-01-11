@@ -416,7 +416,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.OXOCARD_COMM_DISABLE_TIP = "Disables the short messages";
 /** @export */ Blockly.Msg.OXOCARD_COMM_DISABLE_TITLE = "Disable short message";
 /** @export */ Blockly.Msg.OXOCARD_COMM_ENABLE_TIP = "Enables the short messages";
-/** @export */ Blockly.Msg.OXOCARD_COMM_ENABLE_TITLE = "Enable short message";
+/** @export */ Blockly.Msg.OXOCARD_COMM_ENABLE_TITLE = "Enable short message with name";
 /** @export */ Blockly.Msg.OXOCARD_COMM_GET_BROADCAST_NUMBER_TIP = "Reads the number from the broadcast message";
 /** @export */ Blockly.Msg.OXOCARD_COMM_GET_BROADCAST_NUMBER_TITLE = "Get broadcast number";
 /** @export */ Blockly.Msg.OXOCARD_COMM_SEND_BROADCAST_MESSAGE_AND_NUMBER_TIP = "Broadcast a message and a number to all OXOcards";

@@ -1497,7 +1497,7 @@ Blockly.Msg.OXOCARD_WEATHER_GET_ICON_TITLE = 'Weather: get icon';
 Blockly.Msg.OXOCARD_WEATHER_GET_ICON_TIP = 'Get the icon number of the weather';
 
 // Communication
-Blockly.Msg.OXOCARD_COMM_ENABLE_TITLE = 'Enable short message';
+Blockly.Msg.OXOCARD_COMM_ENABLE_TITLE = 'Enable short message with name';
 Blockly.Msg.OXOCARD_COMM_ENABLE_TIP = 'Enables the short messages';
 Blockly.Msg.OXOCARD_COMM_DISABLE_TITLE = 'Disable short message';
 Blockly.Msg.OXOCARD_COMM_DISABLE_TIP = 'Disables the short messages';

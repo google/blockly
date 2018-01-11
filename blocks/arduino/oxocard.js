@@ -335,8 +335,9 @@ Blockly.Blocks.oxocard_weather_get_icon = {
 Blockly.Blocks.oxocard_comm_enable = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
-		this.appendValueInput('NAME')
-			.appendField(Blockly.Msg.OXOCARD_COMM_ENABLE_TITLE).setCheck('Text').setAlign(Blockly.ALIGN_RIGHT);
+		this.appendDummyInput()
+			.appendField(Blockly.Msg.OXOCARD_COMM_ENABLE_TITLE)
+			.appendField(new Blockly.FieldTextInput('OXOcard ' +Math.floor((Math.random() * 100) + 1)), 'NAME');
 		// this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);

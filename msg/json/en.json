@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-01-11 14:55:49.187360",
+		"lastupdated": "2018-01-11 15:25:11.957484",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -638,7 +638,7 @@
 	"OXOCARD_WEATHER_GET_CITY_TIP": "Get the name of the weather",
 	"OXOCARD_WEATHER_GET_ICON_TITLE": "Weather: get icon",
 	"OXOCARD_WEATHER_GET_ICON_TIP": "Get the icon number of the weather",
-	"OXOCARD_COMM_ENABLE_TITLE": "Enable short message",
+	"OXOCARD_COMM_ENABLE_TITLE": "Enable short message with name",
 	"OXOCARD_COMM_ENABLE_TIP": "Enables the short messages",
 	"OXOCARD_COMM_DISABLE_TITLE": "Disable short message",
 	"OXOCARD_COMM_DISABLE_TIP": "Disables the short messages",

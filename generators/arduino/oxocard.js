@@ -106,7 +106,7 @@ Blockly.Arduino.oxocard_weather_get_icon = function() {
 
 /* ---------- Communication ---------- */
 Blockly.Arduino.oxocard_comm_enable = function(block) {
-	var name = Blockly.Arduino.valueToCode(this, 'NAME', Blockly.Arduino.ORDER_NONE) ||  '" "' ;
+	var name = Blockly.Arduino.quote_(block.getFieldValue('NAME'));
 	return 'oxocard.communication->start(' +name +');\n';
 };
 

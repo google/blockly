@@ -52,13 +52,13 @@ this.customYSpacing = 4;
 		'width': Blockly.FieldLed.sizeWidth,
 		'rx':0,
 		'ry':0,
-		'fill:': this.ledOffColor,
+		'style': 'fill: '  + this.ledOffColor,
 		'fill-opacity': 1,
 		'x':0,
 		'y':0
 	}, this.fieldGroup_);
-	
-	
+
+
 	this.updateEditable();
 
 	this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
@@ -67,7 +67,7 @@ this.customYSpacing = 4;
 		this.onMouseDown_);
 	// Force a render.
 	this.render_();
-	
+
 };
 
 /**

@@ -20,13 +20,13 @@ Blockly.FieldRGBLed.prototype.init = function() {
 	  // Checkbox has already been initialized once.
 	  return;
 	}
-  
-  
-  
-  
+
+
+
+
 	Blockly.FieldRGBLed.superClass_.init.call(this);
-  
- 
+
+
 };
 
 Blockly.FieldRGBLed.prototype.setSource = function(source) {
@@ -46,10 +46,10 @@ Blockly.FieldRGBLed.prototype.getValue = function() {
 	if(this.state_ != false) return this.state_;
 	return String(this.state_).toUpperCase();
   };
-  
+
 
 /**
- * 
+ *
  * @param {string} strBool New state.
  */
 Blockly.FieldRGBLed.prototype.setValue = function(strBool) {
@@ -66,10 +66,13 @@ Blockly.FieldRGBLed.prototype.setValue = function(strBool) {
 	  }
 	  this.state_ = newState;
 	  if (this.checkElement_) {
-		this.checkElement_.style.display = newState == false ? 'none' : 'block';
 		if(newState){
 			this.currentColor_ = this.colorSource_.colour_;
 			this.checkElement_.style.fill = this.colorSource_.colour_;
+		}
+		else {
+			this.currentColor_ = this.ledOffColor;
+			this.checkElement_.style.fill = this.ledOffColor;
 		}
 	  }
 	}

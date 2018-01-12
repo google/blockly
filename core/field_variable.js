@@ -88,7 +88,7 @@ Blockly.FieldVariable.prototype.initModel = function() {
     return; // Initialization already happened.
   }
   this.workspace_ = this.sourceBlock_.workspace;
-  var variable = Blockly.Variables.getOrCreateVariable(
+  var variable = Blockly.Variables.getOrCreateVariablePackage(
       this.workspace_, null, this.defaultVariableName, this.defaultType_);
 
   // Don't fire a change event for this setValue.  It would have null as the

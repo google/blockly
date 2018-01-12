@@ -758,8 +758,8 @@ Blockly.Xml.domToFieldVariable_ = function(workspace, xml, text, field) {
     type = '';
   }
 
-  var variable =
-      Blockly.Variables.getOrCreateVariable(workspace, xml.id, text, type);
+  var variable = Blockly.Variables.getOrCreateVariablePackage(workspace, xml.id,
+      text, type);
 
   // This should never happen :)
   if (type != null && type !== variable.type) {

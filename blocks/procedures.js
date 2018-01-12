@@ -159,8 +159,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       if (childNode.nodeName.toLowerCase() == 'arg') {
         var varName = childNode.getAttribute('name');
         this.arguments_.push(varName);
-        var variable = Blockly.Variables.getOrCreateVariable(this.workspace,
-            null, varName, '');
+        var variable = Blockly.Variables.getOrCreateVariablePackage(
+            this.workspace, null, varName, '');
         this.argumentVarModels_.push(variable);
       }
     }
@@ -217,8 +217,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     while (paramBlock) {
       var varName = paramBlock.getFieldValue('NAME');
       this.arguments_.push(varName);
-      var variable = Blockly.Variables.getOrCreateVariable(this.workspace, null,
-          varName, '');
+      var variable = Blockly.Variables.getOrCreateVariablePackage(
+          this.workspace, null, varName, '');
       this.argumentVarModels_.push(variable);
       this.paramIds_.push(paramBlock.id);
       paramBlock = paramBlock.nextConnection &&
@@ -636,8 +636,8 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     // And rebuild the argument model list.
     this.argumentVarModels_ = [];
     for (var i = 0; i < this.arguments_.length; i++) {
-      var variable = Blockly.Variables.getOrCreateVariable(this.workspace, null,
-          this.arguments_[i], '');
+      var variable = Blockly.Variables.getOrCreateVariablePackage(
+          this.workspace, null, this.arguments_[i], '');
       this.argumentVarModels_.push(variable);
     }
 

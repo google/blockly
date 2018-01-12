@@ -367,7 +367,7 @@ Blockly.Variables.generateVariableFieldXml_ = function(variableModel) {
     typeString = '\'\'';
   }
   var text = '<field name="VAR" id="' + variableModel.getId() +
-    '" variabletype="' + typeString +
+    '" variabletype="' + goog.string.htmlEscape(typeString) +
     '">' + goog.string.htmlEscape(variableModel.name) + '</field>';
   return text;
 };

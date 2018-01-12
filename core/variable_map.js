@@ -266,14 +266,19 @@ Blockly.VariableMap.prototype.deleteVariableById = function(id) {
  */
 Blockly.VariableMap.prototype.deleteVariableInternal_ = function(variable,
     uses) {
-  Blockly.Events.setGroup(true);
+  var existingGroup = Blockly.Events.getGroup();
+  if (!existingGroup) {
+    Blockly.Events.setGroup(true);
+  }
   try {
     for (var i = 0; i < uses.length; i++) {
       uses[i].dispose(true, false);
     }
     this.deleteVariable(variable);
   } finally {
-    Blockly.Events.setGroup(false);
+    if (!existingGroup) {
+      Blockly.Events.setGroup(false);
+    }
   }
 };
 

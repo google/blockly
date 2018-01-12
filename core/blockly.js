@@ -487,7 +487,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
   if (name in Blockly.Touch.TOUCH_MAP) {
     var touchWrapFunc = function(e) {
       // Punt on multitouch events.
-      if (e.changedTouches.length == 1) {
+      if (e.changedTouches && e.changedTouches.length == 1) {
         // Map the touch event's properties to the event.
         var touchPoint = e.changedTouches[0];
         e.clientX = touchPoint.clientX;

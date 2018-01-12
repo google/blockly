@@ -280,7 +280,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   },
   /**
    * Notification that a variable is renaming.
-   * If the name matches one of this block's variables, rename it.
+   * If the ID matches one of this block's variables, rename it.
    * @param {string} oldId ID of variable to rename.
    * @param {string} newId ID of new variable.  May be the same as oldId, but
    *     with an updated name.  Guaranteed to be the same type as the old
@@ -308,6 +308,12 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       this.displayRenamedVar_(oldName, newVar.name);
     }
   },
+  /**
+   * Notification that a variable is renaming but keeping the same ID.  If the
+   * variable is in use on this block, rerender to show the new name.
+   * @param {!Blockly.VariableModel} variable The variable being renamed.
+   * @package
+   */
   updateVarName: function(variable) {
     var newName = variable.name;
     var change = false;
@@ -737,25 +743,6 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     this.setProcedureParameters_(args, paramIds);
   },
   /**
-   * Notification that a variable is renaming.
-   * If the name matches one of this block's variables, rename it.
-   * @param {string} oldId ID of variable to rename.
-   * @param {string} newId ID of new variable.  May be the same as oldId, but
-   *     with an updated name.  Guaranteed to be the same type as the old
-   *     variable.
-   * @this Blockly.Block
-   */
-  renameVarById: function(oldId, newId) {
-    var newVar = this.workspace.getVariableById(newId);
-    for (var i = 0; i < this.arguments_.length; i++) {
-      if (oldId == this.argumentVarModels_[i].getId()) {
-        this.arguments_[i] = newVar.name;
-        this.argumentVarModels_[i] = newVar;
-        this.getField('ARGNAME' + i).setValue(newVar.name);
-      }
-    }
-  },
-  /**
    * Return all variables referenced by this block.
    * @return {!Array.<!Blockly.VariableModel>} List of variable models.
    * @this Blockly.Block
@@ -872,7 +859,6 @@ Blockly.Blocks['procedures_callreturn'] = {
   updateShape_: Blockly.Blocks['procedures_callnoreturn'].updateShape_,
   mutationToDom: Blockly.Blocks['procedures_callnoreturn'].mutationToDom,
   domToMutation: Blockly.Blocks['procedures_callnoreturn'].domToMutation,
-  renameVarById: Blockly.Blocks['procedures_callnoreturn'].renameVarById,
   getVarModels: Blockly.Blocks['procedures_callnoreturn'].getVarModels,
   onchange: Blockly.Blocks['procedures_callnoreturn'].onchange,
   customContextMenu:

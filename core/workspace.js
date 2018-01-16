@@ -311,6 +311,7 @@ Blockly.Workspace.prototype.getVariablesOfType = function(type) {
 /**
  * Return all variable types.
  * @return {!Array.<string>} List of variable types.
+ * @package
  */
 Blockly.Workspace.prototype.getVariableTypes = function() {
   return this.variableMap_.getVariableTypes();

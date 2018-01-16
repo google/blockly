@@ -344,6 +344,7 @@ Blockly.VariableMap.prototype.getVariablesOfType = function(type) {
 /**
  * Return all variable types.  This list always contains the empty string.
  * @return {!Array.<string>} List of variable types.
+ * @package
  */
 Blockly.VariableMap.prototype.getVariableTypes = function() {
   var types = Object.keys(this.variableMap_);

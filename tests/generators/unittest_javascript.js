@@ -27,7 +27,7 @@
 Blockly.JavaScript['unittest_main'] = function(block) {
   // Container for unit tests.
   var resultsVar = Blockly.JavaScript.variableDB_.getName('unittestResults',
-      Blockly.Variables.NAME_TYPE);
+      Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = Blockly.JavaScript.provideFunction_(
       'unittest_report',
       [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '() {',
@@ -72,7 +72,7 @@ Blockly.JavaScript['unittest_main'] = function(block) {
 
 Blockly.JavaScript['unittest_main'].defineAssert_ = function(block) {
   var resultsVar = Blockly.JavaScript.variableDB_.getName('unittestResults',
-      Blockly.Variables.NAME_TYPE);
+      Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = Blockly.JavaScript.provideFunction_(
       'assertEquals',
       [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
@@ -143,7 +143,7 @@ Blockly.JavaScript['unittest_assertvalue'] = function(block) {
 Blockly.JavaScript['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = Blockly.JavaScript.variableDB_.getName('unittestResults',
-      Blockly.Variables.NAME_TYPE);
+      Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var message = Blockly.JavaScript.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.JavaScript.provideFunction_(
       'unittest_fail',

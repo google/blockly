@@ -44,10 +44,20 @@ function fieldVariable_mockBlock(workspace) {
   return {'workspace': workspace, 'isShadow': function(){return false;}};
 }
 
+function fieldVariable_createAndInitField(workspace) {
+  var fieldVariable = new Blockly.FieldVariable('name1');
+  var mockBlock = fieldVariable_mockBlock(workspace);
+  fieldVariable.setSourceBlock(mockBlock);
+  // No view to initialize, but the model still needs work.
+  fieldVariable.initModel();
+  return fieldVariable;
+}
+
 function test_fieldVariable_Constructor() {
   workspace = new Blockly.Workspace();
   var fieldVariable = new Blockly.FieldVariable('name1');
-  assertEquals('name1', fieldVariable.getText());
+  // The field does not have a variable until after init() is called.
+  assertEquals('', fieldVariable.getText());
   workspace.dispose();
 }
 
@@ -55,52 +65,38 @@ function test_fieldVariable_setValueMatchId() {
  // Expect the fieldVariable value to be set to variable name
   fieldVariableTestWithMocks_setUp();
   workspace.createVariable('name2', null, 'id2');
-  var fieldVariable = new Blockly.FieldVariable('name1');
-  var mockBlock = fieldVariable_mockBlock(workspace);
-  fieldVariable.setSourceBlock(mockBlock);
+
+  var fieldVariable = fieldVariable_createAndInitField(workspace);
+
+  var oldId = fieldVariable.getValue();
   var event = new Blockly.Events.BlockChange(
-        mockBlock, 'field', undefined, 'name1', 'id2');
+        fieldVariable.sourceBlock_, 'field', undefined, oldId, 'id2');
   setUpMockMethod(mockControl_, Blockly.Events, 'fire', [event], null);
 
   fieldVariable.setValue('id2');
   assertEquals('name2', fieldVariable.getText());
-  assertEquals('id2', fieldVariable.value_);
-  fieldVariableTestWithMocks_tearDown();
-}
-
-function test_fieldVariable_setValueMatchName() {
-  // Expect the fieldVariable value to be set to variable name
-  fieldVariableTestWithMocks_setUp();
-  workspace.createVariable('name2', null, 'id2');
-  var fieldVariable = new Blockly.FieldVariable('name1');
-  var mockBlock = fieldVariable_mockBlock(workspace);
-  fieldVariable.setSourceBlock(mockBlock);
-  var event = new Blockly.Events.BlockChange(
-        mockBlock, 'field', undefined, 'name1', 'id2');
-  setUpMockMethod(mockControl_, Blockly.Events, 'fire', [event], null);
-
-  fieldVariable.setValue('name2');
-  assertEquals('name2', fieldVariable.getText());
-  assertEquals('id2', fieldVariable.value_);
+  assertEquals('id2', fieldVariable.getValue());
   fieldVariableTestWithMocks_tearDown();
 }
 
 function test_fieldVariable_setValueNoVariable() {
-  // Expect the fieldVariable value to be set to the passed in string. No error
-  // should be thrown.
   fieldVariableTestWithMocks_setUp();
-  var fieldVariable = new Blockly.FieldVariable('name1');
-  var mockBlock = {'workspace': workspace,
-    'isShadow': function(){return false;}};
-  fieldVariable.setSourceBlock(mockBlock);
-  var event = new Blockly.Events.BlockChange(
-        mockBlock, 'field', undefined, 'name1', 'id1');
-  setUpMockMethod(mockControl_, Blockly.Events, 'fire', [event], null);
 
-  fieldVariable.setValue('id1');
-  assertEquals('id1', fieldVariable.getText());
-  assertEquals('id1', fieldVariable.value_);
-  fieldVariableTestWithMocks_tearDown();
+  var fieldVariable = fieldVariable_createAndInitField(workspace);
+  var mockBlock = fieldVariable.sourceBlock_;
+  mockBlock.isShadow = function() {
+    return false;
+  };
+
+  try {
+    fieldVariable.setValue('id1');
+    // Calling setValue with a variable that doesn't exist throws an error.
+    fail();
+  } catch (e) {
+    // expected
+  } finally {
+    fieldVariableTestWithMocks_tearDown();
+  }
 }
 
 function test_fieldVariable_dropdownCreateVariablesExist() {
@@ -108,12 +104,12 @@ function test_fieldVariable_dropdownCreateVariablesExist() {
   workspace = new Blockly.Workspace();
   workspace.createVariable('name1', '', 'id1');
   workspace.createVariable('name2', '', 'id2');
+
+  var fieldVariable = fieldVariable_createAndInitField(workspace);
+
   var result_options = Blockly.FieldVariable.dropdownCreate.call(
-    {
-      'sourceBlock_': {'workspace': workspace},
-      'getText': function(){return 'name1';},
-      'getVariableTypes_': function(){return [''];}
-    });
+      fieldVariable);
+
   assertEquals(result_options.length, 3);
   isEqualArrays(result_options[0], ['name1', 'id1']);
   isEqualArrays(result_options[1], ['name2', 'id2']);
@@ -121,77 +117,30 @@ function test_fieldVariable_dropdownCreateVariablesExist() {
   workspace.dispose();
 }
 
-function test_fieldVariable_dropdownCreateVariablesExist() {
-  // Expect that the dropdown options will contain the variables that exist.
-  workspace = new Blockly.Workspace();
-  workspace.createVariable('name1', '', 'id1');
-  workspace.createVariable('name2', '', 'id2');
-  var result_options = Blockly.FieldVariable.dropdownCreate.call(
-    {
-      'sourceBlock_': {'workspace': workspace},
-      'getText': function(){return 'name1';},
-      'getVariableTypes_': function(){return [''];}
-    });
-  assertEquals(result_options.length, 3);
-  isEqualArrays(result_options[0], ['name1', 'id1']);
-  isEqualArrays(result_options[1], ['name2', 'id2']);
-
-  workspace.dispose();
-}
-
-function test_fieldVariable_dropdownVariableAndTypeDoesNotExist() {
-  // Expect a variable will be created for the selected option. Expect the
-  // workspace variable map to contain the new variable once.
+function test_fieldVariable_setValueNull() {
+  // This should no longer create a variable for the selected option.
   fieldVariableTestWithMocks_setUp();
   setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['id1', null]);
 
-  var result_options = Blockly.FieldVariable.dropdownCreate.call(
-    {
-      'sourceBlock_': {'workspace': workspace},
-      'getText': function(){return 'name1';},
-      'getVariableTypes_': function(){return [''];}
-    });
+  var fieldVariable = fieldVariable_createAndInitField(workspace);
+  try {
+    fieldVariable.setValue(null);
+    fail();
+  } catch (e) {
+    // expected
+  } finally {
+    fieldVariableTestWithMocks_tearDown();
+  }
 
-  // Check the options.
-  assertEquals(2, result_options.length);
-  isEqualArrays(result_options[0], ['name1', 'id1']);
-  // Check the variable map.
-  assertEquals(1, workspace.getAllVariables().length);
-  checkVariableValues(workspace, 'name1', '', 'id1');
-
-  fieldVariableTestWithMocks_tearDown();
-}
-
-function test_fieldVariable_dropdownVariableDoesNotExistTypeDoes() {
-  // Expect a variable will be created for the selected option. Expect the
-  // workspace variable map to contain the new variable once.
-  fieldVariableTestWithMocks_setUp();
-  workspace.createVariable('name1', '', 'id1');
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['id2', null]);
-
-  var result_options = Blockly.FieldVariable.dropdownCreate.call(
-    {
-      'sourceBlock_': {'workspace': workspace},
-      'getText': function(){return 'name2';},
-      'getVariableTypes_': function(){return [''];}
-    });
-
-  assertEquals(3, result_options.length);
-  isEqualArrays(result_options[0], ['name1', 'id1']);
-  isEqualArrays(result_options[1], ['name2', 'id2']);
-  assertEquals(2, workspace.variableMap_.getAllVariables().length);
-  checkVariableValues(workspace, 'name1', '', 'id1');
-  checkVariableValues(workspace, 'name2', '', 'id2');
-
-  fieldVariableTestWithMocks_tearDown();
 }
 
 function test_fieldVariable_getVariableTypes_undefinedVariableTypes() {
   // Expect that since variableTypes is undefined, only type empty string
-  // will be returned.
+  // will be returned (regardless of what types are available on the workspace).
   workspace = new Blockly.Workspace();
   workspace.createVariable('name1', 'type1');
   workspace.createVariable('name2', 'type2');
+
   var fieldVariable = new Blockly.FieldVariable('name1');
   var resultTypes = fieldVariable.getVariableTypes_();
   isEqualArrays(resultTypes, ['']);
@@ -199,12 +148,14 @@ function test_fieldVariable_getVariableTypes_undefinedVariableTypes() {
 }
 
 function test_fieldVariable_getVariableTypes_givenVariableTypes() {
-  // Expect that since variableTypes is undefined, only type empty string
-  // will be returned.
+  // Expect that since variableTypes is defined, it will be the return value,
+  // regardless of what types are available on the workspace.
   workspace = new Blockly.Workspace();
   workspace.createVariable('name1', 'type1');
   workspace.createVariable('name2', 'type2');
-  var fieldVariable = new Blockly.FieldVariable('name1', null, ['type1', 'type2']);
+
+  var fieldVariable = new Blockly.FieldVariable(
+      'name1', null, ['type1', 'type2']);
   var resultTypes = fieldVariable.getVariableTypes_();
   isEqualArrays(resultTypes, ['type1', 'type2']);
   workspace.dispose();
@@ -212,15 +163,20 @@ function test_fieldVariable_getVariableTypes_givenVariableTypes() {
 
 function test_fieldVariable_getVariableTypes_nullVariableTypes() {
   // Expect all variable types to be returned.
+  // The variable does not need to be initialized to do this--it just needs a
+  // pointer to the workspace.
   workspace = new Blockly.Workspace();
   workspace.createVariable('name1', 'type1');
   workspace.createVariable('name2', 'type2');
+
   var fieldVariable = new Blockly.FieldVariable('name1');
   var mockBlock = fieldVariable_mockBlock(workspace);
   fieldVariable.setSourceBlock(mockBlock);
   fieldVariable.variableTypes = null;
+
   var resultTypes = fieldVariable.getVariableTypes_();
-  isEqualArrays(resultTypes, ['type1', 'type2']);
+  // The empty string is always one of the options.
+  isEqualArrays(resultTypes, ['type1', 'type2', '']);
   workspace.dispose();
 }
 
@@ -229,12 +185,15 @@ function test_fieldVariable_getVariableTypes_emptyListVariableTypes() {
   workspace = new Blockly.Workspace();
   workspace.createVariable('name1', 'type1');
   workspace.createVariable('name2', 'type2');
+
   var fieldVariable = new Blockly.FieldVariable('name1');
   var mockBlock = fieldVariable_mockBlock(workspace);
   fieldVariable.setSourceBlock(mockBlock);
   fieldVariable.variableTypes = [];
+
   try {
     fieldVariable.getVariableTypes_();
+    fail();
   } catch (e) {
     //expected
   } finally {

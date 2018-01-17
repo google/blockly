@@ -155,8 +155,21 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   // Record initial inline state.
   /** @type {boolean|undefined} */
   this.inputsInlineDefault = this.inputsInline;
+
+  // Fire a create event.
   if (Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(new Blockly.Events.BlockCreate(this));
+    var existingGroup = Blockly.Events.getGroup();
+    if (!existingGroup) {
+      Blockly.Events.setGroup(true);
+    }
+    try {
+      Blockly.Events.fire(new Blockly.Events.BlockCreate(this));
+    } finally {
+      if (!existingGroup) {
+        Blockly.Events.setGroup(false);
+      }
+    }
+
   }
   // Bind an onchange function, if it exists.
   if (goog.isFunction(this.onchange)) {
@@ -255,6 +268,25 @@ Blockly.Block.prototype.dispose = function(healStack) {
     }
   } finally {
     Blockly.Events.enable();
+  }
+};
+
+/**
+ * Call initModel on all fields on the block.
+ * May be called more than once.
+ * Either initModel or initSvg must be called after creating a block and before
+ * the first interaction with it.  Interactions include UI actions
+ * (e.g. clicking and dragging) and firing events (e.g. create, delete, and
+ * change).
+ * @public
+ */
+Blockly.Block.prototype.initModel = function() {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field.initModel) {
+        field.initModel();
+      }
+    }
   }
 };
 
@@ -673,6 +705,7 @@ Blockly.Block.prototype.getField = function(name) {
 /**
  * Return all variables referenced by this block.
  * @return {!Array.<string>} List of variable names.
+ * @package
  */
 Blockly.Block.prototype.getVars = function() {
   var vars = [];
@@ -687,17 +720,57 @@ Blockly.Block.prototype.getVars = function() {
 };
 
 /**
- * Notification that a variable is renaming.
- * If the name matches one of this block's variables, rename it.
- * @param {string} oldName Previous name of variable.
- * @param {string} newName Renamed variable.
+ * Return all variables referenced by this block.
+ * @return {!Array.<!Blockly.VariableModel>} List of variable models.
+ * @package
  */
-Blockly.Block.prototype.renameVar = function(oldName, newName) {
+Blockly.Block.prototype.getVarModels = function() {
+  var vars = [];
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field instanceof Blockly.FieldVariable) {
+        var model = this.workspace.getVariableById(field.getValue());
+        // Check if the variable actually exists (and isn't just a potential
+        // variable).
+        if (model) {
+          vars.push(model);
+        }
+      }
+    }
+  }
+  return vars;
+};
+
+/**
+ * Notification that a variable is renaming but keeping the same ID.  If the
+ * variable is in use on this block, rerender to show the new name.
+ * @param {!Blockly.VariableModel} variable The variable being renamed.
+ * @package
+ */
+Blockly.Block.prototype.updateVarName = function(variable) {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
       if (field instanceof Blockly.FieldVariable &&
-          Blockly.Names.equals(oldName, field.getValue())) {
-        field.setValue(newName);
+          variable.getId() == field.getValue()) {
+        field.setText(variable.name);
+      }
+    }
+  }
+};
+
+/**
+ * Notification that a variable is renaming.
+ * If the ID matches one of this block's variables, rename it.
+ * @param {string} oldId ID of variable to rename.
+ * @param {string} newId ID of new variable.  May be the same as oldId, but with
+ *     an updated name.
+ */
+Blockly.Block.prototype.renameVarById = function(oldId, newId) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field instanceof Blockly.FieldVariable &&
+          oldId == field.getValue()) {
+        field.setValue(newId);
       }
     }
   }

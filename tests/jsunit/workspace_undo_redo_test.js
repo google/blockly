@@ -33,16 +33,6 @@ goog.require('goog.testing.MockControl');
 var workspace;
 var mockControl_;
 var savedFireFunc = Blockly.Events.fire;
-Blockly.defineBlocksWithJsonArray([{
-  "type": "get_var_block",
-  "message0": "%1",
-  "args0": [
-    {
-      "type": "field_variable",
-      "name": "VAR",
-    }
-  ]
-}]);
 
 function temporary_fireEvent(event) {
   if (!Blockly.Events.isEnabled()) {
@@ -53,26 +43,17 @@ function temporary_fireEvent(event) {
 }
 
 function undoRedoTest_setUp() {
+  defineGetVarBlock();
   workspace = new Blockly.Workspace();
   mockControl_ = new goog.testing.MockControl();
   Blockly.Events.fire = temporary_fireEvent;
 }
 
 function undoRedoTest_tearDown() {
+  undefineGetVarBlock();
   mockControl_.$tearDown();
   workspace.dispose();
   Blockly.Events.fire = savedFireFunc;
-}
-
-/**
- * Create a test get_var_block.
- * @param {string} variableName The string to put into the variable field.
- * @return {!Blockly.Block} The created block.
- */
-function createMockBlock(variableName) {
-  var block = new Blockly.Block(workspace, 'get_var_block');
-  block.inputList[0].fieldRow[0].setValue(variableName);
-  return block;
 }
 
 /**
@@ -82,7 +63,7 @@ function createMockBlock(variableName) {
  * @param {string} name The expected name of the variable in the block.
  */
 function undoRedoTest_checkBlockVariableName(blockIndex, name) {
-  var blockVarName = workspace.topBlocks_[blockIndex].getVars()[0];
+  var blockVarName = workspace.topBlocks_[blockIndex].getVarModels()[0].name;
   assertEquals(name, blockVarName);
 }
 
@@ -91,10 +72,14 @@ function createTwoVarsEmptyType() {
   workspace.createVariable('name2', '', 'id2');
 }
 
-function test_undoCreateVariable_Trivial() {
-  undoRedoTest_setUp();
+function createTwoVarsDifferentTypes() {
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
+}
+
+function test_undoCreateVariable_Trivial() {
+  undoRedoTest_setUp();
+  createTwoVarsDifferentTypes();
 
   workspace.undo();
   checkVariableValues(workspace, 'name1', 'type1', 'id1');
@@ -107,8 +92,7 @@ function test_undoCreateVariable_Trivial() {
 
 function test_redoAndUndoCreateVariable_Trivial() {
   undoRedoTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
+  createTwoVarsDifferentTypes();
 
   workspace.undo();
   workspace.undo(true);
@@ -129,8 +113,7 @@ function test_redoAndUndoCreateVariable_Trivial() {
 
 function test_undoDeleteVariable_NoBlocks() {
   undoRedoTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
+  createTwoVarsDifferentTypes();
   workspace.deleteVariableById('id1');
   workspace.deleteVariableById('id2');
 
@@ -146,10 +129,9 @@ function test_undoDeleteVariable_NoBlocks() {
 
 function test_undoDeleteVariable_WithBlocks() {
   undoRedoTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
-  createMockBlock('name1');
-  createMockBlock('name2');
+
+  createTwoVariablesAndBlocks(workspace);
+
   workspace.deleteVariableById('id1');
   workspace.deleteVariableById('id2');
 
@@ -168,8 +150,9 @@ function test_undoDeleteVariable_WithBlocks() {
 
 function test_redoAndUndoDeleteVariable_NoBlocks() {
   undoRedoTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
+
+  createTwoVarsDifferentTypes();
+
   workspace.deleteVariableById('id1');
   workspace.deleteVariableById('id2');
 
@@ -190,10 +173,9 @@ function test_redoAndUndoDeleteVariable_NoBlocks() {
 
 function test_redoAndUndoDeleteVariable_WithBlocks() {
   undoRedoTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
-  createMockBlock('name1');
-  createMockBlock('name2');
+
+  createTwoVariablesAndBlocks(workspace);
+
   workspace.deleteVariableById('id1');
   workspace.deleteVariableById('id2');
 
@@ -241,10 +223,11 @@ function test_redoAndUndoDeleteVariableTwice_NoBlocks() {
 
 function test_redoAndUndoDeleteVariableTwice_WithBlocks() {
   undoRedoTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  createMockBlock('name1');
-  workspace.deleteVariableById('id1');
-  workspace.deleteVariableById('id1');
+  var id = 'id1';
+  workspace.createVariable('name1', 'type1', id);
+  createMockBlock(id);
+  workspace.deleteVariableById(id);
+  workspace.deleteVariableById(id);
 
   // Check the undoStack only recorded one delete event.
   var undoStack = workspace.undoStack_;
@@ -255,45 +238,27 @@ function test_redoAndUndoDeleteVariableTwice_WithBlocks() {
   // undo delete
   workspace.undo();
   undoRedoTest_checkBlockVariableName(0, 'name1');
-  checkVariableValues(workspace, 'name1', 'type1', 'id1');
+  checkVariableValues(workspace, 'name1', 'type1', id);
 
   // redo delete
   workspace.undo(true);
   assertEquals(0, workspace.topBlocks_.length);
-  assertNull(workspace.getVariableById('id1'));
+  assertNull(workspace.getVariableById(id));
 
   // redo delete, nothing should happen
   workspace.undo(true);
   assertEquals(0, workspace.topBlocks_.length);
-  assertNull(workspace.getVariableById('id1'));
-  undoRedoTest_tearDown();
-}
-
-function test_undoRedoRenameVariable_NeitherVariableExists() {
-  // Expect that a variable with the name, 'name2', and the generated UUID,
-  // 'id2', to be created when rename is called. Undo removes this variable
-  // and redo recreates it.
-  undoRedoTest_setUp();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null,
-    ['rename_group', 'id2', 'delete_group']);
-  workspace.renameVariable('name1', 'name2');
-
-  workspace.undo();
-  assertNull(workspace.getVariableById('id2'));
-
-  workspace.undo(true);
-  checkVariableValues(workspace, 'name2', '', 'id2');
+  assertNull(workspace.getVariableById(id));
   undoRedoTest_tearDown();
 }
 
 function test_undoRedoRenameVariable_OneExists_NoBlocks() {
   undoRedoTest_setUp();
   workspace.createVariable('name1', '', 'id1');
-  workspace.renameVariable('name1', 'name2');
+  workspace.renameVariableById('id1', 'name2');
 
   workspace.undo();
   checkVariableValues(workspace, 'name1', '', 'id1');
-  assertNull(workspace.getVariable('name2'));
 
   workspace.undo(true);
   checkVariableValues(workspace, 'name2', '', 'id1');
@@ -303,13 +268,12 @@ function test_undoRedoRenameVariable_OneExists_NoBlocks() {
 function test_undoRedoRenameVariable_OneExists_WithBlocks() {
   undoRedoTest_setUp();
   workspace.createVariable('name1', '', 'id1');
-  createMockBlock('name1');
-  workspace.renameVariable('name1', 'name2');
+  createMockBlock('id1');
+  workspace.renameVariableById('id1', 'name2');
 
   workspace.undo();
   undoRedoTest_checkBlockVariableName(0, 'name1');
   checkVariableValues(workspace, 'name1', '', 'id1');
-  assertNull(workspace.getVariable('name2'));
 
   workspace.undo(true);
   checkVariableValues(workspace, 'name2', '', 'id1');
@@ -320,7 +284,7 @@ function test_undoRedoRenameVariable_OneExists_WithBlocks() {
 function test_undoRedoRenameVariable_BothExist_NoBlocks() {
   undoRedoTest_setUp();
   createTwoVarsEmptyType();
-  workspace.renameVariable('name1', 'name2');
+  workspace.renameVariableById('id1', 'name2');
 
   workspace.undo();
   checkVariableValues(workspace, 'name1', '', 'id1');
@@ -328,16 +292,16 @@ function test_undoRedoRenameVariable_BothExist_NoBlocks() {
 
   workspace.undo(true);
   checkVariableValues(workspace, 'name2', '', 'id2');
-  assertNull(workspace.getVariable('name1'));
+  assertNull(workspace.getVariableById('id1'));
   undoRedoTest_tearDown();
 }
 
 function test_undoRedoRenameVariable_BothExist_WithBlocks() {
   undoRedoTest_setUp();
   createTwoVarsEmptyType();
-  createMockBlock('name1');
-  createMockBlock('name2');
-  workspace.renameVariable('name1', 'name2');
+  createMockBlock('id1');
+  createMockBlock('id2');
+  workspace.renameVariableById('id1', 'name2');
 
   workspace.undo();
   undoRedoTest_checkBlockVariableName(0, 'name1');
@@ -354,7 +318,7 @@ function test_undoRedoRenameVariable_BothExist_WithBlocks() {
 function test_undoRedoRenameVariable_BothExistCaseChange_NoBlocks() {
   undoRedoTest_setUp();
   createTwoVarsEmptyType();
-  workspace.renameVariable('name1', 'Name2');
+  workspace.renameVariableById('id1', 'Name2');
 
   workspace.undo();
   checkVariableValues(workspace, 'name1', '', 'id1');
@@ -369,9 +333,9 @@ function test_undoRedoRenameVariable_BothExistCaseChange_NoBlocks() {
 function test_undoRedoRenameVariable_BothExistCaseChange_WithBlocks() {
   undoRedoTest_setUp();
   createTwoVarsEmptyType();
-  createMockBlock('name1');
-  createMockBlock('name2');
-  workspace.renameVariable('name1', 'Name2');
+  createMockBlock('id1');
+  createMockBlock('id2');
+  workspace.renameVariableById('id1', 'Name2');
 
   workspace.undo();
   undoRedoTest_checkBlockVariableName(0, 'name1');
@@ -381,7 +345,7 @@ function test_undoRedoRenameVariable_BothExistCaseChange_WithBlocks() {
 
   workspace.undo(true);
   checkVariableValues(workspace, 'Name2', '', 'id2');
-  assertNull(workspace.getVariable('name1'));
+  assertNull(workspace.getVariableById('id1'));
   undoRedoTest_checkBlockVariableName(0, 'Name2');
   undoRedoTest_checkBlockVariableName(1, 'Name2');
   undoRedoTest_tearDown();
@@ -390,7 +354,7 @@ function test_undoRedoRenameVariable_BothExistCaseChange_WithBlocks() {
 function test_undoRedoRenameVariable_OnlyCaseChange_NoBlocks() {
   undoRedoTest_setUp();
   workspace.createVariable('name1', '', 'id1');
-  workspace.renameVariable('name1', 'Name1');
+  workspace.renameVariableById('id1', 'Name1');
 
   workspace.undo();
   checkVariableValues(workspace, 'name1', '', 'id1');
@@ -403,8 +367,8 @@ function test_undoRedoRenameVariable_OnlyCaseChange_NoBlocks() {
 function test_undoRedoRenameVariable_OnlyCaseChange_WithBlocks() {
   undoRedoTest_setUp();
   workspace.createVariable('name1', '', 'id1');
-  createMockBlock('name1');
-  workspace.renameVariable('name1', 'Name1');
+  createMockBlock('id1');
+  workspace.renameVariableById('id1', 'Name1');
 
   workspace.undo();
   undoRedoTest_checkBlockVariableName(0, 'name1');

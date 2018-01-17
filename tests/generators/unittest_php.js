@@ -27,7 +27,7 @@
 Blockly.PHP['unittest_main'] = function(block) {
   // Container for unit tests.
   var resultsVar = Blockly.PHP.variableDB_.getName('unittestResults',
-      Blockly.Variables.NAME_TYPE);
+      Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = Blockly.PHP.provideFunction_(
       'unittest_report',
       [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '() {',
@@ -72,7 +72,7 @@ Blockly.PHP['unittest_main'] = function(block) {
 
 Blockly.PHP['unittest_main'].defineAssert_ = function(block) {
   var resultsVar = Blockly.PHP.variableDB_.getName('unittestResults',
-      Blockly.Variables.NAME_TYPE);
+      Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = Blockly.PHP.provideFunction_(
       'assertEquals',
       ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
@@ -129,7 +129,7 @@ Blockly.PHP['unittest_assertvalue'] = function(block) {
 Blockly.PHP['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = Blockly.PHP.variableDB_.getName('unittestResults',
-      Blockly.Variables.NAME_TYPE);
+      Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var message = Blockly.PHP.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.PHP.provideFunction_(
       'unittest_fail',

@@ -249,26 +249,9 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
       this.targetWorkspace_.getGesture.bind(this.targetWorkspace_);
 
   // Get variables from the main workspace rather than the target workspace.
-  this.workspace_.getVariable =
-      this.targetWorkspace_.getVariable.bind(this.targetWorkspace_);
+  this.workspace_.variableMap_  = this.targetWorkspace_.getVariableMap();
 
-  this.workspace_.getVariableById =
-      this.targetWorkspace_.getVariableById.bind(this.targetWorkspace_);
-
-  this.workspace_.getVariablesOfType =
-      this.targetWorkspace_.getVariablesOfType.bind(this.targetWorkspace_);
-
-  this.workspace_.deleteVariable =
-      this.targetWorkspace_.deleteVariable.bind(this.targetWorkspace_);
-
-  this.workspace_.deleteVariableById =
-      this.targetWorkspace_.deleteVariableById.bind(this.targetWorkspace_);
-
-  this.workspace_.renameVariable =
-      this.targetWorkspace_.renameVariable.bind(this.targetWorkspace_);
-
-  this.workspace_.renameVariableById =
-      this.targetWorkspace_.renameVariableById.bind(this.targetWorkspace_);
+  this.workspace_.createPotentialVariableMap();
 };
 
 /**
@@ -542,6 +525,9 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
     button.dispose();
   }
   this.buttons_.length = 0;
+
+  // Clear potential variables from the previous showing.
+  this.workspace_.getPotentialVariableMap().clear();
 };
 
 /**
@@ -597,33 +583,6 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
 };
 
 /**
- * Helper function to get the list of variables that have been added to the
- * workspace after adding a new block, using the given list of variables that
- * were in the workspace before the new block was added.
- * @param {!Array.<!Blockly.VariableModel>} originalVariables The array of
- *     variables that existed in the workspace before adding the new block.
- * @return {!Array.<!Blockly.VariableModel>} The new array of variables that were
- *     freshly added to the workspace after creating the new block, or [] if no
- *     new variables were added to the workspace.
- * @private
- */
-Blockly.Flyout.prototype.getAddedVariables_ = function(originalVariables) {
-  var allCurrentVariables = this.targetWorkspace_.getAllVariables();
-  var addedVariables = [];
-  if (originalVariables.length != allCurrentVariables.length) {
-    for (var i = 0; i < allCurrentVariables.length; i++) {
-      var variable = allCurrentVariables[i];
-      // For any variable that is present in allCurrentVariables but not
-      // present in originalVariables, add the variable to addedVariables.
-      if (!originalVariables.includes(variable)) {
-        addedVariables.push(variable);
-      }
-    }
-  }
-  return addedVariables;
-};
-
-/**
  * Create a copy of this block on the workspace.
  * @param {!Blockly.BlockSvg} originalBlock The block to copy from the flyout.
  * @return {Blockly.BlockSvg} The newly created block, or null if something
@@ -643,7 +602,8 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
     Blockly.Events.enable();
   }
 
-  var newVariables = this.getAddedVariables_(variablesBeforeCreation);
+  var newVariables = Blockly.Variables.getAddedVariables(this.targetWorkspace_,
+      variablesBeforeCreation);
 
   if (Blockly.Events.isEnabled()) {
     Blockly.Events.setGroup(true);

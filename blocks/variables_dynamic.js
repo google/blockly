@@ -124,8 +124,8 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
     options.push(option);
   },
   onchange: function() {
-    var name = this.getFieldValue('VAR');
-    var variableModel = this.workspace.getVariable(name);
+    var id = this.getFieldValue('VAR');
+    var variableModel = this.workspace.getVariableById(id);
     if (this.type == 'variables_get_dynamic') {
       this.outputConnection.setCheck(variableModel.type);
     } else {

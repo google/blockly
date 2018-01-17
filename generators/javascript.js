@@ -152,13 +152,25 @@ Blockly.JavaScript.init = function(workspace) {
     Blockly.JavaScript.variableDB_.reset();
   }
 
+  Blockly.JavaScript.variableDB_.setVariableMap(workspace.getVariableMap());
+
   var defvars = [];
+  // Add user variables.
   var variables = workspace.getAllVariables();
-  if (variables.length) {
-    for (var i = 0; i < variables.length; i++) {
-      defvars[i] = Blockly.JavaScript.variableDB_.getName(variables[i].name,
-          Blockly.Variables.NAME_TYPE);
-    }
+  for (var i = 0; i < variables.length; i++) {
+    defvars[i] = Blockly.JavaScript.variableDB_.getName(variables[i].getId(),
+        Blockly.Variables.NAME_TYPE);
+  }
+
+  // Add developer variables (not created or named by the user).
+  var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
+  for (var i = 0; i < devVarList.length; i++) {
+    defvars.push(Blockly.JavaScript.variableDB_.getName(devVarList[i],
+        Blockly.Names.DEVELOPER_VARIABLE_TYPE));
+  }
+
+  // Declare all of the variables.
+  if (defvars.length) {
     Blockly.JavaScript.definitions_['variables'] =
         'var ' + defvars.join(', ') + ';';
   }

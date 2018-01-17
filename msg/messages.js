@@ -1520,6 +1520,30 @@ Blockly.Msg.OXOCARD_COMM_COMPARE_BROADCAST_NUMBER_TIP = 'Compares the broadcast 
 Blockly.Msg.OXOCARD_COMM_GET_BROADCAST_NUMBER_TITLE = 'Get broadcast number';
 Blockly.Msg.OXOCARD_COMM_GET_BROADCAST_NUMBER_TIP = 'Reads the number from the broadcast message';
 
+// Audio
+Blockly.Msg.OXOCARD_AUDIO_WAIT_FOR_TONE_TITLE = 'Wait after tones';
+Blockly.Msg.OXOCARD_AUDIO_WAIT_FOR_TONE_TIP = 'If this is set the programm waits after every following tone';
+Blockly.Msg.OXOCARD_AUDIO_WAIT_NOT_FOR_TONE_TITLE = 'Continue after tones';
+Blockly.Msg.OXOCARD_AUDIO_WAIT_NOT_FOR_TONE_TIP = 'If this is set the programm does not wait after every following tone';
+Blockly.Msg.OXOCARD_AUDIO_SET_OCTAVE_TITLE = 'Set octave';
+Blockly.Msg.OXOCARD_AUDIO_SET_OCTAVE_TIP = 'Sets the global octave for the tones';
+Blockly.Msg.OXOCARD_AUDIO_SET_WAVEFORM_TITLE = 'Set waveform';
+Blockly.Msg.OXOCARD_CONNECT_TO_INTERNET_SINE = 'Sine';
+Blockly.Msg.OXOCARD_CONNECT_TO_INTERNET_SQUARE = 'Square';
+Blockly.Msg.OXOCARD_CONNECT_TO_INTERNET_SAWTOOTH = 'Sawtooth';
+Blockly.Msg.OXOCARD_CONNECT_TO_INTERNET_TRIANGLE = 'Triangle';
+Blockly.Msg.OXOCARD_AUDIO_SET_WAVEFORM_TIP = 'Sets the global waveform for the tones';
+Blockly.Msg.OXOCARD_AUDIO_SET_BPM_TITLE = 'Set BPM';
+Blockly.Msg.OXOCARD_AUDIO_SET_BPM_TIP = 'Set the global beats per minute (BPM)';
+Blockly.Msg.OXOCARD_AUDIO_WAIT_TITLE = 'Wait';
+Blockly.Msg.OXOCARD_AUDIO_WAIT_TIP = 'Wait for a given tone duration';
+Blockly.Msg.OXOCARD_AUDIO_STOP_TONE_TITLE = 'Stop Tone';
+Blockly.Msg.OXOCARD_AUDIO_STOP_TONE_TIP = 'Stops the current playing tone';
+Blockly.Msg.OXOCARD_AUDIO_PLAY_TONE_TITLE = 'Play tone';
+Blockly.Msg.OXOCARD_AUDIO_PLAY_TONE_TIP = 'Plays a tone. the octave can set with the corresponding block';
+Blockly.Msg.OXOCARD_AUDIO_PLAY_TONE_HZ_TITLE = 'Play tone (Herz)';
+Blockly.Msg.OXOCARD_AUDIO_PLAY_TONE_HZ_TIP = 'Plays a tone in Herz.';
+
 // Other
 Blockly.Msg.OXOCARD_RANDOM_TITLE = 'Random 0 to ';
 Blockly.Msg.OXOCARD_RANDOM_TIP = 'Returns a random number between 0 an the given value';

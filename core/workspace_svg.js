@@ -923,8 +923,9 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.refreshToolboxSelection_ = function() {
-  if (this.toolbox_ && this.toolbox_.flyout_ && !this.currentGesture_) {
-    this.toolbox_.refreshSelection();
+  var ws = this.isFlyout ? this.targetWorkspace : this;
+  if (ws && !ws.currentGesture_ && ws.toolbox_ && ws.toolbox_.flyout_) {
+    ws.toolbox_.refreshSelection();
   }
 };
 

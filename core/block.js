@@ -1340,7 +1340,8 @@ Blockly.Block.newFieldTextInputFromJson_ = function(options) {
 Blockly.Block.newFieldVariableFromJson_ = function(options) {
   var varname = Blockly.utils.replaceMessageReferences(options['variable']);
   var variableTypes = options['variableTypes'];
-  return new Blockly.FieldVariable(varname, null, variableTypes);
+  var defaultType = options['defaultType'];
+  return new Blockly.FieldVariable(varname, null, variableTypes, defaultType);
 };
 
 

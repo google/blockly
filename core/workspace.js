@@ -486,7 +486,6 @@ Blockly.Workspace.prototype.createPotentialVariableMap = function() {
 /**
  * Return the map of all variables on the workspace.
  * @return {?Blockly.VariableMap} The  variable map.
- * @package
  */
 Blockly.Workspace.prototype.getVariableMap = function() {
   return this.variableMap_;

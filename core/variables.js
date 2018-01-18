@@ -109,7 +109,6 @@ Blockly.Variables.allVariables = function(root) {
  * For use by generators.
  * @param {!Blockly.Workspace} workspace The workspace to search.
  * @return {!Array.<string>} A list of non-duplicated variable names.
- * @package
  */
 Blockly.Variables.allDeveloperVariables = function(workspace) {
   var blocks = workspace.getAllBlocks();

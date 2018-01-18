@@ -1126,7 +1126,6 @@ Blockly.Events.VarRename.prototype.run = function(forward) {
 Blockly.Events.disableOrphans = function(event) {
   if (event.type == Blockly.Events.MOVE ||
       event.type == Blockly.Events.CREATE) {
-    Blockly.Events.disable();
     var workspace = Blockly.Workspace.getById(event.workspaceId);
     var block = workspace.getBlockById(event.blockId);
     if (block) {
@@ -1143,6 +1142,5 @@ Blockly.Events.disableOrphans = function(event) {
         } while (block);
       }
     }
-    Blockly.Events.enable();
   }
 };

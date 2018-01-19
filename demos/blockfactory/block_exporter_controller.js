@@ -139,7 +139,7 @@ BlockExporterController.prototype.export = function() {
       var fileType = (language == 'JavaScript') ? 'javascript' : 'plain';
       // Download the file.
       FactoryUtils.createAndDownloadFile(
-          genStubs, generatorStub_filename, fileType);
+          genStubs, generatorStub_filename + '.js', fileType);
       BlocklyDevTools.Analytics.onExport(
           BlocklyDevTools.Analytics.GENERATOR,
           (fileType == 'javascript' ?

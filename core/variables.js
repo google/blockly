@@ -382,7 +382,6 @@ Blockly.Variables.generateVariableFieldXml_ = function(variableModel) {
  * @param {string=} opt_type The type to use to look up or create the variable.
  * @return {!Blockly.VariableModel} The variable corresponding to the given ID
  *     or name + type combination.
- * @package
  */
 Blockly.Variables.getOrCreateVariablePackage = function(workspace, id, opt_name,
     opt_type) {

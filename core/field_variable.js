@@ -238,27 +238,30 @@ Blockly.FieldVariable.prototype.setTypes_ = function(opt_variableTypes,
     opt_defaultType) {
   // If you expected that the default type would be the same as the only entry
   // in the variable types array, tell the Blockly team by commenting on #1499.
-  this.defaultType_ = opt_defaultType || '';
+  var defaultType = opt_defaultType || '';
   // Set the allowable variable types.  Null means all types on the workspace.
   if (opt_variableTypes == null || opt_variableTypes == undefined) {
-    this.variableTypes = null;
+    var variableTypes = null;
   } else if (Array.isArray(opt_variableTypes)) {
-    this.variableTypes = opt_variableTypes;
+    var variableTypes = opt_variableTypes;
     // Make sure the default type is valid.
     var isInArray = false;
-    for (var i = 0; i < this.variableTypes.length; i++) {
-      if (this.variableTypes[i] == this.defaultType_) {
+    for (var i = 0; i < variableTypes.length; i++) {
+      if (variableTypes[i] == defaultType) {
         isInArray = true;
       }
     }
     if (!isInArray) {
-      throw new Error('Invalid default type \'' + this.defaultType_ + '\' in ' +
+      throw new Error('Invalid default type \'' + defaultType + '\' in ' +
           'the definition of a FieldVariable');
     }
   } else {
     throw new Error('\'variableTypes\' was not an array in the definition of ' +
         'a FieldVariable');
   }
+  // Only update the field once all checks pass.
+  this.defaultType_ =  defaultType;
+  this.variableTypes = variableTypes;
 };
 
 /**

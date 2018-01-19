@@ -137,9 +137,29 @@ BlockExporterController.prototype.export = function() {
           language);
       // Get the correct file extension.
       var fileType = (language == 'JavaScript') ? 'javascript' : 'plain';
+      
+      // Get the extension of the code to put next to the file name, 
+      // otherwise extension-less file is downloaded.
+      var ext = '';
+      if(language == 'JavaScript'){
+        ext = '.js';
+      }
+      else if(language == 'Python'){
+        ext = '.py';
+      }
+      else if(language == 'PHP'){
+        ext = '.php';
+      }
+      else if(language == 'Lua'){
+        ext = '.lua';
+      }
+      else if(language == 'Dart'){
+        ext = '.dart';
+      }
+      
       // Download the file.
       FactoryUtils.createAndDownloadFile(
-          genStubs, generatorStub_filename, fileType);
+          genStubs, generatorStub_filename + ext, fileType);
       BlocklyDevTools.Analytics.onExport(
           BlocklyDevTools.Analytics.GENERATOR,
           (fileType == 'javascript' ?
@@ -297,7 +317,8 @@ BlockExporterController.prototype.updatePreview = function() {
 
   // Update the text areas containing the code.
   FactoryUtils.injectCode(blockDefs, 'blockDefs_textArea');
-  FactoryUtils.injectCode(genStubs, 'genStubs_textArea');
+  FactoryUtils.injectCode(genStubs, '
+                          Stubs_textArea');
 };
 
 /**

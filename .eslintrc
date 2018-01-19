@@ -2,7 +2,28 @@
     "rules": {
         "curly": ["error", "multi-line"],
         "eol-last": ["error"],
-        "indent": ["error", 2, {"SwitchCase": 1}], # Blockly/Google use 2-space indents
+        "indent": [
+            "error", 2,  # Blockly/Google use 2-space indents
+            # Blockly/Google uses +4 space indents for line continuations.
+            {
+                "SwitchCase": 1,
+                "MemberExpression": 2,
+                "ObjectExpression": 1,
+                "FunctionDeclaration": {
+                    "body": 1,
+                    "parameters": 2
+                },
+                "FunctionExpression": {
+                    "body": 1,
+                    "parameters": 2
+                },
+                "CallExpression": {
+                    "arguments": 2
+                },
+                # Ignore default rules for ternary expressions.
+                "ignoredNodes": ["ConditionalExpression"]
+            }
+        ],
         "linebreak-style": ["error", "unix"],
         "max-len": ["error", 120, 4],
         "no-trailing-spaces": ["error", { "skipBlankLines": true }],

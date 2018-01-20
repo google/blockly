@@ -135,10 +135,7 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
       textToBeLogged +=  '* ' + blocksNotGenerated[x].type + '\n';
     }
     textToBeLogged += 'Fix those to be able to generate code';
-    alert(textToBeLogged);
-
-    //Code area remained empty
-    return '';
+    throw textToBeLogged;
   }
 };
 

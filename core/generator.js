@@ -106,10 +106,9 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
       line = line[0];
     }
 
-    if(line == undefined){
+    if (line == undefined) {
       blocksNotGenerated.push(block);
-    }
-    else if (line) {
+    } else if (line) {
       if (block.outputConnection && this.scrubNakedValue) {
         // This block is a naked value.  Ask the language's code generator if
         // it wants to append a semicolon, or something.
@@ -118,7 +117,7 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
       code.push(line);
     }
   }
-  if(blocksNotGenerated.length == 0){
+  if (blocksNotGenerated.length == 0) {
     code = code.join('\n');  // Blank line between each section.
     code = this.finish(code);
     // Final scrubbing of whitespace.
@@ -126,12 +125,12 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
     code = code.replace(/\n\s+$/, '\n');
     code = code.replace(/[ \t]+\n/g, '\n');
     return code;
-  }
-  else{
-    var textToBeLogged = 'The generator code for the following blocks not specified for ' + this.name_ + ': \n';
+  } else {
+    var textToBeLogged = 'The generator code for the following '
+    + 'blocks not specified for ' + this.name_ + ': \n';
     
     //Blocks not specified traversed
-    for(var x = 0; x < blocksNotGenerated.length; x++){
+    for (var x = 0; x < blocksNotGenerated.length; x++) {
       textToBeLogged +=  '* ' + blocksNotGenerated[x].type + '\n';
     }
     textToBeLogged += 'Fix those to be able to generate code';
@@ -197,11 +196,10 @@ Blockly.Generator.prototype.blockToCode = function(block) {
   // Prior to 24 September 2013 'this' was the only way to access the block.
   // The current prefered method of accessing the block is through the second
   // argument to func.call, which becomes the first parameter to the generator.
-  if(func == null || func == undefined){
+  if (func == null || func == undefined) {
     return undefined;
-  }else{
+   } else {
     var code = func.call(block, block);
-    
     if (goog.isArray(code)) {
       // Value blocks return tuples of code and operator order.
       goog.asserts.assert(block.outputConnection,

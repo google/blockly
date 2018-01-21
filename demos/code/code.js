@@ -93,7 +93,7 @@ Code.workspace = null;
  * Extracts a parameter from the URL.
  * If the parameter is absent default_value is returned.
  * @param {string} name The name of the parameter.
- * @param {string} defaultValue Value to return if paramater not found.
+ * @param {string} defaultValue Value to return if parameter not found.
  * @return {string} The parameter value or the default value if not found.
  */
 Code.getStringParamFromUrl = function(name, defaultValue) {
@@ -161,7 +161,7 @@ Code.changeLanguage = function() {
   // This should be skipped for the index page, which has no blocks and does
   // not load Blockly.
   // MSIE 11 does not support sessionStorage on file:// URLs.
-  if (typeof Blockly != 'undefined' && window.sessionStorage) {
+  if (window.sessionStorage) {
     var xml = Blockly.Xml.workspaceToDom(Code.workspace);
     var text = Blockly.Xml.domToText(xml);
     window.sessionStorage.loadOnceBlocks = text;
@@ -298,15 +298,16 @@ Code.tabClick = function(clickedName) {
  */
 Code.renderContent = function() {
   var content = document.getElementById('content_' + Code.selected);
-  // Initialize the pane.
-  if (content.id == 'content_xml') {
-    var xmlTextarea = document.getElementById('content_xml');
-    var xmlDom = Blockly.Xml.workspaceToDom(Code.workspace);
-    var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
-    xmlTextarea.value = xmlText;
-    xmlTextarea.focus();
-  } else if (content.id == 'content_javascript') {
-    try{
+  // Handles the error of not implemented block
+  try {
+    // Initialize the pane.
+    if (content.id == 'content_xml') {
+      var xmlTextarea = document.getElementById('content_xml');
+      var xmlDom = Blockly.Xml.workspaceToDom(Code.workspace);
+      var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
+      xmlTextarea.value = xmlText;
+      xmlTextarea.focus();
+    } else if (content.id == 'content_javascript') {
       var code = Blockly.JavaScript.workspaceToCode(Code.workspace);
       content.textContent = code;
       if (typeof PR.prettyPrintOne == 'function') {
@@ -314,10 +315,7 @@ Code.renderContent = function() {
         code = PR.prettyPrintOne(code, 'js');
         content.innerHTML = code;
       }
-    }catch(err){
-      alert(err);}
-  } else if (content.id == 'content_python') {
-    try{
+    } else if (content.id == 'content_python') {
       var code = Blockly.Python.workspaceToCode(Code.workspace);
       content.textContent = code;
       if (typeof PR.prettyPrintOne == 'function') {
@@ -325,11 +323,7 @@ Code.renderContent = function() {
         code = PR.prettyPrintOne(code, 'py');
         content.innerHTML = code;
       }
-    }catch(err){
-      alert(err);
-    }
-  } else if (content.id == 'content_php') {
-    try{
+    } else if (content.id == 'content_php') {
       var code = Blockly.PHP.workspaceToCode(Code.workspace);
       content.textContent = code;
       if (typeof PR.prettyPrintOne == 'function') {
@@ -337,11 +331,7 @@ Code.renderContent = function() {
         code = PR.prettyPrintOne(code, 'php');
         content.innerHTML = code;
       }
-    }catch(err){
-      alert(err);
-    }
-  } else if (content.id == 'content_dart') {
-    try{
+    } else if (content.id == 'content_dart') {
       var code = Blockly.Dart.workspaceToCode(Code.workspace);
       content.textContent = code;
       if (typeof PR.prettyPrintOne == 'function') {
@@ -349,11 +339,7 @@ Code.renderContent = function() {
         code = PR.prettyPrintOne(code, 'dart');
         content.innerHTML = code;
       }
-    }catch(err){
-      alert(err);
-    }
-  } else if (content.id == 'content_lua') {
-    try{
+    } else if (content.id == 'content_lua') {
       var code = Blockly.Lua.workspaceToCode(Code.workspace);
       content.textContent = code;
       if (typeof PR.prettyPrintOne == 'function') {
@@ -361,8 +347,9 @@ Code.renderContent = function() {
         code = PR.prettyPrintOne(code, 'lua');
         content.innerHTML = code;
       }
-    }catch(err){
-      alert(err);}
+    }
+  } catch(err) {
+    Blockly.alert(err);
   }
 };
 

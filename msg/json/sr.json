@@ -5,7 +5,8 @@
 			"아라",
 			"Perevod16",
 			"Nikola Smolenski",
-			"Obsuser"
+			"Obsuser",
+			"Acamicamacaraca"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "ставка",
@@ -28,9 +29,9 @@
 	"HELP": "Помоћ",
 	"UNDO": "Опозови",
 	"REDO": "Понови",
-	"CHANGE_VALUE_TITLE": "Промените вредност:",
+	"CHANGE_VALUE_TITLE": "Промени вредност:",
 	"RENAME_VARIABLE": "Преименуј променљиву…",
-	"RENAME_VARIABLE_TITLE": "Преименујте све „%1“ променљиве у:",
+	"RENAME_VARIABLE_TITLE": "Преименуј све „%1“ променљиве у:",
 	"NEW_VARIABLE": "Направи променљиву…",
 	"NEW_VARIABLE_TITLE": "Име нове променљиве:",
 	"VARIABLE_ALREADY_EXISTS": "Променљива под именом '%1' већ постоји.",

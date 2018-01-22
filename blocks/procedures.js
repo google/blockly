@@ -28,12 +28,13 @@ goog.provide('Blockly.Blocks.procedures');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly');
+goog.require('Blockly.ColorDefinitions');
 
 
 /**
  * Common HSV hue for all blocks in this category.
  */
-Blockly.Blocks.procedures.HUE = 290;
+Blockly.Blocks.procedures.HUE = Blockly.ColorDefinitions.FUNCTIONS;
 
 Blockly.Blocks['procedures_defnoreturn'] = {
   /**

@@ -28,12 +28,13 @@ goog.provide('Blockly.Blocks.loops');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Types');
+goog.require('Blockly.ColorDefinitions');
 
 
 /**
  * Common HSV hue for all blocks in this category.
  */
-Blockly.Blocks.loops.HUE = 181;
+Blockly.Blocks.loops.HUE = Blockly.ColorDefinitions.LOGIC;
 
 Blockly.Blocks['controls_repeat_ext'] = {
   /**
@@ -158,7 +159,7 @@ Blockly.Blocks['controls_for'] = {
       "inputsInline": true,
       "previousStatement": null,
       "nextStatement": null,
-      "colour": '#bbbbbb',
+      "colour": Blockly.ColorDefinitions.LOGIC,
       "helpUrl": Blockly.Msg.CONTROLS_FOR_HELPURL
     });
     this.appendStatementInput('DO')

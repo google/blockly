@@ -5,6 +5,7 @@
 goog.provide('Blockly.Blocks.oxocard.display');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly.ColorDefinitions');
 
 Blockly.Blocks.oxocard_matrix_draw_image = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
@@ -26,7 +27,7 @@ Blockly.Blocks.oxocard_matrix_draw_image = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_DRAW_IMAGE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -53,7 +54,7 @@ Blockly.Blocks.oxocard_matrix_draw_rgb_image = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_DRAW_RGB_IMAGE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -66,7 +67,7 @@ Blockly.Blocks.oxocard_matrix_set_color = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -85,7 +86,7 @@ Blockly.Blocks.oxocard_matrix_set_color_var = {
 		this.setNextStatement(true, null);
 		this.setInputsInline(true);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_SET_COLOR_VAR_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -97,7 +98,7 @@ Blockly.Blocks.oxocard_matrix_update = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_UPDATE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -109,7 +110,7 @@ Blockly.Blocks.oxocard_matrix_draw_all = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_DRAW_ALL_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -121,7 +122,7 @@ Blockly.Blocks.oxocard_matrix_clear = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_CLEAR_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -133,7 +134,7 @@ Blockly.Blocks.oxocard_matrix_set_fill = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_SET_FILL_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -146,7 +147,7 @@ Blockly.Blocks.oxocard_matrix_set_nofill = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_SET_NOFILL_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -168,7 +169,7 @@ Blockly.Blocks.oxocard_matrix_draw_pixel = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_DRAW_PIXEL_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -192,7 +193,7 @@ Blockly.Blocks.oxocard_matrix_draw_line = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_DRAW_LINE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -217,7 +218,7 @@ Blockly.Blocks.oxocard_matrix_draw_rectangle = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_DRAW_RECTANGLE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -238,7 +239,7 @@ Blockly.Blocks.oxocard_matrix_draw_circle = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_DRAW_CIRCLE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -264,7 +265,7 @@ Blockly.Blocks.oxocard_matrix_draw_triangle = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_DRAW_TRIANGLE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -277,7 +278,7 @@ Blockly.Blocks.oxocard_matrix_draw_number = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_DRAW_NUMBER_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -293,7 +294,7 @@ Blockly.Blocks.oxocard_matrix_draw_text = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATRIX_DRAW_TEXT_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };
 
@@ -305,6 +306,6 @@ Blockly.Blocks.oxocard_matrix_draw_weather = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip("T_ Tip");
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.DISPLAY);
 	}
 };

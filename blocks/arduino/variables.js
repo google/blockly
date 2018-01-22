@@ -14,10 +14,7 @@
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Types');
-
-
-/** Common HSV hue for all blocks in this category. */
-//Blockly.Blocks.variables.HUE = '#74B41D';
+goog.require('Blockly.ColorDefinitions');
 
 Blockly.Blocks['variables_set_type'] = {
   /**
@@ -56,7 +53,7 @@ Blockly.Blocks['text'] = {
 	 */
 	init: function() {
 	  this.setHelpUrl(Blockly.Msg.TEXT_TEXT_HELPURL);
-	  this.setColour('#000000');
+	  this.setColour(Blockly.ColorDefinitions.VARIABLES);
 	  this.appendDummyInput()
 		  .appendField(this.newQuote_(true))
 		  .appendField(new Blockly.FieldTextInput(''), 'TEXT')
@@ -91,4 +88,3 @@ Blockly.Blocks['text'] = {
 	  return Blockly.Types.TEXT;
 	}
   };
-  

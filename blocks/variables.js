@@ -34,7 +34,7 @@ goog.provide('Blockly.Constants.Variables');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly');
-
+goog.require('Blockly.ColorDefinitions');
 
 
 
@@ -45,7 +45,7 @@ Blockly.Blocks['variables_get'] = {
 	 */
 	init: function() {
 	  this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
-	  this.setColour('#999999');
+	  this.setColour(Blockly.ColorDefinitions.VARIABLES);
 	  this.appendDummyInput()
 		  .appendField(new Blockly.FieldVariable(
 		  Blockly.Msg.VARIABLES_DEFAULT_NAME), 'VAR');
@@ -110,7 +110,7 @@ Blockly.Blocks['variables_set'] = {
 		],
 		"previousStatement": null,
 		"nextStatement": null,
-		"colour": '#999999',
+		"colour": Blockly.ColorDefinitions.VARIABLES,
 		"tooltip": Blockly.Msg.VARIABLES_SET_TOOLTIP,
 		"helpUrl": Blockly.Msg.VARIABLES_SET_HELPURL
 	  });

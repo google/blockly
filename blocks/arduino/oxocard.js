@@ -4,6 +4,7 @@ goog.provide('Blockly.Blocks.oxocard');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly');
+goog.require('Blockly.ColorDefinitions');
 
 
 Blockly.Blocks['oxocard_button_ispressed'] = {
@@ -16,7 +17,7 @@ Blockly.Blocks['oxocard_button_ispressed'] = {
                       ["R3", "R3"]]), "BUTTON");
 	this.setOutput(true, 'Boolean');
     this.setTooltip(Blockly.Msg.OXOCARD_BUTTON_PRESSED_TIP);
-    this.setColour('#000000');
+    this.setColour(Blockly.ColorDefinitions.LOGIC);
   },
   getBlockType: function() {
     return Blockly.Types.BOOLEAN;
@@ -31,7 +32,7 @@ Blockly.Blocks.oxocard_turn_off = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.ONOFF);
 	}
 };
 
@@ -58,7 +59,7 @@ Blockly.Blocks['oxocard_turn_off_with_buttons'] = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TIP2);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.ONOFF);
 	}
 };
 
@@ -73,7 +74,7 @@ Blockly.Blocks.oxocard_handle_autoturnoff = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_AUTO_TURNOFF_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.ONOFF);
 	}
 };
 
@@ -85,7 +86,7 @@ Blockly.Blocks.oxocard_disable_auto_turnoff = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_NO_AUTO_TURNOFF_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.ONOFF);
 	}
 };
 
@@ -97,13 +98,13 @@ Blockly.Blocks.oxocard_connect_to_internet = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_CONNECT_TO_INTERNET_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
 	}
 };
 
 Blockly.Blocks['oxocard_statemachine'] = {
 	init: function() {
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
 		this.appendDummyInput().appendField('Statemachine');
@@ -185,7 +186,7 @@ Blockly.Blocks['oxocard_statemachine'] = {
 
 Blockly.Blocks['oxocard_statemachine_wrapper'] = {
 	init: function() {
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
 		this.appendDummyInput()
 			.appendField('Statemachine');
 		this.appendStatementInput('STACK');
@@ -197,7 +198,7 @@ Blockly.Blocks['oxocard_statemachine_wrapper'] = {
 Blockly.Blocks['oxocard_statemachine_state'] = {
 	init: function() {
 		var field = new Blockly.FieldTextInput('', this.validator_);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
 		this.appendDummyInput().appendField('State').appendField(field, 'NAME');
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
@@ -216,7 +217,7 @@ Blockly.Blocks.oxocard_get_acceleration = {
         .appendField(new Blockly.FieldDropdown([["X", "X"], ["Y", "Y"], ["Z", "Z"]]), "AXIS")
     this.setOutput(true, 'Number');
     this.setTooltip(Blockly.Msg.OXOCARD_GET_ACCELERATION_TIP);
-    this.setColour('#000000');
+    this.setColour(Blockly.ColorDefinitions.ACCMETER);
   },
   getBlockType: function() {
     return Blockly.Types.NUMBER;
@@ -234,7 +235,7 @@ Blockly.Blocks['oxocard_is_orientation'] = {
                       [Blockly.Msg.OXOCARD_IS_ORIENTATION_VERTICALLY_FIELD, "VERTICALLY"]]), "DIRECTION")
     this.setOutput(true, 'Boolean');
     this.setTooltip(Blockly.Msg.OXOCARD_IS_ORIENTATION_TIP);
-    this.setColour('#000000');
+    this.setColour(Blockly.ColorDefinitions.ACCMETER);
   },
   getBlockType: function() {
     return Blockly.Types.BOOLEAN;
@@ -258,7 +259,7 @@ Blockly.Blocks.oxocard_set_cursor = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_SET_CURSOR_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.ACCMETER);
 	}
 };
 
@@ -279,7 +280,7 @@ Blockly.Blocks.oxocard_get_weather = {
 	this.setPreviousStatement(true, null);
 	this.setNextStatement(true, null);
     this.setTooltip(Blockly.Msg.OXOCARD_WEATHER_GET_FROM_TIP);
-    this.setColour('#000000');
+    this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
   }
 };
 
@@ -295,7 +296,7 @@ Blockly.Blocks.oxocard_weather_get_value = {
 					[Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_PRECIPITATION, "Precipitation"]]), "TYPE")
     this.setOutput(true, 'Number');
     this.setTooltip(Blockly.Msg.OXOCARD_WEATHER_GET_VALUE_TIP);
-    this.setColour('#000000');
+    this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
   },
   getBlockType: function() {
     return Blockly.Types.DECIMAL;
@@ -309,7 +310,7 @@ Blockly.Blocks.oxocard_weather_get_city = {
         .appendField(Blockly.Msg.OXOCARD_WEATHER_GET_CITY_TITLE)
     this.setOutput(true, 'Text');
     this.setTooltip(Blockly.Msg.OXOCARD_WEATHER_GET_CITY_TIP);
-    this.setColour('#000000');
+    this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
   },
   getBlockType: function() {
     return Blockly.Types.TEXT;
@@ -323,7 +324,7 @@ Blockly.Blocks.oxocard_weather_get_icon = {
         .appendField(Blockly.Msg.OXOCARD_WEATHER_GET_ICON_TITLE)
     this.setOutput(true, 'Number');
     this.setTooltip(Blockly.Msg.OXOCARD_WEATHER_GET_ICON_TIP);
-    this.setColour('#000000');
+    this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
   },
   getBlockType: function() {
     return Blockly.Types.NUMBER;
@@ -342,7 +343,7 @@ Blockly.Blocks.oxocard_comm_enable = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_COMM_ENABLE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
 	}
 };
 
@@ -354,7 +355,7 @@ Blockly.Blocks.oxocard_comm_disable = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_COMM_DISABLE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
 	}
 };
 
@@ -366,7 +367,7 @@ Blockly.Blocks.oxocard_comm_wait_for_message = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_COMM_WAIT_FOR_MESSAGE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
 	}
 };
 
@@ -381,7 +382,7 @@ Blockly.Blocks.oxocard_comm_wait_for_message_timeout = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_COMM_WAIT_FOR_MESSAGE_TIMEOUT_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
 	}
 };
 
@@ -394,7 +395,7 @@ Blockly.Blocks.oxocard_comm_send_broadcast_message = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_COMM_SEND_BROADCAST_MESSAGE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
 	}
 };
 
@@ -407,7 +408,7 @@ Blockly.Blocks.oxocard_comm_send_broadcast_number = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_COMM_SEND_BROADCAST_NUMBER_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
 	}
 };
 
@@ -422,7 +423,7 @@ Blockly.Blocks.oxocard_comm_send_broadcast_messageand_number = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_COMM_SEND_BROADCAST_MESSAGE_AND_NUMBER_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
 	}
 };
 
@@ -433,7 +434,7 @@ Blockly.Blocks.oxocard_comm_check_for_broadcast = {
 			.appendField(Blockly.Msg.OXOCARD_COMM_CHECK_FOR_BROADCAST_TITLE);
 		this.setOutput(true, 'Boolean');
 		this.setTooltip(Blockly.Msg.OXOCARD_COMM_CHECK_FOR_BROADCAST_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
 	},
     getBlockType: function() {
       return Blockly.Types.BOOLEAN;
@@ -448,7 +449,7 @@ Blockly.Blocks.oxocard_comm_compare_broadcast_message = {
 		// this.setInputsInline(true);
 		this.setOutput(true, 'Boolean');
 		this.setTooltip(Blockly.Msg.OXOCARD_COMM_COMPARE_BROADCAST_MESSAGE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
 	},
     getBlockType: function() {
       return Blockly.Types.BOOLEAN;
@@ -463,7 +464,7 @@ Blockly.Blocks.oxocard_comm_compare_broadcast_number = {
 		// this.setInputsInline(true);
 		this.setOutput(true, 'Boolean');
 		this.setTooltip(Blockly.Msg.OXOCARD_COMM_COMPARE_BROADCAST_NUMBER_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
 	},
     getBlockType: function() {
       return Blockly.Types.BOOLEAN;
@@ -477,7 +478,7 @@ Blockly.Blocks.oxocard_comm_get_broadcast_number = {
         .appendField(Blockly.Msg.OXOCARD_COMM_GET_BROADCAST_NUMBER_TITLE)
     this.setOutput(true, 'Number');
     this.setTooltip(Blockly.Msg.OXOCARD_COMM_GET_BROADCAST_NUMBER_TIP);
-    this.setColour('#000000');
+    this.setColour(Blockly.ColorDefinitions.COMMUNICATION);
   },
   getBlockType: function() {
     return Blockly.Types.NUMBER;

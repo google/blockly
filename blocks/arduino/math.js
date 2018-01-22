@@ -5,6 +5,7 @@
 goog.provide('Blockly.Blocks.oxocard.math');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly.ColorDefinitions');
 
 
 Blockly.Blocks.math_decrement = {
@@ -22,7 +23,7 @@ Blockly.Blocks.math_decrement = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATH_DECREMENT_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.VARIABLES);
 	},
 	getVarType: function(varName) {
 		return Blockly.Types.NUMBER;
@@ -44,7 +45,7 @@ Blockly.Blocks.math_increment = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATH_INCREMENT_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.VARIABLES);
 	},
 	getVarType: function(varName) {
 		return Blockly.Types.NUMBER;
@@ -65,7 +66,7 @@ Blockly.Blocks.math_set_var_with = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATH_SET_VAR_WITH_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.VARIABLES);
 	}
 };
 
@@ -89,6 +90,6 @@ Blockly.Blocks.math_set_var_random= {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_MATH_SET_VAR_RANDOM_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.VARIABLES);
 	}
 };

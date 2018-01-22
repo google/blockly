@@ -4,6 +4,7 @@ goog.provide('Blockly.Blocks.oxocard.audio');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly');
+goog.require('Blockly.ColorDefinitions');
 
 
 Blockly.Blocks.oxocard_audio_wait_for_tone = {
@@ -14,7 +15,7 @@ Blockly.Blocks.oxocard_audio_wait_for_tone = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_WAIT_FOR_TONE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
 	}
 };
 
@@ -26,7 +27,7 @@ Blockly.Blocks.oxocard_audio_wait_not_for_tone = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_WAIT_NOT_FOR_TONE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
 	}
 };
 
@@ -41,7 +42,7 @@ Blockly.Blocks.oxocard_audio_set_octave = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_SET_OCTAVE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
 	}
 };
 
@@ -58,7 +59,7 @@ Blockly.Blocks.oxocard_audio_set_waveform = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_SET_WAVEFORM_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
 	}
 };
 
@@ -71,7 +72,7 @@ Blockly.Blocks.oxocard_audio_set_bpm = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_SET_BPM_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
 	}
 };
 
@@ -87,7 +88,7 @@ Blockly.Blocks.oxocard_audio_wait = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_WAIT_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
 	}
 };
 
@@ -99,7 +100,7 @@ Blockly.Blocks.oxocard_audio_stop_tone = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_STOP_TONE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
 	}
 };
 
@@ -115,7 +116,7 @@ Blockly.Blocks.oxocard_audio_play_tone = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_PLAY_TONE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
 	}
 };
 
@@ -133,7 +134,7 @@ Blockly.Blocks.oxocard_audio_play_tone_dur_ms = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_PLAY_TONE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
 	}
 };
 
@@ -153,7 +154,7 @@ Blockly.Blocks.oxocard_audio_play_tone_dur = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_PLAY_TONE_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
 	}
 };
 
@@ -166,7 +167,7 @@ Blockly.Blocks.oxocard_audio_play_tone_hz = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_PLAY_TONE_HZ_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
 	}
 };
 
@@ -181,7 +182,7 @@ Blockly.Blocks.oxocard_audio_play_tone_hz_dur_ms = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_PLAY_TONE_HZ_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
 	}
 };
 
@@ -199,6 +200,6 @@ Blockly.Blocks.oxocard_audio_play_tone_hz_dur = {
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_PLAY_TONE_HZ_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
 	}
 };

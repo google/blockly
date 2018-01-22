@@ -28,12 +28,13 @@ goog.provide('Blockly.Blocks.math');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Types');
+goog.require('Blockly.ColorDefinitions');
 
 
 /**
  * Common HSV hue for all blocks in this category.
  */
-Blockly.Blocks.math.HUE = '#000000';
+Blockly.Blocks.math.HUE = Blockly.ColorDefinitions.VARIABLES;
 
 Blockly.Blocks['math_number'] = {
   /**
@@ -42,7 +43,7 @@ Blockly.Blocks['math_number'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.MATH_NUMBER_HELPURL);
-    this.setColour('#999999');
+    this.setColour(Blockly.ColorDefinitions.VARIABLES);
     this.appendDummyInput()
         .appendField(new Blockly.FieldNumber(0),'NUM');
     this.setOutput(true, Blockly.Types.NUMBER.output);

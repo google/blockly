@@ -5,6 +5,7 @@
 goog.provide('Blockly.Blocks.oxocard.util');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly.ColorDefinitions');
 
 
 Blockly.Blocks['oxocard_random'] = {
@@ -15,7 +16,7 @@ Blockly.Blocks['oxocard_random'] = {
 			.appendField(new Blockly.FieldTextInput('1', Blockly.FieldTextInput.numberValidator),'NUM');
 		this.setOutput(true, 'Number');
 		this.setTooltip(Blockly.Msg.OXOCARD_RANDOM_TIP);
-		this.setColour('#000000');
+		this.setColour(Blockly.ColorDefinitions.VARIABLES);
 	},
 	getBlockType: function() {
 	  return Blockly.Types.NUMBER;
@@ -25,7 +26,7 @@ Blockly.Blocks['oxocard_random'] = {
   Blockly.Blocks['infinite_loop'] = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
-		this.setColour('#999999');
+		this.setColour(Blockly.ColorDefinitions.VARIABLES);
 		this.appendDummyInput()
 			.appendField(Blockly.Msg.ARD_TIME_INF);
 		this.setInputsInline(true);

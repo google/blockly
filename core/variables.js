@@ -144,7 +144,7 @@ Blockly.Variables.flyoutCategory = function(workspace) {
   button.setAttribute('callbackKey', 'CREATE_VARIABLE');
 
   workspace.registerButtonCallback('CREATE_VARIABLE', function(button) {
-    Blockly.Variables.createVariable(button.getTargetWorkspace());
+    Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace());
   });
 
   xmlList.push(button);
@@ -257,16 +257,24 @@ Blockly.Variables.generateUniqueName = function(workspace) {
 };
 
 /**
- * Create a new variable on the given workspace.
+ * Handles "Create Variable" button in the default variables toolbox category.
+ * It will prompt the user for a varibale name, including re-prompts if a name
+ * is already in use among the workspace's variables.
+ *
+ * Custom button handlers can delegate to this function, allowing variables
+ * types and after-creation processing. More complex customization (e.g.,
+ * prompting for variable type) is beyond the scope of this function.
+ *
  * @param {!Blockly.Workspace} workspace The workspace on which to create the
  *     variable.
- * @param {function(?string=)=} opt_callback A callback. It will
- *     be passed an acceptable new variable name, or null if change is to be
- *     aborted (cancel button), or undefined if an existing variable was chosen.
+ * @param {function(?string=)=} opt_callback A callback. It will be passed an
+ *     acceptable new variable name, or null if change is to be aborted (cancel
+ *     button), or undefined if an existing variable was chosen.
  * @param {string=} opt_type The type of the variable like 'int', 'string', or
  *     ''. This will default to '', which is a specific type.
  */
-Blockly.Variables.createVariable = function(workspace, opt_callback, opt_type) {
+Blockly.Variables.createVariableButtonHandler = function(
+    workspace, opt_callback, opt_type) {
   // This function needs to be named so it can be called recursively.
   var promptAndCheckWithAlert = function(defaultName) {
     Blockly.Variables.promptName(Blockly.Msg.NEW_VARIABLE_TITLE, defaultName,
@@ -294,6 +302,25 @@ Blockly.Variables.createVariable = function(workspace, opt_callback, opt_type) {
   };
   promptAndCheckWithAlert('');
 };
+goog.exportSymbol('Blockly.Variables.createVariableButtonHandler',
+    Blockly.Variables.createVariableButtonHandler);
+
+/**
+ * Original name of Blockly.Variables.createVariableButtonHandler(..).
+ * @deprecated Use Blockly.Variables.createVariableButtonHandler(..).
+ *
+ * @param {!Blockly.Workspace} workspace The workspace on which to create the
+ *     variable.
+ * @param {function(?string=)=} opt_callback A callback. It will be passed an
+ *     acceptable new variable name, or null if change is to be aborted (cancel
+ *     button), or undefined if an existing variable was chosen.
+ * @param {string=} opt_type The type of the variable like 'int', 'string', or
+ *     ''. This will default to '', which is a specific type.
+ */
+Blockly.Variables.createVariable =
+    Blockly.Variables.createVariableButtonHandler;
+goog.exportSymbol('Blockly.Variables.createVariable',
+    Blockly.Variables.createVariable);
 
 /**
  * Rename a variable with the given workspace, variableType, and oldName.

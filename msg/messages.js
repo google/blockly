@@ -1544,6 +1544,46 @@ Blockly.Msg.OXOCARD_AUDIO_PLAY_TONE_TIP = 'Plays a tone. the octave can set with
 Blockly.Msg.OXOCARD_AUDIO_PLAY_TONE_HZ_TITLE = 'Play tone (Herz)';
 Blockly.Msg.OXOCARD_AUDIO_PLAY_TONE_HZ_TIP = 'Plays a tone in Herz.';
 
+// Time
+Blockly.Msg.OXOCARD_TIME_UPDATE_TITLE = 'Synchronize time';
+Blockly.Msg.OXOCARD_TIME_UPDATE_TIP = 'Updates the time on the OXOcard';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_TITLE = 'Get time for ';
+
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_1 = 'Pacific - Samoa / Pago';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_2 = 'Pacific - Honolulu / Papeete';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_3 = 'Pacific - Auckland / Anchorage';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_4 = 'America - Los Angeles / Vancouver';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_5 = 'America - Phoenix / Calgary';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_6 = 'America - Chicago / Mexico City';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_7 = 'America - New York / Toronto';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_8 = 'America - Santiago / Halifax';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_9 = 'America - São Paulo / Buenos Aires';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_10 = 'Atlantic - Cape Verde / Praia';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_11 = 'Europe - London / Lisbon';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_12 = 'Europe - Zurich / Warsaw';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_13 = 'Europe - Athens / Helsinki';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_14 = 'Europe - Moscow / Baghdad';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_15 = 'Asia - Baku / Dubai';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_16 = 'Asia - Karachi / Yekaterinburg';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_17 = 'Asia - Dhaka / Omsk';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_18 = 'Asia - Jakarta / Bangkok';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_19 = 'Asia - Beijing / Pago';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_20 = 'Asia - Tokyo / Yakutsk';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_21 = 'Australia - Port Moresby / Brisbane';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_22 = 'Australia - Sydney / Nouméa';
+Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_23 = 'Pacific - Auckland / Suva';
+
+Blockly.Msg.OXOCARD_TIME_GET_FROM_TIP = 'Get the time from a given city';
+Blockly.Msg.OXOCARD_TIME_GET_VALUE_TITLE = 'Get time ';
+Blockly.Msg.OXOCARD_TIME_GET_VALUE_SECOND = 'seconds';
+Blockly.Msg.OXOCARD_TIME_GET_VALUE_MINUTE = 'minutes';
+Blockly.Msg.OXOCARD_TIME_GET_VALUE_HOUR = 'hour';
+Blockly.Msg.OXOCARD_TIME_GET_VALUE_WEEKDAY = 'weekday';
+Blockly.Msg.OXOCARD_TIME_GET_VALUE_DAY = 'day';
+Blockly.Msg.OXOCARD_TIME_GET_VALUE_MONTH = 'month';
+Blockly.Msg.OXOCARD_TIME_GET_VALUE_YEAR = 'year';
+Blockly.Msg.OXOCARD_TIME_GET_VALUE_TIP = 'Get a specific value from the time e.g. seconds';
+
 // Other
 Blockly.Msg.OXOCARD_RANDOM_TITLE = 'Random 0 to ';
 Blockly.Msg.OXOCARD_RANDOM_TIP = 'Returns a random number between 0 an the given value';

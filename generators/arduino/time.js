@@ -18,4 +18,17 @@ goog.require('Blockly.Arduino');
   return code;
 };
 
+Blockly.Arduino.oxocard_time_update = function(block) {
+	return '//oxocard.time->updateTime();\n';
+};
 
+Blockly.Arduino.oxocard_get_time = function() {
+	var timeZone = this.getFieldValue('ZONE');
+	return '//oxocard.time->getTime(' +timeZone +');\n';
+};
+
+Blockly.Arduino.oxocard_time_get_value = function() {
+  var valueType = this.getFieldValue('TYPE');
+  var code = '1/*oxocard.time->get' +valueType +'()*/';
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};

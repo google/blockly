@@ -155,9 +155,10 @@ function test_fieldVariable_getVariableTypes_givenVariableTypes() {
   workspace.createVariable('name2', 'type2');
 
   var fieldVariable = new Blockly.FieldVariable(
-      'name1', null, ['type1', 'type2']);
+      'name1', null, ['type1', 'type2'], 'type1');
   var resultTypes = fieldVariable.getVariableTypes_();
   isEqualArrays(resultTypes, ['type1', 'type2']);
+  assertEquals('Default type was wrong', 'type1', fieldVariable.defaultType_);
   workspace.dispose();
 }
 
@@ -198,5 +199,39 @@ function test_fieldVariable_getVariableTypes_emptyListVariableTypes() {
     //expected
   } finally {
     workspace.dispose();
+  }
+}
+
+function test_fieldVariable_defaultType_exists() {
+  var fieldVariable = new Blockly.FieldVariable(null, null, ['b'], 'b');
+  assertEquals('The variable field\'s default type should be "b"',
+      'b', fieldVariable.defaultType_);
+}
+
+function test_fieldVariable_noDefaultType() {
+  var fieldVariable = new Blockly.FieldVariable(null);
+  assertEquals('The variable field\'s default type should be the empty string',
+      '', fieldVariable.defaultType_);
+  assertNull('The variable field\'s allowed types should be null',
+      fieldVariable.variableTypes);
+}
+
+function test_fieldVariable_defaultTypeMismatch() {
+  try {
+    var fieldVariable = new Blockly.FieldVariable(null, null, ['a'], 'b');
+    fail('Variable field creation should have failed due to an invalid ' +
+        'default type');
+  } catch (e) {
+    // expected
+  }
+}
+
+function test_fieldVariable_defaultTypeMismatch_empty() {
+  try {
+    var fieldVariable = new Blockly.FieldVariable(null, null, ['a']);
+    fail('Variable field creation should have failed due to an invalid ' +
+        'default type');
+  } catch (e) {
+    // expected
   }
 }

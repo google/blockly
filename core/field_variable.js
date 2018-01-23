@@ -30,7 +30,6 @@ goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.Msg');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Variables');
-goog.require('Blockly.VariableModel');
 goog.require('goog.asserts');
 goog.require('goog.string');
 
@@ -43,23 +42,24 @@ goog.require('goog.string');
  *     option is selected.  Its sole argument is the new option value.
  * @param {Array.<string>=} opt_variableTypes A list of the types of variables
  *     to include in the dropdown.
+ * @param {string=} opt_defaultType The type of variable to create if this
+ *     field's value is not explicitly set.  Defaults to ''.
  * @extends {Blockly.FieldDropdown}
  * @constructor
  */
-Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes) {
+Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes,
+    opt_defaultType) {
   // The FieldDropdown constructor would call setValue, which might create a
   // spurious variable.  Just do the relevant parts of the constructor.
   this.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;
   this.size_ = new goog.math.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
   this.setValidator(opt_validator);
-  // TODO (#1499): Add opt_default_type to match default value.  If not set, ''.
   this.defaultVariableName = (varname || '');
-  this.defaultType_ = '';
-  this.variableTypes = opt_variableTypes;
+
+  this.setTypes_(opt_variableTypes, opt_defaultType);
   this.value_ = null;
 };
 goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
-
 
 /**
  * Initialize everything needed to render this field.  This includes making sure
@@ -207,7 +207,7 @@ Blockly.FieldVariable.prototype.typeIsAllowed_ = function(type) {
 Blockly.FieldVariable.prototype.getVariableTypes_ = function() {
   // TODO (#1513): Try to avoid calling this every time the field is edited.
   var variableTypes = this.variableTypes;
-  if (variableTypes === null || variableTypes === undefined) {
+  if (variableTypes === null) {
     // If variableTypes is null, return all variable types.
     if (this.sourceBlock_) {
       var workspace = this.sourceBlock_.workspace;
@@ -222,6 +222,46 @@ Blockly.FieldVariable.prototype.getVariableTypes_ = function() {
       name + ' was an empty list');
   }
   return variableTypes;
+};
+
+/**
+ * Parse the optional arguments representing the allowed variable types and the
+ * default variable type.
+ * @param {Array.<string>=} opt_variableTypes A list of the types of variables
+ *     to include in the dropdown.  If null or undefined, variables of all types
+ *     will be displayed in the dropdown.
+ * @param {string=} opt_defaultType The type of the variable to create if this
+ *     field's value is not explicitly set.  Defaults to ''.
+ * @private
+ */
+Blockly.FieldVariable.prototype.setTypes_ = function(opt_variableTypes,
+    opt_defaultType) {
+  // If you expected that the default type would be the same as the only entry
+  // in the variable types array, tell the Blockly team by commenting on #1499.
+  var defaultType = opt_defaultType || '';
+  // Set the allowable variable types.  Null means all types on the workspace.
+  if (opt_variableTypes == null || opt_variableTypes == undefined) {
+    var variableTypes = null;
+  } else if (Array.isArray(opt_variableTypes)) {
+    var variableTypes = opt_variableTypes;
+    // Make sure the default type is valid.
+    var isInArray = false;
+    for (var i = 0; i < variableTypes.length; i++) {
+      if (variableTypes[i] == defaultType) {
+        isInArray = true;
+      }
+    }
+    if (!isInArray) {
+      throw new Error('Invalid default type \'' + defaultType + '\' in ' +
+          'the definition of a FieldVariable');
+    }
+  } else {
+    throw new Error('\'variableTypes\' was not an array in the definition of ' +
+        'a FieldVariable');
+  }
+  // Only update the field once all checks pass.
+  this.defaultType_ =  defaultType;
+  this.variableTypes = variableTypes;
 };
 
 /**

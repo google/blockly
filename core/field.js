@@ -157,8 +157,8 @@ Blockly.Field.prototype.init = function() {
   this.updateEditable();
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
   this.mouseDownWrapper_ =
-      Blockly.bindEventWithChecks_(this.fieldGroup_, 'mousedown', this,
-          this.onMouseDown_);
+      Blockly.bindEventWithChecks_(
+          this.fieldGroup_, 'mousedown', this, this.onMouseDown_);
   // Force a render.
   this.render_();
 };

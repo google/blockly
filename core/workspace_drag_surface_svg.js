@@ -115,8 +115,8 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.translateSurface = function(x, y) {
   y = y.toFixed(0);
 
   this.SVG_.style.display = 'block';
-  Blockly.utils.setCssTransform(this.SVG_,
-      'translate3d(' + x + 'px, ' + y + 'px, 0px)');
+  Blockly.utils.setCssTransform(
+      this.SVG_, 'translate3d(' + x + 'px, ' + y + 'px, 0px)');
 };
 
 /**
@@ -157,8 +157,8 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   Blockly.utils.insertAfter_(bubbleCanvas, blockCanvas);
   // Hide the drag surface.
   this.SVG_.style.display = 'none';
-  goog.asserts.assert(this.SVG_.childNodes.length == 0,
-      'Drag surface was not cleared.');
+  goog.asserts.assert(
+      this.SVG_.childNodes.length == 0, 'Drag surface was not cleared.');
   Blockly.utils.setCssTransform(this.SVG_, '');
   this.previousSibling_ = null;
 };
@@ -177,13 +177,13 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
  */
 Blockly.WorkspaceDragSurfaceSvg.prototype.setContentsAndShow = function(
     blockCanvas, bubbleCanvas, previousSibling, width, height, scale) {
-  goog.asserts.assert(this.SVG_.childNodes.length == 0,
-      'Already dragging a block.');
+  goog.asserts.assert(
+      this.SVG_.childNodes.length == 0, 'Already dragging a block.');
   this.previousSibling_ = previousSibling;
   // Make sure the blocks and bubble canvas are scaled appropriately.
   blockCanvas.setAttribute('transform', 'translate(0, 0) scale(' + scale + ')');
-  bubbleCanvas.setAttribute('transform',
-      'translate(0, 0) scale(' + scale + ')');
+  bubbleCanvas.setAttribute(
+      'transform', 'translate(0, 0) scale(' + scale + ')');
   this.SVG_.setAttribute('width', width);
   this.SVG_.setAttribute('height', height);
   this.SVG_.appendChild(blockCanvas);

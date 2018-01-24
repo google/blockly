@@ -189,8 +189,8 @@ Blockly.Toolbox.prototype.init = function() {
   } else {
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
-  goog.dom.insertSiblingAfter(this.flyout_.createDom('svg'),
-      this.workspace_.getParentSvg());
+  goog.dom.insertSiblingAfter(
+      this.flyout_.createDom('svg'), this.workspace_.getParentSvg());
   this.flyout_.init(workspace);
 
   this.config_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';
@@ -427,8 +427,7 @@ Blockly.Toolbox.prototype.clearSelection = function() {
  * @package
  */
 Blockly.Toolbox.prototype.addStyle = function(style) {
-  Blockly.utils.addClass(/** @type {!Element} */ (this.HtmlDiv),
-      style);
+  Blockly.utils.addClass(/** @type {!Element} */ (this.HtmlDiv), style);
 };
 
 /**
@@ -437,8 +436,7 @@ Blockly.Toolbox.prototype.addStyle = function(style) {
  * @package
  */
 Blockly.Toolbox.prototype.removeStyle = function(style) {
-  Blockly.utils.removeClass(/** @type {!Element} */ (this.HtmlDiv),
-      style);
+  Blockly.utils.removeClass(/** @type {!Element} */ (this.HtmlDiv), style);
 };
 
 /**

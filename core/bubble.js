@@ -75,11 +75,11 @@ Blockly.Bubble = function(workspace, content, shape, anchorXY,
   this.rendered_ = true;
 
   if (!workspace.options.readOnly) {
-    Blockly.bindEventWithChecks_(this.bubbleBack_, 'mousedown', this,
-        this.bubbleMouseDown_);
+    Blockly.bindEventWithChecks_(
+        this.bubbleBack_, 'mousedown', this, this.bubbleMouseDown_);
     if (this.resizeGroup_) {
-      Blockly.bindEventWithChecks_(this.resizeGroup_, 'mousedown', this,
-          this.resizeMouseDown_);
+      Blockly.bindEventWithChecks_(
+          this.resizeGroup_, 'mousedown', this, this.resizeMouseDown_);
     }
   }
 };

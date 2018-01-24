@@ -114,8 +114,8 @@ Blockly.FieldImage.prototype.dispose = function() {
 Blockly.FieldImage.prototype.maybeAddClickHandler_ = function() {
   if (this.clickHandler_) {
     this.mouseDownWrapper_ =
-        Blockly.bindEventWithChecks_(this.fieldGroup_, 'mousedown', this,
-            this.onMouseDown_);
+        Blockly.bindEventWithChecks_(
+            this.fieldGroup_, 'mousedown', this, this.onMouseDown_);
   }
 };
 

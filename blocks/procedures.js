@@ -182,8 +182,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
     // Check/uncheck the allow statement box.
     if (this.getInput('RETURN')) {
-      containerBlock.setFieldValue(this.hasStatements_ ? 'TRUE' : 'FALSE',
-          'STATEMENTS');
+      containerBlock.setFieldValue(
+          this.hasStatements_ ? 'TRUE' : 'FALSE', 'STATEMENTS');
     } else {
       containerBlock.getInput('STATEMENT_INPUT').setVisible(false);
     }

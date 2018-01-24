@@ -120,8 +120,10 @@ Blockly.hueToRgb = function(hue) {
  * @return {!Object} Contains width and height properties.
  */
 Blockly.svgSize = function(svg) {
-  return {width: svg.cachedWidth_,
-          height: svg.cachedHeight_};
+  return {
+    width: svg.cachedWidth_,
+    height: svg.cachedHeight_
+  };
 };
 
 /**
@@ -307,7 +309,7 @@ Blockly.hideChaff = function(opt_allowToolbox) {
 Blockly.addChangeListener = function(func) {
   // Backwards compatibility from before there could be multiple workspaces.
   console.warn('Deprecated call to Blockly.addChangeListener, ' +
-               'use workspace.addChangeListener instead.');
+      'use workspace.addChangeListener instead.');
   return Blockly.getMainWorkspace().addChangeListener(func);
 };
 
@@ -381,7 +383,7 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
     var typename = elem.type;
     if (typename == null || typename === '') {
       console.warn('Block definition #' + i +
-        ' in JSON array is missing a type attribute. Skipping.');
+          ' in JSON array is missing a type attribute. Skipping.');
     } else {
       if (Blockly.Blocks[typename]) {
         console.warn('Block definition #' + i +

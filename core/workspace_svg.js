@@ -634,7 +634,7 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
  */
 Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled =
     function() {
-  /* eslint-disable indent */
+    /* eslint-disable indent */
   var currScroll = goog.dom.getDocumentScroll();
   if (!goog.math.Coordinate.equals(this.lastRecordedPageScroll_,
      currScroll)) {
@@ -966,7 +966,7 @@ Blockly.WorkspaceSvg.prototype.deleteVariableById = function(id) {
  */
 Blockly.WorkspaceSvg.prototype.createVariable = function(name, opt_type, opt_id) {
   var newVar = Blockly.WorkspaceSvg.superClass_.createVariable.call(this, name,
-    opt_type, opt_id);
+      opt_type, opt_id);
   this.refreshToolboxSelection_();
   return newVar;
 };

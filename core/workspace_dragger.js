@@ -62,7 +62,7 @@ Blockly.WorkspaceDragger = function(workspace) {
    * @private
    */
   this.startScrollXY_ = new goog.math.Coordinate(workspace.scrollX,
-        workspace.scrollY);
+      workspace.scrollY);
 };
 
 /**

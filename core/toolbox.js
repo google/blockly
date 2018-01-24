@@ -190,7 +190,7 @@ Blockly.Toolbox.prototype.init = function() {
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
   goog.dom.insertSiblingAfter(this.flyout_.createDom('svg'),
-                              this.workspace_.getParentSvg());
+      this.workspace_.getParentSvg());
   this.flyout_.init(workspace);
 
   this.config_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';
@@ -315,7 +315,7 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
         // Decode the category name for any potential message references
         // (eg. `%{BKY_CATEGORY_NAME_LOGIC}`).
         var categoryName = Blockly.utils.replaceMessageReferences(
-          childIn.getAttribute('name'));
+            childIn.getAttribute('name'));
         var childOut = this.tree_.createNode(categoryName);
         childOut.blocks = [];
         treeOut.add(childOut);
@@ -428,7 +428,7 @@ Blockly.Toolbox.prototype.clearSelection = function() {
  */
 Blockly.Toolbox.prototype.addStyle = function(style) {
   Blockly.utils.addClass(/** @type {!Element} */ (this.HtmlDiv),
-                         style);
+      style);
 };
 
 /**
@@ -438,7 +438,7 @@ Blockly.Toolbox.prototype.addStyle = function(style) {
  */
 Blockly.Toolbox.prototype.removeStyle = function(style) {
   Blockly.utils.removeClass(/** @type {!Element} */ (this.HtmlDiv),
-                            style);
+      style);
 };
 
 /**
@@ -542,8 +542,9 @@ Blockly.Toolbox.TreeControl.prototype.handleTouchEvent_ = function(e) {
  * @override
  */
 Blockly.Toolbox.TreeControl.prototype.createNode = function(opt_html) {
-  return new Blockly.Toolbox.TreeNode(this.toolbox_, opt_html ?
-      goog.html.SafeHtml.htmlEscape(opt_html) : goog.html.SafeHtml.EMPTY,
+  var html = opt_html ?
+      goog.html.SafeHtml.htmlEscape(opt_html) : goog.html.SafeHtml.EMPTY;
+  return new Blockly.Toolbox.TreeNode(this.toolbox_, html,
       this.getConfig(), this.getDomHelper());
 };
 

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
- /**
+/**
  * @fileoverview Object representing a map of variables and their types.
  * @author marisaleung@google.com (Marisa Leung)
  */
@@ -35,7 +35,7 @@ goog.provide('Blockly.VariableMap');
  * @constructor
  */
 Blockly.VariableMap = function(workspace) {
- /**
+  /**
    * A map from variable type to list of variable names.  The lists contain all
    * of the named variables in the workspace, including variables
    * that are not currently in use.

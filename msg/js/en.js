@@ -480,6 +480,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.OXOCARD_LOGIC_IF_TITLE = "If";
 /** @export */ Blockly.Msg.OXOCARD_LOGIC_OPERATION_AND = "and";
 /** @export */ Blockly.Msg.OXOCARD_LOGIC_OPERATION_OR = "or";
+/** @export */ Blockly.Msg.OXOCARD_LOGIC_WHILE_FOREVER_TIP = "Repeats the blocks inside forever";
+/** @export */ Blockly.Msg.OXOCARD_LOGIC_WHILE_FOREVER_TITLE = "Do forever";
 /** @export */ Blockly.Msg.OXOCARD_MATH_DECREMENT_TIP = "Does decrement the variable with the value -1.";
 /** @export */ Blockly.Msg.OXOCARD_MATH_DECREMENT_TITLE = "Substract 1 from";
 /** @export */ Blockly.Msg.OXOCARD_MATH_INCREMENT_TIP = "Does increment the variable with the value 1.";

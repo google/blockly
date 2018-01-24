@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-01-23 15:00:48.791665",
+		"lastupdated": "2018-01-24 12:27:58.211981",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -718,6 +718,8 @@
 	"OXOCARD_TIME_GET_VALUE_MONTH": "month",
 	"OXOCARD_TIME_GET_VALUE_YEAR": "year",
 	"OXOCARD_TIME_GET_VALUE_TIP": "Get a specific value from the time e.g. seconds",
+	"OXOCARD_LOGIC_WHILE_FOREVER_TITLE": "Do forever",
+	"OXOCARD_LOGIC_WHILE_FOREVER_TIP": "Repeats the blocks inside forever",
 	"OXOCARD_RANDOM_TITLE": "Random 0 to ",
 	"OXOCARD_RANDOM_TIP": "Returns a random number between 0 an the given value",
 	"OXOCARD_CONNECT_TO_INTERNET_TITLE": "Connect with internet",

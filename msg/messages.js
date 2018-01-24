@@ -1548,7 +1548,6 @@ Blockly.Msg.OXOCARD_AUDIO_PLAY_TONE_HZ_TIP = 'Plays a tone in Herz.';
 Blockly.Msg.OXOCARD_TIME_UPDATE_TITLE = 'Synchronize time';
 Blockly.Msg.OXOCARD_TIME_UPDATE_TIP = 'Updates the time on the OXOcard';
 Blockly.Msg.OXOCARD_TIME_GET_FROM_TITLE = 'Get time for ';
-
 Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_1 = 'Pacific - Samoa / Pago';
 Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_2 = 'Pacific - Honolulu / Papeete';
 Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_3 = 'Pacific - Auckland / Anchorage';
@@ -1572,7 +1571,6 @@ Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_20 = 'Asia - Tokyo / Yakutsk';
 Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_21 = 'Australia - Port Moresby / Brisbane';
 Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_22 = 'Australia - Sydney / Nouméa';
 Blockly.Msg.OXOCARD_TIME_GET_FROM_ID_23 = 'Pacific - Auckland / Suva';
-
 Blockly.Msg.OXOCARD_TIME_GET_FROM_TIP = 'Get the time from a given city';
 Blockly.Msg.OXOCARD_TIME_GET_VALUE_TITLE = 'Get time ';
 Blockly.Msg.OXOCARD_TIME_GET_VALUE_SECOND = 'seconds';
@@ -1583,6 +1581,10 @@ Blockly.Msg.OXOCARD_TIME_GET_VALUE_DAY = 'day';
 Blockly.Msg.OXOCARD_TIME_GET_VALUE_MONTH = 'month';
 Blockly.Msg.OXOCARD_TIME_GET_VALUE_YEAR = 'year';
 Blockly.Msg.OXOCARD_TIME_GET_VALUE_TIP = 'Get a specific value from the time e.g. seconds';
+
+// Logic
+Blockly.Msg.OXOCARD_LOGIC_WHILE_FOREVER_TITLE = 'Do forever';
+Blockly.Msg.OXOCARD_LOGIC_WHILE_FOREVER_TIP = 'Repeats the blocks inside forever';
 
 // Other
 Blockly.Msg.OXOCARD_RANDOM_TITLE = 'Random 0 to ';

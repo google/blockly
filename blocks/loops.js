@@ -92,6 +92,18 @@ Blockly.Blocks['controls_repeat'] = {
   }
 };
 
+Blockly.Blocks.oxocard_logic_while_forever = {
+	init: function() {
+	this.appendDummyInput()
+		.appendField(Blockly.Msg.OXOCARD_LOGIC_WHILE_FOREVER_TITLE);
+	this.appendStatementInput('DO')
+	this.setPreviousStatement(true, null);
+	this.setNextStatement(false, null);
+	this.setTooltip(Blockly.Msg.OXOCARD_LOGIC_WHILE_FOREVER_TIP);
+	this.setColour(Blockly.ColorDefinitions.LOGIC);
+	}
+};
+
 Blockly.Blocks['controls_whileUntil'] = {
   /**
    * Block for 'do while/until' loop.

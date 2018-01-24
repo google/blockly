@@ -80,7 +80,7 @@ Blockly.Icon.prototype.createIcon = function() {
       {'class': 'blocklyIconGroup'}, null);
   if (this.block_.isInFlyout) {
     Blockly.utils.addClass(/** @type {!Element} */ (this.iconGroup_),
-                      'blocklyIconGroupReadonly');
+        'blocklyIconGroupReadonly');
   }
   this.drawIcon_(this.iconGroup_);
 

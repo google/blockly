@@ -46,18 +46,16 @@ this.customXSpacing = 4;
 this.customYSpacing = 4;
 //  Blockly.FieldLed.superClass_.init.call(this);
 
-
 	this.checkElement_ = Blockly.utils.createSvgElement('rect',{
 		'height': Blockly.FieldLed.sizeHeight,
 		'width': Blockly.FieldLed.sizeWidth,
 		'rx':0,
 		'ry':0,
-		'style': 'fill: '  + this.ledOffColor,
+		'style': 'fill: '  +(this.state_ ? this.ledOnColor : this.ledOffColor), //+actualColor,
 		'fill-opacity': 1,
 		'x':0,
 		'y':0
 	}, this.fieldGroup_);
-
 
 	this.updateEditable();
 

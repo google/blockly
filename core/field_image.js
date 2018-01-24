@@ -81,12 +81,12 @@ Blockly.FieldImage.prototype.init = function() {
   }
   /** @type {SVGElement} */
   this.imageElement_ = Blockly.utils.createSvgElement(
-    'image',
-    {
-      'height': this.height_ + 'px',
-      'width': this.width_ + 'px'
-    },
-    this.fieldGroup_);
+      'image',
+      {
+        'height': this.height_ + 'px',
+        'width': this.width_ + 'px'
+      },
+      this.fieldGroup_);
   this.setValue(this.src_);
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
 
@@ -115,7 +115,7 @@ Blockly.FieldImage.prototype.maybeAddClickHandler_ = function() {
   if (this.clickHandler_) {
     this.mouseDownWrapper_ =
         Blockly.bindEventWithChecks_(this.fieldGroup_, 'mousedown', this,
-        this.onMouseDown_);
+            this.onMouseDown_);
   }
 };
 
@@ -187,7 +187,7 @@ Blockly.FieldImage.prototype.forceRerender = function() {
  * @private
  */
 Blockly.FieldImage.prototype.updateWidth = function() {
- // NOP
+  // NOP
 };
 
 /**

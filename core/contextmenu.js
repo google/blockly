@@ -68,7 +68,7 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
   var menu = Blockly.ContextMenu.populate_(options, rtl);
 
   goog.events.listen(menu, goog.ui.Component.EventType.ACTION,
-                     Blockly.ContextMenu.hide);
+      Blockly.ContextMenu.hide);
 
   Blockly.ContextMenu.position_(menu, e, rtl);
   // 1ms delay is required for focusing on context menus because some other
@@ -99,7 +99,7 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
     menuItem.setEnabled(option.enabled);
     if (option.enabled) {
       goog.events.listen(menuItem, goog.ui.Component.EventType.ACTION,
-                         option.callback);
+          option.callback);
       menuItem.handleContextMenu = function(/* e */) {
         // Right-clicking on menu option should count as a click.
         goog.events.dispatchEvent(this, goog.ui.Component.EventType.ACTION);
@@ -155,7 +155,7 @@ Blockly.ContextMenu.createWidget_ = function(menu) {
   Blockly.utils.addClass(menuDom, 'blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
   Blockly.bindEventWithChecks_(menuDom, 'contextmenu', null,
-                               Blockly.utils.noEvent);
+      Blockly.utils.noEvent);
   // Enable autofocus after the initial render to avoid issue #1329.
   menu.setAllowAutoFocus(true);
 };

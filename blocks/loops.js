@@ -228,7 +228,7 @@ Blockly.Constants.Loops.WHILE_UNTIL_TOOLTIPS = {
 
 Blockly.Extensions.register('controls_whileUntil_tooltip',
     Blockly.Extensions.buildTooltipForDropdown(
-      'MODE', Blockly.Constants.Loops.WHILE_UNTIL_TOOLTIPS));
+        'MODE', Blockly.Constants.Loops.WHILE_UNTIL_TOOLTIPS));
 
 /**
  * Tooltips for the 'controls_flow_statements' block, keyed by FLOW value.
@@ -243,7 +243,7 @@ Blockly.Constants.Loops.BREAK_CONTINUE_TOOLTIPS = {
 
 Blockly.Extensions.register('controls_flow_tooltip',
     Blockly.Extensions.buildTooltipForDropdown(
-      'FLOW', Blockly.Constants.Loops.BREAK_CONTINUE_TOOLTIPS));
+        'FLOW', Blockly.Constants.Loops.BREAK_CONTINUE_TOOLTIPS));
 
 /**
  * Mixin to add a context menu item to create a 'variables_get' block.

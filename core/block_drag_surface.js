@@ -114,7 +114,7 @@ Blockly.BlockDragSurfaceSvg.prototype.createDom = function() {
  */
 Blockly.BlockDragSurfaceSvg.prototype.setBlocksAndShow = function(blocks) {
   goog.asserts.assert(this.dragGroup_.childNodes.length == 0,
-    'Already dragging a block.');
+      'Already dragging a block.');
   // appendChild removes the blocks from the previous parent
   this.dragGroup_.appendChild(blocks);
   this.SVG_.style.display = 'block';
@@ -215,6 +215,6 @@ Blockly.BlockDragSurfaceSvg.prototype.clearAndHide = function(opt_newSurface) {
   }
   this.SVG_.style.display = 'none';
   goog.asserts.assert(this.dragGroup_.childNodes.length == 0,
-    'Drag group was not cleared.');
+      'Drag group was not cleared.');
   this.surfaceXY_ = null;
 };

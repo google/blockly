@@ -183,7 +183,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     // Check/uncheck the allow statement box.
     if (this.getInput('RETURN')) {
       containerBlock.setFieldValue(this.hasStatements_ ? 'TRUE' : 'FALSE',
-                                   'STATEMENTS');
+          'STATEMENTS');
     } else {
       containerBlock.getInput('STATEMENT_INPUT').setVisible(false);
     }
@@ -557,10 +557,10 @@ Blockly.Blocks['procedures_callnoreturn'] = {
   renameProcedure: function(oldName, newName) {
     if (Blockly.Names.equals(oldName, this.getProcedureCall())) {
       this.setFieldValue(newName, 'NAME');
-      this.setTooltip(
-          (this.outputConnection ? Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP :
-           Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP)
-          .replace('%1', newName));
+      var baseMsg = this.outputConnection ?
+          Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP :
+          Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP;
+      this.setTooltip(baseMsg.replace('%1', newName));
     }
   },
   /**
@@ -906,7 +906,7 @@ Blockly.Blocks['procedures_ifreturn'] = {
     if (!this.hasReturnValue_) {
       this.removeInput('VALUE');
       this.appendDummyInput('VALUE')
-        .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
+          .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
     }
   },
   /**

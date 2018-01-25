@@ -9,6 +9,11 @@ Blockly.Arduino.oxocard_button_ispressed = function() {
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+Blockly.Arduino.oxocard_update = function(block) {
+	Blockly.Arduino.includes_['oxocard_flashscenario'] = '#include "flashscenario.h"';
+	 return 'FlashScenario(&oxocard).run();\n';
+};
+
 Blockly.Arduino.oxocard_turn_off = function(block) {
 	 return 'oxocard.system->turnOff();\n';
 };

@@ -602,6 +602,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TITLE = "OXOcard ausschalten";
 /** @export */ Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TITLE2 = "Klicke die Tasten, mit denen du wieder";
 /** @export */ Blockly.Msg.OXOCARD_TURN_OXOCARD_OFF_TITLE3 = "einschalten möchtest";
+/** @export */ Blockly.Msg.OXOCARD_UPDATE_TIP = "Aktualisiert die OXOcard mit dem neusten code von Blockly";
+/** @export */ Blockly.Msg.OXOCARD_UPDATE_TITLE = "OXOcard aktualisieren";
 /** @export */ Blockly.Msg.OXOCARD_WEATHER_GET_CITY_TIP = "Hole den namen der Stadt vom Wetter";
 /** @export */ Blockly.Msg.OXOCARD_WEATHER_GET_CITY_TITLE = "Wetter: Hole Stadtname";
 /** @export */ Blockly.Msg.OXOCARD_WEATHER_GET_FROM_TIP = "Hole das Wetter von der angegebenen Stadt";

@@ -730,5 +730,7 @@
 	"OXOCARD_TIME_GET_VALUE_YEAR": "Jahr",
 	"OXOCARD_TIME_GET_VALUE_TIP": "Lese einen wert der Zeit z.B. die Minuten",
 	"OXOCARD_LOGIC_WHILE_FOREVER_TITLE": "Mache für immer",
-	"OXOCARD_LOGIC_WHILE_FOREVER_TIP": "Wiederhole die Blöcke für immer"
+	"OXOCARD_LOGIC_WHILE_FOREVER_TIP": "Wiederhole die Blöcke für immer",
+	"OXOCARD_UPDATE_TITLE": "OXOcard aktualisieren",
+	"OXOCARD_UPDATE_TIP": "Aktualisiert die OXOcard mit dem neusten code von Blockly"
 }

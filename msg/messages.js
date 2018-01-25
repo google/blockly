@@ -1432,7 +1432,8 @@ Blockly.Msg.OXOCARD_PRINT_TITLE = 'Print';
 Blockly.Msg.OXOCARD_PRINT_TIP = 'Prints the given number or string to the console';
 Blockly.Msg.OXOCARD_PRINTLN_TITLE = 'Println';
 Blockly.Msg.OXOCARD_PRINTLN_TIP = 'Prints the given number or string to the console (with new line)';
-
+Blockly.Msg.OXOCARD_UPDATE_TITLE = 'Update OXOcard';
+Blockly.Msg.OXOCARD_UPDATE_TIP = 'Updates the OXOcard with the newest code from Blokly';
 
 // Display
 Blockly.Msg.OXOCARD_TURN_DISPLAY_ON_TITLE = 'Turn display on';

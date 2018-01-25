@@ -129,7 +129,7 @@ Blockly.Arduino.init = function(workspace) {
  */
 Blockly.Arduino.finish = function(code) {
   // Convert the includes, definitions, and functions dictionaries into lists
-  var includes = ['#include "OXOcardRunner.h"\n'], definitions = [], variables = [], functions = [];
+  var includes = ['#include "OXOcardRunner.h"'], definitions = [], variables = [], functions = [];
   for (var name in Blockly.Arduino.includes_) {
     includes.push(Blockly.Arduino.includes_[name]);
   }

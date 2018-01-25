@@ -208,6 +208,19 @@ Blockly.Blocks['oxocard_statemachine_state'] = {
 };
 
 
+Blockly.Blocks.oxocard_update = {
+	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+	init: function() {
+		this.appendDummyInput()
+			.appendField(Blockly.Msg.OXOCARD_UPDATE_TITLE);
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(false, null);
+		this.setTooltip(Blockly.Msg.OXOCARD_UPDATE_TIP);
+		this.setColour(Blockly.ColorDefinitions.ONOFF);
+	}
+};
+
+
 /* ---------- Accelerometer ---------- */
 Blockly.Blocks.oxocard_get_acceleration = {
   helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',

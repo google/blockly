@@ -84,8 +84,9 @@ Blockly.JavaScript.ORDER_TYPEOF = 4.5;         // typeof
 Blockly.JavaScript.ORDER_VOID = 4.6;           // void
 Blockly.JavaScript.ORDER_DELETE = 4.7;         // delete
 Blockly.JavaScript.ORDER_AWAIT = 4.8;          // await
-Blockly.JavaScript.ORDER_DIVISION = 5.1;       // /
-Blockly.JavaScript.ORDER_MULTIPLICATION = 5.2; // *
+Blockly.JavaScript.ORDER_EXPONENTIATION = 5.0; // **
+Blockly.JavaScript.ORDER_MULTIPLICATION = 5.1; // *
+Blockly.JavaScript.ORDER_DIVISION = 5.2;       // /
 Blockly.JavaScript.ORDER_MODULUS = 5.3;        // %
 Blockly.JavaScript.ORDER_SUBTRACTION = 6.1;    // -
 Blockly.JavaScript.ORDER_ADDITION = 6.2;       // +
@@ -100,7 +101,8 @@ Blockly.JavaScript.ORDER_BITWISE_OR = 12;      // |
 Blockly.JavaScript.ORDER_LOGICAL_AND = 13;     // &&
 Blockly.JavaScript.ORDER_LOGICAL_OR = 14;      // ||
 Blockly.JavaScript.ORDER_CONDITIONAL = 15;     // ?:
-Blockly.JavaScript.ORDER_ASSIGNMENT = 16;      // = += -= *= /= %= <<= >>= ...
+Blockly.JavaScript.ORDER_ASSIGNMENT = 16;      // = += -= **= *= /= %= <<= >>= ...
+Blockly.JavaScript.ORDER_YIELD = 16.5;         // yield
 Blockly.JavaScript.ORDER_COMMA = 17;           // ,
 Blockly.JavaScript.ORDER_NONE = 99;            // (...)
 

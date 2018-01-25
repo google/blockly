@@ -104,16 +104,10 @@ class Gen_uncompressed(threading.Thread):
     f = open(self.target_filename, 'w')
     f.write(HEADER)
     f.write("""
-var isNodeJS = !!(typeof module !== 'undefined' && module.exports &&
-                  typeof window === 'undefined');
+this.IS_NODE_JS = !!(typeof module !== 'undefined' && module.exports);
 
-if (isNodeJS) {
-  var window = {};
-  require('closure-library');
-}
-
-window.BLOCKLY_DIR = (function() {
-  if (!isNodeJS) {
+this.BLOCKLY_DIR = (function(root) {
+  if (!root.IS_NODE_JS) {
     // Find name of current directory.
     var scripts = document.getElementsByTagName('script');
     var re = new RegExp('(.+)[\/]blockly_(.*)uncompressed\.js$');
@@ -126,21 +120,23 @@ window.BLOCKLY_DIR = (function() {
     alert('Could not detect Blockly\\'s directory name.');
   }
   return '';
-})();
+})(this);
 
-window.BLOCKLY_BOOT = function() {
+this.BLOCKLY_BOOT = function(root) {
+  if (root.IS_NODE_JS) {
+    require('google-closure-library');
+  } else if (typeof goog == 'undefined') {
+    alert('Error: Closure not found.  Read this:\\n' +
+          'developers.google.com/blockly/guides/modify/web/closure');
+  }
+
   var dir = '';
-  if (isNodeJS) {
-    require('closure-library');
+  if (root.IS_NODE_JS) {
     dir = 'blockly';
   } else {
-    // Execute after Closure has loaded.
-    if (!window.goog) {
-      alert('Error: Closure not found.  Read this:\\n' +
-            'developers.google.com/blockly/guides/modify/web/closure');
-    }
-    dir = window.BLOCKLY_DIR.match(/[^\\/]+$/)[0];
+    dir = this.BLOCKLY_DIR.match(/[^\\/]+$/)[0];
   }
+  // Execute after Closure has loaded.
 """)
     add_dependency = []
     base_path = calcdeps.FindClosureBasePath(self.search_paths)
@@ -167,20 +163,21 @@ window.BLOCKLY_BOOT = function() {
       f.write("goog.require('%s');\n" % provide)
 
     f.write("""
-delete this.BLOCKLY_DIR;
-delete this.BLOCKLY_BOOT;
+delete root.BLOCKLY_DIR;
+delete root.BLOCKLY_BOOT;
+delete root.IS_NODE_JS;
 };
 
-if (isNodeJS) {
-  window.BLOCKLY_BOOT();
+if (this.IS_NODE_JS) {
+  this.BLOCKLY_BOOT(this);
   module.exports = Blockly;
 } else {
   // Delete any existing Closure (e.g. Soy's nogoog_shim).
   document.write('<script>var goog = undefined;</script>');
   // Load fresh Closure Library.
-  document.write('<script src="' + window.BLOCKLY_DIR +
+  document.write('<script src="' + this.BLOCKLY_DIR +
       '/../closure-library/closure/goog/base.js"></script>');
-  document.write('<script>window.BLOCKLY_BOOT();</script>');
+  document.write('<script>this.BLOCKLY_BOOT(this);</script>');
 }
 """)
     f.close()

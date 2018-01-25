@@ -25,7 +25,7 @@
   "private": true,
   "devDependencies": {
     "jshint": "latest",
-    "eslint": "2.9.0"
+    "eslint": "^4.16"
   },
   "jshintConfig": {
     "globalstrict": true,

@@ -137,17 +137,34 @@ Blockly.createDom_ = function(container, options) {
   Blockly.utils.createSvgElement('feGaussianBlur',
       {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, embossFilter);
   var feSpecularLighting = Blockly.utils.createSvgElement('feSpecularLighting',
-      {'in': 'blur', 'surfaceScale': 1, 'specularConstant': 0.5,
-       'specularExponent': 10, 'lighting-color': 'white', 'result': 'specOut'},
+      {
+        'in': 'blur',
+        'surfaceScale': 1,
+        'specularConstant': 0.5,
+        'specularExponent': 10,
+        'lighting-color': 'white',
+        'result': 'specOut'
+      },
       embossFilter);
   Blockly.utils.createSvgElement('fePointLight',
       {'x': -5000, 'y': -10000, 'z': 20000}, feSpecularLighting);
   Blockly.utils.createSvgElement('feComposite',
-      {'in': 'specOut', 'in2': 'SourceAlpha', 'operator': 'in',
-       'result': 'specOut'}, embossFilter);
+      {
+        'in': 'specOut',
+        'in2': 'SourceAlpha',
+        'operator': 'in',
+        'result': 'specOut'
+      }, embossFilter);
   Blockly.utils.createSvgElement('feComposite',
-      {'in': 'SourceGraphic', 'in2': 'specOut', 'operator': 'arithmetic',
-       'k1': 0, 'k2': 1, 'k3': 1, 'k4': 0}, embossFilter);
+      {
+        'in': 'SourceGraphic',
+        'in2': 'specOut',
+        'operator': 'arithmetic',
+        'k1': 0,
+        'k2': 1,
+        'k3': 1,
+        'k4': 0
+      }, embossFilter);
   options.embossFilterId = embossFilter.id;
   /*
     <pattern id="blocklyDisabledPattern837493" patternUnits="userSpaceOnUse"
@@ -157,9 +174,12 @@ Blockly.createDom_ = function(container, options) {
     </pattern>
   */
   var disabledPattern = Blockly.utils.createSvgElement('pattern',
-      {'id': 'blocklyDisabledPattern' + rnd,
-       'patternUnits': 'userSpaceOnUse',
-       'width': 10, 'height': 10}, defs);
+      {
+        'id': 'blocklyDisabledPattern' + rnd,
+        'patternUnits': 'userSpaceOnUse',
+        'width': 10,
+        'height': 10
+      }, defs);
   Blockly.utils.createSvgElement('rect',
       {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
   Blockly.utils.createSvgElement('path',
@@ -346,17 +366,23 @@ Blockly.inject.bindDocumentEvents_ = function() {
 Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
   var audioMgr = workspace.getAudioManager();
   audioMgr.load(
-      [pathToMedia + 'click.mp3',
-       pathToMedia + 'click.wav',
-       pathToMedia + 'click.ogg'], 'click');
+      [
+        pathToMedia + 'click.mp3',
+        pathToMedia + 'click.wav',
+        pathToMedia + 'click.ogg'
+      ], 'click');
   audioMgr.load(
-      [pathToMedia + 'disconnect.wav',
-       pathToMedia + 'disconnect.mp3',
-       pathToMedia + 'disconnect.ogg'], 'disconnect');
+      [
+        pathToMedia + 'disconnect.wav',
+        pathToMedia + 'disconnect.mp3',
+        pathToMedia + 'disconnect.ogg'
+      ], 'disconnect');
   audioMgr.load(
-      [pathToMedia + 'delete.mp3',
-       pathToMedia + 'delete.ogg',
-       pathToMedia + 'delete.wav'], 'delete');
+      [
+        pathToMedia + 'delete.mp3',
+        pathToMedia + 'delete.ogg',
+        pathToMedia + 'delete.wav'
+      ], 'delete');
 
   // Bind temporary hooks that preload the sounds.
   var soundBinds = [];

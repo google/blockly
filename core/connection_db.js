@@ -109,9 +109,8 @@ Blockly.ConnectionDB.prototype.findConnection = function(conn) {
  * @return {number} The candidate index.
  * @private
  */
-Blockly.ConnectionDB.prototype.findPositionForConnection_ =
-    function(connection) {
-  /* eslint-disable indent */
+Blockly.ConnectionDB.prototype.findPositionForConnection_ = function(
+    connection) {
   if (!this.length) {
     return 0;
   }
@@ -129,7 +128,7 @@ Blockly.ConnectionDB.prototype.findPositionForConnection_ =
     }
   }
   return pointerMin;
-};  /* eslint-enable indent */
+};
 
 /**
  * Remove a connection from the database.  Must already exist in DB.

@@ -125,10 +125,12 @@ Blockly.ZoomControls.prototype.createDom = function() {
       {'width': 32, 'height': 32, 'y': 77},
       clip);
   var zoomoutSvg = Blockly.utils.createSvgElement('image',
-      {'width': Blockly.SPRITE.width,
-       'height': Blockly.SPRITE.height, 'x': -64,
-       'y': -15,
-       'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')'},
+      {
+        'width': Blockly.SPRITE.width,
+        'height': Blockly.SPRITE.height, 'x': -64,
+        'y': -15,
+        'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')'
+      },
       this.svgGroup_);
   zoomoutSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
       workspace.options.pathToMedia + Blockly.SPRITE.url);
@@ -140,11 +142,13 @@ Blockly.ZoomControls.prototype.createDom = function() {
       {'width': 32, 'height': 32, 'y': 43},
       clip);
   var zoominSvg = Blockly.utils.createSvgElement('image',
-      {'width': Blockly.SPRITE.width,
-       'height': Blockly.SPRITE.height,
-       'x': -32,
-       'y': -49,
-       'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')'},
+      {
+        'width': Blockly.SPRITE.width,
+        'height': Blockly.SPRITE.height,
+        'x': -32,
+        'y': -49,
+        'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')'
+      },
       this.svgGroup_);
   zoominSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
       workspace.options.pathToMedia + Blockly.SPRITE.url);
@@ -156,9 +160,11 @@ Blockly.ZoomControls.prototype.createDom = function() {
       {'width': 32, 'height': 32},
       clip);
   var zoomresetSvg = Blockly.utils.createSvgElement('image',
-      {'width': Blockly.SPRITE.width,
-       'height': Blockly.SPRITE.height, 'y': -92,
-       'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')'},
+      {
+        'width': Blockly.SPRITE.width,
+        'height': Blockly.SPRITE.height, 'y': -92,
+        'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')'
+      },
       this.svgGroup_);
   zoomresetSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
       workspace.options.pathToMedia + Blockly.SPRITE.url);

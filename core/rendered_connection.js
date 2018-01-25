@@ -205,11 +205,14 @@ Blockly.RenderedConnection.prototype.highlight = function() {
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();
   var x = this.x_ - xy.x;
   var y = this.y_ - xy.y;
-  Blockly.Connection.highlightedPath_ = Blockly.utils.createSvgElement('path',
-      {'class': 'blocklyHighlightedConnectionPath',
-       'd': steps,
-       transform: 'translate(' + x + ',' + y + ')' +
-           (this.sourceBlock_.RTL ? ' scale(-1 1)' : '')},
+  Blockly.Connection.highlightedPath_ = Blockly.utils.createSvgElement(
+      'path',
+      {
+        'class': 'blocklyHighlightedConnectionPath',
+        'd': steps,
+        transform: 'translate(' + x + ',' + y + ')' +
+            (this.sourceBlock_.RTL ? ' scale(-1 1)' : '')
+      },
       this.sourceBlock_.getSvgRoot());
 };
 

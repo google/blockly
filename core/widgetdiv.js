@@ -134,7 +134,7 @@ Blockly.WidgetDiv.hideIfOwner = function(oldOwner) {
  * @param {boolean} rtl True if RTL, false if LTR.
  */
 Blockly.WidgetDiv.position = function(anchorX, anchorY, windowSize,
-                                      scrollOffset, rtl) {
+    scrollOffset, rtl) {
   // Don't let the widget go above the top edge of the window.
   if (anchorY < scrollOffset.y) {
     anchorY = scrollOffset.y;

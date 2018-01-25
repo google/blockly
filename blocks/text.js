@@ -190,11 +190,13 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "field_dropdown",
         "name": "WHERE",
-        "options": [["%{BKY_TEXT_CHARAT_FROM_START}", "FROM_START"],
-            ["%{BKY_TEXT_CHARAT_FROM_END}", "FROM_END"],
-            ["%{BKY_TEXT_CHARAT_FIRST}", "FIRST"],
-            ["%{BKY_TEXT_CHARAT_LAST}", "LAST"],
-            ["%{BKY_TEXT_CHARAT_RANDOM}", "RANDOM"]]
+        "options": [
+          ["%{BKY_TEXT_CHARAT_FROM_START}", "FROM_START"],
+          ["%{BKY_TEXT_CHARAT_FROM_END}", "FROM_END"],
+          ["%{BKY_TEXT_CHARAT_FIRST}", "FIRST"],
+          ["%{BKY_TEXT_CHARAT_LAST}", "LAST"],
+          ["%{BKY_TEXT_CHARAT_RANDOM}", "RANDOM"]
+        ]
       }
     ],
     "output": "String",
@@ -629,10 +631,10 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
       this.QUOTE_IMAGE_LEFT_DATAURI :
       this.QUOTE_IMAGE_RIGHT_DATAURI;
     return new Blockly.FieldImage(
-      dataUri,
-      this.QUOTE_IMAGE_WIDTH,
-      this.QUOTE_IMAGE_HEIGHT,
-      isLeft ? '\u201C' : '\u201D');
+        dataUri,
+        this.QUOTE_IMAGE_WIDTH,
+        this.QUOTE_IMAGE_HEIGHT,
+        isLeft ? '\u201C' : '\u201D');
   }
 };
 

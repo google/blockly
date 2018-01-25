@@ -180,8 +180,8 @@ Blockly.FieldDropdown.prototype.addTouchStartListener_ = function(menu) {
     // Highlight the menu item.
     control.handleMouseDown(e);
   }
-  menu.getHandler().listen(menu.getElement(), goog.events.EventType.TOUCHSTART,
-                           callback);
+  menu.getHandler().listen(
+      menu.getElement(), goog.events.EventType.TOUCHSTART, callback);
 };
 
 /**
@@ -196,8 +196,8 @@ Blockly.FieldDropdown.prototype.addTouchEndListener_ = function(menu) {
     // Activate the menu item.
     control.performActionInternal(e);
   }
-  menu.getHandler().listen(menu.getElement(), goog.events.EventType.TOUCHEND,
-                           callbackTouchEnd);
+  menu.getHandler().listen(
+      menu.getElement(), goog.events.EventType.TOUCHEND, callbackTouchEnd);
 };
 
 /**
@@ -485,11 +485,13 @@ Blockly.FieldDropdown.prototype.render_ = function() {
 Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
   // Image option is selected.
   this.imageElement_ = Blockly.utils.createSvgElement('image',
-      {'y': 5,
-       'height': this.imageJson_.height + 'px',
-       'width': this.imageJson_.width + 'px'}, this.fieldGroup_);
-  this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
-                                    'xlink:href', this.imageJson_.src);
+      {
+        'y': 5,
+        'height': this.imageJson_.height + 'px',
+        'width': this.imageJson_.width + 'px'
+      }, this.fieldGroup_);
+  this.imageElement_.setAttributeNS(
+      'http://www.w3.org/1999/xlink', 'xlink:href', this.imageJson_.src);
   // Insert dropdown arrow.
   this.textElement_.appendChild(this.arrow_);
   var arrowWidth = Blockly.Field.getCachedWidth(this.arrow_);

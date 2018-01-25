@@ -584,8 +584,8 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
 Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   var block = null;
   var prototypeName = xmlBlock.getAttribute('type');
-  goog.asserts.assert(prototypeName, 'Block type unspecified: %s',
-                      xmlBlock.outerHTML);
+  goog.asserts.assert(
+      prototypeName, 'Block type unspecified: %s', xmlBlock.outerHTML);
   var id = xmlBlock.getAttribute('id');
   block = workspace.newBlock(prototypeName, id);
 
@@ -600,13 +600,12 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     // Find any enclosed blocks or shadows in this tag.
     var childBlockElement = null;
     var childShadowElement = null;
-    for (var j = 0, grandchildNode; grandchildNode = xmlChild.childNodes[j];
-         j++) {
-      if (grandchildNode.nodeType == 1) {
-        if (grandchildNode.nodeName.toLowerCase() == 'block') {
-          childBlockElement = /** @type {!Element} */ (grandchildNode);
-        } else if (grandchildNode.nodeName.toLowerCase() == 'shadow') {
-          childShadowElement = /** @type {!Element} */ (grandchildNode);
+    for (var j = 0, grandchild; grandchild = xmlChild.childNodes[j]; j++) {
+      if (grandchild.nodeType == 1) {
+        if (grandchild.nodeName.toLowerCase() == 'block') {
+          childBlockElement = /** @type {!Element} */ (grandchild);
+        } else if (grandchild.nodeName.toLowerCase() == 'shadow') {
+          childShadowElement = /** @type {!Element} */ (grandchild);
         }
       }
     }
@@ -730,8 +729,8 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     // Ensure all children are also shadows.
     var children = block.getChildren();
     for (var i = 0, child; child = children[i]; i++) {
-      goog.asserts.assert(child.isShadow(),
-                          'Shadow block not allowed non-shadow child.');
+      goog.asserts.assert(
+          child.isShadow(), 'Shadow block not allowed non-shadow child.');
     }
     // Ensure this block doesn't have any variable inputs.
     goog.asserts.assert(block.getVarModels().length == 0,

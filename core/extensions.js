@@ -100,10 +100,10 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
   var errorPrefix = 'Error when registering mutator "' + name + '": ';
 
   // Sanity check the mixin object before registering it.
-  Blockly.Extensions.checkHasFunction_(errorPrefix, mixinObj.domToMutation,
-                                       'domToMutation');
-  Blockly.Extensions.checkHasFunction_(errorPrefix, mixinObj.mutationToDom,
-                                       'mutationToDom');
+  Blockly.Extensions.checkHasFunction_(
+      errorPrefix, mixinObj.domToMutation, 'domToMutation');
+  Blockly.Extensions.checkHasFunction_(
+      errorPrefix, mixinObj.mutationToDom, 'mutationToDom');
 
   var hasMutatorDialog =
       Blockly.Extensions.checkMutatorDialog_(mixinObj, errorPrefix);

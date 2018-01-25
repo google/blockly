@@ -293,8 +293,10 @@ Blockly.Blocks['lists_indexOf'] = {
    */
   init: function() {
     var OPERATORS =
-        [[Blockly.Msg.LISTS_INDEX_OF_FIRST, 'FIRST'],
-         [Blockly.Msg.LISTS_INDEX_OF_LAST, 'LAST']];
+        [
+          [Blockly.Msg.LISTS_INDEX_OF_FIRST, 'FIRST'],
+          [Blockly.Msg.LISTS_INDEX_OF_LAST, 'LAST']
+        ];
     this.setHelpUrl(Blockly.Msg.LISTS_INDEX_OF_HELPURL);
     this.setColour(Blockly.Blocks.lists.HUE);
     this.setOutput(true, 'Number');
@@ -320,15 +322,19 @@ Blockly.Blocks['lists_getIndex'] = {
    */
   init: function() {
     var MODE =
-        [[Blockly.Msg.LISTS_GET_INDEX_GET, 'GET'],
-         [Blockly.Msg.LISTS_GET_INDEX_GET_REMOVE, 'GET_REMOVE'],
-         [Blockly.Msg.LISTS_GET_INDEX_REMOVE, 'REMOVE']];
+        [
+          [Blockly.Msg.LISTS_GET_INDEX_GET, 'GET'],
+          [Blockly.Msg.LISTS_GET_INDEX_GET_REMOVE, 'GET_REMOVE'],
+          [Blockly.Msg.LISTS_GET_INDEX_REMOVE, 'REMOVE']
+        ];
     this.WHERE_OPTIONS =
-        [[Blockly.Msg.LISTS_GET_INDEX_FROM_START, 'FROM_START'],
-         [Blockly.Msg.LISTS_GET_INDEX_FROM_END, 'FROM_END'],
-         [Blockly.Msg.LISTS_GET_INDEX_FIRST, 'FIRST'],
-         [Blockly.Msg.LISTS_GET_INDEX_LAST, 'LAST'],
-         [Blockly.Msg.LISTS_GET_INDEX_RANDOM, 'RANDOM']];
+        [
+          [Blockly.Msg.LISTS_GET_INDEX_FROM_START, 'FROM_START'],
+          [Blockly.Msg.LISTS_GET_INDEX_FROM_END, 'FROM_END'],
+          [Blockly.Msg.LISTS_GET_INDEX_FIRST, 'FIRST'],
+          [Blockly.Msg.LISTS_GET_INDEX_LAST, 'LAST'],
+          [Blockly.Msg.LISTS_GET_INDEX_RANDOM, 'RANDOM']
+        ];
     this.setHelpUrl(Blockly.Msg.LISTS_GET_INDEX_HELPURL);
     this.setColour(Blockly.Blocks.lists.HUE);
     var modeMenu = new Blockly.FieldDropdown(MODE, function(value) {
@@ -501,14 +507,18 @@ Blockly.Blocks['lists_setIndex'] = {
    */
   init: function() {
     var MODE =
-        [[Blockly.Msg.LISTS_SET_INDEX_SET, 'SET'],
-         [Blockly.Msg.LISTS_SET_INDEX_INSERT, 'INSERT']];
+        [
+          [Blockly.Msg.LISTS_SET_INDEX_SET, 'SET'],
+          [Blockly.Msg.LISTS_SET_INDEX_INSERT, 'INSERT']
+        ];
     this.WHERE_OPTIONS =
-        [[Blockly.Msg.LISTS_GET_INDEX_FROM_START, 'FROM_START'],
-         [Blockly.Msg.LISTS_GET_INDEX_FROM_END, 'FROM_END'],
-         [Blockly.Msg.LISTS_GET_INDEX_FIRST, 'FIRST'],
-         [Blockly.Msg.LISTS_GET_INDEX_LAST, 'LAST'],
-         [Blockly.Msg.LISTS_GET_INDEX_RANDOM, 'RANDOM']];
+        [
+          [Blockly.Msg.LISTS_GET_INDEX_FROM_START, 'FROM_START'],
+          [Blockly.Msg.LISTS_GET_INDEX_FROM_END, 'FROM_END'],
+          [Blockly.Msg.LISTS_GET_INDEX_FIRST, 'FIRST'],
+          [Blockly.Msg.LISTS_GET_INDEX_LAST, 'LAST'],
+          [Blockly.Msg.LISTS_GET_INDEX_RANDOM, 'RANDOM']
+        ];
     this.setHelpUrl(Blockly.Msg.LISTS_SET_INDEX_HELPURL);
     this.setColour(Blockly.Blocks.lists.HUE);
     this.appendValueInput('LIST')
@@ -637,13 +647,17 @@ Blockly.Blocks['lists_getSublist'] = {
    */
   init: function() {
     this['WHERE_OPTIONS_1'] =
-        [[Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_START, 'FROM_START'],
-         [Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_END, 'FROM_END'],
-         [Blockly.Msg.LISTS_GET_SUBLIST_START_FIRST, 'FIRST']];
+        [
+          [Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_START, 'FROM_START'],
+          [Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_END, 'FROM_END'],
+          [Blockly.Msg.LISTS_GET_SUBLIST_START_FIRST, 'FIRST']
+        ];
     this['WHERE_OPTIONS_2'] =
-        [[Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_START, 'FROM_START'],
-         [Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_END, 'FROM_END'],
-         [Blockly.Msg.LISTS_GET_SUBLIST_END_LAST, 'LAST']];
+        [
+          [Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_START, 'FROM_START'],
+          [Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_END, 'FROM_END'],
+          [Blockly.Msg.LISTS_GET_SUBLIST_END_LAST, 'LAST']
+        ];
     this.setHelpUrl(Blockly.Msg.LISTS_GET_SUBLIST_HELPURL);
     this.setColour(Blockly.Blocks.lists.HUE);
     this.appendValueInput('LIST')
@@ -786,8 +800,10 @@ Blockly.Blocks['lists_split'] = {
     // Assign 'this' to a variable for use in the closures below.
     var thisBlock = this;
     var dropdown = new Blockly.FieldDropdown(
-        [[Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT, 'SPLIT'],
-         [Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST, 'JOIN']],
+        [
+          [Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT, 'SPLIT'],
+          [Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST, 'JOIN']
+        ],
         function(newMode) {
           thisBlock.updateType_(newMode);
         });

@@ -79,14 +79,14 @@ Blockly.Icon.prototype.createIcon = function() {
   this.iconGroup_ = Blockly.utils.createSvgElement('g',
       {'class': 'blocklyIconGroup'}, null);
   if (this.block_.isInFlyout) {
-    Blockly.utils.addClass(/** @type {!Element} */ (this.iconGroup_),
-                      'blocklyIconGroupReadonly');
+    Blockly.utils.addClass(
+        /** @type {!Element} */ (this.iconGroup_), 'blocklyIconGroupReadonly');
   }
   this.drawIcon_(this.iconGroup_);
 
   this.block_.getSvgRoot().appendChild(this.iconGroup_);
-  Blockly.bindEventWithChecks_(this.iconGroup_, 'mouseup', this,
-      this.iconClick_);
+  Blockly.bindEventWithChecks_(
+      this.iconGroup_, 'mouseup', this, this.iconClick_);
   this.updateEditable();
 };
 

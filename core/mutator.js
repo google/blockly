@@ -66,25 +66,37 @@ Blockly.Mutator.prototype.workspaceHeight_ = 0;
 Blockly.Mutator.prototype.drawIcon_ = function(group) {
   // Square with rounded corners.
   Blockly.utils.createSvgElement('rect',
-      {'class': 'blocklyIconShape',
-       'rx': '4', 'ry': '4',
-       'height': '16', 'width': '16'},
-       group);
+      {
+        'class': 'blocklyIconShape',
+        'rx': '4',
+        'ry': '4',
+        'height': '16',
+        'width': '16'
+      },
+      group);
   // Gear teeth.
   Blockly.utils.createSvgElement('path',
-      {'class': 'blocklyIconSymbol',
-       'd': 'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,' +
-            '0.11 1.043,-0.457 1.187,0.683 0.127,1.134 0.3,0.3 1.8,0 0.3,' +
-            '-0.299 0.127,-1.138 1.185,-0.682 1.046,0.458 0.409,-0.11 0.9,' +
-            '-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,' +
-            '-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 ' +
-            '-0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,' +
-            '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z'},
-       group);
+      {
+        'class': 'blocklyIconSymbol',
+        'd': 'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,' +
+             '0.11 1.043,-0.457 1.187,0.683 0.127,1.134 0.3,0.3 1.8,0 0.3,' +
+             '-0.299 0.127,-1.138 1.185,-0.682 1.046,0.458 0.409,-0.11 0.9,' +
+             '-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,' +
+             '-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 ' +
+             '-0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,' +
+             '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z'
+      },
+      group);
   // Axle hole.
-  Blockly.utils.createSvgElement('circle',
-      {'class': 'blocklyIconShape', 'r': '2.7', 'cx': '8', 'cy': '8'},
-       group);
+  Blockly.utils.createSvgElement(
+      'circle',
+      {
+        'class': 'blocklyIconShape',
+        'r': '2.7',
+        'cx': '8',
+        'cy': '8'
+      },
+      group);
 };
 
 /**
@@ -160,15 +172,17 @@ Blockly.Mutator.prototype.updateEditable = function() {
   if (!this.block_.isInFlyout) {
     if (this.block_.isEditable()) {
       if (this.iconGroup_) {
-        Blockly.utils.removeClass(/** @type {!Element} */ (this.iconGroup_),
-                             'blocklyIconGroupReadonly');
+        Blockly.utils.removeClass(
+            /** @type {!Element} */ (this.iconGroup_),
+            'blocklyIconGroupReadonly');
       }
     } else {
       // Close any mutator bubble.  Icon is not clickable.
       this.setVisible(false);
       if (this.iconGroup_) {
-        Blockly.utils.addClass(/** @type {!Element} */ (this.iconGroup_),
-                          'blocklyIconGroupReadonly');
+        Blockly.utils.addClass(
+            /** @type {!Element} */ (this.iconGroup_),
+            'blocklyIconGroupReadonly');
       }
     }
   }
@@ -203,8 +217,8 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
     this.workspaceWidth_ = width;
     this.workspaceHeight_ = height;
     // Resize the bubble.
-    this.bubble_.setBubbleSize(width + doubleBorderWidth,
-                               height + doubleBorderWidth);
+    this.bubble_.setBubbleSize(
+        width + doubleBorderWidth, height + doubleBorderWidth);
     this.svgDialog_.setAttribute('width', this.workspaceWidth_);
     this.svgDialog_.setAttribute('height', this.workspaceHeight_);
   }

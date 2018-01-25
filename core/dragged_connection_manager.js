@@ -163,8 +163,8 @@ Blockly.DraggedConnectionManager.prototype.update = function(dxy, deleteArea) {
     oldClosestConnection.unhighlight();
   }
 
- // Prefer connecting over dropping into the trash can, but prefer dragging to
- // the toolbox over connecting to other blocks.
+  // Prefer connecting over dropping into the trash can, but prefer dragging to
+  // the toolbox over connecting to other blocks.
   var wouldConnect = !!this.closestConnection_ &&
       deleteArea != Blockly.DELETE_AREA_TOOLBOX;
   var wouldDelete = !!deleteArea && !this.topBlock_.getParent() &&

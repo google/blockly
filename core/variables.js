@@ -279,37 +279,37 @@ Blockly.Variables.createVariableButtonHandler = function(
   // This function needs to be named so it can be called recursively.
   var promptAndCheckWithAlert = function(defaultName) {
     Blockly.Variables.promptName(Blockly.Msg.NEW_VARIABLE_TITLE, defaultName,
-      function(text) {
-        if (text) {
-            var existing = Blockly.Variables.nameUsedWithAnyType_(text,
-                workspace);
+        function(text) {
+          if (text) {
+            var existing =
+                Blockly.Variables.nameUsedWithAnyType_(text, workspace);
             if (existing) {
               var lowerCase = text.toLowerCase();
               if (existing.type == type) {
-                var msg = Blockly.Msg.VARIABLE_ALREADY_EXISTS.replace('%1',
-                    lowerCase);
+                var msg = Blockly.Msg.VARIABLE_ALREADY_EXISTS.replace(
+                    '%1', lowerCase);
               } else {
                 var msg = Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE;
                 msg = msg.replace('%1', lowerCase).replace('%2', existing.type);
               }
               Blockly.alert(msg,
-                function() {
-                  promptAndCheckWithAlert(text);  // Recurse
-                });
+                  function() {
+                    promptAndCheckWithAlert(text);  // Recurse
+                  });
+            } else {
+              // No conflict
+              workspace.createVariable(text, type);
+              if (opt_callback) {
+                opt_callback(text);
+              }
+            }
           } else {
-            // No conflict
-            workspace.createVariable(text, type);
+            // User canceled prompt.
             if (opt_callback) {
-              opt_callback(text);
+              opt_callback(null);
             }
           }
-        } else {
-          // User canceled prompt without a value.
-          if (opt_callback) {
-            opt_callback(null);
-          }
-        }
-      });
+        });
   };
   promptAndCheckWithAlert('');
 };
@@ -354,13 +354,13 @@ Blockly.Variables.renameVariable = function(workspace, variable,
             var existing = Blockly.Variables.nameUsedWithOtherType_(newName,
                 variable.type, workspace);
             if (existing) {
-              var msg =
-                  Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE.replace(
-                  '%1', newName.toLowerCase()).replace('%2', existing.type);
+              var msg = Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE
+                  .replace('%1', newName.toLowerCase())
+                  .replace('%2', existing.type);
               Blockly.alert(msg,
-                function() {
-                  promptAndCheckWithAlert(newName);  // Recurse
-                });
+                  function() {
+                    promptAndCheckWithAlert(newName);  // Recurse
+                  });
             } else {
               workspace.renameVariableById(variable.getId(), newName);
               if (opt_callback) {
@@ -368,7 +368,7 @@ Blockly.Variables.renameVariable = function(workspace, variable,
               }
             }
           } else {
-            // User canceled prompt without a value.
+            // User canceled prompt.
             if (opt_callback) {
               opt_callback(null);
             }

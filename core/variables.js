@@ -275,19 +275,30 @@ Blockly.Variables.generateUniqueName = function(workspace) {
  */
 Blockly.Variables.createVariableButtonHandler = function(
     workspace, opt_callback, opt_type) {
+  var type = opt_type || '';
   // This function needs to be named so it can be called recursively.
   var promptAndCheckWithAlert = function(defaultName) {
     Blockly.Variables.promptName(Blockly.Msg.NEW_VARIABLE_TITLE, defaultName,
       function(text) {
         if (text) {
-          if (workspace.getVariable(text, opt_type)) {
-            Blockly.alert(Blockly.Msg.VARIABLE_ALREADY_EXISTS.replace('%1',
-                text.toLowerCase()),
+            var existing = Blockly.Variables.nameUsedWithAnyType_(text,
+                workspace);
+            if (existing) {
+              var lowerCase = text.toLowerCase();
+              if (existing.type == type) {
+                var msg = Blockly.Msg.VARIABLE_ALREADY_EXISTS.replace('%1',
+                    lowerCase);
+              } else {
+                var msg = Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE;
+                msg = msg.replace('%1', lowerCase).replace('%2', existing.type);
+              }
+              Blockly.alert(msg,
                 function() {
                   promptAndCheckWithAlert(text);  // Recurse
                 });
           } else {
-            workspace.createVariable(text, opt_type);
+            // No conflict
+            workspace.createVariable(text, type);
             if (opt_callback) {
               opt_callback(text);
             }
@@ -340,9 +351,21 @@ Blockly.Variables.renameVariable = function(workspace, variable,
     Blockly.Variables.promptName(promptText, defaultName,
         function(newName) {
           if (newName) {
-            workspace.renameVariableById(variable.getId(), newName);
-            if (opt_callback) {
-              opt_callback(newName);
+            var existing = Blockly.Variables.nameUsedWithOtherType_(newName,
+                variable.type, workspace);
+            if (existing) {
+              var msg =
+                  Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE.replace(
+                  '%1', newName.toLowerCase()).replace('%2', existing.type);
+              Blockly.alert(msg,
+                function() {
+                  promptAndCheckWithAlert(newName);  // Recurse
+                });
+            } else {
+              workspace.renameVariableById(variable.getId(), newName);
+              if (opt_callback) {
+                opt_callback(newName);
+              }
             }
           } else {
             // User canceled prompt without a value.
@@ -376,6 +399,30 @@ Blockly.Variables.promptName = function(promptText, defaultText, callback) {
     }
     callback(newVar);
   });
+};
+
+Blockly.Variables.nameUsedWithOtherType_ = function(name, type, workspace) {
+  var allVariables = workspace.getVariableMap().getAllVariables();
+
+  name = name.toLowerCase();
+  for (var i = 0, variable; variable = allVariables[i]; i++) {
+    if (variable.name.toLowerCase() == name && variable.type != type) {
+      return variable;
+    }
+  }
+  return null;
+};
+
+Blockly.Variables.nameUsedWithAnyType_ = function(name, workspace) {
+  var allVariables = workspace.getVariableMap().getAllVariables();
+
+  name = name.toLowerCase();
+  for (var i = 0, variable; variable = allVariables[i]; i++) {
+    if (variable.name.toLowerCase() == name) {
+      return variable;
+    }
+  }
+  return null;
 };
 
 /**

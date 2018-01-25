@@ -37,7 +37,7 @@ Blockly.FieldLed.prototype.init = function() {
     this.fieldGroup_.style.display = 'none';
   }
 
-  this.ledOnColor = '#ff0000';
+  this.ledOnColor = '#FFFFFF';
   this.ledOffColor = '#888888';
   this.size_.height = Blockly.FieldLed.sizeHeight;
   this.size_.width = Blockly.FieldLed.sizeWidth;

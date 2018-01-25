@@ -401,6 +401,17 @@ Blockly.Variables.promptName = function(promptText, defaultText, callback) {
   });
 };
 
+/**
+ * Check whether there exists a variable with the given name but a different
+ * type.
+ * @param {string} name The name to search for.
+ * @param {string} type The type to exclude from the search.
+ * @param {!Blockly.Workspace} workspace The workspace to search for the
+ *     variable.
+ * @return {?Blockly.VariableModel} The variable with the given name and a
+ *     different type, or null if none was found.
+ * @private
+ */
 Blockly.Variables.nameUsedWithOtherType_ = function(name, type, workspace) {
   var allVariables = workspace.getVariableMap().getAllVariables();
 
@@ -413,6 +424,15 @@ Blockly.Variables.nameUsedWithOtherType_ = function(name, type, workspace) {
   return null;
 };
 
+/**
+ * Check whether there exists a variable with the given name of any type.
+ * @param {string} name The name to search for.
+ * @param {!Blockly.Workspace} workspace The workspace to search for the
+ *     variable.
+ * @return {?Blockly.VariableModel} The variable with the given name, or null if
+ *    none was found.
+ * @private
+ */
 Blockly.Variables.nameUsedWithAnyType_ = function(name, workspace) {
   var allVariables = workspace.getVariableMap().getAllVariables();
 

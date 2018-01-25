@@ -83,6 +83,7 @@ Blockly.JavaScript.ORDER_LOGICAL_NOT = 4.4;    // !
 Blockly.JavaScript.ORDER_TYPEOF = 4.5;         // typeof
 Blockly.JavaScript.ORDER_VOID = 4.6;           // void
 Blockly.JavaScript.ORDER_DELETE = 4.7;         // delete
+Blockly.JavaScript.ORDER_AWAIT = 4.8;          // await
 Blockly.JavaScript.ORDER_DIVISION = 5.1;       // /
 Blockly.JavaScript.ORDER_MULTIPLICATION = 5.2; // *
 Blockly.JavaScript.ORDER_MODULUS = 5.3;        // %

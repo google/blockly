@@ -32,12 +32,14 @@ goog.require('Blockly.PHP');
 Blockly.PHP['math_number'] = function(block) {
   // Numeric value.
   var code = parseFloat(block.getFieldValue('NUM'));
+  var order = code >= 0 ? Blockly.PHP.ORDER_ATOMIC : 
+              Blockly.PHP.ORDER_UNARY_NEGATION;
   if (code == Infinity) {
     code = 'INF';
   } else if (code == -Infinity) {
     code = '-INF';
   }
-  return [code, Blockly.PHP.ORDER_ATOMIC];
+  return [code, order];
 };
 
 Blockly.PHP['math_arithmetic'] = function(block) {

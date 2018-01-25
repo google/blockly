@@ -288,7 +288,7 @@ Blockly.Blocks.oxocard_matrix_draw_text = {
 		this.appendValueInput('TEXT')
 			.appendField(Blockly.Msg.OXOCARD_MATRIX_DRAW_TEXT_TITLE).setCheck('Text').setAlign(Blockly.ALIGN_RIGHT);
 		this.appendDummyInput()
-			.appendField(new Blockly.FieldDropdown([[Blockly.Msg.OXOCARD_MATRIX_DRAW_TEXT_SMALL_FONT, "FLASE"],
+			.appendField(new Blockly.FieldDropdown([[Blockly.Msg.OXOCARD_MATRIX_DRAW_TEXT_SMALL_FONT, "FALSE"],
 				  [Blockly.Msg.OXOCARD_MATRIX_DRAW_TEXT_BIG_FONT, "TRUE"]]), "BUTTON")
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);

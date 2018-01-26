@@ -31,6 +31,57 @@ Blockly.Blocks.oxocard_audio_wait_not_for_tone = {
 	}
 };
 
+Blockly.Blocks.oxocard_audio_set_volume = {
+	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+	init: function() {
+		this.appendValueInput('VOL')
+			.appendField(Blockly.Msg.OXOCARD_AUDIO_SET_VOLUME_TITLE).setCheck('Number').setAlign(Blockly.ALIGN_RIGHT);
+		// this.setInputsInline(true);
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_SET_VOLUME_TIP);
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
+	}
+};
+
+Blockly.Blocks.oxocard_audio_get_volume = {
+  helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+  init: function() {
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.OXOCARD_AUDIO_GET_VOLUME_TITLE)
+    this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_GET_VOLUME_TIP);
+    this.setColour(Blockly.ColorDefinitions.AUDIO);
+  },
+  getBlockType: function() {
+    return Blockly.Types.NUMBER;
+  }
+};
+
+Blockly.Blocks.oxocard_audio_volume_up = {
+	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+	init: function() {
+		this.appendDummyInput()
+			.appendField(Blockly.Msg.OXOCARD_AUDIO_VOLUME_UP_TITLE);
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_VOLUME_UP_TIP);
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
+	}
+};
+
+Blockly.Blocks.oxocard_audio_volume_down = {
+	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+	init: function() {
+		this.appendDummyInput()
+			.appendField(Blockly.Msg.OXOCARD_AUDIO_VOLUME_DOWN_TITLE);
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setTooltip(Blockly.Msg.OXOCARD_AUDIO_VOLUME_DOWN_TIP);
+		this.setColour(Blockly.ColorDefinitions.AUDIO);
+	}
+};
+
 Blockly.Blocks.oxocard_audio_set_octave = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {

@@ -11,6 +11,24 @@ Blockly.Arduino.oxocard_audio_wait_not_for_tone = function(block) {
 	return 'oxocard.audio->setToneBlocking(false);\n';
 };
 
+Blockly.Arduino.oxocard_audio_set_volume = function() {
+	var volume = Blockly.Arduino.valueToCode(this, 'VOL', Blockly.Arduino.ORDER_ATOMIC) || 0;
+	return 'oxocard.audio->setVolume(' + volume + ');\n';
+};
+
+Blockly.Arduino.oxocard_audio_get_volume = function() {
+	var code = 'oxocard.audio->getVolume()';
+	return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Arduino.oxocard_audio_volume_up = function(block) {
+	return 'oxocard.audio->volumeUp();\n';
+};
+
+Blockly.Arduino.oxocard_audio_volume_down = function(block) {
+	return 'oxocard.audio->volumeUp();\n';
+};
+
 Blockly.Arduino.oxocard_audio_set_octave = function() {
   var octave = this.getFieldValue('OCTAVE');
   return 'oxocard.audio->setGlobalOctave(Octave::' +octave +');\n';

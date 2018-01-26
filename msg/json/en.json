@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-01-26 13:09:26.415958",
+		"lastupdated": "2018-01-26 14:32:40.094573",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -668,6 +668,14 @@
 	"OXOCARD_AUDIO_WAIT_FOR_TONE_TIP": "If this is set the programm waits after every following tone",
 	"OXOCARD_AUDIO_WAIT_NOT_FOR_TONE_TITLE": "Continue after tones",
 	"OXOCARD_AUDIO_WAIT_NOT_FOR_TONE_TIP": "If this is set the programm does not wait after every following tone",
+	"OXOCARD_AUDIO_SET_VOLUME_TITLE": "Set volume",
+	"OXOCARD_AUDIO_SET_VOLUME_TIP": "Set the voume of the audio output",
+	"OXOCARD_AUDIO_GET_VOLUME_TITLE": "Get volume",
+	"OXOCARD_AUDIO_GET_VOLUME_TIP": "Get the volume from the audio output",
+	"OXOCARD_AUDIO_VOLUME_UP_TITLE": "Volume up",
+	"OXOCARD_AUDIO_VOLUME_UP_TIP": "Turns the volume one step up",
+	"OXOCARD_AUDIO_VOLUME_DOWN_TITLE": "Volume down",
+	"OXOCARD_AUDIO_VOLUME_DOWN_TIP": "Turns the volume one step down",
 	"OXOCARD_AUDIO_SET_OCTAVE_TITLE": "Set octave",
 	"OXOCARD_AUDIO_SET_OCTAVE_TIP": "Sets the global octave for the tones",
 	"OXOCARD_AUDIO_SET_WAVEFORM_TITLE": "Set waveform",

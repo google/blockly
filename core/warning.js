@@ -87,11 +87,15 @@ Blockly.Warning.prototype.drawIcon_ = function(group) {
  * @private
  */
 Blockly.Warning.textToDom_ = function(text) {
-  var paragraph = /** @type {!SVGTextElement} */ (
-      Blockly.utils.createSvgElement('text',
-          {'class': 'blocklyText blocklyBubbleText',
-           'y': Blockly.Bubble.BORDER_WIDTH},
-          null));
+  var paragraph = /** @type {!SVGTextElement} */
+      (Blockly.utils.createSvgElement(
+          'text',
+          {
+            'class': 'blocklyText blocklyBubbleText',
+            'y': Blockly.Bubble.BORDER_WIDTH
+          },
+          null)
+      );
   var lines = text.split('\n');
   for (var i = 0; i < lines.length; i++) {
     var tspanElement = Blockly.utils.createSvgElement('tspan',

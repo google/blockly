@@ -140,13 +140,13 @@ Blockly.Arduino.oxocard_matrix_draw_circle = function() {
 
 Blockly.Arduino.oxocard_matrix_draw_number = function() {
 	var num = Blockly.Arduino.valueToCode(this, 'NUMBER', Blockly.Arduino.ORDER_NONE);
-	return 'oxocard.displayNumber(' +num +');\n';
+	return 'oxocard.matrix->drawNumber(' +num +');\n';
 };
 
 Blockly.Arduino.oxocard_matrix_draw_text = function() {
 	var text = Blockly.Arduino.valueToCode(this, 'TEXT', Blockly.Arduino.ORDER_NONE);
 	var isBigFont = this.getFieldValue('BUTTON').toLowerCase();
-	return 'oxocard.displayText(' +text +',' +isBigFont +');\n';
+	return 'oxocard.matrix->drawText(' +text +',' +isBigFont +');\n';
 };
 
 Blockly.Arduino.oxocard_matrix_draw_weather = function() {

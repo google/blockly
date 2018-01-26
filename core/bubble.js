@@ -393,7 +393,7 @@ Blockly.Bubble.prototype.setAnchorLocation = function(xy) {
  */
 Blockly.Bubble.prototype.layoutBubble_ = function() {
   // Compute the preferred bubble location.
-  var relativeLeft = -this.width_ / 4;
+  var relativeLeft = -this.width_ / 8;
   var relativeTop = -this.height_ - Blockly.BlockSvg.MIN_BLOCK_Y;
   // Prevent the bubble from being off-screen.
   var metrics = this.workspace_.getMetrics();
@@ -426,8 +426,7 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
   }
   if (this.anchorXY_.y + relativeTop < metrics.viewTop) {
     // Slide the bubble below the block.
-    var bBox = /** @type {SVGLocatable} */ (this.shape_).getBBox();
-    relativeTop = bBox.height;
+    relativeTop = (metrics.viewHeight*0.1);
   }
   this.relativeLeft_ = relativeLeft;
   this.relativeTop_ = relativeTop;

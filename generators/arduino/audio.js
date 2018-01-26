@@ -26,7 +26,7 @@ Blockly.Arduino.oxocard_audio_volume_up = function(block) {
 };
 
 Blockly.Arduino.oxocard_audio_volume_down = function(block) {
-	return 'oxocard.audio->volumeUp();\n';
+	return 'oxocard.audio->volumeDown();\n';
 };
 
 Blockly.Arduino.oxocard_audio_set_octave = function() {

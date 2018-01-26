@@ -70,20 +70,26 @@ Blockly.Arduino.oxocard_statemachine = function(block) {
 /* ---------- Accelerometer ---------- */
 Blockly.Arduino.oxocard_get_acceleration = function() {
   var dropdown_button = this.getFieldValue('AXIS');
-  var code = 'oxocard.getAccelerometer' +dropdown_button +'()';
+  var code = 'oxocard.accelerometer->get' +dropdown_button +'()';
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 Blockly.Arduino.oxocard_is_orientation = function() {
   var dropdown_button = this.getFieldValue('DIRECTION');
-  var code = 'getOrientation() == LIS3DE::' +dropdown_button ;
+  var code = 'oxocard.accelerometer->isOrientation(LIS3DE::' +dropdown_button +')' ;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 Blockly.Arduino.oxocard_set_cursor = function() {
 	var posX = Blockly.Arduino.valueToCode(this, 'X', Blockly.Arduino.ORDER_NONE);
 	var posY = Blockly.Arduino.valueToCode(this, 'Y', Blockly.Arduino.ORDER_NONE);
-	return 'oxocard.setAccelerometerRootCursor(' + posX + ',' + posY + ');\n';
+	return 'oxocard.accelerometer->setRootCursor(' + posX + ',' + posY + ');\n';
+};
+
+Blockly.Arduino.oxocard_get_cursor_value = function() {
+  var dropdown_button = this.getFieldValue('AXIS');
+  var code = 'oxocard.accelerometer->getCursor' +dropdown_button +'()';
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 

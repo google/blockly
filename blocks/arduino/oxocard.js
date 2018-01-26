@@ -276,7 +276,20 @@ Blockly.Blocks.oxocard_set_cursor = {
 	}
 };
 
-
+Blockly.Blocks.oxocard_get_cursor_value = {
+  helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
+  init: function() {
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.OXOCARD_GET_CURSOR_VALUE_TITLE)
+        .appendField(new Blockly.FieldDropdown([["X", "X"], ["Y", "Y"]]), "AXIS")
+    this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.OXOCARD_GET_CURSOR_VALUE_TIP);
+    this.setColour(Blockly.ColorDefinitions.ACCMETER);
+  },
+  getBlockType: function() {
+    return Blockly.Types.NUMBER;
+  }
+};
 
 /* ---------- Weather ---------- */
 Blockly.Blocks.oxocard_get_weather = {

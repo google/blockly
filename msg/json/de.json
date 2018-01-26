@@ -568,6 +568,8 @@
 	"OXOCARD_IS_ORIENTATION_TIP": "Ja, wenn die OXOcard in der angegebenen Orientierung liegt",
 	"OXOCARD_SET_CURSOR_TITLE": "Setze Cursor",
 	"OXOCARD_SET_CURSOR_TIP": "Setze die Position des Cursors",
+	"OXOCARD_GET_CURSOR_VALUE_TITLE": "Get cursor ",
+	"OXOCARD_GET_CURSOR_VALUE_TIP": "Get the x or y value of the cursor",
 	"OXOCARD_SETUP_AS_IBEACON_TITLE": "Starte als iBeacon",
 	"OXOCARD_SETUP_AS_IBEACON_ID_FIELD": "mit der ID",
 	"OXOCARD_SETUP_AS_IBEACON_TIP": "Startet die OXOcard als iBeacon mit der angegebenen ID",
@@ -692,7 +694,6 @@
 	"OXOCARD_AUDIO_PLAY_TONE_TIP": "Spielt einen Ton. Die Oktave kann mittels dem entsprechenden Block gesetzt werden",
 	"OXOCARD_AUDIO_PLAY_TONE_HZ_TITLE": "Spiele Ton (Herz)",
 	"OXOCARD_AUDIO_PLAY_TONE_HZ_TIP": "Spielt einen Ton in Herz.",
-
 	"OXOCARD_TIME_UPDATE_TITLE": "Synchronisiere Zeit",
 	"OXOCARD_TIME_UPDATE_TIP": "Aktualisiert die Zeit der OXOcard mit dem Internet",
 	"OXOCARD_TIME_GET_FROM_TITLE": "Hole Zeit von ",

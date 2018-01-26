@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-01-25 17:22:52.073347",
+		"lastupdated": "2018-01-26 13:09:26.415958",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -614,6 +614,8 @@
 	"OXOCARD_IS_ORIENTATION_TIP": "Return if the OXOcard is in the given orientation",
 	"OXOCARD_SET_CURSOR_TITLE": "Set cursor",
 	"OXOCARD_SET_CURSOR_TIP": "Set the position of the cursor",
+	"OXOCARD_GET_CURSOR_VALUE_TITLE": "Get cursor ",
+	"OXOCARD_GET_CURSOR_VALUE_TIP": "Get the x or y value of the cursor",
 	"OXOCARD_SETUP_AS_IBEACON_TITLE": "Setup the OXOcard as iBeacon",
 	"OXOCARD_SETUP_AS_IBEACON_ID_FIELD": "With the ID",
 	"OXOCARD_SETUP_AS_IBEACON_TIP": "Sets the OXOcard up as iBeacon with the given ID",

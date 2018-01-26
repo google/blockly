@@ -465,6 +465,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.OXOCARD_FIND_IBEACON_TITLE = "Finde iBeacon mit ID";
 /** @export */ Blockly.Msg.OXOCARD_GET_ACCELERATION_TIP = "Gibt die Beschleunigung der angegebenen Achse zurück";
 /** @export */ Blockly.Msg.OXOCARD_GET_ACCELERATION_TITLE = "Beschleunigung";
+/** @export */ Blockly.Msg.OXOCARD_GET_CURSOR_VALUE_TIP = "Get the x or y value of the cursor";
+/** @export */ Blockly.Msg.OXOCARD_GET_CURSOR_VALUE_TITLE = "Get cursor ";
 /** @export */ Blockly.Msg.OXOCARD_GET_ORIENTATION_TIP = "Gibt die Orientierung der OXOcard zurück";
 /** @export */ Blockly.Msg.OXOCARD_GET_ORIENTATION_TITLE = "Orientierung ";
 /** @export */ Blockly.Msg.OXOCARD_GET_TIMER_SECONDS_TIP = "Liefert die Sekunden des Timers zurück";

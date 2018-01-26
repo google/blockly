@@ -1467,6 +1467,8 @@ Blockly.Msg.OXOCARD_IS_ORIENTATION_VERTICALLY_FIELD = 'Vertically';
 Blockly.Msg.OXOCARD_IS_ORIENTATION_TIP = 'Return if the OXOcard is in the given orientation';
 Blockly.Msg.OXOCARD_SET_CURSOR_TITLE = 'Set cursor';
 Blockly.Msg.OXOCARD_SET_CURSOR_TIP = 'Set the position of the cursor';
+Blockly.Msg.OXOCARD_GET_CURSOR_VALUE_TITLE = 'Get cursor ';
+Blockly.Msg.OXOCARD_GET_CURSOR_VALUE_TIP = 'Get the x or y value of the cursor';
 // Bluetooth
 Blockly.Msg.OXOCARD_SETUP_AS_IBEACON_TITLE = 'Setup the OXOcard as iBeacon';
 Blockly.Msg.OXOCARD_SETUP_AS_IBEACON_ID_FIELD = 'With the ID';

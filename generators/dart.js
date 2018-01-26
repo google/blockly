@@ -112,8 +112,8 @@ Blockly.Dart.init = function(workspace) {
         Blockly.Names.DEVELOPER_VARIABLE_TYPE));
   }
 
-  // Add user variables.
-  var variables = workspace.getAllVariables();
+  // Add user variables, but only ones that are being used.
+  var variables = Blockly.Variables.allUsedVarModels(workspace);
   for (var i = 0; i < variables.length; i++) {
     defvars.push(Blockly.Dart.variableDB_.getName(variables[i].getId(),
         Blockly.Variables.NAME_TYPE));

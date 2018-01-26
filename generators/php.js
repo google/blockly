@@ -159,8 +159,8 @@ Blockly.PHP.init = function(workspace) {
         Blockly.Names.DEVELOPER_VARIABLE_TYPE) + ';');
   }
 
-  // Add user-created variables.
-  var variables = workspace.getAllVariables();
+  // Add user variables, but only ones that are being used.
+  var variables = Blockly.Variables.allUsedVarModels(workspace);
   for (var i = 0, variable; variable = variables[i]; i++) {
     defvars.push(Blockly.PHP.variableDB_.getName(variable.getId(),
         Blockly.Variables.NAME_TYPE) + ';');

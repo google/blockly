@@ -93,11 +93,12 @@ function checkVariableValues(container, name, type, id) {
 /**
  * Create a test get_var_block.
  * Will fail if get_var_block isn't defined.
- * TODO (fenichel): Rename to createMockVarBlock.
+ * @param {!Blockly.Workspace} workspace The workspace on which to create the
+ *     block.
  * @param {!string} variable_id The id of the variable to reference.
  * @return {!Blockly.Block} The created block.
  */
-function createMockBlock(variable_id) {
+function createMockVarBlock(workspace, variable_id) {
   if (!Blockly.Blocks['get_var_block']) {
     fail();
   }
@@ -114,13 +115,13 @@ function createTwoVariablesAndBlocks(workspace) {
   workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
   // Create blocks to refer to both of them.
-  createMockBlock('id1');
-  createMockBlock('id2');
+  createMockVarBlock(workspace, 'id1');
+  createMockVarBlock(workspace, 'id2');
 }
 
 function createVariableAndBlock(workspace) {
   workspace.createVariable('name1', 'type1', 'id1');
-  createMockBlock('id1');
+  createMockVarBlock(workspace, 'id1');
 }
 
 function defineGetVarBlock() {

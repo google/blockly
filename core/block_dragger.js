@@ -169,7 +169,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
 
   if (this.workspace_.toolbox_) {
     var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
-        'blocklyToolboxGrab';
+      'blocklyToolboxGrab';
     this.workspace_.toolbox_.addStyle(style);
   }
 };
@@ -183,6 +183,81 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY) {
  * @package
  */
 Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
+  // Check if dragging block is changing workspace
+  var xy = new goog.math.Coordinate(e.clientX, e.clientY);
+  var rect = this.workspace_.getParentSvg().getBoundingClientRect();
+  rect = new goog.math.Rect(rect.left, rect.top, rect.width, rect.height);
+  if (Blockly.selected &&
+      Blockly.selected === this.draggingBlock_ &&
+      !rect.contains(xy)) {
+    // The dragging bloc is out of his workspace
+    // Find the new workspace
+    var workspaces = [];
+    // loop used instead of Object.values cause of missing polyfill for IE
+    for (var workspaceId in Blockly.Workspace.WorkspaceDB_) {
+      workspaces.push(Blockly.Workspace.WorkspaceDB_[workspaceId]);
+    }
+    var workspace;
+    // loop used instead of Array.prototype.find
+    for (var i = 0; i<workspaces.length && workspace === undefined; i++) {
+      var newRect = workspaces[i].getParentSvg().getBoundingClientRect();
+      newRect = new goog.math.Rect(newRect.left, newRect.top,
+          newRect.width, newRect.height);
+      if (newRect.contains(xy)) {
+        workspace = workspaces[i];
+      }
+    }
+    if (workspace) {
+      // the dragging block is changing workspace,
+      // a new block will be created in the new workspace
+      // and will be deleted in the current workspace
+      // Drag the new block is done by simulating mouse events
+      this.draggingBlock_.unselect(); // Unselect block to avoid cycle
+
+      // Prepare mouse events
+      var draggingBlockSvgRoot = this.draggingBlock_.getSvgRoot();
+      var workspaceDomNode = workspace.getCanvas().parentNode;
+      var newBoundingClientRect = workspaceDomNode.getBoundingClientRect();
+      var mousedownX = newBoundingClientRect.left + workspace.scrollX
+        + (e.clientX - draggingBlockSvgRoot.getBoundingClientRect().left);
+      var mousedownY = newBoundingClientRect.top + workspace.scrollY
+        + (e.clientY - draggingBlockSvgRoot.getBoundingClientRect().top);
+      if (workspace.toolbox_) {
+        if (workspace.toolbox_.horizontalLayout_) {
+          mousedownY += workspace.toolbox_.getHeight();
+        } else {
+          mousedownX += workspace.toolbox_.getWidth();
+        }
+      }
+      var mouseup = document.createEvent('MouseEvents');
+      mouseup.initMouseEvent("mouseup", true, true,
+          window, 0, rect.left, rect.top, rect.left, rect.top,
+          false, false, false, false, 0, null);
+      var mousedown = document.createEvent('MouseEvents');
+      mousedown.initMouseEvent("mousedown", true, true,
+          window, 0, mousedownX, mousedownY, mousedownX, mousedownY,
+          false, false, false, false, 0, null);
+      var mousemove = document.createEvent('MouseEvents');
+      mousemove.initMouseEvent("mousemove", true, true,
+          window, 0, e.screenX, e.screenY, e.clientX, e.clientY,
+          false, false, false, false, 0, null);
+
+      // Create new block and dispatch events
+      var xml = Blockly.Xml.blockToDom(this.draggingBlock_);
+      var block = Blockly.Xml.domToBlock(xml, workspace);
+      var blockDragger = this;
+      setTimeout(function() {
+        var draggingBlock = blockDragger.draggingBlock_;
+        if (draggingBlock) {
+          draggingBlock.getSvgRoot().dispatchEvent(mouseup);
+          draggingBlock.dispose();
+          block.getSvgRoot().dispatchEvent(mousedown);
+          block.getSvgRoot().dispatchEvent(mousemove);
+        }
+      },0);
+    }
+  }
+
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
 
@@ -227,7 +302,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
 
   if (this.workspace_.toolbox_) {
     var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
-        'blocklyToolboxGrab';
+      'blocklyToolboxGrab';
     this.workspace_.toolbox_.removeStyle(style);
   }
   Blockly.Events.setGroup(false);
@@ -277,7 +352,7 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
   var trashcan = this.workspace_.trashcan;
   if (this.wouldDeleteBlock_) {
     this.draggingBlock_.setDeleteStyle(true);
-    if (this.deleteArea_ == Blockly.DELETE_AREA_TRASH && trashcan) {
+    if (this.deleteArea_ === Blockly.DELETE_AREA_TRASH && trashcan) {
       trashcan.setOpen_(true);
     }
   } else {

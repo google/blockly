@@ -80,9 +80,13 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
   this.svgGroup_.appendChild(this.foreignObject_);
 
   this.svgRectTarget_ = Blockly.utils.createSvgElement('rect',
-    {'class': 'blocklyCommentTarget', 'x': 0, 'y': 0,
-    'rx': Blockly.WorkspaceCommentSvg.BORDER_RADIUS,
-    'ry': Blockly.WorkspaceCommentSvg.BORDER_RADIUS});
+      {
+        'class': 'blocklyCommentTarget',
+        'x': 0,
+        'y': 0,
+        'rx': Blockly.WorkspaceCommentSvg.BORDER_RADIUS,
+        'ry': Blockly.WorkspaceCommentSvg.BORDER_RADIUS
+      });
   this.svgGroup_.appendChild(this.svgRectTarget_);
 
   // Add the resize icon
@@ -96,8 +100,8 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
   this.rendered_ = true;
 
   if (this.resizeGroup_) {
-    Blockly.bindEventWithChecks_(this.resizeGroup_, 'mousedown', this,
-      this.resizeMouseDown_);
+    Blockly.bindEventWithChecks_(
+        this.resizeGroup_, 'mousedown', this, this.resizeMouseDown_);
   }
 };
 
@@ -116,10 +120,13 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
       </body>
     </foreignObject>
   */
-  this.foreignObject_ = Blockly.utils.createSvgElement('foreignObject',
-      {'x': 0,
-       'y': Blockly.WorkspaceCommentSvg.TOP_OFFSET,
-       'class': 'blocklyCommentForeignObject'},
+  this.foreignObject_ = Blockly.utils.createSvgElement(
+      'foreignObject',
+      {
+        'x': 0,
+        'y': Blockly.WorkspaceCommentSvg.TOP_OFFSET,
+        'class': 'blocklyCommentForeignObject'
+      },
       null);
   var body = document.createElementNS(Blockly.HTML_NS, 'body');
   body.setAttribute('xmlns', Blockly.HTML_NS);
@@ -139,7 +146,7 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
       /* eslint-enable no-unused-vars */) {
     if (this.content_ != textarea.value) {
       Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this.block_, 'comment', null, this.content_, textarea.value));
+          this.block_, 'comment', null, this.content_, textarea.value));
       this.content_ = textarea.value;
     }
   });
@@ -151,28 +158,31 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
  * @private
  */
 Blockly.WorkspaceCommentSvg.prototype.addResizeDom_ = function() {
-  this.resizeGroup_ = Blockly.utils.createSvgElement('g',
-    {
-      'class': this.RTL ?
-        'blocklyResizeSW' : 'blocklyResizeSE'
-    },
-    this.svgGroup_);
+  this.resizeGroup_ = Blockly.utils.createSvgElement(
+      'g',
+      {
+        'class': this.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'
+      },
+      this.svgGroup_);
   var resizeSize = Blockly.WorkspaceCommentSvg.RESIZE_SIZE;
-  Blockly.utils.createSvgElement('polygon',
-    { 'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString()) },
-    this.resizeGroup_);
-  Blockly.utils.createSvgElement('line',
-    {
-      'class': 'blocklyResizeLine',
-      'x1': resizeSize / 3, 'y1': resizeSize - 1,
-      'x2': resizeSize - 1, 'y2': resizeSize / 3
-    }, this.resizeGroup_);
-  Blockly.utils.createSvgElement('line',
-    {
-      'class': 'blocklyResizeLine',
-      'x1': resizeSize * 2 / 3, 'y1': resizeSize - 1,
-      'x2': resizeSize - 1, 'y2': resizeSize * 2 / 3
-    }, this.resizeGroup_);
+  Blockly.utils.createSvgElement(
+      'polygon',
+      {'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString())},
+      this.resizeGroup_);
+  Blockly.utils.createSvgElement(
+      'line',
+      {
+        'class': 'blocklyResizeLine',
+        'x1': resizeSize / 3, 'y1': resizeSize - 1,
+        'x2': resizeSize - 1, 'y2': resizeSize / 3
+      }, this.resizeGroup_);
+  Blockly.utils.createSvgElement(
+      'line',
+      {
+        'class': 'blocklyResizeLine',
+        'x1': resizeSize * 2 / 3, 'y1': resizeSize - 1,
+        'x2': resizeSize - 1, 'y2': resizeSize * 2 / 3
+      }, this.resizeGroup_);
 };
 
 /**
@@ -192,10 +202,10 @@ Blockly.WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
   this.workspace.startDrag(e, new goog.math.Coordinate(
     this.workspace.RTL ? -this.width_ : this.width_, this.height_));
 
-  this.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
-    'mouseup', this, this.resizeMouseUp_);
-  this.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
-    'mousemove', this, this.resizeMouseMove_);
+  this.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(
+      document, 'mouseup', this, this.resizeMouseUp_);
+  this.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(
+      document, 'mousemove', this, this.resizeMouseMove_);
   Blockly.hideChaff();
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();

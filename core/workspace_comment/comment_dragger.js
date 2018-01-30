@@ -92,7 +92,9 @@ Blockly.CommentDragger.prototype.dispose = function() {
  *     moved from the position at mouse down, in pixel units.
  * @package
  */
-Blockly.CommentDragger.prototype.startCommentDrag = function(currentDragDeltaXY) {
+Blockly.CommentDragger.prototype.startCommentDrag = function(
+    /* eslint-disable no-unused-vars */ currentDragDeltaXY
+    /* eslint-enable no-unused-vars */) {
   if (!Blockly.Events.getGroup()) {
     Blockly.Events.setGroup(true);
   }

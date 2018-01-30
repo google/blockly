@@ -47,14 +47,19 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
    * @type {SVGElement}
    * @private
    */
-  this.svgGroup_ = Blockly.utils.createSvgElement('g',
-      {'class': 'blocklyComment'}, null);
+  this.svgGroup_ = Blockly.utils.createSvgElement(
+      'g', {'class': 'blocklyComment'}, null);
   this.svgGroup_.translate_ = '';
 
-  this.svgRect_ = Blockly.utils.createSvgElement('rect',
-      {'class': 'blocklyCommentRect', 'x': 0, 'y': 0,
-      'rx': Blockly.WorkspaceCommentSvg.BORDER_RADIUS,
-      'ry': Blockly.WorkspaceCommentSvg.BORDER_RADIUS});
+  this.svgRect_ = Blockly.utils.createSvgElement(
+      'rect',
+      {
+        'class': 'blocklyCommentRect',
+        'x': 0,
+        'y': 0,
+        'rx': Blockly.WorkspaceCommentSvg.BORDER_RADIUS,
+        'ry': Blockly.WorkspaceCommentSvg.BORDER_RADIUS
+      });
   this.svgGroup_.appendChild(this.svgRect_);
 
   /**
@@ -121,8 +126,8 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
 Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
   goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
   if (!this.workspace.options.readOnly && !this.eventsInit_) {
-    Blockly.bindEventWithChecks_(this.svgRectTarget_, 'mousedown', this,
-                       this.pathMouseDown_);
+    Blockly.bindEventWithChecks_(
+        this.svgRectTarget_, 'mousedown', this, this.pathMouseDown_);
   }
   this.eventsInit_ = true;
 
@@ -188,32 +193,32 @@ Blockly.WorkspaceCommentSvg.prototype.unselect = function() {
  * Select this comment.  Highlight it visually.
  */
 Blockly.WorkspaceCommentSvg.prototype.addSelect = function() {
-  Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
-                    'blocklySelected');
+  Blockly.utils.addClass(
+      /** @type {!Element} */ (this.svgGroup_), 'blocklySelected');
 };
 
 /**
  * Unselect this comment.  Remove its highlighting.
  */
 Blockly.WorkspaceCommentSvg.prototype.removeSelect = function() {
-  Blockly.utils.removeClass(/** @type {!Element} */ (this.svgGroup_),
-                       'blocklySelected');
+  Blockly.utils.removeClass(
+      /** @type {!Element} */ (this.svgGroup_), 'blocklySelected');
 };
 
 /**
  * Focus this comment.  Highlight it visually.
  */
 Blockly.WorkspaceCommentSvg.prototype.addFocus = function() {
-  Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
-                    'blocklyFocused');
+  Blockly.utils.addClass(
+      /** @type {!Element} */ (this.svgGroup_), 'blocklyFocused');
 };
 
 /**
  * Unfocus this comment.  Remove its highlighting.
  */
 Blockly.WorkspaceCommentSvg.prototype.removeFocus = function() {
-  Blockly.utils.removeClass(/** @type {!Element} */ (this.svgGroup_),
-                       'blocklyFocused');
+  Blockly.utils.removeClass(
+      /** @type {!Element} */ (this.svgGroup_), 'blocklyFocused');
 };
 
 /**
@@ -380,11 +385,11 @@ Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
  */
 Blockly.WorkspaceCommentSvg.prototype.updateMovable = function() {
   if (this.isMovable()) {
-    Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
-                      'blocklyDraggable');
+    Blockly.utils.addClass(
+        /** @type {!Element} */ (this.svgGroup_), 'blocklyDraggable');
   } else {
-    Blockly.utils.removeClass(/** @type {!Element} */ (this.svgGroup_),
-                         'blocklyDraggable');
+    Blockly.utils.removeClass(
+        /** @type {!Element} */ (this.svgGroup_), 'blocklyDraggable');
   }
 };
 
@@ -407,11 +412,11 @@ Blockly.WorkspaceCommentSvg.prototype.setDragging = function(adding) {
     var group = this.getSvgRoot();
     group.translate_ = '';
     group.skew_ = '';
-    Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
-                      'blocklyDragging');
+    Blockly.utils.addClass(
+        /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
   } else {
-    Blockly.utils.removeClass(/** @type {!Element} */ (this.svgGroup_),
-                         'blocklyDragging');
+    Blockly.utils.removeClass(
+        /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
   }
 };
 
@@ -477,7 +482,7 @@ Blockly.WorkspaceCommentSvg.prototype.getContent = function() {
 Blockly.WorkspaceCommentSvg.prototype.setContent = function(content) {
   if (this.content_ != content) {
     Blockly.Events.fire(new Blockly.Events.BlockChange(
-      this.block_, 'comment', null, this.text_, content));
+        this.block_, 'comment', null, this.text_, content));
     this.text_ = content;
   }
   if (this.textarea_) {

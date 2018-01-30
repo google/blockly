@@ -116,7 +116,7 @@ Blockly.CommentDragger.prototype.startCommentDrag = function(
   this.draggingComment_.moveToDragSurface_();
 
   if (this.workspace_.toolbox_) {
-    this.workspace_.toolbox_.addDeleteStyle();
+    this.workspace_.toolbox_.addStyle('blocklyToolboxDelete');
   }
 };
 
@@ -164,7 +164,7 @@ Blockly.CommentDragger.prototype.endCommentDrag = function(e, currentDragDeltaXY
   this.workspace_.setResizesEnabled(true);
 
   if (this.workspace_.toolbox_) {
-    this.workspace_.toolbox_.removeDeleteStyle();
+    this.workspace_.toolbox_.removeStyle('blocklyToolboxDelete');
   }
   Blockly.Events.setGroup(false);
 };

@@ -47,20 +47,13 @@ Blockly.Variables.NAME_TYPE = Blockly.VARIABLE_CATEGORY_NAME;
 /**
  * Find all user-created variables that are in use in the workspace.
  * For use by generators.
- * @param {!Blockly.Block|!Blockly.Workspace} root Root block or workspace.
- * @return {!Array.<string>} Array of variable names.
+ * To get a list of all variables on a workspace, including unused variables,
+ * call Workspace.getAllVariables.
+ * @param {!Blockly.Workspace} ws The workspace to search for variables.
+ * @return {!Array.<!Blockly.VariableModel>} Array of variable models.
  */
-Blockly.Variables.allUsedVariables = function(root) {
-  var blocks;
-  if (root instanceof Blockly.Block) {
-    // Root is Block.
-    blocks = root.getDescendants();
-  } else if (root.getAllBlocks) {
-    // Root is Workspace.
-    blocks = root.getAllBlocks();
-  } else {
-    throw 'Not Block or Workspace: ' + root;
-  }
+Blockly.Variables.allUsedVarModels = function(ws) {
+  var blocks = ws.getAllBlocks();
   var variableHash = Object.create(null);
   // Iterate through every block and add each variable to the hash.
   for (var x = 0; x < blocks.length; x++) {
@@ -68,36 +61,32 @@ Blockly.Variables.allUsedVariables = function(root) {
     if (blockVariables) {
       for (var y = 0; y < blockVariables.length; y++) {
         var variable = blockVariables[y];
-        // Variable ID may be null if the block is only half-built.
         if (variable.getId()) {
-          variableHash[variable.name.toLowerCase()] = variable.name;
+          variableHash[variable.getId()] = variable;
         }
       }
     }
   }
   // Flatten the hash into a list.
   var variableList = [];
-  for (var name in variableHash) {
-    variableList.push(variableHash[name]);
+  for (var id in variableHash) {
+    variableList.push(variableHash[id]);
   }
   return variableList;
 };
 
 /**
- * Find all variables that the user has created through the workspace or
- * toolbox.  For use by generators.
- * @param {!Blockly.Workspace} root The workspace to inspect.
- * @return {!Array.<Blockly.VariableModel>} Array of variable models.
+ * Find all user-created variables that are in use in the workspace and return
+ * only their names.
+ * For use by generators.
+ * To get a list of all variables on a workspace, including unused variables,
+ * call Workspace.getAllVariables.
+ * @deprecated January 2018
  */
-Blockly.Variables.allVariables = function(root) {
-  if (root instanceof Blockly.Block) {
-    // Root is Block.
-    console.warn('Deprecated call to Blockly.Variables.allVariables ' +
-                 'with a block instead of a workspace.  You may want ' +
-                 'Blockly.Variables.allUsedVariables');
-    return {};
-  }
-  return root.getAllVariables();
+Blockly.Variables.allUsedVariables = function() {
+  console.warn('Deprecated call to Blockly.Variables.allUsedVariables. ' +
+      'Use Blockly.Variables.allUsedVarModels instead.\nIf this is a major ' +
+      'issue please file a bug on GitHub.');
 };
 
 /**

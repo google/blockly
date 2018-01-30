@@ -141,9 +141,9 @@ function test_deleteVariable_InternalTrivial() {
   workspaceTest_setUp();
   var var_1 = workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
-  createMockBlock('id1');
-  createMockBlock('id1');
-  createMockBlock('id2');
+  createMockVarBlock(workspace, 'id1');
+  createMockVarBlock(workspace, 'id1');
+  createMockVarBlock(workspace, 'id2');
 
   var uses = workspace.getVariableUsesById(var_1.getId());
   workspace.deleteVariableInternal_(var_1, uses);
@@ -169,7 +169,7 @@ function test_addTopBlock_TrivialFlyoutIsTrue() {
   workspace.variableMap_ = targetWorkspace.getVariableMap();
 
   try {
-    var block = createMockBlock('1');
+    var block = createMockVarBlock(workspace, '1');
     workspace.removeTopBlock(block);
     workspace.addTopBlock(block);
     checkVariableValues(workspace, 'name1', '', '1');
@@ -266,8 +266,8 @@ function test_renameVariable_TwoVariablesSameType() {
   workspace.createVariable(oldName, type, id1);
   workspace.createVariable(newName, type, id2);
   // Create blocks to refer to both of them.
-  createMockBlock(id1);
-  createMockBlock(id2);
+  createMockVarBlock(workspace, id1);
+  createMockVarBlock(workspace, id2);
 
   workspace.renameVariableById(id1, newName);
   checkVariableValues(workspace, newName, type, id2);
@@ -340,8 +340,8 @@ function test_renameVariable_TwoVariablesAndOldCase() {
 
   workspace.createVariable(oldName, type, id1);
   workspace.createVariable(oldCase, type, id2);
-  createMockBlock(id1);
-  createMockBlock(id2);
+  createMockVarBlock(workspace, id1);
+  createMockVarBlock(workspace, id2);
 
   workspace.renameVariableById(id1, newName);
 

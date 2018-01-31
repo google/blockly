@@ -878,16 +878,19 @@ Blockly.Xml.domToField_ = function(block, fieldName, xml) {
 Blockly.Xml.domToCommentHeadless_ = function(xmlComment, workspace) {
   var comment = null;
   var id = xmlComment.getAttribute('id');
-  var h = xmlComment.getAttribute('h');
-  var w = xmlComment.getAttribute('w');
+  var h = parseInt(xmlComment.getAttribute('h'), 10);
+  var w = parseInt(xmlComment.getAttribute('w'), 10);
   var content = xmlComment.textContent;
+  // TODO (fenichel): This constructor doesn't work in a headless workspace.
   comment = workspace.newComment(content, h, w, id);
 
-  var height = xmlComment.getAttribute('h');
+  // TODO (fenichel): Why are height and width getting parsed twice?
+  // And which time actually matters?
+  var height = parseInt(xmlComment.getAttribute('h'), 10);
   if (height) {
     comment.setHeight(height);
   }
-  var width = xmlComment.getAttribute('w');
+  var width = parseInt(xmlComment.getAttribute('w'), 10);
   if (width) {
     comment.setWidth(width);
   }

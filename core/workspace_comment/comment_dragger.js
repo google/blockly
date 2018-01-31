@@ -184,22 +184,20 @@ Blockly.CommentDragger.prototype.fireMoveEvent_ = function() {
  * @private
  */
 Blockly.CommentDragger.prototype.maybeDeleteComment_ = function() {
-  // TODO: Make deleting by dragging work.
-  return false;
-  // var trashcan = this.workspace_.trashcan;
+  var trashcan = this.workspace_.trashcan;
 
-  // if (this.wouldDeleteBlock_) {
-  //   if (trashcan) {
-  //     goog.Timer.callOnce(trashcan.close, 100, trashcan);
-  //   }
-  //   // Fire a move event, so we know where to go back to for an undo.
-  //   this.fireMoveEvent_();
-  //   this.draggingComment_.dispose(false, true);
-  // } else if (trashcan) {
-  //   // Make sure the trash can is closed.
-  //   trashcan.close();
-  // }
-  // return this.wouldDeleteBlock_;
+  if (this.wouldDeleteComment_) {
+    if (trashcan) {
+      goog.Timer.callOnce(trashcan.close, 100, trashcan);
+    }
+    // Fire a move event, so we know where to go back to for an undo.
+    this.fireMoveEvent_();
+    this.draggingComment_.dispose(false, true);
+  } else if (trashcan) {
+    // Make sure the trash can is closed.
+    trashcan.close();
+  }
+  return this.wouldDeleteComment_;
 };
 
 /**
@@ -208,21 +206,19 @@ Blockly.CommentDragger.prototype.maybeDeleteComment_ = function() {
  * @private
  */
 Blockly.CommentDragger.prototype.updateCursorDuringCommentDrag_ = function() {
-  // TODO: Make dragging over the trashcan or toolbox work.
-
-  // this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
-  // var trashcan = this.workspace_.trashcan;
-  // if (this.wouldDeleteBlock_) {
-  //   this.draggingComment_.setDeleteStyle(true);
-  //   if (this.deleteArea_ == Blockly.DELETE_AREA_TRASH && trashcan) {
-  //     trashcan.setOpen_(true);
-  //   }
-  // } else {
-  //   this.draggingComment_.setDeleteStyle(false);
-  //   if (trashcan) {
-  //     trashcan.setOpen_(false);
-  //   }
-  // }
+  this.wouldDeleteComment_ = this.deleteArea_ != Blockly.DELETE_AREA_NONE;
+  var trashcan = this.workspace_.trashcan;
+  if (this.wouldDeleteComment_) {
+    this.draggingComment_.setDeleteStyle(true);
+    if (this.deleteArea_ == Blockly.DELETE_AREA_TRASH && trashcan) {
+      trashcan.setOpen_(true);
+    }
+  } else {
+    this.draggingComment_.setDeleteStyle(false);
+    if (trashcan) {
+      trashcan.setOpen_(false);
+    }
+  }
 };
 
 /**
@@ -237,6 +233,7 @@ Blockly.CommentDragger.prototype.updateCursorDuringCommentDrag_ = function() {
  * @private
  */
 Blockly.CommentDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
+  // TODO: Should comments be allowed in mutator workspaces?
   var result = new goog.math.Coordinate(pixelCoord.x / this.workspace_.scale,
       pixelCoord.y / this.workspace_.scale);
   if (this.workspace_.isMutator) {

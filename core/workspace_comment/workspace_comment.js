@@ -82,7 +82,7 @@ Blockly.WorkspaceComment.prototype.dispose = function() {
     return;
   }
 
-  // TODO: Fire an event for deletion.
+  // TODO (#1580): Fire an event for deletion.
 
   // Remove from the list of top comments.
   this.workspace.removeTopComment(this);
@@ -107,7 +107,7 @@ Blockly.WorkspaceComment.prototype.getRelativeToSurfaceXY = function() {
  * @param {number} dy Vertical offset, in workspace units.
  */
 Blockly.WorkspaceComment.prototype.moveBy = function(dx, dy) {
-  // TODO: Fire an event for move
+  // TODO (#1580): Fire an event for move
   this.xy_.translate(dx, dy);
 };
 
@@ -159,7 +159,7 @@ Blockly.WorkspaceComment.prototype.getContent = function() {
  */
 Blockly.WorkspaceComment.prototype.setContent = function(content) {
   if (this.content_ != content) {
-    // TODO: Fire a event for change
+    // TODO (#1580): Fire a event for change
     this.text_ = content;
   }
 };

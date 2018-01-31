@@ -297,3 +297,57 @@ Blockly.ContextMenu.blockCommentOption = function(block) {
   }
   return commentOption;
 };
+
+/**
+ * Make a context menu option for adding a comment on the workspace.
+ * @param {!Blockly.WorkspaceSvg} ws The workspace where the right-click
+ *     originated.
+ * @param {!Event} e The right-click mouse event.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @package
+ */
+Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
+  // Helper function to create and position a comment correctly based on the
+  // location of the mouse event.
+  var addWsComment = function() {
+    var comment = ws.newComment('Say something...', 100, 100);
+
+    var injectionDiv = ws.getInjectionDiv();
+    // Bounding rect coordinates are in client coordinates, meaning that they
+    // are in pixels relative to the upper left corner of the visible browser
+    // window.  These coordinates change when you scroll the browser window.
+    var boundingRect = injectionDiv.getBoundingClientRect();
+
+    // The client coordinates offset by the injection div's upper left corner.
+    var clientOffsetPixels = new goog.math.Coordinate(
+        e.clientX - boundingRect.left, e.clientY - boundingRect.top);
+
+    // The offset in pixels between the main workspace's origin and the upper
+    // left corner of the injection div.
+    var mainOffsetPixels = ws.getOriginOffsetInPixels();
+
+    // The position of the new comment in pixels relative to the origin of the
+    // main workspace.
+    var finalOffsetPixels = goog.math.Coordinate.difference(clientOffsetPixels,
+        mainOffsetPixels);
+
+    // The position of the new comment in main workspace coordinates.
+    var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
+
+    var commentX = finalOffsetMainWs.x;
+    var commentY = finalOffsetMainWs.y;
+    comment.moveBy(commentX, commentY);
+    if (ws.rendered) {
+      comment.initSvg();
+      comment.render(false);
+      comment.select();
+    }
+  };
+
+  var wsCommentOption = {enabled: true};
+  wsCommentOption.text = Blockly.Msg.ADD_COMMENT;
+  wsCommentOption.callback = function() {
+    addWsComment();
+  };
+  return wsCommentOption;
+};

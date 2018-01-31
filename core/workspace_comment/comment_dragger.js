@@ -93,8 +93,7 @@ Blockly.CommentDragger.prototype.dispose = function() {
  * @package
  */
 Blockly.CommentDragger.prototype.startCommentDrag = function(
-    /* eslint-disable no-unused-vars */ currentDragDeltaXY
-    /* eslint-enable no-unused-vars */) {
+    currentDragDeltaXY) {
   if (!Blockly.Events.getGroup()) {
     Blockly.Events.setGroup(true);
   }
@@ -170,11 +169,7 @@ Blockly.CommentDragger.prototype.endCommentDrag = function(e, currentDragDeltaXY
  * @private
  */
 Blockly.CommentDragger.prototype.fireMoveEvent_ = function() {
-  // TODO: Make comment events work.
-  // var event = new Blockly.Events.BlockMove(this.draggingComment_);
-  // event.oldCoordinate = this.startXY_;
-  // event.recordNew();
-  // Blockly.Events.fire(event);
+  // TODO (#1580): Fire move events for comments.
 };
 
 /**

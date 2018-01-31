@@ -101,17 +101,13 @@ Blockly.CommentDragger.prototype.startCommentDrag = function(
 
   this.workspace_.setResizesEnabled(false);
 
-  // if (this.draggingComment_.getParent()) {
-  //   this.draggingComment_.unplug();
-  //   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  //   var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
+  var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+  var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
 
-  //   this.draggingComment_.translate(newLoc.x, newLoc.y);
-  //   this.draggingComment_.disconnectUiEffect();
-  // }
+  this.draggingComment_.translate(newLoc.x, newLoc.y);
   this.draggingComment_.setDragging(true);
   // For future consideration: we may be able to put moveToDragSurface inside
-  // the comment dragger, which would also let the comment not track the block
+  // the comment dragger, which would also let the comment not track the
   // drag surface.
   this.draggingComment_.moveToDragSurface_();
 

@@ -489,3 +489,19 @@ Blockly.WorkspaceCommentSvg.prototype.setContent = function(content) {
     this.textarea_.value = content;
   }
 };
+
+/**
+ * Update the cursor over this comment by adding or removing a class.
+ * @param {boolean} enable True if the delete cursor should be shown, false
+ *     otherwise.
+ * @package
+ */
+Blockly.WorkspaceCommentSvg.prototype.setDeleteStyle = function(enable) {
+  if (enable) {
+    Blockly.utils.addClass(
+        /** @type {!Element} */ (this.svgGroup_), 'blocklyDraggingDelete');
+  } else {
+    Blockly.utils.removeClass(
+        /** @type {!Element} */ (this.svgGroup_), 'blocklyDraggingDelete');
+  }
+};

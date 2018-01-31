@@ -267,12 +267,10 @@ Blockly.WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
-  //var event = new Blockly.Events.BlockMove(this);
+  // TODO (#1580): Fire an event for move.
   var xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);
-  //event.recordNew();
   this.workspace.resizeContents();
-  //Blockly.Events.fire(event);
 };
 
 /**

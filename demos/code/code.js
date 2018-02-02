@@ -304,47 +304,67 @@ Code.renderContent = function() {
     xmlTextarea.value = xmlText;
     xmlTextarea.focus();
   } else if (content.id == 'content_javascript') {
-    var code = Blockly.JavaScript.workspaceToCode(Code.workspace);
-    content.textContent = code;
-    if (typeof PR.prettyPrintOne == 'function') {
-      code = content.textContent;
-      code = PR.prettyPrintOne(code, 'js');
-      content.innerHTML = code;
-    }
+    Code.attemptCodeGeneration(Blockly.JavaScript, 'js');
   } else if (content.id == 'content_python') {
-    code = Blockly.Python.workspaceToCode(Code.workspace);
-    content.textContent = code;
-    if (typeof PR.prettyPrintOne == 'function') {
-      code = content.textContent;
-      code = PR.prettyPrintOne(code, 'py');
-      content.innerHTML = code;
-    }
+    Code.attemptCodeGeneration(Blockly.Python, 'py');
   } else if (content.id == 'content_php') {
-    code = Blockly.PHP.workspaceToCode(Code.workspace);
-    content.textContent = code;
-    if (typeof PR.prettyPrintOne == 'function') {
-      code = content.textContent;
-      code = PR.prettyPrintOne(code, 'php');
-      content.innerHTML = code;
-    }
+    Code.attemptCodeGeneration(Blockly.PHP, 'php');
   } else if (content.id == 'content_dart') {
-    code = Blockly.Dart.workspaceToCode(Code.workspace);
-    content.textContent = code;
-    if (typeof PR.prettyPrintOne == 'function') {
-      code = content.textContent;
-      code = PR.prettyPrintOne(code, 'dart');
-      content.innerHTML = code;
-    }
+    Code.attemptCodeGeneration(Blockly.Dart, 'dart');
   } else if (content.id == 'content_lua') {
-    code = Blockly.Lua.workspaceToCode(Code.workspace);
+    Code.attemptCodeGeneration(Blockly.Lua, 'lua');
+  }
+};
+
+/**
+ * Attempt to generate the code and display it in the UI, pretty printed.
+ * @param generator {Blockly.Generator} The generator to use.
+ * @param prettyPrintType {string} The file type key for the pretty printer.
+ */
+Code.attemptCodeGeneration = function(generator, prettyPrintType) {
+  var content = document.getElementById('content_' + Code.selected);
+  content.textContent = '';
+  if (Code.checkAllGeneratorFunctionsDefined(generator)) {
+    var code = generator.workspaceToCode(Code.workspace);
+
     content.textContent = code;
     if (typeof PR.prettyPrintOne == 'function') {
       code = content.textContent;
-      code = PR.prettyPrintOne(code, 'lua');
+      code = PR.prettyPrintOne(code, prettyPrintType);
       content.innerHTML = code;
     }
   }
-};
+}
+
+/**
+ * Check whether all blocks in use have generator functions.
+ * @param generator {Blockly.Generator} The generator to use.
+ */
+Code.checkAllGeneratorFunctionsDefined = function(generator) {
+  var blocks = Code.workspace.getAllBlocks();
+  var missingBlockGenerators = [];
+  for (var i = 0; i < blocks.length; ++i) {
+    var blockType = blocks[i].type;
+    if (!generator[blockType]) {
+      if (missingBlockGenerators.indexOf(blockType) === -1) {
+        missingBlockGenerators.push(blockType);
+      }
+    }
+  }
+
+  var valid = missingBlockGenerators.length == 0;
+  if (!valid) {
+    var msg = 'The generator code for the following blocks not specified for '
+        + generator.name_ + ': \n';
+
+     //Blocks not specified traversed
+     for (var x = 0; x < missingBlockGenerators.length; x++) {
+       msg +=  ' - ' + missingBlockGenerators[x] + '\n';
+    }
+    Blockly.alert(msg);  // Assuming synchronous. No callback.
+  }
+  return valid;
+}
 
 /**
  * Initialize Blockly.  Called on page load.

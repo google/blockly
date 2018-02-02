@@ -158,6 +158,8 @@ Code.loadBlocks = function(defaultXml) {
  */
 Code.changeLanguage = function() {
   // Store the blocks for the duration of the reload.
+  // This should be skipped for the index page, which has no blocks and does
+  // not load Blockly.
   // MSIE 11 does not support sessionStorage on file:// URLs.
   if (window.sessionStorage) {
     var xml = Blockly.Xml.workspaceToDom(Code.workspace);
@@ -296,53 +298,58 @@ Code.tabClick = function(clickedName) {
  */
 Code.renderContent = function() {
   var content = document.getElementById('content_' + Code.selected);
-  // Initialize the pane.
-  if (content.id == 'content_xml') {
-    var xmlTextarea = document.getElementById('content_xml');
-    var xmlDom = Blockly.Xml.workspaceToDom(Code.workspace);
-    var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
-    xmlTextarea.value = xmlText;
-    xmlTextarea.focus();
-  } else if (content.id == 'content_javascript') {
-    var code = Blockly.JavaScript.workspaceToCode(Code.workspace);
-    content.textContent = code;
-    if (typeof PR.prettyPrintOne == 'function') {
-      code = content.textContent;
-      code = PR.prettyPrintOne(code, 'js');
-      content.innerHTML = code;
+  // Handles the error of not implemented block
+  try {
+    // Initialize the pane.
+    if (content.id == 'content_xml') {
+      var xmlTextarea = document.getElementById('content_xml');
+      var xmlDom = Blockly.Xml.workspaceToDom(Code.workspace);
+      var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
+      xmlTextarea.value = xmlText;
+      xmlTextarea.focus();
+    } else if (content.id == 'content_javascript') {
+      var code = Blockly.JavaScript.workspaceToCode(Code.workspace);
+      content.textContent = code;
+      if (typeof PR.prettyPrintOne == 'function') {
+        code = content.textContent;
+        code = PR.prettyPrintOne(code, 'js');
+        content.innerHTML = code;
+      }
+    } else if (content.id == 'content_python') {
+      var code = Blockly.Python.workspaceToCode(Code.workspace);
+      content.textContent = code;
+      if (typeof PR.prettyPrintOne == 'function') {
+        code = content.textContent;
+        code = PR.prettyPrintOne(code, 'py');
+        content.innerHTML = code;
+      }
+    } else if (content.id == 'content_php') {
+      var code = Blockly.PHP.workspaceToCode(Code.workspace);
+      content.textContent = code;
+      if (typeof PR.prettyPrintOne == 'function') {
+        code = content.textContent;
+        code = PR.prettyPrintOne(code, 'php');
+        content.innerHTML = code;
+      }
+    } else if (content.id == 'content_dart') {
+      var code = Blockly.Dart.workspaceToCode(Code.workspace);
+      content.textContent = code;
+      if (typeof PR.prettyPrintOne == 'function') {
+        code = content.textContent;
+        code = PR.prettyPrintOne(code, 'dart');
+        content.innerHTML = code;
+      }
+    } else if (content.id == 'content_lua') {
+      var code = Blockly.Lua.workspaceToCode(Code.workspace);
+      content.textContent = code;
+      if (typeof PR.prettyPrintOne == 'function') {
+        code = content.textContent;
+        code = PR.prettyPrintOne(code, 'lua');
+        content.innerHTML = code;
+      }
     }
-  } else if (content.id == 'content_python') {
-    code = Blockly.Python.workspaceToCode(Code.workspace);
-    content.textContent = code;
-    if (typeof PR.prettyPrintOne == 'function') {
-      code = content.textContent;
-      code = PR.prettyPrintOne(code, 'py');
-      content.innerHTML = code;
-    }
-  } else if (content.id == 'content_php') {
-    code = Blockly.PHP.workspaceToCode(Code.workspace);
-    content.textContent = code;
-    if (typeof PR.prettyPrintOne == 'function') {
-      code = content.textContent;
-      code = PR.prettyPrintOne(code, 'php');
-      content.innerHTML = code;
-    }
-  } else if (content.id == 'content_dart') {
-    code = Blockly.Dart.workspaceToCode(Code.workspace);
-    content.textContent = code;
-    if (typeof PR.prettyPrintOne == 'function') {
-      code = content.textContent;
-      code = PR.prettyPrintOne(code, 'dart');
-      content.innerHTML = code;
-    }
-  } else if (content.id == 'content_lua') {
-    code = Blockly.Lua.workspaceToCode(Code.workspace);
-    content.textContent = code;
-    if (typeof PR.prettyPrintOne == 'function') {
-      code = content.textContent;
-      code = PR.prettyPrintOne(code, 'lua');
-      content.innerHTML = code;
-    }
+  } catch(err) {
+    Blockly.alert(err);
   }
 };
 

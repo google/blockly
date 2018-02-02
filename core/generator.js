@@ -95,6 +95,7 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
     workspace = Blockly.getMainWorkspace();
   }
   var code = [];
+  var blocksNotGenerated = [];
   this.init(workspace);
   var blocks = workspace.getTopBlocks(true);
   for (var x = 0, block; block = blocks[x]; x++) {
@@ -104,7 +105,10 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
       // Top-level blocks don't care about operator order.
       line = line[0];
     }
-    if (line) {
+
+    if (line == undefined) {
+      blocksNotGenerated.push(block);
+    } else if (line) {
       if (block.outputConnection && this.scrubNakedValue) {
         // This block is a naked value.  Ask the language's code generator if
         // it wants to append a semicolon, or something.
@@ -113,13 +117,25 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
       code.push(line);
     }
   }
-  code = code.join('\n');  // Blank line between each section.
-  code = this.finish(code);
-  // Final scrubbing of whitespace.
-  code = code.replace(/^\s+\n/, '');
-  code = code.replace(/\n\s+$/, '\n');
-  code = code.replace(/[ \t]+\n/g, '\n');
-  return code;
+  if (blocksNotGenerated.length == 0) {
+    code = code.join('\n');  // Blank line between each section.
+    code = this.finish(code);
+    // Final scrubbing of whitespace.
+    code = code.replace(/^\s+\n/, '');
+    code = code.replace(/\n\s+$/, '\n');
+    code = code.replace(/[ \t]+\n/g, '\n');
+    return code;
+  } else {
+    var textToBeLogged = 'The generator code for the following '
+    + 'blocks not specified for ' + this.name_ + ': \n';
+    
+    //Blocks not specified traversed
+    for (var x = 0; x < blocksNotGenerated.length; x++) {
+      textToBeLogged +=  '* ' + blocksNotGenerated[x].type + '\n';
+    }
+    textToBeLogged += 'Fix those to be able to generate code';
+    throw textToBeLogged;
+  }
 };
 
 // The following are some helpful functions which can be used by multiple
@@ -180,24 +196,28 @@ Blockly.Generator.prototype.blockToCode = function(block) {
   // Prior to 24 September 2013 'this' was the only way to access the block.
   // The current prefered method of accessing the block is through the second
   // argument to func.call, which becomes the first parameter to the generator.
-  var code = func.call(block, block);
-  if (goog.isArray(code)) {
-    // Value blocks return tuples of code and operator order.
-    goog.asserts.assert(block.outputConnection,
-        'Expecting string from statement block "%s".', block.type);
-    return [this.scrub_(block, code[0]), code[1]];
-  } else if (goog.isString(code)) {
-    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
-    if (this.STATEMENT_PREFIX) {
-      code = this.STATEMENT_PREFIX.replace(/%1/g, '\'' + id + '\'') +
-          code;
+  if (func == null || func == undefined) {
+    return undefined;
+   } else {
+    var code = func.call(block, block);
+    if (goog.isArray(code)) {
+      // Value blocks return tuples of code and operator order.
+      goog.asserts.assert(block.outputConnection,
+          'Expecting string from statement block "%s".', block.type);
+      return [this.scrub_(block, code[0]), code[1]];
+    } else if (goog.isString(code)) {
+      var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+      if (this.STATEMENT_PREFIX) {
+        code = this.STATEMENT_PREFIX.replace(/%1/g, '\'' + id + '\'') +
+            code;
+      }
+      return this.scrub_(block, code);
+    } else if (code === null) {
+      // Block has handled code generation itself.
+      return '';
+    } else {
+      goog.asserts.fail('Invalid code generated: %s', code);
     }
-    return this.scrub_(block, code);
-  } else if (code === null) {
-    // Block has handled code generation itself.
-    return '';
-  } else {
-    goog.asserts.fail('Invalid code generated: %s', code);
   }
 };
 

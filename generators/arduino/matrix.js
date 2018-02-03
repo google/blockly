@@ -19,17 +19,15 @@ Blockly.Arduino.oxocard_matrix_draw_image = function() {
 };
 
 Blockly.Arduino.oxocard_matrix_draw_rgb_image = function() {
-	var posX = Blockly.Arduino.valueToCode(this, 'X', Blockly.Arduino.ORDER_NONE) || '0';
-	var posY = Blockly.Arduino.valueToCode(this, 'Y', Blockly.Arduino.ORDER_NONE) || '0';
-	posX = parseInt(posX, 10);
-	posY = parseInt(posY, 10);
+	var posX = Blockly.Arduino.valueToCode(this, 'X', Blockly.Arduino.ORDER_NONE) || 0;
+	var posY = Blockly.Arduino.valueToCode(this, 'Y', Blockly.Arduino.ORDER_NONE) || 0;
 	let somePixelSet = 0;
 
 	var code = '';
 	for(var i=0, l=8; i<l; i++){
 		for(var j=0, ll=8; j<l; j++){
-			let x = j + posX;
-			let y = i + posY;
+			let x = j;
+			let y = i;
 			if((x >= 0) && (x < 8) && (y >= 0) && (y < 8)){
 				var value= this.getFieldValue(i + '' + j);
 				if(value != 'FALSE'){
@@ -38,7 +36,10 @@ Blockly.Arduino.oxocard_matrix_draw_rgb_image = function() {
 					var g = parseInt(value.substring(3,5),16);
 					var b = parseInt(value.substring(5,7),16);
 					code += 'oxocard.matrix->drawPixel(';
-					code += x + ', ' + y + ',';
+					code += (isNaN(posX)) ? '(' + x + '+' + posX + ')' : x;
+					code += ', ';
+					code += (isNaN(posY)) ? '(' + y + '+' + posY + ')' : y;
+					code += ', ';
 					code += 'makeRGBVal(' + r + ', ' + g + ', ' + b + '));\n';
 					continue;
 				}

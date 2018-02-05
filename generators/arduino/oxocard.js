@@ -19,20 +19,23 @@ Blockly.Arduino.oxocard_turn_off = function(block) {
 };
 
 Blockly.Arduino['oxocard_turn_off_with_buttons'] = function(block) {
-	var valueL1= this.getFieldValue("L1").toLowerCase();
-	var valueL2= this.getFieldValue("L2").toLowerCase();
-	var valueL3= this.getFieldValue("L3").toLowerCase();
-	var valueR1= this.getFieldValue("R1").toLowerCase();
-	var valueR2= this.getFieldValue("R2").toLowerCase();
-	var valueR3= this.getFieldValue("R3").toLowerCase();
-	return 'oxocard.system->turnOff(oxocard.button->createButtonByte('
-		+valueL1 +', ' +valueL2 +', ' + valueL3 +', ' +valueR1 +', '
-		+valueR2 +', ' +valueR3 +'));\n';
+	console.log(this);//blup
+	var valueL1 = this.getFieldValue("L1").toLowerCase();
+	var valueL2 = this.getFieldValue("L2").toLowerCase();
+	var valueL3 = this.getFieldValue("L3").toLowerCase();
+	var valueR1 = this.getFieldValue("R1").toLowerCase();
+	var valueR2 = this.getFieldValue("R2").toLowerCase();
+	var valueR3 = this.getFieldValue("R3").toLowerCase();
+	return 'uint8_t buttonByte = oxocard.button->createButtonByte(\n'
+		+ '  ' + valueL1 + ', ' + valueL2 + ', ' + valueL3 + ', '
+		+ valueR1 + ', ' + valueR2 + ', ' + valueR3 + ');\n'
+		+ 'oxocard.system->turnOff(buttonByte);\n'
 };
 
-Blockly.Arduino.oxocard_handle_autoturnoff = function() {
+Blockly.Arduino.oxocard_handle_auto_turnoff = function() {
   var timeout = Blockly.Arduino.valueToCode(this, 'TIMEOUT', Blockly.Arduino.ORDER_ATOMIC) || 0;
-	return 'AutoTurnOff::getInstance().configureAutoTurnOff(' + timeout + ');\nAutoTurnOff::getInstance().enableAutoTurnOff();\n';
+	return 'AutoTurnOff::getInstance().configureAutoTurnOff(' + timeout + ');\n'
+		+ 'AutoTurnOff::getInstance().enableAutoTurnOff();\n';
 };
 
 Blockly.Arduino.oxocard_disable_auto_turnoff = function(block) {
@@ -58,11 +61,9 @@ Blockly.Arduino.oxocard_statemachine = function(block) {
 		var state_code = Blockly.Arduino.statementToCode(block, 'STATE' + i, Blockly.Arduino.ORDER_NONE);
 		if(i > 0) code += 'else ';
 		code += 'if(statemachine_value == ' + stateName + '){\n' + state_code + '\n}';
-
 	}
 
 	Blockly.Arduino.addDeclaration('STATEMENT_MACHINE', defs);
-
 	return code += '\n';
 };
 

@@ -63,7 +63,7 @@ Blockly.Blocks['oxocard_turn_off_with_buttons'] = {
 	}
 };
 
-Blockly.Blocks.oxocard_handle_autoturnoff = {
+Blockly.Blocks.oxocard_handle_auto_turnoff = {
 	helpUrl: 'http://www.oxocard.ch/oxocard-befehle/',
 	init: function() {
 		this.appendDummyInput()

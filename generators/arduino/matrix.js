@@ -3,10 +3,9 @@
 goog.require('Blockly.Arduino');
 
 Blockly.Arduino.oxocard_matrix_draw_image = function() {
-	var code = 'oxocard.matrix->drawImage(';
+	var code = 'oxocard.matrix->drawImage(\n';
 	for(var i=0, l=8; i<l; i++){
-		if(i!=0) code += "\t\t";
-		code += '0b';
+		code += "  0b";
 		for(var j=0, ll=8; j<l; j++){
 			code += (this.getFieldValue(i + '' + j) == 'TRUE') ? '1' : '0';
 		}
@@ -15,7 +14,7 @@ Blockly.Arduino.oxocard_matrix_draw_image = function() {
 	}
 	var posX = Blockly.Arduino.valueToCode(this, 'X', Blockly.Arduino.ORDER_NONE) || '0';
 	var posY = Blockly.Arduino.valueToCode(this, 'Y', Blockly.Arduino.ORDER_NONE) || '0';
-	return code = code  +posX +',' +posY +');\n';
+	return code = code + posX + ',' + posY + ');\n';
 };
 
 Blockly.Arduino.oxocard_matrix_draw_rgb_image = function() {
@@ -35,24 +34,19 @@ Blockly.Arduino.oxocard_matrix_draw_rgb_image = function() {
 					var r = parseInt(value.substring(1,3),16);
 					var g = parseInt(value.substring(3,5),16);
 					var b = parseInt(value.substring(5,7),16);
-					code += 'oxocard.matrix->drawPixel(';
+					code += 'oxocard.matrix->setPixel(';
 					code += (isNaN(posX)) ? '(' + x + '+' + posX + ')' : x;
 					code += ', ';
 					code += (isNaN(posY)) ? '(' + y + '+' + posY + ')' : y;
 					code += ', ';
-					code += 'makeRGBVal(' + r + ', ' + g + ', ' + b + '));\n';
+					code += 'rgb(' + r + ', ' + g + ', ' + b + '));\n';
 					continue;
 				}
 			}
 		}
 	}
-	if(somePixelSet > 1){
-		code = 'oxocard.matrix->disableRedraw();\n' + code;
+	if(somePixelSet > 0){
 		code += 'oxocard.matrix->update();\n';
-		code += 'oxocard.matrix->enableRedraw();\n';
-	}
-	else{
-		// code += '\n';
 	}
 	return code;
 };
@@ -63,7 +57,7 @@ Blockly.Arduino.oxocard_matrix_set_color = function() {
 	var r = parseInt(value.substring(1,3),16);
 	var g = parseInt(value.substring(3,5),16);
 	var b = parseInt(value.substring(5,7),16);
-	return code += 'makeRGBVal(' + r + ', ' + g + ', ' + b + '));\n';
+	return code += 'rgb(' + r + ', ' + g + ', ' + b + '));\n';
 };
 
 Blockly.Arduino.oxocard_matrix_set_color_var = function() {
@@ -71,7 +65,7 @@ Blockly.Arduino.oxocard_matrix_set_color_var = function() {
 	var r = Blockly.Arduino.valueToCode(this, 'R', Blockly.Arduino.ORDER_NONE);
 	var g = Blockly.Arduino.valueToCode(this, 'G', Blockly.Arduino.ORDER_NONE);
 	var b = Blockly.Arduino.valueToCode(this, 'B', Blockly.Arduino.ORDER_NONE);
-	return code += 'makeRGBVal(' + r + ', ' + g + ', ' + b + '));\n';
+	return code += 'rgb(' + r + ', ' + g + ', ' + b + '));\n';
 };
 
 Blockly.Arduino.oxocard_matrix_update = function() {
@@ -79,21 +73,15 @@ Blockly.Arduino.oxocard_matrix_update = function() {
 };
 
 Blockly.Arduino.oxocard_matrix_draw_all = function(){
-	var code = 'oxocard.matrix->fill();\n';
-	code += 'oxocard.matrix->drawRectangle(0,0,8,8);\n';
-	return code;
+	return 'oxocard.matrix->fillScreen();\n';
 };
 
 Blockly.Arduino.oxocard_matrix_clear = function(){
-	return 'oxocard.matrix->clear();\n';
+	return 'oxocard.matrix->clearScreen();\n';
 };
 
 Blockly.Arduino.oxocard_matrix_set_fill = function(){
 	return 'oxocard.matrix->fill();\n';
-};
-
-Blockly.Arduino.oxocard_matrix_set_nofill = function(){
-	return 'oxocard.matrix->noFill();\n';
 };
 
 Blockly.Arduino.oxocard_matrix_set_nofill = function(){
@@ -141,18 +129,18 @@ Blockly.Arduino.oxocard_matrix_draw_circle = function() {
 
 Blockly.Arduino.oxocard_matrix_draw_number = function() {
 	var num = Blockly.Arduino.valueToCode(this, 'NUMBER', Blockly.Arduino.ORDER_NONE);
-	return 'oxocard.matrix->drawNumber(' +num +');\n';
+	return 'oxocard.matrix->drawNumber(' + num +');\n';
 };
 
 Blockly.Arduino.oxocard_matrix_draw_text = function() {
 	var text = Blockly.Arduino.valueToCode(this, 'TEXT', Blockly.Arduino.ORDER_NONE);
 	var isBigFont = this.getFieldValue('BUTTON').toLowerCase();
-	return 'oxocard.matrix->drawText(' +text +',' +isBigFont +');\n';
+	return 'oxocard.matrix->drawText(' + text + ', ' + isBigFont +');\n';
 };
 
 Blockly.Arduino.oxocard_matrix_draw_weather = function() {
-	return "oxocard.matrix->clear();\n"
-			+"oxocard.matrix->setForeColor(oxocard.weather->getDrawableIconColor());\n"
-			+"oxocard.matrix->drawImage(oxocard.weather->getDrawableIcon());\n"
-			+"oxocard.matrix->update();\n";
+	return 'rgbColor_t color = oxocard.weather->getDrawableIconColor();\n'
+		+ 'uint8_t *imagePtr = oxocard.weather->getDrawableIcon();\n'
+		+ 'oxocard.matrix->clear();\n'
+		+ 'oxocard.matrix->drawImage(imagePtr, 0, 0, color);\n';
 };

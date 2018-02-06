@@ -279,28 +279,33 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
  * @private
  */
 Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
-  this.promote_();
-  Blockly.Bubble.unbindDragEvents_();
-  if (Blockly.utils.isRightButton(e)) {
-    // No right-click.
-    e.stopPropagation();
-    return;
-  } else if (Blockly.utils.isTargetInput(e)) {
-    // When focused on an HTML text input widget, don't trap any events.
-    return;
+  var gesture = this.workspace_.getGesture(e);
+  if (gesture) {
+    gesture.handleBubbleStart(e, this);
   }
-  // Left-click (or middle click)
-  this.workspace_.startDrag(e, new goog.math.Coordinate(
-      this.workspace_.RTL ? -this.relativeLeft_ : this.relativeLeft_,
-      this.relativeTop_));
 
-  Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
-      'mouseup', this, Blockly.Bubble.bubbleMouseUp_);
-  Blockly.Bubble.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
-      'mousemove', this, this.bubbleMouseMove_);
-  Blockly.hideChaff();
-  // This event has been handled.  No need to bubble up to the document.
-  e.stopPropagation();
+  // this.promote_();
+  // Blockly.Bubble.unbindDragEvents_();
+  // if (Blockly.utils.isRightButton(e)) {
+  //   // No right-click.
+  //   e.stopPropagation();
+  //   return;
+  // } else if (Blockly.utils.isTargetInput(e)) {
+  //   // When focused on an HTML text input widget, don't trap any events.
+  //   return;
+  // }
+  // // Left-click (or middle click)
+  // this.workspace_.startDrag(e, new goog.math.Coordinate(
+  //     this.workspace_.RTL ? -this.relativeLeft_ : this.relativeLeft_,
+  //     this.relativeTop_));
+
+  // Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
+  //     'mouseup', this, Blockly.Bubble.bubbleMouseUp_);
+  // Blockly.Bubble.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
+  //     'mousemove', this, this.bubbleMouseMove_);
+  // Blockly.hideChaff();
+  // // This event has been handled.  No need to bubble up to the document.
+  // e.stopPropagation();
 };
 
 /**
@@ -445,8 +450,11 @@ Blockly.Bubble.prototype.positionBubble_ = function() {
     left += this.relativeLeft_;
   }
   var top = this.relativeTop_ + this.anchorXY_.y;
-  this.bubbleGroup_.setAttribute('transform',
-      'translate(' + left + ',' + top + ')');
+  this.moveTo_(left, top);
+};
+
+Blockly.Bubble.prototype.moveTo_ = function(x, y) {
+  this.bubbleGroup_.setAttribute('transform', 'translate(' + x + ',' + y + ')');
 };
 
 /**
@@ -594,4 +602,44 @@ Blockly.Bubble.prototype.dispose = function() {
   this.workspace_ = null;
   this.content_ = null;
   this.shape_ = null;
+};
+
+Blockly.Bubble.prototype.moveToDragSurface = function(dragSurface) {
+  //var bubbleXY = this.getRelativeToSurfaceXY();
+  //var anchorXY = this.getAnchorRelativeToSurfaceXY();
+
+  // TODO: check RTL.
+  var x = this.anchorXY_.x + this.relativeLeft_;
+  var y = this.anchorXY_.y + this.relativeTop_;
+  this.savedRelativeXY_ =
+    new goog.math.Coordinate(this.relativeLeft_, this.relativeTop_);
+  this.savedAnchorXY_ = this.anchorXY_;
+  this.moveTo_(0, 0);
+  dragSurface.translateSurface(x, y);
+  // Execute the move on the top-level SVG component.
+  dragSurface.setBlocksAndShow(this.bubbleGroup_);
+};
+
+Blockly.Bubble.prototype.moveDuringDrag = function(dragSurface, newLoc) {
+  console.log(newLoc);
+  dragSurface.translateSurface(newLoc.x, newLoc.y);
+  this.relativeLeft_ = this.savedRelativeXY_.x + newLoc.x;
+  this.relativeTop_ = this.savedRelativeXY_.y + newLoc.y;
+  this.renderArrow_();
+};
+
+Blockly.Bubble.prototype.moveOffDragSurface = function(dragSurface, newXY) {
+
+  //this.savedAnchorXY_ = this.anchorXY_;
+  this.anchorXY_ = this.savedAnchorXY_;
+  this.moveTo_(newXY.x, newXY.y);
+  dragSurface.clearAndHide(this.workspace_.getBubbleCanvas());
+};
+
+
+Blockly.Bubble.prototype.getRelativeToSurfaceXY = function() {
+  // This may not be quite right.  It's probably the top-left of the bubble
+  // group.
+  return new goog.math.Coordinate(this.anchorXY_.x + this.relativeLeft_,
+      this.anchorXY_.y + this.relativeTop_);
 };

@@ -318,7 +318,7 @@ Code.renderContent = function() {
 
 /**
  * Attempt to generate the code and display it in the UI, pretty printed.
- * @param generator {Blockly.Generator} The generator to use.
+ * @param generator {!Blockly.Generator} The generator to use.
  * @param prettyPrintType {string} The file type key for the pretty printer.
  */
 Code.attemptCodeGeneration = function(generator, prettyPrintType) {
@@ -334,16 +334,16 @@ Code.attemptCodeGeneration = function(generator, prettyPrintType) {
       content.innerHTML = code;
     }
   }
-}
+};
 
 /**
  * Check whether all blocks in use have generator functions.
- * @param generator {Blockly.Generator} The generator to use.
+ * @param generator {!Blockly.Generator} The generator to use.
  */
 Code.checkAllGeneratorFunctionsDefined = function(generator) {
   var blocks = Code.workspace.getAllBlocks();
   var missingBlockGenerators = [];
-  for (var i = 0; i < blocks.length; ++i) {
+  for (var i = 0; i < blocks.length; i++) {
     var blockType = blocks[i].type;
     if (!generator[blockType]) {
       if (missingBlockGenerators.indexOf(blockType) === -1) {
@@ -355,16 +355,11 @@ Code.checkAllGeneratorFunctionsDefined = function(generator) {
   var valid = missingBlockGenerators.length == 0;
   if (!valid) {
     var msg = 'The generator code for the following blocks not specified for '
-        + generator.name_ + ': \n';
-
-     //Blocks not specified traversed
-     for (var x = 0; x < missingBlockGenerators.length; x++) {
-       msg +=  ' - ' + missingBlockGenerators[x] + '\n';
-    }
+        + generator.name_ + ':\n - ' + missingBlockGenerators.join('\n - ');
     Blockly.alert(msg);  // Assuming synchronous. No callback.
   }
   return valid;
-}
+};
 
 /**
  * Initialize Blockly.  Called on page load.

@@ -162,14 +162,15 @@ Blockly.Bubble.bubbleMouseUp_ = function(/*e*/) {
 Blockly.Bubble.prototype.rendered_ = false;
 
 /**
- * Absolute coordinate of anchor point.
+ * Absolute coordinate of anchor point, in workspace coordinates.
  * @type {goog.math.Coordinate}
  * @private
  */
 Blockly.Bubble.prototype.anchorXY_ = null;
 
 /**
- * Relative X coordinate of bubble with respect to the anchor's centre.
+ * Relative X coordinate of bubble with respect to the anchor's centre,
+ * in workspace units.
  * In RTL mode the initial value is negated.
  * @private
  */
@@ -270,6 +271,14 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
     this.resizeGroup_ = null;
   }
   this.bubbleGroup_.appendChild(content);
+  return this.bubbleGroup_;
+};
+
+/**
+ * Return the root node of the bubble's SVG group.
+ * @return {Element} The root SVG node of the bubble's group.
+ */
+Blockly.Bubble.prototype.getSvgRoot = function() {
   return this.bubbleGroup_;
 };
 
@@ -413,16 +422,16 @@ Blockly.Bubble.prototype.positionBubble_ = function() {
     left += this.relativeLeft_;
   }
   var top = this.relativeTop_ + this.anchorXY_.y;
-  this.moveTo_(left, top);
+  this.moveTo(left, top);
 };
 
 /**
  * Move the bubble group to the specified location in workspace coordinates.
  * @param {number} x The x position to move to.
- * @param {nubmer} y The y position to move to.
- * @private
+ * @param {number} y The y position to move to.
+ * @package
  */
-Blockly.Bubble.prototype.moveTo_ = function(x, y) {
+Blockly.Bubble.prototype.moveTo = function(x, y) {
   this.bubbleGroup_.setAttribute('transform', 'translate(' + x + ',' + y + ')');
 };
 
@@ -574,53 +583,48 @@ Blockly.Bubble.prototype.dispose = function() {
 };
 
 /**
- *
- * @package
- */
-Blockly.Bubble.prototype.moveToDragSurface = function(dragSurface) {
-  this.autoLayout_ = false;
-  if (dragSurface) {
-    // TODO: check RTL.
-    var x = this.anchorXY_.x + this.relativeLeft_;
-    var y = this.anchorXY_.y + this.relativeTop_;
-    this.moveTo_(0, 0);
-    dragSurface.translateSurface(x, y);
-    // Execute the move on the top-level SVG component.
-    dragSurface.setBlocksAndShow(this.bubbleGroup_);
-  }
-};
-
-/**
- *
+ * Move this bubble during a drag, taking into account whether or not there is
+ * a drag surface.
+ * @param {?Blockly.BlockDragSurfaceSvg} dragSurface The surface that carries
+ *     rendered items during a drag, or null if no drag surface is in use.
+ * @param {!goog.math.Coordinate} newLoc The location to translate to, in
+ *     workspace coordinates.
  * @package
  */
 Blockly.Bubble.prototype.moveDuringDrag = function(dragSurface, newLoc) {
   if (dragSurface) {
     dragSurface.translateSurface(newLoc.x, newLoc.y);
   } else {
-    this.moveTo_(newLoc.x, newLoc.y);
+    this.moveTo(newLoc.x, newLoc.y);
   }
-  this.relativeLeft_ = - this.anchorXY_.x + newLoc.x;
-  this.relativeTop_ = - this.anchorXY_.y + newLoc.y;
+  if (this.workspace_.RTL) {
+    this.relativeLeft_ = this.anchorXY_.x - newLoc.x - this.width_;
+  } else {
+    this.relativeLeft_ = newLoc.x - this.anchorXY_.x;
+  }
+  this.relativeTop_ = newLoc.y - this.anchorXY_.y;
   this.renderArrow_();
 };
 
 /**
- *
- * @package
+ * Return the coordinates of the top-left corner of this bubble's body relative
+ * to the drawing surface's origin (0,0), in workspace units.
+ * @return {!goog.math.Coordinate} Object with .x and .y properties.
  */
-Blockly.Bubble.prototype.moveOffDragSurface = function(dragSurface, newXY) {
-  this.moveTo_(newXY.x, newXY.y);
-  if (dragSurface)  {
-    dragSurface.clearAndHide(this.workspace_.getBubbleCanvas());
-  }
+Blockly.Bubble.prototype.getRelativeToSurfaceXY = function() {
+  return new goog.math.Coordinate(
+      this.anchorXY_.x + this.relativeLeft_,
+      this.anchorXY_.y + this.relativeTop_);
 };
 
 /**
- *
+ * Set whether auto-layout of this bubble is enabled.  The first time a bubble
+ * is shown it positions itself to not cover any blocks.  Once a user has
+ * dragged it to reposition, it renders where the user put it.
+ * @param {boolean} enable True if auto-layout should be enabled, false
+ *     otherwise.
  * @package
  */
-Blockly.Bubble.prototype.getRelativeToSurfaceXY = function() {
-  return new goog.math.Coordinate(this.anchorXY_.x + this.relativeLeft_,
-      this.anchorXY_.y + this.relativeTop_);
+Blockly.Bubble.prototype.setAutoLayout = function(enable) {
+  this.autoLayout_ = enable;
 };

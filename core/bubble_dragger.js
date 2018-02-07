@@ -53,17 +53,22 @@ Blockly.BubbleDragger = function(bubble, workspace) {
   this.workspace_ = workspace;
 
   /**
-   * The location of the top left corner of the dragging bubble at the beginning
-   * of the drag in workspace coordinates.
+   * The location of the top left corner of the dragging bubble's body at the
+   * beginning of the drag, in workspace coordinates.
    * @type {!goog.math.Coordinate}
    * @private
    */
   this.startXY_ = this.draggingBubble_.getRelativeToSurfaceXY();
 
-  // TODO: validate, getters, etc.
+  /**
+   * The drag surface to move bubbles to during a drag, or null if none should
+   * be used.  Block dragging and bubble dragging use the same surface.
+   * @type {?Blockly.BlockDragSurfaceSvg}
+   * @private
+   */
   this.dragSurface_ =
-      Blockly.utils.is3dSupported() && !!workspace.blockDragSurface_ ?
-      workspace.blockDragSurface_ : null;
+      Blockly.utils.is3dSupported() && !!workspace.getBlockDragSurface() ?
+      workspace.getBlockDragSurface() : null;
 };
 
 /**
@@ -73,11 +78,11 @@ Blockly.BubbleDragger = function(bubble, workspace) {
 Blockly.BubbleDragger.prototype.dispose = function() {
   this.draggingBubble_ = null;
   this.workspace_ = null;
-  this.startWorkspace_ = null;
+  this.dragSurface_ = null;
 };
 
 /**
- * Start dragging a block.  This includes moving it to the drag surface.
+ * Start dragging a bubble.  This includes moving it to the drag surface.
  * @package
  */
 Blockly.BubbleDragger.prototype.startBubbleDrag = function() {
@@ -86,11 +91,14 @@ Blockly.BubbleDragger.prototype.startBubbleDrag = function() {
   }
 
   this.workspace_.setResizesEnabled(false);
-  this.draggingBubble_.moveToDragSurface(this.dragSurface_);
+  this.draggingBubble_.setAutoLayout(false);
+  if (this.dragSurface_) {
+    this.moveToDragSurface_();
+  }
 };
 
 /**
- * Execute a step of block dragging, based on the given event.  Update the
+ * Execute a step of bubble dragging, based on the given event.  Update the
  * display accordingly.
  * @param {!Event} e The most recent move event.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
@@ -107,19 +115,26 @@ Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
 };
 
 /**
- * Finish a block drag and put the block back on the workspace.
+ * Finish a bubble drag and put the bubble back on the workspace.
  * @param {!Event} e The mouseup/touchend event.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
  * @package
  */
-Blockly.BubbleDragger.prototype.endBubbleDrag = function(e, currentDragDeltaXY) {
+Blockly.BubbleDragger.prototype.endBubbleDrag = function(
+    e, currentDragDeltaXY) {
   // Make sure internal state is fresh.
   this.dragBubble(e, currentDragDeltaXY);
 
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
-  this.draggingBubble_.moveOffDragSurface(this.dragSurface_, newLoc);
+
+  // Move the bubble to its final location.
+  this.draggingBubble_.moveTo(newLoc.x, newLoc.y);
+  // Put everything back onto the bubble canvas.
+  if (this.dragSurface_) {
+    this.dragSurface_.clearAndHide(this.workspace_.getBubbleCanvas());
+  }
 
   this.fireMoveEvent_();
   this.workspace_.setResizesEnabled(true);
@@ -128,11 +143,11 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(e, currentDragDeltaXY) 
 };
 
 /**
- * Fire a move event at the end of a block drag.
+ * Fire a move event at the end of a bubble drag.
  * @private
  */
 Blockly.BubbleDragger.prototype.fireMoveEvent_ = function() {
-  // TODO: move events for comments.
+  // TODO (fenichel): move events for comments.
   return;
 };
 
@@ -159,4 +174,15 @@ Blockly.BubbleDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
     result = result.scale(1 / mainScale);
   }
   return result;
+};
+/**
+ * Move the bubble onto the drag surface at the beginning of a drag.  Move the
+ * drag surface to preserve the apparent location of the bubble.
+ * @private
+ */
+Blockly.BubbleDragger.prototype.moveToDragSurface_ = function() {
+  this.draggingBubble_.moveTo(0, 0);
+  this.dragSurface_.translateSurface(this.startXY_.x, this.startXY_.y);
+  // Execute the move on the top-level SVG component.
+  this.dragSurface_.setBlocksAndShow(this.draggingBubble_.getSvgRoot());
 };

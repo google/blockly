@@ -455,7 +455,7 @@ Blockly.Gesture.prototype.startDraggingBlock_ = function() {
 Blockly.Gesture.prototype.startDraggingBubble_ = function() {
   this.bubbleDragger_ = new Blockly.BubbleDragger(this.startBubble_,
       this.startWorkspace_);
-  this.bubbleDragger_.startBubbleDrag(this.currentDragDeltaXY_);
+  this.bubbleDragger_.startBubbleDrag();
   this.bubbleDragger_.dragBubble(this.mostRecentEvent_,
       this.currentDragDeltaXY_);
 };
@@ -566,6 +566,9 @@ Blockly.Gesture.prototype.handleUp = function(e) {
     this.blockDragger_.endBlockDrag(e, this.currentDragDeltaXY_);
   } else if (this.isDraggingWorkspace_) {
     this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
+  } else if (this.isBubbleClick_()) {
+    // Bubbles are in front of all fields and blocks.
+    this.doBubbleClick_();
   } else if (this.isFieldClick_()) {
     this.doFieldClick_();
   } else if (this.isBlockClick_()) {
@@ -686,6 +689,15 @@ Blockly.Gesture.prototype.handleBubbleStart = function(e, bubble) {
 /* Begin functions defining what actions to take to execute clicks on each type
  * of target.  Any developer wanting to add behaviour on clicks should modify
  * only this code. */
+
+/**
+ * Execute a bubble click.
+ * @private
+ */
+Blockly.Gesture.prototype.doBubbleClick_ = function() {
+  // TODO: This isn't really enough, is it.
+  this.startBubble_.promote_();
+};
 
 /**
  * Execute a field click.
@@ -830,6 +842,18 @@ Blockly.Gesture.prototype.setStartFlyout_ = function(flyout) {
 
 /* Begin helper functions defining types of clicks.  Any developer wanting
  * to change the definition of a click should modify only this code. */
+
+/**
+ * Whether this gesture is a click on a bubble.  This should only be called when
+ * ending a gesture (mouse up, touch end).
+ * @return {boolean} whether this gesture was a click on a bubble.
+ * @private
+ */
+Blockly.Gesture.prototype.isBubbleClick_ = function() {
+  // A bubble click starts on a bubble and never escapes the drag radius.
+  var hasStartBubble = !!this.startBubble_;
+  return hasStartBubble && !this.hasExceededDragRadius_;
+};
 
 /**
  * Whether this gesture is a click on a block.  This should only be called when

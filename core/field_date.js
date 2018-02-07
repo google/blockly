@@ -65,7 +65,7 @@ goog.inherits(Blockly.FieldDate, Blockly.Field);
  * @returns {!Blockly.FieldDate} The new field instance.
  * @package
  */
-Blockly.FieldDate.fromJson_ = function(options) {
+Blockly.FieldDate.fromJson = function(options) {
   return new Blockly.FieldDate(options['date']);
 };
 

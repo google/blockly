@@ -52,7 +52,7 @@ goog.inherits(Blockly.FieldCheckbox, Blockly.Field);
  * @returns {!Blockly.FieldCheckbox} The new field instance.
  * @package
  */
-Blockly.FieldCheckbox.fromJson_ = function(options) {
+Blockly.FieldCheckbox.fromJson = function(options) {
   return new Blockly.FieldCheckbox(options['checked'] ? 'TRUE' : 'FALSE');
 };
 

@@ -1224,35 +1224,35 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
               input = this.appendDummyInput(element['name']);
               break;
             case 'field_label':
-              field = Blockly.FieldLabel.fromJson_(element);
+              field = Blockly.FieldLabel.fromJson(element);
               break;
             case 'field_input':
-              field = Blockly.FieldTextInput.fromJson_(element);
+              field = Blockly.FieldTextInput.fromJson(element);
               break;
             case 'field_angle':
-              field = Blockly.FieldAngle.fromJson_(element);
+              field = Blockly.FieldAngle.fromJson(element);
               break;
             case 'field_checkbox':
-              field = Blockly.FieldCheckbox.fromJson_(element);
+              field = Blockly.FieldCheckbox.fromJson(element);
               break;
             case 'field_colour':
-              field = Blockly.FieldColour.fromJson_(element);
+              field = Blockly.FieldColour.fromJson(element);
               break;
             case 'field_variable':
-              field = Blockly.FieldVariable.fromJson_(element);
+              field = Blockly.FieldVariable.fromJson(element);
               break;
             case 'field_dropdown':
-              field = Blockly.FieldDropdown.fromJson_(element);
+              field = Blockly.FieldDropdown.fromJson(element);
               break;
             case 'field_image':
-              field = Blockly.FieldImage.fromJson_(element);
+              field = Blockly.FieldImage.fromJson(element);
               break;
             case 'field_number':
-              field = Blockly.FieldNumber.fromJson_(element);
+              field = Blockly.FieldNumber.fromJson(element);
               break;
             case 'field_date':
               if (Blockly.FieldDate) {
-                field = Blockly.FieldDate.fromJson_(element);
+                field = Blockly.FieldDate.fromJson(element);
                 break;
               }
               // Fall through if FieldDate is not compiled in.

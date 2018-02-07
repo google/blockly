@@ -1228,9 +1228,16 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
               field = Blockly.Field.fromJson(element);
 
               // Unknown field.
-              if (!field && element['alt']) {
-                element = element['alt'];
-                altRepeat = true;
+              if (!field) {
+                if (element['alt']) {
+                  element = element['alt'];
+                  altRepeat = true;
+                } else {
+                  console.warn('Blockly could not create a field of type ' +
+                      element['type'] +
+                      '. You may need to register your custom field.  See ' +
+                      'github.com/google/blockly/issues/1584');
+                }
               }
           }
         }

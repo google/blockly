@@ -55,29 +55,29 @@ Blockly.Field = function(text, opt_validator) {
 /**
  * The set of all registered fields, keyed by field type as used in the JSON
  * definition of a block.
+ * @type {!Object<string, !{fromJson: Function}>}
  * @private
  */
-Blockly.Field.ALL_ = {};
+Blockly.Field.TYPE_MAP_ = {};
 
 /**
  * Registers a field type. May also override an existing field type.
  * Blockly.Field.fromJson uses this registry to find the appropriate field.
  * @param {!string} type The field type name as used in the JSON definition.
  * @param {!{fromJson: Function}} fieldClass The field class containing a
- *                                 fromJson function that can construct an
- *                                 instance of the field.
+ *     fromJson function that can construct an instance of the field.
  * @throws {Error} if the type name is empty, or the fieldClass is not an
- *                 object containing a fromJson function.
+ *     object containing a fromJson function.
  */
 Blockly.Field.register = function(type, fieldClass) {
   if (!goog.isString(type) || goog.string.isEmptyOrWhitespace(type)) {
-    throw new Error('Error: Invalid field type "' + type + '"');
+    throw new Error('Invalid field type "' + type + '"');
   }
   if (!goog.isObject(fieldClass) || !goog.isFunction(fieldClass.fromJson)) {
-    throw new Error('Error: Field "' + fieldClass +
+    throw new Error('Field "' + fieldClass +
         '" must have a fromJson function');
   }
-  Blockly.Field.ALL_[type] = fieldClass;
+  Blockly.Field.TYPE_MAP_[type] = fieldClass;
 };
 
 /**
@@ -91,7 +91,7 @@ Blockly.Field.register = function(type, fieldClass) {
  * @package
  */
 Blockly.Field.fromJson = function(options) {
-  var fieldClass = Blockly.Field.ALL_[options['type']];
+  var fieldClass = Blockly.Field.TYPE_MAP_[options['type']];
   if (fieldClass) {
     return fieldClass.fromJson(options);
   }

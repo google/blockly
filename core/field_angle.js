@@ -60,7 +60,7 @@ goog.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
  * @package
  */
 Blockly.FieldAngle.fromJson_ = function(options) {
-  return new Blockly.FieldAngle(options['angle'])
+  return new Blockly.FieldAngle(options['angle']);
 };
 
 /**

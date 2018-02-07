@@ -1225,7 +1225,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
               break;
 
             default:
-              field = Blockly.Field.fromJson_(element);
+              field = Blockly.Field.fromJson(element);
 
               // Unknown field.
               if (!field && element['alt']) {

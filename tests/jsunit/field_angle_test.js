@@ -39,6 +39,6 @@ function test_fieldangle_constructor() {
 }
 
 function test_fieldangle_fromJson() {
-  assertEquals(Blockly.FieldAngle.fromJson_({}).getValue(), '0');
-  assertEquals(Blockly.FieldAngle.fromJson_({ angle: 1 }).getValue(), '1');
+  assertEquals(Blockly.FieldAngle.fromJson({}).getValue(), '0');
+  assertEquals(Blockly.FieldAngle.fromJson({ angle: 1 }).getValue(), '1');
 }

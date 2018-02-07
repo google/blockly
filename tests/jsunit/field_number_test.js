@@ -63,11 +63,11 @@ function test_fieldnumber_constructor() {
 }
 
 function test_fieldnumber_fromJson() {
-  assertEquals(Blockly.FieldNumber.fromJson_({}).getValue(), '0');
-  assertEquals(Blockly.FieldNumber.fromJson_({ value: 1 }).getValue(), '1');
+  assertEquals(Blockly.FieldNumber.fromJson({}).getValue(), '0');
+  assertEquals(Blockly.FieldNumber.fromJson({ value: 1 }).getValue(), '1');
 
   // All options
-  var field = Blockly.FieldNumber.fromJson_({
+  var field = Blockly.FieldNumber.fromJson({
       value: 0,
       min: -128,
       max: 127,

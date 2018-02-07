@@ -61,6 +61,23 @@ Blockly.FieldImage = function(src, width, height, opt_alt, opt_onClick) {
 goog.inherits(Blockly.FieldImage, Blockly.Field);
 
 /**
+ * Construct a FieldImage from a JSON arg object,
+ * dereferencing any string table references.
+ * @param {!Object} options A JSON object with options (src, width, height, and
+ *                          alt).
+ * @returns {!Blockly.FieldImage} The new field instance.
+ * @package
+ */
+Blockly.FieldImage.fromJson = function(options) {
+  var src = Blockly.utils.replaceMessageReferences(options['src']);
+  var width = Number(Blockly.utils.replaceMessageReferences(options['width']));
+  var height =
+      Number(Blockly.utils.replaceMessageReferences(options['height']));
+  var alt = Blockly.utils.replaceMessageReferences(options['alt']);
+  return new Blockly.FieldImage(src, width, height, alt);
+};
+
+/**
  * Editable fields are saved by the XML renderer, non-editable fields are not.
  */
 Blockly.FieldImage.prototype.EDITABLE = false;

@@ -54,6 +54,18 @@ Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
 goog.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
 
 /**
+ * Construct a FieldNumber from a JSON arg object.
+ * @param {!Object} options A JSON object with options (value, min, max, and
+ *                          precision).
+ * @returns {!Blockly.FieldNumber} The new field instance.
+ * @package
+ */
+Blockly.FieldNumber.fromJson = function(options) {
+  return new Blockly.FieldNumber(options['value'],
+      options['min'], options['max'], options['precision']);
+};
+
+/**
  * Set the maximum, minimum and precision constraints on this field.
  * Any of these properties may be undefiend or NaN to be disabled.
  * Setting precision (usually a power of 10) enforces a minimum step between

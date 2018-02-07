@@ -51,6 +51,23 @@ Blockly.FieldTextInput = function(text, opt_validator) {
 goog.inherits(Blockly.FieldTextInput, Blockly.Field);
 
 /**
+ * Construct a FieldTextInput from a JSON arg object,
+ * dereferencing any string table references.
+ * @param {!Object} options A JSON object with options (text, class, and
+ *                          spellcheck).
+ * @returns {!Blockly.FieldTextInput} The new field instance.
+ * @package
+ */
+Blockly.FieldTextInput.fromJson = function(options) {
+  var text = Blockly.utils.replaceMessageReferences(options['text']);
+  var field = new Blockly.FieldTextInput(text, options['class']);
+  if (typeof options['spellcheck'] === 'boolean') {
+    field.setSpellcheck(options['spellcheck']);
+  }
+  return field;
+};
+
+/**
  * Point size of text.  Should match blocklyText's font-size in CSS.
  */
 Blockly.FieldTextInput.FONTSIZE = 11;

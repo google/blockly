@@ -60,6 +60,16 @@ Blockly.FieldDate = function(date, opt_validator) {
 goog.inherits(Blockly.FieldDate, Blockly.Field);
 
 /**
+ * Construct a FieldDate from a JSON arg object.
+ * @param {!Object} options A JSON object with options (date).
+ * @returns {!Blockly.FieldDate} The new field instance.
+ * @package
+ */
+Blockly.FieldDate.fromJson = function(options) {
+  return new Blockly.FieldDate(options['date']);
+};
+
+/**
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
 Blockly.FieldDate.prototype.CURSOR = 'text';

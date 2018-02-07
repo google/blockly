@@ -37,3 +37,8 @@ function test_fieldangle_constructor() {
   assertEquals(new Blockly.FieldAngle('bad').getValue(), '0');
   assertEquals(new Blockly.FieldAngle(NaN).getValue(), '0');
 }
+
+function test_fieldangle_fromJson() {
+  assertEquals(Blockly.FieldAngle.fromJson({}).getValue(), '0');
+  assertEquals(Blockly.FieldAngle.fromJson({ angle: 1 }).getValue(), '1');
+}

@@ -234,3 +234,5 @@ Blockly.FieldColour.widgetDispose_ = function() {
   }
   Blockly.Events.setGroup(false);
 };
+
+Blockly.Field.register('field_colour', Blockly.FieldColour);

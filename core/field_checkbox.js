@@ -127,3 +127,5 @@ Blockly.FieldCheckbox.prototype.showEditor_ = function() {
     this.setValue(String(newState).toUpperCase());
   }
 };
+
+Blockly.Field.register('field_checkbox', Blockly.FieldCheckbox);

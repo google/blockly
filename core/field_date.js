@@ -347,3 +347,5 @@ Blockly.FieldDate.CSS = [
   '  color: #fff;',
   '}'
 ];
+
+Blockly.Field.register('field_date', Blockly.FieldDate);

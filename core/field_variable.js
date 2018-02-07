@@ -352,3 +352,5 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
   }
   this.setValue(id);
 };
+
+Blockly.Field.register('field_variable', Blockly.FieldVariable);

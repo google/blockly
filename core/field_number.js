@@ -114,3 +114,5 @@ Blockly.FieldNumber.prototype.classValidator = function(text) {
   n = goog.math.clamp(n, this.min_, this.max_);
   return String(n);
 };
+
+Blockly.Field.register('field_number', Blockly.FieldNumber);

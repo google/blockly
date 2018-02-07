@@ -1223,42 +1223,12 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
             case 'input_dummy':
               input = this.appendDummyInput(element['name']);
               break;
-            case 'field_label':
-              field = Blockly.FieldLabel.fromJson_(element);
-              break;
-            case 'field_input':
-              field = Blockly.FieldTextInput.fromJson_(element);
-              break;
-            case 'field_angle':
-              field = Blockly.FieldAngle.fromJson_(element);
-              break;
-            case 'field_checkbox':
-              field = Blockly.FieldCheckbox.fromJson_(element);
-              break;
-            case 'field_colour':
-              field = Blockly.FieldColour.fromJson_(element);
-              break;
-            case 'field_variable':
-              field = Blockly.FieldVariable.fromJson_(element);
-              break;
-            case 'field_dropdown':
-              field = Blockly.FieldDropdown.fromJson_(element);
-              break;
-            case 'field_image':
-              field = Blockly.FieldImage.fromJson_(element);
-              break;
-            case 'field_number':
-              field = Blockly.FieldNumber.fromJson_(element);
-              break;
-            case 'field_date':
-              if (Blockly.FieldDate) {
-                field = Blockly.FieldDate.fromJson_(element);
-                break;
-              }
-              // Fall through if FieldDate is not compiled in.
+
             default:
+              field = Blockly.Field.fromJson_(element);
+
               // Unknown field.
-              if (element['alt']) {
+              if (!field && element['alt']) {
                 element = element['alt'];
                 altRepeat = true;
               }

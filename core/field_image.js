@@ -68,7 +68,7 @@ goog.inherits(Blockly.FieldImage, Blockly.Field);
  * @returns {!Blockly.FieldImage} The new field instance.
  * @package
  */
-Blockly.FieldImage.fromJson_ = function(options) {
+Blockly.FieldImage.fromJson = function(options) {
   var src = Blockly.utils.replaceMessageReferences(options['src']);
   var width = Number(Blockly.utils.replaceMessageReferences(options['width']));
   var height =

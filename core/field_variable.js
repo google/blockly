@@ -69,7 +69,7 @@ goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
  * @returns {!Blockly.FieldVariable} The new field instance.
  * @package
  */
-Blockly.FieldVariable.fromJson_ = function(options) {
+Blockly.FieldVariable.fromJson = function(options) {
   var varname = Blockly.utils.replaceMessageReferences(options['variable']);
   var variableTypes = options['variableTypes'];
   var defaultType = options['defaultType'];

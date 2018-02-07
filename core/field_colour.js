@@ -58,7 +58,7 @@ goog.inherits(Blockly.FieldColour, Blockly.Field);
  * @returns {!Blockly.FieldColour} The new field instance.
  * @package
  */
-Blockly.FieldColour.fromJson_ = function(options) {
+Blockly.FieldColour.fromJson = function(options) {
   return new Blockly.FieldColour(options['colour']);
 };
 

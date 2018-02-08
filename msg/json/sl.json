@@ -52,7 +52,7 @@
 	"COLOUR_BLEND_RATIO": "razmerje",
 	"COLOUR_BLEND_TOOLTIP": "Zmeša dve barvi v danem razmerju (0.0 - 1.0).",
 	"CONTROLS_REPEAT_HELPURL": "https://en.wikipedia.org/wiki/For_loop",
-	"CONTROLS_REPEAT_TITLE": "ponavljaj %1 krat",
+	"CONTROLS_REPEAT_TITLE": "ponovi %1 krat",
 	"CONTROLS_REPEAT_INPUT_DO": "izvedi",
 	"CONTROLS_REPEAT_TOOLTIP": "Kocke se izvedejo večkrat.",
 	"CONTROLS_WHILEUNTIL_HELPURL": "https://github.com/google/blockly/wiki/Loops#repeat",

@@ -18,7 +18,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.COLOUR_BLEND_RATIO = "نسبت";
 /** @export */ Blockly.Msg.COLOUR_BLEND_TITLE = "قاتی پاتی";
 /** @export */ Blockly.Msg.COLOUR_BLEND_TOOLTIP = "دو رنگ را با نسبت مشخص‌شده مخلوط می‌کند (۰٫۰ - ۱٫۰)";
-/** @export */ Blockly.Msg.COLOUR_PICKER_HELPURL = "https://en.wikipedia.org/wiki/رةنگ";
+/** @export */ Blockly.Msg.COLOUR_PICKER_HELPURL = "https://lki.wikipedia.org/wiki/ڕەنگ";
 /** @export */ Blockly.Msg.COLOUR_PICKER_TOOLTIP = "رةنگێ إژ تةختة رةنگ انتخاب کةن";
 /** @export */ Blockly.Msg.COLOUR_RANDOM_HELPURL = "http://randomcolour.com";  // untranslated
 /** @export */ Blockly.Msg.COLOUR_RANDOM_TITLE = "رةنگ بةختةکی";

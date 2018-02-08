@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.th');
 goog.require('Blockly.Msg');
 
 /** @export */ Blockly.Msg.ADD_COMMENT = "ใส่คำอธิบาย";
-/** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
+/** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "ไม่สามารถลบตัวแปร '%1' ได้เนื่องจากเป็นส่วนหนึ่งของนิยามของฟังก์ชัน '%2'";
 /** @export */ Blockly.Msg.CHANGE_VALUE_TITLE = "เปลี่ยนค่า:";
 /** @export */ Blockly.Msg.CLEAN_UP = "จัดเรียงบล็อกให้เป็นแถว";
 /** @export */ Blockly.Msg.COLLAPSE_ALL = "ย่อบล็อก";
@@ -63,8 +63,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "ขณะที่ค่าเป็นจริง ก็จะทำบางคำสั่ง";
 /** @export */ Blockly.Msg.DELETE_ALL_BLOCKS = "ลบ %1 บล็อกทั้งหมด?";
 /** @export */ Blockly.Msg.DELETE_BLOCK = "ลบบล็อก";
-/** @export */ Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
-/** @export */ Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the '%2' variable?";  // untranslated
+/** @export */ Blockly.Msg.DELETE_VARIABLE = "ลบตัวแปร '%1'";
+/** @export */ Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "ลบการใช้ตัวแปร %2 %1 ครั้งหรือไม่";
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "ลบ %1 บล็อก";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "ปิดใช้งานบล็อก";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "ทำสำเนา";
@@ -74,9 +74,9 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.EXTERNAL_INPUTS = "อินพุตภายนอก";
 /** @export */ Blockly.Msg.HELP = "ช่วยเหลือ";
 /** @export */ Blockly.Msg.INLINE_INPUTS = "อินพุตในบรรทัด";
-/** @export */ Blockly.Msg.IOS_CANCEL = "Cancel";  // untranslated
-/** @export */ Blockly.Msg.IOS_ERROR = "Error";  // untranslated
-/** @export */ Blockly.Msg.IOS_OK = "OK";  // untranslated
+/** @export */ Blockly.Msg.IOS_CANCEL = "ยกเลิก";
+/** @export */ Blockly.Msg.IOS_ERROR = "ข้อผิดพลาด";
+/** @export */ Blockly.Msg.IOS_OK = "ตกลง";
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
@@ -392,8 +392,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_CREATE_GET = "สร้าง \"get %1\"";
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "กำหนดให้ตัวแปรนี้เท่ากับการป้อนข้อมูล";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "A variable named '%1' already exists.";  // untranslated
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "มีตัวแปรชื่อ '%1' อยู่แล้ว";
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "ตัวแปรชื่อ '%1' มีอยู่แล้วสำหรับตัวแปรอื่นของชนิด '%2'";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

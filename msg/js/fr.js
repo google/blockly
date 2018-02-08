@@ -263,7 +263,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_ABS = "Renvoie la valeur absolue d’un nombre.";
 /** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_EXP = "Renvoie e à la puissance d’un nombre.";
 /** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_LN = "Renvoie le logarithme naturel d’un nombre.";
-/** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_LOG10 = "Renvoie le logarithme base 10 d’un nombre.";
+/** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_LOG10 = "Renvoie le logarithme décimal d’un nombre.";
 /** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_NEG = "Renvoie l’opposé d’un nombre";
 /** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_POW10 = "Renvoie 10 à la puissance d’un nombre.";
 /** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_ROOT = "Renvoie la racine carrée d’un nombre.";

@@ -929,9 +929,9 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
 
 /**
  * Refresh the toolbox unless there's a drag in progress.
- * @private
+ * @package
  */
-Blockly.WorkspaceSvg.prototype.refreshToolboxSelection_ = function() {
+Blockly.WorkspaceSvg.prototype.refreshToolboxSelection = function() {
   var ws = this.isFlyout ? this.targetWorkspace : this;
   if (ws && !ws.currentGesture_ && ws.toolbox_ && ws.toolbox_.flyout_) {
     ws.toolbox_.refreshSelection();
@@ -947,7 +947,7 @@ Blockly.WorkspaceSvg.prototype.refreshToolboxSelection_ = function() {
  */
 Blockly.WorkspaceSvg.prototype.renameVariableById = function(id, newName) {
   Blockly.WorkspaceSvg.superClass_.renameVariableById.call(this, id, newName);
-  this.refreshToolboxSelection_();
+  this.refreshToolboxSelection();
 };
 
 /**
@@ -958,7 +958,7 @@ Blockly.WorkspaceSvg.prototype.renameVariableById = function(id, newName) {
  */
 Blockly.WorkspaceSvg.prototype.deleteVariableById = function(id) {
   Blockly.WorkspaceSvg.superClass_.deleteVariableById.call(this, id);
-  this.refreshToolboxSelection_();
+  this.refreshToolboxSelection();
 };
 
 /**
@@ -976,7 +976,7 @@ Blockly.WorkspaceSvg.prototype.deleteVariableById = function(id) {
 Blockly.WorkspaceSvg.prototype.createVariable = function(name, opt_type, opt_id) {
   var newVar = Blockly.WorkspaceSvg.superClass_.createVariable.call(
       this, name, opt_type, opt_id);
-  this.refreshToolboxSelection_();
+  this.refreshToolboxSelection();
   return newVar;
 };
 

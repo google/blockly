@@ -1,13 +1,4 @@
 {
-	"@metadata": {
-		"authors": [
-			"Espertus",
-			"Liuxinyu970226",
-			"Metalhead64",
-			"Robby",
-			"Shirayuki"
-		]
-	},
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
 	"TODAY": "button text - Button that sets a calendar to today's date.\n{{Identical|Today}}",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}",
@@ -32,6 +23,10 @@
 	"RENAME_VARIABLE": "dropdown choice - When the user clicks on a variable block, this is one of the dropdown menu choices.  It is used to rename the current variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].",
 	"RENAME_VARIABLE_TITLE": "prompt - Prompts the user to enter the new name for the selected variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].\n\nParameters:\n* %1 - the name of the variable to be renamed.",
 	"NEW_VARIABLE": "button text - Text on the button used to launch the variable creation dialogue.",
+	"NEW_STRING_VARIABLE": "button text - Text on the button used to launch the variable creation dialogue.",
+	"NEW_NUMBER_VARIABLE": "button text - Text on the button used to launch the variable creation dialogue.",
+	"NEW_COLOUR_VARIABLE": "button text - Text on the button used to launch the variable creation dialogue.",
+	"NEW_VARIABLE_TYPE_TITLE": "prompt - Prompts the user to enter the type for a variable.",
 	"NEW_VARIABLE_TITLE": "prompt - Prompts the user to enter the name for a new variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].",
 	"VARIABLE_ALREADY_EXISTS": "alert - Tells the user that the name they entered is already in use.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "alert - Tells the user that the name they entered is already in use for another type.",

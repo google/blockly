@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Επιστρέφει το συνημίτονο ενός βαθμού (όχι ακτινίου).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Επιστρέφει το ημίτονο ενός βαθμού (όχι ακτινίου).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Επιστρέφει την εφαπτομένη ενός βαθμού (όχι ακτινίου).";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Δημιουργείστε μεταβλητή";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Νέο όνομα μεταβλητής:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "να επιτρέπονται οι δηλώσεις";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "με:";
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

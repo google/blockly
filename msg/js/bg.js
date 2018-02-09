@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Върни косинус от ъгъл в градуси (не в радиани)";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Върни синус от ъгъл в градуси (не в радиани)";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Върни тангенс от ъгъл в градуси (не в радиани)";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Създаване на променлива...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Ново име на променливата:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "позволи операциите";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "с:";

@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Retorna o cosseno de um grau (não radiano).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Retorna o seno de um grau (não radiano).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Retorna a tangente de um grau (não radiano).";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Criar variável...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Nome da nova variável:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "permitir declarações";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "com:";

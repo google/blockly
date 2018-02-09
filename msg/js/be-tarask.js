@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Вяртае косынус кута ў градусах.";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Вяртае сынус кута ў градусах.";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Вяртае тангэнс кута ў градусах.";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Стварыць зьменную…";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Імя новай зьменнай:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "дазволіць зацьвярджэньне";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "з:";

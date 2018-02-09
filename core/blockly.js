@@ -206,8 +206,9 @@ Blockly.onKeyDown_ = function(e) {
         // 'c' for copy.
         Blockly.hideChaff();
         Blockly.copy_(Blockly.selected);
-      } else if (e.keyCode == 88) {
-        // 'x' for cut.
+      } else if (e.keyCode == 88 && !Blockly.selected.workspace.isFlyout) {
+        // 'x' for cut, but not in a flyout.
+        // Don't even copy the selected item in the flyout.
         Blockly.copy_(Blockly.selected);
         deleteBlock = true;
       }
@@ -216,7 +217,13 @@ Blockly.onKeyDown_ = function(e) {
       // 'v' for paste.
       if (Blockly.clipboardXml_) {
         Blockly.Events.setGroup(true);
-        Blockly.clipboardSource_.paste(Blockly.clipboardXml_);
+        // Pasting always pastes to the main workspace, even if the copy started
+        // in a flyout workspace.
+        var workspace = Blockly.clipboardSource_;
+        if (workspace.isFlyout) {
+          workspace = workspace.targetWorkspace;
+        }
+        workspace.paste(Blockly.clipboardXml_);
         Blockly.Events.setGroup(false);
       }
     } else if (e.keyCode == 90) {
@@ -225,8 +232,9 @@ Blockly.onKeyDown_ = function(e) {
       Blockly.mainWorkspace.undo(e.shiftKey);
     }
   }
-  if (deleteBlock) {
-    // Common code for delete and cut.
+  // Common code for delete and cut.
+  // Don't delete in the flyout.
+  if (deleteBlock && !Blockly.selected.workspace.isFlyout) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
     Blockly.selected.dispose(/* heal */ true, true);

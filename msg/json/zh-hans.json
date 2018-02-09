@@ -11,7 +11,8 @@
 			"Hudafu",
 			"Shatteredwind",
 			"Duzc2",
-			"Tonylianlong"
+			"Tonylianlong",
+			"WindWood"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "项目",
@@ -330,7 +331,7 @@
 	"ORDINAL_NUMBER_SUFFIX": "空白",
 	"VARIABLES_GET_TOOLTIP": "返回此变量的值。",
 	"VARIABLES_GET_CREATE_SET": "创建“设定%1”",
-	"VARIABLES_SET": "赋值 %1 到 %2",
+	"VARIABLES_SET": "赋值 %1 为 %2",
 	"VARIABLES_SET_TOOLTIP": "设置此变量，以使它和输入值相等。",
 	"VARIABLES_SET_CREATE_GET": "创建“获得%1”",
 	"PROCEDURES_DEFNORETURN_HELPURL": "https://zh.wikipedia.org/wiki/子程序",

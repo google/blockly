@@ -263,7 +263,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_ABS = "Renvoie la valeur absolue d’un nombre.";
 /** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_EXP = "Renvoie e à la puissance d’un nombre.";
 /** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_LN = "Renvoie le logarithme naturel d’un nombre.";
-/** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_LOG10 = "Renvoie le logarithme base 10 d’un nombre.";
+/** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_LOG10 = "Renvoie le logarithme décimal d’un nombre.";
 /** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_NEG = "Renvoie l’opposé d’un nombre";
 /** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_POW10 = "Renvoie 10 à la puissance d’un nombre.";
 /** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_ROOT = "Renvoie la racine carrée d’un nombre.";
@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Renvoie le cosinus d’un angle en degrés (pas en radians).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Renvoie le sinus d’un angle en degrés (pas en radians).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Renvoie la tangente d’un angle en degrés (pas en radians).";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Créer une variable...";
-/** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Nouveau nom de la variable :";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Le nom de la nouvelle variable :";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "autoriser les ordres";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "avec :";
@@ -304,7 +308,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_DEF_DUPLICATE_WARNING = "Attention : Cette fonction a des paramètres en double.";
 /** @export */ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Surligner la définition de la fonction";
 /** @export */ Blockly.Msg.PROCEDURES_IFRETURN_HELPURL = "http://c2.com/cgi/wiki?GuardClause";
-/** @export */ Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "Si une valeur est vrai, alors renvoyer une seconde valeur.";
+/** @export */ Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "Si une valeur est vraie, alors renvoyer une seconde valeur.";
 /** @export */ Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Attention : Ce bloc pourrait n’être utilisé que dans une définition de fonction.";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "nom de l’entrée :";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Ajouter une entrée à la fonction.";

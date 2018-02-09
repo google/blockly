@@ -14,7 +14,8 @@
 			"GR",
 			"Stam.nikos",
 			"Themelis",
-			"KATRINE1992"
+			"KATRINE1992",
+			"Vicng"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "αντικείμενο",
@@ -216,9 +217,8 @@
 	"TEXT_CREATE_JOIN_TITLE_JOIN": "ένωσε",
 	"TEXT_CREATE_JOIN_TOOLTIP": "Προσθέτει, αφαιρεί ή αναδιατάσσει τους τομείς για να αναδιαμορφώσει αυτό το μπλοκ κειμένου.",
 	"TEXT_CREATE_JOIN_ITEM_TOOLTIP": "Προσθέτει ένα στοιχείο στο κείμενο.",
-	"TEXT_APPEND_TITLE": "προσάρτηση κειμένου από %1 στο %2",
-	"TEXT_APPEND_TOOLTIP": "Αναθέτει κείμενο στη μεταβλητή «%1».",
 	"TEXT_APPEND_TITLE": "έως %1 ανάθεσε κείμενο %2",
+	"TEXT_APPEND_TOOLTIP": "Αναθέτει κείμενο στη μεταβλητή «%1».",
 	"TEXT_LENGTH_TITLE": "το μήκος του %1",
 	"TEXT_LENGTH_TOOLTIP": "Επιστρέφει το πλήθος των γραμμάτων (συμπεριλαμβανομένων και των κενών διαστημάτων) στο παρεχόμενο κείμενο.",
 	"TEXT_ISEMPTY_TITLE": "το %1 είναι κενό",
@@ -325,7 +325,7 @@
 	"LISTS_GET_SUBLIST_END_LAST": "έως το τελευταίο",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Δημιουργεί ένα αντίγραφο του καθορισμένου τμήματος μιας λίστας.",
 	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
-	"LISTS_SORT_TITLE": "επιλογή %1 %2 % 3",
+	"LISTS_SORT_TITLE": "επιλογή %1 %2 %3",
 	"LISTS_SORT_TOOLTIP": "Επιλέξετε ένα αντίγραφο της λίστας.",
 	"LISTS_SORT_ORDER_ASCENDING": "Αύξουσα",
 	"LISTS_SORT_ORDER_DESCENDING": "Φθίνουσα",

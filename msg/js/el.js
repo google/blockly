@@ -160,7 +160,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_SORT_HELPURL = "https://github.com/google/blockly/wiki/Lists#sorting-a-list";
 /** @export */ Blockly.Msg.LISTS_SORT_ORDER_ASCENDING = "Αύξουσα";
 /** @export */ Blockly.Msg.LISTS_SORT_ORDER_DESCENDING = "Φθίνουσα";
-/** @export */ Blockly.Msg.LISTS_SORT_TITLE = "επιλογή %1 %2 % 3";
+/** @export */ Blockly.Msg.LISTS_SORT_TITLE = "επιλογή %1 %2 %3";
 /** @export */ Blockly.Msg.LISTS_SORT_TOOLTIP = "Επιλέξετε ένα αντίγραφο της λίστας.";
 /** @export */ Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE = "αλφαβητικά, αγνοήστε το στοιχείο";
 /** @export */ Blockly.Msg.LISTS_SORT_TYPE_NUMERIC = "αριθμητικό";
@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Επιστρέφει το συνημίτονο ενός βαθμού (όχι ακτινίου).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Επιστρέφει το ημίτονο ενός βαθμού (όχι ακτινίου).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Επιστρέφει την εφαπτομένη ενός βαθμού (όχι ακτινίου).";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Δημιουργείστε μεταβλητή";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Νέο όνομα μεταβλητής:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "να επιτρέπονται οι δηλώσεις";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "με:";

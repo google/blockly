@@ -10,7 +10,10 @@
 			"Diniscoelho",
 			"Fúlvio",
 			"Mansil",
-			"Mauricio"
+			"Mauricio",
+			"Vicng",
+			"MokaAkashiyaPT",
+			"Athena in Wonderland"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -39,6 +42,7 @@
 	"NEW_VARIABLE": "Criar variável…",
 	"NEW_VARIABLE_TITLE": "Nome da nova variável:",
 	"VARIABLE_ALREADY_EXISTS": "Já existe uma variável com o nome de '%1'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Já existe uma variável chamada '%1' para outra variável do tipo '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Eliminar %1 utilizações da variável '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Não se pode eliminar a variável '%1' porque faz parte da definição da função '%2'",
 	"DELETE_VARIABLE": "Eliminar a variável '%1'",
@@ -210,8 +214,8 @@
 	"TEXT_CREATE_JOIN_TITLE_JOIN": "unir",
 	"TEXT_CREATE_JOIN_TOOLTIP": "Acrescenta, remove ou reordena seções para reconfigurar este bloco de texto.",
 	"TEXT_CREATE_JOIN_ITEM_TOOLTIP": "Acrescentar um item ao texto.",
-	"TEXT_APPEND_TOOLTIP": "Acrescentar um pedaço de texto à variável \"%1\".",
 	"TEXT_APPEND_TITLE": "para %1 acrescentar texto %2",
+	"TEXT_APPEND_TOOLTIP": "Acrescentar um pedaço de texto à variável \"%1\".",
 	"TEXT_LENGTH_TITLE": "tamanho de %1",
 	"TEXT_LENGTH_TOOLTIP": "Devolve o número de letras (incluindo espaços) do texto fornecido.",
 	"TEXT_ISEMPTY_TITLE": "%1 está vazio",
@@ -220,6 +224,7 @@
 	"TEXT_INDEXOF_TITLE": "no texto %1 %2 %3",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "primeira ocorrência do texto",
 	"TEXT_INDEXOF_OPERATOR_LAST": "última ocorrência do texto",
+	"TEXT_CHARAT_TITLE": "no texto %1 %2",
 	"TEXT_CHARAT_FROM_START": "obter letra nº",
 	"TEXT_CHARAT_FROM_END": "obter letra nº a partir do final",
 	"TEXT_CHARAT_FIRST": "obter primeira letra",

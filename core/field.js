@@ -85,9 +85,9 @@ Blockly.Field.register = function(type, fieldClass) {
  * Finds the appropriate registered field by the type name as registered using
  * Blockly.Field.register.
  * @param {!Object} options A JSON object with a type and options specific
- *                          to the field type.
+ *     to the field type.
  * @returns {?Blockly.Field} The new field instance or null if a field wasn't
- *                           found with the given type name
+ *     found with the given type name
  * @package
  */
 Blockly.Field.fromJson = function(options) {

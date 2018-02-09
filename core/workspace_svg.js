@@ -274,6 +274,7 @@ Blockly.WorkspaceSvg.prototype.toolboxCategoryCallbacks_ = {};
  * @package
  */
 Blockly.WorkspaceSvg.prototype.targetWorkspace = null;
+
 /**
  * Inverted screen CTM, for use in mouseToSvg.
  * @type {SVGMatrix}

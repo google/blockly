@@ -178,7 +178,7 @@ WorkspaceFactoryGenerator.prototype.generateInjectString = function() {
       ' workspace blocks XML from Workspace Factory. */\n' +
       'var workspaceBlocks = document.getElementById("workspaceBlocks"); \n\n' +
       '/* Load blocks to workspace. */\n' +
-      'Blockly.Xml.domToWorkspace(workspace, workspaceBlocks);';
+      'Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);';
   return finalStr;
 };
 

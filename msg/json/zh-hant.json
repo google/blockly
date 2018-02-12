@@ -214,7 +214,6 @@
 	"TEXT_CHARAT_FIRST": "取得 第一個字元",
 	"TEXT_CHARAT_LAST": "取得 最後一個字元",
 	"TEXT_CHARAT_RANDOM": "取得 任意字元",
-	"TEXT_CHARAT_TAIL": "",
 	"TEXT_CHARAT_TOOLTIP": "返回位於指定位置的字元。",
 	"TEXT_GET_SUBSTRING_TOOLTIP": "返回指定的部分文字。",
 	"TEXT_GET_SUBSTRING_INPUT_IN_TEXT": "在字串",

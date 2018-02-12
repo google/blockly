@@ -172,7 +172,6 @@
 	"MATH_ROUND_OPERATOR_ROUND": "avrunding",
 	"MATH_ROUND_OPERATOR_ROUNDUP": "rund opp",
 	"MATH_ROUND_OPERATOR_ROUNDDOWN": "rund ned",
-	"MATH_ONLIST_HELPURL": "",
 	"MATH_ONLIST_OPERATOR_SUM": "summen av listen",
 	"MATH_ONLIST_TOOLTIP_SUM": "Returner summen av alle tallene i listen.",
 	"MATH_ONLIST_OPERATOR_MIN": "minimum av listen",

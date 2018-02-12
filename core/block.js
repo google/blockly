@@ -55,7 +55,7 @@ goog.require('goog.string');
 Blockly.Block = function(workspace, prototypeName, opt_id) {
   if (typeof Blockly.Generator.prototype[prototypeName] !== 'undefined') {
     console.warn('FUTURE ERROR: Block prototypeName "' + prototypeName
-        + '`" conflicts with Blockly.Generator members. Registering Generators '
+        + '" conflicts with Blockly.Generator members. Registering Generators '
         + 'for this block type will incur errors.'
         + '\nThis name will be DISALLOWED (throwing an error) in future '
         + 'versions of Blockly.');

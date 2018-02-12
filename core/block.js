@@ -57,7 +57,8 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
     console.warn('FUTURE ERROR: Block prototypeName "' + prototypeName
         + '`" conflicts with Blockly.Generator members. Registering Generators '
         + 'for this block type will incur errors.'
-        + 'This name will be DISALLOWED in future versions of Blockly.');
+        + '\nThis name will be DISALLOWED (throwing an error) in future '
+        + 'versions of Blockly.');
   }
 
   /** @type {string} */

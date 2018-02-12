@@ -380,7 +380,9 @@ Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
  * names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
-Blockly.Generator.prototype.init = undefined;
+Blockly.Generator.prototype.init = function(workspace) {
+  // Optionally override
+};
 
 /**
  * Common tasks for generating code from blocks.  This is called from
@@ -393,7 +395,9 @@ Blockly.Generator.prototype.init = undefined;
  * @return {string} JavaScript code with comments and subsequent blocks added.
  * @private
  */
-Blockly.Generator.prototype.scrub_ = undefined;
+Blockly.Generator.prototype.scrub_ = function(block, code) {
+  // Optionally override
+};
 
 /**
  * Hook for code to run at end of code generation.
@@ -402,7 +406,9 @@ Blockly.Generator.prototype.scrub_ = undefined;
  * @param {string} code Generated code.
  * @return {string} Completed code.
  */
-Blockly.Generator.prototype.finish = undefined;
+Blockly.Generator.prototype.finish = function(code) {
+  // Optionally override
+};
 
 /**
  * Naked values are top-level blocks with outputs that aren't plugged into
@@ -412,4 +418,6 @@ Blockly.Generator.prototype.finish = undefined;
  * @param {string} line Line of generated code.
  * @return {string} Legal line of code.
  */
-Blockly.Generator.prototype.scrubNakedValue = undefined;
+Blockly.Generator.prototype.scrubNakedValue = function(line) {
+  // Optionally override
+};

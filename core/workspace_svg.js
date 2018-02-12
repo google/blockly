@@ -268,6 +268,14 @@ Blockly.WorkspaceSvg.prototype.flyoutButtonCallbacks_ = {};
 Blockly.WorkspaceSvg.prototype.toolboxCategoryCallbacks_ = {};
 
 /**
+ * In a flyout, the target workspace where blocks should be placed after a drag.
+ * Otherwise null.
+ * @type {?Blockly.WorkspaceSvg}
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.targetWorkspace = null;
+
+/**
  * Inverted screen CTM, for use in mouseToSvg.
  * @type {SVGMatrix}
  * @private

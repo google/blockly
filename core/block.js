@@ -30,6 +30,7 @@ goog.require('Blockly.Blocks');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Connection');
 goog.require('Blockly.Extensions');
+goog.require('Blockly.Generator');
 goog.require('Blockly.Input');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.Warning');
@@ -52,6 +53,13 @@ goog.require('goog.string');
  * @constructor
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {
+  if (typeof Blockly.Generator.prototype[prototypeName] !== 'undefined') {
+    console.warn('FUTURE ERROR: Block prototypeName "' + prototypeName
+        + '`" conflicts with Blockly.Generator members. Registering Generators '
+        + 'for this block type will incur errors.'
+        + 'This name will be DISALLOWED in future versions of Blockly.');
+  }
+
   /** @type {string} */
   this.id = (opt_id && !workspace.getBlockById(opt_id)) ?
       opt_id : Blockly.utils.genUid();

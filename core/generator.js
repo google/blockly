@@ -105,7 +105,7 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
       line = line[0];
     }
     if (line) {
-      if (block.outputConnection && this.scrubNakedValue) {
+      if (block.outputConnection) {
         // This block is a naked value.  Ask the language's code generator if
         // it wants to append a semicolon, or something.
         line = this.scrubNakedValue(line);
@@ -380,7 +380,11 @@ Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
  * names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
-Blockly.Generator.prototype.init = undefined;
+Blockly.Generator.prototype.init = function(
+    /* eslint-disable no-unused-vars */ workspace
+    /* eslint-enable no-unused-vars */) {
+  // Optionally override
+};
 
 /**
  * Common tasks for generating code from blocks.  This is called from
@@ -393,7 +397,12 @@ Blockly.Generator.prototype.init = undefined;
  * @return {string} JavaScript code with comments and subsequent blocks added.
  * @private
  */
-Blockly.Generator.prototype.scrub_ = undefined;
+Blockly.Generator.prototype.scrub_ = function(
+    /* eslint-disable no-unused-vars */ block, code
+    /* eslint-enable no-unused-vars */) {
+  // Optionally override
+  return code;
+};
 
 /**
  * Hook for code to run at end of code generation.
@@ -402,7 +411,12 @@ Blockly.Generator.prototype.scrub_ = undefined;
  * @param {string} code Generated code.
  * @return {string} Completed code.
  */
-Blockly.Generator.prototype.finish = undefined;
+Blockly.Generator.prototype.finish = function(
+    /* eslint-disable no-unused-vars */ code
+    /* eslint-enable no-unused-vars */) {
+  // Optionally override
+  return code;
+};
 
 /**
  * Naked values are top-level blocks with outputs that aren't plugged into
@@ -412,4 +426,9 @@ Blockly.Generator.prototype.finish = undefined;
  * @param {string} line Line of generated code.
  * @return {string} Legal line of code.
  */
-Blockly.Generator.prototype.scrubNakedValue = undefined;
+Blockly.Generator.prototype.scrubNakedValue = function(
+    /* eslint-disable no-unused-vars */ line
+    /* eslint-enable no-unused-vars */) {
+  // Optionally override
+  return line;
+};

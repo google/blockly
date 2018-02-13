@@ -83,31 +83,36 @@ function start() {
   document.forms.options.elements.side.value = side;
   // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
-          {comments: true,
-           collapse: true,
-           disable: true,
-           grid:
-             {spacing: 25,
-              length: 3,
-              colour: '#ccc',
-              snap: true},
-           horizontalLayout: side == 'top' || side == 'bottom',
-           maxBlocks: Infinity,
-           media: '../media/',
-           oneBasedIndex: true,
-           readOnly: false,
-           rtl: rtl,
-           scrollbars: true,
-           toolbox: toolbox,
-           toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
-           zoom:
-             {controls: true,
-              wheel: true,
-              startScale: 1.0,
-              maxScale: 4,
-              minScale: .25,
-              scaleSpeed: 1.1}
-          });
+      {
+        comments: true,
+        collapse: true,
+        disable: true,
+        grid:
+          {
+            spacing: 25,
+            length: 3,
+            colour: '#ccc',
+            snap: true
+          },
+        horizontalLayout: side == 'top' || side == 'bottom',
+        maxBlocks: Infinity,
+        media: '../media/',
+        oneBasedIndex: true,
+        readOnly: false,
+        rtl: rtl,
+        scrollbars: true,
+        toolbox: toolbox,
+        toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
+        zoom:
+          {
+            controls: true,
+            wheel: true,
+            startScale: 1.0,
+            maxScale: 4,
+            minScale: .25,
+            scaleSpeed: 1.1
+          }
+      });
   // Restore previously displayed text.
   if (sessionStorage) {
     var text = sessionStorage.getItem('textarea');

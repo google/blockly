@@ -131,8 +131,6 @@ Blockly.FieldDropdown.prototype.init = function() {
       ' ' + Blockly.FieldDropdown.ARROW_CHAR));
 
   Blockly.FieldDropdown.superClass_.init.call(this);
-  // Make sure the arrow gets rendered.
-  this.forceRerender();
 };
 
 /**

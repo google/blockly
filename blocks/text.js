@@ -89,7 +89,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "previousStatement": null,
     "nextStatement": null,
     "colour": "%{BKY_TEXTS_HUE}",
-    "tooltip": "{%BKY_TEXT_CREATE_JOIN_ITEM_TOOLTIP}",
+    "tooltip": "%{BKY_TEXT_CREATE_JOIN_ITEM_TOOLTIP}",
     "enableContextMenu": false
   },
   {

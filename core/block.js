@@ -1231,44 +1231,21 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
             case 'input_dummy':
               input = this.appendDummyInput(element['name']);
               break;
-            case 'field_label':
-              field = Blockly.FieldLabel.fromJson(element);
-              break;
-            case 'field_input':
-              field = Blockly.FieldTextInput.fromJson(element);
-              break;
-            case 'field_angle':
-              field = Blockly.FieldAngle.fromJson(element);
-              break;
-            case 'field_checkbox':
-              field = Blockly.FieldCheckbox.fromJson(element);
-              break;
-            case 'field_colour':
-              field = Blockly.FieldColour.fromJson(element);
-              break;
-            case 'field_variable':
-              field = Blockly.FieldVariable.fromJson(element);
-              break;
-            case 'field_dropdown':
-              field = Blockly.FieldDropdown.fromJson(element);
-              break;
-            case 'field_image':
-              field = Blockly.FieldImage.fromJson(element);
-              break;
-            case 'field_number':
-              field = Blockly.FieldNumber.fromJson(element);
-              break;
-            case 'field_date':
-              if (Blockly.FieldDate) {
-                field = Blockly.FieldDate.fromJson(element);
-                break;
-              }
-              // Fall through if FieldDate is not compiled in.
+
             default:
+              field = Blockly.Field.fromJson(element);
+
               // Unknown field.
-              if (element['alt']) {
-                element = element['alt'];
-                altRepeat = true;
+              if (!field) {
+                if (element['alt']) {
+                  element = element['alt'];
+                  altRepeat = true;
+                } else {
+                  console.warn('Blockly could not create a field of type ' +
+                      element['type'] +
+                      '. You may need to register your custom field.  See ' +
+                      'github.com/google/blockly/issues/1584');
+                }
               }
           }
         }

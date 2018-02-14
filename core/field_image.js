@@ -216,3 +216,5 @@ Blockly.FieldImage.prototype.showEditor_ = function() {
     this.clickHandler_(this);
   }
 };
+
+Blockly.Field.register('field_image', Blockly.FieldImage);

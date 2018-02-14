@@ -450,10 +450,14 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
     }
   };
 
-  node.addEventListener(name, wrapFunc, false);
-  var bindData = [[node, name, wrapFunc]];
+  var bindData = [];
+  // Don't register the mouse event if an equivalent pointer event is supported.
+  if (!window.PointerEvent || !(name in Blockly.Touch.TOUCH_MAP)) {
+    node.addEventListener(name, wrapFunc, false);
+    bindData.push([node, name, wrapFunc]);
+  }
 
-  // Add equivalent touch event.
+  // Add equivalent touch or pointer event.
   if (name in Blockly.Touch.TOUCH_MAP) {
     var touchWrapFunc = function(e) {
       wrapFunc(e);
@@ -495,10 +499,13 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
     }
   };
 
-  node.addEventListener(name, wrapFunc, false);
-  var bindData = [[node, name, wrapFunc]];
-
-  // Add equivalent touch event.
+  var bindData = [];
+  // Don't register the mouse event if an equivalent pointer event is supported.
+  if (!window.PointerEvent || !(name in Blockly.Touch.TOUCH_MAP)) {
+    node.addEventListener(name, wrapFunc, false);
+    bindData.push([node, name, wrapFunc]);
+  }
+  // Add equivalent touch or pointer event.
   if (name in Blockly.Touch.TOUCH_MAP) {
     var touchWrapFunc = function(e) {
       // Punt on multitouch events.

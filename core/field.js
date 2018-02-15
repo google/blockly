@@ -61,6 +61,15 @@ Blockly.Field = function(text, opt_validator) {
 Blockly.Field.TYPE_MAP_ = {};
 
 /**
+ * Regular expression matching valid characters from the W3C Extensible Markup Language
+ * 1.0 Recommendation.
+ * @see https://www.w3.org/TR/2008/REC-xml-20081126/#NT-Char
+ * @type {string}
+ * @private
+ */
+Blockly.Field.XML_CHARS_REGEX_ = /^[\t\r\n\u0020-\uD7FF\uE000-\uFFFD\u10000-\u10FFFF]*$/;
+
+/**
  * Registers a field type. May also override an existing field type.
  * Blockly.Field.fromJson uses this registry to find the appropriate field.
  * @param {!string} type The field type name as used in the JSON definition.
@@ -324,6 +333,9 @@ Blockly.Field.prototype.callValidator = function(text) {
     return null;
   } else if (classResult !== undefined) {
     text = classResult;
+  }
+  if (!text.match(Blockly.Field.XML_CHARS_REGEX_)) {
+    return null;
   }
   var userValidator = this.getValidator();
   if (userValidator) {

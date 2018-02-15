@@ -283,6 +283,23 @@ function test_appendDomToWorkspace() {
   }
 }
 
+function test_domToWorkspace_throwsOnBadXML() {
+  xmlTest_setUpWithMockBlocks();
+  try {
+    var dom = Blockly.Xml.textToDom(
+      '<xml xmlns="http://www.w3.org/1999/xhtml">' +
+      '  <block type="controls_repeat_ext" inline="true" x="21" y="23">\u0015' +
+      '  </block>' +
+      '</xml>');
+    Blockly.Xml.domToWorkspace(dom, workspace);
+    fail();
+  } catch(e) {
+    // expected
+  } finally {
+    xmlTest_tearDownWithMockBlocks();
+  }
+}
+
 function test_blockToDom_fieldToDom_trivial() {
   xmlTest_setUpWithMockBlocks();
   // TODO (#1199): make a similar test where the variable is given a non-empty

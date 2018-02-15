@@ -124,3 +124,10 @@ function test_field_register_with_custom_field() {
   assertNotNull(field);
   assertEquals(field.getValue(), 'ok');
 }
+
+function test_field_reject_invalid_xml() {
+  var field = new Blockly.Field("Dummy text");
+
+  // Reject strings with invalid XML characters
+  assertNull(field.callValidator("Invalid char: \u0015"));
+}

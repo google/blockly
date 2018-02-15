@@ -422,6 +422,9 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
             'another location.');
         }
         variablesFirst = false;
+      } else if (name == 'parsererror') {
+        goog.asserts.fail('Parser error reading workspace XML:\n' +
+          xmlChild.textContent);
       }
     }
   } finally {

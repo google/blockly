@@ -430,6 +430,45 @@ Blockly.Extensions.buildTooltipWithFieldValue = function(msgTemplate,
 };
 
 /**
+ * Builds an extension function that will install a dynamic tooltip. The
+ * tooltip message should include the string '%1' and that string will be
+ * replaced with the text of the named field.
+ * @param {string} msgTemplate The template form to of the message text, with
+ *     %1 placeholder.
+ * @param {string} fieldName The field with the replacement text.
+ * @returns {Function} The extension function.
+ */
+Blockly.Extensions.buildTooltipWithFieldText = function(msgTemplate,
+    fieldName) {
+  // Check the tooltip string messages for invalid references.
+  // Wait for load, in case Blockly.Msg is not yet populated.
+  // runAfterPageLoad() does not run in a Node.js environment due to lack of
+  // document object, in which case skip the validation.
+  if (typeof document == 'object') {  // Relies on document.readyState
+    Blockly.utils.runAfterPageLoad(function() {
+      // Will print warnings if reference is missing.
+      Blockly.utils.checkMessageReferences(msgTemplate);
+    });
+  }
+
+  /**
+   * The actual extension.
+   * @this {Blockly.Block}
+   */
+  var extensionFn = function() {
+    this.setTooltip(function() {
+      var text = '';
+      var field = this.getField(fieldName);
+      if (field) {
+        text = field.getText();
+      }
+      return Blockly.utils.replaceMessageReferences(msgTemplate)
+          .replace('%1', text);
+    }.bind(this));
+  };
+  return extensionFn;
+};
+/**
  * Configures the tooltip to mimic the parent block when connected. Otherwise,
  * uses the tooltip text at the time this extension is initialized. This takes
  * advantage of the fact that all other values from JSON are initialized before

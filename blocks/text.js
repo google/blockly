@@ -773,18 +773,6 @@ Blockly.Constants.Text.TEXT_JOIN_EXTENSION = function() {
   this.setMutator(new Blockly.Mutator(['text_create_join_item']));
 };
 
-Blockly.Constants.Text.TEXT_APPEND_TOOLTIP_EXTENSION = function() {
-  // Assign 'this' to a variable for use in the tooltip closure below.
-  var thisBlock = this;
-  this.setTooltip(function() {
-    if (Blockly.Msg.TEXT_APPEND_TOOLTIP) {
-      return Blockly.Msg.TEXT_APPEND_TOOLTIP.replace('%1',
-          thisBlock.getFieldValue('VAR'));
-    }
-    return '';
-  });
-};
-
 Blockly.Constants.Text.TEXT_INDEXOF_TOOLTIP_EXTENSION = function() {
   // Assign 'this' to a variable for use in the tooltip closure below.
   var thisBlock = this;
@@ -890,7 +878,8 @@ Blockly.Extensions.register('text_quotes',
     Blockly.Constants.Text.TEXT_QUOTES_EXTENSION);
 
 Blockly.Extensions.register('text_append_tooltip',
-    Blockly.Constants.Text.TEXT_APPEND_TOOLTIP_EXTENSION);
+    Blockly.Extensions.buildTooltipWithFieldText(
+        '%{BKY_TEXT_APPEND_TOOLTIP}', 'VAR'));
 
 Blockly.Extensions.registerMutator('text_join_mutator',
     Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN,

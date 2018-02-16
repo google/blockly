@@ -470,12 +470,12 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     var field = new Blockly.FieldTextInput('x', this.validator_);
     // Hack: override showEditor to do just a little bit more work.
     // We don't have a good place to hook into the start of a text edit.
-    var oldShowEditorFn = field.showEditor_.bind(field);
+    field.oldShowEditorFn_ = field.showEditor_;
     var newShowEditorFn = function() {
       this.createdVariables_ = [];
-      oldShowEditorFn();
+      this.oldShowEditorFn_();
     };
-    field.showEditor_ = newShowEditorFn.bind(field);
+    field.showEditor_ = newShowEditorFn;
 
     this.appendDummyInput()
         .appendField(Blockly.Msg.PROCEDURES_MUTATORARG_TITLE)
@@ -486,9 +486,6 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     this.setTooltip(Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP);
     this.contextMenu = false;
 
-    // Get a handle on the parent workspace.
-    // TODO: Do I need to delete this during dispose?
-    this.outerWs_ = Blockly.Mutator.findParentWs(this.workspace);
     // Create the default variable when we drag the block in from the flyout.
     // Have to do this after installing the field on the block.
     field.onFinishEditing_ = this.deleteIntermediateVars_;
@@ -508,17 +505,18 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    * @this Blockly.FieldTextInput
    */
   validator_: function(varName) {
+    var outerWs = Blockly.Mutator.findParentWs(this.sourceBlock_.workspace);
     varName = varName.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
     if (!varName) {
       return null;
     }
-    var model = this.sourceBlock_.outerWs_.getVariable(varName, '');
+    var model = outerWs.getVariable(varName, '');
     if (model && model.name != varName) {
       // Rename the variable (case change)
-      this.outerWs_.renameVarById(model.getId(), varName);
+      outerWs.renameVarById(model.getId(), varName);
     }
     if (!model) {
-      model = this.sourceBlock_.outerWs_.createVariable(varName, '');
+      model = outerWs.createVariable(varName, '');
       if (model && this.createdVariables_) {
         this.createdVariables_.push(model);
       }
@@ -534,13 +532,14 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    * @this Blockly.FieldTextInput
    */
   deleteIntermediateVars_: function(newText) {
-    if (!this.sourceBlock_.outerWs_) {
+    var outerWs = Blockly.Mutator.findParentWs(this.sourceBlock_.workspace);
+    if (!outerWs) {
       return;
     }
     for (var i = 0; i < this.createdVariables_.length; i++) {
       var model = this.createdVariables_[i];
       if (model.name != newText) {
-        this.sourceBlock_.outerWs_.deleteVariableById(model.getId());
+        outerWs.deleteVariableById(model.getId());
       }
     }
   }

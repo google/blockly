@@ -198,7 +198,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "height": 50,
         "alt": "*"
       }
-    ]
+    ],
+    "colour": 160
   },
   {
     "type": "image_small",
@@ -211,7 +212,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "height": 50,
         "alt": "*"
       }
-    ]
+    ],
+    "colour": 160
   },
   {
     "type": "image_large",
@@ -224,7 +226,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "height": 50,
         "alt": "*"
       }
-    ]
+    ],
+    "colour": 160
   },
   {
     "type": "image_missing",
@@ -237,7 +240,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "height": 50,
         "alt": "*"
       }
-    ]
+    ],
+    "colour": 160
   },
   {
     "type": "test_with_lots_of_network_icons",
@@ -362,7 +366,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "alt": "H"
       }
     ],
-    "colour": 230
+    "colour": 160
   },
   {
     "type": "styled_event_cap",

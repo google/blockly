@@ -415,6 +415,30 @@ Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
   return false;
 };
 
+/**
+ * Get the parent workspace of a workspace that is inside a mutator, taking into
+ * account whether it is a flyout.
+ * @param {?Blockly.Workspace} workspace The workspace that is inside a mutator.
+ * @return {?Blockly.Workspace} The mutator's parent workspace or null.
+ * @package
+ */
+Blockly.Mutator.findParentWs = function(workspace) {
+  var outerWs = null;
+  if (workspace && workspace.options) {
+    var parent = workspace.options.parentWorkspace;
+    // If we were in a flyout in a mutator, need to go up two levels to find
+    // the actual parent.
+    if (workspace.isFlyout) {
+      if (parent && parent.options) {
+        outerWs = parent.options.parentWorkspace;
+      }
+    } else if (parent) {
+      outerWs = parent;
+    }
+  }
+  return outerWs;
+};
+
 // Export symbols that would otherwise be renamed by Closure compiler.
 if (!goog.global['Blockly']) {
   goog.global['Blockly'] = {};

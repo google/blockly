@@ -217,8 +217,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     while (paramBlock) {
       var varName = paramBlock.getFieldValue('NAME');
       this.arguments_.push(varName);
-      var variable = Blockly.Variables.getOrCreateVariablePackage(
-          this.workspace, null, varName, '');
+      var variable = this.workspace.getVariable(varName, '');
       this.argumentVarModels_.push(variable);
       this.paramIds_.push(paramBlock.id);
       paramBlock = paramBlock.nextConnection &&
@@ -469,6 +468,15 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    */
   init: function() {
     var field = new Blockly.FieldTextInput('x', this.validator_);
+    // Hack: override showEditor to do just a little bit more work.
+    // We don't have a good place to hook into the start of a text edit.
+    field.oldShowEditorFn_ = field.showEditor_;
+    var newShowEditorFn = function() {
+      this.createdVariables_ = [];
+      this.oldShowEditorFn_();
+    };
+    field.showEditor_ = newShowEditorFn;
+
     this.appendDummyInput()
         .appendField(Blockly.Msg.PROCEDURES_MUTATORARG_TITLE)
         .appendField(field, 'NAME');
@@ -480,41 +488,58 @@ Blockly.Blocks['procedures_mutatorarg'] = {
 
     // Create the default variable when we drag the block in from the flyout.
     // Have to do this after installing the field on the block.
-    field.onFinishEditing_ = this.createNewVar_;
+    field.onFinishEditing_ = this.deleteIntermediateVars_;
+    // Create an empty list so onFinishEditing_ has something to look at, even
+    // though the editor was never opened.
+    field.createdVariables_ = [];
     field.onFinishEditing_('x');
   },
   /**
-   * Obtain a valid name for the procedure.
+   * Obtain a valid name for the procedure argument. Create a variable if
+   * necessary.
    * Merge runs of whitespace.  Strip leading and trailing whitespace.
    * Beyond this, all names are legal.
-   * @param {string} newVar User-supplied name.
+   * @param {string} varName User-supplied name.
    * @return {?string} Valid name, or null if a name was not specified.
    * @private
-   * @this Blockly.Block
+   * @this Blockly.FieldTextInput
    */
-  validator_: function(newVar) {
-    newVar = newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
-    return newVar || null;
+  validator_: function(varName) {
+    var outerWs = Blockly.Mutator.findParentWs(this.sourceBlock_.workspace);
+    varName = varName.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
+    if (!varName) {
+      return null;
+    }
+    var model = outerWs.getVariable(varName, '');
+    if (model && model.name != varName) {
+      // Rename the variable (case change)
+      outerWs.renameVarById(model.getId(), varName);
+    }
+    if (!model) {
+      model = outerWs.createVariable(varName, '');
+      if (model && this.createdVariables_) {
+        this.createdVariables_.push(model);
+      }
+    }
+    return varName;
   },
   /**
    * Called when focusing away from the text field.
-   * Creates a new variable with this name.
+   * Deletes all variables that were created as the user typed their intended
+   * variable name.
    * @param {string} newText The new variable name.
    * @private
    * @this Blockly.FieldTextInput
    */
-  createNewVar_: function(newText) {
-    var source = this.sourceBlock_;
-    if (source && source.workspace && source.workspace.options &&
-        source.workspace.options.parentWorkspace) {
-      var workspace = source.workspace.options.parentWorkspace;
-      var variableType = '';
-      var variable = workspace.getVariable(newText, variableType);
-      // If there is a case change, rename the variable.
-      if (variable && variable.name !== newText) {
-        workspace.renameVariableById(variable.getId(), newText);
-      } else {
-        workspace.createVariable(newText, variableType);
+  deleteIntermediateVars_: function(newText) {
+    var outerWs = Blockly.Mutator.findParentWs(this.sourceBlock_.workspace);
+    if (!outerWs) {
+      return;
+    }
+    for (var i = 0; i < this.createdVariables_.length; i++) {
+      var model = this.createdVariables_[i];
+      if (model.name != newText) {
+        outerWs.deleteVariableById(model.getId());
       }
     }
   }

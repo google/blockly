@@ -64,6 +64,7 @@
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/variables_dynamic.js"></script>
 <script src="../blocks/procedures.js"></script>
+<script src="blocks/test_blocks.js"></script>
 <script>
 'use strict';
 var workspace = null;
@@ -326,6 +327,7 @@ h1 {
       <option value="categories">Categories (untyped variables)</option>
       <option value="categories-typed-variables">Categories (typed variables)</option>
       <option value="simple">Simple</option>
+      <option value="test-blocks">Test Blocks</option>
     </select>
     <select name="side" onchange="document.forms.options.submit()">
       <option value="start">Start</option>
@@ -1047,6 +1049,48 @@ h1 {
     <sep></sep>
     <category name="Variables" colour="310" custom="VARIABLE_DYNAMIC"></category>
     <category name="Functions" colour="290" custom="PROCEDURE"></category>
+  </xml>
+
+  <!-- toolbox-test-blocks has a category menu and an auto-closing flyout.
+  The blocks in this toolbox reflect block configurations not used by
+  the standard predefined blocks, and so test alernative block rendering
+  code paths. -->
+  <xml id="toolbox-test-blocks" style="display: none">
+    <category name="Basic">
+      <block type="empty_block"></block>
+      <block type="empty_block_with_mutator"></block>
+    </category>
+    <category name="Fields">
+      <label text="Numbers"></label>
+      <block type="test_number"></block>
+      <block type="test_integer"></block>
+      <block type="test_number_hundredths"></block>
+      <block type="test_integer_bounded"></block>
+      <label text="Drop-downs"></label>
+      <block type="example_dropdown_long"></block>
+      <block type="example_dropdown_images"></block>
+      <label text="Others"></label>
+      <block type="example_angle"></block>
+      <block type="example_date"></block>
+    </category>
+    <category name="Style">
+      <label text="Hats"></label>
+      <block type="styled_event_cap"></block>
+      <label text="Colour"></label>
+      <block type="block_colour_hex1"></block>
+      <block type="block_colour_hex2"></block>
+      <block type="block_colour_hex3"></block>
+      <block type="block_no_colour"></block>
+      <block type="block_colour_hex4"></block>
+      <block type="block_colour_hex5"></block>
+    </category>
+    <category name="Images">
+      <block type="image_datauri"></block>
+      <block type="image_small"></block>
+      <block type="image_large"></block>
+      <block type="image_missing"></block>
+      <block type="test_with_lots_of_network_icons"></block>
+    </category>
   </xml>
 </body>
 </html>

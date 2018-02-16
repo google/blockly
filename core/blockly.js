@@ -55,7 +55,6 @@ goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 
 goog.require('goog.color');
-goog.require('goog.events.BrowserFeature');
 goog.require('goog.userAgent');
 
 
@@ -454,8 +453,7 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
 
   var bindData = [];
   // Don't register the mouse event if an equivalent pointer event is supported.
-  if (!goog.events.BrowserFeature.POINTER_EVENTS ||
-      !(name in Blockly.Touch.TOUCH_MAP)) {
+  if ((window && !window.PointerEvent) || !(name in Blockly.Touch.TOUCH_MAP)) {
     node.addEventListener(name, wrapFunc, false);
     bindData.push([node, name, wrapFunc]);
   }
@@ -504,8 +502,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
 
   var bindData = [];
   // Don't register the mouse event if an equivalent pointer event is supported.
-  if (!goog.events.BrowserFeature.POINTER_EVENTS ||
-      !(name in Blockly.Touch.TOUCH_MAP)) {
+  if ((window && !window.PointerEvent) || !(name in Blockly.Touch.TOUCH_MAP)) {
     node.addEventListener(name, wrapFunc, false);
     bindData.push([node, name, wrapFunc]);
   }

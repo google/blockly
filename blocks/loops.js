@@ -280,11 +280,11 @@ Blockly.Extensions.registerMixin('contextMenu_newGetVariableBlock',
     Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN);
 
 Blockly.Extensions.register('controls_for_tooltip',
-    Blockly.Extensions.buildTooltipWithFieldValue(
+    Blockly.Extensions.buildTooltipWithFieldText(
         '%{BKY_CONTROLS_FOR_TOOLTIP}', 'VAR'));
 
 Blockly.Extensions.register('controls_forEach_tooltip',
-    Blockly.Extensions.buildTooltipWithFieldValue(
+    Blockly.Extensions.buildTooltipWithFieldText(
         '%{BKY_CONTROLS_FOREACH_TOOLTIP}', 'VAR'));
 
 /**

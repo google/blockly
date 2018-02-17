@@ -397,13 +397,13 @@ Blockly.Extensions.checkDropdownOptionsInTable_ = function(block, dropdownName,
 /**
  * Builds an extension function that will install a dynamic tooltip. The
  * tooltip message should include the string '%1' and that string will be
- * replaced with the value of the named field.
+ * replaced with the text of the named field.
  * @param {string} msgTemplate The template form to of the message text, with
  *     %1 placeholder.
- * @param {string} fieldName The field with the replacement value.
+ * @param {string} fieldName The field with the replacement text.
  * @returns {Function} The extension function.
  */
-Blockly.Extensions.buildTooltipWithFieldValue = function(msgTemplate,
+Blockly.Extensions.buildTooltipWithFieldText = function(msgTemplate,
     fieldName) {
   // Check the tooltip string messages for invalid references.
   // Wait for load, in case Blockly.Msg is not yet populated.
@@ -422,8 +422,9 @@ Blockly.Extensions.buildTooltipWithFieldValue = function(msgTemplate,
    */
   var extensionFn = function() {
     this.setTooltip(function() {
+      var field = this.getField(fieldName);
       return Blockly.utils.replaceMessageReferences(msgTemplate)
-          .replace('%1', this.getFieldValue(fieldName));
+          .replace('%1', field ? field.getText() : '');
     }.bind(this));
   };
   return extensionFn;

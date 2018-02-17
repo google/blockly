@@ -422,8 +422,9 @@ Blockly.Extensions.buildTooltipWithFieldText = function(msgTemplate,
    */
   var extensionFn = function() {
     this.setTooltip(function() {
+      var field = this.getField(fieldName);
       return Blockly.utils.replaceMessageReferences(msgTemplate)
-          .replace('%1', this.getField(fieldName).getText());
+          .replace('%1', field ? field.getText() : '');
     }.bind(this));
   };
   return extensionFn;

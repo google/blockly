@@ -128,6 +128,7 @@
 	"LISTS_SET_INDEX_TOOLTIP_SET_RANDOM": "Setzt en zoufällegt Element an eng Lëscht.",
 	"LISTS_SET_INDEX_TOOLTIP_INSERT_LAST": "Setzt d'Element um Enn vun enger Lëscht derbäi.",
 	"LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM": "Setzt d'Element op eng zoufälleg Plaz an d'Lëscht dobäi.",
+	"LISTS_SORT_TITLE": "%1 %2 %3 zortéieren",
 	"LISTS_SORT_TYPE_NUMERIC": "numeresch",
 	"LISTS_SORT_TYPE_TEXT": "alphabetesch",
 	"LISTS_REVERSE_HELPURL": "https://github.com/google/blockly/wiki/Lists#reversing-a-list",

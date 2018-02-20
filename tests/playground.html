@@ -1060,6 +1060,71 @@ h1 {
       <block type="empty_block"></block>
       <block type="empty_block_with_mutator"></block>
     </category>
+    <category name="Drag">
+      <label text="Drag each of to the workspace"></label>
+      <block type="text_print">
+        <value name="TEXT">
+          <block type="text">
+            <field name="TEXT">Drag me by this child</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_print">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">Drag me by this shadow</field>
+          </shadow>
+        </value>
+      </block>
+      <label text="Multiple Variable Refs"></label>
+      <block type="text_print">
+        <value name="TEXT">
+          <block type="variables_get">
+            <field name="VAR" id="item" variabletype="">item</field>
+          </block>
+        </value>
+        <next>
+          <block type="text_print">
+            <value name="TEXT">
+              <block type="variables_get">
+                <field name="VAR" id="item" variabletype="">item</field>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+      <label text="Procedure Definitions"></label>
+      <block type="procedures_defnoreturn">
+        <field name="NAME">without arguments</field>
+        <statement name="STACK">
+          <block type="text_print">
+            <value name="TEXT">
+              <shadow type="text">
+                <field name="TEXT">No argument reference.</field>
+              </shadow>
+            </value>
+          </block>
+        </statement>
+      </block>
+      <block type="procedures_defnoreturn">
+        <mutation>
+          <arg name="fnArgument"></arg>
+        </mutation>
+        <field name="NAME">with one argument</field>
+        <statement name="STACK">
+          <block type="text_print">
+            <value name="TEXT">
+              <shadow type="text">
+                <field name="TEXT">Expected an argument reference here.</field>
+              </shadow>
+              <block type="variables_get">
+                <field name="VAR">fnArgument</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </block>
+    </category>
     <category name="Fields">
       <label text="Numbers"></label>
       <block type="test_number"></block>

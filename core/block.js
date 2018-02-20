@@ -1054,6 +1054,7 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
  * @param {!Object} json Structured data describing the block.
  */
 Blockly.Block.prototype.jsonInit = function(json) {
+  var blockTypeName = json['type'];
 
   // Validate inputs.
   goog.asserts.assert(
@@ -1063,9 +1064,14 @@ Blockly.Block.prototype.jsonInit = function(json) {
   // Set basic properties of block.
   if (json['colour'] !== undefined) {
     var rawValue = json['colour'];
-    var colour = goog.isString(rawValue) ?
-        Blockly.utils.replaceMessageReferences(rawValue) : rawValue;
-    this.setColour(colour);
+    try {
+      var colour = goog.isString(rawValue) ?
+          Blockly.utils.replaceMessageReferences(rawValue) : rawValue;
+      this.setColour(colour);
+    } catch (colorError) {
+      console.warn(
+          'Block "' + blockTypeName + '": Illegal color value: ', rawValue);
+    }
   }
 
   // Interpolate the message blocks.

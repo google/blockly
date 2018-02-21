@@ -299,7 +299,7 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
   /**
    * List of block types that are loops and thus do not need warnings.
    * To add a new loop type add this to your code:
-   * Blockly.Blocks['controls_flow_statements'].LOOP_TYPES.push('custom_loop');
+   * Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push('custom_loop');
    */
   LOOP_TYPES: ['controls_repeat', 'controls_repeat_ext', 'controls_forEach',
     'controls_for', 'controls_whileUntil'],

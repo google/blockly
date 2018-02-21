@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "返回指定角度的余弦值(非弧度）。";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "返回指定角度的正弦值(非弧度）。";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "返回指定角度的正切值(非弧度）。";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "创建变量...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "新变量的名称：";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "空白";
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "允许声明";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "与：";
@@ -388,7 +392,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_GET_CREATE_SET = "创建“设定%1”";
 /** @export */ Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_GET_TOOLTIP = "返回此变量的值。";
-/** @export */ Blockly.Msg.VARIABLES_SET = "赋值 %1 到 %2";
+/** @export */ Blockly.Msg.VARIABLES_SET = "赋值 %1 为 %2";
 /** @export */ Blockly.Msg.VARIABLES_SET_CREATE_GET = "创建“获得%1”";
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "设置此变量，以使它和输入值相等。";
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

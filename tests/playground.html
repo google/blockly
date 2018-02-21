@@ -12,6 +12,7 @@
 <script src="../generators/javascript/lists.js"></script>
 <script src="../generators/javascript/colour.js"></script>
 <script src="../generators/javascript/variables.js"></script>
+<script src="../generators/javascript/variables_dynamic.js"></script>
 <script src="../generators/javascript/procedures.js"></script>
 <script src="../generators/python.js"></script>
 <script src="../generators/python/logic.js"></script>
@@ -21,6 +22,7 @@
 <script src="../generators/python/lists.js"></script>
 <script src="../generators/python/colour.js"></script>
 <script src="../generators/python/variables.js"></script>
+<script src="../generators/python/variables_dynamic.js"></script>
 <script src="../generators/python/procedures.js"></script>
 <script src="../generators/php.js"></script>
 <script src="../generators/php/logic.js"></script>
@@ -30,6 +32,7 @@
 <script src="../generators/php/lists.js"></script>
 <script src="../generators/php/colour.js"></script>
 <script src="../generators/php/variables.js"></script>
+<script src="../generators/php/variables_dynamic.js"></script>
 <script src="../generators/php/procedures.js"></script>
 <script src="../generators/lua.js"></script>
 <script src="../generators/lua/logic.js"></script>
@@ -39,6 +42,7 @@
 <script src="../generators/lua/lists.js"></script>
 <script src="../generators/lua/colour.js"></script>
 <script src="../generators/lua/variables.js"></script>
+<script src="../generators/lua/variables_dynamic.js"></script>
 <script src="../generators/lua/procedures.js"></script>
 <script src="../generators/dart.js"></script>
 <script src="../generators/dart/logic.js"></script>
@@ -48,6 +52,7 @@
 <script src="../generators/dart/lists.js"></script>
 <script src="../generators/dart/colour.js"></script>
 <script src="../generators/dart/variables.js"></script>
+<script src="../generators/dart/variables_dynamic.js"></script>
 <script src="../generators/dart/procedures.js"></script>
 <script src="../msg/messages.js"></script>
 <script src="../blocks/logic.js"></script>
@@ -57,11 +62,11 @@
 <script src="../blocks/lists.js"></script>
 <script src="../blocks/colour.js"></script>
 <script src="../blocks/variables.js"></script>
+<script src="../blocks/variables_dynamic.js"></script>
 <script src="../blocks/procedures.js"></script>
 <script>
 'use strict';
 var workspace = null;
-var fakeDragStack = [];
 
 function start() {
   setBackgroundColor();
@@ -72,37 +77,42 @@ function start() {
   document.forms.options.elements.dir.selectedIndex = Number(rtl);
   var toolbox = getToolboxElement();
   document.forms.options.elements.toolbox.selectedIndex =
-      Number(toolbox.getElementsByTagName('category').length == 0);
+      getToolboxFormIndex(toolbox.id);
   match = location.search.match(/side=([^&]+)/);
   var side = match ? match[1] : 'start';
   document.forms.options.elements.side.value = side;
   // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
-          {comments: true,
-           collapse: true,
-           disable: true,
-           grid:
-             {spacing: 25,
-              length: 3,
-              colour: '#ccc',
-              snap: true},
-           horizontalLayout: side == 'top' || side == 'bottom',
-           maxBlocks: Infinity,
-           media: '../media/',
-           oneBasedIndex: true,
-           readOnly: false,
-           rtl: rtl,
-           scrollbars: true,
-           toolbox: toolbox,
-           toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
-           zoom:
-             {controls: true,
-              wheel: true,
-              startScale: 1.0,
-              maxScale: 4,
-              minScale: .25,
-              scaleSpeed: 1.1}
-          });
+      {
+        comments: true,
+        collapse: true,
+        disable: true,
+        grid:
+          {
+            spacing: 25,
+            length: 3,
+            colour: '#ccc',
+            snap: true
+          },
+        horizontalLayout: side == 'top' || side == 'bottom',
+        maxBlocks: Infinity,
+        media: '../media/',
+        oneBasedIndex: true,
+        readOnly: false,
+        rtl: rtl,
+        scrollbars: true,
+        toolbox: toolbox,
+        toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
+        zoom:
+          {
+            controls: true,
+            wheel: true,
+            startScale: 1.0,
+            maxScale: 4,
+            minScale: .25,
+            scaleSpeed: 1.1
+          }
+      });
   // Restore previously displayed text.
   if (sessionStorage) {
     var text = sessionStorage.getItem('textarea');
@@ -132,7 +142,24 @@ function setBackgroundColor() {
 
 function getToolboxElement() {
   var match = location.search.match(/toolbox=([^&]+)/);
-  return document.getElementById('toolbox-' + (match ? match[1] : 'categories'));
+  // Default to the basic toolbox with categories and untyped variables,
+  // but override that if the toolbox type is set in the URL.
+  var toolboxSuffix = (match ? match[1] : 'categories');
+  // The three possible values are: "simple", "categories",
+  // "categories-typed-variables".
+  return document.getElementById('toolbox-' + toolboxSuffix);
+}
+
+function getToolboxFormIndex(id) {
+  if (id == 'toolbox-categories') {
+    return 0;
+  } else if (id == 'toolbox-categories-typed-variables') {
+    return 1;
+  } else if (id == 'toolbox-simple') {
+    return 2;
+  }
+  // Didn't recognize it.
+  return 0;
 }
 
 function toXml() {
@@ -206,65 +233,6 @@ function airstrike(n) {
         Math.round(Math.random() * 600 + 40) + ')');
     block.render();
   }
-}
-
-function fakeDrag(id, dx, dy, opt_workspace) {
-  var ws = opt_workspace || Blockly.getMainWorkspace();
-  var blockToDrag = ws.getBlockById(id);
-
-  if (!blockToDrag) {
-    fakeDragWrapper();
-    return;
-  }
-  var blockTop = blockToDrag.svgGroup_.getBoundingClientRect().top;
-  var blockLeft = blockToDrag.svgGroup_.getBoundingClientRect().left;
-
-  // Click somewhere on the block.
-  var mouseDownEvent = new MouseEvent('mousedown',
-      {clientX: blockLeft + 5, clientY: blockTop + 5});
-  blockToDrag.onMouseDown_(mouseDownEvent);
-
-  // Throw in a move for good measure.
-  setTimeout(
-    function() {
-      var mouseMoveEvent = new MouseEvent('mousemove',
-          {clientX: blockLeft + dx,
-          clientY: blockTop + dy});
-      blockToDrag.onMouseMove_(mouseMoveEvent);
-
-      // Drop at dx, dy.
-      setTimeout(
-        function() {
-          var mouseUpEvent = new MouseEvent('mouseup',
-              {clientX: blockLeft + dx,
-              clientY: blockTop + dy});
-          blockToDrag.onMouseUp_(mouseUpEvent);
-
-          setTimeout(fakeDragWrapper(), 100);
-        }, 100);
-    }, 100);
-};
-
-function fakeDragWrapper() {
-  var dragInfo = fakeDragStack.pop();
-  if (dragInfo) {
-    fakeDrag(dragInfo.id, dragInfo.dx, dragInfo.dy, dragInfo.workspace);
-  }
-}
-
-function fakeManyDrags() {
-  var blockList = workspace.getAllBlocks();
-  for (var i = 0; i < 2 * blockList.length; i++) {
-    fakeDragStack.push(
-      {
-        id: blockList[Math.round(Math.random() * (blockList.length - 1))].id,
-        // Move some blocks up and to the left, but mostly down and to the right.
-        dx: Math.round((Math.random() - 0.25) * 200),
-        dy: Math.round((Math.random() - 0.25) * 200),
-        workspace: workspace
-      });
-  }
-  fakeDragWrapper();
 }
 
 function spaghetti(n) {
@@ -355,7 +323,8 @@ h1 {
       <option value="rtl">RTL</option>
     </select>
     <select name="toolbox" onchange="document.forms.options.submit()">
-      <option value="categories">Categories</option>
+      <option value="categories">Categories (untyped variables)</option>
+      <option value="categories-typed-variables">Categories (typed variables)</option>
       <option value="simple">Simple</option>
     </select>
     <select name="side" onchange="document.forms.options.submit()">
@@ -389,13 +358,17 @@ h1 {
     Stress test: &nbsp;
     <input type="button" value="Airstrike!" onclick="airstrike(100)">
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
-    <input type="button" value="Fake some drags!" onclick="fakeManyDrags()">
   </p>
   <p>
     Log events: &nbsp;
     <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
   </p>
 
+  <!-- The next three blocks of XML are sample toolboxes for testing basic
+  configurations.  For more information on building toolboxes, see https://developers.google.com/blockly/guides/configure/web/toolbox -->
+
+  <!-- toolbox-simple is an always-open flyout with no category menu.
+  Always-open flyouts are a good idea if you have a small number of blocks. -->
   <xml id="toolbox-simple" style="display: none">
     <block type="controls_ifelse"></block>
     <block type="logic_compare"></block>
@@ -413,8 +386,18 @@ h1 {
     <block type="logic_boolean"></block>
     <block type="logic_null" disabled="true"></block>
     <block type="logic_ternary"></block>
+    <block type="text_charAt">
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">text</field>
+        </block>
+      </value>
+    </block>
   </xml>
 
+  <!-- toolbox-categories has a category menu and an auto-closing flyout.  The
+  Variables category uses untyped variable blocks.
+  See https://developers.google.com/blockly/guides/create-custom-blocks/variables#untyped_variable_blocks for more information. -->
   <xml id="toolbox-categories" style="display: none">
     <category name="Logic" colour="210">
       <block type="controls_if"></block>
@@ -736,6 +719,333 @@ h1 {
     </category>
     <sep></sep>
     <category name="Variables" colour="330" custom="VARIABLE"></category>
+    <category name="Functions" colour="290" custom="PROCEDURE"></category>
+  </xml>
+
+  <!-- toolbox-categories-typed-variables has a category menu and an
+  auto-closing flyout.  The Variables category uses typed variable blocks.
+  See https://developers.google.com/blockly/guides/create-custom-blocks/variables#typed_variable_blocks for more information. -->
+  <xml id="toolbox-categories-typed-variables" style="display: none">
+    <category name="Logic" colour="210">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_null" disabled="true"></block>
+      <block type="logic_ternary"></block>
+    </category>
+    <category name="Loops" colour="120">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_repeat" disabled="true"></block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="BY">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
+    </category>
+    <category name="Math" colour="230">
+      <block type="math_number" gap="32"></block>
+      <block type="math_arithmetic">
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_single">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">9</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_trig">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">45</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_constant"></block>
+      <block type="math_number_property">
+        <value name="NUMBER_TO_CHECK">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_round">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">3.1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_on_list"></block>
+      <block type="math_modulo">
+        <value name="DIVIDEND">
+          <shadow type="math_number">
+            <field name="NUM">64</field>
+          </shadow>
+        </value>
+        <value name="DIVISOR">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_constrain">
+        <value name="VALUE">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="LOW">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="HIGH">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_int">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_float"></block>
+    </category>
+    <category name="Text" colour="160">
+      <block type="text"></block>
+      <block type="text_join"></block>
+      <block type="text_append">
+        <value name="TEXT">
+          <shadow type="text"></shadow>
+        </value>
+      </block>
+      <block type="text_length">
+        <value name="VALUE">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_isEmpty">
+        <value name="VALUE">
+          <shadow type="text">
+            <field name="TEXT"></field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+        <value name="FIND">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_charAt">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_getSubstring">
+        <value name="STRING">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_changeCase">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_trim">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_count">
+        <value name="SUB">
+          <shadow type="text"></shadow>
+        </value>
+        <value name="TEXT">
+          <shadow type="text"></shadow>
+        </value>
+      </block>
+      <block type="text_replace">
+        <value name="FROM">
+          <shadow type="text"></shadow>
+        </value>
+        <value name="TO">
+          <shadow type="text"></shadow>
+        </value>
+        <value name="TEXT">
+          <shadow type="text"></shadow>
+        </value>
+      </block>
+      <block type="text_reverse">
+        <value name="TEXT">
+          <shadow type="text"></shadow>
+        </value>
+      </block>
+      <label text="Input/Output:" web-class="ioLabel"></label>
+      <block type="text_print">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_prompt_ext">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="Lists" colour="260">
+      <block type="lists_create_with">
+        <mutation items="0"></mutation>
+      </block>
+      <block type="lists_create_with"></block>
+      <block type="lists_repeat">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">5</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="lists_length"></block>
+      <block type="lists_isEmpty"></block>
+      <block type="lists_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getIndex">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_setIndex">
+        <value name="LIST">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getSublist">
+        <value name="LIST">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_split">
+        <value name="DELIM">
+          <shadow type="text">
+            <field name="TEXT">,</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="lists_sort"></block>
+      <block type="lists_reverse"></block>
+    </category>
+    <category name="Colour" colour="20">
+      <block type="colour_picker"></block>
+      <block type="colour_random"></block>
+      <block type="colour_rgb">
+        <value name="RED">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+        <value name="GREEN">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="BLUE">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="colour_blend">
+        <value name="COLOUR1">
+          <shadow type="colour_picker">
+            <field name="COLOUR">#ff0000</field>
+          </shadow>
+        </value>
+        <value name="COLOUR2">
+          <shadow type="colour_picker">
+            <field name="COLOUR">#3333ff</field>
+          </shadow>
+        </value>
+        <value name="RATIO">
+          <shadow type="math_number">
+            <field name="NUM">0.5</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <sep></sep>
+    <category name="Variables" colour="310" custom="VARIABLE_DYNAMIC"></category>
     <category name="Functions" colour="290" custom="PROCEDURE"></category>
   </xml>
 </body>

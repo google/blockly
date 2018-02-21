@@ -564,12 +564,12 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
  * @readonly
  */
 Blockly.Constants.Logic.LOGIC_COMPARE_EXTENSION = function() {
-  // Fix operator labels in RTL
+  // Fix operator labels in RTL.
   if (this.RTL) {
     Blockly.Constants.Logic.fixLogicCompareRtlOpLabels.apply(this);
   }
 
-  // Add onchange handler to ensure types are compatable.
+  // Add onchange handler to ensure types are compatible.
   this.mixin(Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN);
 };
 

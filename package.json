@@ -24,7 +24,8 @@
   "license": "Apache-2.0",
   "private": true,
   "devDependencies": {
-    "jshint": "latest"
+    "jshint": "latest",
+    "eslint": "^4.16"
   },
   "jshintConfig": {
     "globalstrict": true,
@@ -41,12 +42,9 @@
     "unused": true
   },
   "dependencies": {
+    "google-closure-library": "^20180204.0.0",
     "install": "^0.8.8",
     "npm": "^4.4.4",
-    "closure-library": "^1.43629075.2",
     "webdriverio": "^4.6.2"
-  },
-  "devDependencies": {
-    "eslint": "2.9.0"
   }
 }

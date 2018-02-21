@@ -24,36 +24,17 @@ goog.require('goog.testing.MockControl');
 
 var workspace;
 var mockControl_;
-Blockly.defineBlocksWithJsonArray([{
-  "type": "get_var_block",
-  "message0": "%1",
-  "args0": [
-    {
-      "type": "field_variable",
-      "name": "VAR",
-    }
-  ]
-}]);
 
 function workspaceTest_setUp() {
+  defineGetVarBlock();
   workspace = new Blockly.Workspace();
   mockControl_ = new goog.testing.MockControl();
 }
 
 function workspaceTest_tearDown() {
+  undefineGetVarBlock();
   mockControl_.$tearDown();
   workspace.dispose();
-}
-
-/**
- * Create a test get_var_block.
- * @param {?string} variable_name The string to put into the variable field.
- * @return {!Blockly.Block} The created block.
- */
-function createMockBlock(variable_name) {
-  var block = new Blockly.Block(workspace, 'get_var_block');
-  block.inputList[0].fieldRow[0].setValue(variable_name);
-  return block;
 }
 
 function test_emptyWorkspace() {
@@ -160,13 +141,15 @@ function test_deleteVariable_InternalTrivial() {
   workspaceTest_setUp();
   var var_1 = workspace.createVariable('name1', 'type1', 'id1');
   workspace.createVariable('name2', 'type2', 'id2');
-  createMockBlock('name1');
-  createMockBlock('name1');
-  createMockBlock('name2');
+  createMockVarBlock(workspace, 'id1');
+  createMockVarBlock(workspace, 'id1');
+  createMockVarBlock(workspace, 'id2');
 
-  workspace.deleteVariableInternal_(var_1);
-  var variable = workspace.getVariable('name1');
-  var block_var_name = workspace.topBlocks_[0].getVars()[0];
+  var uses = workspace.getVariableUsesById(var_1.getId());
+  workspace.deleteVariableInternal_(var_1, uses);
+
+  var variable = workspace.getVariableById('id1');
+  var block_var_name = workspace.topBlocks_[0].getVarModels()[0].name;
   assertNull(variable);
   checkVariableValues(workspace, 'name2', 'type2', 'id2');
   assertEquals('name2', block_var_name);
@@ -175,83 +158,27 @@ function test_deleteVariable_InternalTrivial() {
 
 // TODO(marisaleung): Test the alert for deleting a variable that is a procedure.
 
-function test_updateVariableStore_TrivialNoClear() {
-  workspaceTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
-  setUpMockMethod(mockControl_, Blockly.Variables, 'allUsedVariables',
-    [workspace], [['name1', 'name2']]);
-
-  try {
-    workspace.updateVariableStore();
-    checkVariableValues(workspace, 'name1', 'type1', 'id1');
-    checkVariableValues(workspace, 'name2', 'type2', 'id2');
-  } finally {
-    workspaceTest_tearDown();
-  }
-}
-
-function test_updateVariableStore_NameNotInvariableMap_NoClear() {
-  workspaceTest_setUp();
-  setUpMockMethod(mockControl_, Blockly.Variables, 'allUsedVariables',
-    [workspace], [['name1']]);
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
-
-  try {
-    workspace.updateVariableStore();
-    checkVariableValues(workspace, 'name1', '', '1');
-  } finally {
-    workspaceTest_tearDown();
-  }
-}
-
-function test_updateVariableStore_ClearAndAllInUse() {
-  workspaceTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
-  setUpMockMethod(mockControl_, Blockly.Variables, 'allUsedVariables',
-    [workspace], [['name1', 'name2']]);
-
-  try {
-    workspace.updateVariableStore(true);
-    checkVariableValues(workspace, 'name1', 'type1', 'id1');
-    checkVariableValues(workspace, 'name2', 'type2', 'id2');
-  } finally {
-    workspaceTest_tearDown();
-  }
-}
-
-function test_updateVariableStore_ClearAndOneInUse() {
-  workspaceTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type2', 'id2');
-  setUpMockMethod(mockControl_, Blockly.Variables, 'allUsedVariables',
-    [workspace], [['name1']]);
-
-  try {
-    workspace.updateVariableStore(true);
-    checkVariableValues(workspace, 'name1', 'type1', 'id1');
-    var variabe = workspace.getVariable('name2');
-    assertNull(variable);
-  } finally {
-    workspaceTest_tearDown();
-  }
-}
-
 function test_addTopBlock_TrivialFlyoutIsTrue() {
   workspaceTest_setUp();
+  var targetWorkspace = new Blockly.Workspace();
   workspace.isFlyout = true;
-  var block = createMockBlock();
-  workspace.removeTopBlock(block);
-  setUpMockMethod(mockControl_, Blockly.Variables, 'allUsedVariables', [block],
-    [['name1']]);
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
+  workspace.targetWorkspace = targetWorkspace;
+  targetWorkspace.createVariable('name1', '', '1');
+
+  // Flyout.init usually does this binding.
+  workspace.variableMap_ = targetWorkspace.getVariableMap();
 
   try {
+    var block = createMockVarBlock(workspace, '1');
+    workspace.removeTopBlock(block);
     workspace.addTopBlock(block);
     checkVariableValues(workspace, 'name1', '', '1');
   } finally {
     workspaceTest_tearDown();
+    // Have to dispose of the main workspace after the flyout workspace, because
+    // it holds the variable map.
+    // Normally the main workspace disposes of the flyout workspace.
+    targetWorkspace.dispose();
   }
 }
 
@@ -289,50 +216,38 @@ function test_clear_NoVariables() {
   }
 }
 
-function test_renameVariable_NoBlocks() {
-  // Expect 'renameVariable' to create new variable with newName.
+function test_renameVariable_NoReference() {
+  // Test renaming a variable in the simplest case: when no blocks refer to it.
   workspaceTest_setUp();
+  var id = 'id1';
+  var type = 'type1';
   var oldName = 'name1';
   var newName = 'name2';
-    // Mocked setGroup to ensure only one call to the mocked genUid.
-  setUpMockMethod(mockControl_, Blockly.Events, 'setGroup', [true, false],
-    null);
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
+  workspace.createVariable(oldName, type, id);
 
   try {
-    workspace.renameVariable(oldName, newName);
-    checkVariableValues(workspace, 'name2', '', '1');
-    var variable = workspace.getVariable(oldName);
-    assertNull(variable);
+    workspace.renameVariableById(id, newName);
+    checkVariableValues(workspace, newName, type, id);
+    // Renaming should not have created a new variable.
+    assertEquals(1, workspace.getAllVariables().length);
   } finally {
     workspaceTest_tearDown();
   }
 }
 
-function test_renameVariable_SameNameNoBlocks() {
-  // Expect 'renameVariable' to create new variable with newName.
-  workspaceTest_setUp();
-  var name = 'name1';
-  workspace.createVariable(name, 'type1', 'id1');
-
-  workspace.renameVariable(name, name);
-  checkVariableValues(workspace, name, 'type1', 'id1');
-  workspaceTest_tearDown();
-}
-
-function test_renameVariable_OnlyOldNameBlockExists() {
+function test_renameVariable_ReferenceExists() {
+  // Test renaming a variable when a reference to it exists.
   // Expect 'renameVariable' to change oldName variable name to newName.
   workspaceTest_setUp();
-  var oldName = 'name1';
   var newName = 'name2';
-  workspace.createVariable(oldName, 'type1', 'id1');
-  createMockBlock(oldName);
 
-  workspace.renameVariable(oldName, newName);
+  createVariableAndBlock(workspace);
+
+  workspace.renameVariableById('id1', newName);
   checkVariableValues(workspace, newName, 'type1', 'id1');
-  var variable = workspace.getVariable(oldName);
-  var block_var_name = workspace.topBlocks_[0].getVars()[0];
-  assertNull(variable);
+  // Renaming should not have created a new variable.
+  assertEquals(1, workspace.getAllVariables().length);
+  var block_var_name = workspace.topBlocks_[0].getVarModels()[0].name;
   assertEquals(newName, block_var_name);
   workspaceTest_tearDown();
 }
@@ -341,140 +256,120 @@ function test_renameVariable_TwoVariablesSameType() {
   // Expect 'renameVariable' to change oldName variable name to newName.
   // Expect oldName block name to change to newName
   workspaceTest_setUp();
+  var id1 = 'id1';
+  var id2 = 'id2';
+  var type = 'type1';
+
   var oldName = 'name1';
   var newName = 'name2';
-  workspace.createVariable(oldName, 'type1', 'id1');
-  workspace.createVariable(newName, 'type1', 'id2');
-  createMockBlock(oldName);
-  createMockBlock(newName);
+  // Create two variables of the same type.
+  workspace.createVariable(oldName, type, id1);
+  workspace.createVariable(newName, type, id2);
+  // Create blocks to refer to both of them.
+  createMockVarBlock(workspace, id1);
+  createMockVarBlock(workspace, id2);
 
-  workspace.renameVariable(oldName, newName);
-  checkVariableValues(workspace, newName, 'type1', 'id2');
-  var variable = workspace.getVariable(oldName);
-  var block_var_name_1 = workspace.topBlocks_[0].getVars()[0];
-  var block_var_name_2 = workspace.topBlocks_[1].getVars()[0];
+  workspace.renameVariableById(id1, newName);
+  checkVariableValues(workspace, newName, type, id2);
+  // The old variable should have been deleted.
+  var variable = workspace.getVariableById(id1);
   assertNull(variable);
+
+  // There should only be one variable left.
+  assertEquals(1, workspace.getAllVariables().length);
+
+  // References should have the correct names.
+  var block_var_name_1 = workspace.topBlocks_[0].getVarModels()[0].name;
+  var block_var_name_2 = workspace.topBlocks_[1].getVarModels()[0].name;
   assertEquals(newName, block_var_name_1);
   assertEquals(newName, block_var_name_2);
+
   workspaceTest_tearDown();
 }
 
 function test_renameVariable_TwoVariablesDifferentType() {
-  // Expect triggered error because of different types
+  // Expect the rename to succeed, because variables with different types are
+  // allowed to have the same name.
   workspaceTest_setUp();
-  var oldName = 'name1';
-  var newName = 'name2';
-  workspace.createVariable(oldName, 'type1', 'id1');
-  workspace.createVariable(newName, 'type2', 'id2');
-  createMockBlock(oldName);
-  createMockBlock(newName);
+  createTwoVariablesAndBlocks(workspace);
 
-  try {
-    workspace.renameVariable(oldName, newName);
-    fail();
-  } catch (e) {
-    // expected
-  }
-  checkVariableValues(workspace, oldName, 'type1', 'id1');
+  var newName = 'name2';
+  workspace.renameVariableById('id1', newName);
+
+  checkVariableValues(workspace, newName, 'type1', 'id1');
   checkVariableValues(workspace, newName, 'type2', 'id2');
-  var block_var_name_1 = workspace.topBlocks_[0].getVars()[0];
-  var block_var_name_2 = workspace.topBlocks_[1].getVars()[0];
-  assertEquals(oldName, block_var_name_1);
+
+  // References shoul have the correct names.
+  var block_var_name_1 = workspace.topBlocks_[0].getVarModels()[0].name;
+  var block_var_name_2 = workspace.topBlocks_[1].getVarModels()[0].name;
+  assertEquals(newName, block_var_name_1);
   assertEquals(newName, block_var_name_2);
+
   workspaceTest_tearDown();
 }
 
 function test_renameVariable_OldCase() {
-  // Expect triggered error because of different types
+  // Rename a variable with a single reference.  Update only the capitalization.
   workspaceTest_setUp();
-  var oldCase = 'Name1';
-  var newName = 'name1';
-  workspace.createVariable(oldCase, 'type1', 'id1');
-  createMockBlock(oldCase);
+  var newName = 'Name1';
 
-  workspace.renameVariable(oldCase, newName);
+  createVariableAndBlock(workspace);
+
+  workspace.renameVariableById('id1', newName);
   checkVariableValues(workspace, newName, 'type1', 'id1');
-  var result_oldCase = workspace.getVariable(oldCase).name;
-  assertNotEquals(oldCase, result_oldCase);
+  var variable = workspace.getVariableById('id1');
+  assertNotEquals('name1', variable.name);
   workspaceTest_tearDown();
 }
 
 function test_renameVariable_TwoVariablesAndOldCase() {
-  // Expect triggered error because of different types
+  // Test renaming a variable to an in-use name, but with different
+  // capitalization.  The new capitalization should apply everywhere.
+
+  // TODO (fenichel): What about different capitalization but also different
+  // types?
   workspaceTest_setUp();
   var oldName = 'name1';
   var oldCase = 'Name2';
   var newName = 'name2';
-  workspace.createVariable(oldName, 'type1', 'id1');
-  workspace.createVariable(oldCase, 'type1', 'id2');
-  createMockBlock(oldName);
-  createMockBlock(oldCase);
 
-  workspace.renameVariable(oldName, newName);
+  var id1 = 'id1';
+  var id2 = 'id2';
 
-  checkVariableValues(workspace, newName, 'type1', 'id2');
-  var variable = workspace.getVariable(oldName);
-  var result_oldCase = workspace.getVariable(oldCase).name;
-  var block_var_name_1 = workspace.topBlocks_[0].getVars()[0];
-  var block_var_name_2 = workspace.topBlocks_[1].getVars()[0];
+  var type = 'type1';
+
+  workspace.createVariable(oldName, type, id1);
+  workspace.createVariable(oldCase, type, id2);
+  createMockVarBlock(workspace, id1);
+  createMockVarBlock(workspace, id2);
+
+  workspace.renameVariableById(id1, newName);
+
+  checkVariableValues(workspace, newName, type, id2);
+
+  // The old variable should have been deleted.
+  var variable = workspace.getVariableById(id1);
   assertNull(variable);
-  assertNotEquals(oldCase, result_oldCase);
+
+  // There should only be one variable left.
+  assertEquals(1, workspace.getAllVariables().length);
+
+  // Blocks should now use the new capitalization.
+  var block_var_name_1 = workspace.topBlocks_[0].getVarModels()[0].name;
+  var block_var_name_2 = workspace.topBlocks_[1].getVarModels()[0].name;
   assertEquals(newName, block_var_name_1);
   assertEquals(newName, block_var_name_2);
-  workspaceTest_tearDown();
-}
-
-// Extra testing not required for renameVariableById. It calls renameVariable
-// and that has extensive testing.
-function test_renameVariableById_TwoVariablesSameType() {
-  // Expect 'renameVariableById' to change oldName variable name to newName.
-  // Expect oldName block name to change to newName
-  workspaceTest_setUp();
-  var oldName = 'name1';
-  var newName = 'name2';
-  workspace.createVariable(oldName, 'type1', 'id1');
-  workspace.createVariable(newName, 'type1', 'id2');
-  createMockBlock(oldName);
-  createMockBlock(newName);
-
-  workspace.renameVariableById('id1', newName);
-  checkVariableValues(workspace, newName, 'type1', 'id2');
-  var variable = workspace.getVariable(oldName);
-  var block_var_name_1 = workspace.topBlocks_[0].getVars()[0];
-  var block_var_name_2 = workspace.topBlocks_[1].getVars()[0];
-  assertNull(variable);
-  assertEquals(newName, block_var_name_1);
-  assertEquals(newName, block_var_name_2);
-  workspaceTest_tearDown();
-}
-
-function test_deleteVariable_Trivial() {
-  workspaceTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type1', 'id2');
-  createMockBlock('name1');
-  createMockBlock('name2');
-
-  workspace.deleteVariable('name1');
-  checkVariableValues(workspace, 'name2', 'type1', 'id2');
-  var variable = workspace.getVariable('name1');
-  var block_var_name = workspace.topBlocks_[0].getVars()[0];
-  assertNull(variable);
-  assertEquals('name2', block_var_name);
   workspaceTest_tearDown();
 }
 
 function test_deleteVariableById_Trivial() {
   workspaceTest_setUp();
-  workspace.createVariable('name1', 'type1', 'id1');
-  workspace.createVariable('name2', 'type1', 'id2');
-  createMockBlock('name1');
-  createMockBlock('name2');
+  createTwoVariablesAndBlocks(workspace);
 
   workspace.deleteVariableById('id1');
-  checkVariableValues(workspace, 'name2', 'type1', 'id2');
-  var variable = workspace.getVariable('name1');
-  var block_var_name = workspace.topBlocks_[0].getVars()[0];
+  checkVariableValues(workspace, 'name2', 'type2', 'id2');
+  var variable = workspace.getVariableById('id1');
+  var block_var_name = workspace.topBlocks_[0].getVarModels()[0].name;
   assertNull(variable);
   assertEquals('name2', block_var_name);
   workspaceTest_tearDown();

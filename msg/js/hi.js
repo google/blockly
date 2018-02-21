@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "डिग्री का कोसाइन रिटर्न करें (रेडियन नही)";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "डिग्री का साइन रिटर्न करें (रेडियन नही)";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "डिग्री का टैन्जन्ट रिटर्न करें (रेडियन नही)";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "चर बनाएँ...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "नए चर का नाम:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "बयानों की अनुमति दें";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = ": के साथ";
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

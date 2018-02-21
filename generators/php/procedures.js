@@ -35,7 +35,7 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
   var globals = [];
   var varName;
   var workspace = block.workspace;
-  var variables = workspace.getAllVariables() || [];
+  var variables = Blockly.Variables.allUsedVarModels(workspace) || [];
   for (var i = 0, variable; variable = variables[i]; i++) {
     varName = variable.name;
     if (block.arguments_.indexOf(varName) == -1) {
@@ -43,7 +43,14 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
           Blockly.Variables.NAME_TYPE));
     }
   }
-  globals = globals.length ? Blockly.PHP.INDENT + 'global ' + globals.join(', ') + ';\n' : '';
+  // Add developer variables.
+  var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
+  for (var i = 0; i < devVarList.length; i++) {
+    globals.push(Blockly.PHP.variableDB_.getName(devVarList[i],
+        Blockly.Names.DEVELOPER_VARIABLE_TYPE));
+  }
+  globals = globals.length ?
+      Blockly.PHP.INDENT + 'global ' + globals.join(', ') + ';\n' : '';
 
   var funcName = Blockly.PHP.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
@@ -51,8 +58,8 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
   if (Blockly.PHP.STATEMENT_PREFIX) {
     var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
     branch = Blockly.PHP.prefixLines(
-        Blockly.PHP.STATEMENT_PREFIX.replace(/%1/g,
-        '\'' + id + '\''), Blockly.PHP.INDENT) + branch;
+        Blockly.PHP.STATEMENT_PREFIX.replace(
+            /%1/g, '\'' + id + '\''), Blockly.PHP.INDENT) + branch;
   }
   if (Blockly.PHP.INFINITE_LOOP_TRAP) {
     branch = Blockly.PHP.INFINITE_LOOP_TRAP.replace(/%1/g,

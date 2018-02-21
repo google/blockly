@@ -54,7 +54,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.CONTROLS_IF_TOOLTIP_4 = "Če je prva vrednost resnična, izvedi prvo skupino kock. Sicer, če je resnična druga vrednost, izvedi drugo skupino kock. Če nobena izmed vrednosti ni resnična, izvedi zadnjo skupino kock.";
 /** @export */ Blockly.Msg.CONTROLS_REPEAT_HELPURL = "https://en.wikipedia.org/wiki/For_loop";
 /** @export */ Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = "izvedi";
-/** @export */ Blockly.Msg.CONTROLS_REPEAT_TITLE = "ponavljaj %1 krat";
+/** @export */ Blockly.Msg.CONTROLS_REPEAT_TITLE = "ponovi %1 krat";
 /** @export */ Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = "Kocke se izvedejo večkrat.";
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = "https://github.com/google/blockly/wiki/Loops#repeat";
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "ponavljaj dokler";
@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Vrne kosinus kota v stopinjah (ne radianih).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Vrne sinus kota v stopinjah (ne radianih).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Vrne tangens kota v stopinjah (ne radianih).";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Ustvari spremenljivko ...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Ime nove spremenljivke:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "dovoli korake";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "s/z:";
@@ -393,7 +397,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Nastavi, da je vrednost spremenljivke enaka vnosu.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Spremenljivka »%1« že obstaja.";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another type: '%2'.";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

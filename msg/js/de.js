@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Ist der Kosinus des Winkels.";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Ist der Sinus des Winkels.";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Ist der Tangens des Winkels.";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Variable erstellen …";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Name der neuen Variable:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = ".";
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "Anweisungen erlauben";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "mit:";
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

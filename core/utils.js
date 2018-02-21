@@ -269,7 +269,7 @@ Blockly.utils.getScale_REGEXP_ = /scale\(\s*([-+\d.e]+)\s*\)/;
  * @private
  */
 Blockly.utils.getRelativeXY.XY_3D_REGEX_ =
-  /transform:\s*translate3d\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
+    /transform:\s*translate3d\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
 
 /**
  * Static regex to pull the x,y,z values out of a translate3d() style property.
@@ -278,7 +278,7 @@ Blockly.utils.getRelativeXY.XY_3D_REGEX_ =
  * @private
  */
 Blockly.utils.getRelativeXY.XY_2D_REGEX_ =
-  /transform:\s*translate\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
+    /transform:\s*translate\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
 
 /**
  * Helper method for creating SVG elements.
@@ -288,8 +288,8 @@ Blockly.utils.getRelativeXY.XY_2D_REGEX_ =
  * @return {!SVGElement} Newly created SVG element.
  */
 Blockly.utils.createSvgElement = function(name, attrs, parent) {
-  var e = /** @type {!SVGElement} */ (
-      document.createElementNS(Blockly.SVG_NS, name));
+  var e = /** @type {!SVGElement} */
+      (document.createElementNS(Blockly.SVG_NS, name));
   for (var key in attrs) {
     e.setAttribute(key, attrs[key]);
   }
@@ -896,7 +896,7 @@ Blockly.utils.insertAfter_ = function(newNode, refNode) {
  * @throws Error Will throw if no global document can be found (e.g., Node.js).
  */
 Blockly.utils.runAfterPageLoad = function(fn) {
-  if (!document) {
+  if (typeof document != 'object') {
     throw new Error('Blockly.utils.runAfterPageLoad() requires browser document.');
   }
   if (document.readyState === 'complete') {

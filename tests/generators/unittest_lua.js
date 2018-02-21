@@ -27,7 +27,7 @@
 Blockly.Lua['unittest_main'] = function(block) {
   // Container for unit tests.
   var resultsVar = Blockly.Lua.variableDB_.getName('unittestResults',
-      Blockly.Variables.NAME_TYPE);
+      Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = Blockly.Lua.provideFunction_(
       'unittest_report',
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '()',
@@ -61,19 +61,16 @@ Blockly.Lua['unittest_main'] = function(block) {
   // Run tests (unindented).
   code += Blockly.Lua.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');
-  var reportVar = Blockly.Lua.variableDB_.getDistinctName(
-      'report', Blockly.Variables.NAME_TYPE);
-  code += reportVar + ' = ' + functionName + '()\n';
+  // Print the report.
+  code += 'print(' + functionName + '())\n';
   // Destroy results.
   code += resultsVar + ' = nil\n';
-  // Print the report.
-  code += 'print(' + reportVar + ')\n';
   return code;
 };
 
 Blockly.Lua['unittest_main'].defineAssert_ = function(block) {
   var resultsVar = Blockly.Lua.variableDB_.getName('unittestResults',
-      Blockly.Variables.NAME_TYPE);
+      Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = Blockly.Lua.provideFunction_(
       'assertEquals',
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ +
@@ -152,9 +149,8 @@ Blockly.Lua['unittest_assertvalue'] = function(block) {
 Blockly.Lua['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = Blockly.Lua.variableDB_.getName('unittestResults',
-      Blockly.Variables.NAME_TYPE);
-  var message = Blockly.Lua.valueToCode(block, 'MESSAGE',
-      Blockly.Lua.ORDER_NONE) || '';
+      Blockly.Names.DEVELOPER_VARIABLE_TYPE);
+  var message = Blockly.Lua.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.Lua.provideFunction_(
       'unittest_fail',
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(message)',

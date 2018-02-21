@@ -160,7 +160,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_SORT_HELPURL = "https://github.com/google/blockly/wiki/Lists#sorting-a-list";  // untranslated
 /** @export */ Blockly.Msg.LISTS_SORT_ORDER_ASCENDING = "صعودی";
 /** @export */ Blockly.Msg.LISTS_SORT_ORDER_DESCENDING = "نزولی";
-/** @export */ Blockly.Msg.LISTS_SORT_TITLE = "sort %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.LISTS_SORT_TITLE = "مرتب‌سازی%1 %2 %3";
 /** @export */ Blockly.Msg.LISTS_SORT_TOOLTIP = "یک کپی از لیست را مرتب کنید.";
 /** @export */ Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE = "حروفی ، رد کردن مورد";
 /** @export */ Blockly.Msg.LISTS_SORT_TYPE_NUMERIC = "عددی";
@@ -168,8 +168,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_SPLIT_HELPURL = "https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists";  // untranslated
 /** @export */ Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT = "ایجاد فهرست از متن";
 /** @export */ Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST = "ایجاد متن از فهرست";
-/** @export */ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "Join a list of texts into one text, separated by a delimiter.";  // untranslated
-/** @export */ Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "Split text into a list of texts, breaking at each delimiter.";  // untranslated
+/** @export */ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = "چسباندن یک فهرست از متن‌ها و تشکیل یک متن که با یک جداکننده جدا شده‌اند";
+/** @export */ Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = "شکستن متن به فهرستی از متن‌ها، شکستن در محل جداکننده";
 /** @export */ Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = "همراه جداساز";
 /** @export */ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "ناصحیح";
 /** @export */ Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
@@ -281,12 +281,16 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "بازگرداندن کسینوس یک زاویه درجه (نه رادیان).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "بازگرداندن سینوس یک زاویه به درجه (نه رادیان).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "بازگرداندن تانژانت یک زاویه به درجه (نه رادیان).";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "ایجاد متغیر...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "نام متغیر تازه:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "اجازه اظهارات";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "با:";
-/** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B1%D9%88%DB%8C%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29";
+/** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B1%D9%88%DB%8C%D9%87_(%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87)";
 /** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "اجرای تابع تعریف‌شده توسط کاربر «%1».";
 /** @export */ Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B1%D9%88%DB%8C%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29";
 /** @export */ Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "اجرای تابع تعریف‌شده توسط کاربر «%1» و استفاده از خروجی آن.";
@@ -329,7 +333,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_CHARAT_LAST = "گرفتن آخرین حرف";
 /** @export */ Blockly.Msg.TEXT_CHARAT_RANDOM = "گرفتن حرف تصادفی";
 /** @export */ Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
-/** @export */ Blockly.Msg.TEXT_CHARAT_TITLE = "in text %1 %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_CHARAT_TITLE = "در متن %1 %2";
 /** @export */ Blockly.Msg.TEXT_CHARAT_TOOLTIP = "حرفی در موقعیت مشخص‌شده بر می‌گرداند.";
 /** @export */ Blockly.Msg.TEXT_COUNT_HELPURL = "https://github.com/google/blockly/wiki/Text#counting-substrings";  // untranslated
 /** @export */ Blockly.Msg.TEXT_COUNT_MESSAGE0 = "تعداد %1 را در %2 بشمار";
@@ -371,7 +375,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_PROMPT_TYPE_TEXT = "اعلان برای متن با پیام";
 /** @export */ Blockly.Msg.TEXT_REPLACE_HELPURL = "https://github.com/google/blockly/wiki/Text#replacing-substrings";  // untranslated
 /** @export */ Blockly.Msg.TEXT_REPLACE_MESSAGE0 = "درون %3، متن %1 را با %2 جایگزین کن";
-/** @export */ Blockly.Msg.TEXT_REPLACE_TOOLTIP = "Replace all occurances of some text within some other text.";  // untranslated
+/** @export */ Blockly.Msg.TEXT_REPLACE_TOOLTIP = "جایگزین کردن تمام مواردی که از متنی درون متن دیگر وجود دارد";
 /** @export */ Blockly.Msg.TEXT_REVERSE_HELPURL = "https://github.com/google/blockly/wiki/Text#reversing-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_REVERSE_MESSAGE0 = "معکوس %1";
 /** @export */ Blockly.Msg.TEXT_REVERSE_TOOLTIP = "چینش کاراکترها درون متن را برعکس می‌کند";
@@ -393,7 +397,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "متغیر برابر با خروجی را مشخص می‌کند.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "متغیری با نام '%1' هم اکنون وجود دارد";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "در حال حاضر یک متغیر با نام '%1' برای متغیر دیگری از نوع '%2' وجود دارد";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

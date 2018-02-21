@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.fi');
 goog.require('Blockly.Msg');
 
 /** @export */ Blockly.Msg.ADD_COMMENT = "Lisää kommentti";
-/** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
+/** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Ei voida poistaa muuttujaa '%1' koska se on osa funktion määritelmää '%2'";
 /** @export */ Blockly.Msg.CHANGE_VALUE_TITLE = "Muuta arvoa:";
 /** @export */ Blockly.Msg.CLEAN_UP = "Siivoa lohkot";
 /** @export */ Blockly.Msg.COLLAPSE_ALL = "Sulje lohkot";
@@ -78,8 +78,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.IOS_ERROR = "Virhe";
 /** @export */ Blockly.Msg.IOS_OK = "OK";
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Lisää syöte";
-/** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
-/** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
+/** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Salli selostukset";
+/** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "Tällä toiminnolla on päällekkäisiä syöttöjä.";
 /** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "SYÖTTEET";
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Lisää";
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Lisää muuttuja";
@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Palauttaa asteluvun (ei radiaanin) kosinin.";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Palauttaa asteluvun (ei radiaanin) sinin.";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Palauttaa asteluvun (ei radiaanin) tangentin.";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Luo muuttuja...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Uuden muuttujan nimi:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "salli kommentit";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "parametrit:";
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

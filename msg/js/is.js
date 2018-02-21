@@ -63,7 +63,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Endurtaka eitthvað á meðan gildi er satt.";
 /** @export */ Blockly.Msg.DELETE_ALL_BLOCKS = "Eyða öllum %1 kubbunum?";
 /** @export */ Blockly.Msg.DELETE_BLOCK = "Eyða kubbi";
-/** @export */ Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+/** @export */ Blockly.Msg.DELETE_VARIABLE = "Eyða '%1' breytunni";
 /** @export */ Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the '%2' variable?";  // untranslated
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "Eyða %1 kubbum";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "Óvirkja kubb";
@@ -82,7 +82,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Bæta við";
-/** @export */ Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
+/** @export */ Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Bæta við breytu";
 /** @export */ Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Eyða";
 /** @export */ Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
 /** @export */ Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Endurnefna";
@@ -144,7 +144,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_REPEAT_TOOLTIP = "Býr til lista sem inniheldur tiltekna gildið endurtekið tiltekið oft.";
 /** @export */ Blockly.Msg.LISTS_REVERSE_HELPURL = "https://github.com/google/blockly/wiki/Lists#reversing-a-list";  // untranslated
 /** @export */ Blockly.Msg.LISTS_REVERSE_MESSAGE0 = "snúa við %1";
-/** @export */ Blockly.Msg.LISTS_REVERSE_TOOLTIP = "Reverse a copy of a list.";  // untranslated
+/** @export */ Blockly.Msg.LISTS_REVERSE_TOOLTIP = "Snúa við afriti lista.";
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_HELPURL = "https://github.com/google/blockly/wiki/Lists#in-list--set";
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_INPUT_TO = "sem";
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_INSERT = "bæta við";
@@ -281,14 +281,18 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Skila kósínusi horns gefnu í gráðum.";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Skila sínusi horns gefnu í gráðum.";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Skila tangensi horns gefnu í gráðum.";
-/** @export */ Blockly.Msg.NEW_VARIABLE = "Ný breyta...";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_VARIABLE = "Búa til breytu...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Heiti nýrrar breytu:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "leyfa setningar";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "með:";
-/** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
+/** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Subroutine";
 /** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "Keyra heimatilbúna fallið '%1'.";
-/** @export */ Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
+/** @export */ Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://en.wikipedia.org/wiki/Subroutine";
 /** @export */ Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "Keyra heimatilbúna fallið '%1' og nota úttak þess.";
 /** @export */ Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "með:";
 /** @export */ Blockly.Msg.PROCEDURES_CREATE_DO = "Búa til '%1'";
@@ -329,10 +333,10 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_CHARAT_LAST = "sækja síðasta staf";
 /** @export */ Blockly.Msg.TEXT_CHARAT_RANDOM = "sækja einhvern staf";
 /** @export */ Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
-/** @export */ Blockly.Msg.TEXT_CHARAT_TITLE = "in text %1 %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_CHARAT_TITLE = "í texta %1 %2";
 /** @export */ Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Skila staf á tilteknum stað.";
 /** @export */ Blockly.Msg.TEXT_COUNT_HELPURL = "https://github.com/google/blockly/wiki/Text#counting-substrings";  // untranslated
-/** @export */ Blockly.Msg.TEXT_COUNT_MESSAGE0 = "count %1 in %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_COUNT_MESSAGE0 = "fjöldi %1 í %2";
 /** @export */ Blockly.Msg.TEXT_COUNT_TOOLTIP = "Count how many times some text occurs within some other text.";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Bæta atriði við textann.";
 /** @export */ Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "tengja";
@@ -374,7 +378,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_REPLACE_TOOLTIP = "Replace all occurances of some text within some other text.";  // untranslated
 /** @export */ Blockly.Msg.TEXT_REVERSE_HELPURL = "https://github.com/google/blockly/wiki/Text#reversing-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_REVERSE_MESSAGE0 = "snúa við %1";
-/** @export */ Blockly.Msg.TEXT_REVERSE_TOOLTIP = "Reverses the order of the characters in the text.";  // untranslated
+/** @export */ Blockly.Msg.TEXT_REVERSE_TOOLTIP = "Snýr við röð stafanna í textanum.";
 /** @export */ Blockly.Msg.TEXT_TEXT_HELPURL = "https://en.wikipedia.org/wiki/String_(computer_science)";
 /** @export */ Blockly.Msg.TEXT_TEXT_TOOLTIP = "Stafur, orð eða textalína.";
 /** @export */ Blockly.Msg.TEXT_TRIM_HELPURL = "https://github.com/google/blockly/wiki/Text#trimming-removing-spaces";
@@ -392,8 +396,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_CREATE_GET = "Búa til 'sækja %1'";
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Stillir þessa breytu á innihald inntaksins.";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "A variable named '%1' already exists.";  // untranslated
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Breyta með heitinu '%1' er þegar til staðar.";
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another type: '%2'.";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

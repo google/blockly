@@ -83,8 +83,10 @@ Blockly.JavaScript.ORDER_LOGICAL_NOT = 4.4;    // !
 Blockly.JavaScript.ORDER_TYPEOF = 4.5;         // typeof
 Blockly.JavaScript.ORDER_VOID = 4.6;           // void
 Blockly.JavaScript.ORDER_DELETE = 4.7;         // delete
-Blockly.JavaScript.ORDER_DIVISION = 5.1;       // /
-Blockly.JavaScript.ORDER_MULTIPLICATION = 5.2; // *
+Blockly.JavaScript.ORDER_AWAIT = 4.8;          // await
+Blockly.JavaScript.ORDER_EXPONENTIATION = 5.0; // **
+Blockly.JavaScript.ORDER_MULTIPLICATION = 5.1; // *
+Blockly.JavaScript.ORDER_DIVISION = 5.2;       // /
 Blockly.JavaScript.ORDER_MODULUS = 5.3;        // %
 Blockly.JavaScript.ORDER_SUBTRACTION = 6.1;    // -
 Blockly.JavaScript.ORDER_ADDITION = 6.2;       // +
@@ -99,7 +101,8 @@ Blockly.JavaScript.ORDER_BITWISE_OR = 12;      // |
 Blockly.JavaScript.ORDER_LOGICAL_AND = 13;     // &&
 Blockly.JavaScript.ORDER_LOGICAL_OR = 14;      // ||
 Blockly.JavaScript.ORDER_CONDITIONAL = 15;     // ?:
-Blockly.JavaScript.ORDER_ASSIGNMENT = 16;      // = += -= *= /= %= <<= >>= ...
+Blockly.JavaScript.ORDER_ASSIGNMENT = 16;      // = += -= **= *= /= %= <<= >>= ...
+Blockly.JavaScript.ORDER_YIELD = 16.5;         // yield
 Blockly.JavaScript.ORDER_COMMA = 17;           // ,
 Blockly.JavaScript.ORDER_NONE = 99;            // (...)
 
@@ -152,13 +155,25 @@ Blockly.JavaScript.init = function(workspace) {
     Blockly.JavaScript.variableDB_.reset();
   }
 
+  Blockly.JavaScript.variableDB_.setVariableMap(workspace.getVariableMap());
+
   var defvars = [];
-  var variables = workspace.getAllVariables();
-  if (variables.length) {
-    for (var i = 0; i < variables.length; i++) {
-      defvars[i] = Blockly.JavaScript.variableDB_.getName(variables[i].name,
-          Blockly.Variables.NAME_TYPE);
-    }
+  // Add developer variables (not created or named by the user).
+  var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
+  for (var i = 0; i < devVarList.length; i++) {
+    defvars.push(Blockly.JavaScript.variableDB_.getName(devVarList[i],
+        Blockly.Names.DEVELOPER_VARIABLE_TYPE));
+  }
+
+  // Add user variables, but only ones that are being used.
+  var variables = Blockly.Variables.allUsedVarModels(workspace);
+  for (var i = 0; i < variables.length; i++) {
+    defvars.push(Blockly.JavaScript.variableDB_.getName(variables[i].getId(),
+        Blockly.Variables.NAME_TYPE));
+  }
+
+  // Declare all of the variables.
+  if (defvars.length) {
     Blockly.JavaScript.definitions_['variables'] =
         'var ' + defvars.join(', ') + ';';
   }

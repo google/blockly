@@ -36,7 +36,7 @@ Blockly.Python['procedures_defreturn'] = function(block) {
   var globals = [];
   var varName;
   var workspace = block.workspace;
-  var variables = workspace.getAllVariables() || [];
+  var variables = Blockly.Variables.allUsedVarModels(workspace) || [];
   for (var i = 0, variable; variable = variables[i]; i++) {
     varName = variable.name;
     if (block.arguments_.indexOf(varName) == -1) {
@@ -44,15 +44,23 @@ Blockly.Python['procedures_defreturn'] = function(block) {
           Blockly.Variables.NAME_TYPE));
     }
   }
-  globals = globals.length ? Blockly.Python.INDENT + 'global ' + globals.join(', ') + '\n' : '';
-  var funcName = Blockly.Python.variableDB_.getName(block.getFieldValue('NAME'),
-      Blockly.Procedures.NAME_TYPE);
+  // Add developer variables.
+  var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
+  for (var i = 0; i < devVarList.length; i++) {
+    globals.push(Blockly.Python.variableDB_.getName(devVarList[i],
+        Blockly.Names.DEVELOPER_VARIABLE_TYPE));
+  }
+
+  globals = globals.length ?
+      Blockly.Python.INDENT + 'global ' + globals.join(', ') + '\n' : '';
+  var funcName = Blockly.Python.variableDB_.getName(
+      block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Python.statementToCode(block, 'STACK');
   if (Blockly.Python.STATEMENT_PREFIX) {
     var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
     branch = Blockly.Python.prefixLines(
-        Blockly.Python.STATEMENT_PREFIX.replace(/%1/g,
-        '\'' + id + '\''), Blockly.Python.INDENT) + branch;
+        Blockly.Python.STATEMENT_PREFIX.replace(
+            /%1/g, '\'' + id + '\''), Blockly.Python.INDENT) + branch;
   }
   if (Blockly.Python.INFINITE_LOOP_TRAP) {
     branch = Blockly.Python.INFINITE_LOOP_TRAP.replace(/%1/g,

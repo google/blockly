@@ -207,8 +207,10 @@ Blockly.Grid.createDom = function(rnd, gridOptions, defs) {
     </pattern>
   */
   var gridPattern = Blockly.utils.createSvgElement('pattern',
-      {'id': 'blocklyGridPattern' + rnd,
-       'patternUnits': 'userSpaceOnUse'}, defs);
+      {
+        'id': 'blocklyGridPattern' + rnd,
+        'patternUnits': 'userSpaceOnUse'
+      }, defs);
   if (gridOptions['length'] > 0 && gridOptions['spacing'] > 0) {
     Blockly.utils.createSvgElement('line',
         {'stroke': gridOptions['colour']}, gridPattern);

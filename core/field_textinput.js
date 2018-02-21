@@ -51,6 +51,23 @@ Blockly.FieldTextInput = function(text, opt_validator) {
 goog.inherits(Blockly.FieldTextInput, Blockly.Field);
 
 /**
+ * Construct a FieldTextInput from a JSON arg object,
+ * dereferencing any string table references.
+ * @param {!Object} options A JSON object with options (text, class, and
+ *                          spellcheck).
+ * @returns {!Blockly.FieldTextInput} The new field instance.
+ * @package
+ */
+Blockly.FieldTextInput.fromJson = function(options) {
+  var text = Blockly.utils.replaceMessageReferences(options['text']);
+  var field = new Blockly.FieldTextInput(text, options['class']);
+  if (typeof options['spellcheck'] === 'boolean') {
+    field.setSpellcheck(options['spellcheck']);
+  }
+  return field;
+};
+
+/**
  * Point size of text.  Should match blocklyText's font-size in CSS.
  */
 Blockly.FieldTextInput.FONTSIZE = 11;
@@ -156,12 +173,12 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
 Blockly.FieldTextInput.prototype.showPromptEditor_ = function() {
   var fieldText = this;
   Blockly.prompt(Blockly.Msg.CHANGE_VALUE_TITLE, this.text_,
-    function(newValue) {
-      if (fieldText.sourceBlock_) {
-        newValue = fieldText.callValidator(newValue);
-      }
-      fieldText.setValue(newValue);
-    });
+      function(newValue) {
+        if (fieldText.sourceBlock_) {
+          newValue = fieldText.callValidator(newValue);
+        }
+        fieldText.setValue(newValue);
+      });
 };
 
 /**
@@ -206,16 +223,16 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
 Blockly.FieldTextInput.prototype.bindEvents_ = function(htmlInput) {
   // Bind to keydown -- trap Enter without IME and Esc to hide.
   htmlInput.onKeyDownWrapper_ =
-      Blockly.bindEventWithChecks_(htmlInput, 'keydown', this,
-      this.onHtmlInputKeyDown_);
+      Blockly.bindEventWithChecks_(
+          htmlInput, 'keydown', this, this.onHtmlInputKeyDown_);
   // Bind to keyup -- trap Enter; resize after every keystroke.
   htmlInput.onKeyUpWrapper_ =
-      Blockly.bindEventWithChecks_(htmlInput, 'keyup', this,
-      this.onHtmlInputChange_);
+      Blockly.bindEventWithChecks_(
+          htmlInput, 'keyup', this, this.onHtmlInputChange_);
   // Bind to keyPress -- repeatedly resize when holding down a key.
   htmlInput.onKeyPressWrapper_ =
-      Blockly.bindEventWithChecks_(htmlInput, 'keypress', this,
-      this.onHtmlInputChange_);
+      Blockly.bindEventWithChecks_(
+          htmlInput, 'keypress', this, this.onHtmlInputChange_);
   htmlInput.onWorkspaceChangeWrapper_ = this.resizeEditor_.bind(this);
   this.workspace_.addChangeListener(htmlInput.onWorkspaceChangeWrapper_);
 };

@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "（ラジアンではなく）度数の余弦（cosin）を返す。";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "（ラジアンではなく）度数の正弦（sin）を返す。";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "（ラジアンではなく）度数の正接（tan）を返す。";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "変数の作成…";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "新しい変数の名前：";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "ステートメントを許可";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "対象：";
@@ -393,7 +397,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "この入力を変数と等しくなるように設定します。";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "変数名 '%1' は既に存在しています。";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another type: '%2'.";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

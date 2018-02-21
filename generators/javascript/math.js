@@ -32,7 +32,9 @@ goog.require('Blockly.JavaScript');
 Blockly.JavaScript['math_number'] = function(block) {
   // Numeric value.
   var code = parseFloat(block.getFieldValue('NUM'));
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  var order = code >= 0 ? Blockly.JavaScript.ORDER_ATOMIC : 
+              Blockly.JavaScript.ORDER_UNARY_NEGATION;
+  return [code, order];
 };
 
 Blockly.JavaScript['math_arithmetic'] = function(block) {

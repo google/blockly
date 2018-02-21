@@ -8,7 +8,7 @@ goog.require('Blockly.Msg');
 
 /** @export */ Blockly.Msg.ADD_COMMENT = "Додај коментар";
 /** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Не могу да обришем варијаблу ’%1’ јер је део дефиниције функције ’%2’";
-/** @export */ Blockly.Msg.CHANGE_VALUE_TITLE = "Промените вредност:";
+/** @export */ Blockly.Msg.CHANGE_VALUE_TITLE = "Промени вредност:";
 /** @export */ Blockly.Msg.CLEAN_UP = "Уклони блокове";
 /** @export */ Blockly.Msg.COLLAPSE_ALL = "Скупи блокове";
 /** @export */ Blockly.Msg.COLLAPSE_BLOCK = "Скупи блок";
@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Враћа косинус степена (не радијан).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Враћа синус степена (не радијан).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Враћа тангенс степена (не радијан).";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Направи променљиву…";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Име нове променљиве:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "дозволити изреке";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "са:";
@@ -313,7 +317,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.REDO = "Понови";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Уклони коментар";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "Преименуј променљиву…";
-/** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Преименујте све „%1“ променљиве у:";
+/** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Преименуј све „%1“ променљиве у:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 /** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "на %1 додај текст %2";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "Додајте текст на променљиву „%1“.";
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

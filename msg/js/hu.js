@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.hu');
 goog.require('Blockly.Msg');
 
 /** @export */ Blockly.Msg.ADD_COMMENT = "Megjegyzés hozzáadása";
-/** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
+/** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "A(z) „%1” változó nem törölhető, mert része a(z) „%2” függvény definíciójának.";
 /** @export */ Blockly.Msg.CHANGE_VALUE_TITLE = "Érték módosítása:";
 /** @export */ Blockly.Msg.CLEAN_UP = "Blokkok kiürítése";
 /** @export */ Blockly.Msg.COLLAPSE_ALL = "Blokkok összecsukása";
@@ -77,10 +77,10 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.IOS_CANCEL = "Mégse";
 /** @export */ Blockly.Msg.IOS_ERROR = "Hiba";
 /** @export */ Blockly.Msg.IOS_OK = "OK";
-/** @export */ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
-/** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
+/** @export */ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Bemenet hozzáadása";
+/** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Utasítások engedélyezése";
 /** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "Ennek a függvénynek kettőzött bemenete van.";
-/** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
+/** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "BEMENETEK";
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Hozzáadás";
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Változó hozzáadása";
 /** @export */ Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Törlés";
@@ -143,8 +143,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_REPEAT_TITLE = "Lista készítése %1 elemet %2 alkalommal hozzáadva";
 /** @export */ Blockly.Msg.LISTS_REPEAT_TOOLTIP = "A megadtott elem felhasználásával n elemű listát készít";
 /** @export */ Blockly.Msg.LISTS_REVERSE_HELPURL = "https://github.com/google/blockly/wiki/Lists#reversing-a-list";  // untranslated
-/** @export */ Blockly.Msg.LISTS_REVERSE_MESSAGE0 = "reverse %1";  // untranslated
-/** @export */ Blockly.Msg.LISTS_REVERSE_TOOLTIP = "Reverse a copy of a list.";  // untranslated
+/** @export */ Blockly.Msg.LISTS_REVERSE_MESSAGE0 = "%1 megfordítása";
+/** @export */ Blockly.Msg.LISTS_REVERSE_TOOLTIP = "Megfordítja a lista másolatát.";
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_HELPURL = "https://github.com/google/blockly/wiki/Lists#in-list--set";  // untranslated
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_INPUT_TO = "elemkéntː";
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_INSERT = "listába szúrd be";
@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "A fokban megadott szög koszinusz értéke.";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "A fokban megadott szög szinusz értéke.";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "A fokban megadott szög tangens értéke.";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Változó létrehozása…";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Az új változó neve:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = ".";
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "utasítások engedélyezése";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "paraméterlistaː";
@@ -329,11 +333,11 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_CHARAT_LAST = "utolsó";
 /** @export */ Blockly.Msg.TEXT_CHARAT_RANDOM = "véletlen";
 /** @export */ Blockly.Msg.TEXT_CHARAT_TAIL = "karaktere";
-/** @export */ Blockly.Msg.TEXT_CHARAT_TITLE = "in text %1 %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_CHARAT_TITLE = "a szövegben: %1 %2";
 /** @export */ Blockly.Msg.TEXT_CHARAT_TOOLTIP = "A szöveg egy megadott karakterét adja eredményül.";
 /** @export */ Blockly.Msg.TEXT_COUNT_HELPURL = "https://github.com/google/blockly/wiki/Text#counting-substrings";  // untranslated
-/** @export */ Blockly.Msg.TEXT_COUNT_MESSAGE0 = "count %1 in %2";  // untranslated
-/** @export */ Blockly.Msg.TEXT_COUNT_TOOLTIP = "Count how many times some text occurs within some other text.";  // untranslated
+/** @export */ Blockly.Msg.TEXT_COUNT_MESSAGE0 = "%1 száma ebben: %2";
+/** @export */ Blockly.Msg.TEXT_COUNT_TOOLTIP = "A szöveg előfordulásainak megszámolása egy másik szövegben.";
 /** @export */ Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Elem hozzáfűzése a szöveghez.";
 /** @export */ Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "fűzd össze";
 /** @export */ Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Összefűzéssel, törléssel vagy rendezéssel kapcsolato sblokkok szöveg szerkesztéséhez.";
@@ -371,10 +375,10 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_PROMPT_TYPE_TEXT = "Kérj be szöveget";
 /** @export */ Blockly.Msg.TEXT_REPLACE_HELPURL = "https://github.com/google/blockly/wiki/Text#replacing-substrings";  // untranslated
 /** @export */ Blockly.Msg.TEXT_REPLACE_MESSAGE0 = "%1 cseréje %2-vel %3-ban";
-/** @export */ Blockly.Msg.TEXT_REPLACE_TOOLTIP = "Replace all occurances of some text within some other text.";  // untranslated
+/** @export */ Blockly.Msg.TEXT_REPLACE_TOOLTIP = "A szöveg összes előfordulásának cseréje egy másik szöveggel.";
 /** @export */ Blockly.Msg.TEXT_REVERSE_HELPURL = "https://github.com/google/blockly/wiki/Text#reversing-text";  // untranslated
-/** @export */ Blockly.Msg.TEXT_REVERSE_MESSAGE0 = "reverse %1";  // untranslated
-/** @export */ Blockly.Msg.TEXT_REVERSE_TOOLTIP = "Reverses the order of the characters in the text.";  // untranslated
+/** @export */ Blockly.Msg.TEXT_REVERSE_MESSAGE0 = "%1 megfordítása";
+/** @export */ Blockly.Msg.TEXT_REVERSE_TOOLTIP = "Megfordítja a karakterek sorrendjét a szövegben.";
 /** @export */ Blockly.Msg.TEXT_TEXT_HELPURL = "https://hu.wikipedia.org/wiki/String";
 /** @export */ Blockly.Msg.TEXT_TEXT_TOOLTIP = "Egy betű, szó vagy szöveg egy sora.";
 /** @export */ Blockly.Msg.TEXT_TRIM_HELPURL = "https://github.com/google/blockly/wiki/Text#trimming-removing-spaces";  // untranslated
@@ -393,7 +397,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "A változónak adhatunk értéket.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "A(z) „%1” nevű változó már létezik.";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Egy „%1” nevű változó már létezik egy másik típussal: „%2”.";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

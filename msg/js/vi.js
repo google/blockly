@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Hoàn trả Cos của một góc (theo độ).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Hoàn trả Sin của một góc (theo độ).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Hoàn trả Tang của một góc (theo độ).";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Tạo biến...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Tên của biến mới:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "cho phép báo cáo";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "với:";
@@ -328,7 +332,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_CHARAT_HELPURL = "https://github.com/google/blockly/wiki/Text#extracting-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHARAT_LAST = "lấy ký tự cuối cùng";
 /** @export */ Blockly.Msg.TEXT_CHARAT_RANDOM = "lấy ký tự bất kỳ";
-/** @export */ Blockly.Msg.TEXT_CHARAT_TAIL = "";
+/** @export */ Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHARAT_TITLE = "trong văn bản %1 %2";
 /** @export */ Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Hoàn trả ký tự ở vị trí đặt ra.";
 /** @export */ Blockly.Msg.TEXT_COUNT_HELPURL = "https://github.com/google/blockly/wiki/Text#counting-substrings";  // untranslated
@@ -345,7 +349,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_GET_SUBSTRING_START_FIRST = "lấy từ ký tự đầu tiên";
 /** @export */ Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_END = "lấy từ phía cuối, ký tự thứ";
 /** @export */ Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_START = "lấy từ ký tự thứ";
-/** @export */ Blockly.Msg.TEXT_GET_SUBSTRING_TAIL = "";
+/** @export */ Blockly.Msg.TEXT_GET_SUBSTRING_TAIL = "";  // untranslated
 /** @export */ Blockly.Msg.TEXT_GET_SUBSTRING_TOOLTIP = "Hoàn trả một mảng ký tự ấn định từ trong văn bản.";
 /** @export */ Blockly.Msg.TEXT_INDEXOF_HELPURL = "https://github.com/google/blockly/wiki/Text#finding-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "tìm sự có mặt đầu tiên của";
@@ -393,7 +397,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Đặt giá trị của biến này thành...";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Một biến có tên '%1' đã tồn tại.";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another type: '%2'.";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

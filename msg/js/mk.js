@@ -40,7 +40,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Му ја задава променливата „%1“ на секој елемент на списокот, а потоа исполнува наредби.";
 /** @export */ Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 /** @export */ Blockly.Msg.CONTROLS_FOR_TITLE = "број со %1 од %2 до %3 со %4";
-/** @export */ Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Променливата \"%1\" да ги земе вредностите од почетниот до завршниот број, броејќи според укажаниот интервал и ги исполнува укажаните блокови.";
+/** @export */ Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Променливата „%1“ да ги земе вредностите од почетниот до завршниот број, броејќи според укажаниот интервал и ги исполнува укажаните блокови.";
 /** @export */ Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Add a condition to the if block.";  // untranslated
 /** @export */ Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Add a final, catch-all condition to the if block.";  // untranslated
 /** @export */ Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated
@@ -281,12 +281,16 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Return the cosine of a degree (not radian).";  // untranslated
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Return the sine of a degree (not radian).";  // untranslated
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Return the tangent of a degree (not radian).";  // untranslated
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Нова променлива...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Назив на новата променлива:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "with:";  // untranslated
-/** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Subroutine";  // untranslated
+/** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://mk.wikipedia.org/wiki/Потпрограма";
 /** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "Run the user-defined function '%1'.";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://en.wikipedia.org/wiki/Subroutine";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "Run the user-defined function '%1' and use its output.";  // untranslated
@@ -382,7 +386,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "trim spaces from left side of";  // untranslated
 /** @export */ Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "trim spaces from right side of";  // untranslated
 /** @export */ Blockly.Msg.TEXT_TRIM_TOOLTIP = "Return a copy of the text with spaces removed from one or both ends.";  // untranslated
-/** @export */ Blockly.Msg.TODAY = "Today";  // untranslated
+/** @export */ Blockly.Msg.TODAY = "Денес";
 /** @export */ Blockly.Msg.UNDO = "Undo";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_DEFAULT_NAME = "елемент";
 /** @export */ Blockly.Msg.VARIABLES_GET_CREATE_SET = "Create 'set %1'";  // untranslated
@@ -393,7 +397,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Sets this variable to be equal to the input.";  // untranslated
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "A variable named '%1' already exists.";  // untranslated
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another variable of type '%2'.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another type: '%2'.";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

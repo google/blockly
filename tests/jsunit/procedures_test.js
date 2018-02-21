@@ -41,10 +41,10 @@ function proceduresTest_setUpWithMockBlocks() {
         'name': 'NAME',
         'variable': 'item'
       }
-    ],
+    ]
   }]);
   Blockly.Blocks['procedure_mock_block'].getProcedureDef = function() {
-    return [this.getFieldValue('NAME'), [], false];
+    return [this.getField('NAME').getText(), [], false];
   };
 }
 
@@ -63,8 +63,9 @@ function test_isNameUsed_NoBlocks() {
 
 function test_isNameUsed_False() {
   proceduresTest_setUpWithMockBlocks();
+  workspace.createVariable('name2', '', 'id2');
   var block = new Blockly.Block(workspace, 'procedure_mock_block');
-  block.setFieldValue('name2', 'NAME');
+  block.setFieldValue('id2', 'NAME');
 
   var result = Blockly.Procedures.isNameUsed('name1', workspace);
   assertFalse(result);
@@ -73,8 +74,9 @@ function test_isNameUsed_False() {
 
 function test_isNameUsed_True() {
   proceduresTest_setUpWithMockBlocks();
+  workspace.createVariable('name1', '', 'id1');
   var block = new Blockly.Block(workspace, 'procedure_mock_block');
-  block.setFieldValue('name1', 'NAME');
+  block.setFieldValue('id1', 'NAME');
 
   var result = Blockly.Procedures.isNameUsed('name1', workspace);
   assertTrue(result);

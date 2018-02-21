@@ -132,18 +132,16 @@ BlockExporterController.prototype.export = function() {
       BlocklyDevTools.Analytics.onWarning(msg);
       alert(msg);
     } else {
+      
       // Get generator stub code in the selected language for the blocks.
       var genStubs = this.tools.getGeneratorCode(blockXmlMap,
           language);
-      // Get the correct file extension.
-      var fileType = (language == 'JavaScript') ? 'javascript' : 'plain';
+      
       // Download the file.
       FactoryUtils.createAndDownloadFile(
-          genStubs, generatorStub_filename, fileType);
+          genStubs, generatorStub_filename + '.js', 'javascript');
       BlocklyDevTools.Analytics.onExport(
-          BlocklyDevTools.Analytics.GENERATOR,
-          (fileType == 'javascript' ?
-              { format: BlocklyDevTools.Analytics.FORMAT_JS } : undefined));
+          BlocklyDevTools.Analytics.GENERATOR, { format: BlocklyDevTools.Analytics.FORMAT_JS });
     }
   }
 

@@ -8,7 +8,7 @@ goog.require('Blockly.Msg');
 
 /** @export */ Blockly.Msg.ADD_COMMENT = "Rnu awennit";
 /** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Ur izmir ara ad yekkes amutti '%1' acku yedda di tbadut n twuri '%2'";
-/** @export */ Blockly.Msg.CHANGE_VALUE_TITLE = "Snifel azal:";
+/** @export */ Blockly.Msg.CHANGE_VALUE_TITLE = "Beddel azal:";
 /** @export */ Blockly.Msg.CLEAN_UP = "Sfeḍ iḥedran";
 /** @export */ Blockly.Msg.COLLAPSE_ALL = "Fneẓ iḥedran";
 /** @export */ Blockly.Msg.COLLAPSE_BLOCK = "Fneẓ iḥder";
@@ -61,11 +61,11 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "ales skud";
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Skud azal d ucciḍ, selkem ihi tinadin.";
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Skud azal d idetti, selkem ihi tinadin.";
-/** @export */ Blockly.Msg.DELETE_ALL_BLOCKS = "Kkes %1 n iḥedran meṛṛa?";
+/** @export */ Blockly.Msg.DELETE_ALL_BLOCKS = "Kkes akk %1 n yiḥedran?";
 /** @export */ Blockly.Msg.DELETE_BLOCK = "Kkes iḥder";
 /** @export */ Blockly.Msg.DELETE_VARIABLE = "Kkes amutti '%1'";
 /** @export */ Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Kkes %1 n useqdec n umutti '%2'?";
-/** @export */ Blockly.Msg.DELETE_X_BLOCKS = "Kkes %1 n iḥder";
+/** @export */ Blockly.Msg.DELETE_X_BLOCKS = "Kkes %1 n yiḥderan";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "Sens iḥder";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "Sleg";
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "Sens iḥedran";
@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Ad d-yerr akusinus n teɣmert s tfesna (mačči aṛadyan).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Ad d-yerr asinus n teɣmert s tfesna (mačči aṛadyan).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Ad d-yerr taslayt n teɣmert s tfesna (mačči aṛadyan).";
-/** @export */ Blockly.Msg.NEW_VARIABLE = "rnu amutti...";
-/** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Isem amaynut n wazal";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_VARIABLE = "Rnu amutti...";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Isem amaynut n wazal:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "Sireg asmizzwer";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "s:";
@@ -312,8 +316,8 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Rnu, kkes neɣ ales asmizzwer n inekcam i twuri-agi.";
 /** @export */ Blockly.Msg.REDO = "Uɣal";
 /** @export */ Blockly.Msg.REMOVE_COMMENT = "Kkes awennit";
-/** @export */ Blockly.Msg.RENAME_VARIABLE = "Snifel isem n umutti...";
-/** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Snifel akk imuttiyen '%1' ar:";
+/** @export */ Blockly.Msg.RENAME_VARIABLE = "Beddel isem n umutti...";
+/** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "Beddel akk isem n yimuttiyen '%1' ar:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 /** @export */ Blockly.Msg.TEXT_APPEND_TITLE = "Rnu aḍris %2 ar %1";
 /** @export */ Blockly.Msg.TEXT_APPEND_TOOLTIP = "Rnu aḍris ar umutti '%1'.";
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

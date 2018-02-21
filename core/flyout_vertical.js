@@ -365,7 +365,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
       // With the flyoutWidth known, right-align the buttons.
       for (var i = 0, button; button = this.buttons_[i]; i++) {
         var y = button.getPosition().y;
-        var x = flyoutWidth - button.width - this.MARGIN -
+        var x = flyoutWidth / this.workspace_.scale - button.width - this.MARGIN -
             Blockly.BlockSvg.TAB_WIDTH;
         button.moveTo(x, y);
       }

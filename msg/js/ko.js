@@ -281,8 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "각도의 코사인을 반환합니다. (라디안 아님)";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "각도의 사인을 반환합니다. (라디안 아님)";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "각도의 탄젠트를 반환합니다. (라디안 아님)";
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_VARIABLE = "변수 만들기...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "새 변수 이름:";
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "서술 허가";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "사용:";
@@ -423,3 +427,4 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXTS_HUE = "160";
 /** @export */ Blockly.Msg.PROCEDURES_HUE = "290";
 /** @export */ Blockly.Msg.COLOUR_HUE = "20";
+/** @export */ Blockly.Msg.VARIABLES_DYNAMIC_HUE = "310";

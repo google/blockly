@@ -54,6 +54,16 @@ Blockly.FieldAngle = function(opt_value, opt_validator) {
 goog.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 
 /**
+ * Construct a FieldAngle from a JSON arg object.
+ * @param {!Object} options A JSON object with options (angle).
+ * @returns {!Blockly.FieldAngle} The new field instance.
+ * @package
+ */
+Blockly.FieldAngle.fromJson = function(options) {
+  return new Blockly.FieldAngle(options['angle']);
+};
+
+/**
  * Round angles to the nearest 15 degrees when using mouse.
  * Set to 0 to disable rounding.
  */
@@ -203,8 +213,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
   this.moveWrapper1_ =
       Blockly.bindEvent_(circle, 'mousemove', this, this.onMouseMove);
   this.moveWrapper2_ =
-      Blockly.bindEvent_(this.gauge_, 'mousemove', this,
-      this.onMouseMove);
+      Blockly.bindEvent_(this.gauge_, 'mousemove', this, this.onMouseMove);
   this.updateGraph_();
 };
 

@@ -193,7 +193,7 @@ Blockly.HorizontalFlyout.prototype.setBackgroundPath_ = function(width,
     path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         this.CORNER_RADIUS, -this.CORNER_RADIUS);
     path.push('h', width);
-     // Right.
+    // Right.
     path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         this.CORNER_RADIUS, this.CORNER_RADIUS);
     path.push('v', height);

@@ -33,6 +33,9 @@
  **/
 goog.provide('Blockly.Extensions');
 
+goog.require('Blockly.Mutator');
+goog.require('Blockly.utils');
+goog.require('goog.string');
 
 /**
  * The set of all registered extensions, keyed by extension name/id.
@@ -71,6 +74,9 @@ Blockly.Extensions.register = function(name, initFn) {
  *     registered.
  */
 Blockly.Extensions.registerMixin = function(name, mixinObj) {
+  if (!goog.isObject(mixinObj)){
+    throw new Error('Error: Mixin "' + name + '" must be a object');
+  }
   Blockly.Extensions.register(name, function() {
     this.mixin(mixinObj);
   });
@@ -94,10 +100,10 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
   var errorPrefix = 'Error when registering mutator "' + name + '": ';
 
   // Sanity check the mixin object before registering it.
-  Blockly.Extensions.checkHasFunction_(errorPrefix, mixinObj.domToMutation,
-                                       'domToMutation');
-  Blockly.Extensions.checkHasFunction_(errorPrefix, mixinObj.mutationToDom,
-                                       'mutationToDom');
+  Blockly.Extensions.checkHasFunction_(
+      errorPrefix, mixinObj.domToMutation, 'domToMutation');
+  Blockly.Extensions.checkHasFunction_(
+      errorPrefix, mixinObj.mutationToDom, 'mutationToDom');
 
   var hasMutatorDialog =
       Blockly.Extensions.checkMutatorDialog_(mixinObj, errorPrefix);
@@ -322,7 +328,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName,
   // Wait for load, in case Blockly.Msg is not yet populated.
   // runAfterPageLoad() does not run in a Node.js environment due to lack of
   // document object, in which case skip the validation.
-  if (document) {  // Relies on document.readyState
+  if (typeof document == 'object') {  // Relies on document.readyState
     Blockly.utils.runAfterPageLoad(function() {
       for (var key in lookupTable) {
         // Will print warnings if reference is missing.
@@ -403,7 +409,7 @@ Blockly.Extensions.buildTooltipWithFieldValue = function(msgTemplate,
   // Wait for load, in case Blockly.Msg is not yet populated.
   // runAfterPageLoad() does not run in a Node.js environment due to lack of
   // document object, in which case skip the validation.
-  if (document) {  // Relies on document.readyState
+  if (typeof document == 'object') {  // Relies on document.readyState
     Blockly.utils.runAfterPageLoad(function() {
       // Will print warnings if reference is missing.
       Blockly.utils.checkMessageReferences(msgTemplate);

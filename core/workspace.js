@@ -277,12 +277,12 @@ Blockly.Workspace.prototype.variableIndexOf = function(
 /**
  * Find the variable by the given name and return it. Return null if it is not
  *     found.
- * TODO (#1199): Possibly delete this function.
  * @param {!string} name The name to check for.
  * @param {string=} opt_type The type of the variable.  If not provided it
  *     defaults to the empty string, which is a specific type.
  * @return {?Blockly.VariableModel} the variable with the given name.
  */
+// TODO (#1199): Possibly delete this function.
 Blockly.Workspace.prototype.getVariable = function(name, opt_type) {
   return this.variableMap_.getVariable(name, opt_type);
 };

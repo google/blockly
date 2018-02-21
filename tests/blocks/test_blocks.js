@@ -483,6 +483,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "type": "block_colour_hex5",
     "message0": "Block color: #RRGGBB (invalid)",
     "colour": "#NotHex"
+  },
+  {
+    "type": "emoji_label_robot_face",
+    "message0": "Robot Face: \uD83E\uDD16",
+    "colour": "#AAAAAA"
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 

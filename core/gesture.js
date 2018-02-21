@@ -65,7 +65,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
    * How far the mouse has moved during this drag, in pixel units.
    * (0, 0) is at this.mouseDownXY_.
    * @type {goog.math.Coordinate}
-   * private
+   * @private
    */
   this.currentDragDeltaXY_ = 0;
 

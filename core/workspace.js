@@ -77,10 +77,10 @@ Blockly.Workspace = function(opt_options) {
   this.blockDB_ = Object.create(null);
 
   /**
-   * @type {!Blockly.VariableMap}
    * A map from variable type to list of variable names.  The lists contain all
    * of the named variables in the workspace, including variables
    * that are not currently in use.
+   * @type {!Blockly.VariableMap}
    * @private
    */
   this.variableMap_ = new Blockly.VariableMap(this);

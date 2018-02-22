@@ -295,7 +295,6 @@
 	"LISTS_GET_INDEX_FIRST": "pierwszy",
 	"LISTS_GET_INDEX_LAST": "ostatni",
 	"LISTS_GET_INDEX_RANDOM": "losowy",
-	"LISTS_GET_INDEX_TAIL": "",
 	"LISTS_INDEX_FROM_START_TOOLTIP": "%1 to pierwszy element.",
 	"LISTS_INDEX_FROM_END_TOOLTIP": "%1 to ostatni element.",
 	"LISTS_GET_INDEX_TOOLTIP_GET_FROM": "Zwraca element z konkretnej pozycji na liście.",

@@ -315,6 +315,7 @@ Blockly.Blocks['text_getSubstring'] = {
       this.moveInputBefore('AT1', 'AT2');
       if (this.getInput('ORDINAL1')) {
         this.moveInputBefore('ORDINAL1', 'AT2');
+      }
     }
   }
 };

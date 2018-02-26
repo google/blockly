@@ -43,8 +43,7 @@ goog.addDependency("../../../" + dir + "/core/blockly.js", ['Blockly'], ['Blockl
 goog.addDependency("../../../" + dir + "/core/blocks.js", ['Blockly.Blocks'], []);
 goog.addDependency("../../../" + dir + "/core/bubble.js", ['Blockly.Bubble'], ['Blockly.Touch', 'Blockly.Workspace', 'goog.dom', 'goog.math', 'goog.math.Coordinate', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/bubble_dragger.js", ['Blockly.BubbleDragger'], ['goog.math.Coordinate', 'goog.asserts']);
-goog.addDependency("../../../" + dir + "/core/comment.js", ['Blockly.Comment'], ['Blockly.Bubble', 'Blockly.CommentUtils', 'Blockly.Icon', 'goog.userAgent']);
-goog.addDependency("../../../" + dir + "/core/comment_utils.js", ['Blockly.CommentUtils'], []);
+goog.addDependency("../../../" + dir + "/core/comment.js", ['Blockly.Comment'], ['Blockly.Bubble', 'Blockly.Icon', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/connection.js", ['Blockly.Connection'], ['goog.asserts', 'goog.dom']);
 goog.addDependency("../../../" + dir + "/core/connection_db.js", ['Blockly.ConnectionDB'], ['Blockly.Connection']);
 goog.addDependency("../../../" + dir + "/core/constants.js", ['Blockly.constants'], []);
@@ -95,9 +94,8 @@ goog.addDependency("../../../" + dir + "/core/variables.js", ['Blockly.Variables
 goog.addDependency("../../../" + dir + "/core/variables_dynamic.js", ['Blockly.VariablesDynamic'], ['Blockly.Variables', 'Blockly.Blocks', 'Blockly.constants', 'Blockly.VariableModel', 'goog.string']);
 goog.addDependency("../../../" + dir + "/core/warning.js", ['Blockly.Warning'], ['Blockly.Bubble', 'Blockly.Icon']);
 goog.addDependency("../../../" + dir + "/core/widgetdiv.js", ['Blockly.WidgetDiv'], ['Blockly.Css', 'goog.dom', 'goog.dom.TagName', 'goog.style']);
-goog.addDependency("../../../" + dir + "/core/workspace.js", ['Blockly.Workspace'], ['Blockly.VariableMap', 'goog.array', 'goog.math']);
+goog.addDependency("../../../" + dir + "/core/workspace.js", ['Blockly.Workspace'], ['Blockly.VariableMap', 'Blockly.WorkspaceComment', 'goog.array', 'goog.math']);
 goog.addDependency("../../../" + dir + "/core/workspace_audio.js", ['Blockly.WorkspaceAudio'], []);
-goog.addDependency("../../../" + dir + "/core/workspace_comment.js", [], ['Blockly.Bubble', 'Blockly.CommentUtils', 'Blockly.Icon', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/workspace_comment/workspace_comment.js", ['Blockly.WorkspaceComment'], []);
 goog.addDependency("../../../" + dir + "/core/workspace_comment/workspace_comment_render_svg.js", ['Blockly.WorkspaceCommentSvg.render'], ['Blockly.WorkspaceCommentSvg']);
 goog.addDependency("../../../" + dir + "/core/workspace_comment/workspace_comment_svg.js", ['Blockly.WorkspaceCommentSvg'], ['Blockly.WorkspaceComment']);
@@ -1713,7 +1711,6 @@ goog.require('Blockly.Blocks');
 goog.require('Blockly.Bubble');
 goog.require('Blockly.BubbleDragger');
 goog.require('Blockly.Comment');
-goog.require('Blockly.CommentUtils');
 goog.require('Blockly.Connection');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.ContextMenu');

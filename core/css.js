@@ -387,13 +387,13 @@ Blockly.Css.CONTENT = [
     'position: relative;',
     'z-index: 0;',
   '}',
-  
+
   '.blocklyCommentRect {',
     'fill: #E7DE8E;',
     'stroke: #bcA903;',
     'stroke-width: 1px',
   '}',
-  
+
   '.blocklyCommentTarget {',
     'fill: transparent;',
     'stroke: #bcA903;',

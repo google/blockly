@@ -706,7 +706,8 @@ Blockly.Gesture.prototype.handleBubbleStart = function(e, bubble) {
  */
 Blockly.Gesture.prototype.doBubbleClick_ = function() {
   // TODO: This isn't really enough, is it.
-  this.startBubble_.promote_();
+  this.startBubble_.setFocus();
+  this.startBubble_.select();
 };
 
 /**

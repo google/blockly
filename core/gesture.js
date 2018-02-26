@@ -104,15 +104,6 @@ Blockly.Gesture = function(e, creatorWorkspace) {
   this.targetBlock_ = null;
 
   /**
-   * The comment that the gesture started on, or null if it did not start on a
-   * comment.
-   * A gesture cannot have both a start block and a start comment.
-   * @type {Blockly.WorkspaceCommentSvg}
-   * @private
-   */
-  this.startComment_ = null;
-
-  /**
    * The workspace that the gesture started on.  There may be multiple
    * workspaces on a page; this is more accurate than using
    * Blockly.getMainWorkspace().
@@ -199,13 +190,6 @@ Blockly.Gesture = function(e, creatorWorkspace) {
   this.blockDragger_ = null;
 
   /**
-   * The object tracking a comment drag, or null if none is in progress.
-   * @type {Blockly.CommentDragger}
-   * @private
-   */
-  this.commentDragger_ = null;
-
-  /**
    * The object tracking a workspace or flyout workspace drag, or null if none
    * is in progress.
    * @type {Blockly.WorkspaceDragger}
@@ -262,7 +246,6 @@ Blockly.Gesture.prototype.dispose = function() {
 
   this.startField_ = null;
   this.startBlock_ = null;
-  this.startComment_ = null;
   this.targetBlock_ = null;
   this.startWorkspace_ = null;
   this.flyout_ = null;
@@ -270,10 +253,6 @@ Blockly.Gesture.prototype.dispose = function() {
   if (this.blockDragger_) {
     this.blockDragger_.dispose();
     this.blockDragger_ = null;
-  }
-  if (this.commentDragger_) {
-    this.commentDragger_.dispose();
-    this.commentDragger_ = null;
   }
   if (this.workspaceDragger_) {
     this.workspaceDragger_.dispose();
@@ -452,10 +431,6 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
   if (this.updateIsDraggingBlock_()) {
     return;
   }
-  // Or a comment drag.
-  if (this.updateIsDraggingComment_()) {
-    return;
-  }
   // Then check if it's a workspace drag.
   this.updateIsDraggingWorkspace_();
 };
@@ -514,11 +489,6 @@ Blockly.Gesture.prototype.doStart = function(e) {
   if (this.targetBlock_) {
     this.targetBlock_.select();
   }
-  if (this.startComment_) {
-    this.startComment_.select();
-  }
-
-  // TODO: Select the start comment.
 
   if (Blockly.utils.isRightButton(e)) {
     this.handleRightClick(e);
@@ -593,9 +563,6 @@ Blockly.Gesture.prototype.handleUp = function(e) {
     this.bubbleDragger_.endBubbleDrag(e, this.currentDragDeltaXY_);
   } else if (this.isDraggingBlock_) {
     this.blockDragger_.endBlockDrag(e, this.currentDragDeltaXY_);
-  } else if (this.isDraggingComment_) {
-    // Comment drags have the same priority as block drags.
-    this.commentDragger_.endCommentDrag(e, this.currentDragDeltaXY_);
   } else if (this.isDraggingWorkspace_) {
     this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
   } else if (this.isBubbleClick_()) {
@@ -607,8 +574,6 @@ Blockly.Gesture.prototype.handleUp = function(e) {
     this.doBlockClick_();
   } else if (this.isWorkspaceClick_()) {
     this.doWorkspaceClick_();
-  } else if (this.isCommentClick_()) {
-    this.doCommentClick_();
   }
 
   e.preventDefault();
@@ -634,9 +599,6 @@ Blockly.Gesture.prototype.cancel = function() {
         this.currentDragDeltaXY_);
   } else if (this.isDraggingBlock_) {
     this.blockDragger_.endBlockDrag(this.mostRecentEvent_,
-        this.currentDragDeltaXY_);
-  } else if (this.isDraggingComment_) {
-    this.commentDragger_.endCommentDrag(this.mostRecentEvent_,
         this.currentDragDeltaXY_);
   } else if (this.isDraggingWorkspace_) {
     this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
@@ -778,13 +740,6 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
   }
 };
 
-/**
- * Execute a comment click.
- * @private
- */
-Blockly.Gesture.prototype.doCommentClick_ = function() {
-  this.startComment_.setFocus();
-};
 
 /* End functions defining what actions to take to execute clicks on each type
  * of target. */
@@ -803,18 +758,6 @@ Blockly.Gesture.prototype.bringBlockToFront_ = function() {
 };
 
 /* Begin functions for populating a gesture at mouse down. */
-
-/**
- * Record the comment that a gesture started on.
- * @param {Blockly.WorkspaceCommentSvg} comment The comment on which the
- *     gesture started.
- */
-Blockly.Gesture.prototype.setStartComment = function(comment) {
-  // If the gesture already went through a block, don't set the start comment.
-  if (!this.startBlock_ && !this.startComment_) {
-    this.startComment_ = comment;
-  }
-};
 
 /**
  * Record the field that a gesture started on.
@@ -848,8 +791,8 @@ Blockly.Gesture.prototype.setStartBubble = function(bubble) {
  * @package
  */
 Blockly.Gesture.prototype.setStartBlock = function(block) {
-  // If the gesture already went through a comment, don't set the start block.
-  if (!this.startBlock_ && !this.startComment_) {
+  // If the gesture already went through a bubble, don't set the start block.
+  if (!this.startBlock_ && !this.startBubble_) {
     this.startBlock_ = block;
     if (block.isInFlyout && block != block.getRootBlock()) {
       this.setTargetBlock_(block.getRootBlock());
@@ -947,20 +890,9 @@ Blockly.Gesture.prototype.isFieldClick_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.isWorkspaceClick_ = function() {
-  var onlyTouchedWorkspace = !this.startBlock_ && !this.startComment_ && !this.startField_;
+  var onlyTouchedWorkspace = !this.startBlock_ && !this.startBubble_ &&
+      !this.startField_;
   return onlyTouchedWorkspace && !this.hasExceededDragRadius_;
-};
-
-/**
- * Whether this gesture is a click on a comment.  This should only be called
- * when ending a gesture (mouse up, touch end).
- * @return {boolean} whether this gesture was a click on a workspace.
- * @private
- */
-Blockly.Gesture.prototype.isCommentClick_ = function() {
-  // A comment click starts on a comment, never escapes the drag radius
-  var hasStartComment = !!this.startComment_;
-  return hasStartComment && !this.hasExceededDragRadius_;
 };
 
 /* End helper functions defining types of clicks. */

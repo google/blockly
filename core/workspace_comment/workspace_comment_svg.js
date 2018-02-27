@@ -326,6 +326,8 @@ Blockly.WorkspaceCommentSvg.prototype.moveOffDragSurface_ = function(newXY) {
 /**
  * Move this comment during a drag, taking into account whether we are using a
  * drag surface to translate blocks.
+ * @param {?Blockly.BlockDragSurfaceSvg} dragSurface The surface that carries
+ *     rendered items during a drag, or null if no drag surface is in use.
  * @param {!goog.math.Coordinate} newLoc The location to translate to, in
  *     workspace coordinates.
  * @package

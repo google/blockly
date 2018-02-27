@@ -133,7 +133,7 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
 
   this.updateMovable();
   if (!this.getSvgRoot().parentNode) {
-    this.workspace.getCanvas().appendChild(this.getSvgRoot());
+    this.workspace.getBubbleCanvas().appendChild(this.getSvgRoot());
   }
 };
 
@@ -145,7 +145,7 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
 Blockly.WorkspaceCommentSvg.prototype.pathMouseDown_ = function(e) {
   var gesture = this.workspace.getGesture(e);
   if (gesture) {
-    gesture.handleCommentStart(e, this);
+    gesture.handleBubbleStart(e, this);
   }
 };
 
@@ -254,7 +254,7 @@ Blockly.WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
         y += surfaceTranslation.y;
       }
       element = element.parentNode;
-    } while (element && element != this.workspace.getCanvas() &&
+    } while (element && element != this.workspace.getBubbleCanvas() &&
         element != dragSurfaceGroup);
   }
   return new goog.math.Coordinate(x, y);
@@ -326,18 +326,31 @@ Blockly.WorkspaceCommentSvg.prototype.moveOffDragSurface_ = function(newXY) {
 /**
  * Move this comment during a drag, taking into account whether we are using a
  * drag surface to translate blocks.
+ * @param {?Blockly.BlockDragSurfaceSvg} dragSurface The surface that carries
+ *     rendered items during a drag, or null if no drag surface is in use.
  * @param {!goog.math.Coordinate} newLoc The location to translate to, in
  *     workspace coordinates.
  * @package
  */
-Blockly.WorkspaceCommentSvg.prototype.moveDuringDrag = function(newLoc) {
-  if (this.useDragSurface_) {
-    this.workspace.blockDragSurface_.translateSurface(newLoc.x, newLoc.y);
+Blockly.WorkspaceCommentSvg.prototype.moveDuringDrag = function(dragSurface, newLoc) {
+  if (dragSurface) {
+    dragSurface.translateSurface(newLoc.x, newLoc.y);
   } else {
     this.svgGroup_.translate_ = 'translate(' + newLoc.x + ',' + newLoc.y + ')';
     this.svgGroup_.setAttribute('transform',
         this.svgGroup_.translate_ + this.svgGroup_.skew_);
   }
+};
+
+/**
+ * Move the bubble group to the specified location in workspace coordinates.
+ * @param {number} x The x position to move to.
+ * @param {number} y The y position to move to.
+ * @package
+ */
+Blockly.WorkspaceCommentSvg.prototype.moveTo = function(x, y) {
+  this.svgGroup_.translate_ = 'translate(' + x + ',' + y + ')';
+  this.svgGroup_.setAttribute('transform', this.svgGroup_.translate_);
 };
 
 /**
@@ -502,4 +515,8 @@ Blockly.WorkspaceCommentSvg.prototype.setDeleteStyle = function(enable) {
     Blockly.utils.removeClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDraggingDelete');
   }
+};
+
+Blockly.WorkspaceCommentSvg.prototype.setAutoLayout = function() {
+  // NOP for compatibility with the bubble dragger.
 };

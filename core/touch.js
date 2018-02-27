@@ -48,13 +48,6 @@ Blockly.Touch.touchIdentifier_ = null;
  * @type {Object}
  */
 Blockly.Touch.TOUCH_MAP = {};
-// if (window.PointerEvent) {
-//   Blockly.Touch.TOUCH_MAP = {
-//     'mousedown': ['pointerdown'],
-//     'mousemove': ['pointermove'],
-//     'mouseup': ['pointerup', 'pointercancel']
-//   };
-// } else
 if (goog.events.BrowserFeature.TOUCH_ENABLED) {
   Blockly.Touch.TOUCH_MAP = {
     'mousedown': ['touchstart'],

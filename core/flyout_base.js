@@ -28,6 +28,8 @@ goog.provide('Blockly.Flyout');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.Events');
+goog.require('Blockly.Events.BlockCreate');
+goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Touch');

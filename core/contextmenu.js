@@ -30,6 +30,7 @@
  */
 goog.provide('Blockly.ContextMenu');
 
+goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.uiMenu');
 

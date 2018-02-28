@@ -420,12 +420,14 @@ Blockly.Workspace.prototype.newBlock = function(prototypeName, opt_id) {
 /**
  * Obtain a newly created comment.
  * @param {?string} content Content of the comment
+ * @param {?string} h Height of the comment
+ * @param {?string} w Width of the comment
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @return {!Blockly.WorkspaceComment} The created comment.
  */
-Blockly.Workspace.prototype.newComment = function(content, opt_id) {
-  return new Blockly.WorkspaceComment(this, content, opt_id);
+Blockly.Workspace.prototype.newComment = function(content, h, w, opt_id) {
+  return new Blockly.WorkspaceComment(this, content, h, w, opt_id);
 };
 
 /**

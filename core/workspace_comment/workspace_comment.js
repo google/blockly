@@ -30,11 +30,13 @@ goog.provide('Blockly.WorkspaceComment');
  * Class for a workspace comment.
  * @param {!Blockly.Workspace} workspace The block's workspace.
  * @param {string} content The content of this workspace comment.
+ * @param {number} height Height of the comment.
+ * @param {number} width Width of the comment.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @constructor
  */
-Blockly.WorkspaceComment = function(workspace, content, opt_id) {
+Blockly.WorkspaceComment = function(workspace, content, height, width, opt_id) {
   /** @type {string} */
   this.id = (opt_id && !workspace.getCommentById(opt_id)) ?
       opt_id : Blockly.utils.genUid();
@@ -49,6 +51,20 @@ Blockly.WorkspaceComment = function(workspace, content, opt_id) {
    * @private
    */
   this.xy_ = new goog.math.Coordinate(0, 0);
+
+  /**
+   * The comment's height in workspace units.  Scale does not change this value.
+   * @type {number}
+   * @private
+   */
+  this.height_ = height;
+
+  /**
+   * The comment's width in workspace units.  Scale does not change this value.
+   * @type {number}
+   * @private
+   */
+  this.width_ = width;
 
   /** @type {!Blockly.Workspace} */
   this.workspace = workspace;
@@ -162,4 +178,56 @@ Blockly.WorkspaceComment.prototype.setContent = function(content) {
     // TODO (#1580): Fire a event for change
     this.text_ = content;
   }
+};
+
+/**
+ * Encode a comment subtree as XML with XY coordinates.
+ * @param {boolean} opt_noId True if the encoder should skip the comment id.
+ * @return {!Element} Tree of XML elements.
+ */
+Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
+  var width;  // Not used in LTR.
+  if (this.workspace.RTL) {
+    width = this.workspace.getWidth();
+  }
+  var element = this.toXml(opt_noId);
+  var xy = this.getRelativeToSurfaceXY();
+  element.setAttribute('x',
+      Math.round(this.workspace.RTL ? width - xy.x : xy.x));
+  element.setAttribute('y', Math.round(xy.y));
+  return element;
+};
+
+/**
+ * Encode a comment subtree as XML.
+ * @param {boolean} opt_noId True if the encoder should skip the comment id.
+ * @return {!Element} Tree of XML elements.
+ */
+Blockly.WorkspaceComment.prototype.toXml = function(opt_noId) {
+  var commentElement = goog.dom.createDom('comment');
+  commentElement.setAttribute('h', this.getHeight());
+  commentElement.setAttribute('w', this.getWidth());
+  if (!opt_noId) {
+    commentElement.setAttribute('id', this.id);
+  }
+  commentElement.textContent = this.getContent();
+  return commentElement;
+};
+
+/**
+ * Decode an XML comment tag and create a comment on the workspace.
+ * @param {!Element} xmlComment XML comment element.
+ * @param {!Blockly.Workspace} workspace The workspace.
+ * @return {!Blockly.WorkspaceComment} The workspace comment created.
+ * @package
+ */
+Blockly.WorkspaceComment.fromXml = function(xmlComment, workspace) {
+  var comment = null;
+  var id = xmlComment.getAttribute('id');
+  var h = parseInt(xmlComment.getAttribute('h'), 10);
+  var w = parseInt(xmlComment.getAttribute('w'), 10);
+  var content = xmlComment.textContent;
+
+  comment = workspace.newComment(content, h, w, id);
+  return comment;
 };

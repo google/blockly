@@ -63,17 +63,7 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
   this.svgGroup_.appendChild(this.svgRect_);
 
   /**
-   * @type {number}
-   * @private
-   */
-  this.height_ = height;
-  /**
-   * @type {number}
-   * @private
-   */
-  this.width_ = width;
-
-  /**
+   * Whether the comment is rendered onscreen and is a part of the DOM.
    * @type {boolean}
    * @private
    */
@@ -88,7 +78,7 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
   this.useDragSurface_ = Blockly.utils.is3dSupported() && !!workspace.blockDragSurface_;
 
   Blockly.WorkspaceCommentSvg.superClass_.constructor.call(this,
-      workspace, content, opt_id);
+      workspace, content, height, width, opt_id);
 
   this.render();
 }; goog.inherits(Blockly.WorkspaceCommentSvg, Blockly.WorkspaceComment);
@@ -519,4 +509,28 @@ Blockly.WorkspaceCommentSvg.prototype.setDeleteStyle = function(enable) {
 
 Blockly.WorkspaceCommentSvg.prototype.setAutoLayout = function() {
   // NOP for compatibility with the bubble dragger.
+};
+
+/**
+ * Decode an XML comment tag and create a rendered comment on the workspace.
+ * @param {!Element} xmlComment XML comment element.
+ * @param {!Blockly.Workspace} workspace The workspace.
+ * @return {!Blockly.WorkspaceComment} The workspace comment created.
+ * @package
+ */
+Blockly.WorkspaceCommentSvg.fromXml = function(xmlComment, workspace) {
+  // Create top-level comment.
+  Blockly.Events.disable();
+  try {
+    var comment = Blockly.WorkspaceComment.fromXml(xmlComment, workspace);
+    if (workspace.rendered) {
+      comment.initSvg();
+      comment.render(false);
+    }
+  } finally {
+    Blockly.Events.enable();
+  }
+  // TODO (#1580): fire a comment create event.  Possibly should happen in
+  // Blockly.WorkspaceComment.fromXml instead.
+  return comment;
 };

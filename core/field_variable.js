@@ -68,6 +68,7 @@ goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
  *                          variableTypes, and defaultType).
  * @returns {!Blockly.FieldVariable} The new field instance.
  * @package
+ * @nocollapse
  */
 Blockly.FieldVariable.fromJson = function(options) {
   var varname = Blockly.utils.replaceMessageReferences(options['variable']);
@@ -120,7 +121,7 @@ Blockly.FieldVariable.prototype.initModel = function() {
  * Dispose of this field.
  * @public
  */
-Blockly.FieldVariable.dispose = function() {
+Blockly.FieldVariable.prototype.dispose = function() {
   Blockly.FieldVariable.superClass_.dispose.call(this);
   this.workspace_ = null;
   this.variableMap_ = null;

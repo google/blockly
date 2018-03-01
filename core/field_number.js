@@ -59,6 +59,7 @@ goog.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
  *                          precision).
  * @returns {!Blockly.FieldNumber} The new field instance.
  * @package
+ * @nocollapse
  */
 Blockly.FieldNumber.fromJson = function(options) {
   return new Blockly.FieldNumber(options['value'],

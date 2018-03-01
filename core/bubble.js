@@ -40,7 +40,7 @@ goog.require('goog.userAgent');
  *     bubble.
  * @param {!Element} content SVG content for the bubble.
  * @param {Element} shape SVG element to avoid eclipsing.
- * @param {!goog.math.Coodinate} anchorXY Absolute position of bubble's anchor
+ * @param {!goog.math.Coordinate} anchorXY Absolute position of bubble's anchor
  *     point.
  * @param {?number} bubbleWidth Width of bubble, or null if not resizable.
  * @param {?number} bubbleHeight Height of bubble, or null if not resizable.

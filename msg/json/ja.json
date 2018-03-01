@@ -10,7 +10,8 @@
 			"TAKAHASHI Shuuji",
 			"Suiato",
 			"ネイ",
-			"Aefgh39622"
+			"Aefgh39622",
+			"Omotecho"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "項目",
@@ -39,7 +40,7 @@
 	"NEW_VARIABLE": "変数の作成…",
 	"NEW_VARIABLE_TITLE": "新しい変数の名前：",
 	"VARIABLE_ALREADY_EXISTS": "変数名 '%1' は既に存在しています。",
-	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "種類 '%2' の別の変数に '%1' という名前の変数が既に存在します。",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "別の種類の変数: '%2' に '%1' という名前の変数が既に存在します。",
 	"DELETE_VARIABLE_CONFIRMATION": "%1か所で使われている変数 '%2' を削除しますか？",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "変数 '%1' は関数 '%2' の定義の一部であるため、削除できません",
 	"DELETE_VARIABLE": "変数 '%1' を削除",

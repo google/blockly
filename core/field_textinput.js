@@ -57,6 +57,7 @@ goog.inherits(Blockly.FieldTextInput, Blockly.Field);
  *                          spellcheck).
  * @returns {!Blockly.FieldTextInput} The new field instance.
  * @package
+ * @nocollapse
  */
 Blockly.FieldTextInput.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);

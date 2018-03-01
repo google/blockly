@@ -67,6 +67,7 @@ goog.inherits(Blockly.FieldImage, Blockly.Field);
  *                          alt).
  * @returns {!Blockly.FieldImage} The new field instance.
  * @package
+ * @nocollapse
  */
 Blockly.FieldImage.fromJson = function(options) {
   var src = Blockly.utils.replaceMessageReferences(options['src']);

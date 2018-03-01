@@ -47,7 +47,7 @@ function test_noWorkspaceComments() {
 function test_oneWorkspaceComment() {
   workspaceCommentTest_setUp();
   try {
-    var comment = workspace.newComment('comment text', 'comment id');
+    var comment = workspace.newComment('comment text', 0, 0, 'comment id');
     assertEquals('One comment on workspace (1).', 1, workspace.getTopComments(true).length);
     assertEquals('One comment on workspace  (2).', 1, workspace.getTopComments(false).length);
     assertEquals('Comment db contains this comment.', comment, workspace.commentDB_['comment id']);
@@ -63,7 +63,7 @@ function test_oneWorkspaceComment() {
 function test_getWorkspaceCommentById() {
   workspaceCommentTest_setUp();
   try {
-    var comment = workspace.newComment('comment text', 'comment id');
+    var comment = workspace.newComment('comment text', 0, 0, 'comment id');
     assertEquals('Getting a comment by id.', comment, workspace.getCommentById('comment id'));
     assertEquals('No comment found.', null, workspace.getCommentById('not a comment'));
     comment.dispose();
@@ -76,7 +76,7 @@ function test_getWorkspaceCommentById() {
 function test_disposeWsCommentTwice() {
   workspaceCommentTest_setUp();
   try {
-    var comment = workspace.newComment('comment text', 'comment id');
+    var comment = workspace.newComment('comment text', 0, 0, 'comment id');
     comment.dispose();
     // Nothing should go wrong the second time dispose is called.
     comment.dispose();

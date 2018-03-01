@@ -188,6 +188,8 @@ Blockly.WorkspaceComment.prototype.setContent = function(content) {
 Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
   var width;  // Not used in LTR.
   if (this.workspace.RTL) {
+    // Here be performance dragons: On a rendered workspace, this will call
+    // getMetrics().
     width = this.workspace.getWidth();
   }
   var element = this.toXml(opt_noId);
@@ -199,9 +201,12 @@ Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
 };
 
 /**
- * Encode a comment subtree as XML.
+ * Encode a comment subtree as XML, but don't serialize the XY coordinates.
+ * This method avoids some expensive metrics-related calls that are made in
+ * toXmlWithXY().
  * @param {boolean} opt_noId True if the encoder should skip the comment id.
  * @return {!Element} Tree of XML elements.
+ * @package
  */
 Blockly.WorkspaceComment.prototype.toXml = function(opt_noId) {
   var commentElement = goog.dom.createDom('comment');

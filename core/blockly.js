@@ -534,7 +534,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
  * @param {!Array.<!Array>} bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
  * @return {!Function} The function call.
- * @private
+ * @package
  */
 Blockly.unbindEvent_ = function(bindData) {
   while (bindData.length) {

@@ -48,7 +48,7 @@ Blockly.Touch.touchIdentifier_ = null;
  * @type {Object}
  */
 Blockly.Touch.TOUCH_MAP = {};
-if (window.PointerEvent) {
+if (window && window.PointerEvent) {
   Blockly.Touch.TOUCH_MAP = {
     'mousedown': ['pointerdown'],
     'mousemove': ['pointermove'],

@@ -122,7 +122,7 @@ Blockly.Comment.prototype.createEditor_ = function() {
   body.appendChild(textarea);
   this.textarea_ = textarea;
   this.foreignObject_.appendChild(body);
-  Blockly.bindEventWithChecks_(textarea, 'mouseup', this, this.textareaFocus_);
+  Blockly.bindEventWithChecks_(textarea, 'mouseup', this, this.textareaFocus_, true, true);
   // Don't zoom with mousewheel.
   Blockly.bindEventWithChecks_(textarea, 'wheel', this, function(e) {
     e.stopPropagation();
@@ -224,10 +224,11 @@ Blockly.Comment.prototype.textareaFocus_ = function(
   // Ideally this would be hooked to the focus event for the comment.
   // However doing so in Firefox swallows the cursor for unknown reasons.
   // So this is hooked to mouseup instead.  No big deal.
-  this.bubble_.promote_();
-  // Since the act of moving this node within the DOM causes a loss of focus,
-  // we need to reapply the focus.
-  this.textarea_.focus();
+  if (this.bubble_.promote_()) {
+    // Since the act of moving this node within the DOM causes a loss of focus,
+    // we need to reapply the focus.
+    this.textarea_.focus();
+  }
 };
 
 /**

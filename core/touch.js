@@ -51,8 +51,14 @@ Blockly.Touch.TOUCH_MAP = {};
 if (window && window.PointerEvent) {
   Blockly.Touch.TOUCH_MAP = {
     'mousedown': ['pointerdown'],
+    'mouseenter': ['pointerenter'],
+    'mouseleave': ['pointerleave'],
     'mousemove': ['pointermove'],
-    'mouseup': ['pointerup', 'pointercancel']
+    'mouseout': ['pointerout'],
+    'mouseover': ['pointerover'],
+    'mouseup': ['pointerup', 'pointercancel'],
+    'touchend': ['pointerup'],
+    'touchcancel': ['pointercancel']
   };
 } else if (goog.events.BrowserFeature.TOUCH_ENABLED) {
   Blockly.Touch.TOUCH_MAP = {

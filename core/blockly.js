@@ -452,9 +452,7 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
   };
 
   var bindData = [];
-  var bindData = [];
-  if (window && window.PointerEvent &&
-      (name in Blockly.Touch.TOUCH_MAP)) {
+  if (window && window.PointerEvent && (name in Blockly.Touch.TOUCH_MAP)) {
       for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
         node.addEventListener(type, wrapFunc, false);
         bindData.push([node, type, wrapFunc]);
@@ -507,8 +505,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
   };
 
   var bindData = [];
-  if (window && window.PointerEvent &&
-      (name in Blockly.Touch.TOUCH_MAP)) {
+  if (window && window.PointerEvent && (name in Blockly.Touch.TOUCH_MAP)) {
       for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
         node.addEventListener(type, wrapFunc, false);
         bindData.push([node, type, wrapFunc]);

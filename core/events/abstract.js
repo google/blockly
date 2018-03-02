@@ -134,7 +134,7 @@ Blockly.Events.Abstract.prototype.run = function(
  * Get workspace the event belongs to.
  * @return {Blockly.Workspace} The workspace the event belongs to.
  * @throws {Error} if workspace is null.
- * @private
+ * @protected
  */
 Blockly.Events.Abstract.prototype.getEventWorkspace_ = function() {
   var workspace = Blockly.Workspace.getById(this.workspaceId);

@@ -110,7 +110,7 @@ Blockly.TouchGesture.ZOOM_OUT_MULTIPLIER = 6;
  */
 Blockly.TouchGesture.prototype.doStart = function(e) {
   Blockly.TouchGesture.superClass_.doStart.call(this, e);
-  if (Blockly.Touch.isTouchEvent(e)) {
+  if (!this.isEnding_ && Blockly.Touch.isTouchEvent(e)) {
     this.handleTouchStart(e);
   }
 };

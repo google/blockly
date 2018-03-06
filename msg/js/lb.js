@@ -160,7 +160,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_SORT_HELPURL = "https://github.com/google/blockly/wiki/Lists#sorting-a-list";  // untranslated
 /** @export */ Blockly.Msg.LISTS_SORT_ORDER_ASCENDING = "ascending";  // untranslated
 /** @export */ Blockly.Msg.LISTS_SORT_ORDER_DESCENDING = "descending";  // untranslated
-/** @export */ Blockly.Msg.LISTS_SORT_TITLE = "sort %1 %2 %3";  // untranslated
+/** @export */ Blockly.Msg.LISTS_SORT_TITLE = "%1 %2 %3 zortéieren";
 /** @export */ Blockly.Msg.LISTS_SORT_TOOLTIP = "Sort a copy of a list.";  // untranslated
 /** @export */ Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE = "alphabetic, ignore case";  // untranslated
 /** @export */ Blockly.Msg.LISTS_SORT_TYPE_NUMERIC = "numeresch";

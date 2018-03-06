@@ -228,7 +228,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_MULTIPLICATION_SYMBOL = "x";
 /** @export */ Blockly.Msg.MATH_NUMBER_HELPURL = "https://en.wikipedia.org/wiki/Number";
 /** @export */ Blockly.Msg.MATH_NUMBER_TOOLTIP = "Et tall.";
-/** @export */ Blockly.Msg.MATH_ONLIST_HELPURL = "";
+/** @export */ Blockly.Msg.MATH_ONLIST_HELPURL = "";  // untranslated
 /** @export */ Blockly.Msg.MATH_ONLIST_OPERATOR_AVERAGE = "gjennomsnittet av listen";
 /** @export */ Blockly.Msg.MATH_ONLIST_OPERATOR_MAX = "maksimum av liste";
 /** @export */ Blockly.Msg.MATH_ONLIST_OPERATOR_MEDIAN = "medianen til listen";

@@ -39,6 +39,8 @@
 	"RENAME_VARIABLE": "Nimeä uudelleen muuttuja...",
 	"RENAME_VARIABLE_TITLE": "Nimeä uudelleen kaikki '%1' muuttujaa:",
 	"NEW_VARIABLE": "Luo muuttuja...",
+	"NEW_NUMBER_VARIABLE": "Luo numeromuuttuja...",
+	"NEW_COLOUR_VARIABLE": "Luo värimuuttuja...",
 	"NEW_VARIABLE_TITLE": "Uuden muuttujan nimi:",
 	"VARIABLE_ALREADY_EXISTS": "Muuttuja nimeltään '%1' jo olemassa.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Muuttuja nimeltä '%1' on jo olemassa toiselle muuttujalle tyypiltään '%2'.",

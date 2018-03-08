@@ -5,7 +5,8 @@
 			"Octahedron80",
 			"Horus",
 			"Roysheng",
-			"Aefgh39622"
+			"Aefgh39622",
+			"Nantapat"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "รายการ",
@@ -32,6 +33,10 @@
 	"RENAME_VARIABLE": "เปลี่ยนชื่อตัวแปร...",
 	"RENAME_VARIABLE_TITLE": "เปลี่ยนชื่อตัวแปร '%1' ทั้งหมดเป็น:",
 	"NEW_VARIABLE": "สร้างตัวแปร...",
+	"NEW_STRING_VARIABLE": "สร้างตัวแปร string",
+	"NEW_NUMBER_VARIABLE": "สร้างตัวแปรจำนวน",
+	"NEW_COLOUR_VARIABLE": "สร้างตัวแปรสี",
+	"NEW_VARIABLE_TYPE_TITLE": "ชนิดตัวแปรใหม่",
 	"NEW_VARIABLE_TITLE": "ชื่อตัวแปรใหม่:",
 	"VARIABLE_ALREADY_EXISTS": "มีตัวแปรชื่อ '%1' อยู่แล้ว",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "ตัวแปรชื่อ '%1' มีอยู่แล้วสำหรับตัวแปรอื่นของชนิด '%2'",

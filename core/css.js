@@ -391,7 +391,7 @@ Blockly.Css.CONTENT = [
     'padding: 2px;',
     'resize: none;',
     'display: block;',
-    'overflow: none;',
+    'overflow: hidden;',
   '}',
 
   '.blocklyHtmlInput {',

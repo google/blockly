@@ -30,6 +30,7 @@
 	"RENAME_VARIABLE": "Перайменаваць зьменную…",
 	"RENAME_VARIABLE_TITLE": "Перайменаваць усе назвы зьменных '%1' на:",
 	"NEW_VARIABLE": "Стварыць зьменную…",
+	"NEW_STRING_VARIABLE": "Стварыць радковую зьменную…",
 	"NEW_VARIABLE_TITLE": "Імя новай зьменнай:",
 	"VARIABLE_ALREADY_EXISTS": "Зьменная з назвай «%1» ужо існуе.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Зьменная з назвай «%1» ужо існуе зь іншым тыпам «%2».",

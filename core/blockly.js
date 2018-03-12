@@ -452,26 +452,30 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
   };
 
   var bindData = [];
-  // Don't register the mouse event if an equivalent pointer event is supported.
-  if ((window && !window.PointerEvent) || !(name in Blockly.Touch.TOUCH_MAP)) {
+  if (window && window.PointerEvent && (name in Blockly.Touch.TOUCH_MAP)) {
+    for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+      node.addEventListener(type, wrapFunc, false);
+      bindData.push([node, type, wrapFunc]);
+    }
+  } else {
     node.addEventListener(name, wrapFunc, false);
     bindData.push([node, name, wrapFunc]);
-  }
 
-  // Add equivalent touch or pointer event.
-  if (name in Blockly.Touch.TOUCH_MAP) {
-    var touchWrapFunc = function(e) {
-      wrapFunc(e);
-      // Calling preventDefault stops the browser from scrolling/zooming the
-      // page.
-      var preventDef = !opt_noPreventDefault;
-      if (handled && preventDef) {
-        e.preventDefault();
+    // Add equivalent touch event.
+    if (name in Blockly.Touch.TOUCH_MAP) {
+      var touchWrapFunc = function(e) {
+        wrapFunc(e);
+        // Calling preventDefault stops the browser from scrolling/zooming the
+        // page.
+        var preventDef = !opt_noPreventDefault;
+        if (handled && preventDef) {
+          e.preventDefault();
+        }
+      };
+      for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+        node.addEventListener(type, touchWrapFunc, false);
+        bindData.push([node, type, touchWrapFunc]);
       }
-    };
-    for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
-      node.addEventListener(type, touchWrapFunc, false);
-      bindData.push([node, type, touchWrapFunc]);
     }
   }
   return bindData;
@@ -501,29 +505,34 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
   };
 
   var bindData = [];
-  // Don't register the mouse event if an equivalent pointer event is supported.
-  if ((window && !window.PointerEvent) || !(name in Blockly.Touch.TOUCH_MAP)) {
+  if (window && window.PointerEvent && (name in Blockly.Touch.TOUCH_MAP)) {
+    for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+      node.addEventListener(type, wrapFunc, false);
+      bindData.push([node, type, wrapFunc]);
+    }
+  } else {
     node.addEventListener(name, wrapFunc, false);
     bindData.push([node, name, wrapFunc]);
-  }
-  // Add equivalent touch or pointer event.
-  if (name in Blockly.Touch.TOUCH_MAP) {
-    var touchWrapFunc = function(e) {
-      // Punt on multitouch events.
-      if (e.changedTouches && e.changedTouches.length == 1) {
-        // Map the touch event's properties to the event.
-        var touchPoint = e.changedTouches[0];
-        e.clientX = touchPoint.clientX;
-        e.clientY = touchPoint.clientY;
-      }
-      wrapFunc(e);
 
-      // Stop the browser from scrolling/zooming the page.
-      e.preventDefault();
-    };
-    for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
-      node.addEventListener(type, touchWrapFunc, false);
-      bindData.push([node, type, touchWrapFunc]);
+    // Add equivalent touch event.
+    if (name in Blockly.Touch.TOUCH_MAP) {
+      var touchWrapFunc = function(e) {
+        // Punt on multitouch events.
+        if (e.changedTouches && e.changedTouches.length == 1) {
+          // Map the touch event's properties to the event.
+          var touchPoint = e.changedTouches[0];
+          e.clientX = touchPoint.clientX;
+          e.clientY = touchPoint.clientY;
+        }
+        wrapFunc(e);
+
+        // Stop the browser from scrolling/zooming the page.
+        e.preventDefault();
+      };
+      for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+        node.addEventListener(type, touchWrapFunc, false);
+        bindData.push([node, type, touchWrapFunc]);
+      }
     }
   }
   return bindData;

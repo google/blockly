@@ -402,7 +402,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
 
   if (!this.isFlyout) {
     Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
-        this.onMouseDown_);
+        this.onMouseDown_, false, true);
     if (this.options.zoomOptions && this.options.zoomOptions.wheel) {
       // Mouse-wheel.
       Blockly.bindEventWithChecks_(this.svgGroup_, 'wheel', this,

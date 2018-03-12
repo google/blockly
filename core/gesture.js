@@ -498,7 +498,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
   }
 
   if (goog.string.caseInsensitiveEquals(e.type, 'touchstart') ||
-      goog.string.caseInsensitiveEquals(e.type, 'pointerdown')) {
+      (goog.string.caseInsensitiveEquals(e.type, 'pointerdown') && e.pointerType != 'mouse')) {
     Blockly.longStart_(e, this);
   }
 

@@ -345,11 +345,16 @@ Blockly.Bubble.prototype.registerResizeEvent = function(callback) {
 
 /**
  * Move this bubble to the top of the stack.
+ * @return {!boolean} Whether or not the bubble has been moved.
  * @private
  */
 Blockly.Bubble.prototype.promote_ = function() {
   var svgGroup = this.bubbleGroup_.parentNode;
-  svgGroup.appendChild(this.bubbleGroup_);
+  if (svgGroup.lastChild !== this.bubbleGroup_) {
+    svgGroup.appendChild(this.bubbleGroup_);
+    return true;
+  }
+  return false;
 };
 
 /**

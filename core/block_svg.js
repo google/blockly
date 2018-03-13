@@ -101,7 +101,7 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
       workspace, prototypeName, opt_id);
 
   // Expose this block's ID on its top-level SVG group.
-  this.svgGroup_.id = this.id;
+  this.svgGroup_.id = 'block' + this.id;
 };
 goog.inherits(Blockly.BlockSvg, Blockly.Block);
 

@@ -124,6 +124,8 @@ Blockly.Warning.prototype.setVisible = function(visible) {
     this.bubble_ = new Blockly.Bubble(
         /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
         paragraph, this.block_.svgPath_, this.iconXY_, null, null);
+    // Expose this warning's block's ID on its top-level SVG group.
+    this.bubble_.setSvgId('warning' + this.block_.id);
     if (this.block_.RTL) {
       // Right-align the paragraph.
       // This cannot be done until the bubble is rendered on screen.

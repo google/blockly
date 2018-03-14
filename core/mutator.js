@@ -250,7 +250,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
         /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
         this.createEditor_(), this.block_.svgPath_, this.iconXY_, null, null);
     // Expose this mutator's block's ID on its top-level SVG group.
-    this.bubble_.setSvgId('mutator' + this.block_.id);
+    this.bubble_.setSvgId(this.block_.id);
     var tree = this.workspace_.options.languageTree;
     if (tree) {
       this.workspace_.flyout_.init(this.workspace_);

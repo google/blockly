@@ -201,7 +201,7 @@ Blockly.Comment.prototype.setVisible = function(visible) {
         this.createEditor_(), this.block_.svgPath_,
         this.iconXY_, this.width_, this.height_);
     // Expose this comment's block's ID on its top-level SVG group.
-    this.bubble_.setSvgId('comment' + this.block_.id);
+    this.bubble_.setSvgId(this.block_.id);
     this.bubble_.registerResizeEvent(this.resizeBubble_.bind(this));
     this.updateColour();
   } else {

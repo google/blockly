@@ -284,10 +284,10 @@ Blockly.Bubble.prototype.getSvgRoot = function() {
 
 /**
  * Expose the block's ID on the bubble's top-level SVG group.
- * @param {string} id Bubble type and ID of block.
+ * @param {string} id ID of block.
  */
 Blockly.Bubble.prototype.setSvgId = function(id) {
-  this.bubbleGroup_.id = id;
+  this.bubbleGroup_.dataset.id = id;
 };
 
 /**

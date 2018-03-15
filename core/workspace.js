@@ -62,12 +62,12 @@ Blockly.Workspace = function(opt_options) {
   this.listeners_ = [];
   /**
    * @type {!Array.<!Blockly.Events.Abstract>}
-   * @private
+   * @protected
    */
   this.undoStack_ = [];
   /**
    * @type {!Array.<!Blockly.Events.Abstract>}
-   * @private
+   * @protected
    */
   this.redoStack_ = [];
   /**

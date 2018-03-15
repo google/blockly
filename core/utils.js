@@ -122,7 +122,7 @@ Blockly.utils.removeClass = function(element, className) {
  * @param {!Element} element DOM element to check.
  * @param {string} className Name of class to check.
  * @return {boolean} True if class exists, false otherwise.
- * @private
+ * @package
  */
 Blockly.utils.hasClass = function(element, className) {
   var classes = element.getAttribute('class');

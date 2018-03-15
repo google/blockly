@@ -11,7 +11,8 @@
 			"LaG roiL",
 			"아라",
 			"Elyashiv",
-			"Guycn2"
+			"Guycn2",
+			"Deborahjay"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "פריט",
@@ -93,7 +94,7 @@
 	"LOGIC_NEGATE_TOOLTIP": "החזר אמת אם הקלט הוא שקר. החזר שקר אם הקלט אמת.",
 	"LOGIC_BOOLEAN_TRUE": "נכון",
 	"LOGIC_BOOLEAN_FALSE": "שגוי",
-	"LOGIC_BOOLEAN_TOOLTIP": "תחזיר אם נכון או אם שגוי.",
+	"LOGIC_BOOLEAN_TOOLTIP": "מחזיר או האם נכון או האם שגוי.",
 	"LOGIC_NULL": "null",
 	"LOGIC_NULL_TOOLTIP": "תחזיר ריק.",
 	"LOGIC_TERNARY_CONDITION": "בדיקה",

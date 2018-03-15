@@ -11,14 +11,15 @@
 			"Lemondoge",
 			"Ykhwong",
 			"Jerrykim306",
-			"Onebone"
+			"Onebone",
+			"JeonHK"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "항목",
 	"TODAY": "오늘",
 	"DUPLICATE_BLOCK": "복제",
-	"ADD_COMMENT": "메모 추가",
-	"REMOVE_COMMENT": "내용 제거",
+	"ADD_COMMENT": "주석 추가",
+	"REMOVE_COMMENT": "주석 제거",
 	"EXTERNAL_INPUTS": "외부 입력",
 	"INLINE_INPUTS": "내부 입력",
 	"DELETE_BLOCK": "블록 삭제",

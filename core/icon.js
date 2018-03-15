@@ -52,14 +52,14 @@ Blockly.Icon.prototype.SIZE = 17;
 /**
  * Bubble UI (if visible).
  * @type {Blockly.Bubble}
- * @private
+ * @protected
  */
 Blockly.Icon.prototype.bubble_ = null;
 
 /**
  * Absolute coordinate of icon's center.
  * @type {goog.math.Coordinate}
- * @private
+ * @protected
  */
 Blockly.Icon.prototype.iconXY_ = null;
 
@@ -119,7 +119,7 @@ Blockly.Icon.prototype.isVisible = function() {
 /**
  * Clicking on the icon toggles if the bubble is visible.
  * @param {!Event} e Mouse click event.
- * @private
+ * @protected
  */
 Blockly.Icon.prototype.iconClick_ = function(e) {
   if (this.block_.workspace.isDragging()) {

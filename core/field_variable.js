@@ -291,15 +291,14 @@ Blockly.FieldVariable.dropdownCreate = function() {
     throw new Error('Tried to call dropdownCreate on a variable field with no' +
         ' variable selected.');
   }
-  var variableModelList = [];
   var name = this.getText();
   var workspace = null;
   if (this.sourceBlock_) {
     workspace = this.sourceBlock_.workspace;
   }
+  var variableModelList = [];
   if (workspace) {
     var variableTypes = this.getVariableTypes_();
-    var variableModelList = [];
     // Get a copy of the list, so that adding rename and new variable options
     // doesn't modify the workspace's list.
     for (var i = 0; i < variableTypes.length; i++) {

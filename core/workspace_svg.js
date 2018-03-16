@@ -269,6 +269,13 @@ Blockly.WorkspaceSvg.prototype.flyoutButtonCallbacks_ = {};
 Blockly.WorkspaceSvg.prototype.toolboxCategoryCallbacks_ = {};
 
 /**
+ * Developers may define this function to add custom menu options to the
+ * workspace's context menu or edit the workspace-created set of menu options.
+ * @param {!Array.<!Object>} options List of menu options to add to.
+ */
+Blockly.WorkspaceSvg.prototype.configureContextMenu = null;
+
+/**
  * In a flyout, the target workspace where blocks should be placed after a drag.
  * Otherwise null.
  * @type {?Blockly.WorkspaceSvg}
@@ -1309,6 +1316,11 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     }
   };
   menuOptions.push(deleteOption);
+
+  // Allow the developer to add or modify menuOptions.
+  if (this.configureContextMenu) {
+    this.configureContextMenu(menuOptions);
+  }
 
   Blockly.ContextMenu.show(e, menuOptions, this.RTL);
 };

@@ -1009,7 +1009,7 @@ Blockly.WorkspaceSvg.prototype.createVariable = function(name, opt_type, opt_id)
  * Make a list of all the delete areas for this workspace.
  */
 Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
-  if (this.trashcan) {
+  if (this.trashcan && this.svgGroup_.parentNode) {
     this.deleteAreaTrash_ = this.trashcan.getClientRect();
   } else {
     this.deleteAreaTrash_ = null;

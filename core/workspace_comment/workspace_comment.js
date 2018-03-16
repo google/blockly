@@ -224,7 +224,7 @@ Blockly.WorkspaceComment.prototype.toXml = function(opt_noId) {
  * @param {!Element} xmlComment XML comment element.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @return {!Blockly.WorkspaceComment} The created workspace comment.
- * @package
+ * @public
  */
 Blockly.WorkspaceComment.fromXml = function(xmlComment, workspace) {
   var comment = null;

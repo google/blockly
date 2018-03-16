@@ -515,7 +515,7 @@ Blockly.WorkspaceCommentSvg.prototype.setAutoLayout = function() {
  * Decode an XML comment tag and create a rendered comment on the workspace.
  * @param {!Element} xmlComment XML comment element.
  * @param {!Blockly.Workspace} workspace The workspace.
- * @return {!Blockly.WorkspaceComment} The workspace comment created.
+ * @return {!Blockly.WorkspaceComment} The created workspace comment.
  * @package
  */
 Blockly.WorkspaceCommentSvg.fromXml = function(xmlComment, workspace) {

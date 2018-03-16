@@ -287,7 +287,9 @@ Blockly.Bubble.prototype.getSvgRoot = function() {
  * @param {string} id ID of block.
  */
 Blockly.Bubble.prototype.setSvgId = function(id) {
-  this.bubbleGroup_.dataset.id = id;
+  if (this.bubbleGroup_.dataset) {
+    this.bubbleGroup_.dataset.blockId = id;
+  }
 };
 
 /**

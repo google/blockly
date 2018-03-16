@@ -111,7 +111,7 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
 /**
  * Create and initialize the SVG representation of a workspace comment.
  * May be called more than once.
- * @package
+ * @public
  */
 Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
   goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
@@ -254,7 +254,7 @@ Blockly.WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
  * Move a comment by a relative offset.
  * @param {number} dx Horizontal offset, in workspace units.
  * @param {number} dy Vertical offset, in workspace units.
- * @package
+ * @public
  */
 Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
   // TODO (#1580): Fire an event for move.
@@ -516,7 +516,7 @@ Blockly.WorkspaceCommentSvg.prototype.setAutoLayout = function() {
  * @param {!Element} xmlComment XML comment element.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @return {!Blockly.WorkspaceComment} The created workspace comment.
- * @package
+ * @public
  */
 Blockly.WorkspaceCommentSvg.fromXml = function(xmlComment, workspace) {
   // Create top-level comment.

@@ -40,11 +40,11 @@ Blockly.confirm = function(message, callback) {
   CustomDialog.show('Confirm', message, {
     showOkay: true,
     onOkay: function() {
-      callback(true)
+      callback(true);
     },
     showCancel: true,
     onCancel: function() {
-      callback(false)
+      callback(false);
     }
   });
 };
@@ -56,11 +56,11 @@ Blockly.prompt = function(message, defaultValue, callback) {
     showInput: true,
     showOkay: true,
     onOkay: function() {
-      callback(CustomDialog.inputField.value)
+      callback(CustomDialog.inputField.value);
     },
     showCancel: true,
     onCancel: function() {
-      callback(null)
+      callback(null);
     }
   });
   CustomDialog.inputField.value = defaultValue;
@@ -69,8 +69,8 @@ Blockly.prompt = function(message, defaultValue, callback) {
 /** Hides any currently visible dialog. */
 CustomDialog.hide = function() {
   if (CustomDialog.backdropDiv_) {
-    CustomDialog.backdropDiv_.style.display = 'none'
-    CustomDialog.dialogDiv_.style.display = 'none'
+    CustomDialog.backdropDiv_.style.display = 'none';
+    CustomDialog.dialogDiv_.style.display = 'none';
   }
 };
 

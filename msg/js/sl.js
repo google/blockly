@@ -80,7 +80,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
-/** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
+/** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "VHODI";
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Dodaj";
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Dodaj spremenljivko";
 /** @export */ Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Izbriši";
@@ -398,6 +398,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Nastavi, da je vrednost spremenljivke enaka vnosu.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Spremenljivka »%1« že obstaja.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another type: '%2'.";  // untranslated
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

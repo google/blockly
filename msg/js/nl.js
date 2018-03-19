@@ -398,6 +398,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Verandert de waarde van de variabele naar de waarde van de invoer.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Er bestaat al een variabele met de naam \"%1\".";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Een variabele met de naam '%1' bestaat al voor een andere variabele van type '%2'.";
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

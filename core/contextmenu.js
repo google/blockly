@@ -311,7 +311,8 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
   // Helper function to create and position a comment correctly based on the
   // location of the mouse event.
   var addWsComment = function() {
-    var comment = ws.newComment('Say something...', 100, 100);
+    var comment = ws.newComment(
+        Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT, 100, 100);
 
     var injectionDiv = ws.getInjectionDiv();
     // Bounding rect coordinates are in client coordinates, meaning that they

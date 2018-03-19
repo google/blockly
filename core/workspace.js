@@ -536,6 +536,10 @@ Blockly.Workspace.prototype.getCommentById = function(id) {
  * @package
  */
 Blockly.Workspace.prototype.addCommentById = function(comment) {
+  if (this.commentDB_[comment.id]) {
+    console.warn('Overriding an existing comment on this workspace, with id "' +
+        comment.id + '"');
+  }
   this.commentDB_[comment.id] = comment;
 };
 

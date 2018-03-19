@@ -39,7 +39,7 @@
 	"NEW_VARIABLE_TYPE_TITLE": "ชนิดตัวแปรใหม่",
 	"NEW_VARIABLE_TITLE": "ชื่อตัวแปรใหม่:",
 	"VARIABLE_ALREADY_EXISTS": "มีตัวแปรชื่อ '%1' อยู่แล้ว",
-	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "ตัวแปรชื่อ '%1' มีอยู่แล้วสำหรับตัวแปรอื่นของชนิด '%2'",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "ตัวแปรชื่อ '%1' มีอยู่แล้วสำหรับตัวแปรอื่นของชนิด: '%2'",
 	"DELETE_VARIABLE_CONFIRMATION": "ลบการใช้ตัวแปร %2 %1 ครั้งหรือไม่",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "ไม่สามารถลบตัวแปร '%1' ได้เนื่องจากเป็นส่วนหนึ่งของนิยามของฟังก์ชัน '%2'",
 	"DELETE_VARIABLE": "ลบตัวแปร '%1'",

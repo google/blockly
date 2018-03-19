@@ -184,7 +184,7 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
 /**
  * Add a comment to the list of top comments.
  * @param {!Blockly.WorkspaceComment} comment comment to add.
- * @package
+ * @public
  */
 Blockly.Workspace.prototype.addTopComment = function(comment) {
   this.topComments_.push(comment);
@@ -193,7 +193,7 @@ Blockly.Workspace.prototype.addTopComment = function(comment) {
 /**
  * Remove a comment from the list of top comments.
  * @param {!Blockly.WorkspaceComment} comment comment to remove.
- * @package
+ * @public
  */
 Blockly.Workspace.prototype.removeTopComment = function(comment) {
   if (!goog.array.remove(this.topComments_, comment)) {
@@ -524,7 +524,7 @@ Blockly.Workspace.prototype.getBlockById = function(id) {
  * @param {string} id ID of comment to find.
  * @return {Blockly.WorkspaceComment} The sought after comment or null if not
  *     found.
- * @package
+ * @public
  */
 Blockly.Workspace.prototype.getCommentById = function(id) {
   return this.commentDB_[id] || null;
@@ -533,7 +533,7 @@ Blockly.Workspace.prototype.getCommentById = function(id) {
 /**
  * Add the comment to the comment database.
  * @param {Blockly.WorkspaceComment} comment The comment to add.
- * @package
+ * @public
  */
 Blockly.Workspace.prototype.addCommentById = function(comment) {
   if (this.commentDB_[comment.id]) {
@@ -546,7 +546,7 @@ Blockly.Workspace.prototype.addCommentById = function(comment) {
 /**
  * Remove the comment from the comment database.
  * @param {string} id The id of the comment to remove.
- * @package
+ * @public
  */
 Blockly.Workspace.prototype.removeCommentById = function(id) {
   delete this.commentDB_[id];

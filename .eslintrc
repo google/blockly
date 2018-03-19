@@ -24,8 +24,17 @@
                 "ignoredNodes": ["ConditionalExpression"]
             }
         ],
+        "keyword-spacing": ["error"],
         "linebreak-style": ["error", "unix"],
-        "max-len": ["error", 120, 4],
+        "max-len": [
+            "error",
+            {
+                "code": 100,
+                "tabWidth": 4,
+                "ignoreStrings": true,
+                "ignoreRegExpLiterals": true
+            }
+        ],
         "no-trailing-spaces": ["error", { "skipBlankLines": true }],
         "no-unused-vars": ["error", {"args": "after-used", "varsIgnorePattern": "^_"}],
         "no-use-before-define": ["error"],

@@ -627,6 +627,8 @@ Blockly.Gesture.prototype.handleRightClick = function(e) {
     this.bringBlockToFront_();
     Blockly.hideChaff(this.flyout_);
     this.targetBlock_.showContextMenu_(e);
+  } else if (this.startBubble_) {
+    this.startBubble_.showContextMenu_(e);
   } else if (this.startWorkspace_ && !this.flyout_) {
     Blockly.hideChaff();
     this.startWorkspace_.showContextMenu_(e);
@@ -706,8 +708,8 @@ Blockly.Gesture.prototype.handleBubbleStart = function(e, bubble) {
  */
 Blockly.Gesture.prototype.doBubbleClick_ = function() {
   // TODO (#1673): Consistent handling of single clicks.
-  this.startBubble_.setFocus();
-  this.startBubble_.select();
+  this.startBubble_.setFocus && this.startBubble_.setFocus();
+  this.startBubble_.select && this.startBubble_.select();
 };
 
 /**

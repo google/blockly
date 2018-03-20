@@ -302,6 +302,42 @@ Blockly.ContextMenu.blockCommentOption = function(block) {
 };
 
 /**
+ * Make a context menu option for deleting the current workspace comment.
+ * @param {!Blockly.WorkspaceCommentSvg} comment The workspace comment where the right-click originated.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @package
+ */
+Blockly.ContextMenu.commentDeleteOption = function(comment) {
+  var deleteOption = {
+    text: Blockly.Msg.REMOVE_COMMENT,
+    enabled: true,
+    callback: function() {
+      Blockly.Events.setGroup(true);
+      comment.dispose(true, true);
+      Blockly.Events.setGroup(false);
+    }
+  };
+  return deleteOption;
+};
+
+/**
+ * Make a context menu option for duplicating the current workspace comment.
+ * @param {!Blockly.WorkspaceCommentSvg} comment The workspace comment where the right-click originated.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @package
+ */
+Blockly.ContextMenu.commentDuplicateOption = function(comment) {
+  var duplicateOption = {
+    text: Blockly.Msg.DUPLICATE_COMMENT,
+    enabled: true,
+    callback: function() {
+      Blockly.duplicate_(comment);
+    }
+  };
+  return duplicateOption;
+};
+
+/**
  * Make a context menu option for adding a comment on the workspace.
  * @param {!Blockly.WorkspaceSvg} ws The workspace where the right-click
  *     originated.

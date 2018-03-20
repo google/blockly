@@ -251,7 +251,7 @@ Blockly.onKeyDown_ = function(e) {
  * @private
  */
 Blockly.copy_ = function(block) {
-  var xmlBlock = Blockly.Xml.blockToDom(block);
+  var xmlBlock = (block.isComment) ? block.toXmlWithXY() : Blockly.Xml.blockToDom(block);
   // Copy only the selected block and internal blocks.
   Blockly.Xml.deleteNext(xmlBlock);
   // Encode start position in XML.

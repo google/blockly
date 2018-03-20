@@ -86,6 +86,9 @@ Blockly.WorkspaceComment = function(workspace, content, height, width, opt_id) {
 
   /** @type {!string} */
   this.content_ = content;
+
+  /** @type {boolean} */
+  this.isComment = true;
 };
 
 /**

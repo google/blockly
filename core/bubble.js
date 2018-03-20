@@ -295,6 +295,14 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
 };
 
 /**
+ * Show the context menu for this bubble.
+ * @param {!Event} e Mouse event.
+ * @private
+ */
+Blockly.Bubble.prototype.showContextMenu_ = function(/*e*/) {
+};
+
+/**
  * Handle a mouse-down on bubble's resize corner.
  * @param {!Event} e Mouse down event.
  * @private

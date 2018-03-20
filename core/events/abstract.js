@@ -71,7 +71,7 @@ Blockly.Events.Abstract = function(elem) {
    */
   this.recordUndo = undefined;
 
-  if (elem instanceof Blockly.Block) {
+  if (elem instanceof Blockly.Block || elem instanceof Blockly.WorkspaceComment) {
     this.blockId = elem.id;
     this.workspaceId = elem.workspace.id;
   } else if (elem instanceof Blockly.VariableModel) {

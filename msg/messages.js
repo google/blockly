@@ -81,6 +81,8 @@ Blockly.Msg.DUPLICATE_BLOCK = 'Duplicate';
 Blockly.Msg.ADD_COMMENT = 'Add Comment';
 /// context menu - Remove the descriptive comment from the selected block.
 Blockly.Msg.REMOVE_COMMENT = 'Remove Comment';
+/// context menu - Make a copy of the selected workspace comment.\n{{Identical|Duplicate}}
+Blockly.Msg.DUPLICATE_COMMENT = 'Duplicate Comment';
 /// context menu - Change from 'external' to 'inline' mode for displaying blocks used as inputs to the selected block.  See [[Translating:Blockly#context_menus]].
 Blockly.Msg.EXTERNAL_INPUTS = 'External Inputs';
 /// context menu - Change from 'internal' to 'external' mode for displaying blocks used as inputs to the selected block.  See [[Translating:Blockly#context_menus]].

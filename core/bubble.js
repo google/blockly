@@ -295,6 +295,22 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
 };
 
 /**
+ * Show the context menu for this bubble.
+ * @param {!Event} e Mouse event.
+ * @private
+ */
+Blockly.Bubble.prototype.showContextMenu_ = function(/*e*/) {
+};
+
+/**
+ * Whether the bubble is deletable by a drag into delete areas.
+ * @return {!boolean} Whether or not the bubble is deletable.
+ */
+Blockly.Bubble.prototype.isDeletableByDrag = function() {
+  return false;
+};
+
+/**
  * Handle a mouse-down on bubble's resize corner.
  * @param {!Event} e Mouse down event.
  * @private

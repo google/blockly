@@ -492,6 +492,14 @@ Blockly.WorkspaceCommentSvg.prototype.setContent = function(content) {
 };
 
 /**
+ * Whether the bubble is deletable by a drag into delete areas.
+ * @return {!boolean} Whether or not the bubble is deletable.
+ */
+Blockly.WorkspaceCommentSvg.prototype.isDeletableByDrag = function() {
+  return true;
+};
+
+/**
  * Update the cursor over this comment by adding or removing a class.
  * @param {boolean} enable True if the delete cursor should be shown, false
  *     otherwise.

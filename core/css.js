@@ -420,6 +420,16 @@ Blockly.Css.CONTENT = [
     'overflow: hidden;',
   '}',
 
+  '.blocklyCommentDeleteIcon {',
+    'cursor: pointer;',
+    'fill: #000;',
+    'display: none',
+  '}',
+
+  '.blocklySelected > .blocklyCommentDeleteIcon {',
+    'display: block',
+  '}',
+
   '.blocklyHtmlInput {',
     'border: none;',
     'border-radius: 4px;',

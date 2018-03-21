@@ -26,7 +26,9 @@
 
 goog.provide('Blockly.WorkspaceCommentSvg');
 
+goog.require('Blockly.Events.CommentCreate');
 goog.require('Blockly.WorkspaceComment');
+
 
 /**
  * Class for a workspace comment's SVG representation.
@@ -557,5 +559,8 @@ Blockly.WorkspaceCommentSvg.fromXml = function(xmlComment, workspace) {
   }
   // TODO (#1580): fire a comment create event.  Possibly should happen in
   // Blockly.WorkspaceComment.fromXml instead.
+  // Fire a create event.
+  Blockly.WorkspaceComment.fireCreateEvent(comment);
+
   return comment;
 };

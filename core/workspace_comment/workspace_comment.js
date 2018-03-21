@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.WorkspaceComment');
 
+goog.require('Blockly.Events.CommentCreate');
+
 /**
  * Class for a workspace comment.
  * @param {!Blockly.Workspace} workspace The block's workspace.
@@ -89,6 +91,8 @@ Blockly.WorkspaceComment = function(workspace, content, height, width, opt_id) {
 
   /** @type {boolean} */
   this.isComment = true;
+
+  Blockly.WorkspaceComment.fireCreateEvent(this);
 };
 
 /**
@@ -222,6 +226,24 @@ Blockly.WorkspaceComment.prototype.toXml = function(opt_noId) {
   return commentElement;
 };
 
+Blockly.WorkspaceComment.fireCreateEvent = function(comment) {
+  if (Blockly.Events.isEnabled()) {
+    // TODO: Does this need to be in a group?  It can't cause other events to
+    // be fired, unlike a block create.
+    var existingGroup = Blockly.Events.getGroup();
+    if (!existingGroup) {
+      Blockly.Events.setGroup(true);
+    }
+    try {
+      Blockly.Events.fire(new Blockly.Events.CommentCreate(comment));
+    } finally {
+      if (!existingGroup) {
+        Blockly.Events.setGroup(false);
+      }
+    }
+  }
+};
+
 /**
  * Decode an XML comment tag and create a comment on the workspace.
  * @param {!Element} xmlComment XML comment element.
@@ -237,5 +259,6 @@ Blockly.WorkspaceComment.fromXml = function(xmlComment, workspace) {
   var content = xmlComment.textContent;
 
   comment = workspace.newComment(content, h, w, id);
+  Blockly.WorkspaceComment.fireCreateEvent(comment);
   return comment;
 };

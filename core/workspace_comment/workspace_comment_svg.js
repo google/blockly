@@ -118,6 +118,8 @@ Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
   if (!this.workspace.options.readOnly && !this.eventsInit_) {
     Blockly.bindEventWithChecks_(
         this.svgRectTarget_, 'mousedown', this, this.pathMouseDown_);
+    Blockly.bindEventWithChecks_(
+        this.svgHandleTarget_, 'mousedown', this, this.pathMouseDown_);
   }
   this.eventsInit_ = true;
 

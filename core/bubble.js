@@ -303,10 +303,10 @@ Blockly.Bubble.prototype.showContextMenu_ = function(/*e*/) {
 };
 
 /**
- * Whether the bubble is deletable by a drag into delete areas.
- * @return {!boolean} Whether or not the bubble is deletable.
+ * Get whether this bubble is deletable or not.
+ * @return {boolean} True if deletable.
  */
-Blockly.Bubble.prototype.isDeletableByDrag = function() {
+Blockly.Bubble.prototype.isDeletable = function() {
   return false;
 };
 

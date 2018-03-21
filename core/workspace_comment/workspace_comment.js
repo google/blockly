@@ -226,6 +226,11 @@ Blockly.WorkspaceComment.prototype.toXml = function(opt_noId) {
   return commentElement;
 };
 
+/**
+ * Fire a create event for the given workspace comment, if comments are enabled.
+ * @param {!Blockly.WorkspaceComment} comment The comment that was just created.
+ * @package
+ */
 Blockly.WorkspaceComment.fireCreateEvent = function(comment) {
   if (Blockly.Events.isEnabled()) {
     var existingGroup = Blockly.Events.getGroup();

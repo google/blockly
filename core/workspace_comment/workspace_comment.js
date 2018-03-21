@@ -228,8 +228,6 @@ Blockly.WorkspaceComment.prototype.toXml = function(opt_noId) {
 
 Blockly.WorkspaceComment.fireCreateEvent = function(comment) {
   if (Blockly.Events.isEnabled()) {
-    // TODO: Does this need to be in a group?  It can't cause other events to
-    // be fired, unlike a block create.
     var existingGroup = Blockly.Events.getGroup();
     if (!existingGroup) {
       Blockly.Events.setGroup(true);

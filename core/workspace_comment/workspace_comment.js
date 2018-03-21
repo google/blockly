@@ -204,6 +204,8 @@ Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
   element.setAttribute('x',
       Math.round(this.workspace.RTL ? width - xy.x : xy.x));
   element.setAttribute('y', Math.round(xy.y));
+  element.setAttribute('h', this.getHeight());
+  element.setAttribute('w', this.getWidth());
   return element;
 };
 
@@ -217,8 +219,6 @@ Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
  */
 Blockly.WorkspaceComment.prototype.toXml = function(opt_noId) {
   var commentElement = goog.dom.createDom('comment');
-  commentElement.setAttribute('h', this.getHeight());
-  commentElement.setAttribute('w', this.getWidth());
   if (!opt_noId) {
     commentElement.setAttribute('id', this.id);
   }

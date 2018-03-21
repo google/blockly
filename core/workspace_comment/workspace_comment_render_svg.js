@@ -79,6 +79,13 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
   this.createEditor_();
   this.svgGroup_.appendChild(this.foreignObject_);
 
+  this.svgHandleTarget_ = Blockly.utils.createSvgElement('rect',
+    {
+      'class': 'blocklyCommentHandleTarget',
+      'x': 0,
+      'y': 0
+    });
+  this.svgGroup_.appendChild(this.svgHandleTarget_);
   this.svgRectTarget_ = Blockly.utils.createSvgElement('rect',
       {
         'class': 'blocklyCommentTarget',
@@ -287,6 +294,8 @@ Blockly.WorkspaceCommentSvg.prototype.setSize_ = function(width, height) {
   this.svgRect_.setAttribute('height', height);
   this.svgRectTarget_.setAttribute('width', width);
   this.svgRectTarget_.setAttribute('height', height);
+  this.svgHandleTarget_.setAttribute('width', width);
+  this.svgHandleTarget_.setAttribute('height', Blockly.WorkspaceCommentSvg.TOP_OFFSET);
   if (this.RTL) {
     this.svgRect_.setAttribute('transform', 'scale(-1 1)');
     this.svgRectTarget_.setAttribute('transform', 'scale(-1 1)');
@@ -317,6 +326,7 @@ Blockly.WorkspaceCommentSvg.prototype.disposeInternal_ = function() {
   this.textarea_ = null;
   this.foreignObject_ = null;
   this.svgRectTarget_ = null;
+  this.svgHandleTarget_ = null;
 };
 
 /**
@@ -327,6 +337,7 @@ Blockly.WorkspaceCommentSvg.prototype.setFocus = function() {
   this.focused_ = true;
   var textarea = this.textarea_;
   this.svgRectTarget_.style.fill = "none";
+  this.svgHandleTarget_.style.fill = "transparent";
   setTimeout(function() {
     textarea.focus();
   }, 0);
@@ -341,6 +352,7 @@ Blockly.WorkspaceCommentSvg.prototype.blurFocus = function() {
   this.focused_ = false;
   var textarea = this.textarea_;
   this.svgRectTarget_.style.fill = "transparent";
+  this.svgHandleTarget_.style.fill = "none";
   setTimeout(function() {
     textarea.blur();
   }, 0);

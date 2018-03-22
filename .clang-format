@@ -1,5 +1,5 @@
 BasedOnStyle: Google
 ---
 Language: JavaScript
-Disable: True
+DisableFormat: true
 ---

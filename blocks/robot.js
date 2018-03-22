@@ -23,7 +23,7 @@ Blockly.Blocks['robot_display_message_h2'] = {
   }
 };
 
-Blockly.Blocks['robot_display_message_h1h2_no_timeout'] = {
+Blockly.Blocks['robot_display_message_h1h2'] = {
   init: function() {
     this.appendValueInput("H1_TEXT")
         .setCheck("String")
@@ -41,32 +41,10 @@ Blockly.Blocks['robot_display_message_h1h2_no_timeout'] = {
   }
 };
 
-Blockly.Blocks['robot_display_message_h1h2'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("display message");
-    this.appendValueInput("H1TEXT")
-        .setCheck("String")
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("big text");
-    this.appendValueInput("H2TEXT")
-        .setCheck("String")
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("regular text");
-    this.appendValueInput("TIMEOUT")
-        .setCheck("Number")
-        .setAlign(Blockly.ALIGN_RIGHT)
-        .appendField("timeout (s)");
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setColour(260);
-    this.setTooltip('Displays a message with both big and regular size text.');
-    this.setHelpUrl('');
-  }
-};
-
+// DEPRECATED
 Blockly.Blocks['robot_display_ask_multiple_choice'] = {
   init: function() {
+    this.setWarningText('DEPRECATED: replace with the new ask multiple choice block.');
     this.appendValueInput("QUESTION")
         .setCheck("String")
         .setAlign(Blockly.ALIGN_RIGHT)
@@ -86,8 +64,27 @@ Blockly.Blocks['robot_display_ask_multiple_choice'] = {
   }
 };
 
+Blockly.Blocks['robot_display_ask_choice'] = {
+  init: function() {
+    this.appendValueInput("QUESTION")
+        .setCheck("String")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("ask multiple choice question");
+    this.appendValueInput("CHOICES")
+        .setCheck("Array")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("list of choices");
+    this.setOutput(true, "String");
+    this.setColour(260);
+    this.setTooltip('Asks a multiple choice question. The user\'s choice is returned.');
+    this.setHelpUrl('');
+  }
+};
+
+
 Blockly.Blocks['robot_display_wait_for_button_press'] = {
   init: function() {
+    this.setWarningText('DEPRECATED: replace with the new wait for button press block.');
     this.appendValueInput("TEXT")
         .setCheck("String")
         .setAlign(Blockly.ALIGN_RIGHT)
@@ -100,6 +97,24 @@ Blockly.Blocks['robot_display_wait_for_button_press'] = {
         .setCheck("Number")
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField("timeout (seconds)");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(260);
+    this.setTooltip('Waits for a button to be pressed.');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['robot_display_wait_for_button'] = {
+  init: function() {
+    this.appendValueInput("TEXT")
+        .setCheck("String")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("wait for button press");
+    this.appendValueInput("BUTTON")
+        .setCheck("String")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("button text");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(260);
@@ -206,30 +221,6 @@ Blockly.Blocks['robot_head_look_angles'] = {
   }
 };
 
-Blockly.Blocks['robot_head_look_at'] = {
-  init: function() {
-    this.appendValueInput("OBJECT_OR_PERSON")
-        .setCheck(["SceneObject", "Person"])
-        .appendField("look at");
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setColour(230);
-    this.setTooltip('Look at an object.');
-    this.setHelpUrl('');
-  }
-};
-
-Blockly.Blocks['robot_perception_find_objects'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("look for objects");
-    this.setOutput(true, "Array");
-    this.setColour(230);
-    this.setTooltip('Makes the robot look for objects where it\'s looking.');
-    this.setHelpUrl('');
-  }
-};
-
 Blockly.Blocks['robot_perception_object_attributes'] = {
   init: function() {
     this.appendValueInput("OBJECT")
@@ -328,29 +319,6 @@ Blockly.Blocks['robot_movement_tuck_arms'] = {
     this.setNextStatement(true, null);
     this.setColour(20);
     this.setTooltip('Tucks or deploys the robot\'s arms.');
-    this.setHelpUrl('');
-  }
-};
-
-Blockly.Blocks['robot_manipulation_pick_default'] = {
-  init: function() {
-    this.appendValueInput("OBJ")
-        .setCheck("SceneObject")
-        .appendField("pick up object");
-    this.setOutput(true, "Boolean");
-    this.setColour(20);
-    this.setTooltip('Picks up the given object.');
-    this.setHelpUrl('');
-  }
-};
-
-Blockly.Blocks['robot_manipulation_place_default'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("place object on table");
-    this.setOutput(true, "Boolean");
-    this.setColour(20);
-    this.setTooltip('Places the held object onto the nearest table.');
     this.setHelpUrl('');
   }
 };
@@ -478,10 +446,10 @@ Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
   init: function() {
     this.appendValueInput("ACTION_ID")
         .setCheck("PbD action ID")
-        .appendField("run PbD action");
+        .appendField("run PR2 PbD action");
     this.setOutput(true, "Boolean");
     this.setColour(20);
-    this.setTooltip('Executes an action created using the Programming by Demonstration interface.');
+    this.setTooltip('Executes an action created using the PR2 Programming by Demonstration interface.');
     this.setHelpUrl('');
     this.setMutator(new Blockly.Mutator(['robot_manipulation_pbd_landmark']));
     this.possibleLandmarks_ = [];
@@ -697,14 +665,16 @@ Blockly.Blocks['robot_manipulation_open_gripper'] = {
   }
 };
 
-Blockly.Blocks['robot_manipulation_close_gripper'] = {
+Blockly.Blocks['robot_manipulation_close_gripper_with_effort'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("close gripper");
+        .appendField("close gripper with")
+        .appendField(new Blockly.FieldNumber(35, 0, 120), "FORCE")
+        .appendField("N force");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
-    this.setTooltip('Closes the gripper.');
+    this.setTooltip('Closes the gripper with a maximum amount of force');
     this.setHelpUrl('');
   }
 };
@@ -753,7 +723,7 @@ Blockly.Blocks['robot_manipulation_set_torso'] = {
   init: function() {
     this.appendValueInput("HEIGHT")
       .setCheck("Number")
-      .appendField("set torso height");
+      .appendField("set torso height (m)");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);

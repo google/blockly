@@ -14,34 +14,42 @@ Blockly.JavaScript['robot_display_message_h2'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['robot_display_message_h1h2_no_timeout'] = function(block) {
+Blockly.JavaScript['robot_display_message_h1h2'] = function(block) {
   var value_h1_text = Blockly.JavaScript.valueToCode(block, 'H1_TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
   var value_h2_text = Blockly.JavaScript.valueToCode(block, 'H2_TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
   var code = 'robot.displayMessage(' + value_h1_text + ', ' + value_h2_text + ');\n';
   return code;
 };
 
-Blockly.JavaScript['robot_display_message_h1h2'] = function(block) {
-  var value_h1text = Blockly.JavaScript.valueToCode(block, 'H1TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
-  var value_h2text = Blockly.JavaScript.valueToCode(block, 'H2TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
-  var value_timeout = Blockly.JavaScript.valueToCode(block, 'TIMEOUT', Blockly.JavaScript.ORDER_COMMA) || 0;
-  var code = 'robot.displayMessage(' + value_h1text + ', ' + value_h2text + ', ' + value_timeout + ');\n';
-  return code;
-};
-
+// DEPRECATED
 Blockly.JavaScript['robot_display_ask_multiple_choice'] = function(block) {
   var value_question = Blockly.JavaScript.valueToCode(block, 'QUESTION', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
   var value_choices = Blockly.JavaScript.valueToCode(block, 'CHOICES', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
-  var value_timeout = Blockly.JavaScript.valueToCode(block, 'TIMEOUT', Blockly.JavaScript.ORDER_COMMA) || 0;
-  var code = 'robot.askMultipleChoice(' + value_question + ', ' + value_choices + ', ' + value_timeout + ')';
+  //var value_timeout = Blockly.JavaScript.valueToCode(block, 'TIMEOUT', Blockly.JavaScript.ORDER_COMMA) || 0;
+  var code = 'robot.askMultipleChoice(' + value_question + ', ' + value_choices + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
+
+Blockly.JavaScript['robot_display_ask_choice'] = function(block) {
+  var value_question = Blockly.JavaScript.valueToCode(block, 'QUESTION', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+  var value_choices = Blockly.JavaScript.valueToCode(block, 'CHOICES', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+  var code = 'robot.askMultipleChoice(' + value_question + ', ' + value_choices + ')';
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+
 
 Blockly.JavaScript['robot_display_wait_for_button_press'] = function(block) {
   var value_text = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
   var value_button = Blockly.JavaScript.valueToCode(block, 'BUTTON', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
-  var value_timeout = Blockly.JavaScript.valueToCode(block, 'TIMEOUT', Blockly.JavaScript.ORDER_COMMA) || 0;
+  //var value_timeout = Blockly.JavaScript.valueToCode(block, 'TIMEOUT', Blockly.JavaScript.ORDER_COMMA) || 0;
   var code = 'robot.askMultipleChoice(' + value_text + ', [' + value_button + '], ' + value_timeout + ');\n';
+  return code;
+};
+
+Blockly.JavaScript['robot_display_wait_for_button'] = function(block) {
+  var value_text = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+  var value_button = Blockly.JavaScript.valueToCode(block, 'BUTTON', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+  var code = 'robot.askMultipleChoice(' + value_text + ', [' + value_button + ']);\n';
   return code;
 };
 
@@ -73,17 +81,6 @@ Blockly.JavaScript['robot_head_look_angles'] = function(block) {
   var angle_left = block.getFieldValue('LEFT') || '0';
   var code = 'robot.lookAtDegrees(' + angle_up + ', ' + angle_left + ');\n';
   return code;
-};
-
-Blockly.JavaScript['robot_head_look_at'] = function(block) {
-  var obj = Blockly.JavaScript.valueToCode(block, 'OBJECT_OR_PERSON', Blockly.JavaScript.NONE) || 'null';
-  var code = 'robot.lookAt(' + obj + ');\n';
-  return code;
-};
-
-Blockly.JavaScript['robot_perception_find_objects'] = function(block) {
-  var code = 'robot.findObjects()';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
 Blockly.JavaScript['robot_perception_object_attributes'] = function(block) {
@@ -138,26 +135,14 @@ Blockly.JavaScript['robot_movement_tuck_arms'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['robot_manipulation_pick_default'] = function(block) {
-  var value_obj = Blockly.JavaScript.valueToCode(block, 'OBJ', Blockly.JavaScript.ORDER_COMMA) || 'null';
-  var arm_id = 0; // DEFAULT
-  var code = 'robot.pick(' + value_obj + ', ' + arm_id + ')';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-};
-
-Blockly.JavaScript['robot_manipulation_place_default'] = function(block) {
-  var arm_id = 0; // DEFAULT
-  var code = 'robot.place(' + arm_id + ')';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-};
-
 Blockly.JavaScript['robot_manipulation_open_gripper'] = function(block) {
   var code = 'robot.openGripper();\n';
   return code;
 };
 
-Blockly.JavaScript['robot_manipulation_close_gripper'] = function(block) {
-  var code = 'robot.closeGripper();\n';
+Blockly.JavaScript['robot_manipulation_close_gripper_with_effort'] = function(block) {
+  var number_force = block.getFieldValue('FORCE') || 120;
+  var code = 'robot.closeGripper(' + number_force + ');\n';
   return code;
 };
 

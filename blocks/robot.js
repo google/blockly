@@ -669,7 +669,7 @@ Blockly.Blocks['robot_manipulation_close_gripper_with_effort'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("close gripper with")
-        .appendField(new Blockly.FieldNumber(35, 0, 120), "FORCE")
+        .appendField(new Blockly.FieldNumber(75, 35, 120), "FORCE")
         .appendField("N force");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

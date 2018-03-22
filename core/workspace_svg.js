@@ -31,7 +31,6 @@ goog.provide('Blockly.WorkspaceSvg');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
 goog.require('Blockly.Events.BlockCreate');
-goog.require('Blockly.Events.WorkspaceCommentCreate');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
 goog.require('Blockly.Options');
@@ -1029,7 +1028,7 @@ Blockly.WorkspaceSvg.prototype.pasteWorkspaceComment_ = function(xmlComment) {
     Blockly.Events.enable();
   }
   if (Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(new Blockly.Events.WorkspaceCommentCreate(comment));
+    // TODO: Fire a Workspace Comment Create event
   }
   comment.select();
 };

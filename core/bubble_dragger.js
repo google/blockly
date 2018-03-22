@@ -113,6 +113,13 @@ Blockly.BubbleDragger.prototype.startBubbleDrag = function() {
   }
 
   this.draggingBubble_.setDragging && this.draggingBubble_.setDragging(true);
+
+  var toolbox = this.workspace_.getToolbox();
+  if (toolbox) {
+    var style = this.draggingBubble_.isDeletable() ? 'blocklyToolboxDelete' :
+        'blocklyToolboxGrab';
+    toolbox.addStyle(style);
+  }
 };
 
 /**
@@ -209,6 +216,11 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
   }
   this.workspace_.setResizesEnabled(true);
 
+  if (this.workspace_.toolbox_) {
+    var style = this.draggingBubble_.isDeletable() ? 'blocklyToolboxDelete' :
+        'blocklyToolboxGrab';
+    this.workspace_.toolbox_.removeStyle(style);
+  }
   Blockly.Events.setGroup(false);
 };
 

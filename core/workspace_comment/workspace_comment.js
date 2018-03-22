@@ -259,8 +259,10 @@ Blockly.WorkspaceComment.fireCreateEvent = function(comment) {
 Blockly.WorkspaceComment.fromXml = function(xmlComment, workspace) {
   var comment = null;
   var id = xmlComment.getAttribute('id');
-  var h = parseInt(xmlComment.getAttribute('h'), 10);
-  var w = parseInt(xmlComment.getAttribute('w'), 10);
+  var xmlH = xmlComment.getAttribute('h');
+  var xmlW = xmlComment.getAttribute('w');
+  var h = xmlH ? parseInt(xmlH, 10) : 100;
+  var w = xmlW ? parseInt(xmlW, 10) : 100;
   var content = xmlComment.textContent;
 
   comment = workspace.newComment(content, h, w, id);

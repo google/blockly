@@ -31,6 +31,7 @@
 
 goog.provide('BlockExporterController');
 
+goog.require('BlocklyDevTools.Analytics');
 goog.require('FactoryUtils');
 goog.require('StandardCategories');
 goog.require('BlockExporterView');
@@ -103,7 +104,9 @@ BlockExporterController.prototype.export = function() {
     // User wants to export selected blocks' definitions.
     if (!blockDef_filename) {
       // User needs to enter filename.
-      alert('Please enter a filename for your block definition(s) download.');
+      var msg = 'Please enter a filename for your block definition(s) download.';
+      BlocklyDevTools.Analytics.onWarning(msg);
+      alert(msg);
     } else {
       // Get block definition code in the selected format for the blocks.
       var blockDefs = this.tools.getBlockDefinitions(blockXmlMap,
@@ -111,6 +114,13 @@ BlockExporterController.prototype.export = function() {
       // Download the file, using .js file ending for JSON or Javascript.
       FactoryUtils.createAndDownloadFile(
           blockDefs, blockDef_filename, 'javascript');
+      BlocklyDevTools.Analytics.onExport(
+          BlocklyDevTools.Analytics.BLOCK_DEFINITIONS,
+          {
+            format: (definitionFormat == 'JSON' ?
+                BlocklyDevTools.Analytics.FORMAT_JSON :
+                BlocklyDevTools.Analytics.FORMAT_JS)
+          });
     }
   }
 
@@ -118,16 +128,20 @@ BlockExporterController.prototype.export = function() {
     // User wants to export selected blocks' generator stubs.
     if (!generatorStub_filename) {
       // User needs to enter filename.
-      alert('Please enter a filename for your generator stub(s) download.');
+      var msg = 'Please enter a filename for your generator stub(s) download.';
+      BlocklyDevTools.Analytics.onWarning(msg);
+      alert(msg);
     } else {
+      
       // Get generator stub code in the selected language for the blocks.
       var genStubs = this.tools.getGeneratorCode(blockXmlMap,
           language);
-      // Get the correct file extension.
-      var fileType = (language == 'JavaScript') ? 'javascript' : 'plain';
+      
       // Download the file.
       FactoryUtils.createAndDownloadFile(
-          genStubs, generatorStub_filename, fileType);
+          genStubs, generatorStub_filename + '.js', 'javascript');
+      BlocklyDevTools.Analytics.onExport(
+          BlocklyDevTools.Analytics.GENERATOR, { format: BlocklyDevTools.Analytics.FORMAT_JS });
     }
   }
 

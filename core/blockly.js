@@ -58,7 +58,10 @@ goog.require('goog.userAgent');
 
 
 // Turn off debugging when compiled.
+// Unused within the Blockly library, but used in Closure.
+/* eslint-disable no-unused-vars */
 var CLOSURE_DEFINES = {'goog.DEBUG': false};
+/* eslint-enable no-unused-vars */
 
 /**
  * The main workspace most recently used.
@@ -117,8 +120,10 @@ Blockly.hueToRgb = function(hue) {
  * @return {!Object} Contains width and height properties.
  */
 Blockly.svgSize = function(svg) {
-  return {width: svg.cachedWidth_,
-          height: svg.cachedHeight_};
+  return {
+    width: svg.cachedWidth_,
+    height: svg.cachedHeight_
+  };
 };
 
 /**
@@ -197,12 +202,16 @@ Blockly.onKeyDown_ = function(e) {
     }
     if (Blockly.selected &&
         Blockly.selected.isDeletable() && Blockly.selected.isMovable()) {
+      // Don't allow copying immovable or undeletable blocks. The next step
+      // would be to paste, which would create additional undeletable/immovable
+      // blocks on the workspace.
       if (e.keyCode == 67) {
         // 'c' for copy.
         Blockly.hideChaff();
         Blockly.copy_(Blockly.selected);
-      } else if (e.keyCode == 88) {
-        // 'x' for cut.
+      } else if (e.keyCode == 88 && !Blockly.selected.workspace.isFlyout) {
+        // 'x' for cut, but not in a flyout.
+        // Don't even copy the selected item in the flyout.
         Blockly.copy_(Blockly.selected);
         deleteBlock = true;
       }
@@ -211,7 +220,13 @@ Blockly.onKeyDown_ = function(e) {
       // 'v' for paste.
       if (Blockly.clipboardXml_) {
         Blockly.Events.setGroup(true);
-        Blockly.clipboardSource_.paste(Blockly.clipboardXml_);
+        // Pasting always pastes to the main workspace, even if the copy started
+        // in a flyout workspace.
+        var workspace = Blockly.clipboardSource_;
+        if (workspace.isFlyout) {
+          workspace = workspace.targetWorkspace;
+        }
+        workspace.paste(Blockly.clipboardXml_);
         Blockly.Events.setGroup(false);
       }
     } else if (e.keyCode == 90) {
@@ -220,8 +235,9 @@ Blockly.onKeyDown_ = function(e) {
       Blockly.mainWorkspace.undo(e.shiftKey);
     }
   }
-  if (deleteBlock) {
-    // Common code for delete and cut.
+  // Common code for delete and cut.
+  // Don't delete in the flyout.
+  if (deleteBlock && !Blockly.selected.workspace.isFlyout) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
     Blockly.selected.dispose(/* heal */ true, true);
@@ -303,8 +319,9 @@ Blockly.hideChaff = function(opt_allowToolbox) {
  */
 Blockly.addChangeListener = function(func) {
   // Backwards compatibility from before there could be multiple workspaces.
-  console.warn('Deprecated call to Blockly.addChangeListener, ' +
-               'use workspace.addChangeListener instead.');
+  console.warn(
+      'Deprecated call to Blockly.addChangeListener, ' +
+      'use workspace.addChangeListener instead.');
   return Blockly.getMainWorkspace().addChangeListener(func);
 };
 
@@ -377,12 +394,14 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
   for (var i = 0, elem; elem = jsonArray[i]; i++) {
     var typename = elem.type;
     if (typename == null || typename === '') {
-      console.warn('Block definition #' + i +
-        ' in JSON array is missing a type attribute. Skipping.');
+      console.warn(
+          'Block definition #' + i +
+          ' in JSON array is missing a type attribute. Skipping.');
     } else {
       if (Blockly.Blocks[typename]) {
-        console.warn('Block definition #' + i +
-          ' in JSON array overwrites prior definition of "' + typename + '".');
+        console.warn(
+            'Block definition #' + i + ' in JSON array' +
+            ' overwrites prior definition of "' + typename + '".');
       }
       Blockly.Blocks[typename] = {
         init: Blockly.jsonInitFactory_(elem)
@@ -395,18 +414,22 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
  * Bind an event to a function call.  When calling the function, verifies that
  * it belongs to the touch stream that is currently being processed, and splits
  * multitouch events into multiple events as needed.
- * @param {!Node} node Node upon which to listen.
+ * @param {!EventTarget} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
- * @param {boolean} opt_noCaptureIdentifier True if triggering on this event
+ * @param {boolean=} opt_noCaptureIdentifier True if triggering on this event
  *     should not block execution of other event handlers on this touch or other
  *     simultaneous touches.
+ * @param {boolean=} opt_noPreventDefault True if triggering on this event
+ *     should prevent the default handler.  False by default.  If
+ *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
+ *     provided.
  * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
  * @private
  */
 Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
-    opt_noCaptureIdentifier) {
+    opt_noCaptureIdentifier, opt_noPreventDefault) {
   var handled = false;
   var wrapFunc = function(e) {
     var captureIdentifier = !opt_noCaptureIdentifier;
@@ -434,15 +457,16 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
   if (name in Blockly.Touch.TOUCH_MAP) {
     var touchWrapFunc = function(e) {
       wrapFunc(e);
-      // Stop the browser from scrolling/zooming the page.
-      if (handled) {
+      // Calling preventDefault stops the browser from scrolling/zooming the
+      // page.
+      var preventDef = !opt_noPreventDefault;
+      if (handled && preventDef) {
         e.preventDefault();
       }
     };
-    for (var i = 0, eventName;
-         eventName = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
-      node.addEventListener(eventName, touchWrapFunc, false);
-      bindData.push([node, eventName, touchWrapFunc]);
+    for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+      node.addEventListener(type, touchWrapFunc, false);
+      bindData.push([node, type, touchWrapFunc]);
     }
   }
   return bindData;
@@ -455,7 +479,7 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
  * simultaneous event processing.
  * @deprecated in favor of bindEventWithChecks_, but preserved for external
  * users.
- * @param {!Node} node Node upon which to listen.
+ * @param {!EventTarget} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
@@ -478,7 +502,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
   if (name in Blockly.Touch.TOUCH_MAP) {
     var touchWrapFunc = function(e) {
       // Punt on multitouch events.
-      if (e.changedTouches.length == 1) {
+      if (e.changedTouches && e.changedTouches.length == 1) {
         // Map the touch event's properties to the event.
         var touchPoint = e.changedTouches[0];
         e.clientX = touchPoint.clientX;
@@ -489,10 +513,9 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
       // Stop the browser from scrolling/zooming the page.
       e.preventDefault();
     };
-    for (var i = 0, eventName;
-         eventName = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
-      node.addEventListener(eventName, touchWrapFunc, false);
-      bindData.push([node, eventName, touchWrapFunc]);
+    for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+      node.addEventListener(type, touchWrapFunc, false);
+      bindData.push([node, type, touchWrapFunc]);
     }
   }
   return bindData;
@@ -522,7 +545,7 @@ Blockly.unbindEvent_ = function(bindData) {
  * @return {boolean} True if number, false otherwise.
  */
 Blockly.isNumber = function(str) {
-  return !!str.match(/^\s*-?\d+(\.\d+)?\s*$/);
+  return /^\s*-?\d+(\.\d+)?\s*$/.test(str);
 };
 
 // IE9 does not have a console.  Create a stub to stop errors.

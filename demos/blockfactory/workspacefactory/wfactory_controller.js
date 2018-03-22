@@ -34,8 +34,9 @@
  * @author Emma Dauterman (evd2014)
  */
 
- goog.require('FactoryUtils');
- goog.require('StandardCategories');
+goog.require('BlocklyDevTools.Analytics');
+goog.require('FactoryUtils');
+goog.require('StandardCategories');
 
 
 /**
@@ -342,13 +343,25 @@ WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
     this.hasUnsavedPreloadChanges = false;
   } else {
     // Unknown mode. Throw error.
-    throw new Error ("Unknown export mode: " + exportMode);
+    var msg = "Unknown export mode: " + exportMode;
+    BlocklyDevTools.Analytics.onError(msg);
+    throw new Error(msg);
   }
 
   // Download file.
   var data = new Blob([configXml], {type: 'text/xml'});
   this.view.createAndDownloadFile(fileName, data);
- };
+
+  if (exportMode == WorkspaceFactoryController.MODE_TOOLBOX) {
+    BlocklyDevTools.Analytics.onExport(
+        BlocklyDevTools.Analytics.TOOLBOX,
+        { format: BlocklyDevTools.Analytics.FORMAT_XML });
+  } else if (exportMode == WorkspaceFactoryController.MODE_PRELOAD) {
+    BlocklyDevTools.Analytics.onExport(
+        BlocklyDevTools.Analytics.WORKSPACE_CONTENTS,
+        { format: BlocklyDevTools.Analytics.FORMAT_XML });
+  }
+};
 
 /**
  * Export the options object to be used for the Blockly inject call. Gets a
@@ -366,6 +379,13 @@ WorkspaceFactoryController.prototype.exportInjectFile = function() {
   var printableOptions = this.generator.generateInjectString()
   var data = new Blob([printableOptions], {type: 'text/javascript'});
   this.view.createAndDownloadFile(fileName, data);
+
+  BlocklyDevTools.Analytics.onExport(
+      BlocklyDevTools.Analytics.STARTER_CODE,
+      {
+        format: BlocklyDevTools.Analytics.FORMAT_JS,
+        platform: BlocklyDevTools.Analytics.PLATFORM_WEB
+      });
 };
 
 /**
@@ -729,33 +749,45 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
         // Confirm that the user wants to override their current toolbox.
         var hasToolboxElements = controller.model.hasElements() ||
             controller.toolboxWorkspace.getAllBlocks().length > 0;
-        if (hasToolboxElements &&
-            !confirm('Are you sure you want to import? You will lose your ' +
-            'current toolbox.')) {
-            return;
+        if (hasToolboxElements) {
+            var msg = 'Are you sure you want to import? You will lose your ' +
+                'current toolbox.';
+            BlocklyDevTools.Analytics.onWarning(msg);
+            var continueAnyway = confirm();
+            if (!continueAnyway) {
+              return;
+            }
         }
         // Import toolbox XML.
         controller.importToolboxFromTree_(tree);
+        BlocklyDevTools.Analytics.onImport('Toolbox.xml');
 
       } else if (importMode == WorkspaceFactoryController.MODE_PRELOAD) {
         // Switch mode.
         controller.setMode(WorkspaceFactoryController.MODE_PRELOAD);
 
         // Confirm that the user wants to override their current blocks.
-        if (controller.toolboxWorkspace.getAllBlocks().length > 0 &&
-            !confirm('Are you sure you want to import? You will lose your ' +
-            'current workspace blocks.')) {
+        if (controller.toolboxWorkspace.getAllBlocks().length > 0) {
+          var msg = 'Are you sure you want to import? You will lose your ' +
+            'current workspace blocks.';
+          var continueAnyway = confirm(msg);
+          BlocklyDevTools.Analytics.onWarning(msg);
+          if (!continueAnyway) {
             return;
+          }
         }
 
         // Import pre-loaded workspace XML.
         controller.importPreloadFromTree_(tree);
+        BlocklyDevTools.Analytics.onImport('WorkspaceContents.xml');
       } else {
         // Throw error if invalid mode.
         throw new Error("Unknown import mode: " + importMode);
       }
     } catch(e) {
-      alert('Cannot load XML from file.');
+      var msg = 'Cannot load XML from file.';
+      alert(msg);
+      BlocklyDevTools.Analytics.onError(msg);
       console.log(e);
     } finally {
       Blockly.Events.enable();
@@ -888,8 +920,10 @@ WorkspaceFactoryController.prototype.importPreloadFromTree_ = function(tree) {
  * "Clear" button.
  */
 WorkspaceFactoryController.prototype.clearAll = function() {
-  if (!confirm('Are you sure you want to clear all of your work in Workspace' +
-      ' Factory?')) {
+  var msg = 'Are you sure you want to clear all of your work in Workspace' +
+      ' Factory?';
+  BlocklyDevTools.Analytics.onWarning(msg);
+  if (!confirm(msg)) {
     return;
   }
   var hasCategories = this.model.hasElements();
@@ -1213,11 +1247,15 @@ WorkspaceFactoryController.prototype.importBlocks = function(file, format) {
 
       // If an imported block type is already defined, check if the user wants
       // to override the current block definition.
-      if (controller.model.hasDefinedBlockTypes(blockTypes) &&
-          !confirm('An imported block uses the same name as a block '
+      if (controller.model.hasDefinedBlockTypes(blockTypes)) {
+        var msg = 'An imported block uses the same name as a block '
           + 'already in your toolbox. Are you sure you want to override the '
-          + 'currently defined block?')) {
+          + 'currently defined block?';
+        var continueAnyway = confirm(msg);
+        BlocklyDevTools.Analytics.onWarning(msg);
+        if (!continueAnyway) {
           return;
+        }
       }
 
       var blocks = controller.generator.getDefinedBlocks(blockTypes);
@@ -1234,8 +1272,13 @@ WorkspaceFactoryController.prototype.importBlocks = function(file, format) {
       // Reload current category to possibly reflect any newly defined blocks.
       controller.clearAndLoadXml_
           (Blockly.Xml.workspaceToDom(controller.toolboxWorkspace));
+
+      BlocklyDevTools.Analytics.onImport('BlockDefinitions' +
+          (format == 'JSON' ? '.json' : '.js'));
     } catch (e) {
-      alert('Cannot read blocks from file.');
+      msg = 'Cannot read blocks from file.';
+      alert(msg);
+      BlocklyDevTools.Analytics.onError(msg);
       window.console.log(e);
     }
   }

@@ -9,7 +9,10 @@
 			"Grimault",
 			"Rixed",
 			"Frigory",
-			"Appr"
+			"Appr",
+			"Vexthedorito",
+			"Urhixidur",
+			"RoboErikG"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "élément",
@@ -36,9 +39,9 @@
 	"RENAME_VARIABLE": "Renommer la variable…",
 	"RENAME_VARIABLE_TITLE": "Renommer toutes les variables « %1 » en :",
 	"NEW_VARIABLE": "Créer une variable...",
-	"NEW_VARIABLE_TITLE": "Nouveau nom de la variable :",
+	"NEW_VARIABLE_TITLE": "Le nom de la nouvelle variable :",
 	"VARIABLE_ALREADY_EXISTS": "Une variable appelée '%1' existe déjà.",
-	"PROCEDURE_ALREADY_EXISTS": "Une procédure appelée '%1' existe déjà.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Une variable nommée '%1' existe déjà pour une autre variable de type '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Supprimer %1 utilisations de la variable '%2' ?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Impossible de supprimer la variable '%1' parce qu’elle fait partie de la définition de la fonction '%2'",
 	"DELETE_VARIABLE": "Supprimer la variable '%1'",
@@ -137,7 +140,7 @@
 	"MATH_SINGLE_TOOLTIP_ABS": "Renvoie la valeur absolue d’un nombre.",
 	"MATH_SINGLE_TOOLTIP_NEG": "Renvoie l’opposé d’un nombre",
 	"MATH_SINGLE_TOOLTIP_LN": "Renvoie le logarithme naturel d’un nombre.",
-	"MATH_SINGLE_TOOLTIP_LOG10": "Renvoie le logarithme base 10 d’un nombre.",
+	"MATH_SINGLE_TOOLTIP_LOG10": "Renvoie le logarithme décimal d’un nombre.",
 	"MATH_SINGLE_TOOLTIP_EXP": "Renvoie e à la puissance d’un nombre.",
 	"MATH_SINGLE_TOOLTIP_POW10": "Renvoie 10 à la puissance d’un nombre.",
 	"MATH_TRIG_HELPURL": "https://en.wikipedia.org/wiki/Trigonometric_functions",

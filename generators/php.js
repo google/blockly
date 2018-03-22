@@ -149,14 +149,24 @@ Blockly.PHP.init = function(workspace) {
     Blockly.PHP.variableDB_.reset();
   }
 
+  Blockly.PHP.variableDB_.setVariableMap(workspace.getVariableMap());
+
   var defvars = [];
-  var varName;
-  var variables = Blockly.Variables.allVariables(workspace);
-  for (var i = 0, variable; variable = variables[i]; i++) {
-    varName = variable.name;
-    defvars[i] = Blockly.PHP.variableDB_.getName(varName,
-        Blockly.Variables.NAME_TYPE) + ';';
+  // Add developer variables (not created or named by the user).
+  var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
+  for (var i = 0; i < devVarList.length; i++) {
+    defvars.push(Blockly.PHP.variableDB_.getName(devVarList[i],
+        Blockly.Names.DEVELOPER_VARIABLE_TYPE) + ';');
   }
+
+  // Add user variables, but only ones that are being used.
+  var variables = Blockly.Variables.allUsedVarModels(workspace);
+  for (var i = 0, variable; variable = variables[i]; i++) {
+    defvars.push(Blockly.PHP.variableDB_.getName(variable.getId(),
+        Blockly.Variables.NAME_TYPE) + ';');
+  }
+
+  // Declare all of the variables.
   Blockly.PHP.definitions_['variables'] = defvars.join('\n');
 };
 

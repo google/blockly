@@ -136,16 +136,21 @@ Blockly.Css.CONTENT = [
   '.blocklyNonSelectable {',
     'user-select: none;',
     '-moz-user-select: none;',
-    '-webkit-user-select: none;',
     '-ms-user-select: none;',
+    '-webkit-user-select: none;',
   '}',
 
   '.blocklyWsDragSurface {',
     'display: none;',
     'position: absolute;',
-    'overflow: visible;',
     'top: 0;',
     'left: 0;',
+  '}',
+  /* Added as a separate rule with multiple classes to make it more specific
+     than a bootstrap rule that selects svg:root. See issue #1275 for context.
+  */
+  '.blocklyWsDragSurface.blocklyOverflowVisible {',
+    'overflow: visible;',
   '}',
 
   '.blocklyBlockDragSurface {',
@@ -167,7 +172,7 @@ Blockly.Css.CONTENT = [
     'display: none;',
     'font-family: sans-serif;',
     'font-size: 9pt;',
-    'opacity: 0.9;',
+    'opacity: .9;',
     'padding: 2px;',
     'position: absolute;',
     'z-index: 100000;', /* big value for bootstrap3 compatibility */
@@ -214,7 +219,6 @@ Blockly.Css.CONTENT = [
     'cursor: url("<<<PATH>>>/handopen.cur"), auto;',
     'cursor: grab;',
     'cursor: -webkit-grab;',
-    'cursor: -moz-grab;',
   '}',
 
    '.blocklyDragging {',
@@ -222,7 +226,6 @@ Blockly.Css.CONTENT = [
     'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
     'cursor: grabbing;',
     'cursor: -webkit-grabbing;',
-    'cursor: -moz-grabbing;',
   '}',
   /* Changes cursor on mouse down. Not effective in Firefox because of
     https://bugzilla.mozilla.org/show_bug.cgi?id=771241 */
@@ -231,7 +234,6 @@ Blockly.Css.CONTENT = [
     'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
     'cursor: grabbing;',
     'cursor: -webkit-grabbing;',
-    'cursor: -moz-grabbing;',
   '}',
   /* Change the cursor on the whole drag surface in case the mouse gets
      ahead of block during a drag. This way the cursor is still a closed hand.
@@ -241,7 +243,6 @@ Blockly.Css.CONTENT = [
     'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
     'cursor: grabbing;',
     'cursor: -webkit-grabbing;',
-    'cursor: -moz-grabbing;',
   '}',
 
   '.blocklyDragging.blocklyDraggingDelete {',
@@ -250,6 +251,12 @@ Blockly.Css.CONTENT = [
 
   '.blocklyToolboxDelete {',
     'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
+  '}',
+
+  '.blocklyToolboxGrab {',
+    'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
+    'cursor: grabbing;',
+    'cursor: -webkit-grabbing;',
   '}',
 
   '.blocklyDragging>.blocklyPath,',
@@ -339,6 +346,7 @@ Blockly.Css.CONTENT = [
   '.blocklySvg text, .blocklyBlockDragSurface text {',
     'user-select: none;',
     '-moz-user-select: none;',
+    '-ms-user-select: none;',
     '-webkit-user-select: none;',
     'cursor: inherit;',
   '}',
@@ -497,6 +505,9 @@ Blockly.Css.CONTENT = [
 
   '.blocklyDropdownMenu {',
     'padding: 0 !important;',
+    /* max-height value is same as the constant
+     * Blockly.FieldDropdown.MAX_MENU_HEIGHT defined in field_dropdown.js. */
+    'max-height: 300px !important;',
   '}',
 
   /* Override the default Closure URL. */
@@ -511,7 +522,12 @@ Blockly.Css.CONTENT = [
     'overflow-x: visible;',
     'overflow-y: auto;',
     'position: absolute;',
+    'user-select: none;',
+    '-moz-user-select: none;',
+    '-ms-user-select: none;',
+    '-webkit-user-select: none;',
     'z-index: 70;', /* so blocks go under toolbox when dragging */
+    '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
   '}',
 
   '.blocklyTreeRoot {',
@@ -574,7 +590,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyTreeIconClosedRtl {',
-    'background-position: 0px -1px;',
+    'background-position: 0 -1px;',
   '}',
 
   '.blocklyTreeIconOpen {',
@@ -586,7 +602,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyTreeSelected>.blocklyTreeIconClosedRtl {',
-    'background-position: 0px -17px;',
+    'background-position: 0 -17px;',
   '}',
 
   '.blocklyTreeSelected>.blocklyTreeIconOpen {',
@@ -770,7 +786,6 @@ Blockly.Css.CONTENT = [
 
   '.blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-icon {',
     'opacity: 0.3;',
-    '-moz-opacity: 0.3;',
     'filter: alpha(opacity=30);',
   '}',
 

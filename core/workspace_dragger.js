@@ -61,8 +61,8 @@ Blockly.WorkspaceDragger = function(workspace) {
    * @type {!goog.math.Coordinate}
    * @private
    */
-  this.startScrollXY_ = new goog.math.Coordinate(workspace.scrollX,
-        workspace.scrollY);
+  this.startScrollXY_ = new goog.math.Coordinate(
+      workspace.scrollX, workspace.scrollY);
 };
 
 /**

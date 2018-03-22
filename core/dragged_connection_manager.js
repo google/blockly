@@ -139,6 +139,9 @@ Blockly.DraggedConnectionManager.prototype.applyConnections = function() {
       var inferiorConnection = this.localConnection_.isSuperior() ?
           this.closestConnection_ : this.localConnection_;
       inferiorConnection.getSourceBlock().connectionUiEffect();
+      // Bring the just-edited stack to the front.
+      var rootBlock = this.topBlock_.getRootBlock();
+      rootBlock.bringToFront();
     }
     this.removeHighlighting_();
   }
@@ -160,13 +163,19 @@ Blockly.DraggedConnectionManager.prototype.update = function(dxy, deleteArea) {
     oldClosestConnection.unhighlight();
   }
 
- // Prefer connecting over dropping into the trash can, but prefer dragging to
- // the toolbox over connecting to other blocks.
+  // Prefer connecting over dropping into the trash can, but prefer dragging to
+  // the toolbox over connecting to other blocks.
   var wouldConnect = !!this.closestConnection_ &&
       deleteArea != Blockly.DELETE_AREA_TOOLBOX;
   var wouldDelete = !!deleteArea && !this.topBlock_.getParent() &&
       this.topBlock_.isDeletable();
   this.wouldDeleteBlock_ = wouldDelete && !wouldConnect;
+
+  // Get rid of highlighting so we don't sent mixed messages.
+  if (wouldDelete && this.closestConnection_) {
+    this.closestConnection_.unhighlight();
+    this.closestConnection_ = null;
+  }
 
   if (!this.wouldDeleteBlock_ && closestConnectionChanged &&
       this.closestConnection_) {

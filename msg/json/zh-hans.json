@@ -11,7 +11,8 @@
 			"Hudafu",
 			"Shatteredwind",
 			"Duzc2",
-			"Tonylianlong"
+			"Tonylianlong",
+			"WindWood"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "项目",
@@ -40,7 +41,7 @@
 	"NEW_VARIABLE": "创建变量...",
 	"NEW_VARIABLE_TITLE": "新变量的名称：",
 	"VARIABLE_ALREADY_EXISTS": "已存在名为“%1”的变量。",
-	"PROCEDURE_ALREADY_EXISTS": "已存在名为“%1”的步骤。",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "名叫“%1”的变量已存在，但作为另一个变量类型“%2”存在。",
 	"DELETE_VARIABLE_CONFIRMATION": "删除“%2”变量的%1用途么？",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "不能删除变量“%1”，因为它是功能“%2”定义的一部分",
 	"DELETE_VARIABLE": "删除“%1”变量",
@@ -330,7 +331,7 @@
 	"ORDINAL_NUMBER_SUFFIX": "空白",
 	"VARIABLES_GET_TOOLTIP": "返回此变量的值。",
 	"VARIABLES_GET_CREATE_SET": "创建“设定%1”",
-	"VARIABLES_SET": "赋值 %1 到 %2",
+	"VARIABLES_SET": "赋值 %1 为 %2",
 	"VARIABLES_SET_TOOLTIP": "设置此变量，以使它和输入值相等。",
 	"VARIABLES_SET_CREATE_GET": "创建“获得%1”",
 	"PROCEDURES_DEFNORETURN_HELPURL": "https://zh.wikipedia.org/wiki/子程序",

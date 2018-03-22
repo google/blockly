@@ -142,11 +142,13 @@ Blockly.Field.prototype.init = function() {
     this.fieldGroup_.style.display = 'none';
   }
   this.borderRect_ = Blockly.utils.createSvgElement('rect',
-      {'rx': 4,
-       'ry': 4,
-       'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
-       'y': 0,
-       'height': 16}, this.fieldGroup_, this.sourceBlock_.workspace);
+      {
+        'rx': 4,
+        'ry': 4,
+        'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
+        'y': 0,
+        'height': 16
+      }, this.fieldGroup_);
   /** @type {!Element} */
   this.textElement_ = Blockly.utils.createSvgElement('text',
       {'class': 'blocklyText', 'y': this.size_.height - 12.5},
@@ -155,8 +157,8 @@ Blockly.Field.prototype.init = function() {
   this.updateEditable();
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
   this.mouseDownWrapper_ =
-      Blockly.bindEventWithChecks_(this.fieldGroup_, 'mousedown', this,
-      this.onMouseDown_);
+      Blockly.bindEventWithChecks_(
+          this.fieldGroup_, 'mousedown', this, this.onMouseDown_);
   // Force a render.
   this.render_();
 };
@@ -351,10 +353,13 @@ Blockly.Field.getCachedWidth = function(textElement) {
 
   // Attempt to compute fetch the width of the SVG text element.
   try {
-    width = textElement.getComputedTextLength();
+    if (goog.userAgent.IE || goog.userAgent.EDGE) {
+      width = textElement.getBBox().width;
+    } else {
+      width = textElement.getComputedTextLength();
+    }
   } catch (e) {
-    // MSIE 11 and Edge are known to throw "Unexpected call to method or
-    // property access." if the block is hidden. Instead, use an
+    // In other cases where we fail to geth the computed text. Instead, use an
     // approximation and do not cache the result. At some later point in time
     // when the block is inserted into the visible DOM, this method will be
     // called again and, at that point in time, will not throw an exception.
@@ -402,16 +407,23 @@ Blockly.Field.prototype.getSize = function() {
 };
 
 /**
- * Returns the height and width of the field,
- * accounting for the workspace scaling.
- * @return {!goog.math.Size} Height and width.
+ * Returns the bounding box of the rendered field, accounting for workspace
+ * scaling.
+ * @return {!Object} An object with top, bottom, left, and right in pixels
+ *     relative to the top left corner of the page (window coordinates).
  * @private
  */
 Blockly.Field.prototype.getScaledBBox_ = function() {
   var bBox = this.borderRect_.getBBox();
-  // Create new object, as getBBox can return an uneditable SVGRect in IE.
-  return new goog.math.Size(bBox.width * this.sourceBlock_.workspace.scale,
-                            bBox.height * this.sourceBlock_.workspace.scale);
+  var scaledHeight = bBox.height * this.sourceBlock_.workspace.scale;
+  var scaledWidth = bBox.width * this.sourceBlock_.workspace.scale;
+  var xy = this.getAbsoluteXY_();
+  return {
+    top: xy.y,
+    bottom: xy.y + scaledHeight,
+    left: xy.x,
+    right: xy.x + scaledWidth
+  };
 };
 
 /**
@@ -462,6 +474,17 @@ Blockly.Field.prototype.setText = function(newText) {
     return;
   }
   this.text_ = newText;
+  this.forceRerender();
+};
+
+/**
+ * Force a rerender of the block that this field is installed on, which will
+ * rerender this field and adjust for any sizing changes.
+ * Other fields on the same block will not rerender, because their sizes have
+ * already been recorded.
+ * @package
+ */
+Blockly.Field.prototype.forceRerender = function() {
   // Set width to 0 to force a rerender of this field.
   this.size_.width = 0;
 
@@ -506,7 +529,8 @@ Blockly.Field.prototype.setValue = function(newValue) {
  * @param {!Event} e Mouse down event.
  * @private
  */
-Blockly.Field.prototype.onMouseDown_ = function(e) {
+Blockly.Field.prototype.onMouseDown_ = function(
+    /* eslint-disable no-unused-vars */ e /* eslint-enable no-unused-vars */) {
   if (!this.sourceBlock_ || !this.sourceBlock_.workspace) {
     return;
   }
@@ -516,13 +540,14 @@ Blockly.Field.prototype.onMouseDown_ = function(e) {
   }
 };
 
-
 /**
  * Change the tooltip text for this field.
  * @param {string|!Element} newTip Text for tooltip or a parent element to
  *     link to for its tooltip.
  */
-Blockly.Field.prototype.setTooltip = function(newTip) {
+Blockly.Field.prototype.setTooltip = function(
+    /* eslint-disable no-unused-vars */ newTip
+    /* eslint-enable no-unused-vars */) {
   // Non-abstract sub-classes may wish to implement this.  See FieldLabel.
 };
 

@@ -89,3 +89,55 @@ function checkVariableValues(container, name, type, id) {
   assertEquals(type, variable.type);
   assertEquals(id, variable.getId());
 }
+
+/**
+ * Create a test get_var_block.
+ * Will fail if get_var_block isn't defined.
+ * @param {!Blockly.Workspace} workspace The workspace on which to create the
+ *     block.
+ * @param {!string} variable_id The id of the variable to reference.
+ * @return {!Blockly.Block} The created block.
+ */
+function createMockVarBlock(workspace, variable_id) {
+  if (!Blockly.Blocks['get_var_block']) {
+    fail();
+  }
+  // Turn off events to avoid testing XML at the same time.
+  Blockly.Events.disable();
+  var block = new Blockly.Block(workspace, 'get_var_block');
+  block.inputList[0].fieldRow[0].setValue(variable_id);
+  Blockly.Events.enable();
+  return block;
+}
+
+function createTwoVariablesAndBlocks(workspace) {
+  // Create two variables of different types.
+  workspace.createVariable('name1', 'type1', 'id1');
+  workspace.createVariable('name2', 'type2', 'id2');
+  // Create blocks to refer to both of them.
+  createMockVarBlock(workspace, 'id1');
+  createMockVarBlock(workspace, 'id2');
+}
+
+function createVariableAndBlock(workspace) {
+  workspace.createVariable('name1', 'type1', 'id1');
+  createMockVarBlock(workspace, 'id1');
+}
+
+function defineGetVarBlock() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "get_var_block",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_variable",
+        "name": "VAR",
+        "variableTypes": ["", "type1", "type2"]
+      }
+    ]
+  }]);
+}
+
+function undefineGetVarBlock() {
+  delete Blockly.Blocks['get_var_block'];
+}

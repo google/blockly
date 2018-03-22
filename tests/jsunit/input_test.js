@@ -19,8 +19,8 @@
  */
 
  /**
- * @fileoverview Tests for Blockly.Input
- */
+  * @fileoverview Tests for Blockly.Input
+  */
 'use strict';
 
 function test_appendField_simple() {
@@ -157,7 +157,7 @@ function test_insertFieldAt_prefix() {
   var after = new Blockly.FieldLabel('after');
   var prefix = new Blockly.FieldLabel('prefix');
   var between = new Blockly.FieldLabel('between');
-  between.prefixField = prefix
+  between.prefixField = prefix;
   input.appendField(before);
   input.appendField(after);
 
@@ -175,7 +175,7 @@ function test_insertFieldAt_prefix() {
   assertEquals(after, input.fieldRow[3]);
 }
 
-function test_insertFieldAt_prefix() {
+function test_insertFieldAt_suffix() {
   var ws = new Blockly.Workspace();
   var block = new Blockly.Block(ws);
   var input = new Blockly.Input(Blockly.DUMMY_INPUT, 'INPUT', block);
@@ -183,7 +183,7 @@ function test_insertFieldAt_prefix() {
   var after = new Blockly.FieldLabel('after');
   var suffix = new Blockly.FieldLabel('suffix');
   var between = new Blockly.FieldLabel('between');
-  between.suffixField = suffix
+  between.suffixField = suffix;
   input.appendField(before);
   input.appendField(after);
 

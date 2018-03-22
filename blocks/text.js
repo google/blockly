@@ -28,6 +28,7 @@ goog.provide('Blockly.Blocks.texts');  // Deprecated
 goog.provide('Blockly.Constants.Text');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly');
 
 
 /**
@@ -187,8 +188,15 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "check": "String"
       },
       {
-        "type": "input_dummy",
-        "name": "AT"
+        "type": "field_dropdown",
+        "name": "WHERE",
+        "options": [
+          ["%{BKY_TEXT_CHARAT_FROM_START}", "FROM_START"],
+          ["%{BKY_TEXT_CHARAT_FROM_END}", "FROM_END"],
+          ["%{BKY_TEXT_CHARAT_FIRST}", "FIRST"],
+          ["%{BKY_TEXT_CHARAT_LAST}", "LAST"],
+          ["%{BKY_TEXT_CHARAT_RANDOM}", "RANDOM"]
+        ]
       }
     ],
     "output": "String",
@@ -561,17 +569,25 @@ Blockly.Blocks['text_reverse'] = {
  */
 Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
   /**
-   * Image data URI of an LTR opening double quote (same as RTL closing couble quote).
+   * Image data URI of an LTR opening double quote (same as RTL closing double quote).
    * @readonly
    */
   QUOTE_IMAGE_LEFT_DATAURI:
-    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAAn0lEQVQI1z3OMa5BURSF4f/cQhAKjUQhuQmFNwGJEUi0RKN5rU7FHKhpjEH3TEMtkdBSCY1EIv8r7nFX9e29V7EBAOvu7RPjwmWGH/VuF8CyN9/OAdvqIXYLvtRaNjx9mMTDyo+NjAN1HNcl9ZQ5oQMM3dgDUqDo1l8DzvwmtZN7mnD+PkmLa+4mhrxVA9fRowBWmVBhFy5gYEjKMfz9AylsaRRgGzvZAAAAAElFTkSuQmCC',
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAA' +
+    'n0lEQVQI1z3OMa5BURSF4f/cQhAKjUQhuQmFNwGJEUi0RKN5rU7FHKhpjEH3TEMtkdBSCY' +
+    '1EIv8r7nFX9e29V7EBAOvu7RPjwmWGH/VuF8CyN9/OAdvqIXYLvtRaNjx9mMTDyo+NjAN1' +
+    'HNcl9ZQ5oQMM3dgDUqDo1l8DzvwmtZN7mnD+PkmLa+4mhrxVA9fRowBWmVBhFy5gYEjKMf' +
+    'z9AylsaRRgGzvZAAAAAElFTkSuQmCC',
   /**
-   * Image data URI of an LTR closing double quote (same as RTL opening couble quote).
+   * Image data URI of an LTR closing double quote (same as RTL opening double quote).
    * @readonly
    */
   QUOTE_IMAGE_RIGHT_DATAURI:
-    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAAqUlEQVQI1z3KvUpCcRiA8ef9E4JNHhI0aFEacm1o0BsI0Slx8wa8gLauoDnoBhq7DcfWhggONDmJJgqCPA7neJ7p934EOOKOnM8Q7PDElo/4x4lFb2DmuUjcUzS3URnGib9qaPNbuXvBO3sGPHJDRG6fGVdMSeWDP2q99FQdFrz26Gu5Tq7dFMzUvbXy8KXeAj57cOklgA+u1B5AoslLtGIHQMaCVnwDnADZIFIrXsoXrgAAAABJRU5ErkJggg==',
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAA' +
+    'qUlEQVQI1z3KvUpCcRiA8ef9E4JNHhI0aFEacm1o0BsI0Slx8wa8gLauoDnoBhq7DcfWhg' +
+    'gONDmJJgqCPA7neJ7p934EOOKOnM8Q7PDElo/4x4lFb2DmuUjcUzS3URnGib9qaPNbuXvB' +
+    'O3sGPHJDRG6fGVdMSeWDP2q99FQdFrz26Gu5Tq7dFMzUvbXy8KXeAj57cOklgA+u1B5Aos' +
+    'lLtGIHQMaCVnwDnADZIFIrXsoXrgAAAABJRU5ErkJggg==',
   /**
    * Pixel width of QUOTE_IMAGE_LEFT_DATAURI and QUOTE_IMAGE_RIGHT_DATAURI.
    * @readonly
@@ -586,6 +602,7 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
   /**
    * Inserts appropriate quote images before and after the named field.
    * @param {string} fieldName The name of the field to wrap with quotes.
+   * @this Blockly.Block
    */
   quoteField_: function(fieldName) {
     for (var i = 0, input; input = this.inputList[i]; i++) {
@@ -606,6 +623,7 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
    * @param {boolean} open If the image should be open quote (“ in LTR).
    *                       Otherwise, a closing quote is used (” in LTR).
    * @returns {!Blockly.FieldImage} The new field.
+   * @this Blockly.Block
    */
   newQuote_: function(open) {
     var isLeft = this.RTL? !open : open;
@@ -613,10 +631,10 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
       this.QUOTE_IMAGE_LEFT_DATAURI :
       this.QUOTE_IMAGE_RIGHT_DATAURI;
     return new Blockly.FieldImage(
-      dataUri,
-      this.QUOTE_IMAGE_WIDTH,
-      this.QUOTE_IMAGE_HEIGHT,
-      isLeft ? '\u201C' : '\u201D');
+        dataUri,
+        this.QUOTE_IMAGE_WIDTH,
+        this.QUOTE_IMAGE_HEIGHT,
+        isLeft ? '\u201C' : '\u201D');
   }
 };
 
@@ -748,10 +766,10 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
 Blockly.Constants.Text.TEXT_JOIN_EXTENSION = function() {
   // Add the quote mixin for the itemCount_ = 0 case.
   this.mixin(Blockly.Constants.Text.QUOTE_IMAGE_MIXIN);
-  // initialize the mutator values
+  // Initialize the mutator values.
   this.itemCount_ = 2;
   this.updateShape_();
-  // Configure the mutator ui
+  // Configure the mutator UI.
   this.setMutator(new Blockly.Mutator(['text_create_join_item']));
 };
 
@@ -790,8 +808,7 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
    */
   mutationToDom: function() {
     var container = document.createElement('mutation');
-    var isAt = this.getInput('AT').type == Blockly.INPUT_VALUE;
-    container.setAttribute('at', isAt);
+    container.setAttribute('at', !!this.isAt_);
     return container;
   },
   /**
@@ -813,7 +830,7 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
    */
   updateAt_: function(isAt) {
     // Destroy old 'AT' and 'ORDINAL' inputs.
-    this.removeInput('AT');
+    this.removeInput('AT', true);
     this.removeInput('ORDINAL', true);
     // Create either a value 'AT' input or a dummy input.
     if (isAt) {
@@ -822,71 +839,63 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
         this.appendDummyInput('ORDINAL')
             .appendField(Blockly.Msg.ORDINAL_NUMBER_SUFFIX);
       }
-    } else {
-      this.appendDummyInput('AT');
     }
     if (Blockly.Msg.TEXT_CHARAT_TAIL) {
       this.removeInput('TAIL', true);
       this.appendDummyInput('TAIL')
           .appendField(Blockly.Msg.TEXT_CHARAT_TAIL);
     }
-    var menu = new Blockly.FieldDropdown(this.WHERE_OPTIONS, function(value) {
-      var newAt = (value == 'FROM_START') || (value == 'FROM_END');
-      // The 'isAt' variable is available due to this function being a closure.
-      if (newAt != isAt) {
-        var block = this.sourceBlock_;
-        block.updateAt_(newAt);
-        // This menu has been destroyed and replaced.  Update the replacement.
-        block.setFieldValue(value, 'WHERE');
-        return null;
-      }
-      return undefined;
-    });
-    this.getInput('AT').appendField(menu, 'WHERE');
+
+    this.isAt_ = isAt;
   }
 };
 
 // Does the initial mutator update of text_charAt and adds the tooltip
 Blockly.Constants.Text.TEXT_CHARAT_EXTENSION = function() {
-    this.WHERE_OPTIONS = [
-        [Blockly.Msg.TEXT_CHARAT_FROM_START, 'FROM_START'],
-        [Blockly.Msg.TEXT_CHARAT_FROM_END, 'FROM_END'],
-        [Blockly.Msg.TEXT_CHARAT_FIRST, 'FIRST'],
-        [Blockly.Msg.TEXT_CHARAT_LAST, 'LAST'],
-        [Blockly.Msg.TEXT_CHARAT_RANDOM, 'RANDOM']
-      ];
-    this.updateAt_(true);
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
-    this.setTooltip(function() {
-      var where = thisBlock.getFieldValue('WHERE');
-      var tooltip = Blockly.Msg.TEXT_CHARAT_TOOLTIP;
-      if (where == 'FROM_START' || where == 'FROM_END') {
-        var msg = (where == 'FROM_START') ?
-            Blockly.Msg.LISTS_INDEX_FROM_START_TOOLTIP :
-            Blockly.Msg.LISTS_INDEX_FROM_END_TOOLTIP;
-        if (msg) {
-          tooltip += '  ' + msg.replace('%1',
-              thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
-        }
+  var dropdown = this.getField('WHERE');
+  dropdown.setValidator(function(value) {
+    var newAt = (value == 'FROM_START') || (value == 'FROM_END');
+    if (newAt != this.isAt_) {
+      var block = this.sourceBlock_;
+      block.updateAt_(newAt);
+      // This menu has been destroyed and replaced.  Update the replacement.
+      block.setFieldValue(value, 'WHERE');
+      return null;
+    }
+    return undefined;
+  });
+  this.updateAt_(true);
+  // Assign 'this' to a variable for use in the tooltip closure below.
+  var thisBlock = this;
+  this.setTooltip(function() {
+    var where = thisBlock.getFieldValue('WHERE');
+    var tooltip = Blockly.Msg.TEXT_CHARAT_TOOLTIP;
+    if (where == 'FROM_START' || where == 'FROM_END') {
+      var msg = (where == 'FROM_START') ?
+          Blockly.Msg.LISTS_INDEX_FROM_START_TOOLTIP :
+          Blockly.Msg.LISTS_INDEX_FROM_END_TOOLTIP;
+      if (msg) {
+        tooltip += '  ' + msg.replace('%1',
+            thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
       }
-      return tooltip;
-    });
+    }
+    return tooltip;
+  });
 };
 
 Blockly.Extensions.register('text_indexOf_tooltip',
-  Blockly.Constants.Text.TEXT_INDEXOF_TOOLTIP_EXTENSION);
+    Blockly.Constants.Text.TEXT_INDEXOF_TOOLTIP_EXTENSION);
 
 Blockly.Extensions.register('text_quotes',
-  Blockly.Constants.Text.TEXT_QUOTES_EXTENSION);
+    Blockly.Constants.Text.TEXT_QUOTES_EXTENSION);
 
 Blockly.Extensions.register('text_append_tooltip',
-  Blockly.Constants.Text.TEXT_APPEND_TOOLTIP_EXTENSION);
+    Blockly.Constants.Text.TEXT_APPEND_TOOLTIP_EXTENSION);
 
 Blockly.Extensions.registerMutator('text_join_mutator',
-  Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN,
-  Blockly.Constants.Text.TEXT_JOIN_EXTENSION);
+    Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN,
+    Blockly.Constants.Text.TEXT_JOIN_EXTENSION);
 
 Blockly.Extensions.registerMutator('text_charAt_mutator',
-  Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN,
-  Blockly.Constants.Text.TEXT_CHARAT_EXTENSION);
+    Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN,
+    Blockly.Constants.Text.TEXT_CHARAT_EXTENSION);

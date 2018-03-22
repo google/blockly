@@ -109,6 +109,7 @@ Blockly.Lua.init = function(workspace) {
   } else {
     Blockly.Lua.variableDB_.reset();
   }
+  Blockly.Lua.variableDB_.setVariableMap(workspace.getVariableMap());
 };
 
 /**

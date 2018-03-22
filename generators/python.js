@@ -160,12 +160,23 @@ Blockly.Python.init = function(workspace) {
     Blockly.Python.variableDB_.reset();
   }
 
+  Blockly.Python.variableDB_.setVariableMap(workspace.getVariableMap());
+
   var defvars = [];
-  var variables = workspace.getAllVariables();
-  for (var i = 0; i < variables.length; i++) {
-    defvars[i] = Blockly.Python.variableDB_.getName(variables[i].name,
-        Blockly.Variables.NAME_TYPE) + ' = None';
+  // Add developer variables (not created or named by the user).
+  var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
+  for (var i = 0; i < devVarList.length; i++) {
+    defvars.push(Blockly.Python.variableDB_.getName(devVarList[i],
+        Blockly.Names.DEVELOPER_VARIABLE_TYPE) + ' = None');
   }
+
+  // Add user variables, but only ones that are being used.
+  var variables = Blockly.Variables.allUsedVarModels(workspace);
+  for (var i = 0; i < variables.length; i++) {
+    defvars.push(Blockly.Python.variableDB_.getName(variables[i].getId(),
+        Blockly.Variables.NAME_TYPE) + ' = None');
+  }
+
   Blockly.Python.definitions_['variables'] = defvars.join('\n');
 };
 

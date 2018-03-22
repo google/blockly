@@ -27,10 +27,12 @@
 
 goog.provide('Blockly.WorkspaceAudio');
 
+
 /**
  * Class for loading, storing, and playing audio for a workspace.
  * @param {Blockly.WorkspaceSvg} parentWorkspace The parent of the workspace
  *     this audio object belongs to, or null.
+ * @constructor
  */
 Blockly.WorkspaceAudio = function(parentWorkspace) {
 
@@ -72,7 +74,6 @@ Blockly.WorkspaceAudio.prototype.dispose = function() {
  *   preference (i.e. increasing size).  E.g. ['media/go.mp3', 'media/go.wav']
  *   Filenames include path from Blockly's root.  File extensions matter.
  * @param {string} name Name of sound.
- * @package
  */
 Blockly.WorkspaceAudio.prototype.load = function(filenames, name) {
   if (!filenames.length) {
@@ -107,7 +108,7 @@ Blockly.WorkspaceAudio.prototype.load = function(filenames, name) {
 Blockly.WorkspaceAudio.prototype.preload = function() {
   for (var name in this.SOUNDS_) {
     var sound = this.SOUNDS_[name];
-    sound.volume = .01;
+    sound.volume = 0.01;
     sound.play();
     sound.pause();
     // iOS can only process one sound at a time.  Trying to load more than one

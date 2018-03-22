@@ -34,9 +34,10 @@ goog.require('goog.events');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.string');
 
+
 /**
  * Which touch events are we currently paying attention to?
- * @type {DOMString}
+ * @type {?string}
  * @private
  */
 Blockly.Touch.touchIdentifier_ = null;
@@ -63,7 +64,7 @@ Blockly.longPid_ = 0;
 
 /**
  * Context menus on touch devices are activated using a long-press.
- * Unfortunately the contextmenu touch event is currently (2015) only suported
+ * Unfortunately the contextmenu touch event is currently (2015) only supported
  * by Chrome.  This function is fired on any touchstart event, queues a task,
  * which after about a second opens the context menu.  The tasks is killed
  * if the touch event terminates early.
@@ -74,14 +75,18 @@ Blockly.longPid_ = 0;
 Blockly.longStart_ = function(e, gesture) {
   Blockly.longStop_();
   // Punt on multitouch events.
-  if (e.changedTouches.length != 1) {
+  if (e.changedTouches && e.changedTouches.length != 1) {
     return;
   }
   Blockly.longPid_ = setTimeout(function() {
-    e.button = 2;  // Simulate a right button click.
-    // e was a touch event.  It needs to pretend to be a mouse event.
-    e.clientX = e.changedTouches[0].clientX;
-    e.clientY = e.changedTouches[0].clientY;
+    // Additional check to distinguish between touch events and pointer events
+    if (e.changedTouches) {
+      // TouchEvent
+      e.button = 2;  // Simulate a right button click.
+      // e was a touch event.  It needs to pretend to be a mouse event.
+      e.clientX = e.changedTouches[0].clientX;
+      e.clientY = e.changedTouches[0].clientY;
+    }
 
     // Let the gesture route the right-click correctly.
     if (gesture) {
@@ -133,7 +138,8 @@ Blockly.Touch.shouldHandleEvent = function(e) {
  *     defined.  Otherwise 'mouse'.
  */
 Blockly.Touch.getTouchIdentifierFromEvent = function(e) {
-  return (e.changedTouches && e.changedTouches[0] &&
+  return e.pointerId != undefined ? e.pointerId :
+      (e.changedTouches && e.changedTouches[0] &&
       e.changedTouches[0].identifier != undefined &&
       e.changedTouches[0].identifier != null) ?
       e.changedTouches[0].identifier : 'mouse';
@@ -154,7 +160,7 @@ Blockly.Touch.getTouchIdentifierFromEvent = function(e) {
 Blockly.Touch.checkTouchIdentifier = function(e) {
   var identifier = Blockly.Touch.getTouchIdentifierFromEvent(e);
 
-  // if (Blockly.touchIdentifier_ )is insufficient because android touch
+  // if (Blockly.touchIdentifier_ )is insufficient because Android touch
   // identifiers may be zero.
   if (Blockly.Touch.touchIdentifier_ != undefined &&
       Blockly.Touch.touchIdentifier_ != null) {
@@ -162,7 +168,7 @@ Blockly.Touch.checkTouchIdentifier = function(e) {
     // source?
     return Blockly.Touch.touchIdentifier_ == identifier;
   }
-  if (e.type == 'mousedown' || e.type == 'touchstart') {
+  if (e.type == 'mousedown' || e.type == 'touchstart' || e.type == 'pointerdown') {
     // No identifier set yet, and this is the start of a drag.  Set it and
     // return.
     Blockly.Touch.touchIdentifier_ = identifier;
@@ -195,7 +201,18 @@ Blockly.Touch.setClientFromTouch = function(e) {
  */
 Blockly.Touch.isMouseOrTouchEvent = function(e) {
   return goog.string.startsWith(e.type, 'touch') ||
-      goog.string.startsWith(e.type, 'mouse');
+      goog.string.startsWith(e.type, 'mouse') ||
+      goog.string.startsWith(e.type, 'pointer');
+};
+
+/**
+ * Check whether a given event is a touch event or a pointer event.
+ * @param {!Event} e An event.
+ * @return {boolean} true if it is a touch event; false otherwise.
+ */
+Blockly.Touch.isTouchEvent = function(e) {
+  return goog.string.startsWith(e.type, 'touch') ||
+      goog.string.startsWith(e.type, 'pointer');
 };
 
 /**

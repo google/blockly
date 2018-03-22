@@ -35,7 +35,8 @@ Blockly.Python['procedures_defreturn'] = function(block) {
   // a local parameter.
   var globals = [];
   var varName;
-  var variables = workspace.getAllVariables();
+  var workspace = block.workspace;
+  var variables = Blockly.Variables.allUsedVarModels(workspace) || [];
   for (var i = 0, variable; variable = variables[i]; i++) {
     varName = variable.name;
     if (block.arguments_.indexOf(varName) == -1) {
@@ -43,14 +44,23 @@ Blockly.Python['procedures_defreturn'] = function(block) {
           Blockly.Variables.NAME_TYPE));
     }
   }
-  globals = globals.length ? '  global ' + globals.join(', ') + '\n' : '';
-  var funcName = Blockly.Python.variableDB_.getName(block.getFieldValue('NAME'),
-      Blockly.Procedures.NAME_TYPE);
+  // Add developer variables.
+  var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
+  for (var i = 0; i < devVarList.length; i++) {
+    globals.push(Blockly.Python.variableDB_.getName(devVarList[i],
+        Blockly.Names.DEVELOPER_VARIABLE_TYPE));
+  }
+
+  globals = globals.length ?
+      Blockly.Python.INDENT + 'global ' + globals.join(', ') + '\n' : '';
+  var funcName = Blockly.Python.variableDB_.getName(
+      block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Python.statementToCode(block, 'STACK');
   if (Blockly.Python.STATEMENT_PREFIX) {
+    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
     branch = Blockly.Python.prefixLines(
-        Blockly.Python.STATEMENT_PREFIX.replace(/%1/g,
-        '\'' + block.id + '\''), Blockly.Python.INDENT) + branch;
+        Blockly.Python.STATEMENT_PREFIX.replace(
+            /%1/g, '\'' + id + '\''), Blockly.Python.INDENT) + branch;
   }
   if (Blockly.Python.INFINITE_LOOP_TRAP) {
     branch = Blockly.Python.INFINITE_LOOP_TRAP.replace(/%1/g,
@@ -59,7 +69,7 @@ Blockly.Python['procedures_defreturn'] = function(block) {
   var returnValue = Blockly.Python.valueToCode(block, 'RETURN',
       Blockly.Python.ORDER_NONE) || '';
   if (returnValue) {
-    returnValue = '  return ' + returnValue + '\n';
+    returnValue = Blockly.Python.INDENT + 'return ' + returnValue + '\n';
   } else if (!branch) {
     branch = Blockly.Python.PASS;
   }
@@ -115,9 +125,9 @@ Blockly.Python['procedures_ifreturn'] = function(block) {
   if (block.hasReturnValue_) {
     var value = Blockly.Python.valueToCode(block, 'VALUE',
         Blockly.Python.ORDER_NONE) || 'None';
-    code += '  return ' + value + '\n';
+    code += Blockly.Python.INDENT + 'return ' + value + '\n';
   } else {
-    code += '  return\n';
+    code += Blockly.Python.INDENT + 'return\n';
   }
   return code;
 };

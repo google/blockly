@@ -42,7 +42,7 @@ goog.require('goog.math.Coordinate');
 Blockly.Events.group_ = '';
 
 /**
- * Sets whether events should be added to the undo stack.
+ * Sets whether the next event should be added to the undo stack.
  * @type {boolean}
  */
 Blockly.Events.recordUndo = true;
@@ -174,45 +174,42 @@ Blockly.Events.filter = function(queueIn, forward) {
     // Undo is merged in reverse order.
     queue.reverse();
   }
-  // Merge duplicates.  O(n^2), but n should be very small.
-  for (var i = 0, event1; event1 = queue[i]; i++) {
-    for (var j = i + 1, event2; event2 = queue[j]; j++) {
-      if (event1.type == event2.type &&
-          event1.blockId == event2.blockId &&
-          event1.workspaceId == event2.workspaceId) {
-        if (event1.type == Blockly.Events.MOVE) {
-          // Merge move events.
-          event1.newParentId = event2.newParentId;
-          event1.newInputName = event2.newInputName;
-          event1.newCoordinate = event2.newCoordinate;
-          queue.splice(j, 1);
-          j--;
-        } else if (event1.type == Blockly.Events.CHANGE &&
-            event1.element == event2.element &&
-            event1.name == event2.name) {
-          // Merge change events.
-          event1.newValue = event2.newValue;
-          queue.splice(j, 1);
-          j--;
-        } else if (event1.type == Blockly.Events.UI &&
-            event2.element == 'click' &&
-            (event1.element == 'commentOpen' ||
-             event1.element == 'mutatorOpen' ||
-             event1.element == 'warningOpen')) {
-          // Merge change events.
-          event1.newValue = event2.newValue;
-          queue.splice(j, 1);
-          j--;
-        }
+  var mergedQueue = [];
+  var hash = Object.create(null);
+  // Merge duplicates.
+  for (var i = 0, event; event = queue[i]; i++) {
+    if (!event.isNull()) {
+      var key = [event.type, event.blockId, event.workspaceId].join(' ');
+      var lastEvent = hash[key];
+      if (!lastEvent) {
+        hash[key] = event;
+        mergedQueue.push(event);
+      } else if (event.type == Blockly.Events.MOVE) {
+        // Merge move events.
+        lastEvent.newParentId = event.newParentId;
+        lastEvent.newInputName = event.newInputName;
+        lastEvent.newCoordinate = event.newCoordinate;
+      } else if (event.type == Blockly.Events.CHANGE &&
+          event.element == lastEvent.element &&
+          event.name == lastEvent.name) {
+        // Merge change events.
+        lastEvent.newValue = event.newValue;
+      } else if (event.type == Blockly.Events.UI &&
+          event.element == 'click' &&
+          (lastEvent.element == 'commentOpen' ||
+           lastEvent.element == 'mutatorOpen' ||
+           lastEvent.element == 'warningOpen')) {
+        // Merge click events.
+        lastEvent.newValue = event.newValue;
+      } else {
+        // Collision: newer events should merge into this event to maintain order
+        hash[key] = event;
+        mergedQueue.push(event);
       }
     }
   }
-  // Remove null events.
-  for (var i = queue.length - 1; i >= 0; i--) {
-    if (queue[i].isNull()) {
-      queue.splice(i, 1);
-    }
-  }
+  // Filter out any events that have become null due to merging.
+  queue = mergedQueue.filter(function(e) { return !e.isNull(); });
   if (!forward) {
     // Restore undo order.
     queue.reverse();
@@ -313,7 +310,7 @@ Blockly.Events.fromJson = function(json, workspace) {
       event = new Blockly.Events.Delete(null);
       break;
     case Blockly.Events.CHANGE:
-      event = new Blockly.Events.Change(null);
+      event = new Blockly.Events.Change(null, '', '', '', '');
       break;
     case Blockly.Events.MOVE:
       event = new Blockly.Events.Move(null);
@@ -325,7 +322,7 @@ Blockly.Events.fromJson = function(json, workspace) {
       event = new Blockly.Events.VarDelete(null);
       break;
     case Blockly.Events.VAR_RENAME:
-      event = new Blockly.Events.VarRename(null);
+      event = new Blockly.Events.VarRename(null, '');
       break;
     case Blockly.Events.UI:
       event = new Blockly.Events.Ui(null);
@@ -344,11 +341,44 @@ Blockly.Events.fromJson = function(json, workspace) {
  * @constructor
  */
 Blockly.Events.Abstract = function(elem) {
+  /**
+   * The block id for the block this event pertains to, if appropriate for the
+   * event type.
+   * @type {string|undefined}
+   */
+  this.blockId = undefined;
+
+  /**
+   * The variable id for the variable this event pertains to. Only set in
+   * VarCreate, VarDelete, and VarRename events.
+   * @type {string|undefined}
+   */
+  this.varId = undefined;
+
+  /**
+   * The workspace identifier for this event.
+   * @type {string|undefined}
+   */
+  this.workspaceId = undefined;
+
+  /**
+   * The event group id for the group this event belongs to. Groups define
+   * events that should be treated as an single action from the user's
+   * perspective, and should be undone together.
+   * @type {string}
+   */
+  this.group = undefined;
+
+  /**
+   * Sets whether the event should be added to the undo stack.
+   * @type {boolean}
+   */
+  this.recordUndo = undefined;
+
   if (elem instanceof Blockly.Block) {
     this.blockId = elem.id;
     this.workspaceId = elem.workspace.id;
-  }
-  else if (elem instanceof Blockly.VariableModel){
+  } else if (elem instanceof Blockly.VariableModel) {
     this.workspaceId = elem.workspace.id;
     this.varId = elem.getId();
   }
@@ -398,7 +428,9 @@ Blockly.Events.Abstract.prototype.isNull = function() {
  * Run an event.
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
-Blockly.Events.Abstract.prototype.run = function(forward) {
+Blockly.Events.Abstract.prototype.run = function(
+    /* eslint-disable no-unused-vars */ forward
+    /* eslint-enable no-unused-vars */) {
   // Defined by subclasses.
 };
 
@@ -490,7 +522,7 @@ Blockly.Events.Create.prototype.run = function(forward) {
         block.dispose(false, false);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
-        console.warn("Can't uncreate non-existant block: " + id);
+        console.warn("Can't uncreate non-existent block: " + id);
       }
     }
   }
@@ -566,7 +598,7 @@ Blockly.Events.Delete.prototype.run = function(forward) {
         block.dispose(false, false);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
-        console.warn("Can't delete non-existant block: " + id);
+        console.warn("Can't delete non-existent block: " + id);
       }
     }
   } else {
@@ -581,8 +613,8 @@ Blockly.Events.Delete.prototype.run = function(forward) {
  * @param {Blockly.Block} block The changed block.  Null for a blank event.
  * @param {string} element One of 'field', 'comment', 'disabled', etc.
  * @param {?string} name Name of input or field affected, or null.
- * @param {string} oldValue Previous value of element.
- * @param {string} newValue New value of element.
+ * @param {*} oldValue Previous value of element.
+ * @param {*} newValue New value of element.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
@@ -603,8 +635,8 @@ goog.inherits(Blockly.Events.Change, Blockly.Events.Abstract);
  * @param {Blockly.Block} block The changed block.  Null for a blank event.
  * @param {string} element One of 'field', 'comment', 'disabled', etc.
  * @param {?string} name Name of input or field affected, or null.
- * @param {string} oldValue Previous value of element.
- * @param {string} newValue New value of element.
+ * @param {*} oldValue Previous value of element.
+ * @param {*} newValue New value of element.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
@@ -657,7 +689,7 @@ Blockly.Events.Change.prototype.run = function(forward) {
   var workspace = this.getEventWorkspace_();
   var block = workspace.getBlockById(this.blockId);
   if (!block) {
-    console.warn("Can't change non-existant block: " + this.blockId);
+    console.warn("Can't change non-existent block: " + this.blockId);
     return;
   }
   if (block.mutator) {
@@ -674,7 +706,7 @@ Blockly.Events.Change.prototype.run = function(forward) {
         field.callValidator(value);
         field.setValue(value);
       } else {
-        console.warn("Can't set non-existant field: " + this.name);
+        console.warn("Can't set non-existent field: " + this.name);
       }
       break;
     case 'comment':
@@ -826,7 +858,7 @@ Blockly.Events.Move.prototype.run = function(forward) {
   var workspace = this.getEventWorkspace_();
   var block = workspace.getBlockById(this.blockId);
   if (!block) {
-    console.warn("Can't move non-existant block: " + this.blockId);
+    console.warn("Can't move non-existent block: " + this.blockId);
     return;
   }
   var parentId = forward ? this.newParentId : this.oldParentId;
@@ -836,7 +868,7 @@ Blockly.Events.Move.prototype.run = function(forward) {
   if (parentId) {
     parentBlock = workspace.getBlockById(parentId);
     if (!parentBlock) {
-      console.warn("Can't connect to non-existant block: " + parentId);
+      console.warn("Can't connect to non-existent block: " + parentId);
       return;
     }
   }
@@ -860,7 +892,7 @@ Blockly.Events.Move.prototype.run = function(forward) {
     if (parentConnection) {
       blockConnection.connect(parentConnection);
     } else {
-      console.warn("Can't connect to non-existant input: " + inputName);
+      console.warn("Can't connect to non-existent input: " + inputName);
     }
   }
 };
@@ -869,8 +901,8 @@ Blockly.Events.Move.prototype.run = function(forward) {
  * Class for a UI event.
  * @param {Blockly.Block} block The affected block.
  * @param {string} element One of 'selected', 'comment', 'mutator', etc.
- * @param {string} oldValue Previous value of element.
- * @param {string} newValue New value of element.
+ * @param {*} oldValue Previous value of element.
+ * @param {*} newValue New value of element.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
@@ -1094,7 +1126,6 @@ Blockly.Events.VarRename.prototype.run = function(forward) {
 Blockly.Events.disableOrphans = function(event) {
   if (event.type == Blockly.Events.MOVE ||
       event.type == Blockly.Events.CREATE) {
-    Blockly.Events.disable();
     var workspace = Blockly.Workspace.getById(event.workspaceId);
     var block = workspace.getBlockById(event.blockId);
     if (block) {
@@ -1111,6 +1142,5 @@ Blockly.Events.disableOrphans = function(event) {
         } while (block);
       }
     }
-    Blockly.Events.enable();
   }
 };

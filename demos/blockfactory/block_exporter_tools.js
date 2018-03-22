@@ -37,9 +37,9 @@ goog.require('goog.dom.xml');
 
 
 /**
-* Block Exporter Tools Class
-* @constructor
-*/
+ * Block Exporter Tools Class
+ * @constructor
+ */
 BlockExporterTools = function() {
   // Create container for hidden workspace.
   this.container = goog.dom.createDom('div', {

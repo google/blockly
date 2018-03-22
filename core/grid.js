@@ -121,7 +121,7 @@ Blockly.Grid.prototype.getSpacing = function() {
 /**
  * Get the id of the pattern element, which should be randomized to avoid
  * conflicts with other Blockly instances on the page.
- * @return {string} The pattern id.
+ * @return {string} The pattern ID.
  * @package
  */
 Blockly.Grid.prototype.getPatternId = function() {
@@ -207,8 +207,10 @@ Blockly.Grid.createDom = function(rnd, gridOptions, defs) {
     </pattern>
   */
   var gridPattern = Blockly.utils.createSvgElement('pattern',
-      {'id': 'blocklyGridPattern' + rnd,
-       'patternUnits': 'userSpaceOnUse'}, defs);
+      {
+        'id': 'blocklyGridPattern' + rnd,
+        'patternUnits': 'userSpaceOnUse'
+      }, defs);
   if (gridOptions['length'] > 0 && gridOptions['spacing'] > 0) {
     Blockly.utils.createSvgElement('line',
         {'stroke': gridOptions['colour']}, gridPattern);

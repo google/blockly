@@ -38,7 +38,8 @@ goog.require('goog.userAgent');
  * @param {number} width Width of the image.
  * @param {number} height Height of the image.
  * @param {string=} opt_alt Optional alt text for when block is collapsed.
- * @param {function=} opt_onClick Optional function to be called when image is clicked
+ * @param {Function=} opt_onClick Optional function to be called when the image
+ *     is clicked.  If opt_onClick is defined, opt_alt must also be defined.
  * @extends {Blockly.Field}
  * @constructor
  */
@@ -53,11 +54,28 @@ Blockly.FieldImage = function(src, width, height, opt_alt, opt_onClick) {
   this.text_ = opt_alt || '';
   this.setValue(src);
 
-  if (typeof opt_onClick === "function") {
+  if (typeof opt_onClick == 'function') {
     this.clickHandler_ = opt_onClick;
   }
 };
 goog.inherits(Blockly.FieldImage, Blockly.Field);
+
+/**
+ * Construct a FieldImage from a JSON arg object,
+ * dereferencing any string table references.
+ * @param {!Object} options A JSON object with options (src, width, height, and
+ *                          alt).
+ * @returns {!Blockly.FieldImage} The new field instance.
+ * @package
+ */
+Blockly.FieldImage.fromJson = function(options) {
+  var src = Blockly.utils.replaceMessageReferences(options['src']);
+  var width = Number(Blockly.utils.replaceMessageReferences(options['width']));
+  var height =
+      Number(Blockly.utils.replaceMessageReferences(options['height']));
+  var alt = Blockly.utils.replaceMessageReferences(options['alt']);
+  return new Blockly.FieldImage(src, width, height, alt);
+};
 
 /**
  * Editable fields are saved by the XML renderer, non-editable fields are not.
@@ -80,18 +98,20 @@ Blockly.FieldImage.prototype.init = function() {
   }
   /** @type {SVGElement} */
   this.imageElement_ = Blockly.utils.createSvgElement(
-    'image',
-    {
-      'height': this.height_ + 'px',
-      'width': this.width_ + 'px'
-    },
-    this.fieldGroup_);
+      'image',
+      {
+        'height': this.height_ + 'px',
+        'width': this.width_ + 'px'
+      },
+      this.fieldGroup_);
   this.setValue(this.src_);
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
 
   // Configure the field to be transparent with respect to tooltips.
   this.setTooltip(this.sourceBlock_);
   Blockly.Tooltip.bindMouseEvents(this.imageElement_);
+
+  this.maybeAddClickHandler_();
 };
 
 /**
@@ -101,6 +121,19 @@ Blockly.FieldImage.prototype.dispose = function() {
   goog.dom.removeNode(this.fieldGroup_);
   this.fieldGroup_ = null;
   this.imageElement_ = null;
+};
+
+/**
+ * Bind events for a mouse down on the image, but only if a click handler has
+ * been defined.
+ * @private
+ */
+Blockly.FieldImage.prototype.maybeAddClickHandler_ = function() {
+  if (this.clickHandler_) {
+    this.mouseDownWrapper_ =
+        Blockly.bindEventWithChecks_(
+            this.fieldGroup_, 'mousedown', this, this.onMouseDown_);
+  }
 };
 
 /**
@@ -160,19 +193,26 @@ Blockly.FieldImage.prototype.render_ = function() {
 };
 
 /**
+ * Images are fixed width, no need to render even if forced.
+ */
+Blockly.FieldImage.prototype.forceRerender = function() {
+  // NOP
+};
+
+/**
  * Images are fixed width, no need to update.
  * @private
  */
 Blockly.FieldImage.prototype.updateWidth = function() {
- // NOP
+  // NOP
 };
 
 /**
  * If field click is called, and click handler defined,
  * call the handler.
  */
- Blockly.FieldImage.prototype.showEditor = function() {
-   if (this.clickHandler_){
-     this.clickHandler_(this);
-   }
- };
+Blockly.FieldImage.prototype.showEditor_ = function() {
+  if (this.clickHandler_) {
+    this.clickHandler_(this);
+  }
+};

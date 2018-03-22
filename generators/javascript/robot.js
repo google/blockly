@@ -230,7 +230,7 @@ Blockly.JavaScript['robot_manipulation_run_pbd_action'] = function(block) {
 
 Blockly.JavaScript['robot_manipulation_run_pbd_program'] = function(block) {
   var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_NONE) || '\'\'';
-  var code = 'robot.runPbdProgram(' + value_name + ')';
+  var code = 'robot.runRapidPbdProgram(' + value_name + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 

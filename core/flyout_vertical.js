@@ -286,16 +286,10 @@ Blockly.VerticalFlyout.prototype.isDragTowardWorkspace = function(
   var dragDirection = Math.atan2(dy, dx) / Math.PI * 180;
 
   var range = this.dragAngleRange_;
-  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
-    // Vertical at left.
-    if (dragDirection < range && dragDirection > -range) {
-      return true;
-    }
-  } else {
-    // Vertical at right.
-    if (dragDirection < -180 + range || dragDirection > 180 - range) {
-      return true;
-    }
+  // Check for left or right dragging.
+  if ((dragDirection < range && dragDirection > -range) ||
+      (dragDirection < -180 + range || dragDirection > 180 - range)) {
+    return true;
   }
   return false;
 };

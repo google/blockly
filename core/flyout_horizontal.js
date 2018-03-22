@@ -309,16 +309,10 @@ Blockly.HorizontalFlyout.prototype.isDragTowardWorkspace = function(
   var dragDirection = Math.atan2(dy, dx) / Math.PI * 180;
 
   var range = this.dragAngleRange_;
-  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
-    // Horizontal at top.
-    if (dragDirection < 90 + range && dragDirection > 90 - range) {
-      return true;
-    }
-  } else {
-    // Horizontal at bottom.
-    if (dragDirection > -90 - range && dragDirection < -90 + range) {
-      return true;
-    }
+  // Check for up or down dragging.
+  if ((dragDirection < 90 + range && dragDirection > 90 - range) ||
+      (dragDirection > -90 - range && dragDirection < -90 + range)) {
+    return true;
   }
   return false;
 };

@@ -208,6 +208,7 @@ Blockly.WorkspaceCommentSvg.prototype.unselect = function() {
 Blockly.WorkspaceCommentSvg.prototype.addSelect = function() {
   Blockly.utils.addClass(
       /** @type {!Element} */ (this.svgGroup_), 'blocklySelected');
+  this.setFocus();
 };
 
 /**
@@ -216,6 +217,7 @@ Blockly.WorkspaceCommentSvg.prototype.addSelect = function() {
 Blockly.WorkspaceCommentSvg.prototype.removeSelect = function() {
   Blockly.utils.removeClass(
       /** @type {!Element} */ (this.svgGroup_), 'blocklySelected');
+  this.blurFocus();
 };
 
 /**

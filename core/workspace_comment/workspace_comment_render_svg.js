@@ -111,6 +111,10 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
   if (this.isDeletable()) {
     Blockly.bindEventWithChecks_(
         this.deleteGroup_, 'mousedown', this, this.deleteMouseDown_);
+    Blockly.bindEventWithChecks_(
+        this.deleteGroup_, 'mouseout', this, this.deleteMouseOut_);
+    Blockly.bindEventWithChecks_(
+        this.deleteGroup_, 'mouseup', this, this.deleteMouseUp_);
   }
 };
 
@@ -205,10 +209,10 @@ Blockly.WorkspaceCommentSvg.prototype.addDeleteDom_ = function() {
         'class': 'blocklyCommentDeleteIcon'
       },
       this.svgGroup_);
-  Blockly.utils.createSvgElement('circle',
+  this.deleteIconBorder_ = Blockly.utils.createSvgElement('circle',
       {
-        'fill': '#000',
-        'r': '8',
+        'class': 'blocklyDeleteIconShape',
+        'r': '7',
         'cx': '7.5',
         'cy': '7.5'
       },
@@ -266,6 +270,30 @@ Blockly.WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
  * @private
  */
 Blockly.WorkspaceCommentSvg.prototype.deleteMouseDown_ = function(e) {
+  // highlight the delete icon
+  Blockly.utils.addClass(
+      /** @type {!Element} */ (this.deleteIconBorder_), 'blocklyDeleteIconHighlighted');
+  // This event has been handled.  No need to bubble up to the document.
+  e.stopPropagation();
+};
+
+/**
+ * Handle a mouse-out on comment's delete icon.
+ * @param {!Event} e Mouse out event.
+ * @private
+ */
+Blockly.WorkspaceCommentSvg.prototype.deleteMouseOut_ = function(e) {
+  // restore highlight on the delete icon
+  Blockly.utils.removeClass(
+    /** @type {!Element} */ (this.deleteIconBorder_), 'blocklyDeleteIconHighlighted');
+};
+
+/**
+ * Handle a mouse-up on comment's delete icon.
+ * @param {!Event} e Mouse up event.
+ * @private
+ */
+Blockly.WorkspaceCommentSvg.prototype.deleteMouseUp_ = function(e) {
   // Delete this comment
   this.dispose(true, true);
   // This event has been handled.  No need to bubble up to the document.

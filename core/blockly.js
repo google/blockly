@@ -253,13 +253,17 @@ Blockly.onKeyDown_ = function(e) {
  * @private
  */
 Blockly.copy_ = function(toCopy) {
-  var xml = (toCopy.isComment) ? toCopy.toXmlWithXY() : Blockly.Xml.blockToDom(toCopy);
-  // Copy only the selected block and internal blocks.
-  Blockly.Xml.deleteNext(xml);
-  // Encode start position in XML.
-  var xy = toCopy.getRelativeToSurfaceXY();
-  xml.setAttribute('x', toCopy.RTL ? -xy.x : xy.x);
-  xml.setAttribute('y', xy.y);
+  if (toCopy.isComment) {
+    var xml = toCopy.toXmlWithXY();
+  } else {
+    var xml = Blockly.Xml.blockToDom(toCopy);
+    // Copy only the selected block and internal blocks.
+    Blockly.Xml.deleteNext(xml);
+    // Encode start position in XML.
+    var xy = toCopy.getRelativeToSurfaceXY();
+    xml.setAttribute('x', toCopy.RTL ? -xy.x : xy.x);
+    xml.setAttribute('y', xy.y);
+  }
   Blockly.clipboardXml_ = xml;
   Blockly.clipboardSource_ = toCopy.workspace;
 };

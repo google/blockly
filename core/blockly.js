@@ -427,7 +427,6 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
  *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
  *     provided.
  * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
- * @package
  */
 Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
     opt_noCaptureIdentifier, opt_noPreventDefault) {
@@ -493,7 +492,6 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
  * @param {Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
  * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
- * @package
  */
 Blockly.bindEvent_ = function(node, name, thisObject, func) {
   var wrapFunc = function(e) {
@@ -543,7 +541,6 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
  * @param {!Array.<!Array>} bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
  * @return {!Function} The function call.
- * @package
  */
 Blockly.unbindEvent_ = function(bindData) {
   while (bindData.length) {

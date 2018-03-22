@@ -80,11 +80,11 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
   this.svgGroup_.appendChild(this.foreignObject_);
 
   this.svgHandleTarget_ = Blockly.utils.createSvgElement('rect',
-    {
-      'class': 'blocklyCommentHandleTarget',
-      'x': 0,
-      'y': 0
-    });
+      {
+        'class': 'blocklyCommentHandleTarget',
+        'x': 0,
+        'y': 0
+      });
   this.svgGroup_.appendChild(this.svgHandleTarget_);
   this.svgRectTarget_ = Blockly.utils.createSvgElement('rect',
       {

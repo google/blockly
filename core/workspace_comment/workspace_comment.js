@@ -105,7 +105,9 @@ Blockly.WorkspaceComment.prototype.dispose = function() {
     return;
   }
 
-  // TODO (#1580): Fire an event for deletion.
+  if (Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.CommentDelete(this));
+  }
 
   // Remove from the list of top comments.
   this.workspace.removeTopComment(this);

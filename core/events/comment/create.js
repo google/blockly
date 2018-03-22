@@ -43,7 +43,11 @@ Blockly.Events.CommentCreate = function(comment) {
   }
   Blockly.Events.CommentCreate.superClass_.constructor.call(this, comment);
 
-  this.xml = comment.toXml();
+  if (comment.workspace.rendered) {
+    this.xml = comment.toXmlWithXY();
+  } else {
+    this.xml = comment.toXml();
+  }
 };
 goog.inherits(Blockly.Events.CommentCreate, Blockly.Events.CommentBase);
 
@@ -55,6 +59,7 @@ Blockly.Events.CommentCreate.prototype.type = Blockly.Events.COMMENT_CREATE;
 
 /**
  * Encode the event as JSON.
+ * TODO (#1266): "Full" and "minimal" serialization.
  * @return {!Object} JSON representation.
  */
 Blockly.Events.CommentCreate.prototype.toJson = function() {

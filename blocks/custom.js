@@ -22,4 +22,5 @@ Blockly.Blocks['custom_controls_repeat_forever'] = {
   }
 };
 
+// TODO: this doesn't work
 //Blockly.Blocks['controls_flow_statements'].LOOP_TYPES.push('custom_controls_repeat_forever');

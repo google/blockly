@@ -54,9 +54,7 @@ goog.inherits(Blockly.Events.VarBase, Blockly.Events.Abstract);
  */
 Blockly.Events.VarBase.prototype.toJson = function() {
   var json = Blockly.Events.VarBase.superClass_.toJson.call(this);
-  if (this.varId) {
-    json['varId'] = this.varId;
-  }
+  json['varId'] = this.varId;
   return json;
 };
 

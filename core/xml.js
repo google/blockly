@@ -421,17 +421,9 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         variablesFirst = false;
       } else if (name == 'comment') {
         if (workspace.rendered) {
-          var comment =
-            Blockly.WorkspaceCommentSvg.fromXml(xmlChild, workspace);
+          Blockly.WorkspaceCommentSvg.fromXml(xmlChild, workspace, width);
         } else {
-          var comment = Blockly.WorkspaceComment.fromXml(xmlChild, workspace);
-        }
-        // Position the comment correctly, taking into account the width of a
-        // rendered RTL workspace.
-        var commentX = parseInt(xmlChild.getAttribute('x'), 10);
-        var commentY = parseInt(xmlChild.getAttribute('y'), 10);
-        if (!isNaN(commentX) && !isNaN(commentY)) {
-          comment.moveBy(workspace.RTL ? width - commentX : commentX, commentY);
+          Blockly.WorkspaceComment.fromXml(xmlChild, workspace);
         }
       } else if (name == 'variables') {
         if (variablesFirst) {

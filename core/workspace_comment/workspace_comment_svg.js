@@ -100,6 +100,10 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
     this.workspace.cancelCurrentGesture();
   }
 
+  if (Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.CommentDelete(this));
+  }
+
   goog.dom.removeNode(this.svgGroup_);
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;
@@ -107,7 +111,9 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
   // Dispose of any rendered components
   this.disposeInternal_();
 
+  Blockly.Events.disable();
   Blockly.WorkspaceCommentSvg.superClass_.dispose.call(this);
+  Blockly.Events.enable();
 };
 
 /**
@@ -542,10 +548,13 @@ Blockly.WorkspaceCommentSvg.prototype.setAutoLayout = function() {
  * Decode an XML comment tag and create a rendered comment on the workspace.
  * @param {!Element} xmlComment XML comment element.
  * @param {!Blockly.Workspace} workspace The workspace.
- * @return {!Blockly.WorkspaceComment} The created workspace comment.
+ * @param {number=} opt_wsWidth The width of the workspace, which is used to
+ *     position comments correctly in RTL.
+ * @return {!Blockly.WorkspaceCommentSvg} The created workspace comment.
  * @public
  */
-Blockly.WorkspaceCommentSvg.fromXml = function(xmlComment, workspace) {
+Blockly.WorkspaceCommentSvg.fromXml = function(xmlComment, workspace,
+    opt_wsWidth) {
   // Create top-level comment.
   Blockly.Events.disable();
   try {
@@ -553,6 +562,18 @@ Blockly.WorkspaceCommentSvg.fromXml = function(xmlComment, workspace) {
     if (workspace.rendered) {
       comment.initSvg();
       comment.render(false);
+    }
+    // Position the comment correctly, taking into account the width of a
+    // rendered RTL workspace.
+    var commentX = parseInt(xmlComment.getAttribute('x'), 10);
+    var commentY = parseInt(xmlComment.getAttribute('y'), 10);
+    if (!isNaN(commentX) && !isNaN(commentY)) {
+      if (workspace.RTL) {
+        var wsWidth = opt_wsWidth || workspace.getWidth();
+        comment.moveBy(wsWidth - commentX, commentY);
+      } else {
+        comment.moveBy(commentX, commentY);
+      }
     }
   } finally {
     Blockly.Events.enable();

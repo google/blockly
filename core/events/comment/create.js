@@ -43,11 +43,7 @@ Blockly.Events.CommentCreate = function(comment) {
   }
   Blockly.Events.CommentCreate.superClass_.constructor.call(this, comment);
 
-  if (comment.workspace.rendered) {
-    this.xml = comment.toXmlWithXY();
-  } else {
-    this.xml = comment.toXml();
-  }
+  this.xml = comment.toXmlWithXY();
 };
 goog.inherits(Blockly.Events.CommentCreate, Blockly.Events.CommentBase);
 

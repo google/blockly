@@ -28,7 +28,7 @@
 goog.provide('Blockly.Events.VarCreate');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.Events.VarBase');
 goog.require('goog.array');
 goog.require('goog.math.Coordinate');
 
@@ -36,7 +36,7 @@ goog.require('goog.math.Coordinate');
  * Class for a variable creation event.
  * @param {Blockly.VariableModel} variable The created variable.
  *     Null for a blank event.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Blockly.Events.VarBase}
  * @constructor
  */
 Blockly.Events.VarCreate = function(variable) {
@@ -47,7 +47,7 @@ Blockly.Events.VarCreate = function(variable) {
   this.varType = variable.type;
   this.varName = variable.name;
 };
-goog.inherits(Blockly.Events.VarCreate, Blockly.Events.Abstract);
+goog.inherits(Blockly.Events.VarCreate, Blockly.Events.VarBase);
 
 /**
  * Type of this event.

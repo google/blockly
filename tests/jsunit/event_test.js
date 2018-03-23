@@ -76,14 +76,14 @@ function eventTest_tearDownWithMockBlocks() {
   delete Blockly.Blocks.field_variable_test_block;
 }
 
-function test_abstract_constructor_block() {
+function test_block_base_constructor() {
   eventTest_setUpWithMockBlocks();
   setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, '1');
   try {
     var block = createSimpleTestBlock(workspace);
 
     // Here's the event we care about.
-    var event = new Blockly.Events.Abstract(block);
+    var event = new Blockly.Events.BlockBase(block);
     assertUndefined(event.varId);
     checkExactEventValues(event, {'blockId': '1', 'workspaceId': workspace.id,
       'group': '', 'recordUndo': true});
@@ -92,13 +92,13 @@ function test_abstract_constructor_block() {
   }
 }
 
-function test_abstract_constructor_variable() {
+function test_var_base_constructor() {
   eventTest_setUpWithMockBlocks();
   setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, '1');
   try {
     var variable = workspace.createVariable('name1', 'type1', 'id1');
 
-    var event = new Blockly.Events.Abstract(variable);
+    var event = new Blockly.Events.VarBase(variable);
     assertUndefined(event.blockId);
     checkExactEventValues(event, {'varId': 'id1',
       'workspaceId': workspace.id, 'group': '', 'recordUndo': true});
@@ -107,12 +107,13 @@ function test_abstract_constructor_variable() {
   }
 }
 
-function test_abstract_constructor_null() {
+function test_abstract_constructor() {
   eventTest_setUpWithMockBlocks();
   try {
-    var event = new Blockly.Events.Abstract(null);
+    var event = new Blockly.Events.Abstract();
     assertUndefined(event.blockId);
     assertUndefined(event.workspaceId);
+    assertUndefined(event.varId);
     checkExactEventValues(event, {'group': '', 'recordUndo': true});
   } finally {
     eventTest_tearDownWithMockBlocks();

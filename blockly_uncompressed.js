@@ -58,7 +58,7 @@ goog.addDependency("../../../" + dir + "/core/events/block/move.js", ['Blockly.E
 goog.addDependency("../../../" + dir + "/core/events/comment/base.js", ['Blockly.Events.CommentBase'], ['Blockly.Events', 'Blockly.Events.Abstract']);
 goog.addDependency("../../../" + dir + "/core/events/comment/change.js", ['Blockly.Events.CommentChange'], ['Blockly.Events', 'Blockly.Events.Abstract']);
 goog.addDependency("../../../" + dir + "/core/events/comment/create.js", ['Blockly.Events.CommentCreate'], ['Blockly.Events', 'Blockly.Events.CommentBase']);
-goog.addDependency("../../../" + dir + "/core/events/comment/delete.js", ['Blockly.Events.CommentDelete'], ['Blockly.Events', 'Blockly.Events.Abstract']);
+goog.addDependency("../../../" + dir + "/core/events/comment/delete.js", ['Blockly.Events.CommentDelete'], ['Blockly.Events', 'Blockly.Events.CommentBase']);
 goog.addDependency("../../../" + dir + "/core/events/comment/move.js", ['Blockly.Events.CommentMove'], ['Blockly.Events', 'Blockly.Events.Abstract']);
 goog.addDependency("../../../" + dir + "/core/events/events.js", ['Blockly.Events'], ['goog.array', 'goog.math.Coordinate']);
 goog.addDependency("../../../" + dir + "/core/events/ui/ui_base.js", ['Blockly.Events.Ui'], ['Blockly.Events', 'Blockly.Events.Abstract', 'goog.array', 'goog.math.Coordinate']);

@@ -28,7 +28,7 @@
 goog.provide('Blockly.Events.VarRename');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.Events.VarBase');
 goog.require('goog.array');
 goog.require('goog.math.Coordinate');
 
@@ -37,7 +37,7 @@ goog.require('goog.math.Coordinate');
  * @param {Blockly.VariableModel} variable The renamed variable.
  *     Null for a blank event.
  * @param {string} newName The new name the variable will be changed to.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Blockly.Events.VarBase}
  * @constructor
  */
 Blockly.Events.VarRename = function(variable, newName) {
@@ -48,7 +48,7 @@ Blockly.Events.VarRename = function(variable, newName) {
   this.oldName = variable.name;
   this.newName = newName;
 };
-goog.inherits(Blockly.Events.VarRename, Blockly.Events.Abstract);
+goog.inherits(Blockly.Events.VarRename, Blockly.Events.VarBase);
 
 /**
  * Type of this event.

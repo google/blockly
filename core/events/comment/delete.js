@@ -43,7 +43,7 @@ Blockly.Events.CommentDelete = function(comment) {
   }
   Blockly.Events.CommentDelete.superClass_.constructor.call(this, comment);
 
-  this.xml = comment.toXml();
+  this.xml = comment.toXmlWithXY();
 };
 goog.inherits(Blockly.Events.CommentDelete, Blockly.Events.CommentBase);
 

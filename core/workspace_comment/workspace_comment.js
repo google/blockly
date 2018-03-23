@@ -266,6 +266,13 @@ Blockly.WorkspaceComment.fromXml = function(xmlComment, workspace) {
   var content = xmlComment.textContent;
 
   comment = workspace.newComment(content, h, w, id);
+
+  var commentX = parseInt(xmlComment.getAttribute('x'), 10);
+  var commentY = parseInt(xmlComment.getAttribute('y'), 10);
+  if (!isNaN(commentX) && !isNaN(commentY)) {
+    comment.moveBy(commentX, commentY);
+  }
+
   Blockly.WorkspaceComment.fireCreateEvent(comment);
   return comment;
 };

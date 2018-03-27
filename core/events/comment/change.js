@@ -28,4 +28,72 @@
 goog.provide('Blockly.Events.CommentChange');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.Events.CommentBase');
+
+/**
+ * Class for a comment change event.
+ * @param {Blockly.WorkspaceComment} comment The comment that is being changed.
+ *     Null for a blank event.
+ * @param {string} oldContents Previous contents of the comment.
+ * @param {string} newContents New contents of the comment.
+ * @extends {Blockly.Events.CommentBase}
+ * @constructor
+ */
+Blockly.Events.CommentChange = function(comment, oldContents, newContents) {
+  if (!comment) {
+    return;  // Blank event to be populated by fromJson.
+  }
+  Blockly.Events.CommentChange.superClass_.constructor.call(this, comment);
+  this.oldContents_ = oldContents;
+  this.newContents_ = newContents;
+};
+goog.inherits(Blockly.Events.CommentChange, Blockly.Events.CommentBase);
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.CommentChange.prototype.type = Blockly.Events.COMMENT_CHANGE;
+
+/**
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
+Blockly.Events.CommentChange.prototype.toJson = function() {
+  var json = Blockly.Events.CommentChange.superClass_.toJson.call(this);
+  json['newContents'] = this.newContents_;
+  return json;
+};
+
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.CommentChange.prototype.fromJson = function(json) {
+  Blockly.Events.CommentChange.superClass_.fromJson.call(this, json);
+  this.newContents_ = json['newValue'];
+};
+
+/**
+ * Does this event record any change of state?
+ * @return {boolean} False if something changed.
+ */
+Blockly.Events.CommentChange.prototype.isNull = function() {
+  return this.oldContents_ == this.newContents_;
+};
+
+/**
+ * Run a change event.
+ * @param {boolean} forward True if run forward, false if run backward (undo).
+ */
+Blockly.Events.CommentChange.prototype.run = function(forward) {
+  var workspace = this.getEventWorkspace_();
+  var comment = workspace.getCommentById(this.commentId);
+  if (!comment) {
+    console.warn('Can\'t change non-existent comment: ' + this.commentId);
+    return;
+  }
+  var contents = forward ? this.newContents_ : this.oldContents_;
+
+  comment.setContent(contents);
+};

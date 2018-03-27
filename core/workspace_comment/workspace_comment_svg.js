@@ -485,11 +485,7 @@ Blockly.WorkspaceCommentSvg.prototype.getContent = function() {
  * @public
  */
 Blockly.WorkspaceCommentSvg.prototype.setContent = function(content) {
-  if (this.content_ != content) {
-    Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this.block_, 'comment', null, this.text_, content));
-    this.text_ = content;
-  }
+  Blockly.WorkspaceCommentSvg.superClass_.setContent.call(this, content);
   if (this.textarea_) {
     this.textarea_.value = content;
   }

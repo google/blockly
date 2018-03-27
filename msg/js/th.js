@@ -281,12 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "คืนค่า cosine ขององศา (ไม่ใช่เรเดียน)";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "คืนค่า sine ขององศา (ไม่ใช่เรเดียน)";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "คืนค่า tangent ขององศา (ไม่ใช่เรเดียน)";
-/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "สร้างตัวแปรสี";
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "สร้างตัวแปรจำนวน";
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "สร้างตัวแปร string";
 /** @export */ Blockly.Msg.NEW_VARIABLE = "สร้างตัวแปร...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "ชื่อตัวแปรใหม่:";
-/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "ชนิดตัวแปรใหม่";
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "ข้อความที่ใช้ได้";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "ด้วย:";
@@ -398,6 +398,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "กำหนดให้ตัวแปรนี้เท่ากับการป้อนข้อมูล";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "มีตัวแปรชื่อ '%1' อยู่แล้ว";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "ตัวแปรชื่อ '%1' มีอยู่แล้วสำหรับตัวแปรอื่นของชนิด '%2'";
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

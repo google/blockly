@@ -74,6 +74,9 @@ Blockly.Events.Abstract = function(elem) {
   if (elem instanceof Blockly.Block) {
     this.blockId = elem.id;
     this.workspaceId = elem.workspace.id;
+  } else if (elem instanceof Blockly.WorkspaceComment) {
+    this.commentId = elem.id;
+    this.workspaceId = elem.workspace.id;
   } else if (elem instanceof Blockly.VariableModel) {
     this.workspaceId = elem.workspace.id;
     this.varId = elem.getId();

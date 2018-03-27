@@ -45,9 +45,11 @@ goog.require('goog.dom');
  */
 Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
   var xml = goog.dom.createDom('xml');
-  var variables = Blockly.Variables.allUsedVarModels(workspace);
-  if (variables.length) {
-    xml.appendChild(Blockly.Xml.variablesToDom(variables));
+  xml.appendChild(Blockly.Xml.variablesToDom(
+      Blockly.Variables.allUsedVarModels(workspace)));
+  var comments = workspace.getTopComments(true);
+  for (var i = 0, comment; comment = comments[i]; i++) {
+    xml.appendChild(comment.toXmlWithXY(opt_noId));
   }
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
@@ -376,6 +378,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     console.warn('Deprecated call to Blockly.Xml.domToWorkspace, ' +
                  'swap the arguments.');
   }
+
   var width;  // Not used in LTR.
   if (workspace.RTL) {
     width = workspace.getWidth();
@@ -416,6 +419,20 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
       } else if (name == 'shadow') {
         goog.asserts.fail('Shadow block cannot be a top-level block.');
         variablesFirst = false;
+      } else if (name == 'comment') {
+        if (workspace.rendered) {
+          var comment =
+            Blockly.WorkspaceCommentSvg.fromXml(xmlChild, workspace);
+        } else {
+          var comment = Blockly.WorkspaceComment.fromXml(xmlChild, workspace);
+        }
+        // Position the comment correctly, taking into account the width of a
+        // rendered RTL workspace.
+        var commentX = parseInt(xmlChild.getAttribute('x'), 10);
+        var commentY = parseInt(xmlChild.getAttribute('y'), 10);
+        if (!isNaN(commentX) && !isNaN(commentY)) {
+          comment.moveBy(workspace.RTL ? width - commentX : commentX, commentY);
+        }
       } else if (name == 'variables') {
         if (variablesFirst) {
           Blockly.Xml.domToVariables(xmlChild, workspace);
@@ -559,6 +576,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
   }
   return topBlock;
 };
+
 
 /**
  * Decode an XML list of variables and add the variables to the workspace.

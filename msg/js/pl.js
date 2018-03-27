@@ -104,7 +104,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_LAST = "ostatni";
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_RANDOM = "losowy";
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_REMOVE = "usuń";
-/** @export */ Blockly.Msg.LISTS_GET_INDEX_TAIL = "";
+/** @export */ Blockly.Msg.LISTS_GET_INDEX_TAIL = "";  // untranslated
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FIRST = "Zwraca pierwszy element z listy.";
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FROM = "Zwraca element z konkretnej pozycji na liście.";
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_LAST = "Zwraca ostatni element z listy.";
@@ -398,6 +398,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Wartości zmiennej i  wejście będą identyczne.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Zmienna o nazwie '%1' już istnieje.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Zmienna o nazwie '%1' już istnieje i jest typu '%2'.";
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

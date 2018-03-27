@@ -74,9 +74,9 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.EXTERNAL_INPUTS = "Entrata externe";
 /** @export */ Blockly.Msg.HELP = "Adjuta";
 /** @export */ Blockly.Msg.INLINE_INPUTS = "Entrata interne";
-/** @export */ Blockly.Msg.IOS_CANCEL = "Cancel";  // untranslated
-/** @export */ Blockly.Msg.IOS_ERROR = "Error";  // untranslated
-/** @export */ Blockly.Msg.IOS_OK = "OK";  // untranslated
+/** @export */ Blockly.Msg.IOS_CANCEL = "Cancellar";
+/** @export */ Blockly.Msg.IOS_ERROR = "Error";
+/** @export */ Blockly.Msg.IOS_OK = "OK";
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
@@ -284,7 +284,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
 /** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_VARIABLE = "Nove variabile...";
+/** @export */ Blockly.Msg.NEW_VARIABLE = "Crear variabile...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Nomine del nove variabile:";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
@@ -396,8 +396,9 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_CREATE_GET = "Crear 'prender %1'";
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Mitte iste variabile al valor del entrata.";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "A variable named '%1' already exists.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "A variabile named '%1' already exists.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another type: '%2'.";  // untranslated
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

@@ -42,6 +42,7 @@ goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceAudio');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
+goog.require('Blockly.JSON');
 goog.require('Blockly.ZoomControls');
 
 goog.require('goog.array');

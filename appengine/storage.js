@@ -70,7 +70,7 @@ BlocklyStorage.restoreBlocks = function(opt_workspace) {
  */
 BlocklyStorage.link = function(opt_workspace) {
   var workspace = opt_workspace || Blockly.getMainWorkspace();
-  var xml = Blockly.Xml.workspaceToDom(workspace);
+  var xml = Blockly.Xml.workspaceToDom(workspace, true);
   var data = Blockly.Xml.domToText(xml);
   BlocklyStorage.makeRequest_('/storage', 'xml', data, workspace);
 };

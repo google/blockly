@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.WorkspaceComment');
 
+goog.require('Blockly.Events.CommentChange');
 goog.require('Blockly.Events.CommentCreate');
 goog.require('Blockly.Events.CommentDelete');
 goog.require('Blockly.Events.CommentMove');
@@ -230,8 +231,9 @@ Blockly.WorkspaceComment.prototype.getContent = function() {
  */
 Blockly.WorkspaceComment.prototype.setContent = function(content) {
   if (this.content_ != content) {
-    // TODO (#1580): Fire a event for change
-    this.text_ = content;
+    Blockly.Events.fire(
+        new Blockly.Events.CommentChange(this, this.content_, content));
+    this.content_ = content;
   }
 };
 

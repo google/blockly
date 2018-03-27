@@ -135,7 +135,7 @@ Blockly.Events.Move.prototype.currentLocation_ = function() {
 
 /**
  * Does this event record any change of state?
- * @return {boolean} True if something changed.
+ * @return {boolean} False if something changed.
  */
 Blockly.Events.Move.prototype.isNull = function() {
   return this.oldParentId == this.newParentId &&

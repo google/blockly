@@ -27,12 +27,13 @@
 goog.provide('Blockly.WorkspaceCommentSvg');
 
 goog.require('Blockly.Events.CommentCreate');
+goog.require('Blockly.Events.CommentDelete');
+goog.require('Blockly.Events.CommentMove');
 goog.require('Blockly.WorkspaceComment');
 
 
 /**
  * Class for a workspace comment's SVG representation.
- * Not normally called directly, workspace.newComment() is preferred.
  * @param {!Blockly.Workspace} workspace The block's workspace.
  * @param {string} content The content of this workspace comment.
  * @param {number} height Height of the comment.
@@ -272,7 +273,8 @@ Blockly.WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
       // the translation of the drag surface itself.
       if (this.useDragSurface_ &&
           this.workspace.blockDragSurface_.getCurrentBlock() == element) {
-        var surfaceTranslation = this.workspace.blockDragSurface_.getSurfaceTranslation();
+        var surfaceTranslation =
+            this.workspace.blockDragSurface_.getSurfaceTranslation();
         x += surfaceTranslation.x;
         y += surfaceTranslation.y;
       }
@@ -280,7 +282,8 @@ Blockly.WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
     } while (element && element != this.workspace.getBubbleCanvas() &&
         element != dragSurfaceGroup);
   }
-  return new goog.math.Coordinate(x, y);
+  this.xy_ = new goog.math.Coordinate(x, y);
+  return this.xy_;
 };
 
 /**
@@ -290,9 +293,13 @@ Blockly.WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
  * @public
  */
 Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
-  // TODO (#1580): Fire an event for move.
+  var event = new Blockly.Events.CommentMove(this);
+  // TODO: Do I need to look up the relative to surface XY position here?
   var xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);
+  this.xy_ = new goog.math.Coordinate(xy.x + dx, xy.y + dy);
+  event.recordNew();
+  Blockly.Events.fire(event);
   this.workspace.resizeContents();
 };
 
@@ -304,6 +311,7 @@ Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.translate = function(x, y) {
+  this.xy_ = new goog.math.Coordinate(x, y);
   this.getSvgRoot().setAttribute('transform',
       'translate(' + x + ',' + y + ')');
 };
@@ -372,8 +380,7 @@ Blockly.WorkspaceCommentSvg.prototype.moveDuringDrag = function(dragSurface, new
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.moveTo = function(x, y) {
-  this.svgGroup_.translate_ = 'translate(' + x + ',' + y + ')';
-  this.svgGroup_.setAttribute('transform', this.svgGroup_.translate_);
+  this.translate(x, y);
 };
 
 /**
@@ -393,7 +400,7 @@ Blockly.WorkspaceCommentSvg.prototype.clearTransformAttributes_ = function() {
  *    Object with top left and bottom right coordinates of the bounding box.
  */
 Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
-  var blockXY = this.getRelativeToSurfaceXY(this);
+  var blockXY = this.getRelativeToSurfaceXY();
   var commentBounds = this.getHeightWidth();
   var topLeft;
   var bottomRight;
@@ -452,42 +459,6 @@ Blockly.WorkspaceCommentSvg.prototype.setDragging = function(adding) {
     Blockly.utils.removeClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
   }
-};
-
-/**
- * Get comment height.
- * @return {number} comment height.
- * @public
- */
-Blockly.WorkspaceCommentSvg.prototype.getHeight = function() {
-  return this.height_;
-};
-
-/**
- * Set comment height.
- * @param {number} height comment height.
- * @public
- */
-Blockly.WorkspaceCommentSvg.prototype.setHeight = function(height) {
-  this.height_ = height;
-};
-
-/**
- * Get comment width.
- * @return {number} comment width.
- * @public
- */
-Blockly.WorkspaceCommentSvg.prototype.getWidth = function() {
-  return this.width_;
-};
-
-/**
- * Set comment width.
- * @param {number} width comment width.
- * @public
- */
-Blockly.WorkspaceCommentSvg.prototype.setWidth = function(width) {
-  this.width_ = width;
 };
 
 /**
@@ -555,33 +526,51 @@ Blockly.WorkspaceCommentSvg.prototype.setAutoLayout = function() {
  */
 Blockly.WorkspaceCommentSvg.fromXml = function(xmlComment, workspace,
     opt_wsWidth) {
-  // Create top-level comment.
   Blockly.Events.disable();
   try {
-    var comment = Blockly.WorkspaceComment.fromXml(xmlComment, workspace);
+    var info = Blockly.WorkspaceComment.parseAttributes(xmlComment);
+
+    var comment = new Blockly.WorkspaceCommentSvg(workspace,
+        info.content, info.h, info.w, info.id);
     if (workspace.rendered) {
       comment.initSvg();
       comment.render(false);
     }
     // Position the comment correctly, taking into account the width of a
     // rendered RTL workspace.
-    var commentX = parseInt(xmlComment.getAttribute('x'), 10);
-    var commentY = parseInt(xmlComment.getAttribute('y'), 10);
-    if (!isNaN(commentX) && !isNaN(commentY)) {
+    if (!isNaN(info.x) && !isNaN(info.y)) {
       if (workspace.RTL) {
         var wsWidth = opt_wsWidth || workspace.getWidth();
-        comment.moveBy(wsWidth - commentX, commentY);
+        comment.moveBy(wsWidth - info.x, info.y);
       } else {
-        comment.moveBy(commentX, commentY);
+        comment.moveBy(info.x, info.y);
       }
     }
   } finally {
     Blockly.Events.enable();
   }
-  // TODO (#1580): fire a comment create event.  Possibly should happen in
-  // Blockly.WorkspaceComment.fromXml instead.
-  // Fire a create event.
   Blockly.WorkspaceComment.fireCreateEvent(comment);
 
   return comment;
+};
+
+/**
+ * Encode a comment subtree as XML with XY coordinates.
+ * @param {boolean} opt_noId True if the encoder should skip the comment id.
+ * @return {!Element} Tree of XML elements.
+ */
+Blockly.WorkspaceCommentSvg.prototype.toXmlWithXY = function(opt_noId) {
+  var width;  // Not used in LTR.
+  if (this.workspace.RTL) {
+    // Here be performance dragons: This calls getMetrics().
+    width = this.workspace.getWidth();
+  }
+  var element = this.toXml(opt_noId);
+  var xy = this.getRelativeToSurfaceXY();
+  element.setAttribute('x',
+      Math.round(this.workspace.RTL ? width - xy.x : xy.x));
+  element.setAttribute('y', Math.round(xy.y));
+  element.setAttribute('h', this.getHeight());
+  element.setAttribute('w', this.getWidth());
+  return element;
 };

@@ -26,6 +26,10 @@
 
 goog.provide('Blockly.BubbleDragger');
 
+goog.require('Blockly.Bubble');
+goog.require('Blockly.Events.CommentMove');
+goog.require('Blockly.WorkspaceCommentSvg');
+
 goog.require('goog.math.Coordinate');
 goog.require('goog.asserts');
 
@@ -33,14 +37,15 @@ goog.require('goog.asserts');
 /**
  * Class for a bubble dragger.  It moves bubbles around the workspace when they
  * are being dragged by a mouse or touch.
- * @param {!Blockly.Bubble} bubble The bubble to drag.
+ * @param {!Blockly.Bubble|!Blockly.WorkspaceCommentSvg} bubble The bubble to
+ *     drag.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to drag on.
  * @constructor
  */
 Blockly.BubbleDragger = function(bubble, workspace) {
   /**
    * The bubble that is being dragged.
-   * @type {!Blockly.Bubble}
+   * @type {!Blockly.Bubble|!Blockly.WorkspaceCommentSvg}
    * @private
    */
   this.draggingBubble_ = bubble;
@@ -229,6 +234,12 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
  * @private
  */
 Blockly.BubbleDragger.prototype.fireMoveEvent_ = function() {
+  if (this.draggingBubble_.isComment) {
+    var event = new Blockly.Events.CommentMove(this.draggingBubble_);
+    event.setOldCoordinate(this.startXY_);
+    event.recordNew();
+    Blockly.Events.fire(event);
+  }
   // TODO (fenichel): move events for comments.
   return;
 };

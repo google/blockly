@@ -641,7 +641,10 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
   }
 };
 
-/** Wraps TEXT field with images of double quote characters. */
+/**
+ * Wraps TEXT field with images of double quote characters.
+ * @this Blockly.Block
+ */
 Blockly.Constants.Text.TEXT_QUOTES_EXTENSION = function() {
   this.mixin(Blockly.Constants.Text.QUOTE_IMAGE_MIXIN);
   this.quoteField_('TEXT');
@@ -765,7 +768,10 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
   }
 };
 
-// Performs final setup of a text_join block.
+/**
+ * Performs final setup of a text_join block.
+ * @this Blockly.Block
+ */
 Blockly.Constants.Text.TEXT_JOIN_EXTENSION = function() {
   // Add the quote mixin for the itemCount_ = 0 case.
   this.mixin(Blockly.Constants.Text.QUOTE_IMAGE_MIXIN);
@@ -781,6 +787,10 @@ Blockly.Extensions.register('text_append_tooltip',
     Blockly.Extensions.buildTooltipWithFieldText(
         '%{BKY_TEXT_APPEND_TOOLTIP}', 'VAR'));
 
+/**
+ * Update the tooltip of 'text_append' block to reference the variable.
+ * @this Blockly.Block
+ */
 Blockly.Constants.Text.TEXT_INDEXOF_TOOLTIP_EXTENSION = function() {
   // Assign 'this' to a variable for use in the tooltip closure below.
   var thisBlock = this;
@@ -846,7 +856,10 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
   }
 };
 
-// Does the initial mutator update of text_charAt and adds the tooltip
+/**
+ * Does the initial mutator update of text_charAt and adds the tooltip
+ * @this Blockly.Block
+ */
 Blockly.Constants.Text.TEXT_CHARAT_EXTENSION = function() {
   var dropdown = this.getField('WHERE');
   dropdown.setValidator(function(value) {

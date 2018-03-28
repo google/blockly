@@ -51,9 +51,9 @@ goog.addDependency("../../../" + dir + "/core/contextmenu.js", ['Blockly.Context
 goog.addDependency("../../../" + dir + "/core/css.js", ['Blockly.Css'], []);
 goog.addDependency("../../../" + dir + "/core/dragged_connection_manager.js", ['Blockly.DraggedConnectionManager'], ['Blockly.RenderedConnection', 'goog.math.Coordinate']);
 goog.addDependency("../../../" + dir + "/core/events/abstract.js", ['Blockly.Events.Abstract'], ['Blockly.Events', 'goog.array', 'goog.math.Coordinate']);
-goog.addDependency("../../../" + dir + "/core/events/block/change.js", ['Blockly.Events.BlockChange', 'Blockly.Events.Change'], ['Blockly.Events', 'goog.array', 'goog.math.Coordinate']);
-goog.addDependency("../../../" + dir + "/core/events/block/create.js", ['Blockly.Events.BlockCreate', 'Blockly.Events.Create'], ['Blockly.Events', 'goog.array', 'goog.math.Coordinate']);
-goog.addDependency("../../../" + dir + "/core/events/block/delete.js", ['Blockly.Events.BlockDelete', 'Blockly.Events.Delete'], ['Blockly.Events', 'goog.array', 'goog.math.Coordinate']);
+goog.addDependency("../../../" + dir + "/core/events/block/change.js", ['Blockly.Events.BlockChange', 'Blockly.Events.Change'], ['Blockly.Events', 'Blockly.Events.Abstract', 'goog.array', 'goog.math.Coordinate']);
+goog.addDependency("../../../" + dir + "/core/events/block/create.js", ['Blockly.Events.BlockCreate', 'Blockly.Events.Create'], ['Blockly.Events', 'Blockly.Events.Abstract', 'goog.array', 'goog.math.Coordinate']);
+goog.addDependency("../../../" + dir + "/core/events/block/delete.js", ['Blockly.Events.BlockDelete', 'Blockly.Events.Delete'], ['Blockly.Events', 'Blockly.Events.Abstract', 'goog.array', 'goog.math.Coordinate']);
 goog.addDependency("../../../" + dir + "/core/events/block/move.js", ['Blockly.Events.BlockMove', 'Blockly.Events.Move'], ['Blockly.Events', 'Blockly.Events.Abstract', 'goog.array', 'goog.math.Coordinate']);
 goog.addDependency("../../../" + dir + "/core/events/events.js", ['Blockly.Events'], ['goog.array', 'goog.math.Coordinate']);
 goog.addDependency("../../../" + dir + "/core/events/ui/ui_base.js", ['Blockly.Events.Ui'], ['Blockly.Events', 'Blockly.Events.Abstract', 'goog.array', 'goog.math.Coordinate']);
@@ -107,7 +107,7 @@ goog.addDependency("../../../" + dir + "/core/workspace.js", ['Blockly.Workspace
 goog.addDependency("../../../" + dir + "/core/workspace_audio.js", ['Blockly.WorkspaceAudio'], []);
 goog.addDependency("../../../" + dir + "/core/workspace_drag_surface_svg.js", ['Blockly.WorkspaceDragSurfaceSvg'], ['Blockly.utils', 'goog.asserts', 'goog.math.Coordinate']);
 goog.addDependency("../../../" + dir + "/core/workspace_dragger.js", ['Blockly.WorkspaceDragger'], ['goog.math.Coordinate', 'goog.asserts']);
-goog.addDependency("../../../" + dir + "/core/workspace_svg.js", ['Blockly.WorkspaceSvg'], ['Blockly.ConnectionDB', 'Blockly.constants', 'Blockly.Events.BlockCreate', 'Blockly.Gesture', 'Blockly.Grid', 'Blockly.Options', 'Blockly.ScrollbarPair', 'Blockly.Touch', 'Blockly.Trashcan', 'Blockly.VariablesDynamic', 'Blockly.Workspace', 'Blockly.WorkspaceAudio', 'Blockly.WorkspaceDragSurfaceSvg', 'Blockly.Xml', 'Blockly.ZoomControls', 'goog.array', 'goog.dom', 'goog.math.Coordinate', 'goog.userAgent']);
+goog.addDependency("../../../" + dir + "/core/workspace_svg.js", ['Blockly.WorkspaceSvg'], ['Blockly.ConnectionDB', 'Blockly.constants', 'Blockly.Events.BlockCreate', 'Blockly.Gesture', 'Blockly.Grid', 'Blockly.Options', 'Blockly.ScrollbarPair', 'Blockly.Touch', 'Blockly.TouchGesture', 'Blockly.Trashcan', 'Blockly.VariablesDynamic', 'Blockly.Workspace', 'Blockly.WorkspaceAudio', 'Blockly.WorkspaceDragSurfaceSvg', 'Blockly.Xml', 'Blockly.ZoomControls', 'goog.array', 'goog.dom', 'goog.math.Coordinate', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/xml.js", ['Blockly.Xml'], ['Blockly.Events.BlockCreate', 'Blockly.Events.VarCreate', 'goog.asserts', 'goog.dom']);
 goog.addDependency("../../../" + dir + "/core/zoom_controls.js", ['Blockly.ZoomControls'], ['Blockly.Touch', 'goog.dom']);
 goog.addDependency("../../alltests.js", [], []);

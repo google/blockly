@@ -33,6 +33,7 @@ goog.require('Blockly.WorkspaceCommentSvg');
  * Size of the resize icon.
  * @type {number}
  * @const
+ * @private
  */
 Blockly.WorkspaceCommentSvg.RESIZE_SIZE = 8;
 
@@ -40,6 +41,7 @@ Blockly.WorkspaceCommentSvg.RESIZE_SIZE = 8;
  * Radius of the border around the comment.
  * @type {number}
  * @const
+ * @private
  */
 Blockly.WorkspaceCommentSvg.BORDER_RADIUS = 3;
 
@@ -47,6 +49,7 @@ Blockly.WorkspaceCommentSvg.BORDER_RADIUS = 3;
  * Offset from the foreignobject edge to the textarea edge.
  * @type {number}
  * @const
+ * @private
  */
 Blockly.WorkspaceCommentSvg.TEXTAREA_OFFSET = 2;
 
@@ -54,6 +57,7 @@ Blockly.WorkspaceCommentSvg.TEXTAREA_OFFSET = 2;
  * Offset from the top to make room for a top bar.
  * @type {number}
  * @const
+ * @private
  */
 Blockly.WorkspaceCommentSvg.TOP_OFFSET = 10;
 
@@ -61,11 +65,16 @@ Blockly.WorkspaceCommentSvg.TOP_OFFSET = 10;
  * Returns a bounding box describing the dimensions of this comment.
  * @return {!{height: number, width: number}} Object with height and width
  *    properties in workspace units.
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.getHeightWidth = function() {
   return { width: this.getWidth(), height: this.getHeight() };
 };
 
+/**
+ * Renders the workspace comment.
+ * @package
+ */
 Blockly.WorkspaceCommentSvg.prototype.render = function() {
   if (this.rendered_) {
     return;

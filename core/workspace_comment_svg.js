@@ -78,7 +78,8 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
    * @type {boolean}
    * @private
    */
-  this.useDragSurface_ = Blockly.utils.is3dSupported() && !!workspace.blockDragSurface_;
+  this.useDragSurface_ =
+      Blockly.utils.is3dSupported() && !!workspace.blockDragSurface_;
 
   Blockly.WorkspaceCommentSvg.superClass_.constructor.call(this,
       workspace, content, height, width, opt_id);
@@ -120,7 +121,7 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
 /**
  * Create and initialize the SVG representation of a workspace comment.
  * May be called more than once.
- * @public
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
   goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
@@ -173,6 +174,7 @@ Blockly.WorkspaceCommentSvg.prototype.showContextMenu_ = function(e) {
 
 /**
  * Select this comment.  Highlight it visually.
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.select = function() {
   if (Blockly.selected == this) {
@@ -198,6 +200,7 @@ Blockly.WorkspaceCommentSvg.prototype.select = function() {
 
 /**
  * Unselect this comment.  Remove its highlighting.
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.unselect = function() {
   if (Blockly.selected != this) {
@@ -213,6 +216,7 @@ Blockly.WorkspaceCommentSvg.prototype.unselect = function() {
 
 /**
  * Select this comment.  Highlight it visually.
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.addSelect = function() {
   Blockly.utils.addClass(
@@ -222,6 +226,7 @@ Blockly.WorkspaceCommentSvg.prototype.addSelect = function() {
 
 /**
  * Unselect this comment.  Remove its highlighting.
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.removeSelect = function() {
   Blockly.utils.removeClass(
@@ -231,6 +236,7 @@ Blockly.WorkspaceCommentSvg.prototype.removeSelect = function() {
 
 /**
  * Focus this comment.  Highlight it visually.
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.addFocus = function() {
   Blockly.utils.addClass(
@@ -239,6 +245,7 @@ Blockly.WorkspaceCommentSvg.prototype.addFocus = function() {
 
 /**
  * Unfocus this comment.  Remove its highlighting.
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.removeFocus = function() {
   Blockly.utils.removeClass(
@@ -398,6 +405,7 @@ Blockly.WorkspaceCommentSvg.prototype.clearTransformAttributes_ = function() {
  * Coordinate system: workspace coordinates.
  * @return {!{topLeft: goog.math.Coordinate, bottomRight: goog.math.Coordinate}}
  *    Object with top left and bottom right coordinates of the bounding box.
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
   var blockXY = this.getRelativeToSurfaceXY();
@@ -423,6 +431,7 @@ Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
 
 /**
  * Add or remove the UI indicating if this comment is movable or not.
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.updateMovable = function() {
   if (this.isMovable()) {
@@ -437,6 +446,7 @@ Blockly.WorkspaceCommentSvg.prototype.updateMovable = function() {
 /**
  * Set whether this comment is movable or not.
  * @param {boolean} movable True if movable.
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.setMovable = function(movable) {
   Blockly.WorkspaceCommentSvg.superClass_.setMovable.call(this, movable);
@@ -554,6 +564,7 @@ Blockly.WorkspaceCommentSvg.fromXml = function(xmlComment, workspace,
  * Encode a comment subtree as XML with XY coordinates.
  * @param {boolean} opt_noId True if the encoder should skip the comment id.
  * @return {!Element} Tree of XML elements.
+ * @public
  */
 Blockly.WorkspaceCommentSvg.prototype.toXmlWithXY = function(opt_noId) {
   var width;  // Not used in LTR.

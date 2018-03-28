@@ -355,6 +355,9 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this Blockly.Block
    */
   customContextMenu: function(options) {
+    if (this.isInFlyout){
+      return;
+    }
     // Add option to create caller.
     var option = {enabled: true};
     var name = this.getFieldValue('NAME');

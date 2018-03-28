@@ -261,6 +261,9 @@ Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
    * @this Blockly.Block
    */
   customContextMenu: function(options) {
+    if (this.isInFlyout){
+      return;
+    }
     var varName = this.getFieldValue('VAR');
     if (!this.isCollapsed() && varName != null) {
       var option = {enabled: true};

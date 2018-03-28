@@ -537,19 +537,6 @@ Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {
 };
 
 /**
- * Obtain a newly created comment.
- * @param {?string} content Content of the comment
- * @param {number} h Height of the comment
- * @param {number} w Width of the comment
- * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
- *     create a new ID.
- * @return {!Blockly.WorkspaceCommentSvg} The created comment.
- */
-Blockly.WorkspaceSvg.prototype.newComment = function(content, h, w, opt_id) {
-  return new Blockly.WorkspaceCommentSvg(this, content, h, w, opt_id);
-};
-
-/**
  * Add a trashcan.
  * @param {number} bottom Distance from workspace bottom to bottom of trashcan.
  * @return {number} Distance from workspace bottom to the top of trashcan.

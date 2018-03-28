@@ -127,6 +127,30 @@ Blockly.Events.VAR_RENAME = 'var_rename';
 Blockly.Events.UI = 'ui';
 
 /**
+ * Name of event that creates a comment.
+ * @const
+ */
+Blockly.Events.COMMENT_CREATE = 'comment_create';
+
+/**
+ * Name of event that deletes a comment.
+ * @const
+ */
+Blockly.Events.COMMENT_DELETE = 'comment_delete';
+
+/**
+ * Name of event that changes a comment.
+ * @const
+ */
+Blockly.Events.COMMENT_CHANGE = 'comment_change';
+
+/**
+ * Name of event that moves a comment.
+ * @const
+ */
+Blockly.Events.COMMENT_MOVE = 'comment_move';
+
+/**
  * List of events queued for firing.
  * @private
  */
@@ -327,6 +351,18 @@ Blockly.Events.fromJson = function(json, workspace) {
       break;
     case Blockly.Events.UI:
       event = new Blockly.Events.Ui(null);
+      break;
+    case Blockly.Events.COMMENT_CREATE:
+      event = new Blockly.Events.CommentCreate(null);
+      break;
+    case Blockly.Events.COMMENT_CHANGE:
+      event = new Blockly.Events.CommentChange(null);
+      break;
+    case Blockly.Events.COMMENT_MOVE:
+      event = new Blockly.Events.CommentMove(null);
+      break;
+    case Blockly.Events.COMMENT_DELETE:
+      event = new Blockly.Events.CommentDelete(null);
       break;
     default:
       throw 'Unknown event type.';

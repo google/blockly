@@ -164,11 +164,7 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
   Blockly.bindEventWithChecks_(textarea, 'change', this, function(
       /* eslint-disable no-unused-vars */ e
       /* eslint-enable no-unused-vars */) {
-    if (this.content_ != textarea.value) {
-      Blockly.Events.fire(new Blockly.Events.BlockChange(
-          this.block_, 'comment', null, this.content_, textarea.value));
-      this.content_ = textarea.value;
-    }
+    this.setContent(textarea.value);
   });
   return this.foreignObject_;
 };

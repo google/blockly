@@ -95,6 +95,33 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ]
   },
   {
+    "type": "example_dropdown_images_and_text",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "FIELDNAME",
+        "options": [
+          ["images and text", "IMAGES AND TEXT"],
+          [{"src": "../media/test_a.png", "width": 32, "height": 32, "alt": "A"}, "A"],
+          [{"src": "../media/test_b.png", "width": 32, "height": 32, "alt": "B"}, "B"],
+          [{"src": "../media/test_c.png", "width": 32, "height": 32, "alt": "C"}, "C"],
+          [{"src": "../media/test_d.png", "width": 32, "height": 32, "alt": "D"}, "D"],
+          [{"src": "../media/test_e.png", "width": 32, "height": 32, "alt": "E"}, "E"],
+          [{"src": "../media/test_f.png", "width": 32, "height": 32, "alt": "F"}, "F"],
+          [{"src": "../media/test_g.png", "width": 32, "height": 32, "alt": "G"}, "G"],
+          [{"src": "../media/test_h.png", "width": 32, "height": 32, "alt": "H"}, "H"],
+          ["xyz", "LMNOP"],
+          [{"src": "../media/test_i.png", "width": 32, "height": 32, "alt": "I"}, "I"],
+          [{"src": "../media/test_j.png", "width": 32, "height": 32, "alt": "J"}, "J"],
+          [{"src": "../media/test_k.png", "width": 32, "height": 32, "alt": "K"}, "K"],
+          [{"src": "../media/test_l.png", "width": 32, "height": 32, "alt": "L"}, "L"],
+          [{"src": "../media/test_m.png", "width": 32, "height": 32, "alt": "M"}, "M"]
+        ]
+      }
+    ]
+  },
+  {
     "type": "example_angle",
     "message0": "angle: %1",
     "args0": [

@@ -15,7 +15,8 @@
 			"Stam.nikos",
 			"Themelis",
 			"KATRINE1992",
-			"Vicng"
+			"Vicng",
+			"Nikosgranturismogt"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "αντικείμενο",
@@ -42,6 +43,7 @@
 	"RENAME_VARIABLE": "Μετονόμασε τη μεταβλητή...",
 	"RENAME_VARIABLE_TITLE": "Μετονόμασε όλες τις μεταβλητές «%1» σε:",
 	"NEW_VARIABLE": "Δημιουργείστε μεταβλητή",
+	"NEW_VARIABLE_TYPE_TITLE": "Νέος τύπος μεταβλητής:",
 	"NEW_VARIABLE_TITLE": "Νέο όνομα μεταβλητής:",
 	"VARIABLE_ALREADY_EXISTS": "Η μεταβλητή με το όνομα \"%1\" υπάρχει ήδη",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Μια μεταβλητή με όνομα '%1' υπάρχει πάντα για μια άλλη μεταβλητή τύπου '%2'.",

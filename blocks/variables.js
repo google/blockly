@@ -37,13 +37,10 @@ goog.require('Blockly');
 
 
 /**
- * Common HSV hue for all blocks in this category.
- * Should be the same as Blockly.Msg.VARIABLES_HUE.
- * @readonly
+ * Unused constant for the common HSV hue for all blocks in this category.
+ * @deprecated Use Blockly.Msg.VARIABLES_HUE.
  */
 Blockly.Constants.Variables.HUE = 330;
-/** @deprecated Use Blockly.Constants.Variables.HUE */
-Blockly.Blocks.variables.HUE = Blockly.Constants.Variables.HUE;
 
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for variable getter.

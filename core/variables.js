@@ -563,7 +563,7 @@ Blockly.Variables.getAddedVariables = function(workspace, originalVariables) {
       var variable = allCurrentVariables[i];
       // For any variable that is present in allCurrentVariables but not
       // present in originalVariables, add the variable to addedVariables.
-      if (!originalVariables.includes(variable)) {
+      if (originalVariables.indexOf(variable) == -1) {
         addedVariables.push(variable);
       }
     }

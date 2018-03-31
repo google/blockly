@@ -165,7 +165,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyBlockCanvas.blocklyCanvasTransitioning,',
-    ' .blocklyBubbleCanvas.blocklyCanvasTransitioning {',
+  '.blocklyBubbleCanvas.blocklyCanvasTransitioning {',
     'transition: transform 0.5s;',
   '}',
 

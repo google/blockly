@@ -225,6 +225,14 @@ Blockly.Gesture = function(e, creatorWorkspace) {
    * @private
    */
   this.isEnding_ = false;
+
+  /**
+   * Boolean used to indicate whether or not to heal the stack after
+   * disconnecting a block.
+   * @type {boolean}
+   * @private
+   */
+  this.healStack_ = !Blockly.DRAG_STACK;
 };
 
 /**
@@ -443,7 +451,7 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
 Blockly.Gesture.prototype.startDraggingBlock_ = function() {
   this.blockDragger_ = new Blockly.BlockDragger(this.targetBlock_,
       this.startWorkspace_);
-  this.blockDragger_.startBlockDrag(this.currentDragDeltaXY_);
+  this.blockDragger_.startBlockDrag(this.currentDragDeltaXY_, this.healStack_);
   this.blockDragger_.dragBlock(this.mostRecentEvent_,
       this.currentDragDeltaXY_);
 };
@@ -503,6 +511,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
   }
 
   this.mouseDownXY_ = new goog.math.Coordinate(e.clientX, e.clientY);
+  this.healStack_ = e.altKey || e.ctrlKey || e.metaKey;
 
   this.bindMouseEvents(e);
 };

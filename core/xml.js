@@ -407,8 +407,10 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         // to be moved to a nested destination in the next operation.
         var block = Blockly.Xml.domToBlock(xmlChild, workspace);
         newBlockIds.push(block.id);
-        var blockX = parseInt(xmlChild.getAttribute('x'), 10);
-        var blockY = parseInt(xmlChild.getAttribute('y'), 10);
+        var blockX = xmlChild.hasAttribute('x') ?
+            parseInt(xmlChild.getAttribute('x'), 10) : 10;
+        var blockY = xmlChild.hasAttribute('y') ?
+            parseInt(xmlChild.getAttribute('y'), 10) : 10;
         if (!isNaN(blockX) && !isNaN(blockY)) {
           block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
         }

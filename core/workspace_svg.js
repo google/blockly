@@ -1486,6 +1486,7 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
 Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
   if (!this.scrollbar) {
     // Can't center a non-scrolling workspace.
+    console.warn('Tried to scroll a non-scrollable workspace.');
     return;
   }
   var metrics = this.getMetrics();
@@ -1636,6 +1637,56 @@ Blockly.WorkspaceSvg.getContentDimensionsBounded_ = function(ws, svgSize) {
   };
   return dimensions;
 };
+
+/**
+ * Scroll the workspace to center on the given block.
+ * @param {?string} id ID of block center on.
+ * @public
+ */
+Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
+  if (!this.scrollbar) {
+    console.warn('Tried to scroll a non-scrollable workspace.');
+    return;
+  }
+  var block = this.getBlockById(id);
+  if (block) {
+    // XY is in workspace coordinates.
+    var xy = block.getRelativeToSurfaceXY();
+    // Height/width is in workspace units.
+    var heightWidth = block.getHeightWidth();
+
+    // Center in workspace units.
+    var blockCenterX = xy.x + heightWidth.width / 2;
+    var blockCenterY = xy.y + heightWidth.height / 2;
+
+    // Workspace scale, used to convert from workspace coordinates to pixels.
+    var scale = this.scale;
+
+    // Center in pixels.  0, 0 is at the workspace origin.  These numbers may
+    // be negative.
+    var pixelX = blockCenterX * scale;
+    var pixelY = blockCenterY * scale;
+
+    var metrics = this.getMetrics();
+
+    // Scrolling to here would put the block in the top-left corner of the
+    // visible workspace.
+    var scrollToBlockX = pixelX - metrics.contentLeft;
+    var scrollToBlockY = pixelY - metrics.contentTop;
+
+    // viewHeight and viewWidth are in pixels.
+    var halfViewWidth = metrics.viewWidth / 2;
+    var halfViewHeight = metrics.viewHeight / 2;
+
+    // Put the block in the center of the visible workspace instead.
+    var scrollToCenterX = scrollToBlockX - halfViewWidth;
+    var scrollToCenterY = scrollToBlockY - halfViewHeight;
+
+    Blockly.WidgetDiv.hide(true);
+    this.scrollbar.set(scrollToCenterX, scrollToCenterY);
+  }
+};
+
 
 /**
  * Return an object with all the metrics required to size scrollbars for a

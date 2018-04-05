@@ -38,7 +38,7 @@ goog.require('Blockly');
 
 /**
  * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg.LOOPS_HUE.
+ * @deprecated Use Blockly.Msg.LOOPS_HUE. (2018 April 5)
  */
 Blockly.Constants.Loops.HUE = 120;
 

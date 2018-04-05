@@ -30,12 +30,6 @@ goog.require('Blockly.Blocks');
 goog.require('Blockly');
 
 
-/**
- * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg.PROCEDURES_HUE.
- */
-Blockly.Blocks.procedures.HUE = 290;
-
 Blockly.Blocks['procedures_defnoreturn'] = {
   /**
    * Block for defining a procedure with no return value.

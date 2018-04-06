@@ -260,15 +260,13 @@ Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable, uses) {
 /**
  * Check whether a variable exists with the given name.  The check is
  * case-insensitive.
- * @param {string} name The name to check for.
+ * @param {string} _name The name to check for.
  * @return {number} The index of the name in the variable list, or -1 if it is
  *     not present.
  * @deprecated April 2017
  */
 
-Blockly.Workspace.prototype.variableIndexOf = function(
-    /* eslint-disable no-unused-vars */ name
-    /* eslint-enable no-unused-vars */) {
+Blockly.Workspace.prototype.variableIndexOf = function(_name) {
   console.warn(
       'Deprecated call to Blockly.Workspace.prototype.variableIndexOf');
   return -1;

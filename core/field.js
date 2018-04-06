@@ -576,8 +576,7 @@ Blockly.Field.prototype.setValue = function(newValue) {
  * @param {!Event} e Mouse down event.
  * @private
  */
-Blockly.Field.prototype.onMouseDown_ = function(
-    /* eslint-disable no-unused-vars */ e /* eslint-enable no-unused-vars */) {
+Blockly.Field.prototype.onMouseDown_ = function(e) {
   if (!this.sourceBlock_ || !this.sourceBlock_.workspace) {
     return;
   }
@@ -589,12 +588,10 @@ Blockly.Field.prototype.onMouseDown_ = function(
 
 /**
  * Change the tooltip text for this field.
- * @param {string|!Element} newTip Text for tooltip or a parent element to
+ * @param {string|!Element} _newTip Text for tooltip or a parent element to
  *     link to for its tooltip.
  */
-Blockly.Field.prototype.setTooltip = function(
-    /* eslint-disable no-unused-vars */ newTip
-    /* eslint-enable no-unused-vars */) {
+Blockly.Field.prototype.setTooltip = function(_newTip) {
   // Non-abstract sub-classes may wish to implement this.  See FieldLabel.
 };
 

@@ -36,7 +36,16 @@
             }
         ],
         "no-trailing-spaces": ["error", { "skipBlankLines": true }],
-        "no-unused-vars": ["error", {"args": "after-used", "varsIgnorePattern": "^_"}],
+        "no-unused-vars": [
+            "error",
+            {
+                "args": "after-used",
+                # Ignore vars starting with an underscore.
+                "varsIgnorePattern": "^_",
+                # Ignore arguments starting with an underscore.
+                "argsIgnorePattern": "^_"
+            }
+        ],
         "no-use-before-define": ["error"],
         "quotes": ["off"], # Blockly uses single quotes except for JSON blobs, which must use double quotes.
         "semi": ["error", "always"],

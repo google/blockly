@@ -273,11 +273,10 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
 
 /**
  * Handle a change to the editor.
- * @param {!Event} e Keyboard event.
+ * @param {!Event} _e Keyboard event.
  * @private
  */
-Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(
-    /* eslint-disable no-unused-vars */ e /* eslint-enable no-unused-vars */) {
+Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(_e) {
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
   // Update source block.
   var text = htmlInput.value;

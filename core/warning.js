@@ -149,12 +149,11 @@ Blockly.Warning.prototype.setVisible = function(visible) {
 
 /**
  * Bring the warning to the top of the stack when clicked on.
- * @param {!Event} e Mouse up event.
+ * @param {!Event} _e Mouse up event.
  * @private
  */
 
-Blockly.Warning.prototype.bodyFocus_ = function(
-    /* eslint-disable no-unused-vars */ e /* eslint-enable no-unused-vars */) {
+Blockly.Warning.prototype.bodyFocus_ = function(_e) {
   this.bubble_.promote_();
 };
 

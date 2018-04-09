@@ -609,12 +609,13 @@ Blockly.checkBlockColourConstants_ = function() {
  * not extist (if flagged as removed) or has the same value as the Msg
  * constant. Prints a warning if this is not true.
  * @param {string} msgName The Msg constant identifier.
- * @param {Array<string>} The name parts of the tested constant.
- * @param {boolean} Whether the constant was already removed and should
+ * @param {Array<string>} blocklyNamePath The name parts of the tested
+ *     constant.
+ * @param {boolean} removed Whether the constant was already removed and should
  *     evaluate to undefined.
  */
-Blockly.checkBlockColourConstant_ =
-    function(msgName, blocklyNamePath, removed) {
+Blockly.checkBlockColourConstant_ = function(
+    msgName, blocklyNamePath, removed) {
   var namePath = 'Blockly';
   var value = Blockly;
   for (var i =0; i < blocklyNamePath.length; ++i) {
@@ -633,7 +634,7 @@ Blockly.checkBlockColourConstant_ =
     var warning = warningPattern.replace('%1', namePath).replace('%2', msgName);
     console.warn(warning);
   }
-}
+};
 
 // IE9 does not have a console.  Create a stub to stop errors.
 if (!goog.global['console']) {

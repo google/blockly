@@ -257,3 +257,57 @@ function test_json_dropdown_image() {
     delete Blockly.Msg['ALTTEXT'];
   }
 }
+
+function test_defineBlocksWithJsonArray_nullItem() {
+  var BLOCK_TYPE1 = 'test_block_before_null';
+  var BLOCK_TYPE2 = 'test_block_after_null';
+
+  try {
+    Blockly.defineBlocksWithJsonArray([
+        {
+          "type": BLOCK_TYPE1,
+          "message0": 'before'
+        },
+        null,
+        {
+          "type": BLOCK_TYPE2,
+          "message0": 'after'
+        }]);
+    assertNotNullNorUndefined('Block before null in array should be defined.',
+        Blockly.Blocks[BLOCK_TYPE1]);
+    assertNotNullNorUndefined('Block after null in array should be defined.',
+        Blockly.Blocks[BLOCK_TYPE2]);
+  } finally {
+    workspace.dispose();
+    delete Blockly.Blocks[BLOCK_TYPE1];
+    delete Blockly.Blocks[BLOCK_TYPE2];
+  }
+}
+
+function test_defineBlocksWithJsonArray_undefinedItem() {
+  var BLOCK_TYPE1 = 'test_block_before_undefined';
+  var BLOCK_TYPE2 = 'test_block_after_undefined';
+
+  try {
+    Blockly.defineBlocksWithJsonArray([
+        {
+          "type": BLOCK_TYPE1,
+          "message0": 'before'
+        },
+        undefined,
+        {
+          "type": BLOCK_TYPE2,
+          "message0": 'after'
+        }]);
+    assertNotNullNorUndefined(
+        'Block before undefined in array should be defined.',
+        Blockly.Blocks[BLOCK_TYPE1]);
+    assertNotNullNorUndefined(
+        'Block after undefined in array should be defined.',
+        Blockly.Blocks[BLOCK_TYPE2]);
+  } finally {
+    workspace.dispose();
+    delete Blockly.Blocks[BLOCK_TYPE1];
+    delete Blockly.Blocks[BLOCK_TYPE2];
+  }
+}

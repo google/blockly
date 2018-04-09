@@ -566,8 +566,9 @@ Blockly.isNumber = function(str) {
  * Checks old colour constants are not overwritten by the host application.
  * If a constant is overwritten, it prints a console warning directing the
  * developer to use the equivalent Msg constant.
+ * @package
  */
-Blockly.checkBlockColourConstants_ = function() {
+Blockly.checkBlockColourConstants = function() {
   Blockly.checkBlockColourConstant_(
       'LOGIC_HUE', ['Blocks', 'logic', 'HUE'], /* removed */ true);
   Blockly.checkBlockColourConstant_(
@@ -606,13 +607,14 @@ Blockly.checkBlockColourConstants_ = function() {
 
 /**
  * Checks for a constant in the Blockly namespace, verifying it either does
- * not extist (if flagged as removed) or has the same value as the Msg
+ * not exist (if flagged as removed) or has the same value as the Msg
  * constant. Prints a warning if this is not true.
  * @param {string} msgName The Msg constant identifier.
  * @param {Array<string>} blocklyNamePath The name parts of the tested
  *     constant.
  * @param {boolean} removed Whether the constant was already removed and should
  *     evaluate to undefined.
+ * @private
  */
 Blockly.checkBlockColourConstant_ = function(
     msgName, blocklyNamePath, removed) {

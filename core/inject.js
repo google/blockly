@@ -45,7 +45,7 @@ goog.require('goog.userAgent');
  * @return {!Blockly.Workspace} Newly created main workspace.
  */
 Blockly.inject = function(container, opt_options) {
-  Blockly.checkBlockColourConstants_();
+  Blockly.checkBlockColourConstants();
 
   if (goog.isString(container)) {
     container = document.getElementById(container) ||

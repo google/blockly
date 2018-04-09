@@ -662,14 +662,14 @@ Blockly.Block.prototype.getHue = function() {
  */
 Blockly.Block.prototype.setColour = function(colour) {
   var dereferenced = goog.isString(colour) ?
-          Blockly.utils.replaceMessageReferences(colour) : colour;
+      Blockly.utils.replaceMessageReferences(colour) : colour;
 
   var hue = Number(dereferenced);
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
     this.hue_ = hue;
     this.colour_ = Blockly.hueToRgb(hue);
   } else if (goog.isString(dereferenced) &&
-        /^#[0-9a-fA-F]{6}$/.test(dereferenced)) {
+      /^#[0-9a-fA-F]{6}$/.test(dereferenced)) {
     this.colour_ = dereferenced;
     // Only store hue if colour is set as a hue.
     this.hue_ = null;

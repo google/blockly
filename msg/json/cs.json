@@ -11,7 +11,8 @@
 			"Vtmarvin",
 			"Dvorapa",
 			"Dita",
-			"Ilimanaq29"
+			"Ilimanaq29",
+			"Patriccck"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "položka",
@@ -37,7 +38,7 @@
 	"CHANGE_VALUE_TITLE": "Změnit hodnotu:",
 	"RENAME_VARIABLE": "Přejmenovat proměnnou...",
 	"RENAME_VARIABLE_TITLE": "Přejmenuj všech '%1' proměnných na:",
-	"NEW_VARIABLE": "Nová proměnná...",
+	"NEW_VARIABLE": "Vytvořte proměnnou...",
 	"NEW_STRING_VARIABLE": "Vytvořit řetězcovou proměnnou...",
 	"NEW_NUMBER_VARIABLE": "Vytvořit číselnou proměnnou...",
 	"NEW_COLOUR_VARIABLE": "Vytvořit barvu proměnné...",

@@ -26,12 +26,17 @@ function test_json_minimal() {
   var workspace = new Blockly.Workspace();
   var block;
   try {
-    Blockly.defineBlocksWithJsonArray([{
-      "type": BLOCK_TYPE
-    }]);
+    var warnings = captureWarnings(function() {
+      Blockly.defineBlocksWithJsonArray([{
+        "type": BLOCK_TYPE
+      }]);
+      block = new Blockly.Block(workspace, BLOCK_TYPE);
+    });
 
-    block = new Blockly.Block(workspace, BLOCK_TYPE);
     assertEquals(BLOCK_TYPE, block.type);
+    assertEquals(
+        'Expecting no warnings when defining and creating a simple block.',
+        warnings.length, 0);
     // TODO: asserts
   } finally {
     block.dispose();

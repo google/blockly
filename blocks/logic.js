@@ -35,15 +35,11 @@ goog.provide('Blockly.Constants.Logic');
 goog.require('Blockly.Blocks');
 goog.require('Blockly');
 
-
 /**
- * Common HSV hue for all blocks in this category.
- * Should be the same as Blockly.Msg.LOGIC_HUE.
- * @readonly
+ * Unused constant for the common HSV hue for all blocks in this category.
+ * @deprecated Use Blockly.Msg.LOGIC_HUE. (2018 April 5)
  */
 Blockly.Constants.Logic.HUE = 210;
-/** @deprecated Use Blockly.Constants.Logic.HUE */
-Blockly.Blocks.logic.HUE = Blockly.Constants.Logic.HUE;
 
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for boolean data type: true and false.

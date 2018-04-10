@@ -657,19 +657,28 @@ Blockly.Block.prototype.getHue = function() {
 
 /**
  * Change the colour of a block.
- * @param {number|string} colour HSV hue value, or #RRGGBB string.
+ * @param {number|string} colour HSV hue value (0 to 360), #RRGGBB string,
+ *     or a message reference string pointing to one of those two values.
  */
 Blockly.Block.prototype.setColour = function(colour) {
-  var hue = Number(colour);
+  var dereferenced = goog.isString(colour) ?
+      Blockly.utils.replaceMessageReferences(colour) : colour;
+
+  var hue = Number(dereferenced);
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
     this.hue_ = hue;
     this.colour_ = Blockly.hueToRgb(hue);
-  } else if (goog.isString(colour) && /^#[0-9a-fA-F]{6}$/.test(colour)) {
-    this.colour_ = colour;
+  } else if (goog.isString(dereferenced) &&
+      /^#[0-9a-fA-F]{6}$/.test(dereferenced)) {
+    this.colour_ = dereferenced;
     // Only store hue if colour is set as a hue.
     this.hue_ = null;
   } else {
-    throw 'Invalid colour: ' + colour;
+    var errorMsg = 'Invalid colour: "' + dereferenced + '"';
+    if (colour != dereferenced) {
+      errorMsg += ' (from "' + colour + '")';
+    }
+    throw errorMsg;
   }
 };
 
@@ -1067,9 +1076,7 @@ Blockly.Block.prototype.jsonInit = function(json) {
   if (json['colour'] !== undefined) {
     var rawValue = json['colour'];
     try {
-      var colour = goog.isString(rawValue) ?
-          Blockly.utils.replaceMessageReferences(rawValue) : rawValue;
-      this.setColour(colour);
+      this.setColour(rawValue);
     } catch (colorError) {
       console.warn(
           'Block "' + blockTypeName + '": Illegal color value: ', rawValue);

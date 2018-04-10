@@ -562,6 +562,82 @@ Blockly.isNumber = function(str) {
   return /^\s*-?\d+(\.\d+)?\s*$/.test(str);
 };
 
+/**
+ * Checks old colour constants are not overwritten by the host application.
+ * If a constant is overwritten, it prints a console warning directing the
+ * developer to use the equivalent Msg constant.
+ * @package
+ */
+Blockly.checkBlockColourConstants = function() {
+  Blockly.checkBlockColourConstant_(
+      'LOGIC_HUE', ['Blocks', 'logic', 'HUE'], /* removed */ true);
+  Blockly.checkBlockColourConstant_(
+      'LOGIC_HUE', ['Constants', 'Logic', 'HUE'], /* removed */ false);
+  Blockly.checkBlockColourConstant_(
+      'LOOPS_HUE', ['Blocks', 'loops', 'HUE'], /* removed */ true);
+  Blockly.checkBlockColourConstant_(
+      'LOOPS_HUE', ['Constants', 'Loops', 'HUE'], /* removed */ false);
+  Blockly.checkBlockColourConstant_(
+      'MATH_HUE', ['Blocks', 'math', 'HUE'], /* removed */ true);
+  Blockly.checkBlockColourConstant_(
+      'MATH_HUE', ['Constants', 'Math', 'HUE'], /* removed */ false);
+  Blockly.checkBlockColourConstant_(
+      'TEXTS_HUE', ['Blocks', 'texts', 'HUE'], /* removed */ true);
+  Blockly.checkBlockColourConstant_(
+      'TEXTS_HUE', ['Constants', 'Text', 'HUE'], /* removed */ false);
+  Blockly.checkBlockColourConstant_(
+      'LISTS_HUE', ['Blocks', 'lists', 'HUE'], /* removed */ true);
+  Blockly.checkBlockColourConstant_(
+      'LISTS_HUE', ['Constants', 'Lists', 'HUE'], /* removed */ false);
+  Blockly.checkBlockColourConstant_(
+      'COLOUR_HUE', ['Blocks', 'colour', 'HUE'], /* removed */ true);
+  Blockly.checkBlockColourConstant_(
+      'COLOUR_HUE', ['Constants', 'Colour', 'HUE'], /* removed */ false);
+  Blockly.checkBlockColourConstant_(
+      'VARIABLES_HUE', ['Blocks', 'variables', 'HUE'], /* removed */ true);
+  Blockly.checkBlockColourConstant_(
+      'VARIABLES_HUE', ['Constants', 'Variables', 'HUE'], /* removed */ false);
+  // Blockly.Blocks.variables_dynamic.HUE never existed.
+  Blockly.checkBlockColourConstant_(
+      'VARIABLES_DYNAMIC_HUE', ['Constants', 'VariablesDynamic', 'HUE'], /* removed */ false);
+  Blockly.checkBlockColourConstant_(
+      'PROCEDURES_HUE', ['Blocks', 'procedures', 'HUE'], /* removed */ true);
+  // Blockly.Constants.Procedures.HUE never existed.
+};
+
+/**
+ * Checks for a constant in the Blockly namespace, verifying it either does
+ * not exist (if flagged as removed) or has the same value as the Msg
+ * constant. Prints a warning if this is not true.
+ * @param {string} msgName The Msg constant identifier.
+ * @param {Array<string>} blocklyNamePath The name parts of the tested
+ *     constant.
+ * @param {boolean} removed Whether the constant was already removed and should
+ *     evaluate to undefined.
+ * @private
+ */
+Blockly.checkBlockColourConstant_ = function(
+    msgName, blocklyNamePath, removed) {
+  var namePath = 'Blockly';
+  var value = Blockly;
+  for (var i =0; i < blocklyNamePath.length; ++i) {
+    namePath += '.' + blocklyNamePath[i];
+    if (value) {
+      value = value[blocklyNamePath[i]];
+    }
+  }
+  var isExpectedValue = removed ?
+      value === undefined :
+      value == Blockly.Msg[msgName]; // Intentionally coercing the value.
+  if (!isExpectedValue) {
+    var warningPattern = removed ?
+        '%1 is unused and has been removed. Override Blockly.Msg.%2.' :
+        '%1 is deprecated and unused. Override Blockly.Msg.%2.';
+    var warning = warningPattern.replace('%1', namePath).replace('%2', msgName);
+    console.warn(warning);
+  }
+};
+
 // IE9 does not have a console.  Create a stub to stop errors.
 if (!goog.global['console']) {
   goog.global['console'] = {

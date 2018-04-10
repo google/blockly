@@ -36,9 +36,8 @@ goog.require('Blockly');
 
 
 /**
- * Common HSV hue for all blocks in this category.
- * Should be the same as Blockly.Msg.VARIABLES_DYNAMIC_HUE.
- * @readonly
+ * Unused constant for the common HSV hue for all blocks in this category.
+ * @deprecated Use Blockly.Msg.VARIABLES_DYNAMIC_HUE. (2018 April 5)
  */
 Blockly.Constants.VariablesDynamic.HUE = 310;
 

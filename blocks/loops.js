@@ -37,13 +37,10 @@ goog.require('Blockly');
 
 
 /**
- * Common HSV hue for all blocks in this category.
- * Should be the same as Blockly.Msg.LOOPS_HUE
- * @readonly
+ * Unused constant for the common HSV hue for all blocks in this category.
+ * @deprecated Use Blockly.Msg.LOOPS_HUE. (2018 April 5)
  */
 Blockly.Constants.Loops.HUE = 120;
-/** @deprecated Use Blockly.Constants.Loops.HUE */
-Blockly.Blocks.loops.HUE = Blockly.Constants.Loops.HUE;
 
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for repeat n times (external number).

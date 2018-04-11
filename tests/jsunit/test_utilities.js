@@ -141,3 +141,23 @@ function defineGetVarBlock() {
 function undefineGetVarBlock() {
   delete Blockly.Blocks['get_var_block'];
 }
+
+/**
+ * Capture the strings sent to console.warn() when calling a function.
+ * @param {function} innerFunc The function where warnings may called.
+ * @return {string[]} The warning messages (only the first arguments).
+ */
+function captureWarnings(innerFunc) {
+  var msgs = [];
+  var nativeConsoleWarn = console.warn;
+  try {
+    console.warn = function(msg) {
+      msgs.push(msg);
+      nativeConsoleWarn.apply(console, arguments);
+    };
+    innerFunc();
+  } finally {
+    console.warn = nativeConsoleWarn;
+  }
+  return msgs;
+}

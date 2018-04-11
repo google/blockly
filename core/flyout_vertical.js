@@ -155,8 +155,13 @@ Blockly.VerticalFlyout.prototype.position = function() {
   var x = targetWorkspaceMetrics.absoluteLeft;
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
     x += (targetWorkspaceMetrics.viewWidth - this.width_);
+    // Save the location of the left edge of the flyout, for use when firefox
+    // gets the bounding client rect wrong.
+    this.leftEdge_ = x;
   }
   this.positionAt_(this.width_, this.height_, x, y);
+
+
 };
 
 /**
@@ -315,6 +320,18 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
     return new goog.math.Rect(x - BIG_NUM, -BIG_NUM, BIG_NUM + width,
         BIG_NUM * 2);
   } else {  // Right
+    // Firefox sometimes reports the wrong value for the client rect.
+    // See https://github.com/google/blockly/issues/1425 and
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=1066435
+    if (goog.userAgent.GECKO &&
+        this.targetWorkspace_ && this.targetWorkspace_.isMutator) {
+      // If we're in a mutator, its scale is always 1, purely because of some
+      // oddities in our rendering optimizations.  The actual scale is the same
+      // as the scale on the parent workspace.
+      var scale = this.targetWorkspace_.options.parentWorkspace.scale;
+      x += this.leftEdge_ * scale;
+
+    }
     return new goog.math.Rect(x, -BIG_NUM, BIG_NUM + width, BIG_NUM * 2);
   }
 };

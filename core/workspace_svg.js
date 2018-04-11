@@ -48,7 +48,6 @@ goog.require('Blockly.ZoomControls');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
-goog.require('goog.userAgent');
 
 
 /**

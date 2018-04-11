@@ -29,8 +29,6 @@ goog.provide('Blockly.BlockSvg.render');
 
 goog.require('Blockly.BlockSvg');
 
-goog.require('goog.userAgent');
-
 
 // UI constants for rendering blocks.
 /**

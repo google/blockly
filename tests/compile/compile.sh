@@ -1,17 +1,17 @@
 # Find the Closure Compiler.
 if [ -f "$(npm root)/google-closure-compiler/compiler.jar" ]; then
-  # Travis test.
   COMPILER="$(npm root)/google-closure-compiler/compiler.jar"
 elif [ -f *compiler*.jar ]; then
-  # Manual test.
   COMPILER="*compiler*.jar"
+  # TODO: Check whether multiple files were found.
 else
-	echo "ERROR: Closure Compiler not found."
+  echo "ERROR: Closure Compiler not found."
   echo "Download from this URL, and place jar file in current directory."
   echo "https://dl.google.com/closure-compiler/compiler-latest.zip"
   exit 1
 fi
 
+echo Using $COMPILER as the compiler.
 rm main_compressed.js 2> /dev/null
 echo Compiling Blockly...
 java -jar $COMPILER --js='main.js' \

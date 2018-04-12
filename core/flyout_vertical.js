@@ -329,8 +329,12 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
       // oddities in our rendering optimizations.  The actual scale is the same
       // as the scale on the parent workspace.
       var scale = this.targetWorkspace_.options.parentWorkspace.scale;
-      x += this.leftEdge_ * scale;
-
+      var altX = x + this.leftEdge_ * scale;
+      // If the browser was obviously wrong, use the calculated value.  If the
+      // browser's value was plausible, trust it.
+      if (Math.abs(altX - x) > 10) {
+        x = altX;
+      }
     }
     return new goog.math.Rect(x, -BIG_NUM, BIG_NUM + width, BIG_NUM * 2);
   }

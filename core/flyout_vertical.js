@@ -160,8 +160,6 @@ Blockly.VerticalFlyout.prototype.position = function() {
     this.leftEdge_ = x;
   }
   this.positionAt_(this.width_, this.height_, x, y);
-
-
 };
 
 /**

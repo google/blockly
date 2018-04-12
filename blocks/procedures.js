@@ -371,12 +371,13 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
     // Add options to create getters for each parameter.
     if (!this.isCollapsed()) {
-      for (var i = 0; i < this.arguments_.length; i++) {
+      for (var i = 0; i < this.argumentVarModels_.length; i++) {
         var option = {enabled: true};
-        var name = this.arguments_[i];
+        var argVar = this.argumentVarModels_[i];
+        var name = argVar.name;
         option.text = Blockly.Msg.VARIABLES_SET_CREATE_GET.replace('%1', name);
-        var xmlField = goog.dom.createDom('field', null, name);
-        xmlField.setAttribute('name', 'VAR');
+
+        var xmlField = Blockly.Variables.generateVariableFieldDom(argVar);
         var xmlBlock = goog.dom.createDom('block', null, xmlField);
         xmlBlock.setAttribute('type', 'variables_get');
         option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);

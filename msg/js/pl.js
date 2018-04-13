@@ -104,7 +104,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_LAST = "ostatni";
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_RANDOM = "losowy";
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_REMOVE = "usuń";
-/** @export */ Blockly.Msg.LISTS_GET_INDEX_TAIL = "";
+/** @export */ Blockly.Msg.LISTS_GET_INDEX_TAIL = "";  // untranslated
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FIRST = "Zwraca pierwszy element z listy.";
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FROM = "Zwraca element z konkretnej pozycji na liście.";
 /** @export */ Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_LAST = "Zwraca ostatni element z listy.";

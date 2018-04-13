@@ -332,7 +332,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_CHARAT_HELPURL = "https://github.com/google/blockly/wiki/Text#extracting-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHARAT_LAST = "取得 最後一個字元";
 /** @export */ Blockly.Msg.TEXT_CHARAT_RANDOM = "取得 任意字元";
-/** @export */ Blockly.Msg.TEXT_CHARAT_TAIL = "";
+/** @export */ Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
 /** @export */ Blockly.Msg.TEXT_CHARAT_TITLE = "在文字 %1 %2";
 /** @export */ Blockly.Msg.TEXT_CHARAT_TOOLTIP = "返回位於指定位置的字元。";
 /** @export */ Blockly.Msg.TEXT_COUNT_HELPURL = "https://github.com/google/blockly/wiki/Text#counting-substrings";

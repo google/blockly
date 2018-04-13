@@ -456,7 +456,8 @@ Blockly.Variables.generateVariableFieldXmlString = function(variableModel) {
 
 /**
  * Generate DOM objects representing a variable field.
- * @param {!Blockly.VariableModel} variableModel The variable model represent.
+ * @param {!Blockly.VariableModel} variableModel The variable model to
+ *     represent.
  * @return {Element} The generated DOM.
  * @package
  */

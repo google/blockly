@@ -261,13 +261,13 @@ Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
     if (this.isInFlyout){
       return;
     }
-    var varName = this.getFieldValue('VAR');
+    var variable = this.getField('VAR').getVariable();
+    var varName = variable.name;
     if (!this.isCollapsed() && varName != null) {
       var option = {enabled: true};
       option.text =
-        Blockly.Msg.VARIABLES_SET_CREATE_GET.replace('%1', varName);
-      var xmlField = goog.dom.createDom('field', null, varName);
-      xmlField.setAttribute('name', 'VAR');
+          Blockly.Msg.VARIABLES_SET_CREATE_GET.replace('%1', varName);
+      var xmlField = Blockly.Variables.generateVariableFieldDom(variable);
       var xmlBlock = goog.dom.createDom('block', null, xmlField);
       xmlBlock.setAttribute('type', 'variables_get');
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);

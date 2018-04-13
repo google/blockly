@@ -94,7 +94,7 @@ Blockly.VariablesDynamic.flyoutCategoryBlocks = function(workspace) {
       var gap = 24;
       var blockText = '<xml>' +
           '<block type="variables_set_dynamic" gap="' + gap + '">' +
-          Blockly.Variables.generateVariableFieldXml_(firstVariable) +
+          Blockly.Variables.generateVariableFieldXmlString(firstVariable) +
           '</block>' +
           '</xml>';
       var block = Blockly.Xml.textToDom(blockText).firstChild;
@@ -104,7 +104,7 @@ Blockly.VariablesDynamic.flyoutCategoryBlocks = function(workspace) {
       for (var i = 0, variable; variable = variableModelList[i]; i++) {
         var blockText = '<xml>' +
             '<block type="variables_get_dynamic" gap="8">' +
-            Blockly.Variables.generateVariableFieldXml_(variable) +
+            Blockly.Variables.generateVariableFieldXmlString(variable) +
             '</block>' +
             '</xml>';
         var block = Blockly.Xml.textToDom(blockText).firstChild;

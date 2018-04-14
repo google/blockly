@@ -81,7 +81,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
-/** @export */ Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Dobäisetzen";
+/** @export */ Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Derbäisetzen";
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Variabel derbäisetzen";
 /** @export */ Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Läschen";
 /** @export */ Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "Dir kënnt keen eidelen Numm fir eng Variabel benotzen.";
@@ -152,7 +152,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_FIRST = "Inserts the item at the start of a list.";  // untranslated
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_FROM = "Inserts the item at the specified position in a list.";  // untranslated
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_LAST = "Setzt d'Element um Enn vun enger Lëscht derbäi.";
-/** @export */ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM = "Setzt d'Element op eng zoufälleg Plaz an d'Lëscht dobäi.";
+/** @export */ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM = "Setzt d'Element op eng zoufälleg Plaz an d'Lëscht derbäi.";
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FIRST = "Sets the first item in a list.";  // untranslated
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FROM = "Sets the item at the specified position in a list.";  // untranslated
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_LAST = "Sets the last item in a list.";  // untranslated

@@ -1070,7 +1070,7 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
       this.updateColour();
     }
   }
-  var children = this.getChildren();
+  var children = this.getChildren(false);
   for (var i = 0, child; child = children[i]; i++) {
     child.updateDisabled();
   }

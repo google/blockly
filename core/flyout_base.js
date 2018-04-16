@@ -717,7 +717,7 @@ Blockly.Flyout.prototype.filterForCapacity_ = function() {
   var blocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     if (this.permanentlyDisabled_.indexOf(block) == -1) {
-      var allBlocks = block.getDescendants();
+      var allBlocks = block.getDescendants(false);
       block.setDisabled(allBlocks.length > remainingCapacity);
     }
   }

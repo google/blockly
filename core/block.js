@@ -87,13 +87,13 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 
   /**
    * @type {Blockly.Block}
-   * @private
+   * @protected
    */
   this.parentBlock_ = null;
 
   /**
    * @type {!Array.<!Blockly.Block>}
-   * @private
+   * @protected
    */
   this.childBlocks_ = [];
 
@@ -123,7 +123,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 
   /**
    * @type {boolean}
-   * @private
+   * @protected
    */
   this.collapsed_ = false;
 
@@ -382,7 +382,7 @@ Blockly.Block.prototype.lastConnectionInStack_ = function() {
 /**
  * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
  * connected should not coincidentally line up on screen.
- * @private
+ * @protected
  */
 Blockly.Block.prototype.bumpNeighbours_ = function() {
   console.warn('Not expected to reach this bumpNeighbours_ function. The ' +
@@ -1290,7 +1290,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
- * @private
+ * @protected
  */
 Blockly.Block.prototype.appendInput_ = function(type, name) {
   var connection = null;

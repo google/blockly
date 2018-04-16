@@ -461,7 +461,7 @@ Blockly.Block.prototype.getRootBlock = function() {
  * Excludes any connection on an output tab or any preceding statement.
  * Blocks are optionally sorted by position; top to bottom.
  * @param {boolean} ordered Sort the list if true.
- * * @return {!Array.<!Blockly.Block>} Array of blocks.
+ * @return {!Array.<!Blockly.Block>} Array of blocks.
  */
 Blockly.Block.prototype.getChildren = function(ordered) {
   if (!ordered) {

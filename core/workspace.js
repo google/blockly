@@ -171,13 +171,25 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
 };
 
 /**
- * Find all blocks in workspace.  No particular order.
+ * Find all blocks in workspace.  Blocks are optionally sorted
+ * by position; top to bottom (with slight LTR or RTL bias).
+ * @param {boolean} ordered Sort the list if true.
  * @return {!Array.<!Blockly.Block>} Array of blocks.
  */
-Blockly.Workspace.prototype.getAllBlocks = function() {
-  var blocks = this.getTopBlocks(false);
-  for (var i = 0; i < blocks.length; i++) {
-    blocks.push.apply(blocks, blocks[i].getChildren());
+Blockly.Workspace.prototype.getAllBlocks = function(ordered) {
+  if (ordered) {
+    // Slow, but ordered.
+    var topBlocks = this.getTopBlocks(true);
+    var blocks = [];
+    for (var i = 0; i < topBlocks.length; i++) {
+      blocks.push.apply(blocks, topBlocks[i].getDescendants(true));
+    }
+  } else {
+    // Fast, but in no particular order.
+    var blocks = this.getTopBlocks(false);
+    for (var i = 0; i < blocks.length; i++) {
+      blocks.push.apply(blocks, blocks[i].getChildren(false));
+    }
   }
   return blocks;
 };

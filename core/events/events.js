@@ -287,7 +287,7 @@ Blockly.Events.setGroup = function(state) {
  */
 Blockly.Events.getDescendantIds_ = function(block) {
   var ids = [];
-  var descendants = block.getDescendants();
+  var descendants = block.getDescendants(false);
   for (var i = 0, descendant; descendant = descendants[i]; i++) {
     ids[i] = descendant.id;
   }
@@ -350,7 +350,7 @@ Blockly.Events.disableOrphans = function(event) {
     var block = workspace.getBlockById(event.blockId);
     if (block) {
       if (block.getParent() && !block.getParent().disabled) {
-        var children = block.getDescendants();
+        var children = block.getDescendants(false);
         for (var i = 0, child; child = children[i]; i++) {
           child.setDisabled(false);
         }

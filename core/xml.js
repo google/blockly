@@ -517,7 +517,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
   try {
     var topBlock = Blockly.Xml.domToBlockHeadless_(xmlBlock, workspace);
     // Generate list of all blocks.
-    var blocks = topBlock.getDescendants();
+    var blocks = topBlock.getDescendants(false);
     if (workspace.rendered) {
       // Hide connections to speed up assembly.
       topBlock.setConnectionsHidden(true);
@@ -735,7 +735,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   }
   if (xmlBlock.nodeName.toLowerCase() == 'shadow') {
     // Ensure all children are also shadows.
-    var children = block.getChildren();
+    var children = block.getChildren(false);
     for (var i = 0, child; child = children[i]; i++) {
       goog.asserts.assert(
           child.isShadow(), 'Shadow block not allowed non-shadow child.');

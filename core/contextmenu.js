@@ -215,11 +215,11 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
 Blockly.ContextMenu.blockDeleteOption = function(block) {
   // Option to delete this block but not blocks lower in the stack.
   // Count the number of blocks that are nested in this block.
-  var descendantCount = block.getDescendants(true).length;
+  var descendantCount = block.getDescendants(false).length;
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
     // Blocks in the current stack would survive this block's deletion.
-    descendantCount -= nextBlock.getDescendants(true).length;
+    descendantCount -= nextBlock.getDescendants(false).length;
   }
   var deleteOption = {
     text: descendantCount == 1 ? Blockly.Msg.DELETE_BLOCK :
@@ -260,7 +260,8 @@ Blockly.ContextMenu.blockHelpOption = function(block) {
  */
 Blockly.ContextMenu.blockDuplicateOption = function(block) {
   var enabled = true;
-  if (block.getDescendants().length > block.workspace.remainingCapacity()) {
+  if (block.getDescendants(false).length >
+      block.workspace.remainingCapacity()) {
     enabled = false;
   }
   var duplicateOption = {

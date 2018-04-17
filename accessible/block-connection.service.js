@@ -101,7 +101,7 @@ blocklyApp.BlockConnectionService = ng.core.Class({
   },
   attachToMarkedConnection: function(block) {
     var xml = Blockly.Xml.blockToDom(block);
-    var reconstitutedBlock = Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
+    var reconstitutedBlock = Blockly.Xml.domToBlock(xml, blocklyApp.workspace);
 
     var targetConnection = null;
     if (this.markedConnection_.targetBlock() &&

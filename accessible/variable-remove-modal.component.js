@@ -74,17 +74,17 @@ blocklyApp.VariableRemoveModalComponent = ng.core.Component({
       this.treeService = treeService;
       this.variableModalService = variableService;
       this.audioService = audioService;
-      this.keyboardInputService = keyboardService
+      this.keyboardInputService = keyboardService;
       this.modalIsVisible = false;
       this.activeButtonIndex = -1;
-      this.currentVariableName = "";
+      this.currentVariableName = '';
       this.count = 0;
 
       var that = this;
       this.variableModalService.registerPreRemoveShowHook(
         function(name, count) {
           that.currentVariableName = name;
-          that.count = count
+          that.count = count;
           that.modalIsVisible = true;
 
           Blockly.CommonModal.setupKeyboardOverrides(that);
@@ -106,7 +106,7 @@ blocklyApp.VariableRemoveModalComponent = ng.core.Component({
   getInteractiveElements: Blockly.CommonModal.getInteractiveElements,
   // Gets the container with interactive elements.
   getInteractiveContainer: function() {
-    return document.getElementById("varForm");
+    return document.getElementById('varForm');
   },
   getNumVariables: function() {
     return this.variableModalService.getNumVariables(this.currentVariableName);

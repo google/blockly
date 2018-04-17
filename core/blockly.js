@@ -632,9 +632,9 @@ Blockly.checkBlockColourConstant_ = function(
       value = value[blocklyNamePath[i]];
     }
   }
-  var isExpectedValue = removed ?
-      value === undefined :
-      value == Blockly.Msg[msgName]; // Intentionally coercing the value.
+  // If the value is not removed, intentionally comparing coerced type (==).
+  var isExpectedValue =
+      (value === undefined) || (!removed && value == Blockly.Msg[msgName]);
   if (!isExpectedValue) {
     var warningPattern = removed ?
         '%1 is unused and has been removed. Override Blockly.Msg.%2.' :

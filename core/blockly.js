@@ -576,54 +576,52 @@ Blockly.isNumber = function(str) {
  */
 Blockly.checkBlockColourConstants = function() {
   Blockly.checkBlockColourConstant_(
-      'LOGIC_HUE', ['Blocks', 'logic', 'HUE'], /* removed */ true);
+      'LOGIC_HUE', ['Blocks', 'logic', 'HUE'], undefined);
   Blockly.checkBlockColourConstant_(
-      'LOGIC_HUE', ['Constants', 'Logic', 'HUE'], /* removed */ false);
+      'LOGIC_HUE', ['Constants', 'Logic', 'HUE'], 210);
   Blockly.checkBlockColourConstant_(
-      'LOOPS_HUE', ['Blocks', 'loops', 'HUE'], /* removed */ true);
+      'LOOPS_HUE', ['Blocks', 'loops', 'HUE'], undefined);
   Blockly.checkBlockColourConstant_(
-      'LOOPS_HUE', ['Constants', 'Loops', 'HUE'], /* removed */ false);
+      'LOOPS_HUE', ['Constants', 'Loops', 'HUE'], 120);
   Blockly.checkBlockColourConstant_(
-      'MATH_HUE', ['Blocks', 'math', 'HUE'], /* removed */ true);
+      'MATH_HUE', ['Blocks', 'math', 'HUE'], undefined);
   Blockly.checkBlockColourConstant_(
-      'MATH_HUE', ['Constants', 'Math', 'HUE'], /* removed */ false);
+      'MATH_HUE', ['Constants', 'Math', 'HUE'], 230);
   Blockly.checkBlockColourConstant_(
-      'TEXTS_HUE', ['Blocks', 'texts', 'HUE'], /* removed */ true);
+      'TEXTS_HUE', ['Blocks', 'texts', 'HUE'], undefined);
   Blockly.checkBlockColourConstant_(
-      'TEXTS_HUE', ['Constants', 'Text', 'HUE'], /* removed */ false);
+      'TEXTS_HUE', ['Constants', 'Text', 'HUE'], 160);
   Blockly.checkBlockColourConstant_(
-      'LISTS_HUE', ['Blocks', 'lists', 'HUE'], /* removed */ true);
+      'LISTS_HUE', ['Blocks', 'lists', 'HUE'], undefined);
   Blockly.checkBlockColourConstant_(
-      'LISTS_HUE', ['Constants', 'Lists', 'HUE'], /* removed */ false);
+      'LISTS_HUE', ['Constants', 'Lists', 'HUE'], 260);
   Blockly.checkBlockColourConstant_(
-      'COLOUR_HUE', ['Blocks', 'colour', 'HUE'], /* removed */ true);
+      'COLOUR_HUE', ['Blocks', 'colour', 'HUE'], undefined);
   Blockly.checkBlockColourConstant_(
-      'COLOUR_HUE', ['Constants', 'Colour', 'HUE'], /* removed */ false);
+      'COLOUR_HUE', ['Constants', 'Colour', 'HUE'], 20);
   Blockly.checkBlockColourConstant_(
-      'VARIABLES_HUE', ['Blocks', 'variables', 'HUE'], /* removed */ true);
+      'VARIABLES_HUE', ['Blocks', 'variables', 'HUE'], undefined);
   Blockly.checkBlockColourConstant_(
-      'VARIABLES_HUE', ['Constants', 'Variables', 'HUE'], /* removed */ false);
+      'VARIABLES_HUE', ['Constants', 'Variables', 'HUE'], 330);
   // Blockly.Blocks.variables_dynamic.HUE never existed.
   Blockly.checkBlockColourConstant_(
-      'VARIABLES_DYNAMIC_HUE', ['Constants', 'VariablesDynamic', 'HUE'], /* removed */ false);
+      'VARIABLES_DYNAMIC_HUE', ['Constants', 'VariablesDynamic', 'HUE'], 310);
   Blockly.checkBlockColourConstant_(
-      'PROCEDURES_HUE', ['Blocks', 'procedures', 'HUE'], /* removed */ true);
+      'PROCEDURES_HUE', ['Blocks', 'procedures', 'HUE'], undefined);
   // Blockly.Constants.Procedures.HUE never existed.
 };
 
 /**
- * Checks for a constant in the Blockly namespace, verifying it either does
- * not exist (if flagged as removed) or has the same value as the Msg
- * constant. Prints a warning if this is not true.
+ * Checks for a constant in the Blockly namespace, verifying it is undefined or
+ * has the old/original value. Prints a warning if this is not true.
  * @param {string} msgName The Msg constant identifier.
  * @param {Array<string>} blocklyNamePath The name parts of the tested
  *     constant.
- * @param {boolean} removed Whether the constant was already removed and should
- *     evaluate to undefined.
+ * @param {number|undefined} expectedValue The expected value of the constant.
  * @private
  */
 Blockly.checkBlockColourConstant_ = function(
-    msgName, blocklyNamePath, removed) {
+    msgName, blocklyNamePath, expectedValue) {
   var namePath = 'Blockly';
   var value = Blockly;
   for (var i =0; i < blocklyNamePath.length; ++i) {
@@ -632,12 +630,10 @@ Blockly.checkBlockColourConstant_ = function(
       value = value[blocklyNamePath[i]];
     }
   }
-  // If the value is not removed, intentionally comparing coerced type (==).
-  var isExpectedValue =
-      (value === undefined) || (!removed && value == Blockly.Msg[msgName]);
-  if (!isExpectedValue) {
-    var warningPattern = removed ?
-        '%1 is unused and has been removed. Override Blockly.Msg.%2.' :
+
+  if (value && value !== expectedValue) {
+    var warningPattern = (expectedValue === undefined) ?
+        '%1 is been removed. Use Blockly.Msg.%2.' :
         '%1 is deprecated and unused. Override Blockly.Msg.%2.';
     var warning = warningPattern.replace('%1', namePath).replace('%2', msgName);
     console.warn(warning);

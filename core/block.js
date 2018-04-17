@@ -1094,13 +1094,17 @@ Blockly.Block.prototype.jsonInit = function(json) {
       'Must not have both an output and a previousStatement.');
 
   // Set basic properties of block.
-  if (json['colour'] !== undefined) {
-    var rawValue = json['colour'];
-    try {
-      this.setColour(rawValue);
-    } catch (colorError) {
-      console.warn(
-          'Block "' + blockTypeName + '": Illegal color value: ', rawValue);
+  if ('colour' in json) {
+    if (json['colour'] === undefined) {
+      console.warn('Block "' + blockTypeName + '": Undefined color value.');
+    } else {
+      var rawValue = json['colour'];
+      try {
+        this.setColour(rawValue);
+      } catch (colorError) {
+        console.warn(
+            'Block "' + blockTypeName + '": Illegal color value: ', rawValue);
+      }
     }
   }
 

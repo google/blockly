@@ -27,6 +27,7 @@
 
 goog.provide('Blockly.Gesture');
 
+goog.require('Blockly.BlockAnimations');
 goog.require('Blockly.BlockDragger');
 goog.require('Blockly.BubbleDragger');
 goog.require('Blockly.constants');
@@ -482,7 +483,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
   }
   this.hasStarted_ = true;
 
-  Blockly.BlockSvg.disconnectUiStop_();
+  Blockly.BlockAnimations.disconnectUiStop();
   this.startWorkspace_.updateScreenCalculationsIfScrolled();
   if (this.startWorkspace_.isMutator) {
     // Mutator's coordinate system could be out of date because the bubble was

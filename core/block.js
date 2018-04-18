@@ -1094,19 +1094,7 @@ Blockly.Block.prototype.jsonInit = function(json) {
       'Must not have both an output and a previousStatement.');
 
   // Set basic properties of block.
-  if ('colour' in json) {
-    if (json['colour'] === undefined) {
-      console.warn('Block "' + blockTypeName + '": Undefined color value.');
-    } else {
-      var rawValue = json['colour'];
-      try {
-        this.setColour(rawValue);
-      } catch (colorError) {
-        console.warn(
-            'Block "' + blockTypeName + '": Illegal color value: ', rawValue);
-      }
-    }
-  }
+  this.jsonInitColour_(json);
 
   // Interpolate the message blocks.
   var i = 0;
@@ -1159,6 +1147,27 @@ Blockly.Block.prototype.jsonInit = function(json) {
     for (var i = 0; i < extensionNames.length; ++i) {
       var extensionName = extensionNames[i];
       Blockly.Extensions.apply(extensionName, this, false);
+    }
+  }
+};
+
+/**
+ * Initialize the colour of this block from the JSON description.
+ * @param {!Object} json Structured data describing the block.
+ * @private
+ */
+Blockly.Block.prototype.jsonInitColour_ = function(json) {
+  if ('colour' in json) {
+    if (json['colour'] === undefined) {
+      console.warn('Block "' + blockTypeName + '": Undefined color value.');
+    } else {
+      var rawValue = json['colour'];
+      try {
+        this.setColour(rawValue);
+      } catch (colorError) {
+        console.warn(
+            'Block "' + blockTypeName + '": Illegal color value: ', rawValue);
+      }
     }
   }
 };

@@ -24,8 +24,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.procedures');
-
 goog.require('Blockly.Blocks');
 goog.require('Blockly');
 

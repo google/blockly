@@ -1086,15 +1086,15 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
  * @param {!Object} json Structured data describing the block.
  */
 Blockly.Block.prototype.jsonInit = function(json) {
-  var blockTypeName = json['type'];
+  var warningPrefix = json['type'] ? 'Block "' + json['type'] + '": ' : '';
 
   // Validate inputs.
   goog.asserts.assert(
       json['output'] == undefined || json['previousStatement'] == undefined,
-      'Must not have both an output and a previousStatement.');
+      warningPrefix + 'Must not have both an output and a previousStatement.');
 
   // Set basic properties of block.
-  this.jsonInitColour_(json);
+  this.jsonInitColour_(json, warningPrefix);
 
   // Interpolate the message blocks.
   var i = 0;
@@ -1132,8 +1132,10 @@ Blockly.Block.prototype.jsonInit = function(json) {
     this.setHelpUrl(localizedValue);
   }
   if (goog.isString(json['extensions'])) {
-    console.warn('JSON attribute \'extensions\' should be an array of ' +
-      'strings. Found raw string in JSON for \'' + json['type'] + '\' block.');
+    console.warn(
+        warningPrefix + 'JSON attribute \'extensions\' should be an array of' +
+        ' strings. Found raw string in JSON for \'' + json['type'] +
+        '\' block.');
     json['extensions'] = [json['extensions']];  // Correct and continue.
   }
 
@@ -1154,19 +1156,19 @@ Blockly.Block.prototype.jsonInit = function(json) {
 /**
  * Initialize the colour of this block from the JSON description.
  * @param {!Object} json Structured data describing the block.
+ * @param {string} warningPrefix Warning prefix string identifying block.
  * @private
  */
-Blockly.Block.prototype.jsonInitColour_ = function(json) {
+Blockly.Block.prototype.jsonInitColour_ = function(json, warningPrefix) {
   if ('colour' in json) {
     if (json['colour'] === undefined) {
-      console.warn('Block "' + blockTypeName + '": Undefined color value.');
+      console.warn(warningPrefix + 'Undefined color value.');
     } else {
       var rawValue = json['colour'];
       try {
         this.setColour(rawValue);
       } catch (colorError) {
-        console.warn(
-            'Block "' + blockTypeName + '": Illegal color value: ', rawValue);
+        console.warn(warningPrefix + 'Illegal color value: ', rawValue);
       }
     }
   }

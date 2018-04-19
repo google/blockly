@@ -28,7 +28,7 @@
 goog.provide('Blockly.Events.VarDelete');
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.Events.VarBase');
 goog.require('goog.array');
 goog.require('goog.math.Coordinate');
 
@@ -36,7 +36,7 @@ goog.require('goog.math.Coordinate');
  * Class for a variable deletion event.
  * @param {Blockly.VariableModel} variable The deleted variable.
  *     Null for a blank event.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Blockly.Events.VarBase}
  * @constructor
  */
 Blockly.Events.VarDelete = function(variable) {
@@ -47,7 +47,7 @@ Blockly.Events.VarDelete = function(variable) {
   this.varType = variable.type;
   this.varName = variable.name;
 };
-goog.inherits(Blockly.Events.VarDelete, Blockly.Events.Abstract);
+goog.inherits(Blockly.Events.VarDelete, Blockly.Events.VarBase);
 
 /**
  * Type of this event.

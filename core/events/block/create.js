@@ -29,14 +29,14 @@ goog.provide('Blockly.Events.BlockCreate');
 goog.provide('Blockly.Events.Create');  // Deprecated.
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.Events.BlockBase');
 goog.require('goog.array');
 goog.require('goog.math.Coordinate');
 
 /**
  * Class for a block creation event.
  * @param {Blockly.Block} block The created block.  Null for a blank event.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
 Blockly.Events.Create = function(block) {
@@ -52,12 +52,12 @@ Blockly.Events.Create = function(block) {
   }
   this.ids = Blockly.Events.getDescendantIds_(block);
 };
-goog.inherits(Blockly.Events.Create, Blockly.Events.Abstract);
+goog.inherits(Blockly.Events.Create, Blockly.Events.BlockBase);
 
 /**
  * Class for a block creation event.
  * @param {Blockly.Block} block The created block. Null for a blank event.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
 Blockly.Events.BlockCreate = Blockly.Events.Create;

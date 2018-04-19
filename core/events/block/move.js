@@ -29,14 +29,14 @@ goog.provide('Blockly.Events.BlockMove');
 goog.provide('Blockly.Events.Move');  // Deprecated.
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.Events.BlockBase');
 goog.require('goog.array');
 goog.require('goog.math.Coordinate');
 
 /**
  * Class for a block move event.  Created before the move.
  * @param {Blockly.Block} block The moved block.  Null for a blank event.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
 Blockly.Events.Move = function(block) {
@@ -49,13 +49,13 @@ Blockly.Events.Move = function(block) {
   this.oldInputName = location.inputName;
   this.oldCoordinate = location.coordinate;
 };
-goog.inherits(Blockly.Events.Move, Blockly.Events.Abstract);
+goog.inherits(Blockly.Events.Move, Blockly.Events.BlockBase);
 
 
 /**
  * Class for a block move event.  Created before the move.
  * @param {Blockly.Block} block The moved block.  Null for a blank event.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
 Blockly.Events.BlockMove = Blockly.Events.Move;

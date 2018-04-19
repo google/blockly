@@ -29,14 +29,14 @@ goog.provide('Blockly.Events.BlockDelete');
 goog.provide('Blockly.Events.Delete');  // Deprecated.
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.Events.BlockBase');
 goog.require('goog.array');
 goog.require('goog.math.Coordinate');
 
 /**
  * Class for a block deletion event.
  * @param {Blockly.Block} block The deleted block.  Null for a blank event.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
 Blockly.Events.Delete = function(block) {
@@ -55,12 +55,12 @@ Blockly.Events.Delete = function(block) {
   }
   this.ids = Blockly.Events.getDescendantIds_(block);
 };
-goog.inherits(Blockly.Events.Delete, Blockly.Events.Abstract);
+goog.inherits(Blockly.Events.Delete, Blockly.Events.BlockBase);
 
 /**
  * Class for a block deletion event.
  * @param {Blockly.Block} block The deleted block.  Null for a blank event.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
 Blockly.Events.BlockDelete = Blockly.Events.Delete;

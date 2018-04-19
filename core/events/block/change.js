@@ -29,7 +29,7 @@ goog.provide('Blockly.Events.BlockChange');
 goog.provide('Blockly.Events.Change');  // Deprecated.
 
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.Events.BlockBase');
 goog.require('goog.array');
 goog.require('goog.math.Coordinate');
 
@@ -40,7 +40,7 @@ goog.require('goog.math.Coordinate');
  * @param {?string} name Name of input or field affected, or null.
  * @param {*} oldValue Previous value of element.
  * @param {*} newValue New value of element.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
 Blockly.Events.Change = function(block, element, name, oldValue, newValue) {
@@ -53,7 +53,7 @@ Blockly.Events.Change = function(block, element, name, oldValue, newValue) {
   this.oldValue = oldValue;
   this.newValue = newValue;
 };
-goog.inherits(Blockly.Events.Change, Blockly.Events.Abstract);
+goog.inherits(Blockly.Events.Change, Blockly.Events.BlockBase);
 
 /**
  * Class for a block change event.
@@ -62,7 +62,7 @@ goog.inherits(Blockly.Events.Change, Blockly.Events.Abstract);
  * @param {?string} name Name of input or field affected, or null.
  * @param {*} oldValue Previous value of element.
  * @param {*} newValue New value of element.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
 Blockly.Events.BlockChange = Blockly.Events.Change;

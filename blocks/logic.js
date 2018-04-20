@@ -29,6 +29,7 @@
  */
 'use strict';
 
+goog.provide('Blockly.Blocks.logic');  // Deprecated
 goog.provide('Blockly.Constants.Logic');
 
 goog.require('Blockly.Blocks');

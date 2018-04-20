@@ -29,6 +29,7 @@
  */
 'use strict';
 
+goog.provide('Blockly.Blocks.colour');  // Deprecated
 goog.provide('Blockly.Constants.Colour');  // deprecated, 2018 April 5
 
 goog.require('Blockly.Blocks');

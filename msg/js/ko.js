@@ -68,6 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "블록 %1개 삭제";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "블록 비활성화";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "복제";
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "블록 활성화";
 /** @export */ Blockly.Msg.EXPAND_ALL = "블록 확장";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "블록 확장";
@@ -398,6 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "변수의 값을 입력한 값으로 변경해 줍니다.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "'%1' 변수는 이미 존재합니다.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "'%1' 변수는 다른 유형에 대해 이미 존재합니다: '%2'.";
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

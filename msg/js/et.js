@@ -68,6 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "Kustuta %1 plokki";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "Keela ploki kasutamine";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "Tekita duplikaat";
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "Luba ploki kasutamine";
 /** @export */ Blockly.Msg.EXPAND_ALL = "Laota plokid laiali";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "Laota plokk laiali";
@@ -398,6 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Määrab selle muutuja väärtuse võrdseks sisendi väärtusega.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "'%1'-nimeline muutuja on juba olemas.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another type: '%2'.";  // untranslated
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

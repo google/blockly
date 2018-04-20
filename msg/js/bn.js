@@ -68,6 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "%1 ব্লক অপসারণ কর";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "ব্লকটি বিকল কর";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "প্রতিলিপি";
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "ব্লকটি সচল কর";
 /** @export */ Blockly.Msg.EXPAND_ALL = "ব্লকগুলো সম্প্রসারিত কর";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "ব্লকটি সম্প্রসারিত কর";
@@ -398,6 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Sets this variable to be equal to the input.";  // untranslated
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "'%1' নামের চলক পূর্ব থেকে অাছে।";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "'%1' নামের চলক '%2' ধরনের চলকের জন্য পূর্ব থেকেই অাছে।";
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

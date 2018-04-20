@@ -68,6 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "Xóa %1 Mảnh";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "Ngưng Tác Dụng";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "Tạo Bản Sao";
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "Phục Hồi Tác Dụng";
 /** @export */ Blockly.Msg.EXPAND_ALL = "Mở Lớn Mọi Mảnh";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "Mở Lớn Mảnh";
@@ -398,6 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Đặt giá trị của biến này thành...";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Một biến có tên '%1' đã tồn tại.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another type: '%2'.";  // untranslated
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

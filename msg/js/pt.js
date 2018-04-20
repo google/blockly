@@ -68,6 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "Eliminar %1 Blocos";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "Desativar Bloco";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "Duplicar";
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "Ativar Bloco";
 /** @export */ Blockly.Msg.EXPAND_ALL = "Expandir Blocos";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "Expandir Bloco";
@@ -398,6 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Define esta variável para o valor inserido.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Já existe uma variável com o nome de '%1'.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Já existe uma variável chamada '%1' para outra do tipo: '%2'.";
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

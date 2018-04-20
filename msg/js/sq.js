@@ -68,6 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "Fshij %1 blloqe";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "Çaktivizo bllokun";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "Kopjo";
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "Aktivizo bllokun";
 /** @export */ Blockly.Msg.EXPAND_ALL = "Zmadho blloqet";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "Zmadho bllokun";
@@ -398,6 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Vendos kete variable te jete e barabarte me te dhenat ne hyrje.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Një variabël e quajtur '%1' tashmë ekziston.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Një variabël me emrin '%1' veç ekziston për një tip tjetër: '%2'.";
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

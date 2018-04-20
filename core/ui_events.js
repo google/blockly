@@ -28,6 +28,7 @@ goog.provide('Blockly.Events.Ui');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
+
 goog.require('goog.array');
 goog.require('goog.math.Coordinate');
 

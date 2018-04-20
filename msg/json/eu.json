@@ -4,7 +4,8 @@
 			"An13sa",
 			"Asieriko",
 			"Mikel Ibaiba",
-			"Subi"
+			"Subi",
+			"RFenichel"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "Elementua",
@@ -38,7 +39,7 @@
 	"COLOUR_RGB_RED": "gorria",
 	"COLOUR_RGB_GREEN": "berdea",
 	"COLOUR_RGB_BLUE": "urdina",
-	"COLOUR_RGB_TOOLTIP": "\nSortu kolorea zehaztutako gorriz, berdearekin eta urdinekin. Balio guztiak 0 eta 100 artean egon behar dira.",
+	"COLOUR_RGB_TOOLTIP": "Sortu kolorea zehaztutako gorriz, berdearekin eta urdinekin. Balio guztiak 0 eta 100 artean egon behar dira.",
 	"COLOUR_BLEND_TITLE": "Nahastu",
 	"COLOUR_BLEND_COLOUR1": "1 Kolorea",
 	"COLOUR_BLEND_COLOUR2": "2 Kolorea",

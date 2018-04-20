@@ -281,12 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Επιστρέφει το συνημίτονο ενός βαθμού (όχι ακτινίου).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Επιστρέφει το ημίτονο ενός βαθμού (όχι ακτινίου).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Επιστρέφει την εφαπτομένη ενός βαθμού (όχι ακτινίου).";
-/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Δημιουργία μεταβλητής χρώματος...";
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Δημιουργία μεταβλητής αριθμού...";
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Δημιουργία μεταβλητή συμβολοσειράς...";
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Δημιουργείστε μεταβλητή";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Νέο όνομα μεταβλητής:";
-/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "Νέος τύπος μεταβλητής:";
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "να επιτρέπονται οι δηλώσεις";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "με:";
@@ -397,7 +397,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Ορίζει αυτή τη μεταβλητή να είναι ίση με την είσοδο.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Η μεταβλητή με το όνομα \"%1\" υπάρχει ήδη";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Μια μεταβλητή με όνομα '%1' υπάρχει πάντα για μια άλλη μεταβλητή τύπου '%2'.";
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Μια μεταβλητή με όνομα '%1' υπάρχει πάντα για έναν άλλο τύπο: '%2'.";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

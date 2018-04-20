@@ -176,6 +176,7 @@ Blockly.Names.prototype.safeName_ = function(name) {
   } else {
     // Unfortunately names in non-latin characters will look like
     // _E9_9F_B3_E4_B9_90 which is pretty meaningless.
+    // https://github.com/google/blockly/issues/1654
     name = encodeURI(name.replace(/ /g, '_')).replace(/[^\w]/g, '_');
     // Most languages don't allow names with leading numbers.
     if ('0123456789'.indexOf(name[0]) != -1) {

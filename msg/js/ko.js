@@ -6,7 +6,7 @@ goog.provide('Blockly.Msg.ko');
 
 goog.require('Blockly.Msg');
 
-/** @export */ Blockly.Msg.ADD_COMMENT = "메모 추가";
+/** @export */ Blockly.Msg.ADD_COMMENT = "주석 추가";
 /** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "'%2' 함수 정의의 일부이기 때문에 '%1' 변수를 삭제할 수 없습니다";
 /** @export */ Blockly.Msg.CHANGE_VALUE_TITLE = "값 바꾸기:";
 /** @export */ Blockly.Msg.CLEAN_UP = "블록 정리";
@@ -281,12 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "각도의 코사인을 반환합니다. (라디안 아님)";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "각도의 사인을 반환합니다. (라디안 아님)";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "각도의 탄젠트를 반환합니다. (라디안 아님)";
-/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "색 변수 만들기...";
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "숫자 변수 만들기....";
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "문자열 변수 만들기...";
 /** @export */ Blockly.Msg.NEW_VARIABLE = "변수 만들기...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "새 변수 이름:";
-/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "새 변수 유형:";
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "서술 허가";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "사용:";
@@ -315,7 +315,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "매개 변수들";
 /** @export */ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "이 함수를 추가, 삭제, 혹은 재정렬합니다.";
 /** @export */ Blockly.Msg.REDO = "다시 실행";
-/** @export */ Blockly.Msg.REMOVE_COMMENT = "내용 제거";
+/** @export */ Blockly.Msg.REMOVE_COMMENT = "주석 제거";
 /** @export */ Blockly.Msg.RENAME_VARIABLE = "변수 이름 바꾸기:";
 /** @export */ Blockly.Msg.RENAME_VARIABLE_TITLE = "'%1' 변수 이름을 바꾸기:";
 /** @export */ Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";
@@ -397,7 +397,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://ko.wikipedia.org/wiki/%EB%B3%80%EC%88%98_(%EC%BB%B4%ED%93%A8%ED%84%B0_%EA%B3%BC%ED%95%99)";
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "변수의 값을 입력한 값으로 변경해 줍니다.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "'%1' 변수는 이미 존재합니다.";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "'%1' 변수는 '%2' 유형의 다른 변수에 대해 이미 존재합니다.";
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "'%1' 변수는 다른 유형에 대해 이미 존재합니다: '%2'.";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

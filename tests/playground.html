@@ -64,6 +64,7 @@
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/variables_dynamic.js"></script>
 <script src="../blocks/procedures.js"></script>
+<script src="blocks/test_blocks.js"></script>
 <script>
 'use strict';
 var workspace = null;
@@ -326,6 +327,7 @@ h1 {
       <option value="categories">Categories (untyped variables)</option>
       <option value="categories-typed-variables">Categories (typed variables)</option>
       <option value="simple">Simple</option>
+      <option value="test-blocks">Test Blocks</option>
     </select>
     <select name="side" onchange="document.forms.options.submit()">
       <option value="start">Start</option>
@@ -439,7 +441,9 @@ h1 {
       <block type="controls_flow_statements"></block>
     </category>
     <category name="Math" colour="230">
-      <block type="math_number" gap="32"></block>
+      <block type="math_number" gap="32">
+        <field name="NUM">123</field>
+      </block>
       <block type="math_arithmetic">
         <value name="A">
           <shadow type="math_number">
@@ -766,7 +770,9 @@ h1 {
       <block type="controls_flow_statements"></block>
     </category>
     <category name="Math" colour="230">
-      <block type="math_number" gap="32"></block>
+      <block type="math_number" gap="32">
+        <field name="NUM">123</field>
+      </block>
       <block type="math_arithmetic">
         <value name="A">
           <shadow type="math_number">
@@ -1047,6 +1053,149 @@ h1 {
     <sep></sep>
     <category name="Variables" colour="310" custom="VARIABLE_DYNAMIC"></category>
     <category name="Functions" colour="290" custom="PROCEDURE"></category>
+  </xml>
+
+  <!-- toolbox-test-blocks has a category menu and an auto-closing flyout.
+  The blocks in this toolbox reflect block configurations not used by
+  the standard predefined blocks, and so test alernative block rendering
+  code paths. -->
+  <xml id="toolbox-test-blocks" style="display: none">
+    <category name="Basic">
+      <block type="empty_block"></block>
+      <block type="empty_block_with_mutator"></block>
+    </category>
+    <category name="Drag">
+      <label text="Drag each to the workspace"></label>
+      <block type="text_print">
+        <value name="TEXT">
+          <block type="text">
+            <field name="TEXT">Drag me by this child</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_print">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">Drag me by this shadow</field>
+          </shadow>
+        </value>
+      </block>
+      <label text="Multiple Variable Refs"></label>
+      <block type="text_print">
+        <value name="TEXT">
+          <block type="variables_get">
+            <field name="VAR" id="item" variabletype="">item</field>
+          </block>
+        </value>
+        <next>
+          <block type="text_print">
+            <value name="TEXT">
+              <block type="variables_get">
+                <field name="VAR" id="item" variabletype="">item</field>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+      <label text="Procedure Definitions"></label>
+      <block type="procedures_defnoreturn">
+        <field name="NAME">without arguments</field>
+        <statement name="STACK">
+          <block type="text_print">
+            <value name="TEXT">
+              <shadow type="text">
+                <field name="TEXT">No argument reference.</field>
+              </shadow>
+            </value>
+          </block>
+        </statement>
+      </block>
+      <block type="procedures_defnoreturn">
+        <mutation>
+          <arg name="fnArgument"></arg>
+        </mutation>
+        <field name="NAME">with one argument</field>
+        <statement name="STACK">
+          <block type="text_print">
+            <value name="TEXT">
+              <shadow type="text">
+                <field name="TEXT">Expected an argument reference here.</field>
+              </shadow>
+              <block type="variables_get">
+                <field name="VAR">fnArgument</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </block>
+    </category>
+    <category name="Fields">
+      <label text="Numbers"></label>
+      <block type="test_number"></block>
+      <block type="test_integer"></block>
+      <block type="test_number_hundredths"></block>
+      <block type="test_integer_bounded"></block>
+      <label text="Drop-downs"></label>
+      <block type="example_dropdown_long"></block>
+      <block type="example_dropdown_images"></block>
+      <block type="example_dropdown_images_and_text"></block>
+      <label text="Others"></label>
+      <block type="example_angle"></block>
+      <block type="example_date"></block>
+    </category>
+    <category name="Mutators">
+      <label text="logic_compare"></label>
+      <block type="logic_compare">
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="logic_compare">
+        <value name="A">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+        <value name="B">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category name="Style">
+      <label text="Hats"></label>
+      <block type="styled_event_cap"></block>
+      <label text="Colour"></label>
+      <block type="block_colour_hex1"></block>
+      <block type="block_colour_hex2"></block>
+      <block type="block_colour_hex3"></block>
+      <block type="block_no_colour"></block>
+      <block type="block_colour_hex4"></block>
+      <block type="block_colour_hex5"></block>
+    </category>
+    <category name="Images">
+      <block type="image_datauri"></block>
+      <block type="image_small"></block>
+      <block type="image_large"></block>
+      <block type="image_missing"></block>
+      <block type="test_with_lots_of_network_icons"></block>
+      <label text="Unicode & Emojis"></label>
+      <block type="emoji_label_robot_face"></block>
+      <block type="text">
+        <field name="TEXT">Robot face in text field: &#x1f916;</field>
+      </block>
+      <block type="text">
+        <field name="TEXT">Zalgo in text field: B&#776;&#788;&#862;&#795;&#842;&#827;&#806;&#837;&#812;&#792;&#816;&#846;&#805;l&#771;&#832;&#833;&#864;&#849;&#849;&#789;&#861;&#801;&#854;&#863;&#811;&#826;&#812;&#790;&#803;&#819;o&#843;&#777;&#778;&#785;&#831;&#829;&#794;&#825;&#857;&#814;&#802;&#811;&#852;c&#843;&#786;&#849;&#778;&#861;&#775;&#825;&#825;&#796;&#857;&#825;&#800;&#824;k&#778;&#850;&#833;&#774;&#772;&#782;&#862;&#770;&#789;&#788;&#841;&#801;&#811;&#860;&#839;&#790;&#819;&#854;l&#832;&#774;&#836;&#831;&#776;&#787;&#855;&#816;&#793;&#798;&#819;&#809;&#800;&#854;&#815;y&#864;&#783;&#856;&#773;&#832;&#808;&#799;&#839;&#814;&#840;&#812;&#793;&#818;&#801;</field>
+      </block>
+    </category>
   </xml>
 </body>
 </html>

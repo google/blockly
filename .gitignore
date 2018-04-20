@@ -9,3 +9,5 @@ npm-debug.log
 
 tests/compile/main_compressed.js
 tests/compile/*compiler*.jar
+local_build/*compiler*.jar
+local_build/local_blockly_compressed.js

@@ -10,7 +10,8 @@
 			"Redredsonia",
 			"Facenapalm",
 			"Helpau",
-			"SimondR"
+			"SimondR",
+			"Mouse21"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "элемент",
@@ -37,9 +38,13 @@
 	"RENAME_VARIABLE": "Переименовать переменную…",
 	"RENAME_VARIABLE_TITLE": "Переименовать все переменные '%1' в:",
 	"NEW_VARIABLE": "Создать переменную…",
+	"NEW_STRING_VARIABLE": "Создать строковую переменную...",
+	"NEW_NUMBER_VARIABLE": "Создать числовую переменную...",
+	"NEW_COLOUR_VARIABLE": "Создать переменную цвета...",
+	"NEW_VARIABLE_TYPE_TITLE": "Новый тип переменной:",
 	"NEW_VARIABLE_TITLE": "Имя новой переменной:",
 	"VARIABLE_ALREADY_EXISTS": "Переменная с именем '%1' уже существует.",
-	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Название переменной '%1' уже используется другой переменной типа '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Название переменной '%1' уже используется другой типа: '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Удалить %1 использований переменной '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Невозможно удалить переменную '%1', поскольку она является частью определения функции '%2'",
 	"DELETE_VARIABLE": "Удалить переменную '%1'",

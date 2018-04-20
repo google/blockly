@@ -392,7 +392,7 @@ function test_variableFieldXml_caseSensitive() {
   };
 
   var generatedXml =
-    Blockly.Variables.generateVariableFieldXml_(mockVariableModel);
+    Blockly.Variables.generateVariableFieldXmlString(mockVariableModel);
   var goldenXml =
       '<field name="VAR"' +
       ' id="' + id + '"' +

@@ -66,9 +66,14 @@ Blockly.Lua['math_single'] = function(block) {
         Blockly.Lua.ORDER_UNARY) || '0';
     return ['-' + arg, Blockly.Lua.ORDER_UNARY];
   }
-  if (operator == 'SIN' || operator == 'COS' || operator == 'TAN') {
+  if (operator == 'POW10') {
     arg = Blockly.Lua.valueToCode(block, 'NUM',
-        Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';
+        Blockly.Lua.ORDER_EXPONENTIATION) || '0';
+    return ['10 ^ ' + arg, Blockly.Lua.ORDER_EXPONENTIATION];
+  }
+  if (operator == 'ROUND') {
+    arg = Blockly.Lua.valueToCode(block, 'NUM',
+        Blockly.Lua.ORDER_ADDITIVE) || '0';
   } else {
     arg = Blockly.Lua.valueToCode(block, 'NUM',
         Blockly.Lua.ORDER_NONE) || '0';
@@ -84,13 +89,10 @@ Blockly.Lua['math_single'] = function(block) {
       code = 'math.log(' + arg + ')';
       break;
     case 'LOG10':
-      code = 'math.log10(' + arg + ')';
+      code = 'math.log(' + arg + ', 10)';
       break;
     case 'EXP':
       code = 'math.exp(' + arg + ')';
-      break;
-    case 'POW10':
-      code = 'math.pow(10,' + arg + ')';
       break;
     case 'ROUND':
       // This rounds up.  Blockly does not specify rounding direction.

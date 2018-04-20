@@ -123,7 +123,7 @@ Blockly.Variables.allDeveloperVariables = function(workspace) {
 /**
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
- * @param {!Blockly.Workspace} workspace The workspace contianing variables.
+ * @param {!Blockly.Workspace} workspace The workspace containing variables.
  * @return {!Array.<!Element>} Array of XML elements.
  */
 Blockly.Variables.flyoutCategory = function(workspace) {
@@ -145,7 +145,7 @@ Blockly.Variables.flyoutCategory = function(workspace) {
 
 /**
  * Construct the blocks required by the flyout for the variable category.
- * @param {!Blockly.Workspace} workspace The workspace contianing variables.
+ * @param {!Blockly.Workspace} workspace The workspace containing variables.
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
@@ -159,7 +159,7 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       var gap = Blockly.Blocks['math_change'] ? 8 : 24;
       var blockText = '<xml>' +
             '<block type="variables_set" gap="' + gap + '">' +
-            Blockly.Variables.generateVariableFieldXml_(firstVariable) +
+            Blockly.Variables.generateVariableFieldXmlString(firstVariable) +
             '</block>' +
             '</xml>';
       var block = Blockly.Xml.textToDom(blockText).firstChild;
@@ -169,7 +169,7 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       var gap = Blockly.Blocks['variables_get'] ? 20 : 8;
       var blockText = '<xml>' +
           '<block type="math_change" gap="' + gap + '">' +
-          Blockly.Variables.generateVariableFieldXml_(firstVariable) +
+          Blockly.Variables.generateVariableFieldXmlString(firstVariable) +
           '<value name="DELTA">' +
           '<shadow type="math_number">' +
           '<field name="NUM">1</field>' +
@@ -185,7 +185,7 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       if (Blockly.Blocks['variables_get']) {
         var blockText = '<xml>' +
             '<block type="variables_get" gap="8">' +
-            Blockly.Variables.generateVariableFieldXml_(variable) +
+            Blockly.Variables.generateVariableFieldXmlString(variable) +
             '</block>' +
             '</xml>';
         var block = Blockly.Xml.textToDom(blockText).firstChild;
@@ -439,9 +439,9 @@ Blockly.Variables.nameUsedWithAnyType_ = function(name, workspace) {
  * @param {!Blockly.VariableModel} variableModel The variable model to generate
  *     an XML string from.
  * @return {string} The generated XML.
- * @private
+ * @package
  */
-Blockly.Variables.generateVariableFieldXml_ = function(variableModel) {
+Blockly.Variables.generateVariableFieldXmlString = function(variableModel) {
   // The variable name may be user input, so it may contain characters that need
   // to be escaped to create valid XML.
   var typeString = variableModel.type;
@@ -449,9 +449,25 @@ Blockly.Variables.generateVariableFieldXml_ = function(variableModel) {
     typeString = '\'\'';
   }
   var text = '<field name="VAR" id="' + variableModel.getId() +
-    '" variabletype="' + goog.string.htmlEscape(typeString) +
-    '">' + goog.string.htmlEscape(variableModel.name) + '</field>';
+      '" variabletype="' + goog.string.htmlEscape(typeString) +
+      '">' + goog.string.htmlEscape(variableModel.name) + '</field>';
   return text;
+};
+
+/**
+ * Generate DOM objects representing a variable field.
+ * @param {!Blockly.VariableModel} variableModel The variable model to
+ *     represent.
+ * @return {Element} The generated DOM.
+ * @public
+ */
+Blockly.Variables.generateVariableFieldDom = function(variableModel) {
+  var xmlFieldString =
+      Blockly.Variables.generateVariableFieldXmlString(variableModel);
+  var text = '<xml>' + xmlFieldString + '</xml>';
+  var dom = Blockly.Xml.textToDom(text);
+  var fieldDom = dom.firstChild;
+  return fieldDom;
 };
 
 /**
@@ -563,7 +579,7 @@ Blockly.Variables.getAddedVariables = function(workspace, originalVariables) {
       var variable = allCurrentVariables[i];
       // For any variable that is present in allCurrentVariables but not
       // present in originalVariables, add the variable to addedVariables.
-      if (!originalVariables.includes(variable)) {
+      if (originalVariables.indexOf(variable) == -1) {
         addedVariables.push(variable);
       }
     }

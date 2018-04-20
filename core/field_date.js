@@ -64,6 +64,7 @@ goog.inherits(Blockly.FieldDate, Blockly.Field);
  * @param {!Object} options A JSON object with options (date).
  * @returns {!Blockly.FieldDate} The new field instance.
  * @package
+ * @nocollapse
  */
 Blockly.FieldDate.fromJson = function(options) {
   return new Blockly.FieldDate(options['date']);
@@ -347,3 +348,5 @@ Blockly.FieldDate.CSS = [
   '  color: #fff;',
   '}'
 ];
+
+Blockly.Field.register('field_date', Blockly.FieldDate);

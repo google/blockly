@@ -62,12 +62,12 @@ Blockly.Workspace = function(opt_options) {
   this.listeners_ = [];
   /**
    * @type {!Array.<!Blockly.Events.Abstract>}
-   * @private
+   * @protected
    */
   this.undoStack_ = [];
   /**
    * @type {!Array.<!Blockly.Events.Abstract>}
-   * @private
+   * @protected
    */
   this.redoStack_ = [];
   /**
@@ -77,10 +77,10 @@ Blockly.Workspace = function(opt_options) {
   this.blockDB_ = Object.create(null);
 
   /**
-   * @type {!Blockly.VariableMap}
    * A map from variable type to list of variable names.  The lists contain all
    * of the named variables in the workspace, including variables
    * that are not currently in use.
+   * @type {!Blockly.VariableMap}
    * @private
    */
   this.variableMap_ = new Blockly.VariableMap(this);
@@ -260,15 +260,13 @@ Blockly.Workspace.prototype.deleteVariableInternal_ = function(variable, uses) {
 /**
  * Check whether a variable exists with the given name.  The check is
  * case-insensitive.
- * @param {string} name The name to check for.
+ * @param {string} _name The name to check for.
  * @return {number} The index of the name in the variable list, or -1 if it is
  *     not present.
  * @deprecated April 2017
  */
 
-Blockly.Workspace.prototype.variableIndexOf = function(
-    /* eslint-disable no-unused-vars */ name
-    /* eslint-enable no-unused-vars */) {
+Blockly.Workspace.prototype.variableIndexOf = function(_name) {
   console.warn(
       'Deprecated call to Blockly.Workspace.prototype.variableIndexOf');
   return -1;
@@ -277,12 +275,12 @@ Blockly.Workspace.prototype.variableIndexOf = function(
 /**
  * Find the variable by the given name and return it. Return null if it is not
  *     found.
- * TODO (#1199): Possibly delete this function.
  * @param {!string} name The name to check for.
  * @param {string=} opt_type The type of the variable.  If not provided it
  *     defaults to the empty string, which is a specific type.
  * @return {?Blockly.VariableModel} the variable with the given name.
  */
+// TODO (#1199): Possibly delete this function.
 Blockly.Workspace.prototype.getVariable = function(name, opt_type) {
   return this.variableMap_.getVariable(name, opt_type);
 };

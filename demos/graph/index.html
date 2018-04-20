@@ -59,7 +59,9 @@
 
   <xml id="toolbox" style="display: none">
     <category name="Math">
-      <block type="math_number"></block>
+      <block type="math_number">
+        <field name="NUM">123</field>
+      </block>
       <block type="math_arithmetic">
         <value name="A">
           <shadow type="math_number">
@@ -190,42 +192,34 @@ if (typeof google == 'object') {
 }
 
 // Define the custom blocks and their JS generators.
-Blockly.Blocks['graph_get_x'] = {
-  // x variable getter.
-  init: function() {
-    this.jsonInit({
-      "message0": "x",
-      "output": "Number",
-      "colour": Blockly.Blocks.variables.HUE,
-      "tooltip": Blockly.Msg.VARIABLES_GET_TOOLTIP,
-      "helpUrl": Blockly.Msg.VARIABLES_GET_HELPURL
-    });
-  }
-};
+Blockly.defineBlocksWithJsonArray([{
+  "type": "graph_get_x",
+  "message0": "x",
+  "output": "Number",
+  "colour": Blockly.Msg.VARIABLES_HUE,
+  "tooltip": Blockly.Msg.VARIABLES_GET_TOOLTIP,
+  "helpUrl": Blockly.Msg.VARIABLES_GET_HELPURL
+}]);
 
 Blockly.JavaScript['graph_get_x'] = function(block) {
   // x variable getter.
   return ['x', Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.Blocks['graph_set_y'] = {
-  // y variable setter.
-  init: function() {
-    this.jsonInit({
-      "message0": "y = %1",
-      "args0": [
-        {
-          "type": "input_value",
-          "name": "VALUE",
-          "check": "Number"
-        }
-      ],
-      "colour": Blockly.Blocks.variables.HUE,
-      "tooltip": Blockly.Msg.VARIABLES_SET_TOOLTIP,
-      "helpUrl": Blockly.Msg.VARIABLES_SET_HELPURL
-    });
-  }
-};
+Blockly.defineBlocksWithJsonArray([{
+  "type": "graph_set_y",
+  "message0": "y = %1",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "VALUE",
+      "check": "Number"
+    }
+  ],
+  "colour": Blockly.Msg.VARIABLES_HUE,
+  "tooltip": Blockly.Msg.VARIABLES_SET_TOOLTIP,
+  "helpUrl": Blockly.Msg.VARIABLES_SET_HELPURL
+}]);
 
 Blockly.JavaScript['graph_set_y'] = function(block) {
   // y variable setter.

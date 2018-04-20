@@ -281,12 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "A smon ël cosen ëd n'àngol an gré (pa an radiant).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "A smon ël sen ëd n'àngol an gré (pa an radiant).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "A smon la tangenta ëd n'àngol an gré (pa an radiant).";
-/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Creé na variàbil ëd color...";
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Creé na variàbil numérica...";
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Creé na variàbil dë stringa...";
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Creé na variàbil...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Nòm ëd la neuva variàbil:";
-/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "Neuva sòrt ëd variàbil:";
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "përmëtte le diciairassion";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "con:";
@@ -397,7 +397,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Fissé costa variàbil ugual al valor d'imission.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Na variàbil con ël nòm '%1' a esist già.";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Na variàbil ciamà '%1' a esist già për n'àutra variàbil ëd sòrt '%2'.";
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Na variàbil ciamà '%1' a esist già për n'àutra sòrt: '%2'.";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

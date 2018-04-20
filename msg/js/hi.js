@@ -281,12 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "डिग्री का कोसाइन रिटर्न करें (रेडियन नही)";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "डिग्री का साइन रिटर्न करें (रेडियन नही)";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "डिग्री का टैन्जन्ट रिटर्न करें (रेडियन नही)";
-/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "रंग चर बनाएँ...";
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "संख्या चर बनायें...";
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "लड़ी चर बनायें...";
 /** @export */ Blockly.Msg.NEW_VARIABLE = "चर बनाएँ...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "नए चर का नाम:";
-/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "नए चर का नाम:";
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "बयानों की अनुमति दें";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = ": के साथ";

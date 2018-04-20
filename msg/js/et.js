@@ -83,10 +83,10 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Add";  // untranslated
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
-/** @export */ Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Delete";  // untranslated
-/** @export */ Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "You can't use an empty variable name.";  // untranslated
+/** @export */ Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Kustuta";
+/** @export */ Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "Tühja muutuja nime ei saa kasutada.";
 /** @export */ Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "Rename";  // untranslated
-/** @export */ Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Variable name";  // untranslated
+/** @export */ Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = "Muutuja nimi";
 /** @export */ Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 /** @export */ Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "tühi loend";
 /** @export */ Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "Tagastab loendi, mille pikkus on 0 ja milles pole ühtegi elementi.";
@@ -337,7 +337,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_CHARAT_TOOLTIP = "Tagastab tekstis määratud asukohal oleva sümboli.";
 /** @export */ Blockly.Msg.TEXT_COUNT_HELPURL = "https://github.com/google/blockly/wiki/Text#counting-substrings";  // untranslated
 /** @export */ Blockly.Msg.TEXT_COUNT_MESSAGE0 = "count %1 in %2";  // untranslated
-/** @export */ Blockly.Msg.TEXT_COUNT_TOOLTIP = "Count how many times some text occurs within some other text.";  // untranslated
+/** @export */ Blockly.Msg.TEXT_COUNT_TOOLTIP = "Loenda, mitu korda mingi tekst esineb teise teksti sees.";
 /** @export */ Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "Objekti lisamine tekstile.";
 /** @export */ Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "ühenda";
 /** @export */ Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "Tekstiploki muutmine sektsioonide lisamise, eemaldamise või järjestuse muutmisega.";

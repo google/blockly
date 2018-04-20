@@ -28,7 +28,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.html";  // untranslated
 /** @export */ Blockly.Msg.COLOUR_RGB_RED = "gorria";
 /** @export */ Blockly.Msg.COLOUR_RGB_TITLE = "colour with";
-/** @export */ Blockly.Msg.COLOUR_RGB_TOOLTIP = " Sortu kolorea zehaztutako gorriz, berdearekin eta urdinekin. Balio guztiak 0 eta 100 artean egon behar dira.";
+/** @export */ Blockly.Msg.COLOUR_RGB_TOOLTIP = "Sortu kolorea zehaztutako gorriz, berdearekin eta urdinekin. Balio guztiak 0 eta 100 artean egon behar dira.";
 /** @export */ Blockly.Msg.CONTROLS_FLOW_STATEMENTS_HELPURL = "https://github.com/google/blockly/wiki/Loops#loop-termination-blocks";  // untranslated
 /** @export */ Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK = "begizta eten";
 /** @export */ Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE = "jarraitu hurrengo begizta iterazioarekin";

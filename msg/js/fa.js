@@ -148,7 +148,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_HELPURL = "https://github.com/google/blockly/wiki/Lists#in-list--set";  // untranslated
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_INPUT_TO = "به عنوان";
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_INSERT = "درج در";
-/** @export */ Blockly.Msg.LISTS_SET_INDEX_SET = "مجموعه";
+/** @export */ Blockly.Msg.LISTS_SET_INDEX_SET = "اعمال";
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_FIRST = "موردی به ته فهرست اضافه می‌کند.";
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_FROM = "موردی در موقعیت مشخص‌شده در یک فهرست اضافه می‌کند.";
 /** @export */ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_LAST = "موردی به ته فهرست الحاق می‌کند.";
@@ -223,7 +223,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_IS_TOOLTIP = "بررسی می‌کند که آیا یک عدد زوج، فرد، اول، کامل، مثبت، منفی یا بخش‌پذیر عدد خاصی باشد را بررسی می‌کند. درست یا نادرست باز می‌گرداند.";
 /** @export */ Blockly.Msg.MATH_IS_WHOLE = "کامل است";
 /** @export */ Blockly.Msg.MATH_MODULO_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B9%D9%85%D9%84%DB%8C%D8%A7%D8%AA_%D9%BE%DB%8C%D9%85%D8%A7%D9%86%D9%87";
-/** @export */ Blockly.Msg.MATH_MODULO_TITLE = "باقی‌ماندهٔ %1 + %2";
+/** @export */ Blockly.Msg.MATH_MODULO_TITLE = "باقی‌ماندهٔ %1 ÷ %2";
 /** @export */ Blockly.Msg.MATH_MODULO_TOOLTIP = "باقی‌ماندهٔ تقسیم دو عدد را بر می‌گرداند.";
 /** @export */ Blockly.Msg.MATH_MULTIPLICATION_SYMBOL = "×";  // untranslated
 /** @export */ Blockly.Msg.MATH_NUMBER_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B9%D8%AF%D8%AF";

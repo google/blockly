@@ -114,7 +114,7 @@ Blockly.WorkspaceComment = function(workspace, content, height, width, opt_id) {
 
 /**
  * Dispose of this comment.
- * @publc
+ * @package
  */
 Blockly.WorkspaceComment.prototype.dispose = function() {
   if (!this.workspace) {
@@ -176,7 +176,7 @@ Blockly.WorkspaceComment.prototype.setWidth = function(width) {
  * Get stored location.
  * @return {!goog.math.Coordinate} The comment's stored location.  This is not
  *     valid if the comment is currently being dragged.
- * @public
+ * @package
  */
 Blockly.WorkspaceComment.prototype.getXY = function() {
   return this.xy_.clone();
@@ -186,7 +186,7 @@ Blockly.WorkspaceComment.prototype.getXY = function() {
  * Move a comment by a relative offset.
  * @param {number} dx Horizontal offset, in workspace units.
  * @param {number} dy Vertical offset, in workspace units.
- * @public
+ * @package
  */
 Blockly.WorkspaceComment.prototype.moveBy = function(dx, dy) {
   var event = new Blockly.Events.CommentMove(this);
@@ -245,7 +245,7 @@ Blockly.WorkspaceComment.prototype.getContent = function() {
 /**
  * Set this comment's content.
  * @param {string} content Comment content.
- * @public
+ * @package
  */
 Blockly.WorkspaceComment.prototype.setContent = function(content) {
   if (this.content_ != content) {
@@ -257,9 +257,9 @@ Blockly.WorkspaceComment.prototype.setContent = function(content) {
 
 /**
  * Encode a comment subtree as XML with XY coordinates.
- * @param {boolean} opt_noId True if the encoder should skip the comment id.
+ * @param {boolean=} opt_noId True if the encoder should skip the comment id.
  * @return {!Element} Tree of XML elements.
- * @public
+ * @package
  */
 Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
   var element = this.toXml(opt_noId);
@@ -274,7 +274,7 @@ Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
  * Encode a comment subtree as XML, but don't serialize the XY coordinates.
  * This method avoids some expensive metrics-related calls that are made in
  * toXmlWithXY().
- * @param {boolean} opt_noId True if the encoder should skip the comment id.
+ * @param {boolean=} opt_noId True if the encoder should skip the comment id.
  * @return {!Element} Tree of XML elements.
  * @package
  */

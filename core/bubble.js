@@ -315,6 +315,7 @@ Blockly.Bubble.prototype.showContextMenu_ = function(/*e*/) {
 /**
  * Get whether this bubble is deletable or not.
  * @return {boolean} True if deletable.
+ * @package
  */
 Blockly.Bubble.prototype.isDeletable = function() {
   return false;

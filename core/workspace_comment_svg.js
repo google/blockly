@@ -89,7 +89,7 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
 
 /**
  * Dispose of this comment.
- * @public
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
   if (!this.workspace) {
@@ -297,7 +297,7 @@ Blockly.WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
  * Move a comment by a relative offset.
  * @param {number} dx Horizontal offset, in workspace units.
  * @param {number} dy Vertical offset, in workspace units.
- * @public
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
   var event = new Blockly.Events.CommentMove(this);
@@ -483,7 +483,7 @@ Blockly.WorkspaceCommentSvg.prototype.getSvgRoot = function() {
 /**
  * Returns this comment's text.
  * @return {string} Comment text.
- * @public
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.getContent = function() {
   return this.textarea_ ? this.textarea_.value : this.content_;
@@ -492,7 +492,7 @@ Blockly.WorkspaceCommentSvg.prototype.getContent = function() {
 /**
  * Set this comment's content.
  * @param {string} content Comment content.
- * @public
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.setContent = function(content) {
   Blockly.WorkspaceCommentSvg.superClass_.setContent.call(this, content);
@@ -528,7 +528,7 @@ Blockly.WorkspaceCommentSvg.prototype.setAutoLayout = function() {
  * @param {number=} opt_wsWidth The width of the workspace, which is used to
  *     position comments correctly in RTL.
  * @return {!Blockly.WorkspaceCommentSvg} The created workspace comment.
- * @public
+ * @package
  */
 Blockly.WorkspaceCommentSvg.fromXml = function(xmlComment, workspace,
     opt_wsWidth) {
@@ -562,9 +562,9 @@ Blockly.WorkspaceCommentSvg.fromXml = function(xmlComment, workspace,
 
 /**
  * Encode a comment subtree as XML with XY coordinates.
- * @param {boolean} opt_noId True if the encoder should skip the comment id.
+ * @param {boolean=} opt_noId True if the encoder should skip the comment id.
  * @return {!Element} Tree of XML elements.
- * @public
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.toXmlWithXY = function(opt_noId) {
   var width;  // Not used in LTR.

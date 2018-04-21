@@ -430,7 +430,7 @@ Blockly.WorkspaceCommentSvg.prototype.disposeInternal_ = function() {
 
 /**
  * Set the focus on the text area.
- * @public
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.setFocus = function() {
   this.focused_ = true;
@@ -445,7 +445,7 @@ Blockly.WorkspaceCommentSvg.prototype.setFocus = function() {
 
 /**
  * Remove focus from the text area.
- * @public
+ * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.blurFocus = function() {
   this.focused_ = false;

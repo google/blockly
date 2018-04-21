@@ -68,7 +68,6 @@ if (window && window.PointerEvent) {
   };
 }
 
-
 /**
  * PID of queued long-press task.
  * @private

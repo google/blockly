@@ -1000,6 +1000,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
 /**
  * Paste the provided comment onto the workspace.
  * @param {!Element} xmlComment XML workspace comment element.
+ * @private
  */
 Blockly.WorkspaceSvg.prototype.pasteWorkspaceComment_ = function(xmlComment) {
   Blockly.Events.disable();

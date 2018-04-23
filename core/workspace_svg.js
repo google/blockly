@@ -128,11 +128,19 @@ Blockly.WorkspaceSvg.prototype.resizeHandlerWrapper_ = null;
 
 /**
  * The render status of an SVG workspace.
- * Returns `true` for visible workspaces and `false` for non-visible,
- * or headless, workspaces.
+ * Returns `false` for headless workspaces and true for instances of
+ * `Blockly.WorkspaceSvg`.
  * @type {boolean}
  */
 Blockly.WorkspaceSvg.prototype.rendered = true;
+
+/**
+ * Whether the workspace is visible.  False if the workspace has been hidden
+ * by calling `setVisisble(false)`.
+ * @type {boolean}
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.isVisible = true;
 
 /**
  * Is this workspace the surface for a flyout?
@@ -830,6 +838,7 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
   } else {
     Blockly.hideChaff(true);
   }
+  this.isVisible = isVisible;
 };
 
 /**

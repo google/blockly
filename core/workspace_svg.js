@@ -1480,6 +1480,27 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
 };
 
 /**
+ * Add a transition class to the block and bubble canvas, to animate any
+ * transform changes.
+ */
+Blockly.WorkspaceSvg.prototype.beginCanvasTransition = function() {
+  Blockly.utils.addClass(
+      /** @type {!SVGElement} */ this.svgBlockCanvas_, 'blocklyCanvasTransitioning');
+  Blockly.utils.addClass(
+      /** @type {!SVGElement} */ this.svgBubbleCanvas_, 'blocklyCanvasTransitioning');
+};
+
+/**
+ * Remove transition class from the block and bubble canvas.
+ */
+Blockly.WorkspaceSvg.prototype.endCanvasTransition = function() {
+  Blockly.utils.removeClass(
+      /** @type {!SVGElement} */ this.svgBlockCanvas_, 'blocklyCanvasTransitioning');
+  Blockly.utils.removeClass(
+      /** @type {!SVGElement} */ this.svgBubbleCanvas_, 'blocklyCanvasTransitioning');
+};
+
+/**
  * Center the workspace.
  */
 Blockly.WorkspaceSvg.prototype.scrollCenter = function() {

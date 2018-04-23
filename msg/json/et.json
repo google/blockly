@@ -3,7 +3,8 @@
 		"authors": [
 			"Aivarannamaa",
 			"Hasso",
-			"Puik"
+			"Puik",
+			"Ilmarine"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "objekt",
@@ -301,9 +302,9 @@
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Tekitab funktsiooni, mis tagastab midagi.",
 	"PROCEDURES_ALLOW_STATEMENTS": "kood plokis",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Hoiatus: Sel funktsioonil on mitu sama nimega sisendit.",
-	"PROCEDURES_CALLNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
+	"PROCEDURES_CALLNORETURN_HELPURL": "https://et.wikipedia.org/wiki/Alamprogramm",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Käivitab kasutaja defineeritud funktsiooni '%1'.",
-	"PROCEDURES_CALLRETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
+	"PROCEDURES_CALLRETURN_HELPURL": "https://et.wikipedia.org/wiki/Alamprogramm",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "Run the user-defined function '%1' and use its output.",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "sisendid",
 	"PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Funktsiooni sisendite lisamine, eemaldamine või järjestuse muutmine.",

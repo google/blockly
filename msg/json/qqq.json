@@ -292,7 +292,7 @@
 	"LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs].",
 	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs].",
 	"LISTS_REPEAT_HELPURL": "{{Optional}} url - Information about [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].",
-	"LISTS_REPEAT_TOOLTIP": "{{Optional}} url - See [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].",
+	"LISTS_REPEAT_TOOLTIP": " url - See [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].",
 	"LISTS_REPEAT_TITLE": "block text - See [https://github.com/google/blockly/wiki/Lists#create-list-with https://github.com/google/blockly/wiki/Lists#create-list-with]. \n\nParameters:\n* %1 - the item (text) to be repeated\n* %2 - the number of times to repeat it",
 	"LISTS_LENGTH_HELPURL": "{{Optional}} url - Information about how the length of a list is computed (i.e., by the total number of elements, not the number of different elements).",
 	"LISTS_LENGTH_TITLE": "block text - See [https://github.com/google/blockly/wiki/Lists#length-of https://github.com/google/blockly/wiki/Lists#length-of]. \n\nParameters:\n* %1 - the list whose length is desired",

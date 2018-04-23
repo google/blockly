@@ -68,6 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "بۆلەك %1 نى ئۆچۈرۈش";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "چەكلەنگەن بۆلەك";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "كۆچۈرۈش";
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "قوزغىتىلغان بۆلەك";
 /** @export */ Blockly.Msg.EXPAND_ALL = "ئېچىلىش بۆلىكى";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "ئېچىلىش بۆلىكى";
@@ -398,6 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Sets this variable to be equal to the input.";  // untranslated
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "ئىسم مەۋجۇت “%1” ئۆزگەرگۈچى";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "ئىسىملىك“%1” ئۆزگەرگۈچى مىقدار مەۋجۇت بولۇپ تۇرىدۇ ، لېكىن يەنە بىر ئۆزگەرگۈچى مىقدار تىپى بولۇش سۈپىتى بىلەن “%2” مەۋجۇت .";
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

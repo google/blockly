@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-03-06 15:07:55.902880",
+		"lastupdated": "2018-04-20 16:47:32.097975",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -10,6 +10,7 @@
 	"DUPLICATE_BLOCK": "Duplicate",
 	"ADD_COMMENT": "Add Comment",
 	"REMOVE_COMMENT": "Remove Comment",
+	"DUPLICATE_COMMENT": "Duplicate Comment",
 	"EXTERNAL_INPUTS": "External Inputs",
 	"INLINE_INPUTS": "Inline Inputs",
 	"DELETE_BLOCK": "Delete Block",
@@ -396,5 +397,6 @@
 	"PROCEDURES_CREATE_DO": "Create '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "If a value is true, then return a second value.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Warning: This block may be used only within a function definition."
+	"PROCEDURES_IFRETURN_WARNING": "Warning: This block may be used only within a function definition.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Say something..."
 }

@@ -68,6 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "%1 個のブロックを削除";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "ブロックを無効にする";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "複製";
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "ブロックを有効にする";
 /** @export */ Blockly.Msg.EXPAND_ALL = "ブロックを展開する";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "ブロックを展開する";
@@ -398,6 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "この入力を変数と等しくなるように設定します。";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "変数名 '%1' は既に存在しています。";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "'%2' 型の '%1' という名前の変数が既に存在します。";
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

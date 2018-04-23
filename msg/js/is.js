@@ -68,6 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "Eyða %1 kubbum";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "Óvirkja kubb";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "Afrita";
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "Virkja kubb";
 /** @export */ Blockly.Msg.EXPAND_ALL = "Opna kubba";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "Opna kubb";
@@ -398,6 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Stillir þessa breytu á innihald inntaksins.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Breyta með heitinu '%1' er þegar til staðar.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another type: '%2'.";  // untranslated
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

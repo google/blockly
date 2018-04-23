@@ -68,6 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "%1 ब्लॉक हटाएँ";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "ब्लॉक को अक्षम करें";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "कॉपी करें";
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "ब्लॉक को सक्षम करें";
 /** @export */ Blockly.Msg.EXPAND_ALL = "ब्लॉक विस्तार करें";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "ब्लॉक का विस्तार करें";
@@ -398,6 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "इस चर को इनपुट के बराबर सेट करता है।";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "प्राचल नाम '%1' पहले से मौजूद है।";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "'%1' नाम का एक चर पहले से '%2' प्रकार के अन्य चर के लिए मौजूद है।";
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

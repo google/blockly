@@ -68,6 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "Выдаліць %1 блокаў";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "Адключыць блок";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "Дубляваць";
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "Уключыць блок";
 /** @export */ Blockly.Msg.EXPAND_ALL = "Разгарнуць блокі";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "Разгарнуць блок";
@@ -398,6 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Прысабечвае пераменнай значэнне ўстаўкі.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Пераменная з назвай '%1' ужо існуе.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Назва пераменнай '%1' ужо выкарыстоўваецца іншай пераменнай тыпу '%2'.";
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

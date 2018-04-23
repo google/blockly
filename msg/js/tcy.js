@@ -68,6 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "%1 ಬ್ಲಾಕ್‍ಲೆನ್ ಮಾಜಾವು";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "ಬ್ಲಾಕ್‍ನ್ ದೆತ್ತ್‌ಪಾಡ್";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "ನಕಲ್";
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "ತಡೆನ್ ಸಕ್ರಿಯೊ ಮಲ್ಪು";
 /** @export */ Blockly.Msg.EXPAND_ALL = "ಮಾತಾ ತಡೆಕ್ಲೆನ ಮಾಹಿತಿನ್ ಪರಡಾವು";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "ಬ್ಲಾಕ್‍ದ ಮಾಹಿತಿನ್ ಪರಡಾವು";
@@ -398,6 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "ಈ ವ್ಯತ್ಯಯೊನು ಇನ್‌ಪುಟ್‌ಗ್ ಸಮ ಆಪಿಲೆಕ ಸೆಟ್ ಮಲ್ಪುಂಡು.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "'%1' ಪನ್ಪಿ ಪುದರ್‌ದ ವ್ಯತ್ಯಯೊ ದುಂಬೆ ಅಸ್ತಿತ್ವೊಡು ಉಂಡು.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another type: '%2'.";  // untranslated
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

@@ -88,6 +88,14 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
 }; goog.inherits(Blockly.WorkspaceCommentSvg, Blockly.WorkspaceComment);
 
 /**
+ * The width and height to use to size a workspace comment when it is first
+ * added, before it has been edited by the user.
+ * @type {number}
+ * @package
+ */
+Blockly.WorkspaceCommentSvg.DEFAULT_SIZE = 100;
+
+/**
  * Dispose of this comment.
  * @package
  */

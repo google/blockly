@@ -35,16 +35,17 @@ goog.require('goog.asserts');
 
 
 /**
- * Class for a bubble dragger.  It moves bubbles around the workspace when they
- * are being dragged by a mouse or touch.
- * @param {!Blockly.Bubble|!Blockly.WorkspaceCommentSvg} bubble The bubble to
- *     drag.
+ * Class for a bubble dragger.  It moves things on the bubble canvas around the
+ * workspace when they are being dragged by a mouse or touch.  These can be
+ * block comments, mutators, warnings, or workspace comments.
+ * @param {!Blockly.Bubble|!Blockly.WorkspaceCommentSvg} bubble The item on the
+ *     bubble canvas to drag.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to drag on.
  * @constructor
  */
 Blockly.BubbleDragger = function(bubble, workspace) {
   /**
-   * The bubble that is being dragged.
+   * The item on the bubble canvas that is being dragged.
    * @type {!Blockly.Bubble|!Blockly.WorkspaceCommentSvg}
    * @private
    */

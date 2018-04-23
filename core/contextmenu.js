@@ -352,7 +352,9 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
   // location of the mouse event.
   var addWsComment = function() {
     var comment = new Blockly.WorkspaceCommentSvg(
-        ws, Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT, 100, 100);
+        ws, Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT,
+        Blockly.WorkspaceCommentSvg.DEFAULT_SIZE,
+        Blockly.WorkspaceCommentSvg.DEFAULT_SIZE);
 
     var injectionDiv = ws.getInjectionDiv();
     // Bounding rect coordinates are in client coordinates, meaning that they

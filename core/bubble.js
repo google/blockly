@@ -306,10 +306,12 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
 
 /**
  * Show the context menu for this bubble.
- * @param {!Event} e Mouse event.
+ * @param {!Event} _e Mouse event.
  * @private
  */
-Blockly.Bubble.prototype.showContextMenu_ = function(/*e*/) {
+Blockly.Bubble.prototype.showContextMenu_ = function(_e) {
+  // NOP on bubbles, but used by the bubble dragger to pass events to
+  // workspace comments.
 };
 
 /**

@@ -1281,11 +1281,6 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   redoOption.callback = this.undo.bind(this, true);
   menuOptions.push(redoOption);
 
-  // Option to add a workspace comment.
-  if (this.options.comments) {
-    menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(ws, e));
-  }
-
   // Option to clean up blocks.
   if (this.scrollbar) {
     var cleanOption = {};

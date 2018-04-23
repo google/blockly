@@ -83,8 +83,6 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
   var size = this.getHeightWidth();
 
   // Add text area
-  // TODO: Does this need to happen every time?  Or are we orphaning foreign
-  // elements in the code?
   this.createEditor_();
   this.svgGroup_.appendChild(this.foreignObject_);
 

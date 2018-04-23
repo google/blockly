@@ -246,7 +246,7 @@ Blockly.onKeyDown_ = function(e) {
 };
 
 /**
- * Copy a block onto the local clipboard.
+ * Copy a block or workspace comment onto the local clipboard.
  * @param {!Blockly.Block | !Blockly.WorkspaceComment} toCopy Block or Workspace Comment
  *    to be copied.
  * @private
@@ -268,7 +268,7 @@ Blockly.copy_ = function(toCopy) {
 };
 
 /**
- * Duplicate this block and its children.
+ * Duplicate this block and its children, or a workspace comment.
  * @param {!Blockly.Block | !Blockly.WorkspaceComment} toDuplicate Block or
  *     Workspace Comment to be copied.
  * @private

@@ -173,9 +173,12 @@ Blockly.svgResize = function(workspace) {
  * @private
  */
 Blockly.onKeyDown_ = function(e) {
-  if (Blockly.mainWorkspace.options.readOnly || Blockly.utils.isTargetInput(e)) {
+  if (Blockly.mainWorkspace.options.readOnly || Blockly.utils.isTargetInput(e)
+      || (Blockly.mainWorkspace.rendered && !Blockly.mainWorkspace.isVisible)) {
     // No key actions on readonly workspaces.
     // When focused on an HTML text input widget, don't trap any keys.
+    // Ignore keypresses on rendered workspaces that have been explicitly
+    // hidden.
     return;
   }
   var deleteBlock = false;

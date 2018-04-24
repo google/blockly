@@ -210,9 +210,8 @@ Blockly.utils.getInjectionDivXY_ = function(element) {
   var y = 0;
   while (element) {
     var xy = Blockly.utils.getRelativeXY(element);
-    var scale = Blockly.utils.getScale_(element);
-    x = (x * scale) + xy.x;
-    y = (y * scale) + xy.y;
+    x = x + xy.x;
+    y = y + xy.y;
     var classes = element.getAttribute('class') || '';
     if ((' ' + classes + ' ').indexOf(' injectionDiv ') != -1) {
       break;
@@ -220,25 +219,6 @@ Blockly.utils.getInjectionDivXY_ = function(element) {
     element = element.parentNode;
   }
   return new goog.math.Coordinate(x, y);
-};
-
-/**
- * Return the scale of this element.
- * @param {!Element} element  The element to find the coordinates of.
- * @return {!number} number represending the scale applied to the element.
- * @private
- */
-Blockly.utils.getScale_ = function(element) {
-  var scale = 1;
-  var transform = element.getAttribute('transform');
-  if (transform) {
-    var transformComponents =
-        transform.match(Blockly.utils.getScale_.REGEXP_);
-    if (transformComponents && transformComponents[0]) {
-      scale = parseFloat(transformComponents[0]);
-    }
-  }
-  return scale;
 };
 
 /**
@@ -252,15 +232,6 @@ Blockly.utils.getScale_ = function(element) {
  */
 Blockly.utils.getRelativeXY.XY_REGEX_ =
     /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*\))?/;
-
-
-/**
- * Static regex to pull the scale values out of a transform style property.
- * Accounts for same exceptions as XY_REGEXP_.
- * @type {!RegExp}
- * @private
- */
-Blockly.utils.getScale_REGEXP_ = /scale\(\s*([-+\d.e]+)\s*\)/;
 
 /**
  * Static regex to pull the x,y,z values out of a translate3d() style property.

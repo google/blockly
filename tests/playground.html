@@ -401,7 +401,7 @@ h1 {
   Variables category uses untyped variable blocks.
   See https://developers.google.com/blockly/guides/create-custom-blocks/variables#untyped_variable_blocks for more information. -->
   <xml id="toolbox-categories" style="display: none">
-    <category name="Logic" colour="210">
+    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
@@ -410,7 +410,7 @@ h1 {
       <block type="logic_null" disabled="true"></block>
       <block type="logic_ternary"></block>
     </category>
-    <category name="Loops" colour="120">
+    <category name="Loops" colour="%{BKY_LOOPS_HUE}">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <shadow type="math_number">
@@ -440,7 +440,7 @@ h1 {
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
     </category>
-    <category name="Math" colour="230">
+    <category name="Math" colour="%{BKY_MATH_HUE}">
       <block type="math_number" gap="32">
         <field name="NUM">123</field>
       </block>
@@ -529,7 +529,7 @@ h1 {
       </block>
       <block type="math_random_float"></block>
     </category>
-    <category name="Text" colour="160">
+    <category name="Text" colour="%{BKY_TEXTS_HUE}">
       <block type="text"></block>
       <block type="text_join"></block>
       <block type="text_append">
@@ -631,7 +631,7 @@ h1 {
         </value>
       </block>
     </category>
-    <category name="Lists" colour="260">
+    <category name="Lists" colour="%{BKY_LISTS_HUE}">
       <block type="lists_create_with">
         <mutation items="0"></mutation>
       </block>
@@ -683,7 +683,7 @@ h1 {
       <block type="lists_sort"></block>
       <block type="lists_reverse"></block>
     </category>
-    <category name="Colour" colour="20">
+    <category name="Colour" colour="%{BKY_COLOUR_HUE}">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
       <block type="colour_rgb">
@@ -722,15 +722,15 @@ h1 {
       </block>
     </category>
     <sep></sep>
-    <category name="Variables" colour="330" custom="VARIABLE"></category>
-    <category name="Functions" colour="290" custom="PROCEDURE"></category>
+    <category name="Variables" colour="%{BKY_VARIABLES_HUE}" custom="VARIABLE"></category>
+    <category name="Functions" colour="%{BKY_PROCEDURES_HUE}" custom="PROCEDURE"></category>
   </xml>
 
   <!-- toolbox-categories-typed-variables has a category menu and an
   auto-closing flyout.  The Variables category uses typed variable blocks.
   See https://developers.google.com/blockly/guides/create-custom-blocks/variables#typed_variable_blocks for more information. -->
   <xml id="toolbox-categories-typed-variables" style="display: none">
-    <category name="Logic" colour="210">
+    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
@@ -739,7 +739,7 @@ h1 {
       <block type="logic_null" disabled="true"></block>
       <block type="logic_ternary"></block>
     </category>
-    <category name="Loops" colour="120">
+    <category name="Loops" colour="%{BKY_LOOPS_HUE}">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <shadow type="math_number">
@@ -769,7 +769,7 @@ h1 {
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
     </category>
-    <category name="Math" colour="230">
+    <category name="Math" colour="%{BKY_MATH_HUE}">
       <block type="math_number" gap="32">
         <field name="NUM">123</field>
       </block>
@@ -858,7 +858,7 @@ h1 {
       </block>
       <block type="math_random_float"></block>
     </category>
-    <category name="Text" colour="160">
+    <category name="Text" colour="%{BKY_TEXTS_HUE}">
       <block type="text"></block>
       <block type="text_join"></block>
       <block type="text_append">
@@ -960,7 +960,7 @@ h1 {
         </value>
       </block>
     </category>
-    <category name="Lists" colour="260">
+    <category name="Lists" colour="%{BKY_LISTS_HUE}">
       <block type="lists_create_with">
         <mutation items="0"></mutation>
       </block>
@@ -1012,7 +1012,7 @@ h1 {
       <block type="lists_sort"></block>
       <block type="lists_reverse"></block>
     </category>
-    <category name="Colour" colour="20">
+    <category name="Colour" colour="%{BKY_COLOUR_HUE}">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
       <block type="colour_rgb">
@@ -1051,8 +1051,8 @@ h1 {
       </block>
     </category>
     <sep></sep>
-    <category name="Variables" colour="310" custom="VARIABLE_DYNAMIC"></category>
-    <category name="Functions" colour="290" custom="PROCEDURE"></category>
+    <category name="Variables" colour="%{BKY_VARIABLES_DYNAMIC_HUE}" custom="VARIABLE_DYNAMIC"></category>
+    <category name="Functions" colour="%{BKY_PROCEDURES_HUE}" custom="PROCEDURE"></category>
   </xml>
 
   <!-- toolbox-test-blocks has a category menu and an auto-closing flyout.

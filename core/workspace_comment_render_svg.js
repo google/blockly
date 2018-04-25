@@ -433,8 +433,12 @@ Blockly.WorkspaceCommentSvg.prototype.disposeInternal_ = function() {
 Blockly.WorkspaceCommentSvg.prototype.setFocus = function() {
   this.focused_ = true;
   var textarea = this.textarea_;
-  this.svgRectTarget_.style.fill = "none";
-  this.svgHandleTarget_.style.fill = "transparent";
+  Blockly.utils.addClass(this.svgRectTarget_, 'blocklyCommentTargetFocused');
+  Blockly.utils.addClass(
+      this.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
+
+  // this.svgRectTarget_.style.fill = "none";
+  // this.svgHandleTarget_.style.fill = "transparent";
   setTimeout(function() {
     textarea.focus();
   }, 0);
@@ -448,8 +452,11 @@ Blockly.WorkspaceCommentSvg.prototype.setFocus = function() {
 Blockly.WorkspaceCommentSvg.prototype.blurFocus = function() {
   this.focused_ = false;
   var textarea = this.textarea_;
-  this.svgRectTarget_.style.fill = "transparent";
-  this.svgHandleTarget_.style.fill = "none";
+  Blockly.utils.removeClass(this.svgRectTarget_, 'blocklyCommentTargetFocused');
+  Blockly.utils.removeClass(
+      this.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
+  // this.svgRectTarget_.style.fill = "transparent";
+  // this.svgHandleTarget_.style.fill = "none";
   setTimeout(function() {
     textarea.blur();
   }, 0);

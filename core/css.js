@@ -399,8 +399,16 @@ Blockly.Css.CONTENT = [
     'stroke: #bcA903;',
   '}',
 
+  '.blocklyCommentTargetFocused {',
+    'fill: none;',
+  '}',
+
   '.blocklyCommentHandleTarget {',
     'fill: none;',
+  '}',
+
+  '.blocklyCommentHandleTargetFocused {',
+    'fill: transparent;',
   '}',
 
   '.blocklyFocused>.blocklyCommentRect {',
@@ -412,6 +420,7 @@ Blockly.Css.CONTENT = [
     'stroke: #fc3;',
     'stroke-width: 3px;',
   '}',
+
 
   '.blocklyCommentTextarea {',
     'background-color: #fef49c;',

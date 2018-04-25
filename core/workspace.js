@@ -188,6 +188,14 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
  */
 Blockly.Workspace.prototype.addTopComment = function(comment) {
   this.topComments_.push(comment);
+
+  // Note: If the comment database starts to hold block comments, this may need
+  // to move to a separate function.
+  if (this.commentDB_[comment.id]) {
+    console.warn('Overriding an existing comment on this workspace, with id "' +
+        comment.id + '"');
+  }
+  this.commentDB_[comment.id] = comment;
 };
 
 /**
@@ -199,6 +207,9 @@ Blockly.Workspace.prototype.removeTopComment = function(comment) {
   if (!goog.array.remove(this.topComments_, comment)) {
     throw 'Comment not present in workspace\'s list of top-most comments.';
   }
+  // Note: If the comment database starts to hold block comments, this may need
+  // to move to a separate function.
+  delete this.commentDB_[comment.id];
 };
 
 /**
@@ -525,28 +536,6 @@ Blockly.Workspace.prototype.getBlockById = function(id) {
  */
 Blockly.Workspace.prototype.getCommentById = function(id) {
   return this.commentDB_[id] || null;
-};
-
-/**
- * Add the comment to the comment database.
- * @param {Blockly.WorkspaceComment} comment The comment to add.
- * @package
- */
-Blockly.Workspace.prototype.addCommentById = function(comment) {
-  if (this.commentDB_[comment.id]) {
-    console.warn('Overriding an existing comment on this workspace, with id "' +
-        comment.id + '"');
-  }
-  this.commentDB_[comment.id] = comment;
-};
-
-/**
- * Remove the comment from the comment database.
- * @param {string} id The id of the comment to remove.
- * @package
- */
-Blockly.Workspace.prototype.removeCommentById = function(id) {
-  delete this.commentDB_[id];
 };
 
 /**

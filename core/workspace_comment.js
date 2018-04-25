@@ -49,7 +49,6 @@ Blockly.WorkspaceComment = function(workspace, content, height, width, opt_id) {
   this.id = (opt_id && !workspace.getCommentById(opt_id)) ?
       opt_id : Blockly.utils.genUid();
 
-  workspace.addCommentById(this);
   workspace.addTopComment(this);
 
   /**
@@ -126,10 +125,8 @@ Blockly.WorkspaceComment.prototype.dispose = function() {
     Blockly.Events.fire(new Blockly.Events.CommentDelete(this));
   }
 
-  // Remove from the list of top comments.
+  // Remove from the list of top comments and the comment database.
   this.workspace.removeTopComment(this);
-  // Remove from the comment DB.
-  this.workspace.removeCommentById(this.id);
   this.workspace = null;
 };
 

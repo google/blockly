@@ -13,6 +13,7 @@
 	"DUPLICATE_BLOCK": "Duplicera",
 	"ADD_COMMENT": "Lägg till kommentar",
 	"REMOVE_COMMENT": "Radera kommentar",
+	"DUPLICATE_COMMENT": "Duplicera kommentar",
 	"EXTERNAL_INPUTS": "Externa inmatningar",
 	"INLINE_INPUTS": "Radinmatning",
 	"DELETE_BLOCK": "Radera block",
@@ -363,5 +364,6 @@
 	"PROCEDURES_CREATE_DO": "Skapa '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Om ett värde är sant returneras ett andra värde.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Varning: Detta block får användas endast i en funktionsdefinition."
+	"PROCEDURES_IFRETURN_WARNING": "Varning: Detta block får användas endast i en funktionsdefinition.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Säg någonting..."
 }

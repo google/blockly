@@ -21,6 +21,7 @@
 	"DUPLICATE_BLOCK": "שכפל",
 	"ADD_COMMENT": "הוסף תגובה",
 	"REMOVE_COMMENT": "הסר תגובה",
+	"DUPLICATE_COMMENT": "שכפול ההערה",
 	"EXTERNAL_INPUTS": "קלטים חיצוניים",
 	"INLINE_INPUTS": "קלטים פנימיים",
 	"DELETE_BLOCK": "מחק קטע קוד",
@@ -292,5 +293,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "הדגש הגדרה של פונקציה",
 	"PROCEDURES_CREATE_DO": "ליצור '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "אם ערך נכון, אז להחזיר ערך שני.",
-	"PROCEDURES_IFRETURN_WARNING": "אזהרה: בלוק זה עשוי לשמש רק בתוך הגדרה של פונקציה."
+	"PROCEDURES_IFRETURN_WARNING": "אזהרה: בלוק זה עשוי לשמש רק בתוך הגדרה של פונקציה.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "נא להזין הערה..."
 }

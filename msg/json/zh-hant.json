@@ -19,6 +19,7 @@
 	"DUPLICATE_BLOCK": "複製",
 	"ADD_COMMENT": "加入註解",
 	"REMOVE_COMMENT": "移除註解",
+	"DUPLICATE_COMMENT": "重複註解",
 	"EXTERNAL_INPUTS": "外部輸入",
 	"INLINE_INPUTS": "單行輸入",
 	"DELETE_BLOCK": "刪除區塊",
@@ -350,5 +351,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "反白顯示函式定義",
 	"PROCEDURES_CREATE_DO": "建立「%1」",
 	"PROCEDURES_IFRETURN_TOOLTIP": "如果值為 true，則返回第二個值。",
-	"PROCEDURES_IFRETURN_WARNING": "警告：這個區塊只可以在定義函式時使用。"
+	"PROCEDURES_IFRETURN_WARNING": "警告：這個區塊只可以在定義函式時使用。",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "來說些事情..."
 }

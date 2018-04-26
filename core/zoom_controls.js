@@ -160,7 +160,7 @@ Blockly.ZoomControls.prototype.position = function() {
 
 /**
  * Create the zoom in icon and its event handler.
- * @param {number} rnd The random number to use to identify the clip paths.
+ * @param {string} rnd The random string to use to identify the clip paths.
  * @private
  */
 Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
@@ -207,7 +207,7 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
 
 /**
  * Create the zoom out icon and its event handler.
- * @param {number} rnd The random number to use to identify the clip paths.
+ * @param {string} rnd The random string to use to identify the clip paths.
  * @private
  */
 Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
@@ -255,7 +255,7 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
 
 /**
  * Create the zoom reset icon and its event handler.
- * @param {number} rnd The random number to use to identify the clip paths.
+ * @param {string} rnd The random string to use to identify the clip paths.
  * @private
  */
 Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {

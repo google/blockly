@@ -11,6 +11,7 @@
 	"DUPLICATE_BLOCK": "Eng Kopie maachen",
 	"ADD_COMMENT": "Bemierkung derbäisetzen",
 	"REMOVE_COMMENT": "Bemierkung ewechhuelen",
+	"DUPLICATE_COMMENT": "Bemierkung kopéieren",
 	"DELETE_BLOCK": "Block läschen",
 	"DELETE_X_BLOCKS": "%1 Bléck läschen",
 	"CLEAN_UP": "Bléck opraumen",
@@ -138,5 +139,6 @@
 	"PROCEDURES_CALL_BEFORE_PARAMS": "mat:",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Dës Funktioun beschreiwen...",
 	"PROCEDURES_DEFRETURN_RETURN": "zréck",
-	"PROCEDURES_CREATE_DO": "'%1' uleeën"
+	"PROCEDURES_CREATE_DO": "'%1' uleeën",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Sot eppes..."
 }

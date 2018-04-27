@@ -30,6 +30,7 @@
 	"DUPLICATE_BLOCK": "Duplicar",
 	"ADD_COMMENT": "Adicionar comentário",
 	"REMOVE_COMMENT": "Remover comentário",
+	"DUPLICATE_COMMENT": "Duplicar comentário",
 	"EXTERNAL_INPUTS": "Entradas externas",
 	"INLINE_INPUTS": "Entradas incorporadas",
 	"DELETE_BLOCK": "Deletar bloco",
@@ -360,5 +361,6 @@
 	"PROCEDURES_CREATE_DO": "Criar \"%1\"",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Se um valor é verdadeiro, então retorna um valor.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Atenção: Este bloco só pode ser utilizado dentro da definição de uma função."
+	"PROCEDURES_IFRETURN_WARNING": "Atenção: Este bloco só pode ser utilizado dentro da definição de uma função.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Diz algo..."
 }

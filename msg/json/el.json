@@ -24,6 +24,7 @@
 	"DUPLICATE_BLOCK": "Διπλότυπο",
 	"ADD_COMMENT": "Πρόσθεσε Το Σχόλιο",
 	"REMOVE_COMMENT": "Αφαίρεσε Το Σχόλιο",
+	"DUPLICATE_COMMENT": "Διπλότυπο σχόλιο",
 	"EXTERNAL_INPUTS": "Εξωτερικές Είσοδοι",
 	"INLINE_INPUTS": "Εσωτερικές Είσοδοι",
 	"DELETE_BLOCK": "Διάγραψε Το Μπλοκ",
@@ -372,5 +373,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Επισημάνετε τον ορισμό συνάρτησης",
 	"PROCEDURES_CREATE_DO": "Δημιούργησε «%1»",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Αν μια τιμή είναι αληθής, τότε επιστρέφει τη δεύτερη τιμή.",
-	"PROCEDURES_IFRETURN_WARNING": "Προειδοποίηση: Αυτό το μπλοκ μπορεί να χρησιμοποιηθεί μόνο στον ορισμό μιας συνάρτησης."
+	"PROCEDURES_IFRETURN_WARNING": "Προειδοποίηση: Αυτό το μπλοκ μπορεί να χρησιμοποιηθεί μόνο στον ορισμό μιας συνάρτησης.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Πείτε κάτι..."
 }

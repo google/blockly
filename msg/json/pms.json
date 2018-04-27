@@ -9,6 +9,7 @@
 	"DUPLICATE_BLOCK": "Dupliché",
 	"ADD_COMMENT": "Gionté un coment",
 	"REMOVE_COMMENT": "Scancelé un coment",
+	"DUPLICATE_COMMENT": "Dupliché ël coment",
 	"EXTERNAL_INPUTS": "Imission esterne",
 	"INLINE_INPUTS": "Imission an linia",
 	"DELETE_BLOCK": "Scancelé ël blòch",
@@ -340,5 +341,6 @@
 	"PROCEDURES_CREATE_DO": "Creé '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Se un valor a l'é ver, antlora smon-e un second valor.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Atension: Ës blòch a podria esse dovrà mach an na definission ëd fonsion."
+	"PROCEDURES_IFRETURN_WARNING": "Atension: Ës blòch a podria esse dovrà mach an na definission ëd fonsion.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Dì cheicòs..."
 }

@@ -4,7 +4,8 @@
 			"Etrapani",
 			"Ochilov",
 			"Orikrin1998",
-			"Robin van der Vliet"
+			"Robin van der Vliet",
+			"Cérilew"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
@@ -191,5 +192,6 @@
 	"LISTS_SET_INDEX_SET": "difini",
 	"LISTS_SET_INDEX_INSERT": "enmeti je",
 	"LISTS_SET_INDEX_INPUT_TO": "kiel",
-	"PROCEDURES_CREATE_DO": "Krei '%1'"
+	"PROCEDURES_CREATE_DO": "Krei '%1'",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Diru ion…"
 }

@@ -1271,12 +1271,12 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
 
   // Options to undo/redo previous action.
   var undoOption = {};
-  undoOption.text = Blockly.Msg.UNDO;
+  undoOption.text = Blockly.Msg['UNDO'];
   undoOption.enabled = this.undoStack_.length > 0;
   undoOption.callback = this.undo.bind(this, false);
   menuOptions.push(undoOption);
   var redoOption = {};
-  redoOption.text = Blockly.Msg.REDO;
+  redoOption.text = Blockly.Msg['REDO'];
   redoOption.enabled = this.redoStack_.length > 0;
   redoOption.callback = this.undo.bind(this, true);
   menuOptions.push(redoOption);
@@ -1284,7 +1284,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   // Option to clean up blocks.
   if (this.scrollbar) {
     var cleanOption = {};
-    cleanOption.text = Blockly.Msg.CLEAN_UP;
+    cleanOption.text = Blockly.Msg['CLEAN_UP'];
     cleanOption.enabled = topBlocks.length > 1;
     cleanOption.callback = this.cleanUp.bind(this);
     menuOptions.push(cleanOption);
@@ -1326,7 +1326,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
 
     // Option to collapse top blocks.
     var collapseOption = {enabled: hasExpandedBlocks};
-    collapseOption.text = Blockly.Msg.COLLAPSE_ALL;
+    collapseOption.text = Blockly.Msg['COLLAPSE_ALL'];
     collapseOption.callback = function() {
       toggleOption(true);
     };
@@ -1334,7 +1334,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
 
     // Option to expand top blocks.
     var expandOption = {enabled: hasCollapsedBlocks};
-    expandOption.text = Blockly.Msg.EXPAND_ALL;
+    expandOption.text = Blockly.Msg['EXPAND_ALL'];
     expandOption.callback = function() {
       toggleOption(false);
     };
@@ -1373,8 +1373,8 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   }
 
   var deleteOption = {
-    text: deleteList.length == 1 ? Blockly.Msg.DELETE_BLOCK :
-        Blockly.Msg.DELETE_X_BLOCKS.replace('%1', String(deleteList.length)),
+    text: deleteList.length == 1 ? Blockly.Msg['DELETE_BLOCK'] :
+        Blockly.Msg['DELETE_X_BLOCKS'].replace('%1', String(deleteList.length)),
     enabled: deleteList.length > 0,
     callback: function() {
       if (ws.currentGesture_) {
@@ -1384,7 +1384,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
         deleteNext();
       } else {
         Blockly.confirm(
-            Blockly.Msg.DELETE_ALL_BLOCKS.replace('%1', deleteList.length),
+            Blockly.Msg['DELETE_ALL_BLOCKS'].replace('%1', deleteList.length),
             function(ok) {
               if (ok) {
                 deleteNext();

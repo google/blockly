@@ -396,5 +396,6 @@
 	"PROCEDURES_CREATE_DO": "'%1' 생성",
 	"PROCEDURES_IFRETURN_TOOLTIP": "값이 참이라면, 두 번째 값을 반환합니다.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "경고: 이 블럭은, 함수 정의 블럭 안에서만 사용할 수 있습니다."
+	"PROCEDURES_IFRETURN_WARNING": "경고: 이 블럭은, 함수 정의 블럭 안에서만 사용할 수 있습니다.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "말해 보세요..."
 }

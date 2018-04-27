@@ -173,7 +173,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
  */
 Blockly.FieldTextInput.prototype.showPromptEditor_ = function() {
   var fieldText = this;
-  Blockly.prompt(Blockly.Msg.CHANGE_VALUE_TITLE, this.text_,
+  Blockly.prompt(Blockly.Msg['CHANGE_VALUE_TITLE'], this.text_,
       function(newValue) {
         if (fieldText.sourceBlock_) {
           newValue = fieldText.callValidator(newValue);

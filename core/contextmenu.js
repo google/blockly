@@ -222,8 +222,8 @@ Blockly.ContextMenu.blockDeleteOption = function(block) {
     descendantCount -= nextBlock.getDescendants(false).length;
   }
   var deleteOption = {
-    text: descendantCount == 1 ? Blockly.Msg.DELETE_BLOCK :
-        Blockly.Msg.DELETE_X_BLOCKS.replace('%1', String(descendantCount)),
+    text: descendantCount == 1 ? Blockly.Msg['DELETE_BLOCK'] :
+        Blockly.Msg['DELETE_X_BLOCKS'].replace('%1', String(descendantCount)),
     enabled: true,
     callback: function() {
       Blockly.Events.setGroup(true);
@@ -244,7 +244,7 @@ Blockly.ContextMenu.blockHelpOption = function(block) {
   var url = goog.isFunction(block.helpUrl) ? block.helpUrl() : block.helpUrl;
   var helpOption = {
     enabled: !!url,
-    text: Blockly.Msg.HELP,
+    text: Blockly.Msg['HELP'],
     callback: function() {
       block.showHelp_();
     }
@@ -265,7 +265,7 @@ Blockly.ContextMenu.blockDuplicateOption = function(block) {
     enabled = false;
   }
   var duplicateOption = {
-    text: Blockly.Msg.DUPLICATE_BLOCK,
+    text: Blockly.Msg['DUPLICATE_BLOCK'],
     enabled: enabled,
     callback: function() {
       Blockly.duplicate_(block);
@@ -287,13 +287,13 @@ Blockly.ContextMenu.blockCommentOption = function(block) {
   };
   // If there's already a comment, add an option to delete it.
   if (block.comment) {
-    commentOption.text = Blockly.Msg.REMOVE_COMMENT;
+    commentOption.text = Blockly.Msg['REMOVE_COMMENT'];
     commentOption.callback = function() {
       block.setCommentText(null);
     };
   } else {
     // If there's no comment, add an option to create a comment.
-    commentOption.text = Blockly.Msg.ADD_COMMENT;
+    commentOption.text = Blockly.Msg['ADD_COMMENT'];
     commentOption.callback = function() {
       block.setCommentText('');
     };

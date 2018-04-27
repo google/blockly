@@ -617,7 +617,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
           var inlineOption = {enabled: true};
           var isInline = this.getInputsInline();
           inlineOption.text = isInline ?
-              Blockly.Msg.EXTERNAL_INPUTS : Blockly.Msg.INLINE_INPUTS;
+              Blockly.Msg['EXTERNAL_INPUTS'] : Blockly.Msg['INLINE_INPUTS'];
           inlineOption.callback = function() {
             block.setInputsInline(!isInline);
           };
@@ -631,14 +631,14 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       // Option to collapse/expand block.
       if (this.collapsed_) {
         var expandOption = {enabled: true};
-        expandOption.text = Blockly.Msg.EXPAND_BLOCK;
+        expandOption.text = Blockly.Msg['EXPAND_BLOCK'];
         expandOption.callback = function() {
           block.setCollapsed(false);
         };
         menuOptions.push(expandOption);
       } else {
         var collapseOption = {enabled: true};
-        collapseOption.text = Blockly.Msg.COLLAPSE_BLOCK;
+        collapseOption.text = Blockly.Msg['COLLAPSE_BLOCK'];
         collapseOption.callback = function() {
           block.setCollapsed(true);
         };
@@ -650,7 +650,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       // Option to disable/enable block.
       var disableOption = {
         text: this.disabled ?
-            Blockly.Msg.ENABLE_BLOCK : Blockly.Msg.DISABLE_BLOCK,
+            Blockly.Msg['ENABLE_BLOCK'] : Blockly.Msg['DISABLE_BLOCK'],
         enabled: !this.getInheritedDisabled(),
         callback: function() {
           block.setDisabled(!block.disabled);

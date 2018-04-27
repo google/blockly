@@ -16,6 +16,7 @@
 	"DUPLICATE_BLOCK": "Kopieren",
 	"ADD_COMMENT": "Kommentar hinzufügen",
 	"REMOVE_COMMENT": "Kommentar entfernen",
+	"DUPLICATE_COMMENT": "Kommentar kopieren",
 	"EXTERNAL_INPUTS": "externe Eingänge",
 	"INLINE_INPUTS": "interne Eingänge",
 	"DELETE_BLOCK": "Baustein löschen",
@@ -376,5 +377,6 @@
 	"PROCEDURES_CREATE_DO": "Erzeuge \"Aufruf %1\"",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Gibt den zweiten Wert zurück und verlässt die Funktion, falls der erste Wert wahr ist.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Warnung: Dieser Block darf nur innerhalb eines Funktionsblocks genutzt werden."
+	"PROCEDURES_IFRETURN_WARNING": "Warnung: Dieser Block darf nur innerhalb eines Funktionsblocks genutzt werden.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Teile etwas mit …"
 }

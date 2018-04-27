@@ -354,11 +354,10 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
 };
 
 /**
- * Whether this field references any Blockly variables.  If true it may need to
- * be handled differently during serialization and deserialization.  Subclasses
- * may override this.
- * @return {boolean} True if this field has any variable references.
+ * Overrides referencesVariables(), indicating this field refers to a variable.
+ * @return {boolean} True.
  * @package
+ * @override
  */
 Blockly.FieldVariable.prototype.referencesVariables = function() {
   return true;

@@ -68,7 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "删除 %1 块";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "禁用块";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "复制";
-/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "重复频率";
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "启用块";
 /** @export */ Blockly.Msg.EXPAND_ALL = "展开块";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "展开块";
@@ -399,7 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "设置此变量，以使它和输入值相等。";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "已存在名为“%1”的变量。";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "名为“%1”的变量已作为另一个变量类型存在：“%2”。";
-/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "说一些事情...";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

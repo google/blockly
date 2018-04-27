@@ -68,7 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "Διάγραψε %1 Μπλοκ";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "Απενεργοποίησε Το Μπλοκ";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "Διπλότυπο";
-/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Διπλότυπο σχόλιο";
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "Ενεργοποίησε Το Μπλοκ";
 /** @export */ Blockly.Msg.EXPAND_ALL = "Επέκτεινε Όλα Τα Μπλοκ";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "Επέκτεινε Το Μπλοκ";
@@ -399,7 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Ορίζει αυτή τη μεταβλητή να είναι ίση με την είσοδο.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Η μεταβλητή με το όνομα \"%1\" υπάρχει ήδη";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Μια μεταβλητή με όνομα '%1' υπάρχει πάντα για έναν άλλο τύπο: '%2'.";
-/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Πείτε κάτι...";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

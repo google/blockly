@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.ar');
 goog.require('Blockly.Msg');
 
 /** @export */ Blockly.Msg.ADD_COMMENT = "أضف تعليقًا";
-/** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
+/** @export */ Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = "لايمكن حذف متغير \"%1\" بسبب انه جزء من الدالة \"%2\"";
 /** @export */ Blockly.Msg.CHANGE_VALUE_TITLE = "تغيير قيمة:";
 /** @export */ Blockly.Msg.CLEAN_UP = "ترتيب القطع";
 /** @export */ Blockly.Msg.COLLAPSE_ALL = "إخفاء القطع";
@@ -78,12 +78,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.IOS_CANCEL = "ألغِ";
 /** @export */ Blockly.Msg.IOS_ERROR = "خطأ";
 /** @export */ Blockly.Msg.IOS_OK = "أوافق";
-/** @export */ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
-/** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
-/** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
-/** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
+/** @export */ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+اضافة ادخال";
+/** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "العبارات المسموحة";
+/** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "هذه الدالة لها مدخلات مكررة.";
+/** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "المدخلات";
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "أضف";
-/** @export */ Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Add Variable";  // untranslated
+/** @export */ Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+اضف متغير";
 /** @export */ Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "احذف";
 /** @export */ Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = "لا يمكنك استخدام اسم متغير فارغ.";
 /** @export */ Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = "أعد التسمية";
@@ -200,7 +200,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.LOGIC_TERNARY_IF_TRUE = "إذا كانت العبارة صحيحة";
 /** @export */ Blockly.Msg.LOGIC_TERNARY_TOOLTIP = "تحقق الشرط في 'الاختبار'. إذا كان الشرط صحيح، يقوم بإرجاع قيمة 'اذا كانت العبارة صحيحة'؛ خلاف ذلك يرجع قيمة 'اذا كانت العبارة خاطئة'.";
 /** @export */ Blockly.Msg.MATH_ADDITION_SYMBOL = "+";
-/** @export */ Blockly.Msg.MATH_ARITHMETIC_HELPURL = "https://ar.wikipedia.org/wiki/%D8%AD%D8%B3%D8%A7%D8%A8%D9%8A%D8%A7%D8%AA";
+/** @export */ Blockly.Msg.MATH_ARITHMETIC_HELPURL = "https://en.wikipedia.org/wiki/Arithmetic";
 /** @export */ Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_ADD = "يرجع مجموع الرقمين.";
 /** @export */ Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_DIVIDE = "يرجع حاصل قسمة الرقمين.";
 /** @export */ Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MINUS = "يرجع الفرق بين الرقمين.";
@@ -258,7 +258,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_ROUND_OPERATOR_ROUNDDOWN = "تقريب إلى اصغر عدد صحيح";
 /** @export */ Blockly.Msg.MATH_ROUND_OPERATOR_ROUNDUP = "تقريب الى اكبر عدد صحيح";
 /** @export */ Blockly.Msg.MATH_ROUND_TOOLTIP = "تقريب الى اكبر عدد صحيح أو الى اصغر عدد صحيح.";
-/** @export */ Blockly.Msg.MATH_SINGLE_HELPURL = "https://ar.wikipedia.org/wiki/%D8%AC%D8%B0%D8%B1_%D8%AA%D8%B1%D8%A8%D9%8A%D8%B9%D9%8A";
+/** @export */ Blockly.Msg.MATH_SINGLE_HELPURL = "https://en.wikipedia.org/wiki/Square_root";
 /** @export */ Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE = "مطلق";
 /** @export */ Blockly.Msg.MATH_SINGLE_OP_ROOT = "الجذر التربيعي";
 /** @export */ Blockly.Msg.MATH_SINGLE_TOOLTIP_ABS = "يرجع القيمة المطلقة لرقم.";
@@ -282,12 +282,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "يرجع جيب التمام لدرجة (لا زواية نصف قطرية).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "يرجع جيب التمام لدرجة (لا زواية نصف قطرية).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "يرجع الظل لدرجة (لا دائرة نصف قطرية).";
-/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "انشاء متغير لوني...";
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "انشاء متغير رقمي...";
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "انشاء متغير نصي...";
 /** @export */ Blockly.Msg.NEW_VARIABLE = "إنشاء متغير...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "اسم المتغير الجديد:";
-/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "نوع متغير جديد:";
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "اسمح بالبيانات";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "مع:";
@@ -334,11 +334,11 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_CHARAT_LAST = "احصل على آخر حرف";
 /** @export */ Blockly.Msg.TEXT_CHARAT_RANDOM = "الحصول على حرف عشوائي";
 /** @export */ Blockly.Msg.TEXT_CHARAT_TAIL = "";  // untranslated
-/** @export */ Blockly.Msg.TEXT_CHARAT_TITLE = "in text %1 %2";  // untranslated
+/** @export */ Blockly.Msg.TEXT_CHARAT_TITLE = "في النص %1 %2";
 /** @export */ Blockly.Msg.TEXT_CHARAT_TOOLTIP = "يرجع حرف ما في الموضع المحدد.";
 /** @export */ Blockly.Msg.TEXT_COUNT_HELPURL = "https://github.com/google/blockly/wiki/Text#counting-substrings";  // untranslated
-/** @export */ Blockly.Msg.TEXT_COUNT_MESSAGE0 = "count %1 in %2";  // untranslated
-/** @export */ Blockly.Msg.TEXT_COUNT_TOOLTIP = "Count how many times some text occurs within some other text.";  // untranslated
+/** @export */ Blockly.Msg.TEXT_COUNT_MESSAGE0 = "العدد %1 في %2";
+/** @export */ Blockly.Msg.TEXT_COUNT_TOOLTIP = "احسب كم عدد بعض النصوص تتكرر ضمن نص اخر.";
 /** @export */ Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = "إضف عنصر إلى النص.";
 /** @export */ Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = "الانضمام إلى";
 /** @export */ Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = "أضف, إحذف, أو أعد ترتيب المقاطع لإعادة تكوين النص من القطع التالية.";
@@ -375,7 +375,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.TEXT_PROMPT_TYPE_NUMBER = "انتظر ادخال المستخدم لرقم ما مع اظهار رسالة";
 /** @export */ Blockly.Msg.TEXT_PROMPT_TYPE_TEXT = "انتظر ادخال المستخدم لنص ما مع اظهار رسالة";
 /** @export */ Blockly.Msg.TEXT_REPLACE_HELPURL = "https://github.com/google/blockly/wiki/Text#replacing-substrings";  // untranslated
-/** @export */ Blockly.Msg.TEXT_REPLACE_MESSAGE0 = "replace %1 with %2 in %3";  // untranslated
+/** @export */ Blockly.Msg.TEXT_REPLACE_MESSAGE0 = "بدل %1 ب %2 في %3";
 /** @export */ Blockly.Msg.TEXT_REPLACE_TOOLTIP = "Replace all occurances of some text within some other text.";  // untranslated
 /** @export */ Blockly.Msg.TEXT_REVERSE_HELPURL = "https://github.com/google/blockly/wiki/Text#reversing-text";  // untranslated
 /** @export */ Blockly.Msg.TEXT_REVERSE_MESSAGE0 = "reverse %1";  // untranslated
@@ -398,7 +398,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "تعيين هذا المتغير لتكون مساوية للقيمة المدخلة.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "المتغير '%1' موجود بالفعل";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "A variable named '%1' already exists for another type: '%2'.";  // untranslated
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "متغير بأسم '%1' معرف من نوع اخر : '%2'.";
 /** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;

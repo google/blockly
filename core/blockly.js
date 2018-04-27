@@ -633,8 +633,8 @@ Blockly.checkBlockColourConstant_ = function(
 
   if (value && value !== expectedValue) {
     var warningPattern = (expectedValue === undefined) ?
-        '%1 has been removed. Use Blockly.Msg.%2.' :
-        '%1 is deprecated and unused. Override Blockly.Msg.%2.';
+        '%1 has been removed. Use Blockly.Msg["%2"].' :
+        '%1 is deprecated and unused. Override Blockly.Msg["%2"].';
     var warning = warningPattern.replace('%1', namePath).replace('%2', msgName);
     console.warn(warning);
   }

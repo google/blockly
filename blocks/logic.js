@@ -37,7 +37,7 @@ goog.require('Blockly');
 
 /**
  * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg.LOGIC_HUE. (2018 April 5)
+ * @deprecated Use Blockly.Msg['LOGIC_HUE']. (2018 April 5)
  */
 Blockly.Constants.Logic.HUE = 210;
 
@@ -445,13 +445,13 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
     for (var i = 1; i <= this.elseifCount_; i++) {
       this.appendValueInput('IF' + i)
           .setCheck('Boolean')
-          .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
+          .appendField(Blockly.Msg['CONTROLS_IF_MSG_ELSEIF']);
       this.appendStatementInput('DO' + i)
-          .appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
+          .appendField(Blockly.Msg['CONTROLS_IF_MSG_THEN']);
     }
     if (this.elseCount_) {
       this.appendStatementInput('ELSE')
-          .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
+          .appendField(Blockly.Msg['CONTROLS_IF_MSG_ELSE']);
     }
   }
 };
@@ -469,13 +469,13 @@ Blockly.Constants.Logic.CONTROLS_IF_TOOLTIP_EXTENSION = function() {
 
   this.setTooltip(function() {
     if (!this.elseifCount_ && !this.elseCount_) {
-      return Blockly.Msg.CONTROLS_IF_TOOLTIP_1;
+      return Blockly.Msg['CONTROLS_IF_TOOLTIP_1'];
     } else if (!this.elseifCount_ && this.elseCount_) {
-      return Blockly.Msg.CONTROLS_IF_TOOLTIP_2;
+      return Blockly.Msg['CONTROLS_IF_TOOLTIP_2'];
     } else if (this.elseifCount_ && !this.elseCount_) {
-      return Blockly.Msg.CONTROLS_IF_TOOLTIP_3;
+      return Blockly.Msg['CONTROLS_IF_TOOLTIP_3'];
     } else if (this.elseifCount_ && this.elseCount_) {
-      return Blockly.Msg.CONTROLS_IF_TOOLTIP_4;
+      return Blockly.Msg['CONTROLS_IF_TOOLTIP_4'];
     }
     return '';
   }.bind(this));

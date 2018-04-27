@@ -314,11 +314,11 @@ Blockly.FieldVariable.dropdownCreate = function() {
     // Set the UUID as the internal representation of the variable.
     options[i] = [variableModelList[i].name, variableModelList[i].getId()];
   }
-  options.push([Blockly.Msg.RENAME_VARIABLE, Blockly.RENAME_VARIABLE_ID]);
-  if (Blockly.Msg.DELETE_VARIABLE) {
+  options.push([Blockly.Msg['RENAME_VARIABLE'], Blockly.RENAME_VARIABLE_ID]);
+  if (Blockly.Msg['DELETE_VARIABLE']) {
     options.push(
         [
-          Blockly.Msg.DELETE_VARIABLE.replace('%1', name),
+          Blockly.Msg['DELETE_VARIABLE'].replace('%1', name),
           Blockly.DELETE_VARIABLE_ID
         ]
     );

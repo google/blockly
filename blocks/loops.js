@@ -38,7 +38,7 @@ goog.require('Blockly');
 
 /**
  * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg.LOOPS_HUE. (2018 April 5)
+ * @deprecated Use Blockly.Msg['LOOPS_HUE']. (2018 April 5)
  */
 Blockly.Constants.Loops.HUE = 120;
 
@@ -266,7 +266,7 @@ Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
     if (!this.isCollapsed() && varName != null) {
       var option = {enabled: true};
       option.text =
-          Blockly.Msg.VARIABLES_SET_CREATE_GET.replace('%1', varName);
+          Blockly.Msg['VARIABLES_SET_CREATE_GET'].replace('%1', varName);
       var xmlField = Blockly.Variables.generateVariableFieldDom(variable);
       var xmlBlock = goog.dom.createDom('block', null, xmlField);
       xmlBlock.setAttribute('type', 'variables_get');
@@ -330,7 +330,7 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
         this.setDisabled(false);
       }
     } else {
-      this.setWarningText(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING);
+      this.setWarningText(Blockly.Msg['CONTROLS_FLOW_STATEMENTS_WARNING']);
       if (!this.isInFlyout && !this.getInheritedDisabled()) {
         this.setDisabled(true);
       }

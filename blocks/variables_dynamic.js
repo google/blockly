@@ -37,7 +37,7 @@ goog.require('Blockly');
 
 /**
  * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg.VARIABLES_DYNAMIC_HUE. (2018 April 5)
+ * @deprecated Use Blockly.Msg['VARIABLES_DYNAMIC_HUE']. (2018 April 5)
  */
 Blockly.Constants.VariablesDynamic.HUE = 310;
 
@@ -104,10 +104,10 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
     var contextMenuMsg;
     if (this.type == 'variables_get_dynamic') {
       opposite_type = 'variables_set_dynamic';
-      contextMenuMsg = Blockly.Msg.VARIABLES_GET_CREATE_SET;
+      contextMenuMsg = Blockly.Msg['VARIABLES_GET_CREATE_SET'];
     } else {
       opposite_type = 'variables_get_dynamic';
-      contextMenuMsg = Blockly.Msg.VARIABLES_SET_CREATE_GET;
+      contextMenuMsg = Blockly.Msg['VARIABLES_SET_CREATE_GET'];
     }
 
     var option = {enabled: this.workspace.remainingCapacity() > 0};

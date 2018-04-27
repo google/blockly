@@ -68,7 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "Scancelé %1 blòch";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "Disativé ël blòch";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "Dupliché";
-/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Dupliché ël coment";
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "Ativé ël blòch";
 /** @export */ Blockly.Msg.EXPAND_ALL = "Dësvlupé ij blòch";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "Dësvlupé ël blòch";
@@ -399,7 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Fissé costa variàbil ugual al valor d'imission.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "Na variàbil con ël nòm '%1' a esist già.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "Na variàbil ciamà '%1' a esist già për n'àutra sòrt: '%2'.";
-/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Dì cheicòs...";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

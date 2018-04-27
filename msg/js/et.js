@@ -291,9 +291,9 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "kood plokis";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "sisenditega:";
-/** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
+/** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://et.wikipedia.org/wiki/Alamprogramm";
 /** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "Käivitab kasutaja defineeritud funktsiooni '%1'.";
-/** @export */ Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
+/** @export */ Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://et.wikipedia.org/wiki/Alamprogramm";
 /** @export */ Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "Run the user-defined function '%1' and use its output.";
 /** @export */ Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "sisenditega:";
 /** @export */ Blockly.Msg.PROCEDURES_CREATE_DO = "Tekita '%1' plokk";

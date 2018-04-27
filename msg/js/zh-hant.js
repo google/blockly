@@ -68,7 +68,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.DELETE_X_BLOCKS = "刪除%1個積木";
 /** @export */ Blockly.Msg.DISABLE_BLOCK = "停用區塊";
 /** @export */ Blockly.Msg.DUPLICATE_BLOCK = "複製";
-/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "Duplicate Comment";  // untranslated
+/** @export */ Blockly.Msg.DUPLICATE_COMMENT = "重複註解";
 /** @export */ Blockly.Msg.ENABLE_BLOCK = "啟用積木";
 /** @export */ Blockly.Msg.EXPAND_ALL = "展開積木";
 /** @export */ Blockly.Msg.EXPAND_BLOCK = "展開區塊";
@@ -291,7 +291,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "允許陳述式";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "與：";
-/** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://zh.wikipedia.org/wiki/%E5%AD%90%E7%A8%8B%E5%BA%8F";
+/** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://zh.wikipedia.org/wiki/子程式";
 /** @export */ Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "執行使用者定義的函式「%1」。";
 /** @export */ Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://zh.wikipedia.org/wiki/%E5%AD%90%E7%A8%8B%E5%BA%8F";
 /** @export */ Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "執行使用者定義的函式「%1」，並使用它的回傳值。";
@@ -399,7 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "設定此變數，好和輸入結果相等。";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "已存在變數「%1」。";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "已存在名為「%1」且用於其它類型「%2」的變數。";
-/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "來說些事情...";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

@@ -211,7 +211,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_CHANGE_TOOLTIP = "변수 '%1' 에 저장되어있는 값에, 어떤 수를 더해, 변수에 다시 저장합니다.";
 /** @export */ Blockly.Msg.MATH_CONSTANT_HELPURL = "https://ko.wikipedia.org/wiki/수학_상수";
 /** @export */ Blockly.Msg.MATH_CONSTANT_TOOLTIP = "일반적인 상수 값들 중 하나를 돌려줍니다. : π (3.141…), e (2.718…), φ (1.618…), sqrt(2) (1.414…), sqrt(½) (0.707…), or ∞ (infinity).";
-/** @export */ Blockly.Msg.MATH_CONSTRAIN_HELPURL = "https://ko.wikipedia.org/wiki/%ED%81%B4%EB%9E%A8%ED%95%91_(%EA%B7%B8%EB%9E%98%ED%94%BD)";
+/** @export */ Blockly.Msg.MATH_CONSTRAIN_HELPURL = "https://ko.wikipedia.org/wiki/클램핑_(그래픽)";
 /** @export */ Blockly.Msg.MATH_CONSTRAIN_TITLE = "%1의 값을, 최소 %2 최대 %3으로 조정";
 /** @export */ Blockly.Msg.MATH_CONSTRAIN_TOOLTIP = "어떤 수를, 특정 범위의 값이 되도록 강제로 조정합니다.";
 /** @export */ Blockly.Msg.MATH_DIVISION_SYMBOL = "÷";
@@ -399,7 +399,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "변수의 값을 입력한 값으로 변경해 줍니다.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "'%1' 변수는 이미 존재합니다.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "'%1' 변수는 다른 유형에 대해 이미 존재합니다: '%2'.";
-/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "Say something...";  // untranslated
+/** @export */ Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = "말해 보세요...";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

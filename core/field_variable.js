@@ -353,4 +353,14 @@ Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
   this.setValue(id);
 };
 
+/**
+ * Overrides referencesVariables(), indicating this field refers to a variable.
+ * @return {boolean} True.
+ * @package
+ * @override
+ */
+Blockly.FieldVariable.prototype.referencesVariables = function() {
+  return true;
+};
+
 Blockly.Field.register('field_variable', Blockly.FieldVariable);

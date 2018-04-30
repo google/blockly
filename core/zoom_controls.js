@@ -95,6 +95,10 @@ Blockly.ZoomControls.prototype.top_ = 0;
 Blockly.ZoomControls.prototype.createDom = function() {
   this.svgGroup_ =
       Blockly.utils.createSvgElement('g', {'class': 'blocklyZoom'}, null);
+
+  // Each filter/pattern needs a unique ID for the case of multiple Blockly
+  // instances on a page.  Browser behaviour becomes undefined otherwise.
+  // https://neil.fraser.name/news/2015/11/01/
   var rnd = String(Math.random()).substring(2);
   this.createZoomOutSvg_(rnd);
   this.createZoomInSvg_(rnd);
@@ -160,7 +164,9 @@ Blockly.ZoomControls.prototype.position = function() {
 
 /**
  * Create the zoom in icon and its event handler.
- * @param {string} rnd The random string to use to identify the clip paths.
+ * @param {string} rnd The random string to use as a suffix in the clip path's
+ *     ID.  These IDs must be unique in case there are multiple Blockly
+ *     instances on the same page.
  * @private
  */
 Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
@@ -207,7 +213,9 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
 
 /**
  * Create the zoom out icon and its event handler.
- * @param {string} rnd The random string to use to identify the clip paths.
+ * @param {string} rnd The random string to use as a suffix in the clip path's
+ *     ID.  These IDs must be unique in case there are multiple Blockly
+ *     instances on the same page.
  * @private
  */
 Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
@@ -255,7 +263,9 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
 
 /**
  * Create the zoom reset icon and its event handler.
- * @param {string} rnd The random string to use to identify the clip paths.
+ * @param {string} rnd The random string to use as a suffix in the clip path's
+ *     ID.  These IDs must be unique in case there are multiple Blockly
+ *     instances on the same page.
  * @private
  */
 Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {

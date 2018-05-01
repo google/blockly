@@ -236,3 +236,9 @@ Blockly.JavaScript['robot_wait_for_seconds'] = function(block) {
   var code = 'waitForDuration(' + value_seconds + ');\n';
   return code;
 };
+
+Blockly.JavaScript['robot_start_torso'] = function(block) {
+  var value_height = Blockly.JavaScript.valueToCode(block, 'HEIGHT', Blockly.JavaScript.ORDER_NONE);
+  var code = 'robot.startTorso(' + value_height + ');\n';
+  return code;
+};

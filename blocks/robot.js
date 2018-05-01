@@ -748,3 +748,16 @@ Blockly.Blocks['robot_wait_for_seconds'] = {
     this.setHelpUrl('');
   }
 };
+
+Blockly.Blocks['robot_start_torso'] = {
+  init: function() {
+    this.appendValueInput("HEIGHT")
+        .setCheck("Number")
+        .appendField("start moving torso to (m)");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip("Height ranges from 0.0 to 0.4 m");
+    this.setHelpUrl("");
+  }
+};

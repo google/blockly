@@ -5,7 +5,7 @@ var errored = false;
 // Run the JsUnit tests in a browser.
 try {
   runJsUnitTestsInBrowser();
-} catch(errorStr) {
+} catch (errorStr) {
   errored = true;
   console.error(errorStr + '\n\n');
 }

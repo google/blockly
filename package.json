@@ -19,7 +19,7 @@
   "scripts": {
     "lint": "eslint .",
     "pretest": "tests/scripts/test_setup.sh",
-    "test": "node tests/jsunit/test_runner.js"
+    "test": "node tests/test_runner.js"
   },
   "license": "Apache-2.0",
   "private": true,

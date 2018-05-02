@@ -6,6 +6,7 @@
 /tests/compile/*
 /tests/jsunit/*
 /tests/generators/*
+/tests/test_runner.js
 /tests/workspace_svg/*
 /generators/*
 /demos/*

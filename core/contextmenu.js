@@ -311,46 +311,6 @@ Blockly.ContextMenu.blockCommentOption = function(block) {
 };
 
 /**
- * Add a context menu option for undoing the most recent action on the
- * workspace.
- * @param {!Array.<!Object>} optionsArr Array of menu options to add to.
- * @param {!Blockly.WorkspaceSvg} ws The workspace where the right-click
- *     originated.
- * @package
- */
-Blockly.ContextMenu.addWsUndoOption = function(optionsArr, ws) {
-  optionsArr.push(Blockly.ContextMenu.createOption(
-      Blockly.Msg['UNDO'], ws.hasUndoStack(), ws.undo.bind(ws, false)));
-};
-
-/**
- * Add a context menu option for redoing the most recent action on the
- * workspace.
- * @param {!Array.<!Object>} optionsArr Array of menu options to add to.
- * @param {!Blockly.WorkspaceSvg} ws The workspace where the right-click
- *     originated.
- * @package
- */
-Blockly.ContextMenu.wsRedoOption = function(optionsArr, ws) {
-  optionsArr.push(Blockly.ContextMenu.createOption(
-      Blockly.Msg['REDO'], ws.hasRedoStack(), ws.undo.bind(ws, true)));
-};
-
-/**
- * Make a context menu option for cleaning up blocks on the workspace, by
- * aligning them vertically.
- * @param {!Blockly.WorkspaceSvg} ws The workspace where the right-click
- *     originated.
- * @param {number} numTopBlocks The number of top blocks on the workspace.
- * @return {!Object} A menu option, containing text, enabled, and a callback.
- * @package
- */
-Blockly.ContextMenu.wsCleanupOption = function(ws, numTopBlocks) {
-  return Blockly.ContextMenu.createOption(
-      Blockly.Msg['CLEAN_UP'], numTopBlocks > 1, ws.cleanUp.bind(ws, true));
-};
-
-/**
  * Helper function for toggling delete state on blocks on the workspace, to be
  * called from a right-click menu.
  * @param {!Array.<!Blockly.BlockSvg>} topBlocks The list of top blocks on the

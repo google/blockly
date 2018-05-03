@@ -483,22 +483,6 @@ Blockly.Workspace.prototype.clearUndo = function() {
 };
 
 /**
- * @return {boolean} whether there are any events in the redo stack.
- * @package
- */
-Blockly.Workspace.prototype.hasRedoStack = function() {
-  return this.redoStack_.length != 0;
-};
-
-/**
- * @return {boolean} whether there are any events in the undo stack.
- * @package
- */
-Blockly.Workspace.prototype.hasUndoStack = function() {
-  return this.undoStack_.length != 0;
-};
-
-/**
  * When something in this workspace changes, call a function.
  * @param {!Function} func Function to call.
  * @return {!Function} Function that can be passed to

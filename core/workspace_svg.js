@@ -1270,13 +1270,15 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   var ws = this;
 
   // Options to undo/redo previous action.
-  Blockly.ContextMenu.addWsUndoOption(menuOptions, this);
-  Blockly.ContextMenu.wsRedoOption(menuOptions, this);
+  menuOptions.push(Blockly.ContextMenu.createOption(Blockly.Msg['UNDO'],
+      this.undoStack_.length != 0, this.undo.bind(this, false)));
+  menuOptions.push(Blockly.ContextMenu.createOption(Blockly.Msg['REDO'],
+      this.redoStack_.length != 0, this.undo.bind(this, true)));
 
   // Option to clean up blocks.
   if (this.scrollbar) {
-    menuOptions.push(
-        Blockly.ContextMenu.wsCleanupOption(this, topBlocks.length));
+    menuOptions.push(Blockly.ContextMenu.createOption(Blockly.Msg['CLEAN_UP'],
+        topBlocks.length > 1, this.cleanUp.bind(this, true)));
   }
 
   if (this.options.collapse) {

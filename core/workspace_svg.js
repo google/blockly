@@ -1270,28 +1270,15 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   var ws = this;
 
   // Options to undo/redo previous action.
-  var undoOption = {};
-  undoOption.text = Blockly.Msg['UNDO'];
-  undoOption.enabled = this.undoStack_.length > 0;
-  undoOption.callback = this.undo.bind(this, false);
-  menuOptions.push(undoOption);
-  var redoOption = {};
-  redoOption.text = Blockly.Msg['REDO'];
-  redoOption.enabled = this.redoStack_.length > 0;
-  redoOption.callback = this.undo.bind(this, true);
-  menuOptions.push(redoOption);
+  menuOptions.push(Blockly.ContextMenu.wsUndoOption(this));
+  menuOptions.push(Blockly.ContextMenu.wsRedoOption(this));
 
   // Option to clean up blocks.
   if (this.scrollbar) {
-    var cleanOption = {};
-    cleanOption.text = Blockly.Msg['CLEAN_UP'];
-    cleanOption.enabled = topBlocks.length > 1;
-    cleanOption.callback = this.cleanUp.bind(this);
-    menuOptions.push(cleanOption);
+    menuOptions.push(
+        Blockly.ContextMenu.wsCleanupOption(this, topBlocks.length));
   }
 
-  // Add a little animation to collapsing and expanding.
-  var DELAY = 10;
   if (this.options.collapse) {
     var hasCollapsedBlocks = false;
     var hasExpandedBlocks = false;
@@ -1307,57 +1294,18 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
       }
     }
 
-    /**
-     * Option to collapse or expand top blocks.
-     * @param {boolean} shouldCollapse Whether a block should collapse.
-     * @private
-     */
-    var toggleOption = function(shouldCollapse) {
-      var ms = 0;
-      for (var i = 0; i < topBlocks.length; i++) {
-        var block = topBlocks[i];
-        while (block) {
-          setTimeout(block.setCollapsed.bind(block, shouldCollapse), ms);
-          block = block.getNextBlock();
-          ms += DELAY;
-        }
-      }
-    };
+    menuOptions.push(Blockly.ContextMenu.wsCollapseOption(hasExpandedBlocks,
+        topBlocks));
 
-    // Option to collapse top blocks.
-    var collapseOption = {enabled: hasExpandedBlocks};
-    collapseOption.text = Blockly.Msg['COLLAPSE_ALL'];
-    collapseOption.callback = function() {
-      toggleOption(true);
-    };
-    menuOptions.push(collapseOption);
-
-    // Option to expand top blocks.
-    var expandOption = {enabled: hasCollapsedBlocks};
-    expandOption.text = Blockly.Msg['EXPAND_ALL'];
-    expandOption.callback = function() {
-      toggleOption(false);
-    };
-    menuOptions.push(expandOption);
+    menuOptions.push(Blockly.ContextMenu.wsExpandOption(hasCollapsedBlocks,
+        topBlocks));
   }
 
   // Option to delete all blocks.
   // Count the number of blocks that are deletable.
-  var deleteList = [];
-  function addDeletableBlocks(block) {
-    if (block.isDeletable()) {
-      deleteList = deleteList.concat(block.getDescendants(false));
-    } else {
-      var children = block.getChildren(false);
-      for (var i = 0; i < children.length; i++) {
-        addDeletableBlocks(children[i]);
-      }
-    }
-  }
-  for (var i = 0; i < topBlocks.length; i++) {
-    addDeletableBlocks(topBlocks[i]);
-  }
+  var deleteList = Blockly.WorkspaceSvg.buildDeleteList_(topBlocks);
 
+  var DELAY = 10;
   function deleteNext() {
     Blockly.Events.setGroup(eventGroup);
     var block = deleteList.shift();
@@ -1372,19 +1320,20 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     Blockly.Events.setGroup(false);
   }
 
+  var deleteCount = deleteList.length;
   var deleteOption = {
-    text: deleteList.length == 1 ? Blockly.Msg['DELETE_BLOCK'] :
-        Blockly.Msg['DELETE_X_BLOCKS'].replace('%1', String(deleteList.length)),
-    enabled: deleteList.length > 0,
+    text: deleteCount == 1 ? Blockly.Msg['DELETE_BLOCK'] :
+        Blockly.Msg['DELETE_X_BLOCKS'].replace('%1', String(deleteCount)),
+    enabled: deleteCount > 0,
     callback: function() {
       if (ws.currentGesture_) {
         ws.currentGesture_.cancel();
       }
-      if (deleteList.length < 2 ) {
+      if (deleteCount < 2 ) {
         deleteNext();
       } else {
         Blockly.confirm(
-            Blockly.Msg['DELETE_ALL_BLOCKS'].replace('%1', deleteList.length),
+            Blockly.Msg['DELETE_ALL_BLOCKS'].replace('%1', deleteCount),
             function(ok) {
               if (ok) {
                 deleteNext();
@@ -1401,6 +1350,33 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   }
 
   Blockly.ContextMenu.show(e, menuOptions, this.RTL);
+};
+
+/**
+ * Build a list of all deletable blocks that are reachable from the given
+ * list of top blocks.
+ * @param {!Array.<!Blockly.BlockSvg>} topBlocks The list of top blocks on the
+ *     workspace.
+ * @return {!Array.<!Blockly.BlockSvg>} A list of deletable blocks on the
+ *     workspace.
+ * @private
+ */
+Blockly.WorkspaceSvg.buildDeleteList_ = function(topBlocks) {
+  var deleteList = [];
+  function addDeletableBlocks(block) {
+    if (block.isDeletable()) {
+      deleteList = deleteList.concat(block.getDescendants(false));
+    } else {
+      var children = block.getChildren(false);
+      for (var i = 0; i < children.length; i++) {
+        addDeletableBlocks(children[i]);
+      }
+    }
+  }
+  for (var i = 0; i < topBlocks.length; i++) {
+    addDeletableBlocks(topBlocks[i]);
+  }
+  return deleteList;
 };
 
 /**

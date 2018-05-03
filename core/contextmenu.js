@@ -302,6 +302,116 @@ Blockly.ContextMenu.blockCommentOption = function(block) {
 };
 
 /**
+ * Make a context menu option for undoing the most recent action on the
+ * workspace.
+ * @param {!Blockly.WorkspaceSvg} ws The workspace where the right-click
+ *     originated.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @package
+ */
+Blockly.ContextMenu.wsUndoOption = function(ws) {
+  return {
+    text: Blockly.Msg['UNDO'],
+    enabled: ws.hasUndoStack(),
+    callback: ws.undo.bind(ws, false)
+  };
+};
+
+/**
+ * Make a context menu option for redoing the most recent action on the
+ * workspace.
+ * @param {!Blockly.WorkspaceSvg} ws The workspace where the right-click
+ *     originated.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @package
+ */
+Blockly.ContextMenu.wsRedoOption = function(ws) {
+  return {
+    text: Blockly.Msg['REDO'],
+    enabled: ws.hasRedoStack(),
+    callback: ws.undo.bind(ws, true)
+  };
+};
+
+/**
+ * Make a context menu option for cleaning up blocks on the workspace, by
+ * aligning them vertically.
+ * @param {!Blockly.WorkspaceSvg} ws The workspace where the right-click
+ *     originated.
+ * @param {number} numTopBlocks The number of top blocks on the workspace.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @package
+ */
+Blockly.ContextMenu.wsCleanupOption = function(ws, numTopBlocks) {
+  return {
+    text: Blockly.Msg['CLEAN_UP'],
+    enabled: numTopBlocks > 1,
+    callback: ws.cleanUp.bind(ws, true)
+  };
+};
+
+/**
+ * Helper function for toggling delete state on blocks on the workspace, to be
+ * called from a right-click menu.
+ * @param {!Array.<!Blockly.BlockSvg>} topBlocks The list of top blocks on the
+ *     the workspace.
+ * @param {boolean} shouldCollapse True if the blocks should be collapsed, false
+ *     if they should be expanded.
+ * @private
+ */
+Blockly.ContextMenu.toggleCollapseFn_ = function(topBlocks, shouldCollapse) {
+  // Add a little animation to collapsing and expanding.
+  var DELAY = 10;
+  var ms = 0;
+  for (var i = 0; i < topBlocks.length; i++) {
+    var block = topBlocks[i];
+    while (block) {
+      setTimeout(block.setCollapsed.bind(block, shouldCollapse), ms);
+      block = block.getNextBlock();
+      ms += DELAY;
+    }
+  }
+};
+
+/**
+ * Make a context menu option for collapsing all block stacks on the workspace.
+ * @param {boolean} hasExpandedBlocks Whether there are any non-collapsed blocks
+ *     on the workspace.
+ * @param {!Array.<!Blockly.BlockSvg>} topBlocks The list of top blocks on the
+ *     the workspace.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @package
+ */
+Blockly.ContextMenu.wsCollapseOption = function(hasExpandedBlocks, topBlocks) {
+  return {
+    enabled: hasExpandedBlocks,
+    text: Blockly.Msg['COLLAPSE_ALL'],
+    callback: function() {
+      Blockly.ContextMenu.toggleCollapseFn_(topBlocks, true);
+    }
+  };
+};
+
+/**
+ * Make a context menu option for expanding all block stacks on the workspace.
+ * @param {boolean} hasCollapsedBlocks Whether there are any collapsed blocks
+ *     on the workspace.
+ * @param {!Array.<!Blockly.BlockSvg>} topBlocks The list of top blocks on the
+ *     the workspace.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @package
+ */
+Blockly.ContextMenu.wsExpandOption = function(hasCollapsedBlocks, topBlocks) {
+  return {
+    enabled: hasCollapsedBlocks,
+    text: Blockly.Msg['EXPAND_ALL'],
+    callback: function() {
+      Blockly.ContextMenu.toggleCollapseFn_(topBlocks, false);
+    }
+  };
+};
+
+/**
  * Make a context menu option for deleting the current workspace comment.
  * @param {!Blockly.WorkspaceCommentSvg} comment The workspace comment where the
  *     right-click originated.

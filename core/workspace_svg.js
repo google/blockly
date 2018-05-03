@@ -1303,10 +1303,6 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
         topBlocks));
   }
 
-  // Option to add a workspace comment.
-  if (this.options.comments) {
-    menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(ws, e));
-  }
   // Option to delete all blocks.
   // Count the number of blocks that are deletable.
   var deleteList = Blockly.WorkspaceSvg.buildDeleteList_(topBlocks);

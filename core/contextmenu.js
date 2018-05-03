@@ -294,20 +294,14 @@ Blockly.ContextMenu.blockDuplicateOption = function(block) {
  */
 Blockly.ContextMenu.blockCommentOption = function(block) {
   // If there's already a comment, add an option to delete it.
-  if (block.comment) {
-    var text = Blockly.Msg['REMOVE_COMMENT'];
-    var callback = function() {
-      block.setCommentText(null);
-    };
-  } else {
-    // If there's no comment, add an option to create a comment.
-    var text = Blockly.Msg['ADD_COMMENT'];
-    var callback = function() {
-      block.setCommentText('');
-    };
-  }
+  // If there's no comment, add an option to create a comment.
+  var msgIdentifier = block.comment ? 'REMOVE_COMMENT' : 'ADD_COMMENT';
+  var callback = function() {
+    block.setCommentText(block.comment ? null : '');
+  };
 
-  return Blockly.ContextMenu.createOption(text, !goog.userAgent.IE, callback);
+  return Blockly.ContextMenu.createOption(
+      Blockly.Msg[msgIdentifier], !goog.userAgent.IE, callback);
 };
 
 /**

@@ -1270,8 +1270,8 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   var ws = this;
 
   // Options to undo/redo previous action.
-  menuOptions.push(Blockly.ContextMenu.wsUndoOption(this));
-  menuOptions.push(Blockly.ContextMenu.wsRedoOption(this));
+  Blockly.ContextMenu.addWsUndoOption(menuOptions, this);
+  Blockly.ContextMenu.wsRedoOption(menuOptions, this);
 
   // Option to clean up blocks.
   if (this.scrollbar) {
@@ -1301,6 +1301,10 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
         topBlocks));
   }
 
+  // Option to add a workspace comment.
+  if (this.options.comments) {
+    menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(ws, e));
+  }
   // Option to delete all blocks.
   // Count the number of blocks that are deletable.
   var deleteList = Blockly.WorkspaceSvg.buildDeleteList_(topBlocks);

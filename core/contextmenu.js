@@ -174,6 +174,25 @@ Blockly.ContextMenu.hide = function() {
 };
 
 /**
+ * Create and return a option object that can be added to a context menu's list
+ * of options.
+ * @param {string} text The text to display to the user.
+ * @param {boolean} enabled True if the option should be enabled.  If false, the
+ *     option will be visible but grayed out.
+ * @param {Function} callback The function to be called when the option is
+ *     clicked.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @package
+ */
+Blockly.ContextMenu.createOption = function(text, enabled, callback) {
+  return {
+    text: text,
+    enabled: enabled,
+    callback: callback
+  };
+};
+
+/**
  * Create a callback function that creates and configures a block,
  *   then places the new block next to the original.
  * @param {!Blockly.Block} block Original block.
@@ -221,17 +240,15 @@ Blockly.ContextMenu.blockDeleteOption = function(block) {
     // Blocks in the current stack would survive this block's deletion.
     descendantCount -= nextBlock.getDescendants(false).length;
   }
-  var deleteOption = {
-    text: descendantCount == 1 ? Blockly.Msg['DELETE_BLOCK'] :
-        Blockly.Msg['DELETE_X_BLOCKS'].replace('%1', String(descendantCount)),
-    enabled: true,
-    callback: function() {
-      Blockly.Events.setGroup(true);
-      block.dispose(true, true);
-      Blockly.Events.setGroup(false);
-    }
+
+  var text = descendantCount == 1 ? Blockly.Msg['DELETE_BLOCK'] :
+      Blockly.Msg['DELETE_X_BLOCKS'].replace('%1', String(descendantCount));
+  var callback = function() {
+    Blockly.Events.setGroup(true);
+    block.dispose(true, true);
+    Blockly.Events.setGroup(false);
   };
-  return deleteOption;
+  return Blockly.ContextMenu.createOption(text, true, callback);
 };
 
 /**
@@ -242,14 +259,10 @@ Blockly.ContextMenu.blockDeleteOption = function(block) {
  */
 Blockly.ContextMenu.blockHelpOption = function(block) {
   var url = goog.isFunction(block.helpUrl) ? block.helpUrl() : block.helpUrl;
-  var helpOption = {
-    enabled: !!url,
-    text: Blockly.Msg['HELP'],
-    callback: function() {
-      block.showHelp_();
-    }
+  var callback = function() {
+    block.showHelp_();
   };
-  return helpOption;
+  return Blockly.ContextMenu.createOption(Blockly.Msg['HELP'], !!url, callback);
 };
 
 /**
@@ -264,14 +277,12 @@ Blockly.ContextMenu.blockDuplicateOption = function(block) {
       block.workspace.remainingCapacity()) {
     enabled = false;
   }
-  var duplicateOption = {
-    text: Blockly.Msg['DUPLICATE_BLOCK'],
-    enabled: enabled,
-    callback: function() {
-      Blockly.duplicate_(block);
-    }
+
+  var callback = function() {
+    Blockly.duplicate_(block);
   };
-  return duplicateOption;
+  return Blockly.ContextMenu.createOption(
+      Blockly.Msg['DUPLICATE_BLOCK'], enabled, callback);
 };
 
 /**
@@ -282,55 +293,47 @@ Blockly.ContextMenu.blockDuplicateOption = function(block) {
  * @package
  */
 Blockly.ContextMenu.blockCommentOption = function(block) {
-  var commentOption = {
-    enabled: !goog.userAgent.IE
-  };
   // If there's already a comment, add an option to delete it.
   if (block.comment) {
-    commentOption.text = Blockly.Msg['REMOVE_COMMENT'];
-    commentOption.callback = function() {
+    var text = Blockly.Msg['REMOVE_COMMENT'];
+    var callback = function() {
       block.setCommentText(null);
     };
   } else {
     // If there's no comment, add an option to create a comment.
-    commentOption.text = Blockly.Msg['ADD_COMMENT'];
-    commentOption.callback = function() {
+    var text = Blockly.Msg['ADD_COMMENT'];
+    var callback = function() {
       block.setCommentText('');
     };
   }
-  return commentOption;
+
+  return Blockly.ContextMenu.createOption(text, !goog.userAgent.IE, callback);
 };
 
 /**
- * Make a context menu option for undoing the most recent action on the
+ * Add a context menu option for undoing the most recent action on the
  * workspace.
+ * @param {!Array.<!Object>} optionsArr Array of menu options to add to.
  * @param {!Blockly.WorkspaceSvg} ws The workspace where the right-click
  *     originated.
- * @return {!Object} A menu option, containing text, enabled, and a callback.
  * @package
  */
-Blockly.ContextMenu.wsUndoOption = function(ws) {
-  return {
-    text: Blockly.Msg['UNDO'],
-    enabled: ws.hasUndoStack(),
-    callback: ws.undo.bind(ws, false)
-  };
+Blockly.ContextMenu.addWsUndoOption = function(optionsArr, ws) {
+  optionsArr.push(Blockly.ContextMenu.createOption(
+      Blockly.Msg['UNDO'], ws.hasUndoStack(), ws.undo.bind(ws, false)));
 };
 
 /**
- * Make a context menu option for redoing the most recent action on the
+ * Add a context menu option for redoing the most recent action on the
  * workspace.
+ * @param {!Array.<!Object>} optionsArr Array of menu options to add to.
  * @param {!Blockly.WorkspaceSvg} ws The workspace where the right-click
  *     originated.
- * @return {!Object} A menu option, containing text, enabled, and a callback.
  * @package
  */
-Blockly.ContextMenu.wsRedoOption = function(ws) {
-  return {
-    text: Blockly.Msg['REDO'],
-    enabled: ws.hasRedoStack(),
-    callback: ws.undo.bind(ws, true)
-  };
+Blockly.ContextMenu.wsRedoOption = function(optionsArr, ws) {
+  optionsArr.push(Blockly.ContextMenu.createOption(
+      Blockly.Msg['REDO'], ws.hasRedoStack(), ws.undo.bind(ws, true)));
 };
 
 /**
@@ -343,11 +346,8 @@ Blockly.ContextMenu.wsRedoOption = function(ws) {
  * @package
  */
 Blockly.ContextMenu.wsCleanupOption = function(ws, numTopBlocks) {
-  return {
-    text: Blockly.Msg['CLEAN_UP'],
-    enabled: numTopBlocks > 1,
-    callback: ws.cleanUp.bind(ws, true)
-  };
+  return Blockly.ContextMenu.createOption(
+      Blockly.Msg['CLEAN_UP'], numTopBlocks > 1, ws.cleanUp.bind(ws, true));
 };
 
 /**
@@ -383,13 +383,11 @@ Blockly.ContextMenu.toggleCollapseFn_ = function(topBlocks, shouldCollapse) {
  * @package
  */
 Blockly.ContextMenu.wsCollapseOption = function(hasExpandedBlocks, topBlocks) {
-  return {
-    enabled: hasExpandedBlocks,
-    text: Blockly.Msg['COLLAPSE_ALL'],
-    callback: function() {
-      Blockly.ContextMenu.toggleCollapseFn_(topBlocks, true);
-    }
+  var callback = function() {
+    Blockly.ContextMenu.toggleCollapseFn_(topBlocks, true);
   };
+  return Blockly.ContextMenu.createOption(
+      Blockly.Msg['COLLAPSE_ALL'], hasExpandedBlocks, callback);
 };
 
 /**
@@ -402,13 +400,11 @@ Blockly.ContextMenu.wsCollapseOption = function(hasExpandedBlocks, topBlocks) {
  * @package
  */
 Blockly.ContextMenu.wsExpandOption = function(hasCollapsedBlocks, topBlocks) {
-  return {
-    enabled: hasCollapsedBlocks,
-    text: Blockly.Msg['EXPAND_ALL'],
-    callback: function() {
-      Blockly.ContextMenu.toggleCollapseFn_(topBlocks, false);
-    }
+  var callback = function() {
+    Blockly.ContextMenu.toggleCollapseFn_(topBlocks, false);
   };
+  return Blockly.ContextMenu.createOption(
+      Blockly.Msg['EXPAND_ALL'], hasCollapsedBlocks, callback);
 };
 
 /**
@@ -419,16 +415,13 @@ Blockly.ContextMenu.wsExpandOption = function(hasCollapsedBlocks, topBlocks) {
  * @package
  */
 Blockly.ContextMenu.commentDeleteOption = function(comment) {
-  var deleteOption = {
-    text: Blockly.Msg.REMOVE_COMMENT,
-    enabled: true,
-    callback: function() {
-      Blockly.Events.setGroup(true);
-      comment.dispose(true, true);
-      Blockly.Events.setGroup(false);
-    }
+  var callback = function() {
+    Blockly.Events.setGroup(true);
+    comment.dispose(true, true);
+    Blockly.Events.setGroup(false);
   };
-  return deleteOption;
+  return Blockly.ContextMenu.createOption(
+      Blockly.Msg['REMOVE_COMMENT'], true, callback);
 };
 
 /**
@@ -439,14 +432,11 @@ Blockly.ContextMenu.commentDeleteOption = function(comment) {
  * @package
  */
 Blockly.ContextMenu.commentDuplicateOption = function(comment) {
-  var duplicateOption = {
-    text: Blockly.Msg.DUPLICATE_COMMENT,
-    enabled: true,
-    callback: function() {
-      Blockly.duplicate_(comment);
-    }
+  var callback = function() {
+    Blockly.duplicate_(comment);
   };
-  return duplicateOption;
+  return Blockly.ContextMenu.createOption(
+      Blockly.Msg['DUPLICATE_COMMENT'], true, callback);
 };
 
 /**
@@ -498,10 +488,6 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
     }
   };
 
-  var wsCommentOption = {enabled: true};
-  wsCommentOption.text = Blockly.Msg.ADD_COMMENT;
-  wsCommentOption.callback = function() {
-    addWsComment();
-  };
-  return wsCommentOption;
+  return Blockly.ContextMenu.createOption(
+      Blockly.Msg['ADD_COMMENT'], true, addWsComment);
 };

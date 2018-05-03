@@ -53,7 +53,11 @@ goog.require('goog.userAgent');
  * @constructor
  */
 Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
+  if (!goog.isFunction(menuGenerator)) {
+    Blockly.FieldDropdown.validateOptions_(menuGenerator);
+  }
   this.menuGenerator_ = menuGenerator;
+
   this.trimOptions_();
   var firstTuple = this.getOptions()[0];
 
@@ -407,10 +411,13 @@ Blockly.FieldDropdown.prototype.isOptionListDynamic = function() {
  * Return a list of the options for this dropdown.
  * @return {!Array.<!Array>} Array of option tuples:
  *     (human-readable text or image, language-neutral name).
+ * @throws If generated options are incorrectly structured.
  */
 Blockly.FieldDropdown.prototype.getOptions = function() {
   if (goog.isFunction(this.menuGenerator_)) {
-    return this.menuGenerator_.call(this);
+    var generatedOptions = this.menuGenerator_.call(this);
+    Blockly.FieldDropdown.validateOptions_(generatedOptions);
+    return generatedOptions;
   }
   return /** @type {!Array.<!Array.<string>>} */ (this.menuGenerator_);
 };
@@ -563,6 +570,26 @@ Blockly.FieldDropdown.prototype.updateWidth = function() {
 Blockly.FieldDropdown.prototype.dispose = function() {
   Blockly.WidgetDiv.hideIfOwner(this);
   Blockly.FieldDropdown.superClass_.dispose.call(this);
+};
+
+/**
+ * Validates the data structure to be processed as an options list.
+ * @param {?} options The proposed dropdown options.
+ * @throws If proposed options are incorrectly structured.
+ * @private
+ */
+Blockly.FieldDropdown.validateOptions_ = function(options) {
+  if (!goog.isArray(options)) {
+    throw 'FieldDropdown options must be an array.';
+  }
+  for (var i = 0; i < options.length; ++i) {
+    var tuple = options[0];
+    if (!goog.isArray(options) || !goog.isString(tuple[0]) ||
+        !goog.isString(tuple[1])) {
+      throw 'Each FieldDropdown option must be an array of two strings. ' +
+          'Found item #' + i +': ' + tuple;
+    }
+  }
 };
 
 Blockly.Field.register('field_dropdown', Blockly.FieldDropdown);

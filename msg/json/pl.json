@@ -18,7 +18,8 @@
 			"Mazab IZW",
 			"Teeed",
 			"InternerowyGołąb",
-			"Wojtas"
+			"Wojtas",
+			"Stojex"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -26,6 +27,7 @@
 	"DUPLICATE_BLOCK": "Powiel",
 	"ADD_COMMENT": "Dodaj Komentarz",
 	"REMOVE_COMMENT": "Usuń komentarz",
+	"DUPLICATE_COMMENT": "Zduplikowany komentarz",
 	"EXTERNAL_INPUTS": "Zewnętrzne Wejścia",
 	"INLINE_INPUTS": "Wbudowane Wejścia",
 	"DELETE_BLOCK": "Usuń Klocek",
@@ -45,6 +47,10 @@
 	"RENAME_VARIABLE": "Zmień nazwę zmiennej...",
 	"RENAME_VARIABLE_TITLE": "Zmień nazwy wszystkich '%1' zmiennych na:",
 	"NEW_VARIABLE": "Utwórz zmienną...",
+	"NEW_STRING_VARIABLE": "Utwórz zmienną typu string",
+	"NEW_NUMBER_VARIABLE": "Utwórz zmienną typu number",
+	"NEW_COLOUR_VARIABLE": "Utwórz zmienną colour",
+	"NEW_VARIABLE_TYPE_TITLE": "Nowy typ zmiennej:",
 	"NEW_VARIABLE_TITLE": "Nowa nazwa zmiennej:",
 	"VARIABLE_ALREADY_EXISTS": "Zmienna o nazwie '%1' już istnieje.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Zmienna o nazwie '%1' już istnieje i jest typu '%2'.",
@@ -373,5 +379,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Podświetl definicję funkcji",
 	"PROCEDURES_CREATE_DO": "Utwórz '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Jeśli warunek jest spełniony zwróć drugą wartość.",
-	"PROCEDURES_IFRETURN_WARNING": "Uwaga: Ten klocek może być używany tylko w definicji funkcji."
+	"PROCEDURES_IFRETURN_WARNING": "Uwaga: Ten klocek może być używany tylko w definicji funkcji.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Powiedz coś..."
 }

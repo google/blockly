@@ -582,13 +582,29 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
   if (!goog.isArray(options)) {
     throw 'FieldDropdown options must be an array.';
   }
+  var foundError = false;
   for (var i = 0; i < options.length; ++i) {
-    var tuple = options[0];
-    if (!goog.isArray(options) || !goog.isString(tuple[0]) ||
-        !goog.isString(tuple[1])) {
-      throw 'Each FieldDropdown option must be an array of two strings. ' +
-          'Found item #' + i +': ' + tuple;
+    var tuple = options[i];
+    if (!goog.isArray(options)) {
+      foundError = true;
+      console.error(
+        'Invalid option[' + i + ']: Each FieldDropdown option must be an ' +
+        'array. Found: ', tuple);
+    } else if (!goog.isString(tuple[1])) {
+      foundError = true;
+      console.error(
+          'Invalid option[' + i + ']: Each FieldDropdown option id must be ' +
+          'a string. Found ' + tuple[1] + ' in: ', tuple);
+    } else if (!goog.isString(tuple[0]) && !goog.isString(tuple[0].src)) {
+      foundError = true;
+      console.error(
+          'Invalid option[' + i + ']: Each FieldDropdown option must have a ' +
+          'string label or image description. Found' + tuple[0] + ' in: ',
+          tuple);
     }
+  }
+  if (foundError) {
+    throw 'Found invalid FieldDropdown options.';
   }
 };
 

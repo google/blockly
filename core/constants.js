@@ -272,9 +272,3 @@ Blockly.RENAME_VARIABLE_ID = 'RENAME_VARIABLE_ID';
  * @const {string}
  */
 Blockly.DELETE_VARIABLE_ID = 'DELETE_VARIABLE_ID';
-
-/**
- * A constant value that we can use to mark calculated properties as dirty.
- * @const {string}
- */
-Blockly.DIRTY = 'dirty';

@@ -748,3 +748,29 @@ Blockly.Blocks['robot_wait_for_seconds'] = {
     this.setHelpUrl('');
   }
 };
+
+Blockly.Blocks['robot_start_torso'] = {
+  init: function() {
+    this.appendValueInput("HEIGHT")
+        .setCheck("Number")
+        .appendField("start moving torso to (m)");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip("Height ranges from 0.0 to 0.4 m");
+    this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['robot_is_done_fetch'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("if")
+        .appendField(new Blockly.FieldDropdown([["torso","TORSO"], ["gripper","GRIPPER"], ["screen","SCREEN"], ["navigation","NAVIGATION"], ["PbD","PBD"], ["timer","TIMER"]]), "NAME")
+        .appendField("is done");
+    this.setOutput(true, "Boolean");
+    this.setColour(20);
+ this.setTooltip("Checks if the chosen action is completed");
+ this.setHelpUrl("");
+  }
+};

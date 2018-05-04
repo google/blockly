@@ -236,3 +236,15 @@ Blockly.JavaScript['robot_wait_for_seconds'] = function(block) {
   var code = 'waitForDuration(' + value_seconds + ');\n';
   return code;
 };
+
+Blockly.JavaScript['robot_start_torso'] = function(block) {
+  var value_height = Blockly.JavaScript.valueToCode(block, 'HEIGHT', Blockly.JavaScript.ORDER_NONE);
+  var code = 'robot.startTorso(' + value_height + ');\n';
+  return code;
+};
+
+Blockly.JavaScript['robot_is_done_fetch'] = function(block) {
+  var dropdown_name = block.getFieldValue('NAME');
+  var code = 'robot.isDone(' + dropdown_name + ');\n';
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};

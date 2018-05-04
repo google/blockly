@@ -588,8 +588,8 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
     if (!goog.isArray(options)) {
       foundError = true;
       console.error(
-        'Invalid option[' + i + ']: Each FieldDropdown option must be an ' +
-        'array. Found: ', tuple);
+          'Invalid option[' + i + ']: Each FieldDropdown option must be an ' +
+          'array. Found: ', tuple);
     } else if (!goog.isString(tuple[1])) {
       foundError = true;
       console.error(

@@ -312,6 +312,52 @@ function test_blockMove_constructoroldParentId() {
   }
 }
 
+function test_uiEvent_constructor_null() {
+  try {
+    Blockly.Events.setGroup('testGroup');
+    var event = new Blockly.Events.Ui(null, 'foo', 'bar', 'baz');
+    checkExactEventValues(event,
+        {
+          'blockId': null,
+          'workspaceId': null,
+          'type': 'ui',
+          'oldValue': 'bar',
+          'newValue': 'baz',
+          'element': 'foo',
+          'recordUndo': false,
+          'group': 'testGroup'
+        }
+    );
+  } finally {
+    Blockly.Events.setGroup(false);
+  }
+}
+
+function test_uiEvent_constructor_block() {
+  eventTest_setUpWithMockBlocks();
+  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
+  try {
+    var block1 = createSimpleTestBlock(workspace);
+    Blockly.Events.setGroup('testGroup');
+    var event = new Blockly.Events.Ui(block1, 'foo', 'bar', 'baz');
+    checkExactEventValues(event,
+        {
+          'blockId': '1',
+          'workspaceId': workspace.id,
+          'type': 'ui',
+          'oldValue': 'bar',
+          'newValue': 'baz',
+          'element': 'foo',
+          'recordUndo': false,
+          'group': 'testGroup'
+        }
+    );
+  } finally {
+    Blockly.Events.setGroup(false);
+    eventTest_tearDownWithMockBlocks();
+  }
+}
+
 function test_varCreate_constructor() {
   eventTest_setUp();
   try {

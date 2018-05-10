@@ -244,7 +244,7 @@ Blockly.JavaScript['robot_start_torso'] = function(block) {
 };
 
 Blockly.JavaScript['robot_is_done_fetch'] = function(block) {
-  var dropdown_name = block.getFieldValue('NAME');
-  var code = 'robot.isDone(' + dropdown_name + ');\n';
+  var dropdown_name = Blockly.JavaScript.quote_(block.getFieldValue('NAME'));
+  var code = 'robot.isDone(' + dropdown_name + ')';
   return [code, Blockly.JavaScript.ORDER_NONE];
 };

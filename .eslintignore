@@ -1,5 +1,7 @@
 *_compressed*.js
 *_uncompressed*.js
+blockly_node_javascript_en.js
+gulpfile.js
 /msg/*
 /core/css.js
 /tests/blocks/*

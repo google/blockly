@@ -4,7 +4,6 @@ blockly_node_javascript_en.js
 gulpfile.js
 /msg/*
 /core/css.js
-/core/node_lib_suffix.js
 /tests/blocks/*
 /tests/compile/*
 /tests/jsunit/*

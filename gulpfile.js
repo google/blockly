@@ -59,8 +59,8 @@ gulp.task('blockly_javascript_en', ['build'], function() {
   return gulp.src(srcs)
       .pipe(gulp.concat('blockly_node_javascript_en.js'))
       .pipe(insert.append(`
-if (typeof module === 'object') module.exports = Blockly;
-if (typeof window === 'object') window.Blockly = Blockly;\n`))
+if (typeof module === 'object') { module.exports = Blockly; }
+if (typeof window === 'object') { window.Blockly = Blockly; }\n`))
       .pipe(gulp.dest(''));
 });
 

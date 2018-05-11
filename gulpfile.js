@@ -26,6 +26,7 @@
 var gulp = require('gulp');
 gulp.shell = require('gulp-shell');
 gulp.concat = require('gulp-concat');
+var insert = require('gulp-insert');
 
 // Rebuilds Blockly, including the following:
 //  - blockly_compressed.js
@@ -52,11 +53,14 @@ gulp.task('blockly_javascript_en', ['build'], function() {
     'blockly_compressed.js',
     'blocks_compressed.js',
     'javascript_compressed.js',
-    'msg/js/en.js',
-    'core/node_lib_suffix.js'
+    'msg/js/en.js'
   ];
+  // Concatenate the sources, appending the module export at the bottom.
   return gulp.src(srcs)
       .pipe(gulp.concat('blockly_node_javascript_en.js'))
+      .pipe(insert.append(`
+if (typeof module === 'object') module.exports = Blockly;
+if (typeof window === 'object') window.Blockly = Blockly;\n`))
       .pipe(gulp.dest(''));
 });
 

@@ -766,7 +766,7 @@ Blockly.Blocks['robot_is_done_fetch'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("is")
-        .appendField(new Blockly.FieldDropdown([["choose an option", ""], ["torso","TORSO"], ["gripper","GRIPPER"], ["screen","SCREEN"], ["navigation","NAVIGATION"], ["PbD","PBD"], ["timer","TIMER"]]), "NAME")
+        .appendField(new Blockly.FieldDropdown([["torso","TORSO"], ["gripper","GRIPPER"], ["screen","SCREEN"], ["navigation","NAVIGATION"], ["PbD","PBD"], ["timer","TIMER"]]), "NAME")
         .appendField("done");
     this.setOutput(true, "Boolean");
     this.setColour(20);

@@ -50,6 +50,6 @@
     "unused": true
   },
   "dependencies": {
-    "google-closure-library": "^20180204.0.0"
+    "google-closure-library": "^20180506.0.0"
   }
 }

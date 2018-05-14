@@ -774,3 +774,15 @@ Blockly.Blocks['robot_is_done_fetch'] = {
  this.setHelpUrl("");
   }
 };
+
+Blockly.Blocks['robot_cancel_fetch'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("cancel")
+        .appendField(new Blockly.FieldDropdown([["torso","TORSO"], ["gripper","GRIPPER"], ["screen","SCREEN"], ["navigation","NAVIGATION"], ["PbD","PBD"], ["timer","TIMER"]]), "NAME");
+    this.setPreviousStatement(true, null);
+    this.setColour(20);
+ this.setTooltip("Cancels the chosen action");
+ this.setHelpUrl("");
+  }
+};

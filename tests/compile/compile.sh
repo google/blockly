@@ -1,3 +1,5 @@
+echo "Executing compile.sh from $(pwd)"
+
 # Find the Closure Compiler.
 if [ -f "$(npm root)/google-closure-compiler/compiler.jar" ]; then
   COMPILER="$(npm root)/google-closure-compiler/compiler.jar"

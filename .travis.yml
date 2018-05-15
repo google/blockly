@@ -14,6 +14,8 @@ matrix:
       osx_image: xcode8.3
 
 before_script:
+  # Symlink closure library used by test/jsunit
+  - ln -s $(npm root)/google-closure-library ../closure-library
   - export DISPLAY=:99.0
   - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then ( tests/scripts/setup_linux_env.sh ) fi
   - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then ( tests/scripts/setup_osx_env.sh ) fi
@@ -23,4 +25,5 @@ script:
   - set -x
   - npm run lint
   - npm test
+  - tests/compile/compile.sh
   - cd tests/compile; compile.sh; cd ..

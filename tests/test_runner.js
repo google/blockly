@@ -30,7 +30,7 @@ var testFns = [
     ];
 
 var errored = false;
-testFns.forEach((testFn) => {
+testFns.forEach(function(testFn) {
   try {
     testFn();
   } catch (errorStr) {

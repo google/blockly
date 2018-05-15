@@ -1,4 +1,7 @@
 # Find the Closure Compiler.
+echo "If this script is running, you should see this in the Travis log"
+
+
 if [ -f "$(npm root)/google-closure-compiler/compiler.jar" ]; then
   COMPILER="$(npm root)/google-closure-compiler/compiler.jar"
 elif [ -f *compiler*.jar ]; then

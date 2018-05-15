@@ -464,8 +464,7 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
   };
 
   var bindData = [];
-  var window = goog.global['window'];
-  if (window && window.PointerEvent && (name in Blockly.Touch.TOUCH_MAP)) {
+  if (goog.global.PointerEvent && (name in Blockly.Touch.TOUCH_MAP)) {
     for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
       node.addEventListener(type, wrapFunc, false);
       bindData.push([node, type, wrapFunc]);

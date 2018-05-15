@@ -39,7 +39,7 @@ gulp.task('build', gulp.shell.task([
 ]));
 
 // Concatenates the necessary files to load Blockly in a Node.js VM.  Blockly's
-// inidividual libraries target use in a browser, where globals (via the window
+// individual libraries target use in a browser, where globals (via the window
 // objects) are used to share state and APIs.  By concatenating all the
 // necessary components into a single file, Blockly can be loaded as a Node.js
 // module.

@@ -90,19 +90,6 @@ function start() {
   changeIndex();
 }
 
-var all_test_names = [
-  'logic',
-  'loops1',
-  'loops2',
-  'loops3',
-  'math',
-  'text',
-  'lists',
-  'colour',
-  'variables',
-  'functions'
-];
-
 /*
  * Run this test to load all of the test files in all_test_names.  The contents
  * will be loaded into the workspace in order.  To test the generators:
@@ -120,13 +107,15 @@ function loadAll() {
 
   var loadingElem = document.getElementById('loading');
   loadingElem.textContent = 'loading...';
-  for (var i = 0; i < all_test_names.length; i++) {
-    var testName = all_test_names[i];
-    var url = testName + '.xml';
 
-    var xmlText = fetchFile(url);
-    if (xmlText !== null) {
-      fromXml(url, xmlText, /* opt_append */ true);
+  var options = document.getElementById('testUrl').options;
+  for (var i = 0; i < options.length; i++) {
+    var testUrl = options[i].value;
+    if (testUrl) {
+      var xmlText = fetchFile(testUrl);
+      if (xmlText !== null) {
+        fromXml(testUrl, xmlText, /* opt_append */ true);
+      }
     }
   }
   output.style.background = '';

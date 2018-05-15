@@ -48,7 +48,7 @@ gulp.task('build', gulp.shell.task([
 // and JavaScript code generation.  If you need another localization or
 // generator language, just copy and edit the srcs. Only one localization
 // language can be included.
-gulp.task('blockly_javascript_en', ['build'], function() {
+gulp.task('blockly_javascript_en', function() {
   var srcs = [
     'blockly_compressed.js',
     'blocks_compressed.js',
@@ -99,4 +99,4 @@ gulp.task('watch', buildWatchTaskFn('blockly_javascript_en'));
 
 // The default task concatenates files for Node.js, using English language
 // blocks and the JavaScript generator.
-gulp.task('default', ['blockly_javascript_en']);
+gulp.task('default', ['build', 'blockly_javascript_en']);

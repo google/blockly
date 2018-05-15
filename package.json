@@ -18,7 +18,7 @@
     "name": "Neil Fraser"
   },
   "scripts": {
-    "prepare": "gulp default",
+    "prepare": "gulp blockly_javascript_en",
     "lint": "eslint .",
     "pretest": "tests/scripts/test_setup.sh",
     "test": "node tests/test_runner.js"
@@ -27,6 +27,7 @@
   "private": true,
   "devDependencies": {
     "eslint": "^4.16",
+    "google-closure-library": "^20180506.0.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-insert": "^0.5.0",
@@ -48,8 +49,5 @@
     "sub": true,
     "undef": true,
     "unused": true
-  },
-  "dependencies": {
-    "google-closure-library": "^20180506.0.0"
   }
 }

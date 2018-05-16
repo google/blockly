@@ -19,7 +19,7 @@ fi
 echo Using $COMPILER as the compiler.
 rm main_compressed.js 2> /dev/null
 echo Compiling Blockly...
-java -jar $COMPILER --js='tests/compile/main.js' \
+COMPILATION_COMMAND="java -jar $COMPILER --js='tests/compile/main.js' \
   --js='core/**.js' \
   --js='blocks/**.js' \
   --js='generators/**.js' \
@@ -30,7 +30,9 @@ java -jar $COMPILER --js='tests/compile/main.js' \
   --externs externs/svg-externs.js \
   --compilation_level ADVANCED_OPTIMIZATIONS \
   --dependency_mode=STRICT --entry_point=Main \
-  --js_output_file 'tests/compile/main_compressed.js'
+  --js_output_file 'tests/compile/main_compressed.js'"
+echo $COMPILATION_COMMAND
+$COMPILATION_COMMAND
 if [ -s main_compressed.js ]; then
   echo Compilation OK.
 else

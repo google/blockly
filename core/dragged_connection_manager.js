@@ -215,7 +215,7 @@ Blockly.DraggedConnectionManager.prototype.addHighlighting_ = function() {
 Blockly.DraggedConnectionManager.prototype.initAvailableConnections_ = function() {
   var available = this.topBlock_.getConnections_(false);
   // Also check the last connection on this stack
-  var lastOnStack = this.topBlock_.lastConnectionInStack_();
+  var lastOnStack = this.topBlock_.lastConnectionInStack();
   if (lastOnStack && lastOnStack != this.topBlock_.nextConnection) {
     available.push(lastOnStack);
   }

@@ -2,7 +2,7 @@
 echo "Executing compile.sh from $(pwd)"
 
 # Find the Blockly project root if pwd is the root
-# or the directory containing this script.
+# or if pwd is the directory containing this script.
 if [ -f ./main.js ] && [ -f ./compile.sh ]; then
   BLOCKLY_ROOT="../.."
 elif [ -f tests/compile/compile.sh ]; then
@@ -15,7 +15,8 @@ fi
 # Test for npm and node_modules directory.
 if command -v npm >/dev/null 2>&1; then
   NODE_MODULES=$(npm root)
-  # npm root will invent a location based on pwd if it can't find one.
+  # npm root will invent a location based on pwd if it can't find
+  # one, such as when the project has not been `npm install`ed.
   # Clear the variable if the directory doesn't already exist.
   [[ ! -d $NODE_MODULES ]] && NODE_MODULES=""
 fi

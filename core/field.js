@@ -360,10 +360,7 @@ Blockly.Field.prototype.render_ = function() {
   }
 
   // Replace the text.
-  goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
-  var textNode = document.createTextNode(this.getDisplayText_());
-  this.textElement_.appendChild(textNode);
-
+  this.textElement_.textContent = this.getDisplayText_();
   this.updateWidth();
 };
 

@@ -243,6 +243,13 @@ Blockly.JavaScript['robot_start_torso'] = function(block) {
   return code;
 };
 
+Blockly.JavaScript['robot_start_head'] = function(block) {
+  var value_pan = Blockly.JavaScript.valueToCode(block, 'PAN', Blockly.JavaScript.ORDER_NONE);
+  var value_tilt = Blockly.JavaScript.valueToCode(block, 'TILT', Blockly.JavaScript.ORDER_NONE);
+  var code = 'robot.startHead(' + value_pan + ', ' + value_tilt + ');\n';
+  return code;
+};
+
 Blockly.JavaScript['robot_is_done_fetch'] = function(block) {
   var dropdown_name = Blockly.JavaScript.quote_(block.getFieldValue('NAME'));
   var code = 'robot.isDone(' + dropdown_name + ')';

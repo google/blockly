@@ -762,11 +762,29 @@ Blockly.Blocks['robot_start_torso'] = {
   }
 };
 
+Blockly.Blocks['robot_start_head'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("start moving head to pan (degrees)");
+    this.appendValueInput("PAN")
+        .setCheck("Number");
+    this.appendValueInput("TILT")
+        .setCheck("Number")
+        .appendField("tilt (degrees)");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+ this.setTooltip("Pan angle ranges from -90 to 90 degrees. Tilt angle ranges from -90 to 45 degrees. ");
+ this.setHelpUrl("");
+  }
+};
+
 Blockly.Blocks['robot_is_done_fetch'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("is")
-        .appendField(new Blockly.FieldDropdown([["torso","TORSO"], ["gripper","GRIPPER"], ["screen","SCREEN"], ["navigation","NAVIGATION"], ["PbD","PBD"], ["timer","TIMER"]]), "NAME")
+        .appendField(new Blockly.FieldDropdown([["torso","TORSO"], ["head", "HEAD"], ["gripper","GRIPPER"], ["screen","SCREEN"], ["navigation","NAVIGATION"], ["PbD","PBD"], ["timer","TIMER"]]), "NAME")
         .appendField("done");
     this.setOutput(true, "Boolean");
     this.setColour(20);

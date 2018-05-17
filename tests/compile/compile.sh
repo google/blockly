@@ -36,7 +36,6 @@ else
       echo "$COMPILER_JARS" 1>&2;
       exit 1
     fi
-    # TODO: Check whether multiple files were found.
     COMPILER=$COMPILER_JARS
     echo "Found local Closure compiler .jar:"
     echo "  $COMPILER"

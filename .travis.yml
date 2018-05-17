@@ -22,7 +22,4 @@ before_script:
   - sleep 2
 
 script:
-  - set -x
-  - npm run lint
-  - npm test
-  - tests/compile/compile.sh
+  - tests/run_all_tests.sh

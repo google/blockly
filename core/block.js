@@ -259,6 +259,10 @@ Blockly.Block.prototype.dispose = function(healStack) {
     // well as corruption of the connection database.  Therefore we must
     // methodically step through the blocks and carefully disassemble them.
 
+    if (Blockly.selected == this) {
+      Blockly.selected = null;
+    }
+
     // First, dispose of all my children.
     for (var i = this.childBlocks_.length - 1; i >= 0; i--) {
       this.childBlocks_[i].dispose(false);
@@ -365,7 +369,7 @@ Blockly.Block.prototype.getConnections_ = function(_all) {
  * @return {Blockly.Connection} The last next connection on the stack, or null.
  * @package
  */
-Blockly.Block.prototype.lastConnectionInStack_ = function() {
+Blockly.Block.prototype.lastConnectionInStack = function() {
   var nextConnection = this.nextConnection;
   while (nextConnection) {
     var nextBlock = nextConnection.targetBlock();
@@ -1282,7 +1286,6 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
             case 'input_dummy':
               input = this.appendDummyInput(element['name']);
               break;
-
             default:
               field = Blockly.Field.fromJson(element);
 

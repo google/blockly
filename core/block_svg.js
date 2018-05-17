@@ -28,6 +28,8 @@ goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.ContextMenu');
+goog.require('Blockly.Events.Ui');
+goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Grid');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.Tooltip');
@@ -37,7 +39,6 @@ goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
-goog.require('goog.userAgent');
 
 
 /**
@@ -97,6 +98,11 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   Blockly.Tooltip.bindMouseEvents(this.svgPath_);
   Blockly.BlockSvg.superClass_.constructor.call(this,
       workspace, prototypeName, opt_id);
+
+  // Expose this block's ID on its top-level SVG group.
+  if (this.svgGroup_.dataset) {
+    this.svgGroup_.dataset.id = this.id;
+  }
 };
 goog.inherits(Blockly.BlockSvg, Blockly.Block);
 

@@ -37,13 +37,10 @@ goog.require('Blockly');
 
 
 /**
- * Common HSV hue for all blocks in this category.
- * Should be the same as Blockly.Msg.MATH_HUE
- * @readonly
+ * Unused constant for the common HSV hue for all blocks in this category.
+ * @deprecated Use Blockly.Msg.MATH_HUE. (2018 April 5)
  */
 Blockly.Constants.Math.HUE = 230;
-/** @deprecated Use Blockly.Constants.Math.HUE */
-Blockly.Blocks.math.HUE = Blockly.Constants.Math.HUE;
 
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for numeric value.
@@ -492,20 +489,9 @@ Blockly.Extensions.registerMutator('math_is_divisibleby_mutator',
     Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN,
     Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION);
 
-/**
- * Update the tooltip of 'math_change' block to reference the variable.
- * @this Blockly.Block
- * @package
- */
-Blockly.Constants.Math.CHANGE_TOOLTIP_EXTENSION = function() {
-  this.setTooltip(function() {
-    return Blockly.Msg.MATH_CHANGE_TOOLTIP.replace('%1',
-        this.getFieldValue('VAR'));
-  }.bind(this));
-};
-
+// Update the tooltip of 'math_change' block to reference the variable.
 Blockly.Extensions.register('math_change_tooltip',
-    Blockly.Extensions.buildTooltipWithFieldValue(
+    Blockly.Extensions.buildTooltipWithFieldText(
         '%{BKY_MATH_CHANGE_TOOLTIP}', 'VAR'));
 
 /**

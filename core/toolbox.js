@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Toolbox');
 
+goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.Touch');
@@ -628,11 +629,10 @@ Blockly.Toolbox.TreeNode.prototype.getExpandIconSafeHtml = function() {
 
 /**
  * Expand or collapse the node on mouse click.
- * @param {!goog.events.BrowserEvent} e The browser event.
+ * @param {!goog.events.BrowserEvent} _e The browser event.
  * @override
  */
-Blockly.Toolbox.TreeNode.prototype.onClick_ = function(
-    /* eslint-disable no-unused-vars */ e /* eslint-disable no-unused-vars */) {
+Blockly.Toolbox.TreeNode.prototype.onClick_ = function(_e) {
   // Expand icon.
   if (this.hasChildren() && this.isUserCollapsible_) {
     this.toggle();
@@ -647,23 +647,21 @@ Blockly.Toolbox.TreeNode.prototype.onClick_ = function(
 
 /**
  * Suppress the inherited mouse down behaviour.
- * @param {!goog.events.BrowserEvent} e The browser event.
+ * @param {!goog.events.BrowserEvent} _e The browser event.
  * @override
  * @private
  */
-Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(
-    /* eslint-disable no-unused-vars */ e /* eslint-disable no-unused-vars */) {
+Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(_e) {
   // NOPE.
 };
 
 /**
  * Suppress the inherited double-click behaviour.
- * @param {!goog.events.BrowserEvent} e The browser event.
+ * @param {!goog.events.BrowserEvent} _e The browser event.
  * @override
  * @private
  */
-Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(
-    /* eslint-disable no-unused-vars */ e /* eslint-disable no-unused-vars */) {
+Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(_e) {
   // NOP.
 };
 

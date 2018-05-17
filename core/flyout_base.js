@@ -28,6 +28,8 @@ goog.provide('Blockly.Flyout');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.Events');
+goog.require('Blockly.Events.BlockCreate');
+goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Touch');
@@ -35,7 +37,6 @@ goog.require('Blockly.WorkspaceSvg');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.math.Rect');
-goog.require('goog.userAgent');
 
 
 /**
@@ -609,7 +610,7 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
     Blockly.Events.setGroup(true);
     Blockly.Events.fire(new Blockly.Events.Create(newBlock));
     // Fire a VarCreate event for each (if any) new variable created.
-    for(var i = 0; i < newVariables.length; i++) {
+    for (var i = 0; i < newVariables.length; i++) {
       var thisVariable = newVariables[i];
       Blockly.Events.fire(new Blockly.Events.VarCreate(thisVariable));
     }

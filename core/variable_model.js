@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.VariableModel');
 
+goog.require('Blockly.Events.VarCreate');
+
 goog.require('goog.string');
 
 

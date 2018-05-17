@@ -97,3 +97,30 @@ function test_field_isEditable_nonEditableBlock_false() {
   assertFalse('Non-editable field with non-editable block is not editable',
       field.isCurrentlyEditable());
 }
+
+function test_field_register_with_custom_field() {
+  var CustomFieldType = function(value) {
+    CustomFieldType.superClass_.constructor.call(this, value);
+  };
+  goog.inherits(CustomFieldType, Blockly.Field);
+
+  CustomFieldType.fromJson = function(options) {
+    return new CustomFieldType(options['value']);
+  };
+
+  var json = {
+    type: 'field_custom_test',
+    value: 'ok'
+  };
+
+  // before registering
+  var field = Blockly.Field.fromJson(json);
+  assertNull(field);
+
+  Blockly.Field.register('field_custom_test', CustomFieldType);
+
+  // after registering
+  field = Blockly.Field.fromJson(json);
+  assertNotNull(field);
+  assertEquals(field.getValue(), 'ok');
+}

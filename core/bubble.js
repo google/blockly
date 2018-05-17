@@ -40,7 +40,7 @@ goog.require('goog.userAgent');
  *     bubble.
  * @param {!Element} content SVG content for the bubble.
  * @param {Element} shape SVG element to avoid eclipsing.
- * @param {!goog.math.Coodinate} anchorXY Absolute position of bubble's anchor
+ * @param {!goog.math.Coordinate} anchorXY Absolute position of bubble's anchor
  *     point.
  * @param {?number} bubbleWidth Width of bubble, or null if not resizable.
  * @param {?number} bubbleHeight Height of bubble, or null if not resizable.
@@ -283,6 +283,16 @@ Blockly.Bubble.prototype.getSvgRoot = function() {
 };
 
 /**
+ * Expose the block's ID on the bubble's top-level SVG group.
+ * @param {string} id ID of block.
+ */
+Blockly.Bubble.prototype.setSvgId = function(id) {
+  if (this.bubbleGroup_.dataset) {
+    this.bubbleGroup_.dataset.blockId = id;
+  }
+};
+
+/**
  * Handle a mouse-down on bubble's border.
  * @param {!Event} e Mouse down event.
  * @private
@@ -345,11 +355,16 @@ Blockly.Bubble.prototype.registerResizeEvent = function(callback) {
 
 /**
  * Move this bubble to the top of the stack.
+ * @return {!boolean} Whether or not the bubble has been moved.
  * @private
  */
 Blockly.Bubble.prototype.promote_ = function() {
   var svgGroup = this.bubbleGroup_.parentNode;
-  svgGroup.appendChild(this.bubbleGroup_);
+  if (svgGroup.lastChild !== this.bubbleGroup_) {
+    svgGroup.appendChild(this.bubbleGroup_);
+    return true;
+  }
+  return false;
 };
 
 /**

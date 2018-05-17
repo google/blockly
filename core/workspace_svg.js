@@ -30,11 +30,13 @@ goog.provide('Blockly.WorkspaceSvg');
 //goog.require('Blockly.BlockSvg');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
+goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
 goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Touch');
+goog.require('Blockly.TouchGesture');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.VariablesDynamic');
 goog.require('Blockly.Workspace');
@@ -46,7 +48,6 @@ goog.require('Blockly.ZoomControls');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
-goog.require('goog.userAgent');
 
 
 /**
@@ -205,7 +206,7 @@ Blockly.WorkspaceSvg.prototype.scrollbar = null;
 
 /**
  * The current gesture in progress on this workspace, if any.
- * @type {Blockly.Gesture}
+ * @type {Blockly.TouchGesture}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.currentGesture_ = null;
@@ -266,6 +267,13 @@ Blockly.WorkspaceSvg.prototype.flyoutButtonCallbacks_ = {};
  * @private
  */
 Blockly.WorkspaceSvg.prototype.toolboxCategoryCallbacks_ = {};
+
+/**
+ * Developers may define this function to add custom menu options to the
+ * workspace's context menu or edit the workspace-created set of menu options.
+ * @param {!Array.<!Object>} options List of menu options to add to.
+ */
+Blockly.WorkspaceSvg.prototype.configureContextMenu = null;
 
 /**
  * In a flyout, the target workspace where blocks should be placed after a drag.
@@ -401,7 +409,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
 
   if (!this.isFlyout) {
     Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
-        this.onMouseDown_);
+        this.onMouseDown_, false, true);
     if (this.options.zoomOptions && this.options.zoomOptions.wheel) {
       // Mouse-wheel.
       Blockly.bindEventWithChecks_(this.svgGroup_, 'wheel', this,
@@ -581,6 +589,15 @@ Blockly.WorkspaceSvg.prototype.getFlyout_ = function() {
 };
 
 /**
+ * Getter for the toolbox associated with this workspace, if one exists.
+ * @return {Blockly.Toolbox} The toolbox on this workspace.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getToolbox = function() {
+  return this.toolbox_;
+};
+
+/**
  * Update items that use screen coordinate calculations
  * because something has changed (e.g. scroll position, window size).
  * @private
@@ -754,8 +771,8 @@ Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
   // Figure out where we want to put the canvas back.  The order
   // in the is important because things are layered.
   var previousElement = this.svgBlockCanvas_.previousSibling;
-  var width = this.getParentSvg().getAttribute('width');
-  var height = this.getParentSvg().getAttribute('height');
+  var width = parseInt(this.getParentSvg().getAttribute('width'), 10);
+  var height = parseInt(this.getParentSvg().getAttribute('height'), 10);
   var coord = Blockly.utils.getRelativeXY(this.svgBlockCanvas_);
   this.workspaceDragSurface_.setContentsAndShow(this.svgBlockCanvas_,
       this.svgBubbleCanvas_, previousElement, width, height, this.scale);
@@ -992,7 +1009,7 @@ Blockly.WorkspaceSvg.prototype.createVariable = function(name, opt_type, opt_id)
  * Make a list of all the delete areas for this workspace.
  */
 Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
-  if (this.trashcan) {
+  if (this.trashcan && this.svgGroup_.parentNode) {
     this.deleteAreaTrash_ = this.trashcan.getClientRect();
   } else {
     this.deleteAreaTrash_ = null;
@@ -1300,6 +1317,11 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   };
   menuOptions.push(deleteOption);
 
+  // Allow the developer to add or modify menuOptions.
+  if (this.configureContextMenu) {
+    this.configureContextMenu(menuOptions);
+  }
+
   Blockly.ContextMenu.show(e, menuOptions, this.RTL);
 };
 
@@ -1463,6 +1485,7 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
 Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
   if (!this.scrollbar) {
     // Can't center a non-scrolling workspace.
+    console.warn('Tried to scroll a non-scrollable workspace.');
     return;
   }
   var metrics = this.getMetrics();
@@ -1472,6 +1495,61 @@ Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
   }
   var y = (metrics.contentHeight - metrics.viewHeight) / 2;
   this.scrollbar.set(x, y);
+};
+
+/**
+ * Scroll the workspace to center on the given block.
+ * @param {?string} id ID of block center on.
+ * @public
+ */
+Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
+  if (!this.scrollbar) {
+    console.warn('Tried to scroll a non-scrollable workspace.');
+    return;
+  }
+
+  var block = this.getBlockById(id);
+  if (!block) {
+    return;
+  }
+
+  // XY is in workspace coordinates.
+  var xy = block.getRelativeToSurfaceXY();
+  // Height/width is in workspace units.
+  var heightWidth = block.getHeightWidth();
+
+  // Find the enter of the block in workspace units.
+  var blockCenterY = xy.y + heightWidth.height / 2;
+
+  // In RTL the block's position is the top right of the block, not top left.
+  var multiplier = this.RTL ? -1 : 1;
+  var blockCenterX = xy.x + (multiplier * heightWidth.width / 2);
+
+  // Workspace scale, used to convert from workspace coordinates to pixels.
+  var scale = this.scale;
+
+  // Center in pixels.  0, 0 is at the workspace origin.  These numbers may
+  // be negative.
+  var pixelX = blockCenterX * scale;
+  var pixelY = blockCenterY * scale;
+
+  var metrics = this.getMetrics();
+
+  // Scrolling to here would put the block in the top-left corner of the
+  // visible workspace.
+  var scrollToBlockX = pixelX - metrics.contentLeft;
+  var scrollToBlockY = pixelY - metrics.contentTop;
+
+  // viewHeight and viewWidth are in pixels.
+  var halfViewWidth = metrics.viewWidth / 2;
+  var halfViewHeight = metrics.viewHeight / 2;
+
+  // Put the block in the center of the visible workspace instead.
+  var scrollToCenterX = scrollToBlockX - halfViewWidth;
+  var scrollToCenterY = scrollToBlockY - halfViewHeight;
+
+  Blockly.hideChaff();
+  this.scrollbar.set(scrollToCenterX, scrollToCenterY);
 };
 
 /**
@@ -1825,12 +1903,13 @@ Blockly.WorkspaceSvg.prototype.removeToolboxCategoryCallback = function(key) {
  * Look up the gesture that is tracking this touch stream on this workspace.
  * May create a new gesture.
  * @param {!Event} e Mouse event or touch event.
- * @return {Blockly.Gesture} The gesture that is tracking this touch stream,
- *     or null if no valid gesture exists.
+ * @return {Blockly.TouchGesture} The gesture that is tracking this touch
+ *     stream, or null if no valid gesture exists.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getGesture = function(e) {
-  var isStart = (e.type == 'mousedown' || e.type == 'touchstart' || e.type == 'pointerdown');
+  var isStart = (e.type == 'mousedown' || e.type == 'touchstart' ||
+      e.type == 'pointerdown');
 
   var gesture = this.currentGesture_;
   if (gesture) {
@@ -1847,7 +1926,7 @@ Blockly.WorkspaceSvg.prototype.getGesture = function(e) {
   // No gesture existed on this workspace, but this looks like the start of a
   // new gesture.
   if (isStart) {
-    this.currentGesture_ = new Blockly.Gesture(e, this);
+    this.currentGesture_ = new Blockly.TouchGesture(e, this);
     return this.currentGesture_;
   }
   // No gesture existed and this event couldn't be the start of a new gesture.

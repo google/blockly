@@ -29,7 +29,6 @@ goog.provide('Blockly.FieldImage');
 goog.require('Blockly.Field');
 goog.require('goog.dom');
 goog.require('goog.math.Size');
-goog.require('goog.userAgent');
 
 
 /**
@@ -67,6 +66,7 @@ goog.inherits(Blockly.FieldImage, Blockly.Field);
  *                          alt).
  * @returns {!Blockly.FieldImage} The new field instance.
  * @package
+ * @nocollapse
  */
 Blockly.FieldImage.fromJson = function(options) {
   var src = Blockly.utils.replaceMessageReferences(options['src']);
@@ -216,3 +216,5 @@ Blockly.FieldImage.prototype.showEditor_ = function() {
     this.clickHandler_(this);
   }
 };
+
+Blockly.Field.register('field_image', Blockly.FieldImage);

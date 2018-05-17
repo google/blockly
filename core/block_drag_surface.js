@@ -132,10 +132,10 @@ Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y, sc
   this.scale_ = scale;
   // This is a work-around to prevent a the blocks from rendering
   // fuzzy while they are being dragged on the drag surface.
-  x = x.toFixed(0);
-  y = y.toFixed(0);
-  this.dragGroup_.setAttribute('transform', 'translate('+ x + ','+ y + ')' +
-      ' scale(' + scale + ')');
+  var fixedX = x.toFixed(0);
+  var fixedY = y.toFixed(0);
+  this.dragGroup_.setAttribute('transform',
+      'translate('+ fixedX + ','+ fixedY + ') scale(' + scale + ')');
 };
 
 /**

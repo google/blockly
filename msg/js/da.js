@@ -281,12 +281,12 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Returnere cosinus af en vinkel (i grader).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Returnere sinus af en vinkel (i grader).";
 /** @export */ Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Returnere tangens af en vinkel (i grader).";
-/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Create colour variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Create number variable...";  // untranslated
-/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Create string variable...";  // untranslated
+/** @export */ Blockly.Msg.NEW_COLOUR_VARIABLE = "Opret farvevariabel ...";
+/** @export */ Blockly.Msg.NEW_NUMBER_VARIABLE = "Opret nummervariabel ...";
+/** @export */ Blockly.Msg.NEW_STRING_VARIABLE = "Opret strengvariabel ...";
 /** @export */ Blockly.Msg.NEW_VARIABLE = "Opret variabel ...";
 /** @export */ Blockly.Msg.NEW_VARIABLE_TITLE = "Navn til den nye variabel:";
-/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "New variable type:";  // untranslated
+/** @export */ Blockly.Msg.NEW_VARIABLE_TYPE_TITLE = "Ny variabeltype:";
 /** @export */ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 /** @export */ Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "tillad erklæringer";
 /** @export */ Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "med:";
@@ -397,7 +397,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 /** @export */ Blockly.Msg.VARIABLES_SET_TOOLTIP = "Sætter denne variabel til at være lig med input.";
 /** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS = "En variabel med navnet »%1« findes allerede.";
-/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "En variabel med navnet »%1« findes allerede for en anden variabel af typen »%2«.";
+/** @export */ Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE = "En variabel med navnet »%1« findes allerede for en anden type: »%2«.";
 /** @export */ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @export */ Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @export */ Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

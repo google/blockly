@@ -80,7 +80,7 @@ goog.require('Blockly.Msg');
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = "+ Add Input";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = "Allow statements";  // untranslated
 /** @export */ Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = "This function has duplicate inputs.";  // untranslated
-/** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "INPUTS";  // untranslated
+/** @export */ Blockly.Msg.IOS_PROCEDURES_INPUTS = "VHODI";
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = "Dodaj";
 /** @export */ Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = "+ Dodaj spremenljivko";
 /** @export */ Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = "Izbriši";

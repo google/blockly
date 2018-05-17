@@ -3,7 +3,8 @@
 		"authors": [
 			"Lukman Tomayahu",
 			"Marwan Mohamad",
-			"Zhoelyakin"
+			"Zhoelyakin",
+			"RFenichel"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -36,7 +37,7 @@
 	"COLOUR_RGB_RED": "meela",
 	"COLOUR_RGB_GREEN": "moyidu",
 	"COLOUR_RGB_BLUE": "wahu'ente",
-	"COLOUR_RGB_TOOLTIP": "Pohutuwa laku wolo jumula u tilantu monto u meela, moyidu wawu wahu'ente.\nNga'amila musi o woolota 0 wawu 100",
+	"COLOUR_RGB_TOOLTIP": "Pohutuwa laku wolo jumula u tilantu monto u meela, moyidu wawu wahu'ente. Nga'amila musi o woolota 0 wawu 100",
 	"COLOUR_BLEND_TITLE": "Ulawuwa",
 	"COLOUR_BLEND_COLOUR1": "laku 1",
 	"COLOUR_BLEND_COLOUR2": "laku 2",

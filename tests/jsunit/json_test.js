@@ -26,17 +26,56 @@ function test_json_minimal() {
   var workspace = new Blockly.Workspace();
   var block;
   try {
-    Blockly.defineBlocksWithJsonArray([{
-      "type": BLOCK_TYPE
-    }]);
+    var warnings = captureWarnings(function() {
+      Blockly.defineBlocksWithJsonArray([{
+        "type": BLOCK_TYPE
+      }]);
+      block = new Blockly.Block(workspace, BLOCK_TYPE);
+    });
 
-    block = new Blockly.Block(workspace, BLOCK_TYPE);
     assertEquals(BLOCK_TYPE, block.type);
+    assertEquals(
+        'Expecting no warnings when defining and creating a simple block.',
+        warnings.length, 0);
     // TODO: asserts
   } finally {
     block.dispose();
     workspace.dispose();
     delete Blockly.Blocks[BLOCK_TYPE];
+  }
+}
+
+/**
+ * Ensure a block without a type id fails with a warning, but does not block
+ * later definitions.
+ */
+function test_json_nullOrUndefinedBlockTypeId() {
+  var BLOCK_TYPE1 = 'test_json_before_bad_blocks';
+  var BLOCK_TYPE2 = 'test_json_after_bad_blocks';
+
+  assertUndefined(Blockly.Blocks[BLOCK_TYPE1]);
+  assertUndefined(Blockly.Blocks[BLOCK_TYPE2]);
+  var blockTypeCount = Object.keys(Blockly.Blocks).length;
+
+  try {
+    var warnings = captureWarnings(function() {
+      Blockly.defineBlocksWithJsonArray([
+          {"type": BLOCK_TYPE1},
+          {"type": undefined},
+          {"type": null},
+          {"type": BLOCK_TYPE2}]);
+    });
+
+    assertNotNullNorUndefined('Block before bad blocks should be defined.',
+        Blockly.Blocks[BLOCK_TYPE1]);
+    assertNotNullNorUndefined('Block after bad blocks should be defined.',
+        Blockly.Blocks[BLOCK_TYPE2]);
+    assertEquals(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
+    assertEquals(
+        'Expecting 2 warnings, one for each bad block.', warnings.length, 2);
+  } finally {
+    delete Blockly.Blocks[BLOCK_TYPE1];
+    delete Blockly.Blocks[BLOCK_TYPE2];
   }
 }
 
@@ -255,5 +294,77 @@ function test_json_dropdown_image() {
     workspace.dispose();
     delete Blockly.Blocks[BLOCK_TYPE];
     delete Blockly.Msg['ALTTEXT'];
+  }
+}
+
+function test_defineBlocksWithJsonArray_nullItem() {
+  var BLOCK_TYPE1 = 'test_block_before_null';
+  var BLOCK_TYPE2 = 'test_block_after_null';
+
+  assertUndefined(Blockly.Blocks[BLOCK_TYPE1]);
+  assertUndefined(Blockly.Blocks[BLOCK_TYPE2]);
+  var blockTypeCount = Object.keys(Blockly.Blocks).length;
+
+  try {
+    var warnings = captureWarnings(function() {
+      Blockly.defineBlocksWithJsonArray([
+          {
+            "type": BLOCK_TYPE1,
+            "message0": 'before'
+          },
+          null,
+          {
+            "type": BLOCK_TYPE2,
+            "message0": 'after'
+          }]);
+    });
+    assertNotNullNorUndefined(
+        'Block before null in array should be defined.',
+        Blockly.Blocks[BLOCK_TYPE1]);
+    assertNotNullNorUndefined(
+        'Block after null in array should be defined.',
+        Blockly.Blocks[BLOCK_TYPE2]);
+    assertEquals(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
+    assertEquals('Expected 1 warning for the bad block.', warnings.length, 1);
+  } finally {
+    workspace.dispose();
+    delete Blockly.Blocks[BLOCK_TYPE1];
+    delete Blockly.Blocks[BLOCK_TYPE2];
+  }
+}
+
+function test_defineBlocksWithJsonArray_undefinedItem() {
+  var BLOCK_TYPE1 = 'test_block_before_undefined';
+  var BLOCK_TYPE2 = 'test_block_after_undefined';
+
+  assertUndefined(Blockly.Blocks[BLOCK_TYPE1]);
+  assertUndefined(Blockly.Blocks[BLOCK_TYPE2]);
+  var blockTypeCount = Object.keys(Blockly.Blocks).length;
+
+  try {
+    var warnings = captureWarnings(function() {
+      Blockly.defineBlocksWithJsonArray([
+          {
+            "type": BLOCK_TYPE1,
+            "message0": 'before'
+          },
+          undefined,
+          {
+            "type": BLOCK_TYPE2,
+            "message0": 'after'
+          }]);
+    });
+    assertNotNullNorUndefined(
+        'Block before undefined in array should be defined.',
+        Blockly.Blocks[BLOCK_TYPE1]);
+    assertNotNullNorUndefined(
+        'Block after undefined in array should be defined.',
+        Blockly.Blocks[BLOCK_TYPE2]);
+    assertEquals(Object.keys(Blockly.Blocks).length, blockTypeCount + 2);
+    assertEquals('Expected 1 warning for the bad block.', warnings.length, 1);
+  } finally {
+    workspace.dispose();
+    delete Blockly.Blocks[BLOCK_TYPE1];
+    delete Blockly.Blocks[BLOCK_TYPE2];
   }
 }

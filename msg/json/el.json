@@ -15,7 +15,8 @@
 			"Stam.nikos",
 			"Themelis",
 			"KATRINE1992",
-			"Vicng"
+			"Vicng",
+			"Nikosgranturismogt"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "αντικείμενο",
@@ -42,9 +43,13 @@
 	"RENAME_VARIABLE": "Μετονόμασε τη μεταβλητή...",
 	"RENAME_VARIABLE_TITLE": "Μετονόμασε όλες τις μεταβλητές «%1» σε:",
 	"NEW_VARIABLE": "Δημιουργείστε μεταβλητή",
+	"NEW_STRING_VARIABLE": "Δημιουργία μεταβλητή συμβολοσειράς...",
+	"NEW_NUMBER_VARIABLE": "Δημιουργία μεταβλητής αριθμού...",
+	"NEW_COLOUR_VARIABLE": "Δημιουργία μεταβλητής χρώματος...",
+	"NEW_VARIABLE_TYPE_TITLE": "Νέος τύπος μεταβλητής:",
 	"NEW_VARIABLE_TITLE": "Νέο όνομα μεταβλητής:",
 	"VARIABLE_ALREADY_EXISTS": "Η μεταβλητή με το όνομα \"%1\" υπάρχει ήδη",
-	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Μια μεταβλητή με όνομα '%1' υπάρχει πάντα για μια άλλη μεταβλητή τύπου '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Μια μεταβλητή με όνομα '%1' υπάρχει πάντα για έναν άλλο τύπο: '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Θέλετε να διαγράψετε το %1 που χρησιμοποιείτε της μεταβλητής '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Δεν μπορώ να διαγράψω την μεταβλητή '%1' διότι είναι μέρος του ορισμού της λειτουργίας '%2'",
 	"DELETE_VARIABLE": "Διαγράψετε την μεταβλητή '%1'",

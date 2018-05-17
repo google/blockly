@@ -37,13 +37,10 @@ goog.require('Blockly');
 
 
 /**
- * Common HSV hue for all blocks in this category.
- * Should be the same as Blockly.Msg.VARIABLES_HUE.
- * @readonly
+ * Unused constant for the common HSV hue for all blocks in this category.
+ * @deprecated Use Blockly.Msg.VARIABLES_HUE. (2018 April 5)
  */
 Blockly.Constants.Variables.HUE = 330;
-/** @deprecated Use Blockly.Constants.Variables.HUE */
-Blockly.Blocks.variables.HUE = Blockly.Constants.Variables.HUE;
 
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for variable getter.
@@ -103,7 +100,7 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
    * @this Blockly.Block
    */
   customContextMenu: function(options) {
-    if(this.isInFlyout){
+    if (this.isInFlyout){
       return;
     }
     // Getter blocks have the option to create a setter block, and vice versa.
@@ -116,7 +113,7 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
     }
 
     var option = {enabled: this.workspace.remainingCapacity() > 0};
-    var name = this.getFieldValue('VAR');
+    var name = this.getField('VAR').getText();
     option.text = contextMenuMsg.replace('%1', name);
     var xmlField = goog.dom.createDom('field', null, name);
     xmlField.setAttribute('name', 'VAR');

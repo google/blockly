@@ -799,6 +799,7 @@ Blockly.Blocks['robot_cancel_fetch'] = {
         .appendField("cancel")
         .appendField(new Blockly.FieldDropdown([["torso","TORSO"], ["gripper","GRIPPER"], ["screen","SCREEN"], ["navigation","NAVIGATION"], ["PbD","PBD"], ["timer","TIMER"]]), "NAME");
     this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
     this.setColour(20);
  this.setTooltip("Cancels the chosen action");
  this.setHelpUrl("");

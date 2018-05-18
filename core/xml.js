@@ -30,6 +30,9 @@
  **/
 goog.provide('Blockly.Xml');
 
+goog.require('Blockly.Events.BlockCreate');
+goog.require('Blockly.Events.VarCreate');
+
 goog.require('goog.asserts');
 goog.require('goog.dom');
 
@@ -42,8 +45,10 @@ goog.require('goog.dom');
  */
 Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
   var xml = goog.dom.createDom('xml');
-  xml.appendChild(Blockly.Xml.variablesToDom(
-      Blockly.Variables.allUsedVarModels(workspace)));
+  var variables = Blockly.Variables.allUsedVarModels(workspace);
+  if (variables.length) {
+    xml.appendChild(Blockly.Xml.variablesToDom(variables));
+  }
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
     xml.appendChild(Blockly.Xml.blockToDomWithXY(block, opt_noId));
@@ -402,8 +407,10 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         // to be moved to a nested destination in the next operation.
         var block = Blockly.Xml.domToBlock(xmlChild, workspace);
         newBlockIds.push(block.id);
-        var blockX = parseInt(xmlChild.getAttribute('x'), 10);
-        var blockY = parseInt(xmlChild.getAttribute('y'), 10);
+        var blockX = xmlChild.hasAttribute('x') ?
+            parseInt(xmlChild.getAttribute('x'), 10) : 10;
+        var blockY = xmlChild.hasAttribute('y') ?
+            parseInt(xmlChild.getAttribute('y'), 10) : 10;
         if (!isNaN(blockX) && !isNaN(blockY)) {
           block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
         }
@@ -544,7 +551,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     var newVariables = Blockly.Variables.getAddedVariables(workspace,
         variablesBeforeCreation);
     // Fire a VarCreate event for each (if any) new variable created.
-    for(var i = 0; i < newVariables.length; i++) {
+    for (var i = 0; i < newVariables.length; i++) {
       var thisVariable = newVariables[i];
       Blockly.Events.fire(new Blockly.Events.VarCreate(thisVariable));
     }
@@ -708,7 +715,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   }
   var disabled = xmlBlock.getAttribute('disabled');
   if (disabled) {
-    block.setDisabled(disabled == 'true');
+    block.setDisabled(disabled == 'true' || disabled == 'disabled');
   }
   var deletable = xmlBlock.getAttribute('deletable');
   if (deletable) {

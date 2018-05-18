@@ -29,8 +29,6 @@ goog.provide('Blockly.BlockSvg.render');
 
 goog.require('Blockly.BlockSvg');
 
-goog.require('goog.userAgent');
-
 
 // UI constants for rendering blocks.
 /**
@@ -608,8 +606,8 @@ Blockly.BlockSvg.prototype.renderMoveConnections_ = function() {
 
 /**
  * Render the top edge of the block.
- * @param {!Array.<string>} steps Path of block outline.
- * @param {!Array.<string>} highlightSteps Path of block highlights.
+ * @param {!Array.<string|number>} steps Path of block outline.
+ * @param {!Array.<string|number>} highlightSteps Path of block highlights.
  * @param {number} rightEdge Minimum width of block.
  * @private
  */
@@ -653,10 +651,10 @@ Blockly.BlockSvg.prototype.renderDrawTop_ = function(steps,
 
 /**
  * Render the right edge of the block.
- * @param {!Array.<string>} steps Path of block outline.
- * @param {!Array.<string>} highlightSteps Path of block highlights.
- * @param {!Array.<string>} inlineSteps Inline block outlines.
- * @param {!Array.<string>} highlightInlineSteps Inline block highlights.
+ * @param {!Array.<string|number>} steps Path of block outline.
+ * @param {!Array.<string|number>} highlightSteps Path of block highlights.
+ * @param {!Array.<string|number>} inlineSteps Inline block outlines.
+ * @param {!Array.<string|number>} highlightInlineSteps Inline block highlights.
  * @param {!Array.<!Array.<!Object>>} inputRows 2D array of objects, each
  *     containing position information.
  * @param {number} iconWidth Offset of first row due to icons.
@@ -909,8 +907,8 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
 
 /**
  * Render the bottom edge of the block.
- * @param {!Array.<string>} steps Path of block outline.
- * @param {!Array.<string>} highlightSteps Path of block highlights.
+ * @param {!Array.<string|number>} steps Path of block outline.
+ * @param {!Array.<string|number>} highlightSteps Path of block highlights.
  * @param {number} cursorY Height of block.
  * @private
  */
@@ -955,8 +953,8 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ = function(steps,
 
 /**
  * Render the left edge of the block.
- * @param {!Array.<string>} steps Path of block outline.
- * @param {!Array.<string>} highlightSteps Path of block highlights.
+ * @param {!Array.<string|number>} steps Path of block outline.
+ * @param {!Array.<string|number>} highlightSteps Path of block highlights.
  * @private
  */
 Blockly.BlockSvg.prototype.renderDrawLeft_ = function(steps, highlightSteps) {

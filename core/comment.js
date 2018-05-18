@@ -27,6 +27,8 @@
 goog.provide('Blockly.Comment');
 
 goog.require('Blockly.Bubble');
+goog.require('Blockly.Events.BlockChange');
+goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
 goog.require('goog.userAgent');
 
@@ -120,14 +122,12 @@ Blockly.Comment.prototype.createEditor_ = function() {
   body.appendChild(textarea);
   this.textarea_ = textarea;
   this.foreignObject_.appendChild(body);
-  Blockly.bindEventWithChecks_(textarea, 'mouseup', this, this.textareaFocus_);
+  Blockly.bindEventWithChecks_(textarea, 'mouseup', this, this.textareaFocus_, true, true);
   // Don't zoom with mousewheel.
   Blockly.bindEventWithChecks_(textarea, 'wheel', this, function(e) {
     e.stopPropagation();
   });
-  Blockly.bindEventWithChecks_(textarea, 'change', this, function(
-      /* eslint-disable no-unused-vars */ e
-      /* eslint-enable no-unused-vars */) {
+  Blockly.bindEventWithChecks_(textarea, 'change', this, function(_e) {
     if (this.text_ != textarea.value) {
       Blockly.Events.fire(new Blockly.Events.BlockChange(
           this.block_, 'comment', null, this.text_, textarea.value));
@@ -198,6 +198,8 @@ Blockly.Comment.prototype.setVisible = function(visible) {
         /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
         this.createEditor_(), this.block_.svgPath_,
         this.iconXY_, this.width_, this.height_);
+    // Expose this comment's block's ID on its top-level SVG group.
+    this.bubble_.setSvgId(this.block_.id);
     this.bubble_.registerResizeEvent(this.resizeBubble_.bind(this));
     this.updateColour();
   } else {
@@ -214,18 +216,18 @@ Blockly.Comment.prototype.setVisible = function(visible) {
 
 /**
  * Bring the comment to the top of the stack when clicked on.
- * @param {!Event} e Mouse up event.
+ * @param {!Event} _e Mouse up event.
  * @private
  */
-Blockly.Comment.prototype.textareaFocus_ = function(
-    /* eslint-disable no-unused-vars */ e /* eslint-enable no-unused-vars */) {
+Blockly.Comment.prototype.textareaFocus_ = function(_e) {
   // Ideally this would be hooked to the focus event for the comment.
   // However doing so in Firefox swallows the cursor for unknown reasons.
   // So this is hooked to mouseup instead.  No big deal.
-  this.bubble_.promote_();
-  // Since the act of moving this node within the DOM causes a loss of focus,
-  // we need to reapply the focus.
-  this.textarea_.focus();
+  if (this.bubble_.promote_()) {
+    // Since the act of moving this node within the DOM causes a loss of focus,
+    // we need to reapply the focus.
+    this.textarea_.focus();
+  }
 };
 
 /**

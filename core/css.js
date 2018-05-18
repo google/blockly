@@ -386,9 +386,12 @@ Blockly.Css.CONTENT = [
   '.blocklyCommentTextarea {',
     'background-color: #ffc;',
     'border: 0;',
+    'outline: 0;',
     'margin: 0;',
     'padding: 2px;',
     'resize: none;',
+    'display: block;',
+    'overflow: hidden;',
   '}',
 
   '.blocklyHtmlInput {',

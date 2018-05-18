@@ -86,6 +86,7 @@
 	"IOS_OK": "V redu",
 	"IOS_CANCEL": "Prekliči",
 	"IOS_ERROR": "Napaka",
+	"IOS_PROCEDURES_INPUTS": "VHODI",
 	"IOS_VARIABLES_ADD_VARIABLE": "+ Dodaj spremenljivko",
 	"IOS_VARIABLES_ADD_BUTTON": "Dodaj",
 	"IOS_VARIABLES_RENAME_BUTTON": "Preimenuj",

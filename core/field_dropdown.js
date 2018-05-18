@@ -68,6 +68,7 @@ goog.inherits(Blockly.FieldDropdown, Blockly.Field);
  * @param {!Object} options A JSON object with options (options).
  * @returns {!Blockly.FieldDropdown} The new field instance.
  * @package
+ * @nocollapse
  */
 Blockly.FieldDropdown.fromJson = function(options) {
   return new Blockly.FieldDropdown(options['options']);
@@ -563,3 +564,5 @@ Blockly.FieldDropdown.prototype.dispose = function() {
   Blockly.WidgetDiv.hideIfOwner(this);
   Blockly.FieldDropdown.superClass_.dispose.call(this);
 };
+
+Blockly.Field.register('field_dropdown', Blockly.FieldDropdown);

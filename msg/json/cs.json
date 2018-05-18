@@ -10,7 +10,9 @@
 			"Koo6",
 			"Vtmarvin",
 			"Dvorapa",
-			"Dita"
+			"Dita",
+			"Ilimanaq29",
+			"Patriccck"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "položka",
@@ -36,8 +38,13 @@
 	"CHANGE_VALUE_TITLE": "Změnit hodnotu:",
 	"RENAME_VARIABLE": "Přejmenovat proměnnou...",
 	"RENAME_VARIABLE_TITLE": "Přejmenuj všech '%1' proměnných na:",
-	"NEW_VARIABLE": "Nová proměnná...",
+	"NEW_VARIABLE": "Vytvořte proměnnou...",
+	"NEW_STRING_VARIABLE": "Vytvořit řetězcovou proměnnou...",
+	"NEW_NUMBER_VARIABLE": "Vytvořit číselnou proměnnou...",
+	"NEW_COLOUR_VARIABLE": "Vytvořit barvu proměnné...",
+	"NEW_VARIABLE_TYPE_TITLE": "Nový typ proměnné:",
 	"NEW_VARIABLE_TITLE": "Nový název proměnné:",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Proměnná pojmenovaná jako '%1' již existuje pro jiný typ: '%2'.",
 	"COLOUR_PICKER_HELPURL": "https://cs.wikipedia.org/wiki/Barva",
 	"COLOUR_PICKER_TOOLTIP": "Vyberte barvu z palety.",
 	"COLOUR_RANDOM_TITLE": "náhodná barva",

@@ -21,7 +21,8 @@
 			"Trigonometria87",
 			"BarbaraAckles",
 			"Mauricio",
-			"Felipe L. Ewald"
+			"Felipe L. Ewald",
+			"Eduardo Addad de Oliveira"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -48,9 +49,13 @@
 	"RENAME_VARIABLE": "Renomear variável...",
 	"RENAME_VARIABLE_TITLE": "Renomear todas as variáveis '%1' para:",
 	"NEW_VARIABLE": "Criar variável...",
+	"NEW_STRING_VARIABLE": "Criar variável de segmentos de texto...",
+	"NEW_NUMBER_VARIABLE": "Criar variável numérica...",
+	"NEW_COLOUR_VARIABLE": "Criar variável colorida...",
+	"NEW_VARIABLE_TYPE_TITLE": "Tipo da nova variável:",
 	"NEW_VARIABLE_TITLE": "Nome da nova variável:",
 	"VARIABLE_ALREADY_EXISTS": "A variável chamada '%1' já existe.",
-	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Uma variável chamada '%1' já existe para outra variável do tipo '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Já existe uma variável chamada '%1' para outra do tipo: '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Deletar %1 usos da variável '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Não se pode deletar a variável '%1' porque é parte da definição da função '%2'",
 	"DELETE_VARIABLE": "Deletar a variável '%1'",

@@ -102,8 +102,8 @@ Blockly.JavaScript.ORDER_LOGICAL_AND = 13;     // &&
 Blockly.JavaScript.ORDER_LOGICAL_OR = 14;      // ||
 Blockly.JavaScript.ORDER_CONDITIONAL = 15;     // ?:
 Blockly.JavaScript.ORDER_ASSIGNMENT = 16;      // = += -= **= *= /= %= <<= >>= ...
-Blockly.JavaScript.ORDER_YIELD = 16.5;         // yield
-Blockly.JavaScript.ORDER_COMMA = 17;           // ,
+Blockly.JavaScript.ORDER_YIELD = 17;         // yield
+Blockly.JavaScript.ORDER_COMMA = 18;           // ,
 Blockly.JavaScript.ORDER_NONE = 99;            // (...)
 
 /**

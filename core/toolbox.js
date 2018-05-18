@@ -342,7 +342,7 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
           this.hasColours_ = true;
         } else {
           childOut.hexColour = '';
-          console.warn("Toolbox category \"" + categoryName + "\" has unrecognized colour attribute: " + colour);
+          console.warn('Toolbox category "' + categoryName + '" has unrecognized colour attribute: ' + colour);
         }
         if (childIn.getAttribute('expanded') == 'true') {
           if (childOut.blocks.length) {

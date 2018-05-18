@@ -1,12 +1,6 @@
 #!/bin/bash
 echo "Executing compile.sh from $(pwd)"
 
-# Enable folding if running on Travis CI.
-if [ ! -z $TRAVIS ]; then echo "travis_fold:start:compile.sh"; fi
-travis_fold_end () {
-  if [ ! -z $TRAVIS ]; then echo "travis_fold:end:compile.sh"; fi
-}
-
 # Find the Blockly project root if pwd is the root
 # or if pwd is the directory containing this script.
 if [ -f ./main.js ] && [ -f ./compile.sh ]; then
@@ -14,7 +8,6 @@ if [ -f ./main.js ] && [ -f ./compile.sh ]; then
 elif [ -f tests/compile/compile.sh ]; then
   BLOCKLY_ROOT="."
 else
-  travis_fold_end
   echo "ERROR: Cannot determine BLOCKLY_ROOT" 1>&2;
   exit 1
 fi
@@ -39,7 +32,6 @@ else
   COMPILER_JARS=$(find $BLOCKLY_ROOT/tests/compile/ -maxdepth 1 -name "*compiler*.jar")
   if [ -n "$COMPILER_JARS" ]; then
     if [ $(echo "$COMPILER_JARS" | wc -l) -ne 1 ]; then
-      travis_fold_end
       echo "ERROR: Found too many Closure *compiler*.jar files:" 1>&2;
       echo "$COMPILER_JARS" 1>&2;
       exit 1
@@ -48,7 +40,6 @@ else
     echo "Found local Closure compiler .jar:"
     echo "  $COMPILER"
   else
-    travis_fold_end
     echo "ERROR: Closure Compiler not found." 1>&2;
     echo "Either npm install google-closure-compiler" 1>&2;
     echo "Or download from this URL, and place jar file in current directory." 1>&2;
@@ -70,7 +61,6 @@ elif [ -d "$BLOCKLY_ROOT/../closure-library" ]; then
   echo "  $CLOSURE_LIB_ROOT"
   cat $CLOSURE_LIB_ROOT/package.json | grep version
 else
-  travis_fold_end
   echo "ERROR: Closure library not found." 1>&2;
   echo "Either npm install google-closure-library" 1>&2;
   echo "Or clone the repo from GitHub in a directory next to Blockly." 1>&2;
@@ -99,7 +89,6 @@ COMPILATION_COMMAND="java -jar $COMPILER --js='$BLOCKLY_ROOT/tests/compile/main.
 echo "$COMPILATION_COMMAND"
 $COMPILATION_COMMAND
 EXIT_CODE=$?
-travis_fold_end
 echo "Compiler exit code: $EXIT_CODE"
 if [ "$EXIT_CODE" -eq 0 ] && [ -s "$BLOCKLY_ROOT/tests/compile/main_compressed.js" ]; then
   echo "Compilation SUCCESS."

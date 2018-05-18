@@ -334,15 +334,15 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
         // (eg. `%{BKY_MATH_HUE}`).
         var colour = Blockly.utils.replaceMessageReferences(
             childIn.getAttribute('colour'));
-        if (goog.isString(colour)) {
-          if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
-            childOut.hexColour = colour;
-          } else {
-            childOut.hexColour = Blockly.hueToRgb(Number(colour));
-          }
+        if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
+          childOut.hexColour = colour;
+          this.hasColours_ = true;
+        } else if (!isNaN(Number(colour))) {
+          childOut.hexColour = Blockly.hueToRgb(Number(colour));
           this.hasColours_ = true;
         } else {
           childOut.hexColour = '';
+          console.warn("Toolbox category \"" + categoryName + "\" has unrecognized colour attribute: " + colour);
         }
         if (childIn.getAttribute('expanded') == 'true') {
           if (childOut.blocks.length) {

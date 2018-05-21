@@ -388,7 +388,11 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
     }
   };
 
-  var wsCommentOption = {enabled: true};
+  var wsCommentOption = {
+    // Foreign objects don't work in IE.  Don't let the user create comments
+    // that they won't be able to edit.
+    enabled: !goog.userAgent.IE
+  };
   wsCommentOption.text = Blockly.Msg.ADD_COMMENT;
   wsCommentOption.callback = function() {
     addWsComment();

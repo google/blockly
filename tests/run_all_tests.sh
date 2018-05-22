@@ -42,10 +42,10 @@ run_test_command () {
   local test_result=$?
   travis_fold end $test_id
   if [ $test_result -eq 0 ]; then
-    echo -e "${BOLD_GREEN}SUCCESS:${ANSI_RESET} $test_id"
+    echo -e "${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${test_id}"
   else
-     echo -e "${BOLD_RED}FAILED:${ANSI_RESET} $test_id"
-    RETURN_CODE=1
+    echo -e "${BOLD_RED}FAILED:${ANSI_RESET} ${test_id}"
+    RETURN_CODE=$((RETURN_CODE+1))
   fi
 }
 
@@ -64,6 +64,13 @@ run_test_command "compile" "tests/compile/compile.sh"
 
 
 # End of tests.
+echo "======================================="
+if [ "$RETURN_CODE" -eq "0" ]; then
+  echo -e "${BOLD_GREEN}All tests passed.${ANSI_RESET}"
+else
+  echo -e "${BOLD_RED}${RETURN_CODE} tests failed.${ANSI_RESET}"
+fi
+
 # Reset current working directory.
 popd
 exit $RETURN_CODE

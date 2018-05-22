@@ -89,10 +89,10 @@ if (require.main === module) {
     runJsUnitTestsInBrowser()
     .catch(function(e) {
       // TODO: Never called during errors. Fix.
-      console.error(errorStr);
+      console.error('Error: ' + e);
       process.exit(1);
     })
-    .endAll()
+    // .endAll()
     .then(function() {
       console.log('JSUnit tests completed');
       process.exit(0);

@@ -20,8 +20,7 @@
   "scripts": {
     "prepare": "gulp blockly_javascript_en",
     "lint": "eslint .",
-    "pretest": "tests/scripts/test_setup.sh",
-    "test": "node tests/test_runner.js"
+    "test": "tests/run_all_tests.sh"
   },
   "license": "Apache-2.0",
   "private": true,

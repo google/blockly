@@ -37,20 +37,20 @@ function runJsUnitTestsInBrowser() {
   };
 
   var url = 'file://' + __dirname + '/index.html';
-  console.log('Loading file ' + url);
+  console.log('Starting webdriverio...');
   return webdriverio
       .remote(options)
       .init()
       .then(function() {
-        console.log('Initialized');
+        console.log('Initialized.\nLoading url: ' + url);
       })
       .url(url)
       .then(function() {
-        console.log('Loaded URL');
+        console.log('Loaded.\nPausing to allow processing.');
       })
       .pause(5000) //TODO: change pause to waitunitl
       .then(function() {
-        console.log('End pause');
+        console.log('Retrieving results...');
       })
       .getHTML('#closureTestRunnerLog')
       .then(function(result) {
@@ -92,7 +92,7 @@ if (require.main === module) {
       console.error('Error: ' + e);
       process.exit(1);
     })
-    // .endAll()
+    .endAll()
     .then(function() {
       console.log('JSUnit tests completed');
       process.exit(0);

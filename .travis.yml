@@ -22,4 +22,5 @@ before_script:
   - sleep 2
 
 script:
+  - npm install
   - tests/run_all_tests.sh

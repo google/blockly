@@ -29,7 +29,7 @@ fi
 pushd $BLOCKLY_ROOT
 echo "pwd: $(pwd)"
 
-RETURN_CODE=0
+FAILURE_COUNT=0
 
 run_test_command () {
   local test_id=$1  # The id to use for folds and similar. No spaces.
@@ -45,7 +45,7 @@ run_test_command () {
     echo -e "${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${test_id}"
   else
     echo -e "${BOLD_RED}FAILED:${ANSI_RESET} ${test_id}"
-    RETURN_CODE=$((RETURN_CODE+1))
+    FAILURE_COUNT=$((FAILURE_COUNT+1))
   fi
 }
 
@@ -64,13 +64,12 @@ run_test_command "compile" "tests/compile/compile.sh"
 
 
 # End of tests.
-echo "======================================="
-if [ "$RETURN_CODE" -eq "0" ]; then
-  echo -e "${BOLD_GREEN}All tests passed.${ANSI_RESET}"
-else
-  echo -e "${BOLD_RED}${RETURN_CODE} tests failed.${ANSI_RESET}"
-fi
-
-# Reset current working directory.
 popd
-exit $RETURN_CODE
+echo "======================================="
+if [ "$FAILURE_COUNT" -eq "0" ]; then
+  echo -e "${BOLD_GREEN}All tests passed.${ANSI_RESET}"
+  exit 0
+else
+  echo -e "${BOLD_RED}Failures in ${FAILURE_COUNT} test groups.${ANSI_RESET}"
+  exit 1
+fi

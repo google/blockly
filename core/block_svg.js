@@ -279,12 +279,8 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
   // If we are losing a parent, we want to move our DOM element to the
   // root of the workspace.
   else if (oldParent) {
-    // Avoid moving a block up the DOM if it's currently selected/dragging,
-    // so as to avoid taking things off the drag surface.
-    if (Blockly.selected != this) {
-      this.workspace.getCanvas().appendChild(svgRoot);
-      this.translate(oldXY.x, oldXY.y);
-    }
+    this.workspace.getCanvas().appendChild(svgRoot);
+    this.translate(oldXY.x, oldXY.y);
   }
 };
 

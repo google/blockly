@@ -250,6 +250,17 @@ Blockly.JavaScript['robot_start_head'] = function(block) {
   return code;
 };
 
+Blockly.JavaScript['robot_start_open_gripper'] = function(block) {
+  var code = 'robot.startOpenGripper();\n';
+  return code;
+};
+
+Blockly.JavaScript['robot_start_close_gripper'] = function(block) {
+  var value_name = Blockly.JavaScript.valueToCode(block, 'FORCE', Blockly.JavaScript.ORDER_NONE);
+  var code = 'robot.startCloseGripper(' + value_name + ');\n';
+  return code;
+};
+
 Blockly.JavaScript['robot_is_done_fetch'] = function(block) {
   var dropdown_name = Blockly.JavaScript.quote_(block.getFieldValue('NAME'));
   var code = 'robot.isDone(' + dropdown_name + ')';

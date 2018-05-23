@@ -780,6 +780,33 @@ Blockly.Blocks['robot_start_head'] = {
   }
 };
 
+Blockly.Blocks['robot_start_open_gripper'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("start opening gripper");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+ this.setTooltip("Opens the gripper");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['robot_start_close_gripper'] = {
+  init: function() {
+    this.appendValueInput("FORCE")
+        .setCheck("Number")
+        .appendField("start closing gripper with");
+    this.appendDummyInput()
+        .appendField("N force");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+ this.setTooltip("Force ranges from 35 to 100 N");
+ this.setHelpUrl("");
+  }
+};
+
 Blockly.Blocks['robot_is_done_fetch'] = {
   init: function() {
     this.appendDummyInput()

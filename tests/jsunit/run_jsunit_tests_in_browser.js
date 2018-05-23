@@ -79,6 +79,10 @@ function runJsUnitTestsInBrowser() {
           // exit code is non-zero, shutdown the process here.
           process.exit(1);
         }
+
+        // WARNING: Catching this outside of runJsUnitTestsInBrowser() is not
+        // working. However, killing the process doesn't seem good, either.
+        throw e;
       });
 }
 

@@ -126,9 +126,9 @@ Blockly.DraggedConnectionManager.prototype.wouldDeleteBlock = function() {
 };
 
 /**
- * Return whether the block would be deleted if dropped immediately, based on
+ * Return whether the block would be connected if dropped immediately, based on
  * information from the most recent move event.
- * @return {boolean} true if the block would be deleted if dropped immediately.
+ * @return {boolean} true if the block would be connected if dropped immediately.
  * @package
  */
 Blockly.DraggedConnectionManager.prototype.wouldConnectBlock = function() {

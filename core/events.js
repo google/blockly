@@ -204,15 +204,22 @@ Blockly.Events.filter = function(queueIn, forward) {
   for (var i = 0, event; event = queue[i]; i++) {
     if (!event.isNull()) {
       var key = [event.type, event.blockId, event.workspaceId].join(' ');
-      var lastEvent = hash[key];
-      if (!lastEvent) {
-        hash[key] = event;
+
+      var lastEntry = hash[key];
+      var lastEvent = lastEntry ? lastEntry.event : null;
+      if (!lastEntry) {
+        // Each item in the hash table has the event and the index of that event
+        // in the input array.  This lets us make sure we only merge adjacent
+        // move events.
+        hash[key] = { event: event, index: i};
         mergedQueue.push(event);
-      } else if (event.type == Blockly.Events.MOVE) {
+      } else if (event.type == Blockly.Events.MOVE &&
+          lastEntry.index == i - 1) {
         // Merge move events.
         lastEvent.newParentId = event.newParentId;
         lastEvent.newInputName = event.newInputName;
         lastEvent.newCoordinate = event.newCoordinate;
+        lastEntry.index = i;
       } else if (event.type == Blockly.Events.CHANGE &&
           event.element == lastEvent.element &&
           event.name == lastEvent.name) {
@@ -227,7 +234,7 @@ Blockly.Events.filter = function(queueIn, forward) {
         lastEvent.newValue = event.newValue;
       } else {
         // Collision: newer events should merge into this event to maintain order
-        hash[key] = event;
+        hash[key] = { event: event, index: 1};
         mergedQueue.push(event);
       }
     }

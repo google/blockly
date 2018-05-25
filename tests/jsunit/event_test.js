@@ -790,3 +790,30 @@ function test_events_newblock_newvar_xml() {
     Blockly.Events.fire = savedFireFunc;
   }
 }
+
+function test_events_filter_nomerge_move() {
+  // Move events should only merge if they refer to the same block and are
+  // consecutive.
+  eventTest_setUpWithMockBlocks();
+  try {
+    var block1 = createSimpleTestBlock(workspace);
+    var block2 = createSimpleTestBlock(workspace);
+
+    var events = [];
+    helper_addMoveEvent(events, block1, 1, 1);
+    helper_addMoveEvent(events, block2, 1, 1);
+    events.push(new Blockly.Events.BlockDelete(block2));
+    helper_addMoveEvent(events, block1, 2, 2);
+
+    var filteredEvents = Blockly.Events.filter(events, true);
+    // Nothing should have merged.
+    assertEquals(4, filteredEvents.length);
+    // test that the order hasn't changed
+    assertTrue(filteredEvents[0] instanceof Blockly.Events.BlockMove);
+    assertTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
+    assertTrue(filteredEvents[2] instanceof Blockly.Events.BlockDelete);
+    assertTrue(filteredEvents[3] instanceof Blockly.Events.BlockMove);
+  } finally {
+    eventTest_tearDownWithMockBlocks();
+  }
+}

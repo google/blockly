@@ -225,8 +225,12 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
     this.draggingBlock_.moveConnections_(delta.x, delta.y);
     this.draggingBlock_.setDragging(false);
     this.fireMoveEvent_();
-    this.draggedConnectionManager_.applyConnections();
-    this.draggingBlock_.render();
+    if (this.draggedConnectionManager_.wouldConnectBlock()) {
+      // Applying connections also rerenders the relevant blocks.
+      this.draggedConnectionManager_.applyConnections();
+    } else {
+      this.draggingBlock_.render();
+    }
     this.draggingBlock_.scheduleSnapAndBump();
   }
   this.workspace_.setResizesEnabled(true);

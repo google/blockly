@@ -14,6 +14,7 @@
 	"DUPLICATE_BLOCK": "Duplikér",
 	"ADD_COMMENT": "Tilføj kommentar",
 	"REMOVE_COMMENT": "Fjern kommentar",
+	"DUPLICATE_COMMENT": "Dupliker kommentar",
 	"EXTERNAL_INPUTS": "Udvendige inputs",
 	"INLINE_INPUTS": "Indlejrede inputs",
 	"DELETE_BLOCK": "Slet blok",
@@ -340,5 +341,6 @@
 	"PROCEDURES_CREATE_DO": "Opret '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Hvis en værdi er sand, så returnér en anden værdi.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Advarsel: Denne blok kan kun anvendes inden for en funktionsdefinition."
+	"PROCEDURES_IFRETURN_WARNING": "Advarsel: Denne blok kan kun anvendes inden for en funktionsdefinition.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Sig noget ..."
 }

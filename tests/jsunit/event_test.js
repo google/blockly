@@ -794,6 +794,9 @@ function test_events_newblock_newvar_xml() {
 function test_events_filter_nomerge_move() {
   // Move events should only merge if they refer to the same block and are
   // consecutive.
+  // See github.com/google/blockly/pull/1892 for a worked example showing
+  // how merging non-consecutive events can fail when replacing a shadow
+  // block.
   eventTest_setUpWithMockBlocks();
   try {
     var block1 = createSimpleTestBlock(workspace);

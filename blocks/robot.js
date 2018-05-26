@@ -807,6 +807,23 @@ Blockly.Blocks['robot_start_close_gripper'] = {
   }
 };
 
+Blockly.Blocks['robot_start_ask_mc'] = {
+  init: function() {
+    this.appendValueInput("QUESTION")
+        .setCheck("String")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("start asking multiple choice question");
+    this.appendValueInput("CHOICES")
+        .setCheck("Array")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("list of choices");
+    this.setOutput(true, "String");
+    this.setColour(260);
+    this.setTooltip('Asks a multiple choice question. The user\'s choice is returned.');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['robot_is_done_fetch'] = {
   init: function() {
     this.appendDummyInput()

@@ -264,7 +264,7 @@ Blockly.JavaScript['robot_start_close_gripper'] = function(block) {
 Blockly.JavaScript['robot_start_ask_mc'] = function(block) {
   var value_question = Blockly.JavaScript.valueToCode(block, 'QUESTION', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
   var value_choices = Blockly.JavaScript.valueToCode(block, 'CHOICES', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
-  var code = 'robot.startAskMultipleChoice(' + value_question + ', ' + value_choices + ')';
+  var code = 'robot.startAskMultipleChoice(' + value_question + ', ' + value_choices + ');\n';
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
@@ -277,5 +277,10 @@ Blockly.JavaScript['robot_is_done_fetch'] = function(block) {
 Blockly.JavaScript['robot_cancel_fetch'] = function(block) {
   var dropdown_name = Blockly.JavaScript.quote_(block.getFieldValue('NAME'));
   var code = 'robot.cancel(' + dropdown_name + ');\n';
+  return code;
+};
+
+Blockly.JavaScript['robot_get_result_screen'] = function(block) {
+  var code = 'robot.getResultScreen()';
   return code;
 };

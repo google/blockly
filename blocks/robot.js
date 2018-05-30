@@ -817,7 +817,8 @@ Blockly.Blocks['robot_start_ask_mc'] = {
         .setCheck("Array")
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField("list of choices");
-    this.setOutput(true, "String");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
     this.setColour(260);
     this.setTooltip('Asks a multiple choice question. The user\'s choice is returned.');
     this.setHelpUrl('');
@@ -846,6 +847,17 @@ Blockly.Blocks['robot_cancel_fetch'] = {
     this.setNextStatement(true, null);
     this.setColour(20);
  this.setTooltip("Cancels the chosen action");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['robot_get_result_screen'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("get result from screen");
+    this.setOutput(true, "String");
+    this.setColour(260);
+ this.setTooltip("Retrieves user selection from screen");
  this.setHelpUrl("");
   }
 };

@@ -257,10 +257,10 @@ Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
   this.createWidget_(menu);
   var menuSize = Blockly.utils.uiMenu.getSize(menu);
 
-  var maxHeightVh = Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH
+  var menuMaxHeightPx = Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH
       * document.documentElement.clientHeight;
-  if (menuSize.height > maxHeightVh) {
-    menuSize.height = maxHeightVh;
+  if (menuSize.height > menuMaxHeightPx) {
+    menuSize.height = menuMaxHeightPx;
   }
 
   if (this.sourceBlock_.RTL) {

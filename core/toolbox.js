@@ -334,10 +334,14 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
         // (eg. `%{BKY_MATH_HUE}`).
         var colour = Blockly.utils.replaceMessageReferences(
             childIn.getAttribute('colour'));
-        if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
+        if (colour === null || colour === '') {
+          // No attribute. No colour.
+          childOut.hexColour = '';
+        } else if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
           childOut.hexColour = colour;
           this.hasColours_ = true;
-        } else if (!isNaN(Number(colour))) {
+        } else if (typeof colour === 'number'
+            || (typeof colour === 'string' && !isNaN(Number(colour)))) {
           childOut.hexColour = Blockly.hueToRgb(Number(colour));
           this.hasColours_ = true;
         } else {

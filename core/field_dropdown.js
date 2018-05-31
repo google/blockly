@@ -84,10 +84,9 @@ Blockly.FieldDropdown.fromJson = function(options) {
 Blockly.FieldDropdown.CHECKMARK_OVERHANG = 25;
 
 /**
- * Maximum height of the dropdown menu,it's also referenced in css.js as
- * part of .blocklyDropdownMenu.
+ * Maximum height of the dropdown menu, as a percentage of the viewport height.
  */
-Blockly.FieldDropdown.MAX_MENU_HEIGHT = 300;
+Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH = 0.45;
 
 /**
  * Android can't (in 2014) display "▾", so use "▼" instead.
@@ -258,8 +257,10 @@ Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
   this.createWidget_(menu);
   var menuSize = Blockly.utils.uiMenu.getSize(menu);
 
-  if (menuSize.height > Blockly.FieldDropdown.MAX_MENU_HEIGHT) {
-    menuSize.height = Blockly.FieldDropdown.MAX_MENU_HEIGHT;
+  var menuMaxHeightPx = Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH
+      * document.documentElement.clientHeight;
+  if (menuSize.height > menuMaxHeightPx) {
+    menuSize.height = menuMaxHeightPx;
   }
 
   if (this.sourceBlock_.RTL) {

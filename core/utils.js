@@ -200,7 +200,7 @@ Blockly.utils.getInjectionDivXY_ = function(element) {
     x = x + xy.x;
     y = y + xy.y;
     var classes = element.getAttribute('class') || '';
-    if ((' ' + classes + ' ').indexOf(' injectionDiv ') != -1) {
+    if ((' ' + classes + ' ').indexOf(' blocklyInjectionDiv ') != -1) {
       break;
     }
     element = element.parentNode;

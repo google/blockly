@@ -247,8 +247,8 @@ Blockly.WorkspaceSvg.prototype.useWorkspaceDragSurface_ = false;
 Blockly.WorkspaceSvg.prototype.isDragSurfaceActive_ = false;
 
 /**
- * The first parent div with 'injectionDiv' in the name, or null if not set.
- * Access this with getInjectionDiv.
+ * The first parent div with 'blocklyInjectionDiv' in the class attribute, or
+ * null if not set. Access this with getInjectionDiv.
  * @type {!Element}
  * @private
  */
@@ -381,7 +381,8 @@ Blockly.WorkspaceSvg.prototype.getOriginOffsetInPixels = function() {
 /**
  * Return the injection div that is a parent of this workspace.
  * Walks the DOM the first time it's called, then returns a cached value.
- * @return {!Element} The first parent div with 'injectionDiv' in the name.
+ * @return {!Element} The first parent div with 'blocklyInjectionDiv' in the
+ *     class attribute.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getInjectionDiv = function() {
@@ -391,7 +392,7 @@ Blockly.WorkspaceSvg.prototype.getInjectionDiv = function() {
     var element = this.svgGroup_;
     while (element) {
       var classes = element.getAttribute('class') || '';
-      if ((' ' + classes + ' ').indexOf(' injectionDiv ') != -1) {
+      if ((' ' + classes + ' ').indexOf(' blocklyInjectionDiv ') != -1) {
         this.injectionDiv_ = element;
         break;
       }

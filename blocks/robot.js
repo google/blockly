@@ -851,13 +851,14 @@ Blockly.Blocks['robot_cancel_fetch'] = {
   }
 };
 
-Blockly.Blocks['robot_get_result_screen'] = {
+Blockly.Blocks['robot_get_result'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("get result from screen");
+        .appendField("get result from")
+        .appendField(new Blockly.FieldDropdown([["screen","SCREEN"]]), "NAME");
     this.setOutput(true, "String");
     this.setColour(260);
- this.setTooltip("Retrieves user selection from screen");
+ this.setTooltip("Retrieves result of selected action");
  this.setHelpUrl("");
   }
 };

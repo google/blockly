@@ -283,5 +283,5 @@ Blockly.JavaScript['robot_cancel_fetch'] = function(block) {
 Blockly.JavaScript['robot_get_result'] = function(block) {
   var dropdown_name = Blockly.JavaScript.quote_(block.getFieldValue('NAME'));
   var code = 'robot.getResult(' + dropdown_name + ')';
-  return [code, Blockly.Javascript.ORDER_NONE];
+  return [code, Blockly.JavaScript.ORDER_NONE];
 };

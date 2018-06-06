@@ -775,8 +775,8 @@ Blockly.Blocks['robot_start_head'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
- this.setTooltip("Pan angle ranges from -90 to 90 degrees. Tilt angle ranges from -90 to 45 degrees. ");
- this.setHelpUrl("");
+    this.setTooltip("Pan angle ranges from -90 to 90 degrees. Tilt angle ranges from -90 to 45 degrees. ");
+    this.setHelpUrl("");
   }
 };
 
@@ -787,8 +787,8 @@ Blockly.Blocks['robot_start_open_gripper'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
- this.setTooltip("Opens the gripper");
- this.setHelpUrl("");
+    this.setTooltip("Opens the gripper");
+    this.setHelpUrl("");
   }
 };
 
@@ -802,8 +802,8 @@ Blockly.Blocks['robot_start_close_gripper'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
- this.setTooltip("Force ranges from 35 to 100 N");
- this.setHelpUrl("");
+    this.setTooltip("Force ranges from 35 to 100 N");
+    this.setHelpUrl("");
   }
 };
 
@@ -833,8 +833,8 @@ Blockly.Blocks['robot_is_done_fetch'] = {
         .appendField("done");
     this.setOutput(true, "Boolean");
     this.setColour(20);
- this.setTooltip("Checks if the chosen action is completed");
- this.setHelpUrl("");
+    this.setTooltip("Checks if the chosen action is completed");
+    this.setHelpUrl("");
   }
 };
 
@@ -846,8 +846,8 @@ Blockly.Blocks['robot_cancel_fetch'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
- this.setTooltip("Cancels the chosen action");
- this.setHelpUrl("");
+    this.setTooltip("Cancels the chosen action");
+    this.setHelpUrl("");
   }
 };
 
@@ -858,7 +858,7 @@ Blockly.Blocks['robot_get_result'] = {
         .appendField(new Blockly.FieldDropdown([["screen","SCREEN"]]), "NAME");
     this.setOutput(true, "String");
     this.setColour(260);
- this.setTooltip("Retrieves result of selected action");
- this.setHelpUrl("");
+    this.setTooltip("Retrieves result of selected action");
+    this.setHelpUrl("");
   }
 };

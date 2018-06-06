@@ -244,8 +244,8 @@ Blockly.JavaScript['robot_start_torso'] = function(block) {
 };
 
 Blockly.JavaScript['robot_start_head'] = function(block) {
-  var value_pan = Blockly.JavaScript.valueToCode(block, 'PAN', Blockly.JavaScript.ORDER_NONE);
-  var value_tilt = Blockly.JavaScript.valueToCode(block, 'TILT', Blockly.JavaScript.ORDER_NONE);
+  var value_pan = Blockly.JavaScript.valueToCode(block, 'PAN', Blockly.JavaScript.ORDER_COMMA);
+  var value_tilt = Blockly.JavaScript.valueToCode(block, 'TILT', Blockly.JavaScript.ORDER_COMMA);
   var code = 'robot.startHead(' + value_pan + ', ' + value_tilt + ');\n';
   return code;
 };
@@ -265,13 +265,13 @@ Blockly.JavaScript['robot_start_ask_mc'] = function(block) {
   var value_question = Blockly.JavaScript.valueToCode(block, 'QUESTION', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
   var value_choices = Blockly.JavaScript.valueToCode(block, 'CHOICES', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
   var code = 'robot.startAskMultipleChoice(' + value_question + ', ' + value_choices + ');\n';
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return code;
 };
 
 Blockly.JavaScript['robot_is_done_fetch'] = function(block) {
   var dropdown_name = Blockly.JavaScript.quote_(block.getFieldValue('NAME'));
   var code = 'robot.isDone(' + dropdown_name + ')';
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
 Blockly.JavaScript['robot_cancel_fetch'] = function(block) {
@@ -283,5 +283,5 @@ Blockly.JavaScript['robot_cancel_fetch'] = function(block) {
 Blockly.JavaScript['robot_get_result'] = function(block) {
   var dropdown_name = Blockly.JavaScript.quote_(block.getFieldValue('NAME'));
   var code = 'robot.getResult(' + dropdown_name + ')';
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };

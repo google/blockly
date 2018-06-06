@@ -144,19 +144,8 @@ Blockly.FieldDropdown.prototype.init = function() {
 Blockly.FieldDropdown.prototype.showEditor_ = function() {
   Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, null);
   var menu = this.createMenu_();
-  this.addEventListeners_(menu);
-  this.positionMenu_(menu);
-};
-
-/**
- * Add event listeners for actions on the items in the dropdown menu.
- * @param {!goog.ui.Menu} menu The menu to add listeners to.
- * @private
- */
-Blockly.FieldDropdown.prototype.addEventListeners_ = function(menu) {
   this.addActionListener_(menu);
-  this.addTouchStartListener_(menu);
-  this.addTouchEndListener_(menu);
+  this.positionMenu_(menu);
 };
 
 /**
@@ -178,38 +167,6 @@ Blockly.FieldDropdown.prototype.addActionListener_ = function(menu) {
   }
   // Listen for mouse/keyboard events.
   goog.events.listen(menu, goog.ui.Component.EventType.ACTION, callback);
-};
-
-/**
- * Add a listener for touch start events on menu items.
- * @param {!goog.ui.Menu} menu The menu to add the listener to.
- * @private
- */
-Blockly.FieldDropdown.prototype.addTouchStartListener_ = function(menu) {
-  // Listen for touch events (why doesn't Closure handle this already?).
-  function callback(e) {
-    var control = this.getOwnerControl(/** @type {Node} */ (e.target));
-    // Highlight the menu item.
-    control.handleMouseDown(e);
-  }
-  menu.getHandler().listen(
-      menu.getElement(), goog.events.EventType.TOUCHSTART, callback);
-};
-
-/**
- * Add a listener for touch end events on menu items.
- * @param {!goog.ui.Menu} menu The menu to add the listener to.
- * @private
- */
-Blockly.FieldDropdown.prototype.addTouchEndListener_ = function(menu) {
-  // Listen for touch events (why doesn't Closure handle this already?).
-  function callbackTouchEnd(e) {
-    var control = this.getOwnerControl(/** @type {Node} */ (e.target));
-    // Activate the menu item.
-    control.performActionInternal(e);
-  }
-  menu.getHandler().listen(
-      menu.getElement(), goog.events.EventType.TOUCHEND, callbackTouchEnd);
 };
 
 /**

@@ -29,15 +29,6 @@ goog.require('goog.testing.MockControl');
 
 var mockControl_;
 var workspace;
-var savedFireFunc = Blockly.Events.fire;
-
-function temporary_fireEvent(event) {
-  if (!Blockly.Events.isEnabled()) {
-    return;
-  }
-  Blockly.Events.FIRE_QUEUE_.push(event);
-  Blockly.Events.fireNow_();
-}
 
 function eventTest_setUp() {
   workspace = new Blockly.Workspace();

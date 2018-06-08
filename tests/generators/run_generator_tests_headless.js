@@ -1,7 +1,10 @@
-const fs = require('promise-fs');
+const fs = require('fs-extra');
 const sep = require('path').sep;
+const util = require('util');
+
 const Blockly = require('../../blockly_node_javascript_en.js');
 
+const readAsync = util.promisify(fs.read);
 
 /**
  * The .js sources to the unittest_ blocks and generators.
@@ -39,35 +42,38 @@ async function runGeneratorTestsHeadless() {
   return allTestsPassed;
 }
 
-async function runAllGeneratorTestsForFile(filename) {
+async function runAllGeneratorTestsForFile(workspaceXmlFilename) {
   var allTestsPassed = await runGeneratorTest(
-      "JavaScript", workspaceXml, runJavaScriptAndParseResults);
+      "JavaScript", workspaceXmlFilename, runJavaScriptAndParseResults);
   // TODO: Implement other generator languages.
   return allTestsPassed;
 }
 
 async function runGeneratorTest(generatorId, filename, asyncExecCodeFn) {
   let generator = Blockly[generatorId];
+  let fullFilename = __dirname + sep + filename
   var success = false;
   var workspaceXml, code;
 
   try {
-    let buffer = await fs.readfile(__dirname + sep + filename);
+    let buffer = fs.readFileSync(fullFilename);
+
     var workspaceXml = Blockly.Xml.textToDom(buffer.toString());
+    console.log('Read file ' + __dirname + sep + filename + '.');
   } catch (e) {
     console.error('Error loading file "' + filename + '":', e);
     return false;
   }
 
   try {
-    let workspace = new Blockly.workspace();
+    let workspace = new Blockly.Workspace();
     try {
       Blockly.Xml.domToWorkspace(workspaceXml, workspace);
       code = generator.workspaceToCode(workspace);
     } catch (e) {
       console.error('Failed to generate ' + generatorId + ':', e);
     } finally {
-      workspace.release();
+      workspace.dispose();
     }
   } catch(e) {
     console.error('Failed to create workspace:', e);
@@ -96,12 +102,21 @@ async function runJavaScriptAndParseResults(code) {
 if (require.main === module) {
   var allTestsPassed = false;
   try {
-    allTestsPassed = await runGeneratorTestsHeadless();
-    console.log('Generator tests completed.');
+    runGeneratorTestsHeadless()
+        .then(function(result) {
+          allTestsPassed = result;
+        })
+        .catch(function(e) {
+          console.error('Error: ', e);
+          allTestsPassed = false;
+        })
+        .then(function(e) {
+          console.log(allTestsPassed ?
+            'Generator tests completed successfully.'
+            : 'Generator tests completed with failures.');
+        });
   } catch(e) {
-    console.error('Error: ', e);
-    allTestsPassed = false;
-  } finally {
-    process.exit(allTestsPassed ? 0 : 1);
+    console.error('Error starting tests: ', e);
+    process.exit(1);
   }
 }

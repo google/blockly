@@ -14,4 +14,4 @@ gulpfile.js
 /demos/*
 /accessible/*
 /appengine/*
-/externs/svg-externs.js
+/externs/*

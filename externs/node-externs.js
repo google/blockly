@@ -15,7 +15,8 @@
  */
 
 /**
- * @fileoverview Allowed subset of NodeJS built-ins, copied from closure-compiler/blob/master/contrib/nodejs/globals.js.
+ * @fileoverview Allowed subset of NodeJS built-ins, copied from
+ * closure-compiler/blob/master/contrib/nodejs/globals.js.
  * @externs
  * @author nicholas.j.santos@gmail.com (Nick Santos)
  */

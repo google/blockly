@@ -371,8 +371,7 @@ if (typeof DOMParser !== 'function') {
 
 /**
  * Converts an XML string into a DOM structure. It requires the XML to have a
- * root element of <xml> and with exactly one child. Other XML string will
- * result in throwing an error.
+ * root element of <xml>. Other XML string will result in throwing an error.
  * @param {string} text An XML string.
  * @return {!Element} A DOM object representing the singular child of the document element.
  * @throws if XML doesn't parse or is not the expected structure.

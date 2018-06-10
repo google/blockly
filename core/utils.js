@@ -403,7 +403,7 @@ Blockly.utils.tokenizeInterpolation = function(message) {
  * @return {!string} String with message references replaced.
  */
 Blockly.utils.replaceMessageReferences = function(message) {
-  if (!goog.isString(message)) {
+  if (typeof message != 'string') {
     return message;
   }
   var interpolatedResult = Blockly.utils.tokenizeInterpolation_(message, false);
@@ -511,9 +511,9 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
     } else if (state == 3) {  // String table reference
       if (c == '') {
         // Premature end before closing '}'
-        buffer.splice(0, 0, '%{'); // Re-insert leading delimiter
+        buffer.splice(0, 0, '%{');  // Re-insert leading delimiter
         i--;  // Parse this char again.
-        state = 0; // and parse as string literal.
+        state = 0;  // and parse as string literal.
       } else if (c != '}') {
         buffer.push(c);
       } else  {
@@ -529,7 +529,7 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
               keyUpper.substring(4) : null;
           if (bklyKey && bklyKey in Blockly.Msg) {
             var rawValue = Blockly.Msg[bklyKey];
-            if (goog.isString(rawValue)) {
+            if (typeof rawValue == 'string') {
               // Attempt to dereference substrings, too, appending to the end.
               Array.prototype.push.apply(tokens,
                   Blockly.utils.tokenizeInterpolation_(
@@ -551,7 +551,7 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
         } else {
           tokens.push('%{' + rawKey + '}');
           buffer.length = 0;
-          state = 0; // and parse as string literal.
+          state = 0;  // and parse as string literal.
         }
       }
     }
@@ -839,7 +839,7 @@ Blockly.utils.insertAfter_ = function(newNode, refNode) {
   var siblingNode = refNode.nextSibling;
   var parentNode = refNode.parentNode;
   if (!parentNode) {
-    throw 'Reference node has no parent.';
+    throw Error('Reference node has no parent.');
   }
   if (siblingNode) {
     parentNode.insertBefore(newNode, siblingNode);

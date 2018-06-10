@@ -29,7 +29,6 @@ goog.provide('Blockly.TouchGesture');
 
 goog.require('Blockly.Gesture');
 
-goog.require('goog.asserts');
 goog.require('goog.math.Coordinate');
 
 

@@ -161,7 +161,7 @@ Blockly.Workspace.prototype.addTopBlock = function(block) {
  */
 Blockly.Workspace.prototype.removeTopBlock = function(block) {
   if (!goog.array.remove(this.topBlocks_, block)) {
-    throw 'Block not present in workspace\'s list of top-most blocks.';
+    throw Error('Block not present in workspace\'s list of top-most blocks.');
   }
 };
 
@@ -212,7 +212,8 @@ Blockly.Workspace.prototype.addTopComment = function(comment) {
  */
 Blockly.Workspace.prototype.removeTopComment = function(comment) {
   if (!goog.array.remove(this.topComments_, comment)) {
-    throw 'Comment not present in workspace\'s list of top-most comments.';
+    throw Error('Comment not present in workspace\'s list of top-most ' +
+                'comments.');
   }
   // Note: If the comment database starts to hold block comments, this may need
   // to move to a separate function.

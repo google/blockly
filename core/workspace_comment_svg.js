@@ -132,7 +132,9 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
-  goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
+  if (!this.workspace.rendered) {
+    throw TypeError('Workspace is headless.');
+  }
   if (!this.workspace.options.readOnly && !this.eventsInit_) {
     Blockly.bindEventWithChecks_(
         this.svgRectTarget_, 'mousedown', this, this.pathMouseDown_);

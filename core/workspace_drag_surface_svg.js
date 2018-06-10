@@ -32,7 +32,6 @@ goog.provide('Blockly.WorkspaceDragSurfaceSvg');
 
 goog.require('Blockly.utils');
 
-goog.require('goog.asserts');
 goog.require('goog.math.Coordinate');
 
 
@@ -138,14 +137,16 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
  */
 Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   if (!newSurface) {
-    throw 'Couldn\'t clear and hide the drag surface: missing new surface.';
+    throw Error('Couldn\'t clear and hide the drag surface: missing ' +
+                'new surface.');
   }
   var blockCanvas = this.SVG_.childNodes[0];
   var bubbleCanvas = this.SVG_.childNodes[1];
   if (!blockCanvas || !bubbleCanvas ||
       !Blockly.utils.hasClass(blockCanvas, 'blocklyBlockCanvas') ||
       !Blockly.utils.hasClass(bubbleCanvas, 'blocklyBubbleCanvas')) {
-    throw 'Couldn\'t clear and hide the drag surface.  A node was missing.';
+    throw Error('Couldn\'t clear and hide the drag surface. ' +
+                'A node was missing.');
   }
 
   // If there is a previous sibling, put the blockCanvas back right afterwards,
@@ -160,8 +161,9 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   Blockly.utils.insertAfter_(bubbleCanvas, blockCanvas);
   // Hide the drag surface.
   this.SVG_.style.display = 'none';
-  goog.asserts.assert(
-      this.SVG_.childNodes.length == 0, 'Drag surface was not cleared.');
+  if (this.SVG_.childNodes.length) {
+    throw TypeError('Drag surface was not cleared.');
+  }
   Blockly.utils.setCssTransform(this.SVG_, '');
   this.previousSibling_ = null;
 };
@@ -180,8 +182,9 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
  */
 Blockly.WorkspaceDragSurfaceSvg.prototype.setContentsAndShow = function(
     blockCanvas, bubbleCanvas, previousSibling, width, height, scale) {
-  goog.asserts.assert(
-      this.SVG_.childNodes.length == 0, 'Already dragging a block.');
+  if (this.SVG_.childNodes.length) {
+    throw TypeError('Already dragging a block.');
+  }
   this.previousSibling_ = previousSibling;
   // Make sure the blocks and bubble canvas are scaled appropriately.
   blockCanvas.setAttribute('transform', 'translate(0, 0) scale(' + scale + ')');

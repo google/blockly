@@ -660,7 +660,7 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
   // Ideally this would also apply to scrollbar pairs, but that's a bigger
   // headache (due to interactions with the corner square).
   if (this.pair_) {
-    throw 'Unable to toggle visibility of paired scrollbars.';
+    throw Error('Unable to toggle visibility of paired scrollbars.');
   }
   this.isVisible_ = visible;
   if (visibilityChanged) {

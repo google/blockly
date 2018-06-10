@@ -31,7 +31,6 @@ goog.require('Blockly.DraggedConnectionManager');
 goog.require('Blockly.Events.BlockMove');
 
 goog.require('goog.math.Coordinate');
-goog.require('goog.asserts');
 
 
 /**

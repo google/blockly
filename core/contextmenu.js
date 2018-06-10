@@ -241,7 +241,8 @@ Blockly.ContextMenu.blockDeleteOption = function(block) {
  * @package
  */
 Blockly.ContextMenu.blockHelpOption = function(block) {
-  var url = goog.isFunction(block.helpUrl) ? block.helpUrl() : block.helpUrl;
+  var url = (typeof block.helpUrl == 'function') ?
+      block.helpUrl() : block.helpUrl;
   var helpOption = {
     enabled: !!url,
     text: Blockly.Msg['HELP'],

@@ -372,7 +372,7 @@ Blockly.Events.fromJson = function(json, workspace) {
       event = new Blockly.Events.CommentDelete(null);
       break;
     default:
-      throw 'Unknown event type.';
+      throw Error('Unknown event type.');
   }
   event.fromJson(json);
   event.workspaceId = workspace.id;

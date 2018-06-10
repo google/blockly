@@ -166,7 +166,7 @@ Blockly.RenderedConnection.prototype.tighten_ = function() {
     var block = this.targetBlock();
     var svgRoot = block.getSvgRoot();
     if (!svgRoot) {
-      throw 'block is not rendered.';
+      throw Error('block is not rendered.');
     }
     // Workspace coordinates.
     var xy = Blockly.utils.getRelativeXY(svgRoot);
@@ -351,7 +351,7 @@ Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
     Blockly.RenderedConnection.superClass_.respawnShadow_.call(this);
     var blockShadow = this.targetBlock();
     if (!blockShadow) {
-      throw 'Couldn\'t respawn the shadow block that should exist here.';
+      throw Error('Couldn\'t respawn the shadow block that should exist here.');
     }
     blockShadow.initSvg();
     blockShadow.render(false);

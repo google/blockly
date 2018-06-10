@@ -47,13 +47,13 @@ goog.require('goog.userAgent');
 Blockly.inject = function(container, opt_options) {
   Blockly.checkBlockColourConstants();
 
-  if (goog.isString(container)) {
+  if (typeof container == 'string') {
     container = document.getElementById(container) ||
         document.querySelector(container);
   }
   // Verify that the container is in document.
   if (!goog.dom.contains(document, container)) {
-    throw 'Error: container is not in current document.';
+    throw Error('Error: container is not in current document.');
   }
   var options = new Blockly.Options(opt_options || {});
   var subContainer = goog.dom.createDom(goog.dom.TagName.DIV, 'injectionDiv');

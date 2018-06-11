@@ -654,9 +654,13 @@ Blockly.Connection.prototype.toString = function() {
   } else if (block.nextConnection == this) {
     msg = 'Next Connection of ';
   } else {
-    var parentInput = goog.array.find(block.inputList, function(input) {
-      return input.connection == this;
-    }, this);
+    var parentInput = null;
+    for (var i = 0, input; input = block.inputList[i]; i++) {
+      if (input.connection == this) {
+        parentInput = input;
+        break;
+      }
+    }
     if (parentInput) {
       msg = 'Input "' + parentInput.name + '" connection on ';
     } else {

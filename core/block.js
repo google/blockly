@@ -36,10 +36,11 @@ goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Extensions');
 goog.require('Blockly.Input');
 goog.require('Blockly.Mutator');
+goog.require('Blockly.utils');
 goog.require('Blockly.Warning');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
-goog.require('goog.array');
+
 goog.require('goog.math.Coordinate');
 
 
@@ -496,7 +497,7 @@ Blockly.Block.prototype.setParent = function(newParent) {
   }
   if (this.parentBlock_) {
     // Remove this block from the old parent's child list.
-    goog.array.remove(this.parentBlock_.childBlocks_, this);
+    Blockly.utils.arrayRemove(this.parentBlock_.childBlocks_, this);
 
     // Disconnect from superior blocks.
     if (this.previousConnection && this.previousConnection.isConnected()) {
@@ -1444,7 +1445,7 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
     }
   }
   if (!opt_quiet) {
-    throw ReferenceErrer('Input not found: ' + name);
+    throw ReferenceError('Input not found: ' + name);
   }
 };
 

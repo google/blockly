@@ -26,9 +26,10 @@
 
 goog.provide('Blockly.Workspace');
 
+goog.require('Blockly.utils');
 goog.require('Blockly.VariableMap');
 goog.require('Blockly.WorkspaceComment');
-goog.require('goog.array');
+
 goog.require('goog.math');
 
 
@@ -160,7 +161,7 @@ Blockly.Workspace.prototype.addTopBlock = function(block) {
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.Workspace.prototype.removeTopBlock = function(block) {
-  if (!goog.array.remove(this.topBlocks_, block)) {
+  if (!Blockly.utils.arrayRemove(this.topBlocks_, block)) {
     throw Error('Block not present in workspace\'s list of top-most blocks.');
   }
 };
@@ -211,7 +212,7 @@ Blockly.Workspace.prototype.addTopComment = function(comment) {
  * @package
  */
 Blockly.Workspace.prototype.removeTopComment = function(comment) {
-  if (!goog.array.remove(this.topComments_, comment)) {
+  if (!Blockly.utils.arrayRemove(this.topComments_, comment)) {
     throw Error('Comment not present in workspace\'s list of top-most ' +
                 'comments.');
   }
@@ -511,7 +512,7 @@ Blockly.Workspace.prototype.addChangeListener = function(func) {
  * @param {Function} func Function to stop calling.
  */
 Blockly.Workspace.prototype.removeChangeListener = function(func) {
-  goog.array.remove(this.listeners_, func);
+  Blockly.utils.arrayRemove(this.listeners_, func);
 };
 
 /**

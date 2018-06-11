@@ -30,7 +30,6 @@
  */
 goog.provide('Blockly.Events');
 
-goog.require('goog.array');
 goog.require('goog.math.Coordinate');
 
 
@@ -193,7 +192,7 @@ Blockly.Events.fireNow_ = function() {
  * @return {!Array.<!Blockly.Events.Abstract>} Array of filtered events.
  */
 Blockly.Events.filter = function(queueIn, forward) {
-  var queue = goog.array.clone(queueIn);
+  var queue = queueIn.slice();  // Shallow copy of queue.
   if (!forward) {
     // Undo is merged in reverse order.
     queue.reverse();

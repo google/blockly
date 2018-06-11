@@ -29,7 +29,6 @@ goog.provide('Blockly.FieldTextInput');
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
 goog.require('goog.dom');
-goog.require('goog.dom.TagName');
 goog.require('goog.userAgent');
 
 
@@ -191,8 +190,7 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
   Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, this.widgetDispose_());
   var div = Blockly.WidgetDiv.DIV;
   // Create the input.
-  var htmlInput =
-      goog.dom.createDom(goog.dom.TagName.INPUT, 'blocklyHtmlInput');
+  var htmlInput = goog.dom.createDom('input', 'blocklyHtmlInput');
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
   var fontSize =
       (Blockly.FieldTextInput.FONTSIZE * this.workspace_.scale) + 'pt';

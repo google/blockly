@@ -161,10 +161,42 @@ Blockly.FlyoutButton.prototype.createDom = function() {
         'text-anchor': 'middle'
       },
       this.svgGroup_);
-  svgText.textContent = this.text_;
 
-  this.width = Blockly.Field.getCachedWidth(svgText);
-  this.height = 20;  // Can't compute it :(
+  if (this.isLabel_) {
+    // Deal with multi-line labels.
+    var lines = this.text_.split('\n');
+
+    var tspans = lines.map(function(textLine, i) {
+      var tspanArgs = {
+        'class': 'blocklyFlyoutLabelTextLine',
+        'x': 0,
+        'dy': 20, // Can't compute it :(
+        'text-anchor': 'start'
+      };
+      if (i === 0) {
+        tspanArgs.y = 0;
+      }
+      var svgTSpan = Blockly.utils.createSvgElement('tspan', tspanArgs);
+      svgTSpan.textContent = textLine;
+      return svgTSpan;
+    });
+
+    tspans.forEach(function(tspan) { svgText.appendChild(tspan); });
+    
+    var maxLineLength = tspans
+        .map(function(tspan) { return Blockly.Field.getCachedWidth(tspan); })
+        .reduce(function(maxLength, length) {
+          return Math.max(maxLength, length);
+        });
+
+    this.width = maxLineLength;
+    this.height = 20 * lines.length; // Can't compute it :(
+  } else {
+    svgText.textContent = this.text_;
+
+    this.width = Blockly.Field.getCachedWidth(svgText);
+    this.height = 20; // Can't compute it :(
+  }
 
   if (!this.isLabel_) {
     this.width += 2 * Blockly.FlyoutButton.MARGIN;

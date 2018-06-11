@@ -28,8 +28,6 @@
 goog.provide('Blockly.Events.Abstract');
 
 goog.require('Blockly.Events');
-goog.require('goog.array');
-goog.require('goog.math.Coordinate');
 
 /**
  * Abstract class for an event.

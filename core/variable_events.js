@@ -32,9 +32,6 @@ goog.provide('Blockly.Events.VarRename');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
 
-goog.require('goog.array');
-goog.require('goog.math.Coordinate');
-
 
 /**
  * Abstract class for a variable event.

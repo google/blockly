@@ -41,7 +41,6 @@ goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
 goog.require('goog.array');
 goog.require('goog.math.Coordinate');
-goog.require('goog.string');
 
 
 /**
@@ -1055,12 +1054,14 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
       }
     }
   }
-  text = goog.string.trim(text.join(' ')) || '???';
+  text = text.join(' ').trim() || '???';
   if (opt_maxLength) {
     // TODO: Improve truncation so that text from this block is given priority.
     // E.g. "1+2+3+4+5+6+7+8+9=0" should be "...6+7+8+9=0", not "1+2+3+4+5...".
     // E.g. "1+2+3+4+5=6+7+8+9+0" should be "...4+5=6+7...".
-    text = goog.string.truncate(text, opt_maxLength);
+    if (text.length > opt_maxLength) {
+      text = text.substring(0, opt_maxLength - 3) + '...';
+    }
   }
   return text;
 };
@@ -1260,7 +1261,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
   }
   // Add last dummy input if needed.
   if (elements.length && (typeof elements[elements.length - 1] == 'string' ||
-      goog.string.startsWith(
+      Blockly.utils.startsWith(
           elements[elements.length - 1]['type'], 'field_'))) {
     var dummyInput = {type: 'input_dummy'};
     if (lastDummyAlign) {

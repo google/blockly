@@ -33,7 +33,6 @@ goog.require('Blockly.constants');
 goog.require('Blockly.VariableModel');
 // TODO Fix circular dependencies
 // goog.require('Blockly.Workspace');
-goog.require('goog.string');
 
 
 Blockly.VariablesDynamic.onCreateVariableButtonClick_String = function(button) {

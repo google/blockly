@@ -345,7 +345,8 @@ Blockly.Xml.domToPrettyText = function(dom) {
 };
 
 /**
- * Converts an XML string into a DOM tree.
+ * Converts an XML string into a DOM tree. This method will be overridden in
+ * the Node.js build of Blockly. See gulpfile.js, blockly_javascript_en task.
  * @param {string} text XML string.
  * @return {!Element} The DOM document.
  * @throws if XML doesn't parse.
@@ -355,19 +356,6 @@ Blockly.Xml.textToDomDocument_ = function(text) {
   var oParser = new DOMParser();
   return oParser.parseFromString(text, 'text/xml');
 };
-
-// Node.js does not provide DOMParser.
-if (typeof DOMParser !== 'function') {
-  var JSDOM = require('jsdom').JSDOM; // eslint-disable-line no-undef
-
-  // Override the above function, providing the same interface described above.
-  Blockly.Xml.textToDomDocument_ = function(text) {
-    var jsdom = new JSDOM(text, {
-      contentType: 'text/xml'
-    });
-    return jsdom.window.document;
-  };
-}
 
 /**
  * Converts an XML string into a DOM structure. It requires the XML to have a

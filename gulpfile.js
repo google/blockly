@@ -56,9 +56,17 @@ gulp.task('blockly_javascript_en', function() {
     'msg/js/en.js'
   ];
   // Concatenate the sources, appending the module export at the bottom.
+  // Override textToDomDocument_, providing Node alternative to DOMParser.
   return gulp.src(srcs)
       .pipe(gulp.concat('blockly_node_javascript_en.js'))
       .pipe(insert.append(`
+if (typeof DOMParser !== 'function') {
+  var JSDOM = require('jsdom').JSDOM;
+  Blockly.Xml.textToDomDocument_ = function(text) {
+    var jsdom = new JSDOM(text, { contentType: 'text/xml' });
+    return jsdom.window.document;
+  };
+}
 if (typeof module === 'object') { module.exports = Blockly; }
 if (typeof window === 'object') { window.Blockly = Blockly; }\n`))
       .pipe(gulp.dest(''));

@@ -83,7 +83,6 @@ COMPILATION_COMMAND="java -jar $COMPILER --js='$BLOCKLY_ROOT/tests/compile/main.
   --js='$CLOSURE_LIB_ROOT/third_party/closure/goog/**.js' \
   --generate_exports \
   --externs $BLOCKLY_ROOT/externs/svg-externs.js \
-  --externs $BLOCKLY_ROOT/externs/node-externs.js \
   --compilation_level ADVANCED_OPTIMIZATIONS \
   --dependency_mode=STRICT --entry_point=Main \
   --js_output_file $BLOCKLY_ROOT/tests/compile/main_compressed.js"

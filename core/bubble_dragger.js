@@ -32,7 +32,6 @@ goog.require('Blockly.WorkspaceCommentSvg');
 
 goog.require('goog.math.Coordinate');
 goog.require('goog.asserts');
-goog.require('goog.Timer');
 
 
 /**
@@ -160,7 +159,7 @@ Blockly.BubbleDragger.prototype.maybeDeleteBubble_ = function() {
 
   if (this.wouldDeleteBubble_) {
     if (trashcan) {
-      goog.Timer.callOnce(trashcan.close, 100, trashcan);
+      setTimeout(trashcan.close.bind(trashcan), 100);
     }
     // Fire a move event, so we know where to go back to for an undo.
     this.fireMoveEvent_();

@@ -49,5 +49,8 @@
     "sub": true,
     "undef": true,
     "unused": true
+  },
+  "dependencies": {
+    "jsdom": "^11.11.0"
   }
 }

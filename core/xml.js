@@ -33,7 +33,6 @@ goog.provide('Blockly.Xml');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
 
-goog.require('goog.asserts');
 goog.require('goog.dom');
 
 
@@ -346,22 +345,34 @@ Blockly.Xml.domToPrettyText = function(dom) {
 };
 
 /**
- * Converts plain text into a DOM structure.
- * Throws an error if XML doesn't parse.
- * @param {string} text Text representation.
- * @return {!Element} A tree of XML elements.
+ * Converts an XML string into a DOM tree. This method will be overridden in
+ * the Node.js build of Blockly. See gulpfile.js, blockly_javascript_en task.
+ * @param {string} text XML string.
+ * @return {!Element} The DOM document.
+ * @throws if XML doesn't parse.
+ * @private
+ */
+Blockly.Xml.textToDomDocument_ = function(text) {
+  var oParser = new DOMParser();
+  return oParser.parseFromString(text, 'text/xml');
+};
+
+/**
+ * Converts an XML string into a DOM structure. It requires the XML to have a
+ * root element of <xml>. Other XML string will result in throwing an error.
+ * @param {string} text An XML string.
+ * @return {!Element} A DOM object representing the singular child of the document element.
+ * @throws if XML doesn't parse or is not the expected structure.
  */
 Blockly.Xml.textToDom = function(text) {
-  var oParser = new DOMParser();
-  var dom = oParser.parseFromString(text, 'text/xml');
-  // The DOM should have one and only one top-level node, an XML tag.
-  if (!dom || !dom.firstChild ||
-      dom.firstChild.nodeName.toLowerCase() != 'xml' ||
-      dom.firstChild !== dom.lastChild) {
-    // Whatever we got back from the parser is not XML.
-    goog.asserts.fail('Blockly.Xml.textToDom did not obtain a valid XML tree.');
+  var doc = Blockly.Xml.textToDomDocument_(text);
+  // This function only accepts <xml> documents.
+  if (!doc || !doc.documentElement ||
+      doc.documentElement.nodeName.toLowerCase() != 'xml') {
+    // Whatever we got back from the parser is not the expected structure.
+    throw Error('Blockly.Xml.textToDom expected an <xml> document.');
   }
-  return dom.firstChild;
+  return doc.documentElement;
 };
 
 /**
@@ -434,8 +445,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         }
         variablesFirst = false;
       } else if (name == 'shadow') {
-        goog.asserts.fail('Shadow block cannot be a top-level block.');
-        variablesFirst = false;
+        throw Error('Shadow block cannot be a top-level block.');
       } else if (name == 'comment') {
         if (workspace.rendered) {
           Blockly.WorkspaceCommentSvg.fromXml(xmlChild, workspace, width);
@@ -617,8 +627,9 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
 Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   var block = null;
   var prototypeName = xmlBlock.getAttribute('type');
-  goog.asserts.assert(
-      prototypeName, 'Block type unspecified: %s', xmlBlock.outerHTML);
+  if (!prototypeName) {
+    throw Error('Block type unspecified: ' + xmlBlock.outerHTML);
+  }
   var id = xmlBlock.getAttribute('id');
   block = workspace.newBlock(prototypeName, id);
 
@@ -706,7 +717,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
           } else if (blockChild.previousConnection) {
             input.connection.connect(blockChild.previousConnection);
           } else {
-            goog.asserts.fail(
+            throw Error(
                 'Child block does not have output or previous statement.');
           }
         }
@@ -716,15 +727,18 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
           block.nextConnection.setShadowDom(childShadowElement);
         }
         if (childBlockElement) {
-          goog.asserts.assert(block.nextConnection,
-              'Next statement does not exist.');
+          if (!block.nextConnection) {
+            throw Error('Next statement does not exist.');
+          }
           // If there is more than one XML 'next' tag.
-          goog.asserts.assert(!block.nextConnection.isConnected(),
-              'Next statement is already connected.');
+          if (block.nextConnection.isConnected()) {
+            throw Error('Next statement is already connected.');
+          }
           blockChild = Blockly.Xml.domToBlockHeadless_(childBlockElement,
               workspace);
-          goog.asserts.assert(blockChild.previousConnection,
-              'Next block does not have previous statement.');
+          if (!blockChild.previousConnection) {
+            throw Error('Next block does not have previous statement.');
+          }
           block.nextConnection.connect(blockChild.previousConnection);
         }
         break;
@@ -762,12 +776,14 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     // Ensure all children are also shadows.
     var children = block.getChildren(false);
     for (var i = 0, child; child = children[i]; i++) {
-      goog.asserts.assert(
-          child.isShadow(), 'Shadow block not allowed non-shadow child.');
+      if (child.isShadow()) {
+        throw Error('Shadow block not allowed non-shadow child.');
+      }
     }
     // Ensure this block doesn't have any variable inputs.
-    goog.asserts.assert(block.getVarModels().length == 0,
-        'Shadow blocks cannot have variable references.');
+    if (block.getVarModels().length) {
+      throw Error('Shadow blocks cannot have variable references.');
+    }
     block.setShadow(true);
   }
   return block;

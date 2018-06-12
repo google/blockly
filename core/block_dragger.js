@@ -32,7 +32,6 @@ goog.require('Blockly.Events.BlockMove');
 
 goog.require('goog.math.Coordinate');
 goog.require('goog.asserts');
-goog.require('goog.Timer');
 
 
 /**
@@ -267,7 +266,7 @@ Blockly.BlockDragger.prototype.maybeDeleteBlock_ = function() {
 
   if (this.wouldDeleteBlock_) {
     if (trashcan) {
-      goog.Timer.callOnce(trashcan.close, 100, trashcan);
+      setTimeout(trashcan.close.bind(trashcan), 100);
     }
     // Fire a move event, so we know where to go back to for an undo.
     this.fireMoveEvent_();

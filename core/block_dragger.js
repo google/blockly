@@ -267,7 +267,7 @@ Blockly.BlockDragger.prototype.maybeDeleteBlock_ = function() {
 
   if (this.wouldDeleteBlock_) {
     if (trashcan) {
-      goog.Timer.callOnce(trashcan.close, 100, trashcan);
+      setTimeout(trashcan.close, 100, trashcan);
     }
     // Fire a move event, so we know where to go back to for an undo.
     this.fireMoveEvent_();

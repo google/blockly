@@ -319,7 +319,7 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
   var opacity = goog.math.lerp(0.4, 0.8, this.lidOpen_);
   this.svgGroup_.style.opacity = opacity;
   if (this.lidOpen_ > 0 && this.lidOpen_ < 1) {
-    this.lidTask_ = goog.Timer.callOnce(this.animateLid_, 20, this);
+    this.lidTask_ = setTimeout(this.animateLid_, 20, this);
   }
 };
 

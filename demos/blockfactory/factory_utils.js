@@ -766,7 +766,7 @@ FactoryUtils.getBlockTypeFromJsDefinition = function(blockDef) {
  */
 FactoryUtils.generateCategoryXml = function(blocks, categoryName) {
   // Create category DOM element.
-  var categoryElement = goog.dom.createDom('category');
+  var categoryElement = document.createElement('category');
   categoryElement.setAttribute('name', categoryName);
 
   // For each block, add block element to category.

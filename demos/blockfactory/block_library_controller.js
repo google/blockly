@@ -34,8 +34,6 @@
 
 goog.provide('BlockLibraryController');
 
-goog.require('BlockLibraryStorage');
-
 
 /**
  * Block Library Controller Class

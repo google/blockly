@@ -27,15 +27,12 @@
 
 'use strict';
 
-goog.provide('BlockExporterView');
-
-
 /**
  * BlockExporter View Class
  * @param {!Object} blockOptions Map of block types to BlockOption objects.
  * @constructor
  */
-BlockExporterView = function(blockOptions) {
+function BlockExporterView(blockOptions) {
   //  Map of block types to BlockOption objects to select from.
   this.blockOptions = blockOptions;
 };

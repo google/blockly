@@ -35,7 +35,6 @@
  */
 
 goog.require('FactoryUtils');
-goog.require('StandardCategories');
 
 
 /**

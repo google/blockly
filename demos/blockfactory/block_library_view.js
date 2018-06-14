@@ -27,9 +27,6 @@
 
 'use strict';
 
-goog.provide('BlockLibraryView');
-
-
 /**
  * BlockLibraryView Class
  * @constructor

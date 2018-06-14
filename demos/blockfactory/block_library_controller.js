@@ -35,7 +35,6 @@
 goog.provide('BlockLibraryController');
 
 goog.require('BlockLibraryStorage');
-goog.require('BlockLibraryView');
 
 
 /**

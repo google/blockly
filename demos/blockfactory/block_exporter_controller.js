@@ -31,7 +31,6 @@
 
 goog.provide('BlockExporterController');
 
-goog.require('BlocklyDevTools.Analytics');
 goog.require('FactoryUtils');
 goog.require('StandardCategories');
 goog.require('BlockExporterView');

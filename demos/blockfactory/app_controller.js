@@ -28,7 +28,6 @@
 goog.provide('AppController');
 
 goog.require('BlockFactory');
-goog.require('BlocklyDevTools.Analytics');
 goog.require('FactoryUtils');
 goog.require('BlockLibraryController');
 goog.require('BlockExporterController');

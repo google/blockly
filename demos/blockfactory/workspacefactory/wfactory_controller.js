@@ -34,7 +34,6 @@
  * @author Emma Dauterman (evd2014)
  */
 
-goog.require('BlocklyDevTools.Analytics');
 goog.require('FactoryUtils');
 goog.require('StandardCategories');
 

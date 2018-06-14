@@ -34,7 +34,6 @@
 
 goog.provide('BlockLibraryController');
 
-goog.require('BlocklyDevTools.Analytics');
 goog.require('BlockLibraryStorage');
 goog.require('BlockLibraryView');
 goog.require('BlockFactory');

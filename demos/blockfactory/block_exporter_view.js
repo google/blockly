@@ -29,9 +29,6 @@
 
 goog.provide('BlockExporterView');
 
-goog.require('BlockOption');
-goog.require('goog.dom');
-
 
 /**
  * BlockExporter View Class

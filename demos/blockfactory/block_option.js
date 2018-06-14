@@ -28,9 +28,6 @@
  */
 'use strict';
 
-goog.provide('BlockOption');
-
-
  /**
  * BlockOption Class
  * A block option includes checkbox, label, and div element that shows a preview

@@ -27,7 +27,6 @@
  */
 goog.provide('AppController');
 
-goog.require('BlockLibraryController');
 goog.require('BlockExporterController');
 goog.require('goog.dom.classlist');
 goog.require('goog.ui.PopupColorPicker');

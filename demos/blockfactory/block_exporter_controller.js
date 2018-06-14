@@ -29,17 +29,12 @@
 
 'use strict';
 
-goog.provide('BlockExporterController');
-
-goog.require('goog.dom.xml');
-
-
 /**
  * BlockExporter Controller Class
  * @param {!BlockLibrary.Storage} blockLibStorage Block Library Storage.
  * @constructor
  */
-BlockExporterController = function(blockLibStorage) {
+function BlockExporterController(blockLibStorage) {
   // BlockLibrary.Storage object containing user's saved blocks.
   this.blockLibStorage = blockLibStorage;
   // Utils for generating code to export.

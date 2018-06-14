@@ -23,17 +23,11 @@
 'use strict';
 
 /**
- * Namespace for BlockDefinitionExtractor.
- */
-goog.provide('BlockDefinitionExtractor');
-
-
-/**
- * Class to contain all functions needed to extract block definition from
+ * Namespace to contain all functions needed to extract block definition from
  * the block preview data structure.
  * @namespace
  */
-BlockDefinitionExtractor = BlockDefinitionExtractor || Object.create(null);
+var BlockDefinitionExtractor = BlockDefinitionExtractor || Object.create(null);
 
 /**
  * Builds a BlockFactory workspace that reflects the block structure of the

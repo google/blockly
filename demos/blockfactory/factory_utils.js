@@ -34,8 +34,6 @@
  */
 goog.provide('FactoryUtils');
 
-goog.require('BlockDefinitionExtractor');
-
 
 /**
  * Get block definition code for the current block.

@@ -34,9 +34,6 @@
  * @author Emma Dauterman (evd2014)
  */
 
-goog.require('FactoryUtils');
-
-
 /**
  * Class for a WorkspaceFactoryController
  * @param {string} toolboxName Name of workspace toolbox XML.

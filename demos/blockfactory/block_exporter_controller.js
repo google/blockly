@@ -31,7 +31,6 @@
 
 goog.provide('BlockExporterController');
 
-goog.require('FactoryUtils');
 goog.require('BlockExporterView');
 goog.require('goog.dom.xml');
 

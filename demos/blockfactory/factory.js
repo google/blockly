@@ -34,7 +34,6 @@
  */
 goog.provide('BlockFactory');
 
-goog.require('FactoryUtils');
 
 /**
  * Workspace for user to build block.

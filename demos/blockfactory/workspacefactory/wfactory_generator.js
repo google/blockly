@@ -28,8 +28,6 @@
  * @author Emma Dauterman (evd2014)
  */
 
-goog.require('FactoryUtils');
-
 
 /**
  * Class for a WorkspaceFactoryGenerator

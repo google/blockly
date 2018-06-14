@@ -27,7 +27,6 @@
  * @author Emma Dauterman (evd2014)
  */
 
- goog.require('FactoryUtils');
 
 /**
  * Namespace for workspace factory initialization methods.

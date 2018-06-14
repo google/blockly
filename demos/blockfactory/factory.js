@@ -32,8 +32,7 @@
 /**
  * Namespace for Block Factory.
  */
-goog.provide('BlockFactory');
-
+var BlockFactory = BlockFactory || Object.create(null);
 
 /**
  * Workspace for user to build block.

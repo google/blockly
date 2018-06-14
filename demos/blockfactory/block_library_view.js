@@ -29,9 +29,6 @@
 
 goog.provide('BlockLibraryView');
 
-goog.require('goog.dom');
-goog.require('goog.dom.classlist');
-
 
 /**
  * BlockLibraryView Class
@@ -59,10 +56,10 @@ var BlockLibraryView = function() {
  */
 BlockLibraryView.prototype.addOption = function(blockType, selected) {
   // Create option.
-  var option = goog.dom.createDom('a', {
-    'id': 'dropdown_' + blockType,
-    'class': 'blockLibOpt'
-  }, blockType);
+  var option = document.createElement('a');
+  option.id ='dropdown_' + blockType;
+  option.classList.add('blockLibOpt');
+  option.innerHTML = blockType;
 
   // Add option to dropdown.
   this.dropdown.appendChild(option);
@@ -99,7 +96,7 @@ BlockLibraryView.prototype.setSelectedBlockType = function(blockTypeToSelect) {
  * @private
  */
 BlockLibraryView.prototype.selectOption_ = function(option) {
-  goog.dom.classlist.add(option, 'dropdown-content-selected');
+  option.classList.add('dropdown-content-selected');
 };
 
 /**
@@ -109,7 +106,7 @@ BlockLibraryView.prototype.selectOption_ = function(option) {
  * @private
  */
 BlockLibraryView.prototype.deselectOption_ = function(option) {
-  goog.dom.classlist.remove(option, 'dropdown-content-selected');
+  option.classList.remove('dropdown-content-selected');
 };
 
 /**
@@ -150,13 +147,12 @@ BlockLibraryView.prototype.updateButtons =
       if (blockType == 'block_type') {
         buttonFormatClass = 'button_alert';
       }
-      goog.dom.classlist.add(this.saveButton, buttonFormatClass);
+      this.saveButton.classList.add(buttonFormatClass);
       this.saveButton.disabled = false;
 
     } else {
       // No changes to save.
-      var classesToRemove = ['button_alert', 'button_warn'];
-      goog.dom.classlist.removeAll(this.saveButton, classesToRemove);
+      this.saveButton.classList.remove('button_alert', 'button_warn');
       this.saveButton.disabled = true;
     }
 

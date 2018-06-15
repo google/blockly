@@ -32,10 +32,7 @@
 /**
  * Namespace for Block Factory.
  */
-goog.provide('BlockFactory');
-
-goog.require('FactoryUtils');
-goog.require('StandardCategories');
+var BlockFactory = BlockFactory || Object.create(null);
 
 /**
  * Workspace for user to build block.

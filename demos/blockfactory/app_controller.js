@@ -25,17 +25,8 @@
  *
  * @author quachtina96 (Tina Quach)
  */
-goog.provide('AppController');
 
-goog.require('BlockFactory');
-goog.require('BlocklyDevTools.Analytics');
-goog.require('FactoryUtils');
-goog.require('BlockLibraryController');
-goog.require('BlockExporterController');
-goog.require('goog.dom.classlist');
-goog.require('goog.ui.PopupColorPicker');
-goog.require('goog.ui.ColorPicker');
-
+goog.require('goog.dom.xml');  // Used to detect Closure
 
 /**
  * Controller for the Blockly Factory
@@ -161,9 +152,7 @@ AppController.prototype.exportBlockLibraryToFile = function() {
  */
 AppController.prototype.formatBlockLibraryForExport_ = function(blockXmlMap) {
   // Create DOM for XML.
-  var xmlDom = goog.dom.createDom('xml', {
-    'xmlns':"http://www.w3.org/1999/xhtml"
-  });
+  var xmlDom = document.createElementNS('http://www.w3.org/1999/xhtml', 'xml');
 
   // Append each block node to XML DOM.
   for (var blockType in blockXmlMap) {
@@ -184,29 +173,25 @@ AppController.prototype.formatBlockLibraryForExport_ = function(blockXmlMap) {
  * @private
  */
 AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
-  var xmlDom = Blockly.Xml.textToDom(xmlText);
-
-  // Get array of XMLs. Use an asterisk (*) instead of a tag name for the XPath
-  // selector, to match all elements at that level and get all factory_base
-  // blocks.
-  var blockNodes = goog.dom.xml.selectNodes(xmlDom, '*');
+  var inputXml = Blockly.Xml.textToDom(xmlText);
+  // Convert the live HTMLCollection of child Elements into a static array,
+  // since the addition to editorWorkspaceXml below removes it from inputXml.
+  var inputChildren = Array.from(inputXml.children);
 
   // Create empty map. The line below creates a  truly empy object. It doesn't
   // have built-in attributes/functions such as length or toString.
   var blockXmlTextMap = Object.create(null);
 
   // Populate map.
-  for (var i = 0, blockNode; blockNode = blockNodes[i]; i++) {
-
+  for (var i = 0, blockNode; blockNode = inputChildren[i]; i++) {
     // Add outer XML tag to the block for proper injection in to the
     // main workspace.
     // Create DOM for XML.
-    var xmlDom = goog.dom.createDom('xml', {
-      'xmlns':"http://www.w3.org/1999/xhtml"
-    });
-    xmlDom.appendChild(blockNode);
+    var editorWorkspaceXml =
+        document.createElementNS('http://www.w3.org/1999/xhtml', 'xml');
+    editorWorkspaceXml.appendChild(blockNode);
 
-    xmlText = Blockly.Xml.domToText(xmlDom);
+    xmlText = Blockly.Xml.domToText(editorWorkspaceXml);
     // All block types should be lowercase.
     var blockType = this.getBlockTypeFromXml_(xmlText).toLowerCase();
     // Some names are invalid so fix them up.
@@ -376,9 +361,9 @@ AppController.prototype.onTab = function() {
 AppController.prototype.styleTabs_ = function() {
   for (var tabName in this.tabMap) {
     if (this.selectedTab == tabName) {
-      goog.dom.classlist.addRemove(this.tabMap[tabName], 'taboff', 'tabon');
+      this.tabMap[tabName].classList.replace('taboff', 'tabon');
     } else {
-      goog.dom.classlist.addRemove(this.tabMap[tabName], 'tabon', 'taboff');
+      this.tabMap[tabName].classList.replace('tabon', 'taboff');
     }
   }
 };

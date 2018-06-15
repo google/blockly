@@ -19,17 +19,14 @@
  */
 
 /**
- * @fileoverview Javascript for the BlockOption class, used to represent each of
- * the various blocks that you may select. Each block option has a checkbox,
- * a label, and a preview workspace through which to view the block.
+ * @fileoverview Javascript for the BlockOption class, used to represent each
+ * of the various blocks that you may select in the Block Selector. Each block
+ * option has a checkbox, a label, and a preview workspace through which to
+ * view the block.
  *
  * @author quachtina96 (Tina Quach)
  */
 'use strict';
-
-goog.provide('BlockOption');
-goog.require('goog.dom');
-
 
  /**
  * BlockOption Class
@@ -70,48 +67,42 @@ var BlockOption = function(blockSelector, blockType, previewBlockXml) {
  */
 BlockOption.prototype.createDom = function() {
   // Create the div for the block option.
-  var blockOptContainer = goog.dom.createDom('div', {
-    'id': this.blockType,
-    'class': 'blockOption'
-  }, ''); // Empty quotes for empty div.
+  var blockOptContainer = document.createElement('div');
+  blockOptContainer.id = this.blockType;
+  blockOptContainer.classList.add('blockOption');
 
   // Create and append div in which to inject the workspace for viewing the
   // block option.
-  var blockOptionPreview = goog.dom.createDom('div', {
-    'id' : this.blockType + '_workspace',
-    'class': 'blockOption_preview'
-  }, '');
+  var blockOptionPreview = document.createElement('div');
+  blockOptionPreview.id = this.blockType + '_workspace';
+  blockOptionPreview.classList.add('blockOption_preview');
   blockOptContainer.appendChild(blockOptionPreview);
 
   // Create and append container to hold checkbox and label.
-  var checkLabelContainer = goog.dom.createDom('div', {
-    'class': 'blockOption_checkLabel'
-  }, '');
+  var checkLabelContainer = document.createElement('div');
+  checkLabelContainer.classList.add('blockOption_checkLabel');
   blockOptContainer.appendChild(checkLabelContainer);
 
   // Create and append container for checkbox.
-  var checkContainer = goog.dom.createDom('div', {
-    'class': 'blockOption_check'
-  }, '');
+  var checkContainer = document.createElement('div');
+  checkContainer.classList.add('blockOption_check');
   checkLabelContainer.appendChild(checkContainer);
 
   // Create and append checkbox.
-  this.checkbox = goog.dom.createDom('input', {
-    'type': 'checkbox',
-    'id': this.blockType + '_check'
-  }, '');
+  this.checkbox = document.createElement('input');
+  this.checkbox.id = this.blockType + '_check';
+  this.checkbox.setAttribute('type', 'checkbox');
   checkContainer.appendChild(this.checkbox);
 
   // Create and append container for block label.
-  var labelContainer = goog.dom.createDom('div', {
-    'class': 'blockOption_label'
-  }, '');
+  var labelContainer = document.createElement('div');
+  labelContainer.classList.add('blockOption_label');
   checkLabelContainer.appendChild(labelContainer);
 
   // Create and append text node for the label.
-  var labelText = goog.dom.createDom('p', {
-    'id': this.blockType + '_text'
-  }, this.blockType);
+  var labelText = document.createElement('p');
+  labelText.id = this.blockType + '_text';
+  labelText.textContent = this.blockType;
   labelContainer.appendChild(labelText);
 
   this.dom = blockOptContainer;

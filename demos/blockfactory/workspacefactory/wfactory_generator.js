@@ -28,8 +28,6 @@
  * @author Emma Dauterman (evd2014)
  */
 
-goog.require('FactoryUtils');
-
 
 /**
  * Class for a WorkspaceFactoryGenerator
@@ -61,11 +59,10 @@ WorkspaceFactoryGenerator = function(model) {
  */
 WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
   // Create DOM for XML.
-  var xmlDom = goog.dom.createDom('xml',
-      {
-        'id' : 'toolbox',
-        'style' : 'display:none'
-      });
+  var xmlDom = document.createElement('xml');
+  xmlDom.id = 'toolbox';
+  xmlDom.style.display = 'none';
+
   if (!this.model.hasElements()) {
     // Toolbox has no categories. Use XML directly from workspace.
     this.loadToHiddenWorkspace_(this.model.getSelectedXml());
@@ -88,10 +85,10 @@ WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
       var element = toolboxList[i];
       if (element.type == ListElement.TYPE_SEPARATOR) {
         // If the next element is a separator.
-        var nextElement = goog.dom.createDom('sep');
+        var nextElement = document.createElement('sep');
       } else if (element.type == ListElement.TYPE_CATEGORY) {
         // If the next element is a category.
-        var nextElement = goog.dom.createDom('category');
+        var nextElement = document.createElement('category');
         nextElement.setAttribute('name', element.name);
         // Add a colour attribute if one exists.
         if (element.color != null) {

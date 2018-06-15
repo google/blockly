@@ -27,6 +27,8 @@
  * @author Emma Dauterman (evd2014)
  */
 
+goog.require('goog.ui.PopupColorPicker');
+goog.require('goog.ui.ColorPicker');
 
 /**
  * Namespace for workspace factory initialization methods.

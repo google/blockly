@@ -102,7 +102,7 @@ BlockOption.prototype.createDom = function() {
   // Create and append text node for the label.
   var labelText = document.createElement('p');
   labelText.id = this.blockType + '_text';
-  labelText.innerHTML = this.blockType;
+  labelText.textContent = this.blockType;
   labelContainer.appendChild(labelText);
 
   this.dom = blockOptContainer;

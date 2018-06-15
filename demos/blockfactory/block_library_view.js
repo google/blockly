@@ -56,7 +56,7 @@ BlockLibraryView.prototype.addOption = function(blockType, selected) {
   var option = document.createElement('a');
   option.id ='dropdown_' + blockType;
   option.classList.add('blockLibOpt');
-  option.innerHTML = blockType;
+  option.textContent = blockType;
 
   // Add option to dropdown.
   this.dropdown.appendChild(option);

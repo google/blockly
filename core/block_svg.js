@@ -889,6 +889,10 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
     this.customContextMenu(menuOptions);
   }
 
+  if (this.flyoutCustomContextMenu && block.isInFlyout) {
+    this.flyoutCustomContextMenu(menuOptions);
+  }
+
   Blockly.ContextMenu.show(e, menuOptions, this.RTL);
   Blockly.ContextMenu.currentBlock = this;
 };

@@ -135,51 +135,6 @@ Blockly.Blocks['robot_movement_go_to'] = {
   }
 };
 
-Blockly.robot.locations = [['<Select a location>', '<Select a location>']];
-Blockly.robot.getLocations = function() {
-  if (!Blockly.robot.locationListener) {
-    Blockly.robot.locationListener = new ROSLIB.Topic({
-      ros: ROS,
-      name: '/map_annotator/pose_names',
-      messageType: 'map_annotator/PoseNames'
-    });
-    Blockly.robot.locationListener.subscribe(function(msg) {
-      var options = [];
-      for (var i = 0; i < msg.names.length; ++i) {
-        var name = msg.names[i];
-        options.push([name, name]);
-      }
-      Blockly.robot.locations = options;
-    });
-  }
-};
-
-function getLocations() {
-  return Blockly.robot.locations;
-}
-
-Blockly.robot.getLocations();
-
-Blockly.Blocks['robot_movement_locations'] = {
-  init: function() {
-    Blockly.robot.getLocations();
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown(getLocations), "NAME");
-    this.setOutput(true, "String");
-    this.setColour(160);
-    this.setTooltip('The list of locations the robot knows about.');
-    this.setHelpUrl('');
-  },
-
-  onchange: function() {
-    if (this.getFieldValue('NAME') === '<Select a location>') {
-      this.setWarningText('Select a location from the list.');
-    } else {
-      this.setWarningText(null);
-    }
-  },
-};
-
 Blockly.Blocks['robot_movement_go_to_dock'] = {
   init: function() {
     this.appendDummyInput()
@@ -823,6 +778,64 @@ Blockly.Blocks['robot_start_ask_mc'] = {
     this.setTooltip('Asks a multiple choice question. The user\'s choice is returned.');
     this.setHelpUrl('');
   }
+};
+
+Blockly.Blocks['robot_start_go_to'] = {
+  init: function() {
+    this.appendValueInput("LOCATION")
+        .setCheck("String")
+        .appendField("start going to");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(160);
+ this.setTooltip("Start moving towards selected location");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.robot.locations = [['<Select a location>', '<Select a location>']];
+Blockly.robot.getLocations = function() {
+  if (!Blockly.robot.locationListener) {
+    Blockly.robot.locationListener = new ROSLIB.Topic({
+      ros: ROS,
+      name: '/map_annotator/pose_names',
+      messageType: 'map_annotator/PoseNames'
+    });
+    Blockly.robot.locationListener.subscribe(function(msg) {
+      var options = [];
+      for (var i = 0; i < msg.names.length; ++i) {
+        var name = msg.names[i];
+        options.push([name, name]);
+      }
+      Blockly.robot.locations = options;
+    });
+  }
+};
+
+function getLocations() {
+  return Blockly.robot.locations;
+}
+
+Blockly.robot.getLocations();
+
+Blockly.Blocks['robot_locations'] = {
+  init: function() {
+    Blockly.robot.getLocations();
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown(getLocations), "NAME");
+    this.setOutput(true, "String");
+    this.setColour(160);
+    this.setTooltip('The list of locations the robot knows about.');
+    this.setHelpUrl('');
+  },
+
+  onchange: function() {
+    if (this.getFieldValue('NAME') === '<Select a location>') {
+      this.setWarningText('Select a location from the list.');
+    } else {
+      this.setWarningText(null);
+    }
+  },
 };
 
 Blockly.Blocks['robot_is_done_fetch'] = {

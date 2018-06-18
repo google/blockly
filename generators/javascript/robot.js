@@ -59,7 +59,7 @@ Blockly.JavaScript['robot_movement_go_to'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['robot_movement_locations'] = function(block) {
+Blockly.JavaScript['robot_locations'] = function(block) {
   var dropdown_name = block.getFieldValue('NAME');
   var code = Blockly.JavaScript.quote_(dropdown_name);
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
@@ -265,6 +265,12 @@ Blockly.JavaScript['robot_start_ask_mc'] = function(block) {
   var value_question = Blockly.JavaScript.valueToCode(block, 'QUESTION', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
   var value_choices = Blockly.JavaScript.valueToCode(block, 'CHOICES', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
   var code = 'robot.startAskMultipleChoice(' + value_question + ', ' + value_choices + ');\n';
+  return code;
+};
+
+Blockly.JavaScript['robot_start_go_to'] = function(block) {
+  var value_location = Blockly.JavaScript.valueToCode(block, 'LOCATION', Blockly.JavaScript.ORDER_COMMA);
+  var code = 'robot.startGoTo(' + value_location + ');\n';
   return code;
 };
 

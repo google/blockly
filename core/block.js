@@ -1150,8 +1150,8 @@ Blockly.Block.prototype.jsonInit = function(json) {
 
   if (Array.isArray(json['extensions'])) {
     var extensionNames = json['extensions'];
-    for (var i = 0; i < extensionNames.length; ++i) {
-      var extensionName = extensionNames[i];
+    for (var j = 0; j < extensionNames.length; ++j) {
+      var extensionName = extensionNames[j];
       Blockly.Extensions.apply(extensionName, this, false);
     }
   }

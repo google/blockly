@@ -219,7 +219,7 @@ Blockly.JavaScript['robot_manipulation_run_pbd_program'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['robot_manipulation_pbd_programs'] = function(block) {
+Blockly.JavaScript['robot_pbd_programs'] = function(block) {
   var dropdown_name = block.getFieldValue('NAME');
   var code = Blockly.JavaScript.quote_(dropdown_name);
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
@@ -271,6 +271,12 @@ Blockly.JavaScript['robot_start_ask_mc'] = function(block) {
 Blockly.JavaScript['robot_start_go_to'] = function(block) {
   var value_location = Blockly.JavaScript.valueToCode(block, 'LOCATION', Blockly.JavaScript.ORDER_COMMA);
   var code = 'robot.startGoTo(' + value_location + ');\n';
+  return code;
+};
+
+Blockly.JavaScript['robot_start_rapid_pbd'] = function(block) {
+  var value_program = Blockly.JavaScript.valueToCode(block, 'PROGRAM', Blockly.JavaScript.ORDER_COMMA);
+  var code = 'robot.startRapidPbD(' + value_program + ');\n';
   return code;
 };
 

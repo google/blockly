@@ -563,51 +563,6 @@ Blockly.Blocks['robot_manipulation_run_pbd_program'] = {
   }
 };
 
-Blockly.robot.pbdPrograms = [['<Select a program>', '<Select a program>']];
-Blockly.robot.getPbdPrograms = function() {
-  if (!Blockly.robot.pbdProgramListener) {
-    Blockly.robot.pbdProgramListener = new ROSLIB.Topic({
-      ros: ROS,
-      name: '/rapid_pbd/program_list',
-      messageType: 'rapid_pbd_msgs/ProgramInfoList'
-    });
-    Blockly.robot.pbdProgramListener.subscribe(function(msg) {
-      var options = [];
-      for (var i = 0; i < msg.programs.length; ++i) {
-        var name = msg.programs[i].name;
-        options.push([name, name]);
-      }
-      Blockly.robot.pbdPrograms = options;
-    });
-  }
-};
-
-function getPbdPrograms() {
-  return Blockly.robot.pbdPrograms;
-}
-
-Blockly.robot.getPbdPrograms();
-
-Blockly.Blocks['robot_manipulation_pbd_programs'] = {
-  init: function() {
-    Blockly.robot.getPbdPrograms();
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown(getPbdPrograms), "NAME");
-    this.setOutput(true, "String");
-    this.setColour(20);
-    this.setTooltip('The list of Rapid PbD programs that have been created.');
-    this.setHelpUrl('');
-  },
-
-  onchange: function() {
-    if (this.getFieldValue('NAME') === '<Select a program>') {
-      this.setWarningText('Select a program from the list.');
-    } else {
-      this.setWarningText(null);
-    }
-  },
-};
-
 Blockly.Blocks['robot_manipulation_open_gripper'] = {
   init: function() {
     this.appendDummyInput()
@@ -832,6 +787,64 @@ Blockly.Blocks['robot_locations'] = {
   onchange: function() {
     if (this.getFieldValue('NAME') === '<Select a location>') {
       this.setWarningText('Select a location from the list.');
+    } else {
+      this.setWarningText(null);
+    }
+  },
+};
+
+Blockly.Blocks['robot_start_rapid_pbd'] = {
+  init: function() {
+    this.appendValueInput("PROGRAM")
+        .setCheck("String")
+        .appendField("start running Rapid PbD program");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+ this.setTooltip("Start running selected program");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.robot.pbdPrograms = [['<Select a program>', '<Select a program>']];
+Blockly.robot.getPbdPrograms = function() {
+  if (!Blockly.robot.pbdProgramListener) {
+    Blockly.robot.pbdProgramListener = new ROSLIB.Topic({
+      ros: ROS,
+      name: '/rapid_pbd/program_list',
+      messageType: 'rapid_pbd_msgs/ProgramInfoList'
+    });
+    Blockly.robot.pbdProgramListener.subscribe(function(msg) {
+      var options = [];
+      for (var i = 0; i < msg.programs.length; ++i) {
+        var name = msg.programs[i].name;
+        options.push([name, name]);
+      }
+      Blockly.robot.pbdPrograms = options;
+    });
+  }
+};
+
+function getPbdPrograms() {
+  return Blockly.robot.pbdPrograms;
+}
+
+Blockly.robot.getPbdPrograms();
+
+Blockly.Blocks['robot_pbd_programs'] = {
+  init: function() {
+    Blockly.robot.getPbdPrograms();
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown(getPbdPrograms), "NAME");
+    this.setOutput(true, "String");
+    this.setColour(20);
+    this.setTooltip('The list of Rapid PbD programs that have been created.');
+    this.setHelpUrl('');
+  },
+
+  onchange: function() {
+    if (this.getFieldValue('NAME') === '<Select a program>') {
+      this.setWarningText('Select a program from the list.');
     } else {
       this.setWarningText(null);
     }

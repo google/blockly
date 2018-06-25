@@ -48,7 +48,7 @@ goog.require('goog.math.Coordinate');
 Blockly.Events.Ui = function(block, element, oldValue, newValue) {
   Blockly.Events.Ui.superClass_.constructor.call(this);
   this.blockId = block ? block.id : null;
-  this.workspaceId = block? block.workspace.id : null;
+  this.workspaceId = block ? block.workspace.id : null;
   this.element = element;
   this.oldValue = oldValue;
   this.newValue = newValue;

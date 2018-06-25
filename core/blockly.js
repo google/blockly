@@ -632,7 +632,7 @@ Blockly.checkBlockColourConstant_ = function(
     msgName, blocklyNamePath, expectedValue) {
   var namePath = 'Blockly';
   var value = Blockly;
-  for (var i =0; i < blocklyNamePath.length; ++i) {
+  for (var i = 0; i < blocklyNamePath.length; ++i) {
     namePath += '.' + blocklyNamePath[i];
     if (value) {
       value = value[blocklyNamePath[i]];

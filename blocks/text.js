@@ -626,7 +626,7 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
    * @this Blockly.Block
    */
   newQuote_: function(open) {
-    var isLeft = this.RTL? !open : open;
+    var isLeft = this.RTL ? !open : open;
     var dataUri = isLeft ?
       this.QUOTE_IMAGE_LEFT_DATAURI :
       this.QUOTE_IMAGE_RIGHT_DATAURI;

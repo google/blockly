@@ -1,6 +1,6 @@
 {
     "rules": {
-        "curly": ["error", "multi-line"],
+        "curly": ["error"],
         "eol-last": ["error"],
         "indent": [
             "error", 2,  # Blockly/Google use 2-space indents
@@ -50,6 +50,7 @@
         "quotes": ["off"], # Blockly uses single quotes except for JSON blobs, which must use double quotes.
         "semi": ["error", "always"],
         "space-before-function-paren": ["error", "never"], # Blockly doesn't have space before function paren
+        "space-infix-ops": ["error"],
         "strict": ["off"], # Blockly uses 'use strict' in files
         "no-cond-assign": ["off"], # Blockly often uses cond-assignment in loops
         "no-redeclare": ["off"], # Closure style allows redeclarations

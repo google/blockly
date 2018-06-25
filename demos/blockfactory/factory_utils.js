@@ -889,7 +889,7 @@ FactoryUtils.injectCode = function(code, id) {
   pre.textContent = code;
   code = pre.textContent;
   code = PR.prettyPrintOne(code, 'js');
-  pre.textContent = code;
+  pre.innerHTML = code;
 };
 
 /**

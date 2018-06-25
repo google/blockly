@@ -148,7 +148,7 @@ BlockFactory.updateLanguage = function() {
     if (!BlockFactory.updateBlocksFlagDelayed) {
       var languagePre = document.getElementById('languagePre');
       var languageTA = document.getElementById('languageTA');
-      code = languagePre.textContent.trim();
+      code = languagePre.innerText.trim();
       languageTA.value = code;
     }
   }

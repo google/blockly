@@ -48,10 +48,10 @@ import re
 from common import write_files
 
 
-_INPUT_DEF_PATTERN = re.compile("""Blockly.Msg\[(\w*)\]\s*=\s*'(.*)';?\r?$""")
+_INPUT_DEF_PATTERN = re.compile("""Blockly.Msg.(\w*)\s*=\s*'(.*)';?\r?$""")
 
 _INPUT_SYN_PATTERN = re.compile(
-    """Blockly.Msg\[(\w*)\]\s*=\s*Blockly.Msg\[(\w*)\];""")
+    """Blockly.Msg.(\w*)\s*=\s*Blockly.Msg.(\w*);""")
 
 _CONSTANT_DESCRIPTION_PATTERN = re.compile(
     """{{Notranslate}}""", re.IGNORECASE)

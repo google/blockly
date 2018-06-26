@@ -25,7 +25,7 @@
   "license": "Apache-2.0",
   "private": true,
   "devDependencies": {
-    "eslint": "^5.0.1",
+    "eslint": "^4.19.1",
     "google-closure-compiler": "^20180610.0.2",
     "google-closure-library": "^20180506.0.0",
     "gulp": "^3.9.1",

@@ -27,6 +27,7 @@
 goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
+goog.require('Blockly.BlockAnimations');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.BlockMove');
@@ -35,7 +36,7 @@ goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
-goog.require('goog.Timer');
+
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
@@ -250,27 +251,35 @@ Blockly.BlockSvg.prototype.getIcons = function() {
  * @param {Blockly.BlockSvg} newParent New parent block.
  */
 Blockly.BlockSvg.prototype.setParent = function(newParent) {
-  if (newParent == this.parentBlock_) {
+  var oldParent = this.parentBlock_;
+  if (newParent == oldParent) {
     return;
-  }
-  var svgRoot = this.getSvgRoot();
-  if (this.parentBlock_ && svgRoot) {
-    // Move this block up the DOM.  Keep track of x/y translations.
-    var xy = this.getRelativeToSurfaceXY();
-    this.workspace.getCanvas().appendChild(svgRoot);
-    svgRoot.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
   }
 
   Blockly.Field.startCache();
   Blockly.BlockSvg.superClass_.setParent.call(this, newParent);
   Blockly.Field.stopCache();
 
+  var svgRoot = this.getSvgRoot();
+
+  // Bail early if workspace is clearing, or we aren't rendered.
+  // We won't need to reattach ourselves anywhere.
+  if (this.workspace.isClearing || !svgRoot) {
+    return;
+  }
+
+  var oldXY = this.getRelativeToSurfaceXY();
   if (newParent) {
-    var oldXY = this.getRelativeToSurfaceXY();
     newParent.getSvgRoot().appendChild(svgRoot);
     var newXY = this.getRelativeToSurfaceXY();
     // Move the connections to match the child's new position.
     this.moveConnections_(newXY.x - oldXY.x, newXY.y - oldXY.y);
+  }
+  // If we are losing a parent, we want to move our DOM element to the
+  // root of the workspace.
+  else if (oldParent) {
+    this.workspace.getCanvas().appendChild(svgRoot);
+    this.translate(oldXY.x, oldXY.y);
   }
 };
 
@@ -319,13 +328,18 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
  */
 Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
   goog.asserts.assert(!this.parentBlock_, 'Block has parent.');
-  var event = new Blockly.Events.BlockMove(this);
+  var eventsEnabled = Blockly.Events.isEnabled();
+  if (eventsEnabled) {
+    var event = new Blockly.Events.BlockMove(this);
+  }
   var xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);
   this.moveConnections_(dx, dy);
-  event.recordNew();
+  if (eventsEnabled) {
+    event.recordNew();
+    Blockly.Events.fire(event);
+  }
   this.workspace.resizeContents();
-  Blockly.Events.fire(event);
 };
 
 /**
@@ -569,7 +583,7 @@ Blockly.BlockSvg.prototype.createTabList_ = function() {
  * @private
  */
 Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
-  var gesture = this.workspace.getGesture(e);
+  var gesture = this.workspace && this.workspace.getGesture(e);
   if (gesture) {
     gesture.handleBlockStart(e, this);
   }
@@ -616,7 +630,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
           var inlineOption = {enabled: true};
           var isInline = this.getInputsInline();
           inlineOption.text = isInline ?
-              Blockly.Msg.EXTERNAL_INPUTS : Blockly.Msg.INLINE_INPUTS;
+              Blockly.Msg['EXTERNAL_INPUTS'] : Blockly.Msg['INLINE_INPUTS'];
           inlineOption.callback = function() {
             block.setInputsInline(!isInline);
           };
@@ -630,14 +644,14 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       // Option to collapse/expand block.
       if (this.collapsed_) {
         var expandOption = {enabled: true};
-        expandOption.text = Blockly.Msg.EXPAND_BLOCK;
+        expandOption.text = Blockly.Msg['EXPAND_BLOCK'];
         expandOption.callback = function() {
           block.setCollapsed(false);
         };
         menuOptions.push(expandOption);
       } else {
         var collapseOption = {enabled: true};
-        collapseOption.text = Blockly.Msg.COLLAPSE_BLOCK;
+        collapseOption.text = Blockly.Msg['COLLAPSE_BLOCK'];
         collapseOption.callback = function() {
           block.setCollapsed(true);
         };
@@ -649,7 +663,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       // Option to disable/enable block.
       var disableOption = {
         text: this.disabled ?
-            Blockly.Msg.ENABLE_BLOCK : Blockly.Msg.DISABLE_BLOCK,
+            Blockly.Msg['ENABLE_BLOCK'] : Blockly.Msg['DISABLE_BLOCK'],
         enabled: !this.getInheritedDisabled(),
         callback: function() {
           block.setDisabled(!block.disabled);
@@ -807,7 +821,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
 
   if (animate && this.rendered) {
     this.unplug(healStack);
-    this.disposeUiEffect();
+    Blockly.BlockAnimations.disposeUiEffect(this);
   }
   // Stop rerendering.
   this.rendered = false;
@@ -840,179 +854,6 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   this.svgPathDark_ = null;
   Blockly.Field.stopCache();
 };
-
-/**
- * Play some UI effects (sound, animation) when disposing of a block.
- */
-Blockly.BlockSvg.prototype.disposeUiEffect = function() {
-  this.workspace.getAudioManager().play('delete');
-
-  var xy = this.workspace.getSvgXY(/** @type {!Element} */ (this.svgGroup_));
-  // Deeply clone the current block.
-  var clone = this.svgGroup_.cloneNode(true);
-  clone.translateX_ = xy.x;
-  clone.translateY_ = xy.y;
-  clone.setAttribute('transform',
-      'translate(' + clone.translateX_ + ',' + clone.translateY_ + ')');
-  this.workspace.getParentSvg().appendChild(clone);
-  clone.bBox_ = clone.getBBox();
-  // Start the animation.
-  Blockly.BlockSvg.disposeUiStep_(clone, this.RTL, new Date,
-      this.workspace.scale);
-};
-
-/**
- * Animate a cloned block and eventually dispose of it.
- * This is a class method, not an instance method since the original block has
- * been destroyed and is no longer accessible.
- * @param {!Element} clone SVG element to animate and dispose of.
- * @param {boolean} rtl True if RTL, false if LTR.
- * @param {!Date} start Date of animation's start.
- * @param {number} workspaceScale Scale of workspace.
- * @private
- */
-Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl, start, workspaceScale) {
-  var ms = new Date - start;
-  var percent = ms / 150;
-  if (percent > 1) {
-    goog.dom.removeNode(clone);
-  } else {
-    var x = clone.translateX_ +
-        (rtl ? -1 : 1) * clone.bBox_.width * workspaceScale / 2 * percent;
-    var y = clone.translateY_ + clone.bBox_.height * workspaceScale * percent;
-    var scale = (1 - percent) * workspaceScale;
-    clone.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
-        ' scale(' + scale + ')');
-    setTimeout(
-        Blockly.BlockSvg.disposeUiStep_, 10, clone, rtl, start, workspaceScale);
-  }
-};
-
-/**
- * Play some UI effects (sound, ripple) after a connection has been established.
- */
-Blockly.BlockSvg.prototype.connectionUiEffect = function() {
-  this.workspace.getAudioManager().play('click');
-  if (this.workspace.scale < 1) {
-    return;  // Too small to care about visual effects.
-  }
-  // Determine the absolute coordinates of the inferior block.
-  var xy = this.workspace.getSvgXY(/** @type {!Element} */ (this.svgGroup_));
-  // Offset the coordinates based on the two connection types, fix scale.
-  if (this.outputConnection) {
-    xy.x += (this.RTL ? 3 : -3) * this.workspace.scale;
-    xy.y += 13 * this.workspace.scale;
-  } else if (this.previousConnection) {
-    xy.x += (this.RTL ? -23 : 23) * this.workspace.scale;
-    xy.y += 3 * this.workspace.scale;
-  }
-  var ripple = Blockly.utils.createSvgElement('circle',
-      {
-        'cx': xy.x,
-        'cy': xy.y,
-        'r': 0,
-        'fill': 'none',
-        'stroke': '#888',
-        'stroke-width': 10
-      },
-      this.workspace.getParentSvg());
-  // Start the animation.
-  Blockly.BlockSvg.connectionUiStep_(ripple, new Date, this.workspace.scale);
-};
-
-/**
- * Expand a ripple around a connection.
- * @param {!Element} ripple Element to animate.
- * @param {!Date} start Date of animation's start.
- * @param {number} workspaceScale Scale of workspace.
- * @private
- */
-Blockly.BlockSvg.connectionUiStep_ = function(ripple, start, workspaceScale) {
-  var ms = new Date - start;
-  var percent = ms / 150;
-  if (percent > 1) {
-    goog.dom.removeNode(ripple);
-  } else {
-    ripple.setAttribute('r', percent * 25 * workspaceScale);
-    ripple.style.opacity = 1 - percent;
-    Blockly.BlockSvg.disconnectUiStop_.pid_ = setTimeout(
-        Blockly.BlockSvg.connectionUiStep_, 10, ripple, start, workspaceScale);
-  }
-};
-
-/**
- * Play some UI effects (sound, animation) when disconnecting a block.
- */
-Blockly.BlockSvg.prototype.disconnectUiEffect = function() {
-  this.workspace.getAudioManager().play('disconnect');
-  if (this.workspace.scale < 1) {
-    return;  // Too small to care about visual effects.
-  }
-  // Horizontal distance for bottom of block to wiggle.
-  var DISPLACEMENT = 10;
-  // Scale magnitude of skew to height of block.
-  var height = this.getHeightWidth().height;
-  var magnitude = Math.atan(DISPLACEMENT / height) / Math.PI * 180;
-  if (!this.RTL) {
-    magnitude *= -1;
-  }
-  // Start the animation.
-  Blockly.BlockSvg.disconnectUiStep_(this.svgGroup_, magnitude, new Date);
-};
-
-/**
- * Animate a brief wiggle of a disconnected block.
- * @param {!Element} group SVG element to animate.
- * @param {number} magnitude Maximum degrees skew (reversed for RTL).
- * @param {!Date} start Date of animation's start.
- * @private
- */
-Blockly.BlockSvg.disconnectUiStep_ = function(group, magnitude, start) {
-  var DURATION = 200;  // Milliseconds.
-  var WIGGLES = 3;  // Half oscillations.
-
-  var ms = new Date - start;
-  var percent = ms / DURATION;
-
-  if (percent > 1) {
-    group.skew_ = '';
-  } else {
-    var skew = Math.round(
-        Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
-    group.skew_ = 'skewX(' + skew + ')';
-    Blockly.BlockSvg.disconnectUiStop_.group = group;
-    Blockly.BlockSvg.disconnectUiStop_.pid =
-        setTimeout(
-            Blockly.BlockSvg.disconnectUiStep_, 10, group, magnitude, start);
-  }
-  group.setAttribute('transform', group.translate_ + group.skew_);
-};
-
-/**
- * Stop the disconnect UI animation immediately.
- * @private
- */
-Blockly.BlockSvg.disconnectUiStop_ = function() {
-  if (Blockly.BlockSvg.disconnectUiStop_.group) {
-    clearTimeout(Blockly.BlockSvg.disconnectUiStop_.pid);
-    var group = Blockly.BlockSvg.disconnectUiStop_.group;
-    group.skew_ = '';
-    group.setAttribute('transform', group.translate_);
-    Blockly.BlockSvg.disconnectUiStop_.group = null;
-  }
-};
-
-/**
- * PID of disconnect UI animation.  There can only be one at a time.
- * @type {number}
- */
-Blockly.BlockSvg.disconnectUiStop_.pid = 0;
-
-/**
- * SVG group of wobbling block.  There can only be one at a time.
- * @type {Element}
- */
-Blockly.BlockSvg.disconnectUiStop_.group = null;
 
 /**
  * Change the colour of a block.
@@ -1070,7 +911,7 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
       this.updateColour();
     }
   }
-  var children = this.getChildren();
+  var children = this.getChildren(false);
   for (var i = 0, child; child = children[i]; i++) {
     child.updateDisabled();
   }

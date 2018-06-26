@@ -48,7 +48,7 @@ Blockly.Touch.touchIdentifier_ = null;
  * @type {Object}
  */
 Blockly.Touch.TOUCH_MAP = {};
-if (window && window.PointerEvent) {
+if (goog.global.PointerEvent) {
   Blockly.Touch.TOUCH_MAP = {
     'mousedown': ['pointerdown'],
     'mouseenter': ['pointerenter'],

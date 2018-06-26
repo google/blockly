@@ -11,6 +11,7 @@
 	"DUPLICATE_BLOCK": "कपी गर",
 	"ADD_COMMENT": "टिप्पणी थप्दे",
 	"REMOVE_COMMENT": "टिप्पणी हटाउन्या",
+	"DUPLICATE_COMMENT": "हूबहू टिप्पणी",
 	"EXTERNAL_INPUTS": "भाइरका इन्पुटहरू",
 	"INLINE_INPUTS": "इनलाइन इन्पुटहरू",
 	"DELETE_BLOCK": "ब्लक हटाउन्या",
@@ -101,5 +102,6 @@
 	"LOGIC_BOOLEAN_FALSE": "असत्य",
 	"LOGIC_BOOLEAN_TOOLTIP": "सत्य या असत्य फिर्ता अरन्छ।",
 	"LOGIC_NULL": "शू्य",
-	"LOGIC_NULL_TOOLTIP": "शून्य फिर्ता अरन्छ।"
+	"LOGIC_NULL_TOOLTIP": "शून्य फिर्ता अरन्छ।",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "केयि भँण..."
 }

@@ -28,7 +28,6 @@
  * @author Emma Dauterman (edauterman)
  */
 
-goog.require('FactoryUtils');
 
 /**
  * Class for a WorkspaceFactoryView

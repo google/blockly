@@ -11,6 +11,7 @@
 	"DUPLICATE_BLOCK": "Sleg",
 	"ADD_COMMENT": "Rnu awennit",
 	"REMOVE_COMMENT": "Kkes awennit",
+	"DUPLICATE_COMMENT": "Sleg awennit",
 	"EXTERNAL_INPUTS": "Inekcam izɣarayen",
 	"INLINE_INPUTS": "Inekcam srid",
 	"DELETE_BLOCK": "Kkes iḥder",
@@ -30,9 +31,13 @@
 	"RENAME_VARIABLE": "Beddel isem n umutti...",
 	"RENAME_VARIABLE_TITLE": "Beddel akk isem n yimuttiyen '%1' ar:",
 	"NEW_VARIABLE": "Rnu amutti...",
+	"NEW_STRING_VARIABLE": "Rnu amutti azrir n yisekkilen...",
+	"NEW_NUMBER_VARIABLE": "Rnu amutti amḍan...",
+	"NEW_COLOUR_VARIABLE": "Rnu amutti ini...",
+	"NEW_VARIABLE_TYPE_TITLE": "Anaw amaynut n umutti:",
 	"NEW_VARIABLE_TITLE": "Isem amaynut n wazal:",
 	"VARIABLE_ALREADY_EXISTS": "Amutti s yisem '%1' yella yakan.",
-	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Amutti s yisem '%1' yella yakan i umutti-nniḍen s wanaw '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Amutti s yisem '%1' yella yakan i wanaw-nniḍen: '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Kkes %1 n useqdec n umutti '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Ur izmir ara ad yekkes amutti '%1' acku yedda di tbadut n twuri '%2'",
 	"DELETE_VARIABLE": "Kkes amutti '%1'",
@@ -331,5 +336,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Sebruṛeq tabadut n twuri",
 	"PROCEDURES_CREATE_DO": "rnu '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "ma yella azal d idetti, ad d-yerr azal-nniḍen wis sin.",
-	"PROCEDURES_IFRETURN_WARNING": "Ɣur-k: Iḥder-agi yezmer ur yettwaseqdac ara ala di tebadut n twuri-agi."
+	"PROCEDURES_IFRETURN_WARNING": "Ɣur-k: Iḥder-agi yezmer ur yettwaseqdac ara ala di tebadut n twuri-agi.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Ini kra..."
 }

@@ -16,7 +16,8 @@
 			"Alpkant",
 			"Bulgu",
 			"By erdo can",
-			"Azerhan Özen"
+			"Azerhan Özen",
+			"Hedda"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "öge",
@@ -24,6 +25,7 @@
 	"DUPLICATE_BLOCK": "Çoğalt",
 	"ADD_COMMENT": "Yorum Ekle",
 	"REMOVE_COMMENT": "Yorumu Sil",
+	"DUPLICATE_COMMENT": "Yinelenen Yorum",
 	"EXTERNAL_INPUTS": "Harici Girişler",
 	"INLINE_INPUTS": "Satır içi girdiler",
 	"DELETE_BLOCK": "Bloğu Sil",
@@ -43,6 +45,10 @@
 	"RENAME_VARIABLE": "Değişkeni yeniden adlandır...",
 	"RENAME_VARIABLE_TITLE": "Tüm '%1' değişkenlerini yeniden isimlendir:",
 	"NEW_VARIABLE": "Değişken oluştur...",
+	"NEW_STRING_VARIABLE": "Dizi değişkeni oluştur...",
+	"NEW_NUMBER_VARIABLE": "Sayı değişkeni oluştur...",
+	"NEW_COLOUR_VARIABLE": "Renk değişkeni oluştur...",
+	"NEW_VARIABLE_TYPE_TITLE": "Yeni değişken tipi:",
 	"NEW_VARIABLE_TITLE": "Yeni değişken ismi :",
 	"VARIABLE_ALREADY_EXISTS": "'%1' isimli değişken adı zaten var.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "'%1' isimli değişken '%2' tipli başka bir değişkende tanımlı.",
@@ -372,5 +378,6 @@
 	"PROCEDURES_CREATE_DO": "'%1' oluştur",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Eğer değer doğruysa, ikinci değere geri dön.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Uyarı: Bu blok yalnızca bir fonksiyon tanımı içinde kullanılır."
+	"PROCEDURES_IFRETURN_WARNING": "Uyarı: Bu blok yalnızca bir fonksiyon tanımı içinde kullanılır.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Bir şeyler söyle..."
 }

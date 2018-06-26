@@ -19,6 +19,7 @@
 	"DUPLICATE_BLOCK": "複製",
 	"ADD_COMMENT": "加入註解",
 	"REMOVE_COMMENT": "移除註解",
+	"DUPLICATE_COMMENT": "重複註解",
 	"EXTERNAL_INPUTS": "外部輸入",
 	"INLINE_INPUTS": "單行輸入",
 	"DELETE_BLOCK": "刪除區塊",
@@ -339,7 +340,7 @@
 	"PROCEDURES_DEFRETURN_TOOLTIP": "創建一個有回傳值的的函式。",
 	"PROCEDURES_ALLOW_STATEMENTS": "允許陳述式",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "警告: 此函式中有重複的參數。",
-	"PROCEDURES_CALLNORETURN_HELPURL": "https://zh.wikipedia.org/wiki/%E5%AD%90%E7%A8%8B%E5%BA%8F",
+	"PROCEDURES_CALLNORETURN_HELPURL": "https://zh.wikipedia.org/wiki/子程式",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "執行使用者定義的函式「%1」。",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://zh.wikipedia.org/wiki/%E5%AD%90%E7%A8%8B%E5%BA%8F",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "執行使用者定義的函式「%1」，並使用它的回傳值。",
@@ -350,5 +351,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "反白顯示函式定義",
 	"PROCEDURES_CREATE_DO": "建立「%1」",
 	"PROCEDURES_IFRETURN_TOOLTIP": "如果值為 true，則返回第二個值。",
-	"PROCEDURES_IFRETURN_WARNING": "警告：這個區塊只可以在定義函式時使用。"
+	"PROCEDURES_IFRETURN_WARNING": "警告：這個區塊只可以在定義函式時使用。",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "來說些事情..."
 }

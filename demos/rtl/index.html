@@ -42,7 +42,7 @@
   <div id="blocklyDiv"></div>
 
   <xml id="toolbox" style="display: none">
-    <category name="منطق">
+    <category name="منطق" colour="%{BKY_LOGIC_HUE}">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
@@ -51,7 +51,7 @@
       <block type="logic_null"></block>
       <block type="logic_ternary"></block>
     </category>
-    <category name="الحلقات">
+    <category name="الحلقات" colour="%{BKY_LOOPS_HUE}">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <block type="math_number">
@@ -80,7 +80,7 @@
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
     </category>
-    <category name="رياضيات">
+    <category name="رياضيات" colour="%{BKY_MATH_HUE}">
       <block type="math_number">
         <field name="NUM">123</field>
       </block>
@@ -118,7 +118,7 @@
       </block>
       <block type="math_random_float"></block>
     </category>
-    <category name="نص">
+    <category name="نص" colour="%{BKY_TEXTS_HUE}">
       <block type="text"></block>
       <block type="text_join"></block>
       <block type="text_append">
@@ -139,7 +139,7 @@
         </value>
       </block>
     </category>
-    <category name="قوائم">
+    <category name="قوائم" colour="%{BKY_LISTS_HUE}">
       <block type="lists_create_empty"></block>
       <block type="lists_create_with"></block>
       <block type="lists_repeat">
@@ -155,13 +155,16 @@
       <block type="lists_getIndex"></block>
       <block type="lists_setIndex"></block>
     </category>
-    <category name="لون">
+    <category name="لون" colour="%{BKY_COLOUR_HUE}">
       <block type="colour_picker"></block>
       <block type="colour_rgb"></block>
       <block type="colour_blend"></block>
     </category>
-    <category name="متغيرات" custom="VARIABLE"></category>
-    <category name="إجراءات" custom="PROCEDURE"></category>
+    <sep></sep>
+    <category name="متغيرات" custom="VARIABLE" colour="%{BKY_VARIABLES_HUE}">
+    </category>
+    <category name="إجراءات" custom="PROCEDURE" colour="%{BKY_PROCEDURES_HUE}">
+    </category>
   </xml>
 
   <xml id="startBlocks" style="display: none">

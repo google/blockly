@@ -129,7 +129,7 @@ Blockly.Variables.allDeveloperVariables = function(workspace) {
 Blockly.Variables.flyoutCategory = function(workspace) {
   var xmlList = [];
   var button = goog.dom.createDom('button');
-  button.setAttribute('text', Blockly.Msg.NEW_VARIABLE);
+  button.setAttribute('text', '%{BKY_NEW_VARIABLE}');
   button.setAttribute('callbackKey', 'CREATE_VARIABLE');
 
   workspace.registerButtonCallback('CREATE_VARIABLE', function(button) {
@@ -267,7 +267,7 @@ Blockly.Variables.createVariableButtonHandler = function(
   var type = opt_type || '';
   // This function needs to be named so it can be called recursively.
   var promptAndCheckWithAlert = function(defaultName) {
-    Blockly.Variables.promptName(Blockly.Msg.NEW_VARIABLE_TITLE, defaultName,
+    Blockly.Variables.promptName(Blockly.Msg['NEW_VARIABLE_TITLE'], defaultName,
         function(text) {
           if (text) {
             var existing =
@@ -275,10 +275,10 @@ Blockly.Variables.createVariableButtonHandler = function(
             if (existing) {
               var lowerCase = text.toLowerCase();
               if (existing.type == type) {
-                var msg = Blockly.Msg.VARIABLE_ALREADY_EXISTS.replace(
+                var msg = Blockly.Msg['VARIABLE_ALREADY_EXISTS'].replace(
                     '%1', lowerCase);
               } else {
-                var msg = Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE;
+                var msg = Blockly.Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
                 msg = msg.replace('%1', lowerCase).replace('%2', existing.type);
               }
               Blockly.alert(msg,
@@ -336,14 +336,14 @@ Blockly.Variables.renameVariable = function(workspace, variable,
   // This function needs to be named so it can be called recursively.
   var promptAndCheckWithAlert = function(defaultName) {
     var promptText =
-        Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', variable.name);
+        Blockly.Msg['RENAME_VARIABLE_TITLE'].replace('%1', variable.name);
     Blockly.Variables.promptName(promptText, defaultName,
         function(newName) {
           if (newName) {
             var existing = Blockly.Variables.nameUsedWithOtherType_(newName,
                 variable.type, workspace);
             if (existing) {
-              var msg = Blockly.Msg.VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE
+              var msg = Blockly.Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
                   .replace('%1', newName.toLowerCase())
                   .replace('%2', existing.type);
               Blockly.alert(msg,
@@ -380,8 +380,8 @@ Blockly.Variables.promptName = function(promptText, defaultText, callback) {
     // Beyond this, all names are legal.
     if (newVar) {
       newVar = newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
-      if (newVar == Blockly.Msg.RENAME_VARIABLE ||
-          newVar == Blockly.Msg.NEW_VARIABLE) {
+      if (newVar == Blockly.Msg['RENAME_VARIABLE'] ||
+          newVar == Blockly.Msg['NEW_VARIABLE']) {
         // Ok, not ALL names are legal...
         newVar = null;
       }

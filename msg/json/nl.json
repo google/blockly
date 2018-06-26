@@ -11,7 +11,8 @@
 			"Lemondoge",
 			"Jeleniccz",
 			"Festina90",
-			"Optilete"
+			"Optilete",
+			"Patio"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -19,6 +20,7 @@
 	"DUPLICATE_BLOCK": "Duplicaat",
 	"ADD_COMMENT": "Reactie toevoegen",
 	"REMOVE_COMMENT": "Opmerking verwijderen",
+	"DUPLICATE_COMMENT": "Duplicaat Commentaar",
 	"EXTERNAL_INPUTS": "Externe invoer",
 	"INLINE_INPUTS": "Inline invoer",
 	"DELETE_BLOCK": "Blok verwijderen",
@@ -38,9 +40,13 @@
 	"RENAME_VARIABLE": "Variabele hernoemen...",
 	"RENAME_VARIABLE_TITLE": "Alle variabelen \"%1\" hernoemen naar:",
 	"NEW_VARIABLE": "Variabele maken...",
+	"NEW_STRING_VARIABLE": "Creëer tekstvariabele",
+	"NEW_NUMBER_VARIABLE": "Creëer numeriek variabele",
+	"NEW_COLOUR_VARIABLE": "Creëer kleurvariabele",
+	"NEW_VARIABLE_TYPE_TITLE": "Nieuw soort variabele",
 	"NEW_VARIABLE_TITLE": "Nieuwe variabelenaam:",
 	"VARIABLE_ALREADY_EXISTS": "Er bestaat al een variabele met de naam \"%1\".",
-	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Een variabele met de naam '%1' bestaat al voor een andere variabele van type '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Een variabele met de naam '%1' bestaat al voor een ander soort variabele: '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "%1 gebruiken van de variabele \"%2\" verwijderen?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "De variabele \"%1\" kan niet verwijderd worden omdat die onderdeel uitmaakt van de definitie van de functie \"%2\"",
 	"DELETE_VARIABLE": "Verwijder de variabele \"%1\"",
@@ -384,5 +390,6 @@
 	"PROCEDURES_CREATE_DO": "Maak \"%1\"",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Als de eerste waarde \"waar\" is, geef dan de tweede waarde terug.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Waarschuwing: dit blok mag alleen gebruikt worden binnen de definitie van een functie."
+	"PROCEDURES_IFRETURN_WARNING": "Waarschuwing: dit blok mag alleen gebruikt worden binnen de definitie van een functie.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Zeg iets..."
 }

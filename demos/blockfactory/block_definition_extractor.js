@@ -23,21 +23,15 @@
 'use strict';
 
 /**
- * Namespace for BlockDefinitionExtractor.
- */
-goog.provide('BlockDefinitionExtractor');
-
-
-/**
- * Class to contain all functions needed to extract block definition from
+ * Namespace to contain all functions needed to extract block definition from
  * the block preview data structure.
  * @namespace
  */
-BlockDefinitionExtractor = BlockDefinitionExtractor || Object.create(null);
+var BlockDefinitionExtractor = BlockDefinitionExtractor || Object.create(null);
 
 /**
  * Builds a BlockFactory workspace that reflects the block structure of the
- * exmaple block.
+ * example block.
  *
  * @param {!Blockly.Block} block The reference block from which the definition
  *     will be extracted.
@@ -45,7 +39,7 @@ BlockDefinitionExtractor = BlockDefinitionExtractor || Object.create(null);
  *     workspace.
  */
 BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
-  var workspaceXml = goog.dom.createDom('xml');
+  var workspaceXml = document.createElement('xml');
   workspaceXml.append(
       BlockDefinitionExtractor.factoryBase_(block, block.type));
 
@@ -64,7 +58,7 @@ BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
  */
 BlockDefinitionExtractor.newDomElement_ = function(name, opt_attrs, opt_text) {
   // Avoid createDom(..)'s attributes argument for being too HTML specific.
-  var elem = goog.dom.createDom(name);
+  var elem = document.createElement(name);
   if (opt_attrs) {
     for (var key in opt_attrs) {
       elem.setAttribute(key, opt_attrs[key]);
@@ -164,16 +158,17 @@ BlockDefinitionExtractor.factoryBase_ = function(block, name) {
   factoryBaseEl.append(helpUrlValue);
 
   // Convert colour_ to hue value 0-360 degrees
-  // TODO(#1247): Solve off-by-one errors.
-  // TODO: Deal with colors that don't map to standard hues. (Needs improved
-  //     block definitions.)
-  var colour_hue = Math.floor(
-      goog.color.hexToHsv(block.colour_)[0]);  // Off by one... sometimes
-  var colourBlock = BlockDefinitionExtractor.colourBlockFromHue_(colour_hue);
-  var colourInputValue =
-      BlockDefinitionExtractor.newDomElement_('value', {name: 'COLOUR'});
-  colourInputValue.append(colourBlock);
-  factoryBaseEl.append(colourInputValue);
+  var colour_hue = block.getHue();  // May be null if not set via hue.
+  if (colour_hue) {
+    var colourBlock = BlockDefinitionExtractor.colourBlockFromHue_(colour_hue);
+    var colourInputValue =
+        BlockDefinitionExtractor.newDomElement_('value', {name: 'COLOUR'});
+    colourInputValue.append(colourBlock);
+    factoryBaseEl.append(colourInputValue);
+  } else {
+    // Editor will not have a colour block and preview will render black.
+    // TODO: Support RGB colours in the block editor.
+  }
   return factoryBaseEl;
 };
 
@@ -480,7 +475,7 @@ BlockDefinitionExtractor.buildFieldDropdown_ = function(dropdown) {
   var menuGenerator = dropdown.menuGenerator_;
   if (typeof menuGenerator === 'function') {
     var options = menuGenerator();
-  } else if (goog.isArray(menuGenerator)) {
+  } else if (Array.isArray(menuGenerator)) {
     var options = menuGenerator;
   } else {
     throw new Error('Unrecognized type of menuGenerator: ' + menuGenerator);

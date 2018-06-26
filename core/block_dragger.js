@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.BlockDragger');
 
+goog.require('Blockly.BlockAnimations');
 goog.require('Blockly.DraggedConnectionManager');
 goog.require('Blockly.Events.BlockMove');
 
@@ -124,7 +125,7 @@ Blockly.BlockDragger.prototype.dispose = function() {
 Blockly.BlockDragger.initIconData_ = function(block) {
   // Build a list of icons that need to be moved and where they started.
   var dragIconData = [];
-  var descendants = block.getDescendants();
+  var descendants = block.getDescendants(false);
   for (var i = 0, descendant; descendant = descendants[i]; i++) {
     var icons = descendant.getIcons();
     for (var j = 0; j < icons.length; j++) {
@@ -153,7 +154,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY, hea
   }
 
   this.workspace_.setResizesEnabled(false);
-  Blockly.BlockSvg.disconnectUiStop_();
+  Blockly.BlockAnimations.disconnectUiStop();
 
   if (this.draggingBlock_.getParent() ||
       (healStack && this.draggingBlock_.nextConnection &&
@@ -163,7 +164,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY, hea
     var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
 
     this.draggingBlock_.translate(newLoc.x, newLoc.y);
-    this.draggingBlock_.disconnectUiEffect();
+    Blockly.BlockAnimations.disconnectUiEffect(this.draggingBlock_);
   }
   this.draggingBlock_.setDragging(true);
   // For future consideration: we may be able to put moveToDragSurface inside
@@ -212,7 +213,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   this.dragBlock(e, currentDragDeltaXY);
   this.dragIconData_ = [];
 
-  Blockly.BlockSvg.disconnectUiStop_();
+  Blockly.BlockAnimations.disconnectUiStop();
 
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
@@ -223,9 +224,13 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
     // These are expensive and don't need to be done if we're deleting.
     this.draggingBlock_.moveConnections_(delta.x, delta.y);
     this.draggingBlock_.setDragging(false);
-    this.draggedConnectionManager_.applyConnections();
-    this.draggingBlock_.render();
     this.fireMoveEvent_();
+    if (this.draggedConnectionManager_.wouldConnectBlock()) {
+      // Applying connections also rerenders the relevant blocks.
+      this.draggedConnectionManager_.applyConnections();
+    } else {
+      this.draggingBlock_.render();
+    }
     this.draggingBlock_.scheduleSnapAndBump();
   }
   this.workspace_.setResizesEnabled(true);
@@ -261,7 +266,7 @@ Blockly.BlockDragger.prototype.maybeDeleteBlock_ = function() {
 
   if (this.wouldDeleteBlock_) {
     if (trashcan) {
-      goog.Timer.callOnce(trashcan.close, 100, trashcan);
+      setTimeout(trashcan.close.bind(trashcan), 100);
     }
     // Fire a move event, so we know where to go back to for an undo.
     this.fireMoveEvent_();

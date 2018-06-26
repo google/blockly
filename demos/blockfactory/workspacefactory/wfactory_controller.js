@@ -34,11 +34,6 @@
  * @author Emma Dauterman (evd2014)
  */
 
-goog.require('BlocklyDevTools.Analytics');
-goog.require('FactoryUtils');
-goog.require('StandardCategories');
-
-
 /**
  * Class for a WorkspaceFactoryController
  * @param {string} toolboxName Name of workspace toolbox XML.

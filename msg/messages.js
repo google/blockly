@@ -81,6 +81,8 @@ Blockly.Msg.DUPLICATE_BLOCK = 'Duplicate';
 Blockly.Msg.ADD_COMMENT = 'Add Comment';
 /// context menu - Remove the descriptive comment from the selected block.
 Blockly.Msg.REMOVE_COMMENT = 'Remove Comment';
+/// context menu - Make a copy of the selected workspace comment.\n{{Identical|Duplicate}}
+Blockly.Msg.DUPLICATE_COMMENT = 'Duplicate Comment';
 /// context menu - Change from 'external' to 'inline' mode for displaying blocks used as inputs to the selected block.  See [[Translating:Blockly#context_menus]].
 Blockly.Msg.EXTERNAL_INPUTS = 'External Inputs';
 /// context menu - Change from 'internal' to 'external' mode for displaying blocks used as inputs to the selected block.  See [[Translating:Blockly#context_menus]].
@@ -1193,3 +1195,7 @@ Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = 'If a value is true, then return a sec
 Blockly.Msg.PROCEDURES_IFRETURN_HELPURL = 'http://c2.com/cgi/wiki?GuardClause';
 /// warning - This appears if the user tries to use this block outside of a function definition.
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = 'Warning: This block may be used only within a function definition.';
+
+/// comment text - This text appears in a new workspace comment, to hint that
+/// the user can type here.
+Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = 'Say something...';

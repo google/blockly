@@ -28,7 +28,7 @@
   <div id="blocklyDiv" style="height: 600px; width: 800px;"></div>
 
   <xml id="toolbox" style="display: none">
-    <category name="Logic">
+    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
       <category name="If">
         <block type="controls_if"></block>
         <block type="controls_if">
@@ -38,7 +38,7 @@
           <mutation elseif="1" else="1"></mutation>
         </block>
       </category>
-      <category name="Boolean">
+      <category name="Boolean" colour="%{BKY_LOGIC_HUE}">
         <block type="logic_compare"></block>
         <block type="logic_operation"></block>
         <block type="logic_negate"></block>
@@ -47,7 +47,7 @@
         <block type="logic_ternary"></block>
       </category>
     </category>
-    <category name="Loops">
+    <category name="Loops" colour="%{BKY_LOOPS_HUE}">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <block type="math_number">
@@ -77,7 +77,7 @@
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
     </category>
-    <category name="Math">
+    <category name="Math" colour="%{BKY_MATH_HUE}">
       <block type="math_number">
         <field name="NUM">123</field>
       </block>
@@ -115,7 +115,7 @@
       </block>
       <block type="math_random_float"></block>
     </category>
-    <category name="Lists">
+    <category name="Lists" colour="%{BKY_LISTS_HUE}">
       <block type="lists_create_empty"></block>
       <block type="lists_create_with"></block>
       <block type="lists_repeat">
@@ -131,8 +131,11 @@
       <block type="lists_getIndex"></block>
       <block type="lists_setIndex"></block>
     </category>
-    <category name="Variables" custom="VARIABLE"></category>
-    <category name="Functions" custom="PROCEDURE"></category>
+    <sep></sep>
+    <category name="Variables" custom="VARIABLE" colour="%{BKY_VARIABLES_HUE}">
+    </category>
+    <category name="Functions" custom="PROCEDURE" colour="%{BKY_PROCEDURES_HUE}">
+    </category>
     <sep></sep>
     <category name="Library" expanded="true">
       <category name="Randomize">

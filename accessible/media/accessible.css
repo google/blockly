@@ -26,7 +26,7 @@
 }
 .blocklySidebarButton[disabled] {
   border: 1px solid #ccc;
-  opacity: 0.5;
+  opacity: .5;
 }
 
 .blocklyAriaLiveStatus {

@@ -182,7 +182,7 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
   },
   // Sets the value on a dropdown input.
   setDropdownValue: function(optionValue) {
-    this.optionValue = optionValue
+    this.optionValue = optionValue;
     if (this.optionValue == 'NO_ACTION') {
       return;
     }

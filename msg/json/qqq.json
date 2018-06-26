@@ -13,6 +13,7 @@
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}",
 	"ADD_COMMENT": "context menu - Add a descriptive comment to the selected block.",
 	"REMOVE_COMMENT": "context menu - Remove the descriptive comment from the selected block.",
+	"DUPLICATE_COMMENT": "context menu - Make a copy of the selected workspace comment.\n{{Identical|Duplicate}}",
 	"EXTERNAL_INPUTS": "context menu - Change from 'external' to 'inline' mode for displaying blocks used as inputs to the selected block.  See [[Translating:Blockly#context_menus]].",
 	"INLINE_INPUTS": "context menu - Change from 'internal' to 'external' mode for displaying blocks used as inputs to the selected block.  See [[Translating:Blockly#context_menus]].",
 	"DELETE_BLOCK": "context menu - Permanently delete the selected block.",
@@ -292,7 +293,7 @@
 	"LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs].",
 	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs].",
 	"LISTS_REPEAT_HELPURL": "{{Optional}} url - Information about [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].",
-	"LISTS_REPEAT_TOOLTIP": "{{Optional}} url - See [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].",
+	"LISTS_REPEAT_TOOLTIP": " url - See [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].",
 	"LISTS_REPEAT_TITLE": "block text - See [https://github.com/google/blockly/wiki/Lists#create-list-with https://github.com/google/blockly/wiki/Lists#create-list-with]. \n\nParameters:\n* %1 - the item (text) to be repeated\n* %2 - the number of times to repeat it",
 	"LISTS_LENGTH_HELPURL": "{{Optional}} url - Information about how the length of a list is computed (i.e., by the total number of elements, not the number of different elements).",
 	"LISTS_LENGTH_TITLE": "block text - See [https://github.com/google/blockly/wiki/Lists#length-of https://github.com/google/blockly/wiki/Lists#length-of]. \n\nParameters:\n* %1 - the list whose length is desired",
@@ -399,5 +400,6 @@
 	"PROCEDURES_CREATE_DO": "context menu - This appears on the context menu for function definitions. Selecting it creates a block to call the function.\n\nParameters:\n* %1 - the name of the function.\n{{Identical|Create}}",
 	"PROCEDURES_IFRETURN_TOOLTIP": "tooltip - If the first value is true, this causes the second value to be returned immediately from the enclosing function.",
 	"PROCEDURES_IFRETURN_HELPURL": "{{Optional}} url - Information about guard clauses.",
-	"PROCEDURES_IFRETURN_WARNING": "warning - This appears if the user tries to use this block outside of a function definition."
+	"PROCEDURES_IFRETURN_WARNING": "warning - This appears if the user tries to use this block outside of a function definition.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "comment text - This text appears in a new workspace comment, to hint that the user can type here."
 }

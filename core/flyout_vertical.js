@@ -212,8 +212,9 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
   var delta = e.deltaY;
 
   if (delta) {
-    if (goog.userAgent.GECKO) {
-      // Firefox's deltas are a tenth that of Chrome/Safari.
+    // Firefox's mouse wheel deltas are a tenth that of Chrome/Safari.
+    // DeltaMode is 1 for a mouse wheel, but not for a trackpad scroll event
+    if (goog.userAgent.GECKO && (e.deltaMode === 1)) {
       delta *= 10;
     }
     var metrics = this.getMetrics_();
@@ -247,7 +248,7 @@ Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
   for (var i = 0, item; item = contents[i]; i++) {
     if (item.type == 'block') {
       var block = item.block;
-      var allBlocks = block.getDescendants();
+      var allBlocks = block.getDescendants(false);
       for (var j = 0, child; child = allBlocks[j]; j++) {
         // Mark blocks as being inside a flyout.  This is used to detect and
         // prevent the closure of the flyout if the user right-clicks on such a

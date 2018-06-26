@@ -32,7 +32,6 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
 goog.require('Blockly.WorkspaceSvg');
-goog.require('goog.Timer');
 goog.require('goog.dom');
 
 
@@ -258,7 +257,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     }
 
     this.rootBlock_ = this.block_.decompose(this.workspace_);
-    var blocks = this.rootBlock_.getDescendants();
+    var blocks = this.rootBlock_.getDescendants(false);
     for (var i = 0, child; child = blocks[i]; i++) {
       child.render();
     }

@@ -71,7 +71,7 @@ blocklyApp.VariableAddModalComponent = ng.core.Component({
       this.workspace = blocklyApp.workspace;
       this.variableModalService = variableService;
       this.audioService = audioService;
-      this.keyboardInputService = keyboardService
+      this.keyboardInputService = keyboardService;
       this.modalIsVisible = false;
       this.activeButtonIndex = -1;
 
@@ -103,7 +103,7 @@ blocklyApp.VariableAddModalComponent = ng.core.Component({
   getInteractiveElements: Blockly.CommonModal.getInteractiveElements,
   // Gets the container with interactive elements.
   getInteractiveContainer: function() {
-    return document.getElementById("varForm");
+    return document.getElementById('varForm');
   },
   // Submits the name change for the variable.
   submit: function() {

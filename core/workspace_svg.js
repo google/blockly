@@ -41,6 +41,9 @@ goog.require('Blockly.Trashcan');
 goog.require('Blockly.VariablesDynamic');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceAudio');
+goog.require('Blockly.WorkspaceComment');
+goog.require('Blockly.WorkspaceCommentSvg');
+goog.require('Blockly.WorkspaceCommentSvg.render');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
@@ -244,6 +247,14 @@ Blockly.WorkspaceSvg.prototype.useWorkspaceDragSurface_ = false;
 Blockly.WorkspaceSvg.prototype.isDragSurfaceActive_ = false;
 
 /**
+ * The first parent div with 'injectionDiv' in the name, or null if not set.
+ * Access this with getInjectionDiv.
+ * @type {!Element}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.injectionDiv_ = null;
+
+/**
  * Last known position of the page scroll.
  * This is used to determine whether we have recalculated screen coordinate
  * stuff since the page scrolled.
@@ -291,21 +302,36 @@ Blockly.WorkspaceSvg.prototype.targetWorkspace = null;
 Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
 
 /**
+ * Inverted screen CTM is dirty, recalculate it.
+ * @type {Boolean}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
+
+/**
  * Getter for the inverted screen CTM.
  * @return {SVGMatrix} The matrix to use in mouseToSvg
  */
 Blockly.WorkspaceSvg.prototype.getInverseScreenCTM = function() {
+
+  // Defer getting the screen CTM until we actually need it, this should
+  // avoid forced reflows from any calls to updateInverseScreenCTM.
+  if (this.inverseScreenCTMDirty_) {
+    var ctm = this.getParentSvg().getScreenCTM();
+    if (ctm) {
+      this.inverseScreenCTM_ = ctm.inverse();
+      this.inverseScreenCTMDirty_ = false;
+    }
+  }
+
   return this.inverseScreenCTM_;
 };
 
 /**
- * Update the inverted screen CTM.
+ * Mark the inverse screen CTM as dirty.
  */
 Blockly.WorkspaceSvg.prototype.updateInverseScreenCTM = function() {
-  var ctm = this.getParentSvg().getScreenCTM();
-  if (ctm) {
-    this.inverseScreenCTM_ = ctm.inverse();
-  }
+  this.inverseScreenCTMDirty_ = true;
 };
 
 /**
@@ -350,6 +376,29 @@ Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
  */
 Blockly.WorkspaceSvg.prototype.getOriginOffsetInPixels = function() {
   return Blockly.utils.getInjectionDivXY_(this.svgBlockCanvas_);
+};
+
+/**
+ * Return the injection div that is a parent of this workspace.
+ * Walks the DOM the first time it's called, then returns a cached value.
+ * @return {!Element} The first parent div with 'injectionDiv' in the name.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getInjectionDiv = function() {
+  // NB: it would be better to pass this in at createDom, but is more likely to
+  // break existing uses of Blockly.
+  if (!this.injectionDiv_) {
+    var element = this.svgGroup_;
+    while (element) {
+      var classes = element.getAttribute('class') || '';
+      if ((' ' + classes + ' ').indexOf(' injectionDiv ') != -1) {
+        this.injectionDiv_ = element;
+        break;
+      }
+      element = element.parentNode;
+    }
+  }
+  return this.injectionDiv_;
 };
 
 /**
@@ -897,6 +946,18 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
   if (this.currentGesture_) {
     this.currentGesture_.cancel();  // Dragging while pasting?  No.
   }
+  if (xmlBlock.tagName.toLowerCase() == 'comment') {
+    this.pasteWorkspaceComment_(xmlBlock);
+  } else {
+    this.pasteBlock_(xmlBlock);
+  }
+};
+
+/**
+ * Paste the provided block onto the workspace.
+ * @param {!Element} xmlBlock XML block element.
+ */
+Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
   Blockly.Events.disable();
   try {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
@@ -950,6 +1011,37 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
     Blockly.Events.fire(new Blockly.Events.BlockCreate(block));
   }
   block.select();
+};
+
+/**
+ * Paste the provided comment onto the workspace.
+ * @param {!Element} xmlComment XML workspace comment element.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.pasteWorkspaceComment_ = function(xmlComment) {
+  Blockly.Events.disable();
+  try {
+    var comment = Blockly.WorkspaceCommentSvg.fromXml(xmlComment, this);
+    // Move the duplicate to original position.
+    var commentX = parseInt(xmlComment.getAttribute('x'), 10);
+    var commentY = parseInt(xmlComment.getAttribute('y'), 10);
+    if (!isNaN(commentX) && !isNaN(commentY)) {
+      if (this.RTL) {
+        commentX = -commentX;
+      }
+      // Offset workspace comment.
+      // TODO: #1719 properly offset comment such that it's not interfereing with any blocks
+      commentX += 50;
+      commentY += 50;
+      comment.moveBy(commentX, commentY);
+    }
+  } finally {
+    Blockly.Events.enable();
+  }
+  if (Blockly.Events.isEnabled()) {
+    // TODO: Fire a Workspace Comment Create event
+  }
+  comment.select();
 };
 
 /**
@@ -1126,17 +1218,19 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
  */
 Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
   var topBlocks = this.getTopBlocks(false);
+  var topComments = this.getTopComments(false);
+  var topElements = topBlocks.concat(topComments);
   // There are no blocks, return empty rectangle.
-  if (!topBlocks.length) {
+  if (!topElements.length) {
     return {x: 0, y: 0, width: 0, height: 0};
   }
 
   // Initialize boundary using the first block.
-  var boundary = topBlocks[0].getBoundingRectangle();
+  var boundary = topElements[0].getBoundingRectangle();
 
   // Start at 1 since the 0th block was used for initialization
-  for (var i = 1; i < topBlocks.length; i++) {
-    var blockBoundary = topBlocks[i].getBoundingRectangle();
+  for (var i = 1; i < topElements.length; i++) {
+    var blockBoundary = topElements[i].getBoundingRectangle();
     if (blockBoundary.topLeft.x < boundary.topLeft.x) {
       boundary.topLeft.x = blockBoundary.topLeft.x;
     }
@@ -1193,12 +1287,12 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
 
   // Options to undo/redo previous action.
   var undoOption = {};
-  undoOption.text = Blockly.Msg.UNDO;
+  undoOption.text = Blockly.Msg['UNDO'];
   undoOption.enabled = this.undoStack_.length > 0;
   undoOption.callback = this.undo.bind(this, false);
   menuOptions.push(undoOption);
   var redoOption = {};
-  redoOption.text = Blockly.Msg.REDO;
+  redoOption.text = Blockly.Msg['REDO'];
   redoOption.enabled = this.redoStack_.length > 0;
   redoOption.callback = this.undo.bind(this, true);
   menuOptions.push(redoOption);
@@ -1206,7 +1300,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   // Option to clean up blocks.
   if (this.scrollbar) {
     var cleanOption = {};
-    cleanOption.text = Blockly.Msg.CLEAN_UP;
+    cleanOption.text = Blockly.Msg['CLEAN_UP'];
     cleanOption.enabled = topBlocks.length > 1;
     cleanOption.callback = this.cleanUp.bind(this);
     menuOptions.push(cleanOption);
@@ -1248,7 +1342,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
 
     // Option to collapse top blocks.
     var collapseOption = {enabled: hasExpandedBlocks};
-    collapseOption.text = Blockly.Msg.COLLAPSE_ALL;
+    collapseOption.text = Blockly.Msg['COLLAPSE_ALL'];
     collapseOption.callback = function() {
       toggleOption(true);
     };
@@ -1256,7 +1350,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
 
     // Option to expand top blocks.
     var expandOption = {enabled: hasCollapsedBlocks};
-    expandOption.text = Blockly.Msg.EXPAND_ALL;
+    expandOption.text = Blockly.Msg['EXPAND_ALL'];
     expandOption.callback = function() {
       toggleOption(false);
     };
@@ -1268,9 +1362,9 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   var deleteList = [];
   function addDeletableBlocks(block) {
     if (block.isDeletable()) {
-      deleteList = deleteList.concat(block.getDescendants());
+      deleteList = deleteList.concat(block.getDescendants(false));
     } else {
-      var children = block.getChildren();
+      var children = block.getChildren(false);
       for (var i = 0; i < children.length; i++) {
         addDeletableBlocks(children[i]);
       }
@@ -1295,8 +1389,8 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   }
 
   var deleteOption = {
-    text: deleteList.length == 1 ? Blockly.Msg.DELETE_BLOCK :
-        Blockly.Msg.DELETE_X_BLOCKS.replace('%1', String(deleteList.length)),
+    text: deleteList.length == 1 ? Blockly.Msg['DELETE_BLOCK'] :
+        Blockly.Msg['DELETE_X_BLOCKS'].replace('%1', String(deleteList.length)),
     enabled: deleteList.length > 0,
     callback: function() {
       if (ws.currentGesture_) {
@@ -1306,7 +1400,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
         deleteNext();
       } else {
         Blockly.confirm(
-            Blockly.Msg.DELETE_ALL_BLOCKS.replace('%1', deleteList.length),
+            Blockly.Msg['DELETE_ALL_BLOCKS'].replace('%1', deleteList.length),
             function(ok) {
               if (ok) {
                 deleteNext();

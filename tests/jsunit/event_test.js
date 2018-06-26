@@ -29,15 +29,6 @@ goog.require('goog.testing.MockControl');
 
 var mockControl_;
 var workspace;
-var savedFireFunc = Blockly.Events.fire;
-
-function temporary_fireEvent(event) {
-  if (!Blockly.Events.isEnabled()) {
-    return;
-  }
-  Blockly.Events.FIRE_QUEUE_.push(event);
-  Blockly.Events.fireNow_();
-}
 
 function eventTest_setUp() {
   workspace = new Blockly.Workspace();
@@ -308,6 +299,52 @@ function test_blockMove_constructoroldParentId() {
       'oldParentId': '2', 'type': 'move'});
     block1.parentBlock_ = null;
   } finally {
+    eventTest_tearDownWithMockBlocks();
+  }
+}
+
+function test_uiEvent_constructor_null() {
+  try {
+    Blockly.Events.setGroup('testGroup');
+    var event = new Blockly.Events.Ui(null, 'foo', 'bar', 'baz');
+    checkExactEventValues(event,
+        {
+          'blockId': null,
+          'workspaceId': null,
+          'type': 'ui',
+          'oldValue': 'bar',
+          'newValue': 'baz',
+          'element': 'foo',
+          'recordUndo': false,
+          'group': 'testGroup'
+        }
+    );
+  } finally {
+    Blockly.Events.setGroup(false);
+  }
+}
+
+function test_uiEvent_constructor_block() {
+  eventTest_setUpWithMockBlocks();
+  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
+  try {
+    var block1 = createSimpleTestBlock(workspace);
+    Blockly.Events.setGroup('testGroup');
+    var event = new Blockly.Events.Ui(block1, 'foo', 'bar', 'baz');
+    checkExactEventValues(event,
+        {
+          'blockId': '1',
+          'workspaceId': workspace.id,
+          'type': 'ui',
+          'oldValue': 'bar',
+          'newValue': 'baz',
+          'element': 'foo',
+          'recordUndo': false,
+          'group': 'testGroup'
+        }
+    );
+  } finally {
+    Blockly.Events.setGroup(false);
     eventTest_tearDownWithMockBlocks();
   }
 }
@@ -742,5 +779,35 @@ function test_events_newblock_newvar_xml() {
   } finally {
     eventTest_tearDownWithMockBlocks();
     Blockly.Events.fire = savedFireFunc;
+  }
+}
+
+function test_events_filter_nomerge_move() {
+  // Move events should only merge if they refer to the same block and are
+  // consecutive.
+  // See github.com/google/blockly/pull/1892 for a worked example showing
+  // how merging non-consecutive events can fail when replacing a shadow
+  // block.
+  eventTest_setUpWithMockBlocks();
+  try {
+    var block1 = createSimpleTestBlock(workspace);
+    var block2 = createSimpleTestBlock(workspace);
+
+    var events = [];
+    helper_addMoveEvent(events, block1, 1, 1);
+    helper_addMoveEvent(events, block2, 1, 1);
+    events.push(new Blockly.Events.BlockDelete(block2));
+    helper_addMoveEvent(events, block1, 2, 2);
+
+    var filteredEvents = Blockly.Events.filter(events, true);
+    // Nothing should have merged.
+    assertEquals(4, filteredEvents.length);
+    // test that the order hasn't changed
+    assertTrue(filteredEvents[0] instanceof Blockly.Events.BlockMove);
+    assertTrue(filteredEvents[1] instanceof Blockly.Events.BlockMove);
+    assertTrue(filteredEvents[2] instanceof Blockly.Events.BlockDelete);
+    assertTrue(filteredEvents[3] instanceof Blockly.Events.BlockMove);
+  } finally {
+    eventTest_tearDownWithMockBlocks();
   }
 }

@@ -230,7 +230,7 @@ Blockly.VariableMap.prototype.deleteVariableById = function(id) {
       if (block.type == 'procedures_defnoreturn' ||
         block.type == 'procedures_defreturn') {
         var procedureName = block.getFieldValue('NAME');
-        var deleteText = Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE.
+        var deleteText = Blockly.Msg['CANNOT_DELETE_VARIABLE_PROCEDURE'].
             replace('%1', variableName).
             replace('%2', procedureName);
         Blockly.alert(deleteText);
@@ -241,7 +241,7 @@ Blockly.VariableMap.prototype.deleteVariableById = function(id) {
     var map = this;
     if (uses.length > 1) {
       // Confirm before deleting multiple blocks.
-      var confirmText = Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.
+      var confirmText = Blockly.Msg['DELETE_VARIABLE_CONFIRMATION'].
           replace('%1', String(uses.length)).
           replace('%2', variableName);
       Blockly.confirm(confirmText,

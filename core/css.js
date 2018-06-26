@@ -189,7 +189,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyResizeLine {',
-    'stroke: #888;',
+    'stroke: #515A5A;',
     'stroke-width: 1;',
   '}',
 
@@ -383,15 +383,74 @@ Blockly.Css.CONTENT = [
     'padding: 0;',
   '}',
 
+  '.blocklyCommentForeignObject {',
+    'position: relative;',
+    'z-index: 0;',
+  '}',
+
+  '.blocklyCommentRect {',
+    'fill: #E7DE8E;',
+    'stroke: #bcA903;',
+    'stroke-width: 1px',
+  '}',
+
+  '.blocklyCommentTarget {',
+    'fill: transparent;',
+    'stroke: #bcA903;',
+  '}',
+
+  '.blocklyCommentTargetFocused {',
+    'fill: none;',
+  '}',
+
+  '.blocklyCommentHandleTarget {',
+    'fill: none;',
+  '}',
+
+  '.blocklyCommentHandleTargetFocused {',
+    'fill: transparent;',
+  '}',
+
+  '.blocklyFocused>.blocklyCommentRect {',
+    'fill: #B9B272;',
+    'stroke: #B9B272;',
+  '}',
+
+  '.blocklySelected>.blocklyCommentTarget {',
+    'stroke: #fc3;',
+    'stroke-width: 3px;',
+  '}',
+
+
   '.blocklyCommentTextarea {',
-    'background-color: #ffc;',
+    'background-color: #fef49c;',
     'border: 0;',
     'outline: 0;',
     'margin: 0;',
-    'padding: 2px;',
+    'padding: 3px;',
     'resize: none;',
     'display: block;',
     'overflow: hidden;',
+  '}',
+
+  '.blocklyCommentDeleteIcon {',
+    'cursor: pointer;',
+    'fill: #000;',
+    'display: none',
+  '}',
+
+  '.blocklySelected > .blocklyCommentDeleteIcon {',
+    'display: block',
+  '}',
+
+  '.blocklyDeleteIconShape {',
+    'fill: #000;',
+    'stroke: #000;',
+    'stroke-width: 1px;',
+  '}',
+
+  '.blocklyDeleteIconShape.blocklyDeleteIconHighlighted {',
+    'stroke: #fc3;',
   '}',
 
   '.blocklyHtmlInput {',
@@ -508,9 +567,6 @@ Blockly.Css.CONTENT = [
 
   '.blocklyDropdownMenu {',
     'padding: 0 !important;',
-    /* max-height value is same as the constant
-     * Blockly.FieldDropdown.MAX_MENU_HEIGHT defined in field_dropdown.js. */
-    'max-height: 300px !important;',
   '}',
 
   /* Override the default Closure URL. */

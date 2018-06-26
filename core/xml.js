@@ -33,7 +33,6 @@ goog.provide('Blockly.Xml');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
 
-goog.require('goog.asserts');
 goog.require('goog.dom');
 
 
@@ -45,9 +44,11 @@ goog.require('goog.dom');
  */
 Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
   var xml = goog.dom.createDom('xml');
-  var variables = Blockly.Variables.allUsedVarModels(workspace);
-  if (variables.length) {
-    xml.appendChild(Blockly.Xml.variablesToDom(variables));
+  xml.appendChild(Blockly.Xml.variablesToDom(
+      Blockly.Variables.allUsedVarModels(workspace)));
+  var comments = workspace.getTopComments(true);
+  for (var i = 0, comment; comment = comments[i]; i++) {
+    xml.appendChild(comment.toXmlWithXY(opt_noId));
   }
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
@@ -136,7 +137,7 @@ Blockly.Xml.fieldToDomVariable_ = function(field) {
  */
 Blockly.Xml.fieldToDom_ = function(field) {
   if (field.name && field.EDITABLE) {
-    if (field instanceof Blockly.FieldVariable) {
+    if (field.referencesVariables()) {
       return Blockly.Xml.fieldToDomVariable_(field);
     } else {
       var container = goog.dom.createDom('field', null, field.getValue());
@@ -344,22 +345,49 @@ Blockly.Xml.domToPrettyText = function(dom) {
 };
 
 /**
- * Converts plain text into a DOM structure.
- * Throws an error if XML doesn't parse.
- * @param {string} text Text representation.
- * @return {!Element} A tree of XML elements.
+ * Converts an XML string into a DOM tree. This method will be overridden in
+ * the Node.js build of Blockly. See gulpfile.js, blockly_javascript_en task.
+ * @param {string} text XML string.
+ * @return {!Element} The DOM document.
+ * @throws if XML doesn't parse.
+ * @private
+ */
+Blockly.Xml.textToDomDocument_ = function(text) {
+  var oParser = new DOMParser();
+  return oParser.parseFromString(text, 'text/xml');
+};
+
+/**
+ * Converts an XML string into a DOM structure. It requires the XML to have a
+ * root element of <xml>. Other XML string will result in throwing an error.
+ * @param {string} text An XML string.
+ * @return {!Element} A DOM object representing the singular child of the document element.
+ * @throws if XML doesn't parse or is not the expected structure.
  */
 Blockly.Xml.textToDom = function(text) {
-  var oParser = new DOMParser();
-  var dom = oParser.parseFromString(text, 'text/xml');
-  // The DOM should have one and only one top-level node, an XML tag.
-  if (!dom || !dom.firstChild ||
-      dom.firstChild.nodeName.toLowerCase() != 'xml' ||
-      dom.firstChild !== dom.lastChild) {
-    // Whatever we got back from the parser is not XML.
-    goog.asserts.fail('Blockly.Xml.textToDom did not obtain a valid XML tree.');
+  var doc = Blockly.Xml.textToDomDocument_(text);
+  // This function only accepts <xml> documents.
+  if (!doc || !doc.documentElement ||
+      doc.documentElement.nodeName.toLowerCase() != 'xml') {
+    // Whatever we got back from the parser is not the expected structure.
+    throw Error('Blockly.Xml.textToDom expected an <xml> document.');
   }
-  return dom.firstChild;
+  return doc.documentElement;
+};
+
+/**
+ * Clear the given workspace then decode an XML DOM and
+ * create blocks on the workspace.
+ * @param {!Element} xml XML DOM.
+ * @param {!Blockly.Workspace} workspace The workspace.
+ * @return {Array.<string>} An array containing new block ids.
+ */
+Blockly.Xml.clearWorkspaceAndLoadFromXml = function(xml, workspace) {
+  workspace.setResizesEnabled(false);
+  workspace.clear();
+  var blockIds = Blockly.Xml.domToWorkspace(xml, workspace);
+  workspace.setResizesEnabled(true);
+  return blockIds;
 };
 
 /**
@@ -376,6 +404,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     console.warn('Deprecated call to Blockly.Xml.domToWorkspace, ' +
                  'swap the arguments.');
   }
+
   var width;  // Not used in LTR.
   if (workspace.RTL) {
     width = workspace.getWidth();
@@ -416,8 +445,13 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         }
         variablesFirst = false;
       } else if (name == 'shadow') {
-        goog.asserts.fail('Shadow block cannot be a top-level block.');
-        variablesFirst = false;
+        throw Error('Shadow block cannot be a top-level block.');
+      } else if (name == 'comment') {
+        if (workspace.rendered) {
+          Blockly.WorkspaceCommentSvg.fromXml(xmlChild, workspace, width);
+        } else {
+          Blockly.WorkspaceComment.fromXml(xmlChild, workspace);
+        }
       } else if (name == 'variables') {
         if (variablesFirst) {
           Blockly.Xml.domToVariables(xmlChild, workspace);
@@ -517,7 +551,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
   try {
     var topBlock = Blockly.Xml.domToBlockHeadless_(xmlBlock, workspace);
     // Generate list of all blocks.
-    var blocks = topBlock.getDescendants();
+    var blocks = topBlock.getDescendants(false);
     if (workspace.rendered) {
       // Hide connections to speed up assembly.
       topBlock.setConnectionsHidden(true);
@@ -562,6 +596,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
   return topBlock;
 };
 
+
 /**
  * Decode an XML list of variables and add the variables to the workspace.
  * @param {!Element} xmlVariables List of XML variable elements.
@@ -592,8 +627,9 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
 Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   var block = null;
   var prototypeName = xmlBlock.getAttribute('type');
-  goog.asserts.assert(
-      prototypeName, 'Block type unspecified: %s', xmlBlock.outerHTML);
+  if (!prototypeName) {
+    throw Error('Block type unspecified: ' + xmlBlock.outerHTML);
+  }
   var id = xmlBlock.getAttribute('id');
   block = workspace.newBlock(prototypeName, id);
 
@@ -681,7 +717,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
           } else if (blockChild.previousConnection) {
             input.connection.connect(blockChild.previousConnection);
           } else {
-            goog.asserts.fail(
+            throw Error(
                 'Child block does not have output or previous statement.');
           }
         }
@@ -691,15 +727,18 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
           block.nextConnection.setShadowDom(childShadowElement);
         }
         if (childBlockElement) {
-          goog.asserts.assert(block.nextConnection,
-              'Next statement does not exist.');
+          if (!block.nextConnection) {
+            throw Error('Next statement does not exist.');
+          }
           // If there is more than one XML 'next' tag.
-          goog.asserts.assert(!block.nextConnection.isConnected(),
-              'Next statement is already connected.');
+          if (block.nextConnection.isConnected()) {
+            throw Error('Next statement is already connected.');
+          }
           blockChild = Blockly.Xml.domToBlockHeadless_(childBlockElement,
               workspace);
-          goog.asserts.assert(blockChild.previousConnection,
-              'Next block does not have previous statement.');
+          if (!blockChild.previousConnection) {
+            throw Error('Next block does not have previous statement.');
+          }
           block.nextConnection.connect(blockChild.previousConnection);
         }
         break;
@@ -735,14 +774,16 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
   }
   if (xmlBlock.nodeName.toLowerCase() == 'shadow') {
     // Ensure all children are also shadows.
-    var children = block.getChildren();
+    var children = block.getChildren(false);
     for (var i = 0, child; child = children[i]; i++) {
-      goog.asserts.assert(
-          child.isShadow(), 'Shadow block not allowed non-shadow child.');
+      if (child.isShadow()) {
+        throw Error('Shadow block not allowed non-shadow child.');
+      }
     }
     // Ensure this block doesn't have any variable inputs.
-    goog.asserts.assert(block.getVarModels().length == 0,
-        'Shadow blocks cannot have variable references.');
+    if (block.getVarModels().length) {
+      throw Error('Shadow blocks cannot have variable references.');
+    }
     block.setShadow(true);
   }
   return block;
@@ -796,7 +837,7 @@ Blockly.Xml.domToField_ = function(block, fieldName, xml) {
 
   var workspace = block.workspace;
   var text = xml.textContent;
-  if (field instanceof Blockly.FieldVariable) {
+  if (field.referencesVariables()) {
     Blockly.Xml.domToFieldVariable_(workspace, xml, text, field);
   } else {
     field.setValue(text);

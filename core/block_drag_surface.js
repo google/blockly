@@ -135,7 +135,7 @@ Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y, sc
   var fixedX = x.toFixed(0);
   var fixedY = y.toFixed(0);
   this.dragGroup_.setAttribute('transform',
-      'translate('+ fixedX + ','+ fixedY + ') scale(' + scale + ')');
+      'translate(' + fixedX + ',' + fixedY + ') scale(' + scale + ')');
 };
 
 /**

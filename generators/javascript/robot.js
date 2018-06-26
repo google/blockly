@@ -268,6 +268,20 @@ Blockly.JavaScript['robot_start_ask_mc'] = function(block) {
   return code;
 };
 
+Blockly.JavaScript['robot_start_display_message_h2'] = function(block) {
+  var value_text = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+  var code = 'robot.startDisplayMessage(' + value_text + ', \'\');\n';
+  return code;
+};
+
+Blockly.JavaScript['robot_start_display_message_h1h2'] = function(block) {
+  var value_h1_text = Blockly.JavaScript.valueToCode(block, 'H1_TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+  var value_h2_text = Blockly.JavaScript.valueToCode(block, 'H2_TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+  var code = 'robot.startDisplayMessage(' + value_h1_text + ', ' + value_h2_text + ');\n';
+  return code;
+};
+
+
 Blockly.JavaScript['robot_start_go_to'] = function(block) {
   var value_location = Blockly.JavaScript.valueToCode(block, 'LOCATION', Blockly.JavaScript.ORDER_COMMA);
   var code = 'robot.startGoTo(' + value_location + ');\n';

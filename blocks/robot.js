@@ -735,6 +735,37 @@ Blockly.Blocks['robot_start_ask_mc'] = {
   }
 };
 
+Blockly.Blocks['robot_start_display_message_h2'] = {
+  init: function() {
+    this.appendValueInput("TEXT")
+        .setCheck("String")
+        .appendField("start displaying message");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(260);
+    this.setTooltip('Displays a message on the robot\'s screen.');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['robot_start_display_message_h1h2'] = {
+  init: function() {
+    this.appendValueInput("H1_TEXT")
+        .setCheck("String")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("start displaying big text");
+    this.appendValueInput("H2_TEXT")
+        .setCheck("String")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("regular text");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(260);
+    this.setTooltip('Displays a message with both big and regular size text.');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['robot_start_go_to'] = {
   init: function() {
     this.appendValueInput("LOCATION")

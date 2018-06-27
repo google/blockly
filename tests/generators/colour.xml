@@ -104,8 +104,18 @@
             <next>
               <block type="unittest_assertequals" inline="false">
                 <value name="MESSAGE">
-                  <block type="text">
-                    <field name="TEXT">test name</field>
+                  <block type="text_join">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                      <block type="text">
+                        <field name="TEXT">length of random colour string: </field>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="variables_get">
+                        <field name="VAR" id=".BC!Zr?d!(!/,oU[FR=N" variabletype="">item</field>
+                      </block>
+                    </value>
                   </block>
                 </value>
                 <value name="ACTUAL">
@@ -125,8 +135,18 @@
                 <next>
                   <block type="unittest_assertequals" inline="false">
                     <value name="MESSAGE">
-                      <block type="text">
-                        <field name="TEXT">test name</field>
+                      <block type="text_join">
+                        <mutation items="2"></mutation>
+                        <value name="ADD0">
+                          <block type="text">
+                            <field name="TEXT">format of random colour string: </field>
+                          </block>
+                        </value>
+                        <value name="ADD1">
+                          <block type="variables_get">
+                            <field name="VAR" id=".BC!Zr?d!(!/,oU[FR=N" variabletype="">item</field>
+                          </block>
+                        </value>
                       </block>
                     </value>
                     <value name="ACTUAL">
@@ -162,8 +182,32 @@
                           <block type="unittest_assertvalue" inline="false">
                             <field name="EXPECTED">TRUE</field>
                             <value name="MESSAGE">
-                              <block type="text">
-                                <field name="TEXT">test name</field>
+                              <block type="text_join">
+                                <mutation items="4"></mutation>
+                                <value name="ADD0">
+                                  <block type="text">
+                                    <field name="TEXT">contents of random colour string: </field>
+                                  </block>
+                                </value>
+                                <value name="ADD1">
+                                  <block type="variables_get">
+                                    <field name="VAR" id=".BC!Zr?d!(!/,oU[FR=N" variabletype="">item</field>
+                                  </block>
+                                </value>
+                                <value name="ADD2">
+                                  <block type="text">
+                                    <field name="TEXT"> at index: </field>
+                                  </block>
+                                </value>
+                                <value name="ADD3">
+                                  <block type="unittest_adjustindex">
+                                    <value name="INDEX">
+                                      <block type="variables_get">
+                                        <field name="VAR" id="Y^.=S=NGMAu`73E}(x;A" variabletype="">i</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
                               </block>
                             </value>
                             <value name="ACTUAL">
@@ -223,7 +267,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="520" y="205">
+  <block type="procedures_defnoreturn" x="638" y="213">
     <field name="NAME">test blend</field>
     <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">

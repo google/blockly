@@ -903,7 +903,7 @@ Blockly.Blocks['robot_is_done_fetch'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("is")
-        .appendField(new Blockly.FieldDropdown([["torso","TORSO"], ["head", "HEAD"], ["gripper","GRIPPER"], ["screen","SCREEN"], ["navigation","NAVIGATION"], ["PbD","PBD"], ["timer","TIMER"]]), "NAME")
+        .appendField(new Blockly.FieldDropdown([["torso","TORSO"], ["head", "HEAD"], ["gripper","GRIPPER"], ["question", "QUESTION"], ["navigation","NAVIGATION"], ["PbD","PBD"], ["timer","TIMER"]]), "NAME")
         .appendField("done");
     this.setOutput(true, "Boolean");
     this.setColour(20);
@@ -916,7 +916,7 @@ Blockly.Blocks['robot_cancel_fetch'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("cancel")
-        .appendField(new Blockly.FieldDropdown([["torso","TORSO"], ["head", "HEAD"], ["gripper","GRIPPER"], ["screen","SCREEN"], ["navigation","NAVIGATION"], ["PbD","PBD"], ["timer","TIMER"]]), "NAME");
+        .appendField(new Blockly.FieldDropdown([["torso","TORSO"], ["head", "HEAD"], ["gripper","GRIPPER"], ["question", "QUESTION"], ["navigation","NAVIGATION"], ["PbD","PBD"], ["timer","TIMER"]]), "NAME");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
@@ -929,7 +929,7 @@ Blockly.Blocks['robot_get_result'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("get result from")
-        .appendField(new Blockly.FieldDropdown([["screen","SCREEN"]]), "NAME");
+        .appendField(new Blockly.FieldDropdown([["question","QUESTION"]]), "NAME");
     this.setOutput(true, "String");
     this.setColour(260);
     this.setTooltip("Retrieves result of selected action");

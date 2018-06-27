@@ -642,6 +642,23 @@ Blockly.Blocks['robot_manipulation_set_torso'] = {
   }
 };
 
+Blockly.Blocks['robot_start_timer'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("start timer for");
+    this.appendValueInput("SECONDS")
+        .setCheck("Number");
+    this.appendDummyInput()
+        .appendField("seconds");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(120);
+    this.setTooltip('Starts a timer for the given value of time');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['robot_wait_for_seconds'] = {
   init: function() {
     this.appendDummyInput()

@@ -231,6 +231,12 @@ Blockly.JavaScript['robot_manipulation_set_torso'] = function(block) {
   return code;
 };
 
+Blockly.JavaScript['robot_start_timer'] = function(block) {
+  var value_seconds = Blockly.JavaScript.valueToCode(block, 'SECONDS', Blockly.JavaScript.ORDER_NONE) || 0;
+  var code = 'startTimer(' + value_seconds + ');\n';
+  return code;
+};
+
 Blockly.JavaScript['robot_wait_for_seconds'] = function(block) {
   var value_seconds = Blockly.JavaScript.valueToCode(block, 'SECONDS', Blockly.JavaScript.ORDER_NONE) || 0;
   var code = 'waitForDuration(' + value_seconds + ');\n';

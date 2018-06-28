@@ -27,6 +27,7 @@
 goog.provide('Blockly.RenderedConnection');
 
 goog.require('Blockly.Connection');
+goog.require('Blockly.utils');
 
 
 /**

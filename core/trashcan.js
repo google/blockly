@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.Trashcan');
 
+goog.require('Blockly.utils');
+
 goog.require('goog.dom');
 goog.require('goog.math');
 goog.require('goog.math.Rect');

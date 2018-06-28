@@ -28,6 +28,8 @@ goog.provide('Blockly.VariableMap');
 
 goog.require('Blockly.Events.VarDelete');
 goog.require('Blockly.Events.VarRename');
+goog.require('Blockly.utils');
+
 
 /**
  * Class for a variable map.  This contains a dictionary data structure with

@@ -30,8 +30,10 @@ goog.require('Blockly.BlockDragSurfaceSvg');
 goog.require('Blockly.Css');
 goog.require('Blockly.Grid');
 goog.require('Blockly.Options');
+goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
+
 goog.require('goog.dom');
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');

@@ -35,6 +35,7 @@ goog.require('Blockly.Events.Ui');
 goog.require('Blockly.FlyoutDragger');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
+goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceDragger');
 
 goog.require('goog.math.Coordinate');

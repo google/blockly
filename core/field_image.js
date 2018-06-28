@@ -27,6 +27,8 @@
 goog.provide('Blockly.FieldImage');
 
 goog.require('Blockly.Field');
+goog.require('Blockly.utils');
+
 goog.require('goog.dom');
 goog.require('goog.math.Size');
 

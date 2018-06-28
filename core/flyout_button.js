@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.FlyoutButton');
 
+goog.require('Blockly.utils');
+
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 

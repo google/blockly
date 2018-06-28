@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.BlockAnimations');
 
+goog.require('Blockly.utils');
+
 
 /**
  * PID of disconnect UI animation.  There can only be one at a time.

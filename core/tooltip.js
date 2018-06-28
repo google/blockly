@@ -35,6 +35,8 @@
  **/
 goog.provide('Blockly.Tooltip');
 
+goog.require('Blockly.utils');
+
 goog.require('goog.dom');
 
 

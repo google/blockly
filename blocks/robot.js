@@ -129,7 +129,7 @@ Blockly.Blocks['robot_movement_go_to'] = {
         .setCheck("String")
         .appendField("go to");
     this.setOutput(true, "Boolean");
-    this.setColour(160);
+    this.setColour(230);
     this.setTooltip('Makes the robot go to a named location.');
     this.setHelpUrl('');
   }
@@ -317,7 +317,7 @@ Blockly.Blocks['robot_manipulation_pbd_actions'] = {
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(Blockly.robot.pbdActions), "ACTION_ID");
     this.setOutput(true, "PbD action ID");
-    this.setColour(20);
+    this.setColour(210);
     this.setTooltip('The Programming by Demonstration actions the robot knows.');
     this.setHelpUrl('');
   },
@@ -557,7 +557,7 @@ Blockly.Blocks['robot_manipulation_run_pbd_program'] = {
         .setCheck(null)
         .appendField("run Rapid PbD program");
     this.setOutput(true, "Boolean");
-    this.setColour(20);
+    this.setColour(230);
     this.setTooltip('Runs a Rapid PbD program');
     this.setHelpUrl('');
   }
@@ -569,7 +569,7 @@ Blockly.Blocks['robot_manipulation_open_gripper'] = {
         .appendField("open gripper");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(230);
     this.setTooltip('Opens the gripper.');
     this.setHelpUrl('');
   }
@@ -583,7 +583,7 @@ Blockly.Blocks['robot_manipulation_close_gripper_with_effort'] = {
         .appendField("N force");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(230);
     this.setTooltip('Closes the gripper with a maximum amount of force');
     this.setHelpUrl('');
   }
@@ -636,7 +636,7 @@ Blockly.Blocks['robot_manipulation_set_torso'] = {
       .appendField("set torso height (m)");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(230);
     this.setTooltip('Enter height between 0 and 0.4 meters');
     this.setHelpUrl('');
   }
@@ -683,7 +683,7 @@ Blockly.Blocks['robot_start_torso'] = {
         .appendField("start moving torso to (m)");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(160);
     this.setTooltip("Height ranges from 0.0 to 0.4 m");
     this.setHelpUrl("");
   }
@@ -701,7 +701,7 @@ Blockly.Blocks['robot_start_head'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(160);
     this.setTooltip("Pan angle ranges from -90 to 90 degrees. Tilt angle ranges from -90 to 45 degrees. ");
     this.setHelpUrl("");
   }
@@ -713,7 +713,7 @@ Blockly.Blocks['robot_start_open_gripper'] = {
         .appendField("start opening gripper");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(160);
     this.setTooltip("Opens the gripper");
     this.setHelpUrl("");
   }
@@ -728,7 +728,7 @@ Blockly.Blocks['robot_start_close_gripper'] = {
         .appendField("N force");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(160);
     this.setTooltip("Force ranges from 35 to 100 N");
     this.setHelpUrl("");
   }
@@ -827,7 +827,7 @@ Blockly.Blocks['robot_locations'] = {
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(getLocations), "NAME");
     this.setOutput(true, "String");
-    this.setColour(160);
+    this.setColour(20);
     this.setTooltip('The list of locations the robot knows about.');
     this.setHelpUrl('');
   },
@@ -848,7 +848,7 @@ Blockly.Blocks['robot_start_rapid_pbd'] = {
         .appendField("start running Rapid PbD program");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(160);
  this.setTooltip("Start running selected program");
  this.setHelpUrl("");
   }
@@ -906,7 +906,7 @@ Blockly.Blocks['robot_is_done_fetch'] = {
         .appendField(new Blockly.FieldDropdown([["torso","TORSO"], ["head", "HEAD"], ["gripper","GRIPPER"], ["question", "QUESTION"], ["navigation","NAVIGATION"], ["PbD","PBD"], ["timer","TIMER"]]), "NAME")
         .appendField("done");
     this.setOutput(true, "Boolean");
-    this.setColour(20);
+    this.setColour(120);
     this.setTooltip("Checks if the chosen action is completed");
     this.setHelpUrl("");
   }
@@ -919,7 +919,7 @@ Blockly.Blocks['robot_cancel_fetch'] = {
         .appendField(new Blockly.FieldDropdown([["torso","TORSO"], ["head", "HEAD"], ["gripper","GRIPPER"], ["question", "QUESTION"], ["navigation","NAVIGATION"], ["PbD","PBD"], ["timer","TIMER"]]), "NAME");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(20);
+    this.setColour(120);
     this.setTooltip("Cancels the chosen action");
     this.setHelpUrl("");
   }

@@ -928,3 +928,23 @@ Blockly.utils.arrayRemove = function(arr, obj) {
   arr.splice(i, 1);
   return true;
 };
+
+/**
+ * Converts degrees to radians.
+ * Copied from Closure's goog.math.toRadians.
+ * @param {number} angleDegrees Angle in degrees.
+ * @return {number} Angle in radians.
+ */
+Blockly.utils.toRadians = function(angleDegrees) {
+  return angleDegrees * Math.PI / 180;
+};
+
+/**
+ * Converts radians to degrees.
+ * Copied from Closure's goog.math.toDegrees.
+ * @param {number} angleRadians Angle in radians.
+ * @return {number} Angle in degrees.
+ */
+Blockly.utils.toDegrees = function(angleRadians) {
+  return angleRadians * 180 / Math.PI;
+};

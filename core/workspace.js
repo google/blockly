@@ -30,8 +30,6 @@ goog.require('Blockly.utils');
 goog.require('Blockly.VariableMap');
 goog.require('Blockly.WorkspaceComment');
 
-goog.require('goog.math');
-
 
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
@@ -176,7 +174,8 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   // Copy the topBlocks_ list.
   var blocks = [].concat(this.topBlocks_);
   if (ordered && blocks.length > 1) {
-    var offset = Math.sin(goog.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
+    var offset =
+        Math.sin(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
       offset *= -1;
     }
@@ -232,7 +231,8 @@ Blockly.Workspace.prototype.getTopComments = function(ordered) {
   // Copy the topComments_ list.
   var comments = [].concat(this.topComments_);
   if (ordered && comments.length > 1) {
-    var offset = Math.sin(goog.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
+    var offset =
+        Math.sin(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
       offset *= -1;
     }

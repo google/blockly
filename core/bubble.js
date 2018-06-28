@@ -29,7 +29,6 @@ goog.provide('Blockly.Bubble');
 goog.require('Blockly.Touch');
 goog.require('Blockly.Workspace');
 goog.require('goog.dom');
-goog.require('goog.math');
 goog.require('goog.math.Coordinate');
 goog.require('goog.userAgent');
 
@@ -56,7 +55,7 @@ Blockly.Bubble = function(workspace, content, shape, anchorXY,
   if (this.workspace_.RTL) {
     angle = -angle;
   }
-  this.arrow_radians_ = goog.math.toRadians(angle);
+  this.arrow_radians_ = Blockly.utils.toRadians(angle);
 
   var canvas = workspace.getBubbleCanvas();
   canvas.appendChild(this.createDom_(content, !!(bubbleWidth && bubbleHeight)));

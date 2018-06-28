@@ -30,6 +30,7 @@ goog.require('Blockly.Events.CommentChange');
 goog.require('Blockly.Events.CommentCreate');
 goog.require('Blockly.Events.CommentDelete');
 goog.require('Blockly.Events.CommentMove');
+goog.require('Blockly.utils');
 
 goog.require('goog.math.Coordinate');
 
@@ -360,4 +361,3 @@ Blockly.WorkspaceComment.parseAttributes = function(xml) {
     content: xml.textContent
   };
 };
-

@@ -30,6 +30,8 @@
  */
 goog.provide('Blockly.Events');
 
+goog.require('Blockly.utils');
+
 goog.require('goog.math.Coordinate');
 
 

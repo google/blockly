@@ -30,8 +30,8 @@ goog.require('Blockly.Block');
 goog.require('Blockly.Events');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.FlyoutButton');
-goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceSvg');
+
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.math.Rect');

@@ -27,6 +27,8 @@
 goog.provide('Blockly.ZoomControls');
 
 goog.require('Blockly.Touch');
+goog.require('Blockly.utils');
+
 goog.require('goog.dom');
 
 

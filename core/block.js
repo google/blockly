@@ -153,7 +153,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
     this.type = prototypeName;
     var prototype = Blockly.Blocks[prototypeName];
     if (!prototype || typeof prototype != 'object') {
-      throw Error('Unknown block type: ' + prototypeName);
+      throw TypeError('Unknown block type: ' + prototypeName);
     }
     goog.mixin(this, prototype);
   }
@@ -841,7 +841,7 @@ Blockly.Block.prototype.getFieldValue = function(name) {
 Blockly.Block.prototype.setFieldValue = function(newValue, name) {
   var field = this.getField(name);
   if (!field) {
-    throw ReferenceError('Field "' + name + '" not found.');
+    throw Error('Field "' + name + '" not found.');
   }
   field.setValue(newValue);
 };
@@ -860,7 +860,7 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
     if (!this.previousConnection) {
       if (this.outputConnection) {
         throw Error('Remove output connection prior to adding previous ' +
-                    'connection.');
+            'connection.');
       }
       this.previousConnection =
           this.makeConnection_(Blockly.PREVIOUS_STATEMENT);
@@ -870,7 +870,7 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
     if (this.previousConnection) {
       if (this.previousConnection.isConnected()) {
         throw Error('Must disconnect previous statement before removing ' +
-                    'connection.');
+            'connection.');
       }
       this.previousConnection.dispose();
       this.previousConnection = null;
@@ -897,7 +897,7 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
     if (this.nextConnection) {
       if (this.nextConnection.isConnected()) {
         throw Error('Must disconnect next statement before removing ' +
-                    'connection.');
+            'connection.');
       }
       this.nextConnection.dispose();
       this.nextConnection = null;
@@ -920,7 +920,7 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
     if (!this.outputConnection) {
       if (this.previousConnection) {
         throw Error('Remove previous connection prior to adding output ' +
-                    'connection.');
+            'connection.');
       }
       this.outputConnection = this.makeConnection_(Blockly.OUTPUT_VALUE);
     }
@@ -1108,7 +1108,7 @@ Blockly.Block.prototype.jsonInit = function(json) {
   // Validate inputs.
   if (json['output'] && json['previousStatement']) {
     throw Error(warningPrefix +
-                'Must not have both an output and a previousStatement.');
+        'Must not have both an output and a previousStatement.');
   }
 
   // Set basic properties of block.
@@ -1383,10 +1383,10 @@ Blockly.Block.prototype.moveInputBefore = function(name, refName) {
     }
   }
   if (inputIndex == -1) {
-    throw ReferenceError('Named input "' + name + '" not found.');
+    throw Error('Named input "' + name + '" not found.');
   }
   if (refIndex == -1) {
-    throw ReferenceError('Reference input "' + refName + '" not found.');
+    throw Error('Reference input "' + refName + '" not found.');
   }
   this.moveNumberedInputBefore(inputIndex, refIndex);
 };
@@ -1422,7 +1422,7 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
  * Remove an input from this block.
  * @param {string} name The name of the input.
  * @param {boolean=} opt_quiet True to prevent error if input is not present.
- * @throws {ReferenceError} if the input is not present and
+ * @throws {Error} if the input is not present and
  *     opt_quiet is not true.
  */
 Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
@@ -1445,7 +1445,7 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
     }
   }
   if (!opt_quiet) {
-    throw ReferenceError('Input not found: ' + name);
+    throw Error('Input not found: ' + name);
   }
 };
 

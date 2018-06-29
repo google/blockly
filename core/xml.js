@@ -460,8 +460,8 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
           Blockly.Xml.domToVariables(xmlChild, workspace);
         } else {
           throw Error('\'variables\' tag must exist once before block and ' +
-            'shadow tag elements in the workspace XML, but it was found in ' +
-            'another location.');
+              'shadow tag elements in the workspace XML, but it was found in ' +
+              'another location.');
         }
         variablesFirst = false;
       }
@@ -785,7 +785,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     }
     // Ensure this block doesn't have any variable inputs.
     if (block.getVarModels().length) {
-      throw ReferenceError('Shadow blocks cannot have variable references.');
+      throw TypeError('Shadow blocks cannot have variable references.');
     }
     block.setShadow(true);
   }
@@ -815,9 +815,9 @@ Blockly.Xml.domToFieldVariable_ = function(workspace, xml, text, field) {
   // This should never happen :)
   if (type != null && type !== variable.type) {
     throw Error('Serialized variable type with id \'' +
-      variable.getId() + '\' had type ' + variable.type + ', and ' +
-      'does not match variable field that references it: ' +
-      Blockly.Xml.domToText(xml) + '.');
+        variable.getId() + '\' had type ' + variable.type + ', and ' +
+        'does not match variable field that references it: ' +
+        Blockly.Xml.domToText(xml) + '.');
   }
 
   field.setValue(variable.getId());

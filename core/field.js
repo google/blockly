@@ -171,7 +171,7 @@ Blockly.Field.prototype.EDITABLE = true;
  */
 Blockly.Field.prototype.setSourceBlock = function(block) {
   if (this.sourceBlock_) {
-    throw TypeError('Field already bound to a block.');
+    throw Error('Field already bound to a block.');
   }
   this.sourceBlock_ = block;
 };

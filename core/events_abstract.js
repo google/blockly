@@ -103,7 +103,7 @@ Blockly.Events.Abstract.prototype.getEventWorkspace_ = function() {
   var workspace = Blockly.Workspace.getById(this.workspaceId);
   if (!workspace) {
     throw Error('Workspace is null. Event must have been generated from real' +
-      ' Blockly events.');
+        ' Blockly events.');
   }
   return workspace;
 };

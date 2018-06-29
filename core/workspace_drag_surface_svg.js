@@ -136,7 +136,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
 Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   if (!newSurface) {
     throw Error('Couldn\'t clear and hide the drag surface: missing ' +
-                'new surface.');
+        'new surface.');
   }
   var blockCanvas = this.SVG_.childNodes[0];
   var bubbleCanvas = this.SVG_.childNodes[1];
@@ -144,7 +144,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
       !Blockly.utils.hasClass(blockCanvas, 'blocklyBlockCanvas') ||
       !Blockly.utils.hasClass(bubbleCanvas, 'blocklyBubbleCanvas')) {
     throw Error('Couldn\'t clear and hide the drag surface. ' +
-                'A node was missing.');
+        'A node was missing.');
   }
 
   // If there is a previous sibling, put the blockCanvas back right afterwards,
@@ -160,7 +160,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   // Hide the drag surface.
   this.SVG_.style.display = 'none';
   if (this.SVG_.childNodes.length) {
-    throw TypeError('Drag surface was not cleared.');
+    throw Error('Drag surface was not cleared.');
   }
   Blockly.utils.setCssTransform(this.SVG_, '');
   this.previousSibling_ = null;
@@ -181,7 +181,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
 Blockly.WorkspaceDragSurfaceSvg.prototype.setContentsAndShow = function(
     blockCanvas, bubbleCanvas, previousSibling, width, height, scale) {
   if (this.SVG_.childNodes.length) {
-    throw TypeError('Already dragging a block.');
+    throw Error('Already dragging a block.');
   }
   this.previousSibling_ = previousSibling;
   // Make sure the blocks and bubble canvas are scaled appropriately.

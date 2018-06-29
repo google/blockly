@@ -1880,7 +1880,7 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
 Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
   if (!this.scrollbar) {
     throw Error('Attempt to set top level workspace scroll without ' +
-                'scrollbars.');
+        'scrollbars.');
   }
   var metrics = this.getMetrics();
   if (typeof xyRatio.x == 'number') {

@@ -287,7 +287,7 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
 
   if (this.tree_.blocks.length) {
     throw Error('Toolbox cannot have both blocks and categories ' +
-                'in the root level.');
+        'in the root level.');
   }
 
   // Fire a resize event since the toolbox may have changed width and height.

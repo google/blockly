@@ -36,7 +36,6 @@ goog.require('Blockly.utils.uiMenu');
 
 goog.require('goog.events');
 goog.require('goog.math.Coordinate');
-goog.require('goog.style');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.userAgent');

@@ -32,7 +32,6 @@ goog.provide('Blockly.Touch');
 
 goog.require('Blockly.utils');
 
-goog.require('goog.events');
 goog.require('goog.events.BrowserFeature');
 
 

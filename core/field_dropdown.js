@@ -32,7 +32,6 @@ goog.require('Blockly.Field');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.uiMenu');
 
-goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItem');
@@ -441,8 +440,10 @@ Blockly.FieldDropdown.prototype.render_ = function() {
   while ((child = this.textElement_.firstChild)) {
     this.textElement_.removeChild(child);
   }
-  goog.dom.removeNode(this.imageElement_);
-  this.imageElement_ = null;
+  if (this.imageElement_) {
+    this.imageElement_.parentNode.removeChild(this.imageElement_);
+    this.imageElement_ = null;
+  }
 
   if (this.imageJson_) {
     this.renderSelectedImage_();

@@ -34,6 +34,8 @@ goog.require('Blockly.VariableModel');
 // TODO Fix circular dependencies
 // goog.require('Blockly.Workspace');
 
+goog.require('goog.dom');
+
 
 Blockly.VariablesDynamic.onCreateVariableButtonClick_String = function(button) {
   Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(), null, 'String');

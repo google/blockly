@@ -36,7 +36,6 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceSvg');
 
-goog.require('goog.dom');
 goog.require('goog.math.Rect');
 
 
@@ -277,7 +276,7 @@ Blockly.Flyout.prototype.dispose = function() {
     this.workspace_ = null;
   }
   if (this.svgGroup_) {
-    goog.dom.removeNode(this.svgGroup_);
+    this.svgGroup_.parentNode.removeChild(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.svgBackground_ = null;
@@ -527,7 +526,7 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
   for (var j = 0; j < this.mats_.length; j++) {
     var rect = this.mats_[j];
     if (rect) {
-      goog.dom.removeNode(rect);
+      rect.parentNode.removeChild(rect);
     }
   }
   this.mats_.length = 0;

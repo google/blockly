@@ -28,7 +28,6 @@ goog.provide('Blockly.Bubble');
 
 goog.require('Blockly.Touch');
 goog.require('Blockly.Workspace');
-goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 goog.require('goog.userAgent');
 
@@ -605,7 +604,7 @@ Blockly.Bubble.prototype.setColour = function(hexColour) {
 Blockly.Bubble.prototype.dispose = function() {
   Blockly.Bubble.unbindDragEvents_();
   // Dispose of and unlink the bubble.
-  goog.dom.removeNode(this.bubbleGroup_);
+  this.bubbleGroup_.parentNode.removeChild(this.bubbleGroup_);
   this.bubbleGroup_ = null;
   this.bubbleArrow_ = null;
   this.bubbleBack_ = null;

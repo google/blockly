@@ -218,7 +218,7 @@ Blockly.Toolbox.prototype.init = function() {
 Blockly.Toolbox.prototype.dispose = function() {
   this.flyout_.dispose();
   this.tree_.dispose();
-  goog.dom.removeNode(this.HtmlDiv);
+  this.HtmlDiv.parentNode.removeChild(this.HtmlDiv);
   this.workspace_ = null;
   this.lastCategory_ = null;
 };

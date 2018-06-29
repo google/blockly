@@ -38,7 +38,6 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 
 goog.require('goog.color');
-goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 
 
@@ -849,7 +848,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   }
   Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
 
-  goog.dom.removeNode(this.svgGroup_);
+  this.svgGroup_.parentNode.removeChild(this.svgGroup_);
   blockWorkspace.resizeContents();
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;

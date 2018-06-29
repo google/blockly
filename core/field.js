@@ -32,7 +32,6 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.utils');
 
-goog.require('goog.dom');
 goog.require('goog.math.Size');
 goog.require('goog.style');
 goog.require('goog.userAgent');
@@ -228,8 +227,10 @@ Blockly.Field.prototype.dispose = function() {
     this.mouseDownWrapper_ = null;
   }
   this.sourceBlock_ = null;
-  goog.dom.removeNode(this.fieldGroup_);
-  this.fieldGroup_ = null;
+  if (this.fieldGroup_) {
+    this.fieldGroup_.parentNode.removeChild(this.fieldGroup_);
+    this.fieldGroup_ = null;
+  }
   this.textElement_ = null;
   this.borderRect_ = null;
   this.validator_ = null;

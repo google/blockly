@@ -118,7 +118,7 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
     Blockly.Events.fire(new Blockly.Events.CommentDelete(this));
   }
 
-  goog.dom.removeNode(this.svgGroup_);
+  this.svgGroup_.parentNode.removeChild(this.svgGroup_);
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;
   this.svgRect_ = null;

@@ -28,7 +28,6 @@ goog.provide('Blockly.Trashcan');
 
 goog.require('Blockly.utils');
 
-goog.require('goog.dom');
 goog.require('goog.math.Rect');
 
 
@@ -229,7 +228,7 @@ Blockly.Trashcan.prototype.init = function(bottom) {
  */
 Blockly.Trashcan.prototype.dispose = function() {
   if (this.svgGroup_) {
-    goog.dom.removeNode(this.svgGroup_);
+    this.svgGroup_.parentNode.removeChild(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.svgLid_ = null;

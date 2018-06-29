@@ -286,7 +286,7 @@ Blockly.Xml.cloneShadow_ = function(shadow) {
         if (textNode.nodeType == 3 && textNode.data.trim() == '' &&
             node.firstChild != textNode) {
           // Prune whitespace after a tag.
-          goog.dom.removeNode(textNode);
+          textNode.parentNode.removeChild(textNode);
         }
       }
       if (node) {
@@ -294,7 +294,7 @@ Blockly.Xml.cloneShadow_ = function(shadow) {
         node = node.nextSibling;
         if (textNode.nodeType == 3 && textNode.data.trim() == '') {
           // Prune whitespace before a tag.
-          goog.dom.removeNode(textNode);
+          textNode.parentNode.removeChild(textNode);
         }
       }
     }

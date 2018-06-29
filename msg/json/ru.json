@@ -11,7 +11,8 @@
 			"Facenapalm",
 			"Helpau",
 			"SimondR",
-			"Mouse21"
+			"Mouse21",
+			"Movses"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "элемент",
@@ -19,6 +20,7 @@
 	"DUPLICATE_BLOCK": "Дублировать",
 	"ADD_COMMENT": "Добавить комментарий",
 	"REMOVE_COMMENT": "Удалить комментарий",
+	"DUPLICATE_COMMENT": "Клонировать комментарий",
 	"EXTERNAL_INPUTS": "Вставки снаружи",
 	"INLINE_INPUTS": "Вставки внутри",
 	"DELETE_BLOCK": "Удалить блок",
@@ -352,5 +354,6 @@
 	"PROCEDURES_CREATE_DO": "Создать вызов '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Если первое значение истинно, возвращает второе значение.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Предупреждение: Этот блок может использоваться только внутри определения функции."
+	"PROCEDURES_IFRETURN_WARNING": "Предупреждение: Этот блок может использоваться только внутри определения функции.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Напишите здесь что-нибудь..."
 }

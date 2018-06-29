@@ -38,7 +38,7 @@ goog.require('Blockly');
 
 /**
  * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg.MATH_HUE. (2018 April 5)
+ * @deprecated Use Blockly.Msg['MATH_HUE']. (2018 April 5)
  */
 Blockly.Constants.Math.HUE = 230;
 

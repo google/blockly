@@ -32,10 +32,7 @@
 /**
  * Namespace for FactoryUtils.
  */
-goog.provide('FactoryUtils');
-
-goog.require('BlockDefinitionExtractor');
-
+var FactoryUtils = FactoryUtils || Object.create(null);
 
 /**
  * Get block definition code for the current block.
@@ -768,7 +765,7 @@ FactoryUtils.getBlockTypeFromJsDefinition = function(blockDef) {
  */
 FactoryUtils.generateCategoryXml = function(blocks, categoryName) {
   // Create category DOM element.
-  var categoryElement = goog.dom.createDom('category');
+  var categoryElement = document.createElement('category');
   categoryElement.setAttribute('name', categoryName);
 
   // For each block, add block element to category.

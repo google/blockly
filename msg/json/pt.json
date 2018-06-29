@@ -21,6 +21,7 @@
 	"DUPLICATE_BLOCK": "Duplicar",
 	"ADD_COMMENT": "Adicionar Comentário",
 	"REMOVE_COMMENT": "Remover Comentário",
+	"DUPLICATE_COMMENT": "Duplicar comentário",
 	"EXTERNAL_INPUTS": "Entradas Externas",
 	"INLINE_INPUTS": "Entradas Em Linhas",
 	"DELETE_BLOCK": "Eliminar Bloco",
@@ -368,5 +369,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Destacar definição da função",
 	"PROCEDURES_CREATE_DO": "Criar \"%1\"",
 	"PROCEDURES_IFRETURN_TOOLTIP": "se o valor é verdadeiro, então retorna um segundo valor.",
-	"PROCEDURES_IFRETURN_WARNING": "Atenção: Este bloco só pode ser utilizado dentro da definição de uma função."
+	"PROCEDURES_IFRETURN_WARNING": "Atenção: Este bloco só pode ser utilizado dentro da definição de uma função.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Diz algo..."
 }

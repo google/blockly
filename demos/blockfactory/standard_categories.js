@@ -32,7 +32,7 @@
 /**
  * Namespace for StandardCategories
  */
-goog.provide('StandardCategories');
+var StandardCategories = StandardCategories || Object.create(null);
 
 
 // Map of standard category information necessary to add a standard category

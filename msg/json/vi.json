@@ -6,7 +6,8 @@
 			"Qneutron",
 			"Withoutaname",
 			"Dstream",
-			"Nguyenvanduocit"
+			"Nguyenvanduocit",
+			"Leducthn"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "vật",
@@ -14,11 +15,13 @@
 	"DUPLICATE_BLOCK": "Tạo Bản Sao",
 	"ADD_COMMENT": "Thêm Chú Giải",
 	"REMOVE_COMMENT": "Xóa Chú Giải",
+	"DUPLICATE_COMMENT": "Bình luận trùng",
 	"EXTERNAL_INPUTS": "Chỗ Gắn Bên Ngoài",
 	"INLINE_INPUTS": "Chỗ Gắn Cùng Dòng",
 	"DELETE_BLOCK": "Xóa Mảnh Này",
 	"DELETE_X_BLOCKS": "Xóa %1 Mảnh",
 	"DELETE_ALL_BLOCKS": "Xóa hết %1 mảnh?",
+	"CLEAN_UP": "Sắp xếp lại các khối",
 	"COLLAPSE_BLOCK": "Thu Nhỏ Mảnh",
 	"COLLAPSE_ALL": "Thu Nhỏ Mọi Mảnh",
 	"EXPAND_BLOCK": "Mở Lớn Mảnh",
@@ -75,6 +78,7 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Thêm, bỏ, hoặc đổi thứ tự các mảnh con để tạo cấu trúc mới cho mảnh nếu.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Thêm một điều kiện vào mảnh nếu.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Cuối cùng, khi không điều kiện nào đúng.",
+	"IOS_OK": "Đồng ý",
 	"IOS_CANCEL": "Hủy bỏ",
 	"IOS_ERROR": "Lỗi",
 	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Hàm này có chứa các input trùng nhau.",
@@ -313,7 +317,9 @@
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Một thủ tục có giá trị hoàn trả.",
 	"PROCEDURES_ALLOW_STATEMENTS": "cho phép báo cáo",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Chú ý: Thủ tục này có lặp lại tên các tham số.",
+	"PROCEDURES_CALLNORETURN_HELPURL": "https://vi.wikipedia.org/wiki/Ch%C6%B0%C6%A1ng_tr%C3%ACnh_con",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Chạy một thủ tục không có giá trị hoàn trả.",
+	"PROCEDURES_CALLRETURN_HELPURL": "https://vi.wikipedia.org/wiki/Ch%C6%B0%C6%A1ng_tr%C3%ACnh_con",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "Chạy một thủ tục có giá trị hoàn trả.",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "các tham số",
 	"PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Thêm, xóa hoặc sắp xếp lại các đầu vào cho hàm này.",
@@ -322,5 +328,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Làm nổi bật thủ tục",
 	"PROCEDURES_CREATE_DO": "Tạo mảnh \"thực hiện %1\"",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Khi điều kiện đúng thì hoàn trả một giá trị.",
-	"PROCEDURES_IFRETURN_WARNING": "Chú ý: Mảnh này chỉ có thể dùng trong một thủ tục."
+	"PROCEDURES_IFRETURN_WARNING": "Chú ý: Mảnh này chỉ có thể dùng trong một thủ tục.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Hãy nói gì đó..."
 }

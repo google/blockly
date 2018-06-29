@@ -30,7 +30,7 @@
 'use strict';
 
 goog.provide('Blockly.Blocks.colour');  // Deprecated
-goog.provide('Blockly.Constants.Colour');
+goog.provide('Blockly.Constants.Colour');  // deprecated, 2018 April 5
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly');
@@ -38,7 +38,7 @@ goog.require('Blockly');
 
 /**
  * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg.COLOUR_HUE. (2018 April 5)
+ * @deprecated Use Blockly.Msg['COLOUR_HUE']. (2018 April 5)
  */
 Blockly.Constants.Colour.HUE = 20;
 

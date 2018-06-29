@@ -538,7 +538,7 @@ Code.runJS = function() {
 Code.discard = function() {
   var count = Code.workspace.getAllBlocks().length;
   if (count < 2 ||
-      window.confirm(Blockly.Msg.DELETE_ALL_BLOCKS.replace('%1', count))) {
+      window.confirm(Blockly.Msg['DELETE_ALL_BLOCKS'].replace('%1', count))) {
     Code.workspace.clear();
     if (window.location.hash) {
       window.location.hash = '';

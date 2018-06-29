@@ -8,10 +8,10 @@ fi
 echo "downloading chromedriver"
 
 if [[ $os_name == 'Linux' && ! -f $chromedriver_dir/chromedriver ]]; then
-  cd chromedriver  && curl -L https://chromedriver.storage.googleapis.com/2.29/chromedriver_linux64.zip > tmp.zip &&  unzip -o tmp.zip && rm tmp.zip 
+  cd chromedriver  && curl -L https://chromedriver.storage.googleapis.com/2.39/chromedriver_linux64.zip > tmp.zip &&  unzip -o tmp.zip && rm tmp.zip 
   # wait until download finish
   sleep 5
 elif [[ $os_name == 'Darwin' && ! -f $chromedriver_dir/chromedriver ]]; then
-  cd chromedriver  &&  curl -L https://chromedriver.storage.googleapis.com/2.29/chromedriver_mac64.zip  | tar xz 
+  cd chromedriver  &&  curl -L https://chromedriver.storage.googleapis.com/2.39/chromedriver_mac64.zip  | tar xz 
   sleep 5
 fi

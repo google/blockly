@@ -32,14 +32,6 @@
  */
 'use strict';
 
-goog.provide('BlockLibraryController');
-
-goog.require('BlocklyDevTools.Analytics');
-goog.require('BlockLibraryStorage');
-goog.require('BlockLibraryView');
-goog.require('BlockFactory');
-
-
 /**
  * Block Library Controller Class
  * @param {string} blockLibraryName Desired name of Block Library, also used
@@ -48,7 +40,7 @@ goog.require('BlockFactory');
  *    object that allows user to import a block library.
  * @constructor
  */
-BlockLibraryController = function(blockLibraryName, opt_blockLibraryStorage) {
+function BlockLibraryController(blockLibraryName, opt_blockLibraryStorage) {
   this.name = blockLibraryName;
   // Create a new, empty Block Library Storage object, or load existing one.
   this.storage = opt_blockLibraryStorage || new BlockLibraryStorage(this.name);
@@ -144,7 +136,7 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
   }
 
   // Create block XML.
-  var xmlElement = goog.dom.createDom('xml');
+  var xmlElement = document.createElement('xml');
   var block = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
   xmlElement.appendChild(Blockly.Xml.blockToDomWithXY(block));
 

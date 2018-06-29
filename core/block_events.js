@@ -145,7 +145,7 @@ Blockly.Events.Change.prototype.fromJson = function(json) {
 
 /**
  * Does this event record any change of state?
- * @return {boolean} True if something changed.
+ * @return {boolean} False if something changed.
  */
 Blockly.Events.Change.prototype.isNull = function() {
   return this.oldValue == this.newValue;
@@ -470,7 +470,7 @@ Blockly.Events.Move.prototype.currentLocation_ = function() {
 
 /**
  * Does this event record any change of state?
- * @return {boolean} True if something changed.
+ * @return {boolean} False if something changed.
  */
 Blockly.Events.Move.prototype.isNull = function() {
   return this.oldParentId == this.newParentId &&

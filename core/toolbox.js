@@ -334,15 +334,19 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
         // (eg. `%{BKY_MATH_HUE}`).
         var colour = Blockly.utils.replaceMessageReferences(
             childIn.getAttribute('colour'));
-        if (goog.isString(colour)) {
-          if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
-            childOut.hexColour = colour;
-          } else {
-            childOut.hexColour = Blockly.hueToRgb(Number(colour));
-          }
+        if (colour === null || colour === '') {
+          // No attribute. No colour.
+          childOut.hexColour = '';
+        } else if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
+          childOut.hexColour = colour;
+          this.hasColours_ = true;
+        } else if (typeof colour === 'number'
+            || (typeof colour === 'string' && !isNaN(Number(colour)))) {
+          childOut.hexColour = Blockly.hueToRgb(Number(colour));
           this.hasColours_ = true;
         } else {
           childOut.hexColour = '';
+          console.warn('Toolbox category "' + categoryName + '" has unrecognized colour attribute: ' + colour);
         }
         if (childIn.getAttribute('expanded') == 'true') {
           if (childOut.blocks.length) {
@@ -396,7 +400,7 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
  */
 Blockly.Toolbox.prototype.addColour_ = function(opt_tree) {
   var tree = opt_tree || this.tree_;
-  var children = tree.getChildren();
+  var children = tree.getChildren(false);
   for (var i = 0, child; child = children[i]; i++) {
     var element = child.getRowElement();
     if (element) {

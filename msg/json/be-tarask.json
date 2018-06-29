@@ -11,6 +11,7 @@
 	"DUPLICATE_BLOCK": "Капіяваць",
 	"ADD_COMMENT": "Дадаць камэнтар",
 	"REMOVE_COMMENT": "Выдаліць камэнтар",
+	"DUPLICATE_COMMENT": "Прадубляваць камэнтар",
 	"EXTERNAL_INPUTS": "Зьнешнія ўваходы",
 	"INLINE_INPUTS": "Унутраныя ўваходы",
 	"DELETE_BLOCK": "Выдаліць блёк",
@@ -340,5 +341,6 @@
 	"PROCEDURES_CREATE_DO": "Стварыць '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Калі значэньне ісьціна, вярнуць другое значэньне.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Папярэджаньне: гэты блёк можа выкарыстоўвацца толькі ў вызначанай функцыі."
+	"PROCEDURES_IFRETURN_WARNING": "Папярэджаньне: гэты блёк можа выкарыстоўвацца толькі ў вызначанай функцыі.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Напішыце што-небудзь…"
 }

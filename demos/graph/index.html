@@ -58,7 +58,7 @@
   </div>
 
   <xml id="toolbox" style="display: none">
-    <category name="Math">
+    <category name="Math" colour="%{BKY_MATH_HUE}">
       <block type="math_number">
         <field name="NUM">123</field>
       </block>
@@ -146,10 +146,10 @@
       </block>
       <block type="math_random_float"></block>
     </category>
-    <category name="Variables">
+    <category name="Variables" colour="%{BKY_VARIABLES_HUE}">
       <block type="graph_get_x"></block>
     </category>
-    <category name="Logic">
+    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
       <block type="logic_negate"></block>
@@ -196,9 +196,9 @@ Blockly.defineBlocksWithJsonArray([{
   "type": "graph_get_x",
   "message0": "x",
   "output": "Number",
-  "colour": Blockly.Msg.VARIABLES_HUE,
-  "tooltip": Blockly.Msg.VARIABLES_GET_TOOLTIP,
-  "helpUrl": Blockly.Msg.VARIABLES_GET_HELPURL
+  "colour": Blockly.Msg['VARIABLES_HUE'],
+  "tooltip": Blockly.Msg['VARIABLES_GET_TOOLTIP'],
+  "helpUrl": Blockly.Msg['VARIABLES_GET_HELPURL']
 }]);
 
 Blockly.JavaScript['graph_get_x'] = function(block) {
@@ -216,9 +216,9 @@ Blockly.defineBlocksWithJsonArray([{
       "check": "Number"
     }
   ],
-  "colour": Blockly.Msg.VARIABLES_HUE,
-  "tooltip": Blockly.Msg.VARIABLES_SET_TOOLTIP,
-  "helpUrl": Blockly.Msg.VARIABLES_SET_HELPURL
+  "colour": Blockly.Msg['VARIABLES_HUE'],
+  "tooltip": Blockly.Msg['VARIABLES_SET_TOOLTIP'],
+  "helpUrl": Blockly.Msg['VARIABLES_SET_HELPURL']
 }]);
 
 Blockly.JavaScript['graph_set_y'] = function(block) {

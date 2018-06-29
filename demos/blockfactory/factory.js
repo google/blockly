@@ -32,10 +32,7 @@
 /**
  * Namespace for Block Factory.
  */
-goog.provide('BlockFactory');
-
-goog.require('FactoryUtils');
-goog.require('StandardCategories');
+var BlockFactory = BlockFactory || Object.create(null);
 
 /**
  * Workspace for user to build block.
@@ -151,7 +148,7 @@ BlockFactory.updateLanguage = function() {
     if (!BlockFactory.updateBlocksFlagDelayed) {
       var languagePre = document.getElementById('languagePre');
       var languageTA = document.getElementById('languageTA');
-      code = languagePre.textContent.trim();
+      code = languagePre.innerText.trim();
       languageTA.value = code;
     }
   }

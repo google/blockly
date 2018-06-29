@@ -29,22 +29,12 @@
 
 'use strict';
 
-goog.provide('BlockExporterController');
-
-goog.require('BlocklyDevTools.Analytics');
-goog.require('FactoryUtils');
-goog.require('StandardCategories');
-goog.require('BlockExporterView');
-goog.require('BlockExporterTools');
-goog.require('goog.dom.xml');
-
-
 /**
  * BlockExporter Controller Class
  * @param {!BlockLibrary.Storage} blockLibStorage Block Library Storage.
  * @constructor
  */
-BlockExporterController = function(blockLibStorage) {
+function BlockExporterController(blockLibStorage) {
   // BlockLibrary.Storage object containing user's saved blocks.
   this.blockLibStorage = blockLibStorage;
   // Utils for generating code to export.
@@ -132,11 +122,11 @@ BlockExporterController.prototype.export = function() {
       BlocklyDevTools.Analytics.onWarning(msg);
       alert(msg);
     } else {
-      
+
       // Get generator stub code in the selected language for the blocks.
       var genStubs = this.tools.getGeneratorCode(blockXmlMap,
           language);
-      
+
       // Download the file.
       FactoryUtils.createAndDownloadFile(
           genStubs, generatorStub_filename + '.js', 'javascript');

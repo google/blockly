@@ -50,7 +50,7 @@ Blockly.Flyout = function(workspaceOptions) {
 
   /**
    * @type {!Blockly.Workspace}
-   * @private
+   * @protected
    */
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isFlyout = true;
@@ -64,7 +64,7 @@ Blockly.Flyout = function(workspaceOptions) {
   /**
    * Position of the toolbox and flyout relative to the workspace.
    * @type {number}
-   * @private
+   * @protected
    */
   this.toolboxPosition_ = workspaceOptions.toolboxPosition;
 
@@ -86,7 +86,7 @@ Blockly.Flyout = function(workspaceOptions) {
   /**
    * List of visible buttons.
    * @type {!Array.<!Blockly.FlyoutButton>}
-   * @private
+   * @protected
    */
   this.buttons_ = [];
 
@@ -165,14 +165,14 @@ Blockly.Flyout.prototype.SCROLLBAR_PADDING = 2;
 /**
  * Width of flyout.
  * @type {number}
- * @private
+ * @protected
  */
 Blockly.Flyout.prototype.width_ = 0;
 
 /**
  * Height of flyout.
  * @type {number}
- * @private
+ * @protected
  */
 Blockly.Flyout.prototype.height_ = 0;
 
@@ -190,7 +190,7 @@ Blockly.Flyout.prototype.height_ = 0;
  * This is used to know when to create a new block and when to scroll the
  * flyout. Setting it to 360 means that all drags create a new block.
  * @type {number}
- * @private
+ * @protected
 */
 Blockly.Flyout.prototype.dragAngleRange_ = 70;
 
@@ -366,13 +366,20 @@ Blockly.Flyout.prototype.updateDisplay_ = function() {
  * @param {number} height The computed height of the flyout's SVG group.
  * @param {number} x The computed x origin of the flyout's SVG group.
  * @param {number} y The computed y origin of the flyout's SVG group.
- * @private
+ * @protected
  */
 Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
   this.svgGroup_.setAttribute("width", width);
   this.svgGroup_.setAttribute("height", height);
-  var transform = 'translate(' + x + 'px,' + y + 'px)';
-  Blockly.utils.setCssTransform(this.svgGroup_, transform);
+  if (this.svgGroup_.tagName == 'svg') {
+    var transform = 'translate(' + x + 'px,' + y + 'px)';
+    Blockly.utils.setCssTransform(this.svgGroup_, transform);
+  } else {
+    // IE and Edge don't support CSS transforms on SVG elements so
+    // it's important to set the transform on the SVG element itself
+    var transform = 'translate(' + x + ',' + y + ')';
+    this.svgGroup_.setAttribute("transform", transform);
+  }
 
   // Update the scrollbar (if one exists).
   if (this.scrollbar_) {
@@ -537,7 +544,7 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
  * @param {!Blockly.Block} block The block to add listeners for.
  * @param {!Element} rect The invisible rectangle under the block that acts as
  *     a mat for that block.
- * @private
+ * @protected
  */
 Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
   this.listeners_.push(Blockly.bindEventWithChecks_(root, 'mousedown', null,
@@ -629,7 +636,7 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
  * @param {!Blockly.FlyoutButton} button The button to initialize and place.
  * @param {number} x The x position of the cursor during this layout pass.
  * @param {number} y The y position of the cursor during this layout pass.
- * @private
+ * @protected
  */
 Blockly.Flyout.prototype.initFlyoutButton_ = function(button, x, y) {
   var buttonSvg = button.createDom();
@@ -655,7 +662,7 @@ Blockly.Flyout.prototype.initFlyoutButton_ = function(button, x, y) {
  *     placed.
  * @return {!SVGElement} Newly created SVG element for the rectangle behind the
  *     block.
- * @private
+ * @protected
  */
 Blockly.Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
   // Create an invisible rectangle under the block to act as a button.  Just
@@ -683,7 +690,7 @@ Blockly.Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
  * hats, and any other protrusions we invent.
  * @param {!SVGElement} rect The rectangle to move directly behind the block.
  * @param {!Blockly.BlockSvg} block The block the rectangle should be behind.
- * @private
+ * @protected
  */
 Blockly.Flyout.prototype.moveRectToBlock_ = function(rect, block) {
   var blockHW = block.getHeightWidth();
@@ -717,7 +724,7 @@ Blockly.Flyout.prototype.filterForCapacity_ = function() {
   var blocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     if (this.permanentlyDisabled_.indexOf(block) == -1) {
-      var allBlocks = block.getDescendants();
+      var allBlocks = block.getDescendants(false);
       block.setDisabled(allBlocks.length > remainingCapacity);
     }
   }

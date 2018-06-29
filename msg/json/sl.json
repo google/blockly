@@ -4,7 +4,8 @@
 			"Anzeljg",
 			"Miloš Košir",
 			"Dbc334",
-			"HairyFotr"
+			"HairyFotr",
+			"Igor.pesek"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -12,8 +13,8 @@
 	"DUPLICATE_BLOCK": "Podvoji",
 	"ADD_COMMENT": "Dodaj komentar",
 	"REMOVE_COMMENT": "Odstrani komentar",
-	"EXTERNAL_INPUTS": "Vnosi zunaj",
-	"INLINE_INPUTS": "Vnosi v vrsti",
+	"EXTERNAL_INPUTS": "Zunanji vnosi",
+	"INLINE_INPUTS": "Vrstični vnosi",
 	"DELETE_BLOCK": "Izbriši kocko",
 	"DELETE_X_BLOCKS": "Izbriši kocke",
 	"DELETE_ALL_BLOCKS": "Izbrišem vseh %1 kock?",

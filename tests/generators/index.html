@@ -70,6 +70,7 @@
 <script src="../../blocks/colour.js"></script>
 <script src="../../blocks/variables.js"></script>
 <script src="../../blocks/procedures.js"></script>
+
 <script>
 'use strict';
 
@@ -87,6 +88,38 @@ function start() {
        zoom: {controls: true, wheel: true}
        });
   changeIndex();
+}
+
+/*
+ * Run this test to load all of the test files in all_test_names.  The contents
+ * will be loaded into the workspace in order.  To test the generators:
+ * - select your language from the buttons above the text area
+ * - copy all of the generated code
+ * - run it in an interpreter of your choice
+ * - scan all of the results for "FAIL".  All test suites are running in order,
+ *      and each will report OK or FAIL based only on the tests in that suite.
+ * If some tests are failing, load test suites individually to continue
+ * debugging.
+ */
+function loadAll() {
+  var output = document.getElementById('importExport');
+  output.style.background = 'gray';
+
+  var loadingElem = document.getElementById('loading');
+  loadingElem.textContent = 'loading...';
+
+  var options = document.getElementById('testUrl').options;
+  for (var i = 0; i < options.length; i++) {
+    var testUrl = options[i].value;
+    if (testUrl) {
+      var xmlText = fetchFile(testUrl);
+      if (xmlText !== null) {
+        fromXml(testUrl, xmlText, /* opt_append */ true);
+      }
+    }
+  }
+  output.style.background = '';
+  loadingElem.textContent = 'done';
 }
 
 function loadXml() {
@@ -127,16 +160,24 @@ function fetchFile(xmlUrl) {
 /**
  * @param {string} filename The URL (or other name) of the XML, for reporting.
  * @param {string} xmlText The actual XML text.
+ * @param {boolean=} opt_append True if the XML should be appended to the
+ *     workspace.  Otherwise the workspace is cleared and the new XML is loaded.
  */
-function fromXml(filename, xmlText) {
+function fromXml(filename, xmlText, opt_append) {
   var output = document.getElementById('importExport');
   output.value = xmlText;
   output.scrollTop = 0;
   output.scrollLeft = 0;
-  demoWorkspace.clear();
+  if (!opt_append) {
+    demoWorkspace.clear();
+  }
   try {
     var xmlDoc = Blockly.Xml.textToDom(xmlText);
-    Blockly.Xml.domToWorkspace(xmlDoc, demoWorkspace);
+    if (opt_append) {
+      Blockly.Xml.appendDomToWorkspace(xmlDoc, demoWorkspace);
+    } else {
+      Blockly.Xml.domToWorkspace(xmlDoc, demoWorkspace);
+    }
   } catch (e) {
     var msg = 'Error parsing XML: ' + filename + '\n\n\t' + e;
     if (e.stack) {
@@ -219,6 +260,9 @@ h1 {
 #importExport {
   height: 100%;
   width: 100%;
+}
+#loading {
+  color: red;
 }
 </style>
 </head>
@@ -339,6 +383,11 @@ h1 {
         <option value="">Other...</option>
       </select>
       <input type="button" value="Load" onclick="loadXml()">
+    </p>
+
+    <p>
+      <input type="button" value="Load all" id="loadAllBtn" onclick="loadAll()">
+      <label for="loadAllBtn" id="loading"></label>
     </p>
 
     <p>

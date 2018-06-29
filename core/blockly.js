@@ -246,35 +246,41 @@ Blockly.onKeyDown_ = function(e) {
 };
 
 /**
- * Copy a block onto the local clipboard.
- * @param {!Blockly.Block} block Block to be copied.
+ * Copy a block or workspace comment onto the local clipboard.
+ * @param {!Blockly.Block | !Blockly.WorkspaceComment} toCopy Block or Workspace Comment
+ *    to be copied.
  * @private
  */
-Blockly.copy_ = function(block) {
-  var xmlBlock = Blockly.Xml.blockToDom(block);
-  // Copy only the selected block and internal blocks.
-  Blockly.Xml.deleteNext(xmlBlock);
-  // Encode start position in XML.
-  var xy = block.getRelativeToSurfaceXY();
-  xmlBlock.setAttribute('x', block.RTL ? -xy.x : xy.x);
-  xmlBlock.setAttribute('y', xy.y);
-  Blockly.clipboardXml_ = xmlBlock;
-  Blockly.clipboardSource_ = block.workspace;
+Blockly.copy_ = function(toCopy) {
+  if (toCopy.isComment) {
+    var xml = toCopy.toXmlWithXY();
+  } else {
+    var xml = Blockly.Xml.blockToDom(toCopy);
+    // Copy only the selected block and internal blocks.
+    Blockly.Xml.deleteNext(xml);
+    // Encode start position in XML.
+    var xy = toCopy.getRelativeToSurfaceXY();
+    xml.setAttribute('x', toCopy.RTL ? -xy.x : xy.x);
+    xml.setAttribute('y', xy.y);
+  }
+  Blockly.clipboardXml_ = xml;
+  Blockly.clipboardSource_ = toCopy.workspace;
 };
 
 /**
- * Duplicate this block and its children.
- * @param {!Blockly.Block} block Block to be copied.
+ * Duplicate this block and its children, or a workspace comment.
+ * @param {!Blockly.Block | !Blockly.WorkspaceComment} toDuplicate Block or
+ *     Workspace Comment to be copied.
  * @private
  */
-Blockly.duplicate_ = function(block) {
+Blockly.duplicate_ = function(toDuplicate) {
   // Save the clipboard.
   var clipboardXml = Blockly.clipboardXml_;
   var clipboardSource = Blockly.clipboardSource_;
 
   // Create a duplicate via a copy/paste operation.
-  Blockly.copy_(block);
-  block.workspace.paste(Blockly.clipboardXml_);
+  Blockly.copy_(toDuplicate);
+  toDuplicate.workspace.paste(Blockly.clipboardXml_);
 
   // Restore the clipboard.
   Blockly.clipboardXml_ = clipboardXml;
@@ -380,6 +386,7 @@ Blockly.prompt = function(message, defaultValue, callback) {
  * @private
  */
 Blockly.jsonInitFactory_ = function(jsonDef) {
+  /** @this Blockly.Block */
   return function() {
     this.jsonInit(jsonDef);
   };
@@ -457,7 +464,7 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
   };
 
   var bindData = [];
-  if (window && window.PointerEvent && (name in Blockly.Touch.TOUCH_MAP)) {
+  if (goog.global.PointerEvent && (name in Blockly.Touch.TOUCH_MAP)) {
     for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
       node.addEventListener(type, wrapFunc, false);
       bindData.push([node, type, wrapFunc]);
@@ -509,6 +516,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
   };
 
   var bindData = [];
+  var window = goog.global['window'];
   if (window && window.PointerEvent && (name in Blockly.Touch.TOUCH_MAP)) {
     for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
       node.addEventListener(type, wrapFunc, false);
@@ -624,7 +632,7 @@ Blockly.checkBlockColourConstant_ = function(
     msgName, blocklyNamePath, expectedValue) {
   var namePath = 'Blockly';
   var value = Blockly;
-  for (var i =0; i < blocklyNamePath.length; ++i) {
+  for (var i = 0; i < blocklyNamePath.length; ++i) {
     namePath += '.' + blocklyNamePath[i];
     if (value) {
       value = value[blocklyNamePath[i]];
@@ -633,8 +641,8 @@ Blockly.checkBlockColourConstant_ = function(
 
   if (value && value !== expectedValue) {
     var warningPattern = (expectedValue === undefined) ?
-        '%1 has been removed. Use Blockly.Msg.%2.' :
-        '%1 is deprecated and unused. Override Blockly.Msg.%2.';
+        '%1 has been removed. Use Blockly.Msg["%2"].' :
+        '%1 is deprecated and unused. Override Blockly.Msg["%2"].';
     var warning = warningPattern.replace('%1', namePath).replace('%2', msgName);
     console.warn(warning);
   }

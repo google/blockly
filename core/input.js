@@ -135,7 +135,7 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
 /**
  * Remove a field from this input.
  * @param {string} name The name of the field.
- * @throws {ReferenceError} if the field is not present.
+ * @throws {Error} if the field is not present.
  */
 Blockly.Input.prototype.removeField = function(name) {
   for (var i = 0, field; field = this.fieldRow[i]; i++) {
@@ -150,7 +150,7 @@ Blockly.Input.prototype.removeField = function(name) {
       return;
     }
   }
-  throw ReferenceError('Field "%s" not found.', name);
+  throw Error('Field "%s" not found.', name);
 };
 
 /**

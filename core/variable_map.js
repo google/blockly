@@ -177,8 +177,8 @@ Blockly.VariableMap.prototype.createVariable = function(name,
   if (variable) {
     if (opt_id && variable.getId() != opt_id) {
       throw Error('Variable "' + name + '" is already in use and its id is "' +
-                  variable.getId() + '" which conflicts with the passed in ' +
-                  'id, "' + opt_id + '".');
+          variable.getId() + '" which conflicts with the passed in ' +
+          'id, "' + opt_id + '".');
     }
     // The variable already exists and has the same ID.
     return variable;

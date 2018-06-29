@@ -213,7 +213,7 @@ Blockly.Workspace.prototype.addTopComment = function(comment) {
 Blockly.Workspace.prototype.removeTopComment = function(comment) {
   if (!Blockly.utils.arrayRemove(this.topComments_, comment)) {
     throw Error('Comment not present in workspace\'s list of top-most ' +
-                'comments.');
+        'comments.');
   }
   // Note: If the comment database starts to hold block comments, this may need
   // to move to a separate function.

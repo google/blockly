@@ -1216,7 +1216,7 @@ Blockly.BlockSvg.prototype.setInputsInline = function(newBoolean) {
  * Remove an input from this block.
  * @param {string} name The name of the input.
  * @param {boolean=} opt_quiet True to prevent error if input is not present.
- * @throws {ReferenceError} if the input is not present and
+ * @throws {Error} if the input is not present and
  *     opt_quiet is not true.
  */
 Blockly.BlockSvg.prototype.removeInput = function(name, opt_quiet) {

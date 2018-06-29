@@ -541,7 +541,7 @@ Blockly.FieldDropdown.prototype.dispose = function() {
  */
 Blockly.FieldDropdown.validateOptions_ = function(options) {
   if (!Array.isArray(options)) {
-    throw Error('FieldDropdown options must be an array.');
+    throw TypeError('FieldDropdown options must be an array.');
   }
   var foundError = false;
   for (var i = 0; i < options.length; ++i) {

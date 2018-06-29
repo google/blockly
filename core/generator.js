@@ -174,7 +174,7 @@ Blockly.Generator.prototype.blockToCode = function(block) {
   var func = this[block.type];
   if (typeof func != 'function') {
     throw Error('Language "' + this.name_ + '" does not know how to generate ' +
-      ' code for block type "' + block.type + '".');
+        ' code for block type "' + block.type + '".');
   }
   // First argument to func.call is the value of 'this' in the generator.
   // Prior to 24 September 2013 'this' was the only way to access the block.
@@ -184,7 +184,7 @@ Blockly.Generator.prototype.blockToCode = function(block) {
   if (Array.isArray(code)) {
     // Value blocks return tuples of code and operator order.
     if (!block.outputConnection) {
-      throw Error('Expecting string from statement block: ' + block.type);
+      throw TypeError('Expecting string from statement block: ' + block.type);
     }
     return [this.scrub_(block, code[0]), code[1]];
   } else if (typeof code == 'string') {

@@ -652,7 +652,7 @@ Blockly.Gesture.prototype.handleRightClick = function(e) {
 Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
   if (this.hasStarted_) {
     throw Error('Tried to call gesture.handleWsStart, ' +
-                'but the gesture had already been started.');
+        'but the gesture had already been started.');
   }
   this.setStartWorkspace_(ws);
   this.mostRecentEvent_ = e;
@@ -668,7 +668,7 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
 Blockly.Gesture.prototype.handleFlyoutStart = function(e, flyout) {
   if (this.hasStarted_) {
     throw Error('Tried to call gesture.handleFlyoutStart, ' +
-                'but the gesture had already been started.');
+        'but the gesture had already been started.');
   }
   this.setStartFlyout_(flyout);
   this.handleWsStart(e, flyout.getWorkspace());
@@ -683,7 +683,7 @@ Blockly.Gesture.prototype.handleFlyoutStart = function(e, flyout) {
 Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
   if (this.hasStarted_) {
     throw Error('Tried to call gesture.handleBlockStart, ' +
-                'but the gesture had already been started.');
+        'but the gesture had already been started.');
   }
   this.setStartBlock(block);
   this.mostRecentEvent_ = e;
@@ -698,7 +698,7 @@ Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
 Blockly.Gesture.prototype.handleBubbleStart = function(e, bubble) {
   if (this.hasStarted_) {
     throw Error('Tried to call gesture.handleBubbleStart, ' +
-                'but the gesture had already been started.');
+        'but the gesture had already been started.');
   }
   this.setStartBubble(bubble);
   this.mostRecentEvent_ = e;
@@ -787,7 +787,7 @@ Blockly.Gesture.prototype.bringBlockToFront_ = function() {
 Blockly.Gesture.prototype.setStartField = function(field) {
   if (this.hasStarted_) {
     throw Error('Tried to call gesture.setStartField, ' +
-                'but the gesture had already been started.');
+        'but the gesture had already been started.');
   }
   if (!this.startField_) {
     this.startField_ = field;

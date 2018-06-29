@@ -33,7 +33,6 @@
 goog.provide('Blockly.utils');
 
 goog.require('goog.dom');
-goog.require('goog.events.BrowserFeature');
 goog.require('goog.math.Coordinate');
 goog.require('goog.userAgent');
 

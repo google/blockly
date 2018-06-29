@@ -30,7 +30,7 @@ goog.provide('Blockly.ScrollbarPair');
 goog.require('Blockly.utils');
 
 goog.require('goog.dom');
-goog.require('goog.events');
+goog.require('goog.events.BrowserFeature');
 
 
 /**

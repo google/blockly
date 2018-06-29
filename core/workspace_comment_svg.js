@@ -33,6 +33,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceComment');
 
 goog.require('goog.dom');
+goog.require('goog.math.Coordinate');
 
 
 /**

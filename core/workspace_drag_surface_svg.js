@@ -32,8 +32,6 @@ goog.provide('Blockly.WorkspaceDragSurfaceSvg');
 
 goog.require('Blockly.utils');
 
-goog.require('goog.math.Coordinate');
-
 
 /**
  * Blocks are moved into this SVG during a drag, improving performance.

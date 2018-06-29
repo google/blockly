@@ -30,6 +30,7 @@ goog.require('Blockly.Connection');
 goog.require('Blockly.utils');
 
 goog.require('goog.dom');
+goog.require('goog.math.Coordinate');
 
 
 /**

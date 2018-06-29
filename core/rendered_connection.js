@@ -29,6 +29,8 @@ goog.provide('Blockly.RenderedConnection');
 goog.require('Blockly.Connection');
 goog.require('Blockly.utils');
 
+goog.require('goog.dom');
+
 
 /**
  * Class for a connection between blocks that may be rendered on screen.

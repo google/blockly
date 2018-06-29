@@ -34,7 +34,6 @@ goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.uiMenu');
 
-goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.style');
 goog.require('goog.ui.Menu');

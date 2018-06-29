@@ -31,7 +31,6 @@ goog.require('Blockly.utils');
 
 goog.require('goog.date');
 goog.require('goog.date.DateTime');
-goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.i18n.DateTimeSymbols_he');

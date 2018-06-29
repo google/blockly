@@ -32,6 +32,8 @@ goog.require('Blockly.utils');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Variables');
 
+goog.require('goog.math.Size');
+
 
 /**
  * Class for a variable's dropdown field.

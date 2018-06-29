@@ -28,8 +28,6 @@ goog.provide('Blockly.Connection');
 
 goog.require('Blockly.Events.BlockMove');
 
-goog.require('goog.dom');
-
 
 /**
  * Class for a connection between blocks.

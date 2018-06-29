@@ -32,6 +32,7 @@ goog.require('Blockly.Events.CommentDelete');
 goog.require('Blockly.Events.CommentMove');
 goog.require('Blockly.utils');
 
+goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 
 

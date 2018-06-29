@@ -32,7 +32,6 @@ goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.WorkspaceSvg');
 
-goog.require('goog.dom');
 goog.require('goog.math.Rect');
 goog.require('goog.userAgent');
 

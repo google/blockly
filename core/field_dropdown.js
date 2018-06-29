@@ -437,7 +437,10 @@ Blockly.FieldDropdown.prototype.render_ = function() {
     // Update arrow's colour.
     this.arrow_.style.fill = this.sourceBlock_.getColour();
   }
-  goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
+  var child;
+  while ((child = this.textElement_.firstChild)) {
+    this.textElement_.removeChild(child);
+  }
   goog.dom.removeNode(this.imageElement_);
   this.imageElement_ = null;
 

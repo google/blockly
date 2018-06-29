@@ -1,8 +1,4 @@
 <xml xmlns="http://www.w3.org/1999/xhtml">
-  <variables>
-    <variable type="" id=".BC!Zr?d!(!/,oU[FR=N">item</variable>
-    <variable type="" id="Y^.=S=NGMAu`73E}(x;A">i</variable>
-  </variables>
   <block type="procedures_defnoreturn" x="260" y="14">
     <field name="NAME">test colour picker</field>
     <comment pinned="false" h="80" w="160">Describe this function...</comment>
@@ -97,7 +93,7 @@
         </value>
         <statement name="DO">
           <block type="variables_set" inline="false">
-            <field name="VAR" id=".BC!Zr?d!(!/,oU[FR=N" variabletype="">item</field>
+            <field name="VAR">item</field>
             <value name="VALUE">
               <block type="colour_random"></block>
             </value>
@@ -113,7 +109,7 @@
                     </value>
                     <value name="ADD1">
                       <block type="variables_get">
-                        <field name="VAR" id=".BC!Zr?d!(!/,oU[FR=N" variabletype="">item</field>
+                        <field name="VAR">item</field>
                       </block>
                     </value>
                   </block>
@@ -122,7 +118,7 @@
                   <block type="text_length" inline="false">
                     <value name="VALUE">
                       <block type="variables_get">
-                        <field name="VAR" id=".BC!Zr?d!(!/,oU[FR=N" variabletype="">item</field>
+                        <field name="VAR">item</field>
                       </block>
                     </value>
                   </block>
@@ -144,7 +140,7 @@
                         </value>
                         <value name="ADD1">
                           <block type="variables_get">
-                            <field name="VAR" id=".BC!Zr?d!(!/,oU[FR=N" variabletype="">item</field>
+                            <field name="VAR">item</field>
                           </block>
                         </value>
                       </block>
@@ -155,7 +151,7 @@
                         <field name="WHERE">FIRST</field>
                         <value name="VALUE">
                           <block type="variables_get">
-                            <field name="VAR" id=".BC!Zr?d!(!/,oU[FR=N" variabletype="">item</field>
+                            <field name="VAR">item</field>
                           </block>
                         </value>
                       </block>
@@ -167,7 +163,7 @@
                     </value>
                     <next>
                       <block type="controls_for">
-                        <field name="VAR" id="Y^.=S=NGMAu`73E}(x;A" variabletype="">i</field>
+                        <field name="VAR">i</field>
                         <value name="FROM">
                           <block type="math_number">
                             <field name="NUM">1</field>
@@ -191,7 +187,7 @@
                                 </value>
                                 <value name="ADD1">
                                   <block type="variables_get">
-                                    <field name="VAR" id=".BC!Zr?d!(!/,oU[FR=N" variabletype="">item</field>
+                                    <field name="VAR">item</field>
                                   </block>
                                 </value>
                                 <value name="ADD2">
@@ -203,7 +199,7 @@
                                   <block type="unittest_adjustindex">
                                     <value name="INDEX">
                                       <block type="variables_get">
-                                        <field name="VAR" id="Y^.=S=NGMAu`73E}(x;A" variabletype="">i</field>
+                                        <field name="VAR">i</field>
                                       </block>
                                     </value>
                                   </block>
@@ -236,14 +232,14 @@
                                         <field name="WHERE">FROM_START</field>
                                         <value name="VALUE">
                                           <block type="variables_get">
-                                            <field name="VAR" id=".BC!Zr?d!(!/,oU[FR=N" variabletype="">item</field>
+                                            <field name="VAR">item</field>
                                           </block>
                                         </value>
                                         <value name="AT">
                                           <block type="unittest_adjustindex">
                                             <value name="INDEX">
                                               <block type="variables_get">
-                                                <field name="VAR" id="Y^.=S=NGMAu`73E}(x;A" variabletype="">i</field>
+                                                <field name="VAR">i</field>
                                               </block>
                                             </value>
                                           </block>

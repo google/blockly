@@ -30,7 +30,6 @@ goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 
-goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 goog.require('goog.userAgent');
 
@@ -193,7 +192,8 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
   Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, this.widgetDispose_());
   var div = Blockly.WidgetDiv.DIV;
   // Create the input.
-  var htmlInput = goog.dom.createDom('input', 'blocklyHtmlInput');
+  var htmlInput = document.createElement('input');
+  htmlInput.className = 'blocklyHtmlInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
   var fontSize =
       (Blockly.FieldTextInput.FONTSIZE * this.workspace_.scale) + 'pt';
@@ -301,7 +301,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(_e) {
 Blockly.FieldTextInput.prototype.validate_ = function() {
   var valid = true;
   if (!Blockly.FieldTextInput.htmlInput_) {
-    throw TypeError('htmlInput not defined');
+    throw Error('htmlInput not defined');
   }
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
   if (this.sourceBlock_) {

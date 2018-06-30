@@ -156,7 +156,8 @@ Blockly.Toolbox.prototype.init = function() {
    * HTML container for the Toolbox menu.
    * @type {Element}
    */
-  this.HtmlDiv = goog.dom.createDom('div', 'blocklyToolboxDiv');
+  this.HtmlDiv = document.createElement('div');
+  this.HtmlDiv.className = 'blocklyToolboxDiv';
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
   svg.parentNode.insertBefore(this.HtmlDiv, svg);
 

@@ -224,8 +224,7 @@ Blockly.Python.scrubNakedValue = function(line) {
 Blockly.Python.quote_ = function(string) {
   // Can't use goog.string.quote since % must also be escaped.
   string = string.replace(/\\/g, '\\\\')
-                 .replace(/\n/g, '\\\n')
-                 .replace(/\%/g, '\\%');
+                 .replace(/\n/g, '\\\n');
 
   // Follow the CPython behaviour of repr() for a non-byte string.
   var quote = '\'';

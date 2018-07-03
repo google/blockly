@@ -331,7 +331,8 @@ Blockly.WorkspaceComment.fromXml = function(xmlComment, workspace) {
 /**
  * Decode an XML comment tag and return the results in an object.
  * @param {!Element} xml XML comment element.
- * @return {!Object} An object containing the information about the comment.
+ * @return {{w: number, h: number, x: number, y: number, content: string}} An
+ *     object containing the id, size, position, and comment string.
  * @package
  */
 Blockly.WorkspaceComment.parseAttributes = function(xml) {
@@ -339,31 +340,23 @@ Blockly.WorkspaceComment.parseAttributes = function(xml) {
   var xmlW = xml.getAttribute('w');
 
   return {
-    /* @type {string} */
+    // @type {string}
     id: xml.getAttribute('id'),
-    /**
-     * The height of the comment in workspace units, or 100 if not specified.
-     * @type {number}
-     */
+    // The height of the comment in workspace units, or 100 if not specified.
+    // @type {number}
     h: xmlH ? parseInt(xmlH, 10) : 100,
-    /**
-     * The width of the comment in workspace units, or 100 if not specified.
-     * @type {number}
-     */
+    // The width of the comment in workspace units, or 100 if not specified.
+    // @type {number}
     w: xmlW ? parseInt(xmlW, 10) : 100,
-    /**
-     * The x position of the comment in workspace coordinates, or NaN if not
-     * specified in the XML.
-     * @type {number}
-     */
+    // The x position of the comment in workspace coordinates, or NaN if not
+    // specified in the XML.
+    // @type {number}
     x: parseInt(xml.getAttribute('x'), 10),
-    /**
-     * The y position of the comment in workspace coordinates, or NaN if not
-     * specified in the XML.
-     * @type {number}
-     */
+    // The y position of the comment in workspace coordinates, or NaN if not
+    // specified in the XML.
+    // @type {number}
     y: parseInt(xml.getAttribute('y'), 10),
-    /* @type {string} */
+    // @type {string}
     content: xml.textContent
   };
 };

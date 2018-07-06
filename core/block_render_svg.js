@@ -763,11 +763,11 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       this.renderFields_(input.fieldRow, fieldX, fieldY);
       if (row.subtype == Blockly.INDENTED_VALUE){
         cursorX = inputRows.statementEdge;
-        steps.push('H', cursorX+input.fieldWidth+8);
+        steps.push('H', cursorX + input.fieldWidth + Blockly.BlockSvg.TAB_WIDTH);
         steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
-        steps.push('V',cursorY+row.height);
+        steps.push('V', cursorY + row.height + 1);
         steps.push('H', inputRows.rightEdge);
-        steps.push('v 8');
+        steps.push('v', Blockly.BlockSvg.SEP_SPACE_Y);
         if (this.RTL) {
           highlightSteps.push('M',
               (cursorX - Blockly.BlockSvg.NOTCH_WIDTH +
@@ -783,10 +783,9 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         } else {
           highlightSteps.push('M',
               (cursorX + 9 + input.fieldWidth) + ',' +
-                  (cursorY + row.height));
+                  (cursorY + row.height + Blockly.BlockSvg.DISTANCE_45_OUTSIDE));
           highlightSteps.push('H', inputRows.rightEdge);
         }
-        this.height += 8;
       } else {
         steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
         var v = row.height - Blockly.BlockSvg.TAB_HEIGHT
@@ -798,7 +797,10 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         highlightSteps.push('v', v + 0.5);
       } else {
         // Short highlight glint at bottom of tab.
-        highlightSteps.push('M', (inputRows.rightEdge - 5) + ',' +
+        var glintX = (row.subtype == Blockly.INDENTED_VALUE ?
+          cursorX + input.fieldWidth + Blockly.BlockSvg.TAB_WIDTH :
+          inputRows.rightEdge) - 5;
+        highlightSteps.push('M', glintX + ',' +
             (cursorY + Blockly.BlockSvg.TAB_HEIGHT - 0.7));
         highlightSteps.push('l', (Blockly.BlockSvg.TAB_WIDTH * 0.46) +
             ',-2.1');
@@ -806,7 +808,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       // Create external input connection.
       if (row.subtype == Blockly.INDENTED_VALUE) {
         connectionX = (this.RTL ? -inputRows.statementEdge - 1: inputRows.statementEdge + 9 + input.fieldWidth);
-        connectionY = cursorY-8;
+        connectionY = cursorY - Blockly.BlockSvg.INLINE_PADDING_Y;
       } else {
         connectionX = (this.RTL ? -inputRows.rightEdge - 1: inputRows.rightEdge + 1);
         connectionY = cursorY;
@@ -816,6 +818,9 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         this.width = Math.max(this.width, inputRows.rightEdge +
             input.connection.targetBlock().getHeightWidth().width -
             Blockly.BlockSvg.TAB_WIDTH + 1);
+      }
+      if (row.subtype == Blockly.INDENTED_VALUE) {
+        cursorY += Blockly.BlockSvg.SEP_SPACE_Y + 1;
       }
     } else if (row.type == Blockly.DUMMY_INPUT) {
       // External naked field.

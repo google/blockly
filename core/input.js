@@ -164,7 +164,9 @@ Blockly.Input.prototype.isVisible = function() {
 
 /**
  * Sets whether this input is visible or not.
- * Used to collapse/uncollapse a block.
+ * Used to collapse/uncollapse a block. If connections are modified while
+ * an input is not visible, any connected/disconnected blocks must have their
+ * visibility updated manually.
  * @param {boolean} visible True if visible.
  * @return {!Array.<!Blockly.Block>} List of blocks to render.
  */

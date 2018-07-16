@@ -819,7 +819,7 @@ Blockly.Blocks['lists_split'] = {
       } else if (mode == 'JOIN') {
         return Blockly.Msg['LISTS_SPLIT_TOOLTIP_JOIN'];
       }
-      throw TypeError('Unknown mode: ' + mode);
+      throw Error('Unknown mode: ' + mode);
     });
   },
   /**

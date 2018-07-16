@@ -621,7 +621,9 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       // Reset the quarks (a mutator is about to open).
       return;
     }
-    if (goog.array.equals(this.arguments_, paramNames)) {
+    // Test arguments (arrays of strings) for changes. '\n' is not a valid
+    // argument name character, so it is a valid delimiter here.
+    if (paramNames.join('\n') == this.arguments_.join('\n')) {
       // No change.
       this.quarkIds_ = paramIds;
       return;
@@ -633,13 +635,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     if (!this.quarkIds_) {
       // Initialize tracking for this block.
       this.quarkConnections_ = {};
-      if (paramNames.join('\n') == this.arguments_.join('\n')) {
-        // No change to the parameters, allow quarkConnections_ to be
-        // populated with the existing connections.
-        this.quarkIds_ = paramIds;
-      } else {
-        this.quarkIds_ = [];
-      }
+      this.quarkIds_ = [];
     }
     // Switch off rendering while the block is rebuilt.
     var savedRendered = this.rendered;

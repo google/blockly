@@ -123,7 +123,7 @@ Blockly.Lua['math_single'] = function(block) {
       code = 'math.deg(math.atan(' + arg + '))';
       break;
     default:
-      throw 'Unknown math operator: ' + operator;
+      throw Error('Unknown math operator: ' + operator);
   }
   return [code, Blockly.Lua.ORDER_HIGH];
 };
@@ -383,7 +383,7 @@ Blockly.Lua['math_on_list'] = function(block) {
       break;
 
     default:
-      throw 'Unknown operator: ' + func;
+      throw Error('Unknown operator: ' + func);
   }
   return [functionName + '(' + list + ')', Blockly.Lua.ORDER_HIGH];
 };

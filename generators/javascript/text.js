@@ -137,7 +137,7 @@ Blockly.JavaScript['text_charAt'] = function(block) {
       var code = functionName + '(' + text + ')';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
   }
-  throw 'Unhandled option (text_charAt).';
+  throw Error('Unhandled option (text_charAt).');
 };
 
 /**
@@ -186,7 +186,7 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
         var at1 = '0';
         break;
       default:
-        throw 'Unhandled option (text_getSubstring).';
+        throw Error('Unhandled option (text_getSubstring).');
     }
     switch (where2) {
       case 'FROM_START':
@@ -201,7 +201,7 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
         var at2 = text + '.length';
         break;
       default:
-        throw 'Unhandled option (text_getSubstring).';
+        throw Error('Unhandled option (text_getSubstring).');
     }
     code = text + '.slice(' + at1 + ', ' + at2 + ')';
   } else {

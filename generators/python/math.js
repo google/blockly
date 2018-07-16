@@ -147,7 +147,7 @@ Blockly.Python['math_single'] = function(block) {
       code = 'math.atan(' + arg + ') / math.pi * 180';
       break;
     default:
-      throw 'Unknown math operator: ' + operator;
+      throw Error('Unknown math operator: ' + operator);
   }
   return [code, Blockly.Python.ORDER_MULTIPLICATIVE];
 };
@@ -342,7 +342,7 @@ Blockly.Python['math_on_list'] = function(block) {
       code = 'random.choice(' + list + ')';
       break;
     default:
-      throw 'Unknown operator: ' + func;
+      throw Error('Unknown operator: ' + func);
   }
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };

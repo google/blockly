@@ -32,7 +32,7 @@ goog.require('Blockly.PHP');
 Blockly.PHP['math_number'] = function(block) {
   // Numeric value.
   var code = parseFloat(block.getFieldValue('NUM'));
-  var order = code >= 0 ? Blockly.PHP.ORDER_ATOMIC : 
+  var order = code >= 0 ? Blockly.PHP.ORDER_ATOMIC :
               Blockly.PHP.ORDER_UNARY_NEGATION;
   if (code == Infinity) {
     code = 'INF';
@@ -139,7 +139,7 @@ Blockly.PHP['math_single'] = function(block) {
       code = 'atan(' + arg + ') / pi() * 180';
       break;
     default:
-      throw 'Unknown math operator: ' + operator;
+      throw Error('Unknown math operator: ' + operator);
   }
   return [code, Blockly.PHP.ORDER_DIVISION];
 };
@@ -321,7 +321,7 @@ Blockly.PHP['math_on_list'] = function(block) {
       code = functionName + '(' + list + ')';
       break;
     default:
-      throw 'Unknown operator: ' + func;
+      throw Error('Unknown operator: ' + func);
   }
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };

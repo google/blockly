@@ -32,7 +32,7 @@ goog.require('Blockly.JavaScript');
 Blockly.JavaScript['math_number'] = function(block) {
   // Numeric value.
   var code = parseFloat(block.getFieldValue('NUM'));
-  var order = code >= 0 ? Blockly.JavaScript.ORDER_ATOMIC : 
+  var order = code >= 0 ? Blockly.JavaScript.ORDER_ATOMIC :
               Blockly.JavaScript.ORDER_UNARY_NEGATION;
   return [code, order];
 };
@@ -140,7 +140,7 @@ Blockly.JavaScript['math_single'] = function(block) {
       code = 'Math.atan(' + arg + ') / Math.PI * 180';
       break;
     default:
-      throw 'Unknown math operator: ' + operator;
+      throw Error('Unknown math operator: ' + operator);
   }
   return [code, Blockly.JavaScript.ORDER_DIVISION];
 };
@@ -357,7 +357,7 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       code = functionName + '(' + list + ')';
       break;
     default:
-      throw 'Unknown operator: ' + func;
+      throw Error('Unknown operator: ' + func);
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };

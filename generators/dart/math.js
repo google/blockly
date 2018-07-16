@@ -160,7 +160,7 @@ Blockly.Dart['math_single'] = function(block) {
       code = 'Math.atan(' + arg + ') / Math.PI * 180';
       break;
     default:
-      throw 'Unknown math operator: ' + operator;
+      throw Error('Unknown math operator: ' + operator);
   }
   return [code, Blockly.Dart.ORDER_MULTIPLICATIVE];
 };
@@ -426,7 +426,7 @@ Blockly.Dart['math_on_list'] = function(block) {
       code = functionName + '(' + list + ')';
       break;
     default:
-      throw 'Unknown operator: ' + func;
+      throw Error('Unknown operator: ' + func);
   }
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };

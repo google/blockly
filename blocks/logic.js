@@ -381,7 +381,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
           elseStatementConnection = clauseBlock.statementConnection_;
           break;
         default:
-          throw 'Unknown block type.';
+          throw TypeError('Unknown block type: ' + clauseBlock.type);
       }
       clauseBlock = clauseBlock.nextConnection &&
           clauseBlock.nextConnection.targetBlock();
@@ -419,7 +419,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
               inputDo && inputDo.connection.targetConnection;
           break;
         default:
-          throw 'Unknown block type.';
+          throw TypeError('Unknown block type: ' + clauseBlock.type);
       }
       clauseBlock = clauseBlock.nextConnection &&
           clauseBlock.nextConnection.targetBlock();

@@ -627,7 +627,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       return;
     }
     if (paramIds.length != paramNames.length) {
-      throw 'Error: paramNames and paramIds must be the same length.';
+      throw RangeError('paramNames and paramIds must be the same length.');
     }
     this.setCollapsed(false);
     if (!this.quarkIds_) {

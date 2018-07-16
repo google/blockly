@@ -171,5 +171,5 @@ Blockly.JavaScript['controls_flow_statements'] = function(block) {
     case 'CONTINUE':
       return 'continue;\n';
   }
-  throw 'Unknown flow statement.';
+  throw Error('Unknown flow statement.');
 };

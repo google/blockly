@@ -358,7 +358,7 @@ Blockly.Lua['lists_split'] = function(block) {
     }
     functionName = 'table.concat';
   } else {
-    throw 'Unknown mode: ' + mode;
+    throw Error('Unknown mode: ' + mode);
   }
   var code = functionName + '(' + input + ', ' + delimiter + ')';
   return [code, Blockly.Lua.ORDER_HIGH];

@@ -19,6 +19,42 @@
  */
 'use strict';
 
+function helper_setUpMockBlocks() {
+  // TODO: Replace with defineGetVarBlock();
+  Blockly.defineBlocksWithJsonArray([{
+    'type': 'field_variable_test_block',
+    'message0': '%1',
+    'args0': [
+      {
+        'type': 'field_variable',
+        'name': 'VAR',
+        'variable': 'item'
+      }
+    ],
+  },
+  {
+    'type': 'simple_test_block',
+    'message0': 'simple test block',
+    'output': null
+  },
+  {
+    'type': 'test_val_in',
+    'message0': 'test in %1',
+    'args0': [
+      {
+        'type': 'input_value',
+        'name': 'NAME'
+      }
+    ]
+  }]);
+}
+
+function helper_tearDownMockBlocks() {
+  delete Blockly.Blocks['field_variable_test_block'];
+  delete Blockly.Blocks['simple_test_block'];
+  delete Blockly.Blocks['test_val_in'];
+}
+
 function helper_createWorkspaceWithToolbox() {
   var toolbox = document.getElementById('toolbox-categories');
   return Blockly.inject('blocklyDiv', {toolbox: toolbox});
@@ -102,5 +138,33 @@ function test_appendDomToWorkspace() {
     assertEquals('Block 2 position y',23 + blocks[0].getHeightWidth().height + Blockly.BlockSvg.SEP_SPACE_Y,blocks[1].getRelativeToSurfaceXY().y);
   } finally {
     workspace.dispose();
+  }
+}
+
+function test_svgDisposeWithShadow() {
+  helper_setUpMockBlocks();
+  var workspace = helper_createWorkspaceWithToolbox();
+  var blockNew;
+  try {
+    var dom = Blockly.Xml.textToDom(
+      '<xml xmlns="http://www.w3.org/1999/xhtml">' +
+        '<block type="test_val_in">' +
+          '<value name="NAME">' +
+            '<shadow type="simple_test_block"></shadow>' +
+          '</value>' +
+        '</block>' +
+      '</xml>');
+
+    Blockly.Xml.appendDomToWorkspace(dom, workspace);
+    assertEquals('Block count', 2, workspace.getAllBlocks().length);
+    var inputConnection = workspace.getTopBlocks()[0].getInput('NAME').connection;
+
+    blockNew = helper_createNewBlock(workspace, 'simple_test_block');
+    inputConnection.connect(blockNew.outputConnection);
+
+  } finally {
+    workspace.dispose();
+    blockNew && blockNew.dispose();
+    helper_tearDownMockBlocks();
   }
 }

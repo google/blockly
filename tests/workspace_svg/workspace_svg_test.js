@@ -24,6 +24,12 @@ function helper_createWorkspaceWithToolbox() {
   return Blockly.inject('blocklyDiv', {toolbox: toolbox});
 }
 
+function helper_createNewBlock(workspace, type) {
+  var block = workspace.newBlock(type);
+  block.initSvg();
+  return block;
+}
+
 function test_createWorkspace() {
   var workspace = helper_createWorkspaceWithToolbox();
   workspace.dispose();
@@ -48,15 +54,20 @@ function test_flatWorkspace() {
   var workspace = helper_createWorkspaceWithToolbox();
   var blockA, blockB;
   try {
-    blockA = workspace.newBlock('');
+    blockA = helper_createNewBlock(workspace, '');
     assertEquals('One block workspace (1).', 1, workspace.getTopBlocks(true).length);
     assertEquals('One block workspace (2).', 1, workspace.getTopBlocks(false).length);
     assertEquals('One block workspace (3).', 1, workspace.getAllBlocks().length);
-    blockB = workspace.newBlock('');
+    blockB = helper_createNewBlock(workspace, '');
     assertEquals('Two block workspace (1).', 2, workspace.getTopBlocks(true).length);
     assertEquals('Two block workspace (2).', 2, workspace.getTopBlocks(false).length);
     assertEquals('Two block workspace (3).', 2, workspace.getAllBlocks().length);
-    blockA.dispose();
+    try {
+      blockA.dispose();
+    } catch (e) {
+      fail('Failed to delete blockA ' + e);
+    }
+
     assertEquals('One block workspace (4).', 1, workspace.getTopBlocks(true).length);
     assertEquals('One block workspace (5).', 1, workspace.getTopBlocks(false).length);
     assertEquals('One block workspace (6).', 1, workspace.getAllBlocks().length);

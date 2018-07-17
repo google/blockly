@@ -115,10 +115,12 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
     var option = {enabled: this.workspace.remainingCapacity() > 0};
     var name = this.getField('VAR').getText();
     option.text = contextMenuMsg.replace('%1', name);
-    var xmlField = goog.dom.createDom('field', null, name);
+    var xmlField = document.createElement('field');
     xmlField.setAttribute('name', 'VAR');
-    var xmlBlock = goog.dom.createDom('block', null, xmlField);
+    xmlField.appendChild(document.createTextNode(name));
+    var xmlBlock = document.createElement('block');
     xmlBlock.setAttribute('type', opposite_type);
+    xmlBlock.appendChild(xmlField);
     option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
     options.push(option);
   }

@@ -357,15 +357,16 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     var option = {enabled: true};
     var name = this.getFieldValue('NAME');
     option.text = Blockly.Msg['PROCEDURES_CREATE_DO'].replace('%1', name);
-    var xmlMutation = goog.dom.createDom('mutation');
+    var xmlMutation = document.createElement('mutation');
     xmlMutation.setAttribute('name', name);
     for (var i = 0; i < this.arguments_.length; i++) {
-      var xmlArg = goog.dom.createDom('arg');
+      var xmlArg = document.createElement('arg');
       xmlArg.setAttribute('name', this.arguments_[i]);
       xmlMutation.appendChild(xmlArg);
     }
-    var xmlBlock = goog.dom.createDom('block', null, xmlMutation);
+    var xmlBlock = document.createElement('block');
     xmlBlock.setAttribute('type', this.callType_);
+    xmlBlock.appendChild(xmlMutation);
     option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
     options.push(option);
 
@@ -378,8 +379,9 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         option.text = Blockly.Msg['VARIABLES_SET_CREATE_GET'].replace('%1', name);
 
         var xmlField = Blockly.Variables.generateVariableFieldDom(argVar);
-        var xmlBlock = goog.dom.createDom('block', null, xmlField);
+        var xmlBlock = document.createElement('block');
         xmlBlock.setAttribute('type', 'variables_get');
+        xmlBlock.appendChild(xmlField);
         option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
         options.push(option);
       }
@@ -621,7 +623,9 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       // Reset the quarks (a mutator is about to open).
       return;
     }
-    if (goog.array.equals(this.arguments_, paramNames)) {
+    // Test arguments (arrays of strings) for changes. '\n' is not a valid
+    // argument name character, so it is a valid delimiter here.
+    if (paramNames.join('\n') == this.arguments_.join('\n')) {
       // No change.
       this.quarkIds_ = paramIds;
       return;
@@ -633,13 +637,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     if (!this.quarkIds_) {
       // Initialize tracking for this block.
       this.quarkConnections_ = {};
-      if (paramNames.join('\n') == this.arguments_.join('\n')) {
-        // No change to the parameters, allow quarkConnections_ to be
-        // populated with the existing connections.
-        this.quarkIds_ = paramIds;
-      } else {
-        this.quarkIds_ = [];
-      }
+      this.quarkIds_ = [];
     }
     // Switch off rendering while the block is rebuilt.
     var savedRendered = this.rendered;
@@ -813,8 +811,8 @@ Blockly.Blocks['procedures_callnoreturn'] = {
          *   </block>
          * </xml>
          */
-        var xml = goog.dom.createDom('xml');
-        var block = goog.dom.createDom('block');
+        var xml = document.createElement('xml');
+        var block = document.createElement('block');
         block.setAttribute('type', this.defType_);
         var xy = this.getRelativeToSurfaceXY();
         var x = xy.x + Blockly.SNAP_RADIUS * (this.RTL ? -1 : 1);
@@ -823,7 +821,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         block.setAttribute('y', y);
         var mutation = this.mutationToDom();
         block.appendChild(mutation);
-        var field = goog.dom.createDom('field');
+        var field = document.createElement('field');
         field.setAttribute('name', 'NAME');
         field.appendChild(document.createTextNode(this.getProcedureCall()));
         block.appendChild(field);

@@ -5,7 +5,8 @@
 			"Asieriko",
 			"Mikel Ibaiba",
 			"Subi",
-			"RFenichel"
+			"RFenichel",
+			"Amaia"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "Elementua",
@@ -13,10 +14,12 @@
 	"DUPLICATE_BLOCK": "Bikoiztu",
 	"ADD_COMMENT": "Iruzkina gehitu",
 	"REMOVE_COMMENT": "Iruzkina ezabatu",
+	"DUPLICATE_COMMENT": "Iruzkina bikoiztu",
 	"EXTERNAL_INPUTS": "Kanpoko sarrerak",
 	"DELETE_BLOCK": "Ezabatu blokea",
 	"DELETE_X_BLOCKS": "Ezabatu %1 bloke",
 	"DELETE_ALL_BLOCKS": "Ezabatu %1 blokeak?",
+	"CLEAN_UP": "Blokeak garbitu",
 	"DISABLE_BLOCK": "Ezgaitu blokea",
 	"ENABLE_BLOCK": "Gaitu blokea",
 	"HELP": "Laguntza",
@@ -26,6 +29,8 @@
 	"RENAME_VARIABLE": "Aldatu aldagaiaren izena...",
 	"RENAME_VARIABLE_TITLE": "Aldatu '%1' aldagai guztien izenak eta izen hau eman:",
 	"NEW_VARIABLE": "Aldagaia sortu...",
+	"NEW_NUMBER_VARIABLE": "Zenbaki aldagaia sortu...",
+	"NEW_COLOUR_VARIABLE": "Kolore aldagaia sortu...",
 	"NEW_VARIABLE_TITLE": "Aldagai berriaren izena:",
 	"VARIABLE_ALREADY_EXISTS": "%1 parametro izena dagoeneko existitzen da",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "%1 izeneko aldagaia dagoeneko existitzen da %2 motako beste aldagai batekin.",

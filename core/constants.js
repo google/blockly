@@ -42,7 +42,20 @@ Blockly.FLYOUT_DRAG_RADIUS = 10;
 /**
  * Maximum misalignment between connections for them to snap together.
  */
-Blockly.SNAP_RADIUS = 20;
+Blockly.SNAP_RADIUS = 48;
+
+/**
+ * Maximum misalignment between connections for them to snap together,
+ * when a connection is already highlighted.
+ */
+Blockly.CONNECTING_SNAP_RADIUS = 68;
+
+/**
+ * How much to prefer staying connected to the current connection over moving to
+ * a new connection.  The current previewed connection is considered to be this
+ * much closer to the matching connection on the block than it actually is.
+ */
+Blockly.CURRENT_CONNECTION_PREFERENCE = 20;
 
 /**
  * Delay in ms between trigger and bumping unconnected block out of alignment.
@@ -272,3 +285,9 @@ Blockly.RENAME_VARIABLE_ID = 'RENAME_VARIABLE_ID';
  * @const {string}
  */
 Blockly.DELETE_VARIABLE_ID = 'DELETE_VARIABLE_ID';
+
+/**
+ * TODO: Put this somewhere else.  colours.js?
+ *
+ */
+Blockly.INSERTION_MARKER_COLOUR = '#000000';

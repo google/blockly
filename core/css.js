@@ -284,6 +284,24 @@ Blockly.Css.CONTENT = [
     'display: none;',
   '}',
 
+  '.blocklyInsertionMarker>.blocklyPath,',
+  '.blocklyInsertionMarker>.blocklyPathLight,',
+  '.blocklyInsertionMarker>.blocklyPathDark {',
+    'fill-opacity: .2;',
+    'stroke: none',
+  '}',
+
+  '.blocklyReplaceable>.blocklyPath {',
+    'fill-opacity: 0.5;',
+    'stroke-width: 3px;',
+    'stroke: #ffdb70;',
+  '}',
+
+  '.blocklyReplaceable>.blocklyPathLight,',
+  '.blocklyReplaceable>.blocklyPathDark {',
+    'display: none;',
+  '}',
+
   '.blocklyText {',
     'cursor: default;',
     'fill: #fff;',

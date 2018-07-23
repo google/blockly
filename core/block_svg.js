@@ -488,6 +488,25 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
 };
 
 /**
+ * Set block opacity for SVG rendering.
+ * @param {number} opacity Intended opacity, betweeen 0 and 1
+ */
+Blockly.BlockSvg.prototype.setOpacity = function(opacity) {
+  this.opacity_ = opacity;
+  if (this.rendered) {
+    this.updateColour();
+  }
+};
+
+/**
+ * Get block opacity for SVG rendering.
+ * @return {number} Intended opacity, betweeen 0 and 1
+ */
+Blockly.BlockSvg.prototype.getOpacity = function() {
+  return this.opacity_;
+};
+
+/**
  * Set whether the block is collapsed or not.
  * @param {boolean} collapsed True if collapsed.
  */

@@ -131,7 +131,6 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       var parameter = document.createElement('arg');
       var argModel = this.argumentVarModels_[i];
       parameter.setAttribute('name', argModel.name);
-      parameter.setAttribute('varId', argModel.getId());
       parameter.setAttribute('var-id', argModel.getId());
       if (opt_paramIds && this.paramIds_) {
         parameter.setAttribute('paramId', this.paramIds_[i]);

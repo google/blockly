@@ -156,7 +156,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     for (var i = 0, childNode; childNode = xmlElement.childNodes[i]; i++) {
       if (childNode.nodeName.toLowerCase() == 'arg') {
         var varName = childNode.getAttribute('name');
-        var varId = childNode.getAttribute('varId') || childNode.getAttribute('var-id');
+        var varId = childNode.getAttribute('var-id') || childNode.getAttribute('varId');
         this.arguments_.push(varName);
         var variable = Blockly.Variables.getOrCreateVariablePackage(
             this.workspace, varId, varName, '');

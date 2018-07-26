@@ -6,7 +6,8 @@
 			"Alpinistbg",
 			"Miroslav35232",
 			"StanProg",
-			"ShockD"
+			"ShockD",
+			"InsomniHat"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "елемент",
@@ -14,6 +15,7 @@
 	"DUPLICATE_BLOCK": "Копирай",
 	"ADD_COMMENT": "Добави коментар",
 	"REMOVE_COMMENT": "Премахни коментар",
+	"DUPLICATE_COMMENT": "Направете дубликат на коментара",
 	"EXTERNAL_INPUTS": "Външни входове",
 	"INLINE_INPUTS": "Вътрешни входове",
 	"DELETE_BLOCK": "Изтрий блок",
@@ -33,9 +35,13 @@
 	"RENAME_VARIABLE": "Преименувай променливата...",
 	"RENAME_VARIABLE_TITLE": "Преименувай всички '%1' променливи на:",
 	"NEW_VARIABLE": "Създаване на променлива...",
+	"NEW_STRING_VARIABLE": "Създайте низова променлива...",
+	"NEW_NUMBER_VARIABLE": "Създайте числова променлива...",
+	"NEW_COLOUR_VARIABLE": "Създайте цветова променлива...",
+	"NEW_VARIABLE_TYPE_TITLE": "Тип на новата променлива:",
 	"NEW_VARIABLE_TITLE": "Ново име на променливата:",
 	"VARIABLE_ALREADY_EXISTS": "Променлива с име '%1' вече съществува.",
-	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Променлива с име '%1' вече съществува за друга променлива от типа '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Променлива с име '%1' вече съществува за друг тип: '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Изтриване на %1 използване на променлива '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Променливата '%1' не може да бъде изтрита, защото е част от определението на функцията '%2'",
 	"DELETE_VARIABLE": "Изтриване на променливата \"%1\"",
@@ -339,5 +345,6 @@
 	"PROCEDURES_CREATE_DO": "Създай '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Ако стойността е вярна, върни втората стойност.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Предупреждение: Този блок може да се използва само във функция."
+	"PROCEDURES_IFRETURN_WARNING": "Предупреждение: Този блок може да се използва само във функция.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Коментирайте нещо..."
 }

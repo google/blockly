@@ -6,7 +6,8 @@
 			"Perevod16",
 			"Nikola Smolenski",
 			"Obsuser",
-			"Acamicamacaraca"
+			"Acamicamacaraca",
+			"BadDog"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "ставка",
@@ -52,7 +53,7 @@
 	"COLOUR_RGB_RED": "црвена",
 	"COLOUR_RGB_GREEN": "зелена",
 	"COLOUR_RGB_BLUE": "плава",
-	"COLOUR_RGB_TOOLTIP": "Креирај боју са одређеном количином црвене,зелене, и плаве. Све вредности морају бити између 0 и 100.",
+	"COLOUR_RGB_TOOLTIP": "Направите боју са одређеном количином црвене, зелене и плаве. Све вредности морају бити између 0 и 100.",
 	"COLOUR_BLEND_HELPURL": "http://meyerweb.com/eric/tools/color-blend/",
 	"COLOUR_BLEND_TITLE": "помешај",
 	"COLOUR_BLEND_COLOUR1": "боја 1",
@@ -265,7 +266,7 @@
 	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "направи празан списак",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "враћа листу, дужине 0, не садржавајући  евиденцију података",
-	"LISTS_CREATE_WITH_TOOLTIP": "Креирај листу са било којим бројем ставки.",
+	"LISTS_CREATE_WITH_TOOLTIP": "Направите списак са било којим бројем ставки.",
 	"LISTS_CREATE_WITH_INPUT_WITH": "направи списак са",
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "списак",
 	"LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "Додајте, избришите, или преуредите делове како би се реорганизовали овај блок листе.",

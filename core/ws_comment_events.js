@@ -215,8 +215,16 @@ Blockly.Events.CommentCreate.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.CommentCreate.prototype.run = function(forward) {
+  Blockly.Events.CommentCreateDeleteHelper(forward);
+};
+
+/**
+ * Helper function for Comment[Create|Delete]
+ * @param {boolean} create if True then Create, if False then Delete
+ */
+Blockly.Events.CommentCreateDeleteHelper = function(create) {
   var workspace = this.getEventWorkspace_();
-  if (forward) {
+  if (create) {
     var xml = goog.dom.createDom('xml');
     xml.appendChild(this.xml);
     Blockly.Xml.domToWorkspace(xml, workspace);
@@ -230,7 +238,6 @@ Blockly.Events.CommentCreate.prototype.run = function(forward) {
     }
   }
 };
-
 /**
  * Class for a comment deletion event.
  * @param {Blockly.WorkspaceComment} comment The deleted comment.
@@ -277,20 +284,7 @@ Blockly.Events.CommentDelete.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.CommentDelete.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
-  if (forward) {
-    var comment = workspace.getCommentById(this.commentId);
-    if (comment) {
-      comment.dispose(false, false);
-    } else {
-      // Only complain about root-level block.
-      console.warn("Can't uncreate non-existent comment: " + this.commentId);
-    }
-  } else {
-    var xml = goog.dom.createDom('xml');
-    xml.appendChild(this.xml);
-    Blockly.Xml.domToWorkspace(xml, workspace);
-  }
+  Blockly.Events.CommentCreateDeleteHelper(!forward);
 };
 
 /**

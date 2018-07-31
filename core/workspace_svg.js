@@ -346,8 +346,8 @@ Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
   var x = 0;
   var y = 0;
   var scale = 1;
-  if (goog.dom.contains(this.getCanvas(), element) ||
-      goog.dom.contains(this.getBubbleCanvas(), element)) {
+  if (Blockly.utils.containsNode(this.getCanvas(), element) ||
+      Blockly.utils.containsNode(this.getBubbleCanvas(), element)) {
     // Before the SVG canvas, scale the coordinates.
     scale = this.scale;
   }
@@ -539,7 +539,10 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   if (!this.options.parentWorkspace) {
     // Top-most workspace.  Dispose of the div that the
     // SVG is injected into (i.e. injectionDiv).
-    goog.dom.removeNode(this.getParentSvg().parentNode);
+    var div = this.getParentSvg().parentNode;
+    if (div) {
+      div.parentNode.removeChild(div);
+    }
   }
   if (this.resizeHandlerWrapper_) {
     Blockly.unbindEvent_(this.resizeHandlerWrapper_);

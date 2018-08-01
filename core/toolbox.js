@@ -33,7 +33,6 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.VerticalFlyout');
 
-goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.html.SafeHtml');
@@ -191,8 +190,10 @@ Blockly.Toolbox.prototype.init = function() {
   } else {
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
-  goog.dom.insertSiblingAfter(
-      this.flyout_.createDom('svg'), this.workspace_.getParentSvg());
+  // Insert the flyout after the workspace.
+  var workspaceSvg = this.workspace_.getParentSvg();
+  workspaceSvg.parentNode.insertBefore(this.flyout_.createDom('svg'),
+      workspaceSvg.nextSibling);
   this.flyout_.init(workspace);
 
   this.config_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';

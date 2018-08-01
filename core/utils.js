@@ -946,3 +946,14 @@ Blockly.utils.toRadians = function(angleDegrees) {
 Blockly.utils.toDegrees = function(angleRadians) {
   return angleRadians * 180 / Math.PI;
 };
+
+/**
+ * Whether a node contains another node.
+ * @param {!Node} parent The node that should contain the other node.
+ * @param {!Node} descendant The node to test presence of.
+ * @return {boolean} Whether the parent node contains the descendant node.
+ */
+Blockly.utils.containsNode = function(parent, descendant) {
+  return !!(parent.compareDocumentPosition(descendant) &
+            Node.DOCUMENT_POSITION_CONTAINED_BY);
+};

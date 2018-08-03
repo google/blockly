@@ -241,11 +241,13 @@ function test_startsWith() {
 }
 
 function test_arrayRemove() {
-  var arr = [1, 2, 3];
+  var arr = [1, 2, 3, 2];
   assertEquals('Remove Not found', false, Blockly.utils.arrayRemove(arr, 0));
-  assertEquals('Remove Not found result', '1,2,3', arr.join(','));
+  assertEquals('Remove Not found result', '1,2,3,2', arr.join(','));
   assertEquals('Remove item', true, Blockly.utils.arrayRemove(arr, 2));
-  assertEquals('Remove item result', '1,3', arr.join(','));
+  assertEquals('Remove item result', '1,3,2', arr.join(','));
+  assertEquals('Remove item again', true, Blockly.utils.arrayRemove(arr, 2));
+  assertEquals('Remove item again result', '1,3', arr.join(','));
 }
 
 function test_toRadians() {

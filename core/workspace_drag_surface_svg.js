@@ -150,13 +150,13 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   // If there is a previous sibling, put the blockCanvas back right afterwards,
   // otherwise insert it as the first child node in newSurface.
   if (this.previousSibling_ != null) {
-    Blockly.utils.insertAfter_(blockCanvas, this.previousSibling_);
+    Blockly.utils.insertAfter(blockCanvas, this.previousSibling_);
   } else {
     newSurface.insertBefore(blockCanvas, newSurface.firstChild);
   }
 
   // Reattach the bubble canvas after the blockCanvas.
-  Blockly.utils.insertAfter_(bubbleCanvas, blockCanvas);
+  Blockly.utils.insertAfter(bubbleCanvas, blockCanvas);
   // Hide the drag surface.
   this.SVG_.style.display = 'none';
   if (this.SVG_.childNodes.length) {

@@ -191,9 +191,8 @@ Blockly.Toolbox.prototype.init = function() {
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
   // Insert the flyout after the workspace.
-  var workspaceSvg = this.workspace_.getParentSvg();
-  workspaceSvg.parentNode.insertBefore(this.flyout_.createDom('svg'),
-      workspaceSvg.nextSibling);
+  Blockly.utils.insertAfter(this.flyout_.createDom('svg'),
+      this.workspace_.getParentSvg());
   this.flyout_.init(workspace);
 
   this.config_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';

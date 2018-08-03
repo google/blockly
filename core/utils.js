@@ -831,6 +831,7 @@ Blockly.utils.is3dSupported = function() {
  * Contrast with node.insertBefore function.
  * @param {!Element} newNode New element to insert.
  * @param {!Element} refNode Existing element to precede new node.
+ * @package
  */
 Blockly.utils.insertAfter = function(newNode, refNode) {
   var siblingNode = refNode.nextSibling;
@@ -905,6 +906,7 @@ Blockly.utils.getViewportBBox = function() {
  * @param {string} str The string to check.
  * @param {string} prefix A string to look for at the start of `str`.
  * @return {boolean} True if `str` begins with `prefix`.
+ * @package
  */
 Blockly.utils.startsWith = function(str, prefix) {
   return str.lastIndexOf(prefix, 0) == 0;
@@ -916,6 +918,7 @@ Blockly.utils.startsWith = function(str, prefix) {
  *     value.
  * @param {*} obj Object to remove.
  * @return {boolean} True if an element was removed.
+ * @package
  */
 Blockly.utils.arrayRemove = function(arr, obj) {
   var i = arr.indexOf(obj);
@@ -931,6 +934,7 @@ Blockly.utils.arrayRemove = function(arr, obj) {
  * Copied from Closure's goog.math.toRadians.
  * @param {number} angleDegrees Angle in degrees.
  * @return {number} Angle in radians.
+ * @package
  */
 Blockly.utils.toRadians = function(angleDegrees) {
   return angleDegrees * Math.PI / 180;
@@ -941,6 +945,7 @@ Blockly.utils.toRadians = function(angleDegrees) {
  * Copied from Closure's goog.math.toDegrees.
  * @param {number} angleRadians Angle in radians.
  * @return {number} Angle in degrees.
+ * @package
  */
 Blockly.utils.toDegrees = function(angleRadians) {
   return angleRadians * 180 / Math.PI;
@@ -951,6 +956,7 @@ Blockly.utils.toDegrees = function(angleRadians) {
  * @param {!Node} parent The node that should contain the other node.
  * @param {!Node} descendant The node to test presence of.
  * @return {boolean} Whether the parent node contains the descendant node.
+ * @package
  */
 Blockly.utils.containsNode = function(parent, descendant) {
   return !!(parent.compareDocumentPosition(descendant) &

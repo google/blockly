@@ -322,10 +322,6 @@ Blockly.InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
 
   // Found a connection!
   if (candidateLocal && candidateClosest) {
-    // if (candidateLocal.type == Blockly.OUTPUT_VALUE) {
-    //   // Always update previews for output connections.
-    //   return true;
-    // }
     // We're already showing an insertion marker.
     // Decide whether the new connection has higher priority.
     if (this.localConnection_ && this.closestConnection_) {
@@ -413,9 +409,15 @@ Blockly.InsertionMarkerManager.prototype.shouldReplace_ = function() {
   var closest = this.closestConnection_;
   var local = this.localConnection_;
 
-  // Dragging a block over an existing block in an input should replace the
-  // existing block and bump it out.
-  if (local.type == Blockly.OUTPUT_VALUE && closest.isConnected()) {
+  // Dragging a block over an existing block in an input.
+  if (local.type == Blockly.OUTPUT_VALUE) {
+    // Insert the dragged block into the stack if possible.
+    if (!closest.isConnected() ||
+      Blockly.Connection.lastConnectionInRow_(this.topBlock_,
+          closest.targetConnection.getSourceBlock())) {
+      return false; // Insert.
+    }
+    // Otherwise replace the existing block and bump it out.
     return true; // Replace.
   }
 
@@ -568,7 +570,7 @@ Blockly.InsertionMarkerManager.prototype.highlightBlock_ = function() {
   if (closest.targetBlock()) {
     this.highlightedBlock_ = closest.targetBlock();
     closest.targetBlock().highlightForReplacement(true);
-  } else if(local.type == Blockly.OUTPUT_VALUE) {
+  } else if (local.type == Blockly.OUTPUT_VALUE) {
     this.highlightedBlock_ = closest.sourceBlock_;
     closest.sourceBlock_.highlightShapeForInput(closest, true);
   }

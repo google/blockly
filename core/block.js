@@ -314,27 +314,92 @@ Blockly.Block.prototype.initModel = function() {
  */
 Blockly.Block.prototype.unplug = function(opt_healStack) {
   if (this.outputConnection) {
-    if (this.outputConnection.isConnected()) {
-      // Disconnect from any superior block.
-      this.outputConnection.disconnect();
-    }
+    this.unplugFromRow_(opt_healStack);
   } else if (this.previousConnection) {
-    var previousTarget = null;
-    if (this.previousConnection.isConnected()) {
-      // Remember the connection that any next statements need to connect to.
-      previousTarget = this.previousConnection.targetConnection;
-      // Detach this block from the parent's tree.
-      this.previousConnection.disconnect();
-    }
-    var nextBlock = this.getNextBlock();
-    if (opt_healStack && nextBlock) {
-      // Disconnect the next statement.
-      var nextTarget = this.nextConnection.targetConnection;
-      nextTarget.disconnect();
-      if (previousTarget && previousTarget.checkType_(nextTarget)) {
-        // Attach the next statement to the previous statement.
-        previousTarget.connect(nextTarget);
+    this.unplugFromStack_(opt_healStack);
+  }
+};
+
+/**
+ * Unplug this block's output from an input on another block.  Optionally
+ * reconnect the block's parent to the only child block, if possible.
+ * @param {boolean=} opt_healStack Disconnect right-side block and connect to
+ *     left-side block.  Defaults to false.
+ * @private
+ */
+Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
+  var parentConnection = null;
+  if (this.outputConnection.isConnected()) {
+    parentConnection = this.outputConnection.targetConnection;
+    // Disconnect from any superior block.
+    this.outputConnection.disconnect();
+  }
+
+  // Return early in obvious cases.
+  if (!parentConnection || !opt_healStack) {
+    return;
+  }
+
+  var thisConnection = this.getOnlyValueConnection_();
+  if (!thisConnection || !thisConnection.isConnected()) {
+    // Too many or too few possible connections on this block, or there's
+    // nothing on the other side of this connection.
+    return;
+  }
+
+  // Only disconnect the child if it's possible to move it to the parent.
+  var childConnection = thisConnection.targetConnection;
+  if (childConnection.checkType_(parentConnection)) {
+    // Disconnect the child block.
+    childConnection.disconnect();
+    parentConnection.connect(childConnection);
+  }
+};
+
+/**
+ * Returns the connection on the only value input on the block, or null if the
+ * number of value inputs is not one.
+ * @return {Blockly.Connection} The connection on the value input, or null.
+ * @private
+ */
+Blockly.Block.prototype.getOnlyValueConnection_ = function() {
+  var connection = false;
+  for (var i = 0; i < this.inputList.length; i++) {
+    var thisConnection = this.inputList[i].connection;
+    if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE) {
+      if (connection) {
+        return null; // More than one value input found.
       }
+      connection = thisConnection;
+    }
+  }
+  return connection;
+};
+
+/**
+ * Unplug this statement block from its superior block.  Optionally reconnect
+ * the block underneath with the block on top.
+ * @param {boolean=} opt_healStack Disconnect child statement and reconnect
+ *   stack.  Defaults to false.
+ * @private
+ */
+Blockly.Block.prototype.unplugFromStack_ = function(opt_healStack) {
+  var previousTarget = null;
+  if (this.previousConnection.isConnected()) {
+    // Remember the connection that any next statements need to connect to.
+    previousTarget = this.previousConnection.targetConnection;
+    // Detach this block from the parent's tree.
+    this.previousConnection.disconnect();
+  }
+  var nextBlock = this.getNextBlock();
+  if (opt_healStack && nextBlock) {
+    // Disconnect the next statement.
+    var nextTarget = this.nextConnection.targetConnection;
+    nextTarget.disconnect();
+    // TODO (#1994): Check types before unplugging.
+    if (previousTarget && previousTarget.checkType_(nextTarget)) {
+      // Attach the next statement to the previous statement.
+      previousTarget.connect(nextTarget);
     }
   }
 };

@@ -508,6 +508,10 @@ Blockly.InsertionMarkerManager.prototype.showPreview_ = function() {
   } else {  // Should insert
     this.connectMarker_();
   }
+  // Also highlight the actual connection, as a nod to previous behaviour.
+  if (this.closestConnection_) {
+    this.closestConnection_.highlight();
+  }
 };
 
 /**
@@ -524,16 +528,17 @@ Blockly.InsertionMarkerManager.prototype.maybeHidePreview_ = function(candidate)
   // We might need it later, and this saves disposing of it and recreating it.
   if (!candidate.closest) {
     this.hidePreview_();
-  }
-  // If there's a new preview and there was an preview before, and either
-  // connection has changed, remove the old preview.
-  var hadPreview = this.closestConnection_ && this.localConnection_;
-  var closestChanged = this.closestConnection_ != candidate.closest;
-  var localChanged = this.localConnection_ != candidate.local;
+  } else {
+    // If there's a new preview and there was an preview before, and either
+    // connection has changed, remove the old preview.
+    var hadPreview = this.closestConnection_ && this.localConnection_;
+    var closestChanged = this.closestConnection_ != candidate.closest;
+    var localChanged = this.localConnection_ != candidate.local;
 
-  // Also hide if we had a preview before but now we're going to delete instead.
-  if (hadPreview && (closestChanged || localChanged || this.wouldDeleteBlock_)) {
-    this.hidePreview_();
+    // Also hide if we had a preview before but now we're going to delete instead.
+    if (hadPreview && (closestChanged || localChanged || this.wouldDeleteBlock_)) {
+      this.hidePreview_();
+    }
   }
 
   // Either way, clear out old state.
@@ -548,6 +553,9 @@ Blockly.InsertionMarkerManager.prototype.maybeHidePreview_ = function(candidate)
  * @private
  */
 Blockly.InsertionMarkerManager.prototype.hidePreview_ = function() {
+  if (this.closestConnection_) {
+    this.closestConnection_.unhighlight();
+  }
   if (this.highlightingBlock_) {
     this.unhighlightBlock_();
   } else if (this.markerConnection_) {
@@ -572,6 +580,7 @@ Blockly.InsertionMarkerManager.prototype.highlightBlock_ = function() {
     closest.targetBlock().highlightForReplacement(true);
   } else if (local.type == Blockly.OUTPUT_VALUE) {
     this.highlightedBlock_ = closest.sourceBlock_;
+    // TODO: remove?
     closest.sourceBlock_.highlightShapeForInput(closest, true);
   }
   this.highlightingBlock_ = true;
@@ -671,8 +680,7 @@ Blockly.InsertionMarkerManager.prototype.connectMarker_ = function() {
   imBlock.rendered = true;
   imBlock.getSvgRoot().setAttribute('visibility', 'visible');
 
-  // TODO: positionNewBlock should be on Blockly.BlockSvg, not prototype,
-  // because it doesn't rely on anything in the block it's called on.
+  // Position based on the calculated connection locations.
   imBlock.positionNewBlock(imBlock, imConn, closest);
 
   // Connect() also renders the insertion marker.

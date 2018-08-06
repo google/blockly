@@ -1153,8 +1153,6 @@ Blockly.BlockSvg.prototype.renderStatementInput_ = function(pathObject, row,
 };
 
 /**
- * TODO: fenichel: consider moving to block_svg if this is in blockly and
- * scratch-blocks.
  * Position an new block correctly, so that it doesn't move the existing block
  * when connected to it.
  * @param {!Blockly.Block} newBlock The block to position - either the first
@@ -1181,7 +1179,7 @@ Blockly.BlockSvg.prototype.positionNewBlock = function(newBlock, newConnection,
 
 /**
  * Visual effect to show that if the dragging block is dropped, this block will
- * be replaced.  If a shadow block it will disappear.  Otherwise it will bump.
+ * be replaced.  If a shadow block, it will disappear.  Otherwise it will bump.
  * @param {boolean} add True if highlighting should be added.
  */
 Blockly.BlockSvg.prototype.highlightForReplacement = function(add) {

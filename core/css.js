@@ -291,12 +291,12 @@ Blockly.Css.CONTENT = [
     'stroke: none',
   '}',
 
-  '.blocklyReplaceable>.blocklyPath {',
+  '.blocklyReplaceable .blocklyPath {',
     'fill-opacity: 0.5;',
   '}',
 
-  '.blocklyReplaceable>.blocklyPathLight,',
-  '.blocklyReplaceable>.blocklyPathDark {',
+  '.blocklyReplaceable .blocklyPathLight,',
+  '.blocklyReplaceable .blocklyPathDark {',
     'display: none;',
   '}',
 

@@ -340,12 +340,6 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
     return;
   }
 
-  var parentBlock = parentConnection.getSourceBlock();
-  if (parentConnection != parentBlock.getOnlyValueConnection_()) {
-    // Too many or too few possible connections on the parent.
-    return;
-  }
-
   var thisConnection = this.getOnlyValueConnection_();
   if (!thisConnection || !thisConnection.isConnected()) {
     // Too many or too few possible connections on this block, or there's

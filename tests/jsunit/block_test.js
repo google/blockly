@@ -217,7 +217,7 @@ function test_block_row_unplug_multi_inputs_parent() {
 
     // Parent block has multiple inputs.
     blocks.B.unplug(true);
-    assertUnpluggedNoheal(blocks);
+    assertUnpluggedHealed(blocks);
   } finally {
     blockTest_tearDown();
   }

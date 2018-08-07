@@ -168,10 +168,12 @@ Blockly.svgResize = function(workspace) {
 };
 
 /**
- * Handle a key-down on SVG drawing surface.
+ * Handle a key-down on SVG drawing surface. Does nothing if the main workspace is not visible.
  * @param {!Event} e Key down event.
  * @private
  */
+ // TODO handle cases where there are multiple workspaces and non-main workspaces are able to accept
+ // input.
 Blockly.onKeyDown_ = function(e) {
   if (Blockly.mainWorkspace.options.readOnly || Blockly.utils.isTargetInput(e)
       || (Blockly.mainWorkspace.rendered && !Blockly.mainWorkspace.isVisible)) {

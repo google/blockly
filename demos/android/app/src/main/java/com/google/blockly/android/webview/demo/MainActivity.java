@@ -5,8 +5,11 @@ import android.os.Bundle;
 
 import com.example.blocklywebview.R;
 
+/**
+ * The primary activity of the demo application. The activity embeds the
+ * {@link com.google.blockly.android.webview.BlocklyWebViewFragment}.
+ */
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

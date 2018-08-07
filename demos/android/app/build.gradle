@@ -20,6 +20,18 @@ android {
     }
 }
 
+task copyBlocklyWebFiles(type: Copy) {
+    from('../../..') {
+        include 'blockly_compressed.js', 'blocks_compressed.js', 'msg/js/**', 'media/**'
+        exclude 'media/test_*'
+    }
+    into project(':app').file('./src/main/assets/blockly')
+}
+
+project.afterEvaluate {
+    preBuild.dependsOn copyBlocklyWebFiles
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'

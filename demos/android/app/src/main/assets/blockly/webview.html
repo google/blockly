@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!-- HTML file to host Blockly in a mobile WebView. -->
+<html>
+<head>
+  <style type="text/css">
+    html, body, #blocklyDiv {
+      border: 0;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+  </style>
+  <script src="blockly_compressed.js"></script>
+  <script src="blocks_compressed.js"></script>
+  <!-- TODO: Select msg file based on locale. -->
+  <script src="msg/js/en.js"></script>
+  <script src="toolbox_standard.js"></script>
+</head>
+<body>
+  <div id="blocklyDiv"></div>
+  <script type="text/javascript">
+    var workspacePlayground = Blockly.inject('blocklyDiv', {
+          media: 'media/',
+          toolbox: BLOCKLY_TOOLBOX_XML['standard']
+        });
+  </script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 /build
 /captures
+/app/src/main/assets/blockly/msg
 .settings
 .project
 

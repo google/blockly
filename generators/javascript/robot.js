@@ -317,3 +317,9 @@ Blockly.JavaScript['robot_get_result'] = function(block) {
   var code = 'robot.getResult(' + dropdown_name + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
+
+Blockly.JavaScript['slip_gripper'] = function(block) {
+  
+  var code = 'robot.slipGripper()';
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};

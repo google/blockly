@@ -7,14 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB036C55211B89D600CCC9D8 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB036C54211B89D600CCC9D8 /* WebKit.framework */; };
 		AB980111211A37B50025AFF2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB980110211A37B50025AFF2 /* AppDelegate.swift */; };
 		AB980113211A37B50025AFF2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB980112211A37B50025AFF2 /* ViewController.swift */; };
 		AB980116211A37B50025AFF2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB980114211A37B50025AFF2 /* Main.storyboard */; };
 		AB980118211A37B70025AFF2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB980117211A37B70025AFF2 /* Assets.xcassets */; };
 		AB98011B211A37B70025AFF2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB980119211A37B70025AFF2 /* LaunchScreen.storyboard */; };
+		ABA1B7FC212214E7000D3CC5 /* Blockly in Resources */ = {isa = PBXBuildFile; fileRef = ABA1B7FB212214E7000D3CC5 /* Blockly */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AB036C54211B89D600CCC9D8 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		AB98010D211A37B50025AFF2 /* Blockly WebView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Blockly WebView.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB980110211A37B50025AFF2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AB980112211A37B50025AFF2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -22,6 +25,7 @@
 		AB980117211A37B70025AFF2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AB98011A211A37B70025AFF2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AB98011C211A37B70025AFF2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ABA1B7FB212214E7000D3CC5 /* Blockly */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Blockly; path = "Resources/Non-Localized/Blockly"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +33,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB036C55211B89D600CCC9D8 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AB036C53211B89D500CCC9D8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AB036C54211B89D600CCC9D8 /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		AB980104211A37B50025AFF2 = {
 			isa = PBXGroup;
 			children = (
 				AB98010F211A37B50025AFF2 /* Blockly WebView */,
 				AB98010E211A37B50025AFF2 /* Products */,
+				AB036C53211B89D500CCC9D8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,6 +68,7 @@
 		AB98010F211A37B50025AFF2 /* Blockly WebView */ = {
 			isa = PBXGroup;
 			children = (
+				ABA1B7F9212214B9000D3CC5 /* Resources */,
 				AB980110211A37B50025AFF2 /* AppDelegate.swift */,
 				AB980112211A37B50025AFF2 /* ViewController.swift */,
 				AB980114211A37B50025AFF2 /* Main.storyboard */,
@@ -62,6 +77,22 @@
 				AB98011C211A37B70025AFF2 /* Info.plist */,
 			);
 			path = "Blockly WebView";
+			sourceTree = "<group>";
+		};
+		ABA1B7F9212214B9000D3CC5 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				ABA1B7FA212214C6000D3CC5 /* Non-Localized */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		ABA1B7FA212214C6000D3CC5 /* Non-Localized */ = {
+			isa = PBXGroup;
+			children = (
+				ABA1B7FB212214E7000D3CC5 /* Blockly */,
+			);
+			path = "Non-Localized";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,6 +156,7 @@
 				AB98011B211A37B70025AFF2 /* LaunchScreen.storyboard in Resources */,
 				AB980118211A37B70025AFF2 /* Assets.xcassets in Resources */,
 				AB980116211A37B50025AFF2 /* Main.storyboard in Resources */,
+				ABA1B7FC212214E7000D3CC5 /* Blockly in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

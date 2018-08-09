@@ -18,6 +18,7 @@
 	"DUPLICATE_BLOCK": "مكرر",
 	"ADD_COMMENT": "أضف تعليقًا",
 	"REMOVE_COMMENT": "أزل التعليق",
+	"DUPLICATE_COMMENT": "تعليق مكرر",
 	"EXTERNAL_INPUTS": "ادخال خارجي",
 	"INLINE_INPUTS": "ادخال خطي",
 	"DELETE_BLOCK": "احذف القطعة",
@@ -257,6 +258,8 @@
 	"TEXT_COUNT_MESSAGE0": "العدد %1 في %2",
 	"TEXT_COUNT_TOOLTIP": "احسب كم عدد بعض النصوص تتكرر ضمن نص اخر.",
 	"TEXT_REPLACE_MESSAGE0": "بدل %1 ب %2 في %3",
+	"TEXT_REPLACE_TOOLTIP": "استبدل جميع حالات حدوث بعض النصوص داخل نص آخر.",
+	"TEXT_REVERSE_MESSAGE0": "عكس %1",
 	"TEXT_REVERSE_TOOLTIP": "يعكس ترتيب حروف النص",
 	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "إنشئ قائمة فارغة",
@@ -329,6 +332,8 @@
 	"LISTS_SPLIT_WITH_DELIMITER": "مع محدد",
 	"LISTS_SPLIT_TOOLTIP_SPLIT": "تقسيم النص إلى قائمة من النصوص، وكسر في كل محدد",
 	"LISTS_SPLIT_TOOLTIP_JOIN": "ضم قائمة النصوص في نص واحد، مفصولة بواسطة محدد.",
+	"LISTS_REVERSE_MESSAGE0": "عكس %1",
+	"LISTS_REVERSE_TOOLTIP": "عكس نسخة من القائمة.",
 	"VARIABLES_GET_TOOLTIP": "يرجع قيمة هذا المتغير.",
 	"VARIABLES_GET_CREATE_SET": "انشئ 'التعيين %1'",
 	"VARIABLES_SET": "تعيين %1 إلى %2",
@@ -357,5 +362,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "تسليط الضوء على تعريف الدالة",
 	"PROCEDURES_CREATE_DO": "إنشئ '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "إذا كانت القيمة صحيحة ، اذان قم بارجاع القيمة الثانية.",
-	"PROCEDURES_IFRETURN_WARNING": "تحذير:هذه القطعة تستخدم فقط داخل تعريف دالة."
+	"PROCEDURES_IFRETURN_WARNING": "تحذير:هذه القطعة تستخدم فقط داخل تعريف دالة.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "قل شيئا..."
 }

@@ -23,9 +23,7 @@ class ViewController: UIViewController {
     }
     
     func loadWebView() {
-        print("loadWebView: Bundle.main = ", Bundle.main); // This prints
         if let htmlUrl = Bundle.main.url(forResource: "webview", withExtension: "html", subdirectory: "Blockly") {
-            print("htmlUrl = ", htmlUrl)  // Doesn't print
             webView.load(URLRequest.init(url: htmlUrl))
         }
     }

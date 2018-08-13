@@ -291,7 +291,7 @@
 	"LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "섹션을 추가, 제거하거나 순서를 변경하여 이 리스트 블럭을 재구성합니다.",
 	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "아이템을 리스트에 추가합니다.",
 	"LISTS_REPEAT_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-list-with",
-	"LISTS_REPEAT_TOOLTIP": "원하는 값을, 원하는 갯수 만큼 넣어, 목록을 생성합니다.",
+	"LISTS_REPEAT_TOOLTIP": "지정된 값을, 지정된 개수 만큼 넣어, 목록을 생성합니다.",
 	"LISTS_REPEAT_TITLE": "%1을 %2번 넣어, 리스트 생성",
 	"LISTS_LENGTH_HELPURL": "https://github.com/google/blockly/wiki/Lists#length-of",
 	"LISTS_LENGTH_TITLE": "%1의 길이",

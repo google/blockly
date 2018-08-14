@@ -104,6 +104,7 @@
 			buildPhases = (
 				AB980109211A37B50025AFF2 /* Sources */,
 				AB98010A211A37B50025AFF2 /* Frameworks */,
+				ABEDABD1212372E700A66667 /* ShellScript */,
 				AB98010B211A37B50025AFF2 /* Resources */,
 			);
 			buildRules = (
@@ -161,6 +162,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		ABEDABD1212372E700A66667 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = ./cp_resources.sh;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AB980109211A37B50025AFF2 /* Sources */ = {

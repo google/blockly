@@ -240,6 +240,8 @@ Blockly.InsertionMarkerManager.prototype.update = function(dxy, deleteArea) {
       this.shouldUpdatePreviews_(candidate, dxy);
 
   if (shouldUpdate) {
+    //console.log("updating previews");
+    //console.log(candidate);
     // Don't fire events for insertion marker creation or movement.
     Blockly.Events.disable();
     this.maybeHidePreview_(candidate);
@@ -371,6 +373,7 @@ Blockly.InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
  */
 Blockly.InsertionMarkerManager.prototype.getCandidate_ = function(dxy) {
   var radius = this.getStartRadius_();
+  //console.log(radius);
   var candidateClosest = null;
   var candidateLocal = null;
 
@@ -378,11 +381,15 @@ Blockly.InsertionMarkerManager.prototype.getCandidate_ = function(dxy) {
     var myConnection = this.availableConnections_[i];
     var neighbour = myConnection.closest(radius, dxy);
     if (neighbour.connection) {
+    //console.log('neighbour: ');
+    //console.log(neighbour.connection);
+    //console.log('Is insertion marker: ' + neighbour.connection.sourceBlock_.isInsertionMarker());
       candidateClosest = neighbour.connection;
       candidateLocal = myConnection;
       radius = neighbour.radius;
     }
   }
+  //console.log(radius);
   return {
     closest: candidateClosest,
     local: candidateLocal,
@@ -500,6 +507,7 @@ Blockly.InsertionMarkerManager.prototype.maybeShowPreview_ = function(candidate)
   // Something went wrong and we're trying to connect to an invalid connection.
   if (closest == this.closestConnection_ ||
       closest.sourceBlock_.isInsertionMarker()) {
+    console.log("trying to connect to an insertion marker");
     return;
   }
   // Add an insertion marker or replacement marker.
@@ -695,7 +703,9 @@ Blockly.InsertionMarkerManager.prototype.connectMarker_ = function() {
   imBlock.positionNewBlock(imBlock, imConn, closest);
 
   // Connect() also renders the insertion marker.
+  console.log("connecting the insertion marker");
   imConn.connect(closest);
+  console.log("done connecting the insertion marker");
   this.markerConnection_ = imConn;
 };
 

@@ -289,7 +289,9 @@ function helper_makeSourceBlock(sharedWorkspace) {
     getParent: function() { return null; },
     movable_: true,
     isMovable: function() { return true; },
-    isShadow: function() { return false; }
+    isShadow: function() { return false; },
+    isInsertionMarker: function() { return false; },
+    getFirstStatementConnection: function() { return null; }
   };
 }
 

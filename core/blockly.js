@@ -168,14 +168,19 @@ Blockly.svgResize = function(workspace) {
 };
 
 /**
- * Handle a key-down on SVG drawing surface.
+ * Handle a key-down on SVG drawing surface. Does nothing if the main workspace is not visible.
  * @param {!Event} e Key down event.
  * @private
  */
+// TODO (https://github.com/google/blockly/issues/1998) handle cases where there are
+// multiple workspaces and non-main workspaces are able to accept input.
 Blockly.onKeyDown_ = function(e) {
-  if (Blockly.mainWorkspace.options.readOnly || Blockly.utils.isTargetInput(e)) {
+  if (Blockly.mainWorkspace.options.readOnly || Blockly.utils.isTargetInput(e)
+      || (Blockly.mainWorkspace.rendered && !Blockly.mainWorkspace.isVisible())) {
     // No key actions on readonly workspaces.
     // When focused on an HTML text input widget, don't trap any keys.
+    // Ignore keypresses on rendered workspaces that have been explicitly
+    // hidden.
     return;
   }
   var deleteBlock = false;

@@ -669,7 +669,14 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
             Blockly.Msg['ENABLE_BLOCK'] : Blockly.Msg['DISABLE_BLOCK'],
         enabled: !this.getInheritedDisabled(),
         callback: function() {
+          var group = Blockly.Events.getGroup();
+          if (!group) {
+            Blockly.Events.setGroup(true);
+          }
           block.setDisabled(!block.disabled);
+          if (!group) {
+            Blockly.Events.setGroup(false);
+          }
         }
       };
       menuOptions.push(disableOption);

@@ -40,10 +40,8 @@ goog.require('goog.userAgent');
 /**
  * Abstract class for an editable field.
  * @param {string} text The initial content of the field.
- * @param {Function=} opt_validator An optional function that is called
- *     to validate any constraints on what the user entered.  Takes the new
- *     text as an argument and returns either the accepted text, a replacement
- *     text, or null to abort the change.
+ * @param {function(string):(string|null|undefined)=} opt_validator An optional
+ *     function that is called to validate user input. See setValidator().
  * @constructor
  */
 Blockly.Field = function(text, opt_validator) {
@@ -291,15 +289,25 @@ Blockly.Field.prototype.setVisible = function(visible) {
 };
 
 /**
- * Sets a new validation function for editable fields.
- * @param {Function} handler New validation function, or null.
+ * Sets a new validation function for editable fields, or clears a previously
+ * set validator.
+ *
+ * The validator function takes in the text form of the users input, and
+ * optionally returns the accepted field text. Alternatively, if the function
+ * returns null, the field value change aborts. If the function does not return
+ * anything (or returns undefined), the input value is accepted as valid. This
+ * is a shorthand for fields using the validator function call as a field-level
+ * change event notification.
+ *
+ * @param {?function(string):(string|null|undefined)} handler The validator
+ *     function or null to clear a previous validator.
  */
 Blockly.Field.prototype.setValidator = function(handler) {
   this.validator_ = handler;
 };
 
 /**
- * Gets the validation function for editable fields.
+ * Gets the validation function for editable fields, or null if not set.
  * @return {Function} Validation function, or null.
  */
 Blockly.Field.prototype.getValidator = function() {

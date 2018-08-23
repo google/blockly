@@ -29,9 +29,7 @@ goog.provide('Blockly.FieldColour');
 goog.require('Blockly.Field');
 goog.require('Blockly.utils');
 
-goog.require('goog.events');
 goog.require('goog.style');
-goog.require('goog.ui.ColorPicker');
 
 
 /**
@@ -68,6 +66,13 @@ Blockly.FieldColour.fromJson = function(options) {
  * @private
  */
 Blockly.FieldColour.prototype.colours_ = null;
+
+/**
+ * By default use the global constants for colour tooltips.
+ * @type {Array.<string>}
+ * @private
+ */
+Blockly.FieldColour.prototype.titles_ = null;
 
 /**
  * By default use the global constants for columns.
@@ -138,11 +143,38 @@ Blockly.FieldColour.prototype.getText = function() {
 
 /**
  * An array of colour strings for the palette.
- * See bottom of this page for the default:
- * http://docs.closure-library.googlecode.com/git/closure_goog_ui_colorpicker.js.source.html
+ * Copied from goog.ui.ColorPicker.SIMPLE_GRID_COLORS
  * @type {!Array.<string>}
  */
-Blockly.FieldColour.COLOURS = goog.ui.ColorPicker.SIMPLE_GRID_COLORS;
+Blockly.FieldColour.COLOURS = [
+  // grays
+  '#ffffff', '#cccccc', '#c0c0c0', '#999999', '#666666', '#333333', '#000000',
+  // reds
+  '#ffcccc', '#ff6666', '#ff0000', '#cc0000', '#990000', '#660000', '#330000',
+  // oranges
+  '#ffcc99', '#ff9966', '#ff9900', '#ff6600', '#cc6600', '#993300', '#663300',
+  // yellows
+  '#ffff99', '#ffff66', '#ffcc66', '#ffcc33', '#cc9933', '#996633', '#663333',
+  // olives
+  '#ffffcc', '#ffff33', '#ffff00', '#ffcc00', '#999900', '#666600', '#333300',
+  // greens
+  '#99ff99', '#66ff99', '#33ff33', '#33cc00', '#009900', '#006600', '#003300',
+  // turquoises
+  '#99ffff', '#33ffff', '#66cccc', '#00cccc', '#339999', '#336666', '#003333',
+  // blues
+  '#ccffff', '#66ffff', '#33ccff', '#3366ff', '#3333ff', '#000099', '#000066',
+  // purples
+  '#ccccff', '#9999ff', '#6666cc', '#6633ff', '#6600cc', '#333399', '#330099',
+  // violets
+  '#ffccff', '#ff99ff', '#cc66cc', '#cc33cc', '#993399', '#663366', '#330033'
+];
+
+/**
+ * An array of tooltip strings for the palette.
+ * If not the same length as COLOURS, the colour's hex code will be used.
+ * @type {!Array.<string>}
+ */
+Blockly.FieldColour.TITLES = [];
 
 /**
  * Number of columns in the palette.
@@ -153,10 +185,15 @@ Blockly.FieldColour.COLUMNS = 7;
  * Set a custom colour grid for this field.
  * @param {Array.<string>} colours Array of colours for this block,
  *     or null to use default (Blockly.FieldColour.COLOURS).
+ * @param {Array.<string>} opt_titles Optional array of colour tooltips,
+ *     or null to use default (Blockly.FieldColour.TITLES).
  * @return {!Blockly.FieldColour} Returns itself (for method chaining).
  */
-Blockly.FieldColour.prototype.setColours = function(colours) {
+Blockly.FieldColour.prototype.setColours = function(colours, opt_titles) {
   this.colours_ = colours;
+  if (opt_titles !== undefined) {
+    this.titles_ = opt_titles;
+  }
   return this;
 };
 
@@ -185,43 +222,70 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
 
   // Create and add the colour picker, then record the size.
   var picker = this.createWidget_();
-  var paletteSize = goog.style.getSize(picker.getElement());
+  Blockly.WidgetDiv.DIV.appendChild(picker);
+  var paletteSize = goog.style.getSize(picker);
 
   // Position the picker to line up with the field.
   Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, paletteSize,
       this.sourceBlock_.RTL);
 
-  // Configure event handler.
-  var thisField = this;
-  Blockly.FieldColour.changeEventKey_ = goog.events.listen(picker,
-      goog.ui.ColorPicker.EventType.CHANGE,
-      function(event) {
-        var colour = event.target.getSelectedColor() || '#000000';
-        Blockly.WidgetDiv.hide();
-        if (thisField.sourceBlock_) {
-          // Call any validation function, and allow it to override.
-          colour = thisField.callValidator(colour);
-        }
-        if (colour !== null) {
-          thisField.setValue(colour);
-        }
-      });
+  // Configure event handler on the table to listen for any event in a cell.
+  Blockly.FieldColour.onUpWrapper_ = Blockly.bindEvent_(picker,
+      'mouseup', this, this.onClick);
 };
 
 /**
  * Create a color picker widget and render it inside the widget div.
- * @return {!goog.ui.ColorPicker} The newly created color picker.
+ * @param {!Event} e Mouse event.
+ */
+Blockly.FieldColour.prototype.onClick = function(e) {
+  var cell = e.target;
+  if (cell && !cell.label) {
+    // The target element is the 'div', back out to the 'td'.
+    cell = cell.parentNode;
+  }
+  var colour = cell && cell.label;
+  Blockly.WidgetDiv.hide();
+  if (this.sourceBlock_) {
+    // Call any validation function, and allow it to override.
+    colour = this.callValidator(colour);
+  }
+  if (colour !== null) {
+    this.setValue(colour);
+  }
+};
+
+/**
+ * Create a color picker widget and render it inside the widget div.
+ * @return {!Element} The newly created color picker.
  * @private
  */
 Blockly.FieldColour.prototype.createWidget_ = function() {
-  // Create the palette using Closure.
-  var picker = new goog.ui.ColorPicker();
-  picker.setSize(this.columns_ || Blockly.FieldColour.COLUMNS);
-  picker.setColors(this.colours_ || Blockly.FieldColour.COLOURS);
-  var div = Blockly.WidgetDiv.DIV;
-  picker.render(div);
-  picker.setSelectedColor(this.getValue());
-  return picker;
+  var columns = this.columns_ || Blockly.FieldColour.COLUMNS;
+  var colours = this.colours_ || Blockly.FieldColour.COLOURS;
+  var titles = this.titles_ || Blockly.FieldColour.TITLES;
+  var selectedColour = this.getValue();
+  // Create the palette.
+  var table = document.createElement('table');
+  table.className = 'blocklyColourTable';
+  var row;
+  for (var i = 0; i < colours.length; i++) {
+    if (i % columns == 0) {
+      row = document.createElement('tr');
+      table.appendChild(row);
+    }
+    var cell = document.createElement('td');
+    row.appendChild(cell);
+    var div = document.createElement('div');
+    cell.appendChild(div);
+    cell.label = colours[i];
+    cell.title = titles[i] || colours[i];
+    div.style.backgroundColor = colours[i];
+    if (colours[i] == selectedColour) {
+      div.className = 'blocklyColourSelected';
+    }
+  }
+  return table;
 };
 
 /**
@@ -229,8 +293,8 @@ Blockly.FieldColour.prototype.createWidget_ = function() {
  * @private
  */
 Blockly.FieldColour.widgetDispose_ = function() {
-  if (Blockly.FieldColour.changeEventKey_) {
-    goog.events.unlistenByKey(Blockly.FieldColour.changeEventKey_);
+  if (Blockly.FieldColour.onUpWrapper_) {
+    Blockly.unbindEvent_(Blockly.FieldColour.onUpWrapper_);
   }
   Blockly.Events.setGroup(false);
 };

@@ -170,8 +170,8 @@ Blockly.FieldColour.COLOURS = [
 ];
 
 /**
- * An array of tooltip strings for the palette.
- * If not the same length as COLOURS, the colour's hex code will be used.
+ * An array of tooltip strings for the palette.  If not the same length as
+ * COLOURS, the colour's hex code will be used for any missing titles.
  * @type {!Array.<string>}
  */
 Blockly.FieldColour.TITLES = [];
@@ -235,7 +235,7 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
 };
 
 /**
- * Create a color picker widget and render it inside the widget div.
+ * Handle a click on a colour cell.
  * @param {!Event} e Mouse event.
  */
 Blockly.FieldColour.prototype.onClick = function(e) {
@@ -256,8 +256,8 @@ Blockly.FieldColour.prototype.onClick = function(e) {
 };
 
 /**
- * Create a color picker widget and render it inside the widget div.
- * @return {!Element} The newly created color picker.
+ * Create a colour picker widget.
+ * @return {!Element} The newly created colour picker.
  * @private
  */
 Blockly.FieldColour.prototype.createWidget_ = function() {
@@ -278,7 +278,7 @@ Blockly.FieldColour.prototype.createWidget_ = function() {
     row.appendChild(cell);
     var div = document.createElement('div');
     cell.appendChild(div);
-    cell.label = colours[i];
+    cell.label = colours[i];  // This becomes the value, if clicked.
     cell.title = titles[i] || colours[i];
     div.style.backgroundColor = colours[i];
     if (colours[i] == selectedColour) {
@@ -289,7 +289,7 @@ Blockly.FieldColour.prototype.createWidget_ = function() {
 };
 
 /**
- * Hide the colour palette.
+ * Hide the colour picker widget.
  * @private
  */
 Blockly.FieldColour.widgetDispose_ = function() {

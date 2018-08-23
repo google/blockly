@@ -106,8 +106,9 @@ Blockly.Variables.allDeveloperVariables = function(workspace) {
   var hash = {};
   for (var i = 0; i < blocks.length; i++) {
     var block = blocks[i];
-    if (block.getDeveloperVars) {
-      var devVars = block.getDeveloperVars();
+    var getDeveloperVariables = block.getDeveloperVariables || block.getDeveloperVars;
+    if (getDeveloperVariables) {
+      var devVars = getDeveloperVariables();
       for (var j = 0; j < devVars.length; j++) {
         hash[devVars[j]] = devVars[j];
       }

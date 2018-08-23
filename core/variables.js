@@ -92,6 +92,12 @@ Blockly.Variables.allUsedVariables = function() {
 };
 
 /**
+ * @private
+ * @type {Object<string,boolean>}
+ */
+Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_ = {};
+
+/**
  * Find all developer variables used by blocks in the workspace.
  * Developer variables are never shown to the user, but are declared as global
  * variables in the generated code.
@@ -106,7 +112,19 @@ Blockly.Variables.allDeveloperVariables = function(workspace) {
   var hash = {};
   for (var i = 0; i < blocks.length; i++) {
     var block = blocks[i];
-    var getDeveloperVariables = block.getDeveloperVariables || block.getDeveloperVars;
+    var getDeveloperVariables = block.getDeveloperVariables;
+    if (!getDeveloperVariables && block.getDeveloperVars) {
+      // getDeveloperVars was renamed getDeveloperVariables, already
+      // existing documentation.
+      getDeveloperVariables = block.getDeveloperVars;
+      if (!Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_[
+          block.type]) {
+        console.warn('Function getDeveloperVars() deprecated. Use ' +
+          'getDeveloperVariables() (block type \'' + block.type + '\')');
+        Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_[
+            block.type] = true;
+      }
+    }
     if (getDeveloperVariables) {
       var devVars = getDeveloperVariables();
       for (var j = 0; j < devVars.length; j++) {

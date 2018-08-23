@@ -114,8 +114,8 @@ Blockly.Variables.allDeveloperVariables = function(workspace) {
     var block = blocks[i];
     var getDeveloperVariables = block.getDeveloperVariables;
     if (!getDeveloperVariables && block.getDeveloperVars) {
-      // getDeveloperVars was renamed getDeveloperVariables, already
-      // existing documentation.
+      // August 2018: getDeveloperVars() was deprecated and renamed
+      // getDeveloperVariables().
       getDeveloperVariables = block.getDeveloperVars;
       if (!Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_[
           block.type]) {

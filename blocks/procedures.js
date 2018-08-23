@@ -282,6 +282,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @param {string} newId ID of new variable.  May be the same as oldId, but
    *     with an updated name.  Guaranteed to be the same type as the old
    *     variable.
+   * @override
    * @this Blockly.Block
    */
   renameVarById: function(oldId, newId) {
@@ -310,6 +311,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * variable is in use on this block, rerender to show the new name.
    * @param {!Blockly.VariableModel} variable The variable being renamed.
    * @package
+   * @override
+   * @this Blockly.Block
    */
   updateVarName: function(variable) {
     var newName = variable.name;

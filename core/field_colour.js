@@ -61,20 +61,21 @@ Blockly.FieldColour.fromJson = function(options) {
 };
 
 /**
- * By default use the global constants for colours.
+ * Array of colours used by this field.  If null, use the global list.
  * @type {Array.<string>}
  * @private
  */
 Blockly.FieldColour.prototype.colours_ = null;
 
 /**
- * By default use the global constants for colour tooltips.
+ * Array of colour tooltips used by this field.  If null, use the global list.
  * @type {Array.<string>}
  * @private
  */
 Blockly.FieldColour.prototype.titles_ = null;
 
 /**
+ * Number of colour columns used by this field.  If 0, use the global setting.
  * By default use the global constants for columns.
  * @type {number}
  * @private
@@ -144,6 +145,7 @@ Blockly.FieldColour.prototype.getText = function() {
 /**
  * An array of colour strings for the palette.
  * Copied from goog.ui.ColorPicker.SIMPLE_GRID_COLORS
+ * All colour pickers use this unless overridden with setColours.
  * @type {!Array.<string>}
  */
 Blockly.FieldColour.COLOURS = [
@@ -172,12 +174,14 @@ Blockly.FieldColour.COLOURS = [
 /**
  * An array of tooltip strings for the palette.  If not the same length as
  * COLOURS, the colour's hex code will be used for any missing titles.
+ * All colour pickers use this unless overridden with setColours.
  * @type {!Array.<string>}
  */
 Blockly.FieldColour.TITLES = [];
 
 /**
  * Number of columns in the palette.
+ * All colour pickers use this unless overridden with setColumns.
  */
 Blockly.FieldColour.COLUMNS = 7;
 
@@ -231,14 +235,15 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
 
   // Configure event handler on the table to listen for any event in a cell.
   Blockly.FieldColour.onUpWrapper_ = Blockly.bindEvent_(picker,
-      'mouseup', this, this.onClick);
+      'mouseup', this, this.onClick_);
 };
 
 /**
  * Handle a click on a colour cell.
  * @param {!Event} e Mouse event.
+ * @private
  */
-Blockly.FieldColour.prototype.onClick = function(e) {
+Blockly.FieldColour.prototype.onClick_ = function(e) {
   var cell = e.target;
   if (cell && !cell.label) {
     // The target element is the 'div', back out to the 'td'.

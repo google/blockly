@@ -152,8 +152,8 @@ Blockly.Touch.shouldHandleEvent = function(e) {
 Blockly.Touch.getTouchIdentifierFromEvent = function(e) {
   return e.pointerId != undefined ? e.pointerId :
       (e.changedTouches && e.changedTouches[0] &&
-      e.changedTouches[0].identifier != undefined &&
-      e.changedTouches[0].identifier != null) ?
+      e.changedTouches[0].identifier !== undefined &&
+      e.changedTouches[0].identifier !== null) ?
       e.changedTouches[0].identifier : 'mouse';
 };
 
@@ -174,8 +174,8 @@ Blockly.Touch.checkTouchIdentifier = function(e) {
 
   // if (Blockly.touchIdentifier_ )is insufficient because Android touch
   // identifiers may be zero.
-  if (Blockly.Touch.touchIdentifier_ != undefined &&
-      Blockly.Touch.touchIdentifier_ != null) {
+  if (Blockly.Touch.touchIdentifier_ !== undefined &&
+      Blockly.Touch.touchIdentifier_ !== null) {
     // We're already tracking some touch/mouse event.  Is this from the same
     // source?
     return Blockly.Touch.touchIdentifier_ == identifier;

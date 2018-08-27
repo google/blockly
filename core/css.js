@@ -166,7 +166,7 @@ Blockly.Css.CONTENT = [
 
   '.blocklyBlockCanvas.blocklyCanvasTransitioning,',
   '.blocklyBubbleCanvas.blocklyCanvasTransitioning {',
-    'transition: transform 0.5s;',
+    'transition: transform .5s;',
   '}',
 
   '.blocklyTooltipDiv {',

@@ -25,16 +25,16 @@
   "license": "Apache-2.0",
   "private": true,
   "devDependencies": {
-    "eslint": "^5.3.0",
-    "google-closure-compiler": "^20180610.0.2",
-    "google-closure-library": "^20180506.0.0",
+    "eslint": "^5.4.0",
+    "google-closure-compiler": "^20180805.0.0",
+    "google-closure-library": "^20180805.0.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-insert": "^0.5.0",
     "gulp-series": "^1.0.2",
     "gulp-shell": "^0.6.5",
     "jshint": "^2.9.5",
-    "webdriverio": "^4.13.1"
+    "webdriverio": "^4.13.2"
   },
   "jshintConfig": {
     "globalstrict": true,
@@ -51,6 +51,6 @@
     "unused": true
   },
   "dependencies": {
-    "jsdom": "^11.11.0"
+    "jsdom": "^12.0.0"
   }
 }

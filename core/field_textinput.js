@@ -106,18 +106,17 @@ Blockly.FieldTextInput.prototype.dispose = function() {
  * @override
  */
 Blockly.FieldTextInput.prototype.setValue = function(newValue) {
-  if (newValue === null) {
-    return;  // No change if null.
-  }
-  if (this.sourceBlock_) {
-    var validated = this.callValidator(newValue);
-    // If the new value is invalid, validation returns null.
-    // In this case we still want to display the illegal result.
-    if (validated !== null) {
-      newValue = validated;
+  if (newValue !== null) { // No change if null.
+    if (this.sourceBlock_) {
+      var validated = this.callValidator(newValue);
+      // If the new value is invalid, validation returns null.
+      // In this case we still want to display the illegal result.
+      if (validated !== null) {
+        newValue = validated;
+      }
     }
+    Blockly.Field.prototype.setValue.call(this, newValue);
   }
-  Blockly.Field.prototype.setValue.call(this, newValue);
 };
 
 /**
@@ -369,6 +368,11 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
   };
 };
 
+/**
+ * Attempt to save the text field changes when the user input loses focus.
+ * If the value is not valid, revert to the default value.
+ * @private
+ */
 Blockly.FieldTextInput.prototype.maybeSaveEdit_ = function() {
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
   // Save the edit (if it validates).

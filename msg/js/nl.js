@@ -6,7 +6,7 @@ goog.provide('Blockly.Msg.nl');
 
 goog.require('Blockly.Msg');
 
-Blockly.Msg["ADD_COMMENT"] = "Reactie toevoegen";
+Blockly.Msg["ADD_COMMENT"] = "Opmerking toevoegen";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "De variabele \"%1\" kan niet verwijderd worden omdat die onderdeel uitmaakt van de definitie van de functie \"%2\"";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Waarde wijzigen:";
 Blockly.Msg["CLEAN_UP"] = "Blokken opschonen";
@@ -68,7 +68,7 @@ Blockly.Msg["DELETE_VARIABLE_CONFIRMATION"] = "%1 gebruiken van de variabele \"%
 Blockly.Msg["DELETE_X_BLOCKS"] = "%1 blokken verwijderen";
 Blockly.Msg["DISABLE_BLOCK"] = "Blok uitschakelen";
 Blockly.Msg["DUPLICATE_BLOCK"] = "Duplicaat";
-Blockly.Msg["DUPLICATE_COMMENT"] = "Duplicaat Commentaar";
+Blockly.Msg["DUPLICATE_COMMENT"] = "Opmerking dupliceren";
 Blockly.Msg["ENABLE_BLOCK"] = "Blok inschakelen";
 Blockly.Msg["EXPAND_ALL"] = "Blokken uitvouwen";
 Blockly.Msg["EXPAND_BLOCK"] = "Blok uitvouwen";

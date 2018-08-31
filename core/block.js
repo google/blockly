@@ -53,14 +53,13 @@ goog.require('goog.math.Coordinate');
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @constructor
+ * @throw When block is not valid or block name is not allowed.
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {
   if (typeof Blockly.Generator.prototype[prototypeName] !== 'undefined') {
-    console.warn('FUTURE ERROR: Block prototypeName "' + prototypeName +
-        '" conflicts with Blockly.Generator members. Registering Generators ' +
-        'for this block type will incur errors.' +
-        '\nThis name will be DISALLOWED (throwing an error) in future ' +
-        'versions of Blockly.');
+    // Occluding Generator class members is not allowed.
+    throw Error('Block prototypeName "' + prototypeName +
+        '" conflicts with Blockly.Generator members.');
   }
 
   /** @type {string} */

@@ -37,7 +37,7 @@ goog.provide('Blockly.Events.Move');  // Deprecated.
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
 
-goog.require('goog.array');
+goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 
 
@@ -300,7 +300,7 @@ Blockly.Events.Delete = function(block) {
     return;  // Blank event to be populated by fromJson.
   }
   if (block.getParent()) {
-    throw 'Connected blocks cannot be deleted.';
+    throw Error('Connected blocks cannot be deleted.');
   }
   Blockly.Events.Delete.superClass_.constructor.call(this, block);
 

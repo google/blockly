@@ -37,8 +37,7 @@ goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 
-goog.require('goog.asserts');
-goog.require('goog.dom');
+goog.require('goog.color');
 goog.require('goog.math.Coordinate');
 
 
@@ -145,7 +144,9 @@ Blockly.BlockSvg.INLINE = -1;
  * May be called more than once.
  */
 Blockly.BlockSvg.prototype.initSvg = function() {
-  goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
+  if (!this.workspace.rendered) {
+    throw TypeError('Workspace is headless.');
+  }
   for (var i = 0, input; input = this.inputList[i]; i++) {
     input.init();
   }
@@ -327,7 +328,9 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
  * @param {number} dy Vertical offset in workspace units.
  */
 Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
-  goog.asserts.assert(!this.parentBlock_, 'Block has parent.');
+  if (this.parentBlock_) {
+    throw Error('Block has parent.');
+  }
   var eventsEnabled = Blockly.Events.isEnabled();
   if (eventsEnabled) {
     var event = new Blockly.Events.BlockMove(this);
@@ -594,7 +597,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.BlockSvg.prototype.showHelp_ = function() {
-  var url = goog.isFunction(this.helpUrl) ? this.helpUrl() : this.helpUrl;
+  var url = (typeof this.helpUrl == 'function') ? this.helpUrl() : this.helpUrl;
   if (url) {
     window.open(url);
   }
@@ -666,7 +669,14 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
             Blockly.Msg['ENABLE_BLOCK'] : Blockly.Msg['DISABLE_BLOCK'],
         enabled: !this.getInheritedDisabled(),
         callback: function() {
+          var group = Blockly.Events.getGroup();
+          if (!group) {
+            Blockly.Events.setGroup(true);
+          }
           block.setDisabled(!block.disabled);
+          if (!group) {
+            Blockly.Events.setGroup(false);
+          }
         }
       };
       menuOptions.push(disableOption);
@@ -845,7 +855,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   }
   Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
 
-  goog.dom.removeNode(this.svgGroup_);
+  this.svgGroup_.parentNode.removeChild(this.svgGroup_);
   blockWorkspace.resizeContents();
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;
@@ -936,7 +946,7 @@ Blockly.BlockSvg.prototype.getCommentText = function() {
  */
 Blockly.BlockSvg.prototype.setCommentText = function(text) {
   var changedState = false;
-  if (goog.isString(text)) {
+  if (typeof text == 'string') {
     if (!this.comment) {
       this.comment = new Blockly.Comment(this);
       changedState = true;
@@ -1009,7 +1019,7 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
   }
 
   var changedState = false;
-  if (goog.isString(text)) {
+  if (typeof text == 'string') {
     if (!this.warning) {
       this.warning = new Blockly.Warning(this);
       changedState = true;
@@ -1213,7 +1223,7 @@ Blockly.BlockSvg.prototype.setInputsInline = function(newBoolean) {
  * Remove an input from this block.
  * @param {string} name The name of the input.
  * @param {boolean=} opt_quiet True to prevent error if input is not present.
- * @throws {goog.asserts.AssertionError} if the input is not present and
+ * @throws {Error} if the input is not present and
  *     opt_quiet is not true.
  */
 Blockly.BlockSvg.prototype.removeInput = function(name, opt_quiet) {

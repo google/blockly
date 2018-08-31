@@ -1131,10 +1131,18 @@ h1 {
     </category>
     <category name="Fields">
       <label text="Numbers"></label>
-      <block type="test_number"></block>
-      <block type="test_integer"></block>
-      <block type="test_number_hundredths"></block>
-      <block type="test_integer_bounded"></block>
+      <block type="test_number">
+        <field name="NUM">123.456</field>
+      </block>
+      <block type="test_integer">
+        <field name="NUM">123.456</field>
+      </block>
+      <block type="test_number_hundredths">
+        <field name="NUM">123.456</field>
+      </block>
+      <block type="test_integer_bounded">
+        <field name="NOTE">60</field>
+      </block>
       <label text="Drop-downs"></label>
       <block type="example_dropdown_long"></block>
       <block type="example_dropdown_images"></block>

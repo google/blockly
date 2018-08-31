@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.BlockAnimations');
 
+goog.require('Blockly.utils');
+
 
 /**
  * PID of disconnect UI animation.  There can only be one at a time.
@@ -79,7 +81,7 @@ Blockly.BlockAnimations.disposeUiStep_ = function(clone, rtl, start,
   var ms = new Date - start;
   var percent = ms / 150;
   if (percent > 1) {
-    goog.dom.removeNode(clone);
+    clone.parentNode.removeChild(clone);
   } else {
     var x = clone.translateX_ +
         (rtl ? -1 : 1) * clone.bBox_.width * workspaceScale / 2 * percent;
@@ -139,7 +141,7 @@ Blockly.BlockAnimations.connectionUiStep_ = function(ripple, start, scale) {
   var ms = new Date - start;
   var percent = ms / 150;
   if (percent > 1) {
-    goog.dom.removeNode(ripple);
+    ripple.parentNode.removeChild(ripple);
   } else {
     ripple.setAttribute('r', percent * 25 * scale);
     ripple.style.opacity = 1 - percent;

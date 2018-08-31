@@ -28,7 +28,6 @@ goog.provide('Blockly.Input');
 
 goog.require('Blockly.Connection');
 goog.require('Blockly.FieldLabel');
-goog.require('goog.asserts');
 
 
 /**
@@ -42,7 +41,7 @@ goog.require('goog.asserts');
  */
 Blockly.Input = function(type, name, block, connection) {
   if (type != Blockly.DUMMY_INPUT && !name) {
-    throw 'Value inputs and statement inputs must have non-empty name.';
+    throw Error('Value inputs and statement inputs must have non-empty name.');
   }
   /** @type {number} */
   this.type = type;
@@ -104,7 +103,7 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
     return index;
   }
   // Generate a FieldLabel when given a plain text field.
-  if (goog.isString(field)) {
+  if (typeof field == 'string') {
     field = new Blockly.FieldLabel(/** @type {string} */ (field));
   }
   field.setSourceBlock(this.sourceBlock_);
@@ -136,7 +135,7 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
 /**
  * Remove a field from this input.
  * @param {string} name The name of the field.
- * @throws {goog.asserts.AssertionError} if the field is not present.
+ * @throws {Error} if the field is not present.
  */
 Blockly.Input.prototype.removeField = function(name) {
   for (var i = 0, field; field = this.fieldRow[i]; i++) {
@@ -151,7 +150,7 @@ Blockly.Input.prototype.removeField = function(name) {
       return;
     }
   }
-  goog.asserts.fail('Field "%s" not found.', name);
+  throw Error('Field "%s" not found.', name);
 };
 
 /**
@@ -205,7 +204,7 @@ Blockly.Input.prototype.setVisible = function(visible) {
  */
 Blockly.Input.prototype.setCheck = function(check) {
   if (!this.connection) {
-    throw 'This input does not have a connection.';
+    throw Error('This input does not have a connection.');
   }
   this.connection.setCheck(check);
   return this;

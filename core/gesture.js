@@ -35,9 +35,9 @@ goog.require('Blockly.Events.Ui');
 goog.require('Blockly.FlyoutDragger');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
+goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceDragger');
 
-goog.require('goog.asserts');
 goog.require('goog.math.Coordinate');
 
 
@@ -429,8 +429,9 @@ Blockly.Gesture.prototype.updateIsDraggingWorkspace_ = function() {
  */
 Blockly.Gesture.prototype.updateIsDragging_ = function() {
   // Sanity check.
-  goog.asserts.assert(!this.calledUpdateIsDragging_,
-      'updateIsDragging_ should only be called once per gesture.');
+  if (this.calledUpdateIsDragging_) {
+    throw Error('updateIsDragging_ should only be called once per gesture.');
+  }
   this.calledUpdateIsDragging_ = true;
 
   // First check if it was a bubble drag.  Bubbles always sit on top of blocks.
@@ -505,8 +506,9 @@ Blockly.Gesture.prototype.doStart = function(e) {
     return;
   }
 
-  if (goog.string.caseInsensitiveEquals(e.type, 'touchstart') ||
-      (goog.string.caseInsensitiveEquals(e.type, 'pointerdown') && e.pointerType != 'mouse')) {
+  if ((e.type.toLowerCase() == 'touchstart' ||
+      e.type.toLowerCase() == 'pointerdown') &&
+       e.pointerType != 'mouse') {
     Blockly.longStart_(e, this);
   }
 
@@ -648,9 +650,10 @@ Blockly.Gesture.prototype.handleRightClick = function(e) {
  * @package
  */
 Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
-  goog.asserts.assert(!this.hasStarted_,
-      'Tried to call gesture.handleWsStart, but the gesture had already been ' +
-      'started.');
+  if (this.hasStarted_) {
+    throw Error('Tried to call gesture.handleWsStart, ' +
+        'but the gesture had already been started.');
+  }
   this.setStartWorkspace_(ws);
   this.mostRecentEvent_ = e;
   this.doStart(e);
@@ -663,9 +666,10 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
  * @package
  */
 Blockly.Gesture.prototype.handleFlyoutStart = function(e, flyout) {
-  goog.asserts.assert(!this.hasStarted_,
-      'Tried to call gesture.handleFlyoutStart, but the gesture had already ' +
-      'been started.');
+  if (this.hasStarted_) {
+    throw Error('Tried to call gesture.handleFlyoutStart, ' +
+        'but the gesture had already been started.');
+  }
   this.setStartFlyout_(flyout);
   this.handleWsStart(e, flyout.getWorkspace());
 };
@@ -677,9 +681,10 @@ Blockly.Gesture.prototype.handleFlyoutStart = function(e, flyout) {
  * @package
  */
 Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
-  goog.asserts.assert(!this.hasStarted_,
-      'Tried to call gesture.handleBlockStart, but the gesture had already ' +
-      'been started.');
+  if (this.hasStarted_) {
+    throw Error('Tried to call gesture.handleBlockStart, ' +
+        'but the gesture had already been started.');
+  }
   this.setStartBlock(block);
   this.mostRecentEvent_ = e;
 };
@@ -691,9 +696,10 @@ Blockly.Gesture.prototype.handleBlockStart = function(e, block) {
  * @package
  */
 Blockly.Gesture.prototype.handleBubbleStart = function(e, bubble) {
-  goog.asserts.assert(!this.hasStarted_,
-      'Tried to call gesture.handleBubbleStart, but the gesture had already ' +
-      'been started.');
+  if (this.hasStarted_) {
+    throw Error('Tried to call gesture.handleBubbleStart, ' +
+        'but the gesture had already been started.');
+  }
   this.setStartBubble(bubble);
   this.mostRecentEvent_ = e;
 };
@@ -779,9 +785,10 @@ Blockly.Gesture.prototype.bringBlockToFront_ = function() {
  * @package
  */
 Blockly.Gesture.prototype.setStartField = function(field) {
-  goog.asserts.assert(!this.hasStarted_,
-      'Tried to call gesture.setStartField, but the gesture had already been ' +
-      'started.');
+  if (this.hasStarted_) {
+    throw Error('Tried to call gesture.setStartField, ' +
+        'but the gesture had already been started.');
+  }
   if (!this.startField_) {
     this.startField_ = field;
   }

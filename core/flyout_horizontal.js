@@ -31,8 +31,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.WorkspaceSvg');
-goog.require('goog.dom');
-goog.require('goog.events');
+
 goog.require('goog.math.Rect');
 goog.require('goog.userAgent');
 
@@ -126,7 +125,7 @@ Blockly.HorizontalFlyout.prototype.setMetrics_ = function(xyRatio) {
     return;
   }
 
-  if (goog.isNumber(xyRatio.x)) {
+  if (typeof xyRatio.x == 'number') {
     this.workspace_.scrollX = -metrics.contentWidth * xyRatio.x;
   }
 

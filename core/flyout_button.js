@@ -26,7 +26,8 @@
 
 goog.provide('Blockly.FlyoutButton');
 
-goog.require('goog.dom');
+goog.require('Blockly.utils');
+
 goog.require('goog.math.Coordinate');
 
 
@@ -238,7 +239,7 @@ Blockly.FlyoutButton.prototype.dispose = function() {
     Blockly.unbindEvent_(this.onMouseUpWrapper_);
   }
   if (this.svgGroup_) {
-    goog.dom.removeNode(this.svgGroup_);
+    this.svgGroup_.parentNode.removeChild(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.workspace_ = null;

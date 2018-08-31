@@ -255,7 +255,7 @@ Blockly.PHP['lists_getIndex'] = function(block) {
       }
       break;
   }
-  throw 'Unhandled combination (lists_getIndex).';
+  throw Error('Unhandled combination (lists_getIndex).');
 };
 
 Blockly.PHP['lists_setIndex'] = function(block) {
@@ -355,7 +355,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
       }
       break;
   }
-  throw 'Unhandled combination (lists_setIndex).';
+  throw Error('Unhandled combination (lists_setIndex).');
 };
 
 Blockly.PHP['lists_getSublist'] = function(block) {
@@ -383,7 +383,7 @@ Blockly.PHP['lists_getSublist'] = function(block) {
         var at1 = '0';
         break;
       default:
-        throw 'Unhandled option (lists_getSublist).';
+        throw Error('Unhandled option (lists_getSublist).');
     }
     switch (where2) {
       case 'FROM_START':
@@ -416,7 +416,7 @@ Blockly.PHP['lists_getSublist'] = function(block) {
         }
         break;
       default:
-        throw 'Unhandled option (lists_getSublist).';
+        throw Error('Unhandled option (lists_getSublist).');
     }
     code = 'array_slice(' + list + ', ' + at1 + ', ' + length + ')';
   } else {
@@ -497,7 +497,7 @@ Blockly.PHP['lists_split'] = function(block) {
     }
     var functionName = 'implode';
   } else {
-    throw 'Unknown mode: ' + mode;
+    throw Error('Unknown mode: ' + mode);
   }
   var code = functionName + '(' + value_delim + ', ' + value_input + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];

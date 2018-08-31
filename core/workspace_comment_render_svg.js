@@ -26,7 +26,10 @@
 
 goog.provide('Blockly.WorkspaceCommentSvg.render');
 
+goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceCommentSvg');
+
+goog.require('goog.math.Coordinate');
 
 
 /**

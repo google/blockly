@@ -28,7 +28,8 @@ goog.provide('Blockly.FieldLabel');
 
 goog.require('Blockly.Field');
 goog.require('Blockly.Tooltip');
-goog.require('goog.dom');
+goog.require('Blockly.utils');
+
 goog.require('goog.math.Size');
 
 
@@ -94,8 +95,10 @@ Blockly.FieldLabel.prototype.init = function() {
  * Dispose of all DOM objects belonging to this text.
  */
 Blockly.FieldLabel.prototype.dispose = function() {
-  goog.dom.removeNode(this.textElement_);
-  this.textElement_ = null;
+  if (this.textElement_) {
+    this.textElement_.parentNode.removeChild(this.textElement_);
+    this.textElement_ = null;
+  }
 };
 
 /**

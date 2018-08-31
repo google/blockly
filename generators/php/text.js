@@ -152,7 +152,7 @@ Blockly.PHP['text_charAt'] = function(block) {
       code = functionName + '(' + text + ')';
       return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
   }
-  throw 'Unhandled option (text_charAt).';
+  throw Error('Unhandled option (text_charAt).');
 };
 
 Blockly.PHP['text_getSubstring'] = function(block) {

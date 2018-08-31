@@ -243,7 +243,7 @@ Blockly.Dart['lists_getIndex'] = function(block) {
         break;
     }
   }
-  throw 'Unhandled combination (lists_getIndex).';
+  throw Error('Unhandled combination (lists_getIndex).');
 };
 
 Blockly.Dart['lists_setIndex'] = function(block) {
@@ -323,7 +323,7 @@ Blockly.Dart['lists_setIndex'] = function(block) {
       }
       break;
   }
-  throw 'Unhandled combination (lists_setIndex).';
+  throw Error('Unhandled combination (lists_setIndex).');
 };
 
 Blockly.Dart['lists_getSublist'] = function(block) {
@@ -348,7 +348,7 @@ Blockly.Dart['lists_getSublist'] = function(block) {
         var at1 = '0';
         break;
       default:
-        throw 'Unhandled option (lists_getSublist).';
+        throw Error('Unhandled option (lists_getSublist).');
     }
     switch (where2) {
       case 'FROM_START':
@@ -363,7 +363,7 @@ Blockly.Dart['lists_getSublist'] = function(block) {
         // There is no second index if LAST option is chosen.
         break;
       default:
-        throw 'Unhandled option (lists_getSublist).';
+        throw Error('Unhandled option (lists_getSublist).');
     }
     if (where2 == 'LAST') {
       var code = list + '.sublist(' + at1 + ')';
@@ -445,7 +445,7 @@ Blockly.Dart['lists_split'] = function(block) {
     }
     var functionName = 'join';
   } else {
-    throw 'Unknown mode: ' + mode;
+    throw Error('Unknown mode: ' + mode);
   }
   var code = input + '.' + functionName + '(' + delimiter + ')';
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];

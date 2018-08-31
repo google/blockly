@@ -191,6 +191,7 @@ function test_blockDelete_constructor() {
   setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
   try {
     var block = createSimpleTestBlock(workspace);
+    block.setCommentText('test comment');
     var event = new Blockly.Events.BlockDelete(block);
     checkDeleteEventValues(event, block, ['1'], 'delete');
   } finally {

@@ -37,6 +37,8 @@ goog.require('Blockly.Field');
 goog.require('Blockly.Names');
 goog.require('Blockly.Workspace');
 
+goog.require('goog.dom');
+
 
 /**
  * Constant to separate procedure names from variables and generated functions

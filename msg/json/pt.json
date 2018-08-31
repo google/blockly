@@ -13,7 +13,8 @@
 			"Mauricio",
 			"Vicng",
 			"MokaAkashiyaPT",
-			"Athena in Wonderland"
+			"Athena in Wonderland",
+			"McDutchie"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -264,7 +265,7 @@
 	"TEXT_REPLACE_MESSAGE0": "substituir %1 por %2 em %3",
 	"TEXT_REPLACE_HELPURL": "https://github.com/google/blockly/wiki/Text#replacing-substrings",
 	"TEXT_REPLACE_TOOLTIP": "Substituir todas as ocorrências de um certo texto dentro de algum outro texto.",
-	"TEXT_REVERSE_MESSAGE0": "reverse %1",
+	"TEXT_REVERSE_MESSAGE0": "inverter %1",
 	"TEXT_REVERSE_HELPURL": "https://github.com/google/blockly/wiki/Text#reversing-text",
 	"TEXT_REVERSE_TOOLTIP": "Inverte a ordem dos caracteres no texto.",
 	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",

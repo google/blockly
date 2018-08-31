@@ -31,7 +31,6 @@ goog.require('Blockly.DraggedConnectionManager');
 goog.require('Blockly.Events.BlockMove');
 
 goog.require('goog.math.Coordinate');
-goog.require('goog.asserts');
 
 
 /**
@@ -151,6 +150,13 @@ Blockly.BlockDragger.initIconData_ = function(block) {
 Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY, healStack) {
   if (!Blockly.Events.getGroup()) {
     Blockly.Events.setGroup(true);
+  }
+
+  // Mutators don't have the same type of z-ordering as the normal workspace during a drag.
+  // They have to rely on the order of the blocks in the svg. For performance reasons that
+  // usually happens at the end of a drag, but do it at the beginning for mutators.
+  if (this.workspace_.isMutator) {
+    this.draggingBlock_.bringToFront();
   }
 
   this.workspace_.setResizesEnabled(false);

@@ -33,9 +33,9 @@ goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Touch');
+goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceSvg');
-goog.require('goog.dom');
-goog.require('goog.events');
+
 goog.require('goog.math.Rect');
 
 
@@ -276,7 +276,7 @@ Blockly.Flyout.prototype.dispose = function() {
     this.workspace_ = null;
   }
   if (this.svgGroup_) {
-    goog.dom.removeNode(this.svgGroup_);
+    this.svgGroup_.parentNode.removeChild(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.svgBackground_ = null;
@@ -426,11 +426,13 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   if (typeof xmlList == 'string') {
     var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
         xmlList);
-    goog.asserts.assert(goog.isFunction(fnToApply),
-        'Couldn\'t find a callback function when opening a toolbox category.');
+    if (typeof fnToApply != 'function') {
+      throw TypeError('Couldn\'t find a callback function when opening a toolbox category.');
+    }
     xmlList = fnToApply(this.workspace_.targetWorkspace);
-    goog.asserts.assert(goog.isArray(xmlList),
-        'The result of a toolbox category callback must be an array.');
+    if (!Array.isArray(xmlList)) {
+      throw TypeError('Result of toolbox category callback must be an array.');
+    }
   }
 
   this.setVisible(true);
@@ -524,7 +526,7 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
   for (var j = 0; j < this.mats_.length; j++) {
     var rect = this.mats_[j];
     if (rect) {
-      goog.dom.removeNode(rect);
+      rect.parentNode.removeChild(rect);
     }
   }
   this.mats_.length = 0;
@@ -762,7 +764,7 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   var targetWorkspace = this.targetWorkspace_;
   var svgRootOld = oldBlock.getSvgRoot();
   if (!svgRootOld) {
-    throw 'oldBlock is not rendered.';
+    throw Error('oldBlock is not rendered.');
   }
 
   // Create the new block by cloning the block in the flyout (via XML).
@@ -776,7 +778,7 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   var block = Blockly.Xml.domToBlock(xml, targetWorkspace);
   var svgRootNew = block.getSvgRoot();
   if (!svgRootNew) {
-    throw 'block is not rendered.';
+    throw Error('block is not rendered.');
   }
 
   // The offset in pixels between the main workspace's origin and the upper left

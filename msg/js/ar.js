@@ -68,7 +68,7 @@ Blockly.Msg["DELETE_VARIABLE_CONFIRMATION"] = "حذف%1 1 استخدامات ا�
 Blockly.Msg["DELETE_X_BLOCKS"] = "احذف %1 قطع";
 Blockly.Msg["DISABLE_BLOCK"] = "عطّل القطعة";
 Blockly.Msg["DUPLICATE_BLOCK"] = "مكرر";
-Blockly.Msg["DUPLICATE_COMMENT"] = "Duplicate Comment";  // untranslated
+Blockly.Msg["DUPLICATE_COMMENT"] = "تعليق مكرر";
 Blockly.Msg["ENABLE_BLOCK"] = "أعد تفعيل القطعة";
 Blockly.Msg["EXPAND_ALL"] = "وسٌّع القطع";
 Blockly.Msg["EXPAND_BLOCK"] = "وسٌّع القطعة";
@@ -144,8 +144,8 @@ Blockly.Msg["LISTS_REPEAT_HELPURL"] = "https://github.com/google/blockly/wiki/Li
 Blockly.Msg["LISTS_REPEAT_TITLE"] = "إنشئ قائمة مع العنصر  %1 %2 مرات";
 Blockly.Msg["LISTS_REPEAT_TOOLTIP"] = "انشئ قائمة تتألف من القيمة المعطاة متكررة لعدد محدد من المرات.";
 Blockly.Msg["LISTS_REVERSE_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#reversing-a-list";  // untranslated
-Blockly.Msg["LISTS_REVERSE_MESSAGE0"] = "reverse %1";  // untranslated
-Blockly.Msg["LISTS_REVERSE_TOOLTIP"] = "Reverse a copy of a list.";  // untranslated
+Blockly.Msg["LISTS_REVERSE_MESSAGE0"] = "عكس %1";
+Blockly.Msg["LISTS_REVERSE_TOOLTIP"] = "عكس نسخة من القائمة.";
 Blockly.Msg["LISTS_SET_INDEX_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#in-list--set";  // untranslated
 Blockly.Msg["LISTS_SET_INDEX_INPUT_TO"] = "مثل";
 Blockly.Msg["LISTS_SET_INDEX_INSERT"] = "أدخل في";
@@ -376,9 +376,9 @@ Blockly.Msg["TEXT_PROMPT_TYPE_NUMBER"] = "انتظر ادخال المستخدم
 Blockly.Msg["TEXT_PROMPT_TYPE_TEXT"] = "انتظر ادخال المستخدم لنص ما مع اظهار رسالة";
 Blockly.Msg["TEXT_REPLACE_HELPURL"] = "https://github.com/google/blockly/wiki/Text#replacing-substrings";  // untranslated
 Blockly.Msg["TEXT_REPLACE_MESSAGE0"] = "بدل %1 ب %2 في %3";
-Blockly.Msg["TEXT_REPLACE_TOOLTIP"] = "Replace all occurances of some text within some other text.";  // untranslated
+Blockly.Msg["TEXT_REPLACE_TOOLTIP"] = "استبدل جميع حالات حدوث بعض النصوص داخل نص آخر.";
 Blockly.Msg["TEXT_REVERSE_HELPURL"] = "https://github.com/google/blockly/wiki/Text#reversing-text";  // untranslated
-Blockly.Msg["TEXT_REVERSE_MESSAGE0"] = "reverse %1";  // untranslated
+Blockly.Msg["TEXT_REVERSE_MESSAGE0"] = "عكس %1";
 Blockly.Msg["TEXT_REVERSE_TOOLTIP"] = "يعكس ترتيب حروف النص";
 Blockly.Msg["TEXT_TEXT_HELPURL"] = "https://en.wikipedia.org/wiki/String_(computer_science)";
 Blockly.Msg["TEXT_TEXT_TOOLTIP"] = "حرف أو كلمة أو سطر من النص.";
@@ -399,7 +399,7 @@ Blockly.Msg["VARIABLES_SET_HELPURL"] = "https://github.com/google/blockly/wiki/V
 Blockly.Msg["VARIABLES_SET_TOOLTIP"] = "تعيين هذا المتغير لتكون مساوية للقيمة المدخلة.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "المتغير '%1' موجود بالفعل";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "متغير بأسم '%1' معرف من نوع اخر : '%2'.";
-Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "Say something...";  // untranslated
+Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "قل شيئا...";
 Blockly.Msg["PROCEDURES_DEFRETURN_TITLE"] = Blockly.Msg["PROCEDURES_DEFNORETURN_TITLE"];
 Blockly.Msg["CONTROLS_IF_IF_TITLE_IF"] = Blockly.Msg["CONTROLS_IF_MSG_IF"];
 Blockly.Msg["CONTROLS_WHILEUNTIL_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];

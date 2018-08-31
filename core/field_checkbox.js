@@ -27,6 +27,7 @@
 goog.provide('Blockly.FieldCheckbox');
 
 goog.require('Blockly.Field');
+goog.require('Blockly.utils');
 
 
 /**

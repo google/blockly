@@ -27,7 +27,7 @@
 goog.provide('Blockly.ZoomControls');
 
 goog.require('Blockly.Touch');
-goog.require('goog.dom');
+goog.require('Blockly.utils');
 
 
 /**
@@ -122,7 +122,7 @@ Blockly.ZoomControls.prototype.init = function(bottom) {
  */
 Blockly.ZoomControls.prototype.dispose = function() {
   if (this.svgGroup_) {
-    goog.dom.removeNode(this.svgGroup_);
+    this.svgGroup_.parentNode.removeChild(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.workspace_ = null;
@@ -302,7 +302,11 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
   Blockly.bindEventWithChecks_(zoomresetSvg, 'mousedown', null, function(e) {
     ws.markFocused();
     ws.setScale(ws.options.zoomOptions.startScale);
+    ws.beginCanvasTransition();
     ws.scrollCenter();
+    setTimeout(function() {
+      ws.endCanvasTransition();
+    }, 500);
     Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
     e.stopPropagation();  // Don't start a workspace scroll.
     e.preventDefault();  // Stop double-clicking from selecting text.

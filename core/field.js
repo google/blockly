@@ -30,9 +30,8 @@ goog.provide('Blockly.Field');
 
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
+goog.require('Blockly.utils');
 
-goog.require('goog.asserts');
-goog.require('goog.dom');
 goog.require('goog.math.Size');
 goog.require('goog.style');
 goog.require('goog.userAgent');
@@ -41,10 +40,8 @@ goog.require('goog.userAgent');
 /**
  * Abstract class for an editable field.
  * @param {string} text The initial content of the field.
- * @param {Function=} opt_validator An optional function that is called
- *     to validate any constraints on what the user entered.  Takes the new
- *     text as an argument and returns either the accepted text, a replacement
- *     text, or null to abort the change.
+ * @param {function(string):(string|null|undefined)=} opt_validator An optional
+ *     function that is called to validate user input. See setValidator().
  * @constructor
  */
 Blockly.Field = function(text, opt_validator) {
@@ -71,10 +68,10 @@ Blockly.Field.TYPE_MAP_ = {};
  *     object containing a fromJson function.
  */
 Blockly.Field.register = function(type, fieldClass) {
-  if (!goog.isString(type) || goog.string.isEmptyOrWhitespace(type)) {
+  if ((typeof type != 'string') || (type.trim() == '')) {
     throw new Error('Invalid field type "' + type + '"');
   }
-  if (!goog.isObject(fieldClass) || !goog.isFunction(fieldClass.fromJson)) {
+  if (!fieldClass || (typeof fieldClass.fromJson != 'function')) {
     throw new Error('Field "' + fieldClass +
         '" must have a fromJson function');
   }
@@ -171,7 +168,9 @@ Blockly.Field.prototype.EDITABLE = true;
  * @param {!Blockly.Block} block The block containing this field.
  */
 Blockly.Field.prototype.setSourceBlock = function(block) {
-  goog.asserts.assert(!this.sourceBlock_, 'Field already bound to a block.');
+  if (this.sourceBlock_) {
+    throw Error('Field already bound to a block.');
+  }
   this.sourceBlock_ = block;
 };
 
@@ -226,8 +225,10 @@ Blockly.Field.prototype.dispose = function() {
     this.mouseDownWrapper_ = null;
   }
   this.sourceBlock_ = null;
-  goog.dom.removeNode(this.fieldGroup_);
-  this.fieldGroup_ = null;
+  if (this.fieldGroup_) {
+    this.fieldGroup_.parentNode.removeChild(this.fieldGroup_);
+    this.fieldGroup_ = null;
+  }
   this.textElement_ = null;
   this.borderRect_ = null;
   this.validator_ = null;
@@ -288,15 +289,25 @@ Blockly.Field.prototype.setVisible = function(visible) {
 };
 
 /**
- * Sets a new validation function for editable fields.
- * @param {Function} handler New validation function, or null.
+ * Sets a new validation function for editable fields, or clears a previously
+ * set validator.
+ *
+ * The validator function takes in the text form of the users input, and
+ * optionally returns the accepted field text. Alternatively, if the function
+ * returns null, the field value change aborts. If the function does not return
+ * anything (or returns undefined), the input value is accepted as valid. This
+ * is a shorthand for fields using the validator function call as a field-level
+ * change event notification.
+ *
+ * @param {?function(string):(string|null|undefined)} handler The validator
+ *     function or null to clear a previous validator.
  */
 Blockly.Field.prototype.setValidator = function(handler) {
   this.validator_ = handler;
 };
 
 /**
- * Gets the validation function for editable fields.
+ * Gets the validation function for editable fields, or null if not set.
  * @return {Function} Validation function, or null.
  */
 Blockly.Field.prototype.getValidator = function() {

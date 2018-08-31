@@ -149,7 +149,7 @@ Blockly.Lua['text_charAt'] = function(block) {
       } else if (where == 'FROM_END') {
         var start = '-' + at;
       } else {
-        throw 'Unhandled option (text_charAt).';
+        throw Error('Unhandled option (text_charAt).');
       }
     }
     if (start.match(/^-?\w*$/)) {
@@ -185,7 +185,7 @@ Blockly.Lua['text_getSubstring'] = function(block) {
   } else if (where1 == 'FROM_END') {
     var start = '-' + at1;
   } else {
-    throw 'Unhandled option (text_getSubstring)';
+    throw Error('Unhandled option (text_getSubstring)');
   }
 
   // Get end index.
@@ -200,7 +200,7 @@ Blockly.Lua['text_getSubstring'] = function(block) {
   } else if (where2 == 'FROM_END') {
     var end = '-' + at2;
   } else {
-    throw 'Unhandled option (text_getSubstring)';
+    throw Error('Unhandled option (text_getSubstring)');
   }
   var code = 'string.sub(' + text + ', ' + start + ', ' + end + ')';
   return [code, Blockly.Lua.ORDER_HIGH];

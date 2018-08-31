@@ -140,7 +140,7 @@ Blockly.Python['text_charAt'] = function(block) {
       code = functionName + '(' + text + ')';
       return [code, Blockly.Python.ORDER_FUNCTION_CALL];
   }
-  throw 'Unhandled option (text_charAt).';
+  throw Error('Unhandled option (text_charAt).');
 };
 
 Blockly.Python['text_getSubstring'] = function(block) {
@@ -163,7 +163,7 @@ Blockly.Python['text_getSubstring'] = function(block) {
       var at1 = '';
       break;
     default:
-      throw 'Unhandled option (text_getSubstring)';
+      throw Error('Unhandled option (text_getSubstring)');
   }
   switch (where2) {
     case 'FROM_START':
@@ -184,7 +184,7 @@ Blockly.Python['text_getSubstring'] = function(block) {
       var at2 = '';
       break;
     default:
-      throw 'Unhandled option (text_getSubstring)';
+      throw Error('Unhandled option (text_getSubstring)');
   }
   var code = text + '[' + at1 + ' : ' + at2 + ']';
   return [code, Blockly.Python.ORDER_MEMBER];

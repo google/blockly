@@ -232,3 +232,42 @@ function test_replaceMessageReferences() {
   resultString = Blockly.utils.replaceMessageReferences('before %{bky_string_ref_with_subref} after');
   assertEquals('Message ref and subref dereferenced.', 'before test subref string after', resultString);
 }
+
+function test_startsWith() {
+  assertEquals('Does not start with', false, Blockly.utils.startsWith('123', '2'));
+  assertEquals('Start with', true, Blockly.utils.startsWith('123', '12'));
+  assertEquals('Start with empty string 1', true, Blockly.utils.startsWith('123', ''));
+  assertEquals('Start with empty string 2', true, Blockly.utils.startsWith('', ''));
+}
+
+function test_arrayRemove() {
+  var arr = [1, 2, 3, 2];
+  assertEquals('Remove Not found', false, Blockly.utils.arrayRemove(arr, 0));
+  assertEquals('Remove Not found result', '1,2,3,2', arr.join(','));
+  assertEquals('Remove item', true, Blockly.utils.arrayRemove(arr, 2));
+  assertEquals('Remove item result', '1,3,2', arr.join(','));
+  assertEquals('Remove item again', true, Blockly.utils.arrayRemove(arr, 2));
+  assertEquals('Remove item again result', '1,3', arr.join(','));
+}
+
+function test_toRadians() {
+  var quarter = Math.PI / 2;
+  assertEquals('-90', -quarter, Blockly.utils.toRadians(-90));
+  assertEquals('0', 0, Blockly.utils.toRadians(0));
+  assertEquals('90', quarter, Blockly.utils.toRadians(90));
+  assertEquals('180', 2 * quarter, Blockly.utils.toRadians(180));
+  assertEquals('270', 3 * quarter, Blockly.utils.toRadians(270));
+  assertEquals('360', 4 * quarter, Blockly.utils.toRadians(360));
+  assertEquals('450', 5 * quarter, Blockly.utils.toRadians(360 + 90));
+}
+
+function test_toDegrees() {
+  var quarter = Math.PI / 2;
+  assertEquals('-90', -90, Blockly.utils.toDegrees(-quarter));
+  assertEquals('0', 0, Blockly.utils.toDegrees(0));
+  assertEquals('90', 90, Blockly.utils.toDegrees(quarter));
+  assertEquals('180', 180, Blockly.utils.toDegrees(2 * quarter));
+  assertEquals('270', 270, Blockly.utils.toDegrees(3 * quarter));
+  assertEquals('360', 360, Blockly.utils.toDegrees(4 * quarter));
+  assertEquals('450', 360 + 90, Blockly.utils.toDegrees(5 * quarter));
+}

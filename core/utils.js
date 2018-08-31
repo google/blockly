@@ -32,9 +32,7 @@
  **/
 goog.provide('Blockly.utils');
 
-goog.require('Blockly.Touch');
 goog.require('goog.dom');
-goog.require('goog.events.BrowserFeature');
 goog.require('goog.math.Coordinate');
 goog.require('goog.userAgent');
 
@@ -403,7 +401,7 @@ Blockly.utils.tokenizeInterpolation = function(message) {
  * @return {!string} String with message references replaced.
  */
 Blockly.utils.replaceMessageReferences = function(message) {
-  if (!goog.isString(message)) {
+  if (typeof message != 'string') {
     return message;
   }
   var interpolatedResult = Blockly.utils.tokenizeInterpolation_(message, false);
@@ -511,9 +509,9 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
     } else if (state == 3) {  // String table reference
       if (c == '') {
         // Premature end before closing '}'
-        buffer.splice(0, 0, '%{'); // Re-insert leading delimiter
+        buffer.splice(0, 0, '%{');  // Re-insert leading delimiter
         i--;  // Parse this char again.
-        state = 0; // and parse as string literal.
+        state = 0;  // and parse as string literal.
       } else if (c != '}') {
         buffer.push(c);
       } else  {
@@ -525,11 +523,11 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
           // BKY_ is the prefix used to namespace the strings used in Blockly
           // core files and the predefined blocks in ../blocks/. These strings
           // are defined in ../msgs/ files.
-          var bklyKey = goog.string.startsWith(keyUpper, 'BKY_') ?
+          var bklyKey = Blockly.utils.startsWith(keyUpper, 'BKY_') ?
               keyUpper.substring(4) : null;
           if (bklyKey && bklyKey in Blockly.Msg) {
             var rawValue = Blockly.Msg[bklyKey];
-            if (goog.isString(rawValue)) {
+            if (typeof rawValue == 'string') {
               // Attempt to dereference substrings, too, appending to the end.
               Array.prototype.push.apply(tokens,
                   Blockly.utils.tokenizeInterpolation_(
@@ -551,7 +549,7 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
         } else {
           tokens.push('%{' + rawKey + '}');
           buffer.length = 0;
-          state = 0; // and parse as string literal.
+          state = 0;  // and parse as string literal.
         }
       }
     }
@@ -833,13 +831,13 @@ Blockly.utils.is3dSupported = function() {
  * Contrast with node.insertBefore function.
  * @param {!Element} newNode New element to insert.
  * @param {!Element} refNode Existing element to precede new node.
- * @private
+ * @package
  */
-Blockly.utils.insertAfter_ = function(newNode, refNode) {
+Blockly.utils.insertAfter = function(newNode, refNode) {
   var siblingNode = refNode.nextSibling;
   var parentNode = refNode.parentNode;
   if (!parentNode) {
-    throw 'Reference node has no parent.';
+    throw Error('Reference node has no parent.');
   }
   if (siblingNode) {
     parentNode.insertBefore(newNode, siblingNode);
@@ -900,4 +898,67 @@ Blockly.utils.getViewportBBox = function() {
     top: scrollOffset.y,
     left: scrollOffset.x
   };
+};
+
+/**
+ * Fast prefix-checker.
+ * Copied from Closure's goog.string.startsWith.
+ * @param {string} str The string to check.
+ * @param {string} prefix A string to look for at the start of `str`.
+ * @return {boolean} True if `str` begins with `prefix`.
+ * @package
+ */
+Blockly.utils.startsWith = function(str, prefix) {
+  return str.lastIndexOf(prefix, 0) == 0;
+};
+
+/**
+ * Removes the first occurrence of a particular value from an array.
+ * @param {!Array} arr Array from which to remove
+ *     value.
+ * @param {*} obj Object to remove.
+ * @return {boolean} True if an element was removed.
+ * @package
+ */
+Blockly.utils.arrayRemove = function(arr, obj) {
+  var i = arr.indexOf(obj);
+  if (i == -1) {
+    return false;
+  }
+  arr.splice(i, 1);
+  return true;
+};
+
+/**
+ * Converts degrees to radians.
+ * Copied from Closure's goog.math.toRadians.
+ * @param {number} angleDegrees Angle in degrees.
+ * @return {number} Angle in radians.
+ * @package
+ */
+Blockly.utils.toRadians = function(angleDegrees) {
+  return angleDegrees * Math.PI / 180;
+};
+
+/**
+ * Converts radians to degrees.
+ * Copied from Closure's goog.math.toDegrees.
+ * @param {number} angleRadians Angle in radians.
+ * @return {number} Angle in degrees.
+ * @package
+ */
+Blockly.utils.toDegrees = function(angleRadians) {
+  return angleRadians * 180 / Math.PI;
+};
+
+/**
+ * Whether a node contains another node.
+ * @param {!Node} parent The node that should contain the other node.
+ * @param {!Node} descendant The node to test presence of.
+ * @return {boolean} Whether the parent node contains the descendant node.
+ * @package
+ */
+Blockly.utils.containsNode = function(parent, descendant) {
+  return !!(parent.compareDocumentPosition(descendant) &
+            Node.DOCUMENT_POSITION_CONTAINED_BY);
 };

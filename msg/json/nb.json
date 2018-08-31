@@ -13,6 +13,7 @@
 	"DUPLICATE_BLOCK": "duplikat",
 	"ADD_COMMENT": "Legg til kommentar",
 	"REMOVE_COMMENT": "Fjern kommentar",
+	"DUPLICATE_COMMENT": "Dupliser kommentar",
 	"EXTERNAL_INPUTS": "Eksterne kilder",
 	"INLINE_INPUTS": "Interne kilder",
 	"DELETE_BLOCK": "Slett blokk",
@@ -32,9 +33,13 @@
 	"RENAME_VARIABLE": "Gi nytt navn til variabel…",
 	"RENAME_VARIABLE_TITLE": "Endre navnet til alle '%1' variabler til:",
 	"NEW_VARIABLE": "Opprett variabel…",
+	"NEW_STRING_VARIABLE": "Oppretter strengvariabel …",
+	"NEW_NUMBER_VARIABLE": "Oppretter tallvariabel …",
+	"NEW_COLOUR_VARIABLE": "Oppretter fargevariabel …",
+	"NEW_VARIABLE_TYPE_TITLE": "Ny variabeltype:",
 	"NEW_VARIABLE_TITLE": "Nytt variabelnavn:",
 	"VARIABLE_ALREADY_EXISTS": "En variabel med navn «%1» finnes allerede.",
-	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "En variabel med navn «%1» finnes allerede for en annen variabel av typen «%2».",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "En variabel med navn «%1» finnes allerede for en annen type: «%2».",
 	"DELETE_VARIABLE_CONFIRMATION": "Slett %1 bruk av variabelen «%2»?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Kan ikke slette variabelen «%1» fordi den er del av definisjonen for funksjonen «%2»",
 	"DELETE_VARIABLE": "Slett variabelen «%1»",
@@ -361,5 +366,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Marker funksjonsdefinisjonen",
 	"PROCEDURES_CREATE_DO": "Opprett '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Hvis en verdi er sann, returner da en annen verdi.",
-	"PROCEDURES_IFRETURN_WARNING": "Advarsel: Denne blokken kan bare benyttes innenfor en funksjonsdefinisjon."
+	"PROCEDURES_IFRETURN_WARNING": "Advarsel: Denne blokken kan bare benyttes innenfor en funksjonsdefinisjon.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Si noe …"
 }

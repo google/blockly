@@ -164,6 +164,11 @@ Blockly.Css.CONTENT = [
     'z-index: 50;', /* Display below toolbox, but above everything else. */
   '}',
 
+  '.blocklyBlockCanvas.blocklyCanvasTransitioning,',
+  '.blocklyBubbleCanvas.blocklyCanvasTransitioning {',
+    'transition: transform .5s;',
+  '}',
+
   '.blocklyTooltipDiv {',
     'background-color: #ffffc7;',
     'border: 1px solid #ddc;',
@@ -689,55 +694,28 @@ Blockly.Css.CONTENT = [
     'color: #fff;',
   '}',
 
-  /* Copied from: goog/css/colorpicker-simplegrid.css */
-  /*
-   * Copyright 2007 The Closure Library Authors. All Rights Reserved.
-   *
-   * Use of this source code is governed by the Apache License, Version 2.0.
-   * See the COPYING file for details.
-   */
-
-  /* Author: pupius@google.com (Daniel Pupius) */
-
-  /*
-    Styles to make the colorpicker look like the old gmail color picker
-    NOTE: without CSS scoping this will override styles defined in palette.css
-  */
-  '.blocklyWidgetDiv .goog-palette {',
-    'outline: none;',
-    'cursor: default;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-palette-table {',
-    'border: 1px solid #666;',
+  /* Colour Picker Field */
+  '.blocklyColourTable {',
     'border-collapse: collapse;',
   '}',
 
-  '.blocklyWidgetDiv .goog-palette-cell {',
-    'height: 13px;',
-    'width: 15px;',
-    'margin: 0;',
-    'border: 0;',
-    'text-align: center;',
-    'vertical-align: middle;',
-    'border-right: 1px solid #666;',
-    'font-size: 1px;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-palette-colorswatch {',
-    'position: relative;',
-    'height: 13px;',
-    'width: 15px;',
+  '.blocklyColourTable>tr>td {',
     'border: 1px solid #666;',
+    'padding: 0;',
   '}',
 
-  '.blocklyWidgetDiv .goog-palette-cell-hover .goog-palette-colorswatch {',
-    'border: 1px solid #FFF;',
+  '.blocklyColourTable>tr>td>div {',
+    'border: 1px solid #666;',
+    'height: 13px;',
+    'width: 15px;',
   '}',
 
-  '.blocklyWidgetDiv .goog-palette-cell-selected .goog-palette-colorswatch {',
-    'border: 1px solid #000;',
-    'color: #fff;',
+  '.blocklyColourTable>tr>td>div:hover {',
+    'border: 1px solid #fff;',
+  '}',
+
+  '.blocklyColourSelected, .blocklyColourSelected:hover {',
+    'border: 1px solid #000 !important;',
   '}',
 
   /* Copied from: goog/css/menu.css */

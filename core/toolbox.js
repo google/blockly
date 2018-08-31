@@ -30,9 +30,9 @@ goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.Touch');
+goog.require('Blockly.utils');
 goog.require('Blockly.VerticalFlyout');
-goog.require('goog.dom');
-goog.require('goog.dom.TagName');
+
 goog.require('goog.events');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.html.SafeHtml');
@@ -155,8 +155,8 @@ Blockly.Toolbox.prototype.init = function() {
    * HTML container for the Toolbox menu.
    * @type {Element}
    */
-  this.HtmlDiv =
-      goog.dom.createDom(goog.dom.TagName.DIV, 'blocklyToolboxDiv');
+  this.HtmlDiv = document.createElement('div');
+  this.HtmlDiv.className = 'blocklyToolboxDiv';
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
   svg.parentNode.insertBefore(this.HtmlDiv, svg);
 
@@ -190,8 +190,9 @@ Blockly.Toolbox.prototype.init = function() {
   } else {
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
-  goog.dom.insertSiblingAfter(
-      this.flyout_.createDom('svg'), this.workspace_.getParentSvg());
+  // Insert the flyout after the workspace.
+  Blockly.utils.insertAfter(this.flyout_.createDom('svg'),
+      this.workspace_.getParentSvg());
   this.flyout_.init(workspace);
 
   this.config_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';
@@ -218,7 +219,7 @@ Blockly.Toolbox.prototype.init = function() {
 Blockly.Toolbox.prototype.dispose = function() {
   this.flyout_.dispose();
   this.tree_.dispose();
-  goog.dom.removeNode(this.HtmlDiv);
+  this.HtmlDiv.parentNode.removeChild(this.HtmlDiv);
   this.workspace_ = null;
   this.lastCategory_ = null;
 };
@@ -286,7 +287,8 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
     this.syncTrees_(newTree, this.tree_, this.workspace_.options.pathToMedia);
 
   if (this.tree_.blocks.length) {
-    throw 'Toolbox cannot have both blocks and categories in the root level.';
+    throw Error('Toolbox cannot have both blocks and categories ' +
+        'in the root level.');
   }
 
   // Fire a resize event since the toolbox may have changed width and height.

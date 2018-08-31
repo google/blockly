@@ -30,9 +30,10 @@ goog.require('Blockly.BlockDragSurfaceSvg');
 goog.require('Blockly.Css');
 goog.require('Blockly.Grid');
 goog.require('Blockly.Options');
+goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
-goog.require('goog.dom');
+
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
 
@@ -47,16 +48,17 @@ goog.require('goog.userAgent');
 Blockly.inject = function(container, opt_options) {
   Blockly.checkBlockColourConstants();
 
-  if (goog.isString(container)) {
+  if (typeof container == 'string') {
     container = document.getElementById(container) ||
         document.querySelector(container);
   }
   // Verify that the container is in document.
-  if (!goog.dom.contains(document, container)) {
-    throw 'Error: container is not in current document.';
+  if (!Blockly.utils.containsNode(document, container)) {
+    throw Error('Error: container is not in current document.');
   }
   var options = new Blockly.Options(opt_options || {});
-  var subContainer = goog.dom.createDom(goog.dom.TagName.DIV, 'injectionDiv');
+  var subContainer = document.createElement('div');
+  subContainer.className = 'injectionDiv';
   container.appendChild(subContainer);
   var svg = Blockly.createDom_(subContainer, options);
 
@@ -212,7 +214,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface, workspac
   if (!options.hasCategories && options.languageTree) {
     // Add flyout as an <svg> that is a sibling of the workspace svg.
     var flyout = mainWorkspace.addFlyout_('svg');
-    Blockly.utils.insertAfter_(flyout, svg);
+    Blockly.utils.insertAfter(flyout, svg);
   }
 
   // A null translation will also apply the correct initial scale.

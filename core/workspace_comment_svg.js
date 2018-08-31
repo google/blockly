@@ -29,7 +29,10 @@ goog.provide('Blockly.WorkspaceCommentSvg');
 goog.require('Blockly.Events.CommentCreate');
 goog.require('Blockly.Events.CommentDelete');
 goog.require('Blockly.Events.CommentMove');
+goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceComment');
+
+goog.require('goog.math.Coordinate');
 
 
 /**
@@ -114,7 +117,7 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
     Blockly.Events.fire(new Blockly.Events.CommentDelete(this));
   }
 
-  goog.dom.removeNode(this.svgGroup_);
+  this.svgGroup_.parentNode.removeChild(this.svgGroup_);
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;
   this.svgRect_ = null;
@@ -132,7 +135,9 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.initSvg = function() {
-  goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
+  if (!this.workspace.rendered) {
+    throw TypeError('Workspace is headless.');
+  }
   if (!this.workspace.options.readOnly && !this.eventsInit_) {
     Blockly.bindEventWithChecks_(
         this.svgRectTarget_, 'mousedown', this, this.pathMouseDown_);

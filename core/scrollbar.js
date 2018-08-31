@@ -27,8 +27,10 @@
 goog.provide('Blockly.Scrollbar');
 goog.provide('Blockly.ScrollbarPair');
 
-goog.require('goog.dom');
-goog.require('goog.events');
+goog.require('Blockly.utils');
+
+goog.require('goog.events.BrowserFeature');
+goog.require('goog.math.Coordinate');
 
 
 /**
@@ -55,7 +57,7 @@ Blockly.ScrollbarPair = function(workspace) {
         'class': 'blocklyScrollbarBackground'
       },
       null);
-  Blockly.utils.insertAfter_(this.corner_, workspace.getBubbleCanvas());
+  Blockly.utils.insertAfter(this.corner_, workspace.getBubbleCanvas());
 };
 
 /**
@@ -70,7 +72,7 @@ Blockly.ScrollbarPair.prototype.oldHostMetrics_ = null;
  * Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.ScrollbarPair.prototype.dispose = function() {
-  goog.dom.removeNode(this.corner_);
+  this.corner_.parentNode.removeChild(this.corner_);
   this.corner_ = null;
   this.workspace_ = null;
   this.oldHostMetrics_ = null;
@@ -345,7 +347,7 @@ Blockly.Scrollbar.prototype.dispose = function() {
   Blockly.unbindEvent_(this.onMouseDownHandleWrapper_);
   this.onMouseDownHandleWrapper_ = null;
 
-  goog.dom.removeNode(this.outerSvg_);
+  this.outerSvg_.parentNode.removeChild(this.outerSvg_);
   this.outerSvg_ = null;
   this.svgGroup_ = null;
   this.svgBackground_ = null;
@@ -623,7 +625,7 @@ Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
         'ry': radius
       },
       this.svgGroup_);
-  Blockly.utils.insertAfter_(this.outerSvg_, this.workspace_.getParentSvg());
+  Blockly.utils.insertAfter(this.outerSvg_, this.workspace_.getParentSvg());
 };
 
 /**
@@ -660,7 +662,7 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
   // Ideally this would also apply to scrollbar pairs, but that's a bigger
   // headache (due to interactions with the corner square).
   if (this.pair_) {
-    throw 'Unable to toggle visibility of paired scrollbars.';
+    throw Error('Unable to toggle visibility of paired scrollbars.');
   }
   this.isVisible_ = visible;
   if (visibilityChanged) {

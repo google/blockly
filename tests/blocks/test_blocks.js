@@ -74,22 +74,23 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "message0": "%1",
     "args0": [
       {
+        "NOTE": "The following paths are relative to playground.html",
         "type": "field_dropdown",
         "name": "FIELDNAME",
         "options": [
-          [{"src": "../media/test_a.png", "width": 32, "height": 32, "alt": "A"}, "A"],
-          [{"src": "../media/test_b.png", "width": 32, "height": 32, "alt": "B"}, "B"],
-          [{"src": "../media/test_c.png", "width": 32, "height": 32, "alt": "C"}, "C"],
-          [{"src": "../media/test_d.png", "width": 32, "height": 32, "alt": "D"}, "D"],
-          [{"src": "../media/test_e.png", "width": 32, "height": 32, "alt": "E"}, "E"],
-          [{"src": "../media/test_f.png", "width": 32, "height": 32, "alt": "F"}, "F"],
-          [{"src": "../media/test_g.png", "width": 32, "height": 32, "alt": "G"}, "G"],
-          [{"src": "../media/test_h.png", "width": 32, "height": 32, "alt": "H"}, "H"],
-          [{"src": "../media/test_i.png", "width": 32, "height": 32, "alt": "I"}, "I"],
-          [{"src": "../media/test_j.png", "width": 32, "height": 32, "alt": "J"}, "J"],
-          [{"src": "../media/test_k.png", "width": 32, "height": 32, "alt": "K"}, "K"],
-          [{"src": "../media/test_l.png", "width": 32, "height": 32, "alt": "L"}, "L"],
-          [{"src": "../media/test_m.png", "width": 32, "height": 32, "alt": "M"}, "M"]
+          [{"src": "media/a.png", "width": 32, "height": 32, "alt": "A"}, "A"],
+          [{"src": "media/b.png", "width": 32, "height": 32, "alt": "B"}, "B"],
+          [{"src": "media/c.png", "width": 32, "height": 32, "alt": "C"}, "C"],
+          [{"src": "media/d.png", "width": 32, "height": 32, "alt": "D"}, "D"],
+          [{"src": "media/e.png", "width": 32, "height": 32, "alt": "E"}, "E"],
+          [{"src": "media/f.png", "width": 32, "height": 32, "alt": "F"}, "F"],
+          [{"src": "media/g.png", "width": 32, "height": 32, "alt": "G"}, "G"],
+          [{"src": "media/h.png", "width": 32, "height": 32, "alt": "H"}, "H"],
+          [{"src": "media/i.png", "width": 32, "height": 32, "alt": "I"}, "I"],
+          [{"src": "media/j.png", "width": 32, "height": 32, "alt": "J"}, "J"],
+          [{"src": "media/k.png", "width": 32, "height": 32, "alt": "K"}, "K"],
+          [{"src": "media/l.png", "width": 32, "height": 32, "alt": "L"}, "L"],
+          [{"src": "media/m.png", "width": 32, "height": 32, "alt": "M"}, "M"]
         ]
       }
     ]
@@ -103,20 +104,20 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "name": "FIELDNAME",
         "options": [
           ["images and text", "IMAGES AND TEXT"],
-          [{"src": "../media/test_a.png", "width": 32, "height": 32, "alt": "A"}, "A"],
-          [{"src": "../media/test_b.png", "width": 32, "height": 32, "alt": "B"}, "B"],
-          [{"src": "../media/test_c.png", "width": 32, "height": 32, "alt": "C"}, "C"],
-          [{"src": "../media/test_d.png", "width": 32, "height": 32, "alt": "D"}, "D"],
-          [{"src": "../media/test_e.png", "width": 32, "height": 32, "alt": "E"}, "E"],
-          [{"src": "../media/test_f.png", "width": 32, "height": 32, "alt": "F"}, "F"],
-          [{"src": "../media/test_g.png", "width": 32, "height": 32, "alt": "G"}, "G"],
-          [{"src": "../media/test_h.png", "width": 32, "height": 32, "alt": "H"}, "H"],
+          [{"src": "media/a.png", "width": 32, "height": 32, "alt": "A"}, "A"],
+          [{"src": "media/b.png", "width": 32, "height": 32, "alt": "B"}, "B"],
+          [{"src": "media/c.png", "width": 32, "height": 32, "alt": "C"}, "C"],
+          [{"src": "media/d.png", "width": 32, "height": 32, "alt": "D"}, "D"],
+          [{"src": "media/e.png", "width": 32, "height": 32, "alt": "E"}, "E"],
+          [{"src": "media/f.png", "width": 32, "height": 32, "alt": "F"}, "F"],
+          [{"src": "media/g.png", "width": 32, "height": 32, "alt": "G"}, "G"],
+          [{"src": "media/h.png", "width": 32, "height": 32, "alt": "H"}, "H"],
           ["xyz", "LMNOP"],
-          [{"src": "../media/test_i.png", "width": 32, "height": 32, "alt": "I"}, "I"],
-          [{"src": "../media/test_j.png", "width": 32, "height": 32, "alt": "J"}, "J"],
-          [{"src": "../media/test_k.png", "width": 32, "height": 32, "alt": "K"}, "K"],
-          [{"src": "../media/test_l.png", "width": 32, "height": 32, "alt": "L"}, "L"],
-          [{"src": "../media/test_m.png", "width": 32, "height": 32, "alt": "M"}, "M"]
+          [{"src": "media/i.png", "width": 32, "height": 32, "alt": "I"}, "I"],
+          [{"src": "media/j.png", "width": 32, "height": 32, "alt": "J"}, "J"],
+          [{"src": "media/k.png", "width": 32, "height": 32, "alt": "K"}, "K"],
+          [{"src": "media/l.png", "width": 32, "height": 32, "alt": "L"}, "L"],
+          [{"src": "media/m.png", "width": 32, "height": 32, "alt": "M"}, "M"]
         ]
       }
     ]
@@ -234,7 +235,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "args0": [
       {
         "type": "field_image",
-        "src": "../media/test_30px.png",
+        "src": "media/30px.png",
         "width": 50,
         "height": 50,
         "alt": "*"
@@ -248,7 +249,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "args0": [
       {
         "type": "field_image",
-        "src": "../media/test_200px.png",
+        "src": "media/200px.png",
         "width": 50,
         "height": 50,
         "alt": "*"
@@ -279,56 +280,56 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_a.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/a.png",
         "width": 32,
         "height": 32,
         "alt": "A"
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_b.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/b.png",
         "width": 32,
         "height": 32,
         "alt": "B"
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_c.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/c.png",
         "width": 32,
         "height": 32,
         "alt": "C"
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_d.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/d.png",
         "width": 32,
         "height": 32,
         "alt": "D"
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_e.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/e.png",
         "width": 32,
         "height": 32,
         "alt": "E"
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_f.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/f.png",
         "width": 32,
         "height": 32,
         "alt": "F"
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_g.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/g.png",
         "width": 32,
         "height": 32,
         "alt": "G"
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_h.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/h.png",
         "width": 32,
         "height": 32,
         "alt": "H"
@@ -338,56 +339,56 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_a.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/a.png",
         "width": 32,
         "height": 32,
         "alt": "A"
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_b.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/b.png",
         "width": 32,
         "height": 32,
         "alt": "B"
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_c.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/c.png",
         "width": 32,
         "height": 32,
         "alt": "C"
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_d.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/d.png",
         "width": 32,
         "height": 32,
         "alt": "D"
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_e.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/e.png",
         "width": 32,
         "height": 32,
         "alt": "E"
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_f.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/f.png",
         "width": 32,
         "height": 32,
         "alt": "F"
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_g.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/g.png",
         "width": 32,
         "height": 32,
         "alt": "G"
       },
       {
         "type": "field_image",
-        "src": "https://blockly-demo.appspot.com/static/media/test_h.png",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/h.png",
         "width": 32,
         "height": 32,
         "alt": "H"

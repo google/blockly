@@ -122,7 +122,7 @@ Blockly.ZoomControls.prototype.init = function(bottom) {
  */
 Blockly.ZoomControls.prototype.dispose = function() {
   if (this.svgGroup_) {
-    this.svgGroup_.parentNode.removeChild(this.svgGroup_);
+    Blockly.utils.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.workspace_ = null;

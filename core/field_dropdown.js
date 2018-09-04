@@ -441,7 +441,7 @@ Blockly.FieldDropdown.prototype.render_ = function() {
     this.textElement_.removeChild(child);
   }
   if (this.imageElement_) {
-    this.imageElement_.parentNode.removeChild(this.imageElement_);
+    Blockly.utils.removeNode(this.imageElement_);
     this.imageElement_ = null;
   }
 

@@ -96,7 +96,7 @@ Blockly.FieldLabel.prototype.init = function() {
  */
 Blockly.FieldLabel.prototype.dispose = function() {
   if (this.textElement_) {
-    this.textElement_.parentNode.removeChild(this.textElement_);
+    Blockly.utils.removeNode(this.textElement_);
     this.textElement_ = null;
   }
 };

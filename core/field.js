@@ -226,7 +226,7 @@ Blockly.Field.prototype.dispose = function() {
   }
   this.sourceBlock_ = null;
   if (this.fieldGroup_) {
-    this.fieldGroup_.parentNode.removeChild(this.fieldGroup_);
+    Blockly.utils.removeNode(this.fieldGroup_);
     this.fieldGroup_ = null;
   }
   this.textElement_ = null;

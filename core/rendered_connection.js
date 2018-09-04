@@ -262,7 +262,7 @@ Blockly.RenderedConnection.prototype.unhideAll = function() {
  * Remove the highlighting around this connection.
  */
 Blockly.RenderedConnection.prototype.unhighlight = function() {
-  Blockly.Connection.highlightedPath_.parentNode.removeChild(Blockly.Connection.highlightedPath_);
+  Blockly.utils.removeNode(Blockly.Connection.highlightedPath_);
   delete Blockly.Connection.highlightedPath_;
 };
 

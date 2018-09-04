@@ -96,7 +96,7 @@ Blockly.Icon.prototype.createIcon = function() {
  */
 Blockly.Icon.prototype.dispose = function() {
   // Dispose of and unlink the icon.
-  this.iconGroup_.parentNode.removeChild(this.iconGroup_);
+  Blockly.utils.removeNode(this.iconGroup_);
   this.iconGroup_ = null;
   // Dispose of and unlink the bubble.
   this.setVisible(false);

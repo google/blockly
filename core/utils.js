@@ -115,6 +115,16 @@ Blockly.utils.hasClass = function(element, className) {
 };
 
 /**
+ * Removes a node from its parent. No-op if not attached to a parent.
+ * @param {Node} node The node to remove.
+ * @return {Node} The node removed if removed; else, null.
+ */
+// Copied from Closure goog.dom.removeNode
+Blockly.utils.removeNode = function(node) {
+  return node && node.parentNode ? node.parentNode.removeChild(node) : null;
+};
+
+/**
  * Don't do anything for this event, just halt propagation.
  * @param {!Event} e An event.
  */

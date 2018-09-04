@@ -81,7 +81,7 @@ Blockly.BlockAnimations.disposeUiStep_ = function(clone, rtl, start,
   var ms = new Date - start;
   var percent = ms / 150;
   if (percent > 1) {
-    clone.parentNode.removeChild(clone);
+    Blockly.utils.removeNode(clone);
   } else {
     var x = clone.translateX_ +
         (rtl ? -1 : 1) * clone.bBox_.width * workspaceScale / 2 * percent;
@@ -141,7 +141,7 @@ Blockly.BlockAnimations.connectionUiStep_ = function(ripple, start, scale) {
   var ms = new Date - start;
   var percent = ms / 150;
   if (percent > 1) {
-    ripple.parentNode.removeChild(ripple);
+    Blockly.utils.removeNode(ripple);
   } else {
     ripple.setAttribute('r', percent * 25 * scale);
     ripple.style.opacity = 1 - percent;

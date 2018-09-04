@@ -511,7 +511,7 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   }
   Blockly.WorkspaceSvg.superClass_.dispose.call(this);
   if (this.svgGroup_) {
-    this.svgGroup_.parentNode.removeChild(this.svgGroup_);
+    Blockly.utils.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.svgBlockCanvas_ = null;
@@ -558,7 +558,7 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     // SVG is injected into (i.e. injectionDiv).
     var div = this.getParentSvg().parentNode;
     if (div) {
-      div.parentNode.removeChild(div);
+      Blockly.utils.removeNode(div);
     }
   }
   if (this.resizeHandlerWrapper_) {

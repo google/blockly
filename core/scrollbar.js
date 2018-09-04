@@ -72,7 +72,7 @@ Blockly.ScrollbarPair.prototype.oldHostMetrics_ = null;
  * Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.ScrollbarPair.prototype.dispose = function() {
-  this.corner_.parentNode.removeChild(this.corner_);
+  Blockly.utils.removeNode(this.corner_);
   this.corner_ = null;
   this.workspace_ = null;
   this.oldHostMetrics_ = null;
@@ -347,7 +347,7 @@ Blockly.Scrollbar.prototype.dispose = function() {
   Blockly.unbindEvent_(this.onMouseDownHandleWrapper_);
   this.onMouseDownHandleWrapper_ = null;
 
-  this.outerSvg_.parentNode.removeChild(this.outerSvg_);
+  Blockly.utils.removeNode(this.outerSvg_);
   this.outerSvg_ = null;
   this.svgGroup_ = null;
   this.svgBackground_ = null;

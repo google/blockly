@@ -855,7 +855,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   }
   Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
 
-  this.svgGroup_.parentNode.removeChild(this.svgGroup_);
+  Blockly.utils.removeNode(this.svgGroup_);
   blockWorkspace.resizeContents();
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;

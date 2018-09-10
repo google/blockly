@@ -15,11 +15,12 @@
 	"DUPLICATE_BLOCK": "Дуплирај",
 	"ADD_COMMENT": "Додај коментар",
 	"REMOVE_COMMENT": "Уклони коментар",
+	"DUPLICATE_COMMENT": "Дуплирани коментар",
 	"EXTERNAL_INPUTS": "Спољашњи улази",
 	"INLINE_INPUTS": "Редни улази",
 	"DELETE_BLOCK": "Избриши блок",
 	"DELETE_X_BLOCKS": "Избриши %1 блокова",
-	"DELETE_ALL_BLOCKS": "Да избришем све блокове: %1?",
+	"DELETE_ALL_BLOCKS": "Избрисати све блокове: %1?",
 	"CLEAN_UP": "Очисти блокове",
 	"COLLAPSE_BLOCK": "Скупи блок",
 	"COLLAPSE_ALL": "Скупи блокове",
@@ -41,7 +42,7 @@
 	"NEW_VARIABLE_TITLE": "Име нове променљиве:",
 	"VARIABLE_ALREADY_EXISTS": "Променљива под именом ’%1’ већ постоји.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Променљива под именом ’%1’ већ постоји за други тип: ’%2’.",
-	"DELETE_VARIABLE_CONFIRMATION": "Да избришем %1 употреба променљиве ’%2’?",
+	"DELETE_VARIABLE_CONFIRMATION": "Избрисати %1 употреба променљиве ’%2’?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Не могу да избришем променљиву ’%1’ јер је део дефиниције функције ’%2’",
 	"DELETE_VARIABLE": "Избриши променљиву ’%1’",
 	"COLOUR_PICKER_HELPURL": "https://sr.wikipedia.org/wiki/Боја",
@@ -369,5 +370,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Истакни дефиницију функције",
 	"PROCEDURES_CREATE_DO": "Направи „%1“",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Уколико је вредност тачна, врати другу вредност.",
-	"PROCEDURES_IFRETURN_WARNING": "Упозорење: Овај блок се може користити једино у дефиницији функције."
+	"PROCEDURES_IFRETURN_WARNING": "Упозорење: Овај блок се може користити једино у дефиницији функције.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Кажи нешто…"
 }

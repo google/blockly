@@ -110,7 +110,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
    * workspaces on a page; this is more accurate than using
    * Blockly.getMainWorkspace().
    * @type {Blockly.WorkspaceSvg}
-   * @private
+   * @protected
    */
   this.startWorkspace_ = null;
 
@@ -165,7 +165,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
    * A handle to use to unbind a mouse move listener at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
    * @type {Array.<!Array>}
-   * @private
+   * @protected
    */
   this.onMoveWrapper_ = null;
 
@@ -173,7 +173,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
    * A handle to use to unbind a mouse up listener at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
    * @type {Array.<!Array>}
-   * @private
+   * @protected
    */
   this.onUpWrapper_ = null;
 
@@ -223,7 +223,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
   /**
    * Boolean used internally to break a cycle in disposal.
    * @type {boolean}
-   * @private
+   * @protected
    */
   this.isEnding_ = false;
 

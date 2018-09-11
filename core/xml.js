@@ -133,7 +133,6 @@ Blockly.Xml.fieldToDomVariable_ = function(field) {
 /**
  * Encode a field as XML.
  * @param {!Blockly.Field} field The field to encode.
- * @param {!Blockly.Workspace} workspace The workspace that the field is in.
  * @return {?Element} XML element, or null if the field did not need to be
  *     serialized.
  * @private

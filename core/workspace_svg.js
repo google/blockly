@@ -311,7 +311,7 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
 
 /**
  * Inverted screen CTM is dirty, recalculate it.
- * @type {Boolean}
+ * @type {boolean}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
@@ -1602,10 +1602,10 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
  */
 Blockly.WorkspaceSvg.prototype.beginCanvasTransition = function() {
   Blockly.utils.addClass(
-      /** @type {!SVGElement} */ this.svgBlockCanvas_,
+      /** @type {!SVGElement} */ (this.svgBlockCanvas_),
       'blocklyCanvasTransitioning');
   Blockly.utils.addClass(
-      /** @type {!SVGElement} */ this.svgBubbleCanvas_,
+      /** @type {!SVGElement} */ (this.svgBubbleCanvas_),
       'blocklyCanvasTransitioning');
 };
 
@@ -1615,10 +1615,10 @@ Blockly.WorkspaceSvg.prototype.beginCanvasTransition = function() {
  */
 Blockly.WorkspaceSvg.prototype.endCanvasTransition = function() {
   Blockly.utils.removeClass(
-      /** @type {!SVGElement} */ this.svgBlockCanvas_,
+      /** @type {!SVGElement} */ (this.svgBlockCanvas_),
       'blocklyCanvasTransitioning');
   Blockly.utils.removeClass(
-      /** @type {!SVGElement} */ this.svgBubbleCanvas_,
+      /** @type {!SVGElement} */ (this.svgBubbleCanvas_),
       'blocklyCanvasTransitioning');
 };
 /**

@@ -99,7 +99,7 @@ Blockly.FieldDropdown.prototype.CURSOR = 'default';
 /**
  * Language-neutral currently selected string or image object.
  * @type {string|!Object}
- * @private
+ * @protected
  */
 Blockly.FieldDropdown.prototype.value_ = '';
 

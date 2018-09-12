@@ -104,7 +104,7 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
     var contextMenuMsg;
     var id = this.getFieldValue('VAR');
     var variableModel = this.workspace.getVariableById(id);
-    var varType = variableModel.type
+    var varType = variableModel.type;
     if (this.type == 'variables_get_dynamic') {
       opposite_type = 'variables_set_dynamic';
       contextMenuMsg = Blockly.Msg['VARIABLES_GET_CREATE_SET'];

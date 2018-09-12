@@ -102,14 +102,14 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
     }
     var opposite_type;
     var contextMenuMsg;
-    var varType;
+    var id = this.getFieldValue('VAR');
+    var variableModel = this.workspace.getVariableById(id);
+    var varType = variableModel.type
     if (this.type == 'variables_get_dynamic') {
       opposite_type = 'variables_set_dynamic';
-      varType = this.outputConnection.check_ ? this.outputConnection.check_[0] : "";
       contextMenuMsg = Blockly.Msg['VARIABLES_GET_CREATE_SET'];
     } else {
       opposite_type = 'variables_get_dynamic';
-      varType = this.inputList[0].connection.check_ ? this.inputList[0].connection.check_[0] : "";
       contextMenuMsg = Blockly.Msg['VARIABLES_SET_CREATE_GET'];
     }
 

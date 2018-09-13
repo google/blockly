@@ -604,6 +604,13 @@ Blockly.Connection.prototype.setCheck = function(check) {
 };
 
 /**
+ * Get a connection's compatibility.
+ * @return {Array} List of compatible value types.
+ */
+Blockly.Connection.prototype.getCheck = function() {
+  return this.check_;
+};
+/**
  * Change a connection's shadow block.
  * @param {Element} shadow DOM representation of a block or null.
  */

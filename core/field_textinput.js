@@ -77,7 +77,7 @@ Blockly.FieldTextInput.FONTSIZE = 11;
  * The HTML input element for the user to type, or null if no FieldTextInput
  * editor is currently open.
  * @type {HTMLInputElement}
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.htmlInput_ = null;
 
@@ -152,7 +152,7 @@ Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
  * Show the inline free-text editor on top of the text.
  * @param {boolean=} opt_quietInput True if editor should be created without
  *     focus.  Defaults to false.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
   this.workspace_ = this.sourceBlock_.workspace;
@@ -295,7 +295,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(_e) {
 /**
  * Check to see if the contents of the editor validates.
  * Style the editor accordingly.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.validate_ = function() {
   var valid = true;
@@ -315,7 +315,7 @@ Blockly.FieldTextInput.prototype.validate_ = function() {
 
 /**
  * Resize the editor and the underlying block to fit the text.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
   var div = Blockly.WidgetDiv.DIV;

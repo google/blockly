@@ -609,7 +609,7 @@ Blockly.Connection.prototype.setCheck = function(check) {
  */
 Blockly.Connection.prototype.getCheck = function() {
   return this.check_;
-}
+};
 /**
  * Change a connection's shadow block.
  * @param {Element} shadow DOM representation of a block or null.

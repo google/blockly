@@ -795,6 +795,24 @@ Blockly.BlockSvg.prototype.setShadow = function(shadow) {
 };
 
 /**
+ * Set whether this block is an insertion marker block or not.
+ * Once set this cannot be unset.
+ * @param {boolean} insertionMarker True if an insertion marker.
+ * @package
+ */
+Blockly.BlockSvg.prototype.setInsertionMarker = function(insertionMarker) {
+  if (this.isInsertionMarker_ == insertionMarker) {
+    return;  // No change.
+  }
+  this.isInsertionMarker_ = insertionMarker;
+  if (this.isInsertionMarker_) {
+    this.setColour(Blockly.INSERTION_MARKER_COLOUR);
+    Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
+        'blocklyInsertionMarker');
+  }
+};
+
+/**
  * Return the root node of the SVG or null if none exists.
  * @return {Element} The root SVG node (probably a group).
  */

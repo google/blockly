@@ -907,7 +907,7 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
  */
 Blockly.WorkspaceSvg.prototype.render = function() {
   // Generate list of all blocks.
-  var blocks = this.getAllBlocks();
+  var blocks = this.getAllBlocks(false);
   // Render each block.
   for (var i = blocks.length - 1; i >= 0; i--) {
     blocks[i].render(false);
@@ -993,7 +993,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
       // distance with neighbouring blocks.
       do {
         var collide = false;
-        var allBlocks = this.getAllBlocks();
+        var allBlocks = this.getAllBlocks(false);
         for (var i = 0, otherBlock; otherBlock = allBlocks[i]; i++) {
           var otherXY = otherBlock.getRelativeToSurfaceXY();
           if (Math.abs(blockX - otherXY.x) <= 1 &&

@@ -47,7 +47,7 @@ Blockly.Blocks['factory_base'] = {
         ['↓ bottom connection', 'BOTTOM']],
         function(option) {
           this.sourceBlock_.updateShape_(option);
-          // Connect a shadow block to this new input. 
+          // Connect a shadow block to this new input.
           this.sourceBlock_.spawnOutputShadow_(option);
         });
     this.appendDummyInput()
@@ -787,7 +787,7 @@ function fieldNameCheck(referenceBlock) {
   }
   var name = referenceBlock.getFieldValue('FIELDNAME').toLowerCase();
   var count = 0;
-  var blocks = referenceBlock.workspace.getAllBlocks();
+  var blocks = referenceBlock.workspace.getAllBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     var otherName = block.getFieldValue('FIELDNAME');
     if (!block.disabled && !block.getInheritedDisabled() &&
@@ -812,7 +812,7 @@ function inputNameCheck(referenceBlock) {
   }
   var name = referenceBlock.getFieldValue('INPUTNAME').toLowerCase();
   var count = 0;
-  var blocks = referenceBlock.workspace.getAllBlocks();
+  var blocks = referenceBlock.workspace.getAllBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     var otherName = block.getFieldValue('INPUTNAME');
     if (!block.disabled && !block.getInheritedDisabled() &&

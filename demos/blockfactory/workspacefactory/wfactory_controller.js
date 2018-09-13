@@ -167,7 +167,7 @@ WorkspaceFactoryController.prototype.transferFlyoutBlocksToCategory =
   // Saves the user's blocks from the flyout in a category if there is no
   // toolbox and the user has dragged in blocks.
   if (!this.model.hasElements() &&
-        this.toolboxWorkspace.getAllBlocks().length > 0) {
+        this.toolboxWorkspace.getAllBlocks(false).length > 0) {
     // Create the new category.
     this.createCategory('Category 1', true);
     // Set the new category as selected.
@@ -743,7 +743,7 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
 
         // Confirm that the user wants to override their current toolbox.
         var hasToolboxElements = controller.model.hasElements() ||
-            controller.toolboxWorkspace.getAllBlocks().length > 0;
+            controller.toolboxWorkspace.getAllBlocks(false).length > 0;
         if (hasToolboxElements) {
             var msg = 'Are you sure you want to import? You will lose your ' +
                 'current toolbox.';
@@ -762,7 +762,7 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
         controller.setMode(WorkspaceFactoryController.MODE_PRELOAD);
 
         // Confirm that the user wants to override their current blocks.
-        if (controller.toolboxWorkspace.getAllBlocks().length > 0) {
+        if (controller.toolboxWorkspace.getAllBlocks(false).length > 0) {
           var msg = 'Are you sure you want to import? You will lose your ' +
             'current workspace blocks.';
           var continueAnyway = confirm(msg);
@@ -1022,7 +1022,7 @@ WorkspaceFactoryController.prototype.isUserGenShadowBlock = function(blockId) {
  * shadow blocks in the view but are still editable and movable.
  */
 WorkspaceFactoryController.prototype.convertShadowBlocks = function() {
-  var blocks = this.toolboxWorkspace.getAllBlocks();
+  var blocks = this.toolboxWorkspace.getAllBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     if (block.isShadow()) {
       block.setShadow(false);
@@ -1096,7 +1096,7 @@ WorkspaceFactoryController.prototype.clearAndLoadXml_ = function(xml) {
   this.toolboxWorkspace.clearUndo();
   Blockly.Xml.domToWorkspace(xml, this.toolboxWorkspace);
   this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
-      (this.toolboxWorkspace.getAllBlocks()));
+      (this.toolboxWorkspace.getAllBlocks(false)));
   this.warnForUndefinedBlocks_();
 };
 
@@ -1334,7 +1334,7 @@ WorkspaceFactoryController.prototype.isDefinedBlock = function(block) {
  * @private
  */
 WorkspaceFactoryController.prototype.warnForUndefinedBlocks_ = function() {
-  var blocks = this.toolboxWorkspace.getAllBlocks();
+  var blocks = this.toolboxWorkspace.getAllBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     if (!this.isDefinedBlock(block)) {
       block.setWarningText(block.type + ' is not defined (it is not a standard '

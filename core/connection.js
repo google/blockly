@@ -608,7 +608,7 @@ Blockly.Connection.prototype.setCheck = function(check) {
  * @return {Array} List of compatible value types.
  */
 Blockly.Connection.prototype.getCheck = function() {
-  return this.check_; 
+  return this.check_;
 }
 /**
  * Change a connection's shadow block.

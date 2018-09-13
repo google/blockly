@@ -866,7 +866,7 @@ function fieldNameCheck(referenceBlock) {
   }
   var name = referenceBlock.getFieldValue('FIELDNAME').toLowerCase();
   var count = 0;
-  var blocks = referenceBlock.workspace.getAllBlocks();
+  var blocks = referenceBlock.workspace.getAllBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     var otherName = block.getFieldValue('FIELDNAME');
     if (!block.disabled && !block.getInheritedDisabled() &&
@@ -891,7 +891,7 @@ function inputNameCheck(referenceBlock) {
   }
   var name = referenceBlock.getFieldValue('INPUTNAME').toLowerCase();
   var count = 0;
-  var blocks = referenceBlock.workspace.getAllBlocks();
+  var blocks = referenceBlock.workspace.getAllBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     var otherName = block.getFieldValue('INPUTNAME');
     if (!block.disabled && !block.getInheritedDisabled() &&

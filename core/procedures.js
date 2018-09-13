@@ -56,7 +56,7 @@ Blockly.Procedures.NAME_TYPE = Blockly.PROCEDURE_CATEGORY_NAME;
  *     list, and return value boolean.
  */
 Blockly.Procedures.allProcedures = function(root) {
-  var blocks = root.getAllBlocks();
+  var blocks = root.getAllBlocks(false);
   var proceduresReturn = [];
   var proceduresNoReturn = [];
   for (var i = 0; i < blocks.length; i++) {
@@ -134,7 +134,7 @@ Blockly.Procedures.isLegalName_ = function(name, workspace, opt_exclude) {
  * @return {boolean} True if the name is used, otherwise return false.
  */
 Blockly.Procedures.isNameUsed = function(name, workspace, opt_exclude) {
-  var blocks = workspace.getAllBlocks();
+  var blocks = workspace.getAllBlocks(false);
   // Iterate through every block and check the name.
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i] == opt_exclude) {
@@ -165,7 +165,7 @@ Blockly.Procedures.rename = function(name) {
   var oldName = this.text_;
   if (oldName != name && oldName != legalName) {
     // Rename any callers.
-    var blocks = this.sourceBlock_.workspace.getAllBlocks();
+    var blocks = this.sourceBlock_.workspace.getAllBlocks(false);
     for (var i = 0; i < blocks.length; i++) {
       if (blocks[i].renameProcedure) {
         blocks[i].renameProcedure(oldName, legalName);
@@ -258,7 +258,7 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
  */
 Blockly.Procedures.getCallers = function(name, workspace) {
   var callers = [];
-  var blocks = workspace.getAllBlocks();
+  var blocks = workspace.getAllBlocks(false);
   // Iterate through every block and check the name.
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureCall) {

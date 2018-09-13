@@ -391,7 +391,6 @@ Blockly.prompt = function(message, defaultValue, callback) {
  * @private
  */
 Blockly.jsonInitFactory_ = function(jsonDef) {
-  /** @this Blockly.Block */
   return function() {
     this.jsonInit(jsonDef);
   };

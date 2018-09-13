@@ -55,7 +55,7 @@ Blockly.Variables.NAME_TYPE = Blockly.VARIABLE_CATEGORY_NAME;
  * @return {!Array.<!Blockly.VariableModel>} Array of variable models.
  */
 Blockly.Variables.allUsedVarModels = function(ws) {
-  var blocks = ws.getAllBlocks();
+  var blocks = ws.getAllBlocks(false);
   var variableHash = Object.create(null);
   // Iterate through every block and add each variable to the hash.
   for (var x = 0; x < blocks.length; x++) {
@@ -108,7 +108,7 @@ Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_ = {};
  * @return {!Array.<string>} A list of non-duplicated variable names.
  */
 Blockly.Variables.allDeveloperVariables = function(workspace) {
-  var blocks = workspace.getAllBlocks();
+  var blocks = workspace.getAllBlocks(false);
   var hash = {};
   for (var i = 0; i < blocks.length; i++) {
     var block = blocks[i];

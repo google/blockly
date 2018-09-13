@@ -360,8 +360,8 @@ Plane.recalculate = function() {
       block.customUpdate && block.customUpdate();
     }
   }
-  updateBlocks(Plane.workspace.getAllBlocks());
-  updateBlocks(Plane.workspace.flyout_.workspace_.getAllBlocks());
+  updateBlocks(Plane.workspace.getAllBlocks(false));
+  updateBlocks(Plane.workspace.flyout_.workspace_.getAllBlocks(false));
 };
 
 /**

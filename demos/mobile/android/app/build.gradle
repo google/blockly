@@ -20,8 +20,16 @@ android {
     }
 }
 
-task copyBlocklyWebFiles(type: Copy) {
-    from('../../..') {
+task copyBlocklyHtmlFile(type: Copy) {
+    from('../../html') {
+        include 'index.html'
+    }
+    into project(':app').file('./src/main/assets/blockly')
+    rename('index.html', 'webview.html')
+}
+
+task copyBlocklyMoreFiles(type: Copy) {
+    from('../../../..') {
         include 'blockly_compressed.js', 'blocks_compressed.js', 'msg/js/**', 'media/**'
         exclude 'media/test_*'
     }
@@ -29,7 +37,7 @@ task copyBlocklyWebFiles(type: Copy) {
 }
 
 project.afterEvaluate {
-    preBuild.dependsOn copyBlocklyWebFiles
+    preBuild.dependsOn(copyBlocklyHtmlFile, copyBlocklyMoreFiles)
 }
 
 dependencies {

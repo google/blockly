@@ -29,7 +29,7 @@ blocks are visible to the user all the time; that is controlled by the toolbox
 and workspace files. This should accommodate almost all applications.
 
 This does mean loading your own block definitions and generators will involve
-editing the HTML, adding you own `&lt;script&gt;` tag, and possibly removing
+editing the HTML, adding you own `<script>` tag, and possibly removing
 the `blocks_compressed.js` if you do not use any standard blocks.
 
 ### Connecting a Developer Console

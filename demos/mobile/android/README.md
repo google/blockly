@@ -7,18 +7,18 @@ embedding it in a WebView.
 
 Most of the work is done within the fragment class `BlocklyWebViewFragment`.
 This fragment instantiates the WebView, loads the HTML
-(`assets/blockly/webview.html`), and provides a few helper methods.
+(`assets/blockly/webview.html`, copied from `demos/mobile/html/index.html`),
+and provides a few helper methods.
 
 ### Copying web assets with gradle
 
 This android project copies the necessary files from the main Blockly
 repository (i.e., parent directory). In `app/build.gradle`, note the
-`copyBlocklyWebFiles` task and `preBuild.dependsOn copyBlocklyWebFiles` line.
+`copyBlocklyHtmlFile` and `copyBlocklyMoreFiles` tasks.
 
-In your own project, these files can be placed directly in the `assets/blockly`
-directory without the copy step. However, if you do use the copy step, make
-sure you adapt the copy paths appropriately.  Additionally, you may want to
-update your `.gitignore` or similar file.
+In your own project, the HTML and related files can be placed directly in the
+`assets/blockly` directory without the copy step. However, using the copy tasks
+simplifies the synchronization with an iOS app using the same files.
 
 ### Loading Block Definitions and Generator functions
 

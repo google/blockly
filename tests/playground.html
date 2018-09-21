@@ -70,7 +70,7 @@
 var workspace = null;
 
 function start() {
-  setBackgroundColor();
+  setBackgroundColour();
 
   // Parse the URL arguments.
   var match = location.search.match(/dir=([^&]+)/);
@@ -110,7 +110,7 @@ function start() {
             wheel: true,
             startScale: 1.0,
             maxScale: 4,
-            minScale: .25,
+            minScale: 0.25,
             scaleSpeed: 1.1
           }
       });
@@ -130,13 +130,10 @@ function start() {
   taChange();
 }
 
-function setBackgroundColor() {
-  var lilac = '#d6d6ff';
-
-  var currentPage = window.location.href;
-  var regexFile = /^file[\S]*$/;
-
-  if (regexFile.test(currentPage)) {
+function setBackgroundColour() {
+  // Set background colour to differentiate server vs local copy.
+  if (location.protocol == 'file:') {
+    var lilac = '#d6d6ff';
     document.getElementsByTagName('body')[0].style.backgroundColor = lilac;
   }
 }

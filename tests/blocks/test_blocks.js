@@ -30,7 +30,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "message0": "value to stack",
     "nextStatement": null,
     "output": null,
-    "colour": 230,
+    "colour": 230
   },
   {
     "type": "value_to_statement",
@@ -42,7 +42,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": null,
-    "colour": 230,
+    "colour": 230
   },
   {
     "type": "example_dropdown_long",

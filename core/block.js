@@ -369,7 +369,7 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
  * @private
  */
 Blockly.Block.prototype.getOnlyValueConnection_ = function() {
-  var connection = false;
+  var connection = null;
   for (var i = 0; i < this.inputList.length; i++) {
     var thisConnection = this.inputList[i].connection;
     if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE) {

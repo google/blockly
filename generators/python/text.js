@@ -35,6 +35,25 @@ Blockly.Python['text'] = function(block) {
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
+/**
+ * Enclose the provided value in 'str(...)' function.
+ * Leave string literals alone.
+ * @param {string} value Code evaluating to a value.
+ * @return {string} Code evaluating to a string.
+ * @private
+ */
+Blockly.Python.text.forceString_ = function(value) {
+  if (Blockly.Python.text.forceString_.strRegExp.test(value)) {
+    return value;
+  }
+  return 'str(' + value + ')';
+};
+
+/**
+ * Regular expression to detect a single-quoted string literal.
+ */
+Blockly.Python.text.forceString_.strRegExp = /^\s*'([^']|\\')*'\s*$/;
+
 Blockly.Python['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   //Should we allow joining by '-' or ',' or any other characters?
@@ -45,15 +64,16 @@ Blockly.Python['text_join'] = function(block) {
     case 1:
       var element = Blockly.Python.valueToCode(block, 'ADD0',
               Blockly.Python.ORDER_NONE) || '\'\'';
-      var code = 'str(' + element + ')';
+      var code = Blockly.Python.text.forceString_(element);
       return [code, Blockly.Python.ORDER_FUNCTION_CALL];
       break;
     case 2:
       var element0 = Blockly.Python.valueToCode(block, 'ADD0',
-              Blockly.Python.ORDER_NONE) || '\'\'';
+          Blockly.Python.ORDER_NONE) || '\'\'';
       var element1 = Blockly.Python.valueToCode(block, 'ADD1',
-              Blockly.Python.ORDER_NONE) || '\'\'';
-      var code = 'str(' + element0 + ') + str(' + element1 + ')';
+          Blockly.Python.ORDER_NONE) || '\'\'';
+      var code = Blockly.Python.text.forceString_(element0) + ' + ' +
+          Blockly.Python.text.forceString_(element1);
       return [code, Blockly.Python.ORDER_ADDITIVE];
       break;
     default:
@@ -76,7 +96,8 @@ Blockly.Python['text_append'] = function(block) {
       Blockly.Variables.NAME_TYPE);
   var value = Blockly.Python.valueToCode(block, 'TEXT',
       Blockly.Python.ORDER_NONE) || '\'\'';
-  return varName + ' = str(' + varName + ') + str(' + value + ')\n';
+  return varName + ' = str(' + varName + ') + ' +
+      Blockly.Python.text.forceString_(value) + '\n';
 };
 
 Blockly.Python['text_length'] = function(block) {

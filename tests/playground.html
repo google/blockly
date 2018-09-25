@@ -70,15 +70,21 @@
 var workspace = null;
 
 function start() {
-  setBackgroundColor();
+  setBackgroundColour();
 
   // Parse the URL arguments.
   var match = location.search.match(/dir=([^&]+)/);
   var rtl = match && match[1] == 'rtl';
   document.forms.options.elements.dir.selectedIndex = Number(rtl);
   var toolbox = getToolboxElement();
+  var toolboxNames = [
+      'toolbox-categories',
+      'toolbox-categories-typed-variables',
+      'toolbox-simple',
+      'toolbox-test-blocks'
+  ];
   document.forms.options.elements.toolbox.selectedIndex =
-      getToolboxFormIndex(toolbox.id);
+      toolboxNames.indexOf(toolbox.id);
   match = location.search.match(/side=([^&]+)/);
   var side = match ? match[1] : 'start';
   document.forms.options.elements.side.value = side;
@@ -110,7 +116,7 @@ function start() {
             wheel: true,
             startScale: 1.0,
             maxScale: 4,
-            minScale: .25,
+            minScale: 0.25,
             scaleSpeed: 1.1
           }
       });
@@ -130,14 +136,11 @@ function start() {
   taChange();
 }
 
-function setBackgroundColor() {
-  var lilac = '#d6d6ff';
-
-  var currentPage = window.location.href;
-  var regexFile = /^file[\S]*$/;
-
-  if (regexFile.test(currentPage)) {
-    document.getElementsByTagName('body')[0].style.backgroundColor = lilac;
+function setBackgroundColour() {
+  // Set background colour to differentiate server vs local copy.
+  if (location.protocol == 'file:') {
+    var lilac = '#d6d6ff';
+    document.body.style.backgroundColor = lilac;
   }
 }
 
@@ -149,18 +152,6 @@ function getToolboxElement() {
   // The three possible values are: "simple", "categories",
   // "categories-typed-variables".
   return document.getElementById('toolbox-' + toolboxSuffix);
-}
-
-function getToolboxFormIndex(id) {
-  if (id == 'toolbox-categories') {
-    return 0;
-  } else if (id == 'toolbox-categories-typed-variables') {
-    return 1;
-  } else if (id == 'toolbox-simple') {
-    return 2;
-  }
-  // Didn't recognize it.
-  return 0;
 }
 
 function toXml() {
@@ -1063,6 +1054,8 @@ h1 {
     <category name="Basic">
       <block type="empty_block"></block>
       <block type="empty_block_with_mutator"></block>
+      <block type="value_to_stack"></block>
+      <block type="value_to_statement"></block>
     </category>
     <category name="Drag">
       <label text="Drag each to the workspace"></label>

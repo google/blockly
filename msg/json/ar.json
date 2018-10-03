@@ -264,7 +264,7 @@
 	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "إنشئ قائمة فارغة",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "تقوم بإرجاع قائمة، طولها 0, لا تحتوي على أية سجلات البيانات",
-	"LISTS_CREATE_WITH_TOOLTIP": "أنشيء قائمة من أي عدد من العناصر.",
+	"LISTS_CREATE_WITH_TOOLTIP": "أنشىء قائمة من أي عدد من العناصر.",
 	"LISTS_CREATE_WITH_INPUT_WITH": "أتشئ قائمة مع",
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "قائمة",
 	"LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "أضف, إزل, أو أعد ترتيب المقاطع لإعادة تكوين القطعة قائمة القطع التالية.",

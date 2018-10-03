@@ -43,7 +43,7 @@
 	"VARIABLE_ALREADY_EXISTS": "Променљива под именом ’%1’ већ постоји.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Променљива под именом ’%1’ већ постоји за други тип: ’%2’.",
 	"DELETE_VARIABLE_CONFIRMATION": "Избрисати %1 употреба променљиве ’%2’?",
-	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Не могу да избришем променљиву ’%1’ јер је део дефиниције функције ’%2’",
+	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Није могуће избрисати променљиву „%1” јер је део дефиниције функције „%2”",
 	"DELETE_VARIABLE": "Избриши променљиву ’%1’",
 	"COLOUR_PICKER_HELPURL": "https://sr.wikipedia.org/wiki/Боја",
 	"COLOUR_PICKER_TOOLTIP": "Одаберите боју са палете.",

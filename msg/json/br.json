@@ -13,6 +13,7 @@
 	"DUPLICATE_BLOCK": "Eiladuriñ",
 	"ADD_COMMENT": "Ouzhpennañ un evezhiadenn",
 	"REMOVE_COMMENT": "Lemel an evezhiadenn kuit",
+	"DUPLICATE_COMMENT": "Eiladiñ an eilenn",
 	"EXTERNAL_INPUTS": "Monedoù diavaez",
 	"INLINE_INPUTS": "Monedoù enlinenn",
 	"DELETE_BLOCK": "Dilemel ar bloc'h",
@@ -343,5 +344,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Dreislinennañ termenadur an arc'hwel",
 	"PROCEDURES_CREATE_DO": "Krouiñ '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Ma'z eo gwir un dalvoudenn, distreiñ un eil talvoudenn neuze.",
-	"PROCEDURES_IFRETURN_WARNING": "Diwallit : Gallout a rafe ar bloc'h bezañ implijet e termenadur un arc'hwel hepken."
+	"PROCEDURES_IFRETURN_WARNING": "Diwallit : Gallout a rafe ar bloc'h bezañ implijet e termenadur un arc'hwel hepken.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Lavaret un dra bennak..."
 }

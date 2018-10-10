@@ -35,7 +35,6 @@ goog.require('Blockly.constants');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Workspace');
 
-goog.require('goog.dom');
 goog.require('goog.string');
 
 
@@ -149,7 +148,7 @@ Blockly.Variables.allDeveloperVariables = function(workspace) {
  */
 Blockly.Variables.flyoutCategory = function(workspace) {
   var xmlList = [];
-  var button = goog.dom.createDom('button');
+  var button = document.createElement('button');
   button.setAttribute('text', '%{BKY_NEW_VARIABLE}');
   button.setAttribute('callbackKey', 'CREATE_VARIABLE');
 

@@ -36,8 +36,7 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.Names');
 goog.require('Blockly.Workspace');
-
-goog.require('goog.dom');
+goog.require('Blockly.Xml');
 
 
 /**
@@ -186,12 +185,13 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
     // <block type="procedures_defnoreturn" gap="16">
     //     <field name="NAME">do something</field>
     // </block>
-    var block = goog.dom.createDom('block');
+    var block = Blockly.Xml.createElement('block');
     block.setAttribute('type', 'procedures_defnoreturn');
     block.setAttribute('gap', 16);
-    var nameField = goog.dom.createDom('field', null,
-        Blockly.Msg['PROCEDURES_DEFNORETURN_PROCEDURE']);
+    var nameField = Blockly.Xml.createElement('field');
     nameField.setAttribute('name', 'NAME');
+    nameField.appendChild(Blockly.Xml.createTextNode(
+        Blockly.Msg['PROCEDURES_DEFNORETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }
@@ -199,18 +199,19 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
     // <block type="procedures_defreturn" gap="16">
     //     <field name="NAME">do something</field>
     // </block>
-    var block = goog.dom.createDom('block');
+    var block = Blockly.Xml.createElement('block');
     block.setAttribute('type', 'procedures_defreturn');
     block.setAttribute('gap', 16);
-    var nameField = goog.dom.createDom('field', null,
-        Blockly.Msg['PROCEDURES_DEFRETURN_PROCEDURE']);
+    var nameField = Blockly.Xml.createElement('field');
     nameField.setAttribute('name', 'NAME');
+    nameField.appendChild(Blockly.Xml.createTextNode(
+        Blockly.Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }
   if (Blockly.Blocks['procedures_ifreturn']) {
     // <block type="procedures_ifreturn" gap="16"></block>
-    var block = goog.dom.createDom('block');
+    var block = Blockly.Xml.createElement('block');
     block.setAttribute('type', 'procedures_ifreturn');
     block.setAttribute('gap', 16);
     xmlList.push(block);
@@ -229,14 +230,14 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
       //     <arg name="x"></arg>
       //   </mutation>
       // </block>
-      var block = goog.dom.createDom('block');
+      var block = Blockly.Xml.createElement('block');
       block.setAttribute('type', templateName);
       block.setAttribute('gap', 16);
-      var mutation = goog.dom.createDom('mutation');
+      var mutation = Blockly.Xml.createElement('mutation');
       mutation.setAttribute('name', name);
       block.appendChild(mutation);
       for (var j = 0; j < args.length; j++) {
-        var arg = goog.dom.createDom('arg');
+        var arg = Blockly.Xml.createElement('arg');
         arg.setAttribute('name', args[j]);
         mutation.appendChild(arg);
       }

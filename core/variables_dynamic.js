@@ -34,8 +34,6 @@ goog.require('Blockly.VariableModel');
 // TODO Fix circular dependencies
 // goog.require('Blockly.Workspace');
 
-goog.require('goog.dom');
-
 
 Blockly.VariablesDynamic.onCreateVariableButtonClick_String = function(button) {
   Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(), null, 'String');
@@ -54,14 +52,15 @@ Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour = function(button) {
  */
 Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
   var xmlList = [];
-  var button = goog.dom.createDom('button');
+  var button = document.createElement('button');
   button.setAttribute('text', Blockly.Msg['NEW_STRING_VARIABLE']);
   button.setAttribute('callbackKey', 'CREATE_VARIABLE_STRING');
   xmlList.push(button);
-  button = goog.dom.createDom('button');
+  button = document.createElement('button');
   button.setAttribute('text', Blockly.Msg['NEW_NUMBER_VARIABLE']);
   button.setAttribute('callbackKey', 'CREATE_VARIABLE_NUMBER');
-  xmlList.push(button);button = goog.dom.createDom('button');
+  xmlList.push(button);
+  button = document.createElement('button');
   button.setAttribute('text', Blockly.Msg['NEW_COLOUR_VARIABLE']);
   button.setAttribute('callbackKey', 'CREATE_VARIABLE_COLOUR');
   xmlList.push(button);

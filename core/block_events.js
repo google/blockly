@@ -36,8 +36,9 @@ goog.provide('Blockly.Events.Move');  // Deprecated.
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
+// TODO Fix circular dependencies
+//goog.require('Blockly.Xml');
 
-goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 
 
@@ -273,7 +274,7 @@ Blockly.Events.Create.prototype.fromJson = function(json) {
 Blockly.Events.Create.prototype.run = function(forward) {
   var workspace = this.getEventWorkspace_();
   if (forward) {
-    var xml = goog.dom.createDom('xml');
+    var xml = Blockly.Xml.createElement('xml');
     xml.appendChild(this.xml);
     Blockly.Xml.domToWorkspace(xml, workspace);
   } else {
@@ -363,7 +364,7 @@ Blockly.Events.Delete.prototype.run = function(forward) {
       }
     }
   } else {
-    var xml = goog.dom.createDom('xml');
+    var xml = Blockly.Xml.createElement('xml');
     xml.appendChild(this.oldXml);
     Blockly.Xml.domToWorkspace(xml, workspace);
   }

@@ -524,7 +524,7 @@ Blockly.Workspace.prototype.fireChangeListener = function(event) {
     this.undoStack_.push(event);
     this.redoStack_.length = 0;
     while (this.undoStack_.length > this.MAX_UNDO) {
-      this.undoStack_.unshift();
+      this.undoStack_.shift();
     }
   }
   for (var i = 0, func; func = this.listeners_[i]; i++) {

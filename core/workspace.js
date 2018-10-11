@@ -523,7 +523,7 @@ Blockly.Workspace.prototype.fireChangeListener = function(event) {
   if (event.recordUndo) {
     this.undoStack_.push(event);
     this.redoStack_.length = 0;
-    if (this.undoStack_.length > this.MAX_UNDO) {
+    while (this.undoStack_.length > this.MAX_UNDO) {
       this.undoStack_.unshift();
     }
   }

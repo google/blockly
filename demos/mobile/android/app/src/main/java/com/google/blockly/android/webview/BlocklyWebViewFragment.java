@@ -1,5 +1,6 @@
 package com.google.blockly.android.webview;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,11 +17,13 @@ import android.webkit.WebView;
 public class BlocklyWebViewFragment extends Fragment {
     protected @Nullable WebView mWebView = null;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         mWebView = new WebView(inflater.getContext());
+        mWebView.setWebChromeClient(new WebChromeClient());
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         mWebView.loadUrl("file:///android_asset/blockly/webview.html");

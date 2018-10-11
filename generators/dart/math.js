@@ -485,3 +485,15 @@ Blockly.Dart['math_random_float'] = function(block) {
       'import \'dart:math\' as Math;';
   return ['new Math.Random().nextDouble()', Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
+
+Blockly.Dart['math_atan2'] = function(block) {
+  // Arctangent of point (X, Y) in degrees from -180 to 180.
+  Blockly.Dart.definitions_['import_dart_math'] =
+      'import \'dart:math\' as Math;';
+  var argument0 = Blockly.Dart.valueToCode(block, 'X',
+      Blockly.Dart.ORDER_NONE) || '0';
+  var argument1 = Blockly.Dart.valueToCode(block, 'Y',
+      Blockly.Dart.ORDER_NONE) || '0';
+  return ['Math.atan2(' + argument1 + ', ' + argument0 + ') / Math.PI * 180',
+      Blockly.Dart.ORDER_MULTIPLICATIVE];
+};

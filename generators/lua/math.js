@@ -425,3 +425,13 @@ Blockly.Lua['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
   return ['math.random()', Blockly.Lua.ORDER_HIGH];
 };
+
+Blockly.Lua['math_atan2'] = function(block) {
+  // Arctangent of point (X, Y) in degrees from -180 to 180.
+  var argument0 = Blockly.Lua.valueToCode(block, 'X',
+      Blockly.Lua.ORDER_NONE) || '0';
+  var argument1 = Blockly.Lua.valueToCode(block, 'Y',
+      Blockly.Lua.ORDER_NONE) || '0';
+  return ['math.deg(math.atan2(' + argument1 + ', ' + argument0 + '))',
+      Blockly.Lua.ORDER_HIGH];
+};

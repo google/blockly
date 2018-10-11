@@ -372,6 +372,29 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "colour": "%{BKY_MATH_HUE}",
     "tooltip": "%{BKY_MATH_RANDOM_FLOAT_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_RANDOM_FLOAT_HELPURL}"
+  },
+
+  // Block for calculating atan2 of [X] and [Y].
+  {
+    "type": "math_atan2",
+    "message0": "%{BKY_MATH_ATAN2_TITLE}",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "X",
+        "check": "Number"
+      },
+      {
+        "type": "input_value",
+        "name": "Y",
+        "check": "Number"
+      }
+    ],
+    "inputsInline": true,
+    "output": "Number",
+    "colour": "%{BKY_MATH_HUE}",
+    "tooltip": "%{BKY_MATH_ATAN2_TOOLTIP}",
+    "helpUrl": "%{BKY_MATH_ATAN2_HELPURL}"
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 

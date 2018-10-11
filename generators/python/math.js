@@ -386,3 +386,14 @@ Blockly.Python['math_random_float'] = function(block) {
   Blockly.Python.definitions_['import_random'] = 'import random';
   return ['random.random()', Blockly.Python.ORDER_FUNCTION_CALL];
 };
+
+Blockly.Python['math_atan2'] = function(block) {
+  // Arctangent of point (X, Y) in degrees from -180 to 180.
+  Blockly.Python.definitions_['import_math'] = 'import math';
+  var argument0 = Blockly.Python.valueToCode(block, 'X',
+      Blockly.Python.ORDER_NONE) || '0';
+  var argument1 = Blockly.Python.valueToCode(block, 'Y',
+      Blockly.Python.ORDER_NONE) || '0';
+  return ['math.atan2(' + argument1 + ', ' + argument0 + ') / math.pi * 180',
+      Blockly.Python.ORDER_MULTIPLICATIVE];
+};

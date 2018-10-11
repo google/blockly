@@ -411,3 +411,13 @@ Blockly.JavaScript['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
   return ['Math.random()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
+
+Blockly.JavaScript['math_atan2'] = function(block) {
+  // Arctangent of point (X, Y) in degrees from -180 to 180.
+  var argument0 = Blockly.JavaScript.valueToCode(block, 'X',
+      Blockly.JavaScript.ORDER_COMMA) || '0';
+  var argument1 = Blockly.JavaScript.valueToCode(block, 'Y',
+      Blockly.JavaScript.ORDER_COMMA) || '0';
+  return ['Math.atan2(' + argument1 + ', ' + argument0 + ') / Math.PI * 180',
+      Blockly.JavaScript.ORDER_DIVISION];
+};

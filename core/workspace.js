@@ -561,7 +561,7 @@ Blockly.Workspace.prototype.getCommentById = function(id) {
  * @return {boolean} True if all inputs are filled, false otherwise.
  */
 Blockly.Workspace.prototype.allInputsFilled = function(
-      opt_shadowBlocksAreFilled) {
+    opt_shadowBlocksAreFilled) {
   var blocks = this.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     if (!block.allInputsFilled(opt_shadowBlocksAreFilled)) {

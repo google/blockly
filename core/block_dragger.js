@@ -144,17 +144,20 @@ Blockly.BlockDragger.initIconData_ = function(block) {
  * Start dragging a block.  This includes moving it to the drag surface.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at mouse down, in pixel units.
- * @param {boolean} healStack whether or not to heal the stack after disconnecting
+ * @param {boolean} healStack Whether or not to heal the stack after
+ *     disconnecting.
  * @package
  */
-Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY, healStack) {
+Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
+    healStack) {
   if (!Blockly.Events.getGroup()) {
     Blockly.Events.setGroup(true);
   }
 
-  // Mutators don't have the same type of z-ordering as the normal workspace during a drag.
-  // They have to rely on the order of the blocks in the svg. For performance reasons that
-  // usually happens at the end of a drag, but do it at the beginning for mutators.
+  // Mutators don't have the same type of z-ordering as the normal workspace
+  // during a drag.  They have to rely on the order of the blocks in the SVG.
+  // For performance reasons that usually happens at the end of a drag,
+  // but do it at the beginning for mutators.
   if (this.workspace_.isMutator) {
     this.draggingBlock_.bringToFront();
   }

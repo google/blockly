@@ -343,7 +343,8 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
  * @param {number} suffixLength The length of the common suffix
  * @return {!Array.<!Array>} A new array with all of the option text trimmed.
  */
-Blockly.FieldDropdown.applyTrim_ = function(options, prefixLength, suffixLength) {
+Blockly.FieldDropdown.applyTrim_ = function(options,
+    prefixLength, suffixLength) {
   var newOptions = [];
   // Remove the prefix and suffix from the options.
   for (var i = 0; i < options.length; i++) {
@@ -515,7 +516,8 @@ Blockly.FieldDropdown.prototype.updateWidth = function() {
   if (this.imageJson_ && (goog.userAgent.IE || goog.userAgent.EDGE)) {
     // Recalculate the full width.
     var arrowWidth = Blockly.Field.getCachedWidth(this.arrow_);
-    var width = Number(this.imageJson_.width) + arrowWidth + Blockly.BlockSvg.SEP_SPACE_X;
+    var width = Number(this.imageJson_.width) + arrowWidth +
+        Blockly.BlockSvg.SEP_SPACE_X;
     if (this.borderRect_) {
       this.borderRect_.setAttribute('width', width);
     }

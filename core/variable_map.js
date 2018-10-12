@@ -96,7 +96,7 @@ Blockly.VariableMap.prototype.renameVariable = function(variable, newName) {
 Blockly.VariableMap.prototype.renameVariableById = function(id, newName) {
   var variable = this.getVariableById(id);
   if (!variable) {
-    throw new Error('Tried to rename a variable that didn\'t exist. ID: ' + id);
+    throw Error('Tried to rename a variable that didn\'t exist. ID: ' + id);
   }
 
   this.renameVariable(variable, newName);

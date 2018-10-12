@@ -330,7 +330,7 @@ goog.inherits(Blockly.Events.CommentMove, Blockly.Events.CommentBase);
  */
 Blockly.Events.CommentMove.prototype.recordNew = function() {
   if (!this.comment_) {
-    throw new Error('Tried to record the new position of a comment on the ' +
+    throw Error('Tried to record the new position of a comment on the ' +
         'same event twice.');
   }
   this.newCoordinate_ = this.comment_.getXY();

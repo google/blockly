@@ -69,11 +69,10 @@ Blockly.Field.TYPE_MAP_ = {};
  */
 Blockly.Field.register = function(type, fieldClass) {
   if ((typeof type != 'string') || (type.trim() == '')) {
-    throw new Error('Invalid field type "' + type + '"');
+    throw Error('Invalid field type "' + type + '"');
   }
   if (!fieldClass || (typeof fieldClass.fromJson != 'function')) {
-    throw new Error('Field "' + fieldClass +
-        '" must have a fromJson function');
+    throw Error('Field "' + fieldClass + '" must have a fromJson function');
   }
   Blockly.Field.TYPE_MAP_[type] = fieldClass;
 };

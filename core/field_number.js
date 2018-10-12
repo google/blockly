@@ -31,8 +31,8 @@ goog.require('Blockly.FieldTextInput');
 
 /**
  * Class for an editable number field.
- * @param {(string|number)=} opt_value The initial content of the field. The value
- *     should cast to a number, and if it does not, '0' will be used.
+ * @param {(string|number)=} opt_value The initial content of the field.
+ *     The value should cast to a number, and if it does not, '0' will be used.
  * @param {(string|number)=} opt_min Minimum value.
  * @param {(string|number)=} opt_max Maximum value.
  * @param {(string|number)=} opt_precision Precision for value.

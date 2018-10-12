@@ -19,7 +19,8 @@
  */
 
 /**
- * @fileoverview Utility methods for working with the closure menu (goog.ui.menu).
+ * @fileoverview Utility methods for working with the closure menu
+ * (goog.ui.menu).
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';

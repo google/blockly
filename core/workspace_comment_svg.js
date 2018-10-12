@@ -266,8 +266,8 @@ Blockly.WorkspaceCommentSvg.prototype.removeFocus = function() {
 };
 
 /**
- * Return the coordinates of the top-left corner of this comment relative to the
- * drawing surface's origin (0,0), in workspace units.
+ * Return the coordinates of the top-left corner of this comment relative to
+ * the drawing surface's origin (0,0), in workspace units.
  * If the comment is on the workspace, (0, 0) is the origin of the workspace
  * coordinate system.
  * This does not change with workspace scale.
@@ -337,9 +337,9 @@ Blockly.WorkspaceCommentSvg.prototype.translate = function(x, y) {
 };
 
 /**
- * Move this comment to its workspace's drag surface, accounting for positioning.
- * Generally should be called at the same time as setDragging(true).
- * Does nothing if useDragSurface_ is false.
+ * Move this comment to its workspace's drag surface, accounting for
+ * positioning.  Generally should be called at the same time as
+ * setDragging(true).  Does nothing if useDragSurface_ is false.
  * @private
  */
 Blockly.WorkspaceCommentSvg.prototype.moveToDragSurface_ = function() {
@@ -383,7 +383,8 @@ Blockly.WorkspaceCommentSvg.prototype.moveOffDragSurface_ = function(newXY) {
  *     workspace coordinates.
  * @package
  */
-Blockly.WorkspaceCommentSvg.prototype.moveDuringDrag = function(dragSurface, newLoc) {
+Blockly.WorkspaceCommentSvg.prototype.moveDuringDrag = function(dragSurface,
+    newLoc) {
   if (dragSurface) {
     dragSurface.translateSurface(newLoc.x, newLoc.y);
   } else {

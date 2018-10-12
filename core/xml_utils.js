@@ -33,7 +33,7 @@ goog.provide('Blockly.Xml.utils');
 
 /**
  * Create DOM element for XML.
- * @param {tagName} name Name of DOM element.
+ * @param {string} tagName Name of DOM element.
  * @return {!Element} New DOM element.
  */
 Blockly.Xml.utils.createElement = function(tagName) {

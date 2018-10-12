@@ -196,7 +196,7 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
   var commentText = block.getCommentText();
   if (commentText) {
     var commentElement = Blockly.Xml.utils.createElement('comment');
-    containerElement.appendChild(Blockly.Xml.utils.createTextNode(commentText));
+    commentElement.appendChild(Blockly.Xml.utils.createTextNode(commentText));
     if (typeof block.comment == 'object') {
       commentElement.setAttribute('pinned', block.comment.isVisible());
       var hw = block.comment.getBubbleSize();

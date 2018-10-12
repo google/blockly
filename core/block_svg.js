@@ -73,8 +73,8 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @type {SVGElement}
    * @private
    */
-  this.svgPath_ = Blockly.utils.createSvgElement('path', {'class': 'blocklyPath'},
-      this.svgGroup_);
+  this.svgPath_ = Blockly.utils.createSvgElement('path',
+      {'class': 'blocklyPath'}, this.svgGroup_);
 
   /**
    * @type {SVGElement}
@@ -93,7 +93,8 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @type {boolean}
    * @private
    */
-  this.useDragSurface_ = Blockly.utils.is3dSupported() && !!workspace.blockDragSurface_;
+  this.useDragSurface_ =
+      Blockly.utils.is3dSupported() && !!workspace.blockDragSurface_;
 
   Blockly.Tooltip.bindMouseEvents(this.svgPath_);
   Blockly.BlockSvg.superClass_.constructor.call(this,
@@ -311,7 +312,8 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
       // the translation of the drag surface itself.
       if (this.useDragSurface_ &&
           this.workspace.blockDragSurface_.getCurrentBlock() == element) {
-        var surfaceTranslation = this.workspace.blockDragSurface_.getSurfaceTranslation();
+        var surfaceTranslation =
+            this.workspace.blockDragSurface_.getSurfaceTranslation();
         x += surfaceTranslation.x;
         y += surfaceTranslation.y;
       }

@@ -854,7 +854,7 @@ Blockly.Block.prototype.setColour = function(colour) {
  */
 Blockly.Block.prototype.setOnChange = function(onchangeFn) {
   if (onchangeFn && typeof onchangeFn != 'function') {
-    throw new Error('onchange must be a function.');
+    throw Error('onchange must be a function.');
   }
   if (this.onchangeWrapper_) {
     this.workspace.removeChangeListener(this.onchangeWrapper_);
@@ -1339,7 +1339,7 @@ Blockly.Block.prototype.jsonInitColour_ = function(json, warningPrefix) {
  */
 Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
   if (opt_disableCheck !== undefined && typeof opt_disableCheck != 'boolean') {
-    throw new Error('opt_disableCheck must be a boolean if provided');
+    throw Error('opt_disableCheck must be a boolean if provided');
   }
   if (!opt_disableCheck) {
     var overwrites = [];
@@ -1349,7 +1349,7 @@ Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
       }
     }
     if (overwrites.length) {
-      throw new Error('Mixin will overwrite block members: ' +
+      throw Error('Mixin will overwrite block members: ' +
         JSON.stringify(overwrites));
     }
   }
@@ -1375,11 +1375,11 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
     var token = tokens[i];
     if (typeof token == 'number') {
       if (token <= 0 || token > args.length) {
-        throw new Error('Block "' + this.type + '": ' +
+        throw Error('Block "' + this.type + '": ' +
             'Message index %' + token + ' out of range.');
       }
       if (indexDup[token]) {
-        throw new Error('Block "' + this.type + '": ' +
+        throw Error('Block "' + this.type + '": ' +
             'Message index %' + token + ' duplicated.');
       }
       indexDup[token] = true;
@@ -1393,7 +1393,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
     }
   }
   if (indexCount != args.length) {
-    throw new Error('Block "' + this.type + '": ' +
+    throw Error('Block "' + this.type + '": ' +
         'Message does not reference all ' + args.length + ' arg(s).');
   }
   // Add last dummy input if needed.

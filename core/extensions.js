@@ -54,13 +54,13 @@ Blockly.Extensions.ALL_ = {};
  */
 Blockly.Extensions.register = function(name, initFn) {
   if ((typeof name != 'string') || (name.trim() == '')) {
-    throw new Error('Error: Invalid extension name "' + name + '"');
+    throw Error('Error: Invalid extension name "' + name + '"');
   }
   if (Blockly.Extensions.ALL_[name]) {
-    throw new Error('Error: Extension "' + name + '" is already registered.');
+    throw Error('Error: Extension "' + name + '" is already registered.');
   }
   if (typeof initFn != 'function') {
-    throw new Error('Error: Extension "' + name + '" must be a function');
+    throw Error('Error: Extension "' + name + '" must be a function');
   }
   Blockly.Extensions.ALL_[name] = initFn;
 };
@@ -74,7 +74,7 @@ Blockly.Extensions.register = function(name, initFn) {
  */
 Blockly.Extensions.registerMixin = function(name, mixinObj) {
   if (!mixinObj || typeof mixinObj != 'object'){
-    throw new Error('Error: Mixin "' + name + '" must be a object');
+    throw Error('Error: Mixin "' + name + '" must be a object');
   }
   Blockly.Extensions.register(name, function() {
     this.mixin(mixinObj);
@@ -108,7 +108,7 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
       Blockly.Extensions.checkMutatorDialog_(mixinObj, errorPrefix);
 
   if (opt_helperFn && (typeof opt_helperFn != 'function')) {
-    throw new Error('Extension "' + name + '" is not a function');
+    throw Error('Extension "' + name + '" is not a function');
   }
 
   // Sanity checks passed.
@@ -136,7 +136,7 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
 Blockly.Extensions.apply = function(name, block, isMutator) {
   var extensionFn = Blockly.Extensions.ALL_[name];
   if (typeof extensionFn != 'function') {
-    throw new Error('Error: Extension "' + name + '" not found.');
+    throw Error('Error: Extension "' + name + '" not found.');
   }
   if (isMutator) {
     // Fail early if the block already has mutation properties.
@@ -153,7 +153,7 @@ Blockly.Extensions.apply = function(name, block, isMutator) {
     Blockly.Extensions.checkBlockHasMutatorProperties_(errorPrefix, block);
   } else {
     if (!Blockly.Extensions.mutatorPropertiesMatch_(mutatorProperties, block)) {
-      throw new Error('Error when applying extension "' + name + '": ' +
+      throw Error('Error when applying extension "' + name + '": ' +
           'mutation properties changed when applying a non-mutator extension.');
     }
   }
@@ -170,10 +170,10 @@ Blockly.Extensions.apply = function(name, block, isMutator) {
 Blockly.Extensions.checkHasFunction_ = function(errorPrefix, func,
     propertyName) {
   if (!func) {
-    throw new Error(errorPrefix +
+    throw Error(errorPrefix +
         'missing required property "' + propertyName + '"');
   } else if (typeof func != 'function') {
-    throw new Error(errorPrefix +
+    throw Error(errorPrefix +
         '" required property "' + propertyName + '" must be a function');
   }
 };
@@ -191,7 +191,7 @@ Blockly.Extensions.checkHasFunction_ = function(errorPrefix, func,
 Blockly.Extensions.checkNoMutatorProperties_ = function(mutationName, block) {
   var properties = Blockly.Extensions.getMutatorProperties_(block);
   if (properties.length) {
-    throw new Error('Error: tried to apply mutation "' + mutationName +
+    throw Error('Error: tried to apply mutation "' + mutationName +
         '" to a block that already has mutator functions.' +
         '  Block id: ' + block.id);
   }
@@ -215,15 +215,15 @@ Blockly.Extensions.checkMutatorDialog_ = function(object, errorPrefix) {
 
   if (hasCompose && hasDecompose) {
     if (typeof object.compose != 'function') {
-      throw new Error(errorPrefix + 'compose must be a function.');
+      throw Error(errorPrefix + 'compose must be a function.');
     } else if (typeof object.decompose != 'function') {
-      throw new Error(errorPrefix + 'decompose must be a function.');
+      throw Error(errorPrefix + 'decompose must be a function.');
     }
     return true;
   } else if (!hasCompose && !hasDecompose) {
     return false;
   } else {
-    throw new Error(errorPrefix +
+    throw Error(errorPrefix +
         'Must have both or neither of "compose" and "decompose"');
   }
 };
@@ -238,12 +238,10 @@ Blockly.Extensions.checkMutatorDialog_ = function(object, errorPrefix) {
 Blockly.Extensions.checkBlockHasMutatorProperties_ = function(errorPrefix,
     block) {
   if (typeof block.domToMutation != 'function') {
-    throw new Error(errorPrefix +
-                    'Applying a mutator didn\'t add "domToMutation"');
+    throw Error(errorPrefix + 'Applying a mutator didn\'t add "domToMutation"');
   }
   if (typeof block.mutationToDom != 'function') {
-    throw new Error(errorPrefix +
-                    'Applying a mutator didn\'t add "mutationToDom"');
+    throw Error(errorPrefix + 'Applying a mutator didn\'t add "mutationToDom"');
   }
 
   // A block with a mutator isn't required to have a mutation dialog, but

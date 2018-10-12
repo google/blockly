@@ -342,13 +342,14 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
         } else if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
           childOut.hexColour = colour;
           this.hasColours_ = true;
-        } else if (typeof colour === 'number'
-            || (typeof colour === 'string' && !isNaN(Number(colour)))) {
+        } else if (typeof colour === 'number' ||
+            (typeof colour === 'string' && !isNaN(Number(colour)))) {
           childOut.hexColour = Blockly.hueToRgb(Number(colour));
           this.hasColours_ = true;
         } else {
           childOut.hexColour = '';
-          console.warn('Toolbox category "' + categoryName + '" has unrecognized colour attribute: ' + colour);
+          console.warn('Toolbox category "' + categoryName +
+              '" has unrecognized colour attribute: ' + colour);
         }
         if (childIn.getAttribute('expanded') == 'true') {
           if (childOut.blocks.length) {

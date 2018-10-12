@@ -67,7 +67,7 @@ Blockly.WorkspaceCommentSvg.TOP_OFFSET = 10;
 /**
  * Returns a bounding box describing the dimensions of this comment.
  * @return {!{height: number, width: number}} Object with height and width
- *    properties in workspace units.
+ *     properties in workspace units.
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.getHeightWidth = function() {
@@ -283,9 +283,10 @@ Blockly.WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
  * @private
  */
 Blockly.WorkspaceCommentSvg.prototype.deleteMouseDown_ = function(e) {
-  // highlight the delete icon
+  // Highlight the delete icon.
   Blockly.utils.addClass(
-      /** @type {!Element} */ (this.deleteIconBorder_), 'blocklyDeleteIconHighlighted');
+      /** @type {!Element} */ (this.deleteIconBorder_),
+      'blocklyDeleteIconHighlighted');
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();
 };
@@ -296,9 +297,10 @@ Blockly.WorkspaceCommentSvg.prototype.deleteMouseDown_ = function(e) {
  * @private
  */
 Blockly.WorkspaceCommentSvg.prototype.deleteMouseOut_ = function(/*e*/) {
-  // restore highlight on the delete icon
+  // Restore highlight on the delete icon.
   Blockly.utils.removeClass(
-      /** @type {!Element} */ (this.deleteIconBorder_), 'blocklyDeleteIconHighlighted');
+      /** @type {!Element} */ (this.deleteIconBorder_),
+      'blocklyDeleteIconHighlighted');
 };
 
 /**
@@ -307,7 +309,7 @@ Blockly.WorkspaceCommentSvg.prototype.deleteMouseOut_ = function(/*e*/) {
  * @private
  */
 Blockly.WorkspaceCommentSvg.prototype.deleteMouseUp_ = function(e) {
-  // Delete this comment
+  // Delete this comment.
   this.dispose(true, true);
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();
@@ -359,18 +361,13 @@ Blockly.WorkspaceCommentSvg.prototype.resizeComment_ = function() {
   var topOffset = Blockly.WorkspaceCommentSvg.TOP_OFFSET;
   var textOffset = Blockly.WorkspaceCommentSvg.TEXTAREA_OFFSET * 2;
 
-  this.foreignObject_.setAttribute('width',
-      size.width);
-  this.foreignObject_.setAttribute('height',
-      size.height - topOffset);
+  this.foreignObject_.setAttribute('width', size.width);
+  this.foreignObject_.setAttribute('height', size.height - topOffset);
   if (this.RTL) {
-    this.foreignObject_.setAttribute('x',
-        -size.width);
+    this.foreignObject_.setAttribute('x', -size.width);
   }
-  this.textarea_.style.width =
-      (size.width - textOffset) + 'px';
-  this.textarea_.style.height =
-      (size.height - textOffset - topOffset) + 'px';
+  this.textarea_.style.width = (size.width - textOffset) + 'px';
+  this.textarea_.style.height = (size.height - textOffset - topOffset) + 'px';
 };
 
 /**
@@ -390,7 +387,8 @@ Blockly.WorkspaceCommentSvg.prototype.setSize_ = function(width, height) {
   this.svgRectTarget_.setAttribute('width', width);
   this.svgRectTarget_.setAttribute('height', height);
   this.svgHandleTarget_.setAttribute('width', width);
-  this.svgHandleTarget_.setAttribute('height', Blockly.WorkspaceCommentSvg.TOP_OFFSET);
+  this.svgHandleTarget_.setAttribute('height',
+      Blockly.WorkspaceCommentSvg.TOP_OFFSET);
   if (this.RTL) {
     this.svgRect_.setAttribute('transform', 'scale(-1 1)');
     this.svgRectTarget_.setAttribute('transform', 'scale(-1 1)');

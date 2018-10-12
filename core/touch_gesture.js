@@ -82,7 +82,8 @@ Blockly.TouchGesture = function(e, creatorWorkspace) {
 
   /**
    * A handle to use to unbind the second touch start or pointer down listener
-   * at the end of a drag. Opaque data returned from Blockly.bindEventWithChecks_.
+   * at the end of a drag.
+   * Opaque data returned from Blockly.bindEventWithChecks_.
    * @type {Array.<!Array>}
    * @private
    */
@@ -118,7 +119,8 @@ Blockly.TouchGesture.prototype.doStart = function(e) {
 /**
  * Bind gesture events.
  * Overriding the gesture definition of this function, binding the same
- * functions for onMoveWrapper_ and onUpWrapper_ but passing opt_noCaptureIdentifier.
+ * functions for onMoveWrapper_ and onUpWrapper_ but passing
+ * opt_noCaptureIdentifier.
  * In addition, binding a second mouse down event to detect multi-touch events.
  * @param {!Event} e A mouse down or touch start event.
  * @package
@@ -224,7 +226,8 @@ Blockly.TouchGesture.prototype.dispose = function() {
 };
 
 /**
- * Handle a touch start or pointer down event and keep track of current pointers.
+ * Handle a touch start or pointer down event and keep track of current
+ * pointers.
  * @param {!Event} e A touch start, or pointer down event.
  * @package
  */
@@ -244,7 +247,8 @@ Blockly.TouchGesture.prototype.handleTouchStart = function(e) {
 };
 
 /**
- * Handle a touch move or pointer move event and zoom in/out if two pointers are on the screen.
+ * Handle a touch move or pointer move event and zoom in/out if two pointers
+ * are on the screen.
  * @param {!Event} e A touch move, or pointer move event.
  * @package
  */

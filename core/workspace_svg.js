@@ -64,7 +64,8 @@ goog.require('goog.math.Coordinate');
  * @extends {Blockly.Workspace}
  * @constructor
  */
-Blockly.WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface) {
+Blockly.WorkspaceSvg = function(options,
+    opt_blockDragSurface, opt_wsDragSurface) {
   Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
   this.getMetrics =
       options.getMetrics || Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
@@ -344,8 +345,8 @@ Blockly.WorkspaceSvg.prototype.updateInverseScreenCTM = function() {
 
 /**
  * Getter for isVisible
- * @return {boolean} Whether the workspace is visible.  False if the workspace has been hidden
- * by calling `setVisible(false)`.
+ * @return {boolean} Whether the workspace is visible.
+ *     False if the workspace has been hidden by calling `setVisible(false)`.
  */
 Blockly.WorkspaceSvg.prototype.isVisible = function() {
   return this.isVisible_;
@@ -1051,7 +1052,8 @@ Blockly.WorkspaceSvg.prototype.pasteWorkspaceComment_ = function(xmlComment) {
         commentX = -commentX;
       }
       // Offset workspace comment.
-      // TODO: #1719 properly offset comment such that it's not interfereing with any blocks
+      // TODO: #1719 properly offset comment such that it's not interfereing
+      // with any blocks.
       commentX += 50;
       commentY += 50;
       comment.moveBy(commentX, commentY);
@@ -1060,7 +1062,7 @@ Blockly.WorkspaceSvg.prototype.pasteWorkspaceComment_ = function(xmlComment) {
     Blockly.Events.enable();
   }
   if (Blockly.Events.isEnabled()) {
-    // TODO: Fire a Workspace Comment Create event
+    // TODO: Fire a Workspace Comment Create event.
   }
   comment.select();
 };
@@ -1100,8 +1102,8 @@ Blockly.WorkspaceSvg.prototype.deleteVariableById = function(id) {
 };
 
 /**
- * Create a new variable with the given name.  Update the flyout to show the new
- *     variable immediately.
+ * Create a new variable with the given name.  Update the flyout to show the
+ *     new variable immediately.
  * @param {string} name The new variable's name.
  * @param {string=} opt_type The type of the variable like 'int' or 'string'.
  *     Does not need to be unique. Field_variable can filter variables based on

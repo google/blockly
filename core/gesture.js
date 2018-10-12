@@ -126,8 +126,8 @@ Blockly.Gesture = function(e, creatorWorkspace) {
 
   /**
    * Whether the pointer has at any point moved out of the drag radius.
-   * A gesture that exceeds the drag radius is a drag even if it ends exactly at
-   * its start point.
+   * A gesture that exceeds the drag radius is a drag even if it ends exactly
+   * at its start point.
    * @type {boolean}
    * @private
    */
@@ -493,7 +493,8 @@ Blockly.Gesture.prototype.doStart = function(e) {
   this.startWorkspace_.markFocused();
   this.mostRecentEvent_ = e;
 
-  // Hide chaff also hides the flyout, so don't do it if the click is in a flyout.
+  // Hide chaff also hides the flyout, so don't do it if the click is in a
+  // flyout.
   Blockly.hideChaff(!!this.flyout_);
   Blockly.Tooltip.block();
 

@@ -116,8 +116,8 @@ Blockly.Xml.fieldToDomVariable_ = function(field) {
   }
   // Get the variable directly from the field, instead of doing a lookup.  This
   // will work even if the variable has already been deleted.  This can happen
-  // because the flyout defers deleting blocks until the next time the flyout is
-  // opened.
+  // because the flyout defers deleting blocks until the next time the flyout
+  // is opened.
   var variable = field.getVariable();
 
   if (!variable) {
@@ -178,7 +178,8 @@ Blockly.Xml.allFieldsToDom_ = function(block, element) {
  * @return {!Element} Tree of XML elements.
  */
 Blockly.Xml.blockToDom = function(block, opt_noId) {
-  var element = Blockly.Xml.utils.createElement(block.isShadow() ? 'shadow' : 'block');
+  var element =
+      Blockly.Xml.utils.createElement(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
   if (!opt_noId) {
     element.setAttribute('id', block.id);
@@ -354,7 +355,8 @@ Blockly.Xml.domToPrettyText = function(dom) {
  * Converts an XML string into a DOM structure. It requires the XML to have a
  * root element of <xml>. Other XML string will result in throwing an error.
  * @param {string} text An XML string.
- * @return {!Element} A DOM object representing the singular child of the document element.
+ * @return {!Element} A DOM object representing the singular child of the
+ *     document element.
  * @throws if XML doesn't parse or is not the expected structure.
  */
 Blockly.Xml.textToDom = function(text) {
@@ -500,7 +502,8 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
     var newX = Infinity;  // x of top corner
     var newY = Infinity;  // y of top corner
     for (var i = 0; i < newBlockIds.length; i++) {
-      var blockXY = workspace.getBlockById(newBlockIds[i]).getRelativeToSurfaceXY();
+      var blockXY =
+          workspace.getBlockById(newBlockIds[i]).getRelativeToSurfaceXY();
       if (blockXY.y < newY) {
         newY = blockXY.y;
       }

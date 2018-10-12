@@ -316,8 +316,7 @@ Blockly.Xml.cloneShadow_ = function(shadow) {
  * @return {string} Text representation.
  */
 Blockly.Xml.domToText = function(dom) {
-  var oSerializer = new XMLSerializer();
-  return oSerializer.serializeToString(dom);
+  return Blockly.Xml.utils.domToText(dom);
 };
 
 /**
@@ -352,19 +351,6 @@ Blockly.Xml.domToPrettyText = function(dom) {
 };
 
 /**
- * Converts an XML string into a DOM tree. This method will be overridden in
- * the Node.js build of Blockly. See gulpfile.js, blockly_javascript_en task.
- * @param {string} text XML string.
- * @return {!Element} The DOM document.
- * @throws if XML doesn't parse.
- * @private
- */
-Blockly.Xml.textToDomDocument_ = function(text) {
-  var oParser = new DOMParser();
-  return oParser.parseFromString(text, 'text/xml');
-};
-
-/**
  * Converts an XML string into a DOM structure. It requires the XML to have a
  * root element of <xml>. Other XML string will result in throwing an error.
  * @param {string} text An XML string.
@@ -372,7 +358,7 @@ Blockly.Xml.textToDomDocument_ = function(text) {
  * @throws if XML doesn't parse or is not the expected structure.
  */
 Blockly.Xml.textToDom = function(text) {
-  var doc = Blockly.Xml.textToDomDocument_(text);
+  var doc = Blockly.Xml.utils.textToDomDocument(text);
   // This function only accepts <xml> documents.
   if (!doc || !doc.documentElement ||
       doc.documentElement.nodeName.toLowerCase() != 'xml') {

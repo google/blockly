@@ -52,3 +52,26 @@ Blockly.Xml.utils.createTextNode = function(text) {
   return document.createTextNode(text);
 };
 
+/**
+ * Converts an XML string into a DOM tree. This method will be overridden in
+ * the Node.js build of Blockly. See gulpfile.js, blockly_javascript_en task.
+ * @param {string} text XML string.
+ * @return {!Element} The DOM document.
+ * @throws if XML doesn't parse.
+ */
+Blockly.Xml.utils.textToDomDocument = function(text) {
+  var oParser = new DOMParser();
+  return oParser.parseFromString(text, 'text/xml');
+};
+
+/**
+ * Converts a DOM structure into plain text.
+ * Currently the text format is fairly ugly: all one line with no whitespace.
+ * @param {!Element} dom A tree of XML elements.
+ * @return {string} Text representation.
+ */
+Blockly.Xml.utils.domToText = function(dom) {
+  // TODO: Support node.js.
+  var oSerializer = new XMLSerializer();
+  return oSerializer.serializeToString(dom);
+};

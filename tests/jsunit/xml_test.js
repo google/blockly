@@ -180,7 +180,7 @@ function test_domToWorkspace_VariablesAtTop() {
 }
 
 function test_domToWorkspace_VariablesAtTop_DuplicateVariablesTag() {
-  // Expect thrown Error because of duplicate 'variables' tag
+  // Expect thrown Error because of duplicate 'variables' tag.
   xmlTest_setUpWithMockBlocks();
   try {
     var dom = Blockly.Xml.textToDom(

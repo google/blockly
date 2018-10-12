@@ -96,7 +96,7 @@ Blockly.Msg["LISTS_CREATE_WITH_CONTAINER_TOOLTIP"] = "أضف, إزل, أو أع�
 Blockly.Msg["LISTS_CREATE_WITH_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-list-with";  // untranslated
 Blockly.Msg["LISTS_CREATE_WITH_INPUT_WITH"] = "أتشئ قائمة مع";
 Blockly.Msg["LISTS_CREATE_WITH_ITEM_TOOLTIP"] = "أضف عنصرا إلى القائمة.";
-Blockly.Msg["LISTS_CREATE_WITH_TOOLTIP"] = "أنشيء قائمة من أي عدد من العناصر.";
+Blockly.Msg["LISTS_CREATE_WITH_TOOLTIP"] = "أنشىء قائمة من أي عدد من العناصر.";
 Blockly.Msg["LISTS_GET_INDEX_FIRST"] = "أول";
 Blockly.Msg["LISTS_GET_INDEX_FROM_END"] = "# من نهاية";
 Blockly.Msg["LISTS_GET_INDEX_FROM_START"] = "#";
@@ -299,11 +299,11 @@ Blockly.Msg["PROCEDURES_CALL_BEFORE_PARAMS"] = "مع:";
 Blockly.Msg["PROCEDURES_CREATE_DO"] = "إنشئ '%1'";
 Blockly.Msg["PROCEDURES_DEFNORETURN_COMMENT"] = "صف هذه الوظيفة...";
 Blockly.Msg["PROCEDURES_DEFNORETURN_DO"] = "";  // untranslated
-Blockly.Msg["PROCEDURES_DEFNORETURN_HELPURL"] = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
+Blockly.Msg["PROCEDURES_DEFNORETURN_HELPURL"] = "https://en.wikipedia.org/wiki/Subroutine";
 Blockly.Msg["PROCEDURES_DEFNORETURN_PROCEDURE"] = "القيام بشيء ما";
 Blockly.Msg["PROCEDURES_DEFNORETURN_TITLE"] = "إلى";
 Blockly.Msg["PROCEDURES_DEFNORETURN_TOOLTIP"] = "انشئ دالة بدون مخرجات .";
-Blockly.Msg["PROCEDURES_DEFRETURN_HELPURL"] = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
+Blockly.Msg["PROCEDURES_DEFRETURN_HELPURL"] = "https://en.wikipedia.org/wiki/Subroutine";
 Blockly.Msg["PROCEDURES_DEFRETURN_RETURN"] = "يرجع";
 Blockly.Msg["PROCEDURES_DEFRETURN_TOOLTIP"] = "انشئ دالة مع المخرجات.";
 Blockly.Msg["PROCEDURES_DEF_DUPLICATE_WARNING"] = "تحذير: هذه الدالة تحتوي على معلمات مكررة.";

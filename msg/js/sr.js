@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.sr');
 goog.require('Blockly.Msg');
 
 Blockly.Msg["ADD_COMMENT"] = "Додај коментар";
-Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Не могу да избришем променљиву ’%1’ јер је део дефиниције функције ’%2’";
+Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Није могуће избрисати променљиву „%1” јер је део дефиниције функције „%2”";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Промени вредност:";
 Blockly.Msg["CLEAN_UP"] = "Очисти блокове";
 Blockly.Msg["COLLAPSE_ALL"] = "Скупи блокове";
@@ -61,14 +61,14 @@ Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_UNTIL"] = "понављати до";
 Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_WHILE"] = "понављати док";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL"] = "Док је вредност нетачна, извршава неке наредбе.";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_WHILE"] = "Док је вредност тачна, извршава неке наредбе.";
-Blockly.Msg["DELETE_ALL_BLOCKS"] = "Да избришем све блокове: %1?";
+Blockly.Msg["DELETE_ALL_BLOCKS"] = "Избрисати све блокове: %1?";
 Blockly.Msg["DELETE_BLOCK"] = "Избриши блок";
 Blockly.Msg["DELETE_VARIABLE"] = "Избриши променљиву ’%1’";
-Blockly.Msg["DELETE_VARIABLE_CONFIRMATION"] = "Да избришем %1 употреба променљиве ’%2’?";
+Blockly.Msg["DELETE_VARIABLE_CONFIRMATION"] = "Избрисати %1 употреба променљиве ’%2’?";
 Blockly.Msg["DELETE_X_BLOCKS"] = "Избриши %1 блокова";
 Blockly.Msg["DISABLE_BLOCK"] = "Онемогући блок";
 Blockly.Msg["DUPLICATE_BLOCK"] = "Дуплирај";
-Blockly.Msg["DUPLICATE_COMMENT"] = "Duplicate Comment";  // untranslated
+Blockly.Msg["DUPLICATE_COMMENT"] = "Дуплирани коментар";
 Blockly.Msg["ENABLE_BLOCK"] = "Омогући блок";
 Blockly.Msg["EXPAND_ALL"] = "Прошири блокове";
 Blockly.Msg["EXPAND_BLOCK"] = "Прошири блок";
@@ -399,7 +399,7 @@ Blockly.Msg["VARIABLES_SET_HELPURL"] = "https://github.com/google/blockly/wiki/V
 Blockly.Msg["VARIABLES_SET_TOOLTIP"] = "Поставља променљиву тако да буде једнака улазу.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "Променљива под именом ’%1’ већ постоји.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "Променљива под именом ’%1’ већ постоји за други тип: ’%2’.";
-Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "Say something...";  // untranslated
+Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "Кажи нешто…";
 Blockly.Msg["PROCEDURES_DEFRETURN_TITLE"] = Blockly.Msg["PROCEDURES_DEFNORETURN_TITLE"];
 Blockly.Msg["CONTROLS_IF_IF_TITLE_IF"] = Blockly.Msg["CONTROLS_IF_MSG_IF"];
 Blockly.Msg["CONTROLS_WHILEUNTIL_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];

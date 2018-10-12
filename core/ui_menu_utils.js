@@ -27,7 +27,7 @@
 /**
  * @name Blockly.utils.uiMenu
  * @namespace
- **/
+ */
 goog.provide('Blockly.utils.uiMenu');
 
 

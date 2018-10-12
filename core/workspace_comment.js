@@ -31,7 +31,7 @@ goog.require('Blockly.Events.CommentCreate');
 goog.require('Blockly.Events.CommentDelete');
 goog.require('Blockly.Events.CommentMove');
 goog.require('Blockly.utils');
-goog.require('Blockly.Xml');
+goog.require('Blockly.Xml.utils');
 
 goog.require('goog.math.Coordinate');
 
@@ -278,7 +278,7 @@ Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
  * @package
  */
 Blockly.WorkspaceComment.prototype.toXml = function(opt_noId) {
-  var commentElement = Blockly.Xml.createElement('comment');
+  var commentElement = Blockly.Xml.utils.createElement('comment');
   if (!opt_noId) {
     commentElement.setAttribute('id', this.id);
   }

@@ -27,7 +27,7 @@
 /**
  * @name Blockly.Touch
  * @namespace
- **/
+ */
 goog.provide('Blockly.Touch');
 
 goog.require('Blockly.utils');

@@ -29,7 +29,7 @@
 /**
  * @name Blockly.WidgetDiv
  * @namespace
- **/
+ */
 goog.provide('Blockly.WidgetDiv');
 
 goog.require('Blockly.Css');

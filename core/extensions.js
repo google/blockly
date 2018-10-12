@@ -30,7 +30,7 @@
 /**
  * @name Blockly.Extensions
  * @namespace
- **/
+ */
 goog.provide('Blockly.Extensions');
 
 goog.require('Blockly.Mutator');

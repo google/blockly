@@ -29,7 +29,7 @@
 /**
  * @name Blockly.utils
  * @namespace
- **/
+ */
 goog.provide('Blockly.utils');
 
 goog.require('goog.dom');

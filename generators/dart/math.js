@@ -36,10 +36,10 @@ Blockly.Dart['math_number'] = function(block) {
   var code = parseFloat(block.getFieldValue('NUM'));
   var order;
   if (code == Infinity) {
-    code = 'double.INFINITY';
+    code = 'double.infinity';
     order = Blockly.Dart.ORDER_UNARY_POSTFIX;
   } else if (code == -Infinity) {
-    code = '-double.INFINITY';
+    code = '-double.infinity';
     order = Blockly.Dart.ORDER_UNARY_PREFIX;
   } else {
     // -4.abs() returns -4 in Dart due to strange order of operation choices.
@@ -132,13 +132,13 @@ Blockly.Dart['math_single'] = function(block) {
       code = arg + '.floor()';
       break;
     case 'SIN':
-      code = 'Math.sin(' + arg + ' / 180 * Math.PI)';
+      code = 'Math.sin(' + arg + ' / 180 * Math.pi)';
       break;
     case 'COS':
-      code = 'Math.cos(' + arg + ' / 180 * Math.PI)';
+      code = 'Math.cos(' + arg + ' / 180 * Math.pi)';
       break;
     case 'TAN':
-      code = 'Math.tan(' + arg + ' / 180 * Math.PI)';
+      code = 'Math.tan(' + arg + ' / 180 * Math.pi)';
       break;
   }
   if (code) {
@@ -151,13 +151,13 @@ Blockly.Dart['math_single'] = function(block) {
       code = 'Math.log(' + arg + ') / Math.log(10)';
       break;
     case 'ASIN':
-      code = 'Math.asin(' + arg + ') / Math.PI * 180';
+      code = 'Math.asin(' + arg + ') / Math.pi * 180';
       break;
     case 'ACOS':
-      code = 'Math.acos(' + arg + ') / Math.PI * 180';
+      code = 'Math.acos(' + arg + ') / Math.pi * 180';
       break;
     case 'ATAN':
-      code = 'Math.atan(' + arg + ') / Math.PI * 180';
+      code = 'Math.atan(' + arg + ') / Math.pi * 180';
       break;
     default:
       throw Error('Unknown math operator: ' + operator);
@@ -168,13 +168,13 @@ Blockly.Dart['math_single'] = function(block) {
 Blockly.Dart['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   var CONSTANTS = {
-    'PI': ['Math.PI', Blockly.Dart.ORDER_UNARY_POSTFIX],
-    'E': ['Math.E', Blockly.Dart.ORDER_UNARY_POSTFIX],
+    'PI': ['Math.pi', Blockly.Dart.ORDER_UNARY_POSTFIX],
+    'E': ['Math.e', Blockly.Dart.ORDER_UNARY_POSTFIX],
     'GOLDEN_RATIO':
         ['(1 + Math.sqrt(5)) / 2', Blockly.Dart.ORDER_MULTIPLICATIVE],
-    'SQRT2': ['Math.SQRT2', Blockly.Dart.ORDER_UNARY_POSTFIX],
-    'SQRT1_2': ['Math.SQRT1_2', Blockly.Dart.ORDER_UNARY_POSTFIX],
-    'INFINITY': ['double.INFINITY', Blockly.Dart.ORDER_ATOMIC]
+    'SQRT2': ['Math.sqrt2', Blockly.Dart.ORDER_UNARY_POSTFIX],
+    'SQRT1_2': ['Math.sqrt1_2', Blockly.Dart.ORDER_UNARY_POSTFIX],
+    'INFINITY': ['double.infinity', Blockly.Dart.ORDER_ATOMIC]
   };
   var constant = block.getFieldValue('CONSTANT');
   if (constant != 'INFINITY') {
@@ -276,7 +276,7 @@ Blockly.Dart['math_on_list'] = function(block) {
       var functionName = Blockly.Dart.provideFunction_(
           'math_sum',
           ['num ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
-              '(List myList) {',
+              '(List<num> myList) {',
            '  num sumVal = 0;',
            '  myList.forEach((num entry) {sumVal += entry;});',
            '  return sumVal;',
@@ -289,7 +289,7 @@ Blockly.Dart['math_on_list'] = function(block) {
       var functionName = Blockly.Dart.provideFunction_(
           'math_min',
           ['num ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
-              '(List myList) {',
+              '(List<num> myList) {',
            '  if (myList.isEmpty) return null;',
            '  num minVal = myList[0];',
            '  myList.forEach((num entry) ' +
@@ -304,7 +304,7 @@ Blockly.Dart['math_on_list'] = function(block) {
       var functionName = Blockly.Dart.provideFunction_(
           'math_max',
           ['num ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
-              '(List myList) {',
+              '(List<num> myList) {',
            '  if (myList.isEmpty) return null;',
            '  num maxVal = myList[0];',
            '  myList.forEach((num entry) ' +
@@ -325,7 +325,7 @@ Blockly.Dart['math_on_list'] = function(block) {
            '  localList.removeWhere((a) => a is! num);',
            '  if (localList.isEmpty) return null;',
            '  num sumVal = 0;',
-           '  localList.forEach((num entry) {sumVal += entry;});',
+           '  localList.forEach((var entry) {sumVal += entry;});',
            '  return sumVal / localList.length;',
            '}']);
       code = functionName + '(' + list + ')';
@@ -450,7 +450,7 @@ Blockly.Dart['math_constrain'] = function(block) {
   var argument1 = Blockly.Dart.valueToCode(block, 'LOW',
       Blockly.Dart.ORDER_NONE) || '0';
   var argument2 = Blockly.Dart.valueToCode(block, 'HIGH',
-      Blockly.Dart.ORDER_NONE) || 'double.INFINITY';
+      Blockly.Dart.ORDER_NONE) || 'double.infinity';
   var code = 'Math.min(Math.max(' + argument0 + ', ' + argument1 + '), ' +
       argument2 + ')';
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];

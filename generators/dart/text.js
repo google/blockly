@@ -190,9 +190,9 @@ Blockly.Dart['text_getSubstring'] = function(block) {
     var at2 = Blockly.Dart.getAdjusted(block, 'AT2');
     var functionName = Blockly.Dart.provideFunction_(
         'text_get_substring',
-        ['List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
-            '(text, where1, at1, where2, at2) {',
-         '  int getAt(where, at) {',
+        ['String ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
+            '(String text, String where1, num at1, String where2, num at2) {',
+         '  int getAt(String where, num at) {',
          '    if (where == \'FROM_END\') {',
          '      at = text.length - 1 - at;',
          '    } else if (where == \'FIRST\') {',

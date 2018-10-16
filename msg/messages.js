@@ -557,6 +557,13 @@ Blockly.Msg.MATH_RANDOM_FLOAT_TITLE_RANDOM = 'random fraction';
 /// tooltip - Return a random fraction between 0 and 1.  The value may be equal to 0 but must be less than 1.
 Blockly.Msg.MATH_RANDOM_FLOAT_TOOLTIP = 'Return a random fraction between 0.0 (inclusive) and 1.0 (exclusive).';
 
+/// {{Optional}} url - Information about how to calculate atan2.
+Blockly.Msg.MATH_ATAN2_HELPURL = 'https://en.wikipedia.org/wiki/Atan2';
+/// block text - The title of the block that calculates atan2 of point (X, Y).  For example, if the point is (-1, -1), this returns -135. %1 is a placeholder for the X coordinate, %2 is the placeholder for the Y coordinate.
+Blockly.Msg.MATH_ATAN2_TITLE = 'atan2 of X:%1 Y:%2';
+/// tooltip - Return the arctangent of point (X, Y) in degrees from -180 to 180. For example, if the point is (-1, -1) this returns -135.
+Blockly.Msg.MATH_ATAN2_TOOLTIP = 'Return the arctangent of point (X, Y) in degrees from -180 to 180.';
+
 // Text Blocks.
 /// {{Optional}} url - Information about how computers represent text (sometimes referred to as ''string''s).
 Blockly.Msg.TEXT_TEXT_HELPURL = 'https://en.wikipedia.org/wiki/String_(computer_science)';

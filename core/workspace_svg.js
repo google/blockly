@@ -1052,7 +1052,7 @@ Blockly.WorkspaceSvg.prototype.pasteWorkspaceComment_ = function(xmlComment) {
         commentX = -commentX;
       }
       // Offset workspace comment.
-      // TODO: #1719 properly offset comment such that it's not interfereing
+      // TODO (#1719): Properly offset comment such that it's not interfering
       // with any blocks.
       commentX += 50;
       commentY += 50;

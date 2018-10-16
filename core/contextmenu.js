@@ -33,6 +33,7 @@ goog.provide('Blockly.ContextMenu');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.uiMenu');
+goog.require('Blockly.Xml');
 
 goog.require('goog.events');
 goog.require('goog.math.Coordinate');

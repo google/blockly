@@ -432,7 +432,8 @@ Blockly.utils.checkMessageReferences = function(message) {
 
   var msgTable = Blockly.Msg;
 
-  // TODO(#1169): Implement support for other string tables, prefixes other than BKY_.
+  // TODO (#1169): Implement support for other string tables,
+  // prefixes other than BKY_.
   var regex = /%{(BKY_[A-Z][A-Z0-9_]*)}/gi;
   var match = regex.exec(message);
   while (match) {

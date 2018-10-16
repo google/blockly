@@ -90,7 +90,7 @@ Blockly.FieldVariable.prototype.init = function() {
   }
   Blockly.FieldVariable.superClass_.init.call(this);
 
-  // TODO (1010): Change from init/initModel to initView/initModel
+  // TODO (#1010): Change from init/initModel to initView/initModel
   this.initModel();
 };
 

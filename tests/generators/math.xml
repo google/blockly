@@ -1900,21 +1900,49 @@
           <block type="math_atan2">
             <value name="X">
               <block type="math_number">
-                <field name="NUM">-1</field>
+                <field name="NUM">-5</field>
               </block>
             </value>
             <value name="Y">
               <block type="math_number">
-                <field name="NUM">-1</field>
+                <field name="NUM">5</field>
               </block>
             </value>
           </block>
         </value>
         <value name="EXPECTED">
           <block type="math_number">
-            <field name="NUM">-135</field>
+            <field name="NUM">135</field>
           </block>
         </value>
+        <next>
+          <block type="unittest_assertequals">
+            <value name="MESSAGE">
+              <block type="text">
+                <field name="TEXT">atan2</field>
+              </block>
+            </value>
+            <value name="ACTUAL">
+              <block type="math_atan2">
+                <value name="X">
+                  <block type="math_number">
+                    <field name="NUM">0</field>
+                  </block>
+                </value>
+                <value name="Y">
+                  <block type="math_number">
+                    <field name="NUM">-12</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="math_number">
+                <field name="NUM">-90</field>
+              </block>
+            </value>
+          </block>
+        </next>
       </block>
     </statement>
   </block>

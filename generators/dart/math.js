@@ -494,6 +494,6 @@ Blockly.Dart['math_atan2'] = function(block) {
       Blockly.Dart.ORDER_NONE) || '0';
   var argument1 = Blockly.Dart.valueToCode(block, 'Y',
       Blockly.Dart.ORDER_NONE) || '0';
-  return ['Math.atan2(' + argument1 + ', ' + argument0 + ') / Math.PI * 180',
+  return ['Math.atan2(' + argument1 + ', ' + argument0 + ') / Math.pi * 180',
       Blockly.Dart.ORDER_MULTIPLICATIVE];
 };

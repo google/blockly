@@ -27,6 +27,7 @@
 goog.provide('Blockly.Connection');
 
 goog.require('Blockly.Events.BlockMove');
+goog.require('Blockly.Xml');
 
 
 /**

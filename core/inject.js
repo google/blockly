@@ -355,7 +355,7 @@ Blockly.inject.bindDocumentEvents_ = function() {
     if (goog.userAgent.IPAD) {
       Blockly.bindEventWithChecks_(window, 'orientationchange', document,
           function() {
-            // TODO(#397): Fix for multiple blockly workspaces.
+            // TODO (#397): Fix for multiple Blockly workspaces.
             Blockly.svgResize(Blockly.getMainWorkspace());
           });
     }

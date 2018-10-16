@@ -35,6 +35,7 @@ goog.require('Blockly.Gesture');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceSvg');
+goog.require('Blockly.Xml');
 
 goog.require('goog.math.Rect');
 

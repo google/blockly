@@ -35,10 +35,11 @@ goog.provide('Blockly.Xml.utils');
  * Create DOM element for XML.
  * @param {string} tagName Name of DOM element.
  * @return {!Element} New DOM element.
+ * @package
  */
 Blockly.Xml.utils.createElement = function(tagName) {
-  // TODO: Namespace this element.
-  // TODO: Support node.js.
+  // TODO (#1978): Namespace this element.
+  // TODO (#2082): Support node.js.
   return document.createElement(tagName);
 };
 
@@ -46,9 +47,10 @@ Blockly.Xml.utils.createElement = function(tagName) {
  * Create text element for XML.
  * @param {text} text Text content.
  * @return {!Node} New DOM node.
+ * @package
  */
 Blockly.Xml.utils.createTextNode = function(text) {
-  // TODO: Support node.js.
+  // TODO (#2082): Support node.js.
   return document.createTextNode(text);
 };
 
@@ -58,6 +60,7 @@ Blockly.Xml.utils.createTextNode = function(text) {
  * @param {string} text XML string.
  * @return {!Element} The DOM document.
  * @throws if XML doesn't parse.
+ * @package
  */
 Blockly.Xml.utils.textToDomDocument = function(text) {
   var oParser = new DOMParser();
@@ -69,9 +72,10 @@ Blockly.Xml.utils.textToDomDocument = function(text) {
  * Currently the text format is fairly ugly: all one line with no whitespace.
  * @param {!Element} dom A tree of XML elements.
  * @return {string} Text representation.
+ * @package
  */
 Blockly.Xml.utils.domToText = function(dom) {
-  // TODO: Support node.js.
+  // TODO (#2082): Support node.js.
   var oSerializer = new XMLSerializer();
   return oSerializer.serializeToString(dom);
 };

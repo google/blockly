@@ -34,6 +34,7 @@ goog.require('Blockly.Blocks');
 goog.require('Blockly.constants');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Workspace');
+goog.require('Blockly.Xml');
 
 goog.require('goog.string');
 

@@ -195,7 +195,7 @@ Blockly.Events.CommentCreate.prototype.type = Blockly.Events.COMMENT_CREATE;
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-// TODO(#1266): "Full" and "minimal" serialization.
+// TODO (#1266): "Full" and "minimal" serialization.
 Blockly.Events.CommentCreate.prototype.toJson = function() {
   var json = Blockly.Events.CommentCreate.superClass_.toJson.call(this);
   json['xml'] = Blockly.Xml.domToText(this.xml);
@@ -268,7 +268,7 @@ Blockly.Events.CommentDelete.prototype.type = Blockly.Events.COMMENT_DELETE;
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-// TODO(#1266): "Full" and "minimal" serialization.
+// TODO (#1266): "Full" and "minimal" serialization.
 Blockly.Events.CommentDelete.prototype.toJson = function() {
   var json = Blockly.Events.CommentDelete.superClass_.toJson.call(this);
   return json;
@@ -357,7 +357,7 @@ Blockly.Events.CommentMove.prototype.setOldCoordinate = function(xy) {
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-// TODO(#1266): "Full" and "minimal" serialization.
+// TODO (#1266): "Full" and "minimal" serialization.
 Blockly.Events.CommentMove.prototype.toJson = function() {
   var json = Blockly.Events.CommentMove.superClass_.toJson.call(this);
   if (this.newCoordinate_) {

@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.Options');
 
+goog.require('Blockly.Xml');
+
 
 /**
  * Parse the user-specified options, using reasonable defaults where behaviour

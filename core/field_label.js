@@ -44,6 +44,7 @@ Blockly.FieldLabel = function(text, opt_class) {
   this.size_ = new goog.math.Size(0, 17.5);
   this.class_ = opt_class;
   this.setValue(text);
+  this.tooltip_ = '';
 };
 goog.inherits(Blockly.FieldLabel, Blockly.Field);
 
@@ -84,8 +85,12 @@ Blockly.FieldLabel.prototype.init = function() {
   }
   this.sourceBlock_.getSvgRoot().appendChild(this.textElement_);
 
-  // Configure the field to be transparent with respect to tooltips.
-  this.textElement_.tooltip = this.sourceBlock_;
+  if (this.tooltip_) {
+    this.textElement_.tooltip = this.tooltip_;
+  } else {
+    // Configure the field to be transparent with respect to tooltips.
+    this.textElement_.tooltip = this.sourceBlock_;
+  }
   Blockly.Tooltip.bindMouseEvents(this.textElement_);
   // Force a render.
   this.render_();
@@ -116,7 +121,10 @@ Blockly.FieldLabel.prototype.getSvgRoot = function() {
  *     link to for its tooltip.
  */
 Blockly.FieldLabel.prototype.setTooltip = function(newTip) {
-  this.textElement_.tooltip = newTip;
+  this.tooltip_ = newTip;
+  if (this.textElement_) {
+    this.textElement_.tooltip = newTip;
+  }
 };
 
 Blockly.Field.register('field_label', Blockly.FieldLabel);

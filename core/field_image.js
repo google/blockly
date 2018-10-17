@@ -52,6 +52,7 @@ Blockly.FieldImage = function(src, width, height, opt_alt, opt_onClick) {
   this.size_ = new goog.math.Size(this.width_,
       this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
   this.text_ = opt_alt || '';
+  this.tooltip_ = '';
   this.setValue(src);
 
   if (typeof opt_onClick == 'function') {
@@ -108,8 +109,12 @@ Blockly.FieldImage.prototype.init = function() {
   this.setValue(this.src_);
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
 
-  // Configure the field to be transparent with respect to tooltips.
-  this.setTooltip(this.sourceBlock_);
+  if (this.tooltip_) {
+    this.imageElement_.tooltip = this.tooltip_;
+  } else {
+    // Configure the field to be transparent with respect to tooltips.
+    this.setTooltip(this.sourceBlock_);
+  }
   Blockly.Tooltip.bindMouseEvents(this.imageElement_);
 
   this.maybeAddClickHandler_();
@@ -145,7 +150,10 @@ Blockly.FieldImage.prototype.maybeAddClickHandler_ = function() {
  *     link to for its tooltip.
  */
 Blockly.FieldImage.prototype.setTooltip = function(newTip) {
-  this.imageElement_.tooltip = newTip;
+  this.tooltip_ = newTip;
+  if (this.imageElement_) {
+    this.imageElement_.tooltip = newTip;
+  }
 };
 
 /**

@@ -110,8 +110,12 @@ Blockly.FieldTextInput.prototype.setValue = function(newValue) {
     if (this.sourceBlock_) {
       var validated = this.callValidator(newValue);
       // If the new value is invalid, validation returns null.
-      // In this case we still want to display the illegal result.
-      if (validated !== null) {
+      if (validated === null) {
+        return;
+      }
+      // If the validator returned undefined, it didn't have an
+      // opinion.  If it cared, use the new value.
+      if (typeof validated != 'undefined') {
         newValue = validated;
       }
     }

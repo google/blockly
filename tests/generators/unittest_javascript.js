@@ -60,6 +60,11 @@ Blockly.JavaScript['unittest_main'] = function(block) {
         '}']);
   // Setup global to hold test results.
   var code = resultsVar + ' = [];\n';
+  // Say which test suite this is.
+  code += 'console.log(\'\\n====================\\n\\n' +
+      'Running suite: ' +
+      block.getFieldValue('SUITE_NAME') +
+       '\')\n';
   // Run tests (unindented).
   code += Blockly.JavaScript.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');

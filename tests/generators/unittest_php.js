@@ -52,7 +52,7 @@ Blockly.PHP['unittest_main'] = function(block) {
           '  array_push($report, "Number of tests run: " . count(' + resultsVar + '));',
           '  array_push($report, "");',
           '  if ($fails) {',
-          '    array_push($report, "FAILED (failures=" . $fails + ")");',
+          '    array_push($report, "FAILED (failures=" . $fails . ")");',
           '  } else {',
           '    array_push($report, "OK");',
           '  }',
@@ -60,6 +60,11 @@ Blockly.PHP['unittest_main'] = function(block) {
           '}']);
   // Setup global to hold test results.
   var code = resultsVar + ' = array();\n';
+  // Say which test suite this is.
+  code += 'print("\\n====================\\n\\n' +
+      'Running suite: ' +
+      block.getFieldValue('SUITE_NAME') +
+       '\\n");\n';
   // Run tests (unindented).
   code += Blockly.PHP.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');

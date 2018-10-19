@@ -58,6 +58,11 @@ Blockly.Lua['unittest_main'] = function(block) {
        'end']);
   // Setup global to hold test results.
   var code = resultsVar + ' = {}\n';
+  // Say which test suite this is.
+  code += 'print(\'\\n====================\\n\\n' +
+      'Running suite: ' +
+      block.getFieldValue('SUITE_NAME') +
+       '\')\n';
   // Run tests (unindented).
   code += Blockly.Lua.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');

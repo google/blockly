@@ -60,6 +60,7 @@
     </statement>
   </block>
   <block type="unittest_main" x="-5" y="49">
+    <field name="SUITE_NAME">Colour</field>
     <statement name="DO">
       <block type="procedures_callnoreturn">
         <mutation name="test colour picker"></mutation>

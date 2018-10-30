@@ -329,6 +329,7 @@ Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
 /**
  * Connect this connection to another connection.
  * @param {!Blockly.Connection} otherConnection Connection to connect to.
+ * @override
  */
 Blockly.RenderedConnection.prototype.connect = function(otherConnection) {
   Blockly.RenderedConnection.superClass_.connect.call(this, otherConnection);
@@ -350,6 +351,7 @@ Blockly.RenderedConnection.prototype.connect = function(otherConnection) {
 
 /**
  * Disconnect this connection.
+ * @override
  */
 Blockly.RenderedConnection.prototype.disconnect = function() {
   var superiorConnection = this.isSuperior() ? this : this.targetConnection;

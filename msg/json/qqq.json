@@ -1,13 +1,4 @@
 {
-	"@metadata": {
-		"authors": [
-			"Espertus",
-			"Liuxinyu970226",
-			"Metalhead64",
-			"Robby",
-			"Shirayuki"
-		]
-	},
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
 	"TODAY": "button text - Button that sets a calendar to today's date.\n{{Identical|Today}}",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}",
@@ -215,6 +206,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "{{Optional}} url - Information about how computers generate random numbers (specifically, numbers in the range from 0 to just below 1).",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "block text - The title of the block that generates a random number greater than or equal to 0 and less than 1.",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "tooltip - Return a random fraction between 0 and 1.  The value may be equal to 0 but must be less than 1.",
+	"MATH_ATAN2_HELPURL": "{{Optional}} url - Information about how to calculate atan2.",
+	"MATH_ATAN2_TITLE": "block text - The title of the block that calculates atan2 of point (X, Y).  For example, if the point is (-1, -1), this returns -135. %1 is a placeholder for the X coordinate, %2 is the placeholder for the Y coordinate.",
+	"MATH_ATAN2_TOOLTIP": "tooltip - Return the arctangent of point (X, Y) in degrees from -180 to 180. For example, if the point is (-1, -1) this returns -135.",
 	"TEXT_TEXT_HELPURL": "{{Optional}} url - Information about how computers represent text (sometimes referred to as ''string''s).",
 	"TEXT_TEXT_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Text https://github.com/google/blockly/wiki/Text].",
 	"TEXT_JOIN_HELPURL": "{{Optional}} url - Information on concatenating/appending pieces of text.",
@@ -293,7 +287,7 @@
 	"LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs].",
 	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs].",
 	"LISTS_REPEAT_HELPURL": "{{Optional}} url - Information about [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].",
-	"LISTS_REPEAT_TOOLTIP": " url - See [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].",
+	"LISTS_REPEAT_TOOLTIP": "{{Optional}} url - See [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].",
 	"LISTS_REPEAT_TITLE": "block text - See [https://github.com/google/blockly/wiki/Lists#create-list-with https://github.com/google/blockly/wiki/Lists#create-list-with]. \n\nParameters:\n* %1 - the item (text) to be repeated\n* %2 - the number of times to repeat it",
 	"LISTS_LENGTH_HELPURL": "{{Optional}} url - Information about how the length of a list is computed (i.e., by the total number of elements, not the number of different elements).",
 	"LISTS_LENGTH_TITLE": "block text - See [https://github.com/google/blockly/wiki/Lists#length-of https://github.com/google/blockly/wiki/Lists#length-of]. \n\nParameters:\n* %1 - the list whose length is desired",

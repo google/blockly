@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-04-20 16:47:32.097975",
+		"lastupdated": "2018-10-29 17:01:07.395197",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -212,6 +212,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "random fraction",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Return a random fraction between 0.0 (inclusive) and 1.0 (exclusive).",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 of X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Return the arctangent of point (X, Y) in degrees from -180 to 180.",
 	"TEXT_TEXT_HELPURL": "https://en.wikipedia.org/wiki/String_(computer_science)",
 	"TEXT_TEXT_TOOLTIP": "A letter, word, or line of text.",
 	"TEXT_JOIN_HELPURL": "https://github.com/google/blockly/wiki/Text#text-creation",

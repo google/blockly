@@ -261,8 +261,7 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
     var container = Blockly.Xml.utils.createElement('next');
-    container.appendChild(Blockly.Xml.utils.createTextNode(
-        Blockly.Xml.blockToDom(nextBlock, opt_noId)));
+    container.appendChild(Blockly.Xml.blockToDom(nextBlock, opt_noId));
     element.appendChild(container);
   }
   var shadow = block.nextConnection && block.nextConnection.getShadowDom();

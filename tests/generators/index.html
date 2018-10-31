@@ -113,7 +113,6 @@ function loadSelected() {
   demoWorkspace.clear();
 
   var boxList = document.getElementsByClassName('suite_checkbox');
-  console.log(boxList.length);
   for (var i = 0; i < boxList.length; i++) {
     if (boxList[i].checked) {
       var testUrl = boxList[i].value;
@@ -197,7 +196,6 @@ function fromXml(filename, xmlText, opt_append) {
 
 function checkAll() {
   var boxList = document.getElementsByClassName('suite_checkbox');
-  console.log(boxList.length)
   for (var i = 0; i < boxList.length; i++) {
     boxList[i].checked = true;
   }
@@ -397,8 +395,8 @@ h1 {
 
 
     <div id="checkboxes">
-      <input type="button" class="suite_checkbox" value="Check all" onclick="checkAll()">
-      <input type="button" class="suite_checkbox" value="Uncheck all" onclick="uncheckAll()"><br/>
+      <input type="button" value="Check all" onclick="checkAll()">
+      <input type="button" value="Uncheck all" onclick="uncheckAll()"><br/>
       <input type="checkbox" class="suite_checkbox" value="logic.xml">Logic</input><br/>
       <input type="checkbox" class="suite_checkbox" value="loops1.xml">Loops 1 (repeat, while, foreach)</input><br/>
       <input type="checkbox" class="suite_checkbox" value="loops2.xml">Loops 2 (count)</input><br/>

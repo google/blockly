@@ -29,7 +29,7 @@
 /**
  * @name Blockly.utils
  * @namespace
- **/
+ */
 goog.provide('Blockly.utils');
 
 goog.require('goog.dom');
@@ -432,14 +432,16 @@ Blockly.utils.checkMessageReferences = function(message) {
 
   var msgTable = Blockly.Msg;
 
-  // TODO(#1169): Implement support for other string tables, prefixes other than BKY_.
+  // TODO (#1169): Implement support for other string tables,
+  // prefixes other than BKY_.
   var regex = /%{(BKY_[A-Z][A-Z0-9_]*)}/gi;
   var match = regex.exec(message);
   while (match) {
     var msgKey = match[1];
     msgKey = msgKey.toUpperCase();
     if (msgKey.substr(0, 4) != 'BKY_') {
-      console.log('WARNING: Unsupported message table prefix in %{' + match[1] + '}.');
+      console.log('WARNING: Unsupported message table prefix in %{' +
+          match[1] + '}.');
       validSoFar = false;  // Continue to report other errors.
     } else if (msgTable[msgKey.substr(4)] == undefined) {
       console.log('WARNING: No message string for %{' + match[1] + '}.');
@@ -531,8 +533,8 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
           var keyUpper = rawKey.toUpperCase();
 
           // BKY_ is the prefix used to namespace the strings used in Blockly
-          // core files and the predefined blocks in ../blocks/. These strings
-          // are defined in ../msgs/ files.
+          // core files and the predefined blocks in ../blocks/.
+          // These strings are defined in ../msgs/ files.
           var bklyKey = Blockly.utils.startsWith(keyUpper, 'BKY_') ?
               keyUpper.substring(4) : null;
           if (bklyKey && bklyKey in Blockly.Msg) {
@@ -863,14 +865,14 @@ Blockly.utils.insertAfter = function(newNode, refNode) {
  */
 Blockly.utils.runAfterPageLoad = function(fn) {
   if (typeof document != 'object') {
-    throw new Error('Blockly.utils.runAfterPageLoad() requires browser document.');
+    throw Error('Blockly.utils.runAfterPageLoad() requires browser document.');
   }
-  if (document.readyState === 'complete') {
+  if (document.readyState == 'complete') {
     fn();  // Page has already loaded. Call immediately.
   } else {
     // Poll readyState.
     var readyStateCheckInterval = setInterval(function() {
-      if (document.readyState === 'complete') {
+      if (document.readyState == 'complete') {
         clearInterval(readyStateCheckInterval);
         fn();
       }

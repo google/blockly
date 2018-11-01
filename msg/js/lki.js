@@ -206,6 +206,9 @@ Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_DIVIDE"] = "بازگرداندن باقی�
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MINUS"] = "بازگرداندن تفاوت دو عدد.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MULTIPLY"] = "بازگرداندن حاصلضرب دو عدد.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_POWER"] = "بازگرداندن اولین عددی که از توان عدد دوم حاصل شده باشد.";
+Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://en.wikipedia.org/wiki/Atan2";  // untranslated
+Blockly.Msg["MATH_ATAN2_TITLE"] = "atan2 of X:%1 Y:%2";  // untranslated
+Blockly.Msg["MATH_ATAN2_TOOLTIP"] = "Return the arctangent of point (X, Y) in degrees from -180 to 180.";  // untranslated
 Blockly.Msg["MATH_CHANGE_HELPURL"] = "https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter";
 Blockly.Msg["MATH_CHANGE_TITLE"] = "تغییر %1 با %2";
 Blockly.Msg["MATH_CHANGE_TOOLTIP"] = "افزودن یک عدد به متغیر '%1'.";

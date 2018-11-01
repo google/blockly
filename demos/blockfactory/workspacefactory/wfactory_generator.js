@@ -215,7 +215,7 @@ WorkspaceFactoryGenerator.prototype.appendHiddenWorkspaceToDom_ =
  */
 WorkspaceFactoryGenerator.prototype.setShadowBlocksInHiddenWorkspace_ =
     function() {
-  var blocks = this.hiddenWorkspace.getAllBlocks();
+  var blocks = this.hiddenWorkspace.getAllBlocks(false);
   for (var i = 0; i < blocks.length; i++) {
     if (this.model.isShadowBlock(blocks[i].id)) {
       blocks[i].setShadow(true);

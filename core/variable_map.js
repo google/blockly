@@ -73,7 +73,7 @@ Blockly.VariableMap.prototype.clear = function() {
 Blockly.VariableMap.prototype.renameVariable = function(variable, newName) {
   var type = variable.type;
   var conflictVar = this.getVariable(newName, type);
-  var blocks = this.workspace.getAllBlocks();
+  var blocks = this.workspace.getAllBlocks(false);
   Blockly.Events.setGroup(true);
   try {
     // The IDs may match if the rename is a simple case change (name1 -> Name1).
@@ -96,7 +96,7 @@ Blockly.VariableMap.prototype.renameVariable = function(variable, newName) {
 Blockly.VariableMap.prototype.renameVariableById = function(id, newName) {
   var variable = this.getVariableById(id);
   if (!variable) {
-    throw new Error('Tried to rename a variable that didn\'t exist. ID: ' + id);
+    throw Error('Tried to rename a variable that didn\'t exist. ID: ' + id);
   }
 
   this.renameVariable(variable, newName);
@@ -384,7 +384,7 @@ Blockly.VariableMap.prototype.getAllVariables = function() {
  */
 Blockly.VariableMap.prototype.getVariableUsesById = function(id) {
   var uses = [];
-  var blocks = this.workspace.getAllBlocks();
+  var blocks = this.workspace.getAllBlocks(false);
   // Iterate through every block and check the name.
   for (var i = 0; i < blocks.length; i++) {
     var blockVariables = blocks[i].getVarModels();

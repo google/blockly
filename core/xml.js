@@ -27,13 +27,12 @@
 /**
  * @name Blockly.Xml
  * @namespace
- **/
+ */
 goog.provide('Blockly.Xml');
 
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
-
-goog.require('goog.dom');
+goog.require('Blockly.Xml.utils');
 
 
 /**
@@ -43,7 +42,7 @@ goog.require('goog.dom');
  * @return {!Element} XML document.
  */
 Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
-  var xml = goog.dom.createDom('xml');
+  var xml = Blockly.Xml.utils.createElement('xml');
   var variablesElement = Blockly.Xml.variablesToDom(
       Blockly.Variables.allUsedVarModels(workspace));
   if (variablesElement.hasChildNodes()) {
@@ -67,9 +66,10 @@ Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
  * @return {!Element} List of XML elements.
  */
 Blockly.Xml.variablesToDom = function(variableList) {
-  var variables = goog.dom.createDom('variables');
+  var variables = Blockly.Xml.utils.createElement('variables');
   for (var i = 0, variable; variable = variableList[i]; i++) {
-    var element = goog.dom.createDom('variable', null, variable.name);
+    var element = Blockly.Xml.utils.createElement('variable');
+    element.appendChild(Blockly.Xml.utils.createTextNode(variable.name));
     element.setAttribute('type', variable.type);
     element.setAttribute('id', variable.getId());
     variables.appendChild(element);
@@ -116,14 +116,15 @@ Blockly.Xml.fieldToDomVariable_ = function(field) {
   }
   // Get the variable directly from the field, instead of doing a lookup.  This
   // will work even if the variable has already been deleted.  This can happen
-  // because the flyout defers deleting blocks until the next time the flyout is
-  // opened.
+  // because the flyout defers deleting blocks until the next time the flyout
+  // is opened.
   var variable = field.getVariable();
 
   if (!variable) {
     throw Error('Tried to serialize a variable field with no variable.');
   }
-  var container = goog.dom.createDom('field', null, variable.name);
+  var container = Blockly.Xml.utils.createElement('field');
+  container.appendChild(Blockly.Xml.utils.createTextNode(variable.name));
   container.setAttribute('name', field.name);
   container.setAttribute('id', variable.getId());
   container.setAttribute('variabletype', variable.type);
@@ -133,7 +134,6 @@ Blockly.Xml.fieldToDomVariable_ = function(field) {
 /**
  * Encode a field as XML.
  * @param {!Blockly.Field} field The field to encode.
- * @param {!Blockly.Workspace} workspace The workspace that the field is in.
  * @return {?Element} XML element, or null if the field did not need to be
  *     serialized.
  * @private
@@ -143,7 +143,8 @@ Blockly.Xml.fieldToDom_ = function(field) {
     if (field.referencesVariables()) {
       return Blockly.Xml.fieldToDomVariable_(field);
     } else {
-      var container = goog.dom.createDom('field', null, field.getValue());
+      var container = Blockly.Xml.utils.createElement('field');
+      container.appendChild(Blockly.Xml.utils.createTextNode(field.getValue()));
       container.setAttribute('name', field.name);
       return container;
     }
@@ -177,7 +178,8 @@ Blockly.Xml.allFieldsToDom_ = function(block, element) {
  * @return {!Element} Tree of XML elements.
  */
 Blockly.Xml.blockToDom = function(block, opt_noId) {
-  var element = goog.dom.createDom(block.isShadow() ? 'shadow' : 'block');
+  var element =
+      Blockly.Xml.utils.createElement(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
   if (!opt_noId) {
     element.setAttribute('id', block.id);
@@ -194,7 +196,8 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
 
   var commentText = block.getCommentText();
   if (commentText) {
-    var commentElement = goog.dom.createDom('comment', null, commentText);
+    var commentElement = Blockly.Xml.utils.createElement('comment');
+    commentElement.appendChild(Blockly.Xml.utils.createTextNode(commentText));
     if (typeof block.comment == 'object') {
       commentElement.setAttribute('pinned', block.comment.isVisible());
       var hw = block.comment.getBubbleSize();
@@ -205,7 +208,8 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
   }
 
   if (block.data) {
-    var dataElement = goog.dom.createDom('data', null, block.data);
+    var dataElement = Blockly.Xml.utils.createElement('data');
+    dataElement.appendChild(Blockly.Xml.utils.createTextNode(block.data));
     element.appendChild(dataElement);
   }
 
@@ -217,9 +221,9 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
     } else {
       var childBlock = input.connection.targetBlock();
       if (input.type == Blockly.INPUT_VALUE) {
-        container = goog.dom.createDom('value');
+        container = Blockly.Xml.utils.createElement('value');
       } else if (input.type == Blockly.NEXT_STATEMENT) {
-        container = goog.dom.createDom('statement');
+        container = Blockly.Xml.utils.createElement('statement');
       }
       var shadow = input.connection.getShadowDom();
       if (shadow && (!childBlock || !childBlock.isShadow())) {
@@ -256,8 +260,8 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
 
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
-    var container = goog.dom.createDom('next', null,
-        Blockly.Xml.blockToDom(nextBlock, opt_noId));
+    var container = Blockly.Xml.utils.createElement('next');
+    container.appendChild(Blockly.Xml.blockToDom(nextBlock, opt_noId));
     element.appendChild(container);
   }
   var shadow = block.nextConnection && block.nextConnection.getShadowDom();
@@ -312,8 +316,7 @@ Blockly.Xml.cloneShadow_ = function(shadow) {
  * @return {string} Text representation.
  */
 Blockly.Xml.domToText = function(dom) {
-  var oSerializer = new XMLSerializer();
-  return oSerializer.serializeToString(dom);
+  return Blockly.Xml.utils.domToText(dom);
 };
 
 /**
@@ -348,27 +351,15 @@ Blockly.Xml.domToPrettyText = function(dom) {
 };
 
 /**
- * Converts an XML string into a DOM tree. This method will be overridden in
- * the Node.js build of Blockly. See gulpfile.js, blockly_javascript_en task.
- * @param {string} text XML string.
- * @return {!Element} The DOM document.
- * @throws if XML doesn't parse.
- * @private
- */
-Blockly.Xml.textToDomDocument_ = function(text) {
-  var oParser = new DOMParser();
-  return oParser.parseFromString(text, 'text/xml');
-};
-
-/**
  * Converts an XML string into a DOM structure. It requires the XML to have a
  * root element of <xml>. Other XML string will result in throwing an error.
  * @param {string} text An XML string.
- * @return {!Element} A DOM object representing the singular child of the document element.
+ * @return {!Element} A DOM object representing the singular child of the
+ *     document element.
  * @throws if XML doesn't parse or is not the expected structure.
  */
 Blockly.Xml.textToDom = function(text) {
-  var doc = Blockly.Xml.textToDomDocument_(text);
+  var doc = Blockly.Xml.utils.textToDomDocument(text);
   // This function only accepts <xml> documents.
   if (!doc || !doc.documentElement ||
       doc.documentElement.nodeName.toLowerCase() != 'xml') {
@@ -510,7 +501,8 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
     var newX = Infinity;  // x of top corner
     var newY = Infinity;  // y of top corner
     for (var i = 0; i < newBlockIds.length; i++) {
-      var blockXY = workspace.getBlockById(newBlockIds[i]).getRelativeToSurfaceXY();
+      var blockXY =
+          workspace.getBlockById(newBlockIds[i]).getRelativeToSurfaceXY();
       if (blockXY.y < newY) {
         newY = blockXY.y;
       }
@@ -607,7 +599,10 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
  *     should be added.
  */
 Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
-  for (var i = 0, xmlChild; xmlChild = xmlVariables.children[i]; i++) {
+  for (var i = 0, xmlChild; xmlChild = xmlVariables.childNodes[i]; i++) {
+    if (xmlChild.nodeType != Element.ELEMENT_NODE) {
+      continue;  // Skip text nodes.
+    }
     var type = xmlChild.getAttribute('type');
     var id = xmlChild.getAttribute('id');
     var name = xmlChild.textContent;

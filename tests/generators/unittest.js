@@ -29,7 +29,8 @@ Blockly.Blocks['unittest_main'] = {
   init: function() {
     this.setColour(65);
     this.appendDummyInput()
-        .appendField('run tests');
+        .appendField('run test suite')
+        .appendField(new Blockly.FieldTextInput(''), 'SUITE_NAME');
     this.appendStatementInput('DO');
     this.setTooltip('Executes the enclosed unit tests,\n' +
                     'then prints a summary.');

@@ -205,9 +205,11 @@ Blockly.createDom_ = function(container, options) {
  * @return {!Blockly.Workspace} Newly created main workspace.
  * @private
  */
-Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface, workspaceDragSurface) {
+Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
+    workspaceDragSurface) {
   options.parentWorkspace = null;
-  var mainWorkspace = new Blockly.WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
+  var mainWorkspace =
+      new Blockly.WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
   mainWorkspace.scale = options.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
 
@@ -353,7 +355,7 @@ Blockly.inject.bindDocumentEvents_ = function() {
     if (goog.userAgent.IPAD) {
       Blockly.bindEventWithChecks_(window, 'orientationchange', document,
           function() {
-            // TODO(#397): Fix for multiple blockly workspaces.
+            // TODO (#397): Fix for multiple Blockly workspaces.
             Blockly.svgResize(Blockly.getMainWorkspace());
           });
     }

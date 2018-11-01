@@ -95,7 +95,7 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
  */
 Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
   if (index < 0 || index > this.fieldRow.length) {
-    throw new Error('index ' + index + ' out of bounds.');
+    throw Error('index ' + index + ' out of bounds.');
   }
 
   // Empty string, Null or undefined generates no field, unless field is named.

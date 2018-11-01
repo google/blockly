@@ -32,7 +32,7 @@
 /**
  * @name Blockly.Tooltip
  * @namespace
- **/
+ */
 goog.provide('Blockly.Tooltip');
 
 goog.require('Blockly.utils');

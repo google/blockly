@@ -128,7 +128,8 @@ Blockly.BlockDragSurfaceSvg.prototype.setBlocksAndShow = function(blocks) {
  * @param {number} y Y translation in workspace coordinates.
  * @param {number} scale Scale of the group.
  */
-Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y, scale) {
+Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y,
+    scale) {
   this.scale_ = scale;
   // This is a work-around to prevent a the blocks from rendering
   // fuzzy while they are being dragged on the drag surface.

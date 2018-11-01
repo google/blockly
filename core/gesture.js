@@ -110,7 +110,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
    * workspaces on a page; this is more accurate than using
    * Blockly.getMainWorkspace().
    * @type {Blockly.WorkspaceSvg}
-   * @private
+   * @protected
    */
   this.startWorkspace_ = null;
 
@@ -126,8 +126,8 @@ Blockly.Gesture = function(e, creatorWorkspace) {
 
   /**
    * Whether the pointer has at any point moved out of the drag radius.
-   * A gesture that exceeds the drag radius is a drag even if it ends exactly at
-   * its start point.
+   * A gesture that exceeds the drag radius is a drag even if it ends exactly
+   * at its start point.
    * @type {boolean}
    * @private
    */
@@ -165,7 +165,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
    * A handle to use to unbind a mouse move listener at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
    * @type {Array.<!Array>}
-   * @private
+   * @protected
    */
   this.onMoveWrapper_ = null;
 
@@ -173,7 +173,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
    * A handle to use to unbind a mouse up listener at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
    * @type {Array.<!Array>}
-   * @private
+   * @protected
    */
   this.onUpWrapper_ = null;
 
@@ -223,7 +223,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
   /**
    * Boolean used internally to break a cycle in disposal.
    * @type {boolean}
-   * @private
+   * @protected
    */
   this.isEnding_ = false;
 
@@ -493,7 +493,8 @@ Blockly.Gesture.prototype.doStart = function(e) {
   this.startWorkspace_.markFocused();
   this.mostRecentEvent_ = e;
 
-  // Hide chaff also hides the flyout, so don't do it if the click is in a flyout.
+  // Hide chaff also hides the flyout, so don't do it if the click is in a
+  // flyout.
   Blockly.hideChaff(!!this.flyout_);
   Blockly.Tooltip.block();
 

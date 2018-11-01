@@ -37,11 +37,15 @@
 	"RENAME_VARIABLE": "تغییر نام متغیر...",
 	"RENAME_VARIABLE_TITLE": "تغییر نام همهٔ متغیرهای «%1» به:",
 	"NEW_VARIABLE": "ایجاد متغیر...",
+	"NEW_STRING_VARIABLE": "ساخت متغیر رشته...",
+	"NEW_NUMBER_VARIABLE": "ساخت متغیر عددی...",
+	"NEW_COLOUR_VARIABLE": "ساخت متغیر رنگ...",
+	"NEW_VARIABLE_TYPE_TITLE": "نوع متغیر جدید:",
 	"NEW_VARIABLE_TITLE": "نام متغیر تازه:",
 	"VARIABLE_ALREADY_EXISTS": "متغیری با نام '%1' هم اکنون وجود دارد",
-	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "در حال حاضر یک متغیر با نام '%1' برای متغیر دیگری از نوع '%2' وجود دارد",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "در حال حاضر یک متغیر با نام '%1' برای متغیر دیگری از نوع '%2' وجود دارد.",
 	"DELETE_VARIABLE_CONFIRMATION": "تعداد %1 استفاده از متغیر '%2' پاک شود؟",
-	"CANNOT_DELETE_VARIABLE_PROCEDURE": "متغیر '%1' را نمی‌توان پاک کرد، زیرا جزیی از تعریف متغیر '%2' می‌باشد",
+	"CANNOT_DELETE_VARIABLE_PROCEDURE": "متغیر '%1' را نمی‌توان پاک کرد، زیرا جزیی از تعریف تابع '%2' می‌باشد",
 	"DELETE_VARIABLE": "متغیر '%1'را پاک کنید",
 	"COLOUR_PICKER_HELPURL": "https://fa.wikipedia.org/wiki/%D8%B1%D9%86%DA%AF",
 	"COLOUR_PICKER_TOOLTIP": "انتخاب یک رنگ از تخته‌رنگ.",
@@ -297,6 +301,7 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "به # از انتها",
 	"LISTS_GET_SUBLIST_END_LAST": "به آخرین",
 	"LISTS_GET_SUBLIST_TOOLTIP": "کپی از قسمت مشخص‌شدهٔ لیست درست می‌کند.",
+	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
 	"LISTS_SORT_TITLE": "مرتب‌سازی%1 %2 %3",
 	"LISTS_SORT_TOOLTIP": "یک کپی از لیست را مرتب کنید.",
 	"LISTS_SORT_ORDER_ASCENDING": "صعودی",
@@ -337,5 +342,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "برجسته‌سازی تعریف تابع",
 	"PROCEDURES_CREATE_DO": "ساختن «%1»",
 	"PROCEDURES_IFRETURN_TOOLTIP": "اگر یک مقدار صحیح است، مقدار دوم را برگردان.",
-	"PROCEDURES_IFRETURN_WARNING": "اخطار: این بلوک احتمالاً فقط داخل یک تابع استفاده می‌شود."
+	"PROCEDURES_IFRETURN_WARNING": "اخطار: این بلوک احتمالاً فقط داخل یک تابع استفاده می‌شود.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "یک چیزی بگو..."
 }

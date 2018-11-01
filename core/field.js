@@ -69,11 +69,10 @@ Blockly.Field.TYPE_MAP_ = {};
  */
 Blockly.Field.register = function(type, fieldClass) {
   if ((typeof type != 'string') || (type.trim() == '')) {
-    throw new Error('Invalid field type "' + type + '"');
+    throw Error('Invalid field type "' + type + '"');
   }
   if (!fieldClass || (typeof fieldClass.fromJson != 'function')) {
-    throw new Error('Field "' + fieldClass +
-        '" must have a fromJson function');
+    throw Error('Field "' + fieldClass + '" must have a fromJson function');
   }
   Blockly.Field.TYPE_MAP_[type] = fieldClass;
 };
@@ -127,28 +126,28 @@ Blockly.Field.prototype.maxDisplayLength = 50;
 /**
  * Visible text to display.
  * @type {string}
- * @private
+ * @protected
  */
 Blockly.Field.prototype.text_ = '';
 
 /**
  * Block this field is attached to.  Starts as null, then in set in init.
  * @type {Blockly.Block}
- * @private
+ * @protected
  */
 Blockly.Field.prototype.sourceBlock_ = null;
 
 /**
  * Is the field visible, or hidden due to the block being collapsed?
  * @type {boolean}
- * @private
+ * @protected
  */
 Blockly.Field.prototype.visible_ = true;
 
 /**
  * Validation function called when user edits an editable field.
  * @type {Function}
- * @private
+ * @protected
  */
 Blockly.Field.prototype.validator_ = null;
 
@@ -362,7 +361,7 @@ Blockly.Field.prototype.getSvgRoot = function() {
 /**
  * Draws the border with the correct width.
  * Saves the computed width in a property.
- * @private
+ * @protected
  */
 Blockly.Field.prototype.render_ = function() {
   if (!this.visible_) {
@@ -379,7 +378,7 @@ Blockly.Field.prototype.render_ = function() {
  * Updates thw width of the field. This calls getCachedWidth which won't cache
  * the approximated width on IE/Edge when `getComputedTextLength` fails. Once
  * it eventually does succeed, the result will be cached.
- **/
+ */
 Blockly.Field.prototype.updateWidth = function() {
   var width = Blockly.Field.getCachedWidth(this.textElement_);
   if (this.borderRect_) {
@@ -466,7 +465,7 @@ Blockly.Field.prototype.getSize = function() {
  * scaling.
  * @return {!Object} An object with top, bottom, left, and right in pixels
  *     relative to the top left corner of the page (window coordinates).
- * @private
+ * @protected
  */
 Blockly.Field.prototype.getScaledBBox_ = function() {
   var bBox = this.borderRect_.getBBox();
@@ -485,7 +484,7 @@ Blockly.Field.prototype.getScaledBBox_ = function() {
  * Get the text from this field as displayed on screen.  May differ from getText
  * due to ellipsis, and other formatting.
  * @return {string} Currently displayed text.
- * @private
+ * @protected
  */
 Blockly.Field.prototype.getDisplayText_ = function() {
   var text = this.text_;
@@ -582,7 +581,7 @@ Blockly.Field.prototype.setValue = function(newValue) {
 /**
  * Handle a mouse down event on a field.
  * @param {!Event} e Mouse down event.
- * @private
+ * @protected
  */
 Blockly.Field.prototype.onMouseDown_ = function(e) {
   if (!this.sourceBlock_ || !this.sourceBlock_.workspace) {

@@ -341,7 +341,7 @@ Code.attemptCodeGeneration = function(generator, prettyPrintType) {
  * @param generator {!Blockly.Generator} The generator to use.
  */
 Code.checkAllGeneratorFunctionsDefined = function(generator) {
-  var blocks = Code.workspace.getAllBlocks();
+  var blocks = Code.workspace.getAllBlocks(false);
   var missingBlockGenerators = [];
   for (var i = 0; i < blocks.length; i++) {
     var blockType = blocks[i].type;
@@ -536,7 +536,7 @@ Code.runJS = function() {
  * Discard all blocks from the workspace.
  */
 Code.discard = function() {
-  var count = Code.workspace.getAllBlocks().length;
+  var count = Code.workspace.getAllBlocks(false).length;
   if (count < 2 ||
       window.confirm(Blockly.Msg['DELETE_ALL_BLOCKS'].replace('%1', count))) {
     Code.workspace.clear();

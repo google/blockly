@@ -169,7 +169,8 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
 /**
  * Set the SVG to have the block canvas and bubble canvas in it and then
  * show the surface.
- * @param {!Element} blockCanvas The block canvas <g> element from the workspace.
+ * @param {!Element} blockCanvas The block canvas <g> element from the
+ *     workspace.
  * @param {!Element} bubbleCanvas The <g> element that contains the bubbles.
  * @param {?Element} previousSibling The element to insert the block canvas &
        bubble canvas after when it goes back in the DOM at the end of a drag.

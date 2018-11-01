@@ -769,14 +769,14 @@ Blockly.Css.CONTENT = [
    * NOTE(mleibman,chrishenry):
    * The RTL support in Closure is provided via two mechanisms -- "rtl" CSS
    * classes and BiDi flipping done by the CSS compiler.  Closure supports RTL
-   * with or without the use of the CSS compiler.  In order for them not
-   * to conflict with each other, the "rtl" CSS classes need to have the #noflip
-   * annotation.  The non-rtl counterparts should ideally have them as well, but,
-   * since .goog-menuitem existed without .goog-menuitem-rtl for so long before
-   * being added, there is a risk of people having templates where they are not
-   * rendering the .goog-menuitem-rtl class when in RTL and instead rely solely
-   * on the BiDi flipping by the CSS compiler.  That's why we're not adding the
-   * #noflip to .goog-menuitem.
+   * with or without the use of the CSS compiler.  In order for them not to
+   * conflict with each other, the "rtl" CSS classes need to have the #noflip
+   * annotation.  The non-rtl counterparts should ideally have them as well,
+   * but, since .goog-menuitem existed without .goog-menuitem-rtl for so long
+   * before being added, there is a risk of people having templates where they
+   * are not rendering the .goog-menuitem-rtl class when in RTL and instead
+   * rely solely on the BiDi flipping by the CSS compiler.  That's why we're
+   * not adding the #noflip to .goog-menuitem.
    */
   '.blocklyWidgetDiv .goog-menuitem {',
     'color: #000;',
@@ -796,14 +796,15 @@ Blockly.Css.CONTENT = [
     'padding-right: 28px;',
   '}',
 
-  /* If a menu doesn't have checkable items or items with icons, remove padding. */
+  /* If a menu doesn't have checkable items or items with icons,
+   * remove padding.
+   */
   '.blocklyWidgetDiv .goog-menu-nocheckbox .goog-menuitem,',
   '.blocklyWidgetDiv .goog-menu-noicon .goog-menuitem {',
     'padding-left: 12px;',
   '}',
 
-  /*
-   * If a menu doesn't have items with shortcuts, leave just enough room for
+  /* If a menu doesn't have items with shortcuts, leave just enough room for
    * submenu arrows, if they are rendered.
    */
   '.blocklyWidgetDiv .goog-menu-noaccel .goog-menuitem {',

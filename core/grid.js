@@ -34,7 +34,8 @@ goog.require('goog.userAgent');
 
 /**
  * Class for a workspace's grid.
- * @param {!SVGElement} pattern The grid's SVG pattern, created during injection.
+ * @param {!SVGElement} pattern The grid's SVG pattern, created during
+ *     injection.
  * @param {!Object} options A dictionary of normalized options for the grid.
  *     See grid documentation:
  *     https://developers.google.com/blockly/guides/configure/web/grid
@@ -164,7 +165,8 @@ Blockly.Grid.prototype.update = function(scale) {
  * @param {number} y2 The new y end position of the line (in px).
  * @private
  */
-Blockly.Grid.prototype.setLineAttributes_ = function(line, width, x1, x2, y1, y2) {
+Blockly.Grid.prototype.setLineAttributes_ = function(line, width,
+    x1, x2, y1, y2) {
   if (line) {
     line.setAttribute('stroke-width', width);
     line.setAttribute('x1', x1);
@@ -175,7 +177,8 @@ Blockly.Grid.prototype.setLineAttributes_ = function(line, width, x1, x2, y1, y2
 };
 
 /**
- * Move the grid to a new x and y position, and make sure that change is visible.
+ * Move the grid to a new x and y position, and make sure that change is
+ * visible.
  * @param {number} x The new x position of the grid (in px).
  * @param {number} y The new y position ofthe grid (in px).
  * @package

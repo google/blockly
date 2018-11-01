@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.Options');
 
+goog.require('Blockly.Xml');
+
 
 /**
  * Parse the user-specified options, using reasonable defaults where behaviour
@@ -133,7 +135,7 @@ Blockly.Options = function(options) {
 /**
  * The parent of the current workspace, or null if there is no parent workspace.
  * @type {Blockly.Workspace}
- **/
+ */
 Blockly.Options.prototype.parentWorkspace = null;
 
 /**

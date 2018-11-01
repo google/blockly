@@ -27,6 +27,7 @@
 goog.provide('Blockly.Connection');
 
 goog.require('Blockly.Events.BlockMove');
+goog.require('Blockly.Xml');
 
 
 /**
@@ -345,35 +346,45 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
     return false;
   }
 
-  // Don't offer to connect an already connected left (male) value plug to
-  // an available right (female) value plug.  Don't offer to connect the
-  // bottom of a statement block to one that's already connected.
-  if (candidate.type == Blockly.OUTPUT_VALUE ||
-      candidate.type == Blockly.PREVIOUS_STATEMENT) {
-    if (candidate.isConnected() || this.isConnected()) {
-      return false;
-    }
-  }
-
-  // Offering to connect the left (male) of a value block to an already
-  // connected value pair is ok, we'll splice it in.
-  // However, don't offer to splice into an immovable block.
-  if (candidate.type == Blockly.INPUT_VALUE && candidate.isConnected() &&
-      !candidate.targetBlock().isMovable() &&
-      !candidate.targetBlock().isShadow()) {
-    return false;
-  }
-
-  // Don't let a block with no next connection bump other blocks out of the
-  // stack.  But covering up a shadow block or stack of shadow blocks is fine.
-  // Similarly, replacing a terminal statement with another terminal statement
-  // is allowed.
-  if (this.type == Blockly.PREVIOUS_STATEMENT &&
-      candidate.isConnected() &&
-      !this.sourceBlock_.nextConnection &&
-      !candidate.targetBlock().isShadow() &&
-      candidate.targetBlock().nextConnection) {
-    return false;
+  switch (candidate.type) {
+    case Blockly.PREVIOUS_STATEMENT:
+      // Don't offer to connect the bottom of a statement block to one that's
+      // already connected.
+      if (candidate.isConnected() || this.isConnected()) {
+        return false;
+      }
+      break;
+    case Blockly.OUTPUT_VALUE:
+      // Don't offer to connect an already connected left (male) value plug to
+      // an available right (female) value plug.
+      if (candidate.isConnected() || this.isConnected()) {
+        return false;
+      }
+      break;
+    case Blockly.INPUT_VALUE:
+      // Offering to connect the left (male) of a value block to an already
+      // connected value pair is ok, we'll splice it in.
+      // However, don't offer to splice into an unmovable block.
+      if (candidate.targetConnection &&
+          !candidate.targetBlock().isMovable() &&
+          !candidate.targetBlock().isShadow()) {
+        return false;
+      }
+      break;
+    case Blockly.NEXT_STATEMENT:
+      // Don't let a block with no next connection bump other blocks out of the
+      // stack.  But covering up a shadow block or stack of shadow blocks is
+      // fine.  Similarly, replacing a terminal statement with another terminal
+      // statement is allowed.
+      if (candidate.isConnected() &&
+          !this.sourceBlock_.nextConnection &&
+          !candidate.targetBlock().isShadow() &&
+          candidate.targetBlock().nextConnection) {
+        return false;
+      }
+      break;
+    default:
+      throw Error('Unknown connection type in isConnectionAllowed');
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
@@ -601,6 +612,16 @@ Blockly.Connection.prototype.setCheck = function(check) {
     this.check_ = null;
   }
   return this;
+};
+
+/**
+ * Get a connection's compatibility.
+ * @return {Array} List of compatible value types.  Null if
+ *     all types are compatible.
+ * @public
+ */
+Blockly.Connection.prototype.getCheck = function() {
+  return this.check_;
 };
 
 /**

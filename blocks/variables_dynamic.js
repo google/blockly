@@ -102,6 +102,9 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
     }
     var opposite_type;
     var contextMenuMsg;
+    var id = this.getFieldValue('VAR');
+    var variableModel = this.workspace.getVariableById(id);
+    var varType = variableModel.type;
     if (this.type == 'variables_get_dynamic') {
       opposite_type = 'variables_set_dynamic';
       contextMenuMsg = Blockly.Msg['VARIABLES_GET_CREATE_SET'];
@@ -115,6 +118,7 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
     option.text = contextMenuMsg.replace('%1', name);
     var xmlField = document.createElement('field');
     xmlField.setAttribute('name', 'VAR');
+    xmlField.setAttribute('variabletype', varType);
     xmlField.appendChild(document.createTextNode(name));
     var xmlBlock = document.createElement('block');
     xmlBlock.setAttribute('type', opposite_type);

@@ -27,7 +27,7 @@
 /**
  * @name Blockly.Touch
  * @namespace
- **/
+ */
 goog.provide('Blockly.Touch');
 
 goog.require('Blockly.utils');
@@ -180,7 +180,8 @@ Blockly.Touch.checkTouchIdentifier = function(e) {
     // source?
     return Blockly.Touch.touchIdentifier_ == identifier;
   }
-  if (e.type == 'mousedown' || e.type == 'touchstart' || e.type == 'pointerdown') {
+  if (e.type == 'mousedown' || e.type == 'touchstart' ||
+      e.type == 'pointerdown') {
     // No identifier set yet, and this is the start of a drag.  Set it and
     // return.
     Blockly.Touch.touchIdentifier_ = identifier;

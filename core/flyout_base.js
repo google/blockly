@@ -35,6 +35,7 @@ goog.require('Blockly.Gesture');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceSvg');
+goog.require('Blockly.Xml');
 
 goog.require('goog.math.Rect');
 
@@ -427,7 +428,8 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
         xmlList);
     if (typeof fnToApply != 'function') {
-      throw TypeError('Couldn\'t find a callback function when opening a toolbox category.');
+      throw TypeError('Couldn\'t find a callback function when opening' +
+          ' a toolbox category.');
     }
     xmlList = fnToApply(this.workspace_.targetWorkspace);
     if (!Array.isArray(xmlList)) {

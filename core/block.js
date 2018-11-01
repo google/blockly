@@ -39,7 +39,6 @@ goog.require('Blockly.Mutator');
 goog.require('Blockly.utils');
 goog.require('Blockly.Warning');
 goog.require('Blockly.Workspace');
-goog.require('Blockly.Xml');
 
 goog.require('goog.math.Coordinate');
 
@@ -145,6 +144,13 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 
   /** @type {boolean} */
   this.RTL = workspace.RTL;
+
+  /**
+   * True if this block is an insertion marker.
+   * @type {boolean}
+   * @protected
+   */
+  this.isInsertionMarker_ = false;
 
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
@@ -362,7 +368,7 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
  * @private
  */
 Blockly.Block.prototype.getOnlyValueConnection_ = function() {
-  var connection = false;
+  var connection = null;
   for (var i = 0; i < this.inputList.length; i++) {
     var thisConnection = this.inputList[i].connection;
     if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE) {
@@ -506,6 +512,29 @@ Blockly.Block.prototype.getSurroundParent = function() {
  */
 Blockly.Block.prototype.getNextBlock = function() {
   return this.nextConnection && this.nextConnection.targetBlock();
+};
+
+/**
+ * Return the previous statement block directly connected to this block.
+ * @return {Blockly.Block} The previous statement block or null.
+ */
+Blockly.Block.prototype.getPreviousBlock = function() {
+  return this.previousConnection && this.previousConnection.targetBlock();
+};
+
+/**
+ * Return the connection on the first statement input on this block, or null if
+ * there are none.
+ * @return {Blockly.Connection} The first statement connection or null.
+ * @package
+ */
+Blockly.Block.prototype.getFirstStatementConnection = function() {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    if (input.connection && input.connection.type == Blockly.NEXT_STATEMENT) {
+      return input.connection;
+    }
+  }
+  return null;
 };
 
 /**
@@ -656,6 +685,25 @@ Blockly.Block.prototype.setShadow = function(shadow) {
 };
 
 /**
+ * Get whether this block is an insertion marker block or not.
+ * @return {boolean} True if an insertion marker.
+ * @package
+ */
+Blockly.Block.prototype.isInsertionMarker = function() {
+  return this.isInsertionMarker_;
+};
+
+/**
+ * Set whether this block is an insertion marker block or not.
+ * Once set this cannot be unset.
+ * @param {boolean} insertionMarker True if an insertion marker.
+ * @package
+ */
+Blockly.Block.prototype.setInsertionMarker = function(insertionMarker) {
+  this.isInsertionMarker_ = insertionMarker;
+};
+
+/**
  * Get whether this block is editable or not.
  * @return {boolean} True if editable.
  */
@@ -708,6 +756,29 @@ Blockly.Block.prototype.setConnectionsHidden = function(hidden) {
       }
     }
   }
+};
+
+/**
+ * Find the connection on this block that corresponds to the given connection
+ * on the other block.
+ * Used to match connections between a block and its insertion marker.
+ * @param {!Blockly.Block} otherBlock The other block to match against.
+ * @param {!Blockly.Connection} conn The other connection to match.
+ * @return {Blockly.Connection} the matching connection on this block, or null.
+ * @package
+ */
+Blockly.Block.prototype.getMatchingConnection = function(otherBlock, conn) {
+  var connections = this.getConnections_(true);
+  var otherConnections = otherBlock.getConnections_(true);
+  if (connections.length != otherConnections.length) {
+    throw Error("Connection lists did not match in length.");
+  }
+  for (var i = 0; i < otherConnections.length; i++) {
+    if (otherConnections[i] == conn) {
+      return connections[i];
+    }
+  }
+  return null;
 };
 
 /**
@@ -782,7 +853,7 @@ Blockly.Block.prototype.setColour = function(colour) {
  */
 Blockly.Block.prototype.setOnChange = function(onchangeFn) {
   if (onchangeFn && typeof onchangeFn != 'function') {
-    throw new Error('onchange must be a function.');
+    throw Error('onchange must be a function.');
   }
   if (this.onchangeWrapper_) {
     this.workspace.removeChangeListener(this.onchangeWrapper_);
@@ -1267,7 +1338,7 @@ Blockly.Block.prototype.jsonInitColour_ = function(json, warningPrefix) {
  */
 Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
   if (opt_disableCheck !== undefined && typeof opt_disableCheck != 'boolean') {
-    throw new Error('opt_disableCheck must be a boolean if provided');
+    throw Error('opt_disableCheck must be a boolean if provided');
   }
   if (!opt_disableCheck) {
     var overwrites = [];
@@ -1277,7 +1348,7 @@ Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
       }
     }
     if (overwrites.length) {
-      throw new Error('Mixin will overwrite block members: ' +
+      throw Error('Mixin will overwrite block members: ' +
         JSON.stringify(overwrites));
     }
   }
@@ -1303,11 +1374,11 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
     var token = tokens[i];
     if (typeof token == 'number') {
       if (token <= 0 || token > args.length) {
-        throw new Error('Block "' + this.type + '": ' +
+        throw Error('Block "' + this.type + '": ' +
             'Message index %' + token + ' out of range.');
       }
       if (indexDup[token]) {
-        throw new Error('Block "' + this.type + '": ' +
+        throw Error('Block "' + this.type + '": ' +
             'Message index %' + token + ' duplicated.');
       }
       indexDup[token] = true;
@@ -1321,7 +1392,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
     }
   }
   if (indexCount != args.length) {
-    throw new Error('Block "' + this.type + '": ' +
+    throw Error('Block "' + this.type + '": ' +
         'Message does not reference all ' + args.length + ' arg(s).');
   }
   // Add last dummy input if needed.

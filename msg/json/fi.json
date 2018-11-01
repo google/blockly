@@ -20,6 +20,7 @@
 	"DUPLICATE_BLOCK": "Kaksoiskappale",
 	"ADD_COMMENT": "Lisää kommentti",
 	"REMOVE_COMMENT": "Poista kommentti",
+	"DUPLICATE_COMMENT": "Kahdenna kommentti",
 	"EXTERNAL_INPUTS": "Ulkoiset syötteet",
 	"INLINE_INPUTS": "Tuo syötteet",
 	"DELETE_BLOCK": "Poista lohko",
@@ -327,6 +328,7 @@
 	"LISTS_SPLIT_WITH_DELIMITER": "erottimen kanssa",
 	"LISTS_SPLIT_TOOLTIP_SPLIT": "Jaa teksti osiin erotinmerkin perusteella ja järjestä osat listaksi.",
 	"LISTS_SPLIT_TOOLTIP_JOIN": "Yhdistä luettelon tekstit yhdeksi tekstiksi, erotettuina välimerkillä.",
+	"LISTS_REVERSE_MESSAGE0": "%1 takaperin",
 	"VARIABLES_GET_TOOLTIP": "Palauttaa muuttujan arvon.",
 	"VARIABLES_GET_CREATE_SET": "Luo 'aseta %1'",
 	"VARIABLES_SET": "aseta %1 arvoksi %2",
@@ -354,5 +356,6 @@
 	"PROCEDURES_CREATE_DO": "Luo '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Jos arvo on tosi, palauta toinen arvo.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Varoitus: tätä lohkoa voi käyttää vain funktion määrityksessä."
+	"PROCEDURES_IFRETURN_WARNING": "Varoitus: tätä lohkoa voi käyttää vain funktion määrityksessä.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Sano jotakin..."
 }

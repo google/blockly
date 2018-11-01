@@ -259,6 +259,27 @@ function changeIndex() {
   demoWorkspace.options.oneBasedIndex = oneBasedIndex;
   demoWorkspace.toolbox_.flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
 }
+
+//https://stackoverflow.com/a/18197341
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+function downloadOutputCode() {
+
+  console.log('clicked!');
+  download('outputcode.js', outputCode);
+  console.log('and done');
+}
 </script>
 
 <style>
@@ -446,6 +467,9 @@ h1 {
         <br><a target="_blank" href="https://dartpad.dartlang.org/">interpreter</a>
       </div>
     </p>
+  <p>
+    <input type="button" value="download" onclick="downloadOutputCode()">
+  </p>
   </td></tr><tr><td height="99%">
     <textarea id="importExport" readonly="readonly" wrap="off"></textarea>
   </td></tr></table>

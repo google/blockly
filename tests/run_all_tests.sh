@@ -56,7 +56,10 @@ run_test_command "test_setup" "tests/scripts/test_setup.sh"
 # run_test_command "eslint" "eslint ."
 
 # Run JSUnit tests inside a browser.
-run_test_command "jsunit" "node tests/jsunit/run_jsunit_tests_in_browser.js"
+#run_test_command "jsunit" "node tests/jsunit/run_jsunit_tests_in_browser.js"
+run_test_command "generators" "node tests/generators/run_js_generator_tests_in_browser.js"
+#run_test_command "fs_test" "node tests/generators/fs_test.js"
+
 # TODO: Make sure jsunit output is captured.  Child process?
 
 # # Attempt advanced compilation of a Blockly app.

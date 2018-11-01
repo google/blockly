@@ -22,6 +22,7 @@
  * @fileoverview Node.js script to run JsUnit tests in Chrome, via webdriver.
  */
 var webdriverio = require('webdriverio');
+var fs = require('fs');
 
 /*
  * Notes
@@ -97,6 +98,21 @@ function runJsGeneratorTestsInBrowser() {
       //     process.exit(1);
       //   }
       // })
+      .pause(10000)
+      .getValue("#importExport")
+      .then(function(result) {
+        fs.writeFile("test.js", result, function(err) {
+          if (err) {
+            return console.log(err);
+          }
+    //console.log("The file was saved!");
+        });
+        // console.log('start result')
+        // console.log('======')
+        // console.log(result)
+        // console.log('======')
+        // console.log('end result');
+      })
       .pause(10000)
       .catch(function(e) {
         console.error('Error: ', e);

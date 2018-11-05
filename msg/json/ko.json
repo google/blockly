@@ -219,6 +219,7 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "임의 분수",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "0.0 (포함)과 1.0 (배타적) 사이의 임의 분수 값을 돌려줍니다.",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
 	"TEXT_TEXT_HELPURL": "https://ko.wikipedia.org/wiki/문자열",
 	"TEXT_TEXT_TOOLTIP": "문자, 단어, 문장.",
 	"TEXT_JOIN_HELPURL": "https://github.com/google/blockly/wiki/Text#text-creation",

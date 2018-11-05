@@ -5,7 +5,8 @@
 			"WikiPhoenix",
 			"Abbedabb",
 			"Aaoo",
-			"아라"
+			"아라",
+			"Eldaria"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "föremål",
@@ -19,7 +20,7 @@
 	"DELETE_BLOCK": "Radera block",
 	"DELETE_X_BLOCKS": "Radera %1 block",
 	"DELETE_ALL_BLOCKS": "Radera alla %1 block?",
-	"CLEAN_UP": "Rada upp block",
+	"CLEAN_UP": "Städa upp block",
 	"COLLAPSE_BLOCK": "Fäll ihop block",
 	"COLLAPSE_ALL": "Fäll ihop block",
 	"EXPAND_BLOCK": "Fäll ut block",
@@ -204,6 +205,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://sv.wikipedia.org/wiki/Slumptalsgenerator",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "slumpat decimaltal",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Ger tillbaka ett slumpat decimaltal mellan 0.0 (inkluderat) och 1.0 (exkluderat).",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 av X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Returnerar arcustangens av punkt (X, Y) i grader från -180 till 180.",
 	"TEXT_TEXT_HELPURL": "https://sv.wikipedia.org/wiki/Str%C3%A4ng_%28data%29",
 	"TEXT_TEXT_TOOLTIP": "En bokstav, ord eller textrad.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "skapa text med",

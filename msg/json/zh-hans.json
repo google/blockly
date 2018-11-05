@@ -13,7 +13,8 @@
 			"Duzc2",
 			"Tonylianlong",
 			"WindWood",
-			"Deathkon"
+			"Deathkon",
+			"Muhaoying"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "项目",
@@ -199,6 +200,8 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://zh.wikipedia.org/wiki/随机数生成器",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "随机小数",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "返回一个介于0.0到1.0之间（含边界）的随机数。",
+	"MATH_ATAN2_HELPURL": "https://zh.wikipedia.org/wiki/反正切2",
+	"MATH_ATAN2_TITLE": "点(x,y)的反正切",
 	"TEXT_TEXT_HELPURL": "https://zh.wikipedia.org/wiki/字符串",
 	"TEXT_TEXT_TOOLTIP": "一个字、词语或一行文本。",
 	"TEXT_JOIN_TITLE_CREATEWITH": "建立文本从",

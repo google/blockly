@@ -618,6 +618,9 @@ Blockly.Workspace.prototype.clearUndo = function() {
 
 /**
  * When something in this workspace changes, call a function.
+ * Note that there may be a few recent events already on the stack.  Thus the
+ * new change listener might be called with events that occurred a few
+ * milliseconds before the change listener was added.
  * @param {!Function} func Function to call.
  * @return {!Function} Function that can be passed to
  *     removeChangeListener.

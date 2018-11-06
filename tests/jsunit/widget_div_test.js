@@ -31,7 +31,7 @@ function widgetdiv_testHelper_makeBBox(left, top, width, height) {
 }
 
 var widgetDiv_test_viewport = widgetdiv_testHelper_makeBBox(0, 0, 1000, 1000);
-var widgetDiv_test_widgetWidth = {};
+var widgetDiv_test_widgetWidth = 100;
 var widgetDiv_test_widgetHeight = 100;
 
 // Anchor is always 90 px wide and 90 px tall for this test.

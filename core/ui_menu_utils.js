@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Utility methods for working with the closure menu
+ * @fileoverview Utility methods for working with the Closure menu
  * (goog.ui.menu).
  * @author fenichel@google.com (Rachel Fenichel)
  */
@@ -31,19 +31,21 @@
  */
 goog.provide('Blockly.utils.uiMenu');
 
+goog.require('goog.style');
+
 
 /**
  * Get the size of a rendered goog.ui.Menu.
  * @param {!goog.ui.Menu} menu The menu to measure.
- * @return {!goog.math.Size} Object with width and height properties.
+ * @return {!Object} Object with width and height properties.
  * @package
  */
 Blockly.utils.uiMenu.getSize = function(menu) {
   var menuDom = menu.getElement();
-  var menuSize = goog.style.getSize(menuDom);
+  var width = goog.style.getSize(menuDom).width;
   // Recalculate height for the total content, not only box height.
-  menuSize.height = menuDom.scrollHeight;
-  return menuSize;
+  var height = menuDom.scrollHeight;
+  return {height: height, width: width};
 };
 
 /**
@@ -56,14 +58,14 @@ Blockly.utils.uiMenu.getSize = function(menu) {
  *     in window coordinates.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
- * @param {!goog.math.Size} menuSize The size of the menu that is inside the
+ * @param {number} menuWidth The width of the menu that is inside the
  *     widget div, in window coordinates.
  * @package
  */
 Blockly.utils.uiMenu.adjustBBoxesForRTL = function(viewportBBox, anchorBBox,
-    menuSize) {
-  anchorBBox.left += menuSize.width;
-  anchorBBox.right += menuSize.width;
-  viewportBBox.left += menuSize.width;
-  viewportBBox.right += menuSize.width;
+    menuWidth) {
+  anchorBBox.left += menuWidth;
+  anchorBBox.right += menuWidth;
+  viewportBBox.left += menuWidth;
+  viewportBBox.right += menuWidth;
 };

@@ -212,14 +212,15 @@ Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
   this.createWidget_(menu);
   var menuSize = Blockly.utils.uiMenu.getSize(menu);
 
-  var menuMaxHeightPx = Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH
-      * document.documentElement.clientHeight;
+  var menuMaxHeightPx = Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH *
+      document.documentElement.clientHeight;
   if (menuSize.height > menuMaxHeightPx) {
     menuSize.height = menuMaxHeightPx;
   }
 
   if (this.sourceBlock_.RTL) {
-    Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox, menuSize);
+    Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox,
+        menuSize.width);
   }
   // Position the menu.
   Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox,

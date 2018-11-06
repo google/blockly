@@ -135,7 +135,8 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
   var menuSize = Blockly.utils.uiMenu.getSize(menu);
 
   if (rtl) {
-    Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox, menuSize);
+    Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox,
+        menuSize.width);
   }
 
   Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox,

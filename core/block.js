@@ -1240,6 +1240,17 @@ Blockly.Block.prototype.appendStatementInput = function(name) {
 };
 
 /**
+ * Shortcut for appending an inline value input row.
+ * @param {string} name Language-neutral identifier which may used to find this
+ *     input again.  Should be unique to this block.
+ * @return {!Blockly.Input} The input object created.
+ */
+
+Blockly.Block.prototype.appendIndentedValueInput = function(name) {
+  return this.appendInput_(Blockly.INDENTED_INPUT_VALUE, name);
+};
+
+/**
  * Shortcut for appending a dummy input row.
  * @param {string=} opt_name Language-neutral identifier which may used to find
  *     this input again.  Should be unique to this block.
@@ -1490,8 +1501,8 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
 
 /**
  * Add a value input, statement input or local variable to this block.
- * @param {number} type Either Blockly.INPUT_VALUE or Blockly.NEXT_STATEMENT or
- *     Blockly.DUMMY_INPUT.
+ * @param {number} type Either Blockly.INPUT_VALUE, Blockly.NEXT_STATEMENT, Blockly.DUMMY_INPUT,
+ *     or subtypes Blockly.INDENTED_INPUT_VALUE.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
@@ -1499,7 +1510,8 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
  */
 Blockly.Block.prototype.appendInput_ = function(type, name) {
   var connection = null;
-  if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
+  if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT ||
+      type == Blockly.INDENTED_INPUT_VALUE) {
     connection = this.makeConnection_(type);
   }
   var input = new Blockly.Input(type, name, this, connection);

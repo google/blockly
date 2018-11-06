@@ -43,8 +43,14 @@ Blockly.Input = function(type, name, block, connection) {
   if (type != Blockly.DUMMY_INPUT && !name) {
     throw Error('Value inputs and statement inputs must have non-empty name.');
   }
-  /** @type {number} */
-  this.type = type;
+  if (type == Blockly.INDENTED_INPUT_VALUE) {
+    /** @type {number} */
+    this.type = Blockly.INPUT_VALUE;
+    /** @type {number} */
+    this.subtype = Blockly.INDENTED_INPUT_VALUE;
+  } else {
+    this.type = type;
+  }
   /** @type {string} */
   this.name = name;
   /**

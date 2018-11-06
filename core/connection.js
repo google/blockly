@@ -42,13 +42,19 @@ Blockly.Connection = function(source, type) {
    * @protected
    */
   this.sourceBlock_ = source;
-  /** @type {number} */
-  this.type = type;
+  if (type == Blockly.INDENTED_INPUT_VALUE) {
+    /** @type {number} */
+    this.type = Blockly.INPUT_VALUE;
+    /** @subtype {number} */
+    this.subtype = Blockly.INDENTED_INPUT_VALUE;
+  } else {
+    this.type = type;
+  }
   // Shortcut for the databases for this connection's workspace.
   if (source.workspace.connectionDBList) {
-    this.db_ = source.workspace.connectionDBList[type];
+    this.db_ = source.workspace.connectionDBList[this.type];
     this.dbOpposite_ =
-        source.workspace.connectionDBList[Blockly.OPPOSITE_TYPE[type]];
+        source.workspace.connectionDBList[Blockly.OPPOSITE_TYPE[this.type]];
     this.hidden_ = !this.db_;
   }
 };

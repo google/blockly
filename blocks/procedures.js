@@ -67,14 +67,21 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     if (this.hasStatements_ === hasStatements) {
       return;
     }
+    var returnInput = this.getInput('RETURN');
     if (hasStatements) {
       this.appendStatementInput('STACK')
           .appendField(Blockly.Msg['PROCEDURES_DEFNORETURN_DO']);
-      if (this.getInput('RETURN')) {
+      if (returnInput) {
         this.moveInputBefore('STACK', 'RETURN');
+        returnInput.subtype = undefined;
+        returnInput.align = Blockly.ALIGN_RIGHT;
       }
     } else {
       this.removeInput('STACK', true);
+      if (returnInput) {
+        returnInput.subtype = Blockly.INDENTED_INPUT_VALUE;
+        returnInput.align = Blockly.ALIGN_LEFT;
+      }
     }
     this.hasStatements_ = hasStatements;
   },

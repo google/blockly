@@ -429,6 +429,9 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       row = [];
       if (isInline && input.type != Blockly.NEXT_STATEMENT) {
         row.type = Blockly.BlockSvg.INLINE;
+      } else if (input.subtype) {
+        row.type = input.type;
+        row.subtype = input.subtype;
       } else {
         row.type = input.type;
       }
@@ -737,7 +740,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(pathObject, inputRows,
           pathObject, row, cursor, connectionPos, inputRows.rightEdge);
     } else if (row.type == Blockly.INPUT_VALUE) {
       this.renderExternalValueInput_(
-          pathObject, row, cursor, connectionPos, inputRows.rightEdge);
+          pathObject, row, cursor, connectionPos, inputRows.rightEdge, inputRows.statementEdge);
     } else if (row.type == Blockly.DUMMY_INPUT) {
       this.renderDummyInput_(
           pathObject, row, cursor, inputRows.rightEdge, inputRows.hasValue);
@@ -979,10 +982,11 @@ Blockly.BlockSvg.prototype.renderInlineRow_ = function(pathObject, row, cursor,
  *     connection on this input.
  * @param {number} rightEdge The position of the right edge of the block, which
  *     is based on the widest row that has been encountered so far.
+ * @param {number} statementEdge The position of the statement edge of the block.
  * @private
  */
 Blockly.BlockSvg.prototype.renderExternalValueInput_ = function(pathObject, row,
-    cursor, connectionPos, rightEdge) {
+    cursor, connectionPos, rightEdge, statementEdge) {
   var steps = pathObject.steps;
   var highlightSteps = pathObject.highlightSteps;
   // External input.
@@ -999,23 +1003,62 @@ Blockly.BlockSvg.prototype.renderExternalValueInput_ = function(pathObject, row,
     }
   }
   this.renderFields_(input.fieldRow, fieldX, fieldY);
-  steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
   var v = row.height - Blockly.BlockSvg.TAB_HEIGHT;
-  steps.push('v', v);
+  if (row.subtype == Blockly.INDENTED_INPUT_VALUE) {
+    cursor.x = statementEdge;
+    steps.push('H', cursor.x + input.fieldWidth + Blockly.BlockSvg.TAB_WIDTH);
+    steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
+    steps.push('V', cursor.y + row.height + Blockly.BlockSvg.DISTANCE_45_OUTSIDE);
+    steps.push('H', rightEdge);
+    steps.push('v', Blockly.BlockSvg.SEP_SPACE_Y);
+    highlightSteps.push('M',
+        (cursor.x + Blockly.BlockSvg.TAB_WIDTH + input.fieldWidth) + ',' +
+        (cursor.y + row.height + Blockly.BlockSvg.DISTANCE_45_OUTSIDE + 0.5));
+    highlightSteps.push('H', rightEdge);
+    if (this.RTL) {
+      highlightSteps.push('v', Blockly.BlockSvg.SEP_SPACE_Y - 1);
+    }
+  } else {
+    steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
+    steps.push('v', v);
+  }
   if (this.RTL) {
     // Highlight around back of tab.
+    if (row.subtype == Blockly.INDENTED_INPUT_VALUE) {
+      highlightSteps.push('M',
+          (cursor.x + input.fieldWidth + Blockly.BlockSvg.TAB_WIDTH - 0.5) + ',' +
+          (cursor.y + 0.5));
+    }
     highlightSteps.push(Blockly.BlockSvg.TAB_PATH_DOWN_HIGHLIGHT_RTL);
-    highlightSteps.push('v', v + 0.5);
+    if (row.subtype == Blockly.INDENTED_INPUT_VALUE) {
+      highlightSteps.push('v',
+          input.renderHeight - Blockly.BlockSvg.TAB_HEIGHT + 3.5);
+    } else {
+      highlightSteps.push('v', v + 0.5);
+    }
   } else {
     // Short highlight glint at bottom of tab.
-    highlightSteps.push('M', (rightEdge - 5) + ',' +
+    var glintX = (row.subtype == Blockly.INDENTED_INPUT_VALUE ?
+        cursor.x + input.fieldWidth + Blockly.BlockSvg.TAB_WIDTH :
+        rightEdge) - 5;
+    highlightSteps.push('M', glintX + ',' +
         (cursor.y + Blockly.BlockSvg.TAB_HEIGHT - 0.7));
     highlightSteps.push('l', (Blockly.BlockSvg.TAB_WIDTH * 0.46) +
         ',-2.1');
   }
-  // Create external input connection.
-  connectionPos.x = this.RTL ? -rightEdge - 1 : rightEdge + 1;
-  input.connection.setOffsetInBlock(connectionPos.x, cursor.y);
+  var connectionX, connectionY;
+  if (row.subtype == Blockly.INDENTED_INPUT_VALUE) {
+    // Create indented input connection.
+    connectionX = (this.RTL ? -1 : 1) *
+        (statementEdge + Blockly.BlockSvg.TAB_WIDTH + input.fieldWidth + 1);
+    connectionY = cursor.y + 1;  // 1 pixel overhang
+    cursor.y += Blockly.BlockSvg.SEP_SPACE_Y + 2;
+  } else {
+    // Create external input connection.
+    connectionX = (this.RTL ? -rightEdge - 1 : rightEdge + 1);
+    connectionY = cursor.y;
+  }
+  input.connection.setOffsetInBlock(connectionX, connectionY);
   if (input.connection.isConnected()) {
     this.width = Math.max(this.width, rightEdge +
         input.connection.targetBlock().getHeightWidth().width -

@@ -156,6 +156,12 @@ Blockly.PREVIOUS_STATEMENT = 4;
 Blockly.DUMMY_INPUT = 5;
 
 /**
+ * ENUM for an indented value input.
+ * @const
+ */
+Blockly.INDENTED_INPUT_VALUE = 6;
+
+/**
  * ENUM for left alignment.
  * @const
  */

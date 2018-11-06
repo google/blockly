@@ -222,8 +222,8 @@ Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
     Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox, menuSize);
   }
   // Position the menu.
-  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, menuSize,
-      this.sourceBlock_.RTL);
+  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox,
+      menuSize.width, menuSize.height, this.sourceBlock_.RTL);
   // Calling menuDom.focus() has to wait until after the menu has been placed
   // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
   // in view.  See issue #1329.

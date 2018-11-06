@@ -230,8 +230,8 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
   var paletteSize = goog.style.getSize(picker);
 
   // Position the picker to line up with the field.
-  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, paletteSize,
-      this.sourceBlock_.RTL);
+  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox,
+      paletteSize.width, paletteSize.height, this.sourceBlock_.RTL);
 
   // Configure event handler on the table to listen for any event in a cell.
   Blockly.FieldColour.onUpWrapper_ = Blockly.bindEvent_(picker,

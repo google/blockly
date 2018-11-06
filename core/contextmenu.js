@@ -138,7 +138,8 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
     Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox, menuSize);
   }
 
-  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, menuSize, rtl);
+  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox,
+      menuSize.width, menuSize.height, rtl);
   // Calling menuDom.focus() has to wait until after the menu has been placed
   // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
   // in view.  See issue #1329.

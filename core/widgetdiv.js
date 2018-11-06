@@ -174,19 +174,21 @@ Blockly.WidgetDiv.positionInternal_ = function(x, y, height) {
  *     in window coordinates.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
- * @param {!goog.math.Size} widgetSize The size of the widget that is inside the
+ * @param {number} width The width of the widget that is inside the
+ *     widget div, in window coordinates.
+ * @param {number} height The height of the widget that is inside the
  *     widget div, in window coordinates.
  * @param {boolean} rtl Whether the workspace is in RTL mode.  This determines
  *     horizontal alignment.
  * @package
  */
 Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
-    widgetSize, rtl) {
-  var y = Blockly.WidgetDiv.calculateY_(viewportBBox, anchorBBox, widgetSize);
-  var x = Blockly.WidgetDiv.calculateX_(viewportBBox, anchorBBox, widgetSize,
+    width, height, rtl) {
+  var y = Blockly.WidgetDiv.calculateY_(viewportBBox, anchorBBox, height);
+  var x = Blockly.WidgetDiv.calculateX_(viewportBBox, anchorBBox, width,
       rtl);
 
-  Blockly.WidgetDiv.positionInternal_(x, y, widgetSize.height);
+  Blockly.WidgetDiv.positionInternal_(x, y, height);
 };
 
 /**
@@ -196,27 +198,26 @@ Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
  *     in window coordinates.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
- * @param {goog.math.Size} widgetSize The dimensions of the widget inside the
- *     widget div.
+ * @param {number} width The width of the widget inside the widget div.
  * @param {boolean} rtl Whether the Blockly workspace is in RTL mode.
  * @return {number} A valid x-coordinate for the top left corner of the widget
  *     div, in window coordinates.
  * @private
  */
-Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
+Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, width,
     rtl) {
   if (rtl) {
     // Try to align the right side of the field and the right side of widget.
-    var widgetLeft = anchorBBox.right - widgetSize.width;
+    var widgetLeft = anchorBBox.right - width;
     // Don't go offscreen left.
     var x = Math.max(widgetLeft, viewportBBox.left);
     // But really don't go offscreen right:
-    return Math.min(x, viewportBBox.right - widgetSize.width);
+    return Math.min(x, viewportBBox.right - width);
   } else {
     // Try to align the left side of the field and the left side of widget.
     // Don't go offscreen right.
     var x = Math.min(anchorBBox.left,
-        viewportBBox.right - widgetSize.width);
+        viewportBBox.right - width);
     // But left is more important, because that's where the text is.
     return Math.max(x, viewportBBox.left);
   }
@@ -229,18 +230,17 @@ Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
  *     in window coordinates.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
- * @param {goog.math.Size} widgetSize The dimensions of the widget inside the
- *     widget div.
+ * @param {number} height The height of the widget inside the widget div.
  * @return {number} A valid y-coordinate for the top left corner of the widget
  *     div, in window coordinates.
  * @private
  */
-Blockly.WidgetDiv.calculateY_ = function(viewportBBox, anchorBBox, widgetSize) {
+Blockly.WidgetDiv.calculateY_ = function(viewportBBox, anchorBBox, height) {
   // Flip the widget vertically if off the bottom.
-  if (anchorBBox.bottom + widgetSize.height >=
+  if (anchorBBox.bottom + height >=
       viewportBBox.bottom) {
     // The bottom of the widget is at the top of the field.
-    return anchorBBox.top - widgetSize.height;
+    return anchorBBox.top - height;
     // The widget could go off the top of the window, but it would also go off
     // the bottom.  The window is just too small.
   } else {

@@ -124,8 +124,8 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
   var pickerSize = goog.style.getSize(picker.getElement());
 
   // Position the picker to line up with the field.
-  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, pickerSize,
-      this.sourceBlock_.RTL);
+  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox,
+      pickerSize.width, pickerSize.height, this.sourceBlock_.RTL);
 
   // Configure event handler.
   var thisField = this;

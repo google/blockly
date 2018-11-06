@@ -169,10 +169,10 @@ BlocklyStorage.monitorChanges_ = function(workspace) {
     var xmlText = Blockly.Xml.domToText(xmlDom);
     if (startXmlText != xmlText) {
       window.location.hash = '';
-      workspace.removeChangeListener(bindData);
+      workspace.removeChangeListener(change);
     }
   }
-  var bindData = workspace.addChangeListener(change);
+  workspace.addChangeListener(change);
 };
 
 /**

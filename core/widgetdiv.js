@@ -142,8 +142,7 @@ Blockly.WidgetDiv.hideIfOwner = function(oldOwner) {
 Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
     width, height, rtl) {
   var y = Blockly.WidgetDiv.calculateY_(viewportBBox, anchorBBox, height);
-  var x = Blockly.WidgetDiv.calculateX_(viewportBBox, anchorBBox, width,
-      rtl);
+  var x = Blockly.WidgetDiv.calculateX_(viewportBBox, anchorBBox, width, rtl);
 
   Blockly.WidgetDiv.DIV.style.left = x + 'px';
   Blockly.WidgetDiv.DIV.style.top = y + 'px';
@@ -163,8 +162,7 @@ Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
  *     div, in window coordinates.
  * @private
  */
-Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, width,
-    rtl) {
+Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, width, rtl) {
   if (rtl) {
     // Try to align the right side of the field and the right side of widget.
     var widgetLeft = anchorBBox.right - width;
@@ -175,8 +173,7 @@ Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, width,
   } else {
     // Try to align the left side of the field and the left side of widget.
     // Don't go offscreen right.
-    var x = Math.min(anchorBBox.left,
-        viewportBBox.right - width);
+    var x = Math.min(anchorBBox.left, viewportBBox.right - width);
     // But left is more important, because that's where the text is.
     return Math.max(x, viewportBBox.left);
   }
@@ -196,8 +193,7 @@ Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, width,
  */
 Blockly.WidgetDiv.calculateY_ = function(viewportBBox, anchorBBox, height) {
   // Flip the widget vertically if off the bottom.
-  if (anchorBBox.bottom + height >=
-      viewportBBox.bottom) {
+  if (anchorBBox.bottom + height >= viewportBBox.bottom) {
     // The bottom of the widget is at the top of the field.
     return anchorBBox.top - height;
     // The widget could go off the top of the window, but it would also go off

@@ -32,7 +32,6 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.utils');
 
-goog.require('goog.math.Size');
 goog.require('goog.style');
 goog.require('goog.userAgent');
 
@@ -45,7 +44,8 @@ goog.require('goog.userAgent');
  * @constructor
  */
 Blockly.Field = function(text, opt_validator) {
-  this.size_ = new goog.math.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
+  this.width_ = 0;
+  this.height_ = Blockly.BlockSvg.MIN_BLOCK_Y;
   this.setValue(text);
   this.setValidator(opt_validator);
 };
@@ -196,7 +196,7 @@ Blockly.Field.prototype.init = function() {
       }, this.fieldGroup_);
   /** @type {!Element} */
   this.textElement_ = Blockly.utils.createSvgElement('text',
-      {'class': 'blocklyText', 'y': this.size_.height - 12.5},
+      {'class': 'blocklyText', 'y': this.height_ - 12.5},
       this.fieldGroup_);
 
   this.updateEditable();
@@ -365,7 +365,7 @@ Blockly.Field.prototype.getSvgRoot = function() {
  */
 Blockly.Field.prototype.render_ = function() {
   if (!this.visible_) {
-    this.size_.width = 0;
+    this.width_ = 0;
     return;
   }
 
@@ -385,7 +385,7 @@ Blockly.Field.prototype.updateWidth = function() {
     this.borderRect_.setAttribute('width',
         width + Blockly.BlockSvg.SEP_SPACE_X);
   }
-  this.size_.width = width;
+  this.width_ = width;
 };
 
 /**
@@ -451,13 +451,13 @@ Blockly.Field.stopCache = function() {
 
 /**
  * Returns the height and width of the field.
- * @return {!goog.math.Size} Height and width.
+ * @return {!Object} Object with width and height properties.
  */
 Blockly.Field.prototype.getSize = function() {
-  if (!this.size_.width) {
+  if (!this.width_) {
     this.render_();
   }
-  return this.size_;
+  return {width: this.width_, height: this.height_};
 };
 
 /**
@@ -540,7 +540,7 @@ Blockly.Field.prototype.setText = function(newText) {
  */
 Blockly.Field.prototype.forceRerender = function() {
   // Set width to 0 to force a rerender of this field.
-  this.size_.width = 0;
+  this.width_ = 0;
 
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();

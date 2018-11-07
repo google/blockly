@@ -30,8 +30,6 @@ goog.require('Blockly.Field');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 
-goog.require('goog.math.Size');
-
 
 /**
  * Class for a non-editable field.
@@ -41,7 +39,8 @@ goog.require('goog.math.Size');
  * @constructor
  */
 Blockly.FieldLabel = function(text, opt_class) {
-  this.size_ = new goog.math.Size(0, 17.5);
+  this.width_ = 0;
+  this.height_ = 17.5;
   this.class_ = opt_class;
   this.setValue(text);
   this.tooltip_ = '';
@@ -76,7 +75,7 @@ Blockly.FieldLabel.prototype.init = function() {
   }
   // Build the DOM.
   this.textElement_ = Blockly.utils.createSvgElement('text',
-      {'class': 'blocklyText', 'y': this.size_.height - 5}, null);
+      {'class': 'blocklyText', 'y': this.height_ - 5}, null);
   if (this.class_) {
     Blockly.utils.addClass(this.textElement_, this.class_);
   }

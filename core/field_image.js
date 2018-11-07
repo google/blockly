@@ -29,8 +29,6 @@ goog.provide('Blockly.FieldImage');
 goog.require('Blockly.Field');
 goog.require('Blockly.utils');
 
-goog.require('goog.math.Size');
-
 
 /**
  * Class for an image on a block.
@@ -47,10 +45,10 @@ Blockly.FieldImage = function(src, width, height, opt_alt, opt_onClick) {
   this.sourceBlock_ = null;
 
   // Ensure height and width are numbers.  Strings are bad at math.
-  this.height_ = Number(height);
-  this.width_ = Number(width);
-  this.size_ = new goog.math.Size(this.width_,
-      this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
+  this.imageWidth_ = Number(width);
+  this.imageHeight_ = Number(height);
+  this.width_ = this.imageWidth_;
+  this.height_ = this.imageHeight_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y;
   this.text_ = opt_alt || '';
   this.tooltip_ = '';
   this.setValue(src);
@@ -102,8 +100,8 @@ Blockly.FieldImage.prototype.init = function() {
   this.imageElement_ = Blockly.utils.createSvgElement(
       'image',
       {
-        'height': this.height_ + 'px',
-        'width': this.width_ + 'px'
+        'height': this.imageHeight_ + 'px',
+        'width': this.imageWidth_ + 'px'
       },
       this.fieldGroup_);
   this.setValue(this.src_);

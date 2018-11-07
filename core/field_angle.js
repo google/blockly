@@ -118,7 +118,7 @@ Blockly.FieldAngle.RADIUS = Blockly.FieldAngle.HALF - 1;
  */
 Blockly.FieldAngle.prototype.render_ = function() {
   if (!this.visible_) {
-    this.size_.width = 0;
+    this.width_ = 0;
     return;
   }
 
@@ -267,7 +267,7 @@ Blockly.FieldAngle.prototype.setText = function(text) {
   }
   this.updateGraph_();
   // Cached width is obsolete.  Clear it.
-  this.size_.width = 0;
+  this.width_ = 0;
 };
 
 /**

@@ -431,7 +431,7 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
  */
 Blockly.FieldDropdown.prototype.render_ = function() {
   if (!this.visible_) {
-    this.size_.width = 0;
+    this.width_ = 0;
     return;
   }
   if (this.sourceBlock_ && this.arrow_) {
@@ -452,9 +452,9 @@ Blockly.FieldDropdown.prototype.render_ = function() {
   } else {
     this.renderSelectedText_();
   }
-  this.borderRect_.setAttribute('height', this.size_.height - 9);
+  this.borderRect_.setAttribute('height', this.height_ - 9);
   this.borderRect_.setAttribute('width',
-      this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
+      this.width_ + Blockly.BlockSvg.SEP_SPACE_X);
 };
 
 /**
@@ -474,14 +474,14 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
   // Insert dropdown arrow.
   this.textElement_.appendChild(this.arrow_);
   var arrowWidth = Blockly.Field.getCachedWidth(this.arrow_);
-  this.size_.height = Number(this.imageJson_.height) + 19;
-  this.size_.width = Number(this.imageJson_.width) + arrowWidth;
+  this.height_ = Number(this.imageJson_.height) + 19;
+  this.width_ = Number(this.imageJson_.width) + arrowWidth;
   if (this.sourceBlock_.RTL) {
     this.imageElement_.setAttribute('x', arrowWidth);
     this.textElement_.setAttribute('x', -1);
   } else {
     this.textElement_.setAttribute('text-anchor', 'end');
-    this.textElement_.setAttribute('x', this.size_.width + 1);
+    this.textElement_.setAttribute('x', this.width_ + 1);
   }
 };
 
@@ -503,8 +503,8 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   this.textElement_.setAttribute('text-anchor', 'start');
   this.textElement_.setAttribute('x', 0);
 
-  this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y;
-  this.size_.width = Blockly.Field.getCachedWidth(this.textElement_);
+  this.height_ = Blockly.BlockSvg.MIN_BLOCK_Y;
+  this.width_ = Blockly.Field.getCachedWidth(this.textElement_);
 };
 
 /**
@@ -522,7 +522,7 @@ Blockly.FieldDropdown.prototype.updateWidth = function() {
     if (this.borderRect_) {
       this.borderRect_.setAttribute('width', width);
     }
-    this.size_.width = width;
+    this.width_ = width;
   } else {
     Blockly.Field.prototype.updateWidth.call(this);
   }

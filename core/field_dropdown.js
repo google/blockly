@@ -548,7 +548,7 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
   var foundError = false;
   for (var i = 0; i < options.length; ++i) {
     var tuple = options[i];
-    if (!Array.isArray(options)) {
+    if (!Array.isArray(tuple)) {
       foundError = true;
       console.error(
           'Invalid option[' + i + ']: Each FieldDropdown option must be an ' +

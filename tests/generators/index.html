@@ -259,27 +259,6 @@ function changeIndex() {
   demoWorkspace.options.oneBasedIndex = oneBasedIndex;
   demoWorkspace.toolbox_.flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
 }
-
-//https://stackoverflow.com/a/18197341
-function download(filename, text) {
-  var element = document.createElement('a');
-  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-  element.setAttribute('download', filename);
-
-  element.style.display = 'none';
-  document.body.appendChild(element);
-
-  element.click();
-
-  document.body.removeChild(element);
-}
-
-function downloadOutputCode() {
-
-  console.log('clicked!');
-  download('outputcode.js', outputCode);
-  console.log('and done');
-}
 </script>
 
 <style>

@@ -14,21 +14,22 @@ FAILURE_COUNT=0
 check_result() {
   local suffix=$1 # One of: js, py, dart, lua, php
   local tmp_filename="${TMP_DIR}generated.$suffix"
-  if [ ! -f $tmp_filename ]; then
-    echo "File $tmp_filename not found!"
-    FAILURE_COUNT=$((FAILURE_COUNT+1))
-  fi
 
-  local golden_filename="${GOLDEN_DIR}generated.$suffix"
-  if [ ! -f $golden_filename ]; then
-    echo "File $golden_filename not found!"
-    FAILURE_COUNT=$((FAILURE_COUNT+1))
-  fi
-
-  if cmp --silent $tmp_filename $golden_filename; then
-    echo -e "$SUCCESS_PREFIX $suffix: $tmp_filename matches $golden_filename"
+  if [ -f $tmp_filename ]; then
+    local golden_filename="${GOLDEN_DIR}generated.$suffix"
+    if [ -f $golden_filename ]; then
+      if cmp --silent $tmp_filename $golden_filename; then
+        echo -e "$SUCCESS_PREFIX $suffix: $tmp_filename matches $golden_filename"
+      else
+        echo -e "$FAILURE_PREFIX $suffix: $tmp_filename does not match $golden_filename"
+        FAILURE_COUNT=$((FAILURE_COUNT+1))
+      fi
+    else
+      echo "File $golden_filename not found!"
+      FAILURE_COUNT=$((FAILURE_COUNT+1))
+    fi
   else
-    echo -e "$FAILURE_PREFIX $suffix: $tmp_filename does not match $golden_filename"
+    echo "File $tmp_filename not found!"
     FAILURE_COUNT=$((FAILURE_COUNT+1))
   fi
 }

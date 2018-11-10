@@ -12,6 +12,8 @@ matrix:
     - os: osx
       node_js: stable
       osx_image: xcode8.3
+      addons:
+        firefox: latest
 
 before_script:
   # Symlink closure library used by test/jsunit

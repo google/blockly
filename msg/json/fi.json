@@ -208,6 +208,7 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://fi.wikipedia.org/wiki/Satunnaisluku",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "satunnainen murtoluku",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Palauttaa satunnaisen luvun oikealta puoliavoimesta välistä [0.0, 1.0).",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
 	"TEXT_TEXT_HELPURL": "https://fi.wikipedia.org/wiki/Merkkijono",
 	"TEXT_TEXT_TOOLTIP": "Kirjain, sana tai rivi tekstiä.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "luo teksti",

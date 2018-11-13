@@ -69,6 +69,34 @@ class ViewController: UIViewController, WKUIDelegate {
         present(alert, animated: true)
     }
     
+    func webView(_ webView: WKWebView,
+                 runJavaScriptTextInputPanelWithPrompt prompt: String,
+                 defaultText: String?,
+                 initiatedByFrame frame: WKFrameInfo,
+                 completionHandler: @escaping (String?) -> Void) {
+        
+        let alert = UIAlertController(title: prompt, message: nil, preferredStyle: .alert)
+        
+        alert.addTextField { (textField) in
+            textField.text = defaultText
+        }
+        
+        let okTitle = NSLocalizedString("OK", comment: "OK button title")
+        let okAction = UIAlertAction(title: okTitle, style: .default) { (_) in
+            let textInput = alert.textFields![0] as UITextField
+            completionHandler(textInput.text)
+        }
+        alert.addAction(okAction)
+        
+        let cancelTitle = NSLocalizedString("Cancel", comment: "Cancel button title")
+        let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel) { (_) in
+            completionHandler(nil)
+        }
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

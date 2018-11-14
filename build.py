@@ -204,7 +204,7 @@ class Gen_compressed(threading.Thread):
   def run(self):
     if ('core' in self.bundles):
       self.gen_core()
-    
+
     if ('2018_rendering' in self.bundles):
       self.gen_core(True)
 
@@ -558,12 +558,13 @@ developers.google.com/blockly/guides/modify/web/closure""")
 
   blockly_core_search_paths = filter(exclude_new_rendering, core_search_paths)
   new_core_search_paths = filter(exclude_core_rendering, core_search_paths)
-  
+
   blockly_full_search_paths = filter(exclude_new_rendering, full_search_paths)
   new_rendering_full_search_paths = filter(exclude_core_rendering, full_search_paths)
 
   if (len(sys.argv) == 1):
     args = ['core', '2018_rendering', 'accessible', 'generators', 'defaultlangfiles']
+
   else:
     args = sys.argv
 
@@ -574,6 +575,7 @@ developers.google.com/blockly/guides/modify/web/closure""")
 
   if ('2018_rendering' in args):
     Gen_uncompressed(new_core_search_paths, 'blockly_2018_rendering_uncompressed.js').start()
+
 
   if ('accessible' in args):
     Gen_uncompressed(blockly_full_search_paths, 'blockly_accessible_uncompressed.js').start()

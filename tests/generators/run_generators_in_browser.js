@@ -59,7 +59,7 @@ function runLangGeneratorInBrowser(browser, filename, codegenFn) {
 function runGeneratorsInBrowser() {
   var options = {
       desiredCapabilities: {
-          browserName: 'chrome'
+          browserName: 'firefox'
       }
   };
 

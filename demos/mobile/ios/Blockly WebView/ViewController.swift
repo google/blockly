@@ -1,6 +1,5 @@
-//
 //  ViewController.swift
-//  Blockly WebView
+//  Blockly WebView UI controller.
 //
 //  Created by Andrew Marshall on 8/7/18.
 //  Copyright © 2018 Google. All rights reserved.
@@ -9,13 +8,17 @@
 import UIKit
 import WebKit
 
+
+/// A basic ViewController for a WebView.
+/// It handles the initial page load, and functions like window.prompt().
 class ViewController: UIViewController, WKUIDelegate {
     /// The name used to reference this iOS object when executing callbacks from the JS code.
     /// If this value is changed, it should also be changed in the `CODE_GENERATOR_BRIDGE_JS` file.
     fileprivate static let HOST_HTML = "Blockly/webview.html"
     
     @IBOutlet weak var webView: WKWebView!
-    
+ 
+    /// Additional setup after loading the UI NIB.
     override func viewDidLoad() {
         super.viewDidLoad()
         webView.uiDelegate = self
@@ -23,12 +26,17 @@ class ViewController: UIViewController, WKUIDelegate {
         loadWebContent()
     }
     
+    /// Load the root HTML page into the webview.
     func loadWebContent() {
-        if let htmlUrl = Bundle.main.url(forResource: "webview", withExtension: "html", subdirectory: "Blockly") {
+        if let htmlUrl = Bundle.main.url(forResource: "webview", withExtension: "html",
+                                         subdirectory: "Blockly") {
             webView.load(URLRequest.init(url: htmlUrl))
+        } else {
+            NSLog("Failed to load HTML. Could not find resource.")
         }
     }
 
+    /// Handle window.alert() with a native dialog.
     func webView(_ webView: WKWebView,
                  runJavaScriptAlertPanelWithMessage message: String,
                  initiatedByFrame frame: WKFrameInfo,
@@ -44,6 +52,7 @@ class ViewController: UIViewController, WKUIDelegate {
         completionHandler()
     }
     
+    /// Handle window.confirm() with a native dialog.
     func webView(_ webView: WKWebView,
                  runJavaScriptConfirmPanelWithMessage message: String,
                  initiatedByFrame frame: WKFrameInfo,
@@ -62,13 +71,15 @@ class ViewController: UIViewController, WKUIDelegate {
         alert.addAction(ok)
         
         let cancelTitle = NSLocalizedString("Cancel", comment: "Cancel button title")
-        let cancel = UIAlertAction(title: cancelTitle, style: .default) { (action: UIAlertAction) -> Void in
+        let cancel = UIAlertAction(title: cancelTitle, style: .default) {
+            (action: UIAlertAction) -> Void in
             closeAndHandle(false)
         }
         alert.addAction(cancel)
         present(alert, animated: true)
     }
     
+    /// Handle window.prompt() with a native dialog.
     func webView(_ webView: WKWebView,
                  runJavaScriptTextInputPanelWithPrompt prompt: String,
                  defaultText: String?,
@@ -95,11 +106,6 @@ class ViewController: UIViewController, WKUIDelegate {
         alert.addAction(cancelAction)
         
         present(alert, animated: true)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }
 

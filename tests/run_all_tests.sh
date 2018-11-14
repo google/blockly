@@ -49,7 +49,7 @@ run_test_command () {
   fi
 }
 
-# Setup the environment (Chrome, Selenium, etc.)
+# Set up the environment (Chrome, Selenium, etc.)
 run_test_command "test_setup" "tests/scripts/test_setup.sh"
 
 # Lint the codebase.
@@ -59,8 +59,11 @@ run_test_command "eslint" "eslint ."
 run_test_command "jsunit" "node tests/jsunit/run_jsunit_tests_in_browser.js"
 # TODO: Make sure jsunit output is captured.  Child process?
 
-# Attempt advanced compilation of a Blockly app.
-run_test_command "compile" "tests/compile/compile.sh"
+# Run generator tests inside a browser and check the results.
+run_test_command "generators" "tests/scripts/run_generators.sh"
+
+# # Attempt advanced compilation of a Blockly app.
+# run_test_command "compile" "tests/compile/compile.sh"
 
 
 # End of tests.

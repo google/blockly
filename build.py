@@ -56,6 +56,7 @@ import sys
 
 for arg in sys.argv[1:len(sys.argv)]:
   if (arg != 'core' and
+      arg != 'scratch' and
       arg != 'accessible' and
       arg != 'generators' and
       arg != 'langfiles'):
@@ -194,19 +195,23 @@ class Gen_compressed(threading.Thread):
   Uses the Closure Compiler's online API.
   Runs in a separate thread.
   """
-  def __init__(self, search_paths, bundles):
+  def __init__(self, blockly_search_paths, scratch_search_paths, bundles):
     threading.Thread.__init__(self)
-    self.search_paths = search_paths
+    self.blockly_search_paths = blockly_search_paths
+    self.scratch_search_paths = scratch_search_paths
     self.bundles = bundles
 
   def run(self):
     if ('core' in self.bundles):
       self.gen_core()
+    
+    if ('scratch' in self.bundles):
+      self.gen_core(True)
 
     if ('accessible' in self.bundles):
       self.gen_accessible()
 
-    if ('core' in self.bundles or 'accessible' in self.bundles):
+    if ('core' in self.bundles or 'scratch' in self.bundles or 'accessible' in self.bundles):
       self.gen_blocks()
 
     if ('generators' in self.bundles):
@@ -216,8 +221,13 @@ class Gen_compressed(threading.Thread):
       self.gen_generator("lua")
       self.gen_generator("dart")
 
-  def gen_core(self):
-    target_filename = "blockly_compressed.js"
+  def gen_core(self, scratch):
+    if scratch:
+      target_filename = "blockly_scratch_compressed.js"
+      search_paths = self.scratch_search_paths
+    else:
+      target_filename = "blockly_compressed.js"
+      search_paths = self.blockly_search_paths
     # Define the parameters for the POST request.
     params = [
         ("compilation_level", "SIMPLE_OPTIMIZATIONS"),
@@ -231,7 +241,7 @@ class Gen_compressed(threading.Thread):
       ]
 
     # Read in all the source files.
-    filenames = calcdeps.CalculateDependencies(self.search_paths,
+    filenames = calcdeps.CalculateDependencies(search_paths,
         [os.path.join("core", "blockly.js")])
     filenames.sort()  # Deterministic build.
     for filename in filenames:
@@ -511,6 +521,11 @@ class Gen_langfiles(threading.Thread):
       else:
         print("FAILED to create " + f)
 
+def exclude_core_rendering(item):
+  return not item.endswith("block_render_svg.js")
+
+def exclude_scratch_rendering(item):
+  return not item.endswith("block_render_svg_scratch.js")
 
 if __name__ == "__main__":
   try:
@@ -541,21 +556,30 @@ developers.google.com/blockly/guides/modify/web/closure""")
       ["accessible", "core", os.path.join(os.path.pardir, "closure-library")])
   full_search_paths = sorted(full_search_paths)  # Deterministic build.
 
+  blockly_core_search_paths = filter(exclude_scratch_rendering, core_search_paths)
+  scratch_core_search_paths = filter(exclude_core_rendering, core_search_paths)
+  
+  blockly_full_search_paths = filter(exclude_scratch_rendering, full_search_paths)
+  scratch_full_search_paths = filter(exclude_core_rendering, full_search_paths)
+
   if (len(sys.argv) == 1):
-    args = ['core', 'accessible', 'generators', 'defaultlangfiles']
+    args = ['core', 'scratch', 'accessible', 'generators', 'defaultlangfiles']
   else:
     args = sys.argv
 
   # Uncompressed and compressed are run in parallel threads.
   # Uncompressed is limited by processor speed.
   if ('core' in args):
-    Gen_uncompressed(core_search_paths, 'blockly_uncompressed.js').start()
+    Gen_uncompressed(blockly_core_search_paths, 'blockly_uncompressed.js').start()
+
+  if ('scratch' in args):
+    Gen_uncompressed(scratch_core_search_paths, 'blockly_scratch_uncompressed.js').start()
 
   if ('accessible' in args):
-    Gen_uncompressed(full_search_paths, 'blockly_accessible_uncompressed.js').start()
+    Gen_uncompressed(blockly_full_search_paths, 'blockly_accessible_uncompressed.js').start()
 
   # Compressed is limited by network and server speed.
-  Gen_compressed(full_search_paths, args).start()
+  Gen_compressed(blockly_full_search_paths, scratch_core_search_paths, args).start()
 
   # This is run locally in a separate thread
   # defaultlangfiles checks for changes in the msg files, while manually asking

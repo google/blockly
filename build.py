@@ -56,7 +56,7 @@ import sys
 
 for arg in sys.argv[1:len(sys.argv)]:
   if (arg != 'core' and
-      arg != 'scratch' and
+      arg != '2018_rendering' and
       arg != 'accessible' and
       arg != 'generators' and
       arg != 'langfiles'):
@@ -195,23 +195,23 @@ class Gen_compressed(threading.Thread):
   Uses the Closure Compiler's online API.
   Runs in a separate thread.
   """
-  def __init__(self, blockly_search_paths, scratch_search_paths, bundles):
+  def __init__(self, blockly_search_paths, new_rendering_search_paths, bundles):
     threading.Thread.__init__(self)
     self.blockly_search_paths = blockly_search_paths
-    self.scratch_search_paths = scratch_search_paths
+    self.new_rendering_search_paths = new_rendering_search_paths
     self.bundles = bundles
 
   def run(self):
     if ('core' in self.bundles):
       self.gen_core()
     
-    if ('scratch' in self.bundles):
+    if ('2018_rendering' in self.bundles):
       self.gen_core(True)
 
     if ('accessible' in self.bundles):
       self.gen_accessible()
 
-    if ('core' in self.bundles or 'scratch' in self.bundles or 'accessible' in self.bundles):
+    if ('core' in self.bundles or '2018_rendering' in self.bundles or 'accessible' in self.bundles):
       self.gen_blocks()
 
     if ('generators' in self.bundles):
@@ -221,10 +221,10 @@ class Gen_compressed(threading.Thread):
       self.gen_generator("lua")
       self.gen_generator("dart")
 
-  def gen_core(self, scratch):
-    if scratch:
-      target_filename = "blockly_scratch_compressed.js"
-      search_paths = self.scratch_search_paths
+  def gen_core(self, rendering):
+    if rendering:
+      target_filename = "blockly_2018_rendering_compressed.js"
+      search_paths = self.new_rendering_search_paths
     else:
       target_filename = "blockly_compressed.js"
       search_paths = self.blockly_search_paths
@@ -524,8 +524,8 @@ class Gen_langfiles(threading.Thread):
 def exclude_core_rendering(item):
   return not item.endswith("block_render_svg.js")
 
-def exclude_scratch_rendering(item):
-  return not item.endswith("block_render_svg_scratch.js")
+def exclude_new_rendering(item):
+  return not item.endswith("block_render_svg_2018_rendering.js")
 
 if __name__ == "__main__":
   try:
@@ -556,14 +556,14 @@ developers.google.com/blockly/guides/modify/web/closure""")
       ["accessible", "core", os.path.join(os.path.pardir, "closure-library")])
   full_search_paths = sorted(full_search_paths)  # Deterministic build.
 
-  blockly_core_search_paths = filter(exclude_scratch_rendering, core_search_paths)
-  scratch_core_search_paths = filter(exclude_core_rendering, core_search_paths)
+  blockly_core_search_paths = filter(exclude_new_rendering, core_search_paths)
+  new_core_search_paths = filter(exclude_core_rendering, core_search_paths)
   
-  blockly_full_search_paths = filter(exclude_scratch_rendering, full_search_paths)
-  scratch_full_search_paths = filter(exclude_core_rendering, full_search_paths)
+  blockly_full_search_paths = filter(exclude_new_rendering, full_search_paths)
+  new_rendering_full_search_paths = filter(exclude_core_rendering, full_search_paths)
 
   if (len(sys.argv) == 1):
-    args = ['core', 'scratch', 'accessible', 'generators', 'defaultlangfiles']
+    args = ['core', '2018_rendering', 'accessible', 'generators', 'defaultlangfiles']
   else:
     args = sys.argv
 
@@ -572,14 +572,14 @@ developers.google.com/blockly/guides/modify/web/closure""")
   if ('core' in args):
     Gen_uncompressed(blockly_core_search_paths, 'blockly_uncompressed.js').start()
 
-  if ('scratch' in args):
-    Gen_uncompressed(scratch_core_search_paths, 'blockly_scratch_uncompressed.js').start()
+  if ('2018_rendering' in args):
+    Gen_uncompressed(new_core_search_paths, 'blockly_2018_rendering_uncompressed.js').start()
 
   if ('accessible' in args):
     Gen_uncompressed(blockly_full_search_paths, 'blockly_accessible_uncompressed.js').start()
 
   # Compressed is limited by network and server speed.
-  Gen_compressed(blockly_full_search_paths, scratch_core_search_paths, args).start()
+  Gen_compressed(blockly_full_search_paths, new_rendering_full_search_paths, args).start()
 
   # This is run locally in a separate thread
   # defaultlangfiles checks for changes in the msg files, while manually asking

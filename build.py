@@ -59,6 +59,7 @@ if sys.version_info[0] != 2:
 
 for arg in sys.argv[1:len(sys.argv)]:
   if (arg != 'core' and
+      arg != '2018_rendering' and
       arg != 'accessible' and
       arg != 'generators' and
       arg != 'langfiles'):
@@ -190,19 +191,23 @@ class Gen_compressed(threading.Thread):
   Uses the Closure Compiler's online API.
   Runs in a separate thread.
   """
-  def __init__(self, search_paths, bundles):
+  def __init__(self, blockly_search_paths, new_rendering_search_paths, bundles):
     threading.Thread.__init__(self)
-    self.search_paths = search_paths
+    self.blockly_search_paths = blockly_search_paths
+    self.new_rendering_search_paths = new_rendering_search_paths
     self.bundles = bundles
 
   def run(self):
     if ('core' in self.bundles):
       self.gen_core()
+    
+    if ('2018_rendering' in self.bundles):
+      self.gen_core(True)
 
     if ('accessible' in self.bundles):
       self.gen_accessible()
 
-    if ('core' in self.bundles or 'accessible' in self.bundles):
+    if ('core' in self.bundles or '2018_rendering' in self.bundles or 'accessible' in self.bundles):
       self.gen_blocks()
 
     if ('generators' in self.bundles):
@@ -212,8 +217,13 @@ class Gen_compressed(threading.Thread):
       self.gen_generator("lua")
       self.gen_generator("dart")
 
-  def gen_core(self):
-    target_filename = "blockly_compressed.js"
+  def gen_core(self, rendering):
+    if rendering:
+      target_filename = "blockly_2018_rendering_compressed.js"
+      search_paths = self.new_rendering_search_paths
+    else:
+      target_filename = "blockly_compressed.js"
+      search_paths = self.blockly_search_paths
     # Define the parameters for the POST request.
     params = [
         ("compilation_level", "SIMPLE_OPTIMIZATIONS"),
@@ -227,7 +237,7 @@ class Gen_compressed(threading.Thread):
       ]
 
     # Read in all the source files.
-    filenames = calcdeps.CalculateDependencies(self.search_paths,
+    filenames = calcdeps.CalculateDependencies(search_paths,
         [os.path.join("core", "blockly.js")])
     filenames.sort()  # Deterministic build.
     for filename in filenames:
@@ -505,6 +515,11 @@ class Gen_langfiles(threading.Thread):
       else:
         print("FAILED to create " + f)
 
+def exclude_core_rendering(item):
+  return not item.endswith("block_render_svg.js")
+
+def exclude_new_rendering(item):
+  return not item.endswith("block_render_svg_2018_rendering.js")
 
 if __name__ == "__main__":
   try:
@@ -535,21 +550,30 @@ developers.google.com/blockly/guides/modify/web/closure""")
       ["accessible", "core", os.path.join(os.path.pardir, "closure-library")])
   full_search_paths.sort()  # Deterministic build.
 
+  blockly_core_search_paths = filter(exclude_new_rendering, core_search_paths)
+  new_core_search_paths = filter(exclude_core_rendering, core_search_paths)
+  
+  blockly_full_search_paths = filter(exclude_new_rendering, full_search_paths)
+  new_rendering_full_search_paths = filter(exclude_core_rendering, full_search_paths)
+
   if (len(sys.argv) == 1):
-    args = ['core', 'accessible', 'generators', 'defaultlangfiles']
+    args = ['core', '2018_rendering', 'accessible', 'generators', 'defaultlangfiles']
   else:
     args = sys.argv
 
   # Uncompressed and compressed are run in parallel threads.
   # Uncompressed is limited by processor speed.
   if ('core' in args):
-    Gen_uncompressed(core_search_paths, 'blockly_uncompressed.js').start()
+    Gen_uncompressed(blockly_core_search_paths, 'blockly_uncompressed.js').start()
+
+  if ('2018_rendering' in args):
+    Gen_uncompressed(new_core_search_paths, 'blockly_2018_rendering_uncompressed.js').start()
 
   if ('accessible' in args):
-    Gen_uncompressed(full_search_paths, 'blockly_accessible_uncompressed.js').start()
+    Gen_uncompressed(blockly_full_search_paths, 'blockly_accessible_uncompressed.js').start()
 
   # Compressed is limited by network and server speed.
-  Gen_compressed(full_search_paths, args).start()
+  Gen_compressed(blockly_full_search_paths, new_rendering_full_search_paths, args).start()
 
   # This is run locally in a separate thread
   # defaultlangfiles checks for changes in the msg files, while manually asking

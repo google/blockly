@@ -564,7 +564,6 @@ developers.google.com/blockly/guides/modify/web/closure""")
 
   if (len(sys.argv) == 1):
     args = ['core', '2018_rendering', 'accessible', 'generators', 'defaultlangfiles']
-
   else:
     args = sys.argv
 
@@ -575,7 +574,6 @@ developers.google.com/blockly/guides/modify/web/closure""")
 
   if ('2018_rendering' in args):
     Gen_uncompressed(new_core_search_paths, 'blockly_2018_rendering_uncompressed.js').start()
-
 
   if ('accessible' in args):
     Gen_uncompressed(blockly_full_search_paths, 'blockly_accessible_uncompressed.js').start()

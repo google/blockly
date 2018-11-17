@@ -65,7 +65,7 @@ def _parse_trans_unit(trans_unit):
     try:
         result['source'] = get_value('source')
         result['target'] = get_value('target')
-    except InputError, e:
+    except InputError as e:
         raise InputError(key, e.msg)
 
     # Get notes, using the from value as key and the data as value.
@@ -112,8 +112,8 @@ def _process_file(filename):
         except IOError:
             # Don't get caught by below handler
             raise
-        except Exception, e:
-            print
+        except Exception as e:
+            print()
             raise InputError(filename, str(e))
 
         # Make sure needed fields are present and non-empty.
@@ -146,8 +146,8 @@ def _process_file(filename):
               results.append(unit)
 
         return results
-    except IOError, e:
-        print 'Error with file {0}: {1}'.format(filename, e.strerror)
+    except IOError as e:
+        print('Error with file {0}: {1}'.format(filename, e.strerror))
         sys.exit(1)
 
 

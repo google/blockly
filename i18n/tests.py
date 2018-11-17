@@ -37,7 +37,7 @@ class TestSequenceFunctions(unittest.TestCase):
                  u'block of actions.']
     for sentence in sentences:
       output = common.insert_breaks(sentence, 30, 50)
-      self.assert_(contains_all_chars(sentence, output),
+      self.assertTrue(contains_all_chars(sentence, output),
                    u'Mismatch between:\n{0}\n{1}'.format(
                        re.sub(spaces, '', sentence),
                        re.sub(spaces, '', output)))

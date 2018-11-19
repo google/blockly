@@ -357,48 +357,39 @@ Blockly.Connection.prototype.canConnectToPrevious_ = function(candidate) {
     return false;
   }
 
-  switch (candidate.type) {
-    case Blockly.PREVIOUS_STATEMENT:
-      // Don't offer to connect the bottom of a statement block to one that's
-      // already connected.
-      if (candidate.isConnected() || this.isConnected()) {
-        return false;
-      }
-      break;
-    case Blockly.OUTPUT_VALUE:
-      // Don't offer to connect an already connected left (male) value plug to
-      // an available right (female) value plug.
-      if (candidate.isConnected() || this.isConnected()) {
-        return false;
-      }
-      break;
-    case Blockly.INPUT_VALUE:
-      // Offering to connect the left (male) of a value block to an already
-      // connected value pair is ok, we'll splice it in.
-      // However, don't offer to splice into an unmovable block.
-      if (candidate.targetConnection &&
-          !candidate.targetBlock().isMovable() &&
-          !candidate.targetBlock().isShadow()) {
-        return false;
-      }
-      break;
-    case Blockly.NEXT_STATEMENT:
-      // Don't let a block with no next connection bump other blocks out of the
-      // stack.  But covering up a shadow block or stack of shadow blocks is
-      // fine.  Similarly, replacing a terminal statement with another terminal
-      // statement is allowed.
-      if (candidate.isConnected() &&
-          !this.sourceBlock_.nextConnection &&
-          !candidate.targetBlock().isShadow() &&
-          candidate.targetBlock().nextConnection) {
-        return false;
-      }
-      break;
-    default:
-      throw Error('Unknown connection type in isConnectionAllowed');
+  // Don't let blocks try to connect to themselves or ones they nest.
+  if (Blockly.draggingConnections_.indexOf(candidate) != -1) {
+    return false;
   }
 
-  return true;
+  var firstStatementConnection =
+      this.sourceBlock_.getFirstStatementConnection();
+  var isFirstStatementConnection = this == firstStatementConnection;
+  var isNextConnection = this == this.sourceBlock_.nextConnection;
+
+  // Complex blocks with no previous connection will not be allowed to connect
+  // mid-stack.
+  var sourceHasPreviousConn = this.sourceBlock_.previousConnection != null;
+
+  if (isNextConnection ||
+      (isFirstStatementConnection && !sourceHasPreviousConn)) {
+    // If the candidate is the first connection in a stack, we can connect.
+    if (!candidate.targetConnection) {
+      return true;
+    }
+
+    var targetBlock = candidate.targetBlock();
+    // If it is connected a real block, game over.
+    if (!targetBlock.isInsertionMarker()) {
+      return false;
+    }
+    // If it's connected to an insertion marker but that insertion marker
+    // is the first block in a stack, it's still fine.  If that insertion
+    // marker is in the middle of a stack, it won't work.
+    return !targetBlock.getPreviousBlock();
+  }
+  // ???
+  return false;
 };
 
 /**

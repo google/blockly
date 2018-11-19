@@ -703,9 +703,7 @@ Blockly.InsertionMarkerManager.prototype.connectMarker_ = function() {
   imBlock.positionNewBlock(imBlock, imConn, closest);
 
   // Connect() also renders the insertion marker.
-  console.log("connecting the insertion marker");
   imConn.connect(closest);
-  console.log("done connecting the insertion marker");
   this.markerConnection_ = imConn;
 };
 

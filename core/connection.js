@@ -380,7 +380,7 @@ Blockly.Connection.prototype.canConnectToPrevious_ = function(candidate) {
     // marker is in the middle of a stack, it won't work.
     return !targetBlock.getPreviousBlock();
   }
-  // ???
+  console.warn('Returning false by default from canConnectToPrevious_.');
   return false;
 };
 

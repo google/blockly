@@ -99,6 +99,13 @@ Blockly.clipboardXml_ = null;
 Blockly.clipboardSource_ = null;
 
 /**
+ * Copied object.
+ * @type {Blockly.Block | Blockly.WorkspaceComment}
+ * @private
+ */
+Blockly.copiedObject_ = null;
+
+/**
  * Cached value for whether 3D is supported.
  * @type {!boolean}
  * @private
@@ -226,7 +233,8 @@ Blockly.onKeyDown_ = function(e) {
     }
     if (e.keyCode == 86) {
       // 'v' for paste.
-      if (Blockly.clipboardXml_) {
+      if (Blockly.clipboardXml_ && (Blockly.copiedObject_.isComment ||
+          Blockly.copiedObject_.isDuplicatable())) {
         Blockly.Events.setGroup(true);
         // Pasting always pastes to the main workspace, even if the copy
         // started in a flyout workspace.
@@ -273,6 +281,7 @@ Blockly.copy_ = function(toCopy) {
   }
   Blockly.clipboardXml_ = xml;
   Blockly.clipboardSource_ = toCopy.workspace;
+  Blockly.copiedObject_ = toCopy;
 };
 
 /**

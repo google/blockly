@@ -67,6 +67,8 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   workspace.blockDB_[this.id] = this;
   /** @type {Blockly.Connection} */
   this.outputConnection = null;
+  /** @type {number} */
+  this.maxInstances = Infinity;
   /** @type {Blockly.Connection} */
   this.nextConnection = null;
   /** @type {Blockly.Connection} */
@@ -164,6 +166,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   }
 
   workspace.addTopBlock(this);
+  workspace.addTypedBlock(this);
 
   // Call an initialization function, if it exists.
   if (typeof this.init == 'function') {
@@ -255,6 +258,7 @@ Blockly.Block.prototype.dispose = function(healStack) {
     // Remove this block from the workspace's list of top-most blocks.
     if (this.workspace) {
       this.workspace.removeTopBlock(this);
+      this.workspace.removeTypedBlock(this);
       // Remove from block database.
       delete this.workspace.blockDB_[this.id];
       this.workspace = null;
@@ -669,6 +673,53 @@ Blockly.Block.prototype.setMovable = function(movable) {
 };
 
 /**
+ * Get whether is block is duplicatable or not. If any decendent is not 
+ * duplicatable this block is not duplicatable. If duplicating this block and
+ * decendents will put this block over the workspace\'s capacity this block is
+ * not duplicatable. If duplicating this block and decendents will put any 
+ * decendent over their maxInstances this block is not duplicatable.
+ * @return {boolean} True if duplicatable
+ */
+Blockly.Block.prototype.isDuplicatable = function() {
+  var instancesOfType = this.workspace.getBlocksByType(this.type);
+  if(instancesOfType.length >= this.maxInstances) {
+    return false;
+  }
+
+  var copyableBlocks = this.getDescendants(true);
+  // Remove all "next statement" blocks because they will not be copied.
+  if (this.getNextBlock()){
+    var index = copyableBlocks.indexOf(this.getNextBlock());
+    copyableBlocks.splice(index, copyableBlocks.length - index);
+  }
+  
+  if(copyableBlocks.length > this.workspace.remainingCapacity()) {
+    return false;
+  }
+
+  // If we do not have any blocks to copy besides ourself, we can just
+  // return true, because we already checked ourself.
+  if (copyableBlocks.length > 1) {
+    if (copyableBlocks.filter(a => a.type == this.type).length + 
+        instancesOfType.length > this.maxInstances) {
+      return false;
+    }
+
+    var children = this.getChildren(false);
+    for (var i = 0; i < children.length; i++) {
+      // No need to check the next block because it will not be duplicated
+      if (children[i] === this.getNextBlock()) {
+        continue;
+      }
+      if (!children[i].isDuplicatable()) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+/**
  * Get whether this block is a shadow block or not.
  * @return {boolean} True if a shadow.
  */
@@ -1072,6 +1123,16 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
 };
 
 /**
+ * Set the maximum number of instances of this block allowed at a time.
+ * @param {number} maxInstances The maximum number of instances.
+ */
+Blockly.Block.prototype.setMaxInstances = function(maxInstances) {
+  if (maxInstances) {
+    this.maxInstances = maxInstances;
+  }
+};
+
+/**
  * Set whether value inputs are arranged horizontally or vertically.
  * @param {boolean} newBoolean True if inputs are horizontal.
  */
@@ -1263,6 +1324,9 @@ Blockly.Block.prototype.jsonInit = function(json) {
   // Set output and previous/next connections.
   if (json['output'] !== undefined) {
     this.setOutput(true, json['output']);
+  }
+  if (json['maxInstances'] !== undefined) {
+    this.setMaxInstances(json['maxInstances']);
   }
   if (json['previousStatement'] !== undefined) {
     this.setPreviousStatement(true, json['previousStatement']);

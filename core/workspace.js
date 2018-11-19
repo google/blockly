@@ -85,6 +85,11 @@ Blockly.Workspace = function(opt_options) {
    * @private
    */
   this.blockDB_ = Object.create(null);
+  /**
+   * @type {!Object}
+   * @private
+   */
+  this.typedBlocksDB_ = Object.create(null);
 
   /**
    * A map from variable type to list of variable names.  The lists contain all
@@ -188,6 +193,54 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   }
   return blocks;
 };
+
+/** Add a block to the list of blocks keyed by type.
+ * @param {!Blockly.Block} block Block to add.
+ */
+Blockly.Workspace.prototype.addTypedBlock = function(block) {
+  if(!this.typedBlocksDB_[block.type]) {
+    this.typedBlocksDB_[block.type] = [];
+  }
+  this.typedBlocksDB_[block.type].push(block);
+}
+
+/** Remove a block from the list of blocks keyed by type.
+ * @param {!Blockly.Block} block Block to remove.
+ */
+Blockly.Workspace.prototype.removeTypedBlock = function(block) {
+  this.typedBlocksDB_[block.type].splice(this.typedBlocksDB_[block.type].indexOf(block), 1);
+  if (this.typedBlocksDB_[block.type].length === 0) {
+    delete this.typedBlocksDB_[block.type];
+  }
+}
+
+/** 
+ * Finds the blocks with the associated type and returns them. Blocks are 
+ * optionally sorted by position; top to bottom (with slight LTR or RTL bias).
+ * @param {string} type The type of block to search for.
+ * @param {boolean} ordered Sor the list if true.
+ * @return {!Array.<!Blockly.Block>} The blocks of the given type.
+ */
+Blockly.Workspace.prototype.getBlocksByType = function(type, ordered) {
+  if (this.typedBlocksDB_[type]) {
+    var blocks = [].concat(this.typedBlocksDB_[type]);
+  } else {
+    return [];
+  }
+  if (ordered && blocks.length > 1) {
+    var offset = 
+        Math.sign(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
+    if (this.RTL) {
+      offset *= -1;
+    }
+    blocks.sort(function(a, b) {
+      var aXY = a.getRelativeToSurfaceXY();
+      var bXY = b.getRelativeToSurfaceXY();
+      return (aXY.y + offset * aXY.x) - (bXY.y + offset * bXY.x);
+    });
+  }
+  return blocks;
+}
 
 /**
  * Add a comment to the list of top comments.

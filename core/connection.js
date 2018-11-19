@@ -341,6 +341,7 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
  * @param {!Blockly.Connection} candidate A nearby connection to check, which
  *     must be a previous connection.
  * @return {boolean} True if the connection is allowed, false otherwise.
+ * @private
  */
 Blockly.Connection.prototype.canConnectToPrevious_ = function(candidate) {
   if (this.targetConnection) {

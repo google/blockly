@@ -336,7 +336,9 @@ class Gen_compressed(threading.Thread):
     conn = httplib.HTTPSConnection("closure-compiler.appspot.com")
     conn.request("POST", "/compile", urlencode(params), headers)
     response = conn.getresponse()
-    json_str = response.read()
+
+    # Decode is necessary for Python 3.4 compatibility
+    json_str = response.read().decode("utf-8")
     conn.close()
 
     # Parse the JSON response.
@@ -456,7 +458,7 @@ class Gen_langfiles(threading.Thread):
           # If a destination file was missing, rebuild.
           return True
       else:
-        print("Error checking file creation times: " + e)
+        print("Error checking file creation times: " + str(e))
 
   def run(self):
     # The files msg/json/{en,qqq,synonyms}.json depend on msg/messages.js.

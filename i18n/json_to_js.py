@@ -100,7 +100,7 @@ def _process_file(path_to_json, target_lang, key_dict):
         if key != '@metadata':
             try:
                 identifier = key_dict[key]
-            except KeyError, e:
+            except KeyError as e:
                 print('Key "%s" is in %s but not in %s' %
                       (key, keyfile, args.key_file))
                 raise e

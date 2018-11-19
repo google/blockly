@@ -367,7 +367,7 @@
 	"LISTS_SPLIT_TOOLTIP_JOIN": "구분 기호로 구분하여 텍스트 목록을 하나의 텍스트에 병합합니다.",
 	"LISTS_REVERSE_HELPURL": "https://github.com/google/blockly/wiki/Lists#reversing-a-list",
 	"LISTS_REVERSE_MESSAGE0": "%1 뒤집기",
-	"LISTS_REVERSE_TOOLTIP": "리스트의 복사본을 뒤집기",
+	"LISTS_REVERSE_TOOLTIP": "리스트의 복사본을 뒤집습니다.",
 	"ORDINAL_NUMBER_SUFFIX": "",
 	"VARIABLES_GET_HELPURL": "https://ko.wikipedia.org/wiki/%EB%B3%80%EC%88%98_(%EC%BB%B4%ED%93%A8%ED%84%B0_%EA%B3%BC%ED%95%99)",
 	"VARIABLES_GET_TOOLTIP": "변수에 저장 되어있는 값을 돌려줍니다.",

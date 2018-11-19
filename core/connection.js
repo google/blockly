@@ -246,14 +246,6 @@ Blockly.Connection.prototype.dispose = function() {
 };
 
 /**
- * @return {boolean} true if the connection is not connected or is connected to
- *    an insertion marker, false otherwise.
- */
-Blockly.Connection.prototype.isConnectedToNonInsertionMarker = function() {
-  return this.targetConnection && !this.targetBlock().isInsertionMarker();
-};
-
-/**
  * Get the source block for this connection.
  * @return {Blockly.Block} The source block, or null if there is none.
  */
@@ -379,7 +371,7 @@ Blockly.Connection.prototype.canConnectToPrevious_ = function(candidate) {
     }
 
     var targetBlock = candidate.targetBlock();
-    // If it is connected a real block, game over.
+    // If it is connected to a real block, game over.
     if (!targetBlock.isInsertionMarker()) {
       return false;
     }

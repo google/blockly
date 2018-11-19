@@ -391,8 +391,6 @@ Blockly.BlockSvg.prototype.renderFields_ = function(fieldList,
       root.setAttribute('display', 'none');
     }
   }
-
-
   return this.RTL ? -cursorX : cursorX;
 };
 

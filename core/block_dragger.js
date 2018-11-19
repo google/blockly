@@ -162,9 +162,9 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
     this.draggingBlock_.bringToFront();
   }
 
-  // // During a drag there may be a lot of rerenders, but not field changes.
-  // // Turn the cache on so we don't do spurious remeasures during the drag.
-  // Blockly.Field.startCache();
+  // During a drag there may be a lot of rerenders, but not field changes.
+  // Turn the cache on so we don't do spurious remeasures during the drag.
+  Blockly.Field.startCache();
   this.workspace_.setResizesEnabled(false);
   Blockly.BlockAnimations.disconnectUiStop();
 

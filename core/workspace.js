@@ -198,11 +198,11 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
  * @param {!Blockly.Block} block Block to add.
  */
 Blockly.Workspace.prototype.addTypedBlock = function(block) {
-  if(!this.typedBlocksDB_[block.type]) {
+  if (!this.typedBlocksDB_[block.type]) {
     this.typedBlocksDB_[block.type] = [];
   }
   this.typedBlocksDB_[block.type].push(block);
-}
+};
 
 /** Remove a block from the list of blocks keyed by type.
  * @param {!Blockly.Block} block Block to remove.
@@ -212,10 +212,10 @@ Blockly.Workspace.prototype.removeTypedBlock = function(block) {
   if (this.typedBlocksDB_[block.type].length === 0) {
     delete this.typedBlocksDB_[block.type];
   }
-}
+};
 
-/** 
- * Finds the blocks with the associated type and returns them. Blocks are 
+/**
+ * Finds the blocks with the associated type and returns them. Blocks are
  * optionally sorted by position; top to bottom (with slight LTR or RTL bias).
  * @param {string} type The type of block to search for.
  * @param {boolean} ordered Sor the list if true.
@@ -228,7 +228,7 @@ Blockly.Workspace.prototype.getBlocksByType = function(type, ordered) {
     return [];
   }
   if (ordered && blocks.length > 1) {
-    var offset = 
+    var offset =
         Math.sign(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
       offset *= -1;
@@ -240,7 +240,7 @@ Blockly.Workspace.prototype.getBlocksByType = function(type, ordered) {
     });
   }
   return blocks;
-}
+};
 
 /**
  * Add a comment to the list of top comments.

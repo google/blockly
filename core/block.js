@@ -688,7 +688,7 @@ Blockly.Block.prototype.isDuplicatable = function() {
 
   var copyableBlocks = this.getDescendants(true);
   // Remove all "next statement" blocks because they will not be copied.
-  if (this.getNextBlock()){
+  if (this.getNextBlock()) {
     var index = copyableBlocks.indexOf(this.getNextBlock());
     copyableBlocks.splice(index, copyableBlocks.length - index);
   }
@@ -700,8 +700,12 @@ Blockly.Block.prototype.isDuplicatable = function() {
   // If we do not have any blocks to copy besides ourself, we can just
   // return true, because we already checked ourself.
   if (copyableBlocks.length > 1) {
-    if (copyableBlocks.filter(a => a.type == this.type).length + 
-        instancesOfType.length > this.maxInstances) {
+    var type = this.type;
+    var copyableBlocksOfType = copyableBlocks.filter(function(block) {
+      return block.type == type;
+    });
+    if (copyableBlocksOfType.length + instancesOfType.length >
+        this.maxInstances) {
       return false;
     }
 

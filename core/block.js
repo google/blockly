@@ -673,16 +673,16 @@ Blockly.Block.prototype.setMovable = function(movable) {
 };
 
 /**
- * Get whether is block is duplicatable or not. If any decendent is not 
+ * Get whether is block is duplicatable or not. If any decendent is not
  * duplicatable this block is not duplicatable. If duplicating this block and
  * decendents will put this block over the workspace\'s capacity this block is
- * not duplicatable. If duplicating this block and decendents will put any 
+ * not duplicatable. If duplicating this block and decendents will put any
  * decendent over their maxInstances this block is not duplicatable.
  * @return {boolean} True if duplicatable
  */
 Blockly.Block.prototype.isDuplicatable = function() {
   var instancesOfType = this.workspace.getBlocksByType(this.type);
-  if(instancesOfType.length >= this.maxInstances) {
+  if (instancesOfType.length >= this.maxInstances) {
     return false;
   }
 
@@ -693,7 +693,7 @@ Blockly.Block.prototype.isDuplicatable = function() {
     copyableBlocks.splice(index, copyableBlocks.length - index);
   }
   
-  if(copyableBlocks.length > this.workspace.remainingCapacity()) {
+  if (copyableBlocks.length > this.workspace.remainingCapacity()) {
     return false;
   }
 
@@ -721,7 +721,7 @@ Blockly.Block.prototype.isDuplicatable = function() {
     }
   }
   return true;
-}
+};
 
 /**
  * Get whether this block is a shadow block or not.

@@ -279,6 +279,7 @@ function helper_searchDB(db, x, y, radius, shared_workspace) {
   var tempConn = helper_createConnection(x, y,
       Blockly.NEXT_STATEMENT, shared_workspace, true);
   tempConn.sourceBlock_ = helper_makeSourceBlock(shared_workspace);
+  tempConn.sourceBlock_.nextConnection = tempConn;
   var closest = db.searchForClosest(tempConn, radius, {x: 0, y: 0});
   return closest.connection;
 }
@@ -289,7 +290,9 @@ function helper_makeSourceBlock(sharedWorkspace) {
     getParent: function() { return null; },
     movable_: true,
     isMovable: function() { return true; },
-    isShadow: function() { return false; }
+    isShadow: function() { return false; },
+    isInsertionMarker: function() { return false; },
+    getFirstStatementConnection: function() { return null; }
   };
 }
 

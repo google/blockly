@@ -36,6 +36,7 @@ goog.require('goog.math.Coordinate');
  * Class that controls updates to connections during drags.  It is primarily
  * responsible for finding the closest eligible connection and highlighting or
  * unhiglighting it as needed during a drag.
+ * @deprecated July 2018. Use InsertionMarkerManager.
  * @param {!Blockly.BlockSvg} block The top block in the stack being dragged.
  * @constructor
  */

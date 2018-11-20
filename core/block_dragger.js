@@ -27,7 +27,7 @@
 goog.provide('Blockly.BlockDragger');
 
 goog.require('Blockly.BlockAnimations');
-goog.require('Blockly.DraggedConnectionManager');
+goog.require('Blockly.InsertionMarkerManager');
 goog.require('Blockly.Events.BlockMove');
 
 goog.require('goog.math.Coordinate');
@@ -57,10 +57,10 @@ Blockly.BlockDragger = function(block, workspace) {
 
   /**
    * Object that keeps track of connections on dragged blocks.
-   * @type {!Blockly.DraggedConnectionManager}
+   * @type {!Blockly.InsertionMarkerManager}
    * @private
    */
-  this.draggedConnectionManager_ = new Blockly.DraggedConnectionManager(
+  this.draggedConnectionManager_ = new Blockly.InsertionMarkerManager(
       this.draggingBlock_);
 
   /**
@@ -162,6 +162,9 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
     this.draggingBlock_.bringToFront();
   }
 
+  // During a drag there may be a lot of rerenders, but not field changes.
+  // Turn the cache on so we don't do spurious remeasures during the drag.
+  Blockly.Field.startCache();
   this.workspace_.setResizesEnabled(false);
   Blockly.BlockAnimations.disconnectUiStop();
 
@@ -221,6 +224,8 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   // Make sure internal state is fresh.
   this.dragBlock(e, currentDragDeltaXY);
   this.dragIconData_ = [];
+
+  Blockly.Field.stopCache();
 
   Blockly.BlockAnimations.disconnectUiStop();
 

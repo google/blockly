@@ -80,7 +80,6 @@ Blockly.InsertionMarkerManager = function(block) {
   /**
    * The insertion marker that shows up between blocks to show where a block
    * would go if dropped immediately.
-   * This is the scratch-blocks equivalent of connection highlighting.
    * @type {Blockly.BlockSvg}
    * @private
    */
@@ -117,7 +116,6 @@ Blockly.InsertionMarkerManager = function(block) {
   /**
    * Connection on the insertion marker block that corresponds to
    * this.localConnection_ on the currently dragged block.
-   * This is part of the scratch-blocks equivalent of connection highlighting.
    * @type {Blockly.RenderedConnection}
    * @private
    */
@@ -240,8 +238,6 @@ Blockly.InsertionMarkerManager.prototype.update = function(dxy, deleteArea) {
       this.shouldUpdatePreviews_(candidate, dxy);
 
   if (shouldUpdate) {
-    //console.log("updating previews");
-    //console.log(candidate);
     // Don't fire events for insertion marker creation or movement.
     Blockly.Events.disable();
     this.maybeHidePreview_(candidate);
@@ -373,7 +369,6 @@ Blockly.InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
  */
 Blockly.InsertionMarkerManager.prototype.getCandidate_ = function(dxy) {
   var radius = this.getStartRadius_();
-  //console.log(radius);
   var candidateClosest = null;
   var candidateLocal = null;
 
@@ -381,15 +376,11 @@ Blockly.InsertionMarkerManager.prototype.getCandidate_ = function(dxy) {
     var myConnection = this.availableConnections_[i];
     var neighbour = myConnection.closest(radius, dxy);
     if (neighbour.connection) {
-    //console.log('neighbour: ');
-    //console.log(neighbour.connection);
-    //console.log('Is insertion marker: ' + neighbour.connection.sourceBlock_.isInsertionMarker());
       candidateClosest = neighbour.connection;
       candidateLocal = myConnection;
       radius = neighbour.radius;
     }
   }
-  //console.log(radius);
   return {
     closest: candidateClosest,
     local: candidateLocal,
@@ -588,8 +579,6 @@ Blockly.InsertionMarkerManager.prototype.hidePreview_ = function() {
 
 /**
  * Add highlighting showing which block will be replaced.
- * Scratch-specific code, where "highlighting" applies to a block rather than
- * a connection.
  */
 Blockly.InsertionMarkerManager.prototype.highlightBlock_ = function() {
   var closest = this.closestConnection_;
@@ -607,8 +596,6 @@ Blockly.InsertionMarkerManager.prototype.highlightBlock_ = function() {
 
 /**
  * Get rid of the highlighting marking the block that will be replaced.
- * Scratch-specific code, where "highlighting" applies to a block rather than
- * a connection.
  */
 Blockly.InsertionMarkerManager.prototype.unhighlightBlock_ = function() {
   var closest = this.closestConnection_;

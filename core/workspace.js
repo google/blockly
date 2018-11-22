@@ -511,6 +511,7 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
 /**
  * The number of blocks of the given type that may be added to the workspace
  * before reaching the maxInstances allowed for that type.
+ * @param {string} type Type of block to return capacity for.
  * @return {number} Number of blocks of type left.
  */
 Blockly.Workspace.prototype.remainingCapacityOfType = function(type) {

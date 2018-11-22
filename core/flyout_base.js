@@ -731,8 +731,7 @@ Blockly.Flyout.prototype.filterForCapacity_ = function() {
     if (this.permanentlyDisabled_.indexOf(block) == -1) {
       var allBlocks = block.getDescendants(false);
       block.setDisabled(allBlocks.length > remainingCapacity ||
-          this.targetWorkspace_.getBlocksByType(block.type).length >=
-          block.maxInstances);
+          this.targetWorkspace_.remainingCapacityOfType(block.type) <= 0);
     }
   }
 };

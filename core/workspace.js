@@ -218,7 +218,7 @@ Blockly.Workspace.prototype.removeTypedBlock = function(block) {
  * Finds the blocks with the associated type and returns them. Blocks are
  * optionally sorted by position; top to bottom (with slight LTR or RTL bias).
  * @param {string} type The type of block to search for.
- * @param {boolean} ordered Sor the list if true.
+ * @param {boolean} ordered Sort the list if true.
  * @return {!Array.<!Blockly.Block>} The blocks of the given type.
  */
 Blockly.Workspace.prototype.getBlocksByType = function(type, ordered) {
@@ -506,6 +506,19 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
     return Infinity;
   }
   return this.options.maxBlocks - this.getAllBlocks().length;
+};
+
+/**
+ * The number of blocks of the given type that may be added to the workspace
+ * before reaching the maxInstances allowed for that type.
+ * @return {number} Number of blocks of type left.
+ */
+Blockly.Workspace.prototype.remainingCapacityOfType = function(type) {
+  if (!this.options.maxInstances) {
+    return Infinity;
+  }
+  return (this.options.maxInstances[type] || Infinity) -
+      this.getBlocksByType(type).length;
 };
 
 /**

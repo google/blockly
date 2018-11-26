@@ -672,16 +672,21 @@ Blockly.Block.prototype.setMovable = function(movable) {
 
 /**
  * Get whether is block is duplicatable or not. If duplicating this block and
- * decendents will put this block over the workspace\'s capacity this block is
+ * descendants will put this block over the workspace's capacity this block is
  * not duplicatable. If duplicating this block and decendents will put any
  * type over their maxInstances this block is not duplicatable.
- * @return {boolean} True if duplicatable
+ * @return {boolean} True if duplicatable.
  */
 Blockly.Block.prototype.isDuplicatable = function() {
+  if (!this.workspace.hasBlockLimits()) {
+    return true;
+  }
+
   var copyableBlocks = this.getDescendants(true);
   // Remove all "next statement" blocks because they will not be copied.
-  if (this.getNextBlock()) {
-    var index = copyableBlocks.indexOf(this.getNextBlock());
+  var nextBlock = this.getNextBlock();
+  if (nextBlock) {
+    var index = copyableBlocks.indexOf(nextBlock);
     copyableBlocks.splice(index, copyableBlocks.length - index);
   }
 
@@ -689,20 +694,17 @@ Blockly.Block.prototype.isDuplicatable = function() {
     return false;
   }
 
-  var checkedTypes = [];
+  var copyableBlocksTypeCounts = {};
   for (var i = 0, checkBlock; checkBlock = copyableBlocks[i]; i++) {
-    if (checkedTypes.includes(checkBlock.type)) {
-      continue;
+    if (copyableBlocksTypeCounts[checkBlock.type]) {
+      copyableBlocksTypeCounts[checkBlock.type]++;
+    } else {
+      copyableBlocksTypeCounts[checkBlock.type] = 1;
     }
-
-    var copyableBlocksOfType = copyableBlocks.filter(function(copyableBlock) {
-      return copyableBlock.type == checkBlock.type;
-    });
-    if (copyableBlocksOfType.length >
+    if (copyableBlocksTypeCounts[checkBlock.type] >
         this.workspace.remainingCapacityOfType(checkBlock.type)) {
       return false;
     }
-    checkedTypes.push(checkBlock.type);
   }
   return true;
 };

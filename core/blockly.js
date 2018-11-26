@@ -99,7 +99,7 @@ Blockly.clipboardXml_ = null;
 Blockly.clipboardSource_ = null;
 
 /**
- * Copied object.
+ * Object copied onto the clipboard.
  * @type {Blockly.Block | Blockly.WorkspaceComment}
  * @private
  */

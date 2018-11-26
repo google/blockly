@@ -179,7 +179,7 @@ Blockly.Workspace.prototype.removeTopBlock = function(block) {
 Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   // Copy the topBlocks_ list.
   var blocks = [].concat(this.topBlocks_);
-  if (ordered && blocks.length > 1) {
+  if (ordered && blocks.length > 1) { 
     var offset =
         Math.sin(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
@@ -208,8 +208,9 @@ Blockly.Workspace.prototype.addTypedBlock = function(block) {
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.Workspace.prototype.removeTypedBlock = function(block) {
-  this.typedBlocksDB_[block.type].splice(this.typedBlocksDB_[block.type].indexOf(block), 1);
-  if (this.typedBlocksDB_[block.type].length === 0) {
+  this.typedBlocksDB_[block.type].splice(this.typedBlocksDB_[block.type]
+    .indexOf(block), 1);
+  if (!this.typedBlocksDB_[block.type].length) {
     delete this.typedBlocksDB_[block.type];
   }
 };
@@ -222,11 +223,10 @@ Blockly.Workspace.prototype.removeTypedBlock = function(block) {
  * @return {!Array.<!Blockly.Block>} The blocks of the given type.
  */
 Blockly.Workspace.prototype.getBlocksByType = function(type, ordered) {
-  if (this.typedBlocksDB_[type]) {
-    var blocks = [].concat(this.typedBlocksDB_[type]);
-  } else {
+  if (!this.typedBlocksDB_[type]) {
     return [];
   }
+  var blocks = this.typedBlocksDB_[type].slice(0);
   if (ordered && blocks.length > 1) {
     var offset =
         Math.sign(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
@@ -510,7 +510,7 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
 
 /**
  * The number of blocks of the given type that may be added to the workspace
- * before reaching the maxInstances allowed for that type.
+ *    before reaching the maxInstances allowed for that type.
  * @param {string} type Type of block to return capacity for.
  * @return {number} Number of blocks of type left.
  */
@@ -521,6 +521,15 @@ Blockly.Workspace.prototype.remainingCapacityOfType = function(type) {
   return (this.options.maxInstances[type] || Infinity) -
       this.getBlocksByType(type).length;
 };
+
+/**
+ * Checks if the workspace has any limits on the maximum number of blocks,
+ *    or the maximum number of blocks of specific types.
+ * @returns {boolean} True if it has block limits, false otherwise.
+ */
+Blockly.Workspace.prototype.hasBlockLimits = function() {
+  return this.options.maxBlocks != Infinity || !!this.options.maxInstances;
+}
 
 /**
  * Undo or redo the previous action.

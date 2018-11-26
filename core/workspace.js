@@ -179,7 +179,7 @@ Blockly.Workspace.prototype.removeTopBlock = function(block) {
 Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   // Copy the topBlocks_ list.
   var blocks = [].concat(this.topBlocks_);
-  if (ordered && blocks.length > 1) { 
+  if (ordered && blocks.length > 1) {
     var offset =
         Math.sin(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
@@ -209,7 +209,7 @@ Blockly.Workspace.prototype.addTypedBlock = function(block) {
  */
 Blockly.Workspace.prototype.removeTypedBlock = function(block) {
   this.typedBlocksDB_[block.type].splice(this.typedBlocksDB_[block.type]
-    .indexOf(block), 1);
+      .indexOf(block), 1);
   if (!this.typedBlocksDB_[block.type].length) {
     delete this.typedBlocksDB_[block.type];
   }
@@ -529,7 +529,7 @@ Blockly.Workspace.prototype.remainingCapacityOfType = function(type) {
  */
 Blockly.Workspace.prototype.hasBlockLimits = function() {
   return this.options.maxBlocks != Infinity || !!this.options.maxInstances;
-}
+};
 
 /**
  * Undo or redo the previous action.

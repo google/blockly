@@ -244,7 +244,7 @@ Blockly.Python.quote_ = function(string) {
  * Calls any statements following this block.
  * @param {!Blockly.Block} block The current block.
  * @param {string} code The Python code created for this block.
- * @param {boolean} opt_thisOnly True to generate code for only this block.
+ * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} Python code with comments and subsequent blocks added.
  * @private
  */
@@ -278,7 +278,7 @@ Blockly.Python.scrub_ = function(block, code, opt_thisOnly) {
     }
   }
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = opt_thisOnly ? "" : Blockly.Python.blockToCode(nextBlock);
+  var nextCode = opt_thisOnly ? '' : Blockly.Python.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
 

@@ -158,7 +158,7 @@ Blockly.Generator.prototype.allNestedComments = function(block) {
 /**
  * Generate code for the specified block (and attached blocks).
  * @param {Blockly.Block} block The block to generate code for.
- * @param {boolean} opt_thisOnly True to generate code for only this block.
+ * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string|!Array} For statement blocks, the generated code.
  *     For value blocks, an array containing the generated code and an
  *     operator order value.  Returns '' if block is null.
@@ -169,7 +169,7 @@ Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
   }
   if (block.disabled) {
     // Skip past this block if it is disabled.
-    return this.blockToCode(block.getNextBlock());
+    return opt_thisOnly ? '' : this.blockToCode(block.getNextBlock());
   }
 
   var func = this[block.type];

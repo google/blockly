@@ -20,7 +20,7 @@
   "scripts": {
     "prepare": "gulp blockly_javascript_en",
     "lint": "eslint .",
-    "test": "tests/run_all_tests.sh"
+    "test": "mocha --opts tests/mocha/mocha.opts tests/mocha/*.js"
   },
   "license": "Apache-2.0",
   "private": true,
@@ -34,6 +34,7 @@
     "gulp-series": "^1.0.2",
     "gulp-shell": "^0.6.5",
     "jshint": "^2.9.7",
+    "mocha": "^5.2.0",
     "webdriverio": "^4.14.1"
   },
   "jshintConfig": {

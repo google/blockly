@@ -229,10 +229,11 @@ Blockly.JavaScript.quote_ = function(string) {
  * Calls any statements following this block.
  * @param {!Blockly.Block} block The current block.
  * @param {string} code The JavaScript code created for this block.
+ * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} JavaScript code with comments and subsequent blocks added.
  * @private
  */
-Blockly.JavaScript.scrub_ = function(block, code) {
+Blockly.JavaScript.scrub_ = function(block, code, opt_thisOnly) {
   var commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
@@ -264,7 +265,7 @@ Blockly.JavaScript.scrub_ = function(block, code) {
     }
   }
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = Blockly.JavaScript.blockToCode(nextBlock);
+  var nextCode = opt_thisOnly ? '' : Blockly.JavaScript.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
 

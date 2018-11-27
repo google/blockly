@@ -673,7 +673,7 @@ Blockly.Block.prototype.setMovable = function(movable) {
 /**
  * Get whether is block is duplicatable or not. If duplicating this block and
  * descendants will put this block over the workspace's capacity this block is
- * not duplicatable. If duplicating this block and decendents will put any
+ * not duplicatable. If duplicating this block and descendants will put any
  * type over their maxInstances this block is not duplicatable.
  * @return {boolean} True if duplicatable.
  */
@@ -694,7 +694,7 @@ Blockly.Block.prototype.isDuplicatable = function() {
     return false;
   }
 
-  var copyableBlocksTypeCounts = {};
+  var copyableBlocksTypeCounts = Object.create(null);
   for (var i = 0, checkBlock; checkBlock = copyableBlocks[i]; i++) {
     if (copyableBlocksTypeCounts[checkBlock.type]) {
       copyableBlocksTypeCounts[checkBlock.type]++;

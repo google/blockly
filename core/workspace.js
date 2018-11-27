@@ -153,6 +153,22 @@ Blockly.Workspace.prototype.dispose = function() {
 Blockly.Workspace.SCAN_ANGLE = 3;
 
 /**
+ * Compare function for sorting objects (blocks, comments, etc) by position;
+ *    top to bottom (with slight LTR or RTL bias).
+ * @param {!Blockly.Block | !Blockly.WorkspaceComment} a The first object to compare.
+ * @param {!Blockly.Block | !Blockly.WorkspaceComment} b The second object to compare.
+ * @returns {number} The comparison value. This tells Array.sort() how to change
+ *    object a's index.
+ * @private
+ */
+Blockly.Workspace.prototype.sortObjects_ = function(a, b) {
+  var aXY = a.getRelativeToSurfaceXY();
+  var bXY = b.getRelativeToSurfaceXY();
+  return (aXY.y + Blockly.Workspace.prototype.sortObjects_.offset * aXY.x) -
+      (bXY.y + Blockly.Workspace.prototype.sortObjects_.offset * bXY.x);
+};
+
+/**
  * Add a block to the list of top blocks.
  * @param {!Blockly.Block} block Block to add.
  */
@@ -180,21 +196,18 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   // Copy the topBlocks_ list.
   var blocks = [].concat(this.topBlocks_);
   if (ordered && blocks.length > 1) {
-    var offset =
+    this.sortObjects_.offset =
         Math.sin(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
-      offset *= -1;
+      this.sortObjects_.offset *= -1;
     }
-    blocks.sort(function(a, b) {
-      var aXY = a.getRelativeToSurfaceXY();
-      var bXY = b.getRelativeToSurfaceXY();
-      return (aXY.y + offset * aXY.x) - (bXY.y + offset * bXY.x);
-    });
+    blocks.sort(this.sortObjects_);
   }
   return blocks;
 };
 
-/** Add a block to the list of blocks keyed by type.
+/**
+ * Add a block to the list of blocks keyed by type.
  * @param {!Blockly.Block} block Block to add.
  */
 Blockly.Workspace.prototype.addTypedBlock = function(block) {
@@ -204,7 +217,8 @@ Blockly.Workspace.prototype.addTypedBlock = function(block) {
   this.typedBlocksDB_[block.type].push(block);
 };
 
-/** Remove a block from the list of blocks keyed by type.
+/**
+ * Remove a block from the list of blocks keyed by type.
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.Workspace.prototype.removeTypedBlock = function(block) {
@@ -228,16 +242,12 @@ Blockly.Workspace.prototype.getBlocksByType = function(type, ordered) {
   }
   var blocks = this.typedBlocksDB_[type].slice(0);
   if (ordered && blocks.length > 1) {
-    var offset =
+    this.sortObjects_.offset =
         Math.sign(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
-      offset *= -1;
+      this.sortObjects_.offset *= -1;
     }
-    blocks.sort(function(a, b) {
-      var aXY = a.getRelativeToSurfaceXY();
-      var bXY = b.getRelativeToSurfaceXY();
-      return (aXY.y + offset * aXY.x) - (bXY.y + offset * bXY.x);
-    });
+    blocks.sort(this.sortObjects_);
   }
   return blocks;
 };
@@ -285,16 +295,12 @@ Blockly.Workspace.prototype.getTopComments = function(ordered) {
   // Copy the topComments_ list.
   var comments = [].concat(this.topComments_);
   if (ordered && comments.length > 1) {
-    var offset =
+    this.sortObjects_.offset =
         Math.sin(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
-      offset *= -1;
+      this.sortObjects_.offset *= -1;
     }
-    comments.sort(function(a, b) {
-      var aXY = a.getRelativeToSurfaceXY();
-      var bXY = b.getRelativeToSurfaceXY();
-      return (aXY.y + offset * aXY.x) - (bXY.y + offset * bXY.x);
-    });
+    comments.sort(this.sortObjects_);
   }
   return comments;
 };

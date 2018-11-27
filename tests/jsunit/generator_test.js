@@ -59,7 +59,7 @@ function defineGeneratorTestBlocks() {
   }]);
 }
 
-function undefineTestBlocks() {
+function undefineGeneratorTestBlocks() {
   delete Blockly.Blocks['stack_block'];
   delete Blockly.Blocks['row_block'];
 }
@@ -70,7 +70,7 @@ function generatorTest_setUp() {
 }
 
 function generatorTest_tearDown() {
-  undefineTestBlocks();
+  undefineGeneratorTestBlocks();
   workspace.dispose();
 }
 

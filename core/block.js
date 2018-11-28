@@ -681,32 +681,8 @@ Blockly.Block.prototype.isDuplicatable = function() {
   if (!this.workspace.hasBlockLimits()) {
     return true;
   }
-
-  var copyableBlocks = this.getDescendants(true);
-  // Remove all "next statement" blocks because they will not be copied.
-  var nextBlock = this.getNextBlock();
-  if (nextBlock) {
-    var index = copyableBlocks.indexOf(nextBlock);
-    copyableBlocks.splice(index, copyableBlocks.length - index);
-  }
-
-  if (copyableBlocks.length > this.workspace.remainingCapacity()) {
-    return false;
-  }
-
-  var copyableBlocksTypeCounts = Object.create(null);
-  for (var i = 0, checkBlock; checkBlock = copyableBlocks[i]; i++) {
-    if (copyableBlocksTypeCounts[checkBlock.type]) {
-      copyableBlocksTypeCounts[checkBlock.type]++;
-    } else {
-      copyableBlocksTypeCounts[checkBlock.type] = 1;
-    }
-    if (copyableBlocksTypeCounts[checkBlock.type] >
-        this.workspace.remainingCapacityOfType(checkBlock.type)) {
-      return false;
-    }
-  }
-  return true;
+  return this.workspace.isCapacityAvailable(
+      Blockly.utils.getBlockTypeCounts(this, true));
 };
 
 /**

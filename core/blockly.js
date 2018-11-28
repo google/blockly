@@ -99,11 +99,11 @@ Blockly.clipboardXml_ = null;
 Blockly.clipboardSource_ = null;
 
 /**
- * Object copied onto the clipboard.
- * @type {Blockly.Block | Blockly.WorkspaceComment}
+ * Map of types to type counts for the clipboard object and descendants.
+ * @type {Object}
  * @private
  */
-Blockly.copiedObject_ = null;
+Blockly.clipboardTypeCounts_ = null;
 
 /**
  * Cached value for whether 3D is supported.
@@ -233,17 +233,19 @@ Blockly.onKeyDown_ = function(e) {
     }
     if (e.keyCode == 86) {
       // 'v' for paste.
-      if (Blockly.clipboardXml_ && (Blockly.copiedObject_.isComment ||
-          Blockly.copiedObject_.isDuplicatable())) {
-        Blockly.Events.setGroup(true);
+      if (Blockly.clipboardXml_) {
         // Pasting always pastes to the main workspace, even if the copy
         // started in a flyout workspace.
         var workspace = Blockly.clipboardSource_;
         if (workspace.isFlyout) {
           workspace = workspace.targetWorkspace;
         }
-        workspace.paste(Blockly.clipboardXml_);
-        Blockly.Events.setGroup(false);
+        if (Blockly.clipboardTypeCounts_ &&
+            workspace.isCapacityAvailable(Blockly.clipboardTypeCounts_)) {
+          Blockly.Events.setGroup(true);
+          workspace.paste(Blockly.clipboardXml_);
+          Blockly.Events.setGroup(false);
+        }
       }
     } else if (e.keyCode == 90) {
       // 'z' for undo 'Z' is for redo.
@@ -281,7 +283,8 @@ Blockly.copy_ = function(toCopy) {
   }
   Blockly.clipboardXml_ = xml;
   Blockly.clipboardSource_ = toCopy.workspace;
-  Blockly.copiedObject_ = toCopy;
+  Blockly.clipboardTypeCounts_ = toCopy.isComment ? null :
+      Blockly.utils.getBlockTypeCounts(toCopy, true);
 };
 
 /**

@@ -155,8 +155,10 @@ Blockly.Workspace.SCAN_ANGLE = 3;
 /**
  * Compare function for sorting objects (blocks, comments, etc) by position;
  *    top to bottom (with slight LTR or RTL bias).
- * @param {!Blockly.Block | !Blockly.WorkspaceComment} a The first object to compare.
- * @param {!Blockly.Block | !Blockly.WorkspaceComment} b The second object to compare.
+ * @param {!Blockly.Block | !Blockly.WorkspaceComment} a The first object to
+ *    compare.
+ * @param {!Blockly.Block | !Blockly.WorkspaceComment} b The second object to
+ *    compare.
  * @returns {number} The comparison value. This tells Array.sort() how to change
  *    object a's index.
  * @private
@@ -526,6 +528,33 @@ Blockly.Workspace.prototype.remainingCapacityOfType = function(type) {
   }
   return (this.options.maxInstances[type] || Infinity) -
       this.getBlocksByType(type).length;
+};
+
+/**
+ * Check if there is remaining capacity for blocks of the given counts to be
+ *    created. If the total number of blocks represented by the map is more than
+ *    the total remaining capacity, it returns false. If a type count is more
+ *    than the remaining capacity for that type, it returns false.
+ * @param {!Object} typeCountsMap A map of types to counts (usually representing
+ *    blocks to be created).
+ * @returns {boolean} True if there is capacity for the given map,
+ *    false otherwise.
+ */
+Blockly.Workspace.prototype.isCapacityAvailable = function(typeCountsMap) {
+  if (!this.hasBlockLimits()) {
+    return true;
+  }
+  var copyableBlocksCount = 0;
+  for (var type in typeCountsMap) {
+    if (typeCountsMap[type] > this.remainingCapacityOfType(type)) {
+      return false;
+    }
+    copyableBlocksCount += typeCountsMap[type];
+  }
+  if (copyableBlocksCount > this.remainingCapacity()) {
+    return false;
+  }
+  return true;
 };
 
 /**

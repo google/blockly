@@ -228,6 +228,7 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
 Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.targetWorkspace_ = targetWorkspace;
   this.workspace_.targetWorkspace = targetWorkspace;
+
   // Add scrollbar.
   this.scrollbar_ = new Blockly.Scrollbar(this.workspace_,
       this.horizontalLayout_, false, 'blocklyFlyoutScrollbar');
@@ -729,7 +730,8 @@ Blockly.Flyout.prototype.filterForCapacity_ = function() {
   for (var i = 0, block; block = blocks[i]; i++) {
     if (this.permanentlyDisabled_.indexOf(block) == -1) {
       var allBlocks = block.getDescendants(false);
-      block.setDisabled(allBlocks.length > remainingCapacity);
+      block.setDisabled(allBlocks.length > remainingCapacity ||
+          this.targetWorkspace_.remainingCapacityOfType(block.type) <= 0);
     }
   }
 };

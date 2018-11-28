@@ -103,6 +103,7 @@ function start() {
           },
         horizontalLayout: side == 'top' || side == 'bottom',
         maxBlocks: Infinity,
+        maxInstances: {'limit_instances': 3},
         media: '../media/',
         oneBasedIndex: true,
         readOnly: false,
@@ -1080,6 +1081,7 @@ h1 {
       <block type="empty_block_with_mutator"></block>
       <block type="value_to_stack"></block>
       <block type="value_to_statement"></block>
+      <block type="limit_instances"></block>
     </category>
     <category name="Drag">
       <label text="Drag each to the workspace"></label>

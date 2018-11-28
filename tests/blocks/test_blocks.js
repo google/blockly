@@ -45,6 +45,22 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "colour": 230
   },
   {
+    "type": "limit_instances",
+    "message0": "limit 3 instances %1 %2",
+    "args0": [
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_statement",
+        "name": "STATEMENT"
+      }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+  },
+  {
     "type": "example_dropdown_long",
     "message0": "long: %1",
     "args0": [
@@ -145,17 +161,17 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "type": "example_angle",
     "message0": "angle: %1",
     "args0": [
-        {
-          "type": "field_angle",
-          "name": "FIELDNAME",
-          "angle": "90",
-          "alt":
-            {
-              "type": "field_label",
-              "text": "NO ANGLE FIELD"
-            }
-        }
-      ]
+      {
+        "type": "field_angle",
+        "name": "FIELDNAME",
+        "angle": "90",
+        "alt":
+          {
+            "type": "field_label",
+            "text": "NO ANGLE FIELD"
+          }
+      }
+    ]
   },
   {
     "type": "example_date",

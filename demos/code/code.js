@@ -425,6 +425,20 @@ Code.init = function() {
             wheel: true}
       });
 
+  // Clean up variable when a
+  Code.workspace.addChangeListener(function(event) {
+      if (event.element == 'mutatorOpen' && !event.newValue) {
+
+          var variables = Code.workspace.getAllVariables();
+
+          for (var key in variables) {
+              if (variables.hasOwnProperty(key) && Code.workspace.getVariableUsesById(variables[key].getId()).length == 0) {
+                  Code.workspace.deleteVariableById(variables[key].getId());
+              }
+          }
+      }
+  });
+
   // Add to reserved word list: Local variables in execution environment (runJS)
   // and the infinite loop detection function.
   Blockly.JavaScript.addReservedWords('code,timeouts,checkTimeout');

@@ -226,9 +226,10 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
     for (var i = 0; i < procedureList.length; i++) {
       var name = procedureList[i][0];
       var args = procedureList[i][1];
+      var argsModel = procedureList[i][3]; // NOAH CHANGING TO SUPPORT TYPES
       // <block type="procedures_callnoreturn" gap="16">
       //   <mutation name="do something">
-      //     <arg name="x"></arg>
+      //     <arg name="x" type="Nubmer"></arg>
       //   </mutation>
       // </block>
       var block = Blockly.Xml.utils.createElement('block');
@@ -237,9 +238,10 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
       var mutation = Blockly.Xml.utils.createElement('mutation');
       mutation.setAttribute('name', name);
       block.appendChild(mutation);
-      for (var j = 0; j < args.length; j++) {
+      for (var j = 0; j < argsModel.length; j++) {
         var arg = Blockly.Xml.utils.createElement('arg');
-        arg.setAttribute('name', args[j]);
+        arg.setAttribute('name', argsModel[j].name);
+        arg.setAttribute('type', argsModel[j].type); // NOAH CHANGE TO GET TYPES
         mutation.appendChild(arg);
       }
       xmlList.push(block);
@@ -294,6 +296,8 @@ Blockly.Procedures.mutateCallers = function(defBlock) {
       // Fire a mutation on every caller block.  But don't record this as an
       // undo action since it is deterministically tied to the procedure's
       // definition mutation.
+
+      console.log('change event fired');
       Blockly.Events.recordUndo = false;
       Blockly.Events.fire(new Blockly.Events.BlockChange(
           caller, 'mutation', null, oldMutation, newMutation));

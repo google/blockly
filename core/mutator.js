@@ -393,6 +393,7 @@ Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
  * Dispose of this mutator.
  */
 Blockly.Mutator.prototype.dispose = function() {
+  console.log('closed dialog box');
   this.block_.mutator = null;
   Blockly.Icon.prototype.dispose.call(this);
 };

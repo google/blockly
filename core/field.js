@@ -149,7 +149,7 @@ Blockly.Field.prototype.visible_ = true;
  * @type {Function}
  * @protected
  */
-Blockly.Field.prototype.validator_ = null;
+Blockly.Field.prototype.nameValidator_ = null;
 
 /**
  * Non-breaking space.

@@ -149,15 +149,19 @@ Blockly.Variables.allDeveloperVariables = function(workspace) {
  */
 Blockly.Variables.flyoutCategory = function(workspace) {
   var xmlList = [];
-  var button = document.createElement('button');
-  button.setAttribute('text', '%{BKY_NEW_VARIABLE}');
-  button.setAttribute('callbackKey', 'CREATE_VARIABLE');
+  xmlList.push(Blockly.Variables.createButton_(
+      '%{BKY_NEW_VARIABLE}', 'CREATE_VARIABLE'));
 
+  xmlList.push(Blockly.Variables.createButton_(
+      '%{BKY_DELETE_VARIABLE_BUTTON_TITLE}', 'DELETE_VARIABLE'));
+
+  workspace.registerButtonCallback('DELETE_VARIABLE', function(deleteButton) {
+    Blockly.Variables.deleteVariableButtonHandler(deleteButton.getTargetWorkspace());
+  });
   workspace.registerButtonCallback('CREATE_VARIABLE', function(button) {
     Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace());
   });
 
-  xmlList.push(button);
 
   var blockList = Blockly.Variables.flyoutCategoryBlocks(workspace);
   xmlList = xmlList.concat(blockList);
@@ -324,8 +328,43 @@ Blockly.Variables.createVariableButtonHandler = function(
   };
   promptAndCheckWithAlert('');
 };
+
+/**
+ * Handles "Delete Variable" button in the default variables toolbox category.
+ * It will prompt the user for a varibale name, including re-prompts if a name
+ * does not exist.
+ *
+ * @param {!Blockly.Workspace} workspace The workspace on which to delete the
+ *     variable.
+ */
+Blockly.Variables.deleteVariableButtonHandler = function(workspace) {
+  var promptAndCheckWithAlert = function(defaultName) {
+    Blockly.Variables.promptName(Blockly.Msg['DELETE_VARIABLE_PROMPT'], defaultName,
+        function(text) {
+          if (text) {
+            var existing =
+              Blockly.Variables.nameUsedWithAnyType_(text, workspace);
+            if (existing){
+              workspace.deleteVariableById(existing.getId());
+            }
+            else {
+              var lowerCase = text.toLowerCase();
+              var msg = Blockly.Msg['VARIABLE_DOES_NOT_EXIST'];
+              msg = msg.replace('%1', lowerCase);
+              Blockly.alert(msg, function() {promptAndCheckWithAlert(text);});
+            }
+          }
+        }
+    );
+  };
+  promptAndCheckWithAlert('');
+};
+
 goog.exportSymbol('Blockly.Variables.createVariableButtonHandler',
     Blockly.Variables.createVariableButtonHandler);
+
+goog.exportSymbol('Blockly.Variables.deleteVariableButtonHandler',
+    Blockly.Variables.deleteVariableButtonHandler);
 
 /**
  * Original name of Blockly.Variables.createVariableButtonHandler(..).
@@ -579,6 +618,19 @@ Blockly.Variables.createVariable_ = function(workspace, id, opt_name,
     var variable = workspace.createVariable(opt_name, opt_type, id);
   }
   return variable;
+};
+
+/**
+ * Helper function to create a button for the flyout window.
+ * @param {string} msg  The text displayed on the button.
+ * @param {string} callbackKey The callback key.
+ * @return {Element} button The created button.
+ */
+Blockly.Variables.createButton_ = function(msg, callbackKey) {
+  var button = document.createElement('button');
+  button.setAttribute('text', msg);
+  button.setAttribute('callbackKey', callbackKey);
+  return button;
 };
 
 /**

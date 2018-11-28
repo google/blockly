@@ -34,7 +34,7 @@
 
 goog.provide('Blockly.Msg.en');
 
-goog.require('Blockly.Msg');
+goog.require('Blockly.Msg')
 
 
 /**
@@ -147,6 +147,13 @@ Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = 'Delete %1 uses of the "%2" variable?
 Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = 'Can\'t delete the variable "%1" because it\'s part of the definition of the function "%2"';
 /// dropdown choice - Delete the currently selected variable.
 Blockly.Msg.DELETE_VARIABLE = 'Delete the "%1" variable';
+/// alert - Tells the user that the variable name does not exist.
+Blockly.Msg.VARIABLE_DOES_NOT_EXIST = 'A variable named "%1" does not exist.';
+/// alert - Text on the button used to launch the delete variable dialogue.
+Blockly.Msg.DELETE_VARIABLE_BUTTON_TITLE = 'Delete variable...';
+/// alert - Prompts the user to enter the name of an exisiting variable in order to delete it. See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu]
+Blockly.Msg.DELETE_VARIABLE_PROMPT = 'Delete variable with name:';
+
 
 // Colour Blocks.
 /// {{Optional}} url - Information about colour.

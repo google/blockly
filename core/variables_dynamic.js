@@ -48,6 +48,10 @@ Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour = function(button) {
   Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(),
       null, 'Colour');
 };
+Blockly.VariablesDynamic.onDeleteVariableButtonClick = function(button) {
+  Blockly.Variables.deleteVariableButtonHandler(button.getTargetWorkspace());
+};
+
 /**
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
@@ -56,18 +60,18 @@ Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour = function(button) {
  */
 Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
   var xmlList = [];
-  var button = document.createElement('button');
-  button.setAttribute('text', Blockly.Msg['NEW_STRING_VARIABLE']);
-  button.setAttribute('callbackKey', 'CREATE_VARIABLE_STRING');
-  xmlList.push(button);
-  button = document.createElement('button');
-  button.setAttribute('text', Blockly.Msg['NEW_NUMBER_VARIABLE']);
-  button.setAttribute('callbackKey', 'CREATE_VARIABLE_NUMBER');
-  xmlList.push(button);
-  button = document.createElement('button');
-  button.setAttribute('text', Blockly.Msg['NEW_COLOUR_VARIABLE']);
-  button.setAttribute('callbackKey', 'CREATE_VARIABLE_COLOUR');
-  xmlList.push(button);
+
+  xmlList.push(Blockly.Variables.createButton_(
+      '%{BKY_NEW_STRING_VARIABLE}', 'CREATE_VARIABLE_STRING'));
+
+  xmlList.push(Blockly.Variables.createButton_(
+      '%{BKY_NEW_NUMBER_VARIABLE}', 'CREATE_VARIABLE_NUMBER'));
+
+  xmlList.push(Blockly.Variables.createButton_(
+      '%{BKY_NEW_COLOUR_VARIABLE}', 'CREATE_VARIABLE_COLOUR'));
+
+  xmlList.push(Blockly.Variables.createButton_(
+      '%{BKY_DELETE_VARIABLE_BUTTON_TITLE}', 'DELETE_VARIABLE'));
 
   workspace.registerButtonCallback('CREATE_VARIABLE_STRING',
       Blockly.VariablesDynamic.onCreateVariableButtonClick_String);
@@ -75,6 +79,9 @@ Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
       Blockly.VariablesDynamic.onCreateVariableButtonClick_Number);
   workspace.registerButtonCallback('CREATE_VARIABLE_COLOUR',
       Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour);
+  workspace.registerButtonCallback('DELETE_VARIABLE',
+      Blockly.VariablesDynamic.onDeleteVariableButtonClick);
+
 
 
   var blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace);

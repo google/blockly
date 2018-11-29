@@ -285,5 +285,6 @@
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Ստեղծում է ֆունկցիա, որը վերադարձնում է արժեք:",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Զգուշացում։ Այս ֆունկցիան ունի կրկնվող պարամտերեր։",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Եթե արժեքը ճշմարիտ է, վերադարձնում է երկորդ արժեքը:",
+	"PROCEDURES_IFRETURN_WARNING": "Զգուշացում. Այս բլոկը կարող է օգտագործվել միայն ֆունկցիայի սահմանման ներսում:",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Մի բան ասա ․․․"
 }

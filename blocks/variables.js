@@ -100,30 +100,75 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
    * @this Blockly.Block
    */
   customContextMenu: function(options) {
-    if (this.isInFlyout){
-      return;
-    }
-    // Getter blocks have the option to create a setter block, and vice versa.
-    if (this.type == 'variables_get') {
-      var opposite_type = 'variables_set';
-      var contextMenuMsg = Blockly.Msg['VARIABLES_GET_CREATE_SET'];
-    } else {
-      var opposite_type = 'variables_get';
-      var contextMenuMsg = Blockly.Msg['VARIABLES_SET_CREATE_GET'];
-    }
+    if (!this.isInFlyout){
+      // Getter blocks have the option to create a setter block, and vice versa.
+      if (this.type == 'variables_get') {
+        var opposite_type = 'variables_set';
+        var contextMenuMsg = Blockly.Msg['VARIABLES_GET_CREATE_SET'];
+      } else {
+        var opposite_type = 'variables_get';
+        var contextMenuMsg = Blockly.Msg['VARIABLES_SET_CREATE_GET'];
+      }
 
-    var option = {enabled: this.workspace.remainingCapacity() > 0};
-    var name = this.getField('VAR').getText();
-    option.text = contextMenuMsg.replace('%1', name);
-    var xmlField = document.createElement('field');
-    xmlField.setAttribute('name', 'VAR');
-    xmlField.appendChild(document.createTextNode(name));
-    var xmlBlock = document.createElement('block');
-    xmlBlock.setAttribute('type', opposite_type);
-    xmlBlock.appendChild(xmlField);
-    option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
-    options.push(option);
+      var option = {enabled: this.workspace.remainingCapacity() > 0};
+      var name = this.getField('VAR').getText();
+      option.text = contextMenuMsg.replace('%1', name);
+      var xmlField = document.createElement('field');
+      xmlField.setAttribute('name', 'VAR');
+      xmlField.appendChild(document.createTextNode(name));
+      var xmlBlock = document.createElement('block');
+      xmlBlock.setAttribute('type', opposite_type);
+      xmlBlock.appendChild(xmlField);
+      option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
+      options.push(option);
+      // Getter blocks have the option to rename or delete that variable.
+    } else {
+      if (this.type == 'variables_get' || this.type == 'variables_get_reporter'){
+        var renameOption = {
+          text: Blockly.Msg.RENAME_VARIABLE,
+          enabled: true,
+          callback: Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY(this)
+        };
+        var name = this.getField('VAR').getText();
+        var deleteOption = {
+          text: Blockly.Msg.DELETE_VARIABLE.replace('%1', name),
+          enabled: true,
+          callback: Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY(this)
+        };
+        options.unshift(renameOption);
+        options.unshift(deleteOption);
+      }
+    }
   }
+};
+
+/**
+  * Callback for rename variable dropdown menu option associated with a
+  * variable getter block.
+  * @param {!Blockly.Block} block The block with the variable to rename.
+  * @return {!function()} A function that renames the variable.
+  */
+Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY = function(block) {
+  return function() {
+    var workspace = block.workspace;
+    var variable = block.getField('VAR').getVariable();
+    Blockly.Variables.renameVariable(workspace, variable);
+  };
+};
+
+/**
+ * Callback for delete variable dropdown menu option associated with a
+ * variable getter block.
+ * @param {!Blockly.Block} block The block with the variable to delete.
+ * @return {!function()} A function that deletes the variable.
+ */
+Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY = function(block) {
+  return function() {
+    var workspace = block.workspace;
+    var variable = block.getField('VAR').getVariable();
+    workspace.deleteVariableById(variable.getId());
+    workspace.refreshToolboxSelection();
+  };
 };
 
 Blockly.Extensions.registerMixin('contextMenu_variableSetterGetter',

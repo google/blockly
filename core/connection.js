@@ -355,29 +355,19 @@ Blockly.Connection.prototype.canConnectToPrevious_ = function(candidate) {
     return false;
   }
 
-  var firstStatementConnection =
-      this.sourceBlock_.getFirstStatementConnection();
-  var isFirstStatementConnection = this == firstStatementConnection;
-  var isNextConnection = this == this.sourceBlock_.nextConnection;
-
-  if (isNextConnection || isFirstStatementConnection) {
-    // If the candidate is the first connection in a stack, we can connect.
-    if (!candidate.targetConnection) {
-      return true;
-    }
-
-    var targetBlock = candidate.targetBlock();
-    // If it is connected to a real block, game over.
-    if (!targetBlock.isInsertionMarker()) {
-      return false;
-    }
-    // If it's connected to an insertion marker but that insertion marker
-    // is the first block in a stack, it's still fine.  If that insertion
-    // marker is in the middle of a stack, it won't work.
-    return !targetBlock.getPreviousBlock();
+  if (!candidate.targetConnection) {
+    return true;
   }
-  console.warn('Returning false by default from canConnectToPrevious_.');
-  return false;
+
+  var targetBlock = candidate.targetBlock();
+  // If it is connected to a real block, game over.
+  if (!targetBlock.isInsertionMarker()) {
+    return false;
+  }
+  // If it's connected to an insertion marker but that insertion marker
+  // is the first block in a stack, it's still fine.  If that insertion
+  // marker is in the middle of a stack, it won't work.
+  return !targetBlock.getPreviousBlock();
 };
 
 /**

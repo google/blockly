@@ -360,12 +360,7 @@ Blockly.Connection.prototype.canConnectToPrevious_ = function(candidate) {
   var isFirstStatementConnection = this == firstStatementConnection;
   var isNextConnection = this == this.sourceBlock_.nextConnection;
 
-  // Complex blocks with no previous connection will not be allowed to connect
-  // mid-stack.
-  var sourceHasPreviousConn = this.sourceBlock_.previousConnection != null;
-
-  if (isNextConnection ||
-      (isFirstStatementConnection && !sourceHasPreviousConn)) {
+  if (isNextConnection || isFirstStatementConnection) {
     // If the candidate is the first connection in a stack, we can connect.
     if (!candidate.targetConnection) {
       return true;

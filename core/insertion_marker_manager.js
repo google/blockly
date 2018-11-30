@@ -335,7 +335,8 @@ Blockly.InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
     // Decide whether the new connection has higher priority.
     if (this.localConnection_ && this.closestConnection_) {
       // The connection was the same as the current connection.
-      if (this.closestConnection_ == candidateClosest) {
+      if (this.closestConnection_ == candidateClosest &&
+          this.localConnection_ == candidateLocal) {
         return false;
       }
       var xDiff = this.localConnection_.x_ + dxy.x - this.closestConnection_.x_;

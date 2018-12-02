@@ -54,27 +54,27 @@ Blockly.Variables.NAME_TYPE = Blockly.VARIABLE_CATEGORY_NAME;
  * @param {!Blockly.Workspace} ws The workspace to search for variables.
  * @return {!Array.<!Blockly.VariableModel>} Array of variable models.
  */
-Blockly.Variables.allUsedVarModels = function(ws) {
-  var blocks = ws.getAllBlocks(false);
-  var variableHash = Object.create(null);
-  // Iterate through every block and add each variable to the hash.
-  for (var x = 0; x < blocks.length; x++) {
-    var blockVariables = blocks[x].getVarModels();
-    if (blockVariables) {
-      for (var y = 0; y < blockVariables.length; y++) {
-        var variable = blockVariables[y];
-        if (variable.getId()) {
-          variableHash[variable.getId()] = variable;
+Blockly.Variables.allUsedVarModels = function (ws) {
+    var blocks = ws.getAllBlocks(false);
+    var variableHash = Object.create(null);
+    // Iterate through every block and add each variable to the hash.
+    for (var x = 0; x < blocks.length; x++) {
+        var blockVariables = blocks[x].getVarModels();
+        if (blockVariables) {
+            for (var y = 0; y < blockVariables.length; y++) {
+                var variable = blockVariables[y];
+                if (variable.getId()) {
+                    variableHash[variable.getId()] = variable;
+                }
+            }
         }
-      }
     }
-  }
-  // Flatten the hash into a list.
-  var variableList = [];
-  for (var id in variableHash) {
-    variableList.push(variableHash[id]);
-  }
-  return variableList;
+    // Flatten the hash into a list.
+    var variableList = [];
+    for (var id in variableHash) {
+        variableList.push(variableHash[id]);
+    }
+    return variableList;
 };
 
 /**
@@ -85,10 +85,10 @@ Blockly.Variables.allUsedVarModels = function(ws) {
  * call Workspace.getAllVariables.
  * @deprecated January 2018
  */
-Blockly.Variables.allUsedVariables = function() {
-  console.warn('Deprecated call to Blockly.Variables.allUsedVariables. ' +
-      'Use Blockly.Variables.allUsedVarModels instead.\nIf this is a major ' +
-      'issue please file a bug on GitHub.');
+Blockly.Variables.allUsedVariables = function () {
+    console.warn('Deprecated call to Blockly.Variables.allUsedVariables. ' +
+        'Use Blockly.Variables.allUsedVarModels instead.\nIf this is a major ' +
+        'issue please file a bug on GitHub.');
 };
 
 /**
@@ -107,38 +107,38 @@ Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_ = {};
  * @param {!Blockly.Workspace} workspace The workspace to search.
  * @return {!Array.<string>} A list of non-duplicated variable names.
  */
-Blockly.Variables.allDeveloperVariables = function(workspace) {
-  var blocks = workspace.getAllBlocks(false);
-  var hash = {};
-  for (var i = 0; i < blocks.length; i++) {
-    var block = blocks[i];
-    var getDeveloperVariables = block.getDeveloperVariables;
-    if (!getDeveloperVariables && block.getDeveloperVars) {
-      // August 2018: getDeveloperVars() was deprecated and renamed
-      // getDeveloperVariables().
-      getDeveloperVariables = block.getDeveloperVars;
-      if (!Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_[
-          block.type]) {
-        console.warn('Function getDeveloperVars() deprecated. Use ' +
-          'getDeveloperVariables() (block type \'' + block.type + '\')');
-        Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_[
-            block.type] = true;
-      }
+Blockly.Variables.allDeveloperVariables = function (workspace) {
+    var blocks = workspace.getAllBlocks(false);
+    var hash = {};
+    for (var i = 0; i < blocks.length; i++) {
+        var block = blocks[i];
+        var getDeveloperVariables = block.getDeveloperVariables;
+        if (!getDeveloperVariables && block.getDeveloperVars) {
+            // August 2018: getDeveloperVars() was deprecated and renamed
+            // getDeveloperVariables().
+            getDeveloperVariables = block.getDeveloperVars;
+            if (!Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_[
+                    block.type]) {
+                console.warn('Function getDeveloperVars() deprecated. Use ' +
+                    'getDeveloperVariables() (block type \'' + block.type + '\')');
+                Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_[
+                    block.type] = true;
+            }
+        }
+        if (getDeveloperVariables) {
+            var devVars = getDeveloperVariables();
+            for (var j = 0; j < devVars.length; j++) {
+                hash[devVars[j]] = devVars[j];
+            }
+        }
     }
-    if (getDeveloperVariables) {
-      var devVars = getDeveloperVariables();
-      for (var j = 0; j < devVars.length; j++) {
-        hash[devVars[j]] = devVars[j];
-      }
-    }
-  }
 
-  // Flatten the hash into a list.
-  var list = [];
-  for (var name in hash) {
-    list.push(hash[name]);
-  }
-  return list;
+    // Flatten the hash into a list.
+    var list = [];
+    for (var name in hash) {
+        list.push(hash[name]);
+    }
+    return list;
 };
 
 /**
@@ -147,74 +147,216 @@ Blockly.Variables.allDeveloperVariables = function(workspace) {
  * @param {!Blockly.Workspace} workspace The workspace containing variables.
  * @return {!Array.<!Element>} Array of XML elements.
  */
-Blockly.Variables.flyoutCategory = function(workspace) {
-  var xmlList = [];
-  var button = document.createElement('button');
-  button.setAttribute('text', '%{BKY_NEW_VARIABLE}');
-  button.setAttribute('callbackKey', 'CREATE_VARIABLE');
+Blockly.Variables.flyoutCategory = function (workspace) {
+    var xmlList = [];
+    var btnNumVariable = document.createElement('button');
+    btnNumVariable.setAttribute('text', 'Create Number Variable');
+    btnNumVariable.setAttribute('callbackkey', 'CREATE_NUM_VARIABLE');
 
-  workspace.registerButtonCallback('CREATE_VARIABLE', function(button) {
-    Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace());
-  });
+    workspace.registerButtonCallback('CREATE_NUM_VARIABLE', function (button) {
+        Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(), function () {
+            var numVariableBlock = workspace.newBlock('variables_set_number');
+            numVariableBlock.initSvg();
+            numVariableBlock.render();
 
-  xmlList.push(button);
+            var mathBlock = workspace.newBlock('math_number');
+            mathBlock.setShadow(true);
+            mathBlock.setFieldValue(32, 'NUM');
+            mathBlock.initSvg();
+            mathBlock.render();
+            numVariableBlock.getInput('VALUE').connection.connect(mathBlock.outputConnection);
 
-  var blockList = Blockly.Variables.flyoutCategoryBlocks(workspace);
-  xmlList = xmlList.concat(blockList);
-  return xmlList;
+            Blockly.Variables.connectedCreatedVariableToStartBlock(numVariableBlock);
+
+        }, 'Number');
+    });
+
+    xmlList.push(btnNumVariable);
+
+    var btnStringVariable = document.createElement('button');
+
+    btnStringVariable.setAttribute('text', 'Create String Variable');
+    btnStringVariable.setAttribute('callbackkey', 'CREATE_STRING_VARIABLE');
+
+    workspace.registerButtonCallback('CREATE_STRING_VARIABLE', function (button) {
+        Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(), function () {
+            var stringVariableBlock = workspace.newBlock('variables_set_string');
+            stringVariableBlock.initSvg();
+            stringVariableBlock.render();
+
+            var textBlock = workspace.newBlock('text');
+            textBlock.setShadow(true);
+            textBlock.setFieldValue('abc', 'TEXT');
+            textBlock.initSvg();
+            textBlock.render();
+            stringVariableBlock.getInput('VALUE').connection.connect(textBlock.outputConnection);
+
+            Blockly.Variables.connectedCreatedVariableToStartBlock(stringVariableBlock);
+
+        }, 'String');
+    });
+
+    xmlList.push(btnStringVariable);
+
+    var btnBoolVariable = document.createElement('button');
+    btnBoolVariable.setAttribute('text', 'Create Boolean Variable');
+    btnBoolVariable.setAttribute('callbackkey', 'CREATE_BOOLEAN_VARIABLE');
+
+    workspace.registerButtonCallback('CREATE_BOOLEAN_VARIABLE', function (button) {
+        Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(), function () {
+            var boolVariableBlock = workspace.newBlock('variables_set_boolean');
+            boolVariableBlock.initSvg();
+            boolVariableBlock.render();
+
+            var boolBlock = workspace.newBlock('logic_boolean');
+            boolBlock.setShadow(true);
+            boolBlock.initSvg();
+            boolBlock.render();
+            boolVariableBlock.getInput('VALUE').connection.connect(boolBlock.outputConnection);
+
+            Blockly.Variables.connectedCreatedVariableToStartBlock(boolVariableBlock);
+
+        }, 'Boolean');
+
+    });
+
+    xmlList.push(btnBoolVariable);
+
+    var blockList = Blockly.Variables.flyoutCategoryBlocks(workspace);
+    xmlList = xmlList.concat(blockList);
+    return xmlList;
 };
+
+Blockly.Variables.connectedCreatedVariableToStartBlock = function (variableBlock) {
+    var arduinoStartBlocks = Blockly.mainWorkspace.getTopBlocks().filter(function(block) {
+        return block.type == 'arduino_start';
+    });
+
+    if (arduinoStartBlocks.length == 0) {
+        return;
+    }
+
+    console.log(variableBlock);
+    var arduinoStartBlock = arduinoStartBlocks[0];
+    var parentConnection = arduinoStartBlock.getInput('setup').connection;
+    parentConnection.connect(variableBlock.previousConnection);
+};
+
 
 /**
  * Construct the blocks required by the flyout for the variable category.
  * @param {!Blockly.Workspace} workspace The workspace containing variables.
  * @return {!Array.<!Element>} Array of XML block elements.
  */
-Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
-  var variableModelList = workspace.getVariablesOfType('');
-  variableModelList.sort(Blockly.VariableModel.compareByName);
+Blockly.Variables.flyoutCategoryBlocks = function (workspace) {
 
-  var xmlList = [];
-  if (variableModelList.length > 0) {
-    var firstVariable = variableModelList[0];
-    if (Blockly.Blocks['variables_set']) {
-      var gap = Blockly.Blocks['math_change'] ? 8 : 24;
-      var blockText = '<xml>' +
-            '<block type="variables_set" gap="' + gap + '">' +
-            Blockly.Variables.generateVariableFieldXmlString(firstVariable) +
+    var numVariables = workspace.getVariablesOfType('Number');
+    var stringVariables = workspace.getVariablesOfType('String');
+    var boolVariables = workspace.getVariablesOfType('Boolean');
+
+    var xmlList = [];
+    if (numVariables.length > 0) {
+
+        var blockTextSetNum = '<xml>' +
+            '<block type="variables_set_number" gap="24">' +
+            Blockly.Variables.generateVariableFieldXmlString(numVariables[0]) +
+            '<value name="VALUE"> <shadow type="math_number"> <field name="NUM">10</field></shadow> </value>' +
             '</block>' +
             '</xml>';
-      var block = Blockly.Xml.textToDom(blockText).firstChild;
-      xmlList.push(block);
-    }
-    if (Blockly.Blocks['math_change']) {
-      var gap = Blockly.Blocks['variables_get'] ? 20 : 8;
-      var blockText = '<xml>' +
-          '<block type="math_change" gap="' + gap + '">' +
-          Blockly.Variables.generateVariableFieldXmlString(firstVariable) +
-          '<value name="DELTA">' +
-          '<shadow type="math_number">' +
-          '<field name="NUM">1</field>' +
-          '</shadow>' +
-          '</value>' +
-          '</block>' +
-          '</xml>';
-      var block = Blockly.Xml.textToDom(blockText).firstChild;
-      xmlList.push(block);
-    }
+        var blockSetNum = Blockly.Xml.textToDom(blockTextSetNum).firstChild;
+        xmlList.push(blockSetNum);
 
-    for (var i = 0, variable; variable = variableModelList[i]; i++) {
-      if (Blockly.Blocks['variables_get']) {
-        var blockText = '<xml>' +
-            '<block type="variables_get" gap="8">' +
-            Blockly.Variables.generateVariableFieldXmlString(variable) +
+        var blockTextGetNum = '<xml>' +
+            '<block type="variables_get_number" gap="24">' +
+            Blockly.Variables.generateVariableFieldXmlString(numVariables[0]) +
             '</block>' +
             '</xml>';
-        var block = Blockly.Xml.textToDom(blockText).firstChild;
-        xmlList.push(block);
-      }
+        var blockGetNum = Blockly.Xml.textToDom(blockTextGetNum).firstChild;
+        xmlList.push(blockGetNum);
     }
-  }
-  return xmlList;
+
+    if (stringVariables.length > 0) {
+
+        var blockTextSetString = '<xml>' +
+            '<block type="variables_set_string" gap="24">' +
+            Blockly.Variables.generateVariableFieldXmlString(stringVariables[0]) +
+            '<value name="VALUE"> <shadow type="text"> <field name="TEXT">abc</field> </shadow> </value>' +
+            '</block>' +
+            '</xml>';
+        var blockSetString = Blockly.Xml.textToDom(blockTextSetString).firstChild;
+
+        xmlList.push(blockSetString);
+
+        var blockTextGetString = '<xml>' +
+            '<block type="variables_get_string" gap="24">' +
+            Blockly.Variables.generateVariableFieldXmlString(stringVariables[0]) +
+            '</block>' +
+            '</xml>';
+        var blockGetString = Blockly.Xml.textToDom(blockTextGetString).firstChild;
+        xmlList.push(blockGetString);
+    }
+
+    if (boolVariables.length > 0) {
+
+        var blockTextSetBool = '<xml>' +
+            '<block type="variables_set_boolean" gap="24">' +
+            Blockly.Variables.generateVariableFieldXmlString(boolVariables[0]) +
+            '<value name="VALUE"> <shadow type="logic_boolean"> </shadow> </value>' +
+            '</block>' +
+            '</xml>';
+        var blockSetBool = Blockly.Xml.textToDom(blockTextSetBool).firstChild;
+        xmlList.push(blockSetBool);
+
+        var blockTextGetBool = '<xml>' +
+            '<block type="variables_get_boolean" gap="24">' +
+            Blockly.Variables.generateVariableFieldXmlString(boolVariables[0]) +
+            '</block>' +
+            '</xml>';
+        var blockGetBool = Blockly.Xml.textToDom(blockTextGetBool).firstChild;
+        xmlList.push(blockGetBool);
+    }
+
+    // if (variableModelList.length > 0) {
+    //   var firstVariable = variableModelList[0];
+    //   if (Blockly.Blocks['variables_set']) {
+    //     var gap = Blockly.Blocks['math_change'] ? 8 : 24;
+    //     var blockText = '<xml>' +
+    //           '<block type="variables_set" gap="' + gap + '">' +
+    //           Blockly.Variables.generateVariableFieldXmlString(firstVariable) +
+    //           '</block>' +
+    //           '</xml>';
+    //     var block = Blockly.Xml.textToDom(blockText).firstChild;
+    //     xmlList.push(block);
+    //   }
+    //   if (Blockly.Blocks['math_change']) {
+    //     var gap = Blockly.Blocks['variables_get'] ? 20 : 8;
+    //     var blockText = '<xml>' +
+    //         '<block type="math_change" gap="' + gap + '">' +
+    //         Blockly.Variables.generateVariableFieldXmlString(firstVariable) +
+    //         '<value name="DELTA">' +
+    //         '<shadow type="math_number">' +
+    //         '<field name="NUM">1</field>' +
+    //         '</shadow>' +
+    //         '</value>' +
+    //         '</block>' +
+    //         '</xml>';
+    //     var block = Blockly.Xml.textToDom(blockText).firstChild;
+    //     xmlList.push(block);
+    //   }
+    //
+    //   for (var i = 0, variable; variable = variableModelList[i]; i++) {
+    //     if (Blockly.Blocks['variables_get']) {
+    //       var blockText = '<xml>' +
+    //           '<block type="variables_get" gap="8">' +
+    //           Blockly.Variables.generateVariableFieldXmlString(variable) +
+    //           '</block>' +
+    //           '</xml>';
+    //       var block = Blockly.Xml.textToDom(blockText).firstChild;
+    //       xmlList.push(block);
+    //     }
+    //   }
+    // }
+    return xmlList;
 };
 
 /**
@@ -225,45 +367,45 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
  * @param {!Blockly.Workspace} workspace The workspace to be unique in.
  * @return {string} New variable name.
  */
-Blockly.Variables.generateUniqueName = function(workspace) {
-  var variableList = workspace.getAllVariables();
-  var newName = '';
-  if (variableList.length) {
-    var nameSuffix = 1;
-    var letters = 'ijkmnopqrstuvwxyzabcdefgh';  // No 'l'.
-    var letterIndex = 0;
-    var potName = letters.charAt(letterIndex);
-    while (!newName) {
-      var inUse = false;
-      for (var i = 0; i < variableList.length; i++) {
-        if (variableList[i].name.toLowerCase() == potName) {
-          // This potential name is already used.
-          inUse = true;
-          break;
+Blockly.Variables.generateUniqueName = function (workspace) {
+    var variableList = workspace.getAllVariables();
+    var newName = '';
+    if (variableList.length) {
+        var nameSuffix = 1;
+        var letters = 'ijkmnopqrstuvwxyzabcdefgh';  // No 'l'.
+        var letterIndex = 0;
+        var potName = letters.charAt(letterIndex);
+        while (!newName) {
+            var inUse = false;
+            for (var i = 0; i < variableList.length; i++) {
+                if (variableList[i].name.toLowerCase() == potName) {
+                    // This potential name is already used.
+                    inUse = true;
+                    break;
+                }
+            }
+            if (inUse) {
+                // Try the next potential name.
+                letterIndex++;
+                if (letterIndex == letters.length) {
+                    // Reached the end of the character sequence so back to 'i'.
+                    // a new suffix.
+                    letterIndex = 0;
+                    nameSuffix++;
+                }
+                potName = letters.charAt(letterIndex);
+                if (nameSuffix > 1) {
+                    potName += nameSuffix;
+                }
+            } else {
+                // We can use the current potential name.
+                newName = potName;
+            }
         }
-      }
-      if (inUse) {
-        // Try the next potential name.
-        letterIndex++;
-        if (letterIndex == letters.length) {
-          // Reached the end of the character sequence so back to 'i'.
-          // a new suffix.
-          letterIndex = 0;
-          nameSuffix++;
-        }
-        potName = letters.charAt(letterIndex);
-        if (nameSuffix > 1) {
-          potName += nameSuffix;
-        }
-      } else {
-        // We can use the current potential name.
-        newName = potName;
-      }
+    } else {
+        newName = 'i';
     }
-  } else {
-    newName = 'i';
-  }
-  return newName;
+    return newName;
 };
 
 /**
@@ -283,46 +425,45 @@ Blockly.Variables.generateUniqueName = function(workspace) {
  * @param {string=} opt_type The type of the variable like 'int', 'string', or
  *     ''. This will default to '', which is a specific type.
  */
-Blockly.Variables.createVariableButtonHandler = function(
-    workspace, opt_callback, opt_type) {
-  var type = opt_type || '';
-  // This function needs to be named so it can be called recursively.
-  var promptAndCheckWithAlert = function(defaultName) {
-    Blockly.Variables.promptName(Blockly.Msg['NEW_VARIABLE_TITLE'], defaultName,
-        function(text) {
-          if (text) {
-            var existing =
-                Blockly.Variables.nameUsedWithAnyType_(text, workspace);
-            if (existing) {
-              var lowerCase = text.toLowerCase();
-              if (existing.type == type) {
-                var msg = Blockly.Msg['VARIABLE_ALREADY_EXISTS'].replace(
-                    '%1', lowerCase);
-              } else {
-                var msg =
-                    Blockly.Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
-                msg = msg.replace('%1', lowerCase).replace('%2', existing.type);
-              }
-              Blockly.alert(msg,
-                  function() {
-                    promptAndCheckWithAlert(text);  // Recurse
-                  });
-            } else {
-              // No conflict
-              workspace.createVariable(text, type);
-              if (opt_callback) {
-                opt_callback(text);
-              }
-            }
-          } else {
-            // User canceled prompt.
-            if (opt_callback) {
-              opt_callback(null);
-            }
-          }
-        });
-  };
-  promptAndCheckWithAlert('');
+Blockly.Variables.createVariableButtonHandler = function (workspace, opt_callback, opt_type) {
+    var type = opt_type || '';
+    // This function needs to be named so it can be called recursively.
+    var promptAndCheckWithAlert = function (defaultName) {
+        Blockly.Variables.promptName(Blockly.Msg['NEW_VARIABLE_TITLE'], defaultName,
+            function (text) {
+                if (text) {
+                    var existing =
+                        Blockly.Variables.nameUsedWithAnyType_(text, workspace);
+                    if (existing) {
+                        var lowerCase = text.toLowerCase();
+                        if (existing.type == type) {
+                            var msg = Blockly.Msg['VARIABLE_ALREADY_EXISTS'].replace(
+                                '%1', lowerCase);
+                        } else {
+                            var msg =
+                                Blockly.Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
+                            msg = msg.replace('%1', lowerCase).replace('%2', existing.type);
+                        }
+                        Blockly.alert(msg,
+                            function () {
+                                promptAndCheckWithAlert(text);  // Recurse
+                            });
+                    } else {
+                        // No conflict
+                        workspace.createVariable(text, type);
+                        if (opt_callback) {
+                            opt_callback(text);
+                        }
+                    }
+                } else {
+                    // User canceled prompt.
+                    if (opt_callback) {
+                        opt_callback(null);
+                    }
+                }
+            });
+    };
+    promptAndCheckWithAlert('');
 };
 goog.exportSymbol('Blockly.Variables.createVariableButtonHandler',
     Blockly.Variables.createVariableButtonHandler);
@@ -353,40 +494,40 @@ goog.exportSymbol('Blockly.Variables.createVariable',
  *     be passed an acceptable new variable name, or null if change is to be
  *     aborted (cancel button), or undefined if an existing variable was chosen.
  */
-Blockly.Variables.renameVariable = function(workspace, variable,
-    opt_callback) {
-  // This function needs to be named so it can be called recursively.
-  var promptAndCheckWithAlert = function(defaultName) {
-    var promptText =
-        Blockly.Msg['RENAME_VARIABLE_TITLE'].replace('%1', variable.name);
-    Blockly.Variables.promptName(promptText, defaultName,
-        function(newName) {
-          if (newName) {
-            var existing = Blockly.Variables.nameUsedWithOtherType_(newName,
-                variable.type, workspace);
-            if (existing) {
-              var msg = Blockly.Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
-                  .replace('%1', newName.toLowerCase())
-                  .replace('%2', existing.type);
-              Blockly.alert(msg,
-                  function() {
-                    promptAndCheckWithAlert(newName);  // Recurse
-                  });
-            } else {
-              workspace.renameVariableById(variable.getId(), newName);
-              if (opt_callback) {
-                opt_callback(newName);
-              }
-            }
-          } else {
-            // User canceled prompt.
-            if (opt_callback) {
-              opt_callback(null);
-            }
-          }
-        });
-  };
-  promptAndCheckWithAlert('');
+Blockly.Variables.renameVariable = function (workspace, variable,
+                                             opt_callback) {
+    // This function needs to be named so it can be called recursively.
+    var promptAndCheckWithAlert = function (defaultName) {
+        var promptText =
+            Blockly.Msg['RENAME_VARIABLE_TITLE'].replace('%1', variable.name);
+        Blockly.Variables.promptName(promptText, defaultName,
+            function (newName) {
+                if (newName) {
+                    var existing = Blockly.Variables.nameUsedWithOtherType_(newName,
+                        variable.type, workspace);
+                    if (existing) {
+                        var msg = Blockly.Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
+                            .replace('%1', newName.toLowerCase())
+                            .replace('%2', existing.type);
+                        Blockly.alert(msg,
+                            function () {
+                                promptAndCheckWithAlert(newName);  // Recurse
+                            });
+                    } else {
+                        workspace.renameVariableById(variable.getId(), newName);
+                        if (opt_callback) {
+                            opt_callback(newName);
+                        }
+                    }
+                } else {
+                    // User canceled prompt.
+                    if (opt_callback) {
+                        opt_callback(null);
+                    }
+                }
+            });
+    };
+    promptAndCheckWithAlert('');
 };
 
 /**
@@ -396,20 +537,20 @@ Blockly.Variables.renameVariable = function(workspace, variable,
  * @param {function(?string)} callback A callback. It will return the new
  *     variable name, or null if the user picked something illegal.
  */
-Blockly.Variables.promptName = function(promptText, defaultText, callback) {
-  Blockly.prompt(promptText, defaultText, function(newVar) {
-    // Merge runs of whitespace.  Strip leading and trailing whitespace.
-    // Beyond this, all names are legal.
-    if (newVar) {
-      newVar = newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
-      if (newVar == Blockly.Msg['RENAME_VARIABLE'] ||
-          newVar == Blockly.Msg['NEW_VARIABLE']) {
-        // Ok, not ALL names are legal...
-        newVar = null;
-      }
-    }
-    callback(newVar);
-  });
+Blockly.Variables.promptName = function (promptText, defaultText, callback) {
+    Blockly.prompt(promptText, defaultText, function (newVar) {
+        // Merge runs of whitespace.  Strip leading and trailing whitespace.
+        // Beyond this, all names are legal.
+        if (newVar) {
+            newVar = newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
+            if (newVar == Blockly.Msg['RENAME_VARIABLE'] ||
+                newVar == Blockly.Msg['NEW_VARIABLE']) {
+                // Ok, not ALL names are legal...
+                newVar = null;
+            }
+        }
+        callback(newVar);
+    });
 };
 
 /**
@@ -423,16 +564,16 @@ Blockly.Variables.promptName = function(promptText, defaultText, callback) {
  *     different type, or null if none was found.
  * @private
  */
-Blockly.Variables.nameUsedWithOtherType_ = function(name, type, workspace) {
-  var allVariables = workspace.getVariableMap().getAllVariables();
+Blockly.Variables.nameUsedWithOtherType_ = function (name, type, workspace) {
+    var allVariables = workspace.getVariableMap().getAllVariables();
 
-  name = name.toLowerCase();
-  for (var i = 0, variable; variable = allVariables[i]; i++) {
-    if (variable.name.toLowerCase() == name && variable.type != type) {
-      return variable;
+    name = name.toLowerCase();
+    for (var i = 0, variable; variable = allVariables[i]; i++) {
+        if (variable.name.toLowerCase() == name && variable.type != type) {
+            return variable;
+        }
     }
-  }
-  return null;
+    return null;
 };
 
 /**
@@ -444,16 +585,16 @@ Blockly.Variables.nameUsedWithOtherType_ = function(name, type, workspace) {
  *     or null if none was found.
  * @private
  */
-Blockly.Variables.nameUsedWithAnyType_ = function(name, workspace) {
-  var allVariables = workspace.getVariableMap().getAllVariables();
+Blockly.Variables.nameUsedWithAnyType_ = function (name, workspace) {
+    var allVariables = workspace.getVariableMap().getAllVariables();
 
-  name = name.toLowerCase();
-  for (var i = 0, variable; variable = allVariables[i]; i++) {
-    if (variable.name.toLowerCase() == name) {
-      return variable;
+    name = name.toLowerCase();
+    for (var i = 0, variable; variable = allVariables[i]; i++) {
+        if (variable.name.toLowerCase() == name) {
+            return variable;
+        }
     }
-  }
-  return null;
+    return null;
 };
 
 /**
@@ -463,17 +604,17 @@ Blockly.Variables.nameUsedWithAnyType_ = function(name, workspace) {
  * @return {string} The generated XML.
  * @package
  */
-Blockly.Variables.generateVariableFieldXmlString = function(variableModel) {
-  // The variable name may be user input, so it may contain characters that
-  // need to be escaped to create valid XML.
-  var typeString = variableModel.type;
-  if (typeString == '') {
-    typeString = '\'\'';
-  }
-  var text = '<field name="VAR" id="' + variableModel.getId() +
-      '" variabletype="' + goog.string.htmlEscape(typeString) +
-      '">' + goog.string.htmlEscape(variableModel.name) + '</field>';
-  return text;
+Blockly.Variables.generateVariableFieldXmlString = function (variableModel) {
+    // The variable name may be user input, so it may contain characters that
+    // need to be escaped to create valid XML.
+    var typeString = variableModel.type;
+    if (typeString == '') {
+        typeString = '\'\'';
+    }
+    var text = '<field name="VAR" id="' + variableModel.getId() +
+        '" variabletype="' + goog.string.htmlEscape(typeString) +
+        '">' + goog.string.htmlEscape(variableModel.name) + '</field>';
+    return text;
 };
 
 /**
@@ -483,13 +624,13 @@ Blockly.Variables.generateVariableFieldXmlString = function(variableModel) {
  * @return {Element} The generated DOM.
  * @public
  */
-Blockly.Variables.generateVariableFieldDom = function(variableModel) {
-  var xmlFieldString =
-      Blockly.Variables.generateVariableFieldXmlString(variableModel);
-  var text = '<xml>' + xmlFieldString + '</xml>';
-  var dom = Blockly.Xml.textToDom(text);
-  var fieldDom = dom.firstChild;
-  return fieldDom;
+Blockly.Variables.generateVariableFieldDom = function (variableModel) {
+    var xmlFieldString =
+        Blockly.Variables.generateVariableFieldXmlString(variableModel);
+    var text = '<xml>' + xmlFieldString + '</xml>';
+    var dom = Blockly.Xml.textToDom(text);
+    var fieldDom = dom.firstChild;
+    return fieldDom;
 };
 
 /**
@@ -504,15 +645,15 @@ Blockly.Variables.generateVariableFieldDom = function(variableModel) {
  * @return {!Blockly.VariableModel} The variable corresponding to the given ID
  *     or name + type combination.
  */
-Blockly.Variables.getOrCreateVariablePackage = function(workspace, id, opt_name,
-    opt_type) {
-  var variable = Blockly.Variables.getVariable(workspace, id, opt_name,
-      opt_type);
-  if (!variable) {
-    variable = Blockly.Variables.createVariable_(workspace, id, opt_name,
+Blockly.Variables.getOrCreateVariablePackage = function (workspace, id, opt_name,
+                                                         opt_type) {
+    var variable = Blockly.Variables.getVariable(workspace, id, opt_name,
         opt_type);
-  }
-  return variable;
+    if (!variable) {
+        variable = Blockly.Variables.createVariable_(workspace, id, opt_name,
+            opt_type);
+    }
+    return variable;
 };
 
 /**
@@ -530,26 +671,26 @@ Blockly.Variables.getOrCreateVariablePackage = function(workspace, id, opt_name,
  *     or name + type combination, or null if not found.
  * @package
  */
-Blockly.Variables.getVariable = function(workspace, id, opt_name, opt_type) {
-  var potentialVariableMap = workspace.getPotentialVariableMap();
-  // Try to just get the variable, by ID if possible.
-  if (id) {
-    // Look in the real variable map before checking the potential variable map.
-    var variable = workspace.getVariableById(id);
-    if (!variable && potentialVariableMap) {
-      variable = potentialVariableMap.getVariableById(id);
+Blockly.Variables.getVariable = function (workspace, id, opt_name, opt_type) {
+    var potentialVariableMap = workspace.getPotentialVariableMap();
+    // Try to just get the variable, by ID if possible.
+    if (id) {
+        // Look in the real variable map before checking the potential variable map.
+        var variable = workspace.getVariableById(id);
+        if (!variable && potentialVariableMap) {
+            variable = potentialVariableMap.getVariableById(id);
+        }
+    } else if (opt_name) {
+        if (opt_type == undefined) {
+            throw Error('Tried to look up a variable by name without a type');
+        }
+        // Otherwise look up by name and type.
+        var variable = workspace.getVariable(opt_name, opt_type);
+        if (!variable && potentialVariableMap) {
+            variable = potentialVariableMap.getVariable(opt_name, opt_type);
+        }
     }
-  } else if (opt_name) {
-    if (opt_type == undefined) {
-      throw Error('Tried to look up a variable by name without a type');
-    }
-    // Otherwise look up by name and type.
-    var variable = workspace.getVariable(opt_name, opt_type);
-    if (!variable && potentialVariableMap) {
-      variable = potentialVariableMap.getVariable(opt_name, opt_type);
-    }
-  }
-  return variable;
+    return variable;
 };
 
 /**
@@ -563,22 +704,22 @@ Blockly.Variables.getVariable = function(workspace, id, opt_name, opt_type) {
  *     or name + type combination.
  * @private
  */
-Blockly.Variables.createVariable_ = function(workspace, id, opt_name,
-    opt_type) {
-  var potentialVariableMap = workspace.getPotentialVariableMap();
-  // Variables without names get uniquely named for this workspace.
-  if (!opt_name) {
-    var ws = workspace.isFlyout ? workspace.targetWorkspace : workspace;
-    opt_name = Blockly.Variables.generateUniqueName(ws);
-  }
+Blockly.Variables.createVariable_ = function (workspace, id, opt_name,
+                                              opt_type) {
+    var potentialVariableMap = workspace.getPotentialVariableMap();
+    // Variables without names get uniquely named for this workspace.
+    if (!opt_name) {
+        var ws = workspace.isFlyout ? workspace.targetWorkspace : workspace;
+        opt_name = Blockly.Variables.generateUniqueName(ws);
+    }
 
-  // Create a potential variable if in the flyout.
-  if (potentialVariableMap) {
-    var variable = potentialVariableMap.createVariable(opt_name, opt_type, id);
-  } else {  // In the main workspace, create a real variable.
-    var variable = workspace.createVariable(opt_name, opt_type, id);
-  }
-  return variable;
+    // Create a potential variable if in the flyout.
+    if (potentialVariableMap) {
+        var variable = potentialVariableMap.createVariable(opt_name, opt_type, id);
+    } else {  // In the main workspace, create a real variable.
+        var variable = workspace.createVariable(opt_name, opt_type, id);
+    }
+    return variable;
 };
 
 /**
@@ -593,18 +734,18 @@ Blockly.Variables.createVariable_ = function(workspace, id, opt_name,
  *     or [] if no new variables were added to the workspace.
  * @package
  */
-Blockly.Variables.getAddedVariables = function(workspace, originalVariables) {
-  var allCurrentVariables = workspace.getAllVariables();
-  var addedVariables = [];
-  if (originalVariables.length != allCurrentVariables.length) {
-    for (var i = 0; i < allCurrentVariables.length; i++) {
-      var variable = allCurrentVariables[i];
-      // For any variable that is present in allCurrentVariables but not
-      // present in originalVariables, add the variable to addedVariables.
-      if (originalVariables.indexOf(variable) == -1) {
-        addedVariables.push(variable);
-      }
+Blockly.Variables.getAddedVariables = function (workspace, originalVariables) {
+    var allCurrentVariables = workspace.getAllVariables();
+    var addedVariables = [];
+    if (originalVariables.length != allCurrentVariables.length) {
+        for (var i = 0; i < allCurrentVariables.length; i++) {
+            var variable = allCurrentVariables[i];
+            // For any variable that is present in allCurrentVariables but not
+            // present in originalVariables, add the variable to addedVariables.
+            if (originalVariables.indexOf(variable) == -1) {
+                addedVariables.push(variable);
+            }
+        }
     }
-  }
-  return addedVariables;
+    return addedVariables;
 };

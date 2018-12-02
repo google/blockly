@@ -99,36 +99,5 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "colour": "%{BKY_COLOUR_HUE}",
     "helpUrl": "%{BKY_COLOUR_RGB_HELPURL}",
     "tooltip": "%{BKY_COLOUR_RGB_TOOLTIP}"
-  },
-
-  // Block for blending two colours together.
-  {
-    "type": "colour_blend",
-    "message0": "%{BKY_COLOUR_BLEND_TITLE} %{BKY_COLOUR_BLEND_COLOUR1} " +
-        "%1 %{BKY_COLOUR_BLEND_COLOUR2} %2 %{BKY_COLOUR_BLEND_RATIO} %3",
-    "args0": [
-      {
-        "type": "input_value",
-        "name": "COLOUR1",
-        "check": "Colour",
-        "align": "RIGHT"
-      },
-      {
-        "type": "input_value",
-        "name": "COLOUR2",
-        "check": "Colour",
-        "align": "RIGHT"
-      },
-      {
-        "type": "input_value",
-        "name": "RATIO",
-        "check": "Number",
-        "align": "RIGHT"
-      }
-    ],
-    "output": "Colour",
-    "colour": "%{BKY_COLOUR_HUE}",
-    "helpUrl": "%{BKY_COLOUR_BLEND_HELPURL}",
-    "tooltip": "%{BKY_COLOUR_BLEND_TOOLTIP}"
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)

@@ -70,34 +70,3 @@ Blockly.JavaScript['colour_rgb'] = function(block) {
   var code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
-
-Blockly.JavaScript['colour_blend'] = function(block) {
-  // Blend two colours together.
-  var c1 = Blockly.JavaScript.valueToCode(block, 'COLOUR1',
-      Blockly.JavaScript.ORDER_COMMA) || '\'#000000\'';
-  var c2 = Blockly.JavaScript.valueToCode(block, 'COLOUR2',
-      Blockly.JavaScript.ORDER_COMMA) || '\'#000000\'';
-  var ratio = Blockly.JavaScript.valueToCode(block, 'RATIO',
-      Blockly.JavaScript.ORDER_COMMA) || 0.5;
-  var functionName = Blockly.JavaScript.provideFunction_(
-      'colourBlend',
-      ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-          '(c1, c2, ratio) {',
-       '  ratio = Math.max(Math.min(Number(ratio), 1), 0);',
-       '  var r1 = parseInt(c1.substring(1, 3), 16);',
-       '  var g1 = parseInt(c1.substring(3, 5), 16);',
-       '  var b1 = parseInt(c1.substring(5, 7), 16);',
-       '  var r2 = parseInt(c2.substring(1, 3), 16);',
-       '  var g2 = parseInt(c2.substring(3, 5), 16);',
-       '  var b2 = parseInt(c2.substring(5, 7), 16);',
-       '  var r = Math.round(r1 * (1 - ratio) + r2 * ratio);',
-       '  var g = Math.round(g1 * (1 - ratio) + g2 * ratio);',
-       '  var b = Math.round(b1 * (1 - ratio) + b2 * ratio);',
-       '  r = (\'0\' + (r || 0).toString(16)).slice(-2);',
-       '  g = (\'0\' + (g || 0).toString(16)).slice(-2);',
-       '  b = (\'0\' + (b || 0).toString(16)).slice(-2);',
-       '  return \'#\' + r + g + b;',
-       '}']);
-  var code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-};

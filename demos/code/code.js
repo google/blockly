@@ -425,7 +425,11 @@ Code.init = function() {
             wheel: true}
       });
 
-  // Clean up variable when a
+
+    var xml = '<xml><block type="arduino_start" deletable="false" movable="true"></block></xml>';
+    Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), Code.workspace);
+
+    // Clean up variable when a
   Code.workspace.addChangeListener(function(event) {
       if (event.element == 'mutatorOpen' && !event.newValue) {
 

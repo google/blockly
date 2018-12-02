@@ -92,19 +92,3 @@ Blockly.JavaScript['procedures_callnoreturn'] = function(block) {
   var code = funcName + '(' + args.join(', ') + ');\n';
   return code;
 };
-
-Blockly.JavaScript['procedures_ifreturn'] = function(block) {
-  // Conditionally return value from a procedure.
-  var condition = Blockly.JavaScript.valueToCode(block, 'CONDITION',
-      Blockly.JavaScript.ORDER_NONE) || 'false';
-  var code = 'if (' + condition + ') {\n';
-  if (block.hasReturnValue_) {
-    var value = Blockly.JavaScript.valueToCode(block, 'VALUE',
-        Blockly.JavaScript.ORDER_NONE) || 'null';
-    code += Blockly.JavaScript.INDENT + 'return ' + value + ';\n';
-  } else {
-    code += Blockly.JavaScript.INDENT + 'return;\n';
-  }
-  code += '}\n';
-  return code;
-};

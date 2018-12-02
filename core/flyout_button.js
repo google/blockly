@@ -81,7 +81,7 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
    */
   this.callback_ = null;
 
-  var callbackKey = xml.getAttribute('callbackKey');
+  var callbackKey = xml.getAttribute('callbackkey');
   if (this.isLabel_ && callbackKey) {
     console.warn('Labels should not have callbacks. Label text: ' + this.text_);
   } else if (!this.isLabel_ &&

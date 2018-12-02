@@ -146,6 +146,10 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       container.appendChild(parameter);
     }
 
+    if (this.getFieldValue('RETURN TYPE')) {
+      container.setAttribute('return_type', this.getFieldValue('RETURN TYPE'));
+    }
+
     // Save whether the statement input is visible.
     if (!this.hasStatements_) {
       container.setAttribute('statements', 'false');
@@ -631,6 +635,17 @@ Blockly.Blocks['procedures_mutatorarg'] = {
           return null;
       }
 
+      var blocks = this.workspace.getAllBlocks();
+
+      for (var i = 0; i < blocks.length; i += 1) {
+          if (blocks[i].id == this.id) {
+             continue;
+          }
+          if (blocks[i].getFieldValue('NAME') == varName) {
+            return null;
+          }
+      }
+
       return varName;
   },
 
@@ -667,6 +682,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
           // Rename the variable (case change)
           outerWs.renameVarById(model.getId(), varName);
       }
+
       if (!model) {
           model = outerWs.createVariable(varName, varType);
           // Noah CHANGING VARIABLE NAME TO REFLECT TYPE
@@ -719,6 +735,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     this.quarkConnections_ = {};
     this.quarkIds_ = null;
     this.previousDisabledState_ = false;
+    this.returnType = null;
   },
 
   /**
@@ -921,6 +938,11 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       // NOAH TESTING ARGUMENTS NEED TO SET IN XML
       container.appendChild(parameter);
     }
+
+    if (this.returnType) {
+      container.setAttribute('return_type', this.returnType);
+    }
+
     return container;
   },
   /**
@@ -941,6 +963,14 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         types.push(childNode.getAttribute('type'));
         paramIds.push(childNode.getAttribute('paramId'));
       }
+    }
+
+    var returnType = xmlElement.getAttribute('return_type');
+
+    // Sets the output of the block
+    if (returnType) {
+      this.setOutput(true, returnType);
+      this.returnType = returnType;
     }
     this.setProcedureParameters_(args, paramIds, types);
   },
@@ -971,9 +1001,9 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     if (event.type == Blockly.Events.BLOCK_CREATE &&
         event.ids.indexOf(this.id) != -1) {
 
-      var typesAndNames = this.argumentVarModels_.map(function(arg) {
+      var typesAndNames = this.argumentVarModels_ ?  this.argumentVarModels_.map(function(arg) {
         return {'name' : arg.name, 'type': arg.type};
-      });
+      }) : [];
 
 
       // Look for the case where a procedure call was created (usually through
@@ -982,7 +1012,8 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       var name = this.getProcedureCall();
       var def = Blockly.Procedures.getDefinition(name, this.workspace);
 
-      var defTypesAndNames = def.argumentVarModels_.map(function(arg) {
+      var defTypesAndNames = def.argumentVarModels_ ? [] :
+          def.argumentVarModels_.map(function(arg) {
           return {'name' : arg.name, 'type': arg.type};
       });
 
@@ -1086,7 +1117,7 @@ Blockly.Blocks['procedures_callreturn'] = {
   init: function() {
     this.appendDummyInput('TOPROW')
         .appendField('', 'NAME');
-    this.setOutput(true);
+    this.setOutput(true, 'Number'); // Start off as number
     this.setColour(Blockly.Msg['PROCEDURES_HUE']);
     // Tooltip is set in domToMutation.
     this.setHelpUrl(Blockly.Msg['PROCEDURES_CALLRETURN_HELPURL']);
@@ -1108,100 +1139,4 @@ Blockly.Blocks['procedures_callreturn'] = {
   customContextMenu:
       Blockly.Blocks['procedures_callnoreturn'].customContextMenu,
   defType_: 'procedures_defreturn'
-};
-
-Blockly.Blocks['procedures_ifreturn'] = {
-  /**
-   * Block for conditionally returning a value from a procedure.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.appendValueInput('CONDITION')
-        .setCheck('Boolean')
-        .appendField(Blockly.Msg['CONTROLS_IF_MSG_IF']);
-    this.appendValueInput('VALUE')
-        .appendField(Blockly.Msg['PROCEDURES_DEFRETURN_RETURN']);
-    this.setInputsInline(true);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setColour(Blockly.Msg['PROCEDURES_HUE']);
-    this.setTooltip(Blockly.Msg['PROCEDURES_IFRETURN_TOOLTIP']);
-    this.setHelpUrl(Blockly.Msg['PROCEDURES_IFRETURN_HELPURL']);
-    this.hasReturnValue_ = true;
-  },
-  /**
-   * Create XML to represent whether this block has a return value.
-   * @return {!Element} XML storage element.
-   * @this Blockly.Block
-   */
-  mutationToDom: function() {
-    var container = document.createElement('mutation');
-    container.setAttribute('value', Number(this.hasReturnValue_));
-    return container;
-  },
-  /**
-   * Parse XML to restore whether this block has a return value.
-   * @param {!Element} xmlElement XML storage element.
-   * @this Blockly.Block
-   */
-  domToMutation: function(xmlElement) {
-    var value = xmlElement.getAttribute('value');
-    this.hasReturnValue_ = (value == 1);
-    if (!this.hasReturnValue_) {
-      this.removeInput('VALUE');
-      this.appendDummyInput('VALUE')
-          .appendField(Blockly.Msg['PROCEDURES_DEFRETURN_RETURN']);
-    }
-  },
-  /**
-   * Called whenever anything on the workspace changes.
-   * Add warning if this flow block is not nested inside a loop.
-   * @param {!Blockly.Events.Abstract} e Change event.
-   * @this Blockly.Block
-   */
-  onchange: function(/* e */) {
-    if (!this.workspace.isDragging || this.workspace.isDragging()) {
-      return;  // Don't change state at the start of a drag.
-    }
-    var legal = false;
-    // Is the block nested in a procedure?
-    var block = this;
-    do {
-      if (this.FUNCTION_TYPES.indexOf(block.type) != -1) {
-        legal = true;
-        break;
-      }
-      block = block.getSurroundParent();
-    } while (block);
-    if (legal) {
-      // If needed, toggle whether this block has a return value.
-      if (block.type == 'procedures_defnoreturn' && this.hasReturnValue_) {
-        this.removeInput('VALUE');
-        this.appendDummyInput('VALUE')
-            .appendField(Blockly.Msg['PROCEDURES_DEFRETURN_RETURN']);
-        this.hasReturnValue_ = false;
-      } else if (block.type == 'procedures_defreturn' &&
-                 !this.hasReturnValue_) {
-        this.removeInput('VALUE');
-        this.appendValueInput('VALUE')
-            .appendField(Blockly.Msg['PROCEDURES_DEFRETURN_RETURN']);
-        this.hasReturnValue_ = true;
-      }
-      this.setWarningText(null);
-      if (!this.isInFlyout) {
-        this.setDisabled(false);
-      }
-    } else {
-      this.setWarningText(Blockly.Msg['PROCEDURES_IFRETURN_WARNING']);
-      if (!this.isInFlyout && !this.getInheritedDisabled()) {
-        this.setDisabled(true);
-      }
-    }
-  },
-  /**
-   * List of block types that are functions and thus do not need warnings.
-   * To add a new function type add this to your code:
-   * Blockly.Blocks['procedures_ifreturn'].FUNCTION_TYPES.push('custom_func');
-   */
-  FUNCTION_TYPES: ['procedures_defnoreturn', 'procedures_defreturn']
 };

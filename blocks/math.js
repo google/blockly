@@ -93,144 +93,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "extensions": ["math_op_tooltip"]
   },
 
-  // Block for advanced math operators with single operand.
-  {
-    "type": "math_single",
-    "message0": "%1 %2",
-    "args0": [
-      {
-        "type": "field_dropdown",
-        "name": "OP",
-        "options": [
-          ["%{BKY_MATH_SINGLE_OP_ROOT}", 'ROOT'],
-          ["%{BKY_MATH_SINGLE_OP_ABSOLUTE}", 'ABS'],
-          ['-', 'NEG'],
-          ['ln', 'LN'],
-          ['log10', 'LOG10'],
-          ['e^', 'EXP'],
-          ['10^', 'POW10']
-        ]
-      },
-      {
-        "type": "input_value",
-        "name": "NUM",
-        "check": "Number"
-      }
-    ],
-    "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
-    "helpUrl": "%{BKY_MATH_SINGLE_HELPURL}",
-    "extensions": ["math_op_tooltip"]
-  },
-
-  // Block for trigonometry operators.
-  {
-    "type": "math_trig",
-    "message0": "%1 %2",
-    "args0": [
-      {
-        "type": "field_dropdown",
-        "name": "OP",
-        "options": [
-          ["%{BKY_MATH_TRIG_SIN}", "SIN"],
-          ["%{BKY_MATH_TRIG_COS}", "COS"],
-          ["%{BKY_MATH_TRIG_TAN}", "TAN"],
-          ["%{BKY_MATH_TRIG_ASIN}", "ASIN"],
-          ["%{BKY_MATH_TRIG_ACOS}", "ACOS"],
-          ["%{BKY_MATH_TRIG_ATAN}", "ATAN"]
-        ]
-      },
-      {
-        "type": "input_value",
-        "name": "NUM",
-        "check": "Number"
-      }
-    ],
-    "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
-    "helpUrl": "%{BKY_MATH_TRIG_HELPURL}",
-    "extensions": ["math_op_tooltip"]
-  },
-
-  // Block for constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
-  {
-    "type": "math_constant",
-    "message0": "%1",
-    "args0": [
-      {
-        "type": "field_dropdown",
-        "name": "CONSTANT",
-        "options": [
-          ["\u03c0", "PI"],
-          ["e", "E"],
-          ["\u03c6", "GOLDEN_RATIO"],
-          ["sqrt(2)", "SQRT2"],
-          ["sqrt(\u00bd)", "SQRT1_2"],
-          ["\u221e", "INFINITY"]
-        ]
-      }
-    ],
-    "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
-    "tooltip": "%{BKY_MATH_CONSTANT_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_CONSTANT_HELPURL}"
-  },
-
-  // Block for checking if a number is even, odd, prime, whole, positive,
-  // negative or if it is divisible by certain number.
-  {
-    "type": "math_number_property",
-    "message0": "%1 %2",
-    "args0": [
-      {
-        "type": "input_value",
-        "name": "NUMBER_TO_CHECK",
-        "check": "Number"
-      },
-      {
-        "type": "field_dropdown",
-        "name": "PROPERTY",
-        "options": [
-          ["%{BKY_MATH_IS_EVEN}", "EVEN"],
-          ["%{BKY_MATH_IS_ODD}", "ODD"],
-          ["%{BKY_MATH_IS_PRIME}", "PRIME"],
-          ["%{BKY_MATH_IS_WHOLE}", "WHOLE"],
-          ["%{BKY_MATH_IS_POSITIVE}", "POSITIVE"],
-          ["%{BKY_MATH_IS_NEGATIVE}", "NEGATIVE"],
-          ["%{BKY_MATH_IS_DIVISIBLE_BY}", "DIVISIBLE_BY"]
-        ]
-      }
-    ],
-    "inputsInline": true,
-    "output": "Boolean",
-    "colour": "%{BKY_MATH_HUE}",
-    "tooltip": "%{BKY_MATH_IS_TOOLTIP}",
-    "mutator": "math_is_divisibleby_mutator"
-  },
-
-  // Block for adding to a variable in place.
-  {
-    "type": "math_change",
-    "message0": "%{BKY_MATH_CHANGE_TITLE}",
-    "args0": [
-      {
-        "type": "field_variable",
-        "name": "VAR",
-        "variable": "%{BKY_MATH_CHANGE_TITLE_ITEM}"
-      },
-      {
-        "type": "input_value",
-        "name": "DELTA",
-        "check": "Number"
-      }
-    ],
-    "previousStatement": null,
-    "nextStatement": null,
-    "colour": "%{BKY_VARIABLES_HUE}",
-    "helpUrl": "%{BKY_MATH_CHANGE_HELPURL}",
-    "extensions": ["math_change_tooltip"]
-  },
-
   // Block for rounding functions.
   {
     "type": "math_round",
@@ -257,39 +119,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_MATH_ROUND_TOOLTIP}"
   },
 
-  // Block for evaluating a list of numbers to return sum, average, min, max,
-  // etc.  Some functions also work on text (min, max, mode, median).
-  {
-    "type": "math_on_list",
-    "message0": "%1 %2",
-    "args0": [
-      {
-        "type": "field_dropdown",
-        "name": "OP",
-        "options": [
-          ["%{BKY_MATH_ONLIST_OPERATOR_SUM}", "SUM"],
-          ["%{BKY_MATH_ONLIST_OPERATOR_MIN}", "MIN"],
-          ["%{BKY_MATH_ONLIST_OPERATOR_MAX}", "MAX"],
-          ["%{BKY_MATH_ONLIST_OPERATOR_AVERAGE}", "AVERAGE"],
-          ["%{BKY_MATH_ONLIST_OPERATOR_MEDIAN}", "MEDIAN"],
-          ["%{BKY_MATH_ONLIST_OPERATOR_MODE}", "MODE"],
-          ["%{BKY_MATH_ONLIST_OPERATOR_STD_DEV}", "STD_DEV"],
-          ["%{BKY_MATH_ONLIST_OPERATOR_RANDOM}", "RANDOM"]
-        ]
-      },
-      {
-        "type": "input_value",
-        "name": "LIST",
-        "check": "Array"
-      }
-    ],
-    "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
-    "helpUrl": "%{BKY_MATH_ONLIST_HELPURL}",
-    "mutator": "math_modes_of_list_mutator",
-    "extensions": ["math_op_tooltip"]
-  },
-
   // Block for remainder of a division.
   {
     "type": "math_modulo",
@@ -313,34 +142,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_MATH_MODULO_HELPURL}"
   },
 
-  // Block for constraining a number between two limits.
-  {
-    "type": "math_constrain",
-    "message0": "%{BKY_MATH_CONSTRAIN_TITLE}",
-    "args0": [
-      {
-        "type": "input_value",
-        "name": "VALUE",
-        "check": "Number"
-      },
-      {
-        "type": "input_value",
-        "name": "LOW",
-        "check": "Number"
-      },
-      {
-        "type": "input_value",
-        "name": "HIGH",
-        "check": "Number"
-      }
-    ],
-    "inputsInline": true,
-    "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
-    "tooltip": "%{BKY_MATH_CONSTRAIN_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_CONSTRAIN_HELPURL}"
-  },
-
   // Block for random integer between [X] and [Y].
   {
     "type": "math_random_int",
@@ -362,39 +163,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "colour": "%{BKY_MATH_HUE}",
     "tooltip": "%{BKY_MATH_RANDOM_INT_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_RANDOM_INT_HELPURL}"
-  },
-
-  // Block for random integer between [X] and [Y].
-  {
-    "type": "math_random_float",
-    "message0": "%{BKY_MATH_RANDOM_FLOAT_TITLE_RANDOM}",
-    "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
-    "tooltip": "%{BKY_MATH_RANDOM_FLOAT_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_RANDOM_FLOAT_HELPURL}"
-  },
-
-  // Block for calculating atan2 of [X] and [Y].
-  {
-    "type": "math_atan2",
-    "message0": "%{BKY_MATH_ATAN2_TITLE}",
-    "args0": [
-      {
-        "type": "input_value",
-        "name": "X",
-        "check": "Number"
-      },
-      {
-        "type": "input_value",
-        "name": "Y",
-        "check": "Number"
-      }
-    ],
-    "inputsInline": true,
-    "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
-    "tooltip": "%{BKY_MATH_ATAN2_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_ATAN2_HELPURL}"
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 

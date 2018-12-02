@@ -160,36 +160,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "controls_for_tooltip"
     ]
   },
-  // Block for 'for each' loop.
-  {
-    "type": "controls_forEach",
-    "message0": "%{BKY_CONTROLS_FOREACH_TITLE}",
-    "args0": [
-      {
-        "type": "field_variable",
-        "name": "VAR",
-        "variable": null
-      },
-      {
-        "type": "input_value",
-        "name": "LIST",
-        "check": "Array"
-      }
-    ],
-    "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
-    "args1": [{
-      "type": "input_statement",
-      "name": "DO"
-    }],
-    "previousStatement": null,
-    "nextStatement": null,
-    "colour": "%{BKY_LOOPS_HUE}",
-    "helpUrl": "%{BKY_CONTROLS_FOREACH_HELPURL}",
-    "extensions": [
-      "contextMenu_newGetVariableBlock",
-      "controls_forEach_tooltip"
-    ]
-  },
   // Block for flow statements: continue, break.
   {
     "type": "controls_flow_statements",
@@ -273,6 +243,7 @@ Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
       xmlBlock.appendChild(xmlField);
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
       options.push(option);
+      console.log(xmlBlock, option);
     }
   }
 };
@@ -283,10 +254,6 @@ Blockly.Extensions.registerMixin('contextMenu_newGetVariableBlock',
 Blockly.Extensions.register('controls_for_tooltip',
     Blockly.Extensions.buildTooltipWithFieldText(
         '%{BKY_CONTROLS_FOR_TOOLTIP}', 'VAR'));
-
-Blockly.Extensions.register('controls_forEach_tooltip',
-    Blockly.Extensions.buildTooltipWithFieldText(
-        '%{BKY_CONTROLS_FOREACH_TOOLTIP}', 'VAR'));
 
 /**
  * This mixin adds a check to make sure the 'controls_flow_statements' block
@@ -302,7 +269,7 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
    * To add a new loop type add this to your code:
    * Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push('custom_loop');
    */
-  LOOP_TYPES: ['controls_repeat', 'controls_repeat_ext', 'controls_forEach',
+  LOOP_TYPES: ['controls_repeat', 'controls_repeat_ext',
     'controls_for', 'controls_whileUntil'],
 
   /**

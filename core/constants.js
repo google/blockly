@@ -69,6 +69,11 @@ Blockly.INSERTION_MARKER_COLOUR = '#000000';
 Blockly.BUMP_DELAY = 250;
 
 /**
+ * Maximum randomness in workspace units for bumping a block.
+ */
+Blockly.BUMP_RANDOMNESS = 10;
+
+/**
  * Number of characters to truncate a collapsed block to.
  */
 Blockly.COLLAPSE_CHARS = 30;

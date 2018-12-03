@@ -42,20 +42,20 @@ Blockly.FLYOUT_DRAG_RADIUS = 10;
 /**
  * Maximum misalignment between connections for them to snap together.
  */
-Blockly.SNAP_RADIUS = 36;
+Blockly.SNAP_RADIUS = 28;
 
 /**
  * Maximum misalignment between connections for them to snap together,
  * when a connection is already highlighted.
  */
-Blockly.CONNECTING_SNAP_RADIUS = 48;
+Blockly.CONNECTING_SNAP_RADIUS = Blockly.SNAP_RADIUS;
 
 /**
  * How much to prefer staying connected to the current connection over moving to
  * a new connection.  The current previewed connection is considered to be this
  * much closer to the matching connection on the block than it actually is.
  */
-Blockly.CURRENT_CONNECTION_PREFERENCE = 0;
+Blockly.CURRENT_CONNECTION_PREFERENCE = 8;
 
 /**
  * The main colour of insertion markers, in hex.  The block is rendered a

@@ -244,7 +244,7 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
   var ws = this.workspace_;
   var svgHolder = Blockly.utils.createSvgElement('svg',
       {
-        'y': 0
+        "id": "svg" + rnd
       },
       this.svgGroup_);
   var clip = Blockly.utils.createSvgElement('clipPath',

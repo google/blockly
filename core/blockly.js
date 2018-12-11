@@ -113,6 +113,13 @@ Blockly.clipboardTypeCounts_ = null;
 Blockly.cache3dSupported_ = null;
 
 /**
+ * Holds all styles for blocks and .
+ * @type {Blockly.Style}
+ * @private
+ */
+Blockly.style_ = null;
+
+/**
  * Convert a hue (HSV model) into an RGB hex triplet.
  * @param {number} hue Hue on a colour wheel (0-360).
  * @return {string} RGB code, e.g. '#5ba65b'.
@@ -665,6 +672,36 @@ Blockly.checkBlockColourConstant_ = function(
     var warning = warningPattern.replace('%1', namePath).replace('%2', msgName);
     console.warn(warning);
   }
+};
+
+
+/**
+ * Sets the style for blockly and refreshes all blocks in toolbox and workspace.
+ * @param {Blockly.Style} style Style for blockly.
+ */
+Blockly.setStyle = function(style){
+  this.style_ = style;
+  var workspace = Blockly.getMainWorkspace();
+  var blocks = workspace.getAllBlocks();
+
+  workspace.refreshToolboxSelection();
+  for (var i = 0; i < blocks.length; i++) {
+    var block = blocks[i];
+    block.setStyle(block.getStyleName());
+    block.updateColour();
+  }
+
+  var event = new Blockly.Events.Ui(null, 'styleChanged');
+  event.workspaceId = workspace.id;
+  Blockly.Events.fire(event);
+};
+
+/**
+ * Gets the style for blockly.
+ * @return {Blockly.Style} style Style for blockly.
+ */
+Blockly.getStyle = function(){
+  return this.style_;
 };
 
 // IE9 does not have a console.  Create a stub to stop errors.

@@ -152,6 +152,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    */
   this.isInsertionMarker_ = false;
 
+
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
     /** @type {string} */
@@ -217,6 +218,13 @@ Blockly.Block.obtain = function(workspace, prototypeName) {
 Blockly.Block.prototype.data = null;
 
 /**
+ * Colour of the block as HSV hue value (0-360)
+ * @type {?number}
+ * @private
+  */
+Blockly.Block.prototype.hue_ = null;
+
+/**
  * Colour of the block in '#RRGGBB' format.
  * @type {string}
  * @private
@@ -224,11 +232,35 @@ Blockly.Block.prototype.data = null;
 Blockly.Block.prototype.colour_ = '#000000';
 
 /**
- * Colour of the block as HSV hue value (0-360)
- * @type {?number}
+ * Secondary color of the block.
+ * Color if the block is a shadow.
+ * @type {string}
  * @private
-  */
-Blockly.Block.prototype.hue_ = null;
+ */
+Blockly.Block.prototype.secondaryColour_ = null;
+
+/**
+ * Tertiary color of the block.
+ * Color of the border on the block.
+ * @type {string}
+ * @private
+ */
+Blockly.Block.prototype.tertiaryColour_ = null;
+
+/**
+ * Style of the block.
+ * @type {Object} Map from style name (string) to style value (string)
+ * @private
+ */
+Blockly.Block.prototype.style_ = null;
+
+/**
+ * Name of the block style.
+ * @type {string}
+ * @private
+ */
+Blockly.Block.prototype.styleName_ = null;
+
 
 /**
  * Dispose of this block.
@@ -825,12 +857,48 @@ Blockly.Block.prototype.getColour = function() {
 };
 
 /**
+ * Get the secondary colour of a block.
+ * @return {string} #RRGGBB string.
+ */
+Blockly.Block.prototype.getSecondaryColour = function() {
+  return this.secondaryColour_;
+};
+
+/**
+ * Get the tertiary colour of a block.
+ * @return {string} #RRGGBB string.
+ */
+Blockly.Block.prototype.getTertiaryColour = function() {
+  return this.tertiaryColour_;
+};
+
+/**
+ * Get the style of a block.
+ * @return {Object} Map of style names (string) to style value (string).
+ */
+Blockly.Block.prototype.getStyle = function() {
+  return this.style_;
+};
+
+/**
+ * Get the name of the block style.
+ * @return {string} Name of the block style.
+ */
+Blockly.Block.prototype.getStyleName = function() {
+  return this.styleName_;
+};
+
+/**
  * Get the HSV hue value of a block. Null if hue not set.
  * @return {?number} Hue value (0-360)
  */
 Blockly.Block.prototype.getHue = function() {
   return this.hue_;
 };
+
+
+
+
 
 /**
  * Change the colour of a block.
@@ -856,6 +924,28 @@ Blockly.Block.prototype.setColour = function(colour) {
       errorMsg += ' (from "' + colour + '")';
     }
     throw errorMsg;
+  }
+};
+
+/**
+ * Set the style and color values of a block.
+ * @param {string} blockStyleName Name of the block style
+ * @throws {Error} if the block style does not exist.
+ */
+Blockly.Block.prototype.setStyle = function(blockStyleName) {
+  if (blockStyleName) {
+    var blockStyle = Blockly.getStyle().getBlockStyle(blockStyleName);
+
+    if (blockStyle) {
+      this.style_ = blockStyle;
+      this.colour_ = blockStyle.primaryColour;
+      this.secondaryColour_ = blockStyle.secondaryColour;
+      this.tertiaryColour_ = blockStyle.tertiaryColour;
+    }
+    else {
+      var errorMsg = 'Invalid style name: ' + blockStyleName;
+      throw errorMsg;
+    }
   }
 };
 
@@ -1264,7 +1354,13 @@ Blockly.Block.prototype.jsonInit = function(json) {
   }
 
   // Set basic properties of block.
-  this.jsonInitColour_(json, warningPrefix);
+  if (json['style'] && json['colour']) {
+    throw Error(warningPrefix + 'Must not have both a colour and a style.');
+  } else if (json['style']){
+    this.jsonInitStyle_(json, warningPrefix);
+  } else {
+    this.jsonInitColour_(json, warningPrefix);
+  }
 
   // Interpolate the message blocks.
   var i = 0;
@@ -1343,6 +1439,23 @@ Blockly.Block.prototype.jsonInitColour_ = function(json, warningPrefix) {
     }
   }
 };
+
+/**
+ * Initialize the style of this block from the JSON description.
+ * @param {!Object} json Structured data describing the block.
+ * @param {string} warningPrefix Warning prefix string identifying block.
+ * @private
+ */
+Blockly.Block.prototype.jsonInitStyle_ = function(json, warningPrefix) {
+  var blockStyleName = json['style'];
+  try {
+    this.styleName_ = blockStyleName;
+    this.setStyle(blockStyleName);
+  } catch (colorError) {
+    console.warn(warningPrefix + 'Style does not exist: ', blockStyleName);
+  }
+};
+
 
 /**
  * Add key/values from mixinObj to this block object. By default, this method

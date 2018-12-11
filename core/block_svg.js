@@ -894,18 +894,14 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     return;
   }
   var hexColour = this.getColour();
+  var secondaryColour = this.getSecondaryColour();
+  var tertiaryColour = this.getTertiaryColour();
   var rgb = goog.color.hexToRgb(hexColour);
+
   if (this.isShadow()) {
-    rgb = goog.color.lighten(rgb, 0.6);
-    hexColour = goog.color.rgbArrayToHex(rgb);
-    this.svgPathLight_.style.display = 'none';
-    this.svgPathDark_.setAttribute('fill', hexColour);
+    hexColour = this.setShadowColour_(rgb, hexColour, secondaryColour);
   } else {
-    this.svgPathLight_.style.display = '';
-    var hexLight = goog.color.rgbArrayToHex(goog.color.lighten(rgb, 0.3));
-    var hexDark = goog.color.rgbArrayToHex(goog.color.darken(rgb, 0.2));
-    this.svgPathLight_.setAttribute('stroke', hexLight);
-    this.svgPathDark_.setAttribute('fill', hexDark);
+    this.setBorderColour_(rgb, tertiaryColour);
   }
   this.svgPath_.setAttribute('fill', hexColour);
 
@@ -923,6 +919,46 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   }
 };
 
+/**
+ * Sets the colour of the border.
+ * Removes the light and dark paths if a tertiary colour is defined.
+ * @param {string} rgb Colour of the block.
+ * @param {string} tertiaryColour Colour of the border.
+ */
+Blockly.BlockSvg.prototype.setBorderColour_ = function(rgb, tertiaryColour) {
+  if (tertiaryColour) {
+    this.svgPathLight_.setAttribute('stroke', 'none');
+    this.svgPathDark_.setAttribute('fill', 'none');
+    this.svgPath_.setAttribute('stroke', tertiaryColour);
+  } else {
+    this.svgPathLight_.style.display = '';
+    var hexLight = goog.color.rgbArrayToHex(goog.color.lighten(rgb, 0.3));
+    var hexDark = goog.color.rgbArrayToHex(goog.color.darken(rgb, 0.2));
+    this.svgPathLight_.setAttribute('stroke', hexLight);
+    this.svgPathDark_.setAttribute('fill', hexDark);
+  }
+};
+
+/**
+ * Sets the colour of shadow blocks.
+ * @param {string} hexColour Primary colour of the block.
+ * @param {string} rgb Primary colour of the block.
+ * @param {string} secondaryColour Colour for shadow block.
+ */
+
+Blockly.BlockSvg.prototype.setShadowColour_ = function(
+    rgb, hexColour, secondaryColour) {
+  if (secondaryColour) {
+    this.svgPathLight_.style.display = 'none';
+    this.svgPathDark_.setAttribute('fill', secondaryColour);
+  } else {
+    rgb = goog.color.lighten(rgb, 0.6);
+    hexColour = goog.color.rgbArrayToHex(rgb);
+    this.svgPathLight_.style.display = 'none';
+    this.svgPathDark_.setAttribute('fill', hexColour);
+  }
+  return hexColour;
+};
 /**
  * Enable or disable a block.
  */

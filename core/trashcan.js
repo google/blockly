@@ -459,7 +459,7 @@ Blockly.Trashcan.prototype.onDelete_ = function() {
 
       trashcan.hasBlocks = true;
       trashcan.minOpenness_ = trashcan.HAS_BLOCKS_LID_ANGLE;
-      trashcan.setLidAngle_(trashcan.minOpenness_);
+      trashcan.setLidAngle_(trashcan.minOpenness_ * 45);
     }
   };
 };

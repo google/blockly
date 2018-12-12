@@ -778,15 +778,19 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       var tagName = xml.tagName.toUpperCase();
       var default_gap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
       if (tagName == 'BLOCK') {
-        var curBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
-        if (curBlock.disabled) {
-          // Record blocks that were initially disabled.
-          // Do not enable these blocks as a result of capacity filtering.
-          this.permanentlyDisabled_.push(curBlock);
+        try {
+          var curBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
+          if (curBlock.disabled) {
+            // Record blocks that were initially disabled.
+            // Do not enable these blocks as a result of capacity filtering.
+            this.permanentlyDisabled_.push(curBlock);
+          }
+          contents.push({type: 'block', block: curBlock});
+          var gap = parseInt(xml.getAttribute('gap'), 10);
+          gaps.push(isNaN(gap) ? default_gap : gap);
+        } catch(e) {
+          console.error(e);
         }
-        contents.push({type: 'block', block: curBlock});
-        var gap = parseInt(xml.getAttribute('gap'), 10);
-        gaps.push(isNaN(gap) ? default_gap : gap);
       } else if (xml.tagName.toUpperCase() == 'SEP') {
         // Change the gap between two blocks.
         // <sep gap="36"></sep>

@@ -388,10 +388,11 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
  * workspace.
  * @param {!Element} xmlBlock XML block element.
  * @param {!Blockly.Workspace} workspace The workspace.
+ * @param {?number} opt_typeHint optional type hint from parent block
  * @return {!Blockly.Block} The root block created.
  * @private
  */
-Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
+Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace, opt_typeHint) {
   var block = null;
   var prototypeName = xmlBlock.getAttribute('type');
   goog.asserts.assert(prototypeName, 'Block type unspecified: %s',
@@ -426,6 +427,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     }
 
     var name = xmlChild.getAttribute('name');
+    var typeHint = Blockly.NEXT_STATEMENT;
     switch (xmlChild.nodeName.toLowerCase()) {
       case 'mutation':
         // Custom data for an advanced block.
@@ -437,6 +439,19 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
             block.initSvg();
           }
           */
+        }
+        if (block.type == 'component_method' && block.getMethodTypeObject &&
+            block.getMethodTypeObject() == undefined && opt_typeHint != undefined) {
+          switch (opt_typeHint) {
+            case Blockly.INPUT_VALUE:
+              block.setOutput(true, null);
+              break;
+            case Blockly.NEXT_STATEMENT:
+            default:
+              block.setNextStatement(true, null);
+              block.setPreviousStatement(true, null);
+              break;
+          }
         }
         break;
       case 'comment':
@@ -474,6 +489,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         field.setValue(xmlChild.textContent);
         break;
       case 'value':
+        typeHint = Blockly.INPUT_VALUE;
       case 'statement':
         input = block.getInput(name);
         if (!input) {
@@ -493,7 +509,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         }
         if (childBlockNode) {
           blockChild = Blockly.Xml.domToBlockHeadless_(childBlockNode,
-              workspace);
+              workspace, typeHint);
           if (blockChild.outputConnection) {
             input.connection.connect(blockChild.outputConnection);
           } else if (blockChild.previousConnection) {
@@ -528,7 +544,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
           goog.asserts.assert(!block.nextConnection.isConnected(),
               'Next statement is already connected.');
           blockChild = Blockly.Xml.domToBlockHeadless_(childBlockNode,
-              workspace);
+              workspace, Blockly.NEXT_STATEMENT);
           // Attempt to heal a missing method block to prevent assertion errors.
           if (!blockChild.previousConnection && blockChild.type == 'component_method' &&
               blockChild.getMethodTypeObject && !blockChild.getMethodTypeObject()) {

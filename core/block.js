@@ -938,7 +938,7 @@ Blockly.Block.prototype.setStyle = function(blockStyleName) {
 
     if (blockStyle) {
       this.style_ = blockStyle;
-      this.colour_ = blockStyle.primaryColour;
+      this.setColour(blockStyle.primaryColour);
       this.secondaryColour_ = blockStyle.secondaryColour;
       this.tertiaryColour_ = blockStyle.tertiaryColour;
     }

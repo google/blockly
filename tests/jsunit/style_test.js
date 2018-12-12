@@ -120,16 +120,14 @@ function test_setStyleForBlockly() {
   var blockStyles = createBlockStyles();
   var workspace = new Blockly.WorkspaceSvg({});
   var blockA = workspace.newBlock('stack_block');
-  var blocks;
+  var blocks = [blockA];
 
   blockA.setStyle = function(){this.styleName_ = 'styleTwo'};
-  var something = 1;
+  var callCount = 1;
   workspace.refreshToolboxSelection = function(){
-    return ++something;
+    return ++callCount;
   };
   blockA.styleName_ = 'styleOne';
-
-  blocks = [blockA];
 
   setUpMockMethod(mockControl_, Blockly, 'getMainWorkspace', null, [workspace]);
 

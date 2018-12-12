@@ -219,10 +219,10 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
     Blockly.utils.insertAfter(flyout, svg);
   }
   if (options.hasTrashcan) {
-    mainWorkspace.addTrashcan_();
+    mainWorkspace.addTrashcan();
   }
   if (options.zoomOptions && options.zoomOptions.controls) {
-    mainWorkspace.addZoomControls_();
+    mainWorkspace.addZoomControls();
   }
 
   // A null translation will also apply the correct initial scale.

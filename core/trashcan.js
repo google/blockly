@@ -121,6 +121,7 @@ Blockly.Trashcan.prototype.HAS_BLOCKS_LID_ANGLE = 0.1;
  * The maximum number of blocks that can go in the trashcan's flyout. '0' turns
  * turns off trashcan contents, 'Infinity' sets it to unlimited.
  * @type {number}
+ * @private
  */
 Blockly.Trashcan.prototype.MAX_CONTENTS = 32;
 
@@ -134,20 +135,23 @@ Blockly.Trashcan.prototype.isOpen = false;
  * The minimum openness of the lid. Used to indicate if the trashcan contains
  *  blocks.
  * @type {number}
+ * @private
  */
 Blockly.Trashcan.prototype.minOpenness_ = 0;
 
 /**
  * True if the trashcan contains blocks, otherwise false.
  * @type {boolean}
+ * @private
  */
-Blockly.Trashcan.prototype.hasBlocks = false;
+Blockly.Trashcan.prototype.hasBlocks_ = false;
 
 /**
  * A list of Xml representing blocks "inside" the trashcan.
  * @type {Array}
+ * @private
  */
-Blockly.Trashcan.prototype.contents = [];
+Blockly.Trashcan.prototype.contents_ = [];
 
 /**
  * The SVG group containing the trash can.
@@ -296,6 +300,7 @@ Blockly.Trashcan.prototype.dispose = function() {
  * Move the trash can to the bottom-right corner.
  */
 Blockly.Trashcan.prototype.position = function() {
+  // Not yet initialized.
   if (!this.bottom_) {
     return;
   }
@@ -402,15 +407,11 @@ Blockly.Trashcan.prototype.close = function() {
  * Inspect the contents of the trash.
  */
 Blockly.Trashcan.prototype.click = function() {
-  if (!this.hasBlocks) {
+  if (!this.hasBlocks_) {
     return;
   }
 
-  var xml = [];
-  for (var i = 0, text; text = this.contents[i]; i++) {
-    xml[i] = Blockly.Xml.textToDom(text).firstChild;
-  }
-  this.flyout_.show(xml);
+  this.flyout_.show(this.contents_);
 };
 
 /**
@@ -418,7 +419,7 @@ Blockly.Trashcan.prototype.click = function() {
  * @private
  */
 Blockly.Trashcan.prototype.mouseOver_ = function() {
-  if (!this.hasBlocks) {
+  if (!this.hasBlocks_) {
     return;
   }
   this.setOpen_(true);
@@ -447,17 +448,21 @@ Blockly.Trashcan.prototype.onDelete_ = function() {
       return;
     }
     if (event.type == Blockly.Events.BLOCK_DELETE) {
-      var textBlock = trashcan.blockXmlToText(event.oldXml);
-      if (trashcan.contents.indexOf(textBlock) != -1) {
+      var cleanedXML = trashcan.cleanBlockXML_(event.oldXml);
+      console.log('cleaned XML:');
+      console.log(cleanedXML);
+      if (trashcan.contents_.indexOf(cleanedXML) != -1) {
         return;
       }
-      trashcan.contents.unshift(textBlock);
-      if (trashcan.contents.length > trashcan.MAX_CONTENTS) {
-        trashcan.contents.splice(trashcan.MAX_CONTENTS,
-            trashcan.contents.length - trashcan.MAX_CONTENTS);
+      trashcan.contents_.unshift(cleanedXML);
+      console.log('added to contents: ');
+      console.log(trashcan.contents_);
+      if (trashcan.contents_.length > trashcan.MAX_CONTENTS) {
+        trashcan.contents_.splice(trashcan.MAX_CONTENTS,
+            trashcan.contents_.length - trashcan.MAX_CONTENTS);
       }
 
-      trashcan.hasBlocks = true;
+      trashcan.hasBlocks_ = true;
       trashcan.minOpenness_ = trashcan.HAS_BLOCKS_LID_ANGLE;
       trashcan.setLidAngle_(trashcan.minOpenness_ * 45);
     }
@@ -469,13 +474,39 @@ Blockly.Trashcan.prototype.onDelete_ = function() {
  *    content array.
  * @param {!Element} xml An XML tree defining the block and any
  *    connected child blocks.
- * @returns {string} The XML tree converted into a usable text string.
+ * @returns {!Element} The XML tree cleaned of all unnecessary attributes.
+ * @private
  */
-Blockly.Trashcan.prototype.blockXmlToText = function(xml) {
+Blockly.Trashcan.prototype.cleanBlockXML_ = function(xml) {
   var xmlBlock = xml.cloneNode(true);
-  Blockly.Xml.deleteNext(xmlBlock);
-  xmlBlock.removeAttribute('x');
-  xmlBlock.removeAttribute('y');
-  xmlBlock.removeAttribute('id');
-  return '<xml>' + Blockly.Xml.domToText(xmlBlock) + '</xml>';
+  var block = xmlBlock;
+  while (block) {
+    // Things like text inside tags are still treated as nodes, but they
+    // don't have attributes (or the removeAttribute function) so we can
+    // skip removing attributes from them.
+    if (block.removeAttribute) {
+      block.removeAttribute('x');
+      block.removeAttribute('y');
+      block.removeAttribute('id');
+    }
+
+    // Try to traverse down the tree
+    var nextBlock = block.firstChild || block.nextSibling;
+    // If we can't go down, try to traverse back up the tree.
+    if (!nextBlock) {
+      nextBlock = block.parentNode;
+      while (nextBlock) {
+        // We are valid again!
+        if (nextBlock.nextSibling) {
+          nextBlock = nextBlock.nextSibling;
+          break;
+        }
+        // Try going up again. If parentNode is null that means we have
+        // reached the top, and we will break out of both loops.
+        nextBlock = nextBlock.parentNode;
+      }
+    }
+    block = nextBlock;
+  }
+  return xmlBlock;
 };

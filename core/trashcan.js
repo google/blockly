@@ -479,34 +479,34 @@ Blockly.Trashcan.prototype.onDelete_ = function() {
  */
 Blockly.Trashcan.prototype.cleanBlockXML_ = function(xml) {
   var xmlBlock = xml.cloneNode(true);
-  var block = xmlBlock;
-  while (block) {
+  var node = xmlBlock;
+  while (node) {
     // Things like text inside tags are still treated as nodes, but they
     // don't have attributes (or the removeAttribute function) so we can
     // skip removing attributes from them.
-    if (block.removeAttribute) {
-      block.removeAttribute('x');
-      block.removeAttribute('y');
-      block.removeAttribute('id');
+    if (node.removeAttribute) {
+      node.removeAttribute('x');
+      node.removeAttribute('y');
+      node.removeAttribute('id');
     }
 
-    // Try to traverse down the tree
-    var nextBlock = block.firstChild || block.nextSibling;
-    // If we can't go down, try to traverse back up the tree.
-    if (!nextBlock) {
-      nextBlock = block.parentNode;
-      while (nextBlock) {
+    // Try to go down the tree
+    var nextNode = node.firstChild || node.nextSibling;
+    // If we can't go down, try to go back up the tree.
+    if (!nextNode) {
+      nextNode = node.parentNode;
+      while (nextNode) {
         // We are valid again!
-        if (nextBlock.nextSibling) {
-          nextBlock = nextBlock.nextSibling;
+        if (nextNode.nextSibling) {
+          nextNode = nextNode.nextSibling;
           break;
         }
         // Try going up again. If parentNode is null that means we have
         // reached the top, and we will break out of both loops.
-        nextBlock = nextBlock.parentNode;
+        nextNode = nextNode.parentNode;
       }
     }
-    block = nextBlock;
+    node = nextNode;
   }
   return xmlBlock;
 };

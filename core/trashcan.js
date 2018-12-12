@@ -147,7 +147,7 @@ Blockly.Trashcan.prototype.minOpenness_ = 0;
 Blockly.Trashcan.prototype.hasBlocks_ = false;
 
 /**
- * A list of Xml representing blocks "inside" the trashcan.
+ * A list of Xml (stored as strings) representing blocks "inside" the trashcan.
  * @type {Array}
  * @private
  */
@@ -411,7 +411,11 @@ Blockly.Trashcan.prototype.click = function() {
     return;
   }
 
-  this.flyout_.show(this.contents_);
+  var xml = [];
+  for (var i = 0, text; text = this.contents_[i]; i++) {
+    xml[i] = Blockly.Xml.textToDom(text).firstChild;
+  }
+  this.flyout_.show(xml);
 };
 
 /**
@@ -449,14 +453,10 @@ Blockly.Trashcan.prototype.onDelete_ = function() {
     }
     if (event.type == Blockly.Events.BLOCK_DELETE) {
       var cleanedXML = trashcan.cleanBlockXML_(event.oldXml);
-      console.log('cleaned XML:');
-      console.log(cleanedXML);
       if (trashcan.contents_.indexOf(cleanedXML) != -1) {
         return;
       }
       trashcan.contents_.unshift(cleanedXML);
-      console.log('added to contents: ');
-      console.log(trashcan.contents_);
       if (trashcan.contents_.length > trashcan.MAX_CONTENTS) {
         trashcan.contents_.splice(trashcan.MAX_CONTENTS,
             trashcan.contents_.length - trashcan.MAX_CONTENTS);
@@ -474,7 +474,8 @@ Blockly.Trashcan.prototype.onDelete_ = function() {
  *    content array.
  * @param {!Element} xml An XML tree defining the block and any
  *    connected child blocks.
- * @returns {!Element} The XML tree cleaned of all unnecessary attributes.
+ * @returns {!string} Text representing the XML tree, cleaned of all unnecessary
+ * attributes.
  * @private
  */
 Blockly.Trashcan.prototype.cleanBlockXML_ = function(xml) {
@@ -508,5 +509,5 @@ Blockly.Trashcan.prototype.cleanBlockXML_ = function(xml) {
     }
     node = nextNode;
   }
-  return xmlBlock;
+  return '<xml>' + Blockly.Xml.domToText(xmlBlock) + '</xml>';
 };

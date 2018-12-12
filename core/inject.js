@@ -224,7 +224,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   Blockly.mainWorkspace = mainWorkspace;
 
   if (!options.readOnly && !options.hasScrollbars) {
-    var workspaceChanged = function() {
+    var workspaceChanged = function(e) {
       if (!mainWorkspace.isDragging()) {
         var metrics = mainWorkspace.getMetrics();
         var edgeLeft = metrics.viewLeft + metrics.absoluteLeft;
@@ -239,6 +239,11 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
           // One or more blocks may be out of bounds.  Bump them back in.
           var MARGIN = 25;
           var blocks = mainWorkspace.getTopBlocks(false);
+          var oldEvent = null;
+          if (e) {
+            oldEvent = Blockly.Events.getGroup();
+            Blockly.Events.setGroup(e.group);
+          }
           for (var b = 0, block; block = blocks[b]; b++) {
             var blockXY = block.getRelativeToSurfaceXY();
             var blockHW = block.getHeightWidth();
@@ -265,6 +270,9 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             if (overflowRight < 0) {
               block.moveBy(overflowRight, 0);
             }
+          }
+          if (e) {
+            Blockly.Events.setGroup(oldEvent);
           }
         }
       }

@@ -575,20 +575,20 @@ Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {
 
 /**
  * Add a trashcan.
- * @private
+ * @package
  */
-Blockly.WorkspaceSvg.prototype.addTrashcan_ = function() {
+Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
   /** @type {Blockly.Trashcan} */
   this.trashcan = new Blockly.Trashcan(this);
   var svgTrashcan = this.trashcan.createDom();
-  this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_).nextSibling;
+  this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
 };
 
 /**
  * Add zoom controls.
- * @private
+ * @package
  */
-Blockly.WorkspaceSvg.prototype.addZoomControls_ = function() {
+Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
   /** @type {Blockly.ZoomControls} */
   this.zoomControls_ = new Blockly.ZoomControls(this);
   var svgZoomControls = this.zoomControls_.createDom();

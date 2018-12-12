@@ -132,6 +132,7 @@ Blockly.ZoomControls.prototype.dispose = function() {
  * Move the zoom controls to the bottom-right corner.
  */
 Blockly.ZoomControls.prototype.position = function() {
+  // Not yet initialized.
   if (!this.bottom_) {
     return;
   }

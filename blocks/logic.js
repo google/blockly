@@ -424,7 +424,6 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Reconstructs the block with all child blocks attached.
-   * Fixes issue #2037.
    */
   rebuildShape_: function() {
     var valueConnections = [null];

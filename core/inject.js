@@ -345,12 +345,12 @@ Blockly.init_ = function(mainWorkspace) {
     }
   }
 
-  var bottom = Blockly.Scrollbar.scrollbarThickness;
+  var verticalSpacing = Blockly.Scrollbar.scrollbarThickness;
   if (options.hasTrashcan) {
-    bottom = mainWorkspace.trashcan.init(bottom);
+    verticalSpacing = mainWorkspace.trashcan.init(verticalSpacing);
   }
   if (options.zoomOptions && options.zoomOptions.controls) {
-    mainWorkspace.zoomControls_.init(bottom);
+    mainWorkspace.zoomControls_.init(verticalSpacing);
   }
 
   if (options.hasScrollbars) {

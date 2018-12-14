@@ -1,3 +1,5 @@
+/* global chai */
+
 function _argumentsIncludeComments(expectedNumberOfNonCommentArgs, args) {
   return args.length == expectedNumberOfNonCommentArgs + 1;
 }
@@ -70,4 +72,37 @@ function assertNull() {
   var commentArg = _commentArg(1, arguments);
   var val = _nonCommentArg(1, 1, arguments);
   chai.assert.isNull(val, commentArg);
+}
+
+function assertNotNull() {
+  _validateArguments(1, arguments);
+  var commentArg = _commentArg(1, arguments);
+  var val = _nonCommentArg(1, 1, arguments);
+  chai.assert.isNotNull(val, commentArg);
+}
+
+/**
+ * Check that two arrays have the same content.
+ * @param {!Array.<string>} array1 The first array.
+ * @param {!Array.<string>} array2 The second array.
+ */
+function isEqualArrays(array1, array2) {
+  assertEquals(array1.length, array2.length);
+  for (var i = 0; i < array1.length; i++) {
+    assertEquals(array1[i], array2[i]);
+  }
+}
+
+function assertUndefined() {
+  _validateArguments(1, arguments);
+  var commentArg = _commentArg(1, arguments);
+  var val = _nonCommentArg(1, 1, arguments);
+  chai.assert.isUndefined(val, commentArg);
+}
+
+function assertNotUndefined() {
+  _validateArguments(1, arguments);
+  var commentArg = _commentArg(1, arguments);
+  var val = _nonCommentArg(1, 1, arguments);
+  chai.assert.isNotUndefined(val, commentArg);
 }

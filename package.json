@@ -52,6 +52,7 @@
     "unused": true
   },
   "dependencies": {
-    "jsdom": "^13.0.0"
+    "jsdom": "^13.0.0",
+    "sinon": "^7.2.0"
   }
 }

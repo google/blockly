@@ -141,6 +141,15 @@ Blockly.BlockSvg.prototype.warningTextDb_ = null;
 Blockly.BlockSvg.INLINE = -1;
 
 /**
+ * Prefix to add to warnings that bubble up when the parent block is
+ * collapse. Allows us to remove the inherited warnings without removing the
+ * ones that belong to the block.
+ * @type {string}
+ * @const
+ */
+Blockly.BlockSvg.COLLAPSED_WARNING = 'TEMP_COLLAPSED_WARNING_';
+
+/**
  * Create and initialize the SVG representation of the block.
  * May be called more than once.
  */
@@ -509,10 +518,37 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
     }
     var text = this.toString(Blockly.COLLAPSE_CHARS);
     this.appendDummyInput(COLLAPSED_INPUT_NAME).appendField(text).init();
+
+    // Add any warnings on enclosed blocks to this block.
+    var descendants = this.getDescendants(true);
+    var nextBlock = this.getNextBlock();
+    if (nextBlock) {
+      var index = descendants.indexOf(nextBlock);
+      descendants.splice(index, descendants.length - index);
+    }
+    for (var i = 1, block; block = descendants[i]; i++) {
+      if (block.warning) {
+        this.setWarningText(block.warning.getText(),
+            Blockly.BlockSvg.COLLAPSED_WARNING + i);
+      }
+    }
   } else {
     this.removeInput(COLLAPSED_INPUT_NAME);
     // Clear any warnings inherited from enclosed blocks.
-    this.setWarningText(null);
+    if (this.warning) {
+      var keys = Object.keys(this.warning.text_);
+      var warningsDeleted = 0;
+      for (var i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        if (key.indexOf(Blockly.BlockSvg.COLLAPSED_WARNING) != -1) {
+          this.warning.setText('', key);
+          warningsDeleted++;
+        }
+      }
+      if (warningsDeleted == keys.length) {
+        this.setWarningText(null);
+      }
+    }
   }
   Blockly.BlockSvg.superClass_.setCollapsed.call(this, collapsed);
 
@@ -1035,7 +1071,8 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
     parent = parent.getSurroundParent();
   }
   if (collapsedParent) {
-    collapsedParent.setWarningText(text, 'collapsed ' + this.id + ' ' + id);
+    collapsedParent.setWarningText(text,
+        Blockly.BlockSvg.COLLAPSED_WARNING + this.id + ' ' + id);
   }
 
   var changedState = false;

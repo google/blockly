@@ -141,9 +141,9 @@ Blockly.BlockSvg.prototype.warningTextDb_ = null;
 Blockly.BlockSvg.INLINE = -1;
 
 /**
- * Prefix to add to warnings that bubble up when the parent block is
- * collapse. Allows us to remove the inherited warnings without removing the
- * ones that belong to the block.
+ * ID to give the "collapsed warnings" warning. Allows us to remove the
+ * "collapsed warnings" warning without removing any warnings that belong to
+ * the block.
  * @type {string}
  * @const
  */

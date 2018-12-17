@@ -218,6 +218,12 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
     var flyout = mainWorkspace.addFlyout_('svg');
     Blockly.utils.insertAfter(flyout, svg);
   }
+  if (options.hasTrashcan) {
+    mainWorkspace.addTrashcan();
+  }
+  if (options.zoomOptions && options.zoomOptions.controls) {
+    mainWorkspace.addZoomControls();
+  }
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
@@ -337,6 +343,14 @@ Blockly.init_ = function(mainWorkspace) {
       }
       mainWorkspace.translate(mainWorkspace.scrollX, 0);
     }
+  }
+
+  var bottom = Blockly.Scrollbar.scrollbarThickness;
+  if (options.hasTrashcan) {
+    bottom = mainWorkspace.trashcan.init(bottom);
+  }
+  if (options.zoomOptions && options.zoomOptions.controls) {
+    mainWorkspace.zoomControls_.init(bottom);
   }
 
   if (options.hasScrollbars) {

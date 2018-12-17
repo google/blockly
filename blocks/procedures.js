@@ -80,7 +80,6 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   },
   /**
    * Update the display of parameters for this procedure definition block.
-   * Display a warning if there are duplicately named parameters.
    * @private
    * @this Blockly.Block
    */
@@ -523,10 +522,10 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     var blocks = this.sourceBlock_.workspace.getAllBlocks();
     for (var i = 0; i < blocks.length; i += 1) {
       if (blocks[i].id == this.sourceBlock_.id) {
-          continue;
+        continue;
       }
       if (blocks[i].getFieldValue('NAME') == varName) {
-          return null;
+        return null;
       }
     }
     var model = outerWs.getVariable(varName, '');

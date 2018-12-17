@@ -85,21 +85,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this Blockly.Block
    */
   updateParams_: function() {
-    // Check for duplicated arguments.
-    var badArg = false;
-    var hash = {};
-    for (var i = 0; i < this.arguments_.length; i++) {
-      if (hash['arg_' + this.arguments_[i].toLowerCase()]) {
-        badArg = true;
-        break;
-      }
-      hash['arg_' + this.arguments_[i].toLowerCase()] = true;
-    }
-    if (badArg) {
-      this.setWarningText(Blockly.Msg['PROCEDURES_DEF_DUPLICATE_WARNING']);
-    } else {
-      this.setWarningText(null);
-    }
+
     // Merge the arguments into a human-readable list.
     var paramString = '';
     if (this.arguments_.length) {
@@ -468,13 +454,28 @@ Blockly.Blocks['procedures_mutatorcontainer'] = {
   }
 };
 
+var parameterCounter = 1;
+
 Blockly.Blocks['procedures_mutatorarg'] = {
   /**
    * Mutator block for procedure argument.
    * @this Blockly.Block
    */
   init: function() {
-    var field = new Blockly.FieldTextInput('x', this.validator_);
+    var paramName = "param" + parameterCounter.toString();
+
+    // This ensures a different name for the
+    // default variable when a parameter is created.
+    if (this.workspace.flyout_) {
+        this.workspace
+            .flyout_
+            .workspace_
+            .getAllBlocks()[0]
+            .setFieldValue(paramName, "NAME");
+    }
+
+    var field = new Blockly.FieldTextInput(paramName, this.validator_);
+
     // Hack: override showEditor to do just a little bit more work.
     // We don't have a good place to hook into the start of a text edit.
     field.oldShowEditorFn_ = field.showEditor_;
@@ -499,7 +500,8 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     // Create an empty list so onFinishEditing_ has something to look at, even
     // though the editor was never opened.
     field.createdVariables_ = [];
-    field.onFinishEditing_('x');
+    field.onFinishEditing_(paramName);
+    parameterCounter += 1;
   },
   /**
    * Obtain a valid name for the procedure argument. Create a variable if
@@ -516,6 +518,16 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     varName = varName.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
     if (!varName) {
       return null;
+    }
+    // Prevents duplicate parameter names in functions
+    var blocks = this.sourceBlock_.workspace.getAllBlocks();
+    for (var i = 0; i < blocks.length; i += 1) {
+        if (blocks[i].id == this.sourceBlock_.id) {
+            continue;
+        }
+        if (blocks[i].getFieldValue('NAME') == varName) {
+            return null;
+        }
     }
     var model = outerWs.getVariable(varName, '');
     if (model && model.name != varName) {

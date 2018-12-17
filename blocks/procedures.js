@@ -467,11 +467,11 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     // This ensures a different name for the
     // default variable when a parameter is created.
     if (this.workspace.flyout_) {
-        this.workspace
-            .flyout_
-            .workspace_
-            .getAllBlocks()[0]
-            .setFieldValue(paramName, "NAME");
+      this.workspace
+          .flyout_
+          .workspace_
+          .getAllBlocks()[0]
+          .setFieldValue(paramName, "NAME");
     }
 
     var field = new Blockly.FieldTextInput(paramName, this.validator_);
@@ -522,12 +522,12 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     // Prevents duplicate parameter names in functions
     var blocks = this.sourceBlock_.workspace.getAllBlocks();
     for (var i = 0; i < blocks.length; i += 1) {
-        if (blocks[i].id == this.sourceBlock_.id) {
-            continue;
-        }
-        if (blocks[i].getFieldValue('NAME') == varName) {
-            return null;
-        }
+      if (blocks[i].id == this.sourceBlock_.id) {
+          continue;
+      }
+      if (blocks[i].getFieldValue('NAME') == varName) {
+          return null;
+      }
     }
     var model = outerWs.getVariable(varName, '');
     if (model && model.name != varName) {

@@ -147,7 +147,7 @@ Blockly.BlockSvg.INLINE = -1;
  * @type {string}
  * @const
  */
-Blockly.BlockSvg.COLLAPSED_WARNING = 'TEMP_COLLAPSED_WARNING_';
+Blockly.BlockSvg.COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
 
 /**
  * Create and initialize the SVG representation of the block.
@@ -528,24 +528,17 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
     }
     for (var i = 1, block; block = descendants[i]; i++) {
       if (block.warning) {
-        this.setWarningText(block.warning.getText(),
-            Blockly.BlockSvg.COLLAPSED_WARNING + i);
+        this.setWarningText(Blockly.Msg['COLLAPSED_WARNINGS_WARNING'],
+            Blockly.BlockSvg.COLLAPSED_WARNING_ID);
+        break;
       }
     }
   } else {
     this.removeInput(COLLAPSED_INPUT_NAME);
     // Clear any warnings inherited from enclosed blocks.
     if (this.warning) {
-      var keys = Object.keys(this.warning.text_);
-      var warningsDeleted = 0;
-      for (var i = 0; i < keys.length; i++) {
-        var key = keys[i];
-        if (key.indexOf(Blockly.BlockSvg.COLLAPSED_WARNING) != -1) {
-          this.warning.setText('', key);
-          warningsDeleted++;
-        }
-      }
-      if (warningsDeleted == keys.length) {
+      this.warning.setText('', Blockly.BlockSvg.COLLAPSED_WARNING_ID);
+      if (!Object.keys(this.warning.text_).length) {
         this.setWarningText(null);
       }
     }
@@ -1071,8 +1064,8 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
     parent = parent.getSurroundParent();
   }
   if (collapsedParent) {
-    collapsedParent.setWarningText(text,
-        Blockly.BlockSvg.COLLAPSED_WARNING + this.id + ' ' + id);
+    collapsedParent.setWarningText(Blockly.Msg['COLLAPSED_WARNINGS_WARNING'],
+        Blockly.BlockSvg.COLLAPSED_WARNING_ID);
   }
 
   var changedState = false;

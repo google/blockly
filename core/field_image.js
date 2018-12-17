@@ -53,7 +53,7 @@ Blockly.FieldImage = function(src, width, height, opt_alt, opt_onClick) {
       this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
   this.tooltip_ = '';
   this.setValue(src);
-  this.setText(opt_alt)
+  this.setText(opt_alt);
 
   if (typeof opt_onClick == 'function') {
     this.clickHandler_ = opt_onClick;

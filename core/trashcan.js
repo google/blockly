@@ -38,6 +38,10 @@ goog.require('goog.math.Rect');
  */
 Blockly.Trashcan = function(workspace) {
   this.workspace_ = workspace;
+  if (this.workspace_.options.maxTrashcanContents <= 0) {
+    return;
+  }
+
   var flyoutWorkspaceOptions = {
     scrollbars: true,
     disabledPatternId: this.workspace_.options.disabledPatternId,
@@ -116,14 +120,6 @@ Blockly.Trashcan.prototype.SPRITE_TOP_ = 32;
  * @private
  */
 Blockly.Trashcan.prototype.HAS_BLOCKS_LID_ANGLE = 0.1;
-
-/**
- * The maximum number of blocks that can go in the trashcan's flyout. '0' turns
- * turns off trashcan contents, 'Infinity' sets it to unlimited.
- * @type {number}
- * @private
- */
-Blockly.Trashcan.prototype.MAX_CONTENTS = 32;
 
 /**
  * Current open/close state of the lid.
@@ -273,9 +269,11 @@ Blockly.Trashcan.prototype.createDom = function() {
  * @return {number} Distance from workspace bottom to the top of trashcan.
  */
 Blockly.Trashcan.prototype.init = function(bottom) {
-  Blockly.utils.insertAfter(this.flyout_.createDom('svg'),
-      this.workspace_.getParentSvg());
-  this.flyout_.init(this.workspace_);
+  if (this.workspace_.options.maxTrashcanContents > 0) {
+    Blockly.utils.insertAfter(this.flyout_.createDom('svg'),
+        this.workspace_.getParentSvg());
+    this.flyout_.init(this.workspace_);
+  }
 
   this.bottom_ = this.MARGIN_BOTTOM_ + bottom;
   this.setOpen_(false);
@@ -448,7 +446,7 @@ Blockly.Trashcan.prototype.mouseOut_ = function() {
 Blockly.Trashcan.prototype.onDelete_ = function() {
   var trashcan = this;
   return function(event) {
-    if (!trashcan.MAX_CONTENTS) {
+    if (trashcan.workspace_.options.maxTrashcanContents <= 0) {
       return;
     }
     if (event.type == Blockly.Events.BLOCK_DELETE) {
@@ -457,9 +455,12 @@ Blockly.Trashcan.prototype.onDelete_ = function() {
         return;
       }
       trashcan.contents_.unshift(cleanedXML);
-      if (trashcan.contents_.length > trashcan.MAX_CONTENTS) {
-        trashcan.contents_.splice(trashcan.MAX_CONTENTS,
-            trashcan.contents_.length - trashcan.MAX_CONTENTS);
+      if (trashcan.contents_.length >
+          trashcan.workspace_.options.maxTrashcanContents) {
+        trashcan.contents_.splice(
+            trashcan.workspace_.options.maxTrashcanContents,
+            trashcan.contents_.length -
+            trashcan.workspace_.options.maxTrashcanContents);
       }
 
       trashcan.hasBlocks_ = true;

@@ -57,7 +57,7 @@ Blockly.Options = function(options) {
     var maxTrashcanContents = options['maxTrashcanContents'];
     if (hasTrashcan) {
       if (maxTrashcanContents === undefined) {
-        maxTrashcanContents = Infinity;
+        maxTrashcanContents = 32;
       }
     } else {
       maxTrashcanContents = 0;

@@ -488,7 +488,8 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     field.onFinishEditing_('x');
   },
   /**
-   * This is to change the name when a new block is dragged to the workspace.s
+   * This will create & delete variables and in dialogs workspace to ensure
+   * that when a new block is dragged out it will have a unique parameter name.
    * @param {!Blockly.Events.Abstract} event Change event.
    * @this Blockly.Block
    */

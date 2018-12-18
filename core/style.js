@@ -17,11 +17,9 @@ Blockly.Style = function(blockStyles) {
  * block styles.
  */
 Blockly.Style.prototype.setAllBlockStyles = function(blockStyles) {
-  var event = new Blockly.Events.Ui(null, 'blockStylesChanged', this.blockStyles_, blockStyles);
   for (var key in blockStyles) {
     this.setBlockStyle(key, blockStyles[key]);
   }
-  Blockly.Events.fire(event);
 };
 
 /**

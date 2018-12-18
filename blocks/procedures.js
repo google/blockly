@@ -453,7 +453,6 @@ Blockly.Blocks['procedures_mutatorcontainer'] = {
   }
 };
 
-var parameterCounter = 1;
 
 Blockly.Blocks['procedures_mutatorarg'] = {
   /**
@@ -461,20 +460,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    * @this Blockly.Block
    */
   init: function() {
-    var paramName = "param" + parameterCounter.toString();
-
-    // This ensures a different name for the
-    // default variable when a parameter is created.
-    if (this.workspace.flyout_) {
-      this.workspace
-          .flyout_
-          .workspace_
-          .getAllBlocks()[0]
-          .setFieldValue(paramName, "NAME");
-    }
-
-    var field = new Blockly.FieldTextInput(paramName, this.validator_);
-
+    var field = new Blockly.FieldTextInput('x', this.validator_);
     // Hack: override showEditor to do just a little bit more work.
     // We don't have a good place to hook into the start of a text edit.
     field.oldShowEditorFn_ = field.showEditor_;
@@ -499,8 +485,80 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     // Create an empty list so onFinishEditing_ has something to look at, even
     // though the editor was never opened.
     field.createdVariables_ = [];
-    field.onFinishEditing_(paramName);
-    parameterCounter += 1;
+    field.onFinishEditing_('x');
+  },
+  /**
+   * This is to change the name when a new block is dragged to the workspace.s
+   * @param {!Blockly.Events.Abstract} event Change event.
+   * @this Blockly.Block
+   */
+  onchange: function (event) {
+    if (!this.workspace || this.workspace.isFlyout ||
+        (event.type != Blockly.Events.BLOCK_CREATE && event.type != Blockly.Events.BLOCK_DELETE)) {
+      return;
+    }
+    // On delete, make sure the variable no longer exists in the workspace
+    if (event.type == Blockly.Events.BLOCK_DELETE) {
+      var oldVariableName = event.oldXml.getElementsByTagName('field')[0].innerText;
+      var variableToDelete = this.workspace.getVariable(oldVariableName);
+      if (variableToDelete) {
+        this.workspace.deleteVariableById(variableToDelete.getId());
+      }
+      return;
+    }
+    var block = this.workspace.getBlockById(event.blockId);
+    // This is to handle the one none variable block
+    // Happens when all the blocks are regenerated
+    if (!block.getField('NAME')) {
+      return;
+    }
+    var varName = block.getFieldValue('NAME');
+    var variable = this.workspace.getVariable(varName);
+    // If the blocks are connected we don't have to check duplicate variables
+    // This only happens if the dialog box is open
+    if (block.previousConnection.isConnected() || block.nextConnection.isConnected()) {
+      if (!variable) {
+        // Make sure the variable is created with the workspace
+        // if the block is connected to another block
+        this.workspace.createVariable(varName);
+      }
+      return;
+    }
+    if (variable) {
+      var blocks = this.workspace.getAllBlocks();
+
+      for (var i = 0; i < blocks.length; i += 1) {
+        // filter block that was created
+        if (block.id == blocks[i].id) {
+          continue;
+        }
+        // filter container block
+        if (blocks[i].type == 'procedures_mutatorcontainer') {
+          continue;
+        }
+        // filter blocks not in the stack
+        if (!blocks[i].previousConnection || !blocks[i].previousConnection.isConnected()) {
+          continue;
+        }
+
+        // duplicate name exists
+        if (blocks[i].getFieldValue('NAME') == variable.name) {
+          // generate new name and set name field
+          varName = Blockly.Variables.generateUniqueName(this.workspace);
+          variable = this.workspace.createVariable(varName);
+          block.setFieldValue(variable.name, 'NAME');
+          return;
+        }
+      }
+
+      // Variable exists but the block has not been attached to
+      // container block so nothing to do
+      return;
+    }
+
+    // This means the variable does not exist
+    variable = this.workspace.createVariable(varName);
+    block.setFieldValue(variable.name, 'NAME');
   },
   /**
    * Obtain a valid name for the procedure argument. Create a variable if

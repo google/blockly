@@ -688,7 +688,6 @@ Blockly.setStyle = function(style){
   for (var i = 0; i < blocks.length; i++) {
     var block = blocks[i];
     block.setStyle(block.getStyleName());
-    block.updateColour();
   }
 
   var event = new Blockly.Events.Ui(null, 'styleChanged');

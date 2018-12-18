@@ -933,19 +933,20 @@ Blockly.Block.prototype.setColour = function(colour) {
  * @throws {Error} if the block style does not exist.
  */
 Blockly.Block.prototype.setStyle = function(blockStyleName) {
-  if (blockStyleName) {
-    var blockStyle = Blockly.getStyle().getBlockStyle(blockStyleName);
+  var dereferenced = Blockly.utils.replaceMessageReferences(blockStyleName);
+  var blockStyle = Blockly.getStyle().getBlockStyle(dereferenced);
+  this.styleName_ = dereferenced;
 
-    if (blockStyle) {
-      this.style_ = blockStyle;
-      this.setColour(blockStyle.primaryColour);
-      this.secondaryColour_ = blockStyle.secondaryColour;
-      this.tertiaryColour_ = blockStyle.tertiaryColour;
-    }
-    else {
-      var errorMsg = 'Invalid style name: ' + blockStyleName;
-      throw errorMsg;
-    }
+  if (blockStyle) {
+    this.style_ = blockStyle;
+    this.secondaryColour_ = blockStyle.secondaryColour;
+    this.tertiaryColour_ = blockStyle.tertiaryColour;
+    // Set colour will trigger an updateColour() on a block_svg
+    this.setColour(blockStyle.primaryColour);
+  }
+  else {
+    var errorMsg = 'Invalid style name: ' + blockStyleName;
+    throw errorMsg;
   }
 };
 
@@ -1449,13 +1450,11 @@ Blockly.Block.prototype.jsonInitColour_ = function(json, warningPrefix) {
 Blockly.Block.prototype.jsonInitStyle_ = function(json, warningPrefix) {
   var blockStyleName = json['style'];
   try {
-    this.styleName_ = blockStyleName;
     this.setStyle(blockStyleName);
   } catch (colorError) {
     console.warn(warningPrefix + 'Style does not exist: ', blockStyleName);
   }
 };
-
 
 /**
  * Add key/values from mixinObj to this block object. By default, this method

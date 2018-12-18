@@ -899,7 +899,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   var rgb = goog.color.hexToRgb(hexColour);
 
   if (this.isShadow()) {
-    hexColour = this.setShadowColour_(rgb, hexColour, secondaryColour);
+    hexColour = this.setShadowColour_(rgb, secondaryColour);
   } else {
     this.setBorderColour_(rgb, tertiaryColour);
   }
@@ -936,21 +936,25 @@ Blockly.BlockSvg.prototype.setBorderColour_ = function(rgb, tertiaryColour) {
     var hexDark = goog.color.rgbArrayToHex(goog.color.darken(rgb, 0.2));
     this.svgPathLight_.setAttribute('stroke', hexLight);
     this.svgPathDark_.setAttribute('fill', hexDark);
+    this.svgPath_.setAttribute('stroke', 'none');
+
   }
 };
 
 /**
  * Sets the colour of shadow blocks.
- * @param {string} hexColour Primary colour of the block.
  * @param {string} rgb Primary colour of the block.
  * @param {string} secondaryColour Colour for shadow block.
+ * @return {string} hexColour The background color of the block.
  */
-
 Blockly.BlockSvg.prototype.setShadowColour_ = function(
-    rgb, hexColour, secondaryColour) {
+    rgb, secondaryColour) {
+  var hexColour;
   if (secondaryColour) {
     this.svgPathLight_.style.display = 'none';
-    this.svgPathDark_.setAttribute('fill', secondaryColour);
+    this.svgPathDark_.style.display = 'none';
+    this.svgPath_.setAttribute('fill', secondaryColour);
+    hexColour = secondaryColour;
   } else {
     rgb = goog.color.lighten(rgb, 0.6);
     hexColour = goog.color.rgbArrayToHex(rgb);
@@ -959,6 +963,7 @@ Blockly.BlockSvg.prototype.setShadowColour_ = function(
   }
   return hexColour;
 };
+
 /**
  * Enable or disable a block.
  */

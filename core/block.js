@@ -1446,7 +1446,7 @@ Blockly.Block.prototype.jsonInitStyle_ = function(json, warningPrefix) {
   var blockStyleName = json['style'];
   try {
     this.setStyle(blockStyleName);
-  } catch (colorError) {
+  } catch (styleError) {
     console.warn(warningPrefix + 'Style does not exist: ', blockStyleName);
   }
 };

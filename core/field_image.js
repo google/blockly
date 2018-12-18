@@ -51,9 +51,9 @@ Blockly.FieldImage = function(src, width, height, opt_alt, opt_onClick) {
   this.width_ = Number(width);
   this.size_ = new goog.math.Size(this.width_,
       this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
-  this.text_ = opt_alt || '';
   this.tooltip_ = '';
   this.setValue(src);
+  this.setText(opt_alt);
 
   if (typeof opt_onClick == 'function') {
     this.clickHandler_ = opt_onClick;
@@ -107,6 +107,7 @@ Blockly.FieldImage.prototype.init = function() {
       },
       this.fieldGroup_);
   this.setValue(this.src_);
+  this.setText(this.text_);
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
 
   if (this.tooltip_) {
@@ -193,6 +194,9 @@ Blockly.FieldImage.prototype.setText = function(alt) {
     return;
   }
   this.text_ = alt;
+  if (this.imageElement_) {
+    this.imageElement_.setAttribute('alt', alt || '');
+  }
 };
 
 /**

@@ -515,51 +515,42 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     }
     var varName = block.getFieldValue('NAME');
     var variable = this.workspace.getVariable(varName);
+
+    if (!variable) {
+      // This means the parameter name is not in use and we can create the variable.
+      this.workspace.createVariable(varName);
+    }
     // If the blocks are connected we don't have to check duplicate variables
     // This only happens if the dialog box is open
     if (block.previousConnection.isConnected() || block.nextConnection.isConnected()) {
-      if (!variable) {
-        // Make sure the variable is created with the workspace
-        // if the block is connected to another block
-        this.workspace.createVariable(varName);
-      }
-      return;
-    }
-    if (variable) {
-      var blocks = this.workspace.getAllBlocks();
-
-      for (var i = 0; i < blocks.length; i += 1) {
-        // filter block that was created
-        if (block.id == blocks[i].id) {
-          continue;
-        }
-        // filter container block
-        if (blocks[i].type == 'procedures_mutatorcontainer') {
-          continue;
-        }
-        // filter blocks not in the stack
-        if (!blocks[i].previousConnection || !blocks[i].previousConnection.isConnected()) {
-          continue;
-        }
-
-        // duplicate name exists
-        if (blocks[i].getFieldValue('NAME') == variable.name) {
-          // generate new name and set name field
-          varName = Blockly.Variables.generateUniqueName(this.workspace);
-          variable = this.workspace.createVariable(varName);
-          block.setFieldValue(variable.name, 'NAME');
-          return;
-        }
-      }
-
-      // Variable exists but the block has not been attached to
-      // container block so nothing to do
       return;
     }
 
-    // This means the variable does not exist
-    variable = this.workspace.createVariable(varName);
-    block.setFieldValue(variable.name, 'NAME');
+    var blocks = this.workspace.getAllBlocks();
+
+    for (var i = 0; i < blocks.length; i += 1) {
+      // filter block that was created
+      if (block.id == blocks[i].id) {
+        continue;
+      }
+      // filter container block
+      if (blocks[i].type == 'procedures_mutatorcontainer') {
+        continue;
+      }
+      // filter blocks not in the stack
+      if (!blocks[i].previousConnection || !blocks[i].previousConnection.isConnected()) {
+        continue;
+      }
+
+      // duplicate name exists
+      if (blocks[i].getFieldValue('NAME') == variable.name) {
+        // generate new name and set name field
+        varName = Blockly.Variables.generateUniqueName(this.workspace);
+        variable = this.workspace.createVariable(varName);
+        block.setFieldValue(variable.name, 'NAME');
+        return;
+      }
+    }
   },
   /**
    * Obtain a valid name for the procedure argument. Create a variable if

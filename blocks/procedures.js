@@ -492,7 +492,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    * @param {!Blockly.Events.Abstract} event Change event.
    * @this Blockly.Block
    */
-  onchange: function (event) {
+  onchange: function(event) {
     if (!this.workspace || this.workspace.isFlyout ||
         (event.type != Blockly.Events.BLOCK_CREATE && event.type != Blockly.Events.BLOCK_DELETE)) {
       return;

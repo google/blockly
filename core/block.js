@@ -152,7 +152,6 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    */
   this.isInsertionMarker_ = false;
 
-
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
     /** @type {string} */
@@ -232,16 +231,16 @@ Blockly.Block.prototype.hue_ = null;
 Blockly.Block.prototype.colour_ = '#000000';
 
 /**
- * Secondary color of the block.
- * Color if the block is a shadow.
+ * Secondary colour of the block.
+ * Colour of the block if it is a shadow
  * @type {string}
  * @private
  */
 Blockly.Block.prototype.secondaryColour_ = null;
 
 /**
- * Tertiary color of the block.
- * Color of the border on the block.
+ * Tertiary colour of the block.
+ * Colour of the border on the block.
  * @type {string}
  * @private
  */
@@ -249,7 +248,7 @@ Blockly.Block.prototype.tertiaryColour_ = null;
 
 /**
  * Style of the block.
- * @type {Object} Map from style name (string) to style value (string)
+ * @type {Object} Map from style attribute name (string) to style value (string)
  * @private
  */
 Blockly.Block.prototype.style_ = null;
@@ -896,10 +895,6 @@ Blockly.Block.prototype.getHue = function() {
   return this.hue_;
 };
 
-
-
-
-
 /**
  * Change the colour of a block.
  * @param {number|string} colour HSV hue value (0 to 360), #RRGGBB string,
@@ -928,7 +923,7 @@ Blockly.Block.prototype.setColour = function(colour) {
 };
 
 /**
- * Set the style and color values of a block.
+ * Set the style and colour values of a block.
  * @param {string} blockStyleName Name of the block style
  * @throws {Error} if the block style does not exist.
  */

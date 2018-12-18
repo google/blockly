@@ -113,7 +113,7 @@ Blockly.clipboardTypeCounts_ = null;
 Blockly.cache3dSupported_ = null;
 
 /**
- * Holds all styles for blocks and .
+ * Holds all Blockly style attributes.
  * @type {Blockly.Style}
  * @private
  */

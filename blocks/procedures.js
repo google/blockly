@@ -530,20 +530,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
 
     for (var i = 0; i < blocks.length; i += 1) {
       // filter block that was created
-      if (block.id == blocks[i].id) {
-        continue;
-      }
-      // filter container block
-      if (blocks[i].type == 'procedures_mutatorcontainer') {
-        continue;
-      }
-      // filter blocks not in the stack
-      if (!blocks[i].previousConnection || !blocks[i].previousConnection.isConnected()) {
-        continue;
-      }
-
-      // duplicate name exists
-      if (blocks[i].getFieldValue('NAME') == variable.name) {
+      if (block.id != blocks[i].id && blocks[i].getFieldValue('NAME') == variable.name) {
         // generate new name and set name field
         varName = Blockly.Variables.generateUniqueName(this.workspace);
         variable = this.workspace.createVariable(varName);

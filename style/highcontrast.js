@@ -7,47 +7,47 @@ goog.require('Blockly.Style');
 var defaultBlockStyles = {
   "colour":{
     "primaryColour": "#a52714",
-    "secondaryColour":"#FBE1DD",
+    "secondaryColour":"#FB9B8C",
     "tertiaryColour":"#FBE1DD"
   },
   "lists": {
     "primaryColour": "#4a148c",
-    "secondaryColour":"#CDB6E9",
+    "secondaryColour":"#AD7BE9",
     "tertiaryColour":"#CDB6E9"
   },
   "logic": {
     "primaryColour": "#01579b",
-    "secondaryColour":"#C5EAFF",
+    "secondaryColour":"#64C7FF",
     "tertiaryColour":"#C5EAFF"
   },
   "loops": {
     "primaryColour": "#33691e",
-    "secondaryColour":"#E1FFD7",
+    "secondaryColour":"#9AFF78",
     "tertiaryColour":"#E1FFD7"
   },
   "math": {
     "primaryColour": "#1a237e",
-    "secondaryColour":"#DCE2FF",
+    "secondaryColour":"#8A9EFF",
     "tertiaryColour":"#DCE2FF"
   },
   "procedure": {
     "primaryColour": "#006064",
-    "secondaryColour":"#CFECEE",
+    "secondaryColour":"#77E6EE",
     "tertiaryColour":"#CFECEE"
   },
   "text": {
     "primaryColour": "#004d40",
-    "secondaryColour":"#D2FFDD",
+    "secondaryColour":"#5ae27c",
     "tertiaryColour":"#D2FFDD"
   },
   "variables": {
     "primaryColour": "#880e4f",
-    "secondaryColour":"#FFD4EB",
+    "secondaryColour":"#FF73BE",
     "tertiaryColour":"#FFD4EB"
   },
   "variables_dynamic": {
     "primaryColour": "#880e4f",
-    "secondaryColour":"#FFD4EB",
+    "secondaryColour":"#FF73BE",
     "tertiaryColour":"#FFD4EB"
   }
 };

@@ -494,19 +494,27 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    * @this Blockly.Block
    */
   onchange: function(event) {
-    if (!this.workspace || this.workspace.isFlyout ||
-        (event.type != Blockly.Events.BLOCK_CREATE && event.type != Blockly.Events.BLOCK_DELETE)) {
+    if (!this.workspace || this.workspace.isFlyout) {
       return;
     }
-    // On delete, make sure the variable no longer exists in the workspace
-    if (event.type == Blockly.Events.BLOCK_DELETE) {
-      var oldVariableName = event.oldXml.getElementsByTagName('field')[0].innerText;
-      var variableToDelete = this.workspace.getVariable(oldVariableName);
-      if (variableToDelete) {
-        this.workspace.deleteVariableById(variableToDelete.getId());
+    var blocks = this.workspace.getAllBlocks();
+    var allVariables = this.workspace.getAllVariables();
+    var variableNamesToKeep = [];
+    for (var i = 0; i < blocks.length; i += 1) {
+      if (blocks[i].getFieldValue('NAME')) {
+        variableNamesToKeep.push(blocks[i].getFieldValue('NAME'));
       }
+    }
+    for (var k = 0; k < allVariables.length; k += 1) {
+      if (variableNamesToKeep.indexOf(allVariables[k].name) == -1) {
+        this.workspace.deleteVariableById(allVariables[k].getId());
+      }
+    }
+
+    if (event.type != Blockly.Events.BLOCK_CREATE) {
       return;
     }
+
     var block = this.workspace.getBlockById(event.blockId);
     // This is to handle the one none variable block
     // Happens when all the blocks are regenerated
@@ -518,7 +526,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
 
     if (!variable) {
       // This means the parameter name is not in use and we can create the variable.
-      this.workspace.createVariable(varName);
+      variable = this.workspace.createVariable(varName);
     }
     // If the blocks are connected we don't have to check duplicate variables
     // This only happens if the dialog box is open
@@ -526,11 +534,9 @@ Blockly.Blocks['procedures_mutatorarg'] = {
       return;
     }
 
-    var blocks = this.workspace.getAllBlocks();
-
-    for (var i = 0; i < blocks.length; i += 1) {
+    for (var j = 0; j < blocks.length; j += 1) {
       // filter block that was created
-      if (block.id != blocks[i].id && blocks[i].getFieldValue('NAME') == variable.name) {
+      if (block.id != blocks[j].id && blocks[j].getFieldValue('NAME') == variable.name) {
         // generate new name and set name field
         varName = Blockly.Variables.generateUniqueName(this.workspace);
         variable = this.workspace.createVariable(varName);

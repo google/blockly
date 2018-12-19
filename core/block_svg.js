@@ -141,6 +141,15 @@ Blockly.BlockSvg.prototype.warningTextDb_ = null;
 Blockly.BlockSvg.INLINE = -1;
 
 /**
+ * ID to give the "collapsed warnings" warning. Allows us to remove the
+ * "collapsed warnings" warning without removing any warnings that belong to
+ * the block.
+ * @type {string}
+ * @const
+ */
+Blockly.BlockSvg.COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
+
+/**
  * Create and initialize the SVG representation of the block.
  * May be called more than once.
  */
@@ -509,10 +518,30 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
     }
     var text = this.toString(Blockly.COLLAPSE_CHARS);
     this.appendDummyInput(COLLAPSED_INPUT_NAME).appendField(text).init();
+
+    // Add any warnings on enclosed blocks to this block.
+    var descendants = this.getDescendants(true);
+    var nextBlock = this.getNextBlock();
+    if (nextBlock) {
+      var index = descendants.indexOf(nextBlock);
+      descendants.splice(index, descendants.length - index);
+    }
+    for (var i = 1, block; block = descendants[i]; i++) {
+      if (block.warning) {
+        this.setWarningText(Blockly.Msg['COLLAPSED_WARNINGS_WARNING'],
+            Blockly.BlockSvg.COLLAPSED_WARNING_ID);
+        break;
+      }
+    }
   } else {
     this.removeInput(COLLAPSED_INPUT_NAME);
     // Clear any warnings inherited from enclosed blocks.
-    this.setWarningText(null);
+    if (this.warning) {
+      this.warning.setText('', Blockly.BlockSvg.COLLAPSED_WARNING_ID);
+      if (!Object.keys(this.warning.text_).length) {
+        this.setWarningText(null);
+      }
+    }
   }
   Blockly.BlockSvg.superClass_.setCollapsed.call(this, collapsed);
 
@@ -1076,7 +1105,8 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
     parent = parent.getSurroundParent();
   }
   if (collapsedParent) {
-    collapsedParent.setWarningText(text, 'collapsed ' + this.id + ' ' + id);
+    collapsedParent.setWarningText(Blockly.Msg['COLLAPSED_WARNINGS_WARNING'],
+        Blockly.BlockSvg.COLLAPSED_WARNING_ID);
   }
 
   var changedState = false;

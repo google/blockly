@@ -54,6 +54,14 @@ Blockly.Options = function(options) {
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
     }
+    var maxTrashcanContents = options['maxTrashcanContents'];
+    if (hasTrashcan) {
+      if (maxTrashcanContents === undefined) {
+        maxTrashcanContents = 32;
+      }
+    } else {
+      maxTrashcanContents = 0;
+    }
     var hasCollapse = options['collapse'];
     if (hasCollapse === undefined) {
       hasCollapse = hasCategories;
@@ -124,6 +132,7 @@ Blockly.Options = function(options) {
   this.hasCategories = hasCategories;
   this.hasScrollbars = hasScrollbars;
   this.hasTrashcan = hasTrashcan;
+  this.maxTrashcanContents = maxTrashcanContents;
   this.hasSounds = hasSounds;
   this.hasCss = hasCss;
   this.horizontalLayout = horizontalLayout;

@@ -233,7 +233,7 @@ Blockly.Block.prototype.colour_ = '#000000';
 /**
  * Secondary colour of the block.
  * Colour of the block if it is a shadow
- * @type {string}
+ * @type {?string}
  * @private
  */
 Blockly.Block.prototype.secondaryColour_ = null;
@@ -241,21 +241,21 @@ Blockly.Block.prototype.secondaryColour_ = null;
 /**
  * Tertiary colour of the block.
  * Colour of the border on the block.
- * @type {string}
+ * @type {?string}
  * @private
  */
 Blockly.Block.prototype.tertiaryColour_ = null;
 
 /**
  * Style of the block.
- * @type {Object} Map from style attribute name (string) to style value (string)
+ * @type {?Object} Map from style attribute name (string) to style value (string)
  * @private
  */
 Blockly.Block.prototype.style_ = null;
 
 /**
  * Name of the block style.
- * @type {string}
+ * @type {?string}
  * @private
  */
 Blockly.Block.prototype.styleName_ = null;
@@ -857,7 +857,7 @@ Blockly.Block.prototype.getColour = function() {
 
 /**
  * Get the secondary colour of a block.
- * @return {string} #RRGGBB string.
+ * @return {?string} #RRGGBB string.
  */
 Blockly.Block.prototype.getSecondaryColour = function() {
   return this.secondaryColour_;
@@ -865,7 +865,7 @@ Blockly.Block.prototype.getSecondaryColour = function() {
 
 /**
  * Get the tertiary colour of a block.
- * @return {string} #RRGGBB string.
+ * @return {?string} #RRGGBB string.
  */
 Blockly.Block.prototype.getTertiaryColour = function() {
   return this.tertiaryColour_;
@@ -873,7 +873,7 @@ Blockly.Block.prototype.getTertiaryColour = function() {
 
 /**
  * Get the style of a block.
- * @return {Object} Map of style names (string) to style value (string).
+ * @return {?Object} Map of style names (string) to style value (string).
  */
 Blockly.Block.prototype.getStyle = function() {
   return this.style_;
@@ -881,7 +881,7 @@ Blockly.Block.prototype.getStyle = function() {
 
 /**
  * Get the name of the block style.
- * @return {string} Name of the block style.
+ * @return {?string} Name of the block style.
  */
 Blockly.Block.prototype.getStyleName = function() {
   return this.styleName_;
@@ -1352,7 +1352,7 @@ Blockly.Block.prototype.jsonInit = function(json) {
   // Set basic properties of block.
   if (json['style'] && json['colour']) {
     throw Error(warningPrefix + 'Must not have both a colour and a style.');
-  } else if (json['style']){
+  } else if (json['style']) {
     this.jsonInitStyle_(json, warningPrefix);
   } else {
     this.jsonInitColour_(json, warningPrefix);

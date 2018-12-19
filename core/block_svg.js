@@ -922,8 +922,8 @@ Blockly.BlockSvg.prototype.updateColour = function() {
 /**
  * Sets the colour of the border.
  * Removes the light and dark paths if a tertiary colour is defined.
- * @param {string} rgb Colour of the block.
- * @param {string} tertiaryColour Colour of the border.
+ * @param {!string} rgb Colour of the block.
+ * @param {?string} tertiaryColour Colour of the border.
  */
 Blockly.BlockSvg.prototype.setBorderColour_ = function(rgb, tertiaryColour) {
   if (tertiaryColour) {
@@ -943,9 +943,9 @@ Blockly.BlockSvg.prototype.setBorderColour_ = function(rgb, tertiaryColour) {
 
 /**
  * Sets the colour of shadow blocks.
- * @param {string} rgb Primary colour of the block.
- * @param {string} secondaryColour Colour for shadow block.
- * @return {string} hexColour The background color of the block.
+ * @param {!string} rgb Primary colour of the block.
+ * @param {?string} secondaryColour Colour for shadow block.
+ * @return {!string} hexColour The background color of the block.
  */
 Blockly.BlockSvg.prototype.setShadowColour_ = function(
     rgb, secondaryColour) {

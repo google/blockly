@@ -114,7 +114,7 @@ Blockly.cache3dSupported_ = null;
 
 /**
  * Holds all Blockly style attributes.
- * @type {Blockly.Style}
+ * @type {?Blockly.Style}
  * @private
  */
 Blockly.style_ = null;
@@ -679,7 +679,7 @@ Blockly.checkBlockColourConstant_ = function(
  * Sets the style for blockly and refreshes all blocks in toolbox and workspace.
  * @param {Blockly.Style} style Style for blockly.
  */
-Blockly.setStyle = function(style){
+Blockly.setStyle = function(style) {
   this.style_ = style;
   var workspace = Blockly.getMainWorkspace();
   var blocks = workspace.getAllBlocks();
@@ -697,9 +697,9 @@ Blockly.setStyle = function(style){
 
 /**
  * Gets the style for blockly.
- * @return {Blockly.Style} style Style for blockly.
+ * @return {?Blockly.Style} style Style for blockly.
  */
-Blockly.getStyle = function(){
+Blockly.getStyle = function() {
   return this.style_;
 };
 

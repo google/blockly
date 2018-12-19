@@ -44,7 +44,7 @@ Blockly.Style.prototype.getBlockStyle = function(blockStyleName) {
  * @param{String} blockStyleName The name of the block style.
  * @param{Blockly.BlockStyle} blockStyle The block style
 */
-Blockly.Style.prototype.setBlockStyle = function(blockStyleName, blockStyle){
+Blockly.Style.prototype.setBlockStyle = function(blockStyleName, blockStyle) {
   var event = new Blockly.Events.Ui(null, 'blockStyleChanged',
       this.blockStyles_[blockStyleName], blockStyle);
   this.blockStyles_[blockStyleName] = blockStyle;

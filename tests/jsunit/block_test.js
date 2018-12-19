@@ -292,7 +292,7 @@ function test_set_style_throw_exception() {
   var blockA = workspace.newBlock('row_block');
   try {
     blockA.setStyle('styleOne');
-  }catch(error){
+  }catch(error) {
     assertEquals(error, "Invalid style name: styleOne");
   }finally {
     blockTest_tearDown();

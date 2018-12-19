@@ -122,9 +122,9 @@ function test_setStyleForBlockly() {
   var blockA = workspace.newBlock('stack_block');
   var blocks = [blockA];
 
-  blockA.setStyle = function(){this.styleName_ = 'styleTwo'};
+  blockA.setStyle = function() {this.styleName_ = 'styleTwo'};
   var callCount = 1;
-  workspace.refreshToolboxSelection = function(){
+  workspace.refreshToolboxSelection = function() {
     return ++callCount;
   };
   blockA.styleName_ = 'styleOne';

@@ -33,12 +33,11 @@
 # - Add a good error message if multiple versions of the closure compiler were
 #   found.
 
-# Note that the root folder MUST be named 'local_build'.
-
 EXPECTED_PWD='local_build'
+# Check the current working directory.
 if [[ ${PWD##*/} != $EXPECTED_PWD ]]; then
   echo ""
-  echo "  WARNING   This script should be run from the blockly/local_build folder."
+  echo "  WARNING   This script should be run from the local_build folder."
   echo ""
   exit 1
 fi

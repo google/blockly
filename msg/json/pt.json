@@ -14,7 +14,8 @@
 			"Vicng",
 			"MokaAkashiyaPT",
 			"Athena in Wonderland",
-			"McDutchie"
+			"McDutchie",
+			"Hamilton Abreu"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -213,6 +214,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "http://pt.wikipedia.org/wiki/N%C3%BAmero_aleat%C3%B3rio",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "fração aleatória",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Insere uma fração aleatória entre 0.0 (inclusive) e 1.0 (exclusive).",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 de X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Devolver o arco tangente do ponto (X, Y) em graus entre -180 e 180.",
 	"TEXT_TEXT_HELPURL": "http://pt.wikipedia.org/wiki/Cadeia_de_caracteres",
 	"TEXT_TEXT_TOOLTIP": "Uma letra, palavra ou linha de texto.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "criar texto com",

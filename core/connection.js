@@ -336,10 +336,50 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
 
 /**
  * Check if the two connections can be dragged to connect to each other.
+ * This is used by the connection database when searching for the closest
+ * connection.
+ * @param {!Blockly.Connection} candidate A nearby connection to check, which
+ *     must be a previous connection.
+ * @return {boolean} True if the connection is allowed, false otherwise.
+ * @private
+ */
+Blockly.Connection.prototype.canConnectToPrevious_ = function(candidate) {
+  if (this.targetConnection) {
+    // This connection is already occupied.
+    // A next connection will never disconnect itself mid-drag.
+    return false;
+  }
+
+  // Don't let blocks try to connect to themselves or ones they nest.
+  if (Blockly.draggingConnections_.indexOf(candidate) != -1) {
+    return false;
+  }
+
+  if (!candidate.targetConnection) {
+    return true;
+  }
+
+  var targetBlock = candidate.targetBlock();
+  // If it is connected to a real block, game over.
+  if (!targetBlock.isInsertionMarker()) {
+    return false;
+  }
+  // If it's connected to an insertion marker but that insertion marker
+  // is the first block in a stack, it's still fine.  If that insertion
+  // marker is in the middle of a stack, it won't work.
+  return !targetBlock.getPreviousBlock();
+};
+
+/**
+ * Check if the two connections can be dragged to connect to each other.
  * @param {!Blockly.Connection} candidate A nearby connection to check.
  * @return {boolean} True if the connection is allowed, false otherwise.
  */
 Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
+  // Don't consider insertion markers.
+  if (candidate.sourceBlock_.isInsertionMarker()) {
+    return false;
+  }
   // Type checking.
   var canConnect = this.canConnectWithReason_(candidate);
   if (canConnect != Blockly.Connection.CAN_CONNECT) {
@@ -348,30 +388,27 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
 
   switch (candidate.type) {
     case Blockly.PREVIOUS_STATEMENT:
-      // Don't offer to connect the bottom of a statement block to one that's
-      // already connected.
-      if (candidate.isConnected() || this.isConnected()) {
-        return false;
-      }
-      break;
-    case Blockly.OUTPUT_VALUE:
+      return this.canConnectToPrevious_(candidate);
+    case Blockly.OUTPUT_VALUE: {
       // Don't offer to connect an already connected left (male) value plug to
       // an available right (female) value plug.
       if (candidate.isConnected() || this.isConnected()) {
         return false;
       }
       break;
-    case Blockly.INPUT_VALUE:
+    }
+    case Blockly.INPUT_VALUE: {
       // Offering to connect the left (male) of a value block to an already
       // connected value pair is ok, we'll splice it in.
-      // However, don't offer to splice into an unmovable block.
-      if (candidate.targetConnection &&
+      // However, don't offer to splice into an immovable block.
+      if (candidate.isConnected() &&
           !candidate.targetBlock().isMovable() &&
           !candidate.targetBlock().isShadow()) {
         return false;
       }
       break;
-    case Blockly.NEXT_STATEMENT:
+    }
+    case Blockly.NEXT_STATEMENT: {
       // Don't let a block with no next connection bump other blocks out of the
       // stack.  But covering up a shadow block or stack of shadow blocks is
       // fine.  Similarly, replacing a terminal statement with another terminal
@@ -383,6 +420,7 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
         return false;
       }
       break;
+    }
     default:
       throw Error('Unknown connection type in isConnectionAllowed');
   }

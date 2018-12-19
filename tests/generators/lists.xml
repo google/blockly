@@ -3,25 +3,25 @@
     <field name="SUITE_NAME">Lists</field>
     <statement name="DO">
       <block type="procedures_callnoreturn">
-        <mutation name="test create"></mutation>
+        <mutation name="test create lists"></mutation>
         <next>
           <block type="procedures_callnoreturn">
-            <mutation name="test empty"></mutation>
+            <mutation name="test lists empty"></mutation>
             <next>
               <block type="procedures_callnoreturn">
-                <mutation name="test length"></mutation>
+                <mutation name="test lists length"></mutation>
                 <next>
                   <block type="procedures_callnoreturn">
-                    <mutation name="test find simple"></mutation>
+                    <mutation name="test find lists simple"></mutation>
                     <next>
                       <block type="procedures_callnoreturn">
-                        <mutation name="test find complex"></mutation>
+                        <mutation name="test find lists complex"></mutation>
                         <next>
                           <block type="procedures_callnoreturn">
-                            <mutation name="test get simple"></mutation>
+                            <mutation name="test get lists simple"></mutation>
                             <next>
                               <block type="procedures_callnoreturn">
-                                <mutation name="test get complex"></mutation>
+                                <mutation name="test get lists complex"></mutation>
                                 <next>
                                   <block type="procedures_callnoreturn">
                                     <mutation name="test getRemove"></mutation>
@@ -57,7 +57,7 @@
                                                                             <mutation name="test sort numeric"></mutation>
                                                                             <next>
                                                                               <block type="procedures_callnoreturn">
-                                                                                <mutation name="test reverse"></mutation>
+                                                                                <mutation name="test lists reverse"></mutation>
                                                                               </block>
                                                                             </next>
                                                                           </block>
@@ -134,7 +134,7 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="13" y="713">
-    <field name="NAME">test create</field>
+    <field name="NAME">test create lists</field>
     <comment pinned="false" h="80" w="160">Tests the "create list with" and "create empty list" blocks.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -298,7 +298,7 @@
     </value>
   </block>
   <block type="procedures_defnoreturn" x="13" y="1238">
-    <field name="NAME">test empty</field>
+    <field name="NAME">test lists empty</field>
     <comment pinned="false" h="80" w="160">Tests the "is empty" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertvalue" inline="false">
@@ -391,7 +391,7 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="13" y="1563">
-    <field name="NAME">test length</field>
+    <field name="NAME">test lists length</field>
     <comment pinned="false" h="80" w="160">Tests the "length" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -525,7 +525,7 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="13" y="1988">
-    <field name="NAME">test find simple</field>
+    <field name="NAME">test find lists simple</field>
     <comment pinned="false" h="80" w="160">Tests the "find" block with a variable.</comment>
     <statement name="STACK">
       <block type="variables_set">
@@ -697,7 +697,7 @@
     </value>
   </block>
   <block type="procedures_defnoreturn" x="13" y="2563">
-    <field name="NAME">test find complex</field>
+    <field name="NAME">test find lists complex</field>
     <comment pinned="false" h="80" w="160">Tests the "find" block with a function call.</comment>
     <statement name="STACK">
       <block type="variables_set">
@@ -1067,7 +1067,7 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="13" y="3738">
-    <field name="NAME">test get simple</field>
+    <field name="NAME">test get lists simple</field>
     <comment pinned="false" h="80" w="160">Tests the "get" block with a variable.</comment>
     <statement name="STACK">
       <block type="variables_set" inline="false">
@@ -1391,7 +1391,7 @@
     </value>
   </block>
   <block type="procedures_defnoreturn" x="13" y="4663">
-    <field name="NAME">test get complex</field>
+    <field name="NAME">test get lists complex</field>
     <comment pinned="false" h="80" w="160">Tests the "get" block with a function call.</comment>
     <statement name="STACK">
       <block type="variables_set" inline="false">
@@ -8138,7 +8138,7 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="13" y="20463">
-    <field name="NAME">test reverse</field>
+    <field name="NAME">test lists reverse</field>
     <comment pinned="false" h="80" w="160">Tests the "list reverse" block.</comment>
     <statement name="STACK">
       <block type="variables_set">

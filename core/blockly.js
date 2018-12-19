@@ -99,6 +99,13 @@ Blockly.clipboardXml_ = null;
 Blockly.clipboardSource_ = null;
 
 /**
+ * Map of types to type counts for the clipboard object and descendants.
+ * @type {Object}
+ * @private
+ */
+Blockly.clipboardTypeCounts_ = null;
+
+/**
  * Cached value for whether 3D is supported.
  * @type {!boolean}
  * @private
@@ -227,15 +234,18 @@ Blockly.onKeyDown_ = function(e) {
     if (e.keyCode == 86) {
       // 'v' for paste.
       if (Blockly.clipboardXml_) {
-        Blockly.Events.setGroup(true);
         // Pasting always pastes to the main workspace, even if the copy
         // started in a flyout workspace.
         var workspace = Blockly.clipboardSource_;
         if (workspace.isFlyout) {
           workspace = workspace.targetWorkspace;
         }
-        workspace.paste(Blockly.clipboardXml_);
-        Blockly.Events.setGroup(false);
+        if (Blockly.clipboardTypeCounts_ &&
+            workspace.isCapacityAvailable(Blockly.clipboardTypeCounts_)) {
+          Blockly.Events.setGroup(true);
+          workspace.paste(Blockly.clipboardXml_);
+          Blockly.Events.setGroup(false);
+        }
       }
     } else if (e.keyCode == 90) {
       // 'z' for undo 'Z' is for redo.
@@ -273,6 +283,8 @@ Blockly.copy_ = function(toCopy) {
   }
   Blockly.clipboardXml_ = xml;
   Blockly.clipboardSource_ = toCopy.workspace;
+  Blockly.clipboardTypeCounts_ = toCopy.isComment ? null :
+      Blockly.utils.getBlockTypeCounts(toCopy, true);
 };
 
 /**
@@ -314,8 +326,14 @@ Blockly.onContextMenu_ = function(e) {
 Blockly.hideChaff = function(opt_allowToolbox) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
+  // For now the trashcan flyout always autocloses because it overlays the
+  // trashcan UI (no trashcan to click to close it)
+  var workspace = Blockly.getMainWorkspace();
+  if (workspace.trashcan &&
+      workspace.trashcan.flyout_) {
+    workspace.trashcan.flyout_.hide();
+  }
   if (!opt_allowToolbox) {
-    var workspace = Blockly.getMainWorkspace();
     if (workspace.toolbox_ &&
         workspace.toolbox_.flyout_ &&
         workspace.toolbox_.flyout_.autoClose) {

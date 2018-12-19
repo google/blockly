@@ -3,28 +3,28 @@
     <field name="SUITE_NAME">Text</field>
     <statement name="DO">
       <block type="procedures_callnoreturn">
-        <mutation name="test length"></mutation>
+        <mutation name="test text length"></mutation>
         <next>
           <block type="procedures_callnoreturn">
-            <mutation name="test empty"></mutation>
+            <mutation name="test empty text"></mutation>
             <next>
               <block type="procedures_callnoreturn">
-                <mutation name="test create"></mutation>
+                <mutation name="test create text"></mutation>
                 <next>
                   <block type="procedures_callnoreturn">
                     <mutation name="test append"></mutation>
                     <next>
                       <block type="procedures_callnoreturn">
-                        <mutation name="test find simple"></mutation>
+                        <mutation name="test find text simple"></mutation>
                         <next>
                           <block type="procedures_callnoreturn">
-                            <mutation name="test find complex"></mutation>
+                            <mutation name="test find text complex"></mutation>
                             <next>
                               <block type="procedures_callnoreturn">
-                                <mutation name="test get simple"></mutation>
+                                <mutation name="test get text simple"></mutation>
                                 <next>
                                   <block type="procedures_callnoreturn">
-                                    <mutation name="test get complex"></mutation>
+                                    <mutation name="test get text complex"></mutation>
                                     <next>
                                       <block type="procedures_callnoreturn">
                                         <mutation name="test substring simple"></mutation>
@@ -39,10 +39,10 @@
                                                     <mutation name="test trim"></mutation>
                                                     <next>
                                                       <block type="procedures_callnoreturn">
-                                                        <mutation name="test count"></mutation>
+                                                        <mutation name="test count text"></mutation>
                                                         <next>
                                                           <block type="procedures_callnoreturn">
-                                                            <mutation name="test reverse"></mutation>
+                                                            <mutation name="test text reverse"></mutation>
                                                             <next>
                                                               <block type="procedures_callnoreturn">
                                                                 <mutation name="test replace"></mutation>
@@ -114,7 +114,7 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="13" y="563">
-    <field name="NAME">test create</field>
+    <field name="NAME">test create text</field>
     <comment pinned="false" h="80" w="160">Tests the "create text with" block with varying number of inputs.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -333,7 +333,7 @@
     </value>
   </block>
   <block type="procedures_defnoreturn" x="13" y="1338">
-    <field name="NAME">test empty</field>
+    <field name="NAME">test empty text</field>
     <comment pinned="false" h="80" w="160">Tests the "is empty" block".</comment>
     <statement name="STACK">
       <block type="unittest_assertvalue" inline="false">
@@ -425,7 +425,7 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="13" y="1663">
-    <field name="NAME">test length</field>
+    <field name="NAME">test text length</field>
     <comment pinned="false" h="80" w="160">Tests the "length" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -643,7 +643,7 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="13" y="2438">
-    <field name="NAME">test find simple</field>
+    <field name="NAME">test find text simple</field>
     <comment pinned="false" h="80" w="160">Tests the "find" block with a variable.</comment>
     <statement name="STACK">
       <block type="variables_set" inline="false">
@@ -775,7 +775,7 @@
     </value>
   </block>
   <block type="procedures_defnoreturn" x="13" y="2938">
-    <field name="NAME">test find complex</field>
+    <field name="NAME">test find text complex</field>
     <comment pinned="false" h="80" w="160">Tests the "find" block with a function call.</comment>
     <statement name="STACK">
       <block type="variables_set">
@@ -1145,7 +1145,7 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="13" y="4013">
-    <field name="NAME">test get simple</field>
+    <field name="NAME">test get text simple</field>
     <comment pinned="false" h="80" w="160">Tests the "get letter" block with a variable.</comment>
     <statement name="STACK">
       <block type="variables_set" inline="false">
@@ -1432,7 +1432,7 @@
     </value>
   </block>
   <block type="procedures_defnoreturn" x="13" y="4938">
-    <field name="NAME">test get complex</field>
+    <field name="NAME">test get text complex</field>
     <comment pinned="false" h="80" w="160">Tests the "get letter" block with a function call.</comment>
     <statement name="STACK">
       <block type="variables_set" inline="false">
@@ -4108,7 +4108,7 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="13" y="12088">
-    <field name="NAME">test count</field>
+    <field name="NAME">test count text</field>
     <comment pinned="false" h="80" w="160">Tests the "trim" block.</comment>
     <statement name="STACK">
       <block type="variables_set">
@@ -4318,7 +4318,7 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="12" y="12812">
-    <field name="NAME">test reverse</field>
+    <field name="NAME">test text reverse</field>
     <comment pinned="false" h="80" w="160">Tests the "trim" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">

@@ -12,7 +12,8 @@
 			"Helpau",
 			"SimondR",
 			"Mouse21",
-			"Movses"
+			"Movses",
+			"Vlad5250"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "элемент",
@@ -198,6 +199,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://ru.wikipedia.org/wiki/Генератор_псевдослучайных_чисел",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "случайное число от 0 (включительно) до 1",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Возвращает случайное число от 0.0 (включительно) до 1.0.",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 от X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Возвращает арктангенс точки (X, Y) в градусах от -180 до 180.",
 	"TEXT_TEXT_HELPURL": "https://ru.wikipedia.org/wiki/Строковый_тип",
 	"TEXT_TEXT_TOOLTIP": "Буква, слово или строка текста.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "создать текст из",

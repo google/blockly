@@ -425,6 +425,7 @@ Blockly.WorkspaceCommentSvg.prototype.disposeInternal_ = function() {
   this.foreignObject_ = null;
   this.svgRectTarget_ = null;
   this.svgHandleTarget_ = null;
+  this.disposed_ = true;
 };
 
 /**
@@ -436,6 +437,9 @@ Blockly.WorkspaceCommentSvg.prototype.setFocus = function() {
   this.focused_ = true;
   // Defer CSS changes.
   setTimeout(function() {
+    if (comment.disposed_) {
+      return;
+    }
     comment.textarea_.focus();
     comment.addFocus();
     Blockly.utils.addClass(
@@ -454,6 +458,10 @@ Blockly.WorkspaceCommentSvg.prototype.blurFocus = function() {
   this.focused_ = false;
   // Defer CSS changes.
   setTimeout(function() {
+    if (comment.disposed_) {
+      return;
+    }
+
     comment.textarea_.blur();
     comment.removeFocus();
     Blockly.utils.removeClass(

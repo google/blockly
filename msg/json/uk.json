@@ -8,7 +8,8 @@
 			"아라",
 			"Visem",
 			"Piramidion",
-			"SimondR"
+			"SimondR",
+			"Movses"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "елемент",
@@ -197,6 +198,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://uk.wikipedia.org/wiki/Генерація_випадкових_чисел",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "випадковий дріб",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Повертає випадковий дріб від 0,0 (включно) та 1.0 (не включно).",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 по X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Повертає арктангенс точки (X, Y) у градусах від -180 до 180.",
 	"TEXT_TEXT_HELPURL": "https://uk.wikipedia.org/wiki/Рядок_(програмування)",
 	"TEXT_TEXT_TOOLTIP": "Символ, слово або рядок тексту.",
 	"TEXT_JOIN_HELPURL": "http://www.chemie.fu-berlin.de/chemnet/use/info/make/make_8.html",

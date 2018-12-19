@@ -1285,6 +1285,9 @@ Blockly.WorkspaceSvg.prototype.cleanUp = function() {
   var topBlocks = this.getTopBlocks(true);
   var cursorY = 0;
   for (var i = 0, block; block = topBlocks[i]; i++) {
+    if (!block.isMovable()) {
+      continue;
+    }
     var xy = block.getRelativeToSurfaceXY();
     block.moveBy(-xy.x, cursorY - xy.y);
     block.snapToGrid();

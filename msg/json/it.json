@@ -191,6 +191,7 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://it.wikipedia.org/wiki/Numeri_pseudo-casuali",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "frazione casuale",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Restituisce una frazione compresa fra 0.0 (incluso) e 1.0 (escluso).",
+	"MATH_ATAN2_HELPURL": "https://it.wikipedia.org/wiki/Arcotangente2",
 	"TEXT_TEXT_HELPURL": "https://it.wikipedia.org/wiki/Stringa_(informatica)",
 	"TEXT_TEXT_TOOLTIP": "Una lettera, una parola o una linea di testo.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "crea testo con",

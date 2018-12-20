@@ -52,7 +52,7 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
       "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
     }],
     "output": null,
-    "style": "%{BKY_VARIABLES_DYNAMIC_STYLE}",
+    "style": "variables_dynamic",
     "helpUrl": "%{BKY_VARIABLES_GET_HELPURL}",
     "tooltip": "%{BKY_VARIABLES_GET_TOOLTIP}",
     "extensions": ["contextMenu_variableDynamicSetterGetter"]
@@ -73,7 +73,7 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
     ],
     "previousStatement": null,
     "nextStatement": null,
-    "style": "%{BKY_VARIABLES_DYNAMIC_STYLE}",
+    "style": "variables_dynamic",
     "tooltip": "%{BKY_VARIABLES_SET_TOOLTIP}",
     "helpUrl": "%{BKY_VARIABLES_SET_HELPURL}",
     "extensions": ["contextMenu_variableDynamicSetterGetter"]

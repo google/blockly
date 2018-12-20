@@ -67,25 +67,6 @@ Blockly.Msg.VARIABLES_DYNAMIC_HUE = '310';
 /// {{Notranslate}} Hue value for all procedure blocks.
 Blockly.Msg.PROCEDURES_HUE = '290';
 
-/// {{Notranslate}} Style name for all logic blocks.
-Blockly.Msg.LOGIC_STYLE = 'logic';
-/// {{Notranslate}} Style name for all loop blocks.
-Blockly.Msg.LOOPS_STYLE = 'loops';
-/// {{Notranslate}} Style name for all math blocks.
-Blockly.Msg.MATH_STYLE = 'math';
-/// {{Notranslate}} Style name for all text blocks.
-Blockly.Msg.TEXT_STYLE = 'text';
-/// {{Notranslate}} Style name for all list blocks.
-Blockly.Msg.LISTS_STYLE = 'lists';
-/// {{Notranslate}} Style name for all colour blocks.
-Blockly.Msg.COLOUR_STYLE = 'colour';
-/// {{Notranslate}} Style name for all variable blocks.
-Blockly.Msg.VARIABLES_STYLE = 'variables';
-/// {{Notranslate}} Style name for all variable dynamic blocks.
-Blockly.Msg.VARIABLES_DYNAMIC_STYLE = 'variables_dynamic';
-/// {{Notranslate}} Style name for all procedure blocks.
-Blockly.Msg.PROCEDURES_STYLE = 'procedure';
-
 /// default name - A simple, general default name for a variable, preferably short.
 /// For more context, see
 /// [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}

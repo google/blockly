@@ -20,7 +20,7 @@ var defaultBlockStyles = {
   "math": {
     "primaryColour": "230"
   },
-  "procedure": {
+  "procedures": {
     "primaryColour": "290"
   },
   "text": {

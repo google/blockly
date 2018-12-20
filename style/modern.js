@@ -30,7 +30,7 @@ var defaultBlockStyles = {
     "secondaryColour": "#bdc2db",
     "tertiaryColour": "#495284"
   },
-  "procedure": {
+  "procedures": {
     "primaryColour": "#995ba5",
     "secondaryColour": "#d6bddb",
     "tertiaryColour": "#7a4984"

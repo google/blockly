@@ -35,11 +35,11 @@ var fs = require('fs');
  */
 function runLangGeneratorInBrowser(browser, filename, codegenFn) {
   return browser
-      .pause(5000)
+      .pause(9000)
       .then(function() {
         this.execute(codegenFn)
       })
-      .pause(10000)
+      .pause(90000)
       .getValue("#importExport")
       .then(function(result) {
         fs.writeFile(filename, result, function(err) {
@@ -80,7 +80,7 @@ function runGeneratorsInBrowser() {
           loadSelected();
         })
       })
-      .pause(10000)
+      .pause(50000)
       .then(function() {
         return runLangGeneratorInBrowser(this, prefix + '.js', function() {
           toJavaScript();
@@ -106,7 +106,7 @@ function runGeneratorsInBrowser() {
           toPhp();
         });
       })
-      .pause(10000)
+      .pause(50000)
       .catch(function(e) {
         console.error('Error: ', e);
 

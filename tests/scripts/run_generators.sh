@@ -46,7 +46,7 @@ done
 
 
 # Clean up.
-#rm -r $TMP_DIR
+rm -r $TMP_DIR
 
 if [ "$FAILURE_COUNT" -eq "0" ]; then
   echo -e "${BOLD_GREEN}All generator tests passed.${ANSI_RESET}"

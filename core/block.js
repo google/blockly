@@ -929,7 +929,11 @@ Blockly.Block.prototype.setColour = function(colour) {
  */
 Blockly.Block.prototype.setStyle = function(blockStyleName) {
   var dereferenced = Blockly.utils.replaceMessageReferences(blockStyleName);
-  var blockStyle = Blockly.getStyle().getBlockStyle(dereferenced);
+  var style = Blockly.getStyle();
+  if (!style) {
+    throw 'Trying to set block style before Blockly.setStyle() has been called';
+  }
+  var blockStyle = style.getBlockStyle(dereferenced);
   this.styleName_ = dereferenced;
 
   if (blockStyle) {

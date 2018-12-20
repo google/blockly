@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "1.20181030.0-develop",
+  "version": "1.20181219.0",
   "description": "Blockly is a library for building visual programming editors.",
   "main": "blockly_node_javascript_en.js",
   "keywords": [

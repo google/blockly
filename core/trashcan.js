@@ -265,10 +265,10 @@ Blockly.Trashcan.prototype.createDom = function() {
 
 /**
  * Initialize the trash can.
- * @param {number} verticalSpacing Vertical distance workspace edge to the same
- * edge of the trashcan.
+ * @param {number} verticalSpacing Vertical distance from workspace edge to the
+ *    same edge of the trashcan.
  * @return {number} Vertical distance from workspace edge to the opposite
- * edge of the trashcan.
+ *    edge of the trashcan.
  */
 Blockly.Trashcan.prototype.init = function(verticalSpacing) {
   if (this.workspace_.options.maxTrashcanContents > 0) {
@@ -297,7 +297,10 @@ Blockly.Trashcan.prototype.dispose = function() {
 };
 
 /**
- * Move the trash can to the bottom-right corner.
+ * Position the trashcan.
+ * It is positioned in the upper corner when the toolbox is on bottom, and the
+ * bottom corner for all other toolbox positions. It is on the right in LTR,
+ * and left in RTL.
  */
 Blockly.Trashcan.prototype.position = function() {
   // Not yet initialized.

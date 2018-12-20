@@ -109,9 +109,9 @@ Blockly.ZoomControls.prototype.createDom = function() {
 /**
  * Initialize the zoom controls.
  * @param {number} verticalSpacing Vertical distances from workspace edge to the
- * same edge of the controls.
+ *    same edge of the controls.
  * @return {number} Vertical distance from workspace edge to the opposite
- * edge of the controls.
+ *    edge of the controls.
  */
 Blockly.ZoomControls.prototype.init = function(verticalSpacing) {
   this.verticalSpacing_ = this.MARGIN_BOTTOM_ + verticalSpacing;

@@ -693,7 +693,12 @@ Blockly.setStyle = function(style) {
   workspace.refreshToolboxSelection();
   for (var i = 0; i < blocks.length; i++) {
     var block = blocks[i];
-    block.setStyle(block.getStyleName());
+    var blockStyleName = block.getStyleName();
+
+    block.setStyle(blockStyleName);
+    if (block.mutator) {
+      block.mutator.updateBlockStyle(blockStyleName);
+    }
   }
 
   var event = new Blockly.Events.Ui(null, 'styleChanged');

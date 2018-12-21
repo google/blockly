@@ -221,7 +221,7 @@ Blockly.Blocks['text_getSubstring'] = {
       [Blockly.Msg['TEXT_GET_SUBSTRING_END_LAST'], 'LAST']
     ];
     this.setHelpUrl(Blockly.Msg['TEXT_GET_SUBSTRING_HELPURL']);
-    this.setStyle("text");
+    this.setStyle('text');
     this.appendValueInput('STRING')
         .setCheck('String')
         .appendField(Blockly.Msg['TEXT_GET_SUBSTRING_INPUT_IN_TEXT']);
@@ -329,7 +329,7 @@ Blockly.Blocks['text_changeCase'] = {
       [Blockly.Msg['TEXT_CHANGECASE_OPERATOR_TITLECASE'], 'TITLECASE']
     ];
     this.setHelpUrl(Blockly.Msg['TEXT_CHANGECASE_HELPURL']);
-    this.setStyle("text");
+    this.setStyle('text');
     this.appendValueInput('TEXT')
         .setCheck('String')
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'CASE');
@@ -350,7 +350,7 @@ Blockly.Blocks['text_trim'] = {
       [Blockly.Msg['TEXT_TRIM_OPERATOR_RIGHT'], 'RIGHT']
     ];
     this.setHelpUrl(Blockly.Msg['TEXT_TRIM_HELPURL']);
-    this.setStyle("text");
+    this.setStyle('text');
     this.appendValueInput('TEXT')
         .setCheck('String')
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'MODE');
@@ -393,7 +393,7 @@ Blockly.Blocks['text_prompt_ext'] = {
       [Blockly.Msg['TEXT_PROMPT_TYPE_NUMBER'], 'NUMBER']
     ];
     this.setHelpUrl(Blockly.Msg['TEXT_PROMPT_HELPURL']);
-    this.setStyle("text");
+    this.setStyle('text');
     // Assign 'this' to a variable for use in the closures below.
     var thisBlock = this;
     var dropdown = new Blockly.FieldDropdown(TYPES, function(newOp) {
@@ -453,7 +453,7 @@ Blockly.Blocks['text_prompt'] = {
     // Assign 'this' to a variable for use in the closures below.
     var thisBlock = this;
     this.setHelpUrl(Blockly.Msg['TEXT_PROMPT_HELPURL']);
-    this.setStyle("text");
+    this.setStyle('text');
     var dropdown = new Blockly.FieldDropdown(TYPES, function(newOp) {
       thisBlock.updateType_(newOp);
     });

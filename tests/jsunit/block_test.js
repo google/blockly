@@ -293,7 +293,7 @@ function test_set_style_throw_exception() {
   try {
     blockA.setStyle('styleOne');
   }catch(error) {
-    assertEquals(error, "Invalid style name: styleOne");
+    assertEquals(error.message, "Invalid style name: styleOne");
   }finally {
     blockTest_tearDown();
   }

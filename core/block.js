@@ -928,13 +928,12 @@ Blockly.Block.prototype.setColour = function(colour) {
  * @throws {Error} if the block style does not exist.
  */
 Blockly.Block.prototype.setStyle = function(blockStyleName) {
-  var dereferenced = Blockly.utils.replaceMessageReferences(blockStyleName);
   var style = Blockly.getStyle();
   if (!style) {
-    throw 'Trying to set block style before Blockly.setStyle() has been called';
+    throw Error('Trying to set block style before Blockly.setStyle() has been called');
   }
-  var blockStyle = style.getBlockStyle(dereferenced);
-  this.styleName_ = dereferenced;
+  var blockStyle = style.getBlockStyle(blockStyleName);
+  this.styleName_ = blockStyleName;
 
   if (blockStyle) {
     this.style_ = blockStyle;
@@ -944,8 +943,7 @@ Blockly.Block.prototype.setStyle = function(blockStyleName) {
     this.setColour(blockStyle.primaryColour);
   }
   else {
-    var errorMsg = 'Invalid style name: ' + blockStyleName;
-    throw errorMsg;
+    throw Error('Invalid style name: ' + blockStyleName);
   }
 };
 

@@ -279,7 +279,7 @@ Blockly.Events.Create.prototype.run = function(forward) {
   } else {
     for (var i = 0, id; id = this.ids[i]; i++) {
       var block = workspace.getBlockById(id);
-      if (block) {
+      if (block && block.isDeletable()) {
         block.dispose(false, false);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
@@ -485,7 +485,7 @@ Blockly.Events.Move.prototype.isNull = function() {
 Blockly.Events.Move.prototype.run = function(forward) {
   var workspace = this.getEventWorkspace_();
   var block = workspace.getBlockById(this.blockId);
-  if (!block) {
+  if (!block || !block.isMovable()) {
     console.warn("Can't move non-existent block: " + this.blockId);
     return;
   }

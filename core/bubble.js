@@ -472,7 +472,7 @@ Blockly.Bubble.prototype.getOverlap_ = function(relativeMin, metrics) {
   };
   // The position of the top-start corner of the workspace.
   var workspaceMin = {
-    x: metrics.viewLeft,
+    x: this.workspace_.RTL ? -metrics.viewLeft : metrics.viewLeft,
     y: metrics.viewTop
   };
   // The position of the bottom-end corner of the workspace.

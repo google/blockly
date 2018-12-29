@@ -1026,6 +1026,9 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
       } while (collide);
       block.moveBy(blockX, blockY);
     }
+
+    //SHAPE: Added from blockly_changes
+    incrementCounter(block);
   } finally {
     Blockly.Events.enable();
   }

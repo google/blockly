@@ -68,11 +68,12 @@ Blockly.Mutator.prototype.workspaceHeight_ = 0;
  */
 Blockly.Mutator.prototype.drawIcon_ = function(group) {
   // Square with rounded corners.
+  //SHAPE: Radius changed from 4 to 8 from blockly_changes
   Blockly.utils.createSvgElement('rect',
       {
         'class': 'blocklyIconShape',
-        'rx': '4',
-        'ry': '4',
+        'rx': '8',
+        'ry': '8',
         'height': '16',
         'width': '16'
       },

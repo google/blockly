@@ -13249,7 +13249,7 @@ Blockly.Icon.prototype.renderIcon = function(a) {
     this.iconGroup_.setAttribute("display", "block");
     var b = this.SIZE;
     this.block_.RTL && (a -= b);
-    this.iconGroup_.setAttribute("transform", "translate(" + a + ",5)");
+    this.iconGroup_.setAttribute("transform", "translate(" + a + ",7.5)");
     this.computeIconLocation();
     return a = this.block_.RTL ? a - Blockly.BlockSvg.SEP_SPACE_X : a + (b + Blockly.BlockSvg.SEP_SPACE_X)
 };
@@ -13690,8 +13690,8 @@ Blockly.COLLAPSE_CHARS = 30;
 Blockly.LONGPRESS = 750;
 Blockly.SOUND_LIMIT = 100;
 Blockly.DRAG_STACK = !0;
-Blockly.HSV_SATURATION = .45;
-Blockly.HSV_VALUE = .65;
+Blockly.HSV_SATURATION = 1;
+Blockly.HSV_VALUE = 1;
 Blockly.SPRITE = {
     width: 96,
     height: 124,
@@ -16112,6 +16112,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(a) {
             } while (a);
             b.moveBy(c, d)
         }
+        incrementCounter(b)
     } finally {
         Blockly.Events.enable()
     }
@@ -16543,8 +16544,8 @@ Blockly.Mutator.prototype.workspaceHeight_ = 0;
 Blockly.Mutator.prototype.drawIcon_ = function(a) {
     Blockly.utils.createSvgElement("rect", {
         "class": "blocklyIconShape",
-        rx: "4",
-        ry: "4",
+        rx: "8",
+        ry: "8",
         height: "16",
         width: "16"
     }, a);
@@ -16851,9 +16852,9 @@ Blockly.Field.prototype.init = function() {
             x: -Blockly.BlockSvg.SEP_SPACE_X / 2,
             y: 0,
             height: 16
-        }, this.fieldGroup_), this.textElement_ = Blockly.utils.createSvgElement("text", {
+        }, this.fieldGroup_, this.sourceBlock_.workspace), this.textElement_ = Blockly.utils.createSvgElement("text", {
             "class": "blocklyText",
-            y: this.size_.height - 12.5
+            y: this.size_.height - 11
         }, this.fieldGroup_), this.updateEditable(), this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_),
         this.mouseDownWrapper_ = Blockly.bindEventWithChecks_(this.fieldGroup_, "mousedown", this, this.onMouseDown_), this.render_())
 };
@@ -19011,7 +19012,7 @@ Blockly.FieldColour.prototype.getText = function() {
     b && (a = "#" + b[1] + b[2] + b[3]);
     return a
 };
-Blockly.FieldColour.COLOURS = "#ffffff #cccccc #c0c0c0 #999999 #666666 #333333 #000000 #ffcccc #ff6666 #ff0000 #cc0000 #990000 #660000 #330000 #ffcc99 #ff9966 #ff9900 #ff6600 #cc6600 #993300 #663300 #ffff99 #ffff66 #ffcc66 #ffcc33 #cc9933 #996633 #663333 #ffffcc #ffff33 #ffff00 #ffcc00 #999900 #666600 #333300 #99ff99 #66ff99 #33ff33 #33cc00 #009900 #006600 #003300 #99ffff #33ffff #66cccc #00cccc #339999 #336666 #003333 #ccffff #66ffff #33ccff #3366ff #3333ff #000099 #000066 #ccccff #9999ff #6666cc #6633ff #6600cc #333399 #330099 #ffccff #ff99ff #cc66cc #cc33cc #993399 #663366 #330033".split(" ");
+Blockly.FieldColour.COLOURS = "#ffffff #cccccc #c0c0c0 #999999 #666666 #333333 #000000 #ffcccc #ff6666 #ff0000 #cc0000 #990000 #660000 #330000 #ffcc99 #ff9966 #fa9605 #ff6600 #cc6600 #993300 #663300 #ffff99 #ffff66 #ffcc66 #ffcc33 #cc9933 #996633 #663333 #ffffcc #ffff33 #ffff00 #ffcc00 #999900 #666600 #333300 #99ff99 #66ff99 #33ff33 #33cc00 #009900 #006600 #003300 #99ffff #33ffff #00cccc #4bcdcc #339999 #336666 #003333 #ccffff #66ffff #33ccff #3366ff #3333ff #000099 #000066 #ccccff #9999ff #6666cc #6633ff #6600cc #333399 #330099 #ffccff #ff99ff #cc66cc #cc33cc #993399 #663366 #330033".split(" ");
 Blockly.FieldColour.TITLES = [];
 Blockly.FieldColour.COLUMNS = 7;
 Blockly.FieldColour.prototype.setColours = function(a, b) {
@@ -19226,7 +19227,8 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
     this.size_.height = Number(this.imageJson_.height) + 19;
     this.size_.width = Number(this.imageJson_.width) +
         a;
-    this.sourceBlock_.RTL ? (this.imageElement_.setAttribute("x", a), this.textElement_.setAttribute("x", -1)) : (this.textElement_.setAttribute("text-anchor", "end"), this.textElement_.setAttribute("x", this.size_.width + 1))
+    this.sourceBlock_.RTL ? (this.imageElement_.setAttribute("x", a), this.textElement_.setAttribute("x", -1)) : (this.textElement_.setAttribute("text-anchor", "end"), this.textElement_.setAttribute("x", this.size_.width + 1));
+    this.textElement_.setAttribute("transform", "translate(0,0)")
 };
 Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
     var a = document.createTextNode(this.getDisplayText_());
@@ -19234,8 +19236,10 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
     this.sourceBlock_.RTL ? this.textElement_.insertBefore(this.arrow_, this.textElement_.firstChild) : this.textElement_.appendChild(this.arrow_);
     this.textElement_.setAttribute("text-anchor", "start");
     this.textElement_.setAttribute("x", 0);
-    this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y;
-    this.size_.width = Blockly.Field.getCachedWidth(this.textElement_)
+    this.textElement_.setAttribute("transform", "translate(0,0)");
+    this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y + 5;
+    this.size_.width =
+        Blockly.Field.getCachedWidth(this.textElement_)
 };
 Blockly.FieldDropdown.prototype.updateWidth = function() {
     if (this.imageJson_ && (goog.userAgent.IE || goog.userAgent.EDGE)) {
@@ -19244,6 +19248,24 @@ Blockly.FieldDropdown.prototype.updateWidth = function() {
         this.borderRect_ && this.borderRect_.setAttribute("width", a);
         this.size_.width = a
     } else Blockly.Field.prototype.updateWidth.call(this)
+};
+Blockly.FieldDropdown.changeRecentModuleColors = function(a, b) {
+    var c = document.getElementsByClassName("blocklyWidgetDiv");
+    if (0 < c.length && (c = c[0], "none" !== c.style.display && (c = c.children, 0 < c.length))) {
+        c = c[0];
+        var d = [],
+            e = [],
+            f = ["Dongle", "Joint", "Spin", "Face"];
+        for (key in f) {
+            moduleType = f[key];
+            if (moduleType in a)
+                for (activeModule in a[moduleType]) d.push(a[moduleType][activeModule][0]);
+            if (moduleType in b)
+                for (recentModule in b[moduleType]) e.push(b[moduleType][recentModule][0])
+        }
+        for (child in c.children) child = c.children[child],
+            f = child.innerText, void 0 != f && (f = f.substring(0, f.length - 1).toUpperCase(), !d.includes(f) && e.includes(f) ? child.children[0].className = "goog-menuitem-content recent-module" : "goog-menuitem-content recent-module" === child.children[0].className && (child.children[0].className = "goog-menuitem-content"))
+    }
 };
 Blockly.FieldDropdown.prototype.dispose = function() {
     Blockly.WidgetDiv.hideIfOwner(this);
@@ -20051,11 +20073,12 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(a) {
     c = Blockly.Xml.domToBlock(c, b);
     if (!c.getSvgRoot()) throw Error("block is not rendered.");
     var d = b.getOriginOffsetInPixels(),
-        e = this.workspace_.getOriginOffsetInPixels();
-    a = a.getRelativeToSurfaceXY().scale(this.workspace_.scale);
-    a = goog.math.Coordinate.sum(e, a);
-    b = goog.math.Coordinate.difference(a, d).scale(1 / b.scale);
+        e = this.workspace_.getOriginOffsetInPixels(),
+        f = a.getRelativeToSurfaceXY().scale(this.workspace_.scale);
+    e = goog.math.Coordinate.sum(e, f);
+    b = goog.math.Coordinate.difference(e, d).scale(1 / b.scale);
     c.moveBy(b.x, b.y);
+    incrementCounter(a);
     return c
 };
 Blockly.HorizontalFlyout = function(a) {
@@ -20599,6 +20622,7 @@ Blockly.WidgetDiv = {};
 Blockly.WidgetDiv.DIV = null;
 Blockly.WidgetDiv.owner_ = null;
 Blockly.WidgetDiv.dispose_ = null;
+Blockly.WidgetDiv.intervalID = -1;
 Blockly.WidgetDiv.createDom = function() {
     Blockly.WidgetDiv.DIV || (Blockly.WidgetDiv.DIV = document.createElement("div"), Blockly.WidgetDiv.DIV.className = "blocklyWidgetDiv", document.body.appendChild(Blockly.WidgetDiv.DIV))
 };
@@ -20609,10 +20633,17 @@ Blockly.WidgetDiv.show = function(a, b, c) {
     a = goog.style.getViewportPageOffset(document);
     Blockly.WidgetDiv.DIV.style.top = a.y + "px";
     Blockly.WidgetDiv.DIV.style.direction = b ? "rtl" : "ltr";
-    Blockly.WidgetDiv.DIV.style.display = "block"
+    Blockly.WidgetDiv.DIV.style.display = "block";
+    setTimeout(function() {
+        Blockly.FieldDropdown.changeRecentModuleColors(activeIDsDict, recentIDsDict)
+    }, 100);
+    Blockly.WidgetDiv.intervalID = setInterval(function() {
+        Blockly.FieldDropdown.changeRecentModuleColors(activeIDsDict,
+            recentIDsDict)
+    }, 1E3)
 };
 Blockly.WidgetDiv.hide = function() {
-    Blockly.WidgetDiv.owner_ && (Blockly.WidgetDiv.owner_ = null, Blockly.WidgetDiv.DIV.style.display = "none", Blockly.WidgetDiv.DIV.style.left = "", Blockly.WidgetDiv.DIV.style.top = "", Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_(), Blockly.WidgetDiv.dispose_ = null, Blockly.WidgetDiv.DIV.innerHTML = "")
+    Blockly.WidgetDiv.owner_ && (Blockly.WidgetDiv.owner_ = null, Blockly.WidgetDiv.DIV.style.display = "none", Blockly.WidgetDiv.DIV.style.left = "", Blockly.WidgetDiv.DIV.style.top = "", Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_(), Blockly.WidgetDiv.dispose_ = null, Blockly.WidgetDiv.DIV.innerHTML = "", 0 < Blockly.WidgetDiv.intervalID && (clearInterval(Blockly.WidgetDiv.intervalID), Blockly.WidgetDiv.intervalID = -1))
 };
 Blockly.WidgetDiv.isVisible = function() {
     return !!Blockly.WidgetDiv.owner_

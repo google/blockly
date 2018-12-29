@@ -293,6 +293,21 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "colour": 160
   },
   {
+    "type": "image_fliprtl",
+    "message0": "Image flipped RTL %1",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "media/arrow.png",
+        "width": 50,
+        "height": 50,
+        "alt": "*",
+        "flipRtl": true
+      }
+    ],
+    "colour": 160
+  },
+  {
     "type": "image_missing",
     "message0": "Image missing %1",
     "args0": [

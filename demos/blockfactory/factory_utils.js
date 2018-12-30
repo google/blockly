@@ -593,7 +593,8 @@ FactoryUtils.getFieldsJson_ = function(block) {
             src: block.getFieldValue('SRC'),
             width: Number(block.getFieldValue('WIDTH')),
             height: Number(block.getFieldValue('HEIGHT')),
-            alt: block.getFieldValue('ALT')
+            alt: block.getFieldValue('ALT'),
+            flipRtl: block.getFieldValue('FLIP_RTL') == 'TRUE'
           });
           break;
       }

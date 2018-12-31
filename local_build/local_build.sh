@@ -20,12 +20,20 @@
 #
 # Usage: local_build.sh.
 #
-# This script generates only local_blockly_compressed.js. You may modify it as
-# needed to build other files.
+# This script generates only local_blockly_compressed.js and
+# local_blocks_compressed.js . You may modify it as needed to build other
+# files.
 #
+# local_blockly_compressed.js:
 # The compressed file is a concatenation of all of Blockly's core files, run
 # through a local copy of Google's Closure Compiler with simple optimizations
 # turned on.
+#
+# local_blocks_compressed.js:
+# The compressed file is a concatenation of all of Blockly's block files, run
+# through a local copy of Google's Closure Compiler with simple optimizations
+# turned on.
+#
 
 # Future work:
 # - Trim down Google's Apache licenses, to match the output of build.py.
@@ -74,4 +82,27 @@ if [ -s local_blockly_compressed.js ]; then
 else
   echo Compilation FAIL.
   exit 1
+fi
+
+rm local_blocks_compressed.js 2> /dev/null
+echo Compiling Blockly blocks...
+echo -e "'use strict';\ngoog.provide('Blockly');goog.provide('Blockly.Blocks');" > temp.js
+cat ../blocks/*.js| grep -v "^'use strict';" >> temp.js
+java -jar $COMPILER \
+  --js='temp.js' \
+  --js='../../closure-library/closure/goog/**.js' \
+  --js='../../closure-library/third_party/closure/goog/**.js' \
+  --generate_exports \
+  --warning_level='DEFAULT' \
+  --compilation_level SIMPLE_OPTIMIZATIONS \
+  --dependency_mode=STRICT \
+  --entry_point=Blockly \
+  --js_output_file local_blocks_compressed.js
+rm temp.js 2> /dev/null
+if [ -s local_blocks_compressed.js ]; then
+       echo Compilation OK
+       sed -i 's/var Blockly={Blocks:{}};//g' local_blocks_compressed.js
+else
+       echo Compilation FAIL.
+       exit 1
 fi

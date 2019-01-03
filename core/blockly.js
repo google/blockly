@@ -687,19 +687,19 @@ Blockly.checkBlockColourConstant_ = function(
  */
 Blockly.setStyle = function(style) {
   this.style_ = style;
-  var workspace = Blockly.getMainWorkspace();
+  var ws = Blockly.getMainWorkspace();
 
-  this.updateBlockStyles_(workspace.getAllBlocks());
+  this.updateBlockStyles_(ws.getAllBlocks());
 
-  if (!workspace.toolbox_) {
-    this.updateBlockStyles_(workspace.flyout_.workspace_.getAllBlocks());
+  if (!ws.toolbox_ && ws.flyout_ && ws.flyout_.workspace_) {
+    this.updateBlockStyles_(ws.flyout_.workspace_.getAllBlocks());
   }
   else {
-    workspace.refreshToolboxSelection();
+    ws.refreshToolboxSelection();
   }
 
   var event = new Blockly.Events.Ui(null, 'styleChanged');
-  event.workspaceId = workspace.id;
+  event.workspaceId = ws.id;
   Blockly.Events.fire(event);
 };
 

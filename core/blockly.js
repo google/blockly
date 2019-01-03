@@ -688,9 +688,27 @@ Blockly.checkBlockColourConstant_ = function(
 Blockly.setStyle = function(style) {
   this.style_ = style;
   var workspace = Blockly.getMainWorkspace();
-  var blocks = workspace.getAllBlocks();
 
-  workspace.refreshToolboxSelection();
+  this.updateBlockStyles_(workspace.getAllBlocks());
+
+  if (!workspace.toolbox_) {
+    this.updateBlockStyles_(workspace.flyout_.workspace_.getAllBlocks());
+  }
+  else {
+    workspace.refreshToolboxSelection();
+  }
+
+  var event = new Blockly.Events.Ui(null, 'styleChanged');
+  event.workspaceId = workspace.id;
+  Blockly.Events.fire(event);
+};
+
+/**
+ * Updates all the blocks with new style.
+ * @param {!Array.<Blockly.Block>} blocks List of blocks to update the style on.
+ * @private
+ */
+Blockly.updateBlockStyles_ = function(blocks) {
   for (var i = 0; i < blocks.length; i++) {
     var block = blocks[i];
     var blockStyleName = block.getStyleName();
@@ -700,10 +718,6 @@ Blockly.setStyle = function(style) {
       block.mutator.updateBlockStyle(blockStyleName);
     }
   }
-
-  var event = new Blockly.Events.Ui(null, 'styleChanged');
-  event.workspaceId = workspace.id;
-  Blockly.Events.fire(event);
 };
 
 /**

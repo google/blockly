@@ -99,7 +99,7 @@ Blockly.BlockSvg.MIN_BLOCK_Y_WITH_PICTURE = 55;
  * Height of horizontal puzzle tab.
  * @const
  */
-Blockly.BlockSvg.TAB_HEIGHT = 20;
+Blockly.BlockSvg.TAB_HEIGHT = 22.5;
 /**
  * Width of horizontal puzzle tab.
  * @const
@@ -611,7 +611,7 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
   this.renderDrawTop_(pathObject, inputRows.rightEdge);
   var cursorY = this.renderDrawRight_(pathObject, inputRows, iconWidth);
   this.renderDrawBottom_(pathObject, cursorY);
-  this.renderDrawLeft_(pathObject);
+  this.renderDrawLeft_(pathObject, inputRows);
 
   this.setPaths_(pathObject);
 };
@@ -833,13 +833,19 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ = function(pathObject, cursorY) {
  *     partially constructed SVG paths, which will be modified by this function.
  * @private
  */
-Blockly.BlockSvg.prototype.renderDrawLeft_ = function(pathObject) {
+Blockly.BlockSvg.prototype.renderDrawLeft_ = function(pathObject, inputRows) {
   var steps = pathObject.steps;
   var highlightSteps = pathObject.highlightSteps;
   if (this.outputConnection) {
+    //SHAPE: This will calculate the vertical middle of the first row, so the "puzzle" piece can be centered there.
+    //SHAPE: On blocks with multiple lines, it will still render the "puzzle" piece in the middle of the first row.
+    var firstRowHeight = inputRows[0].height;
+    //SHAPE: 15 is hardcoded because the svg path of the "puzzle" piece is also hardcoded.
+    var tabHeight = ((firstRowHeight - 15) / 2) + 15;
+
     // Create output connection.
     this.outputConnection.setOffsetInBlock(0, 0);
-    steps.push('V', Blockly.BlockSvg.TAB_HEIGHT);
+    steps.push('V', tabHeight);
     steps.push('c 0,-10 -' + Blockly.BlockSvg.TAB_WIDTH + ',8 -' +
         Blockly.BlockSvg.TAB_WIDTH + ',-7.5 s ' + Blockly.BlockSvg.TAB_WIDTH +
         ',2.5 ' + Blockly.BlockSvg.TAB_WIDTH + ',-7.5');
@@ -847,7 +853,7 @@ Blockly.BlockSvg.prototype.renderDrawLeft_ = function(pathObject) {
       highlightSteps.push('M', (Blockly.BlockSvg.TAB_WIDTH * -0.25) + ',8.4');
       highlightSteps.push('l', (Blockly.BlockSvg.TAB_WIDTH * -0.45) + ',-2.1');
     } else {
-      highlightSteps.push('V', Blockly.BlockSvg.TAB_HEIGHT - 1.5);
+      highlightSteps.push('V', tabHeight - 1.5);
       highlightSteps.push('m', (Blockly.BlockSvg.TAB_WIDTH * -0.92) +
                           ',-0.5 q ' + (Blockly.BlockSvg.TAB_WIDTH * -0.19) +
                           ',-5.5 0,-11');

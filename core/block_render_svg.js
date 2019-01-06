@@ -514,6 +514,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
           Blockly.BlockSvg.SEP_SPACE_X : 0;
       input.fieldWidth += field.renderWidth + field.renderSep;
       row.height = Math.max(row.height, fieldSize.height);
+      row.alignmentHeight = Math.max(row.alignmentHeight, fieldSize.height);
       previousFieldEditable = field.EDITABLE;
     }
 

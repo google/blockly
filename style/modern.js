@@ -21,7 +21,6 @@
 /**
  * @fileoverview Modern style.
  * Same colors as classic, but single colored border.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 

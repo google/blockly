@@ -1,4 +1,4 @@
-# !/usr/bin/python2.7
+# !/usr/bin/env python
 # Converts a single colour to primary, secondary and tertiary colours.
 # Primary Colour - The colour given
 # Secondary Colour - Lightens the primary colour by .8

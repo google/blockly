@@ -218,9 +218,10 @@ Blockly.Block.prototype.data = null;
 
 /**
  * Colour of the block as HSV hue value (0-360)
+ * This may be null if the block colour was not set via a hue number.
  * @type {?number}
  * @private
-  */
+ */
 Blockly.Block.prototype.hue_ = null;
 
 /**
@@ -930,7 +931,8 @@ Blockly.Block.prototype.setColour = function(colour) {
 Blockly.Block.prototype.setStyle = function(blockStyleName) {
   var style = Blockly.getStyle();
   if (!style) {
-    throw Error('Trying to set block style before Blockly.setStyle() has been called');
+    throw Error('Trying to set block style to ' + blockStyleName +
+      ' before style was defined via Blockly.setStyle().');
   }
   var blockStyle = style.getBlockStyle(blockStyleName);
   this.styleName_ = blockStyleName;

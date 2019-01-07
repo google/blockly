@@ -21,7 +21,6 @@
 /**
  * @fileoverview High contrast style.
  * Darker colors to contrast the white block font.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 

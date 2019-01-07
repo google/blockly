@@ -21,7 +21,6 @@
 /**
  * @fileoverview Classic style.
  * Contains multi colored border to create shadow effect.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 
 'use strict';

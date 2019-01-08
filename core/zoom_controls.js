@@ -183,14 +183,14 @@ Blockly.ZoomControls.prototype.position = function() {
  * @private
  */
 Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
-  /* This markup will be generated and added to the "blocklyZoom" group:
-  <svg id="svg837493">
-    <clippath id="blocklyZoomoutClipPath837493">
-      <rect width="32" height="32" y="77"></rect>
-    </clippath>
-    <image width="96" height="124" x="-64" y="-15" xlink:href="media/sprites.png"
+  /* This markup will be generated and added to the .svgGroup_:
+  <g class="blocklyZoom">
+    <clipPath id="blocklyZoomoutClipPath837493">
+      <rect width="32" height="32></rect>
+    </clipPath>
+    <image width="96" height="124" x="-64" y="-92" xlink:href="media/sprites.png"
         clip-path="url(#blocklyZoomoutClipPath837493)"></image>
-  </svg>
+  </g>
   */
   var ws = this.workspace_;
   this.zoomOutGroup_ = Blockly.utils.createSvgElement('g',
@@ -236,16 +236,15 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
  * @private
  */
 Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
-  /* This markup will be generated and added to the "blocklyZoom" group:
-  <svg id="svg837493">
-    <clippath id="blocklyZoominClipPath837493">
-      <rect width="32" height="32" y="43"></rect>
-    </clippath>
-    <image width="96" height="124" x="-32" y="-49" xlink:href="media/sprites.png"
+  /* This markup will be generated and added to the .svgGroup_:
+  <g class="blocklyZoom">
+    <clipPath id="blocklyZoominClipPath837493">
+      <rect width="32" height="32"></rect>
+    </clipPath>
+    <image width="96" height="124" x="-32" y="-92" xlink:href="media/sprites.png"
         clip-path="url(#blocklyZoominClipPath837493)"></image>
-  </svg>
+  </g>
   */
- 
   var ws = this.workspace_;
   this.zoomInGroup_ = Blockly.utils.createSvgElement('g',
       {'class': 'blocklyZoom'}, this.svgGroup_);
@@ -290,14 +289,14 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
  * @private
  */
 Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
-  /* This markup will be generated and added to the "blocklyZoom" group:
-  <svg id="svg837493">
-    <clippath id="blocklyZoomresetClipPath837493">
+  /* This markup will be generated and added to the .svgGroup_:
+  <g class="blocklyZoom">
+    <clipPath id="blocklyZoomresetClipPath837493">
       <rect width="32" height="32"></rect>
-    </clippath>
-    <image width="96" height="124" y="-92" xlink:href="media/sprites.png"
+    </clipPath>
+    <image width="96" height="124" x="-32" y="-92" xlink:href="media/sprites.png"
         clip-path="url(#blocklyZoomresetClipPath837493)"></image>
-  </svg>
+  </g>
   */
   var ws = this.workspace_;
   this.zoomResetGroup_ = Blockly.utils.createSvgElement('g',

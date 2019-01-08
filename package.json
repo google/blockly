@@ -34,7 +34,6 @@
     "gulp-series": "^1.0.2",
     "gulp-shell": "^0.6.5",
     "jshint": "^2.9.7",
-    "mocha": "^5.2.0",
     "webdriverio": "^4.14.1"
   },
   "jshintConfig": {
@@ -52,7 +51,6 @@
     "unused": true
   },
   "dependencies": {
-    "jsdom": "^13.0.0",
-    "sinon": "^7.2.0"
+    "jsdom": "^13.0.0"
   }
 }

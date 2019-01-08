@@ -2,7 +2,7 @@
 // Declare some globals to make eslint happier.
 // TODO: make an eslint config that applies to this directory and put this
 // configuration in that file, instead of inline.
-/* global suite, test, chai, setup, teardown */
+/* global suite, test, setup, teardown */
 /* global sinon */
 
 /* global assertNotNull, assertNotUndefined, assertNull, assertEquals, isEqualArrays, assertUndefined */

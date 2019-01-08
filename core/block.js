@@ -152,6 +152,12 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    */
   this.isInsertionMarker_ = false;
 
+  /**
+   * True if the block has a hat.
+   * @type {boolean}
+   */
+  this.hat = false;
+
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
     /** @type {string} */
@@ -941,6 +947,7 @@ Blockly.Block.prototype.setStyle = function(blockStyleName) {
     this.style_ = blockStyle;
     this.secondaryColour_ = blockStyle.secondaryColour;
     this.tertiaryColour_ = blockStyle.tertiaryColour;
+    this.hat = blockStyle.hat;
     // Set colour will trigger an updateColour() on a block_svg
     this.setColour(blockStyle.primaryColour);
   }

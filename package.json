@@ -20,7 +20,7 @@
   "scripts": {
     "prepare": "gulp blockly_javascript_en",
     "lint": "eslint .",
-    "test": "mocha --opts tests/mocha/mocha.opts tests/mocha/*.js"
+    "test": "tests/run_all_tests.sh"
   },
   "license": "Apache-2.0",
   "private": true,

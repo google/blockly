@@ -56,6 +56,10 @@ var defaultBlockStyles = {
   },
   "variable_dynamic_blocks":{
     "primaryColour": "310"
+  },
+  "hat_blocks":{
+    "primaryColour":"330",
+    "hat":"cap"
   }
 };
 

@@ -73,6 +73,12 @@ var defaultBlockStyles = {
     "primaryColour": "#880e4f",
     "secondaryColour":"#FF73BE",
     "tertiaryColour":"#FFD4EB"
+  },
+  "hat_blocks" : {
+    "primaryColour": "#880e4f",
+    "secondaryColour":"#FF73BE",
+    "tertiaryColour":"#FFD4EB",
+    "hat": "cap"
   }
 };
 

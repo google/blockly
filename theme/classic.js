@@ -19,15 +19,15 @@
  */
 
 /**
- * @fileoverview Classic style.
+ * @fileoverview Classic theme.
  * Contains multi colored border to create shadow effect.
  */
 
 'use strict';
 
-goog.provide('Blockly.Styles.Classic');
+goog.provide('Blockly.Themes.Classic');
 
-goog.require('Blockly.Style');
+goog.require('Blockly.Theme');
 
 var defaultBlockStyles = {
   "colour_blocks":{
@@ -59,4 +59,4 @@ var defaultBlockStyles = {
   }
 };
 
-Blockly.Styles.Classic = new Blockly.Style(defaultBlockStyles);
+Blockly.Themes.Classic = new Blockly.Theme(defaultBlockStyles);

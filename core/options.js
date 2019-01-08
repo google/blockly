@@ -119,9 +119,9 @@ Blockly.Options = function(options) {
   } else {
     var oneBasedIndex = !!options['oneBasedIndex'];
   }
-  var style = options['style'];
-  if (style === undefined) {
-    style = Blockly.Styles.Classic;
+  var theme = options['theme'];
+  if (theme === undefined) {
+    theme = Blockly.Themes.Classic;
   }
 
   this.RTL = rtl;
@@ -144,7 +144,7 @@ Blockly.Options = function(options) {
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
   this.toolboxPosition = toolboxPosition;
-  this.style = style;
+  this.theme = theme;
 };
 
 /**

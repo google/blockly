@@ -270,7 +270,7 @@ function test_set_style() {
       }
     }
   };
-  setUpMockMethod(mockControl_, Blockly, 'getStyle', null, [styleStub]);
+  setUpMockMethod(mockControl_, Blockly, 'getTheme', null, [styleStub]);
   var blockA = workspace.newBlock('row_block');
   blockA.setStyle('styleOne');
 
@@ -288,7 +288,7 @@ function test_set_style_throw_exception() {
       return null;
     }
   };
-  setUpMockMethod(mockControl_, Blockly, 'getStyle', null, [styleStub]);
+  setUpMockMethod(mockControl_, Blockly, 'getTheme', null, [styleStub]);
   var blockA = workspace.newBlock('row_block');
   try {
     blockA.setStyle('styleOne');

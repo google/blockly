@@ -19,14 +19,14 @@
  */
 
 /**
- * @fileoverview High contrast style.
- * Darker colors to contrast the white block font.
+ * @fileoverview High contrast theme.
+ * Darker colors to contrast the white font.
  */
 'use strict';
 
-goog.provide('Blockly.Styles.HighContrast');
+goog.provide('Blockly.Themes.HighContrast');
 
-goog.require('Blockly.Style');
+goog.require('Blockly.Theme');
 
 var defaultBlockStyles = {
   "colour_blocks":{
@@ -77,4 +77,4 @@ var defaultBlockStyles = {
 };
 
 //This style is still being fleshed out and may change.
-Blockly.Styles.HighContrast = new Blockly.Style(defaultBlockStyles);
+Blockly.Themes.HighContrast = new Blockly.Theme(defaultBlockStyles);

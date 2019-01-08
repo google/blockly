@@ -117,7 +117,7 @@ Blockly.cache3dSupported_ = null;
  * @type {?Blockly.Style}
  * @private
  */
-Blockly.style_ = null;
+Blockly.theme_ = null;
 
 /**
  * Convert a hue (HSV model) into an RGB hex triplet.
@@ -682,11 +682,11 @@ Blockly.checkBlockColourConstant_ = function(
 
 
 /**
- * Sets the style for blockly and refreshes all blocks in toolbox and workspace.
- * @param {Blockly.Style} style Style for blockly.
+ * Sets the theme for blockly and refreshes all blocks in the toolbox and workspace.
+ * @param {Blockly.Theme} theme Theme for blockly.
  */
-Blockly.setStyle = function(style) {
-  this.style_ = style;
+Blockly.setTheme = function(theme) {
+  this.theme_ = theme;
   var ws = Blockly.getMainWorkspace();
 
   this.updateBlockStyles_(ws.getAllBlocks());
@@ -698,7 +698,7 @@ Blockly.setStyle = function(style) {
     ws.refreshToolboxSelection();
   }
 
-  var event = new Blockly.Events.Ui(null, 'styleChanged');
+  var event = new Blockly.Events.Ui(null, 'themeChanged');
   event.workspaceId = ws.id;
   Blockly.Events.fire(event);
 };
@@ -721,11 +721,11 @@ Blockly.updateBlockStyles_ = function(blocks) {
 };
 
 /**
- * Gets the style for blockly.
- * @return {?Blockly.Style} style Style for blockly.
+ * Gets the theme.
+ * @return {?Blockly.Theme} theme Theme for blockly.
  */
-Blockly.getStyle = function() {
-  return this.style_;
+Blockly.getTheme = function() {
+  return this.theme_;
 };
 
 // IE9 does not have a console.  Create a stub to stop errors.

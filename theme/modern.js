@@ -19,14 +19,14 @@
  */
 
 /**
- * @fileoverview Modern style.
+ * @fileoverview Modern theme.
  * Same colors as classic, but single colored border.
  */
 'use strict';
 
-goog.provide('Blockly.Styles.Modern');
+goog.provide('Blockly.Themes.Modern');
 
-goog.require('Blockly.Style');
+goog.require('Blockly.Theme');
 
 var defaultBlockStyles = {
   "colour_blocks": {
@@ -77,4 +77,4 @@ var defaultBlockStyles = {
 };
 
 //This style is still being fleshed out and may change.
-Blockly.Styles.Modern = new Blockly.Style(defaultBlockStyles);
+Blockly.Themes.Modern = new Blockly.Theme(defaultBlockStyles);

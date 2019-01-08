@@ -20,10 +20,10 @@
 # limitations under the License.
 #
 #
-# Usage: create_styles.py <fileName>
+# Usage: create_blockStyles.py <fileName>
 #
 # fileName - Name of the file holding the map of style names to colours.
-# Refer to colours_example.json for an example input.
+# Refer to blockStyles_example.json for an example input.
 #
 # Input: A json file with the keys being style names and the values
 # being either a hue (number) or a hex value (string).

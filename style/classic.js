@@ -30,31 +30,31 @@ goog.provide('Blockly.Styles.Classic');
 goog.require('Blockly.Style');
 
 var defaultBlockStyles = {
-  "colour":{
+  "colour_blocks":{
     "primaryColour": "20"
   },
-  "lists": {
+  "list_blocks": {
     "primaryColour": "260"
   },
-  "logic": {
+  "logic_blocks": {
     "primaryColour": "210"
   },
-  "loops": {
+  "loop_blocks": {
     "primaryColour": "120"
   },
-  "math": {
+  "math_blocks": {
     "primaryColour": "230"
   },
-  "procedures": {
+  "procedure_blocks": {
     "primaryColour": "290"
   },
-  "text": {
+  "text_blocks": {
     "primaryColour": "160"
   },
-  "variables": {
+  "variable_blocks": {
     "primaryColour": "330"
   },
-  "variables_dynamic":{
+  "variable_dynamic_blocks":{
     "primaryColour": "310"
   }
 };

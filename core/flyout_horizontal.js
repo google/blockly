@@ -217,7 +217,7 @@ Blockly.HorizontalFlyout.prototype.scrollToStart = function() {
  * @private
  */
 Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
-  var delta = e.deltaX;
+  var delta = e.deltaX || e.deltaY;
 
   if (delta) {
     // Firefox's mouse wheel deltas are a tenth that of Chrome/Safari.
@@ -225,7 +225,6 @@ Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
     if (goog.userAgent.GECKO && (e.deltaMode === 1)) {
       delta *= 10;
     }
-    // TODO: #1093
     var metrics = this.getMetrics_();
     var pos = metrics.viewLeft + delta;
     var limit = metrics.contentWidth - metrics.viewWidth;

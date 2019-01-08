@@ -80,26 +80,11 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   },
   /**
    * Update the display of parameters for this procedure definition block.
-   * Display a warning if there are duplicately named parameters.
    * @private
    * @this Blockly.Block
    */
   updateParams_: function() {
-    // Check for duplicated arguments.
-    var badArg = false;
-    var hash = {};
-    for (var i = 0; i < this.arguments_.length; i++) {
-      if (hash['arg_' + this.arguments_[i].toLowerCase()]) {
-        badArg = true;
-        break;
-      }
-      hash['arg_' + this.arguments_[i].toLowerCase()] = true;
-    }
-    if (badArg) {
-      this.setWarningText(Blockly.Msg['PROCEDURES_DEF_DUPLICATE_WARNING']);
-    } else {
-      this.setWarningText(null);
-    }
+
     // Merge the arguments into a human-readable list.
     var paramString = '';
     if (this.arguments_.length) {
@@ -159,7 +144,11 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         this.arguments_.push(varName);
         var variable = Blockly.Variables.getOrCreateVariablePackage(
             this.workspace, varId, varName, '');
-        this.argumentVarModels_.push(variable);
+        if (variable != null) {
+          this.argumentVarModels_.push(variable);
+        } else {
+          console.log('Failed to create a variable with name ' + varName + ', ignoring.');
+        }
       }
     }
     this.updateParams_();
@@ -216,7 +205,12 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       var varName = paramBlock.getFieldValue('NAME');
       this.arguments_.push(varName);
       var variable = this.workspace.getVariable(varName, '');
-      this.argumentVarModels_.push(variable);
+      if (variable != null) {
+        this.argumentVarModels_.push(variable);
+      } else {
+        console.log('Failed to get variable named ' + varName + ', ignoring.');
+      }
+
       this.paramIds_.push(paramBlock.id);
       paramBlock = paramBlock.nextConnection &&
           paramBlock.nextConnection.targetBlock();
@@ -465,8 +459,71 @@ Blockly.Blocks['procedures_mutatorcontainer'] = {
     this.setStyle('procedure_blocks');
     this.setTooltip(Blockly.Msg['PROCEDURES_MUTATORCONTAINER_TOOLTIP']);
     this.contextMenu = false;
+  },
+  /**
+   * This will create & delete variables and in dialogs workspace to ensure
+   * that when a new block is dragged out it will have a unique parameter name.
+   * @param {!Blockly.Events.Abstract} event Change event.
+   * @this Blockly.Block
+   */
+  onchange: function(event) {
+    if (!this.workspace || this.workspace.isFlyout ||
+        (event.type != Blockly.Events.BLOCK_DELETE && event.type != Blockly.Events.BLOCK_CREATE)) {
+      return;
+    }
+    var blocks = this.workspace.getAllBlocks();
+    var allVariables = this.workspace.getAllVariables();
+    if (event.type == Blockly.Events.BLOCK_DELETE) {
+      var variableNamesToKeep = [];
+      for (var i = 0; i < blocks.length; i += 1) {
+        if (blocks[i].getFieldValue('NAME')) {
+          variableNamesToKeep.push(blocks[i].getFieldValue('NAME'));
+        }
+      }
+      for (var k = 0; k < allVariables.length; k += 1) {
+        if (variableNamesToKeep.indexOf(allVariables[k].name) == -1) {
+          this.workspace.deleteVariableById(allVariables[k].getId());
+        }
+      }
+      return;
+    }
+      
+    if (event.type != Blockly.Events.BLOCK_CREATE) {
+      return;
+    }
+
+    var block = this.workspace.getBlockById(event.blockId);
+    // This is to handle the one none variable block
+    // Happens when all the blocks are regenerated
+    if (!block.getField('NAME')) {
+      return;
+    }
+    var varName = block.getFieldValue('NAME');
+    var variable = this.workspace.getVariable(varName);
+
+    if (!variable) {
+      // This means the parameter name is not in use and we can create the variable.
+      variable = this.workspace.createVariable(varName);
+    }
+    // If the blocks are connected we don't have to check duplicate variables
+    // This only happens if the dialog box is open
+    if (block.previousConnection.isConnected() || block.nextConnection.isConnected()) {
+      return;
+    }
+
+    for (var j = 0; j < blocks.length; j += 1) {
+      // filter block that was created
+      if (block.id != blocks[j].id && blocks[j].getFieldValue('NAME') == variable.name) {
+        // generate new name and set name field
+        varName = Blockly.Variables.generateUniqueName(this.workspace);
+        variable = this.workspace.createVariable(varName);
+        block.setFieldValue(variable.name, 'NAME');
+        return;
+      }
+    }
   }
 };
+
 
 Blockly.Blocks['procedures_mutatorarg'] = {
   /**
@@ -501,6 +558,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     field.createdVariables_ = [];
     field.onFinishEditing_('x');
   },
+
   /**
    * Obtain a valid name for the procedure argument. Create a variable if
    * necessary.
@@ -516,6 +574,16 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     varName = varName.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
     if (!varName) {
       return null;
+    }
+    // Prevents duplicate parameter names in functions
+    var blocks = this.sourceBlock_.workspace.getAllBlocks();
+    for (var i = 0; i < blocks.length; i += 1) {
+      if (blocks[i].id == this.sourceBlock_.id) {
+        continue;
+      }
+      if (blocks[i].getFieldValue('NAME') == varName) {
+        return null;
+      }
     }
     var model = outerWs.getVariable(varName, '');
     if (model && model.name != varName) {

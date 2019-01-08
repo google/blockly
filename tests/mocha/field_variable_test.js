@@ -3,9 +3,8 @@
 // TODO: make an eslint config that applies to this directory and put this
 // configuration in that file, instead of inline.
 /* global suite, test, chai, setup, teardown */
-/* global sinon */
 
-/* global assertFalse, assertTrue, assertNull, assertEquals, isEqualArrays */
+/* global assertNull, assertEquals, isEqualArrays */
 
 suite('Variable Fields', function() {
   function getMockBlock(workspace) {

@@ -5,7 +5,8 @@
 /* global suite, test, setup, teardown */
 /* global sinon */
 
-/* global assertNotNull, assertNotUndefined, assertNull, assertEquals, isEqualArrays, assertUndefined */
+/* global assertNotNull, assertNotUndefined, assertNull, assertEquals,
+   isEqualArrays, assertUndefined */
 suite('Events', function() {
   setup(function() {
     this.workspace = new Blockly.Workspace();

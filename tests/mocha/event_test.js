@@ -333,7 +333,7 @@ suite('Events', function() {
       });
     });
 
-    suite('Run Forward', function() {
+    suite.skip('Run Forward', function() {
       test('Var create', function() {
         var json = {type: "var_create", varId: "id1", varType: "type1",
           varName: "name1"};
@@ -357,7 +357,7 @@ suite('Events', function() {
         checkVariableValues(this.workspace, 'name2', 'type1', 'id1');
       });
     });
-    suite('Run Backward', function() {
+    suite.skip('Run Backward', function() {
       test('Var create', function() {
         var variable = this.workspace.createVariable('name1', 'type1', 'id1');
         var event = new Blockly.Events.VarCreate(variable);

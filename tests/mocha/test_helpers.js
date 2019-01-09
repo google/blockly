@@ -1,4 +1,3 @@
-/* global chai */
 /* exported assertEquals, assertTrue, assertFalse, assertNull, assertNotNull,
    isEqualArrays, assertUndefined, assertNotUndefined */
 function _argumentsIncludeComments(expectedNumberOfNonCommentArgs, args) {

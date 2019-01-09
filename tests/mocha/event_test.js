@@ -1,12 +1,4 @@
 
-// Declare some globals to make eslint happier.
-// TODO: make an eslint config that applies to this directory and put this
-// configuration in that file, instead of inline.
-/* global suite, test, setup, teardown */
-/* global sinon */
-
-/* global assertNotNull, assertNotUndefined, assertNull, assertEquals,
-   isEqualArrays, assertUndefined */
 suite('Events', function() {
   setup(function() {
     this.workspace = new Blockly.Workspace();
@@ -39,7 +31,8 @@ suite('Events', function() {
 
   function checkExactEventValues(event, values) {
     var keys = Object.keys(values);
-    for (var i = 0, field; field = keys[i]; i++) {
+    for (var i = 0; i < keys.length; i++) {
+      var field = keys[i]
       assertEquals(values[field], event[field]);
     }
   }

@@ -1,10 +1,4 @@
 
-// Declare some globals to make eslint happier.
-// TODO: make an eslint config that applies to this directory and put this
-// configuration in that file, instead of inline.
-/* global suite, test, setup, teardown */
-
-/* global assertNull, assertEquals */
 
 suite('Blocks', function() {
 

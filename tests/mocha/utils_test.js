@@ -1,9 +1,4 @@
 
-// Declare some globals to make eslint happier.
-// TODO: make an eslint config that applies to this directory and put this
-// configuration in that file, instead of inline.
-/* global suite, test, chai, assertFalse, assertTrue, assertEquals */
-
 suite('Utils', function() {
   test('genUid', function() {
     var uuids = {};

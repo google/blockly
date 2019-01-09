@@ -28,11 +28,14 @@ goog.provide('Blockly.Theme');
 /**
  * Class for a theme.
  * @param {Object.<string, Blockly.BlockStyle>} blockStyles A map from style
- * names (strings) to objects with style attributes.
+ * names (strings) to objects with style attributes relating to blocks.
+ * @param {Object.<string, Blockly.CategoryStyle>} categoryStyles A map from style
+ * names (strings) to objects with style attributes relating to categories.
  * @constructor
  */
-Blockly.Theme = function(blockStyles) {
+Blockly.Theme = function(blockStyles, categoryStyles) {
   this.blockStyles_ = blockStyles;
+  this.categoryStyles_ = categoryStyles;
 };
 
 /**
@@ -70,4 +73,22 @@ Blockly.Theme.prototype.getBlockStyle = function(blockStyleName) {
 */
 Blockly.Theme.prototype.setBlockStyle = function(blockStyleName, blockStyle) {
   this.blockStyles_[blockStyleName] = blockStyle;
+};
+
+/**
+ * Gets the CategoryStyle for the given category style name.
+ * @param{String} categoryStyleName The name of the block style.
+ * @return {Blockly.CategoryStyle} The style with the block style name.
+ */
+Blockly.Theme.prototype.getCategoryStyle = function(categoryStyleName) {
+  return this.categoryStyles_[categoryStyleName];
+};
+
+/**
+ * Overrides or adds a style to the categoryStyles map.
+ * @param{String} categoryStyleName The name of the category style.
+ * @param{Blockly.CategoryStyle} categoryStyle The category style
+*/
+Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName, categoryStyle) {
+  this.categoryStyles_[categoryStyleName] = categoryStyle;
 };

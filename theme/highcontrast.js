@@ -82,5 +82,35 @@ var defaultBlockStyles = {
   }
 };
 
+var categoryStyles = {
+  "colour_category":{
+    "colour": "#a52714",
+  },
+  "list_category": {
+    "colour": "#4a148c",
+  },
+  "logic_category": {
+    "colour": "#01579b",
+  },
+  "loop_category": {
+    "colour": "#33691e",
+  },
+  "math_category": {
+    "colour": "#1a237e",
+  },
+  "procedure_category": {
+    "colour": "#006064",
+  },
+  "text_category": {
+    "colour": "#004d40",
+  },
+  "variable_category": {
+    "colour": "#880e4f",
+  },
+  "variable_dynamic_category":{
+    "colour": "#880e4f",
+  }
+};
+
 //This style is still being fleshed out and may change.
-Blockly.Themes.HighContrast = new Blockly.Theme(defaultBlockStyles);
+Blockly.Themes.HighContrast = new Blockly.Theme(defaultBlockStyles, categoryStyles);

@@ -689,13 +689,20 @@ Blockly.setTheme = function(theme) {
   this.theme_ = theme;
   var ws = Blockly.getMainWorkspace();
 
+  //update blocks in workspace
   this.updateBlockStyles_(ws.getAllBlocks());
 
+  //update blocks in the flyout
   if (!ws.toolbox_ && ws.flyout_ && ws.flyout_.workspace_) {
     this.updateBlockStyles_(ws.flyout_.workspace_.getAllBlocks());
   }
   else {
     ws.refreshToolboxSelection();
+  }
+
+  //update colours on the categories
+  if (ws.toolbox_) {
+    ws.toolbox_.updateColourFromTheme();
   }
 
   var event = new Blockly.Events.Ui(null, 'themeChanged');

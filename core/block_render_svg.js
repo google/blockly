@@ -566,7 +566,7 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
       if (prevBlock && prevBlock.getNextBlock() == this) {
         this.squareTopLeftCorner_ = true;
       }
-    } else if (Blockly.BlockSvg.START_HAT || this.hat) {
+    } else if (Blockly.BlockSvg.START_HAT || this.hat === 'cap') {
       // No output or previous connection.
       this.squareTopLeftCorner_ = true;
       this.startHat_ = true;

@@ -689,8 +689,12 @@ Blockly.setTheme = function(theme) {
   this.theme_ = theme;
   var ws = Blockly.getMainWorkspace();
 
-  //update blocks in workspace
-  this.updateBlockStyles_(ws.getAllBlocks());
+  //update all blocks in workspace that have a style name
+  this.updateBlockStyles_(ws.getAllBlocks().filter(
+      function(block){
+        return block.getStyleName() !== undefined;
+      }
+  ));
 
   //update blocks in the flyout
   if (!ws.toolbox_ && ws.flyout_ && ws.flyout_.workspace_) {

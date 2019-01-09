@@ -114,7 +114,7 @@ Blockly.cache3dSupported_ = null;
 
 /**
  * Holds all Blockly style attributes.
- * @type {?Blockly.Style}
+ * @type {?Blockly.Theme}
  * @private
  */
 Blockly.theme_ = null;

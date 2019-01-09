@@ -239,7 +239,7 @@ Blockly.Block.prototype.colour_ = '#000000';
 
 /**
  * Secondary colour of the block.
- * Colour of the block if it is a shadow
+ * Colour of shadow blocks.
  * @type {?string}
  * @private
  */
@@ -247,7 +247,7 @@ Blockly.Block.prototype.secondaryColour_ = null;
 
 /**
  * Tertiary colour of the block.
- * Colour of the border on the block.
+ * Colour of the block's border.
  * @type {?string}
  * @private
  */
@@ -935,12 +935,12 @@ Blockly.Block.prototype.setColour = function(colour) {
  * @throws {Error} if the block style does not exist.
  */
 Blockly.Block.prototype.setStyle = function(blockStyleName) {
-  var style = Blockly.getTheme();
-  if (!style) {
+  var theme = Blockly.getTheme();
+  if (!theme) {
     throw Error('Trying to set block style to ' + blockStyleName +
-      ' before style was defined via Blockly.setStyle().');
+      ' before theme was defined via Blockly.setTheme().');
   }
-  var blockStyle = style.getBlockStyle(blockStyleName);
+  var blockStyle = theme.getBlockStyle(blockStyleName);
   this.styleName_ = blockStyleName;
 
   if (blockStyle) {

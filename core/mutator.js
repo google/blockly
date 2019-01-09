@@ -402,13 +402,16 @@ Blockly.Mutator.prototype.dispose = function() {
  * @public
  */
 Blockly.Mutator.prototype.updateBlockStyle = function() {
-  if (this.workspace_ && this.workspace_.getAllBlocks()){
-    var workspaceBlocks = this.workspace_.getAllBlocks();
+  var ws = this.workspace_;
+
+  if (ws && ws.getAllBlocks()){
+    var workspaceBlocks = ws.getAllBlocks();
     for (var i = 0; i < workspaceBlocks.length; i++) {
       var block = workspaceBlocks[i];
       block.setStyle(block.getStyleName());
     }
-    var flyoutBlocks = this.workspace_.flyout_.workspace_.getAllBlocks();
+
+    var flyoutBlocks = ws.flyout_.workspace_.getAllBlocks();
     for (var i = 0; i < flyoutBlocks.length; i++) {
       var block = flyoutBlocks[i];
       block.setStyle(block.getStyleName());

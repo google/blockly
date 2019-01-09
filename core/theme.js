@@ -20,16 +20,15 @@
 
 /**
  * @fileoverview The class representing a theme.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
 goog.provide('Blockly.Theme');
 /**
  * Class for a theme.
- * @param {Object.<string, Blockly.BlockStyle>} blockStyles A map from style
+ * @param {?Object.<string, Blockly.BlockStyle>} blockStyles A map from style
  * names (strings) to objects with style attributes relating to blocks.
- * @param {Object.<string, Blockly.CategoryStyle>} categoryStyles A map from style
+ * @param {?Object.<string, Blockly.CategoryStyle>} categoryStyles A map from style
  * names (strings) to objects with style attributes relating to categories.
  * @constructor
  */

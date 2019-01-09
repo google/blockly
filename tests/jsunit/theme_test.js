@@ -91,7 +91,7 @@ function test_getAllBlockStyles() {
 
 function test_getBlockStyles() {
   var theme = new Blockly.Theme(createBlockStyles());
-  var blockStyle = theme.getBlockStyle("styleOne");
+  var blockStyle = theme.getBlockStyle('styleOne');
 
   stringifyAndCompare(blockStyle, createBlockStyles().styleOne);
 }
@@ -99,7 +99,7 @@ function test_getBlockStyles() {
 function test_setBlockStyleUpdate() {
   var theme = new Blockly.Theme(createBlockStyles());
   var blockStyle = createBlockStyles();
-  blockStyle.styleOne.primaryColour = "somethingElse";
+  blockStyle.styleOne.primaryColour = 'somethingElse';
 
   theme.setBlockStyle('styleOne', blockStyle.styleOne);
 
@@ -142,7 +142,7 @@ function test_setTheme() {
   //check that the toolbox refreshed method was called
   assertEquals(workspace.refreshToolboxSelection(), 3);
 
-  assertEquals(Blockly.Events.FIRE_QUEUE_.pop().element, "themeChanged");
+  assertEquals(Blockly.Events.FIRE_QUEUE_.pop().element, 'themeChanged');
 
   undefineThemeTestBlocks();
 }

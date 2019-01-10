@@ -254,13 +254,6 @@ Blockly.Block.prototype.secondaryColour_ = null;
 Blockly.Block.prototype.tertiaryColour_ = null;
 
 /**
- * Style of the block.
- * @type {?Object} Map from style attribute name (string) to style value (string)
- * @private
- */
-Blockly.Block.prototype.style_ = null;
-
-/**
  * Name of the block style.
  * @type {?string}
  * @private

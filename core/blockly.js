@@ -699,8 +699,7 @@ Blockly.setTheme = function(theme) {
   //update blocks in the flyout
   if (!ws.toolbox_ && ws.flyout_ && ws.flyout_.workspace_) {
     this.updateBlockStyles_(ws.flyout_.workspace_.getAllBlocks());
-  }
-  else {
+  } else {
     ws.refreshToolboxSelection();
   }
 

@@ -153,10 +153,10 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   this.isInsertionMarker_ = false;
 
   /**
-   * True if the block has a hat.
-   * @type {boolean}
+   * Name of the type of hat.
+   * @type {string|undefined}
    */
-  this.hat = false;
+  this.hat = undefined;
 
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
@@ -879,14 +879,6 @@ Blockly.Block.prototype.getTertiaryColour = function() {
 };
 
 /**
- * Get the style of a block.
- * @return {?Object} Map of style names (string) to style value (string).
- */
-Blockly.Block.prototype.getStyle = function() {
-  return this.style_;
-};
-
-/**
  * Get the name of the block style.
  * @return {?string} Name of the block style.
  */
@@ -944,7 +936,6 @@ Blockly.Block.prototype.setStyle = function(blockStyleName) {
   this.styleName_ = blockStyleName;
 
   if (blockStyle) {
-    this.style_ = blockStyle;
     this.secondaryColour_ = blockStyle.secondaryColour;
     this.tertiaryColour_ = blockStyle.tertiaryColour;
     this.hat = blockStyle.hat;

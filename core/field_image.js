@@ -40,7 +40,7 @@ goog.require('goog.math.Size');
  * @param {string=} opt_alt Optional alt text for when block is collapsed.
  * @param {Function=} opt_onClick Optional function to be called when the image
  *     is clicked.  If opt_onClick is defined, opt_alt must also be defined.
- * @param {boolean} opt_flipRtl Whether to flip the icon in RTL.
+ * @param {boolean=} opt_flipRtl Whether to flip the icon in RTL.
  * @extends {Blockly.Field}
  * @constructor
  */

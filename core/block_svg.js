@@ -893,16 +893,28 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     this.warningTextDb_ = null;
   }
 
+  // If the block is rendered we need to record the event before disposing of
+  // the icons to prevent losing information.
+  // TODO (#1969): Remove event generation/firing once comments are fixed.
+  this.unplug(healStack);
+  var deleteEvent;
+  if (Blockly.Events.isEnabled()) {
+    deleteEvent = new Blockly.Events.BlockDelete(this);
+  }
   Blockly.Events.disable();
   try {
     var icons = this.getIcons();
     for (var i = 0; i < icons.length; i++) {
       icons[i].dispose();
     }
+    // TODO (#1969): Move out of disable block once comments are fixed.
+    Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
   } finally {
     Blockly.Events.enable();
   }
-  Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
+  if (Blockly.Events.isEnabled() && deleteEvent) {
+    Blockly.Events.fire(deleteEvent);
+  }
 
   Blockly.utils.removeNode(this.svgGroup_);
   blockWorkspace.resizeContents();

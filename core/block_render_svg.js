@@ -370,21 +370,30 @@ Blockly.BlockSvg.prototype.renderFields_ = function(fieldList,
       continue;
     }
 
+    var translateX;
+    var scale = '';
     if (this.RTL) {
       cursorX -= field.renderSep + field.renderWidth;
-      root.setAttribute('transform',
-          'translate(' + cursorX + ',' + cursorY + ')');
+      translateX = cursorX;
       if (field.renderWidth) {
         cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
       }
     } else {
-      root.setAttribute('transform',
-          'translate(' + (cursorX + field.renderSep) + ',' + cursorY + ')');
+      translateX = cursorX + field.renderSep;
       if (field.renderWidth) {
         cursorX += field.renderSep + field.renderWidth +
             Blockly.BlockSvg.SEP_SPACE_X;
       }
     }
+    if (this.RTL &&
+        field instanceof  Blockly.FieldImage &&
+        field.getFlipRtl()) {
+      scale = 'scale(-1 1)';
+      translateX += field.renderWidth;
+    }
+    root.setAttribute('transform',
+        'translate(' + translateX + ',' + cursorY + ')' + scale);
+
     // Fields are invisible on insertion marker.  They still have to be rendered
     // so that the block can be sized correctly.
     if (this.isInsertionMarker()) {

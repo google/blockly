@@ -398,6 +398,28 @@ Blockly.Mutator.prototype.dispose = function() {
 };
 
 /**
+ * Update the styles on all blocks in the mutator.
+ * @public
+ */
+Blockly.Mutator.prototype.updateBlockStyle = function() {
+  var ws = this.workspace_;
+
+  if (ws && ws.getAllBlocks()){
+    var workspaceBlocks = ws.getAllBlocks();
+    for (var i = 0; i < workspaceBlocks.length; i++) {
+      var block = workspaceBlocks[i];
+      block.setStyle(block.getStyleName());
+    }
+
+    var flyoutBlocks = ws.flyout_.workspace_.getAllBlocks();
+    for (var i = 0; i < flyoutBlocks.length; i++) {
+      var block = flyoutBlocks[i];
+      block.setStyle(block.getStyleName());
+    }
+  }
+};
+
+/**
  * Reconnect an block to a mutated input.
  * @param {Blockly.Connection} connectionChild Connection on child block.
  * @param {!Blockly.Block} block Parent block.

@@ -30,7 +30,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "message0": "value to stack",
     "nextStatement": null,
     "output": null,
-    "colour": 230
+    "style": "math_blocks"
   },
   {
     "type": "value_to_statement",
@@ -42,7 +42,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": null,
-    "colour": 230
+    "style": "math_blocks"
   },
   {
     "type": "limit_instances",
@@ -58,7 +58,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "style": "math_blocks",
   },
   {
     "type": "example_dropdown_long",
@@ -199,7 +199,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "text": "0"
       }
     ],
-    "colour": 230,
+    "style": "math_blocks",
     "output": "Number",
     "tooltip": "A number."
   },
@@ -214,7 +214,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "text": "0"
       }
     ],
-    "colour": 230,
+    "style": "math_blocks",
     "output": "Number",
     "tooltip": "An integer."
   },
@@ -229,7 +229,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "text": "0"
       }
     ],
-    "colour": 230,
+    "style": "math_blocks",
     "output": "Number",
     "tooltip": "A dollar amount."
   },
@@ -246,7 +246,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "text": "0"
       }
     ],
-    "colour": 230,
+    "style": "math_blocks",
     "output": "Note",
     "tooltip": "A midi note."
   },
@@ -262,7 +262,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "alt": "*"
       }
     ],
-    "colour": 160
+    "style": "text_blocks"
   },
   {
     "type": "image_small",
@@ -276,7 +276,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "alt": "*"
       }
     ],
-    "colour": 160
+    "style": "text_blocks"
   },
   {
     "type": "image_large",
@@ -290,7 +290,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "alt": "*"
       }
     ],
-    "colour": 160
+    "style": "text_blocks"
   },
   {
     "type": "image_fliprtl",
@@ -319,7 +319,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "alt": "*"
       }
     ],
-    "colour": 160
+    "style": "text_blocks"
   },
   {
     "type": "test_with_lots_of_network_icons",
@@ -444,16 +444,13 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "alt": "H"
       }
     ],
-    "colour": 160
+    "style": "text_blocks"
   },
   {
     "type": "styled_event_cap",
     "message0": "Hat block (event)",
     "nextStatement": null,
-    "colour": 330,
-    "style": {
-      "hat": "cap"
-    }
+    "style": "hat_blocks"
   },
   {
     "type": "block_colour_hex1",

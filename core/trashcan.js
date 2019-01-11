@@ -41,19 +41,25 @@ Blockly.Trashcan = function(workspace) {
   if (this.workspace_.options.maxTrashcanContents <= 0) {
     return;
   }
-
+  // Create flyout options.
   var flyoutWorkspaceOptions = {
     scrollbars: true,
     disabledPatternId: this.workspace_.options.disabledPatternId,
     parentWorkspace: this.workspace_,
     RTL: this.workspace_.RTL,
-    oneBasedIndex: workspace.options.oneBasedIndex,
-    // TODO: Add horizontal.
-    /*horizontalLayout: this.workspace_.horizontalLayout,*/
-    toolboxPosition: this.workspace_.RTL ? Blockly.TOOLBOX_AT_LEFT :
-        Blockly.TOOLBOX_AT_RIGHT
+    oneBasedIndex: this.workspace_.options.oneBasedIndex,
   };
-  this.flyout_ = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
+  // Create vertical or horizontal flyout.
+  if (this.workspace_.horizontalLayout) {
+    flyoutWorkspaceOptions.toolboxPosition =
+        this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_TOP ?
+        Blockly.TOOLBOX_AT_BOTTOM : Blockly.TOOLBOX_AT_TOP;
+    this.flyout_ = new Blockly.HorizontalFlyout(flyoutWorkspaceOptions);
+  } else {
+    flyoutWorkspaceOptions.toolboxPosition = this.workspace_.RTL ?
+        Blockly.TOOLBOX_AT_LEFT : Blockly.TOOLBOX_AT_RIGHT;
+    this.flyout_ = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
+  }
   this.workspace_.addChangeListener(this.onDelete_());
 };
 

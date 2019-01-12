@@ -27,6 +27,7 @@
 goog.provide('Blockly.Options');
 
 goog.require('Blockly.Xml');
+goog.require('Blockly.Themes.Classic');
 
 
 /**

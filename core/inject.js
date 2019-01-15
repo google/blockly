@@ -232,19 +232,19 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   mainWorkspace.translate(0, 0);
   Blockly.mainWorkspace = mainWorkspace;
 
-  if (!options.readOnly && !options.hasScrollbars) {
+  if (!options.readOnly && !mainWorkspace.isContentBounded_()) {
     var workspaceChanged = function(e) {
-      if (!mainWorkspace.isDragging()) {
+      // We always check isContentBounded_ again because the original
+      // "not bounded" state of isContentBounded_ could have been changed.
+      if (!mainWorkspace.isDragging() && !mainWorkspace.isContentBounded_()) {
         var metrics = mainWorkspace.getMetrics();
-        var edgeLeft = metrics.viewLeft + metrics.absoluteLeft;
-        var edgeTop = metrics.viewTop + metrics.absoluteTop;
-        if (metrics.contentTop < edgeTop ||
+        if (metrics.contentTop < metrics.viewTop ||
             metrics.contentTop + metrics.contentHeight >
-            metrics.viewHeight + edgeTop ||
+            metrics.viewHeight + metrics.viewTop ||
             metrics.contentLeft <
-                (options.RTL ? metrics.viewLeft : edgeLeft) ||
+                (options.RTL ? metrics.viewLeft : metrics.viewLeft) ||
             metrics.contentLeft + metrics.contentWidth > (options.RTL ?
-                metrics.viewWidth : metrics.viewWidth + edgeLeft)) {
+                metrics.viewWidth : metrics.viewWidth + metrics.viewLeft)) {
           // One or more blocks may be out of bounds.  Bump them back in.
           var MARGIN = 25;
           var blocks = mainWorkspace.getTopBlocks(false);
@@ -258,27 +258,28 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             var blockXY = block.getRelativeToSurfaceXY();
             var blockHW = block.getHeightWidth();
             // Bump any block that's above the top back inside.
-            var overflowTop = edgeTop + MARGIN - blockHW.height - blockXY.y;
+            var overflowTop = metrics.viewTop + MARGIN
+                - blockHW.height - blockXY.y;
             if (overflowTop > 0) {
               block.moveBy(0, overflowTop);
               movedBlocks = true;
             }
             // Bump any block that's below the bottom back inside.
             var overflowBottom =
-                edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
+                metrics.viewTop + metrics.viewHeight - MARGIN - blockXY.y;
             if (overflowBottom < 0) {
               block.moveBy(0, overflowBottom);
               movedBlocks = true;
             }
             // Bump any block that's off the left back inside.
-            var overflowLeft = MARGIN + edgeLeft -
+            var overflowLeft = MARGIN + metrics.viewLeft -
                 blockXY.x - (options.RTL ? 0 : blockHW.width);
             if (overflowLeft > 0) {
               block.moveBy(overflowLeft, 0);
               movedBlocks = true;
             }
             // Bump any block that's off the right back inside.
-            var overflowRight = edgeLeft + metrics.viewWidth - MARGIN -
+            var overflowRight = metrics.viewLeft + metrics.viewWidth - MARGIN -
                 blockXY.x + (options.RTL ? blockHW.width : 0);
             if (overflowRight < 0) {
               block.moveBy(overflowRight, 0);
@@ -356,9 +357,16 @@ Blockly.init_ = function(mainWorkspace) {
     mainWorkspace.zoomControls_.init(verticalSpacing);
   }
 
-  if (options.hasScrollbars) {
+  if (options.moveOptions && options.moveOptions.scrollbars) {
     mainWorkspace.scrollbar = new Blockly.ScrollbarPair(mainWorkspace);
     mainWorkspace.scrollbar.resize();
+  } else {
+    mainWorkspace.setMetrics({x: .5, y: .5});
+    // Makes it so zoom controls zoom correctly when the content is not
+    // bounded & the toolbox has categories.
+    var metrics = mainWorkspace.getMetrics();
+    mainWorkspace.scrollX = metrics.absoluteLeft;
+    mainWorkspace.scrollY = metrics.absoluteTop;
   }
 
   // Load the sounds.

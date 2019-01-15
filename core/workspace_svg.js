@@ -470,11 +470,8 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (!this.isFlyout) {
     Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
         this.onMouseDown_, false, true);
-    if (this.options.zoomOptions && this.options.zoomOptions.wheel) {
-      // Mouse-wheel.
-      Blockly.bindEventWithChecks_(this.svgGroup_, 'wheel', this,
-          this.onMouseWheel_);
-    }
+    Blockly.bindEventWithChecks_(this.svgGroup_, 'wheel', this,
+        this.onMouseWheel_);
   }
 
   // Determine if there needs to be a category tree, or a simple list of
@@ -1193,11 +1190,24 @@ Blockly.WorkspaceSvg.prototype.isDragging = function() {
 };
 
 /**
- * Is this workspace draggable and scrollable?
+ * Is this workspace draggable?
  * @return {boolean} True if this workspace may be dragged.
  */
 Blockly.WorkspaceSvg.prototype.isDraggable = function() {
-  return !!this.scrollbar;
+  return this.options.moveOptions && this.options.moveOptions.drag;
+};
+
+/**
+ * Should the workspace have bounded content? Used to tell if the
+ * workspace's content should be sized so that it can move (bounded) or not
+ * (exact sizing).
+ * @returns {boolean} True if the workspace should be bounded, false otherwise.
+ */
+Blockly.WorkspaceSvg.prototype.isContentBounded_ = function() {
+  return (this.options.moveOptions && this.options.moveOptions.scrollbars)
+      || (this.options.moveOptions && this.options.moveOptions.wheel)
+      || (this.options.moveOptions && this.options.moveOptions.drag)
+      || (this.options.zoomOptions && this.options.zoomOptions.wheel);
 };
 
 /**
@@ -1206,17 +1216,45 @@ Blockly.WorkspaceSvg.prototype.isDraggable = function() {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
+  if (!(this.options.zoomOptions && this.options.zoomOptions.wheel)
+      && !(this.options.moveOptions && this.options.moveOptions.wheel)) {
+    return;
+  }
+
   // TODO: Remove gesture cancellation and compensate for coordinate skew during
   // zoom.
   if (this.currentGesture_) {
     this.currentGesture_.cancel();
   }
-  // The vertical scroll distance that corresponds to a click of a zoom button.
-  var PIXELS_PER_ZOOM_STEP = 50;
-  var delta = -e.deltaY / PIXELS_PER_ZOOM_STEP;
-  var position = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
-      this.getInverseScreenCTM());
-  this.zoom(position.x, position.y, delta);
+
+  // TODO: Change '10' from magic number to constant variable. Also change in
+  // flyout_vertical.js and flyout_horizontal.js.
+  // Multiplier variable, so that non-pixel-deltaModes are supported.
+  var multiplier = e.deltaMode === 0x1 ? 10 : 1;
+
+  if ((this.options.zoomOptions && this.options.zoomOptions.wheel)
+      && (!(this.options.moveOptions && this.options.moveOptions.wheel)
+          || e.ctrlKey)) {
+    // TODO: Change '50' from magic number to constant variable.
+    // The vertical scroll distance that corresponds to a click of a zoom button.
+    var PIXELS_PER_ZOOM_STEP = 50;
+    var delta = -e.deltaY / PIXELS_PER_ZOOM_STEP * multiplier;
+    var position = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
+        this.getInverseScreenCTM());
+    this.zoom(position.x, position.y, delta);
+  } else {
+    var x = this.scrollX - e.deltaX * multiplier;
+    var y = this.scrollY - e.deltaY * multiplier;
+
+    if (e.shiftKey && e.deltaX === 0) {
+      // Scroll horizontally (based on vertical scroll delta)
+      // This is needed as for some browser/system combinations which do not
+      // set deltaX.
+      x = this.scrollX - e.deltaY * multiplier;
+      y = this.scrollY; // Don't scroll vertically
+    }
+    this.scroll_(x, y);
+  }
   e.preventDefault();
 };
 
@@ -1537,7 +1575,7 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
   if (this.scale == newScale) {
     return;  // No change in zoom.
   }
-  if (this.scrollbar) {
+  if (this.isContentBounded_()) {
     var matrix = canvas.getCTM()
         .translate(x * (1 - scaleChange), y * (1 - scaleChange))
         .scale(scaleChange);
@@ -1702,8 +1740,13 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
   if (this.grid_) {
     this.grid_.update(this.scale);
   }
-  if (this.scrollbar) {
-    this.scrollbar.resize();
+  if (this.isContentBounded_()) {
+    this.scroll_(this.scrollX, this.scrollY);
+    if (this.scrollbar) {
+      var metrics = this.getMetrics();
+      this.scrollbar.hScroll.resizeContentHorizontal(metrics);
+      this.scrollbar.vScroll.resizeContentVertical(metrics);
+    }
   } else {
     this.translate(this.scrollX, this.scrollY);
   }
@@ -1711,6 +1754,42 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
   if (this.flyout_) {
     // No toolbox, resize flyout.
     this.flyout_.reflow();
+  }
+};
+
+/**
+ * Scroll the workspace by a specified amount (in pixels), keeping in the
+ * bounds.
+ * @param {number} x Target X to scroll to
+ * @param {number} y Target Y to scroll to
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.scroll_ = function(x, y) {
+  var metrics = this.getMetrics();
+  x = Math.min(x, -metrics.contentLeft);
+  y = Math.min(y, -metrics.contentTop);
+  x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
+    metrics.contentWidth);
+  y = Math.max(y, metrics.viewHeight - metrics.contentTop -
+    metrics.contentHeight);
+  // When the workspace starts scrolling, hide the WidgetDiv without animation.
+  // This is to prevent a disposal animation from happening in the wrong
+  // location.
+  Blockly.WidgetDiv.hide(true);
+
+  this.scrollX = x;
+  this.scrollY = y;
+  x += metrics.absoluteLeft;
+  y += metrics.absoluteTop;
+  this.translate(x, y);
+  if (this.grid_) {
+    this.grid_.moveTo(x, y);
+  }
+  if (this.scrollbar) {
+    this.scrollbar.hScroll.setHandlePosition((-x - metrics.contentLeft)
+        * this.scrollbar.hScroll.ratio_);
+    this.scrollbar.vScroll.setHandlePosition((-y - metrics.contentTop)
+      * this.scrollbar.vScroll.ratio_);
   }
 };
 
@@ -1750,7 +1829,7 @@ Blockly.WorkspaceSvg.getDimensionsPx_ = function(elem) {
  * @private
  */
 Blockly.WorkspaceSvg.getContentDimensions_ = function(ws, svgSize) {
-  if (ws.scrollbar) {
+  if (ws.isContentBounded_()) {
     return Blockly.WorkspaceSvg.getContentDimensionsBounded_(ws, svgSize);
   } else {
     return Blockly.WorkspaceSvg.getContentDimensionsExact_(ws);
@@ -1917,10 +1996,6 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
  * @this Blockly.WorkspaceSvg
  */
 Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
-  if (!this.scrollbar) {
-    throw Error('Attempt to set top level workspace scroll without ' +
-        'scrollbars.');
-  }
   var metrics = this.getMetrics();
   if (typeof xyRatio.x == 'number') {
     this.scrollX = -metrics.contentWidth * xyRatio.x - metrics.contentLeft;

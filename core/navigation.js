@@ -86,3 +86,15 @@ Blockly.Navigation.keyboardPrev = function() {
   Blockly.Navigation.connection = prevConnection;
   return prevConnection;
 };
+
+/**
+ * Decides what function to call when arrow key is pressed.
+ * @param{Event} e The keyboard event
+ */
+Blockly.Navigation.keyboardNav = function(e) {
+  if (e.code === "ArrowDown") {
+    console.log(Blockly.Navigation.keyboardNext());
+  } else if (e.code === "ArrowUp") {
+    console.log(Blockly.Navigation.keyboardPrev());
+  }
+};

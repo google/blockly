@@ -20,7 +20,7 @@
 
 goog.provide('Blockly.Navigation');
 
-var connection = null;
+Blockly.Navigation.connection = null;
 
 Blockly.Navigation.navigateBetweenStacks = function(forward) {
   var curBlock = Blockly.selected;
@@ -48,11 +48,11 @@ Blockly.Navigation.navigateBetweenStacks = function(forward) {
 };
 
 Blockly.Navigation.setConnection = function() {
-  connection = Blockly.selected.previousConnection;
+  Blockly.Navigation.connection = Blockly.selected.previousConnection;
 };
 
 Blockly.Navigation.keyboardNext = function() {
-  var curConnect = connection;
+  var curConnect = Blockly.Navigation.connection;
   var nextConnection;
   if (!curConnect) {
     return null;
@@ -65,12 +65,12 @@ Blockly.Navigation.keyboardNext = function() {
     nextConnection = curConnect.sourceBlock_.nextConnection;
   }
   //Set cursor here
-  connection = nextConnection;
+  Blockly.Navigation.connection = nextConnection;
   return nextConnection;
 };
 
 Blockly.Navigation.keyboardPrev = function() {
-  var curConnect = connection;
+  var curConnect = Blockly.Navigation.connection;
   var prevConnection;
   if (!curConnect) {
     return null;
@@ -83,6 +83,6 @@ Blockly.Navigation.keyboardPrev = function() {
     prevConnection = curConnect.sourceBlock_.previousConnection;
   }
   //Set cursor here
-  connection = prevConnection;
+  Blockly.Navigation.connection = prevConnection;
   return prevConnection;
 };

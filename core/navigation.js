@@ -78,7 +78,9 @@ Blockly.Navigation.keyboardPrev = function() {
     return null;
   }
   var prevBlock = curConnect.sourceBlock_.getParent();
-  if (prevBlock){
+  if (curConnect === curConnect.sourceBlock_.nextConnection) {
+    prevConnection = curConnect.sourceBlock_.previousConnection;
+  } else if (prevBlock){
     prevConnection = prevBlock.previousConnection;
   }
   else {

@@ -51,6 +51,13 @@ Blockly.Cursor.CURSOR_HEIGHT = 5;
 Blockly.Cursor.CURSOR_WIDTH = 100;
 
 /**
+ * The start length of the notch.
+ * @type {number}
+ * @const
+ */
+Blockly.Cursor.NOTCH_START_LENGTH = 24;
+
+/**
  * Cursor color.
  * @type {number}
  * @const
@@ -84,7 +91,7 @@ Blockly.Cursor.prototype.createDom = function() {
  * @param {boolean} rtl True if RTL, false if LTR.
  * @package
  */
-Blockly.Cursor.prototype.workspaceShow = function(e, rtl) {
+Blockly.Cursor.prototype.workspaceShow = function(e) {
   var ws = this.workspace_;
   var injectionDiv = ws.getInjectionDiv();
   // Bounding rect coordinates are in client coordinates, meaning that they
@@ -108,9 +115,7 @@ Blockly.Cursor.prototype.workspaceShow = function(e, rtl) {
   // The position of the new comment in main workspace coordinates.
   var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
 
-  var cursorSize = new goog.math.Size(Blockly.Cursor.CURSOR_WIDTH, Blockly.Cursor.CURSOR_HEIGHT);
-
-  var x = finalOffsetMainWs.x + (rtl ? -cursorSize.width : cursorSize.width);
+  var x = finalOffsetMainWs.x;
   var y = finalOffsetMainWs.y;
   this.showWithCoordinates(x, y);
 };
@@ -122,11 +127,8 @@ Blockly.Cursor.prototype.workspaceShow = function(e, rtl) {
  */
 Blockly.Cursor.prototype.showWithCoordinates = function(x, y) {
   this.CURSOR_REFERENCE = new goog.math.Coordinate(x, y);
-  
-  this.cursorSvgRect_.setAttribute('x', x);
-  this.cursorSvgRect_.setAttribute('y', y);
 
-  this.show();
+  this.show(x, y, Blockly.Cursor.CURSOR_WIDTH);
 };
 
 /**
@@ -134,17 +136,30 @@ Blockly.Cursor.prototype.showWithCoordinates = function(x, y) {
  * @param {Blockly.Connection} connection The connection to position the cursor to
  */
 Blockly.Cursor.prototype.showWithConnection = function(connection) {
+  if (!connection) {
+    return;
+  }
   this.CURSOR_REFERENCE = connection;
 
-  // TODO: position to connection
-  
-  this.show();
+  var targetBlock = connection.sourceBlock_;
+  var xy = targetBlock.getRelativeToSurfaceXY();
+  this.show(xy.x + connection.offsetInBlock_.x - Blockly.Cursor.NOTCH_START_LENGTH,
+      xy.y + connection.offsetInBlock_.y, targetBlock.getHeightWidth().width);
 };
 
 /**
- * Show the cursor
+ * Move and show the cursor at the specified coordinate in workspace units.
+ * @param {number} x The new x, in workspace units.
+ * @param {number} y The new y, in workspace units.
+ * @param {number} width The new width, in workspace units.
  */
-Blockly.Cursor.prototype.show = function() {
+Blockly.Cursor.prototype.show = function(x, y, width) {
+  var cursorSize = new goog.math.Size(Blockly.Cursor.CURSOR_WIDTH, Blockly.Cursor.CURSOR_HEIGHT);
+
+  this.cursorSvgRect_.setAttribute('x', x + (this.workspace_.RTL ? -cursorSize.width : cursorSize.width));
+  this.cursorSvgRect_.setAttribute('y', y);
+  this.cursorSvgRect_.setAttribute('width', width);
+  
   this.svgGroup_.style.display = '';
 };
 

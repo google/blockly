@@ -80,6 +80,19 @@ Blockly.mainWorkspace = null;
 Blockly.selected = null;
 
 /**
+ * Current cursor.
+ * @type {Blockly.Cursor}
+ */
+Blockly.cursor = null;
+
+/**
+ * Whether or not we're currently in keyboard accessibility mode.
+ * @type {Boolean}
+ * @private
+ */
+Blockly.keyboardAccessibilityMode_ = false;
+
+/**
  * All of the connections on blocks that are currently being dragged.
  * @type {!Array.<!Blockly.Connection>}
  * @private
@@ -261,6 +274,12 @@ Blockly.onKeyDown_ = function(e) {
       Blockly.hideChaff();
       workspace.undo(e.shiftKey);
     }
+  } else if (Blockly.keyboardAccessibilityMode_
+      && (e.keyCode === goog.events.KeyCodes.UP
+        || e.keyCode === goog.events.KeyCodes.DOWN)) {
+    Blockly.Navigation.navigate(e);
+  } else if (Blockly.keyboardAccessibilityMode_ && e.keyCode === goog.events.KeyCodes.SPACE) {
+    Blockly.Navigation.setConnection();
   }
   // Common code for delete and cut.
   // Don't delete in the flyout.

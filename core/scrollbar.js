@@ -173,6 +173,24 @@ Blockly.ScrollbarPair.prototype.set = function(x, y) {
 };
 
 /**
+ * Pan the handles of both scrollbars to be at a certain position in CSS pixels
+ * relative to their parents.
+ * @param {number} x Horizontal scroll value.
+ * @param {number} y Vertical scroll value.
+ */
+Blockly.ScrollbarPair.prototype.panBy = function(x, y) {
+  // Find the current x,y position
+
+  var hNewHandlePosition = x * this.hScroll.ratio_;
+  var vNewHandlePosition = y * this.vScroll.ratio_;
+
+  var hHandlePosition = this.hScroll.handlePosition_ + hNewHandlePosition;
+  var vHandlePosition = this.vScroll.handlePosition_ + vNewHandlePosition;
+
+  this.set(hHandlePosition / this.hScroll.ratio_, vHandlePosition / this.hScroll.ratio_);
+};
+
+/**
  * Helper to calculate the ratio of handle position to scrollbar view size.
  * @param {number} handlePosition The value of the handle.
  * @param {number} viewSize The total size of the scrollbar's view.

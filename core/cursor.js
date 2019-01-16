@@ -112,7 +112,7 @@ Blockly.Cursor.prototype.workspaceShow = function(e, rtl) {
 
   var x = finalOffsetMainWs.x + (rtl ? -cursorSize.width : cursorSize.width);
   var y = finalOffsetMainWs.y;
-  this.showWithCoordinates_(x, y);
+  this.showWithCoordinates(x, y);
 };
 
 /**
@@ -120,12 +120,24 @@ Blockly.Cursor.prototype.workspaceShow = function(e, rtl) {
  * @param {number} x The new x position to move the cursor to.
  * @param {number} y The new y position to move the cursor to.
  */
-Blockly.Cursor.prototype.showWithCoordinates_ = function(x, y) {
+Blockly.Cursor.prototype.showWithCoordinates = function(x, y) {
   this.CURSOR_REFERENCE = new goog.math.Coordinate(x, y);
   
   this.cursorSvgRect_.setAttribute('x', x);
   this.cursorSvgRect_.setAttribute('y', y);
 
+  this.show();
+};
+
+/**
+ * Show the cursor using a connection
+ * @param {Blockly.Connection} connection The connection to position the cursor to
+ */
+Blockly.Cursor.prototype.showWithConnection = function(connection) {
+  this.CURSOR_REFERENCE = connection;
+
+  // TODO: position to connection
+  
   this.show();
 };
 

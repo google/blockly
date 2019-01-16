@@ -1588,6 +1588,38 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
 };
 
 /**
+ * Pan the workspace by a specified amount, keeping in the bounds.
+ * @param {number} x Offset X to scroll by in pixels.
+ * @param {number} y Offset Y to scroll by in pixels.
+ */
+Blockly.WorkspaceSvg.prototype.panByOffset = function(x, y) {
+  var x = this.scrollX - x;
+  var y = this.scrollY - y;
+  this.scroll(x, y);
+};
+
+/**
+ * Scroll the workspace by a specified amount, keeping in the bounds.
+ * TODO: Unit annotations
+ * @param {number} x Target X to scroll to.
+ * @param {number} y Target Y to scroll to.
+ */
+Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
+  var metrics = this.getMetrics();
+  x = Math.min(x, -metrics.contentLeft);
+  y = Math.min(y, -metrics.contentTop);
+  x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
+               metrics.contentWidth);
+  y = Math.max(y, metrics.viewHeight - metrics.contentTop -
+               metrics.contentHeight);
+  // When the workspace starts scrolling, hide the WidgetDiv without animation.
+  // This is to prevent a dispoal animation from happening in the wrong location.
+  Blockly.WidgetDiv.hide(true);
+  // Move the scrollbars and the page will scroll automatically.
+  this.scrollbar.set(-x - metrics.contentLeft, -y - metrics.contentTop);
+};
+
+/**
  * Add a transition class to the block and bubble canvas, to animate any
  * transform changes.
  * @package

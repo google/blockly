@@ -586,7 +586,7 @@ Blockly.Gesture.prototype.handleUp = function(e) {
   } else if (this.isBlockClick_()) {
     this.doBlockClick_();
   } else if (this.isWorkspaceClick_()) {
-    this.doWorkspaceClick_();
+    this.doWorkspaceClick_(e);
   }
 
   e.preventDefault();
@@ -752,10 +752,15 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
 
 /**
  * Execute a workspace click.
+ * @param {!Event} e A mouse up or touch end event.
  * @private
  */
-Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
-  if (Blockly.selected) {
+Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
+  this.startWorkspace_.cursor_.hide();
+  if (e.shiftKey) {
+    // Show the cursor at the specified position
+    this.startWorkspace_.cursor_.workspaceShow(e, this.startWorkspace_.RTL);
+  } else if (Blockly.selected) {
     Blockly.selected.unselect();
   }
 };

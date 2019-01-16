@@ -93,8 +93,8 @@ Blockly.Navigation.keyboardPrev = function() {
  */
 Blockly.Navigation.keyboardNav = function(e) {
   if (e.code === "ArrowDown") {
-    console.log(Blockly.Navigation.keyboardNext());
+    Blockly.Navigation.keyboardNext();
   } else if (e.code === "ArrowUp") {
-    console.log(Blockly.Navigation.keyboardPrev());
+    Blockly.Navigation.keyboardPrev();
   }
 };

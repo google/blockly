@@ -604,12 +604,14 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
 /**
  * Add zoom controls.
  * @package
+ * @return {Blockly.Cursor} return the created cursor
  */
 Blockly.WorkspaceSvg.prototype.addCursor = function() {
   /** @type {Blockly.Cursor} */
   this.cursor_ = new Blockly.Cursor(this);
   var svgCursor = this.cursor_.createDom();
   this.svgGroup_.appendChild(svgCursor);
+  return this.cursor_;
 };
 
 /**

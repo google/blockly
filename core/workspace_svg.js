@@ -1589,8 +1589,8 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
 
 /**
  * Pan the workspace by a specified amount, keeping in the bounds.
- * @param {number} x Target X to scroll to
- * @param {number} y Target Y to scroll to
+ * @param {number} x Offset X to scroll by
+ * @param {number} y Offset Y to scroll by
  */
 Blockly.WorkspaceSvg.prototype.panByOffset = function(x, y) {
   var x = this.scrollX - x;

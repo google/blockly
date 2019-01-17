@@ -278,8 +278,6 @@ Blockly.onKeyDown_ = function(e) {
       && (e.keyCode === goog.events.KeyCodes.UP
         || e.keyCode === goog.events.KeyCodes.DOWN)) {
     Blockly.Navigation.navigate(e);
-  } else if (Blockly.keyboardAccessibilityMode_ && e.keyCode === goog.events.KeyCodes.SPACE) {
-    Blockly.Navigation.setConnection();
   }
   // Common code for delete and cut.
   // Don't delete in the flyout.

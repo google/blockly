@@ -48,6 +48,7 @@ Blockly.Navigation.navigateBetweenStacks = function(forward) {
 };
 
 Blockly.Navigation.setConnection = function() {
+  Blockly.keyboardAccessibilityMode_ = true;
   Blockly.Navigation.connection = Blockly.selected.previousConnection;
   Blockly.cursor.showWithConnection(Blockly.selected.previousConnection);
 };

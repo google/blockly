@@ -500,6 +500,9 @@ Blockly.Gesture.prototype.doStart = function(e) {
 
   if (this.targetBlock_) {
     this.targetBlock_.select();
+    if (!this.targetBlock_.isInFlyout && e.shiftKey) {
+      Blockly.Navigation.setConnection();
+    }
   }
 
   if (Blockly.utils.isRightButton(e)) {

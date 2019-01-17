@@ -58,6 +58,13 @@ Blockly.Cursor.CURSOR_WIDTH = 100;
 Blockly.Cursor.NOTCH_START_LENGTH = 24;
 
 /**
+ * Padding around the input.
+ * @type {number}
+ * @const
+ */
+Blockly.Cursor.VERTICAL_PADDING = 5;
+
+/**
  * Cursor color.
  * @type {number}
  * @const
@@ -77,8 +84,7 @@ Blockly.Cursor.CURSOR_REFERENCE = null;
 Blockly.Cursor.prototype.createDom = function() {
   this.svgGroup_ =
       Blockly.utils.createSvgElement('g', {
-        'class': 'blocklyCursor',
-        'style': 'display: none'
+        'class': 'blocklyCursor'
       }, null);
 
   this.createCursorSvg_();
@@ -128,7 +134,8 @@ Blockly.Cursor.prototype.workspaceShow = function(e) {
 Blockly.Cursor.prototype.showWithCoordinates = function(x, y) {
   this.CURSOR_REFERENCE = new goog.math.Coordinate(x, y);
 
-  this.show(x, y, Blockly.Cursor.CURSOR_WIDTH);
+  this.positionHorizontal_(x, y, Blockly.Cursor.CURSOR_WIDTH);
+  this.showHorizontal_();
 };
 
 /**
@@ -143,8 +150,18 @@ Blockly.Cursor.prototype.showWithConnection = function(connection) {
 
   var targetBlock = connection.sourceBlock_;
   var xy = targetBlock.getRelativeToSurfaceXY();
-  this.show(xy.x + connection.offsetInBlock_.x - Blockly.Cursor.NOTCH_START_LENGTH,
-      xy.y + connection.offsetInBlock_.y, targetBlock.getHeightWidth().width);
+  if (connection.type == Blockly.INPUT_VALUE || connection.type == Blockly.OUTPUT_VALUE) {
+    targetBlock = connection.targetConnection.sourceBlock_;
+    this.positionVertical_(xy.x + connection.offsetInBlock_.x - Blockly.Cursor.VERTICAL_PADDING,
+        xy.y + connection.offsetInBlock_.y - Blockly.Cursor.VERTICAL_PADDING,
+        targetBlock.getHeightWidth().width + (Blockly.Cursor.VERTICAL_PADDING * 2),
+        targetBlock.getHeightWidth().height + (Blockly.Cursor.VERTICAL_PADDING * 2));
+    this.showVertical_();
+  } else {
+    this.positionHorizontal_(xy.x + connection.offsetInBlock_.x - Blockly.Cursor.NOTCH_START_LENGTH,
+        xy.y + connection.offsetInBlock_.y, targetBlock.getHeightWidth().width);
+    this.showHorizontal_();
+  }
 };
 
 /**
@@ -153,21 +170,44 @@ Blockly.Cursor.prototype.showWithConnection = function(connection) {
  * @param {number} y The new y, in workspace units.
  * @param {number} width The new width, in workspace units.
  */
-Blockly.Cursor.prototype.show = function(x, y, width) {
+Blockly.Cursor.prototype.positionHorizontal_ = function(x, y, width) {
   var cursorSize = new goog.math.Size(Blockly.Cursor.CURSOR_WIDTH, Blockly.Cursor.CURSOR_HEIGHT);
 
-  this.cursorSvgRect_.setAttribute('x', x + (this.workspace_.RTL ? -cursorSize.width : cursorSize.width));
-  this.cursorSvgRect_.setAttribute('y', y);
-  this.cursorSvgRect_.setAttribute('width', width);
-  
-  this.svgGroup_.style.display = '';
+  this.cursorSvgHorizontal_.setAttribute('x', x + (this.workspace_.RTL ? -cursorSize.width : cursorSize.width));
+  this.cursorSvgHorizontal_.setAttribute('y', y);
+  this.cursorSvgHorizontal_.setAttribute('width', width);
+};
+
+/**
+ * Move and show the cursor at the specified coordinate in workspace units.
+ * @param {number} x The new x, in workspace units.
+ * @param {number} y The new y, in workspace units.
+ * @param {number} width The new width, in workspace units.
+ * @param {number} height The new height, in workspace units.
+ */
+Blockly.Cursor.prototype.positionVertical_ = function(x, y, width, height) {
+  var cursorSize = new goog.math.Size(Blockly.Cursor.CURSOR_WIDTH, Blockly.Cursor.CURSOR_HEIGHT);
+
+  this.cursorSvgVertical_.setAttribute('x', x + (this.workspace_.RTL ? -cursorSize.width : cursorSize.width));
+  this.cursorSvgVertical_.setAttribute('y', y);
+  this.cursorSvgVertical_.setAttribute('width', width);
+  this.cursorSvgVertical_.setAttribute('height', height);
+};
+
+Blockly.Cursor.prototype.showHorizontal_ = function() {
+  this.cursorSvgHorizontal_.style.display = '';
+};
+
+Blockly.Cursor.prototype.showVertical_ = function() {
+  this.cursorSvgVertical_.style.display = '';
 };
 
 /**
  * Hide the cursor.
  */
 Blockly.Cursor.prototype.hide = function() {
-  this.svgGroup_.style.display = 'none';
+  this.cursorSvgHorizontal_.style.display = 'none';
+  this.cursorSvgVertical_.style.display = 'none';
 };
 
 /**
@@ -189,13 +229,14 @@ Blockly.Cursor.prototype.createCursorSvg_ = function() {
         'width': Blockly.Cursor.CURSOR_WIDTH,
         'height': Blockly.Cursor.CURSOR_HEIGHT
       }, this.svgGroup_);
-  this.cursorSvgRect_ = Blockly.utils.createSvgElement('rect',
+  this.cursorSvgHorizontal_ = Blockly.utils.createSvgElement('rect',
       {
         'x': '0',
         'y': '0',
         'fill': Blockly.Cursor.CURSOR_COLOR,
         'width': Blockly.Cursor.CURSOR_WIDTH,
-        'height': Blockly.Cursor.CURSOR_HEIGHT
+        'height': Blockly.Cursor.CURSOR_HEIGHT,
+        'style': 'display: none;'
       },
       this.cursorSvg_);
   Blockly.utils.createSvgElement('animate',
@@ -206,6 +247,15 @@ Blockly.Cursor.prototype.createCursorSvg_ = function() {
         'values': Blockly.Cursor.CURSOR_COLOR + ';transparent;transparent;',
         'repeatCount': 'indefinite'
       },
-      this.cursorSvgRect_);
+      this.cursorSvgHorizontal_);
+  this.cursorSvgVertical_ = Blockly.utils.createSvgElement('rect',
+      {
+        'class': 'blocklyVerticalCursor',
+        'x': '0',
+        'y': '0',
+        'rx': '10', 'ry': '10',
+        'style': 'display: none;'
+      },
+      this.cursorSvg_);
   return this.cursorSvg_;
 };

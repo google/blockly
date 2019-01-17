@@ -195,10 +195,12 @@ Blockly.Cursor.prototype.positionVertical_ = function(x, y, width, height) {
 };
 
 Blockly.Cursor.prototype.showHorizontal_ = function() {
+  this.hide();
   this.cursorSvgHorizontal_.style.display = '';
 };
 
 Blockly.Cursor.prototype.showVertical_ = function() {
+  this.hide();
   this.cursorSvgVertical_.style.display = '';
 };
 

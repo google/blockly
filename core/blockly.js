@@ -276,7 +276,9 @@ Blockly.onKeyDown_ = function(e) {
     }
   } else if (Blockly.keyboardAccessibilityMode_
       && (e.keyCode === goog.events.KeyCodes.UP
-        || e.keyCode === goog.events.KeyCodes.DOWN)) {
+        || e.keyCode === goog.events.KeyCodes.DOWN
+        || e.keyCode === goog.events.KeyCodes.RIGHT
+        || e.keyCode === goog.events.KeyCodes.LEFT)) {
     Blockly.Navigation.navigate(e);
   }
   // Common code for delete and cut.

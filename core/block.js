@@ -929,11 +929,11 @@ Blockly.Block.prototype.setStyle = function(blockStyleName) {
   this.styleName_ = blockStyleName;
 
   if (blockStyle) {
-    this.secondaryColour_ = blockStyle.secondaryColour;
-    this.tertiaryColour_ = blockStyle.tertiaryColour;
+    this.secondaryColour_ = blockStyle['secondaryColour'];
+    this.tertiaryColour_ = blockStyle['tertiaryColour'];
     this.hat = blockStyle.hat;
     // Set colour will trigger an updateColour() on a block_svg
-    this.setColour(blockStyle.primaryColour);
+    this.setColour(blockStyle['primaryColour']);
   }
   else {
     throw Error('Invalid style name: ' + blockStyleName);

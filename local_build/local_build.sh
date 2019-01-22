@@ -86,7 +86,13 @@ fi
 
 rm local_blocks_compressed.js 2> /dev/null
 echo Compiling Blockly blocks...
+
+# Add Blockly and Blockly.Blocks to be compatible with the compiler.
 echo -e "'use strict';\ngoog.provide('Blockly');goog.provide('Blockly.Blocks');" > temp.js
+
+# Concatenate all blocks/*.js into the first file, as the compiler will otherwise
+# remove them as not needed.
+# Also remove 'use strict' to avoid unnecessary warnings
 cat ../blocks/*.js| grep -v "^'use strict';" >> temp.js
 java -jar $COMPILER \
   --js='temp.js' \
@@ -101,6 +107,7 @@ java -jar $COMPILER \
 rm temp.js 2> /dev/null
 if [ -s local_blocks_compressed.js ]; then
        echo Compilation OK
+       # Remove Blockly initialization line. This is present in local_blockly_compressed.
        sed -i 's/var Blockly={Blocks:{}};//g' local_blocks_compressed.js
 else
        echo Compilation FAIL.

@@ -467,6 +467,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(true);
   }
+  Blockly.Events.fire(new Blockly.Events.FinishedLoading(workspace));
   return newBlockIds;
 };
 

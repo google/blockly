@@ -513,7 +513,18 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
   if (isNaN(this.options.maxBlocks)) {
     return Infinity;
   }
-  return this.options.maxBlocks - this.getAllBlocks().length;
+
+  // Insertion markers exist on the workspace for rendering reasons, but should
+  // be ignored in capacity calculation because they dissolve at the end of a
+  // drag.
+  var allBlocks = this.getAllBlocks();
+  var allBlocksCount = allBlocks.length;
+  for (var i = 0; i < allBlocks.length; i++) {
+    if (allBlocks[i].isInsertionMarker()) {
+      allBlocksCount--;
+    }
+  }
+  return this.options.maxBlocks - allBlocksCount;
 };
 
 /**

@@ -25,7 +25,7 @@
  */
 'use strict';
 
-goog.provide(Blockly.Events.FinishedLoading);
+goog.provide('Blockly.Events.FinishedLoading');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');

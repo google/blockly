@@ -68,7 +68,7 @@ Blockly.Events.FinishedLoading.prototype.type = Blockly.Events.FINISHED_LOADING;
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.Ui.prototype.toJson = function() {
+Blockly.Events.FinishedLoading.prototype.toJson = function() {
   var json = {
     'type': this.type,
   };
@@ -85,7 +85,7 @@ Blockly.Events.Ui.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.Ui.prototype.fromJson = function(json) {
+Blockly.Events.FinishedLoading.prototype.fromJson = function(json) {
   this.workspaceId = json['workspaceId'];
   this.group = json['group'];
 };

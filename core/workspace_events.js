@@ -2,8 +2,7 @@
  * @license
  * Visual Blocks Editor
  *
- * TODO: 2019 instead of 2018???
- * Copyright 2018 Google Inc.
+ * Copyright 2019 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

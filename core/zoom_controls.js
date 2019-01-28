@@ -131,7 +131,9 @@ Blockly.ZoomControls.prototype.dispose = function() {
 };
 
 /**
- * Move the zoom controls to the bottom-right corner.
+ * Position the zoom controls.
+ * It is positioned in the opposite corner to the corner the
+ * categories/toolbox starts at.
  */
 Blockly.ZoomControls.prototype.position = function() {
   // Not yet initialized.
@@ -143,21 +145,14 @@ Blockly.ZoomControls.prototype.position = function() {
     // There are no metrics available (workspace is probably not visible).
     return;
   }
-  if (this.workspace_.RTL) {
-    this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
-    if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
-      this.left_ += metrics.flyoutWidth;
-      if (this.workspace_.toolbox_) {
-        this.left_ += metrics.absoluteLeft;
-      }
-    }
-  } else {
+  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT
+    || (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
+    // Toolbox starts in the left corner.
     this.left_ = metrics.viewWidth + metrics.absoluteLeft -
-        this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
-
-    if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
-      this.left_ -= metrics.flyoutWidth;
-    }
+      this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
+  } else {
+    // Toolbox starts in the right corner.
+    this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
   }
 
   if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {

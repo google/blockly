@@ -111,6 +111,7 @@ goog.addDependency("../../../" + dir + "/core/workspace_comment_render_svg.js", 
 goog.addDependency("../../../" + dir + "/core/workspace_comment_svg.js", ['Blockly.WorkspaceCommentSvg'], ['Blockly.Events.CommentCreate', 'Blockly.Events.CommentDelete', 'Blockly.Events.CommentMove', 'Blockly.utils', 'Blockly.WorkspaceComment', 'goog.math.Coordinate']);
 goog.addDependency("../../../" + dir + "/core/workspace_drag_surface_svg.js", ['Blockly.WorkspaceDragSurfaceSvg'], ['Blockly.utils']);
 goog.addDependency("../../../" + dir + "/core/workspace_dragger.js", ['Blockly.WorkspaceDragger'], ['goog.math.Coordinate']);
+goog.addDependency("../../../" + dir + "/core/workspace_events.js", ['Blockly.Events.FinishedLoading'], ['Blockly.Events', 'Blockly.Events.Abstract']);
 goog.addDependency("../../../" + dir + "/core/workspace_svg.js", ['Blockly.WorkspaceSvg'], ['Blockly.ConnectionDB', 'Blockly.constants', 'Blockly.Events.BlockCreate', 'Blockly.Gesture', 'Blockly.Grid', 'Blockly.Options', 'Blockly.ScrollbarPair', 'Blockly.Touch', 'Blockly.TouchGesture', 'Blockly.Trashcan', 'Blockly.utils', 'Blockly.VariablesDynamic', 'Blockly.Workspace', 'Blockly.WorkspaceAudio', 'Blockly.WorkspaceComment', 'Blockly.WorkspaceCommentSvg', 'Blockly.WorkspaceCommentSvg.render', 'Blockly.WorkspaceDragSurfaceSvg', 'Blockly.Xml', 'Blockly.ZoomControls', 'goog.dom', 'goog.math.Coordinate']);
 goog.addDependency("../../../" + dir + "/core/ws_comment_events.js", ['Blockly.Events.CommentBase', 'Blockly.Events.CommentChange', 'Blockly.Events.CommentCreate', 'Blockly.Events.CommentDelete', 'Blockly.Events.CommentMove'], ['Blockly.Events', 'Blockly.Events.Abstract', 'Blockly.Xml', 'Blockly.Xml.utils', 'goog.math.Coordinate']);
 goog.addDependency("../../../" + dir + "/core/xml.js", ['Blockly.Xml'], ['Blockly.Events.BlockCreate', 'Blockly.Events.VarCreate', 'Blockly.Xml.utils']);
@@ -1764,6 +1765,7 @@ goog.require('Blockly.Events.CommentDelete');
 goog.require('Blockly.Events.CommentMove');
 goog.require('Blockly.Events.Create');
 goog.require('Blockly.Events.Delete');
+goog.require('Blockly.Events.FinishedLoading');
 goog.require('Blockly.Events.Move');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.VarBase');

@@ -319,6 +319,20 @@ Blockly.utils.shortestStringLength = function(array) {
 };
 
 /**
+ * Given an array of strings, return the length of the shortest one.
+ * @param {!Array.<string>} array Array of strings.
+ * @return {number} Length of shortest string.
+ */
+Blockly.utils.longestString = function(array) {
+  if (!array.length) {
+    return 0;
+  }
+  return array.reduce(function(a, b) {
+    return a.length > b.length ? a : b;
+  });
+};
+
+/**
  * Given an array of strings, return the length of the common prefix.
  * Words may not be split.  Any space after a word is included in the length.
  * @param {!Array.<string>} array Array of strings.

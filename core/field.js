@@ -45,7 +45,8 @@ goog.require('goog.userAgent');
  * @constructor
  */
 Blockly.Field = function(text, opt_validator) {
-  this.size_ = new goog.math.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
+  //SHAPE: Removed dependence of height. It should NOT reference constants in other objects unless extremely necessary.
+  this.size_ = new goog.math.Size(0, 25);
   this.setValue(text);
   this.setValidator(opt_validator);
 };
@@ -192,12 +193,12 @@ Blockly.Field.prototype.init = function() {
         'ry': 4,
         'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
         'y': 0,
-        'height': 16
+        'height': 25
         //SHAPE: Last param added from blockly_changes
       }, this.fieldGroup_, this.sourceBlock_.workspace);
   /** @type {!Element} */
   this.textElement_ = Blockly.utils.createSvgElement('text',
-      {'class': 'blocklyText', 'y': this.size_.height - 11},
+      {'class': 'blocklyText', 'y': this.size_.height - 7.5},
       this.fieldGroup_);
 
   this.updateEditable();
@@ -382,6 +383,18 @@ Blockly.Field.prototype.render_ = function() {
  */
 Blockly.Field.prototype.updateWidth = function() {
   var width = Blockly.Field.getCachedWidth(this.textElement_);
+  
+  var textX = -1;
+
+  //Make sure that the width of the text field is at least 16 pixels (otherwise its fugly) 
+  if (width < 16) {
+    //Also, recalculate how much the text should be pushed (because it's smaller and would not be centered)
+    textX = (16 - width) / 2;
+    width = 16;
+  } 
+
+  this.textElement_.setAttribute("x", textX);
+  
   if (this.borderRect_) {
     this.borderRect_.setAttribute('width',
         width + Blockly.BlockSvg.SEP_SPACE_X);

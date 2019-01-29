@@ -41,7 +41,8 @@ goog.require('goog.math.Size');
  * @constructor
  */
 Blockly.FieldLabel = function(text, opt_class) {
-  this.size_ = new goog.math.Size(0, 17.5);
+  //SHAPE: Changed hardcoded size to represent our font's actual size better.
+  this.size_ = new goog.math.Size(0, 18);
   this.class_ = opt_class;
   this.setValue(text);
   this.tooltip_ = '';
@@ -76,7 +77,7 @@ Blockly.FieldLabel.prototype.init = function() {
   }
   // Build the DOM.
   this.textElement_ = Blockly.utils.createSvgElement('text',
-      {'class': 'blocklyText', 'y': this.size_.height - 5}, null);
+      {'class': 'blocklyText', 'y': this.size_.height - 2}, null);
   if (this.class_) {
     Blockly.utils.addClass(this.textElement_, this.class_);
   }

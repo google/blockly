@@ -70,21 +70,45 @@ Blockly.BlockSvg.PathObject = function() {
  * @const
  */
 Blockly.BlockSvg.SEP_SPACE_X = 10;
+
 /**
  * Vertical space between elements.
  * @const
  */
 Blockly.BlockSvg.SEP_SPACE_Y = 10;
+
 /**
  * Vertical padding around inline elements.
  * @const
  */
-Blockly.BlockSvg.INLINE_PADDING_Y = 7.5;
+Blockly.BlockSvg.INLINE_PADDING_Y = 5;
+
 /**
  * Minimum height of a block.
  * @const
  */
-Blockly.BlockSvg.MIN_BLOCK_Y = 30;
+Blockly.BlockSvg.MIN_BLOCK_Y = 25;
+
+/**
+ * VERTICAL(!) Margin (empty space) that is added to the top and bottom of each block.
+ * Added before the first line of a block and after the last line of it.
+ * NOTE: USED WHEN THE BLOCK HAS AN ICON.
+ */
+Blockly.BlockSvg.Y_MARGIN_TOP_WITH_IMAGE = 15;
+
+/**
+ * VERTICAL(!) Margin (empty space) that is added to the top and bottom of each block.
+ * Added before the first line of a block and after the last line of it.
+ * NOTE: USED WHEN THE BLOCK DOES NOT HAVE AN ICON.
+ */
+Blockly.BlockSvg.Y_MARGIN_TOP = 5;
+
+/**
+ * VERTICAL(!) Margin (empty space) that is added between lines in each block.
+ * If only 1 line exists, this will not be added.
+ */
+Blockly.BlockSvg.ROW_SPACING = 5;
+
 /**
  * Height of horizontal puzzle tab.
  * @const
@@ -105,16 +129,19 @@ Blockly.BlockSvg.NOTCH_WIDTH = 30;
  * @const
  */
 Blockly.BlockSvg.CORNER_RADIUS = 8;
+
 /**
  * Do blocks with no previous or output connections have a 'hat' on top?
  * @const
  */
 Blockly.BlockSvg.START_HAT = false;
+
 /**
  * Height of the top hat.
  * @const
  */
 Blockly.BlockSvg.START_HAT_HEIGHT = 15;
+
 /**
  * Path of the top hat's curve.
  * @const
@@ -122,7 +149,8 @@ Blockly.BlockSvg.START_HAT_HEIGHT = 15;
 Blockly.BlockSvg.START_HAT_PATH = 'c 30,-' +
     Blockly.BlockSvg.START_HAT_HEIGHT + ' 70,-' +
     Blockly.BlockSvg.START_HAT_HEIGHT + ' 100,0';
-/**
+
+    /**
  * Path of the top hat's curve's highlight in LTR.
  * @const
  */
@@ -334,6 +362,8 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   // width that the first label needs to move over by.
 
   var inputRows = this.renderCompute_(cursorX);
+  //Add some margin (aka spacing) to each line, based on WHICH line it is (ex. line 1 will get a bit of space added at the top, the last line will get some space added to the bottom, etc)
+  inputRows = this.renderComputeSpacing_(inputRows);
   this.renderDraw_(cursorX, inputRows);
   this.renderMoveConnections_();
 
@@ -352,34 +382,60 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
 
 /**
  * Render a list of fields starting at the specified location.
+ * SHAPE: This method renders A SINGLE LINE, meaning that it goes through all the fields on that line,
+ * and renders them all.
  * @param {!Array.<!Blockly.Field>} fieldList List of fields.
  * @param {number} cursorX X-coordinate to start the fields.
  * @param {number} cursorY Y-coordinate to start the fields.
+ * @param {number} rowHeight Height of the entire row. Used to vertically align elements.
  * @return {number} X-coordinate of the end of the field row (plus a gap).
  * @private
  */
 Blockly.BlockSvg.prototype.renderFields_ = function(fieldList,
-    cursorX, cursorY) {
-  cursorY += Blockly.BlockSvg.INLINE_PADDING_Y;
+    cursorX, cursorY, rowHeight) {
+  //SHAPE: Adding a static 5 (or 7, whatever) pixels to the top of the line is now redundant.
+  // cursorY += Blockly.BlockSvg.INLINE_PADDING_Y;
   if (this.RTL) {
     cursorX = -cursorX;
   }
+  //Loop through every field on the line
   for (var t = 0, field; field = fieldList[t]; t++) {
     var root = field.getSvgRoot();
     if (!root) {
       continue;
     }
 
+    //SHAPE: Calculate how much the element should be pushed down. This will ensure vertical alignment.
+    //Basic logic - instead of using the "top" of the line (aka cursorY), use it only as a "starting" point.
+    //Then, based on the height of the line and the line of the element (either element.height_ or element.size.height_ depending on the type of field),
+    //calculate how much that element needs to be pushed down from the "starting" point. This is saved in yPos.
+
+
+    var yPos = cursorY;
+
+    //Use the height_ element, if available (ex. available in FieldImage)
+    if (field.height_) {
+        if (field.height_ < rowHeight) {
+            yPos += ((rowHeight - field.height_) / 2);
+        }
+    }
+    //If not, use size_.height, if available (ex. most other field types)
+    else if (field.size_.height) {
+        if (field.size_.height < rowHeight) {
+            yPos += ((rowHeight - field.size_.height) / 2);
+        }
+    }
+
     if (this.RTL) {
       cursorX -= field.renderSep + field.renderWidth;
       root.setAttribute('transform',
-          'translate(' + cursorX + ',' + cursorY + ')');
+          'translate(' + cursorX + ',' + yPos + ')');
       if (field.renderWidth) {
         cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
       }
     } else {
       root.setAttribute('transform',
-          'translate(' + (cursorX + field.renderSep) + ',' + cursorY + ')');
+          'translate(' + (cursorX + field.renderSep) + ',' + yPos + ')');
       if (field.renderWidth) {
         cursorX += field.renderSep + field.renderWidth +
             Blockly.BlockSvg.SEP_SPACE_X;
@@ -432,7 +488,10 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       } else {
         row.type = input.type;
       }
+      //SHAPE: height is the TOTAL physical height of the row. Alignment height is just the part of it that will be used for alignment.
+      //Difference - if a block is inside another block (and has multiple lines), the "parent" block shouldn't align based on the ENTIRE height of the inner block.
       row.height = 0;
+      row.alignmentHeight = 0;
       inputRows.push(row);
     } else {
       row = inputRows[inputRows.length - 1];
@@ -441,6 +500,8 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
 
     // Compute minimum input size.
     input.renderHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
+    input.alignmentHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
+    
     // The width is currently only needed for inline value inputs.
     if (isInline && input.type == Blockly.INPUT_VALUE) {
       input.renderWidth = Blockly.BlockSvg.TAB_WIDTH +
@@ -453,8 +514,12 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       var linkedBlock = input.connection.targetBlock();
       var bBox = linkedBlock.getHeightWidth();
       input.renderHeight = Math.max(input.renderHeight, bBox.height);
+      input.alignmentHeight = Math.max(input.alignmentHeight, linkedBlock.firstRowHeight);
       input.renderWidth = Math.max(input.renderWidth, bBox.width);
+      //SHAPE: If the block has an inner block (AND it is connected), mark this. Required because blocks with blocks in them MUST NOT have margins added to top/bottom.
+      row.hasInput = true;
     }
+    
     // Blocks have a one pixel shadow that should sometimes overhang.
     if (!isInline && i == inputList.length - 1) {
       // Last value input should overhang.
@@ -466,6 +531,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
     }
 
     row.height = Math.max(row.height, input.renderHeight);
+    row.alignmentHeight = Math.max(row.alignmentHeight, input.alignmentHeight);
     input.fieldWidth = 0;
     if (inputRows.length == 1) {
       // The first row gets shifted to accommodate any icons.
@@ -483,7 +549,13 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
           Blockly.BlockSvg.SEP_SPACE_X : 0;
       input.fieldWidth += field.renderWidth + field.renderSep;
       row.height = Math.max(row.height, fieldSize.height);
+      row.alignmentHeight = Math.max(row.alignmentHeight, fieldSize.height);
       previousFieldEditable = field.EDITABLE;
+      
+      //SHAPE: If the field has an image property, mark the row as having an icon. Used for margins.
+      if (field.imageElement_) {
+        row.hasImage = true;
+      }
     }
 
     if (row.type != Blockly.BlockSvg.INLINE) {
@@ -500,19 +572,20 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       }
     }
   }
-
+  
   // Make inline rows a bit thicker in order to enclose the values.
   for (var y = 0, row; row = inputRows[y]; y++) {
     row.thicker = false;
-    if (row.type == Blockly.BlockSvg.INLINE) {
-      for (var z = 0, input; input = row[z]; z++) {
-        if (input.type == Blockly.INPUT_VALUE) {
-          row.height += 2 * Blockly.BlockSvg.INLINE_PADDING_Y;
-          row.thicker = true;
-          break;
-        }
-      }
-    }
+    //SHAPE: Removed this as it makes blocks 10 pixels taller if there is another block inside them.	
+    // if (row.type == Blockly.BlockSvg.INLINE) {
+    //   for (var z = 0, input; input = row[z]; z++) {
+    //     if (input.type == Blockly.INPUT_VALUE) {
+    //       row.height += 2 * Blockly.BlockSvg.INLINE_PADDING_Y;
+    //       row.thicker = true;
+    //       break;
+    //     }
+    //   }
+    // }
   }
 
   // Compute the statement edge.
@@ -536,6 +609,57 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
   inputRows.hasValue = hasValue;
   inputRows.hasStatement = hasStatement;
   inputRows.hasDummy = hasDummy;
+  return inputRows;
+};
+
+/**
+ * Adds margins to each line of the block.
+ * This ensures there is some empty space and no line 
+ * is way too tight around the lines of the block.
+ * 
+ * @param {!Array.<!Array.<!Object>>} inputRows List of rows inside the block,
+ * with their metadata about height in them. Created by the renderCompute_ method.
+ * 
+ * @returns Same list, but with adjusted heights.
+ */
+Blockly.BlockSvg.prototype.renderComputeSpacing_ = function(inputRows) {
+  //Go through every line
+  for (var y = 0, row; row = inputRows[y]; y++) {
+    //If the row has a block in it, skip adding the margin. Otherwise extra margin is added multiple times.
+    if ((row.type == Blockly.INPUT_VALUE || row.type == Blockly.NEXT_STATEMENT) && row.hasInput) {
+      continue;
+    }
+
+    //Add some margin to the FIRST line of the block
+    if (y == 0) {
+      if (row.hasImage) {
+        row.height += Blockly.BlockSvg.Y_MARGIN_TOP_WITH_IMAGE;
+        row.alignmentHeight += Blockly.BlockSvg.Y_MARGIN_TOP_WITH_IMAGE;
+      }
+      else {
+        row.height += Blockly.BlockSvg.Y_MARGIN_TOP;
+        row.alignmentHeight += Blockly.BlockSvg.Y_MARGIN_TOP;
+      }
+    }
+
+    //Add some margin to the LAST line of the block (if only 1 line, it's the same as the first line)
+    if (y + 1 == inputRows.length) {
+      if (row.hasImage) {
+        row.height += Blockly.BlockSvg.Y_MARGIN_TOP_WITH_IMAGE;
+        row.alignmentHeight += Blockly.BlockSvg.Y_MARGIN_TOP_WITH_IMAGE;
+      }
+      else {
+        row.height += Blockly.BlockSvg.Y_MARGIN_TOP;
+        row.alignmentHeight += Blockly.BlockSvg.Y_MARGIN_TOP;
+      }
+    }
+    //If any other line in the block, just add the ROW_SPACING margin
+    else {
+      row.height += Blockly.BlockSvg.ROW_SPACING;
+      row.alignmentHeight += Blockly.BlockSvg.ROW_SPACING;
+    }
+  }
+
   return inputRows;
 };
 
@@ -588,7 +712,7 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
   this.renderDrawTop_(pathObject, inputRows.rightEdge);
   var cursorY = this.renderDrawRight_(pathObject, inputRows, iconWidth);
   this.renderDrawBottom_(pathObject, cursorY);
-  this.renderDrawLeft_(pathObject);
+  this.renderDrawLeft_(pathObject, inputRows);
 
   this.setPaths_(pathObject);
 };
@@ -608,7 +732,8 @@ Blockly.BlockSvg.prototype.setPaths_ = function(pathObject) {
 
   pathString = pathObject.highlightSteps.join(' ') + '\n' +
       pathObject.highlightInlineSteps.join(' ');
-  this.svgPathLight_.setAttribute('d', pathString);
+  //SHAPE: We removed the highlight line around blocks.
+  // this.svgPathLight_.setAttribute('d', pathString);
   if (this.RTL) {
     // Mirror the block's path.
     this.svgPath_.setAttribute('transform', 'scale(-1 1)');
@@ -786,7 +911,7 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ = function(pathObject, cursorY) {
   if (this.squareBottomLeftCorner_) {
     steps.push('H 0');
     if (!this.RTL) {
-      highlightSteps.push('M', '0.5,' + (cursorY - 0.5));
+      highlightSteps.push('M', '0.5,' + (cursorY + 0.5));
     }
   } else {
     steps.push('H', Blockly.BlockSvg.CORNER_RADIUS);
@@ -805,18 +930,31 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ = function(pathObject, cursorY) {
 };
 
 /**
- * Render the left edge of the block.
+ * Render the left edge of the block. This also renders a "puzzle" piece to the left of the block (used in blocks that provide output).
  * @param {!Blockly.BlockSvg.PathObject} pathObject The object containing
  *     partially constructed SVG paths, which will be modified by this function.
+ * @param {!Array.<!Array.<!Object>>} inputRows 2D array of objects, each
+ *     containing position information. Used to calculate the height of the VERY FIRST LINE
+ *     of a block, so the "puzzle" piece can be vertically centered based on that first line.
+ *     NOTE: This is done ONLY on the first line, otherwise centering can become very very ugly if the puzzle piece is centered in the middle of the entire block.
  * @private
  */
-Blockly.BlockSvg.prototype.renderDrawLeft_ = function(pathObject) {
+Blockly.BlockSvg.prototype.renderDrawLeft_ = function(pathObject, inputRows) {
   var steps = pathObject.steps;
   var highlightSteps = pathObject.highlightSteps;
+
+  //SHAPE: This will calculate the vertical middle of the first row, so the "puzzle" piece can be centered there.
+  //SHAPE: On blocks with multiple lines, it will still render the "puzzle" piece in the middle of the first row. Reason - it's very ugly otherwise.
+  //TODO: Maybe, just maybe check if a "first" line exist. Even though it always should.
+  this.firstRowHeight = inputRows[0].height;
+
   if (this.outputConnection) {
+    //SHAPE: 15 is hardcoded because the entire svg path of the "puzzle" piece is also hardcoded and has 15 in it.
+    var tabHeight = ((this.firstRowHeight - 15) / 2) + 15;
+
     // Create output connection.
     this.outputConnection.setOffsetInBlock(0, 0);
-    steps.push('V', Blockly.BlockSvg.TAB_HEIGHT);
+    steps.push('V', tabHeight);
     steps.push('c 0,-10 -' + Blockly.BlockSvg.TAB_WIDTH + ',8 -' +
         Blockly.BlockSvg.TAB_WIDTH + ',-7.5 s ' + Blockly.BlockSvg.TAB_WIDTH +
         ',2.5 ' + Blockly.BlockSvg.TAB_WIDTH + ',-7.5');
@@ -824,7 +962,7 @@ Blockly.BlockSvg.prototype.renderDrawLeft_ = function(pathObject) {
       highlightSteps.push('M', (Blockly.BlockSvg.TAB_WIDTH * -0.25) + ',8.4');
       highlightSteps.push('l', (Blockly.BlockSvg.TAB_WIDTH * -0.45) + ',-2.1');
     } else {
-      highlightSteps.push('V', Blockly.BlockSvg.TAB_HEIGHT - 1.5);
+      highlightSteps.push('V', tabHeight - 1.5);
       highlightSteps.push('m', (Blockly.BlockSvg.TAB_WIDTH * -0.92) +
                           ',-0.5 q ' + (Blockly.BlockSvg.TAB_WIDTH * -0.19) +
                           ',-5.5 0,-11');
@@ -858,7 +996,7 @@ Blockly.BlockSvg.prototype.renderJaggedEdge_ = function(pathObject, row,
   var steps = pathObject.steps;
   var highlightSteps = pathObject.highlightSteps;
   var input = row[0];
-  this.renderFields_(input.fieldRow, cursor.x, cursor.y);
+  this.renderFields_(input.fieldRow, cursor.x, cursor.y, row.alignmentHeight);
   steps.push(Blockly.BlockSvg.JAGGED_TEETH);
   highlightSteps.push('h 8');
   var remainder = row.height - Blockly.BlockSvg.JAGGED_TEETH_HEIGHT;
@@ -899,18 +1037,45 @@ Blockly.BlockSvg.prototype.renderInlineRow_ = function(pathObject, row, cursor,
       fieldY += Blockly.BlockSvg.INLINE_PADDING_Y;
     }
     // TODO: Align inline field rows (left/right/centre).
-    cursor.x = this.renderFields_(input.fieldRow, fieldX, fieldY);
+    cursor.x = this.renderFields_(input.fieldRow, fieldX, fieldY, row.alignmentHeight);
     if (input.type != Blockly.DUMMY_INPUT) {
       cursor.x += input.renderWidth + Blockly.BlockSvg.SEP_SPACE_X;
     }
+    //SHAPE: Check if there is another block inside this block.
     if (input.type == Blockly.INPUT_VALUE) {
+      //SHAPE: Calculate the y-axis start of this inner block. This will align the inner block so it's centered.
+      var yStart = (row.height - input.renderHeight) / 2;
+
+      //Empty connections should be pushed up by 2 pixels.
+      if (!input.connection.isConnected()) {
+        yStart = yStart - 2;
+      }
+
       inlineSteps.push('M', (cursor.x - Blockly.BlockSvg.SEP_SPACE_X) +
-                       ',' + (cursor.y + Blockly.BlockSvg.INLINE_PADDING_Y));
+                       ',' + (cursor.y + yStart));
       inlineSteps.push('h', Blockly.BlockSvg.TAB_WIDTH - 2 -
                        input.renderWidth);
+
+      //SHAPE: Recalculate the vertical alignment of an INNER "puzzle" piece
+      //SHAPE: Subtract 7.5 because the TAB_PATH_DOWN variable underneath adds it via a hardcoded value
+      var vLineHeight = 1 + ((input.alignmentHeight - 15) / 2) - 7.5;
+
+      if (vLineHeight > 0) {
+         inlineSteps.push('v', vLineHeight);
+      }
+
+      //Add the "puzzle" piece
       inlineSteps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
-      inlineSteps.push('v', input.renderHeight + 1 -
-                            Blockly.BlockSvg.TAB_HEIGHT);
+      
+      //SHAPE: Calculate the rest of the vertical line and add 2.
+      var restOfHeight = 1 + (input.renderHeight - 15 - vLineHeight - 7.5);
+
+      if (input.renderHeight == input.alignmentHeight) {
+        restOfHeight = vLineHeight + 7.5;
+      }
+
+      inlineSteps.push('v', restOfHeight);
+
       inlineSteps.push('h', input.renderWidth + 2 -
                        Blockly.BlockSvg.TAB_WIDTH);
       inlineSteps.push('z');
@@ -919,26 +1084,27 @@ Blockly.BlockSvg.prototype.renderInlineRow_ = function(pathObject, row, cursor,
         highlightInlineSteps.push('M',
             (cursor.x - Blockly.BlockSvg.SEP_SPACE_X - 2.5 +
              Blockly.BlockSvg.TAB_WIDTH - input.renderWidth) + ',' +
-            (cursor.y + Blockly.BlockSvg.INLINE_PADDING_Y + 0.5));
+            (cursor.y + yStart + 0.5));
         highlightInlineSteps.push(
             Blockly.BlockSvg.TAB_PATH_DOWN_HIGHLIGHT_RTL);
         highlightInlineSteps.push('v',
-            input.renderHeight - Blockly.BlockSvg.TAB_HEIGHT + 2.5);
+            input.renderHeight - restOfHeight + 2.5);
         highlightInlineSteps.push('h',
             input.renderWidth - Blockly.BlockSvg.TAB_WIDTH + 2);
       } else {
         // Highlight right edge, bottom.
         highlightInlineSteps.push('M',
             (cursor.x - Blockly.BlockSvg.SEP_SPACE_X + 0.5) + ',' +
-            (cursor.y + Blockly.BlockSvg.INLINE_PADDING_Y + 0.5));
+            (cursor.y + yStart + 0.5));
         highlightInlineSteps.push('v', input.renderHeight + 1);
         highlightInlineSteps.push('h', Blockly.BlockSvg.TAB_WIDTH - 2 -
                                        input.renderWidth);
         // Short highlight glint at bottom of tab.
+        //SHAPE: Hardcoded values because of the hardcoded SVG paths
         highlightInlineSteps.push('M',
             (cursor.x - input.renderWidth - Blockly.BlockSvg.SEP_SPACE_X +
-             0.9) + ',' + (cursor.y + Blockly.BlockSvg.INLINE_PADDING_Y +
-             Blockly.BlockSvg.TAB_HEIGHT - 0.7));
+             0.9) + ',' + (cursor.y + yStart +
+             vLineHeight + 7.5 + 15 - 0.7));
         highlightInlineSteps.push('l',
             (Blockly.BlockSvg.TAB_WIDTH * 0.46) + ',-2.1');
       }
@@ -952,15 +1118,16 @@ Blockly.BlockSvg.prototype.renderInlineRow_ = function(pathObject, row, cursor,
             Blockly.BlockSvg.TAB_WIDTH - Blockly.BlockSvg.SEP_SPACE_X -
             input.renderWidth - 1;
       }
-      connectionPos.y = cursor.y + Blockly.BlockSvg.INLINE_PADDING_Y + 1;
+      connectionPos.y = cursor.y + yStart + 1;
       input.connection.setOffsetInBlock(connectionPos.x, connectionPos.y);
+      input.connection.addHighlightMargin(vLineHeight, restOfHeight);
     }
   }
 
   cursor.x = Math.max(cursor.x, rightEdge);
   this.width = Math.max(this.width, cursor.x);
   steps.push('H', cursor.x);
-  highlightSteps.push('H', cursor.x - 0.5);
+  highlightSteps.push('H', cursor.x + 0.5);
   steps.push('v', row.height);
   if (this.RTL) {
     highlightSteps.push('v', row.height - 1);
@@ -998,24 +1165,39 @@ Blockly.BlockSvg.prototype.renderExternalValueInput_ = function(pathObject, row,
       fieldX += fieldRightX / 2;
     }
   }
-  this.renderFields_(input.fieldRow, fieldX, fieldY);
+  this.renderFields_(input.fieldRow, fieldX, fieldY, row.alignmentHeight);
+
+  //SHAPE: Figure out where the "puzzle" piece of the inner block is vertically positioned.
+  //Done because the "parent" block needs a hole in it that has a "puzzle" piece to the left
+  //Numbers are hardcoded because the SVG path of the puzzle piece is also hardcoded
+  var topVerticalLine = ((row.height - 15) / 2) - 7.5;
+
+  if (topVerticalLine < 0) {
+    topVerticalLine = 0;
+  }
+
+  steps.push('v', topVerticalLine);
+
   steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
-  var v = row.height - Blockly.BlockSvg.TAB_HEIGHT;
+  var v = row.height - Blockly.BlockSvg.TAB_HEIGHT - topVerticalLine;
   steps.push('v', v);
+
   if (this.RTL) {
     // Highlight around back of tab.
+    highlightSteps.push('v', topVerticalLine);
     highlightSteps.push(Blockly.BlockSvg.TAB_PATH_DOWN_HIGHLIGHT_RTL);
     highlightSteps.push('v', v + 0.5);
   } else {
     // Short highlight glint at bottom of tab.
     highlightSteps.push('M', (rightEdge - 5) + ',' +
-        (cursor.y + Blockly.BlockSvg.TAB_HEIGHT - 0.7));
+        (cursor.y + Blockly.BlockSvg.TAB_HEIGHT + topVerticalLine - 0.7));
     highlightSteps.push('l', (Blockly.BlockSvg.TAB_WIDTH * 0.46) +
         ',-2.1');
   }
   // Create external input connection.
   connectionPos.x = this.RTL ? -rightEdge - 1 : rightEdge + 1;
   input.connection.setOffsetInBlock(connectionPos.x, cursor.y);
+  input.connection.addHighlightMargin(topVerticalLine, v);
   if (input.connection.isConnected()) {
     this.width = Math.max(this.width, rightEdge +
         input.connection.targetBlock().getHeightWidth().width -
@@ -1055,7 +1237,7 @@ Blockly.BlockSvg.prototype.renderDummyInput_ = function(pathObject, row,
       fieldX += fieldRightX / 2;
     }
   }
-  this.renderFields_(input.fieldRow, fieldX, fieldY);
+  this.renderFields_(input.fieldRow, fieldX, fieldY, row.alignmentHeight);
   steps.push('v', row.height);
   if (this.RTL) {
     highlightSteps.push('v', row.height - 1);
@@ -1102,7 +1284,7 @@ Blockly.BlockSvg.prototype.renderStatementInput_ = function(pathObject, row,
       fieldX += fieldRightX / 2;
     }
   }
-  this.renderFields_(input.fieldRow, fieldX, fieldY);
+  this.renderFields_(input.fieldRow, fieldX, fieldY, row.alignmentHeight);
   cursor.x = inputRows.statementEdge + Blockly.BlockSvg.NOTCH_WIDTH;
   steps.push('H', cursor.x);
   steps.push(Blockly.BlockSvg.INNER_TOP_LEFT_CORNER);

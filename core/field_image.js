@@ -49,8 +49,8 @@ Blockly.FieldImage = function(src, width, height, opt_alt, opt_onClick) {
   // Ensure height and width are numbers.  Strings are bad at math.
   this.height_ = Number(height);
   this.width_ = Number(width);
-  this.size_ = new goog.math.Size(this.width_,
-      this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
+  //SHAPE: Removed dependence on constants from blockly_render_svg which shouldn't be referenced anyways.
+  this.size_ = new goog.math.Size(this.width_, this.height_);
   this.text_ = opt_alt || '';
   this.tooltip_ = '';
   this.setValue(src);

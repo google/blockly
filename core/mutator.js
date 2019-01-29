@@ -67,15 +67,17 @@ Blockly.Mutator.prototype.workspaceHeight_ = 0;
  * @private
  */
 Blockly.Mutator.prototype.drawIcon_ = function(group) {
+  var scale = this.SIZE / this.REFERENCE_SIZE;
+
   // Square with rounded corners.
   //SHAPE: Radius changed from 4 to 8 from blockly_changes
   Blockly.utils.createSvgElement('rect',
       {
         'class': 'blocklyIconShape',
-        'rx': '8',
-        'ry': '8',
-        'height': '16',
-        'width': '16'
+        'rx': 8 * scale,
+        'ry': 8 * scale,
+        'height': 16 * scale,
+        'width': 16 * scale
       },
       group);
   // Gear teeth.
@@ -88,7 +90,8 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
              '-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,' +
              '-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 ' +
              '-0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,' +
-             '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z'
+             '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z',
+        'transform': 'scale(' + scale + ', ' + scale + ')',
       },
       group);
   // Axle hole.
@@ -96,9 +99,9 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
       'circle',
       {
         'class': 'blocklyIconShape',
-        'r': '2.7',
-        'cx': '8',
-        'cy': '8'
+        'r': 2.7 * scale,
+        'cx': 8 * scale,
+        'cy': 8 * scale
       },
       group);
 };

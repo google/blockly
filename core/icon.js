@@ -48,7 +48,9 @@ Blockly.Icon.prototype.collapseHidden = true;
 /**
  * Height and width of icons.
  */
-Blockly.Icon.prototype.SIZE = 17;
+Blockly.Icon.prototype.SIZE = 22;
+
+Blockly.Icon.prototype.REFERENCE_SIZE = 16;
 
 /**
  * Bubble UI (if visible).
@@ -154,14 +156,13 @@ Blockly.Icon.prototype.renderIcon = function(cursorX) {
   }
   this.iconGroup_.setAttribute('display', 'block');
 
-  //SHAPE: Changed to 7.5 from blockly_changes. Was 5 before.
-  var TOP_MARGIN = 7.5;
   var width = this.SIZE;
   if (this.block_.RTL) {
     cursorX -= width;
   }
   this.iconGroup_.setAttribute('transform',
-      'translate(' + cursorX + ',' + TOP_MARGIN + ')');
+      'translate(' + cursorX + ',' + 0 + ')');
+  this.transformX = cursorX;
   this.computeIconLocation();
   if (this.block_.RTL) {
     cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
@@ -169,6 +170,17 @@ Blockly.Icon.prototype.renderIcon = function(cursorX) {
     cursorX += width + Blockly.BlockSvg.SEP_SPACE_X;
   }
   return cursorX;
+};
+
+Blockly.Icon.prototype.moveVertical = function(rowHeight) {
+  if (this.transformX) {
+    var y = (rowHeight - this.SIZE) / 2;
+    this.iconGroup_.setAttribute('transform',
+        'translate(' + this.transformX + ',' + y + ')');
+    this.computeIconLocation();
+  } else {
+    setTimeout(this.moveVertical(rowHeight), 100);
+  }
 };
 
 /**

@@ -364,6 +364,13 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   var inputRows = this.renderCompute_(cursorX);
   //Add some margin (aka spacing) to each line, based on WHICH line it is (ex. line 1 will get a bit of space added at the top, the last line will get some space added to the bottom, etc)
   inputRows = this.renderComputeSpacing_(inputRows);
+
+  if (inputRows) {
+    for (var i = 0; i < icons.length; i++) {
+      icons[i].moveVertical(inputRows[0].alignmentHeight);
+    }
+  }
+
   this.renderDraw_(cursorX, inputRows);
   this.renderMoveConnections_();
 

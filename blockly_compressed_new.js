@@ -13278,7 +13278,8 @@ Blockly.Icon = function(a) {
     this.block_ = a
 };
 Blockly.Icon.prototype.collapseHidden = !0;
-Blockly.Icon.prototype.SIZE = 17;
+Blockly.Icon.prototype.SIZE = 22;
+Blockly.Icon.prototype.REFERENCE_SIZE = 16;
 Blockly.Icon.prototype.bubble_ = null;
 Blockly.Icon.prototype.iconXY_ = null;
 Blockly.Icon.prototype.createIcon = function() {
@@ -13307,9 +13308,13 @@ Blockly.Icon.prototype.renderIcon = function(a) {
     this.iconGroup_.setAttribute("display", "block");
     var b = this.SIZE;
     this.block_.RTL && (a -= b);
-    this.iconGroup_.setAttribute("transform", "translate(" + a + ",7.5)");
+    this.iconGroup_.setAttribute("transform", "translate(" + a + ",0)");
+    this.transformX = a;
     this.computeIconLocation();
     return a = this.block_.RTL ? a - Blockly.BlockSvg.SEP_SPACE_X : a + (b + Blockly.BlockSvg.SEP_SPACE_X)
+};
+Blockly.Icon.prototype.moveVertical = function(a) {
+    this.transformX ? (this.iconGroup_.setAttribute("transform", "translate(" + this.transformX + "," + (a - this.SIZE) / 2 + ")"), this.computeIconLocation()) : setTimeout(this.moveVertical(a), 100)
 };
 Blockly.Icon.prototype.setIconLocation = function(a) {
     this.iconXY_ = a;
@@ -13333,22 +13338,24 @@ Blockly.Comment.prototype.text_ = "";
 Blockly.Comment.prototype.width_ = 160;
 Blockly.Comment.prototype.height_ = 80;
 Blockly.Comment.prototype.drawIcon_ = function(a) {
+    var b = this.SIZE / this.REFERENCE_SIZE;
     Blockly.utils.createSvgElement("circle", {
         "class": "blocklyIconShape",
-        r: "8",
-        cx: "8",
-        cy: "8"
+        r: 8 * b,
+        cx: 8 * b,
+        cy: 8 * b
     }, a);
     Blockly.utils.createSvgElement("path", {
         "class": "blocklyIconSymbol",
-        d: "m6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.4050.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25-1.201,0.998 -1.201,1.528 -1.204,2.19z"
+        d: "m6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.4050.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25-1.201,0.998 -1.201,1.528 -1.204,2.19z",
+        transform: "scale(" + b + ", " + b + ")"
     }, a);
     Blockly.utils.createSvgElement("rect", {
         "class": "blocklyIconSymbol",
-        x: "6.8",
-        y: "10.78",
-        height: "2",
-        width: "2"
+        x: 6.8 * b,
+        y: 10.78 * b,
+        height: 2 * b,
+        width: 2 * b
     }, a)
 };
 Blockly.Comment.prototype.createEditor_ = function() {
@@ -16626,22 +16633,25 @@ goog.inherits(Blockly.Mutator, Blockly.Icon);
 Blockly.Mutator.prototype.workspaceWidth_ = 0;
 Blockly.Mutator.prototype.workspaceHeight_ = 0;
 Blockly.Mutator.prototype.drawIcon_ = function(a) {
+    var b = this.SIZE / this.REFERENCE_SIZE;
     Blockly.utils.createSvgElement("rect", {
         "class": "blocklyIconShape",
-        rx: "8",
-        ry: "8",
-        height: "16",
-        width: "16"
+        rx: 8 * b,
+        ry: 8 * b,
+        height: 16 * b,
+        width: 16 * b
     }, a);
     Blockly.utils.createSvgElement("path", {
         "class": "blocklyIconSymbol",
-        d: "m4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,0.11 1.043,-0.457 1.187,0.683 0.127,1.134 0.3,0.3 1.8,0 0.3,-0.299 0.127,-1.138 1.185,-0.682 1.046,0.458 0.409,-0.11 0.9,-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 -0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z"
+        d: "m4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,0.11 1.043,-0.457 1.187,0.683 0.127,1.134 0.3,0.3 1.8,0 0.3,-0.299 0.127,-1.138 1.185,-0.682 1.046,0.458 0.409,-0.11 0.9,-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 -0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z",
+        transform: "scale(" +
+            b + ", " + b + ")"
     }, a);
     Blockly.utils.createSvgElement("circle", {
         "class": "blocklyIconShape",
-        r: "2.7",
-        cx: "8",
-        cy: "8"
+        r: 2.7 * b,
+        cx: 8 * b,
+        cy: 8 * b
     }, a)
 };
 Blockly.Mutator.prototype.iconClick_ = function(a) {
@@ -17176,20 +17186,24 @@ Blockly.Warning = function(a) {
 goog.inherits(Blockly.Warning, Blockly.Icon);
 Blockly.Warning.prototype.collapseHidden = !1;
 Blockly.Warning.prototype.drawIcon_ = function(a) {
+    var b = this.SIZE / this.REFERENCE_SIZE;
     Blockly.utils.createSvgElement("path", {
         "class": "blocklyIconShape",
-        d: "M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z"
+        d: "M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z",
+        transform: "scale(" + b + ", " + b + ")"
     }, a);
     Blockly.utils.createSvgElement("path", {
         "class": "blocklyIconSymbol",
-        d: "m7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z"
+        d: "m7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z",
+        transform: "scale(" + b + ", " + b + ")"
     }, a);
     Blockly.utils.createSvgElement("rect", {
         "class": "blocklyIconSymbol",
-        x: "7",
-        y: "11",
-        height: "2",
-        width: "2"
+        x: 7 * b,
+        y: 11 * b,
+        height: 2 * b,
+        width: 2 *
+            b
     }, a)
 };
 Blockly.Warning.textToDom_ = function(a) {
@@ -18533,11 +18547,13 @@ Blockly.BlockSvg.prototype.render = function(a) {
     this.RTL && (b = -b);
     for (var c = this.getIcons(), d = 0; d < c.length; d++) b = c[d].renderIcon(b);
     b += this.RTL ? Blockly.BlockSvg.SEP_SPACE_X : -Blockly.BlockSvg.SEP_SPACE_X;
-    c = this.renderCompute_(b);
-    c = this.renderComputeSpacing_(c);
-    this.renderDraw_(b, c);
+    var e = this.renderCompute_(b);
+    if (e = this.renderComputeSpacing_(e))
+        for (d = 0; d < c.length; d++) c[d].moveVertical(e[0].alignmentHeight);
+    this.renderDraw_(b, e);
     this.renderMoveConnections_();
-    !1 !== a && ((a = this.getParent()) ? a.render(!0) : this.workspace.resizeContents());
+    !1 !== a && ((a = this.getParent()) ? a.render(!0) :
+        this.workspace.resizeContents());
     Blockly.Field.stopCache()
 };
 Blockly.BlockSvg.prototype.renderFields_ = function(a, b, c, d) {

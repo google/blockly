@@ -65,7 +65,7 @@ Blockly.ZoomControls.prototype.MARGIN_BOTTOM_ = 20;
  * @type {number}
  * @private
  */
-Blockly.ZoomControls.prototype.MARGIN_SIDE_ = 20;
+Blockly.ZoomControls.prototype.MARGIN_SIDE_ = 28;
 
 /**
  * The SVG group containing the zoom controls.

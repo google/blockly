@@ -79,7 +79,7 @@ Blockly.FieldDropdown.fromJson = function(options) {
 /**
  * Horizontal distance that a checkmark overhangs the dropdown.
  */
-Blockly.FieldDropdown.CHECKMARK_OVERHANG = 25;
+Blockly.FieldDropdown.CHECKMARK_OVERHANG = 0;
 
 /**
  * Maximum height of the dropdown menu, as a percentage of the viewport height.
@@ -482,6 +482,9 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
     this.textElement_.setAttribute('text-anchor', 'end');
     this.textElement_.setAttribute('x', this.size_.width + 1);
   }
+
+  //SHAPE: Added from blockly_changes
+  this.textElement_.setAttribute('transform', 'translate(0,0)');
 };
 
 /**
@@ -502,7 +505,11 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   this.textElement_.setAttribute('text-anchor', 'start');
   this.textElement_.setAttribute('x', 0);
 
-  this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y;
+  //SHAPE: Added from blockly_changes
+  this.textElement_.setAttribute('transform', 'translate(0,0)');
+
+  //SHAPE: +5 added from blockly_changes
+  this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y + 5;
   this.size_.width = Blockly.Field.getCachedWidth(this.textElement_);
 };
 
@@ -524,6 +531,81 @@ Blockly.FieldDropdown.prototype.updateWidth = function() {
     this.size_.width = width;
   } else {
     Blockly.Field.prototype.updateWidth.call(this);
+  }
+};
+
+/*
+* SHAPE: Added from blockly_changes
+* Iterates through a dropdown and changes the colors of recent modules to grey them out.
+*/
+Blockly.FieldDropdown.changeRecentModuleColors = function(activeIDsDict, recentIDsDict) {
+  //Find the dropdown HTML element
+  var widgetDiv = document.getElementsByClassName("blocklyWidgetDiv");
+  if (widgetDiv.length > 0) {
+      widgetDiv = widgetDiv[0];
+  }
+  else {
+      return;
+  }
+
+   //If the dropdown is not visible (aka closed), do not do anything
+  if (widgetDiv.style['display'] === "none") {
+      return;
+  }
+
+   //Get the dropdown's child, which contains a list with all the options
+  var mainChild = widgetDiv.children;
+  if (mainChild.length > 0) {
+      mainChild = mainChild[0];
+  }
+  else {
+      return;
+  }
+
+   //The following 30 or lines generate two lists for the active and recent modules.
+  //Those lists contain ALL active/recent modules as strings. Makes for easier search later.
+  var listOfActiveModules = [];
+  var listOfRecentModules = [];
+
+   //TODO: As new module types show up, add them in this list
+  var listOfModuleTypes = ["Dongle", "Joint", "Spin", "Face"];
+
+   for (key in listOfModuleTypes) {
+    moduleType = listOfModuleTypes[key];
+
+     //Go through all the active modules of type "moduleType" and add them to the "global" list above
+    if (moduleType in activeIDsDict) {
+      for (activeModule in activeIDsDict[moduleType]) {
+        listOfActiveModules.push(activeIDsDict[moduleType][activeModule][0]);
+      }
+    }
+
+     //Do the same for the recent modules
+    if (moduleType in recentIDsDict) {
+      for (recentModule in recentIDsDict[moduleType]) {
+        listOfRecentModules.push(recentIDsDict[moduleType][recentModule][0]);
+      }
+    }
+  }
+
+   //Go through all options in the dropdown
+  for (child in mainChild.children) {
+    child = mainChild.children[child];
+    var innerText = child.innerText;
+    if (innerText != undefined) {
+        //Remove the last character (a new line) and do an uppercase for the Face module
+        innerText = innerText.substring(0, innerText.length - 1).toUpperCase();
+
+         //Search in the active and recent lists. If the option is inside the recent list, but not in the active list, grey it out.
+        //Otherwise, un-grey it out.
+        if (!(listOfActiveModules.includes(innerText)) &&
+            (listOfRecentModules.includes(innerText))) {
+                        child.children[0].className = "goog-menuitem-content recent-module";
+        }
+        else if (child.children[0].className === "goog-menuitem-content recent-module") {
+            child.children[0].className = "goog-menuitem-content";
+        }
+    }
   }
 };
 

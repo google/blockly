@@ -509,7 +509,7 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   this.textElement_.setAttribute('transform', 'translate(0,0)');
 
   //SHAPE: +5 added from blockly_changes
-  this.size_.height = 35;
+  this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y + 5;
   this.size_.width = Blockly.Field.getCachedWidth(this.textElement_);
 };
 

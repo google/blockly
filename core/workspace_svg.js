@@ -900,6 +900,13 @@ Blockly.WorkspaceSvg.prototype.render = function() {
   for (var i = blocks.length - 1; i >= 0; i--) {
     blocks[i].render(false);
   }
+
+  if (this.currentGesture_) {
+    var imList = this.currentGesture_.getInsertionMarkers();
+    for (var i = 0; i < imList.length; i++) {
+      imList[i].render(false);
+    }
+  }
 };
 
 /**

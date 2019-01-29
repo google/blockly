@@ -328,7 +328,14 @@ Blockly.Workspace.prototype.getAllBlocks = function(ordered) {
       blocks.push.apply(blocks, blocks[i].getChildren(false));
     }
   }
-  return blocks;
+
+  // Insertion markers exist on the workspace for rendering reasons, but aren't
+  // "real" blocks from a developer perspective.
+  var filtered = blocks.filter(function(block) {
+    return !block.isInsertionMarker();
+  });
+
+  return filtered;
 };
 
 /**
@@ -514,17 +521,7 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
     return Infinity;
   }
 
-  // Insertion markers exist on the workspace for rendering reasons, but should
-  // be ignored in capacity calculation because they dissolve at the end of a
-  // drag.
-  var allBlocks = this.getAllBlocks();
-  var allBlocksCount = allBlocks.length;
-  for (var i = 0; i < allBlocks.length; i++) {
-    if (allBlocks[i].isInsertionMarker()) {
-      allBlocksCount--;
-    }
-  }
-  return this.options.maxBlocks - allBlocksCount;
+  return this.options.maxBlocks - this.getAllBlocks().length;
 };
 
 /**

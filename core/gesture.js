@@ -327,8 +327,7 @@ Blockly.Gesture.prototype.updateDragDelta_ = function(currentXY) {
  * @private
  */
 Blockly.Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
-  // Disabled blocks may not be dragged from the flyout.
-  if (this.targetBlock_.disabled) {
+  if (!this.flyout_.isBlockCreatable_(this.targetBlock_)) {
     return false;
   }
   if (!this.flyout_.isScrollable() ||

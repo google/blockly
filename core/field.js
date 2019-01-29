@@ -45,7 +45,7 @@ goog.require('goog.userAgent');
  * @constructor
  */
 Blockly.Field = function(text, opt_validator) {
-  this.size_ = new goog.math.Size(0, 25);
+  this.size_ = new goog.math.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
   this.setValue(text);
   this.setValidator(opt_validator);
 };
@@ -192,7 +192,7 @@ Blockly.Field.prototype.init = function() {
         'ry': 4,
         'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
         'y': 0,
-        'height': 25
+        'height': 16
         //SHAPE: Last param added from blockly_changes
       }, this.fieldGroup_, this.sourceBlock_.workspace);
   
@@ -200,7 +200,7 @@ Blockly.Field.prototype.init = function() {
   //SHAPE: -11 from blockly_changes. Was -12.5 before
   /** @type {!Element} */
   this.textElement_ = Blockly.utils.createSvgElement('text',
-      {'class': 'blocklyText', 'y': this.size_.height - 7.5},
+      {'class': 'blocklyText', 'y': this.size_.height - 11},
       this.fieldGroup_);
 
   this.updateEditable();
@@ -385,7 +385,6 @@ Blockly.Field.prototype.render_ = function() {
  */
 Blockly.Field.prototype.updateWidth = function() {
   var width = Blockly.Field.getCachedWidth(this.textElement_);
-  width = Math.max(width, 15);
   if (this.borderRect_) {
     this.borderRect_.setAttribute('width',
         width + Blockly.BlockSvg.SEP_SPACE_X);

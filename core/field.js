@@ -204,8 +204,6 @@ Blockly.Field.prototype.init = function() {
   this.mouseDownWrapper_ =
       Blockly.bindEventWithChecks_(
           this.fieldGroup_, 'mousedown', this, this.onMouseDown_);
-  // Force a render.
-  this.render_();
 };
 
 /**
@@ -375,7 +373,7 @@ Blockly.Field.prototype.render_ = function() {
 };
 
 /**
- * Updates thw width of the field. This calls getCachedWidth which won't cache
+ * Updates the width of the field. This calls getCachedWidth which won't cache
  * the approximated width on IE/Edge when `getComputedTextLength` fails. Once
  * it eventually does succeed, the result will be cached.
  */

@@ -164,6 +164,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   }
 
   workspace.addTopBlock(this);
+  workspace.addTypedBlock(this);
 
   // Call an initialization function, if it exists.
   if (typeof this.init == 'function') {
@@ -255,6 +256,7 @@ Blockly.Block.prototype.dispose = function(healStack) {
     // Remove this block from the workspace's list of top-most blocks.
     if (this.workspace) {
       this.workspace.removeTopBlock(this);
+      this.workspace.removeTypedBlock(this);
       // Remove from block database.
       delete this.workspace.blockDB_[this.id];
       this.workspace = null;
@@ -666,6 +668,21 @@ Blockly.Block.prototype.isMovable = function() {
  */
 Blockly.Block.prototype.setMovable = function(movable) {
   this.movable_ = movable;
+};
+
+/**
+ * Get whether is block is duplicatable or not. If duplicating this block and
+ * descendants will put this block over the workspace's capacity this block is
+ * not duplicatable. If duplicating this block and descendants will put any
+ * type over their maxInstances this block is not duplicatable.
+ * @return {boolean} True if duplicatable.
+ */
+Blockly.Block.prototype.isDuplicatable = function() {
+  if (!this.workspace.hasBlockLimits()) {
+    return true;
+  }
+  return this.workspace.isCapacityAvailable(
+      Blockly.utils.getBlockTypeCounts(this, true));
 };
 
 /**

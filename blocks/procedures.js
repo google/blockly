@@ -159,7 +159,11 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         this.arguments_.push(varName);
         var variable = Blockly.Variables.getOrCreateVariablePackage(
             this.workspace, varId, varName, '');
-        this.argumentVarModels_.push(variable);
+        if (variable != null) {
+          this.argumentVarModels_.push(variable);
+        } else {
+          console.log('Failed to create a variable with name ' + varName + ', ignoring.');
+        }
       }
     }
     this.updateParams_();
@@ -216,7 +220,12 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       var varName = paramBlock.getFieldValue('NAME');
       this.arguments_.push(varName);
       var variable = this.workspace.getVariable(varName, '');
-      this.argumentVarModels_.push(variable);
+      if (variable != null) {
+        this.argumentVarModels_.push(variable);
+      } else {
+        console.log('Failed to get variable named ' + varName + ', ignoring.');
+      }
+
       this.paramIds_.push(paramBlock.id);
       paramBlock = paramBlock.nextConnection &&
           paramBlock.nextConnection.targetBlock();

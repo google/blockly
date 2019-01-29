@@ -75,6 +75,7 @@
 'use strict';
 
 var demoWorkspace = null;
+var outputCode = '';
 
 function start() {
   demoWorkspace = Blockly.inject('blocklyDiv',
@@ -111,11 +112,10 @@ function loadSelected() {
   // Clear before adding all of the blocks.
   demoWorkspace.clear();
 
-  var boxList = document.getElementById('checkboxes');
-  var inputChildren = boxList.getElementsByTagName('input');
-  for (var i = 0; i < inputChildren.length; i++) {
-    if (inputChildren[i].checked) {
-      var testUrl = inputChildren[i].value;
+  var boxList = document.getElementsByClassName('suite_checkbox');
+  for (var i = 0; i < boxList.length; i++) {
+    if (boxList[i].checked) {
+      var testUrl = boxList[i].value;
       if (testUrl) {
         var xmlText = fetchFile(testUrl);
         if (xmlText !== null) {
@@ -195,18 +195,16 @@ function fromXml(filename, xmlText, opt_append) {
 }
 
 function checkAll() {
-  var boxList = document.getElementById('checkboxes');
-  var inputChildren = boxList.getElementsByTagName('input');
-  for (var i = 0; i < inputChildren.length; i++) {
-    inputChildren[i].checked = true;
+  var boxList = document.getElementsByClassName('suite_checkbox');
+  for (var i = 0; i < boxList.length; i++) {
+    boxList[i].checked = true;
   }
 }
 
 function uncheckAll() {
-  var boxList = document.getElementById('checkboxes');
-  var inputChildren = boxList.getElementsByTagName('input');
-  for (var i = 0; i < inputChildren.length; i++) {
-    inputChildren[i].checked = false;
+  var boxList = document.getElementsByClassName('suite_checkbox');
+  for (var i = 0; i < boxList.length; i++) {
+    boxList[i].checked = false;
   }
 }
 
@@ -229,26 +227,31 @@ function toJavaScript() {
   var code = '\'use strict\';\n\n'
   code += Blockly.JavaScript.workspaceToCode(demoWorkspace);
   setOutput(code);
+  outputCode = code;
 }
 
 function toPython() {
   var code = Blockly.Python.workspaceToCode(demoWorkspace);
   setOutput(code);
+  outputCode = code;
 }
 
 function toPhp() {
   var code = Blockly.PHP.workspaceToCode(demoWorkspace);
   setOutput(code);
+  outputCode = code;
 }
 
 function toLua() {
   var code = Blockly.Lua.workspaceToCode(demoWorkspace);
   setOutput(code);
+  outputCode = code;
 }
 
 function toDart() {
   var code = Blockly.Dart.workspaceToCode(demoWorkspace);
   setOutput(code);
+  outputCode = code;
 }
 
 function changeIndex() {
@@ -394,16 +397,16 @@ h1 {
     <div id="checkboxes">
       <input type="button" value="Check all" onclick="checkAll()">
       <input type="button" value="Uncheck all" onclick="uncheckAll()"><br/>
-      <input type="checkbox" value="logic.xml">Logic</input><br/>
-      <input type="checkbox" value="loops1.xml">Loops 1 (repeat, while, foreach)</input><br/>
-      <input type="checkbox" value="loops2.xml">Loops 2 (count)</input><br/>
-      <input type="checkbox" value="loops3.xml">Loops 3 (continue, break)</input><br/>
-      <input type="checkbox" value="math.xml">Math</input><br/>
-      <input type="checkbox" value="text.xml">Text</input><br/>
-      <input type="checkbox" value="lists.xml">Lists</input><br/>
-      <input type="checkbox" value="colour.xml">Colour</input><br/>
-      <input type="checkbox" value="variables.xml">Variables</input><br/>
-      <input type="checkbox" value="functions.xml">Functions</input><br/>
+      <input type="checkbox" class="suite_checkbox" value="logic.xml">Logic</input><br/>
+      <input type="checkbox" class="suite_checkbox" value="loops1.xml">Loops 1 (repeat, while, foreach)</input><br/>
+      <input type="checkbox" class="suite_checkbox" value="loops2.xml">Loops 2 (count)</input><br/>
+      <input type="checkbox" class="suite_checkbox" value="loops3.xml">Loops 3 (continue, break)</input><br/>
+      <input type="checkbox" class="suite_checkbox" value="math.xml">Math</input><br/>
+      <input type="checkbox" class="suite_checkbox" value="text.xml">Text</input><br/>
+      <input type="checkbox" class="suite_checkbox" value="lists.xml">Lists</input><br/>
+      <input type="checkbox" class="suite_checkbox" value="colour.xml">Colour</input><br/>
+      <input type="checkbox" class="suite_checkbox" value="variables.xml">Variables</input><br/>
+      <input type="checkbox" class="suite_checkbox" value="functions.xml">Functions</input><br/>
     </div>
 
     <p>

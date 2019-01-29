@@ -284,6 +284,22 @@ Blockly.Css.CONTENT = [
     'display: none;',
   '}',
 
+  '.blocklyInsertionMarker>.blocklyPath,',
+  '.blocklyInsertionMarker>.blocklyPathLight,',
+  '.blocklyInsertionMarker>.blocklyPathDark {',
+    'fill-opacity: .2;',
+    'stroke: none',
+  '}',
+
+  '.blocklyReplaceable .blocklyPath {',
+    'fill-opacity: 0.5;',
+  '}',
+
+  '.blocklyReplaceable .blocklyPathLight,',
+  '.blocklyReplaceable .blocklyPathDark {',
+    'display: none;',
+  '}',
+
   '.blocklyText {',
     'cursor: default;',
     'fill: #fff;',
@@ -515,15 +531,15 @@ Blockly.Css.CONTENT = [
     'fill: #bbb;',
   '}',
 
-  '.blocklyZoom>image {',
+  '.blocklyZoom>image, .blocklyZoom>svg>image {',
     'opacity: .4;',
   '}',
 
-  '.blocklyZoom>image:hover {',
+  '.blocklyZoom>image:hover, .blocklyZoom>svg>image:hover {',
     'opacity: .6;',
   '}',
 
-  '.blocklyZoom>image:active {',
+  '.blocklyZoom>image:active, .blocklyZoom>svg>image:active {',
     'opacity: .8;',
   '}',
 

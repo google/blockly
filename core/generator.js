@@ -158,17 +158,18 @@ Blockly.Generator.prototype.allNestedComments = function(block) {
 /**
  * Generate code for the specified block (and attached blocks).
  * @param {Blockly.Block} block The block to generate code for.
+ * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string|!Array} For statement blocks, the generated code.
  *     For value blocks, an array containing the generated code and an
  *     operator order value.  Returns '' if block is null.
  */
-Blockly.Generator.prototype.blockToCode = function(block) {
+Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
   if (!block) {
     return '';
   }
   if (block.disabled) {
     // Skip past this block if it is disabled.
-    return this.blockToCode(block.getNextBlock());
+    return opt_thisOnly ? '' : this.blockToCode(block.getNextBlock());
   }
 
   var func = this[block.type];
@@ -186,13 +187,13 @@ Blockly.Generator.prototype.blockToCode = function(block) {
     if (!block.outputConnection) {
       throw TypeError('Expecting string from statement block: ' + block.type);
     }
-    return [this.scrub_(block, code[0]), code[1]];
+    return [this.scrub_(block, code[0], opt_thisOnly), code[1]];
   } else if (typeof code == 'string') {
     var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
     if (this.STATEMENT_PREFIX) {
       code = this.STATEMENT_PREFIX.replace(/%1/g, '\'' + id + '\'') + code;
     }
-    return this.scrub_(block, code);
+    return this.scrub_(block, code, opt_thisOnly);
   } else if (code === null) {
     // Block has handled code generation itself.
     return '';

@@ -216,7 +216,7 @@ class Gen_compressed(threading.Thread):
     target_filename = "blockly_compressed.js"
     # Define the parameters for the POST request.
     params = [
-        ("compilation_level", "SIMPLE_OPTIMIZATIONS"),
+        ("compilation_level", "WHITESPACE_ONLY"),
         ("use_closure_library", "true"),
         ("output_format", "json"),
         ("output_info", "compiled_code"),
@@ -244,7 +244,7 @@ class Gen_compressed(threading.Thread):
     target_filename = "blockly_accessible_compressed.js"
     # Define the parameters for the POST request.
     params = [
-        ("compilation_level", "SIMPLE_OPTIMIZATIONS"),
+        ("compilation_level", "WHITESPACE_ONLY"),
         ("use_closure_library", "true"),
         ("language_out", "ES5"),
         ("output_format", "json"),
@@ -273,7 +273,7 @@ class Gen_compressed(threading.Thread):
     target_filename = "blocks_compressed.js"
     # Define the parameters for the POST request.
     params = [
-        ("compilation_level", "SIMPLE_OPTIMIZATIONS"),
+        ("compilation_level", "WHITESPACE_ONLY"),
         ("output_format", "json"),
         ("output_info", "compiled_code"),
         ("output_info", "warnings"),
@@ -424,7 +424,6 @@ class Gen_compressed(threading.Thread):
             original_kb, compressed_kb, ratio))
       else:
         print("UNKNOWN ERROR")
-
 
 class Gen_compressed_New(threading.Thread):
   """Generate a JavaScript file that contains all of Blockly's core and all

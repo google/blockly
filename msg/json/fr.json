@@ -13,7 +13,8 @@
 			"Vexthedorito",
 			"Urhixidur",
 			"RoboErikG",
-			"Zarisi"
+			"Zarisi",
+			"Alacabe"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "élément",
@@ -201,6 +202,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://fr.wikipedia.org/wiki/G%C3%A9n%C3%A9rateur_de_nombres_al%C3%A9atoires",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "fraction aléatoire",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Renvoyer une fraction aléatoire entre 0.0 (inclus) et 1.0 (exclus).",
+	"MATH_ATAN2_HELPURL": "https://fr.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 de X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Renvoie l'arc tangente du point (X, Y) en degrés entre -180 et 180.",
 	"TEXT_TEXT_HELPURL": "https://fr.wikipedia.org/wiki/Cha%C3%AEne_de_caract%C3%A8res",
 	"TEXT_TEXT_TOOLTIP": "Une lettre, un mot ou une ligne de texte.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "créer un texte avec",

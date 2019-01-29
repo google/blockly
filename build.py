@@ -53,9 +53,6 @@
 #   msg/js/<LANG>.js for every language <LANG> defined in msg/js/<LANG>.json.
 
 import sys
-if sys.version_info[0] != 2:
-  raise Exception("Blockly build only compatible with Python 2.x.\n"
-                  "You are using: " + sys.version)
 
 for arg in sys.argv[1:len(sys.argv)]:
   if (arg != 'core' and
@@ -65,8 +62,15 @@ for arg in sys.argv[1:len(sys.argv)]:
     raise Exception("Invalid argument: \"" + arg + "\". Usage: build.py "
         "<0 or more of accessible, core, generators, langfiles>")
 
-import errno, glob, httplib, json, os, re, subprocess, threading, urllib
+import errno, glob, json, os, re, subprocess, threading, codecs
 
+if sys.version_info[0] == 2:
+  import httplib
+  from urllib import urlencode
+else:
+  import http.client as httplib
+  from urllib.parse import urlencode
+  from importlib import reload
 
 def import_path(fullpath):
   """Import a file with full path specification.
@@ -235,8 +239,8 @@ class Gen_compressed(threading.Thread):
       # Filter out the Closure files (the compiler will add them).
       if filename.startswith(os.pardir + os.sep):  # '../'
         continue
-      f = open(filename)
-      params.append(("js_code", "".join(f.readlines())))
+      f = codecs.open(filename, encoding="utf-8")
+      params.append(("js_code", "".join(f.readlines()).encode("utf-8")))
       f.close()
 
     self.do_compile(params, target_filename, filenames, "", beautified_filename)
@@ -264,8 +268,8 @@ class Gen_compressed(threading.Thread):
       # Filter out the Closure files (the compiler will add them).
       if filename.startswith(os.pardir + os.sep):  # '../'
         continue
-      f = open(filename)
-      params.append(("js_code", "".join(f.readlines())))
+      f = codecs.open(filename, encoding="utf-8")
+      params.append(("js_code", "".join(f.readlines()).encode("utf-8")))
       f.close()
 
     self.do_compile(params, target_filename, filenames, "")
@@ -290,8 +294,8 @@ class Gen_compressed(threading.Thread):
     filenames = glob.glob(os.path.join("blocks", "*.js"))
     filenames.sort()  # Deterministic build.
     for filename in filenames:
-      f = open(filename)
-      params.append(("js_code", "".join(f.readlines())))
+      f = codecs.open(filename, encoding="utf-8")
+      params.append(("js_code", "".join(f.readlines()).encode("utf-8")))
       f.close()
 
     # Remove Blockly.Blocks to be compatible with Blockly.
@@ -319,8 +323,8 @@ class Gen_compressed(threading.Thread):
     filenames.sort()  # Deterministic build.
     filenames.insert(0, os.path.join("generators", language + ".js"))
     for filename in filenames:
-      f = open(filename)
-      params.append(("js_code", "".join(f.readlines())))
+      f = codecs.open(filename, encoding="utf-8")
+      params.append(("js_code", "".join(f.readlines()).encode("utf-8")))
       f.close()
     filenames.insert(0, "[goog.provide]")
 
@@ -332,9 +336,11 @@ class Gen_compressed(threading.Thread):
     # Send the request to Google.
     headers = {"Content-type": "application/x-www-form-urlencoded"}
     conn = httplib.HTTPSConnection("closure-compiler.appspot.com")
-    conn.request("POST", "/compile", urllib.urlencode(params), headers)
+    conn.request("POST", "/compile", urlencode(params), headers)
     response = conn.getresponse()
-    json_str = response.read()
+
+    # Decode is necessary for Python 3.4 compatibility
+    json_str = response.read().decode("utf-8")
     conn.close()
 
     # Parse the JSON response.
@@ -351,12 +357,12 @@ class Gen_compressed(threading.Thread):
       n = int(name[6:]) - 1
       return filenames[n]
 
-    if json_data.has_key("serverErrors"):
+    if "serverErrors" in json_data:
       errors = json_data["serverErrors"]
       for error in errors:
         print("SERVER ERROR: %s" % target_filename)
         print(error["error"])
-    elif json_data.has_key("errors"):
+    elif "errors" in json_data:
       errors = json_data["errors"]
       for error in errors:
         print("FATAL ERROR")
@@ -368,7 +374,7 @@ class Gen_compressed(threading.Thread):
           print((" " * error["charno"]) + "^")
         sys.exit(1)
     else:
-      if json_data.has_key("warnings"):
+      if "warnings" in json_data:
         warnings = json_data["warnings"]
         for warning in warnings:
           print("WARNING")
@@ -380,7 +386,7 @@ class Gen_compressed(threading.Thread):
             print((" " * warning["charno"]) + "^")
         print()
 
-      if not json_data.has_key("compiledCode"):
+      if not "compiledCode" in json_data:
         print("FATAL ERROR: Compiler did not return compiledCode.")
         sys.exit(1)
 
@@ -462,7 +468,7 @@ class Gen_langfiles(threading.Thread):
           # If a destination file was missing, rebuild.
           return True
       else:
-        print("Error checking file creation times: " + e)
+        print("Error checking file creation times: " + str(e))
 
   def run(self):
     # The files msg/json/{en,qqq,synonyms}.json depend on msg/messages.js.
@@ -540,10 +546,10 @@ developers.google.com/blockly/guides/modify/web/closure""")
 
   core_search_paths = calcdeps.ExpandDirectories(
       ["core", os.path.join(os.path.pardir, "closure-library")])
-  core_search_paths.sort()  # Deterministic build.
+  core_search_paths = sorted(core_search_paths)  # Deterministic build.
   full_search_paths = calcdeps.ExpandDirectories(
       ["accessible", "core", os.path.join(os.path.pardir, "closure-library")])
-  full_search_paths.sort()  # Deterministic build.
+  full_search_paths = sorted(full_search_paths)  # Deterministic build.
 
   if (len(sys.argv) == 1):
     args = ['core', 'accessible', 'generators', 'defaultlangfiles']

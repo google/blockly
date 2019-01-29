@@ -1,17 +1,27 @@
-# Blockly [![Build Status]( https://travis-ci.org/google/blockly.svg?branch=master)](https://travis-ci.org/google/blockly)
+# Blockly (fork)
+This is a fork of the official repo by Google, so we can make updates to it and rebuild the executable scripts.
 
+## Building
+To build, run the build.py script that is in the main folder.
 
-Google's Blockly is a web-based, visual programming editor.  Users can drag
-blocks together to build programs.  All code is free and open source.
+You will need a Python 2.7 environment. You can use the following command to create one:
+`conda create -n blockly-build python=2.7`
 
-**The project page is https://developers.google.com/blockly/**
+## Building Constraints
+You will need the closure folder to be present in a neighbor directory, as such:
+```
+index.html
+blocks.js
+...
+vendor/blockly/
+vender/closure-library
+```
+Therefore, you should use the submodule that will be inside the [pc-standalone-app](https://github.com/ShapeRobotics/pc-standalone-app) repo.
 
-![](https://developers.google.com/blockly/images/sample.png)
+## Updating the fork
+Make a pull request on the GitHub website. Select the remote master branch (in this case, this means Google's master branch). This will update the origin master branch and put all of the missing commits inside the history, and put our commits on top.
 
-Blockly has an active [developer forum](https://groups.google.com/forum/#!forum/blockly). Please drop by and say hello. Show us your prototypes early; collectively we have a lot of experience and can offer hints which will save you time.
+It can turn out to be a mess, so keeping branches of all changes is necessary.
 
-Help us focus our development efforts by telling us [what you are doing with
-Blockly](https://developers.google.com/blockly/registration). The questionnaire only takes
-a few minutes and will help us better support the Blockly community.
-
-Want to contribute? Great! First, read [our guidelines for contributors](https://developers.google.com/blockly/guides/modify/contributing).
+Alternatively, use this:
+https://stackoverflow.com/questions/7244321/how-do-i-update-a-github-forked-repository

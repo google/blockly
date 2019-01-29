@@ -171,18 +171,27 @@ Blockly.ZoomControls.prototype.position = function() {
  */
 Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
   /* This markup will be generated and added to the "blocklyZoom" group:
-  <clippath id="blocklyZoomoutClipPath837493">
-    <rect width="32" height="32" y="77"></rect>
-  </clippath>
-  <image width="96" height="124" x="-64" y="-15" xlink:href="media/sprites.png"
-      clip-path="url(#blocklyZoomoutClipPath837493)"></image>
+  <svg id="svg837493">
+    <clippath id="blocklyZoomoutClipPath837493">
+      <rect width="32" height="32" y="77"></rect>
+    </clippath>
+    <image width="96" height="124" x="-64" y="-15" xlink:href="media/sprites.png"
+        clip-path="url(#blocklyZoomoutClipPath837493)"></image>
+  </svg>
   */
   var ws = this.workspace_;
+
+  var svgHolder = Blockly.utils.createSvgElement('svg',
+      {
+        "id": "svg" + rnd
+      },
+      this.svgGroup_);
+
   var clip = Blockly.utils.createSvgElement('clipPath',
       {
         'id': 'blocklyZoomoutClipPath' + rnd
       },
-      this.svgGroup_);
+      svgHolder);
   Blockly.utils.createSvgElement('rect',
       {
         'width': 32,
@@ -197,7 +206,7 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
         'y': -15,
         'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')'
       },
-      this.svgGroup_);
+      svgHolder);
   zoomoutSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
       ws.options.pathToMedia + Blockly.SPRITE.url);
 
@@ -220,18 +229,26 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
  */
 Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
   /* This markup will be generated and added to the "blocklyZoom" group:
-  <clippath id="blocklyZoominClipPath837493">
-    <rect width="32" height="32" y="43"></rect>
-  </clippath>
-  <image width="96" height="124" x="-32" y="-49" xlink:href="media/sprites.png"
-      clip-path="url(#blocklyZoominClipPath837493)"></image>
+  <svg id="svg837493">
+    <clippath id="blocklyZoominClipPath837493">
+      <rect width="32" height="32" y="43"></rect>
+    </clippath>
+    <image width="96" height="124" x="-32" y="-49" xlink:href="media/sprites.png"
+        clip-path="url(#blocklyZoominClipPath837493)"></image>
+  </svg>
   */
+ 
   var ws = this.workspace_;
+  var svgHolder = Blockly.utils.createSvgElement('svg',
+      {
+        "id": "svg" + rnd
+      },
+      this.svgGroup_);
   var clip = Blockly.utils.createSvgElement('clipPath',
       {
         'id': 'blocklyZoominClipPath' + rnd
       },
-      this.svgGroup_);
+      svgHolder);
   Blockly.utils.createSvgElement('rect',
       {
         'width': 32,
@@ -247,7 +264,7 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
         'y': -49,
         'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')'
       },
-      this.svgGroup_);
+      svgHolder);
   zoominSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
       ws.options.pathToMedia + Blockly.SPRITE.url);
 
@@ -270,18 +287,25 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
  */
 Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
   /* This markup will be generated and added to the "blocklyZoom" group:
-  <clippath id="blocklyZoomresetClipPath837493">
-    <rect width="32" height="32"></rect>
-  </clippath>
-  <image width="96" height="124" y="-92" xlink:href="media/sprites.png"
-      clip-path="url(#blocklyZoomresetClipPath837493)"></image>
+  <svg id="svg837493">
+    <clippath id="blocklyZoomresetClipPath837493">
+      <rect width="32" height="32"></rect>
+    </clippath>
+    <image width="96" height="124" y="-92" xlink:href="media/sprites.png"
+        clip-path="url(#blocklyZoomresetClipPath837493)"></image>
+  </svg>
   */
   var ws = this.workspace_;
+  var svgHolder = Blockly.utils.createSvgElement('svg',
+      {
+        "id": "svg" + rnd
+      },
+      this.svgGroup_);
   var clip = Blockly.utils.createSvgElement('clipPath',
       {
         'id': 'blocklyZoomresetClipPath' + rnd
       },
-      this.svgGroup_);
+      svgHolder);
   Blockly.utils.createSvgElement('rect',
       {
         'width': 32,
@@ -294,7 +318,7 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
         'height': Blockly.SPRITE.height, 'y': -92,
         'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')'
       },
-      this.svgGroup_);
+      svgHolder);
   zoomresetSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
       ws.options.pathToMedia + Blockly.SPRITE.url);
 

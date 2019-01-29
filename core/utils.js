@@ -974,3 +974,32 @@ Blockly.utils.containsNode = function(parent, descendant) {
   return !!(parent.compareDocumentPosition(descendant) &
             Node.DOCUMENT_POSITION_CONTAINED_BY);
 };
+
+/**
+ * Get a map of all the block's descendants mapping their type to the number of
+ *    children with that type.
+ * @param {!Blockly.Block} block The block to map.
+ * @param {boolean=} opt_stripFollowing Optionally ignore all following
+ *    statements (blocks that are not inside a value or statement input
+ *    of the block).
+ * @returns {!Object} Map of types to type counts for descendants of the bock.
+ */
+Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
+  var typeCountsMap = Object.create(null);
+  var descendants = block.getDescendants(true);
+  if (opt_stripFollowing) {
+    var nextBlock = block.getNextBlock();
+    if (nextBlock) {
+      var index = descendants.indexOf(nextBlock);
+      descendants.splice(index, descendants.length - index);
+    }
+  }
+  for (var i = 0, checkBlock; checkBlock = descendants[i]; i++) {
+    if (typeCountsMap[checkBlock.type]) {
+      typeCountsMap[checkBlock.type]++;
+    } else {
+      typeCountsMap[checkBlock.type] = 1;
+    }
+  }
+  return typeCountsMap;
+};

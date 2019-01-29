@@ -218,10 +218,11 @@ Blockly.PHP.quote_ = function(string) {
  * Calls any statements following this block.
  * @param {!Blockly.Block} block The current block.
  * @param {string} code The PHP code created for this block.
+ * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} PHP code with comments and subsequent blocks added.
  * @private
  */
-Blockly.PHP.scrub_ = function(block, code) {
+Blockly.PHP.scrub_ = function(block, code, opt_thisOnly) {
   var commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
@@ -246,7 +247,7 @@ Blockly.PHP.scrub_ = function(block, code) {
     }
   }
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = Blockly.PHP.blockToCode(nextBlock);
+  var nextCode = opt_thisOnly ? '' : Blockly.PHP.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
 

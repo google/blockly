@@ -4,7 +4,8 @@
 			"Vishwanatha Badikana",
 			"Bharathesha Alasandemajalu",
 			"Kiranpoojary",
-			"BHARATHESHA ALASANDEMAJALU"
+			"BHARATHESHA ALASANDEMAJALU",
+			"Ravi Mundkur"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "ವಸ್ತು",
@@ -181,6 +182,7 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://en.wikipedia.org/wiki/ರಾಂಡಮ್_ನಂಬರ್_ಜನರೇಶನ್",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "ಒವ್ವಾಂಡಲ ಒಂಜಿ ಭಿನ್ನರಾಶಿ",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "0.0 (ಸೇರ್‌ದ್) ಬೊಕ್ಕ 1.0 (ಸೇರಂದೆ) ನಡುತ ಒವ್ವಾಂಡಲ ಒಂಜಿ ಭಿನ್ನರಾಶಿನ್ ಪಿರಕೊರು.",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
 	"TEXT_TEXT_HELPURL": "https://en.wikipedia.org/wiki/ಸ್ಟ್ರಿಂಗ್_(ಕಂಪ್ಯೂಟರ್_ಸೈನ್ಸ್)",
 	"TEXT_TEXT_TOOLTIP": "ಒಂಜಿ ಅಕ್ಷರೊ, ಪದೊ ಅತ್ತಂಡ ಪಾಟೊದ ಒಂಜಿ ಸಾಲ್",
 	"TEXT_JOIN_TITLE_CREATEWITH": "ನೆಡ್ದ್ ಪಟ್ಯೊನು ಉಂಡು ಮಲ್ಪು",

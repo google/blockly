@@ -482,9 +482,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       input.renderHeight = Math.max(input.renderHeight, bBox.height);
       input.alignmentHeight = Math.max(input.alignmentHeight, linkedBlock.firstRowHeight);
       input.renderWidth = Math.max(input.renderWidth, bBox.width);
-      row.hasInput = true;
     }
-    
     // Blocks have a one pixel shadow that should sometimes overhang.
     if (!isInline && i == inputList.length - 1) {
       // Last value input should overhang.
@@ -577,10 +575,6 @@ Blockly.BlockSvg.ROW_SPACING = 10;
 
 Blockly.BlockSvg.prototype.renderComputeSpacing_ = function(inputRows) {
   for (var y = 0, row; row = inputRows[y]; y++) {
-      if ((row.type == Blockly.INPUT_VALUE || row.type == Blockly.NEXT_STATEMENT) && row.hasInput) {
-          continue;
-      }
-
       if (y == 0) {
           row.height += Blockly.BlockSvg.Y_MARGIN_TOP;
           row.alignmentHeight += Blockly.BlockSvg.Y_MARGIN_TOP;
@@ -874,12 +868,10 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ = function(pathObject, cursorY) {
 Blockly.BlockSvg.prototype.renderDrawLeft_ = function(pathObject, inputRows) {
   var steps = pathObject.steps;
   var highlightSteps = pathObject.highlightSteps;
-  
-  //SHAPE: This will calculate the vertical middle of the first row, so the "puzzle" piece can be centered there.
-  //SHAPE: On blocks with multiple lines, it will still render the "puzzle" piece in the middle of the first row.
-  this.firstRowHeight = inputRows[0].height;
-  
   if (this.outputConnection) {
+    //SHAPE: This will calculate the vertical middle of the first row, so the "puzzle" piece can be centered there.
+    //SHAPE: On blocks with multiple lines, it will still render the "puzzle" piece in the middle of the first row.
+    this.firstRowHeight = inputRows[0].height;
     //SHAPE: 15 is hardcoded because the svg path of the "puzzle" piece is also hardcoded.
     var tabHeight = ((this.firstRowHeight - 15) / 2) + 15;
 
@@ -1090,35 +1082,23 @@ Blockly.BlockSvg.prototype.renderExternalValueInput_ = function(pathObject, row,
     }
   }
   this.renderFields_(input.fieldRow, fieldX, fieldY, row.alignmentHeight);
-  
-  var topVerticalLine = ((row.height - 15) / 2) - 7.5;
-
-  if (topVerticalLine < 0) {
-      topVerticalLine = 0;
-  }
-
-  steps.push('v', topVerticalLine);
-
   steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
-  var v = row.height - Blockly.BlockSvg.TAB_HEIGHT - topVerticalLine;
+  var v = row.height - Blockly.BlockSvg.TAB_HEIGHT;
   steps.push('v', v);
-
   if (this.RTL) {
     // Highlight around back of tab.
-      highlightSteps.push('v', topVerticalLine);
     highlightSteps.push(Blockly.BlockSvg.TAB_PATH_DOWN_HIGHLIGHT_RTL);
     highlightSteps.push('v', v + 0.5);
   } else {
     // Short highlight glint at bottom of tab.
     highlightSteps.push('M', (rightEdge - 5) + ',' +
-        (cursor.y + Blockly.BlockSvg.TAB_HEIGHT + topVerticalLine - 0.7));
+        (cursor.y + Blockly.BlockSvg.TAB_HEIGHT - 0.7));
     highlightSteps.push('l', (Blockly.BlockSvg.TAB_WIDTH * 0.46) +
         ',-2.1');
   }
   // Create external input connection.
   connectionPos.x = this.RTL ? -rightEdge - 1 : rightEdge + 1;
   input.connection.setOffsetInBlock(connectionPos.x, cursor.y);
-  input.connection.addHighlightMargin(topVerticalLine, v);
   if (input.connection.isConnected()) {
     this.width = Math.max(this.width, rightEdge +
         input.connection.targetBlock().getHeightWidth().width -

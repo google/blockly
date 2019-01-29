@@ -131,7 +131,7 @@ Blockly.Flyout.prototype.containerVisible_ = true;
  * @type {number}
  * @const
  */
-Blockly.Flyout.prototype.CORNER_RADIUS = 0;
+Blockly.Flyout.prototype.CORNER_RADIUS = 8;
 
 /**
  * Margin around the edges of the blocks in the flyout.

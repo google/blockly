@@ -79,7 +79,7 @@ Blockly.FieldDropdown.fromJson = function(options) {
 /**
  * Horizontal distance that a checkmark overhangs the dropdown.
  */
-Blockly.FieldDropdown.CHECKMARK_OVERHANG = 0;
+Blockly.FieldDropdown.CHECKMARK_OVERHANG = 25;
 
 /**
  * Maximum height of the dropdown menu, as a percentage of the viewport height.

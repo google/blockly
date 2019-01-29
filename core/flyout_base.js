@@ -131,8 +131,7 @@ Blockly.Flyout.prototype.containerVisible_ = true;
  * @type {number}
  * @const
  */
-//SHAPE: Updated corner radius to 8 so there is some spacing between blocks
-Blockly.Flyout.prototype.CORNER_RADIUS = 8;
+Blockly.Flyout.prototype.CORNER_RADIUS = 0;
 
 /**
  * Margin around the edges of the blocks in the flyout.

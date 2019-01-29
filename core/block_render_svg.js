@@ -1036,7 +1036,6 @@ Blockly.BlockSvg.prototype.renderInlineRow_ = function(pathObject, row, cursor,
       }
       connectionPos.y = cursor.y + yStart + 1;
       input.connection.setOffsetInBlock(connectionPos.x, connectionPos.y);
-      input.connection.addHighlightMargin(vLineHeight, restOfHeight);
     }
   }
 

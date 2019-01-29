@@ -516,10 +516,6 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       row.height = Math.max(row.height, fieldSize.height);
       row.alignmentHeight = Math.max(row.alignmentHeight, fieldSize.height);
       previousFieldEditable = field.EDITABLE;
-      
-      if (field.imageElement_) {
-        row.hasImage = true;
-      }
     }
 
     if (row.type != Blockly.BlockSvg.INLINE) {
@@ -576,9 +572,9 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
   return inputRows;
 };
 
-Blockly.BlockSvg.Y_MARGIN_TOP_WITH_IMAGE = 15;
-Blockly.BlockSvg.Y_MARGIN_TOP = 5;
-Blockly.BlockSvg.ROW_SPACING = 5;
+
+Blockly.BlockSvg.Y_MARGIN_TOP = 15;
+Blockly.BlockSvg.ROW_SPACING = 10;
 
 Blockly.BlockSvg.prototype.renderComputeSpacing_ = function(inputRows) {
   for (var y = 0, row; row = inputRows[y]; y++) {
@@ -587,25 +583,13 @@ Blockly.BlockSvg.prototype.renderComputeSpacing_ = function(inputRows) {
       }
 
       if (y == 0) {
-        if (row.hasImage) {
-          row.height += Blockly.BlockSvg.Y_MARGIN_TOP_WITH_IMAGE;
-          row.alignmentHeight += Blockly.BlockSvg.Y_MARGIN_TOP_WITH_IMAGE;
-        }
-        else {
           row.height += Blockly.BlockSvg.Y_MARGIN_TOP;
           row.alignmentHeight += Blockly.BlockSvg.Y_MARGIN_TOP;
-        }
       }
 
       if (y + 1 == inputRows.length) {
-        if (row.hasImage) {
-          row.height += Blockly.BlockSvg.Y_MARGIN_TOP_WITH_IMAGE;
-          row.alignmentHeight += Blockly.BlockSvg.Y_MARGIN_TOP_WITH_IMAGE;
-        }
-        else {
           row.height += Blockly.BlockSvg.Y_MARGIN_TOP;
           row.alignmentHeight += Blockly.BlockSvg.Y_MARGIN_TOP;
-        }
       }
       else {
           row.height += Blockly.BlockSvg.ROW_SPACING;

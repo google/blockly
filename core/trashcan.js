@@ -398,9 +398,11 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
  * @private
  */
 Blockly.Trashcan.prototype.setLidAngle_ = function(lidAngle) {
+  var openAtRight = this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT
+    || (this.workspace_.horizontalLayout && this.workspace_.RTL);
   this.svgLid_.setAttribute('transform', 'rotate(' +
-    (this.workspace_.RTL ? -lidAngle : lidAngle) + ',' +
-    (this.workspace_.RTL ? 4 : this.WIDTH_ - 4) + ',' +
+    (openAtRight ? -lidAngle : lidAngle) + ',' +
+    (openAtRight ? 4 : this.WIDTH_ - 4) + ',' +
     (this.LID_HEIGHT_ - 2) + ')');
 };
 

@@ -56,7 +56,8 @@ Blockly.Trashcan = function(workspace) {
         Blockly.TOOLBOX_AT_BOTTOM : Blockly.TOOLBOX_AT_TOP;
     this.flyout_ = new Blockly.HorizontalFlyout(flyoutWorkspaceOptions);
   } else {
-    flyoutWorkspaceOptions.toolboxPosition = this.workspace_.RTL ?
+    flyoutWorkspaceOptions.toolboxPosition =
+      this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ?
         Blockly.TOOLBOX_AT_LEFT : Blockly.TOOLBOX_AT_RIGHT;
     this.flyout_ = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
   }
@@ -304,9 +305,8 @@ Blockly.Trashcan.prototype.dispose = function() {
 
 /**
  * Position the trashcan.
- * It is positioned in the upper corner when the toolbox is on bottom, and the
- * bottom corner for all other toolbox positions. It is on the right in LTR,
- * and left in RTL.
+ * It is positioned in the opposite corner to the corner the
+ * categories/toolbox starts at.
  */
 Blockly.Trashcan.prototype.position = function() {
   // Not yet initialized.
@@ -318,21 +318,14 @@ Blockly.Trashcan.prototype.position = function() {
     // There are no metrics available (workspace is probably not visible).
     return;
   }
-  if (this.workspace_.RTL) {
-    this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
-    if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
-      this.left_ += metrics.flyoutWidth;
-      if (this.workspace_.toolbox_) {
-        this.left_ += metrics.absoluteLeft;
-      }
-    }
-  } else {
+  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT
+    || (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
+    // Toolbox starts in the left corner.
     this.left_ = metrics.viewWidth + metrics.absoluteLeft -
-        this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
-
-    if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
-      this.left_ -= metrics.flyoutWidth;
-    }
+      this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
+  } else {
+    // Toolbox starts in the right corner.
+    this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
   }
 
   if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {

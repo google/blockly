@@ -392,8 +392,6 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
     }
     // Record the width for .getMetrics_ and .position.
     this.width_ = flyoutWidth;
-    // Call this since it is possible the trash and zoom buttons need
-    // to move. e.g. on a bottom positioned flyout when zoom is clicked.
-    this.targetWorkspace_.resize();
+    this.position();
   }
 };

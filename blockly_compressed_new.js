@@ -17084,7 +17084,7 @@ Blockly.Field.prototype.referencesVariables = function() {
     return !1
 };
 Blockly.FieldLabel = function(a, b) {
-    this.size_ = new goog.math.Size(0, 18);
+    this.size_ = new goog.math.Size(0, 15);
     this.class_ = b;
     this.setValue(a);
     this.tooltip_ = ""

@@ -12,3 +12,16 @@ tests/compile/main_compressed.js
 tests/compile/*compiler*.jar
 local_build/*compiler*.jar
 local_build/local_blockly_compressed.js
+
+blockly_compressed.js
+blockly_compressed_new.js
+blockly_uncompressed.js
+blocks_compressed.js
+blocks_compressed_new.js
+blockly_accessible_compressed.js
+blockly_accessible_uncompressed.js
+dart_compressed.js
+javascript_compressed.js
+lua_compressed.js
+php_compressed.js
+python_compressed.js

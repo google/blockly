@@ -238,13 +238,15 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       // "not bounded" state of isContentBounded_ could have been changed.
       if (!mainWorkspace.isDragging() && !mainWorkspace.isContentBounded_()) {
         var metrics = mainWorkspace.getMetrics();
-        if (metrics.contentTop < metrics.viewTop ||
+        var edgeLeft = metrics.viewLeft + metrics.absoluteLeft;
+        var edgeTop = metrics.viewTop + metrics.absoluteTop;
+        if (metrics.contentTop < edgeTop ||
             metrics.contentTop + metrics.contentHeight >
-            metrics.viewHeight + metrics.viewTop ||
+            metrics.viewHeight + edgeTop ||
             metrics.contentLeft <
-                (options.RTL ? metrics.viewLeft : metrics.viewLeft) ||
+                (options.RTL ? metrics.viewLeft : edgeLeft) ||
             metrics.contentLeft + metrics.contentWidth > (options.RTL ?
-                metrics.viewWidth : metrics.viewWidth + metrics.viewLeft)) {
+                metrics.viewWidth : metrics.viewWidth + edgeLeft)) {
           // One or more blocks may be out of bounds.  Bump them back in.
           var MARGIN = 25;
           var blocks = mainWorkspace.getTopBlocks(false);
@@ -258,28 +260,27 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             var blockXY = block.getRelativeToSurfaceXY();
             var blockHW = block.getHeightWidth();
             // Bump any block that's above the top back inside.
-            var overflowTop = metrics.viewTop + MARGIN
-                - blockHW.height - blockXY.y;
+            var overflowTop = edgeTop + MARGIN - blockHW.height - blockXY.y;
             if (overflowTop > 0) {
               block.moveBy(0, overflowTop);
               movedBlocks = true;
             }
             // Bump any block that's below the bottom back inside.
             var overflowBottom =
-                metrics.viewTop + metrics.viewHeight - MARGIN - blockXY.y;
+                edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
             if (overflowBottom < 0) {
               block.moveBy(0, overflowBottom);
               movedBlocks = true;
             }
             // Bump any block that's off the left back inside.
-            var overflowLeft = MARGIN + metrics.viewLeft -
+            var overflowLeft = MARGIN + edgeLeft -
                 blockXY.x - (options.RTL ? 0 : blockHW.width);
             if (overflowLeft > 0) {
               block.moveBy(overflowLeft, 0);
               movedBlocks = true;
             }
             // Bump any block that's off the right back inside.
-            var overflowRight = metrics.viewLeft + metrics.viewWidth - MARGIN -
+            var overflowRight = edgeLeft + metrics.viewWidth - MARGIN -
                 blockXY.x + (options.RTL ? blockHW.width : 0);
             if (overflowRight < 0) {
               block.moveBy(overflowRight, 0);

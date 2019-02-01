@@ -298,6 +298,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     }
     if (change) {
       this.displayRenamedVar_(oldName, newVar.name);
+      Blockly.Procedures.mutateCallers(this);
     }
   },
   /**
@@ -320,6 +321,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     }
     if (change) {
       this.displayRenamedVar_(oldName, newName);
+      Blockly.Procedures.mutateCallers(this);
     }
   },
   /**

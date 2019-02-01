@@ -363,8 +363,8 @@ Blockly.init_ = function(mainWorkspace) {
     mainWorkspace.scrollbar.resize();
   } else {
     mainWorkspace.setMetrics({x: .5, y: .5});
-    // Makes it so zoom controls zoom correctly when the content is not
-    // bounded & the toolbox has categories.
+    // Makes it so metrics.viewLeft and metrics.viewTop are calculated
+    // correctly, as well as some other things (like zoom) that rely on scroll.
     var metrics = mainWorkspace.getMetrics();
     mainWorkspace.scrollX = metrics.absoluteLeft;
     mainWorkspace.scrollY = metrics.absoluteTop;

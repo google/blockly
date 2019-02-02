@@ -1666,7 +1666,7 @@ Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
     x -= this.flyout_.width_ / 2;
   }
   var y = (metrics.contentHeight - metrics.viewHeight) / 2;
-  this.scrollbar.set(x, y);
+  this.scroll_(x, y);
 };
 
 /**
@@ -1721,7 +1721,7 @@ Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
   var scrollToCenterY = scrollToBlockY - halfViewHeight;
 
   Blockly.hideChaff();
-  this.scrollbar.set(scrollToCenterX, scrollToCenterY);
+  this.scroll_(scrollToCenterX, scrollToCenterY);
 };
 
 /**

@@ -1349,7 +1349,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   menuOptions.push(redoOption);
 
   // Option to clean up blocks.
-  if (this.scrollbar) {
+  if (this.isContentBounded_()) {
     var cleanOption = {};
     cleanOption.text = Blockly.Msg['CLEAN_UP'];
     cleanOption.enabled = topBlocks.length > 1;
@@ -1613,7 +1613,7 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   if (this.flyout_) {
     workspaceWidth -= this.flyout_.width_;
   }
-  if (!this.scrollbar) {
+  if (!this.isContentBounded_()) {
     // Origin point of 0,0 is fixed, blocks will not scroll to center.
     blocksWidth += metrics.contentLeft;
     blocksHeight += metrics.contentTop;
@@ -1671,11 +1671,6 @@ Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
  * @public
  */
 Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
-  if (!this.scrollbar) {
-    console.warn('Tried to scroll a non-scrollable workspace.');
-    return;
-  }
-
   var block = this.getBlockById(id);
   if (!block) {
     return;

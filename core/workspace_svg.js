@@ -1650,22 +1650,19 @@ Blockly.WorkspaceSvg.prototype.endCanvasTransition = function() {
       /** @type {!SVGElement} */ (this.svgBubbleCanvas_),
       'blocklyCanvasTransitioning');
 };
+
 /**
  * Center the workspace.
  */
 Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
-  if (!this.scrollbar) {
-    // Can't center a non-scrolling workspace.
-    console.warn('Tried to scroll a non-scrollable workspace.');
-    return;
-  }
   var metrics = this.getMetrics();
   var x = (metrics.contentWidth - metrics.viewWidth) / 2;
   if (this.flyout_) {
     x -= this.flyout_.width_ / 2;
   }
   var y = (metrics.contentHeight - metrics.viewHeight) / 2;
-  this.scroll_(x, y);
+  this.scroll_((-metrics.contentLeft - x) - metrics.absoluteLeft,
+      (-metrics.contentTop - y) - metrics.absoluteTop);
 };
 
 /**
@@ -1720,7 +1717,8 @@ Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
   var scrollToCenterY = scrollToBlockY - halfViewHeight;
 
   Blockly.hideChaff();
-  this.scroll_(scrollToCenterX, scrollToCenterY);
+  this.scroll_((-metrics.contentLeft - scrollToCenterX) + metrics.absoluteLeft,
+      (-metrics.contentLeft - scrollToCenterY) + metrics.absoluteTop);
 };
 
 /**

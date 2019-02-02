@@ -122,6 +122,7 @@ function start() {
             scaleSpeed: 1.1
           }
       });
+  addToolboxButtonCallbacks();
   // Restore previously displayed text.
   if (sessionStorage) {
     var text = sessionStorage.getItem('textarea');
@@ -136,6 +137,13 @@ function start() {
     logEvents(false);
   }
   taChange();
+}
+
+function addToolboxButtonCallbacks() {
+  workspace.registerButtonCallback(
+      'addDynamicOption', Blockly.TestBlocks.addDynamicDropdownOption_);
+  workspace.registerButtonCallback(
+      'removeDynamicOption', Blockly.TestBlocks.removeDynamicDropdownOption_);
 }
 
 function changeTheme() {
@@ -1182,6 +1190,9 @@ h1 {
       <block type="example_dropdown_long"></block>
       <block type="example_dropdown_images"></block>
       <block type="example_dropdown_images_and_text"></block>
+      <button text="add option" callbackKey="addDynamicOption"></button>
+      <button text="remove option" callbackKey="removeDynamicOption"></button>
+      <block type="test_dropdown_dynamic"></block>
       <label text="Others"></label>
       <block type="example_angle"></block>
       <block type="example_date"></block>

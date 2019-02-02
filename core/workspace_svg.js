@@ -672,10 +672,9 @@ Blockly.WorkspaceSvg.prototype.resizeContents = function() {
     return;
   }
   if (this.scrollbar) {
-    // TODO(picklesrus): Once rachel-fenichel's scrollbar refactoring
-    // is complete, call the method that only resizes scrollbar
-    // based on contents.
-    this.scrollbar.resize();
+    var metrics = this.getMetrics();
+    this.scrollbar.hScroll.resizeContentHorizontal(metrics);
+    this.scrollbar.vScroll.resizeContentVertical(metrics);
   }
   this.updateInverseScreenCTM();
 };

@@ -109,7 +109,11 @@ function start() {
         oneBasedIndex: true,
         readOnly: false,
         rtl: rtl,
-        scrollbars: true,
+        move: {
+          scrollbars: true,
+          drag: true,
+          wheel: false,
+        },
         toolbox: toolbox,
         toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
         zoom:

@@ -1201,12 +1201,33 @@ Blockly.WorkspaceSvg.prototype.isDraggable = function() {
  * workspace's content should be sized so that it can move (bounded) or not
  * (exact sizing).
  * @returns {boolean} True if the workspace should be bounded, false otherwise.
+ * @private
  */
 Blockly.WorkspaceSvg.prototype.isContentBounded_ = function() {
   return (this.options.moveOptions && this.options.moveOptions.scrollbars)
       || (this.options.moveOptions && this.options.moveOptions.wheel)
       || (this.options.moveOptions && this.options.moveOptions.drag)
+      || (this.options.zoomOptions && this.options.zoomOptions.controls)
       || (this.options.zoomOptions && this.options.zoomOptions.wheel);
+};
+
+/**
+ * Is this workspace movable?
+ *
+ * This means the user can reposition the X Y coordinates of the workspace
+ * through input. This can be through scrollbars, scroll wheel, dragging, or
+ * through zooming with the scroll wheel (since the zoom is centered on the
+ * mouse position). This does not include zooming with the zoom controls
+ * since the X Y coordinates are decided programmatically.
+ * @returns {boolean} True if the workspace should be is movable, false
+ *     otherwise.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.isMovable_ = function() {
+  return (this.options.moveOptions && this.options.moveOptions.scrollbars)
+    || (this.options.moveOptions && this.options.moveOptions.wheel)
+    || (this.options.moveOptions && this.options.moveOptions.drag)
+    || (this.options.zoomOptions && this.options.zoomOptions.wheel);
 };
 
 /**
@@ -1349,7 +1370,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   menuOptions.push(redoOption);
 
   // Option to clean up blocks.
-  if (this.isContentBounded_()) {
+  if (this.isMovable_()) {
     var cleanOption = {};
     cleanOption.text = Blockly.Msg['CLEAN_UP'];
     cleanOption.enabled = topBlocks.length > 1;
@@ -1574,15 +1595,13 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
   if (this.scale == newScale) {
     return;  // No change in zoom.
   }
-  if (this.isContentBounded_()) {
-    var matrix = canvas.getCTM()
-        .translate(x * (1 - scaleChange), y * (1 - scaleChange))
-        .scale(scaleChange);
-    // newScale and matrix.a should be identical (within a rounding error).
-    // ScrollX and scrollY are in pixels.
-    this.scrollX = matrix.e - metrics.absoluteLeft;
-    this.scrollY = matrix.f - metrics.absoluteTop;
-  }
+  var matrix = canvas.getCTM()
+      .translate(x * (1 - scaleChange), y * (1 - scaleChange))
+      .scale(scaleChange);
+  // newScale and matrix.a should be identical (within a rounding error).
+  // ScrollX and scrollY are in pixels.
+  this.scrollX = matrix.e - metrics.absoluteLeft;
+  this.scrollY = matrix.f - metrics.absoluteTop;
   this.setScale(newScale);
 };
 
@@ -1612,11 +1631,6 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   var workspaceHeight = metrics.viewHeight;
   if (this.flyout_) {
     workspaceWidth -= this.flyout_.width_;
-  }
-  if (!this.isContentBounded_()) {
-    // Origin point of 0,0 is fixed, blocks will not scroll to center.
-    blocksWidth += metrics.contentLeft;
-    blocksHeight += metrics.contentTop;
   }
   var ratioX = workspaceWidth / blocksWidth;
   var ratioY = workspaceHeight / blocksHeight;
@@ -1661,8 +1675,9 @@ Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
     x -= this.flyout_.width_ / 2;
   }
   var y = (metrics.contentHeight - metrics.viewHeight) / 2;
-  this.scroll_((-metrics.contentLeft - x) - metrics.absoluteLeft,
-      (-metrics.contentTop - y) - metrics.absoluteTop);
+  x = -metrics.contentLeft - x;
+  y = -metrics.contentTop - y;
+  this.scroll_(x, y);
 };
 
 /**
@@ -1671,6 +1686,11 @@ Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
  * @public
  */
 Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
+  if (!this.isMovable_()) {
+    console.warn('Tried to move a non-movable workspace.')
+    return;
+  }
+
   var block = this.getBlockById(id);
   if (!block) {
     return;
@@ -1711,9 +1731,11 @@ Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
   var scrollToCenterX = scrollToBlockX - halfViewWidth;
   var scrollToCenterY = scrollToBlockY - halfViewHeight;
 
+  var x = -metrics.contentLeft - scrollToCenterX;
+  var y = -metrics.contentLeft - scrollToCenterY;
+
   Blockly.hideChaff();
-  this.scroll_((-metrics.contentLeft - scrollToCenterX) + metrics.absoluteLeft,
-      (-metrics.contentLeft - scrollToCenterY) + metrics.absoluteTop);
+  this.scroll_(x, y);
 };
 
 /**
@@ -1732,15 +1754,11 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
   if (this.grid_) {
     this.grid_.update(this.scale);
   }
-  if (this.isContentBounded_()) {
-    this.scroll_(this.scrollX, this.scrollY);
-    if (this.scrollbar) {
-      var metrics = this.getMetrics();
-      this.scrollbar.hScroll.resizeContentHorizontal(metrics);
-      this.scrollbar.vScroll.resizeContentVertical(metrics);
-    }
-  } else {
-    this.translate(this.scrollX, this.scrollY);
+  this.scroll_(this.scrollX, this.scrollY);
+  if (this.scrollbar) {
+    var metrics = this.getMetrics();
+    this.scrollbar.hScroll.resizeContentHorizontal(metrics);
+    this.scrollbar.vScroll.resizeContentVertical(metrics);
   }
   Blockly.hideChaff(false);
   if (this.flyout_) {

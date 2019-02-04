@@ -1219,8 +1219,7 @@ Blockly.WorkspaceSvg.prototype.isContentBounded_ = function() {
  * through zooming with the scroll wheel (since the zoom is centered on the
  * mouse position). This does not include zooming with the zoom controls
  * since the X Y coordinates are decided programmatically.
- * @returns {boolean} True if the workspace should be is movable, false
- *     otherwise.
+ * @returns {boolean} True if the workspace is movable, false otherwise.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.isMovable_ = function() {

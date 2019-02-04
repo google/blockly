@@ -1671,10 +1671,23 @@ Blockly.WorkspaceSvg.prototype.endCanvasTransition = function() {
 Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
   var metrics = this.getMetrics();
   var x = (metrics.contentWidth - metrics.viewWidth) / 2;
-  if (this.flyout_) {
-    x -= this.flyout_.width_ / 2;
-  }
   var y = (metrics.contentHeight - metrics.viewHeight) / 2;
+  if (this.flyout_) {
+    switch (this.toolboxPosition) {
+      case Blockly.TOOLBOX_AT_LEFT:
+        x -= this.flyout_.width_ / 2;
+        break;
+      case Blockly.TOOLBOX_AT_RIGHT:
+        x += this.flyout_.width_ / 2;
+        break;
+      case Blockly.TOOLBOX_AT_TOP:
+        y -= this.flyout_.height_ / 2;
+        break;
+      case Blockly.TOOLBOX_AT_BOTTOM:
+        y += this.flyout_.height_ / 2;
+        break;
+    }
+  }
   x = -metrics.contentLeft - x;
   y = -metrics.contentTop - y;
   this.scroll_(x, y);
@@ -1687,7 +1700,8 @@ Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
  */
 Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
   if (!this.isMovable_()) {
-    console.warn('Tried to move a non-movable workspace.')
+    console.warn('Tried to move a non-movable workspace. This could result' +
+      ' in blocks becoming inaccessible.');
     return;
   }
 

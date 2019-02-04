@@ -232,12 +232,33 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   mainWorkspace.translate(0, 0);
   Blockly.mainWorkspace = mainWorkspace;
 
-  if (!options.readOnly && !mainWorkspace.isContentBounded_()) {
+  if (!options.readOnly && !mainWorkspace.isMovable_()) {
     var workspaceChanged = function(e) {
-      // We always check isContentBounded_ again because the original
-      // "not bounded" state of isContentBounded_ could have been changed.
-      if (!mainWorkspace.isDragging() && !mainWorkspace.isContentBounded_()) {
+      // If the event is of a type that does not affect block placement,
+      // return. In this case it is better return-if rather than do-if so
+      // that if events are added that should activate this function to work,
+      // people don't ned to remember to update it.
+      if (e.type == Blockly.Events.VAR_CREATE ||
+          e.type == Blockly.Events.VAR_DELETE ||
+          e.type == Blockly.Events.VAR_RENAME ||
+          e.type == Blockly.Events.UI) {
+        return;
+      }
+
+      // We always check isMovable_ again because the original
+      // "not movable" state of isMovable_ could have been changed.
+      if (!mainWorkspace.isDragging() && !mainWorkspace.isMovable_()) {
         var metrics = mainWorkspace.getMetrics();
+        // Make sure we have exact dimensions even if the workspace is bounded.
+        if (mainWorkspace.isContentBounded_()) {
+          var blocksBoundingBox = mainWorkspace.getBlocksBoundingBox();
+          // Convert to pixels.
+          var scale = mainWorkspace.scale;
+          metrics.contentLeft = blocksBoundingBox.x * scale;
+          metrics.contentTop = blocksBoundingBox.y * scale;
+          metrics.contentWidth = blocksBoundingBox.width * scale;
+          metrics.contentHeight = blocksBoundingBox.height * scale;
+        }
         var edgeLeft = metrics.viewLeft + metrics.absoluteLeft;
         var edgeTop = metrics.viewTop + metrics.absoluteTop;
         if (metrics.contentTop < edgeTop ||
@@ -247,48 +268,63 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
                 (options.RTL ? metrics.viewLeft : edgeLeft) ||
             metrics.contentLeft + metrics.contentWidth > (options.RTL ?
                 metrics.viewWidth : metrics.viewWidth + edgeLeft)) {
-          // One or more blocks may be out of bounds.  Bump them back in.
+          // The event block is out of bounds, bump it back in.
           var MARGIN = 25;
-          var blocks = mainWorkspace.getTopBlocks(false);
           var oldGroup = null;
           if (e) {
             oldGroup = Blockly.Events.getGroup();
             Blockly.Events.setGroup(e.group);
           }
-          var movedBlocks = false;
-          for (var b = 0, block; block = blocks[b]; b++) {
-            var blockXY = block.getRelativeToSurfaceXY();
-            var blockHW = block.getHeightWidth();
-            // Bump any block that's above the top back inside.
-            var overflowTop = edgeTop + MARGIN - blockHW.height - blockXY.y;
-            if (overflowTop > 0) {
-              block.moveBy(0, overflowTop);
-              movedBlocks = true;
-            }
-            // Bump any block that's below the bottom back inside.
-            var overflowBottom =
-                edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
-            if (overflowBottom < 0) {
-              block.moveBy(0, overflowBottom);
-              movedBlocks = true;
-            }
-            // Bump any block that's off the left back inside.
-            var overflowLeft = MARGIN + edgeLeft -
-                blockXY.x - (options.RTL ? 0 : blockHW.width);
-            if (overflowLeft > 0) {
-              block.moveBy(overflowLeft, 0);
-              movedBlocks = true;
-            }
-            // Bump any block that's off the right back inside.
-            var overflowRight = edgeLeft + metrics.viewWidth - MARGIN -
-                blockXY.x + (options.RTL ? blockHW.width : 0);
-            if (overflowRight < 0) {
-              block.moveBy(overflowRight, 0);
-              movedBlocks = true;
-            }
+
+          var movedBlock = false;
+          var block = mainWorkspace.getBlockById(e.blockId);
+
+          // Get block info in pixel coordinates, since all of the metrics
+          // info is in pixel coordinates.
+          var blockXY = block.getRelativeToSurfaceXY();
+          blockXY.x *= mainWorkspace.scale;
+          blockXY.y *= mainWorkspace.scale;
+          var blockHW = block.getHeightWidth();
+          blockHW.width *= mainWorkspace.scale;
+          blockHW.height *= mainWorkspace.scale;
+
+          // Bump any block that's above the top back inside.
+          var overflowTop = edgeTop + MARGIN - blockHW.height - blockXY.y;
+          if (overflowTop > 0) {
+            // Convert to workspace units.
+            overflowTop /= mainWorkspace.scale;
+            block.moveBy(0, overflowTop);
+            movedBlock = true;
+          }
+          // Bump any block that's below the bottom back inside.
+          var overflowBottom =
+              edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
+          if (overflowBottom < 0) {
+            // Convert to workspace units.
+            overflowBottom /= mainWorkspace.scale;
+            block.moveBy(0, overflowBottom);
+            movedBlock = true;
+          }
+          // Bump any block that's off the left back inside.
+          var overflowLeft = MARGIN + edgeLeft -
+              blockXY.x - (options.RTL ? 0 : blockHW.width);
+          if (overflowLeft > 0) {
+            // Convert to workspace units.
+            overflowLeft /= mainWorkspace.scale;
+            block.moveBy(overflowLeft, 0);
+            movedBlock = true;
+          }
+          // Bump any block that's off the right back inside.
+          var overflowRight = edgeLeft + metrics.viewWidth - MARGIN -
+              blockXY.x + (options.RTL ? blockHW.width : 0);
+          if (overflowRight < 0) {
+            // Convert to workspace units.
+            overflowRight /= mainWorkspace.scale;
+            block.moveBy(overflowRight, 0);
+            movedBlock = true;
           }
           if (e) {
-            if (!e.group && movedBlocks) {
+            if (!e.group && movedBlock) {
               console.log('WARNING: Moved blocks in bounds but there was no event group.'
                         + ' This may break undo.');
             }

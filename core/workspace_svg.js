@@ -1630,7 +1630,11 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   var workspaceWidth = metrics.viewWidth;
   var workspaceHeight = metrics.viewHeight;
   if (this.flyout_) {
-    workspaceWidth -= this.flyout_.width_;
+    if (this.horizontalLayout) {
+      workspaceHeight -= this.flyout_.height_;
+    } else {
+      workspaceWidth -= this.flyout_.width_;
+    }
   }
   var ratioX = workspaceWidth / blocksWidth;
   var ratioY = workspaceHeight / blocksHeight;

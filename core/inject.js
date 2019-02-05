@@ -282,7 +282,6 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             Blockly.Events.setGroup(e.group);
           }
 
-          var MARGIN = 25;
           var movedBlock = false;
           var block = mainWorkspace.getBlockById(e.blockId);
 
@@ -297,7 +296,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
           // Bump any block that's above the top back inside.
           var overflowTop =
-              metrics.viewTop + MARGIN - blockHW.height - blockXY.y;
+              metrics.viewTop - blockXY.y;
           if (overflowTop > 0) {
             // Convert to workspace units.
             overflowTop /= mainWorkspace.scale;
@@ -307,7 +306,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
           // Bump any block that's below the bottom back inside.
           var overflowBottom =
-            metrics.viewTop + metrics.viewHeight - MARGIN - blockXY.y;
+            metrics.viewTop + metrics.viewHeight - blockHW.height - blockXY.y;
           if (overflowBottom < 0) {
             // Convert to workspace units.
             overflowBottom /= mainWorkspace.scale;
@@ -316,8 +315,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
           }
 
           // Bump any block that's off the left back inside.
-          var overflowLeft = MARGIN + metrics.viewLeft -
-              blockXY.x - (options.RTL ? 0 : blockHW.width);
+          var overflowLeft = metrics.viewLeft -
+              blockXY.x + (options.RTL ? blockHW.width : 0);
           if (overflowLeft > 0) {
             // Convert to workspace units.
             overflowLeft /= mainWorkspace.scale;
@@ -326,8 +325,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
           }
 
           // Bump any block that's off the right back inside.
-          var overflowRight = metrics.viewLeft + metrics.viewWidth - MARGIN -
-              blockXY.x + (options.RTL ? blockHW.width : 0);
+          var overflowRight = metrics.viewLeft + metrics.viewWidth -
+              blockXY.x - (options.RTL ? 0 : blockHW.width);
           if (overflowRight < 0) {
             // Convert to workspace units.
             overflowRight /= mainWorkspace.scale;

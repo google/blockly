@@ -250,6 +250,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       // "not movable" state of isMovable_ could have been changed.
       if (!mainWorkspace.isDragging() && !mainWorkspace.isMovable_()) {
         var metrics = mainWorkspace.getMetrics();
+
         // Make sure we have exact dimensions even if the workspace is bounded.
         if (mainWorkspace.isContentBounded_()) {
           var blocksBoundingBox = mainWorkspace.getBlocksBoundingBox();
@@ -260,28 +261,33 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
           metrics.contentWidth = blocksBoundingBox.width * scale;
           metrics.contentHeight = blocksBoundingBox.height * scale;
         }
-        var edgeLeft = metrics.viewLeft + metrics.absoluteLeft;
-        var edgeTop = metrics.viewTop + metrics.absoluteTop;
-        if (metrics.contentTop < edgeTop ||
-            metrics.contentTop + metrics.contentHeight >
-            metrics.viewHeight + edgeTop ||
-            metrics.contentLeft <
-                (options.RTL ? metrics.viewLeft : edgeLeft) ||
-            metrics.contentLeft + metrics.contentWidth > (options.RTL ?
-                metrics.viewWidth : metrics.viewWidth + edgeLeft)) {
-          // The event block is out of bounds, bump it back in.
-          var MARGIN = 25;
+
+        // Check if the block is out of bounds.
+        var contentTop = metrics.contentTop;
+        var contentBottom = metrics.contentTop + metrics.contentHeight;
+        var contentLeft = metrics.contentLeft;
+        var contentRight = metrics.contentLeft + metrics.contentWidth;
+        var viewTop = metrics.viewTop;
+        var viewBottom = metrics.viewHeight + metrics.viewTop;
+        var viewLeft = metrics.viewLeft;
+        var viewRight = options.RTL ? metrics.viewWidth :
+            metrics.viewWidth + metrics.viewLeft;
+        if (contentTop < viewTop || contentBottom > viewBottom ||
+            contentLeft < viewLeft || contentRight > viewRight) {
+
+          // Handle undo.
           var oldGroup = null;
           if (e) {
             oldGroup = Blockly.Events.getGroup();
             Blockly.Events.setGroup(e.group);
           }
 
+          var MARGIN = 25;
           var movedBlock = false;
           var block = mainWorkspace.getBlockById(e.blockId);
 
-          // Get block info in pixel coordinates, since all of the metrics
-          // info is in pixel coordinates.
+          // Get block info in pixel units, since all of the metrics
+          // info is in pixel units.
           var blockXY = block.getRelativeToSurfaceXY();
           blockXY.x *= mainWorkspace.scale;
           blockXY.y *= mainWorkspace.scale;
@@ -290,24 +296,27 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
           blockHW.height *= mainWorkspace.scale;
 
           // Bump any block that's above the top back inside.
-          var overflowTop = edgeTop + MARGIN - blockHW.height - blockXY.y;
+          var overflowTop =
+              metrics.viewTop + MARGIN - blockHW.height - blockXY.y;
           if (overflowTop > 0) {
             // Convert to workspace units.
             overflowTop /= mainWorkspace.scale;
             block.moveBy(0, overflowTop);
             movedBlock = true;
           }
+
           // Bump any block that's below the bottom back inside.
           var overflowBottom =
-              edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
+            metrics.viewTop + metrics.viewHeight - MARGIN - blockXY.y;
           if (overflowBottom < 0) {
             // Convert to workspace units.
             overflowBottom /= mainWorkspace.scale;
             block.moveBy(0, overflowBottom);
             movedBlock = true;
           }
+
           // Bump any block that's off the left back inside.
-          var overflowLeft = MARGIN + edgeLeft -
+          var overflowLeft = MARGIN + metrics.viewLeft -
               blockXY.x - (options.RTL ? 0 : blockHW.width);
           if (overflowLeft > 0) {
             // Convert to workspace units.
@@ -315,8 +324,9 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             block.moveBy(overflowLeft, 0);
             movedBlock = true;
           }
+
           // Bump any block that's off the right back inside.
-          var overflowRight = edgeLeft + metrics.viewWidth - MARGIN -
+          var overflowRight = metrics.viewLeft + metrics.viewWidth - MARGIN -
               blockXY.x + (options.RTL ? blockHW.width : 0);
           if (overflowRight < 0) {
             // Convert to workspace units.
@@ -324,6 +334,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             block.moveBy(overflowRight, 0);
             movedBlock = true;
           }
+
           if (e) {
             if (!e.group && movedBlock) {
               console.log('WARNING: Moved block in bounds but there was no event group.'
@@ -400,11 +411,6 @@ Blockly.init_ = function(mainWorkspace) {
     mainWorkspace.scrollbar.resize();
   } else {
     mainWorkspace.setMetrics({x: .5, y: .5});
-    // Makes it so metrics.viewLeft and metrics.viewTop are calculated
-    // correctly, as well as some other things (like zoom) that rely on scroll.
-    var metrics = mainWorkspace.getMetrics();
-    mainWorkspace.scrollX = metrics.absoluteLeft;
-    mainWorkspace.scrollY = metrics.absoluteTop;
   }
 
   // Load the sounds.

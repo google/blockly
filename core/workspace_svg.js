@@ -1201,7 +1201,7 @@ Blockly.WorkspaceSvg.prototype.isDraggable = function() {
  * workspace's content should be sized so that it can move (bounded) or not
  * (exact sizing).
  * @returns {boolean} True if the workspace should be bounded, false otherwise.
- * @private
+ * @package
  */
 Blockly.WorkspaceSvg.prototype.isContentBounded_ = function() {
   return (this.options.moveOptions && this.options.moveOptions.scrollbars)
@@ -1810,19 +1810,19 @@ Blockly.WorkspaceSvg.prototype.scroll_ = function(x, y) {
   // location.
   Blockly.WidgetDiv.hide(true);
 
-  x += metrics.absoluteLeft;
-  y += metrics.absoluteTop;
   this.scrollX = x;
   this.scrollY = y;
+  if (this.scrollbar) {
+    this.scrollbar.hScroll.setHandlePosition((-x - metrics.contentLeft)
+      * this.scrollbar.hScroll.ratio_);
+    this.scrollbar.vScroll.setHandlePosition((-y - metrics.contentTop)
+      * this.scrollbar.vScroll.ratio_);
+  }
+  x += metrics.absoluteLeft;
+  y += metrics.absoluteTop;
   this.translate(x, y);
   if (this.grid_) {
     this.grid_.moveTo(x, y);
-  }
-  if (this.scrollbar) {
-    this.scrollbar.hScroll.setHandlePosition((-x - metrics.contentLeft)
-        * this.scrollbar.hScroll.ratio_);
-    this.scrollbar.vScroll.setHandlePosition((-y - metrics.contentTop)
-      * this.scrollbar.vScroll.ratio_);
   }
 };
 

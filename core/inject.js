@@ -238,7 +238,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       // return. In this case it is better return-if rather than do-if so
       // that if events are added that should activate this function to work,
       // people don't ned to remember to update it.
-      if (e.type == Blockly.Events.VAR_CREATE ||
+      if (e.type == Blockly.Events.BLOCK_DELETE ||
+          e.type == Blockly.Events.VAR_CREATE ||
           e.type == Blockly.Events.VAR_DELETE ||
           e.type == Blockly.Events.VAR_RENAME ||
           e.type == Blockly.Events.UI) {

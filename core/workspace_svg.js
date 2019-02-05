@@ -1804,10 +1804,10 @@ Blockly.WorkspaceSvg.prototype.scroll_ = function(x, y) {
   // location.
   Blockly.WidgetDiv.hide(true);
 
-  this.scrollX = x;
-  this.scrollY = y;
   x += metrics.absoluteLeft;
   y += metrics.absoluteTop;
+  this.scrollX = x;
+  this.scrollY = y;
   this.translate(x, y);
   if (this.grid_) {
     this.grid_.moveTo(x, y);

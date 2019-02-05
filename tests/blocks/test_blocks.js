@@ -603,26 +603,35 @@ Blockly.TestBlocks.dynamicDropdownOptions_ = [];
  * @package
  */
 Blockly.TestBlocks.addDynamicDropdownOption_ = function() {
-  Blockly.prompt('Add an option?', '', function(text) {
+  Blockly.prompt('Add an option?',
+      'option '  + Blockly.TestBlocks.dynamicDropdownOptions_.length,
+      function(text) {
     if (text) {
       // Do not remove this log! Helps you know if it was added correctly.
       console.log('Adding option: ' + text);
-      Blockly.TestBlocks.dynamicDropdownOptions_.push([text,
-        'OPTION' + Blockly.TestBlocks.dynamicDropdownOptions_.length]);
+      // The option is an array containing human-readable text and
+      // language-neutral text.
+      Blockly.TestBlocks.dynamicDropdownOptions_.push(
+          [text, 'OPTION' + Blockly.TestBlocks.dynamicDropdownOptions_.length]);
     }
   })
 };
 
 /**
  * Handles "remove option" button in the field test category. This will prompt
- * the user for an option to remove.
+ * the user for an option to remove. May remove multiple options with the
+ * same name.
  * @package
  */
 Blockly.TestBlocks.removeDynamicDropdownOption_ = function() {
-  Blockly.prompt('Remove an option?', '', function(text) {
+  var defaultText = Blockly.TestBlocks.dynamicDropdownOptions_[0] ?
+      Blockly.TestBlocks.dynamicDropdownOptions_[0][0] : '';
+  Blockly.prompt('Remove an option?', defaultText, function(text) {
     for (var i = 0, option;
          option = Blockly.TestBlocks.dynamicDropdownOptions_[i];
          i++) {
+      // The option is an array containing human-readable text and
+      // language-neutral text, we'll compare against the human-readable text.
       if (option[0] == text) {
         // Do not remove this log! Helps you know if it was removed correctly.
         console.log('Removing option: ' + text);

@@ -141,6 +141,15 @@ Blockly.BlockSvg.prototype.warningTextDb_ = null;
 Blockly.BlockSvg.INLINE = -1;
 
 /**
+ * ID to give the "collapsed warnings" warning. Allows us to remove the
+ * "collapsed warnings" warning without removing any warnings that belong to
+ * the block.
+ * @type {string}
+ * @const
+ */
+Blockly.BlockSvg.COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
+
+/**
  * Create and initialize the SVG representation of the block.
  * May be called more than once.
  */
@@ -509,10 +518,30 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
     }
     var text = this.toString(Blockly.COLLAPSE_CHARS);
     this.appendDummyInput(COLLAPSED_INPUT_NAME).appendField(text).init();
+
+    // Add any warnings on enclosed blocks to this block.
+    var descendants = this.getDescendants(true);
+    var nextBlock = this.getNextBlock();
+    if (nextBlock) {
+      var index = descendants.indexOf(nextBlock);
+      descendants.splice(index, descendants.length - index);
+    }
+    for (var i = 1, block; block = descendants[i]; i++) {
+      if (block.warning) {
+        this.setWarningText(Blockly.Msg['COLLAPSED_WARNINGS_WARNING'],
+            Blockly.BlockSvg.COLLAPSED_WARNING_ID);
+        break;
+      }
+    }
   } else {
     this.removeInput(COLLAPSED_INPUT_NAME);
     // Clear any warnings inherited from enclosed blocks.
-    this.setWarningText(null);
+    if (this.warning) {
+      this.warning.setText('', Blockly.BlockSvg.COLLAPSED_WARNING_ID);
+      if (!Object.keys(this.warning.text_).length) {
+        this.setWarningText(null);
+      }
+    }
   }
   Blockly.BlockSvg.superClass_.setCollapsed.call(this, collapsed);
 
@@ -864,16 +893,28 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     this.warningTextDb_ = null;
   }
 
+  // If the block is rendered we need to record the event before disposing of
+  // the icons to prevent losing information.
+  // TODO (#1969): Remove event generation/firing once comments are fixed.
+  this.unplug(healStack);
+  var deleteEvent;
+  if (Blockly.Events.isEnabled()) {
+    deleteEvent = new Blockly.Events.BlockDelete(this);
+  }
   Blockly.Events.disable();
   try {
     var icons = this.getIcons();
     for (var i = 0; i < icons.length; i++) {
       icons[i].dispose();
     }
+    // TODO (#1969): Move out of disable block once comments are fixed.
+    Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
   } finally {
     Blockly.Events.enable();
   }
-  Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
+  if (Blockly.Events.isEnabled() && deleteEvent) {
+    Blockly.Events.fire(deleteEvent);
+  }
 
   Blockly.utils.removeNode(this.svgGroup_);
   blockWorkspace.resizeContents();
@@ -894,18 +935,14 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     return;
   }
   var hexColour = this.getColour();
+  var secondaryColour = this.getSecondaryColour();
+  var tertiaryColour = this.getTertiaryColour();
   var rgb = goog.color.hexToRgb(hexColour);
+
   if (this.isShadow()) {
-    rgb = goog.color.lighten(rgb, 0.6);
-    hexColour = goog.color.rgbArrayToHex(rgb);
-    this.svgPathLight_.style.display = 'none';
-    this.svgPathDark_.setAttribute('fill', hexColour);
+    hexColour = this.setShadowColour_(rgb, secondaryColour);
   } else {
-    this.svgPathLight_.style.display = '';
-    var hexLight = goog.color.rgbArrayToHex(goog.color.lighten(rgb, 0.3));
-    var hexDark = goog.color.rgbArrayToHex(goog.color.darken(rgb, 0.2));
-    this.svgPathLight_.setAttribute('stroke', hexLight);
-    this.svgPathDark_.setAttribute('fill', hexDark);
+    this.setBorderColour_(rgb, tertiaryColour);
   }
   this.svgPath_.setAttribute('fill', hexColour);
 
@@ -921,6 +958,51 @@ Blockly.BlockSvg.prototype.updateColour = function() {
       field.forceRerender();
     }
   }
+};
+
+/**
+ * Sets the colour of the border.
+ * Removes the light and dark paths if a tertiary colour is defined.
+ * @param {!string} rgb Colour of the block.
+ * @param {?string} tertiaryColour Colour of the border.
+ */
+Blockly.BlockSvg.prototype.setBorderColour_ = function(rgb, tertiaryColour) {
+  if (tertiaryColour) {
+    this.svgPathLight_.setAttribute('stroke', 'none');
+    this.svgPathDark_.setAttribute('fill', 'none');
+    this.svgPath_.setAttribute('stroke', tertiaryColour);
+  } else {
+    this.svgPathLight_.style.display = '';
+    var hexLight = goog.color.rgbArrayToHex(goog.color.lighten(rgb, 0.3));
+    var hexDark = goog.color.rgbArrayToHex(goog.color.darken(rgb, 0.2));
+    this.svgPathLight_.setAttribute('stroke', hexLight);
+    this.svgPathDark_.setAttribute('fill', hexDark);
+    this.svgPath_.setAttribute('stroke', 'none');
+
+  }
+};
+
+/**
+ * Sets the colour of shadow blocks.
+ * @param {!string} rgb Primary colour of the block.
+ * @param {?string} secondaryColour Colour for shadow block.
+ * @return {!string} hexColour The background color of the block.
+ */
+Blockly.BlockSvg.prototype.setShadowColour_ = function(
+    rgb, secondaryColour) {
+  var hexColour;
+  if (secondaryColour) {
+    this.svgPathLight_.style.display = 'none';
+    this.svgPathDark_.style.display = 'none';
+    this.svgPath_.setAttribute('fill', secondaryColour);
+    hexColour = secondaryColour;
+  } else {
+    rgb = goog.color.lighten(rgb, 0.6);
+    hexColour = goog.color.rgbArrayToHex(rgb);
+    this.svgPathLight_.style.display = 'none';
+    this.svgPathDark_.setAttribute('fill', hexColour);
+  }
+  return hexColour;
 };
 
 /**
@@ -1035,7 +1117,8 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
     parent = parent.getSurroundParent();
   }
   if (collapsedParent) {
-    collapsedParent.setWarningText(text, 'collapsed ' + this.id + ' ' + id);
+    collapsedParent.setWarningText(Blockly.Msg['COLLAPSED_WARNINGS_WARNING'],
+        Blockly.BlockSvg.COLLAPSED_WARNING_ID);
   }
 
   var changedState = false;

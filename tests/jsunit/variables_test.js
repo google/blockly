@@ -97,3 +97,56 @@ var test_allUsedVarModels_allUnused = buildVariablesTest(
           0, result.length);
     }
 );
+
+var test_getVariable_byId = buildVariablesTest(
+    function(workspace) {
+      var var_1 = workspace.createVariable('name1', 'type1', 'id1');
+      var var_2 = workspace.createVariable('name2', 'type1', 'id2');
+      var var_3 = workspace.createVariable('name3', 'type2', 'id3');
+      var result_1 = Blockly.Variables.getVariable(workspace, 'id1');
+      var result_2 = Blockly.Variables.getVariable(workspace, 'id2');
+      var result_3 = Blockly.Variables.getVariable(workspace, 'id3');
+
+      assertEquals(var_1, result_1);
+      assertEquals(var_2, result_2);
+      assertEquals(var_3, result_3);
+    }
+);
+
+var test_getVariable_byNameAndType = buildVariablesTest(
+    function(workspace) {
+      var var_1 = workspace.createVariable('name1', 'type1', 'id1');
+      var var_2 = workspace.createVariable('name2', 'type1', 'id2');
+      var var_3 = workspace.createVariable('name3', 'type2', 'id3');
+      var result_1 =
+          Blockly.Variables.getVariable(workspace, null, 'name1', 'type1');
+      var result_2 =
+          Blockly.Variables.getVariable(workspace, null, 'name2', 'type1');
+      var result_3 =
+          Blockly.Variables.getVariable(workspace, null, 'name3', 'type2');
+
+      // Searching by name + type is correct.
+      assertEquals(var_1, result_1);
+      assertEquals(var_2, result_2);
+      assertEquals(var_3, result_3);
+    }
+);
+
+var test_getVariable_byIdThenName = buildVariablesTest(
+    function(workspace) {
+      var var_1 = workspace.createVariable('name1', 'type1', 'id1');
+      var var_2 = workspace.createVariable('name2', 'type1', 'id2');
+      var var_3 = workspace.createVariable('name3', 'type2', 'id3');
+      var result_1 =
+          Blockly.Variables.getVariable(workspace, 'badId', 'name1', 'type1');
+      var result_2 =
+          Blockly.Variables.getVariable(workspace, 'badId', 'name2', 'type1');
+      var result_3 =
+          Blockly.Variables.getVariable(workspace, 'badId', 'name3', 'type2');
+
+      // Searching by ID failed, but falling back onto name + type is correct.
+      assertEquals(var_1, result_1);
+      assertEquals(var_2, result_2);
+      assertEquals(var_3, result_3);
+    }
+);

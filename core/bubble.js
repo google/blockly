@@ -401,22 +401,121 @@ Blockly.Bubble.prototype.setAnchorLocation = function(xy) {
  * @private
  */
 Blockly.Bubble.prototype.layoutBubble_ = function() {
-  // Compute the preferred bubble location.
-  var relativeLeft = -this.width_ / 4;
-  var relativeTop = -this.height_ - Blockly.BlockSvg.MIN_BLOCK_Y;
-  // Prevent the bubble from being off-screen.
   var metrics = this.workspace_.getMetrics();
   metrics.viewWidth /= this.workspace_.scale;
   metrics.viewLeft /= this.workspace_.scale;
+  var optimalLeft = this.getOptimalRelativeLeft_(metrics);
+  var optimalTop = this.getOptimalRelativeTop_(metrics);
+  var bbox = this.shape_.getBBox();
+
+  var topPosition = {x: optimalLeft,
+    y: -this.height_ - Blockly.BlockSvg.MIN_BLOCK_Y};
+  var startPosition = {x: -this.width_ - 30, y: optimalTop};
+  var endPosition = {x: bbox.width, y: optimalTop};
+  var bottomPosition = {x: optimalLeft, y: bbox.height};
+
+  var closerPosition = bbox.width < bbox.height ? endPosition : bottomPosition;
+  var fartherPosition = bbox.width < bbox.height ? bottomPosition : endPosition;
+
+  var topPositionOverlap = this.getOverlap_(topPosition, metrics);
+  var startPositionOverlap = this.getOverlap_(startPosition, metrics);
+  var closerPositionOverlap = this.getOverlap_(closerPosition, metrics);
+  var fartherPositionOverlap = this.getOverlap_(fartherPosition, metrics);
+
+  // Set the position to whichever position shows the most of the bubble,
+  // with tiebreaks going in the order: top > start > close > far.
+  var mostOverlap = Math.max(topPositionOverlap, startPositionOverlap,
+      closerPositionOverlap, fartherPositionOverlap);
+  if (topPositionOverlap == mostOverlap) {
+    this.relativeLeft_ = topPosition.x;
+    this.relativeTop_ = topPosition.y;
+    return;
+  }
+  if (startPositionOverlap == mostOverlap) {
+    this.relativeLeft_ = startPosition.x;
+    this.relativeTop_ = startPosition.y;
+    return;
+  }
+  if (closerPositionOverlap == mostOverlap) {
+    this.relativeLeft_ = closerPosition.x;
+    this.relativeTop_ = closerPosition.y;
+    return;
+  }
+  this.relativeLeft_ = fartherPosition.x;
+  this.relativeTop_ = fartherPosition.y;
+};
+
+/**
+ * Calculate the what percentage of the bubble overlaps with the visible
+ * workspace (what percentage of the bubble is visible).
+ * @param {!Object} relativeMin The position of the top-left corner of the
+ *    bubble relative to the anchor point.
+ * @param {!number} relativeMin.x The x-position of the relativeMin.
+ * @param {!number} relativeMin.y The y-position of the relativeMin.
+ * @param {!Object} metrics The metrics of the workspace the bubble will
+ *    appear in.
+ * @returns {number} The percentage of the bubble that is visible.
+ * @private
+ */
+Blockly.Bubble.prototype.getOverlap_ = function(relativeMin, metrics) {
+  // The position of the top-start corner of the bubble in workspace units.
+  var bubbleMin = {
+    x: relativeMin.x + (this.workspace_.RTL ?
+        metrics.viewWidth - this.anchorXY_.x :
+        this.anchorXY_.x),
+    y: relativeMin.y + this.anchorXY_.y
+  };
+  // The position of the bottom-end corner of the bubble in workspace units.
+  var bubbleMax = {
+    x: bubbleMin.x + this.width_,
+    y: bubbleMin.y + this.height_
+  };
+  // The position of the top-start corner of the workspace.
+  var workspaceMin = {
+    x: this.workspace_.RTL ? -metrics.viewLeft : metrics.viewLeft,
+    y: metrics.viewTop
+  };
+  // The position of the bottom-end corner of the workspace.
+  var workspaceMax = {
+    x: workspaceMin.x + metrics.viewWidth,
+    y: workspaceMin.y + metrics.viewHeight
+  };
+
+  var overlapWidth = Math.min(bubbleMax.x, workspaceMax.x) -
+      Math.max(bubbleMin.x, workspaceMin.x);
+  var overlapHeight = Math.min(bubbleMax.y, workspaceMax.y) -
+      Math.max(bubbleMin.y, workspaceMin.y);
+  return Math.max(0, Math.min(1,
+      (overlapWidth * overlapHeight) / (this.width_ * this.height_)));
+};
+
+/**
+ * Calculate what the optimal horizontal position of the top-left corner of the
+ * bubble is (relative to the anchor point) so that the most area of the
+ * bubble is shown.
+ * @param {!Object} metrics The metrics of the workspace the bubble will
+ *    appear in.
+ * @returns {number} The optimal horizontal position of the top-left corner
+ *    of the bubble.
+ * @private
+ */
+Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(metrics) {
+  var relativeLeft = -this.width_ / 4;
+
+  // No amount of sliding left or right will give us a better overlap.
+  if (this.width_ > metrics.viewWidth) {
+    return relativeLeft;
+  }
+
   var anchorX = this.anchorXY_.x;
   if (this.workspace_.RTL) {
     if (anchorX - metrics.viewLeft - relativeLeft - this.width_ <
         Blockly.Scrollbar.scrollbarThickness) {
       // Slide the bubble right until it is onscreen.
       relativeLeft = anchorX - metrics.viewLeft - this.width_ -
-        Blockly.Scrollbar.scrollbarThickness;
+          Blockly.Scrollbar.scrollbarThickness;
     } else if (anchorX - metrics.viewLeft - relativeLeft >
-               metrics.viewWidth) {
+        metrics.viewWidth) {
       // Slide the bubble left until it is onscreen.
       relativeLeft = anchorX - metrics.viewLeft - metrics.viewWidth;
     }
@@ -433,13 +532,42 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
           this.width_ - Blockly.Scrollbar.scrollbarThickness;
     }
   }
-  if (this.anchorXY_.y + relativeTop < metrics.viewTop) {
-    // Slide the bubble below the block.
-    var bBox = /** @type {SVGLocatable} */ (this.shape_).getBBox();
-    relativeTop = bBox.height;
+
+  return relativeLeft;
+};
+
+/**
+ * Calculate what the optimal vertical position of the top-left corner of
+ * the bubble is (relative to the anchor point) so that the most area of the
+ * bubble is shown.
+ * @param {!Object} metrics The metrics of the workspace the bubble will
+ *    appear in.
+ * @returns {number} The optimal vertical position of the top-left corner
+ *    of the bubble.
+ * @private
+ */
+Blockly.Bubble.prototype.getOptimalRelativeTop_ = function(metrics) {
+  var relativeTop = -this.height_ / 4;
+
+  // No amount of sliding up or down will give us a better overlap.
+  if (this.height_ > metrics.viewHeight) {
+    return relativeTop;
   }
-  this.relativeLeft_ = relativeLeft;
-  this.relativeTop_ = relativeTop;
+
+  var anchorY = this.anchorXY_.y;
+  if (anchorY + relativeTop < metrics.viewTop) {
+    // Slide the bubble down until it is onscreen.
+    relativeTop = metrics.viewTop - anchorY;
+  } else if (metrics.viewTop + metrics.viewHeight <
+      anchorY + relativeTop + this.height_ +
+      Blockly.BlockSvg.SEP_SPACE_Y +
+      Blockly.Scrollbar.scrollbarThickness) {
+    // Slide the bubble up until it is onscreen.
+    relativeTop = metrics.viewTop + metrics.viewHeight - anchorY -
+        this.height_ - Blockly.Scrollbar.scrollbarThickness;
+  }
+
+  return relativeTop;
 };
 
 /**

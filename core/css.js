@@ -531,15 +531,15 @@ Blockly.Css.CONTENT = [
     'fill: #bbb;',
   '}',
 
-  '.blocklyZoom>image {',
+  '.blocklyZoom>image, .blocklyZoom>svg>image {',
     'opacity: .4;',
   '}',
 
-  '.blocklyZoom>image:hover {',
+  '.blocklyZoom>image:hover, .blocklyZoom>svg>image:hover {',
     'opacity: .6;',
   '}',
 
-  '.blocklyZoom>image:active {',
+  '.blocklyZoom>image:active, .blocklyZoom>svg>image:active {',
     'opacity: .8;',
   '}',
 
@@ -584,6 +584,7 @@ Blockly.Css.CONTENT = [
 
   '.blocklyContextMenu {',
     'border-radius: 4px;',
+    'max-height: 100%;',
   '}',
 
   '.blocklyDropdownMenu {',

@@ -351,3 +351,19 @@ Blockly.BlockDragger.prototype.dragIcons_ = function(dxy) {
     data.icon.setIconLocation(goog.math.Coordinate.sum(data.location, dxy));
   }
 };
+
+/**
+ * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
+ * or 2 insertion markers.
+ * @return {!Array.<!Blockly.BlockSvg>} A possibly empty list of insertion
+ *     marker blocks.
+ * @package
+ */
+Blockly.BlockDragger.prototype.getInsertionMarkers = function() {
+  // No insertion markers with the old style of dragged connection managers.
+  if (this.draggedConnectionManager_ &&
+      this.draggedConnectionManager_.getInsertionMarkers) {
+    return this.draggedConnectionManager_.getInsertionMarkers();
+  }
+  return [];
+};

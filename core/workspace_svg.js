@@ -1672,6 +1672,12 @@ Blockly.WorkspaceSvg.prototype.endCanvasTransition = function() {
  * Center the workspace.
  */
 Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
+  if (!this.isMovable_()) {
+    console.warn('Tried to move a non-movable workspace. This could result' +
+      ' in blocks becoming inaccessible.');
+    return;
+  }
+
   var metrics = this.getMetrics();
   var x = (metrics.contentWidth - metrics.viewWidth) / 2;
   var y = (metrics.contentHeight - metrics.viewHeight) / 2;

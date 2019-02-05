@@ -102,7 +102,9 @@ Blockly.ZoomControls.prototype.createDom = function() {
   var rnd = String(Math.random()).substring(2);
   this.createZoomOutSvg_(rnd);
   this.createZoomInSvg_(rnd);
-  this.createZoomResetSvg_(rnd);
+  if (this.workspace_.isMovable_()) {
+    this.createZoomResetSvg_(rnd);
+  }
   return this.svgGroup_;
 };
 

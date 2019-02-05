@@ -233,6 +233,54 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   Blockly.mainWorkspace = mainWorkspace;
 
   if (!options.readOnly && !mainWorkspace.isMovable_()) {
+    // Helper functions for the workspaceChanged callback.
+    var getWorkspaceMetrics = function() {
+      var workspaceMetrics = Object.create(null);
+      var defaultMetrics = mainWorkspace.getMetrics();
+      var scale = mainWorkspace.scale;
+
+      // Get the view metrics in workspace units.
+      workspaceMetrics.viewLeft = defaultMetrics.viewLeft / scale;
+      workspaceMetrics.viewTop = defaultMetrics.viewTop / scale;
+      workspaceMetrics.viewRight =
+          (defaultMetrics.viewLeft + defaultMetrics.viewWidth) / scale;
+      workspaceMetrics.viewBottom =
+          (defaultMetrics.viewTop + defaultMetrics.viewHeight) / scale;
+
+      // Get the exact content metrics in workspace units, even if the
+      // content is bound.
+      if (mainWorkspace.isContentBounded_()) {
+        // Already in workspace units, not need to divide by scale.
+        var blocksBoundingBox = mainWorkspace.getBlocksBoundingBox();
+        workspaceMetrics.contentLeft = blocksBoundingBox.x;
+        workspaceMetrics.contentTop = blocksBoundingBox.y;
+        workspaceMetrics.contentRight =
+            blocksBoundingBox.x + blocksBoundingBox.width;
+        workspaceMetrics.contentBottom =
+            blocksBoundingBox.y + blocksBoundingBox.height;
+      } else {
+        workspaceMetrics.contentLeft = defaultMetrics.contentLeft / scale;
+        workspaceMetrics.contentTop = defaultMetrics.contentTop / scale;
+        workspaceMetrics.contentRight =
+            (defaultMetrics.contentLeft + defaultMetrics.contentWidth) / scale;
+        workspaceMetrics.contentBottom =
+            (defaultMetrics.contentTop + defaultMetrics.contentHeight) / scale;
+      }
+
+      return workspaceMetrics;
+    };
+    var getWorkspaceObjectMetrics = function(object) {
+      var position = object.getRelativeToSurfaceXY();
+      var size = object.getHeightWidth();
+
+      return {
+        left: position.x - (options.RTL ? size.width : 0),
+        right: position.x + (options.RTL ? 0 : size.width),
+        top: position.y,
+        bottom: position.y + size.height,
+      };
+    };
+
     var workspaceChanged = function(e) {
       // If the event is of a type that does not affect block placement,
       // return. In this case it is better return-if rather than do-if so
@@ -249,31 +297,11 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       // We always check isMovable_ again because the original
       // "not movable" state of isMovable_ could have been changed.
       if (!mainWorkspace.isDragging() && !mainWorkspace.isMovable_()) {
-        var metrics = mainWorkspace.getMetrics();
-
-        // Make sure we have exact dimensions even if the workspace is bounded.
-        if (mainWorkspace.isContentBounded_()) {
-          var blocksBoundingBox = mainWorkspace.getBlocksBoundingBox();
-          // Convert to pixels.
-          var scale = mainWorkspace.scale;
-          metrics.contentLeft = blocksBoundingBox.x * scale;
-          metrics.contentTop = blocksBoundingBox.y * scale;
-          metrics.contentWidth = blocksBoundingBox.width * scale;
-          metrics.contentHeight = blocksBoundingBox.height * scale;
-        }
-
-        // Check if the block is out of bounds.
-        var contentTop = metrics.contentTop;
-        var contentBottom = metrics.contentTop + metrics.contentHeight;
-        var contentLeft = metrics.contentLeft;
-        var contentRight = metrics.contentLeft + metrics.contentWidth;
-        var viewTop = metrics.viewTop;
-        var viewBottom = metrics.viewHeight + metrics.viewTop;
-        var viewLeft = metrics.viewLeft;
-        var viewRight = options.RTL ? metrics.viewWidth :
-            metrics.viewWidth + metrics.viewLeft;
-        if (contentTop < viewTop || contentBottom > viewBottom ||
-            contentLeft < viewLeft || contentRight > viewRight) {
+        var metrics = getWorkspaceMetrics();
+        if (metrics.contentTop < metrics.viewTop ||
+            metrics.contentBottom > metrics.viewBottom ||
+            metrics.contentLeft < metrics.viewLeft ||
+            metrics.contentRight > metrics.viewRight) {
 
           // Handle undo.
           var oldGroup = null;
@@ -284,52 +312,32 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
           var movedBlock = false;
           var block = mainWorkspace.getBlockById(e.blockId);
-
-          // Get block info in pixel units, since all of the metrics
-          // info is in pixel units.
-          var blockXY = block.getRelativeToSurfaceXY();
-          blockXY.x *= mainWorkspace.scale;
-          blockXY.y *= mainWorkspace.scale;
-          var blockHW = block.getHeightWidth();
-          blockHW.width *= mainWorkspace.scale;
-          blockHW.height *= mainWorkspace.scale;
+          var blockMetrics = getWorkspaceObjectMetrics(block);
 
           // Bump any block that's above the top back inside.
-          var overflowTop =
-              metrics.viewTop - blockXY.y;
+          var overflowTop = metrics.viewTop - blockMetrics.top;
           if (overflowTop > 0) {
-            // Convert to workspace units.
-            overflowTop /= mainWorkspace.scale;
             block.moveBy(0, overflowTop);
             movedBlock = true;
           }
 
           // Bump any block that's below the bottom back inside.
-          var overflowBottom =
-            metrics.viewTop + metrics.viewHeight - blockHW.height - blockXY.y;
+          var overflowBottom = metrics.viewBottom - blockMetrics.bottom;
           if (overflowBottom < 0) {
-            // Convert to workspace units.
-            overflowBottom /= mainWorkspace.scale;
             block.moveBy(0, overflowBottom);
             movedBlock = true;
           }
 
           // Bump any block that's off the left back inside.
-          var overflowLeft = metrics.viewLeft -
-              blockXY.x + (options.RTL ? blockHW.width : 0);
+          var overflowLeft = metrics.viewLeft - blockMetrics.left;
           if (overflowLeft > 0) {
-            // Convert to workspace units.
-            overflowLeft /= mainWorkspace.scale;
             block.moveBy(overflowLeft, 0);
             movedBlock = true;
           }
 
           // Bump any block that's off the right back inside.
-          var overflowRight = metrics.viewLeft + metrics.viewWidth -
-              blockXY.x - (options.RTL ? 0 : blockHW.width);
+          var overflowRight = metrics.viewRight - blockMetrics.right;
           if (overflowRight < 0) {
-            // Convert to workspace units.
-            overflowRight /= mainWorkspace.scale;
             block.moveBy(overflowRight, 0);
             movedBlock = true;
           }

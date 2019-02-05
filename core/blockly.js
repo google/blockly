@@ -708,7 +708,7 @@ Blockly.setTheme = function(theme) {
     ws.toolbox_.updateColourFromTheme();
   }
 
-  var event = new Blockly.Events.Ui(null, 'themeChanged');
+  var event = new Blockly.Events.Ui(null, 'theme');
   event.workspaceId = ws.id;
   Blockly.Events.fire(event);
 };

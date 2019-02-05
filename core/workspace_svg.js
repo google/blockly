@@ -1793,8 +1793,8 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
 /**
  * Scroll the workspace by a specified amount (in pixels), keeping in the
  * bounds.
- * @param {number} x Target X to scroll to
- * @param {number} y Target Y to scroll to
+ * @param {number} x Target X to scroll to.
+ * @param {number} y Target Y to scroll to.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.scroll_ = function(x, y) {

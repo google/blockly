@@ -103,6 +103,8 @@ Blockly.ZoomControls.prototype.createDom = function() {
   this.createZoomOutSvg_(rnd);
   this.createZoomInSvg_(rnd);
   if (this.workspace_.isMovable_()) {
+    // If we zoom to the center and the workspace isn't movable we could
+    // loose blocks at the edges of the workspace.
     this.createZoomResetSvg_(rnd);
   }
   return this.svgGroup_;

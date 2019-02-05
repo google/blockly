@@ -237,7 +237,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       // If the event is of a type that does not affect block placement,
       // return. In this case it is better return-if rather than do-if so
       // that if events are added that should activate this function to work,
-      // people don't ned to remember to update it.
+      // people don't need to remember to update it.
       if (e.type == Blockly.Events.BLOCK_DELETE ||
           e.type == Blockly.Events.VAR_CREATE ||
           e.type == Blockly.Events.VAR_DELETE ||
@@ -326,7 +326,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
           }
           if (e) {
             if (!e.group && movedBlock) {
-              console.log('WARNING: Moved blocks in bounds but there was no event group.'
+              console.log('WARNING: Moved block in bounds but there was no event group.'
                         + ' This may break undo.');
             }
             Blockly.Events.setGroup(oldGroup);

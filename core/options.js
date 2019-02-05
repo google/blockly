@@ -131,8 +131,7 @@ Blockly.Options = function(options) {
   this.maxInstances = options['maxInstances'];
   this.pathToMedia = pathToMedia;
   this.hasCategories = hasCategories;
-  this.moveOptions = Blockly.Options.parseMoveOptions(
-      options, hasCategories);
+  this.moveOptions = Blockly.Options.parseMoveOptions(options, hasCategories);
   /** @deprecated  January 2019 */
   this.hasScrollbars = this.moveOptions.scrollbars;
   this.hasTrashcan = hasTrashcan;

@@ -282,21 +282,15 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
     };
 
     var workspaceChanged = function(e) {
-      // If the event is of a type that does not affect block placement,
-      // return. In this case it is better return-if rather than do-if so
-      // that if events are added that should activate this function to work,
-      // people don't need to remember to update it.
-      if (e.type == Blockly.Events.BLOCK_DELETE ||
-          e.type == Blockly.Events.VAR_CREATE ||
-          e.type == Blockly.Events.VAR_DELETE ||
-          e.type == Blockly.Events.VAR_RENAME ||
-          e.type == Blockly.Events.UI) {
-        return;
-      }
-
       // We always check isMovable_ again because the original
       // "not movable" state of isMovable_ could have been changed.
-      if (!mainWorkspace.isDragging() && !mainWorkspace.isMovable_()) {
+      if (!mainWorkspace.isDragging() && !mainWorkspace.isMovable_() &&
+          (e.type == Blockly.Events.BLOCK_CREATE ||
+          e.type == Blockly.Events.BLOCK_CHANGE ||
+          e.type == Blockly.Events.BLOCK_MOVE ||
+          e.type == Blockly.Events.COMMENT_CREATE ||
+          e.type == Blockly.Events.COMMENT_CHANGE ||
+          e.type == Blockly.Events.COMMENT_MOVE)) {
         var metrics = getWorkspaceMetrics();
         if (metrics.contentTop < metrics.viewTop ||
             metrics.contentBottom > metrics.viewBottom ||
@@ -310,40 +304,46 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             Blockly.Events.setGroup(e.group);
           }
 
-          var movedBlock = false;
-          var block = mainWorkspace.getBlockById(e.blockId);
-          var blockMetrics = getWorkspaceObjectMetrics(block);
+          switch (e.type) {
+            case Blockly.Events.BLOCK_CREATE:
+            case Blockly.Events.BlockChange:
+            case Blockly.Events.BLOCK_MOVE:
+              var object = mainWorkspace.getBlockById(e.blockId);
+              break;
+            case Blockly.Events.COMMENT_CREATE:
+            case Blockly.Events.COMMENT_CHANGE:
+            case Blockly.Events.COMMENT_MOVE:
+              var object = mainWorkspace.getCommentById(e.commentId);
+              break;
+          }
+          var objectMetrics = getWorkspaceObjectMetrics(object);
 
-          // Bump any block that's above the top back inside.
-          var overflowTop = metrics.viewTop - blockMetrics.top;
+          // Bump any object that's above the top back inside.
+          var overflowTop = metrics.viewTop - objectMetrics.top;
           if (overflowTop > 0) {
-            block.moveBy(0, overflowTop);
-            movedBlock = true;
+            object.moveBy(0, overflowTop);
           }
 
-          // Bump any block that's below the bottom back inside.
-          var overflowBottom = metrics.viewBottom - blockMetrics.bottom;
+          // Bump any object that's below the bottom back inside.
+          var overflowBottom = metrics.viewBottom - objectMetrics.bottom;
           if (overflowBottom < 0) {
-            block.moveBy(0, overflowBottom);
-            movedBlock = true;
+            object.moveBy(0, overflowBottom);
           }
 
-          // Bump any block that's off the left back inside.
-          var overflowLeft = metrics.viewLeft - blockMetrics.left;
+          // Bump any object that's off the left back inside.
+          var overflowLeft = metrics.viewLeft - objectMetrics.left;
           if (overflowLeft > 0) {
-            block.moveBy(overflowLeft, 0);
-            movedBlock = true;
+            object.moveBy(overflowLeft, 0);
           }
 
-          // Bump any block that's off the right back inside.
-          var overflowRight = metrics.viewRight - blockMetrics.right;
+          // Bump any object that's off the right back inside.
+          var overflowRight = metrics.viewRight - objectMetrics.right;
           if (overflowRight < 0) {
-            block.moveBy(overflowRight, 0);
-            movedBlock = true;
+            object.moveBy(overflowRight, 0);
           }
 
           if (e) {
-            if (!e.group && movedBlock) {
+            if (!e.group) {
               console.log('WARNING: Moved block in bounds but there was no event group.'
                         + ' This may break undo.');
             }

@@ -204,7 +204,7 @@ class Gen_compressed(threading.Thread):
   def run(self):
     if ('core' in self.bundles):
       self.gen_core()
-
+    
     if ('2018_rendering' in self.bundles):
       self.gen_core(True)
 
@@ -558,7 +558,13 @@ developers.google.com/blockly/guides/modify/web/closure""")
 
   blockly_core_search_paths = filter(exclude_new_rendering, core_search_paths)
   new_core_search_paths = filter(exclude_core_rendering, core_search_paths)
+  
+  blockly_full_search_paths = filter(exclude_new_rendering, full_search_paths)
+  new_rendering_full_search_paths = filter(exclude_core_rendering, full_search_paths)
 
+  blockly_core_search_paths = filter(exclude_new_rendering, core_search_paths)
+  new_core_search_paths = filter(exclude_core_rendering, core_search_paths)
+  
   blockly_full_search_paths = filter(exclude_new_rendering, full_search_paths)
   new_rendering_full_search_paths = filter(exclude_core_rendering, full_search_paths)
 

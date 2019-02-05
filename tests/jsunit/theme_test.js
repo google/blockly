@@ -142,7 +142,7 @@ function test_setTheme() {
   //check that the toolbox refreshed method was called
   assertEquals(workspace.refreshToolboxSelection(), 3);
 
-  assertEquals(Blockly.Events.FIRE_QUEUE_.pop().element, 'themeChanged');
+  assertEquals(Blockly.Events.FIRE_QUEUE_.pop().element, 'theme');
 
   undefineThemeTestBlocks();
 }

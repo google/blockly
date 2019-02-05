@@ -281,7 +281,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       };
     };
 
-    var workspaceChanged = function(e) {
+    var bumpObjects = function(e) {
       // We always check isMovable_ again because the original
       // "not movable" state of isMovable_ could have been changed.
       if (!mainWorkspace.isDragging() && !mainWorkspace.isMovable_() &&
@@ -352,7 +352,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
         }
       }
     };
-    mainWorkspace.addChangeListener(workspaceChanged);
+    mainWorkspace.addChangeListener(bumpObjects);
   }
   // The SVG is now fully assembled.
   Blockly.svgResize(mainWorkspace);

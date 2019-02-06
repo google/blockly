@@ -663,6 +663,25 @@ Blockly.Connection.prototype.getCheck = function() {
 };
 
 /**
+ * Returns a shape enum for this connection.
+ * Used in scratch-blocks to draw unoccupied inputs.
+ * @return {number} Enum representing shape.
+ */
+Blockly.Connection.prototype.getOutputShape = function() {
+  if (!this.check_) return Blockly.OUTPUT_SHAPE_ROUND;
+  if (this.check_.indexOf('Boolean') !== -1) {
+    return Blockly.OUTPUT_SHAPE_HEXAGONAL;
+  }
+  if (this.check_.indexOf('Number') !== -1) {
+    return Blockly.OUTPUT_SHAPE_ROUND;
+  }
+  if (this.check_.indexOf('String') !== -1) {
+    return Blockly.OUTPUT_SHAPE_ROUND;
+  }
+  return Blockly.OUTPUT_SHAPE_ROUND;
+};
+
+/**
  * Change a connection's shadow block.
  * @param {Element} shadow DOM representation of a block or null.
  */

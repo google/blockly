@@ -859,7 +859,7 @@ Blockly.Block.prototype.getColour = function() {
  * Get the secondary colour of a block.
  * @return {?string} #RRGGBB string.
  */
-Blockly.Block.prototype.getSecondaryColour = function() {
+Blockly.Block.prototype.getColourSecondary = function() {
   return this.secondaryColour_;
 };
 
@@ -867,8 +867,37 @@ Blockly.Block.prototype.getSecondaryColour = function() {
  * Get the tertiary colour of a block.
  * @return {?string} #RRGGBB string.
  */
-Blockly.Block.prototype.getTertiaryColour = function() {
+Blockly.Block.prototype.getColourTertiary = function() {
   return this.tertiaryColour_;
+};
+
+/**
+ * Get the shadow colour of a block.
+ * @return {string} #RRGGBB string.
+ */
+Blockly.Block.prototype.getShadowColour = function() {
+  return this.shadowColour_;
+};
+
+/**
+ * Set the shadow colour of a block.
+ * @param {number|string} colour HSV hue value, or #RRGGBB string.
+ */
+Blockly.Block.prototype.setShadowColour = function(colour) {
+  this.shadowColour_ = this.makeColour_(colour);
+  if (this.rendered) {
+    this.updateColour();
+  }
+};
+
+/**
+ * Clear the shadow colour of a block.
+ */
+Blockly.Block.prototype.clearShadowColour = function() {
+  this.shadowColour_ = null;
+  if (this.rendered) {
+    this.updateColour();
+  }
 };
 
 /**
@@ -1754,6 +1783,24 @@ Blockly.Block.prototype.setCommentText = function(text) {
         this, 'comment', null, this.comment, text || ''));
     this.comment = text;
   }
+};
+
+/**
+ * Set this block's output shape.
+ * e.g., null, OUTPUT_SHAPE_HEXAGONAL, OUTPUT_SHAPE_ROUND, OUTPUT_SHAPE_SQUARE.
+ * @param {?number} outputShape Value representing output shape
+ *     (see constants.js).
+ */
+Blockly.Block.prototype.setOutputShape = function(outputShape) {
+  this.outputShape_ = outputShape;
+};
+
+/**
+ * Get this block's output shape.
+ * @return {?number} Value representing output shape (see constants.js).
+ */
+Blockly.Block.prototype.getOutputShape = function() {
+  return this.outputShape_ || Blockly.OUTPUT_SHAPE_SQUARE;
 };
 
 /**

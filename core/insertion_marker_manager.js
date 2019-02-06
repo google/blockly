@@ -519,10 +519,10 @@ Blockly.InsertionMarkerManager.prototype.showPreview_ = function() {
   } else {  // Should insert
     this.connectMarker_();
   }
-  // Also highlight the actual connection, as a nod to previous behaviour.
-  if (this.closestConnection_) {
-    this.closestConnection_.highlight();
-  }
+  // // Also highlight the actual connection, as a nod to previous behaviour.
+  // if (this.closestConnection_) {
+  //   this.closestConnection_.highlight();
+  // }
 };
 
 /**

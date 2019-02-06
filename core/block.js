@@ -243,7 +243,7 @@ Blockly.Block.prototype.colour_ = '#000000';
  * @type {?string}
  * @private
  */
-Blockly.Block.prototype.secondaryColour_ = null;
+Blockly.Block.prototype.colourSecondary_ = null;
 
 /**
  * Tertiary colour of the block.
@@ -251,7 +251,7 @@ Blockly.Block.prototype.secondaryColour_ = null;
  * @type {?string}
  * @private
  */
-Blockly.Block.prototype.tertiaryColour_ = null;
+Blockly.Block.prototype.colourTertiary_ = null;
 
 /**
  * Name of the block style.
@@ -859,16 +859,16 @@ Blockly.Block.prototype.getColour = function() {
  * Get the secondary colour of a block.
  * @return {?string} #RRGGBB string.
  */
-Blockly.Block.prototype.getSecondaryColour = function() {
-  return this.secondaryColour_;
+Blockly.Block.prototype.getColourSecondary = function() {
+  return this.colourSecondary_;
 };
 
 /**
  * Get the tertiary colour of a block.
  * @return {?string} #RRGGBB string.
  */
-Blockly.Block.prototype.getTertiaryColour = function() {
-  return this.tertiaryColour_;
+Blockly.Block.prototype.getColourTertiary = function() {
+  return this.colourTertiary_;
 };
 
 /**
@@ -929,11 +929,11 @@ Blockly.Block.prototype.setStyle = function(blockStyleName) {
   this.styleName_ = blockStyleName;
 
   if (blockStyle) {
-    this.secondaryColour_ = blockStyle['secondaryColour'];
-    this.tertiaryColour_ = blockStyle['tertiaryColour'];
+    this.colourSecondary_ = blockStyle['colourSecondary'];
+    this.colourTertiary_ = blockStyle['colourTertiary'];
     this.hat = blockStyle.hat;
     // Set colour will trigger an updateColour() on a block_svg
-    this.setColour(blockStyle['primaryColour']);
+    this.setColour(blockStyle['colourPrimary']);
   }
   else {
     throw Error('Invalid style name: ' + blockStyleName);

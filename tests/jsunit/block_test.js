@@ -264,9 +264,9 @@ function test_set_style() {
   var styleStub = {
     getBlockStyle: function() {
       return{
-        "primaryColour": "#FFFFFF",
-        "secondaryColour":"#AABBCC",
-        "tertiaryColour":"#DDEEFF"
+        "colourPrimary": "#FFFFFF",
+        "colourSecondary":"#AABBCC",
+        "colourTertiary":"#DDEEFF"
       }
     }
   };
@@ -275,8 +275,8 @@ function test_set_style() {
   blockA.setStyle('styleOne');
 
   assertEquals(blockA.colour_, '#FFFFFF');
-  assertEquals(blockA.secondaryColour_, '#AABBCC');
-  assertEquals(blockA.tertiaryColour_, '#DDEEFF');
+  assertEquals(blockA.colourSecondary_, '#AABBCC');
+  assertEquals(blockA.colourTertiary_, '#DDEEFF');
 
   blockTest_tearDown();
 }

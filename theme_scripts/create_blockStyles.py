@@ -32,9 +32,9 @@
 # Output: A json file with the keys being style names and the values being an
 # object holding primary, secondary, and tertiary colours in hex format.
 # {"styleName":
-#    {"primaryColour":"hexVal",
-#     "secondaryColour":"hexVal",
-#     "tertiaryColour":"hexVal"
+#    {"colourPrimary":"hexVal",
+#     "colourSecondary":"hexVal",
+#     "colourTertiary":"hexVal"
 #    }
 # }
 
@@ -127,13 +127,13 @@ def rgbToHex(rgb):
 
 #Calculates the primary, secondary and tertiary colours for the block style
 def findOtherColours(rgb):
-   primaryColour = rgbToHex(rgb)
-   secondaryColour = rgbToHex(lighten(rgb, LIGHT_FACTOR))
-   tertiaryColour = rgbToHex(darken(rgb, DARK_FACTOR))
+   colourPrimary = rgbToHex(rgb)
+   colourSecondary = rgbToHex(lighten(rgb, LIGHT_FACTOR))
+   colourTertiary = rgbToHex(darken(rgb, DARK_FACTOR))
    return {
-      "primaryColour": primaryColour,
-      "secondaryColour": secondaryColour,
-      "tertiaryColour": tertiaryColour
+      "colourPrimary": colourPrimary,
+      "colourSecondary": colourSecondary,
+      "colourTertiary": colourTertiary
    }
 
 # Converts a hex colour to rgb colour format
@@ -167,7 +167,7 @@ def getFileInfo():
    return (jsonFile, fileName)
 
 # Creates a map with the keys being the style names and the values being an object
-# holding primaryColour, secondaryColour, tertiaryColour
+# holding colourPrimary, colourSecondary, colourTertiary
 def createColourMap():
    (jsonFile, fileName) = getFileInfo()
    jsonData = json.loads(jsonFile)

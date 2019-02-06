@@ -31,34 +31,34 @@ goog.require('Blockly.Theme');
 
 var defaultBlockStyles = {
   "colour_blocks":{
-    "primaryColour": "20"
+    "colourPrimary": "20"
   },
   "list_blocks": {
-    "primaryColour": "260"
+    "colourPrimary": "260"
   },
   "logic_blocks": {
-    "primaryColour": "210"
+    "colourPrimary": "210"
   },
   "loop_blocks": {
-    "primaryColour": "120"
+    "colourPrimary": "120"
   },
   "math_blocks": {
-    "primaryColour": "230"
+    "colourPrimary": "230"
   },
   "procedure_blocks": {
-    "primaryColour": "290"
+    "colourPrimary": "290"
   },
   "text_blocks": {
-    "primaryColour": "160"
+    "colourPrimary": "160"
   },
   "variable_blocks": {
-    "primaryColour": "330"
+    "colourPrimary": "330"
   },
   "variable_dynamic_blocks":{
-    "primaryColour": "310"
+    "colourPrimary": "310"
   },
   "hat_blocks":{
-    "primaryColour":"330",
+    "colourPrimary":"330",
     "hat":"cap"
   }
 };

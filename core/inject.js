@@ -286,10 +286,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       // "not movable" state of isMovable_ could have been changed.
       if (!mainWorkspace.isDragging() && !mainWorkspace.isMovable_() &&
           (e.type == Blockly.Events.BLOCK_CREATE ||
-          e.type == Blockly.Events.BLOCK_CHANGE ||
           e.type == Blockly.Events.BLOCK_MOVE ||
           e.type == Blockly.Events.COMMENT_CREATE ||
-          e.type == Blockly.Events.COMMENT_CHANGE ||
           e.type == Blockly.Events.COMMENT_MOVE)) {
         var metrics = getWorkspaceMetrics();
         if (metrics.contentTop < metrics.viewTop ||
@@ -306,12 +304,10 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
           switch (e.type) {
             case Blockly.Events.BLOCK_CREATE:
-            case Blockly.Events.BlockChange:
             case Blockly.Events.BLOCK_MOVE:
               var object = mainWorkspace.getBlockById(e.blockId);
               break;
             case Blockly.Events.COMMENT_CREATE:
-            case Blockly.Events.COMMENT_CHANGE:
             case Blockly.Events.COMMENT_MOVE:
               var object = mainWorkspace.getCommentById(e.commentId);
               break;
@@ -354,6 +350,42 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
     };
     mainWorkspace.addChangeListener(bumpObjects);
   }
+
+  // A reminder for developers to add any events that have to do with
+  // objects on/in the workspace to the bumpObjects function. Useful when
+  // testing often happens on a bounded workspace.
+  var bumpObjectsEventChecker = function(e) {
+    switch (e.type) {
+      case Blockly.Events.BLOCK_CREATE:
+      case Blockly.Events.BLOCK_MOVE:
+      case Blockly.Events.COMMENT_CREATE:
+      case Blockly.Events.COMMENT_MOVE:
+        // bumpObjects activates on these events, they are a known factor.
+        // Nothing to worry about here.
+        break;
+      case Blockly.Events.BLOCK_CHANGE:
+      case Blockly.Events.BLOCK_DELETE:
+      case Blockly.Events.COMMENT_CHANGE:
+      case Blockly.Events.COMMENT_DELETE:
+      case Blockly.Events.VAR_CREATE:
+      case Blockly.Events.VAR_DELETE:
+      case Blockly.Events.VAR_RENAME:
+      case Blockly.Events.UI:
+      case Blockly.Events.FINISHED_LOADING:
+        // bumpObjects ignores these events, they are also a know factor.
+        // Nothing to worry about here.
+        break;
+      default:
+        // We found an event we don't know about. It may or may not need
+        // to activate bumpObjects, notify the developer.
+        // If your event has to with objects on/in the workspace, add it to
+        // the bumpObjects function. Either way add a check to this function.
+        console.warn('Found an event that may need to be added to' +
+          ' bumpObjects. Please check before submitting a PR.');
+    }
+  };
+  mainWorkspace.addChangeListener(bumpObjectsEventChecker);
+
   // The SVG is now fully assembled.
   Blockly.svgResize(mainWorkspace);
   Blockly.WidgetDiv.createDom();

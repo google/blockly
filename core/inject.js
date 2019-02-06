@@ -247,8 +247,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       workspaceMetrics.viewBottom =
           (defaultMetrics.viewTop + defaultMetrics.viewHeight) / scale;
 
-      // Get the exact content metrics in workspace units, even if the
-      // content is bound.
+      // Get the exact content metrics (in workspace units), even if the
+      // content is bounded.
       if (mainWorkspace.isContentBounded_()) {
         // Already in workspace units, not need to divide by scale.
         var blocksBoundingBox = mainWorkspace.getBlocksBoundingBox();
@@ -340,8 +340,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
           if (e) {
             if (!e.group) {
-              console.log('WARNING: Moved block in bounds but there was no event group.'
-                        + ' This may break undo.');
+              console.log('WARNING: Moved object in bounds but there was no' +
+                ' event group. This may break undo.');
             }
             Blockly.Events.setGroup(oldGroup);
           }

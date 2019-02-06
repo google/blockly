@@ -1619,6 +1619,12 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
  * Zoom the blocks to fit in the workspace if possible.
  */
 Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
+  if (!this.isMovable_()) {
+    console.warn('Tried to move a non-movable workspace. This could result' +
+      ' in blocks becoming inaccessible.');
+    return;
+  }
+
   var metrics = this.getMetrics();
   var blocksBox = this.getBlocksBoundingBox();
   var blocksWidth = blocksBox.width;

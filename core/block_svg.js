@@ -935,14 +935,14 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     return;
   }
   var hexColour = this.getColour();
-  var secondaryColour = this.getSecondaryColour();
-  var tertiaryColour = this.getTertiaryColour();
+  var colourSecondary = this.getColourSecondary();
+  var colourTertiary = this.getColourTertiary();
   var rgb = goog.color.hexToRgb(hexColour);
 
   if (this.isShadow()) {
-    hexColour = this.setShadowColour_(rgb, secondaryColour);
+    hexColour = this.setShadowColour_(rgb, colourSecondary);
   } else {
-    this.setBorderColour_(rgb, tertiaryColour);
+    this.setBorderColour_(rgb, colourTertiary);
   }
   this.svgPath_.setAttribute('fill', hexColour);
 
@@ -964,13 +964,13 @@ Blockly.BlockSvg.prototype.updateColour = function() {
  * Sets the colour of the border.
  * Removes the light and dark paths if a tertiary colour is defined.
  * @param {!string} rgb Colour of the block.
- * @param {?string} tertiaryColour Colour of the border.
+ * @param {?string} colourTertiary Colour of the border.
  */
-Blockly.BlockSvg.prototype.setBorderColour_ = function(rgb, tertiaryColour) {
-  if (tertiaryColour) {
+Blockly.BlockSvg.prototype.setBorderColour_ = function(rgb, colourTertiary) {
+  if (colourTertiary) {
     this.svgPathLight_.setAttribute('stroke', 'none');
     this.svgPathDark_.setAttribute('fill', 'none');
-    this.svgPath_.setAttribute('stroke', tertiaryColour);
+    this.svgPath_.setAttribute('stroke', colourTertiary);
   } else {
     this.svgPathLight_.style.display = '';
     var hexLight = goog.color.rgbArrayToHex(goog.color.lighten(rgb, 0.3));
@@ -985,17 +985,17 @@ Blockly.BlockSvg.prototype.setBorderColour_ = function(rgb, tertiaryColour) {
 /**
  * Sets the colour of shadow blocks.
  * @param {!string} rgb Primary colour of the block.
- * @param {?string} secondaryColour Colour for shadow block.
+ * @param {?string} colourSecondary Colour for shadow block.
  * @return {!string} hexColour The background color of the block.
  */
 Blockly.BlockSvg.prototype.setShadowColour_ = function(
-    rgb, secondaryColour) {
+    rgb, colourSecondary) {
   var hexColour;
-  if (secondaryColour) {
+  if (colourSecondary) {
     this.svgPathLight_.style.display = 'none';
     this.svgPathDark_.style.display = 'none';
-    this.svgPath_.setAttribute('fill', secondaryColour);
-    hexColour = secondaryColour;
+    this.svgPath_.setAttribute('fill', colourSecondary);
+    hexColour = colourSecondary;
   } else {
     rgb = goog.color.lighten(rgb, 0.6);
     hexColour = goog.color.rgbArrayToHex(rgb);

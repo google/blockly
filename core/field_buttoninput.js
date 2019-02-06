@@ -71,6 +71,21 @@ Blockly.ButtonInput.prototype.dispose = function () {
 };
 
 /**
+ * Construct a ButtonInput from a JSON arg object,
+ * dereferencing any string table references.
+ * @param {!Object} options A JSON object with options (text, class, and
+ *                          spellcheck).
+ * @returns {!Blockly.ButtonInput} The new field instance.
+ * @package
+ * @nocollapse
+ */
+Blockly.ButtonInput.fromJson = function(options) {
+  var text = Blockly.utils.replaceMessageReferences(options['text']);
+  var field = new Blockly.ButtonInput(text, options['class']);
+  return field;
+};
+
+/**
  * Set the value of this field.
  * @param {?string} newValue New value.
  * @override
@@ -85,7 +100,7 @@ Blockly.ButtonInput.prototype.setValue = function (newValue) {
         // If the new value is invalid, validation returns null.
         // In this case we still want to display the illegal result.
         if (validated !== null) {
-        newValue = validated;
+          newValue = validated;
         }
     }
     
@@ -198,7 +213,9 @@ Blockly.ButtonInput.prototype.resizeInput_ = function() {
       // approximation and do not cache the result. At some later point in time
       // when the block is inserted into the visible DOM, this method will be
       // called again and, at that point in time, will not throw an exception.
-      textWidth = this.text_.length * 8;
+      if (this.text_) {
+        textWidth = this.text_.length * 8;
+      }
     }
 
     tempWidth = textWidth + 20;
@@ -228,18 +245,18 @@ Blockly.ButtonInput.prototype.resizeInput_ = function() {
     this.sourceBlock_.rendered && this.sourceBlock_.render();
   }
 
-  if (this.borderRect_ == undefined || this.textElement_ == undefined) {
-      var thisField = this;
-      var intervalId = -1;
-      intervalId = setInterval(function() {
-        if ((thisField.borderRect_ != undefined) && 
-            (thisField.textElement_ != undefined) && 
-            (thisField.sourceBlock_ != undefined)) {
-              thisField.resizeInput_();
-              clearInterval(intervalId);
-        }
-      }, 100);
-  }
+  // if (this.borderRect_ == undefined || this.textElement_ == undefined) {
+  //     var thisField = this;
+  //     var intervalId = -1;
+  //     intervalId = setInterval(function() {
+  //       if ((thisField.borderRect_ != undefined) && 
+  //           (thisField.textElement_ != undefined) && 
+  //           (thisField.sourceBlock_ != undefined)) {
+  //             thisField.resizeInput_();
+  //             clearInterval(intervalId);
+  //       }
+  //     }, 100);
+  // }
 };
 
 /**
@@ -491,27 +508,21 @@ Blockly.ButtonInput.prototype.validate_ = function () {
 
 /**
  * Resize the editor and the underlying block to fit the text.
- * @private
+ * @protected
  */
-Blockly.ButtonInput.prototype.resizeEditor_ = function () {
+Blockly.ButtonInput.prototype.resizeEditor_ = function() {
   var div = Blockly.WidgetDiv.DIV;
-  // var bBox = this.fieldGroup_.getBBox();
-  
-  //Fix for a crash with getAbsoluteXY_ due to borderRect_ being null when re-initializing Blockly.
-  if(this.borderRect_ == undefined) {
-    return;
-  }
+  var bBox = this.getScaledBBox_();
+  div.style.width = bBox.right - bBox.left + 'px';
+  div.style.height = bBox.bottom - bBox.top + 'px';
 
-  var xy = this.getAbsoluteXY_();
   // In RTL mode block fields and LTR input fields the left edge moves,
   // whereas the right edge is fixed.  Reposition the editor.
-  if (this.sourceBlock_.RTL) {
-    var borderBBox = this.getScaledBBox_();
-    xy.x += borderBBox.width;
-    xy.x -= div.offsetWidth;
-  }
+  var x = this.sourceBlock_.RTL ? bBox.right - div.offsetWidth : bBox.left;
+  var xy = new goog.math.Coordinate(x, bBox.top);
+
   // Shift by a few pixels to line up exactly.
-  xy.y += 4;
+  xy.y += 1;
   if (goog.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
     // Firefox mis-reports the location of the border by a pixel
     // once the WidgetDiv is moved into position.
@@ -523,7 +534,6 @@ Blockly.ButtonInput.prototype.resizeEditor_ = function () {
   }
   div.style.left = xy.x + 'px';
   div.style.top = xy.y + 'px';
-
   this.resizeInput_();
 };
 
@@ -541,7 +551,7 @@ Blockly.ButtonInput.prototype.widgetDispose_ = function () {
     thisField.validate_();
     thisField.resizeInput_();
     thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
-    var htmlInput = Blockly.FieldTextInput.htmlInput_;
+    var htmlInput = Blockly.ButtonInput.htmlInput_;
 
     if (htmlInput != null) {
       Blockly.unbindEvent_(htmlInput.onKeyDownWrapper_);
@@ -549,7 +559,7 @@ Blockly.ButtonInput.prototype.widgetDispose_ = function () {
           htmlInput.onWorkspaceChangeWrapper_);
     }
 
-    Blockly.FieldTextInput.htmlInput_ = null;
+    Blockly.ButtonInput.htmlInput_ = null;
     Blockly.Events.setGroup(false);
 
     // Delete style properties.
@@ -560,4 +570,4 @@ Blockly.ButtonInput.prototype.widgetDispose_ = function () {
   };
 };
 
-// Blockly.Field.register('button_input', Blockly.ButtonInput);
+Blockly.Field.register('button_input', Blockly.ButtonInput);

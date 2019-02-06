@@ -19419,18 +19419,14 @@ Blockly.FieldDropdown.changeRecentModuleColors = function(a, b) {
             e = [],
             f = ["Dongle", "Joint", "Spin", "Face"];
         for (key in f) {
-            moduleType = f[key];
-            if (moduleType in a)
-                for (activeModule in a[moduleType]) d.push(a[moduleType][activeModule][0]);
-            if (moduleType in b)
-                for (recentModule in b[moduleType]) e.push(b[moduleType][recentModule][0])
+            var g = f[key];
+            if (g in a)
+                for (var h in a[g]) d.push(a[g][h][0]);
+            if (g in b)
+                for (var k in b[g]) e.push(b[g][k][0])
         }
-        for (f = 0; f < c.children.length; f++) {
-            var g =
-                c.children[f],
-                h = g.innerText;
-            void 0 != h && (h = h.substring(0, h.length - 1).toUpperCase(), !d.includes(h) && e.includes(h) ? g.children[0].className = "goog-menuitem-content recent-module" : "goog-menuitem-content recent-module" === g.children[0].className && (g.children[0].className = "goog-menuitem-content"))
-        }
+        for (h = 0; h < c.children.length; h++) k = c.children[h], f = k.innerText, void 0 != f && (f = f.substring(0, f.length - 1).toUpperCase(), !d.includes(f) &&
+            e.includes(f) ? k.children[0].className = "goog-menuitem-content recent-module" : "goog-menuitem-content recent-module" === k.children[0].className && (k.children[0].className = "goog-menuitem-content"))
     }
 };
 Blockly.FieldDropdown.prototype.dispose = function() {
@@ -19518,6 +19514,10 @@ Blockly.ButtonInput.prototype.dispose = function() {
     Blockly.WidgetDiv.hideIfOwner(this);
     Blockly.ButtonInput.superClass_.dispose.call(this)
 };
+Blockly.ButtonInput.fromJson = function(a) {
+    var b = Blockly.utils.replaceMessageReferences(a.text);
+    return new Blockly.ButtonInput(b, a["class"])
+};
 Blockly.ButtonInput.prototype.setValue = function(a) {
     if (null !== a) {
         if (this.sourceBlock_) {
@@ -19574,25 +19574,18 @@ Blockly.ButtonInput.prototype.resizeInput_ = function() {
         if (void 0 != this.size_) {
             try {
                 a = this.textElement_.getComputedTextLength()
-            } catch (e) {
-                a = 8 * this.text_.length
+            } catch (c) {
+                this.text_ && (a = 8 * this.text_.length)
             }
             b = a + 20;
             b < Blockly.ButtonInput.MIN_WIDTH && (b = Blockly.ButtonInput.MIN_WIDTH);
             b < Blockly.ButtonInput.WIDGET_MIN_WIDTH && (b = Blockly.ButtonInput.WIDGET_MIN_WIDTH);
             this.size_ = new goog.math.Size(b, this.size_.height)
         }
-        void 0 != this.borderRect_ &&
-            this.borderRect_.setAttribute("width", b);
+        void 0 !=
+            this.borderRect_ && this.borderRect_.setAttribute("width", b);
         void 0 != this.textElement_ && this.textElement_.setAttribute("x", (b - a) / 2 - 5);
-        void 0 != this.sourceBlock_ && this.sourceBlock_.rendered && this.sourceBlock_.render();
-        if (void 0 == this.borderRect_ || void 0 == this.textElement_) {
-            var c = this,
-                d = -1;
-            d = setInterval(function() {
-                void 0 != c.borderRect_ && void 0 != c.textElement_ && void 0 != c.sourceBlock_ && (c.resizeInput_(), clearInterval(d))
-            }, 100)
-        }
+        void 0 != this.sourceBlock_ && this.sourceBlock_.rendered && this.sourceBlock_.render()
     }
 };
 Blockly.ButtonInput.prototype.showEditor_ = function(a) {
@@ -19678,21 +19671,17 @@ Blockly.ButtonInput.prototype.validate_ = function() {
     null === a ? Blockly.utils.addClass(b, "blocklyInvalidInput") : Blockly.utils.removeClass(b, "blocklyInvalidInput")
 };
 Blockly.ButtonInput.prototype.resizeEditor_ = function() {
-    var a = Blockly.WidgetDiv.DIV;
-    if (void 0 != this.borderRect_) {
-        var b = this.getAbsoluteXY_();
-        if (this.sourceBlock_.RTL) {
-            var c = this.getScaledBBox_();
-            b.x += c.width;
-            b.x -= a.offsetWidth
-        }
-        b.y += 4;
-        goog.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top && (--b.x, --b.y);
-        goog.userAgent.WEBKIT && (b.y -= 3);
-        a.style.left = b.x + "px";
-        a.style.top = b.y + "px";
-        this.resizeInput_()
-    }
+    var a = Blockly.WidgetDiv.DIV,
+        b = this.getScaledBBox_();
+    a.style.width = b.right - b.left + "px";
+    a.style.height = b.bottom - b.top + "px";
+    b = new goog.math.Coordinate(this.sourceBlock_.RTL ? b.right - a.offsetWidth : b.left, b.top);
+    b.y += 1;
+    goog.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top && (--b.x, --b.y);
+    goog.userAgent.WEBKIT && (b.y -= 3);
+    a.style.left = b.x + "px";
+    a.style.top = b.y + "px";
+    this.resizeInput_()
 };
 Blockly.ButtonInput.prototype.widgetDispose_ = function() {
     var a = this;
@@ -19702,17 +19691,17 @@ Blockly.ButtonInput.prototype.widgetDispose_ = function() {
         a.validate_();
         a.resizeInput_();
         a.sourceBlock_.rendered && a.sourceBlock_.render();
-        var b = Blockly.FieldTextInput.htmlInput_;
+        var b = Blockly.ButtonInput.htmlInput_;
         null != b && (Blockly.unbindEvent_(b.onKeyDownWrapper_), a.workspace_.removeChangeListener(b.onWorkspaceChangeWrapper_));
-        Blockly.FieldTextInput.htmlInput_ = null;
+        Blockly.ButtonInput.htmlInput_ = null;
         Blockly.Events.setGroup(!1);
         b = Blockly.WidgetDiv.DIV.style;
         b.width = "auto";
-        b.height =
-            "auto";
+        b.height = "auto";
         b.fontSize = ""
     }
 };
+Blockly.Field.register("button_input", Blockly.ButtonInput);
 Blockly.FieldNumber = function(a, b, c, d, e) {
     a = a && !isNaN(a) ? String(a) : "0";
     Blockly.FieldNumber.superClass_.constructor.call(this, a, e);

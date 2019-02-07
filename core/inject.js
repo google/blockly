@@ -250,7 +250,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       // Get the exact content metrics (in workspace units), even if the
       // content is bounded.
       if (mainWorkspace.isContentBounded_()) {
-        // Already in workspace units, not need to divide by scale.
+        // Already in workspace units, no need to divide by scale.
         var blocksBoundingBox = mainWorkspace.getBlocksBoundingBox();
         workspaceMetrics.contentLeft = blocksBoundingBox.x;
         workspaceMetrics.contentTop = blocksBoundingBox.y;
@@ -274,6 +274,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       var size = object.getHeightWidth();
 
       return {
+        // In LTR the position is at the top-left of the block, and in RTL
+        // it is at the top-right of the block, we need to add with accordingly.
         left: position.x - (options.RTL ? size.width : 0),
         right: position.x + (options.RTL ? 0 : size.width),
         top: position.y,

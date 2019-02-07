@@ -168,13 +168,69 @@ Blockly.WorkspaceSvg.prototype.isMutator = false;
 Blockly.WorkspaceSvg.prototype.resizesEnabled_ = true;
 
 /**
- * Current horizontal scrolling offset in pixel units.
+ * Current horizontal scrolling offset in pixel units, relative to the
+ * workspace origin.
+ *
+ * It is useful to think about a view, and a canvas moving beneath that
+ * view. As the canvas moves right, this value becomes more positive, and
+ * the view is now "seeing" the left side of the canvas. As the canvas moves
+ * left, this value becomes more negative, and the view is now "seeing" the
+ * right side of the canvas.
+ *
+ * The confusing thing about this value is that it does not, and must not
+ * include the absoluteLeft offset. This is because it is used to calculate
+ * the viewLeft value.
+ *
+ * The viewLeft is relative to the workspace origin (although in pixel
+ * units). The workspace origin is the top-left corner of the workspace (at
+ * least when it is enabled). It is shifted from the top-left of the blocklyDiv
+ * so as not to be beneath the toolbox.
+ *
+ * When the workspace is enabled the viewLeft and workspace origin are at
+ * the same X location. As the canvas slides towards the right beneath the view
+ * this value (scrollX) becomes more positive, and the viewLeft becomes more
+ * negative relative to the workspace origin (imagine the workspace origin
+ * as a dot on the canvas sliding to the right as the canvas moves).
+ *
+ * So if the scrollX were to include the absoluteLeft this would in a way
+ * "unshift" the workspace origin. This means that the viewLeft would be
+ * representing the left edge of the blocklyDiv, rather than the left edge
+ * of the workspace.
+ *
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.scrollX = 0;
 
 /**
- * Current vertical scrolling offset in pixel units.
+ * Current vertical scrolling offset in pixel units, relative to the
+ * workspace origin.
+ *
+ * It is useful to think about a view, and a canvas moving beneath that
+ * view. As the canvas moves down, this value becomes more positive, and the
+ * view is now "seeing" the upper part of the canvas. As the canvas moves
+ * up, this value becomes more negative, and the view is "seeing" the lower
+ * part of the canvas.
+ *
+ * This confusing thing about this value is that it does not, and must not
+ * include the absoluteTop offset. This is because it is used to calculate
+ * the viewTop value.
+ *
+ * The viewTop is relative to the workspace origin (although in pixel
+ * units). The workspace origin is the top-left corner of the workspace (at
+ * least when it is enabled). It is shifted from the top-left of the
+ * blocklyDiv so as not to be beneath the toolbox.
+ *
+ * When the workspace is enabled the viewTop and workspace origin are at the
+ * same Y location. As the canvas slides towards the bottom this value
+ * (scrollY) becomes more positive, and the viewTop becomes more negative
+ * relative to the workspace origin (image in the workspace origin as a dot
+ * on the canvas sliding downwards as the canvas moves).
+ *
+ * So if the scrollY were to include the absoluteTop this would in a way
+ * "unshift" the workspace origin. This means that the viewTop would be
+ * representing the top edge of the blocklyDiv, rather than the top edge of
+ * the workspace.
+ *
  * @type {number}
  */
 Blockly.WorkspaceSvg.prototype.scrollY = 0;
@@ -1573,32 +1629,37 @@ Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
  *                        (negative zooms out and positive zooms in).
  */
 Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
-  var speed = this.options.zoomOptions.scaleSpeed;
-  var metrics = this.getMetrics();
-  var center = this.getParentSvg().createSVGPoint();
-  center.x = x;
-  center.y = y;
-  center = center.matrixTransform(this.getCanvas().getCTM().inverse());
-  x = center.x;
-  y = center.y;
-  var canvas = this.getCanvas();
   // Scale factor.
+  var speed = this.options.zoomOptions.scaleSpeed;
   var scaleChange = Math.pow(speed, amount);
-  // Clamp scale within valid range.
   var newScale = this.scale * scaleChange;
+  if (this.scale == newScale) {
+    return;  // No change in zoom.
+  }
+
+  // Clamp scale within valid range.
   if (newScale > this.options.zoomOptions.maxScale) {
     scaleChange = this.options.zoomOptions.maxScale / this.scale;
   } else if (newScale < this.options.zoomOptions.minScale) {
     scaleChange = this.options.zoomOptions.minScale / this.scale;
   }
-  if (this.scale == newScale) {
-    return;  // No change in zoom.
-  }
-  var matrix = canvas.getCTM()
-      .translate(x * (1 - scaleChange), y * (1 - scaleChange))
+
+  // Transform the x/y out of the canvas' space, so that they're usable.
+  var matrix = this.getCanvas().getCTM();
+  var center = this.getParentSvg().createSVGPoint();
+  center.x = x;
+  center.y = y;
+  center = center.matrixTransform(matrix.inverse());
+  x = center.x;
+  y = center.y;
+
+  // Find the new scrollX/scrollY so that the center remains in the same
+  // position (relative to the mouse) after we zoom.
+  var matrix = matrix.translate(x * (1 - scaleChange), y * (1 - scaleChange))
       .scale(scaleChange);
   // newScale and matrix.a should be identical (within a rounding error).
   // ScrollX and scrollY are in pixels.
+  var metrics = this.getMetrics();
   this.scrollX = matrix.e - metrics.absoluteLeft;
   this.scrollY = matrix.f - metrics.absoluteTop;
   this.setScale(newScale);
@@ -1632,15 +1693,23 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   if (!blocksWidth) {
     return;  // Prevents zooming to infinity.
   }
-  var workspaceWidth = metrics.viewWidth;
-  var workspaceHeight = metrics.viewHeight;
   if (this.flyout_) {
+    // We add the flyout size to the block size because the flyout contains
+    // blocks, and we want all of the blocks to fit within the view. If we
+    // don't add them, they'll end up overlapping.
     if (this.horizontalLayout) {
-      workspaceHeight -= this.flyout_.height_;
+      // Convert from pixels to workspace coordinates.
+      blocksHeight += this.flyout_.height_ / this.scale;
     } else {
-      workspaceWidth -= this.flyout_.width_;
+      // Convert from pixels to workspace coordinates.
+      blocksWidth += this.flyout_.width_ / this.scale;
     }
   }
+  console.log(blocksWidth + ' blocksWidth');
+
+  var workspaceWidth = metrics.viewWidth;
+  var workspaceHeight = metrics.viewHeight;
+  // Scale is in px/wsUnit units.
   var ratioX = workspaceWidth / blocksWidth;
   var ratioY = workspaceHeight / blocksHeight;
   this.setScale(Math.min(ratioX, ratioY));
@@ -1703,8 +1772,10 @@ Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
         break;
     }
   }
-  x = -metrics.contentLeft - x;
-  y = -metrics.contentTop - y;
+
+  // Convert from workspace directions to canvas directions.
+  x = -x - metrics.contentLeft;
+  y = -y - metrics.contentTop;
   this.scroll_(x, y);
 };
 
@@ -1760,8 +1831,9 @@ Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
   var scrollToCenterX = scrollToBlockX - halfViewWidth;
   var scrollToCenterY = scrollToBlockY - halfViewHeight;
 
-  var x = -metrics.contentLeft - scrollToCenterX;
-  var y = -metrics.contentLeft - scrollToCenterY;
+  // Convert from workspace directions to canvas directions.
+  var x = -scrollToCenterX - metrics.contentLeft;
+  var y = -scrollToCenterY - metrics.contentLeft;
 
   Blockly.hideChaff();
   this.scroll_(x, y);
@@ -1769,7 +1841,7 @@ Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
 
 /**
  * Set the workspace's zoom factor.
- * @param {number} newScale Zoom factor.
+ * @param {number} newScale Zoom factor in pixels/workspaceUnit units.
  */
 Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
   if (this.options.zoomOptions.maxScale &&
@@ -1804,26 +1876,41 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.scroll_ = function(x, y) {
+  // Keep scrolling within the bounds of the content.
   var metrics = this.getMetrics();
+  // This is the offset of the top-left corner of the view from the
+  // workspace origin when the view is "seeing" the bottom-right corner of
+  // the content.
+  var maxOffsetOfViewFromOriginX = metrics.contentWidth + metrics.contentLeft -
+      metrics.viewWidth;
+  var maxOffsetOfViewFromOriginY = metrics.contentHeight + metrics.contentTop -
+      metrics.viewHeight;
+  // Canvas coordinates (aka scroll coordinates) have inverse directionality
+  // to workspace coordinates so we have to inverse them.
   x = Math.min(x, -metrics.contentLeft);
   y = Math.min(y, -metrics.contentTop);
-  x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
-    metrics.contentWidth);
-  y = Math.max(y, metrics.viewHeight - metrics.contentTop -
-    metrics.contentHeight);
-  // When the workspace starts scrolling, hide the WidgetDiv without animation.
-  // This is to prevent a disposal animation from happening in the wrong
-  // location.
+  x = Math.max(x, -maxOffsetOfViewFromOriginX);
+  y = Math.max(y, -maxOffsetOfViewFromOriginY);
+
+  // Hide the WidgetDiv without animation. This is to prevent a disposal
+  // animation from happening in the wrong location.
   Blockly.WidgetDiv.hide(true);
 
   this.scrollX = x;
   this.scrollY = y;
   if (this.scrollbar) {
+    // The negative x/y values are our new viewLeft and viewTop values.
+    // The view position (distance from the view's top-left to the origin)
+    // minus the negative content position (distance from the content's
+    // top-left to the origin) is the distance the view's top-left is from the
+    // content's top-left.
     this.scrollbar.hScroll.setHandlePosition((-x - metrics.contentLeft)
       * this.scrollbar.hScroll.ratio_);
     this.scrollbar.vScroll.setHandlePosition((-y - metrics.contentTop)
       * this.scrollbar.vScroll.ratio_);
   }
+  // We have to shift the translation so that when the canvas is at 0, 0 the
+  // workspace origin is not beneath the toolbox.
   x += metrics.absoluteLeft;
   y += metrics.absoluteTop;
   this.translate(x, y);
@@ -1947,22 +2034,27 @@ Blockly.WorkspaceSvg.getContentDimensionsBounded_ = function(ws, svgSize) {
 /**
  * Return an object with all the metrics required to size scrollbars for a
  * top level workspace.  The following properties are computed:
- * Coordinate system: pixel coordinates.
- * .viewHeight: Height of the visible rectangle,
- * .viewWidth: Width of the visible rectangle,
- * .contentHeight: Height of the contents,
- * .contentWidth: Width of the content,
- * .viewTop: Offset of top edge of visible rectangle from parent,
- * .viewLeft: Offset of left edge of visible rectangle from parent,
- * .contentTop: Offset of the top-most content from the y=0 coordinate,
- * .contentLeft: Offset of the left-most content from the x=0 coordinate.
- * .absoluteTop: Top-edge of view.
- * .absoluteLeft: Left-edge of view.
- * .toolboxWidth: Width of toolbox, if it exists.  Otherwise zero.
- * .toolboxHeight: Height of toolbox, if it exists.  Otherwise zero.
+ * Coordinate system: pixel coordinates, -left, -up, +right, +down
+ * .viewHeight: Height of the visible portion of the workspace.
+ * .viewWidth: Width of the visible portion of the workspace.
+ * .contentHeight: Height of the content.
+ * .contentWidth: Width of the content.
+ * .viewTop: Top-edge of the visible portion of the workspace, relative to
+ *     the workspace origin.
+ * .viewLeft: Left-edge of the visible portion of the workspace, relative to
+ *     the workspace origin.
+ * .contentTop: Top-edge of the content, relative to the workspace origin.
+ * .contentLeft: Left-edge of the content relative to the workspace origin.
+ * .absoluteTop: Top-edge of the visible portion of the workspace, relative
+ *     to the blocklyDiv.
+ * .absoluteLeft: Left-edge of the visible portion of the workspace, relative
+ *     to the blocklyDiv.
+ * .toolboxWidth: Width of the toolbox, if it exists.  Otherwise zero.
+ * .toolboxHeight: Height of the toolbox, if it exists.  Otherwise zero.
  * .flyoutWidth: Width of the flyout if it is always open.  Otherwise zero.
- * .flyoutHeight: Height of flyout if it is always open.  Otherwise zero.
- * .toolboxPosition: Top, bottom, left or right.
+ * .flyoutHeight: Height of the flyout if it is always open.  Otherwise zero.
+ * .toolboxPosition: Top, bottom, left or right. Use TOOLBOX_AT constants to
+ *     compare.
  * @return {!Object} Contains size and position metrics of a top level
  *   workspace.
  * @private

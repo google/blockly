@@ -1123,6 +1123,22 @@ h1 {
           </shadow>
         </value>
       </block>
+      <block type="text_print">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">Shadow value</field>
+          </shadow>
+        </value>
+        <next>
+          <shadow type="text_print">
+            <value name="TEXT">
+              <shadow type="text">
+                <field name="TEXT">Shadow statement</field>
+              </shadow>
+            </value>
+          </shadow>
+        </next>
+      </block>
       <label text="Multiple Variable Refs"></label>
       <block type="text_print">
         <value name="TEXT">

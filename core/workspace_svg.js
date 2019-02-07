@@ -1705,7 +1705,6 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
       blocksWidth += this.flyout_.width_ / this.scale;
     }
   }
-  console.log(blocksWidth + ' blocksWidth');
 
   var workspaceWidth = metrics.viewWidth;
   var workspaceHeight = metrics.viewHeight;
@@ -1902,7 +1901,7 @@ Blockly.WorkspaceSvg.prototype.scroll_ = function(x, y) {
     // The negative x/y values are our new viewLeft and viewTop values.
     // The view position (distance from the view's top-left to the origin)
     // minus the negative content position (distance from the content's
-    // top-left to the origin) is the distance the view's top-left is from the
+    // top-left to the origin) is the distance from the view's top-left to the
     // content's top-left.
     this.scrollbar.hScroll.setHandlePosition((-x - metrics.contentLeft)
       * this.scrollbar.hScroll.ratio_);
@@ -1910,7 +1909,7 @@ Blockly.WorkspaceSvg.prototype.scroll_ = function(x, y) {
       * this.scrollbar.vScroll.ratio_);
   }
   // We have to shift the translation so that when the canvas is at 0, 0 the
-  // workspace origin is not beneath the toolbox.
+  // workspace origin is not underneath the toolbox.
   x += metrics.absoluteLeft;
   y += metrics.absoluteTop;
   this.translate(x, y);
@@ -2120,7 +2119,7 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
 };
 
 /**
- * Sets the X/Y translations of a top level workspace to match the scrollbars.
+ * Sets the X/Y translations of a top level workspace.
  * @param {!Object} xyRatio Contains an x and/or y property which is a float
  *     between 0 and 1 specifying the degree of scrolling.
  * @private
@@ -2134,8 +2133,11 @@ Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
   if (typeof xyRatio.y == 'number') {
     this.scrollY = -metrics.contentHeight * xyRatio.y - metrics.contentTop;
   }
+  // We have to shift the translation so that when the canvas is at 0, 0 the
+  // workspace origin is not underneath the toolbox.
   var x = this.scrollX + metrics.absoluteLeft;
   var y = this.scrollY + metrics.absoluteTop;
+  // We could call scroll_ here, but that has extra checks we don't need to do.
   this.translate(x, y);
   if (this.grid_) {
     this.grid_.moveTo(x, y);

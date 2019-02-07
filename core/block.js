@@ -379,7 +379,9 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
   }
 
   var thisConnection = this.getOnlyValueConnection_();
-  if (!thisConnection || !thisConnection.isConnected()) {
+  if (!thisConnection ||
+      !thisConnection.isConnected() ||
+      thisConnection.targetBlock().isShadow()) {
     // Too many or too few possible connections on this block, or there's
     // nothing on the other side of this connection.
     return;
@@ -430,7 +432,7 @@ Blockly.Block.prototype.unplugFromStack_ = function(opt_healStack) {
     this.previousConnection.disconnect();
   }
   var nextBlock = this.getNextBlock();
-  if (opt_healStack && nextBlock) {
+  if (opt_healStack && nextBlock && !nextBlock.isShadow()) {
     // Disconnect the next statement.
     var nextTarget = this.nextConnection.targetConnection;
     nextTarget.disconnect();

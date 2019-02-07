@@ -609,8 +609,8 @@ Blockly.TestBlocks.addDynamicDropdownOption_ = function() {
     if (text) {
       // Do not remove this log! Helps you know if it was added correctly.
       console.log('Adding option: ' + text);
-      // The option is an array containing human-readable text and
-      // language-neutral text.
+      // The option is an array containing human-readable text and a
+      // language-neutral id.
       Blockly.TestBlocks.dynamicDropdownOptions_.push(
           [text, 'OPTION' + Blockly.TestBlocks.dynamicDropdownOptions_.length]);
     }
@@ -630,8 +630,8 @@ Blockly.TestBlocks.removeDynamicDropdownOption_ = function() {
     for (var i = 0, option;
          option = Blockly.TestBlocks.dynamicDropdownOptions_[i];
          i++) {
-      // The option is an array containing human-readable text and
-      // language-neutral text, we'll compare against the human-readable text.
+      // The option is an array containing human-readable text and a
+      // language-neutral id, we'll compare against the human-readable text.
       if (option[0] == text) {
         // Do not remove this log! Helps you know if it was removed correctly.
         console.log('Removing option: ' + text);

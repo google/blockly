@@ -20,8 +20,14 @@
 
 goog.provide('Blockly.Navigation');
 
+/**
+ * The current connection the cursor is on.
+ */
 Blockly.Navigation.connection = null;
 
+/**
+ * The current selected category.
+ */
 Blockly.Navigation.curCategory = null;
 
 /************************/
@@ -45,6 +51,7 @@ Blockly.Navigation.focusToolbox = function() {
  * Taken from basenode.js
  */
 Blockly.Navigation.nextCategory = function() {
+  if (!Blockly.Navigation.curCategory) {return;}
   var curCategory = Blockly.Navigation.curCategory;
   var nextNode = curCategory.getNextShownNode();
 
@@ -61,7 +68,7 @@ Blockly.Navigation.nextCategory = function() {
  * Taken from basenode.js
  */
 Blockly.Navigation.previousCategory = function() {
-  if (!Blockly.Navigation.curCategory) {return};
+  if (!Blockly.Navigation.curCategory) {return;}
   var curCategory = Blockly.Navigation.curCategory;
   var previousNode = curCategory.getPreviousShownNode();
 
@@ -78,7 +85,7 @@ Blockly.Navigation.previousCategory = function() {
  * Taken from basenode.js
  */
 Blockly.Navigation.inCategory = function() {
-  if (!Blockly.Navigation.curCategory) {return};
+  if (!Blockly.Navigation.curCategory) {return;}
   var curCategory = Blockly.Navigation.curCategory;
 
   if (curCategory.hasChildren()) {
@@ -96,7 +103,7 @@ Blockly.Navigation.inCategory = function() {
  * Taken from basenode.js
  */
 Blockly.Navigation.outCategory = function() {
-  if (!Blockly.Navigation.curCategory) {return};
+  if (!Blockly.Navigation.curCategory) {return;}
   var curCategory = Blockly.Navigation.curCategory;
 
   if (curCategory.hasChildren() && curCategory.getExpanded() && curCategory.isUserCollapsible_) {
@@ -144,7 +151,9 @@ Blockly.Navigation.navigateBetweenStacks = function(forward) {
   throw Error('Couldn\'t find ' + (forward ? 'next' : 'previous') +
       ' stack?!?!?!');
 };
-
+/**
+ * Set the connection.
+ */
 Blockly.Navigation.setConnection = function() {
   Blockly.keyboardAccessibilityMode_ = true;
   Blockly.Navigation.connection = Blockly.selected.previousConnection;
@@ -203,6 +212,7 @@ Blockly.Navigation.keyboardPrev = function() {
 
 /**
  * Handler for all the keyboard navigation events.
+ * @param{Event} e The keyboard event.
  */
 Blockly.Navigation.navigate = function(e) {
   if (e.keyCode === goog.events.KeyCodes.UP) {

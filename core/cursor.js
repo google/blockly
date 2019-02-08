@@ -69,7 +69,7 @@ Blockly.Cursor.VERTICAL_PADDING = 5;
  * @type {number}
  * @const
  */
-Blockly.Cursor.CURSOR_COLOR = '#FFCC33';
+Blockly.Cursor.CURSOR_COLOR = '#cc0a0a';
 
 /**
  * A reference to the current object that the cursor is associated with
@@ -162,6 +162,15 @@ Blockly.Cursor.prototype.showWithConnection = function(connection) {
         xy.y + connection.offsetInBlock_.y, targetBlock.getHeightWidth().width);
     this.showHorizontal_();
   }
+};
+
+Blockly.Cursor.prototype.showWithBlock = function(block) {
+  var xy = block.getRelativeToSurfaceXY();
+  this.positionVertical_(xy.x + Blockly.Cursor.VERTICAL_PADDING,
+    xy.y - Blockly.Cursor.VERTICAL_PADDING,
+    block.getHeightWidth().width + (Blockly.Cursor.VERTICAL_PADDING * 2),
+    block.getHeightWidth().height + (Blockly.Cursor.VERTICAL_PADDING * 2));
+  this.showVertical_();
 };
 
 /**

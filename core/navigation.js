@@ -57,8 +57,6 @@ Blockly.Navigation.nextCategory = function() {
 
   if (nextNode) {
     nextNode.select();
-  }
-  if (nextNode) {
     Blockly.Navigation.curCategory = nextNode;
   }
 };
@@ -74,8 +72,6 @@ Blockly.Navigation.previousCategory = function() {
 
   if (previousNode) {
     previousNode.select();
-  }
-  if (previousNode) {
     Blockly.Navigation.curCategory = previousNode;
   }
 };
@@ -162,6 +158,7 @@ Blockly.Navigation.setConnection = function() {
 
 /**
  * Go to the previous connection on the next block.
+ * @return {?Blockly.Connection} The next connection
  */
 Blockly.Navigation.keyboardNext = function() {
   var curConnect = Blockly.Navigation.connection;
@@ -184,6 +181,7 @@ Blockly.Navigation.keyboardNext = function() {
 
 /**
  * Go to the previous connection on the previous block.
+ * @return {!Blockly.Connection} The previous connection.
  */
 Blockly.Navigation.keyboardPrev = function() {
   var curConnect = Blockly.Navigation.connection;

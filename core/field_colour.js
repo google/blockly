@@ -217,25 +217,42 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
  * @private
  */
 Blockly.FieldColour.prototype.showEditor_ = function() {
-  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
-      Blockly.FieldColour.widgetDispose_);
 
-  // Record viewport dimensions before adding the widget.
-  var viewportBBox = Blockly.utils.getViewportBBox();
-  var anchorBBox = this.getScaledBBox_();
+  Blockly.DropDownDiv.hideWithoutAnimation();
+  Blockly.DropDownDiv.clearContent();
 
-  // Create and add the colour picker, then record the size.
   var picker = this.createWidget_();
-  Blockly.WidgetDiv.DIV.appendChild(picker);
-  var paletteSize = goog.style.getSize(picker);
+  Blockly.DropDownDiv.getContentDiv().appendChild(picker);
+  Blockly.DropDownDiv.setColour('#ffffff', '#dddddd');
 
-  // Position the picker to line up with the field.
-  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, paletteSize,
-      this.sourceBlock_.RTL);
+  Blockly.DropDownDiv.showPositionedByField(this);
 
   // Configure event handler on the table to listen for any event in a cell.
   Blockly.FieldColour.onUpWrapper_ = Blockly.bindEvent_(picker,
       'mouseup', this, this.onClick_);
+
+  // Old code is below here
+  //
+  //
+  // Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
+  //     Blockly.FieldColour.widgetDispose_);
+
+  // // Record viewport dimensions before adding the widget.
+  // var viewportBBox = Blockly.utils.getViewportBBox();
+  // var anchorBBox = this.getScaledBBox_();
+
+  // // Create and add the colour picker, then record the size.
+  // var picker = this.createWidget_();
+  // Blockly.WidgetDiv.DIV.appendChild(picker);
+  // var paletteSize = goog.style.getSize(picker);
+
+  // // Position the picker to line up with the field.
+  // Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, paletteSize,
+  //     this.sourceBlock_.RTL);
+
+  // // Configure event handler on the table to listen for any event in a cell.
+  // Blockly.FieldColour.onUpWrapper_ = Blockly.bindEvent_(picker,
+  //     'mouseup', this, this.onClick_);
 };
 
 /**

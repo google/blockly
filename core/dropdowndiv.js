@@ -236,6 +236,9 @@ Blockly.DropDownDiv.showPositionedByField = function(owner,
   var bBox = {width: owner.size_.width, height: owner.size_.height};
   bBox.width *= scale;
   bBox.height *= scale;
+
+  // bbox.width * scale is not the same as position.right - position.left.
+  // What's up with that?
   var position = owner.fieldGroup_.getBoundingClientRect();
   // If we can fit it, render below the block.
   var primaryX = position.left + bBox.width / 2;
@@ -455,6 +458,11 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
  * @private
  */
 Blockly.DropDownDiv.positionInternal_ = function(initialX, initialY, finalX, finalY) {
+  initialX = initialX == null ? initialX : Math.floor(initialX);
+  initialY = initialY == null ? initialY : Math.floor(initialY);
+  finalX = finalX == null ? finalX : Math.floor(finalX);
+  finalY = finalY == null ? finalY : Math.floor(finalY);
+
   var div = Blockly.DropDownDiv.DIV_;
   // First apply initial translation.
   div.style.left = initialX != null ? initialX + 'px' : '';

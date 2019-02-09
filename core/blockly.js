@@ -285,7 +285,8 @@ Blockly.onKeyDown_ = function(e) {
         || e.keyCode === goog.events.KeyCodes.D
         || e.keyCode === goog.events.KeyCodes.T
         || e.keyCode === goog.events.KeyCodes.M
-        || e.keyCode === goog.events.KeyCodes.I)) {
+        || e.keyCode === goog.events.KeyCodes.I
+        || e.keyCode === goog.events.KeyCodes.ENTER)) {
     Blockly.Navigation.navigate(e);
   }
   // Common code for delete and cut.

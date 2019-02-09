@@ -103,8 +103,8 @@ Blockly.HorizontalFlyout.prototype.getMetrics_ = function() {
     contentWidth: (optionBox.width + 2 * this.MARGIN) * this.workspace_.scale,
     viewTop: -this.workspace_.scrollY,
     viewLeft: -this.workspace_.scrollX,
-    contentTop: optionBox.y,
-    contentLeft: optionBox.x,
+    contentTop: 0,
+    contentLeft: 0,
     absoluteTop: absoluteTop,
     absoluteLeft: absoluteLeft
   };

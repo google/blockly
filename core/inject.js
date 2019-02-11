@@ -437,6 +437,7 @@ Blockly.init_ = function(mainWorkspace) {
  */
 Blockly.inject.bindDocumentEvents_ = function() {
   if (!Blockly.documentEventsBound_) {
+    Blockly.bindEventWithChecks_(document, 'mousedown', null, Blockly.hideChaff);
     Blockly.bindEventWithChecks_(document, 'scroll', null,
         Blockly.mainWorkspace.updateInverseScreenCTM
             .bind(Blockly.mainWorkspace));

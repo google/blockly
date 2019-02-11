@@ -33,29 +33,29 @@ Blockly.Navigation.curCategory = null;
 /**
  * The current selected block in flyout.
  */
- Blockly.Navigation.flyoutBlock = null;
+Blockly.Navigation.flyoutBlock = null;
 
 /**
  * The selected connection.
  */
- Blockly.Navigation.markedConnect = null;
+Blockly.Navigation.markedConnect = null;
 
 /**
  * State for the flyout.
  */
- Blockly.Navigation.FLYOUT_STATE = 1;
+Blockly.Navigation.FLYOUT_STATE = 1;
 
 /**
  * State for the workspace.
  */
- Blockly.Navigation.WS_STATE = 2;
+Blockly.Navigation.WS_STATE = 2;
 
 /**
  * State for the toolbox.
  */
- Blockly.Navigation.TOOLBOX_STATE = 3;
+Blockly.Navigation.TOOLBOX_STATE = 3;
 
- Blockly.Navigation.currentState = null;
+Blockly.Navigation.currentState = null;
 
 /************************/
 /** Toolbox Navigation **/
@@ -171,7 +171,7 @@ Blockly.Navigation.focusFlyout = function() {
  * Get the next block in the flyout.
  */
 Blockly.Navigation.flyoutNext = function() {
-  if (!Blockly.Navigation.flyoutBlock) return;
+  if (!Blockly.Navigation.flyoutBlock){return;}
   var blocks = Blockly.Navigation.getFlyoutBlocks_();
   var curBlock = Blockly.Navigation.flyoutBlock;
   var curIdx = blocks.indexOf(curBlock);
@@ -191,7 +191,7 @@ Blockly.Navigation.flyoutNext = function() {
  * Get the previous block in the flyout.
  */
 Blockly.Navigation.flyoutPrevious = function() {
-  if (!Blockly.Navigation.flyoutBlock) return;
+  if (!Blockly.Navigation.flyoutBlock) {return;}
   var blocks = Blockly.Navigation.getFlyoutBlocks_();
   var curBlock = Blockly.Navigation.flyoutBlock;
   var curIdx = blocks.indexOf(curBlock);
@@ -214,7 +214,7 @@ Blockly.Navigation.flyoutPrevious = function() {
 Blockly.Navigation.getFlyoutBlocks_ = function() {
   var workspace = Blockly.getMainWorkspace();
   var toolbox = workspace.getToolbox();
-  var topBocks = [];
+  var topBlocks = [];
   if (toolbox.flyout_ && toolbox.flyout_.getWorkspace()) {
     topBlocks = toolbox.flyout_.getWorkspace().getTopBlocks();
   }
@@ -251,11 +251,12 @@ Blockly.Navigation.flyoutCleanup = function() {
  * TODO: Need to play with this function.
  * Finds the best connection.
  * @param{Blockly.Block} block The block to be connected.
- * @param{Blockly.Connection} connection
+ * @param{Blockly.Connection} connection The connection to connect to.
+ * @return{Blockly.Connection} blockConnection The best connection we can determine for the block.
  */
 Blockly.Navigation.findBestConnection = function(block, connection) {
   var blockConnection;
-  if (!block || !connection) return;
+  if (!block || !connection) {return;}
   if (connection.type === Blockly.PREVIOUS_STATEMENT) {
     blockConnection = block.nextConnection;
   } else {
@@ -265,7 +266,9 @@ Blockly.Navigation.findBestConnection = function(block, connection) {
 };
 
 /**
- * Find the best connection and
+ * Find the best connection and connect the target block to it.
+ * @param{Blockly.Block} block The selected blcok.
+ * @param{Blockly.Connection} connection The connection on the workspace.
  */
 Blockly.Navigation.insertBlock = function(block, connection) {
   var bestConnection = Blockly.Navigation.findBestConnection(block, connection);
@@ -400,7 +403,7 @@ Blockly.Navigation.navigate = function(e) {
 };
 
 Blockly.Navigation.flyoutKeyHandler = function(e) {
-if (e.keyCode === goog.events.KeyCodes.W) {
+  if (e.keyCode === goog.events.KeyCodes.W) {
     Blockly.Navigation.flyoutPrevious();
   } else if (e.keyCode === goog.events.KeyCodes.A) {
     Blockly.Navigation.focusToolbox();
@@ -412,7 +415,7 @@ if (e.keyCode === goog.events.KeyCodes.W) {
 };
 
 Blockly.Navigation.toolboxKeyHandler = function(e) {
-if (e.keyCode === goog.events.KeyCodes.W) {
+  if (e.keyCode === goog.events.KeyCodes.W) {
     Blockly.Navigation.previousCategory();
   } else if (e.keyCode === goog.events.KeyCodes.A) {
     Blockly.Navigation.outCategory();
@@ -421,12 +424,12 @@ if (e.keyCode === goog.events.KeyCodes.W) {
   } else if (e.keyCode === goog.events.KeyCodes.D) {
     Blockly.Navigation.inCategory();
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
-
+    //focus on flyout OR open if the category is nested?
   }
 };
 
 Blockly.Navigation.workspaceKeyHandler = function(e) {
-if (e.keyCode === goog.events.KeyCodes.W) {
+  if (e.keyCode === goog.events.KeyCodes.W) {
     Blockly.Navigation.keyboardPrev();
   } else if (e.keyCode === goog.events.KeyCodes.A) {
     //Blockly.Navigation.out();

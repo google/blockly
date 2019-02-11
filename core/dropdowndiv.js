@@ -93,7 +93,7 @@ Blockly.DropDownDiv.ARROW_HORIZONTAL_PADDING = 12;
  * @type {number}
  * @const
  */
-Blockly.DropDownDiv.PADDING_Y = 20;
+Blockly.DropDownDiv.PADDING_Y = 8;
 
 /**
  * Length of animations in seconds.

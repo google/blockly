@@ -388,6 +388,10 @@ Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
     // Set the scrollbars origin to be the top left of the flyout.
     this.scrollbar_.setOrigin(x, y);
     this.scrollbar_.resize();
+    // Set the position again so that if the metrics were the same (and the
+    // resize failed) our position is still updated.
+    this.scrollbar_.setPosition_(
+        this.scrollbar_.position_.x, this.scrollbar_.position_.y);
   }
 };
 

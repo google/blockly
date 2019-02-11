@@ -235,6 +235,9 @@ Blockly.Navigation.insertFromFlyout = function() {
     var newBlock = flyout.createBlock(flyoutBlock);
     Blockly.Navigation.insertBlock(newBlock, connection);
     Blockly.Navigation.focusWorkspace();
+    //This will have to be fixed when we add in a block that does not have a previous
+    Blockly.Navigation.connection = newBlock.previousConnection;
+    Blockly.cursor.showWithConnection(Blockly.Navigation.connection);
   }
 };
 
@@ -317,8 +320,10 @@ Blockly.Navigation.focusWorkspace = function() {
   Blockly.Navigation.flyoutCleanup();
   Blockly.Navigation.currentState = Blockly.Navigation.WS_STATE;
   Blockly.keyboardAccessibilityMode_ = true;
-  Blockly.Navigation.connection = Blockly.selected.previousConnection;
-  Blockly.cursor.showWithConnection(Blockly.selected.previousConnection);
+  if (Blockly.selected) {
+    Blockly.Navigation.connection = Blockly.selected.previousConnection;
+    Blockly.cursor.showWithConnection(Blockly.selected.previousConnection);
+  }
 };
 
 /**
@@ -436,7 +441,7 @@ Blockly.Navigation.workspaceKeyHandler = function(e) {
   } else if (e.keyCode === goog.events.KeyCodes.S) {
     Blockly.Navigation.keyboardNext();
   } else if (e.keyCode === goog.events.KeyCodes.D) {
-    //Blockly.Navigation.insertFromFlyout();
+    //Blockly.Navigation.in();
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
     Blockly.Navigation.markConnection();
   }

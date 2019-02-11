@@ -167,9 +167,9 @@ Blockly.Cursor.prototype.showWithConnection = function(connection) {
 Blockly.Cursor.prototype.showWithBlock = function(block) {
   var xy = block.getRelativeToSurfaceXY();
   this.positionVertical_(xy.x + Blockly.Cursor.VERTICAL_PADDING,
-    xy.y - Blockly.Cursor.VERTICAL_PADDING,
-    block.getHeightWidth().width + (Blockly.Cursor.VERTICAL_PADDING * 2),
-    block.getHeightWidth().height + (Blockly.Cursor.VERTICAL_PADDING * 2));
+      xy.y - Blockly.Cursor.VERTICAL_PADDING,
+      block.getHeightWidth().width + (Blockly.Cursor.VERTICAL_PADDING * 2),
+      block.getHeightWidth().height + (Blockly.Cursor.VERTICAL_PADDING * 2));
   this.showVertical_();
 };
 

@@ -22,40 +22,49 @@ goog.provide('Blockly.Navigation');
 
 /**
  * The current connection the cursor is on.
+ * @private
  */
-Blockly.Navigation.connection = null;
+Blockly.Navigation.connection_ = null;
 
 /**
- * The current selected category.
+ * The current selected category if category is open or
+ * last selected category if focus is on a different element.
+ * @private
  */
-Blockly.Navigation.curCategory = null;
+Blockly.Navigation.currentCategory_ = null;
 
 /**
- * The current selected block in flyout.
+ * The current selected block in the flyout.
+ * @private
  */
-Blockly.Navigation.flyoutBlock = null;
+Blockly.Navigation.flyoutBlock_ = null;
 
 /**
- * The selected connection.
+ * The selected connection use for inserting a block.
+ * @private
  */
-Blockly.Navigation.markedConnect = null;
+Blockly.Navigation.insertionConnection_ = null;
 
 /**
- * State for the flyout.
+ * State indicating focus is currently on the flyout.
  */
-Blockly.Navigation.FLYOUT_STATE = 1;
+Blockly.Navigation.STATE_FLYOUT = 1;
 
 /**
- * State for the workspace.
+ * State indicating focus is currently on the workspace.
  */
-Blockly.Navigation.WS_STATE = 2;
+Blockly.Navigation.STATE_WS = 2;
 
 /**
- * State for the toolbox.
+ * State indicating focus is currently on the toolbox.
  */
-Blockly.Navigation.TOOLBOX_STATE = 3;
+Blockly.Navigation.STATE_TOOLBOX = 3;
 
-Blockly.Navigation.currentState = null;
+/**
+ * The current state the user is in.
+ * @private
+ */
+Blockly.Navigation.currentState_ = null;
 
 /************************/
 /** Toolbox Navigation **/
@@ -65,14 +74,14 @@ Blockly.Navigation.currentState = null;
  * Set the first category as the first category in the list.
  */
 Blockly.Navigation.focusToolbox = function() {
-  Blockly.Navigation.flyoutCleanup();
-  Blockly.Navigation.currentState = Blockly.Navigation.TOOLBOX_STATE;
+  Blockly.Navigation.resetFlyout();
+  Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_TOOLBOX;
   var workspace = Blockly.getMainWorkspace();
   var toolbox = workspace.getToolbox();
-  if (workspace && !Blockly.Navigation.curCategory) {
-    Blockly.Navigation.curCategory = toolbox.tree_.firstChild_;
+  if (workspace && !Blockly.Navigation.currentCategory_) {
+    Blockly.Navigation.currentCategory_ = toolbox.tree_.firstChild_;
   }
-  toolbox.tree_.setSelectedItem(Blockly.Navigation.curCategory);
+  toolbox.tree_.setSelectedItem(Blockly.Navigation.currentCategory_);
 };
 
 /**
@@ -80,13 +89,13 @@ Blockly.Navigation.focusToolbox = function() {
  * Taken from closure/goog/ui/tree/basenode.js
  */
 Blockly.Navigation.nextCategory = function() {
-  if (!Blockly.Navigation.curCategory) {return;}
-  var curCategory = Blockly.Navigation.curCategory;
+  if (!Blockly.Navigation.currentCategory_) {return;}
+  var curCategory = Blockly.Navigation.currentCategory_;
   var nextNode = curCategory.getNextShownNode();
 
   if (nextNode) {
     nextNode.select();
-    Blockly.Navigation.curCategory = nextNode;
+    Blockly.Navigation.currentCategory_ = nextNode;
   }
 };
 
@@ -95,13 +104,13 @@ Blockly.Navigation.nextCategory = function() {
  * Taken from closure/goog/ui/tree/basenode.js
  */
 Blockly.Navigation.previousCategory = function() {
-  if (!Blockly.Navigation.curCategory) {return;}
-  var curCategory = Blockly.Navigation.curCategory;
+  if (!Blockly.Navigation.currentCategory_) {return;}
+  var curCategory = Blockly.Navigation.currentCategory_;
   var previousNode = curCategory.getPreviousShownNode();
 
   if (previousNode) {
     previousNode.select();
-    Blockly.Navigation.curCategory = previousNode;
+    Blockly.Navigation.currentCategory_ = previousNode;
   }
 };
 
@@ -110,15 +119,15 @@ Blockly.Navigation.previousCategory = function() {
  * Taken from closure/goog/ui/tree/basenode.js
  */
 Blockly.Navigation.inCategory = function() {
-  if (!Blockly.Navigation.curCategory) {return;}
-  var curCategory = Blockly.Navigation.curCategory;
+  if (!Blockly.Navigation.currentCategory_) {return;}
+  var curCategory = Blockly.Navigation.currentCategory_;
 
   if (curCategory.hasChildren()) {
     if (!curCategory.getExpanded()) {
       curCategory.setExpanded(true);
     } else {
       curCategory.getFirstChild().select();
-      Blockly.Navigation.curCategory = curCategory.getFirstChild();
+      Blockly.Navigation.currentCategory_ = curCategory.getFirstChild();
     }
   } else {
     Blockly.Navigation.focusFlyout();
@@ -130,8 +139,8 @@ Blockly.Navigation.inCategory = function() {
  * Taken from closure/goog/ui/tree/basenode.js
  */
 Blockly.Navigation.outCategory = function() {
-  if (!Blockly.Navigation.curCategory) {return;}
-  var curCategory = Blockly.Navigation.curCategory;
+  if (!Blockly.Navigation.currentCategory_) {return;}
+  var curCategory = Blockly.Navigation.currentCategory_;
 
   if (curCategory.hasChildren() && curCategory.getExpanded() && curCategory.isUserCollapsible_) {
     curCategory.setExpanded(false);
@@ -140,7 +149,7 @@ Blockly.Navigation.outCategory = function() {
     var tree = curCategory.getTree();
     if (parent && (tree.getShowRootNode() || parent != tree)) {
       parent.select();
-      Blockly.Navigation.curCategory = parent;
+      Blockly.Navigation.currentCategory_ = parent;
     }
   }
 };
@@ -153,7 +162,7 @@ Blockly.Navigation.outCategory = function() {
  * Change focus to the flyout.
  */
 Blockly.Navigation.focusFlyout = function() {
-  Blockly.Navigation.currentState = Blockly.Navigation.FLYOUT_STATE;
+  Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_FLYOUT;
   var workspace = Blockly.getMainWorkspace();
   var toolbox = workspace.getToolbox();
   var topBlock;
@@ -161,19 +170,19 @@ Blockly.Navigation.focusFlyout = function() {
     var topBlocks = toolbox.flyout_.getWorkspace().getTopBlocks();
     if (topBlocks.length > 0) {
       topBlock = topBlocks[0];
-      Blockly.Navigation.flyoutBlock = topBlock;
-      Blockly.cursor.showWithBlock(Blockly.Navigation.flyoutBlock);
+      Blockly.Navigation.flyoutBlock_ = topBlock;
+      Blockly.cursor.showWithBlock(Blockly.Navigation.flyoutBlock_);
     }
   }
 };
 
 /**
- * Get the next block in the flyout.
+ * Select the next block in the flyout.
  */
-Blockly.Navigation.flyoutNext = function() {
-  if (!Blockly.Navigation.flyoutBlock){return;}
+Blockly.Navigation.selectNextFlyout = function() {
+  if (!Blockly.Navigation.flyoutBlock_){return;}
   var blocks = Blockly.Navigation.getFlyoutBlocks_();
-  var curBlock = Blockly.Navigation.flyoutBlock;
+  var curBlock = Blockly.Navigation.flyoutBlock_;
   var curIdx = blocks.indexOf(curBlock);
   var nextBlock;
 
@@ -182,18 +191,18 @@ Blockly.Navigation.flyoutNext = function() {
   }
 
   if (nextBlock) {
-    Blockly.Navigation.flyoutBlock = nextBlock;
-    Blockly.cursor.showWithBlock(Blockly.Navigation.flyoutBlock);
+    Blockly.Navigation.flyoutBlock_ = nextBlock;
+    Blockly.cursor.showWithBlock(Blockly.Navigation.flyoutBlock_);
   }
 };
 
 /**
- * Get the previous block in the flyout.
+ * Select the previous block in the flyout.
  */
-Blockly.Navigation.flyoutPrevious = function() {
-  if (!Blockly.Navigation.flyoutBlock) {return;}
+Blockly.Navigation.selectPreviousFlyout = function() {
+  if (!Blockly.Navigation.flyoutBlock_) {return;}
   var blocks = Blockly.Navigation.getFlyoutBlocks_();
-  var curBlock = Blockly.Navigation.flyoutBlock;
+  var curBlock = Blockly.Navigation.flyoutBlock_;
   var curIdx = blocks.indexOf(curBlock);
   var prevBlock;
 
@@ -202,8 +211,8 @@ Blockly.Navigation.flyoutPrevious = function() {
   }
 
   if (prevBlock) {
-    Blockly.Navigation.flyoutBlock = prevBlock;
-    Blockly.cursor.showWithBlock(Blockly.Navigation.flyoutBlock);
+    Blockly.Navigation.flyoutBlock_ = prevBlock;
+    Blockly.cursor.showWithBlock(Blockly.Navigation.flyoutBlock_);
   }
 };
 
@@ -225,24 +234,27 @@ Blockly.Navigation.getFlyoutBlocks_ = function() {
  * Insert the block from the flyout.
  */
 Blockly.Navigation.insertFromFlyout = function() {
-  var flyoutBlock = Blockly.Navigation.flyoutBlock;
-  var connection = Blockly.Navigation.markedConnect;
+  var flyoutBlock = Blockly.Navigation.flyoutBlock_;
+  var connection = Blockly.Navigation.insertionConnection_;
   var workspace = Blockly.getMainWorkspace();
   var toolbox = workspace.getToolbox();
   var flyout = toolbox.flyout_;
 
-  if (flyout){
+  if (flyout && flyout.isVisible()) {
     var newBlock = flyout.createBlock(flyoutBlock);
     Blockly.Navigation.insertBlock(newBlock, connection);
     Blockly.Navigation.focusWorkspace();
     //This will have to be fixed when we add in a block that does not have a previous
-    Blockly.Navigation.connection = newBlock.previousConnection;
-    Blockly.cursor.showWithConnection(Blockly.Navigation.connection);
+    Blockly.Navigation.connection_ = newBlock.previousConnection;
+    Blockly.cursor.showWithConnection(Blockly.Navigation.connection_);
   }
 };
 
-Blockly.Navigation.flyoutCleanup = function() {
-  Blockly.Navigation.flyoutBlock = null;
+/**
+ * Reset flyout information.
+ */
+Blockly.Navigation.resetFlyout = function() {
+  Blockly.Navigation.flyoutBlock_ = null;
   Blockly.cursor.hide();
 };
 
@@ -251,7 +263,7 @@ Blockly.Navigation.flyoutCleanup = function() {
 /************/
 
 /**
- * TODO: Need to play with this function.
+ * TODO: support output/input connections.
  * Finds the best connection.
  * @param{Blockly.Block} block The block to be connected.
  * @param{Blockly.Connection} connection The connection to connect to.
@@ -317,11 +329,11 @@ Blockly.Navigation.navigateBetweenStacks = function(forward) {
  * Sets the connection on the selected block in the workspace.
  */
 Blockly.Navigation.focusWorkspace = function() {
-  Blockly.Navigation.flyoutCleanup();
-  Blockly.Navigation.currentState = Blockly.Navigation.WS_STATE;
+  Blockly.Navigation.resetFlyout();
+  Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_WS;
   Blockly.keyboardAccessibilityMode_ = true;
   if (Blockly.selected) {
-    Blockly.Navigation.connection = Blockly.selected.previousConnection;
+    Blockly.Navigation.connection_ = Blockly.selected.previousConnection;
     Blockly.cursor.showWithConnection(Blockly.selected.previousConnection);
   }
 };
@@ -331,7 +343,7 @@ Blockly.Navigation.focusWorkspace = function() {
  * @return {?Blockly.Connection} The next connection
  */
 Blockly.Navigation.keyboardNext = function() {
-  var curConnect = Blockly.Navigation.connection;
+  var curConnect = Blockly.Navigation.connection_;
   var nextConnection;
   if (!curConnect) {
     return null;
@@ -345,7 +357,7 @@ Blockly.Navigation.keyboardNext = function() {
   }
   //Set cursor here
   Blockly.cursor.showWithConnection(nextConnection);
-  Blockly.Navigation.connection = nextConnection;
+  Blockly.Navigation.connection_ = nextConnection;
   return nextConnection;
 };
 
@@ -354,7 +366,7 @@ Blockly.Navigation.keyboardNext = function() {
  * @return {!Blockly.Connection} The previous connection.
  */
 Blockly.Navigation.keyboardPrev = function() {
-  var curConnect = Blockly.Navigation.connection;
+  var curConnect = Blockly.Navigation.connection_;
   var prevConnection;
   if (!curConnect) {
     return null;
@@ -368,7 +380,7 @@ Blockly.Navigation.keyboardPrev = function() {
   }
   //Set cursor here
   Blockly.cursor.showWithConnection(prevConnection);
-  Blockly.Navigation.connection = prevConnection;
+  Blockly.Navigation.connection_ = prevConnection;
   return prevConnection;
 };
 
@@ -376,7 +388,7 @@ Blockly.Navigation.keyboardPrev = function() {
  * Mark the current connection.
  */
 Blockly.Navigation.markConnection = function() {
-  Blockly.Navigation.markedConnect = Blockly.Navigation.connection;
+  Blockly.Navigation.insertionConnection_ = Blockly.Navigation.connection_;
 };
 
 /**********************/
@@ -390,17 +402,17 @@ Blockly.Navigation.markConnection = function() {
  * @param{Event} e The keyboard event.
  */
 Blockly.Navigation.navigate = function(e) {
-  var curState = Blockly.Navigation.currentState;
+  var curState = Blockly.Navigation.currentState_;
 
   if (e.keyCode === goog.events.KeyCodes.T) {
     Blockly.Navigation.focusToolbox();
   } else if (e.keyCode === goog.events.KeyCodes.F) {
     Blockly.Navigation.focusFlyout();
-  } else if (curState === Blockly.Navigation.FLYOUT_STATE) {
+  } else if (curState === Blockly.Navigation.STATE_FLYOUT) {
     Blockly.Navigation.flyoutKeyHandler(e);
-  } else if (curState === Blockly.Navigation.WS_STATE) {
+  } else if (curState === Blockly.Navigation.STATE_WS) {
     Blockly.Navigation.workspaceKeyHandler(e);
-  } else if (curState === Blockly.Navigation.TOOLBOX_STATE) {
+  } else if (curState === Blockly.Navigation.STATE_TOOLBOX) {
     Blockly.Navigation.toolboxKeyHandler(e);
   } else {
     console.log("we have a problem.");
@@ -409,11 +421,11 @@ Blockly.Navigation.navigate = function(e) {
 
 Blockly.Navigation.flyoutKeyHandler = function(e) {
   if (e.keyCode === goog.events.KeyCodes.W) {
-    Blockly.Navigation.flyoutPrevious();
+    Blockly.Navigation.selectPreviousFlyout();
   } else if (e.keyCode === goog.events.KeyCodes.A) {
     Blockly.Navigation.focusToolbox();
   } else if (e.keyCode === goog.events.KeyCodes.S) {
-    Blockly.Navigation.flyoutNext();
+    Blockly.Navigation.selectNextFlyout();
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
     Blockly.Navigation.insertFromFlyout();
   }
@@ -429,7 +441,7 @@ Blockly.Navigation.toolboxKeyHandler = function(e) {
   } else if (e.keyCode === goog.events.KeyCodes.D) {
     Blockly.Navigation.inCategory();
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
-    //focus on flyout OR open if the category is nested?
+    //TODO: focus on flyout OR open if the category is nested
   }
 };
 
@@ -437,11 +449,11 @@ Blockly.Navigation.workspaceKeyHandler = function(e) {
   if (e.keyCode === goog.events.KeyCodes.W) {
     Blockly.Navigation.keyboardPrev();
   } else if (e.keyCode === goog.events.KeyCodes.A) {
-    //Blockly.Navigation.out();
+    //TODO: Blockly.Navigation.out();
   } else if (e.keyCode === goog.events.KeyCodes.S) {
     Blockly.Navigation.keyboardNext();
   } else if (e.keyCode === goog.events.KeyCodes.D) {
-    //Blockly.Navigation.in();
+    //TODO: Blockly.Navigation.in();
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
     Blockly.Navigation.markConnection();
   }

@@ -589,7 +589,7 @@ Blockly.Css.CONTENT = [
 
   '.blocklyVerticalCursor {',
     'stroke-width: 3px;',
-    'stroke: #ffffff;',
+    'stroke: #f442c8;',
     'fill: rgba(255,255,255,0.5);',
   '}',
 

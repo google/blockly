@@ -1310,7 +1310,6 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
   if ((this.options.zoomOptions && this.options.zoomOptions.wheel)
       && (!(this.options.moveOptions && this.options.moveOptions.wheel)
           || e.ctrlKey)) {
-    // TODO: Change '50' from magic number to constant variable.
     // The vertical scroll distance that corresponds to a click of a zoom button.
     var PIXELS_PER_ZOOM_STEP = 50;
     var delta = -e.deltaY / PIXELS_PER_ZOOM_STEP * multiplier;

@@ -275,7 +275,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
       return {
         // In LTR the position is at the top-left of the block, and in RTL
-        // it is at the top-right of the block, we need to add with accordingly.
+        // it is at the top-right of the block. We need to add the width
+        // accordingly.
         left: position.x - (options.RTL ? size.width : 0),
         right: position.x + (options.RTL ? 0 : size.width),
         top: position.y,
@@ -343,7 +344,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
           if (e) {
             if (!e.group) {
               console.log('WARNING: Moved object in bounds but there was no' +
-                ' event group. This may break undo.');
+                  ' event group. This may break undo.');
             }
             Blockly.Events.setGroup(oldGroup);
           }
@@ -380,7 +381,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       default:
         // We found an event we don't know about. It may or may not need
         // to activate bumpObjects, notify the developer.
-        // If your event has to with objects on/in the workspace, add it to
+        // If your event has to do with objects on/in the workspace, add it to
         // the bumpObjects function. Either way add a check to this function.
         console.warn('Found an event that may need to be added to' +
           ' bumpObjects. Please check before submitting a PR.');

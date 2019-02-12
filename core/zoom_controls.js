@@ -162,7 +162,9 @@ Blockly.ZoomControls.prototype.position = function() {
   if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
     this.top_ = this.verticalSpacing_;
     this.zoomInGroup_.setAttribute('transform', 'translate(0, 34)');
-    this.zoomResetGroup_.setAttribute('transform', 'translate(0, 77)');
+    if (this.zoomResetGroup_) {
+      this.zoomResetGroup_.setAttribute('transform', 'translate(0, 77)');
+    }
   } else {
     this.top_ = metrics.viewHeight + metrics.absoluteTop -
         this.HEIGHT_ - this.verticalSpacing_;

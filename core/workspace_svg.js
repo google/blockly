@@ -1653,7 +1653,7 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
   y = center.y;
 
   // Find the new scrollX/scrollY so that the center remains in the same
-  // position (relative to the mouse) after we zoom.
+  // position (relative to the center) after we zoom.
   var matrix = matrix.translate(x * (1 - scaleChange), y * (1 - scaleChange))
       .scale(scaleChange);
   // newScale and matrix.a should be identical (within a rounding error).
@@ -1670,8 +1670,8 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
  */
 Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
   var metrics = this.getMetrics();
-  var x = metrics.viewWidth / 2;
-  var y = metrics.viewHeight / 2;
+  var x = (metrics.viewWidth / 2) + metrics.absoluteLeft;
+  var y = (metrics.viewHeight / 2) + metrics.absoluteTop;
   this.zoom(x, y, type);
 };
 

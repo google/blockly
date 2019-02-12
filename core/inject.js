@@ -450,7 +450,7 @@ Blockly.init_ = function(mainWorkspace) {
   }
 
   if (mainWorkspace.flyout_) {
-    // Shift the workspace origin sideways to avoid the fixed flyout.
+    // Translate the workspace sideways to avoid the fixed flyout.
     switch (mainWorkspace.toolboxPosition) {
       case Blockly.TOOLBOX_AT_LEFT:
         mainWorkspace.scrollX =
@@ -466,6 +466,7 @@ Blockly.init_ = function(mainWorkspace) {
       // If the toolbox is at the top left (workspace origin) is untouched,
       // so no need to include it.
     }
+    mainWorkspace.translate(mainWorkspace.scrollX, mainWorkspace.scrollY);
   }
 
   // Load the sounds.

@@ -269,20 +269,6 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
       return workspaceMetrics;
     };
-    var getWorkspaceObjectMetrics = function(object) {
-      var position = object.getRelativeToSurfaceXY();
-      var size = object.getHeightWidth();
-
-      return {
-        // In LTR the position is at the top-left of the block, and in RTL
-        // it is at the top-right of the block. We need to add the width
-        // accordingly.
-        left: position.x - (options.RTL ? size.width : 0),
-        right: position.x + (options.RTL ? 0 : size.width),
-        top: position.y,
-        bottom: position.y + size.height,
-      };
-    };
 
     var bumpObjects = function(e) {
       // We always check isMovable_ again because the original
@@ -312,28 +298,28 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
               var object = mainWorkspace.getCommentById(e.commentId);
               break;
           }
-          var objectMetrics = getWorkspaceObjectMetrics(object);
+          var objectMetrics = object.getBoundingRectangle();
 
           // Bump any object that's above the top back inside.
-          var overflowTop = metrics.viewTop - objectMetrics.top;
+          var overflowTop = metrics.viewTop - objectMetrics.topLeft.y;
           if (overflowTop > 0) {
             object.moveBy(0, overflowTop);
           }
 
           // Bump any object that's below the bottom back inside.
-          var overflowBottom = metrics.viewBottom - objectMetrics.bottom;
+          var overflowBottom = metrics.viewBottom - objectMetrics.bottomRight.y;
           if (overflowBottom < 0) {
             object.moveBy(0, overflowBottom);
           }
 
           // Bump any object that's off the left back inside.
-          var overflowLeft = metrics.viewLeft - objectMetrics.left;
+          var overflowLeft = metrics.viewLeft - objectMetrics.topLeft.x;
           if (overflowLeft > 0) {
             object.moveBy(overflowLeft, 0);
           }
 
           // Bump any object that's off the right back inside.
-          var overflowRight = metrics.viewRight - objectMetrics.right;
+          var overflowRight = metrics.viewRight - objectMetrics.bottomRight.x;
           if (overflowRight < 0) {
             object.moveBy(overflowRight, 0);
           }

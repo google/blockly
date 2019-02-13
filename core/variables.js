@@ -171,18 +171,20 @@ Blockly.Variables.flyoutCategory = function(workspace) {
  */
 Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
   var variableModelList = workspace.getVariablesOfType('');
-  variableModelList.sort(Blockly.VariableModel.compareByName);
 
   var xmlList = [];
   if (variableModelList.length > 0) {
-    var firstVariable = variableModelList[0];
+    // New variables are added to the end of the variableModelList.
+    var mostRecentVariableFieldXmlString =
+      Blockly.Variables.generateVariableFieldXmlString(
+          variableModelList[variableModelList.length - 1]);
     if (Blockly.Blocks['variables_set']) {
       var gap = Blockly.Blocks['math_change'] ? 8 : 24;
       var blockText = '<xml>' +
-            '<block type="variables_set" gap="' + gap + '">' +
-            Blockly.Variables.generateVariableFieldXmlString(firstVariable) +
-            '</block>' +
-            '</xml>';
+          '<block type="variables_set" gap="' + gap + '">' +
+          mostRecentVariableFieldXmlString +
+          '</block>' +
+          '</xml>';
       var block = Blockly.Xml.textToDom(blockText).firstChild;
       xmlList.push(block);
     }
@@ -190,7 +192,7 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       var gap = Blockly.Blocks['variables_get'] ? 20 : 8;
       var blockText = '<xml>' +
           '<block type="math_change" gap="' + gap + '">' +
-          Blockly.Variables.generateVariableFieldXmlString(firstVariable) +
+          mostRecentVariableFieldXmlString +
           '<value name="DELTA">' +
           '<shadow type="math_number">' +
           '<field name="NUM">1</field>' +
@@ -202,8 +204,9 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       xmlList.push(block);
     }
 
-    for (var i = 0, variable; variable = variableModelList[i]; i++) {
-      if (Blockly.Blocks['variables_get']) {
+    if (Blockly.Blocks['variables_get']) {
+      variableModelList.sort(Blockly.VariableModel.compareByName);
+      for (var i = 0, variable; variable = variableModelList[i]; i++) {
         var blockText = '<xml>' +
             '<block type="variables_get" gap="8">' +
             Blockly.Variables.generateVariableFieldXmlString(variable) +

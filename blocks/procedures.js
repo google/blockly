@@ -946,7 +946,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
    * @this Blockly.Block
    */
   customContextMenu: function(options) {
-    if (!this.workspace.isMovable_()) {
+    if (!this.workspace.isMovable()) {
       // If we center on the block and the workspace isn't movable we could
       // loose blocks at the edges of the workspace.
       return;

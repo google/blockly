@@ -94,5 +94,5 @@ Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
  */
 Blockly.WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
   var newXY = goog.math.Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
-  this.workspace_.scroll_(newXY.x, newXY.y);
+  this.workspace_.scroll(newXY.x, newXY.y);
 };

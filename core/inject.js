@@ -232,7 +232,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   mainWorkspace.translate(0, 0);
   Blockly.mainWorkspace = mainWorkspace;
 
-  if (!options.readOnly && !mainWorkspace.isMovable_()) {
+  if (!options.readOnly && !mainWorkspace.isMovable()) {
     // Helper functions for the workspaceChanged callback.
     var getWorkspaceMetrics = function() {
       var workspaceMetrics = Object.create(null);
@@ -249,7 +249,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
       // Get the exact content metrics (in workspace units), even if the
       // content is bounded.
-      if (mainWorkspace.isContentBounded_()) {
+      if (mainWorkspace.isContentBounded()) {
         // Already in workspace units, no need to divide by scale.
         var blocksBoundingBox = mainWorkspace.getBlocksBoundingBox();
         workspaceMetrics.contentLeft = blocksBoundingBox.x;
@@ -287,7 +287,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
     var bumpObjects = function(e) {
       // We always check isMovable_ again because the original
       // "not movable" state of isMovable_ could have been changed.
-      if (!mainWorkspace.isDragging() && !mainWorkspace.isMovable_() &&
+      if (!mainWorkspace.isDragging() && !mainWorkspace.isMovable() &&
           (e.type == Blockly.Events.BLOCK_CREATE ||
           e.type == Blockly.Events.BLOCK_MOVE ||
           e.type == Blockly.Events.COMMENT_CREATE ||

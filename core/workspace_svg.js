@@ -989,6 +989,11 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
   Blockly.Events.disable();
   try {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
+    if (Blockly.Navigation.insertionConnection_) {
+      Blockly.Navigation.insertBlock(block, Blockly.Navigation.insertionConnection_);
+      return;
+    }
+
     // Move the duplicate to original position.
     var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
     var blockY = parseInt(xmlBlock.getAttribute('y'), 10);

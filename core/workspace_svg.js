@@ -1620,11 +1620,16 @@ Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
 };
 
 /**
- * Zooming the blocks centered in (x, y) coordinate with zooming in or out.
- * @param {number} x X coordinate of center.
- * @param {number} y Y coordinate of center.
- * @param {number} amount Amount of zooming
- *                        (negative zooms out and positive zooms in).
+ * Zooms the workspace in or out relative to/centered on the given (x, y)
+ * coordinate.
+ * @param {number} x X coordinate of center, in pixel units relative to the
+ *     top-left corner of the parentSVG.
+ * @param {number} y Y coordinate of center, in pixel units relative to the
+ *     top-left corner of the parentSVG.
+ * @param {number} amount Amount of zooming. The formula for the new scale
+ *     is newScale = currentScale * (scaleSpeed^amount). scaleSpeed is set in
+ *     the workspace options. Negative amount values zoom out, and positive
+ *     amount values zoom in.
  */
 Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
   // Scale factor.
@@ -1642,7 +1647,9 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
     scaleChange = this.options.zoomOptions.minScale / this.scale;
   }
 
-  // Transform the x/y out of the canvas' space, so that they're usable.
+  // Transform the x/y coordinates from the parentSVG's space into the
+  // canvas' space, so that they are in workspace units relative to the top
+  // left of the visible portion of the workspace.
   var matrix = this.getCanvas().getCTM();
   var center = this.getParentSvg().createSVGPoint();
   center.x = x;

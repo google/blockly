@@ -267,15 +267,27 @@ Blockly.Navigation.resetFlyout = function() {
  * Finds the best connection.
  * @param{Blockly.Block} block The block to be connected.
  * @param{Blockly.Connection} connection The connection to connect to.
- * @return{Blockly.Connection} blockConnection The best connection we can determine for the block.
+ * @return{Blockly.Connection} blockConnection The best connection we can
+ * determine for the block.
  */
 Blockly.Navigation.findBestConnection = function(block, connection) {
   var blockConnection;
   if (!block || !connection) {return;}
   if (connection.type === Blockly.PREVIOUS_STATEMENT) {
     blockConnection = block.nextConnection;
-  } else {
+  } else if (connection.type === Blockly.NEXT_STATEMENT) {
     blockConnection = block.previousConnection;
+  } else if (connection.type === Blockly.INPUT_VALUE) {
+    blockConnection = block.outputConnection;
+  } else if (connection.type === Blockly.OUTPUT_VALUE) {
+    //select the first input that has an input connection
+    for (var i = 0; i < block.inputList.length; i++) {
+      var connection = block.inputList[i].connection;
+      if (connection.type === Blockly.INPUT_VALUE) {
+        blockConnection = connection;
+        break;
+      }
+    }
   }
   return blockConnection;
 };
@@ -287,8 +299,19 @@ Blockly.Navigation.findBestConnection = function(block, connection) {
  */
 Blockly.Navigation.insertBlock = function(block, connection) {
   var bestConnection = Blockly.Navigation.findBestConnection(block, connection);
+
   if (bestConnection) {
-    connection.connect(bestConnection);
+    try {
+      if (connection.type == Blockly.PREVIOUS_STATEMENT && connection.targetBlock()) {
+        var previousBlock = connection.targetBlock();
+        block.previousConnection.connect(previousBlock.nextConnection);
+      }
+      connection.connect(bestConnection);
+    }
+    catch (Error) {
+      console.warn("The connection block is not the right type");
+    }
+
   }
 };
 

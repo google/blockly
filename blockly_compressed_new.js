@@ -19445,6 +19445,69 @@ Blockly.FieldDropdown.validateOptions_ = function(a) {
     if (b) throw TypeError("Found invalid FieldDropdown options.");
 };
 Blockly.Field.register("field_dropdown", Blockly.FieldDropdown);
+Blockly.FieldBoolean = function(a, b) {
+    Blockly.FieldBoolean.superClass_.constructor.call(this, this.state_ ? Blockly.Msg.LOGIC_BOOLEAN_TRUE : Blockly.Msg.LOGIC_BOOLEAN_FALSE, b);
+    this.setValue(a)
+};
+goog.inherits(Blockly.FieldBoolean, Blockly.Field);
+Blockly.FieldBoolean.fromJson = function(a) {
+    return new Blockly.FieldBoolean(a.checked ? "TRUE" : "FALSE")
+};
+Blockly.FieldBoolean.prototype.CURSOR = "default";
+Blockly.FieldBoolean.prototype.MIN_WIDTH = 40;
+Blockly.FieldBoolean.prototype.ADDED_PADDING = 10;
+Blockly.FieldBoolean.prototype.init = function() {
+    this.fieldGroup_ || (this.fieldGroup_ = Blockly.utils.createSvgElement("g", {}, null), this.borderPath_ = Blockly.utils.createSvgElement("path", {
+            d: "m 0,0",
+            x: -Blockly.BlockSvg.SEP_SPACE_X / 2,
+            y: 0
+        }, this.fieldGroup_, this.sourceBlock_.workspace), this.textElement_ = Blockly.utils.createSvgElement("text", {
+            "class": "blocklyText",
+            y: this.size_.height - 7.5
+        }, this.fieldGroup_), Blockly.Field.prototype.updateEditable.call(this), this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_),
+        this.mouseDownWrapper_ = Blockly.bindEventWithChecks_(this.fieldGroup_, "mousedown", this, this.onMouseDown_), this.fieldGroup_.style.cursor = this.CURSOR, Blockly.utils.addClass(this.fieldGroup_, "blocklyEditableText"), Blockly.utils.removeClass(this.fieldGroup_, "blocklyNonEditableText"), this.resizeField_())
+};
+Blockly.FieldBoolean.prototype.getValue = function() {
+    return String(this.state_).toUpperCase()
+};
+Blockly.FieldBoolean.prototype.setValue = function(a) {
+    a = "string" == typeof a ? "TRUE" == a.toUpperCase() : !!a;
+    this.state_ !== a && (this.sourceBlock_ && Blockly.Events.isEnabled() && Blockly.Events.fire(new Blockly.Events.BlockChange(this.sourceBlock_, "field", this.name, this.state_, a)), this.state_ = a, Blockly.Field.prototype.setText.call(this, this.state_ ? Blockly.Msg.LOGIC_BOOLEAN_TRUE : Blockly.Msg.LOGIC_BOOLEAN_FALSE), this.resizeField_())
+};
+Blockly.FieldBoolean.prototype.resizeField_ = function() {
+    if (this.borderPath_ && this.textElement_) {
+        var a = 0,
+            b = 0;
+        try {
+            b = this.textElement_.getComputedTextLength()
+        } catch (f) {
+            b = 8 * this.text_.length
+        }
+        a = b + this.ADDED_PADDING;
+        a < this.MIN_WIDTH && (a = this.MIN_WIDTH);
+        this.size_ = new goog.math.Size(a, this.size_.height);
+        if (this.borderPath_) {
+            var c = a / 2,
+                d = (this.size_.height - 5) / 2;
+            this.borderPath_.setAttribute("d", "m 0,0 H " + b / 2 + " l " + d + "," + d + " v 5  l " + -d + "," + d + " H " + -b / 2 + " l " + -d + "," + -d + " v -5  l " + d + "," + -d + " z");
+            this.borderPath_.setAttribute("transform",
+                "translate(" + c + ",0)")
+        }
+        this.textElement_ && this.textElement_.setAttribute("x", (a - b) / 2);
+        this.sourceBlock_ && this.sourceBlock_.rendered && this.sourceBlock_.render()
+    } else {
+        var e = this;
+        setTimeout(function() {
+            e.resizeField_()
+        }, 50)
+    }
+};
+Blockly.FieldBoolean.prototype.showEditor_ = function() {
+    var a = !this.state_;
+    this.sourceBlock_ && (a = this.callValidator(a));
+    null !== a && this.setValue(String(a).toUpperCase())
+};
+Blockly.Field.register("field_boolean", Blockly.FieldBoolean);
 Blockly.FieldImage = function(a, b, c, d, e) {
     this.sourceBlock_ = null;
     this.height_ = Number(c);

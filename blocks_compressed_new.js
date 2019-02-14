@@ -570,7 +570,7 @@ Blockly.defineBlocksWithJsonArray([{
     type: "logic_boolean",
     message0: "%1",
     args0: [{
-        type: "field_dropdown",
+        type: "field_boolean",
         name: "BOOL",
         options: [
             ["%{BKY_LOGIC_BOOLEAN_TRUE}", "TRUE"],

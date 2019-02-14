@@ -109,7 +109,7 @@ Blockly.FieldJointAngle.WRAP = 180;
  * Radius of protractor circle.  Slightly smaller than protractor size since
  * otherwise SVG crops off half the border at the edges.
  */
-Blockly.FieldJointAngle.RADIUS = Blockly.FieldJointAngle.HALF - 1;
+Blockly.FieldJointAngle.RADIUS = Blockly.FieldJointAngle.HALF;
 
 /**
  * Adds degree symbol and recalculates width.

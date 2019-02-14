@@ -522,7 +522,7 @@ Blockly.ButtonInput.prototype.resizeEditor_ = function() {
   var xy = new goog.math.Coordinate(x, bBox.top);
 
   // Shift by a few pixels to line up exactly.
-  xy.y += 1;
+  xy.y += 3;
   if (goog.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
     // Firefox mis-reports the location of the border by a pixel
     // once the WidgetDiv is moved into position.

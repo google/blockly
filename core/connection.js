@@ -392,7 +392,9 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
     case Blockly.OUTPUT_VALUE: {
       // Don't offer to connect an already connected left (male) value plug to
       // an available right (female) value plug.
-      if (candidate.isConnected() || this.isConnected()) {
+      if ((candidate.isConnected() &&
+          !candidate.targetBlock().isInsertionMarker()) ||
+          this.isConnected()) {
         return false;
       }
       break;

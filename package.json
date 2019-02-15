@@ -1,6 +1,10 @@
 {
   "name": "blockly",
+<<<<<<< HEAD
   "version": "1.20190419.0-develop",
+=======
+  "version": "1.20190215.0",
+>>>>>>> Rebuild and update version numbers
   "description": "Blockly is a library for building visual programming editors.",
   "main": "blockly_node_javascript_en.js",
   "keywords": [

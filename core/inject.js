@@ -436,6 +436,9 @@ Blockly.init_ = function(mainWorkspace) {
  */
 Blockly.inject.bindDocumentEvents_ = function() {
   if (!Blockly.documentEventsBound_) {
+    Blockly.bindEventWithChecks_(document, 'scroll', null,
+        Blockly.mainWorkspace.updateInverseScreenCTM
+            .bind(Blockly.mainWorkspace));
     Blockly.bindEventWithChecks_(document, 'keydown', null, Blockly.onKeyDown_);
     // longStop needs to run to stop the context menu from showing up.  It
     // should run regardless of what other touch event handlers have run.

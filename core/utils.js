@@ -295,10 +295,8 @@ Blockly.utils.isRightButton = function(e) {
  */
 Blockly.utils.mouseToSvg = function(e, svg, matrix) {
   var svgPoint = svg.createSVGPoint();
-  // We need this in page coordinates so it works even when the document is
-  // scrolled.
-  svgPoint.x = e.pageX;
-  svgPoint.y = e.pageY;
+  svgPoint.x = e.clientX;
+  svgPoint.y = e.clientY;
 
   if (!matrix) {
     matrix = svg.getScreenCTM().inverse();

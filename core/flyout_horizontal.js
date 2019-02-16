@@ -152,10 +152,21 @@ Blockly.HorizontalFlyout.prototype.position = function() {
   var edgeHeight = this.height_ - this.CORNER_RADIUS;
   this.setBackgroundPath_(edgeWidth, edgeHeight);
 
-  var x = targetWorkspaceMetrics.absoluteLeft;
-  var y = targetWorkspaceMetrics.absoluteTop;
-  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
-    y += (targetWorkspaceMetrics.viewHeight - this.height_);
+  // X is always 0 since this is a horizontal flyout.
+  var x = 0;
+  // If there is a toolbox.
+  if (targetWorkspaceMetrics.toolboxHeight) {
+    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+      var y = targetWorkspaceMetrics.toolboxHeight;
+    } else {
+      var y = targetWorkspaceMetrics.viewHeight - this.height_;
+    }
+  } else {
+    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+      var y = 0;
+    } else {
+      var y = targetWorkspaceMetrics.viewHeight;
+    }
   }
   this.positionAt_(this.width_, this.height_, x, y);
 };

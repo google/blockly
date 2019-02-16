@@ -385,9 +385,9 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
 Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
   return {
     viewHeight: this.workspaceHeight_,
-    viewWidth: this.workspaceWidth_,
+    viewWidth: this.workspaceWidth_ - this.workspace_.flyout_.width_,
     absoluteTop: 0,
-    absoluteLeft: 0
+    absoluteLeft: this.workspace_.RTL ? 0 : this.workspace_.flyout_.width_
   };
 };
 

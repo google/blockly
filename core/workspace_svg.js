@@ -814,8 +814,10 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
 
 /**
  * Translate this workspace to new coordinates.
- * @param {number} x Horizontal translation.
- * @param {number} y Vertical translation.
+ * @param {number} x Horizontal translation, in pixel units relative to the
+ *    top left of the blockly div.
+ * @param {number} y Vertical translation, in pixel units relative to the
+ *    top left of the blockly div.
  */
 Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
   if (this.useWorkspaceDragSurface_ && this.isDragSurfaceActive_) {
@@ -829,6 +831,10 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
   // Now update the block drag surface if we're using one.
   if (this.blockDragSurface_) {
     this.blockDragSurface_.translateAndScaleGroup(x, y, this.scale);
+  }
+  // And update the grid if we're using one.
+  if (this.grid_) {
+    this.grid_.moveTo(x, y);
   }
 };
 
@@ -1920,9 +1926,6 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
   x += metrics.absoluteLeft;
   y += metrics.absoluteTop;
   this.translate(x, y);
-  if (this.grid_) {
-    this.grid_.moveTo(x, y);
-  }
 };
 
 /**
@@ -2146,9 +2149,6 @@ Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
   var y = this.scrollY + metrics.absoluteTop;
   // We could call scroll here, but that has extra checks we don't need to do.
   this.translate(x, y);
-  if (this.grid_) {
-    this.grid_.moveTo(x, y);
-  }
 };
 
 /**

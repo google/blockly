@@ -1836,7 +1836,7 @@ Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
 
   // Convert from workspace directions to canvas directions.
   var x = -scrollToCenterX - metrics.contentLeft;
-  var y = -scrollToCenterY - metrics.contentLeft;
+  var y = -scrollToCenterY - metrics.contentTop;
 
   Blockly.hideChaff();
   this.scroll(x, y);

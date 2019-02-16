@@ -466,13 +466,6 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   /** @type {SVGElement} */
   this.svgBubbleCanvas_ = Blockly.utils.createSvgElement('g',
       {'class': 'blocklyBubbleCanvas'}, this.svgGroup_);
-  var bottom = Blockly.Scrollbar.scrollbarThickness;
-  if (this.options.hasTrashcan) {
-    bottom = this.addTrashcan_(bottom);
-  }
-  if (this.options.zoomOptions && this.options.zoomOptions.controls) {
-    this.addZoomControls_(bottom);
-  }
 
   if (!this.isFlyout) {
     Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
@@ -582,30 +575,24 @@ Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {
 
 /**
  * Add a trashcan.
- * @param {number} bottom Distance from workspace bottom to bottom of trashcan.
- * @return {number} Distance from workspace bottom to the top of trashcan.
- * @private
+ * @package
  */
-Blockly.WorkspaceSvg.prototype.addTrashcan_ = function(bottom) {
+Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
   /** @type {Blockly.Trashcan} */
   this.trashcan = new Blockly.Trashcan(this);
   var svgTrashcan = this.trashcan.createDom();
   this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
-  return this.trashcan.init(bottom);
 };
 
 /**
  * Add zoom controls.
- * @param {number} bottom Distance from workspace bottom to bottom of controls.
- * @return {number} Distance from workspace bottom to the top of controls.
- * @private
+ * @package
  */
-Blockly.WorkspaceSvg.prototype.addZoomControls_ = function(bottom) {
+Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
   /** @type {Blockly.ZoomControls} */
   this.zoomControls_ = new Blockly.ZoomControls(this);
   var svgZoomControls = this.zoomControls_.createDom();
   this.svgGroup_.appendChild(svgZoomControls);
-  return this.zoomControls_.init(bottom);
 };
 
 /**
@@ -912,6 +899,13 @@ Blockly.WorkspaceSvg.prototype.render = function() {
   // Render each block.
   for (var i = blocks.length - 1; i >= 0; i--) {
     blocks[i].render(false);
+  }
+
+  if (this.currentGesture_) {
+    var imList = this.currentGesture_.getInsertionMarkers();
+    for (var i = 0; i < imList.length; i++) {
+      imList[i].render(false);
+    }
   }
 };
 

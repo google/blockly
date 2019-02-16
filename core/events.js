@@ -150,6 +150,11 @@ Blockly.Events.COMMENT_CHANGE = 'comment_change';
 Blockly.Events.COMMENT_MOVE = 'comment_move';
 
 /**
+ * Name of event that records a workspace load.
+ */
+Blockly.Events.FINISHED_LOADING = 'finished_loading';
+
+/**
  * List of events queued for firing.
  * @private
  */

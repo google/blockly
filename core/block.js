@@ -152,6 +152,12 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    */
   this.isInsertionMarker_ = false;
 
+  /**
+   * Name of the type of hat.
+   * @type {string|undefined}
+   */
+  this.hat = undefined;
+
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
     /** @type {string} */
@@ -217,6 +223,14 @@ Blockly.Block.obtain = function(workspace, prototypeName) {
 Blockly.Block.prototype.data = null;
 
 /**
+ * Colour of the block as HSV hue value (0-360)
+ * This may be null if the block colour was not set via a hue number.
+ * @type {?number}
+ * @private
+ */
+Blockly.Block.prototype.hue_ = null;
+
+/**
  * Colour of the block in '#RRGGBB' format.
  * @type {string}
  * @private
@@ -224,11 +238,28 @@ Blockly.Block.prototype.data = null;
 Blockly.Block.prototype.colour_ = '#000000';
 
 /**
- * Colour of the block as HSV hue value (0-360)
- * @type {?number}
+ * Secondary colour of the block.
+ * Colour of shadow blocks.
+ * @type {?string}
  * @private
-  */
-Blockly.Block.prototype.hue_ = null;
+ */
+Blockly.Block.prototype.colourSecondary_ = null;
+
+/**
+ * Tertiary colour of the block.
+ * Colour of the block's border.
+ * @type {?string}
+ * @private
+ */
+Blockly.Block.prototype.colourTertiary_ = null;
+
+/**
+ * Name of the block style.
+ * @type {?string}
+ * @private
+ */
+Blockly.Block.prototype.styleName_ = null;
+
 
 /**
  * Dispose of this block.
@@ -348,7 +379,9 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
   }
 
   var thisConnection = this.getOnlyValueConnection_();
-  if (!thisConnection || !thisConnection.isConnected()) {
+  if (!thisConnection ||
+      !thisConnection.isConnected() ||
+      thisConnection.targetBlock().isShadow()) {
     // Too many or too few possible connections on this block, or there's
     // nothing on the other side of this connection.
     return;
@@ -399,7 +432,7 @@ Blockly.Block.prototype.unplugFromStack_ = function(opt_healStack) {
     this.previousConnection.disconnect();
   }
   var nextBlock = this.getNextBlock();
-  if (opt_healStack && nextBlock) {
+  if (opt_healStack && nextBlock && !nextBlock.isShadow()) {
     // Disconnect the next statement.
     var nextTarget = this.nextConnection.targetConnection;
     nextTarget.disconnect();
@@ -825,6 +858,30 @@ Blockly.Block.prototype.getColour = function() {
 };
 
 /**
+ * Get the secondary colour of a block.
+ * @return {?string} #RRGGBB string.
+ */
+Blockly.Block.prototype.getColourSecondary = function() {
+  return this.colourSecondary_;
+};
+
+/**
+ * Get the tertiary colour of a block.
+ * @return {?string} #RRGGBB string.
+ */
+Blockly.Block.prototype.getColourTertiary = function() {
+  return this.colourTertiary_;
+};
+
+/**
+ * Get the name of the block style.
+ * @return {?string} Name of the block style.
+ */
+Blockly.Block.prototype.getStyleName = function() {
+  return this.styleName_;
+};
+
+/**
  * Get the HSV hue value of a block. Null if hue not set.
  * @return {?number} Hue value (0-360)
  */
@@ -856,6 +913,32 @@ Blockly.Block.prototype.setColour = function(colour) {
       errorMsg += ' (from "' + colour + '")';
     }
     throw errorMsg;
+  }
+};
+
+/**
+ * Set the style and colour values of a block.
+ * @param {string} blockStyleName Name of the block style
+ * @throws {Error} if the block style does not exist.
+ */
+Blockly.Block.prototype.setStyle = function(blockStyleName) {
+  var theme = Blockly.getTheme();
+  if (!theme) {
+    throw Error('Trying to set block style to ' + blockStyleName +
+      ' before theme was defined via Blockly.setTheme().');
+  }
+  var blockStyle = theme.getBlockStyle(blockStyleName);
+  this.styleName_ = blockStyleName;
+
+  if (blockStyle) {
+    this.colourSecondary_ = blockStyle['colourSecondary'];
+    this.colourTertiary_ = blockStyle['colourTertiary'];
+    this.hat = blockStyle.hat;
+    // Set colour will trigger an updateColour() on a block_svg
+    this.setColour(blockStyle['colourPrimary']);
+  }
+  else {
+    throw Error('Invalid style name: ' + blockStyleName);
   }
 };
 
@@ -1264,7 +1347,20 @@ Blockly.Block.prototype.jsonInit = function(json) {
   }
 
   // Set basic properties of block.
-  this.jsonInitColour_(json, warningPrefix);
+  // Makes styles backward compatible with old way of defining hat style.
+  if (json['style'] && json['style'].hat) {
+    this.hat = json['style'].hat;
+    //Must set to null so it doesn't error when checking for style and colour.
+    json['style'] = null;
+  }
+
+  if (json['style'] && json['colour']) {
+    throw Error(warningPrefix + 'Must not have both a colour and a style.');
+  } else if (json['style']) {
+    this.jsonInitStyle_(json, warningPrefix);
+  } else {
+    this.jsonInitColour_(json, warningPrefix);
+  }
 
   // Interpolate the message blocks.
   var i = 0;
@@ -1341,6 +1437,21 @@ Blockly.Block.prototype.jsonInitColour_ = function(json, warningPrefix) {
         console.warn(warningPrefix + 'Illegal color value: ', rawValue);
       }
     }
+  }
+};
+
+/**
+ * Initialize the style of this block from the JSON description.
+ * @param {!Object} json Structured data describing the block.
+ * @param {string} warningPrefix Warning prefix string identifying block.
+ * @private
+ */
+Blockly.Block.prototype.jsonInitStyle_ = function(json, warningPrefix) {
+  var blockStyleName = json['style'];
+  try {
+    this.setStyle(blockStyleName);
+  } catch (styleError) {
+    console.warn(warningPrefix + 'Style does not exist: ', blockStyleName);
   }
 };
 

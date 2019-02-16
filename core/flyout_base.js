@@ -388,6 +388,10 @@ Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
     // Set the scrollbars origin to be the top left of the flyout.
     this.scrollbar_.setOrigin(x, y);
     this.scrollbar_.resize();
+    // Set the position again so that if the metrics were the same (and the
+    // resize failed) our position is still updated.
+    this.scrollbar_.setPosition_(
+        this.scrollbar_.position_.x, this.scrollbar_.position_.y);
   }
 };
 
@@ -596,6 +600,18 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
 };
 
 /**
+ * Does this flyout allow you to create a new instance of the given block?
+ * Used for deciding if a block can be "dragged out of" the flyout.
+ * @param {!Blockly.BlockSvg} block The block to copy from the flyout.
+ * @return {!boolean} True if you can create a new instance of the block, false
+ *    otherwise.
+ * @package
+ */
+Blockly.Flyout.prototype.isBlockCreatable_ = function(block) {
+  return !block.disabled;
+};
+
+/**
  * Create a copy of this block on the workspace.
  * @param {!Blockly.BlockSvg} originalBlock The block to copy from the flyout.
  * @return {Blockly.BlockSvg} The newly created block, or null if something
@@ -728,8 +744,12 @@ Blockly.Flyout.prototype.filterForCapacity_ = function() {
   var blocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     if (this.permanentlyDisabled_.indexOf(block) == -1) {
-      block.setDisabled(!this.targetWorkspace_
-          .isCapacityAvailable(Blockly.utils.getBlockTypeCounts(block)));
+      var disable = !this.targetWorkspace_
+          .isCapacityAvailable(Blockly.utils.getBlockTypeCounts(block));
+      while (block) {
+        block.setDisabled(disable);
+        block = block.getNextBlock();
+      }
     }
   }
 };

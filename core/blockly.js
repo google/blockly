@@ -113,6 +113,13 @@ Blockly.clipboardTypeCounts_ = null;
 Blockly.cache3dSupported_ = null;
 
 /**
+ * Holds all Blockly style attributes.
+ * @type {?Blockly.Theme}
+ * @private
+ */
+Blockly.theme_ = null;
+
+/**
  * Convert a hue (HSV model) into an RGB hex triplet.
  * @param {number} hue Hue on a colour wheel (0-360).
  * @return {string} RGB code, e.g. '#5ba65b'.
@@ -326,8 +333,14 @@ Blockly.onContextMenu_ = function(e) {
 Blockly.hideChaff = function(opt_allowToolbox) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
+  // For now the trashcan flyout always autocloses because it overlays the
+  // trashcan UI (no trashcan to click to close it)
+  var workspace = Blockly.getMainWorkspace();
+  if (workspace.trashcan &&
+      workspace.trashcan.flyout_) {
+    workspace.trashcan.flyout_.hide();
+  }
   if (!opt_allowToolbox) {
-    var workspace = Blockly.getMainWorkspace();
     if (workspace.toolbox_ &&
         workspace.toolbox_.flyout_ &&
         workspace.toolbox_.flyout_.autoClose) {
@@ -665,6 +678,64 @@ Blockly.checkBlockColourConstant_ = function(
     var warning = warningPattern.replace('%1', namePath).replace('%2', msgName);
     console.warn(warning);
   }
+};
+
+
+/**
+ * Sets the theme for blockly and refreshes all blocks in the toolbox and workspace.
+ * @param {Blockly.Theme} theme Theme for blockly.
+ */
+Blockly.setTheme = function(theme) {
+  this.theme_ = theme;
+  var ws = Blockly.getMainWorkspace();
+
+  //update all blocks in workspace that have a style name
+  this.updateBlockStyles_(ws.getAllBlocks().filter(
+      function(block){
+        return block.getStyleName() !== undefined;
+      }
+  ));
+
+  //update blocks in the flyout
+  if (!ws.toolbox_ && ws.flyout_ && ws.flyout_.workspace_) {
+    this.updateBlockStyles_(ws.flyout_.workspace_.getAllBlocks());
+  } else {
+    ws.refreshToolboxSelection();
+  }
+
+  //update colours on the categories
+  if (ws.toolbox_) {
+    ws.toolbox_.updateColourFromTheme();
+  }
+
+  var event = new Blockly.Events.Ui(null, 'theme');
+  event.workspaceId = ws.id;
+  Blockly.Events.fire(event);
+};
+
+/**
+ * Updates all the blocks with new style.
+ * @param {!Array.<Blockly.Block>} blocks List of blocks to update the style on.
+ * @private
+ */
+Blockly.updateBlockStyles_ = function(blocks) {
+  for (var i = 0; i < blocks.length; i++) {
+    var block = blocks[i];
+    var blockStyleName = block.getStyleName();
+
+    block.setStyle(blockStyleName);
+    if (block.mutator) {
+      block.mutator.updateBlockStyle(blockStyleName);
+    }
+  }
+};
+
+/**
+ * Gets the theme.
+ * @return {?Blockly.Theme} theme Theme for blockly.
+ */
+Blockly.getTheme = function() {
+  return this.theme_;
 };
 
 // IE9 does not have a console.  Create a stub to stop errors.

@@ -69,10 +69,13 @@ Blockly.inject = function(container, opt_options) {
 
   var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
       workspaceDragSurface);
+  Blockly.setTheme(options.theme);
+
   Blockly.init_(workspace);
   Blockly.mainWorkspace = workspace;
 
   Blockly.svgResize(workspace);
+
   return workspace;
 };
 
@@ -218,6 +221,12 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
     var flyout = mainWorkspace.addFlyout_('svg');
     Blockly.utils.insertAfter(flyout, svg);
   }
+  if (options.hasTrashcan) {
+    mainWorkspace.addTrashcan();
+  }
+  if (options.zoomOptions && options.zoomOptions.controls) {
+    mainWorkspace.addZoomControls();
+  }
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
@@ -337,6 +346,14 @@ Blockly.init_ = function(mainWorkspace) {
       }
       mainWorkspace.translate(mainWorkspace.scrollX, 0);
     }
+  }
+
+  var verticalSpacing = Blockly.Scrollbar.scrollbarThickness;
+  if (options.hasTrashcan) {
+    verticalSpacing = mainWorkspace.trashcan.init(verticalSpacing);
+  }
+  if (options.zoomOptions && options.zoomOptions.controls) {
+    mainWorkspace.zoomControls_.init(verticalSpacing);
   }
 
   if (options.hasScrollbars) {

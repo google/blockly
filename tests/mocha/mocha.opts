@@ -1,0 +1,3 @@
+--ui tdd
+--file ../blockly_uncompressed.js
+--reporter landing

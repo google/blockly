@@ -37,7 +37,28 @@ goog.require('goog.math.Rect');
  * @constructor
  */
 Blockly.Trashcan = function(workspace) {
+  /**
+   * The workspace the trashcan sits in.
+   * @type {!Blockly.Workspace}
+   * @private
+   */
   this.workspace_ = workspace;
+
+  /**
+   * True if the trashcan contains blocks, otherwise false.
+   * @type {boolean}
+   * @private
+   */
+  this.hasBlocks_ = false;
+
+  /**
+   * A list of Xml (stored as strings) representing blocks "inside" the trashcan.
+   * @type {Array}
+   * @private
+   */
+  this.contents_ = [];
+
+
   if (this.workspace_.options.maxTrashcanContents <= 0) {
     return;
   }
@@ -141,20 +162,6 @@ Blockly.Trashcan.prototype.isOpen = false;
  * @private
  */
 Blockly.Trashcan.prototype.minOpenness_ = 0;
-
-/**
- * True if the trashcan contains blocks, otherwise false.
- * @type {boolean}
- * @private
- */
-Blockly.Trashcan.prototype.hasBlocks_ = false;
-
-/**
- * A list of Xml (stored as strings) representing blocks "inside" the trashcan.
- * @type {Array}
- * @private
- */
-Blockly.Trashcan.prototype.contents_ = [];
 
 /**
  * The SVG group containing the trash can.

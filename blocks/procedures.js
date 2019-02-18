@@ -948,6 +948,12 @@ Blockly.Blocks['procedures_callnoreturn'] = {
    * @this Blockly.Block
    */
   customContextMenu: function(options) {
+    if (!this.workspace.isMovable()) {
+      // If we center on the block and the workspace isn't movable we could
+      // loose blocks at the edges of the workspace.
+      return;
+    }
+
     var option = {enabled: true};
     option.text = Blockly.Msg['PROCEDURES_HIGHLIGHT_DEF'];
     var name = this.getProcedureCall();

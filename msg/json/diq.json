@@ -161,6 +161,7 @@
 	"TEXT_CHANGECASE_OPERATOR_LOWERCASE": "Herfanê werdiyana",
 	"TEXT_CHANGECASE_OPERATOR_TITLECASE": "Ser herf gırd",
 	"TEXT_PRINT_TITLE": "%1 çap",
+	"TEXT_REVERSE_MESSAGE0": "karakteranê %1 weçarne",
 	"LISTS_CREATE_EMPTY_TITLE": "lista venge vıraze",
 	"LISTS_CREATE_WITH_INPUT_WITH": "Liste ya vıraz",
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "liste",

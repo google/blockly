@@ -1309,8 +1309,8 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
     this.currentGesture_.cancel();
   }
 
-  // TODO: Change '10' from magic number to constant variable. Also change in
-  // flyout_vertical.js and flyout_horizontal.js.
+  // TODO (#2301): Change '10' from magic number to constant variable. Also
+  //  change in flyout_vertical.js and flyout_horizontal.js.
   // Multiplier variable, so that non-pixel-deltaModes are supported.
   var multiplier = e.deltaMode === 0x1 ? 10 : 1;
 
@@ -1914,8 +1914,12 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
     // content's top-left. Then we negate this so we get the displacement from
     // the content's top-left to the view's top-left, matching the
     // directionality of the scrollbars.
-    this.scrollbar.hScroll.set(-(x + metrics.contentLeft));
-    this.scrollbar.vScroll.set(-(y + metrics.contentTop));
+
+    // TODO (#2299): Change these to not use the internal ratio_ property.
+    this.scrollbar.hScroll.setHandlePosition(-(x + metrics.contentLeft) *
+        this.scrollbar.hScroll.ratio_);
+    this.scrollbar.vScroll.setHandlePosition(-(y + metrics.contentTop) *
+        this.scrollbar.vScroll.ratio_);
   }
 
   // Hide the WidgetDiv without animation. This is to prevent a disposal

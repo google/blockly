@@ -233,7 +233,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   Blockly.mainWorkspace = mainWorkspace;
 
   if (!options.readOnly && !mainWorkspace.isMovable()) {
-    // Helper functions for the workspaceChanged callback.
+    // Helper function for the workspaceChanged callback.
+    // TODO (#2300): Move metrics math back to the WorkspaceSvg.
     var getWorkspaceMetrics = function() {
       var workspaceMetrics = Object.create(null);
       var defaultMetrics = mainWorkspace.getMetrics();

@@ -148,22 +148,25 @@ Blockly.Cursor.prototype.showWithConnection = function(connection) {
   }
   this.CURSOR_REFERENCE = connection;
 
-  var targetBlock = connection.sourceBlock_;
-  var xy = targetBlock.getRelativeToSurfaceXY();
-  if (connection.type == Blockly.INPUT_VALUE || connection.type == Blockly.OUTPUT_VALUE) {
-    targetBlock = connection.targetConnection.sourceBlock_;
-    this.positionVertical_(xy.x + connection.offsetInBlock_.x - Blockly.Cursor.VERTICAL_PADDING,
-        xy.y + connection.offsetInBlock_.y - Blockly.Cursor.VERTICAL_PADDING,
-        targetBlock.getHeightWidth().width + (Blockly.Cursor.VERTICAL_PADDING * 2),
-        targetBlock.getHeightWidth().height + (Blockly.Cursor.VERTICAL_PADDING * 2));
-    this.showVertical_();
+  if (connection.type == Blockly.INPUT_VALUE) {
+    this.positionInput(connection);
+    this.showConnection_();
+  } else if (connection.type == Blockly.OUTPUT_VALUE) {
+    this.positionOutput(connection);
+    this.showConnection_();
   } else {
+    var targetBlock = connection.sourceBlock_;
+    var xy = targetBlock.getRelativeToSurfaceXY();
     this.positionHorizontal_(xy.x + connection.offsetInBlock_.x - Blockly.Cursor.NOTCH_START_LENGTH,
         xy.y + connection.offsetInBlock_.y, targetBlock.getHeightWidth().width);
     this.showHorizontal_();
   }
 };
 
+/**
+ * Show the cursor using a block
+ * @param {Blockly.BlockSvg} block The block to position the cursor around
+ */
 Blockly.Cursor.prototype.showWithBlock = function(block) {
   var xy = block.getRelativeToSurfaceXY();
   this.positionVertical_(xy.x + Blockly.Cursor.VERTICAL_PADDING,
@@ -171,6 +174,25 @@ Blockly.Cursor.prototype.showWithBlock = function(block) {
       block.getHeightWidth().width + (Blockly.Cursor.VERTICAL_PADDING * 2),
       block.getHeightWidth().height + (Blockly.Cursor.VERTICAL_PADDING * 2));
   this.showVertical_();
+};
+
+/**
+ * Show the cursor using an input
+ * @param {Blockly.Input} input The input to position the cursor around
+ */
+Blockly.Cursor.prototype.showWithInput = function(input) {
+  var connection = input.connection;
+  if (connection) {
+    this.showWithConnection(connection);
+  }
+};
+
+/**
+ * Show the cursor using a field
+ * @param {Blockly.Field} field The field to position the cursor around
+ */
+Blockly.Cursor.prototype.showWithField = function(field) {
+  console.log('displaying cursor with field' + field);
 };
 
 /**
@@ -203,14 +225,55 @@ Blockly.Cursor.prototype.positionVertical_ = function(x, y, width, height) {
   this.cursorSvgVertical_.setAttribute('height', height);
 };
 
+/**
+ * Position the cursor for an output connection.
+ * @param{Blockly.Connection} connection The connection to position cursor around.
+ */
+Blockly.Cursor.prototype.positionOutput = function(connection) {
+  var cursorSize = new goog.math.Size(Blockly.Cursor.CURSOR_WIDTH, Blockly.Cursor.CURSOR_HEIGHT);
+  var xy = connection.sourceBlock_.getRelativeToSurfaceXY();
+  var x = xy.x + connection.offsetInBlock_.x + cursorSize.width + cursorSize.height;
+  var y = xy.y + connection.offsetInBlock_.y;
+  this.cursorOutput_.setAttribute('fill', '#f44242');
+  this.cursorOutput_.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
+            (connection.sourceBlock_.RTL ? ' scale(-1 1)' : ''));
+};
+
+/**
+ * Position the cursor for an input connection.
+ * @param{Blockly.Connection} connection The connection to position cursor around.
+ */
+Blockly.Cursor.prototype.positionInput = function(connection) {
+  var cursorSize = new goog.math.Size(Blockly.Cursor.CURSOR_WIDTH, Blockly.Cursor.CURSOR_HEIGHT);
+  var x = connection.x_ + cursorSize.width + cursorSize.height;
+  var y = connection.y_;
+  this.cursorOutput_.setAttribute('fill', '#9e42f4');
+  this.cursorOutput_.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
+            (connection.sourceBlock_.RTL ? ' scale(-1 1)' : ''));
+};
+
+/**
+ * Display the horizontal line used to represent next and previous connections.
+ */
 Blockly.Cursor.prototype.showHorizontal_ = function() {
   this.hide();
   this.cursorSvgHorizontal_.style.display = '';
 };
 
+/**
+ * Display the box used to represent blocks
+ */
 Blockly.Cursor.prototype.showVertical_ = function() {
   this.hide();
   this.cursorSvgVertical_.style.display = '';
+};
+
+/**
+ * Display the connection piece used to represent output and input conneections.
+ */
+Blockly.Cursor.prototype.showConnection_ = function() {
+  this.hide();
+  this.cursorOutput_.style.display = '';
 };
 
 /**
@@ -219,6 +282,7 @@ Blockly.Cursor.prototype.showVertical_ = function() {
 Blockly.Cursor.prototype.hide = function() {
   this.cursorSvgHorizontal_.style.display = 'none';
   this.cursorSvgVertical_.style.display = 'none';
+  this.cursorOutput_.style.display = 'none';
 };
 
 /**
@@ -240,6 +304,7 @@ Blockly.Cursor.prototype.createCursorSvg_ = function() {
         'width': Blockly.Cursor.CURSOR_WIDTH,
         'height': Blockly.Cursor.CURSOR_HEIGHT
       }, this.svgGroup_);
+
   this.cursorSvgHorizontal_ = Blockly.utils.createSvgElement('rect',
       {
         'x': '0',
@@ -250,15 +315,7 @@ Blockly.Cursor.prototype.createCursorSvg_ = function() {
         'style': 'display: none;'
       },
       this.cursorSvg_);
-  Blockly.utils.createSvgElement('animate',
-      {
-        'attributeType': 'XML',
-        'attributeName': 'fill',
-        'dur': '1s',
-        'values': Blockly.Cursor.CURSOR_COLOR + ';transparent;transparent;',
-        'repeatCount': 'indefinite'
-      },
-      this.cursorSvgHorizontal_);
+
   this.cursorSvgVertical_ = Blockly.utils.createSvgElement('rect',
       {
         'class': 'blocklyVerticalCursor',
@@ -268,5 +325,37 @@ Blockly.Cursor.prototype.createCursorSvg_ = function() {
         'style': 'display: none;'
       },
       this.cursorSvg_);
+
+  this.cursorOutput_ = Blockly.utils.createSvgElement(
+      'path',
+      {
+        'width': Blockly.Cursor.CURSOR_WIDTH,
+        'height': Blockly.Cursor.CURSOR_HEIGHT,
+        'd': 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 5',
+        'transform':'',
+        'style':'display: none;'
+      },
+      this.cursorSvg_);
+
+  Blockly.utils.createSvgElement('animate',
+      {
+        'attributeType': 'XML',
+        'attributeName': 'fill',
+        'dur': '1s',
+        'values': Blockly.Cursor.CURSOR_COLOR + ';transparent;transparent;',
+        'repeatCount': 'indefinite'
+      },
+      this.cursorSvgHorizontal_);
+
+  Blockly.utils.createSvgElement('animate',
+      {
+        'attributeType': 'XML',
+        'attributeName': 'fill',
+        'dur': '1s',
+        'values': Blockly.Cursor.CURSOR_COLOR + ';transparent;transparent;',
+        'repeatCount': 'indefinite'
+      },
+      this.cursorOutput_);
+
   return this.cursorSvg_;
 };

@@ -141,6 +141,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     var quarkXml = null;
   }
   var workspaceOptions = {
+    disabledPatternId: this.block_.workspace.options.disabledPatternId,
     languageTree: quarkXml,
     parentWorkspace: this.block_.workspace,
     pathToMedia: this.block_.workspace.options.pathToMedia,
@@ -153,6 +154,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   };
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;
+  this.workspace_.addChangeListener(Blockly.Events.disableOrphans);
 
   // Mutator flyouts go inside the mutator workspace's <g> rather than in
   // a top level svg. Instead of handling scale themselves, mutators

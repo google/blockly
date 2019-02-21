@@ -1316,27 +1316,24 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
     this.currentGesture_.cancel();
   }
 
-  // TODO (#2301): Change '10' from magic number to constant variable. Also
-  //  change in flyout_vertical.js and flyout_horizontal.js.
-  // Multiplier variable, so that non-pixel-deltaModes are supported.
-  var multiplier = e.deltaMode === 0x1 ? 10 : 1;
 
+  var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
   if (canWheelZoom && (e.ctrlKey || !canWheelMove)) {
     // The vertical scroll distance that corresponds to a click of a zoom button.
     var PIXELS_PER_ZOOM_STEP = 50;
-    var delta = -e.deltaY / PIXELS_PER_ZOOM_STEP * multiplier;
+    var delta = -scrollDelta.y / PIXELS_PER_ZOOM_STEP;
     var position = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
         this.getInverseScreenCTM());
     this.zoom(position.x, position.y, delta);
   } else {
-    var x = this.scrollX - e.deltaX * multiplier;
-    var y = this.scrollY - e.deltaY * multiplier;
+    var x = this.scrollX - scrollDelta.x;
+    var y = this.scrollY - scrollDelta.y;
 
-    if (e.shiftKey && e.deltaX === 0) {
+    if (e.shiftKey && !scrollDelta.x) {
       // Scroll horizontally (based on vertical scroll delta)
       // This is needed as for some browser/system combinations which do not
       // set deltaX.
-      x = this.scrollX - e.deltaY * multiplier;
+      x = this.scrollX - scrollDelta.y;
       y = this.scrollY; // Don't scroll vertically
     }
     this.scroll(x, y);

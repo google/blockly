@@ -690,6 +690,7 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
         new Blockly.Events.Ui(this, 'click', undefined, undefined));
   }
   Blockly.terminateDrag_();
+  var oldXY = this.dragStartXY_;
 
   var deleteArea = this.workspace.isDeleteArea(e);
 
@@ -719,6 +720,11 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
       }
       if (confirmedDelete) {
 	Blockly.selected.dispose(false, true);
+      } else {
+        //Move block back to original position if trash is canceled
+        var group = Blockly.selected.getSvgRoot();
+        group.translate_ = 'translate(' + oldXY.x + ',' + oldXY.y + ')';
+        group.setAttribute('transform', group.translate_ + group.skew_);
       }
     });
   }

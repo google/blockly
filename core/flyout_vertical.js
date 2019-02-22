@@ -207,16 +207,11 @@ Blockly.VerticalFlyout.prototype.scrollToStart = function() {
  * @private
  */
 Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
-  var delta = e.deltaY;
+  var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
 
-  if (delta) {
-    // Firefox's mouse wheel deltas are a tenth that of Chrome/Safari.
-    // DeltaMode is 1 for a mouse wheel, but not for a trackpad scroll event
-    if (goog.userAgent.GECKO && (e.deltaMode === 1)) {
-      delta *= 10;
-    }
+  if (scrollDelta.y) {
     var metrics = this.getMetrics_();
-    var pos = (metrics.viewTop - metrics.contentTop) + delta;
+    var pos = (metrics.viewTop - metrics.contentTop) + scrollDelta.y;
     var limit = metrics.contentHeight - metrics.viewHeight;
     pos = Math.min(pos, limit);
     pos = Math.max(pos, 0);

@@ -171,9 +171,17 @@ Blockly.Cursor.prototype.showWithBlock = function(block) {
   var xy = block.getRelativeToSurfaceXY();
   this.positionVertical_(xy.x + Blockly.Cursor.VERTICAL_PADDING,
       xy.y - Blockly.Cursor.VERTICAL_PADDING,
-      block.getHeightWidth().width + (Blockly.Cursor.VERTICAL_PADDING * 2),
-      block.getHeightWidth().height + (Blockly.Cursor.VERTICAL_PADDING * 2));
+      block.width + (Blockly.Cursor.VERTICAL_PADDING * 2),
+      block.height + (Blockly.Cursor.VERTICAL_PADDING * 2));
   this.showVertical_();
+};
+
+Blockly.Cursor.prototype.showWithAnything = function(cursor) {
+  if (cursor instanceof Blockly.BlockSvg) {
+    this.showWithBlock(cursor);
+  } else if (cursor instanceof Blockly.RenderedConnection) {
+    this.showWithConnection(cursor);
+  }
 };
 
 /**

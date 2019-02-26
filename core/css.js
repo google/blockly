@@ -191,7 +191,6 @@ Blockly.Css.CONTENT = [
     'display: none;',
     'border: 1px solid;',
     'border-radius: 1px;',
-    //'box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, .3);',
     'padding: 4px;',
     '-webkit-user-select: none;',
   '}',
@@ -643,9 +642,9 @@ Blockly.Css.CONTENT = [
     'max-height: 100%;',
   '}',
 
-  // '.blocklyDropdownMenu {',
-  //   'padding: 0 !important;',
-  // '}',
+  '.blocklyDropdownMenu {',
+    'padding: 0 !important;',
+  '}',
 
   /* Override the default Closure URL. */
   '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-checkbox,',
@@ -965,8 +964,7 @@ Blockly.Css.CONTENT = [
   '.blocklyDropDownDiv .goog-option-selected .goog-menuitem-checkbox, ',
   '.blocklyDropDownDiv .goog-option-selected .goog-menuitem-icon {',
      /* Client apps may override the URL at which they serve the sprite. */
-    //'background: url(//ssl.gstatic.com/editor/editortoolbar.png) no-repeat -512px 0;',
-    'background: url(<<<PATH>>>/sprites.png) no-repeat -48px -16px !important;',
+    'background: url(//ssl.gstatic.com/editor/editortoolbar.png) no-repeat -512px 0;',
     'position: static;', /* Scroll with the menu. */
     'float: left;',
     'margin-left: -24px;',

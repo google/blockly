@@ -93,7 +93,7 @@ Blockly.DropDownDiv.ARROW_HORIZONTAL_PADDING = 12;
  * @type {number}
  * @const
  */
-Blockly.DropDownDiv.PADDING_Y = 8;
+Blockly.DropDownDiv.PADDING_Y = 16;
 
 /**
  * Length of animations in seconds.
@@ -232,17 +232,10 @@ Blockly.DropDownDiv.showPositionedByBlock = function(field, block,
  */
 Blockly.DropDownDiv.showPositionedByField = function(owner,
     opt_onHide, opt_secondaryYOffset) {
-  var scale = owner.sourceBlock_.workspace.scale;
-  var bBox = {width: owner.size_.width, height: owner.size_.height};
-  bBox.width *= scale;
-  bBox.height *= scale;
-
-  // bbox.width * scale is not the same as position.right - position.left.
-  // What's up with that?
   var position = owner.fieldGroup_.getBoundingClientRect();
   // If we can fit it, render below the block.
-  var primaryX = position.left + bBox.width / 2;
-  var primaryY = position.top + bBox.height;
+  var primaryX = position.left + position.width / 2;
+  var primaryY = position.bottom;
   // If we can't fit it, render above the entire parent block.
   var secondaryX = primaryX;
   var secondaryY = position.top;
@@ -251,8 +244,10 @@ Blockly.DropDownDiv.showPositionedByField = function(owner,
   }
   // Set bounds to workspace; show the drop-down.
   Blockly.DropDownDiv.positionToField_ = true;
-  Blockly.DropDownDiv.setBoundsElement(owner.sourceBlock_.workspace.getParentSvg().parentNode);
-  return Blockly.DropDownDiv.show(owner, primaryX, primaryY, secondaryX, secondaryY, opt_onHide);
+  Blockly.DropDownDiv.setBoundsElement(
+      owner.sourceBlock_.workspace.getParentSvg().parentNode);
+  return Blockly.DropDownDiv.show(
+      owner, primaryX, primaryY, secondaryX, secondaryY, opt_onHide);
 };
 
 

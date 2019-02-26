@@ -140,15 +140,7 @@ Blockly.FieldDropdown.prototype.init = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.showEditor_ = function() {
-  // consider passing the options into createMenu instead of getting them twice.
-  var options = this.getOptions();
-  if (options.length == 0) return;
-
-  this.dropDownOpen_ = true;
-  // If there is an existing drop-down someone else owns, hide it immediately and clear it.
-  Blockly.DropDownDiv.hideWithoutAnimation();
-  Blockly.DropDownDiv.clearContent();
-
+  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, null);
   var menu = this.createMenu_();
   this.addActionListener_(menu);
   this.positionMenu_(menu);
@@ -162,16 +154,13 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
 Blockly.FieldDropdown.prototype.addActionListener_ = function(menu) {
   var thisField = this;
 
-  var selected = false;
   function callback(e) {
-    if (selected) return;
     var menu = this;
     var menuItem = e.target;
     if (menuItem) {
       thisField.onItemSelected(menu, menuItem);
-      selected = true;
     }
-    Blockly.DropDownDiv.hide();
+    Blockly.WidgetDiv.hideIfOwner(thisField);
     Blockly.Events.setGroup(false);
   }
   // Listen for mouse/keyboard events.
@@ -216,28 +205,25 @@ Blockly.FieldDropdown.prototype.createMenu_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
-  // // Record viewport dimensions before adding the dropdown.
-  // var viewportBBox = Blockly.utils.getViewportBBox();
-  // var anchorBBox = this.getAnchorDimensions_();
+  // Record viewport dimensions before adding the dropdown.
+  var viewportBBox = Blockly.utils.getViewportBBox();
+  var anchorBBox = this.getAnchorDimensions_();
 
-  // this.createWidget_(menu);
-  // var menuSize = Blockly.utils.uiMenu.getSize(menu);
-
-  // var menuMaxHeightPx = Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH
-  //     * document.documentElement.clientHeight;
-  // if (menuSize.height > menuMaxHeightPx) {
-  //   menuSize.height = menuMaxHeightPx;
-  // }
-
-  // if (this.sourceBlock_.RTL) {
-  //   Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox, menuSize);
-  // }
-  // // Position the menu.
-  // Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, menuSize,
-  //     this.sourceBlock_.RTL);
   this.createWidget_(menu);
-  this.updateColours_();
-  Blockly.DropDownDiv.showPositionedByField(this);
+  var menuSize = Blockly.utils.uiMenu.getSize(menu);
+
+  var menuMaxHeightPx = Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH
+      * document.documentElement.clientHeight;
+  if (menuSize.height > menuMaxHeightPx) {
+    menuSize.height = menuMaxHeightPx;
+  }
+
+  if (this.sourceBlock_.RTL) {
+    Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox, menuSize);
+  }
+  // Position the menu.
+  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, menuSize,
+      this.sourceBlock_.RTL);
   // Calling menuDom.focus() has to wait until after the menu has been placed
   // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
   // in view.  See issue #1329.
@@ -250,20 +236,11 @@ Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
  * @private
  */
 Blockly.FieldDropdown.prototype.createWidget_ = function(menu) {
-  var contentDiv = Blockly.DropDownDiv.getContentDiv();
-  menu.render(contentDiv);
+  var div = Blockly.WidgetDiv.DIV;
+  menu.render(div);
   Blockly.utils.addClass(menu.getElement(), 'blocklyDropdownMenu');
   // Enable autofocus after the initial render to avoid issue #1329.
   menu.setAllowAutoFocus(true);
-};
-
-/**
- * Set the colours of the dropdown div to match the colours of the field or
- * parent block.
- * @private
- */
-Blockly.FieldDropdown.prototype.updateColours_ = function() {
-  Blockly.DropDownDiv.setColour('#ffffff', '#dddddd');
 };
 
 /**

@@ -61,6 +61,22 @@ Blockly.FieldColour.fromJson = function(options) {
 };
 
 /**
+ * Default width of a colour field.
+ * @type {number}
+ * @private
+ * @const
+ */
+Blockly.FieldColour.DEFAULT_WIDTH = 16;
+
+/**
+ * Default height of a colour field.
+ * @type {number}
+ * @private
+ * @const
+ */
+Blockly.FieldColour.DEFAULT_HEIGHT = 12;
+
+/**
  * Array of colours used by this field.  If null, use the global list.
  * @type {Array.<string>}
  * @private
@@ -88,6 +104,8 @@ Blockly.FieldColour.prototype.columns_ = 0;
 Blockly.FieldColour.prototype.init = function() {
   Blockly.FieldColour.superClass_.init.call(this);
   this.borderRect_.style['fillOpacity'] = 1;
+  this.size_ = new goog.math.Size(Blockly.FieldColour.DEFAULT_WIDTH,
+      Blockly.FieldColour.DEFAULT_HEIGHT);
   this.setValue(this.getValue());
 };
 
@@ -110,6 +128,31 @@ Blockly.FieldColour.prototype.dispose = function() {
  */
 Blockly.FieldColour.prototype.getValue = function() {
   return this.colour_;
+};
+
+/**
+ * Get the size, and rerender if necessary.
+ * @return {!goog.math.Size} Height and width.
+ */
+Blockly.FieldColour.prototype.getSize = function() {
+  if (!this.size_.width) {
+    this.render_();
+  }
+
+  return this.size_;
+};
+
+/**
+ * Updates the width of the field.  Colour fields have a constant width, but
+ * the width is sometimes reset to force a rerender.
+ */
+Blockly.FieldColour.prototype.updateWidth = function() {
+  var width = Blockly.FieldColour.DEFAULT_WIDTH;
+  if (this.borderRect_) {
+    this.borderRect_.setAttribute('width',
+        width + Blockly.BlockSvg.SEP_SPACE_X);
+  }
+  this.size_.width = width;
 };
 
 /**
@@ -230,29 +273,6 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
   // Configure event handler on the table to listen for any event in a cell.
   Blockly.FieldColour.onUpWrapper_ = Blockly.bindEvent_(picker,
       'mouseup', this, this.onClick_);
-
-  // Old code is below here
-  //
-  //
-  // Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
-  //     Blockly.FieldColour.widgetDispose_);
-
-  // // Record viewport dimensions before adding the widget.
-  // var viewportBBox = Blockly.utils.getViewportBBox();
-  // var anchorBBox = this.getScaledBBox_();
-
-  // // Create and add the colour picker, then record the size.
-  // var picker = this.createWidget_();
-  // Blockly.WidgetDiv.DIV.appendChild(picker);
-  // var paletteSize = goog.style.getSize(picker);
-
-  // // Position the picker to line up with the field.
-  // Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, paletteSize,
-  //     this.sourceBlock_.RTL);
-
-  // // Configure event handler on the table to listen for any event in a cell.
-  // Blockly.FieldColour.onUpWrapper_ = Blockly.bindEvent_(picker,
-  //     'mouseup', this, this.onClick_);
 };
 
 /**

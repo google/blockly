@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.FieldColour');
 
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Field');
 goog.require('Blockly.utils');
 

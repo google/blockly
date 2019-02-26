@@ -173,7 +173,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
             "text": "NO ANGLE FIELD"
           }
       }
-    ]
+    ],
+    "colour": "230"
   },
   {
     "type": "example_date",

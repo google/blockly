@@ -190,7 +190,7 @@ Blockly.Css.CONTENT = [
     'z-index: 1000;',
     'display: none;',
     'border: 1px solid;',
-    'border-radius: 1px;',
+    'border-radius: 2px;',
     'padding: 4px;',
     '-webkit-user-select: none;',
   '}',

@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.FieldTextInput');
 
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
@@ -260,11 +261,14 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
   var tabKey = 9, enterKey = 13, escKey = 27;
   if (e.keyCode == enterKey) {
     Blockly.WidgetDiv.hide();
+    Blockly.DropDownDiv.hideIfOwner(this);
   } else if (e.keyCode == escKey) {
     htmlInput.value = htmlInput.defaultValue;
     Blockly.WidgetDiv.hide();
+    Blockly.DropDownDiv.hideIfOwner(this);
   } else if (e.keyCode == tabKey) {
     Blockly.WidgetDiv.hide();
+    Blockly.DropDownDiv.hideIfOwner(this);
     this.sourceBlock_.tab(this, !e.shiftKey);
     e.preventDefault();
   }

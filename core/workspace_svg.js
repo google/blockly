@@ -1733,9 +1733,9 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
       // Convert from pixels to workspace coordinates.
       blocksHeight += this.flyout_.height_ / this.scale;
     } else {
-      workspaceWidth += this.flyout_.width_;
+      workspaceWidth += this.flyout_.getWidth();
       // Convert from pixels to workspace coordinates.
-      blocksWidth += this.flyout_.width_ / this.scale;
+      blocksWidth += this.flyout_.getWidth() / this.scale;
     }
   }
 

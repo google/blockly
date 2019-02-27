@@ -141,6 +141,9 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     var quarkXml = null;
   }
   var workspaceOptions = {
+    // If you want to enable disabling, also remove the
+    // event filter from workspaceChanged_ .
+    disable: false,
     disabledPatternId: this.block_.workspace.options.disabledPatternId,
     languageTree: quarkXml,
     parentWorkspace: this.block_.workspace,
@@ -315,9 +318,15 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
  * Update the source block when the mutator's blocks are changed.
  * Bump down any block that's too high.
  * Fired whenever a change is made to the mutator's workspace.
+ * @param {!Blockly.Events.Abstract} e Custom data for event.
  * @private
  */
-Blockly.Mutator.prototype.workspaceChanged_ = function() {
+Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
+  if (e.type == Blockly.Events.UI ||
+      (e.type == Blockly.Events.CHANGE && e.element == 'disabled')) {
+    return;
+  }
+
   if (!this.workspace_.isDragging()) {
     var blocks = this.workspace_.getTopBlocks(false);
     var MARGIN = 20;

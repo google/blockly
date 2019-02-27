@@ -181,6 +181,8 @@ Blockly.Cursor.prototype.showWithAnything = function(cursor) {
     this.showWithBlock(cursor);
   } else if (cursor instanceof Blockly.RenderedConnection) {
     this.showWithConnection(cursor);
+  } else if (cursor instanceof Blockly.Field) {
+    this.showWithField(cursor);
   }
 };
 

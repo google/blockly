@@ -1688,7 +1688,6 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
  */
 Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
   var metrics = this.getMetrics();
-  console.log(metrics);
   if (this.flyout_) {
     // If you want blocks in the center of the view (visible portion of the
     // workspace) to stay centered when the size of the view decreases (i.e.

@@ -249,7 +249,7 @@ Blockly.Navigation.insertFromFlyout = function() {
     Blockly.Navigation.focusWorkspace();
     //This will have to be fixed when we add in a block that does not have a previous
     cursor.setCursor(newBlock.previousConnection);
-    cursor.showWithConnection();
+    cursor.showWithAnything();
   }
 };
 
@@ -373,7 +373,7 @@ Blockly.Navigation.focusWorkspace = function() {
   Blockly.keyboardAccessibilityMode_ = true;
   if (Blockly.selected) {
     cursor.setCursor(Blockly.selected.previousConnection);
-    cursor.showWithConnection();
+    cursor.showWithAnything();
   }
 };
 
@@ -384,7 +384,6 @@ Blockly.Navigation.keyboardNext = function() {
   var cursor = Blockly.Navigation.cursor_;
   var newCursor = cursor.next();
   if (newCursor) {
-    cursor.setCursor(newCursor);
     cursor.showWithAnything(newCursor);
 
   }
@@ -397,7 +396,6 @@ Blockly.Navigation.keyboardIn = function() {
   var cursor = Blockly.Navigation.cursor_;
   var newCursor = cursor.in();
   if (newCursor) {
-    cursor.setCursor(newCursor);
     cursor.showWithAnything(newCursor);
   }
 };
@@ -409,7 +407,6 @@ Blockly.Navigation.keyboardPrev = function() {
   var cursor = Blockly.Navigation.cursor_;
   var newCursor = cursor.prev();
   if (newCursor) {
-    cursor.setCursor(newCursor);
     cursor.showWithAnything(newCursor);
   }
 };
@@ -421,7 +418,6 @@ Blockly.Navigation.keyboardOut = function() {
   var cursor = Blockly.Navigation.cursor_;
   var newCursor = cursor.out();
   if (newCursor) {
-    cursor.setCursor(newCursor);
     cursor.showWithAnything(newCursor);
   }
 };

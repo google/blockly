@@ -52,7 +52,7 @@ goog.addDependency("../../../" + dir + "/core/constants.js", ['Blockly.constants
 goog.addDependency("../../../" + dir + "/core/contextmenu.js", ['Blockly.ContextMenu'], ['Blockly.Events.BlockCreate', 'Blockly.utils', 'Blockly.utils.uiMenu', 'Blockly.Xml', 'goog.events', 'goog.math.Coordinate', 'goog.ui.Menu', 'goog.ui.MenuItem', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/css.js", ['Blockly.Css'], []);
 goog.addDependency("../../../" + dir + "/core/dragged_connection_manager.js", ['Blockly.DraggedConnectionManager'], ['Blockly.BlockAnimations', 'Blockly.RenderedConnection', 'goog.math.Coordinate']);
-goog.addDependency("../../../" + dir + "/core/dropdowndiv.js", ['Blockly.DropDownDiv'], ['goog.dom', 'goog.style']);
+goog.addDependency("../../../" + dir + "/core/dropdowndiv.js", ['Blockly.DropDownDiv'], ['Blockly.utils', 'goog.dom', 'goog.style']);
 goog.addDependency("../../../" + dir + "/core/events.js", ['Blockly.Events'], ['Blockly.utils']);
 goog.addDependency("../../../" + dir + "/core/events_abstract.js", ['Blockly.Events.Abstract'], ['Blockly.Events']);
 goog.addDependency("../../../" + dir + "/core/extensions.js", ['Blockly.Extensions'], ['Blockly.Mutator', 'Blockly.utils']);

@@ -267,7 +267,9 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
 
   var picker = this.createWidget_();
   Blockly.DropDownDiv.getContentDiv().appendChild(picker);
-  Blockly.DropDownDiv.setColour('#ffffff', '#dddddd');
+  // Dropdown div accepts CSS colours.
+  // But maybe this should be done with a class instead?
+  Blockly.DropDownDiv.setColour('white', 'silver');
 
   Blockly.DropDownDiv.showPositionedByField(this);
 

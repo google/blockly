@@ -236,6 +236,7 @@ Blockly.Navigation.getFlyoutBlocks_ = function() {
  * Insert the block from the flyout.
  */
 Blockly.Navigation.insertFromFlyout = function() {
+  var cursor = Blockly.Navigation.cursor_;
   var flyoutBlock = Blockly.Navigation.flyoutBlock_;
   var connection = Blockly.Navigation.insertionConnection_;
   var workspace = Blockly.getMainWorkspace();
@@ -247,8 +248,8 @@ Blockly.Navigation.insertFromFlyout = function() {
     Blockly.Navigation.insertBlock(newBlock, connection);
     Blockly.Navigation.focusWorkspace();
     //This will have to be fixed when we add in a block that does not have a previous
-    Blockly.Navigation.cursor_ = newBlock.previousConnection;
-    Blockly.cursor.showWithConnection(Blockly.Navigation.cursor_);
+    cursor.setCursor(newBlock.previousConnection);
+    cursor.showWithConnection();
   }
 };
 
@@ -256,8 +257,9 @@ Blockly.Navigation.insertFromFlyout = function() {
  * Reset flyout information.
  */
 Blockly.Navigation.resetFlyout = function() {
+  var cursor = Blockly.Navigation.cursor_;
   Blockly.Navigation.flyoutBlock_ = null;
-  Blockly.cursor.hide();
+  cursor.hide();
 };
 
 /************/
@@ -319,7 +321,7 @@ Blockly.Navigation.insertBlock = function(block, connection) {
 
 Blockly.Navigation.insertBlockFromWs = function() {
   var targetConnection = Blockly.Navigation.insertionConnection_;
-  var sourceConnection = Blockly.Navigation.cursor_;
+  var sourceConnection = Blockly.Navigation.cursor_.getCursor();
   try {
     sourceConnection.connect(targetConnection);
   } catch (Error) {
@@ -365,12 +367,13 @@ Blockly.Navigation.navigateBetweenStacks = function(forward) {
  * Sets the connection on the selected block in the workspace.
  */
 Blockly.Navigation.focusWorkspace = function() {
+  var cursor = Blockly.Navigation.cursor_;
   Blockly.Navigation.resetFlyout();
   Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_WS;
   Blockly.keyboardAccessibilityMode_ = true;
   if (Blockly.selected) {
-    Blockly.Navigation.cursor_ = Blockly.selected.previousConnection;
-    Blockly.cursor.showWithConnection(Blockly.selected.previousConnection);
+    cursor.setCursor(Blockly.selected.previousConnection);
+    cursor.showWithConnection();
   }
 };
 
@@ -379,10 +382,11 @@ Blockly.Navigation.focusWorkspace = function() {
  */
 Blockly.Navigation.keyboardNext = function() {
   var cursor = Blockly.Navigation.cursor_;
-  var newCursor = Blockly.CursorNavigation.next(cursor);
+  var newCursor = cursor.next();
   if (newCursor) {
-    Blockly.cursor.showWithAnything(newCursor);
-    Blockly.Navigation.cursor_ = newCursor;
+    cursor.setCursor(newCursor);
+    cursor.showWithAnything(newCursor);
+
   }
 };
 
@@ -391,10 +395,10 @@ Blockly.Navigation.keyboardNext = function() {
  */
 Blockly.Navigation.keyboardIn = function() {
   var cursor = Blockly.Navigation.cursor_;
-  var newCursor = Blockly.CursorNavigation.in(cursor);
+  var newCursor = cursor.in();
   if (newCursor) {
-    Blockly.cursor.showWithAnything(newCursor);
-    Blockly.Navigation.cursor_ = newCursor;
+    cursor.setCursor(newCursor);
+    cursor.showWithAnything(newCursor);
   }
 };
 
@@ -403,10 +407,10 @@ Blockly.Navigation.keyboardIn = function() {
  */
 Blockly.Navigation.keyboardPrev = function() {
   var cursor = Blockly.Navigation.cursor_;
-  var newCursor = Blockly.CursorNavigation.prev(cursor);
+  var newCursor = cursor.prev();
   if (newCursor) {
-    Blockly.cursor.showWithAnything(newCursor);
-    Blockly.Navigation.cursor_ = newCursor;
+    cursor.setCursor(newCursor);
+    cursor.showWithAnything(newCursor);
   }
 };
 
@@ -415,10 +419,10 @@ Blockly.Navigation.keyboardPrev = function() {
  */
 Blockly.Navigation.keyboardOut = function() {
   var cursor = Blockly.Navigation.cursor_;
-  var newCursor = Blockly.CursorNavigation.out(cursor);
+  var newCursor = cursor.out();
   if (newCursor) {
-    Blockly.cursor.showWithAnything(newCursor);
-    Blockly.Navigation.cursor_ = newCursor;
+    cursor.setCursor(newCursor);
+    cursor.showWithAnything(newCursor);
   }
 };
 
@@ -426,7 +430,7 @@ Blockly.Navigation.keyboardOut = function() {
  * Mark the current connection.
  */
 Blockly.Navigation.markConnection = function() {
-  Blockly.Navigation.insertionConnection_ = Blockly.Navigation.cursor_;
+  Blockly.Navigation.insertionConnection_ = Blockly.Navigation.cursor_.getCursor();
 };
 
 /**********************/

@@ -151,7 +151,8 @@ Blockly.CursorSvg.prototype.showWithCoordinates = function(x, y) {
  * Show the cursor using a connection
  * @param {Blockly.Connection} connection The connection to position the cursor to
  */
-Blockly.CursorSvg.prototype.showWithConnection = function(connection) {
+Blockly.CursorSvg.prototype.showWithConnection = function() {
+  var connection = this.getCursor();
   if (!connection) {
     return;
   }
@@ -202,7 +203,8 @@ Blockly.CursorSvg.prototype.setParent = function(newParent) {
  * Show the cursor using a block
  * @param {Blockly.BlockSvg} block The block to position the cursor around
  */
-Blockly.CursorSvg.prototype.showWithBlock = function(block) {
+Blockly.CursorSvg.prototype.showWithBlock = function() {
+  var block = this.getCursor();
   var xy = block.getRelativeToSurfaceXY();
   this.positionVertical_(xy.x + Blockly.CursorSvg.VERTICAL_PADDING,
       xy.y - Blockly.CursorSvg.VERTICAL_PADDING,
@@ -212,13 +214,14 @@ Blockly.CursorSvg.prototype.showWithBlock = function(block) {
   this.setParent(block);
 };
 
-Blockly.CursorSvg.prototype.showWithAnything = function(cursor) {
+Blockly.CursorSvg.prototype.showWithAnything = function() {
+  var cursor = this.getCursor();
   if (cursor instanceof Blockly.BlockSvg) {
-    this.showWithBlock(cursor);
+    this.showWithBlock();
   } else if (cursor instanceof Blockly.RenderedConnection) {
-    this.showWithConnection(cursor);
+    this.showWithConnection();
   } else if (cursor instanceof Blockly.Field) {
-    this.showWithField(cursor);
+    this.showWithField();
   }
 };
 
@@ -237,7 +240,8 @@ Blockly.CursorSvg.prototype.showWithInput = function(input) {
  * Show the cursor using a field
  * @param {Blockly.Field} field The field to position the cursor around
  */
-Blockly.CursorSvg.prototype.showWithField = function(field) {
+Blockly.CursorSvg.prototype.showWithField = function() {
+  var field = this.getCursor();
   console.log('displaying cursor with field' + field);
 };
 

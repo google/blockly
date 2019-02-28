@@ -48,7 +48,7 @@ goog.require('Blockly.WorkspaceCommentSvg.render');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
-goog.require('Blockly.Cursor');
+goog.require('Blockly.CursorSvg');
 
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
@@ -658,7 +658,7 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
  */
 Blockly.WorkspaceSvg.prototype.addCursor = function() {
   /** @type {Blockly.Cursor} */
-  this.cursor_ = new Blockly.Cursor(this);
+  this.cursor_ = new Blockly.CursorSvg(this);
   var svgCursor = this.cursor_.createDom();
   this.svgGroup_.appendChild(svgCursor);
   return this.cursor_;

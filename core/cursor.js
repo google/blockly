@@ -2,7 +2,7 @@
  * @license
  * Visual Blocks Editor
  *
- * Copyright 2012 Google Inc.
+ * Copyright 2011 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,353 +19,336 @@
  */
 
 /**
- * @fileoverview Methods for graphically rendering a cursor as SVG.
- * @author samelh@microsoft.com (Sam El-Husseini)
+ * @fileoverview The class representing a cursor.
  */
 'use strict';
 
 goog.provide('Blockly.Cursor');
 
-
 /**
  * Class for a cursor.
- * @param {!Blockly.Workspace} workspace The workspace to sit in.
  * @constructor
  */
-Blockly.Cursor = function(workspace) {
-  this.workspace_ = workspace;
+Blockly.Cursor = function() {
+
+  this.parentInput_ = null;
+
+  this.isStack_ = false;
+
+  this.stackBlock_ = null;
+
+  this.isWorkspace_ = false;
+
+  this.cursor_ = null;
+};
+
+Blockly.Cursor.prototype.setCursor = function(newCursor, opt_parent) {
+  this.cursor_ = newCursor;
+  this.parentInput_ = opt_parent;
+};
+
+Blockly.Cursor.prototype.setStack = function(isStack, topBlock) {
+  this.isStack = isStack;
+  this.stackBlock_ = topBlock;
+};
+
+Blockly.Cursor.prototype.setWorkspace = function(isWorkspace) {
+  this.isWorkspace_ = isWorkspace;
+};
+
+Blockly.Cursor.prototype.getCursor = function() {
+  return this.cursor_;
+};
+
+Blockly.Cursor.prototype.getParentInput = function() {
+  return this.parentInput_;
+};
+
+Blockly.Cursor.prototype.isWorkspace = function() {
+  return this.isWorkspace_;
+};
+
+Blockly.Cursor.prototype.isStack = function() {
+  return this.isStack_;
 };
 
 /**
- * Height of the horizontal cursor.
- * @type {number}
- * @const
+ * Get the parent input of a field.
+ * TODO: Check on moving this to the block class.
+ * @param {Blockly.Field} field Field to find parent for.
+ * @return {Blockly.Input} The input that the field belongs to.
  */
-Blockly.Cursor.CURSOR_HEIGHT = 5;
+Blockly.Cursor.getFieldParentInput_ = function(field) {
+  var parentInput = null;
+  var block = field.sourceBlock_;
+  var inputs = block.inputList;
 
-/**
- * Width of the horizontal cursor.
- * @type {number}
- * @const
- */
-Blockly.Cursor.CURSOR_WIDTH = 100;
-
-/**
- * The start length of the notch.
- * @type {number}
- * @const
- */
-Blockly.Cursor.NOTCH_START_LENGTH = 24;
-
-/**
- * Padding around the input.
- * @type {number}
- * @const
- */
-Blockly.Cursor.VERTICAL_PADDING = 5;
-
-/**
- * Cursor color.
- * @type {number}
- * @const
- */
-Blockly.Cursor.CURSOR_COLOR = '#cc0a0a';
-
-/**
- * A reference to the current object that the cursor is associated with
- * @type {goog.math.Coordinate|Blockly.Connection|Blockly.Field}
- */
-Blockly.Cursor.CURSOR_REFERENCE = null;
-
-/**
- * Create the zoom controls.
- * @return {!Element} The zoom controls SVG group.
- */
-Blockly.Cursor.prototype.createDom = function() {
-  this.svgGroup_ =
-      Blockly.utils.createSvgElement('g', {
-        'class': 'blocklyCursor'
-      }, null);
-
-  this.createCursorSvg_();
-  return this.svgGroup_;
-};
-
-/**
- * Show the cursor on the workspace, use the event to determine it's positioning
- * @param {!Event} e Mouse event for the shift click that is making the cursor appear.
- * @param {boolean} rtl True if RTL, false if LTR.
- * @package
- */
-Blockly.Cursor.prototype.workspaceShow = function(e) {
-  var ws = this.workspace_;
-  var injectionDiv = ws.getInjectionDiv();
-  // Bounding rect coordinates are in client coordinates, meaning that they
-  // are in pixels relative to the upper left corner of the visible browser
-  // window.  These coordinates change when you scroll the browser window.
-  var boundingRect = injectionDiv.getBoundingClientRect();
-
-  // The client coordinates offset by the injection div's upper left corner.
-  var clientOffsetPixels = new goog.math.Coordinate(
-      e.clientX - boundingRect.left, e.clientY - boundingRect.top);
-
-  // The offset in pixels between the main workspace's origin and the upper
-  // left corner of the injection div.
-  var mainOffsetPixels = ws.getOriginOffsetInPixels();
-
-  // The position of the new comment in pixels relative to the origin of the
-  // main workspace.
-  var finalOffsetPixels = goog.math.Coordinate.difference(clientOffsetPixels,
-      mainOffsetPixels);
-
-  // The position of the new comment in main workspace coordinates.
-  var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
-
-  var x = finalOffsetMainWs.x;
-  var y = finalOffsetMainWs.y;
-  this.showWithCoordinates(x, y);
-};
-
-/**
- * Show the cursor using coordinates
- * @param {number} x The new x position to move the cursor to.
- * @param {number} y The new y position to move the cursor to.
- */
-Blockly.Cursor.prototype.showWithCoordinates = function(x, y) {
-  this.CURSOR_REFERENCE = new goog.math.Coordinate(x, y);
-
-  this.positionHorizontal_(x, y, Blockly.Cursor.CURSOR_WIDTH);
-  this.showHorizontal_();
-};
-
-/**
- * Show the cursor using a connection
- * @param {Blockly.Connection} connection The connection to position the cursor to
- */
-Blockly.Cursor.prototype.showWithConnection = function(connection) {
-  if (!connection) {
-    return;
+  for (var idx = 0; idx < block.inputList.length; idx++) {
+    var input = inputs[idx];
+    var fieldRows = input.fieldRow;
+    for (var j = 0; j < fieldRows.length; j++) {
+      if (fieldRows[j] === field) {
+        parentInput = input;
+        break;
+      }
+    }
   }
-  this.CURSOR_REFERENCE = connection;
-
-  if (connection.type == Blockly.INPUT_VALUE) {
-    this.positionInput(connection);
-    this.showConnection_();
-  } else if (connection.type == Blockly.OUTPUT_VALUE) {
-    this.positionOutput(connection);
-    this.showConnection_();
-  } else {
-    var targetBlock = connection.sourceBlock_;
-    var xy = targetBlock.getRelativeToSurfaceXY();
-    this.positionHorizontal_(xy.x + connection.offsetInBlock_.x - Blockly.Cursor.NOTCH_START_LENGTH,
-        xy.y + connection.offsetInBlock_.y, targetBlock.getHeightWidth().width);
-    this.showHorizontal_();
-  }
+  return parentInput;
 };
 
 /**
- * Show the cursor using a block
- * @param {Blockly.BlockSvg} block The block to position the cursor around
+ * Get the parent input of a connection.
+ * TODO: Check on moving this to the block class.
+ * @param {Blockly.Connection} connection Connection to find parent for.
+ * @return {Blockly.Input} The input that the connection belongs to.
  */
-Blockly.Cursor.prototype.showWithBlock = function(block) {
-  var xy = block.getRelativeToSurfaceXY();
-  this.positionVertical_(xy.x + Blockly.Cursor.VERTICAL_PADDING,
-      xy.y - Blockly.Cursor.VERTICAL_PADDING,
-      block.width + (Blockly.Cursor.VERTICAL_PADDING * 2),
-      block.height + (Blockly.Cursor.VERTICAL_PADDING * 2));
-  this.showVertical_();
+Blockly.Cursor.getConnectionParentInput_ = function(connection) {
+  var parentInput = null;
+  var block = connection.sourceBlock_;
+  var inputs = block.inputList;
+  for (var idx = 0; idx < block.inputList.length; idx++) {
+    if (inputs[idx].connection === connection) {
+      parentInput = inputs[idx];
+      break;
+    }
+  }
+  return parentInput;
 };
 
-Blockly.Cursor.prototype.showWithAnything = function(cursor) {
-  if (cursor instanceof Blockly.BlockSvg) {
-    this.showWithBlock(cursor);
-  } else if (cursor instanceof Blockly.RenderedConnection) {
-    this.showWithConnection(cursor);
+/**
+ * Get the parent input of the cursor.
+ * TODO: Check on moving this to the block class.
+ * @param {Blockly.Connection|Blockly.Field} cursor Field or connection to find
+ * parent for.
+ * @return {Blockly.Input} The input that the connection belongs to.
+ */
+Blockly.Cursor.getParentInput_ = function(cursor) {
+  var parentInput = null;
+  if (cursor instanceof Blockly.Field) {
+    parentInput = Blockly.Cursor.getFieldParentInput_(cursor);
+  } else if (cursor instanceof Blockly.Connection) {
+    parentInput = Blockly.Cursor.getConnectionParentInput_(cursor);
+  }
+  return parentInput;
+};
+
+/**
+ * Find the first editable field in a list of inputs.
+ * @param {Blockly.Input} input The input to look for fields on.
+ * @return {Blockly.Field} The next editable field.
+ */
+Blockly.Cursor.findFirstEditableField_ = function(input) {
+  var fieldRow = input.fieldRow;
+  var nextField = null;
+  for (var i = 0; i < fieldRow.length; i++) {
+    var field = fieldRow[i];
+    if (field.isCurrentlyEditable()) {
+      nextField = field;
+      break;
+    }
+  }
+  return nextField;
+};
+
+/**
+ * Get the first field or connection that is either editable or has connection
+ * value of not null.
+ * @param {Blockly.Connection|Blockly.Field} cursor Current place of cursor.
+ * @param {Blockly.Input} parentInput The parent input of the field or connection.
+ * @return {Blockly.Connection|Blockly.Field} The next field or connection.
+ */
+Blockly.Cursor.findNextFieldOrInput_ = function(cursor, parentInput){
+  var block = cursor.sourceBlock_;
+  var inputs = block.inputList;
+  var curIdx = inputs.indexOf(parentInput);
+  var nxtIdx = curIdx + 1;
+  var nextCursor = null;
+
+  if (curIdx > -1 && nxtIdx < inputs.length) {
+
+    for (var i = nxtIdx; i < inputs.length; i++) {
+      var newInput = inputs[i];
+      var field = Blockly.Cursor.findFirstEditableField_(newInput);
+      if (field) {
+        nextCursor = field;
+        break;
+      } else if (newInput.connection) {
+        nextCursor = newInput.connection;
+        break;
+      }
+    }
+  }
+  return nextCursor;
+};
+
+Blockly.Cursor.findPrevInputOrField_ = function(cursor, parentInput){
+  var block = cursor.sourceBlock_;
+  var inputs = block.inputList;
+  var curIdx = inputs.indexOf(parentInput);
+  var nextCursor = null;
+
+  if (curIdx > -1 && curIdx < inputs.length) {
+
+    for (var i = curIdx; i >= 0; i--) {
+      var newInput = inputs[i];
+      //TODO: This should be lastEditableField
+      var field = Blockly.Cursor.findFirstEditableField_(newInput);
+      if (newInput.connection && newInput.connection !== parentInput.connection) {
+        nextCursor = newInput.connection;
+        break;
+      } else if (field && field !== cursor) {
+        nextCursor = field;
+        break;
+      }
+    }
+  }
+  return nextCursor;
+};
+
+//TODO: Fix this to make less gross
+Blockly.Cursor.findTop = function(sourceBlock) {
+  var targetConnection = sourceBlock.previousConnection.targetConnection;
+  while (!Blockly.Cursor.getParentInput_(targetConnection)
+    && sourceBlock && sourceBlock.previousConnection
+    && sourceBlock.previousConnection.targetBlock()) {
+    sourceBlock = sourceBlock.previousConnection.targetBlock();
+    targetConnection = sourceBlock.previousConnection.targetConnection;
+  }
+  return sourceBlock;
+};
+
+/**
+ * Find the next connection, field, or block.
+ * @param {Blockly.Field|Blockly.Block|Blockly.Connection} cursor The current
+ * field, block, or connection.
+ * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
+ */
+Blockly.Cursor.next = function(cursor) {
+  if (!cursor) {return null;}
+  var newCursor;
+  var parentInput = Blockly.Cursor.getParentInput_(cursor);
+
+  if (cursor.type === Blockly.OUTPUT_VALUE) {
+    newCursor = cursor.sourceBlock_;
   } else if (cursor instanceof Blockly.Field) {
-    this.showWithField(cursor);
+    //TODO: Check for sibling fields.
+    //TODO: Check that the parent input connection is not null???
+    newCursor = parentInput.connection;
+  } else if (parentInput) {
+    newCursor = Blockly.Cursor.findNextFieldOrInput_(cursor, parentInput);
+  } else if (cursor instanceof Blockly.BlockSvg) {
+    newCursor = cursor.nextConnection;
+  } else if (cursor.type === Blockly.PREVIOUS_STATEMENT) {
+    var output = cursor.outputConnection;
+    newCursor = output ? output : cursor.sourceBlock_;
+  } else if (cursor.type === Blockly.NEXT_STATEMENT) {
+    var nextBlock = cursor.targetBlock();
+    if (nextBlock && nextBlock.previousConnection) {
+      newCursor = nextBlock.previousConnection;
+    } else if (nextBlock && nextBlock.outputConnection) {
+      newCursor = nextBlock.outputConnection;
+    }
   }
+  return newCursor;
 };
 
 /**
- * Show the cursor using an input
- * @param {Blockly.Input} input The input to position the cursor around
+ * Find .
+ * @param {Blockly.Field|Blockly.Block|Blockly.Connection} cursor The current
+ * field, block, or connection.
+ * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
  */
-Blockly.Cursor.prototype.showWithInput = function(input) {
-  var connection = input.connection;
-  if (connection) {
-    this.showWithConnection(connection);
+Blockly.Cursor.in = function(cursor) {
+  if (!cursor) {return null;}
+  var newCursor;
+  var parentInput = Blockly.Cursor.getParentInput_(cursor);
+
+  if (cursor instanceof Blockly.BlockSvg) {
+    var inputs = cursor.inputList;
+    if (inputs && inputs.length > 0) {
+      var input = inputs[0];
+      var field = Blockly.Cursor.findFirstEditableField_(input);
+      if (field) {
+        newCursor = field;
+      } else {
+        newCursor = input.connection;
+      }
+    }
+  } else if (cursor.type === Blockly.OUTPUT_VALUE) {
+    newCursor = null;
+  } else if (cursor.type === Blockly.INPUT_VALUE || parentInput) {
+    var nxtBlock = cursor.targetBlock();
+    if (nxtBlock) {
+      newCursor = nxtBlock.previousConnection ?
+        nxtBlock.previousConnection : nxtBlock.outputConnection;
+    }
   }
+  return newCursor;
 };
 
 /**
- * Show the cursor using a field
- * @param {Blockly.Field} field The field to position the cursor around
+ * Find .
+ * @param {Blockly.Field|Blockly.Block|Blockly.Connection} cursor The current
+ * field, block, or connection.
+ * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
  */
-Blockly.Cursor.prototype.showWithField = function(field) {
-  console.log('displaying cursor with field' + field);
+Blockly.Cursor.prev = function(cursor) {
+  if (!cursor) {return null;}
+  var newCursor;
+  var parentInput = Blockly.Cursor.getParentInput_(cursor);
+
+  if (cursor.type === Blockly.OUTPUT_VALUE) {
+    if (cursor.sourceBlock_ && cursor.sourceBlock_.previousConnection) {
+      newCursor = cursor.sourceBlock_.previousConnection;
+    }
+  } else if (cursor instanceof Blockly.Field) {
+    newCursor = Blockly.Cursor.findPrevInputOrField_(cursor, parentInput);
+
+  } else if (parentInput) {
+    newCursor = Blockly.Cursor.findPrevInputOrField_(cursor, parentInput);
+  } else if (cursor instanceof Blockly.BlockSvg) {
+    var output = cursor.outputConnection;
+    newCursor = output ? output : cursor.previousConnection;
+
+  } else if (cursor.type === Blockly.PREVIOUS_STATEMENT) {
+    var prevBlock = cursor.targetBlock();
+    if (prevBlock) {
+      newCursor = prevBlock.nextConnection;
+    }
+
+  } else if (cursor.type === Blockly.NEXT_STATEMENT) {
+    newCursor = cursor.sourceBlock_;
+  }
+
+  return newCursor;
 };
 
 /**
- * Move and show the cursor at the specified coordinate in workspace units.
- * @param {number} x The new x, in workspace units.
- * @param {number} y The new y, in workspace units.
- * @param {number} width The new width, in workspace units.
+ * Find .
+ * @param {Blockly.Field|Blockly.Block|Blockly.Connection} cursor The current
+ * field, block, or connection.
+ * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
  */
-Blockly.Cursor.prototype.positionHorizontal_ = function(x, y, width) {
-  var cursorSize = new goog.math.Size(Blockly.Cursor.CURSOR_WIDTH, Blockly.Cursor.CURSOR_HEIGHT);
+Blockly.Cursor.out = function(cursor) {
+  if (!cursor) {return null;}
+  var newCursor;
+  var parentInput = Blockly.Cursor.getParentInput_(cursor);
 
-  this.cursorSvgHorizontal_.setAttribute('x', x + (this.workspace_.RTL ? -cursorSize.width : cursorSize.width));
-  this.cursorSvgHorizontal_.setAttribute('y', y);
-  this.cursorSvgHorizontal_.setAttribute('width', width);
-};
+  if (cursor.type === Blockly.OUTPUT_VALUE) {
+    newCursor = cursor.targetConnection;
+  } else if (cursor instanceof Blockly.Field || parentInput) {
+    newCursor = cursor.sourceBlock_;
+  } else if (cursor instanceof Blockly.BlockSvg) {
+    //This needs to change
+    var topBlock = Blockly.Cursor.findTop(cursor);
+    newCursor = topBlock.previousConnection.targetConnection;
+  } else if (cursor.type === Blockly.PREVIOUS_STATEMENT) {
+    var topBlock = Blockly.Cursor.findTop(cursor.sourceBlock_);
+    newCursor = topBlock.previousConnection.targetConnection;
+  } else if (cursor.type === Blockly.NEXT_STATEMENT) {
+    var topBlock = Blockly.Cursor.findTop(cursor.sourceBlock_);
+    newCursor = topBlock.previousConnection.targetConnection;
+  }
 
-/**
- * Move and show the cursor at the specified coordinate in workspace units.
- * @param {number} x The new x, in workspace units.
- * @param {number} y The new y, in workspace units.
- * @param {number} width The new width, in workspace units.
- * @param {number} height The new height, in workspace units.
- */
-Blockly.Cursor.prototype.positionVertical_ = function(x, y, width, height) {
-  var cursorSize = new goog.math.Size(Blockly.Cursor.CURSOR_WIDTH, Blockly.Cursor.CURSOR_HEIGHT);
-
-  this.cursorSvgVertical_.setAttribute('x', x + (this.workspace_.RTL ? -cursorSize.width : cursorSize.width));
-  this.cursorSvgVertical_.setAttribute('y', y);
-  this.cursorSvgVertical_.setAttribute('width', width);
-  this.cursorSvgVertical_.setAttribute('height', height);
-};
-
-/**
- * Position the cursor for an output connection.
- * @param{Blockly.Connection} connection The connection to position cursor around.
- */
-Blockly.Cursor.prototype.positionOutput = function(connection) {
-  var cursorSize = new goog.math.Size(Blockly.Cursor.CURSOR_WIDTH, Blockly.Cursor.CURSOR_HEIGHT);
-  var xy = connection.sourceBlock_.getRelativeToSurfaceXY();
-  var x = xy.x + connection.offsetInBlock_.x + cursorSize.width + cursorSize.height;
-  var y = xy.y + connection.offsetInBlock_.y;
-  this.cursorOutput_.setAttribute('fill', '#f44242');
-  this.cursorOutput_.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
-            (connection.sourceBlock_.RTL ? ' scale(-1 1)' : ''));
-};
-
-/**
- * Position the cursor for an input connection.
- * @param{Blockly.Connection} connection The connection to position cursor around.
- */
-Blockly.Cursor.prototype.positionInput = function(connection) {
-  var cursorSize = new goog.math.Size(Blockly.Cursor.CURSOR_WIDTH, Blockly.Cursor.CURSOR_HEIGHT);
-  var x = connection.x_ + cursorSize.width + cursorSize.height;
-  var y = connection.y_;
-  this.cursorOutput_.setAttribute('fill', '#9e42f4');
-  this.cursorOutput_.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
-            (connection.sourceBlock_.RTL ? ' scale(-1 1)' : ''));
-};
-
-/**
- * Display the horizontal line used to represent next and previous connections.
- */
-Blockly.Cursor.prototype.showHorizontal_ = function() {
-  this.hide();
-  this.cursorSvgHorizontal_.style.display = '';
-};
-
-/**
- * Display the box used to represent blocks
- */
-Blockly.Cursor.prototype.showVertical_ = function() {
-  this.hide();
-  this.cursorSvgVertical_.style.display = '';
-};
-
-/**
- * Display the connection piece used to represent output and input conneections.
- */
-Blockly.Cursor.prototype.showConnection_ = function() {
-  this.hide();
-  this.cursorOutput_.style.display = '';
-};
-
-/**
- * Hide the cursor.
- */
-Blockly.Cursor.prototype.hide = function() {
-  this.cursorSvgHorizontal_.style.display = 'none';
-  this.cursorSvgVertical_.style.display = 'none';
-  this.cursorOutput_.style.display = 'none';
-};
-
-/**
- * Create the cursor svg.
- * @return {Element} The SVG node created.
- * @private
- */
-Blockly.Cursor.prototype.createCursorSvg_ = function() {
-  /* This markup will be generated and added to the .svgGroup_:
-  <g>
-    <rect width="100" height="5">
-      <animate attributeType="XML" attributeName="fill" dur="1s"
-        values="transparent;transparent;#fff;transparent" repeatCount="indefinite" />
-    </rect>
-  </g>
-  */
-  this.cursorSvg_ = Blockly.utils.createSvgElement('g',
-      {
-        'width': Blockly.Cursor.CURSOR_WIDTH,
-        'height': Blockly.Cursor.CURSOR_HEIGHT
-      }, this.svgGroup_);
-
-  this.cursorSvgHorizontal_ = Blockly.utils.createSvgElement('rect',
-      {
-        'x': '0',
-        'y': '0',
-        'fill': Blockly.Cursor.CURSOR_COLOR,
-        'width': Blockly.Cursor.CURSOR_WIDTH,
-        'height': Blockly.Cursor.CURSOR_HEIGHT,
-        'style': 'display: none;'
-      },
-      this.cursorSvg_);
-
-  this.cursorSvgVertical_ = Blockly.utils.createSvgElement('rect',
-      {
-        'class': 'blocklyVerticalCursor',
-        'x': '0',
-        'y': '0',
-        'rx': '10', 'ry': '10',
-        'style': 'display: none;'
-      },
-      this.cursorSvg_);
-
-  this.cursorOutput_ = Blockly.utils.createSvgElement(
-      'path',
-      {
-        'width': Blockly.Cursor.CURSOR_WIDTH,
-        'height': Blockly.Cursor.CURSOR_HEIGHT,
-        'd': 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 5',
-        'transform':'',
-        'style':'display: none;'
-      },
-      this.cursorSvg_);
-
-  Blockly.utils.createSvgElement('animate',
-      {
-        'attributeType': 'XML',
-        'attributeName': 'fill',
-        'dur': '1s',
-        'values': Blockly.Cursor.CURSOR_COLOR + ';transparent;transparent;',
-        'repeatCount': 'indefinite'
-      },
-      this.cursorSvgHorizontal_);
-
-  Blockly.utils.createSvgElement('animate',
-      {
-        'attributeType': 'XML',
-        'attributeName': 'fill',
-        'dur': '1s',
-        'values': Blockly.Cursor.CURSOR_COLOR + ';transparent;transparent;',
-        'repeatCount': 'indefinite'
-      },
-      this.cursorOutput_);
-
-  return this.cursorSvg_;
+  return newCursor;
 };

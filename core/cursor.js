@@ -434,10 +434,19 @@ Blockly.Cursor.prototype.out = function(cursor) {
       newCursor = cursor.outputConnection.targetConnection;
       newParentInput = this.getParentInput_(newCursor);
     } else if (cursor.outputConnection) {
+
       newCursor = null;
     } else {
+      //This is the case where we are on a block that is nested inside a statement
+      //input and we need to get the last input that connects to the top block
       var topBlock = this.findTop(cursor);
-      newCursor = topBlock.previousConnection.targetConnection;
+      var topConnection = topBlock.previousConnection.targetConnection;
+      if (topConnection) {
+        newCursor = topConnection;
+      } else {
+        newCursor = topBlock.previousConnection;
+        this.isStack_ = true;
+      }
     }
   } else if (cursor.type === Blockly.PREVIOUS_STATEMENT) {
     var topBlock = this.findTop(cursor.sourceBlock_);

@@ -333,6 +333,7 @@ Blockly.onContextMenu_ = function(e) {
 Blockly.hideChaff = function(opt_allowToolbox) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
+  Blockly.DropDownDiv.hideWithoutAnimation();
   // For now the trashcan flyout always autocloses because it overlays the
   // trashcan UI (no trashcan to click to close it)
   var workspace = Blockly.getMainWorkspace();

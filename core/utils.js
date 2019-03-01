@@ -1029,3 +1029,20 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
   }
   return typeCountsMap;
 };
+
+/**
+ * Clamp the provided number between the lower bound and the upper bound.
+ * @param {Number} lowerBound The desired lower bound.
+ * @param {Number} number The number to clamp.
+ * @param {Number} upperBound The desired upper bound.
+ * @return {Number} the clamped number
+ * @package
+ */
+Blockly.utils.clampNumber = function(lowerBound, number, upperBound) {
+  if (upperBound < lowerBound) {
+    var temp = upperBound;
+    upperBound = lowerBound;
+    lowerBound = temp;
+  }
+  return Math.max(lowerBound, Math.min(number, upperBound));
+};

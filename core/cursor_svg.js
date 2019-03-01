@@ -194,7 +194,7 @@ Blockly.CursorSvg.prototype.showWithCoordinates = function(x, y) {
  * Show the cursor using a block
  */
 Blockly.CursorSvg.prototype.showWithBlock = function() {
-  var block = this.getCursor();
+  var block = this.getLocation();
 
   this.currentCursorSvg = this.cursorSvgRect_;
   this.setParent(block);
@@ -206,7 +206,7 @@ Blockly.CursorSvg.prototype.showWithBlock = function() {
  * Show the cursor using a connection with input or output type
  */
 Blockly.CursorSvg.prototype.showWithInputOutput = function() {
-  var connection = this.getCursor();
+  var connection = this.getLocation();
   this.currentCursorSvg = this.cursorInputOutput_;
   this.setParent(connection.sourceBlock_);
   this.positionInputOutput_(connection);
@@ -217,7 +217,7 @@ Blockly.CursorSvg.prototype.showWithInputOutput = function() {
  * Show the cursor using a next connection
  */
 Blockly.CursorSvg.prototype.showWithNext = function() {
-  var connection = this.getCursor();
+  var connection = this.getLocation();
   var targetBlock = connection.sourceBlock_;
   var x = 0;
   var y = connection.offsetInBlock_.y;
@@ -233,7 +233,7 @@ Blockly.CursorSvg.prototype.showWithNext = function() {
  * Show the cursor using a previous connection
  */
 Blockly.CursorSvg.prototype.showWithPrev = function() {
-  var connection = this.getCursor();
+  var connection = this.getLocation();
   var targetBlock = connection.sourceBlock_;
   var width = targetBlock.getHeightWidth().width;
 
@@ -248,7 +248,7 @@ Blockly.CursorSvg.prototype.showWithPrev = function() {
  * @param {Blockly.Field} field The field to position the cursor around
  */
 Blockly.CursorSvg.prototype.showWithField = function() {
-  var field = this.getCursor();
+  var field = this.getLocation();
   var width = field.borderRect_.width.baseVal.value;
   var height = field.borderRect_.height.baseVal.value;
 
@@ -262,7 +262,7 @@ Blockly.CursorSvg.prototype.showWithField = function() {
  * Decides what helper function to call based on the type of the cursor.
  */
 Blockly.CursorSvg.prototype.showWithAnything = function() {
-  var cursor = this.getCursor();
+  var cursor = this.getLocation();
   if (cursor instanceof Blockly.BlockSvg) {
     this.showWithBlock();
   } else if (cursor.type === Blockly.INPUT_VALUE
@@ -337,6 +337,10 @@ Blockly.CursorSvg.prototype.hide = function() {
   this.cursorSvgLine_.style.display = 'none';
   this.cursorSvgRect_.style.display = 'none';
   this.cursorInputOutput_.style.display = 'none';
+};
+
+Blockly.CursorSvg.prototype.update_ = function() {
+  this.showWithAnything();
 };
 
 /**

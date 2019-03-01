@@ -167,13 +167,15 @@ Blockly.Navigation.focusFlyout = function() {
   Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_FLYOUT;
   var workspace = Blockly.getMainWorkspace();
   var toolbox = workspace.getToolbox();
+  var cursor = Blockly.Navigation.cursor_;
   var topBlock;
   if (toolbox.flyout_ && toolbox.flyout_.getWorkspace()) {
     var topBlocks = toolbox.flyout_.getWorkspace().getTopBlocks();
     if (topBlocks.length > 0) {
       topBlock = topBlocks[0];
       Blockly.Navigation.flyoutBlock_ = topBlock;
-      Blockly.cursor.showWithBlock(Blockly.Navigation.flyoutBlock_);
+      cursor.setLocation(Blockly.Navigation.flyoutBlock_);
+      cursor.showWithBlock();
     }
   }
 };
@@ -186,6 +188,7 @@ Blockly.Navigation.selectNextFlyout = function() {
   var blocks = Blockly.Navigation.getFlyoutBlocks_();
   var curBlock = Blockly.Navigation.flyoutBlock_;
   var curIdx = blocks.indexOf(curBlock);
+  var cursor = Blockly.Navigation.cursor_;
   var nextBlock;
 
   if (curIdx > -1 && blocks[++curIdx]) {
@@ -194,7 +197,8 @@ Blockly.Navigation.selectNextFlyout = function() {
 
   if (nextBlock) {
     Blockly.Navigation.flyoutBlock_ = nextBlock;
-    Blockly.cursor.showWithBlock(Blockly.Navigation.flyoutBlock_);
+    cursor.setLocation(Blockly.Navigation.flyoutBlock_);
+    cursor.showWithBlock();
   }
 };
 
@@ -206,6 +210,7 @@ Blockly.Navigation.selectPreviousFlyout = function() {
   var blocks = Blockly.Navigation.getFlyoutBlocks_();
   var curBlock = Blockly.Navigation.flyoutBlock_;
   var curIdx = blocks.indexOf(curBlock);
+  var cursor = Blockly.Navigation.cursor_;
   var prevBlock;
 
   if (curIdx > -1 && blocks[--curIdx]) {
@@ -214,7 +219,8 @@ Blockly.Navigation.selectPreviousFlyout = function() {
 
   if (prevBlock) {
     Blockly.Navigation.flyoutBlock_ = prevBlock;
-    Blockly.cursor.showWithBlock(Blockly.Navigation.flyoutBlock_);
+    cursor.setLocation(Blockly.Navigation.flyoutBlock_);
+    cursor.showWithBlock();
   }
 };
 
@@ -247,8 +253,11 @@ Blockly.Navigation.insertFromFlyout = function() {
     var newBlock = flyout.createBlock(flyoutBlock);
     Blockly.Navigation.insertBlock(newBlock, connection);
     Blockly.Navigation.focusWorkspace();
+    var previousConnection = newBlock.previousConnection;
+    var outputConnection = newBlock.outputConnection;
+    var connection = previousConnection ? previousConnection : outputConnection;
     //This will have to be fixed when we add in a block that does not have a previous
-    cursor.setCursor(newBlock.previousConnection);
+    cursor.setLocation(connection);
     cursor.showWithAnything();
   }
 };
@@ -321,7 +330,7 @@ Blockly.Navigation.insertBlock = function(block, connection) {
 
 Blockly.Navigation.insertBlockFromWs = function() {
   var targetConnection = Blockly.Navigation.insertionConnection_;
-  var sourceConnection = Blockly.Navigation.cursor_.getCursor();
+  var sourceConnection = Blockly.Navigation.cursor_.getLocation();
   try {
     sourceConnection.connect(targetConnection);
   } catch (Error) {
@@ -335,35 +344,6 @@ Blockly.Navigation.insertBlockFromWs = function() {
 /*************************/
 
 /**
- * Navigate between stacks of blocks on the workspace.
- * @param {Boolean} forward True to go forward. False to go backwards.
- * @return {Blockly.BlockSvg} The first block of the next stack.
- */
-Blockly.Navigation.navigateBetweenStacks = function(forward) {
-  var curBlock = Blockly.selected;
-  if (!curBlock) {
-    return null;
-  }
-  var curRoot = curBlock.getRootBlock();
-  var topBlocks = curRoot.workspace.getTopBlocks();
-  for (var i = 0; i < topBlocks.length; i++) {
-    var topBlock = topBlocks[i];
-    if (curRoot.id == topBlock.id) {
-      var offset = forward ? 1 : -1;
-      var resultIndex = i + offset;
-      if (resultIndex == -1) {
-        resultIndex = topBlocks.length - 1;
-      } else if (resultIndex == topBlocks.length) {
-        resultIndex = 0;
-      }
-      topBlocks[resultIndex].select();
-      return Blockly.selected;
-    }
-  }
-  throw Error('Couldn\'t find ' + (forward ? 'next' : 'previous') +
-      ' stack?!?!?!');
-};
-/**
  * Sets the connection on the selected block in the workspace.
  */
 Blockly.Navigation.focusWorkspace = function() {
@@ -375,7 +355,7 @@ Blockly.Navigation.focusWorkspace = function() {
     var previousConnection = Blockly.selected.previousConnection;
     var outputConnection = Blockly.selected.outputConnection;
     var connection = previousConnection ? previousConnection : outputConnection;
-    cursor.setCursor(connection);
+    cursor.setLocation(connection);
     cursor.showWithAnything();
   }
 };
@@ -385,11 +365,7 @@ Blockly.Navigation.focusWorkspace = function() {
  */
 Blockly.Navigation.keyboardNext = function() {
   var cursor = Blockly.Navigation.cursor_;
-  var newCursor = cursor.next();
-  if (newCursor) {
-    cursor.showWithAnything(newCursor);
-
-  }
+  cursor.next();
 };
 
 /**
@@ -397,10 +373,7 @@ Blockly.Navigation.keyboardNext = function() {
  */
 Blockly.Navigation.keyboardIn = function() {
   var cursor = Blockly.Navigation.cursor_;
-  var newCursor = cursor.in();
-  if (newCursor) {
-    cursor.showWithAnything(newCursor);
-  }
+  cursor.in();
 };
 
 /**
@@ -408,10 +381,7 @@ Blockly.Navigation.keyboardIn = function() {
  */
 Blockly.Navigation.keyboardPrev = function() {
   var cursor = Blockly.Navigation.cursor_;
-  var newCursor = cursor.prev();
-  if (newCursor) {
-    cursor.showWithAnything(newCursor);
-  }
+  cursor.prev();
 };
 
 /**
@@ -419,17 +389,14 @@ Blockly.Navigation.keyboardPrev = function() {
  */
 Blockly.Navigation.keyboardOut = function() {
   var cursor = Blockly.Navigation.cursor_;
-  var newCursor = cursor.out();
-  if (newCursor) {
-    cursor.showWithAnything(newCursor);
-  }
+  cursor.out();
 };
 
 /**
  * Mark the current connection.
  */
 Blockly.Navigation.markConnection = function() {
-  Blockly.Navigation.insertionConnection_ = Blockly.Navigation.cursor_.getCursor();
+  Blockly.Navigation.insertionConnection_ = Blockly.Navigation.cursor_.getLocation();
 };
 
 /**********************/

@@ -299,32 +299,33 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
               var object = mainWorkspace.getCommentById(e.commentId);
               break;
           }
-          var objectMetrics = object.getBoundingRectangle();
+          if (object) {
+            var objectMetrics = object.getBoundingRectangle();
 
-          // Bump any object that's above the top back inside.
-          var overflowTop = metrics.viewTop - objectMetrics.topLeft.y;
-          if (overflowTop > 0) {
-            object.moveBy(0, overflowTop);
+            // Bump any object that's above the top back inside.
+            var overflowTop = metrics.viewTop - objectMetrics.topLeft.y;
+            if (overflowTop > 0) {
+              object.moveBy(0, overflowTop);
+            }
+
+            // Bump any object that's below the bottom back inside.
+            var overflowBottom = metrics.viewBottom - objectMetrics.bottomRight.y;
+            if (overflowBottom < 0) {
+              object.moveBy(0, overflowBottom);
+            }
+
+            // Bump any object that's off the left back inside.
+            var overflowLeft = metrics.viewLeft - objectMetrics.topLeft.x;
+            if (overflowLeft > 0) {
+              object.moveBy(overflowLeft, 0);
+            }
+
+            // Bump any object that's off the right back inside.
+            var overflowRight = metrics.viewRight - objectMetrics.bottomRight.x;
+            if (overflowRight < 0) {
+              object.moveBy(overflowRight, 0);
+            }
           }
-
-          // Bump any object that's below the bottom back inside.
-          var overflowBottom = metrics.viewBottom - objectMetrics.bottomRight.y;
-          if (overflowBottom < 0) {
-            object.moveBy(0, overflowBottom);
-          }
-
-          // Bump any object that's off the left back inside.
-          var overflowLeft = metrics.viewLeft - objectMetrics.topLeft.x;
-          if (overflowLeft > 0) {
-            object.moveBy(overflowLeft, 0);
-          }
-
-          // Bump any object that's off the right back inside.
-          var overflowRight = metrics.viewRight - objectMetrics.bottomRight.x;
-          if (overflowRight < 0) {
-            object.moveBy(overflowRight, 0);
-          }
-
           if (e) {
             if (!e.group) {
               console.log('WARNING: Moved object in bounds but there was no' +

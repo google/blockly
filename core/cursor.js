@@ -236,6 +236,7 @@ Blockly.Cursor.prototype.next = function() {
     //TODO: Check for sibling fields.
     //TODO: Check that the parent input connection is not null???
     newCursor = parentInput.connection;
+    newParentInput = parentInput;
   } else if (parentInput) {
     var cursorAndInput = this.findNextFieldOrInput_(cursor, parentInput);
     newCursor = cursorAndInput[0];
@@ -270,7 +271,6 @@ Blockly.Cursor.prototype.in = function() {
   if (!cursor) {return null;}
   var newCursor;
   var newParentInput;
-  var parentInput = this.getParentInput(cursor);
 
   if (cursor instanceof Blockly.BlockSvg) {
     var inputs = cursor.inputList;
@@ -285,7 +285,9 @@ Blockly.Cursor.prototype.in = function() {
     }
   } else if (cursor.type === Blockly.OUTPUT_VALUE) {
     newCursor = null;
-  } else if (cursor.type === Blockly.INPUT_VALUE || parentInput) {
+  } else if (cursor instanceof Blockly.Field) {
+    newCursor = null;
+  } else if (cursor.type === Blockly.INPUT_VALUE || this.getParentInput()) {
     var nxtBlock = cursor.targetBlock();
     if (nxtBlock) {
       newCursor = nxtBlock.previousConnection ?
@@ -316,11 +318,11 @@ Blockly.Cursor.prototype.prev = function() {
       newCursor = cursor.sourceBlock_.previousConnection;
     }
   } else if (cursor instanceof Blockly.Field) {
-    var cursorAndInput = this.findPrevInputOrField_(cursor, parentInput)[0];
+    var cursorAndInput = this.findPrevInputOrField_(cursor, parentInput);
     newCursor = cursorAndInput[0];
     newParentInput = cursorAndInput[1];
   } else if (parentInput) {
-    var cursorAndInput = this.findPrevInputOrField_(cursor, parentInput)[0];
+    var cursorAndInput = this.findPrevInputOrField_(cursor, parentInput);
     newCursor = cursorAndInput[0];
     newParentInput = cursorAndInput[1];
   } else if (cursor instanceof Blockly.BlockSvg) {
@@ -352,16 +354,24 @@ Blockly.Cursor.prototype.out = function(cursor) {
   var cursor = this.getCursor();
   if (!cursor) {return null;}
   var newCursor;
-  var parentInput = this.getParentInput(cursor);
+  var parentInput = this.getParentInput_(cursor);
+  var newParentInput;
 
   if (cursor.type === Blockly.OUTPUT_VALUE) {
     newCursor = cursor.targetConnection;
+    newParentInput = this.getParentInput_(newCursor);
   } else if (cursor instanceof Blockly.Field || parentInput) {
     newCursor = cursor.sourceBlock_;
   } else if (cursor instanceof Blockly.BlockSvg) {
-    //This needs to change
-    var topBlock = this.findTop(cursor);
-    newCursor = topBlock.previousConnection.targetConnection;
+    if (cursor.outputConnection && cursor.outputConnection.targetConnection) {
+      newCursor = cursor.outputConnection.targetConnection;
+      newParentInput = this.getParentInput_(newCursor);
+    } else if (cursor.outputConnection) {
+      newCursor = null;
+    } else {
+      var topBlock = this.findTop(cursor);
+      newCursor = topBlock.previousConnection.targetConnection;
+    }
   } else if (cursor.type === Blockly.PREVIOUS_STATEMENT) {
     var topBlock = this.findTop(cursor.sourceBlock_);
     newCursor = topBlock.previousConnection.targetConnection;
@@ -370,8 +380,7 @@ Blockly.Cursor.prototype.out = function(cursor) {
     newCursor = topBlock.previousConnection.targetConnection;
   }
   if (newCursor) {
-    //TODO: fix this
-    this.setCursor(newCursor,  null);
+    this.setCursor(newCursor,  newParentInput);
   }
   return newCursor;
 };

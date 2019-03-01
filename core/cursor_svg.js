@@ -249,7 +249,13 @@ Blockly.CursorSvg.prototype.showWithPrev = function() {
  */
 Blockly.CursorSvg.prototype.showWithField = function() {
   var field = this.getCursor();
-  console.log('displaying cursor with field' + field);
+  var width = field.borderRect_.width.baseVal.value;
+  var height = field.borderRect_.height.baseVal.value;
+
+  this.currentCursorSvg = this.cursorSvgRect_;
+  this.setParent(field);
+  this.positionRect_(0, 0, width, height);
+  this.showCurrent_();
 };
 
 /**
@@ -259,7 +265,8 @@ Blockly.CursorSvg.prototype.showWithAnything = function() {
   var cursor = this.getCursor();
   if (cursor instanceof Blockly.BlockSvg) {
     this.showWithBlock();
-  } else if (cursor.type === Blockly.INPUT_VALUE) {
+  } else if (cursor.type === Blockly.INPUT_VALUE
+    || cursor.type === Blockly.OUTPUT_VALUE) {
     this.showWithInputOutput();
   } else if (cursor.type === Blockly.NEXT_STATEMENT) {
     this.showWithNext();

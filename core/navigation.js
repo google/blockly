@@ -372,7 +372,10 @@ Blockly.Navigation.focusWorkspace = function() {
   Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_WS;
   Blockly.keyboardAccessibilityMode_ = true;
   if (Blockly.selected) {
-    cursor.setCursor(Blockly.selected.previousConnection);
+    var previousConnection = Blockly.selected.previousConnection;
+    var outputConnection = Blockly.selected.outputConnection;
+    var connection = previousConnection ? previousConnection : outputConnection;
+    cursor.setCursor(connection);
     cursor.showWithAnything();
   }
 };

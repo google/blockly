@@ -100,6 +100,22 @@ Blockly.FieldColour.prototype.titles_ = null;
 Blockly.FieldColour.prototype.columns_ = 0;
 
 /**
+ * Border colour for the dropdown div showing the colour picker.  Must be a CSS
+ * string.
+ * @type {string}
+ * @private
+ */
+Blockly.FieldColour.prototype.DROPDOWN_BORDER_COLOUR = 'silver';
+
+/**
+ * Background colour for the dropdown div showing the colour picker.  Must be a
+ * CSS string.
+ * @type {string}
+ * @private
+ */
+Blockly.FieldColour.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
+
+/**
  * Install this field on a block.
  */
 Blockly.FieldColour.prototype.init = function() {
@@ -267,9 +283,8 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
 
   var picker = this.createWidget_();
   Blockly.DropDownDiv.getContentDiv().appendChild(picker);
-  // Dropdown div accepts CSS colours.
-  // But maybe this should be done with a class instead?
-  Blockly.DropDownDiv.setColour('white', 'silver');
+  Blockly.DropDownDiv.setColour(
+      this.DROPDOWN_BACKGROUND_COLOUR, this.DROPDOWN_BORDER_COLOUR);
 
   Blockly.DropDownDiv.showPositionedByField(this);
 

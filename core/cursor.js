@@ -39,12 +39,13 @@ Blockly.Cursor = function() {
 
   this.isWorkspace_ = false;
 
-  this.cursor_ = null;
+  this.location_ = null;
 };
 
-Blockly.Cursor.prototype.setCursor = function(newCursor, opt_parent) {
-  this.cursor_ = newCursor;
+Blockly.Cursor.prototype.setLocation = function(newCursor, opt_parent) {
+  this.location_ = newCursor;
   this.parentInput_ = opt_parent;
+  //internal update method update_
 };
 
 Blockly.Cursor.prototype.setStack = function(isStack, topBlock) {
@@ -56,8 +57,8 @@ Blockly.Cursor.prototype.setWorkspace = function(isWorkspace) {
   this.isWorkspace_ = isWorkspace;
 };
 
-Blockly.Cursor.prototype.getCursor = function() {
-  return this.cursor_;
+Blockly.Cursor.prototype.getLocation = function() {
+  return this.location_;
 };
 
 Blockly.Cursor.prototype.getParentInput = function() {
@@ -71,6 +72,12 @@ Blockly.Cursor.prototype.isWorkspace = function() {
 Blockly.Cursor.prototype.isStack = function() {
   return this.isStack_;
 };
+
+/**
+ * Update method to be overwritten in cursor_svg.
+ * @protected
+ */
+Blockly.Cursor.prototype.update_ = function() {};
 
 /**
  * Get the parent input of a field.
@@ -218,19 +225,70 @@ Blockly.Cursor.prototype.findTop = function(sourceBlock) {
 };
 
 /**
+ * Navigate between stacks of blocks on the workspace.
+ * @param {Boolean} forward True to go forward. False to go backwards.
+ * @return {Blockly.BlockSvg} The first block of the next stack.
+ */
+Blockly.Cursor.prototype.navigateBetweenStacks = function(forward) {
+  var curBlock = this.getLocation().sourceBlock_;
+  if (!curBlock) {
+    return null;
+  }
+  var curRoot = curBlock.getRootBlock();
+  var topBlocks = curRoot.workspace.getTopBlocks();
+  for (var i = 0; i < topBlocks.length; i++) {
+    var topBlock = topBlocks[i];
+    if (curRoot.id == topBlock.id) {
+      var offset = forward ? 1 : -1;
+      var resultIndex = i + offset;
+      if (resultIndex == -1) {
+        resultIndex = topBlocks.length - 1;
+      } else if (resultIndex == topBlocks.length) {
+        resultIndex = 0;
+      }
+      topBlocks[resultIndex].select();
+      return Blockly.selected;
+    }
+  }
+  throw Error('Couldn\'t find ' + (forward ? 'next' : 'previous') +
+      ' stack?!?!?!');
+};
+
+Blockly.Cursor.prototype.isStack = function() {
+  var cursor = this.getLocation();
+  var isStack = false;
+  if (cursor.type === Blockly.OUTPUT_VALUE
+    || cursor.type === Blockly.PREVIOUS_STATEMENT) {
+    var block = cursor.sourceBlock_;
+    var topBlock = block.getRootBlock();
+    isStack = block === topBlock;
+  }
+  return isStack;
+};
+
+Blockly.Cursor.prototype.findTopConnection = function(cursor) {
+  var previousConnection = cursor.previousConnection;
+  var outputConnection = cursor.outputConnection;
+  return previousConnection ? previousConnection : outputConnection;
+};
+
+/**
  * Find the next connection, field, or block.
  * @param {Blockly.Field|Blockly.Block|Blockly.Connection} cursor The current
  * field, block, or connection.
  * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
  */
 Blockly.Cursor.prototype.next = function() {
-  var cursor = this.getCursor();
+  var cursor = this.getLocation();
   if (!cursor) {return null;}
   var newCursor;
   var newParentInput;
   var parentInput = this.getParentInput(cursor);
 
-  if (cursor.type === Blockly.OUTPUT_VALUE) {
+  if (this.isStack_) {
+    var nextTopBlock = this.navigateBetweenStacks(true);
+    newCursor = this.findTopConnection(nextTopBlock);
+  } else if (cursor.type === Blockly.OUTPUT_VALUE) {
     newCursor = cursor.sourceBlock_;
   } else if (cursor instanceof Blockly.Field) {
     //TODO: Check for sibling fields.
@@ -255,7 +313,8 @@ Blockly.Cursor.prototype.next = function() {
     }
   }
   if (newCursor) {
-    this.setCursor(newCursor, newParentInput);
+    this.setLocation(newCursor, newParentInput);
+    this.update_();
   }
   return newCursor;
 };
@@ -267,10 +326,11 @@ Blockly.Cursor.prototype.next = function() {
  * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
  */
 Blockly.Cursor.prototype.in = function() {
-  var cursor = this.getCursor();
+  var cursor = this.getLocation();
   if (!cursor) {return null;}
   var newCursor;
   var newParentInput;
+  this.isStack_ = false;
 
   if (cursor instanceof Blockly.BlockSvg) {
     var inputs = cursor.inputList;
@@ -295,7 +355,8 @@ Blockly.Cursor.prototype.in = function() {
     }
   }
   if (newCursor) {
-    this.setCursor(newCursor, newParentInput);
+    this.setLocation(newCursor, newParentInput);
+    this.update_();
   }
   return newCursor;
 };
@@ -307,13 +368,16 @@ Blockly.Cursor.prototype.in = function() {
  * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
  */
 Blockly.Cursor.prototype.prev = function() {
-  var cursor = this.getCursor();
+  var cursor = this.getLocation();
   if (!cursor) {return null;}
   var newCursor;
   var parentInput = this.getParentInput(cursor);
   var newParentInput;
 
-  if (cursor.type === Blockly.OUTPUT_VALUE) {
+  if (this.isStack_) {
+    var nextTopBlock = this.navigateBetweenStacks(true);
+    newCursor = this.findTopConnection(nextTopBlock);
+  } else if (cursor.type === Blockly.OUTPUT_VALUE) {
     if (cursor.sourceBlock_ && cursor.sourceBlock_.previousConnection) {
       newCursor = cursor.sourceBlock_.previousConnection;
     }
@@ -338,8 +402,11 @@ Blockly.Cursor.prototype.prev = function() {
   } else if (cursor.type === Blockly.NEXT_STATEMENT) {
     newCursor = cursor.sourceBlock_;
   }
+  this.isStack_ = this.isStack();
+
   if (newCursor) {
-    this.setCursor(newCursor, newParentInput);
+    this.setLocation(newCursor, newParentInput);
+    this.update_();
   }
   return newCursor;
 };
@@ -351,7 +418,7 @@ Blockly.Cursor.prototype.prev = function() {
  * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
  */
 Blockly.Cursor.prototype.out = function(cursor) {
-  var cursor = this.getCursor();
+  var cursor = this.getLocation();
   if (!cursor) {return null;}
   var newCursor;
   var parentInput = this.getParentInput_(cursor);
@@ -374,13 +441,20 @@ Blockly.Cursor.prototype.out = function(cursor) {
     }
   } else if (cursor.type === Blockly.PREVIOUS_STATEMENT) {
     var topBlock = this.findTop(cursor.sourceBlock_);
-    newCursor = topBlock.previousConnection.targetConnection;
+    var topConnection = topBlock.previousConnection.targetConnection;
+    if (topConnection) {
+      newCursor = topConnection;
+    } else {
+      newCursor = topConnection;
+      this.isStack_ = true;
+    }
   } else if (cursor.type === Blockly.NEXT_STATEMENT) {
     var topBlock = this.findTop(cursor.sourceBlock_);
     newCursor = topBlock.previousConnection.targetConnection;
   }
   if (newCursor) {
-    this.setCursor(newCursor,  newParentInput);
+    this.setLocation(newCursor,  newParentInput);
+    this.update_();
   }
   return newCursor;
 };

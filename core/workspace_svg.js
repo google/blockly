@@ -1670,13 +1670,15 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
 
   // Find the new scrollX/scrollY so that the center remains in the same
   // position (relative to the center) after we zoom.
+  // newScale and matrix.a should be identical (within a rounding error).
   var matrix = matrix.translate(x * (1 - scaleChange), y * (1 - scaleChange))
       .scale(scaleChange);
-  // newScale and matrix.a should be identical (within a rounding error).
-  // ScrollX and scrollY are in pixels.
-  var metrics = this.getMetrics();
-  this.scrollX = matrix.e - metrics.absoluteLeft;
-  this.scrollY = matrix.f - metrics.absoluteTop;
+  // scrollX and scrollY are in pixels.
+  // The scrollX and scrollY still need to have absoluteLeft and absoluteTop
+  // subtracted from them, but we'll leave that for setScale so that they're
+  // correctly updated for the new flyout size if we have a simple toolbox.
+  this.scrollX = matrix.e;
+  this.scrollY = matrix.f;
   this.setScale(newScale);
 };
 
@@ -1686,8 +1688,18 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
  */
 Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
   var metrics = this.getMetrics();
-  var x = (metrics.viewWidth / 2) + metrics.absoluteLeft;
-  var y = (metrics.viewHeight / 2) + metrics.absoluteTop;
+  if (this.flyout_) {
+    // If you want blocks in the center of the view (visible portion of the
+    // workspace) to stay centered when the size of the view decreases (i.e.
+    // when the size of the flyout increases) you need the center of the
+    // *blockly div* to stay in the same pixel-position.
+    // Note: This only works because of how scrollCenter positions blocks.
+    var x = metrics.svgWidth / 2;
+    var y = metrics.svgHeight / 2;
+  } else {
+    var x = (metrics.viewWidth / 2) + metrics.absoluteLeft;
+    var y = (metrics.viewHeight / 2) + metrics.absoluteTop;
+  }
   this.zoom(x, y, type);
 };
 
@@ -1702,6 +1714,8 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   }
 
   var metrics = this.getMetrics();
+  var workspaceWidth = metrics.viewWidth;
+  var workspaceHeight = metrics.viewHeight;
   var blocksBox = this.getBlocksBoundingBox();
   var blocksWidth = blocksBox.width;
   var blocksHeight = blocksBox.height;
@@ -1709,21 +1723,24 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
     return;  // Prevents zooming to infinity.
   }
   if (this.flyout_) {
-    // We add the flyout size to the block size because the flyout contains
-    // blocks, and we want all of the blocks to fit within the view. If we
-    // don't add them, they'll end up overlapping.
+    // We have to add the flyout size to both the workspace size and the
+    // block size because the blocks we want to resize include the blocks in
+    // the flyout, and the area we want to fit them includes the portion of
+    // the workspace that is behind the flyout.
     if (this.horizontalLayout) {
+      workspaceHeight += this.flyout_.height_;
       // Convert from pixels to workspace coordinates.
       blocksHeight += this.flyout_.height_ / this.scale;
     } else {
+      workspaceWidth += this.flyout_.getWidth();
       // Convert from pixels to workspace coordinates.
-      blocksWidth += this.flyout_.width_ / this.scale;
+      blocksWidth += this.flyout_.getWidth() / this.scale;
     }
   }
 
   // Scale Units: (pixels / workspaceUnit)
-  var ratioX = metrics.viewWidth / blocksWidth;
-  var ratioY = metrics.viewHeight / blocksHeight;
+  var ratioX = workspaceWidth / blocksWidth;
+  var ratioY = workspaceHeight / blocksHeight;
   this.setScale(Math.min(ratioX, ratioY));
   this.scrollCenter();
 };
@@ -1768,23 +1785,6 @@ Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
   var metrics = this.getMetrics();
   var x = (metrics.contentWidth - metrics.viewWidth) / 2;
   var y = (metrics.contentHeight - metrics.viewHeight) / 2;
-  // Shift the x and y to disregard the permanent flyout (if it exists).
-  if (this.flyout_) {
-    switch (this.toolboxPosition) {
-      case Blockly.TOOLBOX_AT_LEFT:
-        x -= this.flyout_.width_ / 2;
-        break;
-      case Blockly.TOOLBOX_AT_RIGHT:
-        x += this.flyout_.width_ / 2;
-        break;
-      case Blockly.TOOLBOX_AT_TOP:
-        y -= this.flyout_.height_ / 2;
-        break;
-      case Blockly.TOOLBOX_AT_BOTTOM:
-        y += this.flyout_.height_ / 2;
-        break;
-    }
-  }
 
   // Convert from workspace directions to canvas directions.
   x = -x - metrics.contentLeft;
@@ -1865,22 +1865,37 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
     newScale = this.options.zoomOptions.minScale;
   }
   this.scale = newScale;
-  if (this.grid_) {
-    this.grid_.update(this.scale);
-  }
-  // We call scroll instead of scrollbar.resize() so that we can center the
-  // zoom correctly without scrollbars, but scroll does not resize the
-  // scrollbars so we have to call resizeContent as well.
-  this.scroll(this.scrollX, this.scrollY);
-  if (this.scrollbar) {
-    var metrics = this.getMetrics();
-    this.scrollbar.hScroll.resizeContentHorizontal(metrics);
-    this.scrollbar.vScroll.resizeContentVertical(metrics);
-  }
+
   Blockly.hideChaff(false);
   if (this.flyout_) {
     // No toolbox, resize flyout.
     this.flyout_.reflow();
+    this.recordDeleteAreas();
+  }
+  if (this.grid_) {
+    this.grid_.update(this.scale);
+  }
+
+  // We call scroll instead of scrollbar.resize() so that we can center the
+  // zoom correctly without scrollbars, but scroll does not resize the
+  // scrollbars so we have to call resizeView/resizeContent as well.
+  var metrics = this.getMetrics();
+  // The scroll values and the view values are additive inverses of
+  // each other, so when we subtract from one we have to add to the other.
+  this.scrollX -= metrics.absoluteLeft;
+  this.scrollY -= metrics.absoluteTop;
+  metrics.viewLeft += metrics.absoluteLeft;
+  metrics.viewTop += metrics.absoluteTop;
+
+  this.scroll(this.scrollX, this.scrollY);
+  if (this.scrollbar) {
+    if (this.flyout_) {
+      this.scrollbar.hScroll.resizeViewHorizontal(metrics);
+      this.scrollbar.vScroll.resizeViewVertical(metrics);
+    } else {
+      this.scrollbar.hScroll.resizeContentHorizontal(metrics);
+      this.scrollbar.vScroll.resizeContentVertical(metrics);
+    }
   }
 };
 
@@ -2056,6 +2071,10 @@ Blockly.WorkspaceSvg.getContentDimensionsBounded_ = function(ws, svgSize) {
  * .viewWidth: Width of the visible portion of the workspace.
  * .contentHeight: Height of the content.
  * .contentWidth: Width of the content.
+ * .svgHeight: Height of the blockly div (the view + the toolbox,
+ *    simple or otherwise),
+ * .svgWidth: Width of the blockly div (the view + the toolbox,
+ *    simple or otherwise),
  * .viewTop: Top-edge of the visible portion of the workspace, relative to
  *     the workspace origin.
  * .viewLeft: Left-edge of the visible portion of the workspace, relative to
@@ -2087,28 +2106,41 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
   // Contains height and width in CSS pixels.
   // svgSize is equivalent to the size of the injectionDiv at this point.
   var svgSize = Blockly.svgSize(this.getParentSvg());
+  var viewSize = {height: svgSize.height, width: svgSize.width};
   if (this.toolbox_) {
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
         this.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
-      svgSize.height -= toolboxDimensions.height;
+      viewSize.height -= toolboxDimensions.height;
     } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
         this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
-      svgSize.width -= toolboxDimensions.width;
+      viewSize.width -= toolboxDimensions.width;
+    }
+  } else if (this.flyout_) {
+    if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
+      this.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
+      viewSize.height -= flyoutDimensions.height;
+    } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
+      this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
+      viewSize.width -= flyoutDimensions.width;
     }
   }
 
   // svgSize is now the space taken up by the Blockly workspace, not including
   // the toolbox.
   var contentDimensions =
-      Blockly.WorkspaceSvg.getContentDimensions_(this, svgSize);
+      Blockly.WorkspaceSvg.getContentDimensions_(this, viewSize);
 
   var absoluteLeft = 0;
   if (this.toolbox_ && this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
     absoluteLeft = toolboxDimensions.width;
+  } else if (this.flyout_ && this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
+    absoluteLeft = flyoutDimensions.width;
   }
   var absoluteTop = 0;
   if (this.toolbox_ && this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
     absoluteTop = toolboxDimensions.height;
+  } else if (this.flyout_ && this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+    absoluteTop = flyoutDimensions.height;
   }
 
   var metrics = {
@@ -2117,13 +2149,16 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
     contentTop: contentDimensions.top,
     contentLeft: contentDimensions.left,
 
-    viewHeight: svgSize.height,
-    viewWidth: svgSize.width,
-    viewTop: -this.scrollY,   // Must be in pixels, somehow.
-    viewLeft: -this.scrollX,  // Must be in pixels, somehow.
+    viewHeight: viewSize.height,
+    viewWidth: viewSize.width,
+    viewTop: -this.scrollY,
+    viewLeft: -this.scrollX,
 
     absoluteTop: absoluteTop,
     absoluteLeft: absoluteLeft,
+
+    svgHeight: svgSize.height,
+    svgWidth: svgSize.width,
 
     toolboxWidth: toolboxDimensions.width,
     toolboxHeight: toolboxDimensions.height,

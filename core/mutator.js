@@ -275,7 +275,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.rootBlock_.setDeletable(false);
     if (this.workspace_.flyout_) {
       var margin = this.workspace_.flyout_.CORNER_RADIUS * 2;
-      var x = this.workspace_.flyout_.width_ + margin;
+      var x = this.workspace_.getFlyout_().getWidth() + margin;
     } else {
       var margin = 16;
       var x = margin;
@@ -394,9 +394,10 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
 Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
   return {
     viewHeight: this.workspaceHeight_,
-    viewWidth: this.workspaceWidth_,
+    viewWidth: this.workspaceWidth_ - this.workspace_.getFlyout_().getWidth(),
     absoluteTop: 0,
-    absoluteLeft: 0
+    absoluteLeft: this.workspace_.RTL ? 0 :
+        this.workspace_.getFlyout_().getWidth()
   };
 };
 

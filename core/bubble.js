@@ -408,8 +408,6 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
   metrics.viewWidth /= this.workspace_.scale;
   metrics.viewTop /= this.workspace_.scale;
   metrics.viewHeight /= this.workspace_.scale;
-  metrics.flyoutWidth /= this.workspace_.scale;
-  metrics.flyoutHeight /= this.workspace_.scale;
 
   var optimalLeft = this.getOptimalRelativeLeft_(metrics);
   var optimalTop = this.getOptimalRelativeTop_(metrics);
@@ -487,19 +485,13 @@ Blockly.Bubble.prototype.getOverlap_ = function(relativeMin, metrics) {
 
   // The position of the top-left corner of the workspace.
   var workspaceMin = {
-    x: metrics.viewLeft + ((metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) ?
-        metrics.flyoutWidth : 0),
-    y: metrics.viewTop + ((metrics.toolboxPosition == Blockly.TOOLBOX_AT_TOP) ?
-      metrics.flyoutHeight : 0)
+    x: metrics.viewLeft,
+    y: metrics.viewTop
   };
   // The position of the bottom-right corner of the workspace.
   var workspaceMax = {
-    x: metrics.viewLeft + metrics.viewWidth -
-        ((metrics.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) ?
-            metrics.flyoutWidth : 0),
-    y: metrics.viewTop + metrics.viewHeight -
-        ((metrics.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) ?
-            metrics.flyoutHeight : 0)
+    x: metrics.viewLeft + metrics.viewWidth,
+    y: metrics.viewTop + metrics.viewHeight
   };
 
   var overlapWidth = Math.min(bubbleMax.x, workspaceMax.x) -
@@ -529,38 +521,22 @@ Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(metrics) {
   }
 
   if (this.workspace_.RTL) {
-    // Everything is flipped in RTL.
+    // Bubble coordinates are flipped in RTL.
     var bubbleRight =  this.anchorXY_.x - relativeLeft;
     var bubbleLeft = bubbleRight - this.width_;
-    var scrollbarRight = 0;
-    // Thickness in workspace units.
-    var scrollbarLeft =
-        Blockly.Scrollbar.scrollbarThickness / this.workspace_.scale;
+
+    var workspaceRight = metrics.viewLeft + metrics.viewWidth;
+    var workspaceLeft = metrics.viewLeft +
+        // Thickness in workspace units.
+        (Blockly.Scrollbar.scrollbarThickness / this.workspace_.scale);
   } else {
     var bubbleLeft = relativeLeft + this.anchorXY_.x;
     var bubbleRight = bubbleLeft + this.width_;
-    // Thickness in workspace units.
-    var scrollbarRight =
-        Blockly.Scrollbar.scrollbarThickness / this.workspace_.scale;
-    var scrollbarLeft = 0;
-  }
 
-  switch (metrics.toolboxPosition) {
-    case Blockly.TOOLBOX_AT_LEFT:
-      var workspaceLeft = metrics.viewLeft + metrics.flyoutWidth;
-      var workspaceRight =
-          metrics.viewLeft + metrics.viewWidth - scrollbarRight;
-      break;
-    case Blockly.TOOLBOX_AT_RIGHT:
-      var workspaceLeft = metrics.viewLeft + scrollbarLeft;
-      var workspaceRight =
-          metrics.viewLeft + metrics.viewWidth - metrics.flyoutWidth;
-      break;
-    default:
-      var workspaceLeft = metrics.viewLeft + scrollbarLeft;
-      var workspaceRight =
-          metrics.viewLeft + metrics.viewWidth - scrollbarRight;
-      break;
+    var workspaceLeft = metrics.viewLeft;
+    var workspaceRight = metrics.viewLeft + metrics.viewWidth -
+      // Thickness in workspace units.
+      (Blockly.Scrollbar.scrollbarThickness / this.workspace_.scale);
   }
 
   if (this.workspace_.RTL) {
@@ -604,27 +580,10 @@ Blockly.Bubble.prototype.getOptimalRelativeTop_ = function(metrics) {
 
   var bubbleTop = this.anchorXY_.y + relativeTop;
   var bubbleBottom = bubbleTop + this.height_;
-
-  // Thickness in workspace units.
-  var scrollbarThickness =
-      Blockly.Scrollbar.scrollbarThickness / this.workspace_.scale;
-  switch (metrics.toolboxPosition) {
-    case Blockly.TOOLBOX_AT_TOP:
-      var workspaceTop = metrics.viewTop + metrics.flyoutHeight;
-      var workspaceBottom = metrics.viewTop + metrics.viewHeight -
-          scrollbarThickness;
-      break;
-    case Blockly.TOOLBOX_AT_BOTTOM:
-      var workspaceTop = metrics.viewTop;
-      var workspaceBottom = metrics.viewTop + metrics.viewHeight
-          - metrics.flyoutHeight;
-      break;
-    default:
-      var workspaceTop = metrics.viewTop;
-      var workspaceBottom = metrics.viewTop + metrics.viewHeight -
-          scrollbarThickness;
-      break;
-  }
+  var workspaceTop = metrics.viewTop;
+  var workspaceBottom = metrics.viewTop + metrics.viewHeight -
+      // Thickness in workspace units.
+      (Blockly.Scrollbar.scrollbarThickness / this.workspace_.scale);
 
   var anchorY = this.anchorXY_.y;
   if (bubbleTop < workspaceTop) {

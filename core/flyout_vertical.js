@@ -149,13 +149,21 @@ Blockly.VerticalFlyout.prototype.position = function() {
   var edgeHeight = targetWorkspaceMetrics.viewHeight - 2 * this.CORNER_RADIUS;
   this.setBackgroundPath_(edgeWidth, edgeHeight);
 
-  var y = targetWorkspaceMetrics.absoluteTop;
-  var x = targetWorkspaceMetrics.absoluteLeft;
-  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
-    x += (targetWorkspaceMetrics.viewWidth - this.width_);
-    // Save the location of the left edge of the flyout, for use when Firefox
-    // gets the bounding client rect wrong.
-    this.leftEdge_ = x;
+  // Y is always 0 since this is a vertical flyout.
+  var y = 0;
+  // If there is a toolbox.
+  if (targetWorkspaceMetrics.toolboxWidth) {
+    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
+      var x = targetWorkspaceMetrics.toolboxWidth;
+    } else {
+      var x = targetWorkspaceMetrics.viewWidth - this.width_;
+    }
+  } else {
+    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
+      var x = 0;
+    } else {
+      var x = targetWorkspaceMetrics.viewWidth;
+    }
   }
   this.positionAt_(this.width_, this.height_, x, y);
 };

@@ -399,26 +399,6 @@ Blockly.init_ = function(mainWorkspace) {
     mainWorkspace.setMetrics({x: .5, y: .5});
   }
 
-  if (mainWorkspace.flyout_) {
-    // Translate the workspace sideways to avoid the fixed flyout.
-    switch (mainWorkspace.toolboxPosition) {
-      case Blockly.TOOLBOX_AT_LEFT:
-        mainWorkspace.scrollX =
-            mainWorkspace.RTL ?  0 : mainWorkspace.flyout_.width_;
-        break;
-      case Blockly.TOOLBOX_AT_RIGHT:
-        mainWorkspace.scrollX =
-            mainWorkspace.RTL ? -mainWorkspace.flyout_.width_ : 0;
-        break;
-      case Blockly.TOOLBOX_AT_TOP:
-        mainWorkspace.scrollY = mainWorkspace.flyout_.height_;
-        break;
-      // If the toolbox is at the top left (workspace origin) is untouched,
-      // so no need to include it.
-    }
-    mainWorkspace.translate(mainWorkspace.scrollX, mainWorkspace.scrollY);
-  }
-
   // Load the sounds.
   if (options.hasSounds) {
     Blockly.inject.loadSounds_(options.pathToMedia, mainWorkspace);

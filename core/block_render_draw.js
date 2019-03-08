@@ -9,8 +9,9 @@ renderDraw = function(block, info) {
   renderDrawRight(block, info, pathObject);
   renderDrawBottom(block, info, pathObject);
   renderDrawLeft(block, info, pathObject);
+  renderFields(block, info, pathObject);
+  //drawInlineInputs(block, info, pathObject);
   block.setPaths_(pathObject);
-  renderFields(block, info);
 };
 
 layoutField = function(field, cursorX, cursorY) {
@@ -18,12 +19,13 @@ layoutField = function(field, cursorX, cursorY) {
       'translate(' + cursorX + ',' + cursorY + ')');
 };
 
-renderFields = function(block, info) {
+renderFields = function(block, info, pathObject) {
   var cursorX = 0;
   var cursorY = info.topPadding;
   // field layout passes:
   for (var r = 0; r < info.rows.length; r++) {
     var row = info.rows[r];
+    var isInline = row.type == Blockly.BlockSvg.INLINE;
     cursorX = info.startPadding;
     if (row.type == 'spacer') {
       //cursorX += row.width;
@@ -38,6 +40,10 @@ renderFields = function(block, info) {
               layoutField(field, cursorX, cursorY);
             }
             cursorX += field.width;
+          }
+          if (isInline && input.type == Blockly.INPUT_VALUE) {
+            drawInlineInput(pathObject, cursorX, cursorY, input);
+            cursorX += input.connectedBlockWidth;
           }
         } else {
           cursorX += input.width;
@@ -89,27 +95,61 @@ drawValueInput = function(pathObject) {
 drawInlineInput = function(pathObject, x, y, input) {
   var width = input.connectedBlockWidth;
   var height = input.connectedBlockHeight;
-  x += input.fieldWidth;
+  x += Blockly.BlockSvg.TAB_WIDTH;  // TODO: This shouldn't be added here.  It
+  // should be added as part of the padding instead.
+  //x += input.fieldWidth;
 
-  var steps = pathObject.steps;
   var inlineSteps = pathObject.inlineSteps;
 
-  inlineSteps.push('M', (x - Blockly.BlockSvg.SEP_SPACE_X) +
-                       ',' + (y + Blockly.BlockSvg.INLINE_PADDING_Y));
-  inlineSteps.push('h', Blockly.BlockSvg.TAB_WIDTH - 2 -
-                   width);
+  inlineSteps.push('M', (x + Blockly.BlockSvg.TAB_WIDTH) + ',' + y);
+  //inlineSteps.push('M', );
   inlineSteps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
-  inlineSteps.push('v', height + 1 -
-                        Blockly.BlockSvg.TAB_HEIGHT);
-  inlineSteps.push('h', width + 2 -
-                   Blockly.BlockSvg.TAB_WIDTH);
+  inlineSteps.push('v', height - Blockly.BlockSvg.TAB_HEIGHT);
+  inlineSteps.push('h', width - Blockly.BlockSvg.TAB_WIDTH);
+  inlineSteps.push('v', - height);
+  //inlineSteps.push('h', - width + Blockly.BlockSvg.TAB_WIDTH);
   inlineSteps.push('z');
+
+
+// old
+  // inlineSteps.push('M', (x - Blockly.BlockSvg.SEP_SPACE_X) +
+  //                      ',' + (y + Blockly.BlockSvg.INLINE_PADDING_Y));
+  // inlineSteps.push('h', Blockly.BlockSvg.TAB_WIDTH - 2 -
+  //                  width);
+  // inlineSteps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
+  // inlineSteps.push('v', height + 1 -
+  //                       Blockly.BlockSvg.TAB_HEIGHT);
+  // inlineSteps.push('h', width + 2 -
+  //                  Blockly.BlockSvg.TAB_WIDTH);
+  // inlineSteps.push('z');
+};
+
+drawInlineInputs = function(block, info, pathObject) {
+  var cursorX = info.startPadding;
+  var cursorY = info.topPadding;
+  for (var r = 0; r < info.rows.length; r++) {
+    var row = info.rows[r];
+    //cursorY += row.height;
+    cursorX = info.startPadding;
+    if (row.type == Blockly.BlockSvg.INLINE) {
+      for (var i = 0; i < row.inputs.length; i++) {
+        var input = row.inputs[i];
+        if (input.type == Blockly.INPUT_VALUE) {
+          cursorX += input.fieldWidth;
+          drawInlineInput(pathObject, cursorX, cursorY, input);
+          cursorX += input.connectedBlockWidth;
+        } else {
+          cursorX += input.width;
+        }
+      }
+    }
+    cursorY += row.height;
+  }
 };
 
 renderDrawRight = function(block, info, pathObject) {
   var cursorX = 0;
   var cursorY = 0;
-  // field layout passes:
   for (var r = 0; r < info.rows.length; r++) {
     var row = info.rows[r];
     cursorY += row.height;
@@ -119,14 +159,15 @@ renderDrawRight = function(block, info, pathObject) {
       if (row.type != Blockly.BlockSvg.INLINE && row.inputs[1].type == Blockly.INPUT_VALUE) {
         pathObject.steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
         pathObject.steps.push('V', cursorY);
-      } else {
-        for (var i = 0; i < row.inputs.length; i++) {
-          var input = row.inputs[i];
-          if (input.type == Blockly.INPUT_VALUE) {
-            drawInlineInput(pathObject, cursorX, cursorY, input);
-          }
-        }
       }
+      // else {
+      //   for (var i = 0; i < row.inputs.length; i++) {
+      //     var input = row.inputs[i];
+      //     if (input.type == Blockly.INPUT_VALUE) {
+      //       drawInlineInput(pathObject, cursorX, cursorY, input);
+      //     }
+      //   }
+      // }
     }
   }
   pathObject.steps.push('V', info.height);

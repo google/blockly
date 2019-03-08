@@ -61,6 +61,8 @@ Blockly.BlockSvg.RenderInfo = function() {
 
   this.startPadding = Blockly.BlockSvg.SEP_SPACE_X;
 
+  // topPadding should be unnecessary: this is the height of the first spacer
+  // row.
   this.topPadding = Blockly.BlockSvg.SEP_SPACE_X / 2;
 
   this.rows = [];
@@ -92,7 +94,7 @@ Blockly.BlockSvg.RenderedRow = function() {
   this.fieldValueWidth = 0;
 
   /**
-   * 'spacer' or 'input row'
+   * 'spacer', 'inline', 'external value', 'dummy', 'statement' //or 'input row'
    * @type {string}
    */
   this.type = '';
@@ -239,17 +241,24 @@ completeInfo = function(info) {
     statementEdge = Math.max(statementEdge, row.statementWidth);
     rightEdge = Math.max(rightEdge, row.fieldValueWidth);
   }
-  info.statementEdge = statementEdge;
-  info.rightEdge = rightEdge;
+  // start padding is added equally to everything.
+  info.statementEdge = statementEdge + info.startPadding;
+  info.rightEdge = rightEdge + info.startPadding;
+
+  // the last row needs some padding
+  // TODO: this padding depends on the type of the last input, iirc.
+  info.rows[info.rows.length - 1].height = Blockly.BlockSvg.SEP_SPACE_X / 2;
+  // And so does the first row.
+  info.rows[0].height = Blockly.BlockSvg.SEP_SPACE_X / 2;
 
   for (var i = 0; i < info.rows.length; i++) {
     var row = info.rows[i];
     info.height += row.height;
-    info.width += row.width;  // No, these aren't additive.
+    //info.width += row.width;  // No, these aren't additive.
+    info.width = Math.max(info.width, row.width);
   }
   // Fuck it, add some padding.
-  info.width += Blockly.BlockSvg.SEP_SPACE_X;
-  //info.height += Blockly.BlockSvg.SEP_SPACE_X;
+  info.width = info.width + info.startPadding;
 };
 
 padRows = function(renderInfo) {
@@ -262,22 +271,50 @@ measureRow = function(renderedRow) {
 
   var statementWidth = 0;
   var fieldValueWidth = 0;
-  // If we're setting width on the first and last, maybe here is a good place.
-  for (var f = 0; f < renderedRow.inputs.length; f++) {
-    var input = renderedRow.inputs[f];
-    height += input.height;
-    width += input.width;
-    if (input.type != 'spacer' &&
-        renderedRow.type != Blockly.BlockSvg.INLINE) {
-      // if it's not inline is there only a single input? And if so, how should
-      // this code be structured?
-      if (renderedRow.type == Blockly.NEXT_STATEMENT) {
-        statementWidth = input.fieldWidth;
+
+  if (renderedRow.type == Blockly.BlockSvg.INLINE) {
+    // row width is the sum of all input widths.
+    // row height is the max of all input heights.
+    // statement width doesn't matter.
+    // fieldvaluewidth is misnamed, but is rightEdge and is the same as the
+    // row width.
+    for (var i = 0; i < renderedRow.inputs.length; i++) {
+      var input = renderedRow.inputs[i];
+      height = Math.max(height, input.height);
+      width += input.width;
+    }
+    statementWidth = 0;
+    fieldValueWidth = width;
+  } else {
+    for (var i = 0; i < renderedRow.inputs.length; i++) {
+      var input = renderedRow.inputs[i];
+      height = Math.max(height, input.height);
+      if (renderedRow.type == 'statement' && input.type == Blockly.NEXT_STATEMENT) {
+        width += input.fieldWidth;
+        fieldValueWidth = width;
       } else {
-        fieldValueWidth = input.fieldWidth;
+        width += input.width;
+        fieldValueWidth = width;
       }
     }
   }
+
+  // // If we're setting width on the first and last, maybe here is a good place.
+  // for (var f = 0; f < renderedRow.inputs.length; f++) {
+  //   var input = renderedRow.inputs[f];
+  //   height += input.height;
+  //   width += input.width;
+  //   if (input.type != 'spacer' &&
+  //       renderedRow.type != Blockly.BlockSvg.INLINE) {
+  //     // if it's not inline is there only a single input? And if so, how should
+  //     // this code be structured?
+  //     if (renderedRow.type == Blockly.NEXT_STATEMENT) {
+  //       statementWidth = input.fieldWidth;
+  //     } else {
+  //       fieldValueWidth = input.fieldWidth;
+  //     }
+  //   }
+  // }
 
   renderedRow.height = height;
   renderedRow.width = width;
@@ -308,6 +345,17 @@ padInputs = function(renderedRow, isInline) {
     // This includes the last spacer but not the first spacer.
     var spacer = inputs[i + 1];
     spacer.width = Blockly.BlockSvg.SEP_SPACE_X;
+  }
+
+  // The end of a row with an external input will have a tab rendered.  Add
+  // space for that.
+  // TODO: Decide if this is the right place to have that spacing live.
+  //
+  if (renderedRow.type == 'external value') {
+    inputs[inputs.length - 1].width = Blockly.BlockSvg.TAB_WIDTH;
+  } else if (renderedRow.type == 'dummy') {
+    // dummies get a bit of padding too.
+    inputs[inputs.length - 1].width = Blockly.BlockSvg.SEP_SPACE_X;
   }
 };
 
@@ -431,7 +479,14 @@ createRows = function(block, info) {
       if (isInline && input.type != Blockly.NEXT_STATEMENT) {
         row.type = Blockly.BlockSvg.INLINE;
       } else {
-        row.type = input.type;
+        if (input.type == Blockly.NEXT_STATEMENT) {
+          row.type = 'statement';
+        } else if (input.type == Blockly.DUMMY_INPUT) {
+          row.type = 'dummy';
+        } else if (input.type == Blockly.INPUT_VALUE) {
+          row.type = 'external value';
+        }
+        //row.type = input.type;
       }
       row.height = 0;
       inputRows.push(row);

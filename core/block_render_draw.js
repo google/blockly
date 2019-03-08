@@ -19,9 +19,11 @@ layoutField = function(field, cursorX, cursorY) {
       'translate(' + cursorX + ',' + cursorY + ')');
 };
 
+// RenderFields is really "render internals".  That should include fields,
+// icons (which are basically fields), and internal inputs.
 renderFields = function(block, info, pathObject) {
   var cursorX = 0;
-  var cursorY = info.topPadding;
+  var cursorY = 0;
   // field layout passes:
   for (var r = 0; r < info.rows.length; r++) {
     var row = info.rows[r];
@@ -107,44 +109,17 @@ drawInlineInput = function(pathObject, x, y, input) {
   inlineSteps.push('v', height - Blockly.BlockSvg.TAB_HEIGHT);
   inlineSteps.push('h', width - Blockly.BlockSvg.TAB_WIDTH);
   inlineSteps.push('v', - height);
-  //inlineSteps.push('h', - width + Blockly.BlockSvg.TAB_WIDTH);
   inlineSteps.push('z');
-
-
-// old
-  // inlineSteps.push('M', (x - Blockly.BlockSvg.SEP_SPACE_X) +
-  //                      ',' + (y + Blockly.BlockSvg.INLINE_PADDING_Y));
-  // inlineSteps.push('h', Blockly.BlockSvg.TAB_WIDTH - 2 -
-  //                  width);
-  // inlineSteps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
-  // inlineSteps.push('v', height + 1 -
-  //                       Blockly.BlockSvg.TAB_HEIGHT);
-  // inlineSteps.push('h', width + 2 -
-  //                  Blockly.BlockSvg.TAB_WIDTH);
-  // inlineSteps.push('z');
 };
 
-drawInlineInputs = function(block, info, pathObject) {
-  var cursorX = info.startPadding;
-  var cursorY = info.topPadding;
-  for (var r = 0; r < info.rows.length; r++) {
-    var row = info.rows[r];
-    //cursorY += row.height;
-    cursorX = info.startPadding;
-    if (row.type == Blockly.BlockSvg.INLINE) {
-      for (var i = 0; i < row.inputs.length; i++) {
-        var input = row.inputs[i];
-        if (input.type == Blockly.INPUT_VALUE) {
-          cursorX += input.fieldWidth;
-          drawInlineInput(pathObject, cursorX, cursorY, input);
-          cursorX += input.connectedBlockWidth;
-        } else {
-          cursorX += input.width;
-        }
-      }
-    }
-    cursorY += row.height;
-  }
+drawStatementInput = function(block, pathObject, x, y, input, info) {
+  var steps = pathObject.steps;
+  x = info.statementEdge + Blockly.BlockSvg.NOTCH_WIDTH;
+  steps.push('H', x);
+  steps.push(Blockly.BlockSvg.INNER_TOP_LEFT_CORNER);
+  steps.push('v', input.height - 2 * Blockly.BlockSvg.CORNER_RADIUS);
+  steps.push(Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER);
+  steps.push('H', info.rightEdge);
 };
 
 renderDrawRight = function(block, info, pathObject) {
@@ -152,23 +127,40 @@ renderDrawRight = function(block, info, pathObject) {
   var cursorY = 0;
   for (var r = 0; r < info.rows.length; r++) {
     var row = info.rows[r];
+    cursorX = info.startPadding;
     cursorY += row.height;
-    if (row.type == 'spacer') {
-      cursorX += row.width;
+    if (row.type == 'external value') {
+      pathObject.steps.push('H', info.rightEdge);
+      pathObject.steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
+      pathObject.steps.push('V', cursorY);
+    } else if (row.type == 'statement') {
+      var realInput = row.inputs[1];
+      drawStatementInput(block, pathObject, cursorX, cursorY, realInput, info);
     } else {
-      if (row.type != Blockly.BlockSvg.INLINE && row.inputs[1].type == Blockly.INPUT_VALUE) {
-        pathObject.steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
-        pathObject.steps.push('V', cursorY);
-      }
-      // else {
-      //   for (var i = 0; i < row.inputs.length; i++) {
-      //     var input = row.inputs[i];
-      //     if (input.type == Blockly.INPUT_VALUE) {
-      //       drawInlineInput(pathObject, cursorX, cursorY, input);
-      //     }
-      //   }
-      // }
+      pathObject.steps.push('H', info.rightEdge);
+      pathObject.steps.push('v', row.height);
     }
+    // if (row.type == 'spacer') {
+    //   cursorX += row.width;
+    // } else {
+    //   if (row.type != Blockly.BlockSvg.INLINE) {
+    //     // If it's not inline, the row only has one real input, plus two spacers.
+    //     var realInput = row.inputs[1];
+    //     // External value input.
+    //     if (realInput.type == Blockly.INPUT_VALUE) {
+    //       pathObject.steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
+    //       pathObject.steps.push('V', cursorY);
+    //     } else if (realInput.type == Blockly.NEXT_STATEMENT) {
+    //       drawStatementInput(block, pathObject, cursorX, cursorY, realInput, info);
+    //     } else if (realInput.type == Blockly.INPUT_DUMMY) {
+    //       pathObject.steps.push('V', cursorY);
+    //     }
+    //   } else {
+    //     //cursorX += row.width;
+    //     pathObject.steps.push('H', info.rightEdge);
+    //     pathObject.steps.push('V', cursorY);
+    //   }
+   // }
   }
   pathObject.steps.push('V', info.height);
 };

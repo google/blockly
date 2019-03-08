@@ -19,6 +19,8 @@
  */
 'use strict';
 
+goog.provide('Blockly.TestBlocks');
+
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   {
     "type": "empty_block",
@@ -171,7 +173,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
             "text": "NO ANGLE FIELD"
           }
       }
-    ]
+    ],
+    "colour": "230"
   },
   {
     "type": "example_date",
@@ -570,4 +573,71 @@ Blockly.Blocks['empty_block_with_mutator'] = {
   init: function() {
     this.setMutator(new Blockly.Mutator(['math_number']));
   }
+};
+
+Blockly.Blocks['test_dropdown_dynamic'] = {
+  init: function() {
+    var dropdown = new Blockly.FieldDropdown(this.dynamicOptions);
+    this.appendDummyInput()
+      .appendField('dynamic')
+      .appendField(dropdown, 'OPTIONS');
+  },
+
+  dynamicOptions: function() {
+    if (!Blockly.TestBlocks.dynamicDropdownOptions_.length) {
+      return [['', 'OPTION0']];
+    }
+    return Blockly.TestBlocks.dynamicDropdownOptions_;
+  }
+};
+
+/**
+ * An array of options for the dynamic dropdown.
+ * @type {!Array<!Array>}
+ * @package
+ */
+Blockly.TestBlocks.dynamicDropdownOptions_ = [];
+
+/**
+ * Handles "add option" button in the field test category. This will prompt
+ * the user for an option to add.
+ * @package
+ */
+Blockly.TestBlocks.addDynamicDropdownOption_ = function() {
+  Blockly.prompt('Add an option?',
+      'option '  + Blockly.TestBlocks.dynamicDropdownOptions_.length,
+      function(text) {
+    if (text) {
+      // Do not remove this log! Helps you know if it was added correctly.
+      console.log('Adding option: ' + text);
+      // The option is an array containing human-readable text and a
+      // language-neutral id.
+      Blockly.TestBlocks.dynamicDropdownOptions_.push(
+          [text, 'OPTION' + Blockly.TestBlocks.dynamicDropdownOptions_.length]);
+    }
+  })
+};
+
+/**
+ * Handles "remove option" button in the field test category. This will prompt
+ * the user for an option to remove. May remove multiple options with the
+ * same name.
+ * @package
+ */
+Blockly.TestBlocks.removeDynamicDropdownOption_ = function() {
+  var defaultText = Blockly.TestBlocks.dynamicDropdownOptions_[0] ?
+      Blockly.TestBlocks.dynamicDropdownOptions_[0][0] : '';
+  Blockly.prompt('Remove an option?', defaultText, function(text) {
+    for (var i = 0, option;
+         option = Blockly.TestBlocks.dynamicDropdownOptions_[i];
+         i++) {
+      // The option is an array containing human-readable text and a
+      // language-neutral id, we'll compare against the human-readable text.
+      if (option[0] == text) {
+        // Do not remove this log! Helps you know if it was removed correctly.
+        console.log('Removing option: ' + text);
+        Blockly.TestBlocks.dynamicDropdownOptions_.splice(i, 1);
+      }
+    }
+  })
 };

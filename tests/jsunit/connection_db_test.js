@@ -20,10 +20,10 @@
 'use strict';
 
 function verify_DB_(msg, expected, db) {
-   var equal = (expected.length == db.length);
+   var equal = (expected.length == db.connections_.length);
    if (equal) {
      for (var i = 0; i < expected.length; i++) {
-       if (expected[i] != db[i]) {
+       if (expected[i] != db.connections_[i]) {
          equal = false;
          break;
        }
@@ -32,7 +32,7 @@ function verify_DB_(msg, expected, db) {
    if (equal) {
      assertTrue(msg, true);
    } else {
-     assertEquals(msg, expected, db);
+     assertEquals(msg, expected, db.connections_);
    }
 }
 
@@ -122,21 +122,21 @@ function test_DB_getNeighbours() {
   var result = helper_getNeighbours(db, 0, 0, 4);
   assertEquals(5, result.length);
   for (i = 0; i < result.length; i++) {
-    assertNotEquals(result.indexOf(db[i]), -1); // contains
+    assertNotEquals(result.indexOf(db.connections_[i]), -1); // contains
   }
 
   // Test block belongs at middle.
   result = helper_getNeighbours(db, 0, 4, 2);
   assertEquals(5, result.length);
   for (i = 0; i < result.length; i++) {
-    assertNotEquals(result.indexOf(db[i + 2]), -1); // contains
+    assertNotEquals(result.indexOf(db.connections_[i + 2]), -1); // contains
   }
 
   // Test block belongs at end.
   result = helper_getNeighbours(db, 0, 9, 4);
   assertEquals(5, result.length);
   for (i = 0; i < result.length; i++) {
-    assertNotEquals(result.indexOf(db[i + 5]), -1); // contains
+    assertNotEquals(result.indexOf(db.connections_[i + 5]), -1); // contains
   }
 
   // Test block has no neighbours due to being out of range in the x direction.
@@ -165,7 +165,7 @@ function test_DB_findPositionForConnection() {
   db.addConnection(helper_createConnection(0, 5, Blockly.PREVIOUS_STATEMENT,
       null, true));
 
-  assertEquals(5, db.length);
+  assertEquals(5, db.connections_.length);
   var conn = helper_createConnection(0, 3, Blockly.PREVIOUS_STATEMENT, null,
       true);
   assertEquals(3, db.findPositionForConnection_(conn));
@@ -183,7 +183,7 @@ function test_DB_findConnection() {
   var conn = helper_createConnection(3, 3, Blockly.PREVIOUS_STATEMENT, null,
       true);
   db.addConnection(conn);
-  assertEquals(conn, db[db.findConnection(conn)]);
+  assertEquals(conn, db.connections_[db.findConnection(conn)]);
 
   conn = helper_createConnection(3, 3, Blockly.PREVIOUS_STATEMENT, null, true);
   assertEquals(-1, db.findConnection(conn));
@@ -197,7 +197,7 @@ function test_DB_ordering() {
   }
 
   for (i = 0; i < 10; i++) {
-      assertEquals(i, db[i].y_);
+      assertEquals(i, db.connections_[i].y_);
   }
 
   // quasi-random
@@ -221,7 +221,7 @@ function test_DB_ordering() {
   }
 
   for (i = 1; i < xCoords.length; i++) {
-    assertTrue(db[i].y_ >= db[i - 1].y_);
+    assertTrue(db.connections_[i].y_ >= db.connections_[i - 1].y_);
   }
 }
 
@@ -246,13 +246,13 @@ function test_SearchForClosest() {
   }
 
   // Should be at 0, 9.
-  var last = db[db.length - 1];
+  var last = db.connections_[db.connections_.length - 1];
   // Correct connection is last in db; many connections in radius.
   assertEquals(last, helper_searchDB(db, 0, 10, 15, sharedWorkspace));
   // Nothing nearby.
   assertEquals(null, helper_searchDB(db, 100, 100, 3, sharedWorkspace));
   // First in db, exact match.
-  assertEquals(db[0], helper_searchDB(db, 0, 0, 0, sharedWorkspace));
+  assertEquals(db.connections_[0], helper_searchDB(db, 0, 0, 0, sharedWorkspace));
 
   tempConn = helper_createConnection(6, 6, Blockly.PREVIOUS_STATEMENT,
       sharedWorkspace, true);

@@ -305,6 +305,32 @@ Blockly.utils.mouseToSvg = function(e, svg, matrix) {
 };
 
 /**
+ * Get the scroll delta of a mouse event in pixel units.
+ * @param {!Event} e Mouse event.
+ * @return {{x: number, y: number}} Scroll delta object with .x and .y
+ *    properties.
+ */
+Blockly.utils.getScrollDeltaPixels = function(e) {
+  switch (e.deltaMode) {
+    case 0x00:  // Pixel mode.
+      return {
+        x: e.deltaX,
+        y: e.deltaY
+      };
+    case 0x01:  // Line mode.
+      return {
+        x: e.deltaX * Blockly.LINE_MODE_MULTIPLIER,
+        y: e.deltaY * Blockly.LINE_MODE_MULTIPLIER
+      };
+    case 0x02:  // Page mode.
+      return {
+        x: e.deltaX * Blockly.PAGE_MODE_MULTIPLIER,
+        y: e.deltaY * Blockly.PAGE_MODE_MULTIPLIER
+      };
+  }
+};
+
+/**
  * Given an array of strings, return the length of the shortest one.
  * @param {!Array.<string>} array Array of strings.
  * @return {number} Length of shortest string.
@@ -1002,4 +1028,21 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
     }
   }
   return typeCountsMap;
+};
+
+/**
+ * Clamp the provided number between the lower bound and the upper bound.
+ * @param {Number} lowerBound The desired lower bound.
+ * @param {Number} number The number to clamp.
+ * @param {Number} upperBound The desired upper bound.
+ * @return {Number} the clamped number
+ * @package
+ */
+Blockly.utils.clampNumber = function(lowerBound, number, upperBound) {
+  if (upperBound < lowerBound) {
+    var temp = upperBound;
+    upperBound = lowerBound;
+    lowerBound = temp;
+  }
+  return Math.max(lowerBound, Math.min(number, upperBound));
 };

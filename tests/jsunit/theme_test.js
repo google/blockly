@@ -53,9 +53,9 @@ function undefineThemeTestBlocks() {
 function createBlockStyles() {
   return {
     "styleOne": {
-      "primaryColour": "colour1",
-      "secondaryColour":"colour2",
-      "tertiaryColour":"colour3"
+      "colourPrimary": "colour1",
+      "colourSecondary":"colour2",
+      "colourTertiary":"colour3"
     }
   };
 }
@@ -63,14 +63,14 @@ function createBlockStyles() {
 function createMultipleBlockStyles() {
   return {
     "styleOne": {
-      "primaryColour": "colour1",
-      "secondaryColour":"colour2",
-      "tertiaryColour":"colour3"
+      "colourPrimary": "colour1",
+      "colourSecondary":"colour2",
+      "colourTertiary":"colour3"
     },
     "styleTwo": {
-      "primaryColour": "colour1",
-      "secondaryColour":"colour2",
-      "tertiaryColour":"colour3"
+      "colourPrimary": "colour1",
+      "colourSecondary":"colour2",
+      "colourTertiary":"colour3"
     }
   };
 }
@@ -99,7 +99,7 @@ function test_getBlockStyles() {
 function test_setBlockStyleUpdate() {
   var theme = new Blockly.Theme(createBlockStyles());
   var blockStyle = createBlockStyles();
-  blockStyle.styleOne.primaryColour = 'somethingElse';
+  blockStyle.styleOne.colourPrimary = 'somethingElse';
 
   theme.setBlockStyle('styleOne', blockStyle.styleOne);
 
@@ -142,7 +142,7 @@ function test_setTheme() {
   //check that the toolbox refreshed method was called
   assertEquals(workspace.refreshToolboxSelection(), 3);
 
-  assertEquals(Blockly.Events.FIRE_QUEUE_.pop().element, 'themeChanged');
+  assertEquals(Blockly.Events.FIRE_QUEUE_.pop().element, 'theme');
 
   undefineThemeTestBlocks();
 }

@@ -327,8 +327,7 @@ Blockly.Gesture.prototype.updateDragDelta_ = function(currentXY) {
  * @private
  */
 Blockly.Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
-  // Disabled blocks may not be dragged from the flyout.
-  if (this.targetBlock_.disabled) {
+  if (!this.flyout_.isBlockCreatable_(this.targetBlock_)) {
     return false;
   }
   if (!this.flyout_.isScrollable() ||
@@ -950,4 +949,18 @@ Blockly.Gesture.prototype.isDragging = function() {
  */
 Blockly.Gesture.prototype.hasStarted = function() {
   return this.hasStarted_;
+};
+
+/**
+ * Get a list of the insertion markers that currently exist.  Block drags have
+ * 0, 1, or 2 insertion markers.
+ * @return {!Array.<!Blockly.BlockSvg>} A possibly empty list of insertion
+ *     marker blocks.
+ * @package
+ */
+Blockly.Gesture.prototype.getInsertionMarkers = function() {
+  if (this.blockDragger_) {
+    return this.blockDragger_.getInsertionMarkers();
+  }
+  return [];
 };

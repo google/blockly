@@ -567,7 +567,7 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
     this.squareTopLeftCorner_ = true;
     this.squareBottomLeftCorner_ = true;
   } else {
-    var renderCap = typeof this.hat !== undefined ? this.hat === 'cap' :
+    var renderCap = this.hat ? this.hat === 'cap' :
       Blockly.BlockSvg.START_HAT;
 
     this.squareTopLeftCorner_ = false;

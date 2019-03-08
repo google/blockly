@@ -11,7 +11,8 @@
 			"Selven",
 			"Samuele2002",
 			"Greis",
-			"Sarah Bernabei"
+			"Sarah Bernabei",
+			"Albe Albe 460"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
@@ -39,6 +40,10 @@
 	"RENAME_VARIABLE": "Rinomina variabile...",
 	"RENAME_VARIABLE_TITLE": "Rinomina tutte le variabili '%1' in:",
 	"NEW_VARIABLE": "Crea variabile...",
+	"NEW_STRING_VARIABLE": "Crea variabile stringa...",
+	"NEW_NUMBER_VARIABLE": "Crea variabile numero...",
+	"NEW_COLOUR_VARIABLE": "Crea variabile colore...",
+	"NEW_VARIABLE_TYPE_TITLE": "Tipo della nuova variabile:",
 	"NEW_VARIABLE_TITLE": "Nome della nuova variabile:",
 	"VARIABLE_ALREADY_EXISTS": "Una variabile denominata '%1' esiste già.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Una variabile nominata '%1' esiste già per un'altro tipo: '%2'.",

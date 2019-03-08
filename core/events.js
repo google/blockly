@@ -150,6 +150,26 @@ Blockly.Events.COMMENT_CHANGE = 'comment_change';
 Blockly.Events.COMMENT_MOVE = 'comment_move';
 
 /**
+ * Name of event that records a workspace load.
+ */
+Blockly.Events.FINISHED_LOADING = 'finished_loading';
+
+/**
+ * List of events that cause objects to be bumped back into the visible
+ * portion of the workspace (only used for non-movable workspaces).
+ *
+ * Not to be confused with bumping so that disconnected connections to do
+ * not appear connected.
+ * @const
+ */
+Blockly.Events.BUMP_EVENTS = [
+  Blockly.Events.BLOCK_CREATE,
+  Blockly.Events.BLOCK_MOVE,
+  Blockly.Events.COMMENT_CREATE,
+  Blockly.Events.COMMENT_MOVE
+];
+
+/**
  * List of events queued for firing.
  * @private
  */

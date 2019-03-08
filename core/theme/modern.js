@@ -30,54 +30,54 @@ goog.require('Blockly.Theme');
 
 var defaultBlockStyles = {
   "colour_blocks": {
-    "primaryColour": "#a5745b",
-    "secondaryColour": "#dbc7bd",
-    "tertiaryColour": "#845d49"
+    "colourPrimary": "#a5745b",
+    "colourSecondary": "#dbc7bd",
+    "colourTertiary": "#845d49"
   },
   "list_blocks": {
-    "primaryColour": "#745ba5",
-    "secondaryColour": "#c7bddb",
-    "tertiaryColour": "#5d4984"
+    "colourPrimary": "#745ba5",
+    "colourSecondary": "#c7bddb",
+    "colourTertiary": "#5d4984"
   },
   "logic_blocks": {
-    "primaryColour": "#5b80a5",
-    "secondaryColour": "#bdccdb",
-    "tertiaryColour": "#496684"
+    "colourPrimary": "#5b80a5",
+    "colourSecondary": "#bdccdb",
+    "colourTertiary": "#496684"
   },
   "loop_blocks": {
-    "primaryColour": "#5ba55b",
-    "secondaryColour": "#bddbbd",
-    "tertiaryColour": "#498449"
+    "colourPrimary": "#5ba55b",
+    "colourSecondary": "#bddbbd",
+    "colourTertiary": "#498449"
   },
   "math_blocks": {
-    "primaryColour": "#5b67a5",
-    "secondaryColour": "#bdc2db",
-    "tertiaryColour": "#495284"
+    "colourPrimary": "#5b67a5",
+    "colourSecondary": "#bdc2db",
+    "colourTertiary": "#495284"
   },
   "procedure_blocks": {
-    "primaryColour": "#995ba5",
-    "secondaryColour": "#d6bddb",
-    "tertiaryColour": "#7a4984"
+    "colourPrimary": "#995ba5",
+    "colourSecondary": "#d6bddb",
+    "colourTertiary": "#7a4984"
   },
   "text_blocks": {
-    "primaryColour": "#5ba58c",
-    "secondaryColour": "#bddbd1",
-    "tertiaryColour": "#498470"
+    "colourPrimary": "#5ba58c",
+    "colourSecondary": "#bddbd1",
+    "colourTertiary": "#498470"
   },
   "variable_blocks": {
-    "primaryColour": "#a55b99",
-    "secondaryColour": "#dbbdd6",
-    "tertiaryColour": "#84497a"
+    "colourPrimary": "#a55b99",
+    "colourSecondary": "#dbbdd6",
+    "colourTertiary": "#84497a"
   },
   "variable_dynamic_blocks": {
-    "primaryColour": "#a55b99",
-    "secondaryColour": "#dbbdd6",
-    "tertiaryColour": "#84497a"
+    "colourPrimary": "#a55b99",
+    "colourSecondary": "#dbbdd6",
+    "colourTertiary": "#84497a"
   },
   "hat_blocks": {
-    "primaryColour": "#a55b99",
-    "secondaryColour": "#dbbdd6",
-    "tertiaryColour": "#84497a",
+    "colourPrimary": "#a55b99",
+    "colourSecondary": "#dbbdd6",
+    "colourTertiary": "#84497a",
     "hat": "cap"
   }
 };

@@ -103,8 +103,8 @@ Blockly.HorizontalFlyout.prototype.getMetrics_ = function() {
     contentWidth: (optionBox.width + 2 * this.MARGIN) * this.workspace_.scale,
     viewTop: -this.workspace_.scrollY,
     viewLeft: -this.workspace_.scrollX,
-    contentTop: optionBox.y,
-    contentLeft: optionBox.x,
+    contentTop: 0,
+    contentLeft: 0,
     absoluteTop: absoluteTop,
     absoluteLeft: absoluteLeft
   };
@@ -152,10 +152,21 @@ Blockly.HorizontalFlyout.prototype.position = function() {
   var edgeHeight = this.height_ - this.CORNER_RADIUS;
   this.setBackgroundPath_(edgeWidth, edgeHeight);
 
-  var x = targetWorkspaceMetrics.absoluteLeft;
-  var y = targetWorkspaceMetrics.absoluteTop;
-  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
-    y += (targetWorkspaceMetrics.viewHeight - this.height_);
+  // X is always 0 since this is a horizontal flyout.
+  var x = 0;
+  // If there is a toolbox.
+  if (targetWorkspaceMetrics.toolboxHeight) {
+    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+      var y = targetWorkspaceMetrics.toolboxHeight;
+    } else {
+      var y = targetWorkspaceMetrics.viewHeight - this.height_;
+    }
+  } else {
+    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+      var y = 0;
+    } else {
+      var y = targetWorkspaceMetrics.viewHeight;
+    }
   }
   this.positionAt_(this.width_, this.height_, x, y);
 };
@@ -217,14 +228,10 @@ Blockly.HorizontalFlyout.prototype.scrollToStart = function() {
  * @private
  */
 Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
-  var delta = e.deltaX || e.deltaY;
+  var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
+  var delta = scrollDelta.x || scrollDelta.y;
 
   if (delta) {
-    // Firefox's mouse wheel deltas are a tenth that of Chrome/Safari.
-    // DeltaMode is 1 for a mouse wheel, but not for a trackpad scroll event
-    if (goog.userAgent.GECKO && (e.deltaMode === 1)) {
-      delta *= 10;
-    }
     var metrics = this.getMetrics_();
     var pos = metrics.viewLeft + delta;
     var limit = metrics.contentWidth - metrics.viewWidth;
@@ -366,8 +373,6 @@ Blockly.HorizontalFlyout.prototype.reflowInternal_ = function() {
     }
     // Record the height for .getMetrics_ and .position.
     this.height_ = flyoutHeight;
-    // Call this since it is possible the trash and zoom buttons need
-    // to move. e.g. on a bottom positioned flyout when zoom is clicked.
-    this.targetWorkspace_.resize();
+    this.position();
   }
 };

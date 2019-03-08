@@ -373,6 +373,8 @@ padFields = function(renderedInput) {
     var nextField = fields[i + 1];
 
     if (prevField && nextField && prevField.EDITABLE && nextField.EDITABLE) {
+      spacer.width = Blockly.BlockSvg.SEP_SPACE_X * 2;
+    } else {
       spacer.width = Blockly.BlockSvg.SEP_SPACE_X;
     }
   }

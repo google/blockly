@@ -152,6 +152,11 @@ Blockly.BlockSvg.RenderedInput = function() {
   this.type = '';
 
   this.fields = [];
+
+  // The actual input on the block.
+  // TODO: scrape all information we need from this, rather than storing it
+  // directly.
+  this.input = null;
 };
 
 Blockly.BlockSvg.RenderedField = function() {
@@ -211,7 +216,7 @@ Blockly.BlockSvg.renderComputeForRealThough = function(block) {
         measureField(field);
       }
       padFields(input);
-      measureInput(input, renderInfo);
+      measureInput(input, renderInfo.isInline);
     }
     padInputs(row, renderInfo);
     measureRow(row);
@@ -299,23 +304,6 @@ measureRow = function(renderedRow) {
     }
   }
 
-  // // If we're setting width on the first and last, maybe here is a good place.
-  // for (var f = 0; f < renderedRow.inputs.length; f++) {
-  //   var input = renderedRow.inputs[f];
-  //   height += input.height;
-  //   width += input.width;
-  //   if (input.type != 'spacer' &&
-  //       renderedRow.type != Blockly.BlockSvg.INLINE) {
-  //     // if it's not inline is there only a single input? And if so, how should
-  //     // this code be structured?
-  //     if (renderedRow.type == Blockly.NEXT_STATEMENT) {
-  //       statementWidth = input.fieldWidth;
-  //     } else {
-  //       fieldValueWidth = input.fieldWidth;
-  //     }
-  //   }
-  // }
-
   renderedRow.height = height;
   renderedRow.width = width;
   renderedRow.statementWidth = statementWidth;
@@ -380,14 +368,14 @@ measureInput = function(renderedInput, isInline) {
         Blockly.BlockSvg.SEP_SPACE_X * 1.25;
   }
   // Expand input size if there is a connection.
-  if (renderedInput.connection && renderedInput.connection.isConnected()) {
-    var linkedBlock = renderedInput.connection.targetBlock();
+  if (renderedInput.input.connection && renderedInput.input.connection.isConnected()) {
+    var linkedBlock = renderedInput.input.connection.targetBlock();
     var bBox = linkedBlock.getHeightWidth();
     connectedBlockHeight = Math.max(connectedBlockHeight, bBox.height);
     connectedBlockWidth = Math.max(connectedBlockWidth, bBox.width);
   }
 
-  if (isInline && renderedInput.connection && !renderedInput.isConnected()) {
+  if (isInline && renderedInput.input.connection && !renderedInput.input.connection.isConnected()) {
     // TODO: Figure out where to get the minimum size for an empty inline
     // input.
     connectedBlockWidth = Blockly.BlockSvg.MIN_BLOCK_Y;
@@ -451,6 +439,8 @@ createInput = function(blockInput) {
   result.type = blockInput.type;
   result.isVisible = blockInput.isVisible();
   result.fields = createFields(blockInput.fieldRow);
+  // TODO: scrape necessary info, rather than storing a pointer to the input.
+  result.input = blockInput;
   return result;
 };
 

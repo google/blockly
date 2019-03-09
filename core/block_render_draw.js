@@ -10,7 +10,6 @@ renderDraw = function(block, info) {
   renderDrawBottom(block, info, pathObject);
   renderDrawLeft(block, info, pathObject);
   renderFields(block, info, pathObject);
-  //drawInlineInputs(block, info, pathObject);
   block.setPaths_(pathObject);
 };
 
@@ -34,7 +33,6 @@ renderFields = function(block, info, pathObject) {
     } else {
       for (var i = 0; i < row.inputs.length; i++) {
         var input = row.inputs[i];
-        //cursorX += input.width;
         if (input.type != 'spacer') {
           for (var f = 0; f < input.fields.length; f++) {
             var field = input.fields[f];
@@ -97,7 +95,7 @@ drawValueInput = function(pathObject) {
 drawInlineInput = function(pathObject, x, y, input) {
   var width = input.connectedBlockWidth;
   var height = input.connectedBlockHeight;
-  x += Blockly.BlockSvg.TAB_WIDTH;  // TODO: This shouldn't be added here.  It
+  //x += Blockly.BlockSvg.TAB_WIDTH;  // TODO: This shouldn't be added here.  It
   // should be added as part of the padding instead.
   //x += input.fieldWidth;
 
@@ -140,27 +138,6 @@ renderDrawRight = function(block, info, pathObject) {
       pathObject.steps.push('H', info.rightEdge);
       pathObject.steps.push('v', row.height);
     }
-    // if (row.type == 'spacer') {
-    //   cursorX += row.width;
-    // } else {
-    //   if (row.type != Blockly.BlockSvg.INLINE) {
-    //     // If it's not inline, the row only has one real input, plus two spacers.
-    //     var realInput = row.inputs[1];
-    //     // External value input.
-    //     if (realInput.type == Blockly.INPUT_VALUE) {
-    //       pathObject.steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
-    //       pathObject.steps.push('V', cursorY);
-    //     } else if (realInput.type == Blockly.NEXT_STATEMENT) {
-    //       drawStatementInput(block, pathObject, cursorX, cursorY, realInput, info);
-    //     } else if (realInput.type == Blockly.INPUT_DUMMY) {
-    //       pathObject.steps.push('V', cursorY);
-    //     }
-    //   } else {
-    //     //cursorX += row.width;
-    //     pathObject.steps.push('H', info.rightEdge);
-    //     pathObject.steps.push('V', cursorY);
-    //   }
-   // }
   }
   pathObject.steps.push('V', info.height);
 };
@@ -239,5 +216,4 @@ renderDrawTop = function(block, info, pathObject) {
   }
   steps.push('H', info.width);
   highlightSteps.push('H', info.width - 0.5);
-  //this.width = rightEdge;
 };

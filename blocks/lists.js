@@ -829,6 +829,21 @@ Blockly.Blocks['lists_split'] = {
    * @this Blockly.Block
    */
   updateType_: function(newMode) {
+    var mode = this.getFieldValue('MODE');
+    if (mode != newMode) {
+      this.setFieldValue(newMode, 'MODE');
+      var inputConnection = this.getInput('INPUT').connection;
+      inputConnection.setShadowDom(null);
+      var inputBlock = inputConnection.targetBlock();
+      if (inputBlock) {
+        inputConnection.disconnect();
+        if (inputBlock.isShadow()) {
+          inputBlock.dispose();
+        } else {
+          this.bumpNeighbours_();
+        }
+      }
+    }
     if (newMode == 'SPLIT') {
       this.outputConnection.setCheck('Array');
       this.getInput('INPUT').setCheck('String');

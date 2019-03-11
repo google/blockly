@@ -45,6 +45,7 @@ Blockly.Cursor = function() {
 Blockly.Cursor.prototype.setLocation = function(newCursor, opt_parent) {
   this.location_ = newCursor;
   this.parentInput_ = opt_parent;
+  this.update_();
   //internal update method update_
 };
 
@@ -314,7 +315,6 @@ Blockly.Cursor.prototype.next = function() {
   }
   if (newCursor) {
     this.setLocation(newCursor, newParentInput);
-    this.update_();
   }
   return newCursor;
 };
@@ -356,7 +356,6 @@ Blockly.Cursor.prototype.in = function() {
   }
   if (newCursor) {
     this.setLocation(newCursor, newParentInput);
-    this.update_();
   }
   return newCursor;
 };
@@ -406,7 +405,6 @@ Blockly.Cursor.prototype.prev = function() {
 
   if (newCursor) {
     this.setLocation(newCursor, newParentInput);
-    this.update_();
   }
   return newCursor;
 };
@@ -463,7 +461,6 @@ Blockly.Cursor.prototype.out = function(cursor) {
   }
   if (newCursor) {
     this.setLocation(newCursor,  newParentInput);
-    this.update_();
   }
   return newCursor;
 };

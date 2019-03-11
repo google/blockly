@@ -1,3 +1,9 @@
+// New constants.
+Blockly.BlockSvg.EMPTY_INPUT_X = Blockly.BlockSvg.TAB_WIDTH +
+          Blockly.BlockSvg.SEP_SPACE_X * 1.25;
+
+Blockly.BlockSvg.START_PADDING = Blockly.BlockSvg.SEP_SPACE_X - 1
+
 Blockly.BlockSvg.RenderInfo = function() {
   /**
    *
@@ -59,7 +65,7 @@ Blockly.BlockSvg.RenderInfo = function() {
    */
   this.statementEdge = 0;
 
-  this.startPadding = Blockly.BlockSvg.SEP_SPACE_X;
+  this.startPadding = Blockly.BlockSvg.START_PADDING;
 
   // topPadding should be unnecessary: this is the height of the first spacer
   // row.
@@ -379,33 +385,36 @@ measureInput = function(renderedInput, isInline) {
     fieldWidth += field.width;
   }
 
-  // Compute minimum input size.
-  var connectedBlockHeight = 0;//Blockly.BlockSvg.MIN_BLOCK_Y;
-  var connectedBlockWidth = 0;
-  // The width is currently only needed for inline value inputs.
-  // Also this is really spacing to put before and after, right?  Not part of
-  // the actual block size.
-  if (isInline && renderedInput.type == Blockly.INPUT_VALUE) {
-    connectedBlockWidth = Blockly.BlockSvg.TAB_WIDTH +
-        Blockly.BlockSvg.SEP_SPACE_X * 1.25;
-  }
-  // Expand input size if there is a connection.
-  if (renderedInput.input.connection) {
-    if (renderedInput.input.connection.isConnected()) {
-      var linkedBlock = renderedInput.input.connection.targetBlock();
-      var bBox = linkedBlock.getHeightWidth();
-      connectedBlockHeight = Math.max(connectedBlockHeight, bBox.height);
-      connectedBlockWidth = Math.max(connectedBlockWidth, bBox.width);
-    }
-    else {
-      connectedBlockHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
-    }
+  var blockWidth = 0;
+  var blockHeight = 0;
+  if (renderedInput.input.connection && renderedInput.input.connection.isConnected()) {
+    var linkedBlock = renderedInput.input.connection.targetBlock();
+    var bBox = linkedBlock.getHeightWidth();
+    blockWidth = bBox.width;
+    blockHeight = bBox.height;
   }
 
-  if (isInline && renderedInput.input.connection && !renderedInput.input.connection.isConnected()) {
-    // TODO: Figure out where to get the minimum size for an empty inline
-    // input.
-    connectedBlockWidth = Blockly.BlockSvg.MIN_BLOCK_Y;
+  // Compute minimum input size.
+  var connectedBlockHeight = 0;
+  var connectedBlockWidth = 0;
+
+  // For statement inputs, keep track of both width and height.
+  if (renderedInput.type == Blockly.NEXT_STATEMENT) {
+    connectedBlockWidth = blockWidth;
+    connectedBlockHeight = blockHeight;
+  } else if (renderedInput.type == Blockly.INPUT_VALUE) {
+    // Value input sizing depends on whether or not the block is inline.
+    if (isInline) {
+      connectedBlockWidth = Math.max(Blockly.BlockSvg.EMPTY_INPUT_X, blockWidth);
+      connectedBlockHeight = Math.max(Blockly.BlockSvg.MIN_BLOCK_Y, blockHeight);
+    } else {
+      connectedBlockWidth = 0;
+      connectedBlockHeight = Math.max(Blockly.BlockSvg.MIN_BLOCK_Y, blockHeight);
+    }
+  } else {
+    // Dummies have no connected blocks.
+    connectedBlockWidth = 0;
+    connectedBlockHeight = 0;
   }
 
   renderedInput.fieldHeight = fieldHeight;
@@ -441,7 +450,9 @@ padFields = function(renderedInput) {
   // Spacers sit between fields.
   // SEP_SPACE_X is the minimum separation between fields, but two editable
   // fields will get a bit of extra separation.
+  // TODO: Check bounds on this loop.
   for (var i = 2; i < fields.length - 2; i += 2) {
+    console.log(i);
     var spacer = fields[i];
     var prevField = fields[i - 1];
     var nextField = fields[i + 1];
@@ -457,6 +468,7 @@ padFields = function(renderedInput) {
   // spacer between the last field and the input tab.
   if ((renderedInput.type == Blockly.INPUT_VALUE  ||
       renderedInput.type == Blockly.NEXT_STATEMENT) && fields.length > 1) {
+    console.log('last spacer before an input');
     fields[fields.length - 1].width = Blockly.BlockSvg.SEP_SPACE_X;
   }
 };

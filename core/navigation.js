@@ -366,6 +366,9 @@ Blockly.Navigation.focusWorkspace = function() {
 Blockly.Navigation.keyboardNext = function() {
   var cursor = Blockly.Navigation.cursor_;
   cursor.next();
+  if (cursor.getLocation().type === Blockly.NEXT_STATEMENT) {
+    cursor.next();
+  }
 };
 
 /**
@@ -374,14 +377,23 @@ Blockly.Navigation.keyboardNext = function() {
 Blockly.Navigation.keyboardIn = function() {
   var cursor = Blockly.Navigation.cursor_;
   cursor.in();
+  if (cursor.getLocation().type === Blockly.OUTPUT_VALUE) {
+    cursor.next();
+  }
 };
 
 /**
  * Move the cursor to the previous connection, field or block.
  */
 Blockly.Navigation.keyboardPrev = function() {
+  var location;
   var cursor = Blockly.Navigation.cursor_;
-  cursor.prev();
+  location = cursor.prev();
+  if (location.type === Blockly.NEXT_STATEMENT) {
+    cursor.prev();
+  } else if (location.type === Blockly.OUTPUT_VALUE) {
+    cursor.out();
+  }
 };
 
 /**

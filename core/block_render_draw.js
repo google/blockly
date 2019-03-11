@@ -11,6 +11,9 @@ renderDraw = function(block, info) {
   renderDrawLeft(block, info, pathObject);
   renderFields(block, info, pathObject);
   block.setPaths_(pathObject);
+
+  block.width = info.width;
+  block.height = info.height;
 };
 
 layoutField = function(field, cursorX, cursorY) {
@@ -37,11 +40,13 @@ renderFields = function(block, info, pathObject) {
           for (var f = 0; f < input.fields.length; f++) {
             var field = input.fields[f];
             if (field.type != 'spacer') {
+              console.log('lay out field at ' + cursorX);
               layoutField(field, cursorX, cursorY);
             }
             cursorX += field.width;
           }
           if (isInline && input.type == Blockly.INPUT_VALUE) {
+            console.log('lay out inline input at ' + cursorX);
             drawInlineInput(pathObject, cursorX, cursorY, input);
             cursorX += input.connectedBlockWidth;
           }
@@ -102,7 +107,6 @@ drawInlineInput = function(pathObject, x, y, input) {
   var inlineSteps = pathObject.inlineSteps;
 
   inlineSteps.push('M', (x + Blockly.BlockSvg.TAB_WIDTH) + ',' + y);
-  //inlineSteps.push('M', );
   inlineSteps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
   inlineSteps.push('v', height - Blockly.BlockSvg.TAB_HEIGHT);
   inlineSteps.push('h', width - Blockly.BlockSvg.TAB_WIDTH);
@@ -129,6 +133,10 @@ renderDrawRight = function(block, info, pathObject) {
     cursorY += row.height;
     if (row.type == 'external value') {
       pathObject.steps.push('H', info.rightEdge);
+      // Does the tab path down just start too high up?
+      // TODO: Pull this out into a constant.  The tab path starts out down by
+      // 5, and shouldn't.
+      pathObject.steps.push('v', -5);
       pathObject.steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
       pathObject.steps.push('V', cursorY);
     } else if (row.type == 'statement') {

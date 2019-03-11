@@ -94,7 +94,7 @@ Blockly.BlockSvg.RenderedRow = function() {
   this.fieldValueWidth = 0;
 
   /**
-   * 'spacer', 'inline', 'external value', 'dummy', 'statement' //or 'input row'
+   * 'spacer', Blockly.BlockSvg.INLINE, 'external value', 'dummy', 'statement'
    * @type {string}
    */
   this.type = '';
@@ -250,16 +250,9 @@ completeInfo = function(info) {
   info.statementEdge = statementEdge + info.startPadding;
   info.rightEdge = rightEdge + info.startPadding;
 
-  // the last row needs some padding
-  // TODO: this padding depends on the type of the last input, iirc.
-  info.rows[info.rows.length - 1].height = Blockly.BlockSvg.SEP_SPACE_X / 2;
-  // And so does the first row.
-  info.rows[0].height = Blockly.BlockSvg.SEP_SPACE_X / 2;
-
   for (var i = 0; i < info.rows.length; i++) {
     var row = info.rows[i];
     info.height += row.height;
-    //info.width += row.width;  // No, these aren't additive.
     info.width = Math.max(info.width, row.width);
   }
   // Fuck it, add some padding.
@@ -267,7 +260,31 @@ completeInfo = function(info) {
 };
 
 padRows = function(renderInfo) {
-  console.log('todo: pad rows');
+  var rowArr = renderInfo.rows;
+
+  for (var r = 1; r < rowArr.length - 1; r += 2) {
+    var row = rowArr[r];
+    var prevSpacer = rowArr[r - 1];
+    var nextSpacer = rowArr[r + 1];
+
+    // Inline rows get extra padding both above and below.
+    if (row.type == Blockly.BlockSvg.INLINE){
+      prevSpacer.height += Blockly.BlockSvg.INLINE_PADDING_Y;
+      nextSpacer.height += Blockly.BlockSvg.INLINE_PADDING_Y;
+    }
+  }
+
+  // If the last rendered row is a statement input, the padding row after it
+  // gets a bit taller to draw the bar between the statement input and the next
+  // connection.
+  var lastRenderedRow = rowArr[rowArr.length  - 2];
+  var lastSpacer = rowArr[rowArr.length - 1];
+  if (lastRenderedRow.type == 'statement') {
+    lastSpacer.height = Blockly.BlockSvg.SEP_SPACE_Y;
+  }
+
+  // The first row gets some padding.  TODO: Does this depend on the start hat?
+  rowArr[0].height = Blockly.BlockSvg.SEP_SPACE_X / 2;
 };
 
 measureRow = function(renderedRow) {
@@ -297,6 +314,7 @@ measureRow = function(renderedRow) {
       if (renderedRow.type == 'statement' && input.type == Blockly.NEXT_STATEMENT) {
         width += input.fieldWidth;
         fieldValueWidth = width;
+        statementWidth = width;
       } else {
         width += input.width;
         fieldValueWidth = width;
@@ -324,10 +342,13 @@ padInputs = function(renderedRow, isInline) {
     var cur = inputs[i];
     var prev = inputs[i - 2];
     var next = inputs[i + 2];
+    // Blocks have a one pixel shadow that should sometimes overhang.
     if (isInline && !next) {
+      // Last value input should overhang.
       cur.connectedBlockHeight--;
     } else if (!isInline && cur.type == Blockly.INPUT_VALUE &&
         next && next.type == Blockly.NEXT_STATEMENT) {
+      // Value input above statement input should overhang.
       cur.connectedBlockHeight--;
     }
     // This includes the last spacer but not the first spacer.
@@ -339,12 +360,13 @@ padInputs = function(renderedRow, isInline) {
   // space for that.
   // TODO: Decide if this is the right place to have that spacing live.
   //
-  if (renderedRow.type == 'external value') {
-    inputs[inputs.length - 1].width = Blockly.BlockSvg.TAB_WIDTH;
-  } else if (renderedRow.type == 'dummy') {
-    // dummies get a bit of padding too.
-    inputs[inputs.length - 1].width = Blockly.BlockSvg.SEP_SPACE_X;
-  }
+  // if (renderedRow.type == 'external value') {
+  //   inputs[inputs.length - 1].width = Blockly.BlockSvg.TAB_WIDTH;
+  // }
+  //  else if (renderedRow.type == 'dummy') {
+  //   // dummies get a bit of padding too.
+  //   inputs[inputs.length - 1].width = Blockly.BlockSvg.SEP_SPACE_X;
+  // }
 };
 
 measureInput = function(renderedInput, isInline) {
@@ -353,12 +375,12 @@ measureInput = function(renderedInput, isInline) {
   // If we're setting width on the first and last, maybe here is a good place.
   for (var f = 0; f < renderedInput.fields.length; f++) {
     var field = renderedInput.fields[f];
-    fieldHeight += field.height;
+    fieldHeight = Math.max(fieldHeight, field.height);
     fieldWidth += field.width;
   }
 
   // Compute minimum input size.
-  var connectedBlockHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
+  var connectedBlockHeight = 0;//Blockly.BlockSvg.MIN_BLOCK_Y;
   var connectedBlockWidth = 0;
   // The width is currently only needed for inline value inputs.
   // Also this is really spacing to put before and after, right?  Not part of
@@ -368,11 +390,16 @@ measureInput = function(renderedInput, isInline) {
         Blockly.BlockSvg.SEP_SPACE_X * 1.25;
   }
   // Expand input size if there is a connection.
-  if (renderedInput.input.connection && renderedInput.input.connection.isConnected()) {
-    var linkedBlock = renderedInput.input.connection.targetBlock();
-    var bBox = linkedBlock.getHeightWidth();
-    connectedBlockHeight = Math.max(connectedBlockHeight, bBox.height);
-    connectedBlockWidth = Math.max(connectedBlockWidth, bBox.width);
+  if (renderedInput.input.connection) {
+    if (renderedInput.input.connection.isConnected()) {
+      var linkedBlock = renderedInput.input.connection.targetBlock();
+      var bBox = linkedBlock.getHeightWidth();
+      connectedBlockHeight = Math.max(connectedBlockHeight, bBox.height);
+      connectedBlockWidth = Math.max(connectedBlockWidth, bBox.width);
+    }
+    else {
+      connectedBlockHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
+    }
   }
 
   if (isInline && renderedInput.input.connection && !renderedInput.input.connection.isConnected()) {
@@ -393,16 +420,27 @@ measureInput = function(renderedInput, isInline) {
 measureField = function(renderedField) {
   // renderedField.field is the instance of Blockly.Field
   var size = renderedField.field.getSize();
+  // if (renderedField.field instanceof Blockly.FieldDropdown) {
+  //   // For some reason dropdown height had a minimum that included the padding.
+  //   // TODO: Figure out if this causes a problem when the dropdown is tall
+  //   // (contains images?)
+  //   renderedField.height = size.height - 5;
+  // } else if (renderedField.field instanceof Blockly.FieldImage) {
+  //   renderedField.height = size.height - (2 * Blockly.BlockSvg.INLINE_PADDING_Y);
+  // } else {
+  //   renderedField.height = size.height;
+  // }
+
   renderedField.height = size.height;
   renderedField.width = size.width;
 };
 
 padFields = function(renderedInput) {
   var fields = renderedInput.fields;
+
   // Spacers sit between fields.
-  // The first and last ones are skipped (left at zero width).  Can I just
-  // delete them?
-  // are these bounds right?
+  // SEP_SPACE_X is the minimum separation between fields, but two editable
+  // fields will get a bit of extra separation.
   for (var i = 2; i < fields.length - 2; i += 2) {
     var spacer = fields[i];
     var prevField = fields[i - 1];
@@ -413,6 +451,13 @@ padFields = function(renderedInput) {
     } else {
       spacer.width = Blockly.BlockSvg.SEP_SPACE_X;
     }
+  }
+
+  // If there is at least one rendered field and there's an input tab, add a
+  // spacer between the last field and the input tab.
+  if ((renderedInput.type == Blockly.INPUT_VALUE  ||
+      renderedInput.type == Blockly.NEXT_STATEMENT) && fields.length > 1) {
+    fields[fields.length - 1].width = Blockly.BlockSvg.SEP_SPACE_X;
   }
 };
 

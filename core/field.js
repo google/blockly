@@ -635,6 +635,10 @@ Blockly.Field.prototype.getSize = function() {
   return this.size_;
 };
 
+Blockly.Field.prototype.getCorrectedSize = function() {
+  return this.getSize();
+};
+
 /**
  * Returns the bounding box of the rendered field, accounting for workspace
  * scaling.

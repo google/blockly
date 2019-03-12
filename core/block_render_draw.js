@@ -17,9 +17,17 @@ renderDraw = function(block, info) {
 };
 
 layoutField = function(fieldInfo, cursorX, cursorY, centerline) {
-  var yPos = centerline - fieldInfo.height / 2;
-  fieldInfo.field.getSvgRoot().setAttribute('transform',
-      'translate(' + cursorX + ',' + yPos + ')');
+    var yPos = centerline - fieldInfo.height / 2;
+  if (fieldInfo.type == 'icon') {
+    var icon = fieldInfo.field;
+    icon.iconGroup_.setAttribute('display', 'block');
+    icon.iconGroup_.setAttribute('transform', 'translate(' + cursorX + ',' +
+        yPos + ')');
+    icon.computeIconLocation();
+  } else {
+    fieldInfo.field.getSvgRoot().setAttribute('transform',
+        'translate(' + cursorX + ',' + yPos + ')');
+  }
 };
 
 // RenderFields is really "render internals".  That should include fields,

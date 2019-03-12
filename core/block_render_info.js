@@ -45,6 +45,10 @@ Blockly.BlockSvg.RenderInfo = function() {
    */
   this.hasDummy = false;
 
+  this.hasIcons = false;
+
+  this.iconCount = 0;
+
   /**
    *
    * @type {number}
@@ -417,7 +421,9 @@ measureInput = function(renderedInput, isInline) {
 
   var blockWidth = 0;
   var blockHeight = 0;
-  if (renderedInput.input.connection && renderedInput.input.connection.isConnected()) {
+  if (renderedInput.input &&
+      renderedInput.input.connection &&
+      renderedInput.input.connection.isConnected()) {
     var linkedBlock = renderedInput.input.connection.targetBlock();
     var bBox = linkedBlock.getHeightWidth();
     blockWidth = bBox.width;
@@ -442,7 +448,7 @@ measureInput = function(renderedInput, isInline) {
       connectedBlockHeight = Math.max(Blockly.BlockSvg.EMPTY_INPUT_Y, blockHeight);
     }
   } else {
-    // Dummies have no connected blocks.
+    // Dummies and icons have no connected blocks.
     connectedBlockWidth = 0;
     connectedBlockHeight = 0;
   }
@@ -457,21 +463,28 @@ measureInput = function(renderedInput, isInline) {
 };
 
 measureField = function(renderedField) {
-  // renderedField.field is the instance of Blockly.Field
-  var size = renderedField.field.getCorrectedSize();
-  // if (renderedField.field instanceof Blockly.FieldDropdown) {
-  //   // For some reason dropdown height had a minimum that included the padding.
-  //   // TODO: Figure out if this causes a problem when the dropdown is tall
-  //   // (contains images?)
-  //   renderedField.height = size.height - 5;
-  // } else if (renderedField.field instanceof Blockly.FieldImage) {
-  //   renderedField.height = size.height - (2 * Blockly.BlockSvg.INLINE_PADDING_Y);
-  // } else {
-  //   renderedField.height = size.height;
-  // }
 
-  renderedField.height = size.height;
-  renderedField.width = size.width;
+  if (renderedField.type == 'icon') {
+    // renderedField.field is the instance of Blockly.Icon, and should be renamed.
+    renderedField.height = 13;//renderedField.field.SIZE - 1;
+    renderedField.width = 13;//renderedField.field.SIZE - 1;
+  } else {
+  // renderedField.field is the instance of Blockly.Field
+    var size = renderedField.field.getCorrectedSize();
+    // if (renderedField.field instanceof Blockly.FieldDropdown) {
+    //   // For some reason dropdown height had a minimum that included the padding.
+    //   // TODO: Figure out if this causes a problem when the dropdown is tall
+    //   // (contains images?)
+    //   renderedField.height = size.height - 5;
+    // } else if (renderedField.field instanceof Blockly.FieldImage) {
+    //   renderedField.height = size.height - (2 * Blockly.BlockSvg.INLINE_PADDING_Y);
+    // } else {
+    //   renderedField.height = size.height;
+    // }
+
+    renderedField.height = size.height;
+    renderedField.width = size.width;
+  }
 };
 
 padFields = function(renderedInput) {
@@ -531,6 +544,32 @@ createInput = function(blockInput) {
   return result;
 };
 
+shouldCreateNewRow = function(isInline, lastType, inputType) {
+  // Always glob onto an icon row.
+  if (lastType == 'icon') {
+    return false;
+  }
+  if (!isInline || !lastType ||
+    lastType == Blockly.NEXT_STATEMENT ||
+    inputType == Blockly.NEXT_STATEMENT) {
+    return true;
+  }
+};
+
+setRowType = function(row, input, isInline) {
+  if (isInline && input.type != Blockly.NEXT_STATEMENT) {
+    row.type = Blockly.BlockSvg.INLINE;
+  } else {
+    if (input.type == Blockly.NEXT_STATEMENT) {
+      row.type = 'statement';
+    } else if (input.type == Blockly.DUMMY_INPUT) {
+      row.type = 'dummy';
+    } else if (input.type == Blockly.INPUT_VALUE) {
+      row.type = 'external value';
+    }
+  }
+};
+
 createRows = function(block, info) {
   // todo: add icons
   var inputRows = [];
@@ -539,37 +578,40 @@ createRows = function(block, info) {
   var lastRow = null;
   var isInline = block.getInputsInline() && !block.isCollapsed();
   info.isInline = isInline;
+
+  var row;
+  var icons = block.getIcons();
+  if (icons.length) {
+    info.hasIcons = true;
+    info.iconCount = icons.length;
+    row = createRowForIcons(icons);
+    lastRow = row;
+    lastType = 'icon';
+    inputRows.push(row);
+    inputRows.push(new Blockly.BlockSvg.RowSpacer());
+  }
   for (var i = 0; i < block.inputList.length; i++) {
     var input = createInput(block.inputList[i]);
     if (!input.isVisible) {
       continue;
     }
-    var row;
-    if (!isInline || !lastType ||
-        lastType == Blockly.NEXT_STATEMENT ||
-        input.type == Blockly.NEXT_STATEMENT) {
+    if (shouldCreateNewRow(isInline, lastType, input.type)) {
       // Create new row.
       lastType = input.type;
       row = new Blockly.BlockSvg.RenderedRow();
       lastRow = row;
       row.inputs.push(new Blockly.BlockSvg.InputSpacer());
-      if (isInline && input.type != Blockly.NEXT_STATEMENT) {
-        row.type = Blockly.BlockSvg.INLINE;
-      } else {
-        if (input.type == Blockly.NEXT_STATEMENT) {
-          row.type = 'statement';
-        } else if (input.type == Blockly.DUMMY_INPUT) {
-          row.type = 'dummy';
-        } else if (input.type == Blockly.INPUT_VALUE) {
-          row.type = 'external value';
-        }
-        //row.type = input.type;
-      }
+      setRowType(row, input, isInline);
       row.height = 0;
       inputRows.push(row);
       inputRows.push(new Blockly.BlockSvg.RowSpacer());
     } else {
       row = lastRow;
+      // Icons are the only type of row that gets overridden.
+      if (lastType == 'icon') {
+        setRowType(row, input, isInline);
+        lastType = row.type;
+      }
     }
     row.inputs.push(input);
     row.inputs.push(new Blockly.BlockSvg.InputSpacer());
@@ -602,4 +644,39 @@ setHasStuff = function(block, info) {
       throw new Error('what why');
     }
   }
+};
+
+createIconFields = function(icons) {
+  var result = [];
+  var spacer = new Blockly.BlockSvg.FieldSpacer();
+  result.push(spacer);
+  for (var i = 0; i < icons.length; i++) {
+    var iconField = new Blockly.BlockSvg.RenderedField();
+    iconField.type = 'icon';
+    iconField.field = icons[i];
+    result.push(iconField);
+    // Spacers between each pair of fields, and after the last field.
+    result.push(new Blockly.BlockSvg.FieldSpacer());
+  }
+  return result;
+};
+
+createIconInput = function(icons) {
+  var result = new Blockly.BlockSvg.RenderedInput();
+  result.type = 'icons';
+  result.isVisible = true;
+  result.fields = createIconFields(icons);
+  // Result.input is the Blockly.Input, which doesn't exist here.
+  result.input = null;
+  return result;
+};
+
+createRowForIcons = function(icons) {
+  var row = new Blockly.BlockSvg.RenderedRow();
+  row.type = 'dummy';
+  row.inputs.push(new Blockly.BlockSvg.InputSpacer());
+  var input = createIconInput(icons);
+  row.inputs.push(input);
+  row.inputs.push(new Blockly.BlockSvg.InputSpacer());
+  return row;
 };

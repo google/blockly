@@ -6,6 +6,8 @@ Blockly.BlockSvg.START_PADDING = Blockly.BlockSvg.SEP_SPACE_X - 1;
 
 Blockly.BlockSvg.STATEMENT_BOTTOM_HEIGHT = Blockly.BlockSvg.SEP_SPACE_Y - 1;
 
+Blockly.BlockSvg.EMPTY_INPUT_Y = Blockly.BlockSvg.MIN_BLOCK_Y;//Blockly.BlockSvg.MIN_BLOCK_Y - 5;
+
 Blockly.BlockSvg.RenderInfo = function() {
   /**
    *
@@ -269,9 +271,19 @@ completeInfo = function(info) {
 
 padRows = function(renderInfo) {
   var rowArr = renderInfo.rows;
+  if (rowArr.length == 1) {
+    // Just a spacer.
+    rowArr[0].height = Blockly.BlockSvg.MIN_BLOCK_Y;
+  }
+  //  else {
+  //   // Single input row.
+  //   var firstSpacer = rowArr[0];
+  //   var renderedRow = rowArr[1];
+  //   if (renderedRow.type == 'dummy') {
+  //     firstSpacer.height = Blockly.BlockSvg.SEP_SPACE_X / 2;
+  //   }
+  // }
 
-  // The first row gets some padding.  TODO: Does this depend on the start hat?
-  rowArr[0].height = Blockly.BlockSvg.SEP_SPACE_X / 2;
 
   if (rowArr.length > 1) {
     for (var r = 1; r < rowArr.length - 1; r += 2) {
@@ -280,9 +292,16 @@ padRows = function(renderInfo) {
       var nextSpacer = rowArr[r + 1];
 
       // Inline rows get extra padding both above and below.
-      if (row.type == Blockly.BlockSvg.INLINE){
-        prevSpacer.height += Blockly.BlockSvg.INLINE_PADDING_Y;
-        nextSpacer.height += Blockly.BlockSvg.INLINE_PADDING_Y;
+      if (row.type == Blockly.BlockSvg.INLINE || row.type == 'dummy'){
+        prevSpacer.height = Blockly.BlockSvg.INLINE_PADDING_Y;
+        nextSpacer.height = Blockly.BlockSvg.INLINE_PADDING_Y;
+      }
+
+      if ((r == rowArr.length - 2 && row.type == 'statement') ||
+          (r < rowArr.length - 2 && rowArr[r + 2].type == 'statement')) {
+      // If the final input is a statement stack, add a small row underneath.
+      // Consecutive statement stacks are also separated by a small divider.
+        nextSpacer.height = 5;
       }
     }
 
@@ -293,8 +312,15 @@ padRows = function(renderInfo) {
     var lastSpacer = rowArr[rowArr.length - 1];
     if (lastRenderedRow.type == 'statement') {
       lastSpacer.height = Blockly.BlockSvg.STATEMENT_BOTTOM_HEIGHT;
+    } else if (lastRenderedRow.type == 'dummy') {
+      lastSpacer.height = Blockly.BlockSvg.SEP_SPACE_X / 2;
     }
   }
+  // // This overrides the spacing around inline rows that is set above.
+  // // The first row gets some padding.  TODO: Does this depend on the start hat?
+  // // TODO: Does this depend on whether the first row is a dummy input?  I think it does.
+  // rowArr[0].height = Blockly.BlockSvg.SEP_SPACE_X / 2;
+
 };
 
 measureRow = function(renderedRow) {
@@ -413,7 +439,7 @@ measureInput = function(renderedInput, isInline) {
       connectedBlockHeight = Math.max(Blockly.BlockSvg.MIN_BLOCK_Y, blockHeight);
     } else {
       connectedBlockWidth = 0;
-      connectedBlockHeight = Math.max(Blockly.BlockSvg.MIN_BLOCK_Y, blockHeight);
+      connectedBlockHeight = Math.max(Blockly.BlockSvg.EMPTY_INPUT_Y, blockHeight);
     }
   } else {
     // Dummies have no connected blocks.
@@ -432,7 +458,7 @@ measureInput = function(renderedInput, isInline) {
 
 measureField = function(renderedField) {
   // renderedField.field is the instance of Blockly.Field
-  var size = renderedField.field.getSize();
+  var size = renderedField.field.getCorrectedSize();
   // if (renderedField.field instanceof Blockly.FieldDropdown) {
   //   // For some reason dropdown height had a minimum that included the padding.
   //   // TODO: Figure out if this causes a problem when the dropdown is tall

@@ -438,4 +438,10 @@ Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
   return n;
 };
 
+Blockly.FieldTextInput.prototype.getCorrectedSize = function() {
+  if (!this.size_.width) {
+    this.render_();
+  }
+  return new goog.math.Size(this.size_.width, 16);
+};
 Blockly.Field.register('field_input', Blockly.FieldTextInput);

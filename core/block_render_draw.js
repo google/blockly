@@ -100,7 +100,7 @@ drawValueInput = function(pathObject, cursorX, cursorY) {
   // Does the tab path down just start too high up?
   // TODO: Pull this out into a constant.  The tab path starts out down by
   // 5, and shouldn't.
-  pathObject.steps.push('v', -5);
+  pathObject.steps.push('v', 0);
   pathObject.steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
   pathObject.steps.push('V', cursorY);
   //pathObject.steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);

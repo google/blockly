@@ -127,4 +127,11 @@ Blockly.FieldLabel.prototype.setTooltip = function(newTip) {
   }
 };
 
+Blockly.FieldLabel.prototype.getCorrectedSize = function() {
+  if (!this.size_.width) {
+    this.render_();
+  }
+  return new goog.math.Size(this.size_.width, this.size_.height - 5);
+};
+
 Blockly.Field.register('field_label', Blockly.FieldLabel);

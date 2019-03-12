@@ -256,7 +256,8 @@ Blockly.Navigation.insertFromFlyout = function() {
     var previousConnection = newBlock.previousConnection;
     var outputConnection = newBlock.outputConnection;
     var connection = previousConnection ? previousConnection : outputConnection;
-    //This will have to be fixed when we add in a block that does not have a previous
+    //TODO: This will have to be fixed when we add in a block that does not have
+    //a previous or output connection
     cursor.setLocation(connection);
     cursor.showWithAnything();
   }
@@ -306,7 +307,7 @@ Blockly.Navigation.findBestConnection = function(block, connection) {
 };
 
 /**
- * Find the best connection and connect the target block to it.
+ * Find the best connection on the given block to match the given connection.
  * @param {Blockly.Block} block The selected blcok.
  * @param {Blockly.Connection} connection The connection on the workspace.
  */
@@ -315,7 +316,8 @@ Blockly.Navigation.insertBlock = function(block, connection) {
 
   if (bestConnection) {
     try {
-      if (connection.type == Blockly.PREVIOUS_STATEMENT && connection.targetBlock()) {
+      if (connection.type == Blockly.PREVIOUS_STATEMENT
+        && connection.targetBlock()) {
         var previousBlock = connection.targetBlock();
         block.previousConnection.connect(previousBlock.nextConnection);
       }
@@ -324,10 +326,13 @@ Blockly.Navigation.insertBlock = function(block, connection) {
     catch (Error) {
       console.warn("The connection block is not the right type");
     }
-
   }
 };
 
+/**
+ * When a user has a marked insertion point they can connect the current block
+ * their cursor is on by hitting the I key.
+ */
 Blockly.Navigation.insertBlockFromWs = function() {
   var targetConnection = Blockly.Navigation.insertionConnection_;
   var sourceConnection = Blockly.Navigation.cursor_.getLocation();
@@ -336,7 +341,6 @@ Blockly.Navigation.insertBlockFromWs = function() {
   } catch (Error) {
     console.warn("The connection block is not the right type");
   }
-
 };
 
 /*************************/
@@ -344,7 +348,8 @@ Blockly.Navigation.insertBlockFromWs = function() {
 /*************************/
 
 /**
- * Sets the connection on the selected block in the workspace.
+ * Sets the cursor to the previous or output connection of the selected block
+ * on the workspace.
  */
 Blockly.Navigation.focusWorkspace = function() {
   var cursor = Blockly.Navigation.cursor_;
@@ -354,6 +359,8 @@ Blockly.Navigation.focusWorkspace = function() {
   if (Blockly.selected) {
     var previousConnection = Blockly.selected.previousConnection;
     var outputConnection = Blockly.selected.outputConnection;
+    //TODO: This still needs to work with blocks that have neither previous
+    //or output connection.
     var connection = previousConnection ? previousConnection : outputConnection;
     cursor.setLocation(connection);
     cursor.showWithAnything();
@@ -361,7 +368,9 @@ Blockly.Navigation.focusWorkspace = function() {
 };
 
 /**
- * Move the cursor to the next connection, field or block.
+ * Move the cursor to the next connection, field or block skipping
+ * connections of type next because previous and next connection look the same
+ * when the cursor is going through a stack of blocks.
  */
 Blockly.Navigation.keyboardNext = function() {
   var cursor = Blockly.Navigation.cursor_;
@@ -411,6 +420,19 @@ Blockly.Navigation.markConnection = function() {
   Blockly.Navigation.insertionConnection_ = Blockly.Navigation.cursor_.getLocation();
 };
 
+/**
+ * Handles hitting the enter key on the workspace.
+ */
+Blockly.Navigation.handleEnterForWS = function() {
+  var cursor = Blockly.Navigation.cursor_;
+  var location = cursor.getLocation();
+  if (location instanceof Blockly.Field) {
+    location.showEditor_();
+  } else {
+    Blockly.Navigation.markConnection();
+  }
+};
+
 /**********************/
 /** Helper Functions **/
 /**********************/
@@ -423,7 +445,6 @@ Blockly.Navigation.markConnection = function() {
  */
 Blockly.Navigation.navigate = function(e) {
   var curState = Blockly.Navigation.currentState_;
-
   if (e.keyCode === goog.events.KeyCodes.T) {
     Blockly.Navigation.focusToolbox();
     console.log("T: Focus Toolbox");
@@ -438,6 +459,10 @@ Blockly.Navigation.navigate = function(e) {
   }
 };
 
+/**
+ * Handles all keyboard events when the user is focused on the flyout.
+ * @param {Event} e The keyboard event.
+ */
 Blockly.Navigation.flyoutKeyHandler = function(e) {
   if (e.keyCode === goog.events.KeyCodes.W) {
     Blockly.Navigation.selectPreviousFlyout();
@@ -454,6 +479,10 @@ Blockly.Navigation.flyoutKeyHandler = function(e) {
   }
 };
 
+/**
+ * Handles all keyboard events when the user is focused on the toolbox.
+ * @param {Event} e The keyboard event.
+ */
 Blockly.Navigation.toolboxKeyHandler = function(e) {
   if (e.keyCode === goog.events.KeyCodes.W) {
     Blockly.Navigation.previousCategory();
@@ -472,6 +501,10 @@ Blockly.Navigation.toolboxKeyHandler = function(e) {
   }
 };
 
+/**
+ * Handles all keyboard events when the user is focused on the workspace.
+ * @param {Event} e The keyboard event.
+ */
 Blockly.Navigation.workspaceKeyHandler = function(e) {
   if (e.keyCode === goog.events.KeyCodes.W) {
     Blockly.Navigation.keyboardOut();
@@ -489,7 +522,7 @@ Blockly.Navigation.workspaceKeyHandler = function(e) {
     Blockly.Navigation.insertBlockFromWs();
     console.log("I: Workspace : Insert/Connect Blocks");
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
-    Blockly.Navigation.markConnection();
+    Blockly.Navigation.handleEnterForWS();
     console.log("Enter: Workspace : Mark Connection");
   }
 };

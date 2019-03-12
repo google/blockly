@@ -2,7 +2,9 @@
 Blockly.BlockSvg.EMPTY_INPUT_X = Blockly.BlockSvg.TAB_WIDTH +
           Blockly.BlockSvg.SEP_SPACE_X * 1.25;
 
-Blockly.BlockSvg.START_PADDING = Blockly.BlockSvg.SEP_SPACE_X - 1
+Blockly.BlockSvg.START_PADDING = Blockly.BlockSvg.SEP_SPACE_X - 1;
+
+Blockly.BlockSvg.STATEMENT_BOTTOM_HEIGHT = Blockly.BlockSvg.SEP_SPACE_Y - 1;
 
 Blockly.BlockSvg.RenderInfo = function() {
   /**
@@ -268,29 +270,31 @@ completeInfo = function(info) {
 padRows = function(renderInfo) {
   var rowArr = renderInfo.rows;
 
-  for (var r = 1; r < rowArr.length - 1; r += 2) {
-    var row = rowArr[r];
-    var prevSpacer = rowArr[r - 1];
-    var nextSpacer = rowArr[r + 1];
-
-    // Inline rows get extra padding both above and below.
-    if (row.type == Blockly.BlockSvg.INLINE){
-      prevSpacer.height += Blockly.BlockSvg.INLINE_PADDING_Y;
-      nextSpacer.height += Blockly.BlockSvg.INLINE_PADDING_Y;
-    }
-  }
-
-  // If the last rendered row is a statement input, the padding row after it
-  // gets a bit taller to draw the bar between the statement input and the next
-  // connection.
-  var lastRenderedRow = rowArr[rowArr.length  - 2];
-  var lastSpacer = rowArr[rowArr.length - 1];
-  if (lastRenderedRow.type == 'statement') {
-    lastSpacer.height = Blockly.BlockSvg.SEP_SPACE_Y;
-  }
-
   // The first row gets some padding.  TODO: Does this depend on the start hat?
   rowArr[0].height = Blockly.BlockSvg.SEP_SPACE_X / 2;
+
+  if (rowArr.length > 1) {
+    for (var r = 1; r < rowArr.length - 1; r += 2) {
+      var row = rowArr[r];
+      var prevSpacer = rowArr[r - 1];
+      var nextSpacer = rowArr[r + 1];
+
+      // Inline rows get extra padding both above and below.
+      if (row.type == Blockly.BlockSvg.INLINE){
+        prevSpacer.height += Blockly.BlockSvg.INLINE_PADDING_Y;
+        nextSpacer.height += Blockly.BlockSvg.INLINE_PADDING_Y;
+      }
+    }
+
+    // If the last rendered row is a statement input, the padding row after it
+    // gets a bit taller to draw the bar between the statement input and the next
+    // connection.
+    var lastRenderedRow = rowArr[rowArr.length  - 2];
+    var lastSpacer = rowArr[rowArr.length - 1];
+    if (lastRenderedRow.type == 'statement') {
+      lastSpacer.height = Blockly.BlockSvg.STATEMENT_BOTTOM_HEIGHT;
+    }
+  }
 };
 
 measureRow = function(renderedRow) {
@@ -401,7 +405,7 @@ measureInput = function(renderedInput, isInline) {
   // For statement inputs, keep track of both width and height.
   if (renderedInput.type == Blockly.NEXT_STATEMENT) {
     connectedBlockWidth = blockWidth;
-    connectedBlockHeight = blockHeight;
+    connectedBlockHeight = Math.max(Blockly.BlockSvg.MIN_BLOCK_Y, blockHeight);
   } else if (renderedInput.type == Blockly.INPUT_VALUE) {
     // Value input sizing depends on whether or not the block is inline.
     if (isInline) {

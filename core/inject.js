@@ -229,8 +229,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
     mainWorkspace.addZoomControls();
   }
 
-  Blockly.cursor = mainWorkspace.addCursor();
-  Blockly.Navigation.cursor_ = Blockly.cursor;
+  Blockly.Navigation.cursor_ = mainWorkspace.cursor_;
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);

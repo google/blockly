@@ -121,6 +121,13 @@ Blockly.WorkspaceSvg = function(options,
     this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
   }
+
+  /**
+   * The cursor for navigating blocks.
+   * @type {!Blockly.CursorSvg}
+   */
+  this.cursor_ = new Blockly.CursorSvg(this);
+
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -544,6 +551,10 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     this.grid_.update(this.scale);
   }
   this.recordDeleteAreas();
+
+  var svgCursor = this.cursor_.createDom();
+  this.svgGroup_.appendChild(svgCursor);
+
   return this.svgGroup_;
 };
 
@@ -649,19 +660,6 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
   this.zoomControls_ = new Blockly.ZoomControls(this);
   var svgZoomControls = this.zoomControls_.createDom();
   this.svgGroup_.appendChild(svgZoomControls);
-};
-
-/**
- * Add zoom controls.
- * @package
- * @return {Blockly.Cursor} return the created cursor
- */
-Blockly.WorkspaceSvg.prototype.addCursor = function() {
-  /** @type {Blockly.Cursor} */
-  this.cursor_ = new Blockly.CursorSvg(this);
-  var svgCursor = this.cursor_.createDom();
-  this.svgGroup_.appendChild(svgCursor);
-  return this.cursor_;
 };
 
 /**

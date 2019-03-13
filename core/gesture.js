@@ -760,7 +760,7 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
  */
 Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
   Blockly.keyboardAccessibilityMode_ = false;
-  Blockly.cursor.hide();
+  Blockly.Navigation.cursor_.hide();
   if (e.shiftKey) {
     // Show the cursor at the specified position
     Blockly.cursor.workspaceShow(e);

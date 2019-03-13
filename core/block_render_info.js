@@ -95,28 +95,83 @@ Blockly.BlockSvg.renderComputeForRealThough = function(block) {
   }
   addElemSpacing(renderInfo);
 
+
+  renderInfo.maxWidth = 0;
+  // Some arbitrary min width?
+  renderInfo.maxValueOrDummyWidth = 60;
   for (var r = 0; r < renderInfo.rows.length; r++) {
-    renderInfo.rows[r].measure();
+    var row = renderInfo.rows[r];
+    row.measure();
+    renderInfo.maxWidth = Math.max(renderInfo.maxWidth, row.width);
+    if (!row.hasStatement && !row.hasInlineInput) {
+      renderInfo.maxValueOrDummyWidth =
+          Math.max(renderInfo.maxValueOrDummyWidth, row.width);
+    }
   }
+
+  computeBounds(renderInfo);
+
   addRowSpacing(renderInfo);
   console.log(renderInfo);
   return renderInfo;
 };
 
+computeBounds = function(renderInfo) {
+  var maxWidth = renderInfo.maxWidth;
+  for (var r = 0; r < renderInfo.rows.length; r++) {
+    var row = renderInfo.rows[r];
+    if (!row.hasStatement && !row.hasInlineInput) {
+      row.width = maxWidth;
+    }
+  }
+};
+
 addRowSpacing = function(info) {
   var oldRows = info.rows;
   var newRows = [];
-  newRows.push(new RowSpacer(5));
+  newRows.push(new RowSpacer(5, info.maxWidth));
 
   for (var r = 0; r < oldRows.length; r++) {
     newRows.push(oldRows[r]);
     var spacing = calculateSpacingBetweenRows(oldRows[r], oldRows[r + 1]);
-    newRows.push(new RowSpacer(spacing));
+    var width = calculateWidthOfSpacerRow(oldRows[r], oldRows[r + 1], info);
+    newRows.push(new RowSpacer(spacing, width));
   }
   info.rows = newRows;
 };
 
+calculateWidthOfSpacerRow = function(prev, next, info) {
+  if (!prev) {
+    return info.maxWidth;
+  }
+
+  // spacer row after the last statement input.
+  if (!next && prev.hasStatement) {
+    return info.maxValueOrDummyWidth;
+  }
+
+  return info.maxWidth;
+};
+
+
 calculateSpacingBetweenRows = function(prev, next) {
+  // First row is always (?) 5.
+  if (!prev) {
+    return 5;
+  }
+
+  // Slightly taller row after the last statement input.
+  if (!next && prev.hasStatement) {
+    return 10;
+  }
+
+  if (!next) {
+    return 5;
+  }
+
+  if (prev.hasExternalInput && next.hasExternalInput) {
+    return 10;
+  }
   return 5;
 };
 
@@ -143,6 +198,10 @@ calculateSpacingBetweenElems = function(prev, next) {
     if (next instanceof FieldElement && next.isEditable) {
       return 5;
     }
+    // Inline input at the beginning of the row.
+    if (next.isInput && next instanceof InlineInputElement) {
+      return 9;
+    }
     // Anything else at the beginning of the row.
     return 10;
   }
@@ -163,6 +222,8 @@ calculateSpacingBetweenElems = function(prev, next) {
       return 0;
     } else if (prev instanceof InlineInputElement) {
       return 10;
+    } else if (prev instanceof StatementInputElement) {
+      return 0;
     }
   }
 
@@ -303,10 +364,13 @@ createRows = function(block, info) {
 
     if (isInline && input.type == Blockly.INPUT_VALUE) {
       activeRow.elements.push(new InlineInputElement(input));
+      activeRow.hasInlineInput = true;
     } else if (input.type == Blockly.NEXT_STATEMENT) {
       activeRow.elements.push(new StatementInputElement(input));
+      activeRow.hasStatement = true;
     } else if (input.type == Blockly.INPUT_VALUE) {
       activeRow.elements.push(new ExternalValueInputElement(input));
+      activeRow.hasExternalInput = true;
     }
   }
 
@@ -379,11 +443,18 @@ InlineInputElement = function(input) {
   this.isInput = true;
   this.width = 0;
   this.height = 0;
-  this.connectedBlockWidth = 0;
-  this.connectedBlockHeight = 0;
   this.input = input;
   this.connectedBlock = input.connection && input.connection.targetBlock() ?
       input.connection.targetBlock() : null;
+
+  if (this.connectedBlock) {
+    var bBox = this.connectedBlock.getHeightWidth();
+    this.connectedBlockWidth = bBox.width;
+    this.connectedBlockHeight = bBox.height;
+  } else {
+    this.connectedBlockWidth = 0;
+    this.connectedBlockHeight = 0;
+  }
   this.type = 'inline input';
 };
 
@@ -396,19 +467,27 @@ StatementInputElement = function(input) {
   this.isInput = true;
   this.width = 0;
   this.height = 0;
-  this.connectedBlockWidth = 0;
-  this.connectedBlockHeight = 0;
   this.input = input;
   this.connectedBlock = input.connection && input.connection.targetBlock() ?
       input.connection.targetBlock() : null;
+
+  if (this.connectedBlock) {
+    var bBox = this.connectedBlock.getHeightWidth();
+    this.connectedBlockWidth = bBox.width;
+    this.connectedBlockHeight = bBox.height;
+  } else {
+    this.connectedBlockWidth = 0;
+    this.connectedBlockHeight = 0;
+  }
   this.type = 'statement input';
 };
 
 StatementInputElement.prototype.measure = function() {
-  this.width = 25;
   if (!this.connectedBlock) {
-    this.height = 20;
+    this.height = 24;
+    this.width = 32;
   } else {
+    this.width = 25;
     this.height = this.connectedBlockHeight;
   }
 };
@@ -417,23 +496,35 @@ ExternalValueInputElement = function(input) {
   this.isInput = true;
   this.width = 0;
   this.height = 0;
-  this.connectedBlockWidth = 0;
-  this.connectedBlockHeight = 0;
+
   this.input = input;
   this.connectedBlock = input.connection && input.connection.targetBlock() ?
       input.connection.targetBlock() : null;
+
+  if (this.connectedBlock) {
+    var bBox = this.connectedBlock.getHeightWidth();
+    this.connectedBlockWidth = bBox.width;
+    this.connectedBlockHeight = bBox.height;
+  } else {
+    this.connectedBlockWidth = 0;
+    this.connectedBlockHeight = 0;
+  }
   this.type = 'statement input';
 };
 
 ExternalValueInputElement.prototype.measure = function() {
   this.width = 10;
-  this.height = 15;
+  this.height = 14.5;
 };
 
 Row = function() {
   this.elements = [];
   this.width = 0;
   this.height = 0;
+
+  this.hasExternalInput = false;
+  this.hasStatement = false;
+  this.hasInlineInput = false;
 };
 
 Row.prototype.measure = function() {
@@ -446,12 +537,15 @@ Row.prototype.measure = function() {
   }
 };
 
-RowSpacer = function(height) {
+RowSpacer = function(height, width) {
   this.height = height;
   this.rect = null;
+  this.width = width; // Only for visible rendering during debugging
 };
 
 ElemSpacer = function(width) {
+  this.height = 15; // Only for visible rendering during debugging.
+
   this.width = width;
   this.rect = null;
 };

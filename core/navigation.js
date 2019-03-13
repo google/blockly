@@ -239,7 +239,9 @@ Blockly.Navigation.getFlyoutBlocks_ = function() {
 };
 
 /**
- * Insert the block from the flyout.
+ * If there is a marked connection insert the block from the flyout to that
+ * connection. If no connection has been marked then inserting it will place it
+ * on the workspace.
  */
 Blockly.Navigation.insertFromFlyout = function() {
   var cursor = Blockly.Navigation.cursor_;

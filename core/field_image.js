@@ -199,4 +199,11 @@ Blockly.FieldImage.prototype.showEditor_ = function() {
   }
 };
 
+Blockly.FieldImage.prototype.getCorrectedSize = function() {
+  if (!this.size_.width) {
+    this.render_();
+  }
+  return new goog.math.Size(this.size_.width, this.height_);
+};
+
 Blockly.Field.register('field_image', Blockly.FieldImage);

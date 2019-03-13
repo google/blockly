@@ -221,89 +221,24 @@ Blockly.BlockSvg.renderComputeForRealThough = function(block) {
   var renderInfo = createRenderInfo(block);
 
   // measure passes:
-  for (var r = 0; r < renderInfo.rows.length; r++) {
+  for (var r = 1; r < renderInfo.rows.length - 1; r += 2) {
     var row = renderInfo.rows[r];
-    for (var e = 0; e < row.elements.length; e++) {
-      var elem = row.elements[e];
-      elem.measure();
+    for (var i = 1; i < row.inputs.length - 1; i += 2) {
+      var input = row.inputs[i];
+      for (var f = 1; f < input.fields.length - 1; f += 2) {
+        var field = input.fields[f];
+        measureField(field);
+      }
+      padFields(input);
+      measureInput(input, renderInfo.isInline);
     }
+    padInputs(row, renderInfo);
+    measureRow(row);
   }
-  addElemSpacing(renderInfo);
-
-  for (var r = 0; r < renderInfo.rows.length; r++) {
-    renderInfo.rows[r].measure();
-  }
-  addRowSpacing(renderInfo);
+  padRows(renderInfo);
+  completeInfo(renderInfo);
   console.log(renderInfo);
   return renderInfo;
-};
-
-addRowSpacing = function(info) {
-  var oldRows = info.rows;
-  var newRows = [];
-  newRows.push(new RowSpacer(5));
-
-  for (var r = 0; r < oldRows.length; r++) {
-    newRows.push(oldRows[r]);
-    var spacing = calculateSpacingBetweenRows(oldRows[r], oldRows[r + 1]);
-    newRows.push(new RowSpacer(spacing));
-  }
-  info.rows = newRows;
-};
-
-calculateSpacingBetweenRows = function(prev, next) {
-  return 5;
-}
-
-addElemSpacing = function(info) {
-  for (var r = 0; r < info.rows.length; r++) {
-    var row = info.rows[r];
-    var oldElems = row.elements;
-    var newElems = [];
-    newElems.push(new ElemSpacer(10));
-    for (var e = 0; e < row.elements.length; e++) {
-      newElems.push(oldElems[e]);
-      var spacing = calculateSpacingBetweenElems(oldElems[e], oldElems[e + 1]);
-      newElems.push(new ElemSpacer(spacing));
-    }
-    row.elements = newElems;
-  }
-};
-
-calculateSpacingBetweenElems = function(prev, next) {
-  if (!prev) {
-    return 5;
-  }
-
-  if (!prev.isInput && !next) {
-    return 10;
-  }
-
-  if (prev.isInput && !next) {
-    if (prev instanceof ExternalValueInputElement) {
-      return 0;
-    } else if (prev instanceof InlineInputElement) {
-      return 10;
-    }
-  }
-
-  if (!next) {
-    return 5;
-  }
-
-  if (!prev.isInput && next.isInput) {
-    return 9;
-  }
-
-  if (prev instanceof IconElement && !next.isInput) {
-    return 10;
-  }
-
-  if (prev instanceof InlineInputElement && !next.isInput) {
-    return 10;
-  }
-
-  return 5;
 };
 
 createRenderInfo = function(block) {
@@ -600,46 +535,107 @@ padFields = function(renderedInput) {
   }
 };
 
+createFields = function(fieldRow) {
+  var result = [];
+  // One spacer at the beginning.
+  var spacer = new Blockly.BlockSvg.FieldSpacer();
+  result.push(spacer);
+  for (var i = 0; i < fieldRow.length; i++) {
+    var renderedField = new Blockly.BlockSvg.RenderedField();
+    renderedField.type = 'block field';
+    renderedField.field = fieldRow[i];
+    result.push(renderedField);
+    // Spacers between each pair of fields, and after the last field.
+    var spacer = new Blockly.BlockSvg.FieldSpacer();
+    result.push(spacer);
+  }
+  return result;
+};
+
+// Turn into a constructor?
+createInput = function(blockInput) {
+  var result = new Blockly.BlockSvg.RenderedInput();
+  result.type = blockInput.type;
+  result.isVisible = blockInput.isVisible();
+  result.fields = createFields(blockInput.fieldRow);
+  // TODO: scrape necessary info, rather than storing a pointer to the input.
+  result.input = blockInput;
+  return result;
+};
+
+shouldCreateNewRow = function(isInline, lastType, inputType) {
+  // Always glob onto an icon row.
+  if (lastType == 'icon') {
+    return false;
+  }
+  if (!isInline || !lastType ||
+    lastType == Blockly.NEXT_STATEMENT ||
+    inputType == Blockly.NEXT_STATEMENT) {
+    return true;
+  }
+};
+
+setRowType = function(row, input, isInline) {
+  if (isInline && input.type != Blockly.NEXT_STATEMENT) {
+    row.type = Blockly.BlockSvg.INLINE;
+  } else {
+    if (input.type == Blockly.NEXT_STATEMENT) {
+      row.type = 'statement';
+    } else if (input.type == Blockly.DUMMY_INPUT) {
+      row.type = 'dummy';
+    } else if (input.type == Blockly.INPUT_VALUE) {
+      row.type = 'external value';
+    }
+  }
+};
+
 createRows = function(block, info) {
-  // necessary data
+  // todo: add icons
+  var inputRows = [];
+  inputRows.push(new Blockly.BlockSvg.RowSpacer());
+  var lastType = undefined;
+  var lastRow = null;
   var isInline = block.getInputsInline() && !block.isCollapsed();
   info.isInline = isInline;
 
-  // algorithm
-  var rowArr = [];
-  var activeRow = new Row();
-
+  var row;
   var icons = block.getIcons();
   if (icons.length) {
-    for (var i = 0; i < icons.length; i++) {
-      activeRow.elements.push(new IconElement(icons[i]));
-    }
+    info.hasIcons = true;
+    info.iconCount = icons.length;
+    row = createRowForIcons(icons);
+    lastRow = row;
+    lastType = 'icon';
+    inputRows.push(row);
+    inputRows.push(new Blockly.BlockSvg.RowSpacer());
   }
-
   for (var i = 0; i < block.inputList.length; i++) {
-    var input = block.inputList[i];
-    for (var f = 0; f < input.fieldRow.length; f++) {
-      var field = input.fieldRow[f];
-      activeRow.elements.push(new FieldElement(field));
+    var input = createInput(block.inputList[i]);
+    if (!input.isVisible) {
+      continue;
     }
-    if (isInline && input.type == Blockly.INPUT_VALUE) {
-      activeRow.elements.push(new InlineInputElement(input));
+    if (shouldCreateNewRow(isInline, lastType, input.type)) {
+      // Create new row.
+      lastType = input.type;
+      row = new Blockly.BlockSvg.RenderedRow();
+      lastRow = row;
+      row.inputs.push(new Blockly.BlockSvg.InputSpacer());
+      setRowType(row, input, isInline);
+      row.height = 0;
+      inputRows.push(row);
+      inputRows.push(new Blockly.BlockSvg.RowSpacer());
     } else {
-      if (input.type == Blockly.NEXT_STATEMENT) {
-        activeRow.elements.push(new StatementInputElement(input));
-      } else if (input.type == Blockly.INPUT_VALUE) {
-        activeRow.elements.push(new ExternalValueInputElement(input));
+      row = lastRow;
+      // Icons are the only type of row that gets overridden.
+      if (lastType == 'icon') {
+        setRowType(row, input, isInline);
+        lastType = row.type;
       }
-      rowArr.push(activeRow);
-      activeRow = new Row();
     }
+    row.inputs.push(input);
+    row.inputs.push(new Blockly.BlockSvg.InputSpacer());
   }
-
-  if (activeRow.elements.length) {
-    rowArr.push(activeRow);
-  }
-
-  info.rows = rowArr;
+  info.rows = inputRows;
 };
 
 setShouldSquareCorners = function(block, info) {
@@ -669,116 +665,37 @@ setHasStuff = function(block, info) {
   }
 };
 
-IconElement = function(icon) {
-  this.isInput = false;
-  this.width = 0;
-  this.height = 0;
-  this.icon = icon;
-  this.isVisible = icon.isVisible();
-  this.renderRect = null;
-  this.type = 'icon';
-};
-
-IconElement.prototype.measure = function() {
-  console.log('measure icon element');
-  this.height = 16;
-  this.width = 16;
-};
-
-FieldElement = function(field) {
-  this.isInput = false;
-  this.width = 0;
-  this.height = 0;
-  this.field = field;
-  this.renderRect = null;
-  this.isEditable = field.isCurrentlyEditable();
-  this.type = 'field';
-};
-
-FieldElement.prototype.measure = function() {
-  console.log('measure field element');
-  var size = this.field.getCorrectedSize();
-  this.height = size.height;
-  this.width = size.width;
-};
-
-InlineInputElement = function(input) {
-  this.isInput = true;
-  this.width = 0;
-  this.height = 0;
-  this.connectedBlockWidth = 0;
-  this.connectedBlockHeight = 0;
-  this.input = input;
-  this.connectedBlock = input.connection && input.connection.targetBlock() ?
-      input.connection.targetBlock() : null;
-  this.type = 'inline input';
-};
-
-InlineInputElement.prototype.measure = function() {
-  console.log('measure inline input');
-  this.width = 22;
-  this.height = 26;
-};
-
-StatementInputElement = function(input) {
-  this.isInput = true;
-  this.width = 0;
-  this.height = 0;
-  this.connectedBlockWidth = 0;
-  this.connectedBlockHeight = 0;
-  this.input = input;
-  this.connectedBlock = input.connection && input.connection.targetBlock() ?
-      input.connection.targetBlock() : null;
-  this.type = 'statement input';
-};
-
-StatementInputElement.prototype.measure = function() {
-  console.log('measure statement input');
-  this.width = 25;
-  this.height = 20;
-};
-
-ExternalValueInputElement = function(input) {
-  this.isInput = true;
-  this.width = 0;
-  this.height = 0;
-  this.connectedBlockWidth = 0;
-  this.connectedBlockHeight = 0;
-  this.input = input;
-  this.connectedBlock = input.connection && input.connection.targetBlock() ?
-      input.connection.targetBlock() : null;
-  this.type = 'statement input';
-};
-
-ExternalValueInputElement.prototype.measure = function() {
-  console.log('measure external value input');
-  this.width = 10;
-  this.height = 20;
-};
-
-Row = function() {
-  this.elements = [];
-  this.width = 0;
-  this.height = 0;
-};
-
-Row.prototype.measure = function() {
-  console.log('measure row');
-  for (var e = 0; e < this.elements.length; e++) {
-    var elem = this.elements[e];
-    this.width += elem.width;
-    if (!(elem instanceof ElemSpacer)) {
-      this.height = Math.max(this.height, elem.height);
-    }
+createIconFields = function(icons) {
+  var result = [];
+  var spacer = new Blockly.BlockSvg.FieldSpacer();
+  result.push(spacer);
+  for (var i = 0; i < icons.length; i++) {
+    var iconField = new Blockly.BlockSvg.RenderedField();
+    iconField.type = 'icon';
+    iconField.field = icons[i];
+    result.push(iconField);
+    // Spacers between each pair of fields, and after the last field.
+    result.push(new Blockly.BlockSvg.FieldSpacer());
   }
+  return result;
 };
 
-RowSpacer = function(height) {
-  this.height = height;
-  this.rect = null;
+createIconInput = function(icons) {
+  var result = new Blockly.BlockSvg.RenderedInput();
+  result.type = 'icons';
+  result.isVisible = true;
+  result.fields = createIconFields(icons);
+  // Result.input is the Blockly.Input, which doesn't exist here.
+  result.input = null;
+  return result;
 };
 
-ElemSpacer = function(width) {
-  this.width = width;
-  this.rect = null;
+createRowForIcons = function(icons) {
+  var row = new Blockly.BlockSvg.RenderedRow();
+  row.type = 'dummy';
+  row.inputs.push(new Blockly.BlockSvg.InputSpacer());
+  var input = createIconInput(icons);
+  row.inputs.push(input);
+  row.inputs.push(new Blockly.BlockSvg.InputSpacer());
+  return row;
 };

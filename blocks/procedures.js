@@ -365,9 +365,75 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     if (this.isInFlyout){
       return;
     }
+
+    var block = this;
+
+    //Get function name
+    var name = this.getFieldValue('NAME');
+
+    //Add an option to export the block to a .fabfunc file
+    var exportOption = {
+      text: "Export '%1' to a file".replace('%1', name),
+      enabled: true,
+      callback: function() {
+        var xml = Blockly.Xml.blockToDom(block, true);
+        console.log(xml);
+        saveCodeElectron("Function", xml);
+      }
+    }
+
+    options.push(exportOption);
+
+    //Get the local storage for stored functions
+    let storedFunctionsDict;
+
+    try {
+      storedFunctionsDict = JSON.parse(localStorage.getItem('storedFunctions'));
+      if (storedFunctionsDict === null) {
+        storedFunctionsDict = {};
+      }
+    }
+    catch (e) {
+      console.log("Error parsing/reading storedFunctions information.");
+      storedFunctionsDict = {};
+    }
+
+    var isSaved = false;
+
+    if (name in storedFunctionsDict) {
+      isSaved = true;
+    }
+
+    //Add "Save for future use" option
+    var savingOption = {
+      text: isSaved ? "Overwrite/Update stored '%1' function".replace('%1', name) : "Store '%1' for use in future projects".replace('%1', name),
+      enabled: true,
+      callback: function() {
+        var xml = Blockly.Xml.blockToDom(block, true);
+        let definitionString = (new XMLSerializer()).serializeToString(xml);
+        definitionString = definitionString.replace(/xmlns=\"(.*?)\" /g, '');
+        storedFunctionsDict[name] = definitionString;
+        localStorage.setItem('storedFunctions', JSON.stringify(storedFunctionsDict));
+      }
+    };
+
+    options.push(savingOption);
+
+    //Add "Delete function forever" option
+    var deleteOption = {
+      text: "Delete stored function '%1'".replace('%1', name),
+      enabled: isSaved,
+      callback: function() {
+        delete storedFunctionsDict[name];
+        localStorage.setItem('storedFunctions', JSON.stringify(storedFunctionsDict));
+      }
+    }
+
+    options.push(deleteOption);
+
+
     // Add option to create caller.
     var option = {enabled: true};
-    var name = this.getFieldValue('NAME');
     option.text = Blockly.Msg['PROCEDURES_CREATE_DO'].replace('%1', name);
     var xmlMutation = document.createElement('mutation');
     xmlMutation.setAttribute('name', name);

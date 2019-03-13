@@ -182,6 +182,15 @@ Blockly.Procedures.rename = function(name) {
  */
 Blockly.Procedures.flyoutCategory = function(workspace) {
   var xmlList = [];
+
+  // var toAdd = '<xml><label text="'+Blockly.Msg.LABEL_STORED_FUNCTIONS+'" web-class="subcategoryClass"></label></xml>';
+
+  var toAdd = '<xml><label text="Function definition" web-class="subcategoryClass"></label></xml>';
+
+  toAdd = Blockly.Xml.textToDom(toAdd);
+  var label = toAdd.firstChild;
+  xmlList.push(label);
+
   if (Blockly.Blocks['procedures_defnoreturn']) {
     // <block type="procedures_defnoreturn" gap="16">
     //     <field name="NAME">do something</field>
@@ -246,9 +255,64 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
     }
   }
 
+  function populateStoredProcedures() {
+    let storedFunctionsDict;
+
+    try {
+      storedFunctionsDict = JSON.parse(localStorage.getItem('storedFunctions'));
+      if (storedFunctionsDict === null) {
+        storedFunctionsDict = {};
+      }
+    }
+    catch (e) {
+      console.log("Error parsing/reading storedFunctions information.");
+      storedFunctionsDict = {};
+    }
+
+    var hasSpawnedLabel = false;
+
+    for (var i in storedFunctionsDict) {
+      if (!hasSpawnedLabel) {
+        // var toAdd = '<xml><sep gap="32"></sep><label text="'+Blockly.Msg.LABEL_STORED_FUNCTIONS+'" web-class="subcategoryClass"></label></xml>';
+
+        var toAdd = '<xml><sep gap="32"></sep><label text="Stored functions" web-class="subcategoryClass"></label></xml>';
+
+        toAdd = Blockly.Xml.textToDom(toAdd);
+        var gap = toAdd.firstChild;
+        var label = toAdd.lastChild;
+        xmlList.push(gap);
+        xmlList.push(label);
+        hasSpawnedLabel = true;
+      }
+
+      var storedFunc = storedFunctionsDict[i];
+
+      let definitionXML = new DOMParser().parseFromString(storedFunc, 'text/xml');
+            
+      xmlList.push(definitionXML.getElementsByTagName('block')[0]);
+    }
+  }
+
   var tuple = Blockly.Procedures.allProcedures(workspace);
+
+  if (tuple[0].length > 0 || tuple[1].length > 0) { 
+    // var toAdd = '<xml><sep gap="32"></sep><label text="'+Blockly.Msg.LABEL_STORED_FUNCTIONS+'" web-class="subcategoryClass"></label></xml>';
+
+    var toAdd = '<xml><sep gap="32"></sep><label text="Function execution" web-class="subcategoryClass"></label></xml>';
+
+    toAdd = Blockly.Xml.textToDom(toAdd);
+    var gap = toAdd.firstChild;
+    var label = toAdd.lastChild;
+    xmlList.push(gap);
+    xmlList.push(label);
+  } 
+
   populateProcedures(tuple[0], 'procedures_callnoreturn');
   populateProcedures(tuple[1], 'procedures_callreturn');
+  populateStoredProcedures();
+
+
+
   return xmlList;
 };
 

@@ -5,72 +5,15 @@ renderDraw = function(block, info) {
    * @type !Blockly.BlockSvg.PathObject
    */
   var pathObject = new Blockly.BlockSvg.PathObject();
-  boxElems(block, info);
-  // renderDrawTop(block, info, pathObject);
-  // renderDrawRight(block, info, pathObject);
-  // renderDrawBottom(block, info, pathObject);
-  // renderDrawLeft(block, info, pathObject);
-  // renderFields(block, info, pathObject);
-  // block.setPaths_(pathObject);
+  renderDrawTop(block, info, pathObject);
+  renderDrawRight(block, info, pathObject);
+  renderDrawBottom(block, info, pathObject);
+  renderDrawLeft(block, info, pathObject);
+  renderFields(block, info, pathObject);
+  block.setPaths_(pathObject);
 
-  // block.width = info.width;
-  // block.height = info.height;
-};
-
-boxElems = function(block, info) {
-  var svgRoot = block.getSvgRoot();
-  var cursorY = 0;
-  for (var r = 0; r < info.rows.length; r++) {
-    var row = info.rows[r];
-    if (row instanceof RowSpacer) {
-      row.rect = Blockly.utils.createSvgElement('rect',
-          {
-            'class': 'rowSpacerRect',
-            'x': 0,
-            'y': cursorY,
-            'width': 20,
-            'height': row.height,
-          },
-          svgRoot);
-    } else {
-      var cursorX = 0;
-      for (var e = 0; e < row.elements.length; e++) {
-        var elem = row.elements[e];
-        if (elem instanceof ElemSpacer) {
-          elem.rect = Blockly.utils.createSvgElement('rect',
-              {
-                'class': 'elemSpacerRect',
-                'x': cursorX,
-                'y': cursorY,
-                'width': elem.width,
-                'height': 15,
-              },
-              svgRoot);
-        } else {
-          elem.rect = Blockly.utils.createSvgElement('rect',
-              {
-                'class': 'rowRenderingRect',
-                'x': cursorX,
-                'y': cursorY,
-                'width': elem.width,
-                'height': elem.height,
-              },
-              svgRoot);
-        }
-        cursorX += elem.width;
-      }
-      row.rect = Blockly.utils.createSvgElement('rect',
-          {
-            'class': 'elemRenderingRect',
-            'x': 0,
-            'y': cursorY,
-            'width': row.width,
-            'height': row.height,
-          },
-          svgRoot);
-    }
-    cursorY += row.height;
-  }
+  block.width = info.width;
+  block.height = info.height;
 };
 
 layoutField = function(fieldInfo, cursorX, cursorY, centerline) {

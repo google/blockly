@@ -66,6 +66,9 @@
 <script src="../blocks/procedures.js"></script>
 <script src="blocks/test_blocks.js"></script>
 
+<script src="../core/block_render_info.js"></script>
+<script src="../core/block_render_draw.js"></script>
+
 <script>
 'use strict';
 var workspace = null;
@@ -97,8 +100,8 @@ function start() {
         disable: true,
         grid:
           {
-            spacing: 25,
-            length: 3,
+            spacing: 5,
+            length: 1,
             colour: '#ccc',
             snap: true
           },
@@ -321,6 +324,32 @@ h1 {
 
 .ioLabel>.blocklyFlyoutLabelText {
   font-style: italic;
+}
+
+.rowRenderingRect {
+  stroke: black;
+  fill: none;
+  stroke-width: 1px;
+}
+
+.elemRenderingRect {
+  stroke: red;
+  fill: none;
+  stroke-width: 1px;
+}
+
+.rowSpacerRect {
+  stroke: blue;
+  fill-opacity: 0.5;
+  fill: blue;
+  stroke-width: 1px;
+}
+
+.elemSpacerRect {
+  stroke: pink;
+  fill-opacity: 0.5;
+  fill: pink;
+  stroke-width: 1px;
 }
 
 </style>

@@ -400,9 +400,9 @@ Blockly.Navigation.keyboardPrev = function() {
   var location;
   var cursor = Blockly.Navigation.cursor_;
   location = cursor.prev();
-  if (location.type === Blockly.NEXT_STATEMENT) {
+  if (location && location.type === Blockly.NEXT_STATEMENT) {
     cursor.prev();
-  } else if (location.type === Blockly.OUTPUT_VALUE) {
+  } else if (location && location.type === Blockly.OUTPUT_VALUE) {
     cursor.out();
   }
 };

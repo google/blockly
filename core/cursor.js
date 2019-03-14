@@ -120,6 +120,7 @@ Blockly.Cursor.prototype.update_ = function() {};
  * TODO: Check on moving this to the block class.
  * @param {Blockly.Field} field Field to find parent for.
  * @return {Blockly.Input} The input that the field belongs to.
+ * @private
  */
 Blockly.Cursor.prototype.getFieldParentInput_ = function(field) {
   var parentInput = null;
@@ -144,6 +145,7 @@ Blockly.Cursor.prototype.getFieldParentInput_ = function(field) {
  * TODO: Check on moving this to the block class.
  * @param {Blockly.Connection} connection Connection to find parent for.
  * @return {Blockly.Input} The input that the connection belongs to.
+ * @private
  */
 Blockly.Cursor.prototype.getConnectionParentInput_ = function(connection) {
   var parentInput = null;
@@ -164,6 +166,7 @@ Blockly.Cursor.prototype.getConnectionParentInput_ = function(connection) {
  * @param {Blockly.Connection|Blockly.Field} cursor Field or connection to find
  * parent for.
  * @return {Blockly.Input} The input that the connection belongs to.
+ * @private
  */
 Blockly.Cursor.prototype.findParentInput_ = function(cursor) {
   var parentInput = null;
@@ -179,6 +182,7 @@ Blockly.Cursor.prototype.findParentInput_ = function(cursor) {
  * Find the first editable field in a list of inputs.
  * @param {Blockly.Input} input The input to look for fields on.
  * @return {Blockly.Field} The next editable field.
+ * @private
  */
 Blockly.Cursor.prototype.findFirstEditableField_ = function(input) {
   var fieldRow = input.fieldRow;
@@ -193,69 +197,129 @@ Blockly.Cursor.prototype.findFirstEditableField_ = function(input) {
   return nextField;
 };
 
+Blockly.Cursor.prototype.findNextEditableField_ = function(location, parentInput) {
+  var fieldRow = parentInput.fieldRow;
+  var fieldIdx = fieldRow.indexOf(location);
+  var nextField = null;
+  for (var i = fieldIdx + 1; i < fieldRow.length; i++) {
+    var field = fieldRow[i];
+    if (field.isCurrentlyEditable()) {
+      nextField = field;
+      break;
+    }
+  }
+  return nextField;
+};
+
+Blockly.Cursor.prototype.findLastEditableField_ = function(input) {
+  var fieldRow = input.fieldRow;
+  var nextField = null;
+  for (var i = fieldRow.length - 1; i >= 0; i--) {
+    var field = fieldRow[i];
+    if (field.isCurrentlyEditable()) {
+      nextField = field;
+      break;
+    }
+  }
+  return nextField;
+};
+
+Blockly.Cursor.prototype.findPreviousEditableField_ = function(location, parentInput) {
+  var fieldRow = parentInput.fieldRow;
+  var fieldIdx = fieldRow.indexOf(location);
+  var nextField = null;
+  for (var i = fieldIdx - 1; i >= 0; i--) {
+    var field = fieldRow[i];
+    if (field.isCurrentlyEditable()) {
+      nextField = field;
+      break;
+    }
+  }
+  return nextField;
+};
+
+
 /**
  * Get the first field or connection that is either editable or has connection
  * value of not null.
  * @param {Blockly.Connection|Blockly.Field} location Current place of cursor.
  * @param {Blockly.Input} parentInput The parent input of the field or connection.
  * @return {Blockly.Connection|Blockly.Field} The next field or connection.
+ * @private
  */
 Blockly.Cursor.prototype.findNextFieldOrInput_ = function(location, parentInput){
   var block = location.sourceBlock_;
   var inputs = block.inputList;
   var curIdx = inputs.indexOf(parentInput);
   var nxtIdx = curIdx + 1;
-  var nextCursor = null;
+  var nextLocation = null;
 
-  if (curIdx > -1 && nxtIdx < inputs.length) {
+  if (location instanceof Blockly.Field) {
+    nextLocation = this.findNextEditableField_(location, parentInput);
+    if (!nextLocation) {
+      nextLocation = parentInput.connection;
+    }
+  } else {
+    if (curIdx > -1 && nxtIdx < inputs.length) {
 
-    for (var i = nxtIdx; i < inputs.length; i++) {
-      var newInput = inputs[i];
-      var field = this.findFirstEditableField_(newInput);
-      if (field) {
-        nextCursor = field;
-        break;
-      } else if (newInput.connection) {
-        nextCursor = newInput.connection;
-        break;
+      for (var i = nxtIdx; i < inputs.length; i++) {
+        var newInput = inputs[i];
+        var field = this.findFirstEditableField_(newInput);
+        if (field) {
+          nextLocation = field;
+          this.parentInput_ = newInput;
+          break;
+        } else if (newInput.connection) {
+          nextLocation = newInput.connection;
+          this.parentInput_ = newInput;
+          break;
+        }
       }
     }
   }
-  return [nextCursor, newInput];
+  return nextLocation;
 };
 
 /**
  * Given the current selected field or connection find the previous connection
  * or field.
- * @param {Blockly.Connection|Blockly.Field} curLocation The current location of
+ * @param {Blockly.Connection|Blockly.Field} location The current location of
  * the cursor.
  * @param {Blockly.Input} parentInput Parent input of the connection or field.
  * @return {Array<Blockly.Field|Blockly.Connection, Blockly.Input>} The first
  * value is the next field or connection and the second value is the parent input.
  */
-Blockly.Cursor.prototype.findPrevInputOrField_ = function(curLocation, parentInput){
-  var block = curLocation.sourceBlock_;
+Blockly.Cursor.prototype.findPrevInputOrField_ = function(location, parentInput){
+  var block = location.sourceBlock_;
   var inputs = block.inputList;
   var curIdx = inputs.indexOf(parentInput);
-  var newLocation = null;
+  var prevLocation = null;
 
-  if (curIdx > -1 && curIdx < inputs.length) {
+  if (location instanceof Blockly.Field) {
+    prevLocation = this.findPreviousEditableField_(location, parentInput);
+    if (!prevLocation && curIdx - 1 > 0) {
+      prevLocation = inputs[curIdx].connection;
+    }
+  } else {
+    if (curIdx > -1 && curIdx < inputs.length) {
 
-    for (var i = curIdx; i >= 0; i--) {
-      var newParentInput = inputs[i];
-      //TODO: This should be lastEditableField
-      var field = this.findFirstEditableField_(newParentInput);
-      if (newParentInput.connection && newParentInput.connection
-        !== parentInput.connection) {
-        newLocation = newParentInput.connection;
-        break;
-      } else if (field && field !== curLocation) {
-        newLocation = field;
-        break;
+      for (var i = curIdx; i >= 0; i--) {
+        var newInput = inputs[i];
+        var field = this.findLastEditableField_(newInput);
+        if (newInput.connection && newInput.connection
+          !== parentInput.connection) {
+          prevLocation = newInput.connection;
+          this.parentInput_ = newInput;
+          break;
+        } else if (field && field !== location) {
+          prevLocation = field;
+          this.parentInput_ = newInput;
+          break;
+        }
       }
     }
   }
-  return [newLocation, newParentInput];
+  return prevLocation;
 };
 
 //TODO: Fix this to make less gross
@@ -265,8 +329,9 @@ Blockly.Cursor.prototype.findPrevInputOrField_ = function(curLocation, parentInp
  * block. Do not go all the way to the top of the stack.
  * @param {Blockly.Block} sourceBlock A block in the stack.
  * @return {Blockly.Block} The top block in a stack
+ * @private
  */
-Blockly.Cursor.prototype.findTop = function(sourceBlock) {
+Blockly.Cursor.prototype.findTop_ = function(sourceBlock) {
   var topBlock = sourceBlock;
   var targetConnection = sourceBlock.previousConnection.targetConnection;
   while (!this.findParentInput_(targetConnection)
@@ -283,7 +348,7 @@ Blockly.Cursor.prototype.findTop = function(sourceBlock) {
  * @param {Boolean} forward True to go forward. False to go backwards.
  * @return {Blockly.BlockSvg} The first block of the next stack.
  */
-Blockly.Cursor.prototype.navigateBetweenStacks = function(forward) {
+Blockly.Cursor.prototype.navigateBetweenStacks_ = function(forward) {
   var curLocation = this.getLocation();
   if (!(curLocation instanceof Blockly.Block)) {
     curLocation = curLocation.sourceBlock_;
@@ -336,7 +401,7 @@ Blockly.Cursor.prototype.isStack = function() {
  * of the cursor.
  * @return {Blockly.Connection} The first connection.
  */
-Blockly.Cursor.prototype.findTopConnection = function(location) {
+Blockly.Cursor.prototype.findTopConnection_ = function(location) {
   var previousConnection = location.previousConnection;
   var outputConnection = location.outputConnection;
   return previousConnection ? previousConnection : outputConnection;
@@ -356,19 +421,13 @@ Blockly.Cursor.prototype.next = function() {
   var parentInput = this.getParentInput(location);
 
   if (this.isStack_) {
-    var nextTopBlock = this.navigateBetweenStacks(true);
-    newCursor = this.findTopConnection(nextTopBlock);
+    var nextTopBlock = this.navigateBetweenStacks_(true);
+    newCursor = this.findTopConnection_(nextTopBlock);
   } else if (location.type === Blockly.OUTPUT_VALUE) {
     newCursor = location.sourceBlock_;
-  } else if (location instanceof Blockly.Field) {
-    //TODO: Check for sibling fields.
-    //TODO: Check that the parent input connection is not null???
-    newCursor = parentInput.connection;
-    newParentInput = parentInput;
-  } else if (parentInput) {
-    var cursorAndInput = this.findNextFieldOrInput_(location, parentInput);
-    newCursor = cursorAndInput[0];
-    newParentInput = cursorAndInput[1];
+  } else if (location instanceof Blockly.Field || parentInput) {
+    newCursor = this.findNextFieldOrInput_(location, parentInput);
+    newParentInput = this.getParentInput();
   } else if (location instanceof Blockly.Block) {
     newCursor = location.nextConnection;
   } else if (location.type === Blockly.PREVIOUS_STATEMENT) {
@@ -443,20 +502,15 @@ Blockly.Cursor.prototype.prev = function() {
   var newParentInput;
 
   if (this.isStack_) {
-    var nextTopBlock = this.navigateBetweenStacks(true);
-    newCursor = this.findTopConnection(nextTopBlock);
+    var nextTopBlock = this.navigateBetweenStacks_(true);
+    newCursor = this.findTopConnection_(nextTopBlock);
   } else if (location.type === Blockly.OUTPUT_VALUE) {
     if (location.sourceBlock_ && location.sourceBlock_.previousConnection) {
       newCursor = location.sourceBlock_.previousConnection;
     }
-  } else if (location instanceof Blockly.Field) {
-    var cursorAndInput = this.findPrevInputOrField_(location, parentInput);
-    newCursor = cursorAndInput[0];
-    newParentInput = cursorAndInput[1];
-  } else if (parentInput) {
-    var cursorAndInput = this.findPrevInputOrField_(location, parentInput);
-    newCursor = cursorAndInput[0];
-    newParentInput = cursorAndInput[1];
+  } else if (location instanceof Blockly.Field || parentInput) {
+    newCursor = this.findPrevInputOrField_(location, parentInput);
+    newParentInput = this.getParentInput();
   } else if (location instanceof Blockly.Block) {
     var output = location.outputConnection;
     newCursor = output ? output : location.previousConnection;
@@ -507,7 +561,7 @@ Blockly.Cursor.prototype.out = function() {
       //This is the case where we are on a block that is nested inside a
       //statement input and we need to get the last input that connects to the
       //top block
-      var topBlock = this.findTop(location);
+      var topBlock = this.findTop_(location);
       var topConnection = topBlock.previousConnection.targetConnection;
       if (topConnection) {
         newCursor = topConnection;
@@ -517,7 +571,7 @@ Blockly.Cursor.prototype.out = function() {
       }
     }
   } else if (location.type === Blockly.PREVIOUS_STATEMENT) {
-    var topBlock = this.findTop(location.sourceBlock_);
+    var topBlock = this.findTop_(location.sourceBlock_);
     var topConnection = topBlock.previousConnection.targetConnection;
     if (topConnection) {
       newCursor = topConnection;
@@ -526,7 +580,7 @@ Blockly.Cursor.prototype.out = function() {
       this.isStack_ = true;
     }
   } else if (location.type === Blockly.NEXT_STATEMENT) {
-    var topBlock = this.findTop(location.sourceBlock_);
+    var topBlock = this.findTop_(location.sourceBlock_);
     newCursor = topBlock.previousConnection.targetConnection;
   }
   if (newCursor) {

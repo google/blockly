@@ -68,6 +68,7 @@
 
 <script src="../core/block_render_info.js"></script>
 <script src="../core/block_render_draw.js"></script>
+<script src="../core/block_rendering_constants.js"></script>
 
 <script>
 'use strict';
@@ -144,6 +145,13 @@ function start() {
     logEvents(false);
   }
   taChange();
+
+  fromXml();
+  var blocks = Blockly.getMainWorkspace().getAllBlocks();
+  for (var i = 0; i < blocks.length; i++) {
+    renderDraw(blocks[i], Blockly.BlockSvg.renderComputeForRealThough(blocks[i]))
+  }
+
 }
 
 function addToolboxButtonCallbacks() {
@@ -423,22 +431,23 @@ h1 {
   font-style: italic;
 }
 
+.displayable {
+  display: none;
+}
+
 .rowRenderingRect {
-  /*display: none;*/
   stroke: black;
   fill: none;
   stroke-width: 1px;
 }
 
 .elemRenderingRect {
-  /*display: none;*/
   stroke: red;
   fill: none;
   stroke-width: 1px;
 }
 
 .rowSpacerRect {
-  /*display: none;*/
   stroke: blue;
   fill-opacity: 0.5;
   fill: blue;
@@ -446,7 +455,6 @@ h1 {
 }
 
 .elemSpacerRect {
-  /*display: none;*/
   stroke: pink;
   fill-opacity: 0.5;
   fill: pink;

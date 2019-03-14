@@ -73,11 +73,7 @@ Blockly.BlockSvg.RenderInfo = function() {
    */
   this.statementEdge = 0;
 
-  this.startPadding = Blockly.BlockSvg.START_PADDING;
-
-  // topPadding should be unnecessary: this is the height of the first spacer
-  // row.
-  this.topPadding = Blockly.BlockSvg.SEP_SPACE_X / 2;
+  this.hasOutputConnection = false;
 
   this.rows = [];
 };
@@ -95,10 +91,65 @@ Blockly.BlockSvg.renderComputeForRealThough = function(block) {
   }
   addElemSpacing(renderInfo);
 
+  computeBounds(renderInfo);
+  alignRowElements(renderInfo);
 
+
+  addRowSpacing(renderInfo);
+  console.log(renderInfo);
+  return renderInfo;
+};
+
+addAlignmentPadding = function(row, missingSpace) {
+  var elems = row.elements;
+  if (row.hasExternalInput) { // TODO: handle for dummy inputs.
+    var externalInput = row.getLastInput();
+    // Decide where the extra padding goes.
+    // TODO: set the alignment value in the constructor.
+    if (externalInput.input.align == Blockly.ALIGN_LEFT) {
+      // Add padding just before the input socket.
+      elems[elems.length - 3].width += missingSpace;
+      row.width += missingSpace;
+    } else if (externalInput.input.align == Blockly.ALIGN_CENTRE) {
+      // Split the padding between the beginning of the row and just
+      // before the socket.
+      row.getFirstSpacer().width += missingSpace / 2;
+      elems[elems.length - 3].width += missingSpace / 2;
+      row.width += missingSpace;
+    } else if (externalInput.input.align == Blockly.ALIGN_RIGHT) {
+      // Add padding at the beginning of the row.
+      row.getFirstSpacer().width += missingSpace;
+      row.width += missingSpace;
+    }
+  }
+};
+
+/**
+ * Extra spacing may be necessary to make sure that the right sides of all
+ * rows line up.  This can only be calculated after a first pass to calculate
+ * the sizes of all rows.
+ */
+alignRowElements = function(renderInfo) {
+  for (var r = 0; r < renderInfo.rows.length; r++) {
+    var row = renderInfo.rows[r];
+
+    if (!row.hasStatement && !row.hasInlineInput) {
+      var currentWidth = row.width;
+      var desiredWidth = renderInfo.maxValueOrDummyWidth;
+
+      var missingSpace = desiredWidth - currentWidth;
+      if (missingSpace) {
+        addAlignmentPadding(row, missingSpace);
+      }
+    }
+  }
+};
+
+computeBounds = function(renderInfo) {
   renderInfo.maxWidth = 0;
   // Some arbitrary min width?
   renderInfo.maxValueOrDummyWidth = 60;
+  renderInfo.statementEdge = 0;
   for (var r = 0; r < renderInfo.rows.length; r++) {
     var row = renderInfo.rows[r];
     row.measure();
@@ -107,25 +158,31 @@ Blockly.BlockSvg.renderComputeForRealThough = function(block) {
       renderInfo.maxValueOrDummyWidth =
           Math.max(renderInfo.maxValueOrDummyWidth, row.width);
     }
+    if (row.hasStatement) {
+      var statementInput = row.getLastInput();
+      var innerWidth = row.width - statementInput.width;
+      renderInfo.statementEdge = Math.max(renderInfo.statementEdge, innerWidth);
+    }
   }
 
-  computeBounds(renderInfo);
+  renderInfo.maxValueOrDummyWidth =
+      Math.max(renderInfo.maxValueOrDummyWidth, renderInfo.statementEdge);
 
-  addRowSpacing(renderInfo);
-  console.log(renderInfo);
-  return renderInfo;
-};
-
-computeBounds = function(renderInfo) {
   var maxWidth = renderInfo.maxWidth;
   for (var r = 0; r < renderInfo.rows.length; r++) {
     var row = renderInfo.rows[r];
-    if (!row.hasStatement && !row.hasInlineInput) {
-      row.width = maxWidth;
+    // if (!row.hasStatement && !row.hasInlineInput) {
+    //   row.desiredWidth = maxWidth;
+    // }
+    if (row.hasStatement) {
+      row.statementEdge = renderInfo.statementEdge;
     }
   }
 };
 
+/**
+ * Add spacers between rows and set their sizes.
+ */
 addRowSpacing = function(info) {
   var oldRows = info.rows;
   var newRows = [];
@@ -140,6 +197,11 @@ addRowSpacing = function(info) {
   info.rows = newRows;
 };
 
+/**
+ * Calculate the width of a spacer row.  Almost all spacers will be the full
+ * width of the block, but there are some exceptions (e.g. the small spacer row
+ * after a statement input).
+ */
 calculateWidthOfSpacerRow = function(prev, next, info) {
   if (!prev) {
     return info.maxWidth;
@@ -153,7 +215,11 @@ calculateWidthOfSpacerRow = function(prev, next, info) {
   return info.maxWidth;
 };
 
-
+/**
+ * Calculate the height of a spacer row based on the previous and next rows.
+ * For instance, extra vertical space is added between two rows with external
+ * value inputs.
+ */
 calculateSpacingBetweenRows = function(prev, next) {
   // First row is always (?) 5.
   if (!prev) {
@@ -175,6 +241,9 @@ calculateSpacingBetweenRows = function(prev, next) {
   return 5;
 };
 
+/**
+ * Add spacers between elements in a single row and set their sizes.
+ */
 addElemSpacing = function(info) {
   for (var r = 0; r < info.rows.length; r++) {
     var row = info.rows[r];
@@ -192,6 +261,11 @@ addElemSpacing = function(info) {
   }
 };
 
+/**
+ * Calculate the width of a spacer element in a row based on the previous and
+ * next elements.  For instance, extra padding is added between two editable
+ * fields.
+ */
 calculateSpacingBetweenElems = function(prev, next) {
   if (!prev) {
     // Between an editable field and the beginning of the row.
@@ -227,8 +301,8 @@ calculateSpacingBetweenElems = function(prev, next) {
     }
   }
 
-  // Between anything else and the end of the row?  Probably gets folded into the
-  // previous two checks.
+  // Between anything else and the end of the row?  Probably gets folded into
+  // the previous two checks.
   if (!next) {
     return 5;
   }
@@ -274,46 +348,6 @@ createRenderInfo = function(block) {
 
   createRows(block, info);
   return info;
-};
-
-completeInfo = function(info) {
-  var statementEdge = 0;
-  var rightEdge = 0;
-  for (var r = 1; r < info.rows.length - 1; r += 2) {
-    var row = info.rows[r];
-    // This is the width of a block where statements are nested.
-    statementEdge = Math.max(statementEdge, row.statementWidth);
-    rightEdge = Math.max(rightEdge, row.fieldValueWidth);
-  }
-
-  // The right edge of non-statement rows should extend past the width of the
-  // statement notches.
-  if (info.hasStatement) {
-    rightEdge = Math.max(rightEdge,
-        statementEdge + Blockly.BlockSvg.NOTCH_WIDTH);
-  }
-
-
-  // start padding is added equally to everything.
-  info.statementEdge = statementEdge + info.startPadding;
-  info.rightEdge = rightEdge + info.startPadding;
-
-  // if (hasValue) {
-  //   rightEdge = Math.max(rightEdge, fieldValueWidth +
-  //       Blockly.BlockSvg.SEP_SPACE_X * 2 + Blockly.BlockSvg.TAB_WIDTH);
-  // } else if (hasDummy) {
-  //   rightEdge = Math.max(rightEdge, fieldValueWidth +
-  //       Blockly.BlockSvg.SEP_SPACE_X * 2);
-  // }
-
-
-  for (var i = 0; i < info.rows.length; i++) {
-    var row = info.rows[i];
-    info.height += row.height;
-    info.width = Math.max(info.width, row.width);
-  }
-  // Fuck it, add some padding.
-  info.width = info.width + info.startPadding;
 };
 
 shouldStartNewRow = function(input, lastInput, isInline) {
@@ -394,6 +428,9 @@ setShouldSquareCorners = function(block, info) {
 };
 
 setHasStuff = function(block, info) {
+  if (block.outputConnection) {
+    info.hasOutputConnection = true;
+  }
   for (var i = 0; i < block.inputList.length; i++) {
     var input = block.inputList[i];
     if (input.type == Blockly.DUMMY_INPUT) {
@@ -514,7 +551,7 @@ ExternalValueInputElement = function(input) {
 
 ExternalValueInputElement.prototype.measure = function() {
   this.width = 10;
-  this.height = 14.5;
+  this.height = 15;
 };
 
 Row = function() {
@@ -535,6 +572,27 @@ Row.prototype.measure = function() {
       this.height = Math.max(this.height, elem.height);
     }
   }
+};
+
+Row.prototype.getLastInput = function() {
+  // There's always a spacer after the last input, unless there are no inputs.
+  if (this.elements.length > 1) {
+    var elem = this.elements[this.elements.length - 2];
+    if (!elem.isInput) {
+      return null;
+    }
+    return elem;
+  }
+  // Return null if there are no inputs.
+  return null;
+};
+
+Row.prototype.getFirstSpacer = function() {
+  return this.elements[0];
+};
+
+Row.prototype.getLastSpacer = function() {
+  return this.elements[this.elements.length - 1];
 };
 
 RowSpacer = function(height, width) {

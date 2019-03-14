@@ -104,6 +104,78 @@ boxElems = function(block, info) {
     }
     cursorY += row.height;
   }
+
+  var pathObject = new Blockly.BlockSvg.PathObject();
+  drawOutline(block, info, pathObject);
+  drawInternals(block, info, pathObject);
+  block.setPaths_(pathObject);
+};
+
+drawOutline = function(block, info, pathObject) {
+  var steps = pathObject.steps;
+  steps.push('m 0,0');
+  var cursorY = 0;
+  for (var r = 0; r < info.rows.length; r++) {
+    var row = info.rows[r];
+    // if (row instanceof RowSpacer) {
+    // } else
+    if (row.hasStatement) {
+      drawStatementInput(row, steps, info);
+    } else if (row.hasExternalInput) {
+      drawValueInput(row, steps, info);
+    } else {
+      steps.push('H', row.width);
+      steps.push('v', row.height);
+    }
+    cursorY += row.height;
+  }
+  steps.push('H', 0);
+  drawLeft(block, info, pathObject, cursorY);
+};
+
+drawLeft = function(block, info, pathObject, cursorY) {
+  var steps = pathObject.steps;
+
+  if (info.hasOutputConnection) {
+    var TAB_PATH_DOWN = 'c 0,10 -' + Blockly.BlockSvg.TAB_WIDTH +
+      ',-8 -' + Blockly.BlockSvg.TAB_WIDTH + ',7.5 s ' +
+      Blockly.BlockSvg.TAB_WIDTH + ',-2.5 ' + Blockly.BlockSvg.TAB_WIDTH + ',7.5';
+    var TAB_HEIGHT = 15;
+    var TAB_OFFSET_FROM_TOP = 5;  // Possibly the height of the first row?
+    // Draw a line up to the bottom of the tab.
+    steps.push('v', -(cursorY - TAB_HEIGHT - TAB_OFFSET_FROM_TOP));
+    // Move (without drawing) to the top of the tab.
+    steps.push('m 0,-' + TAB_HEIGHT);
+    // Draw the tab down, to use the same path as other tab drawing uses.
+    steps.push(TAB_PATH_DOWN);
+    // Move (without drawing) back up by the tab height.
+    steps.push('m 0,' + TAB_HEIGHT);
+    // Close off the path.  This should move up to the top left corner right now.
+    steps.push('z');
+  } else {
+    steps.push('v', -cursorY);
+    steps.push('z');
+  }
+};
+
+drawInternals = function(block, info, pathObject) {
+  var inlineSteps = pathObject.inlineSteps;
+  var cursorY = 0;
+  var cursorX = 0;
+  for (var r = 0; r < info.rows.length; r++) {
+    var row = info.rows[r];
+    var centerline = cursorY + row.height / 2;
+    if (row.hasInlineInput) {
+      for (var e = 0; e < row.elements.length; e++) {
+        var elem = row.elements[e];
+        if (elem instanceof InlineInputElement) {
+          drawInlineInput(inlineSteps, cursorX, cursorY, elem, centerline);
+        }
+        cursorX += elem.width;
+      }
+    }
+    cursorY += row.height;
+  }
 };
 
 layoutField = function(fieldInfo, cursorX, cursorY, centerline) {
@@ -193,29 +265,40 @@ renderDrawLeft = function(block, info, pathObject) {
   steps.push('z');
 };
 
-drawValueInput = function(pathObject, cursorX, cursorY) {
-  pathObject.steps.push('H', cursorX);
+drawValueInput = function(row, steps, info) {
+  /**
+   * SVG path for drawing a horizontal puzzle tab from top to bottom.
+   * currently is "c 0,10 -8,-8 -8,7.5 s 8,-2.5 8,7.5"
+   * @const
+   */
+  var TAB_PATH_DOWN = 'c 0,10 -' + Blockly.BlockSvg.TAB_WIDTH +
+      ',-8 -' + Blockly.BlockSvg.TAB_WIDTH + ',7.5 s ' +
+      Blockly.BlockSvg.TAB_WIDTH + ',-2.5 ' + Blockly.BlockSvg.TAB_WIDTH + ',7.5';
+
+  var halfHeight = row.height / 2;
+  var TAB_HEIGHT = 15;
+  steps.push('H', row.width);
   // Does the tab path down just start too high up?
   // TODO: Pull this out into a constant.  The tab path starts out down by
   // 5, and shouldn't.
-  pathObject.steps.push('v', 0);
-  pathObject.steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
-  pathObject.steps.push('V', cursorY);
+  //steps.push('v', TAB_HEIGHT / 2);
+  steps.push(TAB_PATH_DOWN);
+  steps.push('v', row.height - TAB_HEIGHT);
   //pathObject.steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
 
 };
 
-drawInlineInput = function(pathObject, x, y, input, centerline) {
-  var width = input.connectedBlockWidth;
-  var height = input.connectedBlockHeight;
+drawInlineInput = function(inlineSteps, x, y, input, centerline) {
+  var width = input.width;
+  var height = input.height;
   //x += Blockly.BlockSvg.TAB_WIDTH;  // TODO: This shouldn't be added here.  It
   // should be added as part of the padding instead.
   //x += input.fieldWidth;
 
   var yPos = centerline - height / 2;
-  var inlineSteps = pathObject.inlineSteps;
 
   inlineSteps.push('M', (x + Blockly.BlockSvg.TAB_WIDTH) + ',' + yPos);
+  // todo: this version of tab path down includes the "v 5" at the beginning.
   inlineSteps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
   inlineSteps.push('v', height - Blockly.BlockSvg.TAB_HEIGHT);
   inlineSteps.push('h', width - Blockly.BlockSvg.TAB_WIDTH);
@@ -223,14 +306,14 @@ drawInlineInput = function(pathObject, x, y, input, centerline) {
   inlineSteps.push('z');
 };
 
-drawStatementInput = function(block, pathObject, x, y, input, info) {
-  var steps = pathObject.steps;
-  x = info.statementEdge + Blockly.BlockSvg.NOTCH_WIDTH;
+// updated
+drawStatementInput = function(row, steps, info) {
+  var x = row.statementEdge + Blockly.BlockSvg.NOTCH_WIDTH;
   steps.push('H', x);
   steps.push(Blockly.BlockSvg.INNER_TOP_LEFT_CORNER);
-  steps.push('v', input.height - 2 * Blockly.BlockSvg.CORNER_RADIUS);
+  steps.push('v', row.height - 2 * Blockly.BlockSvg.CORNER_RADIUS);
   steps.push(Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER);
-  steps.push('H', info.rightEdge);
+  steps.push('H', info.maxValueOrDummyWidth);
 };
 
 renderDrawRight = function(block, info, pathObject) {

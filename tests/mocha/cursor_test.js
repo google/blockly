@@ -83,6 +83,12 @@ suite('Cursor', function() {
         assertEquals(parentInput, input);
       });
 
+      test('getConnectionParentInputNotFound_', function() {
+        var nextConnection = this.blocks.A.nextConnection;
+        var parentInput = this.cursor.getConnectionParentInput_(nextConnection);
+        assertEquals(parentInput, undefined);
+      });
+
       test('findFirstEditableField_', function() {
         var input = this.blocks.A.inputList[0];
         var editableField = this.cursor.findFirstEditableField_(input);
@@ -93,36 +99,34 @@ suite('Cursor', function() {
         var input = this.blocks.A.inputList[0];
         var input2 = this.blocks.A.inputList[1];
         var connection = input.connection;
-        var correctValue = [input2.connection, input2];
-        var nextValue = this.cursor.findNextFieldOrInput_(connection, input);
-        assertEquals(nextValue[0], correctValue[0]);
-        assertEquals(nextValue[1], correctValue[1]);
+        var nextLocation = this.cursor.findNextFieldOrInput_(connection, input);
+        assertEquals(nextLocation, input2.connection);
+        assertEquals(input2, this.cursor.getParentInput());
       });
 
       test('findPrevInputOrField_', function() {
         var input = this.blocks.A.inputList[0];
         var input2 = this.blocks.A.inputList[1];
         var connection = input2.connection;
-        var correctValue = [input.connection, input];
-        var nextValue = this.cursor.findPrevInputOrField_(connection, input2);
-        assertEquals(nextValue[0], correctValue[0]);
-        assertEquals(nextValue[1], correctValue[1]);
+        var nextLocation = this.cursor.findPrevInputOrField_(connection, input2);
+        assertEquals(nextLocation, input.connection);
+        assertEquals(input, this.cursor.getParentInput());
       });
 
-      test('findTop', function() {
-        var topBlock = this.cursor.findTop(this.blocks.C);
+      test('findTop_', function() {
+        var topBlock = this.cursor.findTop_(this.blocks.C);
         assertEquals(topBlock, this.blocks.C);
       });
 
       test('navigateBetweenStacksForward', function() {
         this.cursor.setLocation(this.blocks.A.nextConnection);
-        var nextStack = this.cursor.navigateBetweenStacks(true);
+        var nextStack = this.cursor.navigateBetweenStacks_(true);
         assertEquals(nextStack, this.blocks.D);
       });
 
       test('navigateBetweenStacksBackward', function() {
         this.cursor.setLocation(this.blocks.D);
-        var nextStack = this.cursor.navigateBetweenStacks(false);
+        var nextStack = this.cursor.navigateBetweenStacks_(false);
         assertEquals(nextStack, this.blocks.A);
       });
 
@@ -139,7 +143,7 @@ suite('Cursor', function() {
       });
 
       test('findTopConnection', function() {
-        var topConnection = this.cursor.findTopConnection(this.blocks.A);
+        var topConnection = this.cursor.findTopConnection_(this.blocks.A);
         assertEquals(topConnection, this.blocks.A.previousConnection);
       });
     });

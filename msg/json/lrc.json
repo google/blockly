@@ -1,14 +1,16 @@
 {
 	"@metadata": {
 		"authors": [
-			"Mogoeilor"
+			"Mogoeilor",
+			"Lorestani"
 		]
 	},
-	"VARIABLES_DEFAULT_NAME": "قلم",
-	"TODAY": "ئمروٙ",
+	"VARIABLES_DEFAULT_NAME": "قلٱم",
+	"TODAY": "اؽمرۊ",
 	"DUPLICATE_BLOCK": "کپی کردن",
-	"ADD_COMMENT": "نظرتونه اضاف بکید",
-	"REMOVE_COMMENT": "نظر جا وه جا کو",
+	"ADD_COMMENT": "نٱزٱرتو ناْ اْزاف بٱکؽت",
+	"REMOVE_COMMENT": "هٱزف نٱزٱر",
+	"DUPLICATE_COMMENT": "نٱزٱر تکراری",
 	"EXTERNAL_INPUTS": "داده یا وه دری",
 	"INLINE_INPUTS": "داده یا مئنجا",
 	"DELETE_BLOCK": "پاکسا کردن برشت",

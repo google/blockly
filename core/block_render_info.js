@@ -49,14 +49,6 @@ Blockly.BlockSvg.RenderInfo = function() {
 Blockly.BlockSvg.renderComputeForRealThough = function(block) {
   var renderInfo = createRenderInfo(block);
 
-  // measure passes:
-  for (var r = 0; r < renderInfo.rows.length; r++) {
-    var row = renderInfo.rows[r];
-    for (var e = 0; e < row.elements.length; e++) {
-      var elem = row.elements[e];
-      elem.measure();
-    }
-  }
   addElemSpacing(renderInfo);
 
   computeBounds(renderInfo);
@@ -64,8 +56,21 @@ Blockly.BlockSvg.renderComputeForRealThough = function(block) {
 
 
   addRowSpacing(renderInfo);
+
+  computeHeight(renderInfo);
   console.log(renderInfo);
+  block.height = renderInfo.height;
+  block.width = renderInfo.widthWithConnectedBlocks;
   return renderInfo;
+};
+
+computeHeight = function(info) {
+  var height = 0;
+  for (var r = 0; r < info.rows.length; r++) {
+    var row = info.rows[r];
+    height += row.height;
+  }
+  info.height = height;
 };
 
 addAlignmentPadding = function(row, missingSpace) {
@@ -115,6 +120,7 @@ alignRowElements = function(renderInfo) {
 computeBounds = function(renderInfo) {
   var widestStatementRowFields = 0;
   var widestValueOrDummyRow = 0;
+  var widestRowWithConnectedBlocks = 0;
   for (var r = 0; r < renderInfo.rows.length; r++) {
     var row = renderInfo.rows[r];
     row.measure();
@@ -126,15 +132,20 @@ computeBounds = function(renderInfo) {
       var innerWidth = row.width - statementInput.width;
       widestStatementRowFields = Math.max(widestStatementRowFields, innerWidth);
     }
+    widestRowWithConnectedBlocks =
+        Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
   }
 
 
   renderInfo.statementEdge = widestStatementRowFields;
 
-
-  renderInfo.maxValueOrDummyWidth =
-      Math.max(widestValueOrDummyRow,
-          widestStatementRowFields + BRC.NOTCH_WIDTH * 2);
+  if (widestStatementRowFields) {
+    renderInfo.maxValueOrDummyWidth =
+        Math.max(widestValueOrDummyRow,
+            widestStatementRowFields + BRC.NOTCH_WIDTH * 2);
+  } else {
+    renderInfo.maxValueOrDummyWidth = widestValueOrDummyRow;
+  }
 
   for (var r = 0; r < renderInfo.rows.length; r++) {
     var row = renderInfo.rows[r];
@@ -142,6 +153,9 @@ computeBounds = function(renderInfo) {
       row.statementEdge = renderInfo.statementEdge;
     }
   }
+
+  renderInfo.widthWithConnectedBlocks =
+      Math.max(widestValueOrDummyRow, widestRowWithConnectedBlocks);
 };
 
 /**
@@ -402,81 +416,75 @@ setShouldSquareCorners = function(block, info) {
   info.squareBottomLeftCorner = !!block.outputConnection || !!nextBlock;
 };
 
-IconElement = function(icon) {
+RenderableBlockElement = function() {
   this.isInput = false;
   this.width = 0;
   this.height = 0;
+  this.type = null;
+};
+
+RenderableInputElement = function(input) {
+  RenderableInputElement.superClass_.constructor.call(this);
+
+  this.isInput = true;
+  this.input = input;
+  this.connectedBlock = input.connection && input.connection.targetBlock() ?
+      input.connection.targetBlock() : null;
+
+  if (this.connectedBlock) {
+    var bBox = this.connectedBlock.getHeightWidth();
+    this.connectedBlockWidth = bBox.width;
+    this.connectedBlockHeight = bBox.height;
+  } else {
+    this.connectedBlockWidth = 0;
+    this.connectedBlockHeight = 0;
+  }
+};
+goog.inherits(RenderableInputElement, RenderableBlockElement);
+
+IconElement = function(icon) {
+  IconElement.superClass_.constructor.call(this);
   this.icon = icon;
   this.isVisible = icon.isVisible();
   this.renderRect = null;
   this.type = 'icon';
-};
 
-IconElement.prototype.measure = function() {
   this.height = 16;
   this.width = 16;
 };
+goog.inherits(IconElement, RenderableBlockElement);
 
 FieldElement = function(field) {
-  this.isInput = false;
-  this.width = 0;
-  this.height = 0;
+  FieldElement.superClass_.constructor.call(this);
   this.field = field;
   this.renderRect = null;
   this.isEditable = field.isCurrentlyEditable();
   this.type = 'field';
-};
 
-FieldElement.prototype.measure = function() {
   var size = this.field.getCorrectedSize();
   this.height = size.height;
   this.width = size.width;
 };
+goog.inherits(FieldElement, RenderableBlockElement);
 
 InlineInputElement = function(input) {
-  this.isInput = true;
-  this.width = 0;
-  this.height = 0;
-  this.input = input;
-  this.connectedBlock = input.connection && input.connection.targetBlock() ?
-      input.connection.targetBlock() : null;
-
-  if (this.connectedBlock) {
-    var bBox = this.connectedBlock.getHeightWidth();
-    this.connectedBlockWidth = bBox.width;
-    this.connectedBlockHeight = bBox.height;
-  } else {
-    this.connectedBlockWidth = 0;
-    this.connectedBlockHeight = 0;
-  }
+  InlineInputElement.superClass_.constructor.call(this, input);
   this.type = 'inline input';
-};
 
-InlineInputElement.prototype.measure = function() {
-  this.width = 22;
-  this.height = 26;
+  if (!this.connectedBlock) {
+    this.height = 26;
+    this.width = 22;
+  } else {
+    this.width = this.connectedBlockWidth;
+    this.height = this.connectedBlockHeight;
+  }
 };
+goog.inherits(InlineInputElement, RenderableInputElement);
 
 StatementInputElement = function(input) {
-  this.isInput = true;
-  this.width = 0;
-  this.height = 0;
-  this.input = input;
-  this.connectedBlock = input.connection && input.connection.targetBlock() ?
-      input.connection.targetBlock() : null;
-
-  if (this.connectedBlock) {
-    var bBox = this.connectedBlock.getHeightWidth();
-    this.connectedBlockWidth = bBox.width;
-    this.connectedBlockHeight = bBox.height;
-  } else {
-    this.connectedBlockWidth = 0;
-    this.connectedBlockHeight = 0;
-  }
+  InlineInputElement.superClass_.constructor.call(this, input);
   this.type = 'statement input';
-};
 
-StatementInputElement.prototype.measure = function() {
   if (!this.connectedBlock) {
     this.height = 24;
     this.width = 32;
@@ -485,31 +493,20 @@ StatementInputElement.prototype.measure = function() {
     this.height = this.connectedBlockHeight;
   }
 };
+goog.inherits(StatementInputElement, RenderableInputElement);
 
 ExternalValueInputElement = function(input) {
-  this.isInput = true;
-  this.width = 0;
-  this.height = 0;
+  ExternalValueInputElement.superClass_.constructor.call(this, input);
+  this.type = 'external value input';
 
-  this.input = input;
-  this.connectedBlock = input.connection && input.connection.targetBlock() ?
-      input.connection.targetBlock() : null;
-
-  if (this.connectedBlock) {
-    var bBox = this.connectedBlock.getHeightWidth();
-    this.connectedBlockWidth = bBox.width;
-    this.connectedBlockHeight = bBox.height;
+  if (!this.connectedBlock) {
+    this.height = 15;
   } else {
-    this.connectedBlockWidth = 0;
-    this.connectedBlockHeight = 0;
+    this.height = this.connectedBlockHeight - 2 * BRC.TAB_OFFSET_FROM_TOP;
   }
-  this.type = 'statement input';
-};
-
-ExternalValueInputElement.prototype.measure = function() {
   this.width = 10;
-  this.height = 15;
 };
+goog.inherits(ExternalValueInputElement, RenderableInputElement);
 
 Row = function() {
   this.elements = [];
@@ -522,13 +519,18 @@ Row = function() {
 };
 
 Row.prototype.measure = function() {
+  var connectedBlockWidths = 0;
   for (var e = 0; e < this.elements.length; e++) {
     var elem = this.elements[e];
     this.width += elem.width;
+    if (elem.isInput) {
+      connectedBlockWidths += elem.connectedBlockWidth;
+    }
     if (!(elem instanceof ElemSpacer)) {
       this.height = Math.max(this.height, elem.height);
     }
   }
+  this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
 };
 
 Row.prototype.getLastInput = function() {
@@ -555,12 +557,11 @@ Row.prototype.getLastSpacer = function() {
 RowSpacer = function(height, width) {
   this.height = height;
   this.rect = null;
-  this.width = width; // Only for visible rendering during debugging
+  this.width = width;
 };
 
 ElemSpacer = function(width) {
   this.height = 15; // Only for visible rendering during debugging.
-
   this.width = width;
   this.rect = null;
 };

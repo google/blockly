@@ -1,13 +1,3 @@
-// New constants.
-Blockly.BlockSvg.EMPTY_INPUT_X = Blockly.BlockSvg.TAB_WIDTH +
-          Blockly.BlockSvg.SEP_SPACE_X * 1.25;
-
-Blockly.BlockSvg.START_PADDING = Blockly.BlockSvg.SEP_SPACE_X - 1;
-
-Blockly.BlockSvg.STATEMENT_BOTTOM_HEIGHT = Blockly.BlockSvg.SEP_SPACE_Y - 1;
-
-Blockly.BlockSvg.EMPTY_INPUT_Y = Blockly.BlockSvg.MIN_BLOCK_Y;//Blockly.BlockSvg.MIN_BLOCK_Y - 5;
-
 Blockly.BlockSvg.RenderInfo = function() {
   /**
    *
@@ -26,28 +16,6 @@ Blockly.BlockSvg.RenderInfo = function() {
    * @type {boolean}
    */
   this.squareBottomLeftCorner = false;
-
-  /**
-   *
-   * @type {boolean}
-   */
-  this.hasValue = false;
-
-  /**
-   *
-   * @type {boolean}
-   */
-  this.hasStatement = false;
-
-  /**
-   *
-   * @type {boolean}
-   */
-  this.hasDummy = false;
-
-  this.hasIcons = false;
-
-  this.iconCount = 0;
 
   /**
    *
@@ -130,13 +98,12 @@ addAlignmentPadding = function(row, missingSpace) {
  * the sizes of all rows.
  */
 alignRowElements = function(renderInfo) {
+
   for (var r = 0; r < renderInfo.rows.length; r++) {
     var row = renderInfo.rows[r];
-
     if (!row.hasStatement && !row.hasInlineInput) {
       var currentWidth = row.width;
       var desiredWidth = renderInfo.maxValueOrDummyWidth;
-
       var missingSpace = desiredWidth - currentWidth;
       if (missingSpace) {
         addAlignmentPadding(row, missingSpace);
@@ -146,34 +113,31 @@ alignRowElements = function(renderInfo) {
 };
 
 computeBounds = function(renderInfo) {
-  renderInfo.maxWidth = 0;
-  // Some arbitrary min width?
-  renderInfo.maxValueOrDummyWidth = 60;
-  renderInfo.statementEdge = 0;
+  var widestStatementRowFields = 0;
+  var widestValueOrDummyRow = 0;
   for (var r = 0; r < renderInfo.rows.length; r++) {
     var row = renderInfo.rows[r];
     row.measure();
-    renderInfo.maxWidth = Math.max(renderInfo.maxWidth, row.width);
-    if (!row.hasStatement && !row.hasInlineInput) {
-      renderInfo.maxValueOrDummyWidth =
-          Math.max(renderInfo.maxValueOrDummyWidth, row.width);
+    if (!row.hasStatement) {
+      widestValueOrDummyRow = Math.max(widestValueOrDummyRow, row.width);
     }
     if (row.hasStatement) {
       var statementInput = row.getLastInput();
       var innerWidth = row.width - statementInput.width;
-      renderInfo.statementEdge = Math.max(renderInfo.statementEdge, innerWidth);
+      widestStatementRowFields = Math.max(widestStatementRowFields, innerWidth);
     }
   }
 
-  renderInfo.maxValueOrDummyWidth =
-      Math.max(renderInfo.maxValueOrDummyWidth, renderInfo.statementEdge);
 
-  var maxWidth = renderInfo.maxWidth;
+  renderInfo.statementEdge = widestStatementRowFields;
+
+
+  renderInfo.maxValueOrDummyWidth =
+      Math.max(widestValueOrDummyRow,
+          widestStatementRowFields + BRC.NOTCH_WIDTH * 2);
+
   for (var r = 0; r < renderInfo.rows.length; r++) {
     var row = renderInfo.rows[r];
-    // if (!row.hasStatement && !row.hasInlineInput) {
-    //   row.desiredWidth = maxWidth;
-    // }
     if (row.hasStatement) {
       row.statementEdge = renderInfo.statementEdge;
     }
@@ -186,8 +150,11 @@ computeBounds = function(renderInfo) {
 addRowSpacing = function(info) {
   var oldRows = info.rows;
   var newRows = [];
-  newRows.push(new RowSpacer(5, info.maxWidth));
 
+  // There's a spacer before the first row.
+  var spacing = calculateSpacingBetweenRows(null, oldRows[0]);
+  var width = calculateWidthOfSpacerRow(oldRows[null], oldRows[0], info);
+  newRows.push(new RowSpacer(spacing, width));
   for (var r = 0; r < oldRows.length; r++) {
     newRows.push(oldRows[r]);
     var spacing = calculateSpacingBetweenRows(oldRows[r], oldRows[r + 1]);
@@ -204,15 +171,19 @@ addRowSpacing = function(info) {
  */
 calculateWidthOfSpacerRow = function(prev, next, info) {
   if (!prev) {
-    return info.maxWidth;
+    return info.maxValueOrDummyWidth;
   }
 
   // spacer row after the last statement input.
   if (!next && prev.hasStatement) {
-    return info.maxValueOrDummyWidth;
+    if (info.isInline) {
+      return info.maxValueOrDummyWidth;
+    } else {
+      return info.maxValueOrDummyWidth;
+    }
   }
 
-  return info.maxWidth;
+  return info.maxValueOrDummyWidth;
 };
 
 /**
@@ -223,6 +194,9 @@ calculateWidthOfSpacerRow = function(prev, next, info) {
 calculateSpacingBetweenRows = function(prev, next) {
   // First row is always (?) 5.
   if (!prev) {
+    if (next && next.hasStatement) {
+      return 10;
+    }
     return 5;
   }
 
@@ -249,8 +223,7 @@ addElemSpacing = function(info) {
     var row = info.rows[r];
     var oldElems = row.elements;
     var newElems = [];
-    // Could probably do this by starting the loop at -1 or stopping it one late.
-    // Will need to do the same for rows.
+    // There's a spacer before the first element in the row.
     newElems.push(new ElemSpacer(calculateSpacingBetweenElems(null, oldElems[0])));
     for (var e = 0; e < row.elements.length; e++) {
       newElems.push(oldElems[e]);
@@ -342,9 +315,11 @@ calculateSpacingBetweenElems = function(prev, next) {
 createRenderInfo = function(block) {
   var info = new Blockly.BlockSvg.RenderInfo();
   info.startHat = this.hat ? this.hat === 'cap' : Blockly.BlockSvg.START_HAT;
+  if (block.outputConnection) {
+    info.hasOutputConnection = true;
+  }
 
   setShouldSquareCorners(block, info);
-  setHasStuff(block, info);
 
   createRows(block, info);
   return info;
@@ -425,24 +400,6 @@ setShouldSquareCorners = function(block, info) {
       (prevBlock && prevBlock.getNextBlock() == this);
 
   info.squareBottomLeftCorner = !!block.outputConnection || !!nextBlock;
-};
-
-setHasStuff = function(block, info) {
-  if (block.outputConnection) {
-    info.hasOutputConnection = true;
-  }
-  for (var i = 0; i < block.inputList.length; i++) {
-    var input = block.inputList[i];
-    if (input.type == Blockly.DUMMY_INPUT) {
-      info.hasDummy = true;
-    } else if (input.type == Blockly.INPUT_VALUE) {
-      info.hasValue = true;
-    } else if (input.type == Blockly.NEXT_STATEMENT) {
-      info.hasStatement = true;
-    } else {
-      throw new Error('what why');
-    }
-  }
 };
 
 IconElement = function(icon) {

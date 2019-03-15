@@ -186,6 +186,7 @@ Blockly.BlockSvg.JAGGED_TEETH_WIDTH = 15;
 Blockly.BlockSvg.TAB_PATH_DOWN = 'v 5 c 0,10 -' + Blockly.BlockSvg.TAB_WIDTH +
     ',-8 -' + Blockly.BlockSvg.TAB_WIDTH + ',7.5 s ' +
     Blockly.BlockSvg.TAB_WIDTH + ',-2.5 ' + Blockly.BlockSvg.TAB_WIDTH + ',7.5';
+
 /**
  * SVG path for drawing a horizontal puzzle tab from top to bottom with
  * highlighting from the upper-right.
@@ -616,16 +617,16 @@ Blockly.BlockSvg.prototype.setPaths_ = function(pathObject) {
   var pathString = pathObject.steps.join(' ') + '\n' +
       pathObject.inlineSteps.join(' ');
   this.svgPath_.setAttribute('d', pathString);
-  this.svgPathDark_.setAttribute('d', pathString);
+  //this.svgPathDark_.setAttribute('d', pathString);
 
   pathString = pathObject.highlightSteps.join(' ') + '\n' +
       pathObject.highlightInlineSteps.join(' ');
-  this.svgPathLight_.setAttribute('d', pathString);
+  //this.svgPathLight_.setAttribute('d', pathString);
   if (this.RTL) {
     // Mirror the block's path.
     this.svgPath_.setAttribute('transform', 'scale(-1 1)');
-    this.svgPathLight_.setAttribute('transform', 'scale(-1 1)');
-    this.svgPathDark_.setAttribute('transform', 'translate(1,1) scale(-1 1)');
+    //this.svgPathLight_.setAttribute('transform', 'scale(-1 1)');
+    //this.svgPathDark_.setAttribute('transform', 'translate(1,1) scale(-1 1)');
   }
 };
 

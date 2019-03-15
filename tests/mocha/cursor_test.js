@@ -4,7 +4,7 @@ suite('Cursor', function() {
   setup(function() {
     Blockly.defineBlocksWithJsonArray([{
       "type": "input_statement",
-      "message0": "%1 %2 %3",
+      "message0": "%1 %2 %3 %4",
       "args0": [
         {
           "type": "field_input",
@@ -12,8 +12,13 @@ suite('Cursor', function() {
           "text": "default"
         },
         {
+          "type": "field_input",
+          "name": "NAME",
+          "text": "default"
+        },
+        {
           "type": "input_value",
-          "name": "input1"
+          "name": "NAME"
         },
         {
           "type": "input_statement",
@@ -89,28 +94,68 @@ suite('Cursor', function() {
         assertEquals(parentInput, undefined);
       });
 
-      test('findFirstEditableField_', function() {
+      test('findNextEditableField_', function() {
         var input = this.blocks.A.inputList[0];
-        var editableField = this.cursor.findFirstEditableField_(input);
+        var field = input.fieldRow[0];
+        var nextField = input.fieldRow[1];
+        var editableField = this.cursor.findNextEditableField_(field, input);
+        assertEquals(editableField, nextField);
+      });
+
+      test('findNextEditableFieldFirst_', function() {
+        var input = this.blocks.A.inputList[0];
+        var field = input.fieldRow[1];
+        var editableField = this.cursor.findNextEditableField_(field, input, true);
         assertEquals(editableField, input.fieldRow[0]);
       });
 
-      test('findNextFieldOrInput_', function() {
+      test('findPreviousEditableField_', function() {
+        var input = this.blocks.A.inputList[0];
+        var field = input.fieldRow[1];
+        var prevField = input.fieldRow[0];
+        var editableField = this.cursor.findPreviousEditableField_(field, input);
+        assertEquals(editableField, prevField);
+      });
+
+      test('findPreviousEditableFieldLast_', function() {
+        var input = this.blocks.A.inputList[0];
+        var field = input.fieldRow[0];
+        var editableField = this.cursor.findPreviousEditableField_(field, input, true);
+        assertEquals(editableField, input.fieldRow[1]);
+      });
+
+      test('findNextForInput_', function() {
         var input = this.blocks.A.inputList[0];
         var input2 = this.blocks.A.inputList[1];
         var connection = input.connection;
-        var nextLocation = this.cursor.findNextFieldOrInput_(connection, input);
+        var nextLocation = this.cursor.findNextForInput_(connection, input);
         assertEquals(nextLocation, input2.connection);
         assertEquals(input2, this.cursor.getParentInput());
       });
 
-      test('findPrevInputOrField_', function() {
+      test('findPrevForInput_', function() {
         var input = this.blocks.A.inputList[0];
         var input2 = this.blocks.A.inputList[1];
         var connection = input2.connection;
-        var nextLocation = this.cursor.findPrevInputOrField_(connection, input2);
+        var nextLocation = this.cursor.findPrevForInput_(connection, input2);
         assertEquals(nextLocation, input.connection);
         assertEquals(input, this.cursor.getParentInput());
+      });
+
+      test('findNextForField_', function() {
+        var input = this.blocks.A.inputList[0];
+        var field = this.blocks.A.inputList[0].fieldRow[0];
+        var field2 = this.blocks.A.inputList[0].fieldRow[1];
+        var nextLocation = this.cursor.findNextForField_(field, input);
+        assertEquals(nextLocation, field2);
+      });
+
+      test('findPrevForField_', function() {
+        var input = this.blocks.A.inputList[0];
+        var field = this.blocks.A.inputList[0].fieldRow[0];
+        var field2 = this.blocks.A.inputList[0].fieldRow[1];
+        var nextLocation = this.cursor.findPrevForField_(field2, input);
+        assertEquals(nextLocation, field);
       });
 
       test('findTop_', function() {
@@ -180,7 +225,7 @@ suite('Cursor', function() {
         assertEquals(this.cursor.getLocation(), this.blocks.E);
       });
       test('field', function() {
-        var field = this.blocks.A.inputList[0].fieldRow[0];
+        var field = this.blocks.A.inputList[0].fieldRow[1];
         this.cursor.setLocation(field, this.blocks.A.inputList[0]);
         this.cursor.next();
         assertEquals(this.cursor.getLocation(), this.blocks.A.inputList[0].connection);
@@ -221,7 +266,7 @@ suite('Cursor', function() {
         //This will normally get set in the in function
         this.cursor.setLocation(input.connection, input);
         this.cursor.prev();
-        assertEquals(this.cursor.getLocation(), input.fieldRow[0]);
+        assertEquals(this.cursor.getLocation(), input.fieldRow[1]);
       });
       test('output', function() {
         var output = this.blocks.E.outputConnection;

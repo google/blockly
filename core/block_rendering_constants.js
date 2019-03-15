@@ -96,3 +96,8 @@ BRC.TOP_LEFT_CORNER =
     'A ' + BRC.CORNER_RADIUS + ',' +
     BRC.CORNER_RADIUS + ' 0 0,1 ' +
     BRC.CORNER_RADIUS + ',0';
+
+BRC.BOTTOM_LEFT_CORNER = 'a' + BRC.CORNER_RADIUS + ',' +
+               BRC.CORNER_RADIUS + ' 0 0,1 -' +
+               BRC.CORNER_RADIUS + ',-' +
+               BRC.CORNER_RADIUS;

@@ -5,94 +5,8 @@ renderDraw = function(block, info) {
   boxElems(block, info);
 };
 
-drawSpacerRow = function(row, cursorY, svgRoot) {
-  row.rect = Blockly.utils.createSvgElement('rect',
-      {
-        'class': 'rowSpacerRect displayable',
-        'x': 0,
-        'y': cursorY,
-        'width': row.width,
-        'height': row.height,
-      },
-      svgRoot);
-};
-
-drawSpacerElem = function(elem, cursorX, centerY, svgRoot) {
-  elem.rect = Blockly.utils.createSvgElement('rect',
-      {
-        'class': 'elemSpacerRect displayable',
-        'x': cursorX,
-        'y': centerY - elem.height / 2,
-        'width': elem.width,
-        'height': 15,
-      },
-      svgRoot);
-};
-
-drawRenderedElem = function(elem, cursorX, centerY, svgRoot) {
-  var yPos = centerY - elem.height / 2;
-  elem.rect = Blockly.utils.createSvgElement('rect',
-      {
-        'class': 'rowRenderingRect displayable',
-        'x': cursorX,
-        'y': yPos,
-        'width': elem.width,
-        'height': elem.height ,
-      },
-      svgRoot);
-
-  // if (elem.type == 'field') {
-  //   // THEY RENDER AT X=-5 ON THEIR TOP LEVEL GROUP
-  //   // IT'S THE FUCKING WORST
-  //   if (elem.field instanceof Blockly.FieldDropdown ||
-  //       elem.field instanceof Blockly.FieldTextInput) {
-  //     cursorX += 5;
-  //   }
-  //   elem.field.getSvgRoot().setAttribute('transform',
-  //       'translate(' + cursorX + ',' + yPos + ')');
-  // }
-};
-
-drawRenderedRow = function(row, cursorY, svgRoot) {
-  row.rect = Blockly.utils.createSvgElement('rect',
-      {
-        'class': 'elemRenderingRect displayable',
-        'x': 0,
-        'y': cursorY ,
-        'width': row.width,
-        'height': row.height,
-      },
-      svgRoot);
-};
-
-drawRowWithElements = function(row, cursorY, svgRoot) {
-  var centerY = cursorY + row.height / 2;
-  var cursorX = 0;
-  for (var e = 0; e < row.elements.length; e++) {
-    var elem = row.elements[e];
-    if (elem instanceof ElemSpacer) {
-      drawSpacerElem(elem, cursorX, centerY, svgRoot);
-    } else {
-      drawRenderedElem(elem, cursorX, centerY, svgRoot);
-    }
-    cursorX += elem.width;
-  }
-  drawRenderedRow(row, cursorY, svgRoot);
-};
-
 boxElems = function(block, info) {
-  var svgRoot = block.getSvgRoot();
-  var cursorY = 0;
-  for (var r = 0; r < info.rows.length; r++) {
-    var row = info.rows[r];
-    if (row instanceof RowSpacer) {
-      drawSpacerRow(row, cursorY, svgRoot);
-    } else {
-      drawRowWithElements(row, cursorY, svgRoot);
-    }
-    cursorY += row.height;
-  }
-
+  drawDebug(block, info);
   var pathObject = new Blockly.BlockSvg.PathObject();
   drawOutline(block, info, pathObject);
   drawInternals(block, info, pathObject);
@@ -105,8 +19,6 @@ drawOutline = function(block, info, pathObject) {
   var cursorY = 0;
   for (var r = 0; r < info.rows.length; r++) {
     var row = info.rows[r];
-    // if (row instanceof RowSpacer) {
-    // } else
     if (row.hasStatement) {
       drawStatementInput(row, steps, info);
     } else if (row.hasExternalInput) {
@@ -125,8 +37,6 @@ drawOutline = function(block, info, pathObject) {
 
 drawTopCorner = function(block, info, pathObject) {
   var steps = pathObject.steps;
-  //steps.push('m 0,0');
-
   // Position the cursor at the top-left starting point.
   if (info.squareTopLeftCorner) {
     steps.push('m 0,0');
@@ -162,11 +72,7 @@ drawBottomCorner = function(block, info, pathObject) {
   if (info.squareBottomLeftCorner) {
     steps.push('H 0');
   } else {
-    steps.push('H', BRC.CORNER_RADIUS);
-    steps.push('a', BRC.CORNER_RADIUS + ',' +
-               BRC.CORNER_RADIUS + ' 0 0,1 -' +
-               BRC.CORNER_RADIUS + ',-' +
-               BRC.CORNER_RADIUS);
+    steps.push(BRC.BOTTOM_LEFT_CORNER);
   }
 };
 
@@ -193,15 +99,17 @@ drawLeft = function(block, info, pathObject, cursorY) {
 drawInternals = function(block, info, pathObject) {
   var inlineSteps = pathObject.inlineSteps;
   var cursorY = 0;
-  var cursorX = 0;
   for (var r = 0; r < info.rows.length; r++) {
     var row = info.rows[r];
+    var cursorX = 0;
     var centerline = cursorY + row.height / 2;
-    if (row.hasInlineInput) {
+    if (!(row instanceof RowSpacer)) {
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];
         if (elem instanceof InlineInputElement) {
           drawInlineInput(inlineSteps, cursorX, cursorY, elem, centerline);
+        } else if (elem instanceof IconElement || elem instanceof FieldElement) {
+          layoutField(elem, cursorX, centerline, row.width, block.RTL);
         }
         cursorX += elem.width;
       }
@@ -210,15 +118,28 @@ drawInternals = function(block, info, pathObject) {
   }
 };
 
-layoutField = function(fieldInfo, cursorX, cursorY, centerline) {
+dealWithJackassFields = function(field) {
+  if (field instanceof Blockly.FieldDropdown
+      || field instanceof Blockly.FieldTextInput) {
+    return 5;
+  }
+  return 0;
+};
+
+layoutField = function(fieldInfo, cursorX, centerline, rowWidth, RTL) {
   var yPos = centerline - fieldInfo.height / 2;
+  if (RTL) {
+    cursorX = -(cursorX + fieldInfo.width);
+  }
   if (fieldInfo.type == 'icon') {
-    var icon = fieldInfo.field;
+    var icon = fieldInfo.icon;
     icon.iconGroup_.setAttribute('display', 'block');
     icon.iconGroup_.setAttribute('transform', 'translate(' + cursorX + ',' +
         yPos + ')');
     icon.computeIconLocation();
   } else {
+    cursorX += dealWithJackassFields(fieldInfo.field);
+
     fieldInfo.field.getSvgRoot().setAttribute('transform',
         'translate(' + cursorX + ',' + yPos + ')');
   }
@@ -245,7 +166,6 @@ drawInlineInput = function(inlineSteps, x, y, input, centerline) {
   inlineSteps.push('z');
 };
 
-// updated
 drawStatementInput = function(row, steps, info) {
   var x = row.statementEdge + BRC.NOTCH_OFFSET;
   steps.push('H', x);

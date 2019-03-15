@@ -117,7 +117,7 @@ Blockly.Workspace = function(opt_options) {
    * The cursor for navigating blocks.
    * @type {!Blockly.Cursor}
    */
-  this.cursor_ = new Blockly.Cursor();
+  this.cursor = this.addCursor();
 };
 
 /**
@@ -139,6 +139,14 @@ Blockly.Workspace.prototype.isClearing = false;
  * @type {number}
  */
 Blockly.Workspace.prototype.MAX_UNDO = 1024;
+
+/**
+ * Adds cursor for keyboard navigation.
+ * @return{Blockly.Cursor} Cursor for keyboard navigation.
+ */
+Blockly.Workspace.prototype.addCursor = function() {
+  return new Blockly.Cursor();
+};
 
 /**
  * Dispose of this workspace.

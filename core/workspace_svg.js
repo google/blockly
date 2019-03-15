@@ -121,13 +121,6 @@ Blockly.WorkspaceSvg = function(options,
     this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
   }
-
-  /**
-   * The cursor for navigating blocks.
-   * @type {!Blockly.CursorSvg}
-   */
-  this.cursor_ = new Blockly.CursorSvg(this);
-
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -382,6 +375,14 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
 Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
 
 /**
+ * Adds cursor for keyboard navigation.
+ * @return{Blockly.CursorSvg} Cursor for keyboard navigation.
+ */
+Blockly.WorkspaceSvg.prototype.addCursor = function() {
+  return new Blockly.CursorSvg(this);
+};
+
+/**
  * Getter for the inverted screen CTM.
  * @return {SVGMatrix} The matrix to use in mouseToSvg
  */
@@ -552,7 +553,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   this.recordDeleteAreas();
 
-  var svgCursor = this.cursor_.createDom();
+  var svgCursor = this.cursor.createDom();
   this.svgGroup_.appendChild(svgCursor);
 
   return this.svgGroup_;

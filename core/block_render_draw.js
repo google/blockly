@@ -2,12 +2,7 @@
 
 renderDraw = function(block, info) {
   var pathObject = new Blockly.BlockSvg.PathObject();
-  boxElems(block, info);
-};
-
-boxElems = function(block, info) {
-  drawDebug(block, info);
-  var pathObject = new Blockly.BlockSvg.PathObject();
+  //drawDebug(block, info, pathObject);
   drawOutline(block, info, pathObject);
   drawInternals(block, info, pathObject);
   block.setPaths_(pathObject);
@@ -54,7 +49,8 @@ drawTopCorner = function(block, info, pathObject) {
     steps.push('H', BRC.NOTCH_WIDTH);
     steps.push(BRC.NOTCH_PATH_LEFT);
   }
-  steps.push('H', info.width);
+  console.log(info.width);
+  steps.push('H', info.maxValueOrDummyWidth);
 };
 
 drawBottom = function(block, info, pathObject) {
@@ -82,18 +78,12 @@ drawLeft = function(block, info, pathObject, cursorY) {
   if (info.hasOutputConnection) {
     // Draw a line up to the bottom of the tab.
     steps.push('v', -(cursorY - BRC.TAB_HEIGHT - BRC.TAB_OFFSET_FROM_TOP));
-    // Move (without drawing) to the top of the tab.
-    steps.push('m 0,-' + BRC.TAB_HEIGHT);
-    // Draw the tab down, to use the same path as other tab drawing uses.
-    steps.push(BRC.TAB_PATH_DOWN);
-    // Move (without drawing) back up by the tab height.
-    steps.push('m 0,' + BRC.TAB_HEIGHT);
-    // Close off the path.  This should move up to the top left corner right now.
-    steps.push('z');
-  } else {
-    steps.push('v', -cursorY);
-    steps.push('z');
+    steps.push(BRC.TAB_PATH_UP);
   }
+
+  // Close off the path.  This draws a vertical line up to the start of the
+  // block's path, which may be either a rounded or a sharp corner.
+  steps.push('z');
 };
 
 drawInternals = function(block, info, pathObject) {
@@ -157,12 +147,11 @@ drawInlineInput = function(inlineSteps, x, y, input, centerline) {
   var yPos = centerline - height / 2;
 
   inlineSteps.push('M', (x + BRC.TAB_WIDTH) + ',' + yPos);
-  inlineSteps.push('v 5');
-  // todo: this version of tab path down includes the "v 5" at the beginning.
+  inlineSteps.push('v ', BRC.TAB_OFFSET_FROM_TOP);
   inlineSteps.push(BRC.TAB_PATH_DOWN);
-  inlineSteps.push('v', height - BRC.TAB_HEIGHT - 5);
+  inlineSteps.push('v', height - BRC.TAB_HEIGHT - BRC.TAB_OFFSET_FROM_TOP);
   inlineSteps.push('h', width - BRC.TAB_WIDTH);
-  inlineSteps.push('v', - height);
+  inlineSteps.push('v', -height);
   inlineSteps.push('z');
 };
 

@@ -31,6 +31,13 @@ BRC.TAB_PATH_DOWN =  'c 0,10 -' + BRC.TAB_WIDTH +
       BRC.TAB_WIDTH + ',-2.5 ' + BRC.TAB_WIDTH + ',7.5';
 
 /**
+ * SVG path for drawing a horizontal puzzle tab from bottom to top.
+ * @const
+ */
+BRC.TAB_PATH_UP =  'c 0,-10 -' + BRC.TAB_WIDTH +
+      ',8 -' + BRC.TAB_WIDTH + ',-7.5 s ' +
+      BRC.TAB_WIDTH + ',2.5 ' + BRC.TAB_WIDTH + ',-7.5';
+/**
  * Path of the top hat's curve.
  * @const
  */

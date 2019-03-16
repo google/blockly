@@ -37,12 +37,32 @@ BRC.DISTANCE_45_INSIDE = (1 - Math.SQRT1_2) *
     (BRC.CORNER_RADIUS - BRC.HIGHLIGHT_OFFSET) + BRC.HIGHLIGHT_OFFSET;
 
 /**
+ * Distance from shape edge to intersect with a curved corner at 45 degrees.
+ * Applies to highlighting on around the outside of a curve.
+ * @const
+ */
+BRC.DISTANCE_45_OUTSIDE = (1 - Math.SQRT1_2) *
+    (BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET) - BRC.HIGHLIGHT_OFFSET;
+
+/**
  * SVG path for drawing a horizontal puzzle tab from top to bottom.
  * @const
  */
 BRC.TAB_PATH_DOWN =  'c 0,10 -' + BRC.TAB_WIDTH +
       ',-8 -' + BRC.TAB_WIDTH + ',7.5 s ' +
       BRC.TAB_WIDTH + ',-2.5 ' + BRC.TAB_WIDTH + ',7.5';
+
+
+/**
+ * SVG path for drawing a horizontal puzzle tab from top to bottom with
+ * highlighting from the upper-right.
+ * @const
+ */
+BRC.TAB_PATH_DOWN_HIGHLIGHT_RTL = 'm -' +
+    (BRC.TAB_WIDTH * 0.97) + ',0 q -' +
+    (BRC.TAB_WIDTH * 0.05) + ',10 ' +
+    (BRC.TAB_WIDTH * 0.3) + ',9.5 m ' +
+    (BRC.TAB_WIDTH * 0.67) + ',-1.9 v 1.4';
 
 /**
  * SVG path for drawing a horizontal puzzle tab from bottom to top.
@@ -103,6 +123,40 @@ BRC.INNER_BOTTOM_LEFT_CORNER =
     BRC.CORNER_RADIUS + ' 0 0,0 ' +
     BRC.CORNER_RADIUS + ',' +
     BRC.CORNER_RADIUS;
+
+/**
+ * SVG path for drawing highlight on the top-left corner of a statement
+ * input in RTL.
+ * @const
+ */
+BRC.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL =
+    'a ' + BRC.CORNER_RADIUS + ',' +
+    BRC.CORNER_RADIUS + ' 0 0,0 ' +
+    (-BRC.DISTANCE_45_OUTSIDE - 0.5) + ',' +
+    (BRC.CORNER_RADIUS -
+    BRC.DISTANCE_45_OUTSIDE);
+/**
+ * SVG path for drawing highlight on the bottom-left corner of a statement
+ * input in RTL.
+ * @const
+ */
+BRC.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL =
+    'a ' + (BRC.CORNER_RADIUS + 0.5) + ',' +
+    (BRC.CORNER_RADIUS + 0.5) + ' 0 0,0 ' +
+    (BRC.CORNER_RADIUS + 0.5) + ',' +
+    (BRC.CORNER_RADIUS + 0.5);
+/**
+ * SVG path for drawing highlight on the bottom-left corner of a statement
+ * input in LTR.
+ * @const
+ */
+BRC.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
+    'a ' + (BRC.CORNER_RADIUS + 0.5) + ',' +
+    (BRC.CORNER_RADIUS + 0.5) + ' 0 0,0 ' +
+    (BRC.CORNER_RADIUS -
+    BRC.DISTANCE_45_OUTSIDE) + ',' +
+    (BRC.DISTANCE_45_OUTSIDE + 0.5);
+
 
 // This is the offset from the vertical part of a statement input
 // to where to start the notch.

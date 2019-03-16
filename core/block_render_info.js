@@ -333,6 +333,7 @@ createRenderInfo = function(block) {
     info.hasOutputConnection = true;
   }
 
+  info.RTL = block.RTL;
   setShouldSquareCorners(block, info);
 
   createRows(block, info);

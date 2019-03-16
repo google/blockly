@@ -74,24 +74,50 @@ drawBottom = function(block, info, pathObject) {
 };
 
 drawBottomCorner = function(block, info, pathObject) {
+  var highlightSteps = pathObject.highlightSteps;
   var steps = pathObject.steps;
   // Should the bottom-left corner be rounded or square?
   if (info.squareBottomLeftCorner) {
     steps.push('H 0');
+    if (!block.RTL) {
+      highlightSteps.push('M',
+          BRC.HIGHLIGHT_OFFSET + ',' + (info.height - BRC.HIGHLIGHT_OFFSET));
+    }
   } else {
     steps.push(BRC.BOTTOM_LEFT_CORNER);
+    if (!block.RTL) {
+      highlightSteps.push(BRC.BOTTOM_LEFT_CORNER_HIGHLIGHT_START +
+          (info.height - Blockly.BlockSvg.DISTANCE_45_INSIDE) +
+          BRC.BOTTOM_LEFT_CORNER_HIGHLIGHT_MID +
+          (info.height - Blockly.BlockSvg.CORNER_RADIUS));
+    }
   }
 };
 
 drawLeft = function(block, info, pathObject, cursorY) {
   var steps = pathObject.steps;
+  var highlightSteps = pathObject.highlightSteps;
 
   if (info.hasOutputConnection) {
     // Draw a line up to the bottom of the tab.
     steps.push('v', -(cursorY - BRC.TAB_HEIGHT - BRC.TAB_OFFSET_FROM_TOP));
     steps.push(BRC.TAB_PATH_UP);
+
+    if (block.RTL) {
+      highlightSteps.push(BRC.OUTPUT_CONNECTION_HIGHLIGHT_RTL);
+    } else {
+      highlightSteps.push(BRC.OUTPUT_CONNECTION_HIGHLIGHT_LTR);
+    }
   }
 
+  if (!block.RTL) {
+    // Left side highlight
+    if (info.squareTopLeftCorner) {
+      highlightSteps.push('V', BRC.HIGHLIGHT_OFFSET);
+    } else {
+      highlightSteps.push('V', BRC.CORNER_RADIUS);
+    }
+  }
   // Close off the path.  This draws a vertical line up to the start of the
   // block's path, which may be either a rounded or a sharp corner.
   steps.push('z');

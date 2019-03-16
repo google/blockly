@@ -31,26 +31,37 @@ drawOutline = function(block, info, pathObject) {
 };
 
 drawTopCorner = function(block, info, pathObject) {
+  var highlightSteps = pathObject.highlightSteps;
+
   var steps = pathObject.steps;
   // Position the cursor at the top-left starting point.
   if (info.squareTopLeftCorner) {
-    steps.push('m 0,0');
+    steps.push(BRC.START_POINT);
+    highlightSteps.push(BRC.START_POINT_HIGHLIGHT);
     if (info.startHat) {
       steps.push(BRC.START_HAT_PATH);
+      highlightSteps.push(this.RTL ?
+          Blockly.BlockSvg.START_HAT_HIGHLIGHT_RTL :
+          Blockly.BlockSvg.START_HAT_HIGHLIGHT_LTR);
     }
   } else {
-    steps.push(BRC.TOP_LEFT_CORNER_START);
-    // Top-left rounded corner.
-    steps.push(BRC.TOP_LEFT_CORNER);
+    steps.push(BRC.TOP_LEFT_CORNER_START, BRC.TOP_LEFT_CORNER);
+
+    // And the highlights:
+    highlightSteps.push(this.RTL ?
+        Blockly.BlockSvg.TOP_LEFT_CORNER_START_HIGHLIGHT_RTL :
+        Blockly.BlockSvg.TOP_LEFT_CORNER_START_HIGHLIGHT_LTR);
+    highlightSteps.push(Blockly.BlockSvg.TOP_LEFT_CORNER_HIGHLIGHT);
   }
 
   // Top edge.
   if (block.previousConnection) {
-    steps.push('H', BRC.NOTCH_WIDTH);
-    steps.push(BRC.NOTCH_PATH_LEFT);
+    steps.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT);
+
+    highlightSteps.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT_HIGHLIGHT);
   }
-  console.log(info.width);
   steps.push('H', info.maxValueOrDummyWidth);
+  highlightSteps.push('H', info.maxValueOrDummyWidth - BRC.HIGHLIGHT_OFFSET);
 };
 
 drawBottom = function(block, info, pathObject) {

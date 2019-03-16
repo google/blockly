@@ -5,6 +5,7 @@ var BRC = {};
 BRC.HIGHLIGHT_OFFSET = 0.5;
 
 BRC.START_POINT = 'm 0,0';
+
 BRC.START_POINT_HIGHLIGHT =
     'm ' + BRC.HIGHLIGHT_OFFSET + ',' + BRC.HIGHLIGHT_OFFSET;
 
@@ -26,6 +27,14 @@ BRC.CORNER_RADIUS = 8;
  * @const
  */
 BRC.START_HAT_HEIGHT = 15;
+
+/**
+ * Distance from shape edge to intersect with a curved corner at 45 degrees.
+ * Applies to highlighting on around the inside of a curve.
+ * @const
+ */
+BRC.DISTANCE_45_INSIDE = (1 - Math.SQRT1_2) *
+    (BRC.CORNER_RADIUS - BRC.HIGHLIGHT_OFFSET) + BRC.HIGHLIGHT_OFFSET;
 
 /**
  * SVG path for drawing a horizontal puzzle tab from top to bottom.
@@ -119,3 +128,22 @@ BRC.BOTTOM_LEFT_CORNER = 'a' + BRC.CORNER_RADIUS + ',' +
                BRC.CORNER_RADIUS + ' 0 0,1 -' +
                BRC.CORNER_RADIUS + ',-' +
                BRC.CORNER_RADIUS;
+
+BRC.BOTTOM_LEFT_CORNER_HIGHLIGHT_START =
+    'M ' + BRC.DISTANCE_45_INSIDE + ', '; // follow with y pos - distance 45 inside
+
+BRC.BOTTOM_LEFT_CORNER_HIGHLIGHT_MID   =
+    'A ' + (BRC.CORNER_RADIUS - BRC.HIGHLIGHT_OFFSET) +
+    ',' + (BRC.CORNER_RADIUS - BRC.HIGHLIGHT_OFFSET) +
+    ' 0 0,1 ' + BRC.HIGHLIGHT_OFFSET + ','; // follow with y pos - corner radius
+
+BRC.OUTPUT_CONNECTION_HIGHLIGHT_LTR =
+    'V ' + (BRC.TAB_HEIGHT + BRC.TAB_OFFSET_FROM_TOP - 1.5) +
+    ' m ' + (BRC.TAB_WIDTH * -0.92) + ',-0.5 ' +
+    'q ' + (BRC.TAB_WIDTH * -0.19) + ',-5.5 0,-11 ' +
+    'm ' + (BRC.TAB_WIDTH * 0.92) + ',1 ' +
+    'V 0.5 H 1';
+
+BRC.OUTPUT_CONNECTION_HIGHLIGHT_RTL =
+    'M ' + (BRC.TAB_WIDTH * -0.25) + ',8.4 l ' +
+    (BRC.TAB_WIDTH * -0.45) + ',-2.1';

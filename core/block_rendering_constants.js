@@ -2,6 +2,11 @@
 
 var BRC = {};
 
+BRC.HIGHLIGHT_OFFSET = 0.5;
+
+BRC.START_POINT = 'm 0,0';
+BRC.START_POINT_HIGHLIGHT =
+    'm ' + BRC.HIGHLIGHT_OFFSET + ',' + BRC.HIGHLIGHT_OFFSET;
 
 BRC.TAB_HEIGHT = 15;
 
@@ -50,6 +55,12 @@ BRC.START_HAT_PATH = 'c 30,-' +
  * @const
  */
 BRC.NOTCH_PATH_LEFT = 'l 6,4 3,0 6,-4';
+/**
+ * SVG path for drawing next/previous notch from left to right with
+ * highlighting.
+ * @const
+ */
+BRC.NOTCH_PATH_LEFT_HIGHLIGHT = BRC.NOTCH_PATH_LEFT;
 
 /**
  * SVG path for drawing next/previous notch from right to left.

@@ -48,7 +48,7 @@ suite('Cursor', function() {
     }
     ]);
     this.workspace = new Blockly.Workspace();
-    this.cursor = this.workspace.cursor_;
+    this.cursor = this.workspace.cursor;
     var blockA = this.workspace.newBlock('input_statement');
     var blockB = this.workspace.newBlock('input_statement');
     var blockC = this.workspace.newBlock('input_statement');
@@ -288,6 +288,13 @@ suite('Cursor', function() {
         assertEquals(this.cursor.getLocation(), this.blocks.A.previousConnection);
         assertEquals(this.cursor.isStack_, true);
       });
+      test('hasParentInput', function() {
+        var input = this.blocks.B.inputList[1];
+        this.cursor.setLocation(input.connection, input);
+        this.cursor.prev();
+        assertEquals(this.cursor.getLocation(), this.blocks.B.inputList[0].connection);
+        assertEquals(this.cursor.getParentInput(), this.blocks.B.inputList[0]);
+      });
     });
 
     suite('In', function() {
@@ -355,6 +362,12 @@ suite('Cursor', function() {
         var field = this.blocks.A.inputList[0].fieldRow[0];
         this.cursor.setLocation(field, this.blocks.A.inputList[0]);
         assertEquals(this.cursor.out(), this.blocks.A);
+      });
+      test('insideStatement', function() {
+        var nextConnection = this.blocks.C.nextConnection;
+        this.cursor.setLocation(nextConnection);
+        assertEquals(this.cursor.out(), this.blocks.B.inputList[1].connection);
+        assertEquals(this.cursor.getParentInput(), this.blocks.B.inputList[1]);
       });
     });
   });

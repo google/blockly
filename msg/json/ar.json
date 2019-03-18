@@ -92,7 +92,7 @@
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "إضف شرطا إلى القطعة الشرطية \"إذا\".",
 	"CONTROLS_IF_ELSE_TOOLTIP": "أضف شرط \"نهاية، إجمع\" إلى القطعة الشرطية \"إذا\".",
 	"IOS_OK": "أوافق",
-	"IOS_CANCEL": "ألغِ",
+	"IOS_CANCEL": "إلغاء",
 	"IOS_ERROR": "خطأ",
 	"IOS_PROCEDURES_INPUTS": "المدخلات",
 	"IOS_PROCEDURES_ADD_INPUT": "+اضافة ادخال",

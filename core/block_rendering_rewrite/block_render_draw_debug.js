@@ -79,7 +79,7 @@ drawRowWithElements = function(row, cursorY, svgRoot) {
   var cursorX = 0;
   for (var e = 0; e < row.elements.length; e++) {
     var elem = row.elements[e];
-    if (elem instanceof ElemSpacer) {
+    if (elem instanceof Blockly.BlockRendering.Measurables.ElemSpacer) {
       drawSpacerElem(elem, cursorX, centerY, svgRoot);
     } else {
       drawRenderedElem(elem, cursorX, centerY, svgRoot);
@@ -94,7 +94,7 @@ drawDebug = function(block, info) {
   var cursorY = 0;
   for (var r = 0; r < info.rows.length; r++) {
     var row = info.rows[r];
-    if (row instanceof RowSpacer) {
+    if (row instanceof Blockly.BlockRendering.Measurables.RowSpacer) {
       drawSpacerRow(row, cursorY, svgRoot);
     } else {
       drawRowWithElements(row, cursorY, svgRoot);

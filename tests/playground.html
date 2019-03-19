@@ -66,6 +66,7 @@
 <script src="../blocks/procedures.js"></script>
 <script src="blocks/test_blocks.js"></script>
 
+<script src="../core/block_rendering_rewrite/measurables.js"></script>
 <script src="../core/block_rendering_rewrite/block_render_info.js"></script>
 <script src="../core/block_rendering_rewrite/block_render_draw.js"></script>
 <script src="../core/block_rendering_rewrite/block_render_draw_debug.js"></script>
@@ -151,7 +152,7 @@ function start() {
   fromXml();
   var blocks = Blockly.getMainWorkspace().getAllBlocks();
   for (var i = 0; i < blocks.length; i++) {
-    renderDraw(blocks[i], Blockly.BlockSvg.renderComputeForRealThough(blocks[i]))
+    renderDraw(blocks[i], Blockly.BlockRendering.Info.renderCompute(blocks[i]))
   }
 
 }

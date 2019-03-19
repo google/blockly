@@ -34,6 +34,10 @@ Blockly.BlockRendering.Info = function() {
    */
   this.startHat = false;
 
+  this.hasPreviousConnection = false;
+
+  this.hasOutputConnection = false;
+
   /**
    *
    * @type {boolean}
@@ -356,6 +360,10 @@ Blockly.BlockRendering.Info.createRenderInfo = function(block) {
   info.startHat = this.hat ? this.hat === 'cap' : Blockly.BlockSvg.START_HAT;
   if (block.outputConnection) {
     info.hasOutputConnection = true;
+  }
+
+  if (block.previousConnection) {
+    info.hasPreviousConnection = true;
   }
 
   info.RTL = block.RTL;

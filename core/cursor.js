@@ -20,6 +20,7 @@
 
 /**
  * @fileoverview The class representing a cursor.
+ * Used primarily for keyboard navigation.
  */
 'use strict';
 
@@ -31,16 +32,46 @@ goog.provide('Blockly.Cursor');
  */
 Blockly.Cursor = function() {
 
+  /*
+   * The parent input of a field or connection.
+   * @type ?Blockly.Input
+   * @private
+   */
   this.parentInput_ = null;
 
+  /*
+   * Whether we are at the stack level or not.
+   * @type Boolean
+   * @private
+   */
   this.isStack_ = false;
 
+  /*
+   * The top block of the current stack.
+   * @type ?Blockly.Block
+   * @private
+   */
   this.stackBlock_ = null;
 
+  /*
+   * Whether we are at the workspace level.
+   * @type Boolean
+   * @private
+   */
   this.isWorkspace_ = false;
 
+  /*
+   * The current location of the cursor.
+   * @type Blockly.Field|Blockly.Connection|Blockly.Block
+   * @private
+   */
   this.location_ = null;
 
+  /*
+   * The type of the current connection.
+   * @type Boolean
+   * @private
+   */
   this.type_ = null;
 };
 
@@ -58,51 +89,16 @@ Blockly.Cursor.prototype.types = {
   WORKSPACE: 'workspace'
 };
 
-/**
- * Set the location of the cursor and call the update method.
- * @param{Blockly.Field|Blockly.Block|Blockly.Connection} newLocation The new
- * location of the cursor.
- * @param{?Blockly.Input} opt_parent The parent input of a connection or a field.
- */
-Blockly.Cursor.prototype.setLocation = function(newLocation, opt_parent) {
-  this.location_ = newLocation;
-  this.parentInput_ = opt_parent;
-  this.setType();
-  this.update_();
-};
 
 /**
- * Set the type for the current position of the cursor.
- */
-Blockly.Cursor.prototype.setType = function() {
-  var location = this.getLocation();
-  var hasParent = this.getParentInput(location);
-  if (this.isStack_) {
-    this.type_ = this.types.STACK;
-  } else if (location.type === Blockly.OUTPUT_VALUE) {
-    this.type_ = this.types.OUTPUT;
-  } else if (location instanceof Blockly.Field) {
-    this.type_ = this.types.FIELD;
-  } else if (location.type === Blockly.INPUT_VALUE || hasParent) {
-    this.type_ = this.types.INPUT;
-  } else if (location instanceof Blockly.Block) {
-    this.type_ = this.types.BLOCK;
-  } else if (location.type === Blockly.PREVIOUS_STATEMENT) {
-    this.type_ = this.types.PREVIOUS;
-  } else if (location.type === Blockly.NEXT_STATEMENT) {
-    this.type_ = this.types.NEXT;
-  }
-};
-
-/**
- * Decides if we are at the stack level or not.
+ * Sets whether we are at the stack level or not.
  * Having a stack level is necessary in order to navigate to other stacks in the
  * worksapce.
  * @param{Boolean} isStack True if we are at the stack level false otherwise.
  * @param{Blockly.Block} topBlock The top block of a stack.
  */
 Blockly.Cursor.prototype.setStack = function(isStack, topBlock) {
-  this.isStack = isStack;
+  this.isStack_ = isStack;
   this.stackBlock_ = topBlock;
 };
 
@@ -125,8 +121,10 @@ Blockly.Cursor.prototype.getLocation = function() {
 };
 
 /**
- * Gets the parent input of the current parent input of a field or connection.
- * @return {Blockly.Input} The parent input of the current field or connection.
+ * Gets the parent input of the current location.
+ * @return {?Blockly.Input} The parent input of the current location. Should be
+ * null if the current location is a block.
+ * TODO: Do I need this?
  */
 Blockly.Cursor.prototype.getParentInput = function() {
   return this.parentInput_;
@@ -134,7 +132,7 @@ Blockly.Cursor.prototype.getParentInput = function() {
 
 /**
  * Whether or not we are at the worksapce level.
- * @return{Boolean} True if we are on the workspace level, false otherwise.
+ * @return{Boolean} True if we are on the workspace level false otherwise.
  */
 Blockly.Cursor.prototype.isWorkspace = function() {
   return this.isWorkspace_;
@@ -142,10 +140,49 @@ Blockly.Cursor.prototype.isWorkspace = function() {
 
 /**
  * Whether or not we are at the stack level.
- * @return{Boolean} True if we are at the stack level, false otherwise.
+ * @return{Boolean} True if we are at the stack level false otherwise.
  */
 Blockly.Cursor.prototype.isStack = function() {
   return this.isStack_;
+};
+
+/**
+ * Set the location of the cursor and call the update method.
+ * @param{Blockly.Field|Blockly.Block|Blockly.Connection} newLocation The new
+ * location of the cursor.
+ * @param{?Blockly.Input} opt_parent The parent input of a connection or a field.
+ * TODO: Check if it would be better to have a helper function find the parent
+ * when an input or field is passed in and the parent is not supplied.
+ */
+Blockly.Cursor.prototype.setLocation = function(newLocation, opt_parent) {
+  this.location_ = newLocation;
+  this.parentInput_ = opt_parent;
+  this.setType_();
+  this.update_();
+};
+
+/**
+ * Set the type for the current position of the cursor.
+ * @private
+ */
+Blockly.Cursor.prototype.setType_ = function() {
+  var location = this.getLocation();
+  var hasParent = this.parentInput_;
+  if (this.isStack_) {
+    this.type_ = this.types.STACK;
+  } else if (location.type === Blockly.OUTPUT_VALUE) {
+    this.type_ = this.types.OUTPUT;
+  } else if (location instanceof Blockly.Field) {
+    this.type_ = this.types.FIELD;
+  } else if (location.type === Blockly.INPUT_VALUE || hasParent) {
+    this.type_ = this.types.INPUT;
+  } else if (location instanceof Blockly.Block) {
+    this.type_ = this.types.BLOCK;
+  } else if (location.type === Blockly.PREVIOUS_STATEMENT) {
+    this.type_ = this.types.PREVIOUS;
+  } else if (location.type === Blockly.NEXT_STATEMENT) {
+    this.type_ = this.types.NEXT;
+  }
 };
 
 /**
@@ -155,8 +192,8 @@ Blockly.Cursor.prototype.isStack = function() {
 Blockly.Cursor.prototype.update_ = function() {};
 
 /**
- * Search through the list of inputs and their list of fields in order to find
- * the parent input of a field.
+ * Search through the list of inputs and their fields in order to find the
+ * parent input of a field.
  * TODO: Check on moving this to the block class.
  * @param {Blockly.Field} field Field to find parent for.
  * @return {Blockly.Input} The input that the field belongs to.
@@ -219,7 +256,7 @@ Blockly.Cursor.prototype.findParentInput_ = function(cursor) {
 };
 
 /**
- * Get either the next editable field, or get the first field for the given input.
+ * Get either the next editable field, or the first field for the given input.
  * @param{Blockly.Field} location The current location of the cursor.
  * @param{Blockly.Input} parentInput The parentInput of the field.
  * @param{Boolean} opt_first If true find the first editable field otherwise get
@@ -227,7 +264,8 @@ Blockly.Cursor.prototype.findParentInput_ = function(cursor) {
  * @return{Blockly.Field} The next field or null if no next field exists.
  * @private
  */
-Blockly.Cursor.prototype.findNextEditableField_ = function(location, parentInput, opt_first) {
+Blockly.Cursor.prototype.findNextEditableField_ = function(location,
+    parentInput, opt_first) {
   var fieldRow = parentInput.fieldRow;
   var fieldIdx = fieldRow.indexOf(location);
   var nextField = null;
@@ -253,7 +291,8 @@ Blockly.Cursor.prototype.findNextEditableField_ = function(location, parentInput
  * exists.
  * @private
  */
-Blockly.Cursor.prototype.findPreviousEditableField_ = function(location, parentInput, opt_last) {
+Blockly.Cursor.prototype.findPreviousEditableField_ = function(location,
+    parentInput, opt_last) {
   var fieldRow = parentInput.fieldRow;
   var fieldIdx = fieldRow.indexOf(location);
   var nextField = null;
@@ -305,6 +344,7 @@ Blockly.Cursor.prototype.findNextForInput_ = function(location, parentInput){
  * @param{Blockly.Field} location The current location of the cursor.
  * @param{Blockly.Input} parentInput The parent input of the field.
  * @return {Blockly.Field|Blockly.Connection} The next location.
+ * @private
  */
 Blockly.Cursor.prototype.findNextForField_ = function(location, parentInput) {
   var nextLocation = this.findNextEditableField_(location, parentInput);
@@ -352,6 +392,7 @@ Blockly.Cursor.prototype.findPrevForInput_ = function(location, parentInput){
  * @param{Blockly.Field} location The current location of the cursor.
  * @param{Blockly.Input} parentInput The parent input of the field.
  * @return {Blockly.Field|Blockly.Connection} The previous location.
+ * @private
  */
 Blockly.Cursor.prototype.findPrevForField_ = function(location, parentInput) {
   var block = location.sourceBlock_;
@@ -366,8 +407,6 @@ Blockly.Cursor.prototype.findPrevForField_ = function(location, parentInput) {
   return prevLocation;
 };
 
-
-//TODO: Fix this to make less gross
 /**
  * Walk from the given block back up through the stack of blocks to find the top
  * block. If we are nested in a statement input only find the top most nested
@@ -379,6 +418,7 @@ Blockly.Cursor.prototype.findPrevForField_ = function(location, parentInput) {
 Blockly.Cursor.prototype.findTop_ = function(sourceBlock) {
   var topBlock = sourceBlock;
   var targetConnection = sourceBlock.previousConnection.targetConnection;
+  //while the target is not an input and it is connected to another block
   while (!this.findParentInput_(targetConnection)
     && topBlock && topBlock.previousConnection
     && topBlock.previousConnection.targetBlock()) {
@@ -392,6 +432,7 @@ Blockly.Cursor.prototype.findTop_ = function(sourceBlock) {
  * Navigate between stacks of blocks on the workspace.
  * @param {Boolean} forward True to go forward. False to go backwards.
  * @return {Blockly.BlockSvg} The first block of the next stack.
+ * @private
  */
 Blockly.Cursor.prototype.navigateBetweenStacks_ = function(forward) {
   var curLocation = this.getLocation();
@@ -425,17 +466,18 @@ Blockly.Cursor.prototype.navigateBetweenStacks_ = function(forward) {
  * level the cursor must be at the highest connection on the top block in a
  * stack.
  * @return {Boolean} Whether or not we are on the top of the stack.
+ # @private
  */
-Blockly.Cursor.prototype.isStack = function() {
+Blockly.Cursor.prototype.checkIfStack_ = function() {
   var cursor = this.getLocation();
-  var isStack = false;
+  var isStack_ = false;
   if (cursor.type === Blockly.OUTPUT_VALUE
     || cursor.type === Blockly.PREVIOUS_STATEMENT) {
     var block = cursor.sourceBlock_;
     var topBlock = block.getRootBlock();
-    isStack = block === topBlock;
+    isStack_ = block === topBlock;
   }
-  return isStack;
+  return isStack_;
 };
 
 /**
@@ -445,11 +487,30 @@ Blockly.Cursor.prototype.isStack = function() {
  * @param {Blockly.Field|Blockly.Block|Blockly.Connection} location The location
  * of the cursor.
  * @return {Blockly.Connection} The first connection.
+ * @private
  */
 Blockly.Cursor.prototype.findTopConnection_ = function(location) {
   var previousConnection = location.previousConnection;
   var outputConnection = location.outputConnection;
   return previousConnection ? previousConnection : outputConnection;
+};
+
+/**
+ * Given a location in a stack of blocks find the next out connection. If the
+ * location is nested the next out location should be the connected input.
+ * @param{Blockly.Block} location The source block for the current location.
+ * @return {Blockly.Connection|Blockly.Block} The next out connection or block.
+ * @private
+ */
+Blockly.Cursor.prototype.findOutLocationForStack_ = function(location) {
+  var newLocation;
+  var topBlock = this.findTop_(location);
+  newLocation = topBlock.previousConnection.targetConnection;
+  if (!newLocation) {
+    newLocation = topBlock.previousConnection;
+    this.setStack(true, topBlock);
+  }
+  return newLocation;
 };
 
 /**
@@ -463,7 +524,7 @@ Blockly.Cursor.prototype.next = function() {
   if (!location) {return null;}
   var newLocation;
   var newParentInput;
-  var parentInput = this.getParentInput(location);
+  var parentInput = this.parentInput_;
 
   switch (this.type_) {
     case this.types.STACK:
@@ -477,12 +538,12 @@ Blockly.Cursor.prototype.next = function() {
 
     case this.types.FIELD:
       newLocation = this.findNextForField_(location, parentInput);
-      newParentInput = this.getParentInput();
+      newParentInput = this.parentInput_;
       break;
 
     case this.types.INPUT:
       newLocation = this.findNextForInput_(location, parentInput);
-      newParentInput = this.getParentInput();
+      newParentInput = this.parentInput_;
       break;
 
     case this.types.BLOCK:
@@ -518,9 +579,12 @@ Blockly.Cursor.prototype.in = function() {
   if (!location) {return null;}
   var newLocation = null;
   var newParentInput;
-  this.isStack_ = false;
 
   switch (this.type_) {
+    case this.types.STACK:
+      this.setStack(false);
+      this.setType_();
+      break;
     case this.types.BLOCK:
       var inputs = location.inputList;
       if (inputs && inputs.length > 0) {
@@ -540,7 +604,6 @@ Blockly.Cursor.prototype.in = function() {
       }
       break;
   }
-
   if (newLocation) {
     this.setLocation(newLocation, newParentInput);
   }
@@ -557,7 +620,7 @@ Blockly.Cursor.prototype.prev = function() {
   var location = this.getLocation();
   if (!location) {return null;}
   var newLocation;
-  var parentInput = this.getParentInput(location);
+  var parentInput = this.parentInput_;
   var newParentInput;
 
   switch (this.type_) {
@@ -574,12 +637,12 @@ Blockly.Cursor.prototype.prev = function() {
 
     case this.types.FIELD:
       newLocation = this.findPrevForField_(location, parentInput);
-      newParentInput = this.getParentInput();
+      newParentInput = this.parentInput_;
       break;
 
     case this.types.INPUT:
       newLocation = this.findPrevForInput_(location, parentInput);
-      newParentInput = this.getParentInput();
+      newParentInput = this.parentInput_;
       break;
 
     case this.types.BLOCK:
@@ -598,7 +661,6 @@ Blockly.Cursor.prototype.prev = function() {
       newLocation = location.sourceBlock_;
       break;
   }
-
   if (newLocation) {
     this.setLocation(newLocation, newParentInput);
   }
@@ -622,6 +684,10 @@ Blockly.Cursor.prototype.out = function() {
 
     case this.types.OUTPUT:
       newLocation = location.targetConnection;
+      if (!newLocation) {
+        this.setStack(true, location.sourceBlock_);
+        this.setType_();
+      }
       break;
 
     case this.types.FIELD:
@@ -633,40 +699,25 @@ Blockly.Cursor.prototype.out = function() {
       break;
 
     case this.types.BLOCK:
-      if (location.outputConnection && location.outputConnection.targetConnection) {
-        newLocation = location.outputConnection.targetConnection;
-      } else if (location.outputConnection) {
-
-        newLocation = null;
+      var outputConnection = location.outputConnection;
+      if (outputConnection && outputConnection.targetConnection) {
+        newLocation = outputConnection.targetConnection;
+      } else if (outputConnection) {
+        newLocation = outputConnection;
       } else {
         //This is the case where we are on a block that is nested inside a
-        //statement input and we need to get the last input that connects to the
+        //statement input and we need to get the input that connects to the
         //top block
-        var topBlock = this.findTop_(location);
-        var topConnection = topBlock.previousConnection.targetConnection;
-        if (topConnection) {
-          newLocation = topConnection;
-        } else {
-          newLocation = topBlock.previousConnection;
-          this.isStack_ = true;
-        }
+        newLocation = this.findOutLocationForStack_(location);
       }
       break;
 
     case this.types.PREVIOUS:
-      var topBlock = this.findTop_(location.sourceBlock_);
-      var topConnection = topBlock.previousConnection.targetConnection;
-      if (topConnection) {
-        newLocation = topConnection;
-      } else {
-        newLocation = topConnection;
-        this.isStack_ = true;
-      }
+      newLocation = this.findOutLocationForStack_(location.sourceBlock_);
       break;
 
     case this.types.NEXT:
-      var topBlock = this.findTop_(location.sourceBlock_);
-      newLocation = topBlock.previousConnection.targetConnection;
+      newLocation = this.findOutLocationForStack_(location.sourceBlock_);
       break;
   }
 

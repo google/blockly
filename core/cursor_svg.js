@@ -140,12 +140,13 @@ Blockly.CursorSvg.prototype.setParent = function(newParent) {
 };
 
 /**************************/
-/**** Create           ****/
+/**** Display          ****/
 /**************************/
 
 /**
  * Show the cursor on the workspace, use the event to determine it's positioning
- * @param {!Event} e Mouse event for the shift click that is making the cursor appear.
+ * @param {!Event} e Mouse event for the shift click that is making the cursor
+ * appear.
  * @param {boolean} rtl True if RTL, false if LTR.
  * @package
  */

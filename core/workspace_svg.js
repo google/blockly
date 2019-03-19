@@ -1574,8 +1574,10 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(tree) {
       throw Error('Existing toolbox has no categories.  Can\'t change mode.');
     }
     this.options.languageTree = tree;
-    this.toolbox_.populate_(tree);
+    var openNode = this.toolbox_.populate_(tree);
     this.toolbox_.addColour_();
+    this.toolbox_.position();
+    this.toolbox_.tree_.setSelectedItem(openNode);
   } else {
     if (!this.flyout_) {
       throw Error('Existing toolbox has categories.  Can\'t change mode.');

@@ -434,6 +434,11 @@ Blockly.Field.getCachedWidth = function(textElement) {
     return textElement.textContent.length * 8;
   }
 
+  //Fallback check for when the getBBox() and getComputedTextLength() methods both fail
+  if (width == 0) { 
+    return textElement.textContent.length * 6.5;
+  }
+
   // Cache the computed width and return.
   if (Blockly.Field.cacheWidths_) {
     Blockly.Field.cacheWidths_[key] = width;

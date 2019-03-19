@@ -52,13 +52,6 @@ drawOutline = function(block, info, pathObject) {
   drawLeft(block, info, pathObject, cursorY);
 };
 
-drawRightSideRow = function(row, info, pathObject) {
-  drawRightSideRowHighlight(row, info, pathObject);
-  var steps = pathObject.steps;
-  steps.push('H', row.width);
-  steps.push('v', row.height);
-};
-
 drawTopCorner = function(block, info, pathObject) {
   drawTopCornerHighlight(block, info, pathObject);
   var steps = pathObject.steps;
@@ -77,6 +70,32 @@ drawTopCorner = function(block, info, pathObject) {
     steps.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT);
   }
   steps.push('H', info.maxValueOrDummyWidth);
+};
+
+drawValueInput = function(row, pathObject, info, cursorY) {
+  highlightValueInput(row, pathObject, info, cursorY);
+  var steps = pathObject.steps;
+  steps.push('H', row.width);
+  steps.push(BRC.TAB_PATH_DOWN);
+  steps.push('v', row.height - BRC.TAB_HEIGHT);
+};
+
+drawStatementInput = function(row, pathObject, info, cursorY) {
+  drawStatementInputHighlight(row, pathObject, info, cursorY);
+  var steps = pathObject.steps;
+  var x = row.statementEdge + BRC.NOTCH_OFFSET;
+  steps.push('H', x);
+  steps.push(BRC.INNER_TOP_LEFT_CORNER);
+  steps.push('v', row.height - 2 * BRC.CORNER_RADIUS);
+  steps.push(BRC.INNER_BOTTOM_LEFT_CORNER);
+  steps.push('H', info.maxValueOrDummyWidth);
+};
+
+drawRightSideRow = function(row, info, pathObject) {
+  drawRightSideRowHighlight(row, info, pathObject);
+  var steps = pathObject.steps;
+  steps.push('H', row.width);
+  steps.push('v', row.height);
 };
 
 drawBottom = function(block, info, pathObject) {
@@ -112,6 +131,8 @@ drawLeft = function(block, info, pathObject, cursorY) {
   steps.push('z');
 };
 
+
+
 drawInternals = function(block, info, pathObject) {
   var inlineSteps = pathObject.inlineSteps;
   var cursorY = 0;
@@ -119,12 +140,12 @@ drawInternals = function(block, info, pathObject) {
     var row = info.rows[r];
     var cursorX = 0;
     var centerline = cursorY + row.height / 2;
-    if (!(row instanceof RowSpacer)) {
+    if (!(row instanceof Blockly.BlockRendering.Measurables.RowSpacer)) {
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];
-        if (elem instanceof InlineInputElement) {
+        if (elem instanceof Blockly.BlockRendering.Measurables.InlineInputElement) {
           drawInlineInput(pathObject, cursorX, cursorY, elem, centerline, info.RTL);
-        } else if (elem instanceof IconElement || elem instanceof FieldElement) {
+        } else if (elem instanceof Blockly.BlockRendering.Measurables.IconElement || elem instanceof Blockly.BlockRendering.Measurables.FieldElement) {
           layoutField(elem, cursorX, centerline, row.width, block.RTL);
         }
         cursorX += elem.width;
@@ -161,14 +182,6 @@ layoutField = function(fieldInfo, cursorX, centerline, rowWidth, RTL) {
   }
 };
 
-drawValueInput = function(row, pathObject, info, cursorY) {
-  highlightValueInput(row, pathObject, info, cursorY);
-  var steps = pathObject.steps;
-  steps.push('H', row.width);
-  steps.push(BRC.TAB_PATH_DOWN);
-  steps.push('v', row.height - BRC.TAB_HEIGHT);
-};
-
 drawInlineInput = function(pathObject, x, y, input, centerline, isRTL) {
   drawInlineInputHighlight(pathObject, x, y, input, centerline, isRTL);
   var inlineSteps = pathObject.inlineSteps;
@@ -185,13 +198,3 @@ drawInlineInput = function(pathObject, x, y, input, centerline, isRTL) {
   inlineSteps.push('z');
 };
 
-drawStatementInput = function(row, pathObject, info, cursorY) {
-  drawStatementInputHighlight(row, pathObject, info, cursorY);
-  var steps = pathObject.steps;
-  var x = row.statementEdge + BRC.NOTCH_OFFSET;
-  steps.push('H', x);
-  steps.push(BRC.INNER_TOP_LEFT_CORNER);
-  steps.push('v', row.height - 2 * BRC.CORNER_RADIUS);
-  steps.push(BRC.INNER_BOTTOM_LEFT_CORNER);
-  steps.push('H', info.maxValueOrDummyWidth);
-};

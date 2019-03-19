@@ -25,9 +25,9 @@
 
 //'use strict';
 
-//goog.provide('Blockly.BlockRendering.Info');
+goog.provide('Blockly.BlockRendering.Info');
 
-Blockly.BlockSvg.RenderInfo = function() {
+Blockly.BlockRendering.Info = function() {
   /**
    *
    * @type {boolean}
@@ -75,34 +75,31 @@ Blockly.BlockSvg.RenderInfo = function() {
   this.rows = [];
 };
 
-Blockly.BlockSvg.renderComputeForRealThough = function(block) {
-  var renderInfo = createRenderInfo(block);
+Blockly.BlockRendering.Info.renderCompute = function(block) {
+  var renderInfo = Blockly.BlockRendering.Info.createRenderInfo(block);
 
-  addElemSpacing(renderInfo);
+  renderInfo.addElemSpacing();
+  renderInfo.computeBounds();
+  renderInfo.alignRowElements();
+  renderInfo.addRowSpacing();
+  renderInfo.computeHeight();
 
-  computeBounds(renderInfo);
-  alignRowElements(renderInfo);
-
-
-  addRowSpacing(renderInfo);
-
-  computeHeight(renderInfo);
   console.log(renderInfo);
   block.height = renderInfo.height;
   block.width = renderInfo.widthWithConnectedBlocks;
   return renderInfo;
 };
 
-computeHeight = function(info) {
+Blockly.BlockRendering.Info.prototype.computeHeight = function() {
   var height = 0;
-  for (var r = 0; r < info.rows.length; r++) {
-    var row = info.rows[r];
+  for (var r = 0; r < this.rows.length; r++) {
+    var row = this.rows[r];
     height += row.height;
   }
-  info.height = height;
+  this.height = height;
 };
 
-addAlignmentPadding = function(row, missingSpace) {
+Blockly.BlockRendering.Info.prototype.addAlignmentPadding = function(row, missingSpace) {
   var elems = row.elements;
   if (row.hasExternalInput) { // TODO: handle for dummy inputs.
     var externalInput = row.getLastInput();
@@ -131,27 +128,26 @@ addAlignmentPadding = function(row, missingSpace) {
  * rows line up.  This can only be calculated after a first pass to calculate
  * the sizes of all rows.
  */
-alignRowElements = function(renderInfo) {
-
-  for (var r = 0; r < renderInfo.rows.length; r++) {
-    var row = renderInfo.rows[r];
+Blockly.BlockRendering.Info.prototype.alignRowElements = function() {
+  for (var r = 0; r < this.rows.length; r++) {
+    var row = this.rows[r];
     if (!row.hasStatement && !row.hasInlineInput) {
       var currentWidth = row.width;
-      var desiredWidth = renderInfo.maxValueOrDummyWidth;
+      var desiredWidth = this.maxValueOrDummyWidth;
       var missingSpace = desiredWidth - currentWidth;
       if (missingSpace) {
-        addAlignmentPadding(row, missingSpace);
+        this.addAlignmentPadding(row, missingSpace);
       }
     }
   }
 };
 
-computeBounds = function(renderInfo) {
+Blockly.BlockRendering.Info.prototype.computeBounds = function() {
   var widestStatementRowFields = 0;
   var widestValueOrDummyRow = 0;
   var widestRowWithConnectedBlocks = 0;
-  for (var r = 0; r < renderInfo.rows.length; r++) {
-    var row = renderInfo.rows[r];
+  for (var r = 0; r < this.rows.length; r++) {
+    var row = this.rows[r];
     row.measure();
     if (!row.hasStatement) {
       widestValueOrDummyRow = Math.max(widestValueOrDummyRow, row.width);
@@ -166,45 +162,45 @@ computeBounds = function(renderInfo) {
   }
 
 
-  renderInfo.statementEdge = widestStatementRowFields;
+  this.statementEdge = widestStatementRowFields;
 
   if (widestStatementRowFields) {
-    renderInfo.maxValueOrDummyWidth =
+    this.maxValueOrDummyWidth =
         Math.max(widestValueOrDummyRow,
             widestStatementRowFields + BRC.NOTCH_WIDTH * 2);
   } else {
-    renderInfo.maxValueOrDummyWidth = widestValueOrDummyRow;
+    this.maxValueOrDummyWidth = widestValueOrDummyRow;
   }
 
-  for (var r = 0; r < renderInfo.rows.length; r++) {
-    var row = renderInfo.rows[r];
+  for (var r = 0; r < this.rows.length; r++) {
+    var row = this.rows[r];
     if (row.hasStatement) {
-      row.statementEdge = renderInfo.statementEdge;
+      row.statementEdge = this.statementEdge;
     }
   }
 
-  renderInfo.widthWithConnectedBlocks =
+  this.widthWithConnectedBlocks =
       Math.max(widestValueOrDummyRow, widestRowWithConnectedBlocks);
 };
 
 /**
  * Add spacers between rows and set their sizes.
  */
-addRowSpacing = function(info) {
-  var oldRows = info.rows;
+Blockly.BlockRendering.Info.prototype.addRowSpacing = function() {
+  var oldRows = this.rows;
   var newRows = [];
 
   // There's a spacer before the first row.
-  var spacing = calculateSpacingBetweenRows(null, oldRows[0]);
-  var width = calculateWidthOfSpacerRow(oldRows[null], oldRows[0], info);
-  newRows.push(new RowSpacer(spacing, width));
+  var spacing = this.calculateSpacingBetweenRows(null, oldRows[0]);
+  var width = this.calculateWidthOfSpacerRow(oldRows[null], oldRows[0]);
+  newRows.push(new Blockly.BlockRendering.Measurables.RowSpacer(spacing, width));
   for (var r = 0; r < oldRows.length; r++) {
     newRows.push(oldRows[r]);
-    var spacing = calculateSpacingBetweenRows(oldRows[r], oldRows[r + 1]);
-    var width = calculateWidthOfSpacerRow(oldRows[r], oldRows[r + 1], info);
-    newRows.push(new RowSpacer(spacing, width));
+    var spacing = this.calculateSpacingBetweenRows(oldRows[r], oldRows[r + 1]);
+    var width = this.calculateWidthOfSpacerRow(oldRows[r], oldRows[r + 1]);
+    newRows.push(new Blockly.BlockRendering.Measurables.RowSpacer(spacing, width));
   }
-  info.rows = newRows;
+  this.rows = newRows;
 };
 
 /**
@@ -212,21 +208,21 @@ addRowSpacing = function(info) {
  * width of the block, but there are some exceptions (e.g. the small spacer row
  * after a statement input).
  */
-calculateWidthOfSpacerRow = function(prev, next, info) {
+Blockly.BlockRendering.Info.prototype.calculateWidthOfSpacerRow = function(prev, next) {
   if (!prev) {
-    return info.maxValueOrDummyWidth;
+    return this.maxValueOrDummyWidth;
   }
 
   // spacer row after the last statement input.
   if (!next && prev.hasStatement) {
-    if (info.isInline) {
-      return info.maxValueOrDummyWidth;
+    if (this.isInline) {
+      return this.maxValueOrDummyWidth;
     } else {
-      return info.maxValueOrDummyWidth;
+      return this.maxValueOrDummyWidth;
     }
   }
 
-  return info.maxValueOrDummyWidth;
+  return this.maxValueOrDummyWidth;
 };
 
 /**
@@ -234,7 +230,7 @@ calculateWidthOfSpacerRow = function(prev, next, info) {
  * For instance, extra vertical space is added between two rows with external
  * value inputs.
  */
-calculateSpacingBetweenRows = function(prev, next) {
+Blockly.BlockRendering.Info.prototype.calculateSpacingBetweenRows = function(prev, next) {
   // First row is always (?) 5.
   if (!prev) {
     if (next && next.hasStatement) {
@@ -261,17 +257,17 @@ calculateSpacingBetweenRows = function(prev, next) {
 /**
  * Add spacers between elements in a single row and set their sizes.
  */
-addElemSpacing = function(info) {
-  for (var r = 0; r < info.rows.length; r++) {
-    var row = info.rows[r];
+Blockly.BlockRendering.Info.prototype.addElemSpacing = function() {
+  for (var r = 0; r < this.rows.length; r++) {
+    var row = this.rows[r];
     var oldElems = row.elements;
     var newElems = [];
     // There's a spacer before the first element in the row.
-    newElems.push(new ElemSpacer(calculateSpacingBetweenElems(null, oldElems[0])));
+    newElems.push(new Blockly.BlockRendering.Measurables.ElemSpacer(this.calculateSpacingBetweenElems(null, oldElems[0])));
     for (var e = 0; e < row.elements.length; e++) {
       newElems.push(oldElems[e]);
-      var spacing = calculateSpacingBetweenElems(oldElems[e], oldElems[e + 1]);
-      newElems.push(new ElemSpacer(spacing));
+      var spacing = this.calculateSpacingBetweenElems(oldElems[e], oldElems[e + 1]);
+      newElems.push(new Blockly.BlockRendering.Measurables.ElemSpacer(spacing));
     }
     row.elements = newElems;
   }
@@ -282,14 +278,14 @@ addElemSpacing = function(info) {
  * next elements.  For instance, extra padding is added between two editable
  * fields.
  */
-calculateSpacingBetweenElems = function(prev, next) {
+Blockly.BlockRendering.Info.prototype.calculateSpacingBetweenElems = function(prev, next) {
   if (!prev) {
     // Between an editable field and the beginning of the row.
-    if (next instanceof FieldElement && next.isEditable) {
+    if (next instanceof Blockly.BlockRendering.Measurables.FieldElement && next.isEditable) {
       return 5;
     }
     // Inline input at the beginning of the row.
-    if (next.isInput && next instanceof InlineInputElement) {
+    if (next.isInput && next instanceof Blockly.BlockRendering.Measurables.InlineInputElement) {
       return 9;
     }
     // Anything else at the beginning of the row.
@@ -299,7 +295,7 @@ calculateSpacingBetweenElems = function(prev, next) {
   // Spacing between a field or icon and the end of the row.
   if (!prev.isInput && !next) {
     // Between an editable field and the end of the row.
-    if (prev instanceof FieldElement && prev.isEditable) {
+    if (prev instanceof Blockly.BlockRendering.Measurables.FieldElement && prev.isEditable) {
       return 5;
     }
     // Between noneditable fields and icons and the end of the row.
@@ -308,11 +304,11 @@ calculateSpacingBetweenElems = function(prev, next) {
 
   // Between inputs and the end of the row.
   if (prev.isInput && !next) {
-    if (prev instanceof ExternalValueInputElement) {
+    if (prev instanceof Blockly.BlockRendering.Measurables.ExternalValueInputElement) {
       return 0;
-    } else if (prev instanceof InlineInputElement) {
+    } else if (prev instanceof Blockly.BlockRendering.Measurables.InlineInputElement) {
       return 10;
-    } else if (prev instanceof StatementInputElement) {
+    } else if (prev instanceof Blockly.BlockRendering.Measurables.StatementInputElement) {
       return 0;
     }
   }
@@ -327,9 +323,9 @@ calculateSpacingBetweenElems = function(prev, next) {
   if (!prev.isInput && next.isInput) {
     // Between an editable field and an input.
     if (prev.isEditable) {
-      if (next instanceof InlineInputElement) {
+      if (next instanceof Blockly.BlockRendering.Measurables.InlineInputElement) {
         return 3;
-      } else if (next instanceof ExternalValueInputElement) {
+      } else if (next instanceof Blockly.BlockRendering.Measurables.ExternalValueInputElement) {
         return 5;
       }
     }
@@ -337,12 +333,12 @@ calculateSpacingBetweenElems = function(prev, next) {
   }
 
   // Spacing between an icon and an icon or field.
-  if (prev instanceof IconElement && !next.isInput) {
+  if (prev instanceof Blockly.BlockRendering.Measurables.IconElement && !next.isInput) {
     return 11;
   }
 
   // Spacing between an inline input and a field.
-  if (prev instanceof InlineInputElement && !next.isInput) {
+  if (prev instanceof Blockly.BlockRendering.Measurables.InlineInputElement && !next.isInput) {
     // Editable field after inline input.
     if (next.isEditable) {
       return 5;
@@ -355,21 +351,21 @@ calculateSpacingBetweenElems = function(prev, next) {
   return 5;
 };
 
-createRenderInfo = function(block) {
-  var info = new Blockly.BlockSvg.RenderInfo();
+Blockly.BlockRendering.Info.createRenderInfo = function(block) {
+  var info = new Blockly.BlockRendering.Info();
   info.startHat = this.hat ? this.hat === 'cap' : Blockly.BlockSvg.START_HAT;
   if (block.outputConnection) {
     info.hasOutputConnection = true;
   }
 
   info.RTL = block.RTL;
-  setShouldSquareCorners(block, info);
+  info.setShouldSquareCorners(block);
 
-  createRows(block, info);
+  info.createRows(block);
   return info;
 };
 
-shouldStartNewRow = function(input, lastInput, isInline) {
+Blockly.BlockRendering.Info.prototype.shouldStartNewRow = function(input, lastInput, isInline) {
   // If this is the first input, just add to the existing row.
   // That row is either empty or has some icons in it.
   if (!lastInput) {
@@ -389,40 +385,40 @@ shouldStartNewRow = function(input, lastInput, isInline) {
   return false;
 };
 
-createRows = function(block, info) {
+Blockly.BlockRendering.Info.prototype.createRows = function(block) {
   // necessary data
   var isInline = block.getInputsInline() && !block.isCollapsed();
-  info.isInline = isInline;
+  this.isInline = isInline;
 
   var rowArr = [];
-  var activeRow = new Row();
+  var activeRow = new Blockly.BlockRendering.Measurables.Row();
 
   var icons = block.getIcons();
   if (icons.length) {
     for (var i = 0; i < icons.length; i++) {
-      activeRow.elements.push(new IconElement(icons[i]));
+      activeRow.elements.push(new Blockly.BlockRendering.Measurables.IconElement(icons[i]));
     }
   }
 
   for (var i = 0; i < block.inputList.length; i++) {
     var input = block.inputList[i];
-    if (shouldStartNewRow(input, block.inputList[i - 1], isInline)) {
+    if (this.shouldStartNewRow(input, block.inputList[i - 1], isInline)) {
       rowArr.push(activeRow);
-      activeRow = new Row();
+      activeRow = new Blockly.BlockRendering.Measurables.Row();
     }
     for (var f = 0; f < input.fieldRow.length; f++) {
       var field = input.fieldRow[f];
-      activeRow.elements.push(new FieldElement(field));
+      activeRow.elements.push(new Blockly.BlockRendering.Measurables.FieldElement(field));
     }
 
     if (isInline && input.type == Blockly.INPUT_VALUE) {
-      activeRow.elements.push(new InlineInputElement(input));
+      activeRow.elements.push(new Blockly.BlockRendering.Measurables.InlineInputElement(input));
       activeRow.hasInlineInput = true;
     } else if (input.type == Blockly.NEXT_STATEMENT) {
-      activeRow.elements.push(new StatementInputElement(input));
+      activeRow.elements.push(new Blockly.BlockRendering.Measurables.StatementInputElement(input));
       activeRow.hasStatement = true;
     } else if (input.type == Blockly.INPUT_VALUE) {
-      activeRow.elements.push(new ExternalValueInputElement(input));
+      activeRow.elements.push(new Blockly.BlockRendering.Measurables.ExternalValueInputElement(input));
       activeRow.hasExternalInput = true;
     }
   }
@@ -431,167 +427,17 @@ createRows = function(block, info) {
     rowArr.push(activeRow);
   }
 
-  info.rows = rowArr;
+  this.rows = rowArr;
 };
 
-setShouldSquareCorners = function(block, info) {
+Blockly.BlockRendering.Info.prototype.setShouldSquareCorners = function(block) {
   var prevBlock = block.getPreviousBlock();
   var nextBlock = block.getNextBlock();
 
-  info.squareTopLeftCorner =
+  this.squareTopLeftCorner =
       !!block.outputConnection ||
-      info.startHat ||
+      this.startHat ||
       (prevBlock && prevBlock.getNextBlock() == this);
 
-  info.squareBottomLeftCorner = !!block.outputConnection || !!nextBlock;
-};
-
-RenderableBlockElement = function() {
-  this.isInput = false;
-  this.width = 0;
-  this.height = 0;
-  this.type = null;
-};
-
-RenderableInputElement = function(input) {
-  RenderableInputElement.superClass_.constructor.call(this);
-
-  this.isInput = true;
-  this.input = input;
-  this.connectedBlock = input.connection && input.connection.targetBlock() ?
-      input.connection.targetBlock() : null;
-
-  if (this.connectedBlock) {
-    var bBox = this.connectedBlock.getHeightWidth();
-    this.connectedBlockWidth = bBox.width;
-    this.connectedBlockHeight = bBox.height;
-  } else {
-    this.connectedBlockWidth = 0;
-    this.connectedBlockHeight = 0;
-  }
-};
-goog.inherits(RenderableInputElement, RenderableBlockElement);
-
-IconElement = function(icon) {
-  IconElement.superClass_.constructor.call(this);
-  this.icon = icon;
-  this.isVisible = icon.isVisible();
-  this.renderRect = null;
-  this.type = 'icon';
-
-  this.height = 16;
-  this.width = 16;
-};
-goog.inherits(IconElement, RenderableBlockElement);
-
-FieldElement = function(field) {
-  FieldElement.superClass_.constructor.call(this);
-  this.field = field;
-  this.renderRect = null;
-  this.isEditable = field.isCurrentlyEditable();
-  this.type = 'field';
-
-  var size = this.field.getCorrectedSize();
-  this.height = size.height;
-  this.width = size.width;
-};
-goog.inherits(FieldElement, RenderableBlockElement);
-
-InlineInputElement = function(input) {
-  InlineInputElement.superClass_.constructor.call(this, input);
-  this.type = 'inline input';
-
-  if (!this.connectedBlock) {
-    this.height = 26;
-    this.width = 22;
-  } else {
-    this.width = this.connectedBlockWidth;
-    this.height = this.connectedBlockHeight;
-  }
-};
-goog.inherits(InlineInputElement, RenderableInputElement);
-
-StatementInputElement = function(input) {
-  InlineInputElement.superClass_.constructor.call(this, input);
-  this.type = 'statement input';
-
-  if (!this.connectedBlock) {
-    this.height = 24;
-    this.width = 32;
-  } else {
-    this.width = 25;
-    this.height = this.connectedBlockHeight;
-  }
-};
-goog.inherits(StatementInputElement, RenderableInputElement);
-
-ExternalValueInputElement = function(input) {
-  ExternalValueInputElement.superClass_.constructor.call(this, input);
-  this.type = 'external value input';
-
-  if (!this.connectedBlock) {
-    this.height = 15;
-  } else {
-    this.height = this.connectedBlockHeight - 2 * BRC.TAB_OFFSET_FROM_TOP;
-  }
-  this.width = 10;
-};
-goog.inherits(ExternalValueInputElement, RenderableInputElement);
-
-Row = function() {
-  this.elements = [];
-  this.width = 0;
-  this.height = 0;
-
-  this.hasExternalInput = false;
-  this.hasStatement = false;
-  this.hasInlineInput = false;
-};
-
-Row.prototype.measure = function() {
-  var connectedBlockWidths = 0;
-  for (var e = 0; e < this.elements.length; e++) {
-    var elem = this.elements[e];
-    this.width += elem.width;
-    if (elem.isInput) {
-      connectedBlockWidths += elem.connectedBlockWidth;
-    }
-    if (!(elem instanceof ElemSpacer)) {
-      this.height = Math.max(this.height, elem.height);
-    }
-  }
-  this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
-};
-
-Row.prototype.getLastInput = function() {
-  // There's always a spacer after the last input, unless there are no inputs.
-  if (this.elements.length > 1) {
-    var elem = this.elements[this.elements.length - 2];
-    if (!elem.isInput) {
-      return null;
-    }
-    return elem;
-  }
-  // Return null if there are no inputs.
-  return null;
-};
-
-Row.prototype.getFirstSpacer = function() {
-  return this.elements[0];
-};
-
-Row.prototype.getLastSpacer = function() {
-  return this.elements[this.elements.length - 1];
-};
-
-RowSpacer = function(height, width) {
-  this.height = height;
-  this.rect = null;
-  this.width = width;
-};
-
-ElemSpacer = function(width) {
-  this.height = 15; // Only for visible rendering during debugging.
-  this.width = width;
-  this.rect = null;
+  this.squareBottomLeftCorner = !!block.outputConnection || !!nextBlock;
 };

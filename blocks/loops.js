@@ -303,7 +303,7 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
    * Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push('custom_loop');
    */
   LOOP_TYPES: ['controls_repeat', 'controls_repeat_ext', 'controls_forEach',
-    'controls_for', 'controls_whileUntil'],
+    'controls_for', 'controls_whileUntil', 'controls_whileForever'],
 
   /**
    * Called whenever anything on the workspace changes.

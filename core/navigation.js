@@ -20,8 +20,6 @@
 
 goog.provide('Blockly.Navigation');
 
-goog.require('Blockly.CursorNavigation');
-
 /**
  * The current connection the cursor is on.
  * @private

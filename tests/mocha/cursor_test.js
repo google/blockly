@@ -175,15 +175,15 @@ suite('Cursor', function() {
         assertEquals(nextStack, this.blocks.A);
       });
 
-      test('isStackFalse', function() {
+      test('checkIfStackFalse', function() {
         this.cursor.setLocation(this.blocks.B);
-        var isStack = this.cursor.isStack();
+        var isStack = this.cursor.checkIfStack_();
         assertEquals(isStack, false);
       });
 
-      test('isStackTrue', function() {
+      test('checkIfStackTrue', function() {
         this.cursor.setLocation(this.blocks.A.previousConnection);
-        var isStack = this.cursor.isStack();
+        var isStack = this.cursor.checkIfStack_();
         assertEquals(isStack, true);
       });
 

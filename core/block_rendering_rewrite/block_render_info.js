@@ -138,13 +138,13 @@ Blockly.BlockRendering.Info.renderCompute = function(block) {
  * @package
  */
 Blockly.BlockRendering.Info.prototype.createRows = function(block) {
-  var activeRow = new Blockly.BlockRendering.Measurables.Row();
+  var activeRow = new Blockly.BlockRendering.Row();
 
   var icons = block.getIcons();
   if (icons.length) {
     for (var i = 0; i < icons.length; i++) {
       activeRow.elements.push(
-          new Blockly.BlockRendering.Measurables.IconElement(icons[i]));
+          new Blockly.BlockRendering.Icon(icons[i]));
     }
   }
 
@@ -152,25 +152,25 @@ Blockly.BlockRendering.Info.prototype.createRows = function(block) {
     var input = block.inputList[i];
     if (this.shouldStartNewRow(input, block.inputList[i - 1])) {
       this.rows.push(activeRow);
-      activeRow = new Blockly.BlockRendering.Measurables.Row();
+      activeRow = new Blockly.BlockRendering.Row();
     }
     for (var f = 0; f < input.fieldRow.length; f++) {
       var field = input.fieldRow[f];
       activeRow.elements.push(
-          new Blockly.BlockRendering.Measurables.FieldElement(field));
+          new Blockly.BlockRendering.Field(field));
     }
 
     if (this.isInline && input.type == Blockly.INPUT_VALUE) {
       activeRow.elements.push(
-          new Blockly.BlockRendering.Measurables.InlineInputElement(input));
+          new Blockly.BlockRendering.InlineInput(input));
       activeRow.hasInlineInput = true;
     } else if (input.type == Blockly.NEXT_STATEMENT) {
       activeRow.elements.push(
-          new Blockly.BlockRendering.Measurables.StatementInputElement(input));
+          new Blockly.BlockRendering.StatementInput(input));
       activeRow.hasStatement = true;
     } else if (input.type == Blockly.INPUT_VALUE) {
       activeRow.elements.push(
-          new Blockly.BlockRendering.Measurables.ExternalValueInputElement(input));
+          new Blockly.BlockRendering.ExternalValueInput(input));
       activeRow.hasExternalInput = true;
     }
   }
@@ -215,12 +215,12 @@ Blockly.BlockRendering.Info.prototype.addElemSpacing = function() {
     var newElems = [];
     // There's a spacer before the first element in the row.
     newElems.push(
-        new Blockly.BlockRendering.Measurables.ElemSpacer(
+        new Blockly.BlockRendering.ElemSpacer(
             this.calculateSpacingBetweenElems(null, oldElems[0])));
     for (var e = 0; e < row.elements.length; e++) {
       newElems.push(oldElems[e]);
       var spacing = this.calculateSpacingBetweenElems(oldElems[e], oldElems[e + 1]);
-      newElems.push(new Blockly.BlockRendering.Measurables.ElemSpacer(spacing));
+      newElems.push(new Blockly.BlockRendering.ElemSpacer(spacing));
     }
     row.elements = newElems;
   }
@@ -239,11 +239,11 @@ Blockly.BlockRendering.Info.prototype.addElemSpacing = function() {
 Blockly.BlockRendering.Info.prototype.calculateSpacingBetweenElems = function(prev, next) {
   if (!prev) {
     // Between an editable field and the beginning of the row.
-    if (next instanceof Blockly.BlockRendering.Measurables.FieldElement && next.isEditable) {
+    if (next instanceof Blockly.BlockRendering.Field && next.isEditable) {
       return 5;
     }
     // Inline input at the beginning of the row.
-    if (next.isInput && next instanceof Blockly.BlockRendering.Measurables.InlineInputElement) {
+    if (next.isInput && next instanceof Blockly.BlockRendering.InlineInput) {
       return 9;
     }
     // Anything else at the beginning of the row.
@@ -253,7 +253,7 @@ Blockly.BlockRendering.Info.prototype.calculateSpacingBetweenElems = function(pr
   // Spacing between a field or icon and the end of the row.
   if (!prev.isInput && !next) {
     // Between an editable field and the end of the row.
-    if (prev instanceof Blockly.BlockRendering.Measurables.FieldElement && prev.isEditable) {
+    if (prev instanceof Blockly.BlockRendering.Field && prev.isEditable) {
       return 5;
     }
     // Between noneditable fields and icons and the end of the row.
@@ -262,11 +262,11 @@ Blockly.BlockRendering.Info.prototype.calculateSpacingBetweenElems = function(pr
 
   // Between inputs and the end of the row.
   if (prev.isInput && !next) {
-    if (prev instanceof Blockly.BlockRendering.Measurables.ExternalValueInputElement) {
+    if (prev instanceof Blockly.BlockRendering.ExternalValueInput) {
       return 0;
-    } else if (prev instanceof Blockly.BlockRendering.Measurables.InlineInputElement) {
+    } else if (prev instanceof Blockly.BlockRendering.InlineInput) {
       return 10;
-    } else if (prev instanceof Blockly.BlockRendering.Measurables.StatementInputElement) {
+    } else if (prev instanceof Blockly.BlockRendering.StatementInput) {
       return 0;
     }
   }
@@ -281,9 +281,9 @@ Blockly.BlockRendering.Info.prototype.calculateSpacingBetweenElems = function(pr
   if (!prev.isInput && next.isInput) {
     // Between an editable field and an input.
     if (prev.isEditable) {
-      if (next instanceof Blockly.BlockRendering.Measurables.InlineInputElement) {
+      if (next instanceof Blockly.BlockRendering.InlineInput) {
         return 3;
-      } else if (next instanceof Blockly.BlockRendering.Measurables.ExternalValueInputElement) {
+      } else if (next instanceof Blockly.BlockRendering.ExternalValueInput) {
         return 5;
       }
     }
@@ -291,12 +291,12 @@ Blockly.BlockRendering.Info.prototype.calculateSpacingBetweenElems = function(pr
   }
 
   // Spacing between an icon and an icon or field.
-  if (prev instanceof Blockly.BlockRendering.Measurables.IconElement && !next.isInput) {
+  if (prev instanceof Blockly.BlockRendering.Icon && !next.isInput) {
     return 11;
   }
 
   // Spacing between an inline input and a field.
-  if (prev instanceof Blockly.BlockRendering.Measurables.InlineInputElement && !next.isInput) {
+  if (prev instanceof Blockly.BlockRendering.InlineInput && !next.isInput) {
     // Editable field after inline input.
     if (next.isEditable) {
       return 5;
@@ -379,7 +379,7 @@ Blockly.BlockRendering.Info.prototype.alignRowElements = function() {
  * Modify the given row to add the given amount of padding around its fields.
  * The exact location of the padding is based on the alignment property of the
  * last input in the field.
- * @param {Blockly.BlockRendering.Measurables.Row} row The row to add padding to.
+ * @param {Blockly.BlockRendering.Row} row The row to add padding to.
  * @param {number} missingSpace How much padding to add.
  * @package
  */
@@ -415,12 +415,12 @@ Blockly.BlockRendering.Info.prototype.addRowSpacing = function() {
   // There's a spacer before the first row.
   var spacing = this.calculateSpacingBetweenRows(null, oldRows[0]);
   var width = this.calculateWidthOfSpacerRow(oldRows[null], oldRows[0]);
-  newRows.push(new Blockly.BlockRendering.Measurables.RowSpacer(spacing, width));
+  newRows.push(new Blockly.BlockRendering.RowSpacer(spacing, width));
   for (var r = 0; r < oldRows.length; r++) {
     newRows.push(oldRows[r]);
     var spacing = this.calculateSpacingBetweenRows(oldRows[r], oldRows[r + 1]);
     var width = this.calculateWidthOfSpacerRow(oldRows[r], oldRows[r + 1]);
-    newRows.push(new Blockly.BlockRendering.Measurables.RowSpacer(spacing, width));
+    newRows.push(new Blockly.BlockRendering.RowSpacer(spacing, width));
   }
   this.rows = newRows;
 };
@@ -429,10 +429,8 @@ Blockly.BlockRendering.Info.prototype.addRowSpacing = function() {
  * Calculate the width of a spacer row.  Almost all spacers will be the full
  * width of the block, but there are some exceptions (e.g. the small spacer row
  * after a statement input)
- * @param {Blockly.BlockRendering.Measurables.Row} prev The row before the
- *     spacer.
- * @param {Blockly.BlockRendering.Measurables.Row} next The row after the
- *     spacer.
+ * @param {Blockly.BlockRendering.Row} prev The row before the spacer.
+ * @param {Blockly.BlockRendering.Row} next The row after the spacer.
  * @return {number} The desired width of the spacer row between these two rows.
  * @package
  */
@@ -455,10 +453,8 @@ Blockly.BlockRendering.Info.prototype.calculateWidthOfSpacerRow = function(prev,
 
 /**
  * Calculate the height of a spacer row.
- * @param {Blockly.BlockRendering.Measurables.Row} prev The row before the
- *     spacer.
- * @param {Blockly.BlockRendering.Measurables.Row} next The row after the
- *     spacer.
+ * @param {Blockly.BlockRendering.Row} prev The row before the spacer.
+ * @param {Blockly.BlockRendering.Row} next The row after the spacer.
  * @return {number} The desired height of the spacer row between these two rows.
  * @package
  */
@@ -499,7 +495,7 @@ Blockly.BlockRendering.Info.prototype.finalize = function() {
     var row = this.rows[r];
     row.yPos = yCursor;
     var xCursor = 0;
-    if (!(row instanceof Blockly.BlockRendering.Measurables.RowSpacer)) {
+    if (!(row instanceof Blockly.BlockRendering.RowSpacer)) {
       var centerline = yCursor + row.height / 2;
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];

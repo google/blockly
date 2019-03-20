@@ -123,7 +123,7 @@ Blockly.BlockRendering.Info.renderCompute = function(block) {
   renderInfo.computeBounds();
   renderInfo.alignRowElements();
   renderInfo.addRowSpacing();
-  renderInfo.computeHeight();
+  renderInfo.finalize();
 
   console.log(renderInfo);
   block.height = renderInfo.height;
@@ -487,15 +487,28 @@ Blockly.BlockRendering.Info.prototype.calculateSpacingBetweenRows = function(pre
 };
 
 /**
- * Calculate the height of the block, which is obtained by summing the heights
- * of all rows.
+ * Make any final changes to the rendering information object.  In particular,
+ * store the y position of each row, and record the height of the full block.
  * @package
  */
-Blockly.BlockRendering.Info.prototype.computeHeight = function() {
-  var height = 0;
+Blockly.BlockRendering.Info.prototype.finalize = function() {
+  // Performance note: this could be combined with the draw pass, if the time
+  // that this takes is excessive.
+  var yCursor = 0;
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
-    height += row.height;
+    row.yPos = yCursor;
+    var xCursor = 0;
+    if (!(row instanceof Blockly.BlockRendering.Measurables.RowSpacer)) {
+      var centerline = yCursor + row.height / 2;
+      for (var e = 0; e < row.elements.length; e++) {
+        var elem = row.elements[e];
+        elem.xPos = xCursor;
+        elem.centerline = centerline;
+        xCursor += elem.width;
+      }
+    }
+    yCursor += row.height;
   }
-  this.height = height;
+  this.height = yCursor;
 };

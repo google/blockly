@@ -1,6 +1,6 @@
-goog.provide('Blockly.BlockRendering.Measurables');
+goog.provide('Blockly.BlockRendering.Measurable');
 
-Blockly.BlockRendering.Measurables.RenderableBlockElement = function() {
+Blockly.BlockRendering.Measurable = function() {
   this.isInput = false;
   this.width = 0;
   this.height = 0;
@@ -12,6 +12,7 @@ Blockly.BlockRendering.Measurables.RenderableInputElement = function(input) {
 
   this.isInput = true;
   this.input = input;
+  this.align = input.align;
   this.connectedBlock = input.connection && input.connection.targetBlock() ?
       input.connection.targetBlock() : null;
 
@@ -25,7 +26,7 @@ Blockly.BlockRendering.Measurables.RenderableInputElement = function(input) {
   }
 };
 goog.inherits(Blockly.BlockRendering.Measurables.RenderableInputElement,
-    Blockly.BlockRendering.Measurables.RenderableBlockElement);
+    Blockly.BlockRendering.Measurable);
 
 Blockly.BlockRendering.Measurables.IconElement = function(icon) {
   Blockly.BlockRendering.Measurables.IconElement.superClass_.constructor.call(this);
@@ -38,7 +39,7 @@ Blockly.BlockRendering.Measurables.IconElement = function(icon) {
   this.width = 16;
 };
 goog.inherits(Blockly.BlockRendering.Measurables.IconElement,
-    Blockly.BlockRendering.Measurables.RenderableBlockElement);
+    Blockly.BlockRendering.Measurable);
 
 Blockly.BlockRendering.Measurables.FieldElement = function(field) {
   Blockly.BlockRendering.Measurables.FieldElement.superClass_.constructor.call(this);
@@ -52,7 +53,7 @@ Blockly.BlockRendering.Measurables.FieldElement = function(field) {
   this.width = size.width;
 };
 goog.inherits(Blockly.BlockRendering.Measurables.FieldElement,
-    Blockly.BlockRendering.Measurables.RenderableBlockElement);
+    Blockly.BlockRendering.Measurable);
 
 Blockly.BlockRendering.Measurables.InlineInputElement = function(input) {
   Blockly.BlockRendering.Measurables.InlineInputElement.superClass_.constructor.call(this, input);

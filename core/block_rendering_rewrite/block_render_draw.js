@@ -26,6 +26,14 @@
 //'use strict';
 goog.provide('Blockly.BlockRendering.Draw');
 
+
+/**
+ * An object that draws a block based on the given rendering information.
+ * @param {!Blockly.BlockSvg} block The block to render
+ * @param {!Blockly.BlockRendering.Info} info An object containing all
+ *   information needed to render this block.
+ * @package
+ */
 Blockly.BlockRendering.Draw = function(block, info) {
   this.block_ = block;
   this.info_ = info;
@@ -36,6 +44,10 @@ Blockly.BlockRendering.Draw = function(block, info) {
       new Blockly.BlockRendering.Highlighter(info, this.pathObject_);
 };
 
+/**
+ * Draw the block to the workspace.
+ * @package
+ */
 Blockly.BlockRendering.Draw.prototype.renderDraw = function() {
   //Blockly.BlockRendering.Debug.drawDebug(this.block_, this.info_, this.pathObject_);
   this.drawOutline();
@@ -43,6 +55,11 @@ Blockly.BlockRendering.Draw.prototype.renderDraw = function() {
   this.block_.setPaths_(this.pathObject_);
 };
 
+
+/**
+ * Create the outline of the block.  This is a single continuous path.
+ * @package
+ */
 Blockly.BlockRendering.Draw.prototype.drawOutline = function() {
   this.drawTopCorner();
   var cursorY = 0;
@@ -62,6 +79,12 @@ Blockly.BlockRendering.Draw.prototype.drawOutline = function() {
   this.drawLeft(cursorY);
 };
 
+
+/**
+ * Create the path for the top corner of the block, taking into account
+ * details such as hats and rounded corners.
+ * @package
+ */
 Blockly.BlockRendering.Draw.prototype.drawTopCorner = function() {
   this.highlighter_.drawTopCorner();
   // Position the cursor at the top-left starting point.
@@ -81,6 +104,15 @@ Blockly.BlockRendering.Draw.prototype.drawTopCorner = function() {
   this.steps_.push('H', this.info_.maxValueOrDummyWidth);
 };
 
+
+/**
+ * Create the path for an external value input, rendered as a notch in the side
+ * of the block.
+ * @param {!Blockly.BlockRendering.Measurables.Row} row The row that this input
+ *     belongs to.
+ * @param {number} cursorY The y position at which the row starts.
+ * @package
+ */
 Blockly.BlockRendering.Draw.prototype.drawValueInput = function(row, cursorY) {
   this.highlighter_.drawValueInput(row, cursorY);
   this.steps_.push('H', row.width);
@@ -88,6 +120,13 @@ Blockly.BlockRendering.Draw.prototype.drawValueInput = function(row, cursorY) {
   this.steps_.push('v', row.height - BRC.TAB_HEIGHT);
 };
 
+/**
+ * Create the path for a statement input.
+ * @param {!Blockly.BlockRendering.Measurables.Row} row The row that this input
+ *     belongs to.
+ * @param {number} cursorY The y position at which the row starts.
+ * @package
+ */
 Blockly.BlockRendering.Draw.prototype.drawStatementInput = function(row, cursorY) {
   this.highlighter_.drawStatementInput(row, cursorY);
   var x = row.statementEdge + BRC.NOTCH_OFFSET;
@@ -98,12 +137,25 @@ Blockly.BlockRendering.Draw.prototype.drawStatementInput = function(row, cursorY
   this.steps_.push('H', this.info_.maxValueOrDummyWidth);
 };
 
+/**
+ * Create the path for the right side of a row that does not have value or
+ * statement input connections.
+ * @param {!Blockly.BlockRendering.Measurables.Row} row The row to draw the
+ *     side of.
+ * @package
+ */
 Blockly.BlockRendering.Draw.prototype.drawRightSideRow = function(row) {
   this.highlighter_.drawRightSideRow(row);
   this.steps_.push('H', row.width);
   this.steps_.push('v', row.height);
 };
 
+
+/**
+ * Create the path for the bottom edge of a block, possibly including a notch
+ * for the next connection
+ * @package
+ */
 Blockly.BlockRendering.Draw.prototype.drawBottom = function() {
   if (this.block_.nextConnection) {
     this.steps_.push('H', (BRC.NOTCH_OFFSET + (this.info_.RTL ? 0.5 : - 0.5)) +
@@ -112,6 +164,11 @@ Blockly.BlockRendering.Draw.prototype.drawBottom = function() {
   this.steps_.push('H', BRC.CORNER_RADIUS);
 };
 
+/**
+ * Create the path for the bottom left corner of the block, which may be rounded
+ * or squared off.
+ * @package
+ */
 Blockly.BlockRendering.Draw.prototype.drawBottomCorner = function() {
   this.highlighter_.drawBottomCorner();
   if (this.info_.squareBottomLeftCorner) {
@@ -121,6 +178,14 @@ Blockly.BlockRendering.Draw.prototype.drawBottomCorner = function() {
   }
 };
 
+
+/**
+ * Create the path for the left side of the block, which may include an output
+ * connection
+ * @param {number} cursorY The y position the the path was at last, which
+ *     represents the top of the bottom left corner.
+ * @package
+ */
 Blockly.BlockRendering.Draw.prototype.drawLeft = function(cursorY) {
   this.highlighter_.drawLeft();
 
@@ -134,6 +199,11 @@ Blockly.BlockRendering.Draw.prototype.drawLeft = function(cursorY) {
   this.steps_.push('z');
 };
 
+/**
+ * Draw the internals of the block: inline inputs, fields, and icons.  These do
+ * not depend on the outer path for placement.
+ * @package
+ */
 Blockly.BlockRendering.Draw.prototype.drawInternals = function() {
   var cursorY = 0;
   for (var r = 0; r < this.info_.rows.length; r++) {
@@ -155,6 +225,14 @@ Blockly.BlockRendering.Draw.prototype.drawInternals = function() {
   }
 };
 
+/**
+ * Some fields are terrible and render offset from where they claim to be
+ * rendered.  This function calculates an x offset for fields that need it.
+ * No one is happy about this.
+ * @param {!Blockly.Field} field The field to find an offset for.
+ * @return {number} How far to offset the field in the x direction.
+ * @package
+ */
 Blockly.BlockRendering.Draw.prototype.dealWithJackassFields = function(field) {
   if (field instanceof Blockly.FieldDropdown
       || field instanceof Blockly.FieldTextInput) {
@@ -163,6 +241,14 @@ Blockly.BlockRendering.Draw.prototype.dealWithJackassFields = function(field) {
   return 0;
 };
 
+/**
+ * Move a field or icon so that its left side is at cursorX and it is vertically
+ * centered around the given centerline
+ * @param {!Blockly.BlockRendering.Measurables.IconElement|!Blockly.BlockRendering.Measurables.FieldElement} fieldInfo The rendering information for the field or icon.
+ * @param {number} cursorX The X position for the left side of the field.
+ * @param {number} centerline The Y position to center the field on vertically.
+ * @package
+ */
 Blockly.BlockRendering.Draw.prototype.layoutField = function(fieldInfo, cursorX, centerline) {
   var yPos = centerline - fieldInfo.height / 2;
   if (this.info_.RTL) {
@@ -182,6 +268,16 @@ Blockly.BlockRendering.Draw.prototype.layoutField = function(fieldInfo, cursorX,
   }
 };
 
+/**
+ * Create the path for an inline input.
+ * @param {number} x The X position at which to place the inline input.
+ * @param {number} y The Y position at which to place the inline input
+ * @param {Blockly.BlockRendering.Measurables.RenderableInputElement} input The information about the
+ * input to render.
+ * @param {number} centerline The y position to center the inline input on
+ *     vertically.
+ * @package
+ */
 Blockly.BlockRendering.Draw.prototype.drawInlineInput = function(x, y, input, centerline) {
   this.highlighter_.drawInlineInput(x, y, input, centerline);
   var width = input.width;

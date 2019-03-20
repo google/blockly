@@ -10,8 +10,8 @@ Blockly.BlockRendering.Measurable = function() {
   this.centerline = 0;
 };
 
-Blockly.BlockRendering.RenderableInputElement = function(input) {
-  Blockly.BlockRendering.RenderableInputElement.superClass_.constructor.call(this);
+Blockly.BlockRendering.Input = function(input) {
+  Blockly.BlockRendering.Input.superClass_.constructor.call(this);
 
   this.isInput = true;
   this.input = input;
@@ -28,11 +28,11 @@ Blockly.BlockRendering.RenderableInputElement = function(input) {
     this.connectedBlockHeight = 0;
   }
 };
-goog.inherits(Blockly.BlockRendering.RenderableInputElement,
+goog.inherits(Blockly.BlockRendering.Input,
     Blockly.BlockRendering.Measurable);
 
-Blockly.BlockRendering.IconElement = function(icon) {
-  Blockly.BlockRendering.IconElement.superClass_.constructor.call(this);
+Blockly.BlockRendering.Icon = function(icon) {
+  Blockly.BlockRendering.Icon.superClass_.constructor.call(this);
   this.icon = icon;
   this.isVisible = icon.isVisible();
   this.renderRect = null;
@@ -41,11 +41,11 @@ Blockly.BlockRendering.IconElement = function(icon) {
   this.height = 16;
   this.width = 16;
 };
-goog.inherits(Blockly.BlockRendering.IconElement,
+goog.inherits(Blockly.BlockRendering.Icon,
     Blockly.BlockRendering.Measurable);
 
-Blockly.BlockRendering.FieldElement = function(field) {
-  Blockly.BlockRendering.FieldElement.superClass_.constructor.call(this);
+Blockly.BlockRendering.Field = function(field) {
+  Blockly.BlockRendering.Field.superClass_.constructor.call(this);
   this.field = field;
   this.renderRect = null;
   this.isEditable = field.isCurrentlyEditable();
@@ -55,11 +55,11 @@ Blockly.BlockRendering.FieldElement = function(field) {
   this.height = size.height;
   this.width = size.width;
 };
-goog.inherits(Blockly.BlockRendering.FieldElement,
+goog.inherits(Blockly.BlockRendering.Field,
     Blockly.BlockRendering.Measurable);
 
-Blockly.BlockRendering.InlineInputElement = function(input) {
-  Blockly.BlockRendering.InlineInputElement.superClass_.constructor.call(this, input);
+Blockly.BlockRendering.InlineInput = function(input) {
+  Blockly.BlockRendering.InlineInput.superClass_.constructor.call(this, input);
   this.type = 'inline input';
 
   if (!this.connectedBlock) {
@@ -70,11 +70,11 @@ Blockly.BlockRendering.InlineInputElement = function(input) {
     this.height = this.connectedBlockHeight;
   }
 };
-goog.inherits(Blockly.BlockRendering.InlineInputElement,
-    Blockly.BlockRendering.RenderableInputElement);
+goog.inherits(Blockly.BlockRendering.InlineInput,
+    Blockly.BlockRendering.Input);
 
-Blockly.BlockRendering.StatementInputElement = function(input) {
-  Blockly.BlockRendering.StatementInputElement.superClass_.constructor.call(this, input);
+Blockly.BlockRendering.StatementInput = function(input) {
+  Blockly.BlockRendering.StatementInput.superClass_.constructor.call(this, input);
   this.type = 'statement input';
 
   if (!this.connectedBlock) {
@@ -85,11 +85,11 @@ Blockly.BlockRendering.StatementInputElement = function(input) {
     this.height = this.connectedBlockHeight;
   }
 };
-goog.inherits(Blockly.BlockRendering.StatementInputElement,
-    Blockly.BlockRendering.RenderableInputElement);
+goog.inherits(Blockly.BlockRendering.StatementInput,
+    Blockly.BlockRendering.Input);
 
-Blockly.BlockRendering.ExternalValueInputElement = function(input) {
-  Blockly.BlockRendering.ExternalValueInputElement.superClass_.constructor.call(this, input);
+Blockly.BlockRendering.ExternalValueInput = function(input) {
+  Blockly.BlockRendering.ExternalValueInput.superClass_.constructor.call(this, input);
   this.type = 'external value input';
 
   if (!this.connectedBlock) {
@@ -99,8 +99,8 @@ Blockly.BlockRendering.ExternalValueInputElement = function(input) {
   }
   this.width = 10;
 };
-goog.inherits(Blockly.BlockRendering.ExternalValueInputElement,
-    Blockly.BlockRendering.RenderableInputElement);
+goog.inherits(Blockly.BlockRendering.ExternalValueInput,
+    Blockly.BlockRendering.Input);
 
 Blockly.BlockRendering.Row = function() {
   this.yPos = 0;

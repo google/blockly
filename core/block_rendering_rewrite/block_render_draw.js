@@ -106,7 +106,7 @@ Blockly.BlockRendering.Draw.prototype.drawTopCorner = function() {
 /**
  * Create the path for an external value input, rendered as a notch in the side
  * of the block.
- * @param {!Blockly.BlockRendering.Measurables.Row} row The row that this input
+ * @param {!Blockly.BlockRendering.Row} row The row that this input
  *     belongs to.
  * @package
  */
@@ -119,7 +119,7 @@ Blockly.BlockRendering.Draw.prototype.drawValueInput = function(row) {
 
 /**
  * Create the path for a statement input.
- * @param {!Blockly.BlockRendering.Measurables.Row} row The row that this input
+ * @param {!Blockly.BlockRendering.Row} row The row that this input
  *     belongs to.
  * @package
  */
@@ -136,7 +136,7 @@ Blockly.BlockRendering.Draw.prototype.drawStatementInput = function(row) {
 /**
  * Create the path for the right side of a row that does not have value or
  * statement input connections.
- * @param {!Blockly.BlockRendering.Measurables.Row} row The row to draw the
+ * @param {!Blockly.BlockRendering.Row} row The row to draw the
  *     side of.
  * @package
  */
@@ -201,12 +201,12 @@ Blockly.BlockRendering.Draw.prototype.drawLeft = function() {
 Blockly.BlockRendering.Draw.prototype.drawInternals = function() {
   for (var r = 0; r < this.info_.rows.length; r++) {
     var row = this.info_.rows[r];
-    if (!(row instanceof Blockly.BlockRendering.Measurables.RowSpacer)) {
+    if (!(row instanceof Blockly.BlockRendering.RowSpacer)) {
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];
-        if (elem instanceof Blockly.BlockRendering.Measurables.InlineInputElement) {
+        if (elem instanceof Blockly.BlockRendering.InlineInput) {
           this.drawInlineInput(elem);
-        } else if (elem instanceof Blockly.BlockRendering.Measurables.IconElement || elem instanceof Blockly.BlockRendering.Measurables.FieldElement) {
+        } else if (elem instanceof Blockly.BlockRendering.Icon || elem instanceof Blockly.BlockRendering.Field) {
           this.layoutField(elem);
         }
       }
@@ -232,7 +232,7 @@ Blockly.BlockRendering.Draw.prototype.dealWithJackassFields = function(field) {
 
 /**
  * Push a field or icon's new position to its SVG root.
- * @param {!Blockly.BlockRendering.Measurables.IconElement|!Blockly.BlockRendering.Measurables.FieldElement} fieldInfo The rendering information for the field or icon.
+ * @param {!Blockly.BlockRendering.Icon|!Blockly.BlockRendering.Field} fieldInfo The rendering information for the field or icon.
  * @package
  */
 Blockly.BlockRendering.Draw.prototype.layoutField = function(fieldInfo) {
@@ -257,7 +257,7 @@ Blockly.BlockRendering.Draw.prototype.layoutField = function(fieldInfo) {
 
 /**
  * Create the path for an inline input.
- * @param {Blockly.BlockRendering.Measurables.RenderableInputElement} input The information about the
+ * @param {Blockly.BlockRendering.RenderableInput} input The information about the
  * input to render.
  * @package
  */

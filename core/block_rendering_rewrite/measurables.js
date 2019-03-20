@@ -1,4 +1,4 @@
-goog.provide('Blockly.BlockRendering.Measurable');
+goog.provide('Blockly.BlockRendering.Measurables');
 
 Blockly.BlockRendering.Measurable = function() {
   this.isInput = false;

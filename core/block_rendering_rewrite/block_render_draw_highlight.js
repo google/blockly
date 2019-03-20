@@ -26,14 +26,12 @@
 //'use strict';
 goog.provide('Blockly.BlockRendering.Highlighter');
 
-Blockly.BlockRendering.Highlighter = function(block, info, pathObject) {
+Blockly.BlockRendering.Highlighter = function(info, pathObject) {
   this.info_ = info;
   this.pathObject_ = pathObject;
   this.highlightSteps_ = this.pathObject_.highlightSteps;
   this.highlightInlineSteps_ = this.pathObject_.highlightInlineSteps;
-  this.block_ = block;
 };
-
 
 Blockly.BlockRendering.Highlighter.prototype.drawTopCorner = function() {
   // Position the cursor at the top-left starting point.
@@ -52,7 +50,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawTopCorner = function() {
   }
 
   // Top edge.
-  if (this.info_.previousConnection) {
+  if (this.info_.hasPreviousConnection) {
     this.highlightSteps_.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT_HIGHLIGHT);
   }
   this.highlightSteps_.push('H', this.info_.maxValueOrDummyWidth - BRC.HIGHLIGHT_OFFSET);
@@ -63,7 +61,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawValueInput = function(row, curs
 
   if (this.info_.RTL) {
     // Highlight around back of tab.
-    // TODO: Unfuck this.
+    // TODO: Clean up.
     this.highlightSteps_.push('v', BRC.TAB_OFFSET_FROM_TOP - 3);
     this.highlightSteps_.push('m 0,2.5');
     this.highlightSteps_.push(BRC.TAB_PATH_DOWN_HIGHLIGHT_RTL);

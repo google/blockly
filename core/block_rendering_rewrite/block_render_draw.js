@@ -33,7 +33,7 @@ Blockly.BlockRendering.Draw = function(block, info) {
   this.steps_ = this.pathObject_.steps;
   this.inlineSteps_ = this.pathObject_.inlineSteps;
   this.highlighter_ =
-      new Blockly.BlockRendering.Highlighter(block, info, this.pathObject_);
+      new Blockly.BlockRendering.Highlighter(info, this.pathObject_);
 };
 
 Blockly.BlockRendering.Draw.prototype.renderDraw = function() {
@@ -133,8 +133,6 @@ Blockly.BlockRendering.Draw.prototype.drawLeft = function(cursorY) {
   // block's path, which may be either a rounded or a sharp corner.
   this.steps_.push('z');
 };
-
-
 
 Blockly.BlockRendering.Draw.prototype.drawInternals = function() {
   var cursorY = 0;

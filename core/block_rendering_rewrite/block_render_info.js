@@ -25,12 +25,12 @@
 
 //'use strict';
 
-goog.provide('Blockly.BlockRendering.Info');
+goog.provide('Blockly.BlockRendering.Measure');
 
 /**
  * @param {!Blockly.BlockSvg}
  */
-Blockly.BlockRendering.Info = function(block) {
+Blockly.BlockRendering.Measure = function(block) {
   /**
    *
    * @type {boolean}
@@ -112,12 +112,12 @@ Blockly.BlockRendering.Info = function(block) {
  * Populate and return an object containing all sizing information needed to
  * draw this block.
  * @param {!Blockly.BlockSvg} block The block to measure.
- * @return {!Blockly.BlockRendering.Info} An object containing rendering
+ * @return {!Blockly.BlockRendering.Measure} An object containing rendering
  * information about the block.
  * @package
  */
-Blockly.BlockRendering.Info.renderCompute = function(block) {
-  var renderInfo = new Blockly.BlockRendering.Info(block);
+Blockly.BlockRendering.Measure.renderCompute = function(block) {
+  var renderInfo = new Blockly.BlockRendering.Measure(block);
   renderInfo.createRows(block);
   renderInfo.addElemSpacing();
   renderInfo.computeBounds();
@@ -137,7 +137,7 @@ Blockly.BlockRendering.Info.renderCompute = function(block) {
  * @param {!Blockly.BlockSvg}  block The block to create rows from.
  * @package
  */
-Blockly.BlockRendering.Info.prototype.createRows = function(block) {
+Blockly.BlockRendering.Measure.prototype.createRows = function(block) {
   var activeRow = new Blockly.BlockRendering.Row();
 
   var icons = block.getIcons();
@@ -184,7 +184,7 @@ Blockly.BlockRendering.Info.prototype.createRows = function(block) {
  * @return {boolean} True if the next input should be rendered on a new row.
  * @package
  */
-Blockly.BlockRendering.Info.prototype.shouldStartNewRow = function(input, lastInput) {
+Blockly.BlockRendering.Measure.prototype.shouldStartNewRow = function(input, lastInput) {
   // If this is the first input, just add to the existing row.
   // That row is either empty or has some icons in it.
   if (!lastInput) {
@@ -205,21 +205,19 @@ Blockly.BlockRendering.Info.prototype.shouldStartNewRow = function(input, lastIn
  * Add horizontal spacing between and around elements within each row.
  * @package
  */
-Blockly.BlockRendering.Info.prototype.addElemSpacing = function() {
+Blockly.BlockRendering.Measure.prototype.addElemSpacing = function() {
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
     var oldElems = row.elements;
-    var newElems = [];
+    row.elements = [];
     // There's a spacer before the first element in the row.
-    newElems.push(
-        new Blockly.BlockRendering.Spacer(Blockly.BlockRendering.SPACER_DEFAULT_HEIGHT,
-            this.calculateSpacingBetweenElems(null, oldElems[0])));
-    for (var e = 0; e < row.elements.length; e++) {
-      newElems.push(oldElems[e]);
-      var spacing = this.calculateSpacingBetweenElems(oldElems[e], oldElems[e + 1]);
-      newElems.push(new Blockly.BlockRendering.Spacer(Blockly.BlockRendering.SPACER_DEFAULT_HEIGHT, spacing));
+    row.elements.push(new Blockly.BlockRendering.InRowSpacer(
+        this.getInRowSpacing(null, oldElems[0])));
+    for (var e = 0; e < oldElems.length; e++) {
+      row.elements.push(oldElems[e]);
+      var spacing = this.getInRowSpacing(oldElems[e], oldElems[e + 1]);
+      row.elements.push(new Blockly.BlockRendering.InRowSpacer(spacing));
     }
-    row.elements = newElems;
   }
 };
 
@@ -233,10 +231,10 @@ Blockly.BlockRendering.Info.prototype.addElemSpacing = function() {
  * @return {number} The size of the spacing between the two elements.
  * @package
  */
-Blockly.BlockRendering.Info.prototype.calculateSpacingBetweenElems = function(prev, next) {
+Blockly.BlockRendering.Measure.prototype.getInRowSpacing = function(prev, next) {
   if (!prev) {
     // Between an editable field and the beginning of the row.
-    if (next instanceof Blockly.BlockRendering.Field && next.isEditable) {
+    if (next.isField() && next.isEditable) {
       return 5;
     }
     // Inline input at the beginning of the row.
@@ -250,7 +248,7 @@ Blockly.BlockRendering.Info.prototype.calculateSpacingBetweenElems = function(pr
   // Spacing between a field or icon and the end of the row.
   if (!prev.isInput && !next) {
     // Between an editable field and the end of the row.
-    if (prev instanceof Blockly.BlockRendering.Field && prev.isEditable) {
+    if (prev.isField() && prev.isEditable) {
       return 5;
     }
     // Between noneditable fields and icons and the end of the row.
@@ -288,7 +286,7 @@ Blockly.BlockRendering.Info.prototype.calculateSpacingBetweenElems = function(pr
   }
 
   // Spacing between an icon and an icon or field.
-  if (prev instanceof Blockly.BlockRendering.Icon && !next.isInput) {
+  if (prev.isIcon() && !next.isInput) {
     return 11;
   }
 
@@ -311,7 +309,7 @@ Blockly.BlockRendering.Info.prototype.calculateSpacingBetweenElems = function(pr
  * should be placed.
  * @package
  */
-Blockly.BlockRendering.Info.prototype.computeBounds = function() {
+Blockly.BlockRendering.Measure.prototype.computeBounds = function() {
   var widestStatementRowFields = 0;
   var widestValueOrDummyRow = 0;
   var widestRowWithConnectedBlocks = 0;
@@ -358,7 +356,7 @@ Blockly.BlockRendering.Info.prototype.computeBounds = function() {
  * the sizes of all rows.
  * @package
  */
-Blockly.BlockRendering.Info.prototype.alignRowElements = function() {
+Blockly.BlockRendering.Measure.prototype.alignRowElements = function() {
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
     if (!row.hasStatement && !row.hasInlineInput) {
@@ -380,7 +378,7 @@ Blockly.BlockRendering.Info.prototype.alignRowElements = function() {
  * @param {number} missingSpace How much padding to add.
  * @package
  */
-Blockly.BlockRendering.Info.prototype.addAlignmentPadding = function(row, missingSpace) {
+Blockly.BlockRendering.Measure.prototype.addAlignmentPadding = function(row, missingSpace) {
   var elems = row.elements;
   if (row.hasExternalInput) { // TODO: handle for dummy inputs.
     var externalInput = row.getLastInput();
@@ -405,21 +403,22 @@ Blockly.BlockRendering.Info.prototype.addAlignmentPadding = function(row, missin
  * Add spacers between rows and set their sizes.
  * @package
  */
-Blockly.BlockRendering.Info.prototype.addRowSpacing = function() {
+Blockly.BlockRendering.Measure.prototype.addRowSpacing = function() {
   var oldRows = this.rows;
-  var newRows = [];
+  this.rows = [];
 
   // There's a spacer before the first row.
-  var spacing = this.calculateSpacingBetweenRows(null, oldRows[0]);
-  var width = this.calculateWidthOfSpacerRow(oldRows[null], oldRows[0]);
-  newRows.push(new Blockly.BlockRendering.Spacer(spacing, width));
+  this.rows.push(this.makeSpacerRow(null, oldRows[0]));
   for (var r = 0; r < oldRows.length; r++) {
-    newRows.push(oldRows[r]);
-    var spacing = this.calculateSpacingBetweenRows(oldRows[r], oldRows[r + 1]);
-    var width = this.calculateWidthOfSpacerRow(oldRows[r], oldRows[r + 1]);
-    newRows.push(new Blockly.BlockRendering.Spacer(spacing, width));
+    this.rows.push(oldRows[r]);
+    this.rows.push(this.makeSpacerRow(oldRows[r], oldRows[r + 1]));
   }
-  this.rows = newRows;
+};
+
+Blockly.BlockRendering.Measure.prototype.makeSpacerRow = function(prev, next) {
+  var height = this.getSpacerRowHeight(prev, next);
+  var width = this.getSpacerRowWidth(prev, next);
+  return new Blockly.BlockRendering.BetweenRowSpacer(height, width);
 };
 
 /**
@@ -431,7 +430,7 @@ Blockly.BlockRendering.Info.prototype.addRowSpacing = function() {
  * @return {number} The desired width of the spacer row between these two rows.
  * @package
  */
-Blockly.BlockRendering.Info.prototype.calculateWidthOfSpacerRow = function(prev, next) {
+Blockly.BlockRendering.Measure.prototype.getSpacerRowWidth = function(prev, next) {
   if (!prev) {
     return this.maxValueOrDummyWidth;
   }
@@ -455,7 +454,7 @@ Blockly.BlockRendering.Info.prototype.calculateWidthOfSpacerRow = function(prev,
  * @return {number} The desired height of the spacer row between these two rows.
  * @package
  */
-Blockly.BlockRendering.Info.prototype.calculateSpacingBetweenRows = function(prev, next) {
+Blockly.BlockRendering.Measure.prototype.getSpacerRowHeight = function(prev, next) {
   // First row is always (?) 5.
   if (!prev) {
     if (next && next.hasStatement) {
@@ -484,7 +483,7 @@ Blockly.BlockRendering.Info.prototype.calculateSpacingBetweenRows = function(pre
  * store the y position of each row, and record the height of the full block.
  * @package
  */
-Blockly.BlockRendering.Info.prototype.finalize = function() {
+Blockly.BlockRendering.Measure.prototype.finalize = function() {
   // Performance note: this could be combined with the draw pass, if the time
   // that this takes is excessive.
   var yCursor = 0;
@@ -492,7 +491,8 @@ Blockly.BlockRendering.Info.prototype.finalize = function() {
     var row = this.rows[r];
     row.yPos = yCursor;
     var xCursor = 0;
-    if (!(row.isSpacer)) {
+    //if (!(row.isSpacer())) {
+      if (row instanceof Blockly.BlockRendering.Row) {
       var centerline = yCursor + row.height / 2;
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];

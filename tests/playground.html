@@ -152,7 +152,7 @@ function start() {
   fromXml();
   var blocks = Blockly.getMainWorkspace().getAllBlocks();
   for (var i = 0; i < blocks.length; i++) {
-    new Blockly.BlockRendering.Draw(blocks[i], Blockly.BlockRendering.Info.renderCompute(blocks[i])).renderDraw();
+    new Blockly.BlockRendering.Draw(blocks[i], Blockly.BlockRendering.Measure.renderCompute(blocks[i])).renderDraw();
   }
 
 }

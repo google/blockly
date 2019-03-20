@@ -56,7 +56,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawTopCorner = function() {
   this.highlightSteps_.push('H', this.info_.maxValueOrDummyWidth - BRC.HIGHLIGHT_OFFSET);
 };
 
-Blockly.BlockRendering.Highlighter.prototype.drawValueInput = function(row, cursorY) {
+Blockly.BlockRendering.Highlighter.prototype.drawValueInput = function(row) {
   //var v = row.height - BRC.TAB_HEIGHT;
 
   if (this.info_.RTL) {
@@ -69,17 +69,17 @@ Blockly.BlockRendering.Highlighter.prototype.drawValueInput = function(row, curs
   } else {
     // Short highlight glint at bottom of tab.
     this.highlightSteps_.push('M', (this.info_.maxValueOrDummyWidth - 5) + ',' +
-        (cursorY + BRC.TAB_HEIGHT - 0.7));
+        (row.yPos + BRC.TAB_HEIGHT - 0.7));
     this.highlightSteps_.push('l', (BRC.TAB_WIDTH * 0.46) + ',-2.1');
   }
 };
 
-Blockly.BlockRendering.Highlighter.prototype.drawStatementInput = function(row, cursorY) {
+Blockly.BlockRendering.Highlighter.prototype.drawStatementInput = function(row) {
   var x = row.statementEdge;
   if (this.info_.RTL) {
     this.highlightSteps_.push('M',
         (x + BRC.DISTANCE_45_OUTSIDE) +
-        ',' + (cursorY + BRC.DISTANCE_45_OUTSIDE));
+        ',' + (row.yPos + BRC.DISTANCE_45_OUTSIDE));
     this.highlightSteps_.push(
         BRC.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL);
     this.highlightSteps_.push('v',
@@ -90,7 +90,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawStatementInput = function(row, 
   } else {
     this.highlightSteps_.push('M',
         (x + BRC.DISTANCE_45_OUTSIDE) + ',' +
-        (cursorY + row.height - BRC.DISTANCE_45_OUTSIDE));
+        (row.yPos + row.height - BRC.DISTANCE_45_OUTSIDE));
     this.highlightSteps_.push(
         BRC.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR);
     this.highlightSteps_.push('H', this.info_.maxValueOrDummyWidth - BRC.HIGHLIGHT_OFFSET);
@@ -137,10 +137,11 @@ Blockly.BlockRendering.Highlighter.prototype.drawLeft = function() {
   }
 };
 
-Blockly.BlockRendering.Highlighter.prototype.drawInlineInput = function(x, y, input, centerline) {
+Blockly.BlockRendering.Highlighter.prototype.drawInlineInput = function(input) {
   var width = input.width;
   var height = input.height;
-  var yPos = centerline - height / 2;
+  var x = input.xPos;
+  var yPos = input.centerline - height / 2;
   if (this.info_.RTL) {
     // Highlight right edge, around back of tab, and bottom.
     this.highlightInlineSteps_.push('M', (x + BRC.TAB_WIDTH - 0.5) +
@@ -160,7 +161,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawInlineInput = function(x, y, in
     this.highlightInlineSteps_.push('h', BRC.TAB_WIDTH - width);
     // Short highlight glint at bottom of tab.
     this.highlightInlineSteps_.push('M',
-        (x + 2.9) + ',' + (y + Blockly.BlockSvg.INLINE_PADDING_Y +
+        (x + 2.9) + ',' + (yPos + Blockly.BlockSvg.INLINE_PADDING_Y +
          BRC.TAB_HEIGHT - 0.7));
     this.highlightInlineSteps_.push('l',
         (BRC.TAB_WIDTH * 0.46) + ',-2.1');

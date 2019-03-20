@@ -161,16 +161,13 @@ Blockly.BlockRendering.Info.prototype.createRows = function(block) {
     }
 
     if (this.isInline && input.type == Blockly.INPUT_VALUE) {
-      activeRow.elements.push(
-          new Blockly.BlockRendering.InlineInput(input));
+      activeRow.elements.push(new Blockly.BlockRendering.InlineInput(input));
       activeRow.hasInlineInput = true;
     } else if (input.type == Blockly.NEXT_STATEMENT) {
-      activeRow.elements.push(
-          new Blockly.BlockRendering.StatementInput(input));
+      activeRow.elements.push(new Blockly.BlockRendering.StatementInput(input));
       activeRow.hasStatement = true;
     } else if (input.type == Blockly.INPUT_VALUE) {
-      activeRow.elements.push(
-          new Blockly.BlockRendering.ExternalValueInput(input));
+      activeRow.elements.push(new Blockly.BlockRendering.ExternalValueInput(input));
       activeRow.hasExternalInput = true;
     }
   }
@@ -215,12 +212,12 @@ Blockly.BlockRendering.Info.prototype.addElemSpacing = function() {
     var newElems = [];
     // There's a spacer before the first element in the row.
     newElems.push(
-        new Blockly.BlockRendering.ElemSpacer(
+        new Blockly.BlockRendering.Spacer(Blockly.BlockRendering.SPACER_DEFAULT_HEIGHT,
             this.calculateSpacingBetweenElems(null, oldElems[0])));
     for (var e = 0; e < row.elements.length; e++) {
       newElems.push(oldElems[e]);
       var spacing = this.calculateSpacingBetweenElems(oldElems[e], oldElems[e + 1]);
-      newElems.push(new Blockly.BlockRendering.ElemSpacer(spacing));
+      newElems.push(new Blockly.BlockRendering.Spacer(Blockly.BlockRendering.SPACER_DEFAULT_HEIGHT, spacing));
     }
     row.elements = newElems;
   }
@@ -415,12 +412,12 @@ Blockly.BlockRendering.Info.prototype.addRowSpacing = function() {
   // There's a spacer before the first row.
   var spacing = this.calculateSpacingBetweenRows(null, oldRows[0]);
   var width = this.calculateWidthOfSpacerRow(oldRows[null], oldRows[0]);
-  newRows.push(new Blockly.BlockRendering.RowSpacer(spacing, width));
+  newRows.push(new Blockly.BlockRendering.Spacer(spacing, width));
   for (var r = 0; r < oldRows.length; r++) {
     newRows.push(oldRows[r]);
     var spacing = this.calculateSpacingBetweenRows(oldRows[r], oldRows[r + 1]);
     var width = this.calculateWidthOfSpacerRow(oldRows[r], oldRows[r + 1]);
-    newRows.push(new Blockly.BlockRendering.RowSpacer(spacing, width));
+    newRows.push(new Blockly.BlockRendering.Spacer(spacing, width));
   }
   this.rows = newRows;
 };
@@ -495,7 +492,7 @@ Blockly.BlockRendering.Info.prototype.finalize = function() {
     var row = this.rows[r];
     row.yPos = yCursor;
     var xCursor = 0;
-    if (!(row instanceof Blockly.BlockRendering.RowSpacer)) {
+    if (!(row.isSpacer)) {
       var centerline = yCursor + row.height / 2;
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];

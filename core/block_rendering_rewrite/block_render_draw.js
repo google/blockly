@@ -201,7 +201,7 @@ Blockly.BlockRendering.Draw.prototype.drawLeft = function() {
 Blockly.BlockRendering.Draw.prototype.drawInternals = function() {
   for (var r = 0; r < this.info_.rows.length; r++) {
     var row = this.info_.rows[r];
-    if (!(row instanceof Blockly.BlockRendering.RowSpacer)) {
+    if (!(row.isSpacer)) {
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];
         if (elem instanceof Blockly.BlockRendering.InlineInput) {

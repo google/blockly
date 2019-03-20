@@ -2,6 +2,7 @@ goog.provide('Blockly.BlockRendering');
 
 Blockly.BlockRendering.Measurable = function() {
   this.isInput = false;
+  this.isSpacer = false;
   this.width = 0;
   this.height = 0;
   this.type = null;
@@ -28,8 +29,7 @@ Blockly.BlockRendering.Input = function(input) {
     this.connectedBlockHeight = 0;
   }
 };
-goog.inherits(Blockly.BlockRendering.Input,
-    Blockly.BlockRendering.Measurable);
+goog.inherits(Blockly.BlockRendering.Input, Blockly.BlockRendering.Measurable);
 
 Blockly.BlockRendering.Icon = function(icon) {
   Blockly.BlockRendering.Icon.superClass_.constructor.call(this);
@@ -41,8 +41,7 @@ Blockly.BlockRendering.Icon = function(icon) {
   this.height = 16;
   this.width = 16;
 };
-goog.inherits(Blockly.BlockRendering.Icon,
-    Blockly.BlockRendering.Measurable);
+goog.inherits(Blockly.BlockRendering.Icon, Blockly.BlockRendering.Measurable);
 
 Blockly.BlockRendering.Field = function(field) {
   Blockly.BlockRendering.Field.superClass_.constructor.call(this);
@@ -55,8 +54,7 @@ Blockly.BlockRendering.Field = function(field) {
   this.height = size.height;
   this.width = size.width;
 };
-goog.inherits(Blockly.BlockRendering.Field,
-    Blockly.BlockRendering.Measurable);
+goog.inherits(Blockly.BlockRendering.Field, Blockly.BlockRendering.Measurable);
 
 Blockly.BlockRendering.InlineInput = function(input) {
   Blockly.BlockRendering.InlineInput.superClass_.constructor.call(this, input);
@@ -70,8 +68,7 @@ Blockly.BlockRendering.InlineInput = function(input) {
     this.height = this.connectedBlockHeight;
   }
 };
-goog.inherits(Blockly.BlockRendering.InlineInput,
-    Blockly.BlockRendering.Input);
+goog.inherits(Blockly.BlockRendering.InlineInput, Blockly.BlockRendering.Input);
 
 Blockly.BlockRendering.StatementInput = function(input) {
   Blockly.BlockRendering.StatementInput.superClass_.constructor.call(this, input);
@@ -121,7 +118,7 @@ Blockly.BlockRendering.Row.prototype.measure = function() {
     if (elem.isInput) {
       connectedBlockWidths += elem.connectedBlockWidth;
     }
-    if (!(elem instanceof Blockly.BlockRendering.ElemSpacer)) {
+    if (!(elem.isSpacer)) {
       this.height = Math.max(this.height, elem.height);
     }
   }
@@ -149,14 +146,12 @@ Blockly.BlockRendering.Row.prototype.getLastSpacer = function() {
   return this.elements[this.elements.length - 1];
 };
 
-Blockly.BlockRendering.RowSpacer = function(height, width) {
+Blockly.BlockRendering.Spacer = function(height, width) {
+  this.isSpacer = true;
+  this.width = width;
   this.height = height;
-  this.rect = null;
-  this.width = width;
 };
+goog.inherits(Blockly.BlockRendering.Spacer,
+    Blockly.BlockRendering.Measurable);
 
-Blockly.BlockRendering.ElemSpacer = function(width) {
-  this.height = 15; // Only for visible rendering during debugging.
-  this.width = width;
-  this.rect = null;
-};
+Blockly.BlockRendering.SPACER_DEFAULT_HEIGHT = 15;

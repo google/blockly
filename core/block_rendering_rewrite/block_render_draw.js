@@ -62,21 +62,19 @@ Blockly.BlockRendering.Draw.prototype.renderDraw = function() {
  */
 Blockly.BlockRendering.Draw.prototype.drawOutline = function() {
   this.drawTopCorner();
-  var cursorY = 0;
   for (var r = 0; r < this.info_.rows.length; r++) {
     var row = this.info_.rows[r];
     if (row.hasStatement) {
-      this.drawStatementInput(row, cursorY);
+      this.drawStatementInput(row);
     } else if (row.hasExternalInput) {
-      this.drawValueInput(row, cursorY);
+      this.drawValueInput(row);
     } else {
       this.drawRightSideRow(row);
     }
-    cursorY += row.height;
   }
   this.drawBottom();
   this.drawBottomCorner();
-  this.drawLeft(cursorY);
+  this.drawLeft();
 };
 
 
@@ -110,11 +108,10 @@ Blockly.BlockRendering.Draw.prototype.drawTopCorner = function() {
  * of the block.
  * @param {!Blockly.BlockRendering.Measurables.Row} row The row that this input
  *     belongs to.
- * @param {number} cursorY The y position at which the row starts.
  * @package
  */
-Blockly.BlockRendering.Draw.prototype.drawValueInput = function(row, cursorY) {
-  this.highlighter_.drawValueInput(row, cursorY);
+Blockly.BlockRendering.Draw.prototype.drawValueInput = function(row) {
+  this.highlighter_.drawValueInput(row);
   this.steps_.push('H', row.width);
   this.steps_.push(BRC.TAB_PATH_DOWN);
   this.steps_.push('v', row.height - BRC.TAB_HEIGHT);
@@ -124,11 +121,10 @@ Blockly.BlockRendering.Draw.prototype.drawValueInput = function(row, cursorY) {
  * Create the path for a statement input.
  * @param {!Blockly.BlockRendering.Measurables.Row} row The row that this input
  *     belongs to.
- * @param {number} cursorY The y position at which the row starts.
  * @package
  */
-Blockly.BlockRendering.Draw.prototype.drawStatementInput = function(row, cursorY) {
-  this.highlighter_.drawStatementInput(row, cursorY);
+Blockly.BlockRendering.Draw.prototype.drawStatementInput = function(row) {
+  this.highlighter_.drawStatementInput(row);
   var x = row.statementEdge + BRC.NOTCH_OFFSET;
   this.steps_.push('H', x);
   this.steps_.push(BRC.INNER_TOP_LEFT_CORNER);
@@ -182,16 +178,14 @@ Blockly.BlockRendering.Draw.prototype.drawBottomCorner = function() {
 /**
  * Create the path for the left side of the block, which may include an output
  * connection
- * @param {number} cursorY The y position the the path was at last, which
- *     represents the top of the bottom left corner.
  * @package
  */
-Blockly.BlockRendering.Draw.prototype.drawLeft = function(cursorY) {
+Blockly.BlockRendering.Draw.prototype.drawLeft = function() {
   this.highlighter_.drawLeft();
 
   if (this.info_.hasOutputConnection) {
     // Draw a line up to the bottom of the tab.
-    this.steps_.push('v', -(cursorY - BRC.TAB_HEIGHT - BRC.TAB_OFFSET_FROM_TOP));
+    this.steps_.push('V', BRC.TAB_OFFSET_FROM_TOP + BRC.TAB_HEIGHT);
     this.steps_.push(BRC.TAB_PATH_UP);
   }
   // Close off the path.  This draws a vertical line up to the start of the
@@ -205,23 +199,18 @@ Blockly.BlockRendering.Draw.prototype.drawLeft = function(cursorY) {
  * @package
  */
 Blockly.BlockRendering.Draw.prototype.drawInternals = function() {
-  var cursorY = 0;
   for (var r = 0; r < this.info_.rows.length; r++) {
     var row = this.info_.rows[r];
-    var cursorX = 0;
-    var centerline = cursorY + row.height / 2;
     if (!(row instanceof Blockly.BlockRendering.Measurables.RowSpacer)) {
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];
         if (elem instanceof Blockly.BlockRendering.Measurables.InlineInputElement) {
-          this.drawInlineInput(cursorX, cursorY, elem, centerline);
+          this.drawInlineInput(elem);
         } else if (elem instanceof Blockly.BlockRendering.Measurables.IconElement || elem instanceof Blockly.BlockRendering.Measurables.FieldElement) {
-          this.layoutField(elem, cursorX, centerline);
+          this.layoutField(elem);
         }
-        cursorX += elem.width;
       }
     }
-    cursorY += row.height;
   }
 };
 
@@ -242,49 +231,43 @@ Blockly.BlockRendering.Draw.prototype.dealWithJackassFields = function(field) {
 };
 
 /**
- * Move a field or icon so that its left side is at cursorX and it is vertically
- * centered around the given centerline
+ * Push a field or icon's new position to its SVG root.
  * @param {!Blockly.BlockRendering.Measurables.IconElement|!Blockly.BlockRendering.Measurables.FieldElement} fieldInfo The rendering information for the field or icon.
- * @param {number} cursorX The X position for the left side of the field.
- * @param {number} centerline The Y position to center the field on vertically.
  * @package
  */
-Blockly.BlockRendering.Draw.prototype.layoutField = function(fieldInfo, cursorX, centerline) {
-  var yPos = centerline - fieldInfo.height / 2;
+Blockly.BlockRendering.Draw.prototype.layoutField = function(fieldInfo) {
+  var yPos = fieldInfo.centerline - fieldInfo.height / 2;
+  var xPos = fieldInfo.xPos;
   if (this.info_.RTL) {
-    cursorX = -(cursorX + fieldInfo.width);
+    xPos = -(xPos + fieldInfo.width);
   }
   if (fieldInfo.type == 'icon') {
     var icon = fieldInfo.icon;
     icon.iconGroup_.setAttribute('display', 'block');
-    icon.iconGroup_.setAttribute('transform', 'translate(' + cursorX + ',' +
+    icon.iconGroup_.setAttribute('transform', 'translate(' + xPos + ',' +
         yPos + ')');
     icon.computeIconLocation();
   } else {
-    cursorX += this.dealWithJackassFields(fieldInfo.field);
+    xPos += this.dealWithJackassFields(fieldInfo.field);
 
     fieldInfo.field.getSvgRoot().setAttribute('transform',
-        'translate(' + cursorX + ',' + yPos + ')');
+        'translate(' + xPos + ',' + yPos + ')');
   }
 };
 
 /**
  * Create the path for an inline input.
- * @param {number} x The X position at which to place the inline input.
- * @param {number} y The Y position at which to place the inline input
  * @param {Blockly.BlockRendering.Measurables.RenderableInputElement} input The information about the
  * input to render.
- * @param {number} centerline The y position to center the inline input on
- *     vertically.
  * @package
  */
-Blockly.BlockRendering.Draw.prototype.drawInlineInput = function(x, y, input, centerline) {
-  this.highlighter_.drawInlineInput(x, y, input, centerline);
+Blockly.BlockRendering.Draw.prototype.drawInlineInput = function(input) {
+  this.highlighter_.drawInlineInput(input);
   var width = input.width;
   var height = input.height;
-  var yPos = centerline - height / 2;
+  var yPos = input.centerline - height / 2;
 
-  this.inlineSteps_.push('M', (x + BRC.TAB_WIDTH) + ',' + yPos);
+  this.inlineSteps_.push('M', (input.xPos + BRC.TAB_WIDTH) + ',' + yPos);
   this.inlineSteps_.push('v ', BRC.TAB_OFFSET_FROM_TOP);
   this.inlineSteps_.push(BRC.TAB_PATH_DOWN);
   this.inlineSteps_.push('v', height - BRC.TAB_HEIGHT - BRC.TAB_OFFSET_FROM_TOP);

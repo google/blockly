@@ -30,7 +30,7 @@ goog.provide('Blockly.BlockRendering.Draw');
 /**
  * An object that draws a block based on the given rendering information.
  * @param {!Blockly.BlockSvg} block The block to render
- * @param {!Blockly.BlockRendering.Info} info An object containing all
+ * @param {!Blockly.BlockRendering.Measure} info An object containing all
  *   information needed to render this block.
  * @package
  */
@@ -201,12 +201,12 @@ Blockly.BlockRendering.Draw.prototype.drawLeft = function() {
 Blockly.BlockRendering.Draw.prototype.drawInternals = function() {
   for (var r = 0; r < this.info_.rows.length; r++) {
     var row = this.info_.rows[r];
-    if (!(row.isSpacer)) {
+    if (!(row.isSpacer())) {
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];
         if (elem instanceof Blockly.BlockRendering.InlineInput) {
           this.drawInlineInput(elem);
-        } else if (elem instanceof Blockly.BlockRendering.Icon || elem instanceof Blockly.BlockRendering.Field) {
+        } else if (elem.isIcon() || elem.isField()) {
           this.layoutField(elem);
         }
       }

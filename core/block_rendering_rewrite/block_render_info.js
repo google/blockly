@@ -111,9 +111,15 @@ Blockly.BlockRendering.Measure = function(block) {
 /**
  * Populate and return an object containing all sizing information needed to
  * draw this block.
+ *
+ * This measure pass does not propagate changes to the block (although fields
+ * may choose to rerender when getSize() is called).  However, calling it
+ * repeatedly may be expensive.
+ *
  * @param {!Blockly.BlockSvg} block The block to measure.
  * @return {!Blockly.BlockRendering.Measure} An object containing rendering
  * information about the block.
+ * @constructor
  * @package
  */
 Blockly.BlockRendering.Measure.renderCompute = function(block) {
@@ -126,8 +132,6 @@ Blockly.BlockRendering.Measure.renderCompute = function(block) {
   renderInfo.finalize();
 
   console.log(renderInfo);
-  block.height = renderInfo.height;
-  block.width = renderInfo.widthWithConnectedBlocks;
   return renderInfo;
 };
 
@@ -140,6 +144,7 @@ Blockly.BlockRendering.Measure.renderCompute = function(block) {
 Blockly.BlockRendering.Measure.prototype.createRows = function(block) {
   var activeRow = new Blockly.BlockRendering.Row();
 
+  // Icons always go on the first row, before anything else.
   var icons = block.getIcons();
   if (icons.length) {
     for (var i = 0; i < icons.length; i++) {
@@ -148,18 +153,22 @@ Blockly.BlockRendering.Measure.prototype.createRows = function(block) {
     }
   }
 
+  // Loop across all of the inputs on the block, creating objects for anything
+  // that needs to be rendered and breaking the block up into visual rows.
   for (var i = 0; i < block.inputList.length; i++) {
     var input = block.inputList[i];
     if (this.shouldStartNewRow(input, block.inputList[i - 1])) {
+      // Finish this row and create a new one.
       this.rows.push(activeRow);
       activeRow = new Blockly.BlockRendering.Row();
     }
+    // All of the fields in an input go on the same row.
     for (var f = 0; f < input.fieldRow.length; f++) {
       var field = input.fieldRow[f];
-      activeRow.elements.push(
-          new Blockly.BlockRendering.Field(field));
+      activeRow.elements.push(new Blockly.BlockRendering.Field(field));
     }
 
+    // Non-dummy inputs are rendered onscreen.
     if (this.isInline && input.type == Blockly.INPUT_VALUE) {
       activeRow.elements.push(new Blockly.BlockRendering.InlineInput(input));
       activeRow.hasInlineInput = true;
@@ -238,7 +247,7 @@ Blockly.BlockRendering.Measure.prototype.getInRowSpacing = function(prev, next) 
       return 5;
     }
     // Inline input at the beginning of the row.
-    if (next.isInput && next instanceof Blockly.BlockRendering.InlineInput) {
+    if (next.isInput && next.isInlineInput()) {
       return 9;
     }
     // Anything else at the beginning of the row.
@@ -257,11 +266,11 @@ Blockly.BlockRendering.Measure.prototype.getInRowSpacing = function(prev, next) 
 
   // Between inputs and the end of the row.
   if (prev.isInput && !next) {
-    if (prev instanceof Blockly.BlockRendering.ExternalValueInput) {
+    if (prev.isExternalInput()) {
       return 0;
-    } else if (prev instanceof Blockly.BlockRendering.InlineInput) {
+    } else if (prev.isInlineInput()) {
       return 10;
-    } else if (prev instanceof Blockly.BlockRendering.StatementInput) {
+    } else if (prev.isStatementInput()) {
       return 0;
     }
   }
@@ -276,9 +285,9 @@ Blockly.BlockRendering.Measure.prototype.getInRowSpacing = function(prev, next) 
   if (!prev.isInput && next.isInput) {
     // Between an editable field and an input.
     if (prev.isEditable) {
-      if (next instanceof Blockly.BlockRendering.InlineInput) {
+      if (next.isInlineInput()) {
         return 3;
-      } else if (next instanceof Blockly.BlockRendering.ExternalValueInput) {
+      } else if (next.isExternalInput()) {
         return 5;
       }
     }
@@ -291,7 +300,7 @@ Blockly.BlockRendering.Measure.prototype.getInRowSpacing = function(prev, next) 
   }
 
   // Spacing between an inline input and a field.
-  if (prev instanceof Blockly.BlockRendering.InlineInput && !next.isInput) {
+  if (prev.isInlineInput() && !next.isInput) {
     // Editable field after inline input.
     if (next.isEditable) {
       return 5;
@@ -307,6 +316,7 @@ Blockly.BlockRendering.Measure.prototype.getInRowSpacing = function(prev, next) 
 /**
  * Figure out where the right edge of the block and right edge of statement inputs
  * should be placed.
+ * TODO: More cleanup.
  * @package
  */
 Blockly.BlockRendering.Measure.prototype.computeBounds = function() {
@@ -415,6 +425,13 @@ Blockly.BlockRendering.Measure.prototype.addRowSpacing = function() {
   }
 };
 
+/**
+ * Create a spacer row to go between prev and next, and set its size.
+ * @param {?Blockly.BlockRendering.Measurable} prev The previous row, or null.
+ * @param {?Blockly.BlockRendering.Measurable} next The next row, or null.
+ * @return {!Blockly.BlockSvg.BetweenRowSpacer} The newly created spacer row.
+ * @package
+ */
 Blockly.BlockRendering.Measure.prototype.makeSpacerRow = function(prev, next) {
   var height = this.getSpacerRowHeight(prev, next);
   var width = this.getSpacerRowWidth(prev, next);
@@ -485,14 +502,14 @@ Blockly.BlockRendering.Measure.prototype.getSpacerRowHeight = function(prev, nex
  */
 Blockly.BlockRendering.Measure.prototype.finalize = function() {
   // Performance note: this could be combined with the draw pass, if the time
-  // that this takes is excessive.
+  // that this takes is excessive.  But it shouldn't be, because it only
+  // accesses and sets properties that already exist on the objects.
   var yCursor = 0;
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
     row.yPos = yCursor;
     var xCursor = 0;
-    //if (!(row.isSpacer())) {
-      if (row instanceof Blockly.BlockRendering.Row) {
+    if (!(row.isSpacer())) {
       var centerline = yCursor + row.height / 2;
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];

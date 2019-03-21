@@ -75,23 +75,15 @@ suite('Cursor', function() {
   });
 
   suite('HelperFunctions', function() {
-    test('getFieldParentInput_', function() {
+    test('setLocationForStackNotAtTop', function() {
         var input = this.blocks.A.inputList[0];
-        var parentInput = this.cursor.getFieldParentInput_(input.fieldRow[0]);
-        assertEquals(parentInput, input);
+        this.cursor.setLocation(input, true, false);
+        assertEquals(this.cursor.isStack_, false)
       });
-
-      test('getConnectionParentInput_', function() {
-        var input = this.blocks.A.inputList[1];
-        var connection = input.connection;
-        var parentInput = this.cursor.getConnectionParentInput_(connection);
-        assertEquals(parentInput, input);
-      });
-
-      test('getConnectionParentInputNotFound_', function() {
-        var nextConnection = this.blocks.A.nextConnection;
-        var parentInput = this.cursor.getConnectionParentInput_(nextConnection);
-        assertEquals(parentInput, undefined);
+    test('setLocationForStackAtTopBlock', function() {
+        var input = this.blocks.A.previousConnection;
+        this.cursor.setLocation(input, true, false);
+        assertEquals(this.cursor.isStack_, true)
       });
 
       test('findNextEditableField_', function() {
@@ -130,7 +122,7 @@ suite('Cursor', function() {
         var connection = input.connection;
         var nextLocation = this.cursor.findNextForInput_(connection, input);
         assertEquals(nextLocation, input2.connection);
-        assertEquals(input2, this.cursor.getParentInput());
+        assertEquals(input2, this.cursor.parentInput_);
       });
 
       test('findPrevForInput_', function() {
@@ -139,7 +131,7 @@ suite('Cursor', function() {
         var connection = input2.connection;
         var nextLocation = this.cursor.findPrevForInput_(connection, input2);
         assertEquals(nextLocation, input.connection);
-        assertEquals(input, this.cursor.getParentInput());
+        assertEquals(input, this.cursor.parentInput_);
       });
 
       test('findNextForField_', function() {
@@ -293,7 +285,7 @@ suite('Cursor', function() {
         this.cursor.setLocation(input.connection, input);
         this.cursor.prev();
         assertEquals(this.cursor.getLocation(), this.blocks.B.inputList[0].connection);
-        assertEquals(this.cursor.getParentInput(), this.blocks.B.inputList[0]);
+        assertEquals(this.cursor.parentInput_, this.blocks.B.inputList[0]);
       });
     });
 
@@ -367,7 +359,7 @@ suite('Cursor', function() {
         var nextConnection = this.blocks.C.nextConnection;
         this.cursor.setLocation(nextConnection);
         assertEquals(this.cursor.out(), this.blocks.B.inputList[1].connection);
-        assertEquals(this.cursor.getParentInput(), this.blocks.B.inputList[1]);
+        assertEquals(this.cursor.parentInput_, this.blocks.B.inputList[1]);
       });
     });
   });

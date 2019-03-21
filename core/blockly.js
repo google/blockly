@@ -690,28 +690,30 @@ Blockly.setTheme = function(theme) {
   this.theme_ = theme;
   var ws = Blockly.getMainWorkspace();
 
-  //update all blocks in workspace that have a style name
-  this.updateBlockStyles_(ws.getAllBlocks().filter(
-      function(block){
-        return block.getStyleName() !== undefined;
-      }
-  ));
+  if (ws) {
+    //update all blocks in workspace that have a style name
+    this.updateBlockStyles_(ws.getAllBlocks().filter(
+        function(block){
+          return block.getStyleName() !== undefined;
+        }
+    ));
 
-  //update blocks in the flyout
-  if (!ws.toolbox_ && ws.flyout_ && ws.flyout_.workspace_) {
-    this.updateBlockStyles_(ws.flyout_.workspace_.getAllBlocks());
-  } else {
-    ws.refreshToolboxSelection();
+    //update blocks in the flyout
+    if (!ws.toolbox_ && ws.flyout_ && ws.flyout_.workspace_) {
+      this.updateBlockStyles_(ws.flyout_.workspace_.getAllBlocks());
+    } else {
+      ws.refreshToolboxSelection();
+    }
+
+    //update colours on the categories
+    if (ws.toolbox_) {
+      ws.toolbox_.updateColourFromTheme();
+    }
+
+    var event = new Blockly.Events.Ui(null, 'theme');
+    event.workspaceId = ws.id;
+    Blockly.Events.fire(event);
   }
-
-  //update colours on the categories
-  if (ws.toolbox_) {
-    ws.toolbox_.updateColourFromTheme();
-  }
-
-  var event = new Blockly.Events.Ui(null, 'theme');
-  event.workspaceId = ws.id;
-  Blockly.Events.fire(event);
 };
 
 /**

@@ -45,11 +45,14 @@ Blockly.BlockRendering.Draw = function(block, info) {
 };
 
 /**
- * Draw the block to the workspace.
+ * Draw the block to the workspace. Here "drawing" means setting SVG path
+ * elements and moving fields, icons, and connections on the screen.
  * @package
  */
 Blockly.BlockRendering.Draw.prototype.renderDraw = function() {
   //Blockly.BlockRendering.Debug.drawDebug(this.block_, this.info_, this.pathObject_);
+  this.block_.height = this.info_.height;
+  this.block_.width = this.info_.widthWithConnectedBlocks;
   this.drawOutline();
   this.drawInternals();
   this.block_.setPaths_(this.pathObject_);
@@ -204,7 +207,7 @@ Blockly.BlockRendering.Draw.prototype.drawInternals = function() {
     if (!(row.isSpacer())) {
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];
-        if (elem instanceof Blockly.BlockRendering.InlineInput) {
+        if (elem.isInlineInput()) {
           this.drawInlineInput(elem);
         } else if (elem.isIcon() || elem.isField()) {
           this.layoutField(elem);
@@ -232,7 +235,8 @@ Blockly.BlockRendering.Draw.prototype.dealWithJackassFields = function(field) {
 
 /**
  * Push a field or icon's new position to its SVG root.
- * @param {!Blockly.BlockRendering.Icon|!Blockly.BlockRendering.Field} fieldInfo The rendering information for the field or icon.
+ * @param {!Blockly.BlockRendering.Icon|!Blockly.BlockRendering.Field} fieldInfo
+ *     The rendering information for the field or icon.
  * @package
  */
 Blockly.BlockRendering.Draw.prototype.layoutField = function(fieldInfo) {

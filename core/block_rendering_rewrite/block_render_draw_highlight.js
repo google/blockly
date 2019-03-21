@@ -26,6 +26,24 @@
 //'use strict';
 goog.provide('Blockly.BlockRendering.Highlighter');
 
+
+/**
+ * An object that adds highlights to a block based on the given rendering
+ * information.
+ *
+ * Highlighting is interesting because the highlights do not fully enclose the
+ * block.  Instead, they are positioned based on a light source in the top left.
+ * This means that rendering highlights requires exact information about the
+ * position of each part of the block.  The resulting paths are not continuous
+ * or closed paths.  The highlights for tabs and notches are loosely based on
+ * tab and notch shapes, but are not exactly the same.
+ *
+ * @param {!Blockly.BlockRendering.Measure} info An object containing all
+ *     information needed to render this block.
+ * @param {!Blockly.BlockSvg.PathObject} pathObject An object that stores all of
+ *     the block's paths before they are propagated to the page.
+ * @package
+ */
 Blockly.BlockRendering.Highlighter = function(info, pathObject) {
   this.info_ = info;
   this.pathObject_ = pathObject;

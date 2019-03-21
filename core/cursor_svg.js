@@ -311,7 +311,7 @@ Blockly.CursorSvg.prototype.positionRect_ = function(x, y, width, height) {
 
 /**
  * Position the cursor for an output connection.
- * @param{Blockly.Connection} connection The connection to position cursor around.
+ * @param {Blockly.Connection} connection The connection to position cursor around.
  */
 Blockly.CursorSvg.prototype.positionInputOutput_ = function(connection) {
   var xy = connection.sourceBlock_.getRelativeToSurfaceXY();

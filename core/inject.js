@@ -422,10 +422,6 @@ Blockly.init_ = function(mainWorkspace) {
  */
 Blockly.inject.bindDocumentEvents_ = function() {
   if (!Blockly.documentEventsBound_) {
-    Blockly.bindEventWithChecks_(document, 'mousedown', null, function() {
-      Blockly.hideChaff();
-      Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
-    });
     Blockly.bindEventWithChecks_(document, 'scroll', null, function() {
       for (var workspaceId in Blockly.Workspace.WorkspaceDB_) {
         var workspace = Blockly.Workspace.WorkspaceDB_[workspaceId];

@@ -47,6 +47,11 @@ Blockly.BlockRendering.Draw = function(block, info) {
 /**
  * Draw the block to the workspace. Here "drawing" means setting SVG path
  * elements and moving fields, icons, and connections on the screen.
+ *
+ * The pieces of the paths are pushed into arrays of "steps", which are then
+ * joined with spaces and set directly on the block.  This guarantees that
+ * the steps are separated by spaces for improved readability, but isn't
+ * required.
  * @package
  */
 Blockly.BlockRendering.Draw.prototype.renderDraw = function() {
@@ -82,7 +87,7 @@ Blockly.BlockRendering.Draw.prototype.drawOutline = function() {
 
 
 /**
- * Create the path for the top corner of the block, taking into account
+ * Add steps for the top corner of the block, taking into account
  * details such as hats and rounded corners.
  * @package
  */
@@ -107,7 +112,7 @@ Blockly.BlockRendering.Draw.prototype.drawTopCorner = function() {
 
 
 /**
- * Create the path for an external value input, rendered as a notch in the side
+ * Add steps for an external value input, rendered as a notch in the side
  * of the block.
  * @param {!Blockly.BlockRendering.Row} row The row that this input
  *     belongs to.
@@ -121,7 +126,7 @@ Blockly.BlockRendering.Draw.prototype.drawValueInput = function(row) {
 };
 
 /**
- * Create the path for a statement input.
+ * Add steps for a statement input.
  * @param {!Blockly.BlockRendering.Row} row The row that this input
  *     belongs to.
  * @package
@@ -137,7 +142,7 @@ Blockly.BlockRendering.Draw.prototype.drawStatementInput = function(row) {
 };
 
 /**
- * Create the path for the right side of a row that does not have value or
+ * Add steps for the right side of a row that does not have value or
  * statement input connections.
  * @param {!Blockly.BlockRendering.Row} row The row to draw the
  *     side of.
@@ -151,7 +156,7 @@ Blockly.BlockRendering.Draw.prototype.drawRightSideRow = function(row) {
 
 
 /**
- * Create the path for the bottom edge of a block, possibly including a notch
+ * Add steps for the bottom edge of a block, possibly including a notch
  * for the next connection
  * @package
  */
@@ -164,7 +169,7 @@ Blockly.BlockRendering.Draw.prototype.drawBottom = function() {
 };
 
 /**
- * Create the path for the bottom left corner of the block, which may be rounded
+ * Add steps for the bottom left corner of the block, which may be rounded
  * or squared off.
  * @package
  */
@@ -179,7 +184,7 @@ Blockly.BlockRendering.Draw.prototype.drawBottomCorner = function() {
 
 
 /**
- * Create the path for the left side of the block, which may include an output
+ * Add steps for the left side of the block, which may include an output
  * connection
  * @package
  */
@@ -260,7 +265,7 @@ Blockly.BlockRendering.Draw.prototype.layoutField = function(fieldInfo) {
 };
 
 /**
- * Create the path for an inline input.
+ * Add steps for an inline input.
  * @param {Blockly.BlockRendering.RenderableInput} input The information about the
  * input to render.
  * @package

@@ -168,7 +168,7 @@ Blockly.BlockRendering.Measure.prototype.createRows = function(block) {
       activeRow.elements.push(new Blockly.BlockRendering.Field(field));
     }
 
-    // Non-dummy inputs are rendered onscreen.
+    // Non-dummy inputs have visual representations onscreen.
     if (this.isInline && input.type == Blockly.INPUT_VALUE) {
       activeRow.elements.push(new Blockly.BlockRendering.InlineInput(input));
       activeRow.hasInlineInput = true;

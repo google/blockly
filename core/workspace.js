@@ -328,7 +328,14 @@ Blockly.Workspace.prototype.getAllBlocks = function(ordered) {
       blocks.push.apply(blocks, blocks[i].getChildren(false));
     }
   }
-  return blocks;
+
+  // Insertion markers exist on the workspace for rendering reasons, but aren't
+  // "real" blocks from a developer perspective.
+  var filtered = blocks.filter(function(block) {
+    return !block.isInsertionMarker();
+  });
+
+  return filtered;
 };
 
 /**
@@ -513,6 +520,7 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
   if (isNaN(this.options.maxBlocks)) {
     return Infinity;
   }
+
   return this.options.maxBlocks - this.getAllBlocks().length;
 };
 

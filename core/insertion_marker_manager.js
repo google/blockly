@@ -696,3 +696,21 @@ Blockly.InsertionMarkerManager.prototype.connectMarker_ = function() {
 };
 
 /**** End insertion marker display functions ****/
+
+/**
+ * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
+ * or 2 insertion markers.
+ * @return {!Array.<!Blockly.BlockSvg>} A possibly empty list of insertion
+ *     marker blocks.
+ * @package
+ */
+Blockly.InsertionMarkerManager.prototype.getInsertionMarkers = function() {
+  var result = [];
+  if (this.firstMarker_) {
+    result.push(this.firstMarker_);
+  }
+  if (this.lastMarker_) {
+    result.push(this.lastMarker_);
+  }
+  return result;
+};

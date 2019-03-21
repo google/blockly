@@ -37,7 +37,28 @@ goog.require('goog.math.Rect');
  * @constructor
  */
 Blockly.Trashcan = function(workspace) {
+  /**
+   * The workspace the trashcan sits in.
+   * @type {!Blockly.Workspace}
+   * @private
+   */
   this.workspace_ = workspace;
+
+  /**
+   * True if the trashcan contains blocks, otherwise false.
+   * @type {boolean}
+   * @private
+   */
+  this.hasBlocks_ = false;
+
+  /**
+   * A list of Xml (stored as strings) representing blocks "inside" the trashcan.
+   * @type {Array}
+   * @private
+   */
+  this.contents_ = [];
+
+
   if (this.workspace_.options.maxTrashcanContents <= 0) {
     return;
   }
@@ -56,7 +77,8 @@ Blockly.Trashcan = function(workspace) {
         Blockly.TOOLBOX_AT_BOTTOM : Blockly.TOOLBOX_AT_TOP;
     this.flyout_ = new Blockly.HorizontalFlyout(flyoutWorkspaceOptions);
   } else {
-    flyoutWorkspaceOptions.toolboxPosition = this.workspace_.RTL ?
+    flyoutWorkspaceOptions.toolboxPosition =
+      this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ?
         Blockly.TOOLBOX_AT_LEFT : Blockly.TOOLBOX_AT_RIGHT;
     this.flyout_ = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
   }
@@ -140,20 +162,6 @@ Blockly.Trashcan.prototype.isOpen = false;
  * @private
  */
 Blockly.Trashcan.prototype.minOpenness_ = 0;
-
-/**
- * True if the trashcan contains blocks, otherwise false.
- * @type {boolean}
- * @private
- */
-Blockly.Trashcan.prototype.hasBlocks_ = false;
-
-/**
- * A list of Xml (stored as strings) representing blocks "inside" the trashcan.
- * @type {Array}
- * @private
- */
-Blockly.Trashcan.prototype.contents_ = [];
 
 /**
  * The SVG group containing the trash can.
@@ -281,6 +289,11 @@ Blockly.Trashcan.prototype.init = function(verticalSpacing) {
     Blockly.utils.insertAfter(this.flyout_.createDom('svg'),
         this.workspace_.getParentSvg());
     this.flyout_.init(this.workspace_);
+    this.flyout_.isBlockCreatable_ = function() {
+      // All blocks, including disabled ones, can be dragged from the
+      // trashcan flyout.
+      return true;
+    };
   }
 
   this.verticalSpacing_ = this.MARGIN_BOTTOM_ + verticalSpacing;
@@ -304,9 +317,8 @@ Blockly.Trashcan.prototype.dispose = function() {
 
 /**
  * Position the trashcan.
- * It is positioned in the upper corner when the toolbox is on bottom, and the
- * bottom corner for all other toolbox positions. It is on the right in LTR,
- * and left in RTL.
+ * It is positioned in the opposite corner to the corner the
+ * categories/toolbox starts at.
  */
 Blockly.Trashcan.prototype.position = function() {
   // Not yet initialized.
@@ -318,21 +330,14 @@ Blockly.Trashcan.prototype.position = function() {
     // There are no metrics available (workspace is probably not visible).
     return;
   }
-  if (this.workspace_.RTL) {
-    this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
-    if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
-      this.left_ += metrics.flyoutWidth;
-      if (this.workspace_.toolbox_) {
-        this.left_ += metrics.absoluteLeft;
-      }
-    }
-  } else {
+  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT
+    || (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
+    // Toolbox starts in the left corner.
     this.left_ = metrics.viewWidth + metrics.absoluteLeft -
-        this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
-
-    if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
-      this.left_ -= metrics.flyoutWidth;
-    }
+      this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
+  } else {
+    // Toolbox starts in the right corner.
+    this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
   }
 
   if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
@@ -400,9 +405,11 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
  * @private
  */
 Blockly.Trashcan.prototype.setLidAngle_ = function(lidAngle) {
+  var openAtRight = this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT
+    || (this.workspace_.horizontalLayout && this.workspace_.RTL);
   this.svgLid_.setAttribute('transform', 'rotate(' +
-    (this.workspace_.RTL ? -lidAngle : lidAngle) + ',' +
-    (this.workspace_.RTL ? 4 : this.WIDTH_ - 4) + ',' +
+    (openAtRight ? -lidAngle : lidAngle) + ',' +
+    (openAtRight ? 4 : this.WIDTH_ - 4) + ',' +
     (this.LID_HEIGHT_ - 2) + ')');
 };
 

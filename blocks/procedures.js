@@ -298,6 +298,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     }
     if (change) {
       this.displayRenamedVar_(oldName, newVar.name);
+      Blockly.Procedures.mutateCallers(this);
     }
   },
   /**
@@ -320,6 +321,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     }
     if (change) {
       this.displayRenamedVar_(oldName, newName);
+      Blockly.Procedures.mutateCallers(this);
     }
   },
   /**
@@ -946,6 +948,12 @@ Blockly.Blocks['procedures_callnoreturn'] = {
    * @this Blockly.Block
    */
   customContextMenu: function(options) {
+    if (!this.workspace.isMovable()) {
+      // If we center on the block and the workspace isn't movable we could
+      // loose blocks at the edges of the workspace.
+      return;
+    }
+
     var option = {enabled: true};
     option.text = Blockly.Msg['PROCEDURES_HIGHLIGHT_DEF'];
     var name = this.getProcedureCall();

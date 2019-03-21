@@ -696,7 +696,7 @@ Blockly.Blocks['lists_getSublist'] = {
   },
   /**
    * Create or delete an input for a numeric index.
-   * This block has two such inputs, independant of each other.
+   * This block has two such inputs, independent of each other.
    * @param {number} n Specify first or second input (1 or 2).
    * @param {boolean} isAt True if the input should exist.
    * @private
@@ -829,6 +829,21 @@ Blockly.Blocks['lists_split'] = {
    * @this Blockly.Block
    */
   updateType_: function(newMode) {
+    var mode = this.getFieldValue('MODE');
+    if (mode != newMode) {
+      this.setFieldValue(newMode, 'MODE');
+      var inputConnection = this.getInput('INPUT').connection;
+      inputConnection.setShadowDom(null);
+      var inputBlock = inputConnection.targetBlock();
+      if (inputBlock) {
+        inputConnection.disconnect();
+        if (inputBlock.isShadow()) {
+          inputBlock.dispose();
+        } else {
+          this.bumpNeighbours_();
+        }
+      }
+    }
     if (newMode == 'SPLIT') {
       this.outputConnection.setCheck('Array');
       this.getInput('INPUT').setCheck('String');

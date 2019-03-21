@@ -152,6 +152,13 @@ Blockly.Field.prototype.visible_ = true;
 Blockly.Field.prototype.validator_ = null;
 
 /**
+ * The element the click handler is bound to.
+ * @type {!Element}
+ * @private
+ */
+Blockly.Field.prototype.clickTarget_ = null;
+
+/**
  * Non-breaking space.
  * @const
  */
@@ -200,12 +207,12 @@ Blockly.Field.prototype.init = function() {
       this.fieldGroup_);
 
   this.updateEditable();
+
+  this.clickTarget_ = this.getSvgRoot();
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
   this.mouseDownWrapper_ =
       Blockly.bindEventWithChecks_(
-          this.fieldGroup_, 'mousedown', this, this.onMouseDown_);
-  // Force a render.
-  this.render_();
+          this.clickTarget_, 'mousedown', this, this.onMouseDown_);
 };
 
 /**
@@ -237,18 +244,18 @@ Blockly.Field.prototype.dispose = function() {
  * Add or remove the UI indicating if this field is editable or not.
  */
 Blockly.Field.prototype.updateEditable = function() {
-  var group = this.fieldGroup_;
+  var group = this.getClickTarget_();
   if (!this.EDITABLE || !group) {
     return;
   }
   if (this.sourceBlock_.isEditable()) {
     Blockly.utils.addClass(group, 'blocklyEditableText');
     Blockly.utils.removeClass(group, 'blocklyNonEditableText');
-    this.fieldGroup_.style.cursor = this.CURSOR;
+    group.style.cursor = this.CURSOR;
   } else {
     Blockly.utils.addClass(group, 'blocklyNonEditableText');
     Blockly.utils.removeClass(group, 'blocklyEditableText');
-    this.fieldGroup_.style.cursor = '';
+    group.style.cursor = '';
   }
 };
 
@@ -375,7 +382,7 @@ Blockly.Field.prototype.render_ = function() {
 };
 
 /**
- * Updates thw width of the field. This calls getCachedWidth which won't cache
+ * Updates the width of the field. This calls getCachedWidth which won't cache
  * the approximated width on IE/Edge when `getComputedTextLength` fails. Once
  * it eventually does succeed, the result will be cached.
  */
@@ -600,6 +607,17 @@ Blockly.Field.prototype.onMouseDown_ = function(e) {
  */
 Blockly.Field.prototype.setTooltip = function(_newTip) {
   // Non-abstract sub-classes may wish to implement this.  See FieldLabel.
+};
+
+/**
+ * The element to bind the click handler to. If not set explicitly, defaults
+ * to the SVG root of the field. When this element is
+ * clicked on an editable field, the editor will open.
+ * @return {!Element} Element to bind click handler to.
+ * @private
+ */
+Blockly.Field.prototype.getClickTarget_ = function() {
+  return this.clickTarget_ || this.getSvgRoot();
 };
 
 /**

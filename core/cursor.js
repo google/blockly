@@ -54,11 +54,11 @@ Blockly.Cursor = function() {
   this.stackBlock_ = null;
 
   /*
-   * Whether we are at the workspace level.
+   * The current workspace the cursor is on.
    * @type Boolean
    * @private
    */
-  this.isWorkspace_ = false;
+  this.workspace_ = false;
 
   /*
    * The current location of the cursor.
@@ -68,7 +68,7 @@ Blockly.Cursor = function() {
   this.location_ = null;
 
   /*
-   * The type of the current connection.
+   * The type of the current location.
    * @type String
    * @private
    */
@@ -113,13 +113,14 @@ Blockly.Cursor.prototype.getLocationType = function() {
  * @param {!Blockly.Field|Blockly.Block|Blockly.Connection} newLocation The new
  * location of the cursor.
  * @param {?Boolean} isStack True if we are at the stack level false otherwise.
- * @param {?Boolean} isWorkspace True if we are at the workspace level false
+ * @param {Blockly.Workspace|Blockly.WorkspaceSvg} workspace True if we are at
+ * the workspace level false
  * otherwise.
  */
-Blockly.Cursor.prototype.setLocation = function(newLocation, isStack, isWorkspace) {
+Blockly.Cursor.prototype.setLocation = function(newLocation, isStack, workspace) {
   this.location_ = newLocation;
   this.parentInput_ = this.findParentInput_();
-  this.isWorkspace_ = isWorkspace;
+  this.workspace_ = workspace;
   this.verifyStack_(isStack);
   this.setType_();
   this.update_();
@@ -130,6 +131,7 @@ Blockly.Cursor.prototype.setLocation = function(newLocation, isStack, isWorkspac
  * we are at stack level when the user is trying to set isStack to true.
  * @param {?Boolean} isStack Whether or not we are trying to set the location to
  * the stack level.
+ * @private
  */
 Blockly.Cursor.prototype.verifyStack_ = function(isStack) {
   if (!isStack) {return;}
@@ -293,6 +295,7 @@ Blockly.Cursor.prototype.findNextForField_ = function(location, parentInput) {
  * @param {!Blockly.Input} parentInput Parent input of the connection or field.
  * @return {Array<Blockly.Field|Blockly.Connection, Blockly.Input>} The first
  * value is the next field or connection and the second value is the parent input.
+ * @private
  */
 Blockly.Cursor.prototype.findPrevForInput_ = function(location, parentInput){
   var block = location.sourceBlock_;

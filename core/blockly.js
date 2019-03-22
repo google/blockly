@@ -698,6 +698,7 @@ Blockly.setTheme = function(theme) {
 /**
  * Refresh the theme for all items on the workspace.
  * @param {Blockly.Workspace} ws Blockly workspace to refresh theme on.
+ * @private
  */
 Blockly.refreshTheme_ = function(ws) {
   //update all blocks in workspace that have a style name

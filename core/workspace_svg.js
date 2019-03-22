@@ -378,7 +378,7 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
  * Adds cursor for keyboard navigation.
  * @return {Blockly.CursorSvg} Cursor for keyboard navigation.
  */
-Blockly.WorkspaceSvg.prototype.addCursor = function() {
+Blockly.WorkspaceSvg.prototype.createCursor = function() {
   return new Blockly.CursorSvg(this);
 };
 

@@ -763,7 +763,7 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
   this.creatorWorkspace_.cursor.hide();
   if (e.shiftKey) {
     // Show the cursor at the specified position
-    this.creatorWorkspace_.cursor.workspaceShow(e);
+    this.creatorWorkspace_.cursor.showWithWorkspace(e);
     Blockly.keyboardAccessibilityMode_ = true;
   } else if (Blockly.selected) {
     Blockly.selected.unselect();

@@ -699,7 +699,7 @@ Blockly.Connection.prototype.neighbours_ = function(/* maxLimit */) {
 /**
  * Get the parent input of a connection.
  * @return {Blockly.Input} The input that the connection belongs to or null if
- * no parent exists.
+ *     no parent exists.
  * @package
  */
 Blockly.Connection.prototype.getParentInput = function() {

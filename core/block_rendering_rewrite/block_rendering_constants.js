@@ -27,12 +27,12 @@
 
 var BRC = {};
 
+BRC.NO_PADDING = 0;
+BRC.SMALL_PADDING = 3;
+BRC.MEDIUM_PADDING = 5;
+BRC.LARGE_PADDING = 10;
+
 BRC.HIGHLIGHT_OFFSET = 0.5;
-
-BRC.START_POINT = 'm 0,0';
-
-BRC.START_POINT_HIGHLIGHT =
-    'm ' + BRC.HIGHLIGHT_OFFSET + ',' + BRC.HIGHLIGHT_OFFSET;
 
 BRC.TAB_HEIGHT = 15;
 
@@ -41,6 +41,10 @@ BRC.TAB_OFFSET_FROM_TOP = 5;
 BRC.TAB_WIDTH = 8;
 
 BRC.NOTCH_WIDTH = 15;
+
+// This is the offset from the vertical part of a statement input
+// to where to start the notch.
+BRC.NOTCH_OFFSET = BRC.NOTCH_WIDTH * 2;
 
 /**
  * Rounded corner radius.
@@ -52,6 +56,17 @@ BRC.CORNER_RADIUS = 8;
  * @const
  */
 BRC.START_HAT_HEIGHT = 15;
+
+BRC.SPACER_DEFAULT_HEIGHT = 15;
+
+
+
+
+
+BRC.START_POINT = 'm 0,0';
+
+BRC.START_POINT_HIGHLIGHT =
+    'm ' + BRC.HIGHLIGHT_OFFSET + ',' + BRC.HIGHLIGHT_OFFSET;
 
 /**
  * Distance from shape edge to intersect with a curved corner at 45 degrees.
@@ -109,6 +124,7 @@ BRC.START_HAT_PATH = 'c 30,-' +
  * @const
  */
 BRC.NOTCH_PATH_LEFT = 'l 6,4 3,0 6,-4';
+
 /**
  * SVG path for drawing next/previous notch from left to right with
  * highlighting.
@@ -121,9 +137,6 @@ BRC.NOTCH_PATH_LEFT_HIGHLIGHT = BRC.NOTCH_PATH_LEFT;
  * @const
  */
 BRC.NOTCH_PATH_RIGHT = 'l -6,4 -3,0 -6,-4';
-
-
-BRC.LINE = 'h ' + BRC.NOTCH_WIDTH;
 
 /**
  * SVG path for drawing the top-left corner of a statement input.
@@ -157,35 +170,33 @@ BRC.INNER_BOTTOM_LEFT_CORNER =
 BRC.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL =
     'a ' + BRC.CORNER_RADIUS + ',' +
     BRC.CORNER_RADIUS + ' 0 0,0 ' +
-    (-BRC.DISTANCE_45_OUTSIDE - 0.5) + ',' +
+    (-BRC.DISTANCE_45_OUTSIDE - BRC.HIGHLIGHT_OFFSET) + ',' +
     (BRC.CORNER_RADIUS -
     BRC.DISTANCE_45_OUTSIDE);
+
 /**
  * SVG path for drawing highlight on the bottom-left corner of a statement
  * input in RTL.
  * @const
  */
 BRC.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL =
-    'a ' + (BRC.CORNER_RADIUS + 0.5) + ',' +
-    (BRC.CORNER_RADIUS + 0.5) + ' 0 0,0 ' +
-    (BRC.CORNER_RADIUS + 0.5) + ',' +
-    (BRC.CORNER_RADIUS + 0.5);
+    'a ' + (BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET) + ',' +
+    (BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET) + ' 0 0,0 ' +
+    (BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET) + ',' +
+    (BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET);
+
 /**
  * SVG path for drawing highlight on the bottom-left corner of a statement
  * input in LTR.
  * @const
  */
 BRC.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
-    'a ' + (BRC.CORNER_RADIUS + 0.5) + ',' +
-    (BRC.CORNER_RADIUS + 0.5) + ' 0 0,0 ' +
-    (BRC.CORNER_RADIUS -
-    BRC.DISTANCE_45_OUTSIDE) + ',' +
-    (BRC.DISTANCE_45_OUTSIDE + 0.5);
+    'a ' + (BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET) + ',' +
+    (BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET) + ' 0 0,0 ' +
+    (BRC.CORNER_RADIUS - BRC.DISTANCE_45_OUTSIDE) + ',' +
+    (BRC.DISTANCE_45_OUTSIDE + BRC.HIGHLIGHT_OFFSET);
 
 
-// This is the offset from the vertical part of a statement input
-// to where to start the notch.
-BRC.NOTCH_OFFSET = BRC.NOTCH_WIDTH * 2;
 
 /**
  * SVG start point for drawing the top-left corner.

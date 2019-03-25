@@ -75,6 +75,7 @@
 
 <script>
 'use strict';
+goog.require('Blockly.BlockRendering.RenderInfo');
 var workspace = null;
 
 function start() {
@@ -150,11 +151,6 @@ function start() {
   taChange();
 
   fromXml();
-  var blocks = Blockly.getMainWorkspace().getAllBlocks();
-  for (var i = 0; i < blocks.length; i++) {
-    new Blockly.BlockRendering.Draw(blocks[i], Blockly.BlockRendering.Measure.renderCompute(blocks[i])).renderDraw();
-  }
-
 }
 
 function addToolboxButtonCallbacks() {

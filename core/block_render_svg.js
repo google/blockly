@@ -319,23 +319,23 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   Blockly.Field.startCache();
   this.rendered = true;
+  Blockly.BlockRendering.render(this);
+  // var cursorX = Blockly.BlockSvg.SEP_SPACE_X;
+  // if (this.RTL) {
+  //   cursorX = -cursorX;
+  // }
+  // // Move the icons into position.
+  // var icons = this.getIcons();
+  // for (var i = 0; i < icons.length; i++) {
+  //   cursorX = icons[i].renderIcon(cursorX);
+  // }
+  // cursorX += this.RTL ?
+  //     Blockly.BlockSvg.SEP_SPACE_X : -Blockly.BlockSvg.SEP_SPACE_X;
+  // // If there are no icons, cursorX will be 0, otherwise it will be the
+  // // width that the first label needs to move over by.
 
-  var cursorX = Blockly.BlockSvg.SEP_SPACE_X;
-  if (this.RTL) {
-    cursorX = -cursorX;
-  }
-  // Move the icons into position.
-  var icons = this.getIcons();
-  for (var i = 0; i < icons.length; i++) {
-    cursorX = icons[i].renderIcon(cursorX);
-  }
-  cursorX += this.RTL ?
-      Blockly.BlockSvg.SEP_SPACE_X : -Blockly.BlockSvg.SEP_SPACE_X;
-  // If there are no icons, cursorX will be 0, otherwise it will be the
-  // width that the first label needs to move over by.
-
-  var inputRows = this.renderCompute_(cursorX);
-  this.renderDraw_(cursorX, inputRows);
+  // var inputRows = this.renderCompute_(cursorX);
+  // this.renderDraw_(cursorX, inputRows);
   this.renderMoveConnections_();
 
   if (opt_bubble !== false) {

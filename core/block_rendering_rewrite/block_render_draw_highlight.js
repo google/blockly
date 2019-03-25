@@ -38,7 +38,7 @@ goog.provide('Blockly.BlockRendering.Highlighter');
  * or closed paths.  The highlights for tabs and notches are loosely based on
  * tab and notch shapes, but are not exactly the same.
  *
- * @param {!Blockly.BlockRendering.Measure} info An object containing all
+ * @param {!Blockly.BlockRendering.RenderInfo} info An object containing all
  *     information needed to render this block.
  * @param {!Blockly.BlockSvg.PathObject} pathObject An object that stores all of
  *     the block's paths before they are propagated to the page.

@@ -1,6 +1,5 @@
 goog.provide('Blockly.BlockRendering.Measurable');
 
-Blockly.BlockRendering.SPACER_DEFAULT_HEIGHT = 15;
 /**
  * The base class to represent a part of a block that takes up space during
  * rendering.  The constructor for each non-spacer Measurable records the size
@@ -261,7 +260,7 @@ goog.inherits(Blockly.BlockRendering.BetweenRowSpacer,
 Blockly.BlockRendering.InRowSpacer = function(width) {
   this.type = 'in-row spacer';
   this.width = width;
-  this.height = Blockly.BlockRendering.SPACER_DEFAULT_HEIGHT;
+  this.height = BRC.SPACER_DEFAULT_HEIGHT;
 };
 goog.inherits(Blockly.BlockRendering.InRowSpacer,
     Blockly.BlockRendering.Measurable);

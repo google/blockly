@@ -276,18 +276,8 @@ Blockly.onKeyDown_ = function(e) {
       workspace.undo(e.shiftKey);
     }
   } else if (Blockly.keyboardAccessibilityMode_
-      && (e.keyCode === goog.events.KeyCodes.UP
-        || e.keyCode === goog.events.KeyCodes.DOWN
-        || e.keyCode === goog.events.KeyCodes.F
-        || e.keyCode === goog.events.KeyCodes.W
-        || e.keyCode === goog.events.KeyCodes.A
-        || e.keyCode === goog.events.KeyCodes.S
-        || e.keyCode === goog.events.KeyCodes.D
-        || e.keyCode === goog.events.KeyCodes.T
-        || e.keyCode === goog.events.KeyCodes.M
-        || e.keyCode === goog.events.KeyCodes.I
-        || e.keyCode === goog.events.KeyCodes.ENTER)) {
-    Blockly.Navigation.navigate(e);
+    && Blockly.Navigation.navigate(e)) {
+    return;
   }
   // Common code for delete and cut.
   // Don't delete in the flyout.

@@ -223,8 +223,7 @@ suite('Cursor', function() {
         assertEquals(this.cursor.getLocation(), this.blocks.A.inputList[0].connection);
       });
       test('isStack', function() {
-        this.cursor.isStack_ = true;
-        this.cursor.setLocation(this.blocks.A.previousConnection);
+        this.cursor.setLocation(this.blocks.A.previousConnection, true);
         this.cursor.next();
         assertEquals(this.cursor.getLocation(), this.blocks.D.previousConnection);
         assertEquals(this.cursor.isStack_, true);
@@ -274,8 +273,7 @@ suite('Cursor', function() {
         assertEquals(this.cursor.getLocation(), field);
       });
       test('isStack', function() {
-        this.cursor.isStack_ = true;
-        this.cursor.setLocation(this.blocks.D.previousConnection);
+        this.cursor.setLocation(this.blocks.D.previousConnection, true);
         this.cursor.prev();
         assertEquals(this.cursor.getLocation(), this.blocks.A.previousConnection);
         assertEquals(this.cursor.isStack_, true);
@@ -317,8 +315,7 @@ suite('Cursor', function() {
         assertEquals(this.cursor.getLocation(), field);
       });
       test('isStack', function() {
-        this.cursor.isStack_ = true;
-        this.cursor.setLocation(this.blocks.D.previousConnection);
+        this.cursor.setLocation(this.blocks.D.previousConnection, true);
         this.cursor.in();
         assertEquals(this.cursor.getLocation(), this.blocks.D.previousConnection);
         assertEquals(this.cursor.isStack_, false);

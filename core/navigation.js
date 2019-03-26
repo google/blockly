@@ -199,7 +199,7 @@ Blockly.Navigation.selectNextBlockInFlyout = function() {
 
   if (nextBlock) {
     Blockly.Navigation.flyoutBlock_ = nextBlock;
-    cursor.setLocation(Blockly.Navigation.flyoutBlock_);
+    cursor.setLocation(Blockly.Navigation.flyoutBlock_, false);
   }
 };
 
@@ -220,7 +220,7 @@ Blockly.Navigation.selectPreviousBlockInFlyout = function() {
 
   if (prevBlock) {
     Blockly.Navigation.flyoutBlock_ = prevBlock;
-    cursor.setLocation(Blockly.Navigation.flyoutBlock_);
+    cursor.setLocation(Blockly.Navigation.flyoutBlock_, false);
   }
 };
 
@@ -440,89 +440,117 @@ Blockly.Navigation.handleEnterForWS = function() {
  * TODO: Revisit keycodes before releasing
  * Handler for all the keyboard navigation events.
  * @param {Event} e The keyboard event.
+ * @return {boolean} True if the key was handled false otherwise.
  */
 Blockly.Navigation.navigate = function(e) {
   var curState = Blockly.Navigation.currentState_;
+  var keyHandled = false;
   if (e.keyCode === goog.events.KeyCodes.T) {
     Blockly.Navigation.focusToolbox();
+    keyHandled = true;
     console.log('T: Focus Toolbox');
   } else if (curState === Blockly.Navigation.STATE_FLYOUT) {
-    Blockly.Navigation.flyoutKeyHandler(e);
+    keyHandled = Blockly.Navigation.flyoutKeyHandler(e);
   } else if (curState === Blockly.Navigation.STATE_WS) {
-    Blockly.Navigation.workspaceKeyHandler(e);
+    keyHandled = Blockly.Navigation.workspaceKeyHandler(e);
   } else if (curState === Blockly.Navigation.STATE_TOOLBOX) {
-    Blockly.Navigation.toolboxKeyHandler(e);
+    keyHandled = Blockly.Navigation.toolboxKeyHandler(e);
   } else {
-    console.log('we have a problem.');
+    console.log('Not a valid key ');
   }
+  return keyHandled;
 };
 
 /**
  * Handles all keyboard events when the user is focused on the flyout.
  * @param {Event} e The keyboard event.
+ * @return {boolean} True if the key was handled false otherwise.
  */
 Blockly.Navigation.flyoutKeyHandler = function(e) {
+  var keyHandled = false;
   if (e.keyCode === goog.events.KeyCodes.W) {
     Blockly.Navigation.selectPreviousBlockInFlyout();
+    keyHandled = true;
     console.log('W: Flyout : Previous');
   } else if (e.keyCode === goog.events.KeyCodes.A) {
     Blockly.Navigation.focusToolbox();
+    keyHandled = true;
     console.log('A: Flyout : Go To Toolbox');
   } else if (e.keyCode === goog.events.KeyCodes.S) {
     Blockly.Navigation.selectNextBlockInFlyout();
+    keyHandled = true;
     console.log('S: Flyout : Next');
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
     Blockly.Navigation.insertFromFlyout();
+    keyHandled = true;
     console.log('Enter: Flyout : Select');
   }
+  return keyHandled;
 };
 
 /**
  * Handles all keyboard events when the user is focused on the toolbox.
  * @param {Event} e The keyboard event.
+ * @return {boolean} True if the key was handled false otherwise.
  */
 Blockly.Navigation.toolboxKeyHandler = function(e) {
+  var keyHandled = false;
   if (e.keyCode === goog.events.KeyCodes.W) {
     Blockly.Navigation.previousCategory();
+    keyHandled = true;
     console.log('W: Toolbox : Previous');
   } else if (e.keyCode === goog.events.KeyCodes.A) {
     Blockly.Navigation.outCategory();
+    keyHandled = true;
     console.log('A: Toolbox : Out');
   } else if (e.keyCode === goog.events.KeyCodes.S) {
     Blockly.Navigation.nextCategory();
+    keyHandled = true;
     console.log('S: Toolbox : Next');
   } else if (e.keyCode === goog.events.KeyCodes.D) {
     Blockly.Navigation.inCategory();
+    keyHandled = true;
     console.log('D: Toolbox : Go to flyout');
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
+    keyHandled = true;
     //TODO: focus on flyout OR open if the category is nested
   }
+  return keyHandled;
 };
 
 /**
  * Handles all keyboard events when the user is focused on the workspace.
  * @param {Event} e The keyboard event.
+ * @return {boolean} True if the key was handled false otherwise.
  */
 Blockly.Navigation.workspaceKeyHandler = function(e) {
+  var keyHandled = false;
   if (e.keyCode === goog.events.KeyCodes.W) {
     Blockly.Navigation.keyboardOut();
+    keyHandled = true;
     console.log('W: Workspace : Out');
   } else if (e.keyCode === goog.events.KeyCodes.A) {
     Blockly.Navigation.keyboardPrev();
+    keyHandled = true;
     console.log('S: Workspace : Previous');
   } else if (e.keyCode === goog.events.KeyCodes.S) {
     Blockly.Navigation.keyboardIn();
+    keyHandled = true;
     console.log('S: Workspace : In');
   } else if (e.keyCode === goog.events.KeyCodes.D) {
     Blockly.Navigation.keyboardNext();
+    keyHandled = true;
     console.log('S: Workspace : Next');
   } else if (e.keyCode === goog.events.KeyCodes.I) {
     Blockly.Navigation.insertBlockFromWs();
+    keyHandled = true;
     console.log('I: Workspace : Insert/Connect Blocks');
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
     Blockly.Navigation.handleEnterForWS();
+    keyHandled = true;
     console.log('Enter: Workspace : Mark Connection');
   }
+  return keyHandled;
 };
 
 /**

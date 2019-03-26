@@ -121,6 +121,7 @@ Blockly.Cursor.prototype.setLocation = function(newLocation, isStack, position) 
   this.location_ = newLocation;
   this.parentInput_ = this.findParentInput_();
   this.isWorkspace_ = this.isWorkspace(newLocation);
+  this.isStack_ = isStack;
   this.verifyStack_(isStack);
   this.setType_();
   this.update_(position);
@@ -476,11 +477,13 @@ Blockly.Cursor.prototype.next = function() {
   var newLocation;
   var newParentInput;
   var parentInput = this.parentInput_;
+  var isStack = false;
 
   switch (this.type_) {
     case this.types.STACK:
       var nextTopBlock = this.navigateBetweenStacks_(true);
       newLocation = this.findTopConnection_(nextTopBlock);
+      isStack = true;
       break;
 
     case this.types.OUTPUT:
@@ -514,7 +517,7 @@ Blockly.Cursor.prototype.next = function() {
   }
 
   if (newLocation) {
-    this.setLocation(newLocation, newParentInput);
+    this.setLocation(newLocation, isStack);
   }
   return newLocation;
 };
@@ -554,7 +557,7 @@ Blockly.Cursor.prototype.in = function() {
       break;
   }
   if (newLocation) {
-    this.setLocation(newLocation, newParentInput);
+    this.setLocation(newLocation);
   }
   return newLocation;
 };
@@ -569,11 +572,14 @@ Blockly.Cursor.prototype.prev = function() {
   var newLocation;
   var parentInput = this.parentInput_;
   var newParentInput;
+  var isStack = false;
+
 
   switch (this.type_) {
     case this.types.STACK:
       var nextTopBlock = this.navigateBetweenStacks_(true);
       newLocation = this.findTopConnection_(nextTopBlock);
+      isStack = true;
       break;
 
     case this.types.OUTPUT:
@@ -609,7 +615,7 @@ Blockly.Cursor.prototype.prev = function() {
       break;
   }
   if (newLocation) {
-    this.setLocation(newLocation, newParentInput);
+    this.setLocation(newLocation, isStack);
   }
   return newLocation;
 };
@@ -622,6 +628,7 @@ Blockly.Cursor.prototype.out = function() {
   var location = this.getLocation();
   if (!location) {return null;}
   var newLocation;
+  var isStack = false;
 
   switch (this.type_) {
     case this.types.STACK:
@@ -630,7 +637,7 @@ Blockly.Cursor.prototype.out = function() {
     case this.types.OUTPUT:
       newLocation = location.targetConnection;
       if (!newLocation) {
-        this.isStack_ = true;
+        isStack = true;
         this.stackBlock_ = location.sourceBlock_;
         this.setType_();
       }
@@ -655,20 +662,23 @@ Blockly.Cursor.prototype.out = function() {
         //statement input and we need to get the input that connects to the
         //top block
         newLocation = this.findOutLocationForStack_(location);
+        isStack = this.isStack_;
       }
       break;
 
     case this.types.PREVIOUS:
       newLocation = this.findOutLocationForStack_(location.sourceBlock_);
+      isStack = this.isStack_;
       break;
 
     case this.types.NEXT:
       newLocation = this.findOutLocationForStack_(location.sourceBlock_);
+      isStack = this.isStack_;
       break;
   }
 
   if (newLocation) {
-    this.setLocation(newLocation, this.findParentInput_(newLocation));
+    this.setLocation(newLocation, isStack);
   }
   return newLocation;
 };

@@ -59,6 +59,8 @@ Blockly.BlockRendering.RenderInfo = function(block) {
    */
   this.hasOutputConnection = !!block.outputConnection;
 
+  this.hasNextConnection = !!block.nextConnection;
+
   /**
    * Whether the block should be rendered as a single line, either because it's
    * inline or because it has been collapsed.
@@ -523,6 +525,10 @@ Blockly.BlockRendering.RenderInfo.prototype.finalize_ = function() {
       }
     }
     yCursor += row.height;
+  }
+
+  if (this.hasNextConnection) {
+    yCursor += BRC.TAB_HEIGHT;
   }
   this.height = yCursor;
 };

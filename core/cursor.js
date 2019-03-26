@@ -2,7 +2,7 @@
  * @license
  * Visual Blocks Editor
  *
- * Copyright 2011 Google Inc.
+ * Copyright 2019 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,7 +58,7 @@ Blockly.Cursor = function() {
    * @type Boolean
    * @private
    */
-  this.workspace_ = false;
+  this.isWorkspace_ = false;
 
   /*
    * The current location of the cursor.
@@ -113,17 +113,23 @@ Blockly.Cursor.prototype.getLocationType = function() {
  * @param {!Blockly.Field|Blockly.Block|Blockly.Connection} newLocation The new
  * location of the cursor.
  * @param {?Boolean} isStack True if we are at the stack level false otherwise.
- * @param {Blockly.Workspace|Blockly.WorkspaceSvg} workspace True if we are at
- * the workspace level false
+ * @param {?goog.math.Coordinate} position The x, y coordinates for where to
+ * put the cursor when a workspace is passed in.
  * otherwise.
  */
-Blockly.Cursor.prototype.setLocation = function(newLocation, isStack, workspace) {
+Blockly.Cursor.prototype.setLocation = function(newLocation, isStack, position) {
   this.location_ = newLocation;
   this.parentInput_ = this.findParentInput_();
-  this.workspace_ = workspace;
+  this.isWorkspace_ = this.isWorkspace(newLocation);
   this.verifyStack_(isStack);
   this.setType_();
-  this.update_();
+  this.update_(position);
+};
+
+//set true if the location is a workspace and same as our current workspace
+//
+Blockly.Cursor.prototype.isWorkspace = function(newLocation){
+  return newLocation === this.workspace_;
 };
 
 /**
@@ -162,6 +168,8 @@ Blockly.Cursor.prototype.setType_ = function() {
     this.type_ = this.types.PREVIOUS;
   } else if (location.type === Blockly.NEXT_STATEMENT) {
     this.type_ = this.types.NEXT;
+  } else if (location instanceof Blockly.Workspace) {
+    this.type_ = this.types.WORKSPACE;
   }
 };
 

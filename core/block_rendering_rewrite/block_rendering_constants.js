@@ -42,9 +42,15 @@ BRC.TAB_WIDTH = 8;
 
 BRC.NOTCH_WIDTH = 15;
 
+// Offset from the left side of a block or the inside of a statement input to
+// the left side of the notch.
+BRC.NOTCH_OFFSET_LEFT = BRC.NOTCH_WIDTH;
+
 // This is the offset from the vertical part of a statement input
-// to where to start the notch.
-BRC.NOTCH_OFFSET = BRC.NOTCH_WIDTH * 2;
+// to where to start the notch, which is on the right side in LTR.
+BRC.NOTCH_OFFSET_RIGHT = BRC.NOTCH_OFFSET_LEFT + BRC.NOTCH_WIDTH;
+
+BRC.STATEMENT_BOTTOM_SPACER = 5;
 
 /**
  * Rounded corner radius.

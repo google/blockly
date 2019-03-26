@@ -760,10 +760,12 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
  */
 Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
   Blockly.keyboardAccessibilityMode_ = false;
-  this.creatorWorkspace_.cursor.hide();
+  var ws = this.creatorWorkspace_;
+  ws.cursor.hide();
   if (e.shiftKey) {
-    // Show the cursor at the specified position
-    this.creatorWorkspace_.cursor.showWithWorkspace(e);
+    var screenCoord = new goog.math.Coordinate(e.clientX, e.clientY);
+    var wsCoord = Blockly.utils.screenToWsCoordinates(ws, screenCoord);
+    ws.cursor.setLocation(ws, false, wsCoord);
     Blockly.keyboardAccessibilityMode_ = true;
   } else if (Blockly.selected) {
     Blockly.selected.unselect();

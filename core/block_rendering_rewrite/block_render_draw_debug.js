@@ -61,6 +61,43 @@ Blockly.BlockRendering.Debug.drawRenderedElem = function(elem, cursorX, centerY,
         'height': elem.height ,
       },
       svgRoot);
+
+  if (elem.isInput) {
+    Blockly.BlockRendering.Debug.drawConnection(elem.connection, svgRoot);
+  }
+};
+
+Blockly.BlockRendering.Debug.drawConnection = function(conn, svgRoot) {
+  var colour;
+  var size;
+  var fill;
+  if (conn.type == Blockly.INPUT_VALUE) {
+    size = 4;
+    colour = 'magenta';
+    fill = 'none';
+  } else if (conn.type == Blockly.OUTPUT_VALUE) {
+    size = 2;
+    colour = 'magenta';
+    fill = colour;
+  } else if (conn.type == Blockly.NEXT_STATEMENT) {
+    size = 4;
+    colour = 'goldenrod';
+    fill = 'none';
+  } else if (conn.type == Blockly.PREVIOUS_STATEMENT) {
+    size = 2;
+    colour = 'goldenrod';
+    fill = colour;
+  }
+  Blockly.utils.createSvgElement('circle',
+      {
+        'class': 'connectionRenderingDot',
+        'cx': conn.offsetInBlock_.x,
+        'cy': conn.offsetInBlock_.y,
+        'r': size,
+        'fill': fill,
+        'stroke': colour,
+      },
+      svgRoot);
 };
 
 Blockly.BlockRendering.Debug.drawRenderedRow = function(row, cursorY, svgRoot) {
@@ -101,5 +138,15 @@ Blockly.BlockRendering.Debug.drawDebug = function(block, info) {
       Blockly.BlockRendering.Debug.drawRowWithElements(row, cursorY, svgRoot);
     }
     cursorY += row.height;
+  }
+
+  if (block.previousConnection) {
+    Blockly.BlockRendering.Debug.drawConnection(block.previousConnection, svgRoot);
+  }
+  if (block.nextConnection) {
+    Blockly.BlockRendering.Debug.drawConnection(block.nextConnection, svgRoot);
+  }
+  if (block.outputConnection) {
+    Blockly.BlockRendering.Debug.drawConnection(block.outputConnection, svgRoot);
   }
 };

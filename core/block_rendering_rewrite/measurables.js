@@ -91,6 +91,10 @@ Blockly.BlockRendering.Input = function(input) {
     this.connectedBlockWidth = 0;
     this.connectedBlockHeight = 0;
   }
+
+  this.connection = input.connection;
+  this.connectionOffsetX = 0;
+  this.connectionOffsetY = 0;
 };
 goog.inherits(Blockly.BlockRendering.Input, Blockly.BlockRendering.Measurable);
 
@@ -150,8 +154,8 @@ Blockly.BlockRendering.InlineInput = function(input) {
     this.height = 26;
     this.width = 22;
   } else {
-    this.width = this.connectedBlockWidth;
-    this.height = this.connectedBlockHeight;
+    this.width = this.connectedBlockWidth + BRC.TAB_WIDTH + 1;
+    this.height = this.connectedBlockHeight + 2;
   }
 };
 goog.inherits(Blockly.BlockRendering.InlineInput, Blockly.BlockRendering.Input);
@@ -173,7 +177,7 @@ Blockly.BlockRendering.StatementInput = function(input) {
     this.width = 32;
   } else {
     this.width = 25;
-    this.height = this.connectedBlockHeight;
+    this.height = this.connectedBlockHeight + BRC.STATEMENT_BOTTOM_SPACER;
   }
 };
 goog.inherits(Blockly.BlockRendering.StatementInput,
@@ -222,7 +226,8 @@ Blockly.BlockRendering.Row.prototype.measure = function() {
   for (var e = 0; e < this.elements.length; e++) {
     var elem = this.elements[e];
     this.width += elem.width;
-    if (elem.isInput) {
+    if (elem.isInput &&
+        (elem.type == 'statement input' || elem.type == 'external value input')) {
       connectedBlockWidths += elem.connectedBlockWidth;
     }
     if (!(elem.isSpacer())) {

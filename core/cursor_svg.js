@@ -239,18 +239,18 @@ Blockly.CursorSvg.prototype.showWithField_ = function() {
  */
 Blockly.CursorSvg.prototype.showWithAnything_ = function(position) {
   var location = this.getLocation();
-  if (this.type_ == this.types.BLOCK) {
+  if (this.type_ === this.types.BLOCK) {
     this.showWithBlock_();
-  } else if (this.type_ === this.types.INPUT
-    || location.type_ === this.types.OUTPUT) {
+  } else if (location.type === Blockly.INPUT_VALUE
+    || location.type === Blockly.OUTPUT_VALUE) {
     this.showWithInputOutput_();
-  } else if (this.type_ === this.types.NEXT) {
+  } else if (location.type === Blockly.NEXT_STATEMENT) {
     this.showWithNext_();
-  } else if (this.type_ === this.types.PREVIOUS) {
+  } else if (location.type === Blockly.PREVIOUS_STATEMENT) {
     this.showWithPrev_();
   } else if (this.type_ === this.types.FIELD) {
     this.showWithField_();
-  } else if (this.type_ === this.types.WORKSPACE ) {
+  } else if (this.type_ === this.types.WORKSPACE) {
     this.showWithCoordinates_(position);
   }
 };

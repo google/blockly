@@ -190,7 +190,7 @@ Blockly.Dart['math_number_property'] = function(block) {
   var number_to_check = Blockly.Dart.valueToCode(block, 'NUMBER_TO_CHECK',
       Blockly.Dart.ORDER_MULTIPLICATIVE);
   if (!number_to_check) {
-    return ['false', Blockly.Python.ORDER_ATOMIC];
+    return ['false', Blockly.Dart.ORDER_ATOMIC];
   }
   var dropdown_property = block.getFieldValue('PROPERTY');
   var code;
@@ -242,7 +242,7 @@ Blockly.Dart['math_number_property'] = function(block) {
       var divisor = Blockly.Dart.valueToCode(block, 'DIVISOR',
           Blockly.Dart.ORDER_MULTIPLICATIVE);
       if (!divisor) {
-        return ['false', Blockly.Python.ORDER_ATOMIC];
+        return ['false', Blockly.Dart.ORDER_ATOMIC];
       }
       code = number_to_check + ' % ' + divisor + ' == 0';
       break;

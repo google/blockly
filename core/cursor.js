@@ -110,8 +110,8 @@ Blockly.Cursor.prototype.getLocationType = function() {
  * Set the location of the cursor and call the update method.
  * Setting isStack to true will only work if the newLocation is the top most
  * output or previous connection on a stack.
- * @param {!Blockly.Field|Blockly.Block|Blockly.Connection} newLocation The new
- * location of the cursor.
+ * @param {!Blockly.Field|Blockly.Block|Blockly.Connection|Blockly.Workspace}
+ *   newLocation The new location of the cursor.
  * @param {?Boolean} isStack True if we are at the stack level false otherwise.
  * @param {?goog.math.Coordinate} position The x, y coordinates for where to
  * put the cursor when a workspace is passed in.
@@ -127,8 +127,12 @@ Blockly.Cursor.prototype.setLocation = function(newLocation, isStack, position) 
   this.update_(position);
 };
 
-//set true if the location is a workspace and same as our current workspace
-//
+/**
+ * Checks whether the passed in workspace is the same as our current workspace.
+ * @param {Blockly.Workspace} newLocation The new workspace
+ * @return {Boolean} True if the worksapce is the same as our current workspace.
+ * @package
+ */
 Blockly.Cursor.prototype.isWorkspace = function(newLocation){
   return newLocation === this.workspace_;
 };

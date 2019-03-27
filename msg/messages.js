@@ -1208,6 +1208,6 @@ Blockly.Msg.PROCEDURES_IFRETURN_WARNING = 'Warning: This block may be used only 
 Blockly.Msg.WORKSPACE_COMMENT_DEFAULT_TEXT = 'Say something...';
 
 /// warning - This appears if the user collapses a block, and blocks inside
-// that block have warnings attached to them. It should inform the user that the
-// block they collapsed contains blocks that have warnings.
+/// that block have warnings attached to them. It should inform the user that the
+/// block they collapsed contains blocks that have warnings.
 Blockly.Msg.COLLAPSED_WARNINGS_WARNING = 'Collapsed blocks contain warnings.';

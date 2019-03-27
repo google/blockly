@@ -178,6 +178,9 @@ Blockly.BlockRendering.StatementInput = function(input) {
   } else {
     this.width = 25;
     this.height = this.connectedBlockHeight + BRC.STATEMENT_BOTTOM_SPACER;
+    if (this.connectedBlock.nextConnection) {
+      this.height -= BRC.NOTCH_HEIGHT;
+    }
   }
 };
 goog.inherits(Blockly.BlockRendering.StatementInput,

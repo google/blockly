@@ -479,7 +479,6 @@ Blockly.Cursor.prototype.next = function() {
   var location = this.getLocation();
   if (!location) {return null;}
   var newLocation;
-  var newParentInput;
   var parentInput = this.parentInput_;
   var isStack = false;
 
@@ -496,12 +495,10 @@ Blockly.Cursor.prototype.next = function() {
 
     case this.types.FIELD:
       newLocation = this.findNextForField_(location, parentInput);
-      newParentInput = this.parentInput_;
       break;
 
     case this.types.INPUT:
       newLocation = this.findNextForInput_(location, parentInput);
-      newParentInput = this.parentInput_;
       break;
 
     case this.types.BLOCK:
@@ -575,7 +572,6 @@ Blockly.Cursor.prototype.prev = function() {
   if (!location) {return null;}
   var newLocation;
   var parentInput = this.parentInput_;
-  var newParentInput;
   var isStack = false;
 
 
@@ -594,12 +590,10 @@ Blockly.Cursor.prototype.prev = function() {
 
     case this.types.FIELD:
       newLocation = this.findPrevForField_(location, parentInput);
-      newParentInput = this.parentInput_;
       break;
 
     case this.types.INPUT:
       newLocation = this.findPrevForInput_(location, parentInput);
-      newParentInput = this.parentInput_;
       break;
 
     case this.types.BLOCK:

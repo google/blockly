@@ -31,7 +31,6 @@
 	"REDO": "Կրկին անել",
 	"CHANGE_VALUE_TITLE": "Փոխել նշանակություն:",
 	"RENAME_VARIABLE": "Վերանվանել փոփոխականը...",
-	"RENAME_VARIABLE_TITLE": "%1 -ը վերանվանվող փոփոխականի անունն է\n\nthe name of the variable to be renamed.",
 	"NEW_VARIABLE": "Ստեղծել փոփոխական...",
 	"NEW_STRING_VARIABLE": "Ստեղծել տեքստային փոփոխական",
 	"NEW_NUMBER_VARIABLE": "Ստեղծել թվային փոփոխական",

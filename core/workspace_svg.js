@@ -48,7 +48,7 @@ goog.require('Blockly.WorkspaceCommentSvg.render');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
-goog.require('Blockly.Cursor');
+goog.require('Blockly.CursorSvg');
 
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
@@ -375,6 +375,14 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
 Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
 
 /**
+ * Adds cursor for keyboard navigation.
+ * @return {Blockly.CursorSvg} Cursor for keyboard navigation.
+ */
+Blockly.WorkspaceSvg.prototype.createCursor = function() {
+  return new Blockly.CursorSvg(this);
+};
+
+/**
  * Getter for the inverted screen CTM.
  * @return {SVGMatrix} The matrix to use in mouseToSvg
  */
@@ -544,6 +552,10 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     this.grid_.update(this.scale);
   }
   this.recordDeleteAreas();
+
+  var svgCursor = this.cursor.createDom();
+  this.svgGroup_.appendChild(svgCursor);
+
   return this.svgGroup_;
 };
 
@@ -652,19 +664,6 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
   this.zoomControls_ = new Blockly.ZoomControls(this);
   var svgZoomControls = this.zoomControls_.createDom();
   this.svgGroup_.appendChild(svgZoomControls);
-};
-
-/**
- * Add zoom controls.
- * @package
- * @return {Blockly.Cursor} return the created cursor
- */
-Blockly.WorkspaceSvg.prototype.addCursor = function() {
-  /** @type {Blockly.Cursor} */
-  this.cursor_ = new Blockly.Cursor(this);
-  var svgCursor = this.cursor_.createDom();
-  this.svgGroup_.appendChild(svgCursor);
-  return this.cursor_;
 };
 
 /**
@@ -1054,6 +1053,11 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
   Blockly.Events.disable();
   try {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
+    if (Blockly.Navigation.insertionConnection_) {
+      Blockly.Navigation.insertBlock(block, Blockly.Navigation.insertionConnection_);
+      return;
+    }
+
     // Move the duplicate to original position.
     var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
     var blockY = parseInt(xmlBlock.getAttribute('y'), 10);

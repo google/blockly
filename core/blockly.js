@@ -275,9 +275,8 @@ Blockly.onKeyDown_ = function(e) {
       workspace.undo(e.shiftKey);
     }
   } else if (Blockly.keyboardAccessibilityMode_
-      && (e.keyCode === goog.events.KeyCodes.UP
-        || e.keyCode === goog.events.KeyCodes.DOWN)) {
-    Blockly.Navigation.navigate(e);
+    && Blockly.Navigation.navigate(e)) {
+    return;
   }
   // Common code for delete and cut.
   // Don't delete in the flyout.

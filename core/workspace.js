@@ -29,6 +29,7 @@ goog.provide('Blockly.Workspace');
 goog.require('Blockly.utils');
 goog.require('Blockly.VariableMap');
 goog.require('Blockly.WorkspaceComment');
+goog.require('Blockly.Cursor');
 
 
 /**
@@ -111,6 +112,12 @@ Blockly.Workspace = function(opt_options) {
    * @private
    */
   this.potentialVariableMap_ = null;
+
+  /**
+   * The cursor for navigating blocks.
+   * @type {!Blockly.Cursor}
+   */
+  this.cursor = this.createCursor();
 };
 
 /**
@@ -132,6 +139,14 @@ Blockly.Workspace.prototype.isClearing = false;
  * @type {number}
  */
 Blockly.Workspace.prototype.MAX_UNDO = 1024;
+
+/**
+ * Adds cursor for keyboard navigation.
+ * @return {Blockly.Cursor} Cursor for keyboard navigation.
+ */
+Blockly.Workspace.prototype.createCursor = function() {
+  return new Blockly.Cursor();
+};
 
 /**
  * Dispose of this workspace.
@@ -510,6 +525,7 @@ Blockly.Workspace.prototype.getWidth = function() {
 Blockly.Workspace.prototype.newBlock = function(prototypeName, opt_id) {
   return new Blockly.Block(this, prototypeName, opt_id);
 };
+
 
 /**
  * The number of blocks that may be added to the workspace before reaching

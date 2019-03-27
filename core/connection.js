@@ -697,6 +697,25 @@ Blockly.Connection.prototype.neighbours_ = function(/* maxLimit */) {
 };
 
 /**
+ * Get the parent input of a connection.
+ * @return {Blockly.Input} The input that the connection belongs to or null if
+ *     no parent exists.
+ * @package
+ */
+Blockly.Connection.prototype.getParentInput = function() {
+  var parentInput = null;
+  var block = this.sourceBlock_;
+  var inputs = block.inputList;
+  for (var idx = 0; idx < block.inputList.length; idx++) {
+    if (inputs[idx].connection === this) {
+      parentInput = inputs[idx];
+      break;
+    }
+  }
+  return parentInput;
+};
+
+/**
  * This method returns a string describing this Connection in developer terms
  * (English only). Intended to on be used in console logs and errors.
  * @return {string} The description.

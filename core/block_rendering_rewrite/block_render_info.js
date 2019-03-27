@@ -526,9 +526,15 @@ Blockly.BlockRendering.RenderInfo.prototype.finalize_ = function() {
     }
     yCursor += row.height;
   }
+  this.blockBottom = yCursor;
+  this.overhang = 0;
 
+  // should the next connection be a separate row with its own height?
   if (this.hasNextConnection) {
-    yCursor += BRC.TAB_HEIGHT;
+    this.overhang = BRC.NOTCH_HEIGHT;
+  } else if (!this.hasOutputConnection) {
+    // No output and no next.
+    this.overhang = 2; // for the shadow.
   }
-  this.height = yCursor;
+  this.height = yCursor + this.overhang;
 };

@@ -148,7 +148,7 @@ Blockly.Workspace.prototype.dispose = function() {
  * Angle away from the horizontal to sweep for blocks.  Order of execution is
  * generally top to bottom, but a small angle changes the scan to give a bit of
  * a left to right bias (reversed in RTL).  Units are in degrees.
- * See: http://tvtropes.org/pmwiki/pmwiki.php/Main/DiagonalBilling.
+ * See: https://tvtropes.org/pmwiki/pmwiki.php/Main/DiagonalBilling
  */
 Blockly.Workspace.SCAN_ANGLE = 3;
 
@@ -481,7 +481,7 @@ Blockly.Workspace.prototype.getVariableTypes = function() {
 
 /**
  * Return all variables of all types.
- * @return {!Array.<Blockly.VariableModel>} List of variable models.
+ * @return {!Array.<!Blockly.VariableModel>} List of variable models.
  */
 Blockly.Workspace.prototype.getAllVariables = function() {
   return this.variableMap_.getAllVariables();

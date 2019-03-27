@@ -494,8 +494,8 @@ Blockly.Block.prototype.lastConnectionInStack = function() {
  * @protected
  */
 Blockly.Block.prototype.bumpNeighbours_ = function() {
-  console.warn('Not expected to reach this bumpNeighbours_ function. The ' +
-    'BlockSvg function for bumpNeighbours_ was expected to be called instead.');
+  console.warn('Not expected to reach Block.bumpNeighbours_ function. ' +
+      'BlockSvg.bumpNeighbours_ was expected to be called instead.');
 };
 
 /**
@@ -912,7 +912,7 @@ Blockly.Block.prototype.setColour = function(colour) {
     if (colour != dereferenced) {
       errorMsg += ' (from "' + colour + '")';
     }
-    throw errorMsg;
+    throw Error(errorMsg);
   }
 };
 
@@ -925,7 +925,7 @@ Blockly.Block.prototype.setStyle = function(blockStyleName) {
   var theme = Blockly.getTheme();
   if (!theme) {
     throw Error('Trying to set block style to ' + blockStyleName +
-      ' before theme was defined via Blockly.setTheme().');
+        ' before theme was defined via Blockly.setTheme().');
   }
   var blockStyle = theme.getBlockStyle(blockStyleName);
   this.styleName_ = blockStyleName;
@@ -936,8 +936,7 @@ Blockly.Block.prototype.setStyle = function(blockStyleName) {
     this.hat = blockStyle.hat;
     // Set colour will trigger an updateColour() on a block_svg
     this.setColour(blockStyle['colourPrimary']);
-  }
-  else {
+  } else {
     throw Error('Invalid style name: ' + blockStyleName);
   }
 };
@@ -1428,13 +1427,13 @@ Blockly.Block.prototype.jsonInit = function(json) {
 Blockly.Block.prototype.jsonInitColour_ = function(json, warningPrefix) {
   if ('colour' in json) {
     if (json['colour'] === undefined) {
-      console.warn(warningPrefix + 'Undefined color value.');
+      console.warn(warningPrefix + 'Undefined colour value.');
     } else {
       var rawValue = json['colour'];
       try {
         this.setColour(rawValue);
-      } catch (colorError) {
-        console.warn(warningPrefix + 'Illegal color value: ', rawValue);
+      } catch (e) {
+        console.warn(warningPrefix + 'Illegal colour value: ', rawValue);
       }
     }
   }
@@ -1477,7 +1476,7 @@ Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
     }
     if (overwrites.length) {
       throw Error('Mixin will overwrite block members: ' +
-        JSON.stringify(overwrites));
+          JSON.stringify(overwrites));
     }
   }
   goog.mixin(this, mixinObj);
@@ -1488,8 +1487,8 @@ Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
  * @param {string} message Text contains interpolation tokens (%1, %2, ...)
  *     that match with fields or inputs defined in the args array.
  * @param {!Array} args Array of arguments to be interpolated.
- * @param {string=} lastDummyAlign If a dummy input is added at the end,
- *     how should it be aligned?
+ * @param {string|undefined} lastDummyAlign If a dummy input is added at the
+ *     end, how should it be aligned?
  * @private
  */
 Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {

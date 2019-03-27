@@ -398,7 +398,7 @@ Blockly.init_ = function(mainWorkspace) {
     mainWorkspace.scrollbar = new Blockly.ScrollbarPair(mainWorkspace);
     mainWorkspace.scrollbar.resize();
   } else {
-    mainWorkspace.setMetrics({x: .5, y: .5});
+    mainWorkspace.setMetrics({x: 0.5, y: 0.5});
   }
 
   // Load the sounds.

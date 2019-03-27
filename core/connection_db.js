@@ -153,7 +153,7 @@ Blockly.ConnectionDB.prototype.removeConnection_ = function(connection) {
  * @param {!Blockly.Connection} connection The connection whose neighbours
  *     should be returned.
  * @param {number} maxRadius The maximum radius to another connection.
- * @return {!Array.<Blockly.Connection>} List of connections.
+ * @return {!Array.<!Blockly.Connection>} List of connections.
  */
 Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
   var db = this.connections_;

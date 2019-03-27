@@ -120,7 +120,7 @@ Blockly.Variables.allDeveloperVariables = function(workspace) {
       if (!Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_[
           block.type]) {
         console.warn('Function getDeveloperVars() deprecated. Use ' +
-          'getDeveloperVariables() (block type \'' + block.type + '\')');
+            'getDeveloperVariables() (block type \'' + block.type + '\')');
         Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_[
             block.type] = true;
       }

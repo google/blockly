@@ -158,8 +158,12 @@ Blockly.BlockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   // Move the connection.
   var input = row.getLastInput();
   if (input.connection) {
+    var connX = row.statementEdge + BRC.NOTCH_OFFSET_LEFT + 1;
+    if (this.info_.RTL) {
+      connX *= -1;
+    }
     input.connection.setOffsetInBlock(
-        row.statementEdge + BRC.NOTCH_OFFSET_LEFT + 1, row.yPos + 1);
+        connX, row.yPos + 1);
   }
 };
 
@@ -309,8 +313,12 @@ Blockly.BlockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
 
   // Move the connection.
   if (input.connection) {
+    var connX = input.xPos + BRC.TAB_WIDTH + 1;
+    if (this.info_.RTL) {
+      connX *= -1;
+    }
     input.connection.setOffsetInBlock(
-        input.xPos + BRC.TAB_WIDTH + 1, yPos + BRC.TAB_OFFSET_FROM_TOP + 1);
+        connX, yPos + BRC.TAB_OFFSET_FROM_TOP + 1);
   }
 };
 
@@ -355,7 +363,8 @@ Blockly.BlockRendering.Drawer.prototype.moveConnections_ = function() {
     }
 
     console.log('next connection goes to ' + connectionX + ', ' + this.info_.height);
-    this.block_.nextConnection.setOffsetInBlock(connectionX, this.info_.height + 1);
+    this.block_.nextConnection.setOffsetInBlock(connectionX,
+        this.info_.height - BRC.NOTCH_HEIGHT + 1);
     this.block_.nextConnection.moveToOffset(blockTL);
     if (this.block_.nextConnection.isConnected()) {
       this.block_.nextConnection.tighten_();

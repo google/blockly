@@ -41,6 +41,8 @@ BRC.TAB_OFFSET_FROM_TOP = 5;
 BRC.TAB_WIDTH = 8;
 
 BRC.NOTCH_WIDTH = 15;
+BRC.NOTCH_HEIGHT = 4;
+
 
 // Offset from the left side of a block or the inside of a statement input to
 // the left side of the notch.

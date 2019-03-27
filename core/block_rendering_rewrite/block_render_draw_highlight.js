@@ -122,17 +122,21 @@ Blockly.BlockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
 };
 
 Blockly.BlockRendering.Highlighter.prototype.drawBottomCorner = function() {
+  var height = this.info_.blockBottom;
+  // if (this.info_.hasNextConnection) {
+  //   height -= BRC.NOTCH_HEIGHT;
+  // }
   if (this.info_.squareBottomLeftCorner) {
     if (!this.info_.RTL) {
       this.highlightSteps_.push('M',
-          BRC.HIGHLIGHT_OFFSET + ',' + (this.info_.height - BRC.HIGHLIGHT_OFFSET));
+          BRC.HIGHLIGHT_OFFSET + ',' + (height - BRC.HIGHLIGHT_OFFSET));
     }
   } else {
     if (!this.info_.RTL) {
       this.highlightSteps_.push(BRC.BOTTOM_LEFT_CORNER_HIGHLIGHT_START +
-          (this.info_.height - Blockly.BlockSvg.DISTANCE_45_INSIDE) +
+          (height - Blockly.BlockSvg.DISTANCE_45_INSIDE) +
           BRC.BOTTOM_LEFT_CORNER_HIGHLIGHT_MID +
-          (this.info_.height - Blockly.BlockSvg.CORNER_RADIUS));
+          (height - Blockly.BlockSvg.CORNER_RADIUS));
     }
   }
 };

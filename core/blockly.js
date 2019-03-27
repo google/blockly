@@ -192,8 +192,8 @@ Blockly.svgResize = function(workspace) {
 // are multiple workspaces and non-main workspaces are able to accept input.
 Blockly.onKeyDown_ = function(e) {
   var workspace = Blockly.mainWorkspace;
-  if (workspace.options.readOnly || Blockly.utils.isTargetInput(e)
-      || (workspace.rendered && !workspace.isVisible())) {
+  if (workspace.options.readOnly || Blockly.utils.isTargetInput(e) ||
+      (workspace.rendered && !workspace.isVisible())) {
     // No key actions on readonly workspaces.
     // When focused on an HTML text input widget, don't trap any keys.
     // Ignore keypresses on rendered workspaces that have been explicitly
@@ -467,7 +467,7 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
  * @param {!Function} func Function to call when event is triggered.
  * @param {boolean=} opt_noCaptureIdentifier True if triggering on this event
  *     should not block execution of other event handlers on this touch or
- *     other simultaneous touches.
+ *     other simultaneous touches.  False by default.
  * @param {boolean=} opt_noPreventDefault True if triggering on this event
  *     should prevent the default handler.  False by default.  If
  *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
@@ -683,8 +683,9 @@ Blockly.checkBlockColourConstant_ = function(
 
 
 /**
- * Sets the theme for blockly and refreshes all blocks in the toolbox and workspace.
- * @param {Blockly.Theme} theme Theme for blockly.
+ * Sets the theme for Blockly and refreshes all blocks in the toolbox and
+ * workspace.
+ * @param {!Blockly.Theme} theme Theme for Blockly.
  */
 Blockly.setTheme = function(theme) {
   this.theme_ = theme;
@@ -697,25 +698,25 @@ Blockly.setTheme = function(theme) {
 
 /**
  * Refresh the theme for all items on the workspace.
- * @param {Blockly.Workspace} ws Blockly workspace to refresh theme on.
+ * @param {!Blockly.Workspace} ws Blockly workspace to refresh theme on.
  * @private
  */
 Blockly.refreshTheme_ = function(ws) {
-  //update all blocks in workspace that have a style name
+  // Update all blocks in workspace that have a style name.
   this.updateBlockStyles_(ws.getAllBlocks().filter(
       function(block){
         return block.getStyleName() !== undefined;
       }
   ));
 
-  //update blocks in the flyout
+  // Update blocks in the flyout.
   if (!ws.toolbox_ && ws.flyout_ && ws.flyout_.workspace_) {
     this.updateBlockStyles_(ws.flyout_.workspace_.getAllBlocks());
   } else {
     ws.refreshToolboxSelection();
   }
 
-  //update colours on the categories
+  // Update colours on the categories.
   if (ws.toolbox_) {
     ws.toolbox_.updateColourFromTheme();
   }
@@ -727,12 +728,12 @@ Blockly.refreshTheme_ = function(ws) {
 
 /**
  * Updates all the blocks with new style.
- * @param {!Array.<Blockly.Block>} blocks List of blocks to update the style on.
+ * @param {!Array.<!Blockly.Block>} blocks List of blocks to update the style
+ * on.
  * @private
  */
 Blockly.updateBlockStyles_ = function(blocks) {
-  for (var i = 0; i < blocks.length; i++) {
-    var block = blocks[i];
+  for (var i = 0, block; block = blocks[i]; i++) {
     var blockStyleName = block.getStyleName();
 
     block.setStyle(blockStyleName);
@@ -744,19 +745,11 @@ Blockly.updateBlockStyles_ = function(blocks) {
 
 /**
  * Gets the theme.
- * @return {?Blockly.Theme} theme Theme for blockly.
+ * @return {?Blockly.Theme} theme Theme for Blockly.
  */
 Blockly.getTheme = function() {
   return this.theme_;
 };
-
-// IE9 does not have a console.  Create a stub to stop errors.
-if (!goog.global['console']) {
-  goog.global['console'] = {
-    'log': function() {},
-    'warn': function() {}
-  };
-}
 
 // Export symbols that would otherwise be renamed by Closure compiler.
 if (!goog.global['Blockly']) {

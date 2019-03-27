@@ -188,8 +188,7 @@ Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
 
   if (y < 0) {
     Blockly.WidgetDiv.positionInternal_(x, 0, widgetSize.height + y);
-  }
-  else {
+  } else {
     Blockly.WidgetDiv.positionInternal_(x, y, widgetSize.height);
   }
 };

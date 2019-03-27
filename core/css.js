@@ -104,8 +104,8 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
  * @deprecated April 2017.
  */
 Blockly.Css.setCursor = function(cursor) {
-  console.warn('Deprecated call to Blockly.Css.setCursor.' +
-    'See https://github.com/google/blockly/issues/981 for context');
+  console.warn('Deprecated call to Blockly.Css.setCursor. ' +
+      'See https://github.com/google/blockly/issues/981 for context');
 };
 
 /**

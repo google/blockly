@@ -194,9 +194,9 @@ Blockly.utils.getRelativeXY = function(element) {
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
- * the div blockly was injected into.
+ * the div Blockly was injected into.
  * @param {!Element} element SVG element to find the coordinates of. If this is
- *     not a child of the div blockly was injected into, the behaviour is
+ *     not a child of the div Blockly was injected into, the behaviour is
  *     undefined.
  * @return {!goog.math.Coordinate} Object with .x and .y properties.
  */
@@ -847,10 +847,10 @@ Blockly.utils.is3dSupported = function() {
       el.style[t] = 'translate3d(1px,1px,1px)';
       var computedStyle = goog.global.getComputedStyle(el);
       if (!computedStyle) {
-        // getComputedStyle in Firefox returns null when blockly is loaded
+        // getComputedStyle in Firefox returns null when Blockly is loaded
         // inside an iframe with display: none.  Returning false and not
         // caching is3dSupported means we try again later.  This is most likely
-        // when users are interacting with blocks which should mean blockly is
+        // when users are interacting with blocks which should mean Blockly is
         // visible again.
         // See https://bugzilla.mozilla.org/show_bug.cgi?id=548397
         document.body.removeChild(el);
@@ -909,7 +909,7 @@ Blockly.utils.runAfterPageLoad = function(fn) {
 /**
  * Sets the CSS transform property on an element. This function sets the
  * non-vendor-prefixed and vendor-prefixed versions for backwards compatibility
- * with older browsers. See http://caniuse.com/#feat=transforms2d
+ * with older browsers. See https://caniuse.com/#feat=transforms2d
  * @param {!Element} node The node which the CSS transform should be applied.
  * @param {string} transform The value of the CSS `transform` property.
  */

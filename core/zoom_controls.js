@@ -149,11 +149,11 @@ Blockly.ZoomControls.prototype.position = function() {
     // There are no metrics available (workspace is probably not visible).
     return;
   }
-  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT
-    || (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
+  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
+      (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
     // Toolbox starts in the left corner.
     this.left_ = metrics.viewWidth + metrics.absoluteLeft -
-      this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
+        this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
   } else {
     // Toolbox starts in the right corner.
     this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;

@@ -542,7 +542,7 @@ Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(metrics) {
   if (this.workspace_.RTL) {
     if (bubbleLeft < workspaceLeft) {
       // Slide the bubble right until it is onscreen.
-      relativeLeft = -(workspaceLeft - this.anchorXY_.x  + this.width_);
+      relativeLeft = -(workspaceLeft - this.anchorXY_.x + this.width_);
     } else if (bubbleRight > workspaceRight) {
       // Slide the bubble left until it is onscreen.
       relativeLeft = -(workspaceRight - this.anchorXY_.x);

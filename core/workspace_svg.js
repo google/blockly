@@ -771,7 +771,7 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled =
     /* eslint-disable indent */
   var currScroll = goog.dom.getDocumentScroll();
   if (!goog.math.Coordinate.equals(this.lastRecordedPageScroll_,
-     currScroll)) {
+      currScroll)) {
     this.lastRecordedPageScroll_ = currScroll;
     this.updateScreenCalculations_();
   }
@@ -815,9 +815,9 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
 /**
  * Translate this workspace to new coordinates.
  * @param {number} x Horizontal translation, in pixel units relative to the
- *    top left of the blockly div.
+ *    top left of the Blockly div.
  * @param {number} y Vertical translation, in pixel units relative to the
- *    top left of the blockly div.
+ *    top left of the Blockly div.
  */
 Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
   if (this.useWorkspaceDragSurface_ && this.isDragSurfaceActive_) {
@@ -1273,11 +1273,11 @@ Blockly.WorkspaceSvg.prototype.isDraggable = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
-  return (this.options.moveOptions && this.options.moveOptions.scrollbars)
-      || (this.options.moveOptions && this.options.moveOptions.wheel)
-      || (this.options.moveOptions && this.options.moveOptions.drag)
-      || (this.options.zoomOptions && this.options.zoomOptions.controls)
-      || (this.options.zoomOptions && this.options.zoomOptions.wheel);
+  return (this.options.moveOptions && this.options.moveOptions.scrollbars) ||
+      (this.options.moveOptions && this.options.moveOptions.wheel) ||
+      (this.options.moveOptions && this.options.moveOptions.drag) ||
+      (this.options.zoomOptions && this.options.zoomOptions.controls) ||
+      (this.options.zoomOptions && this.options.zoomOptions.wheel);
 };
 
 /**
@@ -1292,10 +1292,10 @@ Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.isMovable = function() {
-  return (this.options.moveOptions && this.options.moveOptions.scrollbars)
-    || (this.options.moveOptions && this.options.moveOptions.wheel)
-    || (this.options.moveOptions && this.options.moveOptions.drag)
-    || (this.options.zoomOptions && this.options.zoomOptions.wheel);
+  return (this.options.moveOptions && this.options.moveOptions.scrollbars) ||
+      (this.options.moveOptions && this.options.moveOptions.wheel) ||
+      (this.options.moveOptions && this.options.moveOptions.drag) ||
+      (this.options.zoomOptions && this.options.zoomOptions.wheel);
 };
 
 /**
@@ -1318,18 +1318,21 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
 
   var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
   if (canWheelZoom && (e.ctrlKey || !canWheelMove)) {
-    // The vertical scroll distance that corresponds to a click of a zoom button.
+    // Zoom.
+    // The vertical scroll distance that corresponds to a click of a zoom
+    // button.
     var PIXELS_PER_ZOOM_STEP = 50;
     var delta = -scrollDelta.y / PIXELS_PER_ZOOM_STEP;
     var position = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
         this.getInverseScreenCTM());
     this.zoom(position.x, position.y, delta);
   } else {
+    // Scroll.
     var x = this.scrollX - scrollDelta.x;
     var y = this.scrollY - scrollDelta.y;
 
     if (e.shiftKey && !scrollDelta.x) {
-      // Scroll horizontally (based on vertical scroll delta)
+      // Scroll horizontally (based on vertical scroll delta).
       // This is needed as for some browser/system combinations which do not
       // set deltaX.
       x = this.scrollX - scrollDelta.y;
@@ -1710,7 +1713,7 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
 Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   if (!this.isMovable()) {
     console.warn('Tried to move a non-movable workspace. This could result' +
-      ' in blocks becoming inaccessible.');
+        ' in blocks becoming inaccessible.');
     return;
   }
 
@@ -1779,7 +1782,7 @@ Blockly.WorkspaceSvg.prototype.endCanvasTransition = function() {
 Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
   if (!this.isMovable()) {
     console.warn('Tried to move a non-movable workspace. This could result' +
-      ' in blocks becoming inaccessible.');
+        ' in blocks becoming inaccessible.');
     return;
   }
 
@@ -1801,7 +1804,7 @@ Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
 Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
   if (!this.isMovable()) {
     console.warn('Tried to move a non-movable workspace. This could result' +
-      ' in blocks becoming inaccessible.');
+        ' in blocks becoming inaccessible.');
     return;
   }
 
@@ -2072,9 +2075,9 @@ Blockly.WorkspaceSvg.getContentDimensionsBounded_ = function(ws, svgSize) {
  * .viewWidth: Width of the visible portion of the workspace.
  * .contentHeight: Height of the content.
  * .contentWidth: Width of the content.
- * .svgHeight: Height of the blockly div (the view + the toolbox,
+ * .svgHeight: Height of the Blockly div (the view + the toolbox,
  *    simple or otherwise),
- * .svgWidth: Width of the blockly div (the view + the toolbox,
+ * .svgWidth: Width of the Blockly div (the view + the toolbox,
  *    simple or otherwise),
  * .viewTop: Top-edge of the visible portion of the workspace, relative to
  *     the workspace origin.
@@ -2283,8 +2286,7 @@ Blockly.WorkspaceSvg.prototype.registerToolboxCategoryCallback = function(key,
  *     is registered.
  */
 Blockly.WorkspaceSvg.prototype.getToolboxCategoryCallback = function(key) {
-  var result = this.toolboxCategoryCallbacks_[key];
-  return result ? result : null;
+  return this.toolboxCategoryCallbacks_[key] || null;
 };
 
 /**
@@ -2310,7 +2312,7 @@ Blockly.WorkspaceSvg.prototype.getGesture = function(e) {
   var gesture = this.currentGesture_;
   if (gesture) {
     if (isStart && gesture.hasStarted()) {
-      console.warn('tried to start the same gesture twice');
+      console.warn('Tried to start the same gesture twice.');
       // That's funny.  We must have missed a mouse up.
       // Cancel it, rather than try to retrieve all of the state we need.
       gesture.cancel();

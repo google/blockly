@@ -1304,18 +1304,17 @@ Blockly.WorkspaceSvg.prototype.isMovable = function() {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
+  // Don't scroll or zoom anything if drag is in progress.
+  if (this.currentGesture_) {
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
   var canWheelZoom = this.options.zoomOptions && this.options.zoomOptions.wheel;
   var canWheelMove = this.options.moveOptions && this.options.moveOptions.wheel;
   if (!canWheelZoom && !canWheelMove) {
     return;
   }
-
-  // TODO: Remove gesture cancellation and compensate for coordinate skew during
-  // zoom.
-  if (this.currentGesture_) {
-    this.currentGesture_.cancel();
-  }
-
 
   var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
   if (canWheelZoom && (e.ctrlKey || !canWheelMove)) {

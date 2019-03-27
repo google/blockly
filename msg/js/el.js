@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Πρόσθεσε Το Σχόλιο";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Δεν μπορώ να διαγράψω την μεταβλητή '%1' διότι είναι μέρος του ορισμού της λειτουργίας '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Άλλαξε την τιμή:";
 Blockly.Msg["CLEAN_UP"] = "Ταξινομείστε τα Μπλοκ";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Σύμπτυξε Όλα Τα Μπλοκ";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Σύμπτυξε Το Μπλοκ";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "χρώμα 1";

@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "افزودن نظر";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "متغیر '%1' را نمی‌توان پاک کرد، زیرا جزیی از تعریف تابع '%2' می‌باشد";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "تغییر مقدار:";
 Blockly.Msg["CLEAN_UP"] = "تمیز کردن بلوک‌ها";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "فروپاشی بلوک‌ها";
 Blockly.Msg["COLLAPSE_BLOCK"] = "فروپاشی بلوک";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "رنگ ۱";

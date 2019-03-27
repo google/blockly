@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Palikti komentarą";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Negalima ištrinti kintamojo '%1', nes jis yra dalis funkcijos '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Keisti reikšmę:";
 Blockly.Msg["CLEAN_UP"] = "Išvalyti blokus";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Suskleisti blokus";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Suskleisti bloką";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "1 spalva";

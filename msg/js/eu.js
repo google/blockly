@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Iruzkina gehitu";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ezin da '%1' aldagaia ezabatu '%2' funtzioaren definizioaren zati delako.";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Aldatu balioa:";
 Blockly.Msg["CLEAN_UP"] = "Blokeak garbitu";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Blokeak kolapsatu";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Blokea kolapsatu";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "1 Kolorea";

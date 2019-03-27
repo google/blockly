@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "মন্তব্য যোগ করুন";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "'%1' চলক অপসারণ করা যাবে না কারণ এটি '%2' কার্যপ্রণালীর সংজ্ঞার অংশ";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "মান পরিবর্তন করুন:";
 Blockly.Msg["CLEAN_UP"] = "ব্লকসমূহ পরিস্কার করুন";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "ব্লকসমূহ সঙ্কুচিত করুন";
 Blockly.Msg["COLLAPSE_BLOCK"] = "ব্লক সঙ্কুচিত করুন";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "রং ১";

@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "주석 추가";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "'%2' 함수 정의의 일부이기 때문에 '%1' 변수를 삭제할 수 없습니다";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "값 바꾸기:";
 Blockly.Msg["CLEAN_UP"] = "블록 정리";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "블록 축소";
 Blockly.Msg["COLLAPSE_BLOCK"] = "블록 축소";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "색 1";

@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Tilføj kommentar";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Kan ikke slette variablen »%1« da den er en del af definitionen af funktionen »%2«";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Skift værdi:";
 Blockly.Msg["CLEAN_UP"] = "Ryd op i blokke";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Fold blokkene sammen";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Fold blokken sammen";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "farve 1";

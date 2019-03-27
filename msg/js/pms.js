@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Gionté un coment";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "As peul nen eliminesse la variàbil '%1' përchè a l'é part ëd la definission dla fonsion '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Modifiché ël valor:";
 Blockly.Msg["CLEAN_UP"] = "Dëscancelé ij blòch";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Arduve ij blòch";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Arduve ël blòch";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "color 1";

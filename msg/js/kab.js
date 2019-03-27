@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Rnu awennit";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ur izmir ara ad yekkes amutti '%1' acku yedda di tbadut n twuri '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Beddel azal:";
 Blockly.Msg["CLEAN_UP"] = "Sfeḍ iḥedran";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Fneẓ iḥedran";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Fneẓ iḥder";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "ini 1";

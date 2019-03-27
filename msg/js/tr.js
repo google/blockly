@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Yorum Ekle";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "'%1' değişkeni, '%2' fonksiyonunun tanımının bir parçası olduğu için silinemez";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Değeri değiştir:";
 Blockly.Msg["CLEAN_UP"] = "Blokları temizle";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Blokları Daralt";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Blok'u Daralt";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "renk 1";

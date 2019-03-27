@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Megjegyzés hozzáadása";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "A(z) „%1” változó nem törölhető, mert része a(z) „%2” függvény definíciójának.";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Érték módosítása:";
 Blockly.Msg["CLEAN_UP"] = "Blokkok kiürítése";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Blokkok összecsukása";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Blokk összecsukása";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "szín 1";

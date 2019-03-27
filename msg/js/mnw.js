@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "စုတ် လညာတ်";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "မပြံင်လှာဲ '%1' ဂှ် ဇိုတ်ပလီု ဟွံဂွံ၊ ဟိုတ်နူ ဍေဟ်ဂှ် ဆက်စပ်ဒၟံင် ကုဝှင်ရှေန် '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "သၠာဲ ဍာ်ဒကေဝ်";
 Blockly.Msg["CLEAN_UP"] = "ဖအး ဗလံက်";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "ဖဍိုန်ဖ္ဍောတ် ဗလံက်ဂမၠိုင်";
 Blockly.Msg["COLLAPSE_BLOCK"] = "ဖဍိုန်ဖ္ဍောတ် ဗလံက်";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "အသာ် ၁";

@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Add Comment";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Change value:";
 Blockly.Msg["CLEAN_UP"] = "Clean up Blocks";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";
 Blockly.Msg["COLLAPSE_ALL"] = "Collapse Blocks";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Collapse Block";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "colour 1";

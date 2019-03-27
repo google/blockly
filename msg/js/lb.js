@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Bemierkung derbäisetzen";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Wäert änneren:";
 Blockly.Msg["CLEAN_UP"] = "Bléck opraumen";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Bléck zesummeklappen";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Block zesummeklappen";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "Faarf 1";

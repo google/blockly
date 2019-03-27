@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "کمنٹ کریں";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "متغیر '٪ 1' کو حذف نہیں کر سکتا کیونکہ یہ فنکشن کی تعریف کا حصہ ہے '٪ 2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "ویلیو تبدیل کریں:";
 Blockly.Msg["CLEAN_UP"] = "بلاکس صاف کریں";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "بند کرو بلاکس";
 Blockly.Msg["COLLAPSE_BLOCK"] = "بند کرو بلاک";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "رنگ 1";

@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Додај коментар";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Није могуће избрисати променљиву „%1” јер је део дефиниције функције „%2”";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Промена вредности:";
 Blockly.Msg["CLEAN_UP"] = "Очисти блокове";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Скупи блокове";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Скупи блок";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "боја 1";

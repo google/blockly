@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "ເພີ່ມຄຳອະທິບາຍ";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "ປ່ຽນຄ່າ:";
 Blockly.Msg["CLEAN_UP"] = "ຈັດລຽນບລັອກໃຫ້ເປັນແຖວ";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "ຍຸບບລັອກ";
 Blockly.Msg["COLLAPSE_BLOCK"] = "ຍຸບບລັອກ";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "ສີ 1";

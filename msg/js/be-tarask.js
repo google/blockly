@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Дадаць камэнтар";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Немагчыма выдаліць зьменную «%1», таму што яна зьяўляецца часткай вызначэньня функцыі «%2»";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Зьмяніць значэньне:";
 Blockly.Msg["CLEAN_UP"] = "Ачысьціць блёкі";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Згарнуць блёкі";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Згарнуць блёк";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "колер 1";

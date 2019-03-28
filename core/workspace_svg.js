@@ -594,12 +594,9 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.grid_ = null;
   }
 
-  if (this.toolboxCategoryCallbacks_) {
-    this.toolboxCategoryCallbacks_ = null;
-  }
-  if (this.flyoutButtonCallbacks_) {
-    this.flyoutButtonCallbacks_ = null;
-  }
+  this.toolboxCategoryCallbacks_ = null;
+  this.flyoutButtonCallbacks_ = null;
+
   if (!this.options.parentWorkspace) {
     // Top-most workspace.  Dispose of the div that the
     // SVG is injected into (i.e. injectionDiv).

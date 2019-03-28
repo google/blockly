@@ -219,8 +219,7 @@ Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
   } else {
     // Try to align the left side of the field and the left side of widget.
     // Don't go offscreen right.
-    var x = Math.min(anchorBBox.left,
-        viewportBBox.right - widgetSize.width);
+    var x = Math.min(anchorBBox.left, viewportBBox.right - widgetSize.width);
     // But left is more important, because that's where the text is.
     return Math.max(x, viewportBBox.left);
   }
@@ -241,8 +240,7 @@ Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
  */
 Blockly.WidgetDiv.calculateY_ = function(viewportBBox, anchorBBox, widgetSize) {
   // Flip the widget vertically if off the bottom.
-  if (anchorBBox.bottom + widgetSize.height >=
-      viewportBBox.bottom) {
+  if (anchorBBox.bottom + widgetSize.height >= viewportBBox.bottom) {
     // The bottom of the widget is at the top of the field.
     return anchorBBox.top - widgetSize.height;
     // The widget could go off the top of the window, but it would also go off

@@ -954,3 +954,18 @@ Blockly.Gesture.prototype.getInsertionMarkers = function() {
   }
   return [];
 };
+
+/**
+ * Is a drag or other gesture currently in progress on any workspace?
+ * @return {boolean} True if gesture is occurring.
+ */
+Blockly.Gesture.inProgress = function() {
+  // If a drag is occurring, then it involves a selected block on a workspace.
+  if (Blockly.selected) {
+    var currentWorkspace = Blockly.selected.workspace;
+    if (currentWorkspace && currentWorkspace.currentGesture_) {
+      return true;
+    }
+  }
+  return false;
+};

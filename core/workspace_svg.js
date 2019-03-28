@@ -1305,10 +1305,14 @@ Blockly.WorkspaceSvg.prototype.isMovable = function() {
  */
 Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
   // Don't scroll or zoom anything if drag is in progress.
-  if (this.currentGesture_) {
-    e.preventDefault();
-    e.stopPropagation();
-    return;
+  // If a drag is occurring, then it involves a selected block on a workspace.
+  if (Blockly.selected) {
+    var currentWorkspace = Blockly.selected.workspace;
+    if (currentWorkspace && currentWorkspace.currentGesture_) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
   }
   var canWheelZoom = this.options.zoomOptions && this.options.zoomOptions.wheel;
   var canWheelMove = this.options.moveOptions && this.options.moveOptions.wheel;

@@ -58,13 +58,14 @@ Blockly.Variables.allUsedVarModels = function(ws) {
   var blocks = ws.getAllBlocks(false);
   var variableHash = Object.create(null);
   // Iterate through every block and add each variable to the hash.
-  for (var x = 0; x < blocks.length; x++) {
-    var blockVariables = blocks[x].getVarModels();
+  for (var i = 0; i < blocks.length; i++) {
+    var blockVariables = blocks[i].getVarModels();
     if (blockVariables) {
-      for (var y = 0; y < blockVariables.length; y++) {
-        var variable = blockVariables[y];
-        if (variable.getId()) {
-          variableHash[variable.getId()] = variable;
+      for (var j = 0; j < blockVariables.length; j++) {
+        var variable = blockVariables[j];
+        var id = variable.getId();
+        if (id) {
+          variableHash[id] = variable;
         }
       }
     }
@@ -109,9 +110,8 @@ Blockly.Variables.ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE_ = {};
  */
 Blockly.Variables.allDeveloperVariables = function(workspace) {
   var blocks = workspace.getAllBlocks(false);
-  var hash = {};
-  for (var i = 0; i < blocks.length; i++) {
-    var block = blocks[i];
+  var variableHash = Object.create(null);
+  for (var i = 0, block; block = blocks[i]; i++) {
     var getDeveloperVariables = block.getDeveloperVariables;
     if (!getDeveloperVariables && block.getDeveloperVars) {
       // August 2018: getDeveloperVars() was deprecated and renamed
@@ -128,17 +128,13 @@ Blockly.Variables.allDeveloperVariables = function(workspace) {
     if (getDeveloperVariables) {
       var devVars = getDeveloperVariables();
       for (var j = 0; j < devVars.length; j++) {
-        hash[devVars[j]] = devVars[j];
+        variableHash[devVars[j]] = true;
       }
     }
   }
 
   // Flatten the hash into a list.
-  var list = [];
-  for (var name in hash) {
-    list.push(hash[name]);
-  }
-  return list;
+  return Object.keys(variableHash);
 };
 
 /**

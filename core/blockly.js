@@ -211,7 +211,7 @@ Blockly.onKeyDown_ = function(e) {
     // data loss.
     e.preventDefault();
     // Don't delete while dragging.  Jeez.
-    if (workspace.isDragging()) {
+    if (Blockly.Gesture.inProgress()) {
       return;
     }
     if (Blockly.selected && Blockly.selected.isDeletable()) {
@@ -219,7 +219,7 @@ Blockly.onKeyDown_ = function(e) {
     }
   } else if (e.altKey || e.ctrlKey || e.metaKey) {
     // Don't use meta keys during drags.
-    if (workspace.isDragging()) {
+    if (Blockly.Gesture.inProgress()) {
       return;
     }
     if (Blockly.selected &&

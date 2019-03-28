@@ -58,7 +58,7 @@ goog.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 /**
  * Construct a FieldAngle from a JSON arg object.
  * @param {!Object} options A JSON object with options (angle).
- * @returns {!Blockly.FieldAngle} The new field instance.
+ * @return {!Blockly.FieldAngle} The new field instance.
  * @package
  * @nocollapse
  */

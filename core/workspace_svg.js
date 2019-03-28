@@ -1266,7 +1266,7 @@ Blockly.WorkspaceSvg.prototype.isDraggable = function() {
  * Should the workspace have bounded content? Used to tell if the
  * workspace's content should be sized so that it can move (bounded) or not
  * (exact sizing).
- * @returns {boolean} True if the workspace should be bounded, false otherwise.
+ * @return {boolean} True if the workspace should be bounded, false otherwise.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
@@ -1285,7 +1285,7 @@ Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
  * through zooming with the scroll wheel (since the zoom is centered on the
  * mouse position). This does not include zooming with the zoom controls
  * since the X Y coordinates are decided programmatically.
- * @returns {boolean} True if the workspace is movable, false otherwise.
+ * @return {boolean} True if the workspace is movable, false otherwise.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.isMovable = function() {

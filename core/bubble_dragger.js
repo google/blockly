@@ -151,7 +151,7 @@ Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
 /**
  * Shut the trash can and, if necessary, delete the dragging bubble.
  * Should be called at the end of a bubble drag.
- * @return {boolean} whether the bubble was deleted.
+ * @return {boolean} Whether the bubble was deleted.
  * @private
  */
 Blockly.BubbleDragger.prototype.maybeDeleteBubble_ = function() {

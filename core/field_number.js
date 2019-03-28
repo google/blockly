@@ -56,7 +56,7 @@ goog.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
  * Construct a FieldNumber from a JSON arg object.
  * @param {!Object} options A JSON object with options (value, min, max, and
  *                          precision).
- * @returns {!Blockly.FieldNumber} The new field instance.
+ * @return {!Blockly.FieldNumber} The new field instance.
  * @package
  * @nocollapse
  */

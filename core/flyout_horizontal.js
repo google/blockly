@@ -317,7 +317,7 @@ Blockly.HorizontalFlyout.prototype.layout_ = function(contents, gaps) {
  * determine if a new block should be created or if the flyout should scroll.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at mouse down, in pixel units.
- * @return {boolean} true if the drag is toward the workspace.
+ * @return {boolean} True if the drag is toward the workspace.
  * @package
  */
 Blockly.HorizontalFlyout.prototype.isDragTowardWorkspace = function(

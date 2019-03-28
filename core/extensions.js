@@ -398,7 +398,7 @@ Blockly.Extensions.checkDropdownOptionsInTable_ = function(block, dropdownName,
  * @param {string} msgTemplate The template form to of the message text, with
  *     %1 placeholder.
  * @param {string} fieldName The field with the replacement text.
- * @returns {Function} The extension function.
+ * @return {Function} The extension function.
  */
 Blockly.Extensions.buildTooltipWithFieldText = function(msgTemplate,
     fieldName) {

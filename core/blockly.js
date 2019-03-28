@@ -745,7 +745,7 @@ Blockly.updateBlockStyles_ = function(blocks) {
 
 /**
  * Gets the theme.
- * @return {?Blockly.Theme} theme Theme for Blockly.
+ * @return {?Blockly.Theme} Theme for Blockly.
  */
 Blockly.getTheme = function() {
   return this.theme_;

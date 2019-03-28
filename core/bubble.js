@@ -462,7 +462,7 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
  * @param {!number} relativeMin.y The y-position of the relativeMin.
  * @param {!Object} metrics The metrics of the workspace the bubble will
  *    appear in.
- * @returns {number} The percentage of the bubble that is visible.
+ * @return {number} The percentage of the bubble that is visible.
  * @private
  */
 Blockly.Bubble.prototype.getOverlap_ = function(relativeMin, metrics) {
@@ -508,7 +508,7 @@ Blockly.Bubble.prototype.getOverlap_ = function(relativeMin, metrics) {
  * bubble is shown.
  * @param {!Object} metrics The metrics of the workspace the bubble will
  *    appear in.
- * @returns {number} The optimal horizontal position of the top-left corner
+ * @return {number} The optimal horizontal position of the top-left corner
  *    of the bubble.
  * @private
  */
@@ -566,7 +566,7 @@ Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(metrics) {
  * bubble is shown.
  * @param {!Object} metrics The metrics of the workspace the bubble will
  *    appear in.
- * @returns {number} The optimal vertical position of the top-left corner
+ * @return {number} The optimal vertical position of the top-left corner
  *    of the bubble.
  * @private
  */

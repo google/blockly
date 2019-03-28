@@ -68,7 +68,7 @@ goog.inherits(Blockly.FieldDropdown, Blockly.Field);
 /**
  * Construct a FieldDropdown from a JSON arg object.
  * @param {!Object} options A JSON object with options (options).
- * @returns {!Blockly.FieldDropdown} The new field instance.
+ * @return {!Blockly.FieldDropdown} The new field instance.
  * @package
  * @nocollapse
  */
@@ -249,7 +249,7 @@ Blockly.FieldDropdown.prototype.createWidget_ = function(menu) {
  * the size of the checkmark that is displayed next to the currently selected
  * item. This means that the item text will be positioned directly under the
  * field text, rather than offset slightly.
- * @returns {!Object} The bounding rectangle of the anchor, in window
+ * @return {!Object} The bounding rectangle of the anchor, in window
  *     coordinates.
  * @private
  */

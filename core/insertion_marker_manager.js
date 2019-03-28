@@ -178,7 +178,7 @@ Blockly.InsertionMarkerManager.prototype.dispose = function() {
 /**
  * Return whether the block would be deleted if dropped immediately, based on
  * information from the most recent move event.
- * @return {boolean} true if the block would be deleted if dropped immediately.
+ * @return {boolean} True if the block would be deleted if dropped immediately.
  * @package
  */
 Blockly.InsertionMarkerManager.prototype.wouldDeleteBlock = function() {
@@ -188,7 +188,8 @@ Blockly.InsertionMarkerManager.prototype.wouldDeleteBlock = function() {
 /**
  * Return whether the block would be connected if dropped immediately, based on
  * information from the most recent move event.
- * @return {boolean} true if the block would be connected if dropped immediately.
+ * @return {boolean} True if the block would be connected if dropped
+ *   immediately.
  * @package
  */
 Blockly.InsertionMarkerManager.prototype.wouldConnectBlock = function() {
@@ -294,7 +295,7 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
  * only be called once, at the beginning of a drag.
  * If the stack has more than one block, this function will populate
  * lastOnStack_ and create the corresponding insertion marker.
- * @return {!Array.<!Blockly.RenderedConnection>} a list of available
+ * @return {!Array.<!Blockly.RenderedConnection>} A list of available
  *     connections.
  * @private
  */
@@ -320,7 +321,7 @@ Blockly.InsertionMarkerManager.prototype.initAvailableConnections_ = function() 
  *     connection, and a radius.  Returned by getCandidate_.
  * @param {!goog.math.Coordinate} dxy Position relative to drag start,
  *     in workspace units.
- * @return {boolean} whether the preview should be updated.
+ * @return {boolean} Whether the preview should be updated.
  * @private
  */
 Blockly.InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
@@ -365,7 +366,7 @@ Blockly.InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
  * closest connection.
  * @param {!goog.math.Coordinate} dxy Position relative to drag start,
  *     in workspace units.
- * @return {!Object} candidate An object containing a local connection, a closest
+ * @return {!Object} An object containing a local connection, a closest
  *     connection, and a radius.
  */
 Blockly.InsertionMarkerManager.prototype.getCandidate_ = function(dxy) {

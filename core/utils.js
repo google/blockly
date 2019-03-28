@@ -817,7 +817,7 @@ Blockly.utils.wrapToText_ = function(words, wordBreaks) {
 /**
  * Check if 3D transforms are supported by adding an element
  * and attempting to set the property.
- * @return {boolean} true if 3D transforms are supported.
+ * @return {boolean} True if 3D transforms are supported.
  */
 Blockly.utils.is3dSupported = function() {
   if (Blockly.utils.is3dSupported.cached_ !== undefined) {
@@ -921,7 +921,7 @@ Blockly.utils.setCssTransform = function(node, transform) {
 /**
  * Get the position of the current viewport in window coordinates.  This takes
  * scroll into account.
- * @return {!Object} an object containing window width, height, and scroll
+ * @return {!Object} An object containing window width, height, and scroll
  *     position in window coordinates.
  * @package
  */
@@ -1008,7 +1008,7 @@ Blockly.utils.containsNode = function(parent, descendant) {
  * @param {boolean=} opt_stripFollowing Optionally ignore all following
  *    statements (blocks that are not inside a value or statement input
  *    of the block).
- * @returns {!Object} Map of types to type counts for descendants of the bock.
+ * @return {!Object} Map of types to type counts for descendants of the bock.
  */
 Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
   var typeCountsMap = Object.create(null);
@@ -1035,7 +1035,7 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
  * @param {Number} lowerBound The desired lower bound.
  * @param {Number} number The number to clamp.
  * @param {Number} upperBound The desired upper bound.
- * @return {Number} the clamped number
+ * @return {Number} The clamped number.
  * @package
  */
 Blockly.utils.clampNumber = function(lowerBound, number, upperBound) {

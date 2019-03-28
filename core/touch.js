@@ -210,7 +210,7 @@ Blockly.Touch.setClientFromTouch = function(e) {
 /**
  * Check whether a given event is a mouse or touch event.
  * @param {!Event} e An event.
- * @return {boolean} true if it is a mouse or touch event; false otherwise.
+ * @return {boolean} True if it is a mouse or touch event; false otherwise.
  */
 Blockly.Touch.isMouseOrTouchEvent = function(e) {
   return Blockly.utils.startsWith(e.type, 'touch') ||
@@ -221,7 +221,7 @@ Blockly.Touch.isMouseOrTouchEvent = function(e) {
 /**
  * Check whether a given event is a touch event or a pointer event.
  * @param {!Event} e An event.
- * @return {boolean} true if it is a touch event; false otherwise.
+ * @return {boolean} True if it is a touch event; false otherwise.
  */
 Blockly.Touch.isTouchEvent = function(e) {
   return Blockly.utils.startsWith(e.type, 'touch') ||

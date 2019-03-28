@@ -123,35 +123,6 @@ Blockly.WidgetDiv.hideIfOwner = function(oldOwner) {
 };
 
 /**
- * Position the widget at a given location.  Prevent the widget from going
- * offscreen top or left (right in RTL).
- * @param {number} anchorX Horizontal location (window coordinates, not body).
- * @param {number} anchorY Vertical location (window coordinates, not body).
- * @param {!goog.math.Size} windowSize Height/width of window.
- * @param {!goog.math.Coordinate} scrollOffset X/y of window scrollbars.
- * @param {boolean} rtl True if RTL, false if LTR.
- */
-Blockly.WidgetDiv.position = function(anchorX, anchorY, windowSize,
-    scrollOffset, rtl) {
-  // Don't let the widget go above the top edge of the window.
-  if (anchorY < scrollOffset.y) {
-    anchorY = scrollOffset.y;
-  }
-  if (rtl) {
-    // Don't let the widget go right of the right edge of the window.
-    if (anchorX > windowSize.width + scrollOffset.x) {
-      anchorX = windowSize.width + scrollOffset.x;
-    }
-  } else {
-    // Don't let the widget go left of the left edge of the window.
-    if (anchorX < scrollOffset.x) {
-      anchorX = scrollOffset.x;
-    }
-  }
-  Blockly.WidgetDiv.positionInternal_(anchorX, anchorY, windowSize.height);
-};
-
-/**
  * Set the widget div's position and height.  This function does nothing clever:
  * it will not ensure that your widget div ends up in the visible window.
  * @param {number} x Horizontal location (window coordinates, not body).

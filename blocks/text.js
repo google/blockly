@@ -622,7 +622,7 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
    * closing double quote. The selected quote will be adapted for RTL blocks.
    * @param {boolean} open If the image should be open quote (“ in LTR).
    *                       Otherwise, a closing quote is used (” in LTR).
-   * @returns {!Blockly.FieldImage} The new field.
+   * @return {!Blockly.FieldImage} The new field.
    * @this Blockly.Block
    */
   newQuote_: function(open) {

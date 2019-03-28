@@ -51,7 +51,7 @@ Blockly.Theme.prototype.setAllBlockStyles = function(blockStyles) {
 
 /**
  * Gets a list of all the block style names.
- * @return {Array.<String>} styleName List of blockstyle names.
+ * @return {Array.<String>} List of blockstyle names.
  */
 Blockly.Theme.prototype.getAllBlockStyles = function() {
   return this.blockStyles_;

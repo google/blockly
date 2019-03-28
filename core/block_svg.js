@@ -986,7 +986,7 @@ Blockly.BlockSvg.prototype.setBorderColour_ = function(rgb, colourTertiary) {
  * Sets the colour of shadow blocks.
  * @param {!string} rgb Primary colour of the block.
  * @param {?string} colourSecondary Colour for shadow block.
- * @return {!string} hexColour The background colour of the block.
+ * @return {!string} The background colour of the block.
  */
 Blockly.BlockSvg.prototype.setShadowColour_ = function(rgb, colourSecondary) {
   var hexColour;

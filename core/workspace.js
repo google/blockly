@@ -159,7 +159,7 @@ Blockly.Workspace.SCAN_ANGLE = 3;
  *    compare.
  * @param {!Blockly.Block | !Blockly.WorkspaceComment} b The second object to
  *    compare.
- * @returns {number} The comparison value. This tells Array.sort() how to change
+ * @return {number} The comparison value. This tells Array.sort() how to change
  *    object a's index.
  * @private
  */
@@ -442,7 +442,7 @@ Blockly.Workspace.prototype.variableIndexOf = function(_name) {
  * @param {!string} name The name to check for.
  * @param {string=} opt_type The type of the variable.  If not provided it
  *     defaults to the empty string, which is a specific type.
- * @return {?Blockly.VariableModel} the variable with the given name.
+ * @return {?Blockly.VariableModel} The variable with the given name.
  */
 // TODO (#1199): Possibly delete this function.
 Blockly.Workspace.prototype.getVariable = function(name, opt_type) {
@@ -545,7 +545,7 @@ Blockly.Workspace.prototype.remainingCapacityOfType = function(type) {
  *    than the remaining capacity for that type, it returns false.
  * @param {!Object} typeCountsMap A map of types to counts (usually representing
  *    blocks to be created).
- * @returns {boolean} True if there is capacity for the given map,
+ * @return {boolean} True if there is capacity for the given map,
  *    false otherwise.
  */
 Blockly.Workspace.prototype.isCapacityAvailable = function(typeCountsMap) {
@@ -568,7 +568,7 @@ Blockly.Workspace.prototype.isCapacityAvailable = function(typeCountsMap) {
 /**
  * Checks if the workspace has any limits on the maximum number of blocks,
  *    or the maximum number of blocks of specific types.
- * @returns {boolean} True if it has block limits, false otherwise.
+ * @return {boolean} True if it has block limits, false otherwise.
  */
 Blockly.Workspace.prototype.hasBlockLimits = function() {
   return this.options.maxBlocks != Infinity || !!this.options.maxInstances;

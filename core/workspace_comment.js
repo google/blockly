@@ -137,7 +137,7 @@ Blockly.WorkspaceComment.prototype.dispose = function() {
 
 /**
  * Get comment height.
- * @return {number} comment height.
+ * @return {number} Comment height.
  * @package
  */
 Blockly.WorkspaceComment.prototype.getHeight = function() {
@@ -146,7 +146,7 @@ Blockly.WorkspaceComment.prototype.getHeight = function() {
 
 /**
  * Set comment height.
- * @param {number} height comment height.
+ * @param {number} height Comment height.
  * @package
  */
 Blockly.WorkspaceComment.prototype.setHeight = function(height) {
@@ -155,7 +155,7 @@ Blockly.WorkspaceComment.prototype.setHeight = function(height) {
 
 /**
  * Get comment width.
- * @return {number} comment width.
+ * @return {number} Comment width.
  * @package
  */
 Blockly.WorkspaceComment.prototype.getWidth = function() {

@@ -83,7 +83,7 @@ Blockly.Field.register = function(type, fieldClass) {
  * Blockly.Field.register.
  * @param {!Object} options A JSON object with a type and options specific
  *     to the field type.
- * @returns {?Blockly.Field} The new field instance or null if a field wasn't
+ * @return {?Blockly.Field} The new field instance or null if a field wasn't
  *     found with the given type name
  * @package
  */
@@ -264,7 +264,7 @@ Blockly.Field.prototype.updateEditable = function() {
  * editable (e.g. text labels).  Those fields are not serialized to XML.  Other
  * fields may be editable, and therefore serialized, but may exist on
  * non-editable blocks.
- * @return {boolean} whether this field is editable and on an editable block
+ * @return {boolean} Whether this field is editable and on an editable block
  */
 Blockly.Field.prototype.isCurrentlyEditable = function() {
   return this.EDITABLE && !!this.sourceBlock_ && this.sourceBlock_.isEditable();

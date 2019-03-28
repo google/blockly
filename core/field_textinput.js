@@ -56,7 +56,7 @@ goog.inherits(Blockly.FieldTextInput, Blockly.Field);
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (text, class, and
  *                          spellcheck).
- * @returns {!Blockly.FieldTextInput} The new field instance.
+ * @return {!Blockly.FieldTextInput} The new field instance.
  * @package
  * @nocollapse
  */

@@ -297,7 +297,7 @@ Blockly.DropDownDiv.show = function(owner, primaryX, primaryY, secondaryX, secon
 
 /**
  * Get sizing info about the bounding element.
- * @return {!Object} an object containing size information about the bounding
+ * @return {!Object} An object containing size information about the bounding
  *   element (bounding box and width/height).
  * @private
  */
@@ -322,7 +322,7 @@ Blockly.DropDownDiv.getBoundsInfo_ = function() {
  * @param {number} primaryY Desired origin point y, in absolute px
  * @param {number} secondaryX Secondary/alternative origin point x, in absolute px
  * @param {number} secondaryY Secondary/alternative origin point y, in absolute px
- * @returns {Object} Various final metrics, including rendered positions for drop-down and arrow.
+ * @return {Object} Various final metrics, including rendered positions for drop-down and arrow.
  */
 Blockly.DropDownDiv.getPositionMetrics = function(primaryX, primaryY, secondaryX, secondaryY) {
   var boundsInfo = Blockly.DropDownDiv.getBoundsInfo_();

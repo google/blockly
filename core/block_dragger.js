@@ -272,7 +272,7 @@ Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
 /**
  * Shut the trash can and, if necessary, delete the dragging block.
  * Should be called at the end of a block drag.
- * @return {boolean} whether the block was deleted.
+ * @return {boolean} Whether the block was deleted.
  * @private
  */
 Blockly.BlockDragger.prototype.maybeDeleteBlock_ = function() {

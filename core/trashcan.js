@@ -460,7 +460,7 @@ Blockly.Trashcan.prototype.mouseOut_ = function() {
 
 /**
  * Handle a BLOCK_DELETE event. Adds deleted blocks oldXml to the content array.
- * @returns {!Function} Function to call when a block is deleted.
+ * @return {!Function} Function to call when a block is deleted.
  * @private
  */
 Blockly.Trashcan.prototype.onDelete_ = function() {
@@ -495,7 +495,7 @@ Blockly.Trashcan.prototype.onDelete_ = function() {
  *    content array.
  * @param {!Element} xml An XML tree defining the block and any
  *    connected child blocks.
- * @returns {!string} Text representing the XML tree, cleaned of all unnecessary
+ * @return {!string} Text representing the XML tree, cleaned of all unnecessary
  * attributes.
  * @private
  */

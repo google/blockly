@@ -69,7 +69,7 @@ goog.inherits(Blockly.FieldImage, Blockly.Field);
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (src, width, height,
  *    alt, and flipRtl).
- * @returns {!Blockly.FieldImage} The new field instance.
+ * @return {!Blockly.FieldImage} The new field instance.
  * @package
  * @nocollapse
  */

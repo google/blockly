@@ -814,7 +814,7 @@ Blockly.Block.prototype.setConnectionsHidden = function(hidden) {
  * Used to match connections between a block and its insertion marker.
  * @param {!Blockly.Block} otherBlock The other block to match against.
  * @param {!Blockly.Connection} conn The other connection to match.
- * @return {Blockly.Connection} the matching connection on this block, or null.
+ * @return {Blockly.Connection} The matching connection on this block, or null.
  * @package
  */
 Blockly.Block.prototype.getMatchingConnection = function(otherBlock, conn) {

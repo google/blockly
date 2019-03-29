@@ -960,10 +960,9 @@ Blockly.Gesture.prototype.getInsertionMarkers = function() {
  * @return {boolean} True if gesture is occurring.
  */
 Blockly.Gesture.inProgress = function() {
-  // If a drag is occurring, then it involves a selected block on a workspace.
-  if (Blockly.selected) {
-    var currentWorkspace = Blockly.selected.workspace;
-    if (currentWorkspace && currentWorkspace.currentGesture_) {
+  var workspaces = Blockly.Workspace.getAll();
+  for (var i = 0, workspace; workspace = workspaces[i]; i++) {
+    if (workspace.currentGesture_) {
       return true;
     }
   }

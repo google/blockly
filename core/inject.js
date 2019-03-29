@@ -421,8 +421,8 @@ Blockly.init_ = function(mainWorkspace) {
 Blockly.inject.bindDocumentEvents_ = function() {
   if (!Blockly.documentEventsBound_) {
     Blockly.bindEventWithChecks_(document, 'scroll', null, function() {
-      for (var workspaceId in Blockly.Workspace.WorkspaceDB_) {
-        var workspace = Blockly.Workspace.WorkspaceDB_[workspaceId];
+      var workspaces = Blockly.Workspace.getAll();
+      for (var i = 0, workspace; workspace = workspaces[i]; i++) {
         if (workspace.updateInverseScreenCTM) {
           workspace.updateInverseScreenCTM();
         }

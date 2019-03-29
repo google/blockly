@@ -734,6 +734,18 @@ Blockly.Workspace.getById = function(id) {
   return Blockly.Workspace.WorkspaceDB_[id] || null;
 };
 
+/**
+ * Find all workspaces.
+ * @return {!Array.<!Blockly.Workspace>} Array of workspaces.
+ */
+Blockly.Workspace.getAll = function() {
+  var workspaces = [];
+  for (var workspaceId in Blockly.Workspace.WorkspaceDB_) {
+    workspaces.push(Blockly.Workspace.WorkspaceDB_[workspaceId]);
+  }
+  return workspaces;
+};
+
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.Workspace.prototype['clear'] = Blockly.Workspace.prototype.clear;
 Blockly.Workspace.prototype['clearUndo'] =

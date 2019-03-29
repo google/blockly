@@ -401,7 +401,7 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
 
 /**
  * Set the angle of the trashcan's lid.
- * @param {!number} lidAngle The angle at which to set the lid.
+ * @param {number} lidAngle The angle at which to set the lid.
  * @private
  */
 Blockly.Trashcan.prototype.setLidAngle_ = function(lidAngle) {
@@ -495,7 +495,7 @@ Blockly.Trashcan.prototype.onDelete_ = function() {
  *    content array.
  * @param {!Element} xml An XML tree defining the block and any
  *    connected child blocks.
- * @return {!string} Text representing the XML tree, cleaned of all unnecessary
+ * @return {string} Text representing the XML tree, cleaned of all unnecessary
  * attributes.
  * @private
  */

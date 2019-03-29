@@ -458,8 +458,8 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
  * workspace (what percentage of the bubble is visible).
  * @param {!Object} relativeMin The position of the top-left corner of the
  *    bubble relative to the anchor point.
- * @param {!number} relativeMin.x The x-position of the relativeMin.
- * @param {!number} relativeMin.y The y-position of the relativeMin.
+ * @param {number} relativeMin.x The x-position of the relativeMin.
+ * @param {number} relativeMin.y The y-position of the relativeMin.
  * @param {!Object} metrics The metrics of the workspace the bubble will
  *    appear in.
  * @return {number} The percentage of the bubble that is visible.
@@ -772,7 +772,7 @@ Blockly.Bubble.prototype.dispose = function() {
 /**
  * Move this bubble during a drag, taking into account whether or not there is
  * a drag surface.
- * @param {?Blockly.BlockDragSurfaceSvg} dragSurface The surface that carries
+ * @param {Blockly.BlockDragSurfaceSvg} dragSurface The surface that carries
  *     rendered items during a drag, or null if no drag surface is in use.
  * @param {!goog.math.Coordinate} newLoc The location to translate to, in
  *     workspace coordinates.

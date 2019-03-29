@@ -433,8 +433,8 @@ Blockly.utils.tokenizeInterpolation = function(message) {
  * For example, "%{bky_my_msg}" and "%{BKY_MY_MSG}" will both be replaced with
  * the value in Blockly.Msg['MY_MSG'].
  * @param {string|?} message Message, which may be a string that contains
- *                           string table references.
- * @return {!string} String with message references replaced.
+ *     string table references.
+ * @return {string} String with message references replaced.
  */
 Blockly.utils.replaceMessageReferences = function(message) {
   if (typeof message != 'string') {
@@ -1032,10 +1032,10 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
 
 /**
  * Clamp the provided number between the lower bound and the upper bound.
- * @param {Number} lowerBound The desired lower bound.
- * @param {Number} number The number to clamp.
- * @param {Number} upperBound The desired upper bound.
- * @return {Number} The clamped number.
+ * @param {number} lowerBound The desired lower bound.
+ * @param {number} number The number to clamp.
+ * @param {number} upperBound The desired upper bound.
+ * @return {number} The clamped number.
  * @package
  */
 Blockly.utils.clampNumber = function(lowerBound, number, upperBound) {

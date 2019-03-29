@@ -160,7 +160,7 @@ Blockly.FieldVariable.prototype.getText = function() {
  * Get the variable model for the selected variable.
  * Not guaranteed to be in the variable map on the workspace (e.g. if accessed
  * after the variable has been deleted).
- * @return {?Blockly.VariableModel} The selected variable, or null if none was
+ * @return {Blockly.VariableModel} The selected variable, or null if none was
  *     selected.
  * @package
  */

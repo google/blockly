@@ -100,7 +100,7 @@ Blockly.WorkspaceComment = function(workspace, content, height, width, opt_id) {
 
   /**
    * @protected
-   * @type {!string}
+   * @type {string}
    */
   this.content_ = content;
 
@@ -256,7 +256,7 @@ Blockly.WorkspaceComment.prototype.setContent = function(content) {
 
 /**
  * Encode a comment subtree as XML with XY coordinates.
- * @param {boolean=} opt_noId True if the encoder should skip the comment id.
+ * @param {boolean=} opt_noId True if the encoder should skip the comment ID.
  * @return {!Element} Tree of XML elements.
  * @package
  */
@@ -273,7 +273,7 @@ Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
  * Encode a comment subtree as XML, but don't serialize the XY coordinates.
  * This method avoids some expensive metrics-related calls that are made in
  * toXmlWithXY().
- * @param {boolean=} opt_noId True if the encoder should skip the comment id.
+ * @param {boolean=} opt_noId True if the encoder should skip the comment ID.
  * @return {!Element} Tree of XML elements.
  * @package
  */

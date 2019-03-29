@@ -213,7 +213,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
   Blockly.DropDownDiv.showPositionedByField(this);
   // The angle picker is different from other fields in that it updates on
   // mousemove even if it's not in the middle of a drag.  In future we may
-  // change this behavior.  For now, using bindEvent_ instead of
+  // change this behaviour.  For now, using bindEvent_ instead of
   // bindEventWithChecks_ allows it to work without a mousedown/touchstart.
   this.clickWrapper_ =
       Blockly.bindEvent_(svg, 'click', this, this.hide_.bind(this));

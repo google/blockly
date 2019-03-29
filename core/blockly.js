@@ -114,7 +114,7 @@ Blockly.cache3dSupported_ = null;
 
 /**
  * Holds all Blockly style attributes.
- * @type {?Blockly.Theme}
+ * @type {Blockly.Theme}
  * @private
  */
 Blockly.theme_ = null;
@@ -745,7 +745,7 @@ Blockly.updateBlockStyles_ = function(blocks) {
 
 /**
  * Gets the theme.
- * @return {?Blockly.Theme} Theme for Blockly.
+ * @return {Blockly.Theme} Theme for Blockly.
  */
 Blockly.getTheme = function() {
   return this.theme_;

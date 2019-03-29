@@ -354,7 +354,7 @@ Blockly.WorkspaceSvg.prototype.configureContextMenu = null;
 /**
  * In a flyout, the target workspace where blocks should be placed after a drag.
  * Otherwise null.
- * @type {?Blockly.WorkspaceSvg}
+ * @type {Blockly.WorkspaceSvg}
  * @package
  */
 Blockly.WorkspaceSvg.prototype.targetWorkspace = null;
@@ -892,7 +892,7 @@ Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
 };
 
 /**
- * @return {?Blockly.BlockDragSurfaceSvg} This workspace's block drag surface,
+ * @return {Blockly.BlockDragSurfaceSvg} This workspace's block drag surface,
  *     if one is in use.
  * @package
  */
@@ -1159,7 +1159,7 @@ Blockly.WorkspaceSvg.prototype.deleteVariableById = function(id) {
  *     their type. This will default to '' which is a specific type.
  * @param {string=} opt_id The unique ID of the variable. This will default to
  *     a UUID.
- * @return {?Blockly.VariableModel} The newly created variable.
+ * @return {Blockly.VariableModel} The newly created variable.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.createVariable = function(name,

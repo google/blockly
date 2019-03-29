@@ -418,7 +418,7 @@ Blockly.Variables.promptName = function(promptText, defaultText, callback) {
  * @param {string} type The type to exclude from the search.
  * @param {!Blockly.Workspace} workspace The workspace to search for the
  *     variable.
- * @return {?Blockly.VariableModel} The variable with the given name and a
+ * @return {Blockly.VariableModel} The variable with the given name and a
  *     different type, or null if none was found.
  * @private
  */
@@ -439,7 +439,7 @@ Blockly.Variables.nameUsedWithOtherType_ = function(name, type, workspace) {
  * @param {string} name The name to search for.
  * @param {!Blockly.Workspace} workspace The workspace to search for the
  *     variable.
- * @return {?Blockly.VariableModel} The variable with the given name,
+ * @return {Blockly.VariableModel} The variable with the given name,
  *     or null if none was found.
  * @private
  */
@@ -525,7 +525,7 @@ Blockly.Variables.getOrCreateVariablePackage = function(workspace, id, opt_name,
  *     Only used if lookup by ID fails.
  * @param {string=} opt_type The type to use to look up the variable.
  *     Only used if lookup by ID fails.
- * @return {?Blockly.VariableModel} The variable corresponding to the given ID
+ * @return {Blockly.VariableModel} The variable corresponding to the given ID
  *     or name + type combination, or null if not found.
  * @package
  */

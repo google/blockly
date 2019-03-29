@@ -379,14 +379,14 @@ Blockly.Workspace.prototype.renameVariableById = function(id, newName) {
 
 /**
  * Create a variable with a given name, optional type, and optional ID.
- * @param {!string} name The name of the variable. This must be unique across
+ * @param {string} name The name of the variable. This must be unique across
  *     variables and procedures.
  * @param {string=} opt_type The type of the variable like 'int' or 'string'.
  *     Does not need to be unique. Field_variable can filter variables based on
  *     their type. This will default to '' which is a specific type.
  * @param {string=} opt_id The unique ID of the variable. This will default to
  *     a UUID.
- * @return {?Blockly.VariableModel} The newly created variable.
+ * @return {Blockly.VariableModel} The newly created variable.
  */
 Blockly.Workspace.prototype.createVariable = function(name, opt_type, opt_id) {
   return this.variableMap_.createVariable(name, opt_type, opt_id);
@@ -439,10 +439,10 @@ Blockly.Workspace.prototype.variableIndexOf = function(_name) {
 /**
  * Find the variable by the given name and return it. Return null if it is not
  *     found.
- * @param {!string} name The name to check for.
+ * @param {string} name The name to check for.
  * @param {string=} opt_type The type of the variable.  If not provided it
  *     defaults to the empty string, which is a specific type.
- * @return {?Blockly.VariableModel} The variable with the given name.
+ * @return {Blockly.VariableModel} The variable with the given name.
  */
 // TODO (#1199): Possibly delete this function.
 Blockly.Workspace.prototype.getVariable = function(name, opt_type) {
@@ -452,8 +452,8 @@ Blockly.Workspace.prototype.getVariable = function(name, opt_type) {
 /**
  * Find the variable by the given ID and return it. Return null if it is not
  *     found.
- * @param {!string} id The ID to check for.
- * @return {?Blockly.VariableModel} The variable with the given ID.
+ * @param {string} id The ID to check for.
+ * @return {Blockly.VariableModel} The variable with the given ID.
  */
 Blockly.Workspace.prototype.getVariableById = function(id) {
   return this.variableMap_.getVariableById(id);
@@ -622,8 +622,7 @@ Blockly.Workspace.prototype.clearUndo = function() {
  * new change listener might be called with events that occurred a few
  * milliseconds before the change listener was added.
  * @param {!Function} func Function to call.
- * @return {!Function} Function that can be passed to
- *     removeChangeListener.
+ * @return {!Function} Obsolete return value, ignore.
  */
 Blockly.Workspace.prototype.addChangeListener = function(func) {
   this.listeners_.push(func);
@@ -658,7 +657,7 @@ Blockly.Workspace.prototype.fireChangeListener = function(event) {
 /**
  * Find the block on this workspace with the specified ID.
  * @param {string} id ID of block to find.
- * @return {Blockly.Block} The sought after block or null if not found.
+ * @return {Blockly.Block} The sought after block, or null if not found.
  */
 Blockly.Workspace.prototype.getBlockById = function(id) {
   return this.blockDB_[id] || null;
@@ -667,7 +666,7 @@ Blockly.Workspace.prototype.getBlockById = function(id) {
 /**
  * Find the comment on this workspace with the specified ID.
  * @param {string} id ID of comment to find.
- * @return {Blockly.WorkspaceComment} The sought after comment or null if not
+ * @return {Blockly.WorkspaceComment} The sought after comment, or null if not
  *     found.
  * @package
  */
@@ -696,7 +695,7 @@ Blockly.Workspace.prototype.allInputsFilled = function(
 /**
  * Return the variable map that contains "potential" variables.
  * These exist in the flyout but not in the workspace.
- * @return {?Blockly.VariableMap} The potential variable map.
+ * @return {Blockly.VariableMap} The potential variable map.
  * @package
  */
 Blockly.Workspace.prototype.getPotentialVariableMap = function() {
@@ -713,7 +712,7 @@ Blockly.Workspace.prototype.createPotentialVariableMap = function() {
 
 /**
  * Return the map of all variables on the workspace.
- * @return {?Blockly.VariableMap} The  variable map.
+ * @return {Blockly.VariableMap} The variable map.
  */
 Blockly.Workspace.prototype.getVariableMap = function() {
   return this.variableMap_;

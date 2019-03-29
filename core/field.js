@@ -61,7 +61,7 @@ Blockly.Field.TYPE_MAP_ = {};
 /**
  * Registers a field type. May also override an existing field type.
  * Blockly.Field.fromJson uses this registry to find the appropriate field.
- * @param {!string} type The field type name as used in the JSON definition.
+ * @param {string} type The field type name as used in the JSON definition.
  * @param {!{fromJson: Function}} fieldClass The field class containing a
  *     fromJson function that can construct an instance of the field.
  * @throws {Error} if the type name is empty, or the fieldClass is not an
@@ -83,7 +83,7 @@ Blockly.Field.register = function(type, fieldClass) {
  * Blockly.Field.register.
  * @param {!Object} options A JSON object with a type and options specific
  *     to the field type.
- * @return {?Blockly.Field} The new field instance or null if a field wasn't
+ * @return {Blockly.Field} The new field instance or null if a field wasn't
  *     found with the given type name
  * @package
  */

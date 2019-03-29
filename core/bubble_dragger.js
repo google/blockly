@@ -85,7 +85,7 @@ Blockly.BubbleDragger = function(bubble, workspace) {
   /**
    * The drag surface to move bubbles to during a drag, or null if none should
    * be used.  Block dragging and bubble dragging use the same surface.
-   * @type {?Blockly.BlockDragSurfaceSvg}
+   * @type {Blockly.BlockDragSurfaceSvg}
    * @private
    */
   this.dragSurface_ =

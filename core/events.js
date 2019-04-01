@@ -249,12 +249,11 @@ Blockly.Events.filter = function(queueIn, forward) {
           (lastEvent.element == 'commentOpen' ||
            lastEvent.element == 'mutatorOpen' ||
            lastEvent.element == 'warningOpen')) {
-        // Merge click events.
-        lastEvent.newValue = event.newValue;
+        // Drop click events caused by opening/closing bubbles.
       } else {
         // Collision: newer events should merge into this event to maintain
         // order.
-        hash[key] = { event: event, index: 1};
+        hash[key] = {event: event, index: 1};
         mergedQueue.push(event);
       }
     }

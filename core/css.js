@@ -874,7 +874,7 @@ Blockly.Css.CONTENT = [
   '.blocklyWidgetDiv .goog-menuitem.goog-menuitem-rtl, ',
   '.blocklyDropDownDiv .goog-menuitem.goog-menuitem-rtl {',
      /* Flip left/right padding for BiDi. */
-    'padding-left: 7em;',
+    'padding-left: 5px;',
     'padding-right: 28px;',
   '}',
 
@@ -969,6 +969,15 @@ Blockly.Css.CONTENT = [
     'float: left;',
     'margin-left: -24px;',
   '}',
+
+  '.blocklyWidgetDiv .goog-menuitem-rtl .goog-menuitem-checkbox, ',
+  '.blocklyWidgetDiv .goog-menuitem-rtl .goog-menuitem-icon, ',
+  '.blocklyDropDownDiv .goog-menuitem-rtl .goog-menuitem-checkbox, ',
+  '.blocklyDropDownDiv .goog-menuitem-rtl .goog-menuitem-icon {',
+    'float: right;',
+    'margin-right: -24px;',
+  '}',
+
 
   /* Keyboard shortcut ("accelerator") style. */
   '.blocklyWidgetDiv .goog-menuitem-accel, ',

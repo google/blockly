@@ -154,18 +154,32 @@ Blockly.HorizontalFlyout.prototype.position = function() {
 
   // X is always 0 since this is a horizontal flyout.
   var x = 0;
-  // If there is a toolbox.
-  if (targetWorkspaceMetrics.toolboxHeight) {
-    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
-      var y = targetWorkspaceMetrics.toolboxHeight;
+  // If this flyout is the toolbox flyout.
+  if (targetWorkspaceMetrics.toolboxPosition == this.toolboxPosition_) {
+    // If there is a toolbox.
+    if (targetWorkspaceMetrics.toolboxHeight) {
+      if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+        var y = targetWorkspaceMetrics.toolboxHeight;
+      } else {
+        var y = targetWorkspaceMetrics.viewHeight - this.height_;
+      }
     } else {
-      var y = targetWorkspaceMetrics.viewHeight - this.height_;
+      if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+        var y = 0;
+      } else {
+        var y = targetWorkspaceMetrics.viewHeight;
+      }
     }
   } else {
     if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
       var y = 0;
     } else {
-      var y = targetWorkspaceMetrics.viewHeight;
+      // Because the anchor point of the flyout is on the top, but we want
+      // to align the bottom edge of the flyout with the bottom edge of the
+      // blocklyDiv, we calculate the full height of the div minus the height
+      // of the flyout.
+      var y = targetWorkspaceMetrics.viewHeight
+        + targetWorkspaceMetrics.absoluteTop - this.height_;
     }
   }
   this.positionAt_(this.width_, this.height_, x, y);
@@ -303,7 +317,7 @@ Blockly.HorizontalFlyout.prototype.layout_ = function(contents, gaps) {
  * determine if a new block should be created or if the flyout should scroll.
  * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at mouse down, in pixel units.
- * @return {boolean} true if the drag is toward the workspace.
+ * @return {boolean} True if the drag is toward the workspace.
  * @package
  */
 Blockly.HorizontalFlyout.prototype.isDragTowardWorkspace = function(

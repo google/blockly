@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Şərh əlavə et";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "'%1' dəyişənini silmək mümkün deyil, çünki o '%2' funksiyasının təyin hissəsidir";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Qiyməti dəyiş:";
 Blockly.Msg["CLEAN_UP"] = "Blokları təmizlə";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Blokları yığ";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Bloku yığ";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "rəng 1";

@@ -37,7 +37,7 @@ goog.require('Blockly.Events.Abstract');
  * categories).
  * UI events do not undo or redo.
  * @param {Blockly.Block} block The affected block.
- * @param {string} element One of 'selected', 'comment', 'mutator', etc.
+ * @param {string} element One of 'selected', 'comment', 'mutatorOpen', etc.
  * @param {*} oldValue Previous value of element.
  * @param {*} newValue New value of element.
  * @extends {Blockly.Events.Abstract}

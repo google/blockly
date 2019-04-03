@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Lisää kommentti";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Ei voida poistaa muuttujaa '%1' koska se on osa funktion määritelmää '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Muuta arvoa:";
 Blockly.Msg["CLEAN_UP"] = "Siivoa lohkot";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Sulje lohkot";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Sulje lohko";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "väri 1";

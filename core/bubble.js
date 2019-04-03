@@ -458,11 +458,11 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
  * workspace (what percentage of the bubble is visible).
  * @param {!Object} relativeMin The position of the top-left corner of the
  *    bubble relative to the anchor point.
- * @param {!number} relativeMin.x The x-position of the relativeMin.
- * @param {!number} relativeMin.y The y-position of the relativeMin.
+ * @param {number} relativeMin.x The x-position of the relativeMin.
+ * @param {number} relativeMin.y The y-position of the relativeMin.
  * @param {!Object} metrics The metrics of the workspace the bubble will
  *    appear in.
- * @returns {number} The percentage of the bubble that is visible.
+ * @return {number} The percentage of the bubble that is visible.
  * @private
  */
 Blockly.Bubble.prototype.getOverlap_ = function(relativeMin, metrics) {
@@ -508,7 +508,7 @@ Blockly.Bubble.prototype.getOverlap_ = function(relativeMin, metrics) {
  * bubble is shown.
  * @param {!Object} metrics The metrics of the workspace the bubble will
  *    appear in.
- * @returns {number} The optimal horizontal position of the top-left corner
+ * @return {number} The optimal horizontal position of the top-left corner
  *    of the bubble.
  * @private
  */
@@ -542,7 +542,7 @@ Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(metrics) {
   if (this.workspace_.RTL) {
     if (bubbleLeft < workspaceLeft) {
       // Slide the bubble right until it is onscreen.
-      relativeLeft = -(workspaceLeft - this.anchorXY_.x  + this.width_);
+      relativeLeft = -(workspaceLeft - this.anchorXY_.x + this.width_);
     } else if (bubbleRight > workspaceRight) {
       // Slide the bubble left until it is onscreen.
       relativeLeft = -(workspaceRight - this.anchorXY_.x);
@@ -566,7 +566,7 @@ Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(metrics) {
  * bubble is shown.
  * @param {!Object} metrics The metrics of the workspace the bubble will
  *    appear in.
- * @returns {number} The optimal vertical position of the top-left corner
+ * @return {number} The optimal vertical position of the top-left corner
  *    of the bubble.
  * @private
  */
@@ -772,7 +772,7 @@ Blockly.Bubble.prototype.dispose = function() {
 /**
  * Move this bubble during a drag, taking into account whether or not there is
  * a drag surface.
- * @param {?Blockly.BlockDragSurfaceSvg} dragSurface The surface that carries
+ * @param {Blockly.BlockDragSurfaceSvg} dragSurface The surface that carries
  *     rendered items during a drag, or null if no drag surface is in use.
  * @param {!goog.math.Coordinate} newLoc The location to translate to, in
  *     workspace coordinates.

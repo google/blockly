@@ -354,7 +354,7 @@ Blockly.WorkspaceSvg.prototype.configureContextMenu = null;
 /**
  * In a flyout, the target workspace where blocks should be placed after a drag.
  * Otherwise null.
- * @type {?Blockly.WorkspaceSvg}
+ * @type {Blockly.WorkspaceSvg}
  * @package
  */
 Blockly.WorkspaceSvg.prototype.targetWorkspace = null;
@@ -594,12 +594,9 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.grid_ = null;
   }
 
-  if (this.toolboxCategoryCallbacks_) {
-    this.toolboxCategoryCallbacks_ = null;
-  }
-  if (this.flyoutButtonCallbacks_) {
-    this.flyoutButtonCallbacks_ = null;
-  }
+  this.toolboxCategoryCallbacks_ = null;
+  this.flyoutButtonCallbacks_ = null;
+
   if (!this.options.parentWorkspace) {
     // Top-most workspace.  Dispose of the div that the
     // SVG is injected into (i.e. injectionDiv).
@@ -771,7 +768,7 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled =
     /* eslint-disable indent */
   var currScroll = goog.dom.getDocumentScroll();
   if (!goog.math.Coordinate.equals(this.lastRecordedPageScroll_,
-     currScroll)) {
+      currScroll)) {
     this.lastRecordedPageScroll_ = currScroll;
     this.updateScreenCalculations_();
   }
@@ -815,9 +812,9 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
 /**
  * Translate this workspace to new coordinates.
  * @param {number} x Horizontal translation, in pixel units relative to the
- *    top left of the blockly div.
+ *    top left of the Blockly div.
  * @param {number} y Vertical translation, in pixel units relative to the
- *    top left of the blockly div.
+ *    top left of the Blockly div.
  */
 Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
   if (this.useWorkspaceDragSurface_ && this.isDragSurfaceActive_) {
@@ -895,7 +892,7 @@ Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
 };
 
 /**
- * @return {?Blockly.BlockDragSurfaceSvg} This workspace's block drag surface,
+ * @return {Blockly.BlockDragSurfaceSvg} This workspace's block drag surface,
  *     if one is in use.
  * @package
  */
@@ -1162,7 +1159,7 @@ Blockly.WorkspaceSvg.prototype.deleteVariableById = function(id) {
  *     their type. This will default to '' which is a specific type.
  * @param {string=} opt_id The unique ID of the variable. This will default to
  *     a UUID.
- * @return {?Blockly.VariableModel} The newly created variable.
+ * @return {Blockly.VariableModel} The newly created variable.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.createVariable = function(name,
@@ -1269,15 +1266,15 @@ Blockly.WorkspaceSvg.prototype.isDraggable = function() {
  * Should the workspace have bounded content? Used to tell if the
  * workspace's content should be sized so that it can move (bounded) or not
  * (exact sizing).
- * @returns {boolean} True if the workspace should be bounded, false otherwise.
+ * @return {boolean} True if the workspace should be bounded, false otherwise.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
-  return (this.options.moveOptions && this.options.moveOptions.scrollbars)
-      || (this.options.moveOptions && this.options.moveOptions.wheel)
-      || (this.options.moveOptions && this.options.moveOptions.drag)
-      || (this.options.zoomOptions && this.options.zoomOptions.controls)
-      || (this.options.zoomOptions && this.options.zoomOptions.wheel);
+  return (this.options.moveOptions && this.options.moveOptions.scrollbars) ||
+      (this.options.moveOptions && this.options.moveOptions.wheel) ||
+      (this.options.moveOptions && this.options.moveOptions.drag) ||
+      (this.options.zoomOptions && this.options.zoomOptions.controls) ||
+      (this.options.zoomOptions && this.options.zoomOptions.wheel);
 };
 
 /**
@@ -1288,14 +1285,14 @@ Blockly.WorkspaceSvg.prototype.isContentBounded = function() {
  * through zooming with the scroll wheel (since the zoom is centered on the
  * mouse position). This does not include zooming with the zoom controls
  * since the X Y coordinates are decided programmatically.
- * @returns {boolean} True if the workspace is movable, false otherwise.
+ * @return {boolean} True if the workspace is movable, false otherwise.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.isMovable = function() {
-  return (this.options.moveOptions && this.options.moveOptions.scrollbars)
-    || (this.options.moveOptions && this.options.moveOptions.wheel)
-    || (this.options.moveOptions && this.options.moveOptions.drag)
-    || (this.options.zoomOptions && this.options.zoomOptions.wheel);
+  return (this.options.moveOptions && this.options.moveOptions.scrollbars) ||
+      (this.options.moveOptions && this.options.moveOptions.wheel) ||
+      (this.options.moveOptions && this.options.moveOptions.drag) ||
+      (this.options.zoomOptions && this.options.zoomOptions.wheel);
 };
 
 /**
@@ -1304,33 +1301,35 @@ Blockly.WorkspaceSvg.prototype.isMovable = function() {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
+  // Don't scroll or zoom anything if drag is in progress.
+  if (Blockly.Gesture.inProgress()) {
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
   var canWheelZoom = this.options.zoomOptions && this.options.zoomOptions.wheel;
   var canWheelMove = this.options.moveOptions && this.options.moveOptions.wheel;
   if (!canWheelZoom && !canWheelMove) {
     return;
   }
 
-  // TODO: Remove gesture cancellation and compensate for coordinate skew during
-  // zoom.
-  if (this.currentGesture_) {
-    this.currentGesture_.cancel();
-  }
-
-
   var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
   if (canWheelZoom && (e.ctrlKey || !canWheelMove)) {
-    // The vertical scroll distance that corresponds to a click of a zoom button.
+    // Zoom.
+    // The vertical scroll distance that corresponds to a click of a zoom
+    // button.
     var PIXELS_PER_ZOOM_STEP = 50;
     var delta = -scrollDelta.y / PIXELS_PER_ZOOM_STEP;
     var position = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
         this.getInverseScreenCTM());
     this.zoom(position.x, position.y, delta);
   } else {
+    // Scroll.
     var x = this.scrollX - scrollDelta.x;
     var y = this.scrollY - scrollDelta.y;
 
     if (e.shiftKey && !scrollDelta.x) {
-      // Scroll horizontally (based on vertical scroll delta)
+      // Scroll horizontally (based on vertical scroll delta).
       // This is needed as for some browser/system combinations which do not
       // set deltaX.
       x = this.scrollX - scrollDelta.y;
@@ -1711,7 +1710,7 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
 Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   if (!this.isMovable()) {
     console.warn('Tried to move a non-movable workspace. This could result' +
-      ' in blocks becoming inaccessible.');
+        ' in blocks becoming inaccessible.');
     return;
   }
 
@@ -1780,7 +1779,7 @@ Blockly.WorkspaceSvg.prototype.endCanvasTransition = function() {
 Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
   if (!this.isMovable()) {
     console.warn('Tried to move a non-movable workspace. This could result' +
-      ' in blocks becoming inaccessible.');
+        ' in blocks becoming inaccessible.');
     return;
   }
 
@@ -1802,7 +1801,7 @@ Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
 Blockly.WorkspaceSvg.prototype.centerOnBlock = function(id) {
   if (!this.isMovable()) {
     console.warn('Tried to move a non-movable workspace. This could result' +
-      ' in blocks becoming inaccessible.');
+        ' in blocks becoming inaccessible.');
     return;
   }
 
@@ -2073,9 +2072,9 @@ Blockly.WorkspaceSvg.getContentDimensionsBounded_ = function(ws, svgSize) {
  * .viewWidth: Width of the visible portion of the workspace.
  * .contentHeight: Height of the content.
  * .contentWidth: Width of the content.
- * .svgHeight: Height of the blockly div (the view + the toolbox,
+ * .svgHeight: Height of the Blockly div (the view + the toolbox,
  *    simple or otherwise),
- * .svgWidth: Width of the blockly div (the view + the toolbox,
+ * .svgWidth: Width of the Blockly div (the view + the toolbox,
  *    simple or otherwise),
  * .viewTop: Top-edge of the visible portion of the workspace, relative to
  *     the workspace origin.
@@ -2284,8 +2283,7 @@ Blockly.WorkspaceSvg.prototype.registerToolboxCategoryCallback = function(key,
  *     is registered.
  */
 Blockly.WorkspaceSvg.prototype.getToolboxCategoryCallback = function(key) {
-  var result = this.toolboxCategoryCallbacks_[key];
-  return result ? result : null;
+  return this.toolboxCategoryCallbacks_[key] || null;
 };
 
 /**
@@ -2311,7 +2309,7 @@ Blockly.WorkspaceSvg.prototype.getGesture = function(e) {
   var gesture = this.currentGesture_;
   if (gesture) {
     if (isStart && gesture.hasStarted()) {
-      console.warn('tried to start the same gesture twice');
+      console.warn('Tried to start the same gesture twice.');
       // That's funny.  We must have missed a mouse up.
       // Cancel it, rather than try to retrieve all of the state we need.
       gesture.cancel();

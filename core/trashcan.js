@@ -330,11 +330,11 @@ Blockly.Trashcan.prototype.position = function() {
     // There are no metrics available (workspace is probably not visible).
     return;
   }
-  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT
-    || (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
+  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
+      (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
     // Toolbox starts in the left corner.
     this.left_ = metrics.viewWidth + metrics.absoluteLeft -
-      this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
+        this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
   } else {
     // Toolbox starts in the right corner.
     this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
@@ -401,16 +401,16 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
 
 /**
  * Set the angle of the trashcan's lid.
- * @param {!number} lidAngle The angle at which to set the lid.
+ * @param {number} lidAngle The angle at which to set the lid.
  * @private
  */
 Blockly.Trashcan.prototype.setLidAngle_ = function(lidAngle) {
   var openAtRight = this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT
-    || (this.workspace_.horizontalLayout && this.workspace_.RTL);
+      || (this.workspace_.horizontalLayout && this.workspace_.RTL);
   this.svgLid_.setAttribute('transform', 'rotate(' +
-    (openAtRight ? -lidAngle : lidAngle) + ',' +
-    (openAtRight ? 4 : this.WIDTH_ - 4) + ',' +
-    (this.LID_HEIGHT_ - 2) + ')');
+      (openAtRight ? -lidAngle : lidAngle) + ',' +
+      (openAtRight ? 4 : this.WIDTH_ - 4) + ',' +
+      (this.LID_HEIGHT_ - 2) + ')');
 };
 
 /**
@@ -460,7 +460,7 @@ Blockly.Trashcan.prototype.mouseOut_ = function() {
 
 /**
  * Handle a BLOCK_DELETE event. Adds deleted blocks oldXml to the content array.
- * @returns {!Function} Function to call when a block is deleted.
+ * @return {!Function} Function to call when a block is deleted.
  * @private
  */
 Blockly.Trashcan.prototype.onDelete_ = function() {
@@ -491,11 +491,11 @@ Blockly.Trashcan.prototype.onDelete_ = function() {
 };
 
 /**
- * Converts xml representing a block into text that can be stored in the
+ * Converts XML representing a block into text that can be stored in the
  *    content array.
  * @param {!Element} xml An XML tree defining the block and any
  *    connected child blocks.
- * @returns {!string} Text representing the XML tree, cleaned of all unnecessary
+ * @return {string} Text representing the XML tree, cleaned of all unnecessary
  * attributes.
  * @private
  */

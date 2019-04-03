@@ -270,14 +270,14 @@ Blockly.DELETE_AREA_TRASH = 1;
 Blockly.DELETE_AREA_TOOLBOX = 2;
 
 /**
- * String for use in the "custom" attribute of a category in toolbox xml.
+ * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
  * @const {string}
  */
 Blockly.VARIABLE_CATEGORY_NAME = 'VARIABLE';
 /**
- * String for use in the "custom" attribute of a category in toolbox xml.
+ * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
  * @const {string}
@@ -285,7 +285,7 @@ Blockly.VARIABLE_CATEGORY_NAME = 'VARIABLE';
 Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME = 'VARIABLE_DYNAMIC';
 
 /**
- * String for use in the "custom" attribute of a category in toolbox xml.
+ * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * procedure blocks.
  * @const {string}

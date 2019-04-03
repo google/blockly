@@ -401,5 +401,6 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "If a value is true, then return a second value.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Warning: This block may be used only within a function definition.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Say something..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Say something...",
+	"COLLAPSED_WARNINGS_WARNING": "Collapsed blocks contain warnings."
 }

@@ -172,8 +172,8 @@ Blockly.DropDownDiv.clearContent = function() {
 
 /**
  * Set the colour for the drop-down.
- * @param {string} backgroundColour Any CSS color for the background
- * @param {string} borderColour Any CSS color for the border
+ * @param {string} backgroundColour Any CSS colour for the background.
+ * @param {string} borderColour Any CSS colour for the border.
  */
 Blockly.DropDownDiv.setColour = function(backgroundColour, borderColour) {
   Blockly.DropDownDiv.DIV_.style.backgroundColor = backgroundColour;
@@ -193,10 +193,12 @@ Blockly.DropDownDiv.setCategory = function(category) {
  * by a particular block. The primary position will be below the block,
  * and the secondary position above the block. Drop-down will be
  * constrained to the block's workspace.
- * @param {!Blockly.Field} field The field showing the drop-down
+ * @param {!Blockly.Field} field The field showing the drop-down.
  * @param {!Blockly.Block} block Block to position the drop-down around.
- * @param {Function=} opt_onHide Optional callback for when the drop-down is hidden.
- * @param {Number} opt_secondaryYOffset Optional Y offset for above-block positioning.
+ * @param {Function=} opt_onHide Optional callback for when the drop-down is
+ *   hidden.
+ * @param {number} opt_secondaryYOffset Optional Y offset for above-block
+ *   positioning.
  * @return {boolean} True if the menu rendered below block; false if above.
  */
 Blockly.DropDownDiv.showPositionedByBlock = function(field, block,
@@ -226,9 +228,11 @@ Blockly.DropDownDiv.showPositionedByBlock = function(field, block,
  * by a particular field. The primary position will be below the field,
  * and the secondary position above the field. Drop-down will be
  * constrained to the block's workspace.
- * @param {Object} owner The object showing the drop-down
- * @param {Function=} opt_onHide Optional callback for when the drop-down is hidden.
- * @param {Number} opt_secondaryYOffset Optional Y offset for above-block positioning.
+ * @param {Object} owner The object showing the drop-down.
+ * @param {Function=} opt_onHide Optional callback for when the drop-down is
+ *   hidden.
+ * @param {number} opt_secondaryYOffset Optional Y offset for above-block
+ *   positioning.
  * @return {boolean} True if the menu rendered below block; false if above.
  */
 Blockly.DropDownDiv.showPositionedByField = function(owner,
@@ -297,7 +301,7 @@ Blockly.DropDownDiv.show = function(owner, primaryX, primaryY, secondaryX, secon
 
 /**
  * Get sizing info about the bounding element.
- * @return {!Object} an object containing size information about the bounding
+ * @return {!Object} An object containing size information about the bounding
  *   element (bounding box and width/height).
  * @private
  */
@@ -322,7 +326,7 @@ Blockly.DropDownDiv.getBoundsInfo_ = function() {
  * @param {number} primaryY Desired origin point y, in absolute px
  * @param {number} secondaryX Secondary/alternative origin point x, in absolute px
  * @param {number} secondaryY Secondary/alternative origin point y, in absolute px
- * @returns {Object} Various final metrics, including rendered positions for drop-down and arrow.
+ * @return {Object} Various final metrics, including rendered positions for drop-down and arrow.
  */
 Blockly.DropDownDiv.getPositionMetrics = function(primaryX, primaryY, secondaryX, secondaryY) {
   var boundsInfo = Blockly.DropDownDiv.getBoundsInfo_();
@@ -415,8 +419,8 @@ Blockly.DropDownDiv.isVisible = function() {
 
 /**
  * Hide the menu only if it is owned by the provided object.
- * @param {Object} owner Object which must be owning the drop-down to hide
- * @return {Boolean} True if hidden
+ * @param {Object} owner Object which must be owning the drop-down to hide.
+ * @return {boolean} True if hidden.
  */
 Blockly.DropDownDiv.hideIfOwner = function(owner) {
   if (Blockly.DropDownDiv.owner_ === owner) {

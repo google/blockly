@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "ใส่คำอธิบาย";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "ไม่สามารถลบตัวแปร '%1' ได้เนื่องจากเป็นส่วนหนึ่งของนิยามของฟังก์ชัน '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "เปลี่ยนค่า:";
 Blockly.Msg["CLEAN_UP"] = "จัดเรียงบล็อกให้เป็นแถว";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "ย่อบล็อก";
 Blockly.Msg["COLLAPSE_BLOCK"] = "ย่อบล็อก";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "สีที่ 1";

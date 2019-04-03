@@ -116,10 +116,7 @@ Blockly.Options = function(options) {
   } else {
     var oneBasedIndex = !!options['oneBasedIndex'];
   }
-  var theme = options['theme'];
-  if (theme === undefined) {
-    theme = Blockly.Themes.Classic;
-  }
+  var theme = options['theme'] || Blockly.Themes.Classic;
 
   this.RTL = rtl;
   this.oneBasedIndex = oneBasedIndex;
@@ -165,7 +162,7 @@ Blockly.Options.prototype.getMetrics = null;
 
 /**
  * Parse the user-specified move options, using reasonable defaults where
- *    behavior is unspecified.
+ *    behaviour is unspecified.
  * @param {!Object} options Dictionary of options.
  * @param {!boolean} hasCategories Whether the workspace has categories or not.
  * @return {!Object} A dictionary of normalized options.
@@ -174,8 +171,7 @@ Blockly.Options.prototype.getMetrics = null;
 Blockly.Options.parseMoveOptions = function(options, hasCategories) {
   var move = options['move'] || {};
   var moveOptions = {};
-  if (move['scrollbars'] === undefined
-      && options['scrollbars'] === undefined) {
+  if (move['scrollbars'] === undefined && options['scrollbars'] === undefined) {
     moveOptions.scrollbars = hasCategories;
   } else {
     moveOptions.scrollbars = !!move['scrollbars'] || !!options['scrollbars'];

@@ -187,7 +187,7 @@ Blockly.Comment.prototype.setVisible = function(visible) {
   if ((!this.block_.isEditable() && !this.textarea_) || goog.userAgent.IE) {
     // Steal the code from warnings to make an uneditable text bubble.
     // MSIE does not support foreignobject; textareas are impossible.
-    // http://msdn.microsoft.com/en-us/library/hh834675%28v=vs.85%29.aspx
+    // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034
     // Always treat comments in IE as uneditable.
     Blockly.Warning.prototype.setVisible.call(this, visible);
     return;

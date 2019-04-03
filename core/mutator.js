@@ -459,8 +459,8 @@ Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
 /**
  * Get the parent workspace of a workspace that is inside a mutator, taking into
  * account whether it is a flyout.
- * @param {?Blockly.Workspace} workspace The workspace that is inside a mutator.
- * @return {?Blockly.Workspace} The mutator's parent workspace or null.
+ * @param {Blockly.Workspace} workspace The workspace that is inside a mutator.
+ * @return {Blockly.Workspace} The mutator's parent workspace or null.
  * @public
  */
 Blockly.Mutator.findParentWs = function(workspace) {

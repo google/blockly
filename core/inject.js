@@ -398,7 +398,7 @@ Blockly.init_ = function(mainWorkspace) {
     mainWorkspace.scrollbar = new Blockly.ScrollbarPair(mainWorkspace);
     mainWorkspace.scrollbar.resize();
   } else {
-    mainWorkspace.setMetrics({x: .5, y: .5});
+    mainWorkspace.setMetrics({x: 0.5, y: 0.5});
   }
 
   // Load the sounds.
@@ -421,8 +421,8 @@ Blockly.init_ = function(mainWorkspace) {
 Blockly.inject.bindDocumentEvents_ = function() {
   if (!Blockly.documentEventsBound_) {
     Blockly.bindEventWithChecks_(document, 'scroll', null, function() {
-      for (var workspaceId in Blockly.Workspace.WorkspaceDB_) {
-        var workspace = Blockly.Workspace.WorkspaceDB_[workspaceId];
+      var workspaces = Blockly.Workspace.getAll();
+      for (var i = 0, workspace; workspace = workspaces[i]; i++) {
         if (workspace.updateInverseScreenCTM) {
           workspace.updateInverseScreenCTM();
         }

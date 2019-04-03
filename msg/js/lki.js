@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "گةپ دائن";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "تةغییر مقدار:";
 Blockly.Msg["CLEAN_UP"] = "تمیزکردن بلاکةل";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "چؤیچانن/پشکانن بلاکةل";
 Blockly.Msg["COLLAPSE_BLOCK"] = "چؤیچانن/پشکانن بلاک";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "رةنگ 1";

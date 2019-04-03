@@ -53,7 +53,7 @@ goog.inherits(Blockly.FieldColour, Blockly.Field);
 /**
  * Construct a FieldColour from a JSON arg object.
  * @param {!Object} options A JSON object with options (colour).
- * @returns {!Blockly.FieldColour} The new field instance.
+ * @return {!Blockly.FieldColour} The new field instance.
  * @package
  * @nocollapse
  */

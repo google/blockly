@@ -45,7 +45,7 @@ Blockly.Xml.utils.createElement = function(tagName) {
 
 /**
  * Create text element for XML.
- * @param {text} text Text content.
+ * @param {string} text Text content.
  * @return {!Node} New DOM node.
  * @package
  */

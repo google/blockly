@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Adder commento";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Impossibile deler le variabile '%1' perque illo face parte del definition del function '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Cambiar valor:";
 Blockly.Msg["CLEAN_UP"] = "Rangiar le blocos";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Plicar blocos";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Plicar bloco";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "color 1";

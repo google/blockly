@@ -13,7 +13,8 @@
 			"Elyashiv",
 			"Guycn2",
 			"Deborahjay",
-			"נדב ס"
+			"נדב ס",
+			"Motife"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "פריט",
@@ -40,7 +41,9 @@
 	"CHANGE_VALUE_TITLE": "שנה ערך:",
 	"RENAME_VARIABLE": "שנה את שם המשתנה...",
 	"RENAME_VARIABLE_TITLE": "שנה את שם כל '%1' המשתנים ל:",
-	"NEW_VARIABLE": "משתנה חדש...",
+	"NEW_VARIABLE": "צור משתנה...",
+	"NEW_STRING_VARIABLE": "צור משתנה מחרוזת",
+	"NEW_NUMBER_VARIABLE": "צור משתנה מחרוזת",
 	"NEW_VARIABLE_TYPE_TITLE": "סוג המשתנה החדש:",
 	"NEW_VARIABLE_TITLE": "שם המשתנה החדש:",
 	"VARIABLE_ALREADY_EXISTS": "קיים כבר משתנה בשם \"%1\".",
@@ -179,6 +182,7 @@
 	"MATH_ONLIST_TOOLTIP_RANDOM": "תחזיר רכיב אקראי מרשימה.",
 	"MATH_MODULO_TITLE": "שארית החילוק %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "החזרת השארית מחלוקת שני המספרים.",
+	"MATH_CONSTRAIN_TITLE": "הגבל %1 בין %2 ל %3",
 	"MATH_RANDOM_INT_TITLE": "מספר שלם אקראי בין %1 ל-%2 (כולל)",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "שבר אקראי",
 	"TEXT_TEXT_TOOLTIP": "אות, מילה, או שורת טקסט.",

@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Lisa kommentaar";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Muuda väärtust:";
 Blockly.Msg["CLEAN_UP"] = "Korista plokid kokku";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "Tõmba plokid kokku";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Tõmba plokk kokku";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "1. värvist";

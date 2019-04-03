@@ -355,5 +355,6 @@
 	"PROCEDURES_CREATE_DO": "建立「%1」",
 	"PROCEDURES_IFRETURN_TOOLTIP": "如果值為 true，則返回第二個值。",
 	"PROCEDURES_IFRETURN_WARNING": "警告：這個區塊只可以在定義函式時使用。",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "來說些事情..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "來說些事情...",
+	"COLLAPSED_WARNINGS_WARNING": "收合含有警告的區塊。"
 }

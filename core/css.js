@@ -104,8 +104,8 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
  * @deprecated April 2017.
  */
 Blockly.Css.setCursor = function(cursor) {
-  console.warn('Deprecated call to Blockly.Css.setCursor.' +
-    'See https://github.com/google/blockly/issues/981 for context');
+  console.warn('Deprecated call to Blockly.Css.setCursor. ' +
+      'See https://github.com/google/blockly/issues/981 for context');
 };
 
 /**
@@ -925,8 +925,8 @@ Blockly.Css.CONTENT = [
     'border-color: #d6e9f8;',
     'border-style: dotted;',
     'border-width: 1px 0;',
-    'padding-bottom: 3px;',
-    'padding-top: 3px;',
+    'padding-bottom: 4px;',
+    'padding-top: 4px;',
   '}',
 
   '.blocklyDropDownDiv .goog-menuitem-highlight, ',

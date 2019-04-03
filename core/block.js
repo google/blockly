@@ -397,8 +397,12 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
 };
 
 /**
- * Returns the connection on the only value input on the block, or null if the
- * number of value inputs is not one.
+ * Returns the connection on the value input that is connected to another block.
+ * When an insertion marker is connected to a connection with a block already
+ * attached, the connected block is attached to the insertion marker.
+ * Since only one block can be displaced and attached to the insertion marker
+ * this should only ever return one connection.
+ *
  * @return {Blockly.Connection} The connection on the value input, or null.
  * @private
  */
@@ -406,7 +410,8 @@ Blockly.Block.prototype.getOnlyValueConnection_ = function() {
   var connection = null;
   for (var i = 0; i < this.inputList.length; i++) {
     var thisConnection = this.inputList[i].connection;
-    if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE) {
+    if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE
+        && thisConnection.targetConnection) {
       if (connection) {
         return null; // More than one value input found.
       }

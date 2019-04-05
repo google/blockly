@@ -333,6 +333,7 @@ Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
  */
 Blockly.RenderedConnection.prototype.connect = function(otherConnection) {
   Blockly.RenderedConnection.superClass_.connect.call(this, otherConnection);
+
   // This is a quick check to make sure we aren't doing unecessary work.
   if (this.hidden_ || otherConnection.hidden_) {
     var superiorConnection = this.isSuperior() ? this : otherConnection;

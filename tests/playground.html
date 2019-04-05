@@ -104,7 +104,7 @@ function start() {
           },
         horizontalLayout: side == 'top' || side == 'bottom',
         maxBlocks: Infinity,
-        maxInstances: {'limit_instances': 3},
+        maxInstances: {'test_basic_limit_instances': 3},
         media: '../media/',
         oneBasedIndex: true,
         readOnly: false,
@@ -1105,11 +1105,11 @@ h1 {
   code paths. -->
   <xml id="toolbox-test-blocks" style="display: none">
     <category name="Basic">
-      <block type="empty_block"></block>
-      <block type="empty_block_with_mutator"></block>
-      <block type="value_to_stack"></block>
-      <block type="value_to_statement"></block>
-      <block type="limit_instances"></block>
+      <block type="test_basic_empty"></block>
+      <block type="test_basic_empty_with_mutator"></block>
+      <block type="test_basic_value_to_stack"></block>
+      <block type="test_basic_value_to_statement"></block>
+      <block type="test_basic_limit_instances"></block>
     </category>
     <category name="Drag">
       <label text="Drag each to the workspace"></label>
@@ -1194,29 +1194,29 @@ h1 {
     </category>
     <category name="Fields">
       <label text="Numbers"></label>
-      <block type="test_number">
+      <block type="test_fields_number">
         <field name="NUM">123.456</field>
       </block>
-      <block type="test_integer">
+      <block type="test_fields_integer">
         <field name="NUM">123.456</field>
       </block>
-      <block type="test_number_hundredths">
+      <block type="test_fields_number_hundredths">
         <field name="NUM">123.456</field>
       </block>
-      <block type="test_integer_bounded">
+      <block type="test_fields_integer_bounded">
         <field name="NOTE">60</field>
       </block>
       <label text="Drop-downs"></label>
-      <block type="example_dropdown_long"></block>
-      <block type="example_dropdown_images"></block>
-      <block type="example_dropdown_images_and_text"></block>
+      <block type="test_fields_dropdown_long"></block>
+      <block type="test_fields_dropdown_images"></block>
+      <block type="test_fields_dropdown_images_and_text"></block>
       <label text="Dynamic Drop-downs"></label>
-      <block type="test_dropdown_dynamic"></block>
+      <block type="test_fields_dropdown_dynamic"></block>
       <button text="Add option" callbackKey="addDynamicOption"></button>
       <button text="Remove option" callbackKey="removeDynamicOption"></button>
       <label text="Others"></label>
-      <block type="example_angle"></block>
-      <block type="example_date"></block>
+      <block type="test_fields_angle"></block>
+      <block type="test_fields_date"></block>
     </category>
     <category name="Mutators">
       <label text="logic_compare"></label>
@@ -1247,24 +1247,24 @@ h1 {
     </category>
     <category name="Style">
       <label text="Hats"></label>
-      <block type="styled_event_cap"></block>
+      <block type="test_style_hat"></block>
       <label text="Colour"></label>
-      <block type="block_colour_hex1"></block>
-      <block type="block_colour_hex2"></block>
-      <block type="block_colour_hex3"></block>
-      <block type="block_no_colour"></block>
-      <block type="block_colour_hex4"></block>
-      <block type="block_colour_hex5"></block>
+      <block type="test_style_hex1"></block>
+      <block type="test_style_hex2"></block>
+      <block type="test_style_hex3"></block>
+      <block type="test_style_no_colour"></block>
+      <block type="test_style_hex4"></block>
+      <block type="test_style_hex5"></block>
     </category>
     <category name="Images">
-      <block type="image_datauri"></block>
-      <block type="image_small"></block>
-      <block type="image_large"></block>
-      <block type="image_fliprtl"></block>
-      <block type="image_missing"></block>
-      <block type="test_with_lots_of_network_icons"></block>
+      <block type="test_images_datauri"></block>
+      <block type="test_images_small"></block>
+      <block type="test_images_large"></block>
+      <block type="test_images_fliprtl"></block>
+      <block type="test_images_missing"></block>
+      <block type="test_images_many_icons"></block>
       <label text="Unicode & Emojis"></label>
-      <block type="emoji_label_robot_face"></block>
+      <block type="test_style_emoji"></block>
       <block type="text">
         <field name="TEXT">Robot face in text field: &#x1f916;</field>
       </block>

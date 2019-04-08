@@ -131,7 +131,7 @@ Blockly.Field.prototype.maxDisplayLength = 50;
 Blockly.Field.prototype.text_ = '';
 
 /**
- * Block this field is attached to.  Starts as null, then in set in init.
+ * Block this field is attached to.  Starts as null, then set in init.
  * @type {Blockly.Block}
  * @protected
  */

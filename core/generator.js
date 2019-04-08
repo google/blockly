@@ -276,7 +276,7 @@ Blockly.Generator.prototype.valueToCode = function(block, name, outerOrder) {
 /**
  * Generate code representing the statement.  Indent the code.
  * This is mainly used in generators. When trying to generate code to evaluate
- * look at using workspaceToCode and blockToCode.
+ * look at using workspaceToCode or blockToCode.
  * @param {!Blockly.Block} block The block containing the input.
  * @param {string} name The name of the input.
  * @return {string} Generated code or '' if no blocks are connected.

@@ -203,7 +203,7 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "Peyni # ra hetana",
 	"LISTS_GET_SUBLIST_END_LAST": "Hetana pey",
 	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
-	"LISTS_SORT_TITLE": "Kılm %1 %2 %3",
+	"LISTS_SORT_TITLE": "%1 %2 %3 weçine",
 	"LISTS_SORT_ORDER_ASCENDING": "zeydıyen",
 	"LISTS_SORT_ORDER_DESCENDING": "Kemeyen",
 	"LISTS_SORT_TYPE_NUMERIC": "Amoriyal",

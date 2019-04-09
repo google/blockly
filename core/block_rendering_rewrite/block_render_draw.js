@@ -45,6 +45,7 @@ Blockly.BlockRendering.render = function(block) {
  */
 Blockly.BlockRendering.Drawer = function(block) {
   this.block_ = block;
+  this.topLeft_ = block.getRelativeToSurfaceXY();
   this.info_ = new Blockly.BlockRendering.RenderInfo(block);
   this.pathObject_ = new Blockly.BlockSvg.PathObject();
   this.steps_ = this.pathObject_.steps;
@@ -65,12 +66,15 @@ Blockly.BlockRendering.Drawer = function(block) {
  */
 Blockly.BlockRendering.Drawer.prototype.draw_ = function() {
   this.block_.height = this.info_.height;
-  this.block_.width = this.info_.widthWithConnectedBlocks;
+  this.block_.width = this.info_.widthWithChildren;
   this.drawOutline_();
   this.drawInternals_();
   this.block_.setPaths_(this.pathObject_);
   this.moveConnections_();
   Blockly.BlockRendering.Debug.drawDebug(this.block_, this.info_, this.pathObject_);
+
+  // Someone out there depends on this existing.
+  this.block_.startHat_ = this.info_.topRow.startHat;
 };
 
 
@@ -79,8 +83,8 @@ Blockly.BlockRendering.Drawer.prototype.draw_ = function() {
  * @private
  */
 Blockly.BlockRendering.Drawer.prototype.drawOutline_ = function() {
-  this.drawTopCorner_();
-  for (var r = 0; r < this.info_.rows.length; r++) {
+  this.drawTop_();
+  for (var r = 1; r < this.info_.rows.length - 1; r++) {
     var row = this.info_.rows[r];
     if (row.hasStatement) {
       this.drawStatementInput_(row);
@@ -91,7 +95,6 @@ Blockly.BlockRendering.Drawer.prototype.drawOutline_ = function() {
     }
   }
   this.drawBottom_();
-  this.drawBottomCorner_();
   this.drawLeft_();
 };
 
@@ -101,12 +104,16 @@ Blockly.BlockRendering.Drawer.prototype.drawOutline_ = function() {
  * details such as hats and rounded corners.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.drawTopCorner_ = function() {
-  this.highlighter_.drawTopCorner();
+Blockly.BlockRendering.Drawer.prototype.drawTop_ = function() {
+  var topRow = this.info_.topRow;
+
+  this.highlighter_.drawTopCorner(topRow);
+  this.highlighter_.drawRightSideRow(topRow);
+
   // Position the cursor at the top-left starting point.
-  if (this.info_.squareTopLeftCorner) {
+  if (topRow.squareCorner) {
     this.steps_.push(BRC.START_POINT);
-    if (this.info_.startHat) {
+    if (topRow.startHat) {
       this.steps_.push(BRC.START_HAT_PATH);
     }
   } else {
@@ -114,10 +121,11 @@ Blockly.BlockRendering.Drawer.prototype.drawTopCorner_ = function() {
   }
 
   // Top edge.
-  if (this.block_.previousConnection) {
+  if (topRow.hasPreviousConnection) {
     this.steps_.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT);
   }
-  this.steps_.push('H', this.info_.maxValueOrDummyWidth);
+  this.steps_.push('H', topRow.width);
+  this.steps_.push('v', topRow.height);
 };
 
 
@@ -153,7 +161,7 @@ Blockly.BlockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   this.steps_.push(BRC.INNER_TOP_LEFT_CORNER);
   this.steps_.push('v', row.height - 2 * BRC.CORNER_RADIUS);
   this.steps_.push(BRC.INNER_BOTTOM_LEFT_CORNER);
-  this.steps_.push('H', this.info_.maxValueOrDummyWidth);
+  this.steps_.push('H', this.info_.width);
 
   // Move the connection.
   var input = row.getLastInput();
@@ -187,27 +195,43 @@ Blockly.BlockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
  * @private
  */
 Blockly.BlockRendering.Drawer.prototype.drawBottom_ = function() {
-  if (this.block_.nextConnection) {
+  var bottomRow = this.info_.bottomRow;
+  this.highlighter_.drawBottomCorner(bottomRow);
+  if (bottomRow.hasNextConnection) {
+    this.steps_.push('v', bottomRow.height - BRC.NOTCH_HEIGHT);
     this.steps_.push('H', (BRC.NOTCH_OFFSET_RIGHT + (this.info_.RTL ? 0.5 : - 0.5)) +
         ' ' + BRC.NOTCH_PATH_RIGHT);
+  } else {
+    this.steps_.push('v', bottomRow.height);
   }
-  this.steps_.push('H', BRC.CORNER_RADIUS);
-};
 
-/**
- * Add steps for the bottom left corner of the block, which may be rounded
- * or squared off.
- * @private
- */
-Blockly.BlockRendering.Drawer.prototype.drawBottomCorner_ = function() {
-  this.highlighter_.drawBottomCorner();
-  if (this.info_.squareBottomLeftCorner) {
+  this.steps_.push('H', BRC.CORNER_RADIUS);
+
+  if (bottomRow.squareCorner) {
     this.steps_.push('H 0');
   } else {
     this.steps_.push(BRC.BOTTOM_LEFT_CORNER);
   }
-};
 
+
+
+  if (bottomRow.hasNextConnection) {
+    var connectionX;
+    if (this.info_.RTL) {
+      connectionX = -BRC.NOTCH_OFFSET_LEFT;
+    } else {
+      connectionX = BRC.NOTCH_OFFSET_LEFT;
+    }
+
+    bottomRow.connection.setOffsetInBlock(connectionX,
+        this.info_.height - BRC.NOTCH_HEIGHT - 1);
+    bottomRow.connection.moveToOffset(this.topLeft_);
+    if (bottomRow.connection.isConnected()) {
+      bottomRow.connection.tighten_();
+    }
+  }
+
+};
 
 /**
  * Add steps for the left side of the block, which may include an output
@@ -332,13 +356,14 @@ Blockly.BlockRendering.Drawer.prototype.moveConnections_ = function() {
   var blockTL = this.block_.getRelativeToSurfaceXY();
   // Don't tighten previous or output connections because they are inferior
   // connections.
-  if (this.info_.hasPreviousConnection) {
+  var topRow = this.info_.topRow;
+  if (topRow.hasPreviousConnection) {
     var connectionX = (this.info_.RTL ? -BRC.NOTCH_OFFSET_LEFT : BRC.NOTCH_OFFSET_LEFT);
 
 
     console.log('previous connection goes to ' + connectionX + ', 0');
-    this.block_.previousConnection.setOffsetInBlock(connectionX, 0);
-    this.block_.previousConnection.moveToOffset(blockTL);
+    topRow.connection.setOffsetInBlock(connectionX, 0);
+    topRow.connection.moveToOffset(blockTL);
   }
   if (this.block_.outputConnection) {
     this.block_.outputConnection.moveToOffset(blockTL);
@@ -354,20 +379,4 @@ Blockly.BlockRendering.Drawer.prototype.moveConnections_ = function() {
   //   }
   // }
 
-  if (this.block_.nextConnection) {
-    var connectionX;
-    if (this.info_.RTL) {
-      connectionX = -BRC.NOTCH_OFFSET_LEFT;
-    } else {
-      connectionX = BRC.NOTCH_OFFSET_LEFT;
-    }
-
-    console.log('next connection goes to ' + connectionX + ', ' + this.info_.height);
-    this.block_.nextConnection.setOffsetInBlock(connectionX,
-        this.info_.height - BRC.NOTCH_HEIGHT + 1);
-    this.block_.nextConnection.moveToOffset(blockTL);
-    if (this.block_.nextConnection.isConnected()) {
-      this.block_.nextConnection.tighten_();
-    }
-  }
 };

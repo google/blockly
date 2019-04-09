@@ -51,11 +51,11 @@ Blockly.BlockRendering.Highlighter = function(info, pathObject) {
   this.highlightInlineSteps_ = this.pathObject_.highlightInlineSteps;
 };
 
-Blockly.BlockRendering.Highlighter.prototype.drawTopCorner = function() {
+Blockly.BlockRendering.Highlighter.prototype.drawTopCorner = function(row) {
   // Position the cursor at the top-left starting point.
-  if (this.info_.squareTopLeftCorner) {
+  if (row.squareCorner) {
     this.highlightSteps_.push(BRC.START_POINT_HIGHLIGHT);
-    if (this.info_.startHat) {
+    if (row.startHat) {
       this.highlightSteps_.push(this.RTL ?
           Blockly.BlockSvg.START_HAT_HIGHLIGHT_RTL :
           Blockly.BlockSvg.START_HAT_HIGHLIGHT_LTR);
@@ -68,10 +68,10 @@ Blockly.BlockRendering.Highlighter.prototype.drawTopCorner = function() {
   }
 
   // Top edge.
-  if (this.info_.hasPreviousConnection) {
+  if (row.hasPreviousConnection) {
     this.highlightSteps_.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT_HIGHLIGHT);
   }
-  this.highlightSteps_.push('H', this.info_.maxValueOrDummyWidth - BRC.HIGHLIGHT_OFFSET);
+  this.highlightSteps_.push('H', row.width - BRC.HIGHLIGHT_OFFSET);
 };
 
 Blockly.BlockRendering.Highlighter.prototype.drawValueInput = function(row) {
@@ -86,7 +86,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawValueInput = function(row) {
     this.highlightSteps_.push('v', row.height - BRC.TAB_HEIGHT);
   } else {
     // Short highlight glint at bottom of tab.
-    this.highlightSteps_.push('M', (this.info_.maxValueOrDummyWidth - 5) + ',' +
+    this.highlightSteps_.push('M', (row.width - 5) + ',' +
         (row.yPos + BRC.TAB_HEIGHT - 0.7));
     this.highlightSteps_.push('l', (BRC.TAB_WIDTH * 0.46) + ',-2.1');
   }
@@ -104,14 +104,14 @@ Blockly.BlockRendering.Highlighter.prototype.drawStatementInput = function(row) 
         row.height - 2 * BRC.CORNER_RADIUS);
     this.highlightSteps_.push(
         BRC.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL);
-    this.highlightSteps_.push('H', this.info_.maxValueOrDummyWidth - BRC.HIGHLIGHT_OFFSET);
+    this.highlightSteps_.push('H', this.info_.width - BRC.HIGHLIGHT_OFFSET);
   } else {
     this.highlightSteps_.push('M',
         (x + BRC.DISTANCE_45_OUTSIDE) + ',' +
         (row.yPos + row.height - BRC.DISTANCE_45_OUTSIDE));
     this.highlightSteps_.push(
         BRC.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR);
-    this.highlightSteps_.push('H', this.info_.maxValueOrDummyWidth - BRC.HIGHLIGHT_OFFSET);
+    this.highlightSteps_.push('H', this.info_.width - BRC.HIGHLIGHT_OFFSET);
   }
 };
 
@@ -121,12 +121,16 @@ Blockly.BlockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
   }
 };
 
-Blockly.BlockRendering.Highlighter.prototype.drawBottomCorner = function() {
-  var height = this.info_.blockBottom;
-  // if (this.info_.hasNextConnection) {
-  //   height -= BRC.NOTCH_HEIGHT;
-  // }
-  if (this.info_.squareBottomLeftCorner) {
+Blockly.BlockRendering.Highlighter.prototype.drawBottomCorner = function(row) {
+  var height = this.info_.height;
+  if (row.hasNextConnection) {
+    height -= BRC.NOTCH_HEIGHT;
+  }
+  height -= 2;
+  if (this.info_.RTL) {
+    this.highlightSteps_.push('V', height);
+  }
+  if (row.squareCorner) {
     if (!this.info_.RTL) {
       this.highlightSteps_.push('M',
           BRC.HIGHLIGHT_OFFSET + ',' + (height - BRC.HIGHLIGHT_OFFSET));
@@ -151,7 +155,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawLeft = function() {
   }
 
   if (!this.info_.RTL) {
-    if (this.info_.squareTopLeftCorner) {
+    if (this.info_.topRow.squareCorner) {
       this.highlightSteps_.push('V', BRC.HIGHLIGHT_OFFSET);
     } else {
       this.highlightSteps_.push('V', BRC.CORNER_RADIUS);

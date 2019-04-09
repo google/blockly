@@ -42,24 +42,10 @@ Blockly.BlockRendering.RenderInfo = function(block) {
   this.block_ = block;
 
   /**
-   *
-   * @type {boolean}
-   */
-  this.startHat = block.hat ? block.hat === 'cap' : Blockly.BlockSvg.START_HAT;
-
-  /**
-   * True if the block has a previous connection.
-   * @type {boolean}
-   */
-  this.hasPreviousConnection = !!block.previousConnection;
-
-  /**
    * Whether the block has an output connection.
    * @type {boolean}
    */
   this.hasOutputConnection = !!block.outputConnection;
-
-  this.hasNextConnection = !!block.nextConnection;
 
   /**
    * Whether the block should be rendered as a single line, either because it's
@@ -74,21 +60,6 @@ Blockly.BlockRendering.RenderInfo = function(block) {
    */
   this.RTL = block.RTL;
 
-  var prevBlock = block.getPreviousBlock();
-
-  /**
-   * True if the top left corner of the block should be squared.
-   * @type {boolean}
-   */
-  this.squareTopLeftCorner = !!block.outputConnection ||
-      this.startHat || (prevBlock && prevBlock.getNextBlock() == this);
-
-  /**
-   * True if the bottom left corner of the block should be squared.
-   * @type {boolean}
-   */
-  this.squareBottomLeftCorner = !!block.outputConnection || !!block.getNextBlock();
-
   /**
    * The height of the rendered block, including child blocks.
    * @type {number}
@@ -99,13 +70,14 @@ Blockly.BlockRendering.RenderInfo = function(block) {
    * The width of the rendered block, including child blocks.
    * @type {number}
    */
-  this.width = 0;
+  this.widthWithChildren = 0;
 
   /**
-   *
+   * The width of the rendered block, excluding child blocks.  This is the right
+   * edge of the block when rendered LTR.
    * @type {number}
    */
-  this.rightEdge = 0;
+  this.width = 0;
 
   /**
    *
@@ -118,6 +90,9 @@ Blockly.BlockRendering.RenderInfo = function(block) {
    * @type {Array}
    */
   this.rows = [];
+
+  this.topRow = null;
+  this.bottomRow = null;
 
   this.measure_();
 };
@@ -328,13 +303,13 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
  */
 Blockly.BlockRendering.RenderInfo.prototype.computeBounds_ = function() {
   var widestStatementRowFields = 0;
-  var widestValueOrDummyRow = 0;
+  var blockWidth = 0;
   var widestRowWithConnectedBlocks = 0;
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
     row.measure();
     if (!row.hasStatement) {
-      widestValueOrDummyRow = Math.max(widestValueOrDummyRow, row.width);
+      blockWidth = Math.max(blockWidth, row.width);
     }
     if (row.hasStatement) {
       var statementInput = row.getLastInput();
@@ -349,11 +324,11 @@ Blockly.BlockRendering.RenderInfo.prototype.computeBounds_ = function() {
   this.statementEdge = widestStatementRowFields;
 
   if (widestStatementRowFields) {
-    this.maxValueOrDummyWidth =
-        Math.max(widestValueOrDummyRow,
+    this.width =
+        Math.max(blockWidth,
             widestStatementRowFields + BRC.NOTCH_WIDTH * 2);
   } else {
-    this.maxValueOrDummyWidth = widestValueOrDummyRow;
+    this.width = blockWidth;
   }
 
   for (var r = 0; r < this.rows.length; r++) {
@@ -363,8 +338,8 @@ Blockly.BlockRendering.RenderInfo.prototype.computeBounds_ = function() {
     }
   }
 
-  this.widthWithConnectedBlocks =
-      Math.max(widestValueOrDummyRow, widestRowWithConnectedBlocks);
+  this.widthWithChildren =
+      Math.max(blockWidth, widestRowWithConnectedBlocks);
 };
 
 /**
@@ -378,7 +353,7 @@ Blockly.BlockRendering.RenderInfo.prototype.alignRowElements_ = function() {
     var row = this.rows[r];
     if (!row.hasStatement && !row.hasInlineInput) {
       var currentWidth = row.width;
-      var desiredWidth = this.maxValueOrDummyWidth;
+      var desiredWidth = this.width;
       var missingSpace = desiredWidth - currentWidth;
       if (missingSpace) {
         this.addAlignmentPadding_(row, missingSpace);
@@ -425,11 +400,17 @@ Blockly.BlockRendering.RenderInfo.prototype.addRowSpacing_ = function() {
   this.rows = [];
 
   // There's a spacer before the first row.
-  this.rows.push(this.makeSpacerRow_(null, oldRows[0]));
+  //this.rows.push(this.makeSpacerRow_(null, oldRows[0]));
+  this.topRow = new Blockly.BlockRendering.TopRow(this.block_, this.width);
+  this.rows.push(this.topRow);
   for (var r = 0; r < oldRows.length; r++) {
     this.rows.push(oldRows[r]);
-    this.rows.push(this.makeSpacerRow_(oldRows[r], oldRows[r + 1]));
+    if (r != oldRows.length - 1) {
+      this.rows.push(this.makeSpacerRow_(oldRows[r], oldRows[r + 1]));
+    }
   }
+  this.bottomRow = new Blockly.BlockRendering.BottomRow(this.block_, this.width);
+  this.rows.push(this.bottomRow);
 };
 
 /**
@@ -455,20 +436,7 @@ Blockly.BlockRendering.RenderInfo.prototype.makeSpacerRow_ = function(prev, next
  * @private
  */
 Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
-  if (!prev) {
-    return this.maxValueOrDummyWidth;
-  }
-
-  // spacer row after the last statement input.
-  if (!next && prev.hasStatement) {
-    if (this.isInline) {
-      return this.maxValueOrDummyWidth;
-    } else {
-      return this.maxValueOrDummyWidth;
-    }
-  }
-
-  return this.maxValueOrDummyWidth;
+  return this.width;
 };
 
 /**
@@ -479,22 +447,6 @@ Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, 
  * @private
  */
 Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
-  if (!prev) {
-    if (next && next.hasStatement) {
-      return BRC.LARGE_PADDING;
-    }
-    return BRC.MEDIUM_PADDING;
-  }
-
-  // Slightly taller row after the last statement input.
-  if (!next && prev.hasStatement) {
-    return BRC.LARGE_PADDING;
-  }
-
-  if (!next) {
-    return BRC.MEDIUM_PADDING;
-  }
-
   if (prev.hasExternalInput && next.hasExternalInput) {
     return BRC.LARGE_PADDING;
   }
@@ -529,10 +481,7 @@ Blockly.BlockRendering.RenderInfo.prototype.finalize_ = function() {
   this.blockBottom = yCursor;
   this.overhang = 0;
 
-  // should the next connection be a separate row with its own height?
-  if (this.hasNextConnection) {
-    this.overhang = BRC.NOTCH_HEIGHT;
-  } else if (!this.hasOutputConnection) {
+  if (!this.hasOutputConnection) {
     // No output and no next.
     this.overhang = 2; // for the shadow.
   }

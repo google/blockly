@@ -273,3 +273,69 @@ Blockly.BlockRendering.InRowSpacer = function(width) {
 goog.inherits(Blockly.BlockRendering.InRowSpacer,
     Blockly.BlockRendering.Measurable);
 
+Blockly.BlockRendering.TopRow = function(block, width) {
+  /**
+   *
+   * @type {boolean}
+   */
+  this.startHat = block.hat ? block.hat === 'cap' : Blockly.BlockSvg.START_HAT;
+
+  this.hasPreviousConnection = !!block.previousConnection;
+  this.connection = block.previousConnection;
+
+  var prevBlock = block.getPreviousBlock();
+  /**
+   * True if the top left corner of the block should be squared.
+   * @type {boolean}
+   */
+  this.squareCorner = !!block.outputConnection ||
+      this.startHat || (prevBlock && prevBlock.getNextBlock() == block);
+
+  this.precedesStatement =
+      block.inputList.length &&
+      block.inputList[0].type == Blockly.NEXT_STATEMENT;
+
+  if (this.precedesStatement) {
+    this.height = BRC.LARGE_PADDING;
+  } else {
+    this.height = BRC.MEDIUM_PADDING;
+  }
+
+  this.width = width;
+};
+goog.inherits(Blockly.BlockRendering.TopRow,
+    Blockly.BlockRendering.Measurable);
+
+
+Blockly.BlockRendering.TopRow.prototype.isSpacer = function() {
+  return true;
+};
+
+Blockly.BlockRendering.BottomRow = function(block, width) {
+
+  this.hasNextConnection = !!block.nextConnection;
+  this.connection = block.nextConnection;
+  /**
+   * True if the bottom left corner of the block should be squared.
+   * @type {boolean}
+   */
+  this.squareCorner = !!block.outputConnection || !!block.getNextBlock();
+
+  this.followsStatement =
+      block.inputList.length &&
+      block.inputList[block.inputList.length - 1].type == Blockly.NEXT_STATEMENT;
+
+  if (this.followsStatement) {
+    this.height = BRC.LARGE_PADDING;
+  } else {
+    this.height = BRC.MEDIUM_PADDING;
+  }
+
+  this.width = width;
+};
+goog.inherits(Blockly.BlockRendering.BottomRow,
+    Blockly.BlockRendering.Measurable);
+
+Blockly.BlockRendering.BottomRow.prototype.isSpacer = function() {
+  return true;
+};

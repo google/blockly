@@ -1,3 +1,4 @@
+var testdata = String.raw`
 <xml xmlns="http://www.w3.org/1999/xhtml">
   <block type="unittest_main" x="19" y="106">
     <field name="SUITE_NAME">Loops 3</field>
@@ -733,3 +734,4 @@
     </statement>
   </block>
 </xml>
+`

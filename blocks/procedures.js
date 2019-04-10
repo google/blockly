@@ -409,11 +409,27 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       text: isSaved ? "Overwrite/Update stored '%1' function".replace('%1', name) : "Store '%1' for use in future projects".replace('%1', name),
       enabled: true,
       callback: function() {
-        var xml = Blockly.Xml.blockToDom(block, true);
-        let definitionString = (new XMLSerializer()).serializeToString(xml);
-        definitionString = definitionString.replace(/xmlns=\"(.*?)\" /g, '');
-        storedFunctionsDict[name] = definitionString;
-        localStorage.setItem('storedFunctions', JSON.stringify(storedFunctionsDict));
+
+        if (isSaved) {
+          Blockly.confirm(
+            "Are you sure? You will lose your old '%1' function in the process.".replace('%1', name),
+            function(ok) {
+              if (ok) {
+                var xml = Blockly.Xml.blockToDom(block, true);
+                let definitionString = (new XMLSerializer()).serializeToString(xml);
+                definitionString = definitionString.replace(/xmlns=\"(.*?)\" /g, '');
+                storedFunctionsDict[name] = definitionString;
+                localStorage.setItem('storedFunctions', JSON.stringify(storedFunctionsDict));
+              }
+            });
+        }
+        else {
+          var xml = Blockly.Xml.blockToDom(block, true);
+          let definitionString = (new XMLSerializer()).serializeToString(xml);
+          definitionString = definitionString.replace(/xmlns=\"(.*?)\" /g, '');
+          storedFunctionsDict[name] = definitionString;
+          localStorage.setItem('storedFunctions', JSON.stringify(storedFunctionsDict));
+        }
       }
     };
 

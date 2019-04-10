@@ -1,3 +1,4 @@
+var testdata = String.raw`
 <xml xmlns="http://www.w3.org/1999/xhtml">
   <!-- Do not include <variables> here to test backward compatibility. -->
   <block type="unittest_main" x="0" y="0">
@@ -66,3 +67,4 @@
     <comment pinned="true" h="80" w="160">Intentionally non-connected variable.</comment>
   </block>
 </xml>
+`

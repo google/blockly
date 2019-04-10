@@ -1,3 +1,4 @@
+var testdata = String.raw`
 <xml xmlns="http://www.w3.org/1999/xhtml">
   <block type="procedures_defnoreturn" x="260" y="14">
     <field name="NAME">test colour picker</field>
@@ -316,3 +317,4 @@
     </statement>
   </block>
 </xml>
+`

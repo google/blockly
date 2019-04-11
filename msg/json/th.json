@@ -6,7 +6,8 @@
 			"Horus",
 			"Roysheng",
 			"Aefgh39622",
-			"Nantapat"
+			"Nantapat",
+			"Trisorn Triboon"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "รายการ",
@@ -14,6 +15,7 @@
 	"DUPLICATE_BLOCK": "ทำสำเนา",
 	"ADD_COMMENT": "ใส่คำอธิบาย",
 	"REMOVE_COMMENT": "เอาคำอธิบายออก",
+	"DUPLICATE_COMMENT": "ทำสำเนาความเห็น",
 	"EXTERNAL_INPUTS": "อินพุตภายนอก",
 	"INLINE_INPUTS": "อินพุตในบรรทัด",
 	"DELETE_BLOCK": "ลบบล็อก",
@@ -59,7 +61,7 @@
 	"COLOUR_BLEND_TOOLTIP": "ผสมสองสีเข้าด้วยกันด้วยอัตราส่วน (0.0 - 1.0)",
 	"CONTROLS_REPEAT_HELPURL": "https://en.wikipedia.org/wiki/For_loop",
 	"CONTROLS_REPEAT_TITLE": "ทำซ้ำ %1 ครั้ง",
-	"CONTROLS_REPEAT_INPUT_DO": "ทำ:",
+	"CONTROLS_REPEAT_INPUT_DO": "ทำ",
 	"CONTROLS_REPEAT_TOOLTIP": "ทำซ้ำบางคำสั่งหลายครั้ง",
 	"CONTROLS_WHILEUNTIL_OPERATOR_WHILE": "ทำซ้ำขณะที่",
 	"CONTROLS_WHILEUNTIL_OPERATOR_UNTIL": "ทำซ้ำจนกระทั่ง",

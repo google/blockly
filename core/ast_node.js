@@ -48,7 +48,7 @@ Blockly.ASTNode = function(type, location, params) {
    */
   this.location_ = location;
 
-  this.processParams(params);
+  // this.processParams(params);
 
 };
 
@@ -66,20 +66,22 @@ Blockly.ASTNode.types = {
   WORKSPACE: 'workspace'
 };
 
-Blockly.ASTNode.prototype.processParams = function(params){
-  if (!params) {return;}
-  if (params['position']) {
-    this.position_ = params['position'];
-  }
+Blockly.ASTNode.wsMove = 10;
 
-  if (params['block']) {
-    this.block_ = params['block'];
-  }
+// Blockly.ASTNode.prototype.processParams = function(params){
+//   if (!params) {return;}
+//   if (params['position']) {
+//     this.position_ = params['position'];
+//   }
 
-  if (params['name']) {
-    this.name_ = params['name'];
-  }
-};
+//   if (params['block']) {
+//     this.block_ = params['block'];
+//   }
+
+//   if (params['name']) {
+//     this.name_ = params['name'];
+//   }
+// };
 
 /**
  * Gets the current location of the cursor.
@@ -88,10 +90,6 @@ Blockly.ASTNode.prototype.processParams = function(params){
  */
 Blockly.ASTNode.prototype.getLocation = function() {
   return this.location_;
-};
-
-Blockly.ASTNode.prototype.setLocationType = function(type) {
-  this.type_ = type;
 };
 
 /**
@@ -194,7 +192,8 @@ Blockly.ASTNode.prototype.findNextForInput_ = function(location, parentInput){
       break;
     } else if (newInput.connection) {
       var connection = newInput.connection;
-      nextLocation = new Blockly.ASTNode(Blockly.ASTNode.types.INPUT, connection);
+      nextLocation = new Blockly.ASTNode(Blockly.ASTNode.types.INPUT,
+          connection);
       break;
     }
   }
@@ -377,49 +376,56 @@ Blockly.ASTNode.prototype.findOutLocationForStack_ = function(location) {
  * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
  */
 Blockly.ASTNode.prototype.next = function() {
-  var location = this.getLocation();
   if (!location) {return null;}
-  var newAstNode;
-  var parentInput = this.findParentInput_();
+  var newAstNode = null;
 
   switch (this.type_) {
+    case Blockly.ASTNode.types.WORKSPACE:
+      var newX = this.location_.x + Blockly.ASTNode.wsMove;
+      var newLocation = new goog.math.Coordinate(newX, this.location_.y);
+      newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.WORKSPACE,
+          newLocation);
+      break;
     case Blockly.ASTNode.types.STACK:
       var nextTopBlock = this.navigateBetweenStacks_(true);
       newAstNode = this.findTopASTConnection(nextTopBlock);
-      newAstNode.setLocationType(Blockly.ASTNode.types.STACK);
+      newAstNode.type_ = Blockly.ASTNode.types.STACK;
       break;
 
     case Blockly.ASTNode.types.OUTPUT:
       newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK,
-          location.sourceBlock_);
+          this.location_.sourceBlock_);
       break;
 
     case Blockly.ASTNode.types.FIELD:
-      newAstNode = this.findNextForField_(location, parentInput);
+      var parentInput = this.findParentInput_();
+      newAstNode = this.findNextForField_(this.location_, parentInput);
       break;
 
     case Blockly.ASTNode.types.INPUT:
-      newAstNode = this.findNextForInput_(location, parentInput);
+      var parentInput = this.findParentInput_();
+      newAstNode = this.findNextForInput_(this.location_, parentInput);
       break;
 
     case Blockly.ASTNode.types.BLOCK:
-      newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.NEXT, location.nextConnection);
+      newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.NEXT,
+          this.location_.nextConnection);
       break;
 
     case Blockly.ASTNode.types.PREVIOUS:
-      var output = location.outputConnection;
+      var output = this.location_.outputConnection;
       if (output) {
         newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.OUTPUT,
             output);
       } else {
         newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK,
-            location.sourceBlock_);
+            this.location_.sourceBlock_);
       }
       break;
 
     case Blockly.ASTNode.types.NEXT:
-      if (location.targetBlock()) {
-        newAstNode = this.findTopASTConnection(location.targetBlock());
+      if (this.location_.targetBlock()) {
+        newAstNode = this.findTopASTConnection(this.location_.targetBlock());
       }
       break;
   }
@@ -432,22 +438,25 @@ Blockly.ASTNode.prototype.next = function() {
  * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
  */
 Blockly.ASTNode.prototype.in = function() {
-  var location = this.getLocation();
-  if (!location) {return null;}
+  if (!this.location_) {return null;}
   var newAstNode = null;
-  var newParentInput;
 
   switch (this.type_) {
+    case Blockly.ASTNode.types.WORKSPACE:
+      //TODO: How would this work for multiple workspaces?
+      var firstBlock = Blockly.getMainWorkspace().getTopBlocks();
+      newAstNode = this.findTopASTConnection(firstBlock);
+      newAstNode.type_ = Blockly.ASTNode.types.STACK;
+      break;
     case Blockly.ASTNode.types.STACK:
       newAstNode = this.findTopASTConnection(this.location_.sourceBlock_);
-      // this.isStack_ = false;
-      // this.setType_();
       break;
     case Blockly.ASTNode.types.BLOCK:
-      var inputs = location.inputList;
+      var inputs = this.location_.inputList;
       if (inputs && inputs.length > 0) {
-        newParentInput = inputs[0];
-        var fieldNode = this.findNextEditableField_(location, newParentInput, true);
+        var newParentInput = inputs[0];
+        var fieldNode =
+            this.findNextEditableField_(this.location_, newParentInput, true);
         if (fieldNode) {
           newAstNode = fieldNode;
         } else {
@@ -456,8 +465,8 @@ Blockly.ASTNode.prototype.in = function() {
       }
       break;
     case Blockly.ASTNode.types.INPUT:
-      if (location.targetBlock()) {
-        newAstNode = this.findTopASTConnection(location.targetBlock());
+      if (this.location_.targetBlock()) {
+        newAstNode = this.findTopASTConnection(this.location_.targetBlock());
       }
       break;
   }
@@ -470,47 +479,53 @@ Blockly.ASTNode.prototype.in = function() {
  * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
  */
 Blockly.ASTNode.prototype.prev = function() {
-  var location = this.getLocation();
-  if (!location) {return null;}
-  var parentInput = this.findParentInput_();
-  var isStack = false;
+  if (!this.location_) {return null;}
   var newAstNode;
 
   switch (this.type_) {
+    case Blockly.ASTNode.types.WORKSPACE:
+      var newX = this.location_.x - Blockly.ASTNode.wsMove;
+      var newLocation = new goog.math.Coordinate(newX, this.location_.y);
+      newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.WORKSPACE,
+          newLocation);
+      break;
     case Blockly.ASTNode.types.STACK:
       var nextTopBlock = this.navigateBetweenStacks_(true);
       newAstNode = this.findTopASTConnection(nextTopBlock);
-      newAstNode.setLocationType(Blockly.ASTNode.types.STACK);
+      newAstNode.type_ = Blockly.ASTNode.types.STACK;
       break;
 
     case Blockly.ASTNode.types.OUTPUT:
-      if (location.sourceBlock_ && location.sourceBlock_.previousConnection) {
+      var sourceBlock = this.location_.sourceBlock_;
+      if (sourceBlock && sourceBlock.previousConnection) {
         newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.PREVIOUS,
-            location.sourceBlock_.previousConnection);
+            sourceBlock.previousConnection);
       }
       break;
 
     case Blockly.ASTNode.types.FIELD:
-      newAstNode = this.findPrevForField_(location, parentInput);
+      var parentInput = this.findParentInput_();
+      newAstNode = this.findPrevForField_(this.location_, parentInput);
       break;
 
     case Blockly.ASTNode.types.INPUT:
-      newAstNode = this.findPrevForInput_(location, parentInput);
+      var parentInput = this.findParentInput_();
+      newAstNode = this.findPrevForInput_(this.location_, parentInput);
       break;
 
     case Blockly.ASTNode.types.BLOCK:
-      var output = location.outputConnection;
+      var output = this.location_.outputConnection;
       if (output) {
         newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.OUTPUT,
             output);
       } else {
         newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.PREVIOUS,
-            location.previousConnection);
+            this.location_.previousConnection);
       }
       break;
 
     case Blockly.ASTNode.types.PREVIOUS:
-      var prevBlock = location.targetBlock();
+      var prevBlock = this.location_.targetBlock();
       if (prevBlock) {
         newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.NEXT,
             prevBlock.nextConnection);
@@ -519,7 +534,7 @@ Blockly.ASTNode.prototype.prev = function() {
 
     case Blockly.ASTNode.types.NEXT:
       newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK,
-          location.sourceBlock_);
+          this.location_.sourceBlock_);
       break;
   }
 
@@ -531,32 +546,33 @@ Blockly.ASTNode.prototype.prev = function() {
  * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
  */
 Blockly.ASTNode.prototype.out = function() {
-  var location = this.getLocation();
-  if (!location) {return null;}
+  if (!this.location_) {return null;}
   var newAstNode;
-  var isStack = false;
 
   switch (this.type_) {
     case Blockly.ASTNode.types.STACK:
       break;
 
     case Blockly.ASTNode.types.OUTPUT:
-      newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.INPUT, location.targetConnection);
+      newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.INPUT,
+          this.location_.targetConnection);
       if (!newAstNode) {
-        newAstNode.setLocationType(Blockly.ASTNode.types.STACK);
+        newAstNode.type_ = Blockly.ASTNode.types.STACK;
       }
       break;
 
     case Blockly.ASTNode.types.FIELD:
-      newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, location.sourceBlock_);
+      newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK,
+          this.location_.sourceBlock_);
       break;
 
     case Blockly.ASTNode.types.INPUT:
-      newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, location.sourceBlock_);
+      newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK,
+          this.location_.sourceBlock_);
       break;
 
     case Blockly.ASTNode.types.BLOCK:
-      var outputConnection = location.outputConnection;
+      var outputConnection = this.location_.outputConnection;
       if (outputConnection && outputConnection.targetConnection) {
         newAstNode = new Blockly.ASTNode(Blockly.ASTNode.types.OUTPUT,
             outputConnection.targetConnection);
@@ -567,16 +583,16 @@ Blockly.ASTNode.prototype.out = function() {
         //This is the case where we are on a block that is nested inside a
         //statement input and we need to get the input that connects to the
         //top block
-        newAstNode = this.findOutLocationForStack_(location);
+        newAstNode = this.findOutLocationForStack_(this.location_);
       }
       break;
 
     case Blockly.ASTNode.types.PREVIOUS:
-      newAstNode = this.findOutLocationForStack_(location.sourceBlock_);
+      newAstNode = this.findOutLocationForStack_(this.location_.sourceBlock_);
       break;
 
     case Blockly.ASTNode.types.NEXT:
-      newAstNode = this.findOutLocationForStack_(location.sourceBlock_);
+      newAstNode = this.findOutLocationForStack_(this.location_.sourceBlock_);
       break;
   }
 

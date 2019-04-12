@@ -232,6 +232,19 @@ suite('ASTNode', function() {
         assertEquals(nextNode.getLocation(), this.blocks.D.previousConnection);
         assertEquals(nextNode.getLocationType(), Blockly.ASTNode.types.STACK);
       });
+      test('isStack', function() {
+        var node = new Blockly.ASTNode(Blockly.ASTNode.types.STACK, this.blocks.A.previousConnection);
+        var nextNode = node.next();
+        assertEquals(nextNode.getLocation(), this.blocks.D.previousConnection);
+        assertEquals(nextNode.getLocationType(), Blockly.ASTNode.types.STACK);
+      });
+      test('workspace', function() {
+        var coordinate = new goog.math.Coordinate(100,100);
+        var node = new Blockly.ASTNode(Blockly.ASTNode.types.WORKSPACE, coordinate);
+        var nextNode = node.next();
+        assertEquals(nextNode.getLocation().x, 110);
+        assertEquals(nextNode.getLocationType(), Blockly.ASTNode.types.WORKSPACE);
+      });
     });
     suite('Previous', function() {
       test('previousConnectionTopBlock', function() {
@@ -279,6 +292,13 @@ suite('ASTNode', function() {
         assertEquals(prevNode.getLocation(), this.blocks.A.previousConnection);
         assertEquals(prevNode.getLocationType(), Blockly.ASTNode.types.STACK);
       });
+      test('workspace', function() {
+        var coordinate = new goog.math.Coordinate(100,100);
+        var node = new Blockly.ASTNode(Blockly.ASTNode.types.WORKSPACE, coordinate);
+        var prevNode = node.prev();
+        assertEquals(prevNode.getLocation().x, 90);
+        assertEquals(prevNode.getLocationType(), Blockly.ASTNode.types.WORKSPACE);
+      });
     });
     suite('In', function() {
       test('block', function() {
@@ -310,6 +330,13 @@ suite('ASTNode', function() {
         var inNode = node.in();
         assertEquals(inNode.getLocation(), prevConnection);
         assertEquals(inNode.getLocationType(), Blockly.ASTNode.types.PREVIOUS);
+      });
+      test('workspace', function() {
+        var coordinate = new goog.math.Coordinate(100,100);
+        var node = new Blockly.ASTNode(Blockly.ASTNode.types.WORKSPACE, coordinate);
+        var inNode = node.in();
+        assertEquals(inNode.getLocation(), null);
+        assertEquals(inNode.getLocationType(), Blockly.ASTNode.types.WORKSPACE);
       });
     });
 

@@ -280,8 +280,6 @@ Blockly.FieldAngle.prototype.setText = function(text) {
     return;
   }
   this.updateGraph_();
-  // Cached width is obsolete.  Clear it.
-  this.size_.width = 0;
 };
 
 /**

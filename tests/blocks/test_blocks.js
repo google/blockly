@@ -190,7 +190,64 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
             "text": "NO DATE FIELD"
           }
       }
-    ]
+    ],
+    "colour": 230
+  },
+  {
+    "type": "test_fields_text_input",
+    "message0": "text input %1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "TEXT_INPUT",
+        "text": "default"
+      }
+    ],
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  },
+  {
+    "type": "test_fields_checkbox",
+    "message0": "checkbox %1",
+    "args0": [
+      {
+        "type": "field_checkbox",
+        "name": "CHECKBOX",
+        "checked": true
+      }
+    ],
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  },
+  {
+    "type": "test_fields_colour",
+    "message0": "colour %1",
+    "args0": [
+      {
+        "type": "field_colour",
+        "name": "COLOUR",
+        "colour": "#ff0000"
+      }
+    ],
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  },
+  {
+    "type": "test_fields_variable",
+    "message0": "variable %1",
+    "args0": [
+      {
+        "type": "field_variable",
+        "name": "VARIABLE",
+        "variable": "item"
+      }
+    ],
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
   },
   {
     "type": "test_fields_number",

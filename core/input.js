@@ -163,9 +163,10 @@ Blockly.Input.prototype.isVisible = function() {
 
 /**
  * Sets whether this input is visible or not.
- * Used to collapse/uncollapse a block.
+ * Should only be used to collapse/uncollapse a block.
  * @param {boolean} visible True if visible.
  * @return {!Array.<!Blockly.Block>} List of blocks to render.
+ * @package
  */
 Blockly.Input.prototype.setVisible = function(visible) {
   var renderList = [];

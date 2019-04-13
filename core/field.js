@@ -319,8 +319,10 @@ Blockly.Field.prototype.isVisible = function() {
 };
 
 /**
- * Sets whether this editable field is visible or not.
+ * Sets whether this editable field is visible or not. Should only be called
+ * by input.setVisible.
  * @param {boolean} visible True if visible.
+ * @package
  */
 Blockly.Field.prototype.setVisible = function(visible) {
   if (this.visible_ == visible) {
@@ -330,7 +332,7 @@ Blockly.Field.prototype.setVisible = function(visible) {
   var root = this.getSvgRoot();
   if (root) {
     root.style.display = visible ? 'block' : 'none';
-    this.render_();
+    this.size_.width = 0;
   }
 };
 
@@ -411,11 +413,6 @@ Blockly.Field.prototype.getSvgRoot = function() {
  * @protected
  */
 Blockly.Field.prototype.render_ = function() {
-  if (!this.visible_) {
-    this.size_.width = 0;
-    return;
-  }
-
   // Replace the text.
   this.textElement_.textContent = this.getDisplayText_();
   this.updateWidth();

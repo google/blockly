@@ -127,11 +127,8 @@ Blockly.FieldAngle.prototype.render_ = function() {
   this.textElement_.textContent = this.getDisplayText_();
 
   // Insert degree symbol.
-  if (this.sourceBlock_.RTL) {
-    this.textElement_.insertBefore(this.symbol_, this.textElement_.firstChild);
-  } else {
-    this.textElement_.appendChild(this.symbol_);
-  }
+  // Degree symbol should be left of number, even in RTL (issue #2380).
+  this.textElement_.appendChild(this.symbol_);
   this.updateWidth();
 };
 

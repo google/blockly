@@ -207,8 +207,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "A number."
   },
   {
-    "type": "test_fields_integer",
-    "message0": "integer %1",
+    "type": "test_fields_number_whole",
+    "message0": "precision 1 %1",
     "args0": [
       {
         "type": "field_number",
@@ -219,11 +219,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "style": "math_blocks",
     "output": "Number",
-    "tooltip": "An integer."
+    "tooltip": "The number should be rounded to multiples of 1"
   },
   {
     "type": "test_fields_number_hundredths",
-    "message0": "$ %1",
+    "message0": "precision 0.01 %1",
     "args0": [
       {
         "type": "field_number",
@@ -234,7 +234,37 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "style": "math_blocks",
     "output": "Number",
-    "tooltip": "A dollar amount."
+    "tooltip": "The number should be rounded to multiples of 0.01"
+  },
+  {
+    "type": "test_fields_number_halves",
+    "message0": "precision 0.5 %1",
+    "args0": [
+      {
+        "type": "field_number",
+        "name": "NUM",
+        "precision": 0.5,
+        "text": "0"
+      }
+    ],
+    "style": "math_blocks",
+    "output": "Number",
+    "tooltip": "The number should be rounded to multiples of 0.5"
+  },
+  {
+    "type": "test_fields_number_three_halves",
+    "message0": "precision 1.5 %1",
+    "args0": [
+      {
+        "type": "field_number",
+        "name": "NUM",
+        "precision": 1.5,
+        "text": "0"
+      }
+    ],
+    "style": "math_blocks",
+    "output": "Number",
+    "tooltip": "The number should be rounded to multiples of 1.5"
   },
   {
     "type": "test_fields_integer_bounded",

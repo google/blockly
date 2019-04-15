@@ -1217,12 +1217,27 @@ Blockly.Block.prototype.getInputsInline = function() {
 /**
  * Set whether the block is disabled or not.
  * @param {boolean} disabled True if disabled.
+ * @deprecated April 2018
  */
 Blockly.Block.prototype.setDisabled = function(disabled) {
+  console.warn('Deprecated call to Blockly.Block.prototype.setDisabled, ' +
+               'use Blockly.Block.prototype.setEnabled instead.');
   if (this.disabled != disabled) {
     Blockly.Events.fire(new Blockly.Events.BlockChange(
         this, 'disabled', null, this.disabled, disabled));
     this.disabled = disabled;
+  }
+};
+
+/**
+ * Set whether the block is enabled or not.
+ * @param {boolean} enabled True if enabled.
+ */
+Blockly.Block.prototype.setEnabled = function(enabled) {
+  if (this.disabled == enabled) {
+    Blockly.Events.fire(new Blockly.Events.BlockChange(
+        this, 'disabled', null, this.disabled, !enabled));
+    this.disabled = !enabled;
   }
 };
 

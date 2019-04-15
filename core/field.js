@@ -574,6 +574,12 @@ Blockly.Field.prototype.setValue = function(newValue) {
     // No change if null.
     return;
   }
+  // Validate input.
+  var validated = this.callValidator(newValue);
+  if (validated !== null) {
+    newValue = validated;
+  }
+  // Check for change.
   var oldValue = this.getValue();
   if (oldValue == newValue) {
     return;

@@ -155,7 +155,7 @@ Blockly.HorizontalFlyout.prototype.position = function() {
   // X is always 0 since this is a horizontal flyout.
   var x = 0;
   // If this flyout is the toolbox flyout.
-  if (targetWorkspaceMetrics.toolboxPosition == this.toolboxPosition_) {
+  if (this.targetWorkspace_.toolboxPosition == this.toolboxPosition_) {
     // If there is a toolbox.
     if (targetWorkspaceMetrics.toolboxHeight) {
       if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {

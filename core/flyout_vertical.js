@@ -152,7 +152,7 @@ Blockly.VerticalFlyout.prototype.position = function() {
   // Y is always 0 since this is a vertical flyout.
   var y = 0;
   // If this flyout is the toolbox flyout.
-  if (targetWorkspaceMetrics.toolboxPosition == this.toolboxPosition_) {
+  if (this.targetWorkspace_.toolboxPosition == this.toolboxPosition_) {
     // If there is a category toolbox.
     if (targetWorkspaceMetrics.toolboxWidth) {
       if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {

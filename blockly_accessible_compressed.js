@@ -1568,13 +1568,18 @@ Blockly.BlockSvg.prototype.renderStatementInput_=function(a,b,c,d,e,f){var g=a.s
 g.push("H",c.x);g.push(Blockly.BlockSvg.INNER_TOP_LEFT_CORNER);g.push("v",b.height-2*Blockly.BlockSvg.CORNER_RADIUS);g.push(Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER);g.push("H",e.rightEdge);this.RTL?(a.push("M",c.x-Blockly.BlockSvg.NOTCH_WIDTH+Blockly.BlockSvg.DISTANCE_45_OUTSIDE+","+(c.y+Blockly.BlockSvg.DISTANCE_45_OUTSIDE)),a.push(Blockly.BlockSvg.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL),a.push("v",b.height-2*Blockly.BlockSvg.CORNER_RADIUS),a.push(Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL)):
 (a.push("M",c.x-Blockly.BlockSvg.NOTCH_WIDTH+Blockly.BlockSvg.DISTANCE_45_OUTSIDE+","+(c.y+b.height-Blockly.BlockSvg.DISTANCE_45_OUTSIDE)),a.push(Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR));a.push("H",e.rightEdge-.5);d.x=this.RTL?-c.x:c.x+1;h.connection.setOffsetInBlock(d.x,c.y+1);h.connection.isConnected()&&(this.width=Math.max(this.width,e.statementEdge+h.connection.targetBlock().getHeightWidth().width));if(f==e.length-1||e[f+1].type==Blockly.NEXT_STATEMENT)g.push("v",Blockly.BlockSvg.SEP_SPACE_Y),
 this.RTL&&a.push("v",Blockly.BlockSvg.SEP_SPACE_Y-1),c.y+=Blockly.BlockSvg.SEP_SPACE_Y};Blockly.BlockSvg.prototype.positionNewBlock=function(a,b,c){b.type!=Blockly.NEXT_STATEMENT&&b.type!=Blockly.INPUT_VALUE||a.moveBy(c.x_-b.x_,c.y_-b.y_)};Blockly.BlockSvg.prototype.highlightForReplacement=function(a){a?Blockly.utils.addClass(this.svgGroup_,"blocklyReplaceable"):Blockly.utils.removeClass(this.svgGroup_,"blocklyReplaceable")};/*
+
  Visual Blocks Editor
+
  Copyright 2016 Massachusetts Institute of Technology
  All rights reserved.
+
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
+
    http://www.apache.org/licenses/LICENSE-2.0
+
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.

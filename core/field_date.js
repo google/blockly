@@ -70,6 +70,14 @@ Blockly.FieldDate.fromJson = function(options) {
 };
 
 /**
+ * Serializable fields are saved by the XML renderer, non-serializable fields
+ * are not. Editable fields should also be serializable.
+ * @type {boolean}
+ * @const
+ */
+Blockly.FieldDate.prototype.SERIALIZABLE = true;
+
+/**
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
 Blockly.FieldDate.prototype.CURSOR = 'text';

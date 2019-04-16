@@ -62,6 +62,14 @@ Blockly.FieldColour.fromJson = function(options) {
 };
 
 /**
+ * Serializable fields are saved by the XML renderer, non-serializable fields
+ * are not. Editable fields should also be serializable.
+ * @type {boolean}
+ * @const
+ */
+Blockly.FieldColour.prototype.SERIALIZABLE = true;
+
+/**
  * Default width of a colour field.
  * @type {number}
  * @private

@@ -67,6 +67,14 @@ Blockly.FieldAngle.fromJson = function(options) {
 };
 
 /**
+ * Serializable fields are saved by the XML renderer, non-serializable fields
+ * are not. Editable fields should also be serializable.
+ * @type {boolean}
+ * @const
+ */
+Blockly.FieldAngle.prototype.SERIALIZABLE = true;
+
+/**
  * Round angles to the nearest 15 degrees when using mouse.
  * Set to 0 to disable rounding.
  */

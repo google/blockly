@@ -225,6 +225,7 @@ Blockly.RenderedConnection.prototype.highlight = function() {
  * attached to this connection.  This happens when a block is expanded.
  * Also unhides down-stream comments.
  * @return {!Array.<!Blockly.Block>} List of blocks to render.
+ * @protected
  */
 Blockly.RenderedConnection.prototype.unhideAll = function() {
   this.setHidden(false);
@@ -272,6 +273,7 @@ Blockly.RenderedConnection.prototype.unhighlight = function() {
 /**
  * Set whether this connections is hidden (not tracked in a database) or not.
  * @param {boolean} hidden True if connection is hidden.
+ * @protected
  */
 Blockly.RenderedConnection.prototype.setHidden = function(hidden) {
   this.hidden_ = hidden;
@@ -286,6 +288,7 @@ Blockly.RenderedConnection.prototype.setHidden = function(hidden) {
  * Hide this connection, as well as all down-stream connections on any block
  * attached to this connection.  This happens when a block is collapsed.
  * Also hides down-stream comments.
+ * @protected
  */
 Blockly.RenderedConnection.prototype.hideAll = function() {
   this.setHidden(true);
@@ -325,6 +328,49 @@ Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
 };
 
 /**
+ * Connect this connection to another connection.
+ * @param {!Blockly.Connection} otherConnection Connection to connect to.
+ * @override
+ */
+Blockly.RenderedConnection.prototype.connect = function(otherConnection) {
+  Blockly.RenderedConnection.superClass_.connect.call(this, otherConnection);
+
+  // This is a quick check to make sure we aren't doing unecessary work.
+  if (this.hidden_ || otherConnection.hidden_) {
+    var superiorConnection = this.isSuperior() ? this : otherConnection;
+    if (superiorConnection.hidden_) {
+      superiorConnection.hideAll();
+    } else {
+      superiorConnection.unhideAll();
+    }
+
+    var renderedBlock = superiorConnection.targetBlock();
+    var display = superiorConnection.hidden_ ? 'none' : 'block';
+    renderedBlock.getSvgRoot().style.display = display;
+    renderedBlock.rendered = !superiorConnection.hidden_;
+  }
+};
+
+/**
+ * Disconnect this connection.
+ * @override
+ */
+Blockly.RenderedConnection.prototype.disconnect = function() {
+  var superiorConnection = this.isSuperior() ? this : this.targetConnection;
+  if (this.targetConnection && superiorConnection.hidden_) {
+    superiorConnection.unhideAll();
+    var renderedBlock = superiorConnection.targetBlock();
+    renderedBlock.getSvgRoot().style.display = 'block';
+    renderedBlock.rendered = true;
+
+    // Set the hidden state for the connection back to true so shadow blocks
+    // will be hidden.
+    superiorConnection.setHidden(true);
+  }
+  Blockly.RenderedConnection.superClass_.disconnect.call(this);
+};
+
+/**
  * Disconnect two blocks that are connected by this connection.
  * @param {!Blockly.Block} parentBlock The superior block.
  * @param {!Blockly.Block} childBlock The inferior block.
@@ -361,7 +407,7 @@ Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
     }
     blockShadow.initSvg();
     blockShadow.render(false);
-    if (parentBlock.rendered) {
+    if (parentBlock.rendered && !this.hidden_) {
       parentBlock.render();
     }
   }

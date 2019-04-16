@@ -79,6 +79,10 @@ Blockly.FieldNumber.fromJson = function(options) {
 Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
   precision = parseFloat(precision);
   this.precision_ = isNaN(precision) ? 0 : precision;
+  var precisionString = this.precision_.toString();
+  var decimalIndex = precisionString.indexOf('.');
+  this.fractionalDigits_ = (decimalIndex == -1) ? -1 :
+      precisionString.length - (decimalIndex + 1);
   min = parseFloat(min);
   this.min_ = isNaN(min) ? -Infinity : min;
   max = parseFloat(max);
@@ -106,13 +110,14 @@ Blockly.FieldNumber.prototype.classValidator = function(text) {
     // Invalid number.
     return null;
   }
+  // Get the value in range.
+  n = Math.min(Math.max(n, this.min_), this.max_);
   // Round to nearest multiple of precision.
   if (this.precision_ && isFinite(n)) {
     n = Math.round(n / this.precision_) * this.precision_;
   }
-  // Get the value in range.
-  n = Math.min(Math.max(n, this.min_), this.max_);
-  return String(n);
+  return (this.fractionalDigits_ == -1) ? String(n) :
+      n.toFixed(this.fractionalDigits_);
 };
 
 Blockly.Field.register('field_number', Blockly.FieldNumber);

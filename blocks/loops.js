@@ -328,12 +328,12 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
     if (legal) {
       this.setWarningText(null);
       if (!this.isInFlyout) {
-        this.setDisabled(false);
+        this.setEnabled(true);
       }
     } else {
       this.setWarningText(Blockly.Msg['CONTROLS_FLOW_STATEMENTS_WARNING']);
       if (!this.isInFlyout && !this.getInheritedDisabled()) {
-        this.setDisabled(true);
+        this.setEnabled(false);
       }
     }
   }

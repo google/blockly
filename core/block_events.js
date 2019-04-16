@@ -186,7 +186,7 @@ Blockly.Events.Change.prototype.run = function(forward) {
       block.setCollapsed(value);
       break;
     case 'disabled':
-      block.setDisabled(value);
+      block.setEnabled(!value);
       break;
     case 'inline':
       block.setInputsInline(value);

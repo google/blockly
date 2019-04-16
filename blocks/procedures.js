@@ -934,9 +934,9 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         Blockly.Events.setGroup(event.group);
         if (event.newValue) {
           this.previousDisabledState_ = this.disabled;
-          this.setDisabled(true);
+          this.setEnabled(false);
         } else {
-          this.setDisabled(this.previousDisabledState_);
+          this.setEnabled(!this.previousDisabledState_);
         }
         Blockly.Events.setGroup(oldGroup);
       }
@@ -1081,12 +1081,12 @@ Blockly.Blocks['procedures_ifreturn'] = {
       }
       this.setWarningText(null);
       if (!this.isInFlyout) {
-        this.setDisabled(false);
+        this.setEnabled(true);
       }
     } else {
       this.setWarningText(Blockly.Msg['PROCEDURES_IFRETURN_WARNING']);
       if (!this.isInFlyout && !this.getInheritedDisabled()) {
-        this.setDisabled(true);
+        this.setEnabled(false);
       }
     }
   },

@@ -704,7 +704,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
           if (!group) {
             Blockly.Events.setGroup(true);
           }
-          block.setDisabled(!block.disabled);
+          block.setEnabled(block.disabled);
           if (!group) {
             Blockly.Events.setGroup(false);
           }
@@ -1167,10 +1167,26 @@ Blockly.BlockSvg.prototype.setMutator = function(mutator) {
 /**
  * Set whether the block is disabled or not.
  * @param {boolean} disabled True if disabled.
+ * @deprecated April 2018
  */
 Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
+  console.warn('Deprecated call to Blockly.BlockSvg.prototype.setDisabled, ' +
+  'use Blockly.BlockSvg.prototype.setEnabled instead.');
   if (this.disabled != disabled) {
     Blockly.BlockSvg.superClass_.setDisabled.call(this, disabled);
+    if (this.rendered) {
+      this.updateDisabled();
+    }
+  }
+};
+
+/**
+ * Set whether the block is enabled or not.
+ * @param {boolean} enabled True if enabled.
+ */
+Blockly.BlockSvg.prototype.setEnabled = function(enabled) {
+  if (this.disabled == enabled) {
+    Blockly.BlockSvg.superClass_.setEnabled.call(this, enabled);
     if (this.rendered) {
       this.updateDisabled();
     }

@@ -744,10 +744,10 @@ Blockly.Flyout.prototype.filterForCapacity_ = function() {
   var blocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     if (this.permanentlyDisabled_.indexOf(block) == -1) {
-      var disable = !this.targetWorkspace_
+      var enable = this.targetWorkspace_
           .isCapacityAvailable(Blockly.utils.getBlockTypeCounts(block));
       while (block) {
-        block.setDisabled(disable);
+        block.setEnabled(enable);
         block = block.getNextBlock();
       }
     }

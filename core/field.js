@@ -138,6 +138,13 @@ Blockly.Field.prototype.text_ = '';
 Blockly.Field.prototype.sourceBlock_ = null;
 
 /**
+ * Does this block need to be re-rendered?
+ * @type {boolean}
+ * @private
+ */
+Blockly.Field.prototype.isDirty_ = true;
+
+/**
  * Is the field visible, or hidden due to the block being collapsed?
  * @type {boolean}
  * @protected
@@ -379,6 +386,7 @@ Blockly.Field.prototype.render_ = function() {
   // Replace the text.
   this.textElement_.textContent = this.getDisplayText_();
   this.updateWidth();
+  this.isDirty_ = false;
 };
 
 /**
@@ -458,10 +466,18 @@ Blockly.Field.stopCache = function() {
 
 /**
  * Returns the height and width of the field.
+ *
+ * This should *in general* be the only place render_ gets called from.
  * @return {!goog.math.Size} Height and width.
  */
 Blockly.Field.prototype.getSize = function() {
-  if (!this.size_.width) {
+  if (this.isDirty_) {
+    this.render_();
+  } else if (this.visible_ && this.size_.width == 0) {
+    // If the field is not visible the width will be 0 as well, one of the
+    // problems with the old system.
+    console.warn('Deprecated use of setting size_.width to 0 to rerender a' +
+      ' field. Set field.isDirty_ to true instead.');
     this.render_();
   }
   return this.size_;
@@ -546,9 +562,7 @@ Blockly.Field.prototype.setText = function(newText) {
  * @package
  */
 Blockly.Field.prototype.forceRerender = function() {
-  // Set width to 0 to force a rerender of this field.
-  this.size_.width = 0;
-
+  this.isDirty_ = true;
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
     this.sourceBlock_.bumpNeighbours_();

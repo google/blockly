@@ -133,8 +133,8 @@ suite('ASTNode', function() {
         var input2 = this.blocks.A.inputList[1];
         var connection = input.connection;
         var node = new Blockly.ASTNode();
-        var nextLocation = node.findNextForInput_(connection, input);
-        assertEquals(nextLocation.getLocation(), input2.connection);
+        var newASTNode = node.findNextForInput_(connection, input);
+        assertEquals(newASTNode.getLocation(), input2.connection);
       });
 
       test('findPrevForInput_', function() {
@@ -142,8 +142,8 @@ suite('ASTNode', function() {
         var input2 = this.blocks.A.inputList[1];
         var connection = input2.connection;
         var node = new Blockly.ASTNode();
-        var nextLocation = node.findPrevForInput_(connection, input2);
-        assertEquals(nextLocation.getLocation(), input);
+        var newASTNode = node.findPrevForInput_(connection, input2);
+        assertEquals(newASTNode.getLocation(), input);
       });
 
       test('findNextForField_', function() {
@@ -151,28 +151,29 @@ suite('ASTNode', function() {
         var field = this.blocks.A.inputList[0].fieldRow[0];
         var field2 = this.blocks.A.inputList[0].fieldRow[1];
         var node = new Blockly.ASTNode();
-        var nextLocation = node.findNextForField_(field, input);
-        assertEquals(nextLocation.getLocation(), field2);
+        var newASTNode = node.findNextForField_(field, input);
+        assertEquals(newASTNode.getLocation(), field2);
       });
 
       test('findPrevForField_', function() {
         var input = this.blocks.A.inputList[0];
         var field = this.blocks.A.inputList[0].fieldRow[0];
         var field2 = this.blocks.A.inputList[0].fieldRow[1];
-        var nextLocation = this.cursor.findPrevForField_(field2, input);
-        assertEquals(nextLocation, field);
+        var node = new Blockly.ASTNode();
+        var newASTNode = node.findPrevForField_(field2, input);
+        assertEquals(newASTNode.getLocation(), field);
       });
 
       test('navigateBetweenStacksForward', function() {
         var node = new Blockly.ASTNode(Blockly.ASTNode.types.NEXT, this.blocks.A.nextConnection);
-        var nextStack = node.navigateBetweenStacks_(true);
-        assertEquals(nextStack, this.blocks.D);
+        var nextTopBlock = node.navigateBetweenStacks_(true);
+        assertEquals(nextTopBlock, this.blocks.D);
       });
 
       test('navigateBetweenStacksBackward', function() {
         var node = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, this.blocks.D);
-        var nextStack = node.navigateBetweenStacks_(false);
-        assertEquals(nextStack, this.blocks.A);
+        var nextTopBlock = node.navigateBetweenStacks_(false);
+        assertEquals(nextTopBlock, this.blocks.A);
       });
     });
 

@@ -66,6 +66,9 @@ suite('ASTNode', function() {
       D: blockD,
       E: blockE
     };
+    Blockly.getMainWorkspace = function() {
+      return new Blockly.Workspace();
+    };
   });
   teardown(function() {
     delete Blockly.Blocks['input_statement'];
@@ -75,17 +78,6 @@ suite('ASTNode', function() {
   });
 
   suite('HelperFunctions', function() {
-    // test('setLocationForStackNotAtTop', function() {
-    //     var input = this.blocks.A.inputList[0];
-    //     this.cursor.setLocation(input, true, false);
-    //     assertEquals(this.cursor.isStack_, false)
-    //   });
-    // test('setLocationForStackAtTopBlock', function() {
-    //     var input = this.blocks.A.previousConnection;
-    //     this.cursor.setLocation(input, true, false);
-    //     assertEquals(this.cursor.isStack_, true)
-    //   });
-
       test('findNextEditableField_', function() {
         var input = this.blocks.A.inputList[0];
         var field = input.fieldRow[0];
@@ -103,284 +95,303 @@ suite('ASTNode', function() {
         assertEquals(editableField.getLocation(), input.fieldRow[0]);
       });
 
-      // test('findPreviousEditableField_', function() {
-      //   var input = this.blocks.A.inputList[0];
-      //   var field = input.fieldRow[1];
-      //   var prevField = input.fieldRow[0];
-      //   var editableField = this.cursor.findPreviousEditableField_(field, input);
-      //   assertEquals(editableField, prevField);
-      // });
+      test('findPreviousEditableField_', function() {
+        var input = this.blocks.A.inputList[0];
+        var field = input.fieldRow[1];
+        var prevField = input.fieldRow[0];
+        var node = new Blockly.ASTNode();
+        var editableField = node.findPreviousEditableField_(field, input);
+        assertEquals(editableField.getLocation(), prevField);
+      });
 
-      // test('findPreviousEditableFieldLast_', function() {
-      //   var input = this.blocks.A.inputList[0];
-      //   var field = input.fieldRow[0];
-      //   var editableField = this.cursor.findPreviousEditableField_(field, input, true);
-      //   assertEquals(editableField, input.fieldRow[1]);
-      // });
+      test('findPreviousEditableFieldLast_', function() {
+        var input = this.blocks.A.inputList[0];
+        var field = input.fieldRow[0];
+        var node = new Blockly.ASTNode();
+        var editableField = node.findPreviousEditableField_(field, input, true);
+        assertEquals(editableField.getLocation(), input.fieldRow[1]);
+      });
 
-      // test('findNextForInput_', function() {
-      //   var input = this.blocks.A.inputList[0];
-      //   var input2 = this.blocks.A.inputList[1];
-      //   var connection = input.connection;
-      //   var nextLocation = this.cursor.findNextForInput_(connection, input);
-      //   assertEquals(nextLocation, input2.connection);
-      //   assertEquals(input2, this.cursor.parentInput_);
-      // });
+      test('findNextForInput_', function() {
+        var input = this.blocks.A.inputList[0];
+        var input2 = this.blocks.A.inputList[1];
+        var connection = input.connection;
+        var node = new Blockly.ASTNode();
+        var nextLocation = node.findNextForInput_(connection, input);
+        assertEquals(nextLocation.getLocation(), input2.connection);
+      });
 
-      // test('findPrevForInput_', function() {
-      //   var input = this.blocks.A.inputList[0];
-      //   var input2 = this.blocks.A.inputList[1];
-      //   var connection = input2.connection;
-      //   var nextLocation = this.cursor.findPrevForInput_(connection, input2);
-      //   assertEquals(nextLocation, input.connection);
-      //   assertEquals(input, this.cursor.parentInput_);
-      // });
+      test('findPrevForInput_', function() {
+        var input = this.blocks.A.inputList[0];
+        var input2 = this.blocks.A.inputList[1];
+        var connection = input2.connection;
+        var node = new Blockly.ASTNode();
+        var nextLocation = node.findPrevForInput_(connection, input2);
+        assertEquals(nextLocation.getLocation(), input);
+      });
 
-      // test('findNextForField_', function() {
-      //   var input = this.blocks.A.inputList[0];
-      //   var field = this.blocks.A.inputList[0].fieldRow[0];
-      //   var field2 = this.blocks.A.inputList[0].fieldRow[1];
-      //   var nextLocation = this.cursor.findNextForField_(field, input);
-      //   assertEquals(nextLocation, field2);
-      // });
+      test('findNextForField_', function() {
+        var input = this.blocks.A.inputList[0];
+        var field = this.blocks.A.inputList[0].fieldRow[0];
+        var field2 = this.blocks.A.inputList[0].fieldRow[1];
+        var node = new Blockly.ASTNode();
+        var nextLocation = node.findNextForField_(field, input);
+        assertEquals(nextLocation.getLocation(), field2);
+      });
 
-      // test('findPrevForField_', function() {
-      //   var input = this.blocks.A.inputList[0];
-      //   var field = this.blocks.A.inputList[0].fieldRow[0];
-      //   var field2 = this.blocks.A.inputList[0].fieldRow[1];
-      //   var nextLocation = this.cursor.findPrevForField_(field2, input);
-      //   assertEquals(nextLocation, field);
-      // });
+      test('findPrevForField_', function() {
+        var input = this.blocks.A.inputList[0];
+        var field = this.blocks.A.inputList[0].fieldRow[0];
+        var field2 = this.blocks.A.inputList[0].fieldRow[1];
+        var nextLocation = this.cursor.findPrevForField_(field2, input);
+        assertEquals(nextLocation, field);
+      });
 
-      // test('findTop_', function() {
-      //   var topBlock = this.cursor.findTop_(this.blocks.C);
-      //   assertEquals(topBlock, this.blocks.C);
-      // });
+      test('navigateBetweenStacksForward', function() {
+        var node = new Blockly.ASTNode(Blockly.ASTNode.types.NEXT, this.blocks.A.nextConnection);
+        var nextStack = node.navigateBetweenStacks_(true);
+        assertEquals(nextStack, this.blocks.D);
+      });
 
-      // test('navigateBetweenStacksForward', function() {
-      //   this.cursor.setLocation(this.blocks.A.nextConnection);
-      //   var nextStack = this.cursor.navigateBetweenStacks_(true);
-      //   assertEquals(nextStack, this.blocks.D);
-      // });
-
-      // test('navigateBetweenStacksBackward', function() {
-      //   this.cursor.setLocation(this.blocks.D);
-      //   var nextStack = this.cursor.navigateBetweenStacks_(false);
-      //   assertEquals(nextStack, this.blocks.A);
-      // });
-
-      // test('checkIfStackFalse', function() {
-      //   this.cursor.setLocation(this.blocks.B);
-      //   var isStack = this.cursor.checkIfStack_();
-      //   assertEquals(isStack, false);
-      // });
-
-      // test('checkIfStackTrue', function() {
-      //   this.cursor.setLocation(this.blocks.A.previousConnection);
-      //   var isStack = this.cursor.checkIfStack_();
-      //   assertEquals(isStack, true);
-      // });
-
-      // test('findTopConnection', function() {
-      //   var topConnection = this.cursor.findTopConnection_(this.blocks.A);
-      //   assertEquals(topConnection, this.blocks.A.previousConnection);
-      // });
+      test('navigateBetweenStacksBackward', function() {
+        var node = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, this.blocks.D);
+        var nextStack = node.navigateBetweenStacks_(false);
+        assertEquals(nextStack, this.blocks.A);
+      });
     });
 
   suite('NavigationFunctions', function() {
     suite('Next', function() {
       test('previousConnection', function() {
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.PREVIOUS,
-            this.blocks.A.previousConnection);
+        var node = Blockly.ASTNode.createConnectionNode(this.blocks.A.previousConnection);
         var nextNode = node.next();
         assertEquals(nextNode.getLocation(), this.blocks.A);
       });
       test('block', function() {
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK,
-            this.blocks.A);
+        var node = Blockly.ASTNode.createBlockNode(this.blocks.A);
         var nextNode = node.next();
         assertEquals(nextNode.getLocation(), this.blocks.A.nextConnection);
       });
       test('nextConnection', function() {
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.NEXT,
-            this.blocks.A.nextConnection);
+        var node = Blockly.ASTNode.createConnectionNode(this.blocks.A.nextConnection);
         var nextNode = node.next();
         assertEquals(nextNode.getLocation(), this.blocks.B.previousConnection);
       });
       test('input', function() {
         var input = this.blocks.A.inputList[0];
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.INPUT, input.connection);
-
+        var node = Blockly.ASTNode.createInputNode(input);
         var nextNode = node.next();
         assertEquals(nextNode.getLocation(), this.blocks.A.inputList[1].connection);
       });
       test('output', function() {
         var output = this.blocks.E.outputConnection;
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.OUTPUT, output);
+        var node = Blockly.ASTNode.createConnectionNode(output);
         var nextNode = node.next();
         assertEquals(nextNode.getLocation(), this.blocks.E);
       });
       test('field', function() {
         var field = this.blocks.A.inputList[0].fieldRow[1];
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.FIELD, field);
+        var node = Blockly.ASTNode.createFieldNode(field);
         var nextNode = node.next();
         assertEquals(nextNode.getLocation(), this.blocks.A.inputList[0].connection);
       });
       test('isStack', function() {
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.STACK, this.blocks.A.previousConnection);
+        var node = Blockly.ASTNode.createStackNode(this.blocks.A);
         var nextNode = node.next();
-        assertEquals(nextNode.getLocation(), this.blocks.D.previousConnection);
-        assertEquals(nextNode.getLocationType(), Blockly.ASTNode.types.STACK);
-      });
-      test('isStack', function() {
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.STACK, this.blocks.A.previousConnection);
-        var nextNode = node.next();
-        assertEquals(nextNode.getLocation(), this.blocks.D.previousConnection);
+        assertEquals(nextNode.getLocation(), this.blocks.D);
         assertEquals(nextNode.getLocationType(), Blockly.ASTNode.types.STACK);
       });
       test('workspace', function() {
         var coordinate = new goog.math.Coordinate(100,100);
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.WORKSPACE, coordinate);
+        var node = Blockly.ASTNode.createWorkspaceNode(this.workspace, coordinate);
         var nextNode = node.next();
-        assertEquals(nextNode.getLocation().x, 110);
+        assertEquals(nextNode.wsCoordinate_.x, 110);
+        assertEquals(nextNode.getLocation(), this.workspace);
         assertEquals(nextNode.getLocationType(), Blockly.ASTNode.types.WORKSPACE);
       });
     });
+
     suite('Previous', function() {
       test('previousConnectionTopBlock', function() {
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.PREVIOUS, this.blocks.A.previousConnection);
+        var prevConnection = this.blocks.A.previousConnection;
+        var node = Blockly.ASTNode.createConnectionNode(prevConnection);
         var prevNode = node.prev();
         assertEquals(prevNode, null);
       });
       test('previousConnection', function() {
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.PREVIOUS, this.blocks.B.previousConnection);
+        var prevConnection = this.blocks.B.previousConnection;
+        var node = Blockly.ASTNode.createConnectionNode(prevConnection);
         var prevNode = node.prev();
         assertEquals(prevNode.getLocation(), this.blocks.A.nextConnection);
       });
       test('block', function() {
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, this.blocks.A);
+        var node = Blockly.ASTNode.createBlockNode(this.blocks.A);
         var prevNode = node.prev();
         assertEquals(prevNode.getLocation(), this.blocks.A.previousConnection);
       });
       test('nextConnection', function() {
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.NEXT, this.blocks.A.nextConnection);
+        var nextConnection = this.blocks.A.nextConnection;
+        var node = Blockly.ASTNode.createConnectionNode(nextConnection)
         var prevNode = node.prev();
         assertEquals(prevNode.getLocation(), this.blocks.A);
       });
       test('input', function() {
         var input = this.blocks.A.inputList[0];
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.INPUT, input.connection);
+        var node = Blockly.ASTNode.createInputNode(input);
         var prevNode = node.prev();
         assertEquals(prevNode.getLocation(), input.fieldRow[1]);
       });
       test('output', function() {
         var output = this.blocks.E.outputConnection;
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.OUTPUT, output);
+        var node = Blockly.ASTNode.createConnectionNode(output);
         var prevNode = node.prev();
         assertEquals(prevNode, null);
       });
       test('field', function() {
         var field = this.blocks.A.inputList[0].fieldRow[0];
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.FIELD, field);
+        var node = Blockly.ASTNode.createFieldNode(field);
         var prevNode = node.prev();
         assertEquals(prevNode, null);
       });
       test('isStack', function() {
-        var prevConnection = this.blocks.D.previousConnection;
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.STACK, prevConnection);
+        var node = Blockly.ASTNode.createStackNode(this.blocks.D);
         var prevNode = node.prev();
-        assertEquals(prevNode.getLocation(), this.blocks.A.previousConnection);
+        assertEquals(prevNode.getLocation(), this.blocks.A);
         assertEquals(prevNode.getLocationType(), Blockly.ASTNode.types.STACK);
       });
       test('workspace', function() {
         var coordinate = new goog.math.Coordinate(100,100);
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.WORKSPACE, coordinate);
-        var prevNode = node.prev();
-        assertEquals(prevNode.getLocation().x, 90);
-        assertEquals(prevNode.getLocationType(), Blockly.ASTNode.types.WORKSPACE);
+        var node = Blockly.ASTNode.createWorkspaceNode(this.workspace, coordinate);
+        var nextNode = node.prev();
+        assertEquals(nextNode.wsCoordinate_.x, 90);
+        assertEquals(nextNode.getLocation(), this.workspace);
+        assertEquals(nextNode.getLocationType(), Blockly.ASTNode.types.WORKSPACE);
       });
     });
+
     suite('In', function() {
       test('block', function() {
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, this.blocks.A);
+        var node = Blockly.ASTNode.createBlockNode(this.blocks.A);
         var inNode = node.in();
         assertEquals(inNode.getLocation(), this.blocks.A.inputList[0].fieldRow[0]);
       });
       test('input', function() {
         var input = this.blocks.A.inputList[0];
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.INPUT, input.connection);
+        var node = Blockly.ASTNode.createInputNode(input);
         var inNode = node.in();
         assertEquals(inNode.getLocation(), this.blocks.E.outputConnection);
       });
       test('output', function() {
         var output = this.blocks.E.outputConnection;
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.OUTPUT, output);
+        var node = Blockly.ASTNode.createConnectionNode(output);
         var inNode = node.in();
         assertEquals(inNode, null);
       });
       test('field', function() {
         var field = this.blocks.A.inputList[0].fieldRow[0];
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.FIELD, field);
+        var node = Blockly.ASTNode.createFieldNode(field);
         var inNode = node.in();
         assertEquals(inNode, null);
       });
       test('isStack', function() {
         var prevConnection = this.blocks.D.previousConnection;
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.STACK, prevConnection);
+        var node = Blockly.ASTNode.createStackNode(this.blocks.D);
         var inNode = node.in();
         assertEquals(inNode.getLocation(), prevConnection);
         assertEquals(inNode.getLocationType(), Blockly.ASTNode.types.PREVIOUS);
       });
       test('workspace', function() {
         var coordinate = new goog.math.Coordinate(100,100);
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.WORKSPACE, coordinate);
+        var node = Blockly.ASTNode.createWorkspaceNode(this.workspace, coordinate);
         var inNode = node.in();
-        assertEquals(inNode.getLocation(), null);
-        assertEquals(inNode.getLocationType(), Blockly.ASTNode.types.WORKSPACE);
+        assertEquals(inNode.getLocation(), this.workspace.getTopBlocks()[0].previousConnection);
+        assertEquals(inNode.getLocationType(), Blockly.ASTNode.types.STACK);
+
       });
     });
 
     suite('Out', function() {
       test('topBlock', function() {
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, this.blocks.A);
+        var node = Blockly.ASTNode.createBlockNode(this.blocks.A);
         var outNode = node.out();
-        assertEquals(outNode.getLocation(), this.blocks.A.previousConnection);
+        assertEquals(outNode.getLocation(), this.blocks.A);
       });
       test('nestedBlock', function() {
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, this.blocks.C);
+        var node = Blockly.ASTNode.createBlockNode(this.blocks.C);
         var outNode = node.out();
         assertEquals(outNode.getLocation(), this.blocks.B.inputList[1].connection);
       });
       test('input', function() {
         var input = this.blocks.A.inputList[0];
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.INPUT, input.connection);
+        var node = Blockly.ASTNode.createInputNode(input);
         var outNode = node.out();
         assertEquals(outNode.getLocation(), this.blocks.A);
       });
       test('output', function() {
         var output = this.blocks.E.outputConnection;
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.OUTPUT, output);
+        var node = Blockly.ASTNode.createConnectionNode(output);
         var outNode = node.out();
         assertEquals(outNode.getLocation(), this.blocks.A.inputList[0].connection);
       });
       test('field', function() {
         var field = this.blocks.A.inputList[0].fieldRow[0];
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.FIELD, field);
+        var node = Blockly.ASTNode.createFieldNode(field);
         var outNode = node.out();
         assertEquals(outNode.getLocation(), this.blocks.A);
       });
       test('insideStatement', function() {
         var nextConnection = this.blocks.C.nextConnection;
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.NEXT, nextConnection);
+        var node = Blockly.ASTNode.createConnectionNode(nextConnection);
         var outNode = node.out();
         assertEquals(outNode.getLocation(), this.blocks.B.inputList[1].connection);
       });
       test('stack', function() {
         var prevConnection = this.blocks.D.previousConnection;
-        var node = new Blockly.ASTNode(Blockly.ASTNode.types.PREVIOUS, prevConnection);
+        var node = Blockly.ASTNode.createConnectionNode(prevConnection);
         var outNode = node.out();
-        assertEquals(outNode.getLocation(), prevConnection);
+        assertEquals(outNode.getLocation(), this.blocks.D);
         assertEquals(outNode.getLocationType(), Blockly.ASTNode.types.STACK);
+      });
+      test('workspace', function() {
+        var node = Blockly.ASTNode.createStackNode(this.blocks.D);
+        var outNode = node.out();
+        assertEquals(outNode.getLocationType(), Blockly.ASTNode.types.WORKSPACE);
+        assertEquals(outNode.wsCoordinate_.x, 100);
+        assertEquals(outNode.wsCoordinate_.y, 100);
+      });
+    });
+
+    suite('createFunctions', function() {
+      test('createFieldNode', function() {
+        var field = this.blocks.A.inputList[0].fieldRow[0];
+        var node = Blockly.ASTNode.createFieldNode(field);
+        assertEquals(node.getLocation(), field);
+        assertEquals(node.getLocationType(), Blockly.ASTNode.types.FIELD);
+      });
+      test('createConnectionNode', function() {
+        var prevConnection = this.blocks.D.previousConnection;
+        var node = Blockly.ASTNode.createConnectionNode(prevConnection);
+        assertEquals(node.getLocation(), prevConnection);
+        assertEquals(node.getLocationType(), Blockly.ASTNode.types.PREVIOUS);
+      });
+      test('createInputNode', function() {
+        var input = this.blocks.A.inputList[0];
+        var node = Blockly.ASTNode.createInputNode(input);
+        assertEquals(node.getLocation(), input);
+        assertEquals(node.getLocationType(), Blockly.ASTNode.types.INPUT);
+      });
+      test('createWorkspaceNode', function() {
+        var coordinate = new goog.math.Coordinate(100,100);
+        var node = Blockly.ASTNode.createWorkspaceNode(this.workspace, coordinate);
+        assertEquals(node.getLocation(), this.workspace);
+        assertEquals(node.getLocationType(), Blockly.ASTNode.types.WORKSPACE);
+        assertEquals(node.getWsCoordinate(), coordinate);
+      });
+      test('createStatementConnectionNode', function() {
+        var nextConnection = this.blocks.A.inputList[1].connection;
+        var node = Blockly.ASTNode.createConnectionNode(nextConnection);
+        assertEquals(node.getLocation(), nextConnection);
+        assertEquals(node.getLocationType(), Blockly.ASTNode.types.INPUT);
       });
     });
   });

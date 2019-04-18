@@ -190,7 +190,7 @@ Blockly.ASTNode.prototype.getLocation = function() {
  * The type of the current location.
  * @return {String} The type of the location.
  */
-Blockly.ASTNode.prototype.getLocationType = function() {
+Blockly.ASTNode.prototype.getType = function() {
   return this.type_;
 };
 
@@ -516,7 +516,7 @@ Blockly.ASTNode.prototype.in = function() {
         if (fieldNode) {
           newAstNode = fieldNode;
         } else {
-          newAstNode = newParentInput.connection;
+          newAstNode = Blockly.ASTNode.createInputNode(newParentInput);
         }
       }
       break;

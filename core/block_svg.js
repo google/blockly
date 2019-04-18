@@ -647,53 +647,58 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
   var block = this;
   var menuOptions = [];
 
-  if (this.isDeletable() && this.isMovable() && !block.isInFlyout) {
-    menuOptions.push(Blockly.ContextMenu.blockDuplicateOption(block));
-    if (this.isEditable() && !this.collapsed_ &&
-        this.workspace.options.comments) {
+  if (!this.isInFlyout) {
+    if (this.isDeletable() && this.isMovable()) {
+      menuOptions.push(Blockly.ContextMenu.blockDuplicateOption(block));
+    }
+
+    if (this.workspace.options.comments && !this.collapsed_ &&
+        this.isEditable()) {
       menuOptions.push(Blockly.ContextMenu.blockCommentOption(block));
     }
 
-    // Option to make block inline.
-    if (!this.collapsed_) {
-      for (var i = 1; i < this.inputList.length; i++) {
-        if (this.inputList[i - 1].type != Blockly.NEXT_STATEMENT &&
-            this.inputList[i].type != Blockly.NEXT_STATEMENT) {
-          // Only display this option if there are two value or dummy inputs
-          // next to each other.
-          var inlineOption = {enabled: true};
-          var isInline = this.getInputsInline();
-          inlineOption.text = isInline ?
-              Blockly.Msg['EXTERNAL_INPUTS'] : Blockly.Msg['INLINE_INPUTS'];
-          inlineOption.callback = function() {
-            block.setInputsInline(!isInline);
+    if (this.isMovable()) {
+      if (!this.collapsed_) {
+        // Option to make block inline.
+        for (var i = 1; i < this.inputList.length; i++) {
+          if (this.inputList[i - 1].type != Blockly.NEXT_STATEMENT &&
+              this.inputList[i].type != Blockly.NEXT_STATEMENT) {
+            // Only display this option if there are two value or dummy inputs
+            // next to each other.
+            var inlineOption = {enabled: true};
+            var isInline = this.getInputsInline();
+            inlineOption.text = isInline ?
+                Blockly.Msg['EXTERNAL_INPUTS'] : Blockly.Msg['INLINE_INPUTS'];
+            inlineOption.callback = function() {
+              block.setInputsInline(!isInline);
+            };
+            menuOptions.push(inlineOption);
+            break;
+          }
+        }
+        // Option to collapse block
+        if (this.workspace.options.collapse) {
+          var collapseOption = {enabled: true};
+          collapseOption.text = Blockly.Msg['COLLAPSE_BLOCK'];
+          collapseOption.callback = function() {
+            block.setCollapsed(true);
           };
-          menuOptions.push(inlineOption);
-          break;
+          menuOptions.push(collapseOption);
+        }
+      } else {
+        // Option to expand block.
+        if (this.workspace.options.collapse) {
+          var expandOption = {enabled: true};
+          expandOption.text = Blockly.Msg['EXPAND_BLOCK'];
+          expandOption.callback = function() {
+            block.setCollapsed(false);
+          };
+          menuOptions.push(expandOption);
         }
       }
     }
 
-    if (this.workspace.options.collapse) {
-      // Option to collapse/expand block.
-      if (this.collapsed_) {
-        var expandOption = {enabled: true};
-        expandOption.text = Blockly.Msg['EXPAND_BLOCK'];
-        expandOption.callback = function() {
-          block.setCollapsed(false);
-        };
-        menuOptions.push(expandOption);
-      } else {
-        var collapseOption = {enabled: true};
-        collapseOption.text = Blockly.Msg['COLLAPSE_BLOCK'];
-        collapseOption.callback = function() {
-          block.setCollapsed(true);
-        };
-        menuOptions.push(collapseOption);
-      }
-    }
-
-    if (this.workspace.options.disable) {
+    if (this.workspace.options.disable && this.isEditable()) {
       // Option to disable/enable block.
       var disableOption = {
         text: this.disabled ?
@@ -713,7 +718,9 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       menuOptions.push(disableOption);
     }
 
-    menuOptions.push(Blockly.ContextMenu.blockDeleteOption(block));
+    if (this.isDeletable()) {
+      menuOptions.push(Blockly.ContextMenu.blockDeleteOption(block));
+    }
   }
 
   menuOptions.push(Blockly.ContextMenu.blockHelpOption(block));

@@ -344,10 +344,9 @@ Blockly.ASTNode.prototype.findPrevForField_ = function(location, parentInput) {
   var block = location.sourceBlock_;
   var inputs = block.inputList;
   var curIdx = inputs.indexOf(parentInput);
-  var prevLocation = this.findPreviousEditableField_(location, parentInput);
-  var newAstNode;
+  var newAstNode = this.findPreviousEditableField_(location, parentInput);
 
-  if (!prevLocation && curIdx - 1 >= 0) {
+  if (!newAstNode && curIdx - 1 >= 0) {
     newAstNode = Blockly.ASTNode.createInputNode(inputs[curIdx - 1]);
   }
   return newAstNode;

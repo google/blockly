@@ -14,4 +14,6 @@ Help us focus our development efforts by telling us [what you are doing with
 Blockly](https://developers.google.com/blockly/registration). The questionnaire only takes
 a few minutes and will help us better support the Blockly community.
 
+Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com)
+
 Want to contribute? Great! First, read [our guidelines for contributors](https://developers.google.com/blockly/guides/modify/contributing).

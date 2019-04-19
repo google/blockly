@@ -100,7 +100,7 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
 /**
  * Encode a variable field as XML.
  * @param {!Blockly.FieldVariable} field The field to encode.
- * @return {?Element} XML element, or null if the field did not need to be
+ * @return {Element} XML element, or null if the field did not need to be
  *     serialized.
  * @private
  */
@@ -135,7 +135,7 @@ Blockly.Xml.fieldToDomVariable_ = function(field) {
 /**
  * Encode a field as XML.
  * @param {!Blockly.Field} field The field to encode.
- * @return {?Element} XML element, or null if the field did not need to be
+ * @return {Element} XML element, or null if the field did not need to be
  *     serialized.
  * @private
  */

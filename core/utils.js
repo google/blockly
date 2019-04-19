@@ -194,9 +194,9 @@ Blockly.utils.getRelativeXY = function(element) {
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
- * the div blockly was injected into.
+ * the div Blockly was injected into.
  * @param {!Element} element SVG element to find the coordinates of. If this is
- *     not a child of the div blockly was injected into, the behaviour is
+ *     not a child of the div Blockly was injected into, the behaviour is
  *     undefined.
  * @return {!goog.math.Coordinate} Object with .x and .y properties.
  */
@@ -305,6 +305,32 @@ Blockly.utils.mouseToSvg = function(e, svg, matrix) {
 };
 
 /**
+ * Get the scroll delta of a mouse event in pixel units.
+ * @param {!Event} e Mouse event.
+ * @return {{x: number, y: number}} Scroll delta object with .x and .y
+ *    properties.
+ */
+Blockly.utils.getScrollDeltaPixels = function(e) {
+  switch (e.deltaMode) {
+    case 0x00:  // Pixel mode.
+      return {
+        x: e.deltaX,
+        y: e.deltaY
+      };
+    case 0x01:  // Line mode.
+      return {
+        x: e.deltaX * Blockly.LINE_MODE_MULTIPLIER,
+        y: e.deltaY * Blockly.LINE_MODE_MULTIPLIER
+      };
+    case 0x02:  // Page mode.
+      return {
+        x: e.deltaX * Blockly.PAGE_MODE_MULTIPLIER,
+        y: e.deltaY * Blockly.PAGE_MODE_MULTIPLIER
+      };
+  }
+};
+
+/**
  * Given an array of strings, return the length of the shortest one.
  * @param {!Array.<string>} array Array of strings.
  * @return {number} Length of shortest string.
@@ -407,8 +433,8 @@ Blockly.utils.tokenizeInterpolation = function(message) {
  * For example, "%{bky_my_msg}" and "%{BKY_MY_MSG}" will both be replaced with
  * the value in Blockly.Msg['MY_MSG'].
  * @param {string|?} message Message, which may be a string that contains
- *                           string table references.
- * @return {!string} String with message references replaced.
+ *     string table references.
+ * @return {string} String with message references replaced.
  */
 Blockly.utils.replaceMessageReferences = function(message) {
   if (typeof message != 'string') {
@@ -791,7 +817,7 @@ Blockly.utils.wrapToText_ = function(words, wordBreaks) {
 /**
  * Check if 3D transforms are supported by adding an element
  * and attempting to set the property.
- * @return {boolean} true if 3D transforms are supported.
+ * @return {boolean} True if 3D transforms are supported.
  */
 Blockly.utils.is3dSupported = function() {
   if (Blockly.utils.is3dSupported.cached_ !== undefined) {
@@ -821,10 +847,10 @@ Blockly.utils.is3dSupported = function() {
       el.style[t] = 'translate3d(1px,1px,1px)';
       var computedStyle = goog.global.getComputedStyle(el);
       if (!computedStyle) {
-        // getComputedStyle in Firefox returns null when blockly is loaded
+        // getComputedStyle in Firefox returns null when Blockly is loaded
         // inside an iframe with display: none.  Returning false and not
         // caching is3dSupported means we try again later.  This is most likely
-        // when users are interacting with blocks which should mean blockly is
+        // when users are interacting with blocks which should mean Blockly is
         // visible again.
         // See https://bugzilla.mozilla.org/show_bug.cgi?id=548397
         document.body.removeChild(el);
@@ -883,7 +909,7 @@ Blockly.utils.runAfterPageLoad = function(fn) {
 /**
  * Sets the CSS transform property on an element. This function sets the
  * non-vendor-prefixed and vendor-prefixed versions for backwards compatibility
- * with older browsers. See http://caniuse.com/#feat=transforms2d
+ * with older browsers. See https://caniuse.com/#feat=transforms2d
  * @param {!Element} node The node which the CSS transform should be applied.
  * @param {string} transform The value of the CSS `transform` property.
  */
@@ -895,7 +921,7 @@ Blockly.utils.setCssTransform = function(node, transform) {
 /**
  * Get the position of the current viewport in window coordinates.  This takes
  * scroll into account.
- * @return {!Object} an object containing window width, height, and scroll
+ * @return {!Object} An object containing window width, height, and scroll
  *     position in window coordinates.
  * @package
  */
@@ -982,7 +1008,7 @@ Blockly.utils.containsNode = function(parent, descendant) {
  * @param {boolean=} opt_stripFollowing Optionally ignore all following
  *    statements (blocks that are not inside a value or statement input
  *    of the block).
- * @returns {!Object} Map of types to type counts for descendants of the bock.
+ * @return {!Object} Map of types to type counts for descendants of the bock.
  */
 Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
   var typeCountsMap = Object.create(null);
@@ -1002,4 +1028,21 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
     }
   }
   return typeCountsMap;
+};
+
+/**
+ * Clamp the provided number between the lower bound and the upper bound.
+ * @param {number} lowerBound The desired lower bound.
+ * @param {number} number The number to clamp.
+ * @param {number} upperBound The desired upper bound.
+ * @return {number} The clamped number.
+ * @package
+ */
+Blockly.utils.clampNumber = function(lowerBound, number, upperBound) {
+  if (upperBound < lowerBound) {
+    var temp = upperBound;
+    upperBound = lowerBound;
+    lowerBound = temp;
+  }
+  return Math.max(lowerBound, Math.min(number, upperBound));
 };

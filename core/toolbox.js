@@ -333,18 +333,16 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
           }
         }
 
-        var styleName = childIn.getAttribute('style');
+        var styleName = childIn.getAttribute('categorystyle');
         var colour = childIn.getAttribute('colour');
 
         if (colour && styleName) {
           childOut.hexColour = '';
           console.warn('Toolbox category "' + categoryName +
-            '" can not have both a style and a colour');
-        }
-        else if (styleName) {
+              '" can not have both a style and a colour');
+        } else if (styleName) {
           this.setColourFromStyle_(styleName, childOut, categoryName);
-        }
-        else {
+        } else {
           this.setColour_(colour, childOut, categoryName);
         }
 
@@ -435,8 +433,7 @@ Blockly.Toolbox.prototype.setColourFromStyle_ = function(
     var style = Blockly.getTheme().getCategoryStyle(styleName);
     if (style && style.colour) {
       this.setColour_(style.colour, childOut, categoryName);
-    }
-    else {
+    } else {
       console.warn('Style "' + styleName + '" must exist and contain a colour value');
     }
   }
@@ -644,8 +641,7 @@ Blockly.Toolbox.TreeControl.prototype.handleTouchEvent_ = function(e) {
 Blockly.Toolbox.TreeControl.prototype.createNode = function(opt_html) {
   var html = opt_html ?
       goog.html.SafeHtml.htmlEscape(opt_html) : goog.html.SafeHtml.EMPTY;
-  return new Blockly.Toolbox.TreeNode(this.toolbox_, html,
-      this.getConfig(), this.getDomHelper());
+  return new Blockly.Toolbox.TreeNode(this.toolbox_, html, this.getConfig());
 };
 
 /**
@@ -695,15 +691,14 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
  * A single node in the tree, customized for Blockly's UI.
  * @param {Blockly.Toolbox} toolbox The parent toolbox for this tree.
  * @param {!goog.html.SafeHtml} html The HTML content of the node label.
- * @param {Object=} opt_config The configuration for the tree. See
- *    goog.ui.tree.TreeControl.DefaultConfig. If not specified, a default config
- *    will be used.
- * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+ * @param {Object|undefined} config The configuration for the tree.
+ *    See goog.ui.tree.TreeControl.DefaultConfig.
+ *    If not specified, a default config will be used.
  * @constructor
  * @extends {goog.ui.tree.TreeNode}
  */
-Blockly.Toolbox.TreeNode = function(toolbox, html, opt_config, opt_domHelper) {
-  goog.ui.tree.TreeNode.call(this, html, opt_config, opt_domHelper);
+Blockly.Toolbox.TreeNode = function(toolbox, html, config) {
+  goog.ui.tree.TreeNode.call(this, html, config);
   if (toolbox) {
     var resize = function() {
       // Even though the div hasn't changed size, the visible workspace
@@ -792,9 +787,9 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 
 /**
  * A blank separator node in the tree.
- * @param {Object=} config The configuration for the tree. See
- *    goog.ui.tree.TreeControl.DefaultConfig. If not specified, a default config
- *    will be used.
+ * @param {Object|undefined} config The configuration for the tree.
+ *    See goog.ui.tree.TreeControl.DefaultConfig
+ *    If not specified, a default config will be used.
  * @constructor
  * @extends {Blockly.Toolbox.TreeNode}
  */

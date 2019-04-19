@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.FieldColour');
 
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Field');
 goog.require('Blockly.utils');
 
@@ -52,13 +53,29 @@ goog.inherits(Blockly.FieldColour, Blockly.Field);
 /**
  * Construct a FieldColour from a JSON arg object.
  * @param {!Object} options A JSON object with options (colour).
- * @returns {!Blockly.FieldColour} The new field instance.
+ * @return {!Blockly.FieldColour} The new field instance.
  * @package
  * @nocollapse
  */
 Blockly.FieldColour.fromJson = function(options) {
   return new Blockly.FieldColour(options['colour']);
 };
+
+/**
+ * Default width of a colour field.
+ * @type {number}
+ * @private
+ * @const
+ */
+Blockly.FieldColour.DEFAULT_WIDTH = 16;
+
+/**
+ * Default height of a colour field.
+ * @type {number}
+ * @private
+ * @const
+ */
+Blockly.FieldColour.DEFAULT_HEIGHT = 12;
 
 /**
  * Array of colours used by this field.  If null, use the global list.
@@ -83,11 +100,29 @@ Blockly.FieldColour.prototype.titles_ = null;
 Blockly.FieldColour.prototype.columns_ = 0;
 
 /**
+ * Border colour for the dropdown div showing the colour picker.  Must be a CSS
+ * string.
+ * @type {string}
+ * @private
+ */
+Blockly.FieldColour.prototype.DROPDOWN_BORDER_COLOUR = 'silver';
+
+/**
+ * Background colour for the dropdown div showing the colour picker.  Must be a
+ * CSS string.
+ * @type {string}
+ * @private
+ */
+Blockly.FieldColour.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
+
+/**
  * Install this field on a block.
  */
 Blockly.FieldColour.prototype.init = function() {
   Blockly.FieldColour.superClass_.init.call(this);
   this.borderRect_.style['fillOpacity'] = 1;
+  this.size_ = new goog.math.Size(Blockly.FieldColour.DEFAULT_WIDTH,
+      Blockly.FieldColour.DEFAULT_HEIGHT);
   this.setValue(this.getValue());
 };
 
@@ -110,6 +145,31 @@ Blockly.FieldColour.prototype.dispose = function() {
  */
 Blockly.FieldColour.prototype.getValue = function() {
   return this.colour_;
+};
+
+/**
+ * Get the size, and rerender if necessary.
+ * @return {!goog.math.Size} Height and width.
+ */
+Blockly.FieldColour.prototype.getSize = function() {
+  if (!this.size_.width) {
+    this.render_();
+  }
+
+  return this.size_;
+};
+
+/**
+ * Updates the width of the field.  Colour fields have a constant width, but
+ * the width is sometimes reset to force a rerender.
+ */
+Blockly.FieldColour.prototype.updateWidth = function() {
+  var width = Blockly.FieldColour.DEFAULT_WIDTH;
+  if (this.borderRect_) {
+    this.borderRect_.setAttribute('width',
+        width + Blockly.BlockSvg.SEP_SPACE_X);
+  }
+  this.size_.width = width;
 };
 
 /**
@@ -217,21 +277,16 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
  * @private
  */
 Blockly.FieldColour.prototype.showEditor_ = function() {
-  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
-      Blockly.FieldColour.widgetDispose_);
 
-  // Record viewport dimensions before adding the widget.
-  var viewportBBox = Blockly.utils.getViewportBBox();
-  var anchorBBox = this.getScaledBBox_();
+  Blockly.DropDownDiv.hideWithoutAnimation();
+  Blockly.DropDownDiv.clearContent();
 
-  // Create and add the colour picker, then record the size.
   var picker = this.createWidget_();
-  Blockly.WidgetDiv.DIV.appendChild(picker);
-  var paletteSize = goog.style.getSize(picker);
+  Blockly.DropDownDiv.getContentDiv().appendChild(picker);
+  Blockly.DropDownDiv.setColour(
+      this.DROPDOWN_BACKGROUND_COLOUR, this.DROPDOWN_BORDER_COLOUR);
 
-  // Position the picker to line up with the field.
-  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, paletteSize,
-      this.sourceBlock_.RTL);
+  Blockly.DropDownDiv.showPositionedByField(this);
 
   // Configure event handler on the table to listen for any event in a cell.
   Blockly.FieldColour.onUpWrapper_ = Blockly.bindEvent_(picker,

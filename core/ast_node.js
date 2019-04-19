@@ -38,7 +38,9 @@ goog.provide('Blockly.ASTNode');
  * @param {Object?} params Optional dictionary of options.
  */
 Blockly.ASTNode = function(type, location, params) {
-
+  if (!location) {
+    throw Error('Cannot create a node without a location.');
+  }
   /*
    * The type of the location.
    * One of Blockly.ASTNode.types
@@ -70,6 +72,20 @@ Blockly.ASTNode.types = {
   STACK: 'stack',
   WORKSPACE: 'workspace'
 };
+
+/**
+ * The amount to move the workspace coordinate.
+ * @type {number}
+ * @private
+ */
+Blockly.ASTNode.wsMove_ = 10;
+
+/**
+ * The default position on the worskpace when starting from a block.
+ * @type {number}
+ * @private
+ */
+Blockly.ASTNode.defaultPosition_ = new goog.math.Coordinate(100,100);
 
 /**
  * Create an ast node from a field.
@@ -157,20 +173,6 @@ Blockly.ASTNode.createWorkspaceNode = function(workspace, wsCoordinate) {
   return new Blockly.ASTNode(
       Blockly.ASTNode.types.WORKSPACE, workspace, params);
 };
-
-/**
- * The amount to move the workspace coordinate.
- * @type {number}
- * @private
- */
-Blockly.ASTNode.wsMove_ = 10;
-
-/**
- * The default position on the worskpace when starting from a block.
- * @type {number}
- * @private
- */
-Blockly.ASTNode.defaultPosition_ = new goog.math.Coordinate(100,100);
 
 /**
  * Parse the optional parameters.
@@ -347,7 +349,7 @@ Blockly.ASTNode.prototype.findPrevForInput_ = function(location, parentInput){
       newAstNode = Blockly.ASTNode.createInputNode(newInput);
       break;
     } else if (fieldNode && fieldNode.getLocation() && fieldNode !== location) {
-      newAstNode = Blockly.ASTNode.createFieldNode(fieldNode.getLocation());
+      newAstNode = fieldNode;
       break;
     }
   }
@@ -376,7 +378,7 @@ Blockly.ASTNode.prototype.findPrevForField_ = function(location, parentInput) {
 /**
  * Navigate between stacks of blocks on the workspace.
  * @param {?Boolean} forward True to go forward. False to go backwards.
- * @return {?Blockly.BlockSvg} The first block of the next stack.
+ * @return {?Blockly.ASTNode} The first block of the next stack.
  * @private
  */
 Blockly.ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
@@ -421,6 +423,8 @@ Blockly.ASTNode.prototype.findTopASTConnection_ = function(block) {
     newAstNode = Blockly.ASTNode.createConnectionNode(previousConnection);
   } else if (outputConnection) {
     newAstNode = Blockly.ASTNode.createConnectionNode(outputConnection);
+  } else {
+    newAstNode = Blockly.ASTNode.createBlockNode(block);
   }
   return newAstNode;
 };
@@ -457,7 +461,7 @@ Blockly.ASTNode.prototype.next = function() {
   switch (this.type_) {
     case Blockly.ASTNode.types.WORKSPACE:
       //TODO: Need to limit this. The view is bounded to half a screen beyond
-      //the furthest blocks
+      //the furthest block.
       var newX = this.wsCoordinate_.x + Blockly.ASTNode.wsMove_;
       var newWsCoordinate = new goog.math.Coordinate(newX, this.wsCoordinate_.y);
       newAstNode = Blockly.ASTNode.createWorkspaceNode(this.location_,
@@ -551,9 +555,9 @@ Blockly.ASTNode.prototype.in = function() {
 };
 
 /**
- * Find the next element that is one level to the left of the current position.
+ * Find the element to the left of the current element in the ast.
  * @return {?Blockly.ASTNode} An ast node that wraps the previous field,
- * connection, workspace or block.If no element exists to the left then return
+ * connection, workspace or block. If no element exists to the left then return
  * null.
  */
 Blockly.ASTNode.prototype.prev = function() {
@@ -613,8 +617,8 @@ Blockly.ASTNode.prototype.prev = function() {
 };
 
 /**
- * Find the next element that is one level above the current location and all
- * the way to the left of the current location.
+ * Find the next element that is one position above and all the way to the left
+ * of the current location.
  * @return {?Blockly.ASTNode} An ast node that wraps the next field, connection,
  *     workspace or block. Returns null if we are at the workspace level.
  */

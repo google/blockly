@@ -150,11 +150,13 @@ Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
  * workspace.
  * @private
  */
-Blockly.CursorSvg.prototype.showWithCoordinates_ = function(position) {
-  this.CURSOR_REFERENCE = position;
+Blockly.CursorSvg.prototype.showWithCoordinates_ = function() {
+  var workspaceNode = this.getCurNode();
+  var wsCoordinate = workspaceNode.getWsCoordinate();
+  this.CURSOR_REFERENCE = wsCoordinate;
   this.currentCursorSvg = this.cursorSvgLine_;
   this.setParent_(this.workspace_.svgBlockCanvas_);
-  this.positionLine_(position.x, position.y, Blockly.CursorSvg.CURSOR_WIDTH);
+  this.positionLine_(wsCoordinate.x, wsCoordinate.y, Blockly.CursorSvg.CURSOR_WIDTH);
   this.showCurrent_();
 };
 
@@ -163,7 +165,8 @@ Blockly.CursorSvg.prototype.showWithCoordinates_ = function(position) {
  * @private
  */
 Blockly.CursorSvg.prototype.showWithBlock_ = function() {
-  var block = this.getLocation();
+  //TODO: Change this from getLocation to something else
+  var block = this.getCurNode().getLocation();
 
   this.currentCursorSvg = this.cursorSvgRect_;
   this.setParent_(block.getSvgRoot());
@@ -176,7 +179,7 @@ Blockly.CursorSvg.prototype.showWithBlock_ = function() {
  * @private
  */
 Blockly.CursorSvg.prototype.showWithInputOutput_ = function() {
-  var connection = this.getLocation();
+  var connection = this.getCurNode().getLocation();
   this.currentCursorSvg = this.cursorInputOutput_;
   this.setParent_(connection.sourceBlock_.getSvgRoot());
   this.positionInputOutput_(connection);
@@ -188,7 +191,7 @@ Blockly.CursorSvg.prototype.showWithInputOutput_ = function() {
  * @private
  */
 Blockly.CursorSvg.prototype.showWithNext_ = function() {
-  var connection = this.getLocation();
+  var connection = this.getCurNode().getLocation();
   var targetBlock = connection.sourceBlock_;
   var x = 0;
   var y = connection.offsetInBlock_.y;
@@ -205,7 +208,7 @@ Blockly.CursorSvg.prototype.showWithNext_ = function() {
  * @private
  */
 Blockly.CursorSvg.prototype.showWithPrev_ = function() {
-  var connection = this.getLocation();
+  var connection = this.getCurNode().getLocation();
   var targetBlock = connection.sourceBlock_;
   var width = targetBlock.getHeightWidth().width;
 
@@ -221,7 +224,7 @@ Blockly.CursorSvg.prototype.showWithPrev_ = function() {
  * @private
  */
 Blockly.CursorSvg.prototype.showWithField_ = function() {
-  var field = this.getLocation();
+  var field = this.getCurNode().getLocation();
   var width = field.borderRect_.width.baseVal.value;
   var height = field.borderRect_.height.baseVal.value;
 
@@ -237,21 +240,27 @@ Blockly.CursorSvg.prototype.showWithField_ = function() {
  * @param {?goog.math.Coordinate} position The position of the cursor on the
  * workspace.
  */
-Blockly.CursorSvg.prototype.showWithAnything_ = function(position) {
-  var location = this.getLocation();
-  if (this.type_ === this.types.BLOCK) {
+Blockly.CursorSvg.prototype.showWithAnything_ = function() {
+  var curNode = this.getCurNode();
+  if (curNode.getType() === Blockly.ASTNode.types.BLOCK) {
     this.showWithBlock_();
-  } else if (location.type === Blockly.INPUT_VALUE
-    || location.type === Blockly.OUTPUT_VALUE) {
+    //This needs to be the location type because next connections can be input
+    //type but they need to draw like they are a next statement
+  } else if (curNode.getLocation().type === Blockly.INPUT_VALUE
+    || curNode.getType() === Blockly.ASTNode.types.OUTPUT) {
     this.showWithInputOutput_();
-  } else if (location.type === Blockly.NEXT_STATEMENT) {
+  } else if (curNode.getLocation().type === Blockly.NEXT_STATEMENT) {
     this.showWithNext_();
-  } else if (location.type === Blockly.PREVIOUS_STATEMENT) {
+  } else if (curNode.getType() === Blockly.ASTNode.types.PREVIOUS) {
     this.showWithPrev_();
-  } else if (this.type_ === this.types.FIELD) {
+  } else if (curNode.getType() === Blockly.ASTNode.types.FIELD) {
     this.showWithField_();
-  } else if (this.type_ === this.types.WORKSPACE) {
-    this.showWithCoordinates_(position);
+  } else if (curNode.getType() === Blockly.ASTNode.types.WORKSPACE) {
+    this.showWithCoordinates_();
+  } else if (curNode.getType() === Blockly.ASTNode.types.STACK) {
+    //TODO: This should be something else so that we show that we are at the
+    //stack level.
+    this.showWithBlock_();
   }
 };
 
@@ -327,8 +336,8 @@ Blockly.CursorSvg.prototype.hide = function() {
  * workspace.
  * @package
  */
-Blockly.CursorSvg.prototype.update_ = function(position) {
-  this.showWithAnything_(position);
+Blockly.CursorSvg.prototype.update_ = function() {
+  this.showWithAnything_();
 };
 
 /**

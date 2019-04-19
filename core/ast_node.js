@@ -28,9 +28,11 @@ goog.provide('Blockly.ASTNode');
 
 /**
  * Class for an ASTNode.
+ * It is recommended that you use one of the createNode methods instead of
+ * creating a node directly.
  * @constructor
  * @param {!String} type This is the type of the location using
- *     Blockly.ASTNodes.types.
+ *     Blockly.ASTNode.types.
  * @param {Blockly.Block|Blockly.Connection|Blockly.Field|Blockly.Workspace}
  *     location The position in the ast.
  * @param {Object?} params Optional dictionary of options.
@@ -39,6 +41,7 @@ Blockly.ASTNode = function(type, location, params) {
 
   /*
    * The type of the location.
+   * One of Blockly.ASTNode.types
    * @type String
    * @private
    */
@@ -52,6 +55,20 @@ Blockly.ASTNode = function(type, location, params) {
 
   this.processParams_(params);
 
+};
+
+/**
+ * Object holding different types for an ASTNode.
+ */
+Blockly.ASTNode.types = {
+  FIELD: 'field',
+  BLOCK: 'block',
+  INPUT: 'input',
+  OUTPUT: 'output',
+  NEXT: 'next',
+  PREVIOUS: 'previous',
+  STACK: 'stack',
+  WORKSPACE: 'workspace'
 };
 
 /**
@@ -74,10 +91,10 @@ Blockly.ASTNode.createConnectionNode = function(connection) {
   var astNode;
   if (!connection){return;}
   if (connection.type === Blockly.INPUT_VALUE) {
-    astNode = new Blockly.ASTNode(Blockly.ASTNode.types.INPUT, connection);
+    astNode = new Blockly.ASTNode.createInputNode(connection.getParentInput());
   } else if (connection.type === Blockly.NEXT_STATEMENT
       && connection.getParentInput()) {
-    astNode = new Blockly.ASTNode(Blockly.ASTNode.types.INPUT, connection);
+    astNode = new Blockly.ASTNode.createInputNode(connection.getParentInput());
   } else if (connection.type === Blockly.NEXT_STATEMENT) {
     astNode = new Blockly.ASTNode(Blockly.ASTNode.types.NEXT, connection);
   } else if (connection.type === Blockly.OUTPUT_VALUE) {
@@ -89,14 +106,17 @@ Blockly.ASTNode.createConnectionNode = function(connection) {
 };
 
 /**
- * Creates an ast node from an input. Stores the connection of the input instead
- * of the actual input.
+ * Creates an ast node from an input. Stores the input connection as the
+ * location.
  * @param {?Blockly.Input} input The input used to create an ast node.
  * @return {?Blockly.ASTNode} The ast node for the input.
  */
 Blockly.ASTNode.createInputNode = function(input) {
-  if (!input){return;}
-  return new Blockly.ASTNode(Blockly.ASTNode.types.INPUT, input);
+  if (!input){return null;}
+  var params = {
+    "input": input
+  };
+  return new Blockly.ASTNode(Blockly.ASTNode.types.INPUT, input.connection, params);
 };
 
 /**
@@ -105,17 +125,19 @@ Blockly.ASTNode.createInputNode = function(input) {
  * @return {?Blockly.ASTNode} The ast node for the block.
  */
 Blockly.ASTNode.createBlockNode = function(block) {
-  if (!block){return;}
+  if (!block){return null;}
   return new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, block);
 };
 
 /**
- * Create an ast node of type stack.
- * @param {?Blockly.Block} topBlock The top block of a stack.
- * @return {?Blockly.ASTNode} [description]
+ * Create an ast node of type stack. A stack, represented by its top block, is
+ *     the set of all blocks connected to a top block, including the top block.
+ * @param {?Blockly.Block} topBlock A top block has no parent and can be found
+ *     in the list returned by workspace.getTopBlocks().
+ * @return {?Blockly.ASTNode} The node for a stack.
  */
 Blockly.ASTNode.createStackNode = function(topBlock) {
-  if (!topBlock){return;}
+  if (!topBlock){return null;}
   return new Blockly.ASTNode(Blockly.ASTNode.types.STACK, topBlock);
 };
 
@@ -124,30 +146,16 @@ Blockly.ASTNode.createStackNode = function(topBlock) {
  * @param {?Blockly.Workspace} workspace The workspace that we are on.
  * @param {?goog.math.Coordinate} wsCoordinate The position on the workspace for
  *     this node.
- * @return {?Blockly.ASTNode} The node for a workspace.
+ * @return {?Blockly.ASTNode} The node for a position on a workspace.
  */
 Blockly.ASTNode.createWorkspaceNode = function(workspace, wsCoordinate) {
-  if (!workspace || !wsCoordinate){return;}
+  if (!workspace || !wsCoordinate){return null;}
 
   var params = {
     "wsCoordinate": wsCoordinate
   };
   return new Blockly.ASTNode(
       Blockly.ASTNode.types.WORKSPACE, workspace, params);
-};
-
-/**
- * Object holding different types for an ASTNode.
- */
-Blockly.ASTNode.types = {
-  FIELD: 'field',
-  BLOCK: 'block',
-  INPUT: 'input',
-  OUTPUT: 'output',
-  NEXT: 'next',
-  PREVIOUS: 'previous',
-  STACK: 'stack',
-  WORKSPACE: 'workspace'
 };
 
 /**
@@ -174,6 +182,8 @@ Blockly.ASTNode.prototype.processParams_ = function(params){
 
   if (params['wsCoordinate']) {
     this.wsCoordinate_ = params['wsCoordinate'];
+  } else if (params['input']) {
+    this.parentInput_ = params['input'];
   }
 };
 
@@ -188,6 +198,7 @@ Blockly.ASTNode.prototype.getLocation = function() {
 
 /**
  * The type of the current location.
+ * One of Blockly.ASTNode.types
  * @return {String} The type of the location.
  */
 Blockly.ASTNode.prototype.getType = function() {
@@ -201,6 +212,16 @@ Blockly.ASTNode.prototype.getType = function() {
  */
 Blockly.ASTNode.prototype.getWsCoordinate = function() {
   return this.wsCoordinate_;
+};
+
+/**
+ * Get the parent input of the location.
+ * @return {Blockly.Input} The parent input of the location or null if the node
+ * is not input type.
+ * @package
+ */
+Blockly.ASTNode.prototype.getParentInput = function() {
+  return this.parentInput_;
 };
 
 /**
@@ -277,7 +298,7 @@ Blockly.ASTNode.prototype.findNextForInput_ = function(location, parentInput){
     var newInput = inputs[i];
     var field = this.findNextEditableField_(location, newInput, true);
     if (field) {
-      newAstNode = Blockly.ASTNode.createFieldNode(field);
+      newAstNode = field;
       break;
     } else if (newInput.connection) {
       var connection = newInput.connection;
@@ -378,7 +399,7 @@ Blockly.ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
       } else if (resultIndex == topBlocks.length) {
         resultIndex = 0;
       }
-      return topBlocks[resultIndex];
+      return Blockly.ASTNode.createStackNode(topBlocks[resultIndex]);
     }
   }
   throw Error('Couldn\'t find ' + (forward ? 'next' : 'previous') +
@@ -414,12 +435,12 @@ Blockly.ASTNode.prototype.findTopASTConnection_ = function(block) {
  * @private
  */
 Blockly.ASTNode.prototype.findOutLocationForBlock_ = function(block) {
-  var newLocation, newAstNode;
+  var newLocation = null;
+  var newAstNode = null;
 
   newLocation = block.previousConnection.targetConnection;
   newAstNode = Blockly.ASTNode.createConnectionNode(newLocation);
   if (!newLocation) {
-    newLocation = block.previousConnection;
     newAstNode = Blockly.ASTNode.createStackNode(block);
   }
   return newAstNode;
@@ -435,6 +456,8 @@ Blockly.ASTNode.prototype.next = function() {
 
   switch (this.type_) {
     case Blockly.ASTNode.types.WORKSPACE:
+      //TODO: Need to limit this. The view is bounded to half a screen beyond
+      //the furthest blocks
       var newX = this.wsCoordinate_.x + Blockly.ASTNode.wsMove_;
       var newWsCoordinate = new goog.math.Coordinate(newX, this.wsCoordinate_.y);
       newAstNode = Blockly.ASTNode.createWorkspaceNode(this.location_,
@@ -442,8 +465,7 @@ Blockly.ASTNode.prototype.next = function() {
       break;
 
     case Blockly.ASTNode.types.STACK:
-      var nextTopBlock = this.navigateBetweenStacks_(true);
-      newAstNode = Blockly.ASTNode.createStackNode(nextTopBlock);
+      var newAstNode = this.navigateBetweenStacks_(true);
       break;
 
     case Blockly.ASTNode.types.OUTPUT:
@@ -456,8 +478,7 @@ Blockly.ASTNode.prototype.next = function() {
       break;
 
     case Blockly.ASTNode.types.INPUT:
-      var inputConnection = this.location_.connection;
-      newAstNode = this.findNextForInput_(inputConnection, this.location_);
+      newAstNode = this.findNextForInput_(this.location_, this.getParentInput());
       break;
 
     case Blockly.ASTNode.types.BLOCK:
@@ -489,17 +510,15 @@ Blockly.ASTNode.prototype.next = function() {
  * Find the element one level below and all the way to the left of the current
  * location.
  * @return {?Blockly.ASTNode} An ast node that wraps the next field, connection,
- * workspace, or block.
+ * workspace, or block. Returns null if there is nothing below this node.
  */
 Blockly.ASTNode.prototype.in = function() {
-  if (!this.location_) {return null;}
   var newAstNode = null;
 
   switch (this.type_) {
     case Blockly.ASTNode.types.WORKSPACE:
-      var firstBlock = this.location_.getTopBlocks()[0];
-      newAstNode = this.findTopASTConnection_(firstBlock);
-      newAstNode.type_ = Blockly.ASTNode.types.STACK;
+      var firstTopBlock = this.location_.getTopBlocks()[0];
+      newAstNode = Blockly.ASTNode.createStackNode(firstTopBlock);
       break;
 
     case Blockly.ASTNode.types.STACK:
@@ -521,7 +540,7 @@ Blockly.ASTNode.prototype.in = function() {
       break;
 
     case Blockly.ASTNode.types.INPUT:
-      var inputConnection = this.location_.connection;
+      var inputConnection = this.location_;
       if (inputConnection.targetBlock()) {
         newAstNode = this.findTopASTConnection_(inputConnection.targetBlock());
       }
@@ -532,13 +551,13 @@ Blockly.ASTNode.prototype.in = function() {
 };
 
 /**
- * Find the next element that is one level to the left of the current location.
- * @return {?Blockly.ASTNode} An ast node that wraps the next field, connection,
- *     workspace or block.If no element exists to the left then return null.
+ * Find the next element that is one level to the left of the current position.
+ * @return {?Blockly.ASTNode} An ast node that wraps the previous field,
+ * connection, workspace or block.If no element exists to the left then return
+ * null.
  */
 Blockly.ASTNode.prototype.prev = function() {
-  if (!this.location_) {return null;}
-  var newAstNode;
+  var newAstNode = null;
 
   switch (this.type_) {
     case Blockly.ASTNode.types.WORKSPACE:
@@ -547,8 +566,7 @@ Blockly.ASTNode.prototype.prev = function() {
       newAstNode = Blockly.ASTNode.createWorkspaceNode(this.location_, newCoord);
       break;
     case Blockly.ASTNode.types.STACK:
-      var nextTopBlock = this.navigateBetweenStacks_(true);
-      newAstNode = Blockly.ASTNode.createStackNode(nextTopBlock);
+      var newAstNode = this.navigateBetweenStacks_(false);
       break;
 
     case Blockly.ASTNode.types.OUTPUT:
@@ -565,8 +583,7 @@ Blockly.ASTNode.prototype.prev = function() {
       break;
 
     case Blockly.ASTNode.types.INPUT:
-      var inputConnection = this.location_.connection;
-      newAstNode = this.findPrevForInput_(inputConnection, this.location_);
+      newAstNode = this.findPrevForInput_(this.location_, this.getParentInput());
       break;
 
     case Blockly.ASTNode.types.BLOCK:
@@ -602,8 +619,7 @@ Blockly.ASTNode.prototype.prev = function() {
  *     workspace or block. Returns null if we are at the workspace level.
  */
 Blockly.ASTNode.prototype.out = function() {
-  if (!this.location_) {return null;}
-  var newAstNode;
+  var newAstNode = null;
 
   switch (this.type_) {
     case Blockly.ASTNode.types.STACK:

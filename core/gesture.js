@@ -765,7 +765,8 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
   if (e.shiftKey) {
     var screenCoord = new goog.math.Coordinate(e.clientX, e.clientY);
     var wsCoord = Blockly.utils.screenToWsCoordinates(ws, screenCoord);
-    ws.cursor.setLocation(ws, false, wsCoord);
+    var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
+    ws.cursor.setLocation(wsNode);
     Blockly.keyboardAccessibilityMode_ = true;
   } else if (Blockly.selected) {
     Blockly.selected.unselect();

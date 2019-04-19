@@ -47,7 +47,7 @@ Blockly.Navigation.flyoutBlock_ = null;
  * @type ?Blockly.Connection
  * @private
  */
-Blockly.Navigation.insertionConnection_ = null;
+Blockly.Navigation.insertionNode_ = null;
 
 /**
  * State indicating focus is currently on the flyout.
@@ -66,9 +66,11 @@ Blockly.Navigation.STATE_TOOLBOX = 3;
 
 /**
  * The current state the user is in.
+ * Initialized to workspace state since a user enters navigation mode by shift
+ * clicking on a block or workspace.
  * @private
  */
-Blockly.Navigation.currentState_ = null;
+Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_WS;
 
 /************************/
 /** Toolbox Navigation **/
@@ -177,7 +179,8 @@ Blockly.Navigation.focusFlyout = function() {
     if (topBlocks.length > 0) {
       topBlock = topBlocks[0];
       Blockly.Navigation.flyoutBlock_ = topBlock;
-      cursor.setLocation(Blockly.Navigation.flyoutBlock_);
+      var astNode = Blockly.ASTNode.createBlockNode(Blockly.Navigation.flyoutBlock_);
+      cursor.setLocation(astNode);
     }
   }
 };
@@ -199,7 +202,8 @@ Blockly.Navigation.selectNextBlockInFlyout = function() {
 
   if (nextBlock) {
     Blockly.Navigation.flyoutBlock_ = nextBlock;
-    cursor.setLocation(Blockly.Navigation.flyoutBlock_, false);
+    var astNode = Blockly.ASTNode.createBlockNode(nextBlock);
+    cursor.setLocation(astNode);
   }
 };
 
@@ -220,7 +224,8 @@ Blockly.Navigation.selectPreviousBlockInFlyout = function() {
 
   if (prevBlock) {
     Blockly.Navigation.flyoutBlock_ = prevBlock;
-    cursor.setLocation(Blockly.Navigation.flyoutBlock_, false);
+    var astNode = Blockly.ASTNode.createBlockNode(prevBlock);
+    cursor.setLocation(astNode);
   }
 };
 
@@ -244,9 +249,14 @@ Blockly.Navigation.getFlyoutBlocks_ = function() {
  * it on the workspace.
  */
 Blockly.Navigation.insertFromFlyout = function() {
+  var connection = null;
+  //TODO: IF this is null then we need to add to the correct place on the
+  //workspace.
+  if (Blockly.Navigation.insertionNode_) {
+    connection = Blockly.Navigation.insertionNode_.getLocation();
+  }
   var cursor = Blockly.Navigation.cursor_;
   var flyoutBlock = Blockly.Navigation.flyoutBlock_;
-  var connection = Blockly.Navigation.insertionConnection_;
   var workspace = Blockly.getMainWorkspace();
   var toolbox = workspace.getToolbox();
   var flyout = toolbox.flyout_;
@@ -260,7 +270,8 @@ Blockly.Navigation.insertFromFlyout = function() {
     var connection = previousConnection ? previousConnection : outputConnection;
     //TODO: This will have to be fixed when we add in a block that does not have
     //a previous or output connection
-    cursor.setLocation(connection);
+    var astNode = Blockly.ASTNode.createConnectionNode(connection);
+    cursor.setLocation(astNode);
   }
 };
 
@@ -334,8 +345,8 @@ Blockly.Navigation.insertBlock = function(block, connection) {
  * connection.
  */
 Blockly.Navigation.insertBlockFromWs = function() {
-  var targetConnection = Blockly.Navigation.insertionConnection_;
-  var sourceConnection = Blockly.Navigation.cursor_.getLocation();
+  var targetConnection = Blockly.Navigation.insertionNode_;
+  var sourceConnection = Blockly.Navigation.cursor_.getCurNode();
   try {
     sourceConnection.connect(targetConnection);
   } catch (Error) {
@@ -362,7 +373,8 @@ Blockly.Navigation.focusWorkspace = function() {
     //TODO: This still needs to work with blocks that have neither previous
     //or output connection.
     var connection = previousConnection ? previousConnection : outputConnection;
-    cursor.setLocation(connection);
+    var newAstNode = Blockly.ASTNode.createConnectionNode(connection);
+    cursor.setLocation(newAstNode);
   }
 };
 
@@ -374,7 +386,8 @@ Blockly.Navigation.focusWorkspace = function() {
 Blockly.Navigation.keyboardNext = function() {
   var cursor = Blockly.Navigation.cursor_;
   cursor.next();
-  if (cursor.getLocationType() === cursor.types.NEXT) {
+  var newNode = cursor.getCurNode();
+  if (newNode.getType() === Blockly.ASTNode.types.NEXT) {
     cursor.next();
   }
 };
@@ -385,7 +398,8 @@ Blockly.Navigation.keyboardNext = function() {
 Blockly.Navigation.keyboardIn = function() {
   var cursor = Blockly.Navigation.cursor_;
   cursor.in();
-  if (cursor.getLocationType() === cursor.types.OUTPUT) {
+  var newNode = cursor.getCurNode();
+  if (newNode.getType() === Blockly.ASTNode.types.OUTPUT) {
     cursor.next();
   }
 };
@@ -395,9 +409,9 @@ Blockly.Navigation.keyboardIn = function() {
  */
 Blockly.Navigation.keyboardPrev = function() {
   var cursor = Blockly.Navigation.cursor_;
-  var location = cursor.prev();
-  var locationType = cursor.getLocationType();
-  if (location && locationType === cursor.types.NEXT) {
+  cursor.prev();
+  var newNode = cursor.getCurNode();
+  if (newNode && newNode.getType() === Blockly.ASTNode.types.NEXT) {
     cursor.prev();
   }
 };
@@ -414,8 +428,8 @@ Blockly.Navigation.keyboardOut = function() {
  * Mark the current location of the cursor.
  */
 Blockly.Navigation.markConnection = function() {
-  Blockly.Navigation.insertionConnection_ =
-    Blockly.Navigation.cursor_.getLocation();
+  Blockly.Navigation.insertionNode_ =
+    Blockly.Navigation.cursor_.getCurNode();
 };
 
 /**
@@ -423,8 +437,9 @@ Blockly.Navigation.markConnection = function() {
  */
 Blockly.Navigation.handleEnterForWS = function() {
   var cursor = Blockly.Navigation.cursor_;
-  var location = cursor.getLocation();
-  if (cursor.getLocationType() === cursor.types.FIELD) {
+  var curNode = cursor.getCurNode();
+  var location = curNode.getLocation();
+  if (curNode.getType() === Blockly.ASTNode.types.FIELD) {
     location.showEditor_();
   } else {
     Blockly.Navigation.markConnection();

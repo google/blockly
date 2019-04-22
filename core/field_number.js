@@ -45,12 +45,11 @@ goog.require('Blockly.FieldTextInput');
  */
 Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
     opt_validator) {
-  this.min_ = -Infinity;
-  this.max_ = Infinity;
+  this.setConstraints(opt_min, opt_max, opt_precision);
   opt_value = (opt_value && !isNaN(opt_value)) ? String(opt_value) : '0';
   Blockly.FieldNumber.superClass_.constructor.call(
       this, opt_value, opt_validator);
-  this.setConstraints(opt_min, opt_max, opt_precision);
+  //this.setConstraints(opt_min, opt_max, opt_precision);
 };
 goog.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
 
@@ -85,7 +84,7 @@ Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
   this.min_ = isNaN(min) ? -Infinity : min;
   max = parseFloat(max);
   this.max_ = isNaN(max) ? Infinity : max;
-  this.setValue(this.callValidator(this.getValue()));
+  //this.setValue(this.callValidator(this.getValue()));
 };
 
 /**

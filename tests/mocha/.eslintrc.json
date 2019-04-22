@@ -16,5 +16,5 @@
         "assertNotUndefined": true
 
     },
-    "extends": "eslint:recommended"
+    "extends": "../../.eslintrc.json"
 }

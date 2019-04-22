@@ -359,25 +359,14 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
         lastElement = childIn;
         break;
       case 'SEP':
-        if (lastElement) {
-          if (lastElement.tagName.toUpperCase() == 'CATEGORY') {
-            // Separator between two categories.
-            // <sep></sep>
-            treeOut.add(new Blockly.Toolbox.TreeSeparator(
-                this.treeSeparatorConfig_));
-          } else {
-            // Change the gap between two blocks.
-            // <sep gap="36"></sep>
-            // The default gap is 24, can be set larger or smaller.
-            // Note that a deprecated method is to add a gap to a block.
-            // <block type="math_arithmetic" gap="8"></block>
-            var newGap = parseFloat(childIn.getAttribute('gap'));
-            if (!isNaN(newGap) && lastElement) {
-              lastElement.setAttribute('gap', newGap);
-            }
-          }
+        if (lastElement && lastElement.tagName.toUpperCase() == 'CATEGORY') {
+          // Separator between two categories.
+          // <sep></sep>
+          treeOut.add(new Blockly.Toolbox.TreeSeparator(
+              this.treeSeparatorConfig_));
+          break;
         }
-        break;
+        // Otherwise falls through.
       case 'BLOCK':
       case 'SHADOW':
       case 'LABEL':

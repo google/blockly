@@ -89,7 +89,7 @@ suite('XML', function() {
           ],
         }]);
         var block = new Blockly.Block(this.workspace,
-          'field_colour_test_block');
+            'field_colour_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
         assertSimpleField(resultFieldDom, 'COLOUR', '#000099');
         delete Blockly.Blocks['field_colour_test_block'];
@@ -107,7 +107,7 @@ suite('XML', function() {
           ],
         }]);
         var block = new Blockly.Block(this.workspace,
-          'field_date_test_block');
+            'field_date_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
         assertSimpleField(resultFieldDom, 'DATE', '2020-02-20');
         delete Blockly.Blocks['field_date_test_block'];
@@ -138,7 +138,7 @@ suite('XML', function() {
           ],
         }]);
         var block = new Blockly.Block(this.workspace,
-          'field_dropdown_test_block');
+            'field_dropdown_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
         assertSimpleField(resultFieldDom, 'DROPDOWN', 'A');
         delete Blockly.Blocks['field_dropdown_test_block'];
@@ -159,7 +159,7 @@ suite('XML', function() {
           ],
         }]);
         var block = new Blockly.Block(this.workspace,
-          'field_image_test_block');
+            'field_image_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block);
         assertNonSerializingField(resultFieldDom);
         delete Blockly.Blocks['field_image_test_block'];
@@ -177,7 +177,7 @@ suite('XML', function() {
           ],
         }]);
         var block = new Blockly.Block(this.workspace,
-          'field_label_test_block');
+            'field_label_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block);
         assertNonSerializingField(resultFieldDom);
         delete Blockly.Blocks['field_label_test_block'];
@@ -195,7 +195,7 @@ suite('XML', function() {
           ],
         }]);
         var block = new Blockly.Block(this.workspace,
-          'field_number_test_block');
+            'field_number_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
         assertSimpleField(resultFieldDom, 'NUMBER', '97');
         delete Blockly.Blocks['field_number_test_block'];
@@ -213,7 +213,7 @@ suite('XML', function() {
           ],
         }]);
         var block = new Blockly.Block(this.workspace,
-          'field_text_input_test_block');
+            'field_text_input_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
         assertSimpleField(resultFieldDom, 'TEXT', 'default');
       });
@@ -237,7 +237,7 @@ suite('XML', function() {
         test('Variable Trivial', function() {
           this.workspace.createVariable('name1', '', 'id1');
           var block = new Blockly.Block(this.workspace,
-            'field_variable_test_block');
+              'field_variable_test_block');
           block.inputList[0].fieldRow[0].setValue('id1');
           var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
           assertVariableField(resultFieldDom, 'VAR', '', 'id1', 'name1');
@@ -253,7 +253,7 @@ suite('XML', function() {
 
             Blockly.Events.disable();
             var block = new Blockly.Block(this.workspace,
-              'field_variable_test_block');
+                'field_variable_test_block');
             block.inputList[0].fieldRow[0].setValue('1');
             Blockly.Events.enable();
 
@@ -263,8 +263,8 @@ suite('XML', function() {
           } finally {
             Blockly.utils.genUid = cacheGenUid;
           }
-        })
-      })
+        });
+      });
     });
   });
   suite('Deserialization', function() {

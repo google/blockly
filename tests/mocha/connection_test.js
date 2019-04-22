@@ -3,18 +3,12 @@
 suite('Connections', function() {
 
   suite('Rendered', function() {
-    function assertAllConnectionsHidden(block) {
-      assertAllConnectionsHiddenState(block, true);
-    }
-    function assertAllConnectionsVisible(block) {
-      assertAllConnectionsHiddenState(block, false);
-    }
     function assertAllConnectionsHiddenState(block, hidden) {
       var connections = block.getConnections_(true);
       for (var i = 0; i < connections.length; i++) {
         var connection = connections[i];
         if (connection.type == Blockly.PREVIOUS_STATEMENT
-            || connection.type == Blockly.OUTPUT_VALUE) {
+          || connection.type == Blockly.OUTPUT_VALUE) {
           // Only superior connections on inputs get hidden
           continue;
         }
@@ -22,8 +16,14 @@ suite('Connections', function() {
           // The next connection is not hidden when collapsed
           continue;
         }
-        assertEquals('Connection ' + i + ' failed', hidden, connections[i].hidden_)
+        assertEquals('Connection ' + i + ' failed', hidden, connections[i].hidden_);
       }
+    }
+    function assertAllConnectionsHidden(block) {
+      assertAllConnectionsHiddenState(block, true);
+    }
+    function assertAllConnectionsVisible(block) {
+      assertAllConnectionsHiddenState(block, false);
     }
 
     setup(function() {
@@ -83,7 +83,7 @@ suite('Connections', function() {
         blockA.setCollapsed(true);
 
         assertEquals(blockA, blockB.getParent());
-        assertNull(blockC.getParent())
+        assertNull(blockC.getParent());
         assertTrue(blockA.isCollapsed());
         assertAllConnectionsHidden(blockA);
         assertAllConnectionsHidden(blockB);
@@ -180,7 +180,7 @@ suite('Connections', function() {
         blockA.setCollapsed(true);
 
         assertEquals(blockA, blockB.getParent());
-        assertNull(blockC.getParent())
+        assertNull(blockC.getParent());
         assertTrue(blockA.isCollapsed());
         assertAllConnectionsHidden(blockA);
         assertAllConnectionsHidden(blockB);
@@ -286,7 +286,7 @@ suite('Connections', function() {
         blockA.setCollapsed(true);
 
         assertEquals(blockA, blockB.getParent());
-        assertNull(blockC.getParent())
+        assertNull(blockC.getParent());
         assertTrue(blockA.isCollapsed());
         assertAllConnectionsHidden(blockA);
         assertAllConnectionsHidden(blockB);
@@ -307,7 +307,7 @@ suite('Connections', function() {
         var shadowBlock = connection.targetBlock();
         assertTrue(shadowBlock.isShadow());
         assertAllConnectionsHidden(shadowBlock);
-      })
+      });
 
       test('Reveal shadow value', function() {
         var blocks = this.blocks;
@@ -316,7 +316,7 @@ suite('Connections', function() {
         var shadowBlock = connection.targetBlock();
         assertTrue(shadowBlock.isShadow());
         assertAllConnectionsHidden(shadowBlock);
-      })
+      });
     });
   });
 });

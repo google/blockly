@@ -19,7 +19,8 @@
  */
 
 /**
- * @fileoverview Non-editable text field.  Used for titles, labels, etc.
+ * @fileoverview Non-editable, non-serializable text field.  Used for titles,
+ *    labels, etc.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
@@ -34,7 +35,7 @@ goog.require('goog.math.Size');
 
 
 /**
- * Class for a non-editable field.
+ * Class for a non-editable, non-serializable text field.
  * @param {string} text The initial content of the field.
  * @param {string=} opt_class Optional CSS class for the field's text.
  * @extends {Blockly.Field}
@@ -62,7 +63,10 @@ Blockly.FieldLabel.fromJson = function(options) {
 };
 
 /**
- * Editable fields are saved by the XML renderer, non-editable fields are not.
+ * Editable fields usually show some sort of UI indicating they are
+ * editable. This field should not.
+ * @type {boolean}
+ * @const
  */
 Blockly.FieldLabel.prototype.EDITABLE = false;
 

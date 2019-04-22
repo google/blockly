@@ -63,7 +63,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "math_blocks",
   },
   {
-    "type": "test_fields_dropdown_long",
+    "type": "test_dropdowns_long",
     "message0": "long: %1",
     "args0": [
       {
@@ -107,7 +107,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ]
   },
   {
-    "type": "test_fields_dropdown_images",
+    "type": "test_dropdowns_images",
     "message0": "%1",
     "args0": [
       {
@@ -133,7 +133,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ]
   },
   {
-    "type": "test_fields_dropdown_images_and_text",
+    "type": "test_dropdowns_images_and_text",
     "message0": "%1",
     "args0": [
       {
@@ -250,7 +250,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": ""
   },
   {
-    "type": "test_fields_number",
+    "type": "test_numbers_float",
     "message0": "float %1",
     "args0": [
       {
@@ -264,7 +264,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "A number."
   },
   {
-    "type": "test_fields_number_whole",
+    "type": "test_numbers_whole",
     "message0": "precision 1 %1",
     "args0": [
       {
@@ -279,7 +279,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "The number should be rounded to multiples of 1"
   },
   {
-    "type": "test_fields_number_hundredths",
+    "type": "test_numbers_hundredths",
     "message0": "precision 0.01 %1",
     "args0": [
       {
@@ -294,7 +294,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "The number should be rounded to multiples of 0.01"
   },
   {
-    "type": "test_fields_number_halves",
+    "type": "test_numbers_halves",
     "message0": "precision 0.5 %1",
     "args0": [
       {
@@ -309,7 +309,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "The number should be rounded to multiples of 0.5"
   },
   {
-    "type": "test_fields_number_three_halves",
+    "type": "test_numbers_three_halves",
     "message0": "precision 1.5 %1",
     "args0": [
       {
@@ -324,7 +324,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "The number should be rounded to multiples of 1.5"
   },
   {
-    "type": "test_fields_integer_bounded",
+    "type": "test_numbers_whole_bounded",
     "message0": "midi note %1",
     "args0": [
       {
@@ -662,7 +662,7 @@ Blockly.Blocks['test_basic_empty_with_mutator'] = {
   }
 };
 
-Blockly.Blocks['test_fields_dropdown_dynamic'] = {
+Blockly.Blocks['test_dropdowns_dynamic'] = {
   init: function() {
     var dropdown = new Blockly.FieldDropdown(this.dynamicOptions);
     this.appendDummyInput()

@@ -140,7 +140,7 @@ Blockly.Xml.fieldToDomVariable_ = function(field) {
  * @private
  */
 Blockly.Xml.fieldToDom_ = function(field) {
-  if (field.name && field.EDITABLE) {
+  if (field.isSerializable()) {
     if (field.referencesVariables()) {
       return Blockly.Xml.fieldToDomVariable_(field);
     } else {

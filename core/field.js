@@ -172,9 +172,23 @@ Blockly.Field.prototype.clickTarget_ = null;
 Blockly.Field.NBSP = '\u00A0';
 
 /**
- * Editable fields are saved by the XML renderer, non-editable fields are not.
+ * Editable fields usually show some sort of UI indicating they are editable.
+ * They will also be saved by the XML renderer.
+ * @type {boolean}
+ * @const
+ * @default
  */
 Blockly.Field.prototype.EDITABLE = true;
+
+/**
+ * Serializable fields are saved by the XML renderer, non-serializable fields
+ * are not. Editable fields should also be serializable. This is not the
+ * case by default so that SERIALIZABLE is backwards compatible.
+ * @type {boolean}
+ * @const
+ * @default
+ */
+Blockly.Field.prototype.SERIALIZABLE = false;
 
 /**
  * Attach this field to a block.
@@ -268,13 +282,32 @@ Blockly.Field.prototype.updateEditable = function() {
 
 /**
  * Check whether this field is currently editable.  Some fields are never
- * editable (e.g. text labels).  Those fields are not serialized to XML.  Other
- * fields may be editable, and therefore serialized, but may exist on
+ * EDITABLE (e.g. text labels). Other fields may be EDITABLE but may exist on
  * non-editable blocks.
  * @return {boolean} Whether this field is editable and on an editable block
  */
 Blockly.Field.prototype.isCurrentlyEditable = function() {
   return this.EDITABLE && !!this.sourceBlock_ && this.sourceBlock_.isEditable();
+};
+
+/**
+ * Check whether this field should be serialized by the XML renderer.
+ * Handles the logic for backwards compatibility and incongruous states.
+ * @return {boolean} Whether this field should be serialized or not.
+ */
+Blockly.Field.prototype.isSerializable = function() {
+  var isSerializable = false;
+  if (this.name) {
+    if (this.SERIALIZABLE) {
+      isSerializable = true;
+    } else if (this.EDITABLE) {
+      console.warn('Detected an editable field that was not serializable.' +
+        ' Please define SERIALIZABLE property as true on all editable custom' +
+        ' fields. Proceeding with serialization.');
+      isSerializable = true;
+    }
+  }
+  return isSerializable;
 };
 
 /**

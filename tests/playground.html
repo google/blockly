@@ -1192,41 +1192,63 @@ h1 {
         </statement>
       </block>
     </category>
-    <category name="Fields">
-      <label text="Numbers"></label>
-      <block type="test_fields_number">
-        <field name="NUM">123.456</field>
-      </block>
-      <block type="test_fields_number_hundredths">
-        <field name="NUM">123.456</field>
-      </block>
-      <block type="test_fields_number_halves">
-        <field name="NUM">123.456</field>
-      </block>
-      <block type="test_fields_number_whole">
-        <field name="NUM">123.456</field>
-      </block>
-      <block type="test_fields_number_three_halves">
-        <field name="NUM">123.456</field>
-      </block>
-      <block type="test_fields_integer_bounded">
-        <field name="NOTE">60</field>
-      </block>
-      <label text="Drop-downs"></label>
-      <block type="test_fields_dropdown_long"></block>
-      <block type="test_fields_dropdown_images"></block>
-      <block type="test_fields_dropdown_images_and_text"></block>
-      <label text="Dynamic Drop-downs"></label>
-      <block type="test_fields_dropdown_dynamic"></block>
-      <button text="Add option" callbackKey="addDynamicOption"></button>
-      <button text="Remove option" callbackKey="removeDynamicOption"></button>
-      <label text="Others"></label>
-      <block type="test_fields_angle"></block>
-      <block type="test_fields_date"></block>
-      <block type="test_fields_text_input"></block>
-      <block type="test_fields_checkbox"></block>
-      <block type="test_fields_colour"></block>
-      <block type="test_fields_variable"></block>
+    <category name="Fields" expanded="true">
+      <category name="Defaults">
+        <block type="test_fields_angle"></block>
+        <block type="test_fields_date"></block>
+        <block type="test_fields_checkbox"></block>
+        <block type="test_fields_colour"></block>
+        <block type="test_fields_text_input"></block>
+        <block type="test_fields_variable"></block>
+      </category>
+      <category name="Numbers">
+        <block type="test_numbers_float">
+          <field name="NUM">123.456</field>
+        </block>
+        <block type="test_numbers_hundredths">
+          <field name="NUM">123.456</field>
+        </block>
+        <block type="test_numbers_halves">
+          <field name="NUM">123.456</field>
+        </block>
+        <block type="test_numbers_whole">
+          <field name="NUM">123.456</field>
+        </block>
+        <block type="test_numbers_three_halves">
+          <field name="NUM">123.456</field>
+        </block>
+        <block type="test_numbers_whole_bounded">
+          <field name="NOTE">60</field>
+        </block>
+      </category>
+      <category name="Drop-downs">
+        <label text="Dynamic"></label>
+        <block type="test_dropdowns_dynamic"></block>
+        <button text="Add option" callbackKey="addDynamicOption"></button>
+        <button text="Remove option" callbackKey="removeDynamicOption"></button>
+        <label text="Other"></label>
+        <block type="test_dropdowns_long"></block>
+        <block type="test_dropdowns_images"></block>
+        <block type="test_dropdowns_images_and_text"></block>
+      </category>
+      <category name="Images">
+        <block type="test_images_datauri"></block>
+        <block type="test_images_small"></block>
+        <block type="test_images_large"></block>
+        <block type="test_images_fliprtl"></block>
+        <block type="test_images_missing"></block>
+        <block type="test_images_many_icons"></block>
+      </category>
+      <category name="Emoji! o((*>ᴗ<*))o">
+        <label text="Unicode & Emojis"></label>
+        <block type="test_style_emoji"></block>
+        <block type="text">
+          <field name="TEXT">Robot face in text field: &#x1f916;</field>
+        </block>
+        <block type="text">
+          <field name="TEXT">Zalgo in text field: B&#776;&#788;&#862;&#795;&#842;&#827;&#806;&#837;&#812;&#792;&#816;&#846;&#805;l&#771;&#832;&#833;&#864;&#849;&#849;&#789;&#861;&#801;&#854;&#863;&#811;&#826;&#812;&#790;&#803;&#819;o&#843;&#777;&#778;&#785;&#831;&#829;&#794;&#825;&#857;&#814;&#802;&#811;&#852;c&#843;&#786;&#849;&#778;&#861;&#775;&#825;&#825;&#796;&#857;&#825;&#800;&#824;k&#778;&#850;&#833;&#774;&#772;&#782;&#862;&#770;&#789;&#788;&#841;&#801;&#811;&#860;&#839;&#790;&#819;&#854;l&#832;&#774;&#836;&#831;&#776;&#787;&#855;&#816;&#793;&#798;&#819;&#809;&#800;&#854;&#815;y&#864;&#783;&#856;&#773;&#832;&#808;&#799;&#839;&#814;&#840;&#812;&#793;&#818;&#801;</field>
+        </block>
+      </category>
     </category>
     <category name="Mutators">
       <label text="logic_compare"></label>
@@ -1265,22 +1287,6 @@ h1 {
       <block type="test_style_no_colour"></block>
       <block type="test_style_hex4"></block>
       <block type="test_style_hex5"></block>
-    </category>
-    <category name="Images">
-      <block type="test_images_datauri"></block>
-      <block type="test_images_small"></block>
-      <block type="test_images_large"></block>
-      <block type="test_images_fliprtl"></block>
-      <block type="test_images_missing"></block>
-      <block type="test_images_many_icons"></block>
-      <label text="Unicode & Emojis"></label>
-      <block type="test_style_emoji"></block>
-      <block type="text">
-        <field name="TEXT">Robot face in text field: &#x1f916;</field>
-      </block>
-      <block type="text">
-        <field name="TEXT">Zalgo in text field: B&#776;&#788;&#862;&#795;&#842;&#827;&#806;&#837;&#812;&#792;&#816;&#846;&#805;l&#771;&#832;&#833;&#864;&#849;&#849;&#789;&#861;&#801;&#854;&#863;&#811;&#826;&#812;&#790;&#803;&#819;o&#843;&#777;&#778;&#785;&#831;&#829;&#794;&#825;&#857;&#814;&#802;&#811;&#852;c&#843;&#786;&#849;&#778;&#861;&#775;&#825;&#825;&#796;&#857;&#825;&#800;&#824;k&#778;&#850;&#833;&#774;&#772;&#782;&#862;&#770;&#789;&#788;&#841;&#801;&#811;&#860;&#839;&#790;&#819;&#854;l&#832;&#774;&#836;&#831;&#776;&#787;&#855;&#816;&#793;&#798;&#819;&#809;&#800;&#854;&#815;y&#864;&#783;&#856;&#773;&#832;&#808;&#799;&#839;&#814;&#840;&#812;&#793;&#818;&#801;</field>
-      </block>
     </category>
   </xml>
 </body>

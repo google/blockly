@@ -1167,17 +1167,12 @@ Blockly.BlockSvg.prototype.setMutator = function(mutator) {
 /**
  * Set whether the block is disabled or not.
  * @param {boolean} disabled True if disabled.
- * @deprecated April 2018
+ * @deprecated May 2019
  */
 Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
   console.warn('Deprecated call to Blockly.BlockSvg.prototype.setDisabled, ' +
   'use Blockly.BlockSvg.prototype.setEnabled instead.');
-  if (this.disabled != disabled) {
-    Blockly.BlockSvg.superClass_.setDisabled.call(this, disabled);
-    if (this.rendered) {
-      this.updateDisabled();
-    }
-  }
+  this.setEnabled(!disabled);
 };
 
 /**
@@ -1185,7 +1180,7 @@ Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
  * @param {boolean} enabled True if enabled.
  */
 Blockly.BlockSvg.prototype.setEnabled = function(enabled) {
-  if (this.disabled == enabled) {
+  if (this.isEnabled != enabled) {
     Blockly.BlockSvg.superClass_.setEnabled.call(this, enabled);
     if (this.rendered) {
       this.updateDisabled();

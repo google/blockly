@@ -41,7 +41,7 @@ goog.addDependency("../../../" + dir + "/core/block_dragger.js", ['Blockly.Block
 goog.addDependency("../../../" + dir + "/core/block_events.js", ['Blockly.Events.BlockBase', 'Blockly.Events.BlockChange', 'Blockly.Events.BlockCreate', 'Blockly.Events.BlockDelete', 'Blockly.Events.BlockMove', 'Blockly.Events.Change', 'Blockly.Events.Create', 'Blockly.Events.Delete', 'Blockly.Events.Move'], ['Blockly.Events', 'Blockly.Events.Abstract', 'Blockly.Xml.utils', 'goog.math.Coordinate']);
 goog.addDependency("../../../" + dir + "/core/block_render_svg.js", ['Blockly.BlockSvg.render'], ['Blockly.BlockSvg']);
 goog.addDependency("../../../" + dir + "/core/block_svg.js", ['Blockly.BlockSvg'], ['Blockly.Block', 'Blockly.BlockAnimations', 'Blockly.ContextMenu', 'Blockly.Events.Ui', 'Blockly.Events.BlockMove', 'Blockly.Grid', 'Blockly.RenderedConnection', 'Blockly.Tooltip', 'Blockly.Touch', 'Blockly.utils', 'goog.color', 'goog.math.Coordinate']);
-goog.addDependency("../../../" + dir + "/core/blockly.js", ['Blockly'], ['Blockly.BlockSvg.render', 'Blockly.Events', 'Blockly.FieldAngle', 'Blockly.FieldCheckbox', 'Blockly.FieldColour', 'Blockly.FieldDropdown', 'Blockly.FieldImage', 'Blockly.FieldTextInput', 'Blockly.FieldNumber', 'Blockly.FieldVariable', 'Blockly.Generator', 'Blockly.Msg', 'Blockly.Procedures', 'Blockly.Toolbox', 'Blockly.Touch', 'Blockly.WidgetDiv', 'Blockly.WorkspaceSvg', 'Blockly.constants', 'Blockly.inject', 'Blockly.utils', 'Blockly.Xml', 'goog.color']);
+goog.addDependency("../../../" + dir + "/core/blockly.js", ['Blockly'], ['Blockly.BlockSvg.render', 'Blockly.Events', 'Blockly.FieldAngle', 'Blockly.FieldCheckbox', 'Blockly.FieldColour', 'Blockly.FieldDropdown', 'Blockly.FieldLabelSerializable', 'Blockly.FieldImage', 'Blockly.FieldTextInput', 'Blockly.FieldNumber', 'Blockly.FieldVariable', 'Blockly.Generator', 'Blockly.Msg', 'Blockly.Procedures', 'Blockly.Toolbox', 'Blockly.Touch', 'Blockly.WidgetDiv', 'Blockly.WorkspaceSvg', 'Blockly.constants', 'Blockly.inject', 'Blockly.utils', 'Blockly.Xml', 'goog.color']);
 goog.addDependency("../../../" + dir + "/core/blocks.js", ['Blockly.Blocks'], []);
 goog.addDependency("../../../" + dir + "/core/bubble.js", ['Blockly.Bubble'], ['Blockly.Touch', 'Blockly.Workspace', 'goog.math.Coordinate', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/bubble_dragger.js", ['Blockly.BubbleDragger'], ['Blockly.Bubble', 'Blockly.Events.CommentMove', 'Blockly.utils', 'Blockly.WorkspaceCommentSvg', 'goog.math.Coordinate']);
@@ -64,6 +64,7 @@ goog.addDependency("../../../" + dir + "/core/field_date.js", ['Blockly.FieldDat
 goog.addDependency("../../../" + dir + "/core/field_dropdown.js", ['Blockly.FieldDropdown'], ['Blockly.Field', 'Blockly.utils', 'Blockly.utils.uiMenu', 'goog.events', 'goog.ui.Menu', 'goog.ui.MenuItem', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/field_image.js", ['Blockly.FieldImage'], ['Blockly.Field', 'Blockly.utils', 'goog.math.Size']);
 goog.addDependency("../../../" + dir + "/core/field_label.js", ['Blockly.FieldLabel'], ['Blockly.Field', 'Blockly.Tooltip', 'Blockly.utils', 'goog.math.Size']);
+goog.addDependency("../../../" + dir + "/core/field_label_serializable.js", ['Blockly.FieldLabelSerializable'], ['Blockly.FieldLabel']);
 goog.addDependency("../../../" + dir + "/core/field_number.js", ['Blockly.FieldNumber'], ['Blockly.FieldTextInput']);
 goog.addDependency("../../../" + dir + "/core/field_textinput.js", ['Blockly.FieldTextInput'], ['Blockly.DropDownDiv', 'Blockly.Field', 'Blockly.Msg', 'Blockly.utils', 'goog.math.Coordinate', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/field_variable.js", ['Blockly.FieldVariable'], ['Blockly.FieldDropdown', 'Blockly.Msg', 'Blockly.utils', 'Blockly.VariableModel', 'Blockly.Variables', 'goog.math.Size']);
@@ -1790,6 +1791,7 @@ goog.require('Blockly.FieldDate');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldLabel');
+goog.require('Blockly.FieldLabelSerializable');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldVariable');

@@ -144,6 +144,21 @@ function start() {
 }
 
 function addToolboxButtonCallbacks() {
+  var randomizeLabelText = function(button) {
+    var blocks = button.targetWorkspace_
+        .getBlocksByType('test_fields_label_serializable');
+    var possible = 'AB';
+    for (var i = 0, block; block = blocks[i]; i++) {
+      var text = '';
+      for (var j = 0; j < 4; j++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+      block.setFieldValue(text, 'LABEL');
+    }
+  };
+
+  workspace.registerButtonCallback(
+    'randomizeLabelText', randomizeLabelText);
   workspace.registerButtonCallback(
       'addDynamicOption', Blockly.TestBlocks.addDynamicDropdownOption_);
   workspace.registerButtonCallback(
@@ -1200,6 +1215,8 @@ h1 {
         <block type="test_fields_colour"></block>
         <block type="test_fields_text_input"></block>
         <block type="test_fields_variable"></block>
+        <button text="randomize label text" callbackKey="randomizeLabelText"></button>
+        <block type="test_fields_label_serializable"></block>
       </category>
       <category name="Numbers">
         <block type="test_numbers_float">

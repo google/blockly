@@ -182,6 +182,25 @@ suite('XML', function() {
         assertNonSerializingField(resultFieldDom);
         delete Blockly.Blocks['field_label_test_block'];
       });
+      test('Label Serializable', function() {
+        Blockly.defineBlocksWithJsonArray([{
+          "type": "field_label_serializable_test_block",
+          "message0": "%1",
+          "args0": [
+            {
+              "type": "field_label_serializable",
+              "name": "LABEL",
+              "text": "default"
+            }
+          ],
+        }]);
+        var block = new Blockly.Block(this.workspace,
+            'field_label_serializable_test_block');
+        var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
+        console.log(resultFieldDom);
+        assertSimpleField(resultFieldDom, 'LABEL', 'default');
+        delete Blockly.Blocks['field_label_serializable_test_block'];
+      });
       test('Number', function() {
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_number_test_block",

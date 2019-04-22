@@ -14,7 +14,8 @@
 			"Tonylianlong",
 			"WindWood",
 			"Deathkon",
-			"Muhaoying"
+			"Muhaoying",
+			"佛壁灯"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "项目",
@@ -370,5 +371,6 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "如果值为真，则返回第二个值。",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "警告：这个块只能在函数内部使用。",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "说点什么..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "说点什么...",
+	"COLLAPSED_WARNINGS_WARNING": "已收起的信息块内包含警告。"
 }

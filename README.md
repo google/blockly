@@ -20,13 +20,15 @@ Want to contribute? Great! First, read [our guidelines for contributors](https:/
 
 ## Releases
 
-We release by pushing the latest code to the master branch, followed by updating our [docs](developers.google.com/blockly) and [demo pages](https://blockly-demo.appspot.com). We typically release a new version of Blockly once a quarter (every 3 months). If there are breaking bugs, such as a crash when performing a standard action or a rendering issue that makes Blockly unusable, we will cherry-pick fixes to master between releases to fix them.
+We release by pushing the latest code to the master branch, followed by updating our [docs](developers.google.com/blockly) and [demo pages](https://blockly-demo.appspot.com). We typically release a new version of Blockly once a quarter (every 3 months). If there are breaking bugs, such as a crash when performing a standard action or a rendering issue that makes Blockly unusable, we will cherry-pick fixes to master between releases to fix them. The [releases page](https://github.com/google/blockly/releases) has a list of all releases.
 
-Releases are tagged by the release date (YYYYMMDD) with a leading '1.' and a trailing '.0' in case we ever need a major or minor version. For example, [1.20190419.0](https://github.com/google/blockly/tree/1.20190419.0)
+Releases are tagged by the release date (YYYYMMDD) with a leading '1.' and a trailing '.0' in case we ever need a major or minor version (such as [1.20190419.0](https://github.com/google/blockly/tree/1.20190419.0)). If you're using npm, a specific release can be installed by using its tag: `npm install git://github.com/google/blockly.git#1.20181219.0`
 
 ### New APIs
 
 Once a new API is merged into master it is considered beta until the following release. We generally try to avoid changing an API after it has been merged to master, but sometimes we need to make changes after seeing how an API is used. If an API has been around for at least two releases we'll do our best to avoid breaking it.
+
+Unreleased APIs may change radically. Anything that is in `develop` but not `master` is subject to change without warning.
 
 ### Branches
 
@@ -40,11 +42,11 @@ There are two main branches for Blockly.
 
 ## Issues and Milestones
 
-We typically triage all bugs within 2 working days, which includes adding any appropriate labels and assigning it to a milestone.
+We typically triage all bugs within 2 working days, which includes adding any appropriate labels and assigning it to a milestone. Please keep in mind, we are a small team so even feature reqeusts that everyone agrees on may not be prioritized.
 
 ### Milestones
 
-**Upcoming release** - The upcoming release milestone is for all bugs we plan on fixing before the next release. This typically has the form of year_quarter_release. For example, 2019_q2_release. Some bugs will be added to this release when they are triaged, others may be added closer to a release.
+**Upcoming release** - The upcoming release milestone is for all bugs we plan on fixing before the next release. This typically has the form of `year_quarter_release` (such as `2019_q2_release`). Some bugs will be added to this release when they are triaged, others may be added closer to a release.
 
 **Bug Bash Backlog** - These are bugs that we're still prioritizing. They haven't been added to a specific release yet, but we'll consider them for each release depending on relative priority and available time.
 

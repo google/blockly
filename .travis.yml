@@ -3,7 +3,9 @@ matrix:
   include:
     - os: linux
       dist: trusty
-      node_js: stable
+      node_js:
+        - 8
+        - 10
       sudo: required
       addons:
         apt:

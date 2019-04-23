@@ -639,7 +639,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     this.argumentVarModels_ = [];
     this.quarkConnections_ = {};
     this.quarkIds_ = null;
-    this.previousDisabledState_ = false;
+    this.previousEnabledState_ = true;
   },
 
   /**
@@ -985,7 +985,7 @@ Blockly.Blocks['procedures_callreturn'] = {
     this.arguments_ = [];
     this.quarkConnections_ = {};
     this.quarkIds_ = null;
-    this.previousDisabledState_ = false;
+    this.previousEnabledState_ = true;
   },
 
   getProcedureCall: Blockly.Blocks['procedures_callnoreturn'].getProcedureCall,

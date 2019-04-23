@@ -704,7 +704,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
           if (!group) {
             Blockly.Events.setGroup(true);
           }
-          block.setEnabled(block.disabled);
+          block.setEnabled(!block.isEnabled());
           if (!group) {
             Blockly.Events.setGroup(false);
           }
@@ -1180,7 +1180,7 @@ Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
  * @param {boolean} enabled True if enabled.
  */
 Blockly.BlockSvg.prototype.setEnabled = function(enabled) {
-  if (this.isEnabled != enabled) {
+  if (this.isEnabled() != enabled) {
     Blockly.BlockSvg.superClass_.setEnabled.call(this, enabled);
     if (this.rendered) {
       this.updateDisabled();

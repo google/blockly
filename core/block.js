@@ -75,8 +75,8 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   this.inputList = [];
   /** @type {boolean|undefined} */
   this.inputsInline = undefined;
-  /** 
-   * @type {boolean} 
+  /**
+   * @type {boolean}
    * @private
    */
   this.disabled = false;
@@ -1241,7 +1241,7 @@ Blockly.Block.prototype.isEnabled = function() {
  * @param {boolean} enabled True if enabled.
  */
 Blockly.Block.prototype.setEnabled = function(enabled) {
-  if (this.isEnabled != enabled) {
+  if (this.isEnabled() != enabled) {
     Blockly.Events.fire(new Blockly.Events.BlockChange(
         this, 'disabled', null, this.disabled, !enabled));
     this.disabled = !enabled;

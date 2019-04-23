@@ -933,10 +933,10 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         }
         Blockly.Events.setGroup(event.group);
         if (event.newValue) {
-          this.previousDisabledState_ = this.disabled;
+          this.previousEnabledState_ = this.isEnabled();
           this.setEnabled(false);
         } else {
-          this.setEnabled(!this.previousDisabledState_);
+          this.setEnabled(this.previousEnabledState_);
         }
         Blockly.Events.setGroup(oldGroup);
       }

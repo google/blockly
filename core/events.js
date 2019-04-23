@@ -414,12 +414,12 @@ Blockly.Events.disableOrphans = function(event) {
       if (block.getParent() && !block.getParent().disabled) {
         var children = block.getDescendants(false);
         for (var i = 0, child; child = children[i]; i++) {
-          child.setDisabled(false);
+          child.setEnabled(true);
         }
       } else if ((block.outputConnection || block.previousConnection) &&
                  !workspace.isDragging()) {
         do {
-          block.setDisabled(true);
+          block.setEnabled(false);
           block = block.getNextBlock();
         } while (block);
       }

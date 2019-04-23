@@ -66,7 +66,7 @@ function test_procedureReturnSetDisabledUpdatesCallers() {
 
     workspace.clearUndo();
     Blockly.Events.setGroup('g1');
-    barDef.setDisabled(true);
+    barDef.setEnabled(false);
     Blockly.Events.setGroup(false);
 
     assertTrue('Callers are disabled when their definition is disabled.',
@@ -82,7 +82,7 @@ function test_procedureReturnSetDisabledUpdatesCallers() {
 
     workspace.clearUndo();
     Blockly.Events.setGroup('g2');
-    barDef.setDisabled(false);
+    barDef.setEnabled(true);
     Blockly.Events.setGroup(false);
 
     assertTrue('Callers are enabled when their definition is enabled.',
@@ -125,10 +125,10 @@ function test_procedureReturnEnablingRemembersOldCallerState() {
     var barDef = workspace.getBlockById('bar-def');
     var barCalls = [workspace.getBlockById('bar-c1'), workspace.getBlockById('bar-c2')];
 
-    barCalls[0].setDisabled(true);
+    barCalls[0].setEnabled(false);
     workspace.clearUndo();
     Blockly.Events.setGroup('g1');
-    barDef.setDisabled(true);
+    barDef.setEnabled(false);
     Blockly.Events.setGroup(false);
 
     assertTrue('Callers are disabled when their definition is disabled.',
@@ -143,7 +143,7 @@ function test_procedureReturnEnablingRemembersOldCallerState() {
 
     workspace.clearUndo();
     Blockly.Events.setGroup('g2');
-    barDef.setDisabled(false);
+    barDef.setEnabled(true);
     Blockly.Events.setGroup(false);
 
 
@@ -184,7 +184,7 @@ function test_procedureNoReturnSetDisabledUpdatesCallers() {
 
     workspace.clearUndo();
     Blockly.Events.setGroup('g1');
-    barDef.setDisabled(true);
+    barDef.setEnabled(false);
     Blockly.Events.setGroup(false);
 
     assertTrue('Callers are disabled when their definition is disabled.',
@@ -200,7 +200,7 @@ function test_procedureNoReturnSetDisabledUpdatesCallers() {
 
     workspace.clearUndo();
     Blockly.Events.setGroup('g2');
-    barDef.setDisabled(false);
+    barDef.setEnabled(true);
     Blockly.Events.setGroup(false);
 
     assertTrue('Callers are enabled when their definition is enabled.',
@@ -241,10 +241,10 @@ function test_procedureNoReturnEnablingRemembersOldCallerState() {
     var barDef = workspace.getBlockById('bar-def');
     var barCalls = [workspace.getBlockById('bar-c1'), workspace.getBlockById('bar-c2')];
 
-    barCalls[0].setDisabled(true);
+    barCalls[0].setEnabled(false);
     workspace.clearUndo();
     Blockly.Events.setGroup('g1');
-    barDef.setDisabled(true);
+    barDef.setEnabled(false);
     Blockly.Events.setGroup(false);
 
     assertTrue('Callers are disabled when their definition is disabled.',
@@ -259,7 +259,7 @@ function test_procedureNoReturnEnablingRemembersOldCallerState() {
 
     workspace.clearUndo();
     Blockly.Events.setGroup('g2');
-    barDef.setDisabled(false);
+    barDef.setEnabled(true);
     Blockly.Events.setGroup(false);
 
 
@@ -329,19 +329,19 @@ function test_procedureEnableDisableInteractions() {
     var fooCalls = [workspace.getBlockById('foo-c1'), workspace.getBlockById('foo-c2')];
     var bazCall = workspace.getBlockById('baz-c1');
 
-    barDef.setDisabled(true);
+    barDef.setEnabled(false);
 
     assertTrue('Callers are disabled when their definition is disabled.',
         barCalls[0].disabled && barCalls[1].disabled);
     assertTrue('Callers in definitions are disabled by inheritence.',
         !fooCalls[0].disabled && fooCalls[0].getInheritedDisabled());
 
-    fooDef.setDisabled(true);
+    fooDef.setEnabled(false);
 
     assertTrue('Callers are disabled when their definition is disabled',
         fooCalls[0].disabled && fooCalls[1].disabled);
 
-    barDef.setDisabled(false);
+    barDef.setEnabled(true);
 
     assertTrue('Callers are reenabled with their definition',
         !barCalls[0].disabled && !barCalls[0].disabled);
@@ -349,7 +349,7 @@ function test_procedureEnableDisableInteractions() {
     assertTrue('Nested disabled callers remain disabled, not by inheritence.',
         fooCalls[0].disabled && !fooCalls[0].getInheritedDisabled());
 
-    bazDef.setDisabled(true);
+    bazDef.setEnabled(false);
 
     assertTrue('Caller is disabled with its definition',
         bazCall.disabled);
@@ -357,11 +357,11 @@ function test_procedureEnableDisableInteractions() {
     assertTrue('Caller in the return is disabled by inheritence.',
         !barCalls[1].disabled && barCalls[1].getInheritedDisabled());
 
-    barDef.setDisabled(true);
+    barDef.setEnabled(false);
     assertTrue('Callers are disabled when their definition is disabled.',
         barCalls[0].disabled && barCalls[1].disabled);
 
-    bazDef.setDisabled(false);
+    bazDef.setEnabled(true);
 
     assertTrue('Caller in the return remains disabled, not by inheritence.',
         barCalls[1].disabled && !barCalls[1].getInheritedDisabled());

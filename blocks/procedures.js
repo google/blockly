@@ -639,7 +639,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     this.argumentVarModels_ = [];
     this.quarkConnections_ = {};
     this.quarkIds_ = null;
-    this.previousDisabledState_ = false;
+    this.previousEnabledState_ = true;
   },
 
   /**
@@ -933,10 +933,10 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         }
         Blockly.Events.setGroup(event.group);
         if (event.newValue) {
-          this.previousDisabledState_ = this.disabled;
-          this.setDisabled(true);
+          this.previousEnabledState_ = this.isEnabled();
+          this.setEnabled(false);
         } else {
-          this.setDisabled(this.previousDisabledState_);
+          this.setEnabled(this.previousEnabledState_);
         }
         Blockly.Events.setGroup(oldGroup);
       }
@@ -985,7 +985,7 @@ Blockly.Blocks['procedures_callreturn'] = {
     this.arguments_ = [];
     this.quarkConnections_ = {};
     this.quarkIds_ = null;
-    this.previousDisabledState_ = false;
+    this.previousEnabledState_ = true;
   },
 
   getProcedureCall: Blockly.Blocks['procedures_callnoreturn'].getProcedureCall,
@@ -1081,12 +1081,12 @@ Blockly.Blocks['procedures_ifreturn'] = {
       }
       this.setWarningText(null);
       if (!this.isInFlyout) {
-        this.setDisabled(false);
+        this.setEnabled(true);
       }
     } else {
       this.setWarningText(Blockly.Msg['PROCEDURES_IFRETURN_WARNING']);
       if (!this.isInFlyout && !this.getInheritedDisabled()) {
-        this.setDisabled(true);
+        this.setEnabled(false);
       }
     }
   },

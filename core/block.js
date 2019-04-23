@@ -75,7 +75,10 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   this.inputList = [];
   /** @type {boolean|undefined} */
   this.inputsInline = undefined;
-  /** @type {boolean} */
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.disabled = false;
   /** @type {string|!Function} */
   this.tooltip = '';
@@ -1217,12 +1220,31 @@ Blockly.Block.prototype.getInputsInline = function() {
 /**
  * Set whether the block is disabled or not.
  * @param {boolean} disabled True if disabled.
+ * @deprecated May 2019
  */
 Blockly.Block.prototype.setDisabled = function(disabled) {
-  if (this.disabled != disabled) {
+  console.warn('Deprecated call to Blockly.Block.prototype.setDisabled, ' +
+               'use Blockly.Block.prototype.setEnabled instead.');
+  this.setEnabled(!disabled);
+};
+
+/**
+ * Get whether this block is enabled or not.
+ * @return {boolean} True if enabled.
+ */
+Blockly.Block.prototype.isEnabled = function() {
+  return !this.disabled;
+};
+
+/**
+ * Set whether the block is enabled or not.
+ * @param {boolean} enabled True if enabled.
+ */
+Blockly.Block.prototype.setEnabled = function(enabled) {
+  if (this.isEnabled() != enabled) {
     Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this, 'disabled', null, this.disabled, disabled));
-    this.disabled = disabled;
+        this, 'disabled', null, this.disabled, !enabled));
+    this.disabled = !enabled;
   }
 };
 

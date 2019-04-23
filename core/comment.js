@@ -123,6 +123,7 @@ Blockly.Comment.prototype.createEditor_ = function() {
   textarea.setAttribute('dir', this.block_.RTL ? 'RTL' : 'LTR');
   body.appendChild(textarea);
   this.textarea_ = textarea;
+  this.body_ = body;
   this.foreignObject_.appendChild(body);
   Blockly.bindEventWithChecks_(textarea, 'mouseup', this, this.textareaFocus_,
       true, true);
@@ -168,6 +169,8 @@ Blockly.Comment.prototype.resizeBubble_ = function() {
     var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
     this.foreignObject_.setAttribute('width', size.width - doubleBorderWidth);
     this.foreignObject_.setAttribute('height', size.height - doubleBorderWidth);
+    this.body_.setAttribute('width', size.width - doubleBorderWidth);
+    this.body_.setAttribute('height', size.height - doubleBorderWidth);
     this.textarea_.style.width = (size.width - doubleBorderWidth - 4) + 'px';
     this.textarea_.style.height = (size.height - doubleBorderWidth - 4) + 'px';
   }

@@ -244,13 +244,33 @@ Blockly.Blocks['field_static'] = {
   // Text value.
   init: function() {
     this.setColour(160);
-    this.appendDummyInput()
+    this.appendDummyInput('FIRST')
         .appendField('text')
         .appendField(new Blockly.FieldTextInput(''), 'TEXT');
     this.setPreviousStatement(true, 'Field');
     this.setNextStatement(true, 'Field');
     this.setTooltip('Static text that serves as a label.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=88');
+  },
+};
+
+Blockly.Blocks['field_label_serializable'] = {
+  // Text value that is saved to XML.
+  init: function() {
+    this.setColour(160);
+    this.appendDummyInput('FIRST')
+        .appendField('text')
+        .appendField(new Blockly.FieldTextInput(''), 'TEXT')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
+    this.setTooltip('Static text that serves as a label, and is saved to' +
+      ' XML. Use only if you want to modify this label at runtime.');
+    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=88');
+  },
+  onchange: function() {
+    fieldNameCheck(this);
   }
 };
 

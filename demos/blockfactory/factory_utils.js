@@ -406,6 +406,12 @@ FactoryUtils.getFieldsJs_ = function(block) {
           // Result: 'hello'
           fields.push(JSON.stringify(block.getFieldValue('TEXT')));
           break;
+        case 'field_label_serializable':
+          // Result: new Blockly.FieldLabelSerializable('Hello'), 'GREET'
+          fields.push('new Blockly.FieldLabelSerializable(' +
+              JSON.stringify(block.getFieldValue('TEXT')) + '), ' +
+              JSON.stringify(block.getFieldValue('FIELDNAME')));
+          break;
         case 'field_input':
           // Result: new Blockly.FieldTextInput('Hello'), 'GREET'
           fields.push('new Blockly.FieldTextInput(' +
@@ -510,6 +516,13 @@ FactoryUtils.getFieldsJson_ = function(block) {
         case 'field_static':
           // Result: 'hello'
           fields.push(block.getFieldValue('TEXT'));
+          break;
+        case 'field_label_serializable':
+          fields.push({
+            type: block.type,
+            name: block.getFieldValue('FIELDNAME'),
+            text: block.getFieldValue('TEXT')
+          });
           break;
         case 'field_input':
           fields.push({

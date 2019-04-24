@@ -250,6 +250,20 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": ""
   },
   {
+    "type": "test_fields_label_serializable",
+    "message0": "label serializable %1",
+    "args0": [
+      {
+        "type": "field_label_serializable",
+        "name": "LABEL",
+        "text": "default"
+      }
+    ],
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  },
+  {
     "type": "test_numbers_float",
     "message0": "float %1",
     "args0": [

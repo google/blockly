@@ -81,9 +81,7 @@ suite('ASTNode', function() {
       E: blockE,
       F: blockF
     };
-    Blockly.getMainWorkspace = function() {
-      return new Blockly.Workspace();
-    };
+    sinon.stub(Blockly, "getMainWorkspace").returns(new Blockly.Workspace());
   });
   teardown(function() {
     delete Blockly.Blocks['input_statement'];
@@ -91,6 +89,7 @@ suite('ASTNode', function() {
     delete Blockly.Blocks['value_input'];
 
     this.workspace.dispose();
+    sinon.restore();
   });
 
   suite('HelperFunctions', function() {

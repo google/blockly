@@ -32,21 +32,21 @@ Blockly.Navigation.cursor_ = null;
 /**
  * The current selected category if the toolbox is open or
  * last selected category if focus is on a different element.
- * @type ?goog.ui.tree.BaseNode
+ * @type goog.ui.tree.BaseNode
  * @private
  */
 Blockly.Navigation.currentCategory_ = null;
 
 /**
  * The current selected block in the flyout.
- * @type ?Blockly.BlockSvg
+ * @type Blockly.BlockSvg
  * @private
  */
 Blockly.Navigation.flyoutBlock_ = null;
 
 /**
  * The selected connection used for inserting a block.
- * @type ?Blockly.ASTNode
+ * @type Blockly.ASTNode
  * @private
  */
 Blockly.Navigation.insertionNode_ = null;
@@ -75,7 +75,7 @@ Blockly.Navigation.STATE_TOOLBOX = 3;
 Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_WS;
 
 /**
- * Set the navigationc cursor.
+ * Set the navigation cursor.
  * @param {Blockly.Cursor} cursor The cursor to navigate through blocks on a
  * workspace.
  * @package
@@ -320,9 +320,9 @@ Blockly.Navigation.resetFlyout = function(shouldHide) {
 
 /**
  * Finds the best connection.
- * @param {?Blockly.Block} block The block to be connected.
- * @param {?Blockly.Connection} connection The connection to connect to.
- * @return {?Blockly.Connection} blockConnection The best connection we can
+ * @param {Blockly.Block} block The block to be connected.
+ * @param {Blockly.Connection} connection The connection to connect to.
+ * @return {Blockly.Connection} blockConnection The best connection we can
  * determine for the block.
  */
 Blockly.Navigation.findBestConnection = function(block, connection) {
@@ -352,7 +352,7 @@ Blockly.Navigation.findBestConnection = function(block, connection) {
 /**
  * Finds the best connection on a block and connects it to the given connection.
  * @param {!Blockly.Block} block The selected blcok.
- * @param {?Blockly.Connection} connection The connection on the workspace.
+ * @param {Blockly.Connection} connection The connection on the workspace.
  */
 Blockly.Navigation.insertBlock = function(block, connection) {
   var bestConnection = Blockly.Navigation.findBestConnection(block, connection);
@@ -470,8 +470,7 @@ Blockly.Navigation.markConnection = function() {
   var curNode = Blockly.Navigation.cursor_.getCurNode();
   var location = curNode.getLocation();
 
-  //TODO: Add a way to identify if something is connection, field, block, ws
-  //onto astnode.
+  //TODO: Add a helper function for identifying if a node is a connection.
   if (location instanceof Blockly.Connection) {
     Blockly.Navigation.insertionNode_ =
       Blockly.Navigation.cursor_.getCurNode();

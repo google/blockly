@@ -98,41 +98,6 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
 };
 
 /**
- * Encode a variable field as XML.
- * @param {!Blockly.FieldVariable} field The field to encode.
- * @return {Element} XML element, or null if the field did not need to be
- *     serialized.
- * @private
- */
-Blockly.Xml.fieldToDomVariable_ = function(field) {
-  var id = field.getValue();
-  // The field had not been initialized fully before being serialized.
-  // This can happen if a block is created directly through a call to
-  // workspace.newBlock instead of from XML.
-  // The new block will be serialized for the first time when firing a block
-  // creation event.
-  if (id == null) {
-    field.initModel();
-    id = field.getValue();
-  }
-  // Get the variable directly from the field, instead of doing a lookup.  This
-  // will work even if the variable has already been deleted.  This can happen
-  // because the flyout defers deleting blocks until the next time the flyout
-  // is opened.
-  var variable = field.getVariable();
-
-  if (!variable) {
-    throw Error('Tried to serialize a variable field with no variable.');
-  }
-  var container = Blockly.Xml.utils.createElement('field');
-  container.appendChild(Blockly.Xml.utils.createTextNode(variable.name));
-  container.setAttribute('name', field.name);
-  container.setAttribute('id', variable.getId());
-  container.setAttribute('variabletype', variable.type);
-  return container;
-};
-
-/**
  * Encode a field as XML.
  * @param {!Blockly.Field} field The field to encode.
  * @return {Element} XML element, or null if the field did not need to be
@@ -141,14 +106,8 @@ Blockly.Xml.fieldToDomVariable_ = function(field) {
  */
 Blockly.Xml.fieldToDom_ = function(field) {
   if (field.isSerializable()) {
-    if (field.referencesVariables()) {
-      return Blockly.Xml.fieldToDomVariable_(field);
-    } else {
-      var container = Blockly.Xml.utils.createElement('field');
-      container.appendChild(Blockly.Xml.utils.createTextNode(field.getValue()));
-      container.setAttribute('name', field.name);
-      return container;
-    }
+    var container = Blockly.Xml.utils.createElement('field');
+    return field.toXml(container);
   }
   return null;
 };
@@ -790,37 +749,6 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
 };
 
 /**
- * Decode an XML variable field tag and set the value of that field.
- * @param {!Blockly.Workspace} workspace The workspace that is currently being
- *     deserialized.
- * @param {!Element} xml The field tag to decode.
- * @param {string} text The text content of the XML tag.
- * @param {!Blockly.FieldVariable} field The field on which the value will be
- *     set.
- * @private
- */
-Blockly.Xml.domToFieldVariable_ = function(workspace, xml, text, field) {
-  var type = xml.getAttribute('variabletype') || '';
-  // TODO (fenichel): Does this need to be explicit or not?
-  if (type == '\'\'') {
-    type = '';
-  }
-
-  var variable = Blockly.Variables.getOrCreateVariablePackage(workspace, xml.id,
-      text, type);
-
-  // This should never happen :)
-  if (type != null && type !== variable.type) {
-    throw Error('Serialized variable type with id \'' +
-        variable.getId() + '\' had type ' + variable.type + ', and ' +
-        'does not match variable field that references it: ' +
-        Blockly.Xml.domToText(xml) + '.');
-  }
-
-  field.setValue(variable.getId());
-};
-
-/**
  * Decode an XML field tag and set the value of that field on the given block.
  * @param {!Blockly.Block} block The block that is currently being deserialized.
  * @param {string} fieldName The name of the field on the block.
@@ -831,17 +759,10 @@ Blockly.Xml.domToField_ = function(block, fieldName, xml) {
   var field = block.getField(fieldName);
   if (!field) {
     console.warn('Ignoring non-existent field ' + fieldName + ' in block ' +
-                 block.type);
+        block.type);
     return;
   }
-
-  var workspace = block.workspace;
-  var text = xml.textContent;
-  if (field.referencesVariables()) {
-    Blockly.Xml.domToFieldVariable_(workspace, xml, text, field);
-  } else {
-    field.setValue(text);
-  }
+  field.fromXml(xml);
 };
 
 /**

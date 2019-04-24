@@ -82,11 +82,12 @@ Blockly.ASTNode.types = {
 Blockly.ASTNode.wsMove_ = 10;
 
 /**
- * The default position on the worskpace when starting from a block.
- * @type {goog.math.Coordinate}
+ * The default y offset to use when moving the cursor from a stack to the
+ * workspace.
+ * @type {number}
  * @private
  */
-Blockly.ASTNode.defaultPosition_ = new goog.math.Coordinate(100,100);
+Blockly.ASTNode.DEFAULT_OFFSET_Y = -20;
 
 /**
  * Create an ast node from a field.
@@ -653,9 +654,11 @@ Blockly.ASTNode.prototype.out = function() {
 
   switch (this.type_) {
     case Blockly.ASTNode.types.STACK:
-      var wsCoordinate = Blockly.ASTNode.defaultPosition_;
+      var blockPos = this.location_.getRelativeToSurfaceXY();
+      var wsCoordinate = new goog.math.Coordinate(
+          blockPos.x, blockPos.y + Blockly.ASTNode.DEFAULT_OFFSET_Y);
       newAstNode = Blockly.ASTNode.createWorkspaceNode(
-          Blockly.getMainWorkspace(), wsCoordinate);
+          this.location_.workspace, wsCoordinate);
       break;
 
     case Blockly.ASTNode.types.OUTPUT:

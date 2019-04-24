@@ -108,7 +108,7 @@ Blockly.Navigation.getInsertionConnection = function() {
  * category.
  */
 Blockly.Navigation.focusToolbox = function() {
-  Blockly.Navigation.resetFlyout();
+  Blockly.Navigation.resetFlyout(false /* shouldHide */);
   Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_TOOLBOX;
   var workspace = Blockly.getMainWorkspace();
   var toolbox = workspace.getToolbox();
@@ -302,12 +302,16 @@ Blockly.Navigation.insertFromFlyout = function() {
 };
 
 /**
- * Reset flyout information.
+ * Reset flyout information, and optionally close the flyout.
+ * @param {boolean} shouldHide True if the flyout should be hidden.
  */
-Blockly.Navigation.resetFlyout = function() {
+Blockly.Navigation.resetFlyout = function(shouldHide) {
   var cursor = Blockly.Navigation.cursor_;
   Blockly.Navigation.flyoutBlock_ = null;
   cursor.hide();
+  if (shouldHide) {
+    cursor.workspace_.getFlyout_().hide();
+  }
 };
 
 /************/
@@ -389,10 +393,11 @@ Blockly.Navigation.insertBlockFromWs = function() {
 /**
  * Sets the cursor to the previous or output connection of the selected block
  * on the workspace.
+ * If no block is selected, places the cursor at a fixed point on the workspace.
  */
 Blockly.Navigation.focusWorkspace = function() {
   var cursor = Blockly.Navigation.cursor_;
-  Blockly.Navigation.resetFlyout();
+  Blockly.Navigation.resetFlyout(true /* shouldHide */);
   Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_WS;
   Blockly.Navigation.enableKeyboardAccessibility();
   if (Blockly.selected) {
@@ -403,6 +408,12 @@ Blockly.Navigation.focusWorkspace = function() {
     var connection = previousConnection ? previousConnection : outputConnection;
     var newAstNode = Blockly.ASTNode.createConnectionNode(connection);
     cursor.setLocation(newAstNode);
+  } else {
+    var ws = cursor.workspace_;
+    // TODO: Find the center of the visible workspace.
+    var wsCoord = new goog.math.Coordinate(100, 100);
+    var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
+    cursor.setLocation(wsNode);
   }
 };
 
@@ -534,6 +545,10 @@ Blockly.Navigation.flyoutKeyHandler = function(e) {
     Blockly.Navigation.insertFromFlyout();
     keyHandled = true;
     console.log('Enter: Flyout : Select');
+  } else if (e.keyCode === goog.events.KeyCodes.E) {
+    console.log('E: Flyout: Exit');
+    Blockly.Navigation.focusWorkspace();
+    keyHandled = true;
   }
   return keyHandled;
 };
@@ -564,6 +579,10 @@ Blockly.Navigation.toolboxKeyHandler = function(e) {
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
     keyHandled = true;
     //TODO: focus on flyout OR open if the category is nested
+  } else if (e.keyCode === goog.events.KeyCodes.E) {
+    console.log('E: Toolbox: Exit');
+    Blockly.Navigation.focusWorkspace();
+    keyHandled = true;
   }
   return keyHandled;
 };

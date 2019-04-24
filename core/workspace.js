@@ -142,7 +142,7 @@ Blockly.Workspace.prototype.MAX_UNDO = 1024;
 
 /**
  * Adds cursor for keyboard navigation.
- * @return {Blockly.Cursor} Cursor for keyboard navigation.
+ * @return {!Blockly.Cursor} Cursor for keyboard navigation.
  */
 Blockly.Workspace.prototype.createCursor = function() {
   return new Blockly.Cursor();

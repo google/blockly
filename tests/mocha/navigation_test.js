@@ -52,6 +52,12 @@ suite('Navigation', function() {
       this.secondCategory_ = this.firstCategory_.getNextShownNode();
     });
 
+    teardown(function() {
+      delete Blockly.Blocks['basic_block'];
+      this.workspace.dispose();
+      Blockly.Navigation.currentCategory_ = null;
+    });
+
     test('Next', function() {
       chai.assert.isTrue(Blockly.Navigation.navigate({
         keyCode: goog.events.KeyCodes.S
@@ -132,10 +138,5 @@ suite('Navigation', function() {
     });
     // More tests:
     // - nested categories
-    teardown(function() {
-      delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
-      Blockly.Navigation.currentCategory_ = null;
-    });
   });
 });

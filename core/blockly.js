@@ -88,10 +88,9 @@ Blockly.cursor = null;
 
 /**
  * Whether or not we're currently in keyboard accessibility mode.
- * @type {Boolean}
- * @private
+ * @type {boolean}
  */
-Blockly.keyboardAccessibilityMode_ = false;
+Blockly.keyboardAccessibilityMode = false;
 
 /**
  * All of the connections on blocks that are currently being dragged.
@@ -275,7 +274,7 @@ Blockly.onKeyDown_ = function(e) {
       Blockly.hideChaff();
       workspace.undo(e.shiftKey);
     }
-  } else if (Blockly.keyboardAccessibilityMode_
+  } else if (Blockly.keyboardAccessibilityMode
     && Blockly.Navigation.navigate(e)) {
     return;
   }

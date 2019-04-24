@@ -20,6 +20,8 @@
 
 goog.provide('Blockly.Navigation');
 
+goog.require('Blockly.ASTNode');
+
 /**
  * The cursor for keyboard navigation.
  * @type Blockly.Cursor
@@ -30,21 +32,21 @@ Blockly.Navigation.cursor_ = null;
 /**
  * The current selected category if the toolbox is open or
  * last selected category if focus is on a different element.
- * @type ?Blockly.Toolbox.TreeNode
+ * @type ?goog.ui.tree.BaseNode
  * @private
  */
 Blockly.Navigation.currentCategory_ = null;
 
 /**
  * The current selected block in the flyout.
- * @type ?Blockly.Block
+ * @type ?Blockly.BlockSvg
  * @private
  */
 Blockly.Navigation.flyoutBlock_ = null;
 
 /**
  * The selected connection used for inserting a block.
- * @type ?Blockly.Connection
+ * @type ?Blockly.ASTNode
  * @private
  */
 Blockly.Navigation.insertionNode_ = null;
@@ -71,6 +73,31 @@ Blockly.Navigation.STATE_TOOLBOX = 3;
  * @private
  */
 Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_WS;
+
+/**
+ * Set the navigationc cursor.
+ * @param {Blockly.Cursor} cursor The cursor to navigate through blocks on a
+ * workspace.
+ * @package
+ */
+Blockly.Navigation.setCursor = function(cursor) {
+  Blockly.Navigation.cursor_ = cursor;
+};
+
+/**
+ * Get the insertion connection.
+ * @return {Blockly.Connection} Returns the marked connection or null if the
+ *    user has not marked a connection.
+ * @package
+ */
+Blockly.Navigation.getInsertionConnection = function() {
+  var connection = null;
+  if (Blockly.Navigation.insertionNode_) {
+    connection = /** @type Blockly.Connection */
+      (Blockly.Navigation.insertionNode_.getLocation());
+  }
+  return connection;
+};
 
 /************************/
 /** Toolbox Navigation **/
@@ -149,14 +176,16 @@ Blockly.Navigation.outCategory = function() {
   if (!Blockly.Navigation.currentCategory_) {return;}
   var curCategory = Blockly.Navigation.currentCategory_;
 
-  if (curCategory.hasChildren() && curCategory.getExpanded() && curCategory.isUserCollapsible_) {
+  if (curCategory.hasChildren() && curCategory.getExpanded() && curCategory.isUserCollapsible()) {
     curCategory.setExpanded(false);
   } else {
     var parent = curCategory.getParent();
     var tree = curCategory.getTree();
     if (parent && (tree.getShowRootNode() || parent != tree)) {
       parent.select();
-      Blockly.Navigation.currentCategory_ = parent;
+
+      Blockly.Navigation.currentCategory_ = /** @type {goog.ui.tree.BaseNode} */
+        (parent);
     }
   }
 };
@@ -249,12 +278,9 @@ Blockly.Navigation.getFlyoutBlocks_ = function() {
  * it on the workspace.
  */
 Blockly.Navigation.insertFromFlyout = function() {
-  var connection = null;
   //TODO: IF this is null then we need to add to the correct place on the
   //workspace.
-  if (Blockly.Navigation.insertionNode_) {
-    connection = Blockly.Navigation.insertionNode_.getLocation();
-  }
+  var connection = Blockly.Navigation.getInsertionConnection();
   var cursor = Blockly.Navigation.cursor_;
   var flyoutBlock = Blockly.Navigation.flyoutBlock_;
   var workspace = Blockly.getMainWorkspace();
@@ -265,12 +291,12 @@ Blockly.Navigation.insertFromFlyout = function() {
     var newBlock = flyout.createBlock(flyoutBlock);
     Blockly.Navigation.insertBlock(newBlock, connection);
     Blockly.Navigation.focusWorkspace();
-    var previousConnection = newBlock.previousConnection;
-    var outputConnection = newBlock.outputConnection;
-    var connection = previousConnection ? previousConnection : outputConnection;
+    var prevConnection = newBlock.previousConnection;
+    var outConnection = newBlock.outputConnection;
+    var topConnection = prevConnection ? prevConnection : outConnection;
     //TODO: This will have to be fixed when we add in a block that does not have
     //a previous or output connection
-    var astNode = Blockly.ASTNode.createConnectionNode(connection);
+    var astNode = Blockly.ASTNode.createConnectionNode(topConnection);
     cursor.setLocation(astNode);
   }
 };
@@ -294,14 +320,16 @@ Blockly.Navigation.resetFlyout = function(shouldHide) {
 
 /**
  * Finds the best connection.
- * @param {!Blockly.Block} block The block to be connected.
- * @param {!Blockly.Connection} connection The connection to connect to.
- * @return {Blockly.Connection} blockConnection The best connection we can
+ * @param {?Blockly.Block} block The block to be connected.
+ * @param {?Blockly.Connection} connection The connection to connect to.
+ * @return {?Blockly.Connection} blockConnection The best connection we can
  * determine for the block.
  */
 Blockly.Navigation.findBestConnection = function(block, connection) {
-  var blockConnection;
-  if (!block || !connection) {return;}
+  var blockConnection = null;
+  if (!block || !connection) {
+    return null;
+  }
   if (connection.type === Blockly.PREVIOUS_STATEMENT) {
     blockConnection = block.nextConnection;
   } else if (connection.type === Blockly.NEXT_STATEMENT) {
@@ -311,9 +339,9 @@ Blockly.Navigation.findBestConnection = function(block, connection) {
   } else if (connection.type === Blockly.OUTPUT_VALUE) {
     //select the first input that has a connection
     for (var i = 0; i < block.inputList.length; i++) {
-      var connection = block.inputList[i].connection;
-      if (connection.type === Blockly.INPUT_VALUE) {
-        blockConnection = connection;
+      var inputConnection = block.inputList[i].connection;
+      if (inputConnection.type === Blockly.INPUT_VALUE) {
+        blockConnection = inputConnection;
         break;
       }
     }
@@ -324,7 +352,7 @@ Blockly.Navigation.findBestConnection = function(block, connection) {
 /**
  * Finds the best connection on a block and connects it to the given connection.
  * @param {!Blockly.Block} block The selected blcok.
- * @param {!Blockly.Connection} connection The connection on the workspace.
+ * @param {?Blockly.Connection} connection The connection on the workspace.
  */
 Blockly.Navigation.insertBlock = function(block, connection) {
   var bestConnection = Blockly.Navigation.findBestConnection(block, connection);
@@ -349,8 +377,8 @@ Blockly.Navigation.insertBlock = function(block, connection) {
  * connection.
  */
 Blockly.Navigation.insertBlockFromWs = function() {
-  var targetConnection = Blockly.Navigation.insertionNode_;
-  var sourceConnection = Blockly.Navigation.cursor_.getCurNode();
+  var targetConnection = Blockly.Navigation.getInsertionConnection();
+  var sourceConnection = Blockly.Navigation.cursor_.getCurNode().getLocation();
   try {
     sourceConnection.connect(targetConnection);
   } catch (Error) {
@@ -371,7 +399,7 @@ Blockly.Navigation.focusWorkspace = function() {
   var cursor = Blockly.Navigation.cursor_;
   Blockly.Navigation.resetFlyout(true /* shouldHide */);
   Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_WS;
-  Blockly.keyboardAccessibilityMode_ = true;
+  Blockly.Navigation.enableKeyboardAccessibility();
   if (Blockly.selected) {
     var previousConnection = Blockly.selected.previousConnection;
     var outputConnection = Blockly.selected.outputConnection;
@@ -439,8 +467,15 @@ Blockly.Navigation.keyboardOut = function() {
  * Mark the current location of the cursor.
  */
 Blockly.Navigation.markConnection = function() {
-  Blockly.Navigation.insertionNode_ =
-    Blockly.Navigation.cursor_.getCurNode();
+  var curNode = Blockly.Navigation.cursor_.getCurNode();
+  var location = curNode.getLocation();
+
+  //TODO: Add a way to identify if something is connection, field, block, ws
+  //onto astnode.
+  if (location instanceof Blockly.Connection) {
+    Blockly.Navigation.insertionNode_ =
+      Blockly.Navigation.cursor_.getCurNode();
+  }
 };
 
 /**
@@ -591,12 +626,12 @@ Blockly.Navigation.workspaceKeyHandler = function(e) {
  * Enable accessibility mode.
  */
 Blockly.Navigation.enableKeyboardAccessibility = function() {
-  Blockly.keyboardAccessibilityMode_ = true;
+  Blockly.keyboardAccessibilityMode = true;
 };
 
 /**
  * Disable accessibility mode.
  */
 Blockly.Navigation.disableKeyboardAccessibility = function() {
-  Blockly.keyboardAccessibilityMode_ = false;
+  Blockly.keyboardAccessibilityMode = false;
 };

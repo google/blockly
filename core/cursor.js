@@ -66,7 +66,7 @@ Blockly.Cursor.prototype.getCurNode = function() {
  * Set the location of the cursor and call the update method.
  * Setting isStack to true will only work if the newLocation is the top most
  * output or previous connection on a stack.
- * @param {?Blockly.ASTNode} newNode The new location of the cursor.
+ * @param {Blockly.ASTNode} newNode The new location of the cursor.
  */
 Blockly.Cursor.prototype.setLocation = function(newNode) {
   this.curNode_ = newNode;

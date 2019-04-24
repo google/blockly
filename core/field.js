@@ -181,6 +181,14 @@ Blockly.Field.prototype.setSourceBlock = function(block) {
 };
 
 /**
+ * Get the source block for this field.
+ * @return {Blockly.Block} The source block, or null if there is none.
+ */
+Blockly.Field.prototype.getSourceBlock = function() {
+  return this.sourceBlock_;
+};
+
+/**
  * Install this field on a block.
  */
 Blockly.Field.prototype.init = function() {

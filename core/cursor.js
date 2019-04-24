@@ -55,7 +55,7 @@ Blockly.Cursor.prototype.types = {
 
 /**
  * Gets the current location of the cursor.
- * @return {Blockly.Field|Blockly.Connection|Blockly.Block} The current field,
+ * @return {Blockly.ASTNode} The current field,
  * connection, or block the cursor is on.
  */
 Blockly.Cursor.prototype.getCurNode = function() {
@@ -63,18 +63,10 @@ Blockly.Cursor.prototype.getCurNode = function() {
 };
 
 /**
- * The type of the current location.
- * @return {String} The type of the location.
- */
-Blockly.Cursor.prototype.getLocationType = function() {
-  return this.type_;
-};
-
-/**
  * Set the location of the cursor and call the update method.
  * Setting isStack to true will only work if the newLocation is the top most
  * output or previous connection on a stack.
- * @param {!Blockly.ASTNode} newNode The new location of the cursor.
+ * @param {Blockly.ASTNode} newNode The new location of the cursor.
  */
 Blockly.Cursor.prototype.setLocation = function(newNode) {
   this.curNode_ = newNode;
@@ -89,15 +81,18 @@ Blockly.Cursor.prototype.update_ = function() {};
 
 /**
  * Find the next connection, field, or block.
- * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
+ * @return {Blockly.ASTNode} The next element.
  */
 Blockly.Cursor.prototype.next = function() {
   var curNode = this.getCurNode();
-  if (!curNode) {return null;}
+  if (!curNode) {
+    return null;
+  }
   var newNode = curNode.next();
   if (newNode) {
     this.setLocation(newNode);
   }
+  return newNode;
 };
 
 /**
@@ -106,35 +101,44 @@ Blockly.Cursor.prototype.next = function() {
  */
 Blockly.Cursor.prototype.in = function() {
   var curNode = this.getCurNode();
-  if (!curNode) {return null;}
+  if (!curNode) {
+    return null;
+  }
   var newNode = curNode.in();
   if (newNode) {
     this.setLocation(newNode);
   }
+  return newNode;
 };
 
 /**
  * Find the previous connection, field, or block.
- * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
+ * @return {Blockly.ASTNode} The next element.
  */
 Blockly.Cursor.prototype.prev = function() {
   var curNode = this.getCurNode();
-  if (!curNode) {return null;}
+  if (!curNode) {
+    return null;
+  }
   var newNode = curNode.prev();
   if (newNode) {
     this.setLocation(newNode);
   }
+  return newNode;
 };
 
 /**
  * Find the next out connection, field, or block.
- * @return {Blockly.Field|Blockly.Block|Blockly.Connection} The next element.
+ * @return {Blockly.ASTNode} The next element.
  */
 Blockly.Cursor.prototype.out = function() {
   var curNode = this.getCurNode();
-  if (!curNode) {return null;}
+  if (!curNode) {
+    return null;
+  }
   var newNode = curNode.out();
   if (newNode) {
     this.setLocation(newNode);
   }
+  return newNode;
 };

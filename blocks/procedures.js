@@ -172,7 +172,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       containerBlock.setFieldValue(
           this.hasStatements_ ? 'TRUE' : 'FALSE', 'STATEMENTS');
     } else {
-      containerBlock.getInput('STATEMENT_INPUT').setVisible(false);
+      containerBlock.removeInput('STATEMENT_INPUT');
     }
 
     // Parameter list.

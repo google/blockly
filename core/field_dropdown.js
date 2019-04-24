@@ -437,10 +437,6 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
  * @private
  */
 Blockly.FieldDropdown.prototype.render_ = function() {
-  if (!this.visible_) {
-    this.size_.width = 0;
-    return;
-  }
   if (this.sourceBlock_ && this.arrow_) {
     // Update arrow's colour.
     this.arrow_.style.fill = this.sourceBlock_.getColour();

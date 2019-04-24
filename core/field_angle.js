@@ -126,11 +126,6 @@ Blockly.FieldAngle.RADIUS = Blockly.FieldAngle.HALF - 1;
  * @private
  */
 Blockly.FieldAngle.prototype.render_ = function() {
-  if (!this.visible_) {
-    this.size_.width = 0;
-    return;
-  }
-
   // Update textElement.
   this.textElement_.textContent = this.getDisplayText_();
 

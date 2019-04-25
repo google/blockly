@@ -85,6 +85,14 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
 };
 
 /**
+ * Get the source block for this input.
+ * @return {Blockly.Block} The source block, or null if there is none.
+ */
+Blockly.Input.prototype.getSourceBlock = function() {
+  return this.sourceBlock_;
+};
+
+/**
  * Inserts a field (or label from string), and all prefix and suffix fields, at
  * the location of the input's field row.
  * @param {number} index The index at which to insert field.

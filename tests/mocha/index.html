@@ -25,6 +25,25 @@
     <script src="event_test.js"></script>
     <script src="field_variable_test.js"></script>
     <script src="utils_test.js"></script>
+    <script src="navigation_test.js"></script>
+
+    <div id="blocklyDiv"></div>
+    <xml id="toolbox-minimal" style="display: none">
+      <block type="basic_block"></block>
+    </xml>
+
+    <xml id="toolbox-categories" style="display: none">
+      <category name="First">
+        <block type="basic_block">
+          <field name="TEXT">First</field>
+        </block>
+      </category>
+      <category name="Second">
+        <block type="basic_block">
+          <field name="TEXT">Second</field>
+        </block>
+      </category>
+    </xml>
 
     <script>
       mocha.run();

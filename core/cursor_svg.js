@@ -32,6 +32,7 @@ goog.require('Blockly.Cursor');
 /**
  * Class for a cursor.
  * @param {!Blockly.Workspace} workspace The workspace to sit in.
+ * @extends {Blockly.Cursor}
  * @constructor
  */
 Blockly.CursorSvg = function(workspace) {
@@ -69,7 +70,7 @@ Blockly.CursorSvg.VERTICAL_PADDING = 5;
 
 /**
  * Cursor color.
- * @type {number}
+ * @type {string}
  * @const
  */
 Blockly.CursorSvg.CURSOR_COLOR = '#cc0a0a';
@@ -82,7 +83,7 @@ Blockly.CursorSvg.CURSOR_REFERENCE = null;
 
 /**
  * Parent svg element.
- * This is generally a block unless the cursor is on the workspace
+ * This is generally a block's svg root, unless the cursor is on the workspace.
  * @type {Element}
  */
 Blockly.CursorSvg.prototype.parent_ = null;
@@ -118,7 +119,7 @@ Blockly.CursorSvg.prototype.createDom = function() {
 /**
  * Set parent of the cursor. This is so that the cursor will be on the correct
  * svg group.
- * @param {SVGElement} newParent New parent of the cursor.
+ * @param {Element} newParent New parent of the cursor.
  * @private
  */
 Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
@@ -135,7 +136,7 @@ Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
   // If we are losing a parent, we want to move our DOM element to the
   // root of the workspace.
   else if (oldParent) {
-    this.workspace.getCanvas().appendChild(svgRoot);
+    this.workspace_.getCanvas().appendChild(svgRoot);
   }
   this.parent_ = newParent;
 };
@@ -146,15 +147,15 @@ Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
 
 /**
  * Show the cursor using coordinates.
- * @param {?goog.math.Coordinate} position The position of the cursor on the
- * workspace.
  * @private
  */
-Blockly.CursorSvg.prototype.showWithCoordinates_ = function(position) {
-  this.CURSOR_REFERENCE = position;
+Blockly.CursorSvg.prototype.showWithCoordinates_ = function() {
+  var workspaceNode = this.getCurNode();
+  var wsCoordinate = workspaceNode.getWsCoordinate();
+  this.CURSOR_REFERENCE = wsCoordinate;
   this.currentCursorSvg = this.cursorSvgLine_;
   this.setParent_(this.workspace_.svgBlockCanvas_);
-  this.positionLine_(position.x, position.y, Blockly.CursorSvg.CURSOR_WIDTH);
+  this.positionLine_(wsCoordinate.x, wsCoordinate.y, Blockly.CursorSvg.CURSOR_WIDTH);
   this.showCurrent_();
 };
 
@@ -163,7 +164,8 @@ Blockly.CursorSvg.prototype.showWithCoordinates_ = function(position) {
  * @private
  */
 Blockly.CursorSvg.prototype.showWithBlock_ = function() {
-  var block = this.getLocation();
+  //TODO: Change this from getLocation to something else
+  var block = this.getCurNode().getLocation();
 
   this.currentCursorSvg = this.cursorSvgRect_;
   this.setParent_(block.getSvgRoot());
@@ -176,9 +178,10 @@ Blockly.CursorSvg.prototype.showWithBlock_ = function() {
  * @private
  */
 Blockly.CursorSvg.prototype.showWithInputOutput_ = function() {
-  var connection = this.getLocation();
+  var connection = /** @type {Blockly.Connection} */
+      (this.getCurNode().getLocation());
   this.currentCursorSvg = this.cursorInputOutput_;
-  this.setParent_(connection.sourceBlock_.getSvgRoot());
+  this.setParent_(connection.getSourceBlock().getSvgRoot());
   this.positionInputOutput_(connection);
   this.showCurrent_();
 };
@@ -188,14 +191,14 @@ Blockly.CursorSvg.prototype.showWithInputOutput_ = function() {
  * @private
  */
 Blockly.CursorSvg.prototype.showWithNext_ = function() {
-  var connection = this.getLocation();
-  var targetBlock = connection.sourceBlock_;
+  var connection = this.getCurNode().getLocation();
+  var targetBlock = connection.getSourceBlock();
   var x = 0;
   var y = connection.offsetInBlock_.y;
   var width = targetBlock.getHeightWidth().width;
 
   this.currentCursorSvg = this.cursorSvgLine_;
-  this.setParent_(connection.sourceBlock_.getSvgRoot());
+  this.setParent_(connection.getSourceBlock().getSvgRoot());
   this.positionLine_(x, y, width);
   this.showCurrent_();
 };
@@ -205,23 +208,22 @@ Blockly.CursorSvg.prototype.showWithNext_ = function() {
  * @private
  */
 Blockly.CursorSvg.prototype.showWithPrev_ = function() {
-  var connection = this.getLocation();
-  var targetBlock = connection.sourceBlock_;
+  var connection = this.getCurNode().getLocation();
+  var targetBlock = connection.getSourceBlock();
   var width = targetBlock.getHeightWidth().width;
 
   this.currentCursorSvg = this.cursorSvgLine_;
-  this.setParent_(connection.sourceBlock_.getSvgRoot());
+  this.setParent_(connection.getSourceBlock().getSvgRoot());
   this.positionLine_(0, 0, width);
   this.showCurrent_();
 };
 
 /**
  * Show the cursor using a field.
- * @param {Blockly.Field} field The field to position the cursor around
  * @private
  */
 Blockly.CursorSvg.prototype.showWithField_ = function() {
-  var field = this.getLocation();
+  var field = this.getCurNode().getLocation();
   var width = field.borderRect_.width.baseVal.value;
   var height = field.borderRect_.height.baseVal.value;
 
@@ -230,31 +232,6 @@ Blockly.CursorSvg.prototype.showWithField_ = function() {
   this.positionRect_(0, 0, width, height);
   this.showCurrent_();
 };
-
-/**
- * Decides what helper function to call based on the type of the cursor.
- * @private
- * @param {?goog.math.Coordinate} position The position of the cursor on the
- * workspace.
- */
-Blockly.CursorSvg.prototype.showWithAnything_ = function(position) {
-  var location = this.getLocation();
-  if (this.type_ === this.types.BLOCK) {
-    this.showWithBlock_();
-  } else if (location.type === Blockly.INPUT_VALUE
-    || location.type === Blockly.OUTPUT_VALUE) {
-    this.showWithInputOutput_();
-  } else if (location.type === Blockly.NEXT_STATEMENT) {
-    this.showWithNext_();
-  } else if (location.type === Blockly.PREVIOUS_STATEMENT) {
-    this.showWithPrev_();
-  } else if (this.type_ === this.types.FIELD) {
-    this.showWithField_();
-  } else if (this.type_ === this.types.WORKSPACE) {
-    this.showWithCoordinates_(position);
-  }
-};
-
 
 /**************************/
 /**** Position         ****/
@@ -294,13 +271,12 @@ Blockly.CursorSvg.prototype.positionRect_ = function(x, y, width, height) {
  * @private
  */
 Blockly.CursorSvg.prototype.positionInputOutput_ = function(connection) {
-  var xy = connection.sourceBlock_.getRelativeToSurfaceXY();
-  var x = connection.x_ - xy.x;
-  var y = connection.y_ - xy.y;
+  var x = connection.offsetInBlock_.x;
+  var y = connection.offsetInBlock_.y;
 
   this.cursorInputOutput_.setAttribute('fill', '#f44242');
   this.cursorInputOutput_.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
-            (connection.sourceBlock_.RTL ? ' scale(-1 1)' : ''));
+            (connection.getSourceBlock().RTL ? ' scale(-1 1)' : ''));
 };
 
 /**
@@ -323,12 +299,33 @@ Blockly.CursorSvg.prototype.hide = function() {
 
 /**
  * Update the cursor.
- * @param {?goog.math.Coordinate} position The position of the cursor on the
- * workspace.
  * @package
  */
-Blockly.CursorSvg.prototype.update_ = function(position) {
-  this.showWithAnything_(position);
+Blockly.CursorSvg.prototype.update_ = function() {
+  if (!this.getCurNode()) {
+    return;
+  }
+  var curNode = this.getCurNode();
+  if (curNode.getType() === Blockly.ASTNode.types.BLOCK) {
+    this.showWithBlock_();
+    //This needs to be the location type because next connections can be input
+    //type but they need to draw like they are a next statement
+  } else if (curNode.getLocation().type === Blockly.INPUT_VALUE
+    || curNode.getType() === Blockly.ASTNode.types.OUTPUT) {
+    this.showWithInputOutput_();
+  } else if (curNode.getLocation().type === Blockly.NEXT_STATEMENT) {
+    this.showWithNext_();
+  } else if (curNode.getType() === Blockly.ASTNode.types.PREVIOUS) {
+    this.showWithPrev_();
+  } else if (curNode.getType() === Blockly.ASTNode.types.FIELD) {
+    this.showWithField_();
+  } else if (curNode.getType() === Blockly.ASTNode.types.WORKSPACE) {
+    this.showWithCoordinates_();
+  } else if (curNode.getType() === Blockly.ASTNode.types.STACK) {
+    //TODO: This should be something else so that we show that we are at the
+    //stack level.
+    this.showWithBlock_();
+  }
 };
 
 /**

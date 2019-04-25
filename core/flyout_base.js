@@ -480,10 +480,8 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         }
         break;
       case 'LABEL':
-        // Labels behave the same as buttons, but are styled differently.
-        var isLabel = true;
-        // Falls through.
       case 'BUTTON':
+        var isLabel = xml.tagName.toUpperCase() == 'LABEL';
         var curButton = new Blockly.FlyoutButton(this.workspace_,
             this.targetWorkspace_, xml, isLabel);
         contents.push({type: 'button', button: curButton});

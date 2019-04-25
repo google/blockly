@@ -37,7 +37,7 @@ def string_is_ascii(s):
 
 def load_constants(filename):
   """Read in constants file, which must be output in every language."""
-  constant_defs = read_json_file(filename);
+  constant_defs = read_json_file(filename)
   constants_text = '\n'
   for key in constant_defs:
     value = constant_defs[key]

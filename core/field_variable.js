@@ -126,6 +126,37 @@ Blockly.FieldVariable.prototype.initModel = function() {
   }
 };
 
+Blockly.FieldVariable.prototype.fromXml = function(fieldElement) {
+  var id = fieldElement.getAttribute('id');
+  var variableName = fieldElement.textContent;
+  var variableType = fieldElement.getAttribute('variabletype') || '';
+
+  var variable = Blockly.Variables.getOrCreateVariablePackage(
+      this.workspace_ || this.sourceBlock_.workspace, id,
+      variableName, variableType);
+
+  // This should never happen :)
+  if (variableType != null && variableType !== variable.type) {
+    throw Error('Serialized variable type with id \'' +
+      variable.getId() + '\' had type ' + variable.type + ', and ' +
+      'does not match variable field that references it: ' +
+      Blockly.Xml.domToText(fieldElement) + '.');
+  }
+
+  this.setValue(variable.getId());
+};
+
+Blockly.FieldVariable.prototype.toXml = function(fieldElement) {
+  // Make sure the variable is initialized.
+  this.initModel();
+
+  fieldElement.setAttribute('name', this.name);
+  fieldElement.setAttribute('id', this.variable_.getId());
+  fieldElement.textContent = this.variable_.name;
+  fieldElement.setAttribute('variableType', this.variable_.type);
+  return fieldElement;
+};
+
 /**
  * Dispose of this field.
  * @public

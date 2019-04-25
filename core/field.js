@@ -244,6 +244,30 @@ Blockly.Field.prototype.initModel = function() {
 };
 
 /**
+ * Sets the field's value based on the given XML element. Should only be
+ * called by Blockly.Xml.
+ * @param {!Element} fieldElement The element containing info about the
+ *    field's state.
+ * @package
+ */
+Blockly.Field.prototype.fromXml = function(fieldElement) {
+  this.setValue(fieldElement.textContent);
+};
+
+/**
+ * Serializes this field's value to XML. Should only be called by Blockly.Xml.
+ * @param {!Element} fieldElement The element to populate with info about the
+ *    field's state.
+ * @return {!Element} The element containing info about the field's state.
+ * @package
+ */
+Blockly.Field.prototype.toXml = function(fieldElement) {
+  fieldElement.setAttribute('name', this.name);
+  fieldElement.textContent = this.getValue();
+  return fieldElement;
+};
+
+/**
  * Dispose of all DOM objects belonging to this editable field.
  */
 Blockly.Field.prototype.dispose = function() {

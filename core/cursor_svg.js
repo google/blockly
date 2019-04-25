@@ -83,7 +83,7 @@ Blockly.CursorSvg.CURSOR_REFERENCE = null;
 
 /**
  * Parent svg element.
- * This is generally a block unless the cursor is on the workspace.
+ * This is generally a block's svg root, unless the cursor is on the workspace.
  * @type {Element}
  */
 Blockly.CursorSvg.prototype.parent_ = null;
@@ -147,7 +147,6 @@ Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
 
 /**
  * Show the cursor using coordinates.
- * workspace.
  * @private
  */
 Blockly.CursorSvg.prototype.showWithCoordinates_ = function() {
@@ -234,39 +233,6 @@ Blockly.CursorSvg.prototype.showWithField_ = function() {
   this.showCurrent_();
 };
 
-/**
- * Decides what helper function to call based on the type of the cursor.
- * @private
- * workspace.
- */
-Blockly.CursorSvg.prototype.showWithAnything_ = function() {
-  if (!this.getCurNode()) {
-    return;
-  }
-  var curNode = this.getCurNode();
-  if (curNode.getType() === Blockly.ASTNode.types.BLOCK) {
-    this.showWithBlock_();
-    //This needs to be the location type because next connections can be input
-    //type but they need to draw like they are a next statement
-  } else if (curNode.getLocation().type === Blockly.INPUT_VALUE
-    || curNode.getType() === Blockly.ASTNode.types.OUTPUT) {
-    this.showWithInputOutput_();
-  } else if (curNode.getLocation().type === Blockly.NEXT_STATEMENT) {
-    this.showWithNext_();
-  } else if (curNode.getType() === Blockly.ASTNode.types.PREVIOUS) {
-    this.showWithPrev_();
-  } else if (curNode.getType() === Blockly.ASTNode.types.FIELD) {
-    this.showWithField_();
-  } else if (curNode.getType() === Blockly.ASTNode.types.WORKSPACE) {
-    this.showWithCoordinates_();
-  } else if (curNode.getType() === Blockly.ASTNode.types.STACK) {
-    //TODO: This should be something else so that we show that we are at the
-    //stack level.
-    this.showWithBlock_();
-  }
-};
-
-
 /**************************/
 /**** Position         ****/
 /**************************/
@@ -333,11 +299,33 @@ Blockly.CursorSvg.prototype.hide = function() {
 
 /**
  * Update the cursor.
- * workspace.
  * @package
  */
 Blockly.CursorSvg.prototype.update_ = function() {
-  this.showWithAnything_();
+  if (!this.getCurNode()) {
+    return;
+  }
+  var curNode = this.getCurNode();
+  if (curNode.getType() === Blockly.ASTNode.types.BLOCK) {
+    this.showWithBlock_();
+    //This needs to be the location type because next connections can be input
+    //type but they need to draw like they are a next statement
+  } else if (curNode.getLocation().type === Blockly.INPUT_VALUE
+    || curNode.getType() === Blockly.ASTNode.types.OUTPUT) {
+    this.showWithInputOutput_();
+  } else if (curNode.getLocation().type === Blockly.NEXT_STATEMENT) {
+    this.showWithNext_();
+  } else if (curNode.getType() === Blockly.ASTNode.types.PREVIOUS) {
+    this.showWithPrev_();
+  } else if (curNode.getType() === Blockly.ASTNode.types.FIELD) {
+    this.showWithField_();
+  } else if (curNode.getType() === Blockly.ASTNode.types.WORKSPACE) {
+    this.showWithCoordinates_();
+  } else if (curNode.getType() === Blockly.ASTNode.types.STACK) {
+    //TODO: This should be something else so that we show that we are at the
+    //stack level.
+    this.showWithBlock_();
+  }
 };
 
 /**

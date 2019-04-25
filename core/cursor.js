@@ -33,7 +33,7 @@ goog.provide('Blockly.Cursor');
 Blockly.Cursor = function() {
   /*
    * The current location of the cursor.
-   * @type Blockly.Field|Blockly.Connection|Blockly.Block
+   * @type {Blockly.Field|Blockly.Connection|Blockly.Block}
    * @private
    */
   this.curNode_ = null;
@@ -55,8 +55,8 @@ Blockly.Cursor.prototype.types = {
 
 /**
  * Gets the current location of the cursor.
- * @return {Blockly.ASTNode} The current field,
- * connection, or block the cursor is on.
+ * @return {Blockly.ASTNode} The current field, connection, or block the cursor
+ *     is on.
  */
 Blockly.Cursor.prototype.getCurNode = function() {
   return this.curNode_;
@@ -81,7 +81,8 @@ Blockly.Cursor.prototype.update_ = function() {};
 
 /**
  * Find the next connection, field, or block.
- * @return {Blockly.ASTNode} The next element.
+ * @return {Blockly.ASTNode} The next element, or null if the current node is
+ *     not set or there is no next value.
  */
 Blockly.Cursor.prototype.next = function() {
   var curNode = this.getCurNode();
@@ -96,8 +97,9 @@ Blockly.Cursor.prototype.next = function() {
 };
 
 /**
- * Find the next in connection or field.
- * @return {Blockly.ASTNode} The next element.
+ * Find the in connection or field.
+ * @return {Blockly.ASTNode} The next element, or null if the current node is
+ *     not set or there is no in value.
  */
 Blockly.Cursor.prototype.in = function() {
   var curNode = this.getCurNode();
@@ -113,7 +115,8 @@ Blockly.Cursor.prototype.in = function() {
 
 /**
  * Find the previous connection, field, or block.
- * @return {Blockly.ASTNode} The next element.
+ * @return {Blockly.ASTNode} The next element, or null if the current node is
+ *     not set or there is no previous value.
  */
 Blockly.Cursor.prototype.prev = function() {
   var curNode = this.getCurNode();
@@ -128,8 +131,9 @@ Blockly.Cursor.prototype.prev = function() {
 };
 
 /**
- * Find the next out connection, field, or block.
- * @return {Blockly.ASTNode} The next element.
+ * Find the out connection, field, or block.
+ * @return {Blockly.ASTNode} The next element, or null if the current node is
+ *     not set or there is no out value.
  */
 Blockly.Cursor.prototype.out = function() {
   var curNode = this.getCurNode();

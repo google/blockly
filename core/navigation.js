@@ -305,6 +305,12 @@ Blockly.Navigation.insertFromFlyout = function() {
 
   if (flyout && flyout.isVisible()) {
     var newBlock = flyout.createBlock(flyoutBlock);
+    // Render to get the sizing right.
+    newBlock.render();
+    // Connections are hidden when the block is first created.  Normally there's
+    // enough time for them to become unhidden in the user's mouse movements,
+    // but not here.
+    newBlock.setConnectionsHidden(false);
     Blockly.Navigation.insertBlock(newBlock, connection);
     Blockly.Navigation.focusWorkspace();
     var prevConnection = newBlock.previousConnection;
@@ -347,6 +353,8 @@ Blockly.Navigation.findBestConnection = function(block, connection) {
   if (!block || !connection) {
     return null;
   }
+
+  // TODO: Possibly check types and return null if the types don't match.
   if (connection.type === Blockly.PREVIOUS_STATEMENT) {
     return block.nextConnection;
   } else if (connection.type === Blockly.NEXT_STATEMENT) {
@@ -354,7 +362,7 @@ Blockly.Navigation.findBestConnection = function(block, connection) {
   } else if (connection.type === Blockly.INPUT_VALUE) {
     return block.outputConnection;
   } else if (connection.type === Blockly.OUTPUT_VALUE) {
-    //select the first input that has a connection
+    // Select the first input that has a connection.
     for (var i = 0; i < block.inputList.length; i++) {
       var inputConnection = block.inputList[i].connection;
       if (inputConnection.type === Blockly.INPUT_VALUE) {
@@ -366,23 +374,25 @@ Blockly.Navigation.findBestConnection = function(block, connection) {
 };
 
 /**
- * Finds the best connection on a block and connects it to the given connection.
- * @param {!Blockly.Block} block The selected blcok.
- * @param {Blockly.Connection} connection The connection on the workspace.
+ * Tries to connect the given block to the target connection, making an
+ * intelligent guess about which connection to use to on the moving block.
+ * @param {!Blockly.Block} block The block to move.
+ * @param {Blockly.Connection} targetConnection The connection to connect to.
  */
-Blockly.Navigation.insertBlock = function(block, connection) {
-  var bestConnection = Blockly.Navigation.findBestConnection(block, connection);
+Blockly.Navigation.insertBlock = function(block, targetConnection) {
+  var bestConnection =
+      Blockly.Navigation.findBestConnection(block, targetConnection);
 
   if (bestConnection) {
+    if (targetConnection.type == Blockly.PREVIOUS_STATEMENT) {
+      block.positionNearConnection(bestConnection, targetConnection);
+    }
     try {
-      if (connection.type == Blockly.PREVIOUS_STATEMENT
-        && connection.targetBlock()) {
-        var previousBlock = connection.targetBlock();
-        block.previousConnection.connect(previousBlock.nextConnection);
-      }
-      connection.connect(bestConnection);
+      targetConnection.connect(bestConnection);
     }
     catch (Error) {
+      // TODO: Is there anything else useful to do at this catch?
+      // Perhaps position the block near the target connection?
       console.warn('The connection block is not the right type');
     }
   }
@@ -395,11 +405,15 @@ Blockly.Navigation.insertBlock = function(block, connection) {
 Blockly.Navigation.insertBlockFromWs = function() {
   var targetConnection = Blockly.Navigation.getInsertionConnection();
   var sourceConnection = Blockly.Navigation.cursor_.getCurNode().getLocation();
-  try {
-    sourceConnection.connect(targetConnection);
-  } catch (Error) {
-    console.warn('The connection block is not the right type');
+  if (targetConnection && sourceConnection) {
+    try {
+      sourceConnection.connect(targetConnection);
+    } catch (Error) {
+      console.warn('The connection block is not the right type');
+    }
   }
+  // TODO: Is there anything else useful to do at this else?
+  // Perhaps position the block near the target connection?
 };
 
 /*************************/

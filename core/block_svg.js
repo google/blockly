@@ -1502,3 +1502,25 @@ Blockly.BlockSvg.prototype.scheduleSnapAndBump = function() {
     Blockly.Events.setGroup(false);
   }, Blockly.BUMP_DELAY);
 };
+
+/**
+ * Position a block so that it doesn't move the target block when connected.
+ * The block to position is usually either the first block in a dragged stack or
+ * an insertion marker.
+ * @param {!Blockly.Connection} sourceConnection The connection on the moving
+ *     block's stack.
+ * @param {!Blockly.Connection} targetConnection The connection that should stay
+ *     stationary as this block is positioned.
+ */
+Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
+    targetConnection) {
+  // We only need to position the new block if it's before the existing one,
+  // otherwise its position is set by the previous block.
+  if (sourceConnection.type == Blockly.NEXT_STATEMENT ||
+      sourceConnection.type == Blockly.INPUT_VALUE) {
+    var dx = targetConnection.x_ - sourceConnection.x_;
+    var dy = targetConnection.y_ - sourceConnection.y_;
+
+    this.moveBy(dx, dy);
+  }
+};

@@ -42,7 +42,7 @@ goog.addDependency("../../../" + dir + "/core/block_dragger.js", ['Blockly.Block
 goog.addDependency("../../../" + dir + "/core/block_events.js", ['Blockly.Events.BlockBase', 'Blockly.Events.BlockChange', 'Blockly.Events.BlockCreate', 'Blockly.Events.BlockDelete', 'Blockly.Events.BlockMove', 'Blockly.Events.Change', 'Blockly.Events.Create', 'Blockly.Events.Delete', 'Blockly.Events.Move'], ['Blockly.Events', 'Blockly.Events.Abstract', 'Blockly.Xml.utils', 'goog.math.Coordinate']);
 goog.addDependency("../../../" + dir + "/core/block_render_svg.js", ['Blockly.BlockSvg.render'], ['Blockly.BlockSvg']);
 goog.addDependency("../../../" + dir + "/core/block_svg.js", ['Blockly.BlockSvg'], ['Blockly.Block', 'Blockly.BlockAnimations', 'Blockly.ContextMenu', 'Blockly.Events.Ui', 'Blockly.Events.BlockMove', 'Blockly.Grid', 'Blockly.RenderedConnection', 'Blockly.Tooltip', 'Blockly.Touch', 'Blockly.utils', 'goog.color', 'goog.math.Coordinate']);
-goog.addDependency("../../../" + dir + "/core/blockly.js", ['Blockly'], ['Blockly.BlockSvg.render', 'Blockly.Events', 'Blockly.FieldAngle', 'Blockly.FieldCheckbox', 'Blockly.FieldColour', 'Blockly.FieldDropdown', 'Blockly.FieldImage', 'Blockly.FieldTextInput', 'Blockly.FieldNumber', 'Blockly.FieldVariable', 'Blockly.Generator', 'Blockly.Msg', 'Blockly.Navigation', 'Blockly.Procedures', 'Blockly.Toolbox', 'Blockly.Touch', 'Blockly.WidgetDiv', 'Blockly.WorkspaceSvg', 'Blockly.constants', 'Blockly.inject', 'Blockly.utils', 'Blockly.Xml', 'goog.color']);
+goog.addDependency("../../../" + dir + "/core/blockly.js", ['Blockly'], ['Blockly.BlockSvg.render', 'Blockly.Events', 'Blockly.FieldAngle', 'Blockly.FieldCheckbox', 'Blockly.FieldColour', 'Blockly.FieldDropdown', 'Blockly.FieldLabelSerializable', 'Blockly.FieldImage', 'Blockly.FieldTextInput', 'Blockly.FieldNumber', 'Blockly.FieldVariable', 'Blockly.Generator', 'Blockly.Msg', 'Blockly.Navigation', 'Blockly.Procedures', 'Blockly.Toolbox', 'Blockly.Touch', 'Blockly.WidgetDiv', 'Blockly.WorkspaceSvg', 'Blockly.constants', 'Blockly.inject', 'Blockly.utils', 'Blockly.Xml', 'goog.color']);
 goog.addDependency("../../../" + dir + "/core/blocks.js", ['Blockly.Blocks'], []);
 goog.addDependency("../../../" + dir + "/core/bubble.js", ['Blockly.Bubble'], ['Blockly.Touch', 'Blockly.Workspace', 'goog.math.Coordinate', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/bubble_dragger.js", ['Blockly.BubbleDragger'], ['Blockly.Bubble', 'Blockly.Events.CommentMove', 'Blockly.utils', 'Blockly.WorkspaceCommentSvg', 'goog.math.Coordinate']);
@@ -67,6 +67,7 @@ goog.addDependency("../../../" + dir + "/core/field_date.js", ['Blockly.FieldDat
 goog.addDependency("../../../" + dir + "/core/field_dropdown.js", ['Blockly.FieldDropdown'], ['Blockly.Field', 'Blockly.utils', 'Blockly.utils.uiMenu', 'goog.events', 'goog.ui.Menu', 'goog.ui.MenuItem', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/field_image.js", ['Blockly.FieldImage'], ['Blockly.Field', 'Blockly.utils', 'goog.math.Size']);
 goog.addDependency("../../../" + dir + "/core/field_label.js", ['Blockly.FieldLabel'], ['Blockly.Field', 'Blockly.Tooltip', 'Blockly.utils', 'goog.math.Size']);
+goog.addDependency("../../../" + dir + "/core/field_label_serializable.js", ['Blockly.FieldLabelSerializable'], ['Blockly.FieldLabel']);
 goog.addDependency("../../../" + dir + "/core/field_number.js", ['Blockly.FieldNumber'], ['Blockly.FieldTextInput']);
 goog.addDependency("../../../" + dir + "/core/field_textinput.js", ['Blockly.FieldTextInput'], ['Blockly.DropDownDiv', 'Blockly.Field', 'Blockly.Msg', 'Blockly.utils', 'goog.math.Coordinate', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/field_variable.js", ['Blockly.FieldVariable'], ['Blockly.FieldDropdown', 'Blockly.Msg', 'Blockly.utils', 'Blockly.VariableModel', 'Blockly.Variables', 'goog.math.Size']);
@@ -85,7 +86,7 @@ goog.addDependency("../../../" + dir + "/core/insertion_marker_manager.js", ['Bl
 goog.addDependency("../../../" + dir + "/core/msg.js", ['Blockly.Msg'], []);
 goog.addDependency("../../../" + dir + "/core/mutator.js", ['Blockly.Mutator'], ['Blockly.Bubble', 'Blockly.Events.BlockChange', 'Blockly.Events.Ui', 'Blockly.Icon', 'Blockly.utils', 'Blockly.WorkspaceSvg', 'Blockly.Xml', 'Blockly.Xml.utils']);
 goog.addDependency("../../../" + dir + "/core/names.js", ['Blockly.Names'], []);
-goog.addDependency("../../../" + dir + "/core/navigation.js", ['Blockly.Navigation'], []);
+goog.addDependency("../../../" + dir + "/core/navigation.js", ['Blockly.Navigation'], ['Blockly.ASTNode']);
 goog.addDependency("../../../" + dir + "/core/options.js", ['Blockly.Options'], ['Blockly.Xml', 'Blockly.Themes.Classic']);
 goog.addDependency("../../../" + dir + "/core/procedures.js", ['Blockly.Procedures'], ['Blockly.Blocks', 'Blockly.constants', 'Blockly.Events.BlockChange', 'Blockly.Field', 'Blockly.Names', 'Blockly.Workspace', 'Blockly.Xml', 'Blockly.Xml.utils']);
 goog.addDependency("../../../" + dir + "/core/rendered_connection.js", ['Blockly.RenderedConnection'], ['Blockly.Connection', 'Blockly.utils', 'goog.math.Coordinate']);
@@ -173,7 +174,7 @@ goog.addDependency("async/delay.js", ['goog.Delay', 'goog.async.Delay'], ['goog.
 goog.addDependency("async/delay_test.js", ['goog.async.DelayTest'], ['goog.async.Delay', 'goog.testing.MockClock', 'goog.testing.jsunit']);
 goog.addDependency("async/freelist.js", ['goog.async.FreeList'], []);
 goog.addDependency("async/freelist_test.js", ['goog.async.FreeListTest'], ['goog.async.FreeList', 'goog.testing.jsunit']);
-goog.addDependency("async/nexttick.js", ['goog.async.nextTick', 'goog.async.throwException'], ['goog.debug.entryPointRegistry', 'goog.dom.TagName', 'goog.functions', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.engine']);
+goog.addDependency("async/nexttick.js", ['goog.async.nextTick', 'goog.async.throwException'], ['goog.debug.entryPointRegistry', 'goog.dom.TagName', 'goog.dom.safe', 'goog.functions', 'goog.html.SafeHtml', 'goog.html.TrustedResourceUrl', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.engine', 'goog.string.Const']);
 goog.addDependency("async/nexttick_test.js", ['goog.async.nextTickTest'], ['goog.Promise', 'goog.Timer', 'goog.async.nextTick', 'goog.debug.ErrorHandler', 'goog.debug.entryPointRegistry', 'goog.dom', 'goog.dom.TagName', 'goog.labs.userAgent.browser', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit']);
 goog.addDependency("async/run.js", ['goog.async.run'], ['goog.async.WorkQueue', 'goog.async.nextTick', 'goog.async.throwException']);
 goog.addDependency("async/run_next_tick_test.js", ['goog.async.runNextTickTest'], ['goog.async.run', 'goog.testing.MockClock', 'goog.testing.jsunit', 'goog.testing.recordFunction']);
@@ -216,7 +217,7 @@ goog.addDependency("crypt/ctr_test.js", ['goog.crypt.CtrTest'], ['goog.crypt', '
 goog.addDependency("crypt/hash.js", ['goog.crypt.Hash'], []);
 goog.addDependency("crypt/hash32.js", ['goog.crypt.hash32'], ['goog.crypt']);
 goog.addDependency("crypt/hash32_test.js", ['goog.crypt.hash32Test'], ['goog.crypt.hash32', 'goog.testing.TestCase', 'goog.testing.jsunit']);
-goog.addDependency("crypt/hashtester.js", ['goog.crypt.hashTester'], ['goog.array', 'goog.crypt', 'goog.dom', 'goog.dom.TagName', 'goog.testing.PerformanceTable', 'goog.testing.PseudoRandom', 'goog.testing.asserts']);
+goog.addDependency("crypt/hashtester.js", ['goog.crypt.hashTester'], ['goog.array', 'goog.crypt', 'goog.dom', 'goog.dom.TagName', 'goog.reflect', 'goog.testing.PerformanceTable', 'goog.testing.PseudoRandom', 'goog.testing.asserts']);
 goog.addDependency("crypt/hmac.js", ['goog.crypt.Hmac'], ['goog.crypt.Hash']);
 goog.addDependency("crypt/hmac_test.js", ['goog.crypt.HmacTest'], ['goog.crypt.Hmac', 'goog.crypt.Sha1', 'goog.crypt.hashTester', 'goog.testing.jsunit']);
 goog.addDependency("crypt/md5.js", ['goog.crypt.Md5'], ['goog.crypt.Hash']);
@@ -348,7 +349,7 @@ goog.addDependency("dom/browserrange/abstractrange.js", ['goog.dom.browserrange.
 goog.addDependency("dom/browserrange/browserrange.js", ['goog.dom.browserrange', 'goog.dom.browserrange.Error'], ['goog.dom', 'goog.dom.BrowserFeature', 'goog.dom.NodeType', 'goog.dom.browserrange.GeckoRange', 'goog.dom.browserrange.IeRange', 'goog.dom.browserrange.OperaRange', 'goog.dom.browserrange.W3cRange', 'goog.dom.browserrange.WebKitRange', 'goog.userAgent']);
 goog.addDependency("dom/browserrange/browserrange_test.js", ['goog.dom.browserrangeTest'], ['goog.dom', 'goog.dom.NodeType', 'goog.dom.Range', 'goog.dom.RangeEndpoint', 'goog.dom.TagName', 'goog.dom.browserrange', 'goog.html.testing', 'goog.testing.dom', 'goog.testing.jsunit']);
 goog.addDependency("dom/browserrange/geckorange.js", ['goog.dom.browserrange.GeckoRange'], ['goog.dom.browserrange.W3cRange']);
-goog.addDependency("dom/browserrange/ierange.js", ['goog.dom.browserrange.IeRange'], ['goog.array', 'goog.dom', 'goog.dom.NodeType', 'goog.dom.RangeEndpoint', 'goog.dom.TagName', 'goog.dom.browserrange.AbstractRange', 'goog.log', 'goog.string']);
+goog.addDependency("dom/browserrange/ierange.js", ['goog.dom.browserrange.IeRange'], ['goog.array', 'goog.dom', 'goog.dom.NodeType', 'goog.dom.RangeEndpoint', 'goog.dom.TagName', 'goog.dom.browserrange.AbstractRange', 'goog.dom.safe', 'goog.html.uncheckedconversions', 'goog.log', 'goog.string']);
 goog.addDependency("dom/browserrange/operarange.js", ['goog.dom.browserrange.OperaRange'], ['goog.dom.browserrange.W3cRange']);
 goog.addDependency("dom/browserrange/w3crange.js", ['goog.dom.browserrange.W3cRange'], ['goog.array', 'goog.dom', 'goog.dom.NodeType', 'goog.dom.RangeEndpoint', 'goog.dom.TagName', 'goog.dom.browserrange.AbstractRange', 'goog.string', 'goog.userAgent']);
 goog.addDependency("dom/browserrange/webkitrange.js", ['goog.dom.browserrange.WebKitRange'], ['goog.dom.RangeEndpoint', 'goog.dom.browserrange.W3cRange', 'goog.userAgent']);
@@ -367,7 +368,7 @@ goog.addDependency("dom/dom_compile_test.js", ['goog.dom.DomCompileTest'], ['goo
 goog.addDependency("dom/dom_test.js", ['goog.dom.dom_test'], ['goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.BrowserFeature', 'goog.dom.DomHelper', 'goog.dom.InputType', 'goog.dom.NodeType', 'goog.dom.TagName', 'goog.functions', 'goog.html.SafeUrl', 'goog.html.testing', 'goog.object', 'goog.string.Const', 'goog.string.Unicode', 'goog.testing.PropertyReplacer', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgent.product', 'goog.userAgent.product.isVersion']);
 goog.addDependency("dom/fontsizemonitor.js", ['goog.dom.FontSizeMonitor', 'goog.dom.FontSizeMonitor.EventType'], ['goog.dom', 'goog.dom.TagName', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.userAgent']);
 goog.addDependency("dom/fontsizemonitor_test.js", ['goog.dom.FontSizeMonitorTest'], ['goog.dom', 'goog.dom.FontSizeMonitor', 'goog.dom.TagName', 'goog.events', 'goog.events.Event', 'goog.testing.PropertyReplacer', 'goog.testing.events', 'goog.testing.jsunit', 'goog.userAgent']);
-goog.addDependency("dom/forms.js", ['goog.dom.forms'], ['goog.dom.InputType', 'goog.dom.TagName', 'goog.structs.Map', 'goog.window']);
+goog.addDependency("dom/forms.js", ['goog.dom.forms'], ['goog.dom.InputType', 'goog.dom.TagName', 'goog.dom.safe', 'goog.structs.Map', 'goog.window']);
 goog.addDependency("dom/forms_test.js", ['goog.dom.formsTest'], ['goog.dom', 'goog.dom.forms', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit']);
 goog.addDependency("dom/fullscreen.js", ['goog.dom.fullscreen', 'goog.dom.fullscreen.EventType'], ['goog.dom']);
 goog.addDependency("dom/fullscreen_test.js", ['goog.dom.fullscreen_test'], ['goog.dom.DomHelper', 'goog.dom.fullscreen', 'goog.testing.PropertyReplacer', 'goog.testing.asserts', 'goog.testing.jsunit']);
@@ -432,7 +433,7 @@ goog.addDependency("dom/vendor.js", ['goog.dom.vendor'], ['goog.string', 'goog.u
 goog.addDependency("dom/vendor_test.js", ['goog.dom.vendorTest'], ['goog.array', 'goog.dom.vendor', 'goog.labs.userAgent.util', 'goog.testing.MockUserAgent', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgentTestUtil']);
 goog.addDependency("dom/viewportsizemonitor.js", ['goog.dom.ViewportSizeMonitor'], ['goog.dom', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.math.Size']);
 goog.addDependency("dom/viewportsizemonitor_test.js", ['goog.dom.ViewportSizeMonitorTest'], ['goog.dom.ViewportSizeMonitor', 'goog.events', 'goog.events.Event', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.math.Size', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit']);
-goog.addDependency("dom/xml.js", ['goog.dom.xml'], ['goog.dom', 'goog.dom.NodeType', 'goog.userAgent']);
+goog.addDependency("dom/xml.js", ['goog.dom.xml'], ['goog.dom', 'goog.dom.NodeType', 'goog.dom.safe', 'goog.html.legacyconversions', 'goog.userAgent']);
 goog.addDependency("dom/xml_test.js", ['goog.dom.xmlTest'], ['goog.dom', 'goog.dom.TagName', 'goog.dom.xml', 'goog.testing.jsunit', 'goog.userAgent']);
 goog.addDependency("editor/browserfeature.js", ['goog.editor.BrowserFeature'], ['goog.editor.defines', 'goog.labs.userAgent.browser', 'goog.userAgent', 'goog.userAgent.product', 'goog.userAgent.product.isVersion']);
 goog.addDependency("editor/browserfeature_test.js", ['goog.editor.BrowserFeatureTest'], ['goog.dom', 'goog.dom.Range', 'goog.dom.TagName', 'goog.editor.BrowserFeature', 'goog.testing.ExpectedFailures', 'goog.testing.jsunit']);
@@ -681,7 +682,7 @@ goog.addDependency("html/safeurl_test_vectors.js", ['goog.html.safeUrlTestVector
 goog.addDependency("html/sanitizer/attributewhitelist.js", ['goog.html.sanitizer.AttributeSanitizedWhitelist', 'goog.html.sanitizer.AttributeWhitelist'], []);
 goog.addDependency("html/sanitizer/csspropertysanitizer.js", [], []);
 goog.addDependency("html/sanitizer/csspropertysanitizer_test.js", [], []);
-goog.addDependency("html/sanitizer/csssanitizer.js", ['goog.html.sanitizer.CssSanitizer'], ['goog.array', 'goog.dom', 'goog.dom.TagName', 'goog.html.CssSpecificity', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.sanitizer.CssPropertySanitizer', 'goog.html.sanitizer.noclobber', 'goog.html.uncheckedconversions', 'goog.object', 'goog.string', 'goog.userAgent', 'goog.userAgent.product']);
+goog.addDependency("html/sanitizer/csssanitizer.js", ['goog.html.sanitizer.CssSanitizer'], ['goog.array', 'goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.CssSpecificity', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.sanitizer.CssPropertySanitizer', 'goog.html.sanitizer.noclobber', 'goog.html.uncheckedconversions', 'goog.object', 'goog.string', 'goog.string.Const', 'goog.userAgent', 'goog.userAgent.product']);
 goog.addDependency("html/sanitizer/csssanitizer_test.js", ['goog.html.CssSanitizerTest'], ['goog.array', 'goog.html.SafeStyle', 'goog.html.SafeStyleSheet', 'goog.html.SafeUrl', 'goog.html.sanitizer.CssSanitizer', 'goog.html.testing', 'goog.string', 'goog.testing.dom', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgent.product', 'goog.userAgent.product.isVersion']);
 goog.addDependency("html/sanitizer/elementweakmap.js", [], []);
 goog.addDependency("html/sanitizer/elementweakmap_test.js", [], []);
@@ -795,7 +796,7 @@ goog.addDependency("labs/mock/mock.js", ['goog.labs.mock', 'goog.labs.mock.Verif
 goog.addDependency("labs/mock/mock_test.js", ['goog.labs.mockTest'], ['goog.array', 'goog.labs.mock', 'goog.labs.mock.VerificationError', 'goog.labs.testing.AnythingMatcher', 'goog.labs.testing.GreaterThanMatcher', 'goog.string', 'goog.testing.jsunit']);
 goog.addDependency("labs/mock/verificationmode.js", ['goog.labs.mock.verification', 'goog.labs.mock.verification.VerificationMode'], []);
 goog.addDependency("labs/mock/verificationmode_test.js", [], []);
-goog.addDependency("labs/net/image.js", ['goog.labs.net.image'], ['goog.Promise', 'goog.events.EventHandler', 'goog.events.EventType', 'goog.html.SafeUrl', 'goog.net.EventType', 'goog.userAgent']);
+goog.addDependency("labs/net/image.js", ['goog.labs.net.image'], ['goog.Promise', 'goog.dom.safe', 'goog.events.EventHandler', 'goog.events.EventType', 'goog.html.SafeUrl', 'goog.net.EventType', 'goog.userAgent']);
 goog.addDependency("labs/net/image_test.js", ['goog.labs.net.imageTest'], ['goog.labs.net.image', 'goog.string', 'goog.testing.TestCase', 'goog.testing.jsunit', 'goog.testing.recordFunction']);
 goog.addDependency("labs/net/webchannel.js", ['goog.net.WebChannel'], ['goog.events', 'goog.events.Event', 'goog.events.Listenable', 'goog.net.XmlHttpFactory']);
 goog.addDependency("labs/net/webchannel/basetestchannel.js", ['goog.labs.net.webChannel.BaseTestChannel'], ['goog.labs.net.webChannel.Channel', 'goog.labs.net.webChannel.ChannelRequest', 'goog.labs.net.webChannel.WebChannelDebug', 'goog.labs.net.webChannel.requestStats', 'goog.net.WebChannel']);
@@ -996,7 +997,7 @@ goog.addDependency("net/filedownloader.js", ['goog.net.FileDownloader', 'goog.ne
 goog.addDependency("net/filedownloader_test.js", ['goog.net.FileDownloaderTest'], ['goog.fs.Error', 'goog.net.ErrorCode', 'goog.net.FileDownloader', 'goog.net.XhrIo', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.fs', 'goog.testing.fs.FileSystem', 'goog.testing.jsunit', 'goog.testing.net.XhrIoPool']);
 goog.addDependency("net/httpstatus.js", ['goog.net.HttpStatus'], []);
 goog.addDependency("net/httpstatusname.js", ['goog.net.HttpStatusName'], []);
-goog.addDependency("net/iframeio.js", ['goog.net.IframeIo', 'goog.net.IframeIo.IncrementalDataEvent'], ['goog.Timer', 'goog.Uri', 'goog.array', 'goog.asserts', 'goog.debug.HtmlFormatter', 'goog.dom', 'goog.dom.InputType', 'goog.dom.TagName', 'goog.dom.safe', 'goog.events', 'goog.events.Event', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.html.uncheckedconversions', 'goog.json', 'goog.log', 'goog.log.Level', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.reflect', 'goog.string', 'goog.string.Const', 'goog.structs', 'goog.userAgent']);
+goog.addDependency("net/iframeio.js", ['goog.net.IframeIo', 'goog.net.IframeIo.IncrementalDataEvent'], ['goog.Timer', 'goog.Uri', 'goog.array', 'goog.asserts', 'goog.debug.HtmlFormatter', 'goog.dom', 'goog.dom.InputType', 'goog.dom.TagName', 'goog.dom.safe', 'goog.events', 'goog.events.Event', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.html.SafeUrl', 'goog.html.legacyconversions', 'goog.html.uncheckedconversions', 'goog.json', 'goog.log', 'goog.log.Level', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.reflect', 'goog.string', 'goog.string.Const', 'goog.structs', 'goog.userAgent']);
 goog.addDependency("net/iframeio_test.js", ['goog.net.IframeIoTest'], ['goog.debug', 'goog.debug.DivConsole', 'goog.debug.LogManager', 'goog.dom', 'goog.dom.TagName', 'goog.events', 'goog.events.EventType', 'goog.log', 'goog.log.Level', 'goog.net.IframeIo', 'goog.testing.events', 'goog.testing.events.Event', 'goog.testing.jsunit', 'goog.userAgent']);
 goog.addDependency("net/iframeloadmonitor.js", ['goog.net.IframeLoadMonitor'], ['goog.dom', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.userAgent']);
 goog.addDependency("net/iframeloadmonitor_test.js", [], []);
@@ -1012,7 +1013,7 @@ goog.addDependency("net/mockiframeio.js", ['goog.net.MockIFrameIo'], ['goog.even
 goog.addDependency("net/multiiframeloadmonitor.js", ['goog.net.MultiIframeLoadMonitor'], ['goog.events', 'goog.net.IframeLoadMonitor']);
 goog.addDependency("net/multiiframeloadmonitor_test.js", [], []);
 goog.addDependency("net/networkstatusmonitor.js", ['goog.net.NetworkStatusMonitor'], ['goog.events.Listenable']);
-goog.addDependency("net/networktester.js", ['goog.net.NetworkTester'], ['goog.Timer', 'goog.Uri', 'goog.log']);
+goog.addDependency("net/networktester.js", ['goog.net.NetworkTester'], ['goog.Timer', 'goog.Uri', 'goog.dom.safe', 'goog.log']);
 goog.addDependency("net/networktester_test.js", ['goog.net.NetworkTesterTest'], ['goog.Uri', 'goog.net.NetworkTester', 'goog.testing.MockClock', 'goog.testing.jsunit']);
 goog.addDependency("net/rpc/httpcors.js", [], []);
 goog.addDependency("net/rpc/httpcors_test.js", [], []);
@@ -1038,7 +1039,7 @@ goog.addDependency("net/testdata/jsloader_test1.js", ['goog.net.testdata.jsloade
 goog.addDependency("net/testdata/jsloader_test2.js", ['goog.net.testdata.jsloader_test2'], []);
 goog.addDependency("net/testdata/jsloader_test3.js", ['goog.net.testdata.jsloader_test3'], []);
 goog.addDependency("net/testdata/jsloader_test4.js", ['goog.net.testdata.jsloader_test4'], []);
-goog.addDependency("net/tmpnetwork.js", ['goog.net.tmpnetwork'], ['goog.Uri', 'goog.net.ChannelDebug']);
+goog.addDependency("net/tmpnetwork.js", ['goog.net.tmpnetwork'], ['goog.Uri', 'goog.dom.safe', 'goog.net.ChannelDebug']);
 goog.addDependency("net/websocket.js", ['goog.net.WebSocket', 'goog.net.WebSocket.ErrorEvent', 'goog.net.WebSocket.EventType', 'goog.net.WebSocket.MessageEvent'], ['goog.Timer', 'goog.asserts', 'goog.debug.entryPointRegistry', 'goog.events', 'goog.events.Event', 'goog.events.EventTarget', 'goog.log']);
 goog.addDependency("net/websocket_test.js", ['goog.net.WebSocketTest'], ['goog.debug.EntryPointMonitor', 'goog.debug.ErrorHandler', 'goog.debug.entryPointRegistry', 'goog.events', 'goog.functions', 'goog.net.WebSocket', 'goog.testing.MockClock', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.testing.recordFunction']);
 goog.addDependency("net/wrapperxmlhttpfactory.js", ['goog.net.WrapperXmlHttpFactory'], ['goog.net.XhrLike', 'goog.net.XmlHttpFactory']);
@@ -1051,7 +1052,7 @@ goog.addDependency("net/xhrmanager.js", ['goog.net.XhrManager', 'goog.net.XhrMan
 goog.addDependency("net/xhrmanager_test.js", ['goog.net.XhrManagerTest'], ['goog.events', 'goog.net.EventType', 'goog.net.XhrIo', 'goog.net.XhrManager', 'goog.testing.jsunit', 'goog.testing.net.XhrIoPool', 'goog.testing.recordFunction']);
 goog.addDependency("net/xmlhttp.js", ['goog.net.DefaultXmlHttpFactory', 'goog.net.XmlHttp', 'goog.net.XmlHttp.OptionType', 'goog.net.XmlHttp.ReadyState', 'goog.net.XmlHttpDefines'], ['goog.asserts', 'goog.net.WrapperXmlHttpFactory', 'goog.net.XmlHttpFactory']);
 goog.addDependency("net/xmlhttpfactory.js", ['goog.net.XmlHttpFactory'], ['goog.net.XhrLike']);
-goog.addDependency("net/xpc/crosspagechannel.js", ['goog.net.xpc.CrossPageChannel'], ['goog.Uri', 'goog.async.Deferred', 'goog.async.Delay', 'goog.dispose', 'goog.dom', 'goog.dom.TagName', 'goog.events', 'goog.events.EventHandler', 'goog.events.EventType', 'goog.json', 'goog.log', 'goog.messaging.AbstractChannel', 'goog.net.xpc', 'goog.net.xpc.CfgFields', 'goog.net.xpc.ChannelStates', 'goog.net.xpc.CrossPageChannelRole', 'goog.net.xpc.DirectTransport', 'goog.net.xpc.FrameElementMethodTransport', 'goog.net.xpc.IframeRelayTransport', 'goog.net.xpc.NativeMessagingTransport', 'goog.net.xpc.NixTransport', 'goog.net.xpc.TransportTypes', 'goog.net.xpc.UriCfgFields', 'goog.string', 'goog.uri.utils', 'goog.userAgent']);
+goog.addDependency("net/xpc/crosspagechannel.js", ['goog.net.xpc.CrossPageChannel'], ['goog.Uri', 'goog.async.Deferred', 'goog.async.Delay', 'goog.dispose', 'goog.dom', 'goog.dom.TagName', 'goog.dom.safe', 'goog.events', 'goog.events.EventHandler', 'goog.events.EventType', 'goog.html.legacyconversions', 'goog.json', 'goog.log', 'goog.messaging.AbstractChannel', 'goog.net.xpc', 'goog.net.xpc.CfgFields', 'goog.net.xpc.ChannelStates', 'goog.net.xpc.CrossPageChannelRole', 'goog.net.xpc.DirectTransport', 'goog.net.xpc.FrameElementMethodTransport', 'goog.net.xpc.IframeRelayTransport', 'goog.net.xpc.NativeMessagingTransport', 'goog.net.xpc.NixTransport', 'goog.net.xpc.TransportTypes', 'goog.net.xpc.UriCfgFields', 'goog.string', 'goog.uri.utils', 'goog.userAgent']);
 goog.addDependency("net/xpc/crosspagechannel_test.js", ['goog.net.xpc.CrossPageChannelTest'], ['goog.Disposable', 'goog.Promise', 'goog.Timer', 'goog.Uri', 'goog.dom', 'goog.dom.TagName', 'goog.labs.userAgent.browser', 'goog.log', 'goog.log.Level', 'goog.net.xpc', 'goog.net.xpc.CfgFields', 'goog.net.xpc.CrossPageChannel', 'goog.net.xpc.CrossPageChannelRole', 'goog.net.xpc.TransportTypes', 'goog.object', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.jsunit']);
 goog.addDependency("net/xpc/crosspagechannelrole.js", ['goog.net.xpc.CrossPageChannelRole'], []);
 goog.addDependency("net/xpc/directtransport.js", ['goog.net.xpc.DirectTransport'], ['goog.Timer', 'goog.async.Deferred', 'goog.events.EventHandler', 'goog.log', 'goog.net.xpc', 'goog.net.xpc.CfgFields', 'goog.net.xpc.CrossPageChannelRole', 'goog.net.xpc.Transport', 'goog.net.xpc.TransportTypes', 'goog.object']);
@@ -1186,7 +1187,7 @@ goog.addDependency("string/newlines_test.js", ['goog.string.newlinesTest'], ['go
 goog.addDependency("string/parser.js", ['goog.string.Parser'], []);
 goog.addDependency("string/path.js", ['goog.string.path'], ['goog.array', 'goog.string']);
 goog.addDependency("string/path_test.js", ['goog.string.pathTest'], ['goog.string.path', 'goog.testing.jsunit']);
-goog.addDependency("string/string.js", ['goog.string', 'goog.string.Unicode'], ['goog.string.internal']);
+goog.addDependency("string/string.js", ['goog.string', 'goog.string.Unicode'], ['goog.dom.safe', 'goog.html.uncheckedconversions', 'goog.string.Const', 'goog.string.internal']);
 goog.addDependency("string/string_test.js", ['goog.stringTest'], ['goog.dom', 'goog.dom.TagName', 'goog.functions', 'goog.object', 'goog.string', 'goog.string.Unicode', 'goog.testing.MockControl', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit']);
 goog.addDependency("string/stringbuffer.js", ['goog.string.StringBuffer'], []);
 goog.addDependency("string/stringbuffer_test.js", ['goog.string.StringBufferTest'], ['goog.string.StringBuffer', 'goog.testing.jsunit']);
@@ -1797,6 +1798,7 @@ goog.require('Blockly.FieldDate');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldLabel');
+goog.require('Blockly.FieldLabelSerializable');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldVariable');

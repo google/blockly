@@ -326,7 +326,7 @@ Blockly.Navigation.resetFlyout = function(shouldHide) {
   Blockly.Navigation.flyoutBlock_ = null;
   cursor.hide();
   if (shouldHide) {
-    cursor.workspace_.getFlyout_().hide();
+    cursor.workspace_.getFlyout().hide();
   }
 };
 

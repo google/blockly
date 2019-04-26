@@ -759,7 +759,7 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
-  Blockly.keyboardAccessibilityMode_ = false;
+  Blockly.keyboardAccessibilityMode = false;
   var ws = this.creatorWorkspace_;
   ws.cursor.hide();
   if (e.shiftKey) {
@@ -767,7 +767,7 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
     var wsCoord = Blockly.utils.screenToWsCoordinates(ws, screenCoord);
     var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
     ws.cursor.setLocation(wsNode);
-    Blockly.keyboardAccessibilityMode_ = true;
+    Blockly.keyboardAccessibilityMode = true;
   } else if (Blockly.selected) {
     Blockly.selected.unselect();
   }

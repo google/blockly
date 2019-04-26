@@ -156,9 +156,36 @@ function addToolboxButtonCallbacks() {
       block.setFieldValue(text, 'LABEL');
     }
   };
+  var setRandomStyle = function(button) {
+    var blocks = button.workspace_.getAllBlocks();
+    var styles = Object.keys(Blockly.getTheme().getAllBlockStyles());
+    styles.splice(styles.indexOf(blocks[0].getStyleName()), 1);
+    var style = styles[Math.floor(Math.random() * styles.length)];
+    for(var i = 0, block; block = blocks[i]; i++) {
+      block.setStyle(style);
+    }
+  };
+  var toggleEnabled = function(button) {
+    var blocks = button.workspace_.getAllBlocks();
+    for(var i = 0, block; block = blocks[i]; i++) {
+      block.setEnabled(!block.isEnabled());
+    }
+  };
+  var toggleShadow = function(button) {
+    var blocks = button.workspace_.getAllBlocks();
+    for(var i = 0, block; block = blocks[i]; i++) {
+      block.setShadow(!block.isShadow());
+    }
+  };
 
   workspace.registerButtonCallback(
-    'randomizeLabelText', randomizeLabelText);
+      'setRandomStyle', setRandomStyle);
+  workspace.registerButtonCallback(
+      'toggleEnabled', toggleEnabled);
+  workspace.registerButtonCallback(
+      'toggleShadow', toggleShadow);
+  workspace.registerButtonCallback(
+      'randomizeLabelText', randomizeLabelText);
   workspace.registerButtonCallback(
       'addDynamicOption', Blockly.TestBlocks.addDynamicDropdownOption_);
   workspace.registerButtonCallback(
@@ -1209,6 +1236,11 @@ h1 {
     </category>
     <category name="Fields" expanded="true">
       <category name="Defaults">
+        <button text="set random style" callbackKey="setRandomStyle"></button>
+        <sep gap="8"></sep>
+        <button text="toggle enabled" callbackKey="toggleEnabled"></button>
+        <sep gap="8"></sep>
+        <button text="toggle shadow" callbackKey="toggleShadow"></button>
         <block type="test_fields_angle"></block>
         <block type="test_fields_date"></block>
         <block type="test_fields_checkbox"></block>

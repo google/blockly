@@ -174,7 +174,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
           }
       }
     ],
-    "colour": "230"
+    "style": "math_blocks",
   },
   {
     "type": "test_fields_date",
@@ -191,7 +191,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
           }
       }
     ],
-    "colour": 230
+    "style": "math_blocks",
   },
   {
     "type": "test_fields_text_input",
@@ -203,7 +203,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "text": "default"
       }
     ],
-    "colour": 230,
+    "style": "math_blocks",
     "tooltip": "",
     "helpUrl": ""
   },
@@ -217,7 +217,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "checked": true
       }
     ],
-    "colour": 230,
+    "style": "math_blocks",
     "tooltip": "",
     "helpUrl": ""
   },
@@ -231,7 +231,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "colour": "#ff0000"
       }
     ],
-    "colour": 230,
+    "style": "math_blocks",
     "tooltip": "",
     "helpUrl": ""
   },
@@ -245,7 +245,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "variable": "item"
       }
     ],
-    "colour": 230,
+    "style": "math_blocks",
     "tooltip": "",
     "helpUrl": ""
   },
@@ -259,7 +259,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "text": "default"
       }
     ],
-    "colour": 230,
+    "style": "math_blocks",
     "tooltip": "",
     "helpUrl": ""
   },

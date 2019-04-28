@@ -31,6 +31,7 @@ goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils');
 
 goog.require('goog.userAgent');
+goog.require('goog.color');
 
 
 /**
@@ -209,7 +210,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
 
 
   Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(),
-      this.sourceBlock_.getColour());
+     goog.color.rgbArrayToHex(goog.color.lighten(goog.color.hexToRgb(this.sourceBlock_.getColour()), 0.6)));
   Blockly.DropDownDiv.showPositionedByField(this);
   // The angle picker is different from other fields in that it updates on
   // mousemove even if it's not in the middle of a drag.  In future we may

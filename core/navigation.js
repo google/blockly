@@ -310,8 +310,6 @@ Blockly.Navigation.getFlyoutBlocks_ = function() {
  * it on the workspace.
  */
 Blockly.Navigation.insertFromFlyout = function() {
-  //TODO: IF this is null then we need to add to the correct place on the
-  //workspace.
   var connection = Blockly.Navigation.getInsertionConnection();
   if (!connection) {
     Blockly.Navigation.insertBlockToWs();
@@ -459,7 +457,7 @@ Blockly.Navigation.insertBlockToWs = function() {
     var position = markedNode.getWsCoordinate();
     newBlock.moveTo(position);
 
-    // Move the cursor toe the right place on the inserted block.
+    // Move the cursor to the right place on the inserted block.
     Blockly.Navigation.focusWorkspace();
     var prevConnection = newBlock.previousConnection;
     var outConnection = newBlock.outputConnection;

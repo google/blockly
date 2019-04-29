@@ -175,9 +175,9 @@ suite('ASTNode', function() {
       var newASTNode = node.navigateBetweenStacks_(false);
       assertEquals(newASTNode.getLocation(), this.blocks.A);
     });
-    test('findTopBlock', function() {
+    test('findTopOfSubStack_', function() {
       var node = new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, this.blocks.D);
-      var block = node.findTopBlock_(this.blocks.D);
+      var block = node.findTopOfSubStack_(this.blocks.D);
       assertEquals(block, this.blocks.D);
     });
     test('getOutAstNodeForBlock_', function() {

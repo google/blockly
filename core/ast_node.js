@@ -447,15 +447,15 @@ Blockly.ASTNode.prototype.findTopASTNodeForBlock_ = function(block) {
 
 /**
  * Get the ast node pointing to the input that the block is nested under or if
- * the block is not neested then get the stack ast node.
+ * the block is not nested then get the stack ast node.
  * @param {Blockly.Block} block The source block of the current location.
  * @return {Blockly.ASTNode} The ast node pointing to the input connection or
  *     the top block of the stack this block is in.
  * @private
  */
 Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
-  //Find top block
-  var topBlock = this.findTopBlock_(block);
+  //Find top block of sub stack
+  var topBlock = this.findTopOfSubStack_(block);
   var topConnection = topBlock.previousConnection || topBlock.outputConnection;
   //If the top connection has a parentInput, create an ast node pointing to that input
   if (topConnection && topConnection.targetConnection &&
@@ -470,13 +470,14 @@ Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
 
 /**
  * Walk backwards from the given block up through the stack of blocks to find
- * the top block. If we are nested in a statement input only find the top most
- * nested block. Do not go all the way to the top of the stack.
+ * the top block of the sub stack. If we are nested in a statement input only
+ * find the top most nested block. Do not go all the way to the top of the
+ * stack.
  * @param {!Blockly.Block} sourceBlock A block in the stack.
  * @return {!Blockly.Block} The top block in a stack.
  * @private
  */
-Blockly.ASTNode.prototype.findTopBlock_ = function(sourceBlock) {
+Blockly.ASTNode.prototype.findTopOfSubStack_ = function(sourceBlock) {
   var topBlock = sourceBlock;
   while (topBlock && topBlock.previousConnection
     && topBlock.previousConnection.targetConnection

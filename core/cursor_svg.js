@@ -32,11 +32,15 @@ goog.require('Blockly.Cursor');
 /**
  * Class for a cursor.
  * @param {!Blockly.Workspace} workspace The workspace to sit in.
+ * @param {?boolean} opt_isImmovable True if the cursor cannot be moved with
+ *     calls to prev/next/in/out.  This is called a marker.
  * @extends {Blockly.Cursor}
  * @constructor
  */
-Blockly.CursorSvg = function(workspace) {
+Blockly.CursorSvg = function(workspace, opt_isImmovable) {
+  Blockly.CursorSvg.superClass_.constructor.call(this);
   this.workspace_ = workspace;
+  this.isMarker_ = opt_isImmovable || false;
 };
 goog.inherits(Blockly.CursorSvg, Blockly.Cursor);
 
@@ -74,6 +78,13 @@ Blockly.CursorSvg.VERTICAL_PADDING = 5;
  * @const
  */
 Blockly.CursorSvg.CURSOR_COLOR = '#cc0a0a';
+
+/**
+ * Immovable marker color.
+ * @type {string}
+ * @const
+ */
+Blockly.CursorSvg.MARKER_COLOR = '#4286f4';
 
 /**
  * A reference to the current object that the cursor is associated with
@@ -342,6 +353,9 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
     </rect>
   </g>
   */
+
+  var colour = this.isMarker_ ? Blockly.CursorSvg.MARKER_COLOR :
+      Blockly.CursorSvg.CURSOR_COLOR;
   this.cursorSvg_ = Blockly.utils.createSvgElement('g',
       {
         'width': Blockly.CursorSvg.CURSOR_WIDTH,
@@ -352,7 +366,7 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
       {
         'x': '0',
         'y': '0',
-        'fill': Blockly.CursorSvg.CURSOR_COLOR,
+        'fill': colour,
         'width': Blockly.CursorSvg.CURSOR_WIDTH,
         'height': Blockly.CursorSvg.CURSOR_HEIGHT,
         'style': 'display: none;'
@@ -380,25 +394,80 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
       },
       this.cursorSvg_);
 
-  Blockly.utils.createSvgElement('animate',
-      {
-        'attributeType': 'XML',
-        'attributeName': 'fill',
-        'dur': '1s',
-        'values': Blockly.CursorSvg.CURSOR_COLOR + ';transparent;transparent;',
-        'repeatCount': 'indefinite'
-      },
-      this.cursorSvgLine_);
+  // Markers don't blink.
+  if (!this.isMarker_) {
+    Blockly.utils.createSvgElement('animate',
+        {
+          'attributeType': 'XML',
+          'attributeName': 'fill',
+          'dur': '1s',
+          'values': Blockly.CursorSvg.CURSOR_COLOR + ';transparent;transparent;',
+          'repeatCount': 'indefinite'
+        },
+        this.cursorSvgLine_);
 
-  Blockly.utils.createSvgElement('animate',
-      {
-        'attributeType': 'XML',
-        'attributeName': 'fill',
-        'dur': '1s',
-        'values': Blockly.CursorSvg.CURSOR_COLOR + ';transparent;transparent;',
-        'repeatCount': 'indefinite'
-      },
-      this.cursorInputOutput_);
+    Blockly.utils.createSvgElement('animate',
+        {
+          'attributeType': 'XML',
+          'attributeName': 'fill',
+          'dur': '1s',
+          'values': Blockly.CursorSvg.CURSOR_COLOR + ';transparent;transparent;',
+          'repeatCount': 'indefinite'
+        },
+        this.cursorInputOutput_);
+  }
 
   return this.cursorSvg_;
+};
+
+/**
+ * Find the next connection, field, or block.
+ * Does nothing if this cursor is an immovable marker.
+ * @return {Blockly.ASTNode} The next element, or null if the current node is
+ *     not set or there is no next value.
+ */
+Blockly.CursorSvg.prototype.next = function() {
+  if (this.isMarker_) {
+    return null;
+  }
+  return Blockly.CursorSvg.superClass_.next.call(this);
+};
+
+/**
+ * Find the in connection or field.
+ * Does nothing if this cursor is an immovable marker.
+ * @return {Blockly.ASTNode} The in element, or null if the current node is
+ *     not set or there is no in value.
+ */
+Blockly.CursorSvg.prototype.in = function() {
+  if (this.isMarker_) {
+    return null;
+  }
+  return Blockly.CursorSvg.superClass_.in.call(this);
+};
+
+/**
+ * Find the previous connection, field, or block.
+ * Does nothing if this cursor is an immovable marker.
+ * @return {Blockly.ASTNode} The previous element, or null if the current node
+ *     is not set or there is no previous value.
+ */
+Blockly.CursorSvg.prototype.prev = function() {
+  if (this.isMarker_) {
+    return null;
+  }
+  return Blockly.CursorSvg.superClass_.prev.call(this);
+};
+
+/**
+ * Find the out connection, field, or block.
+ * Does nothing if this cursor is an immovable marker.
+ * @return {Blockly.ASTNode} The out element, or null if the current node is
+ *     not set or there is no out value.
+ */
+Blockly.CursorSvg.prototype.out = function() {
+  if (this.isMarker_) {
+    return null;
+  }
+  return Blockly.CursorSvg.superClass_.out.call(this);
 };

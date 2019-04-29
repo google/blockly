@@ -30,6 +30,12 @@ goog.require('Blockly.ASTNode');
 Blockly.Navigation.cursor_ = null;
 
 /**
+ * The marker that shows where a user has marked while navigating blocks.
+ * @type {!Blockly.CursorSvg}
+ */
+Blockly.Navigation.marker_ = null;
+
+/**
  * The current selected category if the toolbox is open or
  * last selected category if focus is on a different element.
  * @type {goog.ui.tree.BaseNode}
@@ -86,6 +92,16 @@ Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_WS;
  */
 Blockly.Navigation.setCursor = function(cursor) {
   Blockly.Navigation.cursor_ = cursor;
+};
+
+/**
+ * Set the navigation marker.
+ * @param {Blockly.CursorSvg} marker The marker that shows where a user has
+ *     marked while navigating blocks.
+ * @package
+ */
+Blockly.Navigation.setMarker = function(marker) {
+  Blockly.Navigation.marker_ = marker;
 };
 
 /**
@@ -294,9 +310,11 @@ Blockly.Navigation.getFlyoutBlocks_ = function() {
  * it on the workspace.
  */
 Blockly.Navigation.insertFromFlyout = function() {
-  //TODO: IF this is null then we need to add to the correct place on the
-  //workspace.
   var connection = Blockly.Navigation.getInsertionConnection();
+  if (!connection) {
+    Blockly.Navigation.insertBlockToWs();
+    return;
+  }
   var cursor = Blockly.Navigation.cursor_;
   var flyoutBlock = Blockly.Navigation.flyoutBlock_;
   var workspace = Blockly.getMainWorkspace();
@@ -416,6 +434,45 @@ Blockly.Navigation.insertBlockFromWs = function() {
   // Perhaps position the block near the target connection?
 };
 
+/**
+ * Tries to connect the current location of the cursor and the insertion
+ * connection.
+ */
+Blockly.Navigation.insertBlockToWs = function() {
+  var marker = Blockly.Navigation.marker_;
+  if (!marker) {
+    return;
+  }
+  var markedNode = marker.getCurNode();
+  var flyoutBlock = Blockly.Navigation.flyoutBlock_;
+  var flyout = Blockly.getMainWorkspace().getFlyout();
+
+  var isWsNode = markedNode &&
+      markedNode.getType() === Blockly.ASTNode.types.WORKSPACE;
+
+  if (isWsNode && flyout && flyout.isVisible()) {
+    var newBlock = flyout.createBlock(flyoutBlock);
+    // Render to get the sizing right.
+    newBlock.render();
+    var position = markedNode.getWsCoordinate();
+    newBlock.moveTo(position);
+
+    // Move the cursor to the right place on the inserted block.
+    Blockly.Navigation.focusWorkspace();
+    var prevConnection = newBlock.previousConnection;
+    var outConnection = newBlock.outputConnection;
+    var topConnection = prevConnection ? prevConnection : outConnection;
+    //TODO: This will have to be fixed when we add in a block that does not have
+    //a previous or output connection
+    var astNode = Blockly.ASTNode.createConnectionNode(topConnection);
+    Blockly.Navigation.cursor_.setLocation(astNode);
+    // Hide the marker.
+    marker.setLocation(null);
+    marker.hide();
+  }
+};
+
+
 /*************************/
 /** Keyboard Navigation **/
 /*************************/
@@ -519,6 +576,8 @@ Blockly.Navigation.handleEnterForWS = function() {
   } else {
     Blockly.Navigation.markConnection();
   }
+  // TODO: bring the cursor (blinking) in front of the marker (solid)
+  Blockly.Navigation.marker_.setLocation(curNode);
 };
 
 /**********************/

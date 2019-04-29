@@ -30,6 +30,7 @@ goog.provide('Blockly.WorkspaceSvg');
 //goog.require('Blockly.BlockSvg');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
+goog.require('Blockly.CursorSvg');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
@@ -48,7 +49,6 @@ goog.require('Blockly.WorkspaceCommentSvg.render');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
-goog.require('Blockly.CursorSvg');
 
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
@@ -121,6 +121,12 @@ Blockly.WorkspaceSvg = function(options,
     this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
   }
+
+  /**
+   * The marker that shows where a user has marked while navigating blocks.
+   * @type {!Blockly.CursorSvg}
+   */
+  this.marker = this.createMarker();
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -383,6 +389,14 @@ Blockly.WorkspaceSvg.prototype.createCursor = function() {
 };
 
 /**
+ * Adds marker for keyboard navigation.
+ * @return {!Blockly.CursorSvg} Marker for keyboard navigation.
+ */
+Blockly.WorkspaceSvg.prototype.createMarker = function() {
+  return new Blockly.CursorSvg(this, true);
+};
+
+/**
  * Getter for the inverted screen CTM.
  * @return {SVGMatrix} The matrix to use in mouseToSvg
  */
@@ -556,6 +570,8 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   var svgCursor = this.cursor.createDom();
   this.svgGroup_.appendChild(svgCursor);
 
+  var svgMarker = this.marker.createDom();
+  this.svgGroup_.appendChild(svgMarker);
   return this.svgGroup_;
 };
 

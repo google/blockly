@@ -357,6 +357,28 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
 };
 
 /**
+ * Move a block to a position.
+ * @param {goog.math.Coordinate} xy The position to move to in workspace units.
+ */
+Blockly.BlockSvg.prototype.moveTo = function(xy) {
+  if (this.parentBlock_) {
+    throw Error('Block has parent.');
+  }
+  var eventsEnabled = Blockly.Events.isEnabled();
+  if (eventsEnabled) {
+    var event = new Blockly.Events.BlockMove(this);
+  }
+  var curXY = this.getRelativeToSurfaceXY();
+  this.translate(xy.x, xy.y);
+  this.moveConnections_(xy.x - curXY.x, xy.y - curXY.y);
+  if (eventsEnabled) {
+    event.recordNew();
+    Blockly.Events.fire(event);
+  }
+  this.workspace.resizeContents();
+};
+
+/**
  * Transforms a block by setting the translation on the transform attribute
  * of the block's SVG.
  * @param {number} x The x coordinate of the translation in workspace units.

@@ -230,6 +230,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   }
 
   Blockly.Navigation.setCursor(mainWorkspace.cursor);
+  Blockly.Navigation.setMarker(mainWorkspace.marker);
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);

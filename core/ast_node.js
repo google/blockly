@@ -434,12 +434,9 @@ Blockly.ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
  * @private
  */
 Blockly.ASTNode.prototype.findTopASTNodeForBlock_ = function(block) {
-  var previousConnection = block.previousConnection;
-  var outputConnection = block.outputConnection;
-  if (previousConnection) {
-    return Blockly.ASTNode.createConnectionNode(previousConnection);
-  } else if (outputConnection) {
-    return Blockly.ASTNode.createConnectionNode(outputConnection);
+  var topConnection = block.previousConnection || block.outputConnection;
+  if (topConnection) {
+    return Blockly.ASTNode.createConnectionNode(topConnection);
   } else {
     return Blockly.ASTNode.createBlockNode(block);
   }
@@ -472,6 +469,31 @@ Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
     //Go to stack level if you are not underneath an input
     return Blockly.ASTNode.createStackNode(topBlock);
   }
+};
+
+/**
+ * Find the first editable field or input with a connection on a given block.
+ * @param {Blockly.BlockSvg} block The source block of the current location.
+ * @return {Blockly.ASTNode} An ast node pointing to the first field or input.
+ * Null if there are no editable fields or inputs with connections on the block.
+ * @private
+ */
+Blockly.ASTNode.prototype.findFirstFieldOrInput_ = function(block) {
+  var inputs = block.inputList;
+  for (var i = 0; i < inputs.length; i++) {
+    var input = inputs[i];
+    var fieldRow = input.fieldRow;
+    for (var j = 0; j < fieldRow.length; j++) {
+      var field = fieldRow[j];
+      if (field.isCurrentlyEditable()) {
+        return Blockly.ASTNode.createFieldNode(field);
+      }
+    }
+    if (input.connection) {
+      return Blockly.ASTNode.createInputNode(input);
+    }
+  }
+  return null;
 };
 
 /**
@@ -557,32 +579,23 @@ Blockly.ASTNode.prototype.next = function() {
 Blockly.ASTNode.prototype.in = function() {
   switch (this.type_) {
     case Blockly.ASTNode.types.WORKSPACE:
-      var firstTopBlock = this.location_.getTopBlocks(true)[0];
-      return Blockly.ASTNode.createStackNode(firstTopBlock);
+      var topBlocks = this.location_.getTopBlocks(true);
+      if (topBlocks.length > 0) {
+        return Blockly.ASTNode.createStackNode(topBlocks[0]);
+      }
+      break;
 
     case Blockly.ASTNode.types.STACK:
       var block = /** @type {!Blockly.Block} */ (this.location_);
       return this.findTopASTNodeForBlock_(block);
 
     case Blockly.ASTNode.types.BLOCK:
-      var inputs = this.location_.inputList;
-      if (inputs && inputs.length > 0) {
-        var newParentInput = inputs[0];
-        var block = /** @type {!Blockly.Block} */ (this.location_);
-        var fieldNode =
-            this.findNextEditableField_(block, newParentInput, true);
-        if (fieldNode) {
-          return fieldNode;
-        } else {
-          return Blockly.ASTNode.createInputNode(newParentInput);
-        }
-      }
-      break;
+      return this.findFirstFieldOrInput_(this.location_);
 
     case Blockly.ASTNode.types.INPUT:
-      var inputConnection = this.location_;
-      if (inputConnection.targetBlock()) {
-        return this.findTopASTNodeForBlock_(inputConnection.targetBlock());
+      var targetConnection = this.location_.targetConnection;
+      if (targetConnection) {
+        return Blockly.ASTNode.createConnectionNode(targetConnection);
       }
       break;
 

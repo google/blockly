@@ -445,28 +445,53 @@ Blockly.ASTNode.prototype.findTopASTNodeForBlock_ = function(block) {
   }
 };
 
-
 /**
- * Given a location in a stack of blocks find the next out connection. If the
- * location is nested the next out location should be the connected input.
- * @param {Blockly.Block} block The source block for the current location.
- * @return {Blockly.ASTNode} The ast node holding the next out connection or
- *     block.
+ * Get the ast node pointing to the input that the block is nested under or if
+ * the block is not nested then get the stack ast node.
+ * @param {Blockly.Block} block The source block of the current location.
+ * @return {Blockly.ASTNode} The ast node pointing to the input connection or
+ *     the top block of the stack this block is in.
  * @private
  */
-Blockly.ASTNode.prototype.findOutLocationForBlock_ = function(block) {
-  if (!block) {
-    return null;
+Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
+  var topBlock = null;
+  //If the block doesn't have a previous connection then it is the top of the
+  //substack
+  if (!block.previousConnection) {
+    topBlock = block;
+  } else {
+    topBlock = this.findTopOfSubStack_(block);
   }
-  var newLocation = null;
-  var newAstNode = null;
+  var topConnection = topBlock.previousConnection || topBlock.outputConnection;
+  //If the top connection has a parentInput, create an ast node pointing to that input
+  if (topConnection && topConnection.targetConnection &&
+        topConnection.targetConnection.getParentInput()) {
+    return Blockly.ASTNode.createInputNode(
+        topConnection.targetConnection.getParentInput());
+  } else {
+    //Go to stack level if you are not underneath an input
+    return Blockly.ASTNode.createStackNode(topBlock);
+  }
+};
 
-  newLocation = block.previousConnection.targetConnection;
-  newAstNode = Blockly.ASTNode.createConnectionNode(newLocation);
-  if (!newLocation) {
-    newAstNode = Blockly.ASTNode.createStackNode(block);
+/**
+ * Walk backwards from the given block up through the stack of blocks to find
+ * the top block of the sub stack. If we are nested in a statement input only
+ * find the top most nested block. Do not go all the way to the top of the
+ * stack.
+ * @param {!Blockly.Block} sourceBlock A block in the stack.
+ * @return {!Blockly.Block} The top block in a stack.
+ * @private
+ */
+Blockly.ASTNode.prototype.findTopOfSubStack_ = function(sourceBlock) {
+  var topBlock = sourceBlock;
+  while (topBlock && topBlock.previousConnection
+    && topBlock.previousConnection.targetConnection
+    && topBlock.previousConnection.targetBlock().nextConnection
+    == topBlock.previousConnection.targetConnection) {
+    topBlock = topBlock.previousConnection.targetBlock();
   }
-  return newAstNode;
+  return topBlock;
 };
 
 /**
@@ -633,6 +658,7 @@ Blockly.ASTNode.prototype.out = function() {
   switch (this.type_) {
     case Blockly.ASTNode.types.STACK:
       var blockPos = this.location_.getRelativeToSurfaceXY();
+      //TODO: Make sure this is in the bounds of the workspace
       var wsCoordinate = new goog.math.Coordinate(
           blockPos.x, blockPos.y + Blockly.ASTNode.DEFAULT_OFFSET_Y);
       return Blockly.ASTNode.createWorkspaceNode(
@@ -640,11 +666,11 @@ Blockly.ASTNode.prototype.out = function() {
 
     case Blockly.ASTNode.types.OUTPUT:
       var target = this.location_.targetConnection;
-      var newAstNode = Blockly.ASTNode.createConnectionNode(target);
-      if (!newAstNode) {
-        newAstNode.type_ = Blockly.ASTNode.types.STACK;
+      if (target) {
+        return Blockly.ASTNode.createConnectionNode(target);
+      } else {
+        return Blockly.ASTNode.createStackNode(this.location_.getSourceBlock());
       }
-      return newAstNode;
 
     case Blockly.ASTNode.types.FIELD:
       return Blockly.ASTNode.createBlockNode(this.location_.getSourceBlock());
@@ -653,25 +679,14 @@ Blockly.ASTNode.prototype.out = function() {
       return Blockly.ASTNode.createBlockNode(this.location_.getSourceBlock());
 
     case Blockly.ASTNode.types.BLOCK:
-      var outputConnection = this.location_.outputConnection;
-      if (outputConnection && outputConnection.targetConnection) {
-        var target = outputConnection.targetConnection;
-        return Blockly.ASTNode.createConnectionNode(target);
-      } else if (outputConnection) {
-        return Blockly.ASTNode.createConnectionNode(outputConnection);
-      } else {
-        //This is the case where we are on a block that is nested inside a
-        //statement input and we need to get the input that connects to the
-        //top block
-        var block = /** @type {!Blockly.Block} */ (this.location_);
-        return this.findOutLocationForBlock_(block);
-      }
+      var block = /** @type {!Blockly.Block} */ (this.location_);
+      return this.getOutAstNodeForBlock_(block);
 
     case Blockly.ASTNode.types.PREVIOUS:
-      return this.findOutLocationForBlock_(this.location_.getSourceBlock());
+      return this.getOutAstNodeForBlock_(this.location_.getSourceBlock());
 
     case Blockly.ASTNode.types.NEXT:
-      return this.findOutLocationForBlock_(this.location_.getSourceBlock());
+      return this.getOutAstNodeForBlock_(this.location_.getSourceBlock());
   }
 
   return null;

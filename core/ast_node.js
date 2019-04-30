@@ -487,7 +487,8 @@ Blockly.ASTNode.prototype.findTopOfSubStack_ = function(sourceBlock) {
   var topBlock = sourceBlock;
   while (topBlock && topBlock.previousConnection
     && topBlock.previousConnection.targetConnection
-    && !topBlock.previousConnection.targetConnection.getParentInput()) {
+    && topBlock.previousConnection.targetBlock().nextConnection
+    == topBlock.previousConnection.targetConnection) {
     topBlock = topBlock.previousConnection.targetBlock();
   }
   return topBlock;

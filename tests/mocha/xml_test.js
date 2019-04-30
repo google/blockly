@@ -287,6 +287,138 @@ suite('XML', function() {
     });
   });
   suite('Deserialization', function() {
+    suite('Dynamic Category Blocks', function() {
+      test('Untyped Variables', function() {
+        Blockly.defineBlocksWithJsonArray([{
+          "type": "variables_get",
+          "message0": "%1",
+          "args0": [
+            {
+              "type": "field_variable",
+              "name": "VAR",
+            }
+          ]
+        },
+        {
+          "type": "variables_set",
+          "message0": "%1 %2",
+          "args0": [
+            {
+              "type": "field_variable",
+              "name": "VAR"
+            },
+            {
+              "type": "input_value",
+              "name": "VALUE"
+            }
+          ]
+        },
+        {
+          "type": "math_change",
+          "message0": "%1 %2",
+          "args0": [
+            {
+              "type": "field_variable",
+              "name": "VAR",
+            },
+            {
+              "type": "input_value",
+              "name": "DELTA",
+              "check": "Number"
+            }
+          ]
+        },
+        {
+          "type": "math_number",
+          "message0": "%1",
+          "args0": [{
+            "type": "field_number",
+            "name": "NUM",
+            "value": 0
+          }],
+          "output": "Number"
+        }]);
 
+        this.workspace.createVariable('name1', '', 'id1');
+        var blocksArray = Blockly.Variables.flyoutCategoryBlocks(this.workspace);
+        try {
+          for (var i = 0, xml; xml = blocksArray[i]; i++) {
+            Blockly.Xml.domToBlock(xml, this.workspace);
+          }
+        } finally {
+          delete Blockly.Blocks['variables_get'];
+          delete Blockly.Blocks['variables_set'];
+          delete Blockly.Blocks['math_change'];
+          delete Blockly.Blocks['math_number'];
+        }
+      });
+      test('Typed Variables', function() {
+        Blockly.defineBlocksWithJsonArray([{
+          "type": "variables_get",
+          "message0": "%1",
+          "args0": [
+            {
+              "type": "field_variable",
+              "name": "VAR",
+            }
+          ]
+        },
+        {
+          "type": "variables_set",
+          "message0": "%1 %2",
+          "args0": [
+            {
+              "type": "field_variable",
+              "name": "VAR"
+            },
+            {
+              "type": "input_value",
+              "name": "VALUE"
+            }
+          ]
+        },
+        {
+          "type": "math_change",
+          "message0": "%1 %2",
+          "args0": [
+            {
+              "type": "field_variable",
+              "name": "VAR",
+            },
+            {
+              "type": "input_value",
+              "name": "DELTA",
+              "check": "Number"
+            }
+          ]
+        },
+        {
+          "type": "math_number",
+          "message0": "%1",
+          "args0": [{
+            "type": "field_number",
+            "name": "NUM",
+            "value": 0
+          }],
+          "output": "Number"
+        }]);
+
+        this.workspace.createVariable('name1', 'String', 'id1');
+        this.workspace.createVariable('name2', 'Number', 'id2');
+        this.workspace.createVariable('name3', 'Colour', 'id3');
+        var blocksArray = Blockly.VariablesDynamic
+            .flyoutCategoryBlocks(this.workspace);
+        try {
+          for (var i = 0, xml; xml = blocksArray[i]; i++) {
+            Blockly.Xml.domToBlock(xml, this.workspace);
+          }
+        } finally {
+          delete Blockly.Blocks['variables_get'];
+          delete Blockly.Blocks['variables_set'];
+          delete Blockly.Blocks['math_change'];
+          delete Blockly.Blocks['math_number'];
+        }
+      });
+    });
   });
 });

@@ -377,7 +377,7 @@ suite('ASTNode', function() {
         var inNode = node.in();
         assertEquals(inNode, null);
       });
-      test('fromInputToNext', function() {
+      test('fromInputToPrevious', function() {
         var input = this.blocks.statementInput2.inputList[1];
         var previousConnection = this.blocks.statementInput3.previousConnection;
         var node = Blockly.ASTNode.createInputNode(input);

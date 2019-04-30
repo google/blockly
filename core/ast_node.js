@@ -454,8 +454,14 @@ Blockly.ASTNode.prototype.findTopASTNodeForBlock_ = function(block) {
  * @private
  */
 Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
-  //Find top block of sub stack
-  var topBlock = this.findTopOfSubStack_(block);
+  var topBlock = null;
+  //If the block doesn't have a previous connection then it is the top of the
+  //substack
+  if (!block.previousConnection) {
+    topBlock = block;
+  } else {
+    topBlock = this.findTopOfSubStack_(block);
+  }
   var topConnection = topBlock.previousConnection || topBlock.outputConnection;
   //If the top connection has a parentInput, create an ast node pointing to that input
   if (topConnection && topConnection.targetConnection &&

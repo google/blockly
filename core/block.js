@@ -41,6 +41,7 @@ goog.require('Blockly.Warning');
 goog.require('Blockly.Workspace');
 
 goog.require('goog.math.Coordinate');
+goog.require('goog.color');
 
 
 /**
@@ -879,6 +880,46 @@ Blockly.Block.prototype.getColourSecondary = function() {
  */
 Blockly.Block.prototype.getColourTertiary = function() {
   return this.colourTertiary_;
+};
+
+/**
+ * Get the shadow colour of a block.
+ * @return {?string} #RRGGBB string.
+ */
+Blockly.Block.prototype.getColourShadow = function() {
+  var colourSecondary = this.getColourSecondary();
+  if (colourSecondary) {
+    return colourSecondary;
+  }
+  var rgb = goog.color.hexToRgb(this.getColour());
+  rgb = goog.color.lighten(rgb, 0.6);
+  return goog.color.rgbArrayToHex(rgb);
+};
+
+/**
+ * Get the border colour(s) of a block.
+ * @return {{colourDark, colourLight, colourBorder}} An object containing
+ *     colour values for the border(s) of the block. If the block is using a
+ *     style the colourBorder will be defined and equal to the tertiary colour
+ *     of the style (#RRGGBB string). Otherwise the colourDark and colourLight
+ *     attributes will be defined (#RRGGBB strings).
+ * @package
+ */
+Blockly.Block.prototype.getColourBorder = function() {
+  var colourTertiary = this.getColourTertiary();
+  if (colourTertiary) {
+    return {
+      colourBorder: colourTertiary,
+      colourLight: null,
+      colourDark: null
+    };
+  }
+  var rgb = goog.color.hexToRgb(this.getColour());
+  return {
+    colourBorder: null,
+    colourLight: goog.color.rgbArrayToHex(goog.color.lighten(rgb, 0.3)),
+    colourDark: goog.color.rgbArrayToHex(goog.color.darken(rgb, 0.2))
+  };
 };
 
 /**

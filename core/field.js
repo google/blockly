@@ -432,6 +432,15 @@ Blockly.Field.prototype.getSvgRoot = function() {
 };
 
 /**
+ * Updates the field to match the colour/style of the block. Should only be
+ * called by BlockSvg.updateColour().
+ * @package
+ */
+Blockly.Field.prototype.updateColour = function() {
+  // Non-abstract sub-classes may wish to implement this. See FieldDropdown.
+};
+
+/**
  * Draws the border with the correct width.
  * Saves the computed width in a property.
  * @protected

@@ -87,22 +87,6 @@ Blockly.FieldVariable.fromJson = function(options) {
 Blockly.FieldVariable.prototype.SERIALIZABLE = true;
 
 /**
- * Initialize everything needed to render this field.  This includes making sure
- * that the field's value is valid.
- * @public
- */
-Blockly.FieldVariable.prototype.init = function() {
-  if (this.fieldGroup_) {
-    // Dropdown has already been initialized once.
-    return;
-  }
-  Blockly.FieldVariable.superClass_.init.call(this);
-
-  // TODO (#1010): Change from init/initModel to initView/initModel
-  this.initModel();
-};
-
-/**
  * Initialize the model for this field if it has not already been initialized.
  * If the value has not been set to a variable by the first render, we make up a
  * variable rather than let the value be invalid.

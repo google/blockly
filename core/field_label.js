@@ -71,23 +71,18 @@ Blockly.FieldLabel.fromJson = function(options) {
 Blockly.FieldLabel.prototype.EDITABLE = false;
 
 /**
- * Install this text on a block.
+ * Create block UI for this label.
+ * @package
  */
-Blockly.FieldLabel.prototype.init = function() {
-  if (this.textElement_) {
-    // Text has already been initialized once.
-    return;
-  }
-  // Build the DOM.
+Blockly.FieldLabel.prototype.initView = function() {
   this.textElement_ = Blockly.utils.createSvgElement('text',
-      {'class': 'blocklyText', 'y': this.size_.height - 5}, null);
+      {
+        'class': 'blocklyText',
+        'y': this.size_.height - 5
+      }, this.fieldGroup_);
   if (this.class_) {
     Blockly.utils.addClass(this.textElement_, this.class_);
   }
-  if (!this.visible_) {
-    this.textElement_.style.display = 'none';
-  }
-  this.sourceBlock_.getSvgRoot().appendChild(this.textElement_);
 
   if (this.tooltip_) {
     this.textElement_.tooltip = this.tooltip_;
@@ -106,15 +101,6 @@ Blockly.FieldLabel.prototype.dispose = function() {
     Blockly.utils.removeNode(this.textElement_);
     this.textElement_ = null;
   }
-};
-
-/**
- * Gets the group element for this field.
- * Used for measuring the size and for positioning.
- * @return {!Element} The group element.
- */
-Blockly.FieldLabel.prototype.getSvgRoot = function() {
-  return /** @type {!Element} */ (this.textElement_);
 };
 
 /**

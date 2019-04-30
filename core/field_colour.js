@@ -124,10 +124,12 @@ Blockly.FieldColour.prototype.DROPDOWN_BORDER_COLOUR = 'silver';
 Blockly.FieldColour.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
 
 /**
- * Install this field on a block.
+ * Create the block UI for this colour field.
+ * @package
  */
-Blockly.FieldColour.prototype.init = function() {
-  Blockly.FieldColour.superClass_.init.call(this);
+Blockly.FieldColour.prototype.initView = function() {
+  Blockly.FieldColour.superClass_.initView.call(this);
+
   this.size_ = new goog.math.Size(Blockly.FieldColour.DEFAULT_WIDTH,
       Blockly.FieldColour.DEFAULT_HEIGHT);
   this.borderRect_.style['fillOpacity'] = 1;

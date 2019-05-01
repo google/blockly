@@ -24,6 +24,8 @@
 var webdriverio = require('webdriverio');
 var fs = require('fs');
 
+module.exports = runGeneratorsInBrowser;
+
 /**
  * Run the generator for a given language and save the results to a file.
  * @param {Thenable} browser A Thenable managing the processing of the browser
@@ -31,23 +33,16 @@ var fs = require('fs');
  * @param {string} filename Where to write the output file.
  * @param {Function} codegenFn The function to run for code generation for this
  *     language.
- * @return the Thenable managing the processing of the browser tests.
  */
-function runLangGeneratorInBrowser(browser, filename, codegenFn) {
-  return browser
-      .pause(5000)
-      .then(function() {
-        this.execute(codegenFn)
-      })
-      .pause(10000)
-      .getValue("#importExport")
-      .then(function(result) {
-        fs.writeFile(filename, result, function(err) {
-          if (err) {
-            return console.log(err);
-          }
-        });
-      });
+async function runLangGeneratorInBrowser(browser, filename, codegenFn) {
+  await browser.execute(codegenFn);
+  var elem = await browser.$("#importExport");
+  var result = await elem.getValue();
+  fs.writeFile(filename, result, function(err) {
+    if (err) {
+      return console.log(err);
+    }
+  });
 }
 
 /**
@@ -56,90 +51,61 @@ function runLangGeneratorInBrowser(browser, filename, codegenFn) {
  * to the console and outputs files for later validation.
  * @return the Thenable managing the processing of the browser tests.
  */
-function runGeneratorsInBrowser() {
+async function runGeneratorsInBrowser() {
   var options = {
-      desiredCapabilities: {
+      capabilities: {
           browserName: 'firefox'
       }
   };
 
   var url = 'file://' + __dirname + '/index.html';
-  var prefix = 'tests/generators/tmp/generated'
+  var prefix = 'tests/generators/tmp/generated';
+
   console.log('Starting webdriverio...');
-  return webdriverio
-      .remote(options)
-      .init()
-      .then(function() {
-        console.log('Initialized.\nLoading url: ' + url);
-      })
-      .url(url)
-      .then(function() {
-        console.log('about to load');
-        this.execute(function() {
-          checkAll();
-          loadSelected();
-        })
-      })
-      .pause(10000)
-      .then(function() {
-        return runLangGeneratorInBrowser(this, prefix + '.js', function() {
-          toJavaScript();
-        });
-      })
-      .then(function() {
-        return runLangGeneratorInBrowser(this, prefix + '.py', function() {
-          toPython();
-        });
-      })
-      .then(function() {
-        return runLangGeneratorInBrowser(this, prefix + '.dart', function() {
-          toDart();
-        });
-      })
-      .then(function() {
-        return runLangGeneratorInBrowser(this, prefix + '.lua', function() {
-          toLua();
-        });
-      })
-      .then(function() {
-        return runLangGeneratorInBrowser(this, prefix + '.php', function() {
-          toPhp();
-        });
-      })
-      .pause(10000)
-      .catch(function(e) {
-        console.error('Error: ', e);
+  const browser = await webdriverio.remote(options);
+  console.log('Initialized.\nLoading url: ' + url);
+  await browser.url(url);
 
-        if (require.main === module) {
-          // .catch() doesn't seem to work in the calling code,
-          // even if the error is rethrown. To ensure the script
-          // exit code is non-zero, shutdown the process here.
-          process.exit(1);
-        }
+  await browser.execute(function() {
+    checkAll();
+    loadSelected();
+  });
 
-        // WARNING: Catching this outside of runJsUnitTestsInBrowser() is not
-        // working. However, killing the process doesn't seem good, either.
-        throw e;
+  await runLangGeneratorInBrowser(browser, prefix + '.js',
+      function() {
+        toJavaScript();
       });
+  await runLangGeneratorInBrowser(browser, prefix + '.py',
+      function() {
+        toPython();
+      });
+  await runLangGeneratorInBrowser(browser, prefix + '.dart',
+      function() {
+        toDart();
+      });
+  await runLangGeneratorInBrowser(browser, prefix + '.lua',
+      function() {
+        toLua();
+      });
+  await runLangGeneratorInBrowser(browser, prefix + '.php',
+      function() {
+        toPhp();
+      });
+
+  await browser.deleteSession();
 }
 
-module.exports = runGeneratorsInBrowser;
-
 if (require.main === module) {
-  try {
-    runGeneratorsInBrowser()
-    .catch(function(e) {
-      // TODO: Never called during errors. Fix.
-      console.error('Error: ' + e);
-      process.exit(1);
-    })
-    .endAll()
-    .then(function() {
-      console.log('JSUnit tests completed');
-      process.exit(0);
-    });
-  } catch(e) {
-    console.error('Uncaught error: ', e);
+  runGeneratorsInBrowser().catch(e => {
+    console.error(e);
     process.exit(1);
-  }
+  }).then(function(result) {
+    if (result) {
+      console.log('Generator tests failed');
+      process.exit(1);
+    } else {
+      console.log('Generator tests passed');
+      process.exit(0);
+    }
+  });
 }

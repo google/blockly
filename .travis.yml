@@ -6,6 +6,7 @@ node_js:
   - 10
 sudo: required
 addons:
+  firefox: latest
   apt:
     packages:
     - google-chrome-stable

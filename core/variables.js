@@ -466,9 +466,6 @@ Blockly.Variables.generateVariableFieldXmlString = function(variableModel) {
   // The variable name may be user input, so it may contain characters that
   // need to be escaped to create valid XML.
   var typeString = variableModel.type;
-  if (typeString == '') {
-    typeString = '\'\'';
-  }
   var text = '<field name="VAR" id="' + variableModel.getId() +
       '" variabletype="' + goog.string.htmlEscape(typeString) +
       '">' + goog.string.htmlEscape(variableModel.name) + '</field>';

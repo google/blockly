@@ -10,6 +10,7 @@
   <body>
 
     <div id="mocha"></div>
+    <div id="failureCount" style="display:none"></div>
     <script src="https://unpkg.com/chai/chai.js"></script>
     <script src="https://unpkg.com/mocha@5.2.0/mocha.js"></script>
     <script src="https://unpkg.com/sinon/pkg/sinon.js"></script>
@@ -34,7 +35,10 @@
     </xml>
 
     <script>
-      mocha.run();
+      mocha.run(function(failures) {
+        var failureDiv = document.getElementById('failureCount');
+        failureDiv.setAttribute('tests_failed', failures);
+      });
     </script>
   </body>
 </html>

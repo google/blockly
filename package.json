@@ -34,7 +34,7 @@
     "gulp-series": "^1.0.2",
     "gulp-shell": "^0.6.5",
     "jshint": "^2.10.1",
-    "webdriverio": "^4.14.1"
+    "webdriverio": "^5.8.0"
   },
   "jshintConfig": {
     "globalstrict": true,

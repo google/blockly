@@ -105,7 +105,7 @@ suite('Blocks', function() {
         // Add extra input to middle block
         blocks.B.appendValueInput("INPUT").setCheck(null);
         blocks.B.unplug(true);
-        assertUnpluggedNoheal(blocks);
+        assertUnpluggedHealed(blocks);
       });
 
       test('Child block has multiple inputs', function() {

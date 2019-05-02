@@ -281,7 +281,7 @@ Blockly.copy_ = function(toCopy) {
   if (toCopy.isComment) {
     var xml = toCopy.toXmlWithXY();
   } else {
-    var xml = Blockly.Xml.blockToDom(toCopy);
+    var xml = Blockly.Xml.blockToDom(toCopy, true);
     // Copy only the selected block and internal blocks.
     Blockly.Xml.deleteNext(xml);
     // Encode start position in XML.

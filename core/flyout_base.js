@@ -404,7 +404,7 @@ Blockly.Flyout.prototype.hide = function() {
   }
   this.setVisible(false);
   // Delete all the event listeners.
-  for (var x = 0, listen; listen = this.listeners_[x]; x++) {
+  for (var i = 0, listen; listen = this.listeners_[i]; i++) {
     Blockly.unbindEvent_(listen);
   }
   this.listeners_.length = 0;

@@ -907,7 +907,7 @@ Blockly.BlockSvg.prototype.renderInlineRow_ = function(pathObject, row, cursor,
   var steps = pathObject.steps;
   var highlightSteps = pathObject.highlightSteps;
 
-  for (var x = 0, input; input = row[x]; x++) {
+  for (var i = 0, input; input = row[i]; i++) {
     var fieldX = cursor.x;
     var fieldY = cursor.y;
     if (row.thicker) {

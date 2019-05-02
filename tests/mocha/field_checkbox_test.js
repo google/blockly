@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-suite.skip('Checkbox Fields', function() {
+suite('Checkbox Fields', function() {
   function assertValue(checkboxField, expectedValue, expectedText) {
     var actualValue = checkboxField.getValue();
     var actualText = checkboxField.getText();

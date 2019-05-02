@@ -42,7 +42,7 @@ suite ('Date Fields', function() {
       var dateField = new Blockly.FieldDate(undefined);
       assertValueDefault(dateField);
     });
-    test.skip('Non-Parsable String', function() {
+    test('Non-Parsable String', function() {
       var dateField = new Blockly.FieldDate('bad');
       assertValueDefault(dateField);
     });
@@ -50,11 +50,11 @@ suite ('Date Fields', function() {
       var dateField = new Blockly.FieldDate('2020-02-20');
       assertValue(dateField, '2020-02-20');
     });
-    test.skip('Invalid Date - Month(2020-13-20)', function() {
+    test('Invalid Date - Month(2020-13-20)', function() {
       var dateField = new Blockly.FieldDate('2020-13-20');
       assertValueDefault(dateField);
     });
-    test.skip('Invalid Date - Day(2020-02-32)', function() {
+    test('Invalid Date - Day(2020-02-32)', function() {
       var dateField = new Blockly.FieldDate('2020-02-32');
       assertValueDefault(dateField);
     });
@@ -72,7 +72,7 @@ suite ('Date Fields', function() {
       var dateField = Blockly.FieldDate.fromJson({ date: undefined });
       assertValueDefault(dateField);
     });
-    test.skip('Non-Parsable String', function() {
+    test('Non-Parsable String', function() {
       var dateField = Blockly.FieldDate.fromJson({ date: 'bad' });
       assertValueDefault(dateField);
     });
@@ -80,11 +80,11 @@ suite ('Date Fields', function() {
       var dateField = Blockly.FieldDate.fromJson({ date: '2020-02-20' });
       assertValue(dateField, '2020-02-20');
     });
-    test.skip('Invalid Date - Month(2020-13-20)', function() {
+    test('Invalid Date - Month(2020-13-20)', function() {
       var dateField = Blockly.FieldDate.fromJson({ date: '2020-13-20' });
       assertValueDefault(dateField);
     });
-    test.skip('Invalid Date - Day(2020-02-32)', function() {
+    test('Invalid Date - Day(2020-02-32)', function() {
       var dateField = Blockly.FieldDate.fromJson({ date: '2020-02-32' });
       assertValueDefault(dateField);
     });
@@ -94,23 +94,23 @@ suite ('Date Fields', function() {
       setup(function() {
         this.dateField = new Blockly.FieldDate();
       });
-      test.skip('Null', function() {
+      test('Null', function() {
         this.dateField.setValue(null);
         assertValueDefault(this.dateField);
       });
-      test.skip('Undefined', function() {
+      test('Undefined', function() {
         this.dateField.setValue(undefined);
         assertValueDefault(this.dateField);
       });
-      test.skip('Non-Parsable String', function() {
+      test('Non-Parsable String', function() {
         this.dateField.setValue('bad');
         assertValueDefault(this.dateField);
       });
-      test.skip('Invalid Date - Month(2020-13-20)', function() {
+      test('Invalid Date - Month(2020-13-20)', function() {
         this.dateField.setValue('2020-13-20');
         assertValueDefault(this.dateField);
       });
-      test.skip('Invalid Date - Day(2020-02-32)', function() {
+      test('Invalid Date - Day(2020-02-32)', function() {
         this.dateField.setValue('2020-02-32');
         assertValueDefault(this.dateField);
       });
@@ -123,23 +123,23 @@ suite ('Date Fields', function() {
       setup(function() {
         this.dateField = new Blockly.FieldDate('2020-02-20');
       });
-      test.skip('Null', function() {
+      test('Null', function() {
         this.dateField.setValue(null);
         assertValue(this.dateField, '2020-02-20');
       });
-      test.skip('Undefined', function() {
+      test('Undefined', function() {
         this.dateField.setValue(undefined);
         assertValue(this.dateField, '2020-02-20');
       });
-      test.skip('Non-Parsable String', function() {
+      test('Non-Parsable String', function() {
         this.dateField.setValue('bad');
         assertValue(this.dateField, '2020-02-20');
       });
-      test.skip('Invalid Date - Month(2020-13-20)', function() {
+      test('Invalid Date - Month(2020-13-20)', function() {
         this.dateField.setValue('2020-13-20');
         assertValue(this.dateField, '2020-02-20');
       });
-      test.skip('Invalid Date - Day(2020-02-32)', function() {
+      test('Invalid Date - Day(2020-02-32)', function() {
         this.dateField.setValue('2020-02-32');
         assertValue(this.dateField, '2020-02-20');
       });
@@ -149,7 +149,7 @@ suite ('Date Fields', function() {
       });
     });
   });
-  suite.skip('Validators', function() {
+  suite('Validators', function() {
     setup(function() {
       this.dateField = new Blockly.FieldDate('2020-02-20');
     });

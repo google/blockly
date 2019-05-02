@@ -264,6 +264,21 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": ""
   },
   {
+    "type": "test_fields_image",
+    "message0": "image %1",
+    "args0": [
+      {
+        "type": "field_image",
+        "name": "IMAGE",
+        "src": "https://blockly-demo.appspot.com/static/tests/media/a.png",
+        "width": 32,
+        "height": 32,
+        "alt": "A"
+      }
+    ],
+    "colour": 230
+  },
+  {
     "type": "test_numbers_float",
     "message0": "float %1",
     "args0": [
@@ -669,6 +684,420 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "colour": "#AAAAAA"
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
+
+Blockly.Blocks['test_validators_text_null'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("always null")
+      .appendField(new Blockly.FieldTextInput("default", this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('All input validates to null (invalid). The display' +
+      ' text will remain the input text, but the value should be the default' +
+      ' text. The input should be red after the first keystroke.');
+  },
+
+  validate: function(newValue) {
+    return null;
+  }
+};
+Blockly.Blocks['test_validators_text_A'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("remove \'a\'")
+      .appendField(new Blockly.FieldTextInput("default", this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('All \'a\' characters are removed from field value.' +
+      ' The display text will include invalid \'a\' characters while the' +
+      ' field is being edited, but the value will not.');
+  },
+
+  validate: function(newValue) {
+    return newValue.replace(/\a/g, '');
+  }
+};
+Blockly.Blocks['test_validators_text_B'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("\'b\' -> null")
+      .appendField(new Blockly.FieldTextInput("default", this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('Upon detecting a \'b\' character the input will' +
+      ' validated to null (invalid). Upon removal it should revert to being' +
+      ' valid. The display text will remain the input text, but if the input' +
+      ' text is invalid the value should be the default text.');
+  },
+
+  validate: function(newValue) {
+    if (newValue.indexOf('b') != -1) {
+      return null;
+    }
+    return newValue;
+  }
+};
+
+Blockly.Blocks['test_validators_angle_null'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("always null")
+      .appendField(new Blockly.FieldAngle(90, this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('All input validates to null (invalid). The field' +
+      ' will display the input while the field is being edited (this' +
+      ' includes the text and the graphic), but the value should be the' +
+      ' default value. The input should be red after the first' +
+      ' keystroke.');
+  },
+
+  validate: function(newValue) {
+    return null;
+  }
+};
+Blockly.Blocks['test_validators_angle_mult30_force'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("force mult of 30")
+      .appendField(new Blockly.FieldAngle(90, this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('The input value will be rounded to the nearest' +
+      ' multiple of 30. The field will display the input while the field is' +
+      ' being edited (this includes the text and the graphic), but the value' +
+      ' will be the validated (rounded) value. Note: If you want to do' +
+      ' rounding this is not the proper way, use the ROUND property of the' +
+      ' field angle instead.');
+  },
+
+  validate: function(newValue) {
+    return Math.round(newValue / 30) * 30;
+  }
+};
+Blockly.Blocks['test_validators_angle_mult30_null'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("not mult of 30 -> null")
+      .appendField(new Blockly.FieldAngle(90, this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('If the input value is not a multiple of 30, the' +
+      ' input will validated to null (invalid). The field will display the' +
+      ' input while the field is being edited (this includes the text and' +
+      ' the graphic), but if the input value is invalid the value should be' +
+      ' the default value.');
+  },
+
+  validate: function(newValue) {
+    if (newValue % 30 != 0) {
+      return null;
+    }
+    return newValue;
+  }
+};
+
+Blockly.Blocks['test_validators_checkbox_null'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("always null")
+      .appendField(new Blockly.FieldCheckbox(true, this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('The new input always validates to null (invalid).' +
+      ' This means that the field value should not change.');
+  },
+
+  validate: function(newValue) {
+    return null;
+  }
+};
+Blockly.Blocks['test_validators_checkbox_match'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("force match")
+      .appendField(new Blockly.FieldCheckbox(true), "MATCH")
+      .appendField(new Blockly.FieldCheckbox(true, this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('The validator for this block only works on the' +
+      ' end-most checkbox. The validator will always return the value of the' +
+      ' start-most checkbox. Therefor they should always match.')
+  },
+
+  validate: function(newValue) {
+    return this.sourceBlock_.getFieldValue('MATCH');
+  }
+};
+Blockly.Blocks['test_validators_checkbox_not_match_null'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("not match -> null")
+      .appendField(new Blockly.FieldCheckbox(true), "MATCH")
+      .appendField(new Blockly.FieldCheckbox(true, this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('The validator for this block only works on the' +
+      ' end-most checkbox. If the new value does not match the value of the' +
+      ' start-most checkbox, it will return null (invalid), which means the' +
+      ' field value should not change. Therfore they should always match.');
+  },
+
+  validate: function(newValue) {
+    if (this.sourceBlock_.getFieldValue('MATCH') != newValue) {
+      return null;
+    }
+    return newValue;
+  }
+};
+
+Blockly.Blocks['test_validators_colour_null'] = {
+  init: function() {
+    var colourField = new Blockly.FieldColour('#ff0000', this.validate);
+    colourField.setColours([
+      '#ffffff', '#ffdcdc', '#ffb4b4','#ff8c8c','#ff6464','#ff3c3c','#ff1414',
+      '#00ffff', '#00dcdc', '#00b4b4','#008c8c','#006464','#003c3c','#001414']);
+
+    this.appendDummyInput()
+      .appendField("always null")
+      .appendField(colourField, "INPUT");
+    this.setColour(230);
+    this.setCommentText('All input validates to null (invalid). This means' +
+      ' the field value should not change.');
+  },
+
+  validate: function(newValue) {
+    return null;
+  }
+};
+Blockly.Blocks['test_validators_colour_force_red'] = {
+  init: function() {
+    var colourField = new Blockly.FieldColour('#ff0000', this.validate);
+    colourField.setColours([
+      '#ffffff', '#ffdcdc', '#ffb4b4','#ff8c8c','#ff6464','#ff3c3c','#ff1414',
+      '#00ffff', '#00dcdc', '#00b4b4','#008c8c','#006464','#003c3c','#001414']);
+
+    this.appendDummyInput()
+      .appendField("force full red")
+      .appendField(colourField, "INPUT");
+    this.setColour(230);
+    this.setCommentText('The input will have its red value replaced with' +
+      ' full red.');
+  },
+
+  validate: function(newValue) {
+    return '#ff' + newValue.substr(3, 4);
+  }
+};
+Blockly.Blocks['test_validators_colour_red_null'] = {
+  init: function() {
+    var colourField = new Blockly.FieldColour('#ff0000', this.validate);
+    colourField.setColours([
+      '#ffffff', '#ffdcdc', '#ffb4b4','#ff8c8c','#ff6464','#ff3c3c','#ff1414',
+      '#00ffff', '#00dcdc', '#00b4b4','#008c8c','#006464','#003c3c','#001414']);
+
+    this.appendDummyInput()
+      .appendField("not red -> null")
+      .appendField(colourField, "INPUT");
+    this.setColour(230);
+    this.setCommentText('If the input does not have full red, the input will' +
+      ' validate to null (invalid). Otherwise it will return the input value');
+  },
+
+  validate: function(newValue) {
+    if (newValue.substr(1, 2) != 'ff') {
+      return null;
+    }
+    return newValue;
+  }
+};
+
+Blockly.Blocks['test_validators_date_null'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("always null")
+      .appendField(new Blockly.FieldDate("2020-02-20", this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('All input validates to null (invalid). This means' +
+      ' the field value should not change.');
+  },
+
+  validate: function(newValue) {
+    return null;
+  }
+};
+Blockly.Blocks['test_validators_date_force_20s'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("force day 20s")
+      .appendField(new Blockly.FieldDate("2020-02-20", this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('The input\'s date will change to always be in the' +
+      ' 20s.');
+  },
+
+  validate: function(newValue) {
+    return newValue.substr(0, 8) + '2' + newValue.substr(9, 1);
+  }
+};
+Blockly.Blocks['test_validators_date_20s_null'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("not 20s -> null")
+      .appendField(new Blockly.FieldDate("2020-02-20", this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('If the input is not in the 20s, the input will' +
+      ' validate to null (invalid). Otherwise it will return the input value.');
+  },
+
+  validate: function(newValue) {
+    if (newValue.charAt(8) != '2') {
+      return null;
+    }
+    return newValue;
+  }
+};
+
+Blockly.Blocks['test_validators_dropdown_null'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("always null")
+      .appendField(new Blockly.FieldDropdown([
+        ["1a","1A"], ["1b","1B"], ["1c","1C"],
+        ["2a","2A"], ["2b","2B"], ["2c","2C"]], this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('All input validates to null (invalid). This means' +
+      ' the field value should not change.');
+  },
+
+  validate: function(newValue) {
+    return null;
+  }
+};
+Blockly.Blocks['test_validators_dropdown_force_1s'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("force 1s")
+      .appendField(new Blockly.FieldDropdown([
+        ["1a","1A"], ["1b","1B"], ["1c","1C"],
+        ["2a","2A"], ["2b","2B"], ["2c","2C"]], this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('The input\'s value will always change to start with' +
+      ' 1.');
+  },
+
+  validate: function(newValue) {
+    return '1' + newValue.charAt(1);
+  }
+};
+Blockly.Blocks['test_validators_dropdown_1s_null'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("not 1s -> null")
+      .appendField(new Blockly.FieldDropdown([
+        ["1a","1A"], ["1b","1B"], ["1c","1C"],
+        ["2a","2A"], ["2b","2B"], ["2c","2C"]], this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('If the input does not start with 1, the input will' +
+      ' validate to null (invalid). Otherwise it will return the input value.');
+  },
+
+  validate: function(newValue) {
+    if (newValue.charAt(0) != '1') {
+      return null;
+    }
+    return newValue;
+  }
+};
+
+Blockly.Blocks['test_validators_number_null'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("always null")
+      .appendField(new Blockly.FieldNumber(123, null, null, null, this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('All input validates to null (invalid). The field' +
+      ' will display the input while the field is being edited, but the value' +
+      ' should be the default value. The input should be red after the first' +
+      ' keystroke.');
+  },
+
+  validate: function(newValue) {
+    return null;
+  }
+};
+Blockly.Blocks['test_validators_number_mult10_force'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("force mult of 10")
+      .appendField(new Blockly.FieldNumber(123, null, null, null, this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('Theinput value will be rounded to the nearest' +
+      ' multiple of 10. The field will display the input while the field is' +
+      ' being edited, but the value should be the validated (rounded) value.' +
+      ' Note: If you want to do rounding this is not the proper way, use the' +
+      ' precision option of the number field constructor instead.');
+  },
+
+  validate: function(newValue) {
+    return Math.round(newValue / 10) * 10;
+  }
+};
+Blockly.Blocks['test_validators_number_mult10_null'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("not mult of 10 -> null")
+      .appendField(new Blockly.FieldNumber(123, null, null, null, this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('If the input value is not a multiple of 10, the' +
+      ' input will validate to null (invalid). The field will display the' +
+      ' input while the field is being edited, but if the input value is' +
+      ' invalid the value should be the default value.');
+  },
+
+  validate: function(newValue) {
+    if (newValue % 10 != 0) {
+      return null;
+    }
+    return newValue;
+  }
+};
+
+Blockly.Blocks['test_validators_variable_null'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("always null")
+      .appendField(new Blockly.FieldVariable('1a', this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('All ids validate to null (invalid). This means' +
+      ' the variable should not change.');
+  },
+
+  validate: function(newValue) {
+    return null;
+  }
+};
+Blockly.Blocks['test_validators_variable_force_1s'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("force 1s")
+      .appendField(new Blockly.FieldVariable('1a', this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('The id will always change to start with 1.');
+  },
+
+  validate: function(newValue) {
+    return '1' + newValue.charAt(1);
+  }
+};
+Blockly.Blocks['test_validators_variable_1s_null'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("not 1s -> null")
+      .appendField(new Blockly.FieldVariable('1a', this.validate), "INPUT");
+    this.setColour(230);
+    this.setCommentText('If the id does not start with 1, the id will' +
+      ' validate to null (invalid). Otherwise it will return the id.');
+  },
+
+  validate: function(newValue) {
+    if (newValue.charAt(0) != '1') {
+      return null;
+    }
+    return newValue;
+  }
+};
 
 Blockly.Blocks['test_basic_empty_with_mutator'] = {
   init: function() {

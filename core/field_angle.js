@@ -34,21 +34,19 @@ goog.require('Blockly.utils');
 
 /**
  * Class for an editable angle field.
- * @param {(string|number)=} opt_value The initial content of the field. The
- *     value should cast to a number, and if it does not, '0' will be used.
- * @param {Function=} opt_validator An optional function that is called
- *     to validate any constraints on what the user entered.  Takes the new
- *     text as an argument and returns the accepted text or null to abort
- *     the change.
+ * @param {string|number=} opt_value The initial value of the field. Should cast
+ *    to a number. Defaults to 0.
+ * @param {Function=} opt_validator A function that is called to validate
+ *    changes to the field's value. Takes in a number & returns a
+ *    validated number, or null to abort the change.
  * @extends {Blockly.FieldTextInput}
  * @constructor
  */
 Blockly.FieldAngle = function(opt_value, opt_validator) {
-  // Add degree symbol: '360°' (LTR) or '°360' (RTL)
-  this.symbol_ = Blockly.utils.createSvgElement('tspan', {}, null);
-  this.symbol_.appendChild(document.createTextNode('\u00B0'));
-
-  opt_value = (opt_value && !isNaN(opt_value)) ? String(opt_value) : '0';
+  opt_value = this.doClassValidation_(opt_value);
+  if (opt_value === null) {
+    opt_value = 0;
+  }
   Blockly.FieldAngle.superClass_.constructor.call(
       this, opt_value, opt_validator);
 };
@@ -120,18 +118,25 @@ Blockly.FieldAngle.WRAP = 360;
 Blockly.FieldAngle.RADIUS = Blockly.FieldAngle.HALF - 1;
 
 /**
- * Adds degree symbol and recalculates width.
- * Saves the computed width in a property.
+ * Create the block UI for this field.
+ * @package
+ */
+Blockly.FieldAngle.prototype.initView = function() {
+  Blockly.FieldAngle.superClass_.initView.call(this);
+  // Add the degree symbol to the left of the number, even in RTL (issue #2380)
+  this.symbol_ = Blockly.utils.createSvgElement('tspan', {}, null);
+  this.symbol_.appendChild(document.createTextNode('\u00B0'));
+};
+
+/**
+ * Updates the graph when the field rerenders.
  * @private
  */
 Blockly.FieldAngle.prototype.render_ = function() {
-  // Update textElement.
   this.textElement_.textContent = this.getDisplayText_();
-
-  // Insert degree symbol.
-  // Degree symbol should be left of number, even in RTL (issue #2380).
   this.textElement_.appendChild(this.symbol_);
   this.updateWidth();
+  this.updateGraph_();
 };
 
 /**
@@ -208,7 +213,6 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
     }, svg);
   }
 
-
   var border = this.sourceBlock_.getColourBorder();
   border = border.colourBorder == null ? border.colourLight : border.colourBorder;
 
@@ -244,6 +248,7 @@ Blockly.FieldAngle.prototype.hide_ = function() {
  * @param {!Event} e Mouse move event.
  */
 Blockly.FieldAngle.prototype.onMouseMove = function(e) {
+  // Calculate angle.
   var bBox = this.gauge_.ownerSVGElement.getBoundingClientRect();
   var dx = e.clientX - bBox.left - Blockly.FieldAngle.HALF;
   var dy = e.clientY - bBox.top - Blockly.FieldAngle.HALF;
@@ -268,24 +273,16 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
     angle = Math.round(angle / Blockly.FieldAngle.ROUND) *
         Blockly.FieldAngle.ROUND;
   }
-  angle = this.callValidator(angle);
-  Blockly.FieldTextInput.htmlInput_.value = angle;
-  this.setValue(angle);
-  this.validate_();
-  this.resizeEditor_();
-};
 
-/**
- * Insert a degree symbol.
- * @param {?string} text New text.
- */
-Blockly.FieldAngle.prototype.setText = function(text) {
-  Blockly.FieldAngle.superClass_.setText.call(this, text);
-  if (!this.textElement_) {
-    // Not rendered yet.
-    return;
+  // Update value.
+  var angleString = String(angle);
+  if (angleString != this.text_) {
+    Blockly.FieldTextInput.htmlInput_.value = angle;
+    this.setValue(angle);
+    // Always render the input angle.
+    this.text_ = angleString;
+    this.forceRerender();
   }
-  this.updateGraph_();
 };
 
 /**
@@ -296,6 +293,7 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
   if (!this.gauge_) {
     return;
   }
+  // Always display the input (i.e. getText) even if it is invalid.
   var angleDegrees = Number(this.getText()) + Blockly.FieldAngle.OFFSET;
   var angleRadians = Blockly.utils.toRadians(angleDegrees);
   var path = ['M ', Blockly.FieldAngle.HALF, ',', Blockly.FieldAngle.HALF];
@@ -326,18 +324,16 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
 };
 
 /**
- * Ensure that only an angle may be entered.
- * @param {string} text The user's text.
- * @return {?string} A string representing a valid angle, or null if invalid.
+ * Ensure that the input value is a valid angle.
+ * @param {string|number=} newValue The input value.
+ * @return {?number} A valid angle, or null if invalid.
+ * @protected
  */
-Blockly.FieldAngle.prototype.classValidator = function(text) {
-  if (text === null) {
+Blockly.FieldAngle.prototype.doClassValidation_ = function(newValue) {
+  if (isNaN(newValue)) {
     return null;
   }
-  var n = parseFloat(text || 0);
-  if (isNaN(n)) {
-    return null;
-  }
+  var n = parseFloat(newValue || 0);
   n = n % 360;
   if (n < 0) {
     n += 360;
@@ -345,7 +341,7 @@ Blockly.FieldAngle.prototype.classValidator = function(text) {
   if (n > Blockly.FieldAngle.WRAP) {
     n -= 360;
   }
-  return String(n);
+  return n;
 };
 
 Blockly.Field.register('field_angle', Blockly.FieldAngle);

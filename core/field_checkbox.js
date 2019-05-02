@@ -32,19 +32,22 @@ goog.require('Blockly.utils');
 
 /**
  * Class for a checkbox field.
- * @param {string=} opt_state The initial state of the field ('TRUE' or
- *    'FALSE'), defaults to 'FALSE'.
- * @param {Function=} opt_validator A function that is executed when a new
- *     option is selected.  Its sole argument is the new checkbox state.  If
- *     it returns a value, this becomes the new checkbox state, unless the
- *     value is null, in which case the change is aborted.
+ * @param {string|boolean=} opt_value The initial value of the field. Should
+ *    either be 'TRUE', 'FALSE' or a boolean. Defaults to 'FALSE'.
+ * @param {Function=} opt_validator  A function that is called to validate
+ *    changes to the field's value. Takes in a value ('TRUE' or 'FALSE') &
+ *    returns a validated value ('TRUE' or 'FALSE'), or null to abort the
+ *    change.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldCheckbox = function(opt_state, opt_validator) {
-  Blockly.FieldCheckbox.superClass_.constructor.call(this, '', opt_validator);
-  // Set the initial state.
-  this.setValue(opt_state);
+Blockly.FieldCheckbox = function(opt_value, opt_validator) {
+  opt_value = this.doClassValidation_(opt_value);
+  if (opt_value === null) {
+    opt_value = 'FALSE';
+  }
+  Blockly.FieldCheckbox.superClass_.constructor.call(this, opt_value, opt_validator);
+  this.size_.width = Blockly.FieldCheckbox.WIDTH;
 };
 goog.inherits(Blockly.FieldCheckbox, Blockly.Field);
 
@@ -56,8 +59,22 @@ goog.inherits(Blockly.FieldCheckbox, Blockly.Field);
  * @nocollapse
  */
 Blockly.FieldCheckbox.fromJson = function(options) {
-  return new Blockly.FieldCheckbox(options['checked'] ? 'TRUE' : 'FALSE');
+  return new Blockly.FieldCheckbox(options['checked']);
 };
+
+/**
+ * The width of a checkbox field.
+ * @type {number}
+ * @const
+ */
+Blockly.FieldCheckbox.WIDTH = 5;
+
+/**
+ * Character for the checkmark.
+ * @type {string}
+ * @const
+ */
+Blockly.FieldCheckbox.CHECK_CHAR = '\u2713';
 
 /**
  * Serializable fields are saved by the XML renderer, non-serializable fields
@@ -66,11 +83,6 @@ Blockly.FieldCheckbox.fromJson = function(options) {
  * @const
  */
 Blockly.FieldCheckbox.prototype.SERIALIZABLE = true;
-
-/**
- * Character for the checkmark.
- */
-Blockly.FieldCheckbox.CHECK_CHAR = '\u2713';
 
 /**
  * Mouse cursor style when over the hotspot that initiates editability.
@@ -91,49 +103,98 @@ Blockly.FieldCheckbox.prototype.initView = function() {
       this.fieldGroup_);
   var textNode = document.createTextNode(Blockly.FieldCheckbox.CHECK_CHAR);
   this.checkElement_.appendChild(textNode);
-  this.checkElement_.style.display = this.state_ ? 'block' : 'none';
-};
+  this.checkElement_.style.display = this.value_ ? 'block' : 'none';
 
-/**
- * Return 'TRUE' if the checkbox is checked, 'FALSE' otherwise.
- * @return {string} Current state.
- */
-Blockly.FieldCheckbox.prototype.getValue = function() {
-  return String(this.state_).toUpperCase();
-};
-
-/**
- * Set the checkbox to be checked if newBool is 'TRUE' or true,
- * unchecks otherwise.
- * @param {string|boolean} newBool New state.
- */
-Blockly.FieldCheckbox.prototype.setValue = function(newBool) {
-  var newState = (typeof newBool == 'string') ?
-      (newBool.toUpperCase() == 'TRUE') : !!newBool;
-  if (this.state_ !== newState) {
-    if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
-      Blockly.Events.fire(new Blockly.Events.BlockChange(
-          this.sourceBlock_, 'field', this.name, this.state_, newState));
-    }
-    this.state_ = newState;
-    if (this.checkElement_) {
-      this.checkElement_.style.display = newState ? 'block' : 'none';
-    }
+  if (this.borderRect_) {
+    this.borderRect_.setAttribute('width',
+        this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
   }
 };
 
 /**
- * Toggle the state of the checkbox.
+ * Checkboxes have a constant width.
  * @private
  */
+Blockly.FieldCheckbox.prototype.render_ = function() {
+  this.size_.width = Blockly.FieldCheckbox.WIDTH;
+};
+
+/**
+ * Toggle the state of the checkbox on click.
+ * @protected
+ */
 Blockly.FieldCheckbox.prototype.showEditor_ = function() {
-  var newState = !this.state_;
-  if (this.sourceBlock_) {
-    // Call any validation function, and allow it to override.
-    newState = this.callValidator(newState);
+  this.setValue(!this.value_);
+};
+
+/**
+ * Ensure that the input value is valid ('TRUE' or 'FALSE').
+ * @param {string|boolean=} newValue The input value.
+ * @return {?string} A valid value ('TRUE' or 'FALSE), or null if invalid.
+ * @protected
+ */
+Blockly.FieldCheckbox.prototype.doClassValidation_ = function(newValue) {
+  if (newValue === true || newValue === 'TRUE') {
+    return 'TRUE';
   }
-  if (newState !== null) {
-    this.setValue(String(newState).toUpperCase());
+  if (newValue === false || newValue === 'FALSE') {
+    return 'FALSE';
+  }
+  return null;
+};
+
+/**
+ * Update the value of the field, and update the checkElement.
+ * @param {string} newValue The new value ('TRUE' or 'FALSE') of the field.
+ * @protected
+ */
+Blockly.FieldCheckbox.prototype.doValueUpdate_ = function(newValue) {
+  this.value_ = this.convertValueToBool_(newValue);
+  // Update visual.
+  if (this.checkElement_) {
+    this.checkElement_.style.display = this.value_ ? 'block' : 'none';
+  }
+};
+
+/**
+ * Get the value of this field, either 'TRUE' or 'FALSE'.
+ * @return {string} The value of this field.
+ */
+Blockly.FieldCheckbox.prototype.getValue = function() {
+  return this.value_ ? 'TRUE' : 'FALSE';
+};
+
+/**
+ * Get the boolean value of this field.
+ * @return {string} The boolean value of this field.
+ */
+Blockly.FieldCheckbox.prototype.getValueBoolean = function() {
+  return this.value_;
+};
+
+/**
+ * Get the text of this field. Used when the block is collapsed.
+ * @return {string} Text representing the value of this field
+ *    ('true' or 'false').
+ */
+Blockly.FieldCheckbox.prototype.getText = function() {
+  return String(this.convertValueToBool_(this.value_));
+};
+
+/**
+ * Convert a value into a pure boolean.
+ *
+ * Converts 'TRUE' to true and 'FALSE' to false correctly, everything else
+ * is cast to a boolean.
+ * @param {*} value The value to convert.
+ * @return {boolean} The converted value.
+ * @private
+ */
+Blockly.FieldCheckbox.prototype.convertValueToBool_ = function(value) {
+  if (typeof value == 'string') {
+    return value == 'TRUE';
+  } else {
+    return !!value;
   }
 };
 

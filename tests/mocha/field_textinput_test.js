@@ -107,7 +107,7 @@ suite ('Text Input Fields', function() {
         this.textInputField.setValue(null);
         assertValueDefault(this.textInputField);
       });
-      test.skip('Undefined', function() {
+      test('Undefined', function() {
         this.textInputField.setValue(undefined);
         assertValueDefault(this.textInputField);
       });
@@ -119,7 +119,7 @@ suite ('Text Input Fields', function() {
         this.textInputField.setValue(1);
         assertValue(this.textInputField, '1');
       });
-      test.skip('Number (Falsy)', function() {
+      test('Number (Falsy)', function() {
         this.textInputField.setValue(0);
         assertValue(this.textInputField, '0');
       });
@@ -127,7 +127,7 @@ suite ('Text Input Fields', function() {
         this.textInputField.setValue(true);
         assertValue(this.textInputField, 'true');
       });
-      test.skip('Boolean False', function() {
+      test('Boolean False', function() {
         this.textInputField.setValue(false);
         assertValue(this.textInputField, 'false');
       });
@@ -140,7 +140,7 @@ suite ('Text Input Fields', function() {
         this.textInputField.setValue(null);
         assertValue(this.textInputField, 'value');
       });
-      test.skip('Undefined', function() {
+      test('Undefined', function() {
         this.textInputField.setValue(undefined);
         assertValue(this.textInputField, 'value');
       });
@@ -166,7 +166,7 @@ suite ('Text Input Fields', function() {
       });
     });
   });
-  suite.skip('Validators', function() {
+  suite('Validators', function() {
     setup(function() {
       this.textInputField = new Blockly.FieldTextInput('value');
       Blockly.FieldTextInput.htmlInput_ = Object.create(null);

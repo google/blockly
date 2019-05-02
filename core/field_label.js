@@ -36,19 +36,20 @@ goog.require('goog.math.Size');
 
 /**
  * Class for a non-editable, non-serializable text field.
- * @param {string=} text The initial content of the field, defaults to an
- *    empty string.
+ * @param {string=} opt_value The initial value of the field. Should cast to a
+ *    string. Defaults to an empty string if null or undefined.
  * @param {string=} opt_class Optional CSS class for the field's text.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldLabel = function(text, opt_class) {
+Blockly.FieldLabel = function(opt_value, opt_class) {
   this.size_ = new goog.math.Size(0, 17.5);
   this.class_ = opt_class;
-  if (text === null || text === undefined) {
-    text = '';
+  opt_value = this.doClassValidation_(opt_value);
+  if (opt_value === null) {
+    opt_value = '';
   }
-  this.setValue(String(text));
+  this.setValue(opt_value);
   this.tooltip_ = '';
 };
 goog.inherits(Blockly.FieldLabel, Blockly.Field);
@@ -84,6 +85,8 @@ Blockly.FieldLabel.prototype.initView = function() {
         'class': 'blocklyText',
         'y': this.size_.height - 5
       }, this.fieldGroup_);
+  var textNode = document.createTextNode('');
+  this.textElement_.appendChild(textNode);
   if (this.class_) {
     Blockly.utils.addClass(this.textElement_, this.class_);
   }
@@ -105,6 +108,19 @@ Blockly.FieldLabel.prototype.dispose = function() {
     Blockly.utils.removeNode(this.textElement_);
     this.textElement_ = null;
   }
+};
+
+/**
+ * Ensure that the input value casts to a valid string.
+ * @param {string=} newValue The input value.
+ * @return {?string} A valid string, or null if invalid.
+ * @protected
+ */
+Blockly.FieldLabel.prototype.doClassValidation_ = function(newValue) {
+  if (newValue === null || newValue === undefined) {
+    return null;
+  }
+  return String(newValue);
 };
 
 /**

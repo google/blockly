@@ -794,7 +794,7 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   }
 
   // Create the new block by cloning the block in the flyout (via XML).
-  var xml = Blockly.Xml.blockToDom(oldBlock);
+  var xml = Blockly.Xml.blockToDom(oldBlock, true);
   // The target workspace would normally resize during domToBlock, which will
   // lead to weird jumps.  Save it for terminateDrag.
   targetWorkspace.setResizesEnabled(false);

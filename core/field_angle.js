@@ -207,9 +207,11 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
     }, svg);
   }
 
-
-  Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(),
-      this.sourceBlock_.getColour());
+  
+  var border = this.sourceBlock_.getColourBorder();
+  border = border.colourBorder == null ? border.colourLight : border.colourBorder;
+  
+  Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(), border);
   Blockly.DropDownDiv.showPositionedByField(this);
   // The angle picker is different from other fields in that it updates on
   // mousemove even if it's not in the middle of a drag.  In future we may

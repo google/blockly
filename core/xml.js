@@ -250,8 +250,8 @@ Blockly.Xml.cloneShadow_ = function(shadow) {
       while (node && !node.nextSibling) {
         textNode = node;
         node = node.parentNode;
-        if (textNode.nodeType == 3 && textNode.data.trim() == '' &&
-            node.firstChild != textNode) {
+        if (textNode.nodeType == Element.TEXT_NODE &&
+            textNode.data.trim() == '' && node.firstChild != textNode) {
           // Prune whitespace after a tag.
           Blockly.utils.removeNode(textNode);
         }
@@ -259,7 +259,8 @@ Blockly.Xml.cloneShadow_ = function(shadow) {
       if (node) {
         textNode = node;
         node = node.nextSibling;
-        if (textNode.nodeType == 3 && textNode.data.trim() == '') {
+        if (textNode.nodeType == Element.TEXT_NODE &&
+            textNode.data.trim() == '') {
           // Prune whitespace before a tag.
           Blockly.utils.removeNode(textNode);
         }
@@ -594,7 +595,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
 
   var blockChild = null;
   for (var i = 0, xmlChild; xmlChild = xmlBlock.childNodes[i]; i++) {
-    if (xmlChild.nodeType == 3) {
+    if (xmlChild.nodeType == Element.TEXT_NODE) {
       // Ignore any text at the <block> level.  It's all whitespace anyway.
       continue;
     }
@@ -604,7 +605,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     var childBlockElement = null;
     var childShadowElement = null;
     for (var j = 0, grandchild; grandchild = xmlChild.childNodes[j]; j++) {
-      if (grandchild.nodeType == 1) {
+      if (grandchild.nodeType == Element.ELEMENT_NODE) {
         if (grandchild.nodeName.toLowerCase() == 'block') {
           childBlockElement = /** @type {!Element} */ (grandchild);
         } else if (grandchild.nodeName.toLowerCase() == 'shadow') {

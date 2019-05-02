@@ -95,23 +95,6 @@ suite('ASTNode', function() {
   });
 
   suite('HelperFunctions', function() {
-    test('findNextEditableField_', function() {
-      var input = this.blocks.statementInput1.inputList[0];
-      var field = input.fieldRow[0];
-      var nextField = input.fieldRow[1];
-      var node = Blockly.ASTNode.createFieldNode(field);
-      var editableField = node.findNextEditableField_(field, input);
-      assertEquals(editableField.getLocation(), nextField);
-    });
-
-    test('findNextEditableFieldFirst_', function() {
-      var input = this.blocks.statementInput1.inputList[0];
-      var field = input.fieldRow[1];
-      var node = Blockly.ASTNode.createFieldNode(field);
-      var editableField = node.findNextEditableField_(field, input, true);
-      assertEquals(editableField.getLocation(), input.fieldRow[0]);
-    });
-
     test('findPreviousEditableField_', function() {
       var input = this.blocks.statementInput1.inputList[0];
       var field = input.fieldRow[1];
@@ -134,7 +117,7 @@ suite('ASTNode', function() {
       var input2 = this.blocks.statementInput1.inputList[1];
       var connection = input.connection;
       var node = Blockly.ASTNode.createConnectionNode(connection);
-      var newASTNode = node.findNextForInput_(connection, input);
+      var newASTNode = node.findNextForInput_(input);
       assertEquals(newASTNode.getLocation(), input2.connection);
     });
 
@@ -148,11 +131,10 @@ suite('ASTNode', function() {
     });
 
     test('findNextForField_', function() {
-      var input = this.blocks.statementInput1.inputList[0];
       var field = this.blocks.statementInput1.inputList[0].fieldRow[0];
       var field2 = this.blocks.statementInput1.inputList[0].fieldRow[1];
       var node = Blockly.ASTNode.createFieldNode(field2);
-      var newASTNode = node.findNextForField_(field, input);
+      var newASTNode = node.findNextForField_(field);
       assertEquals(newASTNode.getLocation(), field2);
     });
 
@@ -208,52 +190,203 @@ suite('ASTNode', function() {
 
   suite('NavigationFunctions', function() {
     suite('Next', function() {
-      test('previousConnection', function() {
+      setup(function() {
+        Blockly.defineBlocksWithJsonArray([{
+          "type": "top_connection",
+          "message0": "",
+          "previousStatement": null,
+          "colour": 230,
+          "tooltip": "",
+          "helpUrl": ""
+        },
+        {
+          "type": "fields_and_input",
+          "message0": "%1 hi %2 %3 %4",
+          "args0": [
+            {
+              "type": "field_input",
+              "name": "NAME",
+              "text": "default"
+            },
+            {
+              "type": "input_dummy"
+            },
+            {
+              "type": "field_input",
+              "name": "NAME",
+              "text": "default"
+            },
+            {
+              "type": "input_value",
+              "name": "NAME"
+            }
+          ],
+          "previousStatement": null,
+          "nextStatement": null,
+          "colour": 230,
+          "tooltip": "",
+          "helpUrl": ""
+        },
+        {
+          "type": "two_fields",
+          "message0": "%1 hi",
+          "args0": [
+            {
+              "type": "field_input",
+              "name": "NAME",
+              "text": "default"
+            }
+          ],
+          "colour": 230,
+          "tooltip": "",
+          "helpUrl": ""
+        },
+        {
+          "type": "fields_and_input2",
+          "message0": "%1 %2 %3 hi %4 bye",
+          "args0": [
+            {
+              "type": "input_value",
+              "name": "NAME"
+            },
+            {
+              "type": "field_input",
+              "name": "NAME",
+              "text": "default"
+            },
+            {
+              "type": "input_value",
+              "name": "NAME"
+            },
+            {
+              "type": "input_statement",
+              "name": "NAME"
+            }
+          ],
+          "colour": 230,
+          "tooltip": "",
+          "helpUrl": ""
+        }]);
+
+        this.singleBlockWorkspace = new Blockly.Workspace();
+
+        var noNextConnection = this.workspace.newBlock('top_connection');
+        var fieldAndInputs = this.workspace.newBlock('fields_and_input');
+        var twoFields = this.workspace.newBlock('two_fields');
+        var fieldAndInputs2 = this.workspace.newBlock('fields_and_input2');
+        var singleBlock = this.singleBlockWorkspace.newBlock('two_fields');
+
+        this.blocks.noNextConnection = noNextConnection;
+        this.blocks.fieldAndInputs = fieldAndInputs;
+        this.blocks.twoFields = twoFields;
+        this.blocks.fieldAndInputs2 = fieldAndInputs2;
+        this.blocks.singleBlock = singleBlock;
+
+
+      });
+      teardown(function() {
+        delete this.blocks.noNextConnection;
+        delete this.blocks.fieldAndInputs;
+        delete this.blocks.twoFields;
+        delete this.blocks.fieldAndInputs2;
+        delete this.blocks.singleBlock;
+      });
+
+      test('fromPreviousToBlock', function() {
         var prevConnection = this.blocks.statementInput1.previousConnection;
         var node = Blockly.ASTNode.createConnectionNode(prevConnection);
         var nextNode = node.next();
         assertEquals(nextNode.getLocation(), this.blocks.statementInput1);
       });
-      test('block', function() {
+      test('fromBlockToNext', function() {
         var nextConnection = this.blocks.statementInput1.nextConnection;
         var node = Blockly.ASTNode.createBlockNode(this.blocks.statementInput1);
         var nextNode = node.next();
         assertEquals(nextNode.getLocation(), nextConnection);
       });
-      test('nextConnection', function() {
+      test('fromBlockToNull', function() {
+        var node = Blockly.ASTNode.createBlockNode(this.blocks.noNextConnection);
+        var nextNode = node.next();
+        assertEquals(nextNode, null);
+      });
+      test('fromNextToPrevious', function() {
         var nextConnection = this.blocks.statementInput1.nextConnection;
         var prevConnection = this.blocks.statementInput2.previousConnection;
         var node = Blockly.ASTNode.createConnectionNode(nextConnection);
         var nextNode = node.next();
         assertEquals(nextNode.getLocation(), prevConnection);
       });
-      test('input', function() {
+      test('fromNextToNull', function() {
+        var nextConnection = this.blocks.statementInput2.nextConnection;
+        var node = Blockly.ASTNode.createConnectionNode(nextConnection);
+        var nextNode = node.next();
+        assertEquals(nextNode, null);
+      });
+      test('fromInputToInput', function() {
         var input = this.blocks.statementInput1.inputList[0];
         var inputConnection = this.blocks.statementInput1.inputList[1].connection;
         var node = Blockly.ASTNode.createInputNode(input);
         var nextNode = node.next();
         assertEquals(nextNode.getLocation(), inputConnection);
       });
-      test('output', function() {
+      test('fromInputToStatementInput', function() {
+        var input = this.blocks.fieldAndInputs2.inputList[1];
+        var inputConnection = this.blocks.fieldAndInputs2.inputList[2].connection;
+        var node = Blockly.ASTNode.createInputNode(input);
+        var nextNode = node.next();
+        assertEquals(nextNode.getLocation(), inputConnection);
+      });
+      test('fromInputToField', function() {
+        var input = this.blocks.fieldAndInputs2.inputList[0];
+        var field = this.blocks.fieldAndInputs2.inputList[1].fieldRow[0];
+        var node = Blockly.ASTNode.createInputNode(input);
+        var nextNode = node.next();
+        assertEquals(nextNode.getLocation(), field);
+      });
+      test('fromInputToNull', function() {
+        var input = this.blocks.fieldAndInputs2.inputList[2];
+        var node = Blockly.ASTNode.createInputNode(input);
+        var nextNode = node.next();
+        assertEquals(nextNode, null);
+      });
+      test('fromOutputToBlock', function() {
         var output = this.blocks.fieldWithOutput.outputConnection;
         var node = Blockly.ASTNode.createConnectionNode(output);
         var nextNode = node.next();
         assertEquals(nextNode.getLocation(), this.blocks.fieldWithOutput);
       });
-      test('field', function() {
+      test('fromFieldToInput', function() {
         var field = this.blocks.statementInput1.inputList[0].fieldRow[1];
         var inputConnection = this.blocks.statementInput1.inputList[0].connection;
         var node = Blockly.ASTNode.createFieldNode(field);
         var nextNode = node.next();
         assertEquals(nextNode.getLocation(), inputConnection);
       });
-      test('isStack', function() {
+      test('fromFieldToField', function() {
+        var field = this.blocks.fieldAndInputs.inputList[0].fieldRow[0];
+        var node = Blockly.ASTNode.createFieldNode(field);
+        var field2 = this.blocks.fieldAndInputs.inputList[1].fieldRow[0];
+        var nextNode = node.next();
+        assertEquals(nextNode.getLocation(), field2);
+      });
+      test('fromFieldToNull', function() {
+        var field = this.blocks.twoFields.inputList[0].fieldRow[0];
+        var node = Blockly.ASTNode.createFieldNode(field);
+        var nextNode = node.next();
+        assertEquals(nextNode, null);
+      });
+      test('fromStackToStack', function() {
         var node = Blockly.ASTNode.createStackNode(this.blocks.statementInput1);
         var nextNode = node.next();
         assertEquals(nextNode.getLocation(), this.blocks.statementInput4);
         assertEquals(nextNode.getType(), Blockly.ASTNode.types.STACK);
       });
-      test('workspace', function() {
+      test('fromStackToNull', function() {
+        var node = Blockly.ASTNode.createStackNode(this.blocks.singleBlock);
+        var nextNode = node.next();
+        assertEquals(nextNode, null);
+      });
+      test('moveCursorToRight', function() {
         var coordinate = new goog.math.Coordinate(100,100);
         var node = Blockly.ASTNode.createWorkspaceNode(this.workspace, coordinate);
         var nextNode = node.next();

@@ -234,32 +234,6 @@ Blockly.ASTNode.prototype.getParentInput = function() {
 };
 
 /**
- * Get either the next editable field, or the first editable field for the given
- * input.
- * @param {!(Blockly.Field|Blockly.Connection|Blockly.Block)} location The current
- *     location of the cursor.
- * @param {!Blockly.Input} parentInput The parentInput of the field.
- * @param {boolean=} opt_first If true find the first editable field otherwise
- *     get the next editable field.
- * @return {Blockly.ASTNode} The ast node holding the next field or null if no
- *     next field exists.
- * @private
- */
-Blockly.ASTNode.prototype.findNextEditableField_ = function(location,
-    parentInput, opt_first) {
-  var fieldRow = parentInput.fieldRow;
-  var fieldIdx = fieldRow.indexOf(location);
-  var startIdx = opt_first ? 0 : fieldIdx + 1;
-  for (var i = startIdx, field; field = fieldRow[i]; i++) {
-    var field = fieldRow[i];
-    if (field.isCurrentlyEditable()) {
-      return Blockly.ASTNode.createFieldNode(field);
-    }
-  }
-  return null;
-};
-
-/**
  * Get either the previous editable field, or get the first editable field for
  * the given input.
  * @param {!(Blockly.Field|Blockly.Connection)} location The current location of
@@ -287,53 +261,59 @@ Blockly.ASTNode.prototype.findPreviousEditableField_ = function(location,
 };
 
 /**
- * Get the first field or connection that is either editable or has connection
- * value of not null.
- * @param {!Blockly.Connection} location Current location in the ast.
- * @param {Blockly.Input} parentInput The parent input of the connection.
- * @return {Blockly.ASTNode} The ast node holding the next field or connection.
+ * Given an input find the next editable field or an input with a non null
+ * connection in the same block.
+ * @param {!Blockly.Input} location Current location in the ast.
+ * @return {Blockly.ASTNode} The ast node holding the next field or connection
+ *     or null if there is no editable field or input connection after the given
+ *     input.
  * @private
  */
-Blockly.ASTNode.prototype.findNextForInput_ = function(location, parentInput){
-  if (!parentInput) {
-    return null;
-  }
-  var inputs = location.getSourceBlock().inputList;
-  var curIdx = inputs.indexOf(parentInput);
-  if (curIdx <= -1) {
-    return null;
-  }
-  var nxtIdx = curIdx + 1;
-
-  for (var i = nxtIdx, newInput; newInput = inputs[i]; i++) {
-    var field = this.findNextEditableField_(location, newInput, true);
-    if (field) {
-      return field;
-    } else if (newInput.connection) {
-      var connection = newInput.connection;
-      return Blockly.ASTNode.createConnectionNode(connection);
+Blockly.ASTNode.prototype.findNextForInput_ = function(location) {
+  var block = location.getSourceBlock();
+  var curIdx = block.inputList.indexOf(location);
+  for (var i = curIdx + 1, input; input = block.inputList[i]; i++) {
+    var fieldRow = input.fieldRow;
+    for (var j = 0, field; field = fieldRow[j]; j++) {
+      if (field.isCurrentlyEditable()) {
+        return Blockly.ASTNode.createFieldNode(field);
+      }
+    }
+    if (input.connection) {
+      return Blockly.ASTNode.createInputNode(input);
     }
   }
   return null;
 };
 
 /**
- * Find the next input or field given a field location.
- * @param {Blockly.Field} location Current location in the ast.
- * @param {Blockly.Input} parentInput The parent input of the field.
- * @return {Blockly.ASTNode} The ast node holding the next field or connection.
+ * Given a field find the next editable field or an input with a non null
+ * connection in the same block.
+ * @param {!Blockly.Field} location Current location in the ast.
+ * @return {Blockly.ASTNode} The ast node pointing to the next field or
+ *     connection or null if there is no editable field or input connection
+ *     after the given input.
  * @private
  */
-Blockly.ASTNode.prototype.findNextForField_ = function(location, parentInput) {
-  if (!parentInput) {
-    return null;
+Blockly.ASTNode.prototype.findNextForField_ = function(location) {
+  var input = location.getParentInput();
+  var block = location.getSourceBlock();
+  var curIdx = block.inputList.indexOf(input);
+  var fieldIdx = input.fieldRow.indexOf(location) + 1;
+  for (var i = curIdx, input; input = block.inputList[i]; i++) {
+    var fieldRow = input.fieldRow;
+    while (fieldIdx < fieldRow.length) {
+      if (fieldRow[fieldIdx].isCurrentlyEditable()) {
+        return Blockly.ASTNode.createFieldNode(fieldRow[fieldIdx]);
+      }
+      fieldIdx++;
+    }
+    fieldIdx = 0;
+    if (input.connection) {
+      return Blockly.ASTNode.createInputNode(input);
+    }
   }
-  var newAstNode = this.findNextEditableField_(location, parentInput);
-
-  if (!newAstNode || !newAstNode.getLocation()) {
-    newAstNode = Blockly.ASTNode.createConnectionNode(parentInput.connection);
-  }
-  return newAstNode;
+  return null;
 };
 
 /**
@@ -408,10 +388,8 @@ Blockly.ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
     if (curRoot.id == topBlock.id) {
       var offset = forward ? 1 : -1;
       var resultIndex = i + offset;
-      if (resultIndex == -1) {
-        resultIndex = topBlocks.length - 1;
-      } else if (resultIndex == topBlocks.length) {
-        resultIndex = 0;
+      if (resultIndex == -1 || resultIndex == topBlocks.length) {
+        return null;
       }
       return Blockly.ASTNode.createStackNode(topBlocks[resultIndex]);
     }
@@ -533,30 +511,26 @@ Blockly.ASTNode.prototype.next = function() {
       return Blockly.ASTNode.createBlockNode(this.location_.getSourceBlock());
 
     case Blockly.ASTNode.types.FIELD:
-      var parentInput = this.location_.getParentInput();
       var field = /** @type {Blockly.Field} */ (this.location_);
-      return this.findNextForField_(field, parentInput);
+      return this.findNextForField_(field);
 
     case Blockly.ASTNode.types.INPUT:
-      var inputConnection = /** @type {!Blockly.Connection} */ (this.location_);
-      return this.findNextForInput_(inputConnection, this.getParentInput());
+      return this.findNextForInput_(this.location_.getParentInput());
 
     case Blockly.ASTNode.types.BLOCK:
       var nextConnection = this.location_.nextConnection;
-      return Blockly.ASTNode.createConnectionNode(nextConnection);
+      if (nextConnection) {
+        return Blockly.ASTNode.createConnectionNode(nextConnection);
+      }
+      break;
 
     case Blockly.ASTNode.types.PREVIOUS:
-      var output = this.location_.outputConnection;
-      if (output) {
-        return Blockly.ASTNode.createConnectionNode(output);
-      } else {
-        var srcBlock = this.location_.getSourceBlock();
-        return Blockly.ASTNode.createBlockNode(srcBlock);
-      }
+      return Blockly.ASTNode.createBlockNode(this.location_.getSourceBlock());
 
     case Blockly.ASTNode.types.NEXT:
-      if (this.location_.targetBlock()) {
-        return this.findTopASTNodeForBlock_(this.location_.targetBlock());
+      var targetConnection = this.location_.targetConnection;
+      if (targetConnection) {
+        return Blockly.ASTNode.createConnectionNode(targetConnection);
       }
       break;
   }

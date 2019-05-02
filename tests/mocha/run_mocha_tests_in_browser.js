@@ -2,7 +2,7 @@
  * @license
  * Visual Blocks Editor
  *
- * Copyright 2018 Google Inc.
+ * Copyright 2019 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Node.js script to run JsUnit tests in Chrome, via webdriver.
+ * @fileoverview Node.js script to run Mocha tests in Chrome, via webdriver.
  */
 var webdriverio = require('webdriverio');
 

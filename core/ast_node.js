@@ -262,7 +262,7 @@ Blockly.ASTNode.prototype.findPreviousEditableField_ = function(location,
 
 /**
  * Given an input find the next editable field or an input with a non null
- * connection.
+ * connection in the same block.
  * @param {!Blockly.Input} location Current location in the ast.
  * @return {Blockly.ASTNode} The ast node holding the next field or connection
  *     or null if there is no editable field or input connection after the given
@@ -288,7 +288,7 @@ Blockly.ASTNode.prototype.findNextForInput_ = function(location) {
 
 /**
  * Given a field find the next editable field or an input with a non null
- * connection.
+ * connection in the same block.
  * @param {!Blockly.Field} location Current location in the ast.
  * @return {Blockly.ASTNode} The ast node pointing to the next field or
  *     connection or null if there is no editable field or input connection

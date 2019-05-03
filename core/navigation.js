@@ -51,13 +51,6 @@ Blockly.Navigation.currentCategory_ = null;
 Blockly.Navigation.flyoutBlock_ = null;
 
 /**
- * The selected connection used for inserting a block.
- * @type {Blockly.ASTNode}
- * @private
- */
-Blockly.Navigation.insertionNode_ = null;
-
-/**
  * State indicating focus is currently on the flyout.
  * @type {number}
  */
@@ -113,10 +106,14 @@ Blockly.Navigation.setMarker = function(marker) {
  * @package
  */
 Blockly.Navigation.getInsertionConnection = function() {
-  if (Blockly.Navigation.insertionNode_) {
-    return /** @type {Blockly.Connection} */ (Blockly.Navigation.insertionNode_
-        .getLocation());
+  var marker = Blockly.Navigation.marker_;
+  if (marker && marker.getCurNode()) {
+    var node = marker.getCurNode();
+    if (node.isConnection()) {
+      return /** @type {Blockly.Connection} */ (node.getLocation());
+    }
   }
+  return null;
 };
 
 /************************/
@@ -555,9 +552,7 @@ Blockly.Navigation.keyboardOut = function() {
  */
 Blockly.Navigation.markConnection = function() {
   var curNode = Blockly.Navigation.cursor_.getCurNode();
-  if (curNode.isConnection()) {
-    Blockly.Navigation.insertionNode_ = curNode;
-  }
+  Blockly.Navigation.marker_.setLocation(curNode);
 };
 
 /**
@@ -566,8 +561,8 @@ Blockly.Navigation.markConnection = function() {
 Blockly.Navigation.handleEnterForWS = function() {
   var cursor = Blockly.Navigation.cursor_;
   var curNode = cursor.getCurNode();
-  var location = curNode.getLocation();
   if (curNode.getType() === Blockly.ASTNode.types.FIELD) {
+    var location = curNode.getLocation();
     location.showEditor_();
   } else {
     Blockly.Navigation.markConnection();

@@ -762,18 +762,21 @@ suite('ASTNode', function() {
         var node = Blockly.ASTNode.createFieldNode(field);
         assertEquals(node.getLocation(), field);
         assertEquals(node.getType(), Blockly.ASTNode.types.FIELD);
+        assertFalse(node.isConnection());
       });
       test('createConnectionNode', function() {
         var prevConnection = this.blocks.statementInput4.previousConnection;
         var node = Blockly.ASTNode.createConnectionNode(prevConnection);
         assertEquals(node.getLocation(), prevConnection);
         assertEquals(node.getType(), Blockly.ASTNode.types.PREVIOUS);
+        assertTrue(node.isConnection());
       });
       test('createInputNode', function() {
         var input = this.blocks.statementInput1.inputList[0];
         var node = Blockly.ASTNode.createInputNode(input);
         assertEquals(node.getLocation(), input.connection);
         assertEquals(node.getType(), Blockly.ASTNode.types.INPUT);
+        assertTrue(node.isConnection());
       });
       test('createWorkspaceNode', function() {
         var coordinate = new goog.math.Coordinate(100,100);
@@ -782,6 +785,7 @@ suite('ASTNode', function() {
         assertEquals(node.getLocation(), this.workspace);
         assertEquals(node.getType(), Blockly.ASTNode.types.WORKSPACE);
         assertEquals(node.getWsCoordinate(), coordinate);
+        assertFalse(node.isConnection());
       });
       test('createStatementConnectionNode', function() {
         var nextConnection = this.blocks.statementInput1.inputList[1].connection;
@@ -789,6 +793,7 @@ suite('ASTNode', function() {
         var node = Blockly.ASTNode.createConnectionNode(nextConnection);
         assertEquals(node.getLocation(), inputConnection);
         assertEquals(node.getType(), Blockly.ASTNode.types.INPUT);
+        assertTrue(node.isConnection());
       });
     });
   });

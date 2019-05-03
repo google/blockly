@@ -262,16 +262,17 @@ Blockly.ASTNode.prototype.findPreviousEditableField_ = function(location,
 
 /**
  * Given an input find the next editable field or an input with a non null
- * connection in the same block.
- * @param {!Blockly.Input} location Current location in the ast.
+ * connection in the same block. The current location must be an input
+ * connection.
  * @return {Blockly.ASTNode} The ast node holding the next field or connection
  *     or null if there is no editable field or input connection after the given
  *     input.
  * @private
  */
-Blockly.ASTNode.prototype.findNextForInput_ = function(location) {
-  var block = location.getSourceBlock();
-  var curIdx = block.inputList.indexOf(location);
+Blockly.ASTNode.prototype.findNextForInput_ = function() {
+  var parentInput = this.location_.getParentInput();
+  var block = parentInput.getSourceBlock();
+  var curIdx = block.inputList.indexOf(parentInput);
   for (var i = curIdx + 1, input; input = block.inputList[i]; i++) {
     var fieldRow = input.fieldRow;
     for (var j = 0, field; field = fieldRow[j]; j++) {
@@ -288,14 +289,14 @@ Blockly.ASTNode.prototype.findNextForInput_ = function(location) {
 
 /**
  * Given a field find the next editable field or an input with a non null
- * connection in the same block.
- * @param {!Blockly.Field} location Current location in the ast.
+ * connection in the same block. The current location must be a field.
  * @return {Blockly.ASTNode} The ast node pointing to the next field or
  *     connection or null if there is no editable field or input connection
  *     after the given input.
  * @private
  */
-Blockly.ASTNode.prototype.findNextForField_ = function(location) {
+Blockly.ASTNode.prototype.findNextForField_ = function() {
+  var location = this.location_;
   var input = location.getParentInput();
   var block = location.getSourceBlock();
   var curIdx = block.inputList.indexOf(input);
@@ -318,13 +319,14 @@ Blockly.ASTNode.prototype.findNextForField_ = function(location) {
 
 /**
  * Given an input find the previous editable field or an input with a non null
- * connection in the same block.
- * @param {!Blockly.Input} location Current location in the ast.
+ * connection in the same block. The current location must be an input
+ * connection.
  * @return {Blockly.ASTNode} The ast node holding the previous field or
  *     connection.
  * @private
  */
-Blockly.ASTNode.prototype.findPrevForInput_ = function(location){
+Blockly.ASTNode.prototype.findPrevForInput_ = function(){
+  var location = this.location_.getParentInput();
   var block = location.getSourceBlock();
   var curIdx = block.inputList.indexOf(location);
   for (var i = curIdx, input; input = block.inputList[i]; i--) {
@@ -343,12 +345,12 @@ Blockly.ASTNode.prototype.findPrevForInput_ = function(location){
 
 /**
  * Given a field find the previous editable field or an input with a non null
- * connection in the same block.
- * @param {!Blockly.Field} location The current location of the cursor.
+ * connection in the same block. The current location must be a field.
  * @return {Blockly.ASTNode} The ast node holding the previous input or field.
  * @private
  */
-Blockly.ASTNode.prototype.findPrevForField_ = function(location) {
+Blockly.ASTNode.prototype.findPrevForField_ = function() {
+  var location = this.location_;
   var parentInput = location.getParentInput();
   var block = location.getSourceBlock();
   var curIdx = block.inputList.indexOf(parentInput);
@@ -516,11 +518,10 @@ Blockly.ASTNode.prototype.next = function() {
       return Blockly.ASTNode.createBlockNode(this.location_.getSourceBlock());
 
     case Blockly.ASTNode.types.FIELD:
-      var field = /** @type {Blockly.Field} */ (this.location_);
-      return this.findNextForField_(field);
+      return this.findNextForField_();
 
     case Blockly.ASTNode.types.INPUT:
-      return this.findNextForInput_(this.location_.getParentInput());
+      return this.findNextForInput_();
 
     case Blockly.ASTNode.types.BLOCK:
       var nextConnection = this.location_.nextConnection;
@@ -597,11 +598,10 @@ Blockly.ASTNode.prototype.prev = function() {
       return null;
 
     case Blockly.ASTNode.types.FIELD:
-      var field = /** @type {!Blockly.Field} */ (this.location_);
-      return this.findPrevForField_(field);
+      return this.findPrevForField_();
 
     case Blockly.ASTNode.types.INPUT:
-      return this.findPrevForInput_(this.location_.getParentInput());
+      return this.findPrevForInput_();
 
     case Blockly.ASTNode.types.BLOCK:
       var prevConnection = this.location_.previousConnection;

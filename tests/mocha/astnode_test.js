@@ -133,7 +133,7 @@ suite('ASTNode', function() {
     test('findNextForField_', function() {
       var field = this.blocks.statementInput1.inputList[0].fieldRow[0];
       var field2 = this.blocks.statementInput1.inputList[0].fieldRow[1];
-      var node = Blockly.ASTNode.createFieldNode(field2);
+      var node = Blockly.ASTNode.createFieldNode(field);
       var newASTNode = node.findNextForField_(field);
       assertEquals(newASTNode.getLocation(), field2);
     });

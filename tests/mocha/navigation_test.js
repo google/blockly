@@ -13,7 +13,7 @@ suite('Navigation', function() {
       this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
     });
 
-    test('Focuses workspace from flyout', function() {
+    test('Focuses workspace from flyout (e)', function() {
       Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_FLYOUT;
       var mockEvent = {
         keyCode: goog.events.KeyCodes.E
@@ -23,6 +23,15 @@ suite('Navigation', function() {
           Blockly.Navigation.STATE_WS);
     });
 
+    test('Focuses workspace from flyout (escape)', function() {
+      Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_FLYOUT;
+      var mockEvent = {
+        keyCode: goog.events.KeyCodes.ESC
+      };
+      chai.assert.isTrue(Blockly.Navigation.navigate(mockEvent));
+      chai.assert.equal(Blockly.Navigation.currentState_,
+          Blockly.Navigation.STATE_WS);
+    });
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
@@ -127,10 +136,19 @@ suite('Navigation', function() {
       chai.assert.equal(Blockly.Navigation.flyoutBlock_.getFieldValue("TEXT"), "First");
     });
 
-    test('Focuses workspace from toolbox', function() {
+    test('Focuses workspace from toolbox (e)', function() {
       Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_TOOLBOX;
       var mockEvent = {
         keyCode: goog.events.KeyCodes.E
+      };
+      chai.assert.isTrue(Blockly.Navigation.navigate(mockEvent));
+      chai.assert.equal(Blockly.Navigation.currentState_,
+          Blockly.Navigation.STATE_WS);
+    });
+    test('Focuses workspace from toolbox (escape)', function() {
+      Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_TOOLBOX;
+      var mockEvent = {
+        keyCode: goog.events.KeyCodes.ESC
       };
       chai.assert.isTrue(Blockly.Navigation.navigate(mockEvent));
       chai.assert.equal(Blockly.Navigation.currentState_,

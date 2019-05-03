@@ -555,12 +555,8 @@ Blockly.Navigation.keyboardOut = function() {
  */
 Blockly.Navigation.markConnection = function() {
   var curNode = Blockly.Navigation.cursor_.getCurNode();
-  var location = curNode.getLocation();
-
-  //TODO: Add a helper function for identifying if a node is a connection.
-  if (location instanceof Blockly.Connection) {
-    Blockly.Navigation.insertionNode_ =
-      Blockly.Navigation.cursor_.getCurNode();
+  if (curNode.isConnection()) {
+    Blockly.Navigation.insertionNode_ = curNode;
   }
 };
 

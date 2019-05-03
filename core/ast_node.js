@@ -41,7 +41,8 @@ Blockly.ASTNode = function(type, location, params) {
   if (!location) {
     throw Error('Cannot create a node without a location.');
   }
-  /*
+
+  /**
    * The type of the location.
    * One of Blockly.ASTNode.types
    * @type {string}
@@ -49,7 +50,14 @@ Blockly.ASTNode = function(type, location, params) {
    */
   this.type_ = type;
 
-  /*
+  /**
+   * Whether the location points to a connection.
+   * @type {boolean}
+   * @private
+   */
+  this.isConnection_ = Blockly.ASTNode.isConnectionType(type);
+
+  /**
    * The location of the ast node.
    * @type {!(Blockly.Block|Blockly.Connection|Blockly.Field|Blockly.Workspace)}
    * @private
@@ -89,6 +97,23 @@ Blockly.ASTNode.wsMove_ = 10;
  * @private
  */
 Blockly.ASTNode.DEFAULT_OFFSET_Y = -20;
+
+/**
+ * Whether an ast node of the given type points to a connection.
+ * @param {string} type The type to check.  One of Blockly.ASTNode.types.
+ * @return {boolean} True if a node of the given type points to a connection.
+ * @package
+ */
+Blockly.ASTNode.isConnectionType = function(type) {
+  switch (type) {
+    case Blockly.ASTNode.types.PREVIOUS:
+    case Blockly.ASTNode.types.NEXT:
+    case Blockly.ASTNode.types.INPUT:
+    case Blockly.ASTNode.types.OUTPUT:
+      return true;
+  }
+  return false;
+};
 
 /**
  * Create an ast node pointing to a field.
@@ -231,6 +256,15 @@ Blockly.ASTNode.prototype.getWsCoordinate = function() {
  */
 Blockly.ASTNode.prototype.getParentInput = function() {
   return this.parentInput_;
+};
+
+/**
+ * Whether the node points to a connection.
+ * @return {boolean} [description]
+ * @package
+ */
+Blockly.ASTNode.prototype.isConnection = function() {
+  return this.isConnection_;
 };
 
 /**

@@ -325,21 +325,18 @@ Blockly.ASTNode.prototype.findNextForField_ = function(location) {
  *     connection.
  * @private
  */
-Blockly.ASTNode.prototype.findPrevForInput_ = function(location, parentInput){
-  if (!parentInput) {
-    return null;
-  }
+Blockly.ASTNode.prototype.findPrevForInput_ = function(location){
   var block = location.getSourceBlock();
-  var inputs = block.inputList;
-  var curIdx = inputs.indexOf(parentInput);
-
-  for (var i = curIdx, newInput; newInput = inputs[i]; i--) {
-    var fieldNode = this.findPreviousEditableField_(location, newInput, true);
-    if (newInput.connection && newInput.connection !== parentInput.connection) {
-      return Blockly.ASTNode.createInputNode(newInput);
-    } else if (fieldNode && fieldNode.getLocation()
-        && fieldNode.getLocation() !== location) {
-      return fieldNode;
+  var curIdx = block.inputList.indexOf(location);
+  for (var i = curIdx, input; input = block.inputList[i]; i--) {
+    if (input.connection && input !== location) {
+      return Blockly.ASTNode.createInputNode(input);
+    }
+    var fieldRow = input.fieldRow;
+    for (var j = fieldRow.length - 1, field; field = fieldRow[j]; j--) {
+      if (field.isCurrentlyEditable()) {
+        return Blockly.ASTNode.createFieldNode(field);
+      }
     }
   }
   return null;
@@ -352,19 +349,28 @@ Blockly.ASTNode.prototype.findPrevForInput_ = function(location, parentInput){
  * @return {Blockly.ASTNode} The ast node holding the previous input or field.
  * @private
  */
-Blockly.ASTNode.prototype.findPrevForField_ = function(location, parentInput) {
-  if (!parentInput) {
-    return null;
-  }
+Blockly.ASTNode.prototype.findPrevForField_ = function(location) {
+  var parentInput = location.getParentInput();
   var block = location.getSourceBlock();
-  var inputs = block.inputList;
-  var curIdx = inputs.indexOf(parentInput);
-  var newAstNode = this.findPreviousEditableField_(location, parentInput);
-
-  if (!newAstNode && curIdx - 1 >= 0) {
-    newAstNode = Blockly.ASTNode.createInputNode(inputs[curIdx - 1]);
+  var curIdx = block.inputList.indexOf(parentInput);
+  var fieldIdx = parentInput.fieldRow.indexOf(location) - 1;
+  for (var i = curIdx, input; input = block.inputList[i]; i--) {
+    if (input.connection && input !== parentInput) {
+      return Blockly.ASTNode.createInputNode(input);
+    }
+    var fieldRow = input.fieldRow;
+    while (fieldIdx > -1) {
+      if (fieldRow[fieldIdx].isCurrentlyEditable()) {
+        return Blockly.ASTNode.createFieldNode(fieldRow[fieldIdx]);
+      }
+      fieldIdx--;
+    }
+    //Reset the fieldIdx to the length of the field row of the previous input
+    if (i - 1 >= 0) {
+      fieldIdx = block.inputList[i - 1].fieldRow.length - 1;
+    }
   }
-  return newAstNode;
+  return null;
 };
 
 /**
@@ -589,36 +595,28 @@ Blockly.ASTNode.prototype.prev = function() {
       return this.navigateBetweenStacks_(false);
 
     case Blockly.ASTNode.types.OUTPUT:
-      var sourceBlock = this.location_.getSourceBlock();
-      if (sourceBlock && sourceBlock.previousConnection) {
-        var prevConnection = sourceBlock.previousConnection;
-        return Blockly.ASTNode.createConnectionNode(prevConnection);
-      }
-      break;
+      return null;
 
     case Blockly.ASTNode.types.FIELD:
       var field = /** @type {!Blockly.Field} */ (this.location_);
-      var parentInput = this.location_.getParentInput();
-      return this.findPrevForField_(field, parentInput);
+      return this.findPrevForField_(field);
 
     case Blockly.ASTNode.types.INPUT:
-      var connection = /** @type {!Blockly.Connection} */ (this.location_);
-      return this.findPrevForInput_(connection, this.getParentInput());
+      return this.findPrevForInput_(this.location_.getParentInput());
 
     case Blockly.ASTNode.types.BLOCK:
-      var output = this.location_.outputConnection;
-      if (output) {
-        return Blockly.ASTNode.createConnectionNode(output);
-      } else {
-        var prevConnection = this.location_.previousConnection;
-        return Blockly.ASTNode.createConnectionNode(prevConnection);
+      var prevConnection = this.location_.previousConnection;
+      var outputConnection = this.location_.outputConnection;
+      var topConnection = prevConnection || outputConnection;
+      if (topConnection) {
+        return Blockly.ASTNode.createConnectionNode(topConnection);
       }
+      break;
 
     case Blockly.ASTNode.types.PREVIOUS:
-      var prevBlock = this.location_.targetBlock();
-      if (prevBlock) {
-        var nextConnection = prevBlock.nextConnection;
-        return Blockly.ASTNode.createConnectionNode(nextConnection);
+      var targetConnection = this.location_.targetConnection;
+      if (targetConnection) {
+        return Blockly.ASTNode.createConnectionNode(targetConnection);
       }
       break;
 

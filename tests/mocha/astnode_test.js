@@ -126,7 +126,7 @@ suite('ASTNode', function() {
       var input2 = this.blocks.statementInput1.inputList[1];
       var connection = input2.connection;
       var node = Blockly.ASTNode.createConnectionNode(connection);
-      var newASTNode = node.findPrevForInput_(connection, input2);
+      var newASTNode = node.findPrevForInput_(input2);
       assertEquals(newASTNode.getLocation(), input.connection);
     });
 
@@ -143,7 +143,7 @@ suite('ASTNode', function() {
       var field = this.blocks.statementInput1.inputList[0].fieldRow[0];
       var field2 = this.blocks.statementInput1.inputList[0].fieldRow[1];
       var node = Blockly.ASTNode.createFieldNode(field2);
-      var newASTNode = node.findPrevForField_(field2, input);
+      var newASTNode = node.findPrevForField_(field2);
       assertEquals(newASTNode.getLocation(), field);
     });
 
@@ -290,6 +290,11 @@ suite('ASTNode', function() {
         delete this.blocks.twoFields;
         delete this.blocks.fieldAndInputs2;
         delete this.blocks.singleBlock;
+
+        delete Blockly.Blocks['fields_and_input2'];
+        delete Blockly.Blocks['two_fields'];
+        delete Blockly.Blocks['fields_and_input'];
+        delete Blockly.Blocks['top_connection'];
       });
 
       test('fromPreviousToBlock', function() {
@@ -397,56 +402,183 @@ suite('ASTNode', function() {
     });
 
     suite('Previous', function() {
-      test('previousConnectionTopBlock', function() {
+      setup(function() {
+        Blockly.defineBlocksWithJsonArray([{
+          "type": "start_block",
+          "message0": "",
+          "nextStatement": null,
+          "colour": 230,
+          "tooltip": "",
+          "helpUrl": ""
+        },
+        {
+          "type": "fields_and_input",
+          "message0": "%1 hi %2 %3 %4",
+          "args0": [
+            {
+              "type": "field_input",
+              "name": "NAME",
+              "text": "default"
+            },
+            {
+              "type": "input_dummy"
+            },
+            {
+              "type": "field_input",
+              "name": "NAME",
+              "text": "default"
+            },
+            {
+              "type": "input_value",
+              "name": "NAME"
+            }
+          ],
+          "previousStatement": null,
+          "nextStatement": null,
+          "colour": 230,
+          "tooltip": "",
+          "helpUrl": ""
+        },
+        {
+          "type": "fields_and_input2",
+          "message0": "%1 %2 %3 hi %4 bye",
+          "args0": [
+            {
+              "type": "input_value",
+              "name": "NAME"
+            },
+            {
+              "type": "field_input",
+              "name": "NAME",
+              "text": "default"
+            },
+            {
+              "type": "input_value",
+              "name": "NAME"
+            },
+            {
+              "type": "input_statement",
+              "name": "NAME"
+            }
+          ],
+          "colour": 230,
+          "tooltip": "",
+          "helpUrl": ""
+        }]);
+
+        var noPrevConnection = this.workspace.newBlock('start_block');
+        var fieldsAndInputs = this.workspace.newBlock('fields_and_input');
+        var fieldsAndInputs2 = this.workspace.newBlock('fields_and_input2');
+
+        this.blocks.noPrevConnection = noPrevConnection;
+        this.blocks.fieldsAndInputs = fieldsAndInputs;
+        this.blocks.fieldsAndInputs2 = fieldsAndInputs2;
+      });
+      teardown(function() {
+        delete this.blocks.noPrevConnection;
+        delete this.blocks.fieldAndInputs;
+        delete this.blocks.fieldsAndInputs2;
+
+        delete Blockly.Blocks['fields_and_input2'];
+        delete Blockly.Blocks['start_block'];
+        delete Blockly.Blocks['fields_and_input'];
+      });
+
+      test('fromPreviousToNull', function() {
         var prevConnection = this.blocks.statementInput1.previousConnection;
         var node = Blockly.ASTNode.createConnectionNode(prevConnection);
         var prevNode = node.prev();
         assertEquals(prevNode, null);
       });
-      test('previousConnection', function() {
+      test('fromPreviousToNext', function() {
         var prevConnection = this.blocks.statementInput2.previousConnection;
         var node = Blockly.ASTNode.createConnectionNode(prevConnection);
         var prevNode = node.prev();
         var nextConnection = this.blocks.statementInput1.nextConnection;
         assertEquals(prevNode.getLocation(), nextConnection);
       });
-      test('block', function() {
+      test('fromPreviousToInput', function() {
+        var prevConnection = this.blocks.statementInput3.previousConnection;
+        var inputConnection = this.blocks.statementInput2.inputList[1].connection;
+        var node = Blockly.ASTNode.createConnectionNode(prevConnection);
+        var prevNode = node.prev();
+        assertEquals(prevNode.getLocation(), inputConnection);
+      });
+      test('fromBlockToPrevious', function() {
         var node = Blockly.ASTNode.createBlockNode(this.blocks.statementInput1);
         var prevNode = node.prev();
         var prevConnection = this.blocks.statementInput1.previousConnection;
         assertEquals(prevNode.getLocation(), prevConnection);
       });
-      test('nextConnection', function() {
+      test('fromBlockToNull', function() {
+        var node = Blockly.ASTNode.createBlockNode(this.blocks.noPrevConnection);
+        var prevNode = node.prev();
+        assertEquals(prevNode, null);
+      });
+      test('fromBlockToOutput', function() {
+        var node = Blockly.ASTNode.createBlockNode(this.blocks.fieldWithOutput);
+        var prevNode = node.prev();
+        var outputConnection = this.blocks.fieldWithOutput.outputConnection;
+        assertEquals(prevNode.getLocation(), outputConnection);
+      });
+      test('fromNextToBlock', function() {
         var nextConnection = this.blocks.statementInput1.nextConnection;
         var node = Blockly.ASTNode.createConnectionNode(nextConnection);
         var prevNode = node.prev();
         assertEquals(prevNode.getLocation(), this.blocks.statementInput1);
       });
-      test('input', function() {
+      test('fromInputToField', function() {
         var input = this.blocks.statementInput1.inputList[0];
         var node = Blockly.ASTNode.createInputNode(input);
         var prevNode = node.prev();
         assertEquals(prevNode.getLocation(), input.fieldRow[1]);
       });
-      test('output', function() {
+      test('fromInputToNull', function() {
+        var input = this.blocks.fieldsAndInputs2.inputList[0];
+        var node = Blockly.ASTNode.createInputNode(input);
+        var prevNode = node.prev();
+        assertEquals(prevNode, null);
+      });
+      test('fromInputToInput', function() {
+        var input = this.blocks.fieldsAndInputs2.inputList[2];
+        var inputConnection = this.blocks.fieldsAndInputs2.inputList[1].connection;
+        var node = Blockly.ASTNode.createInputNode(input);
+        var prevNode = node.prev();
+        assertEquals(prevNode.getLocation(), inputConnection);
+      });
+      test('fromOutputToNull', function() {
         var output = this.blocks.fieldWithOutput.outputConnection;
         var node = Blockly.ASTNode.createConnectionNode(output);
         var prevNode = node.prev();
         assertEquals(prevNode, null);
       });
-      test('field', function() {
+      test('fromFieldToNull', function() {
         var field = this.blocks.statementInput1.inputList[0].fieldRow[0];
         var node = Blockly.ASTNode.createFieldNode(field);
         var prevNode = node.prev();
         assertEquals(prevNode, null);
       });
-      test('isStack', function() {
+      test('fromFieldToInput', function() {
+        var field = this.blocks.fieldsAndInputs2.inputList[1].fieldRow[0];
+        var inputConnection = this.blocks.fieldsAndInputs2.inputList[0].connection;
+        var node = Blockly.ASTNode.createFieldNode(field);
+        var prevNode = node.prev();
+        assertEquals(prevNode.getLocation(), inputConnection);
+      });
+      test('fromFieldToField', function() {
+        var field = this.blocks.fieldsAndInputs.inputList[1].fieldRow[0];
+        var field2 = this.blocks.fieldsAndInputs.inputList[0].fieldRow[0];
+        var node = Blockly.ASTNode.createFieldNode(field);
+        var prevNode = node.prev();
+        assertEquals(prevNode.getLocation(), field2);
+      });
+      test('fromStackToStack', function() {
         var node = Blockly.ASTNode.createStackNode(this.blocks.statementInput4);
         var prevNode = node.prev();
         assertEquals(prevNode.getLocation(), this.blocks.statementInput1);
         assertEquals(prevNode.getType(), Blockly.ASTNode.types.STACK);
       });
-      test('workspace', function() {
+      test('moveCursorToLeft', function() {
         var coordinate = new goog.math.Coordinate(100,100);
         var node = Blockly.ASTNode.createWorkspaceNode(this.workspace, coordinate);
         var nextNode = node.prev();
@@ -495,6 +627,9 @@ suite('ASTNode', function() {
         delete this.blocks.dummyInputValue;
         delete this.blocks.fieldWithOutput2;
         delete this.emptyWorkspace;
+
+        delete Blockly.Blocks['dummy_input'];
+        delete Blockly.Blocks['dummy_inputValue'];
       });
 
       test('fromInputToOutput', function() {
@@ -632,6 +767,9 @@ suite('ASTNode', function() {
         delete this.blocks.secondBlock;
         delete this.blocks.outputNextBlock;
         delete this.blocks.fieldWithOutput2;
+
+        delete Blockly.Blocks['start_block'];
+        delete Blockly.Blocks['output_next'];
       });
 
       test('fromInputToBlock', function() {

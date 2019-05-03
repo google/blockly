@@ -139,7 +139,6 @@ suite('ASTNode', function() {
     });
 
     test('findPrevForField_', function() {
-      var input = this.blocks.statementInput1.inputList[0];
       var field = this.blocks.statementInput1.inputList[0].fieldRow[0];
       var field2 = this.blocks.statementInput1.inputList[0].fieldRow[1];
       var node = Blockly.ASTNode.createFieldNode(field2);

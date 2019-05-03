@@ -317,10 +317,9 @@ Blockly.ASTNode.prototype.findNextForField_ = function(location) {
 };
 
 /**
- * Given the current selected field or connection find the previous connection
- *     or field.
- * @param {!Blockly.Connection} location Current location in the ast.
- * @param {Blockly.Input} parentInput Parent input of the connection or field.
+ * Given an input find the previous editable field or an input with a non null
+ * connection in the same block.
+ * @param {!Blockly.Input} location Current location in the ast.
  * @return {Blockly.ASTNode} The ast node holding the previous field or
  *     connection.
  * @private
@@ -343,9 +342,9 @@ Blockly.ASTNode.prototype.findPrevForInput_ = function(location){
 };
 
 /**
- * Find the previous input or field given a field location.
+ * Given a field find the previous editable field or an input with a non null
+ * connection in the same block.
  * @param {!Blockly.Field} location The current location of the cursor.
- * @param {Blockly.Input} parentInput The parent input of the field.
  * @return {Blockly.ASTNode} The ast node holding the previous input or field.
  * @private
  */

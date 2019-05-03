@@ -219,6 +219,9 @@ Blockly.onKeyDown_ = function(e) {
   if (e.keyCode == 27) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
+    if (Blockly.keyboardAccessibilityMode) {
+      Blockly.Navigation.navigate(e);
+    }
   } else if (e.keyCode == 8 || e.keyCode == 46) {
     // Delete or backspace.
     // Stop the browser from going back to the previous page.

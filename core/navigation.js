@@ -631,9 +631,10 @@ Blockly.Navigation.flyoutKeyHandler = function(e) {
     Blockly.Navigation.insertFromFlyout();
     console.log('Enter: Flyout : Select');
     return true;
-  } else if (e.keyCode === goog.events.KeyCodes.E) {
+  } else if (e.keyCode === goog.events.KeyCodes.E ||
+      e.keyCode === goog.events.KeyCodes.ESC) {
     Blockly.Navigation.focusWorkspace();
-    console.log('E: Flyout: Exit');
+    console.log('E or ESC: Flyout: Exit');
     return true;
   }
   return false;
@@ -664,8 +665,9 @@ Blockly.Navigation.toolboxKeyHandler = function(e) {
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
     //TODO: focus on flyout OR open if the category is nested
     return true;
-  } else if (e.keyCode === goog.events.KeyCodes.E) {
-    console.log('E: Toolbox: Exit');
+  } else if (e.keyCode === goog.events.KeyCodes.E ||
+      e.keyCode === goog.events.KeyCodes.ESC) {
+    console.log('E or ESC: Toolbox: Exit');
     Blockly.Navigation.focusWorkspace();
     return true;
   }

@@ -187,6 +187,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "tirẓi tagacurant",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Ad d-yerr tirẓi tagacurant gar 0.0 (yedda) akked 1.0 (ur yeddi ara).",
+	"MATH_ATAN2_HELPURL": "https://kab.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 seg X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Ad d-yerr arctangent n waggaz (X, Y) s tfesniwin deg -180 ɣer 180.",
 	"TEXT_TEXT_HELPURL": "https://en.wikipedia.org/wiki/String_(computer_science)",
 	"TEXT_TEXT_TOOLTIP": "Asekkil, awal neɣ izirig n uḍris.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "rnu aḍṛis s",
@@ -337,5 +340,6 @@
 	"PROCEDURES_CREATE_DO": "rnu '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "ma yella azal d idetti, ad d-yerr azal-nniḍen wis sin.",
 	"PROCEDURES_IFRETURN_WARNING": "Ɣur-k: Iḥder-agi yezmer ur yettwaseqdac ara ala di tebadut n twuri-agi.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Ini kra..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Ini kra...",
+	"COLLAPSED_WARNINGS_WARNING": "Iḥedran yettin gebren ilɣa."
 }

@@ -285,7 +285,6 @@ Blockly.CursorSvg.prototype.positionInputOutput_ = function(connection) {
   var x = connection.offsetInBlock_.x;
   var y = connection.offsetInBlock_.y;
 
-  this.cursorInputOutput_.setAttribute('fill', '#f44242');
   this.cursorInputOutput_.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
             (connection.getSourceBlock().RTL ? ' scale(-1 1)' : ''));
 };
@@ -379,7 +378,8 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
         'x': '0',
         'y': '0',
         'rx': '10', 'ry': '10',
-        'style': 'display: none;'
+        'style': 'display: none;',
+        'stroke': colour
       },
       this.cursorSvg_);
 
@@ -390,7 +390,8 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
         'height': Blockly.CursorSvg.CURSOR_HEIGHT,
         'd': 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 5',
         'transform':'',
-        'style':'display: none;'
+        'style':'display: none;',
+        'fill': colour
       },
       this.cursorSvg_);
 

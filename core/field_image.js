@@ -92,20 +92,10 @@ Blockly.FieldImage.fromJson = function(options) {
 Blockly.FieldImage.prototype.EDITABLE = false;
 
 /**
- * Install this image on a block.
+ * Create the block UI for this image.
+ * @package
  */
-Blockly.FieldImage.prototype.init = function() {
-  if (this.fieldGroup_) {
-    // Image has already been initialized once.
-    return;
-  }
-  // Build the DOM.
-  /** @type {SVGElement} */
-  this.fieldGroup_ = Blockly.utils.createSvgElement('g', {}, null);
-  if (!this.visible_) {
-    this.fieldGroup_.style.display = 'none';
-  }
-  /** @type {SVGElement} */
+Blockly.FieldImage.prototype.initView = function() {
   this.imageElement_ = Blockly.utils.createSvgElement(
       'image',
       {

@@ -127,20 +127,17 @@ Blockly.FieldDropdown.prototype.imageElement_ = null;
 Blockly.FieldDropdown.prototype.imageJson_ = null;
 
 /**
- * Install this dropdown on a block.
+ * Create the block UI for this dropdown.
+ * @package
  */
-Blockly.FieldDropdown.prototype.init = function() {
-  if (this.fieldGroup_) {
-    // Dropdown has already been initialized once.
-    return;
-  }
+Blockly.FieldDropdown.prototype.initView = function() {
+  Blockly.FieldDropdown.superClass_.initView.call(this);
+
   // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
   this.arrow_ = Blockly.utils.createSvgElement('tspan', {}, null);
   this.arrow_.appendChild(document.createTextNode(this.sourceBlock_.RTL ?
       Blockly.FieldDropdown.ARROW_CHAR + ' ' :
       ' ' + Blockly.FieldDropdown.ARROW_CHAR));
-
-  Blockly.FieldDropdown.superClass_.init.call(this);
 };
 
 /**

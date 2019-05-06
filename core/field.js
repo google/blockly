@@ -202,15 +202,26 @@ Blockly.Field.prototype.setSourceBlock = function(block) {
 };
 
 /**
- * Install this field on a block.
+ * Initialize everything to render this field. Override
+ * methods initModel and initView rather than this method.
+ * @package
  */
 Blockly.Field.prototype.init = function() {
   if (this.fieldGroup_) {
     // Field has already been initialized once.
     return;
   }
-  // Build the DOM.
   this.fieldGroup_ = Blockly.utils.createSvgElement('g', {}, null);
+  this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
+  this.initView();
+  this.initModel();
+};
+
+/**
+ * Create the block UI for this field.
+ * @package
+ */
+Blockly.Field.prototype.initView = function() {
   if (!this.visible_) {
     this.fieldGroup_.style.display = 'none';
   }
@@ -230,7 +241,6 @@ Blockly.Field.prototype.init = function() {
   this.updateEditable();
 
   this.clickTarget_ = this.getSvgRoot();
-  this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
   this.mouseDownWrapper_ =
       Blockly.bindEventWithChecks_(
           this.clickTarget_, 'mousedown', this, this.onMouseDown_);
@@ -239,6 +249,7 @@ Blockly.Field.prototype.init = function() {
 /**
  * Initializes the model of the field after it has been installed on a block.
  * No-op by default.
+ * @package
  */
 Blockly.Field.prototype.initModel = function() {
 };

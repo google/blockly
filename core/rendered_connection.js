@@ -162,6 +162,13 @@ Blockly.RenderedConnection.prototype.setOffsetInBlock = function(x, y) {
 };
 
 /**
+ * Get the offset of this connection relative to the top left of its block.
+ * @return {!goog.math.Coordinate} The offset of the connection.
+ */
+Blockly.RenderedConnection.prototype.getOffsetInBlock = function() {
+  return this.offsetInBlock_;
+};
+/**
  * Move the blocks on either side of this connection right next to each other.
  * @private
  */

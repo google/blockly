@@ -399,7 +399,8 @@ Blockly.Navigation.insertBlock = function(block, targetConnection) {
       Blockly.Navigation.findBestConnection(block, targetConnection);
 
   if (bestConnection) {
-    if (targetConnection.type == Blockly.PREVIOUS_STATEMENT) {
+    if (targetConnection.type == Blockly.PREVIOUS_STATEMENT
+        || targetConnection.type == Blockly.OUTPUT_VALUE) {
       block.positionNearConnection(bestConnection, targetConnection);
     }
     try {
@@ -492,6 +493,7 @@ Blockly.Navigation.focusWorkspace = function() {
     var connection = previousConnection ? previousConnection : outputConnection;
     var newAstNode = Blockly.ASTNode.createConnectionNode(connection);
     cursor.setLocation(newAstNode);
+    Blockly.selected.unselect();
   } else {
     var ws = cursor.workspace_;
     // TODO: Find the center of the visible workspace.

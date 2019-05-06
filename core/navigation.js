@@ -108,6 +108,15 @@ Blockly.Navigation.markAtCursor = function() {
 };
 
 /**
+ * Remove the marker from its current location and hide it.
+ * @package
+ */
+Blockly.Navigation.removeMark = function() {
+  Blockly.Navigation.marker_.setLocation(null);
+  Blockly.Navigation.marker_.hide();
+};
+
+/**
  * Gets the connection point the user has marked as where they want to connect
  * their next block to. This is the connection used when inserting from the
  * flyout or from the workspace.
@@ -346,9 +355,7 @@ Blockly.Navigation.insertFromFlyout = function() {
   //a previous or output connection
   var astNode = Blockly.ASTNode.createConnectionNode(topConnection);
   Blockly.Navigation.cursor_.setLocation(astNode);
-  // Hide the marker.
-  Blockly.Navigation.marker_.setLocation(null);
-  Blockly.Navigation.marker_.hide();
+  Blockly.Navigation.removeMark();
 };
 
 /**

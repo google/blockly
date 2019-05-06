@@ -497,6 +497,43 @@ Blockly.Navigation.insertAtConnection = function(newBlock, connection) {
   Blockly.Navigation.insertBlock(newBlock, connection);
 };
 
+/**
+ * Disconnect the connection that the cursor is pointing to, and bump blocks.
+ * This is a no-op if the connection cannot be broken or if the cursor is not
+ * pointing to a connection.
+ * @package
+ */
+Blockly.Navigation.disconnectBlocks = function() {
+  var curNode = Blockly.Navigation.cursor_.getCurNode();
+  if (!curNode.isConnection()) {
+    console.log('Cannot disconnect blocks when the cursor is not on a connection');
+    return;
+  }
+  var curConnection = curNode.getLocation();
+  if (!curConnection.isConnected()) {
+    console.log('Cannot disconnect unconnected connection');
+    return;
+  }
+  var superiorConnection =
+      curConnection.isSuperior() ? curConnection : curConnection.targetConnection;
+
+  var inferiorConnection =
+      curConnection.isSuperior() ? curConnection.targetConnection : curConnection;
+
+  if (inferiorConnection.getSourceBlock().isShadow()) {
+    console.log('Cannot disconnect a shadow block');
+    return;
+  }
+  superiorConnection.disconnect();
+  inferiorConnection.bumpAwayFrom_(superiorConnection);
+
+  var rootBlock = superiorConnection.getSourceBlock().getRootBlock();
+  rootBlock.bringToFront();
+
+  var connectionNode = Blockly.ASTNode.createConnectionNode(superiorConnection);
+  Blockly.Navigation.cursor_.setLocation(connectionNode);
+};
+
 /*************************/
 /** Keyboard Navigation **/
 /*************************/
@@ -712,7 +749,11 @@ Blockly.Navigation.workspaceKeyHandler = function(e) {
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
     Blockly.Navigation.handleEnterForWS();
-    console.log('Enter: Workspace : Mark Connection');
+    console.log('Enter: Workspace : Mark');
+    return true;
+  } else if (e.keyCode === goog.events.KeyCodes.X) {
+    console.log('X: Workspace: Disconnect Blocks');
+    Blockly.Navigation.disconnectBlocks();
     return true;
   }
   return false;

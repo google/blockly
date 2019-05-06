@@ -87,12 +87,6 @@ Blockly.CursorSvg.CURSOR_COLOR = '#cc0a0a';
 Blockly.CursorSvg.MARKER_COLOR = '#4286f4';
 
 /**
- * A reference to the current object that the cursor is associated with
- * @type {goog.math.Coordinate|Blockly.Connection|Blockly.Field}
- */
-Blockly.CursorSvg.CURSOR_REFERENCE = null;
-
-/**
  * Parent svg element.
  * This is generally a block's svg root, unless the cursor is on the workspace.
  * @type {Element}
@@ -163,7 +157,6 @@ Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
 Blockly.CursorSvg.prototype.showWithCoordinates_ = function() {
   var workspaceNode = this.getCurNode();
   var wsCoordinate = workspaceNode.getWsCoordinate();
-  this.CURSOR_REFERENCE = wsCoordinate;
   this.currentCursorSvg = this.cursorSvgLine_;
   this.setParent_(this.workspace_.svgBlockCanvas_);
   this.positionLine_(wsCoordinate.x, wsCoordinate.y, Blockly.CursorSvg.CURSOR_WIDTH);
@@ -205,7 +198,7 @@ Blockly.CursorSvg.prototype.showWithNext_ = function() {
   var connection = this.getCurNode().getLocation();
   var targetBlock = connection.getSourceBlock();
   var x = 0;
-  var y = connection.offsetInBlock_.y;
+  var y = connection.getOffsetInBlock().y;
   var width = targetBlock.getHeightWidth().width;
 
   this.currentCursorSvg = this.cursorSvgLine_;
@@ -282,8 +275,8 @@ Blockly.CursorSvg.prototype.positionRect_ = function(x, y, width, height) {
  * @private
  */
 Blockly.CursorSvg.prototype.positionInputOutput_ = function(connection) {
-  var x = connection.offsetInBlock_.x;
-  var y = connection.offsetInBlock_.y;
+  var x = connection.getOffsetInBlock().x;
+  var y = connection.getOffsetInBlock().y;
 
   this.cursorInputOutput_.setAttribute('fill', '#f44242');
   this.cursorInputOutput_.setAttribute('transform', 'translate(' + x + ',' + y + ')' +

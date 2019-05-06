@@ -574,13 +574,6 @@ Blockly.Navigation.keyboardOut = function() {
 };
 
 /**
- * Mark the current location of the cursor.
- */
-Blockly.Navigation.markConnection = function() {
-  Blockly.Navigation.markAtCursor();
-};
-
-/**
  * Handles hitting the enter key on the workspace.
  */
 Blockly.Navigation.handleEnterForWS = function() {
@@ -590,7 +583,7 @@ Blockly.Navigation.handleEnterForWS = function() {
     var location = curNode.getLocation();
     location.showEditor_();
   } else {
-    Blockly.Navigation.markConnection();
+    Blockly.Navigation.markAtCursor();
   }
   Blockly.Navigation.markAtCursor();
 };

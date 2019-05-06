@@ -267,7 +267,7 @@ Blockly.Variables.generateUniqueName = function(workspace) {
 
 /**
  * Handles "Create Variable" button in the default variables toolbox category.
- * It will prompt the user for a varibale name, including re-prompts if a name
+ * It will prompt the user for a variable name, including re-prompts if a name
  * is already in use among the workspace's variables.
  *
  * Custom button handlers can delegate to this function, allowing variables

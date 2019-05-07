@@ -51,6 +51,18 @@ Blockly.Navigation.currentCategory_ = null;
 Blockly.Navigation.flyoutBlock_ = null;
 
 /**
+ * A function to call to give feedback to the user about logs, warnings, and
+ * errors.  You can override this to customize feedback (e.g. warning sounds,
+ * reading out the warning text, etc).
+ * Null by default.
+ * The first argument is one of 'log', 'warn', and 'error'.
+ * The second argument is the message.
+ * @type {function(string, string)}
+ * @public
+ */
+Blockly.Navigation.loggingCallback = null;
+
+/**
  * State indicating focus is currently on the flyout.
  * @type {number}
  */
@@ -334,7 +346,7 @@ Blockly.Navigation.insertFromFlyout = function() {
 
   var flyout = Blockly.getMainWorkspace().getFlyout();
   if (!flyout || !flyout.isVisible()) {
-    console.warn('Trying to insert from the flyout when the flyout does not ' +
+    Blockly.Navigation.warn('Trying to insert from the flyout when the flyout does not ' +
       ' exist or is not visible');
     return;
   }
@@ -429,7 +441,7 @@ Blockly.Navigation.insertBlock = function(block, targetConnection) {
     catch (Error) {
       // TODO: Is there anything else useful to do at this catch?
       // Perhaps position the block near the target connection?
-      console.warn('The connection block is not the right type');
+      Blockly.Navigation.warn('The connection block is not the right type');
     }
   }
 };
@@ -445,7 +457,7 @@ Blockly.Navigation.insertBlockFromWs = function() {
     try {
       sourceConnection.connect(targetConnection);
     } catch (Error) {
-      console.warn('The connection block is not the right type');
+      Blockly.Navigation.warn('The connection block is not the right type');
     }
   }
   // TODO: Is there anything else useful to do at this else?
@@ -506,12 +518,12 @@ Blockly.Navigation.insertAtConnection = function(newBlock, connection) {
 Blockly.Navigation.disconnectBlocks = function() {
   var curNode = Blockly.Navigation.cursor_.getCurNode();
   if (!curNode.isConnection()) {
-    console.log('Cannot disconnect blocks when the cursor is not on a connection');
+    Blockly.Navigation.log('Cannot disconnect blocks when the cursor is not on a connection');
     return;
   }
   var curConnection = curNode.getLocation();
   if (!curConnection.isConnected()) {
-    console.log('Cannot disconnect unconnected connection');
+    Blockly.Navigation.log('Cannot disconnect unconnected connection');
     return;
   }
   var superiorConnection =
@@ -521,7 +533,7 @@ Blockly.Navigation.disconnectBlocks = function() {
       curConnection.isSuperior() ? curConnection.targetConnection : curConnection;
 
   if (inferiorConnection.getSourceBlock().isShadow()) {
-    console.log('Cannot disconnect a shadow block');
+    Blockly.Navigation.log('Cannot disconnect a shadow block');
     return;
   }
   superiorConnection.disconnect();
@@ -642,7 +654,7 @@ Blockly.Navigation.navigate = function(e) {
   var curState = Blockly.Navigation.currentState_;
   if (e.keyCode === goog.events.KeyCodes.T) {
     Blockly.Navigation.focusToolbox();
-    console.log('T: Focus Toolbox');
+    Blockly.Navigation.log('T: Focus Toolbox');
     return true;
   } else if (curState === Blockly.Navigation.STATE_FLYOUT) {
     return Blockly.Navigation.flyoutKeyHandler(e);
@@ -651,7 +663,7 @@ Blockly.Navigation.navigate = function(e) {
   } else if (curState === Blockly.Navigation.STATE_TOOLBOX) {
     return Blockly.Navigation.toolboxKeyHandler(e);
   } else {
-    console.log('Not a valid key ');
+    Blockly.Navigation.log('Not a valid key ');
   }
   return false;
 };
@@ -664,24 +676,24 @@ Blockly.Navigation.navigate = function(e) {
 Blockly.Navigation.flyoutKeyHandler = function(e) {
   if (e.keyCode === goog.events.KeyCodes.W) {
     Blockly.Navigation.selectPreviousBlockInFlyout();
-    console.log('W: Flyout : Previous');
+    Blockly.Navigation.log('W: Flyout : Previous');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.A) {
     Blockly.Navigation.focusToolbox();
-    console.log('A: Flyout : Go To Toolbox');
+    Blockly.Navigation.log('A: Flyout : Go To Toolbox');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.S) {
     Blockly.Navigation.selectNextBlockInFlyout();
-    console.log('S: Flyout : Next');
+    Blockly.Navigation.log('S: Flyout : Next');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
     Blockly.Navigation.insertFromFlyout();
-    console.log('Enter: Flyout : Select');
+    Blockly.Navigation.log('Enter: Flyout : Select');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.E ||
       e.keyCode === goog.events.KeyCodes.ESC) {
     Blockly.Navigation.focusWorkspace();
-    console.log('E or ESC: Flyout: Exit');
+    Blockly.Navigation.log('E or ESC: Flyout: Exit');
     return true;
   }
   return false;
@@ -695,26 +707,26 @@ Blockly.Navigation.flyoutKeyHandler = function(e) {
 Blockly.Navigation.toolboxKeyHandler = function(e) {
   if (e.keyCode === goog.events.KeyCodes.W) {
     Blockly.Navigation.previousCategory();
-    console.log('W: Toolbox : Previous');
+    Blockly.Navigation.log('W: Toolbox : Previous');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.A) {
     Blockly.Navigation.outCategory();
-    console.log('A: Toolbox : Out');
+    Blockly.Navigation.log('A: Toolbox : Out');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.S) {
     Blockly.Navigation.nextCategory();
-    console.log('S: Toolbox : Next');
+    Blockly.Navigation.log('S: Toolbox : Next');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.D) {
     Blockly.Navigation.inCategory();
-    console.log('D: Toolbox : Go to flyout');
+    Blockly.Navigation.log('D: Toolbox : Go to flyout');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
     //TODO: focus on flyout OR open if the category is nested
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.E ||
       e.keyCode === goog.events.KeyCodes.ESC) {
-    console.log('E or ESC: Toolbox: Exit');
+    Blockly.Navigation.log('E or ESC: Toolbox: Exit');
     Blockly.Navigation.focusWorkspace();
     return true;
   }
@@ -729,30 +741,30 @@ Blockly.Navigation.toolboxKeyHandler = function(e) {
 Blockly.Navigation.workspaceKeyHandler = function(e) {
   if (e.keyCode === goog.events.KeyCodes.W) {
     Blockly.Navigation.keyboardOut();
-    console.log('W: Workspace : Out');
+    Blockly.Navigation.log('W: Workspace : Out');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.A) {
     Blockly.Navigation.keyboardPrev();
-    console.log('S: Workspace : Previous');
+    Blockly.Navigation.log('S: Workspace : Previous');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.S) {
     Blockly.Navigation.keyboardIn();
-    console.log('S: Workspace : In');
+    Blockly.Navigation.log('S: Workspace : In');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.D) {
     Blockly.Navigation.keyboardNext();
-    console.log('S: Workspace : Next');
+    Blockly.Navigation.log('S: Workspace : Next');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.I) {
     Blockly.Navigation.insertBlockFromWs();
-    console.log('I: Workspace : Insert/Connect Blocks');
+    Blockly.Navigation.log('I: Workspace : Insert/Connect Blocks');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
     Blockly.Navigation.handleEnterForWS();
-    console.log('Enter: Workspace : Mark');
+    Blockly.Navigation.log('Enter: Workspace : Mark');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.X) {
-    console.log('X: Workspace: Disconnect Blocks');
+    Blockly.Navigation.log('X: Workspace: Disconnect Blocks');
     Blockly.Navigation.disconnectBlocks();
     return true;
   }
@@ -771,4 +783,46 @@ Blockly.Navigation.enableKeyboardAccessibility = function() {
  */
 Blockly.Navigation.disableKeyboardAccessibility = function() {
   Blockly.keyboardAccessibilityMode = false;
+};
+
+/**
+ * Navigation log handler. If loggingCallback is defined, use it.
+ * Otherwise just log to the console.
+ * @param {string} msg The message to log.
+ * @package
+ */
+Blockly.Navigation.log = function(msg) {
+  if (Blockly.Navigation.loggingCallback) {
+    Blockly.Navigation.loggingCallback('log', msg);
+  } else {
+    console.log(msg);
+  }
+};
+
+/**
+ * Navigation warning handler. If loggingCallback is defined, use it.
+ * Otherwise call Blockly.Navigation.warn.
+ * @param {string} msg The warning message.
+ * @package
+ */
+Blockly.Navigation.warn = function(msg) {
+  if (Blockly.Navigation.loggingCallback) {
+    Blockly.Navigation.loggingCallback('warn', msg);
+  } else {
+    console.warn(msg);
+  }
+};
+
+/**
+ * Navigation error handler. If loggingCallback is defined, use it.
+ * Otherwise call console.error.
+ * @param {string} msg The error message.
+ * @package
+ */
+Blockly.Navigation.error = function(msg) {
+  if (Blockly.Navigation.loggingCallback) {
+    Blockly.Navigation.loggingCallback('error', msg);
+  } else {
+    console.error(msg);
+  }
 };

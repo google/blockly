@@ -258,13 +258,19 @@ Blockly.Navigation.outCategory = function() {
  * Change focus to the flyout.
  */
 Blockly.Navigation.focusFlyout = function() {
+  var topBlock = null;
   Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_FLYOUT;
   var workspace = Blockly.getMainWorkspace();
   var toolbox = workspace.getToolbox();
   var cursor = Blockly.Navigation.cursor_;
-  var topBlock;
-  if (toolbox.flyout_ && toolbox.flyout_.getWorkspace()) {
-    var topBlocks = toolbox.flyout_.getWorkspace().getTopBlocks();
+  var flyout = toolbox ? toolbox.flyout_ : workspace.getFlyout();
+
+  if (!Blockly.Navigation.marker_.getCurNode()) {
+    Blockly.Navigation.markAtCursor();
+  }
+
+  if (flyout && flyout.getWorkspace()) {
+    var topBlocks = flyout.getWorkspace().getTopBlocks();
     if (topBlocks.length > 0) {
       topBlock = topBlocks[0];
       Blockly.Navigation.flyoutBlock_ = topBlock;
@@ -330,8 +336,9 @@ Blockly.Navigation.getFlyoutBlocks_ = function() {
   var workspace = Blockly.getMainWorkspace();
   var toolbox = workspace.getToolbox();
   var topBlocks = [];
-  if (toolbox.flyout_ && toolbox.flyout_.getWorkspace()) {
-    topBlocks = toolbox.flyout_.getWorkspace().getTopBlocks();
+  var flyout = toolbox ? toolbox.flyout_ : workspace.getFlyout();
+  if (flyout && flyout.getWorkspace()) {
+    topBlocks = flyout.getWorkspace().getTopBlocks();
   }
   return topBlocks;
 };
@@ -557,7 +564,9 @@ Blockly.Navigation.disconnectBlocks = function() {
  */
 Blockly.Navigation.focusWorkspace = function() {
   var cursor = Blockly.Navigation.cursor_;
-  Blockly.Navigation.resetFlyout(true /* shouldHide */);
+  var reset = Blockly.getMainWorkspace().getToolbox() ? true : false;
+
+  Blockly.Navigation.resetFlyout(reset);
   Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_WS;
   Blockly.Navigation.enableKeyboardAccessibility();
   if (Blockly.selected) {
@@ -653,8 +662,14 @@ Blockly.Navigation.handleEnterForWS = function() {
 Blockly.Navigation.navigate = function(e) {
   var curState = Blockly.Navigation.currentState_;
   if (e.keyCode === goog.events.KeyCodes.T) {
-    Blockly.Navigation.focusToolbox();
-    Blockly.Navigation.log('T: Focus Toolbox');
+    var workspace = Blockly.getMainWorkspace();
+    if (!workspace.getToolbox()) {
+      Blockly.Navigation.focusFlyout();
+      Blockly.Navigation.log('F: Focus Flyout');
+    } else {
+      Blockly.Navigation.focusToolbox();
+      Blockly.Navigation.log('T: Focus Toolbox');
+    }
     return true;
   } else if (curState === Blockly.Navigation.STATE_FLYOUT) {
     return Blockly.Navigation.flyoutKeyHandler(e);

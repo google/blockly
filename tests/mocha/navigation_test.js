@@ -157,4 +157,87 @@ suite('Navigation', function() {
     // More tests:
     // - nested categories
   });
+  suite('Insert Functions', function() {
+    setup(function() {
+      Blockly.defineBlocksWithJsonArray([{
+        "type": "basic_block",
+        "message0": "",
+        "previousStatement": null,
+        "nextStatement": null,
+      }]);
+
+      var toolbox = document.getElementById('toolbox-categories');
+      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+
+      var basicBlock = this.workspace.newBlock('basic_block');
+      var basicBlock2 = this.workspace.newBlock('basic_block');
+
+      this.basicBlock = basicBlock;
+      this.basicBlock2 = basicBlock2;
+    });
+
+    test('Insert from flyout with a valid connection marked', function() {
+      var previousConnection = this.basicBlock.previousConnection;
+      var prevNode = Blockly.ASTNode.createConnectionNode(previousConnection);
+      Blockly.Navigation.marker_.setLocation(prevNode);
+
+      Blockly.Navigation.focusToolbox();
+      Blockly.Navigation.focusFlyout();
+      Blockly.Navigation.insertFromFlyout();
+
+      var insertedBlock = this.basicBlock.previousConnection.targetBlock();
+
+      chai.assert.isTrue(insertedBlock !== null);
+      chai.assert.equal(Blockly.Navigation.currentState_,
+          Blockly.Navigation.STATE_WS);
+    });
+
+    test('Insert Block from flyout without marking a connection', function() {
+      Blockly.Navigation.focusToolbox();
+      Blockly.Navigation.focusFlyout();
+      Blockly.Navigation.insertFromFlyout();
+
+      var numBlocks = this.workspace.getTopBlocks().length;
+
+      //Make sure the block was not connected to anything
+      chai.assert.isNull(this.basicBlock.previousConnection.targetConnection);
+      chai.assert.isNull(this.basicBlock.nextConnection.targetConnection);
+
+      //Make sure that the block was added to the workspace
+      chai.assert.equal(numBlocks, 3);
+      chai.assert.equal(Blockly.Navigation.currentState_,
+          Blockly.Navigation.STATE_WS);
+    });
+
+    test('Add block to workspace with a marked workspace node', function() {
+      var coordinate = new goog.math.Coordinate(100,100);
+      var wsNode = Blockly.ASTNode.createWorkspaceNode(this.workspace, coordinate);
+      Blockly.Navigation.marker_.setLocation(wsNode);
+
+      Blockly.Navigation.insertBlockToWs(this.basicBlock);
+
+      chai.assert.equal(this.basicBlock.getRelativeToSurfaceXY().x, 100);
+      chai.assert.equal(this.basicBlock.getRelativeToSurfaceXY().y, 100);
+    });
+
+    test('Connect two blocks that are on the workspace', function() {
+      var targetNode = Blockly.ASTNode.createConnectionNode(this.basicBlock.previousConnection);
+      Blockly.Navigation.marker_.setLocation(targetNode);
+
+      var sourceNode = Blockly.ASTNode.createConnectionNode(this.basicBlock2.nextConnection);
+      Blockly.Navigation.cursor_.setLocation(sourceNode);
+
+      Blockly.Navigation.insertBlockFromWs();
+      var insertedBlock = this.basicBlock.previousConnection.targetBlock();
+
+      chai.assert.isNotNull(insertedBlock);
+    });
+
+
+    teardown(function() {
+      delete Blockly.Blocks['basic_block'];
+      this.workspace.dispose();
+      Blockly.Navigation.currentCategory_ = null;
+    });
+  });
 });

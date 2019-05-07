@@ -665,7 +665,7 @@ Blockly.Navigation.navigate = function(e) {
     var workspace = Blockly.getMainWorkspace();
     if (!workspace.getToolbox()) {
       Blockly.Navigation.focusFlyout();
-      Blockly.Navigation.log('F: Focus Flyout');
+      Blockly.Navigation.log('T: Focus Flyout');
     } else {
       Blockly.Navigation.focusToolbox();
       Blockly.Navigation.log('T: Focus Toolbox');

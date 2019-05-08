@@ -1,4 +1,4 @@
-suite.skip('Insert/Modify', function() {
+suite('Insert/Modify', function() {
   setup(function() {
     var xmlText = '<xml xmlns="http://www.w3.org/1999/xhtml">' +
       '<block type="stack_block" id="stack_block_1" x="12" y="38"></block>' +
@@ -31,6 +31,7 @@ suite.skip('Insert/Modify', function() {
   });
 
   suite('Marked Connection', function() {
+    // TODO: Marked connection or cursor connection is already connected.
     suite('Marker on next', function() {
       setup(function() {
         Blockly.Navigation.marker_.setLocation(
@@ -109,45 +110,220 @@ suite.skip('Insert/Modify', function() {
       });
     });
 
-    suite('Value input', function() {
+    suite('Marker on value input', function() {
       setup(function() {
-
+        Blockly.Navigation.marker_.setLocation(
+            Blockly.ASTNode.createConnectionNode(
+                this.row_block_1.inputList[0].connection));
       });
-
-      teardown(function() {
-
+      test('Cursor on compatible connection', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createConnectionNode(
+                this.row_block_2.outputConnection));
+        chai.assert.isTrue(Blockly.Navigation.modify());
+        chai.assert.equal(this.row_block_2.getParent().id, 'row_block_1');
       });
-
-      test('', function() {
-
+      test('Cursor on incompatible connection', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createConnectionNode(
+                this.row_block_2.inputList[0].connection));
+        chai.assert.isFalse(Blockly.Navigation.modify());
+      });
+      test('Cursor on really incompatible connection', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createConnectionNode(
+                this.stack_block_1.previousConnection));
+        chai.assert.isFalse(Blockly.Navigation.modify());
+      });
+      test('Cursor on block', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createBlockNode(
+                this.row_block_2));
+        chai.assert.isTrue(Blockly.Navigation.modify());
+        chai.assert.equal(this.row_block_2.getParent().id, 'row_block_1');
       });
     });
 
     suite('Statement input', function() {
+      // TODO: fill this out.
+    });
+
+    suite('Marker on output', function() {
       setup(function() {
-
+        Blockly.Navigation.marker_.setLocation(
+            Blockly.ASTNode.createConnectionNode(
+                this.row_block_1.outputConnection));
       });
-
-      teardown(function() {
-
+      test('Cursor on compatible connection', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createConnectionNode(
+                this.row_block_2.inputList[0].connection));
+        chai.assert.isTrue(Blockly.Navigation.modify());
+        chai.assert.equal(this.row_block_2.getParent().id, 'row_block_1');
       });
+      test('Cursor on incompatible connection', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createConnectionNode(
+                this.row_block_2.outputConnection));
+        chai.assert.isFalse(Blockly.Navigation.modify());
+      });
+      test('Cursor on really incompatible connection', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createConnectionNode(
+                this.stack_block_1.previousConnection));
+        chai.assert.isFalse(Blockly.Navigation.modify());
+      });
+      test('Cursor on block', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createBlockNode(
+                this.row_block_2));
+        chai.assert.isTrue(Blockly.Navigation.modify());
+        chai.assert.equal(this.row_block_1.getParent().id, 'row_block_2');
+      });
+    });
+  });
 
-      test('', function() {
+
+  suite('Marked Workspace', function() {
+    setup(function() {
+      Blockly.Navigation.marker_.setLocation(
+          Blockly.ASTNode.createWorkspaceNode(
+              this.workspace, new goog.math.Coordinate(100, 100)));
+    });
+    test('Cursor on row block', function() {
+      Blockly.Navigation.cursor_.setLocation(
+          Blockly.ASTNode.createBlockNode(
+              this.row_block_1));
+      chai.assert.isTrue(Blockly.Navigation.modify());
+      chai.assert.equal(100, this.row_block_1.xy_.x);
+      chai.assert.equal(100, this.row_block_1.xy_.x);
+    });
+
+    test('Cursor on connection', function() {
+      // TODO: Does the type of the connection matter?
+      Blockly.Navigation.cursor_.setLocation(
+          Blockly.ASTNode.createConnectionNode(
+              this.row_block_1.outputConnection));
+      chai.assert.isTrue(Blockly.Navigation.modify());
+      chai.assert.equal(100, this.row_block_1.xy_.x);
+      chai.assert.equal(100, this.row_block_1.xy_.x);
+    });
+
+    test('Cursor on child block (row)', function() {
+      this.row_block_1.inputList[0].connection.connect(
+          this.row_block_2.outputConnection);
+
+      Blockly.Navigation.cursor_.setLocation(
+          Blockly.ASTNode.createBlockNode(
+              this.row_block_2));
+
+      chai.assert.isTrue(Blockly.Navigation.modify());
+      chai.assert.isNull(this.row_block_2.getParent());
+    });
+
+    test('Cursor on child block (stack)', function() {
+      this.stack_block_1.nextConnection.connect(
+          this.stack_block_2.previousConnection);
+
+      Blockly.Navigation.cursor_.setLocation(
+          Blockly.ASTNode.createBlockNode(
+              this.stack_block_2));
+
+      chai.assert.isTrue(Blockly.Navigation.modify());
+      chai.assert.isNull(this.stack_block_2.getParent());
+    });
+
+    test('Cursor on workspace', function() {
+      Blockly.Navigation.cursor_.setLocation(
+          Blockly.ASTNode.createWorkspaceNode(
+              this.workspace, new goog.math.Coordinate(100, 100)));
+      chai.assert.isFalse(Blockly.Navigation.modify());
+    });
+  });
+
+  suite('Marked Block', function() {
+    suite('Marked any block', function() {
+      // These tests are using a stack block, but do not depend on the type of
+      // the block.
+      setup(function() {
+        Blockly.Navigation.marker_.setLocation(
+            Blockly.ASTNode.createBlockNode(
+                this.stack_block_1));
+      });
+      test('Cursor on workspace', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createWorkspaceNode(
+                this.workspace, new goog.math.Coordinate(100, 100)));
+        chai.assert.isFalse(Blockly.Navigation.modify());
 
       });
     });
-
-    suite('Output', function() {
+    suite('Marked stack block', function() {
       setup(function() {
-
+        Blockly.Navigation.marker_.setLocation(
+            Blockly.ASTNode.createBlockNode(
+                this.stack_block_1));
       });
-
-      teardown(function() {
-
+      test('Cursor on row block', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createBlockNode(
+                this.row_block_1));
+        chai.assert.isFalse(Blockly.Navigation.modify());
       });
-
-      test('', function() {
-
+      test('Cursor on stack block', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createBlockNode(
+                this.stack_block_1));
+        chai.assert.isTrue(Blockly.Navigation.modify());
+        // TODO: figure out which one ends up above and which below.
+      });
+      test('Cursor on next connection', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createConnectionNode(
+                this.stack_block_2.nextConnection));
+        chai.assert.isTrue(Blockly.Navigation.modify());
+        chai.assert.equals(this.stack_block_1.getParent().id, 'stack_block_2');
+      });
+      test('Cursor on previous connection', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createConnectionNode(
+                this.stack_block_2.previousConnection));
+        chai.assert.isTrue(Blockly.Navigation.modify());
+        chai.assert.equals(this.stack_block_2.getParent().id, 'stack_block_1');
+      });
+    });
+    suite('Marked row block', function() {
+      setup(function() {
+        Blockly.Navigation.marker_.setLocation(
+            Blockly.ASTNode.createBlockNode(
+                this.row_block_1));
+      });
+      test('Cursor on stack block', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createBlockNode(
+                this.stack_block_1));
+        chai.assert.isFalse(Blockly.Navigation.modify());
+      });
+      test('Cursor on row block', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createBlockNode(
+                this.row_block_1));
+        chai.assert.isTrue(Blockly.Navigation.modify());
+        // TODO: Figure out which one ends up first and which second.
+      });
+      test('Cursor on value input connection', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createConnectionNode(
+                this.row_block_2.inputList[0].connection));
+        chai.assert.isTrue(Blockly.Navigation.modify());
+        chai.assert.equals(this.row_block_1.getParent().id, 'row_block_2');
+      });
+      test('Cursor on output connection', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createConnectionNode(
+                this.row_block_2.outputConnection));
+        chai.assert.isTrue(Blockly.Navigation.modify());
+        chai.assert.equals(this.row_block_2.getParent().id, 'row_block_1');
       });
     });
   });

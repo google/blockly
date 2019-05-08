@@ -250,20 +250,21 @@ Blockly.CursorSvg.prototype.showWithField_ = function() {
 Blockly.CursorSvg.prototype.showWithStack_ = function() {
   var block = this.getCurNode().getLocation();
 
-  //Gets the height and width of entire stack
+  // Gets the height and width of entire stack.
   var heightWidth = block.getHeightWidth();
 
-  //Add padding so that being on a stack looks different than being on a block
+  // Add padding so that being on a stack looks different than being on a block.
   var width = heightWidth.width + Blockly.CursorSvg.STACK_PADDING;
   var height = heightWidth.height + Blockly.CursorSvg.STACK_PADDING;
 
-  //Shift the rectangle slightly to upper left so padding is equal on all sides
+  // Shift the rectangle slightly to upper left so padding is equal on all sides.
   var x =  -1 * Blockly.CursorSvg.STACK_PADDING / 2;
   var y =  -1 * Blockly.CursorSvg.STACK_PADDING / 2;
 
-  //If the block has an output connection it needs more padding
+  // If the block has an output connection it needs more padding.
   if (block.outputConnection) {
-    x = -1 * Blockly.CursorSvg.STACK_PADDING;
+    x -= Blockly.BlockSvg.TAB_WIDTH;
+    // width += Blockly.BlockSvg.TAB_WIDTH;
   }
 
   this.currentCursorSvg = this.cursorSvgRect_;

@@ -264,7 +264,6 @@ Blockly.CursorSvg.prototype.showWithStack_ = function() {
   // If the block has an output connection it needs more padding.
   if (block.outputConnection) {
     x -= Blockly.BlockSvg.TAB_WIDTH;
-    // width += Blockly.BlockSvg.TAB_WIDTH;
   }
 
   this.currentCursorSvg = this.cursorSvgRect_;

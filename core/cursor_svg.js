@@ -27,6 +27,7 @@
 goog.provide('Blockly.CursorSvg');
 
 goog.require('Blockly.Cursor');
+goog.require('Blockly.BlockSvg.render');
 
 
 /**
@@ -72,6 +73,12 @@ Blockly.CursorSvg.NOTCH_START_LENGTH = 24;
  */
 Blockly.CursorSvg.VERTICAL_PADDING = 5;
 
+/**
+ * Padding around a stack.
+ * @type {number}
+ * @const
+ */
+Blockly.CursorSvg.STACK_PADDING = 10;
 /**
  * Cursor color.
  * @type {string}
@@ -237,6 +244,37 @@ Blockly.CursorSvg.prototype.showWithField_ = function() {
   this.showCurrent_();
 };
 
+/**
+ * Show the cursor using a stack.
+ * @private
+ */
+Blockly.CursorSvg.prototype.showWithStack_ = function() {
+  var block = this.getCurNode().getLocation();
+
+  // Gets the height and width of entire stack.
+  var heightWidth = block.getHeightWidth();
+
+  // Add padding so that being on a stack looks different than being on a block.
+  var width = heightWidth.width + Blockly.CursorSvg.STACK_PADDING;
+  var height = heightWidth.height + Blockly.CursorSvg.STACK_PADDING;
+
+  // Shift the rectangle slightly to upper left so padding is equal on all sides.
+  var x =  -1 * Blockly.CursorSvg.STACK_PADDING / 2;
+  var y =  -1 * Blockly.CursorSvg.STACK_PADDING / 2;
+
+  // If the block has an output connection it needs more padding.
+  if (block.outputConnection) {
+    x -= Blockly.BlockSvg.TAB_WIDTH;
+  }
+
+  this.currentCursorSvg = this.cursorSvgRect_;
+  this.setParent_(block.getSvgRoot());
+
+  this.positionRect_(x, y, width, height);
+  this.showCurrent_();
+};
+
+
 /**************************/
 /**** Position         ****/
 /**************************/
@@ -325,9 +363,7 @@ Blockly.CursorSvg.prototype.update_ = function() {
   } else if (curNode.getType() === Blockly.ASTNode.types.WORKSPACE) {
     this.showWithCoordinates_();
   } else if (curNode.getType() === Blockly.ASTNode.types.STACK) {
-    //TODO: This should be something else so that we show that we are at the
-    //stack level.
-    this.showWithBlock_();
+    this.showWithStack_();
   }
 };
 

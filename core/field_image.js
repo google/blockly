@@ -34,9 +34,9 @@ goog.require('goog.math.Size');
 
 /**
  * Class for an image on a block.
- * @param {string} src The URL of the image.
- * @param {number} width Width of the image.
- * @param {number} height Height of the image.
+ * @param {string=} opt_src The URL of the image, defaults to an empty string.
+ * @param {!(string|number)} width Width of the image.
+ * @param {!(string|number)} height Height of the image.
  * @param {string=} opt_alt Optional alt text for when block is collapsed.
  * @param {Function=} opt_onClick Optional function to be called when the image
  *     is clicked.  If opt_onClick is defined, opt_alt must also be defined.
@@ -44,19 +44,30 @@ goog.require('goog.math.Size');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldImage = function(src, width, height,
+Blockly.FieldImage = function(opt_src, width, height,
     opt_alt, opt_onClick, opt_flipRtl) {
   this.sourceBlock_ = null;
+
+
+  if (isNaN(height) || isNaN(width)) {
+    throw Error('Height and width values of an image field must cast to' +
+      ' numbers.');
+  }
 
   // Ensure height and width are numbers.  Strings are bad at math.
   this.height_ = Number(height);
   this.width_ = Number(width);
+  if (this.height_ <= 0 || this.width_ <= 0) {
+    throw Error('Height and width values of an image field must be greater' +
+      ' than 0.');
+  }
   this.size_ = new goog.math.Size(this.width_,
       this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
+
   this.flipRtl_ = opt_flipRtl;
   this.tooltip_ = '';
-  this.setValue(src);
-  this.setText(opt_alt);
+  this.setValue(opt_src || '');
+  this.setText(opt_alt || '');
 
   if (typeof opt_onClick == 'function') {
     this.clickHandler_ = opt_onClick;

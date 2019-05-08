@@ -36,7 +36,8 @@ goog.require('goog.math.Size');
 
 /**
  * Class for a non-editable, non-serializable text field.
- * @param {string} text The initial content of the field.
+ * @param {string=} text The initial content of the field, defaults to an
+ *    empty string.
  * @param {string=} opt_class Optional CSS class for the field's text.
  * @extends {Blockly.Field}
  * @constructor
@@ -44,7 +45,7 @@ goog.require('goog.math.Size');
 Blockly.FieldLabel = function(text, opt_class) {
   this.size_ = new goog.math.Size(0, 17.5);
   this.class_ = opt_class;
-  this.setValue(text);
+  this.setValue(text || '');
   this.tooltip_ = '';
 };
 goog.inherits(Blockly.FieldLabel, Blockly.Field);

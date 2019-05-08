@@ -1,5 +1,27 @@
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2019 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 suite('Variable Fields', function() {
+  var FAKE_VARIABLE_NAME = 'yertle';
+  var FAKE_ID = 'turtle';
+
   function getMockBlock(workspace) {
     return {
       'workspace': workspace,
@@ -8,54 +30,49 @@ suite('Variable Fields', function() {
       }
     };
   }
-  function fieldVariable_createAndInitField(workspace) {
-    var fieldVariable = new Blockly.FieldVariable('name1');
+  function initField(fieldVariable, workspace) {
     var mockBlock = getMockBlock(workspace);
     fieldVariable.setSourceBlock(mockBlock);
     // No view to initialize, but still need to init the model.
     fieldVariable.initModel();
     return fieldVariable;
   }
+  function createAndInitFieldConstructor(workspace, variableName) {
+    return initField(new Blockly.FieldVariable(variableName), workspace);
+  }
+  function createAndInitFieldJson(workspace, variableName) {
+    return initField(Blockly.FieldVariable.fromJson(
+        { variable:variableName }), workspace);
+  }
+  function assertValue(variableField, expectedName, opt_expectedId) {
+    var actualName = variableField.getText();
+    var actualId = variableField.getValue();
+    opt_expectedId = opt_expectedId || FAKE_ID;
+    assertEquals(actualName, expectedName);
+    assertEquals(actualId, opt_expectedId);
+  }
+  function assertValueDefault(variableField) {
+    assertValue(variableField, FAKE_VARIABLE_NAME, FAKE_ID);
+  }
 
   setup(function() {
     this.workspace = new Blockly.Workspace();
+
+    sinon.stub(Blockly.utils, 'genUid')
+        .returns(FAKE_ID);
+    sinon.stub(Blockly.Variables, 'generateUniqueName')
+        .returns(FAKE_VARIABLE_NAME);
   });
   teardown(function() {
     this.workspace.dispose();
-  });
-
-  test('Constructor', function() {
-    var fieldVariable = new Blockly.FieldVariable('name1');
-    // The field does not have a variable until after init() is called.
-    assertEquals('', fieldVariable.getText());
-    assertNull(fieldVariable.getValue());
-  });
-
-  test('Set value by ID', function() {
-    this.workspace.createVariable('name2', null, 'id2');
-
-    var fieldVariable = fieldVariable_createAndInitField(this.workspace);
-    var oldId = fieldVariable.getValue();
-
-    fieldVariable.setValue('id2');
-    // Setting value by ID gives us the right text as well.
-    assertEquals('name2', fieldVariable.getText());
-    assertEquals('id2', fieldVariable.getValue());
-    chai.assert.notEqual(oldId, fieldVariable.getValue());
-  });
-
-  test('Set value: variable does not exist', function() {
-    var fieldVariable = fieldVariable_createAndInitField(this.workspace);
-    chai.assert.throws(function() {
-      fieldVariable.setValue('id1');
-    });
+    sinon.restore();
   });
 
   test('Dropdown contains variables', function() {
     // Expect that the dropdown options will contain the variables that exist
     this.workspace.createVariable('name1', '', 'id1');
     this.workspace.createVariable('name2', '', 'id2');
-    var fieldVariable = fieldVariable_createAndInitField(this.workspace);
+    var fieldVariable = createAndInitFieldConstructor(this.workspace, 'name1');
 
     // Expect that variables created after field creation will show up too.
     this.workspace.createVariable('name3', '', 'id3');
@@ -68,9 +85,115 @@ suite('Variable Fields', function() {
     isEqualArrays(result_options[0], ['name1', 'id1']);
     isEqualArrays(result_options[1], ['name2', 'id2']);
     isEqualArrays(result_options[2], ['name3', 'id3']);
-
   });
+  suite('Constructor', function() {
+    test('Null', function() {
+      var variableField = createAndInitFieldConstructor(this.workspace, null);
+      assertValueDefault(variableField);
+    });
+    test('Undefined', function() {
+      var variableField = createAndInitFieldConstructor(
+          this.workspace, undefined);
+      assertValueDefault(variableField);
+    });
+    test('No Value Before InitModel', function() {
+      var fieldVariable = new Blockly.FieldVariable('name1');
+      assertEquals('', fieldVariable.getText());
+      assertNull(fieldVariable.getValue());
+    });
+    test('Given Variable Name', function() {
+      var fieldVariable = createAndInitFieldConstructor(
+          this.workspace, 'name1');
+      assertValue(fieldVariable, 'name1');
+    });
+  });
+  suite('fromJson', function() {
+    test('Null', function() {
+      var variableField = createAndInitFieldJson(this.workspace, null);
+      assertValueDefault(variableField);
+    });
+    test('Undefined', function() {
+      var variableField = createAndInitFieldJson(this.workspace, undefined);
+      assertValueDefault(variableField);
+    });
+    test('No Value Before InitModel', function() {
+      var variableField = new Blockly.FieldVariable('name1');
+      assertEquals('', variableField.getText());
+      assertNull(variableField.getValue());
+    });
+    test('Given Variable Name', function() {
+      var variableField = createAndInitFieldJson(this.workspace, 'name1');
+      assertValue(variableField, 'name1');
+    });
+  });
+  suite('setValue', function() {
+    test.skip('Null', function() {
+      var variableField = createAndInitFieldConstructor(
+          this.workspace, 'name1');
+      variableField.setValue(null);
+      assertValue(variableField, 'name1');
+    });
+    test('Undefined', function() {
+      var variableField = createAndInitFieldConstructor(
+          this.workspace, 'name1');
+      chai.assert.throws(function() {
+        variableField.setValue(undefined);
+      });
+    });
+    test('New Variable ID', function() {
+      this.workspace.createVariable('name2', null, 'id2');
 
+      var variableField = createAndInitFieldConstructor(
+          this.workspace, 'name1');
+      var oldId = variableField.getValue();
+
+      variableField.setValue('id2');
+      // Setting value by ID gives us the right text as well.
+      assertEquals('name2', variableField.getText());
+      assertEquals('id2', variableField.getValue());
+      chai.assert.notEqual(oldId, variableField.getValue());
+    });
+    test('Variable Does not Exist', function() {
+      var variableField = createAndInitFieldConstructor(
+          this.workspace, 'name1');
+      chai.assert.throws(function() {
+        variableField.setValue('id1');
+      });
+    });
+  });
+  suite.skip('Validators', function() {
+    var variableField;
+    setup(function() {
+      this.workspace.createVariable('name1', null, 'id1');
+      this.workspace.createVariable('name2', null, 'id2');
+      this.workspace.createVariable('name3', null, 'id3');
+      variableField = createAndInitFieldConstructor(this.workspace, 'name1');
+    });
+    suite('Null Validator', function() {
+      setup(function() {
+        variableField.setValidator(function() {
+          return null;
+        });
+      });
+      test('New Value', function() {
+        variableField.setValue('id2');
+        assertValue(variableField, 'name1');
+      });
+    });
+    suite('Force \'id\' ID Validator', function() {
+      setup(function() {
+        variableField.setValidator(function(newValue) {
+          return 'id' + newValue.charAt(newValue.length - 1);
+        });
+      });
+      test('New Value', function() {
+        // Must create the var so that the field doesn't throw an error.
+        this.workspace.createVariable('thing2', null, 'other2');
+        variableField.setValue('other2');
+        assertValue(variableField, 'name2');
+      });
+    });
+  });
   suite('Get variable types', function() {
     setup(function() {
       this.workspace.createVariable('name1', 'type1');
@@ -121,7 +244,6 @@ suite('Variable Fields', function() {
       });
     });
   });
-
   suite('Default types', function() {
     test('Default type exists', function() {
       var fieldVariable = new Blockly.FieldVariable(null, null, ['b'], 'b');

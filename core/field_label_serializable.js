@@ -33,8 +33,8 @@ goog.require('Blockly.utils');
 
 /**
  * Class for a non-editable, serializable text field.
- * @param {string} text The initial content of the field.
- * @param {string} opt_class Optional CSS class for the field's text.
+ * @param {!string} text The initial content of the field.
+ * @param {string=} opt_class Optional CSS class for the field's text.
  * @extends {Blockly.FieldLabel}
  * @constructor
  *

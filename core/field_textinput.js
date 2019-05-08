@@ -37,7 +37,8 @@ goog.require('goog.math.Coordinate');
 
 /**
  * Class for an editable text field.
- * @param {string} text The initial content of the field.
+ * @param {string=} text The initial content of the field, defaults to an
+ *    empty string.
  * @param {Function=} opt_validator An optional function that is called
  *     to validate any constraints on what the user entered.  Takes the new
  *     text as an argument and returns either the accepted text, a replacement
@@ -46,7 +47,7 @@ goog.require('goog.math.Coordinate');
  * @constructor
  */
 Blockly.FieldTextInput = function(text, opt_validator) {
-  Blockly.FieldTextInput.superClass_.constructor.call(this, text,
+  Blockly.FieldTextInput.superClass_.constructor.call(this, text || '',
       opt_validator);
 };
 goog.inherits(Blockly.FieldTextInput, Blockly.Field);

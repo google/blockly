@@ -31,20 +31,17 @@ suite.skip('Insert/Modify', function() {
   });
 
   suite('Marked Connection', function() {
-    test('Cursor on workspace', function() {
-      Blockly.Navigation.marker_.setLocation(
-          Blockly.ASTNode.createConnectionNode(
-              this.stack_block_1.nextConnection));
-      Blockly.Navigation.cursor_.setLocation(
-          Blockly.ASTNode.createWorkspaceNode(this.workspace,
-              new goog.math.Coordinate(0, 0)));
-      chai.assert.isFalse(Blockly.Navigation.modify());
-    });
     suite('Marker on next', function() {
       setup(function() {
         Blockly.Navigation.marker_.setLocation(
             Blockly.ASTNode.createConnectionNode(
                 this.stack_block_1.nextConnection));
+      });
+      test('Cursor on workspace', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createWorkspaceNode(this.workspace,
+                new goog.math.Coordinate(0, 0)));
+        chai.assert.isFalse(Blockly.Navigation.modify());
       });
       test('Cursor on compatible connection', function() {
         Blockly.Navigation.cursor_.setLocation(

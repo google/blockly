@@ -77,7 +77,6 @@ Blockly.CursorSvg.VERTICAL_PADDING = 5;
  * @type {number}
  * @const
  */
-
 Blockly.CursorSvg.STACK_PADDING = 10;
 /**
  * Cursor color.
@@ -92,7 +91,6 @@ Blockly.CursorSvg.CURSOR_COLOR = '#cc0a0a';
  * @const
  */
 Blockly.CursorSvg.MARKER_COLOR = '#4286f4';
-
 
 /**
  * Parent svg element.

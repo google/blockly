@@ -102,7 +102,7 @@ function start() {
  * If some tests are failing, load test suites individually to continue
  * debugging.
  */
-function loadSelected() {
+async function loadSelected() {
   var output = document.getElementById('importExport');
   output.style.background = 'gray';
 
@@ -117,7 +117,7 @@ function loadSelected() {
     if (boxList[i].checked) {
       var testUrl = boxList[i].value;
       if (testUrl) {
-        var xmlText = fetchFile(testUrl);
+        var xmlText = await fetchFile(testUrl);
         if (xmlText !== null) {
           fromXml(testUrl, xmlText, /* opt_append */ true);
         }
@@ -143,23 +143,33 @@ function loadOther() {
 }
 
 function fetchFile(xmlUrl) {
-  try {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open('GET', xmlUrl, false);
-    xmlHttp.setRequestHeader('Content-Type', 'text/xml');
-    xmlHttp.send('');
-  } catch (e) {
-    // Attempt to diagnose the problem.
-    var msg = 'Error: Unable to load XML data.\n';
-    if (window.location.protocol == 'file:') {
-      msg += 'This may be due to a security restriction preventing\n' +
-          'access when using the file:// protocol.\n' +
-          'Use an http webserver, or a less paranoid browser.\n';
+  return new Promise( function(resolve, reject) {
+    try {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open('GET', xmlUrl);
+      xmlHttp.setRequestHeader('Content-Type', 'text/xml');
+      xmlHttp.onload = function(e) {
+        if (xmlHttp.readyState === 4) {
+          if (xmlHttp.status === 200) {
+            resolve(xmlHttp.responseText);
+          }
+        }
+      }
+      xmlHttp.send('')
     }
-    alert(msg + '\n' + e);
-    return null;
-  }
-  return xmlHttp.responseText;
+    catch (e) {
+      // Attempt to diagnose the problem.
+      var msg = 'Error: Unable to load XML data.\n';
+      if (window.location.protocol == 'file:') {
+        msg += 'This may be due to a security restriction preventing\n' +
+            'access when using the file:// protocol.\n' +
+            'Use an http webserver, or a less paranoid browser.\n';
+      }
+      alert(msg + '\n' + e);
+      resolve(null);
+      }
+    }
+  ); 
 }
 
 /**

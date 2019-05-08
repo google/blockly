@@ -106,3 +106,26 @@ function assertNotUndefined() {
   var val = _nonCommentArg(1, 1, arguments);
   chai.assert.isNotUndefined(val, commentArg);
 }
+
+function defineStackBlock() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "stack_block",
+    "message0": "",
+    "previousStatement": null,
+    "nextStatement": null
+  }]);
+}
+
+function defineRowBlock() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "row_block",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "INPUT"
+      }
+    ],
+    "output": null
+  }]);
+}

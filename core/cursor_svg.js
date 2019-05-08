@@ -27,7 +27,7 @@
 goog.provide('Blockly.CursorSvg');
 
 goog.require('Blockly.Cursor');
-goog.require('Blockly.BlockSvg');
+goog.require('Blockly.BlockSvg.render');
 
 
 /**

@@ -108,6 +108,13 @@ suite('Insert/Modify', function() {
         chai.assert.isTrue(Blockly.Navigation.modify());
         chai.assert.equal(this.stack_block_1.getPreviousBlock().id, 'stack_block_2');
       });
+      test('Cursor on incompatible block', function() {
+        Blockly.Navigation.cursor_.setLocation(
+            Blockly.ASTNode.createBlockNode(
+                this.row_block_1));
+        chai.assert.isFalse(Blockly.Navigation.modify());
+        chai.assert.isNull(this.stack_block_1.getPreviousBlock());
+      });
     });
 
     suite('Marker on value input', function() {
@@ -200,8 +207,7 @@ suite('Insert/Modify', function() {
       chai.assert.equal(200, pos.y);
     });
 
-    test('Cursor on connection', function() {
-      // TODO: Does the type of the connection matter?
+    test('Cursor on output connection', function() {
       Blockly.Navigation.cursor_.setLocation(
           Blockly.ASTNode.createConnectionNode(
               this.row_block_1.outputConnection));
@@ -209,6 +215,30 @@ suite('Insert/Modify', function() {
       var pos = this.row_block_1.getRelativeToSurfaceXY();
       chai.assert.equal(100, pos.x);
       chai.assert.equal(200, pos.y);
+    });
+
+    test('Cursor on previous connection', function() {
+      Blockly.Navigation.cursor_.setLocation(
+          Blockly.ASTNode.createConnectionNode(
+              this.stack_block_1.previousConnection));
+      chai.assert.isTrue(Blockly.Navigation.modify());
+      var pos = this.stack_block_1.getRelativeToSurfaceXY();
+      chai.assert.equal(100, pos.x);
+      chai.assert.equal(200, pos.y);
+    });
+
+    test('Cursor on input connection', function() {
+      Blockly.Navigation.cursor_.setLocation(
+          Blockly.ASTNode.createConnectionNode(
+              this.row_block_1.inputList[0].connection));
+      chai.assert.isFalse(Blockly.Navigation.modify());
+    });
+
+    test('Cursor on next connection', function() {
+      Blockly.Navigation.cursor_.setLocation(
+          Blockly.ASTNode.createConnectionNode(
+              this.stack_block_1.nextConnection));
+      chai.assert.isFalse(Blockly.Navigation.modify());
     });
 
     test('Cursor on child block (row)', function() {
@@ -221,6 +251,9 @@ suite('Insert/Modify', function() {
 
       chai.assert.isTrue(Blockly.Navigation.modify());
       chai.assert.isNull(this.row_block_2.getParent());
+      var pos = this.row_block_2.getRelativeToSurfaceXY();
+      chai.assert.equal(100, pos.x);
+      chai.assert.equal(200, pos.y);
     });
 
     test('Cursor on child block (stack)', function() {
@@ -233,6 +266,9 @@ suite('Insert/Modify', function() {
 
       chai.assert.isTrue(Blockly.Navigation.modify());
       chai.assert.isNull(this.stack_block_2.getParent());
+      var pos = this.stack_block_2.getRelativeToSurfaceXY();
+      chai.assert.equal(100, pos.x);
+      chai.assert.equal(200, pos.y);
     });
 
     test('Cursor on workspace', function() {

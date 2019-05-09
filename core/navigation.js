@@ -405,13 +405,24 @@ Blockly.Navigation.modify = function() {
     Blockly.Navigation.warn('Cannot insert with no cursor node.');
     return false;
   }
+  var markerType = markerNode.getType();
+  var cursorType = cursorNode.getType();
 
-  if (cursorNode.getType() == Blockly.ASTNode.types.FIELD) {
+  if (markerType == Blockly.ASTNode.types.FIELD) {
+    Blockly.Navigation.warn('Should not have been able to mark a field.');
+    return false;
+  }
+  if (markerType == Blockly.ASTNode.types.BLOCK) {
+    Blockly.Navigation.warn('Should not have been able to mark a block.');
+    return false;
+  }
+
+  if (cursorType == Blockly.ASTNode.types.FIELD) {
     Blockly.Navigation.warn('Cannot attach a field to anything else.');
     return false;
   }
 
-  if (cursorNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
+  if (cursorType == Blockly.ASTNode.types.WORKSPACE) {
     Blockly.Navigation.warn('Cannot attach a workspace to anything else.');
     return false;
   }
@@ -423,22 +434,29 @@ Blockly.Navigation.modify = function() {
     // TODO: Handle the case when one or both are already connected.
     if (cursorNode.isConnection()) {
       return Blockly.Navigation.connect(cursorLoc, markerLoc);
-    } else if (cursorNode.getType() == Blockly.ASTNode.types.BLOCK ||
-        cursorNode.getType() == Blockly.ASTNode.types.STACK) {
+    } else if (cursorType == Blockly.ASTNode.types.BLOCK ||
+        cursorType == Blockly.ASTNode.types.STACK) {
       // TODO: Make insertFromFlyout code similar.
       return Blockly.Navigation.insertBlock(cursorLoc, markerLoc);
     }
-  } else if (markerNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
+  } else if (markerType == Blockly.ASTNode.types.WORKSPACE) {
     // TODO: Make insertFromFlyout code similar.
     if (cursorNode.isConnection()) {
+      if (cursorType == Blockly.ASTNode.types.INPUT ||
+          cursorType == Blockly.ASTNode.types.NEXT) {
+        Blockly.Navigation.warn(
+            'Cannot move a next or input connection to the workspace.');
+        return false;
+      }
       var block = cursorLoc.getSourceBlock();
-    } else if (cursorNode.getType() == Blockly.ASTNode.types.BLOCK ||
-        cursorNode.getType() == Blockly.ASTNode.types.STACK) {
+    } else if (cursorType == Blockly.ASTNode.types.BLOCK ||
+        cursorType == Blockly.ASTNode.types.STACK) {
       var block = cursorLoc;
     } else {
       return false;
     }
     if (block.isShadow()) {
+      Blockly.Navigation.warn('Cannot move a shadow block to the workspace.');
       return false;
     }
     if (block.getParent()) {
@@ -446,10 +464,9 @@ Blockly.Navigation.modify = function() {
     }
     block.moveTo(markerNode.getWsCoordinate());
     return true;
-  } else if (markerNode.getType() == Blockly.ASTNode.types.BLOCK) {
-    return false;
   }
-  return true;
+  Blockly.Navigation.warn('Unexpected state in Blockly.Navigation.modify.');
+  return false;
   // TODO: Make sure the cursor and marker end up in the right places.
 };
 
@@ -527,8 +544,8 @@ Blockly.Navigation.findBestConnection = function(block, connection) {
 Blockly.Navigation.insertBlock = function(block, targetConnection) {
   var bestConnection =
       Blockly.Navigation.findBestConnection(block, targetConnection);
-  if (bestConnection.isConnected() &&
-      !bestConnection.targetConnection.getSourceBlock().isShadow()) {
+  if (bestConnection && bestConnection.isConnected() &&
+      !bestConnection.targetBlock().isShadow()) {
     bestConnection.disconnect();
   }
   return Blockly.Navigation.connect(bestConnection, targetConnection);

@@ -159,7 +159,7 @@ suite('Insert/Modify', function() {
             Blockly.ASTNode.createConnectionNode(
                 this.row_block_2.inputList[0].connection));
         chai.assert.isTrue(Blockly.Navigation.modify());
-        chai.assert.equal(this.row_block_2.getParent().id, 'row_block_1');
+        chai.assert.equal(this.row_block_1.getParent().id, 'row_block_2');
       });
       test('Cursor on incompatible connection', function() {
         Blockly.Navigation.cursor_.setLocation(
@@ -188,15 +188,16 @@ suite('Insert/Modify', function() {
     setup(function() {
       Blockly.Navigation.marker_.setLocation(
           Blockly.ASTNode.createWorkspaceNode(
-              this.workspace, new goog.math.Coordinate(100, 100)));
+              this.workspace, new goog.math.Coordinate(100, 200)));
     });
     test('Cursor on row block', function() {
       Blockly.Navigation.cursor_.setLocation(
           Blockly.ASTNode.createBlockNode(
               this.row_block_1));
       chai.assert.isTrue(Blockly.Navigation.modify());
-      chai.assert.equal(100, this.row_block_1.xy_.x);
-      chai.assert.equal(100, this.row_block_1.xy_.x);
+      var pos = this.row_block_1.getRelativeToSurfaceXY();
+      chai.assert.equal(100, pos.x);
+      chai.assert.equal(200, pos.y);
     });
 
     test('Cursor on connection', function() {
@@ -205,8 +206,9 @@ suite('Insert/Modify', function() {
           Blockly.ASTNode.createConnectionNode(
               this.row_block_1.outputConnection));
       chai.assert.isTrue(Blockly.Navigation.modify());
-      chai.assert.equal(100, this.row_block_1.xy_.x);
-      chai.assert.equal(100, this.row_block_1.xy_.x);
+      var pos = this.row_block_1.getRelativeToSurfaceXY();
+      chai.assert.equal(100, pos.x);
+      chai.assert.equal(200, pos.y);
     });
 
     test('Cursor on child block (row)', function() {
@@ -242,6 +244,8 @@ suite('Insert/Modify', function() {
   });
 
   suite('Marked Block', function() {
+    // TODO: Decide whether it ever makes sense to mark a block, and what to do
+    // if so.  For now all of these attempted modifications will fail.
     suite('Marked any block', function() {
       // These tests are using a stack block, but do not depend on the type of
       // the block.
@@ -274,22 +278,19 @@ suite('Insert/Modify', function() {
         Blockly.Navigation.cursor_.setLocation(
             Blockly.ASTNode.createBlockNode(
                 this.stack_block_1));
-        chai.assert.isTrue(Blockly.Navigation.modify());
-        // TODO: figure out which one ends up above and which below.
+        chai.assert.isFalse(Blockly.Navigation.modify());
       });
       test('Cursor on next connection', function() {
         Blockly.Navigation.cursor_.setLocation(
             Blockly.ASTNode.createConnectionNode(
                 this.stack_block_2.nextConnection));
-        chai.assert.isTrue(Blockly.Navigation.modify());
-        chai.assert.equals(this.stack_block_1.getParent().id, 'stack_block_2');
+        chai.assert.isFalse(Blockly.Navigation.modify());
       });
       test('Cursor on previous connection', function() {
         Blockly.Navigation.cursor_.setLocation(
             Blockly.ASTNode.createConnectionNode(
                 this.stack_block_2.previousConnection));
-        chai.assert.isTrue(Blockly.Navigation.modify());
-        chai.assert.equals(this.stack_block_2.getParent().id, 'stack_block_1');
+        chai.assert.isFalse(Blockly.Navigation.modify());
       });
     });
     suite('Marked row block', function() {
@@ -308,22 +309,19 @@ suite('Insert/Modify', function() {
         Blockly.Navigation.cursor_.setLocation(
             Blockly.ASTNode.createBlockNode(
                 this.row_block_1));
-        chai.assert.isTrue(Blockly.Navigation.modify());
-        // TODO: Figure out which one ends up first and which second.
+        chai.assert.isFalse(Blockly.Navigation.modify());
       });
       test('Cursor on value input connection', function() {
         Blockly.Navigation.cursor_.setLocation(
             Blockly.ASTNode.createConnectionNode(
                 this.row_block_2.inputList[0].connection));
-        chai.assert.isTrue(Blockly.Navigation.modify());
-        chai.assert.equals(this.row_block_1.getParent().id, 'row_block_2');
+        chai.assert.isFalse(Blockly.Navigation.modify());
       });
       test('Cursor on output connection', function() {
         Blockly.Navigation.cursor_.setLocation(
             Blockly.ASTNode.createConnectionNode(
                 this.row_block_2.outputConnection));
-        chai.assert.isTrue(Blockly.Navigation.modify());
-        chai.assert.equals(this.row_block_2.getParent().id, 'row_block_1');
+        chai.assert.isFalse(Blockly.Navigation.modify());
       });
     });
   });

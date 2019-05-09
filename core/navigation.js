@@ -388,6 +388,103 @@ Blockly.Navigation.resetFlyout = function(shouldHide) {
 /************/
 
 /**
+ * Handle the modifier key (currently I for Insert).
+ * @return {boolean} True if the key was handled; false if something went wrong.
+ * @package
+ */
+Blockly.Navigation.modify = function() {
+  var markerNode = Blockly.Navigation.marker_.getCurNode();
+  var cursorNode = Blockly.Navigation.cursor_.getCurNode();
+
+  if (!markerNode) {
+    Blockly.Navigation.warn('Cannot insert with no marked node.');
+    return false;
+  }
+
+  if (!cursorNode) {
+    Blockly.Navigation.warn('Cannot insert with no cursor node.');
+    return false;
+  }
+
+  if (cursorNode.getType() == Blockly.ASTNode.types.FIELD) {
+    Blockly.Navigation.warn('Cannot attach a field to anything else.');
+    return false;
+  }
+
+  if (cursorNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
+    Blockly.Navigation.warn('Cannot attach a workspace to anything else.');
+    return false;
+  }
+
+  var cursorLoc = cursorNode.getLocation();
+  var markerLoc = markerNode.getLocation();
+
+  if (markerNode.isConnection()) {
+    // TODO: Handle the case when one or both are already connected.
+    if (cursorNode.isConnection()) {
+      return Blockly.Navigation.connect(cursorLoc, markerLoc);
+    } else if (cursorNode.getType() == Blockly.ASTNode.types.BLOCK ||
+        cursorNode.getType() == Blockly.ASTNode.types.STACK) {
+      // TODO: Make insertFromFlyout code similar.
+      return Blockly.Navigation.insertBlock(cursorLoc, markerLoc);
+    }
+  } else if (markerNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
+    // TODO: Make insertFromFlyout code similar.
+    if (cursorNode.isConnection()) {
+      var block = cursorLoc.getSourceBlock();
+    } else if (cursorNode.getType() == Blockly.ASTNode.types.BLOCK ||
+        cursorNode.getType() == Blockly.ASTNode.types.STACK) {
+      var block = cursorLoc;
+    } else {
+      return false;
+    }
+    if (block.isShadow()) {
+      return false;
+    }
+    if (block.getParent()) {
+      block.unplug(false);
+    }
+    block.moveTo(markerNode.getWsCoordinate());
+    return true;
+  } else if (markerNode.getType() == Blockly.ASTNode.types.BLOCK) {
+    return false;
+  }
+  return true;
+  // TODO: Make sure the cursor and marker end up in the right places.
+};
+
+/**
+ * Connect the moving connection to the targetConnection.  Disconnect the moving
+ * connection if necessary, and and position the blocks so that the target
+ * connection does not move.
+ * @param {Blockly.RenderedConnection} movingConnection The connection to move.
+ * @param {Blockly.RenderedConnection} targetConnection The connection that
+ *     stays stationary as the movingConnection attaches to it.
+ * @return {boolean} Whether the connection was successful.
+ * @package
+ */
+Blockly.Navigation.connect = function(movingConnection, targetConnection) {
+  if (movingConnection) {
+    var movingBlock = movingConnection.getSourceBlock();
+    if (targetConnection.type == Blockly.PREVIOUS_STATEMENT
+        || targetConnection.type == Blockly.OUTPUT_VALUE) {
+      movingBlock.positionNearConnection(movingConnection, targetConnection);
+    }
+    try {
+      targetConnection.connect(movingConnection);
+      return true;
+    }
+    catch (e) {
+      // TODO: Is there anything else useful to do at this catch?
+      // Perhaps position the block near the target connection?
+      Blockly.Navigation.warn('Connection failed with error: ' + e);
+      return false;
+    }
+  }
+  return false;
+};
+
+/**
  * Finds our best guess of what connection point on the given block the user is
  * trying to connect to given a target connection.
  * @param {Blockly.Block} block The block to be connected.
@@ -425,43 +522,16 @@ Blockly.Navigation.findBestConnection = function(block, connection) {
  * intelligent guess about which connection to use to on the moving block.
  * @param {!Blockly.Block} block The block to move.
  * @param {Blockly.Connection} targetConnection The connection to connect to.
+ * @return {boolean} Whether the connection was successful.
  */
 Blockly.Navigation.insertBlock = function(block, targetConnection) {
   var bestConnection =
       Blockly.Navigation.findBestConnection(block, targetConnection);
-
-  if (bestConnection) {
-    if (targetConnection.type == Blockly.PREVIOUS_STATEMENT
-        || targetConnection.type == Blockly.OUTPUT_VALUE) {
-      block.positionNearConnection(bestConnection, targetConnection);
-    }
-    try {
-      targetConnection.connect(bestConnection);
-    }
-    catch (Error) {
-      // TODO: Is there anything else useful to do at this catch?
-      // Perhaps position the block near the target connection?
-      Blockly.Navigation.warn('The connection block is not the right type');
-    }
+  if (bestConnection.isConnected() &&
+      !bestConnection.targetConnection.getSourceBlock().isShadow()) {
+    bestConnection.disconnect();
   }
-};
-
-/**
- * Tries to connect the current location of the cursor and the insertion
- * connection.
- */
-Blockly.Navigation.insertBlockFromWs = function() {
-  var targetConnection = Blockly.Navigation.getInsertionConnection();
-  var sourceConnection = Blockly.Navigation.cursor_.getCurNode().getLocation();
-  if (targetConnection && sourceConnection) {
-    try {
-      sourceConnection.connect(targetConnection);
-    } catch (Error) {
-      Blockly.Navigation.warn('The connection block is not the right type');
-    }
-  }
-  // TODO: Is there anything else useful to do at this else?
-  // Perhaps position the block near the target connection?
+  return Blockly.Navigation.connect(bestConnection, targetConnection);
 };
 
 /**
@@ -756,7 +826,7 @@ Blockly.Navigation.workspaceKeyHandler = function(e) {
     Blockly.Navigation.log('S: Workspace : Next');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.I) {
-    Blockly.Navigation.insertBlockFromWs();
+    Blockly.Navigation.modify();
     Blockly.Navigation.log('I: Workspace : Insert/Connect Blocks');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {

@@ -31,6 +31,7 @@
 goog.provide('Blockly.ContextMenu');
 
 goog.require('Blockly.Events.BlockCreate');
+goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.uiMenu');
 goog.require('Blockly.Xml');
@@ -279,7 +280,7 @@ Blockly.ContextMenu.blockDuplicateOption = function(block) {
  */
 Blockly.ContextMenu.blockCommentOption = function(block) {
   var commentOption = {
-    enabled: !Blockly.utils.userAgent.IE
+    enabled: !Blockly.userAgent.IE
   };
   // If there's already a comment, add an option to delete it.
   if (block.comment) {
@@ -387,7 +388,7 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
   var wsCommentOption = {
     // Foreign objects don't work in IE.  Don't let the user create comments
     // that they won't be able to edit.
-    enabled: !Blockly.utils.userAgent.IE
+    enabled: !Blockly.userAgent.IE
   };
   wsCommentOption.text = Blockly.Msg.ADD_COMMENT;
   wsCommentOption.callback = function() {

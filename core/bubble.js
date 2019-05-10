@@ -27,6 +27,7 @@
 goog.provide('Blockly.Bubble');
 
 goog.require('Blockly.Touch');
+goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.Workspace');
 
@@ -225,7 +226,7 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
   this.bubbleGroup_ = Blockly.utils.createSvgElement('g', {}, null);
   var filter =
       {'filter': 'url(#' + this.workspace_.options.embossFilterId + ')'};
-  if (Blockly.utils.userAgent.JAVA_FX) {
+  if (Blockly.userAgent.JAVA_FX) {
     // Multiple reports that JavaFX can't handle filters.
     // https://github.com/google/blockly/issues/99
     filter = {};

@@ -31,6 +31,7 @@ goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Grid');
 goog.require('Blockly.Options');
+goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
@@ -433,7 +434,7 @@ Blockly.inject.bindDocumentEvents_ = function() {
     Blockly.bindEvent_(document, 'touchend', null, Blockly.longStop_);
     Blockly.bindEvent_(document, 'touchcancel', null, Blockly.longStop_);
     // Some iPad versions don't fire resize after portrait to landscape change.
-    if (Blockly.utils.userAgent.IPAD) {
+    if (Blockly.userAgent.IPAD) {
       Blockly.bindEventWithChecks_(window, 'orientationchange', document,
           function() {
             // TODO (#397): Fix for multiple Blockly workspaces.

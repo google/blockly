@@ -34,7 +34,6 @@ goog.provide('Blockly.utils');
 
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
-goog.require('goog.userAgent');
 
 
 /**
@@ -46,9 +45,7 @@ goog.require('goog.userAgent');
  * @param {string} attributeName Name of attribute to remove.
  */
 Blockly.utils.removeAttribute = function(element, attributeName) {
-  // goog.userAgent.isVersion is deprecated, but the replacement is
-  // goog.userAgent.isVersionOrHigher.
-  if (goog.userAgent.IE && goog.userAgent.isVersion('10.0')) {
+  if (Blockly.utils.userAgent.IE10) {
     element.setAttribute(attributeName, null);
   } else {
     element.removeAttribute(attributeName);
@@ -277,7 +274,7 @@ Blockly.utils.createSvgElement = function(name, attrs, parent) {
  * @return {boolean} True if right-click.
  */
 Blockly.utils.isRightButton = function(e) {
-  if (e.ctrlKey && goog.userAgent.MAC) {
+  if (e.ctrlKey && Blockly.utils.userAgent.MAC) {
     // Control-clicking on Mac OS X is treated as a right-click.
     // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
     return true;
@@ -1046,3 +1043,47 @@ Blockly.utils.clampNumber = function(lowerBound, number, upperBound) {
   }
   return Math.max(lowerBound, Math.min(number, upperBound));
 };
+
+Blockly.utils.userAgent = {};
+(function(raw) {
+  Blockly.utils.userAgent.raw = raw;
+  var rawUpper = Blockly.utils.userAgent.raw.toUpperCase();
+  /**
+   * Case-insensitive test of whether name is in the useragent string.
+   * @param {string} name Name to test.
+   */
+  function has(name) {
+    return rawUpper.indexOf(name.toUpperCase()) != -1;
+  }
+  // Browsers.  Logic from:
+  // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/browser.js
+  Blockly.utils.userAgent.IE = has('Trident') || has('MSIE');
+  Blockly.utils.userAgent.IE10 = has('MSIE 10.0');  // 10.1 does not exist.
+  Blockly.utils.userAgent.EDGE = has('Edge');
+  // Useragent for JavaFX:
+  // Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.44
+  //     (KHTML, like Gecko) JavaFX/8.0 Safari/537.44
+  Blockly.utils.userAgent.JAVA_FX = has('JavaFX');
+  // Engines.  Logic from:
+  // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/engine.js
+  Blockly.utils.userAgent.WEBKIT = has('WebKit') &&
+      !Blockly.utils.userAgent.EDGE;
+  Blockly.utils.userAgent.GECKO = has('Gecko') &&
+      !Blockly.utils.userAgent.IE && !Blockly.utils.userAgent.EDGE;
+  // Platform.  Logic from:
+  // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/platform.js
+  Blockly.utils.userAgent.ANDROID = has('Android');
+  Blockly.utils.userAgent.IPAD = has('iPad');
+  Blockly.utils.userAgent.IPOD = has('iPod');
+  Blockly.utils.userAgent.IPHONE = has('iPhone') &&
+      !Blockly.utils.userAgent.IPAD && !Blockly.utils.userAgent.IPOD;
+  Blockly.utils.userAgent.MAC = has('Macintosh');
+  // Device.  Logic from:
+  // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/device.js
+  Blockly.utils.userAgent.TABLET = Blockly.utils.userAgent.IPAD ||
+      (Blockly.utils.userAgent.ANDROID && !has('Mobile')) || has('Silk');
+  Blockly.utils.userAgent.MOBILE = !Blockly.utils.userAgent.TABLET &&
+      (Blockly.utils.userAgent.IPOD || Blockly.utils.userAgent.IPHONE ||
+       Blockly.utils.userAgent.ANDROID || has('IEMobile'));
+})((this.navigator && this.navigator.userAgent) || '');
+

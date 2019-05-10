@@ -37,22 +37,6 @@ goog.require('goog.math.Coordinate');
 
 
 /**
- * Remove an attribute from a element even if it's in IE 10.
- * Similar to Element.removeAttribute() but it works on SVG elements in IE 10.
- * Sets the attribute to null in IE 10, which treats removeAttribute as a no-op
- * if it's called on an SVG element.
- * @param {!Element} element DOM element to remove attribute from.
- * @param {string} attributeName Name of attribute to remove.
- */
-Blockly.utils.removeAttribute = function(element, attributeName) {
-  if (Blockly.utils.userAgent.IE10) {
-    element.setAttribute(attributeName, null);
-  } else {
-    element.removeAttribute(attributeName);
-  }
-};
-
-/**
  * Add a CSS class to a element.
  * Similar to Closure's goog.dom.classes.add, except it handles SVG elements.
  * @param {!Element} element DOM element to add class to.
@@ -93,7 +77,7 @@ Blockly.utils.removeClass = function(element, className) {
   if (classList.length) {
     element.setAttribute('class', classList.join(' '));
   } else {
-    Blockly.utils.removeAttribute(element, 'class');
+    element.removeAttribute('class');
   }
   return true;
 };
@@ -1060,7 +1044,6 @@ Blockly.utils.userAgent = {};
   // Browsers.  Logic from:
   // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/browser.js
   Blockly.utils.userAgent.IE = has('Trident') || has('MSIE');
-  Blockly.utils.userAgent.IE10 = has('MSIE 10.0');  // 10.1 does not exist.
   Blockly.utils.userAgent.EDGE = has('Edge');
   // Useragent for JavaFX:
   // Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.44

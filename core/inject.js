@@ -293,17 +293,22 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             Blockly.Events.setGroup(e.group);
           }
 
+          var shouldBump = false;
           switch (e.type) {
             case Blockly.Events.BLOCK_CREATE:
             case Blockly.Events.BLOCK_MOVE:
               var object = mainWorkspace.getBlockById(e.blockId);
+              if (object && !object.getParent()) {
+                shouldBump = true;
+              }
               break;
             case Blockly.Events.COMMENT_CREATE:
             case Blockly.Events.COMMENT_MOVE:
               var object = mainWorkspace.getCommentById(e.commentId);
+              shouldBump = true;
               break;
           }
-          if (object) {
+          if (object && shouldBump) {
             var objectMetrics = object.getBoundingRectangle();
 
             // Bump any object that's above the top back inside.

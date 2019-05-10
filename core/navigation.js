@@ -128,25 +128,6 @@ Blockly.Navigation.removeMark = function() {
   Blockly.Navigation.marker_.hide();
 };
 
-/**
- * Gets the connection point the user has marked as where they want to connect
- * their next block to. This is the connection used when inserting from the
- * flyout or from the workspace.
- * @return {Blockly.Connection} Returns the marked connection or null if the
- *    user has not marked a connection.
- * @package
- */
-Blockly.Navigation.getInsertionConnection = function() {
-  var marker = Blockly.Navigation.marker_;
-  if (marker && marker.getCurNode()) {
-    var node = marker.getCurNode();
-    if (node.isConnection()) {
-      return /** @type {Blockly.Connection} */ (node.getLocation());
-    }
-  }
-  return null;
-};
-
 /************************/
 /** Toolbox Navigation **/
 /************************/
@@ -349,7 +330,6 @@ Blockly.Navigation.getFlyoutBlocks_ = function() {
  * it on the workspace.
  */
 Blockly.Navigation.insertFromFlyout = function() {
-  var connection = Blockly.Navigation.getInsertionConnection();
 
   var flyout = Blockly.getMainWorkspace().getFlyout();
   if (!flyout || !flyout.isVisible()) {
@@ -359,10 +339,16 @@ Blockly.Navigation.insertFromFlyout = function() {
   }
 
   var newBlock = flyout.createBlock(Blockly.Navigation.flyoutBlock_);
-  if (connection) {
-    Blockly.Navigation.insertAtConnection(newBlock, connection);
-  } else {
-    Blockly.Navigation.insertBlockToWs(newBlock);
+  // Render to get the sizing right.
+  newBlock.render();
+  // Connections are hidden when the block is first created.  Normally there's
+  // enough time for them to become unhidden in the user's mouse movements,
+  // but not here.
+  newBlock.setConnectionsHidden(false);
+  Blockly.Navigation.cursor_.setLocation(
+      Blockly.ASTNode.createBlockNode(newBlock));
+  if (!Blockly.Navigation.modify()) {
+    Blockly.Navigation.warn('Something went wrong while inserting a block from the flyout.');
   }
 
   // Move the cursor to the right place on the inserted block.
@@ -423,6 +409,10 @@ Blockly.Navigation.modify = function() {
     Blockly.Navigation.warn('Should not have been able to mark a block.');
     return false;
   }
+  if (markerType == Blockly.ASTNode.types.STACK) {
+    Blockly.Navigation.warn('Should not have been able to mark a stack.');
+    return false;
+  }
 
   if (cursorType == Blockly.ASTNode.types.FIELD) {
     Blockly.Navigation.warn('Cannot attach a field to anything else.');
@@ -443,11 +433,9 @@ Blockly.Navigation.modify = function() {
       return Blockly.Navigation.connect(cursorLoc, markerLoc);
     } else if (cursorType == Blockly.ASTNode.types.BLOCK ||
         cursorType == Blockly.ASTNode.types.STACK) {
-      // TODO: Make insertFromFlyout code similar.
       return Blockly.Navigation.insertBlock(cursorLoc, markerLoc);
     }
   } else if (markerType == Blockly.ASTNode.types.WORKSPACE) {
-    // TODO: Make insertFromFlyout code similar.
     if (cursorNode.isConnection()) {
       if (cursorType == Blockly.ASTNode.types.INPUT ||
           cursorType == Blockly.ASTNode.types.NEXT) {
@@ -556,51 +544,6 @@ Blockly.Navigation.insertBlock = function(block, targetConnection) {
     bestConnection.disconnect();
   }
   return Blockly.Navigation.connect(bestConnection, targetConnection);
-};
-
-/**
- * Insert the given block onto the workspace at the top level, at the location
- * given by the marker.
- * @param {Blockly.BlockSvg} newBlock The block to insert.
- * @package
- */
-Blockly.Navigation.insertBlockToWs = function(newBlock) {
-  var marker = Blockly.Navigation.marker_;
-  if (!marker) {
-    return;
-  }
-  var markedNode = marker.getCurNode();
-
-  var isWsNode = markedNode &&
-      markedNode.getType() === Blockly.ASTNode.types.WORKSPACE;
-
-  // TODO: Decide what to do if the marked node is not a connection or workspace
-  // node.
-  if (isWsNode) {
-    // Render to get the sizing right.
-    newBlock.render();
-    var position = markedNode.getWsCoordinate();
-    newBlock.moveTo(position);
-
-  }
-};
-
-/**
- * Insert the given block onto the workspace, connecting it to the given
- * connection.
- * @param {Blockly.BlockSvg} newBlock The block to insert.
- * @param {Blockly.RenderedConnection} connection The connection to connect
- *     the block to.
- * @package
- */
-Blockly.Navigation.insertAtConnection = function(newBlock, connection) {
-  // Render to get the sizing right.
-  newBlock.render();
-  // Connections are hidden when the block is first created.  Normally there's
-  // enough time for them to become unhidden in the user's mouse movements,
-  // but not here.
-  newBlock.setConnectionsHidden(false);
-  Blockly.Navigation.insertBlock(newBlock, connection);
 };
 
 /**
@@ -726,13 +669,18 @@ Blockly.Navigation.keyboardOut = function() {
 Blockly.Navigation.handleEnterForWS = function() {
   var cursor = Blockly.Navigation.cursor_;
   var curNode = cursor.getCurNode();
-  if (curNode.getType() === Blockly.ASTNode.types.FIELD) {
+  var nodeType = curNode.getType();
+  if (nodeType === Blockly.ASTNode.types.FIELD) {
     var location = curNode.getLocation();
     location.showEditor_();
-  } else {
+  } else if (curNode.isConnection() ||
+      nodeType == Blockly.ASTNode.types.WORKSPACE) {
     Blockly.Navigation.markAtCursor();
+  } else if (nodeType == Blockly.ASTNode.types.BLOCK) {
+    Blockly.Navigation.warn('Cannot mark a block.');
+  } else if (nodeType == Blockly.ASTNode.types.STACK) {
+    Blockly.Navigation.warn('Cannot mark a stack.');
   }
-  Blockly.Navigation.markAtCursor();
 };
 
 /**********************/

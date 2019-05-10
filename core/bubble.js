@@ -27,9 +27,10 @@
 goog.provide('Blockly.Bubble');
 
 goog.require('Blockly.Touch');
+goog.require('Blockly.utils');
 goog.require('Blockly.Workspace');
+
 goog.require('goog.math.Coordinate');
-goog.require('goog.userAgent');
 
 
 /**
@@ -224,10 +225,8 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
   this.bubbleGroup_ = Blockly.utils.createSvgElement('g', {}, null);
   var filter =
       {'filter': 'url(#' + this.workspace_.options.embossFilterId + ')'};
-  if (goog.userAgent.getUserAgentString().indexOf('JavaFX') != -1) {
-    // Multiple reports that JavaFX can't handle filters.  UserAgent:
-    // Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.44
-    //     (KHTML, like Gecko) JavaFX/8.0 Safari/537.44
+  if (Blockly.utils.userAgent.JAVA_FX) {
+    // Multiple reports that JavaFX can't handle filters.
     // https://github.com/google/blockly/issues/99
     filter = {};
   }

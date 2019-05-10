@@ -30,8 +30,6 @@ goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils');
 
-goog.require('goog.userAgent');
-
 
 /**
  * Class for an editable angle field.
@@ -163,7 +161,9 @@ Blockly.FieldAngle.prototype.dispose_ = function() {
  */
 Blockly.FieldAngle.prototype.showEditor_ = function() {
   var noFocus =
-      goog.userAgent.MOBILE || goog.userAgent.ANDROID || goog.userAgent.IPAD;
+      Blockly.utils.userAgent.MOBILE ||
+      Blockly.utils.userAgent.ANDROID ||
+      Blockly.utils.userAgent.IPAD;
   // Mobile browsers have issues with in-line textareas (focus & keyboards).
   Blockly.FieldAngle.superClass_.showEditor_.call(this, noFocus);
 
@@ -207,10 +207,10 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
     }, svg);
   }
 
-  
+
   var border = this.sourceBlock_.getColourBorder();
   border = border.colourBorder == null ? border.colourLight : border.colourBorder;
-  
+
   Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(), border);
   Blockly.DropDownDiv.showPositionedByField(this);
   // The angle picker is different from other fields in that it updates on

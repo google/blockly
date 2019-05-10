@@ -30,6 +30,7 @@ goog.require('Blockly.Bubble');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
+goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
 
 
@@ -183,7 +184,7 @@ Blockly.Comment.prototype.setVisible = function(visible) {
   Blockly.Events.fire(
       new Blockly.Events.Ui(this.block_, 'commentOpen', !visible, visible));
   if ((!this.block_.isEditable() && !this.textarea_) ||
-      Blockly.utils.userAgent.IE) {
+      Blockly.userAgent.IE) {
     // Steal the code from warnings to make an uneditable text bubble.
     // MSIE does not support foreignobject; textareas are impossible.
     // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034

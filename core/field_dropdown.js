@@ -29,6 +29,7 @@
 goog.provide('Blockly.FieldDropdown');
 
 goog.require('Blockly.Field');
+goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.uiMenu');
 
@@ -97,7 +98,7 @@ Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH = 0.45;
  * Android can't (in 2014) display "▾", so use "▼" instead.
  */
 Blockly.FieldDropdown.ARROW_CHAR =
-    Blockly.utils.userAgent.ANDROID ? '\u25BC' : '\u25BE';
+    Blockly.userAgent.ANDROID ? '\u25BC' : '\u25BE';
 
 /**
  * Mouse cursor style when over the hotspot that initiates the editor.
@@ -526,7 +527,7 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
  */
 Blockly.FieldDropdown.prototype.updateWidth = function() {
   if (this.imageJson_ &&
-      (Blockly.utils.userAgent.IE || Blockly.utils.userAgent.EDGE)) {
+      (Blockly.userAgent.IE || Blockly.userAgent.EDGE)) {
     // Recalculate the full width.
     var arrowWidth = Blockly.Field.getCachedWidth(this.arrow_);
     var width = Number(this.imageJson_.width) + arrowWidth +

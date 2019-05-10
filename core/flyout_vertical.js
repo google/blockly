@@ -30,6 +30,7 @@ goog.require('Blockly.Block');
 goog.require('Blockly.Events');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.FlyoutButton');
+goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceSvg');
 
@@ -337,7 +338,7 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
     // Firefox sometimes reports the wrong value for the client rect.
     // See https://github.com/google/blockly/issues/1425 and
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1066435
-    if (Blockly.utils.userAgent.GECKO &&
+    if (Blockly.userAgent.GECKO &&
         this.targetWorkspace_ && this.targetWorkspace_.isMutator) {
       // The position of the left side of the mutator workspace in pixels
       // relative to the window origin.

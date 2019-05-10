@@ -1,5 +1,6 @@
 /* exported assertEquals, assertTrue, assertFalse, assertNull, assertNotNull,
-   isEqualArrays, assertUndefined, assertNotUndefined */
+   isEqualArrays, assertUndefined, assertNotUndefined,
+   defineRowBlock, defineStackBlock */
 function _argumentsIncludeComments(expectedNumberOfNonCommentArgs, args) {
   return args.length == expectedNumberOfNonCommentArgs + 1;
 }

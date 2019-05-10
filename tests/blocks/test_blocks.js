@@ -28,6 +28,25 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "args0": []
   },
   {
+    "type": "test_basic_stack",
+    "message0": "stack block",
+    "previousStatement": null,
+    "nextStatement": null,
+    "style": "math_blocks"
+  },
+  {
+    "type": "test_basic_row",
+    "message0": "row block %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "INPUT"
+      }
+    ],
+    "output": null,
+    "style": "math_blocks"
+  },
+  {
     "type": "test_basic_value_to_stack",
     "message0": "value to stack",
     "nextStatement": null,

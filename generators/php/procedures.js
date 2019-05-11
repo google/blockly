@@ -55,15 +55,21 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
   var funcName = Blockly.PHP.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.PHP.statementToCode(block, 'STACK');
-  if (Blockly.PHP.STATEMENT_PREFIX) {
-    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+  var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+  if (Blockly.PHP.STATEMENT_SUFFIX) {
     branch = Blockly.PHP.prefixLines(
-        Blockly.PHP.STATEMENT_PREFIX.replace(
-            /%1/g, '\'' + id + '\''), Blockly.PHP.INDENT) + branch;
+        Blockly.PHP.STATEMENT_SUFFIX.replace(/%1/g, '\'' + id + '\''),
+        Blockly.PHP.INDENT) + branch;
   }
   if (Blockly.PHP.INFINITE_LOOP_TRAP) {
-    branch = Blockly.PHP.INFINITE_LOOP_TRAP.replace(/%1/g,
-        '\'' + block.id + '\'') + branch;
+    branch = Blockly.PHP.prefixLines(
+        Blockly.PHP.INFINITE_LOOP_TRAP.replace(/%1/g, '\'' + id + '\''),
+        Blockly.PHP.INDENT) + branch;
+  }
+  if (Blockly.PHP.STATEMENT_PREFIX) {
+    branch = Blockly.PHP.prefixLines(
+        Blockly.PHP.STATEMENT_PREFIX.replace(/%1/g, '\'' + id + '\''),
+        Blockly.PHP.INDENT) + branch;
   }
   var returnValue = Blockly.PHP.valueToCode(block, 'RETURN',
       Blockly.PHP.ORDER_NONE) || '';

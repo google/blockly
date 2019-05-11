@@ -56,15 +56,21 @@ Blockly.Python['procedures_defreturn'] = function(block) {
   var funcName = Blockly.Python.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Python.statementToCode(block, 'STACK');
-  if (Blockly.Python.STATEMENT_PREFIX) {
-    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+  var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+  if (Blockly.Python.STATEMENT_SUFFIX) {
     branch = Blockly.Python.prefixLines(
-        Blockly.Python.STATEMENT_PREFIX.replace(
-            /%1/g, '\'' + id + '\''), Blockly.Python.INDENT) + branch;
+        Blockly.Python.STATEMENT_SUFFIX.replace( /%1/g, '\'' + id + '\''),
+        Blockly.Python.INDENT) + branch;
   }
   if (Blockly.Python.INFINITE_LOOP_TRAP) {
-    branch = Blockly.Python.INFINITE_LOOP_TRAP.replace(/%1/g,
-        '"' + block.id + '"') + branch;
+    branch = Blockly.Python.prefixLines(
+        Blockly.Python.INFINITE_LOOP_TRAP.replace(/%1/g, '\'' + id + '\''),
+        Blockly.Python.INDENT) + branch;
+  }
+  if (Blockly.Python.STATEMENT_PREFIX) {
+    branch = Blockly.Python.prefixLines(
+        Blockly.Python.STATEMENT_PREFIX.replace( /%1/g, '\'' + id + '\''),
+        Blockly.Python.INDENT) + branch;
   }
   var returnValue = Blockly.Python.valueToCode(block, 'RETURN',
       Blockly.Python.ORDER_NONE) || '';

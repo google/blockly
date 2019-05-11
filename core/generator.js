@@ -63,6 +63,14 @@ Blockly.Generator.prototype.INFINITE_LOOP_TRAP = null;
 Blockly.Generator.prototype.STATEMENT_PREFIX = null;
 
 /**
+ * Arbitrary code to inject after every statement.
+ * Any instances of '%1' will be replaced by the block ID of the statement.
+ * E.g. 'highlight(%1);\n'
+ * @type {?string}
+ */
+Blockly.Generator.prototype.STATEMENT_SUFFIX = null;
+
+/**
  * The method of indenting.  Defaults to two spaces, but language generators
  * may override this to increase indent or change to tabs.
  * @type {string}
@@ -126,6 +134,7 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
 
 /**
  * Prepend a common prefix onto each line of code.
+ * Intended for indenting code or adding comment markers.
  * @param {string} text The lines of code.
  * @param {string} prefix The common prefix.
  * @return {string} The prefixed lines of code.
@@ -192,6 +201,9 @@ Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
     var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
     if (this.STATEMENT_PREFIX) {
       code = this.STATEMENT_PREFIX.replace(/%1/g, '\'' + id + '\'') + code;
+    }
+    if (this.STATEMENT_SUFFIX) {
+      code = code + this.STATEMENT_SUFFIX.replace(/%1/g, '\'' + id + '\'');
     }
     return this.scrub_(block, code, opt_thisOnly);
   } else if (code === null) {
@@ -299,7 +311,9 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
 
 /**
  * Add an infinite loop trap to the contents of a loop.
- * If loop is empty, add a statment prefix for the loop block.
+ * Add statement suffix at the start of the loop block (right after the loop
+ * statement executes), and a statement prefix to the end of the loop block
+ * (right before the loop statement executes).
  * @param {string} branch Code for loop contents.
  * @param {string} id ID of enclosing block.
  * @return {string} Loop contents, with infinite loop trap added.
@@ -307,10 +321,15 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
 Blockly.Generator.prototype.addLoopTrap = function(branch, id) {
   id = id.replace(/\$/g, '$$$$');  // Issue 251.
   if (this.INFINITE_LOOP_TRAP) {
-    branch = this.INFINITE_LOOP_TRAP.replace(/%1/g, '\'' + id + '\'') + branch;
+    branch = this.prefixLines(this.INFINITE_LOOP_TRAP.replace(/%1/g,
+        '\'' + id + '\''), this.INDENT) + branch;
+  }
+  if (this.STATEMENT_SUFFIX) {
+    branch = this.prefixLines(this.STATEMENT_SUFFIX.replace(/%1/g,
+        '\'' + id + '\''), this.INDENT) + branch;
   }
   if (this.STATEMENT_PREFIX) {
-    branch += this.prefixLines(this.STATEMENT_PREFIX.replace(/%1/g,
+    branch = branch + this.prefixLines(this.STATEMENT_PREFIX.replace(/%1/g,
         '\'' + id + '\''), this.INDENT);
   }
   return branch;

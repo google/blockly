@@ -34,15 +34,21 @@ Blockly.Lua['procedures_defreturn'] = function(block) {
   var funcName = Blockly.Lua.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Lua.statementToCode(block, 'STACK');
-  if (Blockly.Lua.STATEMENT_PREFIX) {
-    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+  var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+  if (Blockly.Lua.STATEMENT_SUFFIX) {
     branch = Blockly.Lua.prefixLines(
-        Blockly.Lua.STATEMENT_PREFIX.replace(/%1/g,
-        '\'' + id + '\''), Blockly.Lua.INDENT) + branch;
+        Blockly.Lua.STATEMENT_SUFFIX.replace(/%1/g, '\'' + id + '\''),
+        Blockly.Lua.INDENT) + branch;
   }
   if (Blockly.Lua.INFINITE_LOOP_TRAP) {
-    branch = Blockly.Lua.INFINITE_LOOP_TRAP.replace(/%1/g,
-        '\'' + block.id + '\'') + branch;
+    branch = Blockly.Lua.prefixLines(
+        Blockly.Lua.INFINITE_LOOP_TRAP.replace(/%1/g, '\'' + id + '\''),
+        Blockly.Lua.INDENT) + branch;
+  }
+  if (Blockly.Lua.STATEMENT_PREFIX) {
+    branch = Blockly.Lua.prefixLines(
+        Blockly.Lua.STATEMENT_PREFIX.replace(/%1/g, '\'' + id + '\''),
+        Blockly.Lua.INDENT) + branch;
   }
   var returnValue = Blockly.Lua.valueToCode(block, 'RETURN',
       Blockly.Lua.ORDER_NONE) || '';

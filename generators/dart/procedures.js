@@ -34,15 +34,21 @@ Blockly.Dart['procedures_defreturn'] = function(block) {
   var funcName = Blockly.Dart.variableDB_.getName(block.getFieldValue('NAME'),
       Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Dart.statementToCode(block, 'STACK');
-  if (Blockly.Dart.STATEMENT_PREFIX) {
-    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+  var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+  if (Blockly.Dart.STATEMENT_SUFFIX) {
     branch = Blockly.Dart.prefixLines(
-        Blockly.Dart.STATEMENT_PREFIX.replace(/%1/g,
-        '\'' + id + '\''), Blockly.Dart.INDENT) + branch;
+        Blockly.Dart.STATEMENT_SUFFIX.replace(/%1/g, '\'' + id + '\''),
+        Blockly.Dart.INDENT) + branch;
   }
   if (Blockly.Dart.INFINITE_LOOP_TRAP) {
-    branch = Blockly.Dart.INFINITE_LOOP_TRAP.replace(/%1/g,
-        '\'' + block.id + '\'') + branch;
+    branch = Blockly.Dart.prefixLines(
+        Blockly.Dart.INFINITE_LOOP_TRAP.replace(/%1/g, '\'' + id + '\''),
+        Blockly.Dart.INDENT) + branch;
+  }
+  if (Blockly.Dart.STATEMENT_PREFIX) {
+    branch = Blockly.Dart.prefixLines(
+        Blockly.Dart.STATEMENT_PREFIX.replace(/%1/g, '\'' + id + '\''),
+        Blockly.Dart.INDENT) + branch;
   }
   var returnValue = Blockly.Dart.valueToCode(block, 'RETURN',
       Blockly.Dart.ORDER_NONE) || '';

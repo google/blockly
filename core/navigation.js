@@ -796,23 +796,19 @@ Blockly.Navigation.toolboxKeyHandler = function(e) {
  */
 Blockly.Navigation.workspaceKeyHandler = function(e) {
   if (e.keyCode === goog.events.KeyCodes.W) {
-    // Blockly.Navigation.cursor_.out();
     Blockly.Navigation.cursor_.prev();
     Blockly.Navigation.log('W: Workspace : Out');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.A) {
     Blockly.Navigation.cursor_.out();
-    // Blockly.Navigation.cursor_.prev();
     Blockly.Navigation.log('S: Workspace : Previous');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.S) {
     Blockly.Navigation.cursor_.next();
-    // Blockly.Navigation.cursor_.in();
     Blockly.Navigation.log('S: Workspace : In');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.D) {
     Blockly.Navigation.cursor_.in();
-    // Blockly.Navigation.cursor_.next();
     Blockly.Navigation.log('S: Workspace : Next');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.I) {

@@ -153,11 +153,27 @@ Blockly.Dart['controls_forEach'] = function(block) {
 
 Blockly.Dart['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
-  switch (block.getFieldValue('FLOW')) {
+  var flowType = block.getFieldValue('FLOW');
+  var xfix = '';
+  if (Blockly.Dart.STATEMENT_SUFFIX) {
+    // Inject any statement suffix here since the regular one at the end
+    // will not get executed if the break/continue is triggered.
+    xfix += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_SUFFIX, block);
+  }
+  if (Blockly.Dart.STATEMENT_PREFIX && flowType == 'CONTINUE') {
+    var loop = Blockly.Constants.Loops
+        .CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.getSurroundLoop(block);
+    if (loop) {
+      // Inject loop's statement prefix here since the regular one at the end
+      // of the loop will not get executed if the continue is triggered.
+      xfix += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_PREFIX, loop);
+    }
+  }
+  switch (flowType) {
     case 'BREAK':
-      return 'break;\n';
+      return xfix + 'break;\n';
     case 'CONTINUE':
-      return 'continue;\n';
+      return xfix + 'continue;\n';
   }
   throw Error('Unknown flow statement.');
 };

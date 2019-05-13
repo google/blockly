@@ -244,8 +244,8 @@ Blockly.Touch.splitEventByTouches = function(e) {
         type: e.type,
         changedTouches: [e.changedTouches[i]],
         target: e.target,
-        stopPropagation: function(){ e.stopPropagation(); },
-        preventDefault: function(){ e.preventDefault(); }
+        stopPropagation: function() { e.stopPropagation(); },
+        preventDefault: function() { e.preventDefault(); }
       };
       events[i] = newEvent;
     }

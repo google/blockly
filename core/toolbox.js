@@ -387,7 +387,7 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
  * @param {string} categoryName Name of the toolbox category.
  * @private
  */
-Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut, categoryName){
+Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut, categoryName) {
   // Decode the colour for any potential message references
   // (eg. `%{BKY_MATH_HUE}`).
   var colour = Blockly.utils.replaceMessageReferences(colourValue);
@@ -416,7 +416,7 @@ Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut, categoryN
  * @param {string} categoryName Name of the toolbox category.
  */
 Blockly.Toolbox.prototype.setColourFromStyle_ = function(
-    styleName, childOut, categoryName){
+    styleName, childOut, categoryName) {
   childOut.styleName = styleName;
   if (styleName && Blockly.getTheme()) {
     var style = Blockly.getTheme().getCategoryStyle(styleName);

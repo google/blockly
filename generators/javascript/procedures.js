@@ -34,20 +34,19 @@ Blockly.JavaScript['procedures_defreturn'] = function(block) {
   var funcName = Blockly.JavaScript.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.JavaScript.statementToCode(block, 'STACK');
-  var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
   if (Blockly.JavaScript.STATEMENT_SUFFIX) {
     branch = Blockly.JavaScript.prefixLines(
-        Blockly.JavaScript.STATEMENT_SUFFIX.replace(/%1/g, '\'' + id + '\''),
+        Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_SUFFIX, block),
         Blockly.JavaScript.INDENT) + branch;
   }
   if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
     branch = Blockly.JavaScript.prefixLines(
-        Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g, '\'' + id + '\''),
-        Blockly.JavaScript.INDENT) + branch;
+        Blockly.JavaScript.injectId(Blockly.JavaScript.INFINITE_LOOP_TRAP,
+        block), Blockly.JavaScript.INDENT) + branch;
   }
   if (Blockly.JavaScript.STATEMENT_PREFIX) {
     branch = Blockly.JavaScript.prefixLines(
-        Blockly.JavaScript.STATEMENT_PREFIX.replace(/%1/g, '\'' + id + '\''),
+        Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_PREFIX, block),
         Blockly.JavaScript.INDENT) + branch;
   }
   var returnValue = Blockly.JavaScript.valueToCode(block, 'RETURN',
@@ -104,6 +103,14 @@ Blockly.JavaScript['procedures_ifreturn'] = function(block) {
   var condition = Blockly.JavaScript.valueToCode(block, 'CONDITION',
       Blockly.JavaScript.ORDER_NONE) || 'false';
   var code = 'if (' + condition + ') {\n';
+  if (Blockly.JavaScript.STATEMENT_SUFFIX) {
+    // Inject any statement suffix here since the regular one at the end
+    // will not get executed if the return is triggered.
+    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+    code += Blockly.JavaScript.prefixLines(
+        Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_SUFFIX, block),
+        Blockly.JavaScript.INDENT);
+  }
   if (block.hasReturnValue_) {
     var value = Blockly.JavaScript.valueToCode(block, 'VALUE',
         Blockly.JavaScript.ORDER_NONE) || 'null';

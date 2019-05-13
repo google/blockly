@@ -56,20 +56,19 @@ Blockly.Python['procedures_defreturn'] = function(block) {
   var funcName = Blockly.Python.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Python.statementToCode(block, 'STACK');
-  var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
   if (Blockly.Python.STATEMENT_SUFFIX) {
     branch = Blockly.Python.prefixLines(
-        Blockly.Python.STATEMENT_SUFFIX.replace( /%1/g, '\'' + id + '\''),
+        Blockly.Python.injectId(Blockly.Python.STATEMENT_SUFFIX, block),
         Blockly.Python.INDENT) + branch;
   }
   if (Blockly.Python.INFINITE_LOOP_TRAP) {
     branch = Blockly.Python.prefixLines(
-        Blockly.Python.INFINITE_LOOP_TRAP.replace(/%1/g, '\'' + id + '\''),
+        Blockly.Python.injectId(Blockly.Python.INFINITE_LOOP_TRAP, block),
         Blockly.Python.INDENT) + branch;
   }
   if (Blockly.Python.STATEMENT_PREFIX) {
     branch = Blockly.Python.prefixLines(
-        Blockly.Python.STATEMENT_PREFIX.replace( /%1/g, '\'' + id + '\''),
+        Blockly.Python.injectId(Blockly.Python.STATEMENT_PREFIX, block),
         Blockly.Python.INDENT) + branch;
   }
   var returnValue = Blockly.Python.valueToCode(block, 'RETURN',
@@ -128,6 +127,13 @@ Blockly.Python['procedures_ifreturn'] = function(block) {
   var condition = Blockly.Python.valueToCode(block, 'CONDITION',
       Blockly.Python.ORDER_NONE) || 'False';
   var code = 'if ' + condition + ':\n';
+  if (Blockly.Python.STATEMENT_SUFFIX) {
+    // Inject any statement suffix here since the regular one at the end
+    // will not get executed if the return is triggered.
+    code += Blockly.Python.prefixLines(
+        Blockly.Python.injectId(Blockly.Python.STATEMENT_SUFFIX, block),
+        Blockly.Python.INDENT);
+  }
   if (block.hasReturnValue_) {
     var value = Blockly.Python.valueToCode(block, 'VALUE',
         Blockly.Python.ORDER_NONE) || 'None';

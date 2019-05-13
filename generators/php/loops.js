@@ -40,7 +40,7 @@ Blockly.PHP['controls_repeat_ext'] = function(block) {
         Blockly.PHP.ORDER_ASSIGNMENT) || '0';
   }
   var branch = Blockly.PHP.statementToCode(block, 'DO');
-  branch = Blockly.PHP.addLoopTrap(branch, block.id);
+  branch = Blockly.PHP.addLoopTrap(branch, block);
   var code = '';
   var loopVar = Blockly.PHP.variableDB_.getDistinctName(
       'count', Blockly.Variables.NAME_TYPE);
@@ -66,7 +66,7 @@ Blockly.PHP['controls_whileUntil'] = function(block) {
       until ? Blockly.PHP.ORDER_LOGICAL_NOT :
       Blockly.PHP.ORDER_NONE) || 'false';
   var branch = Blockly.PHP.statementToCode(block, 'DO');
-  branch = Blockly.PHP.addLoopTrap(branch, block.id);
+  branch = Blockly.PHP.addLoopTrap(branch, block);
   if (until) {
     argument0 = '!' + argument0;
   }
@@ -84,7 +84,7 @@ Blockly.PHP['controls_for'] = function(block) {
   var increment = Blockly.PHP.valueToCode(block, 'BY',
       Blockly.PHP.ORDER_ASSIGNMENT) || '1';
   var branch = Blockly.PHP.statementToCode(block, 'DO');
-  branch = Blockly.PHP.addLoopTrap(branch, block.id);
+  branch = Blockly.PHP.addLoopTrap(branch, block);
   var code;
   if (Blockly.isNumber(argument0) && Blockly.isNumber(argument1) &&
       Blockly.isNumber(increment)) {
@@ -145,7 +145,7 @@ Blockly.PHP['controls_forEach'] = function(block) {
   var argument0 = Blockly.PHP.valueToCode(block, 'LIST',
       Blockly.PHP.ORDER_ASSIGNMENT) || '[]';
   var branch = Blockly.PHP.statementToCode(block, 'DO');
-  branch = Blockly.PHP.addLoopTrap(branch, block.id);
+  branch = Blockly.PHP.addLoopTrap(branch, block);
   var code = '';
   code += 'foreach (' + argument0 + ' as ' + variable0 +
       ') {\n' + branch + '}\n';

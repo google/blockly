@@ -198,12 +198,11 @@ Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
     }
     return [this.scrub_(block, code[0], opt_thisOnly), code[1]];
   } else if (typeof code == 'string') {
-    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
     if (this.STATEMENT_PREFIX) {
-      code = this.STATEMENT_PREFIX.replace(/%1/g, '\'' + id + '\'') + code;
+      code = this.injectId(this.STATEMENT_PREFIX, block) + code;
     }
     if (this.STATEMENT_SUFFIX) {
-      code = code + this.STATEMENT_SUFFIX.replace(/%1/g, '\'' + id + '\'');
+      code = code + this.injectId(this.STATEMENT_SUFFIX, block);
     }
     return this.scrub_(block, code, opt_thisOnly);
   } else if (code === null) {
@@ -315,25 +314,36 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
  * statement executes), and a statement prefix to the end of the loop block
  * (right before the loop statement executes).
  * @param {string} branch Code for loop contents.
- * @param {string} id ID of enclosing block.
+ * @param {!Blockly.Block} block Enclosing block.
  * @return {string} Loop contents, with infinite loop trap added.
  */
-Blockly.Generator.prototype.addLoopTrap = function(branch, id) {
-  id = id.replace(/\$/g, '$$$$');  // Issue 251.
+Blockly.Generator.prototype.addLoopTrap = function(branch, block) {
   if (this.INFINITE_LOOP_TRAP) {
-    branch = this.prefixLines(this.INFINITE_LOOP_TRAP.replace(/%1/g,
-        '\'' + id + '\''), this.INDENT) + branch;
+    branch = this.prefixLines(this.injectId(this.INFINITE_LOOP_TRAP, block),
+        this.INDENT) + branch;
   }
   if (this.STATEMENT_SUFFIX) {
-    branch = this.prefixLines(this.STATEMENT_SUFFIX.replace(/%1/g,
-        '\'' + id + '\''), this.INDENT) + branch;
+    branch = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block),
+        this.INDENT) + branch;
   }
   if (this.STATEMENT_PREFIX) {
-    branch = branch + this.prefixLines(this.STATEMENT_PREFIX.replace(/%1/g,
-        '\'' + id + '\''), this.INDENT);
+    branch = branch + this.prefixLines(this.injectId(this.STATEMENT_PREFIX,
+        block), this.INDENT);
   }
   return branch;
 };
+
+/**
+ * Inject a block ID into a message to replace '%1'.
+ * Used for STATEMENT_PREFIX, STATEMENT_SUFFIX, and INFINITE_LOOP_TRAP.
+ * @param {string} msg Code snippet with '%1'.
+ * @param {!Blockly.Block} block Block which has an ID.
+ * @return {string} Code snippet with ID.
+ */
+Blockly.Generator.prototype.injectId = function(msg, block) {
+  var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+  return msg.replace(/%1/g, '\'' + id + '\'');
+}
 
 /**
  * Comma-separated list of reserved words.

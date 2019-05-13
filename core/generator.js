@@ -343,7 +343,7 @@ Blockly.Generator.prototype.addLoopTrap = function(branch, block) {
 Blockly.Generator.prototype.injectId = function(msg, block) {
   var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
   return msg.replace(/%1/g, '\'' + id + '\'');
-}
+};
 
 /**
  * Comma-separated list of reserved words.

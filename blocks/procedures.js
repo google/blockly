@@ -349,7 +349,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this Blockly.Block
    */
   customContextMenu: function(options) {
-    if (this.isInFlyout){
+    if (this.isInFlyout) {
       return;
     }
     // Add option to create caller.
@@ -489,7 +489,7 @@ Blockly.Blocks['procedures_mutatorcontainer'] = {
       }
       return;
     }
-      
+
     if (event.type != Blockly.Events.BLOCK_CREATE) {
       return;
     }

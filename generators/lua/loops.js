@@ -49,6 +49,7 @@ Blockly.Lua.CONTINUE_STATEMENT = 'goto continue\n';
  */
 Blockly.Lua.addContinueLabel_ = function(branch) {
   if (branch.indexOf(Blockly.Lua.CONTINUE_STATEMENT) != -1) {
+    // False positives are possible (e.g. a string literal), but are harmless.
     return branch + Blockly.Lua.INDENT + '::continue::\n';
   } else {
     return branch;
@@ -156,11 +157,27 @@ Blockly.Lua['controls_forEach'] = function(block) {
 
 Blockly.Lua['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
-  switch (block.getFieldValue('FLOW')) {
+  var flowType = block.getFieldValue('FLOW');
+  var xfix = '';
+  if (Blockly.Lua.STATEMENT_SUFFIX) {
+    // Inject any statement suffix here since the regular one at the end
+    // will not get executed if the break/continue is triggered.
+    xfix += Blockly.Lua.injectId(Blockly.Lua.STATEMENT_SUFFIX, block);
+  }
+  if (Blockly.Lua.STATEMENT_PREFIX && flowType == 'CONTINUE') {
+    var loop = Blockly.Constants.Loops
+        .CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.getSurroundLoop(block);
+    if (loop) {
+      // Inject loop's statement prefix here since the regular one at the end
+      // of the loop will not get executed if the continue is triggered.
+      xfix += Blockly.Lua.injectId(Blockly.Lua.STATEMENT_PREFIX, loop);
+    }
+  }
+  switch (flowType) {
     case 'BREAK':
-      return 'break\n';
+      return xfix + 'break\n';
     case 'CONTINUE':
-      return Blockly.Lua.CONTINUE_STATEMENT;
+      return xfix + Blockly.Lua.CONTINUE_STATEMENT;
   }
   throw Error('Unknown flow statement.');
 };

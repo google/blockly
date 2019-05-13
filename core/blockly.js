@@ -705,7 +705,7 @@ Blockly.setTheme = function(theme) {
 Blockly.refreshTheme_ = function(ws) {
   // Update all blocks in workspace that have a style name.
   this.updateBlockStyles_(ws.getAllBlocks().filter(
-      function(block){
+      function(block) {
         return block.getStyleName() !== undefined;
       }
   ));

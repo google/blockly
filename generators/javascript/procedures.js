@@ -106,7 +106,6 @@ Blockly.JavaScript['procedures_ifreturn'] = function(block) {
   if (Blockly.JavaScript.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the return is triggered.
-    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
     code += Blockly.JavaScript.prefixLines(
         Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_SUFFIX, block),
         Blockly.JavaScript.INDENT);

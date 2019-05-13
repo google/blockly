@@ -34,20 +34,19 @@ Blockly.Lua['procedures_defreturn'] = function(block) {
   var funcName = Blockly.Lua.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Lua.statementToCode(block, 'STACK');
-  var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
   if (Blockly.Lua.STATEMENT_SUFFIX) {
     branch = Blockly.Lua.prefixLines(
-        Blockly.Lua.STATEMENT_SUFFIX.replace(/%1/g, '\'' + id + '\''),
+        Blockly.Lua.injectId(Blockly.Lua.STATEMENT_SUFFIX, block),
         Blockly.Lua.INDENT) + branch;
   }
   if (Blockly.Lua.INFINITE_LOOP_TRAP) {
     branch = Blockly.Lua.prefixLines(
-        Blockly.Lua.INFINITE_LOOP_TRAP.replace(/%1/g, '\'' + id + '\''),
+        Blockly.Lua.injectId(Blockly.Lua.INFINITE_LOOP_TRAP, block),
         Blockly.Lua.INDENT) + branch;
   }
   if (Blockly.Lua.STATEMENT_PREFIX) {
     branch = Blockly.Lua.prefixLines(
-        Blockly.Lua.STATEMENT_PREFIX.replace(/%1/g, '\'' + id + '\''),
+        Blockly.Lua.injectId(Blockly.Lua.STATEMENT_PREFIX, block),
         Blockly.Lua.INDENT) + branch;
   }
   var returnValue = Blockly.Lua.valueToCode(block, 'RETURN',
@@ -106,6 +105,13 @@ Blockly.Lua['procedures_ifreturn'] = function(block) {
   var condition = Blockly.Lua.valueToCode(block, 'CONDITION',
       Blockly.Lua.ORDER_NONE) || 'false';
   var code = 'if ' + condition + ' then\n';
+  if (Blockly.Lua.STATEMENT_SUFFIX) {
+    // Inject any statement suffix here since the regular one at the end
+    // will not get executed if the return is triggered.
+    code += Blockly.Lua.prefixLines(
+        Blockly.Lua.injectId(Blockly.Lua.STATEMENT_SUFFIX, block),
+        Blockly.Lua.INDENT);
+  }
   if (block.hasReturnValue_) {
     var value = Blockly.Lua.valueToCode(block, 'VALUE',
         Blockly.Lua.ORDER_NONE) || 'nil';

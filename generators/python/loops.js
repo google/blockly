@@ -45,8 +45,7 @@ Blockly.Python['controls_repeat_ext'] = function(block) {
     repeats = 'int(' + repeats + ')';
   }
   var branch = Blockly.Python.statementToCode(block, 'DO');
-  branch = Blockly.Python.addLoopTrap(branch, block.id) ||
-      Blockly.Python.PASS;
+  branch = Blockly.Python.addLoopTrap(branch, block) || Blockly.Python.PASS;
   var loopVar = Blockly.Python.variableDB_.getDistinctName(
       'count', Blockly.Variables.NAME_TYPE);
   var code = 'for ' + loopVar + ' in range(' + repeats + '):\n' + branch;
@@ -62,8 +61,7 @@ Blockly.Python['controls_whileUntil'] = function(block) {
       until ? Blockly.Python.ORDER_LOGICAL_NOT :
       Blockly.Python.ORDER_NONE) || 'False';
   var branch = Blockly.Python.statementToCode(block, 'DO');
-  branch = Blockly.Python.addLoopTrap(branch, block.id) ||
-      Blockly.Python.PASS;
+  branch = Blockly.Python.addLoopTrap(branch, block) || Blockly.Python.PASS;
   if (until) {
     argument0 = 'not ' + argument0;
   }
@@ -81,8 +79,7 @@ Blockly.Python['controls_for'] = function(block) {
   var increment = Blockly.Python.valueToCode(block, 'BY',
       Blockly.Python.ORDER_NONE) || '1';
   var branch = Blockly.Python.statementToCode(block, 'DO');
-  branch = Blockly.Python.addLoopTrap(branch, block.id) ||
-      Blockly.Python.PASS;
+  branch = Blockly.Python.addLoopTrap(branch, block) || Blockly.Python.PASS;
 
   var code = '';
   var range;
@@ -193,8 +190,7 @@ Blockly.Python['controls_forEach'] = function(block) {
   var argument0 = Blockly.Python.valueToCode(block, 'LIST',
       Blockly.Python.ORDER_RELATIONAL) || '[]';
   var branch = Blockly.Python.statementToCode(block, 'DO');
-  branch = Blockly.Python.addLoopTrap(branch, block.id) ||
-      Blockly.Python.PASS;
+  branch = Blockly.Python.addLoopTrap(branch, block) || Blockly.Python.PASS;
   var code = 'for ' + variable0 + ' in ' + argument0 + ':\n' + branch;
   return code;
 };

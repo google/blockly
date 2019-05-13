@@ -40,7 +40,7 @@ Blockly.Dart['controls_repeat_ext'] = function(block) {
         Blockly.Dart.ORDER_ASSIGNMENT) || '0';
   }
   var branch = Blockly.Dart.statementToCode(block, 'DO');
-  branch = Blockly.Dart.addLoopTrap(branch, block.id);
+  branch = Blockly.Dart.addLoopTrap(branch, block);
   var code = '';
   var loopVar = Blockly.Dart.variableDB_.getDistinctName(
       'count', Blockly.Variables.NAME_TYPE);
@@ -66,7 +66,7 @@ Blockly.Dart['controls_whileUntil'] = function(block) {
       until ? Blockly.Dart.ORDER_UNARY_PREFIX :
       Blockly.Dart.ORDER_NONE) || 'false';
   var branch = Blockly.Dart.statementToCode(block, 'DO');
-  branch = Blockly.Dart.addLoopTrap(branch, block.id);
+  branch = Blockly.Dart.addLoopTrap(branch, block);
   if (until) {
     argument0 = '!' + argument0;
   }
@@ -84,7 +84,7 @@ Blockly.Dart['controls_for'] = function(block) {
   var increment = Blockly.Dart.valueToCode(block, 'BY',
       Blockly.Dart.ORDER_ASSIGNMENT) || '1';
   var branch = Blockly.Dart.statementToCode(block, 'DO');
-  branch = Blockly.Dart.addLoopTrap(branch, block.id);
+  branch = Blockly.Dart.addLoopTrap(branch, block);
   var code;
   if (Blockly.isNumber(argument0) && Blockly.isNumber(argument1) &&
       Blockly.isNumber(increment)) {
@@ -145,7 +145,7 @@ Blockly.Dart['controls_forEach'] = function(block) {
   var argument0 = Blockly.Dart.valueToCode(block, 'LIST',
       Blockly.Dart.ORDER_ASSIGNMENT) || '[]';
   var branch = Blockly.Dart.statementToCode(block, 'DO');
-  branch = Blockly.Dart.addLoopTrap(branch, block.id);
+  branch = Blockly.Dart.addLoopTrap(branch, block);
   var code = 'for (var ' + variable0 + ' in ' + argument0 + ') {\n' +
       branch + '}\n';
   return code;

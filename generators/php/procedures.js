@@ -55,20 +55,19 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
   var funcName = Blockly.PHP.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.PHP.statementToCode(block, 'STACK');
-  var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
   if (Blockly.PHP.STATEMENT_SUFFIX) {
     branch = Blockly.PHP.prefixLines(
-        Blockly.PHP.STATEMENT_SUFFIX.replace(/%1/g, '\'' + id + '\''),
+        Blockly.PHP.injectId(Blockly.PHP.STATEMENT_SUFFIX, block),
         Blockly.PHP.INDENT) + branch;
   }
   if (Blockly.PHP.INFINITE_LOOP_TRAP) {
     branch = Blockly.PHP.prefixLines(
-        Blockly.PHP.INFINITE_LOOP_TRAP.replace(/%1/g, '\'' + id + '\''),
+        Blockly.PHP.injectId(Blockly.PHP.INFINITE_LOOP_TRAP, block),
         Blockly.PHP.INDENT) + branch;
   }
   if (Blockly.PHP.STATEMENT_PREFIX) {
     branch = Blockly.PHP.prefixLines(
-        Blockly.PHP.STATEMENT_PREFIX.replace(/%1/g, '\'' + id + '\''),
+        Blockly.PHP.injectId(Blockly.PHP.STATEMENT_PREFIX, block),
         Blockly.PHP.INDENT) + branch;
   }
   var returnValue = Blockly.PHP.valueToCode(block, 'RETURN',
@@ -125,6 +124,14 @@ Blockly.PHP['procedures_ifreturn'] = function(block) {
   var condition = Blockly.PHP.valueToCode(block, 'CONDITION',
       Blockly.PHP.ORDER_NONE) || 'false';
   var code = 'if (' + condition + ') {\n';
+  if (Blockly.PHP.STATEMENT_SUFFIX) {
+    // Inject any statement suffix here since the regular one at the end
+    // will not get executed if the return is triggered.
+    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+    code += Blockly.PHP.prefixLines(
+        Blockly.PHP.injectId(Blockly.PHP.STATEMENT_SUFFIX, block),
+        Blockly.PHP.INDENT);
+  }
   if (block.hasReturnValue_) {
     var value = Blockly.PHP.valueToCode(block, 'VALUE',
         Blockly.PHP.ORDER_NONE) || 'null';

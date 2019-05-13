@@ -45,37 +45,34 @@ Blockly.Lua.CONTINUE_STATEMENT = 'goto continue\n';
  *
  * @param {string} branch Generated code of the loop body
  * @return {string} Generated label or '' if unnecessary
+ * @private
  */
-Blockly.Lua.addContinueLabel = function(branch) {
-  if (branch.indexOf(Blockly.Lua.CONTINUE_STATEMENT) > -1) {
+Blockly.Lua.addContinueLabel_ = function(branch) {
+  if (branch.indexOf(Blockly.Lua.CONTINUE_STATEMENT) != -1) {
     return branch + Blockly.Lua.INDENT + '::continue::\n';
   } else {
     return branch;
   }
 };
 
-Blockly.Lua['controls_repeat'] = function(block) {
-  // Repeat n times (internal number).
-  var repeats = parseInt(block.getFieldValue('TIMES'), 10);
-  var branch = Blockly.Lua.statementToCode(block, 'DO') || '';
-  branch = Blockly.Lua.addContinueLabel(branch);
-  var loopVar = Blockly.Lua.variableDB_.getDistinctName(
-      'count', Blockly.Variables.NAME_TYPE);
-  var code = 'for ' + loopVar + ' = 1, ' + repeats + ' do\n' + branch + 'end\n';
-  return code;
-};
-
 Blockly.Lua['controls_repeat_ext'] = function(block) {
-  // Repeat n times (external number).
-  var repeats = Blockly.Lua.valueToCode(block, 'TIMES',
-      Blockly.Lua.ORDER_NONE) || '0';
+  // Repeat n times.
+  if (block.getField('TIMES')) {
+    // Internal number.
+    var repeats = String(Number(block.getFieldValue('TIMES')));
+  } else {
+    // External number.
+    var repeats = Blockly.Lua.valueToCode(block, 'TIMES',
+        Blockly.Lua.ORDER_NONE) || '0';
+  }
   if (Blockly.isNumber(repeats)) {
     repeats = parseInt(repeats, 10);
   } else {
     repeats = 'math.floor(' + repeats + ')';
   }
-  var branch = Blockly.Lua.statementToCode(block, 'DO') || '\n';
-  branch = Blockly.Lua.addContinueLabel(branch);
+  var branch = Blockly.Lua.statementToCode(block, 'DO');
+  branch = Blockly.Lua.addLoopTrap(branch, block);
+  branch = Blockly.Lua.addContinueLabel_(branch);
   var loopVar = Blockly.Lua.variableDB_.getDistinctName(
       'count', Blockly.Variables.NAME_TYPE);
   var code = 'for ' + loopVar + ' = 1, ' + repeats + ' do\n' +
@@ -83,15 +80,17 @@ Blockly.Lua['controls_repeat_ext'] = function(block) {
   return code;
 };
 
+Blockly.Lua['controls_repeat'] = Blockly.Lua['controls_repeat_ext'];
+
 Blockly.Lua['controls_whileUntil'] = function(block) {
   // Do while/until loop.
   var until = block.getFieldValue('MODE') == 'UNTIL';
   var argument0 = Blockly.Lua.valueToCode(block, 'BOOL',
       until ? Blockly.Lua.ORDER_UNARY :
       Blockly.Lua.ORDER_NONE) || 'false';
-  var branch = Blockly.Lua.statementToCode(block, 'DO') || '\n';
-  branch = Blockly.Lua.addLoopTrap(branch, block.id);
-  branch = Blockly.Lua.addContinueLabel(branch);
+  var branch = Blockly.Lua.statementToCode(block, 'DO');
+  branch = Blockly.Lua.addLoopTrap(branch, block);
+  branch = Blockly.Lua.addContinueLabel_(branch);
   if (until) {
     argument0 = 'not ' + argument0;
   }
@@ -108,9 +107,9 @@ Blockly.Lua['controls_for'] = function(block) {
       Blockly.Lua.ORDER_NONE) || '0';
   var increment = Blockly.Lua.valueToCode(block, 'BY',
       Blockly.Lua.ORDER_NONE) || '1';
-  var branch = Blockly.Lua.statementToCode(block, 'DO') || '\n';
-  branch = Blockly.Lua.addLoopTrap(branch, block.id);
-  branch = Blockly.Lua.addContinueLabel(branch);
+  var branch = Blockly.Lua.statementToCode(block, 'DO');
+  branch = Blockly.Lua.addLoopTrap(branch, block);
+  branch = Blockly.Lua.addContinueLabel_(branch);
   var code = '';
   var incValue;
   if (Blockly.isNumber(startVar) && Blockly.isNumber(endVar) &&
@@ -147,8 +146,9 @@ Blockly.Lua['controls_forEach'] = function(block) {
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.Lua.valueToCode(block, 'LIST',
       Blockly.Lua.ORDER_NONE) || '{}';
-  var branch = Blockly.Lua.statementToCode(block, 'DO') || '\n';
-  branch = Blockly.Lua.addContinueLabel(branch);
+  var branch = Blockly.Lua.statementToCode(block, 'DO');
+  branch = Blockly.Lua.addLoopTrap(branch, block);
+  branch = Blockly.Lua.addContinueLabel_(branch);
   var code = 'for _, ' + variable0 + ' in ipairs(' + argument0 + ') do \n' +
       branch + 'end\n';
   return code;

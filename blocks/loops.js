@@ -258,7 +258,7 @@ Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
    * @this Blockly.Block
    */
   customContextMenu: function(options) {
-    if (this.isInFlyout){
+    if (this.isInFlyout) {
       return;
     }
     var variable = this.getField('VAR').getVariable();
@@ -303,7 +303,24 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
    * Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push('custom_loop');
    */
   LOOP_TYPES: ['controls_repeat', 'controls_repeat_ext', 'controls_forEach',
-    'controls_for', 'controls_whileUntil'],
+      'controls_for', 'controls_whileUntil'],
+
+  /**
+   * Is the given block enclosed (at any level) by a loop?
+   * @param {!Blockly.Block} block Current block.
+   * @return {Blockly.Block} The nearest surrounding loop, or null if none.
+   */
+  getSurroundLoop: function(block) {
+    // Is the block nested in a loop?
+    do {
+      if (Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES
+          .indexOf(block.type) != -1) {
+        return block;
+      }
+      block = block.getSurroundParent();
+    } while (block);
+    return null;
+  },
 
   /**
    * Called whenever anything on the workspace changes.
@@ -315,17 +332,8 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
     if (!this.workspace.isDragging || this.workspace.isDragging()) {
       return;  // Don't change state at the start of a drag.
     }
-    var legal = false;
-    // Is the block nested in a loop?
-    var block = this;
-    do {
-      if (this.LOOP_TYPES.indexOf(block.type) != -1) {
-        legal = true;
-        break;
-      }
-      block = block.getSurroundParent();
-    } while (block);
-    if (legal) {
+    if (Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN
+        .getSurroundLoop(this)) {
       this.setWarningText(null);
       if (!this.isInFlyout) {
         this.setEnabled(true);

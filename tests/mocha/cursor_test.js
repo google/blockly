@@ -74,4 +74,36 @@ suite('Cursor', function() {
     this.workspace.dispose();
   });
 
+  test('Next - From a block skip over next connection', function() {
+    var blockNode = Blockly.ASTNode.createBlockNode(this.blocks.A);
+    this.cursor.setLocation(blockNode);
+    this.cursor.next();
+    var curNode = this.cursor.getCurNode();
+    assertEquals(curNode.getLocation(), this.blocks.B.previousConnection);
+  });
+  test('Next - From last block in a stack go to next connection', function() {
+    var blockNode = Blockly.ASTNode.createBlockNode(this.blocks.B);
+    this.cursor.setLocation(blockNode);
+    this.cursor.next();
+    var curNode = this.cursor.getCurNode();
+    assertEquals(curNode.getLocation(), this.blocks.B.nextConnection);
+  });
+
+  test('In - From input skip over output connection', function() {
+    var inputNode = Blockly.ASTNode.createInputNode(this.blocks.A.inputList[0]);
+    this.cursor.setLocation(inputNode);
+    this.cursor.in();
+    var curNode = this.cursor.getCurNode();
+    assertEquals(curNode.getLocation(), this.blocks.E);
+  });
+
+  test('Prev - From previous connection skip over next connection', function() {
+    var prevConnection = this.blocks.B.previousConnection;
+    var prevConnectionNode = Blockly.ASTNode.createConnectionNode(prevConnection);
+    this.cursor.setLocation(prevConnectionNode);
+    this.cursor.prev();
+    var curNode = this.cursor.getCurNode();
+    assertEquals(curNode.getLocation(), this.blocks.A);
+  });
+
 });

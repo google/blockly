@@ -90,6 +90,11 @@ Blockly.Cursor.prototype.next = function() {
     return null;
   }
   var newNode = curNode.next();
+
+  if (newNode && newNode.getType() === Blockly.ASTNode.types.NEXT) {
+    newNode = newNode.next() || newNode;
+  }
+
   if (newNode) {
     this.setLocation(newNode);
   }
@@ -107,6 +112,11 @@ Blockly.Cursor.prototype.in = function() {
     return null;
   }
   var newNode = curNode.in();
+
+  if (newNode && newNode.getType() === Blockly.ASTNode.types.OUTPUT) {
+    newNode = newNode.next() || newNode;
+  }
+
   if (newNode) {
     this.setLocation(newNode);
   }
@@ -124,6 +134,11 @@ Blockly.Cursor.prototype.prev = function() {
     return null;
   }
   var newNode = curNode.prev();
+
+  if (newNode && newNode.getType() === Blockly.ASTNode.types.NEXT) {
+    newNode = newNode.prev() || newNode;
+  }
+
   if (newNode) {
     this.setLocation(newNode);
   }

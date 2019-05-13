@@ -410,7 +410,7 @@ Blockly.WorkspaceCommentSvg.prototype.moveTo = function(x, y) {
  * @private
  */
 Blockly.WorkspaceCommentSvg.prototype.clearTransformAttributes_ = function() {
-  Blockly.utils.removeAttribute(this.getSvgRoot(), 'transform');
+  this.getSvgRoot().removeAttribute('transform');
 };
 
 /**

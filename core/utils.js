@@ -32,28 +32,11 @@
  */
 goog.provide('Blockly.utils');
 
+goog.require('Blockly.userAgent');
+
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
-goog.require('goog.userAgent');
 
-
-/**
- * Remove an attribute from a element even if it's in IE 10.
- * Similar to Element.removeAttribute() but it works on SVG elements in IE 10.
- * Sets the attribute to null in IE 10, which treats removeAttribute as a no-op
- * if it's called on an SVG element.
- * @param {!Element} element DOM element to remove attribute from.
- * @param {string} attributeName Name of attribute to remove.
- */
-Blockly.utils.removeAttribute = function(element, attributeName) {
-  // goog.userAgent.isVersion is deprecated, but the replacement is
-  // goog.userAgent.isVersionOrHigher.
-  if (goog.userAgent.IE && goog.userAgent.isVersion('10.0')) {
-    element.setAttribute(attributeName, null);
-  } else {
-    element.removeAttribute(attributeName);
-  }
-};
 
 /**
  * Add a CSS class to a element.
@@ -96,7 +79,7 @@ Blockly.utils.removeClass = function(element, className) {
   if (classList.length) {
     element.setAttribute('class', classList.join(' '));
   } else {
-    Blockly.utils.removeAttribute(element, 'class');
+    element.removeAttribute('class');
   }
   return true;
 };
@@ -277,7 +260,7 @@ Blockly.utils.createSvgElement = function(name, attrs, parent) {
  * @return {boolean} True if right-click.
  */
 Blockly.utils.isRightButton = function(e) {
-  if (e.ctrlKey && goog.userAgent.MAC) {
+  if (e.ctrlKey && Blockly.userAgent.MAC) {
     // Control-clicking on Mac OS X is treated as a right-click.
     // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
     return true;

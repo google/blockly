@@ -27,9 +27,8 @@
 
 goog.provide('Blockly.Grid');
 
+goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
-
-goog.require('goog.userAgent');
 
 
 /**
@@ -187,7 +186,7 @@ Blockly.Grid.prototype.moveTo = function(x, y) {
   this.gridPattern_.setAttribute('x', x);
   this.gridPattern_.setAttribute('y', y);
 
-  if (goog.userAgent.IE || goog.userAgent.EDGE) {
+  if (Blockly.userAgent.IE || Blockly.userAgent.EDGE) {
     // IE/Edge doesn't notice that the x/y offsets have changed.
     // Force an update.
     this.update(this.scale_);

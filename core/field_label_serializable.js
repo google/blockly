@@ -28,6 +28,7 @@
 goog.provide('Blockly.FieldLabelSerializable');
 
 goog.require('Blockly.FieldLabel');
+goog.require('Blockly.utils');
 
 
 /**

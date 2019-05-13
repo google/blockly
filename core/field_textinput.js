@@ -29,10 +29,10 @@ goog.provide('Blockly.FieldTextInput');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
+goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
 
 goog.require('goog.math.Coordinate');
-goog.require('goog.userAgent');
 
 
 /**
@@ -166,8 +166,9 @@ Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
 Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
   this.workspace_ = this.sourceBlock_.workspace;
   var quietInput = opt_quietInput || false;
-  if (!quietInput && (goog.userAgent.MOBILE || goog.userAgent.ANDROID ||
-                      goog.userAgent.IPAD)) {
+  if (!quietInput && (Blockly.userAgent.MOBILE ||
+                      Blockly.userAgent.ANDROID ||
+                      Blockly.userAgent.IPAD)) {
     this.showPromptEditor_();
   } else {
     this.showInlineEditor_(quietInput);
@@ -301,7 +302,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(_e) {
     this.setValue(text);
     Blockly.Events.setGroup(false);
     this.validate_();
-  } else if (goog.userAgent.WEBKIT) {
+  } else if (Blockly.userAgent.WEBKIT) {
     // Cursor key.  Render the source block to show the caret moving.
     // Chrome only (version 26, OS X).
     this.sourceBlock_.render();
@@ -348,13 +349,13 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
 
   // Shift by a few pixels to line up exactly.
   xy.y += 1;
-  if (goog.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
+  if (Blockly.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
     // Firefox mis-reports the location of the border by a pixel
     // once the WidgetDiv is moved into position.
     xy.x -= 1;
     xy.y -= 1;
   }
-  if (goog.userAgent.WEBKIT) {
+  if (Blockly.userAgent.WEBKIT) {
     xy.y -= 3;
   }
   div.style.left = xy.x + 'px';

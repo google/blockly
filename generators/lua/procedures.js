@@ -33,24 +33,28 @@ Blockly.Lua['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   var funcName = Blockly.Lua.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
-  var branch = Blockly.Lua.statementToCode(block, 'STACK');
-  if (Blockly.Lua.STATEMENT_SUFFIX) {
-    branch = Blockly.Lua.prefixLines(
-        Blockly.Lua.injectId(Blockly.Lua.STATEMENT_SUFFIX, block),
-        Blockly.Lua.INDENT) + branch;
-  }
-  if (Blockly.Lua.INFINITE_LOOP_TRAP) {
-    branch = Blockly.Lua.prefixLines(
-        Blockly.Lua.injectId(Blockly.Lua.INFINITE_LOOP_TRAP, block),
-        Blockly.Lua.INDENT) + branch;
-  }
+  var xfix1 = '';
   if (Blockly.Lua.STATEMENT_PREFIX) {
-    branch = Blockly.Lua.prefixLines(
-        Blockly.Lua.injectId(Blockly.Lua.STATEMENT_PREFIX, block),
-        Blockly.Lua.INDENT) + branch;
+    xfix1 += Blockly.Lua.injectId(Blockly.Lua.STATEMENT_PREFIX, block);
   }
+  if (Blockly.Lua.STATEMENT_SUFFIX) {
+    xfix1 += Blockly.Lua.injectId(Blockly.Lua.STATEMENT_SUFFIX, block);
+  }
+  xfix1 = Blockly.Lua.prefixLines(xfix1, Blockly.Lua.INDENT);
+  var loopTrap = '';
+  if (Blockly.Lua.INFINITE_LOOP_TRAP) {
+    loopTrap = Blockly.Lua.prefixLines(
+        Blockly.Lua.injectId(Blockly.Lua.INFINITE_LOOP_TRAP, block),
+        Blockly.Lua.INDENT);
+  }
+  var branch = Blockly.Lua.statementToCode(block, 'STACK');
   var returnValue = Blockly.Lua.valueToCode(block, 'RETURN',
       Blockly.Lua.ORDER_NONE) || '';
+  var xfix2 = '';
+  if (branch && returnValue) {
+    // After executing the function body, revisit this block for the return.
+    xfix2 = xfix1;
+  }
   if (returnValue) {
     returnValue = Blockly.Lua.INDENT + 'return ' + returnValue + '\n';
   } else if (!branch) {
@@ -62,7 +66,7 @@ Blockly.Lua['procedures_defreturn'] = function(block) {
         Blockly.Variables.NAME_TYPE);
   }
   var code = 'function ' + funcName + '(' + args.join(', ') + ')\n' +
-      branch + returnValue + 'end\n';
+      xfix1 + loopTrap + branch + xfix2 + returnValue + 'end\n';
   code = Blockly.Lua.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
   Blockly.Lua.definitions_['%' + funcName] = code;

@@ -165,25 +165,30 @@ Blockly.JavaScript['controls_forEach'] = function(block) {
 
 Blockly.JavaScript['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
-  var flowType = block.getFieldValue('FLOW');
   var xfix = '';
+  if (Blockly.JavaScript.STATEMENT_PREFIX) {
+    // Automatic prefix insertion is switched off for this block.  Add manually.
+    xfix += Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_PREFIX,
+        block);
+  }
   if (Blockly.JavaScript.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the break/continue is triggered.
     xfix += Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_SUFFIX,
         block);
   }
-  if (Blockly.JavaScript.STATEMENT_PREFIX && flowType == 'CONTINUE') {
+  if (Blockly.JavaScript.STATEMENT_PREFIX) {
     var loop = Blockly.Constants.Loops
         .CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.getSurroundLoop(block);
     if (loop) {
       // Inject loop's statement prefix here since the regular one at the end
-      // of the loop will not get executed if the continue is triggered.
+      // of the loop will not get executed if 'continue' is triggered.
+      // In the case of 'break', a prefix is needed due to the loop's suffix.
       xfix += Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_PREFIX,
           loop);
     }
   }
-  switch (flowType) {
+  switch (block.getFieldValue('FLOW')) {
     case 'BREAK':
       return xfix + 'break;\n';
     case 'CONTINUE':

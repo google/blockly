@@ -89,14 +89,19 @@ Blockly.Lua['procedures_callreturn'] = function(block) {
 
 Blockly.Lua['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
-  var funcName = Blockly.Lua.variableDB_.getName(
-      block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
-  var args = [];
-  for (var i = 0; i < block.arguments_.length; i++) {
-    args[i] = Blockly.Lua.valueToCode(block, 'ARG' + i,
-        Blockly.Lua.ORDER_NONE) || 'nil';
+  var code = '';
+  if (Blockly.Lua.STATEMENT_PREFIX) {
+    // Automatic prefix insertion is switched off for this block.  Add manually.
+    code += Blockly.Lua.injectId(Blockly.Lua.STATEMENT_PREFIX, block);
   }
-  var code = funcName + '(' + args.join(', ') + ')\n';
+  if (Blockly.Lua.STATEMENT_SUFFIX) {
+    // Suffix needs to be added before the function call.
+    code += Blockly.Lua.injectId(Blockly.Lua.STATEMENT_SUFFIX, block);
+  }
+  // Generated code is for a function call as a statement is the same as a
+  // function call as a value, with the addition of line ending.
+  var tuple = Blockly.Lua['procedures_callreturn'](block);
+  code += tuple[0] + '\n';
   return code;
 };
 

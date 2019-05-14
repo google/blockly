@@ -187,6 +187,7 @@ Blockly.BlockSvg.JAGGED_TEETH_WIDTH = 15;
 Blockly.BlockSvg.TAB_PATH_DOWN = 'v 5 c 0,10 -' + Blockly.BlockSvg.TAB_WIDTH +
     ',-8 -' + Blockly.BlockSvg.TAB_WIDTH + ',7.5 s ' +
     Blockly.BlockSvg.TAB_WIDTH + ',-2.5 ' + Blockly.BlockSvg.TAB_WIDTH + ',7.5';
+
 /**
  * SVG path for drawing a horizontal puzzle tab from top to bottom with
  * highlighting from the upper-right.
@@ -323,23 +324,23 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   }
   Blockly.Field.startCache();
   this.rendered = true;
+  Blockly.BlockRendering.render(this);
+  // var cursorX = Blockly.BlockSvg.SEP_SPACE_X;
+  // if (this.RTL) {
+  //   cursorX = -cursorX;
+  // }
+  // // Move the icons into position.
+  // var icons = this.getIcons();
+  // for (var i = 0; i < icons.length; i++) {
+  //   cursorX = icons[i].renderIcon(cursorX);
+  // }
+  // cursorX += this.RTL ?
+  //     Blockly.BlockSvg.SEP_SPACE_X : -Blockly.BlockSvg.SEP_SPACE_X;
+  // // If there are no icons, cursorX will be 0, otherwise it will be the
+  // // width that the first label needs to move over by.
 
-  var cursorX = Blockly.BlockSvg.SEP_SPACE_X;
-  if (this.RTL) {
-    cursorX = -cursorX;
-  }
-  // Move the icons into position.
-  var icons = this.getIcons();
-  for (var i = 0; i < icons.length; i++) {
-    cursorX = icons[i].renderIcon(cursorX);
-  }
-  cursorX += this.RTL ?
-      Blockly.BlockSvg.SEP_SPACE_X : -Blockly.BlockSvg.SEP_SPACE_X;
-  // If there are no icons, cursorX will be 0, otherwise it will be the
-  // width that the first label needs to move over by.
-
-  var inputRows = this.renderCompute_(cursorX);
-  this.renderDraw_(cursorX, inputRows);
+  // var inputRows = this.renderCompute_(cursorX);
+  // this.renderDraw_(cursorX, inputRows);
   this.renderMoveConnections_();
 
   if (opt_bubble !== false) {

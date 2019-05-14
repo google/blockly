@@ -66,8 +66,16 @@
 <script src="../blocks/procedures.js"></script>
 <script src="blocks/test_blocks.js"></script>
 
+<script src="../core/block_rendering_rewrite/measurables.js"></script>
+<script src="../core/block_rendering_rewrite/block_render_info.js"></script>
+<script src="../core/block_rendering_rewrite/block_render_draw.js"></script>
+<script src="../core/block_rendering_rewrite/block_render_draw_debug.js"></script>
+<script src="../core/block_rendering_rewrite/block_rendering_constants.js"></script>
+<script src="../core/block_rendering_rewrite/block_render_draw_highlight.js"></script>
+
 <script>
 'use strict';
+goog.require('Blockly.BlockRendering.RenderInfo');
 var workspace = null;
 
 function start() {
@@ -97,8 +105,8 @@ function start() {
         disable: true,
         grid:
           {
-            spacing: 25,
-            length: 3,
+            spacing: 5,
+            length: 1,
             colour: '#ccc',
             snap: true
           },
@@ -141,6 +149,8 @@ function start() {
     logEvents(false);
   }
   taChange();
+
+  fromXml();
 }
 
 function addToolboxButtonCallbacks() {
@@ -363,6 +373,39 @@ h1 {
 
 .ioLabel>.blocklyFlyoutLabelText {
   font-style: italic;
+}
+
+.displayable {
+  display: none;
+}
+
+.rowRenderingRect {
+  stroke: black;
+  fill: none;
+  stroke-width: 1px;
+}
+
+.elemRenderingRect {
+  stroke: red;
+  fill: none;
+  stroke-width: 1px;
+}
+
+.rowSpacerRect {
+  stroke: blue;
+  fill-opacity: 0.5;
+  fill: blue;
+  stroke-width: 1px;
+}
+
+.elemSpacerRect {
+  stroke: pink;
+  fill-opacity: 0.5;
+  fill: pink;
+  stroke-width: 1px;
+}
+
+.connectionRenderingDot {
 }
 
 </style>

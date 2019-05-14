@@ -586,4 +586,11 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
   }
 };
 
+Blockly.FieldDropdown.prototype.getCorrectedSize = function() {
+  if (!this.size_.width) {
+    this.render_();
+  }
+  return new goog.math.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X, this.size_.height - 9);
+};
+
 Blockly.Field.register('field_dropdown', Blockly.FieldDropdown);

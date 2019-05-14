@@ -302,8 +302,19 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
    * To add a new loop type add this to your code:
    * Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push('custom_loop');
    */
-  LOOP_TYPES: ['controls_repeat', 'controls_repeat_ext', 'controls_forEach',
-      'controls_for', 'controls_whileUntil'],
+  LOOP_TYPES: [
+    'controls_repeat',
+    'controls_repeat_ext',
+    'controls_forEach',
+    'controls_for',
+    'controls_whileUntil'
+  ],
+
+  /**
+   * Don't automatically add STATEMENT_PREFIX and STATEMENT_SUFFIX to generated
+   * code.  These will be handled manually in this block's generators.
+   */
+  suppressPrefixSuffix: true,
 
   /**
    * Is the given block enclosed (at any level) by a loop?

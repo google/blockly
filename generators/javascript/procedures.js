@@ -33,24 +33,30 @@ Blockly.JavaScript['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   var funcName = Blockly.JavaScript.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
-  var branch = Blockly.JavaScript.statementToCode(block, 'STACK');
-  if (Blockly.JavaScript.STATEMENT_SUFFIX) {
-    branch = Blockly.JavaScript.prefixLines(
-        Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_SUFFIX, block),
-        Blockly.JavaScript.INDENT) + branch;
-  }
-  if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
-    branch = Blockly.JavaScript.prefixLines(
-        Blockly.JavaScript.injectId(Blockly.JavaScript.INFINITE_LOOP_TRAP,
-        block), Blockly.JavaScript.INDENT) + branch;
-  }
+  var xfix1 = '';
   if (Blockly.JavaScript.STATEMENT_PREFIX) {
-    branch = Blockly.JavaScript.prefixLines(
-        Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_PREFIX, block),
-        Blockly.JavaScript.INDENT) + branch;
+    xfix1 += Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_PREFIX,
+        block);
   }
+  if (Blockly.JavaScript.STATEMENT_SUFFIX) {
+    xfix1 += Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_SUFFIX,
+        block);
+  }
+  xfix1 = Blockly.JavaScript.prefixLines(xfix1, Blockly.JavaScript.INDENT);
+  var loopTrap = '';
+  if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
+    loopTrap = Blockly.JavaScript.prefixLines(
+        Blockly.JavaScript.injectId(Blockly.JavaScript.INFINITE_LOOP_TRAP,
+        block), Blockly.JavaScript.INDENT);
+  }
+  var branch = Blockly.JavaScript.statementToCode(block, 'STACK');
   var returnValue = Blockly.JavaScript.valueToCode(block, 'RETURN',
       Blockly.JavaScript.ORDER_NONE) || '';
+  var xfix2 = '';
+  if (branch && returnValue) {
+    // After executing the function body, revisit this block for the return.
+    xfix2 = xfix1;
+  }
   if (returnValue) {
     returnValue = Blockly.JavaScript.INDENT + 'return ' + returnValue + ';\n';
   }
@@ -60,7 +66,7 @@ Blockly.JavaScript['procedures_defreturn'] = function(block) {
         Blockly.Variables.NAME_TYPE);
   }
   var code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
-      branch + returnValue + '}';
+      xfix1 + loopTrap + branch + xfix2 + returnValue + '}';
   code = Blockly.JavaScript.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
   Blockly.JavaScript.definitions_['%' + funcName] = code;

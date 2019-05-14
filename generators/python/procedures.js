@@ -55,24 +55,28 @@ Blockly.Python['procedures_defreturn'] = function(block) {
       Blockly.Python.INDENT + 'global ' + globals.join(', ') + '\n' : '';
   var funcName = Blockly.Python.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
-  var branch = Blockly.Python.statementToCode(block, 'STACK');
-  if (Blockly.Python.STATEMENT_SUFFIX) {
-    branch = Blockly.Python.prefixLines(
-        Blockly.Python.injectId(Blockly.Python.STATEMENT_SUFFIX, block),
-        Blockly.Python.INDENT) + branch;
-  }
-  if (Blockly.Python.INFINITE_LOOP_TRAP) {
-    branch = Blockly.Python.prefixLines(
-        Blockly.Python.injectId(Blockly.Python.INFINITE_LOOP_TRAP, block),
-        Blockly.Python.INDENT) + branch;
-  }
+  var xfix1 = '';
   if (Blockly.Python.STATEMENT_PREFIX) {
-    branch = Blockly.Python.prefixLines(
-        Blockly.Python.injectId(Blockly.Python.STATEMENT_PREFIX, block),
-        Blockly.Python.INDENT) + branch;
+    xfix1 += Blockly.Python.injectId(Blockly.Python.STATEMENT_PREFIX, block);
   }
+  if (Blockly.Python.STATEMENT_SUFFIX) {
+    xfix1 += Blockly.Python.injectId(Blockly.Python.STATEMENT_SUFFIX, block);
+  }
+  xfix1 = Blockly.Python.prefixLines(xfix1, Blockly.Python.INDENT);
+  var loopTrap = '';
+  if (Blockly.Python.INFINITE_LOOP_TRAP) {
+    loopTrap = Blockly.Python.prefixLines(
+        Blockly.Python.injectId(Blockly.Python.INFINITE_LOOP_TRAP, block),
+        Blockly.Python.INDENT);
+  }
+  var branch = Blockly.Python.statementToCode(block, 'STACK');
   var returnValue = Blockly.Python.valueToCode(block, 'RETURN',
       Blockly.Python.ORDER_NONE) || '';
+  var xfix2 = '';
+  if (branch && returnValue) {
+    // After executing the function body, revisit this block for the return.
+    xfix2 = xfix1;
+  }
   if (returnValue) {
     returnValue = Blockly.Python.INDENT + 'return ' + returnValue + '\n';
   } else if (!branch) {
@@ -84,7 +88,7 @@ Blockly.Python['procedures_defreturn'] = function(block) {
         Blockly.Variables.NAME_TYPE);
   }
   var code = 'def ' + funcName + '(' + args.join(', ') + '):\n' +
-      globals + branch + returnValue;
+      globals + xfix1 + loopTrap + branch + xfix2 + returnValue;
   code = Blockly.Python.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
   Blockly.Python.definitions_['%' + funcName] = code;

@@ -33,24 +33,28 @@ Blockly.Dart['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   var funcName = Blockly.Dart.variableDB_.getName(block.getFieldValue('NAME'),
       Blockly.Procedures.NAME_TYPE);
-  var branch = Blockly.Dart.statementToCode(block, 'STACK');
-  if (Blockly.Dart.STATEMENT_SUFFIX) {
-    branch = Blockly.Dart.prefixLines(
-        Blockly.Dart.injectId(Blockly.Dart.STATEMENT_SUFFIX, block),
-        Blockly.Dart.INDENT) + branch;
-  }
-  if (Blockly.Dart.INFINITE_LOOP_TRAP) {
-    branch = Blockly.Dart.prefixLines(
-        Blockly.Dart.injectId(Blockly.Dart.INFINITE_LOOP_TRAP, block),
-        Blockly.Dart.INDENT) + branch;
-  }
+  var xfix1 = '';
   if (Blockly.Dart.STATEMENT_PREFIX) {
-    branch = Blockly.Dart.prefixLines(
-        Blockly.Dart.injectId(Blockly.Dart.STATEMENT_PREFIX, block),
-        Blockly.Dart.INDENT) + branch;
+    xfix1 += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_PREFIX, block);
   }
+  if (Blockly.Dart.STATEMENT_SUFFIX) {
+    xfix1 += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_SUFFIX, block);
+  }
+  xfix1 = Blockly.Dart.prefixLines(xfix1, Blockly.Dart.INDENT);
+  var loopTrap = '';
+  if (Blockly.Dart.INFINITE_LOOP_TRAP) {
+    loopTrap = Blockly.Dart.prefixLines(
+        Blockly.Dart.injectId(Blockly.Dart.INFINITE_LOOP_TRAP, block),
+        Blockly.Dart.INDENT);
+  }
+  var branch = Blockly.Dart.statementToCode(block, 'STACK');
   var returnValue = Blockly.Dart.valueToCode(block, 'RETURN',
       Blockly.Dart.ORDER_NONE) || '';
+  var xfix2 = '';
+  if (branch && returnValue) {
+    // After executing the function body, revisit this block for the return.
+    xfix2 = xfix1;
+  }
   if (returnValue) {
     returnValue = Blockly.Dart.INDENT + 'return ' + returnValue + ';\n';
   }
@@ -61,7 +65,7 @@ Blockly.Dart['procedures_defreturn'] = function(block) {
         Blockly.Variables.NAME_TYPE);
   }
   var code = returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' +
-      branch + returnValue + '}';
+      xfix1 + loopTrap + branch + xfix2 + returnValue + '}';
   code = Blockly.Dart.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
   Blockly.Dart.definitions_['%' + funcName] = code;

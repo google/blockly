@@ -54,24 +54,28 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
 
   var funcName = Blockly.PHP.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
-  var branch = Blockly.PHP.statementToCode(block, 'STACK');
-  if (Blockly.PHP.STATEMENT_SUFFIX) {
-    branch = Blockly.PHP.prefixLines(
-        Blockly.PHP.injectId(Blockly.PHP.STATEMENT_SUFFIX, block),
-        Blockly.PHP.INDENT) + branch;
-  }
-  if (Blockly.PHP.INFINITE_LOOP_TRAP) {
-    branch = Blockly.PHP.prefixLines(
-        Blockly.PHP.injectId(Blockly.PHP.INFINITE_LOOP_TRAP, block),
-        Blockly.PHP.INDENT) + branch;
-  }
+  var xfix1 = '';
   if (Blockly.PHP.STATEMENT_PREFIX) {
-    branch = Blockly.PHP.prefixLines(
-        Blockly.PHP.injectId(Blockly.PHP.STATEMENT_PREFIX, block),
-        Blockly.PHP.INDENT) + branch;
+    xfix1 += Blockly.PHP.injectId(Blockly.PHP.STATEMENT_PREFIX, block);
   }
+  if (Blockly.PHP.STATEMENT_SUFFIX) {
+    xfix1 += Blockly.PHP.injectId(Blockly.PHP.STATEMENT_SUFFIX, block);
+  }
+  xfix1 = Blockly.PHP.prefixLines(xfix1, Blockly.PHP.INDENT);
+  var loopTrap = '';
+  if (Blockly.PHP.INFINITE_LOOP_TRAP) {
+    loopTrap = Blockly.PHP.prefixLines(
+        Blockly.PHP.injectId(Blockly.PHP.INFINITE_LOOP_TRAP, block),
+        Blockly.PHP.INDENT);
+  }
+  var branch = Blockly.PHP.statementToCode(block, 'STACK');
   var returnValue = Blockly.PHP.valueToCode(block, 'RETURN',
       Blockly.PHP.ORDER_NONE) || '';
+  var xfix2 = '';
+  if (branch && returnValue) {
+    // After executing the function body, revisit this block for the return.
+    xfix2 = xfix1;
+  }
   if (returnValue) {
     returnValue = Blockly.PHP.INDENT + 'return ' + returnValue + ';\n';
   }
@@ -81,7 +85,7 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
         Blockly.Variables.NAME_TYPE);
   }
   var code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
-      globals + branch + returnValue + '}';
+      globals + xfix1 + loopTrap + branch + xfix2 + returnValue + '}';
   code = Blockly.PHP.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
   Blockly.PHP.definitions_['%' + funcName] = code;

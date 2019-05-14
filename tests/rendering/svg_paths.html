@@ -47,15 +47,49 @@ limitations under the License.
 'use strict';
 var svgSpace;
 
+/**
+ * Add a CSS class to a element.
+ * Similar to Closure's goog.dom.classes.add, except it handles SVG elements.
+ * @param {!Element} element DOM element to add class to.
+ * @param {string} className Name of class to add.
+ * @return {boolean} True if class was added, false if already present.
+ */
+function addClass(element, className) {
+  var classes = element.getAttribute('class') || '';
+  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') != -1) {
+    return false;
+  }
+  if (classes) {
+    classes += ' ';
+  }
+  element.setAttribute('class', classes + className);
+  return true;
+};
+
+function createSvgElement(name, attrs, parent) {
+  var e = /** @type {!SVGElement} */
+      (document.createElementNS('http://www.w3.org/2000/svg', name));
+  for (var key in attrs) {
+    e.setAttribute(key, attrs[key]);
+  }
+  // IE defines a unique attribute "runtimeStyle", it is NOT applied to
+  // elements created with createElementNS. However, Closure checks for IE
+  // and assumes the presence of the attribute and crashes.
+  if (document.body.runtimeStyle) {  // Indicates presence of IE-only attr.
+    e.runtimeStyle = e.currentStyle = e.style;
+  }
+  if (parent) {
+    parent.appendChild(e);
+  }
+  return e;
+};
+
 function addPathAt(path, x, y) {
-  var group = Blockly.utils.createSvgElement('g',
-      {
-        'transform': 'translate(' + (x + 50) + ', ' + y + ')'
-      }, svgSpace);
-  Blockly.utils.createSvgElement('path', {
-    'd': 'M 0,0 ' + path,
-    'marker-start': 'url(#startDot)',
-    'marker-end': 'url(#endDot)',
+  var group = createSvgElement('g', {}, svgSpace);
+  createSvgElement('path', {
+    'd': 'm ' + (x + 50) + ',' + y + ' ' + path,
+    'marker-start': 'url(#reddot)',
+    'marker-end': 'url(#bluedot)',
     'class': 'pathDebugClass'
   },
   group);
@@ -63,7 +97,6 @@ function addPathAt(path, x, y) {
 
   return group;
 }
-
 function start() {
   svgSpace = document.getElementById('workspace');
   addPathAt(Blockly.BlockSvg.TAB_PATH_DOWN, 0, 0);

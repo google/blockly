@@ -87,14 +87,19 @@ Blockly.Dart['procedures_callreturn'] = function(block) {
 
 Blockly.Dart['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
-  var funcName = Blockly.Dart.variableDB_.getName(block.getFieldValue('NAME'),
-      Blockly.Procedures.NAME_TYPE);
-  var args = [];
-  for (var i = 0; i < block.arguments_.length; i++) {
-    args[i] = Blockly.Dart.valueToCode(block, 'ARG' + i,
-        Blockly.Dart.ORDER_NONE) || 'null';
+  var code = '';
+  if (Blockly.Dart.STATEMENT_PREFIX) {
+    // Automatic prefix insertion is switched off for this block.  Add manually.
+    code += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_PREFIX, block);
   }
-  var code = funcName + '(' + args.join(', ') + ');\n';
+  if (Blockly.Dart.STATEMENT_SUFFIX) {
+    // Suffix needs to be added before the function call.
+    code += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_SUFFIX, block);
+  }
+  // Generated code is for a function call as a statement is the same as a
+  // function call as a value, with the addition of line ending.
+  var tuple = Blockly.Dart['procedures_callreturn'](block);
+  code += tuple[0] + ';\n';
   return code;
 };
 

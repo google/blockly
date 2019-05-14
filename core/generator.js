@@ -198,10 +198,10 @@ Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
     }
     return [this.scrub_(block, code[0], opt_thisOnly), code[1]];
   } else if (typeof code == 'string') {
-    if (this.STATEMENT_PREFIX) {
+    if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
       code = this.injectId(this.STATEMENT_PREFIX, block) + code;
     }
-    if (this.STATEMENT_SUFFIX) {
+    if (this.STATEMENT_SUFFIX && !block.suppressPrefixSuffix) {
       code = code + this.injectId(this.STATEMENT_SUFFIX, block);
     }
     return this.scrub_(block, code, opt_thisOnly);

@@ -306,6 +306,12 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   elseCount_: 0,
 
   /**
+   * Don't automatically add STATEMENT_PREFIX and STATEMENT_SUFFIX to generated
+   * code.  These will be handled manually in this block's generators.
+   */
+  suppressPrefixSuffix: true,
+
+  /**
    * Create XML to represent the number of else-if and else inputs.
    * @return {Element} XML storage element.
    * @this Blockly.Block

@@ -42,7 +42,9 @@ Blockly.JavaScript['procedures_defreturn'] = function(block) {
     xfix1 += Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_SUFFIX,
         block);
   }
-  xfix1 = Blockly.JavaScript.prefixLines(xfix1, Blockly.JavaScript.INDENT);
+  if (xfix1) {
+    xfix1 = Blockly.JavaScript.prefixLines(xfix1, Blockly.JavaScript.INDENT);
+  }
   var loopTrap = '';
   if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
     loopTrap = Blockly.JavaScript.prefixLines(

@@ -40,7 +40,9 @@ Blockly.Dart['procedures_defreturn'] = function(block) {
   if (Blockly.Dart.STATEMENT_SUFFIX) {
     xfix1 += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_SUFFIX, block);
   }
-  xfix1 = Blockly.Dart.prefixLines(xfix1, Blockly.Dart.INDENT);
+  if (xfix1) {
+    xfix1 = Blockly.Dart.prefixLines(xfix1, Blockly.Dart.INDENT);
+  }
   var loopTrap = '';
   if (Blockly.Dart.INFINITE_LOOP_TRAP) {
     loopTrap = Blockly.Dart.prefixLines(

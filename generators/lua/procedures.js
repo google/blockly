@@ -40,7 +40,9 @@ Blockly.Lua['procedures_defreturn'] = function(block) {
   if (Blockly.Lua.STATEMENT_SUFFIX) {
     xfix1 += Blockly.Lua.injectId(Blockly.Lua.STATEMENT_SUFFIX, block);
   }
-  xfix1 = Blockly.Lua.prefixLines(xfix1, Blockly.Lua.INDENT);
+  if (xfix1) {
+    xfix1 = Blockly.Lua.prefixLines(xfix1, Blockly.Lua.INDENT);
+  }
   var loopTrap = '';
   if (Blockly.Lua.INFINITE_LOOP_TRAP) {
     loopTrap = Blockly.Lua.prefixLines(

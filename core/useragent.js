@@ -54,8 +54,7 @@ goog.provide('Blockly.userAgent');
 
   // Engines.  Logic from:
   // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/engine.js
-  Blockly.userAgent.WEBKIT = has('WebKit') &&
-      !Blockly.userAgent.EDGE;
+  Blockly.userAgent.WEBKIT = has('WebKit') && !Blockly.userAgent.EDGE;
   Blockly.userAgent.GECKO = has('Gecko') && !Blockly.userAgent.WEBKIT &&
       !Blockly.userAgent.IE && !Blockly.userAgent.EDGE;
 

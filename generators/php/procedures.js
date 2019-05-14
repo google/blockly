@@ -61,7 +61,9 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
   if (Blockly.PHP.STATEMENT_SUFFIX) {
     xfix1 += Blockly.PHP.injectId(Blockly.PHP.STATEMENT_SUFFIX, block);
   }
-  xfix1 = Blockly.PHP.prefixLines(xfix1, Blockly.PHP.INDENT);
+  if (xfix1) {
+    xfix1 = Blockly.PHP.prefixLines(xfix1, Blockly.PHP.INDENT);
+  }
   var loopTrap = '';
   if (Blockly.PHP.INFINITE_LOOP_TRAP) {
     loopTrap = Blockly.PHP.prefixLines(

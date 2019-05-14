@@ -62,7 +62,9 @@ Blockly.Python['procedures_defreturn'] = function(block) {
   if (Blockly.Python.STATEMENT_SUFFIX) {
     xfix1 += Blockly.Python.injectId(Blockly.Python.STATEMENT_SUFFIX, block);
   }
-  xfix1 = Blockly.Python.prefixLines(xfix1, Blockly.Python.INDENT);
+  if (xfix1) {
+    xfix1 = Blockly.Python.prefixLines(xfix1, Blockly.Python.INDENT);
+  }
   var loopTrap = '';
   if (Blockly.Python.INFINITE_LOOP_TRAP) {
     loopTrap = Blockly.Python.prefixLines(

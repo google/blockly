@@ -618,52 +618,6 @@ Blockly.Navigation.focusWorkspace = function() {
 };
 
 /**
- * Move the cursor to the next connection, field or block. This skips
- * connections of type next because previous and next connection look the same
- * when the cursor is going through a stack of blocks.
- */
-Blockly.Navigation.keyboardNext = function() {
-  var cursor = Blockly.Navigation.cursor_;
-  cursor.next();
-  var newNode = cursor.getCurNode();
-  if (newNode.getType() === Blockly.ASTNode.types.NEXT) {
-    cursor.next();
-  }
-};
-
-/**
- * Move the cursor down the AST.
- */
-Blockly.Navigation.keyboardIn = function() {
-  var cursor = Blockly.Navigation.cursor_;
-  cursor.in();
-  var newNode = cursor.getCurNode();
-  if (newNode.getType() === Blockly.ASTNode.types.OUTPUT) {
-    cursor.next();
-  }
-};
-
-/**
- * Move the cursor to the previous connection, field or block.
- */
-Blockly.Navigation.keyboardPrev = function() {
-  var cursor = Blockly.Navigation.cursor_;
-  cursor.prev();
-  var newNode = cursor.getCurNode();
-  if (newNode && newNode.getType() === Blockly.ASTNode.types.NEXT) {
-    cursor.prev();
-  }
-};
-
-/**
- * Move the cursor up the AST.
- */
-Blockly.Navigation.keyboardOut = function() {
-  var cursor = Blockly.Navigation.cursor_;
-  cursor.out();
-};
-
-/**
  * Handles hitting the enter key on the workspace.
  */
 Blockly.Navigation.handleEnterForWS = function() {
@@ -790,19 +744,19 @@ Blockly.Navigation.toolboxKeyHandler = function(e) {
  */
 Blockly.Navigation.workspaceKeyHandler = function(e) {
   if (e.keyCode === goog.events.KeyCodes.W) {
-    Blockly.Navigation.keyboardOut();
+    Blockly.Navigation.cursor_.prev();
     Blockly.Navigation.log('W: Workspace : Out');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.A) {
-    Blockly.Navigation.keyboardPrev();
+    Blockly.Navigation.cursor_.out();
     Blockly.Navigation.log('S: Workspace : Previous');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.S) {
-    Blockly.Navigation.keyboardIn();
+    Blockly.Navigation.cursor_.next();
     Blockly.Navigation.log('S: Workspace : In');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.D) {
-    Blockly.Navigation.keyboardNext();
+    Blockly.Navigation.cursor_.in();
     Blockly.Navigation.log('S: Workspace : Next');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.I) {

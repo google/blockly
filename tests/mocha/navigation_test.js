@@ -227,7 +227,7 @@ suite('Navigation', function() {
       var sourceNode = Blockly.ASTNode.createConnectionNode(this.basicBlock2.nextConnection);
       Blockly.Navigation.cursor_.setLocation(sourceNode);
 
-      Blockly.Navigation.insertBlockFromWs();
+      Blockly.Navigation.modify();
       var insertedBlock = this.basicBlock.previousConnection.targetBlock();
 
       chai.assert.isNotNull(insertedBlock);

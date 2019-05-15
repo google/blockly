@@ -781,13 +781,15 @@ Blockly.Xml.deleteNext = function(xmlBlock) {
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
-if (!goog.global['Blockly']) {
-  goog.global['Blockly'] = {};
+if (!Blockly.utils.global['Blockly']) {
+  Blockly.utils.global['Blockly'] = {};
 }
-if (!goog.global['Blockly']['Xml']) {
-  goog.global['Blockly']['Xml'] = {};
+if (!Blockly.utils.global['Blockly']['Xml']) {
+  Blockly.utils.global['Blockly']['Xml'] = {};
 }
-goog.global['Blockly']['Xml']['domToText'] = Blockly.Xml.domToText;
-goog.global['Blockly']['Xml']['domToWorkspace'] = Blockly.Xml.domToWorkspace;
-goog.global['Blockly']['Xml']['textToDom'] = Blockly.Xml.textToDom;
-goog.global['Blockly']['Xml']['workspaceToDom'] = Blockly.Xml.workspaceToDom;
+Blockly.utils.global['Blockly']['Xml']['domToText'] = Blockly.Xml.domToText;
+Blockly.utils.global['Blockly']['Xml']['domToWorkspace'] =
+    Blockly.Xml.domToWorkspace;
+Blockly.utils.global['Blockly']['Xml']['textToDom'] = Blockly.Xml.textToDom;
+Blockly.utils.global['Blockly']['Xml']['workspaceToDom'] =
+    Blockly.Xml.workspaceToDom;

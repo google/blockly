@@ -37,7 +37,6 @@ goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 
-goog.require('goog.color');
 goog.require('goog.math.Coordinate');
 
 

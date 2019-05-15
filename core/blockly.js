@@ -498,7 +498,7 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
   };
 
   var bindData = [];
-  if (goog.global.PointerEvent && (name in Blockly.Touch.TOUCH_MAP)) {
+  if (Blockly.utils.global.PointerEvent && (name in Blockly.Touch.TOUCH_MAP)) {
     for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
       node.addEventListener(type, wrapFunc, false);
       bindData.push([node, type, wrapFunc]);
@@ -550,7 +550,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
   };
 
   var bindData = [];
-  var window = goog.global['window'];
+  var window = Blockly.utils.global['window'];
   if (window && window.PointerEvent && (name in Blockly.Touch.TOUCH_MAP)) {
     for (var i = 0, type; type = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
       node.addEventListener(type, wrapFunc, false);
@@ -736,7 +736,6 @@ Blockly.refreshTheme_ = function(ws) {
 Blockly.updateBlockStyles_ = function(blocks) {
   for (var i = 0, block; block = blocks[i]; i++) {
     var blockStyleName = block.getStyleName();
-
     block.setStyle(blockStyleName);
     if (block.mutator) {
       block.mutator.updateBlockStyle(blockStyleName);
@@ -753,8 +752,9 @@ Blockly.getTheme = function() {
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
-if (!goog.global['Blockly']) {
-  goog.global['Blockly'] = {};
+if (!Blockly.utils.global['Blockly']) {
+  Blockly.utils.global['Blockly'] = {};
 }
-goog.global['Blockly']['getMainWorkspace'] = Blockly.getMainWorkspace;
-goog.global['Blockly']['addChangeListener'] = Blockly.addChangeListener;
+Blockly.utils.global['Blockly']['getMainWorkspace'] = Blockly.getMainWorkspace;
+Blockly.utils.global['Blockly']['addChangeListener'] =
+    Blockly.addChangeListener;

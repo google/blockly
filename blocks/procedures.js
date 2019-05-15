@@ -643,12 +643,6 @@ Blockly.Blocks['procedures_callnoreturn'] = {
   },
 
   /**
-   * Don't automatically add STATEMENT_PREFIX and STATEMENT_SUFFIX to generated
-   * code.  These will be handled manually in this block's generators.
-   */
-  suppressPrefixSuffix: true,
-
-  /**
    * Returns the name of the procedure this block calls.
    * @return {string} Procedure name.
    * @this Blockly.Block

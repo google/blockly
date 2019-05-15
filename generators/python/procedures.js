@@ -117,20 +117,10 @@ Blockly.Python['procedures_callreturn'] = function(block) {
 
 Blockly.Python['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
-  var code = '';
-  if (Blockly.Python.STATEMENT_PREFIX) {
-    // Automatic prefix insertion is switched off for this block.  Add manually.
-    code += Blockly.Python.injectId(Blockly.Python.STATEMENT_PREFIX, block);
-  }
-  if (Blockly.Python.STATEMENT_SUFFIX) {
-    // Suffix needs to be added before the function call.
-    code += Blockly.Python.injectId(Blockly.Python.STATEMENT_SUFFIX, block);
-  }
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
   var tuple = Blockly.Python['procedures_callreturn'](block);
-  code += tuple[0] + '\n';
-  return code;
+  return tuple[0] + '\n';
 };
 
 Blockly.Python['procedures_ifreturn'] = function(block) {

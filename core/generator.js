@@ -427,8 +427,8 @@ Blockly.Generator.prototype.init = function(_workspace) {
  * the block, or to handle comments for the specified block and any connected
  * value blocks.
  * @param {!Blockly.Block} _block The current block.
- * @param {string} code The JavaScript code created for this block.
- * @return {string} JavaScript code with comments and subsequent blocks added.
+ * @param {string} code The code created for this block.
+ * @return {string} Code with comments and subsequent blocks added.
  * @private
  */
 Blockly.Generator.prototype.scrub_ = function(_block, code) {

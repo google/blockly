@@ -114,20 +114,10 @@ Blockly.PHP['procedures_callreturn'] = function(block) {
 
 Blockly.PHP['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
-  var code = '';
-  if (Blockly.PHP.STATEMENT_PREFIX) {
-    // Automatic prefix insertion is switched off for this block.  Add manually.
-    code += Blockly.PHP.injectId(Blockly.PHP.STATEMENT_PREFIX, block);
-  }
-  if (Blockly.PHP.STATEMENT_SUFFIX) {
-    // Suffix needs to be added before the function call.
-    code += Blockly.PHP.injectId(Blockly.PHP.STATEMENT_SUFFIX, block);
-  }
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
   var tuple = Blockly.PHP['procedures_callreturn'](block);
-  code += tuple[0] + ';\n';
-  return code;
+  return tuple[0] + ';\n';
 };
 
 Blockly.PHP['procedures_ifreturn'] = function(block) {

@@ -481,10 +481,11 @@ Blockly.Mutator.findParentWs = function(workspace) {
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
-if (!goog.global['Blockly']) {
-  goog.global['Blockly'] = {};
+if (!Blockly.utils.global['Blockly']) {
+  Blockly.utils.global['Blockly'] = {};
 }
-if (!goog.global['Blockly']['Mutator']) {
-  goog.global['Blockly']['Mutator'] = {};
+if (!Blockly.utils.global['Blockly']['Mutator']) {
+  Blockly.utils.global['Blockly']['Mutator'] = {};
 }
-goog.global['Blockly']['Mutator']['reconnect'] = Blockly.Mutator.reconnect;
+Blockly.utils.global['Blockly']['Mutator']['reconnect'] =
+    Blockly.Mutator.reconnect;

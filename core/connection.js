@@ -671,8 +671,8 @@ Blockly.Connection.prototype.setCheck = function(check) {
 
 /**
  * Get a connection's compatibility.
- * @return {Array} List of compatible value types.  Null if
- *     all types are compatible.
+ * @return {Array} List of compatible value types.
+ *     Null if all types are compatible.
  * @public
  */
 Blockly.Connection.prototype.getCheck = function() {

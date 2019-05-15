@@ -30,8 +30,8 @@ goog.provide('Blockly.DropDownDiv');
 
 goog.require('Blockly.utils');
 
-goog.require('goog.dom');
 goog.require('goog.style');
+
 
 /**
  * Class for drop-down div.

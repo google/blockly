@@ -30,8 +30,6 @@ goog.require('Blockly.BlockAnimations');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.RenderedConnection');
 
-goog.require('goog.math.Coordinate');
-
 
 /**
  * Class that controls updates to connections during drags.  It is primarily
@@ -660,7 +658,8 @@ Blockly.InsertionMarkerManager.prototype.disconnectMarker_ = function() {
   }
 
   if (imConn.targetConnection) {
-    throw 'markerConnection_ still connected at the end of disconnectInsertionMarker';
+    throw Error('markerConnection_ still connected at the end of ' +
+        'disconnectInsertionMarker');
   }
 
   this.markerConnection_ = null;
@@ -679,8 +678,10 @@ Blockly.InsertionMarkerManager.prototype.connectMarker_ = function() {
   var imBlock = isLastInStack ? this.lastMarker_ : this.firstMarker_;
   var imConn = imBlock.getMatchingConnection(local.sourceBlock_, local);
 
-  goog.asserts.assert(imConn != this.markerConnection_,
-      'Made it to connectMarker_ even though the marker isn\'t changing');
+  if (imConn == this.markerConnection_) {
+    throw Error('Made it to connectMarker_ even though the marker isn\'t ' +
+        'changing');
+  }
 
   // Render disconnected from everything else so that we have a valid
   // connection location.

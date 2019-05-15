@@ -35,10 +35,10 @@ goog.require('Blockly.VerticalFlyout');
 
 goog.require('goog.events');
 goog.require('goog.events.BrowserFeature');
+goog.require('goog.events.EventType');
 goog.require('goog.html.SafeHtml');
-goog.require('goog.html.SafeStyle');
 goog.require('goog.math.Rect');
-goog.require('goog.style');
+goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.ui.tree.TreeNode');
 

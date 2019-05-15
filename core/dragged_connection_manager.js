@@ -29,8 +29,6 @@ goog.provide('Blockly.DraggedConnectionManager');
 goog.require('Blockly.BlockAnimations');
 goog.require('Blockly.RenderedConnection');
 
-goog.require('goog.math.Coordinate');
-
 
 /**
  * Class that controls updates to connections during drags.  It is primarily

@@ -629,7 +629,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
 Blockly.BlockSvg.prototype.showHelp_ = function() {
   var url = (typeof this.helpUrl == 'function') ? this.helpUrl() : this.helpUrl;
   if (url) {
-    window.open(url);
+    open(url);
   }
 };
 

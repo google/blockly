@@ -456,7 +456,9 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
   if (!Blockly.DropDownDiv.isVisible()) {
     return;
   }
-  Blockly.DropDownDiv.animateOutTimer_ && window.clearTimeout(Blockly.DropDownDiv.animateOutTimer_);
+  if (Blockly.DropDownDiv.animateOutTimer_) {
+    clearTimeout(Blockly.DropDownDiv.animateOutTimer_);
+  }
   Blockly.DropDownDiv.positionInternal_();
   Blockly.DropDownDiv.clearContent();
   Blockly.DropDownDiv.owner_ = null;

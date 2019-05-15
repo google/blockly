@@ -82,7 +82,7 @@ Blockly.WorkspaceAudio.prototype.load = function(filenames, name) {
     return;
   }
   try {
-    var audioTest = new window['Audio']();
+    var audioTest = new Blockly.utils.global['Audio']();
   } catch (e) {
     // No browser support for Audio.
     // IE can throw an error even if the Audio object exists.
@@ -94,7 +94,7 @@ Blockly.WorkspaceAudio.prototype.load = function(filenames, name) {
     var ext = filename.match(/\.(\w+)$/);
     if (ext && audioTest.canPlayType('audio/' + ext[1])) {
       // Found an audio format we can play.
-      sound = new window['Audio'](filename);
+      sound = new Blockly.utils.global['Audio'](filename);
       break;
     }
   }

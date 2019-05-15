@@ -35,6 +35,7 @@ goog.provide('Blockly.utils');
 goog.require('Blockly.userAgent');
 
 goog.require('goog.math.Coordinate');
+goog.require('goog.style');
 
 
 /**

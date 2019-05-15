@@ -31,6 +31,8 @@
  */
 goog.provide('Blockly.utils.uiMenu');
 
+goog.require('goog.style');
+
 
 /**
  * Get the size of a rendered goog.ui.Menu.

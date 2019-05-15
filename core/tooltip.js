@@ -37,8 +37,6 @@ goog.provide('Blockly.Tooltip');
 
 goog.require('Blockly.utils');
 
-goog.require('goog.dom');
-
 
 /**
  * Is a tooltip currently showing?
@@ -303,7 +301,8 @@ Blockly.Tooltip.show_ = function() {
     Blockly.Tooltip.DIV.appendChild(div);
   }
   var rtl = Blockly.Tooltip.element_.RTL;
-  var windowSize = goog.dom.getViewportSize();
+  var windowWidth = document.documentElement.clientWidth;
+  var windowHeight = document.documentElement.clientHeight;
   // Display the tooltip.
   Blockly.Tooltip.DIV.style.direction = rtl ? 'rtl' : 'ltr';
   Blockly.Tooltip.DIV.style.display = 'block';
@@ -318,7 +317,7 @@ Blockly.Tooltip.show_ = function() {
   var anchorY = Blockly.Tooltip.lastY_ + Blockly.Tooltip.OFFSET_Y;
 
   if (anchorY + Blockly.Tooltip.DIV.offsetHeight >
-      windowSize.height + window.scrollY) {
+      windowHeight + window.scrollY) {
     // Falling off the bottom of the screen; shift the tooltip up.
     anchorY -= Blockly.Tooltip.DIV.offsetHeight + 2 * Blockly.Tooltip.OFFSET_Y;
   }
@@ -327,10 +326,10 @@ Blockly.Tooltip.show_ = function() {
     anchorX = Math.max(Blockly.Tooltip.MARGINS - window.scrollX, anchorX);
   } else {
     if (anchorX + Blockly.Tooltip.DIV.offsetWidth >
-        windowSize.width + window.scrollX - 2 * Blockly.Tooltip.MARGINS) {
+        windowWidth + window.scrollX - 2 * Blockly.Tooltip.MARGINS) {
       // Falling off the right edge of the screen;
       // clamp the tooltip on the edge.
-      anchorX = windowSize.width - Blockly.Tooltip.DIV.offsetWidth -
+      anchorX = windowWidth - Blockly.Tooltip.DIV.offsetWidth -
           2 * Blockly.Tooltip.MARGINS;
     }
   }

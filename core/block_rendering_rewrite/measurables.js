@@ -208,6 +208,58 @@ Blockly.BlockRendering.ExternalValueInput = function(input) {
 goog.inherits(Blockly.BlockRendering.ExternalValueInput,
     Blockly.BlockRendering.Input);
 
+Blockly.BlockRendering.PreviousConnection = function(width) {
+  Blockly.BlockRendering.Icon.superClass_.constructor.call(this);
+  this.renderRect = null;
+  this.type = 'previous connection';
+  //TODO: this could be changed by the precedes statement
+  this.height = BRC.MEDIUM_PADDING;
+  this.width = BRC.NOTCH_WIDTH;
+
+};
+goog.inherits(Blockly.BlockRendering.PreviousConnection, Blockly.BlockRendering.Measurable);
+
+Blockly.BlockRendering.NextConnection = function(width) {
+  Blockly.BlockRendering.Icon.superClass_.constructor.call(this);
+  this.renderRect = null;
+  this.type = 'next connection';
+  //TODO: this could be changed by the precedes statement
+  this.height = BRC.MEDIUM_PADDING;
+  this.width = width;
+};
+goog.inherits(Blockly.BlockRendering.NextConnection, Blockly.BlockRendering.Measurable);
+
+Blockly.BlockRendering.Hat = function(width, height) {
+  Blockly.BlockRendering.Icon.superClass_.constructor.call(this);
+  this.renderRect = null;
+  this.type = 'hat';
+  //TODO: this could be changed by the precedes statement
+  this.height = BRC.MEDIUM_PADDING;
+
+};
+goog.inherits(Blockly.BlockRendering.Hat, Blockly.BlockRendering.Measurable);
+
+Blockly.BlockRendering.SquareCorner = function(width, height) {
+  Blockly.BlockRendering.Icon.superClass_.constructor.call(this);
+  this.renderRect = null;
+  this.type = 'square corner';
+  //TODO: this could be changed by the precedes statement
+  this.height = BRC.MEDIUM_PADDING;
+
+};
+goog.inherits(Blockly.BlockRendering.SquareCorner, Blockly.BlockRendering.Measurable);
+
+Blockly.BlockRendering.RoundCorner = function(width, height) {
+  Blockly.BlockRendering.Icon.superClass_.constructor.call(this);
+  this.renderRect = null;
+  this.type = 'round corner';
+  //TODO: this could be changed by the precedes statement
+  this.height = BRC.MEDIUM_PADDING;
+
+};
+goog.inherits(Blockly.BlockRendering.RoundCorner, Blockly.BlockRendering.Measurable);
+
+
 Blockly.BlockRendering.Row = function() {
   this.type = 'row';
   this.yPos = 0;
@@ -273,7 +325,9 @@ Blockly.BlockRendering.InRowSpacer = function(width) {
 goog.inherits(Blockly.BlockRendering.InRowSpacer,
     Blockly.BlockRendering.Measurable);
 
-Blockly.BlockRendering.TopRow = function(block, width) {
+Blockly.BlockRendering.TopRow = function(block) {
+  this.elements = [];
+  this.type = 'top row';
   /**
    *
    * @type {boolean}
@@ -288,6 +342,7 @@ Blockly.BlockRendering.TopRow = function(block, width) {
    * True if the top left corner of the block should be squared.
    * @type {boolean}
    */
+  //Can get rid of
   this.squareCorner = !!block.outputConnection ||
       this.startHat || (prevBlock && prevBlock.getNextBlock() == block);
 
@@ -300,8 +355,6 @@ Blockly.BlockRendering.TopRow = function(block, width) {
   } else {
     this.height = BRC.MEDIUM_PADDING;
   }
-
-  this.width = width;
 };
 goog.inherits(Blockly.BlockRendering.TopRow,
     Blockly.BlockRendering.Measurable);

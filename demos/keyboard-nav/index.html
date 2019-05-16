@@ -22,16 +22,19 @@
   <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
     <a href="../index.html">Demos</a> &gt; Keyboard Navigation</h1>
 
-  <p>This is a demo showing basic keyboard navigation.<br>
-    To enter keyboard navigation mode <b>shift click anywhere on the workspace or on a block</b>.<br><br>
+  <p>You can enter keyboard navigation mode by <b>shift click anywhere on the
+  workspace or on a block.</b> <br>
+  You can then use the WASD keys to move around the workspace or click the show
+  demo button to display an alternative way to navigate the workspace. The demo
+  uses <a href="https://en.wikipedia.org/wiki/Tree_traversal#Pre-order_(NLR)">pre
+  order tree raversal</a> as an alternative way to navigate the blocks,
+  connections, and fields on the workspace.<br><br>
     W: Previous block/field/input at the same level<br>
-    A: Up one level (Field (or input) -> Block -> Input (or field) -> Block -> Stack -> Workspace)<br>
+    A: Up one level (Field (or input) -> Block -> Input (or field) -> Block ->
+    Stack -> Workspace)<br>
     S: Next block/field/input at the same level<br>
-    D: Down one level (Workspace -> Stack -> Block -> Input ( or field) -> Block -> Field (orinput))<br><br>
-    The demo below shows how the Blockly AST can be used to change the way that
-    a user can traverse blocks. Below we use depth first tree traversal to
-    squash the tree into a single linear line that a user can traverse by
-    continually hitting next.
+    D: Down one level (Workspace -> Stack -> Block -> Input ( or field) -> Block
+     -> Field (orinput))<br><br>
   </p>
 
   <!-- TODO: Update when we add keyboard navigation to site -->

@@ -47,7 +47,10 @@ goog.require('goog.math.Coordinate');
  * @constructor
  */
 Blockly.FieldTextInput = function(text, opt_validator) {
-  Blockly.FieldTextInput.superClass_.constructor.call(this, text || '',
+  if (text === null || text === undefined) {
+    text = '';
+  }
+  Blockly.FieldTextInput.superClass_.constructor.call(this, String(text),
       opt_validator);
 };
 goog.inherits(Blockly.FieldTextInput, Blockly.Field);

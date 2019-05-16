@@ -46,13 +46,21 @@ suite ('Text Input Fields', function() {
       var textInputField = new Blockly.FieldTextInput('value');
       assertValue(textInputField, 'value');
     });
-    test('Number', function() {
+    test('Number (Truthy)', function() {
       var textInputField = new Blockly.FieldTextInput(1);
       assertValue(textInputField, '1');
     });
-    test('Boolean', function() {
+    test('Number (Falsy)', function() {
+      var textInputField = new Blockly.FieldTextInput(0);
+      assertValue(textInputField, '0');
+    });
+    test('Boolean True', function() {
       var textInputField = new Blockly.FieldTextInput(true);
       assertValue(textInputField, 'true');
+    });
+    test('Boolean False', function() {
+      var textInputField = new Blockly.FieldTextInput(false);
+      assertValue(textInputField, 'false');
     });
   });
   suite('fromJson', function() {
@@ -73,13 +81,21 @@ suite ('Text Input Fields', function() {
       var textInputField = Blockly.FieldTextInput.fromJson({ text:'value' });
       assertValue(textInputField, 'value');
     });
-    test('Number', function() {
+    test('Number (Truthy)', function() {
       var textInputField = Blockly.FieldTextInput.fromJson({ text:1 });
       assertValue(textInputField, '1');
     });
-    test('Boolean', function() {
+    test('Number (Falsy)', function() {
+      var textInputField = Blockly.FieldTextInput.fromJson({ text:0 });
+      assertValue(textInputField, '0');
+    });
+    test('Boolean True', function() {
       var textInputField = Blockly.FieldTextInput.fromJson({ text:true });
       assertValue(textInputField, 'true');
+    });
+    test('Boolean False', function() {
+      var textInputField = Blockly.FieldTextInput.fromJson({ text:false });
+      assertValue(textInputField, 'false');
     });
   });
   suite('setValue', function() {
@@ -98,6 +114,22 @@ suite ('Text Input Fields', function() {
     test('New String', function() {
       textInputField.setValue('newValue');
       assertValue(textInputField, 'newValue');
+    });
+    test('Number (Truthy)', function() {
+      textInputField.setValue(1);
+      assertValue(textInputField, '1');
+    });
+    test('Number (Falsy)', function() {
+      textInputField.setValue(0);
+      assertValue(textInputField, '0');
+    });
+    test('Boolean True', function() {
+      textInputField.setValue(true);
+      assertValue(textInputField, 'true');
+    });
+    test('Boolean False', function() {
+      textInputField.setValue(false);
+      assertValue(textInputField, 'false');
     });
   });
   suite.skip('Validators', function() {

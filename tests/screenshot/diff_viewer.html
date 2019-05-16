@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Diff Viewer</title>
+<script>
+'use strict';
+function start() {
+  var table = document.getElementById('results_table');
+  addTest(table, 'math_addition');
+  //addTest(table, 'another-screenshot');
+}
+
+function addTest(table, name) {
+  var row = table.insertRow(-1);
+  row.className = 'tableRow';
+  var cell1 = row.insertCell(0);
+  cell1.innerHTML = name;
+  cell1.displayed = true;
+  cell1.className = 'testName';
+  var cell2 = addImageCell(row, name, 'old');
+  var cell3 = addImageCell(row, name, 'new');
+  var cell4 = addImageCell(row, name, 'diff');
+
+  cell1.onclick = function() {
+    if (cell1.displayed) {
+      cell1.displayed = false;
+      setVisibility(cell2, false);
+      setVisibility(cell3, false);
+      setVisibility(cell4, false);
+    } else {
+      cell1.displayed = true;
+      setVisibility(cell2, true);
+      setVisibility(cell3, true);
+      setVisibility(cell4, true);
+    }
+  }
+}
+
+function setVisibility(cell, hidden) {
+  var img = cell.firstChild;
+  if (hidden) {
+    img.className = 'hidden';
+  } else {
+    img.className = '';
+  }
+}
+function addImageCell(row, name, dir) {
+  var cell = row.insertCell();
+  cell.className = 'imageCell';
+  var img = document.createElement('img');
+  img.src = 'outputs/' + dir + '/' + name + '.png';
+  cell.appendChild(img);
+  return cell;
+}
+</script>
+
+<style>
+.imageCell {
+  width: 30%;
+  overflow: hidden
+}
+.hidden {
+  display: none;
+}
+.testName {
+  cursor: pointer;
+}
+td {
+  border: 1px solid black;
+}
+th {
+  border: 1px solid black;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+</style>
+</head>
+<body onload="start()">
+  <div>
+    <table id="results_table">
+      <tr>
+        <th style="width:100px">Test name</th>
+        <th>Old</th>
+        <th>New</th>
+        <th>Diff</th>
+      </tr>
+  </div>
+</body>
+</html>

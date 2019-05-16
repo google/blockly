@@ -116,6 +116,12 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
         // This block is a naked value.  Ask the language's code generator if
         // it wants to append a semicolon, or something.
         line = this.scrubNakedValue(line);
+        if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
+          line = this.injectId(this.STATEMENT_PREFIX, block) + line;
+        }
+        if (this.STATEMENT_SUFFIX && !block.suppressPrefixSuffix) {
+          line = line + this.injectId(this.STATEMENT_SUFFIX, block);
+        }
       }
       code.push(line);
     }
@@ -322,11 +328,11 @@ Blockly.Generator.prototype.addLoopTrap = function(branch, block) {
     branch = this.prefixLines(this.injectId(this.INFINITE_LOOP_TRAP, block),
         this.INDENT) + branch;
   }
-  if (this.STATEMENT_SUFFIX) {
+  if (this.STATEMENT_SUFFIX && !block.suppressPrefixSuffix) {
     branch = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block),
         this.INDENT) + branch;
   }
-  if (this.STATEMENT_PREFIX) {
+  if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
     branch = branch + this.prefixLines(this.injectId(this.STATEMENT_PREFIX,
         block), this.INDENT);
   }

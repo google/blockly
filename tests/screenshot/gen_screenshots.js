@@ -77,12 +77,12 @@ async function genSingleScreenshot(browser, dir, test_name) {
   var xml_url = prefix + 'test_cases/' + test_name;
   var xml = fs.readFileSync(xml_url, 'utf8');
 
-  var doStuffFn = function(xml_text) {
+  var loadXmlFn = function(xml_text) {
     workspace.clear();
     var xml = Blockly.Xml.textToDom(xml_text);
     Blockly.Xml.domToWorkspace(xml, workspace);
   };
-  await browser.execute(doStuffFn, xml);
+  await browser.execute(loadXmlFn, xml);
   await browser.saveScreenshot(prefix + '/outputs/' + dir + '/' + test_name + '.png');
 }
 

@@ -210,7 +210,7 @@ Blockly.Python['controls_flow_statements'] = function(block) {
   if (Blockly.Python.STATEMENT_PREFIX) {
     var loop = Blockly.Constants.Loops
         .CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.getSurroundLoop(block);
-    if (loop) {
+    if (loop && !loop.suppressPrefixSuffix) {
       // Inject loop's statement prefix here since the regular one at the end
       // of the loop will not get executed if 'continue' is triggered.
       // In the case of 'break', a prefix is needed due to the loop's suffix.

@@ -45,7 +45,10 @@ goog.require('goog.math.Size');
 Blockly.FieldLabel = function(text, opt_class) {
   this.size_ = new goog.math.Size(0, 17.5);
   this.class_ = opt_class;
-  this.setValue(text || '');
+  if (text === null || text === undefined) {
+    text = '';
+  }
+  this.setValue(String(text));
   this.tooltip_ = '';
 };
 goog.inherits(Blockly.FieldLabel, Blockly.Field);

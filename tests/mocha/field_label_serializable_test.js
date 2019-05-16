@@ -45,13 +45,21 @@ suite ('Label Serializable Fields', function() {
       var labelField = new Blockly.FieldLabelSerializable('value');
       assertValue(labelField, 'value');
     });
-    test('Number', function() {
+    test('Number (Truthy)', function() {
       var labelField = new Blockly.FieldLabelSerializable(1);
       assertValue(labelField, '1');
     });
-    test('Boolean', function() {
+    test('Number (Falsy)', function() {
+      var labelField = new Blockly.FieldLabelSerializable(0);
+      assertValue(labelField, '0');
+    });
+    test('Boolean True', function() {
       var labelField = new Blockly.FieldLabelSerializable(true);
       assertValue(labelField, 'true');
+    });
+    test('Boolean False', function() {
+      var labelField = new Blockly.FieldLabelSerializable(false);
+      assertValue(labelField, 'false');
     });
   });
   suite('fromJson', function() {
@@ -74,13 +82,21 @@ suite ('Label Serializable Fields', function() {
           .fromJson({ text:'value' });
       assertValue(labelField, 'value');
     });
-    test('Number', function() {
+    test('Number (Truthy)', function() {
       var labelField = Blockly.FieldLabelSerializable.fromJson({ text:1 });
       assertValue(labelField, '1');
     });
-    test('Boolean', function() {
+    test('Number (Falsy)', function() {
+      var labelField = Blockly.FieldLabelSerializable.fromJson({ text:0 });
+      assertValue(labelField, '0');
+    });
+    test('Boolean True', function() {
       var labelField = Blockly.FieldLabelSerializable.fromJson({ text:true });
       assertValue(labelField, 'true');
+    });
+    test('Boolean False', function() {
+      var labelField = Blockly.FieldLabelSerializable.fromJson({ text:false });
+      assertValue(labelField, 'false');
     });
   });
   suite('setValue', function() {
@@ -99,6 +115,22 @@ suite ('Label Serializable Fields', function() {
     test('New String', function() {
       labelField.setValue('newValue');
       assertValue(labelField, 'newValue');
+    });
+    test('Number (Truthy)', function() {
+      labelField.setValue(1);
+      assertValue(labelField, '1');
+    });
+    test('Number (Falsy)', function() {
+      labelField.setValue(0);
+      assertValue(labelField, '0');
+    });
+    test('Boolean True', function() {
+      labelField.setValue(true);
+      assertValue(labelField, 'true');
+    });
+    test('Boolean False', function() {
+      labelField.setValue(false);
+      assertValue(labelField, 'false');
     });
   });
 });

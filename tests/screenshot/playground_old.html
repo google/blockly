@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Blockly Playground: Old rendering</title>
+<script src="https://blockly-demo.appspot.com/static/blockly_compressed.js"></script>
+<script src="../../msg/messages.js"></script>
+<script src="../../blocks/logic.js"></script>
+<script src="../../blocks/loops.js"></script>
+<script src="../../blocks/math.js"></script>
+<script src="../../blocks/text.js"></script>
+<script src="../../blocks/lists.js"></script>
+<script src="../../blocks/colour.js"></script>
+<script src="../../blocks/variables.js"></script>
+<script src="../../blocks/variables_dynamic.js"></script>
+<script src="../../blocks/procedures.js"></script>
+<script src="../blocks/test_blocks.js"></script>
+
+<script>
+'use strict';
+var workspace = null;
+
+function start() {
+  // Create main workspace.
+  workspace = Blockly.inject('blocklyDiv',
+      {
+        comments: true,
+        collapse: true,
+        disable: true,
+
+        horizontalLayout: false,
+        maxBlocks: Infinity,
+        maxInstances: {'test_basic_limit_instances': 3},
+        media: '../../media/',
+        oneBasedIndex: true,
+        readOnly: false,
+        rtl: false,
+        move: {
+          scrollbars: false,
+          drag: true,
+          wheel: false,
+        },
+        toolboxPosition: 'start',
+        zoom:
+          {
+            controls: false,
+            wheel: true,
+            startScale: 2.0,
+            maxScale: 4,
+            minScale: 0.25,
+            scaleSpeed: 1.1
+          }
+      });
+}
+
+</script>
+
+<style>
+html, body {
+  height: 100%;
+}
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+#blocklyDiv {
+  height: 100%;
+  width: 100%;
+}
+#importExport {
+  font-family: monospace;
+}
+
+.ioLabel>.blocklyFlyoutLabelText {
+  font-style: italic;
+}
+
+</style>
+</head>
+<body onload="start()">
+
+  <div id="blocklyDiv"></div>
+</body>
+</html>

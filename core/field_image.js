@@ -34,7 +34,7 @@ goog.require('goog.math.Size');
 
 /**
  * Class for an image on a block.
- * @param {string=} opt_src The URL of the image, defaults to an empty string.
+ * @param {string=} src The URL of the image, defaults to an empty string.
  * @param {!(string|number)} width Width of the image.
  * @param {!(string|number)} height Height of the image.
  * @param {string=} opt_alt Optional alt text for when block is collapsed.
@@ -44,7 +44,7 @@ goog.require('goog.math.Size');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldImage = function(opt_src, width, height,
+Blockly.FieldImage = function(src, width, height,
     opt_alt, opt_onClick, opt_flipRtl) {
   this.sourceBlock_ = null;
 
@@ -66,7 +66,7 @@ Blockly.FieldImage = function(opt_src, width, height,
 
   this.flipRtl_ = opt_flipRtl;
   this.tooltip_ = '';
-  this.setValue(opt_src || '');
+  this.setValue(src || '');
   this.setText(opt_alt || '');
 
   if (typeof opt_onClick == 'function') {

@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Node.js script to run Mocha tests in Chrome, via webdriver.
+ * @fileoverview Node.js script to generate screenshots in Chrome, via webdriver.
  */
 var webdriverio = require('webdriverio');
 var fs = require('fs');

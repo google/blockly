@@ -68,9 +68,15 @@ Blockly.BlockRendering.Highlighter.prototype.drawTopCorner = function(row) {
   }
 
   // Top edge.
-  if (row.hasPreviousConnection) {
-    this.highlightSteps_.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT_HIGHLIGHT);
+  for (var i = 0; i < row.elements.length; i++) {
+    var elem = row.elements[i];
+    if (elem.type === 'previous connection') {
+      this.highlightSteps_.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT_HIGHLIGHT);
+    }
   }
+  // if (row.hasPreviousConnection) {
+  //   this.highlightSteps_.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT_HIGHLIGHT);
+  // }
   this.highlightSteps_.push('H', row.width - BRC.HIGHLIGHT_OFFSET);
 };
 

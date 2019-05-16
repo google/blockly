@@ -106,6 +106,7 @@ Blockly.BlockRendering.Drawer.prototype.drawOutline_ = function() {
  */
 Blockly.BlockRendering.Drawer.prototype.drawTop_ = function() {
   var topRow = this.info_.topRow;
+  var elements = topRow.elements;
 
   this.highlighter_.drawTopCorner(topRow);
   this.highlighter_.drawRightSideRow(topRow);
@@ -120,10 +121,17 @@ Blockly.BlockRendering.Drawer.prototype.drawTop_ = function() {
     this.steps_.push(BRC.TOP_LEFT_CORNER_START, BRC.TOP_LEFT_CORNER);
   }
 
-  // Top edge.
-  if (topRow.hasPreviousConnection) {
-    this.steps_.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT);
+  for (var i = 0; i < elements.length; i++) {
+    var elem = elements[i];
+    if (elem.type === 'previous connection') {
+      this.steps_.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT);
+    }
   }
+
+  // Top edge.
+  // if (topRow.hasPreviousConnection) {
+  //   this.steps_.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT);
+  // }
   this.steps_.push('H', topRow.width);
   this.steps_.push('v', topRow.height);
 };

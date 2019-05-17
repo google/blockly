@@ -206,7 +206,7 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
   if (block.isCollapsed()) {
     element.setAttribute('collapsed', true);
   }
-  if (block.disabled) {
+  if (!block.isEnabled()) {
     element.setAttribute('disabled', true);
   }
   if (!block.isDeletable() && !block.isShadow()) {
@@ -350,11 +350,13 @@ Blockly.Xml.clearWorkspaceAndLoadFromXml = function(xml, workspace) {
  * Decode an XML DOM and create blocks on the workspace.
  * @param {!Element} xml XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace.
- * @return {Array.<string>} An array containing new block IDs.
+ * @return {!Array.<string>} An array containing new block IDs.
  */
 Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (xml instanceof Blockly.Workspace) {
     var swap = xml;
+    // Closure Compiler complains here because the arguments are reversed.
+    /** @suppress {checkTypes} */
     xml = workspace;
     workspace = swap;
     console.warn('Deprecated call to Blockly.Xml.domToWorkspace, ' +
@@ -498,6 +500,8 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
 Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
   if (xmlBlock instanceof Blockly.Workspace) {
     var swap = xmlBlock;
+    // Closure Compiler complains here because the arguments are reversed.
+    /** @suppress {checkTypes} */
     xmlBlock = workspace;
     workspace = swap;
     console.warn('Deprecated call to Blockly.Xml.domToBlock, ' +

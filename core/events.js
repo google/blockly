@@ -411,7 +411,8 @@ Blockly.Events.disableOrphans = function(event) {
     var workspace = Blockly.Workspace.getById(event.workspaceId);
     var block = workspace.getBlockById(event.blockId);
     if (block) {
-      if (block.getParent() && !block.getParent().disabled) {
+      var parent = block.getParent()
+      if (parent && parent.isEnabled()) {
         var children = block.getDescendants(false);
         for (var i = 0, child; child = children[i]; i++) {
           child.setEnabled(true);

@@ -455,7 +455,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     switch (xml.tagName.toUpperCase()) {
       case 'BLOCK':
         var curBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
-        if (curBlock.disabled) {
+        if (!curBlock.isEnabled()) {
           // Record blocks that were initially disabled.
           // Do not enable these blocks as a result of capacity filtering.
           this.permanentlyDisabled_.push(curBlock);
@@ -612,7 +612,7 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
  * @package
  */
 Blockly.Flyout.prototype.isBlockCreatable_ = function(block) {
-  return !block.disabled;
+  return block.isEnabled();
 };
 
 /**

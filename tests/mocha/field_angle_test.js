@@ -68,8 +68,8 @@ suite ('Angle Fields', function() {
       assertValue(angleField, 1.5);
     });
     test('> 360°', function() {
-      var angleField = new Blockly.FieldAngle(361);
-      assertValue(angleField, 1);
+      var angleField = new Blockly.FieldAngle(362);
+      assertValue(angleField, 2);
     });
   });
   suite('fromJson', function() {
@@ -110,8 +110,8 @@ suite ('Angle Fields', function() {
       assertValue(angleField, 1.5);
     });
     test('> 360°', function() {
-      var angleField = Blockly.FieldAngle.fromJson({ angle:361 });
-      assertValue(angleField, 1);
+      var angleField = Blockly.FieldAngle.fromJson({ angle:362 });
+      assertValue(angleField, 2);
     });
   });
   suite('setValue', function() {
@@ -154,8 +154,8 @@ suite ('Angle Fields', function() {
         assertValue(angleField, 2.5);
       });
       test('>360°', function() {
-        angleField.setValue(361);
-        assertValue(angleField, 1);
+        angleField.setValue(362);
+        assertValue(angleField, 2);
       });
     });
     suite('Value -> New Value', function() {
@@ -196,8 +196,8 @@ suite ('Angle Fields', function() {
         assertValue(angleField, 2.5);
       });
       test('>360°', function() {
-        angleField.setValue(361);
-        assertValue(angleField, 1);
+        angleField.setValue(362);
+        assertValue(angleField, 2);
       });
     });
   });

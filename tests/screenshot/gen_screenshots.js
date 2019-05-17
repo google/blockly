@@ -60,10 +60,10 @@ async function cleanUp(browser_new, browser_old) {
 
 async function buildBrowser(url) {
   var options = {
-      capabilities: {
-          browserName: 'chrome'
-      }
-  }
+    capabilities: {
+      browserName: 'chrome'
+    }
+  };
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
   await browser.setWindowSize(1000, 1000);

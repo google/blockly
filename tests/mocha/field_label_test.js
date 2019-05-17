@@ -97,37 +97,73 @@ suite ('Label Fields', function() {
     });
   });
   suite('setValue', function() {
-    var labelField;
-    setup(function() {
-      labelField = new Blockly.FieldLabel('value');
+    suite('Empty -> New Value', function() {
+      var labelField;
+      setup(function() {
+        labelField = new Blockly.FieldLabel();
+      });
+      test('Null', function() {
+        labelField.setValue(null);
+        assertValueDefault(labelField);
+      });
+      test.skip('Undefined', function() {
+        labelField.setValue(undefined);
+        assertValueDefault(labelField);
+      });
+      test('New String', function() {
+        labelField.setValue('newValue');
+        assertValue(labelField, 'newValue');
+      });
+      test('Number (Truthy)', function() {
+        labelField.setValue(1);
+        assertValue(labelField, '1');
+      });
+      test.skip('Number (Falsy)', function() {
+        labelField.setValue(0);
+        assertValue(labelField, '0');
+      });
+      test('Boolean True', function() {
+        labelField.setValue(true);
+        assertValue(labelField, 'true');
+      });
+      test.skip('Boolean False', function() {
+        labelField.setValue(false);
+        assertValue(labelField, 'false');
+      });
     });
-    test('Null', function() {
-      labelField.setValue(null);
-      assertValue(labelField, 'value');
-    });
-    test.skip('Undefined', function() {
-      labelField.setValue(undefined);
-      assertValue(labelField, 'value');
-    });
-    test('New String', function() {
-      labelField.setValue('newValue');
-      assertValue(labelField, 'newValue');
-    });
-    test('Number (Truthy)', function() {
-      labelField.setValue(1);
-      assertValue(labelField, '1');
-    });
-    test('Number (Falsy)', function() {
-      labelField.setValue(0);
-      assertValue(labelField, '0');
-    });
-    test('Boolean True', function() {
-      labelField.setValue(true);
-      assertValue(labelField, 'true');
-    });
-    test('Boolean False', function() {
-      labelField.setValue(false);
-      assertValue(labelField, 'false');
+    suite('Value -> New Value', function() {
+      var labelField;
+      setup(function() {
+        labelField = new Blockly.FieldLabel('value');
+      });
+      test('Null', function() {
+        labelField.setValue(null);
+        assertValue(labelField, 'value');
+      });
+      test.skip('Undefined', function() {
+        labelField.setValue(undefined);
+        assertValue(labelField, 'value');
+      });
+      test('New String', function() {
+        labelField.setValue('newValue');
+        assertValue(labelField, 'newValue');
+      });
+      test('Number (Truthy)', function() {
+        labelField.setValue(1);
+        assertValue(labelField, '1');
+      });
+      test('Number (Falsy)', function() {
+        labelField.setValue(0);
+        assertValue(labelField, '0');
+      });
+      test('Boolean True', function() {
+        labelField.setValue(true);
+        assertValue(labelField, 'true');
+      });
+      test('Boolean False', function() {
+        labelField.setValue(false);
+        assertValue(labelField, 'false');
+      });
     });
   });
 });

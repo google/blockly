@@ -99,37 +99,73 @@ suite ('Text Input Fields', function() {
     });
   });
   suite('setValue', function() {
-    var textInputField;
-    setup(function() {
-      textInputField = new Blockly.FieldTextInput('value');
+    suite('Empty -> New Value', function() {
+      var textInputField;
+      setup(function() {
+        textInputField = new Blockly.FieldTextInput();
+      });
+      test('Null', function() {
+        textInputField.setValue(null);
+        assertValueDefault(textInputField);
+      });
+      test.skip('Undefined', function() {
+        textInputField.setValue(undefined);
+        assertValueDefault(textInputField);
+      });
+      test('New String', function() {
+        textInputField.setValue('newValue');
+        assertValue(textInputField, 'newValue');
+      });
+      test('Number (Truthy)', function() {
+        textInputField.setValue(1);
+        assertValue(textInputField, '1');
+      });
+      test.skip('Number (Falsy)', function() {
+        textInputField.setValue(0);
+        assertValue(textInputField, '0');
+      });
+      test('Boolean True', function() {
+        textInputField.setValue(true);
+        assertValue(textInputField, 'true');
+      });
+      test.skip('Boolean False', function() {
+        textInputField.setValue(false);
+        assertValue(textInputField, 'false');
+      });
     });
-    test('Null', function() {
-      textInputField.setValue(null);
-      assertValue(textInputField, 'value');
-    });
-    test.skip('Undefined', function() {
-      textInputField.setValue(undefined);
-      assertValue(textInputField, 'value');
-    });
-    test('New String', function() {
-      textInputField.setValue('newValue');
-      assertValue(textInputField, 'newValue');
-    });
-    test('Number (Truthy)', function() {
-      textInputField.setValue(1);
-      assertValue(textInputField, '1');
-    });
-    test('Number (Falsy)', function() {
-      textInputField.setValue(0);
-      assertValue(textInputField, '0');
-    });
-    test('Boolean True', function() {
-      textInputField.setValue(true);
-      assertValue(textInputField, 'true');
-    });
-    test('Boolean False', function() {
-      textInputField.setValue(false);
-      assertValue(textInputField, 'false');
+    suite('Value -> New Value', function() {
+      var textInputField;
+      setup(function() {
+        textInputField = new Blockly.FieldTextInput('value');
+      });
+      test('Null', function() {
+        textInputField.setValue(null);
+        assertValue(textInputField, 'value');
+      });
+      test.skip('Undefined', function() {
+        textInputField.setValue(undefined);
+        assertValue(textInputField, 'value');
+      });
+      test('New String', function() {
+        textInputField.setValue('newValue');
+        assertValue(textInputField, 'newValue');
+      });
+      test('Number (Truthy)', function() {
+        textInputField.setValue(1);
+        assertValue(textInputField, '1');
+      });
+      test('Number (Falsy)', function() {
+        textInputField.setValue(0);
+        assertValue(textInputField, '0');
+      });
+      test('Boolean True', function() {
+        textInputField.setValue(true);
+        assertValue(textInputField, 'true');
+      });
+      test('Boolean False', function() {
+        textInputField.setValue(false);
+        assertValue(textInputField, 'false');
+      });
     });
   });
   suite.skip('Validators', function() {

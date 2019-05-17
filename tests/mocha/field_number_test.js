@@ -128,85 +128,82 @@ suite ('Number Fields', function() {
   });
   suite('setValue', function() {
     suite('Value Types', function() {
-      test('Empty -> Null', function() {
-        var numberField = new Blockly.FieldNumber();
-        numberField.setValue(null);
-        assertValueDefault(numberField);
+      suite('Empty -> New Value', function() {
+        var numberField;
+        setup(function() {
+          numberField = new Blockly.FieldNumber();
+        });
+        test('Null', function() {
+          numberField.setValue(null);
+          assertValueDefault(numberField);
+        });
+        test.skip('Undefined', function() {
+          numberField.setValue(undefined);
+          assertValueDefault(numberField);
+        });
+        test.skip('Non-Parsable String', function() {
+          numberField.setValue('bad');
+          assertValueDefault(numberField);
+        });
+        test.skip('NaN', function() {
+          numberField.setValue(NaN);
+          assertValueDefault(numberField);
+        });
+        test('Integer', function() {
+          numberField.setValue(2);
+          assertValue(numberField, 2);
+        });
+        test('Float', function() {
+          numberField.setValue(2.5);
+          assertValue(numberField, 2.5);
+        });
+        test('Integer String', function() {
+          numberField.setValue('2');
+          assertValue(numberField, 2);
+        });
+        test('Float', function() {
+          var numberField = new Blockly.FieldNumber();
+          numberField.setValue('2.5');
+          assertValue(numberField, 2.5);
+        });
       });
-      test('Value -> Null', function() {
-        var numberField = new Blockly.FieldNumber(1);
-        numberField.setValue(null);
-        assertValue(numberField, 1);
-      });
-      test.skip('Empty -> Undefined', function() {
-        var numberField = new Blockly.FieldNumber();
-        numberField.setValue(undefined);
-        assertValueDefault(numberField);
-      });
-      test.skip('Value -> Undefined', function() {
-        var numberField = new Blockly.FieldNumber(1);
-        numberField.setValue(undefined);
-        assertValue(numberField, 1);
-      });
-      test.skip('Empty -> Non-Parsable String', function() {
-        var numberField = new Blockly.FieldNumber();
-        numberField.setValue('bad');
-        assertValueDefault(numberField);
-      });
-      test.skip('Value -> Non-Parsable String', function() {
-        var numberField = new Blockly.FieldNumber(1);
-        numberField.setValue('bad');
-        assertValue(numberField, 1);
-      });
-      test.skip('Empty -> NaN', function() {
-        var numberField = new Blockly.FieldNumber();
-        numberField.setValue(NaN);
-        assertValueDefault(numberField);
-      });
-      test.skip('Value -> NaN', function() {
-        var numberField = new Blockly.FieldNumber(1);
-        numberField.setValue(NaN);
-        assertValue(numberField, 1);
-      });
-      test('Empty -> Integer', function() {
-        var numberField = new Blockly.FieldNumber();
-        numberField.setValue(2);
-        assertValue(numberField, 2);
-      });
-      test('Value -> Integer', function() {
-        var numberField = new Blockly.FieldNumber(1);
-        numberField.setValue(2);
-        assertValue(numberField, 2);
-      });
-      test('Empty -> Float', function() {
-        var numberField = new Blockly.FieldNumber();
-        numberField.setValue(2.5);
-        assertValue(numberField, 2.5);
-      });
-      test('Value -> Float', function() {
-        var numberField = new Blockly.FieldNumber(1);
-        numberField.setValue(2.5);
-        assertValue(numberField, 2.5);
-      });
-      test('Empty -> Integer String', function() {
-        var numberField = new Blockly.FieldNumber();
-        numberField.setValue('2');
-        assertValue(numberField, 2);
-      });
-      test('Value -> Integer String', function() {
-        var numberField = new Blockly.FieldNumber(1);
-        numberField.setValue('2');
-        assertValue(numberField, 2);
-      });
-      test('Empty -> Float', function() {
-        var numberField = new Blockly.FieldNumber();
-        numberField.setValue('2.5');
-        assertValue(numberField, 2.5);
-      });
-      test('Value -> Float', function() {
-        var numberField = new Blockly.FieldNumber(1);
-        numberField.setValue('2.5');
-        assertValue(numberField, 2.5);
+      suite('Value -> New Value', function() {
+        var numberField;
+        setup(function() {
+          numberField = new Blockly.FieldNumber(1);
+        });
+        test('Null', function() {
+          numberField.setValue(null);
+          assertValue(numberField, 1);
+        });
+        test.skip('Undefined', function() {
+          numberField.setValue(undefined);
+          assertValue(numberField, 1);
+        });
+        test.skip('Non-Parsable String', function() {
+          numberField.setValue('bad');
+          assertValue(numberField, 1);
+        });
+        test.skip('NaN', function() {
+          numberField.setValue(NaN);
+          assertValue(numberField, 1);
+        });
+        test('Integer', function() {
+          numberField.setValue(2);
+          assertValue(numberField, 2);
+        });
+        test('Float', function() {
+          numberField.setValue(2.5);
+          assertValue(numberField, 2.5);
+        });
+        test('Integer String', function() {
+          numberField.setValue('2');
+          assertValue(numberField, 2);
+        });
+        test('Float', function() {
+          numberField.setValue('2.5');
+          assertValue(numberField, 2.5);
+        });
       });
     });
     suite('Constraints', function() {

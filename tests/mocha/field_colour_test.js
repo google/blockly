@@ -130,29 +130,57 @@ suite ('Colour Fields', function() {
     });
   });
   suite('setValue', function() {
-    var colourField;
-    setup(function() {
-      colourField = new Blockly.FieldColour('#aaaaaa');
+    suite('Empty -> New Value', function() {
+      var colourField;
+      setup(function() {
+        colourField = new Blockly.FieldColour();
+      });
+      test.skip('Null', function() {
+        colourField.setValue(null);
+        assertValueDefault(colourField);
+      });
+      test.skip('Undefined', function() {
+        colourField.setValue(undefined);
+        assertValueDefault(colourField);
+      });
+      test.skip('Non-Parsable String', function() {
+        colourField.setValue('bad');
+        assertValueDefault(colourField);
+      });
+      test('#000000', function() {
+        colourField.setValue('#000000');
+        assertValue(colourField, '#000000', '#000');
+      });
+      test('#bcbcbc', function() {
+        colourField.setValue('#bcbcbc');
+        assertValue(colourField, '#bcbcbc', '#bcbcbc');
+      });
     });
-    test.skip('#aaaaaa -> Null', function() {
-      colourField.setValue(null);
-      assertValue(colourField, '#aaaaaa', '#aaa');
-    });
-    test.skip('#aaaaaa -> Undefined', function() {
-      colourField.setValue(undefined);
-      assertValue(colourField, '#aaaaaa', '#aaa');
-    });
-    test.skip('#aaaaaa -> Non-Parsable String', function() {
-      colourField.setValue('bad');
-      assertValue(colourField, '#aaaaaa', '#aaa');
-    });
-    test('#aaaaaa -> #000000', function() {
-      colourField.setValue('#000000');
-      assertValue(colourField, '#000000', '#000');
-    });
-    test('#aaaaaa -> #bcbcbc', function() {
-      colourField.setValue('#bcbcbc');
-      assertValue(colourField, '#bcbcbc', '#bcbcbc');
+    suite('Value -> New Value', function() {
+      var colourField;
+      setup(function() {
+        colourField = new Blockly.FieldColour('#aaaaaa');
+      });
+      test.skip('Null', function() {
+        colourField.setValue(null);
+        assertValue(colourField, '#aaaaaa', '#aaa');
+      });
+      test.skip('Undefined', function() {
+        colourField.setValue(undefined);
+        assertValue(colourField, '#aaaaaa', '#aaa');
+      });
+      test.skip('Non-Parsable String', function() {
+        colourField.setValue('bad');
+        assertValue(colourField, '#aaaaaa', '#aaa');
+      });
+      test('#000000', function() {
+        colourField.setValue('#000000');
+        assertValue(colourField, '#000000', '#000');
+      });
+      test('#bcbcbc', function() {
+        colourField.setValue('#bcbcbc');
+        assertValue(colourField, '#bcbcbc', '#bcbcbc');
+      });
     });
   });
   suite.skip('Validators', function() {

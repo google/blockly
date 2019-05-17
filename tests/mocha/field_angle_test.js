@@ -115,95 +115,90 @@ suite ('Angle Fields', function() {
     });
   });
   suite('setValue', function() {
-    test('Empty -> Null', function() {
-      var angleField = new Blockly.FieldAngle();
-      angleField.setValue(null);
-      assertValueDefault(angleField);
+    suite('Empty -> New Value', function() {
+      var angleField;
+      setup(function() {
+        angleField = new Blockly.FieldAngle();
+      });
+      test('Null', function() {
+        var angleField = new Blockly.FieldAngle();
+        angleField.setValue(null);
+        assertValueDefault(angleField);
+      });
+      test('Undefined', function() {
+        angleField.setValue(undefined);
+        assertValueDefault(angleField);
+      });
+      test.skip('Non-Parsable String', function() {
+        angleField.setValue('bad');
+        assertValueDefault(angleField);
+      });
+      test('NaN', function() {
+        angleField.setValue(NaN);
+        assertValueDefault(angleField);
+      });
+      test('Integer', function() {
+        angleField.setValue(2);
+        assertValue(angleField, 2);
+      });
+      test('Float', function() {
+        angleField.setValue(2.5);
+        assertValue(angleField, 2.5);
+      });
+      test('Integer String', function() {
+        angleField.setValue('2');
+        assertValue(angleField, 2);
+      });
+      test('Float', function() {
+        angleField.setValue('2.5');
+        assertValue(angleField, 2.5);
+      });
+      test('>360°', function() {
+        angleField.setValue(361);
+        assertValue(angleField, 1);
+      });
     });
-    test('Value -> Null', function() {
-      var angleField = new Blockly.FieldAngle(1);
-      angleField.setValue(null);
-      assertValue(angleField, 1);
-    });
-    test('Empty -> Undefined', function() {
-      var angleField = new Blockly.FieldAngle();
-      angleField.setValue(undefined);
-      assertValueDefault(angleField);
-    });
-    test.skip('Value -> Undefined', function() {
-      var angleField = new Blockly.FieldAngle(1);
-      angleField.setValue(undefined);
-      assertValue(angleField, 1);
-    });
-    test.skip('Empty -> Non-Parsable String', function() {
-      var angleField = new Blockly.FieldAngle();
-      angleField.setValue('bad');
-      assertValueDefault(angleField);
-    });
-    test.skip('Value -> Non-Parsable String', function() {
-      var angleField = new Blockly.FieldAngle(1);
-      angleField.setValue('bad');
-      assertValue(angleField, 1);
-    });
-    test('Empty -> NaN', function() {
-      var angleField = new Blockly.FieldAngle();
-      angleField.setValue(NaN);
-      assertValueDefault(angleField);
-    });
-    test.skip('Value -> NaN', function() {
-      var angleField = new Blockly.FieldAngle(1);
-      angleField.setValue(NaN);
-      assertValue(angleField, 1);
-    });
-    test('Empty -> Integer', function() {
-      var angleField = new Blockly.FieldAngle();
-      angleField.setValue(2);
-      assertValue(angleField, 2);
-    });
-    test('Value -> Integer', function() {
-      var angleField = new Blockly.FieldAngle(1);
-      angleField.setValue(2);
-      assertValue(angleField, 2);
-    });
-    test('Empty -> Float', function() {
-      var angleField = new Blockly.FieldAngle();
-      angleField.setValue(2.5);
-      assertValue(angleField, 2.5);
-    });
-    test('Value -> Float', function() {
-      var angleField = new Blockly.FieldAngle(1);
-      angleField.setValue(2.5);
-      assertValue(angleField, 2.5);
-    });
-    test('Empty -> Integer String', function() {
-      var angleField = new Blockly.FieldAngle();
-      angleField.setValue('2');
-      assertValue(angleField, 2);
-    });
-    test('Value -> Integer String', function() {
-      var angleField = new Blockly.FieldAngle(1);
-      angleField.setValue('2');
-      assertValue(angleField, 2);
-    });
-    test('Empty -> Float', function() {
-      var angleField = new Blockly.FieldAngle();
-      angleField.setValue('2.5');
-      assertValue(angleField, 2.5);
-    });
-    test('Value -> Float', function() {
-      var angleField = new Blockly.FieldAngle(1);
-      angleField.setValue('2.5');
-      assertValue(angleField, 2.5);
-    });
-    test('Empty -> >360°', function() {
-      var angleField = new Blockly.FieldAngle();
-      angleField.setValue(361);
-      assertValue(angleField, 1);
-    });
-    test('Value -> >360°', function() {
-      var angleField = new Blockly.FieldAngle(1);
-      angleField.setValue(361);
-      assertValue(angleField, 1);
+    suite('Value -> New Value', function() {
+      var angleField;
+      setup(function() {
+        angleField = new Blockly.FieldAngle(1);
+      });
+      test('Null', function() {
+        angleField.setValue(null);
+        assertValue(angleField, 1);
+      });
+      test.skip('Undefined', function() {
+        angleField.setValue(undefined);
+        assertValue(angleField, 1);
+      });
+      test.skip('Non-Parsable String', function() {
+        angleField.setValue('bad');
+        assertValue(angleField, 1);
+      });
+      test.skip('NaN', function() {
+        angleField.setValue(NaN);
+        assertValue(angleField, 1);
+      });
+      test('Integer', function() {
+        angleField.setValue(2);
+        assertValue(angleField, 2);
+      });
+      test('Float', function() {
+        angleField.setValue(2.5);
+        assertValue(angleField, 2.5);
+      });
+      test('Integer String', function() {
+        angleField.setValue('2');
+        assertValue(angleField, 2);
+      });
+      test('Float', function() {
+        angleField.setValue('2.5');
+        assertValue(angleField, 2.5);
+      });
+      test('>360°', function() {
+        angleField.setValue(361);
+        assertValue(angleField, 1);
+      });
     });
   });
   suite.skip('Validators', function() {

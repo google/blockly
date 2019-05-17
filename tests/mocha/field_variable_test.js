@@ -175,7 +175,7 @@ suite('Variable Fields', function() {
       });
       test('New Value', function() {
         variableField.setValue('id2');
-        assertValue(variableField, 'name1');
+        assertValue(variableField, 'name1', 'id1');
       });
     });
     suite('Force \'id\' ID Validator', function() {
@@ -188,7 +188,7 @@ suite('Variable Fields', function() {
         // Must create the var so that the field doesn't throw an error.
         this.workspace.createVariable('thing2', null, 'other2');
         variableField.setValue('other2');
-        assertValue(variableField, 'name2');
+        assertValue(variableField, 'name2', 'id2');
       });
     });
   });

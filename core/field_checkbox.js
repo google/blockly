@@ -32,7 +32,8 @@ goog.require('Blockly.utils');
 
 /**
  * Class for a checkbox field.
- * @param {string} state The initial state of the field ('TRUE' or 'FALSE').
+ * @param {string=} opt_state The initial state of the field ('TRUE' or
+ *    'FALSE'), defaults to 'FALSE'.
  * @param {Function=} opt_validator A function that is executed when a new
  *     option is selected.  Its sole argument is the new checkbox state.  If
  *     it returns a value, this becomes the new checkbox state, unless the
@@ -40,10 +41,10 @@ goog.require('Blockly.utils');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldCheckbox = function(state, opt_validator) {
+Blockly.FieldCheckbox = function(opt_state, opt_validator) {
   Blockly.FieldCheckbox.superClass_.constructor.call(this, '', opt_validator);
   // Set the initial state.
-  this.setValue(state);
+  this.setValue(opt_state);
 };
 goog.inherits(Blockly.FieldCheckbox, Blockly.Field);
 

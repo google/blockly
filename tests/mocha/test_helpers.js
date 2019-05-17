@@ -104,5 +104,5 @@ function assertNotUndefined() {
   _validateArguments(1, arguments);
   var commentArg = _commentArg(1, arguments);
   var val = _nonCommentArg(1, 1, arguments);
-  chai.assert.isNotUndefined(val, commentArg);
+  chai.assert.isDefined(val, commentArg);
 }

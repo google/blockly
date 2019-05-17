@@ -34,7 +34,8 @@ goog.require('goog.math.Size');
 
 /**
  * Class for a colour input field.
- * @param {string} colour The initial colour in '#rrggbb' format.
+ * @param {string=} opt_colour The initial colour in '#rrggbb' format, defaults
+ *    to the first value in the default colour array.
  * @param {Function=} opt_validator A function that is executed when a new
  *     colour is selected.  Its sole argument is the new colour value.  Its
  *     return value becomes the selected colour, unless it is undefined, in
@@ -43,8 +44,10 @@ goog.require('goog.math.Size');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldColour = function(colour, opt_validator) {
-  Blockly.FieldColour.superClass_.constructor.call(this, colour, opt_validator);
+Blockly.FieldColour = function(opt_colour, opt_validator) {
+  opt_colour = opt_colour || Blockly.FieldColour.COLOURS[0];
+  Blockly.FieldColour.superClass_.constructor
+      .call(this, opt_colour, opt_validator);
   this.setText(Blockly.Field.NBSP + Blockly.Field.NBSP + Blockly.Field.NBSP);
 };
 goog.inherits(Blockly.FieldColour, Blockly.Field);

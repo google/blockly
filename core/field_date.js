@@ -40,7 +40,7 @@ goog.require('goog.ui.DatePicker');
 
 /**
  * Class for a date input field.
- * @param {string} date The initial date.
+ * @param {string=} opt_date The initial date, defaults to the current day.
  * @param {Function=} opt_validator A function that is executed when a new
  *     date is selected.  Its sole argument is the new date value.  Its
  *     return value becomes the selected date, unless it is undefined, in
@@ -49,12 +49,12 @@ goog.require('goog.ui.DatePicker');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldDate = function(date, opt_validator) {
-  if (!date) {
-    date = new goog.date.Date().toIsoString(true);
+Blockly.FieldDate = function(opt_date, opt_validator) {
+  if (!opt_date) {
+    opt_date = new goog.date.Date().toIsoString(true);
   }
-  Blockly.FieldDate.superClass_.constructor.call(this, date, opt_validator);
-  this.setValue(date);
+  Blockly.FieldDate.superClass_.constructor.call(this, opt_date, opt_validator);
+  this.setValue(opt_date);
 };
 goog.inherits(Blockly.FieldDate, Blockly.Field);
 

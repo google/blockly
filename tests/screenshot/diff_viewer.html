@@ -42,17 +42,11 @@ function addTest(table, name) {
   var cell4 = addImageCell(row, name, 'diff');
 
   cell1.onclick = function() {
-    if (cell1.displayed) {
-      cell1.displayed = false;
-      setVisibility(cell2, false);
-      setVisibility(cell3, false);
-      setVisibility(cell4, false);
-    } else {
-      cell1.displayed = true;
-      setVisibility(cell2, true);
-      setVisibility(cell3, true);
-      setVisibility(cell4, true);
-    }
+    var display = !cell1.displayed;
+    cell1.displayed = display;
+    setVisibility(cell2, display);
+    setVisibility(cell3, display);
+    setVisibility(cell4, display);
   }
 }
 

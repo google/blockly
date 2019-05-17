@@ -90,86 +90,83 @@ suite.skip('Checkbox Fields', function() {
   });
   suite('setValue', function() {
     suite('True -> New Value', function() {
-      var checkboxField;
       setup(function() {
-        checkboxField = new Blockly.FieldCheckbox('TRUE');
+        this.checkboxField = new Blockly.FieldCheckbox('TRUE');
       });
       test('Null', function() {
-        checkboxField.setValue(null);
-        assertValue(checkboxField, 'TRUE', 'true');
+        this.checkboxField.setValue(null);
+        assertValue(this.checkboxField, 'TRUE', 'true');
       });
       test('Undefined', function() {
-        checkboxField.setValue(undefined);
-        assertValue(checkboxField, 'TRUE', 'true');
+        this.checkboxField.setValue(undefined);
+        assertValue(this.checkboxField, 'TRUE', 'true');
       });
       test('Non-Parsable String', function() {
-        checkboxField.setValue('bad');
-        assertValue(checkboxField, 'TRUE', 'true');
+        this.checkboxField.setValue('bad');
+        assertValue(this.checkboxField, 'TRUE', 'true');
       });
       test('False', function() {
-        checkboxField.setValue('FALSE');
-        assertValue(checkboxField, 'FALSE', 'false');
+        this.checkboxField.setValue('FALSE');
+        assertValue(this.checkboxField, 'FALSE', 'false');
       });
     });
     suite('False -> New Value', function() {
-      var checkboxField;
       setup(function() {
-        checkboxField = new Blockly.FieldCheckbox('FALSE');
+        this.checkboxField = new Blockly.FieldCheckbox('FALSE');
       });
       test('Null', function() {
-        checkboxField.setValue(null);
-        assertValue(checkboxField, 'FALSE', 'false');
+        this.checkboxField.setValue(null);
+        assertValue(this.checkboxField, 'FALSE', 'false');
       });
       test('Undefined', function() {
-        checkboxField.setValue(undefined);
-        assertValue(checkboxField, 'FALSE', 'false');
+        this.checkboxField.setValue(undefined);
+        assertValue(this.checkboxField, 'FALSE', 'false');
       });
       test('Non-Parsable String', function() {
-        checkboxField.setValue('bad');
-        assertValue(checkboxField, 'FALSE', 'false');
+        this.checkboxField.setValue('bad');
+        assertValue(this.checkboxField, 'FALSE', 'false');
       });
       test('True', function() {
-        checkboxField.setValue('TRUE');
-        assertValue(checkboxField, 'TRUE', 'true');
+        this.checkboxField.setValue('TRUE');
+        assertValue(this.checkboxField, 'TRUE', 'true');
       });
     });
   });
   suite('Validators', function() {
-    var checkboxField;
     setup(function() {
-      checkboxField = new Blockly.FieldCheckbox(true);
+      this.checkboxField = new Blockly.FieldCheckbox(true);
     });
     suite('Null Validator', function() {
       setup(function() {
-        checkboxField.setValidator(function() {
+        this.checkboxField.setValidator(function() {
           return null;
         });
       });
       test('New Value', function() {
-        checkboxField.setValue('FALSE');
-        assertValue(checkboxField, 'TRUE', 'true');
+        this.checkboxField.setValue('FALSE');
+        assertValue(this.checkboxField, 'TRUE', 'true');
       });
     });
     suite('Always True Validator', function() {
       setup(function() {
-        checkboxField.setValidator(function() {
+        this.checkboxField.setValidator(function() {
           return 'TRUE';
         });
       });
       test('New Value', function() {
-        checkboxField.setValue('FALSE');
-        assertValue(checkboxField, 'TRUE', 'true');
+        this.checkboxField.setValue('FALSE');
+        assertValue(this.checkboxField, 'TRUE', 'true');
       });
     });
     suite('Always False Validator', function() {
       setup(function() {
-        checkboxField.setValidator(function() {
+        this.checkboxField.setValidator(function() {
           return 'FALSE';
         });
       });
       test('New Value', function() {
-        checkboxField.setValue('TRUE');
-        assertValue(checkboxField, 'FALSE', 'false');
+        this.checkboxField.setValue('TRUE');
+        assertValue(this.checkboxField, 'FALSE', 'false');
       });
     });
   });

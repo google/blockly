@@ -116,95 +116,91 @@ suite ('Angle Fields', function() {
   });
   suite('setValue', function() {
     suite('Empty -> New Value', function() {
-      var angleField;
       setup(function() {
-        angleField = new Blockly.FieldAngle();
+        this.angleField = new Blockly.FieldAngle();
       });
       test('Null', function() {
-        var angleField = new Blockly.FieldAngle();
-        angleField.setValue(null);
-        assertValueDefault(angleField);
+        this.angleField.setValue(null);
+        assertValueDefault(this.angleField);
       });
       test('Undefined', function() {
-        angleField.setValue(undefined);
-        assertValueDefault(angleField);
+        this.angleField.setValue(undefined);
+        assertValueDefault(this.angleField);
       });
       test.skip('Non-Parsable String', function() {
-        angleField.setValue('bad');
-        assertValueDefault(angleField);
+        this.angleField.setValue('bad');
+        assertValueDefault(this.angleField);
       });
       test('NaN', function() {
-        angleField.setValue(NaN);
-        assertValueDefault(angleField);
+        this.angleField.setValue(NaN);
+        assertValueDefault(this.angleField);
       });
       test('Integer', function() {
-        angleField.setValue(2);
-        assertValue(angleField, 2);
+        this.angleField.setValue(2);
+        assertValue(this.angleField, 2);
       });
       test('Float', function() {
-        angleField.setValue(2.5);
-        assertValue(angleField, 2.5);
+        this.angleField.setValue(2.5);
+        assertValue(this.angleField, 2.5);
       });
       test('Integer String', function() {
-        angleField.setValue('2');
-        assertValue(angleField, 2);
+        this.angleField.setValue('2');
+        assertValue(this.angleField, 2);
       });
       test('Float', function() {
-        angleField.setValue('2.5');
-        assertValue(angleField, 2.5);
+        this.angleField.setValue('2.5');
+        assertValue(this.angleField, 2.5);
       });
       test('>360°', function() {
-        angleField.setValue(362);
-        assertValue(angleField, 2);
+        this.angleField.setValue(362);
+        assertValue(this.angleField, 2);
       });
     });
     suite('Value -> New Value', function() {
-      var angleField;
       setup(function() {
-        angleField = new Blockly.FieldAngle(1);
+        this.angleField = new Blockly.FieldAngle(1);
       });
       test('Null', function() {
-        angleField.setValue(null);
-        assertValue(angleField, 1);
+        this.angleField.setValue(null);
+        assertValue(this.angleField, 1);
       });
       test.skip('Undefined', function() {
-        angleField.setValue(undefined);
-        assertValue(angleField, 1);
+        this.angleField.setValue(undefined);
+        assertValue(this.angleField, 1);
       });
       test.skip('Non-Parsable String', function() {
-        angleField.setValue('bad');
-        assertValue(angleField, 1);
+        this.angleField.setValue('bad');
+        assertValue(this.angleField, 1);
       });
       test.skip('NaN', function() {
-        angleField.setValue(NaN);
-        assertValue(angleField, 1);
+        this.angleField.setValue(NaN);
+        assertValue(this.angleField, 1);
       });
       test('Integer', function() {
-        angleField.setValue(2);
-        assertValue(angleField, 2);
+        this.angleField.setValue(2);
+        assertValue(this.angleField, 2);
       });
       test('Float', function() {
-        angleField.setValue(2.5);
-        assertValue(angleField, 2.5);
+        this.angleField.setValue(2.5);
+        assertValue(this.angleField, 2.5);
       });
       test('Integer String', function() {
-        angleField.setValue('2');
-        assertValue(angleField, 2);
+        this.angleField.setValue('2');
+        assertValue(this.angleField, 2);
       });
       test('Float', function() {
-        angleField.setValue('2.5');
-        assertValue(angleField, 2.5);
+        this.angleField.setValue('2.5');
+        assertValue(this.angleField, 2.5);
       });
       test('>360°', function() {
-        angleField.setValue(362);
-        assertValue(angleField, 2);
+        this.angleField.setValue(362);
+        assertValue(this.angleField, 2);
       });
     });
   });
   suite.skip('Validators', function() {
-    var angleField;
     setup(function() {
-      angleField = new Blockly.FieldAngle(1);
+      this.angleField = new Blockly.FieldAngle(1);
       Blockly.FieldTextInput.htmlInput_ = Object.create(null);
       Blockly.FieldTextInput.htmlInput_.oldValue_ = '1';
       Blockly.FieldTextInput.htmlInput_.untypedDefaultValue_ = 1;
@@ -214,38 +210,38 @@ suite ('Angle Fields', function() {
     });
     suite('Null Validator', function() {
       setup(function() {
-        angleField.setValidator(function() {
+        this.angleField.setValidator(function() {
           return null;
         });
       });
       test('When Editing', function() {
-        angleField.isBeingEdited_ = true;
+        this.angleField.isBeingEdited_ = true;
         Blockly.FieldTextInput.htmlInput_.value = '2';
-        angleField.onHtmlInputChange_(null);
-        assertValue(angleField, 1, '2');
-        angleField.isBeingEdited_ = false;
+        this.angleField.onHtmlInputChange_(null);
+        assertValue(this.angleField, 1, '2');
+        this.angleField.isBeingEdited_ = false;
       });
       test('When Not Editing', function() {
-        angleField.setValue(2);
-        assertValue(angleField, 1);
+        this.angleField.setValue(2);
+        assertValue(this.angleField, 1);
       });
     });
     suite('Force Mult of 30 Validator', function() {
       setup(function() {
-        angleField.setValidator(function(newValue) {
+        this.angleField.setValidator(function(newValue) {
           return Math.round(newValue / 30) * 30;
         });
       });
       test('When Editing', function() {
-        angleField.isBeingEdited_ = true;
+        this.angleField.isBeingEdited_ = true;
         Blockly.FieldTextInput.htmlInput_.value = '25';
-        angleField.onHtmlInputChange_(null);
-        assertValue(angleField, 30, '25');
-        angleField.isBeingEdited_ = false;
+        this.angleField.onHtmlInputChange_(null);
+        assertValue(this.angleField, 30, '25');
+        this.angleField.isBeingEdited_ = false;
       });
       test('When Not Editing', function() {
-        angleField.setValue(25);
-        assertValue(angleField, 30);
+        this.angleField.setValue(25);
+        assertValue(this.angleField, 30);
       });
     });
   });

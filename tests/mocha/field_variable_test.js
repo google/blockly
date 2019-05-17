@@ -160,35 +160,34 @@ suite('Variable Fields', function() {
     });
   });
   suite.skip('Validators', function() {
-    var variableField;
     setup(function() {
       this.workspace.createVariable('name1', null, 'id1');
       this.workspace.createVariable('name2', null, 'id2');
       this.workspace.createVariable('name3', null, 'id3');
-      variableField = createAndInitFieldConstructor(this.workspace, 'name1');
+      this.variableField = createAndInitFieldConstructor(this.workspace, 'name1');
     });
     suite('Null Validator', function() {
       setup(function() {
-        variableField.setValidator(function() {
+        this.variableField.setValidator(function() {
           return null;
         });
       });
       test('New Value', function() {
-        variableField.setValue('id2');
-        assertValue(variableField, 'name1', 'id1');
+        this.variableField.setValue('id2');
+        assertValue(this.variableField, 'name1', 'id1');
       });
     });
     suite('Force \'id\' ID Validator', function() {
       setup(function() {
-        variableField.setValidator(function(newValue) {
+        this.variableField.setValidator(function(newValue) {
           return 'id' + newValue.charAt(newValue.length - 1);
         });
       });
       test('New Value', function() {
         // Must create the var so that the field doesn't throw an error.
         this.workspace.createVariable('thing2', null, 'other2');
-        variableField.setValue('other2');
-        assertValue(variableField, 'name2', 'id2');
+        this.variableField.setValue('other2');
+        assertValue(this.variableField, 'name2', 'id2');
       });
     });
   });

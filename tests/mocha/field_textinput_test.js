@@ -100,116 +100,113 @@ suite ('Text Input Fields', function() {
   });
   suite('setValue', function() {
     suite('Empty -> New Value', function() {
-      var textInputField;
       setup(function() {
-        textInputField = new Blockly.FieldTextInput();
+        this.textInputField = new Blockly.FieldTextInput();
       });
       test('Null', function() {
-        textInputField.setValue(null);
-        assertValueDefault(textInputField);
+        this.textInputField.setValue(null);
+        assertValueDefault(this.textInputField);
       });
       test.skip('Undefined', function() {
-        textInputField.setValue(undefined);
-        assertValueDefault(textInputField);
+        this.textInputField.setValue(undefined);
+        assertValueDefault(this.textInputField);
       });
       test('New String', function() {
-        textInputField.setValue('newValue');
-        assertValue(textInputField, 'newValue');
+        this.textInputField.setValue('newValue');
+        assertValue(this.textInputField, 'newValue');
       });
       test('Number (Truthy)', function() {
-        textInputField.setValue(1);
-        assertValue(textInputField, '1');
+        this.textInputField.setValue(1);
+        assertValue(this.textInputField, '1');
       });
       test.skip('Number (Falsy)', function() {
-        textInputField.setValue(0);
-        assertValue(textInputField, '0');
+        this.textInputField.setValue(0);
+        assertValue(this.textInputField, '0');
       });
       test('Boolean True', function() {
-        textInputField.setValue(true);
-        assertValue(textInputField, 'true');
+        this.textInputField.setValue(true);
+        assertValue(this.textInputField, 'true');
       });
       test.skip('Boolean False', function() {
-        textInputField.setValue(false);
-        assertValue(textInputField, 'false');
+        this.textInputField.setValue(false);
+        assertValue(this.textInputField, 'false');
       });
     });
     suite('Value -> New Value', function() {
-      var textInputField;
       setup(function() {
-        textInputField = new Blockly.FieldTextInput('value');
+        this.textInputField = new Blockly.FieldTextInput('value');
       });
       test('Null', function() {
-        textInputField.setValue(null);
-        assertValue(textInputField, 'value');
+        this.textInputField.setValue(null);
+        assertValue(this.textInputField, 'value');
       });
       test.skip('Undefined', function() {
-        textInputField.setValue(undefined);
-        assertValue(textInputField, 'value');
+        this.textInputField.setValue(undefined);
+        assertValue(this.textInputField, 'value');
       });
       test('New String', function() {
-        textInputField.setValue('newValue');
-        assertValue(textInputField, 'newValue');
+        this.textInputField.setValue('newValue');
+        assertValue(this.textInputField, 'newValue');
       });
       test('Number (Truthy)', function() {
-        textInputField.setValue(1);
-        assertValue(textInputField, '1');
+        this.textInputField.setValue(1);
+        assertValue(this.textInputField, '1');
       });
       test('Number (Falsy)', function() {
-        textInputField.setValue(0);
-        assertValue(textInputField, '0');
+        this.textInputField.setValue(0);
+        assertValue(this.textInputField, '0');
       });
       test('Boolean True', function() {
-        textInputField.setValue(true);
-        assertValue(textInputField, 'true');
+        this.textInputField.setValue(true);
+        assertValue(this.textInputField, 'true');
       });
       test('Boolean False', function() {
-        textInputField.setValue(false);
-        assertValue(textInputField, 'false');
+        this.textInputField.setValue(false);
+        assertValue(this.textInputField, 'false');
       });
     });
   });
   suite.skip('Validators', function() {
-    var textInputField;
     setup(function() {
-      textInputField = new Blockly.FieldTextInput('value');
+      this.textInputField = new Blockly.FieldTextInput('value');
       Blockly.FieldTextInput.htmlInput_ = Object.create(null);
       Blockly.FieldTextInput.htmlInput_.oldValue_ = 'value';
       Blockly.FieldTextInput.htmlInput_.untypedDefaultValue_ = 'value';
     });
     suite('Null Validator', function() {
       setup(function() {
-        textInputField.setValidator(function() {
+        this.textInputField.setValidator(function() {
           return null;
         });
       });
       test('When Editing', function() {
-        textInputField.isBeingEdited_ = true;
+        this.textInputField.isBeingEdited_ = true;
         Blockly.FieldTextInput.htmlInput_.value = 'newValue';
-        textInputField.onHtmlInputChange_(null);
-        assertValue(textInputField, 'value', 'newValue');
-        textInputField.isBeingEdited_ = false;
+        this.textInputField.onHtmlInputChange_(null);
+        assertValue(this.textInputField, 'value', 'newValue');
+        this.textInputField.isBeingEdited_ = false;
       });
       test('When Not Editing', function() {
-        textInputField.setValue('newValue');
-        assertValue(textInputField, 'value');
+        this.textInputField.setValue('newValue');
+        assertValue(this.textInputField, 'value');
       });
     });
     suite('Remove \'a\' Validator', function() {
       setup(function() {
-        textInputField.setValidator(function(newValue) {
+        this.textInputField.setValidator(function(newValue) {
           return newValue.replace(/a/g, '');
         });
       });
       test('When Editing', function() {
-        textInputField.isBeingEdited_ = true;
+        this.textInputField.isBeingEdited_ = true;
         Blockly.FieldTextInput.htmlInput_.value = 'bbbaaa';
-        textInputField.onHtmlInputChange_(null);
-        assertValue(textInputField, 'bbb', 'bbbaaa');
-        textInputField.isBeingEdited_ = false;
+        this.textInputField.onHtmlInputChange_(null);
+        assertValue(this.textInputField, 'bbb', 'bbbaaa');
+        this.textInputField.isBeingEdited_ = false;
       });
       test('When Not Editing', function() {
-        textInputField.setValue('bbbaaa');
-        assertValue(textInputField, 'bbb');
+        this.textInputField.setValue('bbbaaa');
+        assertValue(this.textInputField, 'bbb');
       });
     });
   });

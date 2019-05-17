@@ -140,55 +140,53 @@ suite ('Dropdown Fields', function() {
     });
   });
   suite('setValue', function() {
-    var dropdownField;
     setup(function() {
-      dropdownField = new Blockly.FieldDropdown(
+      this.dropdownField = new Blockly.FieldDropdown(
           [['a', 'A'], ['b', 'B'], ['c', 'C']]);
     });
     test('Null', function() {
-      dropdownField.setValue(null);
-      assertValue(dropdownField, 'A', 'a');
+      this.dropdownField.setValue(null);
+      assertValue(this.dropdownField, 'A', 'a');
     });
     test.skip('Undefined', function() {
-      dropdownField.setValue(undefined);
-      assertValue(dropdownField, 'A', 'a');
+      this.dropdownField.setValue(undefined);
+      assertValue(this.dropdownField, 'A', 'a');
     });
     test.skip('Invalid ID', function() {
-      dropdownField.setValue('bad');
-      assertValue(dropdownField, 'A', 'a');
+      this.dropdownField.setValue('bad');
+      assertValue(this.dropdownField, 'A', 'a');
     });
     test('Valid ID', function() {
-      dropdownField.setValue('B');
-      assertValue(dropdownField, 'B', 'b');
+      this.dropdownField.setValue('B');
+      assertValue(this.dropdownField, 'B', 'b');
     });
   });
   suite.skip('Validators', function() {
-    var dropdownField;
     setup(function() {
-      dropdownField = new Blockly.FieldDropdown([
+      this.dropdownField = new Blockly.FieldDropdown([
         ["1a","1A"], ["1b","1B"], ["1c","1C"],
         ["2a","2A"], ["2b","2B"], ["2c","2C"]]);
     });
     suite('Null Validator', function() {
       setup(function() {
-        dropdownField.setValidator(function() {
+        this.dropdownField.setValidator(function() {
           return null;
         });
       });
       test('New Value', function() {
-        dropdownField.setValue('1B');
-        assertValue(dropdownField, '1A', '1a');
+        this.dropdownField.setValue('1B');
+        assertValue(this.dropdownField, '1A', '1a');
       });
     });
     suite('Force 1s Validator', function() {
       setup(function() {
-        dropdownField.setValidator(function(newValue) {
+        this.dropdownField.setValidator(function(newValue) {
           return '1' + newValue.charAt(1);
         });
       });
       test('New Value', function() {
-        dropdownField.setValue('2B');
-        assertValue(dropdownField, '1B', '1b');
+        this.dropdownField.setValue('2B');
+        assertValue(this.dropdownField, '1B', '1b');
       });
     });
   });

@@ -91,91 +91,88 @@ suite ('Date Fields', function() {
   });
   suite('setValue', function() {
     suite('Empty -> New Value', function() {
-      var dateField;
       setup(function() {
-        dateField = new Blockly.FieldDate();
+        this.dateField = new Blockly.FieldDate();
       });
       test.skip('Null', function() {
-        dateField.setValue(null);
-        assertValueDefault(dateField);
+        this.dateField.setValue(null);
+        assertValueDefault(this.dateField);
       });
       test.skip('Undefined', function() {
-        dateField.setValue(undefined);
-        assertValueDefault(dateField);
+        this.dateField.setValue(undefined);
+        assertValueDefault(this.dateField);
       });
       test.skip('Non-Parsable String', function() {
-        dateField.setValue('bad');
-        assertValueDefault(dateField);
+        this.dateField.setValue('bad');
+        assertValueDefault(this.dateField);
       });
       test.skip('Invalid Date - Month(2020-13-20)', function() {
-        dateField.setValue('2020-13-20');
-        assertValueDefault(dateField);
+        this.dateField.setValue('2020-13-20');
+        assertValueDefault(this.dateField);
       });
       test.skip('Invalid Date - Day(2020-02-32)', function() {
-        dateField.setValue('2020-02-32');
-        assertValueDefault(dateField);
+        this.dateField.setValue('2020-02-32');
+        assertValueDefault(this.dateField);
       });
       test('3030-03-30', function() {
-        dateField.setValue('3030-03-30');
-        assertValue(dateField, '3030-03-30');
+        this.dateField.setValue('3030-03-30');
+        assertValue(this.dateField, '3030-03-30');
       });
     });
     suite('Value -> New Value', function() {
-      var dateField;
       setup(function() {
-        dateField = new Blockly.FieldDate('2020-02-20');
+        this.dateField = new Blockly.FieldDate('2020-02-20');
       });
       test.skip('Null', function() {
-        dateField.setValue(null);
-        assertValue(dateField, '2020-02-20');
+        this.dateField.setValue(null);
+        assertValue(this.dateField, '2020-02-20');
       });
       test.skip('Undefined', function() {
-        dateField.setValue(undefined);
-        assertValue(dateField, '2020-02-20');
+        this.dateField.setValue(undefined);
+        assertValue(this.dateField, '2020-02-20');
       });
       test.skip('Non-Parsable String', function() {
-        dateField.setValue('bad');
-        assertValue(dateField, '2020-02-20');
+        this.dateField.setValue('bad');
+        assertValue(this.dateField, '2020-02-20');
       });
       test.skip('Invalid Date - Month(2020-13-20)', function() {
-        dateField.setValue('2020-13-20');
-        assertValue(dateField, '2020-02-20');
+        this.dateField.setValue('2020-13-20');
+        assertValue(this.dateField, '2020-02-20');
       });
       test.skip('Invalid Date - Day(2020-02-32)', function() {
-        dateField.setValue('2020-02-32');
-        assertValue(dateField, '2020-02-20');
+        this.dateField.setValue('2020-02-32');
+        assertValue(this.dateField, '2020-02-20');
       });
       test('3030-03-30', function() {
-        dateField.setValue('3030-03-30');
-        assertValue(dateField, '3030-03-30');
+        this.dateField.setValue('3030-03-30');
+        assertValue(this.dateField, '3030-03-30');
       });
     });
   });
   suite.skip('Validators', function() {
-    var dateField;
     setup(function() {
-      dateField = new Blockly.FieldDate('2020-02-20');
+      this.dateField = new Blockly.FieldDate('2020-02-20');
     });
     suite('Null Validator', function() {
       setup(function() {
-        dateField.setValidator(function() {
+        this.dateField.setValidator(function() {
           return null;
         });
       });
       test('New Value', function() {
-        dateField.setValue('3030-03-30');
-        assertValue(dateField, '2020-02-20');
+        this.dateField.setValue('3030-03-30');
+        assertValue(this.dateField, '2020-02-20');
       });
     });
     suite('Force Day 20s Validator', function() {
       setup(function() {
-        dateField.setValidator(function(newValue) {
+        this.dateField.setValidator(function(newValue) {
           return newValue.substr(0, 8) + '2' + newValue.substr(9, 1);
         });
       });
       test('New Value', function() {
-        dateField.setValue('3030-03-30');
-        assertValue(dateField, '3030-03-20');
+        this.dateField.setValue('3030-03-30');
+        assertValue(this.dateField, '3030-03-20');
       });
     });
   });

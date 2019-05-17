@@ -129,80 +129,77 @@ suite ('Number Fields', function() {
   suite('setValue', function() {
     suite('Value Types', function() {
       suite('Empty -> New Value', function() {
-        var numberField;
         setup(function() {
-          numberField = new Blockly.FieldNumber();
+          this.numberField = new Blockly.FieldNumber();
         });
         test('Null', function() {
-          numberField.setValue(null);
-          assertValueDefault(numberField);
+          this.numberField.setValue(null);
+          assertValueDefault(this.numberField);
         });
         test.skip('Undefined', function() {
-          numberField.setValue(undefined);
-          assertValueDefault(numberField);
+          this.numberField.setValue(undefined);
+          assertValueDefault(this.numberField);
         });
         test.skip('Non-Parsable String', function() {
-          numberField.setValue('bad');
-          assertValueDefault(numberField);
+          this.numberField.setValue('bad');
+          assertValueDefault(this.numberField);
         });
         test.skip('NaN', function() {
-          numberField.setValue(NaN);
-          assertValueDefault(numberField);
+          this.numberField.setValue(NaN);
+          assertValueDefault(this.numberField);
         });
         test('Integer', function() {
-          numberField.setValue(2);
-          assertValue(numberField, 2);
+          this.numberField.setValue(2);
+          assertValue(this.numberField, 2);
         });
         test('Float', function() {
-          numberField.setValue(2.5);
-          assertValue(numberField, 2.5);
+          this.numberField.setValue(2.5);
+          assertValue(this.numberField, 2.5);
         });
         test('Integer String', function() {
-          numberField.setValue('2');
-          assertValue(numberField, 2);
+          this.numberField.setValue('2');
+          assertValue(this.numberField, 2);
         });
-        test('Float', function() {
-          var numberField = new Blockly.FieldNumber();
-          numberField.setValue('2.5');
-          assertValue(numberField, 2.5);
+        test('Float String', function() {
+          this.numberField.setValue('2.5');
+          assertValue(this.numberField, 2.5);
         });
       });
       suite('Value -> New Value', function() {
-        var numberField;
         setup(function() {
-          numberField = new Blockly.FieldNumber(1);
+          this.numberField = new Blockly.FieldNumber(1);
         });
         test('Null', function() {
-          numberField.setValue(null);
-          assertValue(numberField, 1);
+          this.numberField.setValue(null);
+          assertValue(this.numberField, 1);
         });
         test.skip('Undefined', function() {
-          numberField.setValue(undefined);
-          assertValue(numberField, 1);
+          this.numberField.setValue(undefined);
+          assertValue(this.numberField, 1);
         });
         test.skip('Non-Parsable String', function() {
-          numberField.setValue('bad');
-          assertValue(numberField, 1);
+          this.numberField.setValue('bad');
+          assertValue(this.numberField, 1);
         });
         test.skip('NaN', function() {
-          numberField.setValue(NaN);
-          assertValue(numberField, 1);
+          this.numberField.setValue(NaN);
+          assertValue(this.numberField, 1);
         });
         test('Integer', function() {
-          numberField.setValue(2);
-          assertValue(numberField, 2);
+          this.numberField.setValue(2);
+          assertValue(this.numberField, 2);
         });
         test('Float', function() {
-          numberField.setValue(2.5);
-          assertValue(numberField, 2.5);
+          this.numberField.setValue(2.5);
+          assertValue(this.numberField, 2.5);
         });
         test('Integer String', function() {
-          numberField.setValue('2');
-          assertValue(numberField, 2);
+          this.numberField.setValue('2');
+          assertValue(this.numberField, 2);
         });
-        test('Float', function() {
-          numberField.setValue('2.5');
-          assertValue(numberField, 2.5);
+        test('Float String', function() {
+          this.numberField.setValue('2.5');
+          assertValue(this.numberField, 2.5);
         });
       });
     });
@@ -299,47 +296,46 @@ suite ('Number Fields', function() {
     });
   });
   suite.skip('Validators', function() {
-    var numberFieldField;
     setup(function() {
-      numberFieldField = new Blockly.FieldNumber(1);
+      this.numberFieldField = new Blockly.FieldNumber(1);
       Blockly.FieldTextInput.htmlInput_ = Object.create(null);
       Blockly.FieldTextInput.htmlInput_.oldValue_ = '1';
       Blockly.FieldTextInput.htmlInput_.untypedDefaultValue_ = 1;
     });
     suite('Null Validator', function() {
       setup(function() {
-        numberFieldField.setValidator(function() {
+        this.numberFieldField.setValidator(function() {
           return null;
         });
       });
       test('When Editing', function() {
-        numberFieldField.isBeingEdited_ = true;
+        this.numberFieldField.isBeingEdited_ = true;
         Blockly.FieldTextInput.htmlInput_.value = '2';
-        numberFieldField.onHtmlInputChange_(null);
-        assertValue(numberFieldField, 1, '2');
-        numberFieldField.isBeingEdited_ = false;
+        this.numberFieldField.onHtmlInputChange_(null);
+        assertValue(this.numberFieldField, 1, '2');
+        this.numberFieldField.isBeingEdited_ = false;
       });
       test('When Not Editing', function() {
-        numberFieldField.setValue(2);
-        assertValue(numberFieldField, 1);
+        this.numberFieldField.setValue(2);
+        assertValue(this.numberFieldField, 1);
       });
     });
     suite('Force End with 6 Validator', function() {
       setup(function() {
-        numberFieldField.setValidator(function(newValue) {
+        this.numberFieldField.setValidator(function(newValue) {
           return String(newValue).replace(/.$/, "6");
         });
       });
       test('When Editing', function() {
-        numberFieldField.isBeingEdited_ = true;
+        this.numberFieldField.isBeingEdited_ = true;
         Blockly.FieldTextInput.htmlInput_.value = '25';
-        numberFieldField.onHtmlInputChange_(null);
-        assertValue(numberFieldField, 26, '25');
-        numberFieldField.isBeingEdited_ = false;
+        this.numberFieldField.onHtmlInputChange_(null);
+        assertValue(this.numberFieldField, 26, '25');
+        this.numberFieldField.isBeingEdited_ = false;
       });
       test('When Not Editing', function() {
-        numberFieldField.setValue(25);
-        assertValue(numberFieldField, 26);
+        this.numberFieldField.setValue(25);
+        assertValue(this.numberFieldField, 26);
       });
     });
   });

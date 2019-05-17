@@ -142,29 +142,28 @@ suite ('Image Fields', function() {
     });
   });
   suite('setValue', function() {
-    var imageField;
     setup(function() {
-      imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
+      this.imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
     });
     test('Null', function() {
-      imageField.setValue(null);
-      assertValue(imageField, 'src', 'alt');
+      this.imageField.setValue(null);
+      assertValue(this.imageField, 'src', 'alt');
     });
     test.skip('Undefined', function() {
-      imageField.setValue(undefined);
-      assertValue(imageField, 'src', 'alt');
+      this.imageField.setValue(undefined);
+      assertValue(this.imageField, 'src', 'alt');
     });
     test('New Src, New Alt', function() {
-      imageField.setValue('newSrc');
-      assertValue(imageField, 'newSrc', 'alt');
-      imageField.setText('newAlt');
-      assertValue(imageField, 'newSrc', 'newAlt');
+      this.imageField.setValue('newSrc');
+      assertValue(this.imageField, 'newSrc', 'alt');
+      this.imageField.setText('newAlt');
+      assertValue(this.imageField, 'newSrc', 'newAlt');
     });
     test('New Alt, New Src', function() {
-      imageField.setText('newAlt');
-      assertValue(imageField, 'src', 'newAlt');
-      imageField.setValue('newSrc');
-      assertValue(imageField, 'newSrc', 'newAlt');
+      this.imageField.setText('newAlt');
+      assertValue(this.imageField, 'src', 'newAlt');
+      this.imageField.setValue('newSrc');
+      assertValue(this.imageField, 'newSrc', 'newAlt');
     });
   });
 });

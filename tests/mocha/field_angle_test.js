@@ -22,10 +22,10 @@ suite ('Angle Fields', function() {
   function assertValue(angleField, expectedValue, opt_expectedText) {
     var actualValue = angleField.getValue();
     var actualText = angleField.getText();
-    var stringExpectedValue = opt_expectedText || String(expectedValue);
-    assertEquals(String(actualValue), stringExpectedValue);
+    opt_expectedText = opt_expectedText || String(expectedValue);
+    assertEquals(String(actualValue), String(expectedValue));
     assertEquals(parseFloat(actualValue), expectedValue);
-    assertEquals(actualText, stringExpectedValue);
+    assertEquals(actualText, opt_expectedText);
   }
   function assertValueDefault(angleField) {
     assertValue(angleField, 0);
@@ -192,6 +192,12 @@ suite ('Angle Fields', function() {
     var angleField;
     setup(function() {
       angleField = new Blockly.FieldAngle(1);
+      Blockly.FieldTextInput.htmlInput_ = Object.create(null);
+      Blockly.FieldTextInput.htmlInput_.oldValue_ = '1';
+      Blockly.FieldTextInput.htmlInput_.untypedDefaultValue_ = 1;
+    });
+    teardown(function() {
+      Blockly.FieldTextInput.htmlInput_ = null;
     });
     suite('Null Validator', function() {
       setup(function() {
@@ -201,13 +207,14 @@ suite ('Angle Fields', function() {
       });
       test('When Editing', function() {
         angleField.isBeingEdited_ = true;
-        angleField.setValue(2);
+        Blockly.FieldTextInput.htmlInput_.value = '2';
+        angleField.onHtmlInputChange_(null);
         assertValue(angleField, 1, '2');
         angleField.isBeingEdited_ = false;
       });
       test('When Not Editing', function() {
         angleField.setValue(2);
-        assertValue(angleField, 2);
+        assertValue(angleField, 1);
       });
     });
     suite('Force Mult of 30 Validator', function() {
@@ -218,7 +225,8 @@ suite ('Angle Fields', function() {
       });
       test('When Editing', function() {
         angleField.isBeingEdited_ = true;
-        angleField.setValue(25);
+        Blockly.FieldTextInput.htmlInput_.value = '25';
+        angleField.onHtmlInputChange_(null);
         assertValue(angleField, 30, '25');
         angleField.isBeingEdited_ = false;
       });

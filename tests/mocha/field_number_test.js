@@ -19,13 +19,13 @@
  */
 
 suite ('Number Fields', function() {
-  function assertValue(numberField, expectedValue) {
+  function assertValue(numberField, expectedValue, opt_expectedText) {
     var actualValue = numberField.getValue();
     var actualText = numberField.getText();
-    var stringExpectedValue = String(expectedValue);
-    assertEquals(String(actualValue), stringExpectedValue);
+    opt_expectedText = opt_expectedText || String(expectedValue);
+    assertEquals(String(actualValue), String(expectedValue));
     assertEquals(parseFloat(actualValue), expectedValue);
-    assertEquals(actualText, stringExpectedValue);
+    assertEquals(actualText, opt_expectedText);
   }
   function assertValueDefault(numberFieldField) {
     assertValue(numberFieldField, 0);
@@ -310,6 +310,9 @@ suite ('Number Fields', function() {
     var numberFieldField;
     setup(function() {
       numberFieldField = new Blockly.FieldNumber(1);
+      Blockly.FieldTextInput.htmlInput_ = Object.create(null);
+      Blockly.FieldTextInput.htmlInput_.oldValue_ = '1';
+      Blockly.FieldTextInput.htmlInput_.untypedDefaultValue_ = 1;
     });
     suite('Null Validator', function() {
       setup(function() {
@@ -319,7 +322,8 @@ suite ('Number Fields', function() {
       });
       test('When Editing', function() {
         numberFieldField.isBeingEdited_ = true;
-        numberFieldField.setValue(2);
+        Blockly.FieldTextInput.htmlInput_.value = '2';
+        numberFieldField.onHtmlInputChange_(null);
         assertValue(numberFieldField, 1, '2');
         numberFieldField.isBeingEdited_ = false;
       });
@@ -331,12 +335,13 @@ suite ('Number Fields', function() {
     suite('Force End with 6 Validator', function() {
       setup(function() {
         numberFieldField.setValidator(function(newValue) {
-          return newValue.replace(/.$/, "6");
+          return String(newValue).replace(/.$/, "6");
         });
       });
       test('When Editing', function() {
         numberFieldField.isBeingEdited_ = true;
-        numberFieldField.setValue(25);
+        Blockly.FieldTextInput.htmlInput_.value = '25';
+        numberFieldField.onHtmlInputChange_(null);
         assertValue(numberFieldField, 26, '25');
         numberFieldField.isBeingEdited_ = false;
       });

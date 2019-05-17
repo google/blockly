@@ -136,6 +136,9 @@ suite ('Text Input Fields', function() {
     var textInputField;
     setup(function() {
       textInputField = new Blockly.FieldTextInput('value');
+      Blockly.FieldTextInput.htmlInput_ = Object.create(null);
+      Blockly.FieldTextInput.htmlInput_.oldValue_ = 'value';
+      Blockly.FieldTextInput.htmlInput_.untypedDefaultValue_ = 'value';
     });
     suite('Null Validator', function() {
       setup(function() {
@@ -145,7 +148,8 @@ suite ('Text Input Fields', function() {
       });
       test('When Editing', function() {
         textInputField.isBeingEdited_ = true;
-        textInputField.setValue('newValue');
+        Blockly.FieldTextInput.htmlInput_.value = 'newValue';
+        textInputField.onHtmlInputChange_(null);
         assertValue(textInputField, 'value', 'newValue');
         textInputField.isBeingEdited_ = false;
       });
@@ -162,7 +166,8 @@ suite ('Text Input Fields', function() {
       });
       test('When Editing', function() {
         textInputField.isBeingEdited_ = true;
-        textInputField.setValue('bbbaaa');
+        Blockly.FieldTextInput.htmlInput_.value = 'bbbaaa';
+        textInputField.onHtmlInputChange_(null);
         assertValue(textInputField, 'bbb', 'bbbaaa');
         textInputField.isBeingEdited_ = false;
       });

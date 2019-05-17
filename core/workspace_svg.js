@@ -273,6 +273,21 @@ Blockly.WorkspaceSvg.prototype.trashcan = null;
 Blockly.WorkspaceSvg.prototype.scrollbar = null;
 
 /**
+ * Fixed flyout providing blocks which may be dragged into this workspace.
+ * @type {Blockly.Flyout}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.flyout_ = null;
+
+/**
+ * Category-based toolbox providing blocks which may be dragged into this
+ * workspace.
+ * @type {Blockly.Toolbox}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.toolbox_ = null;
+
+/**
  * The current gesture in progress on this workspace, if any.
  * @type {Blockly.TouchGesture}
  * @private
@@ -533,10 +548,6 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   // Determine if there needs to be a category tree, or a simple list of
   // blocks.  This cannot be changed later, since the UI is very different.
   if (this.options.hasCategories) {
-    /**
-     * @type {Blockly.Toolbox}
-     * @private
-     */
     this.toolbox_ = new Blockly.Toolbox(this);
   }
   if (this.grid_) {
@@ -660,11 +671,6 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
     horizontalLayout: this.horizontalLayout,
     toolboxPosition: this.options.toolboxPosition
   };
-  /**
-   * @type {!Blockly.Flyout}
-   * @private
-   */
-  this.flyout_ = null;
   if (this.horizontalLayout) {
     this.flyout_ = new Blockly.HorizontalFlyout(workspaceOptions);
   } else {
@@ -672,7 +678,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
   }
   this.flyout_.autoClose = false;
 
-  // Return the element  so that callers can place it in their desired
+  // Return the element so that callers can place it in their desired
   // spot in the DOM.  For example, mutator flyouts do not go in the same place
   // as main workspace flyouts.
   return this.flyout_.createDom(tagName);

@@ -136,15 +136,15 @@ suite ('Colour Fields', function() {
     });
     test.skip('#aaaaaa -> Null', function() {
       colourField.setValue(null);
-      assertValue(colourField, '#aaaaaa', '#aaaaaa');
+      assertValue(colourField, '#aaaaaa', '#aaa');
     });
     test.skip('#aaaaaa -> Undefined', function() {
       colourField.setValue(undefined);
-      assertValue(colourField, '#aaaaaa', '#aaaaaa');
+      assertValue(colourField, '#aaaaaa', '#aaa');
     });
     test.skip('#aaaaaa -> Non-Parsable String', function() {
       colourField.setValue('bad');
-      assertValue(colourField, '#aaaaaa', '#aaaaaa');
+      assertValue(colourField, '#aaaaaa', '#aaa');
     });
     test('#aaaaaa -> #000000', function() {
       colourField.setValue('#000000');

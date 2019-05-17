@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blockly Demo: Keyboard Navigation</title>
+  <script src="../../blockly_compressed.js"></script>
+  <script src="../../blocks_compressed.js"></script>
+  <script src="../../javascript_compressed.js"></script>
+  <script src="../../msg/js/en.js"></script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+  </style>
+</head>
+<body>
+  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Keyboard Navigation</h1>
+
+  <p>You can enter keyboard navigation mode by <b>shift clicking anywhere on the
+  workspace or on a block.</b> <br>
+
+  You can then use the WASD keys to move around the workspace or click the show
+  traversal button to display an alternative way to navigate the workspace.<br>
+
+  The demo uses <a href="https://en.wikipedia.org/wiki/Tree_traversal#Pre-order_(NLR)">pre
+  order tree traversal</a> as an alternative way to navigate the blocks, connections,
+  and fields on the workspace.<br><br>
+    W: Previous block/field/input at the same level<br>
+    A: Up one level (Field (or input) -> Block -> Input (or field) -> Block ->
+    Stack -> Workspace)<br>
+    S: Next block/field/input at the same level<br>
+    D: Down one level (Workspace -> Stack -> Block -> Input ( or field) -> Block
+     -> Field (orinput))<br><br>
+  </p>
+
+  <!-- TODO: Update when we add keyboard navigation to site -->
+  <!-- <p>&rarr; More info on <a href="">Keyboard Navigation</a>.</p> -->
+
+  <p>
+    <button onclick="showTraversal()">Show Traversal</button>
+  </p>
+
+  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+
+  <xml id="toolbox" style="display: none">
+    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+    </category>
+    <category name="Loops" colour="%{BKY_LOOPS_HUE}">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+    </category>
+    <category name="Math" colour="%{BKY_MATH_HUE}">
+      <block type="math_number">
+        <field name="NUM">123</field>
+      </block>
+      <block type="math_arithmetic"></block>
+      <block type="math_single"></block>
+    </category>
+    <category name="Text" colour="%{BKY_TEXTS_HUE}">
+      <block type="text"></block>
+      <block type="text_length"></block>
+      <block type="text_print"></block>
+    </category>
+  </xml>
+
+  <xml id="startBlocks" style="display: none">
+    <variables>
+      <variable type="" id="~GNXm@Z(wclI]t3zTf.g">list</variable>
+      <variable type="" id="8]s[S+Gy+%k7HoFup])m">item</variable>
+    </variables>
+    <block type="controls_if" id="^^hRiX{cCPHWJr}?8M^5" x="37" y="162">
+      <value name="IF0">
+        <block type="logic_compare" id="#yzPl3=N6CIpUKvJ0b1(">
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="math_arithmetic" id="h#NOs2/B*.f{5N=9L|m|">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <shadow type="math_number" id="~4Z2|fDhdniR@Z=9m.]5">
+                  <field name="NUM">1</field>
+                </shadow>
+              </value>
+              <value name="B">
+                <shadow type="math_number" id="X9ywC|L-2$E#DHd[75bJ">
+                  <field name="NUM">1</field>
+                </shadow>
+              </value>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_single" id="Ad|PE{k|OX2k,ef#S1sC">
+              <field name="OP">ROOT</field>
+              <value name="NUM">
+                <shadow type="math_number" id=",d-)d1gr[f%EYC)jryuz">
+                  <field name="NUM">9</field>
+                </shadow>
+                <block type="math_number" id="xn[NF$ps1cPK(;q8K1PM">
+                  <field name="NUM">123</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+      <statement name="DO0">
+        <block type="lists_setIndex" id="EX~e8#P8]I7BOSH%]11H">
+          <mutation at="true"></mutation>
+          <field name="MODE">SET</field>
+          <field name="WHERE">FROM_START</field>
+          <value name="LIST">
+            <block type="variables_get" id="#(o=|qGel$T_MJkZU,%1">
+              <field name="VAR" id="~GNXm@Z(wclI]t3zTf.g" variabletype="">list</field>
+            </block>
+          </value>
+          <next>
+            <block type="text_append" id="gB,Xu47i^C//_e-J7NiY">
+              <field name="VAR" id="8]s[S+Gy+%k7HoFup])m" variabletype="">item</field>
+              <value name="TEXT">
+                <shadow type="text" id="|PcJ2q-,B,gRn7Bz%gm|">
+                  <field name="TEXT"></field>
+                </shadow>
+              </value>
+            </block>
+          </next>
+        </block>
+      </statement>
+      <next>
+        <block type="controls_repeat_ext" id="O=qqWbd:drvugOFlDR3R">
+          <value name="TIMES">
+            <shadow type="math_number" id="0Y^xJhJqlh$.1C?5}B`;">
+              <field name="NUM">10</field>
+            </shadow>
+          </value>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+  <script>
+    var demoWorkspace = Blockly.inject('blocklyDiv',
+        {media: '../../media/',
+         toolbox: document.getElementById('toolbox')});
+    Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
+                               demoWorkspace);
+
+    /**
+     * Decides what nodes to traverse and which ones to skip. Currently, it
+     * skips output, stack and workspace nodes.
+     * @param {Blockly.ASTNode} node The ast node to check whether it is valid.
+     * @return {Boolean} True if the node should be visited, false otherwise.
+     * @package
+     */
+    function validNode(node) {
+      var isValid = false;
+      if (node && (node.getType() === Blockly.ASTNode.types.BLOCK
+        || node.getType() === Blockly.ASTNode.types.INPUT
+        || node.getType() === Blockly.ASTNode.types.FIELD
+        || node.getType() === Blockly.ASTNode.types.NEXT
+        || node.getType() === Blockly.ASTNode.types.PREVIOUS)) {
+          isValid = true;
+      }
+      return isValid;
+    }
+
+    /**
+     * From the given node find either the next valid sibling or parent.
+     * @param {Blockly.ASTNode} node The current position in the ast.
+     * @return {Blockly.ASTNode} The parent ast node or null if there are no
+     * valid parents.
+     * @package
+     */
+    function findSiblingOrParent(node) {
+      if (!node) {
+        return null;
+      }
+      if (validNode(node.next())) {
+        return node.next();
+      }
+      return findSiblingOrParent(node.out());
+    }
+
+    /**
+     * Uses pre order traversal to go navigate the blockly ast. This will allow
+     * a user to easily navigate the entire blockly AST without having to go in
+     * and out levels on the tree.
+     * @param {Blockly.ASTNode} node The current position in the ast.
+     * @return {Blockly.ASTNode} The next node in the traversal.
+     * @package
+     */
+    function treeTraversal(node) {
+      if (!node) {
+        return null;
+      }
+      var newNode = node.in() || node.next();
+      if (validNode(newNode)) {
+        return newNode;
+      } else if (newNode) {
+        return treeTraversal(newNode);
+      } else {
+        return findSiblingOrParent(node);
+      }
+    }
+
+    /**
+     * Finds the next node in the tree traversal starting at the location of
+     * the cursor.
+     * @return {Blockly.ASTNode} The next node in the traversal.
+     * @package
+     */
+    function findNext() {
+        var cursor = Blockly.Navigation.cursor_;
+        var curNode = cursor.getCurNode();
+        return treeTraversal(curNode);
+    }
+
+    /**
+     * Shows the next node in the tree traversal every second.
+     * @package
+     */
+    function demo () {
+      var doNext = function() {
+        var node = findNext();
+        Blockly.Navigation.cursor_.setLocation(node);
+        if (node) {
+          setTimeout(doNext, 1000);
+        }
+      }
+      doNext();
+    }
+
+    /**
+     * Sets up accessibility mode so that the demo can successfully run.
+     * @package
+     */
+    function showTraversal() {
+      Blockly.Navigation.enableKeyboardAccessibility();
+      if (!Blockly.Navigation.cursor_.getCurNode()) {
+        Blockly.Navigation.focusWorkspace();
+      }
+      demo();
+    }
+  </script>
+
+</body>
+</html>

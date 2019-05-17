@@ -25,11 +25,7 @@
 'use strict';
 
 goog.provide('Blockly.CursorSvg');
-
 goog.require('Blockly.Cursor');
-goog.require('Blockly.BlockSvg.render');
-
-
 /**
  * Class for a cursor.
  * @param {!Blockly.Workspace} workspace The workspace to sit in.

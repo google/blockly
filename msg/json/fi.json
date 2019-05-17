@@ -257,6 +257,7 @@
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Kehottaa käyttäjää syöttämään tekstiä.",
 	"TEXT_COUNT_MESSAGE0": "laske määrä '%1' '%2' sisällä",
 	"TEXT_COUNT_TOOLTIP": "Laske kuiunka monta kertaa jokin teksti esiintyy jossakin toisessa tekstissä.",
+	"TEXT_REPLACE_MESSAGE0": "Korvaa teksti %1 tekstillä %2 tekstissä %3",
 	"TEXT_REVERSE_MESSAGE0": "%1 takaperin",
 	"TEXT_REVERSE_TOOLTIP": "Muuttaa tekstin kirjainten järjestyksen toisin päin.",
 	"LISTS_CREATE_EMPTY_TITLE": "Luo tyhjä lista",

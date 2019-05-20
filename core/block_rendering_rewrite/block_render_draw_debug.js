@@ -29,7 +29,7 @@ goog.provide('Blockly.BlockRendering.Debug');
 Blockly.BlockRendering.Debug.drawSpacerRow = function(row, cursorY, svgRoot) {
   row.rect = Blockly.utils.createSvgElement('rect',
       {
-        'class': 'rowSpacerRect displayable',
+        'class': 'rowSpacerRect blockRenderDebug',
         'x': 0,
         'y': cursorY,
         'width': row.width,
@@ -41,7 +41,7 @@ Blockly.BlockRendering.Debug.drawSpacerRow = function(row, cursorY, svgRoot) {
 Blockly.BlockRendering.Debug.drawSpacerElem = function(elem, cursorX, centerY, svgRoot) {
   elem.rect = Blockly.utils.createSvgElement('rect',
       {
-        'class': 'elemSpacerRect displayable',
+        'class': 'elemSpacerRect blockRenderDebug',
         'x': cursorX,
         'y': centerY - elem.height / 2,
         'width': elem.width,
@@ -54,7 +54,7 @@ Blockly.BlockRendering.Debug.drawRenderedElem = function(elem, cursorX, centerY,
   var yPos = centerY - elem.height / 2;
   elem.rect = Blockly.utils.createSvgElement('rect',
       {
-        'class': 'rowRenderingRect displayable',
+        'class': 'rowRenderingRect blockRenderDebug',
         'x': cursorX,
         'y': yPos,
         'width': elem.width,
@@ -90,7 +90,7 @@ Blockly.BlockRendering.Debug.drawConnection = function(conn, svgRoot) {
   }
   Blockly.utils.createSvgElement('circle',
       {
-        'class': 'connectionRenderingDot',
+        'class': 'blockRenderDebug',
         'cx': conn.offsetInBlock_.x,
         'cy': conn.offsetInBlock_.y,
         'r': size,
@@ -103,7 +103,7 @@ Blockly.BlockRendering.Debug.drawConnection = function(conn, svgRoot) {
 Blockly.BlockRendering.Debug.drawRenderedRow = function(row, cursorY, svgRoot) {
   row.rect = Blockly.utils.createSvgElement('rect',
       {
-        'class': 'elemRenderingRect displayable',
+        'class': 'elemRenderingRect blockRenderDebug',
         'x': 0,
         'y': cursorY ,
         'width': row.width,

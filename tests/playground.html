@@ -144,6 +144,10 @@ function start() {
     // Restore event logging state.
     var state = sessionStorage.getItem('logEvents');
     logEvents(Boolean(Number(state)));
+
+    // Restore render debug state.
+    var renderDebugState = sessionStorage.getItem('blockRenderDebug');
+    toggleRenderingDebug(Boolean(Number(renderDebugState)));
   } else {
     // MSIE 11 does not support sessionStorage on file:// URLs.
     logEvents(false);
@@ -282,6 +286,19 @@ function logEvents(state) {
   }
 }
 
+function toggleRenderingDebug(state) {
+  var checkbox = document.getElementById('blockRenderDebugCheck');
+  checkbox.checked = state;
+  if (sessionStorage) {
+    sessionStorage.setItem('blockRenderDebug', Number(state));
+  }
+  if (state) {
+    document.getElementById('blocklyDiv').className = 'renderingDebug';
+  } else {
+    document.getElementById('blocklyDiv').className = '';
+  }
+}
+
 function logger(e) {
   console.log(e);
 }
@@ -375,7 +392,11 @@ h1 {
   font-style: italic;
 }
 
-.displayable {
+#blocklyDiv.renderingDebug .blockRenderDebug {
+  display: block;
+}
+
+.blockRenderDebug {
   display: none;
 }
 
@@ -403,9 +424,6 @@ h1 {
   fill-opacity: 0.5;
   fill: pink;
   stroke-width: 1px;
-}
-
-.connectionRenderingDot {
 }
 
 </style>
@@ -471,6 +489,10 @@ h1 {
     <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
   </p>
 
+  <p>
+    Block rendering debug: &nbsp;
+    <input type="checkbox" onclick="toggleRenderingDebug(this.checked)" id="blockRenderDebugCheck">
+  </p>
   <!-- The next three blocks of XML are sample toolboxes for testing basic
   configurations.  For more information on building toolboxes, see https://developers.google.com/blockly/guides/configure/web/toolbox -->
 

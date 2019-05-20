@@ -27,6 +27,7 @@
 goog.provide('Blockly.BlockRendering.Drawer');
 
 
+
 /**
  * Render the given block.
  * @param {!Blockly.BlockSvg} block The block to render
@@ -111,28 +112,20 @@ Blockly.BlockRendering.Drawer.prototype.drawTop_ = function() {
   this.highlighter_.drawTopCorner(topRow);
   this.highlighter_.drawRightSideRow(topRow);
 
-  // Position the cursor at the top-left starting point.
-  if (topRow.squareCorner) {
-    this.steps_.push(BRC.START_POINT);
-    if (topRow.startHat) {
-      this.steps_.push(BRC.START_HAT_PATH);
-    }
-  } else {
-    this.steps_.push(BRC.TOP_LEFT_CORNER_START, BRC.TOP_LEFT_CORNER);
-  }
-
   for (var i = 0; i < elements.length; i++) {
     var elem = elements[i];
-    if (elem.type === 'previous connection') {
-      this.steps_.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT);
+    if (elem.type === 'square corner') {
+      this.steps_.push(BRC.START_POINT);
+    } else if (elem.type === 'round corner') {
+      this.steps_.push(BRC.TOP_LEFT_CORNER_START, BRC.TOP_LEFT_CORNER);
+    } else if (elem.type === 'previous connection') {
+      this.steps_.push(BRC.NOTCH_PATH_LEFT);
+    } else if (elem.type === 'hat') {
+      this.steps_.push(BRC.START_HAT_PATH);
+    } else if (elem.isSpacer()) {
+      this.steps_.push('h', elem.width);
     }
   }
-
-  // Top edge.
-  // if (topRow.hasPreviousConnection) {
-  //   this.steps_.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT);
-  // }
-  this.steps_.push('H', topRow.width);
   this.steps_.push('v', topRow.height);
 };
 

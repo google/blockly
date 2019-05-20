@@ -463,7 +463,7 @@ Blockly.BlockRendering.RenderInfo.prototype.addRowSpacing_ = function() {
 
   for (var r = 0; r < oldRows.length; r++) {
     this.rows.push(oldRows[r]);
-    if (r <= oldRows.length - 1) {
+    if (r !== oldRows.length - 1) {
       this.rows.push(this.makeSpacerRow_(oldRows[r], oldRows[r + 1]));
     }
   }

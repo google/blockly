@@ -26,6 +26,10 @@ Blockly.BlockRendering.Measurable.prototype.isField = function() {
   return this.type == 'field';
 };
 
+Blockly.BlockRendering.Measurable.prototype.isHat = function() {
+  return this.type == 'hat';
+};
+
 /**
  * Whether this stores information about an icon.
  * @return {boolean} True if this object stores information about an icon.
@@ -66,7 +70,21 @@ Blockly.BlockRendering.Measurable.prototype.isStatementInput = function() {
   return this.type == 'statement input';
 };
 
+Blockly.BlockRendering.Measurable.prototype.isPreviousConnection = function() {
+  return this.type == 'previous connection';
+};
 
+Blockly.BlockRendering.Measurable.prototype.isNextConnection = function() {
+  return this.type == 'next connection';
+};
+
+Blockly.BlockRendering.Measurable.prototype.isRoundedCorner = function() {
+  return this.type == 'round corner';
+};
+
+Blockly.BlockRendering.Measurable.prototype.isSquareCorner = function() {
+  return this.type == 'square corner';
+};
 /**
  * The base class to represent an input that takes up space on a block
  * during rendering
@@ -208,8 +226,8 @@ Blockly.BlockRendering.ExternalValueInput = function(input) {
 goog.inherits(Blockly.BlockRendering.ExternalValueInput,
     Blockly.BlockRendering.Input);
 
-Blockly.BlockRendering.PreviousConnection = function(width) {
-  Blockly.BlockRendering.Icon.superClass_.constructor.call(this);
+Blockly.BlockRendering.PreviousConnection = function() {
+  Blockly.BlockRendering.PreviousConnection.superClass_.constructor.call(this);
   this.renderRect = null;
   this.type = 'previous connection';
   //TODO: this could be changed by the precedes statement
@@ -219,42 +237,42 @@ Blockly.BlockRendering.PreviousConnection = function(width) {
 };
 goog.inherits(Blockly.BlockRendering.PreviousConnection, Blockly.BlockRendering.Measurable);
 
-Blockly.BlockRendering.NextConnection = function(width) {
-  Blockly.BlockRendering.Icon.superClass_.constructor.call(this);
+Blockly.BlockRendering.NextConnection = function() {
+  Blockly.BlockRendering.NextConnection.superClass_.constructor.call(this);
   this.renderRect = null;
   this.type = 'next connection';
   //TODO: this could be changed by the precedes statement
   this.height = BRC.MEDIUM_PADDING;
-  this.width = width;
+  this.width = BRC.NOTCH_WIDTH;
 };
 goog.inherits(Blockly.BlockRendering.NextConnection, Blockly.BlockRendering.Measurable);
 
-Blockly.BlockRendering.Hat = function(width, height) {
-  Blockly.BlockRendering.Icon.superClass_.constructor.call(this);
+Blockly.BlockRendering.Hat = function() {
+  Blockly.BlockRendering.Hat.superClass_.constructor.call(this);
   this.renderRect = null;
   this.type = 'hat';
-  //TODO: this could be changed by the precedes statement
   this.height = BRC.MEDIUM_PADDING;
+  this.width = 100;
 
 };
 goog.inherits(Blockly.BlockRendering.Hat, Blockly.BlockRendering.Measurable);
 
-Blockly.BlockRendering.SquareCorner = function(width, height) {
-  Blockly.BlockRendering.Icon.superClass_.constructor.call(this);
+Blockly.BlockRendering.SquareCorner = function() {
+  Blockly.BlockRendering.SquareCorner.superClass_.constructor.call(this);
   this.renderRect = null;
   this.type = 'square corner';
-  //TODO: this could be changed by the precedes statement
   this.height = BRC.MEDIUM_PADDING;
+  this.width = 0;
 
 };
 goog.inherits(Blockly.BlockRendering.SquareCorner, Blockly.BlockRendering.Measurable);
 
-Blockly.BlockRendering.RoundCorner = function(width, height) {
-  Blockly.BlockRendering.Icon.superClass_.constructor.call(this);
+Blockly.BlockRendering.RoundCorner = function() {
+  Blockly.BlockRendering.RoundCorner.superClass_.constructor.call(this);
   this.renderRect = null;
   this.type = 'round corner';
-  //TODO: this could be changed by the precedes statement
-  this.height = BRC.MEDIUM_PADDING;
+  this.width = 8;
+  this.height = 5;
 
 };
 goog.inherits(Blockly.BlockRendering.RoundCorner, Blockly.BlockRendering.Measurable);
@@ -309,6 +327,10 @@ Blockly.BlockRendering.Row.prototype.getFirstSpacer = function() {
   return this.elements[0];
 };
 
+Blockly.BlockRendering.Row.prototype.getLastSpacer = function() {
+  return this.elements[this.elements.length - 1];
+};
+
 Blockly.BlockRendering.BetweenRowSpacer = function(height, width) {
   this.type = 'between-row spacer';
   this.width = width;
@@ -326,38 +348,30 @@ goog.inherits(Blockly.BlockRendering.InRowSpacer,
     Blockly.BlockRendering.Measurable);
 
 Blockly.BlockRendering.TopRow = function(block) {
+  Blockly.BlockRendering.TopRow.superClass_.constructor.call(this);
+
   this.elements = [];
   this.type = 'top row';
   /**
    *
    * @type {boolean}
    */
-  this.startHat = block.hat ? block.hat === 'cap' : Blockly.BlockSvg.START_HAT;
 
+  //can't get rid of since it is used in move connections
   this.hasPreviousConnection = !!block.previousConnection;
+  //can't get rid of since it is used in move connections
   this.connection = block.previousConnection;
 
-  var prevBlock = block.getPreviousBlock();
-  /**
-   * True if the top left corner of the block should be squared.
-   * @type {boolean}
-   */
-  //Can get rid of
-  this.squareCorner = !!block.outputConnection ||
-      this.startHat || (prevBlock && prevBlock.getNextBlock() == block);
-
-  this.precedesStatement =
-      block.inputList.length &&
+  var precedesStatement = block.inputList.length &&
       block.inputList[0].type == Blockly.NEXT_STATEMENT;
 
-  if (this.precedesStatement) {
+  if (precedesStatement) {
     this.height = BRC.LARGE_PADDING;
   } else {
     this.height = BRC.MEDIUM_PADDING;
   }
 };
-goog.inherits(Blockly.BlockRendering.TopRow,
-    Blockly.BlockRendering.Measurable);
+goog.inherits(Blockly.BlockRendering.TopRow, Blockly.BlockRendering.Row);
 
 
 Blockly.BlockRendering.TopRow.prototype.isSpacer = function() {

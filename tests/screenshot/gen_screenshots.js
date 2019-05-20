@@ -26,6 +26,12 @@ var fs = require('fs');
 
 module.exports = genScreenshots;
 
+function checkAndCreateDir(dirname) {
+  if (!fs.existsSync(dirname)){
+    fs.mkdirSync(dirname);
+  }
+};
+
 /**
  * Opens two different webdriverio browsers.  One uses the hosted version of
  * blockly_compressed.js; the other uses the local blockly_uncompressed.js.
@@ -34,23 +40,39 @@ module.exports = genScreenshots;
  * both playgrounds and saves a screenshot of each.
  */
 async function genScreenshots() {
-  // TODOs:
-  // - open the test cases folder
-  // - iterate over all files in the test cases folder
-  // - use the input file name for the output file names
-  var prefix = './tests/screenshot/';
-  var xml_url = prefix + 'test_cases/math_addition';
-  var xml = fs.readFileSync(xml_url, 'utf8');
-  var url_prefix = 'file://' + __dirname + '/playground';
+  var output_url = 'tests/screenshot/outputs'
+  checkAndCreateDir(output_url)
+  checkAndCreateDir(output_url + '/old');
+  checkAndCreateDir(output_url + '/new');
 
+  var url_prefix = 'file://' + __dirname + '/playground';
   var browser_new = await buildBrowser(url_prefix + '_new.html');
   var browser_old = await buildBrowser(url_prefix + '_old.html');
 
-  await genSingleScreenshot(browser_new, 'new', 'math_addition');
-  await genSingleScreenshot(browser_old, 'old', 'math_addition');
+  var test_list = getTestList();
+
+  for (var i = 0, testName; testName = test_list[i]; i++) {
+    await genSingleScreenshot(browser_new, 'new', testName);
+    if (!fs.existsSync(output_url + '/old/' + testName)) {
+      await genSingleScreenshot(browser_old, 'old', testName);
+    }
+  }
 
   await cleanUp(browser_new, browser_old);
   return 0;
+}
+
+function getTestList() {
+  var file = fs.readFileSync('tests/screenshot/test_cases/test_cases.json');
+  var json = JSON.parse(file);
+  var testSpecArr = json.tests;
+  var testList = [];
+  for (var i = 0, testSpec; testSpec = testSpecArr[i]; i++) {
+    if (!testSpec.skip) {
+      testList.push(testSpec.title);
+    }
+  }
+  return testList;
 }
 
 async function cleanUp(browser_new, browser_old) {

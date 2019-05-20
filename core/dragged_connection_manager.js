@@ -213,6 +213,19 @@ Blockly.DraggedConnectionManager.prototype.removeHighlighting_ = function() {
  */
 Blockly.DraggedConnectionManager.prototype.addHighlighting_ = function() {
   if (this.closestConnection_) {
+
+    //Add some margins to the yellow highlight path.
+    //Required when dragging a block that has an input to a block that will become a child of it upon release.
+    //Ex. dragging a set_variable block to a block with an output
+    //Usually the users do it the other way around
+    //IMPORTANT! Only add it if topMargin is undefined. Otherwise it will apply this the other way around (child block to parent block) and leads to ugly results.
+    if (this.closestConnection_.sourceBlock_ && !this.closestConnection_.topMargin) {
+      let topMargin = 1 + ((this.closestConnection_.sourceBlock_.firstRowHeight - 15) / 2) - 7.5;
+      let restOfHeight = this.closestConnection_.sourceBlock_.height - 15 - 7.5 - topMargin;
+
+      this.closestConnection_.addHighlightMargin(topMargin, restOfHeight);
+    }
+
     this.closestConnection_.highlight();
   }
 };

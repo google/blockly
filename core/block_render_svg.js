@@ -560,8 +560,9 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       previousFieldEditable = field.EDITABLE;
       
       //SHAPE: If the field has an image property, mark the row as having an icon. Used for margins.
-      if (field.imageElement_) {
-        row.hasImage = true;
+      //Only do so for large images. Changed due to "text" block being too big.
+      if (field.imageElement_ && field.height > 20) {
+        row.hasLargeImage = true;
       }
     }
 
@@ -639,7 +640,7 @@ Blockly.BlockSvg.prototype.renderComputeSpacing_ = function(inputRows) {
 
     //Add some margin to the FIRST line of the block
     if (y == 0) {
-      if (row.hasImage) {
+      if (row.hasLargeImage) {
         row.height += Blockly.BlockSvg.Y_MARGIN_TOP_WITH_IMAGE;
         row.alignmentHeight += Blockly.BlockSvg.Y_MARGIN_TOP_WITH_IMAGE;
       }
@@ -651,7 +652,7 @@ Blockly.BlockSvg.prototype.renderComputeSpacing_ = function(inputRows) {
 
     //Add some margin to the LAST line of the block (if only 1 line, it's the same as the first line)
     if (y + 1 == inputRows.length) {
-      if (row.hasImage) {
+      if (row.hasLargeImage) {
         row.height += Blockly.BlockSvg.Y_MARGIN_TOP_WITH_IMAGE;
         row.alignmentHeight += Blockly.BlockSvg.Y_MARGIN_TOP_WITH_IMAGE;
       }

@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Node.js script to generate screenshots in Chrome, via webdriver.
+ * @fileoverview Mocha tests that diff images and save the diffs as artifacts.
  */
 
 var chai = require('chai');
@@ -31,35 +31,55 @@ var old_dir = 'tests/screenshot/outputs/old/';
 var new_dir = 'tests/screenshot/outputs/new/';
 var diff_dir = 'tests/screenshot/outputs/diff/';
 
-// TODOs:
-// - iterate over all test cases
-// - use the name of the test case file as the name of the test
-// - improve doneReading to not rely on globals like this
-// - write or find basic html page that lets you open pairs of outputs + diffs
+if (!fs.existsSync(diff_dir)){
+  fs.mkdirSync(diff_dir);
+}
+
+function getTestList() {
+  var file = fs.readFileSync('tests/screenshot/test_cases/test_cases.json');
+  var json = JSON.parse(file);
+  var testSpecArr = json.tests;
+  var testList = [];
+  for (var i = 0, testSpec; testSpec = testSpecArr[i]; i++) {
+    if (!testSpec.skip) {
+      testList.push(testSpec.title);
+    }
+  }
+  return testList;
+}
+
+var test_list = getTestList();
 
 suite('Rendering', function() {
-  test('math_addition', function(done) {
-    function doneReading() {
-      if (++filesRead < 2) return;
-      var diff = new PNG({width: img1.width, height: img1.height});
+  /**
+   * - Load the old and new files as PNGs
+   * - Diff the files
+   * - Assert that the files are the same
+   * - Save the visual diff to a file.
+   */
+  function diffScreenshots(name) {
 
-      var mismatch_num = pixelmatch(
-          img1.data,
-          img2.data,
-          diff.data,
-          img1.width,
-          img1.height, {threshold: 0.1});
-      console.log('mismatch: ' + mismatch_num);
+    var file1 = fs.readFileSync(old_dir + name  + '.png');
+    var img1 = PNG.sync.read(file1);
 
-      diff.pack().pipe(fs.createWriteStream(diff_dir + 'math_addition.png'));
-      chai.assert.equal(mismatch_num, 0);
-      done();
-    }
+    var file2 = fs.readFileSync(new_dir + name + '.png');
+    var img2 = PNG.sync.read(file2);
 
-    var img1 = fs.createReadStream(old_dir + 'math_addition.png')
-        .pipe(new PNG()).on('parsed', doneReading);
-    var img2 = fs.createReadStream(new_dir + 'math_addition.png')
-        .pipe(new PNG()).on('parsed', doneReading);
-    var filesRead = 0;
+    var diff = new PNG({width: img1.width, height: img1.height});
+
+    var mismatch_num = pixelmatch(
+        img1.data,
+        img2.data,
+        diff.data,
+        img1.width,
+        img1.height, {threshold: 0.1});
+    diff.pack().pipe(fs.createWriteStream(diff_dir + name + '.png'));
+    chai.assert.equal(mismatch_num, 0);
+  }
+
+  test_list.forEach(function(testName) {
+    test(testName, function() {
+      diffScreenshots(testName);
+    })
   });
 });

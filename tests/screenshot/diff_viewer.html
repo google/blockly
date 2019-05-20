@@ -22,24 +22,37 @@ limitations under the License.
 <head>
 <meta charset="utf-8">
 <title>Diff Viewer</title>
+<script src="outputs/test_output.js"></script>
 <script>
 'use strict';
 function start() {
+
+  var test_list = results.tests;
+
   var table = document.getElementById('results_table');
-  addTest(table, 'math_addition');
-  //addTest(table, 'another-screenshot');
+
+  for (var i = 0, test; test = test_list[i]; i++) {
+    addTest(table, test);
+  }
 }
 
-function addTest(table, name) {
+function addTest(table, test) {
   var row = table.insertRow(-1);
-  row.className = 'tableRow';
+  var className = 'tableRow';
+  if (test.state == 'failed') {
+    className += ' failedTest'
+  } else {
+    className += ' passedTest';
+  }
+  row.className = className;
   var cell1 = row.insertCell(0);
-  cell1.innerHTML = name;
-  cell1.displayed = true;
+  cell1.innerHTML = test.title;
+  var displayed = (test.state == "failed")
+  cell1.displayed = displayed;
   cell1.className = 'testName';
-  var cell2 = addImageCell(row, name, 'old');
-  var cell3 = addImageCell(row, name, 'new');
-  var cell4 = addImageCell(row, name, 'diff');
+  var cell2 = addImageCell(row, test.title, 'old', displayed);
+  var cell3 = addImageCell(row, test.title, 'new', displayed);
+  var cell4 = addImageCell(row, test.title, 'diff', displayed);
 
   cell1.onclick = function() {
     var display = !cell1.displayed;
@@ -48,22 +61,26 @@ function addTest(table, name) {
     setVisibility(cell3, display);
     setVisibility(cell4, display);
   }
+
 }
 
-function setVisibility(cell, hidden) {
+function setVisibility(cell, displayed) {
   var img = cell.firstChild;
-  if (hidden) {
-    img.className = 'hidden';
-  } else {
+  if (displayed) {
     img.className = '';
+  } else {
+    img.className = 'hidden';
   }
 }
-function addImageCell(row, name, dir) {
+function addImageCell(row, name, dir, displayed) {
   var cell = row.insertCell();
   cell.className = 'imageCell';
   var img = document.createElement('img');
   img.src = 'outputs/' + dir + '/' + name + '.png';
   cell.appendChild(img);
+  if (!displayed) {
+    img.className = 'hidden';
+  }
   return cell;
 }
 </script>

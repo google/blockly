@@ -33,6 +33,9 @@ goog.provide('Blockly.BlockRendering.Drawer');
  * @public
  */
 Blockly.BlockRendering.render = function(block) {
+  if (!block.renderingDebugger) {
+    block.renderingDebugger = new Blockly.BlockRendering.Debug();
+  }
   new Blockly.BlockRendering.Drawer(block).draw_();
 };
 
@@ -71,7 +74,7 @@ Blockly.BlockRendering.Drawer.prototype.draw_ = function() {
   this.drawInternals_();
   this.block_.setPaths_(this.pathObject_);
   this.moveConnections_();
-  Blockly.BlockRendering.Debug.drawDebug(this.block_, this.info_, this.pathObject_);
+  this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
 
   // Someone out there depends on this existing.
   this.block_.startHat_ = this.info_.topRow.startHat;

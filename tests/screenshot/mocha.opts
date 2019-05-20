@@ -1,1 +1,2 @@
 --ui tdd
+--reporter ./tests/screenshot/diff-reporter.js

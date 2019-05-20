@@ -53,7 +53,9 @@ async function genScreenshots() {
 
   for (var i = 0, testName; testName = test_list[i]; i++) {
     await genSingleScreenshot(browser_new, 'new', testName);
-    await genSingleScreenshot(browser_old, 'old', testName);
+    if (!fs.existsSync(output_url + '/old/' + testName)) {
+      await genSingleScreenshot(browser_old, 'old', testName);
+    }
   }
 
   await cleanUp(browser_new, browser_old);

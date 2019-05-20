@@ -23,7 +23,7 @@
 /**
  * @fileoverview Reporter that prints results to the console with the same
  * format as the spec reporter, but also saves a test_output.js file with a
- * that just wraps a json object, for use in diff_viewer.html.
+ * variable that just wraps a json object, for use in diff_viewer.html.
  */
 var mocha = require('mocha');
 var fs = require("fs");

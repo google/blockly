@@ -30,13 +30,14 @@ var fs = require('fs'),
 var old_dir = 'tests/screenshot/outputs/old/';
 var new_dir = 'tests/screenshot/outputs/new/';
 var diff_dir = 'tests/screenshot/outputs/diff/';
+var test_list_location ='tests/screenshot/test_cases/test_cases.json';
 
 if (!fs.existsSync(diff_dir)){
   fs.mkdirSync(diff_dir);
 }
 
 function getTestList() {
-  var file = fs.readFileSync('tests/screenshot/test_cases/test_cases.json');
+  var file = fs.readFileSync(test_list_location);
   var json = JSON.parse(file);
   var testSpecArr = json.tests;
   var testList = [];

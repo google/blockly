@@ -176,18 +176,15 @@ Blockly.BlockRendering.RenderInfo.prototype.createTopRow_ = function() {
   this.topRow = new Blockly.BlockRendering.TopRow(this.block_);
 
   if (squareCorner) {
-    this.topRow.elements.push(
-        new Blockly.BlockRendering.SquareCorner(this.width));
+    this.topRow.elements.push(new Blockly.BlockRendering.SquareCorner());
   } else {
-    this.topRow.elements.push(
-        new Blockly.BlockRendering.RoundCorner(this.width));
+    this.topRow.elements.push(new Blockly.BlockRendering.RoundCorner());
   }
 
   if (hasHat) {
-    this.topRow.elements.push(new Blockly.BlockRendering.Hat(this.width));
+    this.topRow.elements.push(new Blockly.BlockRendering.Hat());
   } else if (hasPrevious) {
-    this.topRow.elements.push(
-        new Blockly.BlockRendering.PreviousConnection(this.width));
+    this.topRow.elements.push(new Blockly.BlockRendering.PreviousConnection());
   }
 };
 

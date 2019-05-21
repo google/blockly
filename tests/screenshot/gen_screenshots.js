@@ -88,7 +88,7 @@ async function buildBrowser(url) {
   };
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
-  await browser.setWindowSize(1000, 1000);
+  await browser.setWindowSize(500, 500);
   console.log('Initialized.\nLoading url: ' + url);
   await browser.url(url);
   return browser;

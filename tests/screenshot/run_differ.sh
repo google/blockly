@@ -23,8 +23,15 @@
 # preferably not by redownloading everything every time.
 # For now, open a new terminal and run:
 # tests/scripts/test_setup.sh
+rm -rf tests/screenshot/outputs/new
+rm -rf tests/screenshot/outputs/diff
+rm tests/screenshot/outputs/test_output.js
+rm tests/screenshot/outputs/test_output.json
+
 node tests/screenshot/gen_screenshots.js
-clear
+
+echo
+
 ./node_modules/.bin/mocha tests/screenshot/diff_screenshots.js --opts "./tests/screenshot/mocha.opts"
 
 # Open results.

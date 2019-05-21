@@ -162,6 +162,12 @@ Blockly.BlockRendering.RenderInfo.prototype.createRows_ = function() {
   }
 };
 
+/**
+ * Create the top row and fill the elements list with the correct measurables
+ * based on values from the block.
+ * @return {Blockly.BlockRendering.TopRow} The top row with all the elements
+ *     created.
+ */
 Blockly.BlockRendering.RenderInfo.prototype.createTopRow_ = function() {
   var hasHat = this.block_.hat ? this.block_.hat === 'cap' : Blockly.BlockSvg.START_HAT;
   var hasPrevious = !!this.block_.previousConnection;
@@ -181,10 +187,8 @@ Blockly.BlockRendering.RenderInfo.prototype.createTopRow_ = function() {
   } else if (hasPrevious) {
     topRow.elements.push(
         new Blockly.BlockRendering.PreviousConnection(this.width));
-  } else {
-    //We don't add anything here because the spacer it gets added in the add
-    //element spacing method
   }
+
   return topRow;
 };
 
@@ -236,8 +240,8 @@ Blockly.BlockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
     var row = this.rows[r];
     var oldElems = row.elements;
     row.elements = [];
-    //For when the top row has no previous connection or hat
-    if (oldElems.length > 0 && row.type !== 'top row') {
+    // No spacing needed before the corner on the top row.
+    if (row.type != 'top row') {
       // There's a spacer before the first element in the row.
       row.elements.push(new Blockly.BlockRendering.InRowSpacer(
           this.getInRowSpacing_(null, oldElems[0])));
@@ -285,7 +289,8 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
       return BRC.NO_PADDING;
     }
     if (prev.isPreviousConnection() || prev.isNextConnection()) {
-      //TODO: What should this be?
+      // TODO: Need to figure out minimum padding between connection and end of
+      // the block.
       return BRC.NO_PADDING;
     }
     // Between noneditable fields and icons and the end of the row.
@@ -332,22 +337,21 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     }
   }
 
-  //Spacing between a corner and previous connection
-  if (prev.isRoundedCorner()){
-    if (next.isPreviousConnection()) {
-      return BRC.NOTCH_OFFSET_ROUNDED_CORNER;
-    }
+  // Spacing between a hat and a corner
+  if (prev.isRoundedCorner() || prev.isSquareCorner()) {
     if (next.isHat()) {
       return BRC.NO_PADDING;
     }
   }
-  if (prev.isSquareCorner()) {
-    if (next.isPreviousConnection()) {
-      return BRC.NOTCH_OFFSET_LEFT;
-    }
-    if (next.isHat()) {
-      return BRC.NO_PADDING;
-    }
+
+  // Spacing between a rounded corner and a previous connection
+  if (prev.isRoundedCorner() && next.isPreviousConnection()){
+    return BRC.NOTCH_OFFSET_ROUNDED_CORNER;
+  }
+
+  // Spacing between a square corner and a previous connection
+  if (prev.isSquareCorner() && next.isPreviousConnection()) {
+    return BRC.NOTCH_OFFSET_LEFT;
   }
 
   return BRC.MEDIUM_PADDING;
@@ -363,8 +367,6 @@ Blockly.BlockRendering.RenderInfo.prototype.computeBounds_ = function() {
   var widestStatementRowFields = 0;
   var blockWidth = 0;
   var widestRowWithConnectedBlocks = 0;
-  //TODO: This currently skips over the first row since that width is decided
-  //by the rest of the rows?
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
     row.measure();
@@ -391,7 +393,7 @@ Blockly.BlockRendering.RenderInfo.prototype.computeBounds_ = function() {
     this.width = blockWidth;
   }
 
-  for (var r = 1; r < this.rows.length; r++) {
+  for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
     if (row.hasStatement) {
       row.statementEdge = this.statementEdge;
@@ -416,7 +418,11 @@ Blockly.BlockRendering.RenderInfo.prototype.alignRowElements_ = function() {
       var desiredWidth = this.width;
       var missingSpace = desiredWidth - currentWidth;
       if (missingSpace) {
-        this.addAlignmentPadding_(row, missingSpace);
+        if (row.type === 'top row') {
+          row.getLastSpacer().width += missingSpace;
+        } else {
+          this.addAlignmentPadding_(row, missingSpace);
+        }
       }
     }
   }
@@ -448,8 +454,6 @@ Blockly.BlockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
       row.getFirstSpacer().width += missingSpace;
     }
     row.width += missingSpace;
-  } else if (row.type === 'top row') {
-    row.getLastSpacer().width += missingSpace;
   }
 };
 
@@ -505,6 +509,7 @@ Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, 
  * @private
  */
 Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
+  // Top row acts a spacer so we don't need any extra padding
   if (prev.type === 'top row') {
     return BRC.NO_PADDING;
   }

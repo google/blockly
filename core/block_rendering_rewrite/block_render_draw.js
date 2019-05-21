@@ -27,7 +27,6 @@
 goog.provide('Blockly.BlockRendering.Drawer');
 
 
-
 /**
  * Render the given block.
  * @param {!Blockly.BlockSvg} block The block to render

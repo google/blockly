@@ -26,6 +26,11 @@ Blockly.BlockRendering.Measurable.prototype.isField = function() {
   return this.type == 'field';
 };
 
+/**
+ * Whether this stores information about a hat.
+ * @return {boolean} True if this object stores information about a hat.
+ * @package
+ */
 Blockly.BlockRendering.Measurable.prototype.isHat = function() {
   return this.type == 'hat';
 };
@@ -39,13 +44,19 @@ Blockly.BlockRendering.Measurable.prototype.isIcon = function() {
   return this.type == 'icon';
 };
 
+/**
+ * Whether this stores information about a spacer.
+ * @return {boolean} True if this object stores information about a spacer.
+ * @package
+ */
 Blockly.BlockRendering.Measurable.prototype.isSpacer = function() {
   return this.type == 'between-row spacer' || this.type == 'in-row spacer';
 };
 
 /**
- * Whether this stores information about an icon.
- * @return {boolean} True if this object stores information about an icon.
+ * Whether this stores information about an external input.
+ * @return {boolean} True if this object stores information about an external
+ * input.
  * @package
  */
 Blockly.BlockRendering.Measurable.prototype.isExternalInput = function() {
@@ -53,8 +64,9 @@ Blockly.BlockRendering.Measurable.prototype.isExternalInput = function() {
 };
 
 /**
- * Whether this stores information about an icon.
- * @return {boolean} True if this object stores information about an icon.
+ * Whether this stores information about a inline input.
+ * @return {boolean} True if this object stores information about a inline
+ * input.
  * @package
  */
 Blockly.BlockRendering.Measurable.prototype.isInlineInput = function() {
@@ -62,26 +74,51 @@ Blockly.BlockRendering.Measurable.prototype.isInlineInput = function() {
 };
 
 /**
- * Whether this stores information about an icon.
- * @return {boolean} True if this object stores information about an icon.
+ * Whether this stores information about a statement input.
+ * @return {boolean} True if this object stores information about a statement
+ * input.
  * @package
  */
 Blockly.BlockRendering.Measurable.prototype.isStatementInput = function() {
   return this.type == 'statement input';
 };
 
+/**
+ * Whether this stores information about a previous connection.
+ * @return {boolean} True if this object stores information about a previous
+ * connection.
+ * @package
+ */
 Blockly.BlockRendering.Measurable.prototype.isPreviousConnection = function() {
   return this.type == 'previous connection';
 };
 
+/**
+ * Whether this stores information about a next connection.
+ * @return {boolean} True if this object stores information about an next
+ * connection.
+ * @package
+ */
 Blockly.BlockRendering.Measurable.prototype.isNextConnection = function() {
   return this.type == 'next connection';
 };
 
+/**
+ * Whether this stores information about a rounded corner.
+ * @return {boolean} True if this object stores information about an rounded
+ * corner.
+ * @package
+ */
 Blockly.BlockRendering.Measurable.prototype.isRoundedCorner = function() {
   return this.type == 'round corner';
 };
 
+/**
+ * Whether this stores information about a square corner.
+ * @return {boolean} True if this object stores information about an square
+ * corner.
+ * @package
+ */
 Blockly.BlockRendering.Measurable.prototype.isSquareCorner = function() {
   return this.type == 'square corner';
 };
@@ -226,6 +263,12 @@ Blockly.BlockRendering.ExternalValueInput = function(input) {
 goog.inherits(Blockly.BlockRendering.ExternalValueInput,
     Blockly.BlockRendering.Input);
 
+/**
+ * An object containing information about the space a previous connection takes
+ * up during rendering.
+ * @package
+ * @constructor
+ */
 Blockly.BlockRendering.PreviousConnection = function() {
   Blockly.BlockRendering.PreviousConnection.superClass_.constructor.call(this);
   this.renderRect = null;
@@ -237,6 +280,12 @@ Blockly.BlockRendering.PreviousConnection = function() {
 };
 goog.inherits(Blockly.BlockRendering.PreviousConnection, Blockly.BlockRendering.Measurable);
 
+/**
+ * An object containing information about the space a next connection takes
+ * up during rendering.
+ * @package
+ * @constructor
+ */
 Blockly.BlockRendering.NextConnection = function() {
   Blockly.BlockRendering.NextConnection.superClass_.constructor.call(this);
   this.renderRect = null;
@@ -247,26 +296,44 @@ Blockly.BlockRendering.NextConnection = function() {
 };
 goog.inherits(Blockly.BlockRendering.NextConnection, Blockly.BlockRendering.Measurable);
 
+/**
+ * An object containing information about the space a hat takes up during
+ * rendering.
+ * @package
+ * @constructor
+ */
 Blockly.BlockRendering.Hat = function() {
   Blockly.BlockRendering.Hat.superClass_.constructor.call(this);
   this.renderRect = null;
   this.type = 'hat';
   this.height = BRC.MEDIUM_PADDING;
-  this.width = 100;
+  this.width = BRC.START_HAT_WIDTH;
 
 };
 goog.inherits(Blockly.BlockRendering.Hat, Blockly.BlockRendering.Measurable);
 
+/**
+ * An object containing information about the space a square corner takes up
+ * during rendering.
+ * @package
+ * @constructor
+ */
 Blockly.BlockRendering.SquareCorner = function() {
   Blockly.BlockRendering.SquareCorner.superClass_.constructor.call(this);
   this.renderRect = null;
   this.type = 'square corner';
   this.height = BRC.MEDIUM_PADDING;
-  this.width = 0;
+  this.width = BRC.NO_PADDING;
 
 };
 goog.inherits(Blockly.BlockRendering.SquareCorner, Blockly.BlockRendering.Measurable);
 
+/**
+ * An object containing information about the space a rounded corner takes up
+ * during rendering.
+ * @package
+ * @constructor
+ */
 Blockly.BlockRendering.RoundCorner = function() {
   Blockly.BlockRendering.RoundCorner.superClass_.constructor.call(this);
   this.renderRect = null;
@@ -347,6 +414,13 @@ Blockly.BlockRendering.InRowSpacer = function(width) {
 goog.inherits(Blockly.BlockRendering.InRowSpacer,
     Blockly.BlockRendering.Measurable);
 
+/**
+ * An object containing information about what elements are in the top row of a
+ * block as well as spacing information for the top row.
+ * Elements in a top row can consist of corners, hats and previous connections.
+ * @param {[type]} block [description]
+ * @package
+ */
 Blockly.BlockRendering.TopRow = function(block) {
   Blockly.BlockRendering.TopRow.superClass_.constructor.call(this);
 
@@ -357,9 +431,7 @@ Blockly.BlockRendering.TopRow = function(block) {
    * @type {boolean}
    */
 
-  //can't get rid of since it is used in move connections
   this.hasPreviousConnection = !!block.previousConnection;
-  //can't get rid of since it is used in move connections
   this.connection = block.previousConnection;
 
   var precedesStatement = block.inputList.length &&

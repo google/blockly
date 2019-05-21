@@ -115,8 +115,7 @@ Blockly.BlockRendering.Drawer.prototype.drawTop_ = function() {
   this.highlighter_.drawTopCorner(topRow);
   this.highlighter_.drawRightSideRow(topRow);
 
-  for (var i = 0; i < elements.length; i++) {
-    var elem = elements[i];
+  for (var i = 0, elem; elem = elements[i]; i++) {
     if (elem.type === 'square corner') {
       this.steps_.push(BRC.START_POINT);
     } else if (elem.type === 'round corner') {

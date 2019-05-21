@@ -273,7 +273,6 @@ Blockly.BlockRendering.PreviousConnection = function() {
   Blockly.BlockRendering.PreviousConnection.superClass_.constructor.call(this);
   this.renderRect = null;
   this.type = 'previous connection';
-  //TODO: this could be changed by the precedes statement
   this.height = BRC.MEDIUM_PADDING;
   this.width = BRC.NOTCH_WIDTH;
 
@@ -290,7 +289,6 @@ Blockly.BlockRendering.NextConnection = function() {
   Blockly.BlockRendering.NextConnection.superClass_.constructor.call(this);
   this.renderRect = null;
   this.type = 'next connection';
-  //TODO: this could be changed by the precedes statement
   this.height = BRC.MEDIUM_PADDING;
   this.width = BRC.NOTCH_WIDTH;
 };

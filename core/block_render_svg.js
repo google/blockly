@@ -561,7 +561,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       
       //SHAPE: If the field has an image property, mark the row as having an icon. Used for margins.
       //Only do so for large images. Changed due to "text" block being too big.
-      if (field.imageElement_ && field.height > 20) {
+      if (field.imageElement_ && field.height_ > 20) {
         row.hasLargeImage = true;
       }
     }

@@ -17,6 +17,9 @@ Blockly.BlockRendering.Measurable = function() {
   this.centerline = 0;
 };
 
+// TODO: We may remove these helper functions if all of them end up being direct
+// checks against types.
+
 /**
  * Whether this stores information about a field.
  * @return {boolean} True if this object stores information about a field.
@@ -165,7 +168,6 @@ Blockly.BlockRendering.Icon = function(icon) {
   Blockly.BlockRendering.Icon.superClass_.constructor.call(this);
   this.icon = icon;
   this.isVisible = icon.isVisible();
-  this.renderRect = null;
   this.type = 'icon';
 
   this.height = 16;
@@ -183,7 +185,6 @@ goog.inherits(Blockly.BlockRendering.Icon, Blockly.BlockRendering.Measurable);
 Blockly.BlockRendering.Field = function(field) {
   Blockly.BlockRendering.Field.superClass_.constructor.call(this);
   this.field = field;
-  this.renderRect = null;
   this.isEditable = field.isCurrentlyEditable();
   this.type = 'field';
 
@@ -271,9 +272,8 @@ goog.inherits(Blockly.BlockRendering.ExternalValueInput,
  */
 Blockly.BlockRendering.PreviousConnection = function() {
   Blockly.BlockRendering.PreviousConnection.superClass_.constructor.call(this);
-  this.renderRect = null;
   this.type = 'previous connection';
-  this.height = BRC.MEDIUM_PADDING;
+  this.height = BRC.NOTCH_HEIGHT;
   this.width = BRC.NOTCH_WIDTH;
 
 };
@@ -287,9 +287,8 @@ goog.inherits(Blockly.BlockRendering.PreviousConnection, Blockly.BlockRendering.
  */
 Blockly.BlockRendering.NextConnection = function() {
   Blockly.BlockRendering.NextConnection.superClass_.constructor.call(this);
-  this.renderRect = null;
   this.type = 'next connection';
-  this.height = BRC.MEDIUM_PADDING;
+  this.height = BRC.NOTCH_HEIGHT;
   this.width = BRC.NOTCH_WIDTH;
 };
 goog.inherits(Blockly.BlockRendering.NextConnection, Blockly.BlockRendering.Measurable);
@@ -302,9 +301,8 @@ goog.inherits(Blockly.BlockRendering.NextConnection, Blockly.BlockRendering.Meas
  */
 Blockly.BlockRendering.Hat = function() {
   Blockly.BlockRendering.Hat.superClass_.constructor.call(this);
-  this.renderRect = null;
   this.type = 'hat';
-  this.height = BRC.MEDIUM_PADDING;
+  this.height = BRC.NO_PADDING;
   this.width = BRC.START_HAT_WIDTH;
 
 };
@@ -318,7 +316,6 @@ goog.inherits(Blockly.BlockRendering.Hat, Blockly.BlockRendering.Measurable);
  */
 Blockly.BlockRendering.SquareCorner = function() {
   Blockly.BlockRendering.SquareCorner.superClass_.constructor.call(this);
-  this.renderRect = null;
   this.type = 'square corner';
   this.height = BRC.MEDIUM_PADDING;
   this.width = BRC.NO_PADDING;
@@ -334,10 +331,11 @@ goog.inherits(Blockly.BlockRendering.SquareCorner, Blockly.BlockRendering.Measur
  */
 Blockly.BlockRendering.RoundCorner = function() {
   Blockly.BlockRendering.RoundCorner.superClass_.constructor.call(this);
-  this.renderRect = null;
   this.type = 'round corner';
-  this.width = 8;
-  this.height = 5;
+  this.width = BRC.CORNER_RADIUS;
+  // The rounded corner extends into the next row by 4 so we only take the
+  // height that is aligned with this row.
+  this.height = BRC.NOTCH_HEIGHT;
 
 };
 goog.inherits(Blockly.BlockRendering.RoundCorner, Blockly.BlockRendering.Measurable);
@@ -435,6 +433,7 @@ Blockly.BlockRendering.TopRow = function(block) {
   var precedesStatement = block.inputList.length &&
       block.inputList[0].type == Blockly.NEXT_STATEMENT;
 
+  //
   if (precedesStatement) {
     this.height = BRC.LARGE_PADDING;
   } else {
@@ -462,6 +461,8 @@ Blockly.BlockRendering.BottomRow = function(block, width) {
       block.inputList.length &&
       block.inputList[block.inputList.length - 1].type == Blockly.NEXT_STATEMENT;
 
+  // This is the minimum height for the row. If one of it's elements has a greater
+  // height it will be overwritten in the compute pass.
   if (this.followsStatement) {
     this.height = BRC.LARGE_PADDING;
   } else {

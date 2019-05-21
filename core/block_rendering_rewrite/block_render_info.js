@@ -126,9 +126,10 @@ Blockly.BlockRendering.RenderInfo.prototype.measure_ = function() {
  * @private
  */
 Blockly.BlockRendering.RenderInfo.prototype.createRows_ = function() {
-  var activeRow = new Blockly.BlockRendering.Row();
-  this.topRow = this.createTopRow_();
+  this.createTopRow_();
   this.rows.push(this.topRow);
+
+  var activeRow = new Blockly.BlockRendering.Row();
 
   // Icons always go on the first row, before anything else.
   var icons = this.block_.getIcons();
@@ -163,10 +164,8 @@ Blockly.BlockRendering.RenderInfo.prototype.createRows_ = function() {
 };
 
 /**
- * Create the top row and fill the elements list with the correct measurables
- * based on values from the block.
- * @return {Blockly.BlockRendering.TopRow} The top row with all the elements
- *     created.
+ * Create the top row and fill the elements list with all non-spacer elements
+ * created.
  */
 Blockly.BlockRendering.RenderInfo.prototype.createTopRow_ = function() {
   var hasHat = this.block_.hat ? this.block_.hat === 'cap' : Blockly.BlockSvg.START_HAT;
@@ -174,22 +173,22 @@ Blockly.BlockRendering.RenderInfo.prototype.createTopRow_ = function() {
   var prevBlock = this.block_.getPreviousBlock();
   var squareCorner = !!this.block_.outputConnection ||
       hasHat || (prevBlock && prevBlock.getNextBlock() == this.block_);
-  var topRow = new Blockly.BlockRendering.TopRow(this.block_);
+  this.topRow = new Blockly.BlockRendering.TopRow(this.block_);
 
   if (squareCorner) {
-    topRow.elements.push(new Blockly.BlockRendering.SquareCorner(this.width));
+    this.topRow.elements.push(
+        new Blockly.BlockRendering.SquareCorner(this.width));
   } else {
-    topRow.elements.push(new Blockly.BlockRendering.RoundCorner(this.width));
+    this.topRow.elements.push(
+        new Blockly.BlockRendering.RoundCorner(this.width));
   }
 
   if (hasHat) {
-    topRow.elements.push(new Blockly.BlockRendering.Hat(this.width));
+    this.topRow.elements.push(new Blockly.BlockRendering.Hat(this.width));
   } else if (hasPrevious) {
-    topRow.elements.push(
+    this.topRow.elements.push(
         new Blockly.BlockRendering.PreviousConnection(this.width));
   }
-
-  return topRow;
 };
 
 
@@ -338,7 +337,7 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
   }
 
   // Spacing between a hat and a corner
-  if (prev.isRoundedCorner() || prev.isSquareCorner()) {
+  if (prev.isSquareCorner()) {
     if (next.isHat()) {
       return BRC.NO_PADDING;
     }
@@ -418,11 +417,7 @@ Blockly.BlockRendering.RenderInfo.prototype.alignRowElements_ = function() {
       var desiredWidth = this.width;
       var missingSpace = desiredWidth - currentWidth;
       if (missingSpace) {
-        if (row.type === 'top row') {
-          row.getLastSpacer().width += missingSpace;
-        } else {
-          this.addAlignmentPadding_(row, missingSpace);
-        }
+        this.addAlignmentPadding_(row, missingSpace);
       }
     }
   }
@@ -454,6 +449,9 @@ Blockly.BlockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
       row.getFirstSpacer().width += missingSpace;
     }
     row.width += missingSpace;
+    // Top rows are always left aligned
+  } else if (row.type === 'top row') {
+    row.getLastSpacer().width += missingSpace;
   }
 };
 

@@ -139,8 +139,8 @@ Blockly.Blocks['lists_create_with'] = {
     this.setOutput(true, 'Array');
     this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
     this.setTooltip(Blockly.Msg['LISTS_CREATE_WITH_TOOLTIP']);
-    this.child_disconnected_ = [];      //References to disconnected block children.
-    this.add_shadow = false;            //Flag to control the addition of a shadow block on new 'item'.
+    this.child_disconnected_ = [];      //SHAPE: References to disconnected block children.
+    this.add_shadow = false;            //SHAPE: Flag to control the addition of a shadow block on new 'item'.
    },
   /**
    * Create XML to represent list inputs.
@@ -197,23 +197,24 @@ Blockly.Blocks['lists_create_with'] = {
     for (var i = 0; i < this.itemCount_; i++) {
       var connection = this.getInput('ADD' + i).connection.targetConnection;
         if (connection && connections.indexOf(connection) == -1) {
-          //When a child is about to be disconnected, save the reference of the block
+          //SHAPE: When a child is about to be disconnected, save the reference of the block
           //that was attached to the input.
           this.child_disconnected_.push(this.getInput('ADD' + i).connection.targetBlock());
+          
           connection.disconnect();
         }
     }
-    //Set flag to true if a new item was added to the list (from mutator bubble).
+    //SHAPE: Set flag to true if a new item was added to the list (from mutator bubble).
     this.add_shadow = connections.length > this.itemCount_;
 
     this.itemCount_ = connections.length;
     this.updateShape_();
-    // Reconnect any child blocks.
+    //SHAPE: Reconnect any child blocks.
     for (var i = 0; i < this.itemCount_; i++) {
       Blockly.Mutator.reconnect(connections[i], this, 'ADD' + i);
     }
 
-    //Call method to add shadow math block if conditions are met.
+    //SHAPE: Call method to add shadow math block if conditions are met.
     this.connectShadowBlock_();
   },
   /**
@@ -256,15 +257,15 @@ Blockly.Blocks['lists_create_with'] = {
     var j = 0;
     // Remove deleted inputs.
     while (this.getInput('ADD' + i)) {
-      //Delete a disconnected block ONLY if it is a shadow block.
+      //SHAPE: Delete a disconnected block ONLY if it is a shadow block.
       if (this.child_disconnected_[j] && this.child_disconnected_[j].isShadow()) {
           this.child_disconnected_[j].dispose(true, true);
       }
       this.removeInput('ADD' + i);
       i++;
-      j++;      //Iterator for the disconnected children.
+      j++;      //SHAPE: Iterator for the disconnected children.
     }
-    //Reset array.
+    //SHAPE: Reset array.
     this.child_disconnected_ = [];
   },
   /**
@@ -272,6 +273,7 @@ Blockly.Blocks['lists_create_with'] = {
    * new input.
    * @private
    * @this Blockly.Block
+   * @author ShapeRoboticsApS
    */
   connectShadowBlock_: function() {
     if (this.add_shadow) {

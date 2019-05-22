@@ -139,7 +139,9 @@ Blockly.Blocks['lists_create_with'] = {
     this.setOutput(true, 'Array');
     this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
     this.setTooltip(Blockly.Msg['LISTS_CREATE_WITH_TOOLTIP']);
-  },
+    //Points to the last disconnected child block.
+    this.child_disconnected_ = null;
+   },
   /**
    * Create XML to represent list inputs.
    * @return {!Element} XML storage element.
@@ -194,9 +196,12 @@ Blockly.Blocks['lists_create_with'] = {
     // Disconnect any children that don't belong.
     for (var i = 0; i < this.itemCount_; i++) {
       var connection = this.getInput('ADD' + i).connection.targetConnection;
-      if (connection && connections.indexOf(connection) == -1) {
-        connection.disconnect();
-      }
+        if (connection && connections.indexOf(connection) == -1) {
+          //When a child is about to be disconnected, save the reference of the block
+          //that was attached to the input.
+          this.child_disconnected_ = this.getInput('ADD' + i).connection.targetBlock();
+          connection.disconnect();
+        }
     }
     this.itemCount_ = connections.length;
     this.updateShape_();
@@ -244,6 +249,12 @@ Blockly.Blocks['lists_create_with'] = {
     }
     // Remove deleted inputs.
     while (this.getInput('ADD' + i)) {
+      //Delete a disconnected block ONLY if it is a shadow block.
+      if (this.child_disconnected_ && this.child_disconnected_.isShadow()) {
+          this.child_disconnected_.dispose(true, true);
+      }
+      //Set the reference to null after disposing of it.
+      this.child_disconnected_ = null;
       this.removeInput('ADD' + i);
       i++;
     }

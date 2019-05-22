@@ -191,7 +191,7 @@ Blockly.BlockRendering.RenderInfo.prototype.createTopRow_ = function() {
 };
 
 /**
- * Create the top row and fill the elements list with all non-spacer elements
+ * Create the bottom row and fill the elements list with all non-spacer elements
  * created.
  */
 Blockly.BlockRendering.RenderInfo.prototype.createBottomRow_ = function() {
@@ -257,7 +257,7 @@ Blockly.BlockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
     var row = this.rows[r];
     var oldElems = row.elements;
     row.elements = [];
-    // No spacing needed before the corner on the top row.
+    // No spacing needed before the corner on the top row or the bottom row.
     if (row.type != 'top row' && row.type != 'bottom row') {
       // There's a spacer before the first element in the row.
       row.elements.push(new Blockly.BlockRendering.InRowSpacer(
@@ -365,14 +365,14 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     }
   }
 
-  // Spacing between a rounded corner and a previous connection
+  // Spacing between a rounded corner and a previous or next connection
   if (prev.isRoundedCorner()){
     if (next.isPreviousConnection() || next.isNextConnection()) {
       return BRC.NOTCH_OFFSET_ROUNDED_CORNER;
     }
   }
 
-  // Spacing between a square corner and a previous connection
+  // Spacing between a square corner and a previous or next connection
   if (prev.isSquareCorner()) {
     if (next.isPreviousConnection() || next.isNextConnection()) {
       return BRC.NOTCH_OFFSET_LEFT;
@@ -536,7 +536,7 @@ Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(prev,
   if (prev.type === 'top row' && next.type === 'bottom row') {
     return BRC.EMPTY_BLOCK_SPACER_HEIGHT;
   }
-  // Top row acts a spacer so we don't need any extra padding
+  // Top and bottom rows act as a spacer so we don't need any extra padding
   if (prev.type === 'top row' || next.type === 'bottom row') {
     return BRC.NO_PADDING;
   }

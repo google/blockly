@@ -429,7 +429,7 @@ Blockly.BlockRendering.TopRow = function(block) {
   var precedesStatement = block.inputList.length &&
       block.inputList[0].type == Blockly.NEXT_STATEMENT;
 
-  // This is the minimum height for the row. If one of it's elements has a greater
+  // This is the minimum height for the row. If one of its elements has a greater
   // height it will be overwritten in the compute pass.
   if (precedesStatement) {
     this.height = BRC.LARGE_PADDING;

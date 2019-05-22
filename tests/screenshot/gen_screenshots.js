@@ -26,6 +26,8 @@ var fs = require('fs');
 
 module.exports = genScreenshots;
 
+var filterText = process.argv[2] || '';
+
 function checkAndCreateDir(dirname) {
   if (!fs.existsSync(dirname)){
     fs.mkdirSync(dirname);
@@ -68,7 +70,7 @@ function getTestList() {
   var testSpecArr = json.tests;
   var testList = [];
   for (var i = 0, testSpec; testSpec = testSpecArr[i]; i++) {
-    if (!testSpec.skip) {
+    if (!testSpec.skip && testSpec.title.includes(filterText)) {
       testList.push(testSpec.title);
     }
   }

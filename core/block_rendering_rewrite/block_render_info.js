@@ -511,9 +511,34 @@ Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(prev,
   if (prev.hasExternalInput && next.hasExternalInput) {
     return BRC.LARGE_PADDING;
   }
+  if (prev.hasStatement && next.hasStatement) {
+    return BRC.LARGE_PADDING;
+  }
   return BRC.MEDIUM_PADDING;
 };
 
+/**
+ * Calculate the centerline of an element in a rendered row.
+ * @param {Blockly.BlockRendering.Row} row The row containing the element.
+ * @param {Blockly.BlockRendering.Measurable} elem The element to place.
+ * @return {number} The desired centerline of the given element, as an offset
+ *     from the top left of the block.
+ * @private
+ */
+Blockly.BlockRendering.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
+  var result = row.yPos;
+  if (elem.isField()) {
+    result += (elem.height / 2);
+    if (row.hasInlineInput) {
+      result += BRC.INLINE_INPUT_FIELD_OFFSET_Y;
+    } else if (row.hasStatement) {
+      result += BRC.STATEMENT_FIELD_OFFSET_Y;
+    }
+  } else {
+    result += (row.height / 2);
+  }
+  return result;
+};
 /**
  * Make any final changes to the rendering information object.  In particular,
  * store the y position of each row, and record the height of the full block.
@@ -529,11 +554,10 @@ Blockly.BlockRendering.RenderInfo.prototype.finalize_ = function() {
     row.yPos = yCursor;
     var xCursor = 0;
     if (!(row.isSpacer())) {
-      var centerline = yCursor + row.height / 2;
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];
         elem.xPos = xCursor;
-        elem.centerline = centerline;
+        elem.centerline = this.getElemCenterline_(row, elem);
         xCursor += elem.width;
       }
     }

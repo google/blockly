@@ -32,6 +32,14 @@ BRC.SMALL_PADDING = 3;
 BRC.MEDIUM_PADDING = 5;
 BRC.LARGE_PADDING = 10;
 
+// Offset from the top of the row for placing fields on statement input rows.
+// Matches existing rendering (in 2019).
+BRC.STATEMENT_FIELD_OFFSET_Y = BRC.MEDIUM_PADDING - 1;
+
+// Offset from the top of the row for placing fields on inline input rows.
+// Matches existing rendering (in 2019).
+BRC.INLINE_INPUT_FIELD_OFFSET_Y = BRC.MEDIUM_PADDING;
+
 BRC.HIGHLIGHT_OFFSET = 0.5;
 
 BRC.TAB_HEIGHT = 15;

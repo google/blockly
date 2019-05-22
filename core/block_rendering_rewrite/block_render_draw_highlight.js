@@ -155,7 +155,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawLeft = function() {
   }
 
   if (!this.info_.RTL) {
-    if (this.info_.topRow.squareCorner) {
+    if (this.info_.topRow.elements[0].isSquareCorner()) {
       this.highlightSteps_.push('V', BRC.HIGHLIGHT_OFFSET);
     } else {
       this.highlightSteps_.push('V', BRC.CORNER_RADIUS);

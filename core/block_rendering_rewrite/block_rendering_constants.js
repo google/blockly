@@ -51,6 +51,12 @@ BRC.TAB_WIDTH = 8;
 BRC.NOTCH_WIDTH = 15;
 BRC.NOTCH_HEIGHT = 4;
 
+// This is the minimum width of a block measuring from the end of a rounded
+// corner
+BRC.MIN_BLOCK_WIDTH = 12;
+
+BRC.EMPTY_BLOCK_SPACER_HEIGHT = 16;
+
 
 // Offset from the left side of a block or the inside of a statement input to
 // the left side of the notch.

@@ -28,14 +28,20 @@ rm -rf tests/screenshot/outputs/diff
 rm tests/screenshot/outputs/test_output.js
 rm tests/screenshot/outputs/test_output.json
 
+filter=$1""
 # Generate screenshots, only running for tests with $1 in the name.
 node tests/screenshot/gen_screenshots.js $1
 
 echo
 
 # Diff screenshots and use a custom reporter to get results we can easily parse.
-# Only run tests that include $1 in the name.
-./node_modules/.bin/mocha tests/screenshot/diff_screenshots.js --ui tdd --reporter ./tests/screenshot/diff-reporter.js --fgrep $1
+if [ -z "$1" ]
+  then
+    ./node_modules/.bin/mocha tests/screenshot/diff_screenshots.js --ui tdd --reporter ./tests/screenshot/diff-reporter.js
+  else
+  # Only run tests that include $1 in the name.
+    ./node_modules/.bin/mocha tests/screenshot/diff_screenshots.js --ui tdd --reporter ./tests/screenshot/diff-reporter.js --fgrep $filter
+  fi
 
 # Open results.
 xdg-open 'tests/screenshot/diff_viewer.html'

@@ -67,7 +67,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawTopCorner = function(row) {
           Blockly.BlockSvg.START_HAT_HIGHLIGHT_RTL :
           Blockly.BlockSvg.START_HAT_HIGHLIGHT_LTR);
     } else if (elem.isSpacer()) {
-      this.highlightSteps_.push('h', elem.width)
+      this.highlightSteps_.push('h', elem.width);
     }
   }
 
@@ -123,24 +123,27 @@ Blockly.BlockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
 
 Blockly.BlockRendering.Highlighter.prototype.drawBottomCorner = function(row) {
   var height = this.info_.height;
-  if (row.hasNextConnection) {
-    height -= BRC.NOTCH_HEIGHT;
-  }
+  var elems = this.info_.bottomRow.elements;
+
   height -= 2;
   if (this.info_.RTL) {
     this.highlightSteps_.push('V', height);
   }
-  if (row.squareCorner) {
-    if (!this.info_.RTL) {
-      this.highlightSteps_.push('M',
-          BRC.HIGHLIGHT_OFFSET + ',' + (height - BRC.HIGHLIGHT_OFFSET));
-    }
-  } else {
-    if (!this.info_.RTL) {
-      this.highlightSteps_.push(BRC.BOTTOM_LEFT_CORNER_HIGHLIGHT_START +
-          (height - Blockly.BlockSvg.DISTANCE_45_INSIDE) +
-          BRC.BOTTOM_LEFT_CORNER_HIGHLIGHT_MID +
-          (height - Blockly.BlockSvg.CORNER_RADIUS));
+
+  for (var i = elems.length - 1; i >= 0; i--) {
+    var elem = elems[i];
+    if (elem.type === 'square corner') {
+      if (!this.info_.RTL) {
+        this.highlightSteps_.push('M',
+            BRC.HIGHLIGHT_OFFSET + ',' + (height - BRC.HIGHLIGHT_OFFSET));
+      }
+    } else if (elem.type === 'round corner') {
+      if (!this.info_.RTL) {
+        this.highlightSteps_.push(BRC.BOTTOM_LEFT_CORNER_HIGHLIGHT_START +
+            (height - Blockly.BlockSvg.DISTANCE_45_INSIDE) +
+            BRC.BOTTOM_LEFT_CORNER_HIGHLIGHT_MID +
+            (height - Blockly.BlockSvg.CORNER_RADIUS));
+      }
     }
   }
 };

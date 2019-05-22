@@ -161,6 +161,8 @@ Blockly.BlockRendering.RenderInfo.prototype.createRows_ = function() {
   if (activeRow.elements.length) {
     this.rows.push(activeRow);
   }
+  this.createBottomRow_();
+  this.rows.push(this.bottomRow);
 };
 
 /**
@@ -185,6 +187,25 @@ Blockly.BlockRendering.RenderInfo.prototype.createTopRow_ = function() {
     this.topRow.elements.push(new Blockly.BlockRendering.Hat());
   } else if (hasPrevious) {
     this.topRow.elements.push(new Blockly.BlockRendering.PreviousConnection());
+  }
+};
+
+/**
+ * Create the top row and fill the elements list with all non-spacer elements
+ * created.
+ */
+Blockly.BlockRendering.RenderInfo.prototype.createBottomRow_ = function() {
+  var squareCorner = !!this.block_.outputConnection || !!this.block_.getNextBlock();
+  this.bottomRow = new Blockly.BlockRendering.BottomRow(this.block_);
+
+  if (squareCorner) {
+    this.bottomRow.elements.push(new Blockly.BlockRendering.SquareCorner());
+  } else {
+    this.bottomRow.elements.push(new Blockly.BlockRendering.RoundCorner());
+  }
+
+  if (this.bottomRow.hasNextConnection) {
+    this.bottomRow.elements.push(new Blockly.BlockRendering.NextConnection());
   }
 };
 
@@ -237,7 +258,7 @@ Blockly.BlockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
     var oldElems = row.elements;
     row.elements = [];
     // No spacing needed before the corner on the top row.
-    if (row.type != 'top row') {
+    if (row.type != 'top row' && row.type != 'bottom row') {
       // There's a spacer before the first element in the row.
       row.elements.push(new Blockly.BlockRendering.InRowSpacer(
           this.getInRowSpacing_(null, oldElems[0])));
@@ -288,6 +309,10 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
       // TODO: Need to figure out minimum padding between connection and end of
       // the block.
       return BRC.NO_PADDING;
+    }
+    // Between rounded corner and the end of the row.
+    if (prev.isRoundedCorner()) {
+      return BRC.MIN_BLOCK_WIDTH;
     }
     // Between noneditable fields and icons and the end of the row.
     return BRC.LARGE_PADDING;
@@ -341,13 +366,17 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
   }
 
   // Spacing between a rounded corner and a previous connection
-  if (prev.isRoundedCorner() && next.isPreviousConnection()){
-    return BRC.NOTCH_OFFSET_ROUNDED_CORNER;
+  if (prev.isRoundedCorner()){
+    if (next.isPreviousConnection() || next.isNextConnection()) {
+      return BRC.NOTCH_OFFSET_ROUNDED_CORNER;
+    }
   }
 
   // Spacing between a square corner and a previous connection
-  if (prev.isSquareCorner() && next.isPreviousConnection()) {
-    return BRC.NOTCH_OFFSET_LEFT;
+  if (prev.isSquareCorner()) {
+    if (next.isPreviousConnection() || next.isNextConnection()) {
+      return BRC.NOTCH_OFFSET_LEFT;
+    }
   }
 
   return BRC.MEDIUM_PADDING;
@@ -446,9 +475,10 @@ Blockly.BlockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
       row.getFirstSpacer().width += missingSpace;
     }
     row.width += missingSpace;
-    // Top rows are always left aligned
-  } else if (row.type === 'top row') {
+    // Top and bottom rows are always left aligned
+  } else if (row.type === 'top row' || row.type === 'bottom row') {
     row.getLastSpacer().width += missingSpace;
+    row.width += missingSpace;
   }
 };
 
@@ -466,8 +496,6 @@ Blockly.BlockRendering.RenderInfo.prototype.addRowSpacing_ = function() {
       this.rows.push(this.makeSpacerRow_(oldRows[r], oldRows[r + 1]));
     }
   }
-  this.bottomRow = new Blockly.BlockRendering.BottomRow(this.block_, this.width);
-  this.rows.push(this.bottomRow);
 };
 
 /**
@@ -504,8 +532,12 @@ Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, 
  * @private
  */
 Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
+  // If we have an empty block add a spacer to increase the height
+  if (prev.type === 'top row' && next.type === 'bottom row') {
+    return BRC.EMPTY_BLOCK_SPACER_HEIGHT;
+  }
   // Top row acts a spacer so we don't need any extra padding
-  if (prev.type === 'top row') {
+  if (prev.type === 'top row' || next.type === 'bottom row') {
     return BRC.NO_PADDING;
   }
   if (prev.hasExternalInput && next.hasExternalInput) {

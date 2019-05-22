@@ -317,7 +317,7 @@ goog.inherits(Blockly.BlockRendering.Hat, Blockly.BlockRendering.Measurable);
 Blockly.BlockRendering.SquareCorner = function() {
   Blockly.BlockRendering.SquareCorner.superClass_.constructor.call(this);
   this.type = 'square corner';
-  this.height = BRC.MEDIUM_PADDING;
+  this.height = BRC.NOTCH_HEIGHT;
   this.width = BRC.NO_PADDING;
 
 };
@@ -422,10 +422,6 @@ Blockly.BlockRendering.TopRow = function(block) {
 
   this.elements = [];
   this.type = 'top row';
-  /**
-   *
-   * @type {boolean}
-   */
 
   this.hasPreviousConnection = !!block.previousConnection;
   this.connection = block.previousConnection;
@@ -433,7 +429,8 @@ Blockly.BlockRendering.TopRow = function(block) {
   var precedesStatement = block.inputList.length &&
       block.inputList[0].type == Blockly.NEXT_STATEMENT;
 
-  //
+  // This is the minimum height for the row. If one of it's elements has a greater
+  // height it will be overwritten in the compute pass.
   if (precedesStatement) {
     this.height = BRC.LARGE_PADDING;
   } else {
@@ -447,32 +444,27 @@ Blockly.BlockRendering.TopRow.prototype.isSpacer = function() {
   return true;
 };
 
-Blockly.BlockRendering.BottomRow = function(block, width) {
-
+Blockly.BlockRendering.BottomRow = function(block) {
+  Blockly.BlockRendering.BottomRow.superClass_.constructor.call(this);
+  this.type = 'bottom row';
   this.hasNextConnection = !!block.nextConnection;
   this.connection = block.nextConnection;
-  /**
-   * True if the bottom left corner of the block should be squared.
-   * @type {boolean}
-   */
-  this.squareCorner = !!block.outputConnection || !!block.getNextBlock();
 
-  this.followsStatement =
+  var followsStatement =
       block.inputList.length &&
       block.inputList[block.inputList.length - 1].type == Blockly.NEXT_STATEMENT;
 
   // This is the minimum height for the row. If one of it's elements has a greater
   // height it will be overwritten in the compute pass.
-  if (this.followsStatement) {
+  if (followsStatement) {
     this.height = BRC.LARGE_PADDING;
   } else {
-    this.height = BRC.MEDIUM_PADDING;
+    this.height = BRC.NOTCH_HEIGHT;
   }
 
-  this.width = width;
 };
 goog.inherits(Blockly.BlockRendering.BottomRow,
-    Blockly.BlockRendering.Measurable);
+    Blockly.BlockRendering.Row);
 
 Blockly.BlockRendering.BottomRow.prototype.isSpacer = function() {
   return true;

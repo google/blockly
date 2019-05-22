@@ -139,7 +139,7 @@ Blockly.Blocks['lists_create_with'] = {
     this.setOutput(true, 'Array');
     this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
     this.setTooltip(Blockly.Msg['LISTS_CREATE_WITH_TOOLTIP']);
-    this.child_disconnected_ = null;    //Points to the last disconnected child block.
+    this.child_disconnected_ = [];      //References to disconnected block children.
     this.add_shadow = false;            //Flag to control the addition of a shadow block on new 'item'.
    },
   /**
@@ -199,7 +199,7 @@ Blockly.Blocks['lists_create_with'] = {
         if (connection && connections.indexOf(connection) == -1) {
           //When a child is about to be disconnected, save the reference of the block
           //that was attached to the input.
-          this.child_disconnected_ = this.getInput('ADD' + i).connection.targetBlock();
+          this.child_disconnected_.push(this.getInput('ADD' + i).connection.targetBlock());
           connection.disconnect();
         }
     }
@@ -253,17 +253,19 @@ Blockly.Blocks['lists_create_with'] = {
         }
       }
     }
+    var j = 0;
     // Remove deleted inputs.
     while (this.getInput('ADD' + i)) {
       //Delete a disconnected block ONLY if it is a shadow block.
-      if (this.child_disconnected_ && this.child_disconnected_.isShadow()) {
-          this.child_disconnected_.dispose(true, true);
+      if (this.child_disconnected_[j] && this.child_disconnected_[j].isShadow()) {
+          this.child_disconnected_[j].dispose(true, true);
       }
-      //Set the reference to null after disposing of it.
-      this.child_disconnected_ = null;
       this.removeInput('ADD' + i);
       i++;
+      j++;      //Iterator for the disconnected children.
     }
+    //Reset array.
+    this.child_disconnected_ = [];
   },
   /**
    * Connects a shadow math block with a random integer to a
@@ -273,7 +275,7 @@ Blockly.Blocks['lists_create_with'] = {
    */
   connectShadowBlock_: function() {
     if (this.add_shadow) {
-      //Spawn a new shadow math block.
+      // Spawn a new shadow math block.
       var shadow_child = workspace.newBlock('math_number');
       var random_int = Math.floor(Math.random() * 11);
       shadow_child.setFieldValue(random_int, 'NUM');

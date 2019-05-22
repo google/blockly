@@ -52,25 +52,25 @@ Blockly.BlockRendering.Highlighter = function(info, pathObject) {
 };
 
 Blockly.BlockRendering.Highlighter.prototype.drawTopCorner = function(row) {
-  // Position the cursor at the top-left starting point.
-  if (row.squareCorner) {
-    this.highlightSteps_.push(BRC.START_POINT_HIGHLIGHT);
-    if (row.startHat) {
+  for (var i = 0, elem; elem = row.elements[i]; i++) {
+    if (elem.type === 'square corner') {
+      this.highlightSteps_.push(BRC.START_POINT_HIGHLIGHT);
+    } else if (elem.type === 'round corner') {
+      this.highlightSteps_.push(this.RTL ?
+          Blockly.BlockSvg.TOP_LEFT_CORNER_START_HIGHLIGHT_RTL :
+          Blockly.BlockSvg.TOP_LEFT_CORNER_START_HIGHLIGHT_LTR);
+      this.highlightSteps_.push(Blockly.BlockSvg.TOP_LEFT_CORNER_HIGHLIGHT);
+    } else if (elem.type === 'previous connection') {
+      this.highlightSteps_.push(BRC.NOTCH_PATH_LEFT_HIGHLIGHT);
+    } else if (elem.type === 'hat') {
       this.highlightSteps_.push(this.RTL ?
           Blockly.BlockSvg.START_HAT_HIGHLIGHT_RTL :
           Blockly.BlockSvg.START_HAT_HIGHLIGHT_LTR);
+    } else if (elem.isSpacer()) {
+      this.highlightSteps_.push('h', elem.width)
     }
-  } else {
-    this.highlightSteps_.push(this.RTL ?
-        Blockly.BlockSvg.TOP_LEFT_CORNER_START_HIGHLIGHT_RTL :
-        Blockly.BlockSvg.TOP_LEFT_CORNER_START_HIGHLIGHT_LTR);
-    this.highlightSteps_.push(Blockly.BlockSvg.TOP_LEFT_CORNER_HIGHLIGHT);
   }
 
-  // Top edge.
-  if (row.hasPreviousConnection) {
-    this.highlightSteps_.push('H', BRC.NOTCH_WIDTH, BRC.NOTCH_PATH_LEFT_HIGHLIGHT);
-  }
   this.highlightSteps_.push('H', row.width - BRC.HIGHLIGHT_OFFSET);
 };
 

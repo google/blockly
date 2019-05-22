@@ -48,6 +48,10 @@ BRC.NOTCH_HEIGHT = 4;
 // the left side of the notch.
 BRC.NOTCH_OFFSET_LEFT = BRC.NOTCH_WIDTH;
 
+// This is the width from where a rounded corner ends and a next or previous
+// connection starts.
+BRC.NOTCH_OFFSET_ROUNDED_CORNER = 8;
+
 // This is the offset from the vertical part of a statement input
 // to where to start the notch, which is on the right side in LTR.
 BRC.NOTCH_OFFSET_RIGHT = BRC.NOTCH_OFFSET_LEFT + BRC.NOTCH_WIDTH;
@@ -64,6 +68,8 @@ BRC.CORNER_RADIUS = 8;
  * @const
  */
 BRC.START_HAT_HEIGHT = 15;
+
+BRC.START_HAT_WIDTH = 100;
 
 BRC.SPACER_DEFAULT_HEIGHT = 15;
 
@@ -125,7 +131,7 @@ BRC.TAB_PATH_UP =  'c 0,-10 -' + BRC.TAB_WIDTH +
  */
 BRC.START_HAT_PATH = 'c 30,-' +
     BRC.START_HAT_HEIGHT + ' 70,-' +
-    BRC.START_HAT_HEIGHT + ' 100,0';
+    BRC.START_HAT_HEIGHT + ' ' + BRC.START_HAT_WIDTH + ',0';
 
 /**
  * SVG path for drawing next/previous notch from left to right.

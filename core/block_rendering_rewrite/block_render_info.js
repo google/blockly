@@ -126,6 +126,9 @@ Blockly.BlockRendering.RenderInfo.prototype.measure_ = function() {
  * @private
  */
 Blockly.BlockRendering.RenderInfo.prototype.createRows_ = function() {
+  this.createTopRow_();
+  this.rows.push(this.topRow);
+
   var activeRow = new Blockly.BlockRendering.Row();
 
   // Icons always go on the first row, before anything else.
@@ -159,6 +162,32 @@ Blockly.BlockRendering.RenderInfo.prototype.createRows_ = function() {
     this.rows.push(activeRow);
   }
 };
+
+/**
+ * Create the top row and fill the elements list with all non-spacer elements
+ * created.
+ */
+Blockly.BlockRendering.RenderInfo.prototype.createTopRow_ = function() {
+  var hasHat = this.block_.hat ? this.block_.hat === 'cap' : Blockly.BlockSvg.START_HAT;
+  var hasPrevious = !!this.block_.previousConnection;
+  var prevBlock = this.block_.getPreviousBlock();
+  var squareCorner = !!this.block_.outputConnection ||
+      hasHat || (prevBlock && prevBlock.getNextBlock() == this.block_);
+  this.topRow = new Blockly.BlockRendering.TopRow(this.block_);
+
+  if (squareCorner) {
+    this.topRow.elements.push(new Blockly.BlockRendering.SquareCorner());
+  } else {
+    this.topRow.elements.push(new Blockly.BlockRendering.RoundCorner());
+  }
+
+  if (hasHat) {
+    this.topRow.elements.push(new Blockly.BlockRendering.Hat());
+  } else if (hasPrevious) {
+    this.topRow.elements.push(new Blockly.BlockRendering.PreviousConnection());
+  }
+};
+
 
 Blockly.BlockRendering.RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // Non-dummy inputs have visual representations onscreen.
@@ -207,9 +236,13 @@ Blockly.BlockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
     var row = this.rows[r];
     var oldElems = row.elements;
     row.elements = [];
-    // There's a spacer before the first element in the row.
-    row.elements.push(new Blockly.BlockRendering.InRowSpacer(
-        this.getInRowSpacing_(null, oldElems[0])));
+    // No spacing needed before the corner on the top row.
+    if (row.type != 'top row') {
+      // There's a spacer before the first element in the row.
+      row.elements.push(new Blockly.BlockRendering.InRowSpacer(
+          this.getInRowSpacing_(null, oldElems[0])));
+    }
+
     for (var e = 0; e < oldElems.length; e++) {
       row.elements.push(oldElems[e]);
       var spacing = this.getInRowSpacing_(oldElems[e], oldElems[e + 1]);
@@ -247,6 +280,14 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     // Between an editable field and the end of the row.
     if (prev.isField() && prev.isEditable) {
       return BRC.MEDIUM_PADDING;
+    }
+    if (prev.isHat()){
+      return BRC.NO_PADDING;
+    }
+    if (prev.isPreviousConnection() || prev.isNextConnection()) {
+      // TODO: Need to figure out minimum padding between connection and end of
+      // the block.
+      return BRC.NO_PADDING;
     }
     // Between noneditable fields and icons and the end of the row.
     return BRC.LARGE_PADDING;
@@ -290,6 +331,23 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
       // Noneditable field after inline input.
       return BRC.LARGE_PADDING;
     }
+  }
+
+  // Spacing between a hat and a corner
+  if (prev.isSquareCorner()) {
+    if (next.isHat()) {
+      return BRC.NO_PADDING;
+    }
+  }
+
+  // Spacing between a rounded corner and a previous connection
+  if (prev.isRoundedCorner() && next.isPreviousConnection()){
+    return BRC.NOTCH_OFFSET_ROUNDED_CORNER;
+  }
+
+  // Spacing between a square corner and a previous connection
+  if (prev.isSquareCorner() && next.isPreviousConnection()) {
+    return BRC.NOTCH_OFFSET_LEFT;
   }
 
   return BRC.MEDIUM_PADDING;
@@ -388,6 +446,9 @@ Blockly.BlockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
       row.getFirstSpacer().width += missingSpace;
     }
     row.width += missingSpace;
+    // Top rows are always left aligned
+  } else if (row.type === 'top row') {
+    row.getLastSpacer().width += missingSpace;
   }
 };
 
@@ -399,13 +460,9 @@ Blockly.BlockRendering.RenderInfo.prototype.addRowSpacing_ = function() {
   var oldRows = this.rows;
   this.rows = [];
 
-  // There's a spacer before the first row.
-  //this.rows.push(this.makeSpacerRow_(null, oldRows[0]));
-  this.topRow = new Blockly.BlockRendering.TopRow(this.block_, this.width);
-  this.rows.push(this.topRow);
   for (var r = 0; r < oldRows.length; r++) {
     this.rows.push(oldRows[r]);
-    if (r != oldRows.length - 1) {
+    if (r !== oldRows.length - 1) {
       this.rows.push(this.makeSpacerRow_(oldRows[r], oldRows[r + 1]));
     }
   }
@@ -447,6 +504,10 @@ Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, 
  * @private
  */
 Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
+  // Top row acts a spacer so we don't need any extra padding
+  if (prev.type === 'top row') {
+    return BRC.NO_PADDING;
+  }
   if (prev.hasExternalInput && next.hasExternalInput) {
     return BRC.LARGE_PADDING;
   }

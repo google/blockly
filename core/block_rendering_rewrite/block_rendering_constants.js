@@ -72,6 +72,10 @@ BRC.NOTCH_OFFSET_RIGHT = BRC.NOTCH_OFFSET_LEFT + BRC.NOTCH_WIDTH;
 
 BRC.STATEMENT_BOTTOM_SPACER = 5;
 
+// This is the max width of a bottom row that follows a statement input and
+// has inputs inline.
+BRC.MAX_BOTTOM_WIDTH = 66.5;
+
 /**
  * Rounded corner radius.
  * @const

@@ -42,7 +42,53 @@ function DiffReporter(runner) {
   var self = this;
   var indents = 0;
   var n = 0;
-  var color = mocha.reporters.Base.color;
+  var colors = {
+    pass: 32,
+    fail: 31,
+    'bright pass': 92,
+    'bright fail': 91,
+    'bright yellow': 93,
+    pending: 36,
+    suite: 0,
+    'error title': 0,
+    'error message': 31,
+    'error stack': 90,
+    checkmark: 32,
+    fast: 90,
+    medium: 33,
+    slow: 31,
+    green: 32,
+    light: 90,
+    'diff gutter': 90,
+    'diff added': 32,
+    'diff removed': 31
+  };
+
+  var symbols = {
+    ok: '✓',
+    err: '✖',
+    dot: '․',
+    comma: ',',
+    bang: '!'
+  };
+
+  /**
+   * Color `str` with the given `type`,
+   * allowing colors to be disabled,
+   * as well as user-defined color
+   * schemes.
+   *
+   * @private
+   * @param {string} type
+   * @param {string} str
+   * @return {string}
+   */
+  var color = function(type, str) {
+    if (!colors) {
+      return String(str);
+    }
+    return '\u001b[' + colors[type] + 'm' + str + '\u001b[0m';
+  };
 
   function indent() {
     return Array(indents).join('  ');
@@ -62,27 +108,14 @@ function DiffReporter(runner) {
       console.log();
     }
   });
-
   runner.on('pass', function(test) {
     passes++;
     json_tests.push(test);
-
-    // Print test information the way the spec reporter would.
-    var fmt;
-    if (test.speed === 'fast') {
-      fmt =
-        indent() +
-        color('checkmark', '  ' + Base.symbols.ok) +
-        color('pass', ' %s');
-      console.log(fmt, test.title);
-    } else {
-      fmt =
-        indent() +
-        color('checkmark', '  ' + Base.symbols.ok) +
-        color('pass', ' %s') +
-        color(test.speed, ' (%dms)');
-      console.log(fmt, test.title, test.duration);
-    }
+    var logStr =
+      indent() +
+      color('checkmark', '  ' + symbols.ok) +
+      color('pass', ' ' + test.title);
+      console.log(logStr);
   });
 
   runner.on('fail', function(test, err) {

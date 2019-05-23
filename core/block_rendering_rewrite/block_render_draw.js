@@ -198,24 +198,21 @@ Blockly.BlockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
  */
 Blockly.BlockRendering.Drawer.prototype.drawBottom_ = function() {
   var bottomRow = this.info_.bottomRow;
+  var elems = bottomRow.elements;
   this.highlighter_.drawBottomCorner(bottomRow);
-  if (bottomRow.hasNextConnection) {
-    this.steps_.push('v', bottomRow.height - BRC.NOTCH_HEIGHT);
-    this.steps_.push('H', (BRC.NOTCH_OFFSET_RIGHT + (this.info_.RTL ? 0.5 : - 0.5)) +
-        ' ' + BRC.NOTCH_PATH_RIGHT);
-  } else {
-    this.steps_.push('v', bottomRow.height);
+  this.steps_.push('v', bottomRow.height);
+  for (var i = elems.length - 1; i >= 0; i--) {
+    var elem = elems[i];
+    if (elem.type === 'next connection') {
+      this.steps_.push(BRC.NOTCH_PATH_RIGHT);
+    } else if (elem.type === 'square corner') {
+      this.steps_.push('H 0');
+    } else if (elem.type === 'round corner') {
+      this.steps_.push(BRC.BOTTOM_LEFT_CORNER);
+    } else if (elem.isSpacer()) {
+      this.steps_.push('h', elem.width * -1);
+    }
   }
-
-  this.steps_.push('H', BRC.CORNER_RADIUS);
-
-  if (bottomRow.squareCorner) {
-    this.steps_.push('H 0');
-  } else {
-    this.steps_.push(BRC.BOTTOM_LEFT_CORNER);
-  }
-
-
 
   if (bottomRow.hasNextConnection) {
     var connectionX;
@@ -226,7 +223,7 @@ Blockly.BlockRendering.Drawer.prototype.drawBottom_ = function() {
     }
 
     bottomRow.connection.setOffsetInBlock(connectionX,
-        this.info_.height - BRC.NOTCH_HEIGHT - 1);
+        this.info_.height - 1);
     bottomRow.connection.moveToOffset(this.topLeft_);
     if (bottomRow.connection.isConnected()) {
       bottomRow.connection.tighten_();

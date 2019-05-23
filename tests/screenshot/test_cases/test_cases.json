@@ -366,7 +366,7 @@
     },
     {
       "title": "test_dropdowns_images",
-      "skip": true
+      "skip": false
     },
     {
       "title": "test_dropdowns_images_and_text",

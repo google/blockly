@@ -206,6 +206,7 @@ suite ('Angle Fields', function() {
       Blockly.FieldTextInput.htmlInput_.untypedDefaultValue_ = 1;
     });
     teardown(function() {
+      this.angleField.setValidator(null);
       Blockly.FieldTextInput.htmlInput_ = null;
     });
     suite('Null Validator', function() {
@@ -242,6 +243,22 @@ suite ('Angle Fields', function() {
       test('When Not Editing', function() {
         this.angleField.setValue(25);
         assertValue(this.angleField, 30);
+      });
+    });
+    suite('Returns Undefined Validator', function() {
+      setup(function() {
+        this.angleField.setValidator(function() {});
+      });
+      test('When Editing', function() {
+        this.angleField.isBeingEdited_ = true;
+        Blockly.FieldTextInput.htmlInput_.value = '2';
+        this.angleField.onHtmlInputChange_(null);
+        assertValue(this.angleField, 2);
+        this.angleField.isBeingEdited_ = false;
+      });
+      test('When Not Editing', function() {
+        this.angleField.setValue(2);
+        assertValue(this.angleField, 2);
       });
     });
   });

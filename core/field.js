@@ -673,7 +673,11 @@ Blockly.Field.prototype.setValue = function(newValue) {
     return;
   }
 
-  newValue = this.doClassValidation_(newValue);
+  var validatedValue = this.doClassValidation_(newValue);
+  // Class validators might accidentally forget to return, we'll ignore that.
+  if (validatedValue !== undefined) {
+    newValue = validatedValue;
+  }
   if (newValue === null) {
     doLogging && console.log('invalid, return');
     this.doValueInvalid_();
@@ -686,8 +690,7 @@ Blockly.Field.prototype.setValue = function(newValue) {
   var localValidator = this.getValidator();
   if (localValidator) {
     var validatedValue = localValidator.call(this, newValue);
-    // Sometimes local validators are used as change listeners (bad!) which
-    // means they might return undefined accidentally, so we'll just ignore that.
+    // Local validators might accidentally forget to return, we'll ignore that.
     if (validatedValue !== undefined) {
       newValue = validatedValue;
     }

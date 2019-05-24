@@ -136,6 +136,9 @@ suite('Checkbox Fields', function() {
     setup(function() {
       this.checkboxField = new Blockly.FieldCheckbox(true);
     });
+    teardown(function() {
+      this.checkboxField.setValidator(null);
+    });
     suite('Null Validator', function() {
       setup(function() {
         this.checkboxField.setValidator(function() {
@@ -166,6 +169,15 @@ suite('Checkbox Fields', function() {
       });
       test('New Value', function() {
         this.checkboxField.setValue('TRUE');
+        assertValue(this.checkboxField, 'FALSE', 'false');
+      });
+    });
+    suite('Returns Undefined Validator', function() {
+      setup(function() {
+        this.checkboxField.setValidator(function() {});
+      });
+      test('New Value', function() {
+        this.checkboxField.setValue('FALSE');
         assertValue(this.checkboxField, 'FALSE', 'false');
       });
     });

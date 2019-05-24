@@ -27,8 +27,8 @@ suite ('Number Fields', function() {
     assertEquals(parseFloat(actualValue), expectedValue);
     assertEquals(actualText, opt_expectedText);
   }
-  function assertValueDefault(numberFieldField) {
-    assertValue(numberFieldField, 0);
+  function assertValueDefault(numberField) {
+    assertValue(numberField, 0);
   }
   function assertNumberField(numberField, expectedMin, expectedMax,
       expectedPrecision, expectedValue) {
@@ -297,45 +297,65 @@ suite ('Number Fields', function() {
   });
   suite('Validators', function() {
     setup(function() {
-      this.numberFieldField = new Blockly.FieldNumber(1);
+      this.numberField = new Blockly.FieldNumber(1);
       Blockly.FieldTextInput.htmlInput_ = Object.create(null);
       Blockly.FieldTextInput.htmlInput_.oldValue_ = '1';
       Blockly.FieldTextInput.htmlInput_.untypedDefaultValue_ = 1;
     });
+    teardown(function() {
+      this.numberField.setValidator(null);
+      Blockly.FieldTextInput.htmlInput_ = null;
+    });
     suite('Null Validator', function() {
       setup(function() {
-        this.numberFieldField.setValidator(function() {
+        this.numberField.setValidator(function() {
           return null;
         });
       });
       test('When Editing', function() {
-        this.numberFieldField.isBeingEdited_ = true;
+        this.numberField.isBeingEdited_ = true;
         Blockly.FieldTextInput.htmlInput_.value = '2';
-        this.numberFieldField.onHtmlInputChange_(null);
-        assertValue(this.numberFieldField, 1, '2');
-        this.numberFieldField.isBeingEdited_ = false;
+        this.numberField.onHtmlInputChange_(null);
+        assertValue(this.numberField, 1, '2');
+        this.numberField.isBeingEdited_ = false;
       });
       test('When Not Editing', function() {
-        this.numberFieldField.setValue(2);
-        assertValue(this.numberFieldField, 1);
+        this.numberField.setValue(2);
+        assertValue(this.numberField, 1);
       });
     });
     suite('Force End with 6 Validator', function() {
       setup(function() {
-        this.numberFieldField.setValidator(function(newValue) {
+        this.numberField.setValidator(function(newValue) {
           return String(newValue).replace(/.$/, "6");
         });
       });
       test('When Editing', function() {
-        this.numberFieldField.isBeingEdited_ = true;
+        this.numberField.isBeingEdited_ = true;
         Blockly.FieldTextInput.htmlInput_.value = '25';
-        this.numberFieldField.onHtmlInputChange_(null);
-        assertValue(this.numberFieldField, 26, '25');
-        this.numberFieldField.isBeingEdited_ = false;
+        this.numberField.onHtmlInputChange_(null);
+        assertValue(this.numberField, 26, '25');
+        this.numberField.isBeingEdited_ = false;
       });
       test('When Not Editing', function() {
-        this.numberFieldField.setValue(25);
-        assertValue(this.numberFieldField, 26);
+        this.numberField.setValue(25);
+        assertValue(this.numberField, 26);
+      });
+    });
+    suite('Returns Undefined Validator', function() {
+      setup(function() {
+        this.numberField.setValidator(function() {});
+      });
+      test('When Editing', function() {
+        this.numberField.isBeingEdited_ = true;
+        Blockly.FieldTextInput.htmlInput_.value = '2';
+        this.numberField.onHtmlInputChange_(null);
+        assertValue(this.numberField, 2);
+        this.numberField.isBeingEdited_ = false;
+      });
+      test('When Not Editing', function() {
+        this.numberField.setValue(2);
+        assertValue(this.numberField, 2);
       });
     });
   });

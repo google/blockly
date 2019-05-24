@@ -390,8 +390,8 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     }
   }
 
-  // Spacing between an editable field and another editable field
-  if (!prev.isInput && prev.isEditable && !next.isInput && next.isEditable) {
+  // Spacing between two fields of the same editability.
+  if (!prev.isInput && !next.isInput && (prev.isEditable == next.isEditable)) {
     return BRC.LARGE_PADDING;
   }
 

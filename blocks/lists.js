@@ -279,7 +279,7 @@ Blockly.Blocks['lists_create_with'] = {
     if (this.add_shadow) {
       // Spawn a new shadow math block.
       var shadow_child = workspace.newBlock('math_number');
-      var random_int = Math.floor(Math.random() * 11);
+      var random_int = 0; //Math.floor(Math.random() * 11);
       shadow_child.setFieldValue(random_int, 'NUM');
       shadow_child.setShadow(true);
       shadow_child.initSvg();

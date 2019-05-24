@@ -352,4 +352,20 @@ Blockly.FieldColour.widgetDispose_ = function() {
   Blockly.Events.setGroup(false);
 };
 
+/**
+ * Get the size of the visible field, as used in new rendering.
+ * The colour field fills the bounding box with colour and takes up the full
+ * space of the bounding box.
+ * @return {!goog.math.Size} The size of the visible field.
+ * @package
+ */
+Blockly.FieldColour.prototype.getCorrectedSize = function() {
+  if (!this.size_.width) {
+    this.render_();
+  }
+  return new goog.math.Size(
+      this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
+      Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
+};
+
 Blockly.Field.register('field_colour', Blockly.FieldColour);

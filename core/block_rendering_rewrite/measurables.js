@@ -207,8 +207,8 @@ Blockly.BlockRendering.InlineInput = function(input) {
   this.type = 'inline input';
 
   if (!this.connectedBlock) {
-    this.height = 26;
-    this.width = 22;
+    this.height = BRC.EMPTY_INLINE_INPUT_HEIGHT;
+    this.width = BRC.EMPTY_INLINE_INPUT_WIDTH;
   } else {
     this.width = this.connectedBlockWidth + BRC.TAB_WIDTH + 1;
     this.height = this.connectedBlockHeight + 2;

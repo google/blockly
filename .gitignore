@@ -13,3 +13,4 @@ tests/compile/*compiler*.jar
 tests/screenshot/outputs/*
 local_build/*compiler*.jar
 local_build/local_*_compressed.js
+chromedriver

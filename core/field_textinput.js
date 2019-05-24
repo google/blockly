@@ -27,6 +27,8 @@
 goog.provide('Blockly.FieldTextInput');
 
 goog.require('Blockly.DropDownDiv');
+goog.require('Blockly.Events');
+goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
 goog.require('Blockly.userAgent');

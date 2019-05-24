@@ -32,6 +32,7 @@ goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.Gesture');
+goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceSvg');

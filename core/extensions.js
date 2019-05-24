@@ -36,6 +36,7 @@ goog.provide('Blockly.Extensions');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.utils');
 
+
 /**
  * The set of all registered extensions, keyed by extension name/id.
  * @private

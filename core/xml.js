@@ -30,6 +30,7 @@
  */
 goog.provide('Blockly.Xml');
 
+goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.FinishedLoading');
 goog.require('Blockly.Events.VarCreate');

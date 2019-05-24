@@ -24,6 +24,8 @@
 'use strict';
 
 goog.provide('Blockly.Theme');
+
+
 /**
  * Class for a theme.
  * @param {Object.<string, Blockly.BlockStyle>} blockStyles A map from style

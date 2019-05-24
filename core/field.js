@@ -28,6 +28,7 @@
 
 goog.provide('Blockly.Field');
 
+goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.userAgent');

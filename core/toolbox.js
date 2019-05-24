@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Toolbox');
 
+goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.HorizontalFlyout');

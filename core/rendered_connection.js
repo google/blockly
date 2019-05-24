@@ -27,6 +27,7 @@
 goog.provide('Blockly.RenderedConnection');
 
 goog.require('Blockly.Connection');
+goog.require('Blockly.Events');
 goog.require('Blockly.utils');
 
 goog.require('goog.math.Coordinate');

@@ -26,9 +26,11 @@
 
 goog.provide('Blockly.WorkspaceCommentSvg');
 
+goog.require('Blockly.Events');
 goog.require('Blockly.Events.CommentCreate');
 goog.require('Blockly.Events.CommentDelete');
 goog.require('Blockly.Events.CommentMove');
+goog.require('Blockly.Events.Ui');
 goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceComment');
 

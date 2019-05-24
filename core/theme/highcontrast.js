@@ -28,6 +28,7 @@ goog.provide('Blockly.Themes.HighContrast');
 
 goog.require('Blockly.Theme');
 
+
 var defaultBlockStyles = {
   "colour_blocks":{
     "colourPrimary": "#a52714",

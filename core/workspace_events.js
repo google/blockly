@@ -29,6 +29,7 @@ goog.provide('Blockly.Events.FinishedLoading');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
 
+
 /**
  * Class for a finished loading event.
  * Used to notify the developer when the workspace has finished loading (i.e

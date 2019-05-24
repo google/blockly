@@ -32,6 +32,7 @@
  */
 goog.provide('Blockly.utils');
 
+goog.require('Blockly.Msg');
 goog.require('Blockly.userAgent');
 
 goog.require('goog.math.Coordinate');
@@ -1021,4 +1022,3 @@ Blockly.utils.clampNumber = function(lowerBound, number, upperBound) {
  * Reference to the global object.
  */
 Blockly.utils.global = this || self;
-

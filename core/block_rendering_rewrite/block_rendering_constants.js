@@ -65,7 +65,7 @@ BRC.NOTCH_OFFSET_LEFT = BRC.NOTCH_WIDTH;
 
 // This is the width from where a rounded corner ends and a next or previous
 // connection starts.
-BRC.NOTCH_OFFSET_ROUNDED_CORNER = 8 - 0.5;
+BRC.NOTCH_OFFSET_ROUNDED_CORNER = 7.5;
 
 // This is the offset from the vertical part of a statement input
 // to where to start the notch, which is on the right side in LTR.

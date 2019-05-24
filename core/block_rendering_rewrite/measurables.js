@@ -449,20 +449,15 @@ Blockly.BlockRendering.BottomRow = function(block) {
   this.type = 'bottom row';
   this.hasNextConnection = !!block.nextConnection;
   this.connection = block.nextConnection;
-  this.maxLength = null;
 
   var followsStatement =
       block.inputList.length &&
       block.inputList[block.inputList.length - 1].type == Blockly.NEXT_STATEMENT;
+  this.hasFixedWidth = followsStatement && block.getInputsInline();
 
   // This is the minimum height for the row. If one of it's elements has a greater
   // height it will be overwritten in the compute pass.
   if (followsStatement) {
-    // Add a max length so that the bottom of a statement input doesn't become
-    // too long.
-    if (block.getInputsInline()) {
-      this.maxLength = 66.5;
-    }
     this.height = BRC.LARGE_PADDING;
   } else {
     this.height = BRC.NOTCH_HEIGHT;
@@ -475,3 +470,4 @@ goog.inherits(Blockly.BlockRendering.BottomRow,
 Blockly.BlockRendering.BottomRow.prototype.isSpacer = function() {
   return true;
 };
+

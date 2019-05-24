@@ -111,11 +111,6 @@ Blockly.BlockRendering.Highlighter.prototype.drawStatementInput = function(row) 
         (row.yPos + row.height - BRC.DISTANCE_45_OUTSIDE));
     this.highlightSteps_.push(
         BRC.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR);
-    if (this.info_.bottomRow.maxLength) {
-      this.highlightSteps_.push('H', this.info_.bottomRow.maxLength);
-    } else {
-      this.highlightSteps_.push('H', this.info_.width - BRC.HIGHLIGHT_OFFSET);
-    }
   }
 };
 

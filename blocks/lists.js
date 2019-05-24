@@ -139,7 +139,9 @@ Blockly.Blocks['lists_create_with'] = {
     this.setOutput(true, 'Array');
     this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
     this.setTooltip(Blockly.Msg['LISTS_CREATE_WITH_TOOLTIP']);
-  },
+    this.child_disconnected_ = [];      //SHAPE: References to disconnected block children.
+    this.add_shadow = false;            //SHAPE: Flag to control the addition of a shadow block on new 'item'.
+   },
   /**
    * Create XML to represent list inputs.
    * @return {!Element} XML storage element.
@@ -194,16 +196,26 @@ Blockly.Blocks['lists_create_with'] = {
     // Disconnect any children that don't belong.
     for (var i = 0; i < this.itemCount_; i++) {
       var connection = this.getInput('ADD' + i).connection.targetConnection;
-      if (connection && connections.indexOf(connection) == -1) {
-        connection.disconnect();
-      }
+        if (connection && connections.indexOf(connection) == -1) {
+          //SHAPE: When a child is about to be disconnected, save the reference of the block
+          //that was attached to the input.
+          this.child_disconnected_.push(this.getInput('ADD' + i).connection.targetBlock());
+          
+          connection.disconnect();
+        }
     }
+    //SHAPE: Set flag to true if a new item was added to the list (from mutator bubble).
+    this.add_shadow = connections.length > this.itemCount_;
+
     this.itemCount_ = connections.length;
     this.updateShape_();
-    // Reconnect any child blocks.
+    //SHAPE: Reconnect any child blocks.
     for (var i = 0; i < this.itemCount_; i++) {
       Blockly.Mutator.reconnect(connections[i], this, 'ADD' + i);
     }
+
+    //SHAPE: Call method to add shadow math block if conditions are met.
+    this.connectShadowBlock_();
   },
   /**
    * Store pointers to any connected child blocks.
@@ -242,10 +254,40 @@ Blockly.Blocks['lists_create_with'] = {
         }
       }
     }
+    var j = 0;
     // Remove deleted inputs.
     while (this.getInput('ADD' + i)) {
+      //SHAPE: Delete a disconnected block ONLY if it is a shadow block.
+      if (this.child_disconnected_[j] && this.child_disconnected_[j].isShadow()) {
+          this.child_disconnected_[j].dispose(true, true);
+      }
       this.removeInput('ADD' + i);
       i++;
+      j++;      //SHAPE: Iterator for the disconnected children.
+    }
+    //SHAPE: Reset array.
+    this.child_disconnected_ = [];
+  },
+  /**
+   * Connects a shadow math block with a random integer to a
+   * new input.
+   * @private
+   * @this Blockly.Block
+   * @author ShapeRoboticsApS
+   */
+  connectShadowBlock_: function() {
+    if (this.add_shadow) {
+      // Spawn a new shadow math block.
+      var shadow_child = workspace.newBlock('math_number');
+      var random_int = 0; //Math.floor(Math.random() * 11);
+      shadow_child.setFieldValue(random_int, 'NUM');
+      shadow_child.setShadow(true);
+      shadow_child.initSvg();
+      shadow_child.render();
+      // Connect shadow block to last input.
+      var shadow_child_connection = shadow_child.outputConnection;
+      var parent_connection = this.getInput('ADD' + (this.itemCount_ - 1)).connection;
+      parent_connection.connect(shadow_child_connection);
     }
   }
 };

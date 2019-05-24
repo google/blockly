@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.FieldDate');
 
+goog.require('Blockly.Events');
 goog.require('Blockly.Field');
 goog.require('Blockly.utils');
 

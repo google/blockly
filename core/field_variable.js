@@ -26,11 +26,14 @@
 
 goog.provide('Blockly.FieldVariable');
 
+goog.require('Blockly.Events');
+goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Variables');
+goog.require('Blockly.Xml');
 
 goog.require('goog.math.Size');
 

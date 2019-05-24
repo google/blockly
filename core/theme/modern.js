@@ -28,6 +28,7 @@ goog.provide('Blockly.Themes.Modern');
 
 goog.require('Blockly.Theme');
 
+
 var defaultBlockStyles = {
   "colour_blocks": {
     "colourPrimary": "#a5745b",

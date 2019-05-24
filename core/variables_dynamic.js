@@ -29,10 +29,8 @@ goog.provide('Blockly.VariablesDynamic');
 
 goog.require('Blockly.Variables');
 goog.require('Blockly.Blocks');
-goog.require('Blockly.constants');
+goog.require('Blockly.Msg');
 goog.require('Blockly.VariableModel');
-// TODO Fix circular dependencies
-// goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
 
 

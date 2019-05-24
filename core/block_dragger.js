@@ -28,6 +28,7 @@ goog.provide('Blockly.BlockDragger');
 
 goog.require('Blockly.BlockAnimations');
 goog.require('Blockly.InsertionMarkerManager');
+goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
 
 goog.require('goog.math.Coordinate');

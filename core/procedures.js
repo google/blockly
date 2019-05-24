@@ -32,8 +32,10 @@ goog.provide('Blockly.Procedures');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly.constants');
+goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
+goog.require('Blockly.Msg');
 goog.require('Blockly.Names');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');

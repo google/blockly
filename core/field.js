@@ -39,14 +39,15 @@ goog.require('goog.style');
 
 /**
  * Abstract class for an editable field.
- * @param {string} text The initial content of the field.
- * @param {function(string):(string|null|undefined)=} opt_validator An optional
- *     function that is called to validate user input. See setValidator().
+ * @param {*} value The initial value of the field.
+ * @param {Function=} opt_validator  A function that is called to validate
+ *    changes to the field's value. Takes in a value & returns a validated
+ *    value, or null to abort the change.
  * @constructor
  */
-Blockly.Field = function(text, opt_validator) {
+Blockly.Field = function(value, opt_validator) {
   this.size_ = new goog.math.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
-  this.setValue(text);
+  this.setValue(value);
   this.setValidator(opt_validator);
 };
 
@@ -122,6 +123,14 @@ Blockly.Field.prototype.name = undefined;
  * @type {number}
  */
 Blockly.Field.prototype.maxDisplayLength = 50;
+
+/**
+ * Get the current value of the field.
+ * @return {*} Current value.
+ */
+Blockly.Field.prototype.getValue = function() {
+  return this.value_;
+};
 
 /**
  * Visible text to display.
@@ -233,10 +242,11 @@ Blockly.Field.prototype.initView = function() {
         'y': 0,
         'height': 16
       }, this.fieldGroup_);
-  /** @type {!Element} */
   this.textElement_ = Blockly.utils.createSvgElement('text',
       {'class': 'blocklyText', 'y': this.size_.height - 12.5},
       this.fieldGroup_);
+  var textNode = document.createTextNode('');
+  this.textElement_.appendChild(textNode);
 
   this.updateEditable();
 
@@ -375,14 +385,15 @@ Blockly.Field.prototype.setVisible = function(visible) {
  * Sets a new validation function for editable fields, or clears a previously
  * set validator.
  *
- * The validator function takes in the text form of the users input, and
- * optionally returns the accepted field text. Alternatively, if the function
- * returns null, the field value change aborts. If the function does not return
- * anything (or returns undefined), the input value is accepted as valid. This
- * is a shorthand for fields using the validator function call as a field-level
- * change event notification.
+ * The validator function takes in the new field value, and returns
+ * validated value. The validated value could be the input value, a modified
+ * version of the input value, or null to abort the change.
  *
- * @param {?function(string):(string|null|undefined)} handler The validator
+ * If the function does not return anything (or returns undefined) the new
+ * value is accepted as valid. This is to allow for fields using the
+ * validated founction as a field-level change event notification.
+ *
+ * @param {Function=} handler The validator
  *     function or null to clear a previous validator.
  */
 Blockly.Field.prototype.setValidator = function(handler) {
@@ -401,6 +412,8 @@ Blockly.Field.prototype.getValidator = function() {
  * Validates a change.  Does nothing.  Subclasses may override this.
  * @param {string} text The user's text.
  * @return {string} No change needed.
+ * @deprecated May 2019. Override doClassValidation and other relevant 'do'
+ *  functions instead.
  */
 Blockly.Field.prototype.classValidator = function(text) {
   return text;
@@ -411,6 +424,7 @@ Blockly.Field.prototype.classValidator = function(text) {
  * function for the field's class and its parents.
  * @param {string} text Proposed text.
  * @return {?string} Revised text, or null if invalid.
+ * @deprecated May 2019. setValue now contains all relevant logic.
  */
 Blockly.Field.prototype.callValidator = function(text) {
   var classResult = this.classValidator(text);
@@ -452,15 +466,15 @@ Blockly.Field.prototype.updateColour = function() {
 };
 
 /**
- * Draws the border with the correct width.
- * Saves the computed width in a property.
+ * Used by getSize() to move/resize any dom elements, and get the new size.
+ *
+ * All rendering that has an effect on the size/shape of the block should be
+ * done here, and should be triggered by getSize().
  * @protected
  */
 Blockly.Field.prototype.render_ = function() {
-  // Replace the text.
   this.textElement_.textContent = this.getDisplayText_();
   this.updateWidth();
-  this.isDirty_ = false;
 };
 
 /**
@@ -547,6 +561,7 @@ Blockly.Field.stopCache = function() {
 Blockly.Field.prototype.getSize = function() {
   if (this.isDirty_) {
     this.render_();
+    this.isDirty_ = false;
   } else if (this.visible_ && this.size_.width == 0) {
     // If the field is not visible the width will be 0 as well, one of the
     // problems with the old system.
@@ -644,39 +659,106 @@ Blockly.Field.prototype.forceRerender = function() {
 };
 
 /**
- * By default there is no difference between the human-readable text and
- * the language-neutral values.  Subclasses (such as dropdown) may define this.
- * @return {string} Current value.
- */
-Blockly.Field.prototype.getValue = function() {
-  return this.getText();
-};
-
-/**
- * By default there is no difference between the human-readable text and
- * the language-neutral values.  Subclasses (such as dropdown) may define this.
- * @param {string} newValue New value.
+ * Used to change the value of the field. Handles validation and events.
+ * Subclasses should override doClassValidation_ and doValueUpdate_ rather
+ * than this method.
+ * @param {*} newValue New value.
  */
 Blockly.Field.prototype.setValue = function(newValue) {
+  var doLogging = false;
   if (newValue === null) {
-    // No change if null.
+    doLogging && console.log('null, return');
+    // Not a valid value to check.
     return;
   }
-  // Validate input.
-  var validated = this.callValidator(newValue);
-  if (validated !== null) {
-    newValue = validated;
+
+  newValue = this.doClassValidation_(newValue);
+  if (newValue === null) {
+    doLogging && console.log('invalid, return');
+    this.doValueInvalid_();
+    if (this.isDirty_) {
+      this.forceRerender();
+    }
+    return;
   }
-  // Check for change.
+
+  var localValidator = this.getValidator();
+  if (localValidator) {
+    var validatedValue = localValidator.call(this, newValue);
+    // Sometimes local validators are used as change listeners (bad!) which
+    // means they might return undefined accidentally, so we'll just ignore that.
+    if (validatedValue !== undefined) {
+      newValue = validatedValue;
+    }
+    if (newValue === null) {
+      doLogging && console.log('invalid, return');
+      this.doValueInvalid_();
+      if (this.isDirty_) {
+        this.forceRerender();
+      }
+      return;
+    }
+  }
   var oldValue = this.getValue();
-  if (oldValue == newValue) {
+  if (oldValue === newValue) {
+    doLogging && console.log('same, return');
+    // No change.
     return;
   }
+
   if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.BlockChange(
         this.sourceBlock_, 'field', this.name, oldValue, newValue));
   }
-  this.setText(newValue);
+  this.doValueUpdate_(newValue);
+  if (this.isDirty_) {
+    this.forceRerender();
+  }
+  doLogging && console.log(this.value_);
+};
+
+/**
+ * A generic value possessed by the field.
+ * Should generally be non-null, only null when the field is created.
+ * @type {*}
+ * @protected
+ */
+Blockly.Field.prototype.value_ = null;
+
+/**
+ * Used to validate a value. Returns input by default. Can be overridden by
+ * subclasses, see FieldDropdown.
+ * @param {*} newValue The value to be validated.
+ * @return {*} The validated value, same as input by default.
+ * @protected
+ */
+Blockly.Field.prototype.doClassValidation_ = function(newValue) {
+  // For backwards compatibility.
+  newValue = this.classValidator(newValue);
+  return newValue;
+};
+
+/**
+ * Used to update the value of a field. Can be overridden by subclasses to do
+ * custom storage of values/updating of external things.
+ * @param {*} newValue The value to be saved.
+ * @protected
+ */
+Blockly.Field.prototype.doValueUpdate_ = function(newValue) {
+  this.value_ = newValue;
+  this.isDirty_ = true;
+  // For backwards compatibility.
+  this.text_ = String(newValue);
+};
+
+/**
+ * Used to notify the field an invalid value was input. Can be overiden by
+ * subclasses, see FieldTextInput.
+ * No-op by default.
+ * @protected
+ */
+Blockly.Field.prototype.doValueInvalid_ = function() {
+  // NOP
 };
 
 /**

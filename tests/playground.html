@@ -144,6 +144,15 @@ function start() {
 }
 
 function addToolboxButtonCallbacks() {
+  var addAllBlocksToWorkspace = function(button) {
+    var workspace = button.getTargetWorkspace();
+    var blocks = button.workspace_.getTopBlocks();
+    for(var i = 0, block; block = blocks[i]; i++) {
+      var xml = Blockly.Xml.textToDom('<xml></xml>');
+      xml.appendChild(Blockly.Xml.blockToDom(block));
+      Blockly.Xml.appendDomToWorkspace(xml, workspace);
+    }
+  };
   var randomizeLabelText = function(button) {
     var blocks = button.targetWorkspace_
         .getBlocksByType('test_fields_label_serializable');
@@ -177,13 +186,59 @@ function addToolboxButtonCallbacks() {
       block.setShadow(!block.isShadow());
     }
   };
+  var toggleCollapsed = function(button) {
+    var blocks = button.workspace_.getAllBlocks();
+    for(var i = 0, block; block = blocks[i]; i++) {
+      block.setCollapsed(!block.isCollapsed());
+    }
+  };
+  var setInput = function(button) {
+    Blockly.prompt('Input text to set.', 'ab', function(input) {
+      var blocks = button.getTargetWorkspace().getAllBlocks();
+      for(var i = 0, block; block = blocks[i]; i++) {
+        if (block.getField('INPUT')) {
+          block.setFieldValue(input, 'INPUT');
+        }
+      }
+    })
+  };
+  var changeImage = function(button) {
+    var blocks = button.workspace_.getBlocksByType('test_fields_image');
+    var possible = 'abcdefghijklm';
+    var image = possible.charAt(Math.floor(Math.random() * possible.length));
+    var src = 'https://blockly-demo.appspot.com/static/tests/media/'
+      + image + '.png';
+    for (var i = 0, block; block = blocks[i]; i++) {
+      var imageField = block.getField('IMAGE');
+      imageField.setValue(src);
+      imageField.setText(image);
+    }
+  };
+  var addVariables = function(button) {
+    workspace.createVariable('1a', '', '1A');
+    workspace.createVariable('1b', '', '1B');
+    workspace.createVariable('1c', '', '1C');
+    workspace.createVariable('2a', '', '2A');
+    workspace.createVariable('2b', '', '2B');
+    workspace.createVariable('2c', '', '2C');
+  };
 
+  workspace.registerButtonCallback(
+    'addVariables', addVariables);
+  workspace.registerButtonCallback(
+    'changeImage', changeImage);
+  workspace.registerButtonCallback(
+    'addAllBlocksToWorkspace', addAllBlocksToWorkspace);
+  workspace.registerButtonCallback(
+    'setInput', setInput);
   workspace.registerButtonCallback(
       'setRandomStyle', setRandomStyle);
   workspace.registerButtonCallback(
       'toggleEnabled', toggleEnabled);
   workspace.registerButtonCallback(
       'toggleShadow', toggleShadow);
+  workspace.registerButtonCallback(
+    'toggleCollapsed', toggleCollapsed);
   workspace.registerButtonCallback(
       'randomizeLabelText', randomizeLabelText);
   workspace.registerButtonCallback(
@@ -1236,11 +1291,15 @@ h1 {
     </category>
     <category name="Fields" expanded="true">
       <category name="Defaults">
+        <button text="add blocks to workspace" callbackKey="addAllBlocksToWorkspace"></button>
+        <sep gap="8"></sep>
         <button text="set random style" callbackKey="setRandomStyle"></button>
         <sep gap="8"></sep>
         <button text="toggle enabled" callbackKey="toggleEnabled"></button>
         <sep gap="8"></sep>
         <button text="toggle shadow" callbackKey="toggleShadow"></button>
+        <sep gap="8"></sep>
+        <button text="toggle collapsed" callbackKey="toggleCollapsed"></button>
         <block type="test_fields_angle"></block>
         <block type="test_fields_date"></block>
         <block type="test_fields_checkbox"></block>
@@ -1248,7 +1307,11 @@ h1 {
         <block type="test_fields_text_input"></block>
         <block type="test_fields_variable"></block>
         <button text="randomize label text" callbackKey="randomizeLabelText"></button>
+        <sep gap="12"></sep>
         <block type="test_fields_label_serializable"></block>
+        <button text="change image" callbackKey="changeImage"></button>
+        <sep gap="12"></sep>
+        <block type="test_fields_image"></block>
       </category>
       <category name="Numbers">
         <block type="test_numbers_float">
@@ -1297,6 +1360,69 @@ h1 {
         <block type="text">
           <field name="TEXT">Zalgo in text field: B&#776;&#788;&#862;&#795;&#842;&#827;&#806;&#837;&#812;&#792;&#816;&#846;&#805;l&#771;&#832;&#833;&#864;&#849;&#849;&#789;&#861;&#801;&#854;&#863;&#811;&#826;&#812;&#790;&#803;&#819;o&#843;&#777;&#778;&#785;&#831;&#829;&#794;&#825;&#857;&#814;&#802;&#811;&#852;c&#843;&#786;&#849;&#778;&#861;&#775;&#825;&#825;&#796;&#857;&#825;&#800;&#824;k&#778;&#850;&#833;&#774;&#772;&#782;&#862;&#770;&#789;&#788;&#841;&#801;&#811;&#860;&#839;&#790;&#819;&#854;l&#832;&#774;&#836;&#831;&#776;&#787;&#855;&#816;&#793;&#798;&#819;&#809;&#800;&#854;&#815;y&#864;&#783;&#856;&#773;&#832;&#808;&#799;&#839;&#814;&#840;&#812;&#793;&#818;&#801;</field>
         </block>
+      </category>
+      <category name="Validators">
+        <button text="add blocks to workspace" callbackKey="addAllBlocksToWorkspace"></button>
+        <sep gap="8"></sep>
+        <button text="set input" callbackKey="setInput"></button>
+        <label text="Angles"></label>
+        <sep gap="12"></sep>
+        <block type="test_validators_angle_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_angle_mult30_force"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_angle_mult30_null"></block>
+        <label text="Checkboxes"></label>
+        <sep gap="12"></sep>
+        <block type="test_validators_checkbox_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_checkbox_match"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_checkbox_not_match_null"></block>
+        <label text="Colours"></label>
+        <sep gap="12"></sep>
+        <block type="test_validators_colour_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_colour_force_red"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_colour_red_null"></block>
+        <label text="Dates"></label>
+        <sep gap="12"></sep>
+        <block type="test_validators_date_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_date_force_20s"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_date_20s_null"></block>
+        <label text="Dropdowns"></label>
+        <sep gap="12"></sep>
+        <block type="test_validators_dropdown_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_dropdown_force_1s"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_dropdown_1s_null"></block>
+        <label text="Numbers"></label>
+        <sep gap="12"></sep>
+        <block type="test_validators_number_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_number_mult10_force"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_number_mult10_null"></block>
+        <label text="Text"></label>
+        <sep gap="12"></sep>
+        <block type="test_validators_text_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_text_A"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_text_B"></block>
+        <label text="Variables"></label>
+        <sep gap="8"></sep>
+        <button text="add test variables" callbackKey="addVariables" web-class="modifiesWorkspace"></button>
+        <sep gap="12"></sep>
+        <block type="test_validators_variable_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_variable_force_1s"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_variable_1s_null"></block>
       </category>
     </category>
     <category name="Mutators">

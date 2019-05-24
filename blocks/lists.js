@@ -831,7 +831,6 @@ Blockly.Blocks['lists_split'] = {
   updateType_: function(newMode) {
     var mode = this.getFieldValue('MODE');
     if (mode != newMode) {
-      this.setFieldValue(newMode, 'MODE');
       var inputConnection = this.getInput('INPUT').connection;
       inputConnection.setShadowDom(null);
       var inputBlock = inputConnection.targetBlock();

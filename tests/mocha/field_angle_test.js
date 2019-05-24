@@ -127,7 +127,7 @@ suite ('Angle Fields', function() {
         this.angleField.setValue(undefined);
         assertValueDefault(this.angleField);
       });
-      test.skip('Non-Parsable String', function() {
+      test('Non-Parsable String', function() {
         this.angleField.setValue('bad');
         assertValueDefault(this.angleField);
       });
@@ -164,15 +164,15 @@ suite ('Angle Fields', function() {
         this.angleField.setValue(null);
         assertValue(this.angleField, 1);
       });
-      test.skip('Undefined', function() {
+      test('Undefined', function() {
         this.angleField.setValue(undefined);
         assertValue(this.angleField, 1);
       });
-      test.skip('Non-Parsable String', function() {
+      test('Non-Parsable String', function() {
         this.angleField.setValue('bad');
         assertValue(this.angleField, 1);
       });
-      test.skip('NaN', function() {
+      test('NaN', function() {
         this.angleField.setValue(NaN);
         assertValue(this.angleField, 1);
       });
@@ -198,7 +198,7 @@ suite ('Angle Fields', function() {
       });
     });
   });
-  suite.skip('Validators', function() {
+  suite('Validators', function() {
     setup(function() {
       this.angleField = new Blockly.FieldAngle(1);
       Blockly.FieldTextInput.htmlInput_ = Object.create(null);

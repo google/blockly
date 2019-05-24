@@ -108,7 +108,7 @@ suite ('Label Serializable Fields', function() {
         this.labelField.setValue(null);
         assertValueDefault(this.labelField);
       });
-      test.skip('Undefined', function() {
+      test('Undefined', function() {
         this.labelField.setValue(undefined);
         assertValueDefault(this.labelField);
       });
@@ -120,7 +120,7 @@ suite ('Label Serializable Fields', function() {
         this.labelField.setValue(1);
         assertValue(this.labelField, '1');
       });
-      test.skip('Number (Falsy)', function() {
+      test('Number (Falsy)', function() {
         this.labelField.setValue(0);
         assertValue(this.labelField, '0');
       });
@@ -128,7 +128,7 @@ suite ('Label Serializable Fields', function() {
         this.labelField.setValue(true);
         assertValue(this.labelField, 'true');
       });
-      test.skip('Boolean False', function() {
+      test('Boolean False', function() {
         this.labelField.setValue(false);
         assertValue(this.labelField, 'false');
       });
@@ -141,7 +141,7 @@ suite ('Label Serializable Fields', function() {
         this.labelField.setValue(null);
         assertValue(this.labelField, 'value');
       });
-      test.skip('Undefined', function() {
+      test('Undefined', function() {
         this.labelField.setValue(undefined);
         assertValue(this.labelField, 'value');
       });

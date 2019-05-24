@@ -34,21 +34,21 @@ goog.require('goog.math.Size');
 
 /**
  * Class for a colour input field.
- * @param {string=} opt_colour The initial colour in '#rrggbb' format, defaults
- *    to the first value in the default colour array.
- * @param {Function=} opt_validator A function that is executed when a new
- *     colour is selected.  Its sole argument is the new colour value.  Its
- *     return value becomes the selected colour, unless it is undefined, in
- *     which case the new colour stands, or it is null, in which case the change
- *     is aborted.
+ * @param {string=} opt_value The initial value of the field. Should be in
+ *    '#rrggbb' format. Defaults to the first value in the default colour array.
+ * @param {Function=} opt_validator A function that is called to validate
+ *    changes to the field's value. Takes in a colour string & returns a
+ *    validated colour string ('#rrggbb' format), or null to abort the change.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldColour = function(opt_colour, opt_validator) {
-  opt_colour = opt_colour || Blockly.FieldColour.COLOURS[0];
-  Blockly.FieldColour.superClass_.constructor
-      .call(this, opt_colour, opt_validator);
-  this.setText(Blockly.Field.NBSP + Blockly.Field.NBSP + Blockly.Field.NBSP);
+Blockly.FieldColour = function(opt_value, opt_validator) {
+  opt_value = this.doClassValidation_(opt_value);
+  if (opt_value === null) {
+    opt_value = Blockly.FieldColour.COLOURS[0];
+  }
+  Blockly.FieldColour.superClass_.constructor.call(
+      this, opt_value, opt_validator);
 };
 goog.inherits(Blockly.FieldColour, Blockly.Field);
 
@@ -62,14 +62,6 @@ goog.inherits(Blockly.FieldColour, Blockly.Field);
 Blockly.FieldColour.fromJson = function(options) {
   return new Blockly.FieldColour(options['colour']);
 };
-
-/**
- * Serializable fields are saved by the XML renderer, non-serializable fields
- * are not. Editable fields should also be serializable.
- * @type {boolean}
- * @const
- */
-Blockly.FieldColour.prototype.SERIALIZABLE = true;
 
 /**
  * Default width of a colour field.
@@ -86,6 +78,20 @@ Blockly.FieldColour.DEFAULT_WIDTH = 16;
  * @const
  */
 Blockly.FieldColour.DEFAULT_HEIGHT = 12;
+
+/**
+ * Regex that defines the form of a colour string.
+ * @type {RegExp}
+ */
+Blockly.FieldColour.COLOUR_REGEX = new RegExp('#[0-9a-fA-F]{6}');
+
+/**
+ * Serializable fields are saved by the XML renderer, non-serializable fields
+ * are not. Editable fields should also be serializable.
+ * @type {boolean}
+ * @const
+ */
+Blockly.FieldColour.prototype.SERIALIZABLE = true;
 
 /**
  * Array of colours used by this field.  If null, use the global list.
@@ -137,7 +143,7 @@ Blockly.FieldColour.prototype.initView = function() {
   this.borderRect_.style['fillOpacity'] = 1;
   this.borderRect_.setAttribute('width',
       this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
-  this.setValue(this.getValue());
+  this.borderRect_.style.fill = this.value_;
 };
 
 /**
@@ -154,42 +160,44 @@ Blockly.FieldColour.prototype.dispose = function() {
 };
 
 /**
- * Colour fields are fixed with, no need to update.
+ * Render the colour field.
+ * @private
  */
-Blockly.FieldColour.prototype.updateWidth = function() {
-  // NOP
+Blockly.FieldColour.prototype.render_ = function() {
+  this.size_.width = Blockly.FieldColour.DEFAULT_WIDTH;
 };
 
 /**
- * Return the current colour.
- * @return {string} Current colour in '#rrggbb' format.
+ * Ensure that the input value is a valid colour.
+ * @param {string=} newValue The input value.
+ * @return {?string} A valid colour, or null if invalid.
+ * @protected
  */
-Blockly.FieldColour.prototype.getValue = function() {
-  return this.colour_;
-};
-
-/**
- * Set the colour.
- * @param {string} colour The new colour in '#rrggbb' format.
- */
-Blockly.FieldColour.prototype.setValue = function(colour) {
-  if (this.sourceBlock_ && Blockly.Events.isEnabled() &&
-      this.colour_ != colour) {
-    Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this.sourceBlock_, 'field', this.name, this.colour_, colour));
+Blockly.FieldColour.prototype.doClassValidation_ = function(newValue) {
+  if (Blockly.FieldColour.COLOUR_REGEX.test(newValue)) {
+    return newValue.toLowerCase();
   }
-  this.colour_ = colour;
+  return null;
+};
+
+/**
+ * Update the value of this colour field, and update the displayed colour.
+ * @param {string} newValue The new colour in '#rrggbb' format.
+ * @protected
+ */
+Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {
+  this.value_ = newValue;
   if (this.borderRect_) {
-    this.borderRect_.style.fill = colour;
+    this.borderRect_.style.fill = newValue;
   }
 };
 
 /**
- * Get the text from this field.  Used when the block is collapsed.
- * @return {string} Current text.
+ * Get the text for this field.  Used when the block is collapsed.
+ * @return {string} Text representing the value of this field.
  */
 Blockly.FieldColour.prototype.getText = function() {
-  var colour = this.colour_;
+  var colour = this.value_;
   // Try to use #rgb format if possible, rather than #rrggbb.
   var m = colour.match(/^#(.)\1(.)\2(.)\3$/);
   if (m) {

@@ -149,7 +149,7 @@ suite ('Image Fields', function() {
       this.imageField.setValue(null);
       assertValue(this.imageField, 'src', 'alt');
     });
-    test.skip('Undefined', function() {
+    test('Undefined', function() {
       this.imageField.setValue(undefined);
       assertValue(this.imageField, 'src', 'alt');
     });

@@ -136,15 +136,15 @@ suite ('Number Fields', function() {
           this.numberField.setValue(null);
           assertValueDefault(this.numberField);
         });
-        test.skip('Undefined', function() {
+        test('Undefined', function() {
           this.numberField.setValue(undefined);
           assertValueDefault(this.numberField);
         });
-        test.skip('Non-Parsable String', function() {
+        test('Non-Parsable String', function() {
           this.numberField.setValue('bad');
           assertValueDefault(this.numberField);
         });
-        test.skip('NaN', function() {
+        test('NaN', function() {
           this.numberField.setValue(NaN);
           assertValueDefault(this.numberField);
         });
@@ -173,15 +173,15 @@ suite ('Number Fields', function() {
           this.numberField.setValue(null);
           assertValue(this.numberField, 1);
         });
-        test.skip('Undefined', function() {
+        test('Undefined', function() {
           this.numberField.setValue(undefined);
           assertValue(this.numberField, 1);
         });
-        test.skip('Non-Parsable String', function() {
+        test('Non-Parsable String', function() {
           this.numberField.setValue('bad');
           assertValue(this.numberField, 1);
         });
-        test.skip('NaN', function() {
+        test('NaN', function() {
           this.numberField.setValue(NaN);
           assertValue(this.numberField, 1);
         });
@@ -228,7 +228,7 @@ suite ('Number Fields', function() {
           numberField.setValue(123.456);
           assertValue(numberField, 123);
         });
-        test.skip('1.5', function() {
+        test('1.5', function() {
           var numberField = new Blockly.FieldNumber
               .fromJson({ precision: 1.5 });
           numberField.setValue(123.456);
@@ -295,7 +295,7 @@ suite ('Number Fields', function() {
       });
     });
   });
-  suite.skip('Validators', function() {
+  suite('Validators', function() {
     setup(function() {
       this.numberFieldField = new Blockly.FieldNumber(1);
       Blockly.FieldTextInput.htmlInput_ = Object.create(null);

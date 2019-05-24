@@ -148,11 +148,11 @@ suite ('Dropdown Fields', function() {
       this.dropdownField.setValue(null);
       assertValue(this.dropdownField, 'A', 'a');
     });
-    test.skip('Undefined', function() {
+    test('Undefined', function() {
       this.dropdownField.setValue(undefined);
       assertValue(this.dropdownField, 'A', 'a');
     });
-    test.skip('Invalid ID', function() {
+    test('Invalid ID', function() {
       this.dropdownField.setValue('bad');
       assertValue(this.dropdownField, 'A', 'a');
     });
@@ -161,7 +161,7 @@ suite ('Dropdown Fields', function() {
       assertValue(this.dropdownField, 'B', 'b');
     });
   });
-  suite.skip('Validators', function() {
+  suite('Validators', function() {
     setup(function() {
       this.dropdownField = new Blockly.FieldDropdown([
         ["1a","1A"], ["1b","1B"], ["1c","1C"],

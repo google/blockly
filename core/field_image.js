@@ -34,7 +34,7 @@ goog.require('goog.math.Size');
 
 /**
  * Class for an image on a block.
- * @param {string=} src The URL of the image, defaults to an empty string.
+ * @param {string=} src The URL of the image. Defaults to an empty string.
  * @param {!(string|number)} width Width of the image.
  * @param {!(string|number)} height Height of the image.
  * @param {string=} opt_alt Optional alt text for when block is collapsed.
@@ -66,8 +66,8 @@ Blockly.FieldImage = function(src, width, height,
 
   this.flipRtl_ = opt_flipRtl;
   this.tooltip_ = '';
+  this.text_ = opt_alt || '';
   this.setValue(src || '');
-  this.setText(opt_alt || '');
 
   if (typeof opt_onClick == 'function') {
     this.clickHandler_ = opt_onClick;
@@ -111,11 +111,12 @@ Blockly.FieldImage.prototype.initView = function() {
       'image',
       {
         'height': this.height_ + 'px',
-        'width': this.width_ + 'px'
+        'width': this.width_ + 'px',
+        'alt': this.text_
       },
       this.fieldGroup_);
-  this.setValue(this.src_);
-  this.setText(this.text_);
+  this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
+      'xlink:href', this.value_);
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
 
   if (this.tooltip_) {
@@ -166,28 +167,28 @@ Blockly.FieldImage.prototype.setTooltip = function(newTip) {
 };
 
 /**
- * Get the source URL of this image.
- * @return {string} Current text.
- * @override
+ * Ensure that the input value (the source URL) is a string.
+ * @param {string=} newValue The input value
+ * @return {?string} A string, or null if invalid.
+ * @protected
  */
-Blockly.FieldImage.prototype.getValue = function() {
-  return this.src_;
+Blockly.FieldImage.prototype.doClassValidation_ = function(newValue) {
+  if (typeof newValue != 'string') {
+    return null;
+  }
+  return newValue;
 };
 
 /**
- * Set the source URL of this image.
- * @param {?string} src New source.
- * @override
+ * Update the value of this image field, and update the displayed image.
+ * @param {string} newValue The new image src.
+ * @protected
  */
-Blockly.FieldImage.prototype.setValue = function(src) {
-  if (src === null) {
-    // No change if null.
-    return;
-  }
-  this.src_ = src;
+Blockly.FieldImage.prototype.doValueUpdate_ = function(newValue) {
+  this.value_ = newValue;
   if (this.imageElement_) {
     this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
-        'xlink:href', src || '');
+        'xlink:href', this.value_ || '');
   }
 };
 
@@ -220,22 +221,8 @@ Blockly.FieldImage.prototype.setText = function(alt) {
  * @private
  */
 Blockly.FieldImage.prototype.render_ = function() {
-  // NOP
-};
-
-/**
- * Images are fixed width, no need to render even if forced.
- */
-Blockly.FieldImage.prototype.forceRerender = function() {
-  // NOP
-};
-
-/**
- * Images are fixed width, no need to update.
- * @private
- */
-Blockly.FieldImage.prototype.updateWidth = function() {
-  // NOP
+  this.size_.width = this.width_;
+  this.size_.height = this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y;
 };
 
 /**

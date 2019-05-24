@@ -57,11 +57,11 @@ suite ('Colour Fields', function() {
       var colourField = new Blockly.FieldColour(undefined);
       assertValueDefault(colourField);
     });
-    test.skip('Non-Parsable String', function() {
+    test('Non-Parsable String', function() {
       var colourField = new Blockly.FieldColour('bad');
       assertValueDefault(colourField);
     });
-    test.skip('#AAAAAA', function() {
+    test('#AAAAAA', function() {
       var colourField = new Blockly.FieldColour('#AAAAAA');
       assertValue(colourField, '#aaaaaa', '#aaa');
     });
@@ -69,7 +69,7 @@ suite ('Colour Fields', function() {
       var colourField = new Blockly.FieldColour('#aaaaaa');
       assertValue(colourField, '#aaaaaa', '#aaa');
     });
-    test.skip('#AAAA00', function() {
+    test('#AAAA00', function() {
       var colourField = new Blockly.FieldColour('#AAAA00');
       assertValue(colourField, '#aaaa00', '#aa0');
     });
@@ -77,7 +77,7 @@ suite ('Colour Fields', function() {
       var colourField = new Blockly.FieldColour('#aaaa00');
       assertValue(colourField, '#aaaa00', '#aa0');
     });
-    test.skip('#BCBCBC', function() {
+    test('#BCBCBC', function() {
       var colourField = new Blockly.FieldColour('#BCBCBC');
       assertValue(colourField, '#bcbcbc', '#bcbcbc');
     });
@@ -99,11 +99,11 @@ suite ('Colour Fields', function() {
       var colourField = new Blockly.FieldColour.fromJson({ colour:undefined });
       assertValueDefault(colourField);
     });
-    test.skip('Non-Parsable String', function() {
+    test('Non-Parsable String', function() {
       var colourField = new Blockly.FieldColour.fromJson({ colour:'bad' });
       assertValueDefault(colourField);
     });
-    test.skip('#AAAAAA', function() {
+    test('#AAAAAA', function() {
       var colourField = Blockly.FieldColour.fromJson({ colour: '#AAAAAA' });
       assertValue(colourField, '#aaaaaa', '#aaa');
     });
@@ -111,7 +111,7 @@ suite ('Colour Fields', function() {
       var colourField = Blockly.FieldColour.fromJson({ colour: '#aaaaaa' });
       assertValue(colourField, '#aaaaaa', '#aaa');
     });
-    test.skip('#AAAA00', function() {
+    test('#AAAA00', function() {
       var colourField = Blockly.FieldColour.fromJson({ colour: '#AAAA00' });
       assertValue(colourField, '#aaaa00', '#aa0');
     });
@@ -119,7 +119,7 @@ suite ('Colour Fields', function() {
       var colourField = Blockly.FieldColour.fromJson({ colour: '#aaaa00' });
       assertValue(colourField, '#aaaa00', '#aa0');
     });
-    test.skip('#BCBCBC', function() {
+    test('#BCBCBC', function() {
       var colourField = Blockly.FieldColour.fromJson({ colour: '#BCBCBC' });
       assertValue(colourField, '#bcbcbc', '#bcbcbc');
     });
@@ -133,15 +133,15 @@ suite ('Colour Fields', function() {
       setup(function() {
         this.colourField = new Blockly.FieldColour();
       });
-      test.skip('Null', function() {
+      test('Null', function() {
         this.colourField.setValue(null);
         assertValueDefault(this.colourField);
       });
-      test.skip('Undefined', function() {
+      test('Undefined', function() {
         this.colourField.setValue(undefined);
         assertValueDefault(this.colourField);
       });
-      test.skip('Non-Parsable String', function() {
+      test('Non-Parsable String', function() {
         this.colourField.setValue('bad');
         assertValueDefault(this.colourField);
       });
@@ -158,15 +158,15 @@ suite ('Colour Fields', function() {
       setup(function() {
         this.colourField = new Blockly.FieldColour('#aaaaaa');
       });
-      test.skip('Null', function() {
+      test('Null', function() {
         this.colourField.setValue(null);
         assertValue(this.colourField, '#aaaaaa', '#aaa');
       });
-      test.skip('Undefined', function() {
+      test('Undefined', function() {
         this.colourField.setValue(undefined);
         assertValue(this.colourField, '#aaaaaa', '#aaa');
       });
-      test.skip('Non-Parsable String', function() {
+      test('Non-Parsable String', function() {
         this.colourField.setValue('bad');
         assertValue(this.colourField, '#aaaaaa', '#aaa');
       });
@@ -180,7 +180,7 @@ suite ('Colour Fields', function() {
       });
     });
   });
-  suite.skip('Validators', function() {
+  suite('Validators', function() {
     setup(function() {
       this.colourField = new Blockly.FieldColour('#aaaaaa');
     });

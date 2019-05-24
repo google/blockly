@@ -864,11 +864,7 @@ Blockly.Constants.Text.TEXT_CHARAT_EXTENSION = function() {
     if (newAt != this.isAt_) {
       var block = this.sourceBlock_;
       block.updateAt_(newAt);
-      // This menu has been destroyed and replaced.  Update the replacement.
-      block.setFieldValue(value, 'WHERE');
-      return null;
     }
-    return undefined;
   });
   this.updateAt_(true);
   // Assign 'this' to a variable for use in the tooltip closure below.

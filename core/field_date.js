@@ -40,21 +40,20 @@ goog.require('goog.ui.DatePicker');
 
 /**
  * Class for a date input field.
- * @param {string=} opt_date The initial date, defaults to the current day.
- * @param {Function=} opt_validator A function that is executed when a new
- *     date is selected.  Its sole argument is the new date value.  Its
- *     return value becomes the selected date, unless it is undefined, in
- *     which case the new date stands, or it is null, in which case the change
- *     is aborted.
+ * @param {string=} opt_value The initial value of the field. Should be in
+ *    'YYYY-MM-DD' format. Defaults to the current date.
+ * @param {Function=} opt_validator A function that is called to validate
+ *    changes to the field's value. Takes in a date string & returns a
+ *    validated date string ('YYYY-MM-DD' format), or null to abort the change.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldDate = function(opt_date, opt_validator) {
-  if (!opt_date) {
-    opt_date = new goog.date.Date().toIsoString(true);
+Blockly.FieldDate = function(opt_value, opt_validator) {
+  opt_value = this.doClassValidation_(opt_value);
+  if (!opt_value) {
+    opt_value = new goog.date.Date().toIsoString(true);
   }
-  Blockly.FieldDate.superClass_.constructor.call(this, opt_date, opt_validator);
-  this.setValue(opt_date);
+  Blockly.FieldDate.superClass_.constructor.call(this, opt_value, opt_validator);
 };
 goog.inherits(Blockly.FieldDate, Blockly.Field);
 
@@ -91,28 +90,21 @@ Blockly.FieldDate.prototype.dispose = function() {
 };
 
 /**
- * Return the current date.
- * @return {string} Current date.
+ * Ensure that the input value is a valid date.
+ * @param {string=} newValue The input value.
+ * @return {?string} A valid date, or null if invalid.
+ * @protected
  */
-Blockly.FieldDate.prototype.getValue = function() {
-  return this.date_;
-};
-
-/**
- * Set the date.
- * @param {string} date The new date.
- */
-Blockly.FieldDate.prototype.setValue = function(date) {
-  if (this.sourceBlock_) {
-    var validated = this.callValidator(date);
-    // If the new date is invalid, validation returns null.
-    // In this case we still want to display the illegal result.
-    if (validated !== null) {
-      date = validated;
-    }
+Blockly.FieldDate.prototype.doClassValidation_ = function(newValue) {
+  if (!newValue) {
+    return null;
   }
-  this.date_ = date;
-  Blockly.Field.prototype.setText.call(this, date);
+  // Check if the new value is parsable or not.
+  var date = goog.date.Date.fromIsoString(newValue);
+  if (!date || date.toIsoString(true) != newValue) {
+    return null;
+  }
+  return newValue;
 };
 
 /**
@@ -142,10 +134,6 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
       function(event) {
         var date = event.date ? event.date.toIsoString(true) : '';
         Blockly.WidgetDiv.hide();
-        if (thisField.sourceBlock_) {
-          // Call any validation function, and allow it to override.
-          date = thisField.callValidator(date);
-        }
         thisField.setValue(date);
       });
 };

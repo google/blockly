@@ -33,14 +33,15 @@ goog.require('Blockly.utils');
 
 /**
  * Class for a non-editable, serializable text field.
- * @param {!string} text The initial content of the field.
+ * @param {*} opt_value The initial value of the field. Should cast to a
+ *    string. Defaults to an empty string if null or undefined.
  * @param {string=} opt_class Optional CSS class for the field's text.
  * @extends {Blockly.FieldLabel}
  * @constructor
  *
  */
-Blockly.FieldLabelSerializable = function(text, opt_class) {
-  Blockly.FieldLabelSerializable.superClass_.constructor.call(this, text,
+Blockly.FieldLabelSerializable = function(opt_value, opt_class) {
+  Blockly.FieldLabelSerializable.superClass_.constructor.call(this, opt_value,
       opt_class);
 };
 goog.inherits(Blockly.FieldLabelSerializable, Blockly.FieldLabel);

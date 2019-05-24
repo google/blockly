@@ -127,13 +127,13 @@ suite('Variable Fields', function() {
     });
   });
   suite('setValue', function() {
-    test.skip('Null', function() {
+    test('Null', function() {
       var variableField = createAndInitFieldConstructor(
           this.workspace, 'name1');
       variableField.setValue(null);
       assertValue(variableField, 'name1');
     });
-    test.skip('Undefined', function() {
+    test('Undefined', function() {
       var variableField = createAndInitFieldConstructor(
           this.workspace, 'name1');
       variableField.setValue(undefined);
@@ -152,14 +152,14 @@ suite('Variable Fields', function() {
       assertEquals('id2', variableField.getValue());
       chai.assert.notEqual(oldId, variableField.getValue());
     });
-    test.skip('Variable Does not Exist', function() {
+    test('Variable Does not Exist', function() {
       var variableField = createAndInitFieldConstructor(
           this.workspace, 'name1');
       variableField.setValue('id1');
       assertValue(variableField, 'name1');
     });
   });
-  suite.skip('Validators', function() {
+  suite('Validators', function() {
     setup(function() {
       this.workspace.createVariable('name1', null, 'id1');
       this.workspace.createVariable('name2', null, 'id2');

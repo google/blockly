@@ -42,11 +42,10 @@ goog.require('goog.ui.MenuItem');
  * Class for an editable dropdown field.
  * @param {(!Array.<!Array>|!Function)} menuGenerator An array of options
  *     for a dropdown list, or a function which generates these options.
- * @param {Function=} opt_validator A function that is executed when a new
- *     option is selected, with the newly selected value as its sole argument.
- *     If it returns a value, that value (which must be one of the options) will
- *     become selected in place of the newly selected option, unless the return
- *     value is null, in which case the change is aborted.
+ * @param {Function=} opt_validator A function that is called to validate
+ *    changes to the field's value. Takes in a language-neutral dropdown
+ *    option & returns a validated language-neutral dropdown option, or null to
+ *    abort the change.
  * @extends {Blockly.Field}
  * @constructor
  */
@@ -104,13 +103,6 @@ Blockly.FieldDropdown.ARROW_CHAR =
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
 Blockly.FieldDropdown.prototype.CURSOR = 'default';
-
-/**
- * Language-neutral currently selected string or image object.
- * @type {string|!Object}
- * @protected
- */
-Blockly.FieldDropdown.prototype.value_ = '';
 
 /**
  * SVG image element if currently selected option is an image, or null.
@@ -276,14 +268,7 @@ Blockly.FieldDropdown.prototype.getAnchorDimensions_ = function() {
  * @param {!goog.ui.MenuItem} menuItem The MenuItem selected within menu.
  */
 Blockly.FieldDropdown.prototype.onItemSelected = function(menu, menuItem) {
-  var value = menuItem.getValue();
-  if (this.sourceBlock_) {
-    // Call any validation function, and allow it to override.
-    value = this.callValidator(value);
-  }
-  if (value !== null) {
-    this.setValue(value);
-  }
+  this.setValue(menuItem.getValue());
 };
 
 /**
@@ -386,32 +371,43 @@ Blockly.FieldDropdown.prototype.getOptions = function() {
 };
 
 /**
- * Get the language-neutral value from this dropdown menu.
- * @return {string} Current text.
+ * Ensure that the input value is a valid language-neutral option.
+ * @param {string=} newValue The input value.
+ * @return {?string} A valid language-neutral option, or null if invalid.
+ * @protected
  */
-Blockly.FieldDropdown.prototype.getValue = function() {
-  return this.value_;
+Blockly.FieldDropdown.prototype.doClassValidation_ = function(newValue) {
+  var isValueValid = false;
+  var options = this.getOptions();
+  for (var i = 0, option; option = options[i]; i++) {
+    // Options are tuples of human-readable text and language-neutral values.
+    if (option[1] == newValue) {
+      isValueValid = true;
+      break;
+    }
+  }
+  if (!isValueValid) {
+    if (this.sourceBlock_) {
+      console.warn('Cannot set the dropdown\'s value to an unavailable option.' +
+        ' Block type: ' + this.sourceBlock_.type + ', Field name: ' + this.name +
+        ', Value: ' + newValue);
+    }
+    return null;
+  }
+  return newValue;
 };
 
 /**
- * Set the language-neutral value for this dropdown menu.
- * @param {string} newValue New value to set.
+ * Update the value of this dropdown field.
+ * @param {string} newValue The new language-enutral value.
+ * @protected
  */
-Blockly.FieldDropdown.prototype.setValue = function(newValue) {
-  if (newValue === null || (newValue === this.value_ && this.text_)) {
-    return;  // No change if null and text_ was initialized.
-  }
-  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this.sourceBlock_, 'field', this.name, this.value_, newValue));
-  }
-  this.value_ = newValue;
-  // Look up and display the human-readable text.
+Blockly.FieldDropdown.prototype.doValueUpdate_ = function(newValue) {
+  Blockly.FieldDropdown.superClass_.doValueUpdate_.call(this, newValue);
   var options = this.getOptions();
-  for (var i = 0; i < options.length; i++) {
-    // Options are tuples of human-readable text and language-neutral values.
-    if (options[i][1] == newValue) {
-      var content = options[i][0];
+  for (var i = 0, option; option = options[i]; i++) {
+    if (option[1] == this.value_) {
+      var content = option[0];
       if (typeof content == 'object') {
         this.imageJson_ = content;
         this.text_ = content.alt;
@@ -419,15 +415,8 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
         this.imageJson_ = null;
         this.text_ = content;
       }
-      // Always rerender if either the value or the text has changed.
-      this.forceRerender();
-      return;
     }
   }
-  // Value not found.  Add it, maybe it will become valid once set
-  // (like variable names).
-  this.text_ = newValue;
-  this.forceRerender();
 };
 
 /**

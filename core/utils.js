@@ -160,11 +160,8 @@ Blockly.utils.getRelativeXY = function(element) {
   // Then check for style = transform: translate(...) or translate3d(...)
   var style = element.getAttribute('style');
   if (style && style.indexOf('translate') > -1) {
-    var styleComponents = style.match(Blockly.utils.getRelativeXY.XY_2D_REGEX_);
-    // Try transform3d if 2d transform wasn't there.
-    if (!styleComponents) {
-      styleComponents = style.match(Blockly.utils.getRelativeXY.XY_3D_REGEX_);
-    }
+    var styleComponents =
+        style.match(Blockly.utils.getRelativeXY.XY_STYLE_REGEX_);
     if (styleComponents) {
       xy.x += parseFloat(styleComponents[1]);
       if (styleComponents[3]) {
@@ -209,25 +206,17 @@ Blockly.utils.getInjectionDivXY_ = function(element) {
  * @private
  */
 Blockly.utils.getRelativeXY.XY_REGEX_ =
-    /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*\))?/;
+    /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
 
 /**
- * Static regex to pull the x,y,z values out of a translate3d() style property.
- * Accounts for same exceptions as XY_REGEXP_.
+ * Static regex to pull the x,y values out of a translate() or translate3d()
+ * style property.
+ * Accounts for same exceptions as XY_REGEX_.
  * @type {!RegExp}
  * @private
  */
-Blockly.utils.getRelativeXY.XY_3D_REGEX_ =
-    /transform:\s*translate3d\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
-
-/**
- * Static regex to pull the x,y,z values out of a translate3d() style property.
- * Accounts for same exceptions as XY_REGEXP_.
- * @type {!RegExp}
- * @private
- */
-Blockly.utils.getRelativeXY.XY_2D_REGEX_ =
-    /transform:\s*translate\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
+Blockly.utils.getRelativeXY.XY_STYLE_REGEX_ =
+    /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
 
 /**
  * Helper method for creating SVG elements.

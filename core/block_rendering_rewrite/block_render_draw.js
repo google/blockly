@@ -163,11 +163,6 @@ Blockly.BlockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   this.steps_.push(BRC.INNER_TOP_LEFT_CORNER);
   this.steps_.push('v', row.height - 2 * BRC.CORNER_RADIUS);
   this.steps_.push(BRC.INNER_BOTTOM_LEFT_CORNER);
-  if (this.info_.bottomRow.maxLength) {
-    this.steps_.push('H', this.info_.bottomRow.maxLength);
-  } else {
-    this.steps_.push('H', this.info_.width);
-  }
 
   // Move the connection.
   var input = row.getLastInput();

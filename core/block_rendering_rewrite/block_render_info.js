@@ -441,8 +441,8 @@ Blockly.BlockRendering.RenderInfo.prototype.alignRowElements_ = function() {
     if (!row.hasStatement && !row.hasInlineInput) {
       var currentWidth = row.width;
       var desiredWidth = this.width;
-      if (row.type === 'bottom row' && row.maxLength) {
-        desiredWidth = Math.min(row.maxLength, desiredWidth);
+      if (row.type === 'bottom row' && row.hasFixedWidth) {
+        desiredWidth = BRC.MAX_BOTTOM_WIDTH;
       }
       var missingSpace = desiredWidth - currentWidth;
       if (missingSpace) {
@@ -527,9 +527,8 @@ Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, 
   // The width of the spacer before the bottom row should be the same as the
   // bottom row.
   if (next.type === 'bottom row'
-      && next.maxLength
-      && next.maxLength < this.width) {
-    return next.maxLength;
+      && next.hasFixedWidth) {
+    return next.width;
   }
   return this.width;
 };

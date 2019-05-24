@@ -290,7 +290,10 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     }
     // Inline input at the beginning of the row.
     if (next.isInput && next.isInlineInput()) {
-      return BRC.LARGE_PADDING - 1;
+      return BRC.MEDIUM_LARGE_PADDING;
+    }
+    if (next.isStatementInput()) {
+      return BRC.STATEMENT_INPUT_PADDING_LEFT;
     }
     // Anything else at the beginning of the row.
     return BRC.LARGE_PADDING;
@@ -336,7 +339,15 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
       if (next.isInlineInput()) {
         return BRC.SMALL_PADDING;
       } else if (next.isExternalInput()) {
-        return BRC.MEDIUM_PADDING;
+        return BRC.SMALL_PADDING;
+      }
+    } else {
+      if (next.isInlineInput()) {
+        return BRC.MEDIUM_LARGE_PADDING;
+      } else if (next.isExternalInput()) {
+        return BRC.MEDIUM_LARGE_PADDING;
+      } else if (next.isStatementInput()) {
+        return BRC.LARGE_PADDING;
       }
     }
     return BRC.LARGE_PADDING - 1;
@@ -377,6 +388,11 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     if (next.isPreviousConnection() || next.isNextConnection()) {
       return BRC.NOTCH_OFFSET_LEFT;
     }
+  }
+
+  // Spacing between an editable field and another editable field
+  if (!prev.isInput && prev.isEditable && !next.isInput && next.isEditable) {
+    return BRC.LARGE_PADDING;
   }
 
   return BRC.MEDIUM_PADDING;
@@ -551,6 +567,9 @@ Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(prev,
   }
   if (prev.hasExternalInput && next.hasExternalInput) {
     return BRC.LARGE_PADDING;
+  }
+  if (!prev.hasStatement && next.hasStatement) {
+    return BRC.BETWEEN_STATEMENT_PADDING_Y;
   }
   if (prev.hasStatement && next.hasStatement) {
     return BRC.LARGE_PADDING;

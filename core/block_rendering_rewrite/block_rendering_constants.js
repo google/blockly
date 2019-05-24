@@ -30,6 +30,7 @@ var BRC = {};
 BRC.NO_PADDING = 0;
 BRC.SMALL_PADDING = 3;
 BRC.MEDIUM_PADDING = 5;
+BRC.MEDIUM_LARGE_PADDING = 8;
 BRC.LARGE_PADDING = 10;
 
 // Offset from the top of the row for placing fields on statement input rows.
@@ -64,13 +65,15 @@ BRC.NOTCH_OFFSET_LEFT = BRC.NOTCH_WIDTH;
 
 // This is the width from where a rounded corner ends and a next or previous
 // connection starts.
-BRC.NOTCH_OFFSET_ROUNDED_CORNER = 8;
+BRC.NOTCH_OFFSET_ROUNDED_CORNER = 7.5;
 
 // This is the offset from the vertical part of a statement input
 // to where to start the notch, which is on the right side in LTR.
 BRC.NOTCH_OFFSET_RIGHT = BRC.NOTCH_OFFSET_LEFT + BRC.NOTCH_WIDTH;
 
 BRC.STATEMENT_BOTTOM_SPACER = 5;
+BRC.STATEMENT_INPUT_PADDING_LEFT = 20;
+BRC.BETWEEN_STATEMENT_PADDING_Y = 4;
 
 // This is the max width of a bottom row that follows a statement input and
 // has inputs inline.

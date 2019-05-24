@@ -79,6 +79,8 @@ BRC.BETWEEN_STATEMENT_PADDING_Y = 4;
 // has inputs inline.
 BRC.MAX_BOTTOM_WIDTH = 66.5;
 
+BRC.BOTTOM_HIGHLIGHT_OFFSET = 2;
+
 /**
  * Rounded corner radius.
  * @const

@@ -390,6 +390,11 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     }
   }
 
+  // Spacing between an editable field and another editable field
+  if (!prev.isInput && prev.isEditable && !next.isInput && next.isEditable) {
+    return BRC.LARGE_PADDING;
+  }
+
   return BRC.MEDIUM_PADDING;
 };
 

@@ -290,7 +290,10 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     }
     // Inline input at the beginning of the row.
     if (next.isInput && next.isInlineInput()) {
-      return BRC.LARGE_PADDING - 1;
+      return BRC.LARGE_PADDING - 2;
+    }
+    if (next.isStatementInput()) {
+      return 20;
     }
     // Anything else at the beginning of the row.
     return BRC.LARGE_PADDING;
@@ -336,7 +339,15 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
       if (next.isInlineInput()) {
         return BRC.SMALL_PADDING;
       } else if (next.isExternalInput()) {
-        return BRC.MEDIUM_PADDING;
+        return BRC.SMALL_PADDING;
+      }
+    } else {
+      if (next.isInlineInput()) {
+        return 8;
+      } else if (next.isExternalInput()) {
+        return 8;
+      } else if (next.isStatementInput()) {
+        return 10;
       }
     }
     return BRC.LARGE_PADDING - 1;
@@ -551,6 +562,9 @@ Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(prev,
   }
   if (prev.hasExternalInput && next.hasExternalInput) {
     return BRC.LARGE_PADDING;
+  }
+  if (!prev.hasStatement && next.hasStatement) {
+    return 4;
   }
   if (prev.hasStatement && next.hasStatement) {
     return BRC.LARGE_PADDING;

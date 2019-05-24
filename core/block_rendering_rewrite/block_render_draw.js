@@ -281,7 +281,8 @@ Blockly.BlockRendering.Drawer.prototype.drawInternals_ = function() {
  */
 Blockly.BlockRendering.Drawer.prototype.dealWithJackassFields_ = function(field) {
   if (field instanceof Blockly.FieldDropdown
-      || field instanceof Blockly.FieldTextInput) {
+      || field instanceof Blockly.FieldTextInput
+      || field instanceof Blockly.FieldColour) {
     return 5;
   }
   return 0;

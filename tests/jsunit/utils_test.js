@@ -271,3 +271,77 @@ function test_toDegrees() {
   assertEquals('360', 360, Blockly.utils.toDegrees(4 * quarter));
   assertEquals('450', 360 + 90, Blockly.utils.toDegrees(5 * quarter));
 }
+
+function test_XY_REGEX() {
+  var regex = Blockly.utils.getRelativeXY.XY_REGEX_;
+  var m;
+  m = 'INVALID'.match(regex);
+  assertNull(m);
+
+  m = 'translate(10)'.match(regex);
+  assertEquals('translate(10), x', '10', m[1]);
+  assertUndefined('translate(10), y', m[3]);
+
+  m = 'translate(11, 12)'.match(regex);
+  assertEquals('translate(11, 12), x', '11', m[1]);
+  assertEquals('translate(11, 12), y', '12', m[3]);
+
+  m = 'translate(13,14)'.match(regex);
+  assertEquals('translate(13,14), x', '13', m[1]);
+  assertEquals('translate(13,14), y', '14', m[3]);
+
+  m = 'translate(15 16)'.match(regex);
+  assertEquals('translate(15 16), x', '15', m[1]);
+  assertEquals('translate(15 16), y', '16', m[3]);
+
+  m = 'translate(1.23456e+42 0.123456e-42)'.match(regex);
+  assertEquals('translate(1.23456e+42 0.123456e-42), x', '1.23456e+42', m[1]);
+  assertEquals('translate(1.23456e+42 0.123456e-42), y', '0.123456e-42', m[3]);
+}
+
+function XY_STYLE_REGEX_() {
+  var regex = Blockly.utils.getRelativeXY.XY_STYLE_REGEX_;
+  var m;
+  m = 'INVALID'.match(regex);
+  assertNull(m);
+
+  m = 'transform:translate(9px)'.match(regex);
+  assertEquals('transform:translate(9px), x', '9', m[1]);
+  assertUndefined('transform:translate(9px), y', m[3]);
+
+  m = 'transform:translate3d(10px)'.match(regex);
+  assertEquals('transform:translate3d(10px), x', '10', m[1]);
+  assertUndefined('transform:translate(10px), y', m[3]);
+
+  m = 'transform: translate(11px, 12px)'.match(regex);
+  assertEquals('transform: translate(11px, 12px), x', '11', m[1]);
+  assertEquals('transform: translate(11px, 12px), y', '12', m[3]);
+
+  m = 'transform: translate(13px,14px)'.match(regex);
+  assertEquals('transform: translate(13px,14px), x', '13', m[1]);
+  assertEquals('transform: translate(13px,14px), y', '14', m[3]);
+
+  m = 'transform: translate(15px 16px)'.match(regex);
+  assertEquals('transform: translate(15px 16px), x', '15', m[1]);
+  assertEquals('transform: translate(15px 16px), y', '16', m[3]);
+
+  m = 'transform: translate(1.23456e+42px 0.123456e-42px)'.match(regex);
+  assertEquals('transform: translate(1.23456e+42px 0.123456e-42px), x', '1.23456e+42', m[1]);
+  assertEquals('transform: translate(1.23456e+42px 0.123456e-42px), y', '0.123456e-42', m[3]);
+
+  m = 'transform:translate3d(20px, 21px, 22px)'.match(regex);
+  assertEquals('transform:translate3d(20px, 21px, 22px), x', '21', m[1]);
+  assertEquals('transform:translate3d(20px, 21px, 22px), y', '22', m[3]);
+
+  m = 'transform:translate3d(23px,24px,25px)'.match(regex);
+  assertEquals('transform:translate3d(23px,24px,25px), x', '23', m[1]);
+  assertEquals('transform:translate3d(23px,24px,25px), y', '24', m[3]);
+
+  m = 'transform:translate3d(26px 27px 28px)'.match(regex);
+  assertEquals('transform:translate3d(26px 27px 28px), x', '26', m[1]);
+  assertEquals('transform:translate3d(26px 27px 28px), y', '27', m[3]);
+
+  m = 'transform:translate3d(1.23456e+42px 0.123456e-42px 42px)'.match(regex);
+  assertEquals('transform:translate3d(1.23456e+42px 0.123456e-42px 42px), x', '1.23456e+42', m[1]);
+  assertEquals('transform:translate3d(1.23456e+42px 0.123456e-42px 42px), y', '0.123456e-42', m[3]);
+}

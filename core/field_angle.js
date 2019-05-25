@@ -264,6 +264,8 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
   } else if (dy > 0) {
     angle += 360;
   }
+
+  // Do offsetting.
   if (Blockly.FieldAngle.CLOCKWISE) {
     angle = Blockly.FieldAngle.OFFSET + 360 - angle;
   } else {
@@ -272,9 +274,16 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
   if (angle > 360) {
     angle -= 360;
   }
+
+  // Do rounding.
   if (Blockly.FieldAngle.ROUND) {
     angle = Math.round(angle / Blockly.FieldAngle.ROUND) *
         Blockly.FieldAngle.ROUND;
+  }
+
+  // Do wrapping.
+  if (angle > Blockly.FieldAngle.WRAP) {
+    angle -= 360;
   }
 
   // Update value.

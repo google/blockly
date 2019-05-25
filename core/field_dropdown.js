@@ -511,28 +511,6 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
 };
 
 /**
- * Updates the width of the field. Overrides field.prototype.updateWidth to
- * deal with image selections on IE and Edge. If the selected item is not an
- * image, or if the browser is not IE / Edge, this simply calls the parent
- * implementation.
- */
-Blockly.FieldDropdown.prototype.updateWidth = function() {
-  if (this.imageJson_ &&
-      (Blockly.userAgent.IE || Blockly.userAgent.EDGE)) {
-    // Recalculate the full width.
-    var arrowWidth = Blockly.Field.getCachedWidth(this.arrow_);
-    var width = Number(this.imageJson_.width) + arrowWidth +
-        Blockly.BlockSvg.SEP_SPACE_X;
-    if (this.borderRect_) {
-      this.borderRect_.setAttribute('width', width);
-    }
-    this.size_.width = width;
-  } else {
-    Blockly.Field.prototype.updateWidth.call(this);
-  }
-};
-
-/**
  * Close the dropdown menu if this input is being deleted.
  */
 Blockly.FieldDropdown.prototype.dispose = function() {

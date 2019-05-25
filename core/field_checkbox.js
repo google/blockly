@@ -92,6 +92,15 @@ Blockly.FieldCheckbox.prototype.SERIALIZABLE = true;
 Blockly.FieldCheckbox.prototype.CURSOR = 'default';
 
 /**
+ * Used to tell if the field needs to be rendered the next time the block is
+ * rendered. Checkbox fields are statically sized, and only need to be
+ * rendered at initialization.
+ * @type {boolean}
+ * @private
+ */
+Blockly.FieldCheckbox.prototype.isDirty_ = false;
+
+/**
  * Create the block UI for this checkbox.
  * @package
  */
@@ -111,14 +120,6 @@ Blockly.FieldCheckbox.prototype.initView = function() {
     this.borderRect_.setAttribute('width',
         this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
   }
-};
-
-/**
- * Checkboxes have a constant width.
- * @private
- */
-Blockly.FieldCheckbox.prototype.render_ = function() {
-  this.size_.width = Blockly.FieldCheckbox.WIDTH;
 };
 
 /**

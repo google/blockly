@@ -104,6 +104,15 @@ Blockly.FieldImage.fromJson = function(options) {
 Blockly.FieldImage.prototype.EDITABLE = false;
 
 /**
+ * Used to tell if the field needs to be rendered the next time the block is
+ * rendered. Image fields are statically sized, and only need to be
+ * rendered at initialization.
+ * @type {boolean}
+ * @private
+ */
+Blockly.FieldImage.prototype.isDirty_ = false;
+
+/**
  * Create the block UI for this image.
  * @package
  */
@@ -215,15 +224,6 @@ Blockly.FieldImage.prototype.setText = function(alt) {
   if (this.imageElement_) {
     this.imageElement_.setAttribute('alt', alt || '');
   }
-};
-
-/**
- * Images are fixed width, no need to render.
- * @private
- */
-Blockly.FieldImage.prototype.render_ = function() {
-  this.size_.width = this.width_;
-  this.size_.height = this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y;
 };
 
 /**

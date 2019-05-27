@@ -250,7 +250,7 @@ Blockly.DropDownDiv.showPositionedByField = function(owner,
   // Set bounds to workspace; show the drop-down.
   Blockly.DropDownDiv.positionToField_ = true;
   Blockly.DropDownDiv.setBoundsElement(
-      owner.sourceBlock_.workspace.getParentSvg().parentNode);
+      owner.getSourceBlock().workspace.getParentSvg().parentNode);
   return Blockly.DropDownDiv.show(
       owner, primaryX, primaryY, secondaryX, secondaryY, opt_onHide);
 };
@@ -514,7 +514,7 @@ Blockly.DropDownDiv.repositionForWindowResize = function() {
   // when a field is focused, the soft keyboard opens triggering a window resize
   // event and we want the dropdown div to stick around so users can type into it.
   if (Blockly.DropDownDiv.owner_) {
-    var block = Blockly.DropDownDiv.owner_.sourceBlock_;
+    var block = Blockly.DropDownDiv.owner_.getSourceBlock();
     var scale = block.workspace.scale;
     var bBox = {
       width: Blockly.DropDownDiv.positionToField_ ?

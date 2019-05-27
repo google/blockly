@@ -212,6 +212,14 @@ Blockly.Field.prototype.setSourceBlock = function(block) {
 };
 
 /**
+ * Get the block this field is attached to.
+ * @return {Blockly.Block} The block containing this field.
+ */
+Blockly.Field.prototype.getSourceBlock = function() {
+  return this.sourceBlock_;
+};
+
+/**
  * Initialize everything to render this field. Override
  * methods initModel and initView rather than this method.
  * @package

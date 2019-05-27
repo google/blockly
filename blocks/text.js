@@ -296,7 +296,7 @@ Blockly.Blocks['text_getSubstring'] = {
           // The 'isAt' variable is available due to this function being a
           // closure.
           if (newAt != isAt) {
-            var block = this.sourceBlock_;
+            var block = this.getSourceBlock();
             block.updateAt_(n, newAt);
             // This menu has been destroyed and replaced.
             // Update the replacement.
@@ -862,7 +862,7 @@ Blockly.Constants.Text.TEXT_CHARAT_EXTENSION = function() {
   dropdown.setValidator(function(value) {
     var newAt = (value == 'FROM_START') || (value == 'FROM_END');
     if (newAt != this.isAt_) {
-      var block = this.sourceBlock_;
+      var block = this.getSourceBlock();
       block.updateAt_(newAt);
     }
   });

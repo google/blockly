@@ -79,6 +79,20 @@ Blockly.FieldCheckbox.WIDTH = 5;
 Blockly.FieldCheckbox.CHECK_CHAR = '\u2713';
 
 /**
+ * Used to correctly position the check mark.
+ * @type {number}
+ * @const
+ */
+Blockly.FieldCheckbox.CHECK_X_OFFSET = -3;
+
+/**
+ * Used to correctly position the check mark.
+ * @type {number}
+ * @const
+ */
+Blockly.FieldCheckbox.CHECK_Y_OFFSET = 14;
+
+/**
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}
@@ -107,19 +121,13 @@ Blockly.FieldCheckbox.prototype.isDirty_ = false;
 Blockly.FieldCheckbox.prototype.initView = function() {
   Blockly.FieldCheckbox.superClass_.initView.call(this);
 
-  // The checkbox doesn't use the inherited text element.
-  // Instead it uses a custom checkmark element that is either visible or not.
-  this.checkElement_ = Blockly.utils.createSvgElement('text',
-      {'class': 'blocklyText blocklyCheckbox', 'x': -3, 'y': 14},
-      this.fieldGroup_);
-  var textNode = document.createTextNode(Blockly.FieldCheckbox.CHECK_CHAR);
-  this.checkElement_.appendChild(textNode);
-  this.checkElement_.style.display = this.value_ ? 'block' : 'none';
+  this.textElement_.setAttribute('x', Blockly.FieldCheckbox.CHECK_X_OFFSET);
+  this.textElement_.setAttribute('y', Blockly.FieldCheckbox.CHECK_Y_OFFSET);
+  Blockly.utils.addClass(this.textElement_, 'blocklyCheckbox');
 
-  if (this.borderRect_) {
-    this.borderRect_.setAttribute('width',
-        this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
-  }
+  var textNode = document.createTextNode(Blockly.FieldCheckbox.CHECK_CHAR);
+  this.textElement_.appendChild(textNode);
+  this.textElement_.style.display = this.value_ ? 'block' : 'none';
 };
 
 /**
@@ -154,8 +162,8 @@ Blockly.FieldCheckbox.prototype.doClassValidation_ = function(newValue) {
 Blockly.FieldCheckbox.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = this.convertValueToBool_(newValue);
   // Update visual.
-  if (this.checkElement_) {
-    this.checkElement_.style.display = this.value_ ? 'block' : 'none';
+  if (this.textElement_) {
+    this.textElement_.style.display = this.value_ ? 'block' : 'none';
   }
 };
 

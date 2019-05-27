@@ -66,7 +66,6 @@ Blockly.FieldImage = function(src, width, height,
       this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
 
   this.flipRtl_ = opt_flipRtl;
-  this.tooltip_ = '';
   this.text_ = opt_alt || '';
   this.setValue(src || '');
 
@@ -127,17 +126,6 @@ Blockly.FieldImage.prototype.initView = function() {
       this.fieldGroup_);
   this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
       'xlink:href', this.value_);
-  this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
-
-  if (this.tooltip_) {
-    this.imageElement_.tooltip = this.tooltip_;
-  } else {
-    // Configure the field to be transparent with respect to tooltips.
-    this.setTooltip(this.sourceBlock_);
-  }
-  Blockly.Tooltip.bindMouseEvents(this.imageElement_);
-
-  this.maybeAddClickHandler_();
 };
 
 /**
@@ -149,31 +137,6 @@ Blockly.FieldImage.prototype.dispose = function() {
     this.fieldGroup_ = null;
   }
   this.imageElement_ = null;
-};
-
-/**
- * Bind events for a mouse down on the image, but only if a click handler has
- * been defined.
- * @private
- */
-Blockly.FieldImage.prototype.maybeAddClickHandler_ = function() {
-  if (this.clickHandler_) {
-    this.mouseDownWrapper_ =
-        Blockly.bindEventWithChecks_(
-            this.fieldGroup_, 'mousedown', this, this.clickHandler_);
-  }
-};
-
-/**
- * Change the tooltip text for this field.
- * @param {string|!Element} newTip Text for tooltip or a parent element to
- *     link to for its tooltip.
- */
-Blockly.FieldImage.prototype.setTooltip = function(newTip) {
-  this.tooltip_ = newTip;
-  if (this.imageElement_) {
-    this.imageElement_.tooltip = newTip;
-  }
 };
 
 /**

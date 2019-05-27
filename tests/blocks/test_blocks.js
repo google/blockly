@@ -914,7 +914,10 @@ Blockly.Blocks['test_validators_date_null'] = {
   },
 
   validate: function(newValue) {
-    return null;
+    // We should be able to expect validators to like their initial values.
+    if (newValue != '2020-02-20') {
+      return null;
+    }
   }
 };
 Blockly.Blocks['test_validators_date_force_20s'] = {

@@ -28,6 +28,7 @@ goog.provide('Blockly.BlockRendering.Highlighter');
 
 goog.require('Blockly.BlockRendering.RenderInfo');
 goog.require('BRC');
+/* global BRC */
 goog.require('Blockly.BlockRendering.Measurable');
 
 /**
@@ -123,7 +124,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
   }
 };
 
-Blockly.BlockRendering.Highlighter.prototype.drawBottomCorner = function(row) {
+Blockly.BlockRendering.Highlighter.prototype.drawBottomCorner = function(_row) {
   var height = this.info_.height;
   var elems = this.info_.bottomRow.elements;
 

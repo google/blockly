@@ -58,7 +58,7 @@ suite ('Colour Fields', function() {
       assertValueDefault(colourField);
     });
     test('Non-Parsable String', function() {
-      var colourField = new Blockly.FieldColour('bad');
+      var colourField = new Blockly.FieldColour('not_a_colour');
       assertValueDefault(colourField);
     });
     test('#AAAAAA', function() {
@@ -85,6 +85,22 @@ suite ('Colour Fields', function() {
       var colourField = new Blockly.FieldColour('#bcbcbc');
       assertValue(colourField, '#bcbcbc', '#bcbcbc');
     });
+    test('#AA0', function() {
+      var colourField = new Blockly.FieldColour('#AA0');
+      assertValue(colourField, '#aaaa00', '#aa0');
+    });
+    test('#aa0', function() {
+      var colourField = new Blockly.FieldColour('#aa0');
+      assertValue(colourField, '#aaaa00', '#aa0');
+    });
+    test('rgb(170, 170, 0)', function() {
+      var colourField = new Blockly.FieldColour('rgb(170, 170, 0)');
+      assertValue(colourField, '#aaaa00', '#aa0');
+    });
+    test('red', function() {
+      var colourField = new Blockly.FieldColour('red');
+      assertValue(colourField, '#ff0000', '#f00');
+    });
   });
   suite('fromJson', function() {
     test('Empty', function() {
@@ -100,7 +116,8 @@ suite ('Colour Fields', function() {
       assertValueDefault(colourField);
     });
     test('Non-Parsable String', function() {
-      var colourField = new Blockly.FieldColour.fromJson({ colour:'bad' });
+      var colourField = new Blockly.FieldColour.fromJson(
+          { colour:'not_a_colour' });
       assertValueDefault(colourField);
     });
     test('#AAAAAA', function() {
@@ -127,6 +144,23 @@ suite ('Colour Fields', function() {
       var colourField = Blockly.FieldColour.fromJson({ colour: '#bcbcbc' });
       assertValue(colourField, '#bcbcbc', '#bcbcbc');
     });
+    test('#AA0', function() {
+      var colourField = Blockly.FieldColour.fromJson({ colour: '#AA0' });
+      assertValue(colourField, '#aaaa00', '#aa0');
+    });
+    test('#aa0', function() {
+      var colourField = Blockly.FieldColour.fromJson({ colour: '#aa0' });
+      assertValue(colourField, '#aaaa00', '#aa0');
+    });
+    test('rgb(170, 170, 0)', function() {
+      var colourField = Blockly.FieldColour.fromJson(
+          { colour: 'rgb(170, 170, 0)' });
+      assertValue(colourField, '#aaaa00', '#aa0');
+    });
+    test('red', function() {
+      var colourField = Blockly.FieldColour.fromJson({ colour: 'red' });
+      assertValue(colourField, '#ff0000', '#f00');
+    });
   });
   suite('setValue', function() {
     suite('Empty -> New Value', function() {
@@ -142,7 +176,7 @@ suite ('Colour Fields', function() {
         assertValueDefault(this.colourField);
       });
       test('Non-Parsable String', function() {
-        this.colourField.setValue('bad');
+        this.colourField.setValue('not_a_colour');
         assertValueDefault(this.colourField);
       });
       test('#000000', function() {
@@ -152,6 +186,18 @@ suite ('Colour Fields', function() {
       test('#bcbcbc', function() {
         this.colourField.setValue('#bcbcbc');
         assertValue(this.colourField, '#bcbcbc', '#bcbcbc');
+      });
+      test('#aa0', function() {
+        this.colourField.setValue('#aa0');
+        assertValue(this.colourField, '#aaaa00', '#aa0');
+      });
+      test('rgb(170, 170, 0)', function() {
+        this.colourField.setValue('rgb(170, 170, 0)');
+        assertValue(this.colourField, '#aaaa00', '#aa0');
+      });
+      test('red', function() {
+        this.colourField.setValue('red');
+        assertValue(this.colourField, '#ff0000', '#f00');
       });
     });
     suite('Value -> New Value', function() {
@@ -167,7 +213,7 @@ suite ('Colour Fields', function() {
         assertValue(this.colourField, '#aaaaaa', '#aaa');
       });
       test('Non-Parsable String', function() {
-        this.colourField.setValue('bad');
+        this.colourField.setValue('not_a_colour');
         assertValue(this.colourField, '#aaaaaa', '#aaa');
       });
       test('#000000', function() {
@@ -177,6 +223,18 @@ suite ('Colour Fields', function() {
       test('#bcbcbc', function() {
         this.colourField.setValue('#bcbcbc');
         assertValue(this.colourField, '#bcbcbc', '#bcbcbc');
+      });
+      test('#aa0', function() {
+        this.colourField.setValue('#aa0');
+        assertValue(this.colourField, '#aaaa00', '#aa0');
+      });
+      test('rgb(170, 170, 0)', function() {
+        this.colourField.setValue('rgb(170, 170, 0)');
+        assertValue(this.colourField, '#aaaa00', '#aa0');
+      });
+      test('red', function() {
+        this.colourField.setValue('red');
+        assertValue(this.colourField, '#ff0000', '#f00');
       });
     });
   });

@@ -59,6 +59,13 @@ Blockly.BlockRendering.RenderInfo = function(block) {
   this.isInline = block.getInputsInline() && !block.isCollapsed();
 
   /**
+   * Whether the block is an insertion marker.  Insertion markers are the same
+   * shape as normal blocks, but don't show fields.
+   * @type {boolean}
+   */
+  this.isInsertionMarker = block.isInsertionMarker();
+
+  /**
    * True if the block should be rendered right-to-left.
    * @type {boolean}
    */

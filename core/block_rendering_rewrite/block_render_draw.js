@@ -301,22 +301,31 @@ Blockly.BlockRendering.Drawer.prototype.dealWithJackassFields_ = function(field)
  * @private
  */
 Blockly.BlockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
+  if (fieldInfo.type == 'field') {
+    var svgGroup = fieldInfo.field.getSvgRoot();
+  } else if (fieldInfo.type == 'icon') {
+    var svgGroup = fieldInfo.icon.iconGroup_;
+  }
+
   var yPos = fieldInfo.centerline - fieldInfo.height / 2;
   var xPos = fieldInfo.xPos;
   if (this.info_.RTL) {
     xPos = -(xPos + fieldInfo.width);
   }
   if (fieldInfo.type == 'icon') {
-    var icon = fieldInfo.icon;
-    icon.iconGroup_.setAttribute('display', 'block');
-    icon.iconGroup_.setAttribute('transform', 'translate(' + xPos + ',' +
-        yPos + ')');
-    icon.computeIconLocation();
+    svgGroup.setAttribute('display', 'block');
+    svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + yPos + ')');
+    fieldInfo.icon.computeIconLocation();
   } else {
     xPos += this.dealWithJackassFields_(fieldInfo.field);
 
-    fieldInfo.field.getSvgRoot().setAttribute('transform',
-        'translate(' + xPos + ',' + yPos + ')');
+    svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + yPos + ')');
+  }
+
+  if (this.info_.isInsertionMarker) {
+    // Fields and icons are invisible on insertion marker.  They still have to
+    // be rendered so that the block can be sized correctly.
+    svgGroup.setAttribute('display', 'none');
   }
 };
 

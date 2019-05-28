@@ -1,5 +1,8 @@
 goog.provide('Blockly.BlockRendering.Measurable');
 
+goog.require('BRC');
+/* global BRC */
+
 /**
  * The base class to represent a part of a block that takes up space during
  * rendering.  The constructor for each non-spacer Measurable records the size

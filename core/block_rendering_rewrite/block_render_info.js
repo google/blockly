@@ -28,6 +28,7 @@
 goog.provide('Blockly.BlockRendering.RenderInfo');
 
 goog.require('BRC');
+/* global BRC */
 goog.require('Blockly.BlockRendering.Measurable');
 
 /**

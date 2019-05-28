@@ -27,6 +27,9 @@
 
 goog.provide('Blockly.BlockRendering.RenderInfo');
 
+goog.require('BRC');
+goog.require('Blockly.BlockRendering.Measurable');
+
 /**
  * An object containing all sizing information needed to draw this block.
  *

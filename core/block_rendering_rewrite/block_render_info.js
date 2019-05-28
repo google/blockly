@@ -536,7 +536,11 @@ Blockly.BlockRendering.RenderInfo.prototype.addRowSpacing_ = function() {
 Blockly.BlockRendering.RenderInfo.prototype.makeSpacerRow_ = function(prev, next) {
   var height = this.getSpacerRowHeight_(prev, next);
   var width = this.getSpacerRowWidth_(prev, next);
-  return new Blockly.BlockRendering.BetweenRowSpacer(height, width);
+  var spacer = new Blockly.BlockRendering.BetweenRowSpacer(height, width);
+  if (prev.hasStatement) {
+    spacer.followsStatement = true;
+  }
+  return spacer;
 };
 
 /**

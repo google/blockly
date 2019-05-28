@@ -179,10 +179,11 @@ goog.inherits(Blockly.BlockRendering.Icon, Blockly.BlockRendering.Measurable);
  * An object containing information about the space a field takes up during
  * rendering
  * @param {!Blockly.Field} field The field to measure and store information for.
+ * @param {!Blockly.Input} parentInput The parent input for the field.
  * @package
  * @constructor
  */
-Blockly.BlockRendering.Field = function(field) {
+Blockly.BlockRendering.Field = function(field, parentInput) {
   Blockly.BlockRendering.Field.superClass_.constructor.call(this);
   this.field = field;
   this.isEditable = field.isCurrentlyEditable();
@@ -191,6 +192,7 @@ Blockly.BlockRendering.Field = function(field) {
   var size = this.field.getCorrectedSize();
   this.height = size.height;
   this.width = size.width;
+  this.parentInput = parentInput;
 };
 goog.inherits(Blockly.BlockRendering.Field, Blockly.BlockRendering.Measurable);
 
@@ -377,10 +379,11 @@ Blockly.BlockRendering.Row.prototype.getLastInput = function() {
   // There's always a spacer after the last input, unless there are no inputs.
   if (this.elements.length > 1) {
     var elem = this.elements[this.elements.length - 2];
-    if (!elem.isInput) {
-      return null;
+    if (elem.isInput) {
+      return elem;
+    } else if (elem.isField()) {
+      return elem.parentInput;
     }
-    return elem;
   }
   // Return null if there are no inputs.
   return null;

@@ -153,7 +153,7 @@ Blockly.BlockRendering.RenderInfo.prototype.createRows_ = function() {
     // All of the fields in an input go on the same row.
     for (var f = 0; f < input.fieldRow.length; f++) {
       var field = input.fieldRow[f];
-      activeRow.elements.push(new Blockly.BlockRendering.Field(field));
+      activeRow.elements.push(new Blockly.BlockRendering.Field(field, input));
     }
     this.addInput_(input, activeRow);
   }
@@ -478,23 +478,28 @@ Blockly.BlockRendering.RenderInfo.prototype.alignRowElements_ = function() {
  */
 Blockly.BlockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row, missingSpace) {
   var elems = row.elements;
-  if (row.hasExternalInput) { // TODO: handle for dummy inputs.
-    var externalInput = row.getLastInput();
+  var input = row.getLastInput();
+  if (input) {
+    var firstSpacer = row.getFirstSpacer();
+    var lastSpacer = row.getLastSpacer();
+    if (row.hasExternalInput) {
+      // Get the spacer right before the input socket.
+      lastSpacer = elems[elems.length - 3];
+    }
     // Decide where the extra padding goes.
-    if (externalInput.align == Blockly.ALIGN_LEFT) {
-      // Add padding just before the input socket.
-      elems[elems.length - 3].width += missingSpace;
-    } else if (externalInput.align == Blockly.ALIGN_CENTRE) {
-      // Split the padding between the beginning of the row and just
-      // before the socket.
-      row.getFirstSpacer().width += missingSpace / 2;
-      elems[elems.length - 3].width += missingSpace / 2;
-    } else if (externalInput.align == Blockly.ALIGN_RIGHT) {
+    if (input.align == Blockly.ALIGN_LEFT) {
+      // Add padding to the end of the row.
+      lastSpacer.width += missingSpace;
+    } else if (input.align == Blockly.ALIGN_CENTRE) {
+      // Split the padding between the beginning and end of the row.
+      firstSpacer.width += missingSpace / 2;
+      lastSpacer.width += missingSpace / 2;
+    } else if (input.align == Blockly.ALIGN_RIGHT) {
       // Add padding at the beginning of the row.
-      row.getFirstSpacer().width += missingSpace;
+      firstSpacer.width += missingSpace;
     }
     row.width += missingSpace;
-    // Top and bottom rows are always left aligned
+    // Top and bottom rows are always left aligned.
   } else if (row.type === 'top row' || row.type === 'bottom row') {
     row.getLastSpacer().width += missingSpace;
     row.width += missingSpace;

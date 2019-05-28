@@ -24,8 +24,8 @@
  */
 
 //'use strict';
-
-var BRC = {};
+goog.provide('BRC');
+/* global BRC */
 
 BRC.NO_PADDING = 0;
 BRC.SMALL_PADDING = 3;

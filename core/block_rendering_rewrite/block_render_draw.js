@@ -26,6 +26,12 @@
 //'use strict';
 goog.provide('Blockly.BlockRendering.Drawer');
 
+goog.require('Blockly.BlockRendering.Debug');
+goog.require('Blockly.BlockRendering.RenderInfo');
+goog.require('Blockly.BlockRendering.Highlighter');
+goog.require('BRC');
+/* global BRC */
+goog.require('Blockly.BlockRendering.Measurable');
 
 /**
  * Render the given block.

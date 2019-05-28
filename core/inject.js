@@ -294,6 +294,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             case Blockly.Events.BLOCK_CREATE:
             case Blockly.Events.BLOCK_MOVE:
               var object = mainWorkspace.getBlockById(e.blockId);
+              object = object.getRootBlock();
               break;
             case Blockly.Events.COMMENT_CREATE:
             case Blockly.Events.COMMENT_MOVE:

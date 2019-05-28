@@ -401,6 +401,7 @@ Blockly.BlockRendering.BetweenRowSpacer = function(height, width) {
   this.type = 'between-row spacer';
   this.width = width;
   this.height = height;
+  this.followsStatement = false;
 };
 goog.inherits(Blockly.BlockRendering.BetweenRowSpacer,
     Blockly.BlockRendering.Measurable);

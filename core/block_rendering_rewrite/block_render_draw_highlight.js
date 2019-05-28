@@ -114,6 +114,9 @@ Blockly.BlockRendering.Highlighter.prototype.drawStatementInput = function(row) 
 };
 
 Blockly.BlockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
+  if (row.followsStatement) {
+    this.highlightSteps_.push('H', row.width);
+  }
   if (this.info_.RTL) {
     this.highlightSteps_.push('H', row.width);
     this.highlightSteps_.push('v', row.height);

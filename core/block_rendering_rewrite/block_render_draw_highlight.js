@@ -26,6 +26,9 @@
 //'use strict';
 goog.provide('Blockly.BlockRendering.Highlighter');
 
+goog.require('Blockly.BlockRendering.RenderInfo');
+goog.require('BRC');
+goog.require('Blockly.BlockRendering.Measurable');
 
 /**
  * An object that adds highlights to a block based on the given rendering

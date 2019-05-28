@@ -25,6 +25,10 @@
 
 //'use strict';
 goog.provide('Blockly.BlockRendering.Debug');
+goog.require('Blockly.BlockRendering.RenderInfo');
+goog.require('Blockly.BlockRendering.Highlighter');
+goog.require('BRC');
+goog.require('Blockly.BlockRendering.Measurable');
 
 /**
  * An object that renders rectangles and dots for debugging rendering code.

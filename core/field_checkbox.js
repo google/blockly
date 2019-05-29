@@ -136,4 +136,16 @@ Blockly.FieldCheckbox.prototype.showEditor_ = function() {
   }
 };
 
+/**
+ * Get the size of the visible field, as used in new rendering.
+ * The checkbox field fills the entire border rect, rather than just using the
+ * text element.
+ * @return {!goog.math.Size} The size of the visible field.
+ * @package
+ */
+Blockly.FieldCheckbox.prototype.getCorrectedSize = function() {
+  this.getSize();
+  return new goog.math.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
+      Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
+};
 Blockly.Field.register('field_checkbox', Blockly.FieldCheckbox);

@@ -1,10 +1,6 @@
 {
   "tests": [
     {
-      "title": "logic",
-      "skip": false
-    },
-    {
       "title": "logic_boolean",
       "skip": false
     },
@@ -49,10 +45,6 @@
       "skip": false
     },
     {
-      "title": "loops",
-      "skip": false
-    },
-    {
       "title": "controls_repeat_ext",
       "skip": false
     },
@@ -74,10 +66,6 @@
     },
     {
       "title": "controls_flow_statements",
-      "skip": false
-    },
-    {
-      "title": "math",
       "skip": false
     },
     {
@@ -134,14 +122,6 @@
     },
     {
       "title": "math_atan2",
-      "skip": false
-    },
-    {
-      "title": "texts",
-      "skip": false
-    },
-    {
-      "title": "text",
       "skip": false
     },
     {
@@ -213,10 +193,6 @@
       "skip": false
     },
     {
-      "title": "lists",
-      "skip": false
-    },
-    {
       "title": "lists_create_empty",
       "skip": false
     },
@@ -273,10 +249,6 @@
       "skip": false
     },
     {
-      "title": "colour",
-      "skip": false
-    },
-    {
       "title": "colour_picker",
       "skip": false
     },
@@ -293,10 +265,6 @@
       "skip": false
     },
     {
-      "title": "variables",
-      "skip": false
-    },
-    {
       "title": "variables_get",
       "skip": false
     },
@@ -310,10 +278,6 @@
     },
     {
       "title": "variables_set_dynamic",
-      "skip": false
-    },
-    {
-      "title": "procedures",
       "skip": false
     },
     {

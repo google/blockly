@@ -86,7 +86,8 @@ async function buildBrowser(url) {
   var options = {
     capabilities: {
       browserName: 'chrome'
-    }
+    },
+    logLevel: 'warn'
   };
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);

@@ -650,6 +650,11 @@ Blockly.Field.prototype.getSize = function() {
   return this.size_;
 };
 
+/**
+ * Get the size of the visible field, as used in new rendering.
+ * @return {!goog.math.Size} The size of the visible field.
+ * @package
+ */
 Blockly.Field.prototype.getCorrectedSize = function() {
   return this.getSize();
 };

@@ -44,4 +44,8 @@ if [ -z "$1" ]
   fi
 
 # Open results.
-xdg-open 'tests/screenshot/diff_viewer.html'
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  xdg-open 'tests/screenshot/diff_viewer.html'
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  open 'tests/screenshot/diff_viewer.html'
+fi

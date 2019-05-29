@@ -639,6 +639,12 @@ Blockly.BlockRendering.RenderInfo.prototype.finalize_ = function() {
   this.blockBottom = yCursor;
   this.overhang = 0;
 
+  // Add padding to the bottom row if block height is less than minimum
+  if (yCursor < BRC.MIN_BLOCK_HEIGHT) {
+    this.bottomRow.height += BRC.MIN_BLOCK_HEIGHT - yCursor;
+    yCursor = BRC.MIN_BLOCK_HEIGHT;
+  }
+
   if (!this.hasOutputConnection) {
     // No output and no next.
     this.overhang = 2; // for the shadow.

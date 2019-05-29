@@ -572,15 +572,15 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    * @this Blockly.FieldTextInput
    */
   validator_: function(varName) {
-    var outerWs = Blockly.Mutator.findParentWs(this.sourceBlock_.workspace);
+    var outerWs = Blockly.Mutator.findParentWs(this.getSourceBlock().workspace);
     varName = varName.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
     if (!varName) {
       return null;
     }
     // Prevents duplicate parameter names in functions
-    var blocks = this.sourceBlock_.workspace.getAllBlocks();
+    var blocks = this.getSourceBlock().workspace.getAllBlocks();
     for (var i = 0; i < blocks.length; i += 1) {
-      if (blocks[i].id == this.sourceBlock_.id) {
+      if (blocks[i].id == this.getSourceBlock().id) {
         continue;
       }
       if (blocks[i].getFieldValue('NAME') == varName) {
@@ -609,7 +609,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    * @this Blockly.FieldTextInput
    */
   deleteIntermediateVars_: function(newText) {
-    var outerWs = Blockly.Mutator.findParentWs(this.sourceBlock_.workspace);
+    var outerWs = Blockly.Mutator.findParentWs(this.getSourceBlock().workspace);
     if (!outerWs) {
       return;
     }

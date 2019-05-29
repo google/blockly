@@ -334,7 +334,7 @@ Blockly.Blocks['lists_getIndex'] = {
     this.setStyle('list_blocks');
     var modeMenu = new Blockly.FieldDropdown(MODE, function(value) {
       var isStatement = (value == 'REMOVE');
-      this.sourceBlock_.updateStatement_(isStatement);
+      this.getSourceBlock().updateStatement_(isStatement);
     });
     this.appendValueInput('VALUE')
         .setCheck('Array')
@@ -480,7 +480,7 @@ Blockly.Blocks['lists_getIndex'] = {
       var newAt = (value == 'FROM_START') || (value == 'FROM_END');
       // The 'isAt' variable is available due to this function being a closure.
       if (newAt != isAt) {
-        var block = this.sourceBlock_;
+        var block = this.getSourceBlock();
         block.updateAt_(newAt);
         // This menu has been destroyed and replaced.  Update the replacement.
         block.setFieldValue(value, 'WHERE');
@@ -618,7 +618,7 @@ Blockly.Blocks['lists_setIndex'] = {
       var newAt = (value == 'FROM_START') || (value == 'FROM_END');
       // The 'isAt' variable is available due to this function being a closure.
       if (newAt != isAt) {
-        var block = this.sourceBlock_;
+        var block = this.getSourceBlock();
         block.updateAt_(newAt);
         // This menu has been destroyed and replaced.  Update the replacement.
         block.setFieldValue(value, 'WHERE');
@@ -723,14 +723,13 @@ Blockly.Blocks['lists_getSublist'] = {
           // The 'isAt' variable is available due to this function being a
           // closure.
           if (newAt != isAt) {
-            var block = this.sourceBlock_;
+            var block = this.getSourceBlock();
             block.updateAt_(n, newAt);
             // This menu has been destroyed and replaced.
             // Update the replacement.
             block.setFieldValue(value, 'WHERE' + n);
             return null;
           }
-          return undefined;
         });
     this.getInput('AT' + n)
         .appendField(menu, 'WHERE' + n);

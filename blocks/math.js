@@ -504,7 +504,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
 Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION = function() {
   this.getField('PROPERTY').setValidator(function(option) {
     var divisorInput = (option == 'DIVISIBLE_BY');
-    this.sourceBlock_.updateShape_(divisorInput);
+    this.getSourceBlock().updateShape_(divisorInput);
   });
 };
 

@@ -46,9 +46,9 @@ Blockly.Blocks['factory_base'] = {
         ['↑ top connection', 'TOP'],
         ['↓ bottom connection', 'BOTTOM']],
         function(option) {
-          this.sourceBlock_.updateShape_(option);
+          this.getSourceBlock().updateShape_(option);
           // Connect a shadow block to this new input.
-          this.sourceBlock_.spawnOutputShadow_(option);
+          this.getSourceBlock().spawnOutputShadow_(option);
         });
     this.appendDummyInput()
         .appendField(dropdown, 'CONNECTIONS');
@@ -863,7 +863,7 @@ Blockly.Blocks['colour_hue'] = {
     // Update the current block's colour to match.
     var hue = parseInt(text, 10);
     if (!isNaN(hue)) {
-      this.sourceBlock_.setColour(hue);
+      this.getSourceBlock().setColour(hue);
     }
   },
   mutationToDom: function(workspace) {

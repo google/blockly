@@ -109,6 +109,11 @@ Blockly.FieldLabel.prototype.doClassValidation_ = function(newValue) {
   return String(newValue);
 };
 
+/**
+ * Get the size of the visible field, as used in new rendering.
+ * @return {!goog.math.Size} The size of the visible field.
+ * @package
+ */
 Blockly.FieldLabel.prototype.getCorrectedSize = function() {
   // getSize also renders and updates the size if needed.  Rather than duplicate
   // the logic to figure out whether to rerender, just call getSize.

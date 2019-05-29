@@ -375,9 +375,9 @@ Blockly.FieldColour.widgetDispose_ = function() {
  * @package
  */
 Blockly.FieldColour.prototype.getCorrectedSize = function() {
-  if (!this.size_.width) {
-    this.render_();
-  }
+  // getSize also renders and updates the size if needed.  Rather than duplicate
+  // the logic to figure out whether to rerender, just call getSize.
+  this.getSize();
   return new goog.math.Size(
       this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
       Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);

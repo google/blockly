@@ -110,9 +110,9 @@ Blockly.FieldLabel.prototype.doClassValidation_ = function(newValue) {
 };
 
 Blockly.FieldLabel.prototype.getCorrectedSize = function() {
-  if (!this.size_.width) {
-    this.render_();
-  }
+  // getSize also renders and updates the size if needed.  Rather than duplicate
+  // the logic to figure out whether to rerender, just call getSize.
+  this.getSize();
   return new goog.math.Size(this.size_.width, this.size_.height - 5);
 };
 

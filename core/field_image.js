@@ -190,9 +190,9 @@ Blockly.FieldImage.prototype.showEditor_ = function() {
 };
 
 Blockly.FieldImage.prototype.getCorrectedSize = function() {
-  if (!this.size_.width) {
-    this.render_();
-  }
+  // getSize also renders and updates the size if needed.  Rather than duplicate
+  // the logic to figure out whether to rerender, just call getSize.
+  this.getSize();
   return new goog.math.Size(this.size_.width, this.height_);
 };
 

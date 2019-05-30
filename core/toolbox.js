@@ -424,7 +424,8 @@ Blockly.Toolbox.prototype.setColourFromStyle_ = function(
     if (style && style.colour) {
       this.setColour_(style.colour, childOut, categoryName);
     } else {
-      console.warn('Style "' + styleName + '" must exist and contain a colour value');
+      console.warn('Style "' + styleName +
+          '" must exist and contain a colour value');
     }
   }
 };

@@ -228,13 +228,6 @@ Blockly.Block.obtain = function(workspace, prototypeName) {
 Blockly.Block.prototype.data = null;
 
 /**
- * Don't automatically add STATEMENT_PREFIX and STATEMENT_SUFFIX to generated
- * code.  These will be handled manually in this block's generators.
- * @type {boolean}
- */
-Blockly.Block.prototype.suppressPrefixSuffix = false;
-
-/**
  * Colour of the block as HSV hue value (0-360)
  * This may be null if the block colour was not set via a hue number.
  * @type {?number}

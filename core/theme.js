@@ -48,7 +48,8 @@ Blockly.Theme = function(blockStyles, categoryStyles) {
 
 /**
  * Overrides or adds all values from blockStyles to blockStyles_
- * @param {Object.<string, Blockly.Theme.Style>} blockStyles Map of block styles.
+ * @param {Object.<string, Blockly.Theme.Style>} blockStyles Map of
+ *     block styles.
  */
 Blockly.Theme.prototype.setAllBlockStyles = function(blockStyles) {
   for (var key in blockStyles) {
@@ -58,7 +59,7 @@ Blockly.Theme.prototype.setAllBlockStyles = function(blockStyles) {
 
 /**
  * Gets a map of all the block style names.
- * @return {!Object.<string, Blockly.Theme.Style>} Map of blockstyle names.
+ * @return {!Object.<string, Blockly.Theme.Style>} Map of block styles.
  */
 Blockly.Theme.prototype.getAllBlockStyles = function() {
   return this.blockStyles_;
@@ -67,7 +68,7 @@ Blockly.Theme.prototype.getAllBlockStyles = function() {
 /**
  * Gets the BlockStyle for the given block style name.
  * @param {string} blockStyleName The name of the block style.
- * @return {Blockly.Theme.Style|undefined} The style with the block style name.
+ * @return {Blockly.Theme.Style|undefined} The named block style.
  */
 Blockly.Theme.prototype.getBlockStyle = function(blockStyleName) {
   return this.blockStyles_[blockStyleName];
@@ -84,8 +85,8 @@ Blockly.Theme.prototype.setBlockStyle = function(blockStyleName, blockStyle) {
 
 /**
  * Gets the CategoryStyle for the given category style name.
- * @param {string} categoryStyleName The name of the block style.
- * @return {Blockly.Theme.Style|undefined} The style with the block style name.
+ * @param {string} categoryStyleName The name of the category style.
+ * @return {Blockly.Theme.Style|undefined} The named category style.
  */
 Blockly.Theme.prototype.getCategoryStyle = function(categoryStyleName) {
   return this.categoryStyles_[categoryStyleName];

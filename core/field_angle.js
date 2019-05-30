@@ -264,14 +264,26 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
   } else if (dy > 0) {
     angle += 360;
   }
+
+  // Do offsetting.
   if (Blockly.FieldAngle.CLOCKWISE) {
     angle = Blockly.FieldAngle.OFFSET + 360 - angle;
   } else {
-    angle -= Blockly.FieldAngle.OFFSET;
+    angle = 360 - (Blockly.FieldAngle.OFFSET - angle);
   }
+  if (angle > 360) {
+    angle -= 360;
+  }
+
+  // Do rounding.
   if (Blockly.FieldAngle.ROUND) {
     angle = Math.round(angle / Blockly.FieldAngle.ROUND) *
         Blockly.FieldAngle.ROUND;
+  }
+
+  // Do wrapping.
+  if (angle > Blockly.FieldAngle.WRAP) {
+    angle -= 360;
   }
 
   // Update value.
@@ -295,6 +307,7 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
   }
   // Always display the input (i.e. getText) even if it is invalid.
   var angleDegrees = Number(this.getText()) + Blockly.FieldAngle.OFFSET;
+  angleDegrees %= 360;
   var angleRadians = Blockly.utils.toRadians(angleDegrees);
   var path = ['M ', Blockly.FieldAngle.HALF, ',', Blockly.FieldAngle.HALF];
   var x2 = Blockly.FieldAngle.HALF;
@@ -334,7 +347,7 @@ Blockly.FieldAngle.prototype.doClassValidation_ = function(newValue) {
     return null;
   }
   var n = parseFloat(newValue || 0);
-  n = n % 360;
+  n %= 360;
   if (n < 0) {
     n += 360;
   }

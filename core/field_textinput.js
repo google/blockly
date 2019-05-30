@@ -396,7 +396,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     thisField.isBeingEdited_ = false;
     // No need to call setValue because if the widget is being closed the
     // latest input text has already been validated.
-    if (thisField.value_ != thisField.text_) {
+    if (thisField.value_ !== thisField.text_) {
       // At the end of an edit the text should be the same as the value. It
       // may not be if the input text is different than the validated text.
       // We should fix that.

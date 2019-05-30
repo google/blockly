@@ -691,11 +691,11 @@ Blockly.checkBlockColourConstant_ = function(
  * @param {!Blockly.Theme} theme Theme for Blockly.
  */
 Blockly.setTheme = function(theme) {
-  this.theme_ = theme;
+  Blockly.theme_ = theme;
   var ws = Blockly.getMainWorkspace();
 
   if (ws) {
-    this.refreshTheme_(ws);
+    Blockly.refreshTheme_(ws);
   }
 };
 
@@ -706,7 +706,7 @@ Blockly.setTheme = function(theme) {
  */
 Blockly.refreshTheme_ = function(ws) {
   // Update all blocks in workspace that have a style name.
-  this.updateBlockStyles_(ws.getAllBlocks().filter(
+  Blockly.updateBlockStyles_(ws.getAllBlocks().filter(
       function(block) {
         return block.getStyleName() !== undefined;
       }
@@ -714,7 +714,7 @@ Blockly.refreshTheme_ = function(ws) {
 
   // Update blocks in the flyout.
   if (!ws.toolbox_ && ws.flyout_ && ws.flyout_.workspace_) {
-    this.updateBlockStyles_(ws.flyout_.workspace_.getAllBlocks());
+    Blockly.updateBlockStyles_(ws.flyout_.workspace_.getAllBlocks());
   } else {
     ws.refreshToolboxSelection();
   }
@@ -750,7 +750,7 @@ Blockly.updateBlockStyles_ = function(blocks) {
  * @return {Blockly.Theme} Theme for Blockly.
  */
 Blockly.getTheme = function() {
-  return this.theme_;
+  return Blockly.theme_;
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.

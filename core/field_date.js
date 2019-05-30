@@ -83,6 +83,22 @@ Blockly.FieldDate.prototype.SERIALIZABLE = true;
 Blockly.FieldDate.prototype.CURSOR = 'text';
 
 /**
+ * Border colour for the dropdown div showing the date picker. Must be a CSS
+ * string.
+ * @type {string}
+ * @private
+ */
+Blockly.FieldDate.prototype.DROPDOWN_BORDER_COLOUR = 'silver';
+
+/**
+ * Background colour for the dropdown div showing the date picker. Must be a
+ * CSS string.
+ * @type {string}
+ * @private
+ */
+Blockly.FieldDate.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
+
+/**
  * Close the colour picker if this input is being deleted.
  */
 Blockly.FieldDate.prototype.dispose = function() {
@@ -109,33 +125,101 @@ Blockly.FieldDate.prototype.doClassValidation_ = function(newValue) {
 };
 
 /**
+ * Called when the given value is invalid. If the picker is shown, set
+ * isDirty to true so that it gets reset to the previous selection.
+ * @protected
+ */
+Blockly.FieldDate.prototype.doValueInvalid_ = function() {
+  if (this.picker_) {
+    this.isDirty_ = true;
+  }
+};
+
+/**
+ * Render the field. If the picker is shown make sure it has the current
+ * date selected.
+ * @protected
+ */
+Blockly.FieldDate.prototype.render_ = function() {
+  Blockly.FieldDate.superClass_.render_.call(this);
+  if (this.picker_) {
+    this.picker_.setDate(goog.date.Date.fromIsoString(this.getValue()));
+    this.updateEditor_();
+  }
+};
+
+/**
+ * Updates the field's colours to match those of the block.
+ * @package
+ */
+Blockly.FieldDate.prototype.updateColour = function() {
+  this.todayColour_ = this.sourceBlock_.getColour();
+  this.selectedColour_ = this.sourceBlock_.getColourShadow();
+  this.updateEditor_();
+};
+
+/**
+ * Updates the picker to show the current date and currently selected date.
+ * @private
+ */
+Blockly.FieldDate.prototype.updateEditor_ = function() {
+  if (!this.picker_) {
+    // Nothing to update.
+    return;
+  }
+
+  // Updating today should come before updating selected, so that if the
+  // current day is selected, it will appear so.
+  if (this.oldTodayElement_) {
+    this.oldTodayElement_.style.backgroundColor = null;
+    this.oldTodayElement_.style.color = null;
+  }
+  var today = this.picker_.getElementByClass('goog-date-picker-today');
+  this.oldTodayElement_ = today;
+  if (today) {
+    today.style.backgroundColor = this.todayColour_;
+    today.style.color = 'white';
+  }
+
+  if (this.oldSelectedElement_ && this.oldSelectedElement_ != today) {
+    this.oldSelectedElement_.style.backgroundColor = null;
+    this.oldSelectedElement_.style.color = null;
+  }
+  var selected = this.picker_.getElementByClass('goog-date-picker-selected');
+  this.oldSelectedElement_ = selected;
+  if (selected) {
+    selected.style.backgroundColor = this.selectedColour_;
+    selected.style.color = this.todayColour_;
+  }
+};
+
+/**
  * Create a date picker under the date field.
  * @private
  */
 Blockly.FieldDate.prototype.showEditor_ = function() {
-  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
-      Blockly.FieldDate.widgetDispose_);
+  Blockly.DropDownDiv.hideWithoutAnimation();
+  Blockly.DropDownDiv.clearContent();
 
-  // Record viewport dimensions before adding the picker.
-  var viewportBBox = Blockly.utils.getViewportBBox();
-  var anchorBBox = this.getScaledBBox_();
+  this.picker_ = this.createWidget_();
+  this.picker_.render(Blockly.DropDownDiv.getContentDiv());
+  Blockly.utils.addClass(this.picker_.getElement(), 'blocklyDatePicker');
+  Blockly.DropDownDiv.showPositionedByField(this);
+  Blockly.DropDownDiv.setColour(
+      this.DROPDOWN_BACKGROUND_COLOUR, this.DROPDOWN_BORDER_COLOUR);
+  this.updateEditor_();
 
-  // Create and add the date picker, then record the size.
-  var picker = this.createWidget_();
-  var pickerSize = goog.style.getSize(picker.getElement());
-
-  // Position the picker to line up with the field.
-  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, pickerSize,
-      this.sourceBlock_.RTL);
-
-  // Configure event handler.
   var thisField = this;
-  Blockly.FieldDate.changeEventKey_ = goog.events.listen(picker,
+  Blockly.FieldDate.changeEventKey_ = goog.events.listen(this.picker_,
       goog.ui.DatePicker.Events.CHANGE,
       function(event) {
         var date = event.date ? event.date.toIsoString(true) : '';
-        Blockly.WidgetDiv.hide();
         thisField.setValue(date);
+      });
+  Blockly.FieldDate.changeEventKey_ = goog.events.listen(this.picker_,
+      goog.ui.DatePicker.Events.CHANGE_ACTIVE_MONTH,
+      function(_e) {
+        thisField.updateEditor_();
       });
 };
 
@@ -150,8 +234,8 @@ Blockly.FieldDate.prototype.createWidget_ = function() {
   var picker = new goog.ui.DatePicker();
   picker.setAllowNone(false);
   picker.setShowWeekNum(false);
-  var div = Blockly.WidgetDiv.DIV;
-  picker.render(div);
+  picker.setUseNarrowWeekdayNames(true);
+  picker.setUseSimpleNavigationMenu(true);
   picker.setDate(goog.date.DateTime.fromIsoString(this.getValue()));
   return picker;
 };
@@ -164,6 +248,7 @@ Blockly.FieldDate.widgetDispose_ = function() {
   if (Blockly.FieldDate.changeEventKey_) {
     goog.events.unlistenByKey(Blockly.FieldDate.changeEventKey_);
   }
+  this.picker_ = null;
   Blockly.Events.setGroup(false);
 };
 
@@ -189,159 +274,61 @@ Blockly.FieldDate.loadLanguage_ = function() {
  * CSS for date picker.  See css.js for use.
  */
 Blockly.FieldDate.CSS = [
-  /* Copied from: goog/css/datepicker.css */
-  /**
-   * Copyright 2009 The Closure Library Authors. All Rights Reserved.
-   *
-   * Use of this source code is governed by the Apache License, Version 2.0.
-   * See the COPYING file for details.
-   */
-
-  /**
-   * Standard styling for a goog.ui.DatePicker.
-   *
-   * @author arv@google.com (Erik Arvidsson)
-   */
-
-  '.blocklyWidgetDiv .goog-date-picker,',
-  '.blocklyWidgetDiv .goog-date-picker th,',
-  '.blocklyWidgetDiv .goog-date-picker td {',
+  '.blocklyDatePicker,',
+  '.blocklyDatePicker th,',
+  '.blocklyDatePicker td {',
   '  font: 13px Arial, sans-serif;',
+  '  color: #3c4043;',
   '}',
 
-  '.blocklyWidgetDiv .goog-date-picker {',
-  '  -moz-user-focus: normal;',
-  '  -moz-user-select: none;',
-  '  position: relative;',
-  '  border: 1px solid #000;',
-  '  float: left;',
-  '  padding: 2px;',
-  '  color: #000;',
-  '  background: #c3d9ff;',
-  '  cursor: default;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker th {',
-  '  text-align: center;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker td {',
+  '.blocklyDatePicker th,',
+  '.blocklyDatePicker td {',
   '  text-align: center;',
   '  vertical-align: middle;',
-  '  padding: 1px 3px;',
   '}',
 
-  '.blocklyWidgetDiv .goog-date-picker-menu {',
-  '  position: absolute;',
-  '  background: threedface;',
-  '  border: 1px solid gray;',
-  '  -moz-user-focus: normal;',
-  '  z-index: 1;',
-  '  outline: none;',
+  '.blocklyDatePicker .goog-date-picker-wday,',
+  '.blocklyDatePicker .goog-date-picker-date {',
+  '  padding: 6px 6px;',
   '}',
 
-  '.blocklyWidgetDiv .goog-date-picker-menu ul {',
-  '  list-style: none;',
-  '  margin: 0px;',
-  '  padding: 0px;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-menu ul li {',
-  '  cursor: default;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-menu-selected {',
-  '  background: #ccf;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker th {',
-  '  font-size: .9em;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker td div {',
-  '  float: left;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker button {',
-  '  padding: 0px;',
+  '.blocklyDatePicker button {',
+  '  cursor: pointer;',
+  '  padding: 6px 6px;',
   '  margin: 1px 0;',
   '  border: 0;',
-  '  color: #20c;',
+  '  color: #3c4043;',
   '  font-weight: bold;',
   '  background: transparent;',
   '}',
 
-  '.blocklyWidgetDiv .goog-date-picker-date {',
-  '  background: #fff;',
+  '.blocklyDatePicker .goog-date-picker-previousMonth,',
+  '.blocklyDatePicker .goog-date-picker-nextMonth {',
+  '  height: 24px;',
+  '  width: 24px;',
   '}',
 
-  '.blocklyWidgetDiv .goog-date-picker-week,',
-  '.blocklyWidgetDiv .goog-date-picker-wday {',
-  '  padding: 1px 3px;',
-  '  border: 0;',
-  '  border-color: #a2bbdd;',
-  '  border-style: solid;',
+  '.blocklyDatePicker .goog-date-picker-monthyear {',
+  '  font-weight: bold;',
   '}',
 
-  '.blocklyWidgetDiv .goog-date-picker-week {',
-  '  border-right-width: 1px;',
+  '.blocklyDatePicker .goog-date-picker-wday, ',
+  '.blocklyDatePicker .goog-date-picker-other-month {',
+  '  color: #70757a;',
+  '  border-radius: 12px;',
   '}',
 
-  '.blocklyWidgetDiv .goog-date-picker-wday {',
-  '  border-bottom-width: 1px;',
+  '.blocklyDatePicker button,',
+  '.blocklyDatePicker .goog-date-picker-date {',
+  '  cursor: pointer;',
+  '  background-color: rgb(218, 220, 224, 0);',
+  '  border-radius: 12px;',
+  '  transition: background-color,opacity 100ms linear;',
   '}',
 
-  '.blocklyWidgetDiv .goog-date-picker-head td {',
-  '  text-align: center;',
-  '}',
-
-  /** Use td.className instead of !important */
-  '.blocklyWidgetDiv td.goog-date-picker-today-cont {',
-  '  text-align: center;',
-  '}',
-
-  /** Use td.className instead of !important */
-  '.blocklyWidgetDiv td.goog-date-picker-none-cont {',
-  '  text-align: center;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-month {',
-  '  min-width: 11ex;',
-  '  white-space: nowrap;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-year {',
-  '  min-width: 6ex;',
-  '  white-space: nowrap;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-monthyear {',
-  '  white-space: nowrap;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker table {',
-  '  border-collapse: collapse;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-other-month {',
-  '  color: #888;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-wkend-start,',
-  '.blocklyWidgetDiv .goog-date-picker-wkend-end {',
-  '  background: #eee;',
-  '}',
-
-  /** Use td.className instead of !important */
-  '.blocklyWidgetDiv td.goog-date-picker-selected {',
-  '  background: #c3d9ff;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-date-picker-today {',
-  '  background: #9ab;',
-  '  font-weight: bold !important;',
-  '  border-color: #246 #9bd #9bd #246;',
-  '  color: #fff;',
+  '.blocklyDatePicker button:hover,',
+  '.blocklyDatePicker .goog-date-picker-date:hover {',
+  '  background-color: rgb(218, 220, 224, .5);',
   '}'
 ];
 

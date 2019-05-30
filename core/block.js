@@ -265,7 +265,6 @@ Blockly.Block.prototype.colourTertiary_ = null;
  */
 Blockly.Block.prototype.styleName_ = null;
 
-
 /**
  * Dispose of this block.
  * @param {boolean} healStack If true, then try to heal any gap by connecting

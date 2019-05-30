@@ -116,4 +116,4 @@ Blockly.Themes.HighContrast.categoryStyles = {
 // This style is still being fleshed out and may change.
 Blockly.Themes.HighContrast =
     new Blockly.Theme(Blockly.Themes.HighContrast.defaultBlockStyles,
-    Blockly.Themes.HighContrast.categoryStyles);
+        Blockly.Themes.HighContrast.categoryStyles);

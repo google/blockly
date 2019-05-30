@@ -96,4 +96,4 @@ Blockly.Themes.Classic.categoryStyles = {
 
 Blockly.Themes.Classic =
     new Blockly.Theme(Blockly.Themes.Classic.defaultBlockStyles,
-    Blockly.Themes.Classic.categoryStyles);
+        Blockly.Themes.Classic.categoryStyles);

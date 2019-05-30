@@ -153,6 +153,9 @@ suite ('Date Fields', function() {
     setup(function() {
       this.dateField = new Blockly.FieldDate('2020-02-20');
     });
+    teardown(function() {
+      this.dateField.setValidator(null);
+    });
     suite('Null Validator', function() {
       setup(function() {
         this.dateField.setValidator(function() {
@@ -173,6 +176,15 @@ suite ('Date Fields', function() {
       test('New Value', function() {
         this.dateField.setValue('3030-03-30');
         assertValue(this.dateField, '3030-03-20');
+      });
+    });
+    suite('Returns Undefined Validator', function() {
+      setup(function() {
+        this.dateField.setValidator(function() {});
+      });
+      test('New Value', function() {
+        this.dateField.setValue('3030-03-30');
+        assertValue(this.dateField, '3030-03-30');
       });
     });
   });

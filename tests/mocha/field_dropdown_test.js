@@ -42,22 +42,28 @@ suite ('Dropdown Fields', function() {
       });
     });
     test('Array Items not Arrays', function() {
-      console.log('You should see three console warnings after this message.');
+      var stub = sinon.stub(console, 'error');
       chai.assert.throws(function() {
         new Blockly.FieldDropdown([1, 2, 3]);
       });
+      chai.assert(stub.calledThrice);
+      stub.restore();
     });
     test('Array Items with Invalid IDs', function() {
-      console.log('You should see three console warnings after this message.');
+      var stub = sinon.stub(console, 'error');
       chai.assert.throws(function() {
         new Blockly.FieldDropdown([['1', 1], ['2', 2], ['3', 3]]);
       });
+      chai.assert(stub.calledThrice);
+      stub.restore();
     });
     test('Array Items with Invalid Content', function() {
-      console.log('You should see three console warnings after this message.');
+      var stub = sinon.stub(console, 'error');
       chai.assert.throws(function() {
         new Blockly.FieldDropdown([[1, '1'], [2, '2'], [3, '3']]);
       });
+      chai.assert(stub.calledThrice);
+      stub.restore();
     });
     test('Text Dropdown', function() {
       var dropdownField = new Blockly.FieldDropdown(
@@ -107,24 +113,30 @@ suite ('Dropdown Fields', function() {
       });
     });
     test('Array Items not Arrays', function() {
-      console.log('You should see three console warnings after this message.');
+      var stub = sinon.stub(console, 'error');
       chai.assert.throws(function() {
         Blockly.FieldDropdown.fromJson({ options: [1, 2, 3] });
       });
+      chai.assert(stub.calledThrice);
+      stub.restore();
     });
     test('Array Items with Invalid IDs', function() {
-      console.log('You should see three console warnings after this message.');
+      var stub = sinon.stub(console, 'error');
       chai.assert.throws(function() {
         Blockly.FieldDropdown.fromJson(
             { options:[['1', 1], ['2', 2], ['3', 3]] });
       });
+      chai.assert(stub.calledThrice);
+      stub.restore();
     });
     test('Array Items with Invalid Content', function() {
-      console.log('You should see three console warnings after this message.');
+      var stub = sinon.stub(console, 'error');
       chai.assert.throws(function() {
         Blockly.FieldDropdown.fromJson(
             { options:[[1, '1'], [2, '2'], [3, '3']] });
       });
+      chai.assert(stub.calledThrice);
+      stub.restore();
     });
     test('Text Dropdown', function() {
       var dropdownField = Blockly.FieldDropdown.fromJson(
@@ -167,6 +179,9 @@ suite ('Dropdown Fields', function() {
         ["1a","1A"], ["1b","1B"], ["1c","1C"],
         ["2a","2A"], ["2b","2B"], ["2c","2C"]]);
     });
+    teardown(function() {
+      this.dropdownField.setValidator(null);
+    });
     suite('Null Validator', function() {
       setup(function() {
         this.dropdownField.setValidator(function() {
@@ -186,6 +201,15 @@ suite ('Dropdown Fields', function() {
       });
       test('New Value', function() {
         this.dropdownField.setValue('2B');
+        assertValue(this.dropdownField, '1B', '1b');
+      });
+    });
+    suite('Returns Undefined Validator', function() {
+      setup(function() {
+        this.dropdownField.setValidator(function() {});
+      });
+      test('New Value', function() {
+        this.dropdownField.setValue('1B');
         assertValue(this.dropdownField, '1B', '1b');
       });
     });

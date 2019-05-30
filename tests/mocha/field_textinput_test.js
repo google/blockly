@@ -173,6 +173,10 @@ suite ('Text Input Fields', function() {
       Blockly.FieldTextInput.htmlInput_.oldValue_ = 'value';
       Blockly.FieldTextInput.htmlInput_.untypedDefaultValue_ = 'value';
     });
+    teardown(function() {
+      this.textInputField.setValidator(null);
+      Blockly.FieldTextInput.htmlInput_ = null;
+    });
     suite('Null Validator', function() {
       setup(function() {
         this.textInputField.setValidator(function() {
@@ -207,6 +211,22 @@ suite ('Text Input Fields', function() {
       test('When Not Editing', function() {
         this.textInputField.setValue('bbbaaa');
         assertValue(this.textInputField, 'bbb');
+      });
+    });
+    suite('Returns Undefined Validator', function() {
+      setup(function() {
+        this.textInputField.setValidator(function() {});
+      });
+      test('When Editing', function() {
+        this.textInputField.isBeingEdited_ = true;
+        Blockly.FieldTextInput.htmlInput_.value = 'newValue';
+        this.textInputField.onHtmlInputChange_(null);
+        assertValue(this.textInputField, 'newValue');
+        this.textInputField.isBeingEdited_ = false;
+      });
+      test('When Not Editing', function() {
+        this.textInputField.setValue('newValue');
+        assertValue(this.textInputField, 'newValue');
       });
     });
   });

@@ -242,6 +242,9 @@ suite ('Colour Fields', function() {
     setup(function() {
       this.colourField = new Blockly.FieldColour('#aaaaaa');
     });
+    teardown(function() {
+      this.colourField.setValidator(null);
+    });
     suite('Null Validator', function() {
       setup(function() {
         this.colourField.setValidator(function() {
@@ -262,6 +265,15 @@ suite ('Colour Fields', function() {
       test('New Value', function() {
         this.colourField.setValue('#000000');
         assertValue(this.colourField, '#ff0000', '#f00');
+      });
+    });
+    suite('Returns Undefined Validator', function() {
+      setup(function() {
+        this.colourField.setValidator(function() {});
+      });
+      test('New Value', function() {
+        this.colourField.setValue('#000000');
+        assertValue(this.colourField, '#000000', '#000');
       });
     });
   });

@@ -136,8 +136,11 @@ suite('Variable Fields', function() {
     test('Undefined', function() {
       var variableField = createAndInitFieldConstructor(
           this.workspace, 'name1');
+      var stub = sinon.stub(console, 'warn');
       variableField.setValue(undefined);
       assertValue(variableField, 'name1');
+      chai.assert(stub.calledOnce);
+      stub.restore();
     });
     test('New Variable ID', function() {
       this.workspace.createVariable('name2', null, 'id2');
@@ -155,8 +158,11 @@ suite('Variable Fields', function() {
     test('Variable Does not Exist', function() {
       var variableField = createAndInitFieldConstructor(
           this.workspace, 'name1');
+      var stub = sinon.stub(console, 'warn');
       variableField.setValue('id1');
       assertValue(variableField, 'name1');
+      chai.assert(stub.calledOnce);
+      stub.restore();
     });
   });
   suite('Validators', function() {
@@ -165,6 +171,9 @@ suite('Variable Fields', function() {
       this.workspace.createVariable('name2', null, 'id2');
       this.workspace.createVariable('name3', null, 'id3');
       this.variableField = createAndInitFieldConstructor(this.workspace, 'name1');
+    });
+    teardown(function() {
+      this.variableField.setValidator(null);
     });
     suite('Null Validator', function() {
       setup(function() {
@@ -187,6 +196,15 @@ suite('Variable Fields', function() {
         // Must create the var so that the field doesn't throw an error.
         this.workspace.createVariable('thing2', null, 'other2');
         this.variableField.setValue('other2');
+        assertValue(this.variableField, 'name2', 'id2');
+      });
+    });
+    suite('Returns Undefined Validator', function() {
+      setup(function() {
+        this.variableField.setValidator(function() {});
+      });
+      test('New Value', function() {
+        this.variableField.setValue('id2');
         assertValue(this.variableField, 'name2', 'id2');
       });
     });

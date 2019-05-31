@@ -151,7 +151,6 @@ Blockly.FieldVariable.prototype.toXml = function(fieldElement) {
   // Make sure the variable is initialized.
   this.initModel();
 
-  fieldElement.setAttribute('name', this.name);
   fieldElement.setAttribute('id', this.variable_.getId());
   fieldElement.textContent = this.variable_.name;
   fieldElement.setAttribute('variableType', this.variable_.type);

@@ -899,10 +899,10 @@ Blockly.Gesture.prototype.isBlockClick_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.isFieldClick_ = function() {
-  var fieldEditable = this.startField_ ?
-      this.startField_.isCurrentlyEditable() : false;
-  return fieldEditable && !this.hasExceededDragRadius_ && (!this.flyout_ ||
-    !this.flyout_.autoClose);
+  var fieldClickable = this.startField_ ?
+      this.startField_.isClickable() : false;
+  return fieldClickable && !this.hasExceededDragRadius_ &&
+      (!this.flyout_ || !this.flyout_.autoClose);
 };
 
 /**

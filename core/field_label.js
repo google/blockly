@@ -50,7 +50,6 @@ Blockly.FieldLabel = function(opt_value, opt_class) {
     opt_value = '';
   }
   this.setValue(opt_value);
-  this.tooltip_ = '';
 };
 goog.inherits(Blockly.FieldLabel, Blockly.Field);
 
@@ -80,24 +79,11 @@ Blockly.FieldLabel.prototype.EDITABLE = false;
  * @package
  */
 Blockly.FieldLabel.prototype.initView = function() {
-  this.textElement_ = Blockly.utils.createSvgElement('text',
-      {
-        'class': 'blocklyText',
-        'y': this.size_.height - 5
-      }, this.fieldGroup_);
-  var textNode = document.createTextNode('');
-  this.textElement_.appendChild(textNode);
+  this.createTextElement_();
+  this.textElement_.setAttribute('y', this.size_.height - 5);
   if (this.class_) {
     Blockly.utils.addClass(this.textElement_, this.class_);
   }
-
-  if (this.tooltip_) {
-    this.textElement_.tooltip = this.tooltip_;
-  } else {
-    // Configure the field to be transparent with respect to tooltips.
-    this.textElement_.tooltip = this.sourceBlock_;
-  }
-  Blockly.Tooltip.bindMouseEvents(this.textElement_);
 };
 
 /**
@@ -121,18 +107,6 @@ Blockly.FieldLabel.prototype.doClassValidation_ = function(newValue) {
     return null;
   }
   return String(newValue);
-};
-
-/**
- * Change the tooltip text for this field.
- * @param {string|!Element} newTip Text for tooltip or a parent element to
- *     link to for its tooltip.
- */
-Blockly.FieldLabel.prototype.setTooltip = function(newTip) {
-  this.tooltip_ = newTip;
-  if (this.textElement_) {
-    this.textElement_.tooltip = newTip;
-  }
 };
 
 Blockly.Field.register('field_label', Blockly.FieldLabel);

@@ -96,6 +96,13 @@ Blockly.FieldDropdown.CHECKMARK_OVERHANG = 25;
 Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH = 0.45;
 
 /**
+ * Used to position the imageElement_ correctly.
+ * @type {number}
+ * @const
+ */
+Blockly.FieldDropdown.IMAGE_Y_OFFSET = 5;
+
+/**
  * Android can't (in 2014) display "▾", so use "▼" instead.
  */
 Blockly.FieldDropdown.ARROW_CHAR =
@@ -128,11 +135,19 @@ Blockly.FieldDropdown.prototype.imageJson_ = null;
 Blockly.FieldDropdown.prototype.initView = function() {
   Blockly.FieldDropdown.superClass_.initView.call(this);
 
-  // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
-  this.arrow_ = Blockly.utils.createSvgElement('tspan', {}, null);
-  this.arrow_.appendChild(document.createTextNode(this.sourceBlock_.RTL ?
-      Blockly.FieldDropdown.ARROW_CHAR + ' ' :
-      ' ' + Blockly.FieldDropdown.ARROW_CHAR));
+  this.imageElement_ = Blockly.utils.createSvgElement( 'image',
+      {
+        'y': Blockly.FieldDropdown.IMAGE_Y_OFFSET
+      }, this.fieldGroup_);
+
+  this.arrow_ = Blockly.utils.createSvgElement('tspan', {}, this.textElement_);
+  this.arrow_.appendChild(document.createTextNode(
+      Blockly.FieldDropdown.ARROW_CHAR));
+  if (this.sourceBlock_.RTL) {
+    this.textElement_.insertBefore(this.arrow_, this.textContent_);
+  } else {
+    this.textElement_.appendChild(this.arrow_);
+  }
 };
 
 /**
@@ -441,15 +456,6 @@ Blockly.FieldDropdown.prototype.updateColour = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.render_ = function() {
-  var child;
-  while ((child = this.textElement_.firstChild)) {
-    this.textElement_.removeChild(child);
-  }
-  if (this.imageElement_) {
-    Blockly.utils.removeNode(this.imageElement_);
-    this.imageElement_ = null;
-  }
-
   if (this.imageJson_) {
     this.renderSelectedImage_();
   } else {
@@ -465,20 +471,18 @@ Blockly.FieldDropdown.prototype.render_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
-  // Image option is selected.
-  this.imageElement_ = Blockly.utils.createSvgElement('image',
-      {
-        'y': 5,
-        'height': this.imageJson_.height + 'px',
-        'width': this.imageJson_.width + 'px'
-      }, this.fieldGroup_);
   this.imageElement_.setAttributeNS(
       'http://www.w3.org/1999/xlink', 'xlink:href', this.imageJson_.src);
-  // Insert dropdown arrow.
-  this.textElement_.appendChild(this.arrow_);
+  this.imageElement_.setAttribute('height', this.imageJson_.height);
+  this.imageElement_.setAttribute('width', this.imageJson_.width);
+
   var arrowWidth = Blockly.Field.getCachedWidth(this.arrow_);
+  // TODO: Standardize sizing, need to talk to rachel and abby about rendering
+  //  redux.
+  // I think really this means plus 10?
   this.size_.height = Number(this.imageJson_.height) + 19;
   this.size_.width = Number(this.imageJson_.width) + arrowWidth;
+
   if (this.sourceBlock_.RTL) {
     this.imageElement_.setAttribute('x', arrowWidth);
     this.textElement_.setAttribute('x', -1);
@@ -493,19 +497,9 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
-  // Text option is selected.
-  // Replace the text.
-  var textNode = document.createTextNode(this.getDisplayText_());
-  this.textElement_.appendChild(textNode);
-  // Insert dropdown arrow.
-  if (this.sourceBlock_.RTL) {
-    this.textElement_.insertBefore(this.arrow_, this.textElement_.firstChild);
-  } else {
-    this.textElement_.appendChild(this.arrow_);
-  }
+  this.textContent_.nodeValue = this.getDisplayText_();
   this.textElement_.setAttribute('text-anchor', 'start');
   this.textElement_.setAttribute('x', 0);
-
   this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y;
   this.size_.width = Blockly.Field.getCachedWidth(this.textElement_);
 };

@@ -153,13 +153,10 @@ Blockly.FieldColour.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
  * @package
  */
 Blockly.FieldColour.prototype.initView = function() {
-  Blockly.FieldColour.superClass_.initView.call(this);
-
   this.size_ = new goog.math.Size(Blockly.FieldColour.DEFAULT_WIDTH,
       Blockly.FieldColour.DEFAULT_HEIGHT);
+  this.createBorderRect_();
   this.borderRect_.style['fillOpacity'] = 1;
-  this.borderRect_.setAttribute('width',
-      this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
   this.borderRect_.style.fill = this.value_;
 };
 

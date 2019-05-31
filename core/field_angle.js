@@ -126,6 +126,7 @@ Blockly.FieldAngle.prototype.initView = function() {
   // Add the degree symbol to the left of the number, even in RTL (issue #2380)
   this.symbol_ = Blockly.utils.createSvgElement('tspan', {}, null);
   this.symbol_.appendChild(document.createTextNode('\u00B0'));
+  this.textElement_.appendChild(this.symbol_);
 };
 
 /**
@@ -133,9 +134,7 @@ Blockly.FieldAngle.prototype.initView = function() {
  * @private
  */
 Blockly.FieldAngle.prototype.render_ = function() {
-  this.textElement_.textContent = this.getDisplayText_();
-  this.textElement_.appendChild(this.symbol_);
-  this.updateSize_();
+  Blockly.FieldAngle.superClass_.render_.call(this);
   this.updateGraph_();
 };
 

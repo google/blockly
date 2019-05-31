@@ -235,6 +235,9 @@ Blockly.Field.prototype.init = function() {
   }
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
   this.initView();
+  this.updateEditable();
+  this.setTooltip();
+  this.bindEvents_();
   this.initModel();
 };
 
@@ -243,26 +246,54 @@ Blockly.Field.prototype.init = function() {
  * @package
  */
 Blockly.Field.prototype.initView = function() {
+  this.createBorderRect_();
+  this.createTextElement_();
+};
+
+/**
+ * Create a field border rect element. Not to be overridden by subclasses.
+ * Instead modify the result of the function inside initView, or create a
+ * separate function to call.
+ * @protected
+ */
+Blockly.Field.prototype.createBorderRect_ = function() {
   this.borderRect_ = Blockly.utils.createSvgElement('rect',
       {
         'rx': 4,
         'ry': 4,
         'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
         'y': 0,
-        'height': 16
+        'height': 16,
+        'width': this.size_.width + Blockly.BlockSvg.SEP_SPACE_X
       }, this.fieldGroup_);
+};
+
+/**
+ * Create a field text element. Not to be overridden by subclasses. Instead
+ * modify the result of the function inside initView, or create a separate
+ * function to call.
+ * @protected
+ */
+Blockly.Field.prototype.createTextElement_ = function() {
   this.textElement_ = Blockly.utils.createSvgElement('text',
-      {'class': 'blocklyText', 'y': this.size_.height - 12.5},
-      this.fieldGroup_);
-  var textNode = document.createTextNode('');
-  this.textElement_.appendChild(textNode);
+      {
+        'class': 'blocklyText',
+        'y': this.size_.height - 12.5
+      }, this.fieldGroup_);
+  this.textContent_ = document.createTextNode('');
+  this.textElement_.appendChild(this.textContent_);
+};
 
-  this.updateEditable();
-
-  this.clickTarget_ = this.getSvgRoot();
+/**
+ * Bind events to the field. Can be overridden by subclasses if they need to do
+ * custom input handling.
+ * @protected
+ */
+Blockly.Field.prototype.bindEvents_ = function() {
+  Blockly.Tooltip.bindMouseEvents(this.getClickTarget_());
   this.mouseDownWrapper_ =
       Blockly.bindEventWithChecks_(
-          this.clickTarget_, 'mousedown', this, this.onMouseDown_);
+          this.getClickTarget_(), 'mousedown', this, this.onMouseDown_);
 };
 
 /**
@@ -331,6 +362,14 @@ Blockly.Field.prototype.updateEditable = function() {
     Blockly.utils.removeClass(group, 'blocklyEditableText');
     group.style.cursor = '';
   }
+};
+
+/**
+ * Check whether this field defines the showEditor_ function.
+ * @return {boolean} Whether this field is clickable.
+ */
+Blockly.Field.prototype.isClickable = function() {
+  return !!this.showEditor_ && (typeof this.showEditor_ === 'function');
 };
 
 /**
@@ -480,7 +519,7 @@ Blockly.Field.prototype.updateColour = function() {
  * @protected
  */
 Blockly.Field.prototype.render_ = function() {
-  this.textElement_.textContent = this.getDisplayText_();
+  this.textContent_.nodeValue = this.getDisplayText_();
   this.updateSize_();
 };
 
@@ -805,11 +844,15 @@ Blockly.Field.prototype.onMouseDown_ = function(e) {
 
 /**
  * Change the tooltip text for this field.
- * @param {string|!Element} _newTip Text for tooltip or a parent element to
- *     link to for its tooltip.
+ * @param {string|function|!Element} newTip Text for tooltip or a parent
+ *    element to link to for its tooltip.
  */
-Blockly.Field.prototype.setTooltip = function(_newTip) {
-  // Non-abstract sub-classes may wish to implement this.  See FieldLabel.
+Blockly.Field.prototype.setTooltip = function(newTip) {
+  if (!newTip && newTip !== '') {  // If null or undefined.
+    this.getClickTarget_().tooltip = this.sourceBlock_;
+  } else {
+    this.getClickTarget_().tooltip = newTip;
+  }
 };
 
 /**

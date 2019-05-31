@@ -263,7 +263,7 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
   }
 
   // Bind events.
-  this.bindEvents_(htmlInput);
+  this.bindInputEvents_(htmlInput);
 
   // Save it.
   Blockly.FieldTextInput.htmlInput_ = htmlInput;
@@ -275,7 +275,7 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
  *     which event handlers will be bound.
  * @private
  */
-Blockly.FieldTextInput.prototype.bindEvents_ = function(htmlInput) {
+Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
   // Bind to keydown -- trap Enter without IME and Esc to hide.
   htmlInput.onKeyDownWrapper_ =
       Blockly.bindEventWithChecks_(
@@ -297,7 +297,7 @@ Blockly.FieldTextInput.prototype.bindEvents_ = function(htmlInput) {
  * @param {!HTMLInputElement} htmlInput The html for this text input.
  * @private
  */
-Blockly.FieldTextInput.prototype.unbindEvents_ = function(htmlInput) {
+Blockly.FieldTextInput.prototype.unbindInputEvents_ = function(htmlInput) {
   Blockly.unbindEvent_(htmlInput.onKeyDownWrapper_);
   Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);
   Blockly.unbindEvent_(htmlInput.onKeyPressWrapper_);
@@ -413,7 +413,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     }
 
     // Remove htmlInput.
-    thisField.unbindEvents_(htmlInput);
+    thisField.unbindInputEvents_(htmlInput);
     Blockly.FieldTextInput.htmlInput_ = null;
 
     // Delete style properties.

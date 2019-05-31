@@ -65,7 +65,7 @@ run_test_command "mocha" "node tests/mocha/run_mocha_tests_in_browser.js"
 run_test_command "generators" "tests/scripts/run_generators.sh"
 
 # # Attempt advanced compilation of a Blockly app.
-# run_test_command "compile" "tests/compile/compile.sh"
+run_test_command "compile" "tests/compile/compile_for_warnings.sh"
 
 
 # End of tests.

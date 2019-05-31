@@ -142,7 +142,9 @@ Blockly.FieldDropdown.prototype.initView = function() {
 
   this.arrow_ = Blockly.utils.createSvgElement('tspan', {}, this.textElement_);
   this.arrow_.appendChild(document.createTextNode(
-      Blockly.FieldDropdown.ARROW_CHAR));
+      this.sourceBlock_.RTL ?
+      Blockly.FieldDropdown.ARROW_CHAR + ' ' :
+      ' ' + Blockly.FieldDropdown.ARROW_CHAR));
   if (this.sourceBlock_.RTL) {
     this.textElement_.insertBefore(this.arrow_, this.textContent_);
   } else {

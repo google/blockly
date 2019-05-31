@@ -292,7 +292,6 @@ Blockly.Field.prototype.fromXml = function(fieldElement) {
  * @package
  */
 Blockly.Field.prototype.toXml = function(fieldElement) {
-  fieldElement.setAttribute('name', this.name);
   fieldElement.textContent = this.getValue();
   return fieldElement;
 };

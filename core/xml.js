@@ -109,6 +109,7 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
 Blockly.Xml.fieldToDom_ = function(field) {
   if (field.isSerializable()) {
     var container = Blockly.Xml.utils.createElement('field');
+    container.setAttribute('name', field.name);
     return field.toXml(container);
   }
   return null;

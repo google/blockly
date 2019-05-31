@@ -451,6 +451,18 @@
     {
       "title": "test_dropdowns_dynamic",
       "skip": false
+    },
+    {
+      "title": "multi_block_1",
+      "skip": false
+    },
+    {
+      "title": "multi_block_logic",
+      "skip": false
+    },
+    {
+      "title": "not_true",
+      "skip": false
     }
   ]
 }

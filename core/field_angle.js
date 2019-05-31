@@ -135,7 +135,7 @@ Blockly.FieldAngle.prototype.initView = function() {
 Blockly.FieldAngle.prototype.render_ = function() {
   this.textElement_.textContent = this.getDisplayText_();
   this.textElement_.appendChild(this.symbol_);
-  this.updateWidth();
+  this.updateSize_();
   this.updateGraph_();
 };
 

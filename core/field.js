@@ -230,6 +230,9 @@ Blockly.Field.prototype.init = function() {
     return;
   }
   this.fieldGroup_ = Blockly.utils.createSvgElement('g', {}, null);
+  if (!this.isVisible()) {
+    this.fieldGroup_.style.display = 'none';
+  }
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
   this.initView();
   this.initModel();
@@ -240,9 +243,6 @@ Blockly.Field.prototype.init = function() {
  * @package
  */
 Blockly.Field.prototype.initView = function() {
-  if (!this.visible_) {
-    this.fieldGroup_.style.display = 'none';
-  }
   this.borderRect_ = Blockly.utils.createSvgElement('rect',
       {
         'rx': 4,
@@ -386,7 +386,6 @@ Blockly.Field.prototype.setVisible = function(visible) {
   var root = this.getSvgRoot();
   if (root) {
     root.style.display = visible ? 'block' : 'none';
-    this.size_.width = 0;
   }
 };
 
@@ -483,15 +482,28 @@ Blockly.Field.prototype.updateColour = function() {
  */
 Blockly.Field.prototype.render_ = function() {
   this.textElement_.textContent = this.getDisplayText_();
-  this.updateWidth();
+  this.updateSize_();
 };
 
 /**
- * Updates the width of the field. This calls getCachedWidth which won't cache
- * the approximated width on IE/Edge when `getComputedTextLength` fails. Once
- * it eventually does succeed, the result will be cached.
+ * Updates the width of the field. Redirects to updateSize_().
+ * @deprecated May 2019  Use Blockly.Field.updateSize_() to force an update
+ * to the size of the field, or Blockly.Field.getCachedWidth() to check the
+ * size of the field..
  */
 Blockly.Field.prototype.updateWidth = function() {
+  console.warn('Deprecated call to updateWidth, call' +
+    ' Blockly.Field.updateSize_ to force an update to the size of the' +
+    ' field, or Blockly.Field.getCachedWidth() to check the size of the' +
+    ' field.');
+  this.updateSize_();
+};
+
+/**
+ * Updates the size of the field based on the text.
+ * @protected
+ */
+Blockly.Field.prototype.updateSize_ = function() {
   var width = Blockly.Field.getCachedWidth(this.textElement_);
   if (this.borderRect_) {
     this.borderRect_.setAttribute('width',
@@ -568,6 +580,10 @@ Blockly.Field.stopCache = function() {
  * @return {!goog.math.Size} Height and width.
  */
 Blockly.Field.prototype.getSize = function() {
+  if (!this.isVisible()) {
+    return new goog.math.Size(0, 0);
+  }
+
   if (this.isDirty_) {
     this.render_();
     this.isDirty_ = false;

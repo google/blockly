@@ -97,6 +97,20 @@ Blockly.FieldColour.COLOUR_REGEX = new RegExp('#[0-9a-fA-F]{6}');
 Blockly.FieldColour.prototype.SERIALIZABLE = true;
 
 /**
+ * Mouse cursor style when over the hotspot that initiates the editor.
+ */
+Blockly.FieldColour.prototype.CURSOR = 'default';
+
+/**
+ * Used to tell if the field needs to be rendered the next time the block is
+ * rendered. Colour fields are statically sized, and only need to be
+ * rendered at initialization.
+ * @type {boolean}
+ * @private
+ */
+Blockly.FieldColour.prototype.isDirty_ = false;
+
+/**
  * Array of colours used by this field.  If null, use the global list.
  * @type {Array.<string>}
  * @private
@@ -150,24 +164,11 @@ Blockly.FieldColour.prototype.initView = function() {
 };
 
 /**
- * Mouse cursor style when over the hotspot that initiates the editor.
- */
-Blockly.FieldColour.prototype.CURSOR = 'default';
-
-/**
  * Close the colour picker if this input is being deleted.
  */
 Blockly.FieldColour.prototype.dispose = function() {
   Blockly.WidgetDiv.hideIfOwner(this);
   Blockly.FieldColour.superClass_.dispose.call(this);
-};
-
-/**
- * Render the colour field.
- * @private
- */
-Blockly.FieldColour.prototype.render_ = function() {
-  this.size_.width = Blockly.FieldColour.DEFAULT_WIDTH;
 };
 
 /**

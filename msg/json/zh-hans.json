@@ -15,7 +15,8 @@
 			"WindWood",
 			"Deathkon",
 			"Muhaoying",
-			"佛壁灯"
+			"佛壁灯",
+			"Htq110219891"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "项目",
@@ -167,7 +168,7 @@
 	"MATH_IS_DIVISIBLE_BY": "可被整除",
 	"MATH_IS_TOOLTIP": "检查一个数值是否是偶数、奇数、质数、自然数、正数、负数或者是否能被某数整除。返回真或假。",
 	"MATH_CHANGE_HELPURL": "https://zh.wikipedia.org/wiki/加法",
-	"MATH_CHANGE_TITLE": "将 %1 改为 %2",
+	"MATH_CHANGE_TITLE": "将 %1 增加 %2",
 	"MATH_CHANGE_TOOLTIP": "为变量“%1”增加一个数值。",
 	"MATH_ROUND_HELPURL": "https://zh.wikipedia.org/wiki/数值修约",
 	"MATH_ROUND_TOOLTIP": "数字向上或向下舍入。",

@@ -172,9 +172,6 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
   // Mobile browsers have issues with in-line textareas (focus & keyboards).
   Blockly.FieldAngle.superClass_.showEditor_.call(this, noFocus);
 
-  // If there is an existing drop-down someone else owns, hide it immediately and clear it.
-  Blockly.DropDownDiv.hideWithoutAnimation();
-  Blockly.DropDownDiv.clearContent();
   var div = Blockly.DropDownDiv.getContentDiv();
 
   // Build the SVG DOM.

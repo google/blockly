@@ -198,9 +198,6 @@ Blockly.FieldDate.prototype.updateEditor_ = function() {
  * @private
  */
 Blockly.FieldDate.prototype.showEditor_ = function() {
-  Blockly.DropDownDiv.hideWithoutAnimation();
-  Blockly.DropDownDiv.clearContent();
-
   this.picker_ = this.createWidget_();
   this.picker_.render(Blockly.DropDownDiv.getContentDiv());
   Blockly.utils.addClass(this.picker_.getElement(), 'blocklyDatePicker');

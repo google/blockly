@@ -285,10 +285,6 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
  * @private
  */
 Blockly.FieldColour.prototype.showEditor_ = function() {
-
-  Blockly.DropDownDiv.hideWithoutAnimation();
-  Blockly.DropDownDiv.clearContent();
-
   var picker = this.createWidget_();
   Blockly.DropDownDiv.getContentDiv().appendChild(picker);
   Blockly.DropDownDiv.setColour(

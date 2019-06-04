@@ -316,7 +316,7 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     if (prev.isField() && prev.isEditable) {
       return BRC.MEDIUM_PADDING;
     }
-    // A block with just an icon is skinny.  Make it more substantial.
+    // Padding at the end of an icon-only row to make the block shape clearer.
     if (prev.isIcon()) {
       return (BRC.LARGE_PADDING * 2) + 1;
     }
@@ -383,10 +383,14 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     }
   }
 
-  // Spacing between a hat and a corner
   if (prev.isSquareCorner()) {
+    // Spacing between a hat and a corner
     if (next.isHat()) {
       return BRC.NO_PADDING;
+    }
+    // Spacing between a square corner and a previous or next connection
+    if (next.isPreviousConnection() || next.isNextConnection()) {
+      return BRC.NOTCH_OFFSET_LEFT;
     }
   }
 
@@ -396,13 +400,6 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
       return BRC.NOTCH_OFFSET_ROUNDED_CORNER_PREV;
     } else if (next.isNextConnection()) {
       return BRC.NOTCH_OFFSET_ROUNDED_CORNER_NEXT;
-    }
-  }
-
-  // Spacing between a square corner and a previous or next connection
-  if (prev.isSquareCorner()) {
-    if (next.isPreviousConnection() || next.isNextConnection()) {
-      return BRC.NOTCH_OFFSET_LEFT;
     }
   }
 

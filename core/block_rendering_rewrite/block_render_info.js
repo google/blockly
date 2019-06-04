@@ -316,13 +316,16 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     if (prev.isField() && prev.isEditable) {
       return BRC.MEDIUM_PADDING;
     }
+    // A block with just an icon is skinny.  Make it more substantial.
+    if (prev.isIcon()) {
+      return (BRC.LARGE_PADDING * 2) + 1;
+    }
     if (prev.isHat()){
       return BRC.NO_PADDING;
     }
+    // Establish a minimum width for a block with a previous or next connection.
     if (prev.isPreviousConnection() || prev.isNextConnection()) {
-      // TODO: Need to figure out minimum padding between connection and end of
-      // the block.
-      return BRC.NO_PADDING;
+      return BRC.LARGE_PADDING;
     }
     // Between rounded corner and the end of the row.
     if (prev.isRoundedCorner()) {
@@ -389,8 +392,10 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
 
   // Spacing between a rounded corner and a previous or next connection
   if (prev.isRoundedCorner()){
-    if (next.isPreviousConnection() || next.isNextConnection()) {
-      return BRC.NOTCH_OFFSET_ROUNDED_CORNER;
+    if (next.isPreviousConnection()) {
+      return BRC.NOTCH_OFFSET_ROUNDED_CORNER_PREV;
+    } else if (next.isNextConnection()) {
+      return BRC.NOTCH_OFFSET_ROUNDED_CORNER_NEXT;
     }
   }
 

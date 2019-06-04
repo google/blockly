@@ -463,6 +463,10 @@
     {
       "title": "not_true",
       "skip": false
+    },
+    {
+      "title": "multi_stack",
+      "skip": false
     }
   ]
 }

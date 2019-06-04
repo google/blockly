@@ -461,6 +461,14 @@
       "skip": false
     },
     {
+      "title": "multi_colour_with_external",
+      "skip": false
+    },
+    {
+      "title": "multi_colour_with_internal",
+      "skip": false
+    },
+    {
       "title": "not_true",
       "skip": false
     }

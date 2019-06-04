@@ -1000,11 +1000,13 @@ Blockly.BlockSvg.prototype.setBorderColour_ = function() {
  */
 Blockly.BlockSvg.prototype.setShadowColour_ = function() {
   this.svgPathLight_.style.display = 'none';
-  this.svgPathDark_.style.display = 'none';
   this.svgPath_.setAttribute('stroke', 'none');
 
   var shadowColour = this.getColourShadow();
   this.svgPath_.setAttribute('fill', shadowColour);
+
+  this.svgPathDark_.style.display = '';
+  this.svgPathDark_.setAttribute('fill', shadowColour);
   return shadowColour;
 };
 

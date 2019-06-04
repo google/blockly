@@ -74,18 +74,28 @@ Blockly.BlockRendering.Drawer = function(block) {
  * @private
  */
 Blockly.BlockRendering.Drawer.prototype.draw_ = function() {
-  this.block_.height = this.info_.height;
-  this.block_.width = this.info_.widthWithChildren;
   this.drawOutline_();
   this.drawInternals_();
   this.block_.setPaths_(this.pathObject_);
   this.moveConnections_();
   this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
-
-  // Someone out there depends on this existing.
-  this.block_.startHat_ = this.info_.topRow.startHat;
+  this.recordSizeOnBlock_();
 };
 
+/**
+ * Save sizing information back to the block
+ * Most of the rendering information can be thrown away at the end of the render.
+ * Anything that needs to be kept around should be set in this function.
+ * @private
+ */
+Blockly.BlockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
+  // This is used when the block is reporting its size to anyone else.
+  // The dark path adds to the size of the block in both X and Y.
+  this.block_.height = this.info_.height + BRC.DARK_PATH_OFFSET;
+  this.block_.width = this.info_.widthWithChildren + BRC.DARK_PATH_OFFSET;
+  // The flyout uses this information.
+  this.block_.startHat_ = this.info_.topRow.startHat;
+};
 
 /**
  * Create the outline of the block.  This is a single continuous path.

@@ -215,8 +215,10 @@ Blockly.BlockRendering.InlineInput = function(input) {
     this.height = BRC.EMPTY_INLINE_INPUT_HEIGHT;
     this.width = BRC.EMPTY_INLINE_INPUT_WIDTH;
   } else {
-    this.width = this.connectedBlockWidth + BRC.TAB_WIDTH + 1;
-    this.height = this.connectedBlockHeight + 2;
+    // We allow the dark path to show on the parent block so that the child
+    // block looks embossed.  This takes up an extra pixel in both x and y.
+    this.width = this.connectedBlockWidth + BRC.TAB_WIDTH + BRC.DARK_PATH_OFFSET;
+    this.height = this.connectedBlockHeight + BRC.DARK_PATH_OFFSET;
   }
 };
 goog.inherits(Blockly.BlockRendering.InlineInput, Blockly.BlockRendering.Input);

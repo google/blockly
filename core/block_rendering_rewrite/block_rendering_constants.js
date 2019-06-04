@@ -43,6 +43,10 @@ BRC.INLINE_INPUT_FIELD_OFFSET_Y = BRC.MEDIUM_PADDING;
 
 BRC.HIGHLIGHT_OFFSET = 0.5;
 
+// The dark/shadow path in classic rendering is the same as the normal block
+// path, but translated down one and right one.
+BRC.DARK_PATH_OFFSET = 1;
+
 BRC.TAB_HEIGHT = 15;
 
 BRC.TAB_OFFSET_FROM_TOP = 5;

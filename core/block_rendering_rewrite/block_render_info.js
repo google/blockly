@@ -611,10 +611,8 @@ Blockly.BlockRendering.RenderInfo.prototype.getElemCenterline_ = function(row, e
   var result = row.yPos;
   if (elem.isField()) {
     result += (elem.height / 2);
-    if (row.hasInlineInput) {
-      result += BRC.INLINE_INPUT_FIELD_OFFSET_Y;
-    } else if (row.hasStatement) {
-      result += BRC.STATEMENT_FIELD_OFFSET_Y;
+    if (row.hasInlineInput || row.hasStatement) {
+      result += BRC.TALL_INPUT_FIELD_OFFSET_Y;
     }
   } else {
     result += (row.height / 2);

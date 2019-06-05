@@ -400,7 +400,7 @@ Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut, categoryN
     this.hasColours_ = true;
   } else if (typeof colour === 'number' ||
       (typeof colour === 'string' && !isNaN(Number(colour)))) {
-    childOut.hexColour = Blockly.utils.colour.hueToRgb(Number(colour));
+    childOut.hexColour = Blockly.utils.colour.hueToHex(Number(colour));
     this.hasColours_ = true;
   } else {
     childOut.hexColour = '';

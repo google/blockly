@@ -30,9 +30,9 @@ goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
+goog.require('Blockly.utils.colour');
 
 goog.require('goog.math.Size');
-goog.require('goog.color');
 
 
 /**
@@ -172,10 +172,7 @@ Blockly.FieldColour.prototype.doClassValidation_ = function(newValue) {
   if (typeof newValue != 'string') {
     return null;
   }
-  if (goog.color.isValidColor(newValue)) {
-    return goog.color.parse(newValue).hex;
-  }
-  return null;
+  return Blockly.utils.colour.parse(newValue);
 };
 
 /**

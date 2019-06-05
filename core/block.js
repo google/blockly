@@ -42,7 +42,6 @@ goog.require('Blockly.Warning');
 goog.require('Blockly.Workspace');
 
 goog.require('goog.math.Coordinate');
-goog.require('goog.color');
 
 
 /**
@@ -891,9 +890,7 @@ Blockly.Block.prototype.getColourShadow = function() {
   if (colourSecondary) {
     return colourSecondary;
   }
-  var rgb = goog.color.hexToRgb(this.getColour());
-  rgb = goog.color.lighten(rgb, 0.6);
-  return goog.color.rgbArrayToHex(rgb);
+  return Blockly.utils.colour.blend('white', this.getColour(), 0.6);
 };
 
 /**
@@ -914,11 +911,11 @@ Blockly.Block.prototype.getColourBorder = function() {
       colourDark: null
     };
   }
-  var rgb = goog.color.hexToRgb(this.getColour());
+  var colour = this.getColour();
   return {
     colourBorder: null,
-    colourLight: goog.color.rgbArrayToHex(goog.color.lighten(rgb, 0.3)),
-    colourDark: goog.color.rgbArrayToHex(goog.color.darken(rgb, 0.2))
+    colourLight: Blockly.utils.colour.blend('white',colour,  0.3),
+    colourDark: Blockly.utils.colour.blend('black', colour, 0.2)
   };
 };
 
@@ -950,7 +947,7 @@ Blockly.Block.prototype.setColour = function(colour) {
   var hue = Number(dereferenced);
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
     this.hue_ = hue;
-    this.colour_ = Blockly.utils.colour.hueToRgb(hue);
+    this.colour_ = Blockly.utils.colour.hueToHex(hue);
   } else {
     var hex = Blockly.utils.colour.parse(dereferenced);
     if (hex) {

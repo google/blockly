@@ -60,14 +60,14 @@ Blockly.BlockRendering.Highlighter.prototype.drawTopCorner = function(row) {
     if (elem.type === 'square corner') {
       this.highlightSteps_.push(BRC.START_POINT_HIGHLIGHT);
     } else if (elem.type === 'round corner') {
-      this.highlightSteps_.push(this.RTL ?
-          Blockly.BlockSvg.TOP_LEFT_CORNER_START_HIGHLIGHT_RTL :
-          Blockly.BlockSvg.TOP_LEFT_CORNER_START_HIGHLIGHT_LTR);
-      this.highlightSteps_.push(Blockly.BlockSvg.TOP_LEFT_CORNER_HIGHLIGHT);
+      this.highlightSteps_.push(this.info_.RTL ?
+          BRC.TOP_LEFT_CORNER_START_HIGHLIGHT_RTL :
+          BRC.TOP_LEFT_CORNER_START_HIGHLIGHT_LTR);
+      this.highlightSteps_.push(BRC.TOP_LEFT_CORNER_HIGHLIGHT);
     } else if (elem.type === 'previous connection') {
       this.highlightSteps_.push(BRC.NOTCH_PATH_LEFT_HIGHLIGHT);
     } else if (elem.type === 'hat') {
-      this.highlightSteps_.push(this.RTL ?
+      this.highlightSteps_.push(this.info_.RTL ?
           Blockly.BlockSvg.START_HAT_HIGHLIGHT_RTL :
           Blockly.BlockSvg.START_HAT_HIGHLIGHT_LTR);
     } else if (elem.isSpacer()) {

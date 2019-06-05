@@ -177,7 +177,8 @@ BRC.NOTCH_PATH_LEFT = 'l 6,4 3,0 6,-4';
  * highlighting.
  * @const
  */
-BRC.NOTCH_PATH_LEFT_HIGHLIGHT = BRC.NOTCH_PATH_LEFT;
+BRC.NOTCH_PATH_LEFT_HIGHLIGHT =
+    'h ' + BRC.HIGHLIGHT_OFFSET + ' ' + BRC.NOTCH_PATH_LEFT;
 
 /**
  * SVG path for drawing next/previous notch from right to left.

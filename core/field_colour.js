@@ -83,12 +83,6 @@ Blockly.FieldColour.DEFAULT_WIDTH = 16;
 Blockly.FieldColour.DEFAULT_HEIGHT = 12;
 
 /**
- * Regex that defines the form of a colour string.
- * @type {RegExp}
- */
-Blockly.FieldColour.COLOUR_REGEX = new RegExp('#[0-9a-fA-F]{6}');
-
-/**
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}

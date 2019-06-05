@@ -177,7 +177,8 @@ BRC.NOTCH_PATH_LEFT = 'l 6,4 3,0 6,-4';
  * highlighting.
  * @const
  */
-BRC.NOTCH_PATH_LEFT_HIGHLIGHT = BRC.NOTCH_PATH_LEFT;
+BRC.NOTCH_PATH_LEFT_HIGHLIGHT =
+    'h ' + BRC.HIGHLIGHT_OFFSET + ' ' + BRC.NOTCH_PATH_LEFT;
 
 /**
  * SVG path for drawing next/previous notch from right to left.
@@ -284,3 +285,41 @@ BRC.OUTPUT_CONNECTION_HIGHLIGHT_LTR =
 BRC.OUTPUT_CONNECTION_HIGHLIGHT_RTL =
     'M ' + (BRC.TAB_WIDTH * -0.25) + ',8.4 l ' +
     (BRC.TAB_WIDTH * -0.45) + ',-2.1';
+
+/**
+ * SVG start point for drawing the top-left corner's highlight in RTL.
+ * @const
+ */
+BRC.TOP_LEFT_CORNER_START_HIGHLIGHT_RTL =
+    'm ' + BRC.DISTANCE_45_INSIDE + ',' +
+    BRC.DISTANCE_45_INSIDE;
+
+/**
+ * SVG start point for drawing the top-left corner's highlight in LTR.
+ * @const
+ */
+BRC.TOP_LEFT_CORNER_START_HIGHLIGHT_LTR =
+    'm 0.5,' + (BRC.CORNER_RADIUS - 0.5);
+
+/**
+ * SVG path for drawing the highlight on the rounded top-left corner.
+ * @const
+ */
+BRC.TOP_LEFT_CORNER_HIGHLIGHT =
+    'A ' + (BRC.CORNER_RADIUS - 0.5) + ',' +
+    (BRC.CORNER_RADIUS - 0.5) + ' 0 0,1 ' +
+    BRC.CORNER_RADIUS + ',0.5';
+
+/**
+ * Path of the top hat's curve's highlight in LTR.
+ * @const
+ */
+BRC.START_HAT_HIGHLIGHT_LTR =
+    'c 17.8,-9.2 45.3,-14.9 75,-8.7 M 100.5,0.5';
+
+/**
+ * Path of the top hat's curve's highlight in RTL.
+ * @const
+ */
+BRC.START_HAT_HIGHLIGHT_RTL =
+    'm 25,-8.7 c 29.7,-6.2 57.2,-0.5 75,8.7';

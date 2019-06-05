@@ -470,7 +470,8 @@ Blockly.Trashcan.prototype.onDelete_ = function() {
     if (trashcan.workspace_.options.maxTrashcanContents <= 0) {
       return;
     }
-    if (event.type == Blockly.Events.BLOCK_DELETE) {
+    if (event.type == Blockly.Events.BLOCK_DELETE &&
+        event.oldXml.tagName.toLowerCase() != 'shadow') {
       var cleanedXML = trashcan.cleanBlockXML_(event.oldXml);
       if (trashcan.contents_.indexOf(cleanedXML) != -1) {
         return;

@@ -77,7 +77,6 @@ Blockly.BlockRendering.Drawer.prototype.draw_ = function() {
   this.drawOutline_();
   this.drawInternals_();
   this.block_.setPaths_(this.pathObject_);
-  this.moveConnections_();
   this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   this.recordSizeOnBlock_();
 };
@@ -129,6 +128,7 @@ Blockly.BlockRendering.Drawer.prototype.drawTop_ = function() {
 
   this.highlighter_.drawTopCorner(topRow);
   this.highlighter_.drawRightSideRow(topRow);
+  this.positionPreviousConnection_();
 
   for (var i = 0, elem; elem = elements[i]; i++) {
     if (elem.type === 'square corner') {
@@ -159,12 +159,9 @@ Blockly.BlockRendering.Drawer.prototype.drawValueInput_ = function(row) {
   this.steps_.push('H', row.width);
   this.steps_.push(BRC.TAB_PATH_DOWN);
   this.steps_.push('v', row.height - BRC.TAB_HEIGHT);
-  // Move the connection.
-  var input = row.getLastInput();
-  if (input.connection) {
-    input.connection.setOffsetInBlock(row.width + 1, row.yPos);
-  }
+  this.positionExternalValueConnection_(row);
 };
+
 
 /**
  * Add steps for a statement input.
@@ -180,16 +177,7 @@ Blockly.BlockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   this.steps_.push('v', row.height - 2 * BRC.CORNER_RADIUS);
   this.steps_.push(BRC.INNER_BOTTOM_LEFT_CORNER);
 
-  // Move the connection.
-  var input = row.getLastInput();
-  if (input.connection) {
-    var connX = row.statementEdge + BRC.NOTCH_OFFSET_LEFT + 1;
-    if (this.info_.RTL) {
-      connX *= -1;
-    }
-    input.connection.setOffsetInBlock(
-        connX, row.yPos + 1);
-  }
+  this.positionStatementInputConnection_(row);
 };
 
 /**
@@ -215,6 +203,7 @@ Blockly.BlockRendering.Drawer.prototype.drawBottom_ = function() {
   var bottomRow = this.info_.bottomRow;
   var elems = bottomRow.elements;
   this.highlighter_.drawBottomCorner(bottomRow);
+  this.positionNextConnection_();
   this.steps_.push('v', bottomRow.height);
   for (var i = elems.length - 1; i >= 0; i--) {
     var elem = elems[i];
@@ -228,23 +217,6 @@ Blockly.BlockRendering.Drawer.prototype.drawBottom_ = function() {
       this.steps_.push('h', elem.width * -1);
     }
   }
-
-  if (bottomRow.hasNextConnection) {
-    var connectionX;
-    if (this.info_.RTL) {
-      connectionX = -BRC.NOTCH_OFFSET_LEFT;
-    } else {
-      connectionX = BRC.NOTCH_OFFSET_LEFT;
-    }
-
-    bottomRow.connection.setOffsetInBlock(connectionX,
-        this.info_.height - 1);
-    bottomRow.connection.moveToOffset(this.topLeft_);
-    if (bottomRow.connection.isConnected()) {
-      bottomRow.connection.tighten_();
-    }
-  }
-
 };
 
 /**
@@ -255,11 +227,11 @@ Blockly.BlockRendering.Drawer.prototype.drawBottom_ = function() {
 Blockly.BlockRendering.Drawer.prototype.drawLeft_ = function() {
   this.highlighter_.drawLeft();
 
+  this.positionOutpuConnection_();
   if (this.info_.hasOutputConnection) {
     // Draw a line up to the bottom of the tab.
     this.steps_.push('V', BRC.TAB_OFFSET_FROM_TOP + BRC.TAB_HEIGHT);
     this.steps_.push(BRC.TAB_PATH_UP);
-    this.block_.outputConnection.setOffsetInBlock(0, BRC.TAB_OFFSET_FROM_TOP);
   }
   // Close off the path.  This draws a vertical line up to the start of the
   // block's path, which may be either a rounded or a sharp corner.
@@ -360,48 +332,99 @@ Blockly.BlockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
   this.inlineSteps_.push('v', -height);
   this.inlineSteps_.push('z');
 
+  this.positionInlineInputConnection_(input);
+
+};
+
+/**
+ * Position the connection on an inline value input, taking into account
+ * RTL and the small gap between the parent block and child block which lets the
+ * parent block's dark path show through.
+ * @param {Blockly.BlockRendering.RenderableInput} input The information about
+ * the input that the connection is on.
+ * @private
+ */
+Blockly.BlockRendering.Drawer.prototype.positionInlineInputConnection_ = function(input) {
+  var yPos = input.centerline - input.height / 2;
   // Move the connection.
   if (input.connection) {
-    var connX = input.xPos + BRC.TAB_WIDTH + 1;
+    var connX = input.xPos + BRC.TAB_WIDTH + BRC.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
     }
     input.connection.setOffsetInBlock(
-        connX, yPos + BRC.TAB_OFFSET_FROM_TOP + 1);
+        connX, yPos + BRC.TAB_OFFSET_FROM_TOP + BRC.DARK_PATH_OFFSET);
   }
 };
 
 /**
- * Update all of the connections on this block with the new locations calculated
- * in renderCompute.  Also move all of the connected blocks based on the new
- * connection locations.
+ * Position the connection on a statement input, taking into account
+ * RTL and the small gap between the parent block and child block which lets the
+ * parent block's dark path show through.
+ * @param {!Blockly.BlockRendering.Row} row The row that the connection is on.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.moveConnections_ = function() {
-  var blockTL = this.block_.getRelativeToSurfaceXY();
-  // Don't tighten previous or output connections because they are inferior
-  // connections.
-  var topRow = this.info_.topRow;
-  if (topRow.hasPreviousConnection) {
-    var connectionX = (this.info_.RTL ? -BRC.NOTCH_OFFSET_LEFT : BRC.NOTCH_OFFSET_LEFT);
-
-
-    console.log('previous connection goes to ' + connectionX + ', 0');
-    topRow.connection.setOffsetInBlock(connectionX, 0);
-    topRow.connection.moveToOffset(blockTL);
+Blockly.BlockRendering.Drawer.prototype.positionStatementInputConnection_ = function(row) {
+  var input = row.getLastInput();
+  if (input.connection) {
+    var connX = row.statementEdge + BRC.NOTCH_OFFSET_LEFT + BRC.DARK_PATH_OFFSET;
+    if (this.info_.RTL) {
+      connX *= -1;
+    }
+    input.connection.setOffsetInBlock(connX, row.yPos + BRC.DARK_PATH_OFFSET);
   }
-  if (this.block_.outputConnection) {
-    this.block_.outputConnection.moveToOffset(blockTL);
+};
+
+/**
+ * Position the connection on an external value input, taking into account
+ * RTL and the small gap between the parent block and child block which lets the
+ * parent block's dark path show through.
+ * @param {!Blockly.BlockRendering.Row} row The row that the connection is on.
+ * @private
+ */
+Blockly.BlockRendering.Drawer.prototype.positionExternalValueConnection_ = function(row) {
+  var input = row.getLastInput();
+  if (input.connection) {
+    var connX = row.width + BRC.DARK_PATH_OFFSET;
+    if (this.info_.RTL) {
+      connX *= -1;
+    }
+    input.connection.setOffsetInBlock(connX, row.yPos);
   }
+};
 
-  // for (var i = 0; i < this.inputList.length; i++) {
-  //   var conn = this.inputList[i].connection;
-  //   if (conn) {
-  //     conn.moveToOffset(blockTL);
-  //     if (conn.isConnected()) {
-  //       conn.tighten_();
-  //     }
-  //   }
-  // }
+/**
+ * Position the previous connection on a block.
+ * @private
+ */
+Blockly.BlockRendering.Drawer.prototype.positionPreviousConnection_ = function() {
+  if (this.info_.topRow.hasPreviousConnection) {
+    var connX = (this.info_.RTL ? -BRC.NOTCH_OFFSET_LEFT : BRC.NOTCH_OFFSET_LEFT);
+    this.info_.topRow.connection.setOffsetInBlock(connX, 0);
+  }
+};
 
+/**
+ * Position the next connection on a block.
+ * @private
+ */
+Blockly.BlockRendering.Drawer.prototype.positionNextConnection_ = function() {
+  var bottomRow = this.info_.bottomRow;
+
+  if (bottomRow.hasNextConnection) {
+    var connX = (this.info_.RTL ? -BRC.NOTCH_OFFSET_LEFT : BRC.NOTCH_OFFSET_LEFT);
+    // TODO use a constant here when fixing block height calculation.
+    bottomRow.connection.setOffsetInBlock(connX, this.info_.height - 1);
+  }
+};
+
+/**
+ * Position the output connection on a block.
+ * @param {!Blockly.BlockRendering.BottomRow} row The bottom row on the block.
+ * @private
+ */
+Blockly.BlockRendering.Drawer.prototype.positionOutpuConnection_ = function() {
+  if (this.info_.hasOutputConnection) {
+    this.block_.outputConnection.setOffsetInBlock(0, BRC.TAB_OFFSET_FROM_TOP);
+  }
 };

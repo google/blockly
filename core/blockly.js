@@ -57,8 +57,6 @@ goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 goog.require('Blockly.Xml');
 
-goog.require('goog.color');
-
 
 // Turn off debugging when compiled.
 // Unused within the Blockly library, but used in Closure.
@@ -120,16 +118,6 @@ Blockly.cache3dSupported_ = null;
  * @private
  */
 Blockly.theme_ = null;
-
-/**
- * Convert a hue (HSV model) into an RGB hex triplet.
- * @param {number} hue Hue on a colour wheel (0-360).
- * @return {string} RGB code, e.g. '#5ba65b'.
- */
-Blockly.hueToRgb = function(hue) {
-  return goog.color.hsvToHex(hue, Blockly.HSV_SATURATION,
-      Blockly.HSV_VALUE * 255);
-};
 
 /**
  * Returns the dimensions of the specified SVG image.

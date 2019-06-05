@@ -931,8 +931,8 @@ Blockly.Block.prototype.getStyleName = function() {
 };
 
 /**
- * Get the HSV hue value of a block. Null if hue not set.
- * @return {?number} Hue value (0-360)
+ * Get the HSV hue value of a block.  Null if hue not set.
+ * @return {?number} Hue value (0-360).
  */
 Blockly.Block.prototype.getHue = function() {
   return this.hue_;
@@ -950,18 +950,20 @@ Blockly.Block.prototype.setColour = function(colour) {
   var hue = Number(dereferenced);
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
     this.hue_ = hue;
-    this.colour_ = Blockly.hueToRgb(hue);
-  } else if ((typeof dereferenced == 'string') &&
-      /^#[0-9a-fA-F]{6}$/.test(dereferenced)) {
-    this.colour_ = dereferenced;
-    // Only store hue if colour is set as a hue.
-    this.hue_ = null;
+    this.colour_ = Blockly.utils.colour.hueToRgb(hue);
   } else {
-    var errorMsg = 'Invalid colour: "' + dereferenced + '"';
-    if (colour != dereferenced) {
-      errorMsg += ' (from "' + colour + '")';
+    var hex = Blockly.utils.colour.parse(dereferenced);
+    if (hex) {
+      this.colour_ = hex;
+      // Only store hue if colour is set as a hue.
+      this.hue_ = null;
+    } else {
+      var errorMsg = 'Invalid colour: "' + dereferenced + '"';
+      if (colour != dereferenced) {
+        errorMsg += ' (from "' + colour + '")';
+      }
+      throw Error(errorMsg);
     }
-    throw Error(errorMsg);
   }
 };
 

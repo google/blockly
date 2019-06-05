@@ -79,6 +79,16 @@ Blockly.utils.colour.parse = function(str) {
 
 
 /**
+ * Convert a hue (HSV model) into an RGB hex triplet.
+ * @param {number} hue Hue on a colour wheel (0-360).
+ * @return {string} RGB code, e.g. '#5ba65b'.
+ */
+Blockly.utils.colour.hueToRgb = function(hue) {
+  return goog.color.hsvToHex(hue, Blockly.HSV_SATURATION,
+      Blockly.HSV_VALUE * 255);
+};
+
+/**
  * A map that contains the 16 basic colour keywords as defined by W3C:
  * https://www.w3.org/TR/2018/REC-css-color-3-20180619/#html4
  * The keys of this map are the lowercase "readable" names of the colours,

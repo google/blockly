@@ -133,11 +133,10 @@ Blockly.FieldImage.prototype.initView = function() {
  * Dispose of all DOM objects belonging to this text.
  */
 Blockly.FieldImage.prototype.dispose = function() {
-  if (this.fieldGroup_) {
-    Blockly.utils.dom.removeNode(this.fieldGroup_);
-    this.fieldGroup_ = null;
-  }
+  Blockly.FieldImage.superClass_.dispose.call(this);
   this.imageElement_ = null;
+  // TODO: Do we need to dispose of this?
+  this.clickHandler_ = null;
 };
 
 /**

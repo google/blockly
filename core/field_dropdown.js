@@ -155,46 +155,45 @@ Blockly.FieldDropdown.prototype.initView = function() {
 };
 
 /**
+ * Dispose of references to DOM elements and events belonging to this field.
+ */
+Blockly.FieldDropdown.prototype.dispose = function() {
+  Blockly.FieldDropdown.superClass_.dispose.call(this);
+  this.imageElement_ = null;
+  this.arrow_ = null;
+};
+
+/**
  * Create a dropdown menu under the text.
  * @private
  */
 Blockly.FieldDropdown.prototype.showEditor_ = function() {
-  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, null);
-  var menu = this.createMenu_();
-  this.addActionListener_(menu);
-  this.positionMenu_(menu);
+  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
+      this.widgetDispose_.bind(this));
+  this.menu_ = this.widgetCreate_();
+
+  this.menu_.render(Blockly.WidgetDiv.DIV);
+  // Element gets created in render.
+  Blockly.utils.addClass(this.menu_.getElement(), 'blocklyDropdownMenu');
+
+  this.positionMenu_(this.menu_);
+
+  // Focusing needs to be handled after the menu is rendered and positioned.
+  // Otherwise it will cause a page scroll to get the misplaced menu in
+  // view. See issue #1329.
+  this.menu_.setAllowAutoFocus(true);
+  this.menu_.getElement().focus();
 };
 
 /**
- * Add a listener for mouse and keyboard events in the menu and its items.
- * @param {!goog.ui.Menu} menu The menu to add listeners to.
+ * Create the dropdown editor widget.
+ * @return {goog.ui.Menu} The newly created dropdown menu.
  * @private
  */
-Blockly.FieldDropdown.prototype.addActionListener_ = function(menu) {
-  var thisField = this;
-
-  function callback(e) {
-    var menu = this;
-    var menuItem = e.target;
-    if (menuItem) {
-      thisField.onItemSelected(menu, menuItem);
-    }
-    Blockly.WidgetDiv.hideIfOwner(thisField);
-    Blockly.Events.setGroup(false);
-  }
-  // Listen for mouse/keyboard events.
-  goog.events.listen(menu, goog.ui.Component.EventType.ACTION, callback);
-};
-
-/**
- * Create and populate the menu and menu items for this dropdown, based on
- * the options list.
- * @return {!goog.ui.Menu} The populated dropdown menu.
- * @private
- */
-Blockly.FieldDropdown.prototype.createMenu_ = function() {
+Blockly.FieldDropdown.prototype.widgetCreate_ = function() {
   var menu = new goog.ui.Menu();
   menu.setRightToLeft(this.sourceBlock_.RTL);
+
   var options = this.getOptions();
   for (var i = 0; i < options.length; i++) {
     var content = options[i][0]; // Human-readable text or image.
@@ -213,7 +212,31 @@ Blockly.FieldDropdown.prototype.createMenu_ = function() {
     menu.addChild(menuItem, true);
     menuItem.setChecked(value == this.value_);
   }
+
+  this.menuActionEventKey_ = goog.events.listen(
+      menu,
+      goog.ui.Component.EventType.ACTION,
+      this.handleMenuActionEvent_,
+      false,
+      this);
+
   return menu;
+};
+
+Blockly.FieldDropdown.prototype.widgetDispose_ = function() {
+  this.menu_ = null;
+  goog.events.unlistenByKey(this.menuActionEventKey_);
+};
+
+/**
+ * Handle an ACTION event in the dropdown menu.
+ * TODO: Not sure what the type for goog event information is.
+ * @param {!Event} event The CHANGE event.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.handleMenuActionEvent_ = function(event) {
+  Blockly.WidgetDiv.hideIfOwner(this);
+  this.onItemSelected(this.menu_, event.target);
 };
 
 /**
@@ -224,11 +247,9 @@ Blockly.FieldDropdown.prototype.createMenu_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
-  // Record viewport dimensions before adding the dropdown.
   var viewportBBox = Blockly.utils.getViewportBBox();
   var anchorBBox = this.getAnchorDimensions_();
 
-  this.createWidget_(menu);
   var menuSize = Blockly.utils.uiMenu.getSize(menu);
 
   var menuMaxHeightPx = Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH
@@ -240,26 +261,8 @@ Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
   if (this.sourceBlock_.RTL) {
     Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox, menuSize);
   }
-  // Position the menu.
   Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, menuSize,
       this.sourceBlock_.RTL);
-  // Calling menuDom.focus() has to wait until after the menu has been placed
-  // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
-  // in view.  See issue #1329.
-  menu.getElement().focus();
-};
-
-/**
- * Create and render the menu widget inside Blockly's widget div.
- * @param {!goog.ui.Menu} menu The menu to add to the widget div.
- * @private
- */
-Blockly.FieldDropdown.prototype.createWidget_ = function(menu) {
-  var div = Blockly.WidgetDiv.DIV;
-  menu.render(div);
-  Blockly.utils.dom.addClass(menu.getElement(), 'blocklyDropdownMenu');
-  // Enable autofocus after the initial render to avoid issue #1329.
-  menu.setAllowAutoFocus(true);
 };
 
 /**
@@ -506,14 +509,6 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   this.textElement_.setAttribute('x', 0);
   this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y;
   this.size_.width = Blockly.Field.getCachedWidth(this.textElement_);
-};
-
-/**
- * Close the dropdown menu if this input is being deleted.
- */
-Blockly.FieldDropdown.prototype.dispose = function() {
-  Blockly.WidgetDiv.hideIfOwner(this);
-  Blockly.FieldDropdown.superClass_.dispose.call(this);
 };
 
 /**

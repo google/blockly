@@ -88,16 +88,6 @@ Blockly.FieldLabel.prototype.initView = function() {
 };
 
 /**
- * Dispose of all DOM objects belonging to this text.
- */
-Blockly.FieldLabel.prototype.dispose = function() {
-  if (this.textElement_) {
-    Blockly.utils.dom.removeNode(this.textElement_);
-    this.textElement_ = null;
-  }
-};
-
-/**
  * Ensure that the input value casts to a valid string.
  * @param {string=} newValue The input value.
  * @return {?string} A valid string, or null if invalid.

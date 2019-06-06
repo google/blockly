@@ -100,14 +100,6 @@ Blockly.FieldDate.prototype.DROPDOWN_BORDER_COLOUR = 'silver';
 Blockly.FieldDate.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
 
 /**
- * Close the colour picker if this input is being deleted.
- */
-Blockly.FieldDate.prototype.dispose = function() {
-  Blockly.WidgetDiv.hideIfOwner(this);
-  Blockly.FieldDate.superClass_.dispose.call(this);
-};
-
-/**
  * Ensure that the input value is a valid date.
  * @param {string=} newValue The input value.
  * @return {?string} A valid date, or null if invalid.
@@ -195,38 +187,28 @@ Blockly.FieldDate.prototype.updateEditor_ = function() {
 };
 
 /**
- * Create a date picker under the date field.
+ * Create and show the date field's editor.
  * @private
  */
 Blockly.FieldDate.prototype.showEditor_ = function() {
-  this.picker_ = this.createWidget_();
+  this.picker_ = this.dropdownCreate_();
   this.picker_.render(Blockly.DropDownDiv.getContentDiv());
   Blockly.utils.dom.addClass(this.picker_.getElement(), 'blocklyDatePicker');
-  Blockly.DropDownDiv.showPositionedByField(this);
   Blockly.DropDownDiv.setColour(
       this.DROPDOWN_BACKGROUND_COLOUR, this.DROPDOWN_BORDER_COLOUR);
-  this.updateEditor_();
 
-  var thisField = this;
-  Blockly.FieldDate.changeEventKey_ = goog.events.listen(this.picker_,
-      goog.ui.DatePicker.Events.CHANGE,
-      function(event) {
-        var date = event.date ? event.date.toIsoString(true) : '';
-        thisField.setValue(date);
-      });
-  Blockly.FieldDate.changeEventKey_ = goog.events.listen(this.picker_,
-      goog.ui.DatePicker.Events.CHANGE_ACTIVE_MONTH,
-      function(_e) {
-        thisField.updateEditor_();
-      });
+  Blockly.DropDownDiv.showPositionedByField(
+      this, this.dropdownDispose_.bind(this));
+
+  this.updateEditor_();
 };
 
 /**
- * Create a date picker widget and render it inside the widget div.
+ * Create the date dropdown editor.
  * @return {!goog.ui.DatePicker} The newly created date picker.
  * @private
  */
-Blockly.FieldDate.prototype.createWidget_ = function() {
+Blockly.FieldDate.prototype.dropdownCreate_ = function() {
   // Create the date picker using Closure.
   Blockly.FieldDate.loadLanguage_();
   var picker = new goog.ui.DatePicker();
@@ -235,19 +217,43 @@ Blockly.FieldDate.prototype.createWidget_ = function() {
   picker.setUseNarrowWeekdayNames(true);
   picker.setUseSimpleNavigationMenu(true);
   picker.setDate(goog.date.DateTime.fromIsoString(this.getValue()));
+
+  this.changeEventKey_ = goog.events.listen(
+      picker,
+      goog.ui.DatePicker.Events.CHANGE,
+      this.onDateSelected_,
+      null,
+      this);
+  this.activeMonthEventKey_ = goog.events.listen(
+      picker,
+      goog.ui.DatePicker.Events.CHANGE_ACTIVE_MONTH,
+      this.updateEditor_,
+      null,
+      this);
+
   return picker;
 };
 
 /**
- * Hide the date picker.
+ * Dispose of references to DOM elements and events belonging
+ * to the date editor.
  * @private
  */
-Blockly.FieldDate.widgetDispose_ = function() {
-  if (Blockly.FieldDate.changeEventKey_) {
-    goog.events.unlistenByKey(Blockly.FieldDate.changeEventKey_);
-  }
+Blockly.FieldDate.prototype.dropdownDispose_ = function() {
   this.picker_ = null;
-  Blockly.Events.setGroup(false);
+  goog.events.unlistenByKey(this.changeEventKey_);
+  goog.events.unlistenByKey(this.activeMonthEventKey_);
+};
+
+/**
+ * Handle a CHANGE event in the date picker.
+ * TODO: Not sure what the type for goog event information is.
+ * @param {!Event} event The CHANGE event.
+ * @private
+ */
+Blockly.FieldDate.prototype.onDateSelected_ = function(event) {
+  var date = event.date ? event.date.toIsoString(true) : '';
+  this.setValue(date);
 };
 
 /**

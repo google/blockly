@@ -111,7 +111,6 @@ Blockly.Field.cacheWidths_ = null;
  */
 Blockly.Field.cacheReference_ = 0;
 
-
 /**
  * Name of field.  Unique within each block.
  * Static labels are usually unnamed.
@@ -126,12 +125,12 @@ Blockly.Field.prototype.name = undefined;
 Blockly.Field.prototype.maxDisplayLength = 50;
 
 /**
- * Get the current value of the field.
- * @return {*} Current value.
+ * A generic value possessed by the field.
+ * Should generally be non-null, only null when the field is created.
+ * @type {*}
+ * @protected
  */
-Blockly.Field.prototype.getValue = function() {
-  return this.value_;
-};
+Blockly.Field.prototype.value_ = null;
 
 /**
  * Visible text to display.
@@ -329,8 +328,12 @@ Blockly.Field.prototype.toXml = function(fieldElement) {
 
 /**
  * Dispose of all DOM objects belonging to this editable field.
+ * @package
  */
 Blockly.Field.prototype.dispose = function() {
+  Blockly.DropDownDiv.hideIfOwner(this);
+  Blockly.WidgetDiv.hideIfOwner(this);
+
   if (this.mouseDownWrapper_) {
     Blockly.unbindEvent_(this.mouseDownWrapper_);
     this.mouseDownWrapper_ = null;
@@ -785,12 +788,12 @@ Blockly.Field.prototype.setValue = function(newValue) {
 };
 
 /**
- * A generic value possessed by the field.
- * Should generally be non-null, only null when the field is created.
- * @type {*}
- * @protected
+ * Get the current value of the field.
+ * @return {*} Current value.
  */
-Blockly.Field.prototype.value_ = null;
+Blockly.Field.prototype.getValue = function() {
+  return this.value_;
+};
 
 /**
  * Used to validate a value. Returns input by default. Can be overridden by

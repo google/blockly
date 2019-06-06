@@ -30,8 +30,7 @@ goog.require('Blockly.Block');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.utils');
-
-goog.require('goog.math.Rect');
+goog.require('Blockly.utils.Rect');
 
 
 /**
@@ -336,7 +335,7 @@ Blockly.HorizontalFlyout.prototype.isDragTowardWorkspace = function(
 
 /**
  * Return the deletion rectangle for this flyout in viewport coordinates.
- * @return {goog.math.Rect} Rectangle in which to delete.
+ * @return {Blockly.utils.Rect} Rectangle in which to delete.
  */
 Blockly.HorizontalFlyout.prototype.getClientRect = function() {
   if (!this.svgGroup_) {
@@ -352,10 +351,10 @@ Blockly.HorizontalFlyout.prototype.getClientRect = function() {
   var height = flyoutRect.height;
 
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
-    return new goog.math.Rect(-BIG_NUM, y - BIG_NUM, BIG_NUM * 2,
+    return new Blockly.utils.Rect(-BIG_NUM, y - BIG_NUM, BIG_NUM * 2,
         BIG_NUM + height);
   } else if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
-    return new goog.math.Rect(-BIG_NUM, y, BIG_NUM * 2,
+    return new Blockly.utils.Rect(-BIG_NUM, y, BIG_NUM * 2,
         BIG_NUM + height);
   }
   // TODO: Else throw error (should never happen).

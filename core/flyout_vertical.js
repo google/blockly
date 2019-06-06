@@ -31,8 +31,7 @@ goog.require('Blockly.Flyout');
 goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
-
-goog.require('goog.math.Rect');
+goog.require('Blockly.utils.Rect');
 
 
 /**
@@ -314,7 +313,7 @@ Blockly.VerticalFlyout.prototype.isDragTowardWorkspace = function(
 
 /**
  * Return the deletion rectangle for this flyout in viewport coordinates.
- * @return {goog.math.Rect} Rectangle in which to delete.
+ * @return {Blockly.utils.Rect} Rectangle in which to delete.
  */
 Blockly.VerticalFlyout.prototype.getClientRect = function() {
   if (!this.svgGroup_) {
@@ -330,7 +329,7 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
   var width = flyoutRect.width;
 
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
-    return new goog.math.Rect(x - BIG_NUM, -BIG_NUM, BIG_NUM + width,
+    return new Blockly.utils.Rect(x - BIG_NUM, -BIG_NUM, BIG_NUM + width,
         BIG_NUM * 2);
   } else {  // Right
     // Firefox sometimes reports the wrong value for the client rect.
@@ -357,7 +356,7 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
         x = x + this.leftEdge_ * scale;
       }
     }
-    return new goog.math.Rect(x, -BIG_NUM, BIG_NUM + width, BIG_NUM * 2);
+    return new Blockly.utils.Rect(x, -BIG_NUM, BIG_NUM + width, BIG_NUM * 2);
   }
 };
 

@@ -82,12 +82,16 @@ Blockly.BlockRendering.Highlighter.prototype.drawValueInput = function(row) {
   //var v = row.height - BRC.TAB_HEIGHT;
 
   if (this.info_.RTL) {
+    var aboveTabHeight = BRC.TAB_VERTICAL_OVERLAP - BRC.HIGHLIGHT_OFFSET;
+    var belowTabHeight = row.height -
+        (BRC.TAB_HEIGHT - BRC.TAB_VERTICAL_OVERLAP) +
+        BRC.HIGHLIGHT_OFFSET;
+    // Edge above tab.
+    this.highlightSteps_.push('v', aboveTabHeight);
     // Highlight around back of tab.
-    // TODO: Clean up.
-    this.highlightSteps_.push('v', BRC.TAB_OFFSET_FROM_TOP - 3);
-    this.highlightSteps_.push('m 0,2.5');
     this.highlightSteps_.push(BRC.TAB_PATH_DOWN_HIGHLIGHT_RTL);
-    this.highlightSteps_.push('v', row.height - BRC.TAB_HEIGHT);
+    // Edge below tab.
+    this.highlightSteps_.push('v', belowTabHeight);
   } else {
     // Short highlight glint at bottom of tab.
     this.highlightSteps_.push('M', (row.width - 5) + ',' +
@@ -122,7 +126,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
     this.highlightSteps_.push('H', row.width);
   }
   if (this.info_.RTL) {
-    this.highlightSteps_.push('H', row.width);
+    this.highlightSteps_.push('H', row.width - BRC.HIGHLIGHT_OFFSET);
     this.highlightSteps_.push('v', row.height);
   }
 };
@@ -145,7 +149,6 @@ Blockly.BlockRendering.Highlighter.prototype.drawBottomCorner = function(_row) {
       }
     } else if (elem.type === 'round corner') {
       if (!this.info_.RTL) {
-        height -= BRC.BOTTOM_HIGHLIGHT_OFFSET;
         this.highlightSteps_.push(BRC.BOTTOM_LEFT_CORNER_HIGHLIGHT_START +
             (height - Blockly.BlockSvg.DISTANCE_45_INSIDE) +
             BRC.BOTTOM_LEFT_CORNER_HIGHLIGHT_MID +
@@ -178,24 +181,41 @@ Blockly.BlockRendering.Highlighter.prototype.drawInlineInput = function(input) {
   var height = input.height;
   var x = input.xPos;
   var yPos = input.centerline - height / 2;
+  var bottomHighlightWidth = width - BRC.TAB_WIDTH;
+
   if (this.info_.RTL) {
+    // TODO: Check if this is different when the inline input is populated.
+
+    var aboveTabHeight =
+        BRC.TAB_OFFSET_FROM_TOP + BRC.TAB_VERTICAL_OVERLAP - BRC.HIGHLIGHT_OFFSET;
+
+    var belowTabHeight =
+        height -
+        (BRC.TAB_OFFSET_FROM_TOP + BRC.TAB_HEIGHT - BRC.TAB_VERTICAL_OVERLAP) +
+        BRC.HIGHLIGHT_OFFSET;
+
+    var startX = x + BRC.TAB_WIDTH - BRC.HIGHLIGHT_OFFSET;
+    var startY = yPos + BRC.HIGHLIGHT_OFFSET;
+
     // Highlight right edge, around back of tab, and bottom.
-    this.highlightInlineSteps_.push('M', (x + BRC.TAB_WIDTH - 0.5) +
-      ',' + (yPos + BRC.TAB_OFFSET_FROM_TOP + 5));
-    this.highlightInlineSteps_.push(
-        BRC.TAB_PATH_DOWN_HIGHLIGHT_RTL);
-    this.highlightInlineSteps_.push('v',
-        height - Blockly.BlockSvg.TAB_HEIGHT + 1.5);
-    this.highlightInlineSteps_.push('h',
-        width - BRC.TAB_WIDTH);
+    this.highlightInlineSteps_.push('M', startX + ',' + startY);
+    // Right edge above tab.
+    this.highlightInlineSteps_.push('v', aboveTabHeight);
+    // Back of tab.
+    this.highlightInlineSteps_.push(BRC.TAB_PATH_DOWN_HIGHLIGHT_RTL);
+    // Right edge below tab.
+    this.highlightInlineSteps_.push('v', belowTabHeight);
+    // Bottom (horizontal).
+    this.highlightInlineSteps_.push('h', bottomHighlightWidth);
   } else {
     // Highlight right edge, bottom.
     this.highlightInlineSteps_.push('M',
-        (x + width + 0.5) + ',' +
-        (yPos + 0.5));
+        (x + width + BRC.HIGHLIGHT_OFFSET) + ',' +
+        (yPos + BRC.HIGHLIGHT_OFFSET));
     this.highlightInlineSteps_.push('v', height);
-    this.highlightInlineSteps_.push('h', BRC.TAB_WIDTH - width);
+    this.highlightInlineSteps_.push('h -', bottomHighlightWidth);
     // Short highlight glint at bottom of tab.
+    // Bad: reference to Blockly.BlockSvg
     this.highlightInlineSteps_.push('M',
         (x + 2.9) + ',' + (yPos + Blockly.BlockSvg.INLINE_PADDING_Y +
          BRC.TAB_HEIGHT - 0.7));

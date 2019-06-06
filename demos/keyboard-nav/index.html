@@ -215,12 +215,14 @@
       } else if (newNode) {
         return treeTraversal(newNode);
       } else {
-        var siblingOrParent = findSiblingOrParent(node);
+        var siblingOrParent = findSiblingOrParent(node.out());
         if (validNode(siblingOrParent)) {
           return siblingOrParent;
         } else if (siblingOrParent
           && siblingOrParent.getType() !== Blockly.ASTNode.types.WORKSPACE) {
           return treeTraversal(siblingOrParent);
+        } else {
+          return null;
         }
       }
     }

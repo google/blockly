@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.WorkspaceCommentSvg');
 
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.CommentCreate');
 goog.require('Blockly.Events.CommentDelete');
@@ -33,8 +34,6 @@ goog.require('Blockly.Events.CommentMove');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceComment');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -273,7 +272,7 @@ Blockly.WorkspaceCommentSvg.prototype.removeFocus = function() {
  * If the comment is on the workspace, (0, 0) is the origin of the workspace
  * coordinate system.
  * This does not change with workspace scale.
- * @return {!goog.math.Coordinate} Object with .x and .y properties in
+ * @return {!Blockly.utils.Coordinate} Object with .x and .y properties in
  *     workspace coordinates.
  * @package
  */
@@ -304,7 +303,7 @@ Blockly.WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
     } while (element && element != this.workspace.getBubbleCanvas() &&
         element != dragSurfaceGroup);
   }
-  this.xy_ = new goog.math.Coordinate(x, y);
+  this.xy_ = new Blockly.utils.Coordinate(x, y);
   return this.xy_;
 };
 
@@ -319,7 +318,7 @@ Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
   // TODO: Do I need to look up the relative to surface XY position here?
   var xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);
-  this.xy_ = new goog.math.Coordinate(xy.x + dx, xy.y + dy);
+  this.xy_ = new Blockly.utils.Coordinate(xy.x + dx, xy.y + dy);
   event.recordNew();
   Blockly.Events.fire(event);
   this.workspace.resizeContents();
@@ -333,7 +332,7 @@ Blockly.WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.translate = function(x, y) {
-  this.xy_ = new goog.math.Coordinate(x, y);
+  this.xy_ = new Blockly.utils.Coordinate(x, y);
   this.getSvgRoot().setAttribute('transform',
       'translate(' + x + ',' + y + ')');
 };
@@ -363,7 +362,7 @@ Blockly.WorkspaceCommentSvg.prototype.moveToDragSurface_ = function() {
  * Move this comment back to the workspace block canvas.
  * Generally should be called at the same time as setDragging(false).
  * Does nothing if useDragSurface_ is false.
- * @param {!goog.math.Coordinate} newXY The position the comment should take on
+ * @param {!Blockly.utils.Coordinate} newXY The position the comment should take on
  *     on the workspace canvas, in workspace coordinates.
  * @private
  */
@@ -381,7 +380,7 @@ Blockly.WorkspaceCommentSvg.prototype.moveOffDragSurface_ = function(newXY) {
  * drag surface to translate blocks.
  * @param {Blockly.BlockDragSurfaceSvg} dragSurface The surface that carries
  *     rendered items during a drag, or null if no drag surface is in use.
- * @param {!goog.math.Coordinate} newLoc The location to translate to, in
+ * @param {!Blockly.utils.Coordinate} newLoc The location to translate to, in
  *     workspace coordinates.
  * @package
  */
@@ -419,7 +418,7 @@ Blockly.WorkspaceCommentSvg.prototype.clearTransformAttributes_ = function() {
  * Returns the coordinates of a bounding box describing the dimensions of this
  * comment.
  * Coordinate system: workspace coordinates.
- * @return {!{topLeft: goog.math.Coordinate, bottomRight: goog.math.Coordinate}}
+ * @return {!{topLeft: Blockly.utils.Coordinate, bottomRight: Blockly.utils.Coordinate}}
  *    Object with top left and bottom right coordinates of the bounding box.
  * @package
  */
@@ -429,17 +428,17 @@ Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
   var topLeft;
   var bottomRight;
   if (this.RTL) {
-    topLeft = new goog.math.Coordinate(blockXY.x - (commentBounds.width),
+    topLeft = new Blockly.utils.Coordinate(blockXY.x - (commentBounds.width),
         blockXY.y);
     // Add the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
-    bottomRight = new goog.math.Coordinate(blockXY.x,
+    bottomRight = new Blockly.utils.Coordinate(blockXY.x,
         blockXY.y + commentBounds.height);
   } else {
     // Subtract the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
-    topLeft = new goog.math.Coordinate(blockXY.x, blockXY.y);
-    bottomRight = new goog.math.Coordinate(blockXY.x + commentBounds.width,
+    topLeft = new Blockly.utils.Coordinate(blockXY.x, blockXY.y);
+    bottomRight = new Blockly.utils.Coordinate(blockXY.x + commentBounds.width,
         blockXY.y + commentBounds.height);
   }
   return {topLeft: topLeft, bottomRight: bottomRight};

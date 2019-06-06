@@ -27,6 +27,7 @@
 goog.provide('Blockly.Flyout');
 
 goog.require('Blockly.Block');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
@@ -37,8 +38,6 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -817,25 +816,23 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   var flyoutOffsetPixels = this.workspace_.getOriginOffsetInPixels();
 
   // The position of the old block in flyout workspace coordinates.
-  var oldBlockPosWs = oldBlock.getRelativeToSurfaceXY();
-
+  var oldBlockPos = oldBlock.getRelativeToSurfaceXY();
   // The position of the old block in pixels relative to the flyout
   // workspace's origin.
-  var oldBlockPosPixels = oldBlockPosWs.scale(this.workspace_.scale);
+  oldBlockPos.scale(this.workspace_.scale);
 
   // The position of the old block in pixels relative to the upper left corner
   // of the injection div.
-  var oldBlockOffsetPixels = goog.math.Coordinate.sum(flyoutOffsetPixels,
-      oldBlockPosPixels);
+  var oldBlockOffsetPixels = Blockly.utils.Coordinate.sum(flyoutOffsetPixels,
+      oldBlockPos);
 
   // The position of the old block in pixels relative to the origin of the
   // main workspace.
-  var finalOffsetPixels = goog.math.Coordinate.difference(oldBlockOffsetPixels,
+  var finalOffset = Blockly.utils.Coordinate.difference(oldBlockOffsetPixels,
       mainOffsetPixels);
-
   // The position of the old block in main workspace coordinates.
-  var finalOffsetMainWs = finalOffsetPixels.scale(1 / targetWorkspace.scale);
+  finalOffset.scale(1 / targetWorkspace.scale);
 
-  block.moveBy(finalOffsetMainWs.x, finalOffsetMainWs.y);
+  block.moveBy(finalOffset.x, finalOffset.y);
   return block;
 };

@@ -27,10 +27,9 @@
 goog.provide('Blockly.Scrollbar');
 goog.provide('Blockly.ScrollbarPair');
 
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -211,10 +210,10 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
    * The upper left corner of the scrollbar's SVG group in CSS pixels relative
    * to the scrollbar's origin.  This is usually relative to the injection div
    * origin.
-   * @type {goog.math.Coordinate}
+   * @type {Blockly.utils.Coordinate}
    * @private
    */
-  this.position_ = new goog.math.Coordinate(0, 0);
+  this.position_ = new Blockly.utils.Coordinate(0, 0);
 
   // Store the thickness in a temp variable for readability.
   var scrollbarThickness = Blockly.Scrollbar.scrollbarThickness;
@@ -246,10 +245,10 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
  * The location of the origin of the workspace that the scrollbar is in,
  * measured in CSS pixels relative to the injection div origin.  This is usually
  * (0, 0).  When the scrollbar is in a flyout it may have a different origin.
- * @type {goog.math.Coordinate}
+ * @type {Blockly.utils.Coordinate}
  * @private
  */
-Blockly.Scrollbar.prototype.origin_ = new goog.math.Coordinate(0, 0);
+Blockly.Scrollbar.prototype.origin_ = new Blockly.utils.Coordinate(0, 0);
 
 /**
  * The position of the mouse along this scrollbar's major axis at the start of
@@ -257,7 +256,7 @@ Blockly.Scrollbar.prototype.origin_ = new goog.math.Coordinate(0, 0);
  * Units are CSS pixels, with (0, 0) at the top left of the browser window.
  * For a horizontal scrollbar this is the x coordinate of the mouse down event;
  * for a vertical scrollbar it's the y coordinate of the mouse down event.
- * @type {goog.math.Coordinate}
+ * @type {Blockly.utils.Coordinate}
  */
 Blockly.Scrollbar.prototype.startDragMouse_ = 0;
 
@@ -860,5 +859,5 @@ Blockly.Scrollbar.prototype.set = function(value) {
  * @param {number} y The y coordinate of the scrollbar's origin, in CSS pixels.
  */
 Blockly.Scrollbar.prototype.setOrigin = function(x, y) {
-  this.origin_ = new goog.math.Coordinate(x, y);
+  this.origin_ = new Blockly.utils.Coordinate(x, y);
 };

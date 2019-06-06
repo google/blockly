@@ -223,7 +223,7 @@ Blockly.InsertionMarkerManager.prototype.applyConnections = function() {
 
 /**
  * Update highlighted connections based on the most recent move location.
- * @param {!goog.math.Coordinate} dxy Position relative to drag start,
+ * @param {!Blockly.utils.Coordinate} dxy Position relative to drag start,
  *     in workspace units.
  * @param {?number} deleteArea One of {@link Blockly.DELETE_AREA_TRASH},
  *     {@link Blockly.DELETE_AREA_TOOLBOX}, or {@link Blockly.DELETE_AREA_NONE}.
@@ -317,7 +317,7 @@ Blockly.InsertionMarkerManager.prototype.initAvailableConnections_ = function() 
  * updated based on the closest candidate and the current drag distance.
  * @param {!Object} candidate An object containing a local connection, a closest
  *     connection, and a radius.  Returned by getCandidate_.
- * @param {!goog.math.Coordinate} dxy Position relative to drag start,
+ * @param {!Blockly.utils.Coordinate} dxy Position relative to drag start,
  *     in workspace units.
  * @return {boolean} Whether the preview should be updated.
  * @private
@@ -362,7 +362,7 @@ Blockly.InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
 /**
  * Find the nearest valid connection, which may be the same as the current
  * closest connection.
- * @param {!goog.math.Coordinate} dxy Position relative to drag start,
+ * @param {!Blockly.utils.Coordinate} dxy Position relative to drag start,
  *     in workspace units.
  * @return {!Object} An object containing a local connection, a closest
  *     connection, and a radius.

@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.FieldTextInput');
 
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
@@ -33,8 +34,6 @@ goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
 goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -364,7 +363,7 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
   // In RTL mode block fields and LTR input fields the left edge moves,
   // whereas the right edge is fixed.  Reposition the editor.
   var x = this.sourceBlock_.RTL ? bBox.right - div.offsetWidth : bBox.left;
-  var xy = new goog.math.Coordinate(x, bBox.top);
+  var xy = new Blockly.utils.Coordinate(x, bBox.top);
 
   // Shift by a few pixels to line up exactly.
   xy.y += 1;

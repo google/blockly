@@ -29,6 +29,7 @@ goog.provide('Blockly.BlockSvg');
 goog.require('Blockly.Block');
 goog.require('Blockly.BlockAnimations');
 goog.require('Blockly.ContextMenu');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.BlockMove');
@@ -38,8 +39,6 @@ goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -121,7 +120,7 @@ Blockly.BlockSvg.prototype.width = 0;
 
 /**
  * Original location of block being dragged.
- * @type {goog.math.Coordinate}
+ * @type {Blockly.utils.Coordinate}
  * @private
  */
 Blockly.BlockSvg.prototype.dragStartXY_ = null;
@@ -301,7 +300,7 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
  * If the block is on the workspace, (0, 0) is the origin of the workspace
  * coordinate system.
  * This does not change with workspace scale.
- * @return {!goog.math.Coordinate} Object with .x and .y properties in
+ * @return {!Blockly.utils.Coordinate} Object with .x and .y properties in
  *     workspace coordinates.
  */
 Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
@@ -331,7 +330,7 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
     } while (element && element != this.workspace.getCanvas() &&
         element != dragSurfaceGroup);
   }
-  return new goog.math.Coordinate(x, y);
+  return new Blockly.utils.Coordinate(x, y);
 };
 
 /**
@@ -393,7 +392,7 @@ Blockly.BlockSvg.prototype.moveToDragSurface_ = function() {
  * Move this block back to the workspace block canvas.
  * Generally should be called at the same time as setDragging_(false).
  * Does nothing if useDragSurface_ is false.
- * @param {!goog.math.Coordinate} newXY The position the block should take on
+ * @param {!Blockly.utils.Coordinate} newXY The position the block should take on
  *     on the workspace canvas, in workspace coordinates.
  * @private
  */
@@ -410,7 +409,7 @@ Blockly.BlockSvg.prototype.moveOffDragSurface_ = function(newXY) {
  * Move this block during a drag, taking into account whether we are using a
  * drag surface to translate blocks.
  * This block must be a top-level block.
- * @param {!goog.math.Coordinate} newLoc The location to translate to, in
+ * @param {!Blockly.utils.Coordinate} newLoc The location to translate to, in
  *     workspace coordinates.
  * @package
  */
@@ -469,7 +468,7 @@ Blockly.BlockSvg.prototype.snapToGrid = function() {
  * Returns the coordinates of a bounding box describing the dimensions of this
  * block and any blocks stacked below it.
  * Coordinate system: workspace coordinates.
- * @return {!{topLeft: goog.math.Coordinate, bottomRight: goog.math.Coordinate}}
+ * @return {!{topLeft: Blockly.utils.Coordinate, bottomRight: Blockly.utils.Coordinate}}
  *    Object with top left and bottom right coordinates of the bounding box.
  */
 Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
@@ -480,18 +479,18 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
   var bottomRight;
   if (this.RTL) {
     // Width has the tab built into it already so subtract it here.
-    topLeft = new goog.math.Coordinate(blockXY.x - (blockBounds.width - tab),
+    topLeft = new Blockly.utils.Coordinate(blockXY.x - (blockBounds.width - tab),
         blockXY.y);
     // Add the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
-    bottomRight = new goog.math.Coordinate(blockXY.x + tab,
+    bottomRight = new Blockly.utils.Coordinate(blockXY.x + tab,
         blockXY.y + blockBounds.height);
   } else {
     // Subtract the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
-    topLeft = new goog.math.Coordinate(blockXY.x - tab, blockXY.y);
+    topLeft = new Blockly.utils.Coordinate(blockXY.x - tab, blockXY.y);
     // Width has the tab built into it already so subtract it here.
-    bottomRight = new goog.math.Coordinate(blockXY.x + blockBounds.width - tab,
+    bottomRight = new Blockly.utils.Coordinate(blockXY.x + blockBounds.width - tab,
         blockXY.y + blockBounds.height);
   }
   return {topLeft: topLeft, bottomRight: bottomRight};

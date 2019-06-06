@@ -29,6 +29,7 @@ goog.provide('Blockly.Block');
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Connection');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.BlockCreate');
@@ -40,8 +41,6 @@ goog.require('Blockly.Mutator');
 goog.require('Blockly.utils');
 goog.require('Blockly.Warning');
 goog.require('Blockly.Workspace');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -134,10 +133,10 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   /**
    * The block's position in workspace units.  (0, 0) is at the workspace's
    * origin; scale does not change this value.
-   * @type {!goog.math.Coordinate}
+   * @type {!Blockly.utils.Coordinate}
    * @private
    */
-  this.xy_ = new goog.math.Coordinate(0, 0);
+  this.xy_ = new Blockly.utils.Coordinate(0, 0);
 
   /** @type {!Blockly.Workspace} */
   this.workspace = workspace;
@@ -1846,7 +1845,7 @@ Blockly.Block.prototype.setMutator = function(_mutator) {
 /**
  * Return the coordinates of the top-left corner of this block relative to the
  * drawing surface's origin (0,0), in workspace units.
- * @return {!goog.math.Coordinate} Object with .x and .y properties.
+ * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
  */
 Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
   return this.xy_;

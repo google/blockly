@@ -26,12 +26,11 @@
 
 goog.provide('Blockly.Bubble');
 
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Touch');
 goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.Workspace');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -40,7 +39,7 @@ goog.require('goog.math.Coordinate');
  *     bubble.
  * @param {!Element} content SVG content for the bubble.
  * @param {Element} shape SVG element to avoid eclipsing.
- * @param {!goog.math.Coordinate} anchorXY Absolute position of bubble's anchor
+ * @param {!Blockly.utils.Coordinate} anchorXY Absolute position of bubble's anchor
  *     point.
  * @param {?number} bubbleWidth Width of bubble, or null if not resizable.
  * @param {?number} bubbleHeight Height of bubble, or null if not resizable.
@@ -163,7 +162,7 @@ Blockly.Bubble.prototype.rendered_ = false;
 
 /**
  * Absolute coordinate of anchor point, in workspace coordinates.
- * @type {goog.math.Coordinate}
+ * @type {Blockly.utils.Coordinate}
  * @private
  */
 Blockly.Bubble.prototype.anchorXY_ = null;
@@ -336,7 +335,7 @@ Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
     return;
   }
   // Left-click (or middle click)
-  this.workspace_.startDrag(e, new goog.math.Coordinate(
+  this.workspace_.startDrag(e, new Blockly.utils.Coordinate(
       this.workspace_.RTL ? -this.width_ : this.width_, this.height_));
 
   Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
@@ -388,7 +387,7 @@ Blockly.Bubble.prototype.promote_ = function() {
 /**
  * Notification that the anchor has moved.
  * Update the arrow and bubble accordingly.
- * @param {!goog.math.Coordinate} xy Absolute location.
+ * @param {!Blockly.utils.Coordinate} xy Absolute location.
  */
 Blockly.Bubble.prototype.setAnchorLocation = function(xy) {
   this.anchorXY_ = xy;
@@ -774,7 +773,7 @@ Blockly.Bubble.prototype.dispose = function() {
  * a drag surface.
  * @param {Blockly.BlockDragSurfaceSvg} dragSurface The surface that carries
  *     rendered items during a drag, or null if no drag surface is in use.
- * @param {!goog.math.Coordinate} newLoc The location to translate to, in
+ * @param {!Blockly.utils.Coordinate} newLoc The location to translate to, in
  *     workspace coordinates.
  * @package
  */
@@ -796,10 +795,10 @@ Blockly.Bubble.prototype.moveDuringDrag = function(dragSurface, newLoc) {
 /**
  * Return the coordinates of the top-left corner of this bubble's body relative
  * to the drawing surface's origin (0,0), in workspace units.
- * @return {!goog.math.Coordinate} Object with .x and .y properties.
+ * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
  */
 Blockly.Bubble.prototype.getRelativeToSurfaceXY = function() {
-  return new goog.math.Coordinate(
+  return new Blockly.utils.Coordinate(
       this.anchorXY_.x + this.relativeLeft_,
       this.anchorXY_.y + this.relativeTop_);
 };

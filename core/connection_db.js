@@ -226,16 +226,17 @@ Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
  * @param {!Blockly.Connection} conn The connection searching for a compatible
  *     mate.
  * @param {number} maxRadius The maximum radius to another connection.
- * @param {!goog.math.Coordinate} dxy Offset between this connection's location
- *     in the database and the current location (as a result of dragging).
+ * @param {!Blockly.utils.Coordinate} dxy Offset between this connection's
+ *     location in the database and the current location (as a result of
+ *     dragging).
  * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
  *     properties:' connection' which is either another connection or null,
  *     and 'radius' which is the distance.
  */
 Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
     dxy) {
-  // Don't bother.
   if (!this.connections_.length) {
+    // Don't bother.
     return {connection: null, radius: maxRadius};
   }
 

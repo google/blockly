@@ -27,10 +27,9 @@
 goog.provide('Blockly.RenderedConnection');
 
 goog.require('Blockly.Connection');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Events');
 goog.require('Blockly.utils');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -45,10 +44,10 @@ Blockly.RenderedConnection = function(source, type) {
 
   /**
    * Workspace units, (0, 0) is top left of block.
-   * @type {!goog.math.Coordinate}
+   * @type {!Blockly.utils.Coordinate}
    * @private
    */
-  this.offsetInBlock_ = new goog.math.Coordinate(0, 0);
+  this.offsetInBlock_ = new Blockly.utils.Coordinate(0, 0);
 };
 goog.inherits(Blockly.RenderedConnection, Blockly.Connection);
 
@@ -144,7 +143,7 @@ Blockly.RenderedConnection.prototype.moveBy = function(dx, dy) {
 /**
  * Move this connection to the location given by its offset within the block and
  * the location of the block's top left corner.
- * @param {!goog.math.Coordinate} blockTL The location of the top left corner
+ * @param {!Blockly.utils.Coordinate} blockTL The location of the top left corner
  *     of the block, in workspace coordinates.
  */
 Blockly.RenderedConnection.prototype.moveToOffset = function(blockTL) {
@@ -187,7 +186,7 @@ Blockly.RenderedConnection.prototype.tighten_ = function() {
  * Find the closest compatible connection to this connection.
  * All parameters are in workspace units.
  * @param {number} maxLimit The maximum radius to another connection.
- * @param {!goog.math.Coordinate} dxy Offset between this connection's location
+ * @param {!Blockly.utils.Coordinate} dxy Offset between this connection's location
  *     in the database and the current location (as a result of dragging).
  * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
  *     properties: 'connection' which is either another connection or null,

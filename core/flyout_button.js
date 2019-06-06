@@ -26,9 +26,8 @@
 
 goog.provide('Blockly.FlyoutButton');
 
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -62,10 +61,10 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
   this.text_ = xml.getAttribute('text');
 
   /**
-   * @type {!goog.math.Coordinate}
+   * @type {!Blockly.utils.Coordinate}
    * @private
    */
-  this.position_ = new goog.math.Coordinate(0, 0);
+  this.position_ = new Blockly.utils.Coordinate(0, 0);
 
   /**
    * Whether this button should be styled as a label.
@@ -205,7 +204,7 @@ Blockly.FlyoutButton.prototype.moveTo = function(x, y) {
 
 /**
  * Location of the button.
- * @return {!goog.math.Coordinate} x, y coordinates.
+ * @return {!Blockly.utils.Coordinate} x, y coordinates.
  * @package
  */
 Blockly.FlyoutButton.prototype.getPosition = function() {

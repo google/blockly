@@ -34,11 +34,10 @@ goog.provide('Blockly.Events.Create');  // Deprecated.
 goog.provide('Blockly.Events.Delete');  // Deprecated.
 goog.provide('Blockly.Events.Move');  // Deprecated.
 
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
 goog.require('Blockly.Xml.utils');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -431,7 +430,7 @@ Blockly.Events.Move.prototype.fromJson = function(json) {
   if (json['newCoordinate']) {
     var xy = json['newCoordinate'].split(',');
     this.newCoordinate =
-        new goog.math.Coordinate(parseFloat(xy[0]), parseFloat(xy[1]));
+        new Blockly.utils.Coordinate(parseFloat(xy[0]), parseFloat(xy[1]));
   }
 };
 
@@ -475,7 +474,7 @@ Blockly.Events.Move.prototype.currentLocation_ = function() {
 Blockly.Events.Move.prototype.isNull = function() {
   return this.oldParentId == this.newParentId &&
       this.oldInputName == this.newInputName &&
-      goog.math.Coordinate.equals(this.oldCoordinate, this.newCoordinate);
+      Blockly.utils.Coordinate.equals(this.oldCoordinate, this.newCoordinate);
 };
 
 /**

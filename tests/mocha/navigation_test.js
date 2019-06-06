@@ -209,17 +209,6 @@ suite('Navigation', function() {
           Blockly.Navigation.STATE_WS);
     });
 
-    test('Add block to workspace with a marked workspace node', function() {
-      var coordinate = new goog.math.Coordinate(100,100);
-      var wsNode = Blockly.ASTNode.createWorkspaceNode(this.workspace, coordinate);
-      Blockly.Navigation.marker_.setLocation(wsNode);
-
-      Blockly.Navigation.insertBlockToWs(this.basicBlock);
-
-      chai.assert.equal(this.basicBlock.getRelativeToSurfaceXY().x, 100);
-      chai.assert.equal(this.basicBlock.getRelativeToSurfaceXY().y, 100);
-    });
-
     test('Connect two blocks that are on the workspace', function() {
       var targetNode = Blockly.ASTNode.createConnectionNode(this.basicBlock.previousConnection);
       Blockly.Navigation.marker_.setLocation(targetNode);

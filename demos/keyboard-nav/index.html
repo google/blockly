@@ -190,8 +190,9 @@
       if (!node) {
         return null;
       }
-      if (validNode(node.next())) {
-        return node.next();
+      var nextNode = node.next();
+      if (nextNode) {
+        return nextNode;
       }
       return findSiblingOrParent(node.out());
     }
@@ -214,7 +215,13 @@
       } else if (newNode) {
         return treeTraversal(newNode);
       } else {
-        return findSiblingOrParent(node);
+        var siblingOrParent = findSiblingOrParent(node);
+        if (validNode(siblingOrParent)) {
+          return siblingOrParent;
+        } else if (siblingOrParent
+          && siblingOrParent.getType() !== Blockly.ASTNode.types.WORKSPACE) {
+          return treeTraversal(siblingOrParent);
+        }
       }
     }
 

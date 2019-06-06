@@ -32,8 +32,19 @@ goog.provide('Blockly.Touch');
 
 goog.require('Blockly.utils');
 
-goog.require('goog.events.BrowserFeature');
 
+/**
+  * Whether touch is enabled in the browser.
+  * Copied from Closure's goog.events.BrowserFeature.TOUCH_ENABLED
+  */
+Blockly.Touch.TOUCH_ENABLED =
+    ('ontouchstart' in Blockly.utils.global ||
+     !!(Blockly.utils.global['document'] && document.documentElement &&
+        'ontouchstart' in document.documentElement) ||
+     // IE10 uses non-standard touch events, so it has a different check.
+     !!(Blockly.utils.global['navigator'] &&
+        (Blockly.utils.global['navigator']['maxTouchPoints'] ||
+         Blockly.utils.global['navigator']['msMaxTouchPoints'])))
 
 /**
  * Which touch events are we currently paying attention to?
@@ -60,7 +71,7 @@ if (Blockly.utils.global['PointerEvent']) {
     'touchend': ['pointerup'],
     'touchcancel': ['pointercancel']
   };
-} else if (goog.events.BrowserFeature.TOUCH_ENABLED) {
+} else if (Blockly.Touch.TOUCH_ENABLED) {
   Blockly.Touch.TOUCH_MAP = {
     'mousedown': ['touchstart'],
     'mousemove': ['touchmove'],

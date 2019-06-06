@@ -35,7 +35,6 @@ goog.require('Blockly.utils');
 goog.require('Blockly.VerticalFlyout');
 
 goog.require('goog.events');
-goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.EventType');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.math.Rect');
@@ -600,7 +599,7 @@ Blockly.Toolbox.TreeControl.prototype.enterDocument = function() {
   Blockly.Toolbox.TreeControl.superClass_.enterDocument.call(this);
 
   // Add touch handler.
-  if (goog.events.BrowserFeature.TOUCH_ENABLED) {
+  if (Blockly.Touch.TOUCH_ENABLED) {
     var el = this.getElement();
     Blockly.bindEventWithChecks_(el, goog.events.EventType.TOUCHEND, this,
         this.handleTouchEvent_);

@@ -51,7 +51,6 @@ goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
 
-goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 
 
@@ -774,7 +773,7 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
 Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled =
     function() {
     /* eslint-disable indent */
-  var currScroll = goog.dom.getDocumentScroll();
+  var currScroll = Blockly.utils.getDocumentScroll();
   if (!goog.math.Coordinate.equals(this.lastRecordedPageScroll_, currScroll)) {
     this.lastRecordedPageScroll_ = currScroll;
     this.updateScreenCalculations_();

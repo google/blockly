@@ -27,9 +27,9 @@
 goog.provide('Blockly.Scrollbar');
 goog.provide('Blockly.ScrollbarPair');
 
+goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 
-goog.require('goog.events.BrowserFeature');
 goog.require('goog.math.Coordinate');
 
 
@@ -303,7 +303,7 @@ Blockly.Scrollbar.prototype.containerVisible_ = true;
  * Scrollbars should be larger on touch devices.
  */
 Blockly.Scrollbar.scrollbarThickness = 15;
-if (goog.events.BrowserFeature.TOUCH_ENABLED) {
+if (Blockly.Touch.TOUCH_ENABLED) {
   Blockly.Scrollbar.scrollbarThickness = 25;
 }
 

@@ -48,6 +48,8 @@ BRC.TAB_HEIGHT = 15;
 
 BRC.TAB_OFFSET_FROM_TOP = 5;
 
+BRC.TAB_VERTICAL_OVERLAP = 2.5;
+
 BRC.TAB_WIDTH = 8;
 
 BRC.NOTCH_WIDTH = 15;
@@ -146,10 +148,10 @@ BRC.TAB_PATH_DOWN =  'c 0,10 -' + BRC.TAB_WIDTH +
  * @const
  */
 BRC.TAB_PATH_DOWN_HIGHLIGHT_RTL = 'm -' +
-    (BRC.TAB_WIDTH * 0.97) + ',0 q -' +
+    (BRC.TAB_WIDTH * 0.97) + ',2.5 q -' +
     (BRC.TAB_WIDTH * 0.05) + ',10 ' +
     (BRC.TAB_WIDTH * 0.3) + ',9.5 m ' +
-    (BRC.TAB_WIDTH * 0.67) + ',-1.9 v 1.4';
+    (BRC.TAB_WIDTH * 0.67) + ',-1.9';
 
 /**
  * SVG path for drawing a horizontal puzzle tab from bottom to top.

@@ -27,9 +27,8 @@
 goog.provide('Blockly.Trashcan');
 
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Rect');
 goog.require('Blockly.Xml');
-
-goog.require('goog.math.Rect');
 
 
 /**
@@ -354,7 +353,7 @@ Blockly.Trashcan.prototype.position = function() {
 
 /**
  * Return the deletion rectangle for this trash can.
- * @return {goog.math.Rect} Rectangle in which to delete.
+ * @return {Blockly.utils.Rect} Rectangle in which to delete.
  */
 Blockly.Trashcan.prototype.getClientRect = function() {
   if (!this.svgGroup_) {
@@ -366,8 +365,7 @@ Blockly.Trashcan.prototype.getClientRect = function() {
   var top = trashRect.top + this.SPRITE_TOP_ - this.MARGIN_HOTSPOT_;
   var width = this.WIDTH_ + 2 * this.MARGIN_HOTSPOT_;
   var height = this.LID_HEIGHT_ + this.BODY_HEIGHT_ + 2 * this.MARGIN_HOTSPOT_;
-  return new goog.math.Rect(left, top, width, height);
-
+  return new Blockly.utils.Rect(left, top, width, height);
 };
 
 /**

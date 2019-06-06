@@ -1201,11 +1201,12 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
  *     which delete area the event is over.
  */
 Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
-  var xy = new goog.math.Coordinate(e.clientX, e.clientY);
-  if (this.deleteAreaTrash_ && this.deleteAreaTrash_.contains(xy)) {
+  if (this.deleteAreaTrash_ &&
+      this.deleteAreaTrash_.contains(e.clientX, e.clientY)) {
     return Blockly.DELETE_AREA_TRASH;
   }
-  if (this.deleteAreaToolbox_ && this.deleteAreaToolbox_.contains(xy)) {
+  if (this.deleteAreaToolbox_ &&
+      this.deleteAreaToolbox_.contains(e.clientX, e.clientY)) {
     return Blockly.DELETE_AREA_TOOLBOX;
   }
   return Blockly.DELETE_AREA_NONE;

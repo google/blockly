@@ -973,6 +973,24 @@ Blockly.utils.containsNode = function(parent, descendant) {
 };
 
 /**
+ * Gets the document scroll distance as a coordinate object.
+ * Copied from Closure's goog.dom.getDocumentScroll.
+ * @return {!goog.math.Coordinate} Object with values 'x' and 'y'.
+ */
+Blockly.utils.getDocumentScroll = function() {
+  var el = document.documentElement;
+  var win = window;
+  if (Blockly.userAgent.IE && win.pageYOffset != el.scrollTop) {
+    // The keyboard on IE10 touch devices shifts the page using the pageYOffset
+    // without modifying scrollTop. For this case, we want the body scroll
+    // offsets.
+    return new goog.math.Coordinate(el.scrollLeft, el.scrollTop);
+  }
+  return new goog.math.Coordinate(
+      win.pageXOffset || el.scrollLeft, win.pageYOffset || el.scrollTop);
+};
+
+/**
  * Get a map of all the block's descendants mapping their type to the number of
  *    children with that type.
  * @param {!Blockly.Block} block The block to map.

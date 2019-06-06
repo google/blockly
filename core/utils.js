@@ -32,10 +32,10 @@
  */
 goog.provide('Blockly.utils');
 
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Msg');
 goog.require('Blockly.userAgent');
 
-goog.require('goog.math.Coordinate');
 goog.require('goog.style');
 
 
@@ -135,10 +135,10 @@ Blockly.utils.isTargetInput = function(e) {
  * Return the coordinates of the top-left corner of this element relative to
  * its parent.  Only for SVG elements and children (e.g. rect, g, path).
  * @param {!Element} element SVG element to find the coordinates of.
- * @return {!goog.math.Coordinate} Object with .x and .y properties.
+ * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
  */
 Blockly.utils.getRelativeXY = function(element) {
-  var xy = new goog.math.Coordinate(0, 0);
+  var xy = new Blockly.utils.Coordinate(0, 0);
   // First, check for x and y attributes.
   var x = element.getAttribute('x');
   if (x) {
@@ -179,7 +179,7 @@ Blockly.utils.getRelativeXY = function(element) {
  * @param {!Element} element SVG element to find the coordinates of. If this is
  *     not a child of the div Blockly was injected into, the behaviour is
  *     undefined.
- * @return {!goog.math.Coordinate} Object with .x and .y properties.
+ * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
  */
 Blockly.utils.getInjectionDivXY_ = function(element) {
   var x = 0;
@@ -194,7 +194,7 @@ Blockly.utils.getInjectionDivXY_ = function(element) {
     }
     element = element.parentNode;
   }
-  return new goog.math.Coordinate(x, y);
+  return new Blockly.utils.Coordinate(x, y);
 };
 
 /**
@@ -975,7 +975,7 @@ Blockly.utils.containsNode = function(parent, descendant) {
 /**
  * Gets the document scroll distance as a coordinate object.
  * Copied from Closure's goog.dom.getDocumentScroll.
- * @return {!goog.math.Coordinate} Object with values 'x' and 'y'.
+ * @return {!Blockly.utils.Coordinate} Object with values 'x' and 'y'.
  */
 Blockly.utils.getDocumentScroll = function() {
   var el = document.documentElement;
@@ -984,9 +984,9 @@ Blockly.utils.getDocumentScroll = function() {
     // The keyboard on IE10 touch devices shifts the page using the pageYOffset
     // without modifying scrollTop. For this case, we want the body scroll
     // offsets.
-    return new goog.math.Coordinate(el.scrollLeft, el.scrollTop);
+    return new Blockly.utils.Coordinate(el.scrollLeft, el.scrollTop);
   }
-  return new goog.math.Coordinate(
+  return new Blockly.utils.Coordinate(
       win.pageXOffset || el.scrollLeft, win.pageYOffset || el.scrollTop);
 };
 

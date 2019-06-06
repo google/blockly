@@ -30,6 +30,7 @@
  */
 goog.provide('Blockly.ContextMenu');
 
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Msg');
@@ -39,7 +40,6 @@ goog.require('Blockly.utils.uiMenu');
 goog.require('Blockly.Xml');
 
 goog.require('goog.events');
-goog.require('goog.math.Coordinate');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItem');
 
@@ -362,7 +362,7 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
     var boundingRect = injectionDiv.getBoundingClientRect();
 
     // The client coordinates offset by the injection div's upper left corner.
-    var clientOffsetPixels = new goog.math.Coordinate(
+    var clientOffsetPixels = new Blockly.utils.Coordinate(
         e.clientX - boundingRect.left, e.clientY - boundingRect.top);
 
     // The offset in pixels between the main workspace's origin and the upper
@@ -371,14 +371,13 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
 
     // The position of the new comment in pixels relative to the origin of the
     // main workspace.
-    var finalOffsetPixels = goog.math.Coordinate.difference(clientOffsetPixels,
+    var finalOffset = Blockly.utils.Coordinate.difference(clientOffsetPixels,
         mainOffsetPixels);
-
     // The position of the new comment in main workspace coordinates.
-    var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
+    finalOffset.scale(1 / ws.scale);
 
-    var commentX = finalOffsetMainWs.x;
-    var commentY = finalOffsetMainWs.y;
+    var commentX = finalOffset.x;
+    var commentY = finalOffset.y;
     comment.moveBy(commentX, commentY);
     if (ws.rendered) {
       comment.initSvg();

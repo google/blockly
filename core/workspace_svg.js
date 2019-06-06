@@ -30,6 +30,7 @@ goog.provide('Blockly.WorkspaceSvg');
 //goog.require('Blockly.BlockSvg');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Gesture');
@@ -50,8 +51,6 @@ goog.require('Blockly.WorkspaceCommentSvg.render');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -250,7 +249,7 @@ Blockly.WorkspaceSvg.prototype.startScrollY = 0;
 
 /**
  * Distance from mouse to object being dragged.
- * @type {goog.math.Coordinate}
+ * @type {Blockly.utils.Coordinate}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.dragDeltaXY_ = null;
@@ -339,7 +338,7 @@ Blockly.WorkspaceSvg.prototype.injectionDiv_ = null;
  * Last known position of the page scroll.
  * This is used to determine whether we have recalculated screen coordinate
  * stuff since the page scrolled.
- * @type {!goog.math.Coordinate}
+ * @type {!Blockly.utils.Coordinate}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.lastRecordedPageScroll_ = null;
@@ -429,7 +428,7 @@ Blockly.WorkspaceSvg.prototype.isVisible = function() {
  * scales that after canvas SVG element, if it's a descendant.
  * The origin (0,0) is the top-left corner of the Blockly SVG.
  * @param {!Element} element Element to find the coordinates of.
- * @return {!goog.math.Coordinate} Object with .x and .y properties.
+ * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
  * @private
  */
 Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
@@ -453,7 +452,7 @@ Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
     y += xy.y * scale;
     element = element.parentNode;
   } while (element && element != this.getParentSvg());
-  return new goog.math.Coordinate(x, y);
+  return new Blockly.utils.Coordinate(x, y);
 };
 
 /**
@@ -461,7 +460,7 @@ Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
  * origin in pixels.
  * The workspace origin is where a block would render at position (0, 0).
  * It is not the upper left corner of the workspace SVG.
- * @return {!goog.math.Coordinate} Offset in pixels.
+ * @return {!Blockly.utils.Coordinate} Offset in pixels.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getOriginOffsetInPixels = function() {
@@ -774,7 +773,7 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled =
     function() {
     /* eslint-disable indent */
   var currScroll = Blockly.utils.getDocumentScroll();
-  if (!goog.math.Coordinate.equals(this.lastRecordedPageScroll_, currScroll)) {
+  if (!Blockly.utils.Coordinate.equals(this.lastRecordedPageScroll_, currScroll)) {
     this.lastRecordedPageScroll_ = currScroll;
     this.updateScreenCalculations_();
   }
@@ -1063,7 +1062,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
           var connections = block.getConnections_(false);
           for (var i = 0, connection; connection = connections[i]; i++) {
             var neighbour = connection.closest(Blockly.SNAP_RADIUS,
-                new goog.math.Coordinate(blockX, blockY));
+                new Blockly.utils.Coordinate(blockX, blockY));
             if (neighbour.connection) {
               collide = true;
               break;
@@ -1227,7 +1226,7 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
 /**
  * Start tracking a drag of an object on this workspace.
  * @param {!Event} e Mouse down event.
- * @param {!goog.math.Coordinate} xy Starting location of object.
+ * @param {!Blockly.utils.Coordinate} xy Starting location of object.
  */
 Blockly.WorkspaceSvg.prototype.startDrag = function(e, xy) {
   // Record the starting offset between the bubble's location and the mouse.
@@ -1236,13 +1235,13 @@ Blockly.WorkspaceSvg.prototype.startDrag = function(e, xy) {
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
-  this.dragDeltaXY_ = goog.math.Coordinate.difference(xy, point);
+  this.dragDeltaXY_ = Blockly.utils.Coordinate.difference(xy, point);
 };
 
 /**
  * Track a drag of an object on this workspace.
  * @param {!Event} e Mouse move event.
- * @return {!goog.math.Coordinate} New location of object.
+ * @return {!Blockly.utils.Coordinate} New location of object.
  */
 Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
   var point = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
@@ -1250,7 +1249,7 @@ Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
-  return goog.math.Coordinate.sum(this.dragDeltaXY_, point);
+  return Blockly.utils.Coordinate.sum(this.dragDeltaXY_, point);
 };
 
 /**

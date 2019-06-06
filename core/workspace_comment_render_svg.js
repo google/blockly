@@ -26,10 +26,9 @@
 
 goog.provide('Blockly.WorkspaceCommentSvg.render');
 
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils');
 goog.require('Blockly.WorkspaceCommentSvg');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -265,7 +264,7 @@ Blockly.WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
     return;
   }
   // Left-click (or middle click)
-  this.workspace.startDrag(e, new goog.math.Coordinate(
+  this.workspace.startDrag(e, new Blockly.utils.Coordinate(
     this.workspace.RTL ? -this.width_ : this.width_, this.height_));
 
   this.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(

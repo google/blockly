@@ -41,7 +41,6 @@ goog.provide('Blockly.utils.Rect');
  * @param {number} h Height.
  * @struct
  * @constructor
- * @implements {goog.math.IRect}
  */
 Blockly.utils.Rect = function(x, y, w, h) {
   /** @type {number} */
@@ -58,8 +57,7 @@ Blockly.utils.Rect = function(x, y, w, h) {
 };
 
 /**
- * Tests whether this rectangle entirely contains another rectangle or
- * coordinate.
+ * Tests whether this rectangle contains a x/y coordinate.
  *
  * @param {number} x The x coordinate to test for containment.
  * @param {number} y The y coordinate to test for containment.

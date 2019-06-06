@@ -142,7 +142,13 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
       }
     }
   },
-  onchange: function() {
+  /**
+   * Called whenever anything on the workspace changes.
+   * Set the connection type for this block.
+   * @param {!Blockly.Events.Abstract} _e Change event.
+   * @this Blockly.Block
+   */
+  onchange: function(_e) {
     var id = this.getFieldValue('VAR');
     var variableModel = this.workspace.getVariableById(id);
     if (this.type == 'variables_get_dynamic') {

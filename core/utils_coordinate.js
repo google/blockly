@@ -35,8 +35,8 @@ goog.provide('Blockly.utils.Coordinate');
 
 /**
  * Class for representing coordinates and positions.
- * @param {number=} opt_x Left, defaults to 0.
- * @param {number=} opt_y Top, defaults to 0.
+ * @param {number} x Left.
+ * @param {number} y Top.
  * @struct
  * @constructor
  */

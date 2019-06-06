@@ -292,10 +292,10 @@ Blockly.WorkspaceCommentSvg.prototype.deleteMouseDown_ = function(e) {
 
 /**
  * Handle a mouse-out on comment's delete icon.
- * @param {!Event} e Mouse out event.
+ * @param {!Event} _e Mouse out event.
  * @private
  */
-Blockly.WorkspaceCommentSvg.prototype.deleteMouseOut_ = function(/*e*/) {
+Blockly.WorkspaceCommentSvg.prototype.deleteMouseOut_ = function(_e) {
   // Restore highlight on the delete icon.
   Blockly.utils.removeClass(
       /** @type {!Element} */ (this.deleteIconBorder_),

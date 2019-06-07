@@ -136,7 +136,6 @@ Blockly.BlockRendering.Highlighter.prototype.drawBottomCorner = function(_row) {
   var elems = this.info_.bottomRow.elements;
 
   if (this.info_.RTL) {
-    height -= BRC.BOTTOM_HIGHLIGHT_OFFSET;
     this.highlightSteps_.push('V', height);
   }
 

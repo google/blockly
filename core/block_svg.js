@@ -40,6 +40,7 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Rect');
 
 
 /**
@@ -469,8 +470,7 @@ Blockly.BlockSvg.prototype.snapToGrid = function() {
  * Returns the coordinates of a bounding box describing the dimensions of this
  * block and any blocks stacked below it.
  * Coordinate system: workspace coordinates.
- * @return {!{top: number, bottom: number, left: number, right: number}}
- *    Object with top, bottom, left, and right coordinates of the bounding box.
+ * @return {!Blockly.utils.Rect} Object with coordinates of the bounding box.
  */
 Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
   var blockXY = this.getRelativeToSurfaceXY(this);
@@ -492,7 +492,7 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
     // Width has the tab built into it already so subtract it here.
     right = blockXY.x + blockBounds.width - tab;
   }
-  return {top: top, bottom: bottom, left: left, right: right};
+  return new Blockly.utils.Rect(top, bottom, left, right);
 };
 
 /**

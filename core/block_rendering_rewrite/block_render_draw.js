@@ -412,7 +412,7 @@ Blockly.BlockRendering.Drawer.prototype.positionNextConnection_ = function() {
   var bottomRow = this.info_.bottomRow;
 
   if (bottomRow.hasNextConnection) {
-    var connX = (this.info_.RTL ? -BRC.NOTCH_OFFSET_LEFT : BRC.NOTCH_OFFSET_LEFT);
+    var connX = this.info_.RTL ? -BRC.NOTCH_OFFSET_LEFT : BRC.NOTCH_OFFSET_LEFT;
     bottomRow.connection.setOffsetInBlock(
         connX, this.info_.height + BRC.DARK_PATH_OFFSET);
   }

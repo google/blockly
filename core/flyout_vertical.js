@@ -325,12 +325,11 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
   // area are still deleted.  Must be larger than the largest screen size,
   // but be smaller than half Number.MAX_SAFE_INTEGER (not available on IE).
   var BIG_NUM = 1000000000;
-  var x = flyoutRect.left;
-  var width = flyoutRect.width;
+  var left = flyoutRect.left;
 
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
-    return new Blockly.utils.Rect(x - BIG_NUM, -BIG_NUM, BIG_NUM + width,
-        BIG_NUM * 2);
+    var width = flyoutRect.width;
+    return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, left + width);
   } else {  // Right
     // Firefox sometimes reports the wrong value for the client rect.
     // See https://github.com/google/blockly/issues/1425 and
@@ -348,15 +347,15 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
       // visible area of the workspace should be more than ten pixels wide.  If
       // the browser reports that the flyout is within ten pixels of the left
       // side of the workspace, ignore it and manually calculate the value.
-      if (Math.abs(targetWsLeftPixels - x) < 10) {
+      if (Math.abs(targetWsLeftPixels - left) < 10) {
         // If we're in a mutator, its scale is always 1, purely because of some
         // oddities in our rendering optimizations.  The actual scale is the
         // same as the scale on the parent workspace.
         var scale = this.targetWorkspace_.options.parentWorkspace.scale;
-        x = x + this.leftEdge_ * scale;
+        left += this.leftEdge_ * scale;
       }
     }
-    return new Blockly.utils.Rect(x, -BIG_NUM, BIG_NUM + width, BIG_NUM * 2);
+    return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
   }
 };
 

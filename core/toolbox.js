@@ -545,23 +545,21 @@ Blockly.Toolbox.prototype.getClientRect = function() {
   var BIG_NUM = 10000000;
   var toolboxRect = this.HtmlDiv.getBoundingClientRect();
 
-  var x = toolboxRect.left;
-  var y = toolboxRect.top;
-  var width = toolboxRect.width;
-  var height = toolboxRect.height;
+  var top = toolboxRect.top;
+  var bottom = top + toolboxRect.height;
+  var left = toolboxRect.left;
+  var right = left + toolboxRect.width;
 
   // Assumes that the toolbox is on the SVG edge.  If this changes
   // (e.g. toolboxes in mutators) then this code will need to be more complex.
-  if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
-    return new Blockly.utils.Rect(-BIG_NUM, -BIG_NUM, BIG_NUM + x + width,
-        2 * BIG_NUM);
-  } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
-    return new Blockly.utils.Rect(x, -BIG_NUM, BIG_NUM + width, 2 * BIG_NUM);
-  } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
-    return new Blockly.utils.Rect(-BIG_NUM, -BIG_NUM, 2 * BIG_NUM,
-        BIG_NUM + y + height);
-  } else {  // Bottom
-    return new Blockly.utils.Rect(0, y, 2 * BIG_NUM, BIG_NUM + width);
+  if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+    return new Blockly.utils.Rect(-BIG_NUM, bottom, -BIG_NUM, BIG_NUM);
+  } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
+    return new Blockly.utils.Rect(top, BIG_NUM, -BIG_NUM, BIG_NUM);
+  } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
+    return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, right);
+  } else {  // Right
+    return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
   }
 };
 

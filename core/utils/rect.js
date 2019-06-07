@@ -35,25 +35,25 @@ goog.provide('Blockly.utils.Rect');
 
 /**
  * Class for representing rectangular regions.
- * @param {number} x Left.
- * @param {number} y Top.
- * @param {number} w Width.
- * @param {number} h Height.
+ * @param {number} top Top.
+ * @param {number} bottom Bottom.
+ * @param {number} left Left.
+ * @param {number} right Right.
  * @struct
  * @constructor
  */
-Blockly.utils.Rect = function(x, y, w, h) {
+Blockly.utils.Rect = function(top, bottom, left, right) {
   /** @type {number} */
-  this.left = x;
+  this.top = top;
 
   /** @type {number} */
-  this.top = y;
+  this.bottom = bottom;
 
   /** @type {number} */
-  this.width = w;
+  this.left = left;
 
   /** @type {number} */
-  this.height = h;
+  this.right = right;
 };
 
 /**
@@ -64,6 +64,5 @@ Blockly.utils.Rect = function(x, y, w, h) {
  * @return {boolean} Whether this rectangle contains given coordinate.
  */
 Blockly.utils.Rect.prototype.contains = function(x, y) {
-  return x >= this.left && x <= this.left + this.width &&
-      y >= this.top && y <= this.top + this.height;
+  return x >= this.left && x <= this.right && y >= this.top && y <= this.bottom;
 };

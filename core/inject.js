@@ -35,6 +35,7 @@ goog.require('Blockly.Options');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 
@@ -56,7 +57,7 @@ Blockly.inject = function(container, opt_options) {
         document.querySelector(container);
   }
   // Verify that the container is in document.
-  if (!Blockly.utils.containsNode(document, container)) {
+  if (!Blockly.utils.dom.containsNode(document, container)) {
     throw Error('Error: container is not in current document.');
   }
   var options = new Blockly.Options(opt_options || {});
@@ -222,7 +223,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   if (!options.hasCategories && options.languageTree) {
     // Add flyout as an <svg> that is a sibling of the workspace svg.
     var flyout = mainWorkspace.addFlyout_('svg');
-    Blockly.utils.insertAfter(flyout, svg);
+    Blockly.utils.dom.insertAfter(flyout, svg);
   }
   if (options.hasTrashcan) {
     mainWorkspace.addTrashcan();

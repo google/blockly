@@ -27,6 +27,7 @@
 goog.provide('Blockly.BlockAnimations');
 
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 
 
 /**
@@ -81,7 +82,7 @@ Blockly.BlockAnimations.disposeUiStep_ = function(clone, rtl, start,
   var ms = new Date - start;
   var percent = ms / 150;
   if (percent > 1) {
-    Blockly.utils.removeNode(clone);
+    Blockly.utils.dom.removeNode(clone);
   } else {
     var x = clone.translateX_ +
         (rtl ? -1 : 1) * clone.bBox_.width * workspaceScale / 2 * percent;
@@ -141,7 +142,7 @@ Blockly.BlockAnimations.connectionUiStep_ = function(ripple, start, scale) {
   var ms = new Date - start;
   var percent = ms / 150;
   if (percent > 1) {
-    Blockly.utils.removeNode(ripple);
+    Blockly.utils.dom.removeNode(ripple);
   } else {
     ripple.setAttribute('r', percent * 25 * scale);
     ripple.style.opacity = 1 - percent;

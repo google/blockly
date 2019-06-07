@@ -26,8 +26,9 @@
 
 goog.provide('Blockly.WorkspaceCommentSvg.render');
 
-goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.WorkspaceCommentSvg');
 
 
@@ -283,7 +284,7 @@ Blockly.WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
  */
 Blockly.WorkspaceCommentSvg.prototype.deleteMouseDown_ = function(e) {
   // Highlight the delete icon.
-  Blockly.utils.addClass(
+  Blockly.utils.dom.addClass(
       /** @type {!Element} */ (this.deleteIconBorder_),
       'blocklyDeleteIconHighlighted');
   // This event has been handled.  No need to bubble up to the document.
@@ -297,7 +298,7 @@ Blockly.WorkspaceCommentSvg.prototype.deleteMouseDown_ = function(e) {
  */
 Blockly.WorkspaceCommentSvg.prototype.deleteMouseOut_ = function(_e) {
   // Restore highlight on the delete icon.
-  Blockly.utils.removeClass(
+  Blockly.utils.dom.removeClass(
       /** @type {!Element} */ (this.deleteIconBorder_),
       'blocklyDeleteIconHighlighted');
 };
@@ -441,9 +442,9 @@ Blockly.WorkspaceCommentSvg.prototype.setFocus = function() {
     }
     comment.textarea_.focus();
     comment.addFocus();
-    Blockly.utils.addClass(
+    Blockly.utils.dom.addClass(
         comment.svgRectTarget_, 'blocklyCommentTargetFocused');
-    Blockly.utils.addClass(
+    Blockly.utils.dom.addClass(
         comment.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
   }, 0);
 };
@@ -463,9 +464,9 @@ Blockly.WorkspaceCommentSvg.prototype.blurFocus = function() {
 
     comment.textarea_.blur();
     comment.removeFocus();
-    Blockly.utils.removeClass(
+    Blockly.utils.dom.removeClass(
         comment.svgRectTarget_, 'blocklyCommentTargetFocused');
-    Blockly.utils.removeClass(
+    Blockly.utils.dom.removeClass(
         comment.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
   }, 0);
 };

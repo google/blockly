@@ -29,6 +29,7 @@ goog.provide('Blockly.FieldImage');
 goog.require('Blockly.Field');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 
 goog.require('goog.math.Size');
 
@@ -133,7 +134,7 @@ Blockly.FieldImage.prototype.initView = function() {
  */
 Blockly.FieldImage.prototype.dispose = function() {
   if (this.fieldGroup_) {
-    Blockly.utils.removeNode(this.fieldGroup_);
+    Blockly.utils.dom.removeNode(this.fieldGroup_);
     this.fieldGroup_ = null;
   }
   this.imageElement_ = null;

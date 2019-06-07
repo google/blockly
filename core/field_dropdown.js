@@ -33,6 +33,8 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.uiMenu');
 
 goog.require('goog.events');
@@ -255,7 +257,7 @@ Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
 Blockly.FieldDropdown.prototype.createWidget_ = function(menu) {
   var div = Blockly.WidgetDiv.DIV;
   menu.render(div);
-  Blockly.utils.addClass(menu.getElement(), 'blocklyDropdownMenu');
+  Blockly.utils.dom.addClass(menu.getElement(), 'blocklyDropdownMenu');
   // Enable autofocus after the initial render to avoid issue #1329.
   menu.setAllowAutoFocus(true);
 };
@@ -323,9 +325,9 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   for (var i = 0; i < options.length; i++) {
     strings.push(options[i][0]);
   }
-  var shortest = Blockly.utils.shortestStringLength(strings);
-  var prefixLength = Blockly.utils.commonWordPrefix(strings, shortest);
-  var suffixLength = Blockly.utils.commonWordSuffix(strings, shortest);
+  var shortest = Blockly.utils.string.shortestStringLength(strings);
+  var prefixLength = Blockly.utils.string.commonWordPrefix(strings, shortest);
+  var suffixLength = Blockly.utils.string.commonWordSuffix(strings, shortest);
   if (!prefixLength && !suffixLength) {
     return;
   }

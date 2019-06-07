@@ -314,8 +314,9 @@ class Gen_compressed(threading.Thread):
       ]
 
     # Read in all the source files.
-    # Add Blockly.Generator to be compatible with the compiler.
-    params.append(("js_code", "goog.provide('Blockly.Generator');"))
+    # Add Blockly.Generator and Blockly.utils.string to be compatible
+    # with the compiler.
+    params.append(("js_code", "goog.provide('Blockly.Generator');goog.provide('Blockly.utils.string');"))
     filenames = glob.glob(
         os.path.join("generators", language, "*.js"))
     filenames.sort()  # Deterministic build.
@@ -326,8 +327,9 @@ class Gen_compressed(threading.Thread):
       f.close()
     filenames.insert(0, "[goog.provide]")
 
-    # Remove Blockly.Generator to be compatible with Blockly.
-    remove = "var Blockly={Generator:{}};"
+    # Remove Blockly.Generator and Blockly.utils.string to be compatible
+    # with Blockly.
+    remove = "var Blockly={Generator:{},utils:{}};Blockly.utils.string={};"
     self.do_compile(params, target_filename, filenames, remove)
 
   def do_compile(self, params, target_filename, filenames, remove):

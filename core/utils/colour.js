@@ -104,16 +104,6 @@ Blockly.utils.colour.hexToRgb = function(hexColor) {
 };
 
 /**
- * Convert a hue (HSV model) into an RGB hex triplet.
- * @param {number} hue Hue on a colour wheel (0-360).
- * @return {string} RGB code, e.g. '#5ba65b'.
- */
-Blockly.utils.colour.hueToHex = function(hue) {
-  return Blockly.utils.colour.hsvToHex(hue, Blockly.HSV_SATURATION,
-      Blockly.HSV_VALUE * 255);
-};
-
-/**
  * Converts an HSV triplet to hex representation.
  * @param {number} h Hue value in [0, 360].
  * @param {number} s Saturation value in [0, 1].

@@ -28,6 +28,7 @@ goog.provide('Blockly.Icon');
 
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 
 
 /**
@@ -79,7 +80,7 @@ Blockly.Icon.prototype.createIcon = function() {
   this.iconGroup_ = Blockly.utils.createSvgElement('g',
       {'class': 'blocklyIconGroup'}, null);
   if (this.block_.isInFlyout) {
-    Blockly.utils.addClass(
+    Blockly.utils.dom.addClass(
         /** @type {!Element} */ (this.iconGroup_), 'blocklyIconGroupReadonly');
   }
   this.drawIcon_(this.iconGroup_);
@@ -95,7 +96,7 @@ Blockly.Icon.prototype.createIcon = function() {
  */
 Blockly.Icon.prototype.dispose = function() {
   // Dispose of and unlink the icon.
-  Blockly.utils.removeNode(this.iconGroup_);
+  Blockly.utils.dom.removeNode(this.iconGroup_);
   this.iconGroup_ = null;
   // Dispose of and unlink the bubble.
   this.setVisible(false);

@@ -34,6 +34,7 @@ goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
 goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 
 
 /**
@@ -179,9 +180,9 @@ Blockly.FieldTextInput.prototype.render_ = function() {
     var htmlInput = Blockly.FieldTextInput.htmlInput_;
     this.resizeEditor_();
     if (!this.isTextValid_) {
-      Blockly.utils.addClass(htmlInput, 'blocklyInvalidInput');
+      Blockly.utils.dom.addClass(htmlInput, 'blocklyInvalidInput');
     } else {
-      Blockly.utils.removeClass(htmlInput, 'blocklyInvalidInput');
+      Blockly.utils.dom.removeClass(htmlInput, 'blocklyInvalidInput');
     }
   }
 };

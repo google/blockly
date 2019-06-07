@@ -30,6 +30,7 @@ goog.provide('Blockly.ScrollbarPair');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 
 
 /**
@@ -56,7 +57,7 @@ Blockly.ScrollbarPair = function(workspace) {
         'class': 'blocklyScrollbarBackground'
       },
       null);
-  Blockly.utils.insertAfter(this.corner_, workspace.getBubbleCanvas());
+  Blockly.utils.dom.insertAfter(this.corner_, workspace.getBubbleCanvas());
 };
 
 /**
@@ -71,7 +72,7 @@ Blockly.ScrollbarPair.prototype.oldHostMetrics_ = null;
  * Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.ScrollbarPair.prototype.dispose = function() {
-  Blockly.utils.removeNode(this.corner_);
+  Blockly.utils.dom.removeNode(this.corner_);
   this.corner_ = null;
   this.workspace_ = null;
   this.oldHostMetrics_ = null;
@@ -346,7 +347,7 @@ Blockly.Scrollbar.prototype.dispose = function() {
   Blockly.unbindEvent_(this.onMouseDownHandleWrapper_);
   this.onMouseDownHandleWrapper_ = null;
 
-  Blockly.utils.removeNode(this.outerSvg_);
+  Blockly.utils.dom.removeNode(this.outerSvg_);
   this.outerSvg_ = null;
   this.svgGroup_ = null;
   this.svgBackground_ = null;
@@ -624,7 +625,7 @@ Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
         'ry': radius
       },
       this.svgGroup_);
-  Blockly.utils.insertAfter(this.outerSvg_, this.workspace_.getParentSvg());
+  Blockly.utils.dom.insertAfter(this.outerSvg_, this.workspace_.getParentSvg());
 };
 
 /**

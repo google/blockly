@@ -42,6 +42,7 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.TouchGesture');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.VariablesDynamic');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceAudio');
@@ -435,8 +436,8 @@ Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
   var x = 0;
   var y = 0;
   var scale = 1;
-  if (Blockly.utils.containsNode(this.getCanvas(), element) ||
-      Blockly.utils.containsNode(this.getBubbleCanvas(), element)) {
+  if (Blockly.utils.dom.containsNode(this.getCanvas(), element) ||
+      Blockly.utils.dom.containsNode(this.getBubbleCanvas(), element)) {
     // Before the SVG canvas, scale the coordinates.
     scale = this.scale;
   }
@@ -569,7 +570,7 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   }
   Blockly.WorkspaceSvg.superClass_.dispose.call(this);
   if (this.svgGroup_) {
-    Blockly.utils.removeNode(this.svgGroup_);
+    Blockly.utils.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.svgBlockCanvas_ = null;
@@ -613,7 +614,7 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     // SVG is injected into (i.e. injectionDiv).
     var div = this.getParentSvg().parentNode;
     if (div) {
-      Blockly.utils.removeNode(div);
+      Blockly.utils.dom.removeNode(div);
     }
   }
   if (this.resizeHandlerWrapper_) {
@@ -1758,10 +1759,10 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.beginCanvasTransition = function() {
-  Blockly.utils.addClass(
+  Blockly.utils.dom.addClass(
       /** @type {!SVGElement} */ (this.svgBlockCanvas_),
       'blocklyCanvasTransitioning');
-  Blockly.utils.addClass(
+  Blockly.utils.dom.addClass(
       /** @type {!SVGElement} */ (this.svgBubbleCanvas_),
       'blocklyCanvasTransitioning');
 };
@@ -1771,10 +1772,10 @@ Blockly.WorkspaceSvg.prototype.beginCanvasTransition = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.endCanvasTransition = function() {
-  Blockly.utils.removeClass(
+  Blockly.utils.dom.removeClass(
       /** @type {!SVGElement} */ (this.svgBlockCanvas_),
       'blocklyCanvasTransitioning');
-  Blockly.utils.removeClass(
+  Blockly.utils.dom.removeClass(
       /** @type {!SVGElement} */ (this.svgBubbleCanvas_),
       'blocklyCanvasTransitioning');
 };

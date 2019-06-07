@@ -33,6 +33,7 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.Xml.utils');
@@ -183,7 +184,7 @@ Blockly.Mutator.prototype.updateEditable = function() {
   if (!this.block_.isInFlyout) {
     if (this.block_.isEditable()) {
       if (this.iconGroup_) {
-        Blockly.utils.removeClass(
+        Blockly.utils.dom.removeClass(
             /** @type {!Element} */ (this.iconGroup_),
             'blocklyIconGroupReadonly');
       }
@@ -191,7 +192,7 @@ Blockly.Mutator.prototype.updateEditable = function() {
       // Close any mutator bubble.  Icon is not clickable.
       this.setVisible(false);
       if (this.iconGroup_) {
-        Blockly.utils.addClass(
+        Blockly.utils.dom.addClass(
             /** @type {!Element} */ (this.iconGroup_),
             'blocklyIconGroupReadonly');
       }

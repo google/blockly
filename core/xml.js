@@ -35,6 +35,7 @@ goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.FinishedLoading');
 goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.Xml.utils');
 
 
@@ -257,7 +258,7 @@ Blockly.Xml.cloneShadow_ = function(shadow) {
         if (textNode.nodeType == Node.TEXT_NODE &&
             textNode.data.trim() == '' && node.firstChild != textNode) {
           // Prune whitespace after a tag.
-          Blockly.utils.removeNode(textNode);
+          Blockly.utils.dom.removeNode(textNode);
         }
       }
       if (node) {
@@ -266,7 +267,7 @@ Blockly.Xml.cloneShadow_ = function(shadow) {
         if (textNode.nodeType == Node.TEXT_NODE &&
             textNode.data.trim() == '') {
           // Prune whitespace before a tag.
-          Blockly.utils.removeNode(textNode);
+          Blockly.utils.dom.removeNode(textNode);
         }
       }
     }

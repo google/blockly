@@ -30,6 +30,7 @@ goog.require('Blockly.Blocks');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Connection');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.string');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.BlockCreate');
@@ -946,7 +947,7 @@ Blockly.Block.prototype.setColour = function(colour) {
   var hue = Number(dereferenced);
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
     this.hue_ = hue;
-    this.colour_ = Blockly.utils.colour.hueToHex(hue);
+    this.colour_ = Blockly.hueToHex(hue);
   } else {
     var hex = Blockly.utils.colour.parse(dereferenced);
     if (hex) {
@@ -1590,7 +1591,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
   }
   // Add last dummy input if needed.
   if (elements.length && (typeof elements[elements.length - 1] == 'string' ||
-      Blockly.utils.startsWith(
+      Blockly.utils.string.startsWith(
           elements[elements.length - 1]['type'], 'field_'))) {
     var dummyInput = {type: 'input_dummy'};
     if (lastDummyAlign) {

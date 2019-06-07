@@ -22,13 +22,15 @@
  * @fileoverview Classic theme.
  * Contains multi-coloured border to create shadow effect.
  */
-
 'use strict';
 
 goog.provide('Blockly.Themes.Classic');
 
 goog.require('Blockly.Theme');
 
+
+// Temporary holding object.
+Blockly.Themes.Classic = {};
 
 Blockly.Themes.Classic.defaultBlockStyles = {
   "colour_blocks": {

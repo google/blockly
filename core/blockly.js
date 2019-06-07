@@ -601,6 +601,16 @@ Blockly.isNumber = function(str) {
 };
 
 /**
+ * Convert a hue (HSV model) into an RGB hex triplet.
+ * @param {number} hue Hue on a colour wheel (0-360).
+ * @return {string} RGB code, e.g. '#5ba65b'.
+ */
+Blockly.hueToHex = function(hue) {
+  return Blockly.utils.colour.hsvToHex(hue, Blockly.HSV_SATURATION,
+      Blockly.HSV_VALUE * 255);
+};
+
+/**
  * Checks old colour constants are not overwritten by the host application.
  * If a constant is overwritten, it prints a console warning directing the
  * developer to use the equivalent Msg constant.

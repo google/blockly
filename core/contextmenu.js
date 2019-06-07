@@ -36,6 +36,7 @@ goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Msg');
 goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.uiMenu');
 goog.require('Blockly.Xml');
 
@@ -156,7 +157,7 @@ Blockly.ContextMenu.createWidget_ = function(menu) {
   var div = Blockly.WidgetDiv.DIV;
   menu.render(div);
   var menuDom = menu.getElement();
-  Blockly.utils.addClass(menuDom, 'blocklyContextMenu');
+  Blockly.utils.dom.addClass(menuDom, 'blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
   Blockly.bindEventWithChecks_(
       menuDom, 'contextmenu', null, Blockly.utils.noEvent);

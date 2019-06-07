@@ -32,6 +32,7 @@ goog.require('Blockly.Flyout');
 goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.VerticalFlyout');
 
@@ -191,7 +192,7 @@ Blockly.Toolbox.prototype.init = function() {
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
   // Insert the flyout after the workspace.
-  Blockly.utils.insertAfter(this.flyout_.createDom('svg'),
+  Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'),
       this.workspace_.getParentSvg());
   this.flyout_.init(workspace);
 
@@ -219,7 +220,7 @@ Blockly.Toolbox.prototype.init = function() {
 Blockly.Toolbox.prototype.dispose = function() {
   this.flyout_.dispose();
   this.tree_.dispose();
-  Blockly.utils.removeNode(this.HtmlDiv);
+  Blockly.utils.dom.removeNode(this.HtmlDiv);
   this.workspace_ = null;
   this.lastCategory_ = null;
 };
@@ -387,7 +388,8 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
  * @param {string} categoryName Name of the toolbox category.
  * @private
  */
-Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut, categoryName) {
+Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut,
+    categoryName) {
   // Decode the colour for any potential message references
   // (eg. `%{BKY_MATH_HUE}`).
   var colour = Blockly.utils.replaceMessageReferences(colourValue);
@@ -399,7 +401,7 @@ Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut, categoryN
     this.hasColours_ = true;
   } else if (typeof colour === 'number' ||
       (typeof colour === 'string' && !isNaN(Number(colour)))) {
-    childOut.hexColour = Blockly.utils.colour.hueToHex(Number(colour));
+    childOut.hexColour = Blockly.hueToHex(Number(colour));
     this.hasColours_ = true;
   } else {
     childOut.hexColour = '';
@@ -516,7 +518,7 @@ Blockly.Toolbox.prototype.clearSelection = function() {
  * @package
  */
 Blockly.Toolbox.prototype.addStyle = function(style) {
-  Blockly.utils.addClass(/** @type {!Element} */ (this.HtmlDiv), style);
+  Blockly.utils.dom.addClass(/** @type {!Element} */ (this.HtmlDiv), style);
 };
 
 /**
@@ -525,7 +527,7 @@ Blockly.Toolbox.prototype.addStyle = function(style) {
  * @package
  */
 Blockly.Toolbox.prototype.removeStyle = function(style) {
-  Blockly.utils.removeClass(/** @type {!Element} */ (this.HtmlDiv), style);
+  Blockly.utils.dom.removeClass(/** @type {!Element} */ (this.HtmlDiv), style);
 };
 
 /**

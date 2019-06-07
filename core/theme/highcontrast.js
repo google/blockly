@@ -29,6 +29,9 @@ goog.provide('Blockly.Themes.HighContrast');
 goog.require('Blockly.Theme');
 
 
+// Temporary holding object.
+Blockly.Themes.HighContrast = {};
+
 Blockly.Themes.HighContrast.defaultBlockStyles = {
   "colour_blocks": {
     "colourPrimary": "#a52714",

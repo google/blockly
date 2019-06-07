@@ -28,6 +28,7 @@ goog.provide('Blockly.ZoomControls');
 
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 
 
 /**
@@ -128,7 +129,7 @@ Blockly.ZoomControls.prototype.init = function(verticalSpacing) {
  */
 Blockly.ZoomControls.prototype.dispose = function() {
   if (this.svgGroup_) {
-    Blockly.utils.removeNode(this.svgGroup_);
+    Blockly.utils.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.workspace_ = null;

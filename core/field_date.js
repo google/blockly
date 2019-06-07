@@ -28,7 +28,7 @@ goog.provide('Blockly.FieldDate');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Field');
-goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 
 goog.require('goog.date');
 goog.require('goog.date.DateTime');
@@ -200,7 +200,7 @@ Blockly.FieldDate.prototype.updateEditor_ = function() {
 Blockly.FieldDate.prototype.showEditor_ = function() {
   this.picker_ = this.createWidget_();
   this.picker_.render(Blockly.DropDownDiv.getContentDiv());
-  Blockly.utils.addClass(this.picker_.getElement(), 'blocklyDatePicker');
+  Blockly.utils.dom.addClass(this.picker_.getElement(), 'blocklyDatePicker');
   Blockly.DropDownDiv.showPositionedByField(this);
   Blockly.DropDownDiv.setColour(
       this.DROPDOWN_BACKGROUND_COLOUR, this.DROPDOWN_BORDER_COLOUR);

@@ -30,6 +30,8 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Touch');
 goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.math');
 goog.require('Blockly.Workspace');
 
 
@@ -55,7 +57,7 @@ Blockly.Bubble = function(workspace, content, shape, anchorXY,
   if (this.workspace_.RTL) {
     angle = -angle;
   }
-  this.arrow_radians_ = Blockly.utils.toRadians(angle);
+  this.arrow_radians_ = Blockly.utils.math.toRadians(angle);
 
   var canvas = workspace.getBubbleCanvas();
   canvas.appendChild(this.createDom_(content, !!(bubbleWidth && bubbleHeight)));
@@ -758,7 +760,7 @@ Blockly.Bubble.prototype.setColour = function(hexColour) {
 Blockly.Bubble.prototype.dispose = function() {
   Blockly.Bubble.unbindDragEvents_();
   // Dispose of and unlink the bubble.
-  Blockly.utils.removeNode(this.bubbleGroup_);
+  Blockly.utils.dom.removeNode(this.bubbleGroup_);
   this.bubbleGroup_ = null;
   this.bubbleArrow_ = null;
   this.bubbleBack_ = null;

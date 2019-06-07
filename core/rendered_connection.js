@@ -27,9 +27,10 @@
 goog.provide('Blockly.RenderedConnection');
 
 goog.require('Blockly.Connection');
-goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Events');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.dom');
 
 
 /**
@@ -266,7 +267,7 @@ Blockly.RenderedConnection.prototype.unhideAll = function() {
  * Remove the highlighting around this connection.
  */
 Blockly.RenderedConnection.prototype.unhighlight = function() {
-  Blockly.utils.removeNode(Blockly.Connection.highlightedPath_);
+  Blockly.utils.dom.removeNode(Blockly.Connection.highlightedPath_);
   delete Blockly.Connection.highlightedPath_;
 };
 

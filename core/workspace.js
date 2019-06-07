@@ -28,6 +28,7 @@ goog.provide('Blockly.Workspace');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
 goog.require('Blockly.WorkspaceComment');
 
@@ -200,7 +201,7 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   var blocks = [].concat(this.topBlocks_);
   if (ordered && blocks.length > 1) {
     this.sortObjects_.offset =
-        Math.sin(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
+        Math.sin(Blockly.utils.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
       this.sortObjects_.offset *= -1;
     }
@@ -246,7 +247,7 @@ Blockly.Workspace.prototype.getBlocksByType = function(type, ordered) {
   var blocks = this.typedBlocksDB_[type].slice(0);
   if (ordered && blocks.length > 1) {
     this.sortObjects_.offset =
-        Math.sign(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
+        Math.sign(Blockly.utils.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
       this.sortObjects_.offset *= -1;
     }
@@ -299,7 +300,7 @@ Blockly.Workspace.prototype.getTopComments = function(ordered) {
   var comments = [].concat(this.topComments_);
   if (ordered && comments.length > 1) {
     this.sortObjects_.offset =
-        Math.sin(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
+        Math.sin(Blockly.utils.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
       this.sortObjects_.offset *= -1;
     }

@@ -29,6 +29,9 @@ goog.provide('Blockly.Themes.Modern');
 goog.require('Blockly.Theme');
 
 
+// Temporary holding object.
+Blockly.Themes.Modern = {};
+
 Blockly.Themes.Modern.defaultBlockStyles = {
   "colour_blocks": {
     "colourPrimary": "#a5745b",

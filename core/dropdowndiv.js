@@ -28,7 +28,7 @@
 
 goog.provide('Blockly.DropDownDiv');
 
-goog.require('Blockly.utils');
+goog.require('Blockly.utils.math');
 
 goog.require('goog.style');
 
@@ -228,10 +228,10 @@ Blockly.DropDownDiv.showPositionedByBlock = function(field, block,
  * by a particular field. The primary position will be below the field,
  * and the secondary position above the field. Drop-down will be
  * constrained to the block's workspace.
- * @param {Object} owner The object showing the drop-down.
+ * @param {!Object} owner The object showing the drop-down.
  * @param {Function=} opt_onHide Optional callback for when the drop-down is
  *   hidden.
- * @param {number} opt_secondaryYOffset Optional Y offset for above-block
+ * @param {number=} opt_secondaryYOffset Optional Y offset for above-block
  *   positioning.
  * @return {boolean} True if the menu rendered below block; false if above.
  */
@@ -272,17 +272,18 @@ Blockly.DropDownDiv.showPositionedByField = function(owner,
  * @param {Function=} opt_onHide Optional callback for when the drop-down is hidden
  * @return {boolean} True if the menu rendered at the primary origin point.
  */
-Blockly.DropDownDiv.show = function(owner, primaryX, primaryY, secondaryX, secondaryY, opt_onHide) {
+Blockly.DropDownDiv.show = function(owner, primaryX, primaryY,
+    secondaryX, secondaryY, opt_onHide) {
   Blockly.DropDownDiv.owner_ = owner;
   Blockly.DropDownDiv.onHide_ = opt_onHide;
-  var metrics = Blockly.DropDownDiv.getPositionMetrics(primaryX, primaryY, secondaryX, secondaryY);
-  // Update arrow CSS
+  var metrics = Blockly.DropDownDiv.getPositionMetrics(primaryX, primaryY,
+      secondaryX, secondaryY);
+  // Update arrow CSS.
   Blockly.DropDownDiv.arrow_.style.transform = 'translate(' +
-    metrics.arrowX + 'px,' + metrics.arrowY + 'px) rotate(45deg)';
-  Blockly.DropDownDiv.arrow_.setAttribute('class',
-    metrics.arrowAtTop ? 'blocklyDropDownArrow arrowTop' : 'blocklyDropDownArrow arrowBottom');
-  Blockly.DropDownDiv.arrow_.style.display =
-    metrics.arrowVisible ? '' : 'none';
+      metrics.arrowX + 'px,' + metrics.arrowY + 'px) rotate(45deg)';
+  Blockly.DropDownDiv.arrow_.setAttribute('class', metrics.arrowAtTop ?
+      'blocklyDropDownArrow arrowTop' : 'blocklyDropDownArrow arrowBottom');
+  Blockly.DropDownDiv.arrow_.style.display = metrics.arrowVisible ? '' : 'none';
 
   // When we change `translate` multiple times in close succession,
   // Chrome may choose to wait and apply them all at once.
@@ -328,7 +329,8 @@ Blockly.DropDownDiv.getBoundsInfo_ = function() {
  * @param {number} secondaryY Secondary/alternative origin point y, in absolute px
  * @return {Object} Various final metrics, including rendered positions for drop-down and arrow.
  */
-Blockly.DropDownDiv.getPositionMetrics = function(primaryX, primaryY, secondaryX, secondaryY) {
+Blockly.DropDownDiv.getPositionMetrics = function(primaryX, primaryY,
+    secondaryX, secondaryY) {
   var boundsInfo = Blockly.DropDownDiv.getBoundsInfo_();
   var div = Blockly.DropDownDiv.DIV_;
   var divSize = goog.style.getSize(div);
@@ -364,14 +366,14 @@ Blockly.DropDownDiv.getPositionMetrics = function(primaryX, primaryY, secondaryX
   // dropdown should appear centered relative to the desired origin point.
   renderX -= divSize.width / 2;
   // Fit horizontally in the bounds.
-  renderX = Blockly.utils.clampNumber(
+  renderX = Blockly.utils.math.clamp(
       boundsInfo.left, renderX, boundsInfo.right - divSize.width);
 
   // Calculate the absolute arrow X. The arrow wants to be as close to the
   // origin point as possible. The arrow may not be centered in the dropdown div.
   var absoluteArrowX = centerX - Blockly.DropDownDiv.ARROW_SIZE / 2;
   // Keep in overall bounds
-  absoluteArrowX = Blockly.utils.clampNumber(
+  absoluteArrowX = Blockly.utils.math.clamp(
       boundsInfo.left, absoluteArrowX, boundsInfo.right);
 
   // Convert the arrow position to be relative to the top left corner of the div.
@@ -379,7 +381,7 @@ Blockly.DropDownDiv.getPositionMetrics = function(primaryX, primaryY, secondaryX
 
   // Pad the arrow by some pixels, primarily so that it doesn't render on top
   // of a rounded border.
-  relativeArrowX = Blockly.utils.clampNumber(
+  relativeArrowX = Blockly.utils.math.clamp(
       Blockly.DropDownDiv.ARROW_HORIZONTAL_PADDING,
       relativeArrowX,
       divSize.width - Blockly.DropDownDiv.ARROW_HORIZONTAL_PADDING -

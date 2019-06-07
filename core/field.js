@@ -33,6 +33,7 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 
 goog.require('goog.math.Size');
 goog.require('goog.style');
@@ -337,7 +338,7 @@ Blockly.Field.prototype.dispose = function() {
   }
   this.sourceBlock_ = null;
   if (this.fieldGroup_) {
-    Blockly.utils.removeNode(this.fieldGroup_);
+    Blockly.utils.dom.removeNode(this.fieldGroup_);
     this.fieldGroup_ = null;
   }
   this.textElement_ = null;
@@ -354,12 +355,12 @@ Blockly.Field.prototype.updateEditable = function() {
     return;
   }
   if (this.sourceBlock_.isEditable()) {
-    Blockly.utils.addClass(group, 'blocklyEditableText');
-    Blockly.utils.removeClass(group, 'blocklyNonEditableText');
+    Blockly.utils.dom.addClass(group, 'blocklyEditableText');
+    Blockly.utils.dom.removeClass(group, 'blocklyNonEditableText');
     group.style.cursor = this.CURSOR;
   } else {
-    Blockly.utils.addClass(group, 'blocklyNonEditableText');
-    Blockly.utils.removeClass(group, 'blocklyEditableText');
+    Blockly.utils.dom.addClass(group, 'blocklyNonEditableText');
+    Blockly.utils.dom.removeClass(group, 'blocklyEditableText');
     group.style.cursor = '';
   }
 };

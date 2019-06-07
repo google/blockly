@@ -33,6 +33,7 @@ goog.require('Blockly.Events.CommentDelete');
 goog.require('Blockly.Events.CommentMove');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.WorkspaceComment');
 
 
@@ -118,7 +119,7 @@ Blockly.WorkspaceCommentSvg.prototype.dispose = function() {
     Blockly.Events.fire(new Blockly.Events.CommentDelete(this));
   }
 
-  Blockly.utils.removeNode(this.svgGroup_);
+  Blockly.utils.dom.removeNode(this.svgGroup_);
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;
   this.svgRect_ = null;
@@ -233,7 +234,7 @@ Blockly.WorkspaceCommentSvg.prototype.unselect = function() {
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.addSelect = function() {
-  Blockly.utils.addClass(
+  Blockly.utils.dom.addClass(
       /** @type {!Element} */ (this.svgGroup_), 'blocklySelected');
   this.setFocus();
 };
@@ -243,7 +244,7 @@ Blockly.WorkspaceCommentSvg.prototype.addSelect = function() {
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.removeSelect = function() {
-  Blockly.utils.removeClass(
+  Blockly.utils.dom.removeClass(
       /** @type {!Element} */ (this.svgGroup_), 'blocklySelected');
   this.blurFocus();
 };
@@ -253,7 +254,7 @@ Blockly.WorkspaceCommentSvg.prototype.removeSelect = function() {
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.addFocus = function() {
-  Blockly.utils.addClass(
+  Blockly.utils.dom.addClass(
       /** @type {!Element} */ (this.svgGroup_), 'blocklyFocused');
 };
 
@@ -262,7 +263,7 @@ Blockly.WorkspaceCommentSvg.prototype.addFocus = function() {
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.removeFocus = function() {
-  Blockly.utils.removeClass(
+  Blockly.utils.dom.removeClass(
       /** @type {!Element} */ (this.svgGroup_), 'blocklyFocused');
 };
 
@@ -450,10 +451,10 @@ Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
  */
 Blockly.WorkspaceCommentSvg.prototype.updateMovable = function() {
   if (this.isMovable()) {
-    Blockly.utils.addClass(
+    Blockly.utils.dom.addClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDraggable');
   } else {
-    Blockly.utils.removeClass(
+    Blockly.utils.dom.removeClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDraggable');
   }
 };
@@ -478,10 +479,10 @@ Blockly.WorkspaceCommentSvg.prototype.setDragging = function(adding) {
     var group = this.getSvgRoot();
     group.translate_ = '';
     group.skew_ = '';
-    Blockly.utils.addClass(
+    Blockly.utils.dom.addClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
   } else {
-    Blockly.utils.removeClass(
+    Blockly.utils.dom.removeClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
   }
 };
@@ -524,10 +525,10 @@ Blockly.WorkspaceCommentSvg.prototype.setContent = function(content) {
  */
 Blockly.WorkspaceCommentSvg.prototype.setDeleteStyle = function(enable) {
   if (enable) {
-    Blockly.utils.addClass(
+    Blockly.utils.dom.addClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDraggingDelete');
   } else {
-    Blockly.utils.removeClass(
+    Blockly.utils.dom.removeClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDraggingDelete');
   }
 };

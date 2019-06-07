@@ -232,6 +232,11 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
   }
 };
 
+/**
+ * Create the text input editor widget.
+ * @return {HTMLInputElement} The newly created text input editor.
+ * @private
+ */
 Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   var div = Blockly.WidgetDiv.DIV;
 
@@ -252,6 +257,42 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   this.bindInputEvents_(htmlInput);
 
   return htmlInput;
+};
+
+/**
+ * Close the editor, save the results, and dispose any events bound to the
+ * text input's editor.
+ * @private
+ */
+Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
+  // Finalize value.
+  this.isBeingEdited_ = false;
+  // No need to call setValue because if the widget is being closed the
+  // latest input text has already been validated.
+  if (this.value_ !== this.text_) {
+    // At the end of an edit the text should be the same as the value. It
+    // may not be if the input text is different than the validated text.
+    // We should fix that.
+    this.text_ = String(this.value_);
+    this.isTextValid_ = true;
+    this.forceRerender();
+  }
+  // Otherwise don't rerender.
+
+  // Call onFinishEditing
+  // TODO: Get rid of this or make it less of a hack.
+  if (this.onFinishEditing_) {
+    this.onFinishEditing_(this.value_);
+  }
+
+  // Remove htmlInput events.
+  this.unbindInputEvents_();
+
+  // Delete style properties.
+  var style = Blockly.WidgetDiv.DIV.style;
+  style.width = 'auto';
+  style.height = 'auto';
+  style.fontSize = '';
 };
 
 /**
@@ -363,43 +404,6 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
   }
   div.style.left = xy.x + 'px';
   div.style.top = xy.y + 'px';
-};
-
-/**
- * Close the editor, save the results, and dispose of the editable
- * text field's elements.
- * @private
- */
-Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
-  // Finalize value.
-  this.isBeingEdited_ = false;
-  // No need to call setValue because if the widget is being closed the
-  // latest input text has already been validated.
-  if (this.value_ !== this.text_) {
-    // At the end of an edit the text should be the same as the value. It
-    // may not be if the input text is different than the validated text.
-    // We should fix that.
-    this.text_ = String(this.value_);
-    this.isTextValid_ = true;
-    this.forceRerender();
-  }
-  // Otherwise don't rerender.
-
-  // Call onFinishEditing
-  // TODO: Get rid of this or make it less of a hack.
-  if (this.onFinishEditing_) {
-    this.onFinishEditing_(this.value_);
-  }
-
-  // Remove htmlInput.
-  this.unbindInputEvents_();
-  this.htmlInput_ = null;
-
-  // Delete style properties.
-  var style = Blockly.WidgetDiv.DIV.style;
-  style.width = 'auto';
-  style.height = 'auto';
-  style.fontSize = '';
 };
 
 /**

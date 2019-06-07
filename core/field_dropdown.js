@@ -155,15 +155,6 @@ Blockly.FieldDropdown.prototype.initView = function() {
 };
 
 /**
- * Dispose of references to DOM elements and events belonging to this field.
- */
-Blockly.FieldDropdown.prototype.dispose = function() {
-  Blockly.FieldDropdown.superClass_.dispose.call(this);
-  this.imageElement_ = null;
-  this.arrow_ = null;
-};
-
-/**
  * Create a dropdown menu under the text.
  * @private
  */
@@ -223,8 +214,11 @@ Blockly.FieldDropdown.prototype.widgetCreate_ = function() {
   return menu;
 };
 
+/**
+ * Dispose of events belonging to the dropdown editor.
+ * @private
+ */
 Blockly.FieldDropdown.prototype.widgetDispose_ = function() {
-  this.menu_ = null;
   goog.events.unlistenByKey(this.menuActionEventKey_);
 };
 

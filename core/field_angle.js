@@ -131,15 +131,6 @@ Blockly.FieldAngle.prototype.initView = function() {
 };
 
 /**
- * Dispose of references to DOM elements and events belonging to this field.
- * @package
- */
-Blockly.FieldAngle.prototype.dispose = function() {
-  Blockly.FieldAngle.superClass_.dispose.call(this);
-  this.symbol_ = null;
-};
-
-/**
  * Updates the graph when the field rerenders.
  * @private
  */
@@ -231,13 +222,10 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
 };
 
 /**
- * Dispose of references to DOM elements and events belonging
- * to the angle editor.
+ * Dispose of events belonging to the angle editor.
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
-  this.gauge_ = null;
-  this.line_ = null;
   Blockly.unbindEvent_(this.clickWrapper_);
   Blockly.unbindEvent_(this.moveWrapper1_);
   Blockly.unbindEvent_(this.moveWrapper2_);

@@ -130,16 +130,6 @@ Blockly.FieldImage.prototype.initView = function() {
 };
 
 /**
- * Dispose of all DOM objects belonging to this text.
- */
-Blockly.FieldImage.prototype.dispose = function() {
-  Blockly.FieldImage.superClass_.dispose.call(this);
-  this.imageElement_ = null;
-  // TODO: Do we need to dispose of this?
-  this.clickHandler_ = null;
-};
-
-/**
  * Ensure that the input value (the source URL) is a string.
  * @param {string=} newValue The input value
  * @return {?string} A string, or null if invalid.

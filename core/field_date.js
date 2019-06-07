@@ -240,7 +240,6 @@ Blockly.FieldDate.prototype.dropdownCreate_ = function() {
  * @private
  */
 Blockly.FieldDate.prototype.dropdownDispose_ = function() {
-  this.picker_ = null;
   goog.events.unlistenByKey(this.changeEventKey_);
   goog.events.unlistenByKey(this.activeMonthEventKey_);
 };

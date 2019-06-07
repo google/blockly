@@ -327,7 +327,7 @@ Blockly.Field.prototype.toXml = function(fieldElement) {
 };
 
 /**
- * Dispose of all DOM objects belonging to this editable field.
+ * Dispose of all DOM objects and events belonging to this editable field.
  * @package
  */
 Blockly.Field.prototype.dispose = function() {
@@ -336,16 +336,11 @@ Blockly.Field.prototype.dispose = function() {
 
   if (this.mouseDownWrapper_) {
     Blockly.unbindEvent_(this.mouseDownWrapper_);
-    this.mouseDownWrapper_ = null;
   }
-  this.sourceBlock_ = null;
-  if (this.fieldGroup_) {
-    Blockly.utils.dom.removeNode(this.fieldGroup_);
-    this.fieldGroup_ = null;
-  }
-  this.textElement_ = null;
-  this.borderRect_ = null;
-  this.validator_ = null;
+
+  Blockly.utils.dom.removeNode(this.fieldGroup_);
+
+  this.disposed = true;
 };
 
 /**

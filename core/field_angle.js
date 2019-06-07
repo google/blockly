@@ -28,7 +28,7 @@ goog.provide('Blockly.FieldAngle');
 
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.FieldTextInput');
-goog.require('Blockly.utils');
+goog.provide('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.userAgent');
 
@@ -125,7 +125,7 @@ Blockly.FieldAngle.RADIUS = Blockly.FieldAngle.HALF - 1;
 Blockly.FieldAngle.prototype.initView = function() {
   Blockly.FieldAngle.superClass_.initView.call(this);
   // Add the degree symbol to the left of the number, even in RTL (issue #2380)
-  this.symbol_ = Blockly.utils.createSvgElement('tspan', {}, null);
+  this.symbol_ = Blockly.utils.dom.createSvgElement('tspan', {}, null);
   this.symbol_.appendChild(document.createTextNode('\u00B0'));
   this.textElement_.appendChild(this.symbol_);
 };
@@ -176,7 +176,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
   var div = Blockly.DropDownDiv.getContentDiv();
 
   // Build the SVG DOM.
-  var svg = Blockly.utils.createSvgElement('svg', {
+  var svg = Blockly.utils.dom.createSvgElement('svg', {
     'xmlns': 'http://www.w3.org/2000/svg',
     'xmlns:html': 'http://www.w3.org/1999/xhtml',
     'xmlns:xlink': 'http://www.w3.org/1999/xlink',
@@ -184,21 +184,21 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
     'height': (Blockly.FieldAngle.HALF * 2) + 'px',
     'width': (Blockly.FieldAngle.HALF * 2) + 'px'
   }, div);
-  var circle = Blockly.utils.createSvgElement('circle', {
+  var circle = Blockly.utils.dom.createSvgElement('circle', {
     'cx': Blockly.FieldAngle.HALF, 'cy': Blockly.FieldAngle.HALF,
     'r': Blockly.FieldAngle.RADIUS,
     'class': 'blocklyAngleCircle'
   }, svg);
-  this.gauge_ = Blockly.utils.createSvgElement('path',
+  this.gauge_ = Blockly.utils.dom.createSvgElement('path',
       {'class': 'blocklyAngleGauge'}, svg);
-  this.line_ = Blockly.utils.createSvgElement('line', {
+  this.line_ = Blockly.utils.dom.createSvgElement('line', {
     'x1': Blockly.FieldAngle.HALF,
     'y1': Blockly.FieldAngle.HALF,
     'class': 'blocklyAngleLine'
   }, svg);
   // Draw markers around the edge.
   for (var angle = 0; angle < 360; angle += 15) {
-    Blockly.utils.createSvgElement('line', {
+    Blockly.utils.dom.createSvgElement('line', {
       'x1': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS,
       'y1': Blockly.FieldAngle.HALF,
       'x2': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS -

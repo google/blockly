@@ -152,31 +152,6 @@ Blockly.utils.getRelativeXY.XY_STYLE_REGEX_ =
     /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
 
 /**
- * Helper method for creating SVG elements.
- * @param {string} name Element's tag name.
- * @param {!Object} attrs Dictionary of attribute names and values.
- * @param {Element} parent Optional parent on which to append the element.
- * @return {!SVGElement} Newly created SVG element.
- */
-Blockly.utils.createSvgElement = function(name, attrs, parent) {
-  var e = /** @type {!SVGElement} */
-      (document.createElementNS(Blockly.SVG_NS, name));
-  for (var key in attrs) {
-    e.setAttribute(key, attrs[key]);
-  }
-  // IE defines a unique attribute "runtimeStyle", it is NOT applied to
-  // elements created with createElementNS. However, Closure checks for IE
-  // and assumes the presence of the attribute and crashes.
-  if (document.body.runtimeStyle) {  // Indicates presence of IE-only attr.
-    e.runtimeStyle = e.currentStyle = e.style;
-  }
-  if (parent) {
-    parent.appendChild(e);
-  }
-  return e;
-};
-
-/**
  * Is this event a right-click?
  * @param {!Event} e Mouse event.
  * @return {boolean} True if right-click.
@@ -537,18 +512,6 @@ Blockly.utils.runAfterPageLoad = function(fn) {
       }
     }, 10);
   }
-};
-
-/**
- * Sets the CSS transform property on an element. This function sets the
- * non-vendor-prefixed and vendor-prefixed versions for backwards compatibility
- * with older browsers. See https://caniuse.com/#feat=transforms2d
- * @param {!Element} node The node which the CSS transform should be applied.
- * @param {string} transform The value of the CSS `transform` property.
- */
-Blockly.utils.setCssTransform = function(node, transform) {
-  node.style['transform'] = transform;
-  node.style['-webkit-transform'] = transform;
 };
 
 /**

@@ -27,7 +27,6 @@
 goog.provide('Blockly.ZoomControls');
 
 goog.require('Blockly.Touch');
-goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 
 
@@ -95,7 +94,7 @@ Blockly.ZoomControls.prototype.top_ = 0;
  */
 Blockly.ZoomControls.prototype.createDom = function() {
   this.svgGroup_ =
-      Blockly.utils.createSvgElement('g', {}, null);
+      Blockly.utils.dom.createSvgElement('g', {}, null);
 
   // Each filter/pattern needs a unique ID for the case of multiple Blockly
   // instances on a page.  Browser behaviour becomes undefined otherwise.
@@ -195,20 +194,20 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
   </g>
   */
   var ws = this.workspace_;
-  this.zoomOutGroup_ = Blockly.utils.createSvgElement('g',
+  this.zoomOutGroup_ = Blockly.utils.dom.createSvgElement('g',
       {'class': 'blocklyZoom'}, this.svgGroup_);
-  var clip = Blockly.utils.createSvgElement('clipPath',
+  var clip = Blockly.utils.dom.createSvgElement('clipPath',
       {
         'id': 'blocklyZoomoutClipPath' + rnd
       },
       this.zoomOutGroup_);
-  Blockly.utils.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement('rect',
       {
         'width': 32,
         'height': 32,
       },
       clip);
-  var zoomoutSvg = Blockly.utils.createSvgElement('image',
+  var zoomoutSvg = Blockly.utils.dom.createSvgElement('image',
       {
         'width': Blockly.SPRITE.width,
         'height': Blockly.SPRITE.height,
@@ -248,20 +247,20 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
   </g>
   */
   var ws = this.workspace_;
-  this.zoomInGroup_ = Blockly.utils.createSvgElement('g',
+  this.zoomInGroup_ = Blockly.utils.dom.createSvgElement('g',
       {'class': 'blocklyZoom'}, this.svgGroup_);
-  var clip = Blockly.utils.createSvgElement('clipPath',
+  var clip = Blockly.utils.dom.createSvgElement('clipPath',
       {
         'id': 'blocklyZoominClipPath' + rnd
       },
       this.zoomInGroup_);
-  Blockly.utils.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement('rect',
       {
         'width': 32,
         'height': 32,
       },
       clip);
-  var zoominSvg = Blockly.utils.createSvgElement('image',
+  var zoominSvg = Blockly.utils.dom.createSvgElement('image',
       {
         'width': Blockly.SPRITE.width,
         'height': Blockly.SPRITE.height,
@@ -301,20 +300,20 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
   </g>
   */
   var ws = this.workspace_;
-  this.zoomResetGroup_ = Blockly.utils.createSvgElement('g',
+  this.zoomResetGroup_ = Blockly.utils.dom.createSvgElement('g',
       {'class': 'blocklyZoom'}, this.svgGroup_);
-  var clip = Blockly.utils.createSvgElement('clipPath',
+  var clip = Blockly.utils.dom.createSvgElement('clipPath',
       {
         'id': 'blocklyZoomresetClipPath' + rnd
       },
       this.zoomResetGroup_);
-  Blockly.utils.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement('rect',
       {
         'width': 32,
         'height': 32
       },
       clip);
-  var zoomresetSvg = Blockly.utils.createSvgElement('image',
+  var zoomresetSvg = Blockly.utils.dom.createSvgElement('image',
       {
         'width': Blockly.SPRITE.width,
         'height': Blockly.SPRITE.height,

@@ -112,7 +112,7 @@ Blockly.createDom_ = function(container, options) {
     ...
   </svg>
   */
-  var svg = Blockly.utils.createSvgElement('svg', {
+  var svg = Blockly.utils.dom.createSvgElement('svg', {
     'xmlns': 'http://www.w3.org/2000/svg',
     'xmlns:html': 'http://www.w3.org/1999/xhtml',
     'xmlns:xlink': 'http://www.w3.org/1999/xlink',
@@ -124,7 +124,7 @@ Blockly.createDom_ = function(container, options) {
     ... filters go here ...
   </defs>
   */
-  var defs = Blockly.utils.createSvgElement('defs', {}, svg);
+  var defs = Blockly.utils.dom.createSvgElement('defs', {}, svg);
   // Each filter/pattern needs a unique ID for the case of multiple Blockly
   // instances on a page.  Browser behaviour becomes undefined otherwise.
   // https://neil.fraser.name/news/2015/11/01/
@@ -143,11 +143,11 @@ Blockly.createDom_ = function(container, options) {
                    k1="0" k2="1" k3="1" k4="0" />
     </filter>
   */
-  var embossFilter = Blockly.utils.createSvgElement('filter',
+  var embossFilter = Blockly.utils.dom.createSvgElement('filter',
       {'id': 'blocklyEmbossFilter' + rnd}, defs);
-  Blockly.utils.createSvgElement('feGaussianBlur',
+  Blockly.utils.dom.createSvgElement('feGaussianBlur',
       {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, embossFilter);
-  var feSpecularLighting = Blockly.utils.createSvgElement('feSpecularLighting',
+  var feSpecularLighting = Blockly.utils.dom.createSvgElement('feSpecularLighting',
       {
         'in': 'blur',
         'surfaceScale': 1,
@@ -157,16 +157,16 @@ Blockly.createDom_ = function(container, options) {
         'result': 'specOut'
       },
       embossFilter);
-  Blockly.utils.createSvgElement('fePointLight',
+  Blockly.utils.dom.createSvgElement('fePointLight',
       {'x': -5000, 'y': -10000, 'z': 20000}, feSpecularLighting);
-  Blockly.utils.createSvgElement('feComposite',
+  Blockly.utils.dom.createSvgElement('feComposite',
       {
         'in': 'specOut',
         'in2': 'SourceAlpha',
         'operator': 'in',
         'result': 'specOut'
       }, embossFilter);
-  Blockly.utils.createSvgElement('feComposite',
+  Blockly.utils.dom.createSvgElement('feComposite',
       {
         'in': 'SourceGraphic',
         'in2': 'specOut',
@@ -184,16 +184,16 @@ Blockly.createDom_ = function(container, options) {
       <path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="#cc0" />
     </pattern>
   */
-  var disabledPattern = Blockly.utils.createSvgElement('pattern',
+  var disabledPattern = Blockly.utils.dom.createSvgElement('pattern',
       {
         'id': 'blocklyDisabledPattern' + rnd,
         'patternUnits': 'userSpaceOnUse',
         'width': 10,
         'height': 10
       }, defs);
-  Blockly.utils.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement('rect',
       {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
-  Blockly.utils.createSvgElement('path',
+  Blockly.utils.dom.createSvgElement('path',
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, disabledPattern);
   options.disabledPatternId = disabledPattern.id;
 

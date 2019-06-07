@@ -31,7 +31,7 @@ goog.provide('Blockly.FieldDropdown');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
-goog.require('Blockly.userAgent');
+goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.string');
@@ -108,7 +108,7 @@ Blockly.FieldDropdown.IMAGE_Y_OFFSET = 5;
  * Android can't (in 2014) display "▾", so use "▼" instead.
  */
 Blockly.FieldDropdown.ARROW_CHAR =
-    Blockly.userAgent.ANDROID ? '\u25BC' : '\u25BE';
+    Blockly.utils.userAgent.ANDROID ? '\u25BC' : '\u25BE';
 
 /**
  * Mouse cursor style when over the hotspot that initiates the editor.

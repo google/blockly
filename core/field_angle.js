@@ -28,7 +28,7 @@ goog.provide('Blockly.FieldAngle');
 
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.FieldTextInput');
-goog.require('Blockly.userAgent');
+goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 
@@ -167,9 +167,9 @@ Blockly.FieldAngle.prototype.dispose_ = function() {
  */
 Blockly.FieldAngle.prototype.showEditor_ = function() {
   var noFocus =
-      Blockly.userAgent.MOBILE ||
-      Blockly.userAgent.ANDROID ||
-      Blockly.userAgent.IPAD;
+      Blockly.utils.userAgent.MOBILE ||
+      Blockly.utils.userAgent.ANDROID ||
+      Blockly.utils.userAgent.IPAD;
   // Mobile browsers have issues with in-line textareas (focus & keyboards).
   Blockly.FieldAngle.superClass_.showEditor_.call(this, noFocus);
 

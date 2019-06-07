@@ -45,7 +45,7 @@ Blockly.Touch.TOUCH_ENABLED =
      // IE10 uses non-standard touch events, so it has a different check.
      !!(Blockly.utils.global['navigator'] &&
         (Blockly.utils.global['navigator']['maxTouchPoints'] ||
-         Blockly.utils.global['navigator']['msMaxTouchPoints'])))
+         Blockly.utils.global['navigator']['msMaxTouchPoints'])));
 
 /**
  * Which touch events are we currently paying attention to?

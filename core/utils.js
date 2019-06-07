@@ -34,7 +34,7 @@ goog.provide('Blockly.utils');
 
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Msg');
-goog.require('Blockly.userAgent');
+goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils.string');
 
 goog.require('goog.style');
@@ -182,7 +182,7 @@ Blockly.utils.createSvgElement = function(name, attrs, parent) {
  * @return {boolean} True if right-click.
  */
 Blockly.utils.isRightButton = function(e) {
-  if (e.ctrlKey && Blockly.userAgent.MAC) {
+  if (e.ctrlKey && Blockly.utils.userAgent.MAC) {
     // Control-clicking on Mac OS X is treated as a right-click.
     // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
     return true;
@@ -594,7 +594,7 @@ Blockly.utils.arrayRemove = function(arr, obj) {
 Blockly.utils.getDocumentScroll = function() {
   var el = document.documentElement;
   var win = window;
-  if (Blockly.userAgent.IE && win.pageYOffset != el.scrollTop) {
+  if (Blockly.utils.userAgent.IE && win.pageYOffset != el.scrollTop) {
     // The keyboard on IE10 touch devices shifts the page using the pageYOffset
     // without modifying scrollTop. For this case, we want the body scroll
     // offsets.

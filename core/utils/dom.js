@@ -46,6 +46,12 @@ Blockly.utils.dom.SVG_NS = 'http://www.w3.org/2000/svg';
 Blockly.utils.dom.HTML_NS = 'http://www.w3.org/1999/xhtml';
 
 /**
+ * Required name space for XLINK elements.
+ * @const
+ */
+Blockly.utils.dom.XLINK_NS = 'http://www.w3.org/1999/xlink';
+
+/**
  * Helper method for creating SVG elements.
  * @param {string} name Element's tag name.
  * @param {!Object} attrs Dictionary of attribute names and values.

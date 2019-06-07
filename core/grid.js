@@ -27,7 +27,7 @@
 
 goog.provide('Blockly.Grid');
 
-goog.provide('Blockly.utils.dom');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.userAgent');
 
 

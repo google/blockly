@@ -30,7 +30,7 @@ goog.require('Blockly.Bubble');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
-goog.provide('Blockly.utils.dom');
+goog.require('Blockly.utils.dom');
 
 
 /**

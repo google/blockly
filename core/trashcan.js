@@ -247,7 +247,7 @@ Blockly.Trashcan.prototype.createDom = function() {
         'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')'
       },
       this.svgGroup_);
-  body.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+  body.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   clip = Blockly.utils.dom.createSvgElement('clipPath',
@@ -264,7 +264,7 @@ Blockly.Trashcan.prototype.createDom = function() {
         'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')'
       },
       this.svgGroup_);
-  this.svgLid_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+  this.svgLid_.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   Blockly.bindEventWithChecks_(this.svgGroup_, 'mouseup', this, this.click);

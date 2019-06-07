@@ -49,7 +49,7 @@ Blockly.ScrollbarPair = function(workspace) {
       workspace, true, true, 'blocklyMainWorkspaceScrollbar');
   this.vScroll = new Blockly.Scrollbar(
       workspace, false, true, 'blocklyMainWorkspaceScrollbar');
-  this.corner_ = Blockly.utils.createSvgElement(
+  this.corner_ = Blockly.utils.dom.createSvgElement(
       'rect',
       {
         'height': Blockly.Scrollbar.scrollbarThickness,
@@ -410,7 +410,7 @@ Blockly.Scrollbar.prototype.setPosition_ = function(x, y) {
   var tempX = this.position_.x + this.origin_.x;
   var tempY = this.position_.y + this.origin_.y;
   var transform = 'translate(' + tempX + 'px,' + tempY + 'px)';
-  Blockly.utils.setCssTransform(this.outerSvg_, transform);
+  Blockly.utils.dom.setCssTransform(this.outerSvg_, transform);
 };
 
 /**
@@ -611,13 +611,13 @@ Blockly.Scrollbar.prototype.createDom_ = function(opt_class) {
   if (opt_class) {
     className += ' ' + opt_class;
   }
-  this.outerSvg_ = Blockly.utils.createSvgElement(
+  this.outerSvg_ = Blockly.utils.dom.createSvgElement(
       'svg', {'class': className}, null);
-  this.svgGroup_ = Blockly.utils.createSvgElement('g', {}, this.outerSvg_);
-  this.svgBackground_ = Blockly.utils.createSvgElement(
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement('g', {}, this.outerSvg_);
+  this.svgBackground_ = Blockly.utils.dom.createSvgElement(
       'rect', {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
   var radius = Math.floor((Blockly.Scrollbar.scrollbarThickness - 5) / 2);
-  this.svgHandle_ = Blockly.utils.createSvgElement(
+  this.svgHandle_ = Blockly.utils.dom.createSvgElement(
       'rect',
       {
         'class': 'blocklyScrollbarHandle',

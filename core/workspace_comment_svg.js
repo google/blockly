@@ -55,11 +55,11 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
    * @type {SVGElement}
    * @private
    */
-  this.svgGroup_ = Blockly.utils.createSvgElement(
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement(
       'g', {'class': 'blocklyComment'}, null);
   this.svgGroup_.translate_ = '';
 
-  this.svgRect_ = Blockly.utils.createSvgElement(
+  this.svgRect_ = Blockly.utils.dom.createSvgElement(
       'rect',
       {
         'class': 'blocklyCommentRect',

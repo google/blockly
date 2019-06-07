@@ -34,6 +34,43 @@ goog.provide('Blockly.utils.dom');
 
 
 /**
+ * Required name space for SVG elements.
+ * @const
+ */
+Blockly.utils.dom.SVG_NS = 'http://www.w3.org/2000/svg';
+
+/**
+ * Required name space for HTML elements.
+ * @const
+ */
+Blockly.utils.dom.HTML_NS = 'http://www.w3.org/1999/xhtml';
+
+/**
+ * Helper method for creating SVG elements.
+ * @param {string} name Element's tag name.
+ * @param {!Object} attrs Dictionary of attribute names and values.
+ * @param {Element} parent Optional parent on which to append the element.
+ * @return {!SVGElement} Newly created SVG element.
+ */
+Blockly.utils.dom.createSvgElement = function(name, attrs, parent) {
+  var e = /** @type {!SVGElement} */
+      (document.createElementNS(Blockly.utils.dom.SVG_NS, name));
+  for (var key in attrs) {
+    e.setAttribute(key, attrs[key]);
+  }
+  // IE defines a unique attribute "runtimeStyle", it is NOT applied to
+  // elements created with createElementNS. However, Closure checks for IE
+  // and assumes the presence of the attribute and crashes.
+  if (document.body.runtimeStyle) {  // Indicates presence of IE-only attr.
+    e.runtimeStyle = e.currentStyle = e.style;
+  }
+  if (parent) {
+    parent.appendChild(e);
+  }
+  return e;
+};
+
+/**
  * Add a CSS class to a element.
  * Similar to Closure's goog.dom.classes.add, except it handles SVG elements.
  * @param {!Element} element DOM element to add class to.
@@ -129,4 +166,16 @@ Blockly.utils.dom.insertAfter = function(newNode, refNode) {
 Blockly.utils.dom.containsNode = function(parent, descendant) {
   return !!(parent.compareDocumentPosition(descendant) &
             Node.DOCUMENT_POSITION_CONTAINED_BY);
+};
+
+/**
+ * Sets the CSS transform property on an element. This function sets the
+ * non-vendor-prefixed and vendor-prefixed versions for backwards compatibility
+ * with older browsers. See https://caniuse.com/#feat=transforms2d
+ * @param {!Element} element Element to which the CSS transform will be applied.
+ * @param {string} transform The value of the CSS `transform` property.
+ */
+Blockly.utils.dom.setCssTransform = function(element, transform) {
+  element.style['transform'] = transform;
+  element.style['-webkit-transform'] = transform;
 };

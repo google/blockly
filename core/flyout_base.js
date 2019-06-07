@@ -213,9 +213,9 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
   */
   // Setting style to display:none to start. The toolbox and flyout
   // hide/show code will set up proper visibility and size later.
-  this.svgGroup_ = Blockly.utils.createSvgElement(tagName,
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement(tagName,
       {'class': 'blocklyFlyout', 'style': 'display: none'}, null);
-  this.svgBackground_ = Blockly.utils.createSvgElement('path',
+  this.svgBackground_ = Blockly.utils.dom.createSvgElement('path',
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());
   return this.svgGroup_;
@@ -376,7 +376,7 @@ Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
   this.svgGroup_.setAttribute("height", height);
   if (this.svgGroup_.tagName == 'svg') {
     var transform = 'translate(' + x + 'px,' + y + 'px)';
-    Blockly.utils.setCssTransform(this.svgGroup_, transform);
+    Blockly.utils.dom.setCssTransform(this.svgGroup_, transform);
   } else {
     // IE and Edge don't support CSS transforms on SVG elements so
     // it's important to set the transform on the SVG element itself
@@ -693,7 +693,7 @@ Blockly.Flyout.prototype.initFlyoutButton_ = function(button, x, y) {
 Blockly.Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
   // Create an invisible rectangle under the block to act as a button.  Just
   // using the block as a button is poor, since blocks have holes in them.
-  var rect = Blockly.utils.createSvgElement('rect',
+  var rect = Blockly.utils.dom.createSvgElement('rect',
       {
         'fill-opacity': 0,
         'x': x,

@@ -137,12 +137,12 @@ Blockly.FieldDropdown.prototype.imageJson_ = null;
 Blockly.FieldDropdown.prototype.initView = function() {
   Blockly.FieldDropdown.superClass_.initView.call(this);
 
-  this.imageElement_ = Blockly.utils.createSvgElement( 'image',
+  this.imageElement_ = Blockly.utils.dom.createSvgElement( 'image',
       {
         'y': Blockly.FieldDropdown.IMAGE_Y_OFFSET
       }, this.fieldGroup_);
 
-  this.arrow_ = Blockly.utils.createSvgElement('tspan', {}, this.textElement_);
+  this.arrow_ = Blockly.utils.dom.createSvgElement('tspan', {}, this.textElement_);
   this.arrow_.appendChild(document.createTextNode(
       this.sourceBlock_.RTL ?
       Blockly.FieldDropdown.ARROW_CHAR + ' ' :

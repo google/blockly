@@ -210,7 +210,7 @@ Blockly.RenderedConnection.prototype.highlight = function() {
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();
   var x = this.x_ - xy.x;
   var y = this.y_ - xy.y;
-  Blockly.Connection.highlightedPath_ = Blockly.utils.createSvgElement(
+  Blockly.Connection.highlightedPath_ = Blockly.utils.dom.createSvgElement(
       'path',
       {
         'class': 'blocklyHighlightedConnectionPath',

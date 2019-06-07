@@ -86,10 +86,10 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.createDom = function() {
   *   <g class="blocklyBubbleCanvas">/g>
   * </svg>
   */
-  this.SVG_ = Blockly.utils.createSvgElement('svg',
+  this.SVG_ = Blockly.utils.dom.createSvgElement('svg',
       {
-        'xmlns': Blockly.SVG_NS,
-        'xmlns:html': Blockly.HTML_NS,
+        'xmlns': Blockly.utils.dom.SVG_NS,
+        'xmlns:html': Blockly.utils.dom.HTML_NS,
         'xmlns:xlink': 'http://www.w3.org/1999/xlink',
         'version': '1.1',
         'class': 'blocklyWsDragSurface blocklyOverflowVisible'
@@ -113,7 +113,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.translateSurface = function(x, y) {
   var fixedY = y.toFixed(0);
 
   this.SVG_.style.display = 'block';
-  Blockly.utils.setCssTransform(
+  Blockly.utils.dom.setCssTransform(
       this.SVG_, 'translate3d(' + fixedX + 'px, ' + fixedY + 'px, 0px)');
 };
 
@@ -163,7 +163,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   if (this.SVG_.childNodes.length) {
     throw Error('Drag surface was not cleared.');
   }
-  Blockly.utils.setCssTransform(this.SVG_, '');
+  Blockly.utils.dom.setCssTransform(this.SVG_, '');
   this.previousSibling_ = null;
 };
 

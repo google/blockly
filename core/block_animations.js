@@ -26,7 +26,6 @@
 
 goog.provide('Blockly.BlockAnimations');
 
-goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 
 
@@ -117,7 +116,7 @@ Blockly.BlockAnimations.connectionUiEffect = function(block) {
     xy.x += (block.RTL ? -23 : 23) * scale;
     xy.y += 3 * scale;
   }
-  var ripple = Blockly.utils.createSvgElement('circle',
+  var ripple = Blockly.utils.dom.createSvgElement('circle',
       {
         'cx': xy.x,
         'cy': xy.y,

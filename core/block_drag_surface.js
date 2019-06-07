@@ -32,6 +32,7 @@
 goog.provide('Blockly.BlockDragSurfaceSvg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.dom');
 
 
 /**
@@ -95,14 +96,14 @@ Blockly.BlockDragSurfaceSvg.prototype.createDom = function() {
   if (this.SVG_) {
     return;  // Already created.
   }
-  this.SVG_ = Blockly.utils.createSvgElement('svg', {
-    'xmlns': Blockly.SVG_NS,
-    'xmlns:html': Blockly.HTML_NS,
+  this.SVG_ = Blockly.utils.dom.createSvgElement('svg', {
+    'xmlns': Blockly.utils.dom.SVG_NS,
+    'xmlns:html': Blockly.utils.dom.HTML_NS,
     'xmlns:xlink': 'http://www.w3.org/1999/xlink',
     'version': '1.1',
     'class': 'blocklyBlockDragSurface'
   }, this.container_);
-  this.dragGroup_ = Blockly.utils.createSvgElement('g', {}, this.SVG_);
+  this.dragGroup_ = Blockly.utils.dom.createSvgElement('g', {}, this.SVG_);
 };
 
 /**
@@ -152,7 +153,7 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
   y = y.toFixed(0);
   this.SVG_.style.display = 'block';
 
-  Blockly.utils.setCssTransform(this.SVG_,
+  Blockly.utils.dom.setCssTransform(this.SVG_,
       'translate3d(' + x + 'px, ' + y + 'px, 0px)');
 };
 

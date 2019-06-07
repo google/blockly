@@ -31,7 +31,6 @@ goog.provide('Blockly.Field');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
-goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.userAgent');
 
@@ -230,7 +229,7 @@ Blockly.Field.prototype.init = function() {
     // Field has already been initialized once.
     return;
   }
-  this.fieldGroup_ = Blockly.utils.createSvgElement('g', {}, null);
+  this.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
   if (!this.isVisible()) {
     this.fieldGroup_.style.display = 'none';
   }
@@ -258,7 +257,7 @@ Blockly.Field.prototype.initView = function() {
  * @protected
  */
 Blockly.Field.prototype.createBorderRect_ = function() {
-  this.borderRect_ = Blockly.utils.createSvgElement('rect',
+  this.borderRect_ = Blockly.utils.dom.createSvgElement('rect',
       {
         'rx': 4,
         'ry': 4,
@@ -276,7 +275,7 @@ Blockly.Field.prototype.createBorderRect_ = function() {
  * @protected
  */
 Blockly.Field.prototype.createTextElement_ = function() {
-  this.textElement_ = Blockly.utils.createSvgElement('text',
+  this.textElement_ = Blockly.utils.dom.createSvgElement('text',
       {
         'class': 'blocklyText',
         'y': this.size_.height - 12.5

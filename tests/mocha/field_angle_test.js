@@ -201,13 +201,13 @@ suite ('Angle Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.angleField = new Blockly.FieldAngle(1);
-      Blockly.FieldTextInput.htmlInput_ = Object.create(null);
-      Blockly.FieldTextInput.htmlInput_.oldValue_ = '1';
-      Blockly.FieldTextInput.htmlInput_.untypedDefaultValue_ = 1;
+      this.angleField.htmlInput_ = Object.create(null);
+      this.angleField.htmlInput_.oldValue_ = '1';
+      this.angleField.htmlInput_.untypedDefaultValue_ = 1;
     });
     teardown(function() {
       this.angleField.setValidator(null);
-      Blockly.FieldTextInput.htmlInput_ = null;
+      this.angleField.htmlInput_ = null;
     });
     suite('Null Validator', function() {
       setup(function() {
@@ -217,7 +217,7 @@ suite ('Angle Fields', function() {
       });
       test('When Editing', function() {
         this.angleField.isBeingEdited_ = true;
-        Blockly.FieldTextInput.htmlInput_.value = '2';
+        this.angleField.htmlInput_.value = '2';
         this.angleField.onHtmlInputChange_(null);
         assertValue(this.angleField, 1, '2');
         this.angleField.isBeingEdited_ = false;
@@ -235,7 +235,7 @@ suite ('Angle Fields', function() {
       });
       test('When Editing', function() {
         this.angleField.isBeingEdited_ = true;
-        Blockly.FieldTextInput.htmlInput_.value = '25';
+        this.angleField.htmlInput_.value = '25';
         this.angleField.onHtmlInputChange_(null);
         assertValue(this.angleField, 30, '25');
         this.angleField.isBeingEdited_ = false;
@@ -251,7 +251,7 @@ suite ('Angle Fields', function() {
       });
       test('When Editing', function() {
         this.angleField.isBeingEdited_ = true;
-        Blockly.FieldTextInput.htmlInput_.value = '2';
+        this.angleField.htmlInput_.value = '2';
         this.angleField.onHtmlInputChange_(null);
         assertValue(this.angleField, 2);
         this.angleField.isBeingEdited_ = false;

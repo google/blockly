@@ -89,14 +89,6 @@ Blockly.FieldTextInput.prototype.SERIALIZABLE = true;
 Blockly.FieldTextInput.FONTSIZE = 11;
 
 /**
- * The HTML input element for the user to type, or null if no FieldTextInput
- * editor is currently open.
- * @type {HTMLInputElement}
- * @protected
- */
-Blockly.FieldTextInput.htmlInput_ = null;
-
-/**
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
 Blockly.FieldTextInput.prototype.CURSOR = 'text';

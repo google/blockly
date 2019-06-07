@@ -30,9 +30,9 @@ goog.provide('Blockly.Events.CommentCreate');
 goog.provide('Blockly.Events.CommentDelete');
 goog.provide('Blockly.Events.CommentMove');
 
-goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Xml');
 goog.require('Blockly.Xml.utils');
 

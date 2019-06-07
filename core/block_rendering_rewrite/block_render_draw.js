@@ -399,7 +399,7 @@ Blockly.BlockRendering.Drawer.prototype.positionExternalValueConnection_ = funct
  */
 Blockly.BlockRendering.Drawer.prototype.positionPreviousConnection_ = function() {
   if (this.info_.topRow.hasPreviousConnection) {
-    var connX = (this.info_.RTL ? -BRC.NOTCH_OFFSET_LEFT : BRC.NOTCH_OFFSET_LEFT);
+    var connX = this.info_.RTL ? -BRC.NOTCH_OFFSET_LEFT : BRC.NOTCH_OFFSET_LEFT;
     this.info_.topRow.connection.setOffsetInBlock(connX, 0);
   }
 };
@@ -413,8 +413,8 @@ Blockly.BlockRendering.Drawer.prototype.positionNextConnection_ = function() {
 
   if (bottomRow.hasNextConnection) {
     var connX = (this.info_.RTL ? -BRC.NOTCH_OFFSET_LEFT : BRC.NOTCH_OFFSET_LEFT);
-    // TODO use a constant here when fixing block height calculation.
-    bottomRow.connection.setOffsetInBlock(connX, this.info_.height - 1);
+    bottomRow.connection.setOffsetInBlock(
+        connX, this.info_.height + BRC.DARK_PATH_OFFSET);
   }
 };
 

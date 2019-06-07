@@ -230,8 +230,6 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
     this.htmlInput_.focus();
     this.htmlInput_.select();
   }
-
-  this.bindInputEvents_();
 };
 
 Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
@@ -257,22 +255,24 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
 };
 
 /**
- * Bind handlers for user input on the text input field's editor..
+ * Bind handlers for user input on the text input field's editor.
+ * @param {!HTMLInputElement} htmlInput The htmlInput to which event
+ *    handlers will be bound.
  * @private
  */
-Blockly.FieldTextInput.prototype.bindInputEvents_ = function() {
+Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
   // Trap Enter without IME and Esc to hide.
   this.onKeyDownWrapper_ =
       Blockly.bindEventWithChecks_(
-          this.htmlInput_, 'keydown', this, this.onHtmlInputKeyDown_);
+          htmlInput, 'keydown', this, this.onHtmlInputKeyDown_);
   // Resize after every keystroke.
   this.onKeyUpWrapper_ =
       Blockly.bindEventWithChecks_(
-          this.htmlInput_, 'keyup', this, this.onHtmlInputChange_);
+          htmlInput, 'keyup', this, this.onHtmlInputChange_);
   // Repeatedly resize when holding down a key.
   this.onKeyPressWrapper_ =
       Blockly.bindEventWithChecks_(
-          this.htmlInput_, 'keypress', this, this.onHtmlInputChange_);
+          htmlInput, 'keypress', this, this.onHtmlInputChange_);
 
   // TODO: Figure out if this is necessary.
   this.onWorkspaceChangeWrapper_ = this.resizeEditor_.bind(this);

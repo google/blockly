@@ -227,7 +227,7 @@ Blockly.BlockRendering.Drawer.prototype.drawBottom_ = function() {
 Blockly.BlockRendering.Drawer.prototype.drawLeft_ = function() {
   this.highlighter_.drawLeft();
 
-  this.positionOutpuConnection_();
+  this.positionOutputConnection_();
   if (this.info_.hasOutputConnection) {
     // Draw a line up to the bottom of the tab.
     this.steps_.push('V', BRC.TAB_OFFSET_FROM_TOP + BRC.TAB_HEIGHT);
@@ -423,7 +423,7 @@ Blockly.BlockRendering.Drawer.prototype.positionNextConnection_ = function() {
  * @param {!Blockly.BlockRendering.BottomRow} row The bottom row on the block.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.positionOutpuConnection_ = function() {
+Blockly.BlockRendering.Drawer.prototype.positionOutputConnection_ = function() {
   if (this.info_.hasOutputConnection) {
     this.block_.outputConnection.setOffsetInBlock(0, BRC.TAB_OFFSET_FROM_TOP);
   }

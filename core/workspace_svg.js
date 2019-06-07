@@ -1370,24 +1370,24 @@ Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
   // Start at 1 since the 0th block was used for initialization
   for (var i = 1; i < topElements.length; i++) {
     var blockBoundary = topElements[i].getBoundingRectangle();
-    if (blockBoundary.topLeft.x < boundary.topLeft.x) {
-      boundary.topLeft.x = blockBoundary.topLeft.x;
+    if (blockBoundary.left < boundary.left) {
+      boundary.left = blockBoundary.left;
     }
-    if (blockBoundary.bottomRight.x > boundary.bottomRight.x) {
-      boundary.bottomRight.x = blockBoundary.bottomRight.x;
+    if (blockBoundary.right > boundary.right) {
+      boundary.right = blockBoundary.right;
     }
-    if (blockBoundary.topLeft.y < boundary.topLeft.y) {
-      boundary.topLeft.y = blockBoundary.topLeft.y;
+    if (blockBoundary.top < boundary.top) {
+      boundary.top = blockBoundary.top;
     }
-    if (blockBoundary.bottomRight.y > boundary.bottomRight.y) {
-      boundary.bottomRight.y = blockBoundary.bottomRight.y;
+    if (blockBoundary.bottom > boundary.bottom) {
+      boundary.bottom = blockBoundary.bottom;
     }
   }
   return {
-    x: boundary.topLeft.x,
-    y: boundary.topLeft.y,
-    width: boundary.bottomRight.x - boundary.topLeft.x,
-    height: boundary.bottomRight.y - boundary.topLeft.y
+    x: boundary.left,
+    y: boundary.top,
+    width: boundary.right - boundary.left,
+    height: boundary.bottom - boundary.top
   };
 };
 

@@ -312,8 +312,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             }
 
             // Bump any object that's below the bottom back inside.
-            var overflowBottom =
-                metrics.viewBottom - objectMetrics.bottom;
+            var overflowBottom = metrics.viewBottom - objectMetrics.bottom;
             if (overflowBottom < 0) {
               object.moveBy(0, overflowBottom);
             }

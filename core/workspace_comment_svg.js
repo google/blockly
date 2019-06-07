@@ -34,6 +34,7 @@ goog.require('Blockly.Events.Ui');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Rect');
 goog.require('Blockly.WorkspaceComment');
 
 
@@ -419,8 +420,7 @@ Blockly.WorkspaceCommentSvg.prototype.clearTransformAttributes_ = function() {
  * Returns the coordinates of a bounding box describing the dimensions of this
  * comment.
  * Coordinate system: workspace coordinates.
- * @return {!{top: number, bottom: number, left: number, right: number}}
- *    Object with top, bottom, left, and right coordinates of the bounding box.
+ * @return {!Blockly.utils.Rect} Object with coordinates of the bounding box.
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
@@ -440,7 +440,7 @@ Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
     left = blockXY.x;
     right = blockXY.x + commentBounds.width;
   }
-  return {top: top, bottom: bottom, left: left, right: right};
+  return new Blockly.utils.Rect(top, bottom, left, right);
 };
 
 /**

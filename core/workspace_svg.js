@@ -43,6 +43,7 @@ goog.require('Blockly.Trashcan');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Rect');
 goog.require('Blockly.VariablesDynamic');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceAudio');
@@ -1352,8 +1353,8 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
  * Calculate the bounding box for the blocks on the workspace.
  * Coordinate system: workspace coordinates.
  *
- * @return {Object} Contains the position and size of the bounding box
- *   containing the blocks on the workspace.
+ * @return {!Blockly.utils.Rect} Contains the position and size of the
+ *   bounding box containing the blocks on the workspace.
  */
 Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
   var topBlocks = this.getTopBlocks(false);
@@ -1361,7 +1362,7 @@ Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
   var topElements = topBlocks.concat(topComments);
   // There are no blocks, return empty rectangle.
   if (!topElements.length) {
-    return {top: 0, bottom: 0, left: 0, right: 0};
+    return new Blockly.utils.Rect(0, 0, 0, 0);
   }
 
   // Initialize boundary using the first block.
@@ -1370,17 +1371,17 @@ Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
   // Start at 1 since the 0th block was used for initialization.
   for (var i = 1; i < topElements.length; i++) {
     var blockBoundary = topElements[i].getBoundingRectangle();
-    if (blockBoundary.left < boundary.left) {
-      boundary.left = blockBoundary.left;
-    }
-    if (blockBoundary.right > boundary.right) {
-      boundary.right = blockBoundary.right;
-    }
     if (blockBoundary.top < boundary.top) {
       boundary.top = blockBoundary.top;
     }
     if (blockBoundary.bottom > boundary.bottom) {
       boundary.bottom = blockBoundary.bottom;
+    }
+    if (blockBoundary.left < boundary.left) {
+      boundary.left = blockBoundary.left;
+    }
+    if (blockBoundary.right > boundary.right) {
+      boundary.right = blockBoundary.right;
     }
   }
   return boundary;

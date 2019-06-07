@@ -125,7 +125,7 @@ Blockly.FieldImage.prototype.initView = function() {
         'alt': this.text_
       },
       this.fieldGroup_);
-  this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
+  this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
       'xlink:href', this.value_);
 };
 
@@ -161,7 +161,7 @@ Blockly.FieldImage.prototype.doClassValidation_ = function(newValue) {
 Blockly.FieldImage.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (this.imageElement_) {
-    this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
+    this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
         'xlink:href', this.value_ || '');
   }
 };

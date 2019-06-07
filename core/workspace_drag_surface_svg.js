@@ -90,7 +90,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.createDom = function() {
       {
         'xmlns': Blockly.utils.dom.SVG_NS,
         'xmlns:html': Blockly.utils.dom.HTML_NS,
-        'xmlns:xlink': 'http://www.w3.org/1999/xlink',
+        'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
         'version': '1.1',
         'class': 'blocklyWsDragSurface blocklyOverflowVisible'
       }, null);

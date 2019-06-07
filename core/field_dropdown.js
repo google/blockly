@@ -476,7 +476,7 @@ Blockly.FieldDropdown.prototype.render_ = function() {
  */
 Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
   this.imageElement_.setAttributeNS(
-      'http://www.w3.org/1999/xlink', 'xlink:href', this.imageJson_.src);
+      Blockly.utils.dom.XLINK_NS, 'xlink:href', this.imageJson_.src);
   this.imageElement_.setAttribute('height', this.imageJson_.height);
   this.imageElement_.setAttribute('width', this.imageJson_.width);
 

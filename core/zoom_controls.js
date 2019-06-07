@@ -216,7 +216,7 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
         'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')'
       },
       this.zoomOutGroup_);
-  zoomoutSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+  zoomoutSvg.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
       ws.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach listener.
@@ -269,7 +269,7 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
         'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')'
       },
       this.zoomInGroup_);
-  zoominSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+  zoominSvg.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
       ws.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach listener.
@@ -321,7 +321,7 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
         'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')'
       },
       this.zoomResetGroup_);
-  zoomresetSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+  zoomresetSvg.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
       ws.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach event listeners.

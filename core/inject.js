@@ -257,12 +257,10 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       if (mainWorkspace.isContentBounded()) {
         // Already in workspace units, no need to divide by scale.
         var blocksBoundingBox = mainWorkspace.getBlocksBoundingBox();
-        workspaceMetrics.contentLeft = blocksBoundingBox.x;
-        workspaceMetrics.contentTop = blocksBoundingBox.y;
-        workspaceMetrics.contentRight =
-            blocksBoundingBox.x + blocksBoundingBox.width;
-        workspaceMetrics.contentBottom =
-            blocksBoundingBox.y + blocksBoundingBox.height;
+        workspaceMetrics.contentLeft = blocksBoundingBox.left;
+        workspaceMetrics.contentTop = blocksBoundingBox.top;
+        workspaceMetrics.contentRight = blocksBoundingBox.right;
+        workspaceMetrics.contentBottom = blocksBoundingBox.bottom;
       } else {
         workspaceMetrics.contentLeft = defaultMetrics.contentLeft / scale;
         workspaceMetrics.contentTop = defaultMetrics.contentTop / scale;

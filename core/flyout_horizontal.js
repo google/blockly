@@ -347,17 +347,14 @@ Blockly.HorizontalFlyout.prototype.getClientRect = function() {
   // area are still deleted.  Must be larger than the largest screen size,
   // but be smaller than half Number.MAX_SAFE_INTEGER (not available on IE).
   var BIG_NUM = 1000000000;
-  var y = flyoutRect.top;
-  var height = flyoutRect.height;
+  var top = flyoutRect.top;
 
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
-    return new Blockly.utils.Rect(-BIG_NUM, y - BIG_NUM, BIG_NUM * 2,
-        BIG_NUM + height);
-  } else if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
-    return new Blockly.utils.Rect(-BIG_NUM, y, BIG_NUM * 2,
-        BIG_NUM + height);
+    var height = flyoutRect.height;
+    return new Blockly.utils.Rect(-BIG_NUM, top + height, -BIG_NUM, BIG_NUM);
+  } else {  // Bottom.
+    return new Blockly.utils.Rect(top, -BIG_NUM, -BIG_NUM, BIG_NUM);
   }
-  // TODO: Else throw error (should never happen).
 };
 
 /**

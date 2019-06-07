@@ -361,11 +361,12 @@ Blockly.Trashcan.prototype.getClientRect = function() {
   }
 
   var trashRect = this.svgGroup_.getBoundingClientRect();
-  var left = trashRect.left + this.SPRITE_LEFT_ - this.MARGIN_HOTSPOT_;
   var top = trashRect.top + this.SPRITE_TOP_ - this.MARGIN_HOTSPOT_;
-  var width = this.WIDTH_ + 2 * this.MARGIN_HOTSPOT_;
-  var height = this.LID_HEIGHT_ + this.BODY_HEIGHT_ + 2 * this.MARGIN_HOTSPOT_;
-  return new Blockly.utils.Rect(left, top, width, height);
+  var bottom = top + this.LID_HEIGHT_ + this.BODY_HEIGHT_ +
+      2 * this.MARGIN_HOTSPOT_;
+  var left = trashRect.left + this.SPRITE_LEFT_ - this.MARGIN_HOTSPOT_;
+  var right = left + this.WIDTH_ + 2 * this.MARGIN_HOTSPOT_;
+  return new Blockly.utils.Rect(top, bottom, left, right);
 };
 
 /**

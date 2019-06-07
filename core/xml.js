@@ -461,11 +461,11 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
   }
   // Load the new blocks into the workspace and get the IDs of the new blocks.
   var newBlockIds = Blockly.Xml.domToWorkspace(xml,workspace);
-  if (bbox && bbox.height) {  // check if any previous block
+  if (bbox && bbox.top != bbox.bottom) {  // check if any previous block
     var offsetY = 0;  // offset to add to y of the new block
     var offsetX = 0;
-    var farY = bbox.y + bbox.height;  // bottom position
-    var topX = bbox.x;  // x of bounding box
+    var farY = bbox.bottom;  // bottom position
+    var topX = bbox.left;  // x of bounding box
     // Check position of the new blocks.
     var newX = Infinity;  // x of top corner
     var newY = Infinity;  // y of top corner

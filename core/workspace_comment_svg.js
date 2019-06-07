@@ -430,7 +430,7 @@ Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
   var bottom = blockXY.y + commentBounds.height;
   var left, right;
   if (this.RTL) {
-    left = blockXY.x - (commentBounds.width);
+    left = blockXY.x - commentBounds.width;
     // Add the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
     right = blockXY.x;

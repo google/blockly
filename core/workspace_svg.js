@@ -1361,7 +1361,7 @@ Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
   var topElements = topBlocks.concat(topComments);
   // There are no blocks, return empty rectangle.
   if (!topElements.length) {
-    return {x: 0, y: 0, width: 0, height: 0};
+    return {top: 0, bottom: 0, left: 0, right: 0};
   }
 
   // Initialize boundary using the first block.
@@ -1383,12 +1383,7 @@ Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
       boundary.bottom = blockBoundary.bottom;
     }
   }
-  return {
-    x: boundary.left,
-    y: boundary.top,
-    width: boundary.right - boundary.left,
-    height: boundary.bottom - boundary.top
-  };
+  return boundary;
 };
 
 /**
@@ -1726,8 +1721,8 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   var workspaceWidth = metrics.viewWidth;
   var workspaceHeight = metrics.viewHeight;
   var blocksBox = this.getBlocksBoundingBox();
-  var blocksWidth = blocksBox.width;
-  var blocksHeight = blocksBox.height;
+  var blocksWidth = blocksBox.right - blocksBox.left;
+  var blocksHeight = blocksBox.bottom - blocksBox.top;
   if (!blocksWidth) {
     return;  // Prevents zooming to infinity.
   }
@@ -2018,18 +2013,18 @@ Blockly.WorkspaceSvg.getContentDimensionsExact_ = function(ws) {
   var scale = ws.scale;
 
   // Convert to pixels.
-  var width = blockBox.width * scale;
-  var height = blockBox.height * scale;
-  var left = blockBox.x * scale;
-  var top = blockBox.y * scale;
+  var top = blockBox.top * scale;
+  var bottom = blockBox.bottom * scale;
+  var left = blockBox.left * scale;
+  var right = blockBox.right * scale;
 
   return {
-    left: left,
     top: top,
-    right: left + width,
-    bottom: top + height,
-    width: width,
-    height: height
+    bottom: bottom,
+    left: left,
+    right: right,
+    width: right - left,
+    height: bottom - top
   };
 };
 

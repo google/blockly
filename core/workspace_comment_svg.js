@@ -419,30 +419,28 @@ Blockly.WorkspaceCommentSvg.prototype.clearTransformAttributes_ = function() {
  * Returns the coordinates of a bounding box describing the dimensions of this
  * comment.
  * Coordinate system: workspace coordinates.
- * @return {!{topLeft: Blockly.utils.Coordinate, bottomRight: Blockly.utils.Coordinate}}
- *    Object with top left and bottom right coordinates of the bounding box.
+ * @return {!{top: number, bottom: number, left: number, right: number}}
+ *    Object with top, bottom, left, and right coordinates of the bounding box.
  * @package
  */
 Blockly.WorkspaceCommentSvg.prototype.getBoundingRectangle = function() {
   var blockXY = this.getRelativeToSurfaceXY();
   var commentBounds = this.getHeightWidth();
-  var topLeft;
-  var bottomRight;
+  var top = blockXY.y;
+  var bottom = blockXY.y + commentBounds.height;
+  var left, right;
   if (this.RTL) {
-    topLeft = new Blockly.utils.Coordinate(blockXY.x - (commentBounds.width),
-        blockXY.y);
+    left = blockXY.x - (commentBounds.width);
     // Add the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
-    bottomRight = new Blockly.utils.Coordinate(blockXY.x,
-        blockXY.y + commentBounds.height);
+    right = blockXY.x;
   } else {
     // Subtract the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
-    topLeft = new Blockly.utils.Coordinate(blockXY.x, blockXY.y);
-    bottomRight = new Blockly.utils.Coordinate(blockXY.x + commentBounds.width,
-        blockXY.y + commentBounds.height);
+    left = blockXY.x;
+    right = blockXY.x + commentBounds.width;
   }
-  return {topLeft: topLeft, bottomRight: bottomRight};
+  return {top: top, bottom: bottom, left: left, right: right};
 };
 
 /**

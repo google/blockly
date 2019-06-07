@@ -308,26 +308,26 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             var objectMetrics = object.getBoundingRectangle();
 
             // Bump any object that's above the top back inside.
-            var overflowTop = metrics.viewTop - objectMetrics.topLeft.y;
+            var overflowTop = metrics.viewTop - objectMetrics.top;
             if (overflowTop > 0) {
               object.moveBy(0, overflowTop);
             }
 
             // Bump any object that's below the bottom back inside.
             var overflowBottom =
-                metrics.viewBottom - objectMetrics.bottomRight.y;
+                metrics.viewBottom - objectMetrics.bottom;
             if (overflowBottom < 0) {
               object.moveBy(0, overflowBottom);
             }
 
             // Bump any object that's off the left back inside.
-            var overflowLeft = metrics.viewLeft - objectMetrics.topLeft.x;
+            var overflowLeft = metrics.viewLeft - objectMetrics.left;
             if (overflowLeft > 0) {
               object.moveBy(overflowLeft, 0);
             }
 
             // Bump any object that's off the right back inside.
-            var overflowRight = metrics.viewRight - objectMetrics.bottomRight.x;
+            var overflowRight = metrics.viewRight - objectMetrics.right;
             if (overflowRight < 0) {
               object.moveBy(overflowRight, 0);
             }

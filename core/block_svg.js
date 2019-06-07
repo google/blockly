@@ -469,32 +469,30 @@ Blockly.BlockSvg.prototype.snapToGrid = function() {
  * Returns the coordinates of a bounding box describing the dimensions of this
  * block and any blocks stacked below it.
  * Coordinate system: workspace coordinates.
- * @return {!{topLeft: Blockly.utils.Coordinate, bottomRight: Blockly.utils.Coordinate}}
- *    Object with top left and bottom right coordinates of the bounding box.
+ * @return {!{top: number, bottom: number, left: number, right: number}}
+ *    Object with top, bottom, left, and right coordinates of the bounding box.
  */
 Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
   var blockXY = this.getRelativeToSurfaceXY(this);
   var tab = this.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
   var blockBounds = this.getHeightWidth();
-  var topLeft;
-  var bottomRight;
+  var top = blockXY.y;
+  var bottom = blockXY.y + blockBounds.height;
+  var left, right;
   if (this.RTL) {
     // Width has the tab built into it already so subtract it here.
-    topLeft = new Blockly.utils.Coordinate(
-        blockXY.x - (blockBounds.width - tab), blockXY.y);
+    left = blockXY.x - (blockBounds.width - tab);
     // Add the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
-    bottomRight = new Blockly.utils.Coordinate(blockXY.x + tab,
-        blockXY.y + blockBounds.height);
+    right = blockXY.x + tab;
   } else {
     // Subtract the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
-    topLeft = new Blockly.utils.Coordinate(blockXY.x - tab, blockXY.y);
+    left = blockXY.x - tab;
     // Width has the tab built into it already so subtract it here.
-    bottomRight = new Blockly.utils.Coordinate(
-        blockXY.x + blockBounds.width - tab, blockXY.y + blockBounds.height);
+    right = blockXY.x + blockBounds.width - tab;
   }
-  return {topLeft: topLeft, bottomRight: bottomRight};
+  return {top: top, bottom: bottom, left: left, right: right};
 };
 
 /**

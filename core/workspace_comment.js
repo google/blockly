@@ -26,13 +26,13 @@
 
 goog.provide('Blockly.WorkspaceComment');
 
-goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.CommentChange');
 goog.require('Blockly.Events.CommentCreate');
 goog.require('Blockly.Events.CommentDelete');
 goog.require('Blockly.Events.CommentMove');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Xml.utils');
 
 

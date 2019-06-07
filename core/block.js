@@ -29,8 +29,6 @@ goog.provide('Blockly.Block');
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Connection');
-goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.string');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.BlockCreate');
@@ -40,6 +38,8 @@ goog.require('Blockly.Extensions');
 goog.require('Blockly.Input');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.string');
 goog.require('Blockly.Warning');
 goog.require('Blockly.Workspace');
 

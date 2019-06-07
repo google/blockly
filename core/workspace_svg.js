@@ -30,7 +30,6 @@ goog.provide('Blockly.WorkspaceSvg');
 //goog.require('Blockly.BlockSvg');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
-goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Gesture');
@@ -42,6 +41,7 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.TouchGesture');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.VariablesDynamic');
 goog.require('Blockly.Workspace');
@@ -1367,7 +1367,7 @@ Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
   // Initialize boundary using the first block.
   var boundary = topElements[0].getBoundingRectangle();
 
-  // Start at 1 since the 0th block was used for initialization
+  // Start at 1 since the 0th block was used for initialization.
   for (var i = 1; i < topElements.length; i++) {
     var blockBoundary = topElements[i].getBoundingRectangle();
     if (blockBoundary.left < boundary.left) {

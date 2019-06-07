@@ -27,9 +27,9 @@
 goog.provide('Blockly.Scrollbar');
 goog.provide('Blockly.ScrollbarPair');
 
-goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 
 

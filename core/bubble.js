@@ -26,9 +26,9 @@
 
 goog.provide('Blockly.Bubble');
 
-goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.userAgent');

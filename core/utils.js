@@ -32,10 +32,10 @@
  */
 goog.provide('Blockly.utils');
 
-goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Msg');
-goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.string');
+goog.require('Blockly.utils.userAgent');
 
 goog.require('goog.style');
 

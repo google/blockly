@@ -31,9 +31,9 @@ goog.provide('Blockly.Field');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
-goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.userAgent');
 
 goog.require('goog.math.Size');
 goog.require('goog.style');

@@ -28,10 +28,10 @@ goog.provide('Blockly.Bubble');
 
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.Touch');
-goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
+goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Workspace');
 
 
@@ -41,8 +41,8 @@ goog.require('Blockly.Workspace');
  *     bubble.
  * @param {!Element} content SVG content for the bubble.
  * @param {Element} shape SVG element to avoid eclipsing.
- * @param {!Blockly.utils.Coordinate} anchorXY Absolute position of bubble's anchor
- *     point.
+ * @param {!Blockly.utils.Coordinate} anchorXY Absolute position of bubble's
+ *     anchor point.
  * @param {?number} bubbleWidth Width of bubble, or null if not resizable.
  * @param {?number} bubbleHeight Height of bubble, or null if not resizable.
  * @constructor

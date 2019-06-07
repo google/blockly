@@ -29,9 +29,9 @@ goog.provide('Blockly.VerticalFlyout');
 goog.require('Blockly.Block');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.FlyoutButton');
-goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.userAgent');
 
 
 /**

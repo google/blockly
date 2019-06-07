@@ -28,9 +28,9 @@ goog.provide('Blockly.FieldAngle');
 
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.FieldTextInput');
-goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
+goog.require('Blockly.utils.userAgent');
 
 
 /**
@@ -211,7 +211,8 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
   }
 
   var border = this.sourceBlock_.getColourBorder();
-  border = border.colourBorder == null ? border.colourLight : border.colourBorder;
+  border = (border.colourBorder == null) ?
+      border.colourLight : border.colourBorder;
 
   Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(), border);
   Blockly.DropDownDiv.showPositionedByField(this);

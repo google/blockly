@@ -32,7 +32,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
-goog.require('Blockly.userAgent');
+goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 
@@ -204,9 +204,9 @@ Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
 Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
   this.workspace_ = this.sourceBlock_.workspace;
   var quietInput = opt_quietInput || false;
-  if (!quietInput && (Blockly.userAgent.MOBILE ||
-                      Blockly.userAgent.ANDROID ||
-                      Blockly.userAgent.IPAD)) {
+  if (!quietInput && (Blockly.utils.userAgent.MOBILE ||
+                      Blockly.utils.userAgent.ANDROID ||
+                      Blockly.utils.userAgent.IPAD)) {
     this.showPromptEditor_();
   } else {
     this.showInlineEditor_(quietInput);
@@ -368,13 +368,13 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
 
   // Shift by a few pixels to line up exactly.
   xy.y += 1;
-  if (Blockly.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
+  if (Blockly.utils.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
     // Firefox mis-reports the location of the border by a pixel
     // once the WidgetDiv is moved into position.
     xy.x -= 1;
     xy.y -= 1;
   }
-  if (Blockly.userAgent.WEBKIT) {
+  if (Blockly.utils.userAgent.WEBKIT) {
     xy.y -= 3;
   }
   div.style.left = xy.x + 'px';

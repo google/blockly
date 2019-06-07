@@ -27,7 +27,7 @@
 
 goog.provide('Blockly.WorkspaceAudio');
 
-goog.require('Blockly.userAgent');
+goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils');
 
 
@@ -116,7 +116,7 @@ Blockly.WorkspaceAudio.prototype.preload = function() {
     sound.pause();
     // iOS can only process one sound at a time.  Trying to load more than one
     // corrupts the earlier ones.  Just load one and leave the others uncached.
-    if (Blockly.userAgent.IPAD || Blockly.userAgent.IPHONE) {
+    if (Blockly.utils.userAgent.IPAD || Blockly.utils.userAgent.IPHONE) {
       break;
     }
   }
@@ -139,7 +139,7 @@ Blockly.WorkspaceAudio.prototype.play = function(name, opt_volume) {
     }
     this.lastSound_ = now;
     var mySound;
-    if (Blockly.userAgent.IPAD || Blockly.userAgent.ANDROID) {
+    if (Blockly.utils.userAgent.IPAD || Blockly.utils.userAgent.ANDROID) {
       // Creating a new audio node causes lag in Android and iPad.  Android
       // refetches the file from the server, iPad uses a singleton audio
       // node which must be deleted and recreated for each new audio tag.

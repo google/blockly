@@ -31,7 +31,7 @@ goog.provide('Blockly.Field');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
-goog.require('Blockly.userAgent');
+goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 
@@ -570,7 +570,7 @@ Blockly.Field.getCachedWidth = function(textElement) {
 
   // Attempt to compute fetch the width of the SVG text element.
   try {
-    if (Blockly.userAgent.IE || Blockly.userAgent.EDGE) {
+    if (Blockly.utils.userAgent.IE || Blockly.utils.userAgent.EDGE) {
       width = textElement.getBBox().width;
     } else {
       width = textElement.getComputedTextLength();

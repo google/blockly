@@ -27,8 +27,8 @@
 
 goog.provide('Blockly.WorkspaceAudio');
 
-goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.userAgent');
 
 
 /**

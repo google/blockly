@@ -31,8 +31,8 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
-goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.userAgent');
 
 
 /**

@@ -480,8 +480,8 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
   var bottomRight;
   if (this.RTL) {
     // Width has the tab built into it already so subtract it here.
-    topLeft = new Blockly.utils.Coordinate(blockXY.x - (blockBounds.width - tab),
-        blockXY.y);
+    topLeft = new Blockly.utils.Coordinate(
+        blockXY.x - (blockBounds.width - tab), blockXY.y);
     // Add the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
     bottomRight = new Blockly.utils.Coordinate(blockXY.x + tab,
@@ -491,8 +491,8 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
     // since X is the corner of the rectangle, not the whole puzzle piece.
     topLeft = new Blockly.utils.Coordinate(blockXY.x - tab, blockXY.y);
     // Width has the tab built into it already so subtract it here.
-    bottomRight = new Blockly.utils.Coordinate(blockXY.x + blockBounds.width - tab,
-        blockXY.y + blockBounds.height);
+    bottomRight = new Blockly.utils.Coordinate(
+        blockXY.x + blockBounds.width - tab, blockXY.y + blockBounds.height);
   }
   return {topLeft: topLeft, bottomRight: bottomRight};
 };

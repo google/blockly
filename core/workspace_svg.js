@@ -774,7 +774,8 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled =
     function() {
     /* eslint-disable indent */
   var currScroll = Blockly.utils.getDocumentScroll();
-  if (!Blockly.utils.Coordinate.equals(this.lastRecordedPageScroll_, currScroll)) {
+  if (!Blockly.utils.Coordinate.equals(
+      this.lastRecordedPageScroll_, currScroll)) {
     this.lastRecordedPageScroll_ = currScroll;
     this.updateScreenCalculations_();
   }

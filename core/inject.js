@@ -33,11 +33,11 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Grid');
 goog.require('Blockly.Options');
 goog.require('Blockly.Tooltip');
-goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.WorkspaceSvg');
+goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
+goog.require('Blockly.WorkspaceSvg');
 
 goog.require('goog.ui.Component');
 
@@ -314,7 +314,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
             }
 
             // Bump any object that's below the bottom back inside.
-            var overflowBottom = metrics.viewBottom - objectMetrics.bottomRight.y;
+            var overflowBottom =
+                metrics.viewBottom - objectMetrics.bottomRight.y;
             if (overflowBottom < 0) {
               object.moveBy(0, overflowBottom);
             }

@@ -249,3 +249,12 @@ Blockly.Input.prototype.dispose = function() {
   }
   this.sourceBlock_ = null;
 };
+
+/**
+ * Get the block that this input is on.
+ * @return {Blockly.Block} The block that this input is attached to.
+ * @package
+ */
+Blockly.Input.prototype.getSourceBlock = function() {
+  return this.sourceBlock_;
+};

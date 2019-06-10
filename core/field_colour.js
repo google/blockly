@@ -380,7 +380,7 @@ Blockly.FieldColour.prototype.getCorrectedSize = function() {
   this.getSize();
   return new goog.math.Size(
       this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
-      Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
+      Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT - 1);
 };
 
 Blockly.Field.register('field_colour', Blockly.FieldColour);

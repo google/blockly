@@ -208,7 +208,11 @@ Blockly.FieldImage.prototype.getCorrectedSize = function() {
   // getSize also renders and updates the size if needed.  Rather than duplicate
   // the logic to figure out whether to rerender, just call getSize.
   this.getSize();
-  return new goog.math.Size(this.size_.width, this.height_);
+  // Old rendering adds an extra pixel under the image.  We include this in the
+  // height of the image in new rendering, rather than having the spacer below
+  // know that there was an image in the previous row.
+  // TODO: Remove.
+  return new goog.math.Size(this.size_.width, this.height_ + 1);
 };
 
 Blockly.Field.register('field_image', Blockly.FieldImage);

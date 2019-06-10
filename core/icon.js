@@ -205,3 +205,12 @@ Blockly.Icon.prototype.computeIconLocation = function() {
 Blockly.Icon.prototype.getIconLocation = function() {
   return this.iconXY_;
 };
+
+/**
+ * Get the size of the icon, as used for rendering.
+ * @return {!goog.math.Size} Height and width.
+ */
+Blockly.Icon.prototype.getCorrectedSize = function() {
+  return new goog.math.Size(
+      Blockly.Icon.prototype.SIZE, Blockly.Icon.prototype.SIZE - 2);
+};

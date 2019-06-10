@@ -49,11 +49,11 @@ Blockly.Css.Cursor = {
 Blockly.Css.currentCursor_ = '';
 
 /**
- * Large stylesheet added by Blockly.Css.inject.
- * @type {Element}
+ * Has CSS already been injected?
+ * @type {boolean}
  * @private
  */
-Blockly.Css.styleSheet_ = null;
+Blockly.Css.injected_ = false;
 
 /**
  * Path to media directory, with any trailing slash removed.
@@ -74,13 +74,15 @@ Blockly.Css.mediaPath_ = '';
  */
 Blockly.Css.inject = function(hasCss, pathToMedia) {
   // Only inject the CSS once.
-  if (Blockly.Css.styleSheet_) {
+  if (Blockly.Css.injected_) {
     return;
   }
+  Blockly.Css.injected_ = true;
   // Placeholder for cursor rule.  Must be first rule (index 0).
   var text = '.blocklyDraggable {}\n';
   if (hasCss) {
     text += Blockly.Css.CONTENT.join('\n');
+    Blockly.Css.CONTENT = null;  // Garbage collect 13 KB.
     if (Blockly.FieldDate) {
       text += Blockly.FieldDate.CSS.join('\n');
     }
@@ -88,13 +90,12 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
   // Strip off any trailing slash (either Unix or Windows).
   Blockly.Css.mediaPath_ = pathToMedia.replace(/[\\\/]$/, '');
   text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
+
   // Inject CSS tag at start of head.
   var cssNode = document.createElement('style');
-  document.head.insertBefore(cssNode, document.head.firstChild);
-
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
-  Blockly.Css.styleSheet_ = cssNode.sheet;
+  document.head.insertBefore(cssNode, document.head.firstChild);
 };
 
 /**

@@ -369,7 +369,7 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
 
   // Spacing between an icon and an icon or field.
   if (prev.isIcon() && !next.isInput) {
-    return BRC.LARGE_PADDING + 1;
+    return BRC.LARGE_PADDING;
   }
 
   // Spacing between an inline input and a field.

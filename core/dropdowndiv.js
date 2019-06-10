@@ -463,7 +463,16 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
   if (Blockly.DropDownDiv.animateOutTimer_) {
     clearTimeout(Blockly.DropDownDiv.animateOutTimer_);
   }
-  Blockly.DropDownDiv.positionInternal_();
+
+  // Reset style properties in case this gets called directly
+  // instead of hide() - see discussion on #2551.
+  var div = Blockly.DropDownDiv.DIV_;
+  div.style.transform = '';
+  div.style.left = '';
+  div.style.top = '';
+  div.style.opacity = 0;
+  div.style.display = 'none';
+
   Blockly.DropDownDiv.clearContent();
   Blockly.DropDownDiv.owner_ = null;
   if (Blockly.DropDownDiv.onHide_) {
@@ -475,37 +484,36 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
 
 /**
  * Set the dropdown div's position.
- * @param {number} initialX Initial Horizontal location (window coordinates, not body).
- * @param {number} initialY Initial Vertical location (window coordinates, not body).
- * @param {number} finalX Final Horizontal location (window coordinates, not body).
- * @param {number} finalY Final Vertical location (window coordinates, not body).
+ * @param {!number} initialX Initial Horizontal location
+ *    (window coordinates, not body).
+ * @param {!number} initialY Initial Vertical location
+ *    (window coordinates, not body).
+ * @param {!number} finalX Final Horizontal location
+ *    (window coordinates, not body).
+ * @param {!number} finalY Final Vertical location
+ *    (window coordinates, not body).
  * @private
  */
 Blockly.DropDownDiv.positionInternal_ = function(initialX, initialY, finalX, finalY) {
-  initialX = initialX == null ? initialX : Math.floor(initialX);
-  initialY = initialY == null ? initialY : Math.floor(initialY);
-  finalX = finalX == null ? finalX : Math.floor(finalX);
-  finalY = finalY == null ? finalY : Math.floor(finalY);
+  initialX = Math.floor(initialX);
+  initialY = Math.floor(initialY);
+  finalX = Math.floor(finalX);
+  finalY = Math.floor(finalY);
 
   var div = Blockly.DropDownDiv.DIV_;
   // First apply initial translation.
-  div.style.left = initialX != null ? initialX + 'px' : '';
-  div.style.top = initialY != null ? initialY + 'px' : '';
-  if (finalX != null) {
-    // Show the div.
-    div.style.display = 'block';
-    div.style.opacity = 1;
-    // Add final translate, animated through `transition`.
-    // Coordinates are relative to (initialX, initialY),
-    // where the drop-down is absolutely positioned.
-    var dx = (finalX - initialX);
-    var dy = (finalY - initialY);
-    div.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
-  } else {
-    // Hide the div.
-    div.style.display = 'none';
-    div.style.transform = '';
-  }
+  div.style.left = initialX + 'px';
+  div.style.top = initialY + 'px';
+
+  // Show the div.
+  div.style.display = 'block';
+  div.style.opacity = 1;
+  // Add final translate, animated through `transition`.
+  // Coordinates are relative to (initialX, initialY),
+  // where the drop-down is absolutely positioned.
+  var dx = (finalX - initialX);
+  var dy = (finalY - initialY);
+  div.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
 };
 
 /**

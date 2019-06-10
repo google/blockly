@@ -282,7 +282,7 @@ Blockly.Css.CONTENT = [
     'cursor: -webkit-grab;',
   '}',
 
-   '.blocklyDragging {',
+  '.blocklyDragging {',
     /* backup for browsers (e.g. IE11) that don't support grabbing */
     'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
     'cursor: grabbing;',
@@ -647,10 +647,9 @@ Blockly.Css.CONTENT = [
     'padding: 0 !important;',
   '}',
 
-  /* Override the default Closure URL. */
   '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-checkbox,',
   '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-icon {',
-    'background: url(<<<PATH>>>/sprites.png) no-repeat -48px -16px !important;',
+    'background: url(<<<PATH>>>/sprites.png) no-repeat -48px -16px;',
   '}',
 
   /* Category tree in Toolbox. */
@@ -964,8 +963,6 @@ Blockly.Css.CONTENT = [
   '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-icon, ',
   '.blocklyDropDownDiv .goog-option-selected .goog-menuitem-checkbox, ',
   '.blocklyDropDownDiv .goog-option-selected .goog-menuitem-icon {',
-     /* Client apps may override the URL at which they serve the sprite. */
-    'background: url(//ssl.gstatic.com/editor/editortoolbar.png) no-repeat -512px 0;',
     'position: static;', /* Scroll with the menu. */
     'float: left;',
     'margin-left: -24px;',

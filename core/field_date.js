@@ -29,6 +29,7 @@ goog.provide('Blockly.FieldDate');
 goog.require('Blockly.Events');
 goog.require('Blockly.Field');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.string');
 
 goog.require('goog.date');
 goog.require('goog.date.DateTime');
@@ -255,13 +256,13 @@ Blockly.FieldDate.widgetDispose_ = function() {
  * @private
  */
 Blockly.FieldDate.loadLanguage_ = function() {
-  var reg = /^DateTimeSymbols_(.+)$/;
   for (var prop in goog.i18n) {
-    var m = prop.match(reg);
-    if (m) {
-      var lang = m[1].toLowerCase().replace('_', '.');  // E.g. 'pt.br'
+    if (Blockly.utils.string.startsWith(prop, 'DateTimeSymbols_')) {
+      var lang = prop.substr(16).toLowerCase().replace('_', '.');
+      // E.g. 'DateTimeSymbols_pt_BR' -> 'pt.br'
       if (goog.getObjectByName(lang, Blockly.Msg)) {
         goog.i18n.DateTimeSymbols = goog.i18n[prop];
+        break;
       }
     }
   }

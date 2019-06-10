@@ -139,6 +139,8 @@ Blockly.DropDownDiv.createDom = function() {
   div.appendChild(arrow);
   Blockly.DropDownDiv.arrow_ = arrow;
 
+  Blockly.DropDownDiv.DIV_.style.opacity = 0;
+
   // Transition animation for transform: translate() and opacity.
   Blockly.DropDownDiv.DIV_.style.transition = 'transform ' +
     Blockly.DropDownDiv.ANIMATION_TIME + 's, ' +

@@ -237,7 +237,6 @@ Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
  */
 Blockly.FieldAngle.prototype.hide_ = function() {
   Blockly.DropDownDiv.hideIfOwner(this);
-  Blockly.WidgetDiv.hide();
 };
 
 /**

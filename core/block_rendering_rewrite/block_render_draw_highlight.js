@@ -136,7 +136,6 @@ Blockly.BlockRendering.Highlighter.prototype.drawBottomCorner = function(_row) {
   var elems = this.info_.bottomRow.elements;
 
   if (this.info_.RTL) {
-    height -= BRC.BOTTOM_HIGHLIGHT_OFFSET;
     this.highlightSteps_.push('V', height);
   }
 
@@ -213,7 +212,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawInlineInput = function(input) {
         (x + width + BRC.HIGHLIGHT_OFFSET) + ',' +
         (yPos + BRC.HIGHLIGHT_OFFSET));
     this.highlightInlineSteps_.push('v', height);
-    this.highlightInlineSteps_.push('h -', bottomHighlightWidth);
+    this.highlightInlineSteps_.push('h ', -bottomHighlightWidth);
     // Short highlight glint at bottom of tab.
     // Bad: reference to Blockly.BlockSvg
     this.highlightInlineSteps_.push('M',

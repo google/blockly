@@ -227,7 +227,7 @@ Blockly.BlockRendering.Drawer.prototype.drawBottom_ = function() {
 Blockly.BlockRendering.Drawer.prototype.drawLeft_ = function() {
   this.highlighter_.drawLeft();
 
-  this.positionOutpuConnection_();
+  this.positionOutputConnection_();
   if (this.info_.hasOutputConnection) {
     // Draw a line up to the bottom of the tab.
     this.steps_.push('V', BRC.TAB_OFFSET_FROM_TOP + BRC.TAB_HEIGHT);
@@ -399,7 +399,7 @@ Blockly.BlockRendering.Drawer.prototype.positionExternalValueConnection_ = funct
  */
 Blockly.BlockRendering.Drawer.prototype.positionPreviousConnection_ = function() {
   if (this.info_.topRow.hasPreviousConnection) {
-    var connX = (this.info_.RTL ? -BRC.NOTCH_OFFSET_LEFT : BRC.NOTCH_OFFSET_LEFT);
+    var connX = this.info_.RTL ? -BRC.NOTCH_OFFSET_LEFT : BRC.NOTCH_OFFSET_LEFT;
     this.info_.topRow.connection.setOffsetInBlock(connX, 0);
   }
 };
@@ -412,9 +412,9 @@ Blockly.BlockRendering.Drawer.prototype.positionNextConnection_ = function() {
   var bottomRow = this.info_.bottomRow;
 
   if (bottomRow.hasNextConnection) {
-    var connX = (this.info_.RTL ? -BRC.NOTCH_OFFSET_LEFT : BRC.NOTCH_OFFSET_LEFT);
-    // TODO use a constant here when fixing block height calculation.
-    bottomRow.connection.setOffsetInBlock(connX, this.info_.height - 1);
+    var connX = this.info_.RTL ? -BRC.NOTCH_OFFSET_LEFT : BRC.NOTCH_OFFSET_LEFT;
+    bottomRow.connection.setOffsetInBlock(
+        connX, this.info_.height + BRC.DARK_PATH_OFFSET);
   }
 };
 
@@ -423,7 +423,7 @@ Blockly.BlockRendering.Drawer.prototype.positionNextConnection_ = function() {
  * @param {!Blockly.BlockRendering.BottomRow} row The bottom row on the block.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.positionOutpuConnection_ = function() {
+Blockly.BlockRendering.Drawer.prototype.positionOutputConnection_ = function() {
   if (this.info_.hasOutputConnection) {
     this.block_.outputConnection.setOffsetInBlock(0, BRC.TAB_OFFSET_FROM_TOP);
   }

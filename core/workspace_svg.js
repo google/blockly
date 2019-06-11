@@ -1913,6 +1913,8 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
+  Blockly.hideChaff(/* opt_allowToolbox */ true);
+
   // Keep scrolling within the bounds of the content.
   var metrics = this.getMetrics();
   // This is the offset of the top-left corner of the view from the
@@ -1945,10 +1947,6 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
     this.scrollbar.vScroll.setHandlePosition(-(y + metrics.contentTop) *
         this.scrollbar.vScroll.ratio_);
   }
-
-  // Hide the WidgetDiv without animation. This is to prevent a disposal
-  // animation from happening in the wrong location.
-  Blockly.WidgetDiv.hide(true);
   // We have to shift the translation so that when the canvas is at 0, 0 the
   // workspace origin is not underneath the toolbox.
   x += metrics.absoluteLeft;

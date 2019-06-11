@@ -70,11 +70,6 @@ BRC.NOTCH_OFFSET_LEFT = BRC.NOTCH_WIDTH;
 // connection starts.
 BRC.NOTCH_OFFSET_ROUNDED_CORNER_PREV = 7;
 
-// This is the width from where a rounded corner ends to where a next
-// connection starts.
-BRC.NOTCH_OFFSET_ROUNDED_CORNER_NEXT =
-        BRC.NOTCH_OFFSET_ROUNDED_CORNER_PREV - 0.5;
-
 // This is the offset from the vertical part of a statement input
 // to where to start the notch, which is on the right side in LTR.
 BRC.NOTCH_OFFSET_RIGHT = BRC.NOTCH_OFFSET_LEFT + BRC.NOTCH_WIDTH;
@@ -102,12 +97,27 @@ BRC.START_HAT_WIDTH = 100;
 
 BRC.SPACER_DEFAULT_HEIGHT = 15;
 
+BRC.MIN_BLOCK_HEIGHT = 24;
 
 BRC.EMPTY_INLINE_INPUT_WIDTH = 22.5;
 
 BRC.EMPTY_INLINE_INPUT_HEIGHT = 26;
 
-BRC.MIN_BLOCK_HEIGHT = 24;
+BRC.EXTERNAL_VALUE_INPUT_WIDTH = 10;
+
+/**
+ * The height of an empty statement input.  Note that in the old rendering this
+ * varies slightly depending on whether the block has external or inline inputs.
+ * In the new rendering this is consistent.  It seems unlikely that the old
+ * behaviour was intentional.
+ * @const
+ * @type {number}
+ */
+BRC.EMPTY_STATEMENT_INPUT_HEIGHT = BRC.MIN_BLOCK_HEIGHT;
+
+BRC.EMPTY_STATEMENT_INPUT_WIDTH = 32;
+
+BRC.POPULATED_STATEMENT_INPUT_WIDTH = 25;
 
 
 BRC.START_POINT = 'm 0,0';

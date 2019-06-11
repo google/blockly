@@ -369,7 +369,7 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
 
   // Spacing between an icon and an icon or field.
   if (prev.isIcon() && !next.isInput) {
-    return BRC.LARGE_PADDING + 1;
+    return BRC.LARGE_PADDING;
   }
 
   // Spacing between an inline input and a field.
@@ -389,8 +389,12 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
       return BRC.NO_PADDING;
     }
     // Spacing between a square corner and a previous or next connection
-    if (next.isPreviousConnection() || next.isNextConnection()) {
+    if (next.isPreviousConnection()) {
       return BRC.NOTCH_OFFSET_LEFT;
+    } else if (next.isNextConnection()) {
+      // Next connections are shifted slightly to the left (in both LTR and RTL)
+      // to make the dark path under the previous connection show through.
+      return BRC.NOTCH_OFFSET_LEFT + (this.RTL ? 0.5 : - 0.5);
     }
   }
 
@@ -399,7 +403,9 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     if (next.isPreviousConnection()) {
       return BRC.NOTCH_OFFSET_ROUNDED_CORNER_PREV;
     } else if (next.isNextConnection()) {
-      return BRC.NOTCH_OFFSET_ROUNDED_CORNER_NEXT;
+      // Next connections are shifted slightly to the left (in both LTR and RTL)
+      // to make the dark path under the previous connection show through.
+      return BRC.NOTCH_OFFSET_ROUNDED_CORNER_PREV + (this.RTL ? 0.5 : - 0.5);
     }
   }
 

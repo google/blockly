@@ -173,8 +173,9 @@ Blockly.BlockRendering.Icon = function(icon) {
   this.isVisible = icon.isVisible();
   this.type = 'icon';
 
-  this.height = 16;
-  this.width = 16;
+  var size = icon.getCorrectedSize();
+  this.height = size.height;
+  this.width = size.width;
 };
 goog.inherits(Blockly.BlockRendering.Icon, Blockly.BlockRendering.Measurable);
 
@@ -236,10 +237,10 @@ Blockly.BlockRendering.StatementInput = function(input) {
   this.type = 'statement input';
 
   if (!this.connectedBlock) {
-    this.height = 24;
-    this.width = 32;
+    this.height = BRC.EMPTY_STATEMENT_INPUT_HEIGHT;
+    this.width = BRC.EMPTY_STATEMENT_INPUT_WIDTH;
   } else {
-    this.width = 25;
+    this.width = BRC.POPULATED_STATEMENT_INPUT_WIDTH;
     this.height = this.connectedBlockHeight + BRC.STATEMENT_BOTTOM_SPACER;
     if (this.connectedBlock.nextConnection) {
       this.height -= BRC.NOTCH_HEIGHT;
@@ -262,11 +263,11 @@ Blockly.BlockRendering.ExternalValueInput = function(input) {
   this.type = 'external value input';
 
   if (!this.connectedBlock) {
-    this.height = 15;
+    this.height = BRC.TAB_HEIGHT;
   } else {
     this.height = this.connectedBlockHeight - 2 * BRC.TAB_OFFSET_FROM_TOP;
   }
-  this.width = 10;
+  this.width = BRC.EXTERNAL_VALUE_INPUT_WIDTH;
 };
 goog.inherits(Blockly.BlockRendering.ExternalValueInput,
     Blockly.BlockRendering.Input);

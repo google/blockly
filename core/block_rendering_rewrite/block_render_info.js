@@ -224,8 +224,8 @@ Blockly.BlockRendering.RenderInfo.prototype.createBottomRow_ = function() {
 /**
  * Add an input element to the active row, if needed, and record the type of the
  * input on the row.
- * @param {Blockly.Input} input The input to record information about.
- * @param {Blockly.BlockRendering.Row} activeRow The row that is currently being
+ * @param {!Blockly.Input} input The input to record information about.
+ * @param {!Blockly.BlockRendering.Row} activeRow The row that is currently being
  *     populated.
  * @private
  */
@@ -249,7 +249,7 @@ Blockly.BlockRendering.RenderInfo.prototype.addInput_ = function(input, activeRo
 
 /**
  * Decide whether to start a new row between the two Blockly.Inputs.
- * @param {Blockly.Input}  input The first input to consider
+ * @param {!Blockly.Input}  input The first input to consider
  * @param {Blockly.Input}  lastInput The input that follows.
  * @return {boolean} True if the next input should be rendered on a new row.
  * @private

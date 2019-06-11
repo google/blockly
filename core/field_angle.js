@@ -171,9 +171,9 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
  */
 Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
   var svg = Blockly.utils.dom.createSvgElement('svg', {
-    'xmlns': 'http://www.w3.org/2000/svg',
-    'xmlns:html': 'http://www.w3.org/1999/xhtml',
-    'xmlns:xlink': 'http://www.w3.org/1999/xlink',
+    'xmlns': Blockly.utils.dom.SVG_NS,
+    'xmlns:html': Blockly.utils.dom.HTML_NS,
+    'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
     'version': '1.1',
     'height': (Blockly.FieldAngle.HALF * 2) + 'px',
     'width': (Blockly.FieldAngle.HALF * 2) + 'px'

@@ -369,7 +369,8 @@ Blockly.Field.prototype.updateEditable = function() {
  * @return {boolean} Whether this field is clickable.
  */
 Blockly.Field.prototype.isClickable = function() {
-  return !!this.showEditor_ && (typeof this.showEditor_ === 'function');
+  return !!this.sourceBlock_ && this.sourceBlock_.isEditable() &&
+      !!this.showEditor_ && (typeof this.showEditor_ === 'function');
 };
 
 /**

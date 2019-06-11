@@ -32,16 +32,19 @@ NAME_ARG = "--name"
 COLLAPSE_ARG = "--collapsed"
 RTL_ARG = "--rtl"
 INSERTION_ARG = "--insertionMarker"
+INLINE_INPUTS_ARG = "--inlineInputs"
+EXTERNAL_INPUTS_ARG = "--externalInputs"
+
+ARG_VALS = [COLLAPSE_ARG, RTL_ARG, INSERTION_ARG, INLINE_INPUTS_ARG, EXTERNAL_INPUTS_ARG]
 
 # Generates the screenshots according to the given parameters, diffs the
 # screenshots and then displays them.
 def main():
   cleanup()
-  filter_text = find_filter_text()
-  is_rtl = check_arg(RTL_ARG)
-  should_collapse = check_arg(COLLAPSE_ARG)
-  is_insertion_marker = check_arg(INSERTION_ARG)
-  gen_screenshots(filter_text, should_collapse, is_insertion_marker, is_rtl)
+  check_arguments()
+  filter_text = find_argument_value(NAME_ARG)
+  argument_string = create_arg_string()
+  gen_screenshots(filter_text, argument_string)
   diff_screenshots(filter_text)
   display_screenshots()
 
@@ -53,14 +56,14 @@ def cleanup():
   remove_file("tests/screenshot/outputs/test_output.json")
 
 # If the --name is given find the name of the test case.
-def find_filter_text():
+def find_argument_value(argument_name):
   args = sys.argv
   for i in range(len(args)):
-    if args[i] == NAME_ARG:
+    if args[i] == argument_name:
       if i + 1 < len(args):
         return args[i+1]
       else:
-        print("Must supply a name after name arg")
+        print ("Must supply a name after name arg")
         sys.exit()
   return ""
 
@@ -72,11 +75,20 @@ def check_arg(arg):
   else:
     return ''
 
+def check_arguments():
+  if (INLINE_INPUTS_ARG in sys.argv) and (EXTERNAL_INPUTS_ARG in sys.argv):
+    print ("Can not have both --inlineInputs and --externalInputs")
+    sys.exit()
+
+def create_arg_string():
+  arg_string = ""
+  for arg in sys.argv:
+    arg_string = arg_string + " " + arg
+  return arg_string
+
 # Generates a set of old and new screenshots according to the given parameters.
-def gen_screenshots(filter_text, should_collapse, is_insertion_marker, is_rtl):
-  if filter_text != "":
-    filter_text = NAME_ARG + " " + filter_text
-  os.system("node tests/screenshot/gen_screenshots.js " + filter_text + " " + should_collapse + " " + is_insertion_marker + " " + is_rtl)
+def gen_screenshots(filter_text, argument_string):
+  os.system("node tests/screenshot/gen_screenshots.js " + argument_string)
 
 # Diffs the old and new screenshots that were created in gen_screenshots.
 def diff_screenshots(filter_text):

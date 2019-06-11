@@ -33,6 +33,8 @@ COLLAPSE_ARG = "--collapsed"
 RTL_ARG = "--rtl"
 INSERTION_ARG = "--insertionMarker"
 
+# Generates the screenshots according to the given parameters, diffs the
+# screenshots and then displays them.
 def main():
   cleanup()
   filter_text = find_filter_text()
@@ -43,12 +45,14 @@ def main():
   diff_screenshots(filter_text)
   display_screenshots()
 
+# Cleans up any files left over from running the script previously.
 def cleanup():
   remove_dir("tests/screenshot/outputs/new")
   remove_dir("tests/screenshot/outputs/diff")
   remove_file("tests/screenshot/outputs/test_output.js")
   remove_file("tests/screenshot/outputs/test_output.json")
 
+# If the --name is given find the name of the test case.
 def find_filter_text():
   args = sys.argv
   for i in range(len(args)):
@@ -60,23 +64,28 @@ def find_filter_text():
         sys.exit()
   return ""
 
+# Check if an argument exists or not. Returns empty string if the argument does
+# not exist.
 def check_arg(arg):
   if arg in sys.argv:
     return arg
   else:
     return ''
 
+# Generates a set of old and new screenshots according to the given parameters.
 def gen_screenshots(filter_text, should_collapse, is_insertion_marker, is_rtl):
   if filter_text != "":
     filter_text = NAME_ARG + " " + filter_text
   os.system("node tests/screenshot/gen_screenshots.js " + filter_text + " " + should_collapse + " " + is_insertion_marker + " " + is_rtl)
 
+# Diffs the old and new screenshots that were created in gen_screenshots.
 def diff_screenshots(filter_text):
   if filter_text != "":
     os.system("./node_modules/.bin/mocha tests/screenshot/diff_screenshots.js --ui tdd --reporter ./tests/screenshot/diff-reporter.js" + " --fgrep " + filter_text)
   else:
     os.system("./node_modules/.bin/mocha tests/screenshot/diff_screenshots.js --ui tdd --reporter ./tests/screenshot/diff-reporter.js")
 
+# Displays the old screenshots, new screenshots, and the diff of them.
 def display_screenshots():
   if (platform.system() == "Linux"):
     os.system("xdg-open tests/screenshot/diff_viewer.html")

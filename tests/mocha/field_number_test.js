@@ -298,13 +298,13 @@ suite ('Number Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.numberField = new Blockly.FieldNumber(1);
-      Blockly.FieldTextInput.htmlInput_ = Object.create(null);
-      Blockly.FieldTextInput.htmlInput_.oldValue_ = '1';
-      Blockly.FieldTextInput.htmlInput_.untypedDefaultValue_ = 1;
+      this.numberField.htmlInput_ = Object.create(null);
+      this.numberField.htmlInput_.oldValue_ = '1';
+      this.numberField.htmlInput_.untypedDefaultValue_ = 1;
     });
     teardown(function() {
       this.numberField.setValidator(null);
-      Blockly.FieldTextInput.htmlInput_ = null;
+      this.numberField.htmlInput_ = null;
     });
     suite('Null Validator', function() {
       setup(function() {
@@ -314,7 +314,7 @@ suite ('Number Fields', function() {
       });
       test('When Editing', function() {
         this.numberField.isBeingEdited_ = true;
-        Blockly.FieldTextInput.htmlInput_.value = '2';
+        this.numberField.htmlInput_.value = '2';
         this.numberField.onHtmlInputChange_(null);
         assertValue(this.numberField, 1, '2');
         this.numberField.isBeingEdited_ = false;
@@ -332,7 +332,7 @@ suite ('Number Fields', function() {
       });
       test('When Editing', function() {
         this.numberField.isBeingEdited_ = true;
-        Blockly.FieldTextInput.htmlInput_.value = '25';
+        this.numberField.htmlInput_.value = '25';
         this.numberField.onHtmlInputChange_(null);
         assertValue(this.numberField, 26, '25');
         this.numberField.isBeingEdited_ = false;
@@ -348,7 +348,7 @@ suite ('Number Fields', function() {
       });
       test('When Editing', function() {
         this.numberField.isBeingEdited_ = true;
-        Blockly.FieldTextInput.htmlInput_.value = '2';
+        this.numberField.htmlInput_.value = '2';
         this.numberField.onHtmlInputChange_(null);
         assertValue(this.numberField, 2);
         this.numberField.isBeingEdited_ = false;

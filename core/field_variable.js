@@ -158,16 +158,6 @@ Blockly.FieldVariable.prototype.toXml = function(fieldElement) {
 };
 
 /**
- * Dispose of this field.
- * @public
- */
-Blockly.FieldVariable.prototype.dispose = function() {
-  Blockly.FieldVariable.superClass_.dispose.call(this);
-  this.workspace_ = null;
-  this.variableMap_ = null;
-};
-
-/**
  * Attach this field to a block.
  * @param {!Blockly.Block} block The block containing this field.
  */

@@ -130,17 +130,6 @@ Blockly.FieldImage.prototype.initView = function() {
 };
 
 /**
- * Dispose of all DOM objects belonging to this text.
- */
-Blockly.FieldImage.prototype.dispose = function() {
-  if (this.fieldGroup_) {
-    Blockly.utils.dom.removeNode(this.fieldGroup_);
-    this.fieldGroup_ = null;
-  }
-  this.imageElement_ = null;
-};
-
-/**
  * Ensure that the input value (the source URL) is a string.
  * @param {string=} newValue The input value
  * @return {?string} A string, or null if invalid.

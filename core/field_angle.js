@@ -140,42 +140,36 @@ Blockly.FieldAngle.prototype.render_ = function() {
 };
 
 /**
- * Clean up this FieldAngle, as well as the inherited FieldTextInput.
- * @return {!Function} Closure to call on destruction of the WidgetDiv.
- * @private
- */
-Blockly.FieldAngle.prototype.dispose_ = function() {
-  var thisField = this;
-  return function() {
-    Blockly.FieldAngle.superClass_.dispose_.call(thisField)();
-    thisField.gauge_ = null;
-    if (thisField.clickWrapper_) {
-      Blockly.unbindEvent_(thisField.clickWrapper_);
-    }
-    if (thisField.moveWrapper1_) {
-      Blockly.unbindEvent_(thisField.moveWrapper1_);
-    }
-    if (thisField.moveWrapper2_) {
-      Blockly.unbindEvent_(thisField.moveWrapper2_);
-    }
-  };
-};
-
-/**
- * Show the inline free-text editor on top of the text.
+ * Create and show the angle field's editor.
  * @private
  */
 Blockly.FieldAngle.prototype.showEditor_ = function() {
+  // Mobile browsers have issues with in-line textareas (focus & keyboards).
   var noFocus =
       Blockly.utils.userAgent.MOBILE ||
       Blockly.utils.userAgent.ANDROID ||
       Blockly.utils.userAgent.IPAD;
-  // Mobile browsers have issues with in-line textareas (focus & keyboards).
   Blockly.FieldAngle.superClass_.showEditor_.call(this, noFocus);
 
-  var div = Blockly.DropDownDiv.getContentDiv();
+  var editor = this.dropdownCreate_();
+  Blockly.DropDownDiv.getContentDiv().appendChild(editor);
 
-  // Build the SVG DOM.
+  var border = this.sourceBlock_.getColourBorder();
+  border = border.colourBorder || border.colourLight;
+  Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(), border);
+
+  Blockly.DropDownDiv.showPositionedByField(
+      this, this.dropdownDispose_.bind(this));
+
+  this.updateGraph_();
+};
+
+/**
+ * Create the angle dropdown editor.
+ * @return {!Element} The newly created angle picker.
+ * @private
+ */
+Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
   var svg = Blockly.utils.dom.createSvgElement('svg', {
     'xmlns': Blockly.utils.dom.SVG_NS,
     'xmlns:html': Blockly.utils.dom.HTML_NS,
@@ -183,14 +177,16 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
     'version': '1.1',
     'height': (Blockly.FieldAngle.HALF * 2) + 'px',
     'width': (Blockly.FieldAngle.HALF * 2) + 'px'
-  }, div);
+  }, null);
   var circle = Blockly.utils.dom.createSvgElement('circle', {
-    'cx': Blockly.FieldAngle.HALF, 'cy': Blockly.FieldAngle.HALF,
+    'cx': Blockly.FieldAngle.HALF,
+    'cy': Blockly.FieldAngle.HALF,
     'r': Blockly.FieldAngle.RADIUS,
     'class': 'blocklyAngleCircle'
   }, svg);
-  this.gauge_ = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyAngleGauge'}, svg);
+  this.gauge_ = Blockly.utils.dom.createSvgElement('path', {
+    'class': 'blocklyAngleGauge'
+  }, svg);
   this.line_ = Blockly.utils.dom.createSvgElement('line', {
     'x1': Blockly.FieldAngle.HALF,
     'y1': Blockly.FieldAngle.HALF,
@@ -210,33 +206,35 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
     }, svg);
   }
 
-  var border = this.sourceBlock_.getColourBorder();
-  border = (border.colourBorder == null) ?
-      border.colourLight : border.colourBorder;
-
-  Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(), border);
-  Blockly.DropDownDiv.showPositionedByField(this);
   // The angle picker is different from other fields in that it updates on
   // mousemove even if it's not in the middle of a drag.  In future we may
   // change this behaviour.  For now, using bindEvent_ instead of
   // bindEventWithChecks_ allows it to work without a mousedown/touchstart.
   this.clickWrapper_ =
-      Blockly.bindEvent_(svg, 'click', this, this.hide_.bind(this));
+      Blockly.bindEvent_(svg, 'click', this, this.hide_);
   this.moveWrapper1_ =
       Blockly.bindEvent_(circle, 'mousemove', this, this.onMouseMove);
   this.moveWrapper2_ =
       Blockly.bindEvent_(this.gauge_, 'mousemove', this, this.onMouseMove);
-  this.updateGraph_();
+
+  return svg;
 };
 
 /**
- * Hide the editor and unbind event listeners.
+ * Dispose of events belonging to the angle editor.
+ * @private
+ */
+Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
+  Blockly.unbindEvent_(this.clickWrapper_);
+  Blockly.unbindEvent_(this.moveWrapper1_);
+  Blockly.unbindEvent_(this.moveWrapper2_);
+};
+
+/**
+ * Hide the editor.
  * @private
  */
 Blockly.FieldAngle.prototype.hide_ = function() {
-  Blockly.unbindEvent_(this.moveWrapper1_);
-  Blockly.unbindEvent_(this.moveWrapper2_);
-  Blockly.unbindEvent_(this.clickWrapper_);
   Blockly.DropDownDiv.hideIfOwner(this);
   Blockly.WidgetDiv.hide();
 };
@@ -287,7 +285,7 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
   // Update value.
   var angleString = String(angle);
   if (angleString != this.text_) {
-    Blockly.FieldTextInput.htmlInput_.value = angle;
+    this.htmlInput_.value = angle;
     this.setValue(angle);
     // Always render the input angle.
     this.text_ = angleString;

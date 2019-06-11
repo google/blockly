@@ -291,6 +291,7 @@ Blockly.FieldColour.prototype.onClick_ = function(e) {
   var colour = cell && cell.label;
   if (colour !== null) {
     this.setValue(colour);
+    Blockly.DropDownDiv.hideIfOwner(this);
   }
 };
 

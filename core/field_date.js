@@ -252,6 +252,7 @@ Blockly.FieldDate.prototype.dropdownDispose_ = function() {
 Blockly.FieldDate.prototype.onDateSelected_ = function(event) {
   var date = event.date ? event.date.toIsoString(true) : '';
   this.setValue(date);
+  Blockly.DropDownDiv.hideIfOwner(this);
 };
 
 /**

@@ -146,9 +146,9 @@ Blockly.FieldAngle.prototype.render_ = function() {
 Blockly.FieldAngle.prototype.showEditor_ = function() {
   // Mobile browsers have issues with in-line textareas (focus & keyboards).
   var noFocus =
-      Blockly.userAgent.MOBILE ||
-      Blockly.userAgent.ANDROID ||
-      Blockly.userAgent.IPAD;
+      Blockly.utils.userAgent.MOBILE ||
+      Blockly.utils.userAgent.ANDROID ||
+      Blockly.utils.userAgent.IPAD;
   Blockly.FieldAngle.superClass_.showEditor_.call(this, noFocus);
 
   var editor = this.dropdownCreate_();
@@ -170,7 +170,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
-  var svg = Blockly.utils.createSvgElement('svg', {
+  var svg = Blockly.utils.dom.createSvgElement('svg', {
     'xmlns': 'http://www.w3.org/2000/svg',
     'xmlns:html': 'http://www.w3.org/1999/xhtml',
     'xmlns:xlink': 'http://www.w3.org/1999/xlink',
@@ -178,16 +178,16 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
     'height': (Blockly.FieldAngle.HALF * 2) + 'px',
     'width': (Blockly.FieldAngle.HALF * 2) + 'px'
   }, null);
-  var circle = Blockly.utils.createSvgElement('circle', {
+  var circle = Blockly.utils.dom.createSvgElement('circle', {
     'cx': Blockly.FieldAngle.HALF,
     'cy': Blockly.FieldAngle.HALF,
     'r': Blockly.FieldAngle.RADIUS,
     'class': 'blocklyAngleCircle'
   }, svg);
-  this.gauge_ = Blockly.utils.createSvgElement('path', {
+  this.gauge_ = Blockly.utils.dom.createSvgElement('path', {
     'class': 'blocklyAngleGauge'
   }, svg);
-  this.line_ = Blockly.utils.createSvgElement('line', {
+  this.line_ = Blockly.utils.dom.createSvgElement('line', {
     'x1': Blockly.FieldAngle.HALF,
     'y1': Blockly.FieldAngle.HALF,
     'class': 'blocklyAngleLine'
@@ -236,6 +236,7 @@ Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
  */
 Blockly.FieldAngle.prototype.hide_ = function() {
   Blockly.DropDownDiv.hideIfOwner(this);
+  Blockly.WidgetDiv.hide();
 };
 
 /**

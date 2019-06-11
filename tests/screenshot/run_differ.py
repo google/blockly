@@ -1,5 +1,4 @@
 #!/usr/bin/python2.7
-# Compresses the core Blockly files into a single JavaScript file.
 #
 # Copyright 2019 Google Inc.
 # https://developers.google.com/blockly/
@@ -19,9 +18,12 @@
 # Usage:
 # run_differ.py with no parameters runs all screenshot tests with blocks in rtl
 # and not collapsed.
-# --name <test_name> runs all tests that contain the given name.
-# --collapsed runs all tests with the blocks collapsed
-# --insertionMarker runs all tests with the blocks set as insertion markers.
+# --name <test_name> runs all tests that contain the given name. If not given,
+#   runs all tests specified in test_cases.json.
+# --collapsed runs all tests with the blocks collapsed. If not given, blocks are
+#  expanded.
+# --insertionMarker runs all tests with the blocks set as insertion markers. If
+#   not given then will default to normal blocks.
 #
 
 import os, errno, platform, shutil, sys
@@ -34,13 +36,12 @@ INSERTION_ARG = "--insertionMarker"
 def main():
   cleanup()
   filter_text = find_filter_text()
-  is_rtl = change_to_rtl()
-  collapse = should_collapse()
-  isInsertionMarker = check_insertion_marker()
-  gen_screenshots(filter_text, collapse, isInsertionMarker)
+  is_rtl = check_arg(RTL_ARG)
+  should_collapse = check_arg(COLLAPSE_ARG)
+  is_insertion_marker = check_arg(INSERTION_ARG)
+  gen_screenshots(filter_text, should_collapse, is_insertion_marker, is_rtl)
   diff_screenshots(filter_text)
   display_screenshots()
-  cleanup_rtl(is_rtl)
 
 def cleanup():
   remove_dir("tests/screenshot/outputs/new")
@@ -59,30 +60,16 @@ def find_filter_text():
         sys.exit()
   return ""
 
-def change_to_rtl():
-  args = sys.argv
-  if RTL_ARG in args:
-    os.system("sed -i -e 's/rtl: false/rtl: true/g' tests/screenshot/playground_new.html")
-    os.system("sed -i -e 's/rtl: false/rtl: true/g' tests/screenshot/playground_old.html")
-    return True
-  return False
-
-def should_collapse():
-  if COLLAPSE_ARG in sys.argv:
-    return COLLAPSE_ARG
+def check_arg(arg):
+  if arg in sys.argv:
+    return arg
   else:
     return ''
 
-def check_insertion_marker():
-  if INSERTION_ARG in sys.argv:
-    return INSERTION_ARG
-  else:
-    return ''
-
-def gen_screenshots(filter_text, collapse, isInsertionMarker):
+def gen_screenshots(filter_text, should_collapse, is_insertion_marker, is_rtl):
   if filter_text != "":
     filter_text = NAME_ARG + " " + filter_text
-  os.system("node tests/screenshot/gen_screenshots.js " + filter_text + " " + collapse + " " + isInsertionMarker)
+  os.system("node tests/screenshot/gen_screenshots.js " + filter_text + " " + should_collapse + " " + is_insertion_marker + " " + is_rtl)
 
 def diff_screenshots(filter_text):
   if filter_text != "":
@@ -95,13 +82,6 @@ def display_screenshots():
     os.system("xdg-open tests/screenshot/diff_viewer.html")
   elif (platform.system() == 'Darwin'):
     os.system("open tests/screenshot/diff_viewer.html")
-
-def cleanup_rtl(is_rtl):
-  if is_rtl:
-    os.system("sed -i -e 's/rtl: true/rtl: false/g' tests/screenshot/playground_new.html")
-    os.system("sed -i -e 's/rtl: true/rtl: false/g' tests/screenshot/playground_old.html")
-    remove_file("tests/screenshot/playground_new.html-e")
-    remove_file("tests/screenshot/playground_old.html-e")
 
 def remove_file(filename):
   try:

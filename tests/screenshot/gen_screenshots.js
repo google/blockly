@@ -29,18 +29,20 @@ module.exports = genScreenshots;
 var isCollapsed = false;
 var filterText = '';
 var isInsertionMarker = false;
+var isRtl = false;
 
 function processArgs() {
   var args = process.argv;
   for (var i = 0; i < args.length; i++) {
     var arg = args[i];
-    console.log("Arg: " + arg);
     if (arg === '--collapsed') {
       isCollapsed = true;
     } else if (arg === '--name') {
       filterText = args[i + 1];
     } else if (arg === '--insertionMarker') {
       isInsertionMarker = true;
+    } else if (arg === '--rtl') {
+      isRtl = true;
     }
   }
 }
@@ -66,8 +68,8 @@ async function genScreenshots() {
   checkAndCreateDir(output_url + '/new');
 
   var url_prefix = 'file://' + __dirname + '/playground';
-  var browser_new = await buildBrowser(url_prefix + '_new.html');
-  var browser_old = await buildBrowser(url_prefix + '_old.html');
+  var browser_new = await buildBrowser(url_prefix + '_new.html', isRtl);
+  var browser_old = await buildBrowser(url_prefix + '_old.html', isRtl);
   var test_list = getTestList();
   for (var i = 0, testName; testName = test_list[i]; i++) {
     await genSingleScreenshot(browser_new, 'new', testName, isCollapsed, isInsertionMarker);
@@ -98,7 +100,7 @@ async function cleanUp(browser_new, browser_old) {
   await browser_old.deleteSession();
 }
 
-async function buildBrowser(url) {
+async function buildBrowser(url, isRtl) {
   var options = {
     capabilities: {
       browserName: 'chrome'
@@ -107,9 +109,42 @@ async function buildBrowser(url) {
   };
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
+  var injectBlockly = function(isRtl) {
+    workspace = Blockly.inject('blocklyDiv',
+    {
+      comments: true,
+      collapse: true,
+      disable: true,
+
+      horizontalLayout: false,
+      maxBlocks: Infinity,
+      maxInstances: {'test_basic_limit_instances': 3},
+      media: '../../media/',
+      oneBasedIndex: true,
+      readOnly: false,
+      rtl: isRtl,
+      move: {
+        scrollbars: false,
+        drag: true,
+        wheel: false,
+      },
+      toolboxPosition: 'start',
+      zoom:
+        {
+          controls: false,
+          wheel: true,
+          startScale: 2.0,
+          maxScale: 4,
+          minScale: 0.25,
+          scaleSpeed: 1.1
+        }
+    });
+  }
+
   await browser.setWindowSize(500, 500);
   console.log('Initialized.\nLoading url: ' + url);
   await browser.url(url);
+  await browser.execute(injectBlockly, isRtl);
   return browser;
 }
 

@@ -246,7 +246,6 @@ Blockly.FieldDate.prototype.dropdownDispose_ = function() {
 
 /**
  * Handle a CHANGE event in the date picker.
- * TODO: Not sure what the type for goog event information is.
  * @param {!Event} event The CHANGE event.
  * @private
  */

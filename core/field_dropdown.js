@@ -224,7 +224,6 @@ Blockly.FieldDropdown.prototype.widgetDispose_ = function() {
 
 /**
  * Handle an ACTION event in the dropdown menu.
- * TODO: Not sure what the type for goog event information is.
  * @param {!Event} event The CHANGE event.
  * @private
  */

@@ -399,7 +399,7 @@ Blockly.Variables.promptName = function(promptText, defaultText, callback) {
     // Merge runs of whitespace.  Strip leading and trailing whitespace.
     // Beyond this, all names are legal.
     if (newVar) {
-      newVar = newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
+      newVar = newVar.replace(/[\s\xa0]+/g, ' ').trim();
       if (newVar == Blockly.Msg['RENAME_VARIABLE'] ||
           newVar == Blockly.Msg['NEW_VARIABLE']) {
         // Ok, not ALL names are legal...

@@ -256,23 +256,13 @@ Blockly.utils.checkMessageReferences = function(message) {
 
   // TODO (#1169): Implement support for other string tables,
   // prefixes other than BKY_.
-  var regex = /%{(BKY_[A-Z][A-Z0-9_]*)}/gi;
-  var match = regex.exec(message);
-  while (match) {
-    var msgKey = match[1];
-    msgKey = msgKey.toUpperCase();
-    if (msgKey.substr(0, 4) != 'BKY_') {
-      console.log('WARNING: Unsupported message table prefix in %{' +
-          match[1] + '}.');
-      validSoFar = false;  // Continue to report other errors.
-    } else if (msgTable[msgKey.substr(4)] == undefined) {
-      console.log('WARNING: No message string for %{' + match[1] + '}.');
+  var m = message.match(/%{BKY_[A-Z]\w*}/ig);
+  for (var i = 0; i < m.length; i++) {
+    var msgKey = m[i].toUpperCase();
+    if (msgTable[msgKey.slice(6, -1)] == undefined) {
+      console.log('WARNING: No message string for ' + m[i] + ' in ' + message);
       validSoFar = false;  // Continue to report other errors.
     }
-
-    // Re-run on remainder of string.
-    message = message.substring(match.index + msgKey.length + 1);
-    match = regex.exec(message);
   }
 
   return validSoFar;
@@ -350,7 +340,7 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
         buffer.push(c);
       } else  {
         var rawKey = buffer.join('');
-        if (/[a-zA-Z][a-zA-Z0-9_]*/.test(rawKey)) {  // Strict matching
+        if (/[A-Z]\w*/i.test(rawKey)) {  // Strict matching
           // Found a valid string key. Attempt case insensitive match.
           var keyUpper = rawKey.toUpperCase();
 

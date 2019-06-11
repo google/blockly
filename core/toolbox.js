@@ -32,6 +32,7 @@ goog.require('Blockly.Flyout');
 goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.VerticalFlyout');
@@ -396,17 +397,22 @@ Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut,
   if (colour === null || colour === '') {
     // No attribute. No colour.
     childOut.hexColour = '';
-  } else if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
-    childOut.hexColour = colour;
-    this.hasColours_ = true;
-  } else if (typeof colour === 'number' ||
-      (typeof colour === 'string' && !isNaN(Number(colour)))) {
-    childOut.hexColour = Blockly.hueToHex(Number(colour));
-    this.hasColours_ = true;
   } else {
-    childOut.hexColour = '';
-    console.warn('Toolbox category "' + categoryName +
-        '" has unrecognized colour attribute: ' + colour);
+    var hue = Number(colour);
+    if (!isNaN(hue)) {
+      childOut.hexColour = Blockly.hueToHex(hue);
+      this.hasColours_ = true;
+    } else {
+      var hex = Blockly.utils.colour.parse(colour);
+      if (hex) {
+        childOut.hexColour = hex;
+        this.hasColours_ = true;
+      } else {
+        childOut.hexColour = '';
+        console.warn('Toolbox category "' + categoryName +
+            '" has unrecognized colour attribute: ' + colour);
+      }
+    }
   }
 };
 

@@ -26,7 +26,24 @@ var fs = require('fs');
 
 module.exports = genScreenshots;
 
-var filterText = process.argv[2] || '';
+var isCollapsed = false;
+var filterText = '';
+var isInsertionMarker = false;
+
+function processArgs() {
+  var args = process.argv;
+  for (var i = 0; i < args.length; i++) {
+    var arg = args[i];
+    console.log("Arg: " + arg);
+    if (arg === '--collapsed') {
+      isCollapsed = true;
+    } else if (arg === '--name') {
+      filterText = args[i + 1];
+    } else if (arg === '--insertionMarker') {
+      isInsertionMarker = true;
+    }
+  }
+}
 
 function checkAndCreateDir(dirname) {
   if (!fs.existsSync(dirname)){
@@ -43,6 +60,7 @@ function checkAndCreateDir(dirname) {
  */
 async function genScreenshots() {
   var output_url = 'tests/screenshot/outputs'
+  processArgs();
   checkAndCreateDir(output_url)
   checkAndCreateDir(output_url + '/old');
   checkAndCreateDir(output_url + '/new');
@@ -50,13 +68,11 @@ async function genScreenshots() {
   var url_prefix = 'file://' + __dirname + '/playground';
   var browser_new = await buildBrowser(url_prefix + '_new.html');
   var browser_old = await buildBrowser(url_prefix + '_old.html');
-
   var test_list = getTestList();
-
   for (var i = 0, testName; testName = test_list[i]; i++) {
-    await genSingleScreenshot(browser_new, 'new', testName);
+    await genSingleScreenshot(browser_new, 'new', testName, isCollapsed, isInsertionMarker);
     if (!fs.existsSync(output_url + '/old/' + testName)) {
-      await genSingleScreenshot(browser_old, 'old', testName);
+      await genSingleScreenshot(browser_old, 'old', testName, isCollapsed, isInsertionMarker);
     }
   }
 
@@ -97,17 +113,24 @@ async function buildBrowser(url) {
   return browser;
 }
 
-async function genSingleScreenshot(browser, dir, test_name) {
+async function genSingleScreenshot(browser, dir, test_name, isCollapsed, isInsertionMarker) {
   var prefix = './tests/screenshot/';
   var xml_url = prefix + 'test_cases/' + test_name;
   var xml = fs.readFileSync(xml_url, 'utf8');
 
-  var loadXmlFn = function(xml_text) {
+  var loadXmlFn = function(xml_text, isCollapsed, isInsertionMarker) {
     workspace.clear();
     var xml = Blockly.Xml.textToDom(xml_text);
     Blockly.Xml.domToWorkspace(xml, workspace);
+    if (isCollapsed || isInsertionMarker) {
+      var blocks = workspace.getAllBlocks();
+      for (var i = 0, block; block = blocks[i]; i++) {
+        block.setCollapsed(isCollapsed);
+        block.setInsertionMarker(isInsertionMarker);
+      }
+    }
   };
-  await browser.execute(loadXmlFn, xml);
+  await browser.execute(loadXmlFn, xml, isCollapsed, isInsertionMarker);
   await browser.saveScreenshot(prefix + '/outputs/' + dir + '/' + test_name + '.png');
 }
 

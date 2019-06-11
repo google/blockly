@@ -207,7 +207,10 @@ Blockly.Icon.prototype.getIconLocation = function() {
 };
 
 /**
- * Get the size of the icon, as used for rendering.
+ * Get the size of the icon as used for rendering.
+ * This differs from the actual size of the icon, because it bulges slightly
+ * out of its row rather than increasing the height of its row.
+ * TODO (#2562): Remove getCorrectedSize.
  * @return {!goog.math.Size} Height and width.
  */
 Blockly.Icon.prototype.getCorrectedSize = function() {

@@ -42,41 +42,7 @@ limitations under the License.
 <script src="../../core/block_rendering_rewrite/block_rendering_constants.js"></script>
 <script src="../../core/block_rendering_rewrite/block_render_draw_highlight.js"></script>
 <script>
-'use strict';
-var workspace = null;
-
 goog.require('Blockly.BlockRendering.RenderInfo');
-function start() {
-  workspace = Blockly.inject('blocklyDiv',
-      {
-        comments: true,
-        collapse: true,
-        disable: true,
-
-        horizontalLayout: false,
-        maxBlocks: Infinity,
-        maxInstances: {'test_basic_limit_instances': 3},
-        media: '../../media/',
-        oneBasedIndex: true,
-        readOnly: false,
-        rtl: false,
-        move: {
-          scrollbars: false,
-          drag: true,
-          wheel: false,
-        },
-        toolboxPosition: 'start',
-        zoom:
-          {
-            controls: false,
-            wheel: true,
-            startScale: 2.0,
-            maxScale: 4,
-            minScale: 0.25,
-            scaleSpeed: 1.1
-          }
-      });
-}
 </script>
 
 <style>

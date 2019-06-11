@@ -359,6 +359,7 @@ Blockly.BlockRendering.Row = function() {
   this.hasExternalInput = false;
   this.hasStatement = false;
   this.hasInlineInput = false;
+  this.hasDummyInput = false;
 };
 
 Blockly.BlockRendering.Row.prototype.isSpacer = function() {

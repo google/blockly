@@ -155,8 +155,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
   Blockly.DropDownDiv.getContentDiv().appendChild(editor);
 
   var border = this.sourceBlock_.getColourBorder();
-  border = border.colourBorder == null ?
-      border.colourLight : border.colourBorder;
+  border = border.colourBorder || border.colourLight;
   Blockly.DropDownDiv.setColour(this.sourceBlock_.getColour(), border);
 
   Blockly.DropDownDiv.showPositionedByField(

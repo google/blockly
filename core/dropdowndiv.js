@@ -484,13 +484,13 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
 
 /**
  * Set the dropdown div's position.
- * @param {!number} initialX Initial Horizontal location
+ * @param {number} initialX Initial Horizontal location
  *    (window coordinates, not body).
- * @param {!number} initialY Initial Vertical location
+ * @param {number} initialY Initial Vertical location
  *    (window coordinates, not body).
- * @param {!number} finalX Final Horizontal location
+ * @param {number} finalX Final Horizontal location
  *    (window coordinates, not body).
- * @param {!number} finalY Final Vertical location
+ * @param {number} finalY Final Vertical location
  *    (window coordinates, not body).
  * @private
  */
@@ -511,8 +511,8 @@ Blockly.DropDownDiv.positionInternal_ = function(initialX, initialY, finalX, fin
   // Add final translate, animated through `transition`.
   // Coordinates are relative to (initialX, initialY),
   // where the drop-down is absolutely positioned.
-  var dx = (finalX - initialX);
-  var dy = (finalY - initialY);
+  var dx = finalX - initialX;
+  var dy = finalY - initialY;
   div.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
 };
 

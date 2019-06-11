@@ -26,7 +26,6 @@
 
 goog.provide('Blockly.FieldTextInput');
 
-goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
@@ -226,7 +225,7 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
 
 /**
  * Create the text input editor widget.
- * @return {HTMLInputElement} The newly created text input editor.
+ * @return {!HTMLInputElement} The newly created text input editor.
  * @private
  */
 Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
@@ -236,7 +235,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   htmlInput.className = 'blocklyHtmlInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
   var fontSize =
-    (Blockly.FieldTextInput.FONTSIZE * this.workspace_.scale) + 'pt';
+      (Blockly.FieldTextInput.FONTSIZE * this.workspace_.scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
   div.appendChild(htmlInput);
@@ -320,8 +319,7 @@ Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
   Blockly.unbindEvent_(this.onKeyDownWrapper_);
   Blockly.unbindEvent_(this.onKeyUpWrapper_);
   Blockly.unbindEvent_(this.onKeyPressWrapper_);
-  this.workspace_.removeChangeListener(
-      this.onWorkspaceChangeWrapper_);
+  this.workspace_.removeChangeListener(this.onWorkspaceChangeWrapper_);
 };
 
 /**
@@ -333,14 +331,11 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
   var tabKey = 9, enterKey = 13, escKey = 27;
   if (e.keyCode == enterKey) {
     Blockly.WidgetDiv.hide();
-    Blockly.DropDownDiv.hideIfOwner(this);
   } else if (e.keyCode == escKey) {
     this.htmlInput_.value = this.htmlInput_.defaultValue;
     Blockly.WidgetDiv.hide();
-    Blockly.DropDownDiv.hideIfOwner(this);
   } else if (e.keyCode == tabKey) {
     Blockly.WidgetDiv.hide();
-    Blockly.DropDownDiv.hideIfOwner(this);
     this.sourceBlock_.tab(this, !e.shiftKey);
     e.preventDefault();
   }

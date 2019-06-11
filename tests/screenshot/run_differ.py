@@ -24,6 +24,10 @@
 #  expanded.
 # --insertionMarker runs all tests with the blocks set as insertion markers. If
 #   not given then will default to normal blocks.
+# --inlineInputs runs all tests with the blocks set to have inline inputs. If
+#   not given then the blocks will be in their default state.
+# --externalInputs runs all tests with the with all blocks set to have external
+#   inputs. If not given then the blocks will be in their default state.
 #
 
 import os, errno, platform, shutil, sys
@@ -67,19 +71,13 @@ def find_argument_value(argument_name):
         sys.exit()
   return ""
 
-# Check if an argument exists or not. Returns empty string if the argument does
-# not exist.
-def check_arg(arg):
-  if arg in sys.argv:
-    return arg
-  else:
-    return ''
-
+# Prints an error and exits if the arguments given aren't allowed.
 def check_arguments():
   if (INLINE_INPUTS_ARG in sys.argv) and (EXTERNAL_INPUTS_ARG in sys.argv):
     print ("Can not have both --inlineInputs and --externalInputs")
     sys.exit()
 
+# Create a string with all arguments.
 def create_arg_string():
   arg_string = ""
   for arg in sys.argv:
@@ -104,6 +102,7 @@ def display_screenshots():
   elif (platform.system() == 'Darwin'):
     os.system("open tests/screenshot/diff_viewer.html")
 
+# Removes a file and catches the error if the file does not exist.
 def remove_file(filename):
   try:
     os.remove(filename)
@@ -111,6 +110,7 @@ def remove_file(filename):
     if e.errno != errno.ENOENT:
       raise
 
+# Removes a directory and catches the error if the directory does not exist.
 def remove_dir(dir_name):
   try:
     shutil.rmtree(dir_name)

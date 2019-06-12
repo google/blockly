@@ -107,7 +107,7 @@ Blockly.clipboardTypeCounts_ = null;
 
 /**
  * Cached value for whether 3D is supported.
- * @type {!boolean}
+ * @type {?boolean}
  * @private
  */
 Blockly.cache3dSupported_ = null;
@@ -181,9 +181,9 @@ Blockly.svgResize = function(workspace) {
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
 // are multiple workspaces and non-main workspaces are able to accept input.
 Blockly.onKeyDown_ = function(e) {
-  var workspace = Blockly.mainWorkspace;
-  if (workspace.options.readOnly || Blockly.utils.isTargetInput(e) ||
-      (workspace.rendered && !workspace.isVisible())) {
+  var mainWorkspace = Blockly.mainWorkspace;
+  if (mainWorkspace.options.readOnly || Blockly.utils.isTargetInput(e) ||
+      (mainWorkspace.rendered && !mainWorkspace.isVisible())) {
     // No key actions on readonly workspaces.
     // When focused on an HTML text input widget, don't trap any keys.
     // Ignore keypresses on rendered workspaces that have been explicitly
@@ -247,7 +247,7 @@ Blockly.onKeyDown_ = function(e) {
     } else if (e.keyCode == 90) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
-      workspace.undo(e.shiftKey);
+      mainWorkspace.undo(e.shiftKey);
     }
   }
   // Common code for delete and cut.

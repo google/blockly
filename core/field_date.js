@@ -36,7 +36,6 @@ goog.require('goog.date.DateTime');
 goog.require('goog.events');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.i18n.DateTimeSymbols_he');
-goog.require('goog.style');
 goog.require('goog.ui.DatePicker');
 
 

@@ -94,8 +94,8 @@ Blockly.utils.Coordinate.magnitude = function(a) {
 /**
  * Returns the difference between two coordinates as a new
  * Blockly.utils.Coordinate.
- * @param {!Blockly.utils.Coordinate} a A Coordinate.
- * @param {!Blockly.utils.Coordinate} b A Coordinate.
+ * @param {!Blockly.utils.Coordinate|!SVGPoint} a An x/y coordinate.
+ * @param {!Blockly.utils.Coordinate|!SVGPoint} b An x/y coordinate.
  * @return {!Blockly.utils.Coordinate} A Coordinate representing the difference
  *     between `a` and `b`.
  */
@@ -105,10 +105,10 @@ Blockly.utils.Coordinate.difference = function(a, b) {
 
 /**
  * Returns the sum of two coordinates as a new Blockly.utils.Coordinate.
- * @param {!Blockly.utils.Coordinate} a A Coordinate.
- * @param {!Blockly.utils.Coordinate} b A Coordinate.
- * @return {!Blockly.utils.Coordinate} A Coordinate representing the sum of the two
- *     coordinates.
+ * @param {!Blockly.utils.Coordinate|!SVGPoint} a An x/y coordinate.
+ * @param {!Blockly.utils.Coordinate|!SVGPoint} b An x/y coordinate.
+ * @return {!Blockly.utils.Coordinate} A Coordinate representing the sum of
+ *     the two coordinates.
  */
 Blockly.utils.Coordinate.sum = function(a, b) {
   return new Blockly.utils.Coordinate(a.x + b.x, a.y + b.y);

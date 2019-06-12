@@ -134,7 +134,7 @@ Blockly.FieldTextInput.prototype.doValueInvalid_ = function() {
  * Called by setValue if the text input is valid. Updates the value of the
  * field, and updates the text of the field if it is not currently being
  * edited (i.e. handled by the htmlInput_).
- * @param {!string} newValue The new validated value of the field.
+ * @param {string} newValue The new validated value of the field.
  * @protected
  */
 Blockly.FieldTextInput.prototype.doValueUpdate_ = function(newValue) {

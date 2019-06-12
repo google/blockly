@@ -736,31 +736,19 @@ Blockly.Field.prototype.setValue = function(newValue) {
 
   var validatedValue = this.doClassValidation_(newValue);
   // Class validators might accidentally forget to return, we'll ignore that.
-  if (validatedValue !== undefined) {
-    newValue = validatedValue;
-  }
-  if (newValue === null) {
-    doLogging && console.log('invalid, return');
-    this.doValueInvalid_();
-    if (this.isDirty_) {
-      this.forceRerender();
-    }
+  newValue = this.validate_(newValue, validatedValue);
+  if (newValue instanceof Error) {
+    doLogging && console.log('invalid class validation, return');
     return;
   }
 
   var localValidator = this.getValidator();
   if (localValidator) {
-    var validatedValue = localValidator.call(this, newValue);
+    validatedValue = localValidator.call(this, newValue);
     // Local validators might accidentally forget to return, we'll ignore that.
-    if (validatedValue !== undefined) {
-      newValue = validatedValue;
-    }
-    if (newValue === null) {
-      doLogging && console.log('invalid, return');
-      this.doValueInvalid_();
-      if (this.isDirty_) {
-        this.forceRerender();
-      }
+    newValue = this.validate_(newValue, validatedValue);
+    if (newValue instanceof Error) {
+      doLogging && console.log('invalid local validation, return');
       return;
     }
   }
@@ -780,6 +768,27 @@ Blockly.Field.prototype.setValue = function(newValue) {
     this.forceRerender();
   }
   doLogging && console.log(this.value_);
+};
+
+/**
+ * Process the result of validation.
+ * @param {*} newValue New value.
+ * @param {*} validatedValue Validated value.
+ * @return {*} New value, or an Error object.
+ * @private
+ */
+Blockly.Field.prototype.validate_ = function(newValue, validatedValue) {
+  if (validatedValue !== undefined) {
+    newValue = validatedValue;
+  }
+  if (newValue === null) {
+    this.doValueInvalid_();
+    if (this.isDirty_) {
+      this.forceRerender();
+    }
+    return Error();
+  }
+  return newValue;
 };
 
 /**

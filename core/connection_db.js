@@ -287,15 +287,15 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
 };
 
 /**
- * Initialize a set of connection DBs for a specified workspace.
- * @param {!Blockly.Workspace} workspace The workspace this DB is for.
+ * Initialize a set of connection DBs for a workspace.
+ * @return {!Array.<!Blockly.ConnectionDB>} Array of databases.
  */
-Blockly.ConnectionDB.init = function(workspace) {
+Blockly.ConnectionDB.init = function() {
   // Create four databases, one for each connection type.
   var dbList = [];
   dbList[Blockly.INPUT_VALUE] = new Blockly.ConnectionDB();
   dbList[Blockly.OUTPUT_VALUE] = new Blockly.ConnectionDB();
   dbList[Blockly.NEXT_STATEMENT] = new Blockly.ConnectionDB();
   dbList[Blockly.PREVIOUS_STATEMENT] = new Blockly.ConnectionDB();
-  workspace.connectionDBList = dbList;
+  return dbList;
 };

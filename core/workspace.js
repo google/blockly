@@ -136,6 +136,12 @@ Blockly.Workspace.prototype.isClearing = false;
 Blockly.Workspace.prototype.MAX_UNDO = 1024;
 
 /**
+ * Set of databases for rapid lookup of connection locations.
+ * @type {Array.<!Blockly.ConnectionDB>}
+ */
+Blockly.Workspace.prototype.connectionDBList = null;
+
+/**
  * Dispose of this workspace.
  * Unlink from all DOM elements to prevent memory leaks.
  */

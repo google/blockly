@@ -242,8 +242,6 @@ Blockly.Connection.prototype.dispose = function() {
   if (this.inDB_) {
     this.db_.removeConnection_(this);
   }
-  this.db_ = null;
-  this.dbOpposite_ = null;
 };
 
 /**

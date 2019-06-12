@@ -74,7 +74,7 @@ Blockly.WorkspaceSvg = function(options,
   this.setMetrics =
       options.setMetrics || Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_;
 
-  Blockly.ConnectionDB.init(this);
+  this.connectionDBList = Blockly.ConnectionDB.init();
 
   if (opt_blockDragSurface) {
     this.blockDragSurface_ = opt_blockDragSurface;
@@ -606,6 +606,8 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.grid_.dispose();
     this.grid_ = null;
   }
+
+  this.connectionDBList = null;
 
   this.toolboxCategoryCallbacks_ = null;
   this.flyoutButtonCallbacks_ = null;

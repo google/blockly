@@ -608,7 +608,7 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
  * Does this flyout allow you to create a new instance of the given block?
  * Used for deciding if a block can be "dragged out of" the flyout.
  * @param {!Blockly.BlockSvg} block The block to copy from the flyout.
- * @return {!boolean} True if you can create a new instance of the block, false
+ * @return {boolean} True if you can create a new instance of the block, false
  *    otherwise.
  * @package
  */

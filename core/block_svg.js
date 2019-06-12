@@ -700,8 +700,8 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
     if (this.workspace.options.disable && this.isEditable()) {
       // Option to disable/enable block.
       var disableOption = {
-        text: this.disabled ?
-            Blockly.Msg['ENABLE_BLOCK'] : Blockly.Msg['DISABLE_BLOCK'],
+        text: this.isEnabled() ?
+            Blockly.Msg['DISABLE_BLOCK'] : Blockly.Msg['ENABLE_BLOCK'],
         enabled: !this.getInheritedDisabled(),
         callback: function() {
           var group = Blockly.Events.getGroup();
@@ -936,7 +936,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
  * Change the colour of a block.
  */
 Blockly.BlockSvg.prototype.updateColour = function() {
-  if (this.disabled) {
+  if (!this.isEnabled()) {
     // Disabled blocks don't have colour.
     return;
   }
@@ -999,7 +999,7 @@ Blockly.BlockSvg.prototype.setShadowColour_ = function() {
  * Enable or disable a block.
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
-  if (this.disabled || this.getInheritedDisabled()) {
+  if (!this.isEnabled() || this.getInheritedDisabled()) {
     var added = Blockly.utils.dom.addClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
     if (added) {

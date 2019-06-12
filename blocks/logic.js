@@ -468,7 +468,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
       i++;
     }
     // Rebuild block.
-    for (var i = 1; i <= this.elseifCount_; i++) {
+    for (i = 1; i <= this.elseifCount_; i++) {
       this.appendValueInput('IF' + i)
           .setCheck('Boolean')
           .appendField(Blockly.Msg['CONTROLS_IF_MSG_ELSEIF']);

@@ -164,7 +164,7 @@ Blockly.Options.prototype.getMetrics = null;
  * Parse the user-specified move options, using reasonable defaults where
  *    behaviour is unspecified.
  * @param {!Object} options Dictionary of options.
- * @param {!boolean} hasCategories Whether the workspace has categories or not.
+ * @param {boolean} hasCategories Whether the workspace has categories or not.
  * @return {!Object} A dictionary of normalized options.
  * @private
  */

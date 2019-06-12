@@ -1676,7 +1676,7 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
   // Find the new scrollX/scrollY so that the center remains in the same
   // position (relative to the center) after we zoom.
   // newScale and matrix.a should be identical (within a rounding error).
-  var matrix = matrix.translate(x * (1 - scaleChange), y * (1 - scaleChange))
+  matrix = matrix.translate(x * (1 - scaleChange), y * (1 - scaleChange))
       .scale(scaleChange);
   // scrollX and scrollY are in pixels.
   // The scrollX and scrollY still need to have absoluteLeft and absoluteTop

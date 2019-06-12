@@ -736,7 +736,7 @@ Blockly.Field.prototype.setValue = function(newValue) {
 
   var validatedValue = this.doClassValidation_(newValue);
   // Class validators might accidentally forget to return, we'll ignore that.
-  newValue = this.validate_(newValue, validatedValue);
+  newValue = this.processValidation_(newValue, validatedValue);
   if (newValue instanceof Error) {
     doLogging && console.log('invalid class validation, return');
     return;
@@ -746,7 +746,7 @@ Blockly.Field.prototype.setValue = function(newValue) {
   if (localValidator) {
     validatedValue = localValidator.call(this, newValue);
     // Local validators might accidentally forget to return, we'll ignore that.
-    newValue = this.validate_(newValue, validatedValue);
+    newValue = this.processValidation_(newValue, validatedValue);
     if (newValue instanceof Error) {
       doLogging && console.log('invalid local validation, return');
       return;
@@ -777,7 +777,8 @@ Blockly.Field.prototype.setValue = function(newValue) {
  * @return {*} New value, or an Error object.
  * @private
  */
-Blockly.Field.prototype.validate_ = function(newValue, validatedValue) {
+Blockly.Field.prototype.processValidation_ = function(newValue,
+    validatedValue) {
   if (validatedValue !== undefined) {
     newValue = validatedValue;
   }

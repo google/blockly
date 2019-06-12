@@ -24,6 +24,10 @@
 #  expanded.
 # --insertionMarker runs all tests with the blocks set as insertion markers. If
 #   not given then will default to normal blocks.
+# --inlineInputs runs all tests with the blocks set to have inline inputs. If
+#   not given then the blocks will be in their default state.
+# --externalInputs runs all tests with the with all blocks set to have external
+#   inputs. If not given then the blocks will be in their default state.
 #
 
 import os, errno, platform, shutil, sys
@@ -32,16 +36,19 @@ NAME_ARG = "--name"
 COLLAPSE_ARG = "--collapsed"
 RTL_ARG = "--rtl"
 INSERTION_ARG = "--insertionMarker"
+INLINE_INPUTS_ARG = "--inlineInputs"
+EXTERNAL_INPUTS_ARG = "--externalInputs"
+
+ARG_VALS = [COLLAPSE_ARG, RTL_ARG, INSERTION_ARG, INLINE_INPUTS_ARG, EXTERNAL_INPUTS_ARG]
 
 # Generates the screenshots according to the given parameters, diffs the
 # screenshots and then displays them.
 def main():
   cleanup()
-  filter_text = find_filter_text()
-  is_rtl = check_arg(RTL_ARG)
-  should_collapse = check_arg(COLLAPSE_ARG)
-  is_insertion_marker = check_arg(INSERTION_ARG)
-  gen_screenshots(filter_text, should_collapse, is_insertion_marker, is_rtl)
+  check_arguments()
+  filter_text = find_argument_value(NAME_ARG)
+  argument_string = create_arg_string()
+  gen_screenshots(filter_text, argument_string)
   diff_screenshots(filter_text)
   display_screenshots()
 
@@ -53,30 +60,33 @@ def cleanup():
   remove_file("tests/screenshot/outputs/test_output.json")
 
 # If the --name is given find the name of the test case.
-def find_filter_text():
+def find_argument_value(argument_name):
   args = sys.argv
   for i in range(len(args)):
-    if args[i] == NAME_ARG:
+    if args[i] == argument_name:
       if i + 1 < len(args):
         return args[i+1]
       else:
-        print("Must supply a name after name arg")
+        print ("Must supply a name after name arg")
         sys.exit()
   return ""
 
-# Check if an argument exists or not. Returns empty string if the argument does
-# not exist.
-def check_arg(arg):
-  if arg in sys.argv:
-    return arg
-  else:
-    return ''
+# Prints an error and exits if the arguments given aren't allowed.
+def check_arguments():
+  if (INLINE_INPUTS_ARG in sys.argv) and (EXTERNAL_INPUTS_ARG in sys.argv):
+    print ("Can not have both --inlineInputs and --externalInputs")
+    sys.exit()
+
+# Create a string with all arguments.
+def create_arg_string():
+  arg_string = ""
+  for arg in sys.argv:
+    arg_string = arg_string + " " + arg
+  return arg_string
 
 # Generates a set of old and new screenshots according to the given parameters.
-def gen_screenshots(filter_text, should_collapse, is_insertion_marker, is_rtl):
-  if filter_text != "":
-    filter_text = NAME_ARG + " " + filter_text
-  os.system("node tests/screenshot/gen_screenshots.js " + filter_text + " " + should_collapse + " " + is_insertion_marker + " " + is_rtl)
+def gen_screenshots(filter_text, argument_string):
+  os.system("node tests/screenshot/gen_screenshots.js " + argument_string)
 
 # Diffs the old and new screenshots that were created in gen_screenshots.
 def diff_screenshots(filter_text):
@@ -92,6 +102,7 @@ def display_screenshots():
   elif (platform.system() == 'Darwin'):
     os.system("open tests/screenshot/diff_viewer.html")
 
+# Removes a file and catches the error if the file does not exist.
 def remove_file(filename):
   try:
     os.remove(filename)
@@ -99,6 +110,7 @@ def remove_file(filename):
     if e.errno != errno.ENOENT:
       raise
 
+# Removes a directory and catches the error if the directory does not exist.
 def remove_dir(dir_name):
   try:
     shutil.rmtree(dir_name)

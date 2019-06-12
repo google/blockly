@@ -30,6 +30,8 @@ var isCollapsed = false;
 var filterText = '';
 var isInsertionMarker = false;
 var isRtl = false;
+var inlineInputs = false;
+var externalInputs = false;
 
 function processArgs() {
   var args = process.argv;
@@ -43,6 +45,10 @@ function processArgs() {
       isInsertionMarker = true;
     } else if (arg === '--rtl') {
       isRtl = true;
+    } else if (arg === '--inlineInputs') {
+      inlineInputs = true
+    } else if (arg === '--externalInputs') {
+      externalInputs = true
     }
   }
 }
@@ -72,9 +78,9 @@ async function genScreenshots() {
   var browser_old = await buildBrowser(url_prefix + '_old.html', isRtl);
   var test_list = getTestList();
   for (var i = 0, testName; testName = test_list[i]; i++) {
-    await genSingleScreenshot(browser_new, 'new', testName, isCollapsed, isInsertionMarker);
+    await genSingleScreenshot(browser_new, 'new', testName, isCollapsed, isInsertionMarker, inlineInputs, externalInputs);
     if (!fs.existsSync(output_url + '/old/' + testName)) {
-      await genSingleScreenshot(browser_old, 'old', testName, isCollapsed, isInsertionMarker);
+      await genSingleScreenshot(browser_old, 'old', testName, isCollapsed, isInsertionMarker, inlineInputs, externalInputs);
     }
   }
 
@@ -148,24 +154,29 @@ async function buildBrowser(url, isRtl) {
   return browser;
 }
 
-async function genSingleScreenshot(browser, dir, test_name, isCollapsed, isInsertionMarker) {
+async function genSingleScreenshot(browser, dir, test_name, isCollapsed, isInsertionMarker, inlineInputs, externalInputs) {
   var prefix = './tests/screenshot/';
   var xml_url = prefix + 'test_cases/' + test_name;
   var xml = fs.readFileSync(xml_url, 'utf8');
 
-  var loadXmlFn = function(xml_text, isCollapsed, isInsertionMarker) {
+  var loadXmlFn = function(xml_text, isCollapsed, isInsertionMarker, inlineInputs, externalInputs) {
     workspace.clear();
     var xml = Blockly.Xml.textToDom(xml_text);
     Blockly.Xml.domToWorkspace(xml, workspace);
-    if (isCollapsed || isInsertionMarker) {
+    if (isCollapsed || isInsertionMarker || inlineInputs || externalInputs) {
       var blocks = workspace.getAllBlocks();
       for (var i = 0, block; block = blocks[i]; i++) {
         block.setCollapsed(isCollapsed);
         block.setInsertionMarker(isInsertionMarker);
+        if (inlineInputs) {
+          block.setInputsInline(true);
+        } else if (externalInputs) {
+          block.setInputsInline(false);
+        }
       }
     }
   };
-  await browser.execute(loadXmlFn, xml, isCollapsed, isInsertionMarker);
+  await browser.execute(loadXmlFn, xml, isCollapsed, isInsertionMarker, inlineInputs, externalInputs);
   await browser.saveScreenshot(prefix + '/outputs/' + dir + '/' + test_name + '.png');
 }
 

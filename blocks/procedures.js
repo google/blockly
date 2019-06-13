@@ -164,7 +164,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this Blockly.Block
    */
   decompose: function(workspace) {
-    var containerBlock = workspace.newBlock('procedures_mutatorcontainer');
+    /*var containerBlock = workspace.newBlock('procedures_mutatorcontainer');
     containerBlock.initSvg();
 
     // Check/uncheck the allow statement box.
@@ -185,7 +185,36 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       paramBlock.oldLocation = i;
       connection.connect(paramBlock.previousConnection);
       connection = paramBlock.nextConnection;
+    }*/
+
+    var xml = Blockly.Xml.textToDom(
+        '<xml>' +
+        '  <block type="procedures_mutatorcontainer">' +
+        '    <statement name="STACK"></statement>' +
+        '  </block>' +
+        '</xml>').children[0];
+    var node = xml.getElementsByTagName('statement')[0];
+    for (var i = 0; i < this.arguments_.length; i++) {
+      node.appendChild(Blockly.Xml.textToDom(
+          '<xml>' +
+          '  <block type="procedures_mutatorarg">' +
+          '    <field name="NAME">' + this.arguments_[i] + '</field>' +
+          '    <next></next>' +
+          '  </block>' +
+          '</xml>'
+      ).children[0]);
+      node = node.getElementsByTagName('xml');
     }
+
+    var containerBlock = Blockly.Xml.domToBlock(xml, workspace);
+
+    if (this.type == 'procedure_defreturn') {
+      containerBlock.setFieldValue(
+        this.hasStatements_ ? 'TRUE' : 'FALSE', 'STATEMENTS');
+    } else {
+      containerBlock.removeInput('STATEMENT_INPUT');
+    }
+
     // Initialize procedure's callers with blank IDs.
     Blockly.Procedures.mutateCallers(this);
     return containerBlock;
@@ -205,11 +234,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       var varName = paramBlock.getFieldValue('NAME');
       this.arguments_.push(varName);
       var variable = this.workspace.getVariable(varName, '');
-      if (variable != null) {
-        this.argumentVarModels_.push(variable);
-      } else {
-        console.log('Failed to get variable named ' + varName + ', ignoring.');
-      }
+      this.argumentVarModels_.push(variable);
 
       this.paramIds_.push(paramBlock.id);
       paramBlock = paramBlock.nextConnection &&
@@ -527,7 +552,6 @@ Blockly.Blocks['procedures_mutatorcontainer'] = {
   }
 };
 
-
 Blockly.Blocks['procedures_mutatorarg'] = {
   /**
    * Mutator block for procedure argument.
@@ -591,6 +615,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     var model = outerWs.getVariable(varName, '');
     if (model && model.name != varName) {
       // Rename the variable (case change)
+      // TODO: This function doesn't exist on the workspace.
       outerWs.renameVarById(model.getId(), varName);
     }
     if (!model) {

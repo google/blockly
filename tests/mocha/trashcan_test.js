@@ -241,8 +241,8 @@ suite("Trashcan", function() {
           '  <comment h="20" w="20">comment_text</comment>' +
           '</block>'
       );
-      // TODO: Is this how we want this to work? The difference is not
-      //  related to the content.
+      // TODO (#2574): These blocks are treated as different, but appear
+      //  identical when the trashcan is opened.
       chai.assert.equal(this.trashcan.contents_.length, 2);
     });
     test("Different Comment Pinned", function() {
@@ -256,8 +256,8 @@ suite("Trashcan", function() {
           '  <comment pinned="true">comment_text</comment>' +
           '</block>'
       );
-      // TODO: Is this how we want this to work? The difference is not
-      //  related to the content.
+      // TODO (#2574): These blocks are treated as different, but appear
+      //  identical when the trashcan is opened.
       chai.assert.equal(this.trashcan.contents_.length, 2);
     });
     test("No Mutator - Mutator", function() {

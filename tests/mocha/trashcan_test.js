@@ -102,19 +102,6 @@ suite("Trashcan", function() {
       );
       chai.assert.equal(this.trashcan.contents_.length, 1);
     });
-    test("No Coords - Coords", function() {
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type"/>' +
-          '</xml>'
-      );
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type" x="10" y="10"/>' +
-          '</xml>'
-      );
-      chai.assert.equal(this.trashcan.contents_.length, 1);
-    });
     test("Different Coords", function() {
       sendDeleteEvent(
           '<xml>' +
@@ -124,19 +111,6 @@ suite("Trashcan", function() {
       sendDeleteEvent(
           '<xml>' +
           '  <block type="dummy_type" x="20" y="20"/>' +
-          '</xml>'
-      );
-      chai.assert.equal(this.trashcan.contents_.length, 1);
-    });
-    test("No ID - ID", function() {
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type"/>' +
-          '</xml>'
-      );
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type" id="id"/>' +
           '</xml>'
       );
       chai.assert.equal(this.trashcan.contents_.length, 1);
@@ -167,49 +141,6 @@ suite("Trashcan", function() {
       );
       chai.assert.equal(this.trashcan.contents_.length, 2);
     });
-    test("No Disabled - Disabled False", function() {
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type"/>' +
-          '</xml>'
-      );
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type" disabled="false"/>' +
-          '</xml>'
-      );
-      // TODO: Is this how we want this to work? To the user they appear to
-      //  be the same.
-      chai.assert.equal(this.trashcan.contents_.length, 2);
-    });
-    test("Different Disabled", function() {
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type" disabled="false"/>' +
-          '</xml>'
-      );
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type" disabled="true"/>' +
-          '</xml>'
-      );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
-    });
-    test("No Editable - Editable True", function() {
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type"/>' +
-          '</xml>'
-      );
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type" editable="true"/>' +
-          '</xml>'
-      );
-      // TODO: Is this how we want this to work? To the user they appear to
-      //  be the same.
-      chai.assert.equal(this.trashcan.contents_.length, 2);
-    });
     test("No Editable - Editable False", function() {
       sendDeleteEvent(
           '<xml>' +
@@ -223,34 +154,6 @@ suite("Trashcan", function() {
       );
       chai.assert.equal(this.trashcan.contents_.length, 2);
     });
-    test("Different Editable", function() {
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type" editable="true"/>' +
-          '</xml>'
-      );
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type" editable="false"/>' +
-          '</xml>'
-      );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
-    });
-    test("No Movable - Movable True", function() {
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type"/>' +
-          '</xml>'
-      );
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type" movable="true"/>' +
-          '</xml>'
-      );
-      // TODO: Is this how we want this to work? To the user they appear to
-      //  be the same.
-      chai.assert.equal(this.trashcan.contents_.length, 2);
-    });
     test("No Movable - Movable False", function() {
       sendDeleteEvent(
           '<xml>' +
@@ -260,34 +163,6 @@ suite("Trashcan", function() {
       sendDeleteEvent(
           '<xml>' +
           '  <block type="dummy_type" movable="false"/>' +
-          '</xml>'
-      );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
-    });
-    test("Different Movable", function() {
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type" movable="true"/>' +
-          '</xml>'
-      );
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type" movable="false"/>' +
-          '</xml>'
-      );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
-    });
-    test("No Fields - Fields", function() {
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type"/>' +
-          '</xml>'
-      );
-      sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type">' +
-          '    <field name="dummy_name">dummy_value</field>' +
-          '  </block>' +
           '</xml>'
       );
       chai.assert.equal(this.trashcan.contents_.length, 2);

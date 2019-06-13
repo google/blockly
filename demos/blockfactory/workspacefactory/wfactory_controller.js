@@ -491,26 +491,25 @@ WorkspaceFactoryController.prototype.reinjectPreview = function(tree) {
 };
 
 /**
- * Tied to "change name" button. Changes the name of the selected category.
- * Continues prompting the user until they input a category name that is not
- * currently in use, exits if user presses cancel.
+ * Changes the name and colour of the selected category.
+ * Return if selected element is a separator.
+ * @param {string} name New name for selected category.
+ * @param {string} colour New colour for selected category.
+ * Must be a valid CSS string.
  */
-WorkspaceFactoryController.prototype.changeCategoryName = function() {
+WorkspaceFactoryController.prototype.changeSelectedCategory =
+    function(name, colour) {
   var selected = this.model.getSelected();
   // Return if a category is not selected.
   if (selected.type != ListElement.TYPE_CATEGORY) {
     return;
   }
-  // Get new name from user.
-  window.foo = selected;
-  var newName = this.promptForNewCategoryName('What do you want to change this'
-    + ' category\'s name to?', selected.name);
-  if (!newName) {  // If cancelled.
-    return;
-  }
+  // Change colour of selected category.
+  selected.changeColor(colour);
+  this.view.setBorderColor(this.model.getSelectedId(), colour);
   // Change category name.
-  selected.changeName(newName);
-  this.view.updateCategoryName(newName, this.model.getSelectedId());
+  selected.changeName(name);
+  this.view.updateCategoryName(name, this.model.getSelectedId());
   // Update preview.
   this.updatePreview();
 };
@@ -555,24 +554,6 @@ WorkspaceFactoryController.prototype.moveElementToIndex = function(element,
     newIndex, oldIndex) {
   this.model.moveElementToIndex(element, newIndex, oldIndex);
   this.view.moveTabToIndex(element.id, newIndex, oldIndex);
-};
-
-/**
- * Changes the color of the selected category. Return if selected element is
- * a separator.
- * @param {string} color The color to change the selected category. Must be
- * a valid CSS string.
- */
-WorkspaceFactoryController.prototype.changeSelectedCategoryColor =
-    function(color) {
-  // Return if category is not selected.
-  if (this.model.getSelected().type != ListElement.TYPE_CATEGORY) {
-    return;
-  }
-  // Change color of selected category.
-  this.model.getSelected().changeColor(color);
-  this.view.setBorderColor(this.model.getSelectedId(), color);
-  this.updatePreview();
 };
 
 /**

@@ -27,9 +27,6 @@
  * @author Emma Dauterman (evd2014)
  */
 
-goog.require('goog.ui.PopupColorPicker');
-goog.require('goog.ui.ColorPicker');
-
 /**
  * Namespace for workspace factory initialization methods.
  * @namespace
@@ -48,7 +45,7 @@ WorkspaceFactoryInit.initWorkspaceFactory = function(controller) {
   document.getElementById('button_down').disabled = true;
   document.getElementById('button_editCategory').disabled = true;
 
-  this.initColorPicker_(controller);
+  this.initColourPicker_(controller);
   this.addWorkspaceFactoryEventListeners_(controller);
   this.assignWorkspaceFactoryClickHandlers_(controller);
   this.addWorkspaceFactoryOptionsListeners_(controller);
@@ -58,98 +55,25 @@ WorkspaceFactoryInit.initWorkspaceFactory = function(controller) {
 };
 
 /**
- * Initialize the color picker in workspace factory.
+ * Initialize the colour picker in workspace factory.
  * @param {!FactoryController} controller The controller for the workspace
  *    factory tab.
  * @private
  */
-WorkspaceFactoryInit.initColorPicker_ = function(controller) {
-  // Array of Blockly category colours, consitent with the 15 degree default
+WorkspaceFactoryInit.initColourPicker_ = function(controller) {
+  // Array of Blockly category colours, consistent with the 15 degree default
   // of the block factory's colour wheel.
   var colours = [];
+  var row = [];
   for (var hue = 0; hue < 360; hue += 15) {
-    colours.push(WorkspaceFactoryInit.hsvToHex_(hue,
-        Blockly.HSV_SATURATION, Blockly.HSV_VALUE));
-  }
-
-  // Create color picker with specific set of Blockly colours.
-  var colourPicker = new goog.ui.ColorPicker();
-  colourPicker.setSize(6);
-  colourPicker.setColors(colours);
-
-  // Create and render the popup colour picker and attach to button.
-  var popupPicker = new goog.ui.PopupColorPicker(null, colourPicker);
-  popupPicker.render();
-  popupPicker.attach(document.getElementById('dropdown_color'));
-  popupPicker.setFocusable(true);
-  goog.events.listen(popupPicker, 'change', function(e) {
-    controller.changeSelectedCategoryColor(popupPicker.getSelectedColor());
-    blocklyFactory.closeModal();
-  });
-};
-
-/**
- * Converts from h,s,v values to a hex string
- * @param {number} h Hue, in [0, 360].
- * @param {number} s Saturation, in [0, 1].
- * @param {number} v Value, in [0, 1].
- * @return {string} hex representation of the color.
- * @private
- */
-WorkspaceFactoryInit.hsvToHex_ = function(h, s, v) {
-  var brightness = v * 255;
-  var red = 0;
-  var green = 0;
-  var blue = 0;
-  if (s == 0) {
-    red = brightness;
-    green = brightness;
-    blue = brightness;
-  } else {
-    var sextant = Math.floor(h / 60);
-    var remainder = (h / 60) - sextant;
-    var val1 = brightness * (1 - s);
-    var val2 = brightness * (1 - (s * remainder));
-    var val3 = brightness * (1 - (s * (1 - remainder)));
-    switch (sextant) {
-      case 1:
-        red = val2;
-        green = brightness;
-        blue = val1;
-        break;
-      case 2:
-        red = val1;
-        green = brightness;
-        blue = val3;
-        break;
-      case 3:
-        red = val1;
-        green = val2;
-        blue = brightness;
-        break;
-      case 4:
-        red = val3;
-        green = val1;
-        blue = brightness;
-        break;
-      case 5:
-        red = brightness;
-        green = val1;
-        blue = val2;
-        break;
-      case 6:
-      case 0:
-        red = brightness;
-        green = val3;
-        blue = val1;
-        break;
+    row.push(Blockly.hueToHex(hue).substring(1));
+    if (row.length == 6) {
+      colours.push(row);
+      row = [];
     }
   }
-
-  var hexR = ('0' + Math.floor(red).toString(16)).slice(-2);
-  var hexG = ('0' + Math.floor(green).toString(16)).slice(-2);
-  var hexB = ('0' + Math.floor(blue).toString(16)).slice(-2);
-  return '#' + hexR + hexG + hexB;
+  // Override the default colours.
+  cp_grid = colours;
 };
 
 /**
@@ -311,12 +235,25 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
   document.getElementById('button_editCategory').addEventListener
       ('click',
       function() {
+        var selected = controller.model.getSelected();
+        // Return if a category is not selected.
+        if (selected.type != ListElement.TYPE_CATEGORY) {
+          return;
+        }
+        document.getElementById('categoryName').value = selected.name;
+        document.getElementById('categoryColour').value = selected.color ?
+            selected.color.substring(1).toLowerCase() : '000000';
+        // Link the colour picker to the field.
+        cp_init('categoryColour');
         blocklyFactory.openModal('dropdownDiv_editCategory');
       });
-  document.getElementById('dropdown_name').addEventListener
+
+  document.getElementById('categorySave').addEventListener
       ('click',
       function() {
-        controller.changeCategoryName();
+        var name = document.getElementById('categoryName').value.trim();
+        var colour = '#' + document.getElementById('categoryColour').value;
+        controller.changeSelectedCategory(name, colour);
         blocklyFactory.closeModal();
       });
 

@@ -68,7 +68,7 @@ suite('Variable Fields', function() {
     sinon.restore();
   });
 
-  test('Dropdown contains variables', function() {
+  test.skip('Dropdown contains variables', function() {
     // Expect that the dropdown options will contain the variables that exist
     this.workspace.createVariable('name1', '', 'id1');
     this.workspace.createVariable('name2', '', 'id2');

@@ -115,9 +115,12 @@ Blockly.FieldTextInput.prototype.doClassValidation_ = function(newValue) {
  * Called by setValue if the text input is not valid. If the field is
  * currently being edited it reverts value of the field to the previous
  * value while allowing the display text to be handled by the htmlInput_.
+ * @param {*} _newValue The input value that was determined to be invalid.
+ *    This is not used by the text input because its display value is stored on
+ *    the htmlInput_.
  * @protected
  */
-Blockly.FieldTextInput.prototype.doValueInvalid_ = function() {
+Blockly.FieldTextInput.prototype.doValueInvalid_ = function(_newValue) {
   if (this.isBeingEdited_) {
     this.isTextValid_ = false;
     var oldValue = this.value_;

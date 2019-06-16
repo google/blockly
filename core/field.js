@@ -133,11 +133,21 @@ Blockly.Field.prototype.maxDisplayLength = 50;
 Blockly.Field.prototype.value_ = null;
 
 /**
- * Visible text to display.
+ * Text representation of the field's value. Maintained for backwards
+ * compatibility reasons.
  * @type {string}
  * @protected
+ * @deprecated Use or override getText instead.
  */
 Blockly.Field.prototype.text_ = '';
+
+/**
+ * Used to cache the field's tooltip value if setTooltip is called when the
+ * field is not yet initialized. Is *not* guaranteed to be accurate.
+ * @type {?string}
+ * @private
+ */
+Blockly.Field.prototype.tooltip_ = null;
 
 /**
  * Block this field is attached to.  Starts as null, then set in init.
@@ -235,7 +245,7 @@ Blockly.Field.prototype.init = function() {
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
   this.initView();
   this.updateEditable();
-  this.setTooltip();
+  this.setTooltip(this.tooltip_);
   this.bindEvents_();
   this.initModel();
 };
@@ -857,10 +867,17 @@ Blockly.Field.prototype.onMouseDown_ = function(e) {
  *    element to link to for its tooltip.
  */
 Blockly.Field.prototype.setTooltip = function(newTip) {
+  var clickTarget = this.getClickTarget_();
+  if (!clickTarget) {
+    // Field has not been initialized yet.
+    this.tooltip_ = newTip;
+    return;
+  }
+
   if (!newTip && newTip !== '') {  // If null or undefined.
-    this.getClickTarget_().tooltip = this.sourceBlock_;
+    clickTarget.tooltip = this.sourceBlock_;
   } else {
-    this.getClickTarget_().tooltip = newTip;
+    clickTarget.tooltip = newTip;
   }
 };
 

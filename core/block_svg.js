@@ -1191,11 +1191,10 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
   if (highlighted) {
     this.svgPath_.setAttribute('filter',
         'url(#' + this.workspace.options.embossFilterId + ')');
-    this.svgPathLight_.style.display = 'none';
   } else {
-    this.svgPath_.removeAttribute('filter');
-    delete this.svgPathLight_.style.display;
+    this.svgPath_.setAttribute('filter', 'none');
   }
+  this.svgPathLight_.style.display = 'none';
 };
 
 /**

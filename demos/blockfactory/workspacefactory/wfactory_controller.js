@@ -664,12 +664,7 @@ WorkspaceFactoryController.prototype.loadStandardToolbox = function() {
  * @return {boolean} True if name is a standard category name, false otherwise.
  */
 WorkspaceFactoryController.prototype.isStandardCategoryName = function(name) {
-  for (var category in StandardCategories.categoryMap) {
-    if (name.toLowerCase() == category) {
-      return true;
-    }
-  }
-  return false;
+  return !!StandardCategories.categoryMap[name.toLowerCase()];
 };
 
 /**

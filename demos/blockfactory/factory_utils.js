@@ -151,11 +151,12 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
       }
     }
   }
-  // Most languages end lines with a semicolon.  Python does not.
+  // Most languages end lines with a semicolon.  Python & Lua do not.
   var lineEnd = {
     'JavaScript': ';',
     'Python': '',
     'PHP': ';',
+    'Lua': '',
     'Dart': ';'
   };
   code.push("  // TODO: Assemble " + language + " into code variable.");

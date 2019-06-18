@@ -118,7 +118,7 @@ BlockLibraryStorage.prototype.getBlockXml = function(blockType) {
  * @return {!Object} Map of block type to corresponding XML.
  */
 BlockLibraryStorage.prototype.getBlockXmlMap = function(blockTypes) {
-  var blockXmlMap = {};
+  var blockXmlMap = Object.create(null);
   for (var i = 0; i < blockTypes.length; i++) {
     var blockType = blockTypes[i];
     var xml = this.getBlockXml(blockType);

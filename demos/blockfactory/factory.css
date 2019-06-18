@@ -563,13 +563,12 @@ td.taboff:hover {
   vertical-align: middle;
 }
 
-#colourpicker {
-  z-index: 999;
+.cp_swatch {
+  vertical-align: middle !important;
 }
 
-#colourpicker>table {
-  border-collapse: separate;
-  z-index: 999;
+#cp_popup {
+ z-index: 999;
 }
 
 .shadowBlock>.blocklyPath {

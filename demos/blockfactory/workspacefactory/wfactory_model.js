@@ -535,7 +535,8 @@ ListElement.prototype.changeName = function (name) {
 /**
  * Sets the color of a category. If tries to set the color of something other
  * than a category, returns.
- * @param {string} color The color that should be used for that category.
+ * @param {?string} color The color that should be used for that category,
+ *     or null if none.
  */
 ListElement.prototype.changeColor = function (color) {
   if (this.type != ListElement.TYPE_CATEGORY) {

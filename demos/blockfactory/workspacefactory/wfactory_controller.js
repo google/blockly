@@ -494,11 +494,11 @@ WorkspaceFactoryController.prototype.reinjectPreview = function(tree) {
  * Changes the name and colour of the selected category.
  * Return if selected element is a separator.
  * @param {string} name New name for selected category.
- * @param {string} colour New colour for selected category.
- * Must be a valid CSS string.
+ * @param {?string} colour New colour for selected category, or null if none.
+ * Must be a valid CSS string, or '' for none.
  */
-WorkspaceFactoryController.prototype.changeSelectedCategory =
-    function(name, colour) {
+WorkspaceFactoryController.prototype.changeSelectedCategory = function(name,
+    colour) {
   var selected = this.model.getSelected();
   // Return if a category is not selected.
   if (selected.type != ListElement.TYPE_CATEGORY) {

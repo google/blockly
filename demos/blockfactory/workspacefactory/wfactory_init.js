@@ -61,15 +61,18 @@ WorkspaceFactoryInit.initWorkspaceFactory = function(controller) {
  * @private
  */
 WorkspaceFactoryInit.initColourPicker_ = function(controller) {
-  // Array of Blockly category colours, consistent with the 15 degree default
-  // of the block factory's colour wheel.
-  var colours = [];
-  var row = [];
-  for (var hue = 0; hue < 360; hue += 15) {
-    row.push(Blockly.hueToHex(hue).substring(1));
-    if (row.length == 6) {
-      colours.push(row);
-      row = [];
+  // Array of Blockly category colours, consistent with the colour defaults.
+  var colours = [
+    [20, 65, 120],
+    [160, 210, 230],
+    [260, 290, '']
+  ];
+  // Convert hue numbers to RRGGBB strings.
+  for (var y = 0; y < colours.length; y++) {
+    for (var x = 0; x < colours[y].length; x++) {
+      if (colours[y][x] !== '') {
+        colours[y][x] = Blockly.hueToHex(colours[y][x]).substring(1);
+      }
     }
   }
   // Override the default colours.
@@ -242,7 +245,7 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
         }
         document.getElementById('categoryName').value = selected.name;
         document.getElementById('categoryColour').value = selected.color ?
-            selected.color.substring(1).toLowerCase() : '000000';
+            selected.color.substring(1).toLowerCase() : '';
         // Link the colour picker to the field.
         cp_init('categoryColour');
         blocklyFactory.openModal('dropdownDiv_editCategory');
@@ -252,7 +255,8 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
       ('click',
       function() {
         var name = document.getElementById('categoryName').value.trim();
-        var colour = '#' + document.getElementById('categoryColour').value;
+        var colour = document.getElementById('categoryColour').value;
+        colour = colour ? '#' + colour : null;
         controller.changeSelectedCategory(name, colour);
         blocklyFactory.closeModal();
       });

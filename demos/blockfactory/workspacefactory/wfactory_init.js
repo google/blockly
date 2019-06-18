@@ -62,21 +62,30 @@ WorkspaceFactoryInit.initWorkspaceFactory = function(controller) {
  */
 WorkspaceFactoryInit.initColourPicker_ = function(controller) {
   // Array of Blockly category colours, consistent with the colour defaults.
-  var colours = [
-    [20, 65, 120],
-    [160, 210, 230],
-    [260, 290, '']
-  ];
+  var colours = [20, 65, 120, 160, 210, 230, 260, 290, 330, ''];
   // Convert hue numbers to RRGGBB strings.
-  for (var y = 0; y < colours.length; y++) {
-    for (var x = 0; x < colours[y].length; x++) {
-      if (colours[y][x] !== '') {
-        colours[y][x] = Blockly.hueToHex(colours[y][x]).substring(1);
-      }
+  for (var i = 0; i < colours.length; i++) {
+    if (colours[i] !== '') {
+      colours[i] = Blockly.hueToHex(colours[i]).substring(1);
     }
   }
+  // Convert to 2D array.
+  var maxCols = Math.ceil(Math.sqrt(colours.length));
+  var grid = [];
+  var row = [];
+  for (var i = 0; i < colours.length; i++) {
+    row.push(colours[i]);
+    if (row.length == maxCols) {
+      grid.push(row);
+      row = [];
+    }
+  }
+  if (row.length) {
+    grid.push(row);
+  }
+
   // Override the default colours.
-  cp_grid = colours;
+  cp_grid = grid;
 };
 
 /**
@@ -246,6 +255,7 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
         document.getElementById('categoryName').value = selected.name;
         document.getElementById('categoryColour').value = selected.color ?
             selected.color.substring(1).toLowerCase() : '';
+        console.log(document.getElementById('categoryColour').value);
         // Link the colour picker to the field.
         cp_init('categoryColour');
         blocklyFactory.openModal('dropdownDiv_editCategory');

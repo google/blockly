@@ -14,7 +14,7 @@ index.html
 blocks.js
 ...
 vendor/blockly/
-vender/closure-library
+vender/closure-library/
 ```
 Therefore, you should use the submodule that will be inside the [pc-standalone-app](https://github.com/ShapeRobotics/pc-standalone-app) repo.
 

@@ -162,6 +162,15 @@ Blockly.RenderedConnection.prototype.setOffsetInBlock = function(x, y) {
 };
 
 /**
+ * Registers the margins of a block, so the highlight 
+ * (yellow line around block when clickedo on) can also be aligned vertically.
+ */
+Blockly.RenderedConnection.prototype.addHighlightMargin = function(top, bottom) {
+  this.topMargin = top;
+  this.bottomMargin = bottom;
+};
+
+/**
  * Move the blocks on either side of this connection right next to each other.
  * @private
  */
@@ -202,7 +211,13 @@ Blockly.RenderedConnection.prototype.closest = function(maxLimit, dxy) {
 Blockly.RenderedConnection.prototype.highlight = function() {
   var steps;
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
-    steps = 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 5';
+    //If the block has top/bottom margins registered, add that to the SVG path of the highlight.
+    if (this.topMargin && this.bottomMargin) {
+      steps = 'm 0,0 ' + 'v ' + this.topMargin + ' ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v ' + this.bottomMargin;
+    }
+    else {
+      steps = 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 7.5'; // OR 5 instead of 7.5, according to Google <<<<<<<<<<<<<<
+    }
   } else {
     steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
   }

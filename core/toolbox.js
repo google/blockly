@@ -499,7 +499,7 @@ Blockly.Toolbox.prototype.addColour_ = function(opt_tree) {
     var element = child.getRowElement();
     if (element) {
       if (this.hasColours_) {
-        var border = '8px solid ' + (child.hexColour || '#ddd');
+        var border = '16px solid ' + (child.hexColour || '#ddd');
       } else {
         var border = 'none';
       }

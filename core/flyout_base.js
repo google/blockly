@@ -832,5 +832,9 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   var finalOffsetMainWs = finalOffsetPixels.scale(1 / targetWorkspace.scale);
 
   block.moveBy(finalOffsetMainWs.x, finalOffsetMainWs.y);
+
+  //SHAPE: Added from blockly_changes
+  incrementCounter(oldBlock);
+  
   return block;
 };

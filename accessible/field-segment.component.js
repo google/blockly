@@ -152,6 +152,10 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
   isNumberInput: function() {
     return this.mainField instanceof Blockly.FieldNumber;
   },
+  // Returns true if the field is text input, false otherwise.
+  isButtonInput: function() {
+    return this.mainField instanceof Blockly.ButtonInput;
+  },
   // Returns true if the field is a dropdown, false otherwise.
   isDropdown: function() {
     return this.mainField instanceof Blockly.FieldDropdown;

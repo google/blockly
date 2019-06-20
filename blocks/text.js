@@ -201,6 +201,25 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_TEXT_CHARAT_HELPURL}",
     "inputsInline": true,
     "mutator": "text_charAt_mutator"
+  },
+  {
+    "type": "fable_text_join",
+    "message0": "%1 + %2",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "FIRSTTEXT"
+      },
+      {
+        "type": "input_value",
+        "name": "SECONDTEXT"
+      }
+    ],
+    "output": "String",
+    "colour": "#8c1bb5",
+    "tooltip": "",
+    "helpUrl": "",
+    "inputsInline": true
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 

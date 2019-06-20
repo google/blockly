@@ -57,11 +57,14 @@ Blockly.Warning.prototype.collapseHidden = false;
  * @private
  */
 Blockly.Warning.prototype.drawIcon_ = function(group) {
+  var scale = this.SIZE / this.REFERENCE_SIZE;
+
   // Triangle with rounded corners.
   Blockly.utils.createSvgElement('path',
       {
         'class': 'blocklyIconShape',
-        'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z'
+        'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z',
+        'transform': 'scale(' + scale + ', ' + scale + ')',
       },
       group);
   // Can't use a real '!' text character since different browsers and operating
@@ -70,14 +73,18 @@ Blockly.Warning.prototype.drawIcon_ = function(group) {
   Blockly.utils.createSvgElement('path',
       {
         'class': 'blocklyIconSymbol',
-        'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z'
+        'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z',
+        'transform': 'scale(' + scale + ', ' + scale + ')',
       },
       group);
   // Dot of exclamation point.
   Blockly.utils.createSvgElement('rect',
       {
         'class': 'blocklyIconSymbol',
-        'x': '7', 'y': '11', 'height': '2', 'width': '2'
+        'x': 7 * scale, 
+        'y': 11 * scale, 
+        'height': 2 * scale, 
+        'width': 2 * scale
       },
       group);
 };

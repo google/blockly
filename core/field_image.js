@@ -40,10 +40,12 @@ goog.require('goog.math.Size');
  * @param {string=} opt_alt Optional alt text for when block is collapsed.
  * @param {Function=} opt_onClick Optional function to be called when the image
  *     is clicked.  If opt_onClick is defined, opt_alt must also be defined.
+ * @param {boolean=} opt_flipRtl Whether to flip the icon in RTL.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldImage = function(src, width, height, opt_alt, opt_onClick) {
+Blockly.FieldImage = function(src, width, height,
+    opt_alt, opt_onClick, opt_flipRtl) {
   this.sourceBlock_ = null;
 
   // Ensure height and width are numbers.  Strings are bad at math.
@@ -51,9 +53,10 @@ Blockly.FieldImage = function(src, width, height, opt_alt, opt_onClick) {
   this.width_ = Number(width);
   this.size_ = new goog.math.Size(this.width_,
       this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
-  this.text_ = opt_alt || '';
+  this.flipRtl_ = opt_flipRtl;
   this.tooltip_ = '';
   this.setValue(src);
+  this.setText(opt_alt);
 
   if (typeof opt_onClick == 'function') {
     this.clickHandler_ = opt_onClick;
@@ -64,9 +67,9 @@ goog.inherits(Blockly.FieldImage, Blockly.Field);
 /**
  * Construct a FieldImage from a JSON arg object,
  * dereferencing any string table references.
- * @param {!Object} options A JSON object with options (src, width, height, and
- *                          alt).
- * @returns {!Blockly.FieldImage} The new field instance.
+ * @param {!Object} options A JSON object with options (src, width, height,
+ *    alt, and flipRtl).
+ * @return {!Blockly.FieldImage} The new field instance.
  * @package
  * @nocollapse
  */
@@ -76,7 +79,8 @@ Blockly.FieldImage.fromJson = function(options) {
   var height =
       Number(Blockly.utils.replaceMessageReferences(options['height']));
   var alt = Blockly.utils.replaceMessageReferences(options['alt']);
-  return new Blockly.FieldImage(src, width, height, alt);
+  var flipRtl = !!options['flipRtl'];
+  return new Blockly.FieldImage(src, width, height, alt, null, flipRtl);
 };
 
 /**
@@ -107,6 +111,7 @@ Blockly.FieldImage.prototype.init = function() {
       },
       this.fieldGroup_);
   this.setValue(this.src_);
+  this.setText(this.text_);
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
 
   if (this.tooltip_) {
@@ -183,6 +188,14 @@ Blockly.FieldImage.prototype.setValue = function(src) {
 };
 
 /**
+ * Get whether to flip this image in RTL
+ * @return {boolean} True if we should flip in RTL.
+ */
+Blockly.FieldImage.prototype.getFlipRtl = function() {
+  return this.flipRtl_;
+};
+
+/**
  * Set the alt text of this image.
  * @param {?string} alt New alt text.
  * @override
@@ -193,6 +206,9 @@ Blockly.FieldImage.prototype.setText = function(alt) {
     return;
   }
   this.text_ = alt;
+  if (this.imageElement_) {
+    this.imageElement_.setAttribute('alt', alt || '');
+  }
 };
 
 /**

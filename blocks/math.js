@@ -53,8 +53,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "value": 0
     }],
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
     "helpUrl": "%{BKY_MATH_NUMBER_HELPURL}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_NUMBER_TOOLTIP}",
     "extensions": ["parent_tooltip_when_inline"]
   },
@@ -88,7 +88,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_ARITHMETIC_HELPURL}",
     "extensions": ["math_op_tooltip"]
   },
@@ -118,7 +118,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_SINGLE_HELPURL}",
     "extensions": ["math_op_tooltip"]
   },
@@ -147,7 +147,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_TRIG_HELPURL}",
     "extensions": ["math_op_tooltip"]
   },
@@ -171,7 +171,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_CONSTANT_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_CONSTANT_HELPURL}"
   },
@@ -203,7 +203,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Boolean",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_IS_TOOLTIP}",
     "mutator": "math_is_divisibleby_mutator"
   },
@@ -226,7 +226,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "previousStatement": null,
     "nextStatement": null,
-    "colour": "%{BKY_VARIABLES_HUE}",
+    "style": "variable_blocks",
     "helpUrl": "%{BKY_MATH_CHANGE_HELPURL}",
     "extensions": ["math_change_tooltip"]
   },
@@ -252,7 +252,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_ROUND_HELPURL}",
     "tooltip": "%{BKY_MATH_ROUND_TOOLTIP}"
   },
@@ -284,7 +284,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_ONLIST_HELPURL}",
     "mutator": "math_modes_of_list_mutator",
     "extensions": ["math_op_tooltip"]
@@ -308,7 +308,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_MODULO_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_MODULO_HELPURL}"
   },
@@ -336,7 +336,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_CONSTRAIN_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_CONSTRAIN_HELPURL}"
   },
@@ -359,7 +359,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_RANDOM_INT_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_RANDOM_INT_HELPURL}"
   },
@@ -369,7 +369,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "type": "math_random_float",
     "message0": "%{BKY_MATH_RANDOM_FLOAT_TITLE_RANDOM}",
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_RANDOM_FLOAT_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_RANDOM_FLOAT_HELPURL}"
   },
@@ -392,7 +392,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "inputsInline": true,
     "output": "Number",
-    "colour": "%{BKY_MATH_HUE}",
+    "style": "math_blocks",
     "tooltip": "%{BKY_MATH_ATAN2_TOOLTIP}",
     "helpUrl": "%{BKY_MATH_ATAN2_HELPURL}"
   }

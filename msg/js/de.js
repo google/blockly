@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Kommentar hinzufügen";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Die Variable „%1“ kann nicht gelöscht werden, da sie Teil der Definition der Funktion „%2“ ist.";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Wert ändern:";
 Blockly.Msg["CLEAN_UP"] = "Bausteine aufräumen";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Eingeklappte Blöcke enthalten Warnungen.";
 Blockly.Msg["COLLAPSE_ALL"] = "Alle Bausteine zusammenfalten";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Baustein zusammenfalten";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "Farbe 1";

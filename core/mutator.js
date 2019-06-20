@@ -141,6 +141,10 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     var quarkXml = null;
   }
   var workspaceOptions = {
+    // If you want to enable disabling, also remove the
+    // event filter from workspaceChanged_ .
+    disable: false,
+    disabledPatternId: this.block_.workspace.options.disabledPatternId,
     languageTree: quarkXml,
     parentWorkspace: this.block_.workspace,
     pathToMedia: this.block_.workspace.options.pathToMedia,
@@ -153,6 +157,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   };
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;
+  this.workspace_.addChangeListener(Blockly.Events.disableOrphans);
 
   // Mutator flyouts go inside the mutator workspace's <g> rather than in
   // a top level svg. Instead of handling scale themselves, mutators
@@ -270,7 +275,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.rootBlock_.setDeletable(false);
     if (this.workspace_.flyout_) {
       var margin = this.workspace_.flyout_.CORNER_RADIUS * 2;
-      var x = this.workspace_.flyout_.width_ + margin;
+      var x = this.workspace_.getFlyout().getWidth() + margin;
     } else {
       var margin = 16;
       var x = margin;
@@ -313,9 +318,15 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
  * Update the source block when the mutator's blocks are changed.
  * Bump down any block that's too high.
  * Fired whenever a change is made to the mutator's workspace.
+ * @param {!Blockly.Events.Abstract} e Custom data for event.
  * @private
  */
-Blockly.Mutator.prototype.workspaceChanged_ = function() {
+Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
+  if (e.type == Blockly.Events.UI ||
+      (e.type == Blockly.Events.CHANGE && e.element == 'disabled')) {
+    return;
+  }
+
   if (!this.workspace_.isDragging()) {
     var blocks = this.workspace_.getTopBlocks(false);
     var MARGIN = 20;
@@ -383,9 +394,10 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
 Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
   return {
     viewHeight: this.workspaceHeight_,
-    viewWidth: this.workspaceWidth_,
+    viewWidth: this.workspaceWidth_ - this.workspace_.getFlyout().getWidth(),
     absoluteTop: 0,
-    absoluteLeft: 0
+    absoluteLeft: this.workspace_.RTL ? 0 :
+        this.workspace_.getFlyout().getWidth()
   };
 };
 
@@ -395,6 +407,28 @@ Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
 Blockly.Mutator.prototype.dispose = function() {
   this.block_.mutator = null;
   Blockly.Icon.prototype.dispose.call(this);
+};
+
+/**
+ * Update the styles on all blocks in the mutator.
+ * @public
+ */
+Blockly.Mutator.prototype.updateBlockStyle = function() {
+  var ws = this.workspace_;
+
+  if (ws && ws.getAllBlocks()){
+    var workspaceBlocks = ws.getAllBlocks();
+    for (var i = 0; i < workspaceBlocks.length; i++) {
+      var block = workspaceBlocks[i];
+      block.setStyle(block.getStyleName());
+    }
+
+    var flyoutBlocks = ws.flyout_.workspace_.getAllBlocks();
+    for (var i = 0; i < flyoutBlocks.length; i++) {
+      var block = flyoutBlocks[i];
+      block.setStyle(block.getStyleName());
+    }
+  }
 };
 
 /**
@@ -425,8 +459,8 @@ Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
 /**
  * Get the parent workspace of a workspace that is inside a mutator, taking into
  * account whether it is a flyout.
- * @param {?Blockly.Workspace} workspace The workspace that is inside a mutator.
- * @return {?Blockly.Workspace} The mutator's parent workspace or null.
+ * @param {Blockly.Workspace} workspace The workspace that is inside a mutator.
+ * @return {Blockly.Workspace} The mutator's parent workspace or null.
  * @public
  */
 Blockly.Mutator.findParentWs = function(workspace) {

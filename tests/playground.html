@@ -65,6 +65,7 @@
 <script src="../blocks/variables_dynamic.js"></script>
 <script src="../blocks/procedures.js"></script>
 <script src="blocks/test_blocks.js"></script>
+
 <script>
 'use strict';
 var workspace = null;
@@ -103,12 +104,16 @@ function start() {
           },
         horizontalLayout: side == 'top' || side == 'bottom',
         maxBlocks: Infinity,
-        maxInstances: {'limit_instances': 3},
+        maxInstances: {'test_basic_limit_instances': 3},
         media: '../media/',
         oneBasedIndex: true,
         readOnly: false,
         rtl: rtl,
-        scrollbars: true,
+        move: {
+          scrollbars: true,
+          drag: true,
+          wheel: false,
+        },
         toolbox: toolbox,
         toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
         zoom:
@@ -121,6 +126,7 @@ function start() {
             scaleSpeed: 1.1
           }
       });
+  addToolboxButtonCallbacks();
   // Restore previously displayed text.
   if (sessionStorage) {
     var text = sessionStorage.getItem('textarea');
@@ -135,6 +141,24 @@ function start() {
     logEvents(false);
   }
   taChange();
+}
+
+function addToolboxButtonCallbacks() {
+  workspace.registerButtonCallback(
+      'addDynamicOption', Blockly.TestBlocks.addDynamicDropdownOption_);
+  workspace.registerButtonCallback(
+      'removeDynamicOption', Blockly.TestBlocks.removeDynamicDropdownOption_);
+}
+
+function changeTheme() {
+  var theme = document.getElementById('themeChanger');
+  if (theme.value === "modern") {
+    Blockly.setTheme(Blockly.Themes.Modern);
+  } else if (theme.value === "high_contrast") {
+    Blockly.setTheme(Blockly.Themes.HighContrast);
+  } else {
+    Blockly.setTheme(Blockly.Themes.Classic);
+  }
 }
 
 function setBackgroundColour() {
@@ -328,7 +352,11 @@ h1 {
       <option value="bottom">Bottom</option>
     </select>
   </form>
-
+  <select id="themeChanger" name="theme" onchange="changeTheme()">
+    <option value="classic">Classic</option>
+    <option value="modern">Modern</option>
+    <option value="high_contrast">High Contrast</option>
+  </select>
   <p>
     <input type="button" value="Export to XML" onclick="toXml()">
     &nbsp;
@@ -393,7 +421,7 @@ h1 {
   Variables category uses untyped variable blocks.
   See https://developers.google.com/blockly/guides/create-custom-blocks/variables#untyped_variable_blocks for more information. -->
   <xml id="toolbox-categories" style="display: none">
-    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+    <category name="Logic" categorystyle="logic_category">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
@@ -402,7 +430,7 @@ h1 {
       <block type="logic_null" disabled="true"></block>
       <block type="logic_ternary"></block>
     </category>
-    <category name="Loops" colour="%{BKY_LOOPS_HUE}">
+    <category name="Loops" categorystyle="loop_category">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <shadow type="math_number">
@@ -432,7 +460,7 @@ h1 {
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
     </category>
-    <category name="Math" colour="%{BKY_MATH_HUE}">
+    <category name="Math" categorystyle="math_category">
       <block type="math_number" gap="32">
         <field name="NUM">123</field>
       </block>
@@ -533,7 +561,7 @@ h1 {
         </value>
       </block>
     </category>
-    <category name="Text" colour="%{BKY_TEXTS_HUE}">
+    <category name="Text" categorystyle="text_category">
       <block type="text"></block>
       <block type="text_join"></block>
       <block type="text_append">
@@ -635,7 +663,7 @@ h1 {
         </value>
       </block>
     </category>
-    <category name="Lists" colour="%{BKY_LISTS_HUE}">
+    <category name="Lists" categorystyle="list_category">
       <block type="lists_create_with">
         <mutation items="0"></mutation>
       </block>
@@ -687,7 +715,7 @@ h1 {
       <block type="lists_sort"></block>
       <block type="lists_reverse"></block>
     </category>
-    <category name="Colour" colour="%{BKY_COLOUR_HUE}">
+    <category name="Colour" categorystyle="colour_category">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
       <block type="colour_rgb">
@@ -726,15 +754,15 @@ h1 {
       </block>
     </category>
     <sep></sep>
-    <category name="Variables" colour="%{BKY_VARIABLES_HUE}" custom="VARIABLE"></category>
-    <category name="Functions" colour="%{BKY_PROCEDURES_HUE}" custom="PROCEDURE"></category>
+    <category name="Variables" categorystyle="variable_category" custom="VARIABLE"></category>
+    <category name="Functions" categorystyle="procedure_category" custom="PROCEDURE"></category>
   </xml>
 
   <!-- toolbox-categories-typed-variables has a category menu and an
   auto-closing flyout.  The Variables category uses typed variable blocks.
   See https://developers.google.com/blockly/guides/create-custom-blocks/variables#typed_variable_blocks for more information. -->
   <xml id="toolbox-categories-typed-variables" style="display: none">
-    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+    <category name="Logic" categorystyle="logic_category">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
@@ -743,7 +771,7 @@ h1 {
       <block type="logic_null" disabled="true"></block>
       <block type="logic_ternary"></block>
     </category>
-    <category name="Loops" colour="%{BKY_LOOPS_HUE}">
+    <category name="Loops" categorystyle="loop_category">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <shadow type="math_number">
@@ -773,7 +801,7 @@ h1 {
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
     </category>
-    <category name="Math" colour="%{BKY_MATH_HUE}">
+    <category name="Math" categorystyle="math_category">
       <block type="math_number" gap="32">
         <field name="NUM">123</field>
       </block>
@@ -874,7 +902,7 @@ h1 {
         </value>
       </block>
     </category>
-    <category name="Text" colour="%{BKY_TEXTS_HUE}">
+    <category name="Text" categorystyle="text_category">
       <block type="text"></block>
       <block type="text_join"></block>
       <block type="text_append">
@@ -976,7 +1004,7 @@ h1 {
         </value>
       </block>
     </category>
-    <category name="Lists" colour="%{BKY_LISTS_HUE}">
+    <category name="Lists" categorystyle="list_category">
       <block type="lists_create_with">
         <mutation items="0"></mutation>
       </block>
@@ -1028,7 +1056,7 @@ h1 {
       <block type="lists_sort"></block>
       <block type="lists_reverse"></block>
     </category>
-    <category name="Colour" colour="%{BKY_COLOUR_HUE}">
+    <category name="Colour" categorystyle="colour_category">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
       <block type="colour_rgb">
@@ -1067,8 +1095,8 @@ h1 {
       </block>
     </category>
     <sep></sep>
-    <category name="Variables" colour="%{BKY_VARIABLES_DYNAMIC_HUE}" custom="VARIABLE_DYNAMIC"></category>
-    <category name="Functions" colour="%{BKY_PROCEDURES_HUE}" custom="PROCEDURE"></category>
+    <category name="Variables" categorystyle="variable_category" custom="VARIABLE_DYNAMIC"></category>
+    <category name="Functions" categorystyle="procedure_category" custom="PROCEDURE"></category>
   </xml>
 
   <!-- toolbox-test-blocks has a category menu and an auto-closing flyout.
@@ -1077,11 +1105,11 @@ h1 {
   code paths. -->
   <xml id="toolbox-test-blocks" style="display: none">
     <category name="Basic">
-      <block type="empty_block"></block>
-      <block type="empty_block_with_mutator"></block>
-      <block type="value_to_stack"></block>
-      <block type="value_to_statement"></block>
-      <block type="limit_instances"></block>
+      <block type="test_basic_empty"></block>
+      <block type="test_basic_empty_with_mutator"></block>
+      <block type="test_basic_value_to_stack"></block>
+      <block type="test_basic_value_to_statement"></block>
+      <block type="test_basic_limit_instances"></block>
     </category>
     <category name="Drag">
       <label text="Drag each to the workspace"></label>
@@ -1098,6 +1126,22 @@ h1 {
             <field name="TEXT">Drag me by this shadow</field>
           </shadow>
         </value>
+      </block>
+      <block type="text_print">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">Shadow value</field>
+          </shadow>
+        </value>
+        <next>
+          <shadow type="text_print">
+            <value name="TEXT">
+              <shadow type="text">
+                <field name="TEXT">Shadow statement</field>
+              </shadow>
+            </value>
+          </shadow>
+        </next>
       </block>
       <label text="Multiple Variable Refs"></label>
       <block type="text_print">
@@ -1150,25 +1194,29 @@ h1 {
     </category>
     <category name="Fields">
       <label text="Numbers"></label>
-      <block type="test_number">
+      <block type="test_fields_number">
         <field name="NUM">123.456</field>
       </block>
-      <block type="test_integer">
+      <block type="test_fields_integer">
         <field name="NUM">123.456</field>
       </block>
-      <block type="test_number_hundredths">
+      <block type="test_fields_number_hundredths">
         <field name="NUM">123.456</field>
       </block>
-      <block type="test_integer_bounded">
+      <block type="test_fields_integer_bounded">
         <field name="NOTE">60</field>
       </block>
       <label text="Drop-downs"></label>
-      <block type="example_dropdown_long"></block>
-      <block type="example_dropdown_images"></block>
-      <block type="example_dropdown_images_and_text"></block>
+      <block type="test_fields_dropdown_long"></block>
+      <block type="test_fields_dropdown_images"></block>
+      <block type="test_fields_dropdown_images_and_text"></block>
+      <label text="Dynamic Drop-downs"></label>
+      <block type="test_fields_dropdown_dynamic"></block>
+      <button text="Add option" callbackKey="addDynamicOption"></button>
+      <button text="Remove option" callbackKey="removeDynamicOption"></button>
       <label text="Others"></label>
-      <block type="example_angle"></block>
-      <block type="example_date"></block>
+      <block type="test_fields_angle"></block>
+      <block type="test_fields_date"></block>
     </category>
     <category name="Mutators">
       <label text="logic_compare"></label>
@@ -1199,23 +1247,24 @@ h1 {
     </category>
     <category name="Style">
       <label text="Hats"></label>
-      <block type="styled_event_cap"></block>
+      <block type="test_style_hat"></block>
       <label text="Colour"></label>
-      <block type="block_colour_hex1"></block>
-      <block type="block_colour_hex2"></block>
-      <block type="block_colour_hex3"></block>
-      <block type="block_no_colour"></block>
-      <block type="block_colour_hex4"></block>
-      <block type="block_colour_hex5"></block>
+      <block type="test_style_hex1"></block>
+      <block type="test_style_hex2"></block>
+      <block type="test_style_hex3"></block>
+      <block type="test_style_no_colour"></block>
+      <block type="test_style_hex4"></block>
+      <block type="test_style_hex5"></block>
     </category>
     <category name="Images">
-      <block type="image_datauri"></block>
-      <block type="image_small"></block>
-      <block type="image_large"></block>
-      <block type="image_missing"></block>
-      <block type="test_with_lots_of_network_icons"></block>
+      <block type="test_images_datauri"></block>
+      <block type="test_images_small"></block>
+      <block type="test_images_large"></block>
+      <block type="test_images_fliprtl"></block>
+      <block type="test_images_missing"></block>
+      <block type="test_images_many_icons"></block>
       <label text="Unicode & Emojis"></label>
-      <block type="emoji_label_robot_face"></block>
+      <block type="test_style_emoji"></block>
       <block type="text">
         <field name="TEXT">Robot face in text field: &#x1f916;</field>
       </block>

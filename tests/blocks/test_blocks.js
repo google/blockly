@@ -19,21 +19,23 @@
  */
 'use strict';
 
+goog.provide('Blockly.TestBlocks');
+
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   {
-    "type": "empty_block",
+    "type": "test_basic_empty",
     "message0": "",
     "args0": []
   },
   {
-    "type": "value_to_stack",
+    "type": "test_basic_value_to_stack",
     "message0": "value to stack",
     "nextStatement": null,
     "output": null,
-    "colour": 230
+    "style": "math_blocks"
   },
   {
-    "type": "value_to_statement",
+    "type": "test_basic_value_to_statement",
     "message0": "value to statement %1",
     "args0": [
       {
@@ -42,10 +44,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": null,
-    "colour": 230
+    "style": "math_blocks"
   },
   {
-    "type": "limit_instances",
+    "type": "test_basic_limit_instances",
     "message0": "limit 3 instances %1 %2",
     "args0": [
       {
@@ -58,10 +60,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "style": "math_blocks",
   },
   {
-    "type": "example_dropdown_long",
+    "type": "test_fields_dropdown_long",
     "message0": "long: %1",
     "args0": [
       {
@@ -105,7 +107,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ]
   },
   {
-    "type": "example_dropdown_images",
+    "type": "test_fields_dropdown_images",
     "message0": "%1",
     "args0": [
       {
@@ -131,7 +133,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ]
   },
   {
-    "type": "example_dropdown_images_and_text",
+    "type": "test_fields_dropdown_images_and_text",
     "message0": "%1",
     "args0": [
       {
@@ -158,7 +160,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ]
   },
   {
-    "type": "example_angle",
+    "type": "test_fields_angle",
     "message0": "angle: %1",
     "args0": [
       {
@@ -171,10 +173,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
             "text": "NO ANGLE FIELD"
           }
       }
-    ]
+    ],
+    "colour": "230"
   },
   {
-    "type": "example_date",
+    "type": "test_fields_date",
     "message0": "date: %1",
     "args0": [
       {
@@ -190,7 +193,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ]
   },
   {
-    "type": "test_number",
+    "type": "test_fields_number",
     "message0": "float %1",
     "args0": [
       {
@@ -199,12 +202,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "text": "0"
       }
     ],
-    "colour": 230,
+    "style": "math_blocks",
     "output": "Number",
     "tooltip": "A number."
   },
   {
-    "type": "test_integer",
+    "type": "test_fields_integer",
     "message0": "integer %1",
     "args0": [
       {
@@ -214,12 +217,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "text": "0"
       }
     ],
-    "colour": 230,
+    "style": "math_blocks",
     "output": "Number",
     "tooltip": "An integer."
   },
   {
-    "type": "test_number_hundredths",
+    "type": "test_fields_number_hundredths",
     "message0": "$ %1",
     "args0": [
       {
@@ -229,12 +232,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "text": "0"
       }
     ],
-    "colour": 230,
+    "style": "math_blocks",
     "output": "Number",
     "tooltip": "A dollar amount."
   },
   {
-    "type": "test_integer_bounded",
+    "type": "test_fields_integer_bounded",
     "message0": "midi note %1",
     "args0": [
       {
@@ -246,12 +249,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "text": "0"
       }
     ],
-    "colour": 230,
+    "style": "math_blocks",
     "output": "Note",
     "tooltip": "A midi note."
   },
   {
-    "type": "image_datauri",
+    "type": "test_images_datauri",
     "message0": "Image data: URI %1",
     "args0": [
       {
@@ -262,10 +265,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "alt": "*"
       }
     ],
-    "colour": 160
+    "style": "text_blocks"
   },
   {
-    "type": "image_small",
+    "type": "test_images_small",
     "message0": "Image too small %1",
     "args0": [
       {
@@ -276,10 +279,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "alt": "*"
       }
     ],
-    "colour": 160
+    "style": "text_blocks"
   },
   {
-    "type": "image_large",
+    "type": "test_images_large",
     "message0": "Image too large %1",
     "args0": [
       {
@@ -290,10 +293,25 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "alt": "*"
       }
     ],
+    "style": "text_blocks"
+  },
+  {
+    "type": "test_images_fliprtl",
+    "message0": "Image flipped RTL %1",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "media/arrow.png",
+        "width": 50,
+        "height": 50,
+        "alt": "*",
+        "flipRtl": true
+      }
+    ],
     "colour": 160
   },
   {
-    "type": "image_missing",
+    "type": "test_images_missing",
     "message0": "Image missing %1",
     "args0": [
       {
@@ -304,10 +322,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "alt": "*"
       }
     ],
-    "colour": 160
+    "style": "text_blocks"
   },
   {
-    "type": "test_with_lots_of_network_icons",
+    "type": "test_images_many_icons",
     "message0": "Lots of network icons: %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14 %15 %16 %17 %18",
     "args0": [
       {
@@ -429,19 +447,16 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "alt": "H"
       }
     ],
-    "colour": 160
+    "style": "text_blocks"
   },
   {
-    "type": "styled_event_cap",
+    "type": "test_style_hat",
     "message0": "Hat block (event)",
     "nextStatement": null,
-    "colour": 330,
-    "style": {
-      "hat": "cap"
-    }
+    "style": "hat_blocks"
   },
   {
-    "type": "block_colour_hex1",
+    "type": "test_style_hex1",
     "message0": "Block color: Bright purple %1 %2 %3 %4",
     "args0": [
       {
@@ -472,7 +487,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "colour": "#992aff"
   },
   {
-    "type": "block_colour_hex2",
+    "type": "test_style_hex2",
     "message0": "Block color: White %1 %2 %3 %4",
     "args0": [
       {
@@ -503,7 +518,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "colour": "#fefefe"
   },
   {
-    "type": "block_colour_hex3",
+    "type": "test_style_hex3",
     "message0": "Block color: Black %1 %2 %3 %4",
     "args0": [
       {
@@ -534,28 +549,95 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "colour": "#010101"
   },
   {
-    "type": "block_no_colour",
+    "type": "test_style_no_colour",
     "message0": "Block color: unset"
   },
   {
-    "type": "block_colour_hex4",
+    "type": "test_style_hex4",
     "message0": "Block color: #RRGGBBAA (invalid)",
     "colour": "#992aff99"
   },
   {
-    "type": "block_colour_hex5",
+    "type": "test_style_hex5",
     "message0": "Block color: #RRGGBB (invalid)",
     "colour": "#NotHex"
   },
   {
-    "type": "emoji_label_robot_face",
+    "type": "test_style_emoji",
     "message0": "Robot Face: \uD83E\uDD16",
     "colour": "#AAAAAA"
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
-Blockly.Blocks['empty_block_with_mutator'] = {
+Blockly.Blocks['test_basic_empty_with_mutator'] = {
   init: function() {
     this.setMutator(new Blockly.Mutator(['math_number']));
   }
+};
+
+Blockly.Blocks['test_fields_dropdown_dynamic'] = {
+  init: function() {
+    var dropdown = new Blockly.FieldDropdown(this.dynamicOptions);
+    this.appendDummyInput()
+      .appendField('dynamic')
+      .appendField(dropdown, 'OPTIONS');
+  },
+
+  dynamicOptions: function() {
+    if (!Blockly.TestBlocks.dynamicDropdownOptions_.length) {
+      return [['', 'OPTION0']];
+    }
+    return Blockly.TestBlocks.dynamicDropdownOptions_;
+  }
+};
+
+/**
+ * An array of options for the dynamic dropdown.
+ * @type {!Array<!Array>}
+ * @package
+ */
+Blockly.TestBlocks.dynamicDropdownOptions_ = [];
+
+/**
+ * Handles "add option" button in the field test category. This will prompt
+ * the user for an option to add.
+ * @package
+ */
+Blockly.TestBlocks.addDynamicDropdownOption_ = function() {
+  Blockly.prompt('Add an option?',
+      'option '  + Blockly.TestBlocks.dynamicDropdownOptions_.length,
+      function(text) {
+    if (text) {
+      // Do not remove this log! Helps you know if it was added correctly.
+      console.log('Adding option: ' + text);
+      // The option is an array containing human-readable text and a
+      // language-neutral id.
+      Blockly.TestBlocks.dynamicDropdownOptions_.push(
+          [text, 'OPTION' + Blockly.TestBlocks.dynamicDropdownOptions_.length]);
+    }
+  })
+};
+
+/**
+ * Handles "remove option" button in the field test category. This will prompt
+ * the user for an option to remove. May remove multiple options with the
+ * same name.
+ * @package
+ */
+Blockly.TestBlocks.removeDynamicDropdownOption_ = function() {
+  var defaultText = Blockly.TestBlocks.dynamicDropdownOptions_[0] ?
+      Blockly.TestBlocks.dynamicDropdownOptions_[0][0] : '';
+  Blockly.prompt('Remove an option?', defaultText, function(text) {
+    for (var i = 0, option;
+         option = Blockly.TestBlocks.dynamicDropdownOptions_[i];
+         i++) {
+      // The option is an array containing human-readable text and a
+      // language-neutral id, we'll compare against the human-readable text.
+      if (option[0] == text) {
+        // Do not remove this log! Helps you know if it was removed correctly.
+        console.log('Removing option: ' + text);
+        Blockly.TestBlocks.dynamicDropdownOptions_.splice(i, 1);
+      }
+    }
+  })
 };

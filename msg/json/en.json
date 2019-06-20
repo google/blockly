@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-10-29 17:01:07.395197",
+		"lastupdated": "2019-04-08 19:20:18.617135",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -45,13 +45,13 @@
 	"COLOUR_RANDOM_HELPURL": "http://randomcolour.com",
 	"COLOUR_RANDOM_TITLE": "random colour",
 	"COLOUR_RANDOM_TOOLTIP": "Choose a colour at random.",
-	"COLOUR_RGB_HELPURL": "http://www.december.com/html/spec/colorper.html",
+	"COLOUR_RGB_HELPURL": "https://www.december.com/html/spec/colorpercompact.html",
 	"COLOUR_RGB_TITLE": "colour with",
 	"COLOUR_RGB_RED": "red",
 	"COLOUR_RGB_GREEN": "green",
 	"COLOUR_RGB_BLUE": "blue",
 	"COLOUR_RGB_TOOLTIP": "Create a colour with the specified amount of red, green, and blue. All values must be between 0 and 100.",
-	"COLOUR_BLEND_HELPURL": "http://meyerweb.com/eric/tools/color-blend/",
+	"COLOUR_BLEND_HELPURL": "https://meyerweb.com/eric/tools/color-blend/#:::rgbp",
 	"COLOUR_BLEND_TITLE": "blend",
 	"COLOUR_BLEND_COLOUR1": "colour 1",
 	"COLOUR_BLEND_COLOUR2": "colour 2",
@@ -401,5 +401,6 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "If a value is true, then return a second value.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Warning: This block may be used only within a function definition.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Say something..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Say something...",
+	"COLLAPSED_WARNINGS_WARNING": "Collapsed blocks contain warnings."
 }

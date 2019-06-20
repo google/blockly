@@ -1,13 +1,4 @@
 {
-	"@metadata": {
-		"authors": [
-			"Espertus",
-			"Liuxinyu970226",
-			"Metalhead64",
-			"Robby",
-			"Shirayuki"
-		]
-	},
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
 	"TODAY": "button text - Button that sets a calendar to today's date.\n{{Identical|Today}}",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}",
@@ -48,17 +39,17 @@
 	"COLOUR_RANDOM_HELPURL": "{{Optional}} url - A link that displays a random colour each time you visit it.",
 	"COLOUR_RANDOM_TITLE": "block text - Title of block that generates a colour at random.",
 	"COLOUR_RANDOM_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Colour#generating-a-random-colour https://github.com/google/blockly/wiki/Colour#generating-a-random-colour].",
-	"COLOUR_RGB_HELPURL": "{{Optional}} url - A link for color codes with percentages (0-100%) for each component, instead of the more common 0-255, which may be more difficult for beginners.",
+	"COLOUR_RGB_HELPURL": "{{Optional}} url - A link for colour codes with percentages (0-100%) for each component, instead of the more common 0-255, which may be more difficult for beginners.",
 	"COLOUR_RGB_TITLE": "block text - Title of block for [https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components].",
 	"COLOUR_RGB_RED": "block input text - The amount of red (from 0 to 100) to use when [https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components].\n{{Identical|Red}}",
 	"COLOUR_RGB_GREEN": "block input text - The amount of green (from 0 to 100) to use when [https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components].",
 	"COLOUR_RGB_BLUE": "block input text - The amount of blue (from 0 to 100) to use when [https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components].\n{{Identical|Blue}}",
 	"COLOUR_RGB_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components].",
-	"COLOUR_BLEND_HELPURL": "{{Optional}} url - A useful link that displays blending of two colors.",
+	"COLOUR_BLEND_HELPURL": "{{Optional}} url - A useful link that displays blending of two colours.",
 	"COLOUR_BLEND_TITLE": "block text - A verb for blending two shades of paint.",
 	"COLOUR_BLEND_COLOUR1": "block input text - The first of two colours to [https://github.com/google/blockly/wiki/Colour#blending-colours blend].",
 	"COLOUR_BLEND_COLOUR2": "block input text - The second of two colours to [https://github.com/google/blockly/wiki/Colour#blending-colours blend].",
-	"COLOUR_BLEND_RATIO": "block input text - The proportion of the [https://github.com/google/blockly/wiki/Colour#blending-colours blend] containing the first color; the remaining proportion is of the second colour.  For example, if the first colour is red and the second color blue, a ratio of 1 would yield pure red, a ratio of .5 would yield purple (equal amounts of red and blue), and a ratio of 0 would yield pure blue.\n{{Identical|Ratio}}",
+	"COLOUR_BLEND_RATIO": "block input text - The proportion of the [https://github.com/google/blockly/wiki/Colour#blending-colours blend] containing the first colour; the remaining proportion is of the second colour.  For example, if the first colour is red and the second colour blue, a ratio of 1 would yield pure red, a ratio of .5 would yield purple (equal amounts of red and blue), and a ratio of 0 would yield pure blue.\n{{Identical|Ratio}}",
 	"COLOUR_BLEND_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Colour#blending-colours https://github.com/google/blockly/wiki/Colour#blending-colours].",
 	"CONTROLS_REPEAT_HELPURL": "{{Optional}} url - Describes 'repeat loops' in computer programs; consider using the translation of the page [https://en.wikipedia.org/wiki/Control_flow https://en.wikipedia.org/wiki/Control_flow].",
 	"CONTROLS_REPEAT_TITLE": "block input text - Title of [https://github.com/google/blockly/wiki/Loops#repeat repeat block].\n\nParameters:\n* %1 - the number of times the body of the loop should be repeated.",
@@ -404,5 +395,6 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "tooltip - If the first value is true, this causes the second value to be returned immediately from the enclosing function.",
 	"PROCEDURES_IFRETURN_HELPURL": "{{Optional}} url - Information about guard clauses.",
 	"PROCEDURES_IFRETURN_WARNING": "warning - This appears if the user tries to use this block outside of a function definition.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "comment text - This text appears in a new workspace comment, to hint that the user can type here."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "comment text - This text appears in a new workspace comment, to hint that the user can type here.",
+	"COLLAPSED_WARNINGS_WARNING": "warning - This appears if the user collapses a block, and blocks inside that block have warnings attached to them. It should inform the user that the block they collapsed contains blocks that have warnings."
 }

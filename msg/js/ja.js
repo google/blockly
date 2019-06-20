@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "コメントを追加";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "変数 '%1' は関数 '%2' の定義の一部であるため、削除できません";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "値を変える：";
 Blockly.Msg["CLEAN_UP"] = "ブロックを整理する";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
 Blockly.Msg["COLLAPSE_ALL"] = "ブロックを折りたたむ";
 Blockly.Msg["COLLAPSE_BLOCK"] = "ブロックを折りたたむ";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "色 1";

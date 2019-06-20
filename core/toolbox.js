@@ -332,25 +332,20 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
             openNode = newOpenNode;
           }
         }
-        // Decode the colour for any potential message references
-        // (eg. `%{BKY_MATH_HUE}`).
-        var colour = Blockly.utils.replaceMessageReferences(
-            childIn.getAttribute('colour'));
-        if (colour === null || colour === '') {
-          // No attribute. No colour.
-          childOut.hexColour = '';
-        } else if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
-          childOut.hexColour = colour;
-          this.hasColours_ = true;
-        } else if (typeof colour === 'number' ||
-            (typeof colour === 'string' && !isNaN(Number(colour)))) {
-          childOut.hexColour = Blockly.hueToRgb(Number(colour));
-          this.hasColours_ = true;
-        } else {
+
+        var styleName = childIn.getAttribute('categorystyle');
+        var colour = childIn.getAttribute('colour');
+
+        if (colour && styleName) {
           childOut.hexColour = '';
           console.warn('Toolbox category "' + categoryName +
-              '" has unrecognized colour attribute: ' + colour);
+              '" can not have both a style and a colour');
+        } else if (styleName) {
+          this.setColourFromStyle_(styleName, childOut, categoryName);
+        } else {
+          this.setColour_(colour, childOut, categoryName);
         }
+
         if (childIn.getAttribute('expanded') == 'true') {
           if (childOut.blocks.length) {
             // This is a category that directly contains blocks.
@@ -394,6 +389,102 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
   }
   return openNode;
 };
+
+/**
+ * Sets the colour on the category.
+ * @param {number|string} colourValue HSV hue value (0 to 360), #RRGGBB string,
+ *     or a message reference string pointing to one of those two values.
+ * @param {Blockly.Toolbox.TreeNode} childOut The child to set the hexColour on.
+ * @param {string} categoryName Name of the toolbox category.
+ * @private
+ */
+Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut, categoryName){
+  // Decode the colour for any potential message references
+  // (eg. `%{BKY_MATH_HUE}`).
+  var colour = Blockly.utils.replaceMessageReferences(colourValue);
+  if (colour === null || colour === '') {
+    // No attribute. No colour.
+    childOut.hexColour = '';
+  } else if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
+    childOut.hexColour = colour;
+    this.hasColours_ = true;
+  } else if (typeof colour === 'number' ||
+      (typeof colour === 'string' && !isNaN(Number(colour)))) {
+    childOut.hexColour = Blockly.hueToRgb(Number(colour));
+    this.hasColours_ = true;
+  } else {
+    childOut.hexColour = '';
+    console.warn('Toolbox category "' + categoryName +
+        '" has unrecognized colour attribute: ' + colour);
+  }
+};
+
+/**
+ * Retrieves and sets the colour for the category using the style name.
+ * The category colour is set from the colour style attribute.
+ * @param {string} styleName Name of the style.
+ * @param {!Blockly.Toolbox.TreeNode} childOut The child to set the hexColour on.
+ * @param {string} categoryName Name of the toolbox category.
+ */
+Blockly.Toolbox.prototype.setColourFromStyle_ = function(
+    styleName, childOut, categoryName){
+  childOut.styleName = styleName;
+  if (styleName && Blockly.getTheme()) {
+    var style = Blockly.getTheme().getCategoryStyle(styleName);
+    if (style && style.colour) {
+      this.setColour_(style.colour, childOut, categoryName);
+    } else {
+      console.warn('Style "' + styleName + '" must exist and contain a colour value');
+    }
+  }
+};
+
+/**
+ * Recursively updates all the category colours using the category style name.
+ * @param {Blockly.Toolbox.TreeNode=} opt_tree Starting point of tree.
+ *     Defaults to the root node.
+ * @private
+ */
+Blockly.Toolbox.prototype.updateColourFromTheme_ = function(opt_tree) {
+  var tree = opt_tree || this.tree_;
+  if (tree) {
+    var children = tree.getChildren(false);
+    for (var i = 0, child; child = children[i]; i++) {
+      if (child.styleName) {
+        this.setColourFromStyle_(child.styleName, child, '');
+        this.addColour_();
+      }
+      this.updateColourFromTheme_(child);
+    }
+  }
+};
+
+/**
+ * Updates the category colours and background colour of selected categories.
+ */
+Blockly.Toolbox.prototype.updateColourFromTheme = function() {
+  var tree = this.tree_;
+  if (tree) {
+    this.updateColourFromTheme_(tree);
+    this.updateSelectedItemColour_(tree);
+  }
+};
+
+/**
+ * Updates the background colour of the selected category.
+ * @param {!Blockly.Toolbox.TreeNode} tree Starting point of tree.
+ *     Defaults to the root node.
+ * @private
+ */
+Blockly.Toolbox.prototype.updateSelectedItemColour_ = function(tree) {
+  var selectedItem = tree.selectedItem_;
+  if (selectedItem) {
+    var hexColour = selectedItem.hexColour || '#57e';
+    selectedItem.getRowElement().style.backgroundColor = hexColour;
+    tree.toolbox_.addColour_(selectedItem);
+  }
+};
+
 
 /**
  * Recursively add colours to this toolbox.
@@ -550,8 +641,7 @@ Blockly.Toolbox.TreeControl.prototype.handleTouchEvent_ = function(e) {
 Blockly.Toolbox.TreeControl.prototype.createNode = function(opt_html) {
   var html = opt_html ?
       goog.html.SafeHtml.htmlEscape(opt_html) : goog.html.SafeHtml.EMPTY;
-  return new Blockly.Toolbox.TreeNode(this.toolbox_, html,
-      this.getConfig(), this.getDomHelper());
+  return new Blockly.Toolbox.TreeNode(this.toolbox_, html, this.getConfig());
 };
 
 /**
@@ -601,15 +691,14 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
  * A single node in the tree, customized for Blockly's UI.
  * @param {Blockly.Toolbox} toolbox The parent toolbox for this tree.
  * @param {!goog.html.SafeHtml} html The HTML content of the node label.
- * @param {Object=} opt_config The configuration for the tree. See
- *    goog.ui.tree.TreeControl.DefaultConfig. If not specified, a default config
- *    will be used.
- * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
+ * @param {Object|undefined} config The configuration for the tree.
+ *    See goog.ui.tree.TreeControl.DefaultConfig.
+ *    If not specified, a default config will be used.
  * @constructor
  * @extends {goog.ui.tree.TreeNode}
  */
-Blockly.Toolbox.TreeNode = function(toolbox, html, opt_config, opt_domHelper) {
-  goog.ui.tree.TreeNode.call(this, html, opt_config, opt_domHelper);
+Blockly.Toolbox.TreeNode = function(toolbox, html, config) {
+  goog.ui.tree.TreeNode.call(this, html, config);
   if (toolbox) {
     var resize = function() {
       // Even though the div hasn't changed size, the visible workspace
@@ -698,9 +787,9 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 
 /**
  * A blank separator node in the tree.
- * @param {Object=} config The configuration for the tree. See
- *    goog.ui.tree.TreeControl.DefaultConfig. If not specified, a default config
- *    will be used.
+ * @param {Object|undefined} config The configuration for the tree.
+ *    See goog.ui.tree.TreeControl.DefaultConfig
+ *    If not specified, a default config will be used.
  * @constructor
  * @extends {Blockly.Toolbox.TreeNode}
  */

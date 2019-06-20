@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Додати коментар";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Неможливо видалити змінну '%1', тому що це частина визначення функції '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Змінити значення:";
 Blockly.Msg["CLEAN_UP"] = "Вирівняти блоки";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Звернуті блоки містять попередження.";
 Blockly.Msg["COLLAPSE_ALL"] = "Згорнути блоки";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Згорнути блок";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "колір 1";

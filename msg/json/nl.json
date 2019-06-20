@@ -13,7 +13,9 @@
 			"Festina90",
 			"Optilete",
 			"Patio",
-			"KlaasZ4usV"
+			"KlaasZ4usV",
+			"Marcelhospers",
+			"Elroy"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -219,6 +221,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://nl.wikipedia.org/wiki/Toevalsgenerator",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "willekeurige fractie",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Geeft een willekeurige fractie tussen 0.0 (inclusief) en 1.0 (exclusief).",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 van X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Geef de boogtangens van punt (X, Y) terug in graden tussen -180 naar 180.",
 	"TEXT_TEXT_HELPURL": "https://nl.wikipedia.org/wiki/String_%28informatica%29",
 	"TEXT_TEXT_TOOLTIP": "Een letter, woord of een regel tekst.",
 	"TEXT_JOIN_HELPURL": "https://github.com/google/blockly/wiki/Text#text-creation",

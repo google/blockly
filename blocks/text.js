@@ -48,7 +48,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "text": ""
     }],
     "output": "String",
-    "colour": "%{BKY_TEXTS_HUE}",
+    "style": "text_blocks",
     "helpUrl": "%{BKY_TEXT_TEXT_HELPURL}",
     "tooltip": "%{BKY_TEXT_TEXT_TOOLTIP}",
     "extensions": [
@@ -60,7 +60,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "type": "text_join",
     "message0": "",
     "output": "String",
-    "colour": "%{BKY_TEXTS_HUE}",
+    "style": "text_blocks",
     "helpUrl": "%{BKY_TEXT_JOIN_HELPURL}",
     "tooltip": "%{BKY_TEXT_JOIN_TOOLTIP}",
     "mutator": "text_join_mutator"
@@ -76,7 +76,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "type": "input_statement",
       "name": "STACK"
     }],
-    "colour": "%{BKY_TEXTS_HUE}",
+    "style": "text_blocks",
     "tooltip": "%{BKY_TEXT_CREATE_JOIN_TOOLTIP}",
     "enableContextMenu": false
   },
@@ -85,7 +85,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "message0": "%{BKY_TEXT_CREATE_JOIN_ITEM_TITLE_ITEM}",
     "previousStatement": null,
     "nextStatement": null,
-    "colour": "%{BKY_TEXTS_HUE}",
+    "style": "text_blocks",
     "tooltip": "%{BKY_TEXT_CREATE_JOIN_ITEM_TOOLTIP}",
     "enableContextMenu": false
   },
@@ -103,7 +103,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     }],
     "previousStatement": null,
     "nextStatement": null,
-    "colour": "%{BKY_TEXTS_HUE}",
+    "style": "text_blocks",
     "extensions": [
       "text_append_tooltip"
     ]
@@ -119,7 +119,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": 'Number',
-    "colour": "%{BKY_TEXTS_HUE}",
+    "style": "text_blocks",
     "tooltip": "%{BKY_TEXT_LENGTH_TOOLTIP}",
     "helpUrl": "%{BKY_TEXT_LENGTH_HELPURL}"
   },
@@ -134,7 +134,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": 'Boolean',
-    "colour": "%{BKY_TEXTS_HUE}",
+    "style": "text_blocks",
     "tooltip": "%{BKY_TEXT_ISEMPTY_TOOLTIP}",
     "helpUrl": "%{BKY_TEXT_ISEMPTY_HELPURL}"
   },
@@ -168,7 +168,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Number",
-    "colour": "%{BKY_TEXTS_HUE}",
+    "style": "text_blocks",
     "helpUrl": "%{BKY_TEXT_INDEXOF_HELPURL}",
     "inputsInline": true,
     "extensions": [
@@ -197,7 +197,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "String",
-    "colour": "%{BKY_TEXTS_HUE}",
+    "style": "text_blocks",
     "helpUrl": "%{BKY_TEXT_CHARAT_HELPURL}",
     "inputsInline": true,
     "mutator": "text_charAt_mutator"
@@ -221,7 +221,7 @@ Blockly.Blocks['text_getSubstring'] = {
       [Blockly.Msg['TEXT_GET_SUBSTRING_END_LAST'], 'LAST']
     ];
     this.setHelpUrl(Blockly.Msg['TEXT_GET_SUBSTRING_HELPURL']);
-    this.setColour(Blockly.Msg['TEXTS_HUE']);
+    this.setStyle('text_blocks');
     this.appendValueInput('STRING')
         .setCheck('String')
         .appendField(Blockly.Msg['TEXT_GET_SUBSTRING_INPUT_IN_TEXT']);
@@ -329,7 +329,7 @@ Blockly.Blocks['text_changeCase'] = {
       [Blockly.Msg['TEXT_CHANGECASE_OPERATOR_TITLECASE'], 'TITLECASE']
     ];
     this.setHelpUrl(Blockly.Msg['TEXT_CHANGECASE_HELPURL']);
-    this.setColour(Blockly.Msg['TEXTS_HUE']);
+    this.setStyle('text_blocks');
     this.appendValueInput('TEXT')
         .setCheck('String')
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'CASE');
@@ -350,7 +350,7 @@ Blockly.Blocks['text_trim'] = {
       [Blockly.Msg['TEXT_TRIM_OPERATOR_RIGHT'], 'RIGHT']
     ];
     this.setHelpUrl(Blockly.Msg['TEXT_TRIM_HELPURL']);
-    this.setColour(Blockly.Msg['TEXTS_HUE']);
+    this.setStyle('text_blocks');
     this.appendValueInput('TEXT')
         .setCheck('String')
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'MODE');
@@ -375,7 +375,7 @@ Blockly.Blocks['text_print'] = {
       ],
       "previousStatement": null,
       "nextStatement": null,
-      "colour": Blockly.Msg['TEXTS_HUE'],
+      "style": "text_blocks",
       "tooltip": Blockly.Msg['TEXT_PRINT_TOOLTIP'],
       "helpUrl": Blockly.Msg['TEXT_PRINT_HELPURL']
     });
@@ -393,7 +393,7 @@ Blockly.Blocks['text_prompt_ext'] = {
       [Blockly.Msg['TEXT_PROMPT_TYPE_NUMBER'], 'NUMBER']
     ];
     this.setHelpUrl(Blockly.Msg['TEXT_PROMPT_HELPURL']);
-    this.setColour(Blockly.Msg['TEXTS_HUE']);
+    this.setStyle('text_blocks');
     // Assign 'this' to a variable for use in the closures below.
     var thisBlock = this;
     var dropdown = new Blockly.FieldDropdown(TYPES, function(newOp) {
@@ -453,7 +453,7 @@ Blockly.Blocks['text_prompt'] = {
     // Assign 'this' to a variable for use in the closures below.
     var thisBlock = this;
     this.setHelpUrl(Blockly.Msg['TEXT_PROMPT_HELPURL']);
-    this.setColour(Blockly.Msg['TEXTS_HUE']);
+    this.setStyle('text_blocks');
     var dropdown = new Blockly.FieldDropdown(TYPES, function(newOp) {
       thisBlock.updateType_(newOp);
     });
@@ -496,7 +496,7 @@ Blockly.Blocks['text_count'] = {
       ],
       "output": "Number",
       "inputsInline": true,
-      "colour": Blockly.Msg['TEXTS_HUE'],
+      "style": "text_blocks",
       "tooltip": Blockly.Msg['TEXT_COUNT_TOOLTIP'],
       "helpUrl": Blockly.Msg['TEXT_COUNT_HELPURL']
     });
@@ -530,7 +530,7 @@ Blockly.Blocks['text_replace'] = {
       ],
       "output": "String",
       "inputsInline": true,
-      "colour": Blockly.Msg['TEXTS_HUE'],
+      "style": "text_blocks",
       "tooltip": Blockly.Msg['TEXT_REPLACE_TOOLTIP'],
       "helpUrl": Blockly.Msg['TEXT_REPLACE_HELPURL']
     });
@@ -554,7 +554,7 @@ Blockly.Blocks['text_reverse'] = {
       ],
       "output": "String",
       "inputsInline": true,
-      "colour": Blockly.Msg['TEXTS_HUE'],
+      "style": "text_blocks",
       "tooltip": Blockly.Msg['TEXT_REVERSE_TOOLTIP'],
       "helpUrl": Blockly.Msg['TEXT_REVERSE_HELPURL']
     });
@@ -622,7 +622,7 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
    * closing double quote. The selected quote will be adapted for RTL blocks.
    * @param {boolean} open If the image should be open quote (“ in LTR).
    *                       Otherwise, a closing quote is used (” in LTR).
-   * @returns {!Blockly.FieldImage} The new field.
+   * @return {!Blockly.FieldImage} The new field.
    * @this Blockly.Block
    */
   newQuote_: function(open) {

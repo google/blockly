@@ -10,6 +10,7 @@ Blockly.Msg["ADD_COMMENT"] = "Lägg till kommentar";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Kan inte radera variabeln '%1' eftersom den är en del av definition för funktionen '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Ändra värde:";
 Blockly.Msg["CLEAN_UP"] = "Städa upp block";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Hopfällda block innehåller varningar.";
 Blockly.Msg["COLLAPSE_ALL"] = "Fäll ihop block";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Fäll ihop block";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "färg 1";

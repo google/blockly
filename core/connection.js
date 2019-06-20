@@ -325,7 +325,7 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
       throw Error('Target connection is null.');
     case Blockly.Connection.REASON_CHECKS_FAILED:
       var msg = 'Connection checks failed. ';
-      msg += this + ' expected '  + this.check_ + ', found ' + target.check_;
+      msg += this + ' expected ' + this.check_ + ', found ' + target.check_;
       throw Error(msg);
     case Blockly.Connection.REASON_SHADOW_PARENT:
       throw Error('Connecting non-shadow to shadow block.');
@@ -392,7 +392,9 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
     case Blockly.OUTPUT_VALUE: {
       // Don't offer to connect an already connected left (male) value plug to
       // an available right (female) value plug.
-      if (candidate.isConnected() || this.isConnected()) {
+      if ((candidate.isConnected() &&
+          !candidate.targetBlock().isInsertionMarker()) ||
+          this.isConnected()) {
         return false;
       }
       break;
@@ -672,7 +674,7 @@ Blockly.Connection.prototype.setShadowDom = function(shadow) {
 
 /**
  * Return a connection's shadow block.
- * @return {Element} shadow DOM representation of a block or null.
+ * @return {Element} Shadow DOM representation of a block or null.
  */
 Blockly.Connection.prototype.getShadowDom = function() {
   return this.shadowDom_;

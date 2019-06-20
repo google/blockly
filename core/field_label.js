@@ -52,7 +52,7 @@ goog.inherits(Blockly.FieldLabel, Blockly.Field);
  * Construct a FieldLabel from a JSON arg object,
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (text, and class).
- * @returns {!Blockly.FieldLabel} The new field instance.
+ * @return {!Blockly.FieldLabel} The new field instance.
  * @package
  * @nocollapse
  */

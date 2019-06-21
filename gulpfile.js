@@ -69,7 +69,7 @@ if (typeof DOMParser !== 'function') {
 }
 if (typeof module === 'object') { module.exports = Blockly; }
 if (typeof window === 'object') { window.Blockly = Blockly; }\n`))
-      .pipe(gulp.dest(''));
+      .pipe(gulp.dest('.'));
 });
 
 /**
@@ -97,7 +97,7 @@ function buildWatchTaskFn(concatTask) {
     var options = {
       debounceDelay: 2000   // Milliseconds to delay rebuild.
     };
-    gulp.watch(srcs, options, tasks);
+    gulp.watch(srcs, options, gulp.parallel(tasks));
   };
 }
 
@@ -107,4 +107,4 @@ gulp.task('watch', buildWatchTaskFn('blockly_javascript_en'));
 
 // The default task concatenates files for Node.js, using English language
 // blocks and the JavaScript generator.
-gulp.task('default', ['build', 'blockly_javascript_en']);
+gulp.task('default', gulp.series(['build', 'blockly_javascript_en']));

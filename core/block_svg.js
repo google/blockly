@@ -635,10 +635,10 @@ Blockly.BlockSvg.prototype.showHelp_ = function() {
 
 /**
  * Generate the context menu for this block.
- * @private
+ * @protected
  * @returns {Array} Context menu options
  */
-Blockly.BlockSvg.prototype.generateContextMenu_ = function() {
+Blockly.BlockSvg.prototype.generateContextMenu = function() {
   
   if (this.workspace.options.readOnly || !this.contextMenu) {
     return;
@@ -739,7 +739,7 @@ Blockly.BlockSvg.prototype.generateContextMenu_ = function() {
  * @private
  */
 Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
-  var menuOptions = this.generateContextMenu_();
+  var menuOptions = this.generateContextMenu();
   
   if (menuOptions && menuOptions.length) {
     Blockly.ContextMenu.show(e, menuOptions, this.RTL);

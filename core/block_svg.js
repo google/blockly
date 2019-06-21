@@ -633,6 +633,10 @@ Blockly.BlockSvg.prototype.showHelp_ = function() {
   }
 };
 
+/**
+ * Generate the context menu for this block.
+ * @private
+ */
 Blockly.BlockSvg.prototype.generateContextMenu_ = function() {
   
   if (this.workspace.options.readOnly || !this.contextMenu) {

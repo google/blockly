@@ -636,6 +636,7 @@ Blockly.BlockSvg.prototype.showHelp_ = function() {
 /**
  * Generate the context menu for this block.
  * @private
+ * @returns {Array} Context menu options
  */
 Blockly.BlockSvg.prototype.generateContextMenu_ = function() {
   
@@ -729,8 +730,8 @@ Blockly.BlockSvg.prototype.generateContextMenu_ = function() {
     this.customContextMenu(menuOptions);
   }
 
-  return menuOptions
-}
+  return menuOptions;
+};
 
 /**
  * Show the context menu for this block.
@@ -740,9 +741,9 @@ Blockly.BlockSvg.prototype.generateContextMenu_ = function() {
 Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
   var menuOptions = this.generateContextMenu_();
   
-  if(menuOptions && menuOptions.length) {
+  if (menuOptions && menuOptions.length) {
     Blockly.ContextMenu.show(e, menuOptions, this.RTL);
-    Blockly.ContextMenu.currentBlock = this;  
+    Blockly.ContextMenu.currentBlock = this;
   }
 };
 

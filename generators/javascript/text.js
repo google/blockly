@@ -35,6 +35,12 @@ Blockly.JavaScript['text'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
+Blockly.JavaScript['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.JavaScript.multiline_quote_(block.getFieldValue('TEXT'));
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
 /**
  * Enclose the provided value in 'String(...)' function.
  * Leave string literals alone.

@@ -57,21 +57,21 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ]
   },
   {
-      "type": "text_multiline",
-      "message0": "%1",
-      "args0": [{
-        "type": "field_textarea",
-        "name": "TEXT",
-        "text": ""
-      }],
-      "output": "String",
-      "style": "text_blocks",
-      "helpUrl": "%{BKY_TEXT_TEXT_HELPURL}",
-      "tooltip": "%{BKY_TEXT_TEXT_TOOLTIP}",
-      "extensions": [
-        "text_pilcrow",
-        "parent_tooltip_when_inline"
-      ]
+    "type": "text_multiline",
+    "message0": "%1",
+    "args0": [{
+      "type": "field_textarea",
+      "name": "TEXT",
+      "text": ""
+    }],
+    "output": "String",
+    "style": "text_blocks",
+    "helpUrl": "%{BKY_TEXT_TEXT_HELPURL}",
+    "tooltip": "%{BKY_TEXT_TEXT_TOOLTIP}",
+    "extensions": [
+      "text_pilcrow",
+      "parent_tooltip_when_inline"
+    ]
   },
   {
     "type": "text_join",
@@ -673,7 +673,7 @@ Blockly.Constants.Text.TEXT_QUOTES_EXTENSION = function() {
 Blockly.Constants.Text.PILCROW_IMAGE_MIXIN = {
   /**
    * Image data URI of a Pilcrow
-   * Pilcrow 
+   * Pilcrow
    * https://commons.wikimedia.org/wiki/File:Pilcrow.svg
    * @readonly
    */

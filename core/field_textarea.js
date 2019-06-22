@@ -118,21 +118,23 @@ Blockly.FieldTextArea.prototype.render_ = function() {
   var yoffset = 14; // 12.5 is hard-coded in Blockly.Field
   var txtLines = txt.split("\n");
   txtLines.forEach(function(t) {
-    Blockly.utils.dom.createSvgElement('tspan', {x:0,y:y+yoffset}, textElement)
-			  .appendChild(document.createTextNode(t));
+    Blockly.utils.dom.createSvgElement('tspan', {x:0,y:y + yoffset}, textElement)
+        .appendChild(document.createTextNode(t));
     y += 20;
   });
-  if (txtLines.length==0) y+=20;
+  if (txtLines.length == 0) {
+    y += 20;
+  }
 
   // set up widths
   this.size_.width = this.textElement_.getBBox().width + 5;
-  this.size_.height= y + (Blockly.BlockSvg.SEP_SPACE_Y+5) ;
+  this.size_.height = y + (Blockly.BlockSvg.SEP_SPACE_Y + 5) ;
 
   if (this.borderRect_) {
     this.borderRect_.setAttribute('width',
-           this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
-   	this.borderRect_.setAttribute('height',
-           this.size_.height - (Blockly.BlockSvg.SEP_SPACE_Y+5));
+        this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
+    this.borderRect_.setAttribute('height',
+        this.size_.height - (Blockly.BlockSvg.SEP_SPACE_Y + 5));
   }
 };
 
@@ -152,7 +154,7 @@ Blockly.FieldTextArea.prototype.widgetCreate_ = function() {
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
   htmlInput.style.fontFamily = 'monospace';
-  htmlInput.style.marginTop="2px";
+  htmlInput.style.marginTop = "2px";
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
   htmlInput.style.resize = 'none';
   htmlInput.style['line-height'] = '20px';
@@ -176,7 +178,7 @@ Blockly.FieldTextArea.prototype.widgetCreate_ = function() {
  * @private
  */
 Blockly.FieldTextArea.prototype.onHtmlInputKeyDown_ = function(e) {
-  var tabKey = 9, enterKey = 13, escKey = 27;
+  var escKey = 27;
   if (e.keyCode == escKey) {
     Blockly.WidgetDiv.hide();
   }

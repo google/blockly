@@ -32,9 +32,9 @@ goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
-
-goog.require('goog.math.Coordinate');
-goog.require('goog.userAgent');
+goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.userAgent');
 
 
 /**

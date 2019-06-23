@@ -232,34 +232,5 @@ Blockly.FieldTextArea.prototype.onHtmlInputKeyDown_ = function(e) {
   }
 };
 
-/**
- * Resize the editor to fit the text.
- * @protected
- */
-Blockly.FieldTextArea.prototype.resizeEditor_ = function() {
-  var div = Blockly.WidgetDiv.DIV;
-  var bBox = this.getScaledBBox_();
-  div.style.width = bBox.right - bBox.left + 'px';
-  div.style.height = bBox.bottom - bBox.top + 'px';
-
-  // In RTL mode block fields and LTR input fields the left edge moves,
-  // whereas the right edge is fixed.  Reposition the editor.
-  var x = this.sourceBlock_.RTL ? bBox.right - div.offsetWidth : bBox.left;
-  var xy = new Blockly.utils.Coordinate(x, bBox.top);
-
-  // Shift by a few pixels to line up exactly.
-  xy.y += 1;
-  if (Blockly.utils.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
-    // Firefox mis-reports the location of the border by a pixel
-    // once the WidgetDiv is moved into position.
-    xy.x -= 1;
-    xy.y -= 1;
-  }
-  if (Blockly.utils.userAgent.WEBKIT) {
-    xy.y -= 3;
-  }
-  div.style.left = xy.x + 'px';
-  div.style.top = xy.y + 'px';
-};
 
 Blockly.Field.register('field_textarea', Blockly.FieldTextArea);

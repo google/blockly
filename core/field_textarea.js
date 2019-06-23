@@ -80,7 +80,7 @@ Blockly.FieldTextArea.prototype.fromXml = function(fieldElement) {
   var length = fieldElement.getAttribute('length');
   var lines = [];
   for (var i = 0; i < length; i++) {
-      lines.push(fieldElement.getAttribute('line'+i));
+    lines.push(fieldElement.getAttribute('line' + i));
   }
   fieldElement.textContent = lines.join("\n");
   this.setValue(fieldElement.textContent);
@@ -97,7 +97,7 @@ Blockly.FieldTextArea.prototype.toXml = function(fieldElement) {
   var length = lines.length;
   fieldElement.setAttribute('length', length);
   for (var i = 0; i < length; i++) {
-      fieldElement.setAttribute('line'+i, lines[i]);
+    fieldElement.setAttribute('line' + i, lines[i]);
   }
   return fieldElement;
 };
@@ -150,12 +150,12 @@ Blockly.FieldTextArea.prototype.render_ = function() {
   // Clear out old tspan lines
   var currentChild;
   while (currentChild = textElement.firstChild) {
-      textElement.removeChild(currentChild);
+    textElement.removeChild(currentChild);
   }
   // Add in new tspan lines
   var txt = this.getDisplayText_();
   var y = 0;
-  var xoffset =0;
+  var xoffset = 0;
   var yoffset = 12.5; // 12.5 is hard-coded in Blockly.Field
   var txtLines = txt.split("\n");
   txtLines.forEach(function(t) {
@@ -196,13 +196,13 @@ Blockly.FieldTextArea.prototype.widgetCreate_ = function() {
   div.style.fontSize = fontSize;
   
   var scale = this.sourceBlock_.workspace.scale;
-  div.style.lineHeight = (20*scale)+'px';
+  div.style.lineHeight = (20 * scale) + 'px';
   htmlInput.style.fontSize = fontSize;
   htmlInput.style.fontFamily = 'monospace';
-  htmlInput.style.marginTop = (1*scale)+"px";
-  htmlInput.style.paddingLeft = (5*scale)+"px";
+  htmlInput.style.marginTop = (1 * scale) + "px";
+  htmlInput.style.paddingLeft = (5 * scale) + "px";
   htmlInput.style.resize = 'none';
-  htmlInput.style.lineHeight = (20*scale)+'px';
+  htmlInput.style.lineHeight = (20 * scale) + 'px';
   htmlInput.style.overflow = 'hidden';
   htmlInput.style.height = '100%';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);

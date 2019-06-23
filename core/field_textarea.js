@@ -83,7 +83,6 @@ Blockly.FieldTextArea.prototype.fromXml = function(fieldElement) {
       lines.push(fieldElement.getAttribute('line'+i));
   }
   fieldElement.textContent = lines.join("\n");
-  console.log("|"+fieldElement.textContent+"|");
   this.setValue(fieldElement.textContent);
 };
 
@@ -100,8 +99,6 @@ Blockly.FieldTextArea.prototype.toXml = function(fieldElement) {
   for (var i = 0; i < length; i++) {
       fieldElement.setAttribute('line'+i, lines[i]);
   }
-  console.log("|"+this.getValue()+"|");
-  console.log(fieldElement);
   return fieldElement;
 };
 
@@ -200,18 +197,15 @@ Blockly.FieldTextArea.prototype.widgetCreate_ = function() {
   
   var scale = this.sourceBlock_.workspace.scale;
   div.style.lineHeight = (20*scale)+'px';
-  //div.style['line-height'] = '20px';
   htmlInput.style.fontSize = fontSize;
   htmlInput.style.fontFamily = 'monospace';
   htmlInput.style.marginTop = (1*scale)+"px";
   htmlInput.style.paddingLeft = (5*scale)+"px";
-  htmlInput.setAttribute('spellcheck', this.spellcheck_);
   htmlInput.style.resize = 'none';
-  htmlInput.style['line-height'] = (20*scale)+'px';
-  htmlInput.style['overflow'] = 'hidden';
-  htmlInput.style['height'] = '100%';
-  //htmlInput.style['padding-top'] = '3px';
-  //htmlInput.style['padding-left'] = '4px';
+  htmlInput.style.lineHeight = (20*scale)+'px';
+  htmlInput.style.overflow = 'hidden';
+  htmlInput.style.height = '100%';
+  htmlInput.setAttribute('spellcheck', this.spellcheck_);
   div.appendChild(htmlInput);
 
   htmlInput.value = htmlInput.defaultValue = this.value_;

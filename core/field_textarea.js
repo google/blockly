@@ -222,9 +222,13 @@ Blockly.FieldTextArea.prototype.widgetCreate_ = function() {
  * @private
  */
 Blockly.FieldTextArea.prototype.onHtmlInputKeyDown_ = function(e) {
-  var escKey = 27;
+  var tabKey = 9, escKey = 27;
   if (e.keyCode == escKey) {
     Blockly.WidgetDiv.hide();
+  } else if (e.keyCode == tabKey) {
+    Blockly.WidgetDiv.hide();
+    this.sourceBlock_.tab(this, !e.shiftKey);
+    e.preventDefault();
   }
 };
 

@@ -58,8 +58,22 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   },
   {
     "type": "text_multiline",
-    "message0": "%1",
+    "message0": "%1 %2",
     "args0": [{
+      "type": "field_image",
+      "src": 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAARCAYAAADpPU'+
+             '2iAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAdhgAAHYYBXaITgQAAABh0RVh0U2'+
+             '9mdHdhcmUAcGFpbnQubmV0IDQuMS42/U4J6AAAAP1JREFUOE+Vks0KQUEYhjmRIj'+
+             'a4ABtZ2dm5A3t3Ia6AUm7CylYuQRaUhZSlLZJiQbFAyRnPN33y01HOW08z8873zp'+
+             'wzM4F3GWOCruvGIE4/rLaV+Nq1hVGMBqzhqlxgCys4wJA65xnogMHsQ5lujnYHTe'+
+             'jBBCK2mE4abjCgMGhNxHgDFWjDSG07kdfVa2pZMf4ZyMAdWmpZMfYOsLiDMYMjlM'+
+             'B+K613QISRhTnITnsYg5yUd0DETmEoMlkFOeIT/A58iyK5E18BuTBfgYXfwNJv4P'+
+             '9/oEBerLylOnRhygmGdPpTTBZAPkde61lbQe4moWUvYUZYLfUNftIY4zwA5X2Z9A'+
+             'YnQrEAAAAASUVORK5CYII=',
+      "width": 12,
+      "height": 17,
+      "alt": '\u00B6'
+    },{
       "type": "field_textarea",
       "name": "TEXT",
       "text": ""
@@ -69,7 +83,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_TEXT_TEXT_HELPURL}",
     "tooltip": "%{BKY_TEXT_TEXT_TOOLTIP}",
     "extensions": [
-      "text_pilcrow",
       "parent_tooltip_when_inline"
     ]
   },
@@ -665,80 +678,6 @@ Blockly.Constants.Text.TEXT_QUOTES_EXTENSION = function() {
 };
 
 /**
- *
- * @mixin
- * @package
- * @readonly
- */
-Blockly.Constants.Text.PILCROW_IMAGE_MIXIN = {
-  /**
-   * Image data URI of a Pilcrow
-   * Pilcrow
-   * https://commons.wikimedia.org/wiki/File:Pilcrow.svg
-   * @readonly
-   */
-  QUOTE_IMAGE_PILCROW:
-    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAARCAYAAADpPU2iAAAA' +
-    'BGdBTUEAALGPC/xhBQAAAAlwSFlzAAAdhgAAHYYBXaITgQAAABh0RVh0U29mdHdhcmUAcG' +
-    'FpbnQubmV0IDQuMS42/U4J6AAAAP1JREFUOE+Vks0KQUEYhjmRIja4ABtZ2dm5A3t3Ia6A' +
-    'Um7CylYuQRaUhZSlLZJiQbFAyRnPN33y01HOW08z8873zpwzM4F3GWOCruvGIE4/rLaV+N' +
-    'q1hVGMBqzhqlxgCys4wJA65xnogMHsQ5lujnYHTejBBCK2mE4abjCgMGhNxHgDFWjDSG07' +
-    'kdfVa2pZMf4ZyMAdWmpZMfYOsLiDMYMjlMB+K613QISRhTnITnsYg5yUd0DETmEoMlkFOe' +
-    'IT/A58iyK5E18BuTBfgYXfwNJv4P9/oEBerLylOnRhygmGdPpTTBZAPkde61lbQe4moWUv' +
-    'YUZYLfUNftIY4zwA5X2Z9AYnQrEAAAAASUVORK5CYII=',
-  /**
-   * Pixel width of QUOTE_IMAGE_PILCROW.
-   * @readonly
-   */
-  QUOTE_IMAGE_WIDTH: 12,
-  /**
-   * Pixel height of QUOTE_IMAGE_PILCROW.
-   * @readonly
-   */
-  QUOTE_IMAGE_HEIGHT: 17,
-
-  /**
-   * Inserts appropriate quote images before the named field.
-   * @param {string} fieldName The name of the field to wrap with quotes.
-   * @this Blockly.Block
-   */
-  prependField_: function(fieldName) {
-    for (var i = 0, input; input = this.inputList[i]; i++) {
-      for (var j = 0, field; field = input.fieldRow[j]; j++) {
-        if (fieldName == field.name) {
-          input.insertFieldAt(j, this.newPilcrow_());
-          return;
-        }
-      }
-    }
-    console.warn('field named "' + fieldName + '" not found in ' + this.toDevString());
-  },
-
-  /**
-   * A helper function that generates a FieldImage of a Pilcrow.
-   * The selected Pilcrow will be adapted for RTL blocks.
-   * @return {!Blockly.FieldImage} The new field.
-   * @this Blockly.Block
-   */
-  newPilcrow_: function() {
-    return new Blockly.FieldImage(
-        this.QUOTE_IMAGE_PILCROW,
-        this.QUOTE_IMAGE_WIDTH,
-        this.QUOTE_IMAGE_HEIGHT,
-        '\u00B6');
-  }
-};
-
-/**
- * Prepend TEXT field with image of Pilcrow (paragraph mark).
- * @this Blockly.Block
- */
-Blockly.Constants.Text.TEXT_PILCROW_EXTENSION = function() {
-  this.mixin(Blockly.Constants.Text.PILCROW_IMAGE_MIXIN);
-  this.prependField_('TEXT');
-};
-
-/**
  * Mixin for mutator functions in the 'text_join_mutator' extension.
  * @mixin
  * @augments Blockly.Block
@@ -981,9 +920,6 @@ Blockly.Extensions.register('text_indexOf_tooltip',
 
 Blockly.Extensions.register('text_quotes',
     Blockly.Constants.Text.TEXT_QUOTES_EXTENSION);
-    
-Blockly.Extensions.register('text_pilcrow',
-    Blockly.Constants.Text.TEXT_PILCROW_EXTENSION);
 
 Blockly.Extensions.registerMutator('text_join_mutator',
     Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN,

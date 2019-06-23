@@ -72,6 +72,40 @@ Blockly.FieldTextArea.fromJson = function(options) {
 };
 
 /**
+ * Initialize this field based on the given XML.
+ * @param {!Element} fieldElement The element containing information about the
+ *    variable field's state.
+ */
+Blockly.FieldTextArea.prototype.fromXml = function(fieldElement) {
+  var length = fieldElement.getAttribute('length');
+  var lines = [];
+  for (var i = 0; i < length; i++) {
+      lines.push(fieldElement.getAttribute('line'+i));
+  }
+  fieldElement.textContent = lines.join("\n");
+  console.log("|"+fieldElement.textContent+"|");
+  this.setValue(fieldElement.textContent);
+};
+
+/**
+ * Serialize this field to Xml.
+ * @param {!Element} fieldElement The element to populate with info about the
+ *    field's state.
+ * @return {!Element} The element containing info about the field's state.
+ */
+Blockly.FieldTextArea.prototype.toXml = function(fieldElement) {
+  var lines = this.getValue().split("\n");
+  var length = lines.length;
+  fieldElement.setAttribute('length', length);
+  for (var i = 0; i < length; i++) {
+      fieldElement.setAttribute('line'+i, lines[i]);
+  }
+  console.log("|"+this.getValue()+"|");
+  console.log(fieldElement);
+  return fieldElement;
+};
+
+/**
  * Get the text from this field as displayed on screen.  May differ from getText
  * due to ellipsis, and other formatting.
  * @return {string} Currently displayed text.

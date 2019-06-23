@@ -106,6 +106,16 @@ Blockly.FieldTextArea.prototype.toXml = function(fieldElement) {
 };
 
 /**
+ * Create the block UI for this field.
+ * @package
+ */
+Blockly.FieldTextArea.prototype.initView = function() {
+  Blockly.FieldDropdown.superClass_.initView.call(this);
+  this.textElement_.setAttribute('class', 'blocklyText blocklyTextCode');
+  
+};
+
+/**
  * Get the text from this field as displayed on screen.  May differ from getText
  * due to ellipsis, and other formatting.
  * @return {string} Currently displayed text.
@@ -139,14 +149,14 @@ Blockly.FieldTextArea.prototype.getDisplayText_ = function() {
  * @protected
  */
 Blockly.FieldTextArea.prototype.render_ = function() {
-  if (!this.visible_) {
-    this.size_.width = 0;
-    return;
-  }
   // Replace the text.
   var textElement = this.textElement_;
-  textElement.setAttribute('class', 'blocklyText blocklyTextCode');
-  goog.dom.removeChildren(/** @type {!Element} */ (textElement));
+  // Clear out old tspan lines
+  var currentChild;
+  while (currentChild = textElement.firstChild) {
+      textElement.removeChild(currentChild);
+  }
+  // Add in new tspan lines
   var txt = this.getDisplayText_();
   var y = 0;
   var yoffset = 14; // 12.5 is hard-coded in Blockly.Field

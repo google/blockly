@@ -144,8 +144,7 @@ Blockly.FieldTextArea.prototype.getDisplayText_ = function() {
 };
 
 /**
- * Updates the colour of the htmlInput given the current validity of the
- * field's value.
+ * Updates the text of the textElement.
  * @protected
  */
 Blockly.FieldTextArea.prototype.render_ = function() {
@@ -159,10 +158,11 @@ Blockly.FieldTextArea.prototype.render_ = function() {
   // Add in new tspan lines
   var txt = this.getDisplayText_();
   var y = 0;
-  var yoffset = 14; // 12.5 is hard-coded in Blockly.Field
+  var xoffset =0;
+  var yoffset = 12.5; // 12.5 is hard-coded in Blockly.Field
   var txtLines = txt.split("\n");
   txtLines.forEach(function(t) {
-    Blockly.utils.dom.createSvgElement('tspan', {x:0,y:y + yoffset}, textElement)
+    Blockly.utils.dom.createSvgElement('tspan', {x:xoffset,y:y + yoffset}, textElement)
         .appendChild(document.createTextNode(t));
     y += 20;
   });
@@ -172,13 +172,14 @@ Blockly.FieldTextArea.prototype.render_ = function() {
 
   // set up widths
   this.size_.width = this.textElement_.getBBox().width + 5;
-  this.size_.height = y + (Blockly.BlockSvg.SEP_SPACE_Y + 5) ;
+  // Minimum size of block (25) - default borderRect_ height (16)
+  //   = 9 for vertical margin
+  this.size_.height = y + 9;
 
   if (this.borderRect_) {
     this.borderRect_.setAttribute('width',
         this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
-    this.borderRect_.setAttribute('height',
-        this.size_.height - (Blockly.BlockSvg.SEP_SPACE_Y + 5));
+    this.borderRect_.setAttribute('height', y);
   }
 };
 
@@ -196,14 +197,21 @@ Blockly.FieldTextArea.prototype.widgetCreate_ = function() {
   var fontSize =
       (Blockly.FieldTextInput.FONTSIZE * this.workspace_.scale) + 'pt';
   div.style.fontSize = fontSize;
+  
+  var scale = this.sourceBlock_.workspace.scale;
+  div.style.lineHeight = (20*scale)+'px';
+  //div.style['line-height'] = '20px';
   htmlInput.style.fontSize = fontSize;
   htmlInput.style.fontFamily = 'monospace';
-  htmlInput.style.marginTop = "2px";
+  htmlInput.style.marginTop = (1*scale)+"px";
+  htmlInput.style.paddingLeft = (5*scale)+"px";
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
   htmlInput.style.resize = 'none';
-  htmlInput.style['line-height'] = '20px';
+  htmlInput.style['line-height'] = (20*scale)+'px';
   htmlInput.style['overflow'] = 'hidden';
   htmlInput.style['height'] = '100%';
+  //htmlInput.style['padding-top'] = '3px';
+  //htmlInput.style['padding-left'] = '4px';
   div.appendChild(htmlInput);
 
   htmlInput.value = htmlInput.defaultValue = this.value_;

@@ -365,7 +365,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   //Add some margin (aka spacing) to each line, based on WHICH line it is (ex. line 1 will get a bit of space added at the top, the last line will get some space added to the bottom, etc)
   inputRows = this.renderComputeSpacing_(inputRows);
 
-  if (inputRows) {
+  if (inputRows && inputRows.length > 0) {
     for (var i = 0; i < icons.length; i++) {
       icons[i].moveVertical(inputRows[0].alignmentHeight);
     }
@@ -966,8 +966,12 @@ Blockly.BlockSvg.prototype.renderDrawLeft_ = function(pathObject, inputRows) {
 
   //SHAPE: This will calculate the vertical middle of the first row, so the "puzzle" piece can be centered there.
   //SHAPE: On blocks with multiple lines, it will still render the "puzzle" piece in the middle of the first row. Reason - it's very ugly otherwise.
-  //TODO: Maybe, just maybe check if a "first" line exist. Even though it always should.
-  this.firstRowHeight = inputRows[0].height;
+  if (inputRows.length > 0) {
+    this.firstRowHeight = inputRows[0].height;
+  }
+  else {
+    this.firstRowHeight = 25;
+  }
 
   if (this.outputConnection) {
     //SHAPE: 15 is hardcoded because the entire svg path of the "puzzle" piece is also hardcoded and has 15 in it.

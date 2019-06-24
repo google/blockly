@@ -73,9 +73,44 @@ if [ -f "$BLOCKLY_ROOT/tests/compile/main_compressed.js" ]; then
   rm "$BLOCKLY_ROOT/tests/compile/main_compressed.js"
 fi
 
+#Set the renderer name
+if [[ $# == 1 ]]; then
+  if [ $(find "$BLOCKLY_ROOT/core" -name "$1") ]; then
+    renderName=$1
+  else
+    echo "A renderer with the name $1 does not exist"
+    echo "Please provide a valid renderer name"
+    exit 1
+  fi
+else
+  renderName="fake_rendering_1"
+fi
+
+
+tempPath="$BLOCKLY_ROOT/tests/compile/temp_core"
+corePath="$BLOCKLY_ROOT/core/*"
+rm -r $tempPath
+mkdir $tempPath
+cp $corePath $tempPath
+
+# Copy over all files in any subdirectories except for the ones in extra
+# rendering folders.
+for dir in ./core/*/ ; do
+  if [[ $dir == *"/renderers/"* ]]; then
+    renderers="$dir*"
+    for renderer in $renderers ; do
+      if [[ $renderer == *"${renderName}" ]]; then
+        find $renderer -type f -exec cp {} $tempPath \;
+      fi
+    done
+  else
+    find $dir -type f -exec cp {} $tempPath \;
+  fi
+done
+
 echo "Compiling Blockly..."
 COMPILATION_COMMAND="java -jar $COMPILER --js='$BLOCKLY_ROOT/tests/compile/main.js' \
-  --js='$BLOCKLY_ROOT/core/**.js' \
+  --js='$BLOCKLY_ROOT/tests/compile/temp_core/**.js' \
   --js='$BLOCKLY_ROOT/blocks/**.js' \
   --js='$BLOCKLY_ROOT/generators/**.js' \
   --js='$BLOCKLY_ROOT/msg/js/**.js' \

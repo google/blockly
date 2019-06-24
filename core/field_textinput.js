@@ -67,7 +67,7 @@ goog.inherits(Blockly.FieldTextInput, Blockly.Field);
  */
 Blockly.FieldTextInput.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  var field = new Blockly.FieldTextInput(text, options['class']);
+  var field = new Blockly.FieldTextInput(text]);
   if (typeof options['spellcheck'] === 'boolean') {
     field.setSpellcheck(options['spellcheck']);
   }

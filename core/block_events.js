@@ -197,9 +197,8 @@ Blockly.Events.Change.prototype.run = function(forward) {
         oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
       }
       if (block.domToMutation) {
-        value = value || '<mutation></mutation>';
-        var dom = Blockly.Xml.textToDom('<xml>' + value + '</xml>');
-        block.domToMutation(dom.firstChild);
+        var dom = Blockly.Xml.textToDom(value || '<mutation></mutation>');
+        block.domToMutation(dom);
       }
       Blockly.Events.fire(new Blockly.Events.Change(
           block, 'mutation', null, oldMutation, value));
@@ -261,7 +260,7 @@ Blockly.Events.Create.prototype.toJson = function() {
  */
 Blockly.Events.Create.prototype.fromJson = function(json) {
   Blockly.Events.Create.superClass_.fromJson.call(this, json);
-  this.xml = Blockly.Xml.textToDom('<xml>' + json['xml'] + '</xml>').firstChild;
+  this.xml = Blockly.Xml.textToDom(json['xml']);
   this.ids = json['ids'];
 };
 

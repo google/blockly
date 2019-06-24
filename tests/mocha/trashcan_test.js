@@ -287,9 +287,7 @@ suite("Trashcan", function() {
     test("Max 0", function() {
       workspace.options.maxTrashcanContents = 0;
       sendDeleteEvent(
-          '<xml>' +
-          '  <block type="dummy_type"/>' +
-          '</xml>'
+          '<block type="dummy_type"/>'
       );
       chai.assert.equal(this.trashcan.contents_.length, 0);
       workspace.options.maxTrashcanContents = Infinity;
@@ -301,7 +299,7 @@ suite("Trashcan", function() {
       chai.assert.equal(this.trashcan.contents_.length, 1);
       chai.assert.equal(
           Blockly.Xml.textToDom(this.trashcan.contents_[0])
-              .children[0].getAttribute('type'),
+              .getAttribute('type'),
           'dummy_type2'
       );
       workspace.options.maxTrashcanContents = Infinity;

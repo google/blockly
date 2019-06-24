@@ -317,20 +317,17 @@ Blockly.Xml.domToPrettyText = function(dom) {
 };
 
 /**
- * Converts an XML string into a DOM structure. It requires the XML to have a
- * root element of <xml>. Other XML string will result in throwing an error.
+ * Converts an XML string into a DOM structure.
  * @param {string} text An XML string.
  * @return {!Element} A DOM object representing the singular child of the
  *     document element.
- * @throws if XML doesn't parse or is not the expected structure.
+ * @throws if the text doesn't parse.
  */
 Blockly.Xml.textToDom = function(text) {
   var doc = Blockly.Xml.utils.textToDomDocument(text);
-  // This function only accepts <xml> documents.
   if (!doc || !doc.documentElement ||
-      doc.documentElement.nodeName.toLowerCase() != 'xml') {
-    // Whatever we got back from the parser is not the expected structure.
-    throw TypeError('Blockly.Xml.textToDom expected an <xml> document.');
+      doc.getElementsByTagName('parsererror').length) {
+    throw Error('textToDom was unable to parse: ' + text);
   }
   return doc.documentElement;
 };

@@ -16,7 +16,8 @@
 			"Deathkon",
 			"Muhaoying",
 			"佛壁灯",
-			"Htq110219891"
+			"Htq110219891",
+			"Ambeta"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "项目",
@@ -51,7 +52,7 @@
 	"NEW_VARIABLE_TITLE": "新变量的名称：",
 	"VARIABLE_ALREADY_EXISTS": "名字叫“%1”的变量已经存在了。",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "名字叫“%1”的变量已经有了另一个类型：“%2”。",
-	"DELETE_VARIABLE_CONFIRMATION": "要删除变量“%2”的%1个使用之处吗？",
+	"DELETE_VARIABLE_CONFIRMATION": "要删除对变量“%2”的%1个引用吗？",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "不能删除变量“%1”，因为它是函数“%2”定义的一部分",
 	"DELETE_VARIABLE": "删除变量“%1”",
 	"COLOUR_PICKER_HELPURL": "https://zh.wikipedia.org/wiki/颜色",

@@ -789,15 +789,15 @@ Blockly.Field.prototype.setValue = function(newValue) {
  */
 Blockly.Field.prototype.processValidation_ = function(newValue,
     validatedValue) {
-  if (validatedValue !== undefined) {
-    newValue = validatedValue;
-  }
-  if (newValue === null) {
-    this.doValueInvalid_();
+  if (validatedValue === null) {
+    this.doValueInvalid_(newValue);
     if (this.isDirty_) {
       this.forceRerender();
     }
     return Error();
+  }
+  if (validatedValue !== undefined) {
+    newValue = validatedValue;
   }
   return newValue;
 };
@@ -837,12 +837,13 @@ Blockly.Field.prototype.doValueUpdate_ = function(newValue) {
 };
 
 /**
- * Used to notify the field an invalid value was input. Can be overiden by
+ * Used to notify the field an invalid value was input. Can be overidden by
  * subclasses, see FieldTextInput.
  * No-op by default.
+ * @param {*} _invalidValue The input value that was determined to be invalid.
  * @protected
  */
-Blockly.Field.prototype.doValueInvalid_ = function() {
+Blockly.Field.prototype.doValueInvalid_ = function(_invalidValue) {
   // NOP
 };
 

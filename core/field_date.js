@@ -117,17 +117,6 @@ Blockly.FieldDate.prototype.doClassValidation_ = function(newValue) {
 };
 
 /**
- * Called when the given value is invalid. If the picker is shown, set
- * isDirty to true so that it gets reset to the previous selection.
- * @protected
- */
-Blockly.FieldDate.prototype.doValueInvalid_ = function() {
-  if (this.picker_) {
-    this.isDirty_ = true;
-  }
-};
-
-/**
  * Render the field. If the picker is shown make sure it has the current
  * date selected.
  * @protected

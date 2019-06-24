@@ -30,67 +30,91 @@ goog.provide('Blockly.Themes.Classic');
 goog.require('Blockly.Theme');
 
 var defaultBlockStyles = {
+  "data_blocks":{
+    "colourPrimary": "#ef476e"
+  },
+  "action_blocks":{
+    "colourPrimary": "#4bcdcc"
+  },
+  "sense_blocks":{
+    "colourPrimary": "#ffa04e"
+  },
+  "vision_blocks":{
+    "colourPrimary": "#d84235"
+  },
   "colour_blocks":{
-    "colourPrimary": "20"
+    "colourPrimary": "#7ed136"
   },
   "list_blocks": {
-    "colourPrimary": "260"
+    "colourPrimary": "#613f93"
   },
   "logic_blocks": {
-    "colourPrimary": "210"
+    "colourPrimary": "#0894c5"
   },
   "loop_blocks": {
-    "colourPrimary": "120"
+    "colourPrimary": "#2aab53"
   },
   "math_blocks": {
-    "colourPrimary": "230"
+    "colourPrimary": "#1d53ba"
   },
   "procedure_blocks": {
-    "colourPrimary": "290"
+    "colourPrimary": "#fbc23d"
   },
   "text_blocks": {
-    "colourPrimary": "160"
+    "colourPrimary": "#8c1bb5"
   },
   "variable_blocks": {
-    "colourPrimary": "330"
+    "colourPrimary": "#ae3998"
   },
   "variable_dynamic_blocks":{
-    "colourPrimary": "310"
+    "colourPrimary": "#ae3998"
   },
   "hat_blocks":{
-    "colourPrimary":"330",
+    "colourPrimary":"#ae3998",
     "hat":"cap"
   }
 };
 
 var categoryStyles = {
+  "data_category":{
+    "colourPrimary": "#ef476e"
+  },
+  "action_category":{
+    "colourPrimary": "#4bcdcc"
+  },
+  "sense_category":{
+    "colourPrimary": "#ffa04e"
+  },
+  "vision_category":{
+    "colourPrimary": "#d84235"
+  },
   "colour_category":{
-    "colour": "20"
+    "colourPrimary": "#7ed136"
   },
   "list_category": {
-    "colour": "260"
+    "colourPrimary": "#613f93"
   },
   "logic_category": {
-    "colour": "210"
+    "colourPrimary": "#0894c5"
   },
   "loop_category": {
-    "colour": "120"
+    "colourPrimary": "#2aab53"
   },
   "math_category": {
-    "colour": "230"
+    "colourPrimary": "#1d53ba"
   },
   "procedure_category": {
-    "colour": "290"
+    "colourPrimary": "#fbc23d"
   },
   "text_category": {
-    "colour": "160"
+    "colourPrimary": "#8c1bb5"
   },
   "variable_category": {
-    "colour": "330"
+    "colourPrimary": "#ae3998"
   },
   "variable_dynamic_category":{
-    "colour": "310"
-  }
+    "colourPrimary": "#ae3998"
+  },
 };
 
 Blockly.Themes.Classic = new Blockly.Theme(defaultBlockStyles, categoryStyles);

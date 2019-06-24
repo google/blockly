@@ -63,11 +63,12 @@ Blockly.FieldColour.fromJson = function(options) {
 
 /**
  * Default width of a colour field.
+ * SHAPE: 10 more pixels are added due to the use of Blockly.BlockSvg.SEP_SPACE_X in field.js
  * @type {number}
  * @private
  * @const
  */
-Blockly.FieldColour.DEFAULT_WIDTH = 16;
+Blockly.FieldColour.DEFAULT_WIDTH = 15;
 
 /**
  * Default height of a colour field.
@@ -75,7 +76,7 @@ Blockly.FieldColour.DEFAULT_WIDTH = 16;
  * @private
  * @const
  */
-Blockly.FieldColour.DEFAULT_HEIGHT = 12;
+Blockly.FieldColour.DEFAULT_HEIGHT = 25;
 
 /**
  * Array of colours used by this field.  If null, use the global list.

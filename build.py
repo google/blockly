@@ -54,15 +54,7 @@
 
 import sys
 
-for arg in sys.argv[1:len(sys.argv)]:
-  if (arg != 'core' and
-      arg != 'accessible' and
-      arg != 'generators' and
-      arg != 'langfiles'):
-    raise Exception("Invalid argument: \"" + arg + "\". Usage: build.py "
-        "<0 or more of accessible, core, generators, langfiles>")
-
-import errno, glob, json, os, re, subprocess, threading, codecs
+import errno, glob, json, os, re, subprocess, threading, codecs, argparse
 
 if sys.version_info[0] == 2:
   import httplib
@@ -194,22 +186,23 @@ class Gen_compressed(threading.Thread):
   Uses the Closure Compiler's online API.
   Runs in a separate thread.
   """
-  def __init__(self, search_paths, bundles):
+  def __init__(self, search_paths, bundles, use_default):
     threading.Thread.__init__(self)
     self.search_paths = search_paths
     self.bundles = bundles
+    self.use_default = use_default
 
   def run(self):
-    if ('core' in self.bundles):
+    if (self.bundles.core or self.use_default):
       self.gen_core()
 
-    if ('accessible' in self.bundles):
+    if (self.bundles.accessible or self.use_default):
       self.gen_accessible()
 
-    if ('core' in self.bundles or 'accessible' in self.bundles):
+    if (self.bundles.core or self.bundles.accessible or self.use_default):
       self.gen_blocks()
 
-    if ('generators' in self.bundles):
+    if (self.bundles.generators or self.use_default):
       self.gen_generator("javascript")
       self.gen_generator("python")
       self.gen_generator("php")
@@ -525,9 +518,37 @@ class Gen_langfiles(threading.Thread):
       else:
         print("FAILED to create " + f)
 
+def find_path(args, directories):
+  new_list = []
+  render_path = 'core/renderers/' + args.render_name
+  core_search_paths = calcdeps.ExpandDirectories(directories)
+  for path in core_search_paths:
+    if path.find('core/renderers') > -1 and path.find(render_path) > -1:
+      new_list.append(path)
+    elif (path.find('core/renderers') == -1):
+      new_list.append(path)
+  return sorted(new_list)
+
+def get_args():
+  parser = argparse.ArgumentParser(description="Decide which files to build with what renderer.")
+  parser.add_argument('-renderer', dest="render_name", default="fake_rendering_1")
+  parser.add_argument('-core', action="store_true", default=False, help="blah")
+  parser.add_argument('-accessible', action="store_true", default=False, help="blah")
+  parser.add_argument('-generators', action="store_true", default=False, help="blah")
+  parser.add_argument('-langfiles', action="store_true", default=False, help="blah")
+  args = parser.parse_args()
+  verify_render_name(args.render_name)
+  return args
+
+def verify_render_name(render_name):
+  if (not render_name in next(os.walk('core/renderers'))[1]):
+    print (render_name + " is not a valid renderer.")
+    sys.exit()
 
 if __name__ == "__main__":
   try:
+    args = get_args()
+    use_default = not args.core and not args.accessible and not args.generators and not args.langfiles
     calcdeps = import_path(os.path.join(
         os.path.pardir, "closure-library", "closure", "bin", "calcdeps.py"))
   except ImportError:
@@ -548,31 +569,22 @@ if __name__ == "__main__":
 developers.google.com/blockly/guides/modify/web/closure""")
     sys.exit(1)
 
-  core_search_paths = calcdeps.ExpandDirectories(
-      ["core", os.path.join(os.path.pardir, "closure-library")])
-  core_search_paths = sorted(core_search_paths)  # Deterministic build.
-  full_search_paths = calcdeps.ExpandDirectories(
-      ["accessible", "core", os.path.join(os.path.pardir, "closure-library")])
-  full_search_paths = sorted(full_search_paths)  # Deterministic build.
-
-  if (len(sys.argv) == 1):
-    args = ['core', 'accessible', 'generators', 'defaultlangfiles']
-  else:
-    args = sys.argv
+  core_search_paths = find_path(args, ["core", os.path.join(os.path.pardir, "closure-library")])
+  full_search_paths = find_path(args, ["accessible", "core", os.path.join(os.path.pardir, "closure-library")])
 
   # Uncompressed and compressed are run in parallel threads.
   # Uncompressed is limited by processor speed.
-  if ('core' in args):
+  if (args.core or use_default):
     Gen_uncompressed(core_search_paths, 'blockly_uncompressed.js').start()
 
-  if ('accessible' in args):
+  if (args.accessible or use_default):
     Gen_uncompressed(full_search_paths, 'blockly_accessible_uncompressed.js').start()
 
   # Compressed is limited by network and server speed.
-  Gen_compressed(full_search_paths, args).start()
+  Gen_compressed(full_search_paths, args, use_default).start()
 
   # This is run locally in a separate thread
   # defaultlangfiles checks for changes in the msg files, while manually asking
-  # to build langfiles will force the messages to be rebuilt.
-  if ('langfiles' in args or 'defaultlangfiles' in args):
-    Gen_langfiles('langfiles' in args).start()
+  # to build langfiles will force the messages to be rebuilt
+  if (args.langfiles or use_default):
+    Gen_langfiles(args.langfiles).start()

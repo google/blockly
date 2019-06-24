@@ -326,11 +326,8 @@ Blockly.Xml.domToPrettyText = function(dom) {
  */
 Blockly.Xml.textToDom = function(text) {
   var doc = Blockly.Xml.utils.textToDomDocument(text);
-  // This function only accepts <xml> documents.
-  if (!doc || !doc.documentElement ||
-      doc.documentElement.nodeName.toLowerCase() != 'xml') {
-    // Whatever we got back from the parser is not the expected structure.
-    throw TypeError('Blockly.Xml.textToDom expected an <xml> document.');
+  if (!doc || !doc.documentElement) {
+    throw Error('textToDom was unable to parse: ' + text);
   }
   return doc.documentElement;
 };

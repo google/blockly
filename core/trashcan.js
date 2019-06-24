@@ -431,7 +431,7 @@ Blockly.Trashcan.prototype.click = function() {
 
   var xml = [];
   for (var i = 0, text; text = this.contents_[i]; i++) {
-    xml[i] = Blockly.Xml.textToDom(text).firstChild;
+    xml[i] = Blockly.Xml.textToDom(text);
   }
   this.flyout_.show(xml);
 };
@@ -531,5 +531,5 @@ Blockly.Trashcan.prototype.cleanBlockXML_ = function(xml) {
     }
     node = nextNode;
   }
-  return '<xml>' + Blockly.Xml.domToText(xmlBlock) + '</xml>';
+  return Blockly.Xml.domToText(xmlBlock);
 };

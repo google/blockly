@@ -325,7 +325,8 @@ Blockly.Xml.domToPrettyText = function(dom) {
  */
 Blockly.Xml.textToDom = function(text) {
   var doc = Blockly.Xml.utils.textToDomDocument(text);
-  if (!doc || !doc.documentElement) {
+  if (!doc || !doc.documentElement ||
+      doc.getElementsByTagName('parsererror').length) {
     throw Error('textToDom was unable to parse: ' + text);
   }
   return doc.documentElement;

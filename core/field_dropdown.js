@@ -456,6 +456,11 @@ Blockly.FieldDropdown.prototype.updateColour = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.render_ = function() {
+  // Hide both elements.
+  this.textContent_.nodeValue = '';
+  this.imageElement_.style.display = 'none';
+
+  // Show correct element.
   if (this.imageJson_) {
     this.renderSelectedImage_();
   } else {
@@ -471,6 +476,7 @@ Blockly.FieldDropdown.prototype.render_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
+  this.imageElement_.style.display = '';
   this.imageElement_.setAttributeNS(
       Blockly.utils.dom.XLINK_NS, 'xlink:href', this.imageJson_.src);
   this.imageElement_.setAttribute('height', this.imageJson_.height);

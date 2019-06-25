@@ -53,6 +53,8 @@ Blockly.FieldMultilineText = function(text, opt_validator) {
 };
 goog.inherits(Blockly.FieldMultilineText, Blockly.FieldTextInput);
 
+Blockly.FieldMultilineText.prototype.lineHeight_ = 20;
+
 /**
  * Construct a FieldMultilineText from a JSON arg object,
  * dereferencing any string table references.
@@ -140,8 +142,6 @@ Blockly.FieldMultilineText.prototype.getDisplayText_ = function() {
   return value;
 };
 
-Blockly.FieldMultilineText.prototype.lineHeight = 20;
-
 /**
  * Updates the text of the textElement.
  * @protected
@@ -160,13 +160,14 @@ Blockly.FieldMultilineText.prototype.render_ = function() {
   var xoffset = 0;
   var yoffset = 12.5; // 12.5 is hard-coded in Blockly.Field
   var txtLines = txt.split("\n");
+  var lineHeight = this.lineHeight_;
   txtLines.forEach(function(t) {
     Blockly.utils.dom.createSvgElement('tspan', {x:xoffset,y:y + yoffset}, textElement)
         .appendChild(document.createTextNode(t));
-    y += this.lineHeight;
+    y += lineHeight;
   });
   if (txtLines.length == 0) {
-    y += this.lineHeight;
+    y += lineHeight;
   }
 
   // set up widths
@@ -197,14 +198,14 @@ Blockly.FieldMultilineText.prototype.widgetCreate_ = function() {
   div.style.fontSize = fontSize;
   
   var scale = this.sourceBlock_.workspace.scale;
-  div.style.lineHeight = (this.lineHeight * scale) + 'px';
+  div.style.lineHeight = (this.lineHeight_ * scale) + 'px';
   htmlInput.style.fontSize = fontSize;
   htmlInput.style.fontFamily = 'monospace';
   // Rendering weirdness values
   htmlInput.style.marginTop = (1 * scale) + "px";
   htmlInput.style.paddingLeft = (5 * scale) + "px";
   htmlInput.style.resize = 'none';
-  htmlInput.style.lineHeight = (this.lineHeight * scale) + 'px';
+  htmlInput.style.lineHeight = (this.lineHeight_ * scale) + 'px';
   htmlInput.style.overflow = 'hidden';
   htmlInput.style.height = '100%';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);

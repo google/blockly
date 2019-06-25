@@ -68,7 +68,7 @@ suite('Variable Fields', function() {
     sinon.restore();
   });
 
-  test.skip('Dropdown contains variables', function() {
+  test('Dropdown contains variables', function() {
     // Expect that the dropdown options will contain the variables that exist
     this.workspace.createVariable('name1', '', 'id1');
     this.workspace.createVariable('name2', '', 'id2');
@@ -81,7 +81,7 @@ suite('Variable Fields', function() {
         fieldVariable);
 
     // Expect three variable options and a rename option.
-    assertEquals(result_options.length, 4);
+    assertEquals(result_options.length, 5);
     isEqualArrays(result_options[0], ['name1', 'id1']);
     isEqualArrays(result_options[1], ['name2', 'id2']);
     isEqualArrays(result_options[2], ['name3', 'id3']);

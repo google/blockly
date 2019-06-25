@@ -2,7 +2,7 @@
  * @license
  * Blockly Tests
  *
- * Copyright 2017 Google Inc.
+ * Copyright 2019 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,9 +42,9 @@ suite('Procedures', function() {
         context.defType = types[0];
         context.callType = types[1];
 
-        context.defBlock = new Blockly.Block(this.workspace, types[0]);
+        context.defBlock = new Blockly.Block(this.workspace, context.defType);
         context.defBlock.setFieldValue(startName, 'NAME');
-        context.callBlock = new Blockly.Block(this.workspace, types[1]);
+        context.callBlock = new Blockly.Block(this.workspace, context.callType);
         context.callBlock.setFieldValue(startName, 'NAME');
         func.call(context);
         context.defBlock.dispose();
@@ -234,10 +234,17 @@ suite('Procedures', function() {
         caller2.dispose();
       }, 'name1');
     });
-    // This can happen using the trashcan to retrieve blocks.
-    test.skip('Call Different Case', function() {
+    // This can occur if you:
+    //  1) Create an uppercase definition and call block.
+    //  2) Delete both blocks.
+    //  3) Create a lowercase definition and call block.
+    //  4) Retrieve the uppercase call block from the trashcan.
+    // (And vise versa for creating lowercase blocks first)
+    // When converted to code all function names will be lowercase, so a
+    // caller should still be returned for a differently-cased procedure.
+    test('Call Different Case', function() {
       this.callForAllTypes(function() {
-        this.callBlock.setFieldValue('NAME', 'NAME');
+        this.callBlock.setFieldValue('NAME1', 'NAME');
         var callers = Blockly.Procedures.getCallers('name1', this.workspace);
         chai.assert.equal(callers.length, 1);
         chai.assert.equal(callers[0], this.callBlock);
@@ -387,7 +394,8 @@ suite('Procedures', function() {
           clearVariables.call(this);
         }, 'name');
       });
-      test('Set Arg Empty (#1958)', function() {
+      // Test case for #1958
+      test('Set Arg Empty', function() {
         this.callForAllTypes(function() {
           var args = ['arg1'];
           createMutator.call(this, args);

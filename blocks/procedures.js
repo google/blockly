@@ -164,45 +164,18 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this Blockly.Block
    */
   decompose: function(workspace) {
-    /*var containerBlock = workspace.newBlock('procedures_mutatorcontainer');
-    containerBlock.initSvg();
-
-    // Check/uncheck the allow statement box.
-    if (this.getInput('RETURN')) {
-      containerBlock.setFieldValue(
-          this.hasStatements_ ? 'TRUE' : 'FALSE', 'STATEMENTS');
-    } else {
-      containerBlock.removeInput('STATEMENT_INPUT');
-    }
-
-    // Parameter list.
-    var connection = containerBlock.getInput('STACK').connection;
-    for (var i = 0; i < this.arguments_.length; i++) {
-      var paramBlock = workspace.newBlock('procedures_mutatorarg');
-      paramBlock.initSvg();
-      paramBlock.setFieldValue(this.arguments_[i], 'NAME');
-      // Store the old location.
-      paramBlock.oldLocation = i;
-      connection.connect(paramBlock.previousConnection);
-      connection = paramBlock.nextConnection;
-    }*/
-
     var xml = Blockly.Xml.textToDom(
-        '<xml>' +
-        '  <block type="procedures_mutatorcontainer">' +
-        '    <statement name="STACK"></statement>' +
-        '  </block>' +
-        '</xml>').children[0];
+        '<block type="procedures_mutatorcontainer">' +
+        '  <statement name="STACK"></statement>' +
+        '</block>');
     var node = xml.getElementsByTagName('statement')[0];
     for (var i = 0; i < this.arguments_.length; i++) {
       node.appendChild(Blockly.Xml.textToDom(
-          '<xml>' +
-          '  <block type="procedures_mutatorarg">' +
-          '    <field name="NAME">' + this.arguments_[i] + '</field>' +
-          '    <next></next>' +
-          '  </block>' +
-          '</xml>'
-      ).children[0]);
+          '<block type="procedures_mutatorarg">' +
+          '  <field name="NAME">' + this.arguments_[i] + '</field>' +
+          '  <next></next>' +
+          '</block>'
+      ));
       node = node.getElementsByTagName('xml');
     }
 

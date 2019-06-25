@@ -26,7 +26,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.FieldTextArea');
+goog.provide('Blockly.FieldMultilineText');
 
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Field');
@@ -47,24 +47,24 @@ goog.require('Blockly.utils.userAgent');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldTextArea = function(text, opt_validator) {
-  Blockly.FieldTextArea.superClass_.constructor.call(this, text,
+Blockly.FieldMultilineText = function(text, opt_validator) {
+  Blockly.FieldMultilineText.superClass_.constructor.call(this, text,
       opt_validator);
 };
-goog.inherits(Blockly.FieldTextArea, Blockly.FieldTextInput);
+goog.inherits(Blockly.FieldMultilineText, Blockly.FieldTextInput);
 
 /**
- * Construct a FieldTextArea from a JSON arg object,
+ * Construct a FieldMultilineText from a JSON arg object,
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (text, class, and
  *                          spellcheck).
- * @return {!Blockly.FieldTextArea} The new field instance.
+ * @return {!Blockly.FieldMultilineText} The new field instance.
  * @package
  * @nocollapse
  */
-Blockly.FieldTextArea.fromJson = function(options) {
+Blockly.FieldMultilineText.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  var field = new Blockly.FieldTextArea(text);
+  var field = new Blockly.FieldMultilineText(text);
   if (typeof options['spellcheck'] === 'boolean') {
     field.setSpellcheck(options['spellcheck']);
   }
@@ -76,7 +76,7 @@ Blockly.FieldTextArea.fromJson = function(options) {
  * @param {!Element} fieldElement The element containing information about the
  *    variable field's state.
  */
-Blockly.FieldTextArea.prototype.fromXml = function(fieldElement) {
+Blockly.FieldMultilineText.prototype.fromXml = function(fieldElement) {
   var length = fieldElement.getAttribute('length');
   var lines = [];
   for (var i = 0; i < length; i++) {
@@ -92,7 +92,7 @@ Blockly.FieldTextArea.prototype.fromXml = function(fieldElement) {
  *    field's state.
  * @return {!Element} The element containing info about the field's state.
  */
-Blockly.FieldTextArea.prototype.toXml = function(fieldElement) {
+Blockly.FieldMultilineText.prototype.toXml = function(fieldElement) {
   var lines = this.getValue().split("\n");
   var length = lines.length;
   fieldElement.setAttribute('length', length);
@@ -106,7 +106,7 @@ Blockly.FieldTextArea.prototype.toXml = function(fieldElement) {
  * Create the block UI for this field.
  * @package
  */
-Blockly.FieldTextArea.prototype.initView = function() {
+Blockly.FieldMultilineText.prototype.initView = function() {
   Blockly.FieldDropdown.superClass_.initView.call(this);
   this.textElement_.setAttribute('class', 'blocklyText blocklyTextCode');
   
@@ -118,7 +118,7 @@ Blockly.FieldTextArea.prototype.initView = function() {
  * @return {string} Currently displayed text.
  * @private
  */
-Blockly.FieldTextArea.prototype.getDisplayText_ = function() {
+Blockly.FieldMultilineText.prototype.getDisplayText_ = function() {
   var value = this.value_;
   if (!value) {
     // Prevent the field from disappearing if empty.
@@ -144,7 +144,7 @@ Blockly.FieldTextArea.prototype.getDisplayText_ = function() {
  * Updates the text of the textElement.
  * @protected
  */
-Blockly.FieldTextArea.prototype.render_ = function() {
+Blockly.FieldMultilineText.prototype.render_ = function() {
   // Replace the text.
   var textElement = this.textElement_;
   // Clear out old tspan lines
@@ -185,7 +185,7 @@ Blockly.FieldTextArea.prototype.render_ = function() {
  * @return {!HTMLInputElement} The newly created text input editor.
  * @private
  */
-Blockly.FieldTextArea.prototype.widgetCreate_ = function() {
+Blockly.FieldMultilineText.prototype.widgetCreate_ = function() {
   var div = Blockly.WidgetDiv.DIV;
 
   var htmlInput = document.createElement('textarea');
@@ -223,7 +223,7 @@ Blockly.FieldTextArea.prototype.widgetCreate_ = function() {
  * @param {!Event} e Keyboard event.
  * @private
  */
-Blockly.FieldTextArea.prototype.onHtmlInputKeyDown_ = function(e) {
+Blockly.FieldMultilineText.prototype.onHtmlInputKeyDown_ = function(e) {
   var tabKey = 9, escKey = 27;
   if (e.keyCode == escKey) {
     Blockly.WidgetDiv.hide();
@@ -235,4 +235,4 @@ Blockly.FieldTextArea.prototype.onHtmlInputKeyDown_ = function(e) {
 };
 
 
-Blockly.Field.register('field_textarea', Blockly.FieldTextArea);
+Blockly.Field.register('field_multilinetext', Blockly.FieldMultilineText);

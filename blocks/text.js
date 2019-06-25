@@ -74,7 +74,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "height": 17,
       "alt": '\u00B6'
     },{
-      "type": "field_textarea",
+      "type": "field_multilinetext",
       "name": "TEXT",
       "text": ""
     }],

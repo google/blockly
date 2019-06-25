@@ -53,7 +53,20 @@ Blockly.FieldMultilineText = function(text, opt_validator) {
 };
 goog.inherits(Blockly.FieldMultilineText, Blockly.FieldTextInput);
 
+/**
+ * Pixel height of a single line of text.
+ */
 Blockly.FieldMultilineText.prototype.lineHeight_ = 20;
+
+/**
+ * Pixel width of the textarea's top offset (margin)
+ */
+Blockly.FieldMultilineText.prototype.areaTop_ = 1;
+
+/**
+ * Pixel width of the textarea's left offset (margin)
+ */
+Blockly.FieldMultilineText.prototype.areaLeft_ = 5;
 
 /**
  * Construct a FieldMultilineText from a JSON arg object,
@@ -202,8 +215,8 @@ Blockly.FieldMultilineText.prototype.widgetCreate_ = function() {
   htmlInput.style.fontSize = fontSize;
   htmlInput.style.fontFamily = 'monospace';
   // Rendering weirdness values
-  htmlInput.style.marginTop = (1 * scale) + "px";
-  htmlInput.style.paddingLeft = (5 * scale) + "px";
+  htmlInput.style.marginTop = (this.areaTop_ * scale) + "px";
+  htmlInput.style.paddingLeft = (this.areaLeft_ * scale) + "px";
   htmlInput.style.resize = 'none';
   htmlInput.style.lineHeight = (this.lineHeight_ * scale) + 'px';
   htmlInput.style.overflow = 'hidden';

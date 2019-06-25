@@ -518,6 +518,14 @@ class Gen_langfiles(threading.Thread):
       else:
         print("FAILED to create " + f)
 
+class Arguments:
+  def __init__(self):
+    self.core = False
+    self.accessible = False
+    self.generators = False
+    self.langfiles = False
+    self.render_name = "fake_rendering_1"
+
 def find_path(args, directories):
   new_list = []
   render_path = 'core/renderers/' + args.render_name
@@ -529,16 +537,36 @@ def find_path(args, directories):
       new_list.append(path)
   return sorted(new_list)
 
-def get_args():
+def setup_parser():
   parser = argparse.ArgumentParser(description="Decide which files to build with what renderer.")
   parser.add_argument('-renderer', dest="render_name", default="fake_rendering_1")
   parser.add_argument('-core', action="store_true", default=False, help="blah")
   parser.add_argument('-accessible', action="store_true", default=False, help="blah")
   parser.add_argument('-generators', action="store_true", default=False, help="blah")
   parser.add_argument('-langfiles', action="store_true", default=False, help="blah")
-  args = parser.parse_args()
+  return parser
+
+def get_args():
+  parser = setup_parser()
+  try:
+    args = parser.parse_args()
+  except SystemExit:
+    args = Arguments()
+    for arg in sys.argv[1:len(sys.argv)]:
+      if arg == 'core':
+        args.core = True
+      elif arg == 'accessible':
+        args.accessible = True
+      elif arg == 'generators':
+        args.generators = True
+      elif arg == 'langfiles':
+        args.langfiles = True
+      elif arg == '--renderer':
+        print "Please use the new arguments -core, -accessible, -generators, -langfiles"
+        sys.exit()
   verify_render_name(args.render_name)
   return args
+
 
 def verify_render_name(render_name):
   if (not render_name in next(os.walk('core/renderers'))[1]):

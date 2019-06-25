@@ -140,6 +140,8 @@ Blockly.FieldMultilineText.prototype.getDisplayText_ = function() {
   return value;
 };
 
+Blockly.FieldMultilineText.prototype.lineHeight = 20;
+
 /**
  * Updates the text of the textElement.
  * @protected
@@ -161,10 +163,10 @@ Blockly.FieldMultilineText.prototype.render_ = function() {
   txtLines.forEach(function(t) {
     Blockly.utils.dom.createSvgElement('tspan', {x:xoffset,y:y + yoffset}, textElement)
         .appendChild(document.createTextNode(t));
-    y += 20;
+    y += this.lineHeight;
   });
   if (txtLines.length == 0) {
-    y += 20;
+    y += this.lineHeight;
   }
 
   // set up widths
@@ -190,19 +192,19 @@ Blockly.FieldMultilineText.prototype.widgetCreate_ = function() {
 
   var htmlInput = document.createElement('textarea');
   htmlInput.className = 'blocklyHtmlInput';
-  htmlInput.setAttribute('spellcheck', this.spellcheck_);
   var fontSize =
       (Blockly.FieldTextInput.FONTSIZE * this.workspace_.scale) + 'pt';
   div.style.fontSize = fontSize;
   
   var scale = this.sourceBlock_.workspace.scale;
-  div.style.lineHeight = (20 * scale) + 'px';
+  div.style.lineHeight = (this.lineHeight * scale) + 'px';
   htmlInput.style.fontSize = fontSize;
   htmlInput.style.fontFamily = 'monospace';
+  // Rendering weirdness values
   htmlInput.style.marginTop = (1 * scale) + "px";
   htmlInput.style.paddingLeft = (5 * scale) + "px";
   htmlInput.style.resize = 'none';
-  htmlInput.style.lineHeight = (20 * scale) + 'px';
+  htmlInput.style.lineHeight = (this.lineHeight * scale) + 'px';
   htmlInput.style.overflow = 'hidden';
   htmlInput.style.height = '100%';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);

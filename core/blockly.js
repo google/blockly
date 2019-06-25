@@ -256,6 +256,10 @@ Blockly.onKeyDown_ = function(e) {
       Blockly.hideChaff();
       workspace.undo(e.shiftKey);
     }
+    else if (e.keyCode == 70) {
+      // 'f' for focusing the search toolbox on the top
+      workspace.focusToolboxSearch();
+    }
   }
   // Common code for delete and cut.
   // Don't delete in the flyout.

@@ -1194,7 +1194,7 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
   } else {
     this.svgPath_.setAttribute('filter', 'none');
   }
-  this.svgPathLight_.style.display = 'none';
+  this.svgPathLight_.style.display = 'inline';
 };
 
 /**

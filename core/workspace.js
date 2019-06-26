@@ -29,6 +29,7 @@ goog.provide('Blockly.Workspace');
 goog.require('Blockly.utils');
 goog.require('Blockly.VariableMap');
 goog.require('Blockly.WorkspaceComment');
+goog.require('Blockly.Search');
 
 
 /**
@@ -111,6 +112,8 @@ Blockly.Workspace = function(opt_options) {
    * @private
    */
   this.potentialVariableMap_ = null;
+
+  this.search_ = new Blockly.Search(this);
 };
 
 /**

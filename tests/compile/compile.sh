@@ -73,7 +73,7 @@ if [ -f "$BLOCKLY_ROOT/tests/compile/main_compressed.js" ]; then
   rm "$BLOCKLY_ROOT/tests/compile/main_compressed.js"
 fi
 
-#Set the renderer name
+# If an argument is passed and is a valid renderer name use it
 if [[ $# == 1 ]]; then
   if [ $(find "$BLOCKLY_ROOT/core" -name "$1") ]; then
     renderName=$1
@@ -83,7 +83,7 @@ if [[ $# == 1 ]]; then
     exit 1
   fi
 else
-  renderName="fake_rendering_1"
+  renderName="block_rendering_rewrite"
 fi
 
 
@@ -93,13 +93,15 @@ rm -r $tempPath
 mkdir $tempPath
 cp $corePath $tempPath
 
-# Copy over all files in any subdirectories except for the ones in extra
-# rendering folders.
+# Copy over all files found in subdirectories except for the extra renderers.
 for dir in ./core/*/ ; do
+  # If we are in the renderers directory
   if [[ $dir == *"/renderers/"* ]]; then
     renderers="$dir*"
+    # Go through all folders in the renderers direcotry
     for renderer in $renderers ; do
       if [[ $renderer == *"${renderName}" ]]; then
+        # Copy over all files from the desired render folder
         find $renderer -type f -exec cp {} $tempPath \;
       fi
     done

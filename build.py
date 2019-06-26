@@ -516,31 +516,33 @@ class Gen_langfiles(threading.Thread):
       else:
         print("FAILED to create " + f)
 
-# Class to hold arguments if user passes in the old argument style.
+# Class to hold arguments if user passes in old argument style.
 class Arguments:
   def __init__(self):
     self.core = False
     self.accessible = False
     self.generators = False
     self.langfiles = False
-    self.render_name = "fake_rendering_1"
+    self.render_name = "block_rendering_rewrite"
 
-# Add all directories to the paths list except for any extra renderers.
+# Add all directories to the path list except for any extra renderers.
 def find_path(args, directories):
   new_list = []
   render_path = 'core/renderers/' + args.render_name
   core_search_paths = calcdeps.ExpandDirectories(directories)
   for path in core_search_paths:
+    #If it is the desired renderer
     if path.find('core/renderers') > -1 and path.find(render_path) > -1:
       new_list.append(path)
+    #If it is not a renderer
     elif (path.find('core/renderers') == -1):
       new_list.append(path)
   return sorted(new_list)
 
-# Setup the argument parser with the correct arguments.
+# Setup the argument parser.
 def setup_parser():
   parser = argparse.ArgumentParser(description="Decide which files to build with what renderer.")
-  parser.add_argument('-renderer', dest="render_name", default="fake_rendering_1", help="The name of the desired renderer. The name should corresspond to the name of a folder in core/renderers")
+  parser.add_argument('-renderer', dest="render_name", default="block_rendering_rewrite", help="The name of the desired renderer. The name should corresspond to the name of a folder in core/renderers")
   parser.add_argument('-core', action="store_true", default=False, help="Build core")
   parser.add_argument('-accessible', action="store_true", default=False, help="Build accessibility project")
   parser.add_argument('-generators', action="store_true", default=False, help="Build the generators")
@@ -565,7 +567,7 @@ def get_args():
         args.generators = True
       elif arg == 'langfiles':
         args.langfiles = True
-      elif arg == '--renderer':
+      elif arg == '-renderer':
         print "Please use the new arguments -core, -accessible, -generators, -langfiles"
         sys.exit()
   verify_render_name(args.render_name)

@@ -565,7 +565,7 @@ def get_args():
     args.generators = 'generators' in sys.argv
     args.langfiles = 'langfiles' in sys.argv
     if '-renderer' in sys.argv:
-      print "Please use the new arguments -core, -accessible, -generators, -langfiles"
+      print ("Please use the new arguments -core, -accessible, -generators, -langfiles")
       sys.exit()
   verify_render_name(args.render_name)
   return args

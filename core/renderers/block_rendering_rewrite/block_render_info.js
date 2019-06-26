@@ -221,6 +221,14 @@ Blockly.BlockRendering.RenderInfo.prototype.createBottomRow_ = function() {
 };
 
 
+/**
+ * Add an input element to the active row, if needed, and record the type of the
+ * input on the row.
+ * @param {!Blockly.Input} input The input to record information about.
+ * @param {!Blockly.BlockRendering.Row} activeRow The row that is currently being
+ *     populated.
+ * @private
+ */
 Blockly.BlockRendering.RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // Non-dummy inputs have visual representations onscreen.
   if (this.isInline && input.type == Blockly.INPUT_VALUE) {
@@ -232,12 +240,16 @@ Blockly.BlockRendering.RenderInfo.prototype.addInput_ = function(input, activeRo
   } else if (input.type == Blockly.INPUT_VALUE) {
     activeRow.elements.push(new Blockly.BlockRendering.ExternalValueInput(input));
     activeRow.hasExternalInput = true;
+  } else if (input.type == Blockly.DUMMY_INPUT) {
+    // Dummy inputs have no visual representation, but the information is still
+    // important.
+    activeRow.hasDummyInput = true;
   }
 };
 
 /**
  * Decide whether to start a new row between the two Blockly.Inputs.
- * @param {Blockly.Input}  input The first input to consider
+ * @param {!Blockly.Input}  input The first input to consider
  * @param {Blockly.Input}  lastInput The input that follows.
  * @return {boolean} True if the next input should be rendered on a new row.
  * @private
@@ -252,9 +264,9 @@ Blockly.BlockRendering.RenderInfo.prototype.shouldStartNewRow_ = function(input,
   if (input.type == Blockly.NEXT_STATEMENT) {
     return true;
   }
-  // External value inputs get their own rows.
-  if (input.type == Blockly.INPUT_VALUE && !this.isInline) {
-    return true;
+  // Value and dummy inputs get new row if inputs are not inlined.
+  if (input.type == Blockly.INPUT_VALUE || input.type == Blockly.DUMMY_INPUT) {
+    return !this.isInline;
   }
   return false;
 };
@@ -600,6 +612,9 @@ Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(prev,
     return BRC.BETWEEN_STATEMENT_PADDING_Y;
   }
   if (prev.hasStatement && next.hasStatement) {
+    return BRC.LARGE_PADDING;
+  }
+  if (next.hasDummyInput) {
     return BRC.LARGE_PADDING;
   }
   return BRC.MEDIUM_PADDING;

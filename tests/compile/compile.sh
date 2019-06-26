@@ -73,7 +73,8 @@ if [ -f "$BLOCKLY_ROOT/tests/compile/main_compressed.js" ]; then
   rm "$BLOCKLY_ROOT/tests/compile/main_compressed.js"
 fi
 
-# If an argument is passed and is a valid renderer name use it
+# If an argument is passed and is a valid renderer name use it otherwise use
+# default renderer name
 if [[ $# == 1 ]]; then
   if [ $(find "$BLOCKLY_ROOT/core" -name "$1") ]; then
     renderName=$1

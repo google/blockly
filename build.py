@@ -558,18 +558,13 @@ def get_args():
     args = parser.parse_args()
   except SystemExit:
     args = Arguments()
-    for arg in sys.argv[1:len(sys.argv)]:
-      if arg == 'core':
-        args.core = True
-      elif arg == 'accessible':
-        args.accessible = True
-      elif arg == 'generators':
-        args.generators = True
-      elif arg == 'langfiles':
-        args.langfiles = True
-      elif arg == '-renderer':
-        print "Please use the new arguments -core, -accessible, -generators, -langfiles"
-        sys.exit()
+    args.core = 'core' in sys.argv
+    args.accessible = 'accessible' in sys.argv
+    args.generators = 'generators' in sys.argv
+    args.langfiles = 'langfiles' in sys.argv
+    if '-renderer' in sys.argv:
+      print "Please use the new arguments -core, -accessible, -generators, -langfiles"
+      sys.exit()
   verify_render_name(args.render_name)
   return args
 

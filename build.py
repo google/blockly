@@ -55,6 +55,7 @@
 import sys
 
 import errno, glob, json, os, re, subprocess, threading, codecs, argparse
+from cStringIO import StringIO
 
 if sys.version_info[0] == 2:
   import httplib
@@ -531,10 +532,10 @@ def find_path(args, directories):
   render_path = 'core/renderers/' + args.render_name
   core_search_paths = calcdeps.ExpandDirectories(directories)
   for path in core_search_paths:
-    #If it is the desired renderer
+    # If it is the desired renderer
     if path.find('core/renderers') > -1 and path.find(render_path) > -1:
       new_list.append(path)
-    #If it is not a renderer
+    # If it is not a renderer
     elif (path.find('core/renderers') == -1):
       new_list.append(path)
   return sorted(new_list)

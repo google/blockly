@@ -88,7 +88,7 @@ else
 fi
 
 
-tempPath="$BLOCKLY_ROOT/tests/compile/temp_core"
+tempPath="$BLOCKLY_ROOT/temp_core"
 corePath="$BLOCKLY_ROOT/core/*"
 rm -r $tempPath
 mkdir $tempPath
@@ -113,7 +113,7 @@ done
 
 echo "Compiling Blockly..."
 COMPILATION_COMMAND="java -jar $COMPILER --js='$BLOCKLY_ROOT/tests/compile/main.js' \
-  --js='$BLOCKLY_ROOT/tests/compile/temp_core/**.js' \
+  --js='$tempPath/**.js' \
   --js='$BLOCKLY_ROOT/blocks/**.js' \
   --js='$BLOCKLY_ROOT/generators/**.js' \
   --js='$BLOCKLY_ROOT/msg/js/**.js' \

@@ -51,7 +51,7 @@ goog.require('goog.userAgent');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldDropdown = function(menuGenerator, opt_validator, shouldAllowSearch = true) {
+Blockly.FieldDropdown = function(menuGenerator, opt_validator, shouldAllowSearch = false) {
   if (typeof menuGenerator != 'function') {
     Blockly.FieldDropdown.validateOptions_(menuGenerator);
   }

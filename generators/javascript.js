@@ -234,8 +234,8 @@ Blockly.JavaScript.quote_ = function(string) {
 Blockly.JavaScript.multiline_quote_ = function(string) {
   // Can't use goog.string.quote since Google's style guide recommends
   // JS string literals use single quotes.
-  string = string.replace(/`/g, '\\\`');
-  return '`' + string + '`';
+  var lines = string.split(/\n/g).map(Blockly.JavaScript.quote_);
+  return lines.join(' + \'\\n\' +\n');
 };
 
 /**

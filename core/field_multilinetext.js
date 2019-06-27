@@ -87,44 +87,12 @@ Blockly.FieldMultilineText.fromJson = function(options) {
 };
 
 /**
- * Initialize this field based on the given XML.
- * @param {!Element} fieldElement The element containing information about the
- *    variable field's state.
- */
-Blockly.FieldMultilineText.prototype.fromXml = function(fieldElement) {
-  var length = fieldElement.getAttribute('length');
-  var lines = [];
-  for (var i = 0; i < length; i++) {
-    lines.push(fieldElement.getAttribute('line' + i));
-  }
-  fieldElement.textContent = lines.join("\n");
-  this.setValue(fieldElement.textContent);
-};
-
-/**
- * Serialize this field to Xml.
- * @param {!Element} fieldElement The element to populate with info about the
- *    field's state.
- * @return {!Element} The element containing info about the field's state.
- */
-Blockly.FieldMultilineText.prototype.toXml = function(fieldElement) {
-  var lines = this.getValue().split("\n");
-  var length = lines.length;
-  fieldElement.setAttribute('length', length);
-  for (var i = 0; i < length; i++) {
-    fieldElement.setAttribute('line' + i, lines[i]);
-  }
-  return fieldElement;
-};
-
-/**
  * Create the block UI for this field.
  * @package
  */
 Blockly.FieldMultilineText.prototype.initView = function() {
   Blockly.FieldDropdown.superClass_.initView.call(this);
   this.textElement_.setAttribute('class', 'blocklyText blocklyTextCode');
-  
 };
 
 /**
@@ -139,7 +107,7 @@ Blockly.FieldMultilineText.prototype.getDisplayText_ = function() {
     // Prevent the field from disappearing if empty.
     return Blockly.Field.NBSP;
   }
-  value = value.split("\n").map(function(value) {
+  value = value.split('\n').map(function(value) {
     if (value.length > this.maxDisplayLength) {
       // Truncate displayed string and add an ellipsis ('...').
       value = value.substring(0, this.maxDisplayLength - 4) + '...';
@@ -147,7 +115,7 @@ Blockly.FieldMultilineText.prototype.getDisplayText_ = function() {
     // Replace whitespace with non-breaking spaces so the value doesn't collapse - keep newline.
     value = value.replace(/\s/g, Blockly.Field.NBSP);
     return value;
-  }.bind(this)).join("\n");
+  }.bind(this)).join('\n');
   if (this.sourceBlock_.RTL) {
     // The SVG is LTR, force value to be RTL.
     value += '\u200F';
@@ -162,7 +130,7 @@ Blockly.FieldMultilineText.prototype.getDisplayText_ = function() {
 Blockly.FieldMultilineText.prototype.render_ = function() {
   // Replace the text.
   var textElement = this.textElement_;
-  // Clear out old tspan lines
+  // Clear out old tspan lines.
   var currentChild;
   while (currentChild = textElement.firstChild) {
     textElement.removeChild(currentChild);
@@ -172,18 +140,18 @@ Blockly.FieldMultilineText.prototype.render_ = function() {
   var y = 0;
   var xoffset = 0;
   var yoffset = 12.5; // 12.5 is hard-coded in Blockly.Field
-  var txtLines = txt.split("\n");
+  var txtLines = txt.split('\n');
   var lineHeight = this.lineHeight_;
   txtLines.forEach(function(t) {
-    Blockly.utils.dom.createSvgElement('tspan', {x:xoffset,y:y + yoffset}, textElement)
-        .appendChild(document.createTextNode(t));
+    Blockly.utils.dom.createSvgElement('tspan', {x:xoffset,y:y + yoffset},
+        textElement).appendChild(document.createTextNode(t));
     y += lineHeight;
   });
   if (txtLines.length == 0) {
     y += lineHeight;
   }
 
-  // set up widths
+  // Set up widths.
   this.size_.width = this.textElement_.getBBox().width + 5;
   // Minimum size of block (25) - default borderRect_ height (16)
   //   = 9 for vertical margin
@@ -209,14 +177,14 @@ Blockly.FieldMultilineText.prototype.widgetCreate_ = function() {
   var fontSize =
       (Blockly.FieldTextInput.FONTSIZE * this.workspace_.scale) + 'pt';
   div.style.fontSize = fontSize;
-  
+
   var scale = this.sourceBlock_.workspace.scale;
   div.style.lineHeight = (this.lineHeight_ * scale) + 'px';
   htmlInput.style.fontSize = fontSize;
   htmlInput.style.fontFamily = 'monospace';
   // Rendering weirdness values
-  htmlInput.style.marginTop = (this.areaTop_ * scale) + "px";
-  htmlInput.style.paddingLeft = (this.areaLeft_ * scale) + "px";
+  htmlInput.style.marginTop = (this.areaTop_ * scale) + 'px';
+  htmlInput.style.paddingLeft = (this.areaLeft_ * scale) + 'px';
   htmlInput.style.resize = 'none';
   htmlInput.style.lineHeight = (this.lineHeight_ * scale) + 'px';
   htmlInput.style.overflow = 'hidden';

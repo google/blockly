@@ -321,7 +321,7 @@ Blockly.Field.prototype.initModel = function() {
  * @package
  */
 Blockly.Field.prototype.fromXml = function(fieldElement) {
-  this.setValue(fieldElement.textContent);
+  this.setValue(fieldElement.textContent.replace(/&#10;/g, '\n'));
 };
 
 /**
@@ -332,7 +332,7 @@ Blockly.Field.prototype.fromXml = function(fieldElement) {
  * @package
  */
 Blockly.Field.prototype.toXml = function(fieldElement) {
-  fieldElement.textContent = this.getValue();
+  fieldElement.textContent = String(this.getValue()).replace(/\n/g, '&#10;');
   return fieldElement;
 };
 

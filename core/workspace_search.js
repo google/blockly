@@ -38,51 +38,74 @@ goog.require('goog.ui.tree.TreeNode');
  */
 Blockly.Search = function(workspace) {
   this.workspace_ = workspace;
-
-  this.searchInput_ = document.createElement('input');
-  this.searchInput_.setAttribute('id', 'workspaceSearchInput');
-
-  document.getElementsByClassName('injectionDiv')[0].appendChild(this.searchInput_);
-
-  this.blockTrie_ = new goog.structs.Trie();
-
   var thisObj = this;
 
-  this.workspace_.addChangeListener(this.onNewWorkspaceEvent);
+  setTimeout(function() {
+    if (thisObj.workspace_.isFlyout) {
+      return;
+    }
 
+    thisObj.searchInput_ = document.createElement("input");
+    thisObj.searchInput_.setAttribute("id", "workspaceSearchInput");
+    thisObj.searchInput_.setAttribute("placeholder", "Search");
+    document.getElementsByClassName("injectionDiv")[0].appendChild(thisObj.searchInput_);
+    
+    thisObj.blockTrie_ = new goog.structs.Trie;
+    
+    thisObj.workspace_.addChangeListener(function(event) {
+      thisObj.onNewWorkspaceEvent(event); 
+    });
 
-  this.searchInput_.addEventListener("keydown", function(event) {
-    event.stopPropagation();
-  });
+    thisObj.searchInput_.addEventListener("keydown", function(event) {
+      event.stopPropagation();
+    });
 
-  this.searchInput_.addEventListener("click", function(event) {
-    event.stopPropagation();
-  });
+    thisObj.searchInput_.addEventListener("click", function(event) {
+      event.stopPropagation();
+    });
 
-  this.searchInput_.addEventListener("keyup", function(event) {
-    thisObj.executeSearchOnKeyUp(event);
-  });
+    thisObj.searchInput_.addEventListener("blur", function(event) {
+      thisObj.onBlur(event);
+    })
+
+    thisObj.searchInput_.addEventListener("keyup", function(event) {
+      thisObj.executeSearchOnKeyUp(event, thisObj);
+    });
+  }, 0);
 };
 
 Blockly.Search.prototype.onNewWorkspaceEvent = function(event) {
+  console.log(event);
+
   if (event.type == Blockly.Events.CREATE) {
     console.log("CREATE");
     console.log(event.blockId);
     console.log(event.ids);
     for (var i = 0; i < event.ids.length; i++) {
       var id = event.ids[i];
-      // var block = this.workspace_.getBlockById(id);
-      this.onBlockAdded(block);
+      var block = this.workspace_.getBlockById(id);
+
+      if (block) {
+        this.onBlockAdded(block);
+      }
     }
   }
   else if (event.type == Blockly.Events.DELETE) {
     console.log("DELETE");
     console.log(event.blockId);
-    console.log(event.ids);
-    for (var i = 0; i < event.ids.length; i++) {
-      var id = event.ids[i];
-      this.onBlockRemoved(id);
+    console.log(event.oldXml);
+
+    Blockly.Events.disable();
+
+    // for (var i = 0; i < event.ids.length; i++) {
+    var block = Blockly.Xml.domToBlockHeadless_(event.oldXml, this.workspace_);
+    if (block) {
+      this.onBlockRemoved(block);
+      block.dispose();
     }
+   // }
+
+    Blockly.Events.enable();
   }
   else if (event.type == Blockly.Events.CHANGE) {
     console.log("CHANGE");
@@ -127,12 +150,14 @@ Blockly.Search.prototype.getAllKeys = function(block) {
       tooltip = block.tooltip;
     }
 
-    var splitTooltip = tooltip.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi ,'').split(' ');
+    if (tooltip) {
+      var splitTooltip = tooltip.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi ,'').split(' ');
 
-    for (var i = 0; i < splitTooltip.length; i++) {
-      var text = splitTooltip[i];
-      if (text && text != '') {
-        keys.push(text);
+      for (var i = 0; i < splitTooltip.length; i++) {
+        var text = splitTooltip[i];
+        if (text && text != '') {
+          keys.push(text);
+        }
       }
     }
   }
@@ -168,8 +193,8 @@ Blockly.Search.prototype.onBlockAdded = function(block) {
   }
 };
 
-Blockly.Search.prototype.onBlockRemoved = function(id) {
-  var keys = this.getAllKeys(id);
+Blockly.Search.prototype.onBlockRemoved = function(block) {
+  var keys = this.getAllKeys(block);
   
   for (var j = 0; j < keys.length; j++) {
     this.removeFromTrie(keys[j], block.id);
@@ -216,13 +241,8 @@ Blockly.Search.prototype.executeSearchOnKeyUp = function(e) {
 
   //Clear the search and unfocus the search box.
   if (e.keyCode == 27) {
-    //TODO: Unhighlight all blocks
     search.searchInput_.blur();
-    search.workspace_.highlightBlock("");
-
-    if (search.currentResult) {
-        search.currentResult.unselect();
-    }
+    search.onBlur(e);
     return;
   }
 
@@ -261,3 +281,14 @@ Blockly.Search.prototype.executeSearchOnKeyUp = function(e) {
     // }
   }
 };
+
+Blockly.Search.prototype.onBlur = function(e) {
+  var search = this;
+  search.workspace_.highlightBlock("");
+
+  if (search.currentResult) {
+      search.currentResult.unselect();
+  }
+
+  search.searchInput_.value = "";
+}

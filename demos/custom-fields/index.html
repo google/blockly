@@ -30,9 +30,40 @@
       <input type="button" value="toggle collapsed" onclick="toggleCollapsed()">
     </p>
 
-    <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+    <p>
+      <input type="button" value="Export to XML" onclick="toXml()">
+      <input type="button" value="Import from XML" onclick="fromXml()">
+    </p>
+
+    <table style="width: 800px; height: 480px">
+      <tr>
+        <td>
+          <textarea id="importExport"
+                    style="width: 200px; height: 100%;"
+                    onchange="textAreaChange();"
+                    onkeyup="textAreaChange()"></textarea>
+        </td>
+        <td>
+          <div id="blocklyDiv" style="width: 600px; height: 100%;"></div>
+        </td>
+      </tr>
+    </table>
 
     <script>
+      function toXml() {
+        var output = document.getElementById('importExport');
+        var xml = Blockly.Xml.workspaceToDom(workspace);
+        output.value = Blockly.Xml.domToPrettyText(xml);
+        output.focus();
+        output.select();
+      }
+
+      function fromXml() {
+        var input = document.getElementById('importExport');
+        var xml = Blockly.Xml.textToDom(input.value);
+        Blockly.Xml.domToWorkspace(xml, workspace);
+      }
+
       function setRandomStyle() {
         var blocks = workspace.getAllBlocks();
         var styles = Object.keys(Blockly.getTheme().getAllBlockStyles());

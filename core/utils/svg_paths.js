@@ -45,6 +45,7 @@ goog.provide('Blockly.utils.Paths');
 Blockly.utils.Paths.point = function(x, y) {
   return ' ' + x + ',' + y + ' ';
 };
+
 /**
  * Draw a curbic or quadratic curve.  See
  * developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#Cubic_B%C3%A9zier_Curve
@@ -59,8 +60,9 @@ Blockly.utils.Paths.point = function(x, y) {
  * @public
  */
 Blockly.utils.Paths.curve = function(command, points) {
-  return command + points.join('');
+  return ' ' + command + points.join('');
 };
+
 /**
  * Move the cursor to the given position without drawing a line.
  * The coordinates are absolute.
@@ -74,6 +76,7 @@ Blockly.utils.Paths.curve = function(command, points) {
 Blockly.utils.Paths.moveTo = function(x, y) {
   return ' M ' + x + ',' + y + ' ';
 };
+
 /**
  * Move the cursor to the given position without drawing a line.
  * Coordinates are relative.
@@ -114,7 +117,7 @@ Blockly.utils.Paths.lineTo = function(dx, dy) {
  * @public
  */
 Blockly.utils.Paths.line = function(points) {
-  return 'l' + points.join('');
+  return ' l' + points.join('');
 };
 
 /**
@@ -131,7 +134,7 @@ Blockly.utils.Paths.line = function(points) {
  * @public
  */
 Blockly.utils.Paths.lineOnAxis = function(command, val) {
-  return command + ' ' + val;
+  return ' ' + command + ' ' + val + ' ';
 };
 
 /**

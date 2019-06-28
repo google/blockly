@@ -639,7 +639,7 @@ Blockly.BlockSvg.prototype.showHelp_ = function() {
  * @returns {Array} Context menu options
  */
 Blockly.BlockSvg.prototype.generateContextMenu = function() {
-  
+
   if (this.workspace.options.readOnly || !this.contextMenu) {
     return;
   }
@@ -740,7 +740,7 @@ Blockly.BlockSvg.prototype.generateContextMenu = function() {
  */
 Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
   var menuOptions = this.generateContextMenu();
-  
+
   if (menuOptions && menuOptions.length) {
     Blockly.ContextMenu.show(e, menuOptions, this.RTL);
     Blockly.ContextMenu.currentBlock = this;
@@ -1207,8 +1207,8 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
         'url(#' + this.workspace.options.embossFilterId + ')');
     this.svgPathLight_.style.display = 'none';
   } else {
-    this.svgPath_.removeAttribute('filter');
-    delete this.svgPathLight_.style.display;
+    this.svgPath_.setAttribute('filter', 'none');
+    this.svgPathLight_.style.display = 'inline';
   }
 };
 

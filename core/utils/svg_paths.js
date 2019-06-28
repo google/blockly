@@ -95,7 +95,7 @@ Blockly.utils.Paths.moveBy = function(dx, dy) {
  * See developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#Line_commands
  * @param {number} dx The relative x coordinate.
  * @param {number} dy The relative y coordinate.
- * @return {string} A string of the format ' L dx,dy '
+ * @return {string} A string of the format ' l dx,dy '
  * @public
  */
 Blockly.utils.Paths.lineTo = function(dx, dy) {

@@ -636,12 +636,11 @@ Blockly.BlockSvg.prototype.showHelp_ = function() {
 /**
  * Generate the context menu for this block.
  * @protected
- * @returns {Array} Context menu options
+ * @returns {Array.<!Object>} Context menu options
  */
 Blockly.BlockSvg.prototype.generateContextMenu = function() {
-
   if (this.workspace.options.readOnly || !this.contextMenu) {
-    return;
+    return null;
   }
   // Save the current block in a variable for use in closures.
   var block = this;

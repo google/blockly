@@ -112,7 +112,7 @@ Blockly.utils.Paths.lineTo = function(dx, dy) {
  * See developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#Line_commands
  * @param {!Array.<string>} points An array containing all of the points to
  *     draw lines to, in order.  The points are represented as strings of the
- *     format ' dx, dy '.
+ *     format ' dx,dy '.
  * @return {string} A string of the format ' l (dx,dy)+ '
  * @public
  */
@@ -127,7 +127,7 @@ Blockly.utils.Paths.line = function(points) {
  * These coordinates are unitless and hence in the user coordinate system.
  * See developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#LineTo_path_commands
  * @param {string} command The command to prepend to the coordinate.  This
- *     should be one of: V, v, H, h.  See
+ *     should be one of: V, v, H, h.
  * @param {number} val The coordinate to pass to the command.  It may be
  *     absolute or relative.
  * @return {string} A string of the format ' command val '

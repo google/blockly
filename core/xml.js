@@ -282,7 +282,7 @@ Blockly.Xml.cloneShadow_ = function(shadow) {
  * @return {string} Text representation.
  */
 Blockly.Xml.domToText = function(dom) {
-  return Blockly.Xml.utils.domToText(dom);
+  return Blockly.Xml.utils.domToText(dom).replace(/\n/g, '&#10;');
 };
 
 /**

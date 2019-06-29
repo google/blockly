@@ -55,7 +55,7 @@ Blockly.BlockRendering.Debug = function() {
  */
 Blockly.BlockRendering.Debug.prototype.clearElems = function() {
   for (var i = 0, elem; elem = this.debugElements_[i]; i++) {
-    Blockly.utils.removeNode(elem);
+    Blockly.utils.dom.removeNode(elem);
   }
 
   this.debugElements_ = [];
@@ -68,7 +68,7 @@ Blockly.BlockRendering.Debug.prototype.clearElems = function() {
  * @package
  */
 Blockly.BlockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY) {
-  this.debugElements_.push(Blockly.utils.createSvgElement('rect',
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'rowSpacerRect blockRenderDebug',
         'x': 0,
@@ -88,7 +88,7 @@ Blockly.BlockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY) {
  */
 Blockly.BlockRendering.Debug.prototype.drawSpacerElem = function(elem, cursorX, centerY) {
   var yPos = centerY - elem.height / 2;
-  this.debugElements_.push(Blockly.utils.createSvgElement('rect',
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'elemSpacerRect blockRenderDebug',
         'x': cursorX,
@@ -108,7 +108,7 @@ Blockly.BlockRendering.Debug.prototype.drawSpacerElem = function(elem, cursorX, 
  */
 Blockly.BlockRendering.Debug.prototype.drawRenderedElem = function(elem, cursorX, centerY) {
   var yPos = centerY - elem.height / 2;
-  this.debugElements_.push(Blockly.utils.createSvgElement('rect',
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'rowRenderingRect blockRenderDebug',
         'x': cursorX,
@@ -151,7 +151,7 @@ Blockly.BlockRendering.Debug.prototype.drawConnection = function(conn) {
     colour = 'goldenrod';
     fill = colour;
   }
-  this.debugElements_.push(Blockly.utils.createSvgElement('circle',
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement('circle',
       {
         'class': 'blockRenderDebug',
         'cx': conn.offsetInBlock_.x,
@@ -170,7 +170,7 @@ Blockly.BlockRendering.Debug.prototype.drawConnection = function(conn) {
  * @package
  */
 Blockly.BlockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY) {
-  this.debugElements_.push(Blockly.utils.createSvgElement('rect',
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'elemRenderingRect blockRenderDebug',
         'x': 0,

@@ -32,6 +32,8 @@ goog.require('Blockly.utils.dom');
 
 goog.require('Blockly.BlockRendering.Drawer');
 
+goog.require('Blockly.BlockRendering.Drawer');
+
 
 /**
  * An object that holds information about the paths that are used to render the

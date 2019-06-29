@@ -27,6 +27,9 @@
 goog.provide('BRC');
 /* global BRC */
 
+goog.require('Blockly.utils.Paths');
+
+
 BRC.NO_PADDING = 0;
 BRC.SMALL_PADDING = 3;
 BRC.MEDIUM_PADDING = 5;
@@ -120,10 +123,10 @@ BRC.EMPTY_STATEMENT_INPUT_WIDTH = 32;
 BRC.POPULATED_STATEMENT_INPUT_WIDTH = 25;
 
 
-BRC.START_POINT = 'm 0,0';
+BRC.START_POINT = Blockly.utils.Paths.moveBy(0, 0);
 
 BRC.START_POINT_HIGHLIGHT =
-    'm ' + BRC.HIGHLIGHT_OFFSET + ',' + BRC.HIGHLIGHT_OFFSET;
+    Blockly.utils.Paths.moveBy(BRC.HIGHLIGHT_OFFSET, BRC.HIGHLIGHT_OFFSET);
 
 /**
  * Distance from shape edge to intersect with a curved corner at 45 degrees.
@@ -168,14 +171,18 @@ BRC.TAB_PATH_DOWN_HIGHLIGHT_RTL = 'm -' +
 BRC.TAB_PATH_UP =  'c 0,-10 -' + BRC.TAB_WIDTH +
       ',8 -' + BRC.TAB_WIDTH + ',-7.5 s ' +
       BRC.TAB_WIDTH + ',2.5 ' + BRC.TAB_WIDTH + ',-7.5';
+
 /**
  * Path of the top hat's curve.
  * @const
  */
-BRC.START_HAT_PATH = 'c 30,-' +
-    BRC.START_HAT_HEIGHT + ' 70,-' +
-    BRC.START_HAT_HEIGHT + ' ' + BRC.START_HAT_WIDTH + ',0';
-
+BRC.START_HAT_PATH =
+    Blockly.utils.Paths.curve('c',
+        [
+          Blockly.utils.Paths.point(30, -BRC.START_HAT_HEIGHT),
+          Blockly.utils.Paths.point(70, -BRC.START_HAT_HEIGHT),
+          Blockly.utils.Paths.point(BRC.START_HAT_WIDTH, 0)
+        ]);
 /**
  * SVG path for drawing next/previous notch from left to right.
  * @const
@@ -215,10 +222,10 @@ BRC.INNER_TOP_LEFT_CORNER =
  * @const
  */
 BRC.INNER_BOTTOM_LEFT_CORNER =
-    'a ' + BRC.CORNER_RADIUS + ',' +
-    BRC.CORNER_RADIUS + ' 0 0,0 ' +
-    BRC.CORNER_RADIUS + ',' +
-    BRC.CORNER_RADIUS;
+    Blockly.utils.Paths.arc('a', '0 0,0',
+        BRC.CORNER_RADIUS,
+        Blockly.utils.Paths.point(BRC.CORNER_RADIUS, BRC.CORNER_RADIUS));
+
 
 /**
  * SVG path for drawing highlight on the top-left corner of a statement
@@ -226,11 +233,11 @@ BRC.INNER_BOTTOM_LEFT_CORNER =
  * @const
  */
 BRC.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL =
-    'a ' + BRC.CORNER_RADIUS + ',' +
-    BRC.CORNER_RADIUS + ' 0 0,0 ' +
-    (-BRC.DISTANCE_45_OUTSIDE - BRC.HIGHLIGHT_OFFSET) + ',' +
-    (BRC.CORNER_RADIUS -
-    BRC.DISTANCE_45_OUTSIDE);
+    Blockly.utils.Paths.arc('a', '0 0,0',
+        BRC.CORNER_RADIUS,
+        Blockly.utils.Paths.point(
+            -BRC.DISTANCE_45_OUTSIDE - BRC.HIGHLIGHT_OFFSET,
+            BRC.CORNER_RADIUS - BRC.DISTANCE_45_OUTSIDE));
 
 /**
  * SVG path for drawing highlight on the bottom-left corner of a statement
@@ -238,10 +245,11 @@ BRC.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL =
  * @const
  */
 BRC.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL =
-    'a ' + (BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET) + ',' +
-    (BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET) + ' 0 0,0 ' +
-    (BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET) + ',' +
-    (BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET);
+    Blockly.utils.Paths.arc('a', '0 0,0',
+        BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET,
+        Blockly.utils.Paths.point(
+            BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET,
+            BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET));
 
 /**
  * SVG path for drawing highlight on the bottom-left corner of a statement
@@ -249,10 +257,11 @@ BRC.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL =
  * @const
  */
 BRC.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
-    'a ' + (BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET) + ',' +
-    (BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET) + ' 0 0,0 ' +
-    (BRC.CORNER_RADIUS - BRC.DISTANCE_45_OUTSIDE) + ',' +
-    (BRC.DISTANCE_45_OUTSIDE + BRC.HIGHLIGHT_OFFSET);
+    Blockly.utils.Paths.arc('a', '0 0,0',
+        BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET,
+        Blockly.utils.Paths.point(
+            BRC.CORNER_RADIUS - BRC.DISTANCE_45_OUTSIDE,
+            BRC.DISTANCE_45_OUTSIDE + BRC.HIGHLIGHT_OFFSET));
 
 
 
@@ -325,11 +334,24 @@ BRC.TOP_LEFT_CORNER_HIGHLIGHT =
  * @const
  */
 BRC.START_HAT_HIGHLIGHT_LTR =
-    'c 17.8,-9.2 45.3,-14.9 75,-8.7 M 100.5,0.5';
+    Blockly.utils.Paths.curve('c',
+        [
+          Blockly.utils.Paths.point(17.8, -9.2),
+          Blockly.utils.Paths.point(45.3, -14.9),
+          Blockly.utils.Paths.point(75, -8.7)
+        ]) +
+    Blockly.utils.Paths.moveTo(100.5, 0.5);
 
 /**
  * Path of the top hat's curve's highlight in RTL.
  * @const
  */
 BRC.START_HAT_HIGHLIGHT_RTL =
-    'm 25,-8.7 c 29.7,-6.2 57.2,-0.5 75,8.7';
+    Blockly.utils.Paths.moveBy(25, -8.7) +
+    Blockly.utils.Paths.curve('c',
+        [
+          Blockly.utils.Paths.point(29.7, -6.2),
+          Blockly.utils.Paths.point(57.2, -0.5),
+          Blockly.utils.Paths.point(75, 8.7)
+        ]);
+

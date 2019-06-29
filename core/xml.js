@@ -35,6 +35,7 @@ goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.FinishedLoading');
 goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.Xml.utils');
 
 
@@ -257,7 +258,7 @@ Blockly.Xml.cloneShadow_ = function(shadow) {
         if (textNode.nodeType == Node.TEXT_NODE &&
             textNode.data.trim() == '' && node.firstChild != textNode) {
           // Prune whitespace after a tag.
-          Blockly.utils.removeNode(textNode);
+          Blockly.utils.dom.removeNode(textNode);
         }
       }
       if (node) {
@@ -266,7 +267,7 @@ Blockly.Xml.cloneShadow_ = function(shadow) {
         if (textNode.nodeType == Node.TEXT_NODE &&
             textNode.data.trim() == '') {
           // Prune whitespace before a tag.
-          Blockly.utils.removeNode(textNode);
+          Blockly.utils.dom.removeNode(textNode);
         }
       }
     }
@@ -316,20 +317,17 @@ Blockly.Xml.domToPrettyText = function(dom) {
 };
 
 /**
- * Converts an XML string into a DOM structure. It requires the XML to have a
- * root element of <xml>. Other XML string will result in throwing an error.
+ * Converts an XML string into a DOM structure.
  * @param {string} text An XML string.
  * @return {!Element} A DOM object representing the singular child of the
  *     document element.
- * @throws if XML doesn't parse or is not the expected structure.
+ * @throws if the text doesn't parse.
  */
 Blockly.Xml.textToDom = function(text) {
   var doc = Blockly.Xml.utils.textToDomDocument(text);
-  // This function only accepts <xml> documents.
   if (!doc || !doc.documentElement ||
-      doc.documentElement.nodeName.toLowerCase() != 'xml') {
-    // Whatever we got back from the parser is not the expected structure.
-    throw TypeError('Blockly.Xml.textToDom expected an <xml> document.');
+      doc.getElementsByTagName('parsererror').length) {
+    throw Error('textToDom was unable to parse: ' + text);
   }
   return doc.documentElement;
 };
@@ -460,11 +458,11 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
   }
   // Load the new blocks into the workspace and get the IDs of the new blocks.
   var newBlockIds = Blockly.Xml.domToWorkspace(xml,workspace);
-  if (bbox && bbox.height) {  // check if any previous block
+  if (bbox && bbox.top != bbox.bottom) {  // check if any previous block
     var offsetY = 0;  // offset to add to y of the new block
     var offsetX = 0;
-    var farY = bbox.y + bbox.height;  // bottom position
-    var topX = bbox.x;  // x of bounding box
+    var farY = bbox.bottom;  // bottom position
+    var topX = bbox.left;  // x of bounding box
     // Check position of the new blocks.
     var newX = Infinity;  // x of top corner
     var newY = Infinity;  // y of top corner

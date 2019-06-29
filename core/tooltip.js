@@ -35,7 +35,7 @@
  */
 goog.provide('Blockly.Tooltip');
 
-goog.require('Blockly.utils');
+goog.require('Blockly.utils.string');
 
 
 /**
@@ -211,9 +211,6 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
   if (!Blockly.Tooltip.element_ || !Blockly.Tooltip.element_.tooltip) {
     // No tooltip here to show.
     return;
-  } else if (Blockly.WidgetDiv.isVisible()) {
-    // Don't display a tooltip if a widget is open (tooltip would be under it).
-    return;
   } else if (Blockly.Tooltip.blocked_) {
     // Someone doesn't want us to show tooltips.  We are probably handling a
     // user gesture, such as a click or drag.
@@ -292,7 +289,7 @@ Blockly.Tooltip.show_ = function() {
   while (typeof tip == 'function') {
     tip = tip();
   }
-  tip = Blockly.utils.wrap(tip, Blockly.Tooltip.LIMIT);
+  tip = Blockly.utils.string.wrap(tip, Blockly.Tooltip.LIMIT);
   // Create new text, line by line.
   var lines = tip.split('\n');
   for (var i = 0; i < lines.length; i++) {

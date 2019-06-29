@@ -226,16 +226,17 @@ Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
  * @param {!Blockly.Connection} conn The connection searching for a compatible
  *     mate.
  * @param {number} maxRadius The maximum radius to another connection.
- * @param {!goog.math.Coordinate} dxy Offset between this connection's location
- *     in the database and the current location (as a result of dragging).
+ * @param {!Blockly.utils.Coordinate} dxy Offset between this connection's
+ *     location in the database and the current location (as a result of
+ *     dragging).
  * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
  *     properties:' connection' which is either another connection or null,
  *     and 'radius' which is the distance.
  */
 Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
     dxy) {
-  // Don't bother.
   if (!this.connections_.length) {
+    // Don't bother.
     return {connection: null, radius: maxRadius};
   }
 
@@ -286,15 +287,15 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
 };
 
 /**
- * Initialize a set of connection DBs for a specified workspace.
- * @param {!Blockly.Workspace} workspace The workspace this DB is for.
+ * Initialize a set of connection DBs for a workspace.
+ * @return {!Array.<!Blockly.ConnectionDB>} Array of databases.
  */
-Blockly.ConnectionDB.init = function(workspace) {
+Blockly.ConnectionDB.init = function() {
   // Create four databases, one for each connection type.
   var dbList = [];
   dbList[Blockly.INPUT_VALUE] = new Blockly.ConnectionDB();
   dbList[Blockly.OUTPUT_VALUE] = new Blockly.ConnectionDB();
   dbList[Blockly.NEXT_STATEMENT] = new Blockly.ConnectionDB();
   dbList[Blockly.PREVIOUS_STATEMENT] = new Blockly.ConnectionDB();
-  workspace.connectionDBList = dbList;
+  return dbList;
 };

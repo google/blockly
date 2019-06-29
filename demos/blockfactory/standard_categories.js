@@ -52,7 +52,7 @@ StandardCategories.categoryMap['logic'].xml =
     '<block type="logic_null"></block>' +
     '<block type="logic_ternary"></block>' +
     '</xml>');
-StandardCategories.categoryMap['logic'].color ='#5C81A6';
+StandardCategories.categoryMap['logic'].hue = 210;
 
 StandardCategories.categoryMap['loops'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Loops');
@@ -87,7 +87,7 @@ StandardCategories.categoryMap['loops'].xml =
     '<block type="controls_forEach"></block>' +
     '<block type="controls_flow_statements"></block>' +
     '</xml>');
-StandardCategories.categoryMap['loops'].color = '#5CA65C';
+StandardCategories.categoryMap['loops'].hue = 120;
 
 StandardCategories.categoryMap['math'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Math');
@@ -180,7 +180,7 @@ StandardCategories.categoryMap['math'].xml =
     '</block>' +
     '<block type="math_random_float"></block>' +
     '</xml>');
-StandardCategories.categoryMap['math'].color = '#5C68A6';
+StandardCategories.categoryMap['math'].hue = 230;
 
 StandardCategories.categoryMap['text'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Text');
@@ -263,7 +263,7 @@ StandardCategories.categoryMap['text'].xml =
       '</value>' +
     '</block>' +
     '</xml>');
-StandardCategories.categoryMap['text'].color = '#5CA68D';
+StandardCategories.categoryMap['text'].hue = 160;
 
 StandardCategories.categoryMap['lists'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Lists');
@@ -320,7 +320,7 @@ StandardCategories.categoryMap['lists'].xml =
     '</block>' +
     '<block type="lists_sort"></block>' +
     '</xml>');
-StandardCategories.categoryMap['lists'].color = '#745CA6';
+StandardCategories.categoryMap['lists'].hue = 260;
 
 StandardCategories.categoryMap['colour'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Colour');
@@ -364,16 +364,16 @@ StandardCategories.categoryMap['colour'].xml =
       '</value>' +
     '</block>' +
     '</xml>');
-StandardCategories.categoryMap['colour'].color = '#A6745C';
+StandardCategories.categoryMap['colour'].hue = 20;
 
 StandardCategories.categoryMap['functions'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Functions');
-StandardCategories.categoryMap['functions'].color = '#9A5CA6'
+StandardCategories.categoryMap['functions'].hue = 290;
 StandardCategories.categoryMap['functions'].custom = 'PROCEDURE';
 
 StandardCategories.categoryMap['variables'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Variables');
-StandardCategories.categoryMap['variables'].color = '#A65C81';
+StandardCategories.categoryMap['variables'].hue = 330;
 StandardCategories.categoryMap['variables'].custom = 'VARIABLE';
 
 // All standard block types in provided in Blockly core.

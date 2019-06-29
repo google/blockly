@@ -33,6 +33,7 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.Xml.utils');
@@ -69,7 +70,7 @@ Blockly.Mutator.prototype.workspaceHeight_ = 0;
  */
 Blockly.Mutator.prototype.drawIcon_ = function(group) {
   // Square with rounded corners.
-  Blockly.utils.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'blocklyIconShape',
         'rx': '4',
@@ -79,7 +80,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
       },
       group);
   // Gear teeth.
-  Blockly.utils.createSvgElement('path',
+  Blockly.utils.dom.createSvgElement('path',
       {
         'class': 'blocklyIconSymbol',
         'd': 'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,' +
@@ -92,7 +93,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
       },
       group);
   // Axle hole.
-  Blockly.utils.createSvgElement(
+  Blockly.utils.dom.createSvgElement(
       'circle',
       {
         'class': 'blocklyIconShape',
@@ -127,7 +128,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     [Workspace]
   </svg>
   */
-  this.svgDialog_ = Blockly.utils.createSvgElement('svg',
+  this.svgDialog_ = Blockly.utils.dom.createSvgElement('svg',
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
   // Convert the list of names into a list of XML objects for the flyout.
@@ -183,7 +184,7 @@ Blockly.Mutator.prototype.updateEditable = function() {
   if (!this.block_.isInFlyout) {
     if (this.block_.isEditable()) {
       if (this.iconGroup_) {
-        Blockly.utils.removeClass(
+        Blockly.utils.dom.removeClass(
             /** @type {!Element} */ (this.iconGroup_),
             'blocklyIconGroupReadonly');
       }
@@ -191,7 +192,7 @@ Blockly.Mutator.prototype.updateEditable = function() {
       // Close any mutator bubble.  Icon is not clickable.
       this.setVisible(false);
       if (this.iconGroup_) {
-        Blockly.utils.addClass(
+        Blockly.utils.dom.addClass(
             /** @type {!Element} */ (this.iconGroup_),
             'blocklyIconGroupReadonly');
       }

@@ -34,10 +34,10 @@ function makeMockWs(scale, x, y, width, height) {
   return {
     getBlocksBoundingBox: function() {
       return {
-        width: width,
-        height: height,
-        x: x,
-        y: y
+        top: y,
+        bottom: y + height,
+        left: x,
+        right: x + width
       }
     },
     scale: scale

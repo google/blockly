@@ -29,7 +29,7 @@ goog.provide('Blockly.FieldCheckbox');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
-goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 
 
 /**
@@ -123,7 +123,7 @@ Blockly.FieldCheckbox.prototype.initView = function() {
 
   this.textElement_.setAttribute('x', Blockly.FieldCheckbox.CHECK_X_OFFSET);
   this.textElement_.setAttribute('y', Blockly.FieldCheckbox.CHECK_Y_OFFSET);
-  Blockly.utils.addClass(this.textElement_, 'blocklyCheckbox');
+  Blockly.utils.dom.addClass(this.textElement_, 'blocklyCheckbox');
 
   var textNode = document.createTextNode(Blockly.FieldCheckbox.CHECK_CHAR);
   this.textElement_.appendChild(textNode);

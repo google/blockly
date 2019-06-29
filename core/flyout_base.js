@@ -35,10 +35,10 @@ goog.require('Blockly.Gesture');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -213,9 +213,9 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
   */
   // Setting style to display:none to start. The toolbox and flyout
   // hide/show code will set up proper visibility and size later.
-  this.svgGroup_ = Blockly.utils.createSvgElement(tagName,
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement(tagName,
       {'class': 'blocklyFlyout', 'style': 'display: none'}, null);
-  this.svgBackground_ = Blockly.utils.createSvgElement('path',
+  this.svgBackground_ = Blockly.utils.dom.createSvgElement('path',
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());
   return this.svgGroup_;
@@ -279,7 +279,7 @@ Blockly.Flyout.prototype.dispose = function() {
     this.workspace_ = null;
   }
   if (this.svgGroup_) {
-    Blockly.utils.removeNode(this.svgGroup_);
+    Blockly.utils.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.svgBackground_ = null;
@@ -376,7 +376,7 @@ Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
   this.svgGroup_.setAttribute("height", height);
   if (this.svgGroup_.tagName == 'svg') {
     var transform = 'translate(' + x + 'px,' + y + 'px)';
-    Blockly.utils.setCssTransform(this.svgGroup_, transform);
+    Blockly.utils.dom.setCssTransform(this.svgGroup_, transform);
   } else {
     // IE and Edge don't support CSS transforms on SVG elements so
     // it's important to set the transform on the SVG element itself
@@ -538,7 +538,7 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
   for (var j = 0; j < this.mats_.length; j++) {
     var rect = this.mats_[j];
     if (rect) {
-      Blockly.utils.removeNode(rect);
+      Blockly.utils.dom.removeNode(rect);
     }
   }
   this.mats_.length = 0;
@@ -608,7 +608,7 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
  * Does this flyout allow you to create a new instance of the given block?
  * Used for deciding if a block can be "dragged out of" the flyout.
  * @param {!Blockly.BlockSvg} block The block to copy from the flyout.
- * @return {!boolean} True if you can create a new instance of the block, false
+ * @return {boolean} True if you can create a new instance of the block, false
  *    otherwise.
  * @package
  */
@@ -693,7 +693,7 @@ Blockly.Flyout.prototype.initFlyoutButton_ = function(button, x, y) {
 Blockly.Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
   // Create an invisible rectangle under the block to act as a button.  Just
   // using the block as a button is poor, since blocks have holes in them.
-  var rect = Blockly.utils.createSvgElement('rect',
+  var rect = Blockly.utils.dom.createSvgElement('rect',
       {
         'fill-opacity': 0,
         'x': x,
@@ -817,25 +817,23 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   var flyoutOffsetPixels = this.workspace_.getOriginOffsetInPixels();
 
   // The position of the old block in flyout workspace coordinates.
-  var oldBlockPosWs = oldBlock.getRelativeToSurfaceXY();
-
+  var oldBlockPos = oldBlock.getRelativeToSurfaceXY();
   // The position of the old block in pixels relative to the flyout
   // workspace's origin.
-  var oldBlockPosPixels = oldBlockPosWs.scale(this.workspace_.scale);
+  oldBlockPos.scale(this.workspace_.scale);
 
   // The position of the old block in pixels relative to the upper left corner
   // of the injection div.
-  var oldBlockOffsetPixels = goog.math.Coordinate.sum(flyoutOffsetPixels,
-      oldBlockPosPixels);
+  var oldBlockOffsetPixels = Blockly.utils.Coordinate.sum(flyoutOffsetPixels,
+      oldBlockPos);
 
   // The position of the old block in pixels relative to the origin of the
   // main workspace.
-  var finalOffsetPixels = goog.math.Coordinate.difference(oldBlockOffsetPixels,
+  var finalOffset = Blockly.utils.Coordinate.difference(oldBlockOffsetPixels,
       mainOffsetPixels);
-
   // The position of the old block in main workspace coordinates.
-  var finalOffsetMainWs = finalOffsetPixels.scale(1 / targetWorkspace.scale);
+  finalOffset.scale(1 / targetWorkspace.scale);
 
-  block.moveBy(finalOffsetMainWs.x, finalOffsetMainWs.y);
+  block.moveBy(finalOffset.x, finalOffset.y);
   return block;
 };

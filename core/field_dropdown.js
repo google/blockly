@@ -31,9 +31,11 @@ goog.provide('Blockly.FieldDropdown');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
-goog.require('Blockly.userAgent');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.uiMenu');
+goog.require('Blockly.utils.userAgent');
 
 goog.require('goog.events');
 goog.require('goog.ui.Menu');
@@ -106,7 +108,7 @@ Blockly.FieldDropdown.IMAGE_Y_OFFSET = 5;
  * Android can't (in 2014) display "▾", so use "▼" instead.
  */
 Blockly.FieldDropdown.ARROW_CHAR =
-    Blockly.userAgent.ANDROID ? '\u25BC' : '\u25BE';
+    Blockly.utils.userAgent.ANDROID ? '\u25BC' : '\u25BE';
 
 /**
  * Mouse cursor style when over the hotspot that initiates the editor.
@@ -135,12 +137,12 @@ Blockly.FieldDropdown.prototype.imageJson_ = null;
 Blockly.FieldDropdown.prototype.initView = function() {
   Blockly.FieldDropdown.superClass_.initView.call(this);
 
-  this.imageElement_ = Blockly.utils.createSvgElement( 'image',
+  this.imageElement_ = Blockly.utils.dom.createSvgElement( 'image',
       {
         'y': Blockly.FieldDropdown.IMAGE_Y_OFFSET
       }, this.fieldGroup_);
 
-  this.arrow_ = Blockly.utils.createSvgElement('tspan', {}, this.textElement_);
+  this.arrow_ = Blockly.utils.dom.createSvgElement('tspan', {}, this.textElement_);
   this.arrow_.appendChild(document.createTextNode(
       this.sourceBlock_.RTL ?
       Blockly.FieldDropdown.ARROW_CHAR + ' ' :
@@ -157,42 +159,32 @@ Blockly.FieldDropdown.prototype.initView = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.showEditor_ = function() {
-  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, null);
-  var menu = this.createMenu_();
-  this.addActionListener_(menu);
-  this.positionMenu_(menu);
+  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
+      this.widgetDispose_.bind(this));
+  this.menu_ = this.widgetCreate_();
+
+  this.menu_.render(Blockly.WidgetDiv.DIV);
+  // Element gets created in render.
+  Blockly.utils.dom.addClass(this.menu_.getElement(), 'blocklyDropdownMenu');
+
+  this.positionMenu_(this.menu_);
+
+  // Focusing needs to be handled after the menu is rendered and positioned.
+  // Otherwise it will cause a page scroll to get the misplaced menu in
+  // view. See issue #1329.
+  this.menu_.setAllowAutoFocus(true);
+  this.menu_.getElement().focus();
 };
 
 /**
- * Add a listener for mouse and keyboard events in the menu and its items.
- * @param {!goog.ui.Menu} menu The menu to add listeners to.
+ * Create the dropdown editor widget.
+ * @return {goog.ui.Menu} The newly created dropdown menu.
  * @private
  */
-Blockly.FieldDropdown.prototype.addActionListener_ = function(menu) {
-  var thisField = this;
-
-  function callback(e) {
-    var menu = this;
-    var menuItem = e.target;
-    if (menuItem) {
-      thisField.onItemSelected(menu, menuItem);
-    }
-    Blockly.WidgetDiv.hideIfOwner(thisField);
-    Blockly.Events.setGroup(false);
-  }
-  // Listen for mouse/keyboard events.
-  goog.events.listen(menu, goog.ui.Component.EventType.ACTION, callback);
-};
-
-/**
- * Create and populate the menu and menu items for this dropdown, based on
- * the options list.
- * @return {!goog.ui.Menu} The populated dropdown menu.
- * @private
- */
-Blockly.FieldDropdown.prototype.createMenu_ = function() {
+Blockly.FieldDropdown.prototype.widgetCreate_ = function() {
   var menu = new goog.ui.Menu();
   menu.setRightToLeft(this.sourceBlock_.RTL);
+
   var options = this.getOptions();
   for (var i = 0; i < options.length; i++) {
     var content = options[i][0]; // Human-readable text or image.
@@ -211,7 +203,33 @@ Blockly.FieldDropdown.prototype.createMenu_ = function() {
     menu.addChild(menuItem, true);
     menuItem.setChecked(value == this.value_);
   }
+
+  this.menuActionEventKey_ = goog.events.listen(
+      menu,
+      goog.ui.Component.EventType.ACTION,
+      this.handleMenuActionEvent_,
+      false,
+      this);
+
   return menu;
+};
+
+/**
+ * Dispose of events belonging to the dropdown editor.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.widgetDispose_ = function() {
+  goog.events.unlistenByKey(this.menuActionEventKey_);
+};
+
+/**
+ * Handle an ACTION event in the dropdown menu.
+ * @param {!Event} event The CHANGE event.
+ * @private
+ */
+Blockly.FieldDropdown.prototype.handleMenuActionEvent_ = function(event) {
+  Blockly.WidgetDiv.hideIfOwner(this);
+  this.onItemSelected(this.menu_, event.target);
 };
 
 /**
@@ -222,11 +240,9 @@ Blockly.FieldDropdown.prototype.createMenu_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
-  // Record viewport dimensions before adding the dropdown.
   var viewportBBox = Blockly.utils.getViewportBBox();
   var anchorBBox = this.getAnchorDimensions_();
 
-  this.createWidget_(menu);
   var menuSize = Blockly.utils.uiMenu.getSize(menu);
 
   var menuMaxHeightPx = Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH
@@ -238,26 +254,8 @@ Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
   if (this.sourceBlock_.RTL) {
     Blockly.utils.uiMenu.adjustBBoxesForRTL(viewportBBox, anchorBBox, menuSize);
   }
-  // Position the menu.
   Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, menuSize,
       this.sourceBlock_.RTL);
-  // Calling menuDom.focus() has to wait until after the menu has been placed
-  // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
-  // in view.  See issue #1329.
-  menu.getElement().focus();
-};
-
-/**
- * Create and render the menu widget inside Blockly's widget div.
- * @param {!goog.ui.Menu} menu The menu to add to the widget div.
- * @private
- */
-Blockly.FieldDropdown.prototype.createWidget_ = function(menu) {
-  var div = Blockly.WidgetDiv.DIV;
-  menu.render(div);
-  Blockly.utils.addClass(menu.getElement(), 'blocklyDropdownMenu');
-  // Enable autofocus after the initial render to avoid issue #1329.
-  menu.setAllowAutoFocus(true);
 };
 
 /**
@@ -323,9 +321,9 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   for (var i = 0; i < options.length; i++) {
     strings.push(options[i][0]);
   }
-  var shortest = Blockly.utils.shortestStringLength(strings);
-  var prefixLength = Blockly.utils.commonWordPrefix(strings, shortest);
-  var suffixLength = Blockly.utils.commonWordSuffix(strings, shortest);
+  var shortest = Blockly.utils.string.shortestStringLength(strings);
+  var prefixLength = Blockly.utils.string.commonWordPrefix(strings, shortest);
+  var suffixLength = Blockly.utils.string.commonWordSuffix(strings, shortest);
   if (!prefixLength && !suffixLength) {
     return;
   }
@@ -458,6 +456,11 @@ Blockly.FieldDropdown.prototype.updateColour = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.render_ = function() {
+  // Hide both elements.
+  this.textContent_.nodeValue = '';
+  this.imageElement_.style.display = 'none';
+
+  // Show correct element.
   if (this.imageJson_) {
     this.renderSelectedImage_();
   } else {
@@ -473,8 +476,9 @@ Blockly.FieldDropdown.prototype.render_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
+  this.imageElement_.style.display = '';
   this.imageElement_.setAttributeNS(
-      'http://www.w3.org/1999/xlink', 'xlink:href', this.imageJson_.src);
+      Blockly.utils.dom.XLINK_NS, 'xlink:href', this.imageJson_.src);
   this.imageElement_.setAttribute('height', this.imageJson_.height);
   this.imageElement_.setAttribute('width', this.imageJson_.width);
 
@@ -504,14 +508,6 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   this.textElement_.setAttribute('x', 0);
   this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y;
   this.size_.width = Blockly.Field.getCachedWidth(this.textElement_);
-};
-
-/**
- * Close the dropdown menu if this input is being deleted.
- */
-Blockly.FieldDropdown.prototype.dispose = function() {
-  Blockly.WidgetDiv.hideIfOwner(this);
-  Blockly.FieldDropdown.superClass_.dispose.call(this);
 };
 
 /**

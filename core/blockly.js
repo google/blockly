@@ -57,8 +57,6 @@ goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 goog.require('Blockly.Xml');
 
-goog.require('goog.color');
-
 
 // Turn off debugging when compiled.
 // Unused within the Blockly library, but used in Closure.
@@ -109,7 +107,7 @@ Blockly.clipboardTypeCounts_ = null;
 
 /**
  * Cached value for whether 3D is supported.
- * @type {!boolean}
+ * @type {?boolean}
  * @private
  */
 Blockly.cache3dSupported_ = null;
@@ -120,16 +118,6 @@ Blockly.cache3dSupported_ = null;
  * @private
  */
 Blockly.theme_ = null;
-
-/**
- * Convert a hue (HSV model) into an RGB hex triplet.
- * @param {number} hue Hue on a colour wheel (0-360).
- * @return {string} RGB code, e.g. '#5ba65b'.
- */
-Blockly.hueToRgb = function(hue) {
-  return goog.color.hsvToHex(hue, Blockly.HSV_SATURATION,
-      Blockly.HSV_VALUE * 255);
-};
 
 /**
  * Returns the dimensions of the specified SVG image.
@@ -193,9 +181,9 @@ Blockly.svgResize = function(workspace) {
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
 // are multiple workspaces and non-main workspaces are able to accept input.
 Blockly.onKeyDown_ = function(e) {
-  var workspace = Blockly.mainWorkspace;
-  if (workspace.options.readOnly || Blockly.utils.isTargetInput(e) ||
-      (workspace.rendered && !workspace.isVisible())) {
+  var mainWorkspace = Blockly.mainWorkspace;
+  if (mainWorkspace.options.readOnly || Blockly.utils.isTargetInput(e) ||
+      (mainWorkspace.rendered && !mainWorkspace.isVisible())) {
     // No key actions on readonly workspaces.
     // When focused on an HTML text input widget, don't trap any keys.
     // Ignore keypresses on rendered workspaces that have been explicitly
@@ -259,7 +247,7 @@ Blockly.onKeyDown_ = function(e) {
     } else if (e.keyCode == 90) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
-      workspace.undo(e.shiftKey);
+      mainWorkspace.undo(e.shiftKey);
     }
   }
   // Common code for delete and cut.
@@ -610,6 +598,16 @@ Blockly.unbindEvent_ = function(bindData) {
  */
 Blockly.isNumber = function(str) {
   return /^\s*-?\d+(\.\d+)?\s*$/.test(str);
+};
+
+/**
+ * Convert a hue (HSV model) into an RGB hex triplet.
+ * @param {number} hue Hue on a colour wheel (0-360).
+ * @return {string} RGB code, e.g. '#5ba65b'.
+ */
+Blockly.hueToHex = function(hue) {
+  return Blockly.utils.colour.hsvToHex(hue, Blockly.HSV_SATURATION,
+      Blockly.HSV_VALUE * 255);
 };
 
 /**

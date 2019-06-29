@@ -29,6 +29,7 @@ goog.provide('Blockly.FieldImage');
 goog.require('Blockly.Field');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
 
 goog.require('goog.math.Size');
 
@@ -116,7 +117,7 @@ Blockly.FieldImage.prototype.isDirty_ = false;
  * @package
  */
 Blockly.FieldImage.prototype.initView = function() {
-  this.imageElement_ = Blockly.utils.createSvgElement(
+  this.imageElement_ = Blockly.utils.dom.createSvgElement(
       'image',
       {
         'height': this.height_ + 'px',
@@ -124,19 +125,8 @@ Blockly.FieldImage.prototype.initView = function() {
         'alt': this.text_
       },
       this.fieldGroup_);
-  this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
+  this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
       'xlink:href', this.value_);
-};
-
-/**
- * Dispose of all DOM objects belonging to this text.
- */
-Blockly.FieldImage.prototype.dispose = function() {
-  if (this.fieldGroup_) {
-    Blockly.utils.removeNode(this.fieldGroup_);
-    this.fieldGroup_ = null;
-  }
-  this.imageElement_ = null;
 };
 
 /**
@@ -160,7 +150,7 @@ Blockly.FieldImage.prototype.doClassValidation_ = function(newValue) {
 Blockly.FieldImage.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (this.imageElement_) {
-    this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
+    this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
         'xlink:href', this.value_ || '');
   }
 };

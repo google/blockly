@@ -30,9 +30,9 @@ goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
+goog.require('Blockly.utils.colour');
 
 goog.require('goog.math.Size');
-goog.require('goog.color');
 
 
 /**
@@ -81,12 +81,6 @@ Blockly.FieldColour.DEFAULT_WIDTH = 16;
  * @const
  */
 Blockly.FieldColour.DEFAULT_HEIGHT = 12;
-
-/**
- * Regex that defines the form of a colour string.
- * @type {RegExp}
- */
-Blockly.FieldColour.COLOUR_REGEX = new RegExp('#[0-9a-fA-F]{6}');
 
 /**
  * Serializable fields are saved by the XML renderer, non-serializable fields
@@ -161,14 +155,6 @@ Blockly.FieldColour.prototype.initView = function() {
 };
 
 /**
- * Close the colour picker if this input is being deleted.
- */
-Blockly.FieldColour.prototype.dispose = function() {
-  Blockly.WidgetDiv.hideIfOwner(this);
-  Blockly.FieldColour.superClass_.dispose.call(this);
-};
-
-/**
  * Ensure that the input value is a valid colour.
  * @param {string=} newValue The input value.
  * @return {?string} A valid colour, or null if invalid.
@@ -178,10 +164,7 @@ Blockly.FieldColour.prototype.doClassValidation_ = function(newValue) {
   if (typeof newValue != 'string') {
     return null;
   }
-  if (goog.color.isValidColor(newValue)) {
-    return goog.color.parse(newValue).hex;
-  }
-  return null;
+  return Blockly.utils.colour.parse(newValue);
 };
 
 /**
@@ -203,9 +186,8 @@ Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {
 Blockly.FieldColour.prototype.getText = function() {
   var colour = this.value_;
   // Try to use #rgb format if possible, rather than #rrggbb.
-  var m = colour.match(/^#(.)\1(.)\2(.)\3$/);
-  if (m) {
-    colour = '#' + m[1] + m[2] + m[3];
+  if (/^#(.)\1(.)\2(.)\3$/.test(colour)) {
+    colour = '#' + colour[1] + colour[3] + colour[5];
   }
   return colour;
 };
@@ -281,24 +263,18 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
 };
 
 /**
- * Create a palette under the colour field.
+ * Create and show the colour field's editor.
  * @private
  */
 Blockly.FieldColour.prototype.showEditor_ = function() {
-
-  Blockly.DropDownDiv.hideWithoutAnimation();
-  Blockly.DropDownDiv.clearContent();
-
-  var picker = this.createWidget_();
+  var picker = this.dropdownCreate_();
   Blockly.DropDownDiv.getContentDiv().appendChild(picker);
+
   Blockly.DropDownDiv.setColour(
       this.DROPDOWN_BACKGROUND_COLOUR, this.DROPDOWN_BORDER_COLOUR);
 
-  Blockly.DropDownDiv.showPositionedByField(this);
-
-  // Configure event handler on the table to listen for any event in a cell.
-  Blockly.FieldColour.onUpWrapper_ = Blockly.bindEvent_(picker,
-      'mouseup', this, this.onClick_);
+  Blockly.DropDownDiv.showPositionedByField(
+      this, this.dropdownDispose_.bind(this));
 };
 
 /**
@@ -313,22 +289,18 @@ Blockly.FieldColour.prototype.onClick_ = function(e) {
     cell = cell.parentNode;
   }
   var colour = cell && cell.label;
-  Blockly.WidgetDiv.hide();
-  if (this.sourceBlock_) {
-    // Call any validation function, and allow it to override.
-    colour = this.callValidator(colour);
-  }
   if (colour !== null) {
     this.setValue(colour);
+    Blockly.DropDownDiv.hideIfOwner(this);
   }
 };
 
 /**
- * Create a colour picker widget.
+ * Create a colour picker dropdown editor.
  * @return {!Element} The newly created colour picker.
  * @private
  */
-Blockly.FieldColour.prototype.createWidget_ = function() {
+Blockly.FieldColour.prototype.dropdownCreate_ = function() {
   var columns = this.columns_ || Blockly.FieldColour.COLUMNS;
   var colours = this.colours_ || Blockly.FieldColour.COLOURS;
   var titles = this.titles_ || Blockly.FieldColour.TITLES;
@@ -353,18 +325,35 @@ Blockly.FieldColour.prototype.createWidget_ = function() {
       div.className = 'blocklyColourSelected';
     }
   }
+
+  // Configure event handler on the table to listen for any event in a cell.
+  this.onUpWrapper_ = Blockly.bindEvent_(table, 'mouseup', this, this.onClick_);
+
   return table;
 };
 
 /**
- * Hide the colour picker widget.
+ * Dispose of events belonging to the colour editor.
  * @private
  */
-Blockly.FieldColour.widgetDispose_ = function() {
-  if (Blockly.FieldColour.onUpWrapper_) {
-    Blockly.unbindEvent_(Blockly.FieldColour.onUpWrapper_);
-  }
-  Blockly.Events.setGroup(false);
+Blockly.FieldColour.prototype.dropdownDispose_ = function() {
+  Blockly.unbindEvent_(this.onUpWrapper_);
+};
+
+/**
+ * Get the size of the visible field, as used in new rendering.
+ * The colour field fills the bounding box with colour and takes up the full
+ * space of the bounding box.
+ * @return {!goog.math.Size} The size of the visible field.
+ * @package
+ */
+Blockly.FieldColour.prototype.getCorrectedSize = function() {
+  // getSize also renders and updates the size if needed.  Rather than duplicate
+  // the logic to figure out whether to rerender, just call getSize.
+  this.getSize();
+  return new goog.math.Size(
+      this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
+      Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT - 1);
 };
 
 /**

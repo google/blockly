@@ -30,8 +30,7 @@ goog.require('Blockly.Block');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.utils');
-
-goog.require('goog.math.Rect');
+goog.require('Blockly.utils.Rect');
 
 
 /**
@@ -313,7 +312,7 @@ Blockly.HorizontalFlyout.prototype.layout_ = function(contents, gaps) {
  * Determine if a drag delta is toward the workspace, based on the position
  * and orientation of the flyout. This is used in determineDragIntention_ to
  * determine if a new block should be created or if the flyout should scroll.
- * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at mouse down, in pixel units.
  * @return {boolean} True if the drag is toward the workspace.
  * @package
@@ -336,7 +335,7 @@ Blockly.HorizontalFlyout.prototype.isDragTowardWorkspace = function(
 
 /**
  * Return the deletion rectangle for this flyout in viewport coordinates.
- * @return {goog.math.Rect} Rectangle in which to delete.
+ * @return {Blockly.utils.Rect} Rectangle in which to delete.
  */
 Blockly.HorizontalFlyout.prototype.getClientRect = function() {
   if (!this.svgGroup_) {
@@ -348,17 +347,14 @@ Blockly.HorizontalFlyout.prototype.getClientRect = function() {
   // area are still deleted.  Must be larger than the largest screen size,
   // but be smaller than half Number.MAX_SAFE_INTEGER (not available on IE).
   var BIG_NUM = 1000000000;
-  var y = flyoutRect.top;
-  var height = flyoutRect.height;
+  var top = flyoutRect.top;
 
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
-    return new goog.math.Rect(-BIG_NUM, y - BIG_NUM, BIG_NUM * 2,
-        BIG_NUM + height);
-  } else if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
-    return new goog.math.Rect(-BIG_NUM, y, BIG_NUM * 2,
-        BIG_NUM + height);
+    var height = flyoutRect.height;
+    return new Blockly.utils.Rect(-BIG_NUM, top + height, -BIG_NUM, BIG_NUM);
+  } else {  // Bottom.
+    return new Blockly.utils.Rect(top, -BIG_NUM, -BIG_NUM, BIG_NUM);
   }
-  // TODO: Else throw error (should never happen).
 };
 
 /**

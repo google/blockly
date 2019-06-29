@@ -130,18 +130,6 @@ Blockly.SPRITE = {
 // Constants below this point are not intended to be changed.
 
 /**
- * Required name space for SVG elements.
- * @const
- */
-Blockly.SVG_NS = 'http://www.w3.org/2000/svg';
-
-/**
- * Required name space for HTML elements.
- * @const
- */
-Blockly.HTML_NS = 'http://www.w3.org/1999/xhtml';
-
-/**
  * ENUM for a right-facing value input.  E.g. 'set item to' or 'return'.
  * @const
  */

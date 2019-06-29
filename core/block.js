@@ -38,11 +38,10 @@ goog.require('Blockly.Extensions');
 goog.require('Blockly.Input');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.string');
 goog.require('Blockly.Warning');
 goog.require('Blockly.Workspace');
-
-goog.require('goog.math.Coordinate');
-goog.require('goog.color');
 
 
 /**
@@ -135,10 +134,10 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   /**
    * The block's position in workspace units.  (0, 0) is at the workspace's
    * origin; scale does not change this value.
-   * @type {!goog.math.Coordinate}
+   * @type {!Blockly.utils.Coordinate}
    * @private
    */
-  this.xy_ = new goog.math.Coordinate(0, 0);
+  this.xy_ = new Blockly.utils.Coordinate(0, 0);
 
   /** @type {!Blockly.Workspace} */
   this.workspace = workspace;
@@ -891,9 +890,7 @@ Blockly.Block.prototype.getColourShadow = function() {
   if (colourSecondary) {
     return colourSecondary;
   }
-  var rgb = goog.color.hexToRgb(this.getColour());
-  rgb = goog.color.lighten(rgb, 0.6);
-  return goog.color.rgbArrayToHex(rgb);
+  return Blockly.utils.colour.blend('white', this.getColour(), 0.6);
 };
 
 /**
@@ -914,11 +911,11 @@ Blockly.Block.prototype.getColourBorder = function() {
       colourDark: null
     };
   }
-  var rgb = goog.color.hexToRgb(this.getColour());
+  var colour = this.getColour();
   return {
     colourBorder: null,
-    colourLight: goog.color.rgbArrayToHex(goog.color.lighten(rgb, 0.3)),
-    colourDark: goog.color.rgbArrayToHex(goog.color.darken(rgb, 0.2))
+    colourLight: Blockly.utils.colour.blend('white',colour,  0.3),
+    colourDark: Blockly.utils.colour.blend('black', colour, 0.2)
   };
 };
 
@@ -931,8 +928,8 @@ Blockly.Block.prototype.getStyleName = function() {
 };
 
 /**
- * Get the HSV hue value of a block. Null if hue not set.
- * @return {?number} Hue value (0-360)
+ * Get the HSV hue value of a block.  Null if hue not set.
+ * @return {?number} Hue value (0-360).
  */
 Blockly.Block.prototype.getHue = function() {
   return this.hue_;
@@ -950,18 +947,20 @@ Blockly.Block.prototype.setColour = function(colour) {
   var hue = Number(dereferenced);
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
     this.hue_ = hue;
-    this.colour_ = Blockly.hueToRgb(hue);
-  } else if ((typeof dereferenced == 'string') &&
-      /^#[0-9a-fA-F]{6}$/.test(dereferenced)) {
-    this.colour_ = dereferenced;
-    // Only store hue if colour is set as a hue.
-    this.hue_ = null;
+    this.colour_ = Blockly.hueToHex(hue);
   } else {
-    var errorMsg = 'Invalid colour: "' + dereferenced + '"';
-    if (colour != dereferenced) {
-      errorMsg += ' (from "' + colour + '")';
+    var hex = Blockly.utils.colour.parse(dereferenced);
+    if (hex) {
+      this.colour_ = hex;
+      // Only store hue if colour is set as a hue.
+      this.hue_ = null;
+    } else {
+      var errorMsg = 'Invalid colour: "' + dereferenced + '"';
+      if (colour != dereferenced) {
+        errorMsg += ' (from "' + colour + '")';
+      }
+      throw Error(errorMsg);
     }
-    throw Error(errorMsg);
   }
 };
 
@@ -1592,7 +1591,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
   }
   // Add last dummy input if needed.
   if (elements.length && (typeof elements[elements.length - 1] == 'string' ||
-      Blockly.utils.startsWith(
+      Blockly.utils.string.startsWith(
           elements[elements.length - 1]['type'], 'field_'))) {
     var dummyInput = {type: 'input_dummy'};
     if (lastDummyAlign) {
@@ -1847,7 +1846,7 @@ Blockly.Block.prototype.setMutator = function(_mutator) {
 /**
  * Return the coordinates of the top-left corner of this block relative to the
  * drawing surface's origin (0,0), in workspace units.
- * @return {!goog.math.Coordinate} Object with .x and .y properties.
+ * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
  */
 Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
   return this.xy_;

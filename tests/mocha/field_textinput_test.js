@@ -169,9 +169,9 @@ suite ('Text Input Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.textInputField = new Blockly.FieldTextInput('value');
-      Blockly.FieldTextInput.htmlInput_ = Object.create(null);
-      Blockly.FieldTextInput.htmlInput_.oldValue_ = 'value';
-      Blockly.FieldTextInput.htmlInput_.untypedDefaultValue_ = 'value';
+      this.textInputField.htmlInput_ = Object.create(null);
+      this.textInputField.htmlInput_.oldValue_ = 'value';
+      this.textInputField.htmlInput_.untypedDefaultValue_ = 'value';
     });
     teardown(function() {
       this.textInputField.setValidator(null);
@@ -185,7 +185,7 @@ suite ('Text Input Fields', function() {
       });
       test('When Editing', function() {
         this.textInputField.isBeingEdited_ = true;
-        Blockly.FieldTextInput.htmlInput_.value = 'newValue';
+        this.textInputField.htmlInput_.value = 'newValue';
         this.textInputField.onHtmlInputChange_(null);
         assertValue(this.textInputField, 'value', 'newValue');
         this.textInputField.isBeingEdited_ = false;
@@ -203,7 +203,7 @@ suite ('Text Input Fields', function() {
       });
       test('When Editing', function() {
         this.textInputField.isBeingEdited_ = true;
-        Blockly.FieldTextInput.htmlInput_.value = 'bbbaaa';
+        this.textInputField.htmlInput_.value = 'bbbaaa';
         this.textInputField.onHtmlInputChange_(null);
         assertValue(this.textInputField, 'bbb', 'bbbaaa');
         this.textInputField.isBeingEdited_ = false;
@@ -219,7 +219,7 @@ suite ('Text Input Fields', function() {
       });
       test('When Editing', function() {
         this.textInputField.isBeingEdited_ = true;
-        Blockly.FieldTextInput.htmlInput_.value = 'newValue';
+        this.textInputField.htmlInput_.value = 'newValue';
         this.textInputField.onHtmlInputChange_(null);
         assertValue(this.textInputField, 'newValue');
         this.textInputField.isBeingEdited_ = false;

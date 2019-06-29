@@ -26,8 +26,9 @@
 
 goog.provide('Blockly.Options');
 
-goog.require('Blockly.Xml');
 goog.require('Blockly.Themes.Classic');
+goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.Xml');
 
 
 /**
@@ -48,7 +49,8 @@ Blockly.Options = function(options) {
     var hasDisable = false;
     var hasSounds = false;
   } else {
-    var languageTree = Blockly.Options.parseToolboxTree(options['toolbox']);
+    var languageTree =
+        Blockly.Options.parseToolboxTree(options['toolbox'] || null);
     var hasCategories = Boolean(languageTree &&
         languageTree.getElementsByTagName('category').length);
     var hasTrashcan = options['trashcan'];
@@ -164,7 +166,7 @@ Blockly.Options.prototype.getMetrics = null;
  * Parse the user-specified move options, using reasonable defaults where
  *    behaviour is unspecified.
  * @param {!Object} options Dictionary of options.
- * @param {!boolean} hasCategories Whether the workspace has categories or not.
+ * @param {boolean} hasCategories Whether the workspace has categories or not.
  * @return {!Object} A dictionary of normalized options.
  * @private
  */
@@ -263,11 +265,11 @@ Blockly.Options.parseGridOptions_ = function(options) {
 Blockly.Options.parseToolboxTree = function(tree) {
   if (tree) {
     if (typeof tree != 'string') {
-      if (typeof XSLTProcessor == 'undefined' && tree.outerHTML) {
+      if (Blockly.utils.userAgent.IE && tree.outerHTML) {
         // In this case the tree will not have been properly built by the
         // browser. The HTML will be contained in the element, but it will
         // not have the proper DOM structure since the browser doesn't support
-        // XSLTProcessor (XML -> HTML). This is the case in IE 9+.
+        // XSLTProcessor (XML -> HTML).
         tree = tree.outerHTML;
       } else if (!(tree instanceof Element)) {
         tree = null;
@@ -275,6 +277,9 @@ Blockly.Options.parseToolboxTree = function(tree) {
     }
     if (typeof tree == 'string') {
       tree = Blockly.Xml.textToDom(tree);
+      if (tree.nodeName.toLowerCase() != 'xml') {
+        throw TypeError('Toolbox should be an <xml> document.');
+      }
     }
   } else {
     tree = null;

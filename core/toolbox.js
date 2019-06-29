@@ -32,13 +32,14 @@ goog.require('Blockly.Flyout');
 goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.colour');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Rect');
 goog.require('Blockly.VerticalFlyout');
 
 goog.require('goog.events');
-goog.require('goog.events.BrowserFeature');
 goog.require('goog.events.EventType');
 goog.require('goog.html.SafeHtml');
-goog.require('goog.math.Rect');
 goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.ui.tree.TreeNode');
@@ -192,7 +193,7 @@ Blockly.Toolbox.prototype.init = function() {
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
   // Insert the flyout after the workspace.
-  Blockly.utils.insertAfter(this.flyout_.createDom('svg'),
+  Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'),
       this.workspace_.getParentSvg());
   this.flyout_.init(workspace);
 
@@ -220,7 +221,7 @@ Blockly.Toolbox.prototype.init = function() {
 Blockly.Toolbox.prototype.dispose = function() {
   this.flyout_.dispose();
   this.tree_.dispose();
-  Blockly.utils.removeNode(this.HtmlDiv);
+  Blockly.utils.dom.removeNode(this.HtmlDiv);
   this.workspace_ = null;
   this.lastCategory_ = null;
 };
@@ -388,24 +389,30 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
  * @param {string} categoryName Name of the toolbox category.
  * @private
  */
-Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut, categoryName) {
+Blockly.Toolbox.prototype.setColour_ = function(colourValue, childOut,
+    categoryName) {
   // Decode the colour for any potential message references
   // (eg. `%{BKY_MATH_HUE}`).
   var colour = Blockly.utils.replaceMessageReferences(colourValue);
   if (colour === null || colour === '') {
     // No attribute. No colour.
     childOut.hexColour = '';
-  } else if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
-    childOut.hexColour = colour;
-    this.hasColours_ = true;
-  } else if (typeof colour === 'number' ||
-      (typeof colour === 'string' && !isNaN(Number(colour)))) {
-    childOut.hexColour = Blockly.hueToRgb(Number(colour));
-    this.hasColours_ = true;
   } else {
-    childOut.hexColour = '';
-    console.warn('Toolbox category "' + categoryName +
-        '" has unrecognized colour attribute: ' + colour);
+    var hue = Number(colour);
+    if (!isNaN(hue)) {
+      childOut.hexColour = Blockly.hueToHex(hue);
+      this.hasColours_ = true;
+    } else {
+      var hex = Blockly.utils.colour.parse(colour);
+      if (hex) {
+        childOut.hexColour = hex;
+        this.hasColours_ = true;
+      } else {
+        childOut.hexColour = '';
+        console.warn('Toolbox category "' + categoryName +
+            '" has unrecognized colour attribute: ' + colour);
+      }
+    }
   }
 };
 
@@ -517,7 +524,7 @@ Blockly.Toolbox.prototype.clearSelection = function() {
  * @package
  */
 Blockly.Toolbox.prototype.addStyle = function(style) {
-  Blockly.utils.addClass(/** @type {!Element} */ (this.HtmlDiv), style);
+  Blockly.utils.dom.addClass(/** @type {!Element} */ (this.HtmlDiv), style);
 };
 
 /**
@@ -526,12 +533,12 @@ Blockly.Toolbox.prototype.addStyle = function(style) {
  * @package
  */
 Blockly.Toolbox.prototype.removeStyle = function(style) {
-  Blockly.utils.removeClass(/** @type {!Element} */ (this.HtmlDiv), style);
+  Blockly.utils.dom.removeClass(/** @type {!Element} */ (this.HtmlDiv), style);
 };
 
 /**
  * Return the deletion rectangle for this toolbox.
- * @return {goog.math.Rect} Rectangle in which to delete.
+ * @return {Blockly.utils.Rect} Rectangle in which to delete.
  */
 Blockly.Toolbox.prototype.getClientRect = function() {
   if (!this.HtmlDiv) {
@@ -544,23 +551,21 @@ Blockly.Toolbox.prototype.getClientRect = function() {
   var BIG_NUM = 10000000;
   var toolboxRect = this.HtmlDiv.getBoundingClientRect();
 
-  var x = toolboxRect.left;
-  var y = toolboxRect.top;
-  var width = toolboxRect.width;
-  var height = toolboxRect.height;
+  var top = toolboxRect.top;
+  var bottom = top + toolboxRect.height;
+  var left = toolboxRect.left;
+  var right = left + toolboxRect.width;
 
   // Assumes that the toolbox is on the SVG edge.  If this changes
   // (e.g. toolboxes in mutators) then this code will need to be more complex.
-  if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
-    return new goog.math.Rect(-BIG_NUM, -BIG_NUM, BIG_NUM + x + width,
-        2 * BIG_NUM);
-  } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
-    return new goog.math.Rect(x, -BIG_NUM, BIG_NUM + width, 2 * BIG_NUM);
-  } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
-    return new goog.math.Rect(-BIG_NUM, -BIG_NUM, 2 * BIG_NUM,
-        BIG_NUM + y + height);
-  } else {  // Bottom
-    return new goog.math.Rect(0, y, 2 * BIG_NUM, BIG_NUM + width);
+  if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+    return new Blockly.utils.Rect(-BIG_NUM, bottom, -BIG_NUM, BIG_NUM);
+  } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
+    return new Blockly.utils.Rect(top, BIG_NUM, -BIG_NUM, BIG_NUM);
+  } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
+    return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, right);
+  } else {  // Right
+    return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
   }
 };
 
@@ -600,7 +605,7 @@ Blockly.Toolbox.TreeControl.prototype.enterDocument = function() {
   Blockly.Toolbox.TreeControl.superClass_.enterDocument.call(this);
 
   // Add touch handler.
-  if (goog.events.BrowserFeature.TOUCH_ENABLED) {
+  if (Blockly.Touch.TOUCH_ENABLED) {
     var el = this.getElement();
     Blockly.bindEventWithChecks_(el, goog.events.EventType.TOUCHEND, this,
         this.handleTouchEvent_);

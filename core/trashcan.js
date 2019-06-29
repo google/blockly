@@ -26,10 +26,9 @@
 
 goog.provide('Blockly.Trashcan');
 
-goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Rect');
 goog.require('Blockly.Xml');
-
-goog.require('goog.math.Rect');
 
 
 /**
@@ -225,21 +224,21 @@ Blockly.Trashcan.prototype.createDom = function() {
         clip-path="url(#blocklyTrashLidClipPath837493)"></image>
   </g>
   */
-  this.svgGroup_ = Blockly.utils.createSvgElement('g',
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement('g',
       {'class': 'blocklyTrash'}, null);
   var clip;
   var rnd = String(Math.random()).substring(2);
-  clip = Blockly.utils.createSvgElement('clipPath',
+  clip = Blockly.utils.dom.createSvgElement('clipPath',
       {'id': 'blocklyTrashBodyClipPath' + rnd},
       this.svgGroup_);
-  Blockly.utils.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement('rect',
       {
         'width': this.WIDTH_,
         'height': this.BODY_HEIGHT_,
         'y': this.LID_HEIGHT_
       },
       clip);
-  var body = Blockly.utils.createSvgElement('image',
+  var body = Blockly.utils.dom.createSvgElement('image',
       {
         'width': Blockly.SPRITE.width,
         'x': -this.SPRITE_LEFT_,
@@ -248,15 +247,15 @@ Blockly.Trashcan.prototype.createDom = function() {
         'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')'
       },
       this.svgGroup_);
-  body.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+  body.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
-  clip = Blockly.utils.createSvgElement('clipPath',
+  clip = Blockly.utils.dom.createSvgElement('clipPath',
       {'id': 'blocklyTrashLidClipPath' + rnd},
       this.svgGroup_);
-  Blockly.utils.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement('rect',
       {'width': this.WIDTH_, 'height': this.LID_HEIGHT_}, clip);
-  this.svgLid_ = Blockly.utils.createSvgElement('image',
+  this.svgLid_ = Blockly.utils.dom.createSvgElement('image',
       {
         'width': Blockly.SPRITE.width,
         'x': -this.SPRITE_LEFT_,
@@ -265,7 +264,7 @@ Blockly.Trashcan.prototype.createDom = function() {
         'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')'
       },
       this.svgGroup_);
-  this.svgLid_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
+  this.svgLid_.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   Blockly.bindEventWithChecks_(this.svgGroup_, 'mouseup', this, this.click);
@@ -287,7 +286,7 @@ Blockly.Trashcan.prototype.createDom = function() {
  */
 Blockly.Trashcan.prototype.init = function(verticalSpacing) {
   if (this.workspace_.options.maxTrashcanContents > 0) {
-    Blockly.utils.insertAfter(this.flyout_.createDom('svg'),
+    Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'),
         this.workspace_.getParentSvg());
     this.flyout_.init(this.workspace_);
     this.flyout_.isBlockCreatable_ = function() {
@@ -308,7 +307,7 @@ Blockly.Trashcan.prototype.init = function(verticalSpacing) {
  */
 Blockly.Trashcan.prototype.dispose = function() {
   if (this.svgGroup_) {
-    Blockly.utils.removeNode(this.svgGroup_);
+    Blockly.utils.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.svgLid_ = null;
@@ -354,7 +353,7 @@ Blockly.Trashcan.prototype.position = function() {
 
 /**
  * Return the deletion rectangle for this trash can.
- * @return {goog.math.Rect} Rectangle in which to delete.
+ * @return {Blockly.utils.Rect} Rectangle in which to delete.
  */
 Blockly.Trashcan.prototype.getClientRect = function() {
   if (!this.svgGroup_) {
@@ -362,12 +361,12 @@ Blockly.Trashcan.prototype.getClientRect = function() {
   }
 
   var trashRect = this.svgGroup_.getBoundingClientRect();
-  var left = trashRect.left + this.SPRITE_LEFT_ - this.MARGIN_HOTSPOT_;
   var top = trashRect.top + this.SPRITE_TOP_ - this.MARGIN_HOTSPOT_;
-  var width = this.WIDTH_ + 2 * this.MARGIN_HOTSPOT_;
-  var height = this.LID_HEIGHT_ + this.BODY_HEIGHT_ + 2 * this.MARGIN_HOTSPOT_;
-  return new goog.math.Rect(left, top, width, height);
-
+  var bottom = top + this.LID_HEIGHT_ + this.BODY_HEIGHT_ +
+      2 * this.MARGIN_HOTSPOT_;
+  var left = trashRect.left + this.SPRITE_LEFT_ - this.MARGIN_HOTSPOT_;
+  var right = left + this.WIDTH_ + 2 * this.MARGIN_HOTSPOT_;
+  return new Blockly.utils.Rect(top, bottom, left, right);
 };
 
 /**
@@ -432,7 +431,7 @@ Blockly.Trashcan.prototype.click = function() {
 
   var xml = [];
   for (var i = 0, text; text = this.contents_[i]; i++) {
-    xml[i] = Blockly.Xml.textToDom(text).firstChild;
+    xml[i] = Blockly.Xml.textToDom(text);
   }
   this.flyout_.show(xml);
 };
@@ -470,7 +469,8 @@ Blockly.Trashcan.prototype.onDelete_ = function() {
     if (trashcan.workspace_.options.maxTrashcanContents <= 0) {
       return;
     }
-    if (event.type == Blockly.Events.BLOCK_DELETE) {
+    if (event.type == Blockly.Events.BLOCK_DELETE &&
+        event.oldXml.tagName.toLowerCase() != 'shadow') {
       var cleanedXML = trashcan.cleanBlockXML_(event.oldXml);
       if (trashcan.contents_.indexOf(cleanedXML) != -1) {
         return;
@@ -531,5 +531,5 @@ Blockly.Trashcan.prototype.cleanBlockXML_ = function(xml) {
     }
     node = nextNode;
   }
-  return '<xml>' + Blockly.Xml.domToText(xmlBlock) + '</xml>';
+  return Blockly.Xml.domToText(xmlBlock);
 };

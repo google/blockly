@@ -160,7 +160,7 @@ Blockly.Procedures.isNameUsed = function(name, workspace, opt_exclude) {
  */
 Blockly.Procedures.rename = function(name) {
   // Strip leading and trailing whitespace.  Beyond this, all names are legal.
-  name = name.replace(/^[\s\xa0]+|[\s\xa0]+$/g, '');
+  name = name.trim();
 
   // Ensure two identically-named procedures don't exist.
   var legalName = Blockly.Procedures.findLegalName(name, this.getSourceBlock());

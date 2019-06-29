@@ -31,8 +31,8 @@ goog.provide('Blockly.Field');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
-goog.require('Blockly.userAgent');
-goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.userAgent');
 
 goog.require('goog.math.Size');
 goog.require('goog.style');
@@ -117,7 +117,6 @@ Blockly.Field.cacheWidths_ = null;
  */
 Blockly.Field.cacheReference_ = 0;
 
-
 /**
  * Name of field.  Unique within each block.
  * Static labels are usually unnamed.
@@ -132,19 +131,29 @@ Blockly.Field.prototype.name = undefined;
 Blockly.Field.prototype.maxDisplayLength = 50;
 
 /**
- * Get the current value of the field.
- * @return {*} Current value.
- */
-Blockly.Field.prototype.getValue = function() {
-  return this.value_;
-};
-
-/**
- * Visible text to display.
- * @type {string}
+ * A generic value possessed by the field.
+ * Should generally be non-null, only null when the field is created.
+ * @type {*}
  * @protected
  */
+Blockly.Field.prototype.value_ = null;
+
+/**
+ * Text representation of the field's value. Maintained for backwards
+ * compatibility reasons.
+ * @type {string}
+ * @protected
+ * @deprecated Use or override getText instead.
+ */
 Blockly.Field.prototype.text_ = '';
+
+/**
+ * Used to cache the field's tooltip value if setTooltip is called when the
+ * field is not yet initialized. Is *not* guaranteed to be accurate.
+ * @type {?string}
+ * @private
+ */
+Blockly.Field.prototype.tooltip_ = null;
 
 /**
  * Block this field is attached to.  Starts as null, then set in init.
@@ -235,14 +244,14 @@ Blockly.Field.prototype.init = function() {
     // Field has already been initialized once.
     return;
   }
-  this.fieldGroup_ = Blockly.utils.createSvgElement('g', {}, null);
+  this.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
   if (!this.isVisible()) {
     this.fieldGroup_.style.display = 'none';
   }
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
   this.initView();
   this.updateEditable();
-  this.setTooltip();
+  this.setTooltip(this.tooltip_);
   this.bindEvents_();
   this.initModel();
 };
@@ -263,7 +272,7 @@ Blockly.Field.prototype.initView = function() {
  * @protected
  */
 Blockly.Field.prototype.createBorderRect_ = function() {
-  this.borderRect_ = Blockly.utils.createSvgElement('rect',
+  this.borderRect_ = Blockly.utils.dom.createSvgElement('rect',
       {
         'rx': 4,
         'ry': 4,
@@ -281,7 +290,7 @@ Blockly.Field.prototype.createBorderRect_ = function() {
  * @protected
  */
 Blockly.Field.prototype.createTextElement_ = function() {
-  this.textElement_ = Blockly.utils.createSvgElement('text',
+  this.textElement_ = Blockly.utils.dom.createSvgElement('text',
       {
         'class': 'blocklyText',
         'y': this.size_.height - 12.5
@@ -334,21 +343,20 @@ Blockly.Field.prototype.toXml = function(fieldElement) {
 };
 
 /**
- * Dispose of all DOM objects belonging to this editable field.
+ * Dispose of all DOM objects and events belonging to this editable field.
+ * @package
  */
 Blockly.Field.prototype.dispose = function() {
+  Blockly.DropDownDiv.hideIfOwner(this);
+  Blockly.WidgetDiv.hideIfOwner(this);
+
   if (this.mouseDownWrapper_) {
     Blockly.unbindEvent_(this.mouseDownWrapper_);
-    this.mouseDownWrapper_ = null;
   }
-  this.sourceBlock_ = null;
-  if (this.fieldGroup_) {
-    Blockly.utils.removeNode(this.fieldGroup_);
-    this.fieldGroup_ = null;
-  }
-  this.textElement_ = null;
-  this.borderRect_ = null;
-  this.validator_ = null;
+
+  Blockly.utils.dom.removeNode(this.fieldGroup_);
+
+  this.disposed = true;
 };
 
 /**
@@ -360,12 +368,12 @@ Blockly.Field.prototype.updateEditable = function() {
     return;
   }
   if (this.sourceBlock_.isEditable()) {
-    Blockly.utils.addClass(group, 'blocklyEditableText');
-    Blockly.utils.removeClass(group, 'blocklyNonEditableText');
+    Blockly.utils.dom.addClass(group, 'blocklyEditableText');
+    Blockly.utils.dom.removeClass(group, 'blocklyNonEditableText');
     group.style.cursor = this.CURSOR;
   } else {
-    Blockly.utils.addClass(group, 'blocklyNonEditableText');
-    Blockly.utils.removeClass(group, 'blocklyEditableText');
+    Blockly.utils.dom.addClass(group, 'blocklyNonEditableText');
+    Blockly.utils.dom.removeClass(group, 'blocklyEditableText');
     group.style.cursor = '';
   }
 };
@@ -375,7 +383,8 @@ Blockly.Field.prototype.updateEditable = function() {
  * @return {boolean} Whether this field is clickable.
  */
 Blockly.Field.prototype.isClickable = function() {
-  return !!this.showEditor_ && (typeof this.showEditor_ === 'function');
+  return !!this.sourceBlock_ && this.sourceBlock_.isEditable() &&
+      !!this.showEditor_ && (typeof this.showEditor_ === 'function');
 };
 
 /**
@@ -575,7 +584,7 @@ Blockly.Field.getCachedWidth = function(textElement) {
 
   // Attempt to compute fetch the width of the SVG text element.
   try {
-    if (Blockly.userAgent.IE || Blockly.userAgent.EDGE) {
+    if (Blockly.utils.userAgent.IE || Blockly.utils.userAgent.EDGE) {
       width = textElement.getBBox().width;
     } else {
       width = textElement.getComputedTextLength();
@@ -752,31 +761,19 @@ Blockly.Field.prototype.setValue = function(newValue) {
 
   var validatedValue = this.doClassValidation_(newValue);
   // Class validators might accidentally forget to return, we'll ignore that.
-  if (validatedValue !== undefined) {
-    newValue = validatedValue;
-  }
-  if (newValue === null) {
-    doLogging && console.log('invalid, return');
-    this.doValueInvalid_();
-    if (this.isDirty_) {
-      this.forceRerender();
-    }
+  newValue = this.processValidation_(newValue, validatedValue);
+  if (newValue instanceof Error) {
+    doLogging && console.log('invalid class validation, return');
     return;
   }
 
   var localValidator = this.getValidator();
   if (localValidator) {
-    var validatedValue = localValidator.call(this, newValue);
+    validatedValue = localValidator.call(this, newValue);
     // Local validators might accidentally forget to return, we'll ignore that.
-    if (validatedValue !== undefined) {
-      newValue = validatedValue;
-    }
-    if (newValue === null) {
-      doLogging && console.log('invalid, return');
-      this.doValueInvalid_();
-      if (this.isDirty_) {
-        this.forceRerender();
-      }
+    newValue = this.processValidation_(newValue, validatedValue);
+    if (newValue instanceof Error) {
+      doLogging && console.log('invalid local validation, return');
       return;
     }
   }
@@ -799,12 +796,34 @@ Blockly.Field.prototype.setValue = function(newValue) {
 };
 
 /**
- * A generic value possessed by the field.
- * Should generally be non-null, only null when the field is created.
- * @type {*}
- * @protected
+ * Process the result of validation.
+ * @param {*} newValue New value.
+ * @param {*} validatedValue Validated value.
+ * @return {*} New value, or an Error object.
+ * @private
  */
-Blockly.Field.prototype.value_ = null;
+Blockly.Field.prototype.processValidation_ = function(newValue,
+    validatedValue) {
+  if (validatedValue === null) {
+    this.doValueInvalid_(newValue);
+    if (this.isDirty_) {
+      this.forceRerender();
+    }
+    return Error();
+  }
+  if (validatedValue !== undefined) {
+    newValue = validatedValue;
+  }
+  return newValue;
+};
+
+/**
+ * Get the current value of the field.
+ * @return {*} Current value.
+ */
+Blockly.Field.prototype.getValue = function() {
+  return this.value_;
+};
 
 /**
  * Used to validate a value. Returns input by default. Can be overridden by
@@ -833,12 +852,13 @@ Blockly.Field.prototype.doValueUpdate_ = function(newValue) {
 };
 
 /**
- * Used to notify the field an invalid value was input. Can be overiden by
+ * Used to notify the field an invalid value was input. Can be overidden by
  * subclasses, see FieldTextInput.
  * No-op by default.
+ * @param {*} _invalidValue The input value that was determined to be invalid.
  * @protected
  */
-Blockly.Field.prototype.doValueInvalid_ = function() {
+Blockly.Field.prototype.doValueInvalid_ = function(_invalidValue) {
   // NOP
 };
 
@@ -863,10 +883,17 @@ Blockly.Field.prototype.onMouseDown_ = function(e) {
  *    element to link to for its tooltip.
  */
 Blockly.Field.prototype.setTooltip = function(newTip) {
+  var clickTarget = this.getClickTarget_();
+  if (!clickTarget) {
+    // Field has not been initialized yet.
+    this.tooltip_ = newTip;
+    return;
+  }
+
   if (!newTip && newTip !== '') {  // If null or undefined.
-    this.getClickTarget_().tooltip = this.sourceBlock_;
+    clickTarget.tooltip = this.sourceBlock_;
   } else {
-    this.getClickTarget_().tooltip = newTip;
+    clickTarget.tooltip = newTip;
   }
 };
 

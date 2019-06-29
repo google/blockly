@@ -491,26 +491,25 @@ WorkspaceFactoryController.prototype.reinjectPreview = function(tree) {
 };
 
 /**
- * Tied to "change name" button. Changes the name of the selected category.
- * Continues prompting the user until they input a category name that is not
- * currently in use, exits if user presses cancel.
+ * Changes the name and colour of the selected category.
+ * Return if selected element is a separator.
+ * @param {string} name New name for selected category.
+ * @param {?string} colour New colour for selected category, or null if none.
+ * Must be a valid CSS string, or '' for none.
  */
-WorkspaceFactoryController.prototype.changeCategoryName = function() {
+WorkspaceFactoryController.prototype.changeSelectedCategory = function(name,
+    colour) {
   var selected = this.model.getSelected();
   // Return if a category is not selected.
   if (selected.type != ListElement.TYPE_CATEGORY) {
     return;
   }
-  // Get new name from user.
-  window.foo = selected;
-  var newName = this.promptForNewCategoryName('What do you want to change this'
-    + ' category\'s name to?', selected.name);
-  if (!newName) {  // If cancelled.
-    return;
-  }
+  // Change colour of selected category.
+  selected.changeColor(colour);
+  this.view.setBorderColor(this.model.getSelectedId(), colour);
   // Change category name.
-  selected.changeName(newName);
-  this.view.updateCategoryName(newName, this.model.getSelectedId());
+  selected.changeName(name);
+  this.view.updateCategoryName(name, this.model.getSelectedId());
   // Update preview.
   this.updatePreview();
 };
@@ -558,24 +557,6 @@ WorkspaceFactoryController.prototype.moveElementToIndex = function(element,
 };
 
 /**
- * Changes the color of the selected category. Return if selected element is
- * a separator.
- * @param {string} color The color to change the selected category. Must be
- * a valid CSS string.
- */
-WorkspaceFactoryController.prototype.changeSelectedCategoryColor =
-    function(color) {
-  // Return if category is not selected.
-  if (this.model.getSelected().type != ListElement.TYPE_CATEGORY) {
-    return;
-  }
-  // Change color of selected category.
-  this.model.getSelected().changeColor(color);
-  this.view.setBorderColor(this.model.getSelectedId(), color);
-  this.updatePreview();
-};
-
-/**
  * Tied to the "Standard Category" dropdown option, this function prompts
  * the user for a name of a standard Blockly category (case insensitive) and
  * loads it as a new category and switches to it. Leverages StandardCategories.
@@ -620,6 +601,10 @@ WorkspaceFactoryController.prototype.loadCategoryByName = function(name) {
     alert('You already have a category with the name ' + standardCategory.name
         + '. Rename your category and try again.');
     return;
+  }
+  if (!standardCategory.color && standardCategory.hue !== undefined) {
+    // Calculate the hex colour based on the hue.
+    standardCategory.color = Blockly.hueToHex(standardCategory.hue);
   }
   // Transfers current flyout blocks to a category if it's the first category
   // created.
@@ -679,12 +664,7 @@ WorkspaceFactoryController.prototype.loadStandardToolbox = function() {
  * @return {boolean} True if name is a standard category name, false otherwise.
  */
 WorkspaceFactoryController.prototype.isStandardCategoryName = function(name) {
-  for (var category in StandardCategories.categoryMap) {
-    if (name.toLowerCase() == category) {
-      return true;
-    }
-  }
-  return false;
+  return !!StandardCategories.categoryMap[name.toLowerCase()];
 };
 
 /**

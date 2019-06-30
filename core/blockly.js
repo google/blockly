@@ -119,6 +119,12 @@ Blockly.cache3dSupported_ = null;
  */
 Blockly.theme_ = null;
 
+if (typeof window !== 'undefined') {
+    Blockly.DOMParser = window.DOMParser;
+    Blockly.Element   = window.Element;
+    Blockly.document  = window.document;    
+}
+
 /**
  * Convert a hue (HSV model) into an RGB hex triplet.
  * @param {number} hue Hue on a colour wheel (0-360).

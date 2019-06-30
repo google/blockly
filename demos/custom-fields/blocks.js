@@ -64,53 +64,27 @@ Blockly.Blocks['turtle_changer'] = {
   init: function() {
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField('no matching');
+        .appendField('force hats');
     this.appendDummyInput()
         .appendField(new CustomFields.FieldTurtle(
-            'Dots', 'Stovepipe', 'Yertle',  this.validate), 'TURTLE1')
-        .appendField(new CustomFields.FieldTurtle(
-            'Stripes', 'Propeller', 'Leonardo', this.validate), 'TURTLE2');
+            'Dots', 'Crown', 'Yertle',  this.validate), 'TURTLE');
     this.setStyle('loop_blocks');
-    this.setCommentText('Validates the input so that the two turtles may' +
-      ' never have the same hat, pattern, or name.');
+    this.setCommentText('Validates the input so that certain names always' +
+      ' have specific hats. The name-hat combinations are: (Leonardo, Mask),' +
+      ' (Yertle, Crown), (Franklin, Propeller).');
   },
 
   validate: function(newValue) {
-    var oldValue = this.getValue();
-    var otherField = (this.name == 'TURTLE1') ?
-        this.getSourceBlock().getField('TURTLE2') :
-        this.getSourceBlock().getField('TURTLE1');
-    var otherValue = otherField.getValue();
-
-    newValue.pattern = this.getSourceBlock().getValidValue(
-        newValue.pattern, oldValue.pattern, otherValue.pattern,
-        CustomFields.FieldTurtle.PATTERNS);
-    newValue.hat = this.getSourceBlock().getValidValue(
-      newValue.hat, oldValue.hat, otherValue.hat,
-      CustomFields.FieldTurtle.HATS);
-    newValue.turtleName = this.getSourceBlock().getValidValue(
-      newValue.turtleName, oldValue.turtleName, otherValue.turtleName,
-      CustomFields.FieldTurtle.NAMES);
-
-    return newValue;
-  },
-
-  getValidValue: function(newValue, oldValue, otherValue, array) {
-    if (newValue == otherValue) {
-      var newValueIndex = array.indexOf(newValue);
-      var endwardIndex = newValueIndex + 1;
-      if (endwardIndex == array.length) {
-        endwardIndex = 0;
-      }
-      var startwardIndex = newValueIndex - 1;
-      if (startwardIndex < 0) {
-        startwardIndex = array.length - 1;
-      }
-
-      newValue = array[endwardIndex];
-      if (newValue == oldValue) {
-        newValue = array[startwardIndex];
-      }
+    switch(newValue.turtleName) {
+      case 'Leonardo':
+        newValue.hat = 'Mask';
+        break;
+      case 'Yertle':
+        newValue.hat = 'Crown';
+        break;
+      case 'Franklin':
+        newValue.hat = 'Propeller';
+        break;
     }
     return newValue;
   }

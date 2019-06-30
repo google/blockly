@@ -63,7 +63,7 @@ Blockly.Xml.utils.createTextNode = function(text) {
  * @package
  */
 Blockly.Xml.utils.textToDomDocument = function(text) {
-  var oParser = new DOMParser();
+  var oParser = new Blockly.DOMParser();
   return oParser.parseFromString(text, 'text/xml');
 };
 

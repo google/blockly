@@ -61,11 +61,13 @@ gulp.task('blockly_javascript_en', function() {
       .pipe(gulp.concat('blockly_node_javascript_en.js'))
       .pipe(insert.append(`
 if (typeof DOMParser !== 'function') {
-  var JSDOM = require('jsdom').JSDOM;
-  Blockly.Xml.utils.textToDomDocument = function(text) {
-    var jsdom = new JSDOM(text, { contentType: 'text/xml' });
-    return jsdom.window.document;
-  };
+    var JSDOM = require('jsdom').JSDOM;
+    var html = '<!doctype html><html><head><meta charset="utf-8"></head><body></body></html>';
+    var document = new JSDOM(html, {});
+    var window = document.window;
+    Blockly.DOMParser = window.DOMParser;
+    Blockly.Element   = window.Element;
+    Blockly.document  = document;
 }
 if (typeof module === 'object') { module.exports = Blockly; }
 if (typeof window === 'object') { window.Blockly = Blockly; }\n`))

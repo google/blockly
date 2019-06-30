@@ -128,7 +128,7 @@ Blockly.FieldDropdown.prototype.init = function() {
   }
   // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
   this.arrow_ = Blockly.utils.createSvgElement('tspan', {}, null);
-  this.arrow_.appendChild(document.createTextNode(this.sourceBlock_.RTL ?
+  this.arrow_.appendChild(Blockly.document.createTextNode(this.sourceBlock_.RTL ?
       Blockly.FieldDropdown.ARROW_CHAR + ' ' :
       ' ' + Blockly.FieldDropdown.ARROW_CHAR));
 
@@ -213,7 +213,7 @@ Blockly.FieldDropdown.prototype.positionMenu_ = function(menu) {
   var menuSize = Blockly.utils.uiMenu.getSize(menu);
 
   var menuMaxHeightPx = Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH
-      * document.documentElement.clientHeight;
+      * Blockly.document.documentElement.clientHeight;
   if (menuSize.height > menuMaxHeightPx) {
     menuSize.height = menuMaxHeightPx;
   }
@@ -491,7 +491,7 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
 Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   // Text option is selected.
   // Replace the text.
-  var textNode = document.createTextNode(this.getDisplayText_());
+  var textNode = Blockly.document.createTextNode(this.getDisplayText_());
   this.textElement_.appendChild(textNode);
   // Insert dropdown arrow.
   if (this.sourceBlock_.RTL) {

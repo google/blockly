@@ -244,14 +244,14 @@ Blockly.utils.getRelativeXY.XY_STYLE_REGEX_ =
  */
 Blockly.utils.createSvgElement = function(name, attrs, parent) {
   var e = /** @type {!SVGElement} */
-      (document.createElementNS(Blockly.SVG_NS, name));
+      (Blockly.document.createElementNS(Blockly.SVG_NS, name));
   for (var key in attrs) {
     e.setAttribute(key, attrs[key]);
   }
   // IE defines a unique attribute "runtimeStyle", it is NOT applied to
   // elements created with createElementNS. However, Closure checks for IE
   // and assumes the presence of the attribute and crashes.
-  if (document.body.runtimeStyle) {  // Indicates presence of IE-only attr.
+  if (Blockly.document.body.runtimeStyle) {  // Indicates presence of IE-only attr.
     e.runtimeStyle = e.currentStyle = e.style;
   }
   if (parent) {
@@ -818,7 +818,7 @@ Blockly.utils.is3dSupported = function() {
     return false;
   }
 
-  var el = document.createElement('p');
+  var el = Blockly.document.createElement('p');
   var has3d = 'none';
   var transforms = {
     'webkitTransform': '-webkit-transform',
@@ -829,7 +829,7 @@ Blockly.utils.is3dSupported = function() {
   };
 
   // Add it to the body to get the computed style.
-  document.body.insertBefore(el, null);
+  Blockly.document.body.insertBefore(el, null);
 
   for (var t in transforms) {
     if (el.style[t] !== undefined) {
@@ -842,13 +842,13 @@ Blockly.utils.is3dSupported = function() {
         // when users are interacting with blocks which should mean Blockly is
         // visible again.
         // See https://bugzilla.mozilla.org/show_bug.cgi?id=548397
-        document.body.removeChild(el);
+        Blockly.document.body.removeChild(el);
         return false;
       }
       has3d = computedStyle.getPropertyValue(transforms[t]);
     }
   }
-  document.body.removeChild(el);
+  Blockly.document.body.removeChild(el);
   Blockly.utils.is3dSupported.cached_ = has3d !== 'none';
   return Blockly.utils.is3dSupported.cached_;
 };
@@ -882,12 +882,12 @@ Blockly.utils.runAfterPageLoad = function(fn) {
   if (typeof document != 'object') {
     throw Error('Blockly.utils.runAfterPageLoad() requires browser document.');
   }
-  if (document.readyState == 'complete') {
+  if (Blockly.document.readyState == 'complete') {
     fn();  // Page has already loaded. Call immediately.
   } else {
     // Poll readyState.
     var readyStateCheckInterval = setInterval(function() {
-      if (document.readyState == 'complete') {
+      if (Blockly.document.readyState == 'complete') {
         clearInterval(readyStateCheckInterval);
         fn();
       }

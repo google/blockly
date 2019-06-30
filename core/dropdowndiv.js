@@ -124,17 +124,17 @@ Blockly.DropDownDiv.createDom = function() {
   if (Blockly.DropDownDiv.DIV_) {
     return;  // Already created.
   }
-  var div = document.createElement('div');
+  var div = Blockly.document.createElement('div');
   div.className = 'blocklyDropDownDiv';
-  document.body.appendChild(div);
+  Blockly.document.body.appendChild(div);
   Blockly.DropDownDiv.DIV_ = div;
 
-  var content = document.createElement('div');
+  var content = Blockly.document.createElement('div');
   content.className = 'blocklyDropDownContent';
   div.appendChild(content);
   Blockly.DropDownDiv.content_ = content;
 
-  var arrow = document.createElement('div');
+  var arrow = Blockly.document.createElement('div');
   arrow.className = 'blocklyDropDownArrow';
   div.appendChild(arrow);
   Blockly.DropDownDiv.arrow_ = arrow;

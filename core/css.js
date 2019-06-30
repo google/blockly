@@ -89,10 +89,10 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
   Blockly.Css.mediaPath_ = pathToMedia.replace(/[\\\/]$/, '');
   text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
   // Inject CSS tag at start of head.
-  var cssNode = document.createElement('style');
-  document.head.insertBefore(cssNode, document.head.firstChild);
+  var cssNode = Blockly.document.createElement('style');
+  Blockly.document.head.insertBefore(cssNode, Blockly.document.head.firstChild);
 
-  var cssTextNode = document.createTextNode(text);
+  var cssTextNode = Blockly.document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
   Blockly.Css.styleSheet_ = cssNode.sheet;
 };

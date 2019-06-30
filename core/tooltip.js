@@ -133,9 +133,9 @@ Blockly.Tooltip.createDom = function() {
     return;  // Already created.
   }
   // Create an HTML container for popup overlays (e.g. editor widgets).
-  Blockly.Tooltip.DIV = document.createElement('div');
+  Blockly.Tooltip.DIV = Blockly.document.createElement('div');
   Blockly.Tooltip.DIV.className = 'blocklyTooltipDiv';
-  document.body.appendChild(Blockly.Tooltip.DIV);
+  Blockly.document.body.appendChild(Blockly.Tooltip.DIV);
 };
 
 /**
@@ -298,8 +298,8 @@ Blockly.Tooltip.show_ = function() {
   // Create new text, line by line.
   var lines = tip.split('\n');
   for (var i = 0; i < lines.length; i++) {
-    var div = document.createElement('div');
-    div.appendChild(document.createTextNode(lines[i]));
+    var div = Blockly.document.createElement('div');
+    div.appendChild(Blockly.document.createTextNode(lines[i]));
     Blockly.Tooltip.DIV.appendChild(div);
   }
   var rtl = Blockly.Tooltip.element_.RTL;

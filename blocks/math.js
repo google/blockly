@@ -460,7 +460,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.document.createElement('mutation');
     var divisorInput = (this.getFieldValue('PROPERTY') == 'DIVISIBLE_BY');
     container.setAttribute('divisor_input', divisorInput);
     return container;
@@ -545,7 +545,7 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.document.createElement('mutation');
     container.setAttribute('op', this.getFieldValue('OP'));
     return container;
   },

@@ -40,7 +40,7 @@ goog.provide('Blockly.Xml.utils');
 Blockly.Xml.utils.createElement = function(tagName) {
   // TODO (#1978): Namespace this element.
   // TODO (#2082): Support node.js.
-  return document.createElement(tagName);
+  return Blockly.document.createElement(tagName);
 };
 
 /**
@@ -51,7 +51,7 @@ Blockly.Xml.utils.createElement = function(tagName) {
  */
 Blockly.Xml.utils.createTextNode = function(text) {
   // TODO (#2082): Support node.js.
-  return document.createTextNode(text);
+  return Blockly.document.createTextNode(text);
 };
 
 /**

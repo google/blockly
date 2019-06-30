@@ -192,7 +192,7 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
   Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, this.widgetDispose_());
   var div = Blockly.WidgetDiv.DIV;
   // Create the input.
-  var htmlInput = document.createElement('input');
+  var htmlInput = Blockly.document.createElement('input');
   htmlInput.className = 'blocklyHtmlInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
   var fontSize =

@@ -56,15 +56,15 @@ Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour = function(button) {
  */
 Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
   var xmlList = [];
-  var button = document.createElement('button');
+  var button = Blockly.document.createElement('button');
   button.setAttribute('text', Blockly.Msg['NEW_STRING_VARIABLE']);
   button.setAttribute('callbackKey', 'CREATE_VARIABLE_STRING');
   xmlList.push(button);
-  button = document.createElement('button');
+  button = Blockly.document.createElement('button');
   button.setAttribute('text', Blockly.Msg['NEW_NUMBER_VARIABLE']);
   button.setAttribute('callbackKey', 'CREATE_VARIABLE_NUMBER');
   xmlList.push(button);
-  button = document.createElement('button');
+  button = Blockly.document.createElement('button');
   button.setAttribute('text', Blockly.Msg['NEW_COLOUR_VARIABLE']);
   button.setAttribute('callbackKey', 'CREATE_VARIABLE_COLOUR');
   xmlList.push(button);

@@ -50,15 +50,15 @@ Blockly.inject = function(container, opt_options) {
   Blockly.checkBlockColourConstants();
 
   if (typeof container == 'string') {
-    container = document.getElementById(container) ||
-        document.querySelector(container);
+    container = Blockly.document.getElementById(container) ||
+        Blockly.document.querySelector(container);
   }
   // Verify that the container is in document.
   if (!Blockly.utils.containsNode(document, container)) {
     throw Error('Error: container is not in current document.');
   }
   var options = new Blockly.Options(opt_options || {});
-  var subContainer = document.createElement('div');
+  var subContainer = Blockly.document.createElement('div');
   subContainer.className = 'injectionDiv';
   container.appendChild(subContainer);
   var svg = Blockly.createDom_(subContainer, options);

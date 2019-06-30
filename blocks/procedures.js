@@ -108,12 +108,12 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this Blockly.Block
    */
   mutationToDom: function(opt_paramIds) {
-    var container = document.createElement('mutation');
+    var container = Blockly.document.createElement('mutation');
     if (opt_paramIds) {
       container.setAttribute('name', this.getFieldValue('NAME'));
     }
     for (var i = 0; i < this.argumentVarModels_.length; i++) {
-      var parameter = document.createElement('arg');
+      var parameter = Blockly.document.createElement('arg');
       var argModel = this.argumentVarModels_[i];
       parameter.setAttribute('name', argModel.name);
       parameter.setAttribute('varid', argModel.getId());
@@ -356,14 +356,14 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     var option = {enabled: true};
     var name = this.getFieldValue('NAME');
     option.text = Blockly.Msg['PROCEDURES_CREATE_DO'].replace('%1', name);
-    var xmlMutation = document.createElement('mutation');
+    var xmlMutation = Blockly.document.createElement('mutation');
     xmlMutation.setAttribute('name', name);
     for (var i = 0; i < this.arguments_.length; i++) {
-      var xmlArg = document.createElement('arg');
+      var xmlArg = Blockly.document.createElement('arg');
       xmlArg.setAttribute('name', this.arguments_[i]);
       xmlMutation.appendChild(xmlArg);
     }
-    var xmlBlock = document.createElement('block');
+    var xmlBlock = Blockly.document.createElement('block');
     xmlBlock.setAttribute('type', this.callType_);
     xmlBlock.appendChild(xmlMutation);
     option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
@@ -378,7 +378,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         option.text = Blockly.Msg['VARIABLES_SET_CREATE_GET'].replace('%1', name);
 
         var xmlField = Blockly.Variables.generateVariableFieldDom(argVar);
-        var xmlBlock = document.createElement('block');
+        var xmlBlock = Blockly.document.createElement('block');
         xmlBlock.setAttribute('type', 'variables_get');
         xmlBlock.appendChild(xmlField);
         option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
@@ -815,10 +815,10 @@ Blockly.Blocks['procedures_callnoreturn'] = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.document.createElement('mutation');
     container.setAttribute('name', this.getProcedureCall());
     for (var i = 0; i < this.arguments_.length; i++) {
-      var parameter = document.createElement('arg');
+      var parameter = Blockly.document.createElement('arg');
       parameter.setAttribute('name', this.arguments_[i]);
       container.appendChild(parameter);
     }
@@ -890,8 +890,8 @@ Blockly.Blocks['procedures_callnoreturn'] = {
          *   </block>
          * </xml>
          */
-        var xml = document.createElement('xml');
-        var block = document.createElement('block');
+        var xml = Blockly.document.createElement('xml');
+        var block = Blockly.document.createElement('block');
         block.setAttribute('type', this.defType_);
         var xy = this.getRelativeToSurfaceXY();
         var x = xy.x + Blockly.SNAP_RADIUS * (this.RTL ? -1 : 1);
@@ -900,9 +900,9 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         block.setAttribute('y', y);
         var mutation = this.mutationToDom();
         block.appendChild(mutation);
-        var field = document.createElement('field');
+        var field = Blockly.document.createElement('field');
         field.setAttribute('name', 'NAME');
-        field.appendChild(document.createTextNode(this.getProcedureCall()));
+        field.appendChild(Blockly.document.createTextNode(this.getProcedureCall()));
         block.appendChild(field);
         xml.appendChild(block);
         Blockly.Xml.domToWorkspace(xml, this.workspace);
@@ -1027,7 +1027,7 @@ Blockly.Blocks['procedures_ifreturn'] = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.document.createElement('mutation');
     container.setAttribute('value', Number(this.hasReturnValue_));
     return container;
   },

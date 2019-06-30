@@ -82,7 +82,7 @@ Blockly.FieldCheckbox.prototype.init = function() {
   this.checkElement_ = Blockly.utils.createSvgElement('text',
       {'class': 'blocklyText blocklyCheckbox', 'x': -3, 'y': 14},
       this.fieldGroup_);
-  var textNode = document.createTextNode(Blockly.FieldCheckbox.CHECK_CHAR);
+  var textNode = Blockly.document.createTextNode(Blockly.FieldCheckbox.CHECK_CHAR);
   this.checkElement_.appendChild(textNode);
   this.checkElement_.style.display = this.state_ ? 'block' : 'none';
 };

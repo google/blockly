@@ -1608,8 +1608,8 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
 Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
   // Blur whatever was focused since explcitly grabbing focus below does not
   // work in Edge.
-  if (document.activeElement) {
-    document.activeElement.blur();
+  if (Blockly.document.activeElement) {
+    Blockly.document.activeElement.blur();
   }
   try {
     // Focus the workspace SVG - this is for Chrome and Firefox.

@@ -146,7 +146,7 @@ Blockly.Blocks['lists_create_with'] = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.document.createElement('mutation');
     container.setAttribute('items', this.itemCount_);
     return container;
   },
@@ -414,7 +414,7 @@ Blockly.Blocks['lists_getIndex'] = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.document.createElement('mutation');
     var isStatement = !this.outputConnection;
     container.setAttribute('statement', isStatement);
     var isAt = this.getInput('AT').type == Blockly.INPUT_VALUE;
@@ -578,7 +578,7 @@ Blockly.Blocks['lists_setIndex'] = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.document.createElement('mutation');
     var isAt = this.getInput('AT').type == Blockly.INPUT_VALUE;
     container.setAttribute('at', isAt);
     return container;
@@ -676,7 +676,7 @@ Blockly.Blocks['lists_getSublist'] = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.document.createElement('mutation');
     var isAt1 = this.getInput('AT1').type == Blockly.INPUT_VALUE;
     container.setAttribute('at1', isAt1);
     var isAt2 = this.getInput('AT2').type == Blockly.INPUT_VALUE;
@@ -858,7 +858,7 @@ Blockly.Blocks['lists_split'] = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.document.createElement('mutation');
     container.setAttribute('mode', this.getFieldValue('MODE'));
     return container;
   },

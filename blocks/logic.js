@@ -314,7 +314,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
     if (!this.elseifCount_ && !this.elseCount_) {
       return null;
     }
-    var container = document.createElement('mutation');
+    var container = Blockly.document.createElement('mutation');
     if (this.elseifCount_) {
       container.setAttribute('elseif', this.elseifCount_);
     }

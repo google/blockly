@@ -64,13 +64,17 @@ if (typeof DOMParser !== 'function') {
     var JSDOM = require('jsdom').JSDOM;
     var html = '<!doctype html><html><head><meta charset="utf-8"></head><body></body></html>';
     var document = new JSDOM(html, {});
-    var window = document.window;
+    Blockly.DOMParser = document.window.DOMParser;
+    Blockly.Element   = document.window.Element;
+    Blockly.document  = document.window.document;
+    Blockly.setTheme(Blockly.Themes.Classic);
+} else {
     Blockly.DOMParser = window.DOMParser;
     Blockly.Element   = window.Element;
-    Blockly.document  = document;
+    Blockly.document  = window.document;
+    Blockly.setTheme(Blockly.Themes.Classic);
 }
-if (typeof module === 'object') { module.exports = Blockly; }
-if (typeof window === 'object') { window.Blockly = Blockly; }\n`))
+if (typeof module === 'object') { module.exports = Blockly; }\n`))
       .pipe(gulp.dest(''));
 });
 

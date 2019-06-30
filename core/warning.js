@@ -102,7 +102,7 @@ Blockly.Warning.textToDom_ = function(text) {
   for (var i = 0; i < lines.length; i++) {
     var tspanElement = Blockly.utils.createSvgElement('tspan',
         {'dy': '1em', 'x': Blockly.Bubble.BORDER_WIDTH}, paragraph);
-    var textNode = document.createTextNode(lines[i]);
+    var textNode = Blockly.document.createTextNode(lines[i]);
     tspanElement.appendChild(textNode);
   }
   return paragraph;

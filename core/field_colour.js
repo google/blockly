@@ -326,17 +326,17 @@ Blockly.FieldColour.prototype.createWidget_ = function() {
   var titles = this.titles_ || Blockly.FieldColour.TITLES;
   var selectedColour = this.getValue();
   // Create the palette.
-  var table = document.createElement('table');
+  var table = Blockly.document.createElement('table');
   table.className = 'blocklyColourTable';
   var row;
   for (var i = 0; i < colours.length; i++) {
     if (i % columns == 0) {
-      row = document.createElement('tr');
+      row = Blockly.document.createElement('tr');
       table.appendChild(row);
     }
-    var cell = document.createElement('td');
+    var cell = Blockly.document.createElement('td');
     row.appendChild(cell);
-    var div = document.createElement('div');
+    var div = Blockly.document.createElement('div');
     cell.appendChild(div);
     cell.label = colours[i];  // This becomes the value, if clicked.
     cell.title = titles[i] || colours[i];

@@ -65,6 +65,7 @@ function blockTest_setUp() {
 function blockTest_tearDown() {
   undefineTestBlocks();
   workspace.dispose();
+  mockControl_.$tearDown();
 }
 
 function assertUnpluggedNoheal(blocks) {

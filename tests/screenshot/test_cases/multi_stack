@@ -29,7 +29,7 @@
               <block type="text_append">
                 <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;" variabletype="">item</field>
                 <value name="TEXT">
-                  <shadow type="text"
+                  <shadow type="text">
                     <field name="TEXT">four</field>
                   </shadow>
                 </value>

@@ -31,6 +31,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
 goog.require('Blockly.WorkspaceComment');
+goog.require('Blockly.Themes.Classic');
 
 
 /**
@@ -113,6 +114,12 @@ Blockly.Workspace = function(opt_options) {
    * @private
    */
   this.potentialVariableMap_ = null;
+
+  // Set the default theme. This is for headless workspaces. This will get
+  // overwritten by the theme passed into the inject call for rendered workspaces.
+  if (!Blockly.getTheme()) {
+    Blockly.setTheme(Blockly.Themes.Classic);
+  }
 };
 
 /**

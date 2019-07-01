@@ -65,6 +65,7 @@ function blockTest_setUp() {
 function blockTest_tearDown() {
   undefineTestBlocks();
   workspace.dispose();
+  mockControl_.$tearDown();
 }
 
 function assertUnpluggedNoheal(blocks) {
@@ -279,6 +280,7 @@ function test_set_style() {
   assertEquals('#ddeeff', blockA.colourTertiary_);
 
   blockTest_tearDown();
+  \
 }
 
 function test_set_style_throw_exception() {

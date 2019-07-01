@@ -62,7 +62,7 @@ gulp.task('blockly_javascript_en', function() {
       .pipe(insert.append(`
 if (typeof DOMParser !== 'function') {
   var JSDOM = require('jsdom').JSDOM;
-  Blockly.Xml.utils.textToDomDocument = function(text) {
+  Blockly.utils.xml.textToDomDocument = function(text) {
     var jsdom = new JSDOM(text, { contentType: 'text/xml' });
     return jsdom.window.document;
   };
@@ -95,7 +95,7 @@ function buildWatchTaskFn(concatTask) {
       'msg/messages.js', 'msg/json/*.json' // Localization data
     ];
     var options = {
-      debounceDelay: 2000   // Milliseconds to delay rebuild.
+      debounceDelay: 2000  // Milliseconds to delay rebuild.
     };
     gulp.watch(srcs, options, gulp.parallel(tasks));
   };

@@ -20,15 +20,17 @@
 
 /**
  * @fileoverview XML element manipulation.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
 /**
- * @name Blockly.Xml.utils
+ * @name Blockly.utils.xml
  * @namespace
  */
-goog.provide('Blockly.Xml.utils');
+goog.provide('Blockly.utils.xml');
 
 
 /**
@@ -37,7 +39,7 @@ goog.provide('Blockly.Xml.utils');
  * @return {!Element} New DOM element.
  * @package
  */
-Blockly.Xml.utils.createElement = function(tagName) {
+Blockly.utils.xml.createElement = function(tagName) {
   // TODO (#1978): Namespace this element.
   // TODO (#2082): Support node.js.
   return document.createElement(tagName);
@@ -49,7 +51,7 @@ Blockly.Xml.utils.createElement = function(tagName) {
  * @return {!Node} New DOM node.
  * @package
  */
-Blockly.Xml.utils.createTextNode = function(text) {
+Blockly.utils.xml.createTextNode = function(text) {
   // TODO (#2082): Support node.js.
   return document.createTextNode(text);
 };
@@ -62,7 +64,7 @@ Blockly.Xml.utils.createTextNode = function(text) {
  * @throws if XML doesn't parse.
  * @package
  */
-Blockly.Xml.utils.textToDomDocument = function(text) {
+Blockly.utils.xml.textToDomDocument = function(text) {
   var oParser = new DOMParser();
   return oParser.parseFromString(text, 'text/xml');
 };
@@ -74,7 +76,7 @@ Blockly.Xml.utils.textToDomDocument = function(text) {
  * @return {string} Text representation.
  * @package
  */
-Blockly.Xml.utils.domToText = function(dom) {
+Blockly.utils.xml.domToText = function(dom) {
   // TODO (#2082): Support node.js.
   var oSerializer = new XMLSerializer();
   return oSerializer.serializeToString(dom);

@@ -34,9 +34,9 @@ goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
-goog.require('Blockly.Xml.utils');
 
 
 /**
@@ -133,9 +133,9 @@ Blockly.Mutator.prototype.createEditor_ = function() {
       null);
   // Convert the list of names into a list of XML objects for the flyout.
   if (this.quarkNames_.length) {
-    var quarkXml = Blockly.Xml.utils.createElement('xml');
+    var quarkXml = Blockly.utils.xml.createElement('xml');
     for (var i = 0, quarkName; quarkName = this.quarkNames_[i]; i++) {
-      var element = Blockly.Xml.utils.createElement('block');
+      var element = Blockly.utils.xml.createElement('block');
       element.setAttribute('type', quarkName);
       quarkXml.appendChild(element);
     }

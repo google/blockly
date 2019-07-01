@@ -280,7 +280,6 @@ function test_set_style() {
   assertEquals('#ddeeff', blockA.colourTertiary_);
 
   blockTest_tearDown();
-  \
 }
 
 function test_set_style_throw_exception() {

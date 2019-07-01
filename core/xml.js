@@ -36,7 +36,7 @@ goog.require('Blockly.Events.FinishedLoading');
 goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.Xml.utils');
+goog.require('Blockly.utils.xml');
 
 
 /**
@@ -46,7 +46,7 @@ goog.require('Blockly.Xml.utils');
  * @return {!Element} XML document.
  */
 Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
-  var xml = Blockly.Xml.utils.createElement('xml');
+  var xml = Blockly.utils.xml.createElement('xml');
   var variablesElement = Blockly.Xml.variablesToDom(
       Blockly.Variables.allUsedVarModels(workspace));
   if (variablesElement.hasChildNodes()) {
@@ -70,10 +70,10 @@ Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
  * @return {!Element} List of XML elements.
  */
 Blockly.Xml.variablesToDom = function(variableList) {
-  var variables = Blockly.Xml.utils.createElement('variables');
+  var variables = Blockly.utils.xml.createElement('variables');
   for (var i = 0, variable; variable = variableList[i]; i++) {
-    var element = Blockly.Xml.utils.createElement('variable');
-    element.appendChild(Blockly.Xml.utils.createTextNode(variable.name));
+    var element = Blockly.utils.xml.createElement('variable');
+    element.appendChild(Blockly.utils.xml.createTextNode(variable.name));
     element.setAttribute('type', variable.type);
     element.setAttribute('id', variable.getId());
     variables.appendChild(element);
@@ -109,7 +109,7 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
  */
 Blockly.Xml.fieldToDom_ = function(field) {
   if (field.isSerializable()) {
-    var container = Blockly.Xml.utils.createElement('field');
+    var container = Blockly.utils.xml.createElement('field');
     container.setAttribute('name', field.name);
     return field.toXml(container);
   }
@@ -143,7 +143,7 @@ Blockly.Xml.allFieldsToDom_ = function(block, element) {
  */
 Blockly.Xml.blockToDom = function(block, opt_noId) {
   var element =
-      Blockly.Xml.utils.createElement(block.isShadow() ? 'shadow' : 'block');
+      Blockly.utils.xml.createElement(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
   if (!opt_noId) {
     element.setAttribute('id', block.id);
@@ -160,8 +160,8 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
 
   var commentText = block.getCommentText();
   if (commentText) {
-    var commentElement = Blockly.Xml.utils.createElement('comment');
-    commentElement.appendChild(Blockly.Xml.utils.createTextNode(commentText));
+    var commentElement = Blockly.utils.xml.createElement('comment');
+    commentElement.appendChild(Blockly.utils.xml.createTextNode(commentText));
     if (typeof block.comment == 'object') {
       commentElement.setAttribute('pinned', block.comment.isVisible());
       var hw = block.comment.getBubbleSize();
@@ -172,8 +172,8 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
   }
 
   if (block.data) {
-    var dataElement = Blockly.Xml.utils.createElement('data');
-    dataElement.appendChild(Blockly.Xml.utils.createTextNode(block.data));
+    var dataElement = Blockly.utils.xml.createElement('data');
+    dataElement.appendChild(Blockly.utils.xml.createTextNode(block.data));
     element.appendChild(dataElement);
   }
 
@@ -185,9 +185,9 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
     } else {
       var childBlock = input.connection.targetBlock();
       if (input.type == Blockly.INPUT_VALUE) {
-        container = Blockly.Xml.utils.createElement('value');
+        container = Blockly.utils.xml.createElement('value');
       } else if (input.type == Blockly.NEXT_STATEMENT) {
-        container = Blockly.Xml.utils.createElement('statement');
+        container = Blockly.utils.xml.createElement('statement');
       }
       var shadow = input.connection.getShadowDom();
       if (shadow && (!childBlock || !childBlock.isShadow())) {
@@ -225,7 +225,7 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
 
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
-    var container = Blockly.Xml.utils.createElement('next');
+    var container = Blockly.utils.xml.createElement('next');
     container.appendChild(Blockly.Xml.blockToDom(nextBlock, opt_noId));
     element.appendChild(container);
   }
@@ -282,7 +282,7 @@ Blockly.Xml.cloneShadow_ = function(shadow) {
  * @return {string} Text representation.
  */
 Blockly.Xml.domToText = function(dom) {
-  return Blockly.Xml.utils.domToText(dom);
+  return Blockly.utils.xml.domToText(dom);
 };
 
 /**
@@ -324,7 +324,7 @@ Blockly.Xml.domToPrettyText = function(dom) {
  * @throws if the text doesn't parse.
  */
 Blockly.Xml.textToDom = function(text) {
-  var doc = Blockly.Xml.utils.textToDomDocument(text);
+  var doc = Blockly.utils.xml.textToDomDocument(text);
   if (!doc || !doc.documentElement ||
       doc.getElementsByTagName('parsererror').length) {
     throw Error('textToDom was unable to parse: ' + text);

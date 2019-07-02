@@ -243,7 +243,7 @@ Blockly.Blocks['text_getSubstring'] = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     var isAt1 = this.getInput('AT1').type == Blockly.INPUT_VALUE;
     container.setAttribute('at1', isAt1);
     var isAt2 = this.getInput('AT2').type == Blockly.INPUT_VALUE;
@@ -423,7 +423,7 @@ Blockly.Blocks['text_prompt_ext'] = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('type', this.getFieldValue('TYPE'));
     return container;
   },
@@ -660,7 +660,7 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('items', this.itemCount_);
     return container;
   },
@@ -810,7 +810,7 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('at', !!this.isAt_);
     return container;
   },

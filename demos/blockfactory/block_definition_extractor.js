@@ -39,10 +39,8 @@ var BlockDefinitionExtractor = BlockDefinitionExtractor || Object.create(null);
  *     workspace.
  */
 BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
-  var workspaceXml = document.createElement('xml');
-  workspaceXml.append(
-      BlockDefinitionExtractor.factoryBase_(block, block.type));
-
+  var workspaceXml = Blockly.utils.xml.createElement('xml');
+  workspaceXml.append(BlockDefinitionExtractor.factoryBase_(block, block.type));
   return workspaceXml;
 };
 
@@ -58,7 +56,7 @@ BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
  */
 BlockDefinitionExtractor.newDomElement_ = function(name, opt_attrs, opt_text) {
   // Avoid createDom(..)'s attributes argument for being too HTML specific.
-  var elem = document.createElement(name);
+  var elem = Blockly.utils.xml.createElement(name);
   if (opt_attrs) {
     for (var key in opt_attrs) {
       elem.setAttribute(key, opt_attrs[key]);

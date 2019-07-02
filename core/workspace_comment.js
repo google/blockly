@@ -280,7 +280,7 @@ Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
 Blockly.WorkspaceComment.prototype.toXml = function(opt_noId) {
   var commentElement = Blockly.utils.xml.createElement('comment');
   if (!opt_noId) {
-    commentElement.setAttribute('id', this.id);
+    commentElement.id = this.id;
   }
   commentElement.textContent = this.getContent();
   return commentElement;

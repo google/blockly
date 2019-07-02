@@ -64,7 +64,7 @@ WorkspaceFactoryController = function(toolboxName, toolboxDiv, previewDiv) {
        colour: '#ccc',
        snap: true},
      media: '../../media/',
-     toolbox: '<xml></xml>',
+     toolbox: '<xml xmlns="https://developers.google.com/blockly/xml"></xml>',
      zoom:
        {controls: true,
         wheel: true}
@@ -328,17 +328,17 @@ WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
   // Generate XML.
   if (exportMode == WorkspaceFactoryController.MODE_TOOLBOX) {
     // Export the toolbox XML.
-    var configXml = Blockly.Xml.domToPrettyText
-        (this.generator.generateToolboxXml());
+    var configXml = Blockly.Xml.domToPrettyText(
+        this.generator.generateToolboxXml());
     this.hasUnsavedToolboxChanges = false;
   } else if (exportMode == WorkspaceFactoryController.MODE_PRELOAD) {
     // Export the pre-loaded block XML.
-    var configXml = Blockly.Xml.domToPrettyText
-        (this.generator.generateWorkspaceXml());
+    var configXml = Blockly.Xml.domToPrettyText(
+        this.generator.generateWorkspaceXml());
     this.hasUnsavedPreloadChanges = false;
   } else {
     // Unknown mode. Throw error.
-    var msg = "Unknown export mode: " + exportMode;
+    var msg = 'Unknown export mode: ' + exportMode;
     BlocklyDevTools.Analytics.onError(msg);
     throw new Error(msg);
   }
@@ -757,7 +757,7 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
         BlocklyDevTools.Analytics.onImport('WorkspaceContents.xml');
       } else {
         // Throw error if invalid mode.
-        throw new Error("Unknown import mode: " + importMode);
+        throw new Error('Unknown import mode: ' + importMode);
       }
     } catch(e) {
       var msg = 'Cannot load XML from file.';
@@ -904,7 +904,7 @@ WorkspaceFactoryController.prototype.clearAll = function() {
   var hasCategories = this.model.hasElements();
   this.model.clearToolboxList();
   this.view.clearToolboxTabs();
-  this.model.savePreloadXml(Blockly.Xml.textToDom('<xml></xml>'));
+  this.model.savePreloadXml(Blockly.utils.xml.createElement('xml'));
   this.view.addEmptyCategoryMessage();
   this.view.updateState(-1, null);
   this.toolboxWorkspace.clear();
@@ -1099,8 +1099,8 @@ WorkspaceFactoryController.prototype.setStandardOptionsAndUpdate = function() {
 WorkspaceFactoryController.prototype.generateNewOptions = function() {
   this.model.setOptions(this.readOptions_());
 
-  this.reinjectPreview(Blockly.Options.parseToolboxTree
-      (this.generator.generateToolboxXml()));
+  this.reinjectPreview(Blockly.Options.parseToolboxTree(
+      this.generator.generateToolboxXml()));
 };
 
 /**
@@ -1274,7 +1274,7 @@ WorkspaceFactoryController.prototype.setBlockLibCategory =
 
   // Set category ID so that it can be easily replaced, and set a standard,
   // arbitrary block library color.
-  categoryXml.setAttribute('id', 'blockLibCategory');
+  categoryXml.id = 'blockLibCategory';
   categoryXml.setAttribute('colour', 260);
 
   // Update the toolbox and toolboxWorkspace.
@@ -1317,8 +1317,8 @@ WorkspaceFactoryController.prototype.warnForUndefinedBlocks_ = function() {
   var blocks = this.toolboxWorkspace.getAllBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     if (!this.isDefinedBlock(block)) {
-      block.setWarningText(block.type + ' is not defined (it is not a standard '
-          + 'block, \nin your block library, or an imported block)');
+      block.setWarningText(block.type + ' is not defined (it is not a ' +
+          'standard block,\nin your block library, or an imported block)');
     }
   }
 };

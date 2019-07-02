@@ -207,7 +207,7 @@ Blockly.Events.CommentCreate.prototype.toJson = function() {
  */
 Blockly.Events.CommentCreate.prototype.fromJson = function(json) {
   Blockly.Events.CommentCreate.superClass_.fromJson.call(this, json);
-  this.xml = Blockly.Xml.textToDom('<xml>' + json['xml'] + '</xml>').firstChild;
+  this.xml = Blockly.Xml.textToDom(json['xml']);
 };
 
 /**

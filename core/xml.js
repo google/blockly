@@ -75,7 +75,7 @@ Blockly.Xml.variablesToDom = function(variableList) {
     var element = Blockly.utils.xml.createElement('variable');
     element.appendChild(Blockly.utils.xml.createTextNode(variable.name));
     element.setAttribute('type', variable.type);
-    element.setAttribute('id', variable.getId());
+    element.id = variable.getId();
     variables.appendChild(element);
   }
   return variables;
@@ -146,7 +146,7 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
       Blockly.utils.xml.createElement(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
   if (!opt_noId) {
-    element.setAttribute('id', block.id);
+    element.id = block.id;
   }
   if (block.mutationToDom) {
     // Custom data for an advanced block.

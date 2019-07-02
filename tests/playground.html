@@ -148,7 +148,7 @@ function addToolboxButtonCallbacks() {
     var workspace = button.getTargetWorkspace();
     var blocks = button.workspace_.getTopBlocks();
     for(var i = 0, block; block = blocks[i]; i++) {
-      var xml = Blockly.Xml.textToDom('<xml></xml>');
+      var xml = Blockly.utils.xml.createElement('xml');
       xml.appendChild(Blockly.Xml.blockToDom(block));
       Blockly.Xml.appendDomToWorkspace(xml, workspace);
     }
@@ -355,7 +355,7 @@ function spaghetti(n) {
     xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
         '$1' + spaghettiXml + '</');
   }
-  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  xml = '<xml xmlns="https://developers.google.com/blockly/xml">' + xml + '</xml>';
   var dom = Blockly.Xml.textToDom(xml);
   console.time('Spaghetti domToWorkspace');
   Blockly.Xml.domToWorkspace(dom, workspace);
@@ -488,7 +488,7 @@ h1 {
 
   <!-- toolbox-simple is an always-open flyout with no category menu.
   Always-open flyouts are a good idea if you have a small number of blocks. -->
-  <xml id="toolbox-simple" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
     <block type="controls_ifelse"></block>
     <block type="logic_compare"></block>
     <!-- <block type="control_repeat"></block> -->
@@ -517,7 +517,7 @@ h1 {
   <!-- toolbox-categories has a category menu and an auto-closing flyout.  The
   Variables category uses untyped variable blocks.
   See https://developers.google.com/blockly/guides/create-custom-blocks/variables#untyped_variable_blocks for more information. -->
-  <xml id="toolbox-categories" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories" style="display: none">
     <category name="Logic" categorystyle="logic_category">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
@@ -858,7 +858,7 @@ h1 {
   <!-- toolbox-categories-typed-variables has a category menu and an
   auto-closing flyout.  The Variables category uses typed variable blocks.
   See https://developers.google.com/blockly/guides/create-custom-blocks/variables#typed_variable_blocks for more information. -->
-  <xml id="toolbox-categories-typed-variables" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories-typed-variables" style="display: none">
     <category name="Logic" categorystyle="logic_category">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
@@ -1198,9 +1198,9 @@ h1 {
 
   <!-- toolbox-test-blocks has a category menu and an auto-closing flyout.
   The blocks in this toolbox reflect block configurations not used by
-  the standard predefined blocks, and so test alernative block rendering
+  the standard predefined blocks, and so test alternative block rendering
   code paths. -->
-  <xml id="toolbox-test-blocks" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-test-blocks" style="display: none">
     <category name="Basic">
       <block type="test_basic_empty"></block>
       <block type="test_basic_empty_with_mutator"></block>

@@ -780,7 +780,7 @@ FactoryUtils.getBlockTypeFromJsDefinition = function(blockDef) {
  */
 FactoryUtils.generateCategoryXml = function(blocks, categoryName) {
   // Create category DOM element.
-  var categoryElement = document.createElement('category');
+  var categoryElement = Blockly.utils.xml.createElement('category');
   categoryElement.setAttribute('name', categoryName);
 
   // For each block, add block element to category.

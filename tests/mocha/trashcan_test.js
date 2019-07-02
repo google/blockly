@@ -31,7 +31,9 @@ suite("Trashcan", function() {
     }
   };
   function sendDeleteEvent(xmlString) {
-    var xml = Blockly.Xml.textToDom('<xml>' + xmlString + '</xml>');
+    var xml = Blockly.Xml.textToDom(
+        '<xml xmlns="https://developers.google.com/blockly/xml">' +
+        xmlString + '</xml>');
     xml = xml.children[0];
     var event = {
       type: Blockly.Events.BLOCK_DELETE,
@@ -63,7 +65,7 @@ suite("Trashcan", function() {
     });
     test("Non-Delete w/ oldXml", function() {
       var xml = Blockly.Xml.textToDom(
-          '<xml>' +
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="dummy_type"/>' +
           '</xml>'
       );

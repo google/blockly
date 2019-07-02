@@ -829,7 +829,7 @@ function init() {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1),
                                mainWorkspace);
   } else {
-    var xml = '<xml><block type="factory_base" deletable="false" movable="false"></block></xml>';
+    var xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="factory_base" deletable="false" movable="false"></block></xml>';
     Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), mainWorkspace);
   }
   mainWorkspace.clearUndo();

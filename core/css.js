@@ -790,6 +790,14 @@ Blockly.Css.CONTENT = [
     'border: 1px solid #000 !important;',
   '}',
 
+  /* Remove the increase and decrease arrows on the field number editor */
+  'input.blocklyHtmlInput[type=number]::-webkit-inner-spin-button,',
+  'input.blocklyHtmlInput[type=number]::-webkit-outer-spin-button {',
+    '-webkit-appearance: none;',
+    'margin: 0;',
+  '}',
+
+
   /* Copied from: goog/css/menu.css */
   /*
    * Copyright 2009 The Closure Library Authors. All Rights Reserved.

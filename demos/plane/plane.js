@@ -269,7 +269,7 @@ Plane.init = function() {
        toolbox: document.getElementById('toolbox')});
 
   var defaultXml =
-      '<xml>' +
+      '<xml xmlns="https://developers.google.com/blockly/xml">' +
       '  <block type="plane_set_seats" deletable="false" x="70" y="70">' +
       '  </block>' +
       '</xml>';
@@ -396,7 +396,7 @@ Plane.redraw = function(newRows) {
     while (newRows > rows1st) {
       rows1st++;
       var row = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-      row.setAttribute('id', 'row1st' + rows1st);
+      row.id = 'row1st' + rows1st;
       // Row of 4 seats.
       row.setAttribute('x', (rows1st - 1) * 20);
       row.setAttributeNS('http://www.w3.org/1999/xlink',
@@ -413,9 +413,8 @@ Plane.redraw = function(newRows) {
       }
       while (newRows > rows2nd) {
         rows2nd++;
-        var row = document.createElementNS('http://www.w3.org/2000/svg',
-                                                    'use');
-        row.setAttribute('id', 'row2nd' + rows2nd);
+        var row = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        row.id = 'row2nd' + rows2nd;
         row.setAttribute('x', 400 - (rows2nd - 1) * 18);
         row.setAttributeNS('http://www.w3.org/1999/xlink',
             'xlink:href', '#row2nd');

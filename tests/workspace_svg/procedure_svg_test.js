@@ -45,7 +45,7 @@ function test_procedureReturnSetDisabledUpdatesCallers() {
   procedureSvgTest_setup();
   try {
     var dom = Blockly.Xml.textToDom(
-      '<xml xmlns="http://www.w3.org/1999/xhtml">' +
+      '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '<block type="procedures_defreturn" id="bar-def">' +
           '<field name="NAME">bar</field>' +
           '<value name="RETURN">' +
@@ -106,7 +106,7 @@ function test_procedureReturnEnablingRemembersOldCallerState() {
   procedureSvgTest_setup();
   try {
     var dom = Blockly.Xml.textToDom(
-      '<xml xmlns="http://www.w3.org/1999/xhtml">' +
+      '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '<block type="procedures_defreturn" id="bar-def">' +
           '<field name="NAME">bar</field>' +
           '<value name="RETURN">' +
@@ -165,7 +165,7 @@ function test_procedureNoReturnSetDisabledUpdatesCallers() {
   procedureSvgTest_setup();
   try {
     var dom = Blockly.Xml.textToDom(
-      '<xml xmlns="http://www.w3.org/1999/xhtml">' +
+      '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '<block type="procedures_defnoreturn" id="bar-def">' +
           '<field name="NAME">bar</field>' +
         '</block>' +
@@ -224,7 +224,7 @@ function test_procedureNoReturnEnablingRemembersOldCallerState() {
   procedureSvgTest_setup();
   try {
     var dom = Blockly.Xml.textToDom(
-      '<xml xmlns="http://www.w3.org/1999/xhtml">' +
+      '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '<block type="procedures_defnoreturn" id="bar-def">' +
           '<field name="NAME">bar</field>' +
         '</block>' +
@@ -285,7 +285,7 @@ function test_procedureEnableDisableInteractions() {
   procedureSvgTest_setup();
   try {
     var dom = Blockly.Xml.textToDom(
-      '<xml xmlns="http://www.w3.org/1999/xhtml">' +
+      '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '<block type="procedures_defreturn" id="bar-def">' +
           '<field name="NAME">bar</field>' +
           '<statement name="STACK">' +
@@ -369,5 +369,5 @@ function test_procedureEnableDisableInteractions() {
   } finally {
     procedureSvgTest_teardown();
   }
-  
+
 }

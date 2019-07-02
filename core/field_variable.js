@@ -142,7 +142,7 @@ Blockly.FieldVariable.prototype.fromXml = function(fieldElement) {
 };
 
 /**
- * Serialize this field to Xml.
+ * Serialize this field to XML.
  * @param {!Element} fieldElement The element to populate with info about the
  *    field's state.
  * @return {!Element} The element containing info about the field's state.
@@ -151,9 +151,9 @@ Blockly.FieldVariable.prototype.toXml = function(fieldElement) {
   // Make sure the variable is initialized.
   this.initModel();
 
-  fieldElement.setAttribute('id', this.variable_.getId());
+  fieldElement.id = this.variable_.getId();
   fieldElement.textContent = this.variable_.name;
-  fieldElement.setAttribute('variableType', this.variable_.type);
+  fieldElement.setAttribute('variabletype', this.variable_.type);
   return fieldElement;
 };
 

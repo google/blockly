@@ -108,12 +108,12 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this Blockly.Block
    */
   mutationToDom: function(opt_paramIds) {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     if (opt_paramIds) {
       container.setAttribute('name', this.getFieldValue('NAME'));
     }
     for (var i = 0; i < this.argumentVarModels_.length; i++) {
-      var parameter = document.createElement('arg');
+      var parameter = Blockly.utils.xml.createElement('arg');
       var argModel = this.argumentVarModels_[i];
       parameter.setAttribute('name', argModel.name);
       parameter.setAttribute('varid', argModel.getId());
@@ -354,14 +354,14 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     var option = {enabled: true};
     var name = this.getFieldValue('NAME');
     option.text = Blockly.Msg['PROCEDURES_CREATE_DO'].replace('%1', name);
-    var xmlMutation = document.createElement('mutation');
+    var xmlMutation = Blockly.utils.xml.createElement('mutation');
     xmlMutation.setAttribute('name', name);
     for (var i = 0; i < this.arguments_.length; i++) {
-      var xmlArg = document.createElement('arg');
+      var xmlArg = Blockly.utils.xml.createElement('arg');
       xmlArg.setAttribute('name', this.arguments_[i]);
       xmlMutation.appendChild(xmlArg);
     }
-    var xmlBlock = document.createElement('block');
+    var xmlBlock = Blockly.utils.xml.createElement('block');
     xmlBlock.setAttribute('type', this.callType_);
     xmlBlock.appendChild(xmlMutation);
     option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
@@ -376,7 +376,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
             .replace('%1', argVar.name);
 
         var argXmlField = Blockly.Variables.generateVariableFieldDom(argVar);
-        var argXmlBlock = document.createElement('block');
+        var argXmlBlock = Blockly.utils.xml.createElement('block');
         argXmlBlock.setAttribute('type', 'variables_get');
         argXmlBlock.appendChild(argXmlField);
         argOption.callback =
@@ -814,10 +814,10 @@ Blockly.Blocks['procedures_callnoreturn'] = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('name', this.getProcedureCall());
     for (var i = 0; i < this.arguments_.length; i++) {
-      var parameter = document.createElement('arg');
+      var parameter = Blockly.utils.xml.createElement('arg');
       parameter.setAttribute('name', this.arguments_[i]);
       container.appendChild(parameter);
     }
@@ -880,7 +880,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         Blockly.Events.setGroup(event.group);
         /**
          * Create matching definition block.
-         * <xml>
+         * <xml xmlns="https://developers.google.com/blockly/xml">
          *   <block type="procedures_defreturn" x="10" y="20">
          *     <mutation name="test">
          *       <arg name="x"></arg>
@@ -889,8 +889,8 @@ Blockly.Blocks['procedures_callnoreturn'] = {
          *   </block>
          * </xml>
          */
-        var xml = document.createElement('xml');
-        var block = document.createElement('block');
+        var xml = Blockly.utils.xml.createElement('xml');
+        var block = Blockly.utils.xml.createElement('block');
         block.setAttribute('type', this.defType_);
         var xy = this.getRelativeToSurfaceXY();
         var x = xy.x + Blockly.SNAP_RADIUS * (this.RTL ? -1 : 1);
@@ -899,9 +899,10 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         block.setAttribute('y', y);
         var mutation = this.mutationToDom();
         block.appendChild(mutation);
-        var field = document.createElement('field');
+        var field = Blockly.utils.xml.createElement('field');
         field.setAttribute('name', 'NAME');
-        field.appendChild(document.createTextNode(this.getProcedureCall()));
+        field.appendChild(Blockly.utils.xml.createTextNode(
+            this.getProcedureCall()));
         block.appendChild(field);
         xml.appendChild(block);
         Blockly.Xml.domToWorkspace(xml, this.workspace);
@@ -1026,7 +1027,7 @@ Blockly.Blocks['procedures_ifreturn'] = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('value', Number(this.hasReturnValue_));
     return container;
   },

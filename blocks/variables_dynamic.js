@@ -114,11 +114,11 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
       var option = {enabled: this.workspace.remainingCapacity() > 0};
       var name = this.getField('VAR').getText();
       option.text = contextMenuMsg.replace('%1', name);
-      var xmlField = document.createElement('field');
+      var xmlField = Blockly.utils.xml.createElement('field');
       xmlField.setAttribute('name', 'VAR');
       xmlField.setAttribute('variabletype', varType);
-      xmlField.appendChild(document.createTextNode(name));
-      var xmlBlock = document.createElement('block');
+      xmlField.appendChild(Blockly.utils.xml.createTextNode(name));
+      var xmlBlock = Blockly.utils.xml.createElement('block');
       xmlBlock.setAttribute('type', opposite_type);
       xmlBlock.appendChild(xmlField);
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);

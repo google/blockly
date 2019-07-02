@@ -150,7 +150,7 @@ AppController.prototype.exportBlockLibraryToFile = function() {
  */
 AppController.prototype.formatBlockLibraryForExport_ = function(blockXmlMap) {
   // Create DOM for XML.
-  var xmlDom = document.createElementNS('http://www.w3.org/1999/xhtml', 'xml');
+  var xmlDom = Blockly.utils.xml.createElemen('xml');
 
   // Append each block node to XML DOM.
   for (var blockType in blockXmlMap) {
@@ -185,8 +185,7 @@ AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
     // Add outer XML tag to the block for proper injection in to the
     // main workspace.
     // Create DOM for XML.
-    var editorWorkspaceXml =
-        document.createElementNS('http://www.w3.org/1999/xhtml', 'xml');
+    var editorWorkspaceXml = Blockly.utils.xml.createElement('xml');
     editorWorkspaceXml.appendChild(blockNode);
 
     xmlText = Blockly.Xml.domToText(editorWorkspaceXml);

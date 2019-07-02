@@ -359,7 +359,7 @@ suite('Abstract Fields', function() {
         },
       };
       var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-          '<xml>' +
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="tooltip"></block>' +
           '</xml>'
       ).children[0], this.workspace);
@@ -377,7 +377,7 @@ suite('Abstract Fields', function() {
         },
       };
       var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-          '<xml>' +
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="tooltip"></block>' +
           '</xml>'
       ).children[0], this.workspace);
@@ -394,7 +394,7 @@ suite('Abstract Fields', function() {
         },
       };
       var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-          '<xml>' +
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="tooltip"></block>' +
           '</xml>'
       ).children[0], this.workspace);
@@ -417,7 +417,7 @@ suite('Abstract Fields', function() {
         }
       };
       var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-          '<xml>' +
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="tooltip"></block>' +
           '</xml>'
       ).children[0], this.workspace);
@@ -438,7 +438,7 @@ suite('Abstract Fields', function() {
         }
       };
       var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-          '<xml>' +
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="tooltip"></block>' +
           '</xml>'
       ).children[0], this.workspace);
@@ -456,7 +456,7 @@ suite('Abstract Fields', function() {
         },
       };
       var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-          '<xml>' +
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="tooltip"></block>' +
           '</xml>'
       ).children[0], this.workspace);
@@ -473,7 +473,7 @@ suite('Abstract Fields', function() {
         },
       };
       var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-          '<xml>' +
+          '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="tooltip"></block>' +
           '</xml>'
       ).children[0], this.workspace);

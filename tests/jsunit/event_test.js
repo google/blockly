@@ -755,7 +755,7 @@ function test_events_newblock_newvar_xml() {
   temporary_fireEvent.firedEvents_ = [];
   try {
         var dom = Blockly.Xml.textToDom(
-        '<xml>' +
+        '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '  <block type="field_variable_test_block" id="block1">' +
         '    <field name="VAR" id="id1" variabletype="">name1</field>' +
         '  </block>' +

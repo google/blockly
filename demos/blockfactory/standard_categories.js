@@ -43,7 +43,7 @@ StandardCategories.categoryMap['logic'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Logic');
 StandardCategories.categoryMap['logic'].xml =
     Blockly.Xml.textToDom(
-    '<xml>' +
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="controls_if"></block>' +
     '<block type="logic_compare"></block>' +
     '<block type="logic_operation"></block>' +
@@ -58,7 +58,7 @@ StandardCategories.categoryMap['loops'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Loops');
 StandardCategories.categoryMap['loops'].xml =
     Blockly.Xml.textToDom(
-    '<xml>' +
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="controls_repeat_ext">' +
       '<value name="TIMES">' +
         '<shadow type="math_number">' +
@@ -93,7 +93,7 @@ StandardCategories.categoryMap['math'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Math');
 StandardCategories.categoryMap['math'].xml =
     Blockly.Xml.textToDom(
-    '<xml>' +
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="math_number"></block>' +
     '<block type="math_arithmetic">' +
       '<value name="A">' +
@@ -186,7 +186,7 @@ StandardCategories.categoryMap['text'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Text');
 StandardCategories.categoryMap['text'].xml =
     Blockly.Xml.textToDom(
-    '<xml>' +
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="text"></block>' +
     '<block type="text_join"></block>' +
     '<block type="text_append">' +
@@ -269,7 +269,7 @@ StandardCategories.categoryMap['lists'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Lists');
 StandardCategories.categoryMap['lists'].xml =
     Blockly.Xml.textToDom(
-    '<xml>' +
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="lists_create_with">' +
       '<mutation items="0"></mutation>' +
     '</block>' +
@@ -326,7 +326,7 @@ StandardCategories.categoryMap['colour'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Colour');
 StandardCategories.categoryMap['colour'].xml =
     Blockly.Xml.textToDom(
-    '<xml>' +
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="colour_picker"></block>' +
     '<block type="colour_random"></block>' +
     '<block type="colour_rgb">' +

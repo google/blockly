@@ -32,6 +32,10 @@
  */
 goog.provide('Blockly.utils.xml');
 
+/**
+ * Namespace for Blockly's XML.
+ */
+Blockly.utils.xml.NAME_SPACE = 'https://developers.google.com/blockly/xml';
 
 /**
  * Create DOM element for XML.
@@ -40,9 +44,8 @@ goog.provide('Blockly.utils.xml');
  * @package
  */
 Blockly.utils.xml.createElement = function(tagName) {
-  // TODO (#1978): Namespace this element.
   // TODO (#2082): Support node.js.
-  return document.createElement(tagName);
+  return document.createElementNS(Blockly.utils.xml.NAME_SPACE, tagName);
 };
 
 /**

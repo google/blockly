@@ -999,11 +999,11 @@ Blockly.BlockSvg.prototype.setBorderColour_ = function() {
  * @return {?string} The background colour of the block.
  */
 Blockly.BlockSvg.prototype.setShadowColour_ = function() {
-  this.svgPathLight_.style.display = 'none';
-  this.svgPathDark_.style.display = 'none';
-  this.svgPath_.setAttribute('stroke', 'none');
-
   var shadowColour = this.getColourShadow();
+
+  this.svgPathLight_.style.display = 'none';
+  this.svgPathDark_.setAttribute('fill', shadowColour);
+  this.svgPath_.setAttribute('stroke', 'none');
   this.svgPath_.setAttribute('fill', shadowColour);
   return shadowColour;
 };

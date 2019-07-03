@@ -125,7 +125,10 @@ Blockly.FieldVariable.prototype.initModel = function() {
 Blockly.FieldVariable.prototype.fromXml = function(fieldElement) {
   var id = fieldElement.getAttribute('id');
   var variableName = fieldElement.textContent;
-  var variableType = fieldElement.getAttribute('variabletype') || '';
+  // 'variabletype' should be lowercase, but until July 2019 it was sometimes
+  // recorded as 'variableType'.  Thus we need to check for both.
+  var variableType = fieldElement.getAttribute('variabletype') ||
+      fieldElement.getAttribute('variableType') || '';
 
   var variable = Blockly.Variables.getOrCreateVariablePackage(
       this.workspace_, id, variableName, variableType);

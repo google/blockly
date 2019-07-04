@@ -150,7 +150,7 @@ AppController.prototype.exportBlockLibraryToFile = function() {
  */
 AppController.prototype.formatBlockLibraryForExport_ = function(blockXmlMap) {
   // Create DOM for XML.
-  var xmlDom = Blockly.utils.xml.createElemen('xml');
+  var xmlDom = Blockly.utils.xml.createElement('xml');
 
   // Append each block node to XML DOM.
   for (var blockType in blockXmlMap) {

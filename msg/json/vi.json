@@ -349,5 +349,6 @@
 	"PROCEDURES_CREATE_DO": "Tạo mảnh \"thực hiện %1\"",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Khi điều kiện đúng thì hoàn trả một giá trị.",
 	"PROCEDURES_IFRETURN_WARNING": "Chú ý: Mảnh này chỉ có thể dùng trong một thủ tục.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Hãy nói gì đó..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Hãy nói gì đó...",
+	"COLLAPSED_WARNINGS_WARNING": "Các khối bị sập có chứa cảnh báo."
 }

@@ -377,7 +377,7 @@ suite('Procedures', function() {
           clearVariables.call(this);
         }, 'name');
       });
-      test.skip('lower -> CAPS', function() {
+      test('lower -> CAPS', function() {
         this.callForAllTypes(function() {
           createMutator.call(this, ['arg']);
           this.argBlock.setFieldValue('ARG', 'NAME');
@@ -386,7 +386,7 @@ suite('Procedures', function() {
           clearVariables.call(this);
         }, 'name');
       });
-      test.skip('CAPS -> lower', function() {
+      test('CAPS -> lower', function() {
         this.callForAllTypes(function() {
           createMutator.call(this, ['ARG']);
           this.argBlock.setFieldValue('arg', 'NAME');

@@ -141,9 +141,7 @@ suite('Procedures', function() {
         chai.assert.equal(this.callBlock.getFieldValue('NAME'), 'start name');
       }, 'start name');
     });
-    // TODO: Simple fix, oldText needs to be trimmed too, or we just discard
-    //  the checking (params don't check).
-    test.skip('Whitespace then Text', function() {
+    test('Whitespace then Text', function() {
       this.callForAllTypes(function() {
         var defInput = this.defBlock.getField('NAME');
         defInput.htmlInput_ = Object.create(null);

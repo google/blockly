@@ -71,6 +71,9 @@ Blockly.Msg.PROCEDURES_HUE = '290';
 /// For more context, see
 /// [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}
 Blockly.Msg.VARIABLES_DEFAULT_NAME = 'item';
+/// default name - A simple, default name for an unnamed function or
+// variable. Preferably indicates that the key is unnamed.
+Blockly.Msg.UNNAMED_KEY = 'unnamed';
 /// button text - Button that sets a calendar to today's date.\n{{Identical|Today}}
 Blockly.Msg.TODAY = 'Today';
 

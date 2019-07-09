@@ -27,7 +27,7 @@
 
 goog.provide('Blockly.Gesture');
 
-goog.require('Blockly.BlockAnimations');
+goog.require('Blockly.blockAnimations');
 goog.require('Blockly.BlockDragger');
 goog.require('Blockly.BubbleDragger');
 goog.require('Blockly.constants');
@@ -57,7 +57,7 @@ goog.require('Blockly.WorkspaceDragger');
 Blockly.Gesture = function(e, creatorWorkspace) {
 
   /**
-   * The position of the mouse when the gesture started.  Units are css pixels,
+   * The position of the mouse when the gesture started.  Units are CSS pixels,
    * with (0, 0) at the top left of the browser window (mouseEvent clientX/Y).
    * @type {Blockly.utils.Coordinate}
    */
@@ -482,7 +482,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
   }
   this.hasStarted_ = true;
 
-  Blockly.BlockAnimations.disconnectUiStop();
+  Blockly.blockAnimations.disconnectUiStop();
   this.startWorkspace_.updateScreenCalculationsIfScrolled();
   if (this.startWorkspace_.isMutator) {
     // Mutator's coordinate system could be out of date because the bubble was

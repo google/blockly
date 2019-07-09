@@ -251,7 +251,7 @@ Blockly.BubbleDragger.prototype.fireMoveEvent_ = function() {
  * This function does not consider differing origins.  It simply scales the
  * input's x and y values.
  * @param {!Blockly.utils.Coordinate} pixelCoord A coordinate with x and y values
- *     in css pixel units.
+ *     in CSS pixel units.
  * @return {!Blockly.utils.Coordinate} The input coordinate divided by the workspace
  *     scale.
  * @private

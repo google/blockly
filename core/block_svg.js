@@ -27,7 +27,7 @@
 goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
-goog.require('Blockly.BlockAnimations');
+goog.require('Blockly.blockAnimations');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
@@ -899,7 +899,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
 
   if (animate && this.rendered) {
     this.unplug(healStack);
-    Blockly.BlockAnimations.disposeUiEffect(this);
+    Blockly.blockAnimations.disposeUiEffect(this);
   }
   // Stop rerendering.
   this.rendered = false;

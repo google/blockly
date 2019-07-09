@@ -181,7 +181,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
     var containerBlock = Blockly.Xml.domToBlock(xml, workspace);
 
-    if (this.type == 'procedure_defreturn') {
+    if (this.type == 'procedures_defreturn') {
       containerBlock.setFieldValue(
         this.hasStatements_ ? 'TRUE' : 'FALSE', 'STATEMENTS');
     } else {

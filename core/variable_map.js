@@ -359,7 +359,7 @@ Blockly.VariableMap.prototype.getVariablesOfType = function(type) {
 Blockly.VariableMap.prototype.getVariableTypes = function(ws) {
   var potentialTypes = [];
   if (ws && ws.getPotentialVariableMap()) {
-      potentialTypes = Object.keys(ws.getPotentialVariableMap().variableMap_);
+    potentialTypes = Object.keys(ws.getPotentialVariableMap().variableMap_);
   }
   var types = Object.keys(this.variableMap_).concat(potentialTypes);
   var hasEmpty = false;

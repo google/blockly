@@ -176,12 +176,12 @@ Blockly.Blocks['procedures_defnoreturn'] = {
           '  <next></next>' +
           '</block>'
       ));
-      node = node.getElementsByTagName('xml');
+      node = node.getElementsByTagName('next')[0];
     }
 
     var containerBlock = Blockly.Xml.domToBlock(xml, workspace);
 
-    if (this.type == 'procedure_defreturn') {
+    if (this.type == 'procedures_defreturn') {
       containerBlock.setFieldValue(
         this.hasStatements_ ? 'TRUE' : 'FALSE', 'STATEMENTS');
     } else {

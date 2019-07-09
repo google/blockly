@@ -21,7 +21,7 @@
 /**
  * @fileoverview An SVG that floats on top of the workspace.
  * Blocks are moved into this SVG during a drag, improving performance.
- * The entire SVG is translated using css translation instead of SVG so the
+ * The entire SVG is translated using CSS translation instead of SVG so the
  * blocks are never repainted during drag improving performance.
  * @author katelyn@google.com (Katelyn Mann)
  */
@@ -36,7 +36,7 @@ goog.require('Blockly.utils.dom');
 
 /**
  * Blocks are moved into this SVG during a drag, improving performance.
- * The entire SVG is translated using css transforms instead of SVG so the
+ * The entire SVG is translated using CSS transforms instead of SVG so the
  * blocks are never repainted during drag improving performance.
  * @param {!Element} container Containing element.
  * @constructor

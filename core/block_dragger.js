@@ -26,7 +26,7 @@
 
 goog.provide('Blockly.BlockDragger');
 
-goog.require('Blockly.BlockAnimations');
+goog.require('Blockly.blockAnimations');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.InsertionMarkerManager');
@@ -166,7 +166,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
   // Turn the cache on so we don't do spurious remeasures during the drag.
   Blockly.Field.startCache();
   this.workspace_.setResizesEnabled(false);
-  Blockly.BlockAnimations.disconnectUiStop();
+  Blockly.blockAnimations.disconnectUiStop();
 
   if (this.draggingBlock_.getParent() ||
       (healStack && this.draggingBlock_.nextConnection &&
@@ -176,7 +176,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
     var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
 
     this.draggingBlock_.translate(newLoc.x, newLoc.y);
-    Blockly.BlockAnimations.disconnectUiEffect(this.draggingBlock_);
+    Blockly.blockAnimations.disconnectUiEffect(this.draggingBlock_);
   }
   this.draggingBlock_.setDragging(true);
   // For future consideration: we may be able to put moveToDragSurface inside
@@ -227,7 +227,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
 
   Blockly.Field.stopCache();
 
-  Blockly.BlockAnimations.disconnectUiStop();
+  Blockly.blockAnimations.disconnectUiStop();
 
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
@@ -319,7 +319,7 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
  * This function does not consider differing origins.  It simply scales the
  * input's x and y values.
  * @param {!Blockly.utils.Coordinate} pixelCoord A coordinate with x and y values
- *     in css pixel units.
+ *     in CSS pixel units.
  * @return {!Blockly.utils.Coordinate} The input coordinate divided by the workspace
  *     scale.
  * @private

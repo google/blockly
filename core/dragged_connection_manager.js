@@ -26,7 +26,7 @@
 
 goog.provide('Blockly.DraggedConnectionManager');
 
-goog.require('Blockly.BlockAnimations');
+goog.require('Blockly.blockAnimations');
 goog.require('Blockly.RenderedConnection');
 
 
@@ -149,7 +149,7 @@ Blockly.DraggedConnectionManager.prototype.applyConnections = function() {
       // Determine which connection is inferior (lower in the source stack).
       var inferiorConnection = this.localConnection_.isSuperior() ?
           this.closestConnection_ : this.localConnection_;
-      Blockly.BlockAnimations.connectionUiEffect(
+      Blockly.blockAnimations.connectionUiEffect(
           inferiorConnection.getSourceBlock());
       // Bring the just-edited stack to the front.
       var rootBlock = this.topBlock_.getRootBlock();

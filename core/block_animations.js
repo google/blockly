@@ -24,7 +24,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.BlockAnimations');
+goog.provide('Blockly.blockAnimations');
 
 goog.require('Blockly.utils.dom');
 
@@ -34,21 +34,21 @@ goog.require('Blockly.utils.dom');
  * @type {number}
  * @private
  */
-Blockly.BlockAnimations.disconnectPid_ = 0;
+Blockly.blockAnimations.disconnectPid_ = 0;
 
 /**
  * SVG group of wobbling block.  There can only be one at a time.
  * @type {Element}
  * @private
  */
-Blockly.BlockAnimations.disconnectGroup_ = null;
+Blockly.blockAnimations.disconnectGroup_ = null;
 
 /**
  * Play some UI effects (sound, animation) when disposing of a block.
  * @param {!Blockly.BlockSvg} block The block being disposed of.
  * @package
  */
-Blockly.BlockAnimations.disposeUiEffect = function(block) {
+Blockly.blockAnimations.disposeUiEffect = function(block) {
   var workspace = block.workspace;
   var svgGroup = block.getSvgRoot();
   workspace.getAudioManager().play('delete');
@@ -62,7 +62,7 @@ Blockly.BlockAnimations.disposeUiEffect = function(block) {
   workspace.getParentSvg().appendChild(clone);
   clone.bBox_ = clone.getBBox();
   // Start the animation.
-  Blockly.BlockAnimations.disposeUiStep_(clone, workspace.RTL, new Date,
+  Blockly.blockAnimations.disposeUiStep_(clone, workspace.RTL, new Date,
       workspace.scale);
 };
 
@@ -76,7 +76,7 @@ Blockly.BlockAnimations.disposeUiEffect = function(block) {
  * @param {number} workspaceScale Scale of workspace.
  * @private
  */
-Blockly.BlockAnimations.disposeUiStep_ = function(clone, rtl, start,
+Blockly.blockAnimations.disposeUiStep_ = function(clone, rtl, start,
     workspaceScale) {
   var ms = new Date - start;
   var percent = ms / 150;
@@ -89,7 +89,7 @@ Blockly.BlockAnimations.disposeUiStep_ = function(clone, rtl, start,
     var scale = (1 - percent) * workspaceScale;
     clone.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
         ' scale(' + scale + ')');
-    setTimeout(Blockly.BlockAnimations.disposeUiStep_, 10, clone, rtl, start,
+    setTimeout(Blockly.blockAnimations.disposeUiStep_, 10, clone, rtl, start,
         workspaceScale);
   }
 };
@@ -99,7 +99,7 @@ Blockly.BlockAnimations.disposeUiStep_ = function(clone, rtl, start,
  * @param {!Blockly.BlockSvg} block The block being connected.
  * @package
  */
-Blockly.BlockAnimations.connectionUiEffect = function(block) {
+Blockly.blockAnimations.connectionUiEffect = function(block) {
   var workspace = block.workspace;
   var scale = workspace.scale;
   workspace.getAudioManager().play('click');
@@ -127,7 +127,7 @@ Blockly.BlockAnimations.connectionUiEffect = function(block) {
       },
       workspace.getParentSvg());
   // Start the animation.
-  Blockly.BlockAnimations.connectionUiStep_(ripple, new Date, scale);
+  Blockly.blockAnimations.connectionUiStep_(ripple, new Date, scale);
 };
 
 /**
@@ -137,7 +137,7 @@ Blockly.BlockAnimations.connectionUiEffect = function(block) {
  * @param {number} scale Scale of workspace.
  * @private
  */
-Blockly.BlockAnimations.connectionUiStep_ = function(ripple, start, scale) {
+Blockly.blockAnimations.connectionUiStep_ = function(ripple, start, scale) {
   var ms = new Date - start;
   var percent = ms / 150;
   if (percent > 1) {
@@ -145,8 +145,8 @@ Blockly.BlockAnimations.connectionUiStep_ = function(ripple, start, scale) {
   } else {
     ripple.setAttribute('r', percent * 25 * scale);
     ripple.style.opacity = 1 - percent;
-    Blockly.BlockAnimations.disconnectPid_ = setTimeout(
-        Blockly.BlockAnimations.connectionUiStep_, 10, ripple, start, scale);
+    Blockly.blockAnimations.disconnectPid_ = setTimeout(
+        Blockly.blockAnimations.connectionUiStep_, 10, ripple, start, scale);
   }
 };
 
@@ -155,7 +155,7 @@ Blockly.BlockAnimations.connectionUiStep_ = function(ripple, start, scale) {
  * @param {!Blockly.BlockSvg} block The block being disconnected.
  * @package
  */
-Blockly.BlockAnimations.disconnectUiEffect = function(block) {
+Blockly.blockAnimations.disconnectUiEffect = function(block) {
   block.workspace.getAudioManager().play('disconnect');
   if (block.workspace.scale < 1) {
     return;  // Too small to care about visual effects.
@@ -169,7 +169,7 @@ Blockly.BlockAnimations.disconnectUiEffect = function(block) {
     magnitude *= -1;
   }
   // Start the animation.
-  Blockly.BlockAnimations.disconnectUiStep_(
+  Blockly.blockAnimations.disconnectUiStep_(
       block.getSvgRoot(), magnitude, new Date);
 };
 /**
@@ -179,7 +179,7 @@ Blockly.BlockAnimations.disconnectUiEffect = function(block) {
  * @param {!Date} start Date of animation's start.
  * @private
  */
-Blockly.BlockAnimations.disconnectUiStep_ = function(group, magnitude, start) {
+Blockly.blockAnimations.disconnectUiStep_ = function(group, magnitude, start) {
   var DURATION = 200;  // Milliseconds.
   var WIGGLES = 3;  // Half oscillations.
 
@@ -192,9 +192,9 @@ Blockly.BlockAnimations.disconnectUiStep_ = function(group, magnitude, start) {
     var skew = Math.round(
         Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
     group.skew_ = 'skewX(' + skew + ')';
-    Blockly.BlockAnimations.disconnectGroup_ = group;
-    Blockly.BlockAnimations.disconnectPid_ =
-        setTimeout(Blockly.BlockAnimations.disconnectUiStep_, 10, group,
+    Blockly.blockAnimations.disconnectGroup_ = group;
+    Blockly.blockAnimations.disconnectPid_ =
+        setTimeout(Blockly.blockAnimations.disconnectUiStep_, 10, group,
             magnitude, start);
   }
   group.setAttribute('transform', group.translate_ + group.skew_);
@@ -204,12 +204,12 @@ Blockly.BlockAnimations.disconnectUiStep_ = function(group, magnitude, start) {
  * Stop the disconnect UI animation immediately.
  * @package
  */
-Blockly.BlockAnimations.disconnectUiStop = function() {
-  if (Blockly.BlockAnimations.disconnectGroup_) {
-    clearTimeout(Blockly.BlockAnimations.disconnectPid_);
-    var group = Blockly.BlockAnimations.disconnectGroup_;
+Blockly.blockAnimations.disconnectUiStop = function() {
+  if (Blockly.blockAnimations.disconnectGroup_) {
+    clearTimeout(Blockly.blockAnimations.disconnectPid_);
+    var group = Blockly.blockAnimations.disconnectGroup_;
     group.skew_ = '';
     group.setAttribute('transform', group.translate_);
-    Blockly.BlockAnimations.disconnectGroup_ = null;
+    Blockly.blockAnimations.disconnectGroup_ = null;
   }
 };

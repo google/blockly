@@ -150,7 +150,7 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
    */
   onchange: function(_e) {
     var id = this.getFieldValue('VAR');
-    var variableModel = this.workspace.getVariableById(id);
+    var variableModel = Blockly.Variables.getVariable(this.workspace, id);
     if (this.type == 'variables_get_dynamic') {
       this.outputConnection.setCheck(variableModel.type);
     } else {

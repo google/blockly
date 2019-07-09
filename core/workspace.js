@@ -491,7 +491,7 @@ Blockly.Workspace.prototype.getVariablesOfType = function(type) {
  * @package
  */
 Blockly.Workspace.prototype.getVariableTypes = function() {
-  return this.variableMap_.getVariableTypes();
+  return this.variableMap_.getVariableTypes(this);
 };
 
 /**

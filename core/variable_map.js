@@ -348,12 +348,20 @@ Blockly.VariableMap.prototype.getVariablesOfType = function(type) {
 };
 
 /**
- * Return all variable types.  This list always contains the empty string.
+ * Return all variable and potential variable types.  This list always contains
+ * the empty string.
+ * @param {?Blockly.Workspace} ws The workspace used to look for potential
+ * variables. This can be different than the workspace stored on this object
+ * if the passed in ws is a flyout workspace.
  * @return {!Array.<string>} List of variable types.
  * @package
  */
-Blockly.VariableMap.prototype.getVariableTypes = function() {
-  var types = Object.keys(this.variableMap_);
+Blockly.VariableMap.prototype.getVariableTypes = function(ws) {
+  var potentialTypes = [];
+  if (ws && ws.getPotentialVariableMap()) {
+      potentialTypes = Object.keys(ws.getPotentialVariableMap().variableMap_);
+  }
+  var types = Object.keys(this.variableMap_).concat(potentialTypes);
   var hasEmpty = false;
   for (var i = 0; i < types.length; i++) {
     if (types[i] == '') {

@@ -16,16 +16,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Usage: build.py <0 or more of accessible, core, generators, langfiles>
+# Usage: build.py <0 or more of core, generators, langfiles>
 # build.py with no parameters builds all files.
 # core builds blockly_compressed, blockly_uncompressed, and blocks_compressed.
-# accessible builds blockly_accessible_compressed,
-#  blockly_accessible_uncompressed, and blocks_compressed.
 # generators builds every <language>_compressed.js.
 # langfiles builds every msg/js/<LANG>.js file.
 
-# This script generates four versions of Blockly's core files. The first pair
-# are:
+# This script generates two versions of Blockly's core files:
 #   blockly_compressed.js
 #   blockly_uncompressed.js
 # The compressed file is a concatenation of all of Blockly's core files which
@@ -37,11 +34,6 @@
 # been renamed.  The uncompressed file also allows for a faster development
 # cycle since there is no need to rebuild or recompile, just reload.
 #
-# The second pair are:
-#  blockly_accessible_compressed.js
-#  blockly_accessible_uncompressed.js
-# These files are analogous to blockly_compressed and blockly_uncompressed,
-# but also include the visually-impaired module for Blockly.
 #
 # This script also generates:
 #   blocks_compressed.js: The compressed Blockly language blocks.
@@ -60,7 +52,7 @@ for arg in sys.argv[1:len(sys.argv)]:
       arg != 'generators' and
       arg != 'langfiles'):
     raise Exception("Invalid argument: \"" + arg + "\". Usage: build.py "
-        "<0 or more of accessible, core, generators, langfiles>")
+        "<0 or more of core, generators, langfiles>")
 
 import errno, glob, json, os, re, subprocess, threading, codecs
 
@@ -153,7 +145,7 @@ this.BLOCKLY_BOOT = function(root) {
     # used on another, even if the directory name differs.
     m = re.search('[\\/]([^\\/]+)[\\/]core[\\/]blockly.js', add_dependency)
     add_dependency = re.sub('([\\/])' + re.escape(m.group(1)) +
-        '([\\/](core|accessible)[\\/])', '\\1" + dir + "\\2', add_dependency)
+        '([\\/](core)[\\/])', '\\1" + dir + "\\2', add_dependency)
     f.write(add_dependency + '\n')
 
     provides = []
@@ -204,9 +196,10 @@ class Gen_compressed(threading.Thread):
       self.gen_core()
 
     if ('accessible' in self.bundles):
-      self.gen_accessible()
+      print("The Blockly accessibility demo has moved to https://github.com/google/blockly-experimental")
+      return
 
-    if ('core' in self.bundles or 'accessible' in self.bundles):
+    if ('core' in self.bundles):
       self.gen_blocks()
 
     if ('generators' in self.bundles):
@@ -233,35 +226,6 @@ class Gen_compressed(threading.Thread):
     # Read in all the source files.
     filenames = calcdeps.CalculateDependencies(self.search_paths,
         [os.path.join("core", "blockly.js")])
-    filenames.sort()  # Deterministic build.
-    for filename in filenames:
-      # Filter out the Closure files (the compiler will add them).
-      if filename.startswith(os.pardir + os.sep):  # '../'
-        continue
-      f = codecs.open(filename, encoding="utf-8")
-      params.append(("js_code", "".join(f.readlines()).encode("utf-8")))
-      f.close()
-
-    self.do_compile(params, target_filename, filenames, "")
-
-  def gen_accessible(self):
-    target_filename = "blockly_accessible_compressed.js"
-    # Define the parameters for the POST request.
-    params = [
-        ("compilation_level", "SIMPLE_OPTIMIZATIONS"),
-        ("use_closure_library", "true"),
-        ("language_out", "ES5"),
-        ("output_format", "json"),
-        ("output_info", "compiled_code"),
-        ("output_info", "warnings"),
-        ("output_info", "errors"),
-        ("output_info", "statistics"),
-        ("warning_level", "DEFAULT"),
-      ]
-
-    # Read in all the source files.
-    filenames = calcdeps.CalculateDependencies(self.search_paths,
-        [os.path.join("accessible", "app.component.js")])
     filenames.sort()  # Deterministic build.
     for filename in filenames:
       # Filter out the Closure files (the compiler will add them).
@@ -552,11 +516,11 @@ developers.google.com/blockly/guides/modify/web/closure""")
       ["core", os.path.join(os.path.pardir, "closure-library")])
   core_search_paths = sorted(core_search_paths)  # Deterministic build.
   full_search_paths = calcdeps.ExpandDirectories(
-      ["accessible", "core", os.path.join(os.path.pardir, "closure-library")])
+      ["core", os.path.join(os.path.pardir, "closure-library")])
   full_search_paths = sorted(full_search_paths)  # Deterministic build.
 
   if (len(sys.argv) == 1):
-    args = ['core', 'accessible', 'generators', 'defaultlangfiles']
+    args = ['core', 'generators', 'defaultlangfiles']
   else:
     args = sys.argv
 
@@ -564,9 +528,6 @@ developers.google.com/blockly/guides/modify/web/closure""")
   # Uncompressed is limited by processor speed.
   if ('core' in args):
     Gen_uncompressed(core_search_paths, 'blockly_uncompressed.js').start()
-
-  if ('accessible' in args):
-    Gen_uncompressed(full_search_paths, 'blockly_accessible_uncompressed.js').start()
 
   # Compressed is limited by network and server speed.
   Gen_compressed(full_search_paths, args).start()

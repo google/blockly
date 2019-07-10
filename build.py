@@ -22,8 +22,7 @@
 # generators builds every <language>_compressed.js.
 # langfiles builds every msg/js/<LANG>.js file.
 
-# This script generates four versions of Blockly's core files. The first pair
-# are:
+# This script generates two versions of Blockly's core files:
 #   blockly_compressed.js
 #   blockly_uncompressed.js
 # The compressed file is a concatenation of all of Blockly's core files which

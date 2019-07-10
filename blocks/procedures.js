@@ -164,22 +164,42 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this Blockly.Block
    */
   decompose: function(workspace) {
-    var xml = Blockly.Xml.textToDom(
-        '<block type="procedures_mutatorcontainer">' +
-        '  <statement name="STACK"></statement>' +
-        '</block>');
-    var node = xml.getElementsByTagName('statement')[0];
+    /*
+    * Creates the following XML
+    * <block type="procedures_mutatorcontainer">
+    *   <statement name="STACK>
+    *     <block type="procedures_mutatorarg">
+    *       <field name="NAME">arg1_name</field>
+    *       <next>etc...</next
+    *     </block>
+    *   </statement>
+    * </block>
+    */
+
+    var containerBlockNode = Blockly.utils.xml.createElement('block');
+    containerBlockNode.setAttribute('type', 'procedures_mutatorcontainer');
+    var statementNode = Blockly.utils.xml.createElement('statement');
+    statementNode.setAttribute('name', 'STACK');
+    containerBlockNode.appendChild(statementNode);
+
+    var node = statementNode;
     for (var i = 0; i < this.arguments_.length; i++) {
-      node.appendChild(Blockly.Xml.textToDom(
-          '<block type="procedures_mutatorarg">' +
-          '  <field name="NAME">' + this.arguments_[i] + '</field>' +
-          '  <next></next>' +
-          '</block>'
-      ));
-      node = node.getElementsByTagName('next')[0];
+      var argBlockNode = Blockly.utils.xml.createElement('block');
+      argBlockNode.setAttribute('type', 'procedures_mutatorarg');
+      var fieldNode = Blockly.utils.xml.createElement('field');
+      fieldNode.setAttribute('name', 'NAME');
+      var argumentName = Blockly.utils.xml.createTextNode(this.arguments_[i]);
+      fieldNode.appendChild(argumentName);
+      argBlockNode.appendChild(fieldNode);
+      var nextNode = Blockly.utils.xml.createElement('next');
+      argBlockNode.appendChild(nextNode);
+
+      node.appendChild(argBlockNode);
+
+      node = nextNode;
     }
 
-    var containerBlock = Blockly.Xml.domToBlock(xml, workspace);
+    var containerBlock = Blockly.Xml.domToBlock(containerBlockNode, workspace);
 
     if (this.type == 'procedures_defreturn') {
       containerBlock.setFieldValue(

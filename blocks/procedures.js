@@ -483,6 +483,9 @@ Blockly.Blocks['procedures_mutatorcontainer'] = {
     this.setTooltip(Blockly.Msg['PROCEDURES_MUTATORCONTAINER_TOOLTIP']);
     this.contextMenu = false;
   },
+
+  // TODO: Move this to a validator on the arg blocks, that way it can be
+  //  tested.
   /**
    * This will create & delete variables and in dialogs workspace to ensure
    * that when a new block is dragged out it will have a unique parameter name.

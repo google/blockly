@@ -165,16 +165,16 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    */
   decompose: function(workspace) {
     /*
-    * Creates the following XML
-    * <block type="procedures_mutatorcontainer">
-    *   <statement name="STACK>
-    *     <block type="procedures_mutatorarg">
-    *       <field name="NAME">arg1_name</field>
-    *       <next>etc...</next
-    *     </block>
-    *   </statement>
-    * </block>
-    */
+     * Creates the following XML:
+     * <block type="procedures_mutatorcontainer">
+     *   <statement name="STACK">
+     *     <block type="procedures_mutatorarg">
+     *       <field name="NAME">arg1_name</field>
+     *       <next>etc...</next>
+     *     </block>
+     *   </statement>
+     * </block>
+     */
 
     var containerBlockNode = Blockly.utils.xml.createElement('block');
     containerBlockNode.setAttribute('type', 'procedures_mutatorcontainer');
@@ -195,15 +195,13 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       argBlockNode.appendChild(nextNode);
 
       node.appendChild(argBlockNode);
-
       node = nextNode;
     }
 
     var containerBlock = Blockly.Xml.domToBlock(containerBlockNode, workspace);
 
     if (this.type == 'procedures_defreturn') {
-      containerBlock.setFieldValue(
-        this.hasStatements_ ? 'TRUE' : 'FALSE', 'STATEMENTS');
+      containerBlock.setFieldValue(this.hasStatements_, 'STATEMENTS');
     } else {
       containerBlock.removeInput('STATEMENT_INPUT');
     }

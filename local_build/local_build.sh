@@ -101,7 +101,7 @@ java -jar $COMPILER \
   --generate_exports \
   --warning_level='DEFAULT' \
   --compilation_level SIMPLE_OPTIMIZATIONS \
-  --dependency_mode=STRICT \
+  --dependency_mode=PRUNE \
   --entry_point=Blockly \
   --js_output_file local_blocks_compressed.js
 rm temp.js 2> /dev/null

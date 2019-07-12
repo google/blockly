@@ -69,7 +69,7 @@
       <xs:simpleContent>
         <xs:extension base="xs:NCName">
           <xs:attribute name="id"/>
-          <xs:attribute name="type" use="required"/>
+          <xs:attribute name="type"/>
         </xs:extension>
       </xs:simpleContent>
     </xs:complexType>

@@ -156,7 +156,9 @@ Blockly.FieldVariable.prototype.toXml = function(fieldElement) {
 
   fieldElement.id = this.variable_.getId();
   fieldElement.textContent = this.variable_.name;
-  fieldElement.setAttribute('variabletype', this.variable_.type);
+  if (this.variable_.type) {
+    fieldElement.setAttribute('variabletype', this.variable_.type);
+  }
   return fieldElement;
 };
 

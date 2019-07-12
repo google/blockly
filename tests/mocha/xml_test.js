@@ -259,7 +259,7 @@ suite('XML', function() {
               'field_variable_test_block');
           block.inputList[0].fieldRow[0].setValue('id1');
           var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
-          assertVariableField(resultFieldDom, 'VAR', '', 'id1', 'name1');
+          assertVariableField(resultFieldDom, 'VAR', null, 'id1', 'name1');
         });
         test('Variable Default Case', function() {
           var cacheGenUid = Blockly.utils.genUid;
@@ -277,8 +277,8 @@ suite('XML', function() {
             Blockly.Events.enable();
 
             var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
-            // Expect type is '' and id is '1' since we don't specify type and id.
-            assertVariableField(resultFieldDom, 'VAR', '', '1', 'name1');
+            // Expect type is null and ID is '1' since we don't specify type and ID.
+            assertVariableField(resultFieldDom, 'VAR', null, '1', 'name1');
           } finally {
             Blockly.utils.genUid = cacheGenUid;
           }

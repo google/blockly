@@ -32,6 +32,7 @@ goog.provide('Blockly.Variables');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Msg');
+goog.require('Blockly.utils.xml');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Xml');
 

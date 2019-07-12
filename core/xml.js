@@ -266,8 +266,7 @@ Blockly.Xml.cloneShadow_ = function(shadow) {
       if (node) {
         textNode = node;
         node = node.nextSibling;
-        if (textNode.nodeType == Node.TEXT_NODE &&
-            textNode.data.trim() == '') {
+        if (textNode.nodeType == Node.TEXT_NODE && textNode.data.trim() == '') {
           // Prune whitespace before a tag.
           Blockly.utils.dom.removeNode(textNode);
         }

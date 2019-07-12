@@ -1,0 +1,45 @@
+<!ELEMENT xml ((variables?,block*)|(category|sep)*)>
+<!ATTLIST xml
+  xmlns:ns1 CDATA #FIXED 'https://developers.google.com/blockly/xml'>
+
+<!ELEMENT variables (variable)*>
+<!ATTLIST variables
+  xmlns:ns1 CDATA #FIXED 'https://developers.google.com/blockly/xml'>
+
+<!ELEMENT variable (#PCDATA)>
+<!ATTLIST variable
+  xmlns:ns1 CDATA #FIXED 'https://developers.google.com/blockly/xml'
+  id CDATA #IMPLIED
+  type CDATA #REQUIRED>
+
+<!ELEMENT block ((mutation|next|statement)?,(field|value)*)>
+<!ATTLIST block
+  xmlns:ns1 CDATA #FIXED 'https://developers.google.com/blockly/xml'
+  disabled NMTOKEN #IMPLIED
+  id CDATA #IMPLIED
+  type NMTOKEN #REQUIRED
+  x CDATA #IMPLIED
+  y CDATA #IMPLIED>
+
+<!ELEMENT mutation ANY>
+
+<!ELEMENT next (block)*>
+<!ATTLIST next
+  xmlns:ns1 CDATA #FIXED 'https://developers.google.com/blockly/xml'>
+
+<!ELEMENT statement (block)*>
+<!ATTLIST statement
+  xmlns:ns1 CDATA #FIXED 'https://developers.google.com/blockly/xml'
+  name NMTOKEN #REQUIRED>
+
+<!ELEMENT field (#PCDATA)>
+<!ATTLIST field
+  xmlns:ns1 CDATA #FIXED 'https://developers.google.com/blockly/xml'
+  id CDATA #IMPLIED
+  name NMTOKEN #REQUIRED
+  variabletype CDATA #IMPLIED>
+
+<!ELEMENT value (block)*>
+<!ATTLIST value
+  xmlns:ns1 CDATA #FIXED 'https://developers.google.com/blockly/xml'
+  name NMTOKEN #REQUIRED>

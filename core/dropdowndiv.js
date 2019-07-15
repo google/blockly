@@ -339,28 +339,33 @@ Blockly.DropDownDiv.getPositionMetrics = function(primaryX, primaryY,
 
   // First decide if we will render at primary or secondary position
   // i.e., above or below
-  // renderX, renderY will eventually be the final rendered position of the box.
-  var renderX, renderY, renderedSecondary, renderedTertiary;
+  var renderPrimary = true;
   // Can the div fit inside the bounds if we render below the primary point?
   if (primaryY + divSize.height > boundsInfo.bottom) {
     // We can't fit below in terms of y. Can we fit above?
     if (secondaryY - divSize.height < boundsInfo.top) {
-      // We also can't fit above, so just render at the top of the screen.
-      renderX = primaryX;
-      renderY = 0;
-      renderedSecondary = false;
-      renderedTertiary = true;
+      // We also can't fit above. Can we fit below if we go outside the
+      // workspace bounds?
+      if (primaryY + divSize.height > document.documentElement.clientHeight) {
+        // We can't fit below, even if we go outside the bounds. Render
+        // secondary.
+        renderPrimary = false;
+      }
     } else {
       // We can fit above, render secondary
-      renderX = secondaryX;
-      renderY = secondaryY - divSize.height - Blockly.DropDownDiv.PADDING_Y;
-      renderedSecondary = true;
+      renderPrimary = false;
     }
-  } else {
-    // We can fit below, render primary
+  }
+
+  var renderX, renderY, renderedSecondary, renderedTertiary;
+  if (renderPrimary) {
     renderX = primaryX;
     renderY = primaryY + Blockly.DropDownDiv.PADDING_Y;
     renderedSecondary = false;
+  } else {
+    renderX = secondaryX;
+    renderY = secondaryY - divSize.height - Blockly.DropDownDiv.PADDING_Y;
+    renderedSecondary = true;
   }
 
   var centerX = renderX;

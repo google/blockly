@@ -872,6 +872,8 @@ Blockly.Toolbox.prototype.populateTrie_ = async function(opt_tree) {
         continue;
       }
       
+      Blockly.Events.disable();
+      
       var block = Blockly.Xml.domToBlock(blockXml, workspace);
 
       var keys = getAllKeys(block);
@@ -880,6 +882,8 @@ Blockly.Toolbox.prototype.populateTrie_ = async function(opt_tree) {
       }
 
       block.dispose();
+
+      Blockly.Events.enable();
     }
   };
 
@@ -1023,6 +1027,11 @@ Blockly.Toolbox.TreeSearch.prototype.enterDocument = function() {
     }
 
     var searchTerms = e.target.value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length == 0 || (searchTerms.length > 0 && searchTerms[0].length == 0)) {
+      return;
+    }
+
     searchTerms = goog.array.filter(searchTerms, function (term) {
       return term.length > 0;
     });

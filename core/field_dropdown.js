@@ -614,7 +614,7 @@ Blockly.FieldDropdown.changeRecentModuleColors = function(activeIDsDict, recentI
     var moduleType = listOfModuleTypes[key];
 
      //Go through all the active modules of type "moduleType" and add them to the "global" list above
-    if (activeIdsDict && moduleType in activeIDsDict) {
+    if (activeIDsDict && moduleType in activeIDsDict) {
       for (var activeModule in activeIDsDict[moduleType]) {
         listOfActiveModules.push(activeIDsDict[moduleType][activeModule][0]);
       }

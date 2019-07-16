@@ -77,9 +77,10 @@ Blockly.Trashcan = function(workspace) {
         Blockly.TOOLBOX_AT_BOTTOM : Blockly.TOOLBOX_AT_TOP;
     this.flyout_ = new Blockly.HorizontalFlyout(flyoutWorkspaceOptions);
   } else {
-    flyoutWorkspaceOptions.toolboxPosition =
-      this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ?
-        Blockly.TOOLBOX_AT_LEFT : Blockly.TOOLBOX_AT_RIGHT;
+    // flyoutWorkspaceOptions.toolboxPosition =
+    //   this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ?
+    //     Blockly.TOOLBOX_AT_LEFT : Blockly.TOOLBOX_AT_RIGHT;
+    flyoutWorkspaceOptions.toolboxPosition = Blockly.TOOLBOX_AT_RIGHT;
     this.flyout_ = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
   }
   this.workspace_.addChangeListener(this.onDelete_());

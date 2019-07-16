@@ -44,11 +44,23 @@ Blockly.Search = function(workspace) {
     if (thisObj.workspace_.isFlyout) {
       return;
     }
+    
+    thisObj.searchMenu_ = document.getElementById("workspaceSearchDiv");
+    
+    thisObj.searchInput_ = document.getElementById("workspaceSearchInput");
 
-    thisObj.searchInput_ = document.createElement("input");
-    thisObj.searchInput_.setAttribute("id", "workspaceSearchInput");
-    thisObj.searchInput_.setAttribute("placeholder", "Search");
-    document.getElementsByClassName("injectionDiv")[0].appendChild(thisObj.searchInput_);
+    thisObj.resultsNumberHolder_ = document.getElementById("resultsCount");
+    
+    thisObj.prevButton_ = document.getElementById("prevWorkspaceHolder");
+    thisObj.nextButton_ = document.getElementById("nextWorkspaceHolder");
+    let closeButton = document.getElementById("closeWorkspaceHolder");
+
+    // thisObj.searchInput_ = document.createElement("input");
+    // thisObj.searchInput_.setAttribute("id", "workspaceSearchInput");
+    // thisObj.searchInput_.setAttribute("placeholder", "Search");
+    // thisObj.searchInput_.setAttribute("type", "search");
+
+    // document.getElementById("workspaceSearchInputHolder").appendChild(thisObj.searchInput_);
     
     thisObj.blockTrie_ = new goog.structs.Trie;
     
@@ -64,23 +76,41 @@ Blockly.Search = function(workspace) {
       event.stopPropagation();
     });
 
-    thisObj.searchInput_.addEventListener("blur", function(event) {
-      thisObj.onBlur(event);
-    })
+    // thisObj.searchInput_.addEventListener("blur", function(event) {
+    //   thisObj.onBlur(event);
+    // })
 
     thisObj.searchInput_.addEventListener("keyup", function(event) {
       thisObj.executeSearchOnKeyUp(event, thisObj);
     });
-  }, 0);
+
+
+    thisObj.nextButton_.addEventListener("click", function(event) { 
+      event.preventDefault();
+      thisObj.showNextResult(true);
+    });
+
+    thisObj.prevButton_.addEventListener("click", function(event) { 
+      event.preventDefault();
+      thisObj.showNextResult(false);
+    });
+
+    closeButton.addEventListener("click", function(event) { 
+      event.preventDefault();
+      thisObj.searchInput_.blur();
+      thisObj.onBlur(event);
+    });
+    
+  }, 100);
 };
 
 Blockly.Search.prototype.onNewWorkspaceEvent = function(event) {
-  console.log(event);
+  // console.log(event);
 
   if (event.type == Blockly.Events.CREATE) {
-    console.log("CREATE");
-    console.log(event.blockId);
-    console.log(event.ids);
+    // console.log("CREATE");
+    // console.log(event.blockId);
+    // console.log(event.ids);
     for (var i = 0; i < event.ids.length; i++) {
       var id = event.ids[i];
       var block = this.workspace_.getBlockById(id);
@@ -91,9 +121,10 @@ Blockly.Search.prototype.onNewWorkspaceEvent = function(event) {
     }
   }
   else if (event.type == Blockly.Events.DELETE) {
-    console.log("DELETE");
-    console.log(event.blockId);
-    console.log(event.oldXml);
+    console.log(new Error().stack);
+    // console.log("DELETE");
+    // console.log(event.blockId);
+    // console.log(event.oldXml);
 
     Blockly.Events.disable();
 
@@ -107,13 +138,13 @@ Blockly.Search.prototype.onNewWorkspaceEvent = function(event) {
 
     Blockly.Events.enable();
   }
-  else if (event.type == Blockly.Events.CHANGE) {
-    console.log("CHANGE");
-    console.log(event.blockId);
-    console.log(event.element);
-    console.log(event.oldValue);
-    console.log(event.newValue);
-  }
+  // else if (event.type == Blockly.Events.CHANGE) {
+    // console.log("CHANGE");
+    // console.log(event.blockId);
+    // console.log(event.element);
+    // console.log(event.oldValue);
+    // console.log(event.newValue);
+  // }
 };
 
 Blockly.Search.prototype.getAllFieldTexts = function(block) {
@@ -245,6 +276,10 @@ Blockly.Search.prototype.executeSearchOnKeyUp = function(e) {
     search.onBlur(e);
     return;
   }
+  else if (e.keyCode == 13) {
+    search.showNextResult(true);
+    return;
+  }
 
   var searchTerms = e.target.value.trim().toLowerCase().split(/\s+/);
   searchTerms = goog.array.filter(searchTerms, function (term) {
@@ -260,26 +295,57 @@ Blockly.Search.prototype.executeSearchOnKeyUp = function(e) {
   if (matchingBlockIds.length > 0) {
     var counter = 0;
 
+    search.finalResults_ = [];
+
     while (counter < matchingBlockIds.length) {
+        var block = search.workspace_.getBlockById(matchingBlockIds[counter]);
         
-        var firstBlock = search.workspace_.getBlockById(matchingBlockIds[counter]);
-        
-        if (firstBlock) {
-            search.currentResult = firstBlock;
-            firstBlock.select();
-            search.workspace_.centerOnBlock(matchingBlockIds[counter]);
-            search.workspace_.highlightBlock(matchingBlockIds[counter]);
-            return;
+        if (block) {
+          search.finalResults_.push(block);
         }
+
         counter++;
     }
-    // search.workspace_.highlightBlock(matchingBlockIds[0]);
 
-    // var firstBlock = search.workspace_.getBlockById(matchingBlockIds[0]);
-
-    // if (firstBlock) {
-    // }
+    search.currentIndex = -1;
+    search.showNextResult(true);
   }
+};
+
+Blockly.Search.prototype.showNextResult = function(direction) {
+  var search = this;
+
+  if (search.finalResults_.length == 0) {
+    search.resultsNumberHolder_.innerHTML = "0/0";
+    search.nextButton_.disabled = true;
+    search.prevButton_.disabled = true;
+    return;
+  }
+
+  search.nextButton_.disabled = false;
+  search.prevButton_.disabled = false;
+
+  if (direction) {
+    search.currentIndex++;
+  }
+  else {
+    search.currentIndex--;
+  }
+
+  if (search.finalResults_.length <= search.currentIndex) {
+    search.currentIndex = 0;
+  }
+  else if (search.currentIndex < 0) {
+    search.currentIndex = search.finalResults_.length - 1;
+  }
+
+  search.resultsNumberHolder_.innerHTML = (search.currentIndex + 1) + "/" + (search.finalResults_.length);
+
+  search.currentResult = search.finalResults_[search.currentIndex];
+  search.currentResult.select();
+  search.workspace_.centerOnBlock(search.currentResult.id);
+  search.workspace_.highlightBlock(search.currentResult.id);
+  return;
 };
 
 Blockly.Search.prototype.onBlur = function(e) {
@@ -291,8 +357,16 @@ Blockly.Search.prototype.onBlur = function(e) {
   }
 
   search.searchInput_.value = "";
-}
+
+  search.resultsNumberHolder_.innerHTML = "0/0";
+
+  search.searchMenu_.style.visibility = "hidden";
+
+  search.finalResults_ = [];
+};
 
 Blockly.Search.prototype.focusSearchField = function() {
+  this.searchMenu_.style.visibility = "visible";
+
   this.searchInput_.focus();
-}
+};

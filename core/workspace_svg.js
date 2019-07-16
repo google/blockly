@@ -1592,9 +1592,16 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(tree) {
 /**
  * Set focus to the search field of the toolbox, if it exists.
  */
-Blockly.WorkspaceSvg.prototype.focusToolboxSearch = function() {
-  if (this.toolbox_) {
-    this.toolbox_.focusSearchField();
+Blockly.WorkspaceSvg.prototype.focusSearch = function(shouldFocusToolbox) {
+  if (shouldFocusToolbox) {
+    if (this.toolbox_) {
+      this.toolbox_.focusSearchField();
+    }
+  }
+  else {
+    if (this.search_) {
+      this.search_.focusSearchField();
+    }
   }
 };
 

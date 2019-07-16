@@ -292,3 +292,7 @@ Blockly.Search.prototype.onBlur = function(e) {
 
   search.searchInput_.value = "";
 }
+
+Blockly.Search.prototype.focusSearchField = function() {
+  this.searchInput_.focus();
+}

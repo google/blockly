@@ -264,8 +264,9 @@ Blockly.onKeyDown_ = function(e) {
       workspace.undo(e.shiftKey);
     }
     else if (e.keyCode == 70) {
-      // 'f' for focusing the search toolbox on the top
-      workspace.focusToolboxSearch();
+      // 'f' for focusing the workspace search,
+      // 'F' for focusing the toolbox search
+      workspace.focusSearch(e.shiftKey);
     }
   }
   // Common code for delete and cut.

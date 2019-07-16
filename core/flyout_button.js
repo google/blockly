@@ -75,21 +75,11 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
   this.isLabel_ = isLabel;
 
   /**
-   * Function to call when this button is clicked.
-   * @type {function(!Blockly.FlyoutButton)}
+   * The key to the function called when this button is clicked.
+   * @type {string}
    * @private
    */
-  this.callback_ = null;
-
-  var callbackKey = xml.getAttribute('callbackKey');
-  if (this.isLabel_ && callbackKey) {
-    console.warn('Labels should not have callbacks. Label text: ' + this.text_);
-  } else if (!this.isLabel_ &&
-      !(callbackKey && targetWorkspace.getButtonCallback(callbackKey))) {
-    console.warn('Buttons should have callbacks. Button text: ' + this.text_);
-  } else {
-    this.callback_ = targetWorkspace.getButtonCallback(callbackKey);
-  }
+  this.callbackKey_ = xml.getAttribute('callbackKey');
 
   /**
    * If specified, a CSS class to add to this button.
@@ -257,8 +247,12 @@ Blockly.FlyoutButton.prototype.onMouseUp_ = function(e) {
     gesture.cancel();
   }
 
-  // Call the callback registered to this button.
-  if (this.callback_) {
-    this.callback_(this);
+  if (this.isLabel_ && this.callbackKey_) {
+    console.warn('Labels should not have callbacks. Label text: ' + this.text_);
+  } else if (!this.isLabel_ && !(this.callbackKey_ &&
+      this.targetWorkspace_.getButtonCallback(this.callbackKey_))) {
+    console.warn('Buttons should have callbacks. Button text: ' + this.text_);
+  } else if (!this.isLabel_) {
+    this.targetWorkspace_.getButtonCallback(this.callbackKey_)(this);
   }
 };

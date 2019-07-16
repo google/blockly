@@ -48,11 +48,23 @@ goog.DEBUG = false;
 
 goog.inherits = function(childCtor, parentCtor) {
   /** @constructor */
-  function tempCtor() {}
+  function tempCtor() {};
   tempCtor.prototype = parentCtor.prototype;
   childCtor.superClass_ = parentCtor.prototype;
   childCtor.prototype = new tempCtor();
   childCtor.prototype.constructor = childCtor;
+
+  /**
+   * Calls superclass constructor/method.
+   * @param {!Object} me Should always be "this".
+   * @param {string} methodName
+   * @param {...*} var_args
+   * @return {?} The return value of the superclass method/constructor.
+   */
+  childCtor.base = function(me, methodName, var_args) {
+    var args = Array.prototype.slice.call(arguments, 2);
+    return parentCtor.prototype[methodName].apply(me, args);
+  };
 };
 
 
@@ -228,46 +240,61 @@ if (!goog.format) {
     },
     /**
      * String inserted as a word break by insertWordBreaks(). Safari requires
-     * <wbr></wbr>, Opera needs the 'shy' entity, though this will give a
-     * visible hyphen at breaks. Other browsers just use <wbr>.
+     * <wbr></wbr>, Opera needs the &shy; entity, though this will give a
+     * visible hyphen at breaks. IE8+ use a zero width space. Other browsers
+     * just use <wbr>.
      * @type {string}
      * @private
      */
-    WORD_BREAK: goog.userAgent.WEBKIT
-        ? '<wbr></wbr>' : goog.userAgent.OPERA ? '&shy;' : '<wbr>'
+    WORD_BREAK:
+        goog.userAgent.WEBKIT ? '<wbr></wbr>' :
+        goog.userAgent.OPERA ? '&shy;' :
+        goog.userAgent.IE ? '&#8203;' :
+        '<wbr>'
   };
 }
 
 
 if (!goog.i18n) {
   goog.i18n = {
-    bidi: {
-      /**
-       * Check the directionality of a piece of text, return true if the piece
-       * of text should be laid out in RTL direction.
-       * @param {string} text The piece of text that need to be detected.
-       * @param {boolean=} opt_isHtml Whether {@code text} is HTML/HTML-escaped.
-       *     Default: false.
-       * @return {boolean}
-       * @private
-       */
-      detectRtlDirectionality: function(text, opt_isHtml) {
-        text = soyshim.$$bidiStripHtmlIfNecessary_(text, opt_isHtml);
-        return soyshim.$$bidiRtlWordRatio_(text)
-            > soyshim.$$bidiRtlDetectionThreshold_;
-      }
-    }
+    bidi: {}
   };
 }
+
+
+/**
+ * Constant that defines whether or not the current locale is an RTL locale.
+ *
+ * @type {boolean}
+ */
+goog.i18n.bidi.IS_RTL = false;
+
 
 /**
  * Directionality enum.
  * @enum {number}
  */
 goog.i18n.bidi.Dir = {
+  /**
+   * Left-to-right.
+   */
+  LTR: 1,
+
+  /**
+   * Right-to-left.
+   */
   RTL: -1,
-  UNKNOWN: 0,
-  LTR: 1
+
+  /**
+   * Neither left-to-right nor right-to-left.
+   */
+  NEUTRAL: 0,
+
+  /**
+   * A historical misnomer for NEUTRAL.
+   * @deprecated For "neutral", use NEUTRAL; for "unknown", use null.
+   */
+  UNKNOWN: 0
 };
 
 
@@ -276,21 +303,69 @@ goog.i18n.bidi.Dir = {
  * constant. Useful for interaction with different standards of directionality
  * representation.
  *
- * @param {goog.i18n.bidi.Dir|number|boolean} givenDir Directionality given in
- *     one of the following formats:
+ * @param {goog.i18n.bidi.Dir|number|boolean|null} givenDir Directionality given
+ *     in one of the following formats:
  *     1. A goog.i18n.bidi.Dir constant.
- *     2. A number (positive = LRT, negative = RTL, 0 = unknown).
+ *     2. A number (positive = LTR, negative = RTL, 0 = neutral).
  *     3. A boolean (true = RTL, false = LTR).
- * @return {goog.i18n.bidi.Dir} A goog.i18n.bidi.Dir constant matching the given
- *     directionality.
+ *     4. A null for unknown directionality.
+ * @param {boolean=} opt_noNeutral Whether a givenDir of zero or
+ *     goog.i18n.bidi.Dir.NEUTRAL should be treated as null, i.e. unknown, in
+ *     order to preserve legacy behavior.
+ * @return {?goog.i18n.bidi.Dir} A goog.i18n.bidi.Dir constant matching the
+ *     given directionality. If given null, returns null (i.e. unknown).
  */
-goog.i18n.bidi.toDir = function(givenDir) {
+goog.i18n.bidi.toDir = function(givenDir, opt_noNeutral) {
   if (typeof givenDir == 'number') {
+    // This includes the non-null goog.i18n.bidi.Dir case.
     return givenDir > 0 ? goog.i18n.bidi.Dir.LTR :
-        givenDir < 0 ? goog.i18n.bidi.Dir.RTL : goog.i18n.bidi.Dir.UNKNOWN;
+        givenDir < 0 ? goog.i18n.bidi.Dir.RTL :
+        opt_noNeutral ? null : goog.i18n.bidi.Dir.NEUTRAL;
+  } else if (givenDir == null) {
+    return null;
   } else {
+    // Must be typeof givenDir == 'boolean'.
     return givenDir ? goog.i18n.bidi.Dir.RTL : goog.i18n.bidi.Dir.LTR;
   }
+};
+
+
+/**
+ * Estimates the directionality of a string based on relative word counts.
+ * If the number of RTL words is above a certain percentage of the total number
+ * of strongly directional words, returns RTL.
+ * Otherwise, if any words are strongly or weakly LTR, returns LTR.
+ * Otherwise, returns NEUTRAL.
+ * Numbers are counted as weakly LTR.
+ * @param {string} str The string to be checked.
+ * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
+ *     Default: false.
+ * @return {goog.i18n.bidi.Dir} Estimated overall directionality of {@code str}.
+ */
+goog.i18n.bidi.estimateDirection = function(str, opt_isHtml) {
+  var rtlCount = 0;
+  var totalCount = 0;
+  var hasWeaklyLtr = false;
+  var tokens = soyshim.$$bidiStripHtmlIfNecessary_(str, opt_isHtml).
+      split(soyshim.$$bidiWordSeparatorRe_);
+  for (var i = 0; i < tokens.length; i++) {
+    var token = tokens[i];
+    if (soyshim.$$bidiRtlDirCheckRe_.test(token)) {
+      rtlCount++;
+      totalCount++;
+    } else if (soyshim.$$bidiIsRequiredLtrRe_.test(token)) {
+      hasWeaklyLtr = true;
+    } else if (soyshim.$$bidiLtrCharRe_.test(token)) {
+      totalCount++;
+    } else if (soyshim.$$bidiHasNumeralsRe_.test(token)) {
+      hasWeaklyLtr = true;
+    }
+  }
+
+  return totalCount == 0 ?
+      (hasWeaklyLtr ? goog.i18n.bidi.Dir.LTR : goog.i18n.bidi.Dir.NEUTRAL) :
+      (rtlCount / totalCount > soyshim.$$bidiRtlDetectionThreshold_ ?
+          goog.i18n.bidi.Dir.RTL : goog.i18n.bidi.Dir.LTR);
 };
 
 
@@ -299,30 +374,43 @@ goog.i18n.bidi.toDir = function(givenDir) {
  * opposite-directionality context without garbling. Provides the following
  * functionality:
  *
- * @param {goog.i18n.bidi.Dir|number|boolean} dir The context
- *     directionality as a number
- *     (positive = LRT, negative = RTL, 0 = unknown).
+ * @param {goog.i18n.bidi.Dir|number|boolean|null} dir The context
+ *     directionality, in one of the following formats:
+ *     1. A goog.i18n.bidi.Dir constant. NEUTRAL is treated the same as null,
+ *        i.e. unknown, for backward compatibility with legacy calls.
+ *     2. A number (positive = LTR, negative = RTL, 0 = unknown).
+ *     3. A boolean (true = RTL, false = LTR).
+ *     4. A null for unknown directionality.
  * @constructor
  */
 goog.i18n.BidiFormatter = function(dir) {
-  this.dir_ = goog.i18n.bidi.toDir(dir);
+  /**
+   * The overall directionality of the context in which the formatter is being
+   * used.
+   * @type {?goog.i18n.bidi.Dir}
+   * @private
+   */
+  this.dir_ = goog.i18n.bidi.toDir(dir, true /* opt_noNeutral */);
 };
 
+/**
+ * @return {?goog.i18n.bidi.Dir} The context directionality.
+ */
+goog.i18n.BidiFormatter.prototype.getContextDir = function() {
+  return this.dir_;
+};
 
 /**
- * Returns 'dir="ltr"' or 'dir="rtl"', depending on {@code text}'s estimated
- * directionality, if it is not the same as the context directionality.
- * Otherwise, returns the empty string.
+ * Returns 'dir="ltr"' or 'dir="rtl"', depending on the given directionality, if
+ * it is not the same as the context directionality. Otherwise, returns the
+ * empty string.
  *
- * @param {string} text Text whose directionality is to be estimated.
- * @param {boolean=} opt_isHtml Whether {@code text} is HTML / HTML-escaped.
- *     Default: false.
+ * @param {goog.i18n.bidi.Dir} dir A directionality.
  * @return {string} 'dir="rtl"' for RTL text in non-RTL context; 'dir="ltr"' for
  *     LTR text in non-LTR context; else, the empty string.
  */
-goog.i18n.BidiFormatter.prototype.dirAttr = function (text, opt_isHtml) {
-  var dir = soy.$$bidiTextDir(text, opt_isHtml);
-  return dir && dir != this.dir_ ? dir < 0 ? 'dir="rtl"' : 'dir="ltr"' : '';
+goog.i18n.BidiFormatter.prototype.knownDirAttr = function(dir) {
+  return !dir || dir == this.dir_ ? '' : dir < 0 ? 'dir="rtl"' : 'dir="ltr"';
 };
 
 /**
@@ -337,7 +425,7 @@ goog.i18n.BidiFormatter.prototype.endEdge = function () {
 /**
  * Returns the Unicode BiDi mark matching the context directionality (LRM for
  * LTR context directionality, RLM for RTL context directionality), or the
- * empty string for neutral / unknown context directionality.
+ * empty string for unknown context directionality.
  *
  * @return {string} LRM for LTR context directionality and RLM for RTL context
  *     directionality.
@@ -350,35 +438,51 @@ goog.i18n.BidiFormatter.prototype.mark = function () {
 };
 
 /**
- * Returns a Unicode BiDi mark matching the context directionality (LRM or RLM)
+ * Returns a Unicode bidi mark matching the context directionality (LRM or RLM)
  * if the directionality or the exit directionality of {@code text} are opposite
  * to the context directionality. Otherwise returns the empty string.
- *
- * @param {string} text The input text.
- * @param {boolean=} opt_isHtml Whether {@code text} is HTML / HTML-escaped.
+ * If opt_isHtml, makes sure to ignore the LTR nature of the mark-up and escapes
+ * in text, making the logic suitable for HTML and HTML-escaped text.
+ * @param {?goog.i18n.bidi.Dir} textDir {@code text}'s overall directionality,
+ *     or null if unknown and needs to be estimated.
+ * @param {string} text The text whose directionality is to be estimated.
+ * @param {boolean=} opt_isHtml Whether text is HTML/HTML-escaped.
  *     Default: false.
- * @return {string} A Unicode bidi mark matching the global directionality or
- *     the empty string.
+ * @return {string} A Unicode bidi mark matching the context directionality, or
+ *     the empty string when either the context directionality is unknown or
+ *     neither the text's overall nor its exit directionality is opposite to it.
  */
-goog.i18n.BidiFormatter.prototype.markAfter = function (text, opt_isHtml) {
-  var dir = soy.$$bidiTextDir(text, opt_isHtml);
-  return soyshim.$$bidiMarkAfterKnownDir_(this.dir_, dir, text, opt_isHtml);
+goog.i18n.BidiFormatter.prototype.markAfterKnownDir = function (
+    textDir, text, opt_isHtml) {
+  if (textDir == null) {
+    textDir = goog.i18n.bidi.estimateDirection(text, opt_isHtml);
+  }
+  return (
+      this.dir_ > 0 && (textDir < 0 ||
+          soyshim.$$bidiIsRtlExitText_(text, opt_isHtml)) ? '\u200E' : // LRM
+      this.dir_ < 0 && (textDir > 0 ||
+          soyshim.$$bidiIsLtrExitText_(text, opt_isHtml)) ? '\u200F' : // RLM
+      '');
 };
 
 /**
- * Formats a string of unknown directionality for use in HTML output of the
- * context directionality, so an opposite-directionality string is neither
- * garbled nor garbles what follows it.
+ * Formats an HTML string for use in HTML output of the context directionality,
+ * so an opposite-directionality string is neither garbled nor garbles what
+ * follows it.
  *
- * @param {string} str The input text.
+ * @param {?goog.i18n.bidi.Dir} textDir {@code str}'s overall directionality, or
+ *     null if unknown and needs to be estimated.
+ * @param {string} str The input text (HTML or HTML-escaped).
  * @param {boolean=} placeholder This argument exists for consistency with the
  *     Closure Library. Specifying it has no effect.
- * @return {string} Input text after applying the above processing.
+ * @return {string} The input text after applying the above processing.
  */
-goog.i18n.BidiFormatter.prototype.spanWrap = function(str, placeholder) {
-  str = String(str);
-  var textDir = soy.$$bidiTextDir(str, true);
-  var reset = soyshim.$$bidiMarkAfterKnownDir_(this.dir_, textDir, str, true);
+goog.i18n.BidiFormatter.prototype.spanWrapWithKnownDir = function(
+    textDir, str, placeholder) {
+  if (textDir == null) {
+    textDir = goog.i18n.bidi.estimateDirection(str, true);
+  }
+  var reset = this.markAfterKnownDir(textDir, str, true);
   if (textDir > 0 && this.dir_ <= 0) {
     str = '<span dir="ltr">' + str + '</span>';
   } else if (textDir < 0 && this.dir_ >= 0) {
@@ -397,22 +501,26 @@ goog.i18n.BidiFormatter.prototype.startEdge = function () {
 };
 
 /**
- * Formats a string of unknown directionality for use in plain-text output of
- * the context directionality, so an opposite-directionality string is neither
- * garbled nor garbles what follows it.
- * As opposed to {@link #spanWrap}, this makes use of unicode BiDi formatting
- * characters. In HTML, its *only* valid use is inside of elements that do not
- * allow mark-up, e.g. an 'option' tag.
+ * Formats an HTML-escaped string for use in HTML output of the context
+ * directionality, so an opposite-directionality string is neither garbled nor
+ * garbles what follows it.
+ * As opposed to {@link #spanWrapWithKnownDir}, this makes use of unicode bidi
+ * formatting characters. In HTML, it should only be used inside attribute
+ * values and elements that do not allow markup, e.g. an 'option' tag.
  *
- * @param {string} str The input text.
- * @param {boolean=} placeholder This argument exists for consistency with the
- *     Closure Library. Specifying it has no effect.
- * @return {string} Input text after applying the above processing.
+ * @param {?goog.i18n.bidi.Dir} textDir {@code str}'s overall directionality, or
+ *     null if unknown and needs to be estimated.
+ * @param {string} str The input text (HTML-escaped).
+ * @param {boolean=} opt_isHtml Whether {@code str} is HTML / HTML-escaped.
+ *     Default: false.
+ * @return {string} The input text after applying the above processing.
  */
-goog.i18n.BidiFormatter.prototype.unicodeWrap = function(str, placeholder) {
-  str = String(str);
-  var textDir = soy.$$bidiTextDir(str, true);
-  var reset = soyshim.$$bidiMarkAfterKnownDir_(this.dir_, textDir, str, true);
+goog.i18n.BidiFormatter.prototype.unicodeWrapWithKnownDir = function(
+    textDir, str, opt_isHtml) {
+  if (textDir == null) {
+    textDir = goog.i18n.bidi.estimateDirection(str, opt_isHtml);
+  }
+  var reset = this.markAfterKnownDir(textDir, str, opt_isHtml);
   if (textDir > 0 && this.dir_ <= 0) {
     str = '\u202A' + str + '\u202C';
   } else if (textDir < 0 && this.dir_ >= 0) {
@@ -637,16 +745,16 @@ goog.soy.data.SanitizedContentKind = {
    * or DOCTYPE; and that does not contain any executable code
    * (JS, {@code <object>}s, etc.) from a different trust domain.
    */
-  HTML: {},
+  HTML: goog.DEBUG ? {sanitizedContentKindHtml: true} : {},
 
   /**
    * Executable Javascript code or expression, safe for insertion in a
    * script-tag or event handler context, known to be free of any
    * attacker-controlled scripts. This can either be side-effect-free
-   * Javascript (such as JSON) or Javascript that entirely under Google's
+   * Javascript (such as JSON) or Javascript that's entirely under Google's
    * control.
    */
-  JS: goog.DEBUG ? {sanitizedContentJsStrChars: true} : {},
+  JS: goog.DEBUG ? {sanitizedContentJsChars: true} : {},
 
   /**
    * A sequence of code units that can appear between quotes (either kind) in a
@@ -660,10 +768,10 @@ goog.soy.data.SanitizedContentKind = {
    * The content must also not end inside an escape sequence ; no partial octal
    * escape sequences or odd number of '{@code \}'s at the end.
    */
-  JS_STR_CHARS: {},
+  JS_STR_CHARS: goog.DEBUG ? {sanitizedContentJsStrChars: true} : {},
 
   /** A properly encoded portion of a URI. */
-  URI: {},
+  URI: goog.DEBUG ? {sanitizedContentUri: true} : {},
 
   /**
    * Repeated attribute names and values. For example,
@@ -678,7 +786,7 @@ goog.soy.data.SanitizedContentKind = {
    * A CSS3 declaration, property, value or group of semicolon separated
    * declarations.
    */
-  CSS: {},
+  CSS: goog.DEBUG ? {sanitizedContentCss: true} : {},
 
   /**
    * Unsanitized plain-text content.
@@ -688,13 +796,13 @@ goog.soy.data.SanitizedContentKind = {
    * string is safe to use as text, being of ContentKind.TEXT makes no
    * guarantees about its safety in any other context such as HTML.
    */
-  TEXT: {}
+  TEXT: goog.DEBUG ? {sanitizedContentKindText: true} : {}
 };
 
 
 
 /**
- * A string-like object that carries a content-type.
+ * A string-like object that carries a content-type and a content direction.
  *
  * IMPORTANT! Do not create these directly, nor instantiate the subclasses.
  * Instead, use a trusted, centrally reviewed library as endorsed by your team
@@ -714,6 +822,14 @@ goog.soy.data.SanitizedContent = function() {
  * @type {goog.soy.data.SanitizedContentKind}
  */
 goog.soy.data.SanitizedContent.prototype.contentKind;
+
+
+/**
+ * The content's direction; null if unknown and thus to be estimated when
+ * necessary.
+ * @type {?goog.i18n.bidi.Dir}
+ */
+goog.soy.data.SanitizedContent.prototype.contentDir = null;
 
 
 /**
@@ -782,37 +898,10 @@ soyshim.$$renderWithWrapper_ = function(
 
 
 /**
- * Returns a Unicode BiDi mark matching bidiGlobalDir (LRM or RLM) if the
- * directionality or the exit directionality of text are opposite to
- * bidiGlobalDir. Otherwise returns the empty string.
- * If opt_isHtml, makes sure to ignore the LTR nature of the mark-up and escapes
- * in text, making the logic suitable for HTML and HTML-escaped text.
- * @param {number} bidiGlobalDir The global directionality context: 1 if ltr, -1
- *     if rtl, 0 if unknown.
- * @param {number} dir text's directionality: 1 if ltr, -1 if rtl, 0 if unknown.
- * @param {string} text The text whose directionality is to be estimated.
- * @param {boolean=} opt_isHtml Whether text is HTML/HTML-escaped.
- *     Default: false.
- * @return {string} A Unicode bidi mark matching bidiGlobalDir, or
- *     the empty string when text's overall and exit directionalities both match
- *     bidiGlobalDir, or bidiGlobalDir is 0 (unknown).
- * @private
- */
-soyshim.$$bidiMarkAfterKnownDir_ = function(
-    bidiGlobalDir, dir, text, opt_isHtml) {
-  return (
-      bidiGlobalDir > 0 && (dir < 0 ||
-          soyshim.$$bidiIsRtlExitText_(text, opt_isHtml)) ? '\u200E' : // LRM
-      bidiGlobalDir < 0 && (dir > 0 ||
-          soyshim.$$bidiIsLtrExitText_(text, opt_isHtml)) ? '\u200F' : // RLM
-      '');
-};
-
-
-/**
  * Strips str of any HTML mark-up and escapes. Imprecise in several ways, but
  * precision is not very important, since the result is only meant to be used
  * for directionality detection.
+ * Based on goog.i18n.bidi.stripHtmlIfNeeded_().
  * @param {string} str The string to be stripped.
  * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
  *     Default: false.
@@ -820,7 +909,7 @@ soyshim.$$bidiMarkAfterKnownDir_ = function(
  * @private
  */
 soyshim.$$bidiStripHtmlIfNecessary_ = function(str, opt_isHtml) {
-  return opt_isHtml ? str.replace(soyshim.$$BIDI_HTML_SKIP_RE_, ' ') : str;
+  return opt_isHtml ? str.replace(soyshim.$$BIDI_HTML_SKIP_RE_, '') : str;
 };
 
 
@@ -828,6 +917,7 @@ soyshim.$$bidiStripHtmlIfNecessary_ = function(str, opt_isHtml) {
  * Simplified regular expression for am HTML tag (opening or closing) or an HTML
  * escape - the things we want to skip over in order to ignore their ltr
  * characters.
+ * Copied from goog.i18n.bidi.htmlSkipReg_.
  * @type {RegExp}
  * @private
  */
@@ -838,38 +928,30 @@ soyshim.$$BIDI_HTML_SKIP_RE_ = /<[^>]*>|&[^;]+;/g;
  * A practical pattern to identify strong LTR character. This pattern is not
  * theoretically correct according to unicode standard. It is simplified for
  * performance and small code size.
+ * Copied from goog.i18n.bidi.ltrChars_.
  * @type {string}
  * @private
  */
 soyshim.$$bidiLtrChars_ =
     'A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02B8\u0300-\u0590\u0800-\u1FFF' +
-    '\u2C00-\uFB1C\uFDFE-\uFE6F\uFEFD-\uFFFF';
-
-
-/**
- * A practical pattern to identify strong neutral and weak character. This
- * pattern is not theoretically correct according to unicode standard. It is
- * simplified for performance and small code size.
- * @type {string}
- * @private
- */
-soyshim.$$bidiNeutralChars_ =
-    '\u0000-\u0020!-@[-`{-\u00BF\u00D7\u00F7\u02B9-\u02FF\u2000-\u2BFF';
+    '\u200E\u2C00-\uFB1C\uFE00-\uFE6F\uFEFD-\uFFFF';
 
 
 /**
  * A practical pattern to identify strong RTL character. This pattern is not
  * theoretically correct according to unicode standard. It is simplified for
  * performance and small code size.
+ * Copied from goog.i18n.bidi.rtlChars_.
  * @type {string}
  * @private
  */
-soyshim.$$bidiRtlChars_ = '\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC';
+soyshim.$$bidiRtlChars_ = '\u0591-\u07FF\u200F\uFB1D-\uFDFF\uFE70-\uFEFC';
 
 
 /**
  * Regular expressions to check if a piece of text is of RTL directionality
  * on first character with strong directionality.
+ * Based on goog.i18n.bidi.rtlDirCheckRe_.
  * @type {RegExp}
  * @private
  */
@@ -878,73 +960,59 @@ soyshim.$$bidiRtlDirCheckRe_ = new RegExp(
 
 
 /**
- * Regular expressions to check if a piece of text is of neutral directionality.
- * Url are considered as neutral.
+ * Regular expression to check for LTR characters.
+ * Based on goog.i18n.bidi.ltrCharReg_.
  * @type {RegExp}
  * @private
  */
-soyshim.$$bidiNeutralDirCheckRe_ = new RegExp(
-    '^[' + soyshim.$$bidiNeutralChars_ + ']*$|^http://');
+soyshim.$$bidiLtrCharRe_ = new RegExp('[' + soyshim.$$bidiLtrChars_ + ']');
 
 
 /**
- * Check the directionality of the a piece of text based on the first character
- * with strong directionality.
- * @param {string} str string being checked.
- * @return {boolean} return true if rtl directionality is being detected.
+ * Regular expression to check if a string looks like something that must
+ * always be LTR even in RTL text, e.g. a URL. When estimating the
+ * directionality of text containing these, we treat these as weakly LTR,
+ * like numbers.
+ * Copied from goog.i18n.bidi.isRequiredLtrRe_.
+ * @type {RegExp}
  * @private
  */
-soyshim.$$bidiIsRtlText_ = function(str) {
-  return soyshim.$$bidiRtlDirCheckRe_.test(str);
-};
+soyshim.$$bidiIsRequiredLtrRe_ = /^http:\/\/.*/;
 
 
 /**
- * Check the directionality of the a piece of text based on the first character
- * with strong directionality.
- * @param {string} str string being checked.
- * @return {boolean} true if all characters have neutral directionality.
+ * Regular expression to check if a string contains any numerals. Used to
+ * differentiate between completely neutral strings and those containing
+ * numbers, which are weakly LTR.
+ * Copied from goog.i18n.bidi.hasNumeralsRe_.
+ * @type {RegExp}
  * @private
  */
-soyshim.$$bidiIsNeutralText_ = function(str) {
-  return soyshim.$$bidiNeutralDirCheckRe_.test(str);
-};
+soyshim.$$bidiHasNumeralsRe_ = /\d/;
+
+
+/**
+ * Regular expression to split a string into "words" for directionality
+ * estimation based on relative word counts.
+ * Copied from goog.i18n.bidi.wordSeparatorRe_.
+ * @type {RegExp}
+ * @private
+ */
+soyshim.$$bidiWordSeparatorRe_ = /\s+/;
 
 
 /**
  * This constant controls threshold of rtl directionality.
+ * Copied from goog.i18n.bidi.rtlDetectionThreshold_.
  * @type {number}
  * @private
  */
 soyshim.$$bidiRtlDetectionThreshold_ = 0.40;
 
-
-/**
- * Returns the RTL ratio based on word count.
- * @param {string} str the string that need to be checked.
- * @return {number} the ratio of RTL words among all words with directionality.
- * @private
- */
-soyshim.$$bidiRtlWordRatio_ = function(str) {
-  var rtlCount = 0;
-  var totalCount = 0;
-  var tokens = str.split(' ');
-  for (var i = 0; i < tokens.length; i++) {
-    if (soyshim.$$bidiIsRtlText_(tokens[i])) {
-      rtlCount++;
-      totalCount++;
-    } else if (!soyshim.$$bidiIsNeutralText_(tokens[i])) {
-      totalCount++;
-    }
-  }
-
-  return totalCount == 0 ? 0 : rtlCount / totalCount;
-};
-
-
 /**
  * Regular expressions to check if the last strongly-directional character in a
  * piece of text is LTR.
+ * Based on goog.i18n.bidi.ltrExitDirCheckRe_.
  * @type {RegExp}
  * @private
  */
@@ -955,6 +1023,7 @@ soyshim.$$bidiLtrExitDirCheckRe_ = new RegExp(
 /**
  * Regular expressions to check if the last strongly-directional character in a
  * piece of text is RTL.
+ * Based on goog.i18n.bidi.rtlExitDirCheckRe_.
  * @type {RegExp}
  * @private
  */
@@ -965,6 +1034,7 @@ soyshim.$$bidiRtlExitDirCheckRe_ = new RegExp(
 /**
  * Check if the exit directionality a piece of text is LTR, i.e. if the last
  * strongly-directional character in the string is LTR.
+ * Based on goog.i18n.bidi.endsWithLtr().
  * @param {string} str string being checked.
  * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
  *     Default: false.
@@ -980,6 +1050,7 @@ soyshim.$$bidiIsLtrExitText_ = function(str, opt_isHtml) {
 /**
  * Check if the exit directionality a piece of text is RTL, i.e. if the last
  * strongly-directional character in the string is RTL.
+ * Based on goog.i18n.bidi.endsWithRtl().
  * @param {string} str string being checked.
  * @param {boolean=} opt_isHtml Whether str is HTML / HTML-escaped.
  *     Default: false.
@@ -1028,13 +1099,58 @@ soydata.SanitizedContentKind = goog.soy.data.SanitizedContentKind;
 
 
 /**
+ * Checks whether a given value is of a given content kind.
+ *
+ * @param {*} value The value to be examined.
+ * @param {soydata.SanitizedContentKind} contentKind The desired content
+ *     kind.
+ * @return {boolean} Whether the given value is of the given kind.
+ * @private
+ */
+soydata.isContentKind = function(value, contentKind) {
+  // TODO(user): This function should really include the assert on
+  // value.constructor that is currently sprinkled at most of the call sites.
+  // Unfortunately, that would require a (debug-mode-only) switch statement.
+  // TODO(user): Perhaps we should get rid of the contentKind property
+  // altogether and only at the constructor.
+  return value != null && value.contentKind === contentKind;
+};
+
+
+/**
+ * Returns a given value's contentDir property, constrained to a
+ * goog.i18n.bidi.Dir value or null. Returns null if the value is null,
+ * undefined, a primitive or does not have a contentDir property, or the
+ * property's value is not 1 (for LTR), -1 (for RTL), or 0 (for neutral).
+ *
+ * @param {*} value The value whose contentDir property, if any, is to
+ *     be returned.
+ * @return {?goog.i18n.bidi.Dir} The contentDir property.
+ */
+soydata.getContentDir = function(value) {
+  if (value != null) {
+    switch (value.contentDir) {
+      case goog.i18n.bidi.Dir.LTR:
+        return goog.i18n.bidi.Dir.LTR;
+      case goog.i18n.bidi.Dir.RTL:
+        return goog.i18n.bidi.Dir.RTL;
+      case goog.i18n.bidi.Dir.NEUTRAL:
+        return goog.i18n.bidi.Dir.NEUTRAL;
+    }
+  }
+  return null;
+};
+
+
+/**
  * Content of type {@link soydata.SanitizedContentKind.HTML}.
  *
  * The content is a string of HTML that can safely be embedded in a PCDATA
  * context in your app.  If you would be surprised to find that an HTML
  * sanitizer produced {@code s} (e.g.  it runs code or fetches bad URLs) and
  * you wouldn't write a template that produces {@code s} on security or privacy
- * grounds, then don't pass {@code s} here.
+ * grounds, then don't pass {@code s} here. The default content direction is
+ * unknown, i.e. to be estimated when necessary.
  *
  * @constructor
  * @extends {goog.soy.data.SanitizedContent}
@@ -1047,12 +1163,34 @@ goog.inherits(soydata.SanitizedHtml, goog.soy.data.SanitizedContent);
 /** @override */
 soydata.SanitizedHtml.prototype.contentKind = soydata.SanitizedContentKind.HTML;
 
+/**
+ * Returns a SanitizedHtml object for a particular value. The content direction
+ * is preserved.
+ *
+ * This HTML-escapes the value unless it is already SanitizedHtml.
+ *
+ * @param {*} value The value to convert. If it is already a SanitizedHtml
+ *     object, it is left alone.
+ * @return {!soydata.SanitizedHtml} A SanitizedHtml object derived from the
+ *     stringified value. It is escaped unless the input is SanitizedHtml.
+ */
+soydata.SanitizedHtml.from = function(value) {
+  // The check is soydata.isContentKind() inlined for performance.
+  if (value != null &&
+      value.contentKind === soydata.SanitizedContentKind.HTML) {
+    goog.asserts.assert(value.constructor === soydata.SanitizedHtml);
+    return /** @type {!soydata.SanitizedHtml} */ (value);
+  }
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml(
+      soy.esc.$$escapeHtmlHelper(String(value)), soydata.getContentDir(value));
+};
+
 
 /**
  * Content of type {@link soydata.SanitizedContentKind.JS}.
  *
  * The content is Javascript source that when evaluated does not execute any
- * attacker-controlled scripts.
+ * attacker-controlled scripts. The content direction is LTR.
  *
  * @constructor
  * @extends {goog.soy.data.SanitizedContent}
@@ -1066,12 +1204,16 @@ goog.inherits(soydata.SanitizedJs, goog.soy.data.SanitizedContent);
 soydata.SanitizedJs.prototype.contentKind =
     soydata.SanitizedContentKind.JS;
 
+/** @override */
+soydata.SanitizedJs.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
+
 
 /**
  * Content of type {@link soydata.SanitizedContentKind.JS_STR_CHARS}.
  *
  * The content can be safely inserted as part of a single- or double-quoted
- * string without terminating the string.
+ * string without terminating the string. The default content direction is
+ * unknown, i.e. to be estimated when necessary.
  *
  * @constructor
  * @extends {goog.soy.data.SanitizedContent}
@@ -1085,12 +1227,11 @@ goog.inherits(soydata.SanitizedJsStrChars, goog.soy.data.SanitizedContent);
 soydata.SanitizedJsStrChars.prototype.contentKind =
     soydata.SanitizedContentKind.JS_STR_CHARS;
 
-
 /**
  * Content of type {@link soydata.SanitizedContentKind.URI}.
  *
  * The content is a URI chunk that the caller knows is safe to emit in a
- * template.
+ * template. The content direction is LTR.
  *
  * @constructor
  * @extends {goog.soy.data.SanitizedContent}
@@ -1103,12 +1244,15 @@ goog.inherits(soydata.SanitizedUri, goog.soy.data.SanitizedContent);
 /** @override */
 soydata.SanitizedUri.prototype.contentKind = soydata.SanitizedContentKind.URI;
 
+/** @override */
+soydata.SanitizedUri.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
+
 
 /**
  * Content of type {@link soydata.SanitizedContentKind.ATTRIBUTES}.
  *
  * The content should be safely embeddable within an open tag, such as a
- * key="value" pair.
+ * key="value" pair. The content direction is LTR.
  *
  * @constructor
  * @extends {goog.soy.data.SanitizedContent}
@@ -1122,11 +1266,15 @@ goog.inherits(soydata.SanitizedHtmlAttribute, goog.soy.data.SanitizedContent);
 soydata.SanitizedHtmlAttribute.prototype.contentKind =
     soydata.SanitizedContentKind.ATTRIBUTES;
 
+/** @override */
+soydata.SanitizedHtmlAttribute.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
+
 
 /**
  * Content of type {@link soydata.SanitizedContentKind.CSS}.
  *
  * The content is non-attacker-exploitable CSS, such as {@code color:#c3d9ff}.
+ * The content direction is LTR.
  *
  * @constructor
  * @extends {goog.soy.data.SanitizedContent}
@@ -1140,6 +1288,9 @@ goog.inherits(soydata.SanitizedCss, goog.soy.data.SanitizedContent);
 soydata.SanitizedCss.prototype.contentKind =
     soydata.SanitizedContentKind.CSS;
 
+/** @override */
+soydata.SanitizedCss.prototype.contentDir = goog.i18n.bidi.Dir.LTR;
+
 
 /**
  * Unsanitized plain text string.
@@ -1149,18 +1300,31 @@ soydata.SanitizedCss.prototype.contentKind =
  * sometimes used to mark that should never be used unescaped.
  *
  * @param {*} content Plain text with no guarantees.
+ * @param {?goog.i18n.bidi.Dir=} opt_contentDir The content direction; null if
+ *     unknown and thus to be estimated when necessary. Default: null.
  * @constructor
  * @extends {goog.soy.data.SanitizedContent}
  */
-soydata.UnsanitizedText = function(content) {
+soydata.UnsanitizedText = function(content, opt_contentDir) {
   /** @override */
   this.content = String(content);
+  this.contentDir = opt_contentDir != null ? opt_contentDir : null;
 };
 goog.inherits(soydata.UnsanitizedText, goog.soy.data.SanitizedContent);
 
 /** @override */
 soydata.UnsanitizedText.prototype.contentKind =
     soydata.SanitizedContentKind.TEXT;
+
+
+/**
+ * Empty string, used as a type in Soy templates.
+ * @enum {string}
+ * @private
+ */
+soydata.$$EMPTY_STRING_ = {
+  VALUE: ''
+};
 
 
 /**
@@ -1172,21 +1336,73 @@ soydata.UnsanitizedText.prototype.contentKind =
  * helps callers and their reviewers easily tell that creating SanitizedContent
  * is not always safe and calls for careful review.
  *
- * @param {function(new: T, string)} ctor A constructor.
- * @return {!function(*): T} A factory that takes content and returns a
- *     new instance.
+ * @param {function(new: T)} ctor A constructor.
+ * @return {!function(*, ?goog.i18n.bidi.Dir=): T} A factory that takes
+ *     content and an optional content direction and returns a new instance. If
+ *     the content direction is undefined, ctor.prototype.contentDir is used.
  * @template T
  * @private
  */
 soydata.$$makeSanitizedContentFactory_ = function(ctor) {
-  /** @constructor */
+  /** @type {function(new: goog.soy.data.SanitizedContent)} */
   function InstantiableCtor() {}
   InstantiableCtor.prototype = ctor.prototype;
-  return function(content) {
+  /**
+   * Creates a ctor-type SanitizedContent instance.
+   *
+   * @param {*} content The content to put in the instance.
+   * @param {?goog.i18n.bidi.Dir=} opt_contentDir The content direction. If
+   *     undefined, ctor.prototype.contentDir is used.
+   * @return {goog.soy.data.SanitizedContent} The new instance. It is actually
+   *     of type T above (ctor's type, a descendant of SanitizedContent), but
+   *     there is no way to express that here.
+   */
+  function sanitizedContentFactory(content, opt_contentDir) {
+    var result = new InstantiableCtor();
+    result.content = String(content);
+    if (opt_contentDir !== undefined) {
+      result.contentDir = opt_contentDir;
+    }
+    return result;
+  }
+  return sanitizedContentFactory;
+};
+
+
+/**
+ * Creates a factory for SanitizedContent types that should always have their
+ * default directionality.
+ *
+ * This is a hack so that the soydata.VERY_UNSAFE.ordainSanitized* can
+ * instantiate Sanitized* classes, without making the Sanitized* constructors
+ * publicly usable. Requiring all construction to use the VERY_UNSAFE names
+ * helps callers and their reviewers easily tell that creating SanitizedContent
+ * is not always safe and calls for careful review.
+ *
+ * @param {function(new: T, string)} ctor A constructor.
+ * @return {!function(*): T} A factory that takes content and returns a new
+ *     instance (with default directionality, i.e. ctor.prototype.contentDir).
+ * @template T
+ * @private
+ */
+soydata.$$makeSanitizedContentFactoryWithDefaultDirOnly_ = function(ctor) {
+  /** @type {function(new: goog.soy.data.SanitizedContent)} */
+  function InstantiableCtor() {}
+  InstantiableCtor.prototype = ctor.prototype;
+  /**
+   * Creates a ctor-type SanitizedContent instance.
+   *
+   * @param {*} content The content to put in the instance.
+   * @return {goog.soy.data.SanitizedContent} The new instance. It is actually
+   *     of type T above (ctor's type, a descendant of SanitizedContent), but
+   *     there is no way to express that here.
+   */
+  function sanitizedContentFactory(content) {
     var result = new InstantiableCtor();
     result.content = String(content);
     return result;
-  };
+  }
+  return sanitizedContentFactory;
 };
 
 
@@ -1205,11 +1421,13 @@ soydata.$$makeSanitizedContentFactory_ = function(ctor) {
  * data that has historically been a source of vulernabilities.
  *
  * @param {*} content Text to protect.
+ * @param {?goog.i18n.bidi.Dir=} opt_contentDir The content direction; null if
+ *     unknown and thus to be estimated when necessary. Default: null.
  * @return {!soydata.UnsanitizedText} A wrapper that is rejected by the
  *     Soy noAutoescape print directive.
  */
-soydata.markUnsanitizedText = function(content) {
-  return new soydata.UnsanitizedText(content);
+soydata.markUnsanitizedText = function(content, opt_contentDir) {
+  return new soydata.UnsanitizedText(content, opt_contentDir);
 };
 
 
@@ -1221,6 +1439,8 @@ soydata.markUnsanitizedText = function(content) {
  *     HTML sanitizer produced {@code s} (e.g. it runs code or fetches bad URLs)
  *     and you wouldn't write a template that produces {@code s} on security or
  *     privacy grounds, then don't pass {@code s} here.
+ * @param {?goog.i18n.bidi.Dir=} opt_contentDir The content direction; null if
+ *     unknown and thus to be estimated when necessary. Default: null.
  * @return {!soydata.SanitizedHtml} Sanitized content wrapper that
  *     indicates to Soy not to escape when printed as HTML.
  */
@@ -1238,7 +1458,8 @@ soydata.VERY_UNSAFE.ordainSanitizedHtml =
  *     Soy not to escape when printed as Javascript source.
  */
 soydata.VERY_UNSAFE.ordainSanitizedJs =
-    soydata.$$makeSanitizedContentFactory_(soydata.SanitizedJs);
+    soydata.$$makeSanitizedContentFactoryWithDefaultDirOnly_(
+        soydata.SanitizedJs);
 
 
 // TODO: This function is probably necessary, either externally or internally
@@ -1251,6 +1472,8 @@ soydata.VERY_UNSAFE.ordainSanitizedJs =
  *
  * @param {*} content Content that can be safely inserted as part of a
  *     single- or double-quoted string without terminating the string.
+ * @param {?goog.i18n.bidi.Dir=} opt_contentDir The content direction; null if
+ *     unknown and thus to be estimated when necessary. Default: null.
  * @return {!soydata.SanitizedJsStrChars} Sanitized content wrapper that
  *     indicates to Soy not to escape when printed in a JS string.
  */
@@ -1273,7 +1496,8 @@ soydata.VERY_UNSAFE.ordainSanitizedJsStrChars =
  *     Soy not to escape or filter when printed in URI context.
  */
 soydata.VERY_UNSAFE.ordainSanitizedUri =
-    soydata.$$makeSanitizedContentFactory_(soydata.SanitizedUri);
+    soydata.$$makeSanitizedContentFactoryWithDefaultDirOnly_(
+        soydata.SanitizedUri);
 
 
 /**
@@ -1286,7 +1510,8 @@ soydata.VERY_UNSAFE.ordainSanitizedUri =
  *     indicates to Soy not to escape when printed as an HTML attribute.
  */
 soydata.VERY_UNSAFE.ordainSanitizedHtmlAttribute =
-    soydata.$$makeSanitizedContentFactory_(soydata.SanitizedHtmlAttribute);
+    soydata.$$makeSanitizedContentFactoryWithDefaultDirOnly_(
+        soydata.SanitizedHtmlAttribute);
 
 
 /**
@@ -1298,7 +1523,8 @@ soydata.VERY_UNSAFE.ordainSanitizedHtmlAttribute =
  *     Soy there is no need to escape or filter when printed in CSS context.
  */
 soydata.VERY_UNSAFE.ordainSanitizedCss =
-    soydata.$$makeSanitizedContentFactory_(soydata.SanitizedCss);
+    soydata.$$makeSanitizedContentFactoryWithDefaultDirOnly_(
+        soydata.SanitizedCss);
 
 
 // -----------------------------------------------------------------------------
@@ -1375,6 +1601,14 @@ soy.renderAsElement = function(
 
 
 /**
+ * Whether the locale is right-to-left.
+ *
+ * @type {boolean}
+ */
+soy.$$IS_LOCALE_RTL = goog.i18n.bidi.IS_RTL;
+
+
+/**
  * Builds an augmented map. The returned map will contain mappings from both
  * the base map and the additional map. If the same key appears in both, then
  * the value from the additional map will be visible, while the value from the
@@ -1408,6 +1642,7 @@ soy.$$augmentMap = function(baseMap, additionalMap) {
  * @return {string} The given key.
  */
 soy.$$checkMapKey = function(key) {
+  // TODO: Support map literal with nonstring key.
   if ((typeof key) != 'string') {
     throw Error(
         'Map literal\'s key expression must evaluate to string' +
@@ -1511,8 +1746,8 @@ soy.$$registerDelegateFn = function(
  * (i.e. rendered output would be empty string).
  *
  * @param {string} delTemplateId The delegate template id.
- * @param {string} delTemplateVariant The delegate template variant (can be
- *     empty string).
+ * @param {string|number} delTemplateVariant The delegate template variant (can
+ *     be an empty string, or a number when a global is used).
  * @param {boolean} allowsEmptyDefault Whether to default to the empty template
  *     function if there's no active implementation.
  * @return {Function} The retrieved implementation function.
@@ -1555,48 +1790,219 @@ soy.$$EMPTY_TEMPLATE_FN_ = function(opt_data, opt_sb, opt_ijData) {
 
 
 // -----------------------------------------------------------------------------
+// Internal sanitized content wrappers.
+
+
+/**
+ * Creates a SanitizedContent factory for SanitizedContent types for internal
+ * Soy let and param blocks.
+ *
+ * This is a hack within Soy so that SanitizedContent objects created via let
+ * and param blocks will truth-test as false if they are empty string.
+ * Tricking the Javascript runtime to treat empty SanitizedContent as falsey is
+ * not possible, and changing the Soy compiler to wrap every boolean statement
+ * for just this purpose is impractical.  Instead, we just avoid wrapping empty
+ * string as SanitizedContent, since it's a no-op for empty strings anyways.
+ *
+ * @param {function(new: T)} ctor A constructor.
+ * @return {!function(*, ?goog.i18n.bidi.Dir=): (T|soydata.$$EMPTY_STRING_)}
+ *     A factory that takes content and an optional content direction and
+ *     returns a new instance, or an empty string. If the content direction is
+ *     undefined, ctor.prototype.contentDir is used.
+ * @template T
+ * @private
+ */
+soydata.$$makeSanitizedContentFactoryForInternalBlocks_ = function(ctor) {
+  /** @type {function(new: goog.soy.data.SanitizedContent)} */
+  function InstantiableCtor() {}
+  InstantiableCtor.prototype = ctor.prototype;
+  /**
+   * Creates a ctor-type SanitizedContent instance.
+   *
+   * @param {*} content The content to put in the instance.
+   * @param {?goog.i18n.bidi.Dir=} opt_contentDir The content direction. If
+   *     undefined, ctor.prototype.contentDir is used.
+   * @return {goog.soy.data.SanitizedContent|soydata.$$EMPTY_STRING_} The new
+   *     instance, or an empty string. A new instance is actually of type T
+   *     above (ctor's type, a descendant of SanitizedContent), but there's no
+   *     way to express that here.
+   */
+  function sanitizedContentFactory(content, opt_contentDir) {
+    var contentString = String(content);
+    if (!contentString) {
+      return soydata.$$EMPTY_STRING_.VALUE;
+    }
+    var result = new InstantiableCtor();
+    result.content = String(content);
+    if (opt_contentDir !== undefined) {
+      result.contentDir = opt_contentDir;
+    }
+    return result;
+  }
+  return sanitizedContentFactory;
+};
+
+
+/**
+ * Creates a SanitizedContent factory for SanitizedContent types that should
+ * always have their default directionality for internal Soy let and param
+ * blocks.
+ *
+ * This is a hack within Soy so that SanitizedContent objects created via let
+ * and param blocks will truth-test as false if they are empty string.
+ * Tricking the Javascript runtime to treat empty SanitizedContent as falsey is
+ * not possible, and changing the Soy compiler to wrap every boolean statement
+ * for just this purpose is impractical.  Instead, we just avoid wrapping empty
+ * string as SanitizedContent, since it's a no-op for empty strings anyways.
+ *
+ * @param {function(new: T)} ctor A constructor.
+ * @return {!function(*): (T|soydata.$$EMPTY_STRING_)} A
+ *     factory that takes content and returns a
+ *     new instance (with default directionality, i.e.
+ *     ctor.prototype.contentDir), or an empty string.
+ * @template T
+ * @private
+ */
+soydata.$$makeSanitizedContentFactoryWithDefaultDirOnlyForInternalBlocks_ =
+    function(ctor) {
+  /** @type {function(new: goog.soy.data.SanitizedContent)} */
+  function InstantiableCtor() {}
+  InstantiableCtor.prototype = ctor.prototype;
+  /**
+   * Creates a ctor-type SanitizedContent instance.
+   *
+   * @param {*} content The content to put in the instance.
+   * @return {goog.soy.data.SanitizedContent|soydata.$$EMPTY_STRING_} The new
+   *     instance, or an empty string. A new instance is actually of type T
+   *     above (ctor's type, a descendant of SanitizedContent), but there's no
+   *     way to express that here.
+   */
+  function sanitizedContentFactory(content) {
+    var contentString = String(content);
+    if (!contentString) {
+      return soydata.$$EMPTY_STRING_.VALUE;
+    }
+    var result = new InstantiableCtor();
+    result.content = String(content);
+    return result;
+  }
+  return sanitizedContentFactory;
+};
+
+
+/**
+ * Creates kind="text" block contents (internal use only).
+ *
+ * @param {*} content Text.
+ * @param {?goog.i18n.bidi.Dir=} opt_contentDir The content direction; null if
+ *     unknown and thus to be estimated when necessary. Default: null.
+ * @return {!soydata.UnsanitizedText|soydata.$$EMPTY_STRING_} Wrapped result.
+ */
+soydata.$$markUnsanitizedTextForInternalBlocks = function(
+    content, opt_contentDir) {
+  var contentString = String(content);
+  if (!contentString) {
+    return soydata.$$EMPTY_STRING_.VALUE;
+  }
+  return new soydata.UnsanitizedText(contentString, opt_contentDir);
+};
+
+
+/**
+ * Creates kind="html" block contents (internal use only).
+ *
+ * @param {*} content Text.
+ * @param {?goog.i18n.bidi.Dir=} opt_contentDir The content direction; null if
+ *     unknown and thus to be estimated when necessary. Default: null.
+ * @return {soydata.SanitizedHtml|soydata.$$EMPTY_STRING_} Wrapped result.
+ */
+soydata.VERY_UNSAFE.$$ordainSanitizedHtmlForInternalBlocks =
+    soydata.$$makeSanitizedContentFactoryForInternalBlocks_(
+        soydata.SanitizedHtml);
+
+
+/**
+ * Creates kind="js" block contents (internal use only).
+ *
+ * @param {*} content Text.
+ * @return {soydata.SanitizedJs|soydata.$$EMPTY_STRING_} Wrapped result.
+ */
+soydata.VERY_UNSAFE.$$ordainSanitizedJsForInternalBlocks =
+    soydata.$$makeSanitizedContentFactoryWithDefaultDirOnlyForInternalBlocks_(
+        soydata.SanitizedJs);
+
+
+/**
+ * Creates kind="uri" block contents (internal use only).
+ *
+ * @param {*} content Text.
+ * @return {soydata.SanitizedUri|soydata.$$EMPTY_STRING_} Wrapped result.
+ */
+soydata.VERY_UNSAFE.$$ordainSanitizedUriForInternalBlocks =
+    soydata.$$makeSanitizedContentFactoryWithDefaultDirOnlyForInternalBlocks_(
+        soydata.SanitizedUri);
+
+
+/**
+ * Creates kind="attributes" block contents (internal use only).
+ *
+ * @param {*} content Text.
+ * @return {soydata.SanitizedHtmlAttribute|soydata.$$EMPTY_STRING_} Wrapped
+ *     result.
+ */
+soydata.VERY_UNSAFE.$$ordainSanitizedAttributesForInternalBlocks =
+    soydata.$$makeSanitizedContentFactoryWithDefaultDirOnlyForInternalBlocks_(
+        soydata.SanitizedHtmlAttribute);
+
+
+/**
+ * Creates kind="css" block contents (internal use only).
+ *
+ * @param {*} content Text.
+ * @return {soydata.SanitizedCss|soydata.$$EMPTY_STRING_} Wrapped result.
+ */
+soydata.VERY_UNSAFE.$$ordainSanitizedCssForInternalBlocks =
+    soydata.$$makeSanitizedContentFactoryWithDefaultDirOnlyForInternalBlocks_(
+        soydata.SanitizedCss);
+
+
+// -----------------------------------------------------------------------------
 // Escape/filter/normalize.
 
 
 /**
- * Escapes HTML special characters in a string. Escapes double quote '"' in
- * addition to '&', '<', and '>' so that a string can be included in an HTML
- * tag attribute value within double quotes.
- * Will emit known safe HTML as-is.
+ * Returns a SanitizedHtml object for a particular value. The content direction
+ * is preserved.
  *
- * @param {*} value The string-like value to be escaped. May not be a string,
- *     but the value will be coerced to a string.
- * @return {string} An escaped version of value.
+ * This HTML-escapes the value unless it is already SanitizedHtml. Escapes
+ * double quote '"' in addition to '&', '<', and '>' so that a string can be
+ * included in an HTML tag attribute value within double quotes.
+ *
+ * @param {*} value The value to convert. If it is already a SanitizedHtml
+ *     object, it is left alone.
+ * @return {!soydata.SanitizedHtml} An escaped version of value.
  */
 soy.$$escapeHtml = function(value) {
-  // TODO: Perhaps we should just ignore the contentKind property and instead
-  // look only at the constructor.
-  if (value && value.contentKind &&
-      value.contentKind === goog.soy.data.SanitizedContentKind.HTML) {
-    goog.asserts.assert(
-        value.constructor === soydata.SanitizedHtml);
-    return value.content;
-  }
-  return soy.esc.$$escapeHtmlHelper(value);
+  return soydata.SanitizedHtml.from(value);
 };
 
 
 /**
  * Strips unsafe tags to convert a string of untrusted HTML into HTML that
- * is safe to embed.
+ * is safe to embed. The content direction is preserved.
  *
  * @param {*} value The string-like value to be escaped. May not be a string,
  *     but the value will be coerced to a string.
- * @return {string} A sanitized and normalized version of value.
+ * @return {!soydata.SanitizedHtml} A sanitized and normalized version of value.
  */
 soy.$$cleanHtml = function(value) {
-  if (value && value.contentKind &&
-      value.contentKind === goog.soy.data.SanitizedContentKind.HTML) {
-    goog.asserts.assert(
-        value.constructor === soydata.SanitizedHtml);
-    return value.content;
+  if (soydata.isContentKind(value, soydata.SanitizedContentKind.HTML)) {
+    goog.asserts.assert(value.constructor === soydata.SanitizedHtml);
+    return /** @type {!soydata.SanitizedHtml} */ (value);
   }
-  return soy.$$stripHtmlTags(value, soy.esc.$$SAFE_TAG_WHITELIST_);
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml(
+      soy.$$stripHtmlTags(value, soy.esc.$$SAFE_TAG_WHITELIST_),
+      soydata.getContentDir(value));
 };
 
 
@@ -1619,10 +2025,8 @@ soy.$$cleanHtml = function(value) {
  * @return {string} An escaped version of value.
  */
 soy.$$escapeHtmlRcdata = function(value) {
-  if (value && value.contentKind &&
-      value.contentKind === goog.soy.data.SanitizedContentKind.HTML) {
-    goog.asserts.assert(
-        value.constructor === soydata.SanitizedHtml);
+  if (soydata.isContentKind(value, soydata.SanitizedContentKind.HTML)) {
+    goog.asserts.assert(value.constructor === soydata.SanitizedHtml);
     return soy.esc.$$normalizeHtmlHelper(value.content);
   }
   return soy.esc.$$escapeHtmlHelper(value);
@@ -1751,16 +2155,13 @@ soy.$$balanceTags_ = function(tags) {
  * @return {string} An escaped version of value.
  */
 soy.$$escapeHtmlAttribute = function(value) {
-  if (value && value.contentKind) {
-    // NOTE: We don't accept ATTRIBUTES here because ATTRIBUTES is
-    // actually not the attribute value context, but instead k/v pairs.
-    if (value.contentKind === goog.soy.data.SanitizedContentKind.HTML) {
-      // NOTE: After removing tags, we also escape quotes ("normalize") so that
-      // the HTML can be embedded in attribute context.
-      goog.asserts.assert(
-          value.constructor === soydata.SanitizedHtml);
-      return soy.esc.$$normalizeHtmlHelper(soy.$$stripHtmlTags(value.content));
-    }
+  // NOTE: We don't accept ATTRIBUTES here because ATTRIBUTES is actually not
+  // the attribute value context, but instead k/v pairs.
+  if (soydata.isContentKind(value, soydata.SanitizedContentKind.HTML)) {
+    // NOTE: After removing tags, we also escape quotes ("normalize") so that
+    // the HTML can be embedded in attribute context.
+    goog.asserts.assert(value.constructor === soydata.SanitizedHtml);
+    return soy.esc.$$normalizeHtmlHelper(soy.$$stripHtmlTags(value.content));
   }
   return soy.esc.$$escapeHtmlHelper(value);
 };
@@ -1775,13 +2176,10 @@ soy.$$escapeHtmlAttribute = function(value) {
  * @return {string} An escaped version of value.
  */
 soy.$$escapeHtmlAttributeNospace = function(value) {
-  if (value && value.contentKind) {
-    if (value.contentKind === goog.soy.data.SanitizedContentKind.HTML) {
-      goog.asserts.assert(value.constructor ===
-          soydata.SanitizedHtml);
-      return soy.esc.$$normalizeHtmlNospaceHelper(
-          soy.$$stripHtmlTags(value.content));
-    }
+  if (soydata.isContentKind(value, soydata.SanitizedContentKind.HTML)) {
+    goog.asserts.assert(value.constructor === soydata.SanitizedHtml);
+    return soy.esc.$$normalizeHtmlNospaceHelper(
+        soy.$$stripHtmlTags(value.content));
   }
   return soy.esc.$$escapeHtmlNospaceHelper(value);
 };
@@ -1800,10 +2198,8 @@ soy.$$escapeHtmlAttributeNospace = function(value) {
 soy.$$filterHtmlAttributes = function(value) {
   // NOTE: Explicitly no support for SanitizedContentKind.HTML, since that is
   // meaningless in this context, which is generally *between* html attributes.
-  if (value &&
-      value.contentKind === goog.soy.data.SanitizedContentKind.ATTRIBUTES) {
-    goog.asserts.assert(value.constructor ===
-        soydata.SanitizedHtmlAttribute);
+  if (soydata.isContentKind(value, soydata.SanitizedContentKind.ATTRIBUTES)) {
+    goog.asserts.assert(value.constructor === soydata.SanitizedHtmlAttribute);
     // Add a space at the end to ensure this won't get merged into following
     // attributes, unless the interpretation is unambiguous (ending with quotes
     // or a space).
@@ -1859,12 +2255,10 @@ soy.$$escapeJs = function(value) {
  * @return {string} An escaped version of value.
  */
 soy.$$escapeJsString = function(value) {
-  if (value &&
-      value.contentKind === goog.soy.data.SanitizedContentKind.JS_STR_CHARS) {
+  if (soydata.isContentKind(value, soydata.SanitizedContentKind.JS_STR_CHARS)) {
     // TODO: It might still be worthwhile to normalize it to remove
     // unescaped quotes, null, etc: replace(/(?:^|[^\])['"]/g, '\\$
-    goog.asserts.assert(value.constructor ===
-        soydata.SanitizedJsStrChars);
+    goog.asserts.assert(value.constructor === soydata.SanitizedJsStrChars);
     return value.content;
   }
   return soy.esc.$$escapeJsStringHelper(value);
@@ -1889,9 +2283,8 @@ soy.$$escapeJsValue = function(value) {
     // distinct undefined value.
     return ' null ';
   }
-  if (value.contentKind == goog.soy.data.SanitizedContentKind.JS) {
-    goog.asserts.assert(value.constructor ===
-        soydata.SanitizedJs);
+  if (soydata.isContentKind(value, soydata.SanitizedContentKind.JS)) {
+    goog.asserts.assert(value.constructor === soydata.SanitizedJs);
     return value.content;
   }
   switch (typeof value) {
@@ -1946,9 +2339,8 @@ soy.$$pctEncode_ = function(ch) {
  * @return {string} An escaped version of value.
  */
 soy.$$escapeUri = function(value) {
-  if (value && value.contentKind === goog.soy.data.SanitizedContentKind.URI) {
-    goog.asserts.assert(value.constructor ===
-        soydata.SanitizedUri);
+  if (soydata.isContentKind(value, soydata.SanitizedContentKind.URI)) {
+    goog.asserts.assert(value.constructor === soydata.SanitizedUri);
     return soy.$$normalizeUri(value);
   }
   // Apostophes and parentheses are not matched by encodeURIComponent.
@@ -1985,12 +2377,25 @@ soy.$$normalizeUri = function(value) {
  * @return {string} An escaped version of value.
  */
 soy.$$filterNormalizeUri = function(value) {
-  if (value && value.contentKind == goog.soy.data.SanitizedContentKind.URI) {
-    goog.asserts.assert(value.constructor ===
-        soydata.SanitizedUri);
+  if (soydata.isContentKind(value, soydata.SanitizedContentKind.URI)) {
+    goog.asserts.assert(value.constructor === soydata.SanitizedUri);
     return soy.$$normalizeUri(value);
   }
   return soy.esc.$$filterNormalizeUriHelper(value);
+};
+
+
+/**
+ * Allows only data-protocol image URI's.
+ *
+ * @param {*} value The value to process. May not be a string, but the value
+ *     will be coerced to a string.
+ * @return {!soydata.SanitizedUri} An escaped version of value.
+ */
+soy.$$filterImageDataUri = function(value) {
+  // NOTE: Even if it's a SanitizedUri, we will still filter it.
+  return soydata.VERY_UNSAFE.ordainSanitizedUri(
+      soy.esc.$$filterImageDataUriHelper(value));
 };
 
 
@@ -2014,9 +2419,8 @@ soy.$$escapeCssString = function(value) {
  * @return {string} A safe CSS identifier part, keyword, or quanitity.
  */
 soy.$$filterCssValue = function(value) {
-  if (value && value.contentKind === goog.soy.data.SanitizedContentKind.CSS) {
-    goog.asserts.assert(value.constructor ===
-        soydata.SanitizedCss);
+  if (soydata.isContentKind(value, soydata.SanitizedContentKind.CSS)) {
+    goog.asserts.assert(value.constructor === soydata.SanitizedCss);
     return value.content;
   }
   // Uses == to intentionally match null and undefined for Java compatibility.
@@ -2034,10 +2438,10 @@ soy.$$filterCssValue = function(value) {
  * meant to be used unescaped.
  *
  * @param {*} value The value to filter.
- * @return {string} The value, that we dearly hope will not cause an attack.
+ * @return {*} The value, that we dearly hope will not cause an attack.
  */
 soy.$$filterNoAutoescape = function(value) {
-  if (value && value.contentKind === goog.soy.data.SanitizedContentKind.TEXT) {
+  if (soydata.isContentKind(value, soydata.SanitizedContentKind.TEXT)) {
     // Fail in development mode.
     goog.asserts.fail(
         'Tainted SanitizedContentKind.TEXT for |noAutoescape: `%s`',
@@ -2045,7 +2449,8 @@ soy.$$filterNoAutoescape = function(value) {
     // Return innocuous data in production.
     return 'zSoyz';
   }
-  return String(value);
+
+  return value;
 };
 
 
@@ -2055,11 +2460,18 @@ soy.$$filterNoAutoescape = function(value) {
 
 /**
  * Converts \r\n, \r, and \n to <br>s
- * @param {*} str The string in which to convert newlines.
- * @return {string} A copy of {@code str} with converted newlines.
+ * @param {*} value The string in which to convert newlines.
+ * @return {string|!soydata.SanitizedHtml} A copy of {@code value} with
+ *     converted newlines. If {@code value} is SanitizedHtml, the return value
+ *     is also SanitizedHtml, of the same known directionality.
  */
-soy.$$changeNewlineToBr = function(str) {
-  return goog.string.newLineToBr(String(str), false);
+soy.$$changeNewlineToBr = function(value) {
+  var result = goog.string.newLineToBr(String(value), false);
+  if (soydata.isContentKind(value, soydata.SanitizedContentKind.HTML)) {
+    return soydata.VERY_UNSAFE.ordainSanitizedHtml(
+        result, soydata.getContentDir(value));
+  }
+  return result;
 };
 
 
@@ -2069,14 +2481,22 @@ soy.$$changeNewlineToBr = function(str) {
  * HTML tags or entities. Entites count towards the character count; HTML tags
  * do not.
  *
- * @param {*} str The HTML string to insert word breaks into. Can be other
+ * @param {*} value The HTML string to insert word breaks into. Can be other
  *     types, but the value will be coerced to a string.
  * @param {number} maxCharsBetweenWordBreaks Maximum number of non-space
  *     characters to allow before adding a word break.
- * @return {string} The string including word breaks.
+ * @return {string|!soydata.SanitizedHtml} The string including word
+ *     breaks. If {@code value} is SanitizedHtml, the return value
+ *     is also SanitizedHtml, of the same known directionality.
  */
-soy.$$insertWordBreaks = function(str, maxCharsBetweenWordBreaks) {
-  return goog.format.insertWordBreaks(String(str), maxCharsBetweenWordBreaks);
+soy.$$insertWordBreaks = function(value, maxCharsBetweenWordBreaks) {
+  var result = goog.format.insertWordBreaks(
+      String(value), maxCharsBetweenWordBreaks);
+  if (soydata.isContentKind(value, soydata.SanitizedContentKind.HTML)) {
+    return soydata.VERY_UNSAFE.ordainSanitizedHtml(
+        result, soydata.getContentDir(value));
+  }
+  return result;
 };
 
 
@@ -2178,16 +2598,22 @@ soy.$$getBidiFormatterInstance_ = function(bidiGlobalDir) {
  * Estimate the overall directionality of text. If opt_isHtml, makes sure to
  * ignore the LTR nature of the mark-up and escapes in text, making the logic
  * suitable for HTML and HTML-escaped text.
- * @param {string} text The text whose directionality is to be estimated.
+ * If text has a goog.i18n.bidi.Dir-valued contentDir, this is used instead of
+ * estimating the directionality.
+ *
+ * @param {*} text The content whose directionality is to be estimated.
  * @param {boolean=} opt_isHtml Whether text is HTML/HTML-escaped.
  *     Default: false.
  * @return {number} 1 if text is LTR, -1 if it is RTL, and 0 if it is neutral.
  */
 soy.$$bidiTextDir = function(text, opt_isHtml) {
-  if (!text) {
-    return 0;
+  var contentDir = soydata.getContentDir(text);
+  if (contentDir != null) {
+    return contentDir;
   }
-  return goog.i18n.bidi.detectRtlDirectionality(text, opt_isHtml) ? -1 : 1;
+  var isHtml = opt_isHtml ||
+      soydata.isContentKind(text, soydata.SanitizedContentKind.HTML);
+  return goog.i18n.bidi.estimateDirection(text + '', isHtml);
 };
 
 
@@ -2197,9 +2623,12 @@ soy.$$bidiTextDir = function(text, opt_isHtml) {
  * Otherwise, returns the empty string.
  * If opt_isHtml, makes sure to ignore the LTR nature of the mark-up and escapes
  * in text, making the logic suitable for HTML and HTML-escaped text.
+ * If text has a goog.i18n.bidi.Dir-valued contentDir, this is used instead of
+ * estimating the directionality.
+ *
  * @param {number} bidiGlobalDir The global directionality context: 1 if ltr, -1
  *     if rtl, 0 if unknown.
- * @param {string} text The text whose directionality is to be estimated.
+ * @param {*} text The content whose directionality is to be estimated.
  * @param {boolean=} opt_isHtml Whether text is HTML/HTML-escaped.
  *     Default: false.
  * @return {soydata.SanitizedHtmlAttribute} 'dir="rtl"' for RTL text in non-RTL
@@ -2207,8 +2636,15 @@ soy.$$bidiTextDir = function(text, opt_isHtml) {
  *     else, the empty string.
  */
 soy.$$bidiDirAttr = function(bidiGlobalDir, text, opt_isHtml) {
+  var formatter = soy.$$getBidiFormatterInstance_(bidiGlobalDir);
+  var contentDir = soydata.getContentDir(text);
+  if (contentDir == null) {
+    var isHtml = opt_isHtml ||
+        soydata.isContentKind(text, soydata.SanitizedContentKind.HTML);
+    contentDir = goog.i18n.bidi.estimateDirection(text + '', isHtml);
+  }
   return soydata.VERY_UNSAFE.ordainSanitizedHtmlAttribute(
-      soy.$$getBidiFormatterInstance_(bidiGlobalDir).dirAttr(text, opt_isHtml));
+      formatter.knownDirAttr(contentDir));
 };
 
 
@@ -2218,9 +2654,12 @@ soy.$$bidiDirAttr = function(bidiGlobalDir, text, opt_isHtml) {
  * bidiGlobalDir. Otherwise returns the empty string.
  * If opt_isHtml, makes sure to ignore the LTR nature of the mark-up and escapes
  * in text, making the logic suitable for HTML and HTML-escaped text.
+ * If text has a goog.i18n.bidi.Dir-valued contentDir, this is used instead of
+ * estimating the directionality.
+ *
  * @param {number} bidiGlobalDir The global directionality context: 1 if ltr, -1
  *     if rtl, 0 if unknown.
- * @param {string} text The text whose directionality is to be estimated.
+ * @param {*} text The content whose directionality is to be estimated.
  * @param {boolean=} opt_isHtml Whether text is HTML/HTML-escaped.
  *     Default: false.
  * @return {string} A Unicode bidi mark matching bidiGlobalDir, or the empty
@@ -2229,49 +2668,121 @@ soy.$$bidiDirAttr = function(bidiGlobalDir, text, opt_isHtml) {
  */
 soy.$$bidiMarkAfter = function(bidiGlobalDir, text, opt_isHtml) {
   var formatter = soy.$$getBidiFormatterInstance_(bidiGlobalDir);
-  return formatter.markAfter(text, opt_isHtml);
+  var isHtml = opt_isHtml ||
+      soydata.isContentKind(text, soydata.SanitizedContentKind.HTML);
+  return formatter.markAfterKnownDir(soydata.getContentDir(text), text + '',
+      isHtml);
 };
 
 
 /**
- * Returns str wrapped in a <span dir="ltr|rtl"> according to its directionality
- * - but only if that is neither neutral nor the same as the global context.
- * Otherwise, returns str unchanged.
- * Always treats str as HTML/HTML-escaped, i.e. ignores mark-up and escapes when
- * estimating str's directionality.
+ * Returns text wrapped in a <span dir="ltr|rtl"> according to its
+ * directionality - but only if that is neither neutral nor the same as the
+ * global context. Otherwise, returns text unchanged.
+ * Always treats text as HTML/HTML-escaped, i.e. ignores mark-up and escapes
+ * when estimating text's directionality.
+ * If text has a goog.i18n.bidi.Dir-valued contentDir, this is used instead of
+ * estimating the directionality.
+ *
  * @param {number} bidiGlobalDir The global directionality context: 1 if ltr, -1
  *     if rtl, 0 if unknown.
- * @param {*} str The string to be wrapped. Can be other types, but the value
+ * @param {*} text The string to be wrapped. Can be other types, but the value
  *     will be coerced to a string.
- * @return {string} The wrapped string.
+ * @return {!goog.soy.data.SanitizedContent|string} The wrapped text.
  */
-soy.$$bidiSpanWrap = function(bidiGlobalDir, str) {
+soy.$$bidiSpanWrap = function(bidiGlobalDir, text) {
   var formatter = soy.$$getBidiFormatterInstance_(bidiGlobalDir);
-  return formatter.spanWrap(str + '', true);
+
+  // We always treat the value as HTML, because span-wrapping is only useful
+  // when its output will be treated as HTML (without escaping), and because
+  // |bidiSpanWrap is not itself specified to do HTML escaping in Soy. (Both
+  // explicit and automatic HTML escaping, if any, is done before calling
+  // |bidiSpanWrap because the BidiSpanWrapDirective Java class implements
+  // SanitizedContentOperator, but this does not mean that the input has to be
+  // HTML SanitizedContent. In legacy usage, a string that is not
+  // SanitizedContent is often printed in an autoescape="false" template or by
+  // a print with a |noAutoescape, in which case our input is just SoyData.) If
+  // the output will be treated as HTML, the input had better be safe
+  // HTML/HTML-escaped (even if it isn't HTML SanitizedData), or we have an XSS
+  // opportunity and a much bigger problem than bidi garbling.
+  var wrappedText = formatter.spanWrapWithKnownDir(
+      soydata.getContentDir(text), text + '', true /* opt_isHtml */);
+
+  // Like other directives whose Java class implements SanitizedContentOperator,
+  // |bidiSpanWrap is called after the escaping (if any) has already been done,
+  // and thus there is no need for it to produce actual SanitizedContent.
+  return wrappedText;
 };
 
 
 /**
- * Returns str wrapped in Unicode BiDi formatting characters according to its
+ * Returns text wrapped in Unicode BiDi formatting characters according to its
  * directionality, i.e. either LRE or RLE at the beginning and PDF at the end -
- * but only if str's directionality is neither neutral nor the same as the
- * global context. Otherwise, returns str unchanged.
- * Always treats str as HTML/HTML-escaped, i.e. ignores mark-up and escapes when
- * estimating str's directionality.
+ * but only if text's directionality is neither neutral nor the same as the
+ * global context. Otherwise, returns text unchanged.
+ * Only treats soydata.SanitizedHtml as HTML/HTML-escaped, i.e. ignores mark-up
+ * and escapes when estimating text's directionality.
+ * If text has a goog.i18n.bidi.Dir-valued contentDir, this is used instead of
+ * estimating the directionality.
+ *
  * @param {number} bidiGlobalDir The global directionality context: 1 if ltr, -1
  *     if rtl, 0 if unknown.
- * @param {*} str The string to be wrapped. Can be other types, but the value
+ * @param {*} text The string to be wrapped. Can be other types, but the value
  *     will be coerced to a string.
- * @return {string} The wrapped string.
+ * @return {!goog.soy.data.SanitizedContent|string} The wrapped string.
  */
-soy.$$bidiUnicodeWrap = function(bidiGlobalDir, str) {
+soy.$$bidiUnicodeWrap = function(bidiGlobalDir, text) {
   var formatter = soy.$$getBidiFormatterInstance_(bidiGlobalDir);
-  return formatter.unicodeWrap(str + '', true);
+
+  // We treat the value as HTML if and only if it says it's HTML, even though in
+  // legacy usage, we sometimes have an HTML string (not SanitizedContent) that
+  // is passed to an autoescape="false" template or a {print $foo|noAutoescape},
+  // with the output going into an HTML context without escaping. We simply have
+  // no way of knowing if this is what is happening when we get
+  // non-SanitizedContent input, and most of the time it isn't.
+  var isHtml = soydata.isContentKind(text, soydata.SanitizedContentKind.HTML);
+  var wrappedText = formatter.unicodeWrapWithKnownDir(
+      soydata.getContentDir(text), text + '', isHtml);
+
+  // Bidi-wrapping a value converts it to the context directionality. Since it
+  // does not cost us anything, we will indicate this known direction in the
+  // output SanitizedContent, even though the intended consumer of that
+  // information - a bidi wrapping directive - has already been run.
+  var wrappedTextDir = formatter.getContextDir();
+
+  // Unicode-wrapping UnsanitizedText gives UnsanitizedText.
+  // Unicode-wrapping safe HTML or JS string data gives valid, safe HTML or JS
+  // string data.
+  // ATTENTION: Do these need to be ...ForInternalBlocks()?
+  if (soydata.isContentKind(text, soydata.SanitizedContentKind.TEXT)) {
+    return new soydata.UnsanitizedText(wrappedText, wrappedTextDir);
+  }
+  if (isHtml) {
+    return soydata.VERY_UNSAFE.ordainSanitizedHtml(wrappedText, wrappedTextDir);
+  }
+  if (soydata.isContentKind(text, soydata.SanitizedContentKind.JS_STR_CHARS)) {
+    return soydata.VERY_UNSAFE.ordainSanitizedJsStrChars(
+        wrappedText, wrappedTextDir);
+  }
+
+  // Unicode-wrapping does not conform to the syntax of the other types of
+  // content. For lack of anything better to do, we we do not declare a content
+  // kind at all by falling through to the non-SanitizedContent case below.
+  // TODO(user): Consider throwing a runtime error on receipt of
+  // SanitizedContent other than TEXT, HTML, or JS_STR_CHARS.
+
+  // The input was not SanitizedContent, so our output isn't SanitizedContent
+  // either.
+  return wrappedText;
 };
 
 
 // -----------------------------------------------------------------------------
 // Generated code.
+
+
+
+
 
 
 
@@ -2286,7 +2797,7 @@ soy.esc.$$escapeUriHelper = function(v) {
 };
 
 /**
- * Maps charcters to the escaped versions for the named escape directives.
+ * Maps characters to the escaped versions for the named escape directives.
  * @type {Object.<string, string>}
  * @private
  */
@@ -2314,7 +2825,7 @@ soy.esc.$$ESCAPE_MAP_FOR_ESCAPE_HTML__AND__NORMALIZE_HTML__AND__ESCAPE_HTML_NOSP
 };
 
 /**
- * A function that can be used with String.replace..
+ * A function that can be used with String.replace.
  * @param {string} ch A single character matched by a compatible matcher.
  * @return {string} A token in the output language.
  * @private
@@ -2324,7 +2835,7 @@ soy.esc.$$REPLACER_FOR_ESCAPE_HTML__AND__NORMALIZE_HTML__AND__ESCAPE_HTML_NOSPAC
 };
 
 /**
- * Maps charcters to the escaped versions for the named escape directives.
+ * Maps characters to the escaped versions for the named escape directives.
  * @type {Object.<string, string>}
  * @private
  */
@@ -2366,7 +2877,7 @@ soy.esc.$$ESCAPE_MAP_FOR_ESCAPE_JS_STRING__AND__ESCAPE_JS_REGEX_ = {
 };
 
 /**
- * A function that can be used with String.replace..
+ * A function that can be used with String.replace.
  * @param {string} ch A single character matched by a compatible matcher.
  * @return {string} A token in the output language.
  * @private
@@ -2376,7 +2887,7 @@ soy.esc.$$REPLACER_FOR_ESCAPE_JS_STRING__AND__ESCAPE_JS_REGEX_ = function(ch) {
 };
 
 /**
- * Maps charcters to the escaped versions for the named escape directives.
+ * Maps characters to the escaped versions for the named escape directives.
  * @type {Object.<string, string>}
  * @private
  */
@@ -2411,7 +2922,7 @@ soy.esc.$$ESCAPE_MAP_FOR_ESCAPE_CSS_STRING_ = {
 };
 
 /**
- * A function that can be used with String.replace..
+ * A function that can be used with String.replace.
  * @param {string} ch A single character matched by a compatible matcher.
  * @return {string} A token in the output language.
  * @private
@@ -2421,7 +2932,7 @@ soy.esc.$$REPLACER_FOR_ESCAPE_CSS_STRING_ = function(ch) {
 };
 
 /**
- * Maps charcters to the escaped versions for the named escape directives.
+ * Maps characters to the escaped versions for the named escape directives.
  * @type {Object.<string, string>}
  * @private
  */
@@ -2494,7 +3005,7 @@ soy.esc.$$ESCAPE_MAP_FOR_NORMALIZE_URI__AND__FILTER_NORMALIZE_URI_ = {
 };
 
 /**
- * A function that can be used with String.replace..
+ * A function that can be used with String.replace.
  * @param {string} ch A single character matched by a compatible matcher.
  * @return {string} A token in the output language.
  * @private
@@ -2572,6 +3083,13 @@ soy.esc.$$FILTER_FOR_FILTER_CSS_VALUE_ = /^(?!-*(?:expression|(?:moz-)?binding))
  * @private
  */
 soy.esc.$$FILTER_FOR_FILTER_NORMALIZE_URI_ = /^(?:(?:https?|mailto):|[^&:\/?#]*(?:[\/?#]|$))/i;
+
+/**
+ * A pattern that vets values produced by the named directives.
+ * @type RegExp
+ * @private
+ */
+soy.esc.$$FILTER_FOR_FILTER_IMAGE_DATA_URI_ = /^data:image\/(?:bmp|gif|jpe?g|png|tiff|webp);base64,[a-z0-9+\/]+=*$/i;
 
 /**
  * A pattern that vets values produced by the named directives.
@@ -2709,6 +3227,19 @@ soy.esc.$$filterNormalizeUriHelper = function(value) {
   return str.replace(
       soy.esc.$$MATCHER_FOR_NORMALIZE_URI__AND__FILTER_NORMALIZE_URI_,
       soy.esc.$$REPLACER_FOR_NORMALIZE_URI__AND__FILTER_NORMALIZE_URI_);
+};
+
+/**
+ * A helper for the Soy directive |filterImageDataUri
+ * @param {*} value Can be of any type but will be coerced to a string.
+ * @return {string} The escaped text.
+ */
+soy.esc.$$filterImageDataUriHelper = function(value) {
+  var str = String(value);
+  if (!soy.esc.$$FILTER_FOR_FILTER_IMAGE_DATA_URI_.test(str)) {
+    return 'data:image/gif;base64,zSoyz';
+  }
+  return str;
 };
 
 /**

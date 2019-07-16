@@ -68,7 +68,7 @@ goog.inherits(Blockly.FieldDropdown, Blockly.Field);
 /**
  * Construct a FieldDropdown from a JSON arg object.f
  * @param {!Object} options A JSON object with options (options).
- * @returns {!Blockly.FieldDropdown} The new field instance.
+ * @return {!Blockly.FieldDropdown} The new field instance.
  * @package
  * @nocollapse
  */
@@ -249,7 +249,7 @@ Blockly.FieldDropdown.prototype.createWidget_ = function(menu) {
  * the size of the checkmark that is displayed next to the currently selected
  * item. This means that the item text will be positioned directly under the
  * field text, rather than offset slightly.
- * @returns {!Object} The bounding rectangle of the anchor, in window
+ * @return {!Object} The bounding rectangle of the anchor, in window
  *     coordinates.
  * @private
  */
@@ -397,8 +397,8 @@ Blockly.FieldDropdown.prototype.getValue = function() {
  * @param {string} newValue New value to set.
  */
 Blockly.FieldDropdown.prototype.setValue = function(newValue) {
-  if (newValue === null || newValue === this.value_) {
-    return;  // No change if null.
+  if (newValue === null || (newValue === this.value_ && this.text_)) {
+    return;  // No change if null and text_ was initialized.
   }
   if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.BlockChange(
@@ -580,13 +580,13 @@ Blockly.FieldDropdown.changeRecentModuleColors = function(activeIDsDict, recentI
     var moduleType = listOfModuleTypes[key];
 
      //Go through all the active modules of type "moduleType" and add them to the "global" list above
-    if (moduleType in activeIDsDict) {
+    if (activeIdsDict && moduleType in activeIDsDict) {
       for (var activeModule in activeIDsDict[moduleType]) {
         listOfActiveModules.push(activeIDsDict[moduleType][activeModule][0]);
       }
     }
      //Do the same for the recent modules
-    if (moduleType in recentIDsDict) {
+    if (recentIDsDict && moduleType in recentIDsDict) {
       for (var recentModule in recentIDsDict[moduleType]) {
         listOfRecentModules.push(recentIDsDict[moduleType][recentModule][0]);
       }

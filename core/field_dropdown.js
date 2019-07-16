@@ -34,6 +34,7 @@ goog.require('Blockly.utils.uiMenu');
 
 goog.require('goog.events');
 goog.require('goog.ui.Menu');
+goog.require('goog.ui.FilteredMenu');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.userAgent');
 
@@ -50,10 +51,13 @@ goog.require('goog.userAgent');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
+Blockly.FieldDropdown = function(menuGenerator, opt_validator, shouldAllowSearch = false) {
   if (typeof menuGenerator != 'function') {
     Blockly.FieldDropdown.validateOptions_(menuGenerator);
   }
+  
+  this.shouldAllowSearch_ = shouldAllowSearch;
+
   this.menuGenerator_ = menuGenerator;
 
   this.trimOptions_();
@@ -174,7 +178,13 @@ Blockly.FieldDropdown.prototype.addActionListener_ = function(menu) {
  * @private
  */
 Blockly.FieldDropdown.prototype.createMenu_ = function() {
-  var menu = new goog.ui.Menu();
+  if (this.shouldAllowSearch_) {
+    var menu = new goog.ui.FilteredMenu();
+  }
+  else {
+    var menu = new goog.ui.Menu();
+  }
+  
   menu.setRightToLeft(this.sourceBlock_.RTL);
   var options = this.getOptions();
   for (var i = 0; i < options.length; i++) {
@@ -194,6 +204,30 @@ Blockly.FieldDropdown.prototype.createMenu_ = function() {
     menu.addChild(menuItem, true);
     menuItem.setChecked(value == this.value_);
   }
+
+  
+  if (menu.filterInput_) {
+    menu.filterInput_.setAttribute('placeholder', 'Search');
+    menu.filterInput_.setAttribute('id', 'dropdownSearchInput');
+
+    var clr = this.sourceBlock_.colour_;
+    var style = "#dropdownSearchInput { border-bottom: 2px solid " + clr + "; }";
+    style = style + "#dropdownSearchInput:focus { background-color: " + clr + "; }";
+    
+    if (!this.styleTag_) {
+        this.styleTag_ = document.createElement('style');
+    }
+
+    if (this.styleTag_.styleSheet) {
+        this.styleTag_.styleSheet.cssText = style;
+    }
+    else {
+        this.styleTag_.appendChild(document.createTextNode(style));
+    }
+    
+    document.getElementsByTagName('head')[0].appendChild(this.styleTag_);
+  }
+  
   return menu;
 };
 

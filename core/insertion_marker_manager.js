@@ -277,7 +277,9 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
       var input = sourceBlock.inputList[i];
       for (var j = 0; j < input.fieldRow.length; j++) {
         var field = input.fieldRow[j];
-        result.setFieldValue(field.getValue(), field.name);
+        if (field.name) {
+          result.setFieldValue(field.getValue(), field.name);
+        }
       }
     }
 

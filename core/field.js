@@ -645,6 +645,15 @@ Blockly.Field.prototype.getSize = function() {
 };
 
 /**
+ * Get the size of the visible field, as used in new rendering.
+ * @return {!goog.math.Size} The size of the visible field.
+ * @package
+ */
+Blockly.Field.prototype.getCorrectedSize = function() {
+  return this.getSize();
+};
+
+/**
  * Returns the bounding box of the rendered field, accounting for workspace
  * scaling.
  * @return {!Object} An object with top, bottom, left, and right in pixels

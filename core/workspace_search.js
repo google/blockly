@@ -51,9 +51,15 @@ Blockly.Search = function(workspace) {
 
     thisObj.resultsNumberHolder_ = document.getElementById("resultsCount");
     
+    thisObj.buttonsHolder_ = document.getElementById("buttonsHolder");
     thisObj.prevButton_ = document.getElementById("prevWorkspaceHolder");
     thisObj.nextButton_ = document.getElementById("nextWorkspaceHolder");
-    let closeButton = document.getElementById("closeWorkspaceHolder");
+    // let closeButton = document.getElementById("closeWorkspaceHolder");
+
+
+    thisObj.resultsNumberHolder_.style.minWidth = "0px";
+    thisObj.resultsNumberHolder_.style.maxWidth = "0px";
+    thisObj.buttonsHolder_.style.maxWidth = "0px";
 
     // thisObj.searchInput_ = document.createElement("input");
     // thisObj.searchInput_.setAttribute("id", "workspaceSearchInput");
@@ -74,11 +80,38 @@ Blockly.Search = function(workspace) {
 
     thisObj.searchInput_.addEventListener("click", function(event) {
       event.stopPropagation();
+
+      thisObj.resultsNumberHolder_.style.minWidth = "50px";
+      thisObj.resultsNumberHolder_.style.maxWidth = "50px";
+      thisObj.buttonsHolder_.style.maxWidth = "140px";
     });
 
-    // thisObj.searchInput_.addEventListener("blur", function(event) {
-    //   thisObj.onBlur(event);
-    // })
+    thisObj.searchInput_.addEventListener("blur", function(event) {
+      if (event.relatedTarget && 
+        ((event.relatedTarget.id && event.relatedTarget.id == "workspaceSearchDiv") || 
+        (event.relatedTarget.id && event.relatedTarget.id == "resultsCount") || 
+        (event.relatedTarget.id && event.relatedTarget.id == "prevWorkspaceHolder") || 
+        (event.relatedTarget.id && event.relatedTarget.id == "nextWorkspaceHolder") || 
+        (event.relatedTarget.id && event.relatedTarget.id == "closeWorkspaceHolder"))) {
+          event.stopPropagation();
+          thisObj.focusSearchField();
+          return;
+        }
+        
+      thisObj.onBlur(event);
+    })
+
+    thisObj.searchInput_.addEventListener("search", function(event) {
+      event.preventDefault();
+      
+      if (thisObj.searchInput_.value.length == 0) {
+        thisObj.searchInput_.blur();
+        thisObj.onBlur(event);
+        return;
+      }
+
+      // thisObj.executeSearchOnKeyUp(event, thisObj);
+    })
 
     thisObj.searchInput_.addEventListener("keyup", function(event) {
       thisObj.executeSearchOnKeyUp(event, thisObj);
@@ -95,11 +128,11 @@ Blockly.Search = function(workspace) {
       thisObj.showNextResult(false);
     });
 
-    closeButton.addEventListener("click", function(event) { 
-      event.preventDefault();
-      thisObj.searchInput_.blur();
-      thisObj.onBlur(event);
-    });
+    // closeButton.addEventListener("click", function(event) { 
+    //   event.preventDefault();
+    //   thisObj.searchInput_.blur();
+    //   thisObj.onBlur(event);
+    // });
     
   }, 100);
 };
@@ -255,6 +288,11 @@ Blockly.Search.prototype.blocksMatchingSearchTerms = function(terms) {
   var intersectingMatches = null;
 
     for (var i = 0; i < terms.length; i++) {
+
+      if (terms[i].length == 0) {
+        continue;
+      }
+
     var matchSet = new goog.structs.Set(this.blocksMatchingSearchTerm(terms[i]));
     if (intersectingMatches) {
       intersectingMatches = intersectingMatches.intersection(matchSet);
@@ -316,14 +354,18 @@ Blockly.Search.prototype.showNextResult = function(direction) {
   var search = this;
 
   if (search.finalResults_.length == 0) {
+    search.workspace_.highlightBlock("");
+    if (search.currentResult) {
+        search.currentResult.unselect();
+    }
     search.resultsNumberHolder_.innerHTML = "0/0";
-    search.nextButton_.disabled = true;
-    search.prevButton_.disabled = true;
+    // search.nextButton_.disabled = true;
+    // search.prevButton_.disabled = true;
     return;
   }
 
-  search.nextButton_.disabled = false;
-  search.prevButton_.disabled = false;
+  // search.nextButton_.disabled = false;
+  // search.prevButton_.disabled = false;
 
   if (direction) {
     search.currentIndex++;
@@ -358,15 +400,21 @@ Blockly.Search.prototype.onBlur = function(e) {
 
   search.searchInput_.value = "";
 
-  search.resultsNumberHolder_.innerHTML = "0/0";
+  search.resultsNumberHolder_.innerHTML = "";
 
   // search.searchMenu_.style.visibility = "hidden";
+  search.resultsNumberHolder_.style.minWidth = "0px";
+  search.resultsNumberHolder_.style.maxWidth = "0px";
+  search.buttonsHolder_.style.maxWidth = "0px";
 
   search.finalResults_ = [];
 };
 
 Blockly.Search.prototype.focusSearchField = function() {
   // this.searchMenu_.style.visibility = "visible";
+  this.resultsNumberHolder_.style.minWidth = "50px";
+  this.resultsNumberHolder_.style.maxWidth = "50px";
+  this.buttonsHolder_.style.maxWidth = "140px";
 
   this.searchInput_.focus();
 };

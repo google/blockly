@@ -392,9 +392,9 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
         lastElement = childIn;
         break;
       case 'SEARCH':
-        // var treeSearch = new Blockly.Toolbox.TreeSearch(this);
-        // treeSearch.hexColour = '#144bb2';
-        // treeOut.add(treeSearch);
+        var treeSearch = new Blockly.Toolbox.TreeSearch(this);
+        treeSearch.hexColour = '#144bb2';
+        treeOut.add(treeSearch);
         lastElement = childIn;
         break;
     }
@@ -966,6 +966,9 @@ Blockly.Toolbox.prototype.blocksMatchingSearchTerms = function(terms) {
   var intersectingMatches = null;
 
    for (var i = 0; i < terms.length; i++) {
+     if (terms[i].length == 0) {
+       continue;
+     }
     var matchSet = new goog.structs.Set(this.blocksMatchingSearchTerm(terms[i]));
     if (intersectingMatches) {
       intersectingMatches = intersectingMatches.intersection(matchSet);

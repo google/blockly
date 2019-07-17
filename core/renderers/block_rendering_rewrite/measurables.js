@@ -1,7 +1,6 @@
 goog.provide('Blockly.BlockRendering.Measurable');
 
-goog.require('BRC');
-/* global BRC */
+goog.require('Blockly.renderingConstants');
 
 /**
  * The base class to represent a part of a block that takes up space during
@@ -213,13 +212,13 @@ Blockly.BlockRendering.InlineInput = function(input) {
   this.type = 'inline input';
 
   if (!this.connectedBlock) {
-    this.height = BRC.EMPTY_INLINE_INPUT_HEIGHT;
-    this.width = BRC.EMPTY_INLINE_INPUT_WIDTH;
+    this.height = Blockly.renderingConstants.EMPTY_INLINE_INPUT_HEIGHT;
+    this.width = Blockly.renderingConstants.EMPTY_INLINE_INPUT_WIDTH;
   } else {
     // We allow the dark path to show on the parent block so that the child
     // block looks embossed.  This takes up an extra pixel in both x and y.
-    this.width = this.connectedBlockWidth + BRC.TAB_WIDTH + BRC.DARK_PATH_OFFSET;
-    this.height = this.connectedBlockHeight + BRC.DARK_PATH_OFFSET;
+    this.width = this.connectedBlockWidth + Blockly.renderingConstants.TAB_WIDTH + Blockly.renderingConstants.DARK_PATH_OFFSET;
+    this.height = this.connectedBlockHeight + Blockly.renderingConstants.DARK_PATH_OFFSET;
   }
 };
 goog.inherits(Blockly.BlockRendering.InlineInput, Blockly.BlockRendering.Input);
@@ -237,13 +236,13 @@ Blockly.BlockRendering.StatementInput = function(input) {
   this.type = 'statement input';
 
   if (!this.connectedBlock) {
-    this.height = BRC.EMPTY_STATEMENT_INPUT_HEIGHT;
-    this.width = BRC.EMPTY_STATEMENT_INPUT_WIDTH;
+    this.height = Blockly.renderingConstants.EMPTY_STATEMENT_INPUT_HEIGHT;
+    this.width = Blockly.renderingConstants.EMPTY_STATEMENT_INPUT_WIDTH;
   } else {
-    this.width = BRC.POPULATED_STATEMENT_INPUT_WIDTH;
-    this.height = this.connectedBlockHeight + BRC.STATEMENT_BOTTOM_SPACER;
+    this.width = Blockly.renderingConstants.POPULATED_STATEMENT_INPUT_WIDTH;
+    this.height = this.connectedBlockHeight + Blockly.renderingConstants.STATEMENT_BOTTOM_SPACER;
     if (this.connectedBlock.nextConnection) {
-      this.height -= BRC.NOTCH_HEIGHT;
+      this.height -= Blockly.renderingConstants.NOTCH_HEIGHT;
     }
   }
 };
@@ -263,11 +262,11 @@ Blockly.BlockRendering.ExternalValueInput = function(input) {
   this.type = 'external value input';
 
   if (!this.connectedBlock) {
-    this.height = BRC.TAB_HEIGHT;
+    this.height = Blockly.renderingConstants.TAB_HEIGHT;
   } else {
-    this.height = this.connectedBlockHeight - 2 * BRC.TAB_OFFSET_FROM_TOP;
+    this.height = this.connectedBlockHeight - 2 * Blockly.renderingConstants.TAB_OFFSET_FROM_TOP;
   }
-  this.width = BRC.EXTERNAL_VALUE_INPUT_WIDTH;
+  this.width = Blockly.renderingConstants.EXTERNAL_VALUE_INPUT_WIDTH;
 };
 goog.inherits(Blockly.BlockRendering.ExternalValueInput,
     Blockly.BlockRendering.Input);
@@ -281,8 +280,8 @@ goog.inherits(Blockly.BlockRendering.ExternalValueInput,
 Blockly.BlockRendering.PreviousConnection = function() {
   Blockly.BlockRendering.PreviousConnection.superClass_.constructor.call(this);
   this.type = 'previous connection';
-  this.height = BRC.NOTCH_HEIGHT;
-  this.width = BRC.NOTCH_WIDTH;
+  this.height = Blockly.renderingConstants.NOTCH_HEIGHT;
+  this.width = Blockly.renderingConstants.NOTCH_WIDTH;
 
 };
 goog.inherits(Blockly.BlockRendering.PreviousConnection, Blockly.BlockRendering.Measurable);
@@ -296,8 +295,8 @@ goog.inherits(Blockly.BlockRendering.PreviousConnection, Blockly.BlockRendering.
 Blockly.BlockRendering.NextConnection = function() {
   Blockly.BlockRendering.NextConnection.superClass_.constructor.call(this);
   this.type = 'next connection';
-  this.height = BRC.NOTCH_HEIGHT;
-  this.width = BRC.NOTCH_WIDTH;
+  this.height = Blockly.renderingConstants.NOTCH_HEIGHT;
+  this.width = Blockly.renderingConstants.NOTCH_WIDTH;
 };
 goog.inherits(Blockly.BlockRendering.NextConnection, Blockly.BlockRendering.Measurable);
 
@@ -310,8 +309,8 @@ goog.inherits(Blockly.BlockRendering.NextConnection, Blockly.BlockRendering.Meas
 Blockly.BlockRendering.Hat = function() {
   Blockly.BlockRendering.Hat.superClass_.constructor.call(this);
   this.type = 'hat';
-  this.height = BRC.NO_PADDING;
-  this.width = BRC.START_HAT_WIDTH;
+  this.height = Blockly.renderingConstants.NO_PADDING;
+  this.width = Blockly.renderingConstants.START_HAT_WIDTH;
 
 };
 goog.inherits(Blockly.BlockRendering.Hat, Blockly.BlockRendering.Measurable);
@@ -325,8 +324,8 @@ goog.inherits(Blockly.BlockRendering.Hat, Blockly.BlockRendering.Measurable);
 Blockly.BlockRendering.SquareCorner = function() {
   Blockly.BlockRendering.SquareCorner.superClass_.constructor.call(this);
   this.type = 'square corner';
-  this.height = BRC.NOTCH_HEIGHT;
-  this.width = BRC.NO_PADDING;
+  this.height = Blockly.renderingConstants.NOTCH_HEIGHT;
+  this.width = Blockly.renderingConstants.NO_PADDING;
 
 };
 goog.inherits(Blockly.BlockRendering.SquareCorner, Blockly.BlockRendering.Measurable);
@@ -340,10 +339,10 @@ goog.inherits(Blockly.BlockRendering.SquareCorner, Blockly.BlockRendering.Measur
 Blockly.BlockRendering.RoundCorner = function() {
   Blockly.BlockRendering.RoundCorner.superClass_.constructor.call(this);
   this.type = 'round corner';
-  this.width = BRC.CORNER_RADIUS;
+  this.width = Blockly.renderingConstants.CORNER_RADIUS;
   // The rounded corner extends into the next row by 4 so we only take the
   // height that is aligned with this row.
-  this.height = BRC.NOTCH_HEIGHT;
+  this.height = Blockly.renderingConstants.NOTCH_HEIGHT;
 
 };
 goog.inherits(Blockly.BlockRendering.RoundCorner, Blockly.BlockRendering.Measurable);
@@ -416,7 +415,7 @@ goog.inherits(Blockly.BlockRendering.BetweenRowSpacer,
 Blockly.BlockRendering.InRowSpacer = function(width) {
   this.type = 'in-row spacer';
   this.width = width;
-  this.height = BRC.SPACER_DEFAULT_HEIGHT;
+  this.height = Blockly.renderingConstants.SPACER_DEFAULT_HEIGHT;
 };
 goog.inherits(Blockly.BlockRendering.InRowSpacer,
     Blockly.BlockRendering.Measurable);
@@ -443,9 +442,9 @@ Blockly.BlockRendering.TopRow = function(block) {
   // This is the minimum height for the row. If one of its elements has a greater
   // height it will be overwritten in the compute pass.
   if (precedesStatement) {
-    this.height = BRC.LARGE_PADDING;
+    this.height = Blockly.renderingConstants.LARGE_PADDING;
   } else {
-    this.height = BRC.MEDIUM_PADDING;
+    this.height = Blockly.renderingConstants.MEDIUM_PADDING;
   }
 };
 goog.inherits(Blockly.BlockRendering.TopRow, Blockly.BlockRendering.Row);
@@ -469,9 +468,9 @@ Blockly.BlockRendering.BottomRow = function(block) {
   // This is the minimum height for the row. If one of it's elements has a greater
   // height it will be overwritten in the compute pass.
   if (followsStatement) {
-    this.height = BRC.LARGE_PADDING;
+    this.height = Blockly.renderingConstants.LARGE_PADDING;
   } else {
-    this.height = BRC.NOTCH_HEIGHT;
+    this.height = Blockly.renderingConstants.NOTCH_HEIGHT;
   }
 
 };

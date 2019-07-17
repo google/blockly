@@ -23,12 +23,12 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-//'use strict';
+'use strict';
 goog.provide('Blockly.BlockRendering.Debug');
 goog.require('Blockly.BlockRendering.RenderInfo');
 goog.require('Blockly.BlockRendering.Highlighter');
-goog.require('BRC');
 goog.require('Blockly.BlockRendering.Measurable');
+goog.require('Blockly.renderingConstants');
 
 /**
  * An object that renders rectangles and dots for debugging rendering code.

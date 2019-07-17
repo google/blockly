@@ -23,13 +23,12 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-//'use strict';
+'use strict';
 
 goog.provide('Blockly.BlockRendering.RenderInfo');
 
-goog.require('BRC');
-/* global BRC */
 goog.require('Blockly.BlockRendering.Measurable');
+goog.require('Blockly.renderingConstants');
 
 /**
  * An object containing all sizing information needed to draw this block.
@@ -309,52 +308,52 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
   if (!prev) {
     // Between an editable field and the beginning of the row.
     if (next.isField() && next.isEditable) {
-      return BRC.MEDIUM_PADDING;
+      return Blockly.renderingConstants.MEDIUM_PADDING;
     }
     // Inline input at the beginning of the row.
     if (next.isInput && next.isInlineInput()) {
-      return BRC.MEDIUM_LARGE_PADDING;
+      return Blockly.renderingConstants.MEDIUM_LARGE_PADDING;
     }
     if (next.isStatementInput()) {
-      return BRC.STATEMENT_INPUT_PADDING_LEFT;
+      return Blockly.renderingConstants.STATEMENT_INPUT_PADDING_LEFT;
     }
     // Anything else at the beginning of the row.
-    return BRC.LARGE_PADDING;
+    return Blockly.renderingConstants.LARGE_PADDING;
   }
 
   // Spacing between a field or icon and the end of the row.
   if (!prev.isInput && !next) {
     // Between an editable field and the end of the row.
     if (prev.isField() && prev.isEditable) {
-      return BRC.MEDIUM_PADDING;
+      return Blockly.renderingConstants.MEDIUM_PADDING;
     }
     // Padding at the end of an icon-only row to make the block shape clearer.
     if (prev.isIcon()) {
-      return (BRC.LARGE_PADDING * 2) + 1;
+      return (Blockly.renderingConstants.LARGE_PADDING * 2) + 1;
     }
     if (prev.isHat()){
-      return BRC.NO_PADDING;
+      return Blockly.renderingConstants.NO_PADDING;
     }
     // Establish a minimum width for a block with a previous or next connection.
     if (prev.isPreviousConnection() || prev.isNextConnection()) {
-      return BRC.LARGE_PADDING;
+      return Blockly.renderingConstants.LARGE_PADDING;
     }
     // Between rounded corner and the end of the row.
     if (prev.isRoundedCorner()) {
-      return BRC.MIN_BLOCK_WIDTH;
+      return Blockly.renderingConstants.MIN_BLOCK_WIDTH;
     }
     // Between noneditable fields and icons and the end of the row.
-    return BRC.LARGE_PADDING;
+    return Blockly.renderingConstants.LARGE_PADDING;
   }
 
   // Between inputs and the end of the row.
   if (prev.isInput && !next) {
     if (prev.isExternalInput()) {
-      return BRC.NO_PADDING;
+      return Blockly.renderingConstants.NO_PADDING;
     } else if (prev.isInlineInput()) {
-      return BRC.LARGE_PADDING;
+      return Blockly.renderingConstants.LARGE_PADDING;
     } else if (prev.isStatementInput()) {
-      return BRC.NO_PADDING;
+      return Blockly.renderingConstants.NO_PADDING;
     }
   }
 
@@ -363,70 +362,70 @@ Blockly.BlockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     // Between an editable field and an input.
     if (prev.isEditable) {
       if (next.isInlineInput()) {
-        return BRC.SMALL_PADDING;
+        return Blockly.renderingConstants.SMALL_PADDING;
       } else if (next.isExternalInput()) {
-        return BRC.SMALL_PADDING;
+        return Blockly.renderingConstants.SMALL_PADDING;
       }
     } else {
       if (next.isInlineInput()) {
-        return BRC.MEDIUM_LARGE_PADDING;
+        return Blockly.renderingConstants.MEDIUM_LARGE_PADDING;
       } else if (next.isExternalInput()) {
-        return BRC.MEDIUM_LARGE_PADDING;
+        return Blockly.renderingConstants.MEDIUM_LARGE_PADDING;
       } else if (next.isStatementInput()) {
-        return BRC.LARGE_PADDING;
+        return Blockly.renderingConstants.LARGE_PADDING;
       }
     }
-    return BRC.LARGE_PADDING - 1;
+    return Blockly.renderingConstants.LARGE_PADDING - 1;
   }
 
   // Spacing between an icon and an icon or field.
   if (prev.isIcon() && !next.isInput) {
-    return BRC.LARGE_PADDING;
+    return Blockly.renderingConstants.LARGE_PADDING;
   }
 
   // Spacing between an inline input and a field.
   if (prev.isInlineInput() && !next.isInput) {
     // Editable field after inline input.
     if (next.isEditable) {
-      return BRC.MEDIUM_PADDING;
+      return Blockly.renderingConstants.MEDIUM_PADDING;
     } else {
       // Noneditable field after inline input.
-      return BRC.LARGE_PADDING;
+      return Blockly.renderingConstants.LARGE_PADDING;
     }
   }
 
   if (prev.isSquareCorner()) {
     // Spacing between a hat and a corner
     if (next.isHat()) {
-      return BRC.NO_PADDING;
+      return Blockly.renderingConstants.NO_PADDING;
     }
     // Spacing between a square corner and a previous or next connection
     if (next.isPreviousConnection()) {
-      return BRC.NOTCH_OFFSET_LEFT;
+      return Blockly.renderingConstants.NOTCH_OFFSET_LEFT;
     } else if (next.isNextConnection()) {
       // Next connections are shifted slightly to the left (in both LTR and RTL)
       // to make the dark path under the previous connection show through.
-      return BRC.NOTCH_OFFSET_LEFT + (this.RTL ? 0.5 : - 0.5);
+      return Blockly.renderingConstants.NOTCH_OFFSET_LEFT + (this.RTL ? 0.5 : - 0.5);
     }
   }
 
   // Spacing between a rounded corner and a previous or next connection
   if (prev.isRoundedCorner()){
     if (next.isPreviousConnection()) {
-      return BRC.NOTCH_OFFSET_ROUNDED_CORNER_PREV;
+      return Blockly.renderingConstants.NOTCH_OFFSET_ROUNDED_CORNER_PREV;
     } else if (next.isNextConnection()) {
       // Next connections are shifted slightly to the left (in both LTR and RTL)
       // to make the dark path under the previous connection show through.
-      return BRC.NOTCH_OFFSET_ROUNDED_CORNER_PREV + (this.RTL ? 0.5 : - 0.5);
+      return Blockly.renderingConstants.NOTCH_OFFSET_ROUNDED_CORNER_PREV + (this.RTL ? 0.5 : - 0.5);
     }
   }
 
   // Spacing between two fields of the same editability.
   if (!prev.isInput && !next.isInput && (prev.isEditable == next.isEditable)) {
-    return BRC.LARGE_PADDING;
+    return Blockly.renderingConstants.LARGE_PADDING;
   }
 
-  return BRC.MEDIUM_PADDING;
+  return Blockly.renderingConstants.MEDIUM_PADDING;
 };
 
 /**
@@ -460,7 +459,7 @@ Blockly.BlockRendering.RenderInfo.prototype.computeBounds_ = function() {
   if (widestStatementRowFields) {
     this.width =
         Math.max(blockWidth,
-            widestStatementRowFields + BRC.NOTCH_WIDTH * 2);
+            widestStatementRowFields + Blockly.renderingConstants.NOTCH_WIDTH * 2);
   } else {
     this.width = blockWidth;
   }
@@ -489,7 +488,7 @@ Blockly.BlockRendering.RenderInfo.prototype.alignRowElements_ = function() {
       var currentWidth = row.width;
       var desiredWidth = this.width;
       if (row.type === 'bottom row' && row.hasFixedWidth) {
-        desiredWidth = BRC.MAX_BOTTOM_WIDTH;
+        desiredWidth = Blockly.renderingConstants.MAX_BOTTOM_WIDTH;
       }
       var missingSpace = desiredWidth - currentWidth;
       if (missingSpace) {
@@ -599,25 +598,25 @@ Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, 
 Blockly.BlockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
   // If we have an empty block add a spacer to increase the height
   if (prev.type === 'top row' && next.type === 'bottom row') {
-    return BRC.EMPTY_BLOCK_SPACER_HEIGHT;
+    return Blockly.renderingConstants.EMPTY_BLOCK_SPACER_HEIGHT;
   }
   // Top and bottom rows act as a spacer so we don't need any extra padding
   if (prev.type === 'top row' || next.type === 'bottom row') {
-    return BRC.NO_PADDING;
+    return Blockly.renderingConstants.NO_PADDING;
   }
   if (prev.hasExternalInput && next.hasExternalInput) {
-    return BRC.LARGE_PADDING;
+    return Blockly.renderingConstants.LARGE_PADDING;
   }
   if (!prev.hasStatement && next.hasStatement) {
-    return BRC.BETWEEN_STATEMENT_PADDING_Y;
+    return Blockly.renderingConstants.BETWEEN_STATEMENT_PADDING_Y;
   }
   if (prev.hasStatement && next.hasStatement) {
-    return BRC.LARGE_PADDING;
+    return Blockly.renderingConstants.LARGE_PADDING;
   }
   if (next.hasDummyInput) {
-    return BRC.LARGE_PADDING;
+    return Blockly.renderingConstants.LARGE_PADDING;
   }
-  return BRC.MEDIUM_PADDING;
+  return Blockly.renderingConstants.MEDIUM_PADDING;
 };
 
 /**
@@ -633,7 +632,7 @@ Blockly.BlockRendering.RenderInfo.prototype.getElemCenterline_ = function(row, e
   if (elem.isField()) {
     result += (elem.height / 2);
     if (row.hasInlineInput || row.hasStatement) {
-      result += BRC.TALL_INPUT_FIELD_OFFSET_Y;
+      result += Blockly.renderingConstants.TALL_INPUT_FIELD_OFFSET_Y;
     }
   } else if (elem.isInlineInput()) {
     result += elem.height / 2;
@@ -669,9 +668,9 @@ Blockly.BlockRendering.RenderInfo.prototype.finalize_ = function() {
   this.blockBottom = yCursor;
 
   // Add padding to the bottom row if block height is less than minimum
-  if (yCursor < BRC.MIN_BLOCK_HEIGHT) {
-    this.bottomRow.height += BRC.MIN_BLOCK_HEIGHT - yCursor;
-    yCursor = BRC.MIN_BLOCK_HEIGHT;
+  if (yCursor < Blockly.renderingConstants.MIN_BLOCK_HEIGHT) {
+    this.bottomRow.height += Blockly.renderingConstants.MIN_BLOCK_HEIGHT - yCursor;
+    yCursor = Blockly.renderingConstants.MIN_BLOCK_HEIGHT;
   }
 
   this.height = yCursor;

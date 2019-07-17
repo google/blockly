@@ -503,7 +503,6 @@ Blockly.Variables.getOrCreateVariablePackage = function(workspace, id, opt_name,
  *     Only used if lookup by ID fails.
  * @return {Blockly.VariableModel} The variable corresponding to the given ID
  *     or name + type combination, or null if not found.
- * @package
  */
 Blockly.Variables.getVariable = function(workspace, id, opt_name, opt_type) {
   var potentialVariableMap = workspace.getPotentialVariableMap();

@@ -133,7 +133,9 @@ Blockly.BlockRendering.Drawer.prototype.drawTop_ = function() {
     if (elem.type === 'square corner') {
       this.steps_.push(Blockly.renderingConstants.START_POINT);
     } else if (elem.type === 'round corner') {
-      this.steps_.push(Blockly.renderingConstants.TOP_LEFT_CORNER_START, Blockly.renderingConstants.TOP_LEFT_CORNER);
+      this.steps_.push(
+          Blockly.renderingConstants.TOP_LEFT_CORNER_START,
+          Blockly.renderingConstants.TOP_LEFT_CORNER);
     } else if (elem.type === 'previous connection') {
       this.steps_.push(Blockly.renderingConstants.NOTCH_PATH_LEFT);
     } else if (elem.type === 'hat') {
@@ -347,12 +349,17 @@ Blockly.BlockRendering.Drawer.prototype.positionInlineInputConnection_ = functio
   var yPos = input.centerline - input.height / 2;
   // Move the connection.
   if (input.connection) {
-    var connX = input.xPos + Blockly.renderingConstants.TAB_WIDTH + Blockly.renderingConstants.DARK_PATH_OFFSET;
+    var connX =
+        input.xPos +
+        Blockly.renderingConstants.TAB_WIDTH +
+        Blockly.renderingConstants.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
     }
     input.connection.setOffsetInBlock(
-        connX, yPos + Blockly.renderingConstants.TAB_OFFSET_FROM_TOP + Blockly.renderingConstants.DARK_PATH_OFFSET);
+        connX,
+        yPos + Blockly.renderingConstants.TAB_OFFSET_FROM_TOP +
+        Blockly.renderingConstants.DARK_PATH_OFFSET);
   }
 };
 
@@ -366,11 +373,15 @@ Blockly.BlockRendering.Drawer.prototype.positionInlineInputConnection_ = functio
 Blockly.BlockRendering.Drawer.prototype.positionStatementInputConnection_ = function(row) {
   var input = row.getLastInput();
   if (input.connection) {
-    var connX = row.statementEdge + Blockly.renderingConstants.NOTCH_OFFSET_LEFT + Blockly.renderingConstants.DARK_PATH_OFFSET;
+    var connX =
+        row.statementEdge +
+        Blockly.renderingConstants.NOTCH_OFFSET_LEFT +
+        Blockly.renderingConstants.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
     }
-    input.connection.setOffsetInBlock(connX, row.yPos + Blockly.renderingConstants.DARK_PATH_OFFSET);
+    input.connection.setOffsetInBlock(
+        connX, row.yPos + Blockly.renderingConstants.DARK_PATH_OFFSET);
   }
 };
 
@@ -398,7 +409,9 @@ Blockly.BlockRendering.Drawer.prototype.positionExternalValueConnection_ = funct
  */
 Blockly.BlockRendering.Drawer.prototype.positionPreviousConnection_ = function() {
   if (this.info_.topRow.hasPreviousConnection) {
-    var connX = this.info_.RTL ? -Blockly.renderingConstants.NOTCH_OFFSET_LEFT : Blockly.renderingConstants.NOTCH_OFFSET_LEFT;
+    var connX =
+      this.info_.RTL ? -Blockly.renderingConstants.NOTCH_OFFSET_LEFT :
+          Blockly.renderingConstants.NOTCH_OFFSET_LEFT;
     this.info_.topRow.connection.setOffsetInBlock(connX, 0);
   }
 };
@@ -411,7 +424,9 @@ Blockly.BlockRendering.Drawer.prototype.positionNextConnection_ = function() {
   var bottomRow = this.info_.bottomRow;
 
   if (bottomRow.hasNextConnection) {
-    var connX = this.info_.RTL ? -Blockly.renderingConstants.NOTCH_OFFSET_LEFT : Blockly.renderingConstants.NOTCH_OFFSET_LEFT;
+    var connX =
+        this.info_.RTL ? -Blockly.renderingConstants.NOTCH_OFFSET_LEFT :
+            Blockly.renderingConstants.NOTCH_OFFSET_LEFT;
     bottomRow.connection.setOffsetInBlock(
         connX, this.info_.height + Blockly.renderingConstants.DARK_PATH_OFFSET);
   }
@@ -424,6 +439,7 @@ Blockly.BlockRendering.Drawer.prototype.positionNextConnection_ = function() {
  */
 Blockly.BlockRendering.Drawer.prototype.positionOutputConnection_ = function() {
   if (this.info_.hasOutputConnection) {
-    this.block_.outputConnection.setOffsetInBlock(0, Blockly.renderingConstants.TAB_OFFSET_FROM_TOP);
+    this.block_.outputConnection.setOffsetInBlock(
+        0, Blockly.renderingConstants.TAB_OFFSET_FROM_TOP);
   }
 };

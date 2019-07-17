@@ -81,7 +81,9 @@ Blockly.BlockRendering.Highlighter.prototype.drawValueInput = function(row) {
   //var v = row.height - Blockly.renderingConstants.TAB_HEIGHT;
 
   if (this.info_.RTL) {
-    var aboveTabHeight = Blockly.renderingConstants.TAB_VERTICAL_OVERLAP - Blockly.renderingConstants.HIGHLIGHT_OFFSET;
+    var aboveTabHeight =
+        Blockly.renderingConstants.TAB_VERTICAL_OVERLAP -
+        Blockly.renderingConstants.HIGHLIGHT_OFFSET;
     var belowTabHeight = row.height -
         (Blockly.renderingConstants.TAB_HEIGHT - Blockly.renderingConstants.TAB_VERTICAL_OVERLAP) +
         Blockly.renderingConstants.HIGHLIGHT_OFFSET;
@@ -185,14 +187,19 @@ Blockly.BlockRendering.Highlighter.prototype.drawInlineInput = function(input) {
     // TODO: Check if this is different when the inline input is populated.
 
     var aboveTabHeight =
-        Blockly.renderingConstants.TAB_OFFSET_FROM_TOP + Blockly.renderingConstants.TAB_VERTICAL_OVERLAP - Blockly.renderingConstants.HIGHLIGHT_OFFSET;
+        Blockly.renderingConstants.TAB_OFFSET_FROM_TOP +
+        Blockly.renderingConstants.TAB_VERTICAL_OVERLAP -
+        Blockly.renderingConstants.HIGHLIGHT_OFFSET;
 
     var belowTabHeight =
         height -
-        (Blockly.renderingConstants.TAB_OFFSET_FROM_TOP + Blockly.renderingConstants.TAB_HEIGHT - Blockly.renderingConstants.TAB_VERTICAL_OVERLAP) +
+        (Blockly.renderingConstants.TAB_OFFSET_FROM_TOP +
+            Blockly.renderingConstants.TAB_HEIGHT -
+            Blockly.renderingConstants.TAB_VERTICAL_OVERLAP) +
         Blockly.renderingConstants.HIGHLIGHT_OFFSET;
 
-    var startX = x + Blockly.renderingConstants.TAB_WIDTH - Blockly.renderingConstants.HIGHLIGHT_OFFSET;
+    var startX = x + Blockly.renderingConstants.TAB_WIDTH -
+        Blockly.renderingConstants.HIGHLIGHT_OFFSET;
     var startY = yPos + Blockly.renderingConstants.HIGHLIGHT_OFFSET;
 
     // Highlight right edge, around back of tab, and bottom.

@@ -23,7 +23,7 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-'use strict'
+'use strict';
 /**
  * @name Blockly.renderingConstants
  * @namespace
@@ -42,7 +42,8 @@ Blockly.renderingConstants.LARGE_PADDING = 10;
 // Offset from the top of the row for placing fields on inline input rows
 // and statement input rows.
 // Matches existing rendering (in 2019).
-Blockly.renderingConstants.TALL_INPUT_FIELD_OFFSET_Y = Blockly.renderingConstants.MEDIUM_PADDING;
+Blockly.renderingConstants.TALL_INPUT_FIELD_OFFSET_Y =
+    Blockly.renderingConstants.MEDIUM_PADDING;
 
 Blockly.renderingConstants.HIGHLIGHT_OFFSET = 0.5;
 
@@ -78,7 +79,8 @@ Blockly.renderingConstants.NOTCH_OFFSET_ROUNDED_CORNER_PREV = 7;
 
 // This is the offset from the vertical part of a statement input
 // to where to start the notch, which is on the right side in LTR.
-Blockly.renderingConstants.NOTCH_OFFSET_RIGHT = Blockly.renderingConstants.NOTCH_OFFSET_LEFT + Blockly.renderingConstants.NOTCH_WIDTH;
+Blockly.renderingConstants.NOTCH_OFFSET_RIGHT =
+    Blockly.renderingConstants.NOTCH_OFFSET_LEFT + Blockly.renderingConstants.NOTCH_WIDTH;
 
 Blockly.renderingConstants.STATEMENT_BOTTOM_SPACER = 5;
 Blockly.renderingConstants.STATEMENT_INPUT_PADDING_LEFT = 20;
@@ -119,7 +121,8 @@ Blockly.renderingConstants.EXTERNAL_VALUE_INPUT_WIDTH = 10;
  * @const
  * @type {number}
  */
-Blockly.renderingConstants.EMPTY_STATEMENT_INPUT_HEIGHT = Blockly.renderingConstants.MIN_BLOCK_HEIGHT;
+Blockly.renderingConstants.EMPTY_STATEMENT_INPUT_HEIGHT =
+    Blockly.renderingConstants.MIN_BLOCK_HEIGHT;
 
 Blockly.renderingConstants.EMPTY_STATEMENT_INPUT_WIDTH = 32;
 
@@ -129,7 +132,8 @@ Blockly.renderingConstants.POPULATED_STATEMENT_INPUT_WIDTH = 25;
 Blockly.renderingConstants.START_POINT = Blockly.utils.Paths.moveBy(0, 0);
 
 Blockly.renderingConstants.START_POINT_HIGHLIGHT =
-    Blockly.utils.Paths.moveBy(Blockly.renderingConstants.HIGHLIGHT_OFFSET, Blockly.renderingConstants.HIGHLIGHT_OFFSET);
+    Blockly.utils.Paths.moveBy(Blockly.renderingConstants.HIGHLIGHT_OFFSET,
+        Blockly.renderingConstants.HIGHLIGHT_OFFSET);
 
 /**
  * Distance from shape edge to intersect with a curved corner at 45 degrees.
@@ -137,7 +141,9 @@ Blockly.renderingConstants.START_POINT_HIGHLIGHT =
  * @const
  */
 Blockly.renderingConstants.DISTANCE_45_INSIDE = (1 - Math.SQRT1_2) *
-    (Blockly.renderingConstants.CORNER_RADIUS - Blockly.renderingConstants.HIGHLIGHT_OFFSET) + Blockly.renderingConstants.HIGHLIGHT_OFFSET;
+    (Blockly.renderingConstants.CORNER_RADIUS -
+        Blockly.renderingConstants.HIGHLIGHT_OFFSET) +
+    Blockly.renderingConstants.HIGHLIGHT_OFFSET;
 
 /**
  * Distance from shape edge to intersect with a curved corner at 45 degrees.
@@ -145,15 +151,19 @@ Blockly.renderingConstants.DISTANCE_45_INSIDE = (1 - Math.SQRT1_2) *
  * @const
  */
 Blockly.renderingConstants.DISTANCE_45_OUTSIDE = (1 - Math.SQRT1_2) *
-    (Blockly.renderingConstants.CORNER_RADIUS + Blockly.renderingConstants.HIGHLIGHT_OFFSET) - Blockly.renderingConstants.HIGHLIGHT_OFFSET;
+    (Blockly.renderingConstants.CORNER_RADIUS +
+        Blockly.renderingConstants.HIGHLIGHT_OFFSET) -
+    Blockly.renderingConstants.HIGHLIGHT_OFFSET;
 
 /**
  * SVG path for drawing a horizontal puzzle tab from top to bottom.
  * @const
  */
-Blockly.renderingConstants.TAB_PATH_DOWN =  'c 0,10 -' + Blockly.renderingConstants.TAB_WIDTH +
+Blockly.renderingConstants.TAB_PATH_DOWN =
+    'c 0,10 -' + Blockly.renderingConstants.TAB_WIDTH +
       ',-8 -' + Blockly.renderingConstants.TAB_WIDTH + ',7.5 s ' +
-      Blockly.renderingConstants.TAB_WIDTH + ',-2.5 ' + Blockly.renderingConstants.TAB_WIDTH + ',7.5';
+      Blockly.renderingConstants.TAB_WIDTH + ',-2.5 ' +
+      Blockly.renderingConstants.TAB_WIDTH + ',7.5';
 
 
 /**
@@ -171,9 +181,12 @@ Blockly.renderingConstants.TAB_PATH_DOWN_HIGHLIGHT_RTL = 'm -' +
  * SVG path for drawing a horizontal puzzle tab from bottom to top.
  * @const
  */
-Blockly.renderingConstants.TAB_PATH_UP =  'c 0,-10 -' + Blockly.renderingConstants.TAB_WIDTH +
+Blockly.renderingConstants.TAB_PATH_UP =
+    'c 0,-10 -' +
+        Blockly.renderingConstants.TAB_WIDTH +
       ',8 -' + Blockly.renderingConstants.TAB_WIDTH + ',-7.5 s ' +
-      Blockly.renderingConstants.TAB_WIDTH + ',2.5 ' + Blockly.renderingConstants.TAB_WIDTH + ',-7.5';
+      Blockly.renderingConstants.TAB_WIDTH + ',2.5 ' +
+      Blockly.renderingConstants.TAB_WIDTH + ',-7.5';
 
 /**
  * Path of the top hat's curve.
@@ -198,7 +211,8 @@ Blockly.renderingConstants.NOTCH_PATH_LEFT = 'l 6,4 3,0 6,-4';
  * @const
  */
 Blockly.renderingConstants.NOTCH_PATH_LEFT_HIGHLIGHT =
-    'h ' + Blockly.renderingConstants.HIGHLIGHT_OFFSET + ' ' + Blockly.renderingConstants.NOTCH_PATH_LEFT;
+    'h ' + Blockly.renderingConstants.HIGHLIGHT_OFFSET + ' ' +
+    Blockly.renderingConstants.NOTCH_PATH_LEFT;
 
 /**
  * SVG path for drawing next/previous notch from right to left.
@@ -227,7 +241,9 @@ Blockly.renderingConstants.INNER_TOP_LEFT_CORNER =
 Blockly.renderingConstants.INNER_BOTTOM_LEFT_CORNER =
     Blockly.utils.Paths.arc('a', '0 0,0',
         Blockly.renderingConstants.CORNER_RADIUS,
-        Blockly.utils.Paths.point(Blockly.renderingConstants.CORNER_RADIUS, Blockly.renderingConstants.CORNER_RADIUS));
+        Blockly.utils.Paths.point(
+            Blockly.renderingConstants.CORNER_RADIUS,
+            Blockly.renderingConstants.CORNER_RADIUS));
 
 
 /**
@@ -239,8 +255,10 @@ Blockly.renderingConstants.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL =
     Blockly.utils.Paths.arc('a', '0 0,0',
         Blockly.renderingConstants.CORNER_RADIUS,
         Blockly.utils.Paths.point(
-            -Blockly.renderingConstants.DISTANCE_45_OUTSIDE - Blockly.renderingConstants.HIGHLIGHT_OFFSET,
-            Blockly.renderingConstants.CORNER_RADIUS - Blockly.renderingConstants.DISTANCE_45_OUTSIDE));
+            -Blockly.renderingConstants.DISTANCE_45_OUTSIDE -
+                Blockly.renderingConstants.HIGHLIGHT_OFFSET,
+            Blockly.renderingConstants.CORNER_RADIUS -
+                Blockly.renderingConstants.DISTANCE_45_OUTSIDE));
 
 /**
  * SVG path for drawing highlight on the bottom-left corner of a statement
@@ -249,10 +267,13 @@ Blockly.renderingConstants.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL =
  */
 Blockly.renderingConstants.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL =
     Blockly.utils.Paths.arc('a', '0 0,0',
-        Blockly.renderingConstants.CORNER_RADIUS + Blockly.renderingConstants.HIGHLIGHT_OFFSET,
+        Blockly.renderingConstants.CORNER_RADIUS +
+            Blockly.renderingConstants.HIGHLIGHT_OFFSET,
         Blockly.utils.Paths.point(
-            Blockly.renderingConstants.CORNER_RADIUS + Blockly.renderingConstants.HIGHLIGHT_OFFSET,
-            Blockly.renderingConstants.CORNER_RADIUS + Blockly.renderingConstants.HIGHLIGHT_OFFSET));
+            Blockly.renderingConstants.CORNER_RADIUS +
+                Blockly.renderingConstants.HIGHLIGHT_OFFSET,
+            Blockly.renderingConstants.CORNER_RADIUS +
+                Blockly.renderingConstants.HIGHLIGHT_OFFSET));
 
 /**
  * SVG path for drawing highlight on the bottom-left corner of a statement
@@ -261,10 +282,13 @@ Blockly.renderingConstants.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL =
  */
 Blockly.renderingConstants.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
     Blockly.utils.Paths.arc('a', '0 0,0',
-        Blockly.renderingConstants.CORNER_RADIUS + Blockly.renderingConstants.HIGHLIGHT_OFFSET,
+        Blockly.renderingConstants.CORNER_RADIUS +
+            Blockly.renderingConstants.HIGHLIGHT_OFFSET,
         Blockly.utils.Paths.point(
-            Blockly.renderingConstants.CORNER_RADIUS - Blockly.renderingConstants.DISTANCE_45_OUTSIDE,
-            Blockly.renderingConstants.DISTANCE_45_OUTSIDE + Blockly.renderingConstants.HIGHLIGHT_OFFSET));
+            Blockly.renderingConstants.CORNER_RADIUS -
+                Blockly.renderingConstants.DISTANCE_45_OUTSIDE,
+            Blockly.renderingConstants.DISTANCE_45_OUTSIDE +
+                Blockly.renderingConstants.HIGHLIGHT_OFFSET));
 
 
 
@@ -284,7 +308,8 @@ Blockly.renderingConstants.TOP_LEFT_CORNER =
     Blockly.renderingConstants.CORNER_RADIUS + ' 0 0,1 ' +
     Blockly.renderingConstants.CORNER_RADIUS + ',0';
 
-Blockly.renderingConstants.BOTTOM_LEFT_CORNER = 'a' + Blockly.renderingConstants.CORNER_RADIUS + ',' +
+Blockly.renderingConstants.BOTTOM_LEFT_CORNER =
+    'a' + Blockly.renderingConstants.CORNER_RADIUS + ',' +
                Blockly.renderingConstants.CORNER_RADIUS + ' 0 0,1 -' +
                Blockly.renderingConstants.CORNER_RADIUS + ',-' +
                Blockly.renderingConstants.CORNER_RADIUS;
@@ -293,12 +318,15 @@ Blockly.renderingConstants.BOTTOM_LEFT_CORNER_HIGHLIGHT_START =
     'M ' + Blockly.renderingConstants.DISTANCE_45_INSIDE + ', '; // follow with y pos - distance 45 inside
 
 Blockly.renderingConstants.BOTTOM_LEFT_CORNER_HIGHLIGHT_MID   =
-    'A ' + (Blockly.renderingConstants.CORNER_RADIUS - Blockly.renderingConstants.HIGHLIGHT_OFFSET) +
-    ',' + (Blockly.renderingConstants.CORNER_RADIUS - Blockly.renderingConstants.HIGHLIGHT_OFFSET) +
+    'A ' + (Blockly.renderingConstants.CORNER_RADIUS -
+        Blockly.renderingConstants.HIGHLIGHT_OFFSET) +
+    ',' + (Blockly.renderingConstants.CORNER_RADIUS -
+        Blockly.renderingConstants.HIGHLIGHT_OFFSET) +
     ' 0 0,1 ' + Blockly.renderingConstants.HIGHLIGHT_OFFSET + ','; // follow with y pos - corner radius
 
 Blockly.renderingConstants.OUTPUT_CONNECTION_HIGHLIGHT_LTR =
-    'V ' + (Blockly.renderingConstants.TAB_HEIGHT + Blockly.renderingConstants.TAB_OFFSET_FROM_TOP - 1.5) +
+    'V ' + (Blockly.renderingConstants.TAB_HEIGHT +
+        Blockly.renderingConstants.TAB_OFFSET_FROM_TOP - 1.5) +
     ' m ' + (Blockly.renderingConstants.TAB_WIDTH * -0.92) + ',-0.5 ' +
     'q ' + (Blockly.renderingConstants.TAB_WIDTH * -0.19) + ',-5.5 0,-11 ' +
     'm ' + (Blockly.renderingConstants.TAB_WIDTH * 0.92) + ',1 ' +

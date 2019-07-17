@@ -41,6 +41,7 @@ Blockly.utils.xml.NAME_SPACE = 'https://developers.google.com/blockly/xml';
  * Create DOM element for XML.
  * @param {string} tagName Name of DOM element.
  * @return {!Element} New DOM element.
+ * @public
  */
 Blockly.utils.xml.createElement = function(tagName) {
   // TODO (#2082): Support node.js.
@@ -51,6 +52,7 @@ Blockly.utils.xml.createElement = function(tagName) {
  * Create text element for XML.
  * @param {string} text Text content.
  * @return {!Node} New DOM node.
+ * @public
  */
 Blockly.utils.xml.createTextNode = function(text) {
   // TODO (#2082): Support node.js.
@@ -63,6 +65,7 @@ Blockly.utils.xml.createTextNode = function(text) {
  * @param {string} text XML string.
  * @return {Document} The DOM document.
  * @throws if XML doesn't parse.
+ * @public
  */
 Blockly.utils.xml.textToDomDocument = function(text) {
   var oParser = new DOMParser();
@@ -74,6 +77,7 @@ Blockly.utils.xml.textToDomDocument = function(text) {
  * Currently the text format is fairly ugly: all one line with no whitespace.
  * @param {!Element} dom A tree of XML elements.
  * @return {string} Text representation.
+ * @public
  */
 Blockly.utils.xml.domToText = function(dom) {
   // TODO (#2082): Support node.js.

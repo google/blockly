@@ -435,11 +435,11 @@ Blockly.FieldAngle.prototype.doClassValidation_ = function(newValue) {
  * @param {boolean=} clockwise Whether the graphical angle editor should
  *    increase as it is moved clockwise (true) or counterclockwise (false)
  *    or the global setting (null).
+ * @return {!Blockly.FieldAngle} Returns itself (for method chaining).
  */
 Blockly.FieldAngle.prototype.setClockwise = function(clockwise) {
-  // TODO: Handle undefined.
   this.clockwise_ = clockwise;
-  // TODO: Do render update?
+  return this;
 };
 
 /**
@@ -448,10 +448,11 @@ Blockly.FieldAngle.prototype.setClockwise = function(clockwise) {
  *    by. Always offsets in the clockwise direction independent of the
  *    Clockwise property. Pass null to use the
  *    global setting.
+ * @return {!Blockly.FieldAngle} Returns itself (for method chaining).
  */
 Blockly.FieldAngle.prototype.setOffset = function(offset) {
   this.offset_ = offset;
-  // TODO: Do render update?
+  return this;
 };
 
 /**
@@ -460,10 +461,11 @@ Blockly.FieldAngle.prototype.setOffset = function(offset) {
  * Usually either 360 (for 0 to 359.9) or 180 (for -179.9 to 180).
  * @param {number=} wrap The wrap value of the angle field. Pass null to use
  *    the global setting.
+ * @return {!Blockly.FieldAngle} Returns itself (for method chaining).
  */
 Blockly.FieldAngle.prototype.setWrap = function(wrap) {
   this.wrap_ = wrap;
-  // TODO: Do render update? May also need to call setValue to reevaluate value?
+  return this;
 };
 
 /**
@@ -471,10 +473,11 @@ Blockly.FieldAngle.prototype.setWrap = function(wrap) {
  * @param {number=} round The value (when input through the graphical
  *    editor) will be rounded to the nearest multiple of this number. Pass 0
  *    to disable rounding. Pass null to use the global setting.
+ * @return {!Blockly.FieldAngle} Returns itself (for method chaining).
  */
 Blockly.FieldAngle.prototype.setRound = function(round) {
   this.round_ = round;
-  // TODO: Do render update?
+  return this;
 };
 
 /**

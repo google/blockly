@@ -63,7 +63,14 @@ goog.inherits(Blockly.FieldColour, Blockly.Field);
  * @nocollapse
  */
 Blockly.FieldColour.fromJson = function(options) {
-  return new Blockly.FieldColour(options['colour']);
+  var field = new Blockly.FieldColour(options['colour']);
+  if (options['colourOptions']) {
+    field.setColours(options['colourOptions'], options['colourTitles']);
+  }
+  if (options['columns']) {
+    field.setColumns(options['columns']);
+  }
+  return field;
 };
 
 /**

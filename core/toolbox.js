@@ -392,9 +392,9 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
         lastElement = childIn;
         break;
       case 'SEARCH':
-        var treeSearch = new Blockly.Toolbox.TreeSearch(this);
-        treeSearch.hexColour = '#144bb2';
-        treeOut.add(treeSearch);
+        // var treeSearch = new Blockly.Toolbox.TreeSearch(this);
+        // treeSearch.hexColour = '#144bb2';
+        // treeOut.add(treeSearch);
         lastElement = childIn;
         break;
     }

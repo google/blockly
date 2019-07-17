@@ -151,6 +151,7 @@ Blockly.Icon.prototype.updateColour = function() {
 Blockly.Icon.prototype.renderIcon = function(cursorX) {
   if ((this.collapseHidden && this.block_.isCollapsed()) ||
       this.block_.isInsertionMarker()) {
+    this.transformX = cursorX;
     this.iconGroup_.setAttribute('display', 'none');
     return cursorX;
   }

@@ -283,6 +283,12 @@ Blockly.RenderedConnection.prototype.setHidden = function(hidden) {
   } else if (!hidden && !this.inDB_) {
     this.db_.addConnection(this);
   }
+  if (this.isSuperior() && this.targetBlock()) {
+    var display = hidden ? 'none' : 'block';
+    var renderedBlock = this.targetBlock();
+    renderedBlock.getSvgRoot().style.display = display;
+    renderedBlock.rendered = !hidden;
+  }
 };
 
 /**
@@ -344,11 +350,6 @@ Blockly.RenderedConnection.prototype.connect = function(otherConnection) {
     } else {
       superiorConnection.unhideAll();
     }
-
-    var renderedBlock = superiorConnection.targetBlock();
-    var display = superiorConnection.hidden_ ? 'none' : 'block';
-    renderedBlock.getSvgRoot().style.display = display;
-    renderedBlock.rendered = !superiorConnection.hidden_;
   }
 };
 
@@ -358,17 +359,17 @@ Blockly.RenderedConnection.prototype.connect = function(otherConnection) {
  */
 Blockly.RenderedConnection.prototype.disconnect = function() {
   var superiorConnection = this.isSuperior() ? this : this.targetConnection;
+  var rehide = false;
   if (this.targetConnection && superiorConnection.hidden_) {
     superiorConnection.unhideAll();
-    var renderedBlock = superiorConnection.targetBlock();
-    renderedBlock.getSvgRoot().style.display = 'block';
-    renderedBlock.rendered = true;
-
+    rehide = true;
+  }
+  Blockly.RenderedConnection.superClass_.disconnect.call(this);
+  if (rehide) {
     // Set the hidden state for the connection back to true so shadow blocks
     // will be hidden.
     superiorConnection.setHidden(true);
   }
-  Blockly.RenderedConnection.superClass_.disconnect.call(this);
 };
 
 /**

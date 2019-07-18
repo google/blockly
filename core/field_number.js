@@ -100,18 +100,6 @@ Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
 };
 
 /**
- * Show the inline free-text editor on top of the text.
- * @param {boolean=} opt_quietInput True if editor should be created without
- *     focus.  Defaults to false.
- * @protected
- */
-Blockly.FieldNumber.prototype.showEditor_ = function(opt_quietInput) {
-  this.setSpellcheck(false);
-  Blockly.FieldNumber.superClass_.showEditor_.call(this, opt_quietInput);
-  this.htmlInput_.type = "number";
-};
-
-/**
  * Ensure that the input value is a valid number (must fulfill the
  * constraints placed on the field).
  * @param {string|number=} newValue The input value.

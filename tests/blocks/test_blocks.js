@@ -63,6 +63,28 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "math_blocks",
   },
   {
+    "type": "test_basic_tooltips",
+    "message0": "%1 %2 %3",
+    "args0": [
+      {
+        "type": "field_label",
+        "name": "NAME",
+        "text": "field tooltip",
+        "tooltip": "This is a JSON tooltip for the *field*."
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "name": "NAME",
+        "text": "block tooltip"
+      }
+    ],
+    "tooltip": "This is a JSON tooltip for the *block*.",
+    "style": "math_blocks"
+  },
+  {
     "type": "test_dropdowns_long",
     "message0": "long: %1",
     "args0": [

@@ -1630,6 +1630,8 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
               input = this.appendDummyInput(element['name']);
               break;
             default:
+              // This should handle all field JSON parsing, including
+              // options that can be applied to any field type.
               field = Blockly.Field.fromJson(element);
 
               // Unknown field.

@@ -92,7 +92,13 @@ Blockly.Field.register = function(type, fieldClass) {
 Blockly.Field.fromJson = function(options) {
   var fieldClass = Blockly.Field.TYPE_MAP_[options['type']];
   if (fieldClass) {
-    return fieldClass.fromJson(options);
+    var field = fieldClass.fromJson(options);
+    if (options['tooltip'] !== undefined) {
+      var rawValue = options['tooltip'];
+      var localizedText = Blockly.utils.replaceMessageReferences(rawValue);
+      field.setTooltip(localizedText);
+    }
+    return field;
   }
   return null;
 };

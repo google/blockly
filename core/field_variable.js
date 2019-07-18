@@ -253,7 +253,7 @@ Blockly.FieldVariable.prototype.doClassValidation_ = function(newId) {
 Blockly.FieldVariable.prototype.doValueUpdate_ = function(newId) {
   this.variable_ = Blockly.Variables.getVariable(this.workspace_, newId);
   this.value_ = newId;
-  this.text_ = (this.variable_.name);
+  this.text_ = this.variable_.name;
   this.isDirty_ = true;
 };
 
@@ -339,6 +339,16 @@ Blockly.FieldVariable.prototype.setTypes_ = function(opt_variableTypes,
   // Only update the field once all checks pass.
   this.defaultType_ =  defaultType;
   this.variableTypes = variableTypes;
+};
+
+/**
+ * A callback to update the name of a variable. Should only be called by
+ * the block.
+ * @package
+ */
+Blockly.FieldVariable.prototype.updateVariableName = function() {
+  this.text_ = this.variable_.name;
+  this.forceRerender();
 };
 
 /**

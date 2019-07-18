@@ -706,6 +706,7 @@ Blockly.Field.prototype.getText = function() {
 /**
  * Set the text in this field.  Trigger a rerender of the source block.
  * @param {*} newText New text.
+ * @deprecated 2019 setText should not be used directly. Use setValue instead.
  */
 Blockly.Field.prototype.setText = function(newText) {
   if (newText === null) {

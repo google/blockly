@@ -225,6 +225,20 @@ Blockly.JavaScript.quote_ = function(string) {
 };
 
 /**
+ * Encode a string as a properly escaped multiline JavaScript string, complete
+ * with quotes.
+ * @param {string} string Text to encode.
+ * @return {string} JavaScript string.
+ * @private
+ */
+Blockly.JavaScript.multiline_quote_ = function(string) {
+  // Can't use goog.string.quote since Google's style guide recommends
+  // JS string literals use single quotes.
+  var lines = string.split(/\n/g).map(Blockly.JavaScript.quote_);
+  return lines.join(' + \'\\n\' +\n');
+};
+
+/**
  * Common tasks for generating JavaScript from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.

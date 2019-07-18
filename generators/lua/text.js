@@ -35,6 +35,12 @@ Blockly.Lua['text'] = function(block) {
   return [code, Blockly.Lua.ORDER_ATOMIC];
 };
 
+Blockly.Lua['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.Lua.multiline_quote_(block.getFieldValue('TEXT'));
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+
 Blockly.Lua['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   if (block.itemCount_ == 0) {

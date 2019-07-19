@@ -444,6 +444,10 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
     return;
   }
   this.checkConnection_(otherConnection);
+  var eventGroup = Blockly.Events.getGroup();
+  if (!eventGroup) {
+    Blockly.Events.setGroup(true);
+  }
   // Determine which block is superior (higher in the source stack).
   if (this.isSuperior()) {
     // Superior block.
@@ -451,6 +455,9 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
   } else {
     // Inferior block.
     otherConnection.connect_(this);
+  }
+  if (!eventGroup) {
+    Blockly.Events.setGroup(false);
   }
 };
 
@@ -541,8 +548,16 @@ Blockly.Connection.prototype.disconnect = function() {
     childBlock = this.sourceBlock_;
     parentConnection = otherConnection;
   }
+
+  var eventGroup = Blockly.Events.getGroup();
+  if (!eventGroup) {
+    Blockly.Events.setGroup(true);
+  }
   this.disconnectInternal_(parentBlock, childBlock);
   parentConnection.respawnShadow_();
+  if (!eventGroup) {
+    Blockly.Events.setGroup(false);
+  }
 };
 
 /**

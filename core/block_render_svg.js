@@ -317,8 +317,8 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
  *   If true, also render block's parent, grandparent, etc.  Defaults to true.
  */
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
-  if (!this.workspace) {
-    // This block is being deleted so don't try to render it.
+  if (!this.workspace || !this.eventsInit_) {
+    // This block is being deleted or created so don't try to render it.
     return;
   }
   Blockly.Field.startCache();

@@ -241,6 +241,7 @@ Blockly.RenderedConnection.prototype.unhideAll = function() {
   }
   var block = this.targetBlock();
   if (block) {
+    renderList[0] = block;
     var connections;
     if (block.isCollapsed()) {
       // This block should only be partially revealed since it is collapsed.
@@ -254,10 +255,6 @@ Blockly.RenderedConnection.prototype.unhideAll = function() {
     }
     for (var i = 0; i < connections.length; i++) {
       renderList.push.apply(renderList, connections[i].unhideAll());
-    }
-    if (!renderList.length) {
-      // Leaf block.
-      renderList[0] = block;
     }
   }
   return renderList;
@@ -348,7 +345,11 @@ Blockly.RenderedConnection.prototype.connect = function(otherConnection) {
     if (superiorConnection.hidden_) {
       superiorConnection.hideAll();
     } else {
-      superiorConnection.unhideAll();
+      var renderList = superiorConnection.unhideAll();
+      for (var i = 0; i < renderList.length; i++) {
+        var block = renderList[i];
+        block.render();
+      }
     }
   }
 };

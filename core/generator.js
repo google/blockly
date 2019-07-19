@@ -105,6 +105,9 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
   this.init(workspace);
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
+    if (block.isInsertionMarker_) { // skip insertion markers
+      continue;
+    }
     var line = this.blockToCode(block);
     if (Array.isArray(line)) {
       // Value blocks return tuples of code and operator order.
@@ -180,6 +183,9 @@ Blockly.Generator.prototype.allNestedComments = function(block) {
  */
 Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
   if (!block) {
+    return '';
+  }
+  if (block.isInsertionMarker_) { // skip insertion markers
     return '';
   }
   if (!block.isEnabled()) {

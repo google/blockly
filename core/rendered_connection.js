@@ -368,7 +368,7 @@ Blockly.RenderedConnection.prototype.disconnect = function() {
   if (rehide) {
     // Set the hidden state for the connection back to true so shadow blocks
     // will be hidden.
-    superiorConnection.hideAll();
+    superiorConnection.setHidden(true);
   }
 };
 

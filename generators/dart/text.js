@@ -280,7 +280,7 @@ Blockly.Dart['text_prompt_ext'] = function(block) {
       'text_prompt',
       [Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ + '(msg) {',
        '  print(msg);',
-       '  return stdin.readLineSync((;',
+       '  return stdin.readLineSync();',
        '}']);
   if (block.getField('TEXT')) {
     // Internal message.
@@ -290,7 +290,7 @@ Blockly.Dart['text_prompt_ext'] = function(block) {
     var msg = Blockly.Dart.valueToCode(block, 'TEXT',
         Blockly.Dart.ORDER_NONE) || '\'\'';
   }
-  var code = functionName + '(' + msg + ', \'\')';
+  var code = functionName + '(' + msg + ')';
   var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
   if (toNumber) {
     Blockly.Dart.definitions_['import_dart_math'] =

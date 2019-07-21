@@ -274,8 +274,14 @@ Blockly.Dart['text_print'] = function(block) {
 
 Blockly.Dart['text_prompt_ext'] = function(block) {
   // Prompt function.
-  Blockly.Dart.definitions_['import_dart_html'] =
-      'import \'dart:html\' as Html;';
+  Blockly.Dart.definitions_['import_dart_io'] =
+      'import \'dart:io\';';
+  var functionName = Blockly.Dart.provideFunction_(
+      'text_prompt',
+      [Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ + '(msg) {',
+       '  print(msg);',
+       '  return stdin.readLineSync((;',
+       '}']);
   if (block.getField('TEXT')) {
     // Internal message.
     var msg = Blockly.Dart.quote_(block.getFieldValue('TEXT'));
@@ -284,7 +290,7 @@ Blockly.Dart['text_prompt_ext'] = function(block) {
     var msg = Blockly.Dart.valueToCode(block, 'TEXT',
         Blockly.Dart.ORDER_NONE) || '\'\'';
   }
-  var code = 'Html.window.prompt(' + msg + ', \'\')';
+  var code = functionName + '(' + msg + ', \'\')';
   var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
   if (toNumber) {
     Blockly.Dart.definitions_['import_dart_math'] =

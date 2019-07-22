@@ -42,7 +42,7 @@ function DiffReporter(runner) {
   var self = this;
   var indents = 0;
   var n = 0;
-  var colors = {
+  var colours = {
     pass: 32,
     fail: 31,
     'bright pass': 92,
@@ -73,9 +73,9 @@ function DiffReporter(runner) {
   };
 
   /**
-   * Color `str` with the given `type`,
-   * allowing colors to be disabled,
-   * as well as user-defined color
+   * colour `str` with the given `type`,
+   * allowing colours to be disabled,
+   * as well as user-defined colour
    * schemes.
    *
    * @private
@@ -83,11 +83,11 @@ function DiffReporter(runner) {
    * @param {string} str
    * @return {string}
    */
-  var color = function(type, str) {
-    if (!colors) {
+  var colour = function(type, str) {
+    if (!colours) {
       return String(str);
     }
-    return '\u001b[' + colors[type] + 'm' + str + '\u001b[0m';
+    return '\u001b[' + colours[type] + 'm' + str + '\u001b[0m';
   };
 
   function indent() {
@@ -100,7 +100,7 @@ function DiffReporter(runner) {
   });
   runner.on('suite', function(suite) {
     ++indents;
-    console.log(color('suite', '%s%s'), indent(), suite.title);
+    console.log(colour('suite', '%s%s'), indent(), suite.title);
   });
   runner.on('suite end', function() {
     --indents;
@@ -113,8 +113,8 @@ function DiffReporter(runner) {
     json_tests.push(test);
     var logStr =
       indent() +
-      color('checkmark', '  ' + symbols.ok) +
-      color('pass', ' ' + test.title);
+      colour('checkmark', '  ' + symbols.ok) +
+      colour('pass', ' ' + test.title);
       console.log(logStr);
   });
 
@@ -122,7 +122,7 @@ function DiffReporter(runner) {
     failures++;
     json_tests.push(test);
     // Print test information the way the spec reporter would.
-    console.log(indent() + color('fail', '  %d) %s'), ++n, test.title);
+    console.log(indent() + colour('fail', '  %d) %s'), ++n, test.title);
   });
 
   runner.on('end', function() {

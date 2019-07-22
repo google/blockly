@@ -201,7 +201,7 @@ Blockly.FieldImage.prototype.getCorrectedSize = function() {
   // Old rendering adds an extra pixel under the image.  We include this in the
   // height of the image in new rendering, rather than having the spacer below
   // know that there was an image in the previous row.
-  // TODO: Remove.
+  // TODO (#2562): Remove getCorrectedSize.
   return new goog.math.Size(this.size_.width, this.height_ + 1);
 };
 

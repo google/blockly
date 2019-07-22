@@ -109,6 +109,9 @@ Blockly.FieldLabel.prototype.getCorrectedSize = function() {
   // getSize also renders and updates the size if needed.  Rather than duplicate
   // the logic to figure out whether to rerender, just call getSize.
   this.getSize();
+  // This extra 5 was probably to add padding between rows.
+  // It's also found in the constructor and in initView.
+  // TODO (#2562): Remove getCorrectedSize.
   return new goog.math.Size(this.size_.width, this.size_.height - 5);
 };
 

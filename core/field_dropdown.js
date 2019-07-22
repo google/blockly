@@ -556,6 +556,9 @@ Blockly.FieldDropdown.prototype.getCorrectedSize = function() {
   // getSize also renders and updates the size if needed.  Rather than duplicate
   // the logic to figure out whether to rerender, just call getSize.
   this.getSize();
+  // This extra 9 was probably to add padding between rows.
+  // It's also found in render_, renderSelectedImage_, and renderSelectedText_.
+  // TODO (#2562): Remove getCorrectedSize.
   return new goog.math.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
       this.size_.height - 9);
 };

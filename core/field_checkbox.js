@@ -218,6 +218,8 @@ Blockly.FieldCheckbox.prototype.convertValueToBool_ = function(value) {
  */
 Blockly.FieldCheckbox.prototype.getCorrectedSize = function() {
   this.getSize();
+
+  // TODO (#2562): Remove getCorrectedSize.
   return new goog.math.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
       Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
 };

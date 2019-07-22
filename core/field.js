@@ -650,6 +650,7 @@ Blockly.Field.prototype.getSize = function() {
  * @package
  */
 Blockly.Field.prototype.getCorrectedSize = function() {
+  // TODO (#2562): Remove getCorrectedSize.
   return this.getSize();
 };
 

@@ -351,6 +351,7 @@ Blockly.FieldColour.prototype.getCorrectedSize = function() {
   // getSize also renders and updates the size if needed.  Rather than duplicate
   // the logic to figure out whether to rerender, just call getSize.
   this.getSize();
+  // TODO (#2562): Remove getCorrectedSize.
   return new goog.math.Size(
       this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
       Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT - 1);

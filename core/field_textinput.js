@@ -432,4 +432,17 @@ Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
   return n;
 };
 
+/**
+ * Get the size of the visible field, as used in new rendering.
+ * @return {!goog.math.Size} The size of the visible field.
+ * @package
+ */
+Blockly.FieldTextInput.prototype.getCorrectedSize = function() {
+  // getSize also renders and updates the size if needed.  Rather than duplicate
+  // the logic to figure out whether to rerender, just call getSize.
+  this.getSize();
+  // TODO (#2562): Remove getCorrectedSize.
+  return new goog.math.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X, 16);
+};
+
 Blockly.Field.register('field_input', Blockly.FieldTextInput);

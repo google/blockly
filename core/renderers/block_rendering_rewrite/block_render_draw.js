@@ -267,7 +267,7 @@ Blockly.BlockRendering.Drawer.prototype.drawInternals_ = function() {
  * @return {number} How far to offset the field in the x direction.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.dealWithJackassFields_ = function(field) {
+Blockly.BlockRendering.Drawer.prototype.dealWithOffsetFields_ = function(field) {
   if (field instanceof Blockly.FieldDropdown
       || field instanceof Blockly.FieldTextInput
       || field instanceof Blockly.FieldColour
@@ -300,7 +300,7 @@ Blockly.BlockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
     svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + yPos + ')');
     fieldInfo.icon.computeIconLocation();
   } else {
-    xPos += this.dealWithJackassFields_(fieldInfo.field);
+    xPos += this.dealWithOffsetFields_(fieldInfo.field);
 
     svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + yPos + ')');
   }

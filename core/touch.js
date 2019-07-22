@@ -31,9 +31,21 @@
 goog.provide('Blockly.Touch');
 
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.string');
 
-goog.require('goog.events.BrowserFeature');
 
+/**
+  * Whether touch is enabled in the browser.
+  * Copied from Closure's goog.events.BrowserFeature.TOUCH_ENABLED
+  */
+Blockly.Touch.TOUCH_ENABLED =
+    ('ontouchstart' in Blockly.utils.global ||
+     !!(Blockly.utils.global['document'] && document.documentElement &&
+        'ontouchstart' in document.documentElement) ||
+     // IE10 uses non-standard touch events, so it has a different check.
+     !!(Blockly.utils.global['navigator'] &&
+        (Blockly.utils.global['navigator']['maxTouchPoints'] ||
+         Blockly.utils.global['navigator']['msMaxTouchPoints'])));
 
 /**
  * Which touch events are we currently paying attention to?
@@ -48,7 +60,7 @@ Blockly.Touch.touchIdentifier_ = null;
  * @type {Object}
  */
 Blockly.Touch.TOUCH_MAP = {};
-if (goog.global.PointerEvent) {
+if (Blockly.utils.global['PointerEvent']) {
   Blockly.Touch.TOUCH_MAP = {
     'mousedown': ['pointerdown'],
     'mouseenter': ['pointerenter'],
@@ -60,7 +72,7 @@ if (goog.global.PointerEvent) {
     'touchend': ['pointerup'],
     'touchcancel': ['pointercancel']
   };
-} else if (goog.events.BrowserFeature.TOUCH_ENABLED) {
+} else if (Blockly.Touch.TOUCH_ENABLED) {
   Blockly.Touch.TOUCH_MAP = {
     'mousedown': ['touchstart'],
     'mousemove': ['touchmove'],
@@ -199,7 +211,7 @@ Blockly.Touch.checkTouchIdentifier = function(e) {
  * @param {!Event} e A touch event.
  */
 Blockly.Touch.setClientFromTouch = function(e) {
-  if (Blockly.utils.startsWith(e.type, 'touch')) {
+  if (Blockly.utils.string.startsWith(e.type, 'touch')) {
     // Map the touch event's properties to the event.
     var touchPoint = e.changedTouches[0];
     e.clientX = touchPoint.clientX;
@@ -213,9 +225,9 @@ Blockly.Touch.setClientFromTouch = function(e) {
  * @return {boolean} True if it is a mouse or touch event; false otherwise.
  */
 Blockly.Touch.isMouseOrTouchEvent = function(e) {
-  return Blockly.utils.startsWith(e.type, 'touch') ||
-      Blockly.utils.startsWith(e.type, 'mouse') ||
-      Blockly.utils.startsWith(e.type, 'pointer');
+  return Blockly.utils.string.startsWith(e.type, 'touch') ||
+      Blockly.utils.string.startsWith(e.type, 'mouse') ||
+      Blockly.utils.string.startsWith(e.type, 'pointer');
 };
 
 /**
@@ -224,8 +236,8 @@ Blockly.Touch.isMouseOrTouchEvent = function(e) {
  * @return {boolean} True if it is a touch event; false otherwise.
  */
 Blockly.Touch.isTouchEvent = function(e) {
-  return Blockly.utils.startsWith(e.type, 'touch') ||
-      Blockly.utils.startsWith(e.type, 'pointer');
+  return Blockly.utils.string.startsWith(e.type, 'touch') ||
+      Blockly.utils.string.startsWith(e.type, 'pointer');
 };
 
 /**
@@ -244,8 +256,8 @@ Blockly.Touch.splitEventByTouches = function(e) {
         type: e.type,
         changedTouches: [e.changedTouches[i]],
         target: e.target,
-        stopPropagation: function(){ e.stopPropagation(); },
-        preventDefault: function(){ e.preventDefault(); }
+        stopPropagation: function() { e.stopPropagation(); },
+        preventDefault: function() { e.preventDefault(); }
       };
       events[i] = newEvent;
     }

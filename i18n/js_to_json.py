@@ -17,7 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Extracts messages from .js files into .json files for translation.
+"""Extracts messages from messages.js file into .json files for translation.
 
 Specifically, lines with the following formats are extracted:
 

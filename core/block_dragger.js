@@ -26,11 +26,11 @@
 
 goog.provide('Blockly.BlockDragger');
 
-goog.require('Blockly.BlockAnimations');
-goog.require('Blockly.InsertionMarkerManager');
+goog.require('Blockly.blockAnimations');
+goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
-
-goog.require('goog.math.Coordinate');
+goog.require('Blockly.InsertionMarkerManager');
+goog.require('Blockly.utils.Coordinate');
 
 
 /**
@@ -82,7 +82,7 @@ Blockly.BlockDragger = function(block, workspace) {
   /**
    * The location of the top left corner of the dragging block at the beginning
    * of the drag in workspace coordinates.
-   * @type {!goog.math.Coordinate}
+   * @type {!Blockly.utils.Coordinate}
    * @private
    */
   this.startXY_ = this.draggingBlock_.getRelativeToSurfaceXY();
@@ -129,7 +129,7 @@ Blockly.BlockDragger.initIconData_ = function(block) {
     var icons = descendant.getIcons();
     for (var j = 0; j < icons.length; j++) {
       var data = {
-        // goog.math.Coordinate with x and y properties (workspace coordinates).
+        // Blockly.utils.Coordinate with x and y properties (workspace coordinates).
         location: icons[j].getIconLocation(),
         // Blockly.Icon
         icon: icons[j]
@@ -142,7 +142,7 @@ Blockly.BlockDragger.initIconData_ = function(block) {
 
 /**
  * Start dragging a block.  This includes moving it to the drag surface.
- * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at mouse down, in pixel units.
  * @param {boolean} healStack Whether or not to heal the stack after
  *     disconnecting.
@@ -166,17 +166,17 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
   // Turn the cache on so we don't do spurious remeasures during the drag.
   Blockly.Field.startCache();
   this.workspace_.setResizesEnabled(false);
-  Blockly.BlockAnimations.disconnectUiStop();
+  Blockly.blockAnimations.disconnectUiStop();
 
   if (this.draggingBlock_.getParent() ||
       (healStack && this.draggingBlock_.nextConnection &&
       this.draggingBlock_.nextConnection.targetBlock())) {
     this.draggingBlock_.unplug(healStack);
     var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-    var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
+    var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
 
     this.draggingBlock_.translate(newLoc.x, newLoc.y);
-    Blockly.BlockAnimations.disconnectUiEffect(this.draggingBlock_);
+    Blockly.blockAnimations.disconnectUiEffect(this.draggingBlock_);
   }
   this.draggingBlock_.setDragging(true);
   // For future consideration: we may be able to put moveToDragSurface inside
@@ -196,13 +196,13 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
  * Execute a step of block dragging, based on the given event.  Update the
  * display accordingly.
  * @param {!Event} e The most recent move event.
- * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
  * @package
  */
 Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
+  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
 
   this.draggingBlock_.moveDuringDrag(newLoc);
   this.dragIcons_(delta);
@@ -216,7 +216,7 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
 /**
  * Finish a block drag and put the block back on the workspace.
  * @param {!Event} e The mouseup/touchend event.
- * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
  * @package
  */
@@ -227,10 +227,10 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
 
   Blockly.Field.stopCache();
 
-  Blockly.BlockAnimations.disconnectUiStop();
+  Blockly.blockAnimations.disconnectUiStop();
 
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
+  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
   this.draggingBlock_.moveOffDragSurface_(newLoc);
 
   var deleted = this.maybeDeleteBlock_();
@@ -318,14 +318,15 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
  * correction for mutator workspaces.
  * This function does not consider differing origins.  It simply scales the
  * input's x and y values.
- * @param {!goog.math.Coordinate} pixelCoord A coordinate with x and y values
- *     in css pixel units.
- * @return {!goog.math.Coordinate} The input coordinate divided by the workspace
+ * @param {!Blockly.utils.Coordinate} pixelCoord A coordinate with x and y values
+ *     in CSS pixel units.
+ * @return {!Blockly.utils.Coordinate} The input coordinate divided by the workspace
  *     scale.
  * @private
  */
 Blockly.BlockDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
-  var result = new goog.math.Coordinate(pixelCoord.x / this.workspace_.scale,
+  var result = new Blockly.utils.Coordinate(
+      pixelCoord.x / this.workspace_.scale,
       pixelCoord.y / this.workspace_.scale);
   if (this.workspace_.isMutator) {
     // If we're in a mutator, its scale is always 1, purely because of some
@@ -333,14 +334,14 @@ Blockly.BlockDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
     // the scale on the parent workspace.
     // Fix that for dragging.
     var mainScale = this.workspace_.options.parentWorkspace.scale;
-    result = result.scale(1 / mainScale);
+    result.scale(1 / mainScale);
   }
   return result;
 };
 
 /**
  * Move all of the icons connected to this drag.
- * @param {!goog.math.Coordinate} dxy How far to move the icons from their
+ * @param {!Blockly.utils.Coordinate} dxy How far to move the icons from their
  *     original positions, in workspace units.
  * @private
  */
@@ -348,7 +349,7 @@ Blockly.BlockDragger.prototype.dragIcons_ = function(dxy) {
   // Moving icons moves their associated bubbles.
   for (var i = 0; i < this.dragIconData_.length; i++) {
     var data = this.dragIconData_[i];
-    data.icon.setIconLocation(goog.math.Coordinate.sum(data.location, dxy));
+    data.icon.setIconLocation(Blockly.utils.Coordinate.sum(data.location, dxy));
   }
 };
 

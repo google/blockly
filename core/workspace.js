@@ -26,9 +26,12 @@
 
 goog.provide('Blockly.Workspace');
 
+goog.require('Blockly.Events');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
 goog.require('Blockly.WorkspaceComment');
+goog.require('Blockly.Themes.Classic');
 
 
 /**
@@ -111,6 +114,12 @@ Blockly.Workspace = function(opt_options) {
    * @private
    */
   this.potentialVariableMap_ = null;
+
+  // Set the default theme. This is for headless workspaces. This will get
+  // overwritten by the theme passed into the inject call for rendered workspaces.
+  if (!Blockly.getTheme()) {
+    Blockly.setTheme(Blockly.Themes.Classic);
+  }
 };
 
 /**
@@ -132,6 +141,12 @@ Blockly.Workspace.prototype.isClearing = false;
  * @type {number}
  */
 Blockly.Workspace.prototype.MAX_UNDO = 1024;
+
+/**
+ * Set of databases for rapid lookup of connection locations.
+ * @type {Array.<!Blockly.ConnectionDB>}
+ */
+Blockly.Workspace.prototype.connectionDBList = null;
 
 /**
  * Dispose of this workspace.
@@ -199,7 +214,7 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   var blocks = [].concat(this.topBlocks_);
   if (ordered && blocks.length > 1) {
     this.sortObjects_.offset =
-        Math.sin(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
+        Math.sin(Blockly.utils.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
       this.sortObjects_.offset *= -1;
     }
@@ -245,7 +260,7 @@ Blockly.Workspace.prototype.getBlocksByType = function(type, ordered) {
   var blocks = this.typedBlocksDB_[type].slice(0);
   if (ordered && blocks.length > 1) {
     this.sortObjects_.offset =
-        Math.sign(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
+        Math.sign(Blockly.utils.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
       this.sortObjects_.offset *= -1;
     }
@@ -298,7 +313,7 @@ Blockly.Workspace.prototype.getTopComments = function(ordered) {
   var comments = [].concat(this.topComments_);
   if (ordered && comments.length > 1) {
     this.sortObjects_.offset =
-        Math.sin(Blockly.utils.toRadians(Blockly.Workspace.SCAN_ANGLE));
+        Math.sin(Blockly.utils.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
       this.sortObjects_.offset *= -1;
     }
@@ -381,10 +396,10 @@ Blockly.Workspace.prototype.renameVariableById = function(id, newName) {
  * Create a variable with a given name, optional type, and optional ID.
  * @param {string} name The name of the variable. This must be unique across
  *     variables and procedures.
- * @param {string=} opt_type The type of the variable like 'int' or 'string'.
+ * @param {?string=} opt_type The type of the variable like 'int' or 'string'.
  *     Does not need to be unique. Field_variable can filter variables based on
  *     their type. This will default to '' which is a specific type.
- * @param {string=} opt_id The unique ID of the variable. This will default to
+ * @param {?string=} opt_id The unique ID of the variable. This will default to
  *     a UUID.
  * @return {Blockly.VariableModel} The newly created variable.
  */
@@ -476,7 +491,7 @@ Blockly.Workspace.prototype.getVariablesOfType = function(type) {
  * @package
  */
 Blockly.Workspace.prototype.getVariableTypes = function() {
-  return this.variableMap_.getVariableTypes();
+  return this.variableMap_.getVariableTypes(this);
 };
 
 /**

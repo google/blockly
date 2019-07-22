@@ -188,7 +188,7 @@ Blockly.PHP['math_number_property'] = function(block) {
          '  return true;',
          '}']);
     code = functionName + '(' + number_to_check + ')';
-    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+    return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
   }
   switch (dropdown_property) {
     case 'EVEN':

@@ -65,6 +65,7 @@ function blockTest_setUp() {
 function blockTest_tearDown() {
   undefineTestBlocks();
   workspace.dispose();
+  mockControl_.$tearDown();
 }
 
 function assertUnpluggedNoheal(blocks) {
@@ -100,7 +101,7 @@ function setUpRowBlocks() {
     A: blockA,
     B: blockB,
     C: blockC
-  }
+  };
 }
 
 function setUpStackBlocks() {
@@ -117,7 +118,7 @@ function setUpStackBlocks() {
     A: blockA,
     B: blockB,
     C: blockC
-  }
+  };
 }
 
 
@@ -219,7 +220,7 @@ function test_block_row_unplug_multi_inputs_parent() {
   try {
     var blocks = setUpRowBlocks();
     // Add extra input to parent
-    blocks.A.appendValueInput("INPUT").setCheck(null);
+    blocks.A.appendValueInput('INPUT').setCheck(null);
 
     // Parent block has multiple inputs.
     blocks.B.unplug(true);
@@ -234,7 +235,7 @@ function test_block_row_unplug_multi_inputs_middle() {
   try {
     var blocks = setUpRowBlocks();
     // Add extra input to middle block
-    blocks.B.appendValueInput("INPUT").setCheck(null);
+    blocks.B.appendValueInput('INPUT').setCheck(null);
 
     // Middle block has multiple inputs.
     blocks.B.unplug(true);
@@ -249,7 +250,7 @@ function test_block_row_unplug_multi_inputs_child() {
   try {
     var blocks = setUpRowBlocks();
     // Add extra input to child block
-    blocks.C.appendValueInput("INPUT").setCheck(null);
+    blocks.C.appendValueInput('INPUT').setCheck(null);
 
     // Child block input count doesn't matter.
     blocks.B.unplug(true);
@@ -263,10 +264,10 @@ function test_set_style() {
   blockTest_setUp();
   var styleStub = {
     getBlockStyle: function() {
-      return{
-        "colourPrimary": "#FFFFFF",
-        "colourSecondary":"#AABBCC",
-        "colourTertiary":"#DDEEFF"
+      return {
+        "colourPrimary": "#ffffff",
+        "colourSecondary": "#aabbcc",
+        "colourTertiary": "#ddeeff"
       }
     }
   };
@@ -274,9 +275,9 @@ function test_set_style() {
   var blockA = workspace.newBlock('row_block');
   blockA.setStyle('styleOne');
 
-  assertEquals(blockA.colour_, '#FFFFFF');
-  assertEquals(blockA.colourSecondary_, '#AABBCC');
-  assertEquals(blockA.colourTertiary_, '#DDEEFF');
+  assertEquals('#ffffff', blockA.colour_);
+  assertEquals('#aabbcc', blockA.colourSecondary_);
+  assertEquals('#ddeeff', blockA.colourTertiary_);
 
   blockTest_tearDown();
 }
@@ -292,9 +293,9 @@ function test_set_style_throw_exception() {
   var blockA = workspace.newBlock('row_block');
   try {
     blockA.setStyle('styleOne');
-  }catch(error) {
-    assertEquals(error.message, "Invalid style name: styleOne");
-  }finally {
+  } catch(error) {
+    assertEquals(error.message, 'Invalid style name: styleOne');
+  } finally {
     blockTest_tearDown();
   }
 }

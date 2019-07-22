@@ -6,7 +6,7 @@ goog.provide('Blockly.Msg.sd');
 
 goog.require('Blockly.Msg');
 
-Blockly.Msg["ADD_COMMENT"] = "راءِ ڏيو";
+Blockly.Msg["ADD_COMMENT"] = "رايو ڏيو";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "قدر بدلايو";
 Blockly.Msg["CLEAN_UP"] = "بندشون هٽايو";
@@ -62,18 +62,18 @@ Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_UNTIL"] = "ورجايو جيستائي
 Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_WHILE"] = "ورجايو جڏهن";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL"] = "While a value is false, then do some statements.";  // untranslated
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_WHILE"] = "While a value is true, then do some statements.";  // untranslated
-Blockly.Msg["DELETE_ALL_BLOCKS"] = "Delete all %1 blocks?";  // untranslated
+Blockly.Msg["DELETE_ALL_BLOCKS"] = "سڀ %1 بلاڪ ڊاھيون؟";
 Blockly.Msg["DELETE_BLOCK"] = "بلاڪ ڊاهيو";
 Blockly.Msg["DELETE_VARIABLE"] = "Delete the '%1' variable";  // untranslated
 Blockly.Msg["DELETE_VARIABLE_CONFIRMATION"] = "Delete %1 uses of the '%2' variable?";  // untranslated
 Blockly.Msg["DELETE_X_BLOCKS"] = "1٪ بلاڪ ڊاهيو";
 Blockly.Msg["DISABLE_BLOCK"] = "بلاڪ کي غيرفعال بڻايو";
 Blockly.Msg["DUPLICATE_BLOCK"] = "نقل";
-Blockly.Msg["DUPLICATE_COMMENT"] = "Duplicate Comment";  // untranslated
+Blockly.Msg["DUPLICATE_COMMENT"] = "نقل رايو";
 Blockly.Msg["ENABLE_BLOCK"] = "بلاڪ کي فعال بڻايو";
 Blockly.Msg["EXPAND_ALL"] = "بلاڪَ نمايو";
 Blockly.Msg["EXPAND_BLOCK"] = "بلاڪ نمايو";
-Blockly.Msg["EXTERNAL_INPUTS"] = "ٻاهرين ڄاڻ";
+Blockly.Msg["EXTERNAL_INPUTS"] = "ٻاهرين داخلائون";
 Blockly.Msg["HELP"] = "مدد";
 Blockly.Msg["INLINE_INPUTS"] = "اِنلائين اِن پٽس";
 Blockly.Msg["IOS_CANCEL"] = "رد";
@@ -320,7 +320,7 @@ Blockly.Msg["PROCEDURES_MUTATORARG_TOOLTIP"] = "Add an input to the function."; 
 Blockly.Msg["PROCEDURES_MUTATORCONTAINER_TITLE"] = "ان پُٽس";
 Blockly.Msg["PROCEDURES_MUTATORCONTAINER_TOOLTIP"] = "Add, remove, or reorder inputs to this function.";  // untranslated
 Blockly.Msg["REDO"] = "ٻيهر ڪريو";
-Blockly.Msg["REMOVE_COMMENT"] = "راءِ ڊاهيو";
+Blockly.Msg["REMOVE_COMMENT"] = "رايو ڊاهيو";
 Blockly.Msg["RENAME_VARIABLE"] = "ڦرڻي کي نئون نالو ڏيو...";
 Blockly.Msg["RENAME_VARIABLE_TITLE"] = "Rename all '%1' variables to:";  // untranslated
 Blockly.Msg["TEXT_APPEND_HELPURL"] = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated

@@ -33,18 +33,31 @@ Blockly.Dart['controls_if'] = function(block) {
   // If/elseif/else condition.
   var n = 0;
   var code = '', branchCode, conditionCode;
+  if (Blockly.Dart.STATEMENT_PREFIX) {
+    // Automatic prefix insertion is switched off for this block.  Add manually.
+    code += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_PREFIX, block);
+  }
   do {
     conditionCode = Blockly.Dart.valueToCode(block, 'IF' + n,
-      Blockly.Dart.ORDER_NONE) || 'false';
+        Blockly.Dart.ORDER_NONE) || 'false';
     branchCode = Blockly.Dart.statementToCode(block, 'DO' + n);
+    if (Blockly.Dart.STATEMENT_SUFFIX) {
+      branchCode = Blockly.Dart.prefixLines(
+          Blockly.Dart.injectId(Blockly.Dart.STATEMENT_SUFFIX, block),
+          Blockly.Dart.INDENT) + branchCode;
+    }
     code += (n > 0 ? 'else ' : '') +
         'if (' + conditionCode + ') {\n' + branchCode + '}';
-
     ++n;
   } while (block.getInput('IF' + n));
 
-  if (block.getInput('ELSE')) {
+  if (block.getInput('ELSE') || Blockly.Dart.STATEMENT_SUFFIX) {
     branchCode = Blockly.Dart.statementToCode(block, 'ELSE');
+    if (Blockly.Dart.STATEMENT_SUFFIX) {
+      branchCode = Blockly.Dart.prefixLines(
+          Blockly.Dart.injectId(Blockly.Dart.STATEMENT_SUFFIX, block),
+          Blockly.Dart.INDENT) + branchCode;
+    }
     code += ' else {\n' + branchCode + '}';
   }
   return code + '\n';

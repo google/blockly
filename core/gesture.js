@@ -27,18 +27,18 @@
 
 goog.provide('Blockly.Gesture');
 
-goog.require('Blockly.BlockAnimations');
+goog.require('Blockly.blockAnimations');
 goog.require('Blockly.BlockDragger');
 goog.require('Blockly.BubbleDragger');
 goog.require('Blockly.constants');
+goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.FlyoutDragger');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.WorkspaceDragger');
-
-goog.require('goog.math.Coordinate');
 
 
 /*
@@ -57,16 +57,16 @@ goog.require('goog.math.Coordinate');
 Blockly.Gesture = function(e, creatorWorkspace) {
 
   /**
-   * The position of the mouse when the gesture started.  Units are css pixels,
+   * The position of the mouse when the gesture started.  Units are CSS pixels,
    * with (0, 0) at the top left of the browser window (mouseEvent clientX/Y).
-   * @type {goog.math.Coordinate}
+   * @type {Blockly.utils.Coordinate}
    */
   this.mouseDownXY_ = null;
 
   /**
    * How far the mouse has moved during this drag, in pixel units.
    * (0, 0) is at this.mouseDownXY_.
-   * @type {goog.math.Coordinate}
+   * @type {Blockly.utils.Coordinate}
    * @private
    */
   this.currentDragDeltaXY_ = null;
@@ -280,7 +280,7 @@ Blockly.Gesture.prototype.dispose = function() {
  * @private
  */
 Blockly.Gesture.prototype.updateFromEvent_ = function(e) {
-  var currentXY = new goog.math.Coordinate(e.clientX, e.clientY);
+  var currentXY = new Blockly.utils.Coordinate(e.clientX, e.clientY);
   var changed = this.updateDragDelta_(currentXY);
   // Exceeded the drag radius for the first time.
   if (changed) {
@@ -292,18 +292,18 @@ Blockly.Gesture.prototype.updateFromEvent_ = function(e) {
 
 /**
  * DO MATH to set currentDragDeltaXY_ based on the most recent mouse position.
- * @param {!goog.math.Coordinate} currentXY The most recent mouse/pointer
+ * @param {!Blockly.utils.Coordinate} currentXY The most recent mouse/pointer
  *     position, in pixel units, with (0, 0) at the window's top left corner.
  * @return {boolean} True if the drag just exceeded the drag radius for the
  *     first time.
  * @private
  */
 Blockly.Gesture.prototype.updateDragDelta_ = function(currentXY) {
-  this.currentDragDeltaXY_ = goog.math.Coordinate.difference(currentXY,
+  this.currentDragDeltaXY_ = Blockly.utils.Coordinate.difference(currentXY,
       this.mouseDownXY_);
 
   if (!this.hasExceededDragRadius_) {
-    var currentDragDelta = goog.math.Coordinate.magnitude(
+    var currentDragDelta = Blockly.utils.Coordinate.magnitude(
         this.currentDragDeltaXY_);
 
     // The flyout has a different drag radius from the rest of Blockly.
@@ -482,7 +482,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
   }
   this.hasStarted_ = true;
 
-  Blockly.BlockAnimations.disconnectUiStop();
+  Blockly.blockAnimations.disconnectUiStop();
   this.startWorkspace_.updateScreenCalculationsIfScrolled();
   if (this.startWorkspace_.isMutator) {
     // Mutator's coordinate system could be out of date because the bubble was
@@ -512,7 +512,7 @@ Blockly.Gesture.prototype.doStart = function(e) {
     Blockly.longStart_(e, this);
   }
 
-  this.mouseDownXY_ = new goog.math.Coordinate(e.clientX, e.clientY);
+  this.mouseDownXY_ = new Blockly.utils.Coordinate(e.clientX, e.clientY);
   this.healStack_ = e.altKey || e.ctrlKey || e.metaKey;
 
   this.bindMouseEvents(e);
@@ -734,7 +734,7 @@ Blockly.Gesture.prototype.doFieldClick_ = function() {
 Blockly.Gesture.prototype.doBlockClick_ = function() {
   // Block click in an autoclosing flyout.
   if (this.flyout_ && this.flyout_.autoClose) {
-    if (!this.targetBlock_.disabled) {
+    if (this.targetBlock_.isEnabled()) {
       if (!Blockly.Events.getGroup()) {
         Blockly.Events.setGroup(true);
       }
@@ -898,10 +898,10 @@ Blockly.Gesture.prototype.isBlockClick_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.isFieldClick_ = function() {
-  var fieldEditable = this.startField_ ?
-      this.startField_.isCurrentlyEditable() : false;
-  return fieldEditable && !this.hasExceededDragRadius_ && (!this.flyout_ ||
-    !this.flyout_.autoClose);
+  var fieldClickable = this.startField_ ?
+      this.startField_.isClickable() : false;
+  return fieldClickable && !this.hasExceededDragRadius_ &&
+      (!this.flyout_ || !this.flyout_.autoClose);
 };
 
 /**

@@ -151,11 +151,12 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
       }
     }
   }
-  // Most languages end lines with a semicolon.  Python does not.
+  // Most languages end lines with a semicolon.  Python & Lua do not.
   var lineEnd = {
     'JavaScript': ';',
     'Python': '',
     'PHP': ';',
+    'Lua': '',
     'Dart': ';'
   };
   code.push("  // TODO: Assemble " + language + " into code variable.");
@@ -406,6 +407,12 @@ FactoryUtils.getFieldsJs_ = function(block) {
           // Result: 'hello'
           fields.push(JSON.stringify(block.getFieldValue('TEXT')));
           break;
+        case 'field_label_serializable':
+          // Result: new Blockly.FieldLabelSerializable('Hello'), 'GREET'
+          fields.push('new Blockly.FieldLabelSerializable(' +
+              JSON.stringify(block.getFieldValue('TEXT')) + '), ' +
+              JSON.stringify(block.getFieldValue('FIELDNAME')));
+          break;
         case 'field_input':
           // Result: new Blockly.FieldTextInput('Hello'), 'GREET'
           fields.push('new Blockly.FieldTextInput(' +
@@ -510,6 +517,13 @@ FactoryUtils.getFieldsJson_ = function(block) {
         case 'field_static':
           // Result: 'hello'
           fields.push(block.getFieldValue('TEXT'));
+          break;
+        case 'field_label_serializable':
+          fields.push({
+            type: block.type,
+            name: block.getFieldValue('FIELDNAME'),
+            text: block.getFieldValue('TEXT')
+          });
           break;
         case 'field_input':
           fields.push({
@@ -766,7 +780,7 @@ FactoryUtils.getBlockTypeFromJsDefinition = function(blockDef) {
  */
 FactoryUtils.generateCategoryXml = function(blocks, categoryName) {
   // Create category DOM element.
-  var categoryElement = document.createElement('category');
+  var categoryElement = Blockly.utils.xml.createElement('category');
   categoryElement.setAttribute('name', categoryName);
 
   // For each block, add block element to category.

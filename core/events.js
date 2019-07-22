@@ -402,7 +402,7 @@ Blockly.Events.fromJson = function(json, workspace) {
  * Enable/disable a block depending on whether it is properly connected.
  * Use this on applications where all blocks should be connected to a top block.
  * Recommend setting the 'disable' option to 'false' in the config so that
- * users don't try to reenable disabled orphan blocks.
+ * users don't try to re-enable disabled orphan blocks.
  * @param {!Blockly.Events.Abstract} event Custom data for event.
  */
 Blockly.Events.disableOrphans = function(event) {
@@ -411,15 +411,16 @@ Blockly.Events.disableOrphans = function(event) {
     var workspace = Blockly.Workspace.getById(event.workspaceId);
     var block = workspace.getBlockById(event.blockId);
     if (block) {
-      if (block.getParent() && !block.getParent().disabled) {
+      var parent = block.getParent();
+      if (parent && parent.isEnabled()) {
         var children = block.getDescendants(false);
         for (var i = 0, child; child = children[i]; i++) {
-          child.setDisabled(false);
+          child.setEnabled(true);
         }
       } else if ((block.outputConnection || block.previousConnection) &&
                  !workspace.isDragging()) {
         do {
-          block.setDisabled(true);
+          block.setEnabled(false);
           block = block.getNextBlock();
         } while (block);
       }

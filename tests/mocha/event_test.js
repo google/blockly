@@ -32,7 +32,7 @@ suite('Events', function() {
   function checkExactEventValues(event, values) {
     var keys = Object.keys(values);
     for (var i = 0; i < keys.length; i++) {
-      var field = keys[i]
+      var field = keys[i];
       assertEquals(values[field], event[field]);
     }
   }

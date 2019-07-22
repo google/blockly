@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Utility methods for working with the closure menu
+ * @fileoverview Utility methods for working with the Closure menu
  * (goog.ui.menu).
  * @author fenichel@google.com (Rachel Fenichel)
  */
@@ -30,6 +30,8 @@
  * @namespace
  */
 goog.provide('Blockly.utils.uiMenu');
+
+goog.require('goog.style');
 
 
 /**

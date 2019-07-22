@@ -1,4 +1,4 @@
-<xml xmlns="http://www.w3.org/1999/xhtml">
+<xml xmlns="https://developers.google.com/blockly/xml">
   <block type="procedures_defnoreturn" x="260" y="14">
     <field name="NAME">test colour picker</field>
     <comment pinned="false" h="80" w="160">Describe this function...</comment>

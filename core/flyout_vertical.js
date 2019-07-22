@@ -27,13 +27,11 @@
 goog.provide('Blockly.VerticalFlyout');
 
 goog.require('Blockly.Block');
-goog.require('Blockly.Events');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.FlyoutButton');
-goog.require('Blockly.WorkspaceSvg');
-
-goog.require('goog.math.Rect');
-goog.require('goog.userAgent');
+goog.require('Blockly.utils');
+goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.userAgent');
 
 
 /**
@@ -292,7 +290,7 @@ Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
  * Determine if a drag delta is toward the workspace, based on the position
  * and orientation of the flyout. This is used in determineDragIntention_ to
  * determine if a new block should be created or if the flyout should scroll.
- * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at mouse down, in pixel units.
  * @return {boolean} True if the drag is toward the workspace.
  * @package
@@ -315,7 +313,7 @@ Blockly.VerticalFlyout.prototype.isDragTowardWorkspace = function(
 
 /**
  * Return the deletion rectangle for this flyout in viewport coordinates.
- * @return {goog.math.Rect} Rectangle in which to delete.
+ * @return {Blockly.utils.Rect} Rectangle in which to delete.
  */
 Blockly.VerticalFlyout.prototype.getClientRect = function() {
   if (!this.svgGroup_) {
@@ -327,17 +325,16 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
   // area are still deleted.  Must be larger than the largest screen size,
   // but be smaller than half Number.MAX_SAFE_INTEGER (not available on IE).
   var BIG_NUM = 1000000000;
-  var x = flyoutRect.left;
-  var width = flyoutRect.width;
+  var left = flyoutRect.left;
 
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
-    return new goog.math.Rect(x - BIG_NUM, -BIG_NUM, BIG_NUM + width,
-        BIG_NUM * 2);
+    var width = flyoutRect.width;
+    return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, left + width);
   } else {  // Right
     // Firefox sometimes reports the wrong value for the client rect.
     // See https://github.com/google/blockly/issues/1425 and
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1066435
-    if (goog.userAgent.GECKO &&
+    if (Blockly.utils.userAgent.GECKO &&
         this.targetWorkspace_ && this.targetWorkspace_.isMutator) {
       // The position of the left side of the mutator workspace in pixels
       // relative to the window origin.
@@ -350,15 +347,15 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
       // visible area of the workspace should be more than ten pixels wide.  If
       // the browser reports that the flyout is within ten pixels of the left
       // side of the workspace, ignore it and manually calculate the value.
-      if (Math.abs(targetWsLeftPixels - x) < 10) {
+      if (Math.abs(targetWsLeftPixels - left) < 10) {
         // If we're in a mutator, its scale is always 1, purely because of some
         // oddities in our rendering optimizations.  The actual scale is the
         // same as the scale on the parent workspace.
         var scale = this.targetWorkspace_.options.parentWorkspace.scale;
-        x = x + this.leftEdge_ * scale;
+        left += this.leftEdge_ * scale;
       }
     }
-    return new goog.math.Rect(x, -BIG_NUM, BIG_NUM + width, BIG_NUM * 2);
+    return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
   }
 };
 

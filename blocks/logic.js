@@ -306,6 +306,12 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   elseCount_: 0,
 
   /**
+   * Don't automatically add STATEMENT_PREFIX and STATEMENT_SUFFIX to generated
+   * code.  These will be handled manually in this block's generators.
+   */
+  suppressPrefixSuffix: true,
+
+  /**
    * Create XML to represent the number of else-if and else inputs.
    * @return {Element} XML storage element.
    * @this Blockly.Block
@@ -314,7 +320,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
     if (!this.elseifCount_ && !this.elseCount_) {
       return null;
     }
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     if (this.elseifCount_) {
       container.setAttribute('elseif', this.elseifCount_);
     }
@@ -462,7 +468,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
       i++;
     }
     // Rebuild block.
-    for (var i = 1; i <= this.elseifCount_; i++) {
+    for (i = 1; i <= this.elseifCount_; i++) {
       this.appendValueInput('IF' + i)
           .setCheck('Boolean')
           .appendField(Blockly.Msg['CONTROLS_IF_MSG_ELSEIF']);

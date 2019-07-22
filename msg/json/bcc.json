@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Baloch Afghanistan"
+			"Baloch Afghanistan",
+			"Sultanselim baloch"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "مورد",
@@ -206,7 +207,7 @@
 	"LISTS_CREATE_EMPTY_TOOLTIP": "فهرستی با طول صفر شامل هیچ رکورد داده‌ای بر می‌گرداند.",
 	"LISTS_CREATE_WITH_TOOLTIP": "فهرستی از هر عددی از موارد می‌سازد.",
 	"LISTS_CREATE_WITH_INPUT_WITH": "ایجاد فهرست با",
-	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "فهرست",
+	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "لیست",
 	"LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "اضافه‌کردن، حذف‌کردن یا ترتیب‌سازی مجدد بخش‌ها این بلوک فهرستی.",
 	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "اضافه‌کردن یک مورد به فهرست.",
 	"LISTS_REPEAT_TOOLTIP": "فهرستی شامل مقادیر داده‌شدهٔ تکرار شده عدد مشخص‌شده می‌سازد.",

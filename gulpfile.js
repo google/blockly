@@ -62,14 +62,21 @@ gulp.task('blockly_javascript_en', function() {
       .pipe(insert.append(`
 if (typeof DOMParser !== 'function') {
   var JSDOM = require('jsdom').JSDOM;
-  Blockly.Xml.utils.textToDomDocument = function(text) {
+  Blockly.utils.xml.textToDomDocument = function(text) {
     var jsdom = new JSDOM(text, { contentType: 'text/xml' });
     return jsdom.window.document;
   };
 }
+if (typeof Node !== 'function') {
+  var Node = {
+    ELEMENT_NODE: 1,
+    TEXT_NODE: 3,
+    DOCUMENT_POSITION_CONTAINED_BY: 16
+  };
+}
 if (typeof module === 'object') { module.exports = Blockly; }
 if (typeof window === 'object') { window.Blockly = Blockly; }\n`))
-      .pipe(gulp.dest(''));
+      .pipe(gulp.dest('.'));
 });
 
 /**
@@ -95,9 +102,9 @@ function buildWatchTaskFn(concatTask) {
       'msg/messages.js', 'msg/json/*.json' // Localization data
     ];
     var options = {
-      debounceDelay: 2000   // Milliseconds to delay rebuild.
+      debounceDelay: 2000  // Milliseconds to delay rebuild.
     };
-    gulp.watch(srcs, options, tasks);
+    gulp.watch(srcs, options, gulp.parallel(tasks));
   };
 }
 
@@ -107,4 +114,4 @@ gulp.task('watch', buildWatchTaskFn('blockly_javascript_en'));
 
 // The default task concatenates files for Node.js, using English language
 // blocks and the JavaScript generator.
-gulp.task('default', ['build', 'blockly_javascript_en']);
+gulp.task('default', gulp.series(['build', 'blockly_javascript_en']));

@@ -49,6 +49,7 @@ function test_gestureIsField_ClickInWorkspace() {
   var block = new Blockly.Block(workspace);
   var field = new Blockly.Field();
   field.setSourceBlock(block);
+  field.showEditor_ = function() {};
   var gesture = new Blockly.Gesture(e, workspace);
   gesture.setStartField(field);
 
@@ -64,6 +65,7 @@ function gestureIsFieldClick_InFlyoutHelper(flyout, expectedResult){
   var block = new Blockly.Block(workspace);
   var field = new Blockly.Field();
   field.setSourceBlock(block);
+  field.showEditor_ = function() {};
   // Create gesture from the flyout
   var gesture = new Blockly.Gesture(e, workspace.flyout_);
   // Populate gesture with click start information

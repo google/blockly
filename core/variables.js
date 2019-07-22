@@ -31,12 +31,10 @@
 goog.provide('Blockly.Variables');
 
 goog.require('Blockly.Blocks');
-goog.require('Blockly.constants');
+goog.require('Blockly.Msg');
+goog.require('Blockly.utils.xml');
 goog.require('Blockly.VariableModel');
-goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
-
-goog.require('goog.string');
 
 
 /**
@@ -171,44 +169,38 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
   var xmlList = [];
   if (variableModelList.length > 0) {
     // New variables are added to the end of the variableModelList.
-    var mostRecentVariableFieldXmlString =
-      Blockly.Variables.generateVariableFieldXmlString(
-          variableModelList[variableModelList.length - 1]);
+    var mostRecentVariable = variableModelList[variableModelList.length - 1];
     if (Blockly.Blocks['variables_set']) {
-      var gap = Blockly.Blocks['math_change'] ? 8 : 24;
-      var blockText = '<xml>' +
-          '<block type="variables_set" gap="' + gap + '">' +
-          mostRecentVariableFieldXmlString +
-          '</block>' +
-          '</xml>';
-      var block = Blockly.Xml.textToDom(blockText).firstChild;
+      var block = Blockly.utils.xml.createElement('block');
+      block.setAttribute('type', 'variables_set');
+      block.setAttribute('gap', Blockly.Blocks['math_change'] ? 8 : 24);
+      block.appendChild(
+          Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
       xmlList.push(block);
     }
     if (Blockly.Blocks['math_change']) {
-      var gap = Blockly.Blocks['variables_get'] ? 20 : 8;
-      var blockText = '<xml>' +
-          '<block type="math_change" gap="' + gap + '">' +
-          mostRecentVariableFieldXmlString +
+      var block = Blockly.utils.xml.createElement('block');
+      block.setAttribute('type', 'math_change');
+      block.setAttribute('gap', Blockly.Blocks['variables_get'] ? 20 : 8);
+      block.appendChild(
+          Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
+      var value = Blockly.Xml.textToDom(
           '<value name="DELTA">' +
           '<shadow type="math_number">' +
           '<field name="NUM">1</field>' +
           '</shadow>' +
-          '</value>' +
-          '</block>' +
-          '</xml>';
-      var block = Blockly.Xml.textToDom(blockText).firstChild;
+          '</value>');
+      block.appendChild(value);
       xmlList.push(block);
     }
 
     if (Blockly.Blocks['variables_get']) {
       variableModelList.sort(Blockly.VariableModel.compareByName);
       for (var i = 0, variable; variable = variableModelList[i]; i++) {
-        var blockText = '<xml>' +
-            '<block type="variables_get" gap="8">' +
-            Blockly.Variables.generateVariableFieldXmlString(variable) +
-            '</block>' +
-            '</xml>';
-        var block = Blockly.Xml.textToDom(blockText).firstChild;
+        var block = Blockly.utils.xml.createElement('block');
+        block.setAttribute('type', 'variables_get');
+        block.setAttribute('gap', 8);
+        block.appendChild(Blockly.Variables.generateVariableFieldDom(variable));
         xmlList.push(block);
       }
     }
@@ -267,7 +259,7 @@ Blockly.Variables.generateUniqueName = function(workspace) {
 
 /**
  * Handles "Create Variable" button in the default variables toolbox category.
- * It will prompt the user for a varibale name, including re-prompts if a name
+ * It will prompt the user for a variable name, including re-prompts if a name
  * is already in use among the workspace's variables.
  *
  * Custom button handlers can delegate to this function, allowing variables
@@ -400,7 +392,7 @@ Blockly.Variables.promptName = function(promptText, defaultText, callback) {
     // Merge runs of whitespace.  Strip leading and trailing whitespace.
     // Beyond this, all names are legal.
     if (newVar) {
-      newVar = newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
+      newVar = newVar.replace(/[\s\xa0]+/g, ' ').trim();
       if (newVar == Blockly.Msg['RENAME_VARIABLE'] ||
           newVar == Blockly.Msg['NEW_VARIABLE']) {
         // Ok, not ALL names are legal...
@@ -456,26 +448,6 @@ Blockly.Variables.nameUsedWithAnyType_ = function(name, workspace) {
 };
 
 /**
- * Generate XML string for variable field.
- * @param {!Blockly.VariableModel} variableModel The variable model to generate
- *     an XML string from.
- * @return {string} The generated XML.
- * @package
- */
-Blockly.Variables.generateVariableFieldXmlString = function(variableModel) {
-  // The variable name may be user input, so it may contain characters that
-  // need to be escaped to create valid XML.
-  var typeString = variableModel.type;
-  if (typeString == '') {
-    typeString = '\'\'';
-  }
-  var text = '<field name="VAR" id="' + variableModel.getId() +
-      '" variabletype="' + goog.string.htmlEscape(typeString) +
-      '">' + goog.string.htmlEscape(variableModel.name) + '</field>';
-  return text;
-};
-
-/**
  * Generate DOM objects representing a variable field.
  * @param {!Blockly.VariableModel} variableModel The variable model to
  *     represent.
@@ -483,12 +455,16 @@ Blockly.Variables.generateVariableFieldXmlString = function(variableModel) {
  * @public
  */
 Blockly.Variables.generateVariableFieldDom = function(variableModel) {
-  var xmlFieldString =
-      Blockly.Variables.generateVariableFieldXmlString(variableModel);
-  var text = '<xml>' + xmlFieldString + '</xml>';
-  var dom = Blockly.Xml.textToDom(text);
-  var fieldDom = dom.firstChild;
-  return fieldDom;
+  /* Generates the following XML:
+   * <field name="VAR" id="goKTKmYJ8DhVHpruv" variabletype="int">foo</field>
+   */
+  var field = Blockly.utils.xml.createElement('field');
+  field.setAttribute('name', 'VAR');
+  field.setAttribute('id', variableModel.getId());
+  field.setAttribute('variabletype', variableModel.type);
+  var name = Blockly.utils.xml.createTextNode(variableModel.name);
+  field.appendChild(name);
+  return field;
 };
 
 /**
@@ -527,7 +503,7 @@ Blockly.Variables.getOrCreateVariablePackage = function(workspace, id, opt_name,
  *     Only used if lookup by ID fails.
  * @return {Blockly.VariableModel} The variable corresponding to the given ID
  *     or name + type combination, or null if not found.
- * @package
+ * @public
  */
 Blockly.Variables.getVariable = function(workspace, id, opt_name, opt_type) {
   var potentialVariableMap = workspace.getPotentialVariableMap();

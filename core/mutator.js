@@ -28,13 +28,15 @@
 goog.provide('Blockly.Mutator');
 
 goog.require('Blockly.Bubble');
+goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
-goog.require('Blockly.Xml.utils');
 
 
 /**
@@ -68,7 +70,7 @@ Blockly.Mutator.prototype.workspaceHeight_ = 0;
  */
 Blockly.Mutator.prototype.drawIcon_ = function(group) {
   // Square with rounded corners.
-  Blockly.utils.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'blocklyIconShape',
         'rx': '4',
@@ -78,7 +80,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
       },
       group);
   // Gear teeth.
-  Blockly.utils.createSvgElement('path',
+  Blockly.utils.dom.createSvgElement('path',
       {
         'class': 'blocklyIconSymbol',
         'd': 'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,' +
@@ -91,7 +93,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
       },
       group);
   // Axle hole.
-  Blockly.utils.createSvgElement(
+  Blockly.utils.dom.createSvgElement(
       'circle',
       {
         'class': 'blocklyIconShape',
@@ -126,14 +128,14 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     [Workspace]
   </svg>
   */
-  this.svgDialog_ = Blockly.utils.createSvgElement('svg',
+  this.svgDialog_ = Blockly.utils.dom.createSvgElement('svg',
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
   // Convert the list of names into a list of XML objects for the flyout.
   if (this.quarkNames_.length) {
-    var quarkXml = Blockly.Xml.utils.createElement('xml');
+    var quarkXml = Blockly.utils.xml.createElement('xml');
     for (var i = 0, quarkName; quarkName = this.quarkNames_[i]; i++) {
-      var element = Blockly.Xml.utils.createElement('block');
+      var element = Blockly.utils.xml.createElement('block');
       element.setAttribute('type', quarkName);
       quarkXml.appendChild(element);
     }
@@ -182,7 +184,7 @@ Blockly.Mutator.prototype.updateEditable = function() {
   if (!this.block_.isInFlyout) {
     if (this.block_.isEditable()) {
       if (this.iconGroup_) {
-        Blockly.utils.removeClass(
+        Blockly.utils.dom.removeClass(
             /** @type {!Element} */ (this.iconGroup_),
             'blocklyIconGroupReadonly');
       }
@@ -190,7 +192,7 @@ Blockly.Mutator.prototype.updateEditable = function() {
       // Close any mutator bubble.  Icon is not clickable.
       this.setVisible(false);
       if (this.iconGroup_) {
-        Blockly.utils.addClass(
+        Blockly.utils.dom.addClass(
             /** @type {!Element} */ (this.iconGroup_),
             'blocklyIconGroupReadonly');
       }
@@ -416,7 +418,7 @@ Blockly.Mutator.prototype.dispose = function() {
 Blockly.Mutator.prototype.updateBlockStyle = function() {
   var ws = this.workspace_;
 
-  if (ws && ws.getAllBlocks()){
+  if (ws && ws.getAllBlocks()) {
     var workspaceBlocks = ws.getAllBlocks();
     for (var i = 0; i < workspaceBlocks.length; i++) {
       var block = workspaceBlocks[i];
@@ -481,10 +483,11 @@ Blockly.Mutator.findParentWs = function(workspace) {
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
-if (!goog.global['Blockly']) {
-  goog.global['Blockly'] = {};
+if (!Blockly.utils.global['Blockly']) {
+  Blockly.utils.global['Blockly'] = {};
 }
-if (!goog.global['Blockly']['Mutator']) {
-  goog.global['Blockly']['Mutator'] = {};
+if (!Blockly.utils.global['Blockly']['Mutator']) {
+  Blockly.utils.global['Blockly']['Mutator'] = {};
 }
-goog.global['Blockly']['Mutator']['reconnect'] = Blockly.Mutator.reconnect;
+Blockly.utils.global['Blockly']['Mutator']['reconnect'] =
+    Blockly.Mutator.reconnect;

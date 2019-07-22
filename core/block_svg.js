@@ -27,18 +27,20 @@
 goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
-goog.require('Blockly.BlockAnimations');
+goog.require('Blockly.blockAnimations');
 goog.require('Blockly.ContextMenu');
+goog.require('Blockly.Events');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Grid');
+goog.require('Blockly.Msg');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
-
-goog.require('goog.color');
-goog.require('goog.math.Coordinate');
+goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Rect');
 
 
 /**
@@ -58,14 +60,14 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @type {SVGElement}
    * @private
    */
-  this.svgGroup_ = Blockly.utils.createSvgElement('g', {}, null);
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
   this.svgGroup_.translate_ = '';
 
   /**
    * @type {SVGElement}
    * @private
    */
-  this.svgPathDark_ = Blockly.utils.createSvgElement('path',
+  this.svgPathDark_ = Blockly.utils.dom.createSvgElement('path',
       {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
       this.svgGroup_);
 
@@ -73,14 +75,14 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
    * @type {SVGElement}
    * @private
    */
-  this.svgPath_ = Blockly.utils.createSvgElement('path',
+  this.svgPath_ = Blockly.utils.dom.createSvgElement('path',
       {'class': 'blocklyPath'}, this.svgGroup_);
 
   /**
    * @type {SVGElement}
    * @private
    */
-  this.svgPathLight_ = Blockly.utils.createSvgElement('path',
+  this.svgPathLight_ = Blockly.utils.dom.createSvgElement('path',
       {'class': 'blocklyPathLight'}, this.svgGroup_);
   this.svgPath_.tooltip = this;
 
@@ -120,7 +122,7 @@ Blockly.BlockSvg.prototype.width = 0;
 
 /**
  * Original location of block being dragged.
- * @type {goog.math.Coordinate}
+ * @type {Blockly.utils.Coordinate}
  * @private
  */
 Blockly.BlockSvg.prototype.dragStartXY_ = null;
@@ -300,7 +302,7 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
  * If the block is on the workspace, (0, 0) is the origin of the workspace
  * coordinate system.
  * This does not change with workspace scale.
- * @return {!goog.math.Coordinate} Object with .x and .y properties in
+ * @return {!Blockly.utils.Coordinate} Object with .x and .y properties in
  *     workspace coordinates.
  */
 Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
@@ -330,7 +332,7 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
     } while (element && element != this.workspace.getCanvas() &&
         element != dragSurfaceGroup);
   }
-  return new goog.math.Coordinate(x, y);
+  return new Blockly.utils.Coordinate(x, y);
 };
 
 /**
@@ -392,7 +394,7 @@ Blockly.BlockSvg.prototype.moveToDragSurface_ = function() {
  * Move this block back to the workspace block canvas.
  * Generally should be called at the same time as setDragging_(false).
  * Does nothing if useDragSurface_ is false.
- * @param {!goog.math.Coordinate} newXY The position the block should take on
+ * @param {!Blockly.utils.Coordinate} newXY The position the block should take on
  *     on the workspace canvas, in workspace coordinates.
  * @private
  */
@@ -409,7 +411,7 @@ Blockly.BlockSvg.prototype.moveOffDragSurface_ = function(newXY) {
  * Move this block during a drag, taking into account whether we are using a
  * drag surface to translate blocks.
  * This block must be a top-level block.
- * @param {!goog.math.Coordinate} newLoc The location to translate to, in
+ * @param {!Blockly.utils.Coordinate} newLoc The location to translate to, in
  *     workspace coordinates.
  * @package
  */
@@ -429,7 +431,7 @@ Blockly.BlockSvg.prototype.moveDuringDrag = function(newLoc) {
  * @private
  */
 Blockly.BlockSvg.prototype.clearTransformAttributes_ = function() {
-  Blockly.utils.removeAttribute(this.getSvgRoot(), 'transform');
+  this.getSvgRoot().removeAttribute('transform');
 };
 
 /**
@@ -468,32 +470,29 @@ Blockly.BlockSvg.prototype.snapToGrid = function() {
  * Returns the coordinates of a bounding box describing the dimensions of this
  * block and any blocks stacked below it.
  * Coordinate system: workspace coordinates.
- * @return {!{topLeft: goog.math.Coordinate, bottomRight: goog.math.Coordinate}}
- *    Object with top left and bottom right coordinates of the bounding box.
+ * @return {!Blockly.utils.Rect} Object with coordinates of the bounding box.
  */
 Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
   var blockXY = this.getRelativeToSurfaceXY(this);
   var tab = this.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
   var blockBounds = this.getHeightWidth();
-  var topLeft;
-  var bottomRight;
+  var top = blockXY.y;
+  var bottom = blockXY.y + blockBounds.height;
+  var left, right;
   if (this.RTL) {
     // Width has the tab built into it already so subtract it here.
-    topLeft = new goog.math.Coordinate(blockXY.x - (blockBounds.width - tab),
-        blockXY.y);
+    left = blockXY.x - (blockBounds.width - tab);
     // Add the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
-    bottomRight = new goog.math.Coordinate(blockXY.x + tab,
-        blockXY.y + blockBounds.height);
+    right = blockXY.x + tab;
   } else {
     // Subtract the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
-    topLeft = new goog.math.Coordinate(blockXY.x - tab, blockXY.y);
+    left = blockXY.x - tab;
     // Width has the tab built into it already so subtract it here.
-    bottomRight = new goog.math.Coordinate(blockXY.x + blockBounds.width - tab,
-        blockXY.y + blockBounds.height);
+    right = blockXY.x + blockBounds.width - tab;
   }
-  return {topLeft: topLeft, bottomRight: bottomRight};
+  return new Blockly.utils.Rect(top, bottom, left, right);
 };
 
 /**
@@ -635,76 +634,81 @@ Blockly.BlockSvg.prototype.showHelp_ = function() {
 };
 
 /**
- * Show the context menu for this block.
- * @param {!Event} e Mouse event.
- * @private
+ * Generate the context menu for this block.
+ * @protected
+ * @returns {Array.<!Object>} Context menu options
  */
-Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
+Blockly.BlockSvg.prototype.generateContextMenu = function() {
   if (this.workspace.options.readOnly || !this.contextMenu) {
-    return;
+    return null;
   }
   // Save the current block in a variable for use in closures.
   var block = this;
   var menuOptions = [];
 
-  if (this.isDeletable() && this.isMovable() && !block.isInFlyout) {
-    menuOptions.push(Blockly.ContextMenu.blockDuplicateOption(block));
-    if (this.isEditable() && !this.collapsed_ &&
-        this.workspace.options.comments) {
+  if (!this.isInFlyout) {
+    if (this.isDeletable() && this.isMovable()) {
+      menuOptions.push(Blockly.ContextMenu.blockDuplicateOption(block));
+    }
+
+    if (this.workspace.options.comments && !this.collapsed_ &&
+        this.isEditable()) {
       menuOptions.push(Blockly.ContextMenu.blockCommentOption(block));
     }
 
-    // Option to make block inline.
-    if (!this.collapsed_) {
-      for (var i = 1; i < this.inputList.length; i++) {
-        if (this.inputList[i - 1].type != Blockly.NEXT_STATEMENT &&
-            this.inputList[i].type != Blockly.NEXT_STATEMENT) {
-          // Only display this option if there are two value or dummy inputs
-          // next to each other.
-          var inlineOption = {enabled: true};
-          var isInline = this.getInputsInline();
-          inlineOption.text = isInline ?
-              Blockly.Msg['EXTERNAL_INPUTS'] : Blockly.Msg['INLINE_INPUTS'];
-          inlineOption.callback = function() {
-            block.setInputsInline(!isInline);
+    if (this.isMovable()) {
+      if (!this.collapsed_) {
+        // Option to make block inline.
+        for (var i = 1; i < this.inputList.length; i++) {
+          if (this.inputList[i - 1].type != Blockly.NEXT_STATEMENT &&
+              this.inputList[i].type != Blockly.NEXT_STATEMENT) {
+            // Only display this option if there are two value or dummy inputs
+            // next to each other.
+            var inlineOption = {enabled: true};
+            var isInline = this.getInputsInline();
+            inlineOption.text = isInline ?
+                Blockly.Msg['EXTERNAL_INPUTS'] : Blockly.Msg['INLINE_INPUTS'];
+            inlineOption.callback = function() {
+              block.setInputsInline(!isInline);
+            };
+            menuOptions.push(inlineOption);
+            break;
+          }
+        }
+        // Option to collapse block
+        if (this.workspace.options.collapse) {
+          var collapseOption = {enabled: true};
+          collapseOption.text = Blockly.Msg['COLLAPSE_BLOCK'];
+          collapseOption.callback = function() {
+            block.setCollapsed(true);
           };
-          menuOptions.push(inlineOption);
-          break;
+          menuOptions.push(collapseOption);
+        }
+      } else {
+        // Option to expand block.
+        if (this.workspace.options.collapse) {
+          var expandOption = {enabled: true};
+          expandOption.text = Blockly.Msg['EXPAND_BLOCK'];
+          expandOption.callback = function() {
+            block.setCollapsed(false);
+          };
+          menuOptions.push(expandOption);
         }
       }
     }
 
-    if (this.workspace.options.collapse) {
-      // Option to collapse/expand block.
-      if (this.collapsed_) {
-        var expandOption = {enabled: true};
-        expandOption.text = Blockly.Msg['EXPAND_BLOCK'];
-        expandOption.callback = function() {
-          block.setCollapsed(false);
-        };
-        menuOptions.push(expandOption);
-      } else {
-        var collapseOption = {enabled: true};
-        collapseOption.text = Blockly.Msg['COLLAPSE_BLOCK'];
-        collapseOption.callback = function() {
-          block.setCollapsed(true);
-        };
-        menuOptions.push(collapseOption);
-      }
-    }
-
-    if (this.workspace.options.disable) {
+    if (this.workspace.options.disable && this.isEditable()) {
       // Option to disable/enable block.
       var disableOption = {
-        text: this.disabled ?
-            Blockly.Msg['ENABLE_BLOCK'] : Blockly.Msg['DISABLE_BLOCK'],
+        text: this.isEnabled() ?
+            Blockly.Msg['DISABLE_BLOCK'] : Blockly.Msg['ENABLE_BLOCK'],
         enabled: !this.getInheritedDisabled(),
         callback: function() {
           var group = Blockly.Events.getGroup();
           if (!group) {
             Blockly.Events.setGroup(true);
           }
-          block.setDisabled(!block.disabled);
+          block.setEnabled(!block.isEnabled());
           if (!group) {
             Blockly.Events.setGroup(false);
           }
@@ -713,7 +717,9 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       menuOptions.push(disableOption);
     }
 
-    menuOptions.push(Blockly.ContextMenu.blockDeleteOption(block));
+    if (this.isDeletable()) {
+      menuOptions.push(Blockly.ContextMenu.blockDeleteOption(block));
+    }
   }
 
   menuOptions.push(Blockly.ContextMenu.blockHelpOption(block));
@@ -723,8 +729,21 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
     this.customContextMenu(menuOptions);
   }
 
-  Blockly.ContextMenu.show(e, menuOptions, this.RTL);
-  Blockly.ContextMenu.currentBlock = this;
+  return menuOptions;
+};
+
+/**
+ * Show the context menu for this block.
+ * @param {!Event} e Mouse event.
+ * @private
+ */
+Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
+  var menuOptions = this.generateContextMenu();
+
+  if (menuOptions && menuOptions.length) {
+    Blockly.ContextMenu.show(e, menuOptions, this.RTL);
+    Blockly.ContextMenu.currentBlock = this;
+  }
 };
 
 /**
@@ -769,11 +788,11 @@ Blockly.BlockSvg.prototype.setDragging = function(adding) {
     group.skew_ = '';
     Blockly.draggingConnections_ =
         Blockly.draggingConnections_.concat(this.getConnections_(true));
-    Blockly.utils.addClass(
+    Blockly.utils.dom.addClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
   } else {
     Blockly.draggingConnections_ = [];
-    Blockly.utils.removeClass(
+    Blockly.utils.dom.removeClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
   }
   // Recurse through all blocks attached under this one.
@@ -787,10 +806,10 @@ Blockly.BlockSvg.prototype.setDragging = function(adding) {
  */
 Blockly.BlockSvg.prototype.updateMovable = function() {
   if (this.isMovable()) {
-    Blockly.utils.addClass(
+    Blockly.utils.dom.addClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDraggable');
   } else {
-    Blockly.utils.removeClass(
+    Blockly.utils.dom.removeClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDraggable');
   }
 };
@@ -838,7 +857,7 @@ Blockly.BlockSvg.prototype.setInsertionMarker = function(insertionMarker) {
   this.isInsertionMarker_ = insertionMarker;
   if (this.isInsertionMarker_) {
     this.setColour(Blockly.INSERTION_MARKER_COLOUR);
-    Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
+    Blockly.utils.dom.addClass(/** @type {!Element} */ (this.svgGroup_),
         'blocklyInsertionMarker');
   }
 };
@@ -880,7 +899,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
 
   if (animate && this.rendered) {
     this.unplug(healStack);
-    Blockly.BlockAnimations.disposeUiEffect(this);
+    Blockly.blockAnimations.disposeUiEffect(this);
   }
   // Stop rerendering.
   this.rendered = false;
@@ -916,7 +935,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     Blockly.Events.fire(deleteEvent);
   }
 
-  Blockly.utils.removeNode(this.svgGroup_);
+  Blockly.utils.dom.removeNode(this.svgGroup_);
   blockWorkspace.resizeContents();
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;
@@ -930,93 +949,78 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
  * Change the colour of a block.
  */
 Blockly.BlockSvg.prototype.updateColour = function() {
-  if (this.disabled) {
+  if (!this.isEnabled()) {
     // Disabled blocks don't have colour.
     return;
   }
-  var hexColour = this.getColour();
-  var colourSecondary = this.getColourSecondary();
-  var colourTertiary = this.getColourTertiary();
-  var rgb = goog.color.hexToRgb(hexColour);
 
   if (this.isShadow()) {
-    hexColour = this.setShadowColour_(rgb, colourSecondary);
+    this.setShadowColour_();
   } else {
-    this.setBorderColour_(rgb, colourTertiary);
+    this.setBorderColour_();
+    this.svgPath_.setAttribute('fill', this.getColour());
   }
-  this.svgPath_.setAttribute('fill', hexColour);
 
   var icons = this.getIcons();
   for (var i = 0; i < icons.length; i++) {
     icons[i].updateColour();
   }
 
-  // Bump every dropdown to change its colour.
-  // TODO (#1456)
   for (var x = 0, input; input = this.inputList[x]; x++) {
     for (var y = 0, field; field = input.fieldRow[y]; y++) {
-      field.forceRerender();
+      field.updateColour();
     }
   }
 };
 
 /**
  * Sets the colour of the border.
- * Removes the light and dark paths if a tertiary colour is defined.
- * @param {!string} rgb Colour of the block.
- * @param {?string} colourTertiary Colour of the border.
+ * Removes the light and dark paths if a border colour is defined.
  */
-Blockly.BlockSvg.prototype.setBorderColour_ = function(rgb, colourTertiary) {
-  if (colourTertiary) {
-    this.svgPathLight_.setAttribute('stroke', 'none');
-    this.svgPathDark_.setAttribute('fill', 'none');
-    this.svgPath_.setAttribute('stroke', colourTertiary);
+Blockly.BlockSvg.prototype.setBorderColour_ = function() {
+  var borderColours = this.getColourBorder();
+  if (borderColours.colourBorder) {
+    this.svgPathLight_.style.display = 'none';
+    this.svgPathDark_.style.display = 'none';
+
+    this.svgPath_.setAttribute('stroke', borderColours.colourBorder);
   } else {
     this.svgPathLight_.style.display = '';
-    var hexLight = goog.color.rgbArrayToHex(goog.color.lighten(rgb, 0.3));
-    var hexDark = goog.color.rgbArrayToHex(goog.color.darken(rgb, 0.2));
-    this.svgPathLight_.setAttribute('stroke', hexLight);
-    this.svgPathDark_.setAttribute('fill', hexDark);
+    this.svgPathDark_.style.display = '';
     this.svgPath_.setAttribute('stroke', 'none');
 
+    this.svgPathLight_.setAttribute('stroke', borderColours.colourLight);
+    this.svgPathDark_.setAttribute('fill', borderColours.colourDark);
   }
 };
 
 /**
  * Sets the colour of shadow blocks.
- * @param {!string} rgb Primary colour of the block.
- * @param {?string} colourSecondary Colour for shadow block.
- * @return {!string} The background colour of the block.
+ * @return {?string} The background colour of the block.
  */
-Blockly.BlockSvg.prototype.setShadowColour_ = function(rgb, colourSecondary) {
-  var hexColour;
-  if (colourSecondary) {
-    this.svgPathLight_.style.display = 'none';
-    this.svgPathDark_.style.display = 'none';
-    this.svgPath_.setAttribute('fill', colourSecondary);
-    hexColour = colourSecondary;
-  } else {
-    rgb = goog.color.lighten(rgb, 0.6);
-    hexColour = goog.color.rgbArrayToHex(rgb);
-    this.svgPathLight_.style.display = 'none';
-    this.svgPathDark_.setAttribute('fill', hexColour);
-  }
-  return hexColour;
+Blockly.BlockSvg.prototype.setShadowColour_ = function() {
+  var shadowColour = this.getColourShadow();
+
+  this.svgPathLight_.style.display = 'none';
+  this.svgPathDark_.setAttribute('fill', shadowColour);
+  this.svgPath_.setAttribute('stroke', 'none');
+  this.svgPath_.setAttribute('fill', shadowColour);
+  return shadowColour;
 };
 
 /**
  * Enable or disable a block.
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
-  if (this.disabled || this.getInheritedDisabled()) {
-    var added = Blockly.utils.addClass(
+  if (!this.isEnabled() || this.getInheritedDisabled()) {
+    var added = Blockly.utils.dom.addClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
     if (added) {
       this.svgPath_.setAttribute('fill',
           'url(#' + this.workspace.options.disabledPatternId + ')');
     }
   } else {
-    var removed = Blockly.utils.removeClass(
+    var removed = Blockly.utils.dom.removeClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDisabled');
     if (removed) {
       this.updateColour();
@@ -1167,10 +1171,21 @@ Blockly.BlockSvg.prototype.setMutator = function(mutator) {
 /**
  * Set whether the block is disabled or not.
  * @param {boolean} disabled True if disabled.
+ * @deprecated May 2019
  */
 Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
-  if (this.disabled != disabled) {
-    Blockly.BlockSvg.superClass_.setDisabled.call(this, disabled);
+  console.warn('Deprecated call to Blockly.BlockSvg.prototype.setDisabled, ' +
+  'use Blockly.BlockSvg.prototype.setEnabled instead.');
+  this.setEnabled(!disabled);
+};
+
+/**
+ * Set whether the block is enabled or not.
+ * @param {boolean} enabled True if enabled.
+ */
+Blockly.BlockSvg.prototype.setEnabled = function(enabled) {
+  if (this.isEnabled() != enabled) {
+    Blockly.BlockSvg.superClass_.setEnabled.call(this, enabled);
     if (this.rendered) {
       this.updateDisabled();
     }
@@ -1191,8 +1206,8 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
         'url(#' + this.workspace.options.embossFilterId + ')');
     this.svgPathLight_.style.display = 'none';
   } else {
-    Blockly.utils.removeAttribute(this.svgPath_, 'filter');
-    delete this.svgPathLight_.style.display;
+    this.svgPath_.setAttribute('filter', 'none');
+    this.svgPathLight_.style.display = 'inline';
   }
 };
 
@@ -1200,7 +1215,7 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.addSelect = function() {
-  Blockly.utils.addClass(
+  Blockly.utils.dom.addClass(
       /** @type {!Element} */ (this.svgGroup_), 'blocklySelected');
 };
 
@@ -1208,7 +1223,7 @@ Blockly.BlockSvg.prototype.addSelect = function() {
  * Unselect this block.  Remove its highlighting.
  */
 Blockly.BlockSvg.prototype.removeSelect = function() {
-  Blockly.utils.removeClass(
+  Blockly.utils.dom.removeClass(
       /** @type {!Element} */ (this.svgGroup_), 'blocklySelected');
 };
 
@@ -1220,10 +1235,10 @@ Blockly.BlockSvg.prototype.removeSelect = function() {
  */
 Blockly.BlockSvg.prototype.setDeleteStyle = function(enable) {
   if (enable) {
-    Blockly.utils.addClass(/** @type {!Element} */ (this.svgGroup_),
+    Blockly.utils.dom.addClass(/** @type {!Element} */ (this.svgGroup_),
         'blocklyDraggingDelete');
   } else {
-    Blockly.utils.removeClass(/** @type {!Element} */ (this.svgGroup_),
+    Blockly.utils.dom.removeClass(/** @type {!Element} */ (this.svgGroup_),
         'blocklyDraggingDelete');
   }
 };

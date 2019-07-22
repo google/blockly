@@ -304,35 +304,33 @@ Code.renderContent = function() {
     xmlTextarea.value = xmlText;
     xmlTextarea.focus();
   } else if (content.id == 'content_javascript') {
-    Code.attemptCodeGeneration(Blockly.JavaScript, 'js');
+    Code.attemptCodeGeneration(Blockly.JavaScript);
   } else if (content.id == 'content_python') {
-    Code.attemptCodeGeneration(Blockly.Python, 'py');
+    Code.attemptCodeGeneration(Blockly.Python);
   } else if (content.id == 'content_php') {
-    Code.attemptCodeGeneration(Blockly.PHP, 'php');
+    Code.attemptCodeGeneration(Blockly.PHP);
   } else if (content.id == 'content_dart') {
-    Code.attemptCodeGeneration(Blockly.Dart, 'dart');
+    Code.attemptCodeGeneration(Blockly.Dart);
   } else if (content.id == 'content_lua') {
-    Code.attemptCodeGeneration(Blockly.Lua, 'lua');
+    Code.attemptCodeGeneration(Blockly.Lua);
+  }
+  if (typeof PR == 'object') {
+    PR.prettyPrint();
   }
 };
 
 /**
  * Attempt to generate the code and display it in the UI, pretty printed.
  * @param generator {!Blockly.Generator} The generator to use.
- * @param prettyPrintType {string} The file type key for the pretty printer.
  */
-Code.attemptCodeGeneration = function(generator, prettyPrintType) {
+Code.attemptCodeGeneration = function(generator) {
   var content = document.getElementById('content_' + Code.selected);
   content.textContent = '';
   if (Code.checkAllGeneratorFunctionsDefined(generator)) {
     var code = generator.workspaceToCode(Code.workspace);
-
     content.textContent = code;
-    if (typeof PR.prettyPrintOne == 'function') {
-      code = content.textContent;
-      code = PR.prettyPrintOne(code, prettyPrintType);
-      content.innerHTML = code;
-    }
+    // Remove the 'prettyprinted' class, so that Prettify will recalculate.
+    content.className = content.className.replace('prettyprinted', '');
   }
 };
 
@@ -346,7 +344,7 @@ Code.checkAllGeneratorFunctionsDefined = function(generator) {
   for (var i = 0; i < blocks.length; i++) {
     var blockType = blocks[i].type;
     if (!generator[blockType]) {
-      if (missingBlockGenerators.indexOf(blockType) === -1) {
+      if (missingBlockGenerators.indexOf(blockType) == -1) {
         missingBlockGenerators.push(blockType);
       }
     }
@@ -354,8 +352,8 @@ Code.checkAllGeneratorFunctionsDefined = function(generator) {
 
   var valid = missingBlockGenerators.length == 0;
   if (!valid) {
-    var msg = 'The generator code for the following blocks not specified for '
-        + generator.name_ + ':\n - ' + missingBlockGenerators.join('\n - ');
+    var msg = 'The generator code for the following blocks not specified for ' +
+        generator.name_ + ':\n - ' + missingBlockGenerators.join('\n - ');
     Blockly.alert(msg);  // Assuming synchronous. No callback.
   }
   return valid;
@@ -516,7 +514,7 @@ Code.initLanguage = function() {
  * Just a quick and dirty eval.  Catch infinite loops.
  */
 Code.runJS = function() {
-  Blockly.JavaScript.INFINITE_LOOP_TRAP = '  checkTimeout();\n';
+  Blockly.JavaScript.INFINITE_LOOP_TRAP = 'checkTimeout();\n';
   var timeouts = 0;
   var checkTimeout = function() {
     if (timeouts++ > 1000000) {

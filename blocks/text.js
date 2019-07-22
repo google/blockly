@@ -243,7 +243,7 @@ Blockly.Blocks['text_getSubstring'] = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     var isAt1 = this.getInput('AT1').type == Blockly.INPUT_VALUE;
     container.setAttribute('at1', isAt1);
     var isAt2 = this.getInput('AT2').type == Blockly.INPUT_VALUE;
@@ -296,7 +296,7 @@ Blockly.Blocks['text_getSubstring'] = {
           // The 'isAt' variable is available due to this function being a
           // closure.
           if (newAt != isAt) {
-            var block = this.sourceBlock_;
+            var block = this.getSourceBlock();
             block.updateAt_(n, newAt);
             // This menu has been destroyed and replaced.
             // Update the replacement.
@@ -423,7 +423,7 @@ Blockly.Blocks['text_prompt_ext'] = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('type', this.getFieldValue('TYPE'));
     return container;
   },
@@ -660,7 +660,7 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('items', this.itemCount_);
     return container;
   },
@@ -810,7 +810,7 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
    * @this Blockly.Block
    */
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('at', !!this.isAt_);
     return container;
   },
@@ -862,13 +862,9 @@ Blockly.Constants.Text.TEXT_CHARAT_EXTENSION = function() {
   dropdown.setValidator(function(value) {
     var newAt = (value == 'FROM_START') || (value == 'FROM_END');
     if (newAt != this.isAt_) {
-      var block = this.sourceBlock_;
+      var block = this.getSourceBlock();
       block.updateAt_(newAt);
-      // This menu has been destroyed and replaced.  Update the replacement.
-      block.setFieldValue(value, 'WHERE');
-      return null;
     }
-    return undefined;
   });
   this.updateAt_(true);
   // Assign 'this' to a variable for use in the tooltip closure below.

@@ -30,16 +30,19 @@
  */
 goog.provide('Blockly.ContextMenu');
 
+goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
+goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.uiMenu');
+goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Xml');
 
 goog.require('goog.events');
-goog.require('goog.math.Coordinate');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItem');
-goog.require('goog.userAgent');
 
 
 /**
@@ -154,7 +157,7 @@ Blockly.ContextMenu.createWidget_ = function(menu) {
   var div = Blockly.WidgetDiv.DIV;
   menu.render(div);
   var menuDom = menu.getElement();
-  Blockly.utils.addClass(menuDom, 'blocklyContextMenu');
+  Blockly.utils.dom.addClass(menuDom, 'blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
   Blockly.bindEventWithChecks_(
       menuDom, 'contextmenu', null, Blockly.utils.noEvent);
@@ -280,7 +283,7 @@ Blockly.ContextMenu.blockDuplicateOption = function(block) {
  */
 Blockly.ContextMenu.blockCommentOption = function(block) {
   var commentOption = {
-    enabled: !goog.userAgent.IE
+    enabled: !Blockly.utils.userAgent.IE
   };
   // If there's already a comment, add an option to delete it.
   if (block.comment) {
@@ -360,7 +363,7 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
     var boundingRect = injectionDiv.getBoundingClientRect();
 
     // The client coordinates offset by the injection div's upper left corner.
-    var clientOffsetPixels = new goog.math.Coordinate(
+    var clientOffsetPixels = new Blockly.utils.Coordinate(
         e.clientX - boundingRect.left, e.clientY - boundingRect.top);
 
     // The offset in pixels between the main workspace's origin and the upper
@@ -369,14 +372,13 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
 
     // The position of the new comment in pixels relative to the origin of the
     // main workspace.
-    var finalOffsetPixels = goog.math.Coordinate.difference(clientOffsetPixels,
+    var finalOffset = Blockly.utils.Coordinate.difference(clientOffsetPixels,
         mainOffsetPixels);
-
     // The position of the new comment in main workspace coordinates.
-    var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
+    finalOffset.scale(1 / ws.scale);
 
-    var commentX = finalOffsetMainWs.x;
-    var commentY = finalOffsetMainWs.y;
+    var commentX = finalOffset.x;
+    var commentY = finalOffset.y;
     comment.moveBy(commentX, commentY);
     if (ws.rendered) {
       comment.initSvg();
@@ -388,7 +390,7 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
   var wsCommentOption = {
     // Foreign objects don't work in IE.  Don't let the user create comments
     // that they won't be able to edit.
-    enabled: !goog.userAgent.IE
+    enabled: !Blockly.utils.userAgent.IE
   };
   wsCommentOption.text = Blockly.Msg.ADD_COMMENT;
   wsCommentOption.callback = function() {

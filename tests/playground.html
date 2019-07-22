@@ -144,6 +144,103 @@ function start() {
 }
 
 function addToolboxButtonCallbacks() {
+  var addAllBlocksToWorkspace = function(button) {
+    var workspace = button.getTargetWorkspace();
+    var blocks = button.workspace_.getTopBlocks();
+    for(var i = 0, block; block = blocks[i]; i++) {
+      var xml = Blockly.utils.xml.createElement('xml');
+      xml.appendChild(Blockly.Xml.blockToDom(block));
+      Blockly.Xml.appendDomToWorkspace(xml, workspace);
+    }
+  };
+  var randomizeLabelText = function(button) {
+    var blocks = button.targetWorkspace_
+        .getBlocksByType('test_fields_label_serializable');
+    var possible = 'AB';
+    for (var i = 0, block; block = blocks[i]; i++) {
+      var text = '';
+      for (var j = 0; j < 4; j++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+      block.setFieldValue(text, 'LABEL');
+    }
+  };
+  var setRandomStyle = function(button) {
+    var blocks = button.workspace_.getAllBlocks();
+    var styles = Object.keys(Blockly.getTheme().getAllBlockStyles());
+    styles.splice(styles.indexOf(blocks[0].getStyleName()), 1);
+    var style = styles[Math.floor(Math.random() * styles.length)];
+    for(var i = 0, block; block = blocks[i]; i++) {
+      block.setStyle(style);
+    }
+  };
+  var toggleEnabled = function(button) {
+    var blocks = button.workspace_.getAllBlocks();
+    for(var i = 0, block; block = blocks[i]; i++) {
+      block.setEnabled(!block.isEnabled());
+    }
+  };
+  var toggleShadow = function(button) {
+    var blocks = button.workspace_.getAllBlocks();
+    for(var i = 0, block; block = blocks[i]; i++) {
+      block.setShadow(!block.isShadow());
+    }
+  };
+  var toggleCollapsed = function(button) {
+    var blocks = button.workspace_.getAllBlocks();
+    for(var i = 0, block; block = blocks[i]; i++) {
+      block.setCollapsed(!block.isCollapsed());
+    }
+  };
+  var setInput = function(button) {
+    Blockly.prompt('Input text to set.', 'ab', function(input) {
+      var blocks = button.getTargetWorkspace().getAllBlocks();
+      for(var i = 0, block; block = blocks[i]; i++) {
+        if (block.getField('INPUT')) {
+          block.setFieldValue(input, 'INPUT');
+        }
+      }
+    })
+  };
+  var changeImage = function(button) {
+    var blocks = button.workspace_.getBlocksByType('test_fields_image');
+    var possible = 'abcdefghijklm';
+    var image = possible.charAt(Math.floor(Math.random() * possible.length));
+    var src = 'https://blockly-demo.appspot.com/static/tests/media/'
+      + image + '.png';
+    for (var i = 0, block; block = blocks[i]; i++) {
+      var imageField = block.getField('IMAGE');
+      imageField.setValue(src);
+      imageField.setText(image);
+    }
+  };
+  var addVariables = function(button) {
+    workspace.createVariable('1a', '', '1A');
+    workspace.createVariable('1b', '', '1B');
+    workspace.createVariable('1c', '', '1C');
+    workspace.createVariable('2a', '', '2A');
+    workspace.createVariable('2b', '', '2B');
+    workspace.createVariable('2c', '', '2C');
+  };
+
+  workspace.registerButtonCallback(
+    'addVariables', addVariables);
+  workspace.registerButtonCallback(
+    'changeImage', changeImage);
+  workspace.registerButtonCallback(
+    'addAllBlocksToWorkspace', addAllBlocksToWorkspace);
+  workspace.registerButtonCallback(
+    'setInput', setInput);
+  workspace.registerButtonCallback(
+      'setRandomStyle', setRandomStyle);
+  workspace.registerButtonCallback(
+      'toggleEnabled', toggleEnabled);
+  workspace.registerButtonCallback(
+      'toggleShadow', toggleShadow);
+  workspace.registerButtonCallback(
+    'toggleCollapsed', toggleCollapsed);
+  workspace.registerButtonCallback(
+      'randomizeLabelText', randomizeLabelText);
   workspace.registerButtonCallback(
       'addDynamicOption', Blockly.TestBlocks.addDynamicDropdownOption_);
   workspace.registerButtonCallback(
@@ -258,7 +355,7 @@ function spaghetti(n) {
     xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
         '$1' + spaghettiXml + '</');
   }
-  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  xml = '<xml xmlns="https://developers.google.com/blockly/xml">' + xml + '</xml>';
   var dom = Blockly.Xml.textToDom(xml);
   console.time('Spaghetti domToWorkspace');
   Blockly.Xml.domToWorkspace(dom, workspace);
@@ -391,7 +488,7 @@ h1 {
 
   <!-- toolbox-simple is an always-open flyout with no category menu.
   Always-open flyouts are a good idea if you have a small number of blocks. -->
-  <xml id="toolbox-simple" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
     <block type="controls_ifelse"></block>
     <block type="logic_compare"></block>
     <!-- <block type="control_repeat"></block> -->
@@ -420,7 +517,7 @@ h1 {
   <!-- toolbox-categories has a category menu and an auto-closing flyout.  The
   Variables category uses untyped variable blocks.
   See https://developers.google.com/blockly/guides/create-custom-blocks/variables#untyped_variable_blocks for more information. -->
-  <xml id="toolbox-categories" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories" style="display: none">
     <category name="Logic" categorystyle="logic_category">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
@@ -761,7 +858,7 @@ h1 {
   <!-- toolbox-categories-typed-variables has a category menu and an
   auto-closing flyout.  The Variables category uses typed variable blocks.
   See https://developers.google.com/blockly/guides/create-custom-blocks/variables#typed_variable_blocks for more information. -->
-  <xml id="toolbox-categories-typed-variables" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories-typed-variables" style="display: none">
     <category name="Logic" categorystyle="logic_category">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
@@ -1101,9 +1198,9 @@ h1 {
 
   <!-- toolbox-test-blocks has a category menu and an auto-closing flyout.
   The blocks in this toolbox reflect block configurations not used by
-  the standard predefined blocks, and so test alernative block rendering
+  the standard predefined blocks, and so test alternative block rendering
   code paths. -->
-  <xml id="toolbox-test-blocks" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-test-blocks" style="display: none">
     <category name="Basic">
       <block type="test_basic_empty"></block>
       <block type="test_basic_empty_with_mutator"></block>
@@ -1192,31 +1289,141 @@ h1 {
         </statement>
       </block>
     </category>
-    <category name="Fields">
-      <label text="Numbers"></label>
-      <block type="test_fields_number">
-        <field name="NUM">123.456</field>
-      </block>
-      <block type="test_fields_integer">
-        <field name="NUM">123.456</field>
-      </block>
-      <block type="test_fields_number_hundredths">
-        <field name="NUM">123.456</field>
-      </block>
-      <block type="test_fields_integer_bounded">
-        <field name="NOTE">60</field>
-      </block>
-      <label text="Drop-downs"></label>
-      <block type="test_fields_dropdown_long"></block>
-      <block type="test_fields_dropdown_images"></block>
-      <block type="test_fields_dropdown_images_and_text"></block>
-      <label text="Dynamic Drop-downs"></label>
-      <block type="test_fields_dropdown_dynamic"></block>
-      <button text="Add option" callbackKey="addDynamicOption"></button>
-      <button text="Remove option" callbackKey="removeDynamicOption"></button>
-      <label text="Others"></label>
-      <block type="test_fields_angle"></block>
-      <block type="test_fields_date"></block>
+    <category name="Fields" expanded="true">
+      <category name="Defaults">
+        <button text="add blocks to workspace" callbackKey="addAllBlocksToWorkspace"></button>
+        <sep gap="8"></sep>
+        <button text="set random style" callbackKey="setRandomStyle"></button>
+        <sep gap="8"></sep>
+        <button text="toggle enabled" callbackKey="toggleEnabled"></button>
+        <sep gap="8"></sep>
+        <button text="toggle shadow" callbackKey="toggleShadow"></button>
+        <sep gap="8"></sep>
+        <button text="toggle collapsed" callbackKey="toggleCollapsed"></button>
+        <block type="test_fields_angle"></block>
+        <block type="test_fields_date"></block>
+        <block type="test_fields_checkbox"></block>
+        <block type="test_fields_colour"></block>
+        <block type="test_fields_text_input"></block>
+        <block type="test_fields_variable"></block>
+        <button text="randomize label text" callbackKey="randomizeLabelText"></button>
+        <sep gap="12"></sep>
+        <block type="test_fields_label_serializable"></block>
+        <button text="change image" callbackKey="changeImage"></button>
+        <sep gap="12"></sep>
+        <block type="test_fields_image"></block>
+      </category>
+      <category name="Numbers">
+        <block type="test_numbers_float">
+          <field name="NUM">123.456</field>
+        </block>
+        <block type="test_numbers_hundredths">
+          <field name="NUM">123.456</field>
+        </block>
+        <block type="test_numbers_halves">
+          <field name="NUM">123.456</field>
+        </block>
+        <block type="test_numbers_whole">
+          <field name="NUM">123.456</field>
+        </block>
+        <block type="test_numbers_three_halves">
+          <field name="NUM">123.456</field>
+        </block>
+        <block type="test_numbers_whole_bounded">
+          <field name="NOTE">60</field>
+        </block>
+      </category>
+      <category name="Drop-downs">
+        <label text="Dynamic"></label>
+        <block type="test_dropdowns_dynamic"></block>
+        <button text="Add option" callbackKey="addDynamicOption"></button>
+        <button text="Remove option" callbackKey="removeDynamicOption"></button>
+        <label text="Other"></label>
+        <block type="test_dropdowns_long"></block>
+        <block type="test_dropdowns_images"></block>
+        <block type="test_dropdowns_images_and_text"></block>
+      </category>
+      <category name="Images">
+        <block type="test_images_datauri"></block>
+        <block type="test_images_small"></block>
+        <block type="test_images_large"></block>
+        <block type="test_images_fliprtl"></block>
+        <block type="test_images_missing"></block>
+        <block type="test_images_many_icons"></block>
+      </category>
+      <category name="Emoji! o((*^ᴗ^*))o">
+        <label text="Unicode & Emojis"></label>
+        <block type="test_style_emoji"></block>
+        <block type="text">
+          <field name="TEXT">Robot face in text field: &#x1f916;</field>
+        </block>
+        <block type="text">
+          <field name="TEXT">Zalgo in text field: B&#776;&#788;&#862;&#795;&#842;&#827;&#806;&#837;&#812;&#792;&#816;&#846;&#805;l&#771;&#832;&#833;&#864;&#849;&#849;&#789;&#861;&#801;&#854;&#863;&#811;&#826;&#812;&#790;&#803;&#819;o&#843;&#777;&#778;&#785;&#831;&#829;&#794;&#825;&#857;&#814;&#802;&#811;&#852;c&#843;&#786;&#849;&#778;&#861;&#775;&#825;&#825;&#796;&#857;&#825;&#800;&#824;k&#778;&#850;&#833;&#774;&#772;&#782;&#862;&#770;&#789;&#788;&#841;&#801;&#811;&#860;&#839;&#790;&#819;&#854;l&#832;&#774;&#836;&#831;&#776;&#787;&#855;&#816;&#793;&#798;&#819;&#809;&#800;&#854;&#815;y&#864;&#783;&#856;&#773;&#832;&#808;&#799;&#839;&#814;&#840;&#812;&#793;&#818;&#801;</field>
+        </block>
+      </category>
+      <category name="Validators">
+        <button text="add blocks to workspace" callbackKey="addAllBlocksToWorkspace"></button>
+        <sep gap="8"></sep>
+        <button text="set input" callbackKey="setInput"></button>
+        <label text="Angles"></label>
+        <sep gap="12"></sep>
+        <block type="test_validators_angle_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_angle_mult30_force"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_angle_mult30_null"></block>
+        <label text="Checkboxes"></label>
+        <sep gap="12"></sep>
+        <block type="test_validators_checkbox_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_checkbox_match"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_checkbox_not_match_null"></block>
+        <label text="Colours"></label>
+        <sep gap="12"></sep>
+        <block type="test_validators_colour_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_colour_force_red"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_colour_red_null"></block>
+        <label text="Dates"></label>
+        <sep gap="12"></sep>
+        <block type="test_validators_date_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_date_force_20s"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_date_20s_null"></block>
+        <label text="Dropdowns"></label>
+        <sep gap="12"></sep>
+        <block type="test_validators_dropdown_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_dropdown_force_1s"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_dropdown_1s_null"></block>
+        <label text="Numbers"></label>
+        <sep gap="12"></sep>
+        <block type="test_validators_number_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_number_mult10_force"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_number_mult10_null"></block>
+        <label text="Text"></label>
+        <sep gap="12"></sep>
+        <block type="test_validators_text_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_text_A"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_text_B"></block>
+        <label text="Variables"></label>
+        <sep gap="8"></sep>
+        <button text="add test variables" callbackKey="addVariables" web-class="modifiesWorkspace"></button>
+        <sep gap="12"></sep>
+        <block type="test_validators_variable_null"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_variable_force_1s"></block>
+        <sep gap="12"></sep>
+        <block type="test_validators_variable_1s_null"></block>
+      </category>
     </category>
     <category name="Mutators">
       <label text="logic_compare"></label>
@@ -1255,22 +1462,6 @@ h1 {
       <block type="test_style_no_colour"></block>
       <block type="test_style_hex4"></block>
       <block type="test_style_hex5"></block>
-    </category>
-    <category name="Images">
-      <block type="test_images_datauri"></block>
-      <block type="test_images_small"></block>
-      <block type="test_images_large"></block>
-      <block type="test_images_fliprtl"></block>
-      <block type="test_images_missing"></block>
-      <block type="test_images_many_icons"></block>
-      <label text="Unicode & Emojis"></label>
-      <block type="test_style_emoji"></block>
-      <block type="text">
-        <field name="TEXT">Robot face in text field: &#x1f916;</field>
-      </block>
-      <block type="text">
-        <field name="TEXT">Zalgo in text field: B&#776;&#788;&#862;&#795;&#842;&#827;&#806;&#837;&#812;&#792;&#816;&#846;&#805;l&#771;&#832;&#833;&#864;&#849;&#849;&#789;&#861;&#801;&#854;&#863;&#811;&#826;&#812;&#790;&#803;&#819;o&#843;&#777;&#778;&#785;&#831;&#829;&#794;&#825;&#857;&#814;&#802;&#811;&#852;c&#843;&#786;&#849;&#778;&#861;&#775;&#825;&#825;&#796;&#857;&#825;&#800;&#824;k&#778;&#850;&#833;&#774;&#772;&#782;&#862;&#770;&#789;&#788;&#841;&#801;&#811;&#860;&#839;&#790;&#819;&#854;l&#832;&#774;&#836;&#831;&#776;&#787;&#855;&#816;&#793;&#798;&#819;&#809;&#800;&#854;&#815;y&#864;&#783;&#856;&#773;&#832;&#808;&#799;&#839;&#814;&#840;&#812;&#793;&#818;&#801;</field>
-      </block>
     </category>
   </xml>
 </body>

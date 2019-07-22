@@ -136,7 +136,7 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
   }
 
   // Create block XML.
-  var xmlElement = document.createElement('xml');
+  var xmlElement = Blockly.utils.xml.createElement('xml');
   var block = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
   xmlElement.appendChild(Blockly.Xml.blockToDomWithXY(block));
 

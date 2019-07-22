@@ -63,6 +63,14 @@ Blockly.Generator.prototype.INFINITE_LOOP_TRAP = null;
 Blockly.Generator.prototype.STATEMENT_PREFIX = null;
 
 /**
+ * Arbitrary code to inject after every statement.
+ * Any instances of '%1' will be replaced by the block ID of the statement.
+ * E.g. 'highlight(%1);\n'
+ * @type {?string}
+ */
+Blockly.Generator.prototype.STATEMENT_SUFFIX = null;
+
+/**
  * The method of indenting.  Defaults to two spaces, but language generators
  * may override this to increase indent or change to tabs.
  * @type {string}
@@ -96,7 +104,7 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
   var code = [];
   this.init(workspace);
   var blocks = workspace.getTopBlocks(true);
-  for (var x = 0, block; block = blocks[x]; x++) {
+  for (var i = 0, block; block = blocks[i]; i++) {
     var line = this.blockToCode(block);
     if (Array.isArray(line)) {
       // Value blocks return tuples of code and operator order.
@@ -108,6 +116,12 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
         // This block is a naked value.  Ask the language's code generator if
         // it wants to append a semicolon, or something.
         line = this.scrubNakedValue(line);
+        if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
+          line = this.injectId(this.STATEMENT_PREFIX, block) + line;
+        }
+        if (this.STATEMENT_SUFFIX && !block.suppressPrefixSuffix) {
+          line = line + this.injectId(this.STATEMENT_SUFFIX, block);
+        }
       }
       code.push(line);
     }
@@ -126,6 +140,7 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
 
 /**
  * Prepend a common prefix onto each line of code.
+ * Intended for indenting code or adding comment markers.
  * @param {string} text The lines of code.
  * @param {string} prefix The common prefix.
  * @return {string} The prefixed lines of code.
@@ -167,7 +182,7 @@ Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
   if (!block) {
     return '';
   }
-  if (block.disabled) {
+  if (!block.isEnabled()) {
     // Skip past this block if it is disabled.
     return opt_thisOnly ? '' : this.blockToCode(block.getNextBlock());
   }
@@ -189,9 +204,11 @@ Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
     }
     return [this.scrub_(block, code[0], opt_thisOnly), code[1]];
   } else if (typeof code == 'string') {
-    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
-    if (this.STATEMENT_PREFIX) {
-      code = this.STATEMENT_PREFIX.replace(/%1/g, '\'' + id + '\'') + code;
+    if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
+      code = this.injectId(this.STATEMENT_PREFIX, block) + code;
+    }
+    if (this.STATEMENT_SUFFIX && !block.suppressPrefixSuffix) {
+      code = code + this.injectId(this.STATEMENT_SUFFIX, block);
     }
     return this.scrub_(block, code, opt_thisOnly);
   } else if (code === null) {
@@ -274,7 +291,10 @@ Blockly.Generator.prototype.valueToCode = function(block, name, outerOrder) {
 };
 
 /**
- * Generate code representing the statement.  Indent the code.
+ * Generate a code string representing the blocks attached to the named
+ * statement input. Indent the code.
+ * This is mainly used in generators. When trying to generate code to evaluate
+ * look at using workspaceToCode or blockToCode.
  * @param {!Blockly.Block} block The block containing the input.
  * @param {string} name The name of the input.
  * @return {string} Generated code or '' if no blocks are connected.
@@ -296,21 +316,39 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
 
 /**
  * Add an infinite loop trap to the contents of a loop.
- * If loop is empty, add a statment prefix for the loop block.
+ * Add statement suffix at the start of the loop block (right after the loop
+ * statement executes), and a statement prefix to the end of the loop block
+ * (right before the loop statement executes).
  * @param {string} branch Code for loop contents.
- * @param {string} id ID of enclosing block.
+ * @param {!Blockly.Block} block Enclosing block.
  * @return {string} Loop contents, with infinite loop trap added.
  */
-Blockly.Generator.prototype.addLoopTrap = function(branch, id) {
-  id = id.replace(/\$/g, '$$$$');  // Issue 251.
+Blockly.Generator.prototype.addLoopTrap = function(branch, block) {
   if (this.INFINITE_LOOP_TRAP) {
-    branch = this.INFINITE_LOOP_TRAP.replace(/%1/g, '\'' + id + '\'') + branch;
+    branch = this.prefixLines(this.injectId(this.INFINITE_LOOP_TRAP, block),
+        this.INDENT) + branch;
   }
-  if (this.STATEMENT_PREFIX) {
-    branch += this.prefixLines(this.STATEMENT_PREFIX.replace(/%1/g,
-        '\'' + id + '\''), this.INDENT);
+  if (this.STATEMENT_SUFFIX && !block.suppressPrefixSuffix) {
+    branch = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block),
+        this.INDENT) + branch;
+  }
+  if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
+    branch = branch + this.prefixLines(this.injectId(this.STATEMENT_PREFIX,
+        block), this.INDENT);
   }
   return branch;
+};
+
+/**
+ * Inject a block ID into a message to replace '%1'.
+ * Used for STATEMENT_PREFIX, STATEMENT_SUFFIX, and INFINITE_LOOP_TRAP.
+ * @param {string} msg Code snippet with '%1'.
+ * @param {!Blockly.Block} block Block which has an ID.
+ * @return {string} Code snippet with ID.
+ */
+Blockly.Generator.prototype.injectId = function(msg, block) {
+  var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+  return msg.replace(/%1/g, '\'' + id + '\'');
 };
 
 /**
@@ -395,8 +433,8 @@ Blockly.Generator.prototype.init = function(_workspace) {
  * the block, or to handle comments for the specified block and any connected
  * value blocks.
  * @param {!Blockly.Block} _block The current block.
- * @param {string} code The JavaScript code created for this block.
- * @return {string} JavaScript code with comments and subsequent blocks added.
+ * @param {string} code The code created for this block.
+ * @return {string} Code with comments and subsequent blocks added.
  * @private
  */
 Blockly.Generator.prototype.scrub_ = function(_block, code) {

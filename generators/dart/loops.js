@@ -40,7 +40,7 @@ Blockly.Dart['controls_repeat_ext'] = function(block) {
         Blockly.Dart.ORDER_ASSIGNMENT) || '0';
   }
   var branch = Blockly.Dart.statementToCode(block, 'DO');
-  branch = Blockly.Dart.addLoopTrap(branch, block.id);
+  branch = Blockly.Dart.addLoopTrap(branch, block);
   var code = '';
   var loopVar = Blockly.Dart.variableDB_.getDistinctName(
       'count', Blockly.Variables.NAME_TYPE);
@@ -66,7 +66,7 @@ Blockly.Dart['controls_whileUntil'] = function(block) {
       until ? Blockly.Dart.ORDER_UNARY_PREFIX :
       Blockly.Dart.ORDER_NONE) || 'false';
   var branch = Blockly.Dart.statementToCode(block, 'DO');
-  branch = Blockly.Dart.addLoopTrap(branch, block.id);
+  branch = Blockly.Dart.addLoopTrap(branch, block);
   if (until) {
     argument0 = '!' + argument0;
   }
@@ -84,7 +84,7 @@ Blockly.Dart['controls_for'] = function(block) {
   var increment = Blockly.Dart.valueToCode(block, 'BY',
       Blockly.Dart.ORDER_ASSIGNMENT) || '1';
   var branch = Blockly.Dart.statementToCode(block, 'DO');
-  branch = Blockly.Dart.addLoopTrap(branch, block.id);
+  branch = Blockly.Dart.addLoopTrap(branch, block);
   var code;
   if (Blockly.isNumber(argument0) && Blockly.isNumber(argument1) &&
       Blockly.isNumber(increment)) {
@@ -145,7 +145,7 @@ Blockly.Dart['controls_forEach'] = function(block) {
   var argument0 = Blockly.Dart.valueToCode(block, 'LIST',
       Blockly.Dart.ORDER_ASSIGNMENT) || '[]';
   var branch = Blockly.Dart.statementToCode(block, 'DO');
-  branch = Blockly.Dart.addLoopTrap(branch, block.id);
+  branch = Blockly.Dart.addLoopTrap(branch, block);
   var code = 'for (var ' + variable0 + ' in ' + argument0 + ') {\n' +
       branch + '}\n';
   return code;
@@ -153,11 +153,31 @@ Blockly.Dart['controls_forEach'] = function(block) {
 
 Blockly.Dart['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
+  var xfix = '';
+  if (Blockly.Dart.STATEMENT_PREFIX) {
+    // Automatic prefix insertion is switched off for this block.  Add manually.
+    xfix += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_PREFIX, block);
+  }
+  if (Blockly.Dart.STATEMENT_SUFFIX) {
+    // Inject any statement suffix here since the regular one at the end
+    // will not get executed if the break/continue is triggered.
+    xfix += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_SUFFIX, block);
+  }
+  if (Blockly.Dart.STATEMENT_PREFIX) {
+    var loop = Blockly.Constants.Loops
+        .CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.getSurroundLoop(block);
+    if (loop && !loop.suppressPrefixSuffix) {
+      // Inject loop's statement prefix here since the regular one at the end
+      // of the loop will not get executed if 'continue' is triggered.
+      // In the case of 'break', a prefix is needed due to the loop's suffix.
+      xfix += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_PREFIX, loop);
+    }
+  }
   switch (block.getFieldValue('FLOW')) {
     case 'BREAK':
-      return 'break;\n';
+      return xfix + 'break;\n';
     case 'CONTINUE':
-      return 'continue;\n';
+      return xfix + 'continue;\n';
   }
   throw Error('Unknown flow statement.');
 };

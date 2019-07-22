@@ -100,7 +100,7 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
    * @this Blockly.Block
    */
   customContextMenu: function(options) {
-    if (!this.isInFlyout){
+    if (!this.isInFlyout) {
       // Getter blocks have the option to create a setter block, and vice versa.
       if (this.type == 'variables_get') {
         var opposite_type = 'variables_set';
@@ -113,17 +113,17 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
       var option = {enabled: this.workspace.remainingCapacity() > 0};
       var name = this.getField('VAR').getText();
       option.text = contextMenuMsg.replace('%1', name);
-      var xmlField = document.createElement('field');
+      var xmlField = Blockly.utils.xml.createElement('field');
       xmlField.setAttribute('name', 'VAR');
-      xmlField.appendChild(document.createTextNode(name));
-      var xmlBlock = document.createElement('block');
+      xmlField.appendChild(Blockly.utils.xml.createTextNode(name));
+      var xmlBlock = Blockly.utils.xml.createElement('block');
       xmlBlock.setAttribute('type', opposite_type);
       xmlBlock.appendChild(xmlField);
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
       options.push(option);
       // Getter blocks have the option to rename or delete that variable.
     } else {
-      if (this.type == 'variables_get' || this.type == 'variables_get_reporter'){
+      if (this.type == 'variables_get' || this.type == 'variables_get_reporter') {
         var renameOption = {
           text: Blockly.Msg.RENAME_VARIABLE,
           enabled: true,

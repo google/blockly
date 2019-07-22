@@ -20,17 +20,20 @@
 
 /**
  * @fileoverview Classic theme.
- * Contains multi colored border to create shadow effect.
+ * Contains multi-coloured border to create shadow effect.
  */
-
 'use strict';
 
 goog.provide('Blockly.Themes.Classic');
 
 goog.require('Blockly.Theme');
 
-var defaultBlockStyles = {
-  "colour_blocks":{
+
+// Temporary holding object.
+Blockly.Themes.Classic = {};
+
+Blockly.Themes.Classic.defaultBlockStyles = {
+  "colour_blocks": {
     "colourPrimary": "20"
   },
   "list_blocks": {
@@ -54,17 +57,17 @@ var defaultBlockStyles = {
   "variable_blocks": {
     "colourPrimary": "330"
   },
-  "variable_dynamic_blocks":{
+  "variable_dynamic_blocks": {
     "colourPrimary": "310"
   },
-  "hat_blocks":{
-    "colourPrimary":"330",
-    "hat":"cap"
+  "hat_blocks": {
+    "colourPrimary": "330",
+    "hat": "cap"
   }
 };
 
-var categoryStyles = {
-  "colour_category":{
+Blockly.Themes.Classic.categoryStyles = {
+  "colour_category": {
     "colour": "20"
   },
   "list_category": {
@@ -88,9 +91,11 @@ var categoryStyles = {
   "variable_category": {
     "colour": "330"
   },
-  "variable_dynamic_category":{
+  "variable_dynamic_category": {
     "colour": "310"
   }
 };
 
-Blockly.Themes.Classic = new Blockly.Theme(defaultBlockStyles, categoryStyles);
+Blockly.Themes.Classic =
+    new Blockly.Theme(Blockly.Themes.Classic.defaultBlockStyles,
+        Blockly.Themes.Classic.categoryStyles);

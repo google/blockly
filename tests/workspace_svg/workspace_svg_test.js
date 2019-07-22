@@ -123,7 +123,7 @@ function test_appendDomToWorkspace() {
   var workspace = helper_createWorkspaceWithToolbox();
   try {
     var dom = Blockly.Xml.textToDom(
-      '<xml xmlns="http://www.w3.org/1999/xhtml">' +
+      '<xml xmlns="https://developers.google.com/blockly/xml">' +
       '  <block type="math_random_float" inline="true" x="21" y="23">' +
       '  </block>' +
       '</xml>');
@@ -147,7 +147,7 @@ function test_svgDisposeWithShadow() {
   var blockNew;
   try {
     var dom = Blockly.Xml.textToDom(
-      '<xml xmlns="http://www.w3.org/1999/xhtml">' +
+      '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '<block type="test_val_in">' +
           '<value name="NAME">' +
             '<shadow type="simple_test_block"></shadow>' +

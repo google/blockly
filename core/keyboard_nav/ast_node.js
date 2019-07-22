@@ -190,7 +190,7 @@ Blockly.ASTNode.createStackNode = function(topBlock) {
 /**
  * Creates an ast node pointing to a workpsace.
  * @param {Blockly.Workspace} workspace The workspace that we are on.
- * @param {goog.math.Coordinate} wsCoordinate The position on the workspace for
+ * @param {Blockly.utils.Coordinate} wsCoordinate The position on the workspace for
  *     this node.
  * @return {Blockly.ASTNode} An ast node pointing to a workspace and a position
  *     on the workspace.
@@ -241,7 +241,7 @@ Blockly.ASTNode.prototype.getType = function() {
 
 /**
  * The coordinate on the workspace.
- * @return {goog.math.Coordinate} The workspace coordinate or null if the
+ * @return {Blockly.utils.Coordinate} The workspace coordinate or null if the
  *     location is not a workspace.
  */
 Blockly.ASTNode.prototype.getWsCoordinate = function() {
@@ -540,7 +540,7 @@ Blockly.ASTNode.prototype.next = function() {
       //TODO: Need to limit this. The view is bounded to half a screen beyond
       //the furthest block.
       var newX = this.wsCoordinate_.x + Blockly.ASTNode.wsMove_;
-      var newWsCoordinate = new goog.math.Coordinate(newX, this.wsCoordinate_.y);
+      var newWsCoordinate = new Blockly.utils.Coordinate(newX, this.wsCoordinate_.y);
       var workspace = /** @type {Blockly.Workspace} */ (this.location_);
       return Blockly.ASTNode.createWorkspaceNode(workspace,
           newWsCoordinate);
@@ -621,7 +621,7 @@ Blockly.ASTNode.prototype.prev = function() {
   switch (this.type_) {
     case Blockly.ASTNode.types.WORKSPACE:
       var newX = this.wsCoordinate_.x - Blockly.ASTNode.wsMove_;
-      var newCoord = new goog.math.Coordinate(newX, this.wsCoordinate_.y);
+      var newCoord = new Blockly.utils.Coordinate(newX, this.wsCoordinate_.y);
       var ws = /** @type {Blockly.Workspace} */ (this.location_);
       return Blockly.ASTNode.createWorkspaceNode(ws, newCoord);
 
@@ -671,7 +671,7 @@ Blockly.ASTNode.prototype.out = function() {
     case Blockly.ASTNode.types.STACK:
       var blockPos = this.location_.getRelativeToSurfaceXY();
       //TODO: Make sure this is in the bounds of the workspace
-      var wsCoordinate = new goog.math.Coordinate(
+      var wsCoordinate = new Blockly.utils.Coordinate(
           blockPos.x, blockPos.y + Blockly.ASTNode.DEFAULT_OFFSET_Y);
       return Blockly.ASTNode.createWorkspaceNode(
           this.location_.workspace, wsCoordinate);

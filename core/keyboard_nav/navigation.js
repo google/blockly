@@ -611,7 +611,7 @@ Blockly.Navigation.focusWorkspace = function() {
   } else {
     var ws = cursor.workspace_;
     // TODO: Find the center of the visible workspace.
-    var wsCoord = new goog.math.Coordinate(100, 100);
+    var wsCoord = new Blockly.utils.Coordinate(100, 100);
     var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
     cursor.setLocation(wsNode);
   }

@@ -116,7 +116,7 @@ Blockly.CursorSvg.prototype.getSvgRoot = function() {
  */
 Blockly.CursorSvg.prototype.createDom = function() {
   this.svgGroup_ =
-      Blockly.utils.createSvgElement('g', {
+      Blockly.utils.dom.createSvgElement('g', {
         'class': 'blocklyCursor'
       }, null);
 
@@ -380,13 +380,13 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
 
   var colour = this.isMarker_ ? Blockly.CursorSvg.MARKER_COLOR :
       Blockly.CursorSvg.CURSOR_COLOR;
-  this.cursorSvg_ = Blockly.utils.createSvgElement('g',
+  this.cursorSvg_ = Blockly.utils.dom.createSvgElement('g',
       {
         'width': Blockly.CursorSvg.CURSOR_WIDTH,
         'height': Blockly.CursorSvg.CURSOR_HEIGHT
       }, this.svgGroup_);
 
-  this.cursorSvgLine_ = Blockly.utils.createSvgElement('rect',
+  this.cursorSvgLine_ = Blockly.utils.dom.createSvgElement('rect',
       {
         'x': '0',
         'y': '0',
@@ -397,7 +397,7 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
       },
       this.cursorSvg_);
 
-  this.cursorSvgRect_ = Blockly.utils.createSvgElement('rect',
+  this.cursorSvgRect_ = Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'blocklyVerticalCursor',
         'x': '0',
@@ -408,7 +408,7 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
       },
       this.cursorSvg_);
 
-  this.cursorInputOutput_ = Blockly.utils.createSvgElement(
+  this.cursorInputOutput_ = Blockly.utils.dom.createSvgElement(
       'path',
       {
         'width': Blockly.CursorSvg.CURSOR_WIDTH,
@@ -422,7 +422,7 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
 
   // Markers don't blink.
   if (!this.isMarker_) {
-    Blockly.utils.createSvgElement('animate',
+    Blockly.utils.dom.createSvgElement('animate',
         {
           'attributeType': 'XML',
           'attributeName': 'fill',
@@ -432,7 +432,7 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
         },
         this.cursorSvgLine_);
 
-    Blockly.utils.createSvgElement('animate',
+    Blockly.utils.dom.createSvgElement('animate',
         {
           'attributeType': 'XML',
           'attributeName': 'fill',

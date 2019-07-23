@@ -24,12 +24,12 @@
  */
 
 //'use strict';
-goog.provide('Blockly.BlockRendering.Highlighter');
+goog.provide('Blockly.blockRendering.Highlighter');
 
-goog.require('Blockly.BlockRendering.RenderInfo');
+goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('BRC');
 /* global BRC */
-goog.require('Blockly.BlockRendering.Measurable');
+goog.require('Blockly.blockRendering.Measurable');
 
 /**
  * An object that adds highlights to a block based on the given rendering
@@ -42,20 +42,20 @@ goog.require('Blockly.BlockRendering.Measurable');
  * or closed paths.  The highlights for tabs and notches are loosely based on
  * tab and notch shapes, but are not exactly the same.
  *
- * @param {!Blockly.BlockRendering.RenderInfo} info An object containing all
+ * @param {!Blockly.blockRendering.RenderInfo} info An object containing all
  *     information needed to render this block.
  * @param {!Blockly.BlockSvg.PathObject} pathObject An object that stores all of
  *     the block's paths before they are propagated to the page.
  * @package
  */
-Blockly.BlockRendering.Highlighter = function(info, pathObject) {
+Blockly.blockRendering.Highlighter = function(info, pathObject) {
   this.info_ = info;
   this.pathObject_ = pathObject;
   this.highlightSteps_ = this.pathObject_.highlightSteps;
   this.highlightInlineSteps_ = this.pathObject_.highlightInlineSteps;
 };
 
-Blockly.BlockRendering.Highlighter.prototype.drawTopCorner = function(row) {
+Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
   for (var i = 0, elem; elem = row.elements[i]; i++) {
     if (elem.type === 'square corner') {
       this.highlightSteps_.push(BRC.START_POINT_HIGHLIGHT);
@@ -78,7 +78,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawTopCorner = function(row) {
   this.highlightSteps_.push('H', row.width - BRC.HIGHLIGHT_OFFSET);
 };
 
-Blockly.BlockRendering.Highlighter.prototype.drawValueInput = function(row) {
+Blockly.blockRendering.Highlighter.prototype.drawValueInput = function(row) {
   //var v = row.height - BRC.TAB_HEIGHT;
 
   if (this.info_.RTL) {
@@ -100,7 +100,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawValueInput = function(row) {
   }
 };
 
-Blockly.BlockRendering.Highlighter.prototype.drawStatementInput = function(row) {
+Blockly.blockRendering.Highlighter.prototype.drawStatementInput = function(row) {
   var x = row.statementEdge;
   if (this.info_.RTL) {
     this.highlightSteps_.push('M',
@@ -121,7 +121,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawStatementInput = function(row) 
   }
 };
 
-Blockly.BlockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
+Blockly.blockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
   if (row.followsStatement) {
     this.highlightSteps_.push('H', row.width);
   }
@@ -131,7 +131,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
   }
 };
 
-Blockly.BlockRendering.Highlighter.prototype.drawBottomCorner = function(_row) {
+Blockly.blockRendering.Highlighter.prototype.drawBottomCorner = function(_row) {
   var height = this.info_.height;
   var elems = this.info_.bottomRow.elements;
 
@@ -157,7 +157,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawBottomCorner = function(_row) {
   }
 };
 
-Blockly.BlockRendering.Highlighter.prototype.drawLeft = function() {
+Blockly.blockRendering.Highlighter.prototype.drawLeft = function() {
   if (this.info_.hasOutputConnection) {
     if (this.info_.RTL) {
       this.highlightSteps_.push(BRC.OUTPUT_CONNECTION_HIGHLIGHT_RTL);
@@ -175,7 +175,7 @@ Blockly.BlockRendering.Highlighter.prototype.drawLeft = function() {
   }
 };
 
-Blockly.BlockRendering.Highlighter.prototype.drawInlineInput = function(input) {
+Blockly.blockRendering.Highlighter.prototype.drawInlineInput = function(input) {
   var width = input.width;
   var height = input.height;
   var x = input.xPos;

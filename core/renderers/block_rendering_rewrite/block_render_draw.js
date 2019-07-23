@@ -24,43 +24,31 @@
  */
 
 //'use strict';
-goog.provide('Blockly.BlockRendering.Drawer');
+goog.provide('Blockly.blockRendering.Drawer');
 
-goog.require('Blockly.BlockRendering.Debug');
-goog.require('Blockly.BlockRendering.RenderInfo');
-goog.require('Blockly.BlockRendering.Highlighter');
+goog.require('Blockly.blockRendering.Debug');
+goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.blockRendering.Highlighter');
 goog.require('BRC');
 /* global BRC */
-goog.require('Blockly.BlockRendering.Measurable');
-
-/**
- * Render the given block.
- * @param {!Blockly.BlockSvg} block The block to render
- * @public
- */
-Blockly.BlockRendering.render = function(block) {
-  if (!block.renderingDebugger) {
-    block.renderingDebugger = new Blockly.BlockRendering.Debug();
-  }
-  new Blockly.BlockRendering.Drawer(block).draw_();
-};
+goog.require('Blockly.blockRendering.Measurable');
 
 /**
  * An object that draws a block based on the given rendering information.
  * @param {!Blockly.BlockSvg} block The block to render
- * @param {!Blockly.BlockRendering.RenderInfo} info An object containing all
+ * @param {!Blockly.blockRendering.RenderInfo} info An object containing all
  *   information needed to render this block.
- * @private
+ * @package
  */
-Blockly.BlockRendering.Drawer = function(block) {
+Blockly.blockRendering.Drawer = function(block, info) {
   this.block_ = block;
+  this.info_ = info;
   this.topLeft_ = block.getRelativeToSurfaceXY();
-  this.info_ = new Blockly.BlockRendering.RenderInfo(block);
   this.pathObject_ = new Blockly.BlockSvg.PathObject();
   this.steps_ = this.pathObject_.steps;
   this.inlineSteps_ = this.pathObject_.inlineSteps;
   this.highlighter_ =
-      new Blockly.BlockRendering.Highlighter(this.info_, this.pathObject_);
+      new Blockly.blockRendering.Highlighter(this.info_, this.pathObject_);
 };
 
 /**
@@ -73,7 +61,7 @@ Blockly.BlockRendering.Drawer = function(block) {
  * required.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.draw_ = function() {
+Blockly.blockRendering.Drawer.prototype.draw_ = function() {
   this.drawOutline_();
   this.drawInternals_();
   this.block_.setPaths_(this.pathObject_);
@@ -87,7 +75,7 @@ Blockly.BlockRendering.Drawer.prototype.draw_ = function() {
  * Anything that needs to be kept around should be set in this function.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
+Blockly.blockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
   // This is used when the block is reporting its size to anyone else.
   // The dark path adds to the size of the block in both X and Y.
   this.block_.height = this.info_.height + BRC.DARK_PATH_OFFSET;
@@ -100,7 +88,7 @@ Blockly.BlockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
  * Create the outline of the block.  This is a single continuous path.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.drawOutline_ = function() {
+Blockly.blockRendering.Drawer.prototype.drawOutline_ = function() {
   this.drawTop_();
   for (var r = 1; r < this.info_.rows.length - 1; r++) {
     var row = this.info_.rows[r];
@@ -122,7 +110,7 @@ Blockly.BlockRendering.Drawer.prototype.drawOutline_ = function() {
  * details such as hats and rounded corners.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.drawTop_ = function() {
+Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
   var topRow = this.info_.topRow;
   var elements = topRow.elements;
 
@@ -150,11 +138,11 @@ Blockly.BlockRendering.Drawer.prototype.drawTop_ = function() {
 /**
  * Add steps for an external value input, rendered as a notch in the side
  * of the block.
- * @param {!Blockly.BlockRendering.Row} row The row that this input
+ * @param {!Blockly.blockRendering.Row} row The row that this input
  *     belongs to.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.drawValueInput_ = function(row) {
+Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
   this.highlighter_.drawValueInput(row);
   this.steps_.push('H', row.width);
   this.steps_.push(BRC.TAB_PATH_DOWN);
@@ -165,11 +153,11 @@ Blockly.BlockRendering.Drawer.prototype.drawValueInput_ = function(row) {
 
 /**
  * Add steps for a statement input.
- * @param {!Blockly.BlockRendering.Row} row The row that this input
+ * @param {!Blockly.blockRendering.Row} row The row that this input
  *     belongs to.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
+Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   this.highlighter_.drawStatementInput(row);
   var x = row.statementEdge + BRC.NOTCH_OFFSET_RIGHT;
   this.steps_.push('H', x);
@@ -183,11 +171,11 @@ Blockly.BlockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
 /**
  * Add steps for the right side of a row that does not have value or
  * statement input connections.
- * @param {!Blockly.BlockRendering.Row} row The row to draw the
+ * @param {!Blockly.blockRendering.Row} row The row to draw the
  *     side of.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
+Blockly.blockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
   this.highlighter_.drawRightSideRow(row);
   this.steps_.push('H', row.width);
   this.steps_.push('v', row.height);
@@ -199,7 +187,7 @@ Blockly.BlockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
  * for the next connection
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.drawBottom_ = function() {
+Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
   var bottomRow = this.info_.bottomRow;
   var elems = bottomRow.elements;
   this.highlighter_.drawBottomCorner(bottomRow);
@@ -224,7 +212,7 @@ Blockly.BlockRendering.Drawer.prototype.drawBottom_ = function() {
  * connection
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.drawLeft_ = function() {
+Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
   this.highlighter_.drawLeft();
 
   this.positionOutputConnection_();
@@ -243,7 +231,7 @@ Blockly.BlockRendering.Drawer.prototype.drawLeft_ = function() {
  * not depend on the outer path for placement.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.drawInternals_ = function() {
+Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
   for (var r = 0; r < this.info_.rows.length; r++) {
     var row = this.info_.rows[r];
     if (!(row.isSpacer())) {
@@ -267,7 +255,7 @@ Blockly.BlockRendering.Drawer.prototype.drawInternals_ = function() {
  * @return {number} How far to offset the field in the x direction.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.dealWithOffsetFields_ = function(field) {
+Blockly.blockRendering.Drawer.prototype.dealWithOffsetFields_ = function(field) {
   if (field instanceof Blockly.FieldDropdown
       || field instanceof Blockly.FieldTextInput
       || field instanceof Blockly.FieldColour
@@ -279,11 +267,11 @@ Blockly.BlockRendering.Drawer.prototype.dealWithOffsetFields_ = function(field) 
 
 /**
  * Push a field or icon's new position to its SVG root.
- * @param {!Blockly.BlockRendering.Icon|!Blockly.BlockRendering.Field} fieldInfo
+ * @param {!Blockly.blockRendering.Icon|!Blockly.blockRendering.Field} fieldInfo
  *     The rendering information for the field or icon.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
+Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
   if (fieldInfo.type == 'field') {
     var svgGroup = fieldInfo.field.getSvgRoot();
   } else if (fieldInfo.type == 'icon') {
@@ -314,11 +302,11 @@ Blockly.BlockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
 
 /**
  * Add steps for an inline input.
- * @param {Blockly.BlockRendering.RenderableInput} input The information about the
+ * @param {Blockly.blockRendering.RenderableInput} input The information about the
  * input to render.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
+Blockly.blockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
   this.highlighter_.drawInlineInput(input);
   var width = input.width;
   var height = input.height;
@@ -340,11 +328,11 @@ Blockly.BlockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
  * Position the connection on an inline value input, taking into account
  * RTL and the small gap between the parent block and child block which lets the
  * parent block's dark path show through.
- * @param {Blockly.BlockRendering.RenderableInput} input The information about
+ * @param {Blockly.blockRendering.RenderableInput} input The information about
  * the input that the connection is on.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.positionInlineInputConnection_ = function(input) {
+Blockly.blockRendering.Drawer.prototype.positionInlineInputConnection_ = function(input) {
   var yPos = input.centerline - input.height / 2;
   // Move the connection.
   if (input.connection) {
@@ -361,10 +349,10 @@ Blockly.BlockRendering.Drawer.prototype.positionInlineInputConnection_ = functio
  * Position the connection on a statement input, taking into account
  * RTL and the small gap between the parent block and child block which lets the
  * parent block's dark path show through.
- * @param {!Blockly.BlockRendering.Row} row The row that the connection is on.
+ * @param {!Blockly.blockRendering.Row} row The row that the connection is on.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.positionStatementInputConnection_ = function(row) {
+Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = function(row) {
   var input = row.getLastInput();
   if (input.connection) {
     var connX = row.statementEdge + BRC.NOTCH_OFFSET_LEFT + BRC.DARK_PATH_OFFSET;
@@ -379,10 +367,10 @@ Blockly.BlockRendering.Drawer.prototype.positionStatementInputConnection_ = func
  * Position the connection on an external value input, taking into account
  * RTL and the small gap between the parent block and child block which lets the
  * parent block's dark path show through.
- * @param {!Blockly.BlockRendering.Row} row The row that the connection is on.
+ * @param {!Blockly.blockRendering.Row} row The row that the connection is on.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.positionExternalValueConnection_ = function(row) {
+Blockly.blockRendering.Drawer.prototype.positionExternalValueConnection_ = function(row) {
   var input = row.getLastInput();
   if (input.connection) {
     var connX = row.width + BRC.DARK_PATH_OFFSET;
@@ -397,7 +385,7 @@ Blockly.BlockRendering.Drawer.prototype.positionExternalValueConnection_ = funct
  * Position the previous connection on a block.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.positionPreviousConnection_ = function() {
+Blockly.blockRendering.Drawer.prototype.positionPreviousConnection_ = function() {
   if (this.info_.topRow.hasPreviousConnection) {
     var connX = this.info_.RTL ? -BRC.NOTCH_OFFSET_LEFT : BRC.NOTCH_OFFSET_LEFT;
     this.info_.topRow.connection.setOffsetInBlock(connX, 0);
@@ -408,7 +396,7 @@ Blockly.BlockRendering.Drawer.prototype.positionPreviousConnection_ = function()
  * Position the next connection on a block.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.positionNextConnection_ = function() {
+Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
   var bottomRow = this.info_.bottomRow;
 
   if (bottomRow.hasNextConnection) {
@@ -420,10 +408,10 @@ Blockly.BlockRendering.Drawer.prototype.positionNextConnection_ = function() {
 
 /**
  * Position the output connection on a block.
- * @param {!Blockly.BlockRendering.BottomRow} row The bottom row on the block.
+ * @param {!Blockly.blockRendering.BottomRow} row The bottom row on the block.
  * @private
  */
-Blockly.BlockRendering.Drawer.prototype.positionOutputConnection_ = function() {
+Blockly.blockRendering.Drawer.prototype.positionOutputConnection_ = function() {
   if (this.info_.hasOutputConnection) {
     this.block_.outputConnection.setOffsetInBlock(0, BRC.TAB_OFFSET_FROM_TOP);
   }

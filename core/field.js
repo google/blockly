@@ -118,6 +118,13 @@ Blockly.Field.cacheWidths_ = null;
 Blockly.Field.cacheReference_ = 0;
 
 /**
+ * The default height of the border rect on any field.
+ * @type {number}
+ * @package
+ */
+Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT = 16;
+
+/**
  * Name of field.  Unique within each block.
  * Static labels are usually unnamed.
  * @type {string|undefined}
@@ -278,7 +285,7 @@ Blockly.Field.prototype.createBorderRect_ = function() {
         'ry': 4,
         'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
         'y': 0,
-        'height': 16,
+        'height': Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT,
         'width': this.size_.width + Blockly.BlockSvg.SEP_SPACE_X
       }, this.fieldGroup_);
 };

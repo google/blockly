@@ -141,9 +141,7 @@ suite('Procedures', function() {
         chai.assert.equal(this.callBlock.getFieldValue('NAME'), 'start name');
       }, 'start name');
     });
-    // TODO: Simple fix, oldText needs to be trimmed too, or we just discard
-    //  the checking (params don't check).
-    test.skip('Whitespace then Text', function() {
+    test('Whitespace then Text', function() {
       this.callForAllTypes(function() {
         var defInput = this.defBlock.getField('NAME');
         defInput.htmlInput_ = Object.create(null);
@@ -167,16 +165,15 @@ suite('Procedures', function() {
 
         defInput.htmlInput_.value = '';
         defInput.onHtmlInputChange_(null);
-        chai.assert.equal(this.defBlock.getFieldValue('NAME'), '');
-        chai.assert.equal(this.callBlock.getFieldValue('NAME'), '');
+        chai.assert.equal(
+            this.defBlock.getFieldValue('NAME'),
+            Blockly.Msg['UNNAMED_KEY']);
+        chai.assert.equal(
+            this.callBlock.getFieldValue('NAME'),
+            Blockly.Msg['UNNAMED_KEY']);
       }, 'start name');
     });
-    // TODO: Procedures do not handle having no name correctly. It is a
-    //  problem with newly created procedure blocks having '' as the
-    //  oldName, just like empty procedures. The renameProcedure function
-    //  gets confused when a procedure's name is initially set. This is
-    //  basically #503 again.
-    test.skip('Set Empty, and Create New', function() {
+    test('Set Empty, and Create New', function() {
       this.callForAllTypes(function() {
         var defInput = this.defBlock.getField('NAME');
         defInput.htmlInput_ = Object.create(null);
@@ -187,8 +184,12 @@ suite('Procedures', function() {
         defInput.onHtmlInputChange_(null);
         var newDefBlock = new Blockly.Block(this.workspace, this.defType);
         newDefBlock.setFieldValue('new name', 'NAME');
-        chai.assert.equal(this.defBlock.getFieldValue('NAME'), '');
-        chai.assert.equal(this.callBlock.getFieldValue('NAME'), '');
+        chai.assert.equal(
+            this.defBlock.getFieldValue('NAME'),
+            Blockly.Msg['UNNAMED_KEY']);
+        chai.assert.equal(
+            this.callBlock.getFieldValue('NAME'),
+            Blockly.Msg['UNNAMED_KEY']);
 
         newDefBlock.dispose();
       }, 'start name');
@@ -376,7 +377,7 @@ suite('Procedures', function() {
           clearVariables.call(this);
         }, 'name');
       });
-      test.skip('lower -> CAPS', function() {
+      test('lower -> CAPS', function() {
         this.callForAllTypes(function() {
           createMutator.call(this, ['arg']);
           this.argBlock.setFieldValue('ARG', 'NAME');
@@ -385,7 +386,7 @@ suite('Procedures', function() {
           clearVariables.call(this);
         }, 'name');
       });
-      test.skip('CAPS -> lower', function() {
+      test('CAPS -> lower', function() {
         this.callForAllTypes(function() {
           createMutator.call(this, ['ARG']);
           this.argBlock.setFieldValue('arg', 'NAME');

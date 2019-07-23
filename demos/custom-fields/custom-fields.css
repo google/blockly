@@ -46,6 +46,7 @@
 }
 
 .customFieldsTurtleWidget .text {
+    height: 20px;
     color: #fff;
     flex-grow: 1;
     text-align: center;

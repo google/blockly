@@ -27,7 +27,7 @@
 goog.provide('BRC');
 /* global BRC */
 
-goog.require('Blockly.utils.Paths');
+goog.require('Blockly.utils.svgPaths');
 
 
 BRC.NO_PADDING = 0;
@@ -123,10 +123,10 @@ BRC.EMPTY_STATEMENT_INPUT_WIDTH = 32;
 BRC.POPULATED_STATEMENT_INPUT_WIDTH = 25;
 
 
-BRC.START_POINT = Blockly.utils.Paths.moveBy(0, 0);
+BRC.START_POINT = Blockly.utils.svgPaths.moveBy(0, 0);
 
 BRC.START_POINT_HIGHLIGHT =
-    Blockly.utils.Paths.moveBy(BRC.HIGHLIGHT_OFFSET, BRC.HIGHLIGHT_OFFSET);
+    Blockly.utils.svgPaths.moveBy(BRC.HIGHLIGHT_OFFSET, BRC.HIGHLIGHT_OFFSET);
 
 /**
  * Distance from shape edge to intersect with a curved corner at 45 degrees.
@@ -177,11 +177,11 @@ BRC.TAB_PATH_UP =  'c 0,-10 -' + BRC.TAB_WIDTH +
  * @const
  */
 BRC.START_HAT_PATH =
-    Blockly.utils.Paths.curve('c',
+    Blockly.utils.svgPaths.curve('c',
         [
-          Blockly.utils.Paths.point(30, -BRC.START_HAT_HEIGHT),
-          Blockly.utils.Paths.point(70, -BRC.START_HAT_HEIGHT),
-          Blockly.utils.Paths.point(BRC.START_HAT_WIDTH, 0)
+          Blockly.utils.svgPaths.point(30, -BRC.START_HAT_HEIGHT),
+          Blockly.utils.svgPaths.point(70, -BRC.START_HAT_HEIGHT),
+          Blockly.utils.svgPaths.point(BRC.START_HAT_WIDTH, 0)
         ]);
 /**
  * SVG path for drawing next/previous notch from left to right.
@@ -222,9 +222,9 @@ BRC.INNER_TOP_LEFT_CORNER =
  * @const
  */
 BRC.INNER_BOTTOM_LEFT_CORNER =
-    Blockly.utils.Paths.arc('a', '0 0,0',
+    Blockly.utils.svgPaths.arc('a', '0 0,0',
         BRC.CORNER_RADIUS,
-        Blockly.utils.Paths.point(BRC.CORNER_RADIUS, BRC.CORNER_RADIUS));
+        Blockly.utils.svgPaths.point(BRC.CORNER_RADIUS, BRC.CORNER_RADIUS));
 
 
 /**
@@ -233,9 +233,9 @@ BRC.INNER_BOTTOM_LEFT_CORNER =
  * @const
  */
 BRC.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL =
-    Blockly.utils.Paths.arc('a', '0 0,0',
+    Blockly.utils.svgPaths.arc('a', '0 0,0',
         BRC.CORNER_RADIUS,
-        Blockly.utils.Paths.point(
+        Blockly.utils.svgPaths.point(
             -BRC.DISTANCE_45_OUTSIDE - BRC.HIGHLIGHT_OFFSET,
             BRC.CORNER_RADIUS - BRC.DISTANCE_45_OUTSIDE));
 
@@ -245,9 +245,9 @@ BRC.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL =
  * @const
  */
 BRC.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL =
-    Blockly.utils.Paths.arc('a', '0 0,0',
+    Blockly.utils.svgPaths.arc('a', '0 0,0',
         BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET,
-        Blockly.utils.Paths.point(
+        Blockly.utils.svgPaths.point(
             BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET,
             BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET));
 
@@ -257,9 +257,9 @@ BRC.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL =
  * @const
  */
 BRC.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
-    Blockly.utils.Paths.arc('a', '0 0,0',
+    Blockly.utils.svgPaths.arc('a', '0 0,0',
         BRC.CORNER_RADIUS + BRC.HIGHLIGHT_OFFSET,
-        Blockly.utils.Paths.point(
+        Blockly.utils.svgPaths.point(
             BRC.CORNER_RADIUS - BRC.DISTANCE_45_OUTSIDE,
             BRC.DISTANCE_45_OUTSIDE + BRC.HIGHLIGHT_OFFSET));
 
@@ -334,24 +334,24 @@ BRC.TOP_LEFT_CORNER_HIGHLIGHT =
  * @const
  */
 BRC.START_HAT_HIGHLIGHT_LTR =
-    Blockly.utils.Paths.curve('c',
+    Blockly.utils.svgPaths.curve('c',
         [
-          Blockly.utils.Paths.point(17.8, -9.2),
-          Blockly.utils.Paths.point(45.3, -14.9),
-          Blockly.utils.Paths.point(75, -8.7)
+          Blockly.utils.svgPaths.point(17.8, -9.2),
+          Blockly.utils.svgPaths.point(45.3, -14.9),
+          Blockly.utils.svgPaths.point(75, -8.7)
         ]) +
-    Blockly.utils.Paths.moveTo(100.5, 0.5);
+    Blockly.utils.svgPaths.moveTo(100.5, 0.5);
 
 /**
  * Path of the top hat's curve's highlight in RTL.
  * @const
  */
 BRC.START_HAT_HIGHLIGHT_RTL =
-    Blockly.utils.Paths.moveBy(25, -8.7) +
-    Blockly.utils.Paths.curve('c',
+    Blockly.utils.svgPaths.moveBy(25, -8.7) +
+    Blockly.utils.svgPaths.curve('c',
         [
-          Blockly.utils.Paths.point(29.7, -6.2),
-          Blockly.utils.Paths.point(57.2, -0.5),
-          Blockly.utils.Paths.point(75, 8.7)
+          Blockly.utils.svgPaths.point(29.7, -6.2),
+          Blockly.utils.svgPaths.point(57.2, -0.5),
+          Blockly.utils.svgPaths.point(75, 8.7)
         ]);
 

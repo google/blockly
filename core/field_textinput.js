@@ -437,7 +437,8 @@ Blockly.FieldTextInput.prototype.getCorrectedSize = function() {
   // the logic to figure out whether to rerender, just call getSize.
   this.getSize();
   // TODO (#2562): Remove getCorrectedSize.
-  return new goog.math.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X, 16);
+  return new goog.math.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
+      Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
 };
 
 Blockly.Field.register('field_input', Blockly.FieldTextInput);

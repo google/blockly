@@ -308,10 +308,6 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
   this.onKeyPressWrapper_ =
       Blockly.bindEventWithChecks_(
           htmlInput, 'keypress', this, this.onHtmlInputChange_);
-
-  // TODO: Figure out if this is necessary.
-  this.onWorkspaceChangeWrapper_ = this.resizeEditor_.bind(this);
-  this.workspace_.addChangeListener(this.onWorkspaceChangeWrapper_);
 };
 
 /**
@@ -322,7 +318,6 @@ Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
   Blockly.unbindEvent_(this.onKeyDownWrapper_);
   Blockly.unbindEvent_(this.onKeyUpWrapper_);
   Blockly.unbindEvent_(this.onKeyPressWrapper_);
-  this.workspace_.removeChangeListener(this.onWorkspaceChangeWrapper_);
 };
 
 /**

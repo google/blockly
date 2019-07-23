@@ -34,28 +34,16 @@ goog.require('BRC');
 goog.require('Blockly.blockRendering.Measurable');
 
 /**
- * Render the given block.
- * @param {!Blockly.BlockSvg} block The block to render
- * @public
- */
-Blockly.blockRendering.render = function(block) {
-  if (!block.renderingDebugger) {
-    block.renderingDebugger = new Blockly.blockRendering.Debug();
-  }
-  new Blockly.blockRendering.Drawer(block).draw_();
-};
-
-/**
  * An object that draws a block based on the given rendering information.
  * @param {!Blockly.BlockSvg} block The block to render
  * @param {!Blockly.blockRendering.RenderInfo} info An object containing all
  *   information needed to render this block.
- * @private
+ * @package
  */
-Blockly.blockRendering.Drawer = function(block) {
+Blockly.blockRendering.Drawer = function(block, info) {
   this.block_ = block;
+  this.info_ = info;
   this.topLeft_ = block.getRelativeToSurfaceXY();
-  this.info_ = new Blockly.blockRendering.RenderInfo(block);
   this.pathObject_ = new Blockly.BlockSvg.PathObject();
   this.steps_ = this.pathObject_.steps;
   this.inlineSteps_ = this.pathObject_.inlineSteps;

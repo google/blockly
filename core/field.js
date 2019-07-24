@@ -936,3 +936,27 @@ Blockly.Field.prototype.getAbsoluteXY_ = function() {
 Blockly.Field.prototype.referencesVariables = function() {
   return false;
 };
+
+/**
+ * Search through the list of inputs and their fields in order to find the
+ * parent input of a field.
+ * @return {Blockly.Input} The input that the field belongs to.
+ * @package
+ */
+Blockly.Field.prototype.getParentInput = function() {
+  var parentInput = null;
+  var block = this.sourceBlock_;
+  var inputs = block.inputList;
+
+  for (var idx = 0; idx < block.inputList.length; idx++) {
+    var input = inputs[idx];
+    var fieldRows = input.fieldRow;
+    for (var j = 0; j < fieldRows.length; j++) {
+      if (fieldRows[j] === this) {
+        parentInput = input;
+        break;
+      }
+    }
+  }
+  return parentInput;
+};

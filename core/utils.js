@@ -587,6 +587,42 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
 };
 
 /**
+ * Converts screen coordinates to workspace coordinates.
+ * @param {Blockly.Workspace_Svg} ws The workspace to find the coordinates on.
+ * @param {goog.math.Coordinate} screenCoordinates The screen coordinates to be
+ * converted to workspace coordintaes
+ * @return {goog.math.Coorindate} The workspace coordinates.
+ * @package
+ */
+Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {
+  var screenX = screenCoordinates.x;
+  var screenY = screenCoordinates.y;
+
+  var injectionDiv = ws.getInjectionDiv();
+  // Bounding rect coordinates are in client coordinates, meaning that they
+  // are in pixels relative to the upper left corner of the visible browser
+  // window.  These coordinates change when you scroll the browser window.
+  var boundingRect = injectionDiv.getBoundingClientRect();
+
+  // The client coordinates offset by the injection div's upper left corner.
+  var clientOffsetPixels = new goog.math.Coordinate(
+      screenX - boundingRect.left, screenY - boundingRect.top);
+
+  // The offset in pixels between the main workspace's origin and the upper
+  // left corner of the injection div.
+  var mainOffsetPixels = ws.getOriginOffsetInPixels();
+
+  // The position of the new comment in pixels relative to the origin of the
+  // main workspace.
+  var finalOffsetPixels = goog.math.Coordinate.difference(clientOffsetPixels,
+      mainOffsetPixels);
+
+  // The position in main workspace coordinates.
+  var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
+  return finalOffsetMainWs;
+};
+
+/**
  * Reference to the global object.
  */
 Blockly.utils.global = this || self;

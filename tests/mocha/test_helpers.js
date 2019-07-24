@@ -1,5 +1,6 @@
 /* exported assertEquals, assertTrue, assertFalse, assertNull, assertNotNull,
-   isEqualArrays, assertUndefined, assertNotUndefined */
+   isEqualArrays, assertUndefined, assertNotUndefined,
+   defineRowBlock, defineStackBlock */
 function _argumentsIncludeComments(expectedNumberOfNonCommentArgs, args) {
   return args.length == expectedNumberOfNonCommentArgs + 1;
 }
@@ -106,3 +107,27 @@ function assertNotUndefined() {
   var val = _nonCommentArg(1, 1, arguments);
   chai.assert.isDefined(val, commentArg);
 }
+
+function defineStackBlock() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "stack_block",
+    "message0": "",
+    "previousStatement": null,
+    "nextStatement": null
+  }]);
+}
+
+function defineRowBlock() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "row_block",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "INPUT"
+      }
+    ],
+    "output": null
+  }]);
+}
+

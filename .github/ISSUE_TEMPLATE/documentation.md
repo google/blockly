@@ -19,6 +19,16 @@ assignees: ''
   -  should be, and where.
   -->
 
+**What**
+
+<!-- What kind of content is it? 
+  -  Check a box with an 'x' between the brackets: [x] 
+  -->
+  
+- [ ] Text
+- [ ] Image or Gif
+- [ ] Other
+
 **Old content**
 
 <!-- What the documentation currently says -->

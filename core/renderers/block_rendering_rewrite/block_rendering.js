@@ -24,6 +24,7 @@
  */
 
 'use strict';
+
 /**
  * The top level namespace for block rendering.
  * @namespace Blockly.blockRendering
@@ -35,7 +36,8 @@ goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.RenderInfo');
 
 /**
- * Render the given block.
+ * Render the given block, using the new rendering.
+ * Developers should not call this directly.  Instead, call block.render().
  * @param {!Blockly.BlockSvg} block The block to render
  * @public
  */
@@ -45,4 +47,7 @@ Blockly.blockRendering.render = function(block) {
   }
   var info = new Blockly.blockRendering.RenderInfo(block);
   new Blockly.blockRendering.Drawer(block, info).draw_();
+
+  // TODO: Fix moving connections in the new rendering code.
+  block.renderMoveConnections_();
 };

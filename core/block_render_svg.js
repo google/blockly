@@ -27,6 +27,7 @@
 
 goog.provide('Blockly.BlockSvg.render');
 
+goog.require('Blockly.blockRendering');
 goog.require('Blockly.BlockSvg');
 goog.require('Blockly.utils.dom');
 
@@ -311,15 +312,11 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
 };
 
 /**
- * Render the block.
- * Lays out and reflows a block based on its contents and settings.
- * @param {boolean=} opt_bubble If false, just render this block.
- *   If true, also render block's parent, grandparent, etc.  Defaults to true.
+ * Render just this block.
+ * Developers should not call this directly.  Instead, call block.render().
+ * @package
  */
-Blockly.BlockSvg.prototype.render = function(opt_bubble) {
-  Blockly.Field.startCache();
-  this.rendered = true;
-
+Blockly.BlockSvg.prototype.renderInternal = function() {
   var cursorX = Blockly.BlockSvg.SEP_SPACE_X;
   if (this.RTL) {
     cursorX = -cursorX;
@@ -337,18 +334,6 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   var inputRows = this.renderCompute_(cursorX);
   this.renderDraw_(cursorX, inputRows);
   this.renderMoveConnections_();
-
-  if (opt_bubble !== false) {
-    // Render all blocks above this one (propagate a reflow).
-    var parentBlock = this.getParent();
-    if (parentBlock) {
-      parentBlock.render(true);
-    } else {
-      // Top-most block.  Fire an event to allow scrollbars to resize.
-      this.workspace.resizeContents();
-    }
-  }
-  Blockly.Field.stopCache();
 };
 
 /**

@@ -51,8 +51,8 @@ if [[ ${PWD##*/} != $EXPECTED_PWD ]]; then
 fi
 
 # Find the Closure Compiler.
-if [ -f "$(npm root)/google-closure-compiler/compiler.jar" ]; then
-  COMPILER="$(npm root)/google-closure-compiler/compiler.jar"
+if [ -f "$(npm root)/google-closure-compiler-java/compiler.jar" ]; then
+  COMPILER="$(npm root)/google-closure-compiler-java/compiler.jar"
   CLOSURE_LIBRARY="$(npm root)/google-closure-library"
 elif [ -f closure-compiler*.jar ]; then
   COMPILER="closure-compiler*.jar"

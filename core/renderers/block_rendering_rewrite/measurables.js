@@ -314,7 +314,7 @@ Blockly.blockRendering.Hat = function() {
   Blockly.blockRendering.Hat.superClass_.constructor.call(this);
   this.type = 'hat';
   this.height = Blockly.blockRendering.constants.NO_PADDING;
-  this.width = Blockly.blockRendering.constants.START_HAT_WIDTH;
+  this.width = Blockly.blockRendering.constants.START_HAT.width;
 
 };
 goog.inherits(Blockly.blockRendering.Hat, Blockly.blockRendering.Measurable);

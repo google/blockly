@@ -127,7 +127,7 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
     } else if (elem.type === 'previous connection') {
       this.steps_.push(Blockly.blockRendering.constants.NOTCH_PATH_LEFT);
     } else if (elem.type === 'hat') {
-      this.steps_.push(Blockly.blockRendering.constants.START_HAT_PATH);
+      this.steps_.push(Blockly.blockRendering.constants.START_HAT.path);
     } else if (elem.isSpacer()) {
       this.steps_.push('h', elem.width);
     }

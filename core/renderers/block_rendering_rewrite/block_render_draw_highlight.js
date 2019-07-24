@@ -66,9 +66,8 @@ Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
     } else if (elem.type === 'previous connection') {
       this.highlightSteps_.push(Blockly.blockRendering.constants.NOTCH_PATH_LEFT_HIGHLIGHT);
     } else if (elem.type === 'hat') {
-      this.highlightSteps_.push(this.info_.RTL ?
-          Blockly.BlockSvg.START_HAT_HIGHLIGHT_RTL :
-          Blockly.BlockSvg.START_HAT_HIGHLIGHT_LTR);
+      this.highlightSteps_.push(
+          Blockly.blockRendering.constants.START_HAT.highlight(this.info_.RTL));
     } else if (elem.isSpacer()) {
       this.highlightSteps_.push('h', elem.width - Blockly.blockRendering.constants.HIGHLIGHT_OFFSET);
     }

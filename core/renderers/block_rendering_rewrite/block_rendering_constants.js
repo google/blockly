@@ -93,12 +93,19 @@ Blockly.blockRendering.constants.MAX_BOTTOM_WIDTH = 66.5;
  * @const
  */
 Blockly.blockRendering.constants.CORNER_RADIUS = 8;
+
 /**
  * Height of the top hat.
  * @const
+ * @private
  */
 Blockly.blockRendering.constants.START_HAT_HEIGHT = 15;
 
+/**
+ * Width of the top hat.
+ * @const
+ * @private
+ */
 Blockly.blockRendering.constants.START_HAT_WIDTH = 100;
 
 Blockly.blockRendering.constants.SPACER_DEFAULT_HEIGHT = 15;
@@ -182,17 +189,6 @@ Blockly.blockRendering.constants.TAB_PATH_UP =  'c 0,-10 -' + Blockly.blockRende
       ',8 -' + Blockly.blockRendering.constants.TAB_WIDTH + ',-7.5 s ' +
       Blockly.blockRendering.constants.TAB_WIDTH + ',2.5 ' + Blockly.blockRendering.constants.TAB_WIDTH + ',-7.5';
 
-/**
- * Path of the top hat's curve.
- * @const
- */
-Blockly.blockRendering.constants.START_HAT_PATH =
-    Blockly.utils.svgPaths.curve('c',
-        [
-          Blockly.utils.svgPaths.point(30, -Blockly.blockRendering.constants.START_HAT_HEIGHT),
-          Blockly.utils.svgPaths.point(70, -Blockly.blockRendering.constants.START_HAT_HEIGHT),
-          Blockly.utils.svgPaths.point(Blockly.blockRendering.constants.START_HAT_WIDTH, 0)
-        ]);
 /**
  * SVG path for drawing next/previous notch from left to right.
  * @const
@@ -350,28 +346,43 @@ Blockly.blockRendering.constants.TOP_LEFT_CORNER_HIGHLIGHT =
     Blockly.blockRendering.constants.CORNER_RADIUS + ',0.5';
 
 /**
- * Path of the top hat's curve's highlight in LTR.
- * @const
+ * Information about the hat on a start block.
  */
-Blockly.blockRendering.constants.START_HAT_HIGHLIGHT_LTR =
-    Blockly.utils.svgPaths.curve('c',
-        [
-          Blockly.utils.svgPaths.point(17.8, -9.2),
-          Blockly.utils.svgPaths.point(45.3, -14.9),
-          Blockly.utils.svgPaths.point(75, -8.7)
-        ]) +
-    Blockly.utils.svgPaths.moveTo(100.5, 0.5);
+Blockly.blockRendering.constants.START_HAT = (function() {
+  // It's really minus 15, which is super unfortunate.
+  var height = Blockly.blockRendering.constants.START_HAT_HEIGHT;
+  var width = Blockly.blockRendering.constants.START_HAT_WIDTH;
+  var highlightRtlPath =
+      Blockly.utils.svgPaths.moveBy(25, -8.7) +
+      Blockly.utils.svgPaths.curve('c',
+          [
+            Blockly.utils.svgPaths.point(29.7, -6.2),
+            Blockly.utils.svgPaths.point(57.2, -0.5),
+            Blockly.utils.svgPaths.point(75, 8.7)
+          ]);
 
-/**
- * Path of the top hat's curve's highlight in RTL.
- * @const
- */
-Blockly.blockRendering.constants.START_HAT_HIGHLIGHT_RTL =
-    Blockly.utils.svgPaths.moveBy(25, -8.7) +
-    Blockly.utils.svgPaths.curve('c',
-        [
-          Blockly.utils.svgPaths.point(29.7, -6.2),
-          Blockly.utils.svgPaths.point(57.2, -0.5),
-          Blockly.utils.svgPaths.point(75, 8.7)
-        ]);
+  var highlightLtrPath =
+      Blockly.utils.svgPaths.curve('c',
+          [
+            Blockly.utils.svgPaths.point(17.8, -9.2),
+            Blockly.utils.svgPaths.point(45.3, -14.9),
+            Blockly.utils.svgPaths.point(75, -8.7)
+          ]) +
+      Blockly.utils.svgPaths.moveTo(100.5, 0.5);
 
+  var mainPath =
+      Blockly.utils.svgPaths.curve('c',
+          [
+            Blockly.utils.svgPaths.point(30, -height),
+            Blockly.utils.svgPaths.point(70, -height),
+            Blockly.utils.svgPaths.point(width, 0)
+          ]);
+  return {
+    height: height,
+    width: width,
+    path: mainPath,
+    highlight: function(rtl) {
+      return rtl ? highlightRtlPath : highlightLtrPath;
+    }
+  };
+})();

@@ -84,17 +84,19 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY) {
  * @param {!Blockly.BlockSvg.InRowSpacer} elem The spacer to render
  * @param {number} cursorX The x position of the left of the row.
  * @param {number} centerY The y position of the center of the row, vertically.
+ * @param {number} rowHeight The height of the container row.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, cursorX, centerY) {
-  var yPos = centerY - elem.height / 2;
+Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, cursorX, centerY, rowHeight) {
+  var debugRenderedHeight = Math.min(15, rowHeight);
+  var yPos = centerY - debugRenderedHeight / 2;
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'elemSpacerRect blockRenderDebug',
         'x': cursorX,
         'y': yPos,
         'width': elem.width,
-        'height': 15,
+        'height': debugRenderedHeight,
       },
       this.svgRoot_));
 };
@@ -193,7 +195,7 @@ Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, curso
   for (var e = 0; e < row.elements.length; e++) {
     var elem = row.elements[e];
     if (elem.isSpacer()) {
-      this.drawSpacerElem(elem, cursorX, centerY);
+      this.drawSpacerElem(elem, cursorX, centerY, row.height);
     } else {
       this.drawRenderedElem(elem, cursorX, centerY);
     }

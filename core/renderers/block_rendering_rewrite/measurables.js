@@ -453,11 +453,6 @@ Blockly.blockRendering.TopRow = function(block) {
 };
 goog.inherits(Blockly.blockRendering.TopRow, Blockly.blockRendering.Row);
 
-
-Blockly.blockRendering.TopRow.prototype.isSpacer = function() {
-  return true;
-};
-
 Blockly.blockRendering.BottomRow = function(block) {
   Blockly.blockRendering.BottomRow.superClass_.constructor.call(this);
   this.type = 'bottom row';
@@ -480,8 +475,3 @@ Blockly.blockRendering.BottomRow = function(block) {
 };
 goog.inherits(Blockly.blockRendering.BottomRow,
     Blockly.blockRendering.Row);
-
-Blockly.blockRendering.BottomRow.prototype.isSpacer = function() {
-  return true;
-};
-

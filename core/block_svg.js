@@ -391,6 +391,28 @@ Blockly.BlockSvg.prototype.moveToDragSurface_ = function() {
 };
 
 /**
+ * Move a block to a position.
+ * @param {Blockly.utils.Coordinate} xy The position to move to in workspace units.
+ */
+Blockly.BlockSvg.prototype.moveTo = function(xy) {
+  if (this.parentBlock_) {
+    throw Error('Block has parent.');
+  }
+  var eventsEnabled = Blockly.Events.isEnabled();
+  if (eventsEnabled) {
+    var event = new Blockly.Events.BlockMove(this);
+  }
+  var curXY = this.getRelativeToSurfaceXY();
+  this.translate(xy.x, xy.y);
+  this.moveConnections_(xy.x - curXY.x, xy.y - curXY.y);
+  if (eventsEnabled) {
+    event.recordNew();
+    Blockly.Events.fire(event);
+  }
+  this.workspace.resizeContents();
+};
+
+/**
  * Move this block back to the workspace block canvas.
  * Generally should be called at the same time as setDragging_(false).
  * Does nothing if useDragSurface_ is false.
@@ -1501,6 +1523,28 @@ Blockly.BlockSvg.prototype.scheduleSnapAndBump = function() {
 };
 
 /**
+ * Position a block so that it doesn't move the target block when connected.
+ * The block to position is usually either the first block in a dragged stack or
+ * an insertion marker.
+ * @param {!Blockly.Connection} sourceConnection The connection on the moving
+ *     block's stack.
+ * @param {!Blockly.Connection} targetConnection The connection that should stay
+ *     stationary as this block is positioned.
+ */
+Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
+    targetConnection) {
+  // We only need to position the new block if it's before the existing one,
+  // otherwise its position is set by the previous block.
+  if (sourceConnection.type == Blockly.NEXT_STATEMENT ||
+      sourceConnection.type == Blockly.INPUT_VALUE) {
+    var dx = targetConnection.x_ - sourceConnection.x_;
+    var dy = targetConnection.y_ - sourceConnection.y_;
+
+    this.moveBy(dx, dy);
+  }
+};
+
+/*
  * Render the block.
  * Lays out and reflows a block based on its contents and settings.
  * @param {boolean=} opt_bubble If false, just render this block.

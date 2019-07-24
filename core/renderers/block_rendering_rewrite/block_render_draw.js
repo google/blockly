@@ -146,8 +146,9 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
 Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
   this.highlighter_.drawValueInput(row);
   this.steps_.push('H', row.width);
-  this.steps_.push(Blockly.blockRendering.constants.TAB_PATH_DOWN);
-  this.steps_.push('v', row.height - Blockly.blockRendering.constants.TAB_HEIGHT);
+  this.steps_.push(Blockly.blockRendering.constants.PUZZLE_TAB.pathDown);
+  this.steps_.push('v',
+      row.height - Blockly.blockRendering.constants.PUZZLE_TAB.height);
   this.positionExternalValueConnection_(row);
 };
 
@@ -220,8 +221,8 @@ Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
   if (this.info_.hasOutputConnection) {
     // Draw a line up to the bottom of the tab.
     this.steps_.push('V', Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP +
-        Blockly.blockRendering.constants.TAB_HEIGHT);
-    this.steps_.push(Blockly.blockRendering.constants.TAB_PATH_UP);
+        Blockly.blockRendering.constants.PUZZLE_TAB.height);
+    this.steps_.push(Blockly.blockRendering.constants.PUZZLE_TAB.pathUp);
   }
   // Close off the path.  This draws a vertical line up to the start of the
   // block's path, which may be either a rounded or a sharp corner.
@@ -314,12 +315,12 @@ Blockly.blockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
   var height = input.height;
   var yPos = input.centerline - height / 2;
 
-  this.inlineSteps_.push('M', (input.xPos + Blockly.blockRendering.constants.TAB_WIDTH) + ',' + yPos);
+  this.inlineSteps_.push('M', (input.xPos + Blockly.blockRendering.constants.PUZZLE_TAB.width) + ',' + yPos);
   this.inlineSteps_.push('v ', Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP);
-  this.inlineSteps_.push(Blockly.blockRendering.constants.TAB_PATH_DOWN);
-  this.inlineSteps_.push('v', height - Blockly.blockRendering.constants.TAB_HEIGHT -
+  this.inlineSteps_.push(Blockly.blockRendering.constants.PUZZLE_TAB.pathDown);
+  this.inlineSteps_.push('v', height - Blockly.blockRendering.constants.PUZZLE_TAB.height -
       Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP);
-  this.inlineSteps_.push('h', width - Blockly.blockRendering.constants.TAB_WIDTH);
+  this.inlineSteps_.push('h', width - Blockly.blockRendering.constants.PUZZLE_TAB.width);
   this.inlineSteps_.push('v', -height);
   this.inlineSteps_.push('z');
 
@@ -339,7 +340,7 @@ Blockly.blockRendering.Drawer.prototype.positionInlineInputConnection_ = functio
   var yPos = input.centerline - input.height / 2;
   // Move the connection.
   if (input.connection) {
-    var connX = input.xPos + Blockly.blockRendering.constants.TAB_WIDTH +
+    var connX = input.xPos + Blockly.blockRendering.constants.PUZZLE_TAB.width +
         Blockly.blockRendering.constants.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;

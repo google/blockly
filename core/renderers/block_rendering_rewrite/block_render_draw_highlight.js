@@ -80,24 +80,22 @@ Blockly.blockRendering.Highlighter.prototype.drawValueInput = function(row) {
   //var v = row.height - Blockly.blockRendering.constants.TAB_HEIGHT;
 
   if (this.info_.RTL) {
-    var aboveTabHeight =
-        Blockly.blockRendering.constants.TAB_VERTICAL_OVERLAP -
-        Blockly.blockRendering.constants.HIGHLIGHT_OFFSET;
+    var aboveTabHeight = -Blockly.blockRendering.constants.HIGHLIGHT_OFFSET;
     var belowTabHeight = row.height -
-        (Blockly.blockRendering.constants.TAB_HEIGHT -
-            Blockly.blockRendering.constants.TAB_VERTICAL_OVERLAP) +
+        Blockly.blockRendering.constants.PUZZLE_TAB.height +
         Blockly.blockRendering.constants.HIGHLIGHT_OFFSET;
     // Edge above tab.
     this.highlightSteps_.push('v', aboveTabHeight);
     // Highlight around back of tab.
-    this.highlightSteps_.push(Blockly.blockRendering.constants.TAB_PATH_DOWN_HIGHLIGHT_RTL);
+    this.highlightSteps_.push(
+        Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT.pathDown(this.info_.RTL));
     // Edge below tab.
     this.highlightSteps_.push('v', belowTabHeight);
   } else {
     // Short highlight glint at bottom of tab.
     this.highlightSteps_.push('M', (row.width - 5) + ',' +
-        (row.yPos + Blockly.blockRendering.constants.TAB_HEIGHT - 0.7));
-    this.highlightSteps_.push('l', (Blockly.blockRendering.constants.TAB_WIDTH * 0.46) + ',-2.1');
+        (row.yPos + Blockly.blockRendering.constants.PUZZLE_TAB.height - 0.7));
+    this.highlightSteps_.push('l', (Blockly.blockRendering.constants.PUZZLE_TAB.width * 0.46) + ',-2.1');
   }
 };
 
@@ -162,11 +160,8 @@ Blockly.blockRendering.Highlighter.prototype.drawBottomCorner = function(_row) {
 
 Blockly.blockRendering.Highlighter.prototype.drawLeft = function() {
   if (this.info_.hasOutputConnection) {
-    if (this.info_.RTL) {
-      this.highlightSteps_.push(Blockly.blockRendering.constants.OUTPUT_CONNECTION_HIGHLIGHT_RTL);
-    } else {
-      this.highlightSteps_.push(Blockly.blockRendering.constants.OUTPUT_CONNECTION_HIGHLIGHT_LTR);
-    }
+    this.highlightSteps_.push(
+        Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT.pathUp(this.info_.RTL));
   }
 
   if (!this.info_.RTL) {
@@ -183,24 +178,22 @@ Blockly.blockRendering.Highlighter.prototype.drawInlineInput = function(input) {
   var height = input.height;
   var x = input.xPos;
   var yPos = input.centerline - height / 2;
-  var bottomHighlightWidth = width - Blockly.blockRendering.constants.TAB_WIDTH;
+  var bottomHighlightWidth = width - Blockly.blockRendering.constants.PUZZLE_TAB.width;
 
   if (this.info_.RTL) {
     // TODO: Check if this is different when the inline input is populated.
 
     var aboveTabHeight =
-        Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP +
-       Blockly.blockRendering.constants.TAB_VERTICAL_OVERLAP -
+        Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP -
        Blockly.blockRendering.constants.HIGHLIGHT_OFFSET;
 
     var belowTabHeight =
         height -
         (Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP +
-            Blockly.blockRendering.constants.TAB_HEIGHT -
-            Blockly.blockRendering.constants.TAB_VERTICAL_OVERLAP) +
+            Blockly.blockRendering.constants.PUZZLE_TAB.height) +
         Blockly.blockRendering.constants.HIGHLIGHT_OFFSET;
 
-    var startX = x + Blockly.blockRendering.constants.TAB_WIDTH -
+    var startX = x + Blockly.blockRendering.constants.PUZZLE_TAB.width -
         Blockly.blockRendering.constants.HIGHLIGHT_OFFSET;
     var startY = yPos + Blockly.blockRendering.constants.HIGHLIGHT_OFFSET;
 
@@ -209,7 +202,8 @@ Blockly.blockRendering.Highlighter.prototype.drawInlineInput = function(input) {
     // Right edge above tab.
     this.highlightInlineSteps_.push('v', aboveTabHeight);
     // Back of tab.
-    this.highlightInlineSteps_.push(Blockly.blockRendering.constants.TAB_PATH_DOWN_HIGHLIGHT_RTL);
+    this.highlightInlineSteps_.push(
+        Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT.pathDown(this.info_.RTL));
     // Right edge below tab.
     this.highlightInlineSteps_.push('v', belowTabHeight);
     // Bottom (horizontal).
@@ -225,8 +219,8 @@ Blockly.blockRendering.Highlighter.prototype.drawInlineInput = function(input) {
     // Bad: reference to Blockly.BlockSvg
     this.highlightInlineSteps_.push('M',
         (x + 2.9) + ',' + (yPos + Blockly.BlockSvg.INLINE_PADDING_Y +
-         Blockly.blockRendering.constants.TAB_HEIGHT - 0.7));
+         Blockly.blockRendering.constants.PUZZLE_TAB.height - 0.7));
     this.highlightInlineSteps_.push('l',
-        (Blockly.blockRendering.constants.TAB_WIDTH * 0.46) + ',-2.1');
+        (Blockly.blockRendering.constants.PUZZLE_TAB.width * 0.46) + ',-2.1');
   }
 };

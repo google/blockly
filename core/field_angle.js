@@ -334,9 +334,10 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
 
 /**
  * Ensure that the input value is a valid angle.
- * @param {*} newValue The input value.
- * @return {*} A valid angle, or null if invalid.
+ * @param {string|number=} newValue The input value.
+ * @return {?number} A valid angle, or null if invalid.
  * @protected
+ * @override
  */
 Blockly.FieldAngle.prototype.doClassValidation_ = function(newValue) {
   if (isNaN(newValue)) {

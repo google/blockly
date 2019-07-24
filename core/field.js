@@ -118,6 +118,13 @@ Blockly.Field.cacheWidths_ = null;
 Blockly.Field.cacheReference_ = 0;
 
 /**
+ * The default height of the border rect on any field.
+ * @type {number}
+ * @package
+ */
+Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT = 16;
+
+/**
  * Name of field.  Unique within each block.
  * Static labels are usually unnamed.
  * @type {string|undefined}
@@ -278,7 +285,7 @@ Blockly.Field.prototype.createBorderRect_ = function() {
         'ry': 4,
         'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
         'y': 0,
-        'height': 16,
+        'height': Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT,
         'width': this.size_.width + Blockly.BlockSvg.SEP_SPACE_X
       }, this.fieldGroup_);
 };
@@ -651,6 +658,16 @@ Blockly.Field.prototype.getSize = function() {
 };
 
 /**
+ * Get the size of the visible field, as used in new rendering.
+ * @return {!goog.math.Size} The size of the visible field.
+ * @package
+ */
+Blockly.Field.prototype.getCorrectedSize = function() {
+  // TODO (#2562): Remove getCorrectedSize.
+  return this.getSize();
+};
+
+/**
  * Returns the bounding box of the rendered field, accounting for workspace
  * scaling.
  * @return {!Object} An object with top, bottom, left, and right in pixels
@@ -902,7 +919,7 @@ Blockly.Field.prototype.getClickTarget_ = function() {
 /**
  * Return the absolute coordinates of the top-left corner of this field.
  * The origin (0,0) is the top-left corner of the page body.
- * @return {!goog.math.Coordinate} Object with .x and .y properties.
+ * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
  * @private
  */
 Blockly.Field.prototype.getAbsoluteXY_ = function() {
@@ -918,4 +935,28 @@ Blockly.Field.prototype.getAbsoluteXY_ = function() {
  */
 Blockly.Field.prototype.referencesVariables = function() {
   return false;
+};
+
+/**
+ * Search through the list of inputs and their fields in order to find the
+ * parent input of a field.
+ * @return {Blockly.Input} The input that the field belongs to.
+ * @package
+ */
+Blockly.Field.prototype.getParentInput = function() {
+  var parentInput = null;
+  var block = this.sourceBlock_;
+  var inputs = block.inputList;
+
+  for (var idx = 0; idx < block.inputList.length; idx++) {
+    var input = inputs[idx];
+    var fieldRows = input.fieldRow;
+    for (var j = 0; j < fieldRows.length; j++) {
+      if (fieldRows[j] === this) {
+        parentInput = input;
+        break;
+      }
+    }
+  }
+  return parentInput;
 };

@@ -308,10 +308,6 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
   this.onKeyPressWrapper_ =
       Blockly.bindEventWithChecks_(
           htmlInput, 'keypress', this, this.onHtmlInputChange_);
-
-  // TODO: Figure out if this is necessary.
-  this.onWorkspaceChangeWrapper_ = this.resizeEditor_.bind(this);
-  this.workspace_.addChangeListener(this.onWorkspaceChangeWrapper_);
 };
 
 /**
@@ -322,7 +318,6 @@ Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
   Blockly.unbindEvent_(this.onKeyDownWrapper_);
   Blockly.unbindEvent_(this.onKeyUpWrapper_);
   Blockly.unbindEvent_(this.onKeyPressWrapper_);
-  this.workspace_.removeChangeListener(this.onWorkspaceChangeWrapper_);
 };
 
 /**
@@ -430,6 +425,20 @@ Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
     n = String(Math.max(0, Math.floor(n)));
   }
   return n;
+};
+
+/**
+ * Get the size of the visible field, as used in new rendering.
+ * @return {!goog.math.Size} The size of the visible field.
+ * @package
+ */
+Blockly.FieldTextInput.prototype.getCorrectedSize = function() {
+  // getSize also renders and updates the size if needed.  Rather than duplicate
+  // the logic to figure out whether to rerender, just call getSize.
+  this.getSize();
+  // TODO (#2562): Remove getCorrectedSize.
+  return new goog.math.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
+      Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
 };
 
 Blockly.Field.register('field_input', Blockly.FieldTextInput);

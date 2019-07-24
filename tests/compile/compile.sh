@@ -23,8 +23,8 @@ fi
 
 # Find the Closure Compiler.
 if [ -n $NODE_MODULES ] && \
-  [ -s $NODE_MODULES/google-closure-compiler/compiler.jar ]; then
-  COMPILER=$NODE_MODULES/google-closure-compiler/compiler.jar
+  [ -s $NODE_MODULES/google-closure-compiler-java/compiler.jar ]; then
+  COMPILER=$NODE_MODULES/google-closure-compiler-java/compiler.jar
   echo "Found npm google-closure-compiler:"
   echo "  $COMPILER"
   npm list google-closure-compiler | grep google-closure-compiler

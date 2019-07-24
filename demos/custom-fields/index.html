@@ -18,6 +18,11 @@
       is used to define a turtle.
     </p>
 
+    <p>All of the custom field implementation is in
+     demos/custom-fields/field_turtle.js, including comments on each required
+     function.
+    </p>
+
     <p>Click on the blocks' comment icons to learn what they are demonstrating.
       Use the buttons below to see how the fields react to changes.
     </p>
@@ -35,16 +40,16 @@
       <input type="button" value="Import from XML" onclick="fromXml()">
     </p>
 
-    <table style="width: 800px; height: 480px">
+    <table>
       <tr>
         <td>
           <textarea id="importExport"
-                    style="width: 200px; height: 100%;"
+                    style="width: 200px; height: 480px;"
                     onchange="textAreaChange();"
                     onkeyup="textAreaChange()"></textarea>
         </td>
         <td>
-          <div id="blocklyDiv" style="width: 600px; height: 100%;"></div>
+          <div id="blocklyDiv" style="width: 600px; height: 480px;"></div>
         </td>
       </tr>
     </table>

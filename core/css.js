@@ -647,6 +647,11 @@ Blockly.Css.CONTENT = [
     'padding: 0 !important;',
   '}',
 
+  '.blocklyVerticalCursor {',
+    'stroke-width: 3px;',
+    'fill: rgba(255,255,255,0.5);',
+  '}',
+
   '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-checkbox,',
   '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-icon {',
     'background: url(<<<PATH>>>/sprites.png) no-repeat -48px -16px;',

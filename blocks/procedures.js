@@ -349,7 +349,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   displayRenamedVar_: function(oldName, newName) {
     this.updateParams_();
     // Update the mutator's variables if the mutator is open.
-    if (this.mutator.isVisible()) {
+    if (this.mutator && this.mutator.isVisible()) {
       var blocks = this.mutator.workspace_.getAllBlocks(false);
       for (var i = 0, block; block = blocks[i]; i++) {
         if (block.type == 'procedures_mutatorarg' &&
@@ -588,14 +588,16 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    * @this Blockly.FieldTextInput
    */
   validator_: function(varName) {
-    var outerWs = Blockly.Mutator.findParentWs(this.getSourceBlock().workspace);
+    var sourceBlock = this.getSourceBlock();
+    var outerWs = Blockly.Mutator.findParentWs(sourceBlock.workspace);
     varName = varName.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
     if (!varName) {
       return null;
     }
+
     // Prevents duplicate parameter names in functions
-    var blocks = this.getSourceBlock().workspace.getAllBlocks();
-    for (var i = 0; i < blocks.length; i += 1) {
+    var blocks = sourceBlock.workspace.getAllBlocks();
+    for (var i = 0; i < blocks.length; i++) {
       if (blocks[i].id == this.getSourceBlock().id) {
         continue;
       }
@@ -603,11 +605,11 @@ Blockly.Blocks['procedures_mutatorarg'] = {
         return null;
       }
     }
+
     var model = outerWs.getVariable(varName, '');
     if (model && model.name != varName) {
       // Rename the variable (case change)
-      // TODO: This function doesn't exist on the workspace.
-      outerWs.renameVarById(model.getId(), varName);
+      outerWs.renameVariableById(model.getId(), varName);
     }
     if (!model) {
       model = outerWs.createVariable(varName, '');

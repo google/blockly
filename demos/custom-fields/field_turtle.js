@@ -455,11 +455,18 @@ CustomFields.FieldTurtle.prototype.updateColour = function() {
 
   var child = this.turtleGroup_.firstChild;
   while(child) {
-    // If it is a text node, or a non-turtle node.
-    if (child.nodeType == 3 || !child.classList.contains('turtleBody')) {
+    // If it is a text node, continue.
+    if (child.nodeType == 3) {
       child = child.nextSibling;
       continue;
     }
+    // Or if it is a non-turtle node, continue.
+    var className = child.getAttribute('class');
+    if (!className || className.indexOf('turtleBody') == -1) {
+      child = child.nextSibling;
+      continue;
+    }
+
     child.style.fill = fillColour;
     child.style.stroke = borderColour;
     child = child.nextSibling;

@@ -23,11 +23,11 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-//'use strict';
+'use strict';
 goog.provide('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Highlighter');
-goog.require('BRC');
+goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Measurable');
 
 /**

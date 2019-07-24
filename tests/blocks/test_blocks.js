@@ -63,6 +63,28 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "math_blocks",
   },
   {
+    "type": "test_basic_tooltips",
+    "message0": "%1 %2 %3",
+    "args0": [
+      {
+        "type": "field_label",
+        "name": "NAME",
+        "text": "field tooltip",
+        "tooltip": "This is a JSON tooltip for the *field*."
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "name": "NAME",
+        "text": "block tooltip"
+      }
+    ],
+    "tooltip": "This is a JSON tooltip for the *block*.",
+    "style": "math_blocks"
+  },
+  {
     "type": "test_dropdowns_long",
     "message0": "long: %1",
     "args0": [
@@ -234,6 +256,26 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "math_blocks",
     "tooltip": "",
     "helpUrl": ""
+  },
+  {
+    "type": "test_fields_colour_options",
+    "message0": "colour options %1",
+    "args0": [
+      {
+        "type": "field_colour",
+        "name": "COLOUR",
+        "colour": "#ff4040",
+        "colourOptions":
+          ['#ff4040', '#ff8080', '#ffc0c0',
+            '#4040ff', '#8080ff', '#c0c0ff'],
+        "colourTitles":
+          ['dark pink', 'pink', 'light pink',
+            'dark blue', 'blue', 'light blue'],
+        "columns": 3
+      }
+    ],
+    "style": "math_blocks",
+    "tooltip": "test tooltip"
   },
   {
     "type": "test_fields_variable",

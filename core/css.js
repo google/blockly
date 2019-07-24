@@ -647,6 +647,11 @@ Blockly.Css.CONTENT = [
     'padding: 0 !important;',
   '}',
 
+  '.blocklyVerticalCursor {',
+    'stroke-width: 3px;',
+    'fill: rgba(255,255,255,0.5);',
+  '}',
+
   '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-checkbox,',
   '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-icon {',
     'background: url(<<<PATH>>>/sprites.png) no-repeat -48px -16px;',
@@ -789,14 +794,6 @@ Blockly.Css.CONTENT = [
   '.blocklyColourSelected, .blocklyColourSelected:hover {',
     'border: 1px solid #000 !important;',
   '}',
-
-  /* Remove the increase and decrease arrows on the field number editor */
-  'input.blocklyHtmlInput[type=number]::-webkit-inner-spin-button,',
-  'input.blocklyHtmlInput[type=number]::-webkit-outer-spin-button {',
-    '-webkit-appearance: none;',
-    'margin: 0;',
-  '}',
-
 
   /* Copied from: goog/css/menu.css */
   /*

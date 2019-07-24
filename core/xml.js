@@ -74,7 +74,9 @@ Blockly.Xml.variablesToDom = function(variableList) {
   for (var i = 0, variable; variable = variableList[i]; i++) {
     var element = Blockly.utils.xml.createElement('variable');
     element.appendChild(Blockly.utils.xml.createTextNode(variable.name));
-    element.setAttribute('type', variable.type);
+    if (variable.type) {
+      element.setAttribute('type', variable.type);
+    }
     element.id = variable.getId();
     variables.appendChild(element);
   }
@@ -191,7 +193,7 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
       }
       var shadow = input.connection.getShadowDom();
       if (shadow && (!childBlock || !childBlock.isShadow())) {
-        container.appendChild(Blockly.Xml.cloneShadow_(shadow));
+        container.appendChild(Blockly.Xml.cloneShadow_(shadow, opt_noId));
       }
       if (childBlock) {
         container.appendChild(Blockly.Xml.blockToDom(childBlock, opt_noId));
@@ -231,7 +233,7 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
   }
   var shadow = block.nextConnection && block.nextConnection.getShadowDom();
   if (shadow && (!nextBlock || !nextBlock.isShadow())) {
-    container.appendChild(Blockly.Xml.cloneShadow_(shadow));
+    container.appendChild(Blockly.Xml.cloneShadow_(shadow, opt_noId));
   }
 
   return element;
@@ -240,15 +242,21 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
 /**
  * Deeply clone the shadow's DOM so that changes don't back-wash to the block.
  * @param {!Element} shadow A tree of XML elements.
+ * @param {boolean=} opt_noId True if the encoder should skip the block ID.
  * @return {!Element} A tree of XML elements.
  * @private
  */
-Blockly.Xml.cloneShadow_ = function(shadow) {
+Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {
   shadow = shadow.cloneNode(true);
   // Walk the tree looking for whitespace.  Don't prune whitespace in a tag.
   var node = shadow;
   var textNode;
   while (node) {
+    if (opt_noId && node.nodeName == 'shadow') {
+      // Strip off IDs from shadow blocks.  There should never be a 'block' as
+      // a child of a 'shadow', so no need to check that.
+      node.removeAttribute('id');
+    }
     if (node.firstChild) {
       node = node.firstChild;
     } else {
@@ -264,8 +272,7 @@ Blockly.Xml.cloneShadow_ = function(shadow) {
       if (node) {
         textNode = node;
         node = node.nextSibling;
-        if (textNode.nodeType == Node.TEXT_NODE &&
-            textNode.data.trim() == '') {
+        if (textNode.nodeType == Node.TEXT_NODE && textNode.data.trim() == '') {
           // Prune whitespace before a tag.
           Blockly.utils.dom.removeNode(textNode);
         }
@@ -575,9 +582,6 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
     var id = xmlChild.getAttribute('id');
     var name = xmlChild.textContent;
 
-    if (type == null) {
-      throw Error('Variable with id, ' + id + ' is without a type');
-    }
     workspace.createVariable(name, type, id);
   }
 };

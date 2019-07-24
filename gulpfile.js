@@ -67,6 +67,13 @@ if (typeof DOMParser !== 'function') {
     return jsdom.window.document;
   };
 }
+if (typeof Node !== 'function') {
+  var Node = {
+    ELEMENT_NODE: 1,
+    TEXT_NODE: 3,
+    DOCUMENT_POSITION_CONTAINED_BY: 16
+  };
+}
 if (typeof module === 'object') { module.exports = Blockly; }
 if (typeof window === 'object') { window.Blockly = Blockly; }\n`))
       .pipe(gulp.dest('.'));

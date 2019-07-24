@@ -71,6 +71,8 @@
 var workspace = null;
 
 function start() {
+  // TODO (#2702): Choose an API for picking the renderer.
+  Blockly.renderMode = 'compatibility';
   setBackgroundColour();
 
   // Parse the URL arguments.
@@ -136,6 +138,9 @@ function start() {
     // Restore event logging state.
     var state = sessionStorage.getItem('logEvents');
     logEvents(Boolean(Number(state)));
+    // Restore render debug state.
+    var renderDebugState = sessionStorage.getItem('blockRenderDebug');
+    toggleRenderingDebug(Boolean(Number(renderDebugState)));
   } else {
     // MSIE 11 does not support sessionStorage on file:// URLs.
     logEvents(false);
@@ -327,6 +332,19 @@ function logEvents(state) {
   }
 }
 
+function toggleRenderingDebug(state) {
+  var checkbox = document.getElementById('blockRenderDebugCheck');
+  checkbox.checked = state;
+  if (sessionStorage) {
+    sessionStorage.setItem('blockRenderDebug', Number(state));
+  }
+  if (state) {
+    document.getElementById('blocklyDiv').className = 'renderingDebug';
+  } else {
+    document.getElementById('blocklyDiv').className = '';
+  }
+}
+
 function logger(e) {
   console.log(e);
 }
@@ -420,6 +438,40 @@ h1 {
   font-style: italic;
 }
 
+#blocklyDiv.renderingDebug .blockRenderDebug {
+  display: block;
+}
+
+.blockRenderDebug {
+  display: none;
+}
+
+.rowRenderingRect {
+  stroke: black;
+  fill: none;
+  stroke-width: 1px;
+}
+
+.elemRenderingRect {
+  stroke: red;
+  fill: none;
+  stroke-width: 1px;
+}
+
+.rowSpacerRect {
+  stroke: blue;
+  fill-opacity: 0.5;
+  fill: blue;
+  stroke-width: 1px;
+}
+
+.elemSpacerRect {
+  stroke: pink;
+  fill-opacity: 0.5;
+  fill: pink;
+  stroke-width: 1px;
+}
+
 </style>
 </head>
 <body onload="start()">
@@ -481,6 +533,11 @@ h1 {
   <p>
     Log events: &nbsp;
     <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
+  </p>
+
+  <p>
+    Block rendering debug: &nbsp;
+    <input type="checkbox" onclick="toggleRenderingDebug(this.checked)" id="blockRenderDebugCheck">
   </p>
 
   <!-- The next three blocks of XML are sample toolboxes for testing basic
@@ -1207,6 +1264,7 @@ h1 {
       <block type="test_basic_value_to_stack"></block>
       <block type="test_basic_value_to_statement"></block>
       <block type="test_basic_limit_instances"></block>
+      <block type="test_basic_tooltips"></block>
     </category>
     <category name="Drag">
       <label text="Drag each to the workspace"></label>
@@ -1304,6 +1362,7 @@ h1 {
         <block type="test_fields_date"></block>
         <block type="test_fields_checkbox"></block>
         <block type="test_fields_colour"></block>
+        <block type="test_fields_colour_options"></block>
         <block type="test_fields_text_input"></block>
         <block type="test_fields_variable"></block>
         <button text="randomize label text" callbackKey="randomizeLabelText"></button>

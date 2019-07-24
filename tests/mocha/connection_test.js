@@ -2,7 +2,7 @@
 
 suite('Connections', function() {
 
-  suite('Rendered', function() {
+  suite.skip('Rendered', function() {
     function assertAllConnectionsHiddenState(block, hidden) {
       var connections = block.getConnections_(true);
       for (var i = 0; i < connections.length; i++) {

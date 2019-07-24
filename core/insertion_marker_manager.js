@@ -262,6 +262,7 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
   try {
     var result = this.workspace_.newBlock(imType);
     result.setInsertionMarker(true, sourceBlock.width);
+    result.setCollapsed(sourceBlock.isCollapsed());
     if (sourceBlock.mutationToDom) {
       var oldMutationDom = sourceBlock.mutationToDom();
       if (oldMutationDom) {

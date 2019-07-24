@@ -82,8 +82,8 @@ function xmlTest_tearDownWithMockBlocks() {
 }
 
 /**
- * Check the values of the non variable field dom.
- * @param {!Element} fieldDom The xml dom of the non variable field.
+ * Check the values of the non variable field DOM.
+ * @param {!Element} fieldDom The XML DOM of the non variable field.
  * @param {!string} name The expected name of the variable.
  * @param {!string} text The expected text of the variable.
  */
@@ -96,10 +96,10 @@ function xmlTest_checkNonVariableField(fieldDom, name, text) {
 
 /**
  * Check the values of the variable field DOM.
- * @param {!Element} fieldDom The xml dom of the variable field.
+ * @param {!Element} fieldDom The XML DOM of the variable field.
  * @param {!string} name The expected name of the variable.
  * @param {!string} type The expected type of the variable.
- * @param {!string} id The expected id of the variable.
+ * @param {!string} id The expected ID of the variable.
  * @param {!string} text The expected text of the variable.
  */
 function xmlTest_checkVariableFieldDomValues(fieldDom, name, type, id, text) {
@@ -111,9 +111,9 @@ function xmlTest_checkVariableFieldDomValues(fieldDom, name, type, id, text) {
 
 /**
  * Check the values of the variable DOM.
- * @param {!Element} variableDom The xml dom of the variable.
+ * @param {!Element} variableDom The XML DOM of the variable.
  * @param {!string} type The expected type of the variable.
- * @param {!string} id The expected id of the variable.
+ * @param {!string} id The expected ID of the variable.
  * @param {!string} text The expected text of the variable.
  */
 function xmlTest_checkVariableDomValues(variableDom, type, id, text) {
@@ -291,8 +291,8 @@ function test_blockToDom_fieldToDom_trivial() {
   var block = new Blockly.Block(workspace, 'field_variable_test_block');
   block.inputList[0].fieldRow[0].setValue('id1');
   var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
-  xmlTest_checkVariableFieldDomValues(resultFieldDom, 'VAR', '', 'id1',
-    'name1');
+  xmlTest_checkVariableFieldDomValues(resultFieldDom, 'VAR', null, 'id1',
+      'name1');
   xmlTest_tearDownWithMockBlocks();
 }
 
@@ -308,8 +308,9 @@ function test_blockToDom_fieldToDom_defaultCase() {
     Blockly.Events.enable();
 
     var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
-    // Expect type is '' and id is '1' since we don't specify type and id.
-    xmlTest_checkVariableFieldDomValues(resultFieldDom, 'VAR', '', '1', 'name1');
+    // Expect type is null and ID is '1' since we don't specify type and ID.
+    xmlTest_checkVariableFieldDomValues(resultFieldDom, 'VAR', null, '1',
+        'name1');
   } finally {
     xmlTest_tearDownWithMockBlocks();
   }
@@ -344,7 +345,7 @@ function test_variablesToDom_oneVariable() {
   assertEquals(1, resultDom.children.length);
   var resultVariableDom = resultDom.children[0];
   assertEquals('name1', resultVariableDom.textContent);
-  assertEquals('', resultVariableDom.getAttribute('type'));
+  assertEquals(null, resultVariableDom.getAttribute('type'));
   assertEquals('1', resultVariableDom.getAttribute('id'));
   xmlTest_tearDown();
 }
@@ -363,7 +364,7 @@ function test_variablesToDom_twoVariables_oneBlock() {
 
   var resultDom = Blockly.Xml.variablesToDom(workspace.getAllVariables());
   assertEquals(2, resultDom.children.length);
-  xmlTest_checkVariableDomValues(resultDom.children[0], '', 'id1',
+  xmlTest_checkVariableDomValues(resultDom.children[0], null, 'id1',
       'name1');
   xmlTest_checkVariableDomValues(resultDom.children[1], 'type2', 'id2',
       'name2');
@@ -391,10 +392,11 @@ function test_variableFieldXml_caseSensitive() {
     }
   };
 
-  var generatedXml =
-    Blockly.Variables.generateVariableFieldXmlString(mockVariableModel);
+  var generatedXml = Blockly.Xml.domToText(
+      Blockly.Variables.generateVariableFieldDom(mockVariableModel));
   var goldenXml =
-      '<field name="VAR"' +
+      '<field xmlns="https://developers.google.com/blockly/xml"' +
+      ' name="VAR"' +
       ' id="' + id + '"' +
       ' variabletype="' + type + '"' +
       '>' + name + '</field>';

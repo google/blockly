@@ -30,6 +30,7 @@ goog.provide('Blockly.WorkspaceSvg');
 //goog.require('Blockly.BlockSvg');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
+goog.require('Blockly.CursorSvg');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Gesture');
@@ -122,6 +123,12 @@ Blockly.WorkspaceSvg = function(options,
     this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
   }
+
+  /**
+   * The marker that shows where a user has marked while navigating blocks.
+   * @type {!Blockly.CursorSvg}
+   */
+  this.marker = this.createMarker();
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -391,6 +398,22 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
 Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
 
 /**
+ * Adds cursor for keyboard navigation.
+ * @return {!Blockly.CursorSvg} Cursor for keyboard navigation.
+ */
+Blockly.WorkspaceSvg.prototype.createCursor = function() {
+  return new Blockly.CursorSvg(this);
+};
+
+/**
+ * Adds marker for keyboard navigation.
+ * @return {!Blockly.CursorSvg} Marker for keyboard navigation.
+ */
+Blockly.WorkspaceSvg.prototype.createMarker = function() {
+  return new Blockly.CursorSvg(this, true);
+};
+
+/**
  * Getter for the inverted screen CTM.
  * @return {SVGMatrix} The matrix to use in mouseToSvg
  */
@@ -556,6 +579,13 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     this.grid_.update(this.scale);
   }
   this.recordDeleteAreas();
+
+  var svgCursor = this.cursor.createDom();
+  this.svgGroup_.appendChild(svgCursor);
+
+  var svgMarker = this.marker.createDom();
+  this.svgGroup_.appendChild(svgMarker);
+
   return this.svgGroup_;
 };
 
@@ -595,6 +625,11 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   if (this.zoomControls_) {
     this.zoomControls_.dispose();
     this.zoomControls_ = null;
+  }
+
+  if (this.cursor_) {
+    this.cursor_.dispose();
+    this.cursor_ = null;
   }
 
   if (this.audioManager_) {

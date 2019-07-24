@@ -51,9 +51,20 @@ Blockly.Blocks['turtle_nullifier'] = {
   },
 
   validate: function(newValue) {
+    this.cachedValidatedValue_ = Object.assign({}, newValue);
     if ((newValue.turtleName == 'Leonardo' && newValue.hat == 'Mask') ||
         (newValue.turtleName == 'Yertle' && newValue.hat == 'Crown') ||
         (newValue.turtleName == 'Franklin') && newValue.hat == 'Propeller') {
+
+      var currentValue = this.getValue();
+      if (newValue.turtleName != currentValue.turtleName) {
+        // Turtle name changed.
+        this.cachedValidatedValue_.turtleName = null;
+      } else {
+        // Hat must have changed.
+        this.cachedValidatedValue_.hat = null;
+      }
+
       return null;
     }
     return newValue;

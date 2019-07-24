@@ -172,15 +172,16 @@ CustomFields.FieldTurtle.prototype.doClassValidation_ = function(newValue) {
     newValue.turtleName = null;
   }
 
+  // This is a strategy for dealing with defaults on multi-part values.
+  // The class validator sets individual properties of the object to null
+  // to indicate that they are invalid, and then caches that object to the
+  // cachedValidatedValue_ property. This way the field can, for
+  // example, properly handle an invalid pattern, combined with a valid hat.
+  // This can also be done with local validators.
+  this.cachedValidatedValue_ = newValue;
+
   // Always be sure to return!
   if (!newValue.pattern || !newValue.hat || !newValue.turtleName) {
-    // This is a strategy for dealing with defaults on multi-part values.
-    // The class validator sets individual properties of the object to null
-    // to indicate that they are invalid, and then caches that object to the
-    // cachedValidatedValue_ property. This way the field can, for
-    // example, properly handle an invalid pattern, combined with a valid hat.
-    // This can also be done with local validators.
-    this.cachedValidatedValue_ = newValue;
     return null;
   }
   return newValue;
@@ -221,9 +222,7 @@ CustomFields.FieldTurtle.prototype.render_ = function() {
   // Always do editor updates inside render. This makes sure the editor
   // always displays the correct value, even if a validator changes it.
   if (this.editor_) {
-    this.editor_.patternText.textContent = value.pattern;
-    this.editor_.hatText.textContent = value.hat;
-    this.editor_.turtleNameText.textContent = value.turtleName;
+    this.renderEditor_();
   }
 
   this.stovepipe_.style.display = 'none';
@@ -286,6 +285,23 @@ CustomFields.FieldTurtle.prototype.render_ = function() {
   this.updateSize_();
 };
 
+CustomFields.FieldTurtle.prototype.renderEditor_ = function() {
+  var value = this.displayValue_;
+
+  // .textElement is a property assigned to the element.
+  // It allows the text to be edited without destroying the warning icon.
+  this.editor_.patternText.textElement.nodeValue = value.pattern;
+  this.editor_.hatText.textElement.nodeValue = value.hat;
+  this.editor_.turtleNameText.textElement.nodeValue = value.turtleName;
+
+  this.editor_.patternText.warningIcon.style.display =
+    this.cachedValidatedValue_.pattern ? 'none' : '';
+  this.editor_.hatText.warningIcon.style.display =
+    this.cachedValidatedValue_.hat ? 'none' : '';
+  this.editor_.turtleNameText.warningIcon.style.display =
+    this.cachedValidatedValue_.turtleName ? 'none' : '';
+};
+
 // Used to update the size of the field. This function's logic could be simply
 // included inside render_ (it is not called anywhere else), but it is
 // usually separated to keep code more organized.
@@ -307,6 +323,7 @@ CustomFields.FieldTurtle.prototype.updateSize_ = function() {
 // this function to check/uncheck itself.
 CustomFields.FieldTurtle.prototype.showEditor_ = function() {
   this.editor_ = this.dropdownCreate_();
+  this.renderEditor_();
   Blockly.DropDownDiv.getContentDiv().appendChild(this.editor_);
 
   // These allow us to have the editor match the block's colour.
@@ -344,6 +361,14 @@ CustomFields.FieldTurtle.prototype.dropdownCreate_ = function() {
     cell.className = 'text';
     var text = document.createTextNode(text);
     cell.appendChild(text);
+    cell.textElement = text;
+    var warning = document.createElement('img');
+    warning.setAttribute('src', 'media/warning.svg');
+    warning.setAttribute('height', '16px');
+    warning.setAttribute('width', '16px');
+    warning.style.marginLeft = '4px';
+    cell.appendChild(warning);
+    cell.warningIcon = warning;
     row.appendChild(cell);
     return cell;
   };

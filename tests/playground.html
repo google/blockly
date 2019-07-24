@@ -71,6 +71,8 @@
 var workspace = null;
 
 function start() {
+  // TODO (#2702): Choose an API for picking the renderer.
+  Blockly.renderMode = 'compatibility';
   setBackgroundColour();
 
   // Parse the URL arguments.

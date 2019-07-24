@@ -1543,3 +1543,31 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
     this.moveBy(dx, dy);
   }
 };
+
+/*
+ * Render the block.
+ * Lays out and reflows a block based on its contents and settings.
+ * @param {boolean=} opt_bubble If false, just render this block.
+ *   If true, also render block's parent, grandparent, etc.  Defaults to true.
+ */
+Blockly.BlockSvg.prototype.render = function(opt_bubble) {
+  Blockly.Field.startCache();
+  this.rendered = true;
+  // TODO (#2702): Choose an API for picking the renderer.
+  if (Blockly.renderMode == 'compatibility') {
+    Blockly.blockRendering.render(this);
+  } else {
+    this.renderInternal();
+  }
+  if (opt_bubble !== false) {
+    // Render all blocks above this one (propagate a reflow).
+    var parentBlock = this.getParent();
+    if (parentBlock) {
+      parentBlock.render(true);
+    } else {
+      // Top-most block.  Fire an event to allow scrollbars to resize.
+      this.workspace.resizeContents();
+    }
+  }
+  Blockly.Field.stopCache();
+};

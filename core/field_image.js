@@ -190,6 +190,15 @@ Blockly.FieldImage.prototype.showEditor_ = function() {
 };
 
 /**
+ * Set the function that is called when this image  is clicked.
+ * @param {function} func The function that is called when the image
+ *    is clicked. It will receive the image field as a parameter.
+ * @public
+ */
+Blockly.FieldImage.prototype.setOnClickHandler = function(func) {
+  this.clickHandler_ = func;
+};
+/*
  * Get the size of the visible field, as used in new rendering.
  * @return {!goog.math.Size} The size of the visible field.
  * @package

@@ -199,7 +199,7 @@ Blockly.DropDownDiv.setCategory = function(category) {
  * @param {!Blockly.Block} block Block to position the drop-down around.
  * @param {Function=} opt_onHide Optional callback for when the drop-down is
  *   hidden.
- * @param {number} opt_secondaryYOffset Optional Y offset for above-block
+ * @param {number=} opt_secondaryYOffset Optional Y offset for above-block
  *   positioning.
  * @return {boolean} True if the menu rendered below block; false if above.
  */

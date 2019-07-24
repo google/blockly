@@ -37,8 +37,8 @@ goog.require('goog.math.Size');
 /**
  * Class for an image on a block.
  * @param {string=} src The URL of the image. Defaults to an empty string.
- * @param {!(string|number)} width Width of the image.
- * @param {!(string|number)} height Height of the image.
+ * @param {!(string|number)=} width Width of the image.
+ * @param {!(string|number)=} height Height of the image.
  * @param {string=} opt_alt Optional alt text for when block is collapsed.
  * @param {Function=} opt_onClick Optional function to be called when the image
  *     is clicked.  If opt_onClick is defined, opt_alt must also be defined.

@@ -23,7 +23,7 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-//'use strict';
+'use strict';
 
 goog.provide('Blockly.blockRendering.RenderInfo');
 

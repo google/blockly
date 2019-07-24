@@ -262,6 +262,7 @@ Blockly.BlockSvg.prototype.getIcons = function() {
 /**
  * Set parent of this block to be a new block or null.
  * @param {Blockly.BlockSvg} newParent New parent block.
+ * @override
  */
 Blockly.BlockSvg.prototype.setParent = function(newParent) {
   var oldParent = this.parentBlock_;

@@ -392,7 +392,7 @@ Blockly.BlockSvg.prototype.moveToDragSurface_ = function() {
 
 /**
  * Move a block to a position.
- * @param {goog.math.Coordinate} xy The position to move to in workspace units.
+ * @param {Blockly.utils.Coordinate} xy The position to move to in workspace units.
  */
 Blockly.BlockSvg.prototype.moveTo = function(xy) {
   if (this.parentBlock_) {

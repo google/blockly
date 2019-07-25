@@ -1,13 +1,28 @@
 suite('Insert/Modify', function() {
   setup(function() {
+    Blockly.defineBlocksWithJsonArray([{
+      "type": "stack_block",
+      "message0": "",
+      "previousStatement": null,
+      "nextStatement": null
+    },
+    {
+      "type": "row_block",
+      "message0": "%1",
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "INPUT"
+        }
+      ],
+      "output": null
+    }]);
     var xmlText = '<xml xmlns="http://www.w3.org/1999/xhtml">' +
       '<block type="stack_block" id="stack_block_1" x="12" y="38"></block>' +
       '<block type="stack_block" id="stack_block_2" x="12" y="113"></block>' +
       '<block type="row_block" id="row_block_1" x="13" y="213"></block>' +
       '<block type="row_block" id="row_block_2" x="12" y="288"></block>' +
     '</xml>';
-    defineStackBlock();
-    defineRowBlock();
 
     var toolbox = document.getElementById('toolbox-connections');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});

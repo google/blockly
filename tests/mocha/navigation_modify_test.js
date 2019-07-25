@@ -1,22 +1,15 @@
 suite('Insert/Modify', function() {
   setup(function() {
-    var xmlText = '<xml xmlns="http://www.w3.org/1999/xhtml">' +
-      '<block type="stack_block" id="stack_block_1" x="12" y="38"></block>' +
-      '<block type="stack_block" id="stack_block_2" x="12" y="113"></block>' +
-      '<block type="row_block" id="row_block_1" x="13" y="213"></block>' +
-      '<block type="row_block" id="row_block_2" x="12" y="288"></block>' +
-    '</xml>';
     defineStackBlock();
     defineRowBlock();
 
     var toolbox = document.getElementById('toolbox-connections');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-    Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xmlText), this.workspace);
 
-    this.stack_block_1 = this.workspace.getBlockById('stack_block_1');
-    this.stack_block_2 = this.workspace.getBlockById('stack_block_2');
-    this.row_block_1 = this.workspace.getBlockById('row_block_1');
-    this.row_block_2 = this.workspace.getBlockById('row_block_2');
+    this.stack_block_1 = this.workspace.newBlock('stack_block', 'stack_block_1');
+    this.stack_block_2 = this.workspace.newBlock('stack_block', 'stack_block_2');
+    this.row_block_1 = this.workspace.newBlock('row_block', 'row_block_1');
+    this.row_block_2 = this.workspace.newBlock('row_block', 'row_block_2');
 
     Blockly.Navigation.enableKeyboardAccessibility();
     Blockly.Navigation.focusWorkspace();
@@ -26,8 +19,6 @@ suite('Insert/Modify', function() {
     delete Blockly.Blocks['stack_block'];
     delete Blockly.Blocks['row_block'];
     this.workspace.dispose();
-    // Does disposing of the workspace dispose of cursors and markers
-    // correctly?
   });
 
   suite('Marked Connection', function() {

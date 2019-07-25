@@ -80,12 +80,6 @@ Blockly.Cursor.prototype.setLocation = function(newNode) {
 Blockly.Cursor.prototype.update_ = function() {};
 
 /**
- * Dispose method to be overwritten in cursor_svg.
- * @protected
- */
-Blockly.Cursor.prototype.dispose = function() {};
-
-/**
  * Find the next connection, field, or block.
  * @return {Blockly.ASTNode} The next element, or null if the current node is
  *     not set or there is no next value.

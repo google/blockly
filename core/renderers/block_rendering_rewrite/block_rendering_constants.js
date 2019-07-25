@@ -347,12 +347,8 @@ Blockly.blockRendering.constants.START_HAT = (function() {
 })();
 
 Blockly.blockRendering.constants.PUZZLE_TAB = (function() {
-  var tabWidth = Blockly.blockRendering.constants.TAB_WIDTH;
-  var tabHeight = Blockly.blockRendering.constants.TAB_HEIGHT;
-
-  // This is how much of the vertical block edge is actually drawn by the puzzle
-  // tab.
-  var verticalOverlap = 2.5;
+  var width = Blockly.blockRendering.constants.TAB_WIDTH;
+  var height = Blockly.blockRendering.constants.TAB_HEIGHT;
 
   // The main path for the puzzle tab is made out of a few curves (c and s).
   // Those curves are defined with relative positions.  The 'up' and 'down'
@@ -363,47 +359,44 @@ Blockly.blockRendering.constants.PUZZLE_TAB = (function() {
     var forward = up ? -1 : 1;
     var back = -forward;
 
-    var overlap = verticalOverlap;
-    var halfHeight = tabHeight / 2;
-    var control1Y = halfHeight + overlap; // 10
-    var control2Y = halfHeight + 0.5; // 8
+    var overlap = 2.5;
+    var halfHeight = height / 2;
+    var control1Y = halfHeight + overlap;
+    var control2Y = halfHeight + 0.5;
     var control3Y = overlap; //2.5
 
-    //var startPoint = Blockly.utils.svgPaths.point(0, 0);
-    // Center point of the line that is the tab.
-    var endPoint1 = Blockly.utils.svgPaths.point(-tabWidth, forward * halfHeight);
-    var endPoint2 = Blockly.utils.svgPaths.point(tabWidth, forward * halfHeight);
+    var endPoint1 = Blockly.utils.svgPaths.point(-width, forward * halfHeight);
+    var endPoint2 = Blockly.utils.svgPaths.point(width, forward * halfHeight);
 
     return Blockly.utils.svgPaths.curve('c',
         [
           Blockly.utils.svgPaths.point(0, forward * control1Y),
-          Blockly.utils.svgPaths.point(-tabWidth, back * control2Y),
+          Blockly.utils.svgPaths.point(-width, back * control2Y),
           endPoint1
         ]) +
         Blockly.utils.svgPaths.curve('s',
             [
-              Blockly.utils.svgPaths.point(tabWidth, back * control3Y),
+              Blockly.utils.svgPaths.point(width, back * control3Y),
               endPoint2
             ]);
   }
 
+  // c 0,-10  -8,8  -8,-7.5  s 8,2.5  8,-7.5
   var pathUp = makeMainPath(true);
+  // c 0,10  -8,-8  -8,7.5  s 8,-2.5  8,7.5
   var pathDown = makeMainPath(false);
-  // TODO: Figure out what other tab-related constants can come into here.
-  // Some candidates: tab height, offset from top, vertical overlap.
 
   return {
-    // TODO: height
-    width: tabWidth,
-    height: tabHeight,
+    width: width,
+    height: height,
     pathDown: pathDown,
     pathUp: pathUp
   };
 })();
 
 Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT = (function() {
-  var tabWidth = Blockly.blockRendering.constants.TAB_WIDTH;
-  var tabHeight = Blockly.blockRendering.constants.TAB_HEIGHT;
+  var width = Blockly.blockRendering.constants.TAB_WIDTH;
+  var height = Blockly.blockRendering.constants.TAB_HEIGHT;
 
   // This is how much of the vertical block edge is actually drawn by the puzzle
   // tab.
@@ -412,45 +405,40 @@ Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT = (function() {
   // The highlight paths are not simple offsets of the main paths.  Changing
   // them is fiddly work.
   var highlightRtlUp =
-      Blockly.utils.svgPaths.moveTo(tabWidth * -0.25, 8.4) +
-      Blockly.utils.svgPaths.lineTo(tabWidth * -0.45, -2.1);
+      Blockly.utils.svgPaths.moveTo(width * -0.25, 8.4) +
+      Blockly.utils.svgPaths.lineTo(width * -0.45, -2.1);
 
   var highlightRtlDown =
       Blockly.utils.svgPaths.lineOnAxis('v', verticalOverlap) +
-      Blockly.utils.svgPaths.moveBy(-tabWidth * 0.97, 2.5) +
+      Blockly.utils.svgPaths.moveBy(-width * 0.97, 2.5) +
       Blockly.utils.svgPaths.curve('q',
           [
-            Blockly.utils.svgPaths.point(-tabWidth * 0.05, 10),
-            Blockly.utils.svgPaths.point(tabWidth * 0.3, 9.5)
+            Blockly.utils.svgPaths.point(-width * 0.05, 10),
+            Blockly.utils.svgPaths.point(width * 0.3, 9.5)
           ]) +
-      Blockly.utils.svgPaths.moveBy(tabWidth * 0.67, -1.9) +
+      Blockly.utils.svgPaths.moveBy(width * 0.67, -1.9) +
       Blockly.utils.svgPaths.lineOnAxis('v', verticalOverlap);
 
   var highlightLtrUp =
       Blockly.utils.svgPaths.lineOnAxis('V',
-          tabHeight + Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP - 1.5) +
-      Blockly.utils.svgPaths.moveBy(tabWidth * -0.92, -0.5) +
+          height + Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP - 1.5) +
+      Blockly.utils.svgPaths.moveBy(width * -0.92, -0.5) +
       Blockly.utils.svgPaths.curve('q',
           [
-            Blockly.utils.svgPaths.point(tabWidth * -0.19, -5.5),
+            Blockly.utils.svgPaths.point(width * -0.19, -5.5),
             Blockly.utils.svgPaths.point(0,-11)
           ]) +
-      Blockly.utils.svgPaths.moveBy(tabWidth * 0.92, 1) +
+      Blockly.utils.svgPaths.moveBy(width * 0.92, 1) +
       Blockly.utils.svgPaths.lineOnAxis('V', 0.5) +
       Blockly.utils.svgPaths.lineOnAxis('H', 1);
 
   var highlightLtrDown =
-      Blockly.utils.svgPaths.moveBy(-5, tabHeight - 0.7) +
-      Blockly.utils.svgPaths.lineTo(tabWidth * 0.46, -2.1);
-  // TODO: Figure out what other tab-related constants can come into here.
-  // Some candidates: tab height, offset from top, vertical overlap.
+      Blockly.utils.svgPaths.moveBy(-5, height - 0.7) +
+      Blockly.utils.svgPaths.lineTo(width * 0.46, -2.1);
 
   return {
-    // TODO: height
-    // width: tabWidth,
-    // height: tabHeight,
-    // TODO: does this actually have a height, or should all references go to
-    // the puzzle_tab object instead?
+    width: width,
+    height: height,
     pathUp: function(rtl) {
       return rtl ? highlightRtlUp : highlightLtrUp;
     },

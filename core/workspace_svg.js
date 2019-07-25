@@ -671,6 +671,7 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @return {!Blockly.BlockSvg} The created block.
+ * @override
  */
 Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {
   return new Blockly.BlockSvg(this, prototypeName, opt_id);

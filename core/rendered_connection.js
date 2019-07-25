@@ -320,7 +320,7 @@ Blockly.RenderedConnection.prototype.hideAll = function() {
 /**
  * Check if the two connections can be dragged to connect to each other.
  * @param {!Blockly.Connection} candidate A nearby connection to check.
- * @param {number} maxRadius The maximum radius allowed for connections, in
+ * @param {number=} maxRadius The maximum radius allowed for connections, in
  *     workspace units.
  * @return {boolean} True if the connection is allowed, false otherwise.
  */

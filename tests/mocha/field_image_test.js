@@ -25,9 +25,6 @@ suite ('Image Fields', function() {
     assertEquals(actualValue, expectedValue);
     assertEquals(actualText, expectedText);
   }
-  function assertValueDefault(imageField) {
-    assertValue(imageField, '', '');
-  }
   suite('Constructor', function() {
     test('Empty', function() {
       chai.assert.throws(function() {
@@ -35,12 +32,14 @@ suite ('Image Fields', function() {
       });
     });
     test('Null Src', function() {
-      var imageField = new Blockly.FieldImage(null, 1, 1);
-      assertValueDefault(imageField);
+      chai.assert.throws(function() {
+        new Blockly.FieldImage(null, 1, 1);
+      });
     });
     test('Undefined Src', function() {
-      var imageField = new Blockly.FieldImage(undefined, 1, 1);
-      assertValueDefault(imageField);
+      chai.assert.throws(function() {
+        new Blockly.FieldImage(undefined, 1, 1);
+      });
     });
     test('Null Size', function() {
       chai.assert.throws(function() {
@@ -81,20 +80,22 @@ suite ('Image Fields', function() {
       });
     });
     test('Null Src', function() {
-      var imageField = Blockly.FieldImage.fromJson({
-        src: null,
-        width: 1,
-        height: 1
+      chai.assert.throws(function() {
+        Blockly.FieldImage.fromJson({
+          src: null,
+          width: 1,
+          height: 1
+        });
       });
-      assertValueDefault(imageField);
     });
     test('Undefined Src', function() {
-      var imageField = Blockly.FieldImage.fromJson({
-        src: undefined,
-        width: 1,
-        height: 1
+      chai.assert.throws(function() {
+        Blockly.FieldImage.fromJson({
+          src: undefined,
+          width: 1,
+          height: 1
+        });
       });
-      assertValueDefault(imageField);
     });
     test('Null Size', function() {
       chai.assert.throws(function() {

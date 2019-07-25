@@ -637,6 +637,8 @@ Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row, e
     }
   } else if (elem.isInlineInput()) {
     result += elem.height / 2;
+  } else if (elem.isNextConnection()) {
+    result += row.height + elem.height / 2;
   } else {
     result += (row.height / 2);
   }

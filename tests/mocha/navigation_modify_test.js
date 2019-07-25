@@ -1,3 +1,4 @@
+
 suite('Insert/Modify', function() {
   setup(function() {
     Blockly.defineBlocksWithJsonArray([{

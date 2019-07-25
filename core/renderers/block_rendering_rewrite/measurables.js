@@ -222,6 +222,10 @@ Blockly.blockRendering.InlineInput = function(input) {
         Blockly.blockRendering.constants.DARK_PATH_OFFSET;
     this.height = this.connectedBlockHeight + Blockly.blockRendering.constants.DARK_PATH_OFFSET;
   }
+
+  this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
+  this.connectionHeight = Blockly.blockRendering.constants.PUZZLE_TAB.height;
+  this.connectionWidth = Blockly.blockRendering.constants.PUZZLE_TAB.width;
 };
 goog.inherits(Blockly.blockRendering.InlineInput, Blockly.blockRendering.Input);
 
@@ -271,9 +275,28 @@ Blockly.blockRendering.ExternalValueInput = function(input) {
         this.connectedBlockHeight - 2 * Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
   }
   this.width = Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_WIDTH;
+
+  this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
+  this.connectionHeight = Blockly.blockRendering.constants.PUZZLE_TAB.height;
+  this.connectionWidth = Blockly.blockRendering.constants.PUZZLE_TAB.width;
 };
 goog.inherits(Blockly.blockRendering.ExternalValueInput,
     Blockly.blockRendering.Input);
+
+/**
+ * An object containing information about the space an output connection takes
+ * up during rendering.
+ * @package
+ * @constructor
+ */
+Blockly.blockRendering.OutputConnection = function() {
+  Blockly.blockRendering.OutputConnection.superClass_.constructor.call(this);
+  this.type = 'output connection';
+  this.height = Blockly.blockRendering.constants.PUZZLE_TAB.height;
+  this.width = Blockly.blockRendering.constants.PUZZLE_TAB.width;
+  this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
+};
+goog.inherits(Blockly.blockRendering.OutputConnection, Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about the space a previous connection takes

@@ -45,10 +45,12 @@ Blockly.blockRendering.RenderInfo = function(block) {
   this.block_ = block;
 
   /**
-   * Whether the block has an output connection.
-   * @type {boolean}
+   * A measurable representing the output connection if the block has one.
+   * Otherwise null.
+   * @type {Blockly.blockRendering.OutputConnection}
    */
-  this.hasOutputConnection = !!block.outputConnection;
+  this.outputConnection = !block.outputConnection ? null :
+      new Blockly.blockRendering.OutputConnection();
 
   /**
    * Whether the block should be rendered as a single line, either because it's

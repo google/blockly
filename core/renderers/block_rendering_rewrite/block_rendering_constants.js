@@ -112,9 +112,11 @@ Blockly.blockRendering.constants.SPACER_DEFAULT_HEIGHT = 15;
 
 Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT = 24;
 
-Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_WIDTH = 22.5;
+Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_WIDTH =
+  Blockly.blockRendering.constants.TAB_WIDTH  + 14.5;
 
-Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_HEIGHT = 26;
+Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_HEIGHT =
+    Blockly.blockRendering.constants.TAB_HEIGHT + 11;
 
 Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_WIDTH = 10;
 
@@ -420,6 +422,7 @@ Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT = (function() {
       Blockly.utils.svgPaths.lineOnAxis('v', verticalOverlap);
 
   var highlightLtrUp =
+      // TODO: Move this 'V' out.
       Blockly.utils.svgPaths.lineOnAxis('V',
           height + Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP - 1.5) +
       Blockly.utils.svgPaths.moveBy(width * -0.92, -0.5) +

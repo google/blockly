@@ -87,7 +87,8 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY) {
  * @param {number} rowHeight The height of the container row.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, cursorX, centerY, rowHeight) {
+Blockly.blockRendering.Debug.prototype.drawSpacerElem =
+    function(elem, cursorX, centerY, rowHeight) {
   var debugRenderedHeight = Math.min(15, rowHeight);
   var yPos = centerY - debugRenderedHeight / 2;
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',

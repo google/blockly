@@ -416,7 +416,7 @@ Blockly.FieldDropdown.prototype.doClassValidation_ = function(newValue) {
 
 /**
  * Update the value of this dropdown field.
- * @param {string} newValue The new language-enutral value.
+ * @param {string} newValue The new language-neutral value.
  * @protected
  */
 Blockly.FieldDropdown.prototype.doValueUpdate_ = function(newValue) {

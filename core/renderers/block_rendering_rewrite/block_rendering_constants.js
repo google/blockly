@@ -93,12 +93,19 @@ Blockly.blockRendering.constants.MAX_BOTTOM_WIDTH = 66.5;
  * @const
  */
 Blockly.blockRendering.constants.CORNER_RADIUS = 8;
+
 /**
  * Height of the top hat.
  * @const
+ * @private
  */
 Blockly.blockRendering.constants.START_HAT_HEIGHT = 15;
 
+/**
+ * Width of the top hat.
+ * @const
+ * @private
+ */
 Blockly.blockRendering.constants.START_HAT_WIDTH = 100;
 
 Blockly.blockRendering.constants.SPACER_DEFAULT_HEIGHT = 15;
@@ -154,45 +161,6 @@ Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE = (1 - Math.SQRT1_2) *
         Blockly.blockRendering.constants.HIGHLIGHT_OFFSET) -
     Blockly.blockRendering.constants.HIGHLIGHT_OFFSET;
 
-/**
- * SVG path for drawing a horizontal puzzle tab from top to bottom.
- * @const
- */
-Blockly.blockRendering.constants.TAB_PATH_DOWN =  'c 0,10 -' + Blockly.blockRendering.constants.TAB_WIDTH +
-      ',-8 -' + Blockly.blockRendering.constants.TAB_WIDTH + ',7.5 s ' +
-      Blockly.blockRendering.constants.TAB_WIDTH + ',-2.5 ' + Blockly.blockRendering.constants.TAB_WIDTH + ',7.5';
-
-
-/**
- * SVG path for drawing a horizontal puzzle tab from top to bottom with
- * highlighting from the upper-right.
- * @const
- */
-Blockly.blockRendering.constants.TAB_PATH_DOWN_HIGHLIGHT_RTL = 'm -' +
-    (Blockly.blockRendering.constants.TAB_WIDTH * 0.97) + ',2.5 q -' +
-    (Blockly.blockRendering.constants.TAB_WIDTH * 0.05) + ',10 ' +
-    (Blockly.blockRendering.constants.TAB_WIDTH * 0.3) + ',9.5 m ' +
-    (Blockly.blockRendering.constants.TAB_WIDTH * 0.67) + ',-1.9';
-
-/**
- * SVG path for drawing a horizontal puzzle tab from bottom to top.
- * @const
- */
-Blockly.blockRendering.constants.TAB_PATH_UP =  'c 0,-10 -' + Blockly.blockRendering.constants.TAB_WIDTH +
-      ',8 -' + Blockly.blockRendering.constants.TAB_WIDTH + ',-7.5 s ' +
-      Blockly.blockRendering.constants.TAB_WIDTH + ',2.5 ' + Blockly.blockRendering.constants.TAB_WIDTH + ',-7.5';
-
-/**
- * Path of the top hat's curve.
- * @const
- */
-Blockly.blockRendering.constants.START_HAT_PATH =
-    Blockly.utils.svgPaths.curve('c',
-        [
-          Blockly.utils.svgPaths.point(30, -Blockly.blockRendering.constants.START_HAT_HEIGHT),
-          Blockly.utils.svgPaths.point(70, -Blockly.blockRendering.constants.START_HAT_HEIGHT),
-          Blockly.utils.svgPaths.point(Blockly.blockRendering.constants.START_HAT_WIDTH, 0)
-        ]);
 /**
  * SVG path for drawing next/previous notch from left to right.
  * @const
@@ -283,8 +251,6 @@ Blockly.blockRendering.constants.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
             Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE +
             Blockly.blockRendering.constants.HIGHLIGHT_OFFSET));
 
-
-
 /**
  * SVG start point for drawing the top-left corner.
  * @const
@@ -314,17 +280,6 @@ Blockly.blockRendering.constants.BOTTOM_LEFT_CORNER_HIGHLIGHT_MID   =
     ',' + (Blockly.blockRendering.constants.CORNER_RADIUS - Blockly.blockRendering.constants.HIGHLIGHT_OFFSET) +
     ' 0 0,1 ' + Blockly.blockRendering.constants.HIGHLIGHT_OFFSET + ','; // follow with y pos - corner radius
 
-Blockly.blockRendering.constants.OUTPUT_CONNECTION_HIGHLIGHT_LTR =
-    'V ' + (Blockly.blockRendering.constants.TAB_HEIGHT + Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP - 1.5) +
-    ' m ' + (Blockly.blockRendering.constants.TAB_WIDTH * -0.92) + ',-0.5 ' +
-    'q ' + (Blockly.blockRendering.constants.TAB_WIDTH * -0.19) + ',-5.5 0,-11 ' +
-    'm ' + (Blockly.blockRendering.constants.TAB_WIDTH * 0.92) + ',1 ' +
-    'V 0.5 H 1';
-
-Blockly.blockRendering.constants.OUTPUT_CONNECTION_HIGHLIGHT_RTL =
-    'M ' + (Blockly.blockRendering.constants.TAB_WIDTH * -0.25) + ',8.4 l ' +
-    (Blockly.blockRendering.constants.TAB_WIDTH * -0.45) + ',-2.1';
-
 /**
  * SVG start point for drawing the top-left corner's highlight in RTL.
  * @const
@@ -350,28 +305,145 @@ Blockly.blockRendering.constants.TOP_LEFT_CORNER_HIGHLIGHT =
     Blockly.blockRendering.constants.CORNER_RADIUS + ',0.5';
 
 /**
- * Path of the top hat's curve's highlight in LTR.
- * @const
+ * Information about the hat on a start block.
  */
-Blockly.blockRendering.constants.START_HAT_HIGHLIGHT_LTR =
-    Blockly.utils.svgPaths.curve('c',
+Blockly.blockRendering.constants.START_HAT = (function() {
+  // It's really minus 15, which is super unfortunate.
+  var height = Blockly.blockRendering.constants.START_HAT_HEIGHT;
+  var width = Blockly.blockRendering.constants.START_HAT_WIDTH;
+  var highlightRtlPath =
+      Blockly.utils.svgPaths.moveBy(25, -8.7) +
+      Blockly.utils.svgPaths.curve('c',
+          [
+            Blockly.utils.svgPaths.point(29.7, -6.2),
+            Blockly.utils.svgPaths.point(57.2, -0.5),
+            Blockly.utils.svgPaths.point(75, 8.7)
+          ]);
+
+  var highlightLtrPath =
+      Blockly.utils.svgPaths.curve('c',
+          [
+            Blockly.utils.svgPaths.point(17.8, -9.2),
+            Blockly.utils.svgPaths.point(45.3, -14.9),
+            Blockly.utils.svgPaths.point(75, -8.7)
+          ]) +
+      Blockly.utils.svgPaths.moveTo(100.5, 0.5);
+
+  var mainPath =
+      Blockly.utils.svgPaths.curve('c',
+          [
+            Blockly.utils.svgPaths.point(30, -height),
+            Blockly.utils.svgPaths.point(70, -height),
+            Blockly.utils.svgPaths.point(width, 0)
+          ]);
+  return {
+    height: height,
+    width: width,
+    path: mainPath,
+    highlight: function(rtl) {
+      return rtl ? highlightRtlPath : highlightLtrPath;
+    }
+  };
+})();
+
+Blockly.blockRendering.constants.PUZZLE_TAB = (function() {
+  var width = Blockly.blockRendering.constants.TAB_WIDTH;
+  var height = Blockly.blockRendering.constants.TAB_HEIGHT;
+
+  // The main path for the puzzle tab is made out of a few curves (c and s).
+  // Those curves are defined with relative positions.  The 'up' and 'down'
+  // versions of the paths are the same, but the Y sign flips.  Forward and back
+  // are the signs to use to move the cursor in the direction that the path is
+  // being drawn.
+  function makeMainPath(up) {
+    var forward = up ? -1 : 1;
+    var back = -forward;
+
+    var overlap = 2.5;
+    var halfHeight = height / 2;
+    var control1Y = halfHeight + overlap;
+    var control2Y = halfHeight + 0.5;
+    var control3Y = overlap; //2.5
+
+    var endPoint1 = Blockly.utils.svgPaths.point(-width, forward * halfHeight);
+    var endPoint2 = Blockly.utils.svgPaths.point(width, forward * halfHeight);
+
+    return Blockly.utils.svgPaths.curve('c',
         [
-          Blockly.utils.svgPaths.point(17.8, -9.2),
-          Blockly.utils.svgPaths.point(45.3, -14.9),
-          Blockly.utils.svgPaths.point(75, -8.7)
+          Blockly.utils.svgPaths.point(0, forward * control1Y),
+          Blockly.utils.svgPaths.point(-width, back * control2Y),
+          endPoint1
         ]) +
-    Blockly.utils.svgPaths.moveTo(100.5, 0.5);
+        Blockly.utils.svgPaths.curve('s',
+            [
+              Blockly.utils.svgPaths.point(width, back * control3Y),
+              endPoint2
+            ]);
+  }
 
-/**
- * Path of the top hat's curve's highlight in RTL.
- * @const
- */
-Blockly.blockRendering.constants.START_HAT_HIGHLIGHT_RTL =
-    Blockly.utils.svgPaths.moveBy(25, -8.7) +
-    Blockly.utils.svgPaths.curve('c',
-        [
-          Blockly.utils.svgPaths.point(29.7, -6.2),
-          Blockly.utils.svgPaths.point(57.2, -0.5),
-          Blockly.utils.svgPaths.point(75, 8.7)
-        ]);
+  // c 0,-10  -8,8  -8,-7.5  s 8,2.5  8,-7.5
+  var pathUp = makeMainPath(true);
+  // c 0,10  -8,-8  -8,7.5  s 8,-2.5  8,7.5
+  var pathDown = makeMainPath(false);
 
+  return {
+    width: width,
+    height: height,
+    pathDown: pathDown,
+    pathUp: pathUp
+  };
+})();
+
+Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT = (function() {
+  var width = Blockly.blockRendering.constants.TAB_WIDTH;
+  var height = Blockly.blockRendering.constants.TAB_HEIGHT;
+
+  // This is how much of the vertical block edge is actually drawn by the puzzle
+  // tab.
+  var verticalOverlap = 2.5;
+
+  // The highlight paths are not simple offsets of the main paths.  Changing
+  // them is fiddly work.
+  var highlightRtlUp =
+      Blockly.utils.svgPaths.moveTo(width * -0.25, 8.4) +
+      Blockly.utils.svgPaths.lineTo(width * -0.45, -2.1);
+
+  var highlightRtlDown =
+      Blockly.utils.svgPaths.lineOnAxis('v', verticalOverlap) +
+      Blockly.utils.svgPaths.moveBy(-width * 0.97, 2.5) +
+      Blockly.utils.svgPaths.curve('q',
+          [
+            Blockly.utils.svgPaths.point(-width * 0.05, 10),
+            Blockly.utils.svgPaths.point(width * 0.3, 9.5)
+          ]) +
+      Blockly.utils.svgPaths.moveBy(width * 0.67, -1.9) +
+      Blockly.utils.svgPaths.lineOnAxis('v', verticalOverlap);
+
+  var highlightLtrUp =
+      Blockly.utils.svgPaths.lineOnAxis('V',
+          height + Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP - 1.5) +
+      Blockly.utils.svgPaths.moveBy(width * -0.92, -0.5) +
+      Blockly.utils.svgPaths.curve('q',
+          [
+            Blockly.utils.svgPaths.point(width * -0.19, -5.5),
+            Blockly.utils.svgPaths.point(0,-11)
+          ]) +
+      Blockly.utils.svgPaths.moveBy(width * 0.92, 1) +
+      Blockly.utils.svgPaths.lineOnAxis('V', 0.5) +
+      Blockly.utils.svgPaths.lineOnAxis('H', 1);
+
+  var highlightLtrDown =
+      Blockly.utils.svgPaths.moveBy(-5, height - 0.7) +
+      Blockly.utils.svgPaths.lineTo(width * 0.46, -2.1);
+
+  return {
+    width: width,
+    height: height,
+    pathUp: function(rtl) {
+      return rtl ? highlightRtlUp : highlightLtrUp;
+    },
+    pathDown: function(rtl) {
+      return rtl ? highlightRtlDown : highlightLtrDown;
+    }
+  };
+})();

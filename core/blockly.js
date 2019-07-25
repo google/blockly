@@ -46,6 +46,7 @@ goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
+goog.require('Blockly.Navigation');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.Toolbox');
 goog.require('Blockly.Tooltip');
@@ -76,6 +77,18 @@ Blockly.mainWorkspace = null;
  * @type {Blockly.Block}
  */
 Blockly.selected = null;
+
+/**
+ * Current cursor.
+ * @type {Blockly.Cursor}
+ */
+Blockly.cursor = null;
+
+/**
+ * Whether or not we're currently in keyboard accessibility mode.
+ * @type {boolean}
+ */
+Blockly.keyboardAccessibilityMode = false;
 
 /**
  * All of the connections on blocks that are currently being dragged.
@@ -194,6 +207,9 @@ Blockly.onKeyDown_ = function(e) {
   if (e.keyCode == 27) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
+    if (Blockly.keyboardAccessibilityMode) {
+      Blockly.Navigation.navigate(e);
+    }
   } else if (e.keyCode == 8 || e.keyCode == 46) {
     // Delete or backspace.
     // Stop the browser from going back to the previous page.
@@ -247,8 +263,11 @@ Blockly.onKeyDown_ = function(e) {
     } else if (e.keyCode == 90) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
-      mainWorkspace.undo(e.shiftKey);
+      workspace.undo(e.shiftKey);
     }
+  } else if (Blockly.keyboardAccessibilityMode
+    && Blockly.Navigation.navigate(e)) {
+    return;
   }
   // Common code for delete and cut.
   // Don't delete in the flyout.

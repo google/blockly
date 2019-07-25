@@ -499,6 +499,9 @@ Blockly.Gesture.prototype.doStart = function(e) {
 
   if (this.targetBlock_) {
     this.targetBlock_.select();
+    if (!this.targetBlock_.isInFlyout && e.shiftKey) {
+      Blockly.Navigation.focusWorkspace();
+    }
   }
 
   if (Blockly.utils.isRightButton(e)) {
@@ -586,7 +589,7 @@ Blockly.Gesture.prototype.handleUp = function(e) {
   } else if (this.isBlockClick_()) {
     this.doBlockClick_();
   } else if (this.isWorkspaceClick_()) {
-    this.doWorkspaceClick_();
+    this.doWorkspaceClick_(e);
   }
 
   e.preventDefault();
@@ -751,15 +754,25 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
 };
 
 /**
- * Execute a workspace click.
+ * Execute a workspace click. Shift clicking puts the workspace in accessibility
+ * mode.
+ * @param {!Event} e A mouse up or touch end event.
  * @private
  */
-Blockly.Gesture.prototype.doWorkspaceClick_ = function() {
-  if (Blockly.selected) {
+Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
+  Blockly.keyboardAccessibilityMode = false;
+  var ws = this.creatorWorkspace_;
+  ws.cursor.hide();
+  if (e.shiftKey) {
+    var screenCoord = new goog.math.Coordinate(e.clientX, e.clientY);
+    var wsCoord = Blockly.utils.screenToWsCoordinates(ws, screenCoord);
+    var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
+    ws.cursor.setLocation(wsNode);
+    Blockly.keyboardAccessibilityMode = true;
+  } else if (Blockly.selected) {
     Blockly.selected.unselect();
   }
 };
-
 
 /* End functions defining what actions to take to execute clicks on each type
  * of target. */

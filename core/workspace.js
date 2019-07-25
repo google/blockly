@@ -26,12 +26,13 @@
 
 goog.provide('Blockly.Workspace');
 
+goog.require('Blockly.Cursor');
 goog.require('Blockly.Events');
+goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
 goog.require('Blockly.WorkspaceComment');
-goog.require('Blockly.Themes.Classic');
 
 
 /**
@@ -115,6 +116,12 @@ Blockly.Workspace = function(opt_options) {
    */
   this.potentialVariableMap_ = null;
 
+  /**
+   * The cursor for navigating blocks.
+   * @type {!Blockly.Cursor}
+   */
+  this.cursor = this.createCursor();
+
   // Set the default theme. This is for headless workspaces. This will get
   // overwritten by the theme passed into the inject call for rendered workspaces.
   if (!Blockly.getTheme()) {
@@ -147,6 +154,14 @@ Blockly.Workspace.prototype.MAX_UNDO = 1024;
  * @type {Array.<!Blockly.ConnectionDB>}
  */
 Blockly.Workspace.prototype.connectionDBList = null;
+
+/**
+ * Adds cursor for keyboard navigation.
+ * @return {!Blockly.Cursor} Cursor for keyboard navigation.
+ */
+Blockly.Workspace.prototype.createCursor = function() {
+  return new Blockly.Cursor();
+};
 
 /**
  * Dispose of this workspace.

@@ -497,3 +497,12 @@ Blockly.CursorSvg.prototype.out = function() {
   }
   return Blockly.CursorSvg.superClass_.out.call(this);
 };
+
+/**
+ * Dispose of this cursor.
+ */
+Blockly.CursorSvg.prototype.dispose = function() {
+  if (this.svgGroup_) {
+    Blockly.utils.dom.removeNode(this.svgGroup_);
+  }
+};

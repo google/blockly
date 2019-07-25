@@ -631,6 +631,10 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.marker.dispose();
   }
 
+  if (this.cursor) {
+    this.cursor.dispose();
+  }
+
   if (this.audioManager_) {
     this.audioManager_.dispose();
     this.audioManager_ = null;

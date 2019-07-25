@@ -169,9 +169,6 @@ Blockly.Workspace.prototype.createCursor = function() {
  */
 Blockly.Workspace.prototype.dispose = function() {
   this.listeners_.length = 0;
-  if (this.cursor) {
-    this.cursor.dispose();
-  }
   this.clear();
   // Remove from workspace database.
   delete Blockly.Workspace.WorkspaceDB_[this.id];

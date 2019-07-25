@@ -1,7 +1,22 @@
 suite('Insert/Modify', function() {
   setup(function() {
-    defineStackBlock();
-    defineRowBlock();
+    Blockly.defineBlocksWithJsonArray([{
+      "type": "stack_block",
+      "message0": "",
+      "previousStatement": null,
+      "nextStatement": null
+    },
+    {
+      "type": "row_block",
+      "message0": "%1",
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "INPUT"
+        }
+      ],
+      "output": null
+    }]);
 
     var toolbox = document.getElementById('toolbox-connections');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
@@ -140,10 +155,6 @@ suite('Insert/Modify', function() {
         chai.assert.isTrue(Blockly.Navigation.modify());
         chai.assert.equal(this.row_block_2.getParent().id, 'row_block_1');
       });
-    });
-
-    suite('Statement input', function() {
-      // TODO: fill this out.
     });
 
     suite('Marker on output', function() {

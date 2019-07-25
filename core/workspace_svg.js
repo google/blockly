@@ -627,9 +627,8 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.zoomControls_ = null;
   }
 
-  if (this.cursor_) {
-    this.cursor_.dispose();
-    this.cursor_ = null;
+  if (this.marker) {
+    this.marker.dispose();
   }
 
   if (this.audioManager_) {

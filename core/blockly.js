@@ -46,7 +46,6 @@ goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
-// TODO: Decide if this require actually goes here.
 goog.require('Blockly.Navigation');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.Toolbox');

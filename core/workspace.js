@@ -26,13 +26,13 @@
 
 goog.provide('Blockly.Workspace');
 
+goog.require('Blockly.Cursor');
 goog.require('Blockly.Events');
+goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
 goog.require('Blockly.WorkspaceComment');
-goog.require('Blockly.Cursor');
-goog.require('Blockly.Themes.Classic');
 
 
 /**
@@ -169,6 +169,9 @@ Blockly.Workspace.prototype.createCursor = function() {
  */
 Blockly.Workspace.prototype.dispose = function() {
   this.listeners_.length = 0;
+  if (this.cursor) {
+    this.cursor.dispose();
+  }
   this.clear();
   // Remove from workspace database.
   delete Blockly.Workspace.WorkspaceDB_[this.id];

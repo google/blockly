@@ -754,7 +754,8 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
 };
 
 /**
- * Execute a workspace click.
+ * Execute a workspace click. Shift clicking puts the workspace in accessibility
+ * mode.
  * @param {!Event} e A mouse up or touch end event.
  * @private
  */

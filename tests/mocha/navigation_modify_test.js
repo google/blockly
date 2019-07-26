@@ -37,161 +37,161 @@ suite('Insert/Modify', function() {
     this.workspace.dispose();
   });
 
-  suite('Marked Connection', function() {
-    // TODO: Marked connection or cursor connection is already connected.
-    suite('Marker on next', function() {
-      setup(function() {
-        Blockly.Navigation.marker_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.stack_block_1.nextConnection));
-      });
-      test('Cursor on workspace', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createWorkspaceNode(this.workspace,
-                new goog.math.Coordinate(0, 0)));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-      });
-      test('Cursor on compatible connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.stack_block_2.previousConnection));
-        chai.assert.isTrue(Blockly.Navigation.modify());
-        chai.assert.equal(this.stack_block_1.getNextBlock().id, 'stack_block_2');
-      });
-      test('Cursor on incompatible connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.stack_block_2.nextConnection));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-        chai.assert.isNull(this.stack_block_1.getNextBlock());
-      });
-      test('Cursor on really incompatible connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.row_block_1.outputConnection));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-        chai.assert.isNull(this.stack_block_1.getNextBlock());
-      });
-      test('Cursor on block', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createBlockNode(
-                this.stack_block_2));
-        chai.assert.isTrue(Blockly.Navigation.modify());
-        chai.assert.equal(this.stack_block_1.getNextBlock().id, 'stack_block_2');
-      });
-    });
+  // suite('Marked Connection', function() {
+  //   // TODO: Marked connection or cursor connection is already connected.
+  //   suite('Marker on next', function() {
+  //     setup(function() {
+  //       Blockly.Navigation.marker_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.stack_block_1.nextConnection));
+  //     });
+  //     test('Cursor on workspace', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createWorkspaceNode(this.workspace,
+  //               new goog.math.Coordinate(0, 0)));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //     });
+  //     test('Cursor on compatible connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.stack_block_2.previousConnection));
+  //       chai.assert.isTrue(Blockly.Navigation.modify());
+  //       chai.assert.equal(this.stack_block_1.getNextBlock().id, 'stack_block_2');
+  //     });
+  //     test('Cursor on incompatible connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.stack_block_2.nextConnection));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //       chai.assert.isNull(this.stack_block_1.getNextBlock());
+  //     });
+  //     test('Cursor on really incompatible connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.row_block_1.outputConnection));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //       chai.assert.isNull(this.stack_block_1.getNextBlock());
+  //     });
+  //     test('Cursor on block', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createBlockNode(
+  //               this.stack_block_2));
+  //       chai.assert.isTrue(Blockly.Navigation.modify());
+  //       chai.assert.equal(this.stack_block_1.getNextBlock().id, 'stack_block_2');
+  //     });
+  //   });
 
-    suite('Marker on previous', function() {
-      setup(function() {
-        Blockly.Navigation.marker_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.stack_block_1.previousConnection));
-      });
-      test('Cursor on compatible connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.stack_block_2.nextConnection));
-        chai.assert.isTrue(Blockly.Navigation.modify());
-        chai.assert.equal(this.stack_block_1.getPreviousBlock().id, 'stack_block_2');
-      });
-      test('Cursor on incompatible connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.stack_block_2.previousConnection));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-        chai.assert.isNull(this.stack_block_1.getPreviousBlock());
-      });
-      test('Cursor on really incompatible connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.row_block_1.outputConnection));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-        chai.assert.isNull(this.stack_block_1.getNextBlock());
-      });
-      test('Cursor on block', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createBlockNode(
-                this.stack_block_2));
-        chai.assert.isTrue(Blockly.Navigation.modify());
-        chai.assert.equal(this.stack_block_1.getPreviousBlock().id, 'stack_block_2');
-      });
-      test('Cursor on incompatible block', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createBlockNode(
-                this.row_block_1));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-        chai.assert.isNull(this.stack_block_1.getPreviousBlock());
-      });
-    });
+  //   suite('Marker on previous', function() {
+  //     setup(function() {
+  //       Blockly.Navigation.marker_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.stack_block_1.previousConnection));
+  //     });
+  //     test('Cursor on compatible connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.stack_block_2.nextConnection));
+  //       chai.assert.isTrue(Blockly.Navigation.modify());
+  //       chai.assert.equal(this.stack_block_1.getPreviousBlock().id, 'stack_block_2');
+  //     });
+  //     test('Cursor on incompatible connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.stack_block_2.previousConnection));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //       chai.assert.isNull(this.stack_block_1.getPreviousBlock());
+  //     });
+  //     test('Cursor on really incompatible connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.row_block_1.outputConnection));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //       chai.assert.isNull(this.stack_block_1.getNextBlock());
+  //     });
+  //     test('Cursor on block', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createBlockNode(
+  //               this.stack_block_2));
+  //       chai.assert.isTrue(Blockly.Navigation.modify());
+  //       chai.assert.equal(this.stack_block_1.getPreviousBlock().id, 'stack_block_2');
+  //     });
+  //     test('Cursor on incompatible block', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createBlockNode(
+  //               this.row_block_1));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //       chai.assert.isNull(this.stack_block_1.getPreviousBlock());
+  //     });
+  //   });
 
-    suite('Marker on value input', function() {
-      setup(function() {
-        Blockly.Navigation.marker_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.row_block_1.inputList[0].connection));
-      });
-      test('Cursor on compatible connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.row_block_2.outputConnection));
-        chai.assert.isTrue(Blockly.Navigation.modify());
-        chai.assert.equal(this.row_block_2.getParent().id, 'row_block_1');
-      });
-      test('Cursor on incompatible connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.row_block_2.inputList[0].connection));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-      });
-      test('Cursor on really incompatible connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.stack_block_1.previousConnection));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-      });
-      test('Cursor on block', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createBlockNode(
-                this.row_block_2));
-        chai.assert.isTrue(Blockly.Navigation.modify());
-        chai.assert.equal(this.row_block_2.getParent().id, 'row_block_1');
-      });
-    });
+  //   suite('Marker on value input', function() {
+  //     setup(function() {
+  //       Blockly.Navigation.marker_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.row_block_1.inputList[0].connection));
+  //     });
+  //     test('Cursor on compatible connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.row_block_2.outputConnection));
+  //       chai.assert.isTrue(Blockly.Navigation.modify());
+  //       chai.assert.equal(this.row_block_2.getParent().id, 'row_block_1');
+  //     });
+  //     test('Cursor on incompatible connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.row_block_2.inputList[0].connection));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //     });
+  //     test('Cursor on really incompatible connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.stack_block_1.previousConnection));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //     });
+  //     test('Cursor on block', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createBlockNode(
+  //               this.row_block_2));
+  //       chai.assert.isTrue(Blockly.Navigation.modify());
+  //       chai.assert.equal(this.row_block_2.getParent().id, 'row_block_1');
+  //     });
+  //   });
 
-    suite('Marker on output', function() {
-      setup(function() {
-        Blockly.Navigation.marker_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.row_block_1.outputConnection));
-      });
-      test('Cursor on compatible connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.row_block_2.inputList[0].connection));
-        chai.assert.isTrue(Blockly.Navigation.modify());
-        chai.assert.equal(this.row_block_1.getParent().id, 'row_block_2');
-      });
-      test('Cursor on incompatible connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.row_block_2.outputConnection));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-      });
-      test('Cursor on really incompatible connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.stack_block_1.previousConnection));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-      });
-      test('Cursor on block', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createBlockNode(
-                this.row_block_2));
-        chai.assert.isTrue(Blockly.Navigation.modify());
-        chai.assert.equal(this.row_block_1.getParent().id, 'row_block_2');
-      });
-    });
-  });
+  //   suite('Marker on output', function() {
+  //     setup(function() {
+  //       Blockly.Navigation.marker_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.row_block_1.outputConnection));
+  //     });
+  //     test('Cursor on compatible connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.row_block_2.inputList[0].connection));
+  //       chai.assert.isTrue(Blockly.Navigation.modify());
+  //       chai.assert.equal(this.row_block_1.getParent().id, 'row_block_2');
+  //     });
+  //     test('Cursor on incompatible connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.row_block_2.outputConnection));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //     });
+  //     test('Cursor on really incompatible connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.stack_block_1.previousConnection));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //     });
+  //     test('Cursor on block', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createBlockNode(
+  //               this.row_block_2));
+  //       chai.assert.isTrue(Blockly.Navigation.modify());
+  //       chai.assert.equal(this.row_block_1.getParent().id, 'row_block_2');
+  //     });
+  //   });
+  // });
 
 
   suite('Marked Workspace', function() {

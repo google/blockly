@@ -436,24 +436,16 @@ Blockly.blockRendering.constants.OUTSIDE_CORNER_HIGHLIGHTS = (function() {
       Blockly.utils.svgPaths.arc('A', '0 0,1', radius - offset,
           Blockly.utils.svgPaths.point(radius, offset));
 
-
-  var bottomLeftCornerStart =
-      'M ' + distance45inside + ', '; // follow with y pos - distance 45 inside
-
-  var bottomLeftCornerMid   =
-      'A ' + (radius - offset) +
-      ',' + (radius - offset) +
-      ' 0 0,1 ' + offset + ','; // follow with y pos - corner radius
-
-
   return {
-    topLeft: topLeftCornerHighlight,
-    topLeftStart: function(rtl) {
-      return rtl ? topLeftCornerStartRtl : topLeftCornerStartLtr;
+    topLeft: function(rtl) {
+      var start = rtl ? topLeftCornerStartRtl : topLeftCornerStartLtr;
+      return start + topLeftCornerHighlight;
     },
     bottomLeft: function(yPos) {
-      return bottomLeftCornerStart + (yPos - distance45inside) +
-          bottomLeftCornerMid + (yPos - radius);
+      return Blockly.utils.svgPaths.moveTo(
+          distance45inside,yPos - distance45inside) +
+          Blockly.utils.svgPaths.arc('A', '0 0,1', radius - offset,
+              Blockly.utils.svgPaths.point(offset, yPos - radius));
     }
   };
 })();

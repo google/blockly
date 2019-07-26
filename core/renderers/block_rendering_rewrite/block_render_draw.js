@@ -208,9 +208,9 @@ Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
   for (var i = elems.length - 1; i >= 0; i--) {
     var elem = elems[i];
     if (elem.type === 'next connection') {
-      this.steps_.push('h',  (this.RTL ? 0.5 : - 0.5));
+      //this.steps_.push('h',  (this.RTL ? 0.5 : - 0.5));
       this.steps_.push(Blockly.blockRendering.constants.NOTCH.pathRight);
-      this.steps_.push('h',  (this.RTL ? -0.5 : 0.5));
+      //this.steps_.push('h',  (this.RTL ? -0.5 : 0.5));
     } else if (elem.type === 'square corner') {
       this.steps_.push('H 0');
     } else if (elem.type === 'round corner') {

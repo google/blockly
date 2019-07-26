@@ -54,6 +54,10 @@ Blockly.blockRendering.Highlighter = function(info, pathObject) {
   this.highlightInlineSteps_ = this.pathObject_.highlightInlineSteps;
 
   this.highlightOffset_ = Blockly.blockRendering.constants.HIGHLIGHT_OFFSET;
+
+  this.outsideCornerPaths_ = Blockly.blockRendering.constants.OUTSIDE_CORNER_HIGHLIGHTS;
+  this.insideCornerPaths_ = Blockly.blockRendering.constants.INSIDE_CORNER_HIGHLIGHTS;
+  this.puzzleTabPaths_ = Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT;
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
@@ -62,10 +66,7 @@ Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
       this.highlightSteps_.push(Blockly.blockRendering.constants.START_POINT_HIGHLIGHT);
     } else if (elem.type === 'round corner') {
       this.highlightSteps_.push(
-          Blockly.blockRendering.constants.OUTSIDE_CORNER_HIGHLIGHTS.topLeftStart(
-              this.info_.RTL));
-      this.highlightSteps_.push(
-          Blockly.blockRendering.constants.OUTSIDE_CORNER_HIGHLIGHTS.topLeft);
+          this.outsideCornerPaths_.topLeft(this.info_.RTL));
     } else if (elem.type === 'previous connection') {
       this.highlightSteps_.push('h',  (this.RTL ? 0.5 : - 0.5));
       this.highlightSteps_.push(Blockly.blockRendering.constants.NOTCH.pathLeftHighlight);
@@ -91,14 +92,13 @@ Blockly.blockRendering.Highlighter.prototype.drawValueInput = function(row) {
     // Edge above tab.
     this.highlightSteps_.push('v', aboveTabHeight);
     // Highlight around back of tab.
-    this.highlightSteps_.push(
-        Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT.pathDown(this.info_.RTL));
+    this.highlightSteps_.push(this.puzzleTabPaths_.pathDown(this.info_.RTL));
     // Edge below tab.
     this.highlightSteps_.push('v', belowTabHeight);
   } else {
     this.highlightSteps_.push(Blockly.utils.svgPaths.moveTo(row.width, row.yPos));
     this.highlightSteps_.push(
-        Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT.pathDown(this.info_.RTL));
+        this.puzzleTabPaths_.pathDown(this.info_.RTL));
   }
 };
 
@@ -108,18 +108,15 @@ Blockly.blockRendering.Highlighter.prototype.drawStatementInput = function(row) 
     this.highlightSteps_.push('M',
         (x + Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE) +
         ',' + (row.yPos + Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE));
-    this.highlightSteps_.push(
-        Blockly.blockRendering.constants.INSIDE_CORNER_HIGHLIGHTS.pathTop(this.info_.RTL));
+    this.highlightSteps_.push(this.insideCornerPaths_.pathTop(this.info_.RTL));
     this.highlightSteps_.push('v',
         row.height - 2 * Blockly.blockRendering.constants.CORNER_RADIUS);
-    this.highlightSteps_.push(
-        Blockly.blockRendering.constants.INSIDE_CORNER_HIGHLIGHTS.pathBottom(this.info_.RTL));
+    this.highlightSteps_.push(this.insideCornerPaths_.pathBottom(this.info_.RTL));
   } else {
     this.highlightSteps_.push('M',
         (x + Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE) + ',' +
         (row.yPos + row.height - Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE));
-    this.highlightSteps_.push(
-        Blockly.blockRendering.constants.INSIDE_CORNER_HIGHLIGHTS.pathBottom(this.info_.RTL));
+    this.highlightSteps_.push(this.insideCornerPaths_.pathBottom(this.info_.RTL));
   }
 };
 
@@ -151,8 +148,7 @@ Blockly.blockRendering.Highlighter.prototype.drawBottomCorner = function(_row) {
       }
     } else if (elem.type === 'round corner') {
       if (!this.info_.RTL) {
-        this.highlightSteps_.push(
-            Blockly.blockRendering.constants.OUTSIDE_CORNER_HIGHLIGHTS.bottomLeft(height));
+        this.highlightSteps_.push(this.outsideCornerPaths_.bottomLeft(height));
       }
     }
   }
@@ -161,7 +157,7 @@ Blockly.blockRendering.Highlighter.prototype.drawBottomCorner = function(_row) {
 Blockly.blockRendering.Highlighter.prototype.drawLeft = function() {
   if (this.info_.outputConnection) {
     this.highlightSteps_.push(
-        Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT.pathUp(this.info_.RTL));
+        this.puzzleTabPaths_.pathUp(this.info_.RTL));
   }
 
   if (!this.info_.RTL) {
@@ -196,7 +192,7 @@ Blockly.blockRendering.Highlighter.prototype.drawInlineInput = function(input) {
     this.highlightInlineSteps_.push('v', aboveTabHeight);
     // Back of tab.
     this.highlightInlineSteps_.push(
-        Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT.pathDown(this.info_.RTL));
+        this.puzzleTabPaths_.pathDown(this.info_.RTL));
     // Right edge below tab.
     this.highlightInlineSteps_.push('v', belowTabHeight);
     // Bottom (horizontal).
@@ -213,6 +209,6 @@ Blockly.blockRendering.Highlighter.prototype.drawInlineInput = function(input) {
         connectionRight, yPos + input.connectionOffsetY));
     // Short highlight glint at bottom of tab.
     this.highlightSteps_.push(
-        Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT.pathDown(this.info_.RTL));
+        this.puzzleTabPaths_.pathDown(this.info_.RTL));
   }
 };

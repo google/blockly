@@ -170,8 +170,19 @@ Blockly.FieldImage.prototype.getFlipRtl = function() {
  * Set the alt text of this image.
  * @param {?string} alt New alt text.
  * @override
+ * @deprecated 2019 setText has been deprecated for all fields. Instead use
+ *    setAlt to set the alt text of the field.
  */
 Blockly.FieldImage.prototype.setText = function(alt) {
+  this.setAlt(alt);
+};
+
+/**
+ * Set the alt text of this image.
+ * @param {?string} alt New alt text.
+ * @public
+ */
+Blockly.FieldImage.prototype.setAlt = function(alt) {
   if (alt === null) {
     // No change if null.
     return;

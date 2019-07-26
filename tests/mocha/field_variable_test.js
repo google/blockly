@@ -27,7 +27,9 @@ suite('Variable Fields', function() {
       'workspace': workspace,
       'isShadow': function() {
         return false;
-      }
+      },
+      'renameVarById': Blockly.Block.prototype.renameVarById,
+      'updateVarName': Blockly.Block.prototype.updateVarName,
     };
   }
   function initField(fieldVariable, workspace) {
@@ -80,7 +82,7 @@ suite('Variable Fields', function() {
     var result_options = Blockly.FieldVariable.dropdownCreate.call(
         fieldVariable);
 
-    // Expect three variable options and a rename option.
+    // Expect three variable options, a rename option, and a delete option.
     assertEquals(result_options.length, 5);
     isEqualArrays(result_options[0], ['name1', 'id1']);
     isEqualArrays(result_options[1], ['name2', 'id2']);
@@ -214,7 +216,6 @@ suite('Variable Fields', function() {
       this.workspace.createVariable('name1', 'type1');
       this.workspace.createVariable('name2', 'type2');
     });
-
     test('variableTypes is undefined', function() {
       // Expect that since variableTypes is undefined, only type empty string
       // will be returned (regardless of what types are available on the workspace).
@@ -222,7 +223,6 @@ suite('Variable Fields', function() {
       var resultTypes = fieldVariable.getVariableTypes_();
       isEqualArrays(resultTypes, ['']);
     });
-
     test('variableTypes is explicit', function() {
       // Expect that since variableTypes is defined, it will be the return
       // value, regardless of what types are available on the workspace.
@@ -233,7 +233,6 @@ suite('Variable Fields', function() {
       assertEquals('Default type was wrong', 'type1',
           fieldVariable.defaultType_);
     });
-
     test('variableTypes is null', function() {
       // Expect all variable types to be returned.
       // The field does not need to be initialized to do this--it just needs
@@ -247,7 +246,6 @@ suite('Variable Fields', function() {
       // The empty string is always one of the options.
       isEqualArrays(resultTypes, ['type1', 'type2', '']);
     });
-
     test('variableTypes is the empty list', function() {
       var fieldVariable = new Blockly.FieldVariable('name1');
       var mockBlock = getMockBlock(this.workspace);
@@ -265,7 +263,6 @@ suite('Variable Fields', function() {
       assertEquals('The variable field\'s default type should be "b"',
           'b', fieldVariable.defaultType_);
     });
-
     test('No default type', function() {
       var fieldVariable = new Blockly.FieldVariable(null);
       assertEquals('The variable field\'s default type should be the empty string',
@@ -273,19 +270,53 @@ suite('Variable Fields', function() {
       assertNull('The variable field\'s allowed types should be null',
           fieldVariable.variableTypes);
     });
-
     test('Default type mismatch', function() {
       // Invalid default type when creating a variable field.
       chai.assert.throws(function() {
         var _fieldVariable = new Blockly.FieldVariable(null, null, ['a'], 'b');
       });
     });
-
     test('Default type mismatch with empty array', function() {
       // Invalid default type when creating a variable field.
       chai.assert.throws(function() {
         var _fieldVariable = new Blockly.FieldVariable(null, null, ['a']);
       });
+    });
+  });
+  suite('Renaming Variables', function() {
+    setup(function() {
+      this.workspace.createVariable('name1', null, 'id1');
+      Blockly.defineBlocksWithJsonArray([{
+        "type": "field_variable_test_block",
+        "message0": "%1",
+        "args0": [
+          {
+            "type": "field_variable",
+            "name": "VAR",
+            "variable": "name1"
+          }
+        ],
+      }]);
+      this.variableBlock = new Blockly.Block(this.workspace,
+          'field_variable_test_block');
+      this.variableField = this.variableBlock.getField('VAR');
+    });
+    teardown(function() {
+      this.variableBlock.dispose();
+      this.variableBlock = null;
+      this.variableField = null;
+      delete Blockly.Blocks['field_variable_test_block'];
+    });
+    test('Rename & Keep Old ID', function() {
+      this.workspace.renameVariableById('id1', 'name2');
+      chai.assert.equal(this.variableField.getText(), 'name2');
+      chai.assert.equal(this.variableField.getValue(), 'id1');
+    });
+    test('Rename & Get New ID', function() {
+      this.workspace.createVariable('name2', null, 'id2');
+      this.workspace.renameVariableById('id1', 'name2');
+      chai.assert.equal(this.variableField.getText(), 'name2');
+      chai.assert.equal(this.variableField.getValue(), 'id2');
     });
   });
 });

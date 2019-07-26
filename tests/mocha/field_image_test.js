@@ -154,17 +154,49 @@ suite ('Image Fields', function() {
       this.imageField.setValue(undefined);
       assertValue(this.imageField, 'src', 'alt');
     });
-    test('New Src, New Alt', function() {
+    test('Good Src', function() {
       this.imageField.setValue('newSrc');
       assertValue(this.imageField, 'newSrc', 'alt');
-      this.imageField.setText('newAlt');
-      assertValue(this.imageField, 'newSrc', 'newAlt');
     });
-    test('New Alt, New Src', function() {
-      this.imageField.setText('newAlt');
-      assertValue(this.imageField, 'src', 'newAlt');
-      this.imageField.setValue('newSrc');
-      assertValue(this.imageField, 'newSrc', 'newAlt');
+  });
+  suite('setAlt', function() {
+    suite('No Alt -> New Alt', function() {
+      setup(function() {
+        this.imageField = new Blockly.FieldImage('src', 1, 1);
+      });
+      test('Backwards Compat - setText', function() {
+        this.imageField.setText('newAlt');
+        assertValue(this.imageField, 'src', 'newAlt');
+      });
+      test('Null', function() {
+        this.imageField.setText(null);
+        assertValue(this.imageField, 'src', '');
+      });
+      test('Good Alt', function() {
+        this.imageField.setText('newAlt');
+        assertValue(this.imageField, 'src', 'newAlt');
+      });
+    });
+    suite('Alt -> New Alt', function() {
+      setup(function() {
+        this.imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
+      });
+      test('Backwards Compat - setText', function() {
+        this.imageField.setText('newAlt');
+        assertValue(this.imageField, 'src', 'newAlt');
+      });
+      test('Null', function() {
+        this.imageField.setText(null);
+        assertValue(this.imageField, 'src', 'alt');
+      });
+      test('Empty String', function() {
+        this.imageField.setText('');
+        assertValue(this.imageField, 'src', '');
+      });
+      test('Good Alt', function() {
+        this.imageField.setText('newAlt');
+        assertValue(this.imageField, 'src', 'newAlt');
+      });
     });
   });
 });

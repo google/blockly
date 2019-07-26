@@ -113,11 +113,10 @@ Blockly.WorkspaceAudio.prototype.preload = function() {
     var sound = this.SOUNDS_[name];
     sound.volume = 0.01;
     var playPromise = sound.play();
-    
     // Edge does not return a promise, so we need to check.
-    if (playPromise) {
-      // If we don't wait for the play request to complete before calling pause() we will get an exception:
-      // Uncaught (in promise) DOMException: The play() request was interrupted by a call to pause().
+    if (playPromise !== undefined) {
+      // If we don't wait for the play request to complete before calling pause()
+      // we will get an exception: (DOMException: The play() request was interrupted)
       // See more: https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
       playPromise.then(sound.pause).catch(function() {
         // Play without user interaction was prevented.

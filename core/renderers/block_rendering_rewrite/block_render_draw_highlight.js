@@ -61,12 +61,18 @@ Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
     if (elem.type === 'square corner') {
       this.highlightSteps_.push(Blockly.blockRendering.constants.START_POINT_HIGHLIGHT);
     } else if (elem.type === 'round corner') {
-      this.highlightSteps_.push(this.info_.RTL ?
-          Blockly.blockRendering.constants.TOP_LEFT_CORNER_START_HIGHLIGHT_RTL :
-          Blockly.blockRendering.constants.TOP_LEFT_CORNER_START_HIGHLIGHT_LTR);
-      this.highlightSteps_.push(Blockly.blockRendering.constants.TOP_LEFT_CORNER_HIGHLIGHT);
+      this.highlightSteps_.push(
+          Blockly.blockRendering.constants.OUTSIDE_CORNER_HIGHLIGHTS.topLeftStart(
+              this.info_.RTL));
+      // this.highlightSteps_.push(this.info_.RTL ?
+      //     Blockly.blockRendering.constants.TOP_LEFT_CORNER_START_HIGHLIGHT_RTL :
+      //     Blockly.blockRendering.constants.TOP_LEFT_CORNER_START_HIGHLIGHT_LTR);
+      this.highlightSteps_.push(
+          Blockly.blockRendering.constants.OUTSIDE_CORNER_HIGHLIGHTS.topLeft);
     } else if (elem.type === 'previous connection') {
-      this.highlightSteps_.push(Blockly.blockRendering.constants.NOTCH_PATH_LEFT_HIGHLIGHT);
+      this.highlightSteps_.push('h',  (this.RTL ? 0.5 : - 0.5));
+      this.highlightSteps_.push(Blockly.blockRendering.constants.NOTCH.pathLeftHighlight);
+      this.highlightSteps_.push('h',  (this.RTL ? -0.5 : 0.5));
     } else if (elem.type === 'hat') {
       this.highlightSteps_.push(
           Blockly.blockRendering.constants.START_HAT.highlight(this.info_.RTL));
@@ -106,17 +112,17 @@ Blockly.blockRendering.Highlighter.prototype.drawStatementInput = function(row) 
         (x + Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE) +
         ',' + (row.yPos + Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE));
     this.highlightSteps_.push(
-        Blockly.blockRendering.constants.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL);
+        Blockly.blockRendering.constants.INSIDE_CORNER_HIGHLIGHTS.pathTop(this.info_.RTL));
     this.highlightSteps_.push('v',
         row.height - 2 * Blockly.blockRendering.constants.CORNER_RADIUS);
     this.highlightSteps_.push(
-        Blockly.blockRendering.constants.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL);
+        Blockly.blockRendering.constants.INSIDE_CORNER_HIGHLIGHTS.pathBottom(this.info_.RTL));
   } else {
     this.highlightSteps_.push('M',
         (x + Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE) + ',' +
         (row.yPos + row.height - Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE));
     this.highlightSteps_.push(
-        Blockly.blockRendering.constants.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR);
+        Blockly.blockRendering.constants.INSIDE_CORNER_HIGHLIGHTS.pathBottom(this.info_.RTL));
   }
 };
 
@@ -149,10 +155,7 @@ Blockly.blockRendering.Highlighter.prototype.drawBottomCorner = function(_row) {
     } else if (elem.type === 'round corner') {
       if (!this.info_.RTL) {
         this.highlightSteps_.push(
-            Blockly.blockRendering.constants.BOTTOM_LEFT_CORNER_HIGHLIGHT_START +
-            (height - Blockly.BlockSvg.DISTANCE_45_INSIDE) +
-            Blockly.blockRendering.constants.BOTTOM_LEFT_CORNER_HIGHLIGHT_MID +
-            (height - Blockly.BlockSvg.CORNER_RADIUS));
+            Blockly.blockRendering.constants.OUTSIDE_CORNER_HIGHLIGHTS.bottomLeft(height));
       }
     }
   }

@@ -74,12 +74,6 @@ Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT =
 // connection starts.
 Blockly.blockRendering.constants.NOTCH_OFFSET_ROUNDED_CORNER_PREV = 7;
 
-// This is the offset from the vertical part of a statement input
-// to where to start the notch, which is on the right side in LTR.
-Blockly.blockRendering.constants.NOTCH_OFFSET_RIGHT =
-    Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT +
-    Blockly.blockRendering.constants.NOTCH_WIDTH;
-
 Blockly.blockRendering.constants.STATEMENT_BOTTOM_SPACER = 5;
 Blockly.blockRendering.constants.STATEMENT_INPUT_PADDING_LEFT = 20;
 Blockly.blockRendering.constants.BETWEEN_STATEMENT_PADDING_Y = 4;
@@ -145,16 +139,6 @@ Blockly.blockRendering.constants.START_POINT_HIGHLIGHT =
 
 /**
  * Distance from shape edge to intersect with a curved corner at 45 degrees.
- * Applies to highlighting on around the inside of a curve.
- * @const
- */
-Blockly.blockRendering.constants.DISTANCE_45_INSIDE = (1 - Math.SQRT1_2) *
-    (Blockly.blockRendering.constants.CORNER_RADIUS -
-        Blockly.blockRendering.constants.HIGHLIGHT_OFFSET) +
-    Blockly.blockRendering.constants.HIGHLIGHT_OFFSET;
-
-/**
- * Distance from shape edge to intersect with a curved corner at 45 degrees.
  * Applies to highlighting on around the outside of a curve.
  * @const
  */
@@ -164,147 +148,11 @@ Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE = (1 - Math.SQRT1_2) *
     Blockly.blockRendering.constants.HIGHLIGHT_OFFSET;
 
 /**
- * SVG path for drawing next/previous notch from left to right.
- * @const
- */
-Blockly.blockRendering.constants.NOTCH_PATH_LEFT = 'l 6,4 3,0 6,-4';
-
-/**
- * SVG path for drawing next/previous notch from left to right with
- * highlighting.
- * @const
- */
-Blockly.blockRendering.constants.NOTCH_PATH_LEFT_HIGHLIGHT =
-    'h ' + Blockly.blockRendering.constants.HIGHLIGHT_OFFSET + ' ' + Blockly.blockRendering.constants.NOTCH_PATH_LEFT;
-
-/**
- * SVG path for drawing next/previous notch from right to left.
- * @const
- */
-Blockly.blockRendering.constants.NOTCH_PATH_RIGHT = 'l -6,4 -3,0 -6,-4';
-
-/**
- * SVG path for drawing the top-left corner of a statement input.
- * Includes the top notch, a horizontal space, and the rounded inside corner.
- * @const
- */
-Blockly.blockRendering.constants.INNER_TOP_LEFT_CORNER =
-    Blockly.blockRendering.constants.NOTCH_PATH_RIGHT + ' h -' +
-    (Blockly.blockRendering.constants.NOTCH_WIDTH -
-        Blockly.blockRendering.constants.CORNER_RADIUS) +
-    ' a ' + Blockly.blockRendering.constants.CORNER_RADIUS + ',' +
-    Blockly.blockRendering.constants.CORNER_RADIUS + ' 0 0,0 -' +
-    Blockly.blockRendering.constants.CORNER_RADIUS + ',' +
-    Blockly.blockRendering.constants.CORNER_RADIUS;
-
-/**
- * SVG path for drawing the bottom-left corner of a statement input.
- * Includes the rounded inside corner.
- * @const
- */
-Blockly.blockRendering.constants.INNER_BOTTOM_LEFT_CORNER =
-    Blockly.utils.svgPaths.arc('a', '0 0,0',
-        Blockly.blockRendering.constants.CORNER_RADIUS,
-        Blockly.utils.svgPaths.point(Blockly.blockRendering.constants.CORNER_RADIUS,
-            Blockly.blockRendering.constants.CORNER_RADIUS));
-
-
-/**
- * SVG path for drawing highlight on the top-left corner of a statement
- * input in RTL.
- * @const
- */
-Blockly.blockRendering.constants.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL =
-    Blockly.utils.svgPaths.arc('a', '0 0,0',
-        Blockly.blockRendering.constants.CORNER_RADIUS,
-        Blockly.utils.svgPaths.point(
-            -Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE -
-            Blockly.blockRendering.constants.HIGHLIGHT_OFFSET,
-            Blockly.blockRendering.constants.CORNER_RADIUS -
-            Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE));
-
-/**
- * SVG path for drawing highlight on the bottom-left corner of a statement
- * input in RTL.
- * @const
- */
-Blockly.blockRendering.constants.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL =
-    Blockly.utils.svgPaths.arc('a', '0 0,0',
-        Blockly.blockRendering.constants.CORNER_RADIUS +
-        Blockly.blockRendering.constants.HIGHLIGHT_OFFSET,
-        Blockly.utils.svgPaths.point(
-            Blockly.blockRendering.constants.CORNER_RADIUS +
-            Blockly.blockRendering.constants.HIGHLIGHT_OFFSET,
-            Blockly.blockRendering.constants.CORNER_RADIUS +
-            Blockly.blockRendering.constants.HIGHLIGHT_OFFSET));
-
-/**
- * SVG path for drawing highlight on the bottom-left corner of a statement
- * input in LTR.
- * @const
- */
-Blockly.blockRendering.constants.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
-    Blockly.utils.svgPaths.arc('a', '0 0,0',
-        Blockly.blockRendering.constants.CORNER_RADIUS +
-        Blockly.blockRendering.constants.HIGHLIGHT_OFFSET,
-        Blockly.utils.svgPaths.point(
-            Blockly.blockRendering.constants.CORNER_RADIUS -
-            Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE,
-            Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE +
-            Blockly.blockRendering.constants.HIGHLIGHT_OFFSET));
-
-/**
  * SVG start point for drawing the top-left corner.
  * @const
  */
 Blockly.blockRendering.constants.TOP_LEFT_CORNER_START =
     'm 0,' + Blockly.blockRendering.constants.CORNER_RADIUS;
-
-/**
- * SVG path for drawing the rounded top-left corner.
- * @const
- */
-Blockly.blockRendering.constants.TOP_LEFT_CORNER =
-    'A ' + Blockly.blockRendering.constants.CORNER_RADIUS + ',' +
-    Blockly.blockRendering.constants.CORNER_RADIUS + ' 0 0,1 ' +
-    Blockly.blockRendering.constants.CORNER_RADIUS + ',0';
-
-Blockly.blockRendering.constants.BOTTOM_LEFT_CORNER = 'a' + Blockly.blockRendering.constants.CORNER_RADIUS + ',' +
-               Blockly.blockRendering.constants.CORNER_RADIUS + ' 0 0,1 -' +
-               Blockly.blockRendering.constants.CORNER_RADIUS + ',-' +
-               Blockly.blockRendering.constants.CORNER_RADIUS;
-
-Blockly.blockRendering.constants.BOTTOM_LEFT_CORNER_HIGHLIGHT_START =
-    'M ' + Blockly.blockRendering.constants.DISTANCE_45_INSIDE + ', '; // follow with y pos - distance 45 inside
-
-Blockly.blockRendering.constants.BOTTOM_LEFT_CORNER_HIGHLIGHT_MID   =
-    'A ' + (Blockly.blockRendering.constants.CORNER_RADIUS - Blockly.blockRendering.constants.HIGHLIGHT_OFFSET) +
-    ',' + (Blockly.blockRendering.constants.CORNER_RADIUS - Blockly.blockRendering.constants.HIGHLIGHT_OFFSET) +
-    ' 0 0,1 ' + Blockly.blockRendering.constants.HIGHLIGHT_OFFSET + ','; // follow with y pos - corner radius
-
-/**
- * SVG start point for drawing the top-left corner's highlight in RTL.
- * @const
- */
-Blockly.blockRendering.constants.TOP_LEFT_CORNER_START_HIGHLIGHT_RTL =
-    'm ' + Blockly.blockRendering.constants.DISTANCE_45_INSIDE + ',' +
-    Blockly.blockRendering.constants.DISTANCE_45_INSIDE;
-
-/**
- * SVG start point for drawing the top-left corner's highlight in LTR.
- * @const
- */
-Blockly.blockRendering.constants.TOP_LEFT_CORNER_START_HIGHLIGHT_LTR =
-    'm 0.5,' + (Blockly.blockRendering.constants.CORNER_RADIUS - 0.5);
-
-/**
- * SVG path for drawing the highlight on the rounded top-left corner.
- * @const
- */
-Blockly.blockRendering.constants.TOP_LEFT_CORNER_HIGHLIGHT =
-    'A ' + (Blockly.blockRendering.constants.CORNER_RADIUS - 0.5) + ',' +
-    (Blockly.blockRendering.constants.CORNER_RADIUS - 0.5) + ' 0 0,1 ' +
-    Blockly.blockRendering.constants.CORNER_RADIUS + ',0.5';
 
 /**
  * Information about the hat on a start block.
@@ -447,6 +295,175 @@ Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT = (function() {
     },
     pathDown: function(rtl) {
       return rtl ? highlightRtlDown : highlightLtrDown;
+    }
+  };
+})();
+
+Blockly.blockRendering.constants.NOTCH = (function() {
+  var width = Blockly.blockRendering.constants.NOTCH_WIDTH;
+  var height = Blockly.blockRendering.constants.NOTCH_HEIGHT;
+  var innerWidth = 3;
+  var outerWidth = (width - innerWidth) / 2;
+  function makeMainPath(dir) {
+    return Blockly.utils.svgPaths.line(
+        [
+          Blockly.utils.svgPaths.point(dir * outerWidth, height),
+          Blockly.utils.svgPaths.point(dir * innerWidth, 0),
+          Blockly.utils.svgPaths.point(dir * outerWidth, -height)
+        ]);
+  }
+  // TODO: Find a relationship between width and path
+  var pathLeft = makeMainPath(1);
+  var pathRight = makeMainPath(-1);
+
+  var pathLeftHighlight = Blockly.utils.svgPaths.lineOnAxis('h', Blockly.blockRendering.constants.HIGHLIGHT_OFFSET) + pathLeft;
+  return {
+    width: width,
+    height: height,
+    pathLeft: pathLeft,
+    pathLeftHighlight: pathLeftHighlight,
+    pathRight: pathRight
+  };
+})();
+
+
+Blockly.blockRendering.constants.INSIDE_CORNERS = (function() {
+  var radius = Blockly.blockRendering.constants.CORNER_RADIUS;
+
+  var innerTopLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
+      Blockly.utils.svgPaths.point(-radius, radius));
+
+  var innerBottomLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
+      Blockly.utils.svgPaths.point(radius, radius));
+
+  return {
+    //width: width,
+    height: radius,
+    pathTop: innerTopLeftCorner,
+    pathBottom: innerBottomLeftCorner
+  };
+})();
+
+/**
+ * Highlight paths for drawing the inside corners of a statement input.
+ */
+Blockly.blockRendering.constants.INSIDE_CORNER_HIGHLIGHTS = (function() {
+  var radius = Blockly.blockRendering.constants.CORNER_RADIUS;
+  var offset = Blockly.blockRendering.constants.HIGHLIGHT_OFFSET;
+
+  /**
+   * Distance from shape edge to intersect with a curved corner at 45 degrees.
+   * Applies to highlighting on around the outside of a curve.
+   * @const
+   */
+  var distance45outside = (1 - Math.SQRT1_2) * (radius + offset) - offset;
+
+  /**
+   * Distance from shape edge to intersect with a curved corner at 45 degrees.
+   * Applies to highlighting on around the inside of a curve.
+   * @const
+   */
+  var distance45inside = (1 - Math.SQRT1_2) * (radius - offset) + offset;
+
+
+  var pathTopRtl = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
+      Blockly.utils.svgPaths.point(
+          -distance45outside - offset,
+          radius - distance45outside));
+
+  var pathBottomRtl = Blockly.utils.svgPaths.arc('a', '0 0,0', radius + offset,
+      Blockly.utils.svgPaths.point(radius + offset, radius + offset));
+
+  var pathBottomLtr = Blockly.utils.svgPaths.arc('a', '0 0,0', radius + offset,
+      Blockly.utils.svgPaths.point(
+          radius - distance45outside,
+          distance45outside + offset));
+
+  return {
+    // width: width,
+    // height: height,
+    pathTop: function(rtl) {
+      return rtl ? pathTopRtl : '';
+    },
+    pathBottom: function(rtl) {
+      return rtl ? pathBottomRtl : pathBottomLtr;
+    },
+  };
+})();
+
+Blockly.blockRendering.constants.OUTSIDE_CORNERS = (function() {
+  var radius = Blockly.blockRendering.constants.CORNER_RADIUS;
+  /**
+   * SVG path for drawing the rounded top-left corner.
+   * @const
+   */
+  var topLeft = Blockly.utils.svgPaths.arc('A', '0 0,1', radius,
+      Blockly.utils.svgPaths.point(radius, 0));
+
+  var bottomLeft = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+      Blockly.utils.svgPaths.point(-radius, -radius));
+
+  return {
+    // width: width,
+    // height: height,
+    topLeft: topLeft,
+    bottomLeft: bottomLeft
+  };
+})();
+
+Blockly.blockRendering.constants.OUTSIDE_CORNER_HIGHLIGHTS = (function() {
+  var radius = Blockly.blockRendering.constants.CORNER_RADIUS;
+  var offset = Blockly.blockRendering.constants.HIGHLIGHT_OFFSET;
+
+  /**
+   * Distance from shape edge to intersect with a curved corner at 45 degrees.
+   * Applies to highlighting on around the inside of a curve.
+   * @const
+   */
+  var distance45inside = (1 - Math.SQRT1_2) * (radius - offset) + offset;
+
+  /**
+   * SVG start point for drawing the top-left corner's highlight in RTL.
+   * @const
+   */
+  var topLeftCornerStartRtl =
+      'm ' + distance45inside + ',' +
+      distance45inside;
+
+  /**
+   * SVG start point for drawing the top-left corner's highlight in LTR.
+   * @const
+   */
+  var topLeftCornerStartLtr =
+      'm 0.5,' + (radius - offset);
+
+  /**
+   * SVG path for drawing the highlight on the rounded top-left corner.
+   * @const
+   */
+  var topLeftCornerHighlight =
+      'A ' + (radius - offset) + ',' +
+      (radius - offset) + ' 0 0,1 ' +
+      radius + ',0.5';
+
+
+  var bottomLeftCornerStart =
+      'M ' + distance45inside + ', '; // follow with y pos - distance 45 inside
+
+  var bottomLeftCornerMid   =
+      'A ' + (radius - offset) +
+      ',' + (radius - offset) +
+      ' 0 0,1 ' + offset + ','; // follow with y pos - corner radius
+
+
+  return {
+    topLeft: topLeftCornerHighlight,
+    topLeftStart: function(rtl) {
+      return rtl ? topLeftCornerStartRtl : topLeftCornerStartLtr;
+    },
+    bottomLeft: function(yPos) {
+      return bottomLeftCornerStart + (yPos - distance45inside) +
+          bottomLeftCornerMid + (yPos - radius);
     }
   };
 })();

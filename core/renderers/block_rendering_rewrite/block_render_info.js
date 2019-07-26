@@ -407,7 +407,7 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     } else if (next.isNextConnection()) {
       // Next connections are shifted slightly to the left (in both LTR and RTL)
       // to make the dark path under the previous connection show through.
-      return Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT + (this.RTL ? 0.5 : - 0.5);
+      return Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;//+ (this.RTL ? 0.5 : - 0.5);
     }
   }
 
@@ -418,8 +418,8 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     } else if (next.isNextConnection()) {
       // Next connections are shifted slightly to the left (in both LTR and RTL)
       // to make the dark path under the previous connection show through.
-      return Blockly.blockRendering.constants.NOTCH_OFFSET_ROUNDED_CORNER_PREV +
-          (this.RTL ? 0.5 : - 0.5);
+      return Blockly.blockRendering.constants.NOTCH_OFFSET_ROUNDED_CORNER_PREV;//+
+          //(this.RTL ? 0.5 : - 0.5);
     }
   }
 
@@ -462,7 +462,7 @@ Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
   if (widestStatementRowFields) {
     this.width =
         Math.max(blockWidth,
-            widestStatementRowFields + Blockly.blockRendering.constants.NOTCH_WIDTH * 2);
+            widestStatementRowFields + Blockly.blockRendering.constants.NOTCH.width * 2);
   } else {
     this.width = blockWidth;
   }

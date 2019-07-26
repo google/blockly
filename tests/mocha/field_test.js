@@ -52,7 +52,7 @@ suite('Abstract Fields', function() {
       var stub = sinon.stub(console, 'warn');
       assertEquals(true, field.isSerializable());
       chai.assert(stub.calledOnce);
-      stub.restore();
+      sinon.restore();
     });
     test('Editable False, Serializable Default(false)', function() {
       // An old non-editable field should not be serialized.

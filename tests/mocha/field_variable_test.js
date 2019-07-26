@@ -140,7 +140,7 @@ suite('Variable Fields', function() {
       variableField.setValue(undefined);
       assertValue(variableField, 'name1');
       chai.assert(stub.calledOnce);
-      stub.restore();
+      sinon.restore();
     });
     test('New Variable ID', function() {
       this.workspace.createVariable('name2', null, 'id2');
@@ -162,7 +162,7 @@ suite('Variable Fields', function() {
       variableField.setValue('id1');
       assertValue(variableField, 'name1');
       chai.assert(stub.calledOnce);
-      stub.restore();
+      sinon.restore();
     });
   });
   suite('Validators', function() {

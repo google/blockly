@@ -358,14 +358,6 @@ Blockly.blockRendering.constants.INSIDE_CORNER_HIGHLIGHTS = (function() {
    */
   var distance45outside = (1 - Math.SQRT1_2) * (radius + offset) - offset;
 
-  /**
-   * Distance from shape edge to intersect with a curved corner at 45 degrees.
-   * Applies to highlighting on around the inside of a curve.
-   * @const
-   */
-  var distance45inside = (1 - Math.SQRT1_2) * (radius - offset) + offset;
-
-
   var pathTopRtl = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
       Blockly.utils.svgPaths.point(
           -distance45outside - offset,
@@ -427,24 +419,22 @@ Blockly.blockRendering.constants.OUTSIDE_CORNER_HIGHLIGHTS = (function() {
    * @const
    */
   var topLeftCornerStartRtl =
-      'm ' + distance45inside + ',' +
-      distance45inside;
+      Blockly.utils.svgPaths.moveBy(distance45inside, distance45inside);
 
   /**
    * SVG start point for drawing the top-left corner's highlight in LTR.
    * @const
    */
   var topLeftCornerStartLtr =
-      'm 0.5,' + (radius - offset);
+      Blockly.utils.svgPaths.moveBy(offset, radius - offset);
 
   /**
    * SVG path for drawing the highlight on the rounded top-left corner.
    * @const
    */
   var topLeftCornerHighlight =
-      'A ' + (radius - offset) + ',' +
-      (radius - offset) + ' 0 0,1 ' +
-      radius + ',0.5';
+      Blockly.utils.svgPaths.arc('A', '0 0,1', radius - offset,
+          Blockly.utils.svgPaths.point(radius, offset));
 
 
   var bottomLeftCornerStart =

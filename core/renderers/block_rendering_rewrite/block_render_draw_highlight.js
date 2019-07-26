@@ -64,9 +64,6 @@ Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
       this.highlightSteps_.push(
           Blockly.blockRendering.constants.OUTSIDE_CORNER_HIGHLIGHTS.topLeftStart(
               this.info_.RTL));
-      // this.highlightSteps_.push(this.info_.RTL ?
-      //     Blockly.blockRendering.constants.TOP_LEFT_CORNER_START_HIGHLIGHT_RTL :
-      //     Blockly.blockRendering.constants.TOP_LEFT_CORNER_START_HIGHLIGHT_LTR);
       this.highlightSteps_.push(
           Blockly.blockRendering.constants.OUTSIDE_CORNER_HIGHLIGHTS.topLeft);
     } else if (elem.type === 'previous connection') {

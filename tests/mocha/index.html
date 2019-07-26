@@ -72,6 +72,7 @@
     </xml>
     <script>
       mocha.run(function(failures) {
+        console.log("FAILURE: ", failures);
         var failureDiv = document.getElementById('failureCount');
         failureDiv.setAttribute('tests_failed', failures);
       });

@@ -83,24 +83,22 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY) {
  * Draw a debug rectangle for a horizontal spacer.
  * @param {!Blockly.BlockSvg.InRowSpacer} elem The spacer to render
  * @param {number} cursorX The x position of the left of the row.
- * @param {number} centerY The y position of the center of the row, vertically.
  * @param {number} rowHeight The height of the container row.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawSpacerElem =
-    function(elem, cursorX,  centerY, rowHeight) {
-      var debugRenderedHeight = Math.min(15, rowHeight);
-      var yPos = centerY - debugRenderedHeight / 2;
-      this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-          {
-            'class': 'elemSpacerRect blockRenderDebug',
-            'x': cursorX,
-            'y': yPos,
-            'width': elem.width,
-            'height': debugRenderedHeight,
-          },
-          this.svgRoot_));
-    };
+Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, cursorX, rowHeight) {
+  var debugRenderedHeight = Math.min(elem.height, rowHeight);
+  var yPos = elem.centerline - debugRenderedHeight / 2;
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+      {
+        'class': 'elemSpacerRect blockRenderDebug',
+        'x': cursorX,
+        'y': yPos,
+        'width': elem.width,
+        'height': debugRenderedHeight,
+      },
+      this.svgRoot_));
+};
 
 /**
  * Draw a debug rectangle for an in-row element.
@@ -109,8 +107,8 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem =
  * @param {number} centerY The y position of the center of the row, vertically.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, cursorX, centerY) {
-  var yPos = centerY - elem.height / 2;
+Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, cursorX) {
+  var yPos = elem.centerline - elem.height / 2;
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'rowRenderingRect blockRenderDebug',
@@ -191,14 +189,13 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY) 
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY) {
-  var centerY = cursorY + row.height / 2;
   var cursorX = 0;
   for (var e = 0; e < row.elements.length; e++) {
     var elem = row.elements[e];
     if (elem.isSpacer()) {
-      this.drawSpacerElem(elem, cursorX, centerY, row.height);
+      this.drawSpacerElem(elem, cursorX, row.height);
     } else {
-      this.drawRenderedElem(elem, cursorX, centerY);
+      this.drawRenderedElem(elem, cursorX);
     }
     cursorX += elem.width;
   }

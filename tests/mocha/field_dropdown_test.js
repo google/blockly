@@ -47,7 +47,7 @@ suite ('Dropdown Fields', function() {
         new Blockly.FieldDropdown([1, 2, 3]);
       });
       chai.assert(stub.calledThrice);
-      stub.restore();
+      sinon.restore();
     });
     test('Array Items with Invalid IDs', function() {
       var stub = sinon.stub(console, 'error');
@@ -55,7 +55,7 @@ suite ('Dropdown Fields', function() {
         new Blockly.FieldDropdown([['1', 1], ['2', 2], ['3', 3]]);
       });
       chai.assert(stub.calledThrice);
-      stub.restore();
+      sinon.restore();
     });
     test('Array Items with Invalid Content', function() {
       var stub = sinon.stub(console, 'error');
@@ -63,7 +63,7 @@ suite ('Dropdown Fields', function() {
         new Blockly.FieldDropdown([[1, '1'], [2, '2'], [3, '3']]);
       });
       chai.assert(stub.calledThrice);
-      stub.restore();
+      sinon.restore();
     });
     test('Text Dropdown', function() {
       var dropdownField = new Blockly.FieldDropdown(
@@ -118,7 +118,7 @@ suite ('Dropdown Fields', function() {
         Blockly.FieldDropdown.fromJson({ options: [1, 2, 3] });
       });
       chai.assert(stub.calledThrice);
-      stub.restore();
+      sinon.restore();
     });
     test('Array Items with Invalid IDs', function() {
       var stub = sinon.stub(console, 'error');
@@ -127,7 +127,7 @@ suite ('Dropdown Fields', function() {
             { options:[['1', 1], ['2', 2], ['3', 3]] });
       });
       chai.assert(stub.calledThrice);
-      stub.restore();
+      sinon.restore();
     });
     test('Array Items with Invalid Content', function() {
       var stub = sinon.stub(console, 'error');
@@ -136,7 +136,7 @@ suite ('Dropdown Fields', function() {
             { options:[[1, '1'], [2, '2'], [3, '3']] });
       });
       chai.assert(stub.calledThrice);
-      stub.restore();
+      sinon.restore();
     });
     test('Text Dropdown', function() {
       var dropdownField = Blockly.FieldDropdown.fromJson(

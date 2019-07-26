@@ -47,7 +47,6 @@ async function runMochaTestsInBrowser() {
   await browser.waitUntil(async () => {
     var elem = await browser.$('#failureCount');
     var text = await elem.getAttribute('tests_failed');
-    console.log("THIS IS TEXT: " + text);
     return text != 'unset';
   })
 

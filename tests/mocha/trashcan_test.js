@@ -47,7 +47,8 @@ suite("Trashcan", function() {
     this.setLidStub = sinon.stub(this.trashcan, 'setLidAngle_');
   });
   teardown(function() {
-    this.setLidStub.restore();
+    sinon.restore();
+    // this.setLidStub.restore();
     this.trashcan = null;
   });
 

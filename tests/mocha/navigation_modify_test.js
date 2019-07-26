@@ -282,86 +282,86 @@ suite('Insert/Modify', function() {
   //   });
   // });
 
-  suite('Marked Block', function() {
-    // TODO: Decide whether it ever makes sense to mark a block, and what to do
-    // if so.  For now all of these attempted modifications will fail.
-    suite('Marked any block', function() {
-      // These tests are using a stack block, but do not depend on the type of
-      // the block.
-      setup(function() {
-        Blockly.Navigation.marker_.setLocation(
-            Blockly.ASTNode.createBlockNode(
-                this.stack_block_1));
-      });
-      test('Cursor on workspace', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createWorkspaceNode(
-                this.workspace, new goog.math.Coordinate(100, 100)));
-        chai.assert.isFalse(Blockly.Navigation.modify());
+  // suite('Marked Block', function() {
+  //   // TODO: Decide whether it ever makes sense to mark a block, and what to do
+  //   // if so.  For now all of these attempted modifications will fail.
+  //   suite('Marked any block', function() {
+  //     // These tests are using a stack block, but do not depend on the type of
+  //     // the block.
+  //     setup(function() {
+  //       Blockly.Navigation.marker_.setLocation(
+  //           Blockly.ASTNode.createBlockNode(
+  //               this.stack_block_1));
+  //     });
+  //     test('Cursor on workspace', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createWorkspaceNode(
+  //               this.workspace, new goog.math.Coordinate(100, 100)));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
 
-      });
-    });
-    suite('Marked stack block', function() {
-      setup(function() {
-        Blockly.Navigation.marker_.setLocation(
-            Blockly.ASTNode.createBlockNode(
-                this.stack_block_1));
-      });
-      test('Cursor on row block', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createBlockNode(
-                this.row_block_1));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-      });
-      test('Cursor on stack block', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createBlockNode(
-                this.stack_block_1));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-      });
-      test('Cursor on next connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.stack_block_2.nextConnection));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-      });
-      test('Cursor on previous connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.stack_block_2.previousConnection));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-      });
-    });
-    suite('Marked row block', function() {
-      setup(function() {
-        Blockly.Navigation.marker_.setLocation(
-            Blockly.ASTNode.createBlockNode(
-                this.row_block_1));
-      });
-      test('Cursor on stack block', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createBlockNode(
-                this.stack_block_1));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-      });
-      test('Cursor on row block', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createBlockNode(
-                this.row_block_1));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-      });
-      test('Cursor on value input connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.row_block_2.inputList[0].connection));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-      });
-      test('Cursor on output connection', function() {
-        Blockly.Navigation.cursor_.setLocation(
-            Blockly.ASTNode.createConnectionNode(
-                this.row_block_2.outputConnection));
-        chai.assert.isFalse(Blockly.Navigation.modify());
-      });
-    });
-  });
+  //     });
+  //   });
+  //   suite('Marked stack block', function() {
+  //     setup(function() {
+  //       Blockly.Navigation.marker_.setLocation(
+  //           Blockly.ASTNode.createBlockNode(
+  //               this.stack_block_1));
+  //     });
+  //     test('Cursor on row block', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createBlockNode(
+  //               this.row_block_1));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //     });
+  //     test('Cursor on stack block', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createBlockNode(
+  //               this.stack_block_1));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //     });
+  //     test('Cursor on next connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.stack_block_2.nextConnection));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //     });
+  //     test('Cursor on previous connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.stack_block_2.previousConnection));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //     });
+  //   });
+  //   suite('Marked row block', function() {
+  //     setup(function() {
+  //       Blockly.Navigation.marker_.setLocation(
+  //           Blockly.ASTNode.createBlockNode(
+  //               this.row_block_1));
+  //     });
+  //     test('Cursor on stack block', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createBlockNode(
+  //               this.stack_block_1));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //     });
+  //     test('Cursor on row block', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createBlockNode(
+  //               this.row_block_1));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //     });
+  //     test('Cursor on value input connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.row_block_2.inputList[0].connection));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //     });
+  //     test('Cursor on output connection', function() {
+  //       Blockly.Navigation.cursor_.setLocation(
+  //           Blockly.ASTNode.createConnectionNode(
+  //               this.row_block_2.outputConnection));
+  //       chai.assert.isFalse(Blockly.Navigation.modify());
+  //     });
+  //   });
+  // });
 });

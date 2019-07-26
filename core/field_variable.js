@@ -342,11 +342,12 @@ Blockly.FieldVariable.prototype.setTypes_ = function(opt_variableTypes,
 };
 
 /**
- * A callback to update the name of a variable. Should only be called by
- * the block.
+ * Refreshes the name of the variable by grabbing the name of the model.
+ * Used when a variable gets renamed, but the ID stays the same. Should only
+ * be called by the block.
  * @package
  */
-Blockly.FieldVariable.prototype.updateVariableName = function() {
+Blockly.FieldVariable.prototype.refreshVariableName = function() {
   this.text_ = this.variable_.name;
   this.forceRerender();
 };

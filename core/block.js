@@ -1078,7 +1078,7 @@ Blockly.Block.prototype.updateVarName = function(variable) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
       if (field.referencesVariables() &&
           variable.getId() == field.getValue()) {
-        field.updateVariableName();
+        field.refreshVariableName();
       }
     }
   }

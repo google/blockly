@@ -26,7 +26,7 @@
 'use strict';
 goog.provide('Blockly.blockRendering.Highlighter');
 
-goog.require('Blockly.blockRendering.constants');
+goog.require('Blockly.blockRendering.highlightConstants');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Measurable');
 
@@ -53,27 +53,30 @@ Blockly.blockRendering.Highlighter = function(info, pathObject) {
   this.highlightSteps_ = this.pathObject_.highlightSteps;
   this.highlightInlineSteps_ = this.pathObject_.highlightInlineSteps;
 
-  this.highlightOffset_ = Blockly.blockRendering.constants.HIGHLIGHT_OFFSET;
+  this.highlightOffset_ = Blockly.blockRendering.highlightConstants.OFFSET;
 
-  this.outsideCornerPaths_ = Blockly.blockRendering.constants.OUTSIDE_CORNER_HIGHLIGHTS;
-  this.insideCornerPaths_ = Blockly.blockRendering.constants.INSIDE_CORNER_HIGHLIGHTS;
-  this.puzzleTabPaths_ = Blockly.blockRendering.constants.PUZZLE_TAB_HIGHLIGHT;
+  this.outsideCornerPaths_ = Blockly.blockRendering.highlightConstants.OUTSIDE_CORNER;
+  this.insideCornerPaths_ = Blockly.blockRendering.highlightConstants.INSIDE_CORNER;
+  this.puzzleTabPaths_ = Blockly.blockRendering.highlightConstants.PUZZLE_TAB;
+  this.notchPaths_ = Blockly.blockRendering.highlightConstants.NOTCH;
+  this.startPaths_ = Blockly.blockRendering.highlightConstants.START_HAT;
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
   for (var i = 0, elem; elem = row.elements[i]; i++) {
     if (elem.type === 'square corner') {
-      this.highlightSteps_.push(Blockly.blockRendering.constants.START_POINT_HIGHLIGHT);
+      this.highlightSteps_.push(Blockly.blockRendering.highlightConstants.START_POINT);
     } else if (elem.type === 'round corner') {
       this.highlightSteps_.push(
           this.outsideCornerPaths_.topLeft(this.info_.RTL));
     } else if (elem.type === 'previous connection') {
+      // TODO: move the offsets into the definition of the notch highlight, maybe.
       this.highlightSteps_.push('h',  (this.RTL ? 0.5 : - 0.5));
-      this.highlightSteps_.push(Blockly.blockRendering.constants.NOTCH.pathLeftHighlight);
+      this.highlightSteps_.push(this.notchPaths_.pathLeft);
       this.highlightSteps_.push('h',  (this.RTL ? -0.5 : 0.5));
     } else if (elem.type === 'hat') {
       this.highlightSteps_.push(
-          Blockly.blockRendering.constants.START_HAT.highlight(this.info_.RTL));
+          this.startPaths_.path(this.info_.RTL));
     } else if (elem.isSpacer()) {
       this.highlightSteps_.push('h', elem.width - this.highlightOffset_);
     }
@@ -104,18 +107,19 @@ Blockly.blockRendering.Highlighter.prototype.drawValueInput = function(row) {
 
 Blockly.blockRendering.Highlighter.prototype.drawStatementInput = function(row) {
   var x = row.statementEdge;
+  var distance45outside = Blockly.blockRendering.highlightConstants.DISTANCE_45_OUTSIDE;
   if (this.info_.RTL) {
     this.highlightSteps_.push('M',
-        (x + Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE) +
-        ',' + (row.yPos + Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE));
+        (x + distance45outside) +
+        ',' + (row.yPos + distance45outside));
     this.highlightSteps_.push(this.insideCornerPaths_.pathTop(this.info_.RTL));
     this.highlightSteps_.push('v',
-        row.height - 2 * Blockly.blockRendering.constants.CORNER_RADIUS);
+        row.height - 2 * this.insideCornerPaths_.height);
     this.highlightSteps_.push(this.insideCornerPaths_.pathBottom(this.info_.RTL));
   } else {
     this.highlightSteps_.push('M',
-        (x + Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE) + ',' +
-        (row.yPos + row.height - Blockly.blockRendering.constants.DISTANCE_45_OUTSIDE));
+        (x + distance45outside) + ',' +
+        (row.yPos + row.height - distance45outside));
     this.highlightSteps_.push(this.insideCornerPaths_.pathBottom(this.info_.RTL));
   }
 };
@@ -164,7 +168,7 @@ Blockly.blockRendering.Highlighter.prototype.drawLeft = function() {
     if (this.info_.topRow.elements[0].isSquareCorner()) {
       this.highlightSteps_.push('V', this.highlightOffset_);
     } else {
-      this.highlightSteps_.push('V', Blockly.blockRendering.constants.CORNER_RADIUS);
+      this.highlightSteps_.push('V', this.outsideCornerPaths_.height);
     }
   }
 };

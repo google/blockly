@@ -238,24 +238,6 @@ Blockly.TOOLBOX_AT_LEFT = 2;
 Blockly.TOOLBOX_AT_RIGHT = 3;
 
 /**
- * ENUM for positioning the DropDownDiv directly below the target.
- * @const
- */
-Blockly.DROPDOWNDIV_BELOW = 1;
-
-/**
- * ENUM for positioning the DropDownDiv directly above the target.
- * @const
- */
-Blockly.DROPDOWNDIV_ABOVE = 2;
-
-/**
- * ENUM for positioning the DropDownDiv at the top of the page.
- * @const
- */
-Blockly.DROPDOWNDIV_TOP_OF_PAGE = 3;
-
-/**
  * ENUM representing that an event is not in any delete areas.
  * Null for backwards compatibility reasons.
  * @const

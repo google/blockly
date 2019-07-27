@@ -338,109 +338,32 @@ Blockly.DropDownDiv.getBoundsInfo_ = function() {
 Blockly.DropDownDiv.getPositionMetrics = function(primaryX, primaryY,
     secondaryX, secondaryY) {
   var boundsInfo = Blockly.DropDownDiv.getBoundsInfo_();
-  var div = Blockly.DropDownDiv.DIV_;
-  var divSize = goog.style.getSize(div);
-
-  // First decide if we will render at primary or secondary position
-  // i.e., above or below
-  var renderPosition = Blockly.DropDownDiv.getPreferredPosition(
-      primaryX, primaryY, secondaryX, secondaryY, boundsInfo, divSize);
-
-  switch (renderPosition) {
-    case Blockly.DROPDOWNDIV_BELOW:
-      return Blockly.DropDownDiv.getPositionBelowMetrics(
-          primaryX, primaryY, boundsInfo, divSize);
-    case Blockly.DROPDOWNDIV_ABOVE:
-      return Blockly.DropDownDiv.getPositionAboveMetrics(
-          secondaryX, secondaryY, boundsInfo, divSize);
-    case Blockly.DROPDOWNDIV_TOP_OF_PAGE:
-      return Blockly.DropDownDiv.getPositionTopOfPageMetrics(
-          primaryX, boundsInfo, divSize);
-  }
-
-  /*
-  var renderX, renderY, renderedSecondary, renderedTertiary;
-  if (renderPrimary) {
-    renderX = primaryX;
-    renderY = primaryY + Blockly.DropDownDiv.PADDING_Y;
-    renderedSecondary = false;
-  } else {
-    renderX = secondaryX;
-    renderY = secondaryY - divSize.height - Blockly.DropDownDiv.PADDING_Y;
-    renderedSecondary = true;
-  }
-
-  var centerX = renderX;
-  // The dropdown's X position is at the top-left of the dropdown rect, but the
-  // dropdown should appear centered relative to the desired origin point.
-  renderX -= divSize.width / 2;
-  // Fit horizontally in the bounds.
-  renderX = Blockly.utils.math.clamp(
-      boundsInfo.left, renderX, boundsInfo.right - divSize.width);
-
-  // Calculate the absolute arrow X. The arrow wants to be as close to the
-  // origin point as possible. The arrow may not be centered in the dropdown div.
-  var absoluteArrowX = centerX - Blockly.DropDownDiv.ARROW_SIZE / 2;
-  // Keep in overall bounds
-  absoluteArrowX = Blockly.utils.math.clamp(
-      boundsInfo.left, absoluteArrowX, boundsInfo.right);
-
-  // Convert the arrow position to be relative to the top left corner of the div.
-  var relativeArrowX = absoluteArrowX - renderX;
-
-  // Pad the arrow by some pixels, primarily so that it doesn't render on top
-  // of a rounded border.
-  relativeArrowX = Blockly.utils.math.clamp(
-      Blockly.DropDownDiv.ARROW_HORIZONTAL_PADDING,
-      relativeArrowX,
-      divSize.width - Blockly.DropDownDiv.ARROW_HORIZONTAL_PADDING -
-          Blockly.DropDownDiv.ARROW_SIZE);
-
-  var arrowY = (renderedSecondary) ?
-      divSize.height - Blockly.DropDownDiv.BORDER_SIZE : 0;
-  arrowY -= (Blockly.DropDownDiv.ARROW_SIZE / 2) +
-      Blockly.DropDownDiv.BORDER_SIZE;
-
-  var initialY;
-  if (renderedSecondary) {
-    initialY = secondaryY - divSize.height; // No padding on Y
-  } else {
-    initialY = primaryY; // No padding on Y
-  }
-
-  return {
-    initialX: renderX, // X position remains constant during animation.
-    initialY : initialY,
-    finalX: renderX,
-    finalY: renderY,
-    arrowX: relativeArrowX,
-    arrowY: arrowY,
-    arrowAtTop: !renderedSecondary,
-    arrowVisible: !renderedTertiary
-  };*/
-};
-
-Blockly.DropDownDiv.getPreferredPosition = function(
-    primaryX, primaryY, secondaryX, secondaryY, boundsInfo, divSize) {
+  var divSize = goog.style.getSize(Blockly.DropDownDiv.DIV_);
 
   // Can we fit in-bounds below the target?
   if (primaryY + divSize.height < boundsInfo.bottom) {
-    return Blockly.DROPDOWNDIV_BELOW;
+    return Blockly.DropDownDiv.getPositionBelowMetrics(
+        primaryX, primaryY, boundsInfo, divSize);
   }
   // Can we fit in-bounds above the target?
   if (secondaryY - divSize.height > boundsInfo.top) {
-    return Blockly.DROPDOWNDIV_ABOVE;
+    return Blockly.DropDownDiv.getPositionAboveMetrics(
+        secondaryX, secondaryY, boundsInfo, divSize);
   }
   // Can we fit outside the workspace bounds (but inside the window) below?
   if (primaryY + divSize.height < document.documentElement.clientHeight) {
-    return Blockly.DROPDOWNDIV_BELOW;
+    return Blockly.DropDownDiv.getPositionBelowMetrics(
+        primaryX, primaryY, boundsInfo, divSize);
   }
   // Can we fit outside the workspace bounds (but inside the window) above?
   if (secondaryY - divSize.height > document.documentElement.clientTop) {
-    return Blockly.DROPDOWNDIV_ABOVE;
+    return Blockly.DropDownDiv.getPositionAboveMetrics(
+        secondaryX, secondaryY, boundsInfo, divSize);
   }
 
-  return Blockly.DROPDOWNDIV_TOP_OF_PAGE;
+  // Last resort, render at top of page.
+  return Blockly.DropDownDiv.getPositionTopOfPageMetrics(
+      primaryX, boundsInfo, divSize);
 };
 
 Blockly.DropDownDiv.getPositionBelowMetrics = function(

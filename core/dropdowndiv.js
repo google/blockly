@@ -224,7 +224,6 @@ Blockly.DropDownDiv.showPositionedByBlock = function(field, block,
   return Blockly.DropDownDiv.show(field, primaryX, primaryY, secondaryX, secondaryY, opt_onHide);
 };
 
-
 /**
  * Shortcut to show and place the drop-down with positioning determined
  * by a particular field. The primary position will be below the field,
@@ -256,7 +255,6 @@ Blockly.DropDownDiv.showPositionedByField = function(owner,
   return Blockly.DropDownDiv.show(
       owner, primaryX, primaryY, secondaryX, secondaryY, opt_onHide);
 };
-
 
 /**
  * Show and place the drop-down.
@@ -313,6 +311,8 @@ Blockly.DropDownDiv.show = function(owner, primaryX, primaryY,
  * @private
  */
 Blockly.DropDownDiv.getBoundsInfo_ = function() {
+  // TODO: Account for toolboxes.
+
   var boundPosition = Blockly.DropDownDiv.boundsElement_.getBoundingClientRect();
   var boundSize = goog.style.getSize(Blockly.DropDownDiv.boundsElement_);
 
@@ -329,11 +329,14 @@ Blockly.DropDownDiv.getBoundsInfo_ = function() {
 /**
  * Helper to position the drop-down and the arrow, maintaining bounds.
  * See explanation of origin points in Blockly.DropDownDiv.show.
- * @param {number} primaryX Desired origin point x, in absolute px
- * @param {number} primaryY Desired origin point y, in absolute px
- * @param {number} secondaryX Secondary/alternative origin point x, in absolute px
- * @param {number} secondaryY Secondary/alternative origin point y, in absolute px
- * @return {Object} Various final metrics, including rendered positions for drop-down and arrow.
+ * @param {number} primaryX Desired origin point x, in absolute px.
+ * @param {number} primaryY Desired origin point y, in absolute px.
+ * @param {number} secondaryX Secondary/alternative origin point x,
+ *    in absolute px.
+ * @param {number} secondaryY Secondary/alternative origin point y,
+ *    in absolute px.
+ * @return {Object} Various final metrics, including rendered positions
+ *    for drop-down and arrow.
  */
 Blockly.DropDownDiv.getPositionMetrics = function(primaryX, primaryY,
     secondaryX, secondaryY) {
@@ -366,6 +369,17 @@ Blockly.DropDownDiv.getPositionMetrics = function(primaryX, primaryY,
       primaryX, boundsInfo, divSize);
 };
 
+/**
+ * Get the metrics for positioning the div below the source.
+ * @param {number} primaryX Desired origin point x, in absolute px.
+ * @param {number} primaryY Desired origin point y, in absolute px.
+ * @param {!Object} boundsInfo An object containing size information about the
+ *    bounding element (bounding box and width/height).
+ * @param {!Object} divSize An object containing information about the size
+ *    of the DropDownDiv (width & height).
+ * @return {Object} Various final metrics, including rendered positions
+ *    for drop-down and arrow.
+ */
 Blockly.DropDownDiv.getPositionBelowMetrics = function(
     primaryX, primaryY, boundsInfo, divSize) {
 
@@ -388,6 +402,19 @@ Blockly.DropDownDiv.getPositionBelowMetrics = function(
   };
 };
 
+/**
+ * Get the metrics for positioning the div above the source.
+ * @param {number} secondaryX Secondary/alternative origin point x,
+ *    in absolute px.
+ * @param {number} secondaryY Secondary/alternative origin point y,
+ *    in absolute px.
+ * @param {!Object} boundsInfo An object containing size information about the
+ *    bounding element (bounding box and width/height).
+ * @param {!Object} divSize An object containing information about the size
+ *    of the DropDownDiv (width & height).
+ * @return {Object} Various final metrics, including rendered positions
+ *    for drop-down and arrow.
+ */
 Blockly.DropDownDiv.getPositionAboveMetrics = function(
     secondaryX, secondaryY, boundsInfo, divSize) {
 
@@ -411,6 +438,16 @@ Blockly.DropDownDiv.getPositionAboveMetrics = function(
   };
 };
 
+/**
+ * Get the metrics for positioning the div at the top of the page.
+ * @param {number} sourceX Desired origin point x, in absolute px.
+ * @param {!Object} boundsInfo An object containing size information about the
+ *    bounding element (bounding box and width/height).
+ * @param {!Object} divSize An object containing information about the size
+ *    of the DropDownDiv (width & height).
+ * @return {Object} Various final metrics, including rendered positions
+ *    for drop-down and arrow.
+ */
 Blockly.DropDownDiv.getPositionTopOfPageMetrics = function(
     sourceX, boundsInfo, divSize) {
 
@@ -427,6 +464,18 @@ Blockly.DropDownDiv.getPositionTopOfPageMetrics = function(
   };
 };
 
+/**
+ * Get the x positions for the left side of the DropDownDiv and the arrow,
+ * accounting for the bounds of the workspace.
+ * @param {number} sourceX Desired origin point x, in absolute px.
+ * @param {number} boundsLeft The left edge of the bounding element, in
+ *    absolute px.
+ * @param {number} boundsRight The right edge of the bounding element, in
+ *    absolute px.
+ * @param {number} divWidth The width of the div in px.
+ * @return {{divX: number, arrowX: number}} An object containing metrics for
+ *    the x positions of the left side of the DropDownDiv and the arrow.
+ */
 Blockly.DropDownDiv.getPositionX = function(
     sourceX, boundsLeft, boundsRight, divWidth) {
   var arrowX, divX;
@@ -521,7 +570,6 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
     Blockly.DropDownDiv.onHide_ = null;
   }
 };
-
 
 /**
  * Set the dropdown div's position.

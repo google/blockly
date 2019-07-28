@@ -391,136 +391,6 @@ suite('Procedures', function() {
             variableMap.deleteVariable(variable);
           }
         }
-      }
-      test('Simple Add Arg', function() {
-        this.callForAllTypes(function() {
-          var args = ['arg1'];
-          createMutator.call(this, args);
-          assertArgs.call(this, args);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      test('Multiple Args', function() {
-        this.callForAllTypes(function() {
-          var args = ['arg1', 'arg2', 'arg3'];
-          createMutator.call(this, args);
-          assertArgs.call(this, args);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      test('Simple Change Arg', function() {
-        this.callForAllTypes(function() {
-          createMutator.call(this, ['arg1']);
-          this.argBlock.setFieldValue('arg2', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, ['arg2']);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      test('lower -> CAPS', function() {
-        this.callForAllTypes(function() {
-          createMutator.call(this, ['arg']);
-          this.argBlock.setFieldValue('ARG', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, ['ARG']);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      test('CAPS -> lower', function() {
-        this.callForAllTypes(function() {
-          createMutator.call(this, ['ARG']);
-          this.argBlock.setFieldValue('arg', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, ['arg']);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      // Test case for #1958
-      test('Set Arg Empty', function() {
-        this.callForAllTypes(function() {
-          var args = ['arg1'];
-          createMutator.call(this, args);
-          this.argBlock.setFieldValue('', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, args);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      test('Whitespace', function() {
-        this.callForAllTypes(function() {
-          var args = ['arg1'];
-          createMutator.call(this, args);
-          this.argBlock.setFieldValue(' ', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, args);
-          clearVariables.call(this);
-        }, 'name');
-<<<<<<< HEAD
-      }
-      test('Simple Add Arg', function() {
-        this.callForAllTypes(function() {
-          var args = ['arg1'];
-          createMutator.call(this, args);
-          assertArgs.call(this, args);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      test('Multiple Args', function() {
-        this.callForAllTypes(function() {
-          var args = ['arg1', 'arg2', 'arg3'];
-          createMutator.call(this, args);
-          assertArgs.call(this, args);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      test('Simple Change Arg', function() {
-        this.callForAllTypes(function() {
-          createMutator.call(this, ['arg1']);
-          this.argBlock.setFieldValue('arg2', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, ['arg2']);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      test('lower -> CAPS', function() {
-        this.callForAllTypes(function() {
-          createMutator.call(this, ['arg']);
-          this.argBlock.setFieldValue('ARG', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, ['ARG']);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      test('CAPS -> lower', function() {
-        this.callForAllTypes(function() {
-          createMutator.call(this, ['ARG']);
-          this.argBlock.setFieldValue('arg', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, ['arg']);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      // Test case for #1958
-      test('Set Arg Empty', function() {
-        this.callForAllTypes(function() {
-          var args = ['arg1'];
-          createMutator.call(this, args);
-          this.argBlock.setFieldValue('', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, args);
-          clearVariables.call(this);
-        }, 'name');
-      });
-      test('Whitespace', function() {
-        this.callForAllTypes(function() {
-          var args = ['arg1'];
-          createMutator.call(this, args);
-          this.argBlock.setFieldValue(' ', 'NAME');
-          this.defBlock.compose(this.containerBlock);
-          assertArgs.call(this, args);
-          clearVariables.call(this);
-        }, 'name');
-=======
         test('Simple Add Arg', function() {
           this.callForAllTypes(function() {
             var args = ['arg1'];
@@ -564,7 +434,7 @@ suite('Procedures', function() {
             clearVariables.call(this);
           }, 'name');
         });
-        test.skip('lower -> CAPS', function() {
+        test('lower -> CAPS', function() {
           this.callForAllTypes(function() {
             createMutator.call(this, ['arg']);
             this.argBlock.setFieldValue('ARG', 'NAME');
@@ -573,7 +443,7 @@ suite('Procedures', function() {
             clearVariables.call(this);
           }, 'name');
         });
-        test.skip('CAPS -> lower', function() {
+        test('CAPS -> lower', function() {
           this.callForAllTypes(function() {
             createMutator.call(this, ['ARG']);
             this.argBlock.setFieldValue('arg', 'NAME');
@@ -655,7 +525,6 @@ suite('Procedures', function() {
               .getField('STATEMENTS').getValueBoolean();
           chai.assert.isFalse(statementValue);
         });
->>>>>>> Added more procedure unit tests.
       });
       suite('Untyped Arguments', function() {
         function assertArguments(argumentsArray) {

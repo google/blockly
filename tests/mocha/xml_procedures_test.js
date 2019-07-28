@@ -61,14 +61,9 @@ suite('Procedures XML', function() {
           );
           var block = Blockly.Xml.domToBlock(xml, this.workspace);
 
-          // TODO: Switch these.
-          /*chai.assert.equal(
-              block.getFieldValue('NAME'),
-              Blockly.Ms['UNNAMED_KEY']);*/
-          chai.assert.equal(
-              block.getFieldValue('NAME'),
-              '');
-
+          // TODO: Is this how you want this to work? or do you want it to
+          //    be 'unnamed'?
+          chai.assert.equal(block.getFieldValue('NAME'), '');
           chai.assert.isArray(block.arguments_);
           chai.assert.isEmpty(block.arguments_);
           chai.assert.isArray(block.argumentVarModels_);

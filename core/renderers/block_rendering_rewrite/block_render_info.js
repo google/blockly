@@ -419,7 +419,7 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
       // Next connections are shifted slightly to the left (in both LTR and RTL)
       // to make the dark path under the previous connection show through.
       return Blockly.blockRendering.constants.NOTCH_OFFSET_ROUNDED_CORNER_PREV;//+
-          //(this.RTL ? 0.5 : - 0.5);
+      //(this.RTL ? 0.5 : - 0.5);
     }
   }
 

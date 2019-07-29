@@ -245,7 +245,6 @@ Blockly.blockRendering.constants.INSIDE_CORNERS = (function() {
       Blockly.utils.svgPaths.point(radius, radius));
 
   return {
-    //width: width,
     height: radius,
     pathTop: innerTopLeftCorner,
     pathBottom: innerBottomLeftCorner
@@ -267,8 +266,6 @@ Blockly.blockRendering.constants.OUTSIDE_CORNERS = (function() {
       Blockly.utils.svgPaths.point(-radius, -radius));
 
   return {
-    // width: width,
-    // height: height,
     topLeft: topLeft,
     bottomLeft: bottomLeft
   };

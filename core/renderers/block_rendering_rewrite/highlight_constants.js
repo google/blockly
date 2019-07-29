@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Methods for graphically rendering a block as SVG.
+ * @fileoverview Objects for rendering highlights on blocks.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 

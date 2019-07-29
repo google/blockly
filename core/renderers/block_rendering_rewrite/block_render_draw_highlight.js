@@ -82,8 +82,7 @@ Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
       this.steps_.push(this.notchPaths_.pathLeft);
       this.steps_.push('h',  (this.RTL_ ? -0.5 : 0.5));
     } else if (elem.type === 'hat') {
-      this.steps_.push(
-          this.startPaths_.path(this.RTL_));
+      this.steps_.push(this.startPaths_.path(this.RTL_));
     } else if (elem.isSpacer()) {
       this.steps_.push('h', elem.width - this.highlightOffset_);
     }
@@ -126,7 +125,6 @@ Blockly.blockRendering.Highlighter.prototype.drawStatementInput = function(row) 
     var steps =
         Blockly.utils.svgPaths.moveTo(row.statementEdge, row.yPos + row.height) +
         this.insideCornerPaths_.pathBottom(this.RTL_);
-
     this.steps_.push(steps);
   }
 };

@@ -757,7 +757,7 @@ function test_events_newblock_newvar_xml() {
         var dom = Blockly.Xml.textToDom(
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '  <block type="field_variable_test_block" id="block1">' +
-        '    <field name="VAR" id="id1" variabletype="">name1</field>' +
+        '    <field name="VAR" id="id1">name1</field>' +
         '  </block>' +
         '</xml>');
     Blockly.Xml.domToWorkspace(dom, workspace);

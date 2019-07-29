@@ -52,7 +52,7 @@
 
   <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
 
-  <xml id="toolbox" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <category name="Logic" colour="%{BKY_LOGIC_HUE}">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
@@ -84,10 +84,10 @@
     </category>
   </xml>
 
-  <xml id="startBlocks" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
     <variables>
-      <variable type="" id="~GNXm@Z(wclI]t3zTf.g">list</variable>
-      <variable type="" id="8]s[S+Gy+%k7HoFup])m">item</variable>
+      <variable id="~GNXm@Z(wclI]t3zTf.g">list</variable>
+      <variable id="8]s[S+Gy+%k7HoFup])m">item</variable>
     </variables>
     <block type="controls_if" id="^^hRiX{cCPHWJr}?8M^5" x="37" y="162">
       <value name="IF0">
@@ -130,12 +130,12 @@
           <field name="WHERE">FROM_START</field>
           <value name="LIST">
             <block type="variables_get" id="#(o=|qGel$T_MJkZU,%1">
-              <field name="VAR" id="~GNXm@Z(wclI]t3zTf.g" variabletype="">list</field>
+              <field name="VAR" id="~GNXm@Z(wclI]t3zTf.g">list</field>
             </block>
           </value>
           <next>
             <block type="text_append" id="gB,Xu47i^C//_e-J7NiY">
-              <field name="VAR" id="8]s[S+Gy+%k7HoFup])m" variabletype="">item</field>
+              <field name="VAR" id="8]s[S+Gy+%k7HoFup])m">item</field>
               <value name="TEXT">
                 <shadow type="text" id="|PcJ2q-,B,gRn7Bz%gm|">
                   <field name="TEXT"></field>

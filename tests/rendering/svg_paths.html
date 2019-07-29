@@ -48,11 +48,11 @@ limitations under the License.
 var svgSpace;
 
 function addPathAt(path, x, y) {
-  var group = Blockly.utils.createSvgElement('g',
+  var group = Blockly.utils.dom.createSvgElement('g',
       {
         'transform': 'translate(' + (x + 50) + ', ' + y + ')'
       }, svgSpace);
-  Blockly.utils.createSvgElement('path', {
+  Blockly.utils.dom.createSvgElement('path', {
     'd': 'M 0,0 ' + path,
     'marker-start': 'url(#startDot)',
     'marker-end': 'url(#endDot)',

@@ -1,6 +1,6 @@
 suite('Insert/Modify', function() {
   setup(function() {
-    var xmlText = '<xml xmlns="http://www.w3.org/1999/xhtml">' +
+    var xmlText = '<xml xmlns="https://developers.google.com/blockly/xml">' +
       '<block type="stack_block" id="stack_block_1" x="12" y="38"></block>' +
       '<block type="stack_block" id="stack_block_2" x="12" y="113"></block>' +
       '<block type="row_block" id="row_block_1" x="13" y="213"></block>' +

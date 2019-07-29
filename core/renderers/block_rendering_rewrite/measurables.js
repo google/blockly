@@ -222,6 +222,10 @@ Blockly.blockRendering.InlineInput = function(input) {
         Blockly.blockRendering.constants.DARK_PATH_OFFSET;
     this.height = this.connectedBlockHeight + Blockly.blockRendering.constants.DARK_PATH_OFFSET;
   }
+
+  this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
+  this.connectionHeight = Blockly.blockRendering.constants.PUZZLE_TAB.height;
+  this.connectionWidth = Blockly.blockRendering.constants.PUZZLE_TAB.width;
 };
 goog.inherits(Blockly.blockRendering.InlineInput, Blockly.blockRendering.Input);
 
@@ -245,7 +249,7 @@ Blockly.blockRendering.StatementInput = function(input) {
     this.height =
         this.connectedBlockHeight + Blockly.blockRendering.constants.STATEMENT_BOTTOM_SPACER;
     if (this.connectedBlock.nextConnection) {
-      this.height -= Blockly.blockRendering.constants.NOTCH_HEIGHT;
+      this.height -= Blockly.blockRendering.constants.NOTCH.height;
     }
   }
 };
@@ -271,9 +275,28 @@ Blockly.blockRendering.ExternalValueInput = function(input) {
         this.connectedBlockHeight - 2 * Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
   }
   this.width = Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_WIDTH;
+
+  this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
+  this.connectionHeight = Blockly.blockRendering.constants.PUZZLE_TAB.height;
+  this.connectionWidth = Blockly.blockRendering.constants.PUZZLE_TAB.width;
 };
 goog.inherits(Blockly.blockRendering.ExternalValueInput,
     Blockly.blockRendering.Input);
+
+/**
+ * An object containing information about the space an output connection takes
+ * up during rendering.
+ * @package
+ * @constructor
+ */
+Blockly.blockRendering.OutputConnection = function() {
+  Blockly.blockRendering.OutputConnection.superClass_.constructor.call(this);
+  this.type = 'output connection';
+  this.height = Blockly.blockRendering.constants.PUZZLE_TAB.height;
+  this.width = Blockly.blockRendering.constants.PUZZLE_TAB.width;
+  this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
+};
+goog.inherits(Blockly.blockRendering.OutputConnection, Blockly.blockRendering.Measurable);
 
 /**
  * An object containing information about the space a previous connection takes
@@ -284,8 +307,8 @@ goog.inherits(Blockly.blockRendering.ExternalValueInput,
 Blockly.blockRendering.PreviousConnection = function() {
   Blockly.blockRendering.PreviousConnection.superClass_.constructor.call(this);
   this.type = 'previous connection';
-  this.height = Blockly.blockRendering.constants.NOTCH_HEIGHT;
-  this.width = Blockly.blockRendering.constants.NOTCH_WIDTH;
+  this.height = Blockly.blockRendering.constants.NOTCH.height;
+  this.width = Blockly.blockRendering.constants.NOTCH.width;
 
 };
 goog.inherits(Blockly.blockRendering.PreviousConnection, Blockly.blockRendering.Measurable);
@@ -299,8 +322,8 @@ goog.inherits(Blockly.blockRendering.PreviousConnection, Blockly.blockRendering.
 Blockly.blockRendering.NextConnection = function() {
   Blockly.blockRendering.NextConnection.superClass_.constructor.call(this);
   this.type = 'next connection';
-  this.height = Blockly.blockRendering.constants.NOTCH_HEIGHT;
-  this.width = Blockly.blockRendering.constants.NOTCH_WIDTH;
+  this.height = Blockly.blockRendering.constants.NOTCH.height;
+  this.width = Blockly.blockRendering.constants.NOTCH.width;
 };
 goog.inherits(Blockly.blockRendering.NextConnection, Blockly.blockRendering.Measurable);
 
@@ -328,7 +351,7 @@ goog.inherits(Blockly.blockRendering.Hat, Blockly.blockRendering.Measurable);
 Blockly.blockRendering.SquareCorner = function() {
   Blockly.blockRendering.SquareCorner.superClass_.constructor.call(this);
   this.type = 'square corner';
-  this.height = Blockly.blockRendering.constants.NOTCH_HEIGHT;
+  this.height = Blockly.blockRendering.constants.NOTCH.height;
   this.width = Blockly.blockRendering.constants.NO_PADDING;
 
 };
@@ -346,7 +369,7 @@ Blockly.blockRendering.RoundCorner = function() {
   this.width = Blockly.blockRendering.constants.CORNER_RADIUS;
   // The rounded corner extends into the next row by 4 so we only take the
   // height that is aligned with this row.
-  this.height = Blockly.blockRendering.constants.NOTCH_HEIGHT;
+  this.height = Blockly.blockRendering.constants.NOTCH.height;
 
 };
 goog.inherits(Blockly.blockRendering.RoundCorner, Blockly.blockRendering.Measurable);
@@ -453,6 +476,14 @@ Blockly.blockRendering.TopRow = function(block) {
 };
 goog.inherits(Blockly.blockRendering.TopRow, Blockly.blockRendering.Row);
 
+
+Blockly.blockRendering.TopRow.prototype.getPreviousConnection = function() {
+  if (this.hasPreviousConnection) {
+    return this.elements[2];
+  }
+  return null;
+};
+
 Blockly.blockRendering.BottomRow = function(block) {
   Blockly.blockRendering.BottomRow.superClass_.constructor.call(this);
   this.type = 'bottom row';
@@ -464,14 +495,20 @@ Blockly.blockRendering.BottomRow = function(block) {
       block.inputList[block.inputList.length - 1].type == Blockly.NEXT_STATEMENT;
   this.hasFixedWidth = followsStatement && block.getInputsInline();
 
-  // This is the minimum height for the row. If one of it's elements has a greater
+  // This is the minimum height for the row. If one of its elements has a greater
   // height it will be overwritten in the compute pass.
   if (followsStatement) {
     this.height = Blockly.blockRendering.constants.LARGE_PADDING;
   } else {
-    this.height = Blockly.blockRendering.constants.NOTCH_HEIGHT;
+    this.height = Blockly.blockRendering.constants.NOTCH.height;
   }
-
 };
 goog.inherits(Blockly.blockRendering.BottomRow,
     Blockly.blockRendering.Row);
+
+Blockly.blockRendering.BottomRow.prototype.getNextConnection = function() {
+  if (this.hasNextConnection) {
+    return this.elements[2];
+  }
+  return null;
+};

@@ -205,7 +205,7 @@ Blockly.FieldImage.prototype.showEditor_ = function() {
 
 /**
  * Set the function that is called when this image  is clicked.
- * @param {function} func The function that is called when the image
+ * @param {Function} func The function that is called when the image
  *    is clicked. It will receive the image field as a parameter.
  * @public
  */

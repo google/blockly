@@ -202,7 +202,7 @@ Blockly.blockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
 Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
   var bottomRow = this.info_.bottomRow;
   var elems = bottomRow.elements;
-  this.highlighter_.drawBottomCorner(bottomRow);
+  this.highlighter_.drawBottomRow(bottomRow);
   this.positionNextConnection_();
   this.steps_.push('v', bottomRow.height);
   for (var i = elems.length - 1; i >= 0; i--) {

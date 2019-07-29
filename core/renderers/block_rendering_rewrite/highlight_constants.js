@@ -29,7 +29,17 @@ goog.provide('Blockly.blockRendering.highlightConstants');
 goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.utils.svgPaths');
 
+/**
+ * Some highlights are simple offsets of the parent paths and can be generated
+ * programmatically.  Others, especially on curves, are just made out of piles
+ * of constants and are hard to tweak.
+ */
 
+/**
+ * The offset between the block's main path and highlight path.
+ * @type {number}
+ * @package
+ */
 Blockly.blockRendering.highlightConstants.OFFSET = 0.5;
 
 Blockly.blockRendering.highlightConstants.START_POINT =
@@ -38,17 +48,9 @@ Blockly.blockRendering.highlightConstants.START_POINT =
         Blockly.blockRendering.highlightConstants.OFFSET);
 
 /**
- * Distance from shape edge to intersect with a curved corner at 45 degrees.
- * Applies to highlighting on around the outside of a curve.
- * @const
- */
-Blockly.blockRendering.highlightConstants.DISTANCE_45_OUTSIDE = (1 - Math.SQRT1_2) *
-    (Blockly.blockRendering.constants.CORNER_RADIUS +
-        Blockly.blockRendering.highlightConstants.OFFSET) -
-    Blockly.blockRendering.highlightConstants.OFFSET;
-
-/**
  * Highlight paths for drawing the inside corners of a statement input.
+ * RTL and LTR refer to the rendering of the block as a whole.  However, the top
+ * of the statement input is drawn from right to left in LTR mode.
  */
 Blockly.blockRendering.highlightConstants.INSIDE_CORNER = (function() {
   var radius = Blockly.blockRendering.constants.CORNER_RADIUS;
@@ -61,21 +63,25 @@ Blockly.blockRendering.highlightConstants.INSIDE_CORNER = (function() {
    */
   var distance45outside = (1 - Math.SQRT1_2) * (radius + offset) - offset;
 
-  var pathTopRtl = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
-      Blockly.utils.svgPaths.point(
-          -distance45outside - offset,
-          radius - distance45outside));
+  var pathTopRtl =
+      Blockly.utils.svgPaths.moveBy(distance45outside, distance45outside) +
+      Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
+          Blockly.utils.svgPaths.point(
+              -distance45outside - offset,
+              radius - distance45outside));
 
-  var pathBottomRtl = Blockly.utils.svgPaths.arc('a', '0 0,0', radius + offset,
-      Blockly.utils.svgPaths.point(radius + offset, radius + offset));
+  var pathBottomRtl =
+      Blockly.utils.svgPaths.arc('a', '0 0,0', radius + offset,
+          Blockly.utils.svgPaths.point(radius + offset, radius + offset));
 
-  var pathBottomLtr = Blockly.utils.svgPaths.arc('a', '0 0,0', radius + offset,
-      Blockly.utils.svgPaths.point(
-          radius - distance45outside,
-          distance45outside + offset));
+  var pathBottomLtr =
+      Blockly.utils.svgPaths.moveBy(distance45outside, - distance45outside) +
+      Blockly.utils.svgPaths.arc('a', '0 0,0', radius + offset,
+          Blockly.utils.svgPaths.point(
+              radius - distance45outside,
+              distance45outside + offset));
 
   return {
-    // width: width,
     height: radius,
     pathTop: function(rtl) {
       return rtl ? pathTopRtl : '';

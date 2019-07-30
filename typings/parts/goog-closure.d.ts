@@ -8,14 +8,6 @@ declare namespace goog {
     dispose(): void;
   }
 
-  namespace string {
-    let caseInsensitiveCompare: (a: string, b: string) => number;
-  }
-
-  namespace array {
-    function remove(ar: string[], v: string): void;
-  }
-
   namespace dom {
     function createDom(tagName: string, opt_attributes?: Object, ...var_args: Object[]): Element;
     function createDom(name: string, ns?: string, children?: any): HTMLElement;
@@ -29,44 +21,6 @@ declare namespace goog {
 
     class DomHelper {
     }
-  }
-
-  namespace math {
-    class Box {
-      top: number;
-      right: number;
-      bottom: number;
-      left: number;
-      constructor(top: number, right: number, bottom: number, left: number);
-    }
-    class Rect {
-    }
-    class Coordinate {
-      x: number;
-      y: number;
-      constructor(x: number, y: number);
-      clone(): Coordinate;
-
-      static difference(a: Coordinate, b: Coordinate): Coordinate;
-      static sum(a: Coordinate, b: Coordinate): Coordinate;
-      static magnitude(a: Coordinate): number;
-    }
-    class Size {
-      width: number;
-      height: number;
-      constructor(width: number, height: number);
-    }
-    function clamp(n: number, min: number, max: number): number;
-    function toRadians(n: number): number;
-    function toDegrees(n: number): number;
-  }
-
-  namespace color {
-    function lighten(rgb: number[], factor: number): number[];
-    function darken(rgb: number[], factor: number): number[];
-    function rgbArrayToHex(rgb: number[]): string;
-    function hexToRgb(hex: string): number[];
-    function hsvToHex(hue: number, sat: number, val: number): string;
   }
 
   namespace ui {
@@ -136,20 +90,6 @@ declare namespace goog {
     }
     class TreeNode__Class {
     }
-  }
-
-  namespace style {
-    let backgroundColor: number;
-    function getBorderBox(element: Element): math.Box;
-    function getMarginBox(element: Element): math.Box;
-    function getPaddingBox(element: Element): math.Box;
-    function getSize(element: Element): math.Size;
-    function getViewportPageOffset(doc: Document): math.Coordinate;
-    function scrollIntoContainerView(element: Element, opt_container?: Element, opt_center?: boolean): void;
-    function setHeight(element: Element, height: number | string): void;
-    function setWidth(element: Element, width: number | string): void;
-    function getPageOffset(element: Element): math.Coordinate;
-    function setStyle(element: Element, style: string, value: string): void;
   }
 
   namespace events {

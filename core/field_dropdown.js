@@ -576,47 +576,46 @@ Blockly.FieldDropdown.changeRecentModuleColors = function(activeIDsDict, recentI
    //TODO: As new module types show up, add them in this list
   var listOfModuleTypes = ["Hub", "Dongle", "Joint", "Spin", "Face"];
 
-   for (key in listOfModuleTypes) {
+  for (key in listOfModuleTypes) {
     var moduleType = listOfModuleTypes[key];
 
-     //Go through all the active modules of type "moduleType" and add them to the "global" list above
-    if (moduleType in activeIDsDict) {
+    //Go through all the active modules of type "moduleType" and add them to the "global" list above
+    if (activeIDsDict && moduleType in activeIDsDict) {
       for (var activeModule in activeIDsDict[moduleType]) {
         listOfActiveModules.push(activeIDsDict[moduleType][activeModule][0]);
       }
     }
-     //Do the same for the recent modules
-    if (moduleType in recentIDsDict) {
+    //Do the same for the recent modules
+    if (recentIDsDict && moduleType in recentIDsDict) {
       for (var recentModule in recentIDsDict[moduleType]) {
         listOfRecentModules.push(recentIDsDict[moduleType][recentModule][0]);
       }
     }
   }
-
-   //Go through all options in the dropdown
-   for (var i = 0; i < mainChild.children.length; i++) {
+  //Go through all options in the dropdown
+  for (var i = 0; i < mainChild.children.length; i++) {
     var child = mainChild.children[i];
     var innerText = child.innerText;
     if (innerText != undefined) {
-      // remove that fun fun empty space
-      innerText = innerText.substring(0, innerText.length - 1);
+      // remove space at the end of module name
+      innerText = innerText.trim();
         if (innerText != 'Hub') {
           //uppercase for the Face module but not the Hub / Dongle
           innerText = innerText.toUpperCase();
         } 
 
-         //Search in the active and recent lists. If the option is inside the recent list, but not in the active list, grey it out.
+        //Search in the active and recent lists. If the option is inside the recent list, but not in the active list, grey it out.
         //Otherwise, un-grey it out.
         if (!(listOfActiveModules.includes(innerText)) &&
             (listOfRecentModules.includes(innerText))) {
-                        child.children[0].className = "goog-menuitem-content recent-module";
+              child.children[0].className = "goog-menuitem-content recent-module";
         }
         else if (child.children[0].className === "goog-menuitem-content recent-module") {
-            child.children[0].className = "goog-menuitem-content";
+          child.children[0].className = "goog-menuitem-content";
         }
+      }
     }
-  }
-};
+  };
 
 /**
  * Close the dropdown menu if this input is being deleted.

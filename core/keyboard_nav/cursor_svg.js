@@ -35,9 +35,8 @@ goog.require('Blockly.Cursor');
  * @constructor
  */
 Blockly.CursorSvg = function(workspace, opt_isImmovable) {
-  Blockly.CursorSvg.superClass_.constructor.call(this);
+  Blockly.CursorSvg.superClass_.constructor.call(this, opt_isImmovable);
   this.workspace_ = workspace;
-  this.isMarker_ = opt_isImmovable || false;
 };
 goog.inherits(Blockly.CursorSvg, Blockly.Cursor);
 

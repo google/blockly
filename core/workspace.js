@@ -122,6 +122,12 @@ Blockly.Workspace = function(opt_options) {
    */
   this.cursor = this.createCursor();
 
+  /**
+   * The marker that shows where a user has marked while navigating blocks.
+   * @type {!Blockly.Cursor}
+   */
+  this.marker = this.createMarker();
+
   // Set the default theme. This is for headless workspaces. This will get
   // overwritten by the theme passed into the inject call for rendered workspaces.
   if (!Blockly.getTheme()) {
@@ -162,6 +168,15 @@ Blockly.Workspace.prototype.connectionDBList = null;
 Blockly.Workspace.prototype.createCursor = function() {
   return new Blockly.Cursor();
 };
+
+/**
+ * Adds marker for keyboard navigation.
+ * @return {!Blockly.Cursor} Cursor for keyboard navigation.
+ */
+Blockly.Workspace.prototype.createMarker = function() {
+  return new Blockly.Cursor(true);
+};
+
 
 /**
  * Dispose of this workspace.

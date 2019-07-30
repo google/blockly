@@ -123,12 +123,6 @@ Blockly.WorkspaceSvg = function(options,
     this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
   }
-
-  /**
-   * The marker that shows where a user has marked while navigating blocks.
-   * @type {!Blockly.CursorSvg}
-   */
-  this.marker = this.createMarker();
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 

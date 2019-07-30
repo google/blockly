@@ -311,7 +311,7 @@ Blockly.DropDownDiv.show = function(owner, primaryX, primaryY,
  * @private
  */
 Blockly.DropDownDiv.getBoundsInfo_ = function() {
-  // TODO: Account for toolboxes.
+  // TODO (#2744): Account for toolboxes.
 
   var boundPosition = Blockly.DropDownDiv.boundsElement_.getBoundingClientRect();
   var boundSize = goog.style.getSize(Blockly.DropDownDiv.boundsElement_);

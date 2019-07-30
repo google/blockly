@@ -30,8 +30,8 @@ goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
-goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.colour');
+goog.require('Blockly.utils.Size');
 
 
 /**
@@ -153,7 +153,7 @@ Blockly.FieldColour.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
  * @package
  */
 Blockly.FieldColour.prototype.initView = function() {
-  this.size_ = new Blockly.utils.math.Size(Blockly.FieldColour.DEFAULT_WIDTH,
+  this.size_ = new Blockly.utils.Size(Blockly.FieldColour.DEFAULT_WIDTH,
       Blockly.FieldColour.DEFAULT_HEIGHT);
   this.createBorderRect_();
   this.borderRect_.style['fillOpacity'] = 1;
@@ -350,7 +350,7 @@ Blockly.FieldColour.prototype.dropdownDispose_ = function() {
  * Get the size of the visible field, as used in new rendering.
  * The colour field fills the bounding box with colour and takes up the full
  * space of the bounding box.
- * @return {!Blockly.utils.math.Size} The size of the visible field.
+ * @return {!Blockly.utils.Size} The size of the visible field.
  * @package
  */
 Blockly.FieldColour.prototype.getCorrectedSize = function() {
@@ -358,7 +358,7 @@ Blockly.FieldColour.prototype.getCorrectedSize = function() {
   // the logic to figure out whether to rerender, just call getSize.
   this.getSize();
   // TODO (#2562): Remove getCorrectedSize.
-  return new Blockly.utils.math.Size(
+  return new Blockly.utils.Size(
       this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
       Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT - 1);
 };

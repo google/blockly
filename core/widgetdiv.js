@@ -146,7 +146,7 @@ Blockly.WidgetDiv.positionInternal_ = function(x, y, height) {
  *     in window coordinates.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
- * @param {!Blockly.utils.math.Size} widgetSize The size of the widget that is inside the
+ * @param {!Blockly.utils.Size} widgetSize The size of the widget that is inside the
  *     widget div, in window coordinates.
  * @param {boolean} rtl Whether the workspace is in RTL mode.  This determines
  *     horizontal alignment.
@@ -172,7 +172,7 @@ Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
  *     in window coordinates.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
- * @param {Blockly.utils.math.Size} widgetSize The dimensions of the widget inside the
+ * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
  *     widget div.
  * @param {boolean} rtl Whether the Blockly workspace is in RTL mode.
  * @return {number} A valid x-coordinate for the top left corner of the widget
@@ -204,7 +204,7 @@ Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
  *     in window coordinates.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
- * @param {Blockly.utils.math.Size} widgetSize The dimensions of the widget inside the
+ * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
  *     widget div.
  * @return {number} A valid y-coordinate for the top left corner of the widget
  *     div, in window coordinates.

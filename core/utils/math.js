@@ -69,25 +69,4 @@ Blockly.utils.math.clamp = function(lowerBound, number, upperBound) {
   return Math.max(lowerBound, Math.min(number, upperBound));
 };
 
-/**
- * Class for representing sizes consisting of a width and height.
- * Copied from Closure's goog.math.Size.
- * @param {number} width Width.
- * @param {number} height Height.
- * @struct
- * @constructor
- */
-Blockly.utils.math.Size = function(width, height) {
-  /**
-   * Width
-   * @type {number}
-   */
-  this.width = width;
-
-  /**
-   * Height
-   * @type {number}
-   */
-  this.height = height;
-};
 

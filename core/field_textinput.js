@@ -33,6 +33,7 @@ goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.userAgent');
 
 
@@ -429,7 +430,7 @@ Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
 
 /**
  * Get the size of the visible field, as used in new rendering.
- * @return {!Blockly.utils.math.Size} The size of the visible field.
+ * @return {!Blockly.utils.Size} The size of the visible field.
  * @package
  */
 Blockly.FieldTextInput.prototype.getCorrectedSize = function() {
@@ -437,7 +438,7 @@ Blockly.FieldTextInput.prototype.getCorrectedSize = function() {
   // the logic to figure out whether to rerender, just call getSize.
   this.getSize();
   // TODO (#2562): Remove getCorrectedSize.
-  return new Blockly.utils.math.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
+  return new Blockly.utils.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
       Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
 };
 

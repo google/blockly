@@ -31,8 +31,7 @@ goog.require('Blockly.Field');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
-
-goog.require('Blockly.utils.math');
+goog.require('Blockly.utils.Size');
 
 
 /**
@@ -44,7 +43,7 @@ goog.require('Blockly.utils.math');
  * @constructor
  */
 Blockly.FieldLabel = function(opt_value, opt_class) {
-  this.size_ = new Blockly.utils.math.Size(0, 17.5);
+  this.size_ = new Blockly.utils.Size(0, 17.5);
   this.class_ = opt_class;
   opt_value = this.doClassValidation_(opt_value);
   if (opt_value === null) {
@@ -102,7 +101,7 @@ Blockly.FieldLabel.prototype.doClassValidation_ = function(newValue) {
 
 /**
  * Get the size of the visible field, as used in new rendering.
- * @return {!Blockly.utils.math.Size} The size of the visible field.
+ * @return {!Blockly.utils.Size} The size of the visible field.
  * @package
  */
 Blockly.FieldLabel.prototype.getCorrectedSize = function() {
@@ -112,7 +111,7 @@ Blockly.FieldLabel.prototype.getCorrectedSize = function() {
   // This extra 5 was probably to add padding between rows.
   // It's also found in the constructor and in initView.
   // TODO (#2562): Remove getCorrectedSize.
-  return new Blockly.utils.math.Size(this.size_.width, this.size_.height - 5);
+  return new Blockly.utils.Size(this.size_.width, this.size_.height - 5);
 };
 
 Blockly.Field.register('field_label', Blockly.FieldLabel);

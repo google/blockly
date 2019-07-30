@@ -32,7 +32,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.math');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.userAgent');
 
 goog.require('goog.style');
@@ -47,7 +47,7 @@ goog.require('goog.style');
  * @constructor
  */
 Blockly.Field = function(value, opt_validator) {
-  this.size_ = new Blockly.utils.math.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
+  this.size_ = new Blockly.utils.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
   this.setValue(value);
   this.setValidator(opt_validator);
 };
@@ -637,11 +637,11 @@ Blockly.Field.stopCache = function() {
  * Returns the height and width of the field.
  *
  * This should *in general* be the only place render_ gets called from.
- * @return {!Blockly.utils.math.Size} Height and width.
+ * @return {!Blockly.utils.Size} Height and width.
  */
 Blockly.Field.prototype.getSize = function() {
   if (!this.isVisible()) {
-    return new Blockly.utils.math.Size(0, 0);
+    return new Blockly.utils.Size(0, 0);
   }
 
   if (this.isDirty_) {
@@ -659,7 +659,7 @@ Blockly.Field.prototype.getSize = function() {
 
 /**
  * Get the size of the visible field, as used in new rendering.
- * @return {!Blockly.utils.math.Size} The size of the visible field.
+ * @return {!Blockly.utils.Size} The size of the visible field.
  * @package
  */
 Blockly.Field.prototype.getCorrectedSize = function() {

@@ -31,6 +31,7 @@ goog.provide('CustomFields.FieldTurtle');
 goog.require('Blockly.Field');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Size');
 
 
 // Generally field's values should be optional, and have logical defaults.
@@ -62,7 +63,7 @@ CustomFields.FieldTurtle = function(
   // that helps keep the code organized and DRY.
   CustomFields.FieldTurtle.superClass_.constructor.call(
       this, value, opt_validator);
-  this.size_ = new Blockly.utils.math.Size(72, 40);
+  this.size_ = new Blockly.utils.Size(72, 40);
 };
 goog.inherits(CustomFields.FieldTurtle, Blockly.Field);
 

@@ -25,7 +25,10 @@
 'use strict';
 
 goog.provide('Blockly.CursorSvg');
+
 goog.require('Blockly.Cursor');
+
+
 /**
  * Class for a cursor.
  * @param {!Blockly.Workspace} workspace The workspace to sit in.
@@ -90,14 +93,14 @@ Blockly.CursorSvg.CURSOR_COLOR = '#cc0a0a';
 Blockly.CursorSvg.MARKER_COLOR = '#4286f4';
 
 /**
- * Parent svg element.
- * This is generally a block's svg root, unless the cursor is on the workspace.
+ * Parent SVG element.
+ * This is generally a block's SVG root, unless the cursor is on the workspace.
  * @type {Element}
  */
 Blockly.CursorSvg.prototype.parent_ = null;
 
 /**
- * The current svg element for the cursor.
+ * The current SVG element for the cursor.
  * @type {Element}
  */
 Blockly.CursorSvg.prototype.currentCursorSvg = null;
@@ -111,7 +114,7 @@ Blockly.CursorSvg.prototype.getSvgRoot = function() {
 };
 
 /**
- * Create the dom element for the cursor.
+ * Create the DOM element for the cursor.
  * @return {!Element} The cursor controls SVG group.
  */
 Blockly.CursorSvg.prototype.createDom = function() {
@@ -126,7 +129,7 @@ Blockly.CursorSvg.prototype.createDom = function() {
 
 /**
  * Set parent of the cursor. This is so that the cursor will be on the correct
- * svg group.
+ * SVG group.
  * @param {Element} newParent New parent of the cursor.
  * @private
  */
@@ -347,8 +350,8 @@ Blockly.CursorSvg.prototype.update_ = function() {
     this.showWithBlock_();
     //This needs to be the location type because next connections can be input
     //type but they need to draw like they are a next statement
-  } else if (curNode.getLocation().type === Blockly.INPUT_VALUE
-    || curNode.getType() === Blockly.ASTNode.types.OUTPUT) {
+  } else if (curNode.getLocation().type === Blockly.INPUT_VALUE ||
+      curNode.getType() === Blockly.ASTNode.types.OUTPUT) {
     this.showWithInputOutput_();
   } else if (curNode.getLocation().type === Blockly.NEXT_STATEMENT) {
     this.showWithNext_();
@@ -364,7 +367,7 @@ Blockly.CursorSvg.prototype.update_ = function() {
 };
 
 /**
- * Create the cursor svg.
+ * Create the cursor SVG.
  * @return {Element} The SVG node created.
  * @private
  */

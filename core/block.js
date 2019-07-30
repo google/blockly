@@ -413,8 +413,8 @@ Blockly.Block.prototype.getOnlyValueConnection_ = function() {
   var connection = null;
   for (var i = 0; i < this.inputList.length; i++) {
     var thisConnection = this.inputList[i].connection;
-    if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE
-        && thisConnection.targetConnection) {
+    if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE &&
+        thisConnection.targetConnection) {
       if (connection) {
         return null; // More than one value input found.
       }

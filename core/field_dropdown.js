@@ -390,16 +390,16 @@ Blockly.FieldDropdown.prototype.getOptions = function() {
 
 /**
  * Ensure that the input value is a valid language-neutral option.
- * @param {string=} newValue The input value.
+ * @param {string=} opt_newValue The input value.
  * @return {?string} A valid language-neutral option, or null if invalid.
  * @protected
  */
-Blockly.FieldDropdown.prototype.doClassValidation_ = function(newValue) {
+Blockly.FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
   var isValueValid = false;
   var options = this.getOptions();
   for (var i = 0, option; option = options[i]; i++) {
     // Options are tuples of human-readable text and language-neutral values.
-    if (option[1] == newValue) {
+    if (option[1] == opt_newValue) {
       isValueValid = true;
       break;
     }
@@ -408,11 +408,11 @@ Blockly.FieldDropdown.prototype.doClassValidation_ = function(newValue) {
     if (this.sourceBlock_) {
       console.warn('Cannot set the dropdown\'s value to an unavailable option.' +
         ' Block type: ' + this.sourceBlock_.type + ', Field name: ' + this.name +
-        ', Value: ' + newValue);
+        ', Value: ' + opt_newValue);
     }
     return null;
   }
-  return newValue;
+  return opt_newValue;
 };
 
 /**

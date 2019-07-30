@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Cursor');
 
+
 /**
  * Class for a cursor.
  * @constructor

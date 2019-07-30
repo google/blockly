@@ -109,7 +109,7 @@ Blockly.blockRendering.constants.SPACER_DEFAULT_HEIGHT = 15;
 Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT = 24;
 
 Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_WIDTH =
-  Blockly.blockRendering.constants.TAB_WIDTH  + 14.5;
+    Blockly.blockRendering.constants.TAB_WIDTH + 14.5;
 
 Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_HEIGHT =
     Blockly.blockRendering.constants.TAB_HEIGHT + 11;
@@ -211,7 +211,6 @@ Blockly.blockRendering.constants.PUZZLE_TAB = (function() {
   };
 })();
 
-
 Blockly.blockRendering.constants.NOTCH = (function() {
   var width = Blockly.blockRendering.constants.NOTCH_WIDTH;
   var height = Blockly.blockRendering.constants.NOTCH_HEIGHT;
@@ -237,7 +236,6 @@ Blockly.blockRendering.constants.NOTCH = (function() {
   };
 })();
 
-
 Blockly.blockRendering.constants.INSIDE_CORNERS = (function() {
   var radius = Blockly.blockRendering.constants.CORNER_RADIUS;
 
@@ -253,8 +251,6 @@ Blockly.blockRendering.constants.INSIDE_CORNERS = (function() {
     pathBottom: innerBottomLeftCorner
   };
 })();
-
-
 
 Blockly.blockRendering.constants.OUTSIDE_CORNERS = (function() {
   var radius = Blockly.blockRendering.constants.CORNER_RADIUS;
@@ -273,4 +269,3 @@ Blockly.blockRendering.constants.OUTSIDE_CORNERS = (function() {
     bottomLeft: bottomLeft
   };
 })();
-

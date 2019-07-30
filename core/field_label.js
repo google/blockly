@@ -88,15 +88,15 @@ Blockly.FieldLabel.prototype.initView = function() {
 
 /**
  * Ensure that the input value casts to a valid string.
- * @param {string=} newValue The input value.
+ * @param {string=} opt_newValue The input value.
  * @return {?string} A valid string, or null if invalid.
  * @protected
  */
-Blockly.FieldLabel.prototype.doClassValidation_ = function(newValue) {
-  if (newValue === null || newValue === undefined) {
+Blockly.FieldLabel.prototype.doClassValidation_ = function(opt_newValue) {
+  if (opt_newValue === null || opt_newValue === undefined) {
     return null;
   }
-  return String(newValue);
+  return String(opt_newValue);
 };
 
 /**

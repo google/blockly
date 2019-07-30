@@ -52,6 +52,18 @@ Blockly.utils.dom.HTML_NS = 'http://www.w3.org/1999/xhtml';
 Blockly.utils.dom.XLINK_NS = 'http://www.w3.org/1999/xlink';
 
 /**
+ * Node type constants.
+ * https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
+ * @enum {number}
+ */
+Blockly.utils.dom.Node = {
+  ELEMENT_NODE: 1,
+  TEXT_NODE: 3,
+  COMMENT_NODE: 8,
+  DOCUMENT_POSITION_CONTAINED_BY: 16
+};
+
+/**
  * Helper method for creating SVG elements.
  * @param {string} name Element's tag name.
  * @param {!Object} attrs Dictionary of attribute names and values.
@@ -171,7 +183,7 @@ Blockly.utils.dom.insertAfter = function(newNode, refNode) {
  */
 Blockly.utils.dom.containsNode = function(parent, descendant) {
   return !!(parent.compareDocumentPosition(descendant) &
-            Node.DOCUMENT_POSITION_CONTAINED_BY);
+            Blockly.utils.dom.Node.DOCUMENT_POSITION_CONTAINED_BY);
 };
 
 /**

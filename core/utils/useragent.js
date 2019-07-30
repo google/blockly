@@ -32,6 +32,7 @@
  */
 goog.provide('Blockly.utils.userAgent');
 
+goog.require('Blockly.utils.base');
 
 (function(raw) {
   Blockly.utils.userAgent.raw = raw;
@@ -79,4 +80,4 @@ goog.provide('Blockly.utils.userAgent');
   Blockly.utils.userAgent.MOBILE = !Blockly.utils.userAgent.TABLET &&
       (Blockly.utils.userAgent.IPOD || Blockly.utils.userAgent.IPHONE ||
        Blockly.utils.userAgent.ANDROID || has('IEMobile'));
-})((this.navigator && this.navigator.userAgent) || '');
+})((Blockly.utils.global.navigator && Blockly.utils.global.navigator.userAgent) || '');

@@ -144,7 +144,7 @@ suite('Events', function() {
 
       suite('Move', function() {
         test('Move by coordinate', function() {
-          var coordinate = new Blockly.utils.math.Coordinate(3, 4);
+          var coordinate = new Blockly.utils.Coordinate(3, 4);
           this.block.xy_ = coordinate;
 
           var event = new Blockly.Events.Move(this.block);
@@ -153,7 +153,7 @@ suite('Events', function() {
         });
 
         test('Block move by coordinate', function() {
-          var coordinate = new Blockly.utils.math.Coordinate(3, 4);
+          var coordinate = new Blockly.utils.Coordinate(3, 4);
           this.block.xy_ = coordinate;
 
           var event = new Blockly.Events.BlockMove(this.block);
@@ -170,7 +170,7 @@ suite('Events', function() {
             sinon.restore();
 
             this.block.parentBlock_ = this.parentBlock;
-            this.block.xy_ = new Blockly.utils.math.Coordinate(3, 4);
+            this.block.xy_ = new Blockly.utils.Coordinate(3, 4);
           });
 
           teardown(function() {

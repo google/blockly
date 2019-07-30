@@ -549,7 +549,7 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
 
 /**
  * Get the size of the visible field, as used in new rendering.
- * @return {!goog.math.Size} The size of the visible field.
+ * @return {!Blockly.utils.math.Size} The size of the visible field.
  * @package
  */
 Blockly.FieldDropdown.prototype.getCorrectedSize = function() {
@@ -559,7 +559,7 @@ Blockly.FieldDropdown.prototype.getCorrectedSize = function() {
   // This extra 9 was probably to add padding between rows.
   // It's also found in render_, renderSelectedImage_, and renderSelectedText_.
   // TODO (#2562): Remove getCorrectedSize.
-  return new goog.math.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
+  return new Blockly.utils.math.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
       this.size_.height - 9);
 };
 

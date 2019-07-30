@@ -68,3 +68,47 @@ Blockly.utils.math.clamp = function(lowerBound, number, upperBound) {
   }
   return Math.max(lowerBound, Math.min(number, upperBound));
 };
+
+/**
+ * Class for representing sizes consisting of a width and height.
+ * Copied from Closure's goog.math.Size.
+ * @param {number} width Width.
+ * @param {number} height Height.
+ * @struct
+ * @constructor
+ */
+Blockly.utils.math.Size = function(width, height) {
+  /**
+   * Width
+   * @type {number}
+   */
+  this.width = width;
+
+  /**
+   * Height
+   * @type {number}
+   */
+  this.height = height;
+};
+
+/**
+ * Class for representing coordinates and positions.
+ * Copied from Closure's goog.math.Coordinate.
+ * @param {number=} opt_x Left, defaults to 0.
+ * @param {number=} opt_y Top, defaults to 0.
+ * @struct
+ * @constructor
+ */
+Blockly.utils.math.Coordinate = function(opt_x, opt_y) {
+  /**
+   * X-value
+   * @type {number}
+   */
+  this.x = goog.isDef(opt_x) ? opt_x : 0;
+
+  /**
+   * Y-value
+   * @type {number}
+   */
+  this.y = goog.isDef(opt_y) ? opt_y : 0;
+};

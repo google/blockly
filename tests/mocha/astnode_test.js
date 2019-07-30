@@ -389,7 +389,7 @@ suite('ASTNode', function() {
         assertEquals(nextNode, null);
       });
       test('moveCursorToRight', function() {
-        var coordinate = new goog.math.Coordinate(100,100);
+        var coordinate = new Blockly.utils.math.Coordinate(100,100);
         var node = Blockly.ASTNode.createWorkspaceNode(this.workspace, coordinate);
         var nextNode = node.next();
         assertEquals(nextNode.wsCoordinate_.x, 110);
@@ -576,7 +576,7 @@ suite('ASTNode', function() {
         assertEquals(prevNode.getType(), Blockly.ASTNode.types.STACK);
       });
       test('moveCursorToLeft', function() {
-        var coordinate = new goog.math.Coordinate(100,100);
+        var coordinate = new Blockly.utils.math.Coordinate(100,100);
         var node = Blockly.ASTNode.createWorkspaceNode(this.workspace, coordinate);
         var nextNode = node.prev();
         assertEquals(nextNode.wsCoordinate_.x, 90);
@@ -692,14 +692,14 @@ suite('ASTNode', function() {
         assertEquals(inNode, null);
       });
       test('fromWorkspaceToStack', function() {
-        var coordinate = new goog.math.Coordinate(100,100);
+        var coordinate = new Blockly.utils.math.Coordinate(100,100);
         var node = Blockly.ASTNode.createWorkspaceNode(this.workspace, coordinate);
         var inNode = node.in();
         assertEquals(inNode.getLocation(), this.workspace.getTopBlocks()[0]);
         assertEquals(inNode.getType(), Blockly.ASTNode.types.STACK);
       });
       test('fromWorkspaceToNull', function() {
-        var coordinate = new goog.math.Coordinate(100,100);
+        var coordinate = new Blockly.utils.math.Coordinate(100,100);
         var node = Blockly.ASTNode.createWorkspaceNode(
             this.emptyWorkspace, coordinate);
         var inNode = node.in();
@@ -914,7 +914,7 @@ suite('ASTNode', function() {
         assertTrue(node.isConnection());
       });
       test('createWorkspaceNode', function() {
-        var coordinate = new goog.math.Coordinate(100,100);
+        var coordinate = new Blockly.utils.math.Coordinate(100,100);
         var node = Blockly.ASTNode
             .createWorkspaceNode(this.workspace, coordinate);
         assertEquals(node.getLocation(), this.workspace);

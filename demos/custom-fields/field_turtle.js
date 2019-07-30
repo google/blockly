@@ -62,7 +62,7 @@ CustomFields.FieldTurtle = function(
   // that helps keep the code organized and DRY.
   CustomFields.FieldTurtle.superClass_.constructor.call(
       this, value, opt_validator);
-  this.size_ = new goog.math.Size(72, 40);
+  this.size_ = new Blockly.utils.math.Size(72, 40);
 };
 goog.inherits(CustomFields.FieldTurtle, Blockly.Field);
 

@@ -764,7 +764,7 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
   var ws = this.creatorWorkspace_;
   ws.cursor.hide();
   if (e.shiftKey) {
-    var screenCoord = new goog.math.Coordinate(e.clientX, e.clientY);
+    var screenCoord = new Blockly.utils.math.Coordinate(e.clientX, e.clientY);
     var wsCoord = Blockly.utils.screenToWsCoordinates(ws, screenCoord);
     var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
     ws.cursor.setLocation(wsNode);

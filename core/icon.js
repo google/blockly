@@ -211,9 +211,9 @@ Blockly.Icon.prototype.getIconLocation = function() {
  * This differs from the actual size of the icon, because it bulges slightly
  * out of its row rather than increasing the height of its row.
  * TODO (#2562): Remove getCorrectedSize.
- * @return {!goog.math.Size} Height and width.
+ * @return {!Blockly.utils.math.Size} Height and width.
  */
 Blockly.Icon.prototype.getCorrectedSize = function() {
-  return new goog.math.Size(
+  return new Blockly.utils.math.Size(
       Blockly.Icon.prototype.SIZE, Blockly.Icon.prototype.SIZE - 2);
 };

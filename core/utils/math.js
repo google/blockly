@@ -68,5 +68,3 @@ Blockly.utils.math.clamp = function(lowerBound, number, upperBound) {
   }
   return Math.max(lowerBound, Math.min(number, upperBound));
 };
-
-

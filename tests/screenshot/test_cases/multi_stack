@@ -1,9 +1,9 @@
-<xml xmlns="http://www.w3.org/1999/xhtml">
+<xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable type="" id="YUz?xxnE}SFx_,jmW#s;">item</variable>
+    <variable id="YUz?xxnE}SFx_,jmW#s;">item</variable>
   </variables>
   <block type="text_append">
-    <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;" variabletype="">item</field>
+    <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;">item</field>
     <value name="TEXT">
       <shadow type="text">
         <field name="TEXT">one</field>
@@ -11,7 +11,7 @@
     </value>
     <next>
       <block type="text_append">
-        <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;" variabletype="">item</field>
+        <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;">item</field>
         <value name="TEXT">
           <shadow type="text">
             <field name="TEXT">two</field>
@@ -19,7 +19,7 @@
         </value>
         <next>
           <block type="text_append">
-            <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;" variabletype="">item</field>
+            <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;">item</field>
             <value name="TEXT">
               <shadow type="text">
                 <field name="TEXT">three</field>
@@ -27,7 +27,7 @@
             </value>
             <next>
               <block type="text_append">
-                <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;" variabletype="">item</field>
+                <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;">item</field>
                 <value name="TEXT">
                   <shadow type="text">
                     <field name="TEXT">four</field>
@@ -35,7 +35,7 @@
                 </value>
                 <next>
                   <block type="text_append">
-                    <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;" variabletype="">item</field>
+                    <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;">item</field>
                     <value name="TEXT">
                       <shadow type="text">
                         <field name="TEXT">five</field>

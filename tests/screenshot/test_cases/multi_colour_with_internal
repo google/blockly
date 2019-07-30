@@ -1,4 +1,4 @@
-<xml xmlns="http://www.w3.org/1999/xhtml">
+<xml xmlns="https://developers.google.com/blockly/xml">
   <block type="colour_rgb" inline="true">
     <value name="RED">
       <shadow type="math_number">

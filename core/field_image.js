@@ -30,7 +30,6 @@ goog.require('Blockly.Field');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
-
 goog.require('Blockly.utils.math');
 
 

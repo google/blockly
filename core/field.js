@@ -32,9 +32,9 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.userAgent');
 
-goog.require('Blockly.utils.math');
 goog.require('goog.style');
 
 

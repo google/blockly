@@ -30,9 +30,8 @@ goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
-goog.require('Blockly.utils.colour');
-
 goog.require('Blockly.utils.math');
+goog.require('Blockly.utils.colour');
 
 
 /**

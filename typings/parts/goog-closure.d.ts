@@ -111,9 +111,6 @@ declare namespace goog {
       getChildAt(index: number): Component;
       removeChildren(opt_unrender: boolean): void;
     }
-    class CustomButton extends Control {
-      title: string;
-    }
     class Container extends Component {
     }
     class Menu extends Container implements events.Listenable {
@@ -126,39 +123,6 @@ declare namespace goog {
       setValue(value: any): void;
       getValue(): any;
       addClassName(className: string): void;
-    }
-    class Popup extends PopupBase {
-      setPosition(position: positioning.ClientPosition): void;
-    }
-    class PopupBase extends events.EventTarget {
-    }
-    class Tooltip extends Popup {
-      className: string;
-      cursorPosition: math.Coordinate;
-      constructor(opt_el?: Node | string, opt_str?: string);
-      onShow(): void;
-      setShowDelayMs(ms: number): void;
-    }
-    class Slider extends Component {
-      setMoveToPointEnabled(val: boolean): void;
-      setMinimum(min: number): void;
-      setMaximum(max: number): void;
-      setUnitIncrement(increments: number): void;
-      setRightToLeft(rightToLeft: boolean): void;
-      setValue(value: number): void;
-      animatedSetValue(value: number): void;
-      setOrientation(orientation: any): void;
-      setVisible(visible: boolean): void;
-    }
-    class ColorPicker extends Component {
-      static SIMPLE_GRID_COLORS: Array<string>;
-      setSize(value: goog.math.Size | number): void;
-      setColors(colurs: Array<string>): void;
-      setSelectedColor(color: string): void;
-    }
-    class ColorPalette extends Control {
-      constructor(opt_colors?: Array<string>);
-      setSize(value: goog.math.Size | number): void;
     }
     class DatePicker extends Component {
 

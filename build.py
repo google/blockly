@@ -56,6 +56,9 @@ else:
   from urllib.parse import urlencode
   from importlib import reload
 
+# Read package.json and extract the current Blockly version
+blocklyVersion = json.loads(open('package.json', 'r').read())['version']
+
 def import_path(fullpath):
   """Import a file with full path specification.
   Allows one to import from any directory, something __import__ does not do.
@@ -345,6 +348,7 @@ class Gen_compressed(threading.Thread):
 
       code = HEADER + "\n" + json_data["compiledCode"]
       code = code.replace(remove, "")
+      code = code.replace('Blockly.version="unset"', 'Blockly.version="' + blocklyVersion + '"')
       code = self.trim_licence(code)
 
       stats = json_data["statistics"]

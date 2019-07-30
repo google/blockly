@@ -133,6 +133,12 @@ Blockly.cache3dSupported_ = null;
 Blockly.theme_ = null;
 
 /**
+ * Blockly core version.
+ * @define {string}
+ */
+Blockly.version = "unset";
+
+/**
  * Returns the dimensions of the specified SVG image.
  * @param {!Element} svg SVG image.
  * @return {!Object} Contains width and height properties.

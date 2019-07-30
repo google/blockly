@@ -404,7 +404,7 @@ Blockly.WorkspaceSvg.prototype.createCursor = function() {
  * @return {!Blockly.CursorSvg} Marker for keyboard navigation.
  */
 Blockly.WorkspaceSvg.prototype.createMarker = function() {
-  return new Blockly.CursorSvg(this, true);
+  return new Blockly.CursorSvg(this, false);
 };
 
 /**

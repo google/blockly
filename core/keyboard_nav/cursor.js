@@ -28,11 +28,11 @@ goog.provide('Blockly.Cursor');
 
 /**
  * Class for a cursor.
- * @param {Boolean} opt_isImmovable True if the cursor is a marker.
+ * @param {boolean} [opt_movable=true] False if the cursor is a marker.
  * False otherwise.
  * @constructor
  */
-Blockly.Cursor = function(opt_isImmovable) {
+Blockly.Cursor = function(opt_movable=true) {
   /*
    * The current location of the cursor.
    * @type {Blockly.Field|Blockly.Connection|Blockly.Block}
@@ -42,10 +42,10 @@ Blockly.Cursor = function(opt_isImmovable) {
 
   /**
    * Whether or not the cursor is a marker.
-   * @type {Boolean} True if the cursor is a marker. False otherwise.
+   * @type {boolean} True if the cursor is a marker. False otherwise.
    * @private
    */
-  this.isMarker_ = opt_isImmovable || false;
+  this.isMarker_ = !opt_movable;
 };
 
 /**

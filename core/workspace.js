@@ -174,7 +174,7 @@ Blockly.Workspace.prototype.createCursor = function() {
  * @return {!Blockly.Cursor} Cursor for keyboard navigation.
  */
 Blockly.Workspace.prototype.createMarker = function() {
-  return new Blockly.Cursor(true);
+  return new Blockly.Cursor(false);
 };
 
 

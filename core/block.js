@@ -914,7 +914,7 @@ Blockly.Block.prototype.getColourBorder = function() {
   var colour = this.getColour();
   return {
     colourBorder: null,
-    colourLight: Blockly.utils.colour.blend('white',colour,  0.3),
+    colourLight: Blockly.utils.colour.blend('white', colour, 0.3),
     colourDark: Blockly.utils.colour.blend('black', colour, 0.2)
   };
 };

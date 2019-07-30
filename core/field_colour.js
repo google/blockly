@@ -245,13 +245,13 @@ Blockly.FieldColour.COLUMNS = 7;
  * Set a custom colour grid for this field.
  * @param {Array.<string>} colours Array of colours for this block,
  *     or null to use default (Blockly.FieldColour.COLOURS).
- * @param {Array.<string>} opt_titles Optional array of colour tooltips,
+ * @param {Array.<string>=} opt_titles Optional array of colour tooltips,
  *     or null to use default (Blockly.FieldColour.TITLES).
  * @return {!Blockly.FieldColour} Returns itself (for method chaining).
  */
 Blockly.FieldColour.prototype.setColours = function(colours, opt_titles) {
   this.colours_ = colours;
-  if (opt_titles !== undefined) {
+  if (opt_titles) {
     this.titles_ = opt_titles;
   }
   return this;

@@ -29,7 +29,7 @@ goog.require('Blockly.Cursor');
 /**
  * Class for a cursor.
  * @param {!Blockly.Workspace} workspace The workspace to sit in.
- * @param {?boolean} opt_isImmovable True if the cursor cannot be moved with
+ * @param {boolean=} opt_isImmovable True if the cursor cannot be moved with
  *     calls to prev/next/in/out.  This is called a marker.
  * @extends {Blockly.Cursor}
  * @constructor

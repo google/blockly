@@ -41,7 +41,7 @@ suite('Insert/Modify', function() {
       test('Cursor on workspace', function() {
         Blockly.Navigation.cursor_.setLocation(
             Blockly.ASTNode.createWorkspaceNode(this.workspace,
-                new goog.math.Coordinate(0, 0)));
+                new Blockly.utils.Coordinate(0, 0)));
         chai.assert.isFalse(Blockly.Navigation.modify());
       });
       test('Cursor on compatible connection', function() {
@@ -195,7 +195,7 @@ suite('Insert/Modify', function() {
     setup(function() {
       Blockly.Navigation.marker_.setLocation(
           Blockly.ASTNode.createWorkspaceNode(
-              this.workspace, new goog.math.Coordinate(100, 200)));
+              this.workspace, new Blockly.utils.Coordinate(100, 200)));
     });
     test('Cursor on row block', function() {
       Blockly.Navigation.cursor_.setLocation(
@@ -274,7 +274,7 @@ suite('Insert/Modify', function() {
     test('Cursor on workspace', function() {
       Blockly.Navigation.cursor_.setLocation(
           Blockly.ASTNode.createWorkspaceNode(
-              this.workspace, new goog.math.Coordinate(100, 100)));
+              this.workspace, new Blockly.utils.Coordinate(100, 100)));
       chai.assert.isFalse(Blockly.Navigation.modify());
     });
   });
@@ -293,7 +293,7 @@ suite('Insert/Modify', function() {
       test('Cursor on workspace', function() {
         Blockly.Navigation.cursor_.setLocation(
             Blockly.ASTNode.createWorkspaceNode(
-                this.workspace, new goog.math.Coordinate(100, 100)));
+                this.workspace, new Blockly.utils.Coordinate(100, 100)));
         chai.assert.isFalse(Blockly.Navigation.modify());
 
       });

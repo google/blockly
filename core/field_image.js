@@ -30,8 +30,7 @@ goog.require('Blockly.Field');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
-
-goog.require('goog.math.Size');
+goog.require('Blockly.utils.Size');
 
 
 /**
@@ -66,7 +65,7 @@ Blockly.FieldImage = function(src, width, height,
     throw Error('Height and width values of an image field must be greater' +
       ' than 0.');
   }
-  this.size_ = new goog.math.Size(this.width_,
+  this.size_ = new Blockly.utils.Size(this.width_,
       this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
 
   this.flipRtl_ = opt_flipRtl;
@@ -214,7 +213,7 @@ Blockly.FieldImage.prototype.setOnClickHandler = function(func) {
 };
 /*
  * Get the size of the visible field, as used in new rendering.
- * @return {!goog.math.Size} The size of the visible field.
+ * @return {!Blockly.utils.Size} The size of the visible field.
  * @package
  */
 Blockly.FieldImage.prototype.getCorrectedSize = function() {
@@ -225,7 +224,7 @@ Blockly.FieldImage.prototype.getCorrectedSize = function() {
   // height of the image in new rendering, rather than having the spacer below
   // know that there was an image in the previous row.
   // TODO (#2562): Remove getCorrectedSize.
-  return new goog.math.Size(this.size_.width, this.height_ + 1);
+  return new Blockly.utils.Size(this.size_.width, this.height_ + 1);
 };
 
 Blockly.Field.register('field_image', Blockly.FieldImage);

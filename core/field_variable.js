@@ -31,11 +31,11 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Variables');
 goog.require('Blockly.Xml');
 
-goog.require('goog.math.Size');
 
 
 /**
@@ -57,7 +57,7 @@ Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes,
   // The FieldDropdown constructor would call setValue, which might create a
   // spurious variable.  Just do the relevant parts of the constructor.
   this.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;
-  this.size_ = new goog.math.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
+  this.size_ = new Blockly.utils.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
   this.setValidator(opt_validator);
   this.defaultVariableName = (varname || '');
 

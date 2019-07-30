@@ -37,7 +37,7 @@ goog.require('goog.style');
 /**
  * Get the size of a rendered goog.ui.Menu.
  * @param {!goog.ui.Menu} menu The menu to measure.
- * @return {!goog.math.Size} Object with width and height properties.
+ * @return {!Blockly.utils.Size} Object with width and height properties.
  * @package
  */
 Blockly.utils.uiMenu.getSize = function(menu) {
@@ -58,7 +58,7 @@ Blockly.utils.uiMenu.getSize = function(menu) {
  *     in window coordinates.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
- * @param {!goog.math.Size} menuSize The size of the menu that is inside the
+ * @param {!Blockly.utils.Size} menuSize The size of the menu that is inside the
  *     widget div, in window coordinates.
  * @package
  */

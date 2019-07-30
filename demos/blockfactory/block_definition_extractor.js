@@ -49,8 +49,8 @@ BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
  * inner text.
  *
  * @param {string} name New element tag name.
- * @param {Map<String,String>} opt_attrs Optional list of attributes.
- * @param {string?} opt_text Optional inner text.
+ * @param {!Object.<string, string>=} opt_attrs Optional list of attributes.
+ * @param {string=} opt_text Optional inner text.
  * @return {!Element} The newly created element.
  * @private
  */

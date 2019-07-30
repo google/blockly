@@ -510,7 +510,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     var swap = xmlBlock;
     // Closure Compiler complains here because the arguments are reversed.
     /** @suppress {checkTypes} */
-    xmlBlock = workspace;
+    xmlBlock = /** @type {!Element} */ (workspace);
     workspace = swap;
     console.warn('Deprecated call to Blockly.Xml.domToBlock, ' +
                  'swap the arguments.');

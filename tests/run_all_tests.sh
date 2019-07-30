@@ -61,6 +61,9 @@ run_test_command "jsunit" "node tests/jsunit/run_jsunit_tests_in_browser.js"
 # Run Mocha tests inside a browser.
 run_test_command "mocha" "node tests/mocha/run_mocha_tests_in_browser.js"
 
+# Run Node tests.
+run_test_command "node" "./node_modules/.bin/mocha tests/node --opts tests/node/mocha.opts"
+
 # Run generator tests inside a browser and check the results.
 run_test_command "generators" "tests/scripts/run_generators.sh"
 

@@ -542,6 +542,9 @@ Blockly.Navigation.insertBlock = function(block, targetConnection) {
   if (bestConnection && bestConnection.isConnected() &&
       !bestConnection.targetBlock().isShadow()) {
     bestConnection.disconnect();
+  } else if (!bestConnection) {
+    Blockly.Navigation.warn(
+    'This block can not be inserted at the marked location. Moved to workspace.');
   }
   return Blockly.Navigation.connect(bestConnection, targetConnection);
 };

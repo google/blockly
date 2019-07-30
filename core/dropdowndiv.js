@@ -386,8 +386,8 @@ Blockly.DropDownDiv.getPositionBelowMetrics = function(
   var xCoords = Blockly.DropDownDiv.getPositionX(
       primaryX, boundsInfo.left, boundsInfo.right, divSize.width);
 
-  var arrowY = -(Blockly.DropDownDiv.ARROW_SIZE / 2
-      + Blockly.DropDownDiv.BORDER_SIZE);
+  var arrowY = -(Blockly.DropDownDiv.ARROW_SIZE / 2 +
+      Blockly.DropDownDiv.BORDER_SIZE);
   var finalY = primaryY + Blockly.DropDownDiv.PADDING_Y;
 
   return {
@@ -421,8 +421,8 @@ Blockly.DropDownDiv.getPositionAboveMetrics = function(
   var xCoords = Blockly.DropDownDiv.getPositionX(
       secondaryX, boundsInfo.left, boundsInfo.right, divSize.width);
 
-  var arrowY = divSize.height - (Blockly.DropDownDiv.BORDER_SIZE * 2)
-      - (Blockly.DropDownDiv.ARROW_SIZE / 2);
+  var arrowY = divSize.height - (Blockly.DropDownDiv.BORDER_SIZE * 2) -
+      (Blockly.DropDownDiv.ARROW_SIZE / 2);
   var finalY = secondaryY - divSize.height - Blockly.DropDownDiv.PADDING_Y;
   var initialY = secondaryY - divSize.height; // No padding on Y
 

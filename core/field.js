@@ -49,7 +49,7 @@ goog.require('goog.style');
 Blockly.Field = function(value, opt_validator) {
   this.size_ = new Blockly.utils.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
   this.setValue(value);
-  this.setValidator(opt_validator);
+  opt_validator && this.setValidator(opt_validator);
 };
 
 /**
@@ -459,10 +459,10 @@ Blockly.Field.prototype.setVisible = function(visible) {
  *
  * If the function does not return anything (or returns undefined) the new
  * value is accepted as valid. This is to allow for fields using the
- * validated founction as a field-level change event notification.
+ * validated function as a field-level change event notification.
  *
- * @param {Function=} handler The validator
- *     function or null to clear a previous validator.
+ * @param {Function} handler The validator function
+ *     or null to clear a previous validator.
  */
 Blockly.Field.prototype.setValidator = function(handler) {
   this.validator_ = handler;
@@ -534,7 +534,7 @@ Blockly.Field.prototype.updateColour = function() {
 };
 
 /**
- * Used by getSize() to move/resize any dom elements, and get the new size.
+ * Used by getSize() to move/resize any DOM elements, and get the new size.
  *
  * All rendering that has an effect on the size/shape of the block should be
  * done here, and should be triggered by getSize().

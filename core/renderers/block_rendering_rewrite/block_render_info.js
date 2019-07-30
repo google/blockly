@@ -587,8 +587,7 @@ Blockly.blockRendering.RenderInfo.prototype.makeSpacerRow_ = function(prev, next
 Blockly.blockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
   // The width of the spacer before the bottom row should be the same as the
   // bottom row.
-  if (next.type === 'bottom row'
-      && next.hasFixedWidth) {
+  if (next.type === 'bottom row' && next.hasFixedWidth) {
     return next.width;
   }
   return this.width;

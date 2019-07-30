@@ -281,10 +281,10 @@ Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.dealWithOffsetFields_ = function(field) {
-  if (field instanceof Blockly.FieldDropdown
-      || field instanceof Blockly.FieldTextInput
-      || field instanceof Blockly.FieldColour
-      || field instanceof Blockly.FieldCheckbox) {
+  if (field instanceof Blockly.FieldDropdown ||
+      field instanceof Blockly.FieldTextInput ||
+      field instanceof Blockly.FieldColour ||
+      field instanceof Blockly.FieldCheckbox) {
     return 5;
   }
   return 0;

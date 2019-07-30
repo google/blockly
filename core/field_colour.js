@@ -162,15 +162,15 @@ Blockly.FieldColour.prototype.initView = function() {
 
 /**
  * Ensure that the input value is a valid colour.
- * @param {string=} newValue The input value.
+ * @param {string=} opt_newValue The input value.
  * @return {?string} A valid colour, or null if invalid.
  * @protected
  */
-Blockly.FieldColour.prototype.doClassValidation_ = function(newValue) {
-  if (typeof newValue != 'string') {
+Blockly.FieldColour.prototype.doClassValidation_ = function(opt_newValue) {
+  if (typeof opt_newValue != 'string') {
     return null;
   }
-  return Blockly.utils.colour.parse(newValue);
+  return Blockly.utils.colour.parse(opt_newValue);
 };
 
 /**

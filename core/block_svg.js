@@ -396,21 +396,8 @@ Blockly.BlockSvg.prototype.moveToDragSurface_ = function() {
  * @param {Blockly.utils.Coordinate} xy The position to move to in workspace units.
  */
 Blockly.BlockSvg.prototype.moveTo = function(xy) {
-  if (this.parentBlock_) {
-    throw Error('Block has parent.');
-  }
-  var eventsEnabled = Blockly.Events.isEnabled();
-  if (eventsEnabled) {
-    var event = new Blockly.Events.BlockMove(this);
-  }
   var curXY = this.getRelativeToSurfaceXY();
-  this.translate(xy.x, xy.y);
-  this.moveConnections_(xy.x - curXY.x, xy.y - curXY.y);
-  if (eventsEnabled) {
-    event.recordNew();
-    Blockly.Events.fire(event);
-  }
-  this.workspace.resizeContents();
+  this.moveBy(xy.x - curXY.x, xy.y - curXY.y);
 };
 
 /**

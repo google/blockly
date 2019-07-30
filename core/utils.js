@@ -33,6 +33,7 @@
 goog.provide('Blockly.utils');
 
 goog.require('Blockly.Msg');
+goog.require('Blockly.utils.base');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.userAgent');
@@ -588,7 +589,7 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
 
 /**
  * Converts screen coordinates to workspace coordinates.
- * @param {Blockly.Workspace_Svg} ws The workspace to find the coordinates on.
+ * @param {Blockly.WorkspaceSvg} ws The workspace to find the coordinates on.
  * @param {Blockly.utils.Coordinate} screenCoordinates The screen coordinates to be
  * converted to workspace coordintaes
  * @return {Blockly.utils.Coordinate} The workspace coordinates.
@@ -621,8 +622,3 @@ Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {
   var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
   return finalOffsetMainWs;
 };
-
-/**
- * Reference to the global object.
- */
-Blockly.utils.global = this || self;

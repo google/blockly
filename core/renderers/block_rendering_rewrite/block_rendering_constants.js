@@ -63,6 +63,11 @@ Blockly.blockRendering.constants.MIN_BLOCK_WIDTH = 12;
 
 Blockly.blockRendering.constants.EMPTY_BLOCK_SPACER_HEIGHT = 16;
 
+/**
+ * Rounded corner radius.
+ * @const
+ */
+Blockly.blockRendering.constants.CORNER_RADIUS = 8;
 
 // Offset from the left side of a block or the inside of a statement input to
 // the left side of the notch.
@@ -71,7 +76,11 @@ Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT =
 
 // This is the width from where a rounded corner ends to where a previous
 // connection starts.
-Blockly.blockRendering.constants.NOTCH_OFFSET_ROUNDED_CORNER_PREV = 7;
+// The position of the notch should not change as the rounded corner decreases
+// in radius.
+Blockly.blockRendering.constants.NOTCH_OFFSET_ROUNDED_CORNER_PREV =
+    Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT -
+    Blockly.blockRendering.constants.CORNER_RADIUS;
 
 Blockly.blockRendering.constants.STATEMENT_BOTTOM_SPACER = 5;
 Blockly.blockRendering.constants.STATEMENT_INPUT_PADDING_LEFT = 20;
@@ -80,12 +89,6 @@ Blockly.blockRendering.constants.BETWEEN_STATEMENT_PADDING_Y = 4;
 // This is the max width of a bottom row that follows a statement input and
 // has inputs inline.
 Blockly.blockRendering.constants.MAX_BOTTOM_WIDTH = 66.5;
-
-/**
- * Rounded corner radius.
- * @const
- */
-Blockly.blockRendering.constants.CORNER_RADIUS = 8;
 
 /**
  * Height of the top hat.

@@ -488,17 +488,6 @@ declare namespace goog {
 }
 
 
-declare module Blockly.Msg {
-
-    /**
-     * Each message is preceded with a triple-slash comment that becomes the
-     * message descriptor.  The build process extracts these descriptors, adds
-     * them to msg/json/qqq.json, and they show up in the translation console.
-     */
-    var LOGIC_HUE: any /*missing*/;
-}
-
-
 declare module Blockly {
 
     class Block extends Block__Class { }
@@ -12269,4 +12258,15 @@ declare module Blockly.utils.xml {
      * @public
      */
     function domToText(dom: Element): string;
+}
+
+
+declare module Blockly.Msg {
+
+    /**
+     * Each message is preceded with a triple-slash comment that becomes the
+     * message descriptor.  The build process extracts these descriptors, adds
+     * them to msg/json/qqq.json, and they show up in the translation console.
+     */
+    var LOGIC_HUE: any /*missing*/;
 }

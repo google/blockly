@@ -153,7 +153,11 @@ gulp.task('typings', function (cb) {
     'typings/parts/blockly-header.d.ts',
     'typings/parts/blockly-interfaces.d.ts',
     'typings/parts/goog-closure.d.ts',
-    `${tmpDir}/**/**/**`
+    `${tmpDir}/core/**`,
+    `${tmpDir}/core/utils/**`,
+    `${tmpDir}/core/theme/**`,
+    `${tmpDir}/core/keyboard_nav/**`,
+    `${tmpDir}/msg/**`
   ];
   return gulp.src(srcs)
     .pipe(gulp.concat('blockly.d.ts'))

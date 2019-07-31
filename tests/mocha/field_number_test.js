@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-suite ('Number Fields', function() {
+suite('Number Fields', function() {
   function assertValue(numberField, expectedValue, opt_expectedText) {
     var actualValue = numberField.getValue();
     var actualText = numberField.getText();

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-suite ('Label Fields', function() {
+suite('Label Fields', function() {
   function assertValue(labelField, expectedValue) {
     var actualValue = labelField.getValue();
     var actualText = labelField.getText();

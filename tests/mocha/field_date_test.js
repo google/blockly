@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-suite ('Date Fields', function() {
+suite('Date Fields', function() {
   function assertValue(dateField, expectedValue) {
     var actualValue = dateField.getValue();
     var actualText = dateField.getText();

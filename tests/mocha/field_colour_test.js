@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-suite ('Colour Fields', function() {
+suite('Colour Fields', function() {
   function assertValue(colourField, expectedValue, expectedText) {
     var actualValue = colourField.getValue();
     var actualText = colourField.getText();

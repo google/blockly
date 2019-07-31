@@ -337,7 +337,7 @@ Blockly.FieldVariable.prototype.setTypes_ = function(opt_variableTypes,
         'a FieldVariable');
   }
   // Only update the field once all checks pass.
-  this.defaultType_ =  defaultType;
+  this.defaultType_ = defaultType;
   this.variableTypes = variableTypes;
 };
 

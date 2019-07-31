@@ -143,7 +143,7 @@ Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
   this.draggingBubble_.moveDuringDrag(this.dragSurface_, newLoc);
 
   if (this.draggingBubble_.isDeletable()) {
-    this.deleteArea_ =  this.workspace_.isDeleteArea(e);
+    this.deleteArea_ = this.workspace_.isDeleteArea(e);
     this.updateCursorDuringBubbleDrag_();
   }
 };

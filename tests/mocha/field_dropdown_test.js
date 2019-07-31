@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-suite ('Dropdown Fields', function() {
+suite('Dropdown Fields', function() {
   function assertValue(dropdownField, expectedValue, expectedText) {
     var actualValue = dropdownField.getValue();
     var actualText = dropdownField.getText();

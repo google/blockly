@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-suite ('Image Fields', function() {
+suite('Image Fields', function() {
   function assertValue(imageField, expectedValue, expectedText) {
     var actualValue = imageField.getValue();
     var actualText = imageField.getText();

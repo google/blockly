@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-suite ('Number Fields', function() {
+suite('Number Fields', function() {
   function assertValue(numberField, expectedValue, opt_expectedText) {
     var actualValue = numberField.getValue();
     var actualText = numberField.getText();
@@ -48,7 +48,7 @@ suite ('Number Fields', function() {
         { 'value': value, min: value, max: value, precision: value });
   }
   function assertNumberFieldSameValues(numberField, value) {
-    assertNumberField(numberField,  value, value, value, value);
+    assertNumberField(numberField, value, value, value, value);
   }
   suite('Constructor', function() {
     test('Empty', function() {

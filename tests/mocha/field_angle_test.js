@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-suite ('Angle Fields', function() {
+suite('Angle Fields', function() {
   function assertValue(angleField, expectedValue, opt_expectedText) {
     var actualValue = angleField.getValue();
     var actualText = angleField.getText();

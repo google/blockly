@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-suite ('Text Input Fields', function() {
+suite('Text Input Fields', function() {
   function assertValue(textInputField, expectedValue, opt_expectedText) {
     var actualValue = textInputField.getValue();
     var actualText = textInputField.getText();

@@ -372,7 +372,7 @@ Blockly.BlockSvg.prototype.renderFields_ = function(fieldList,
       }
     }
     if (this.RTL &&
-        field instanceof  Blockly.FieldImage &&
+        field instanceof Blockly.FieldImage &&
         field.getFlipRtl()) {
       scale = 'scale(-1 1)';
       translateX += field.renderWidth;

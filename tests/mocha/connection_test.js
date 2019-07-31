@@ -7,8 +7,8 @@ suite('Connections', function() {
       var connections = block.getConnections_(true);
       for (var i = 0; i < connections.length; i++) {
         var connection = connections[i];
-        if (connection.type == Blockly.PREVIOUS_STATEMENT
-          || connection.type == Blockly.OUTPUT_VALUE) {
+        if (connection.type == Blockly.PREVIOUS_STATEMENT ||
+          connection.type == Blockly.OUTPUT_VALUE) {
           // Only superior connections on inputs get hidden
           continue;
         }

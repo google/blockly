@@ -73,8 +73,8 @@ if [ -f "$BLOCKLY_ROOT/tests/compile/main_compressed.js" ]; then
   rm "$BLOCKLY_ROOT/tests/compile/main_compressed.js"
 fi
 
-# If an argument is passed and is a valid renderer name use it otherwise use
-# default renderer name
+# If an argument is passed and is a valid renderer name use it. Otherwise use
+# the default renderer name.
 if [[ $# == 1 ]]; then
   if [ $(find "$BLOCKLY_ROOT/core" -name "$1") ]; then
     renderName=$1
@@ -89,11 +89,10 @@ fi
 
 tempPath="$BLOCKLY_ROOT/temp_core"
 corePath="$BLOCKLY_ROOT/core/*"
-rm -r $tempPath
 mkdir $tempPath
 cp $corePath $tempPath
 
-# Copy over all files found in subdirectories except for the extra renderers.
+# Copy over all files except for the extra renderers to the temp_core directory.
 for dir in ./core/*/ ; do
   # If we are in the renderers directory
   if [[ $dir == *"/renderers/"* ]]; then
@@ -142,3 +141,6 @@ else
   echo "Compilation FAIL."
   exit 1
 fi
+
+# Cleanup temp_core directory
+rm -r $tempPath

@@ -340,11 +340,10 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
  * @override
  */
 Blockly.FieldAngle.prototype.doClassValidation_ = function(opt_newValue) {
-  if (isNaN(opt_newValue)) {
+  var n = Number(opt_newValue) % 360;
+  if (isNaN(n)) {
     return null;
   }
-  var n = parseFloat(opt_newValue || 0);
-  n %= 360;
   if (n < 0) {
     n += 360;
   }

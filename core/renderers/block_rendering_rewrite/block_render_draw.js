@@ -60,6 +60,7 @@ Blockly.blockRendering.Drawer = function(block, info) {
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.draw_ = function() {
+  this.hideHiddenIcons_();
   this.drawOutline_();
   this.drawInternals_();
   this.block_.setPaths_(this.pathObject_);
@@ -84,6 +85,17 @@ Blockly.blockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
 };
 
 /**
+ * Hide icons that were marked as hidden.
+ * @private
+ */
+Blockly.blockRendering.Drawer.prototype.hideHiddenIcons_ = function() {
+  for (var i = 0; i < this.info_.hiddenIcons.length; i++) {
+    var iconInfo = this.info_.hiddenIcons[i];
+    iconInfo.icon.iconGroup_.setAttribute('display', 'none');
+  }
+};
+
+/**
  * Create the outline of the block.  This is a single continuous path.
  * @private
  */
@@ -91,7 +103,9 @@ Blockly.blockRendering.Drawer.prototype.drawOutline_ = function() {
   this.drawTop_();
   for (var r = 1; r < this.info_.rows.length - 1; r++) {
     var row = this.info_.rows[r];
-    if (row.hasStatement) {
+    if (!row.isSpacer()  && this.info_.isCollapsed) {
+      this.drawJaggedEdge_(row)
+    } else if (row.hasStatement) {
       this.drawStatementInput_(row);
     } else if (row.hasExternalInput) {
       this.drawValueInput_(row);
@@ -136,6 +150,18 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
   this.steps_.push('v', topRow.height);
 };
 
+/**
+ * Add steps for the jagged edge of a row on a collapsed block.
+ * @param {!Blockly.blockRendering.Row} row The row to draw the side of.
+ * @private
+ */
+Blockly.blockRendering.Drawer.prototype.drawJaggedEdge_ = function(row) {
+  this.highlighter_.drawJaggedEdge_(row);
+  this.steps_.push(Blockly.blockRendering.constants.JAGGED_TEETH);
+  var remainder = row.height - Blockly.blockRendering.constants.JAGGED_TEETH_HEIGHT;
+  this.steps_.push('v', remainder);
+  console.log('remainder: ' + remainder);
+};
 
 /**
  * Add steps for an external value input, rendered as a notch in the side

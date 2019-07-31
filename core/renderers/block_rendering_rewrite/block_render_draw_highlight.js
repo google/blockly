@@ -91,6 +91,20 @@ Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
   this.steps_.push('H', row.width - this.highlightOffset_);
 };
 
+Blockly.blockRendering.Highlighter.prototype.drawJaggedEdge_ = function(row) {
+  if (this.info_.RTL) {
+    var remainder =
+        row.height - Blockly.blockRendering.constants.JAGGED_TEETH_HEIGHT - this.highlightOffset_;
+    this.steps_.push('H', row.width - this.highlightOffset_);
+    var steps =
+        Blockly.utils.svgPaths.lineTo(5.1, 2.6) +
+        Blockly.utils.svgPaths.moveBy(-10.2, 6.8) +
+        Blockly.utils.svgPaths.lineTo(5.1, 2.6) +
+        Blockly.utils.svgPaths.lineOnAxis('v', remainder);
+    this.steps_.push(steps);
+  }
+};
+
 Blockly.blockRendering.Highlighter.prototype.drawValueInput = function(row) {
   var input = row.getLastInput();
   var steps = '';

@@ -142,6 +142,28 @@ Blockly.blockRendering.constants.TOP_LEFT_CORNER_START =
     'm 0,' + Blockly.blockRendering.constants.CORNER_RADIUS;
 
 /**
+ * SVG path for drawing jagged teeth at the end of collapsed blocks.
+ * @const
+ */
+Blockly.blockRendering.constants.JAGGED_TEETH = Blockly.utils.svgPaths.line(
+    [
+      Blockly.utils.svgPaths.point(6, 3),
+      Blockly.utils.svgPaths.point(-12, 6),
+      Blockly.utils.svgPaths.point(6, 3)
+    ]);
+
+/**
+ * Height of SVG path for jagged teeth at the end of collapsed blocks.
+ * @const
+ */
+Blockly.blockRendering.constants.JAGGED_TEETH_HEIGHT = 12;
+/**
+ * Width of SVG path for jagged teeth at the end of collapsed blocks.
+ * @const
+ */
+Blockly.blockRendering.constants.JAGGED_TEETH_WIDTH = 6;
+
+/**
  * Information about the hat on a start block.
  */
 Blockly.blockRendering.constants.START_HAT = (function() {

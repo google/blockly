@@ -68,7 +68,12 @@
         "valid-jsdoc": ["error", {"requireReturn": false}],
         "no-console": ["off"],
         "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
-        "operator-linebreak": ["error", "after"]
+        "operator-linebreak": ["error", "after"],
+        "spaced-comment": ["warn", "always", {
+            "block": {
+                "balanced": true
+            }
+        }]
     },
     "env": {
         "browser": true

@@ -64,7 +64,8 @@
         "_comment": "Closure style allows redeclarations",
         "no-redeclare": ["off"],
         "valid-jsdoc": ["error", {"requireReturn": false}],
-        "no-console": ["off"]
+        "no-console": ["off"],
+        "no-multi-spaces": ["error", { "ignoreEOLComments": true }]
     },
     "env": {
         "browser": true

@@ -48,7 +48,7 @@ suite ('Number Fields', function() {
         { 'value': value, min: value, max: value, precision: value });
   }
   function assertNumberFieldSameValues(numberField, value) {
-    assertNumberField(numberField,  value, value, value, value);
+    assertNumberField(numberField, value, value, value, value);
   }
   suite('Constructor', function() {
     test('Empty', function() {

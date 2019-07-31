@@ -479,7 +479,7 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
       if (blockXY.y < newY) {
         newY = blockXY.y;
       }
-      if (blockXY.x  < newX) {  // if we align also on x
+      if (blockXY.x < newX) {  // if we align also on x
         newX = blockXY.x;
       }
     }

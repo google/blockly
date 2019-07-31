@@ -258,8 +258,8 @@ Blockly.CursorSvg.prototype.showWithStack_ = function() {
   var height = heightWidth.height + Blockly.CursorSvg.STACK_PADDING;
 
   // Shift the rectangle slightly to upper left so padding is equal on all sides.
-  var x =  -1 * Blockly.CursorSvg.STACK_PADDING / 2;
-  var y =  -1 * Blockly.CursorSvg.STACK_PADDING / 2;
+  var x = -1 * Blockly.CursorSvg.STACK_PADDING / 2;
+  var y = -1 * Blockly.CursorSvg.STACK_PADDING / 2;
 
   // If the block has an output connection it needs more padding.
   if (block.outputConnection) {

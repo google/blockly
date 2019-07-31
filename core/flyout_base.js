@@ -253,7 +253,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
       this.targetWorkspace_.getGesture.bind(this.targetWorkspace_);
 
   // Get variables from the main workspace rather than the target workspace.
-  this.workspace_.variableMap_  = this.targetWorkspace_.getVariableMap();
+  this.workspace_.variableMap_ = this.targetWorkspace_.getVariableMap();
 
   this.workspace_.createPotentialVariableMap();
 };

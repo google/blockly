@@ -339,7 +339,7 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
         state = 0;  // and parse as string literal.
       } else if (c != '}') {
         buffer.push(c);
-      } else  {
+      } else {
         var rawKey = buffer.join('');
         if (/[A-Z]\w*/i.test(rawKey)) {  // Strict matching
           // Found a valid string key. Attempt case insensitive match.

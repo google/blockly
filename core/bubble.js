@@ -523,7 +523,7 @@ Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(metrics) {
 
   if (this.workspace_.RTL) {
     // Bubble coordinates are flipped in RTL.
-    var bubbleRight =  this.anchorXY_.x - relativeLeft;
+    var bubbleRight = this.anchorXY_.x - relativeLeft;
     var bubbleLeft = bubbleRight - this.width_;
 
     var workspaceRight = metrics.viewLeft + metrics.viewWidth;

@@ -67,7 +67,8 @@
         "no-redeclare": ["off"],
         "valid-jsdoc": ["error", {"requireReturn": false}],
         "no-console": ["off"],
-        "no-multi-spaces": ["error", { "ignoreEOLComments": true }]
+        "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
+        "operator-linebreak": ["error", "after"]
     },
     "env": {
         "browser": true

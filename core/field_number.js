@@ -103,17 +103,17 @@ Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
 /**
  * Ensure that the input value is a valid number (must fulfill the
  * constraints placed on the field).
- * @param {string|number=} newValue The input value.
+ * @param {string|number=} opt_newValue The input value.
  * @return {?number} A valid number, or null if invalid.
  * @protected
  * @override
  */
-Blockly.FieldNumber.prototype.doClassValidation_ = function(newValue) {
-  if (newValue === null || newValue === undefined) {
+Blockly.FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
+  if (opt_newValue === null || opt_newValue === undefined) {
     return null;
   }
   // Clean up text.
-  newValue = String(newValue);
+  var newValue = String(opt_newValue);
   // TODO: Handle cases like 'ten', '1.203,14', etc.
   // 'O' is sometimes mistaken for '0' by inexperienced users.
   newValue = newValue.replace(/O/ig, '0');

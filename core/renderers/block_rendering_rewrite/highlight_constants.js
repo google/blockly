@@ -133,7 +133,7 @@ Blockly.blockRendering.highlightConstants.OUTSIDE_CORNER = (function() {
     },
     bottomLeft: function(yPos) {
       return Blockly.utils.svgPaths.moveTo(
-          distance45inside,yPos - distance45inside) +
+          distance45inside + offset, yPos - distance45inside) +
           Blockly.utils.svgPaths.arc('A', '0 0,1', radius - offset,
               Blockly.utils.svgPaths.point(offset, yPos - radius));
     }
@@ -195,6 +195,7 @@ Blockly.blockRendering.highlightConstants.PUZZLE_TAB = (function() {
 })();
 
 Blockly.blockRendering.highlightConstants.NOTCH = (function() {
+  // This is only for the previous connection.
   var pathLeft =
       Blockly.utils.svgPaths.lineOnAxis(
           'h', Blockly.blockRendering.highlightConstants.OFFSET) +

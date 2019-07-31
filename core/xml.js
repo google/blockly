@@ -263,7 +263,7 @@ Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {
       while (node && !node.nextSibling) {
         textNode = node;
         node = node.parentNode;
-        if (textNode.nodeType == Node.TEXT_NODE &&
+        if (textNode.nodeType == Blockly.utils.dom.Node.TEXT_NODE &&
             textNode.data.trim() == '' && node.firstChild != textNode) {
           // Prune whitespace after a tag.
           Blockly.utils.dom.removeNode(textNode);
@@ -272,7 +272,7 @@ Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {
       if (node) {
         textNode = node;
         node = node.nextSibling;
-        if (textNode.nodeType == Node.TEXT_NODE && textNode.data.trim() == '') {
+        if (textNode.nodeType == Blockly.utils.dom.Node.TEXT_NODE && textNode.data.trim() == '') {
           // Prune whitespace before a tag.
           Blockly.utils.dom.removeNode(textNode);
         }
@@ -510,7 +510,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     var swap = xmlBlock;
     // Closure Compiler complains here because the arguments are reversed.
     /** @suppress {checkTypes} */
-    xmlBlock = workspace;
+    xmlBlock = /** @type {!Element} */ (workspace);
     workspace = swap;
     console.warn('Deprecated call to Blockly.Xml.domToBlock, ' +
                  'swap the arguments.');
@@ -575,7 +575,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
  */
 Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
   for (var i = 0, xmlChild; xmlChild = xmlVariables.childNodes[i]; i++) {
-    if (xmlChild.nodeType != Node.ELEMENT_NODE) {
+    if (xmlChild.nodeType != Blockly.utils.dom.Node.ELEMENT_NODE) {
       continue;  // Skip text nodes.
     }
     var type = xmlChild.getAttribute('type');
@@ -605,7 +605,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
 
   var blockChild = null;
   for (var i = 0, xmlChild; xmlChild = xmlBlock.childNodes[i]; i++) {
-    if (xmlChild.nodeType == Node.TEXT_NODE) {
+    if (xmlChild.nodeType == Blockly.utils.dom.Node.TEXT_NODE) {
       // Ignore any text at the <block> level.  It's all whitespace anyway.
       continue;
     }
@@ -615,7 +615,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     var childBlockElement = null;
     var childShadowElement = null;
     for (var j = 0, grandchild; grandchild = xmlChild.childNodes[j]; j++) {
-      if (grandchild.nodeType == Node.ELEMENT_NODE) {
+      if (grandchild.nodeType == Blockly.utils.dom.Node.ELEMENT_NODE) {
         if (grandchild.nodeName.toLowerCase() == 'block') {
           childBlockElement = /** @type {!Element} */ (grandchild);
         } else if (grandchild.nodeName.toLowerCase() == 'shadow') {

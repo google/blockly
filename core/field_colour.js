@@ -31,8 +31,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.utils.colour');
-
-goog.require('goog.math.Size');
+goog.require('Blockly.utils.Size');
 
 
 /**
@@ -154,7 +153,7 @@ Blockly.FieldColour.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
  * @package
  */
 Blockly.FieldColour.prototype.initView = function() {
-  this.size_ = new goog.math.Size(Blockly.FieldColour.DEFAULT_WIDTH,
+  this.size_ = new Blockly.utils.Size(Blockly.FieldColour.DEFAULT_WIDTH,
       Blockly.FieldColour.DEFAULT_HEIGHT);
   this.createBorderRect_();
   this.borderRect_.style['fillOpacity'] = 1;
@@ -163,15 +162,15 @@ Blockly.FieldColour.prototype.initView = function() {
 
 /**
  * Ensure that the input value is a valid colour.
- * @param {string=} newValue The input value.
+ * @param {string=} opt_newValue The input value.
  * @return {?string} A valid colour, or null if invalid.
  * @protected
  */
-Blockly.FieldColour.prototype.doClassValidation_ = function(newValue) {
-  if (typeof newValue != 'string') {
+Blockly.FieldColour.prototype.doClassValidation_ = function(opt_newValue) {
+  if (typeof opt_newValue != 'string') {
     return null;
   }
-  return Blockly.utils.colour.parse(newValue);
+  return Blockly.utils.colour.parse(opt_newValue);
 };
 
 /**
@@ -246,13 +245,13 @@ Blockly.FieldColour.COLUMNS = 7;
  * Set a custom colour grid for this field.
  * @param {Array.<string>} colours Array of colours for this block,
  *     or null to use default (Blockly.FieldColour.COLOURS).
- * @param {Array.<string>} opt_titles Optional array of colour tooltips,
+ * @param {Array.<string>=} opt_titles Optional array of colour tooltips,
  *     or null to use default (Blockly.FieldColour.TITLES).
  * @return {!Blockly.FieldColour} Returns itself (for method chaining).
  */
 Blockly.FieldColour.prototype.setColours = function(colours, opt_titles) {
   this.colours_ = colours;
-  if (opt_titles !== undefined) {
+  if (opt_titles) {
     this.titles_ = opt_titles;
   }
   return this;
@@ -351,7 +350,7 @@ Blockly.FieldColour.prototype.dropdownDispose_ = function() {
  * Get the size of the visible field, as used in new rendering.
  * The colour field fills the bounding box with colour and takes up the full
  * space of the bounding box.
- * @return {!goog.math.Size} The size of the visible field.
+ * @return {!Blockly.utils.Size} The size of the visible field.
  * @package
  */
 Blockly.FieldColour.prototype.getCorrectedSize = function() {
@@ -359,7 +358,7 @@ Blockly.FieldColour.prototype.getCorrectedSize = function() {
   // the logic to figure out whether to rerender, just call getSize.
   this.getSize();
   // TODO (#2562): Remove getCorrectedSize.
-  return new goog.math.Size(
+  return new Blockly.utils.Size(
       this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
       Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT - 1);
 };

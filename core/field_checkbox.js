@@ -30,6 +30,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Size');
 
 
 /**
@@ -140,15 +141,15 @@ Blockly.FieldCheckbox.prototype.showEditor_ = function() {
 
 /**
  * Ensure that the input value is valid ('TRUE' or 'FALSE').
- * @param {string|boolean=} newValue The input value.
+ * @param {string|boolean=} opt_newValue The input value.
  * @return {?string} A valid value ('TRUE' or 'FALSE), or null if invalid.
  * @protected
  */
-Blockly.FieldCheckbox.prototype.doClassValidation_ = function(newValue) {
-  if (newValue === true || newValue === 'TRUE') {
+Blockly.FieldCheckbox.prototype.doClassValidation_ = function(opt_newValue) {
+  if (opt_newValue === true || opt_newValue === 'TRUE') {
     return 'TRUE';
   }
-  if (newValue === false || newValue === 'FALSE') {
+  if (opt_newValue === false || opt_newValue === 'FALSE') {
     return 'FALSE';
   }
   return null;
@@ -213,14 +214,14 @@ Blockly.FieldCheckbox.prototype.convertValueToBool_ = function(value) {
  * Get the size of the visible field, as used in new rendering.
  * The checkbox field fills the entire border rect, rather than just using the
  * text element.
- * @return {!goog.math.Size} The size of the visible field.
+ * @return {!Blockly.utils.Size} The size of the visible field.
  * @package
  */
 Blockly.FieldCheckbox.prototype.getCorrectedSize = function() {
   this.getSize();
 
   // TODO (#2562): Remove getCorrectedSize.
-  return new goog.math.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
+  return new Blockly.utils.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
       Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
 };
 Blockly.Field.register('field_checkbox', Blockly.FieldCheckbox);

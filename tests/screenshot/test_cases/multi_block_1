@@ -1,6 +1,6 @@
-<xml xmlns="http://www.w3.org/1999/xhtml">
+<xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable type="" id=";yuq?=_C|_qk64!)f:m^">item</variable>
+    <variable id=";yuq?=_C|_qk64!)f:m^">item</variable>
   </variables>
   <block type="controls_ifelse">
     <statement name="ELSE">
@@ -50,7 +50,7 @@
         </statement>
         <statement name="ELSE">
           <block type="text_append">
-            <field name="VAR" id=";yuq?=_C|_qk64!)f:m^" variabletype="">item</field>
+            <field name="VAR" id=";yuq?=_C|_qk64!)f:m^">item</field>
             <value name="TEXT">
               <shadow type="text">
                 <field name="TEXT">f00</field>
@@ -58,7 +58,7 @@
             </value>
             <next>
               <block type="text_append">
-                <field name="VAR" id=";yuq?=_C|_qk64!)f:m^" variabletype="">item</field>
+                <field name="VAR" id=";yuq?=_C|_qk64!)f:m^">item</field>
                 <value name="TEXT">
                   <shadow type="text">
                     <field name="TEXT">bar</field>

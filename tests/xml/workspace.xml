@@ -1,8 +1,8 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable type="" id="4zqCO]S-jo+2^`maCt|K">x</variable>
-    <variable type="" id="K/cNaUs{[7ol-9}CP7RL">i</variable>
-    <variable type="" id="8ZxN/~:DTP3pX4eGrv2b">text</variable>
+    <variable id="4zqCO]S-jo+2^`maCt|K">x</variable>
+    <variable id="K/cNaUs{[7ol-9}CP7RL">i</variable>
+    <variable id="8ZxN/~:DTP3pX4eGrv2b">text</variable>
   </variables>
   <comment id="TUkxWVwnVb;#]^MfteT4" x="0" y="0" h="100" w="100">This is a workspace comment.
  This is a new line on the workspace comment.
@@ -27,7 +27,7 @@
                 <field name="WHERE2">FROM_START</field>
                 <value name="STRING">
                   <block type="variables_get" id="oF,qA%c[v(h6/iLJJ0Zn">
-                    <field name="VAR" id="8ZxN/~:DTP3pX4eGrv2b" variabletype="">text</field>
+                    <field name="VAR" id="8ZxN/~:DTP3pX4eGrv2b">text</field>
                   </block>
                 </value>
               </block>
@@ -55,7 +55,7 @@
         </statement>
         <statement name="ELSE">
           <block type="math_change" id="KiMt-oQI`=,FYKY5ZK=:">
-            <field name="VAR" id="K/cNaUs{[7ol-9}CP7RL" variabletype="">i</field>
+            <field name="VAR" id="K/cNaUs{[7ol-9}CP7RL">i</field>
             <value name="DELTA">
               <shadow type="math_number" id="-O]V4./`ipovlf]!:v![">
                 <field name="NUM">1</field>

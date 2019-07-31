@@ -93,7 +93,8 @@ for dir in ./core/*/ ; do
     done
   else
     # For all files in the directory and any subdirectories rename them to
-    # include the subirectory name. Ex: subdir/file.js -> subdir_file.js
+    # include the subirectory name and copy them to temporary directory.
+    # Ex: subdir/file.js -> temp_core/subdir_file.js
     for file in $(find $dir -name \*.js); do
       # Replace all / with _ and remove core
       newName="${file//\//_}"

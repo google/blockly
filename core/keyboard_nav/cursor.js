@@ -28,8 +28,9 @@ goog.provide('Blockly.Cursor');
 
 /**
  * Class for a cursor.
- * @param {boolean} opt_marker True if the cursor is a marker. False or
- * undefined if the cursor is not a marker. A marker is an immovable cursor.
+ * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
+ *     to save a location and is an immovable cursor. False or undefined if the
+ *     cursor is not a marker.
  * @constructor
  */
 Blockly.Cursor = function(opt_marker) {

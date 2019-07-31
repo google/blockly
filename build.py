@@ -230,6 +230,7 @@ class Gen_compressed(threading.Thread):
         code = code.replace("Blockly.VERSION = 'unset';", "Blockly.VERSION = '" + blocklyVersion + "';")
       params.append(("js_code", code))
       f.close()
+
     self.do_compile(params, target_filename, filenames, "")
 
   def gen_blocks(self):

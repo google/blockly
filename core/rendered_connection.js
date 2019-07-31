@@ -212,9 +212,19 @@ Blockly.RenderedConnection.prototype.closest = function(maxLimit, dxy) {
 Blockly.RenderedConnection.prototype.highlight = function() {
   var steps;
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
-    steps = 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 5';
+    // Vertical line, puzzle tab, vertical line.
+    var yLen = 5;
+    steps = Blockly.utils.svgPaths.moveBy(0, -yLen) +
+        Blockly.utils.svgPaths.lineOnAxis('v', yLen) +
+        Blockly.blockRendering.constants.PUZZLE_TAB.pathDown +
+        Blockly.utils.svgPaths.lineOnAxis('v', yLen);
   } else {
-    steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
+    var xLen = 5;
+    // Horizontal line, notch, horizontal line.
+    steps = Blockly.utils.svgPaths.moveBy(-xLen, 0) +
+        Blockly.utils.svgPaths.lineOnAxis('h', xLen) +
+        Blockly.blockRendering.constants.NOTCH.pathLeft +
+        Blockly.utils.svgPaths.lineOnAxis('h', xLen);
   }
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();
   var x = this.x_ - xy.x;

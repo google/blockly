@@ -651,8 +651,8 @@ Blockly.BlockSvg.prototype.renderDrawTop_ = function(pathObject, rightEdge) {
     steps.push(Blockly.BlockSvg.NOTCH_PATH_LEFT);
     highlightSteps.push(Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT);
 
-    var connectionX = (this.RTL ?
-        -Blockly.BlockSvg.NOTCH_WIDTH : Blockly.BlockSvg.NOTCH_WIDTH);
+    var notchOffsetStart = 15;
+    var connectionX = (this.RTL ? -notchOffsetStart : notchOffsetStart);
     this.previousConnection.setOffsetInBlock(connectionX, 0);
   }
   steps.push('H', rightEdge);
@@ -733,13 +733,9 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ = function(pathObject, cursorY) {
   if (this.nextConnection) {
     steps.push('H', (Blockly.BlockSvg.NOTCH_WIDTH + (this.RTL ? 0.5 : - 0.5)) +
         ' ' + Blockly.BlockSvg.NOTCH_PATH_RIGHT);
-    // Create next block connection.
-    var connectionX;
-    if (this.RTL) {
-      connectionX = -Blockly.BlockSvg.NOTCH_WIDTH;
-    } else {
-      connectionX = Blockly.BlockSvg.NOTCH_WIDTH;
-    }
+
+    var notchOffsetStart = 15;
+    var connectionX = (this.RTL ? -notchOffsetStart : notchOffsetStart);
     this.nextConnection.setOffsetInBlock(connectionX, cursorY + 1);
     this.height += 4;  // Height of tab.
   }
@@ -777,7 +773,7 @@ Blockly.BlockSvg.prototype.renderDrawLeft_ = function(pathObject) {
   var highlightSteps = pathObject.highlightSteps;
   if (this.outputConnection) {
     // Create output connection.
-    this.outputConnection.setOffsetInBlock(0, 0);
+    this.outputConnection.setOffsetInBlock(0, 5);
     steps.push('V', Blockly.BlockSvg.TAB_HEIGHT);
     steps.push('c 0,-10 -' + Blockly.BlockSvg.TAB_WIDTH + ',8 -' +
         Blockly.BlockSvg.TAB_WIDTH + ',-7.5 s ' + Blockly.BlockSvg.TAB_WIDTH +
@@ -915,7 +911,7 @@ Blockly.BlockSvg.prototype.renderInlineRow_ = function(pathObject, row, cursor,
             input.renderWidth - 1;
       }
       connectionPos.y = cursor.y + Blockly.BlockSvg.INLINE_PADDING_Y + 1;
-      input.connection.setOffsetInBlock(connectionPos.x, connectionPos.y);
+      input.connection.setOffsetInBlock(connectionPos.x, connectionPos.y + 5);
     }
   }
 
@@ -977,7 +973,7 @@ Blockly.BlockSvg.prototype.renderExternalValueInput_ = function(pathObject, row,
   }
   // Create external input connection.
   connectionPos.x = this.RTL ? -rightEdge - 1 : rightEdge + 1;
-  input.connection.setOffsetInBlock(connectionPos.x, cursor.y);
+  input.connection.setOffsetInBlock(connectionPos.x, cursor.y + 5);
   if (input.connection.isConnected()) {
     this.width = Math.max(this.width, rightEdge +
         input.connection.targetBlock().getHeightWidth().width -
@@ -1093,7 +1089,8 @@ Blockly.BlockSvg.prototype.renderStatementInput_ = function(pathObject, row,
     highlightSteps.push('H', inputRows.rightEdge - 0.5);
   }
   // Create statement connection.
-  connectionPos.x = this.RTL ? -cursor.x : cursor.x + 1;
+  var x = inputRows.statementEdge + 15; // Notch offset from left.
+  connectionPos.x = this.RTL ? -x : x + 1;
   input.connection.setOffsetInBlock(connectionPos.x, cursor.y + 1);
 
   if (input.connection.isConnected()) {

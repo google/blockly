@@ -47,7 +47,4 @@ Blockly.blockRendering.render = function(block) {
   }
   var info = new Blockly.blockRendering.RenderInfo(block);
   new Blockly.blockRendering.Drawer(block, info).draw_();
-
-  // TODO: Fix moving connections in the new rendering code.
-  block.renderMoveConnections_();
 };

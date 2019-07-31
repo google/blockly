@@ -1547,6 +1547,8 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   } else {
     this.renderInternal();
   }
+  // No matter how we rendered, connection locations should now be correct.
+  this.updateConnectionLocations_();
   if (opt_bubble !== false) {
     // Render all blocks above this one (propagate a reflow).
     var parentBlock = this.getParent();
@@ -1558,4 +1560,39 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
     }
   }
   Blockly.Field.stopCache();
+};
+
+/**
+ * Update all of the connections on this block with the new locations calculated
+ * during rendering.  Also move all of the connected blocks based on the new
+ * connection locations.
+ * @private
+ */
+Blockly.BlockSvg.prototype.updateConnectionLocations_ = function() {
+  var blockTL = this.getRelativeToSurfaceXY();
+  // Don't tighten previous or output connections because they are inferior
+  // connections.
+  if (this.previousConnection) {
+    this.previousConnection.moveToOffset(blockTL);
+  }
+  if (this.outputConnection) {
+    this.outputConnection.moveToOffset(blockTL);
+  }
+
+  for (var i = 0; i < this.inputList.length; i++) {
+    var conn = this.inputList[i].connection;
+    if (conn) {
+      conn.moveToOffset(blockTL);
+      if (conn.isConnected()) {
+        conn.tighten_();
+      }
+    }
+  }
+
+  if (this.nextConnection) {
+    this.nextConnection.moveToOffset(blockTL);
+    if (this.nextConnection.isConnected()) {
+      this.nextConnection.tighten_();
+    }
+  }
 };

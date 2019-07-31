@@ -73,6 +73,20 @@ if [ -f "$BLOCKLY_ROOT/tests/compile/main_compressed.js" ]; then
   rm "$BLOCKLY_ROOT/tests/compile/main_compressed.js"
 fi
 
+# If an argument is passed and is a valid renderer name use it otherwise use
+# default renderer name
+if [[ $# == 1 ]]; then
+  if [ $(find "$BLOCKLY_ROOT/core" -name "$1") ]; then
+    renderName=$1
+  else
+    echo "A renderer with the name $1 does not exist"
+    echo "Please provide a valid renderer name"
+    exit 1
+  fi
+else
+  renderName="block_rendering_rewrite"
+fi
+
 tempPath="$BLOCKLY_ROOT/temp_core"
 corePath="$BLOCKLY_ROOT/core/*"
 rm -r $tempPath

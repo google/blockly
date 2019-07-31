@@ -1547,7 +1547,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   } else {
     this.renderInternal();
   }
-  // No matter how we rendered, connections locations should now be correct.
+  // No matter how we rendered, connection locations should now be correct.
   this.updateConnectionLocations_();
   if (opt_bubble !== false) {
     // Render all blocks above this one (propagate a reflow).

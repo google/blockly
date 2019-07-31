@@ -1081,6 +1081,14 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
   Blockly.Events.disable();
   try {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
+
+    // Handle paste for keyboard navigation
+    var markedNode = Blockly.Navigation.marker_.getCurNode();
+    if (Blockly.keyboardAccessibilityMode && markedNode) {
+      Blockly.Navigation.insertBlock(block, markedNode.getLocation());
+      return;
+    }
+
     // Move the duplicate to original position.
     var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
     var blockY = parseInt(xmlBlock.getAttribute('y'), 10);

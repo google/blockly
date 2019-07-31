@@ -32,15 +32,15 @@ goog.require('Blockly.Cursor');
 /**
  * Class for a cursor.
  * @param {!Blockly.Workspace} workspace The workspace to sit in.
- * @param {boolean=} opt_isImmovable True if the cursor cannot be moved with
- *     calls to prev/next/in/out.  This is called a marker.
+ * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
+ *     to save a location and is an immovable cursor. False or undefined if the
+ *     cursor is not a marker.
  * @extends {Blockly.Cursor}
  * @constructor
  */
-Blockly.CursorSvg = function(workspace, opt_isImmovable) {
-  Blockly.CursorSvg.superClass_.constructor.call(this);
+Blockly.CursorSvg = function(workspace, opt_marker) {
+  Blockly.CursorSvg.superClass_.constructor.call(this, opt_marker);
   this.workspace_ = workspace;
-  this.isMarker_ = opt_isImmovable || false;
 };
 goog.inherits(Blockly.CursorSvg, Blockly.Cursor);
 

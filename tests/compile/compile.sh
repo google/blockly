@@ -73,9 +73,40 @@ if [ -f "$BLOCKLY_ROOT/tests/compile/main_compressed.js" ]; then
   rm "$BLOCKLY_ROOT/tests/compile/main_compressed.js"
 fi
 
+tempPath="$BLOCKLY_ROOT/temp_core"
+corePath="$BLOCKLY_ROOT/core/*"
+rm -r $tempPath
+mkdir $tempPath
+cp $corePath $tempPath
+
+# Copy over all files found in subdirectories except for the extra renderers.
+for dir in ./core/*/ ; do
+  # If we are in the renderers directory
+  if [[ $dir == *"/renderers/"* ]]; then
+    renderers="$dir*"
+    # Go through all folders in the renderers direcotry
+    for renderer in $renderers ; do
+      if [[ $renderer == *"${renderName}" ]]; then
+        # Copy over all files from the desired render folder
+        find $renderer -type f -exec cp {} $tempPath \;
+      fi
+    done
+  else
+    # For all files in the directory and any subdirectories rename them to
+    # include the subirectory name. Ex: subdir/file.js -> subdir_file.js
+    for file in $(find $dir -name \*.js); do
+      # Replace all / with _ and remove core
+      newName="${file//\//_}"
+      newName="${newName//._core_/}"
+      newFilePath="$tempPath/$newName"
+      cp $file $newFilePath
+    done
+  fi
+done
+
 echo "Compiling Blockly..."
 COMPILATION_COMMAND="java -jar $COMPILER --js='$BLOCKLY_ROOT/tests/compile/main.js' \
-  --js='$BLOCKLY_ROOT/core/**.js' \
+  --js='$BLOCKLY_ROOT/$tempPath/**.js' \
   --js='$BLOCKLY_ROOT/blocks/**.js' \
   --js='$BLOCKLY_ROOT/generators/**.js' \
   --js='$BLOCKLY_ROOT/msg/js/**.js' \

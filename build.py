@@ -56,7 +56,7 @@ else:
   from urllib.parse import urlencode
   from importlib import reload
 
-# Read package.json and extract the current Blockly version
+# Read package.json and extract the current Blockly version.
 blocklyVersion = json.loads(open('package.json', 'r').read())['version']
 
 def import_path(fullpath):
@@ -224,9 +224,12 @@ class Gen_compressed(threading.Thread):
       if filename.startswith(os.pardir + os.sep):  # '../'
         continue
       f = codecs.open(filename, encoding="utf-8")
-      params.append(("js_code", "".join(f.readlines()).encode("utf-8")))
+      code = "".join(f.readlines()).encode("utf-8")
+      # Inject the blockly version.
+      if filename == "core/blockly.js":
+        code = code.replace("Blockly.VERSION = 'unset';", "Blockly.VERSION = '" + blocklyVersion + "';")
+      params.append(("js_code", code))
       f.close()
-
     self.do_compile(params, target_filename, filenames, "")
 
   def gen_blocks(self):
@@ -348,7 +351,6 @@ class Gen_compressed(threading.Thread):
 
       code = HEADER + "\n" + json_data["compiledCode"]
       code = code.replace(remove, "")
-      code = code.replace('Blockly.version="unset"', 'Blockly.version="' + blocklyVersion + '"')
       code = self.trim_licence(code)
 
       stats = json_data["statistics"]

@@ -66,6 +66,12 @@ var CLOSURE_DEFINES = {'goog.DEBUG': false};
 /* eslint-enable no-unused-vars */
 
 /**
+ * Blockly core version.
+ * @define {string}
+ */
+Blockly.VERSION = 'unset';
+
+/**
  * The main workspace most recently used.
  * Set by Blockly.WorkspaceSvg.prototype.markFocused
  * @type {Blockly.Workspace}
@@ -131,12 +137,6 @@ Blockly.cache3dSupported_ = null;
  * @private
  */
 Blockly.theme_ = null;
-
-/**
- * Blockly core version.
- * @define {string}
- */
-Blockly.version = "unset";
 
 /**
  * Returns the dimensions of the specified SVG image.

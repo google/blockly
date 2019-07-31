@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Cursor');
 
+
 /**
  * Class for a cursor.
  * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used

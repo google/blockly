@@ -22,6 +22,7 @@ goog.provide('Blockly.Navigation');
 
 goog.require('Blockly.ASTNode');
 
+
 /**
  * The cursor for keyboard navigation.
  * @type {Blockly.Cursor}
@@ -478,8 +479,8 @@ Blockly.Navigation.modify = function() {
 Blockly.Navigation.connect = function(movingConnection, targetConnection) {
   if (movingConnection) {
     var movingBlock = movingConnection.getSourceBlock();
-    if (targetConnection.type == Blockly.PREVIOUS_STATEMENT
-        || targetConnection.type == Blockly.OUTPUT_VALUE) {
+    if (targetConnection.type == Blockly.PREVIOUS_STATEMENT ||
+        targetConnection.type == Blockly.OUTPUT_VALUE) {
       movingBlock.positionNearConnection(movingConnection, targetConnection);
     }
     try {
@@ -542,6 +543,9 @@ Blockly.Navigation.insertBlock = function(block, targetConnection) {
   if (bestConnection && bestConnection.isConnected() &&
       !bestConnection.targetBlock().isShadow()) {
     bestConnection.disconnect();
+  } else if (!bestConnection) {
+    Blockly.Navigation.warn(
+        'This block can not be inserted at the marked location.');
   }
   return Blockly.Navigation.connect(bestConnection, targetConnection);
 };

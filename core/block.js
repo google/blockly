@@ -413,8 +413,8 @@ Blockly.Block.prototype.getOnlyValueConnection_ = function() {
   var connection = null;
   for (var i = 0; i < this.inputList.length; i++) {
     var thisConnection = this.inputList[i].connection;
-    if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE
-        && thisConnection.targetConnection) {
+    if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE &&
+        thisConnection.targetConnection) {
       if (connection) {
         return null; // More than one value input found.
       }
@@ -914,7 +914,7 @@ Blockly.Block.prototype.getColourBorder = function() {
   var colour = this.getColour();
   return {
     colourBorder: null,
-    colourLight: Blockly.utils.colour.blend('white',colour,  0.3),
+    colourLight: Blockly.utils.colour.blend('white', colour, 0.3),
     colourDark: Blockly.utils.colour.blend('black', colour, 0.2)
   };
 };

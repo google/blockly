@@ -265,8 +265,8 @@ Blockly.onKeyDown_ = function(e) {
       Blockly.hideChaff();
       workspace.undo(e.shiftKey);
     }
-  } else if (Blockly.keyboardAccessibilityMode
-    && Blockly.Navigation.navigate(e)) {
+  } else if (Blockly.keyboardAccessibilityMode &&
+      Blockly.Navigation.navigate(e)) {
     return;
   }
   // Common code for delete and cut.

@@ -33,6 +33,7 @@ goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.userAgent');
 
 
@@ -100,15 +101,15 @@ Blockly.FieldTextInput.prototype.spellcheck_ = true;
 
 /**
  * Ensure that the input value casts to a valid string.
- * @param {string=} newValue The input value.
+ * @param {string=} opt_newValue The input value.
  * @return {?string} A valid string, or null if invalid.
  * @protected
  */
-Blockly.FieldTextInput.prototype.doClassValidation_ = function(newValue) {
-  if (newValue === null || newValue === undefined) {
+Blockly.FieldTextInput.prototype.doClassValidation_ = function(opt_newValue) {
+  if (opt_newValue === null || opt_newValue === undefined) {
     return null;
   }
-  return String(newValue);
+  return String(opt_newValue);
 };
 
 /**
@@ -429,7 +430,7 @@ Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
 
 /**
  * Get the size of the visible field, as used in new rendering.
- * @return {!goog.math.Size} The size of the visible field.
+ * @return {!Blockly.utils.Size} The size of the visible field.
  * @package
  */
 Blockly.FieldTextInput.prototype.getCorrectedSize = function() {
@@ -437,7 +438,7 @@ Blockly.FieldTextInput.prototype.getCorrectedSize = function() {
   // the logic to figure out whether to rerender, just call getSize.
   this.getSize();
   // TODO (#2562): Remove getCorrectedSize.
-  return new goog.math.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
+  return new Blockly.utils.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
       Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
 };
 

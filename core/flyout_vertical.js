@@ -173,8 +173,8 @@ Blockly.VerticalFlyout.prototype.position = function() {
       // to align the right edge of the flyout with the right edge of the
       // blocklyDiv, we calculate the full width of the div minus the width
       // of the flyout.
-      var x = targetWorkspaceMetrics.viewWidth
-          + targetWorkspaceMetrics.absoluteLeft - this.width_;
+      var x = targetWorkspaceMetrics.viewWidth +
+          targetWorkspaceMetrics.absoluteLeft - this.width_;
     }
   }
   this.positionAt_(this.width_, this.height_, x, y);

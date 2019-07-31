@@ -238,7 +238,7 @@ function test_move_constructorCoordinate() {
   setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '2']);
   try {
     var block1 = createSimpleTestBlock(workspace);
-    var coordinate = new goog.math.Coordinate(3,4);
+    var coordinate = new Blockly.utils.Coordinate(3, 4);
     block1.xy_ = coordinate;
 
     var event = new Blockly.Events.Move(block1);
@@ -257,7 +257,7 @@ function test_move_constructoroldParentId() {
     var block1 = createSimpleTestBlock(workspace);
     var block2 = createSimpleTestBlock(workspace);
     block1.parentBlock_ = block2;
-    block1.xy_ = new goog.math.Coordinate(3,4);
+    block1.xy_ = new Blockly.utils.Coordinate(3, 4);
 
     var event = new Blockly.Events.Move(block1);
     checkExactEventValues(event, {'oldCoordinate': undefined,
@@ -274,7 +274,7 @@ function test_blockMove_constructorCoordinate() {
   setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '2']);
   try {
     var block1 = createSimpleTestBlock(workspace);
-    var coordinate = new goog.math.Coordinate(3,4);
+    var coordinate = new Blockly.utils.Coordinate(3, 4);
     block1.xy_ = coordinate;
 
     var event = new Blockly.Events.BlockMove(block1);
@@ -293,7 +293,7 @@ function test_blockMove_constructoroldParentId() {
     var block1 = createSimpleTestBlock(workspace);
     var block2 = createSimpleTestBlock(workspace);
     block1.parentBlock_ = block2;
-    block1.xy_ = new goog.math.Coordinate(3,4);
+    block1.xy_ = new Blockly.utils.Coordinate(3, 4);
 
     var event = new Blockly.Events.BlockMove(block1);
     checkExactEventValues(event, {'oldCoordinate': undefined,
@@ -701,7 +701,7 @@ function test_events_filteraftermerge() {
  */
 function helper_addMoveEvent(events, block, newX, newY) {
   events.push(new Blockly.Events.BlockMove(block));
-  block.xy_ = new goog.math.Coordinate(newX, newY);
+  block.xy_ = new Blockly.utils.Coordinate(newX, newY);
   events[events.length-1].recordNew();
 }
 
@@ -757,7 +757,7 @@ function test_events_newblock_newvar_xml() {
         var dom = Blockly.Xml.textToDom(
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '  <block type="field_variable_test_block" id="block1">' +
-        '    <field name="VAR" id="id1" variabletype="">name1</field>' +
+        '    <field name="VAR" id="id1">name1</field>' +
         '  </block>' +
         '</xml>');
     Blockly.Xml.domToWorkspace(dom, workspace);

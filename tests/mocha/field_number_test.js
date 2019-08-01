@@ -83,6 +83,14 @@ suite('Number Fields', function() {
       var numberField = createNumberFieldSameValuesConstructor('1.5');
       assertNumberFieldSameValues(numberField, 1.5);
     });
+    test('Infinity', function() {
+      var numberField = createNumberFieldSameValuesConstructor('Infinity');
+      assertNumberFieldSameValues(numberField, Infinity);
+    });
+    test('Negative Infinity String', function() {
+      var numberField = createNumberFieldSameValuesConstructor('-Infinity');
+      assertNumberFieldSameValues(numberField, -Infinity);
+    });
   });
   suite('fromJson', function() {
     test('Empty', function() {
@@ -116,6 +124,14 @@ suite('Number Fields', function() {
     test('Float String', function() {
       var numberField = createNumberFieldSameValuesJson('1.5');
       assertNumberFieldSameValues(numberField, 1.5);
+    });
+    test('Infinity', function() {
+      var numberField = createNumberFieldSameValuesJson('Infinity');
+      assertNumberFieldSameValues(numberField, Infinity);
+    });
+    test('Negative Infinity String', function() {
+      var numberField = createNumberFieldSameValuesJson('-Infinity');
+      assertNumberFieldSameValues(numberField, -Infinity);
     });
   });
   suite('setValue', function() {
@@ -156,6 +172,14 @@ suite('Number Fields', function() {
           this.numberField.setValue('2.5');
           assertValue(this.numberField, 2.5);
         });
+        test('Infinity', function() {
+          this.numberField.setValue(Infinity);
+          assertValue(this.numberField, Infinity);
+        });
+        test('Negative Infinity String', function() {
+          this.numberField.setValue('-Infinity');
+          assertValue(this.numberField, -Infinity);
+        });
       });
       suite('Value -> New Value', function() {
         setup(function() {
@@ -192,6 +216,14 @@ suite('Number Fields', function() {
         test('Float String', function() {
           this.numberField.setValue('2.5');
           assertValue(this.numberField, 2.5);
+        });
+        test('Infinity', function() {
+          this.numberField.setValue(Infinity);
+          assertValue(this.numberField, Infinity);
+        });
+        test('Negative Infinity String', function() {
+          this.numberField.setValue('-Infinity');
+          assertValue(this.numberField, -Infinity);
         });
       });
     });

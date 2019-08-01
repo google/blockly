@@ -67,6 +67,14 @@ suite('Angle Fields', function() {
       var angleField = new Blockly.FieldAngle(362);
       assertValue(angleField, 2);
     });
+    test('Infinity', function() {
+      var angleField = new Blockly.FieldAngle(Infinity);
+      assertValueDefault(angleField);
+    });
+    test('Negative Infinity String', function() {
+      var angleField = new Blockly.FieldAngle('-Infinity');
+      assertValueDefault(angleField);
+    });
   });
   suite('fromJson', function() {
     test('Empty', function() {
@@ -104,6 +112,14 @@ suite('Angle Fields', function() {
     test('> 360°', function() {
       var angleField = Blockly.FieldAngle.fromJson({ angle:362 });
       assertValue(angleField, 2);
+    });
+    test('Infinity', function() {
+      var angleField = Blockly.FieldAngle.fromJson({ angle:Infinity });
+      assertValueDefault(angleField);
+    });
+    test('Negative Infinity String', function() {
+      var angleField = Blockly.FieldAngle.fromJson({ angle:'-Infinity' });
+      assertValueDefault(angleField);
     });
   });
   suite('setValue', function() {
@@ -147,6 +163,14 @@ suite('Angle Fields', function() {
         this.angleField.setValue(362);
         assertValue(this.angleField, 2);
       });
+      test('Infinity', function() {
+        this.angleField.setValue(Infinity);
+        assertValueDefault(this.angleField);
+      });
+      test('Negative Infinity String', function() {
+        this.angleField.setValue('-Infinity');
+        assertValueDefault(this.angleField);
+      });
     });
     suite('Value -> New Value', function() {
       setup(function() {
@@ -187,6 +211,14 @@ suite('Angle Fields', function() {
       test('>360°', function() {
         this.angleField.setValue(362);
         assertValue(this.angleField, 2);
+      });
+      test('Infinity', function() {
+        this.angleField.setValue(Infinity);
+        assertValue(this.angleField, 1);
+      });
+      test('Negative Infinity String', function() {
+        this.angleField.setValue('-Infinity');
+        assertValue(this.angleField, 1);
       });
     });
   });

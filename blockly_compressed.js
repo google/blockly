@@ -1377,7 +1377,18 @@ this.svgDialog_.setAttribute("height",this.workspaceHeight_);this.block_.RTL&&(a
 Blockly.Mutator.prototype.setVisible=function(a){if(a!=this.isVisible())if(Blockly.Events.fire(new Blockly.Events.Ui(this.block_,"mutatorOpen",!a,a)),a){this.bubble_=new Blockly.Bubble(this.block_.workspace,this.createEditor_(),this.block_.svgPath_,this.iconXY_,null,null);this.bubble_.setSvgId(this.block_.id);if(a=this.workspace_.options.languageTree)this.workspace_.flyout_.init(this.workspace_),this.workspace_.flyout_.show(a.childNodes);this.rootBlock_=this.block_.decompose(this.workspace_);a=this.rootBlock_.getDescendants(!1);
 for(var b=0,c;c=a[b];b++)c.render();this.rootBlock_.setMovable(!1);this.rootBlock_.setDeletable(!1);this.workspace_.flyout_?(a=2*this.workspace_.flyout_.CORNER_RADIUS,b=this.workspace_.getFlyout().getWidth()+a):b=a=16;this.block_.RTL&&(b=-b);this.rootBlock_.moveBy(b,a);if(this.block_.saveConnections){var d=this;this.block_.saveConnections(this.rootBlock_);this.sourceListener_=function(){d.block_.saveConnections(d.rootBlock_)};this.block_.workspace.addChangeListener(this.sourceListener_)}this.resizeBubble_();
 this.workspace_.addChangeListener(this.workspaceChanged_.bind(this));this.updateColour()}else this.svgDialog_=null,this.workspace_.dispose(),this.rootBlock_=this.workspace_=null,this.bubble_.dispose(),this.bubble_=null,this.workspaceHeight_=this.workspaceWidth_=0,this.sourceListener_&&(this.block_.workspace.removeChangeListener(this.sourceListener_),this.sourceListener_=null)};
-Blockly.Mutator.prototype.workspaceChanged_=function(a){if(a.type!=Blockly.Events.UI&&(a.type!=Blockly.Events.CHANGE||"disabled"!=a.element)){if(!this.workspace_.isDragging()){a=this.workspace_.getTopBlocks(!1);for(var b=0,c;c=a[b];b++){var d=c.getRelativeToSurfaceXY(),e=c.getHeightWidth();20>d.y+e.height&&c.moveBy(0,20-e.height-d.y)}}if(this.rootBlock_.workspace==this.workspace_){Blockly.Events.setGroup(!0);c=this.block_;a=(a=c.mutationToDom())&&Blockly.Xml.domToText(a);b=c.rendered;c.rendered=!1;
+var isLastRunWorkspaceChanged = false;
+Blockly.Mutator.prototype.workspaceChanged_ = function(e){
+  var t = this;
+  if (!isLastRunWorkspaceChanged) {
+    window.setTimeout(() => {
+      t.workspaceChanged_x(e);
+      isLastRunWorkspaceChanged = false;
+    });
+    isLastRunWorkspaceChanged = true;
+  }
+}
+Blockly.Mutator.prototype.workspaceChanged_x=function(a){if(a.type!=Blockly.Events.UI&&(a.type!=Blockly.Events.CHANGE||"disabled"!=a.element)){if(!this.workspace_.isDragging()){a=this.workspace_.getTopBlocks(!1);for(var b=0,c;c=a[b];b++){var d=c.getRelativeToSurfaceXY(),e=c.getHeightWidth();20>d.y+e.height&&c.moveBy(0,20-e.height-d.y)}}if(this.rootBlock_.workspace==this.workspace_){Blockly.Events.setGroup(!0);c=this.block_;a=(a=c.mutationToDom())&&Blockly.Xml.domToText(a);b=c.rendered;c.rendered=!1;
 c.compose(this.rootBlock_);c.rendered=b;c.initSvg();b=(b=c.mutationToDom())&&Blockly.Xml.domToText(b);if(a!=b){Blockly.Events.fire(new Blockly.Events.BlockChange(c,"mutation",null,a,b));var f=Blockly.Events.getGroup();setTimeout(function(){Blockly.Events.setGroup(f);c.bumpNeighbours_();Blockly.Events.setGroup(!1)},Blockly.BUMP_DELAY)}c.rendered&&c.render();this.workspace_.isDragging()||this.resizeBubble_();Blockly.Events.setGroup(!1)}}};
 Blockly.Mutator.prototype.getFlyoutMetrics_=function(){return{viewHeight:this.workspaceHeight_,viewWidth:this.workspaceWidth_-this.workspace_.getFlyout().getWidth(),absoluteTop:0,absoluteLeft:this.workspace_.RTL?0:this.workspace_.getFlyout().getWidth()}};Blockly.Mutator.prototype.dispose=function(){this.block_.mutator=null;Blockly.Icon.prototype.dispose.call(this)};
 Blockly.Mutator.prototype.updateBlockStyle=function(){var a=this.workspace_;if(a&&a.getAllBlocks()){for(var b=a.getAllBlocks(),c=0;c<b.length;c++){var d=b[c];d.setStyle(d.getStyleName())}a=a.flyout_.workspace_.getAllBlocks();for(c=0;c<a.length;c++)d=a[c],d.setStyle(d.getStyleName())}};

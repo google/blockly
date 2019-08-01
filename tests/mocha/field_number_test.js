@@ -24,7 +24,7 @@ suite('Number Fields', function() {
     var actualText = numberField.getText();
     opt_expectedText = opt_expectedText || String(expectedValue);
     assertEquals(String(actualValue), String(expectedValue));
-    assertEquals(parseFloat(actualValue), expectedValue);
+    assertEquals(Number(actualValue), expectedValue);
     assertEquals(actualText, opt_expectedText);
   }
   function assertValueDefault(numberField) {

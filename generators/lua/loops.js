@@ -116,8 +116,8 @@ Blockly.Lua['controls_for'] = function(block) {
   if (Blockly.isNumber(startVar) && Blockly.isNumber(endVar) &&
       Blockly.isNumber(increment)) {
     // All arguments are simple numbers.
-    var up = parseFloat(startVar) <= parseFloat(endVar);
-    var step = Math.abs(parseFloat(increment));
+    var up = Number(startVar) <= Number(endVar);
+    var step = Math.abs(Number(increment));
     incValue = (up ? '' : '-') + step;
   } else {
     code = '';

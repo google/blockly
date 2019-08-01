@@ -173,7 +173,7 @@ Blockly.Lua['unittest_adjustindex'] = function(block) {
       Blockly.Lua.ORDER_ADDITIVE) || '0';
   if (Blockly.isNumber(index)) {
     // If the index is a naked number, adjust it right now.
-    return [parseFloat(index) + 1, Blockly.Lua.ORDER_ATOMIC];
+    return [Number(index) + 1, Blockly.Lua.ORDER_ATOMIC];
   }
   // If the index is dynamic, adjust it in code.
   return [index + ' + 1', Blockly.Lua.ORDER_ATOMIC];

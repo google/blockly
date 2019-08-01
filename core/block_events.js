@@ -429,7 +429,7 @@ Blockly.Events.Move.prototype.fromJson = function(json) {
   if (json['newCoordinate']) {
     var xy = json['newCoordinate'].split(',');
     this.newCoordinate =
-        new Blockly.utils.Coordinate(parseFloat(xy[0]), parseFloat(xy[1]));
+        new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
   }
 };
 

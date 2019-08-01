@@ -416,17 +416,17 @@ function getFieldsJson_(block) {
           var obj = {
             type: block.type,
             name: block.getFieldValue('FIELDNAME'),
-            value: parseFloat(block.getFieldValue('VALUE'))
+            value: Number(block.getFieldValue('VALUE'))
           };
-          var min = parseFloat(block.getFieldValue('MIN'));
+          var min = Number(block.getFieldValue('MIN'));
           if (min > -Infinity) {
             obj.min = min;
           }
-          var max = parseFloat(block.getFieldValue('MAX'));
+          var max = Number(block.getFieldValue('MAX'));
           if (max < Infinity) {
             obj.max = max;
           }
-          var precision = parseFloat(block.getFieldValue('PRECISION'));
+          var precision = Number(block.getFieldValue('PRECISION'));
           if (precision) {
             obj.precision = precision;
           }

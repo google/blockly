@@ -55,10 +55,6 @@ suite('Number Fields', function() {
       var numberField = new Blockly.FieldNumber();
       assertNumberFieldDefault(numberField);
     });
-    test('Null', function() {
-      var numberField = createNumberFieldSameValuesConstructor(null);
-      assertNumberFieldDefault(numberField);
-    });
     test('Undefined', function() {
       var numberField = createNumberFieldSameValuesConstructor(undefined);
       assertNumberFieldDefault(numberField);
@@ -91,10 +87,6 @@ suite('Number Fields', function() {
   suite('fromJson', function() {
     test('Empty', function() {
       var numberField = Blockly.FieldNumber.fromJson({});
-      assertNumberFieldDefault(numberField);
-    });
-    test('Null', function() {
-      var numberField = createNumberFieldSameValuesJson(null);
       assertNumberFieldDefault(numberField);
     });
     test('Undefined', function() {

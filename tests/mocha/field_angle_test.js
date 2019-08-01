@@ -35,10 +35,6 @@ suite('Angle Fields', function() {
       var angleField = new Blockly.FieldAngle();
       assertValueDefault(angleField);
     });
-    test('Null', function() {
-      var angleField = new Blockly.FieldAngle(null);
-      assertValueDefault(angleField);
-    });
     test('Undefined', function() {
       var angleField = new Blockly.FieldAngle(undefined);
       assertValueDefault(angleField);
@@ -75,10 +71,6 @@ suite('Angle Fields', function() {
   suite('fromJson', function() {
     test('Empty', function() {
       var angleField = Blockly.FieldAngle.fromJson({});
-      assertValueDefault(angleField);
-    });
-    test('Null', function() {
-      var angleField = Blockly.FieldAngle.fromJson({ angle:null });
       assertValueDefault(angleField);
     });
     test('Undefined', function() {

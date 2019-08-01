@@ -33,10 +33,6 @@ suite('Label Fields', function() {
       var labelField = new Blockly.FieldLabel();
       assertValueDefault(labelField);
     });
-    test('Null', function() {
-      var labelField = new Blockly.FieldLabel(null);
-      assertValueDefault(labelField);
-    });
     test('Undefined', function() {
       var labelField = new Blockly.FieldLabel(undefined);
       assertValueDefault(labelField);
@@ -65,10 +61,6 @@ suite('Label Fields', function() {
   suite('fromJson', function() {
     test('Empty', function() {
       var labelField = new Blockly.FieldLabel.fromJson({});
-      assertValueDefault(labelField);
-    });
-    test('Null', function() {
-      var labelField = new Blockly.FieldLabel.fromJson({ text:null });
       assertValueDefault(labelField);
     });
     test('Undefined', function() {

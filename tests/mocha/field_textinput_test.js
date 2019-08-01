@@ -34,10 +34,6 @@ suite('Text Input Fields', function() {
       var textInputField = new Blockly.FieldTextInput();
       assertValueDefault(textInputField);
     });
-    test('Null', function() {
-      var textInputField = new Blockly.FieldTextInput(null);
-      assertValueDefault(textInputField);
-    });
     test('Undefined', function() {
       var textInputField = new Blockly.FieldTextInput(undefined);
       assertValueDefault(textInputField);
@@ -66,10 +62,6 @@ suite('Text Input Fields', function() {
   suite('fromJson', function() {
     test('Empty', function() {
       var textInputField = new Blockly.FieldTextInput.fromJson({});
-      assertValueDefault(textInputField);
-    });
-    test('Null', function() {
-      var textInputField = new Blockly.FieldTextInput.fromJson({ text: null});
       assertValueDefault(textInputField);
     });
     test('Undefined', function() {

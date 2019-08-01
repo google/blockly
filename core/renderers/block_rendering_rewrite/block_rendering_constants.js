@@ -202,7 +202,7 @@ Blockly.blockRendering.constants.PUZZLE_TAB = (function() {
     var halfHeight = height / 2;
     var control1Y = halfHeight + overlap;
     var control2Y = halfHeight + 0.5;
-    var control3Y = overlap; //2.5
+    var control3Y = overlap; // 2.5
 
     var endPoint1 = Blockly.utils.svgPaths.point(-width, forward * halfHeight);
     var endPoint2 = Blockly.utils.svgPaths.point(width, forward * halfHeight);

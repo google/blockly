@@ -245,7 +245,7 @@ Blockly.InsertionMarkerManager.prototype.update = function(dxy, deleteArea) {
   }
 };
 
-/**** Begin initialization functions ****/
+/** ** Begin initialization functions *** */
 
 /**
  * Create an insertion marker that represents the given block.
@@ -310,7 +310,7 @@ Blockly.InsertionMarkerManager.prototype.initAvailableConnections_ = function() 
   return available;
 };
 
-/**** End initialization functions ****/
+/** ** End initialization functions *** */
 
 
 /**
@@ -472,7 +472,7 @@ Blockly.InsertionMarkerManager.prototype.shouldDelete_ = function(candidate,
   return wouldDelete && !wouldConnect;
 };
 
-/**** Begin preview visibility functions ****/
+/** ** Begin preview visibility functions *** */
 
 /**
  * Show an insertion marker or replacement highlighting during a drag, if
@@ -574,9 +574,9 @@ Blockly.InsertionMarkerManager.prototype.hidePreview_ = function() {
   }
 };
 
-/**** End preview visibility functions ****/
+/** ** End preview visibility functions *** */
 
-/**** Begin block highlighting functions ****/
+/** ** Begin block highlighting functions *** */
 
 /**
  * Add highlighting showing which block will be replaced.
@@ -611,9 +611,9 @@ Blockly.InsertionMarkerManager.prototype.unhighlightBlock_ = function() {
   this.highlightingBlock_ = false;
 };
 
-/**** End block highlighting functions ****/
+/** ** End block highlighting functions *** */
 
-/**** Begin insertion marker display functions ****/
+/** ** Begin insertion marker display functions *** */
 
 /**
  * Disconnect the insertion marker block in a manner that returns the stack to
@@ -698,7 +698,7 @@ Blockly.InsertionMarkerManager.prototype.connectMarker_ = function() {
   this.markerConnection_ = imConn;
 };
 
-/**** End insertion marker display functions ****/
+/** ** End insertion marker display functions *** */
 
 /**
  * Get a list of the insertion markers that currently exist.  Drags have 0, 1,

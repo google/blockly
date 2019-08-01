@@ -129,9 +129,9 @@ Blockly.Navigation.removeMark = function() {
   Blockly.Navigation.marker_.hide();
 };
 
-/************************/
-/** Toolbox Navigation **/
-/************************/
+/** ********************* */
+/** Toolbox Navigation * */
+/** ********************* */
 
 /**
  * Set the state to the toolbox state and the current category as the first
@@ -232,9 +232,9 @@ Blockly.Navigation.outCategory = function() {
   }
 };
 
-/***********************/
-/** Flyout Navigation **/
-/***********************/
+/** ******************** */
+/** Flyout Navigation * */
+/** ******************** */
 
 /**
  * Change focus to the flyout.
@@ -357,8 +357,8 @@ Blockly.Navigation.insertFromFlyout = function() {
   var prevConnection = newBlock.previousConnection;
   var outConnection = newBlock.outputConnection;
   var topConnection = prevConnection ? prevConnection : outConnection;
-  //TODO: This will have to be fixed when we add in a block that does not have
-  //a previous or output connection
+  // TODO: This will have to be fixed when we add in a block that does not have
+  // a previous or output connection
   var astNode = Blockly.ASTNode.createConnectionNode(topConnection);
   Blockly.Navigation.cursor_.setLocation(astNode);
   Blockly.Navigation.removeMark();
@@ -377,9 +377,9 @@ Blockly.Navigation.resetFlyout = function(shouldHide) {
   }
 };
 
-/************/
-/** Modify **/
-/************/
+/** ********* */
+/** Modify * */
+/** ********* */
 
 /**
  * Handle the modifier key (currently I for Insert).
@@ -587,9 +587,9 @@ Blockly.Navigation.disconnectBlocks = function() {
   Blockly.Navigation.cursor_.setLocation(connectionNode);
 };
 
-/*************************/
-/** Keyboard Navigation **/
-/*************************/
+/** ********************** */
+/** Keyboard Navigation * */
+/** ********************** */
 
 /**
  * Sets the cursor to the previous or output connection of the selected block
@@ -606,8 +606,8 @@ Blockly.Navigation.focusWorkspace = function() {
   if (Blockly.selected) {
     var previousConnection = Blockly.selected.previousConnection;
     var outputConnection = Blockly.selected.outputConnection;
-    //TODO: This still needs to work with blocks that have neither previous
-    //or output connection.
+    // TODO: This still needs to work with blocks that have neither previous
+    // or output connection.
     var connection = previousConnection ? previousConnection : outputConnection;
     var newAstNode = Blockly.ASTNode.createConnectionNode(connection);
     cursor.setLocation(newAstNode);
@@ -641,9 +641,9 @@ Blockly.Navigation.handleEnterForWS = function() {
   }
 };
 
-/**********************/
-/** Helper Functions **/
-/**********************/
+/** ******************* */
+/** Helper Functions * */
+/** ******************* */
 
 
 /**
@@ -730,7 +730,7 @@ Blockly.Navigation.toolboxKeyHandler = function(e) {
     Blockly.Navigation.log('D: Toolbox : Go to flyout');
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.ENTER) {
-    //TODO: focus on flyout OR open if the category is nested
+    // TODO: focus on flyout OR open if the category is nested
     return true;
   } else if (e.keyCode === goog.events.KeyCodes.E ||
       e.keyCode === goog.events.KeyCodes.ESC) {

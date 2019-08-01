@@ -401,7 +401,7 @@ Blockly.ASTNode.prototype.findPrevForField_ = function() {
       }
       fieldIdx--;
     }
-    //Reset the fieldIdx to the length of the field row of the previous input
+    // Reset the fieldIdx to the length of the field row of the previous input
     if (i - 1 >= 0) {
       fieldIdx = block.inputList[i - 1].fieldRow.length - 1;
     }
@@ -483,7 +483,7 @@ Blockly.ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
     return Blockly.ASTNode.createInputNode(
         topConnection.targetConnection.getParentInput());
   } else {
-    //Go to stack level if you are not underneath an input
+    // Go to stack level if you are not underneath an input
     return Blockly.ASTNode.createStackNode(topBlock);
   }
 };
@@ -539,8 +539,8 @@ Blockly.ASTNode.prototype.findTopOfSubStack_ = function(sourceBlock) {
 Blockly.ASTNode.prototype.next = function() {
   switch (this.type_) {
     case Blockly.ASTNode.types.WORKSPACE:
-      //TODO: Need to limit this. The view is bounded to half a screen beyond
-      //the furthest block.
+      // TODO: Need to limit this. The view is bounded to half a screen beyond
+      // the furthest block.
       var newX = this.wsCoordinate_.x + Blockly.ASTNode.wsMove_;
       var newWsCoordinate = new Blockly.utils.Coordinate(newX, this.wsCoordinate_.y);
       var workspace = /** @type {Blockly.Workspace} */ (this.location_);
@@ -672,7 +672,7 @@ Blockly.ASTNode.prototype.out = function() {
   switch (this.type_) {
     case Blockly.ASTNode.types.STACK:
       var blockPos = this.location_.getRelativeToSurfaceXY();
-      //TODO: Make sure this is in the bounds of the workspace
+      // TODO: Make sure this is in the bounds of the workspace
       var wsCoordinate = new Blockly.utils.Coordinate(
           blockPos.x, blockPos.y + Blockly.ASTNode.DEFAULT_OFFSET_Y);
       return Blockly.ASTNode.createWorkspaceNode(

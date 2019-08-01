@@ -152,9 +152,9 @@ Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
   this.parent_ = newParent;
 };
 
-/**************************/
-/**** Display          ****/
-/**************************/
+/** *********************** */
+/** ** Display          *** */
+/** *********************** */
 
 /**
  * Show the cursor using coordinates.
@@ -174,7 +174,7 @@ Blockly.CursorSvg.prototype.showWithCoordinates_ = function() {
  * @private
  */
 Blockly.CursorSvg.prototype.showWithBlock_ = function() {
-  //TODO: Change this from getLocation to something else
+  // TODO: Change this from getLocation to something else
   var block = this.getCurNode().getLocation();
 
   this.currentCursorSvg = this.cursorSvgRect_;
@@ -274,9 +274,9 @@ Blockly.CursorSvg.prototype.showWithStack_ = function() {
 };
 
 
-/**************************/
-/**** Position         ****/
-/**************************/
+/** *********************** */
+/** ** Position         *** */
+/** *********************** */
 
 /**
  * Move and show the cursor at the specified coordinate in workspace units.
@@ -348,8 +348,8 @@ Blockly.CursorSvg.prototype.update_ = function() {
   var curNode = this.getCurNode();
   if (curNode.getType() === Blockly.ASTNode.types.BLOCK) {
     this.showWithBlock_();
-    //This needs to be the location type because next connections can be input
-    //type but they need to draw like they are a next statement
+    // This needs to be the location type because next connections can be input
+    // type but they need to draw like they are a next statement
   } else if (curNode.getLocation().type === Blockly.INPUT_VALUE ||
       curNode.getType() === Blockly.ASTNode.types.OUTPUT) {
     this.showWithInputOutput_();

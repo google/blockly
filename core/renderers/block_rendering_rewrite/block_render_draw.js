@@ -103,8 +103,8 @@ Blockly.blockRendering.Drawer.prototype.drawOutline_ = function() {
   this.drawTop_();
   for (var r = 1; r < this.info_.rows.length - 1; r++) {
     var row = this.info_.rows[r];
-    if (!row.isSpacer()  && this.info_.isCollapsed) {
-      this.drawJaggedEdge_(row)
+    if (!row.isSpacer() && this.info_.isCollapsed) {
+      this.drawJaggedEdge_(row);
     } else if (row.hasStatement) {
       this.drawStatementInput_(row);
     } else if (row.hasExternalInput) {

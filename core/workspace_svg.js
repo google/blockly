@@ -27,7 +27,7 @@
 goog.provide('Blockly.WorkspaceSvg');
 
 // TODO(scr): Fix circular dependencies
-//goog.require('Blockly.BlockSvg');
+// goog.require('Blockly.BlockSvg');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
 goog.require('Blockly.CursorSvg');

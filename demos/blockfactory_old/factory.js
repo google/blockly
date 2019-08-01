@@ -748,9 +748,9 @@ function updatePreview() {
 function injectCode(code, id) {
   var pre = document.getElementById(id);
   pre.textContent = code;
-  code = pre.textContent;
-  code = PR.prettyPrintOne(code, 'js');
-  pre.innerHTML = code;
+  // Remove the 'prettyprinted' class, so that Prettify will recalculate.
+  pre.className = pre.className.replace('prettyprinted', '');
+  PR.prettyPrint();
 }
 
 /**

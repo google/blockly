@@ -174,7 +174,7 @@ Blockly.PHP['text_getSubstring'] = function(block) {
          '    $at1 = strlen($text) - 1 - $at1;',
          '  } else if ($where1 == \'FIRST\') {',
          '    $at1 = 0;',
-         '  } else if ($where1 != \'FROM_START\'){',
+         '  } else if ($where1 != \'FROM_START\') {',
          '    throw new Exception(\'Unhandled option (text_get_substring).\');',
          '  }',
          '  $length = 0;',

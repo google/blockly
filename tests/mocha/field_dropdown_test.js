@@ -31,11 +31,6 @@ suite('Dropdown Fields', function() {
         new Blockly.FieldDropdown();
       });
     });
-    test('Null', function() {
-      chai.assert.throws(function() {
-        new Blockly.FieldDropdown(null);
-      });
-    });
     test('Undefined', function() {
       chai.assert.throws(function() {
         new Blockly.FieldDropdown(undefined);
@@ -100,11 +95,6 @@ suite('Dropdown Fields', function() {
     test('Empty', function() {
       chai.assert.throws(function() {
         Blockly.FieldDropdown.fromJson({});
-      });
-    });
-    test('Null', function() {
-      chai.assert.throws(function() {
-        Blockly.FieldDropdown.fromJson({ options: null });
       });
     });
     test('Undefined', function() {

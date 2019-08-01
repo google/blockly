@@ -197,8 +197,8 @@ goog.inherits(Blockly.blockRendering.Icon, Blockly.blockRendering.Measurable);
 Blockly.blockRendering.JaggedEdge = function() {
   Blockly.blockRendering.JaggedEdge.superClass_.constructor.call(this);
   this.type = 'jagged edge';
-  this.height = Blockly.blockRendering.constants.JAGGED_TEETH_HEIGHT;
-  this.width = Blockly.blockRendering.constants.JAGGED_TEETH_WIDTH;
+  this.height = Blockly.blockRendering.constants.JAGGED_TEETH.height;
+  this.width = Blockly.blockRendering.constants.JAGGED_TEETH.width;
 };
 goog.inherits(Blockly.blockRendering.JaggedEdge, Blockly.blockRendering.Measurable);
 
@@ -411,6 +411,7 @@ Blockly.blockRendering.Row = function() {
   this.hasStatement = false;
   this.hasInlineInput = false;
   this.hasDummyInput = false;
+  this.hasJaggedEdge = false;
 };
 
 Blockly.blockRendering.Row.prototype.isSpacer = function() {

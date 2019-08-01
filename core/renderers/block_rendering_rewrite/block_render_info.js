@@ -111,7 +111,7 @@ Blockly.blockRendering.RenderInfo = function(block) {
 
   /**
    * An array of measureable objects containing hidden icons.
-   * @type {Array}
+   * @type {!Array.<!Blockly.blockRendering.Icon>}
    */
   this.hiddenIcons = [];
 
@@ -191,6 +191,7 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
   }
 
   if (this.isCollapsed) {
+    activeRow.hasJaggedEdge = true;
     activeRow.elements.push(new Blockly.blockRendering.JaggedEdge());
   }
 
@@ -458,6 +459,7 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     return Blockly.blockRendering.constants.LARGE_PADDING;
   }
 
+  // Spacing between anything and a jagged edge.
   if (next.isJaggedEdge()) {
     return Blockly.blockRendering.constants.LARGE_PADDING;
   }

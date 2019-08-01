@@ -205,6 +205,16 @@ Blockly.blockRendering.highlightConstants.NOTCH = (function() {
   };
 })();
 
+Blockly.blockRendering.highlightConstants.JAGGED_TEETH = (function() {
+  var pathLeft =
+      Blockly.utils.svgPaths.lineTo(5.1, 2.6) +
+      Blockly.utils.svgPaths.moveBy(-10.2, 6.8) +
+      Blockly.utils.svgPaths.lineTo(5.1, 2.6);
+  return {
+    pathLeft: pathLeft
+  };
+})();
+
 Blockly.blockRendering.highlightConstants.START_HAT = (function() {
   var pathRtl =
       Blockly.utils.svgPaths.moveBy(25, -8.7) +

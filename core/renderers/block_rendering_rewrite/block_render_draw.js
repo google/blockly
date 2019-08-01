@@ -103,7 +103,7 @@ Blockly.blockRendering.Drawer.prototype.drawOutline_ = function() {
   this.drawTop_();
   for (var r = 1; r < this.info_.rows.length - 1; r++) {
     var row = this.info_.rows[r];
-    if (!row.isSpacer() && this.info_.isCollapsed) {
+    if (row.hasJaggedEdge) {
       this.drawJaggedEdge_(row);
     } else if (row.hasStatement) {
       this.drawStatementInput_(row);
@@ -156,11 +156,13 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.drawJaggedEdge_ = function(row) {
-  this.highlighter_.drawJaggedEdge_(row);
-  this.steps_.push(Blockly.blockRendering.constants.JAGGED_TEETH);
-  var remainder = row.height - Blockly.blockRendering.constants.JAGGED_TEETH_HEIGHT;
+  if (this.highlighter_) {
+    this.highlighter_.drawJaggedEdge_(row);
+  }
+  this.steps_.push(Blockly.blockRendering.constants.JAGGED_TEETH.path);
+  var remainder =
+      row.height - Blockly.blockRendering.constants.JAGGED_TEETH.height;
   this.steps_.push('v', remainder);
-  console.log('remainder: ' + remainder);
 };
 
 /**

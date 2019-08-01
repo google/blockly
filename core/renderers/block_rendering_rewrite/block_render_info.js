@@ -659,8 +659,16 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
     row.yPos = yCursor;
-    var xCursor = 0;
+    yCursor += row.height;
+    // Add padding to the bottom row if block height is less than minimum
+    if (row == this.bottomRow &&
+        yCursor < Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT) {
+      this.bottomRow.height +=
+          Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT - yCursor;
+      yCursor = Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT;
+    }
     if (!(row.isSpacer())) {
+      var xCursor = 0;
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];
         elem.xPos = xCursor;
@@ -668,15 +676,8 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
         xCursor += elem.width;
       }
     }
-    yCursor += row.height;
   }
   this.blockBottom = yCursor;
-
-  // Add padding to the bottom row if block height is less than minimum
-  if (yCursor < Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT) {
-    this.bottomRow.height += Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT - yCursor;
-    yCursor = Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT;
-  }
 
   this.height = yCursor;
 };

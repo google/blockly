@@ -140,6 +140,7 @@ Blockly.blockRendering.highlightConstants.OUTSIDE_CORNER = (function() {
   };
 })();
 
+
 Blockly.blockRendering.highlightConstants.PUZZLE_TAB = (function() {
   var width = Blockly.blockRendering.constants.TAB_WIDTH;
   var height = Blockly.blockRendering.constants.TAB_HEIGHT;

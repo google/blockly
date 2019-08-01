@@ -257,7 +257,7 @@ Blockly.WorkspaceCommentSvg.prototype.addDeleteDom_ = function() {
  * @private
  */
 Blockly.WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
-  // this.promote_();
+  //this.promote_();
   this.unbindDragEvents_();
   if (Blockly.utils.isRightButton(e)) {
     // No right-click.
@@ -335,7 +335,7 @@ Blockly.WorkspaceCommentSvg.prototype.unbindDragEvents_ = function() {
  * @param {!Event} e Mouse up event.
  * @private
  */
-Blockly.WorkspaceCommentSvg.prototype.resizeMouseUp_ = function(/* e */) {
+Blockly.WorkspaceCommentSvg.prototype.resizeMouseUp_ = function(/*e*/) {
   Blockly.Touch.clearTouchIdentifier();
   this.unbindDragEvents_();
 };

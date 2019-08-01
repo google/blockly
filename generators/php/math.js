@@ -31,7 +31,7 @@ goog.require('Blockly.PHP');
 
 Blockly.PHP['math_number'] = function(block) {
   // Numeric value.
-  var code = parseFloat(block.getFieldValue('NUM'));
+  var code = Number(block.getFieldValue('NUM'));
   var order = code >= 0 ? Blockly.PHP.ORDER_ATOMIC :
               Blockly.PHP.ORDER_UNARY_NEGATION;
   if (code == Infinity) {

@@ -31,7 +31,7 @@ goog.require('Blockly.Lua');
 
 Blockly.Lua['math_number'] = function(block) {
   // Numeric value.
-  var code = parseFloat(block.getFieldValue('NUM'));
+  var code = Number(block.getFieldValue('NUM'));
   var order = code < 0 ? Blockly.Lua.ORDER_UNARY :
               Blockly.Lua.ORDER_ATOMIC;
   return [code, order];

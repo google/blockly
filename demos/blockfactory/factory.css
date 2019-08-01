@@ -335,7 +335,7 @@ button, .buttonStyle {
   padding: 5px 19px;
 }
 
-.tab:hover:not(.tabon){
+.tab:hover:not(.tabon) {
   background-color: #e8e8e8;
 }
 

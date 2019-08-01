@@ -132,7 +132,7 @@ Blockly.ASTNode.createFieldNode = function(field) {
  * @return {Blockly.ASTNode} An AST node pointing to a connection.
  */
 Blockly.ASTNode.createConnectionNode = function(connection) {
-  if (!connection){
+  if (!connection) {
     return null;
   }
   if (connection.type === Blockly.INPUT_VALUE) {
@@ -209,7 +209,7 @@ Blockly.ASTNode.createWorkspaceNode = function(workspace, wsCoordinate) {
  * @param {Object} params The user specified parameters.
  * @private
  */
-Blockly.ASTNode.prototype.processParams_ = function(params){
+Blockly.ASTNode.prototype.processParams_ = function(params) {
   if (!params) {
     return;
   }
@@ -608,8 +608,8 @@ Blockly.ASTNode.prototype.in = function() {
         return Blockly.ASTNode.createConnectionNode(targetConnection);
       }
       break;
-
   }
+
   return null;
 };
 
@@ -682,9 +682,8 @@ Blockly.ASTNode.prototype.out = function() {
       var target = this.location_.targetConnection;
       if (target) {
         return Blockly.ASTNode.createConnectionNode(target);
-      } else {
-        return Blockly.ASTNode.createStackNode(this.location_.getSourceBlock());
       }
+      return Blockly.ASTNode.createStackNode(this.location_.getSourceBlock());
 
     case Blockly.ASTNode.types.FIELD:
       return Blockly.ASTNode.createBlockNode(this.location_.getSourceBlock());

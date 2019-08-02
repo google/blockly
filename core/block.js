@@ -322,6 +322,8 @@ Blockly.Block.prototype.dispose = function(healStack) {
   } finally {
     Blockly.Events.enable();
   }
+
+  this.disposed = true;
 };
 
 /**

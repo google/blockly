@@ -65,13 +65,15 @@ Blockly.blockRendering.Debug.prototype.clearElems = function() {
  * Draw a debug rectangle for a spacer (empty) row.
  * @param {!Blockly.blockRendering.Row} row The row to render
  * @param {number} cursorY The y position of the top of the row.
+ * @param {!Blockly.blockRendering.RenderInfo} info Rendering information about
+ *     the block to debug.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY) {
+Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, info) {
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'rowSpacerRect blockRenderDebug',
-        'x': 0,
+        'x': info.RTL ? -row.width : 0,
         'y': cursorY,
         'width': row.width,
         'height': row.height,
@@ -82,17 +84,22 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY) {
 /**
  * Draw a debug rectangle for a horizontal spacer.
  * @param {!Blockly.BlockSvg.InRowSpacer} elem The spacer to render
- * @param {number} cursorX The x position of the left of the row.
  * @param {number} rowHeight The height of the container row.
+ * @param {!Blockly.blockRendering.RenderInfo} info Rendering information about
+ *     the block to debug.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, cursorX, rowHeight) {
+Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight, info) {
+  var xPos = elem.xPos;
+  if (info.RTL) {
+    xPos = -(xPos + elem.width);
+  }
   var debugRenderedHeight = Math.min(elem.height, rowHeight);
   var yPos = elem.centerline - debugRenderedHeight / 2;
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'elemSpacerRect blockRenderDebug',
-        'x': cursorX,
+        'x': xPos,
         'y': yPos,
         'width': elem.width,
         'height': debugRenderedHeight,
@@ -103,19 +110,23 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, cursorX, 
 /**
  * Draw a debug rectangle for an in-row element.
  * @param {!Blockly.BlockSvg.Measurable} elem The element to render
- * @param {number} cursorX The x position of the left of the row.
- * @param {number} centerY The y position of the center of the row, vertically.
+ * @param {!Blockly.blockRendering.RenderInfo} info Rendering information about
+ *     the block to debug.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, cursorX) {
+Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, info) {
+  var xPos = elem.xPos;
+  if (info.RTL) {
+    xPos = -(xPos + elem.width);
+  }
   var yPos = elem.centerline - elem.height / 2;
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'rowRenderingRect blockRenderDebug',
-        'x': cursorX,
+        'x': xPos,
         'y': yPos,
         'width': elem.width,
-        'height': elem.height ,
+        'height': elem.height,
       },
       this.svgRoot_));
 
@@ -168,13 +179,15 @@ Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
  * Draw a debug rectangle for a non-empty row.
  * @param {!Blockly.BlockSvg.Row} row The non-empty row to render.
  * @param {number} cursorY The y position of the top of the row.
+ * @param {!Blockly.blockRendering.RenderInfo} info Rendering information about
+ *     the block to debug.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY) {
+Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, info) {
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'elemRenderingRect blockRenderDebug',
-        'x': 0,
+        'x': info.RTL ? -row.width : 0,
         'y': cursorY ,
         'width': row.width,
         'height': row.height,
@@ -186,20 +199,20 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY) 
  * Draw debug rectangles for a non-empty row and all of its subcomponents.
  * @param {!Blockly.BlockSvg.Row} row The non-empty row to render.
  * @param {number} cursorY The y position of the top of the row.
+ * @param {!Blockly.blockRendering.RenderInfo} info Rendering information about
+ *     the block to debug.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY) {
-  var cursorX = 0;
+Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY, info) {
   for (var e = 0; e < row.elements.length; e++) {
     var elem = row.elements[e];
     if (elem.isSpacer()) {
-      this.drawSpacerElem(elem, cursorX, row.height);
+      this.drawSpacerElem(elem, row.height, info);
     } else {
-      this.drawRenderedElem(elem, cursorX);
+      this.drawRenderedElem(elem, info);
     }
-    cursorX += elem.width;
   }
-  this.drawRenderedRow(row, cursorY);
+  this.drawRenderedRow(row, cursorY, info);
 };
 
 /**
@@ -216,9 +229,9 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
   for (var r = 0; r < info.rows.length; r++) {
     var row = info.rows[r];
     if (row.isSpacer()) {
-      this.drawSpacerRow(row, cursorY);
+      this.drawSpacerRow(row, cursorY, info);
     } else {
-      this.drawRowWithElements(row, cursorY);
+      this.drawRowWithElements(row, cursorY, info);
     }
     cursorY += row.height;
   }

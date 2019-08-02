@@ -326,5 +326,95 @@ suite('Blocks', function() {
         });
       });
     });
+    suite('Remove Input', function() {
+      setup(function() {
+        Blockly.defineBlocksWithJsonArray([
+          {
+            "type": "value_block",
+            "message0": "%1",
+            "args0": [
+              {
+                "type": "input_value",
+                "name": "VALUE"
+              }
+            ]
+          },
+          {
+            "type": "statement_block",
+            "message0": "%1",
+            "args0": [
+              {
+                "type": "input_statement",
+                "name": "STATEMENT"
+              }
+            ]
+          },
+        ]);
+      });
+      teardown(function() {
+        delete Blockly.Blocks['value_block'];
+        delete Blockly.Blocks['statement_block'];
+      });
+
+      suite('Value', function() {
+        setup(function() {
+          this.blockA = this.workspace.newBlock('value_block');
+        });
+
+        test('No Connected', function() {
+          this.blockA.removeInput('VALUE');
+          chai.assert.isNull(this.blockA.getInput('VALUE'));
+        });
+        test('Block Connected', function() {
+          var blockB = this.workspace.newBlock('row_block');
+          this.blockA.getInput('VALUE').connection
+              .connect(blockB.outputConnection);
+
+          this.blockA.removeInput('VALUE');
+          chai.assert.isNotOk(blockB.disposed);
+          chai.assert.equal(this.blockA.getChildren().length, 0);
+        });
+        test('Shadow Connected', function() {
+          var blockB = this.workspace.newBlock('row_block');
+          blockB.setShadow(true);
+          this.blockA.getInput('VALUE').connection
+              .connect(blockB.outputConnection);
+
+          this.blockA.removeInput('VALUE');
+          chai.assert.isTrue(blockB.disposed);
+          chai.assert.equal(this.blockA.getChildren().length, 0);
+        });
+      });
+      suite('Statement', function() {
+        setup(function() {
+          this.blockA = this.workspace.newBlock('statement_block');
+        });
+
+        test('No Connected', function() {
+          this.blockA.removeInput('STATEMENT');
+          chai.assert.isNull(this.blockA.getInput('STATEMENT'));
+        });
+        test('Block Connected', function() {
+          var blockB = this.workspace.newBlock('stack_block');
+          this.blockA.getInput('STATEMENT').connection
+              .connect(blockB.previousConnection);
+
+          this.blockA.removeInput('STATEMENT');
+          chai.assert.isNotOk(blockB.disposed);
+          chai.assert.equal(this.blockA.getChildren().length, 0);
+        });
+        test('Shadow Connected', function() {
+          var blockB = this.workspace.newBlock('stack_block');
+          blockB.setShadow(true);
+          this.blockA.getInput('STATEMENT').connection
+              .connect(blockB.previousConnection);
+
+          this.blockA.removeInput('STATEMENT');
+          console.log(blockB.disposed, blockB);
+          chai.assert.isTrue(blockB.disposed);
+          chai.assert.equal(this.blockA.getChildren().length, 0);
+        });
+      });
+    });
   });
 });

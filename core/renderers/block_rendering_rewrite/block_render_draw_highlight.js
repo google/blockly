@@ -98,8 +98,7 @@ Blockly.blockRendering.Highlighter.prototype.drawJaggedEdge_ = function(row) {
     this.steps_.push('H', row.width - this.highlightOffset_);
     this.steps_.push(this.jaggedTeethPaths_.pathLeft);
     var remainder =
-        row.height - Blockly.blockRendering.constants.JAGGED_TEETH.height -
-        this.highlightOffset_;
+        row.height - this.jaggedTeethPaths_.height - this.highlightOffset_;
     this.steps_.push(Blockly.utils.svgPaths.lineOnAxis('v', remainder));
   }
 };

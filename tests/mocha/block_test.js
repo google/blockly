@@ -104,27 +104,35 @@ suite('Blocks', function() {
         blocks.B.unplug(true);
         assertUnpluggedNoheal(blocks);
       });
-      test('Parent has multiple inputs', function() {
+      test('A has multiple inputs', function() {
         var blocks = this.blocks;
         // Add extra input to parent
         blocks.A.appendValueInput("INPUT").setCheck(null);
         blocks.B.unplug(true);
         assertUnpluggedHealed(blocks);
       });
-      test('Middle block has multiple inputs', function() {
+      test('B has multiple inputs', function() {
         var blocks = this.blocks;
         // Add extra input to middle block
         blocks.B.appendValueInput("INPUT").setCheck(null);
         blocks.B.unplug(true);
         assertUnpluggedHealed(blocks);
       });
-      test('Child block has multiple inputs', function() {
+      test('C has multiple inputs', function() {
         var blocks = this.blocks;
         // Add extra input to child block
         blocks.C.appendValueInput("INPUT").setCheck(null);
         // Child block input count doesn't matter.
         blocks.B.unplug(true);
         assertUnpluggedHealed(blocks);
+      });
+      test('C is Shadow', function() {
+        var blocks = this.blocks;
+        blocks.C.setShadow(true);
+        blocks.B.unplug(true);
+        // Even though we're asking to heal, it will appear as if it has not
+        // healed because shadows always stay with the parent.
+        assertUnpluggedNoheal(blocks);
       });
     });
     suite('Stack', function() {
@@ -176,6 +184,14 @@ suite('Blocks', function() {
         assertNull(blocks.B.getParent());
         // C is the top of its stack.
         assertNull(blocks.C.getParent());
+      });
+      test('C is Shadow', function() {
+        var blocks = this.blocks;
+        blocks.C.setShadow(true);
+        blocks.B.unplug(true);
+        // Even though we're asking to heal, it will appear as if it has not
+        // healed because shadows always stay with the parent.
+        assertUnpluggedNoheal(blocks);
       });
     });
   });

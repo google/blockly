@@ -166,7 +166,7 @@ Blockly.Dart['unittest_adjustindex'] = function(block) {
   if (block.workspace.options.oneBasedIndex) {
     if (Blockly.isNumber(index)) {
       // If the index is a naked number, adjust it right now.
-      return [parseFloat(index) + 1, Blockly.Dart.ORDER_ATOMIC];
+      return [Number(index) + 1, Blockly.Dart.ORDER_ATOMIC];
     } else {
       // If the index is dynamic, adjust it in code.
       index = index + ' + 1';

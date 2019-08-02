@@ -77,7 +77,7 @@ Blockly.FieldNumber.prototype.SERIALIZABLE = true;
 
 /**
  * Set the maximum, minimum and precision constraints on this field.
- * Any of these properties may be undefiend or NaN to be disabled.
+ * Any of these properties may be undefined or NaN to be disabled.
  * Setting precision (usually a power of 10) enforces a minimum step between
  * values. That is, the user's value will rounded to the closest multiple of
  * precision. The least significant digit place is inferred from the precision.
@@ -87,15 +87,15 @@ Blockly.FieldNumber.prototype.SERIALIZABLE = true;
  * @param {number|string|undefined} precision Precision for value.
  */
 Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
-  precision = parseFloat(precision);
+  precision = Number(precision);
   this.precision_ = isNaN(precision) ? 0 : precision;
   var precisionString = this.precision_.toString();
   var decimalIndex = precisionString.indexOf('.');
   this.fractionalDigits_ = (decimalIndex == -1) ? -1 :
       precisionString.length - (decimalIndex + 1);
-  min = parseFloat(min);
+  min = Number(min);
   this.min_ = isNaN(min) ? -Infinity : min;
-  max = parseFloat(max);
+  max = Number(max);
   this.max_ = isNaN(max) ? Infinity : max;
   this.setValue(this.getValue());
 };
@@ -121,7 +121,7 @@ Blockly.FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
   newValue = newValue.replace(/,/g, '');
 
   // Clean up number.
-  var n = parseFloat(newValue || 0);
+  var n = Number(newValue || 0);
   if (isNaN(n)) {
     // Invalid number.
     return null;

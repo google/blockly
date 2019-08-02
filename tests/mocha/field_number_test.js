@@ -24,7 +24,7 @@ suite('Number Fields', function() {
     var actualText = numberField.getText();
     opt_expectedText = opt_expectedText || String(expectedValue);
     assertEquals(String(actualValue), String(expectedValue));
-    assertEquals(parseFloat(actualValue), expectedValue);
+    assertEquals(Number(actualValue), expectedValue);
     assertEquals(actualText, opt_expectedText);
   }
   function assertValueDefault(numberField) {
@@ -55,10 +55,6 @@ suite('Number Fields', function() {
       var numberField = new Blockly.FieldNumber();
       assertNumberFieldDefault(numberField);
     });
-    test('Null', function() {
-      var numberField = createNumberFieldSameValuesConstructor(null);
-      assertNumberFieldDefault(numberField);
-    });
     test('Undefined', function() {
       var numberField = createNumberFieldSameValuesConstructor(undefined);
       assertNumberFieldDefault(numberField);
@@ -87,14 +83,18 @@ suite('Number Fields', function() {
       var numberField = createNumberFieldSameValuesConstructor('1.5');
       assertNumberFieldSameValues(numberField, 1.5);
     });
+    test('Infinity', function() {
+      var numberField = createNumberFieldSameValuesConstructor('Infinity');
+      assertNumberFieldSameValues(numberField, Infinity);
+    });
+    test('Negative Infinity String', function() {
+      var numberField = createNumberFieldSameValuesConstructor('-Infinity');
+      assertNumberFieldSameValues(numberField, -Infinity);
+    });
   });
   suite('fromJson', function() {
     test('Empty', function() {
       var numberField = Blockly.FieldNumber.fromJson({});
-      assertNumberFieldDefault(numberField);
-    });
-    test('Null', function() {
-      var numberField = createNumberFieldSameValuesJson(null);
       assertNumberFieldDefault(numberField);
     });
     test('Undefined', function() {
@@ -124,6 +124,14 @@ suite('Number Fields', function() {
     test('Float String', function() {
       var numberField = createNumberFieldSameValuesJson('1.5');
       assertNumberFieldSameValues(numberField, 1.5);
+    });
+    test('Infinity', function() {
+      var numberField = createNumberFieldSameValuesJson('Infinity');
+      assertNumberFieldSameValues(numberField, Infinity);
+    });
+    test('Negative Infinity String', function() {
+      var numberField = createNumberFieldSameValuesJson('-Infinity');
+      assertNumberFieldSameValues(numberField, -Infinity);
     });
   });
   suite('setValue', function() {
@@ -164,6 +172,14 @@ suite('Number Fields', function() {
           this.numberField.setValue('2.5');
           assertValue(this.numberField, 2.5);
         });
+        test('Infinity', function() {
+          this.numberField.setValue(Infinity);
+          assertValue(this.numberField, Infinity);
+        });
+        test('Negative Infinity String', function() {
+          this.numberField.setValue('-Infinity');
+          assertValue(this.numberField, -Infinity);
+        });
       });
       suite('Value -> New Value', function() {
         setup(function() {
@@ -200,6 +216,14 @@ suite('Number Fields', function() {
         test('Float String', function() {
           this.numberField.setValue('2.5');
           assertValue(this.numberField, 2.5);
+        });
+        test('Infinity', function() {
+          this.numberField.setValue(Infinity);
+          assertValue(this.numberField, Infinity);
+        });
+        test('Negative Infinity String', function() {
+          this.numberField.setValue('-Infinity');
+          assertValue(this.numberField, -Infinity);
         });
       });
     });

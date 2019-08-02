@@ -34,7 +34,7 @@ Blockly.Python.addReservedWords('math,random,Number');
 
 Blockly.Python['math_number'] = function(block) {
   // Numeric value.
-  var code = parseFloat(block.getFieldValue('NUM'));
+  var code = Number(block.getFieldValue('NUM'));
   var order;
   if (code == Infinity) {
     code = 'float("inf")';

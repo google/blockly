@@ -34,10 +34,6 @@ suite('Date Fields', function() {
       var dateField = new Blockly.FieldDate();
       assertValueDefault(dateField);
     });
-    test('Null', function() {
-      var dateField = new Blockly.FieldDate(null);
-      assertValueDefault(dateField);
-    });
     test('Undefined', function() {
       var dateField = new Blockly.FieldDate(undefined);
       assertValueDefault(dateField);
@@ -62,10 +58,6 @@ suite('Date Fields', function() {
   suite('fromJson', function() {
     test('Empty', function() {
       var dateField = Blockly.FieldDate.fromJson({});
-      assertValueDefault(dateField);
-    });
-    test('Null', function() {
-      var dateField = Blockly.FieldDate.fromJson({ date: null });
       assertValueDefault(dateField);
     });
     test('Undefined', function() {

@@ -103,7 +103,7 @@ Blockly.JavaScript.ORDER_LOGICAL_AND = 13;     // &&
 Blockly.JavaScript.ORDER_LOGICAL_OR = 14;      // ||
 Blockly.JavaScript.ORDER_CONDITIONAL = 15;     // ?:
 Blockly.JavaScript.ORDER_ASSIGNMENT = 16;      // = += -= **= *= /= %= <<= >>= ...
-Blockly.JavaScript.ORDER_YIELD = 17;         // yield
+Blockly.JavaScript.ORDER_YIELD = 17;           // yield
 Blockly.JavaScript.ORDER_COMMA = 18;           // ,
 Blockly.JavaScript.ORDER_NONE = 99;            // (...)
 
@@ -304,7 +304,7 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
 
   if (Blockly.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
-    at = parseFloat(at) + delta;
+    at = Number(at) + delta;
     if (opt_negate) {
       at = -at;
     }

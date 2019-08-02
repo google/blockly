@@ -1179,19 +1179,19 @@ WorkspaceFactoryController.prototype.readOptions_ = function() {
     var startScaleValue =
         document.getElementById('zoomOption_startScale_number').value;
     zoom['startScale'] = typeof startScaleValue == 'string' ?
-        parseFloat(startScaleValue) : startScaleValue;
+        Number(startScaleValue) : startScaleValue;
     var maxScaleValue =
         document.getElementById('zoomOption_maxScale_number').value;
     zoom['maxScale'] = typeof maxScaleValue == 'string' ?
-        parseFloat(maxScaleValue) : maxScaleValue;
+        Number(maxScaleValue) : maxScaleValue;
     var minScaleValue =
         document.getElementById('zoomOption_minScale_number').value;
     zoom['minScale'] = typeof minScaleValue == 'string' ?
-        parseFloat(minScaleValue) : minScaleValue;
+        Number(minScaleValue) : minScaleValue;
     var scaleSpeedValue =
         document.getElementById('zoomOption_scaleSpeed_number').value;
     zoom['scaleSpeed'] = typeof scaleSpeedValue == 'string' ?
-        parseFloat(scaleSpeedValue) : scaleSpeedValue;
+        Number(scaleSpeedValue) : scaleSpeedValue;
     optionsObj['zoom'] = zoom;
   }
 

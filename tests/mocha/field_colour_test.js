@@ -49,10 +49,6 @@ suite('Colour Fields', function() {
       var colourField = new Blockly.FieldColour();
       assertValueDefault(colourField);
     });
-    test('Null', function() {
-      var colourField = new Blockly.FieldColour(null);
-      assertValueDefault(colourField);
-    });
     test('Undefined', function() {
       var colourField = new Blockly.FieldColour(undefined);
       assertValueDefault(colourField);
@@ -105,10 +101,6 @@ suite('Colour Fields', function() {
   suite('fromJson', function() {
     test('Empty', function() {
       var colourField = new Blockly.FieldColour.fromJson({});
-      assertValueDefault(colourField);
-    });
-    test('Null', function() {
-      var colourField = new Blockly.FieldColour.fromJson({ colour:null });
       assertValueDefault(colourField);
     });
     test('Undefined', function() {

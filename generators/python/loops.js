@@ -113,9 +113,9 @@ Blockly.Python['controls_for'] = function(block) {
   if (Blockly.isNumber(argument0) && Blockly.isNumber(argument1) &&
       Blockly.isNumber(increment)) {
     // All parameters are simple numbers.
-    argument0 = parseFloat(argument0);
-    argument1 = parseFloat(argument1);
-    increment = Math.abs(parseFloat(increment));
+    argument0 = Number(argument0);
+    argument1 = Number(argument1);
+    increment = Math.abs(Number(increment));
     if (argument0 % 1 === 0 && argument1 % 1 === 0 && increment % 1 === 0) {
       // All parameters are integers.
       if (argument0 <= argument1) {
@@ -151,7 +151,7 @@ Blockly.Python['controls_for'] = function(block) {
     var scrub = function(arg, suffix) {
       if (Blockly.isNumber(arg)) {
         // Simple number.
-        arg = parseFloat(arg);
+        arg = Number(arg);
       } else if (arg.match(/^\w+$/)) {
         // Variable.
         arg = 'float(' + arg + ')';

@@ -85,9 +85,9 @@ Blockly.utils.getRelativeXY = function(element) {
   var transform = element.getAttribute('transform');
   var r = transform && transform.match(Blockly.utils.getRelativeXY.XY_REGEX_);
   if (r) {
-    xy.x += parseFloat(r[1]);
+    xy.x += Number(r[1]);
     if (r[3]) {
-      xy.y += parseFloat(r[3]);
+      xy.y += Number(r[3]);
     }
   }
 
@@ -97,9 +97,9 @@ Blockly.utils.getRelativeXY = function(element) {
     var styleComponents =
         style.match(Blockly.utils.getRelativeXY.XY_STYLE_REGEX_);
     if (styleComponents) {
-      xy.x += parseFloat(styleComponents[1]);
+      xy.x += Number(styleComponents[1]);
       if (styleComponents[3]) {
-        xy.y += parseFloat(styleComponents[3]);
+        xy.y += Number(styleComponents[3]);
       }
     }
   }

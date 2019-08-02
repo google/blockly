@@ -29,8 +29,8 @@ suite('Checkbox Fields', function() {
     assertValue(checkboxField, 'FALSE', 'false');
   }
   suite('Constructor', function() {
-    test('Null', function() {
-      var checkboxField = new Blockly.FieldCheckbox(null);
+    test('Empty', function() {
+      var checkboxField = new Blockly.FieldCheckbox();
       assertValueDefault(checkboxField);
     });
     test('Undefined', function() {
@@ -59,8 +59,8 @@ suite('Checkbox Fields', function() {
     });
   });
   suite('fromJson', function() {
-    test('Null', function() {
-      var checkboxField = Blockly.FieldCheckbox.fromJson({ checked: null});
+    test('Empty', function() {
+      var checkboxField = Blockly.FieldCheckbox.fromJson({});
       assertValueDefault(checkboxField);
     });
     test('Undefined', function() {

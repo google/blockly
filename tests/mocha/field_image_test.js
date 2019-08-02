@@ -31,19 +31,9 @@ suite('Image Fields', function() {
         new Blockly.FieldImage();
       });
     });
-    test('Null Src', function() {
-      chai.assert.throws(function() {
-        new Blockly.FieldImage(null, 1, 1);
-      });
-    });
     test('Undefined Src', function() {
       chai.assert.throws(function() {
         new Blockly.FieldImage(undefined, 1, 1);
-      });
-    });
-    test('Null Size', function() {
-      chai.assert.throws(function() {
-        new Blockly.FieldImage('src', null, null);
       });
     });
     test('Undefined Size', function() {
@@ -79,30 +69,12 @@ suite('Image Fields', function() {
         Blockly.FieldImage.fromJson({});
       });
     });
-    test('Null Src', function() {
-      chai.assert.throws(function() {
-        Blockly.FieldImage.fromJson({
-          src: null,
-          width: 1,
-          height: 1
-        });
-      });
-    });
     test('Undefined Src', function() {
       chai.assert.throws(function() {
         Blockly.FieldImage.fromJson({
           src: undefined,
           width: 1,
           height: 1
-        });
-      });
-    });
-    test('Null Size', function() {
-      chai.assert.throws(function() {
-        Blockly.FieldImage.fromJson({
-          src: 'src',
-          width: null,
-          height: null
         });
       });
     });

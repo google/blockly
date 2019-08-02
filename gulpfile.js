@@ -62,16 +62,12 @@ gulp.task('blockly_javascript_en', function() {
       .pipe(insert.append(`
 if (typeof DOMParser !== 'function') {
   var JSDOM = require('jsdom').JSDOM;
+  var window = (new JSDOM()).window;
+  var document = window.document;
+  var Element = window.Element;
   Blockly.utils.xml.textToDomDocument = function(text) {
     var jsdom = new JSDOM(text, { contentType: 'text/xml' });
     return jsdom.window.document;
-  };
-}
-if (typeof Node !== 'function') {
-  var Node = {
-    ELEMENT_NODE: 1,
-    TEXT_NODE: 3,
-    DOCUMENT_POSITION_CONTAINED_BY: 16
   };
 }
 if (typeof module === 'object') { module.exports = Blockly; }

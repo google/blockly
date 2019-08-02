@@ -33,6 +33,7 @@
 goog.provide('Blockly.utils');
 
 goog.require('Blockly.Msg');
+goog.require('Blockly.utils.base');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.userAgent');
@@ -585,8 +586,3 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
   }
   return typeCountsMap;
 };
-
-/**
- * Reference to the global object.
- */
-Blockly.utils.global = this || self;

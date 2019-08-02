@@ -25,6 +25,7 @@
   "license": "Apache-2.0",
   "private": true,
   "devDependencies": {
+    "chai": "^4.2.0",
     "eslint": "^5.13.0",
     "google-closure-compiler": "^20190618.0.0",
     "google-closure-library": "^20190618.0.0",
@@ -34,6 +35,7 @@
     "gulp-series": "^1.0.2",
     "gulp-shell": "^0.7.1",
     "jshint": "^2.10.2",
+    "mocha": "^6.1.4",
     "webdriverio": "^5.11.5"
   },
   "jshintConfig": {

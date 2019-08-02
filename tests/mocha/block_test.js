@@ -1,7 +1,24 @@
-
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2019 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 suite('Blocks', function() {
-
   suite('Unplug', function() {
     function assertUnpluggedNoheal(blocks) {
       // A has nothing connected to it.
@@ -11,7 +28,6 @@ suite('Blocks', function() {
       // B is the top of its stack.
       assertNull(blocks.B.getParent());
     }
-
     function assertUnpluggedHealed(blocks) {
       // A and C are connected.
       assertEquals(1, blocks.A.getChildren().length);
@@ -43,7 +59,6 @@ suite('Blocks', function() {
 
       this.workspace = new Blockly.Workspace();
     });
-
     teardown(function() {
       delete Blockly.Blocks['stack_block'];
       delete Blockly.Blocks['row_block'];
@@ -73,13 +88,11 @@ suite('Blocks', function() {
         this.blocks.B.unplug(false);
         assertUnpluggedNoheal(this.blocks);
       });
-
       test('Heal', function() {
         this.blocks.B.unplug(true);
         // Each block has only one input, and the types work.
         assertUnpluggedHealed(this.blocks);
       });
-
       test('Heal with bad checks', function() {
         var blocks = this.blocks;
 
@@ -91,7 +104,6 @@ suite('Blocks', function() {
         blocks.B.unplug(true);
         assertUnpluggedNoheal(blocks);
       });
-
       test('Parent has multiple inputs', function() {
         var blocks = this.blocks;
         // Add extra input to parent
@@ -99,7 +111,6 @@ suite('Blocks', function() {
         blocks.B.unplug(true);
         assertUnpluggedHealed(blocks);
       });
-
       test('Middle block has multiple inputs', function() {
         var blocks = this.blocks;
         // Add extra input to middle block
@@ -107,7 +118,6 @@ suite('Blocks', function() {
         blocks.B.unplug(true);
         assertUnpluggedHealed(blocks);
       });
-
       test('Child block has multiple inputs', function() {
         var blocks = this.blocks;
         // Add extra input to child block
@@ -117,8 +127,6 @@ suite('Blocks', function() {
         assertUnpluggedHealed(blocks);
       });
     });
-
-
     suite('Stack', function() {
       setup(function() {
         var blockA = this.workspace.newBlock('stack_block');
@@ -141,12 +149,10 @@ suite('Blocks', function() {
         this.blocks.B.unplug();
         assertUnpluggedNoheal(this.blocks);
       });
-
       test('Heal', function() {
         this.blocks.B.unplug(true);
         assertUnpluggedHealed(this.blocks);
       });
-
       test('Heal with bad checks', function() {
         var blocks = this.blocks;
         // A and C can't connect, but both can connect to B.

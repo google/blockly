@@ -1690,6 +1690,10 @@ Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
  *     amount values zoom in.
  */
 Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
+  // Mutators and flyouts don't support zooming
+  if (this.isFlyout || this.isMutator) {
+    return;
+  }
   // Scale factor.
   var speed = this.options.zoomOptions.scaleSpeed;
   var scaleChange = Math.pow(speed, amount);

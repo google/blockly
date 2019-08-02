@@ -316,12 +316,8 @@ Blockly.Block.prototype.dispose = function(healStack) {
     this.inputList.length = 0;
     // Dispose of any remaining connections (next/previous/output).
     var connections = this.getConnections_(true);
-    for (var i = 0; i < connections.length; i++) {
-      var connection = connections[i];
-      if (connection.isConnected()) {
-        connection.disconnect();
-      }
-      connections[i].dispose();
+    for (var i = 0, connection; connection = connections[i]; i++) {
+      connection.dispose();
     }
   } finally {
     Blockly.Events.enable();
@@ -1759,17 +1755,6 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
 Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     if (input.name == name) {
-      if (input.connection && input.connection.isConnected()) {
-        input.connection.setShadowDom(null);
-        var block = input.connection.targetBlock();
-        if (block.isShadow()) {
-          // Destroy any attached shadow block.
-          block.dispose();
-        } else {
-          // Disconnect any attached normal block.
-          block.unplug();
-        }
-      }
       input.dispose();
       this.inputList.splice(i, 1);
       return;

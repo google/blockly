@@ -304,7 +304,7 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
   // Resize after every input change.
   this.onKeyInputWrapper_ =
       Blockly.bindEventWithChecks_(
-          htmlInput, 'keyup', this, this.onHtmlInputChange_);
+          htmlInput, 'input', this, this.onHtmlInputChange_);
 };
 
 /**

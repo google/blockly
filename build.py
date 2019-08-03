@@ -225,9 +225,9 @@ class Gen_compressed(threading.Thread):
         continue
       f = codecs.open(filename, encoding="utf-8")
       code = "".join(f.readlines()).encode("utf-8")
-      # Inject the blockly version.
+      # Inject the Blockly version.
       if filename == "core/blockly.js":
-        code = code.replace("Blockly.VERSION = 'unset';", "Blockly.VERSION = '" + blocklyVersion + "';")
+        code = code.replace("Blockly.VERSION = 'uncompiled';", "Blockly.VERSION = '" + blocklyVersion + "';")
       params.append(("js_code", code))
       f.close()
 

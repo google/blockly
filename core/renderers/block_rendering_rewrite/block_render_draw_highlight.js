@@ -67,6 +67,8 @@ Blockly.blockRendering.Highlighter = function(info, pathObject) {
   this.puzzleTabPaths_ = Blockly.blockRendering.highlightConstants.PUZZLE_TAB;
   this.notchPaths_ = Blockly.blockRendering.highlightConstants.NOTCH;
   this.startPaths_ = Blockly.blockRendering.highlightConstants.START_HAT;
+  this.jaggedTeethPaths_ =
+      Blockly.blockRendering.highlightConstants.JAGGED_TEETH;
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
@@ -89,6 +91,16 @@ Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
   }
 
   this.steps_.push('H', row.width - this.highlightOffset_);
+};
+
+Blockly.blockRendering.Highlighter.prototype.drawJaggedEdge_ = function(row) {
+  if (this.info_.RTL) {
+    this.steps_.push('H', row.width - this.highlightOffset_);
+    this.steps_.push(this.jaggedTeethPaths_.pathLeft);
+    var remainder =
+        row.height - this.jaggedTeethPaths_.height - this.highlightOffset_;
+    this.steps_.push(Blockly.utils.svgPaths.lineOnAxis('v', remainder));
+  }
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawValueInput = function(row) {

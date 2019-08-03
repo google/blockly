@@ -142,6 +142,39 @@ Blockly.blockRendering.constants.TOP_LEFT_CORNER_START =
     'm 0,' + Blockly.blockRendering.constants.CORNER_RADIUS;
 
 /**
+ * Height of SVG path for jagged teeth at the end of collapsed blocks.
+ * @const
+ */
+Blockly.blockRendering.constants.JAGGED_TEETH_HEIGHT = 12;
+/**
+ * Width of SVG path for jagged teeth at the end of collapsed blocks.
+ * @const
+ */
+Blockly.blockRendering.constants.JAGGED_TEETH_WIDTH = 6;
+
+/**
+ * SVG path for drawing jagged teeth at the end of collapsed blocks.
+ * @const
+ */
+Blockly.blockRendering.constants.JAGGED_TEETH = (function() {
+  var height = Blockly.blockRendering.constants.JAGGED_TEETH_HEIGHT;
+  var width = Blockly.blockRendering.constants.JAGGED_TEETH_WIDTH;
+
+  var mainPath =
+      Blockly.utils.svgPaths.line(
+          [
+            Blockly.utils.svgPaths.point(6, 3),
+            Blockly.utils.svgPaths.point(-12, 6),
+            Blockly.utils.svgPaths.point(6, 3)
+          ]);
+  return {
+    height: height,
+    width: width,
+    path: mainPath
+  };
+})();
+
+/**
  * Information about the hat on a start block.
  */
 Blockly.blockRendering.constants.START_HAT = (function() {
@@ -180,7 +213,7 @@ Blockly.blockRendering.constants.PUZZLE_TAB = (function() {
     var halfHeight = height / 2;
     var control1Y = halfHeight + overlap;
     var control2Y = halfHeight + 0.5;
-    var control3Y = overlap; //2.5
+    var control3Y = overlap; // 2.5
 
     var endPoint1 = Blockly.utils.svgPaths.point(-width, forward * halfHeight);
     var endPoint2 = Blockly.utils.svgPaths.point(width, forward * halfHeight);

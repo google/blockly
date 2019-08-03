@@ -127,6 +127,16 @@ Blockly.blockRendering.Measurable.prototype.isRoundedCorner = function() {
 Blockly.blockRendering.Measurable.prototype.isSquareCorner = function() {
   return this.type == 'square corner';
 };
+
+/**
+ * Whether this stores information about a jagged edge.
+ * @return {boolean} True if this object stores information about a jagged edge.
+ * @package
+ */
+Blockly.blockRendering.Measurable.prototype.isJaggedEdge = function() {
+  return this.type == 'jagged edge';
+};
+
 /**
  * The base class to represent an input that takes up space on a block
  * during rendering
@@ -177,6 +187,21 @@ Blockly.blockRendering.Icon = function(icon) {
   this.width = size.width;
 };
 goog.inherits(Blockly.blockRendering.Icon, Blockly.blockRendering.Measurable);
+
+/**
+ * An object containing information about the jagged edge of a collapsed block
+ * takes up during rendering
+ * @package
+ * @constructor
+ */
+Blockly.blockRendering.JaggedEdge = function() {
+  Blockly.blockRendering.JaggedEdge.superClass_.constructor.call(this);
+  this.type = 'jagged edge';
+  this.height = Blockly.blockRendering.constants.JAGGED_TEETH.height;
+  this.width = Blockly.blockRendering.constants.JAGGED_TEETH.width;
+};
+goog.inherits(Blockly.blockRendering.JaggedEdge, Blockly.blockRendering.Measurable);
+
 
 /**
  * An object containing information about the space a field takes up during
@@ -386,6 +411,7 @@ Blockly.blockRendering.Row = function() {
   this.hasStatement = false;
   this.hasInlineInput = false;
   this.hasDummyInput = false;
+  this.hasJaggedEdge = false;
 };
 
 Blockly.blockRendering.Row.prototype.isSpacer = function() {
@@ -409,9 +435,11 @@ Blockly.blockRendering.Row.prototype.measure = function() {
 };
 
 Blockly.blockRendering.Row.prototype.getLastInput = function() {
-  // There's always a spacer after the last input, unless there are no inputs.
-  if (this.elements.length > 1) {
-    var elem = this.elements[this.elements.length - 2];
+  for (var i = this.elements.length - 1; i >= 0; i--) {
+    var elem = this.elements[i];
+    if (elem.isSpacer()) {
+      continue;
+    }
     if (elem.isInput) {
       return elem;
     } else if (elem.isField()) {
@@ -468,7 +496,7 @@ Blockly.blockRendering.TopRow = function(block) {
 
   // This is the minimum height for the row. If one of its elements has a greater
   // height it will be overwritten in the compute pass.
-  if (precedesStatement) {
+  if (precedesStatement && !block.isCollapsed()) {
     this.height = Blockly.blockRendering.constants.LARGE_PADDING;
   } else {
     this.height = Blockly.blockRendering.constants.MEDIUM_PADDING;

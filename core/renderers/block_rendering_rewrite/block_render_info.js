@@ -60,6 +60,12 @@ Blockly.blockRendering.RenderInfo = function(block) {
   this.isInline = block.getInputsInline() && !block.isCollapsed();
 
   /**
+   * Whether the block is collapsed.
+   * @type {boolean}
+   */
+  this.isCollapsed = block.isCollapsed();
+
+  /**
    * Whether the block is an insertion marker.  Insertion markers are the same
    * shape as normal blocks, but don't show fields.
    * @type {boolean}
@@ -103,6 +109,12 @@ Blockly.blockRendering.RenderInfo = function(block) {
    */
   this.rows = [];
 
+  /**
+   * An array of measureable objects containing hidden icons.
+   * @type {!Array.<!Blockly.blockRendering.Icon>}
+   */
+  this.hiddenIcons = [];
+
   this.topRow = null;
   this.bottomRow = null;
 
@@ -145,16 +157,25 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
   var icons = this.block_.getIcons();
   if (icons.length) {
     for (var i = 0; i < icons.length; i++) {
-      activeRow.elements.push(
-          new Blockly.blockRendering.Icon(icons[i]));
+      var icon = icons[i];
+      var iconInfo = new Blockly.blockRendering.Icon(icon);
+      if (this.isCollapsed && icon.collapseHidden) {
+        this.hiddenIcons.push(iconInfo);
+      } else {
+        activeRow.elements.push(iconInfo);
+      }
     }
   }
 
+  var lastInput = undefined;
   // Loop across all of the inputs on the block, creating objects for anything
   // that needs to be rendered and breaking the block up into visual rows.
   for (var i = 0; i < this.block_.inputList.length; i++) {
     var input = this.block_.inputList[i];
-    if (this.shouldStartNewRow_(input, this.block_.inputList[i - 1])) {
+    if (!input.isVisible()) {
+      continue;
+    }
+    if (this.shouldStartNewRow_(input, lastInput)) {
       // Finish this row and create a new one.
       this.rows.push(activeRow);
       activeRow = new Blockly.blockRendering.Row();
@@ -166,6 +187,12 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
       activeRow.elements.push(new Blockly.blockRendering.Field(field, input));
     }
     this.addInput_(input, activeRow);
+    lastInput = input;
+  }
+
+  if (this.isCollapsed) {
+    activeRow.hasJaggedEdge = true;
+    activeRow.elements.push(new Blockly.blockRendering.JaggedEdge());
   }
 
   if (activeRow.elements.length) {
@@ -285,7 +312,6 @@ Blockly.blockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
       row.elements.push(new Blockly.blockRendering.InRowSpacer(
           this.getInRowSpacing_(null, oldElems[0])));
     }
-
     for (var e = 0; e < oldElems.length; e++) {
       row.elements.push(oldElems[e]);
       var spacing = this.getInRowSpacing_(oldElems[e], oldElems[e + 1]);
@@ -321,7 +347,7 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     return Blockly.blockRendering.constants.LARGE_PADDING;
   }
 
-  // Spacing between a field or icon and the end of the row.
+  // Spacing between a non-input and the end of the row.
   if (!prev.isInput && !next) {
     // Between an editable field and the end of the row.
     if (prev.isField() && prev.isEditable) {
@@ -342,6 +368,10 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     if (prev.isRoundedCorner()) {
       return Blockly.blockRendering.constants.MIN_BLOCK_WIDTH;
     }
+    // Between a jagged edge and the end of the row.
+    if (prev.isJaggedEdge()) {
+      return Blockly.blockRendering.constants.NO_PADDING;
+    }
     // Between noneditable fields and icons and the end of the row.
     return Blockly.blockRendering.constants.LARGE_PADDING;
   }
@@ -357,7 +387,7 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     }
   }
 
-  // Spacing between a field or icon and an input.
+  // Spacing between a non-input and an input.
   if (!prev.isInput && next.isInput) {
     // Between an editable field and an input.
     if (prev.isEditable) {
@@ -411,7 +441,7 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     }
   }
 
-  // Spacing between a rounded corner and a previous or next connection
+  // Spacing between a rounded corner and a previous or next connection.
   if (prev.isRoundedCorner()) {
     if (next.isPreviousConnection()) {
       return Blockly.blockRendering.constants.NOTCH_OFFSET_ROUNDED_CORNER_PREV;
@@ -426,6 +456,11 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
 
   // Spacing between two fields of the same editability.
   if (!prev.isInput && !next.isInput && (prev.isEditable == next.isEditable)) {
+    return Blockly.blockRendering.constants.LARGE_PADDING;
+  }
+
+  // Spacing between anything and a jagged edge.
+  if (next.isJaggedEdge()) {
     return Blockly.blockRendering.constants.LARGE_PADDING;
   }
 

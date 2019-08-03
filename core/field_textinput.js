@@ -301,14 +301,10 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
   this.onKeyDownWrapper_ =
       Blockly.bindEventWithChecks_(
           htmlInput, 'keydown', this, this.onHtmlInputKeyDown_);
-  // Resize after every keystroke.
-  this.onKeyUpWrapper_ =
+  // Resize after every input change.
+  this.onKeyInputWrapper_ =
       Blockly.bindEventWithChecks_(
-          htmlInput, 'keyup', this, this.onHtmlInputChange_);
-  // Repeatedly resize when holding down a key.
-  this.onKeyPressWrapper_ =
-      Blockly.bindEventWithChecks_(
-          htmlInput, 'keypress', this, this.onHtmlInputChange_);
+          htmlInput, 'input', this, this.onHtmlInputChange_);
 };
 
 /**
@@ -317,8 +313,7 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
  */
 Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
   Blockly.unbindEvent_(this.onKeyDownWrapper_);
-  Blockly.unbindEvent_(this.onKeyUpWrapper_);
-  Blockly.unbindEvent_(this.onKeyPressWrapper_);
+  Blockly.unbindEvent_(this.onKeyInputWrapper_);
 };
 
 /**

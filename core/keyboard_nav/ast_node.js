@@ -70,7 +70,6 @@ Blockly.ASTNode = function(type, location, opt_params) {
 
 /**
  * Object holding different types for an AST node.
- * @enum {string}
  */
 Blockly.ASTNode.types = {
   FIELD: 'field',

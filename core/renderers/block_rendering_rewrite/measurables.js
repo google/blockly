@@ -217,7 +217,7 @@ Blockly.blockRendering.Field = function(field, parentInput) {
   this.isEditable = field.isCurrentlyEditable();
   this.type = 'field';
 
-  var size = this.field.getCorrectedSize();
+  var size = this.field.getSize();
   this.height = size.height;
   this.width = size.width;
   this.parentInput = parentInput;

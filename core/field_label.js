@@ -43,7 +43,7 @@ goog.require('Blockly.utils.Size');
  * @constructor
  */
 Blockly.FieldLabel = function(opt_value, opt_class) {
-  this.size_ = new Blockly.utils.Size(0, 17.5);
+  this.size_ = new Blockly.utils.Size(0, Blockly.Field.TEXT_DEFAULT_HEIGHT);
   this.class_ = opt_class;
   opt_value = this.doClassValidation_(opt_value);
   if (opt_value === null) {
@@ -80,7 +80,8 @@ Blockly.FieldLabel.prototype.EDITABLE = false;
  */
 Blockly.FieldLabel.prototype.initView = function() {
   this.createTextElement_();
-  this.textElement_.setAttribute('y', this.size_.height - 5);
+  // The y attribute of an svg text element is the baseline.
+  this.textElement_.setAttribute('y', this.size_.height);
   if (this.class_) {
     Blockly.utils.dom.addClass(this.textElement_, this.class_);
   }
@@ -97,21 +98,6 @@ Blockly.FieldLabel.prototype.doClassValidation_ = function(opt_newValue) {
     return null;
   }
   return String(opt_newValue);
-};
-
-/**
- * Get the size of the visible field, as used in new rendering.
- * @return {!Blockly.utils.Size} The size of the visible field.
- * @package
- */
-Blockly.FieldLabel.prototype.getCorrectedSize = function() {
-  // getSize also renders and updates the size if needed.  Rather than duplicate
-  // the logic to figure out whether to rerender, just call getSize.
-  this.getSize();
-  // This extra 5 was probably to add padding between rows.
-  // It's also found in the constructor and in initView.
-  // TODO (#2562): Remove getCorrectedSize.
-  return new Blockly.utils.Size(this.size_.width, this.size_.height - 5);
 };
 
 Blockly.Field.register('field_label', Blockly.FieldLabel);

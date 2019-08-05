@@ -47,7 +47,12 @@ goog.require('goog.style');
  * @constructor
  */
 Blockly.Field = function(value, opt_validator) {
-  this.size_ = new Blockly.utils.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
+  /**
+   * The size of the area rendered by the field.
+   * @type {Blockly.utils.Size}
+   */
+  this.size_ = new Blockly.utils.Size(0, 0);
+
   this.setValue(value);
   opt_validator && this.setValidator(opt_validator);
 };
@@ -123,6 +128,17 @@ Blockly.Field.cacheReference_ = 0;
  * @package
  */
 Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT = 16;
+
+/**
+ * The default height of the text element on any field.
+ * @type {number}
+ * @package
+ */
+Blockly.Field.TEXT_DEFAULT_HEIGHT = 12.5;
+
+Blockly.Field.WIDTH_PADDING = 10;
+
+Blockly.Field.HEIGHT_PADDING = 10;
 
 /**
  * Name of field.  Unique within each block.
@@ -279,14 +295,16 @@ Blockly.Field.prototype.initView = function() {
  * @protected
  */
 Blockly.Field.prototype.createBorderRect_ = function() {
+  this.size_.height =
+      Math.max(this.size_.height, Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
   this.borderRect_ = Blockly.utils.dom.createSvgElement('rect',
       {
         'rx': 4,
         'ry': 4,
-        'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
+        'x': -Blockly.Field.WIDTH_PADDING / 2,
         'y': 0,
-        'height': Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT,
-        'width': this.size_.width + Blockly.BlockSvg.SEP_SPACE_X
+        'height': this.size_.height,
+        'width': this.size_.width
       }, this.fieldGroup_);
 };
 
@@ -300,7 +318,9 @@ Blockly.Field.prototype.createTextElement_ = function() {
   this.textElement_ = Blockly.utils.dom.createSvgElement('text',
       {
         'class': 'blocklyText',
-        'y': this.size_.height - 12.5
+        // This may just be trying to vertically center the text?
+        'y': Blockly.Field.TEXT_DEFAULT_HEIGHT,
+        'x': 0
       }, this.fieldGroup_);
   this.textContent_ = document.createTextNode('');
   this.textElement_.appendChild(this.textContent_);
@@ -564,12 +584,13 @@ Blockly.Field.prototype.updateWidth = function() {
  * @protected
  */
 Blockly.Field.prototype.updateSize_ = function() {
-  var width = Blockly.Field.getCachedWidth(this.textElement_);
+  var textWidth = Blockly.Field.getCachedWidth(this.textElement_);
+  var totalWidth = textWidth;
   if (this.borderRect_) {
-    this.borderRect_.setAttribute('width',
-        width + Blockly.BlockSvg.SEP_SPACE_X);
+    totalWidth += Blockly.Field.WIDTH_PADDING;
+    this.borderRect_.setAttribute('width', totalWidth);
   }
-  this.size_.width = width;
+  this.size_.width = totalWidth;
 };
 
 /**
@@ -655,16 +676,6 @@ Blockly.Field.prototype.getSize = function() {
     this.render_();
   }
   return this.size_;
-};
-
-/**
- * Get the size of the visible field, as used in new rendering.
- * @return {!Blockly.utils.Size} The size of the visible field.
- * @package
- */
-Blockly.Field.prototype.getCorrectedSize = function() {
-  // TODO (#2562): Remove getCorrectedSize.
-  return this.getSize();
 };
 
 /**

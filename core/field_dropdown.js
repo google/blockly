@@ -106,6 +106,13 @@ Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH = 0.45;
 Blockly.FieldDropdown.IMAGE_Y_OFFSET = 5;
 
 /**
+ * The total vertical padding above and below an image.
+ * @type {number}
+ * @const
+ */
+Blockly.FieldDropdown.IMAGE_Y_PADDING = Blockly.FieldDropdown.IMAGE_Y_OFFSET * 2;
+
+/**
  * Android can't (in 2014) display "▾", so use "▼" instead.
  */
 Blockly.FieldDropdown.ARROW_CHAR =
@@ -153,6 +160,8 @@ Blockly.FieldDropdown.prototype.initView = function() {
   } else {
     this.textElement_.appendChild(this.arrow_);
   }
+
+  this.contentDimensions_ = new Blockly.utils.Size(0, 0);
 };
 
 /**
@@ -467,9 +476,8 @@ Blockly.FieldDropdown.prototype.render_ = function() {
   } else {
     this.renderSelectedText_();
   }
-  this.borderRect_.setAttribute('height', this.size_.height - 9);
-  this.borderRect_.setAttribute('width',
-      this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
+  this.borderRect_.setAttribute('height', this.size_.height);
+  this.borderRect_.setAttribute('width', this.size_.width);
 };
 
 /**
@@ -484,18 +492,19 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
   this.imageElement_.setAttribute('width', this.imageJson_.width);
 
   var arrowWidth = Blockly.Field.getCachedWidth(this.arrow_);
-  // TODO: Standardize sizing, need to talk to rachel and abby about rendering
-  //  redux.
-  // I think really this means plus 10?
-  this.size_.height = Number(this.imageJson_.height) + 19;
-  this.size_.width = Number(this.imageJson_.width) + arrowWidth;
+
+  // Height and width include the border rect.
+  var imageHeight = Number(this.imageJson_.height);
+  var imageWidth = Number(this.imageJson_.width);
+  this.size_.height = imageHeight + Blockly.FieldDropdown.IMAGE_Y_PADDING;
+  this.size_.width = imageWidth + arrowWidth + Blockly.Field.WIDTH_PADDING;
 
   if (this.sourceBlock_.RTL) {
     this.imageElement_.setAttribute('x', arrowWidth);
     this.textElement_.setAttribute('x', -1);
   } else {
     this.textElement_.setAttribute('text-anchor', 'end');
-    this.textElement_.setAttribute('x', this.size_.width + 1);
+    this.textElement_.setAttribute('x', imageWidth + arrowWidth + 1);
   }
 };
 
@@ -507,8 +516,10 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   this.textContent_.nodeValue = this.getDisplayText_();
   this.textElement_.setAttribute('text-anchor', 'start');
   this.textElement_.setAttribute('x', 0);
-  this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y;
-  this.size_.width = Blockly.Field.getCachedWidth(this.textElement_);
+  // Height and width include the border rect.
+  this.size_.height = Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT;
+  this.size_.width =
+      Blockly.Field.getCachedWidth(this.textElement_) + Blockly.Field.WIDTH_PADDING;
 };
 
 /**
@@ -546,22 +557,6 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
   if (foundError) {
     throw TypeError('Found invalid FieldDropdown options.');
   }
-};
-
-/**
- * Get the size of the visible field, as used in new rendering.
- * @return {!Blockly.utils.Size} The size of the visible field.
- * @package
- */
-Blockly.FieldDropdown.prototype.getCorrectedSize = function() {
-  // getSize also renders and updates the size if needed.  Rather than duplicate
-  // the logic to figure out whether to rerender, just call getSize.
-  this.getSize();
-  // This extra 9 was probably to add padding between rows.
-  // It's also found in render_, renderSelectedImage_, and renderSelectedText_.
-  // TODO (#2562): Remove getCorrectedSize.
-  return new Blockly.utils.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
-      this.size_.height - 9);
 };
 
 Blockly.Field.register('field_dropdown', Blockly.FieldDropdown);

@@ -30,7 +30,7 @@ goog.provide('Blockly.DropDownDiv');
 
 goog.require('Blockly.utils.math');
 
-goog.require('goog.style');
+goog.require('Blockly.utils.style');
 
 
 /**
@@ -314,7 +314,7 @@ Blockly.DropDownDiv.getBoundsInfo_ = function() {
   // TODO (#2744): Account for toolboxes.
 
   var boundPosition = Blockly.DropDownDiv.boundsElement_.getBoundingClientRect();
-  var boundSize = goog.style.getSize(Blockly.DropDownDiv.boundsElement_);
+  var boundSize = Blockly.utils.style.getSize(Blockly.DropDownDiv.boundsElement_);
 
   return {
     left: boundPosition.left,
@@ -341,7 +341,7 @@ Blockly.DropDownDiv.getBoundsInfo_ = function() {
 Blockly.DropDownDiv.getPositionMetrics = function(primaryX, primaryY,
     secondaryX, secondaryY) {
   var boundsInfo = Blockly.DropDownDiv.getBoundsInfo_();
-  var divSize = goog.style.getSize(Blockly.DropDownDiv.DIV_);
+  var divSize = Blockly.utils.style.getSize(Blockly.DropDownDiv.DIV_);
 
   // Can we fit in-bounds below the target?
   if (primaryY + divSize.height < boundsInfo.bottom) {

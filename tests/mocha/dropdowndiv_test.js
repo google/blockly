@@ -30,7 +30,7 @@ suite('DropDownDiv', function() {
             width: 100,
             height: 100
           });
-      this.sizeStub = sinon.stub(goog.style, 'getSize')
+      this.sizeStub = sinon.stub(Blockly.utils.style, 'getSize')
           .returns({
             width: 60,
             height: 60

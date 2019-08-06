@@ -35,7 +35,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.userAgent');
 
-goog.require('goog.style');
+goog.require('Blockly.utils.style');
 
 
 /**
@@ -947,7 +947,7 @@ Blockly.Field.prototype.getClickTarget_ = function() {
  * @private
  */
 Blockly.Field.prototype.getAbsoluteXY_ = function() {
-  return goog.style.getPageOffset(this.borderRect_);
+  return Blockly.utils.style.getPageOffset(this.borderRect_);
 };
 
 /**

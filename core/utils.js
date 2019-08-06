@@ -38,7 +38,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.userAgent');
 
-goog.require('goog.style');
+goog.require('Blockly.utils.style');
 
 
 /**
@@ -514,7 +514,7 @@ Blockly.utils.runAfterPageLoad = function(fn) {
  */
 Blockly.utils.getViewportBBox = function() {
   // Pixels, in window coordinates.
-  var scrollOffset = goog.style.getViewportPageOffset(document);
+  var scrollOffset = Blockly.utils.style.getViewportPageOffset();
   return {
     right: document.documentElement.clientWidth + scrollOffset.x,
     bottom: document.documentElement.clientHeight + scrollOffset.y,

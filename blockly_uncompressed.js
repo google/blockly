@@ -52,7 +52,7 @@ goog.addDependency("../../../" + dir + "/core/constants.js", ['Blockly.constants
 goog.addDependency("../../../" + dir + "/core/contextmenu.js", ['Blockly.ContextMenu'], ['Blockly.Events', 'Blockly.Events.BlockCreate', 'Blockly.Msg', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.dom', 'Blockly.utils.uiMenu', 'Blockly.utils.userAgent', 'Blockly.Xml', 'goog.events', 'goog.ui.Menu', 'goog.ui.MenuItem']);
 goog.addDependency("../../../" + dir + "/core/css.js", ['Blockly.Css'], []);
 goog.addDependency("../../../" + dir + "/core/dragged_connection_manager.js", ['Blockly.DraggedConnectionManager'], ['Blockly.blockAnimations', 'Blockly.RenderedConnection']);
-goog.addDependency("../../../" + dir + "/core/dropdowndiv.js", ['Blockly.DropDownDiv'], ['Blockly.utils.math', 'goog.style']);
+goog.addDependency("../../../" + dir + "/core/dropdowndiv.js", ['Blockly.DropDownDiv'], ['Blockly.utils.math', 'Blockly.utils.style']);
 goog.addDependency("../../../" + dir + "/core/events.js", ['Blockly.Events'], ['Blockly.utils']);
 goog.addDependency("../../../" + dir + "/core/events_abstract.js", ['Blockly.Events.Abstract'], ['Blockly.Events']);
 goog.addDependency("../../../" + dir + "/core/extensions.js", ['Blockly.Extensions'], ['Blockly.Mutator', 'Blockly.utils']);
@@ -119,7 +119,7 @@ goog.addDependency("../../../" + dir + "/core/utils/math.js", ['Blockly.utils.ma
 goog.addDependency("../../../" + dir + "/core/utils/rect.js", ['Blockly.utils.Rect'], []);
 goog.addDependency("../../../" + dir + "/core/utils/size.js", ['Blockly.utils.Size'], []);
 goog.addDependency("../../../" + dir + "/core/utils/string.js", ['Blockly.utils.string'], []);
-goog.addDependency("../../../" + dir + "/core/utils/style.js", ['Blockly.utils.style'], ['Blockly.utils.Coordinate', 'Blockly.utils.Size', 'Blockly.utils.userAgent']);
+goog.addDependency("../../../" + dir + "/core/utils/style.js", ['Blockly.utils.style'], ['Blockly.utils.Coordinate', 'Blockly.utils.Size']);
 goog.addDependency("../../../" + dir + "/core/utils/svg_paths.js", ['Blockly.utils.svgPaths'], []);
 goog.addDependency("../../../" + dir + "/core/utils/useragent.js", ['Blockly.utils.userAgent'], ['Blockly.utils.base']);
 goog.addDependency("../../../" + dir + "/core/utils/xml.js", ['Blockly.utils.xml'], []);

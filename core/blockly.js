@@ -66,6 +66,16 @@ var CLOSURE_DEFINES = {'goog.DEBUG': false};
 /* eslint-enable no-unused-vars */
 
 /**
+ * Blockly core version.
+ * This constant is overriden by the build script (build.py) to the value of the version
+ * in package.json. This is done during the gen_core build step.
+ * For local builds, you can pass --define='Blockly.VERSION=X.Y.Z' to the compiler
+ * to override this constant.
+ * @define {string}
+ */
+Blockly.VERSION = 'uncompiled';
+
+/**
  * The main workspace most recently used.
  * Set by Blockly.WorkspaceSvg.prototype.markFocused
  * @type {Blockly.Workspace}

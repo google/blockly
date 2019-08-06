@@ -70,7 +70,7 @@ Blockly.FieldCheckbox.fromJson = function(options) {
  * @type {number}
  * @const
  */
-Blockly.FieldCheckbox.WIDTH = 5;
+Blockly.FieldCheckbox.WIDTH = 15;
 
 /**
  * Character for the checkmark.
@@ -84,7 +84,7 @@ Blockly.FieldCheckbox.CHECK_CHAR = '\u2713';
  * @type {number}
  * @const
  */
-Blockly.FieldCheckbox.CHECK_X_OFFSET = -3;
+Blockly.FieldCheckbox.CHECK_X_OFFSET = Blockly.Field.DEFAULT_TEXT_OFFSET - 3;
 
 /**
  * Used to correctly position the check mark.
@@ -210,18 +210,4 @@ Blockly.FieldCheckbox.prototype.convertValueToBool_ = function(value) {
   }
 };
 
-/**
- * Get the size of the visible field, as used in new rendering.
- * The checkbox field fills the entire border rect, rather than just using the
- * text element.
- * @return {!Blockly.utils.Size} The size of the visible field.
- * @package
- */
-Blockly.FieldCheckbox.prototype.getCorrectedSize = function() {
-  this.getSize();
-
-  // TODO (#2562): Remove getCorrectedSize.
-  return new Blockly.utils.Size(this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
-      Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT);
-};
 Blockly.Field.register('field_checkbox', Blockly.FieldCheckbox);

@@ -59,14 +59,16 @@ Blockly.FieldImage = function(src, width, height,
   }
 
   // Ensure height and width are numbers.  Strings are bad at math.
-  this.height_ = Number(height);
-  this.width_ = Number(width);
-  if (this.height_ <= 0 || this.width_ <= 0) {
+  var imageHeight = Number(height);
+  var imageWidth = Number(width);
+  if (imageHeight <= 0 || imageWidth <= 0) {
     throw Error('Height and width values of an image field must be greater' +
       ' than 0.');
   }
-  this.size_ = new Blockly.utils.Size(this.width_,
-      this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
+  // Store the image height, since it is different from the field height.
+  this.imageHeight_ = imageHeight;
+  this.size_ = new Blockly.utils.Size(imageWidth,
+      imageHeight + Blockly.FieldImage.Y_PADDING);
 
   this.flipRtl_ = opt_flipRtl;
   this.text_ = opt_alt || '';
@@ -98,6 +100,14 @@ Blockly.FieldImage.fromJson = function(options) {
 };
 
 /**
+ * Vertical padding below the image, which is included in the reported height of
+ * the field.
+ * @type {number}
+ * @private
+ */
+Blockly.FieldImage.Y_PADDING = 1;
+
+/**
  * Editable fields usually show some sort of UI indicating they are
  * editable. This field should not.
  * @type {boolean}
@@ -122,8 +132,8 @@ Blockly.FieldImage.prototype.initView = function() {
   this.imageElement_ = Blockly.utils.dom.createSvgElement(
       'image',
       {
-        'height': this.height_ + 'px',
-        'width': this.width_ + 'px',
+        'height': this.imageHeight_ + 'px',
+        'width': this.size_.width + 'px',
         'alt': this.text_
       },
       this.fieldGroup_);
@@ -210,21 +220,6 @@ Blockly.FieldImage.prototype.showEditor_ = function() {
  */
 Blockly.FieldImage.prototype.setOnClickHandler = function(func) {
   this.clickHandler_ = func;
-};
-/*
- * Get the size of the visible field, as used in new rendering.
- * @return {!Blockly.utils.Size} The size of the visible field.
- * @package
- */
-Blockly.FieldImage.prototype.getCorrectedSize = function() {
-  // getSize also renders and updates the size if needed.  Rather than duplicate
-  // the logic to figure out whether to rerender, just call getSize.
-  this.getSize();
-  // Old rendering adds an extra pixel under the image.  We include this in the
-  // height of the image in new rendering, rather than having the spacer below
-  // know that there was an image in the previous row.
-  // TODO (#2562): Remove getCorrectedSize.
-  return new Blockly.utils.Size(this.size_.width, this.height_ + 1);
 };
 
 Blockly.Field.register('field_image', Blockly.FieldImage);

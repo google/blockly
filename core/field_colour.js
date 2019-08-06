@@ -78,7 +78,7 @@ Blockly.FieldColour.fromJson = function(options) {
  * @private
  * @const
  */
-Blockly.FieldColour.DEFAULT_WIDTH = 16;
+Blockly.FieldColour.DEFAULT_WIDTH = 26;
 
 /**
  * Default height of a colour field.
@@ -86,7 +86,7 @@ Blockly.FieldColour.DEFAULT_WIDTH = 16;
  * @private
  * @const
  */
-Blockly.FieldColour.DEFAULT_HEIGHT = 12;
+Blockly.FieldColour.DEFAULT_HEIGHT = Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT;
 
 /**
  * Serializable fields are saved by the XML renderer, non-serializable fields
@@ -344,23 +344,6 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
  */
 Blockly.FieldColour.prototype.dropdownDispose_ = function() {
   Blockly.unbindEvent_(this.onUpWrapper_);
-};
-
-/**
- * Get the size of the visible field, as used in new rendering.
- * The colour field fills the bounding box with colour and takes up the full
- * space of the bounding box.
- * @return {!Blockly.utils.Size} The size of the visible field.
- * @package
- */
-Blockly.FieldColour.prototype.getCorrectedSize = function() {
-  // getSize also renders and updates the size if needed.  Rather than duplicate
-  // the logic to figure out whether to rerender, just call getSize.
-  this.getSize();
-  // TODO (#2562): Remove getCorrectedSize.
-  return new Blockly.utils.Size(
-      this.size_.width + Blockly.BlockSvg.SEP_SPACE_X,
-      Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT - 1);
 };
 
 Blockly.Field.register('field_colour', Blockly.FieldColour);

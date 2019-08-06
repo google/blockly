@@ -516,7 +516,7 @@ gulp.task('package-readme', function() {
  * distribution directory.
  * The bundled declaration file is referenced in package.json in the types property.
  */
-gulp.task('package-dts', gulp.series('typings'), function() {
+gulp.task('package-dts', function() {
   return gulp.src('./typings/blockly.d.ts')
     .pipe(gulp.dest(`${packageDistribution}`))
 });

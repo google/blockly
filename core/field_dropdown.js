@@ -502,11 +502,15 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
   this.size_.width = imageWidth + arrowWidth + Blockly.Field.X_PADDING;
 
   if (this.sourceBlock_.RTL) {
-    this.imageElement_.setAttribute('x', arrowWidth);
-    this.textElement_.setAttribute('x', -1);
+    var imageX = Blockly.Field.DEFAULT_TEXT_OFFSET + arrowWidth;
+    var arrowX = Blockly.Field.DEFAULT_TEXT_OFFSET - 1;
+    this.imageElement_.setAttribute('x', imageX);
+    this.textElement_.setAttribute('x', arrowX);
   } else {
+    var arrowX = imageWidth + arrowWidth + Blockly.Field.DEFAULT_TEXT_OFFSET + 1;
     this.textElement_.setAttribute('text-anchor', 'end');
-    this.textElement_.setAttribute('x', imageWidth + arrowWidth + 1);
+    this.textElement_.setAttribute('x', arrowX);
+    this.imageElement_.setAttribute('x', Blockly.Field.DEFAULT_TEXT_OFFSET);
   }
 };
 
@@ -517,7 +521,7 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
 Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   this.textContent_.nodeValue = this.getDisplayText_();
   this.textElement_.setAttribute('text-anchor', 'start');
-  this.textElement_.setAttribute('x', 0);
+  this.textElement_.setAttribute('x', Blockly.Field.DEFAULT_TEXT_OFFSET);
   // Height and width include the border rect.
   this.size_.height = Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT;
   this.size_.width =

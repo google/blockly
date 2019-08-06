@@ -100,6 +100,14 @@ Blockly.FieldImage.fromJson = function(options) {
 };
 
 /**
+ * Vertical padding below the image, which is included in the reported height of
+ * the field.
+ * @type {number}
+ * @private
+ */
+Blockly.FieldImage.Y_PADDING = 1;
+
+/**
  * Editable fields usually show some sort of UI indicating they are
  * editable. This field should not.
  * @type {boolean}
@@ -115,14 +123,6 @@ Blockly.FieldImage.prototype.EDITABLE = false;
  * @private
  */
 Blockly.FieldImage.prototype.isDirty_ = false;
-
-/**
- * Vertical padding below the image, which is included in the reported height of
- * the field.
- * @type {number}
- * @private
- */
-Blockly.FieldImage.Y_PADDING = 1;
 
 /**
  * Create the block UI for this image.

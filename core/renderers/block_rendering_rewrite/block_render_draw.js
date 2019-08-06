@@ -301,24 +301,6 @@ Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
 };
 
 /**
- * Some fields are terrible and render offset from where they claim to be
- * rendered.  This function calculates an x offset for fields that need it.
- * No one is happy about this.
- * @param {!Blockly.Field} field The field to find an offset for.
- * @return {number} How far to offset the field in the x direction.
- * @private
- */
-Blockly.blockRendering.Drawer.prototype.dealWithOffsetFields_ = function(field) {
-  if (field instanceof Blockly.FieldDropdown ||
-      field instanceof Blockly.FieldTextInput ||
-      field instanceof Blockly.FieldColour ||
-      field instanceof Blockly.FieldCheckbox) {
-    return 5;
-  }
-  return 0;
-};
-
-/**
  * Push a field or icon's new position to its SVG root.
  * @param {!Blockly.blockRendering.Icon|!Blockly.blockRendering.Field} fieldInfo
  *     The rendering information for the field or icon.
@@ -341,8 +323,6 @@ Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
     svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + yPos + ')');
     fieldInfo.icon.computeIconLocation();
   } else {
-    xPos += this.dealWithOffsetFields_(fieldInfo.field);
-
     svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + yPos + ')');
   }
 

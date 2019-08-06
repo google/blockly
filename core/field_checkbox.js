@@ -84,7 +84,7 @@ Blockly.FieldCheckbox.CHECK_CHAR = '\u2713';
  * @type {number}
  * @const
  */
-Blockly.FieldCheckbox.CHECK_X_OFFSET = -3;
+Blockly.FieldCheckbox.CHECK_X_OFFSET = Blockly.Field.DEFAULT_TEXT_OFFSET - 3;
 
 /**
  * Used to correctly position the check mark.

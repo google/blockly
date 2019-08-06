@@ -144,6 +144,12 @@ Blockly.Field.TEXT_DEFAULT_HEIGHT = 12.5;
 Blockly.Field.X_PADDING = 10;
 
 /**
+ * The default offset between the left of the text element and the left of the
+ * border rect, if the border rect exists.
+ * @type {[type]}
+ */
+Blockly.Field.DEFAULT_TEXT_OFFSET = Blockly.Field.X_PADDING / 2;
+/**
  * Name of field.  Unique within each block.
  * Static labels are usually unnamed.
  * @type {string|undefined}
@@ -306,7 +312,7 @@ Blockly.Field.prototype.createBorderRect_ = function() {
       {
         'rx': 4,
         'ry': 4,
-        'x': -Blockly.Field.X_PADDING / 2,
+        'x': 0,
         'y': 0,
         'height': this.size_.height,
         'width': this.size_.width
@@ -320,12 +326,13 @@ Blockly.Field.prototype.createBorderRect_ = function() {
  * @protected
  */
 Blockly.Field.prototype.createTextElement_ = function() {
+  var xOffset = this.borderRect_ ? Blockly.Field.DEFAULT_TEXT_OFFSET : 0;
   this.textElement_ = Blockly.utils.dom.createSvgElement('text',
       {
         'class': 'blocklyText',
         // The y position is the baseline of the text.
         'y': Blockly.Field.TEXT_DEFAULT_HEIGHT,
-        'x': 0
+        'x': xOffset
       }, this.fieldGroup_);
   this.textContent_ = document.createTextNode('');
   this.textElement_.appendChild(this.textContent_);

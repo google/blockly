@@ -65,6 +65,7 @@ Blockly.FieldImage = function(src, width, height,
     throw Error('Height and width values of an image field must be greater' +
       ' than 0.');
   }
+  // Store the image height, since it is different from the field height.
   this.imageHeight_ = imageHeight;
   this.size_ = new Blockly.utils.Size(imageWidth,
       imageHeight + Blockly.FieldImage.Y_PADDING);
@@ -115,6 +116,12 @@ Blockly.FieldImage.prototype.EDITABLE = false;
  */
 Blockly.FieldImage.prototype.isDirty_ = false;
 
+/**
+ * Vertical padding below the image, which is included in the reported height of
+ * the field.
+ * @type {number}
+ * @private
+ */
 Blockly.FieldImage.Y_PADDING = 1;
 
 /**

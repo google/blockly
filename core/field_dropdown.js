@@ -99,9 +99,11 @@ Blockly.FieldDropdown.CHECKMARK_OVERHANG = 25;
 Blockly.FieldDropdown.MAX_MENU_HEIGHT_VH = 0.45;
 
 /**
- * Used to position the imageElement_ correctly.
+ * The y offset from the top of the field to the top of the image, if an image
+ * is selected.
  * @type {number}
  * @const
+ * @private
  */
 Blockly.FieldDropdown.IMAGE_Y_OFFSET = 5;
 
@@ -109,6 +111,7 @@ Blockly.FieldDropdown.IMAGE_Y_OFFSET = 5;
  * The total vertical padding above and below an image.
  * @type {number}
  * @const
+ * @private
  */
 Blockly.FieldDropdown.IMAGE_Y_PADDING = Blockly.FieldDropdown.IMAGE_Y_OFFSET * 2;
 
@@ -160,8 +163,6 @@ Blockly.FieldDropdown.prototype.initView = function() {
   } else {
     this.textElement_.appendChild(this.arrow_);
   }
-
-  this.contentDimensions_ = new Blockly.utils.Size(0, 0);
 };
 
 /**
@@ -493,11 +494,12 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
 
   var arrowWidth = Blockly.Field.getCachedWidth(this.arrow_);
 
-  // Height and width include the border rect.
   var imageHeight = Number(this.imageJson_.height);
   var imageWidth = Number(this.imageJson_.width);
+
+  // Height and width include the border rect.
   this.size_.height = imageHeight + Blockly.FieldDropdown.IMAGE_Y_PADDING;
-  this.size_.width = imageWidth + arrowWidth + Blockly.Field.WIDTH_PADDING;
+  this.size_.width = imageWidth + arrowWidth + Blockly.Field.X_PADDING;
 
   if (this.sourceBlock_.RTL) {
     this.imageElement_.setAttribute('x', arrowWidth);
@@ -519,7 +521,7 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   // Height and width include the border rect.
   this.size_.height = Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT;
   this.size_.width =
-      Blockly.Field.getCachedWidth(this.textElement_) + Blockly.Field.WIDTH_PADDING;
+      Blockly.Field.getCachedWidth(this.textElement_) + Blockly.Field.X_PADDING;
 };
 
 /**

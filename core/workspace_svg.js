@@ -1690,7 +1690,9 @@ Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
  *     amount values zoom in.
  */
 Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
-  // Mutators and flyouts don't support zooming
+  // TODO (#2782): Consider removing once pinch understands zoom configuration
+  // Mutators and flyouts don't support zooming, and pinch doesn't understand
+  // that.
   if (this.isFlyout || this.isMutator) {
     return;
   }

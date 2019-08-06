@@ -78,7 +78,7 @@ Blockly.FieldColour.fromJson = function(options) {
  * @private
  * @const
  */
-Blockly.FieldColour.DEFAULT_WIDTH = 16 + Blockly.Field.X_PADDING;
+Blockly.FieldColour.DEFAULT_WIDTH = 26;
 
 /**
  * Default height of a colour field.

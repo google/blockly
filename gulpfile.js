@@ -400,7 +400,7 @@ gulp.task('package-node-core', function() {
  */
 function packageGenerator(file, rename, generator) {
   return gulp.src(file)
-    .pipe(packageUMD(`Blockly.${generator}`, [{
+    .pipe(packageUMD(generator, [{
         name: 'Blockly',
         amd: './core',
         cjs: './core',

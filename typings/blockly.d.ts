@@ -2303,6 +2303,16 @@ declare module Blockly.BlockSvg {
 declare module Blockly {
 
     /**
+     * Blockly core version.
+     * This constant is overriden by the build script (build.py) to the value of the version
+     * in package.json. This is done during the gen_core build step.
+     * For local builds, you can pass --define='Blockly.VERSION=X.Y.Z' to the compiler
+     * to override this constant.
+     * @define {string}
+     */
+    var VERSION: any /*missing*/;
+
+    /**
      * The main workspace most recently used.
      * Set by Blockly.WorkspaceSvg.prototype.markFocused
      * @type {Blockly.Workspace}
@@ -4071,6 +4081,12 @@ declare module Blockly {
             constructor(value: any, opt_validator?: Function);
     
             /**
+             * The size of the area rendered by the field.
+             * @type {Blockly.utils.Size}
+             */
+            size_: Blockly.utils.Size;
+    
+            /**
              * Name of field.  Unique within each block.
              * Static labels are usually unnamed.
              * @type {string|undefined}
@@ -4346,13 +4362,6 @@ declare module Blockly {
             getSize(): Blockly.utils.Size;
     
             /**
-             * Get the size of the visible field, as used in new rendering.
-             * @return {!Blockly.utils.Size} The size of the visible field.
-             * @package
-             */
-            getCorrectedSize(): Blockly.utils.Size;
-    
-            /**
              * Returns the bounding box of the rendered field, accounting for workspace
              * scaling.
              * @return {!Object} An object with top, bottom, left, and right in pixels
@@ -4496,6 +4505,27 @@ declare module Blockly.Field {
      * @package
      */
     var BORDER_RECT_DEFAULT_HEIGHT: number;
+
+    /**
+     * The default height of the text element on any field.
+     * @type {number}
+     * @package
+     */
+    var TEXT_DEFAULT_HEIGHT: number;
+
+    /**
+     * The padding added to the width by the border rect, if it exists.
+     * @type {number}
+     * @package
+     */
+    var X_PADDING: number;
+
+    /**
+     * The default offset between the left of the text element and the left of the
+     * border rect, if the border rect exists.
+     * @type {number}
+     */
+    var DEFAULT_TEXT_OFFSET: number;
 
     /**
      * Non-breaking space.
@@ -4689,15 +4719,6 @@ declare module Blockly {
              *    ('true' or 'false').
              */
             getText(): string;
-    
-            /**
-             * Get the size of the visible field, as used in new rendering.
-             * The checkbox field fills the entire border rect, rather than just using the
-             * text element.
-             * @return {!Blockly.utils.Size} The size of the visible field.
-             * @package
-             */
-            getCorrectedSize(): Blockly.utils.Size;
     } 
     
 }
@@ -4818,15 +4839,6 @@ declare module Blockly {
              * @return {!Blockly.FieldColour} Returns itself (for method chaining).
              */
             setColumns(columns: number): Blockly.FieldColour;
-    
-            /**
-             * Get the size of the visible field, as used in new rendering.
-             * The colour field fills the bounding box with colour and takes up the full
-             * space of the bounding box.
-             * @return {!Blockly.utils.Size} The size of the visible field.
-             * @package
-             */
-            getCorrectedSize(): Blockly.utils.Size;
     } 
     
 }
@@ -5018,13 +5030,6 @@ declare module Blockly {
              * @package
              */
             updateColour(): void;
-    
-            /**
-             * Get the size of the visible field, as used in new rendering.
-             * @return {!Blockly.utils.Size} The size of the visible field.
-             * @package
-             */
-            getCorrectedSize(): Blockly.utils.Size;
     } 
     
 }
@@ -5049,13 +5054,6 @@ declare module Blockly.FieldDropdown {
      * Maximum height of the dropdown menu, as a percentage of the viewport height.
      */
     var MAX_MENU_HEIGHT_VH: any /*missing*/;
-
-    /**
-     * Used to position the imageElement_ correctly.
-     * @type {number}
-     * @const
-     */
-    var IMAGE_Y_OFFSET: number;
 
     /**
      * Android can't (in 2014) display "▾", so use "▼" instead.
@@ -5206,13 +5204,6 @@ declare module Blockly {
              * @protected
              */
             doClassValidation_(opt_newValue?: string): string;
-    
-            /**
-             * Get the size of the visible field, as used in new rendering.
-             * @return {!Blockly.utils.Size} The size of the visible field.
-             * @package
-             */
-            getCorrectedSize(): Blockly.utils.Size;
     } 
     
 }
@@ -5425,13 +5416,6 @@ declare module Blockly {
              * @protected
              */
             resizeEditor_(): void;
-    
-            /**
-             * Get the size of the visible field, as used in new rendering.
-             * @return {!Blockly.utils.Size} The size of the visible field.
-             * @package
-             */
-            getCorrectedSize(): Blockly.utils.Size;
     } 
     
 }
@@ -11226,9 +11210,8 @@ declare module Blockly.ASTNode {
 
     /**
      * Object holding different types for an AST node.
-     * @enum {string}
      */
-    enum types { FIELD, BLOCK, INPUT, OUTPUT, NEXT, PREVIOUS, STACK, WORKSPACE } 
+    var types: any /*missing*/;
 
     /**
      * Whether an AST node of the given type points to a connection.
@@ -12184,6 +12167,33 @@ declare module Blockly.utils._string {
      * @return {string} Wrapped text.
      */
     function wrap(text: string, limit: number): string;
+}
+
+
+declare module Blockly.utils.style {
+
+    /**
+     * Gets the height and width of an element.
+     * Similar to Closure's goog.style.getSize.
+     * @param {Element} element Element to get size of.
+     * @return {!Blockly.utils.Size} Object with width/height properties.
+     */
+    function getSize(element: Element): Blockly.utils.Size;
+
+    /**
+     * Returns a Coordinate object relative to the top-left of the HTML document.
+     * Similar to Closure's goog.style.getPageOffset.
+     * @param {Element} el Element to get the page offset for.
+     * @return {!Blockly.utils.Coordinate} The page offset.
+     */
+    function getPageOffset(el: Element): Blockly.utils.Coordinate;
+
+    /**
+     * Calculates the viewport coordinates relative to the document.
+     * Similar to Closure's goog.style.getViewportPageOffset.
+     * @return {!Blockly.utils.Coordinate} The page offset of the viewport.
+     */
+    function getViewportPageOffset(): Blockly.utils.Coordinate;
 }
 
 

@@ -72,6 +72,13 @@ Blockly.Connection.REASON_SHADOW_PARENT = 6;
 Blockly.Connection.prototype.targetConnection = null;
 
 /**
+ * Has this connection been disposed of?
+ * @type {boolean}
+ * @package
+ */
+Blockly.Connection.prototype.disposed = false;
+
+/**
  * List of compatible value types.  Null if all types are compatible.
  * @type {Array}
  * @private
@@ -233,15 +240,30 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
 };
 
 /**
- * Sever all links to this connection (not including from the source object).
+ * Dispose of this connection. Deal with connected blocks and remove this
+ * connection from the database.
+ * @package
  */
 Blockly.Connection.prototype.dispose = function() {
+
+  // isConnected returns true for shadows and non-shadows.
   if (this.isConnected()) {
-    throw Error('Disconnect connection before disposing of it.');
+    this.setShadowDom(null);
+    var targetBlock = this.targetBlock();
+    if (targetBlock.isShadow()) {
+      // Destroy the attached shadow block & its children.
+      targetBlock.dispose();
+    } else {
+      // Disconnect the attached normal block.
+      targetBlock.unplug();
+    }
   }
+
   if (this.inDB_) {
     this.db_.removeConnection_(this);
   }
+
+  this.disposed = true;
 };
 
 /**

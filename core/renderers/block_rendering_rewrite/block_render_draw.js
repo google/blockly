@@ -315,15 +315,21 @@ Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
 
   var yPos = fieldInfo.centerline - fieldInfo.height / 2;
   var xPos = fieldInfo.xPos;
+  var scale = '';
   if (this.info_.RTL) {
     xPos = -(xPos + fieldInfo.width);
+    if (fieldInfo.flipRtl) {
+      xPos += fieldInfo.width;
+      scale = 'scale(-1 1)';
+    }
   }
   if (fieldInfo.type == 'icon') {
     svgGroup.setAttribute('display', 'block');
     svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + yPos + ')');
     fieldInfo.icon.computeIconLocation();
   } else {
-    svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + yPos + ')');
+    svgGroup.setAttribute(
+        'transform', 'translate(' + xPos + ',' + yPos + ')' + scale);
   }
 
   if (this.info_.isInsertionMarker) {

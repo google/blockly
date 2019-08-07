@@ -325,8 +325,7 @@ Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
   }
   if (fieldInfo.type == 'icon') {
     svgGroup.setAttribute('display', 'block');
-    svgGroup.setAttribute(
-        'transform','translate(' + xPos + ',' + yPos + ')' + scale);
+    svgGroup.setAttribute('transform','translate(' + xPos + ',' + yPos + ')');
     fieldInfo.icon.computeIconLocation();
   } else {
     svgGroup.setAttribute(

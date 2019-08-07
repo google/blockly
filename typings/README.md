@@ -2,7 +2,7 @@
 
 This ``blockly.d.ts`` file describes the TypeScript type definitions for Blockly.
 If you consume Blockly through ``npm``, this file is already included in the ``npm`` package.
-Otherwise, you can include a copy of this file in your with your sources and reference it through a [Triple-Slash directive](https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html).
+Otherwise, you can include a copy of this file with your sources and reference it through a [Triple-Slash directive](https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html).
 
 
 ## Generating a new version

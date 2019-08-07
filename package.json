@@ -2,7 +2,6 @@
   "name": "blockly",
   "version": "2.20190722.0-develop",
   "description": "Blockly is a library for building visual programming editors.",
-  "main": "blockly_node_javascript_en.js",
   "keywords": [
     "blockly"
   ],
@@ -18,10 +17,21 @@
     "name": "Neil Fraser"
   },
   "scripts": {
-    "prepare": "gulp blockly_javascript_en",
+    "prepare": "gulp blockly_node_javascript_en",
     "lint": "eslint .",
     "typings": "gulp typings",
-    "test": "tests/run_all_tests.sh"
+    "test": "tests/run_all_tests.sh",
+    "package": "gulp package",
+    "release": "gulp release"
+  },
+  "main": "./index.js",
+  "umd": "./blockly.min.js",
+  "unpkg": "./blockly.min.js",
+  "types": "./blockly.d.ts",
+  "browser": {
+    "./node.js": "./browser.js",
+    "./core.js": "./core-browser.js",
+    "./blockly-node.js": "./blockly.js"
   },
   "license": "Apache-2.0",
   "private": true,
@@ -36,6 +46,9 @@
     "gulp-insert": "^0.5.0",
     "gulp-series": "^1.0.2",
     "gulp-shell": "^0.7.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-replace": "^1.0.0",
+    "gulp-umd": "^2.0.0",
     "jshint": "^2.10.2",
     "mocha": "^6.1.4",
     "pixelmatch": "^4.0.2",

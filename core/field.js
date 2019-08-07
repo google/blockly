@@ -146,7 +146,7 @@ Blockly.Field.X_PADDING = 10;
 /**
  * The default offset between the left of the text element and the left of the
  * border rect, if the border rect exists.
- * @type {[type]}
+ * @type {number}
  */
 Blockly.Field.DEFAULT_TEXT_OFFSET = Blockly.Field.X_PADDING / 2;
 

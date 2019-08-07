@@ -124,8 +124,7 @@ Blockly.utils.style.getComputedStyle = function(element, property) {
  * @param {string} style Property to get (camel-case).
  * @return {string} Style value.
  */
-Blockly.utils.style.getCascadedStyle = function(element, style) {
-  // TODO(nicksantos): This should be documented to return null. #fixTypes
+Blockly.utils.style.getCascadedStyle = function(element, style) 
   return /** @type {string} */ (
       element.currentStyle ? element.currentStyle[style] : null);
 };

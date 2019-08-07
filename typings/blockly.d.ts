@@ -1719,6 +1719,20 @@ declare module Blockly.BlockSvg {
     var NOTCH_WIDTH: any /*missing*/;
 
     /**
+     * Offset of the notch from the left side of the block.
+     * @type {number}
+     * @const
+     */
+    var NOTCH_OFFSET_X: number;
+
+    /**
+     * Offset of the puzzle tab from the top of the block.
+     * @type {number}
+     * @const
+     */
+    var TAB_OFFSET_Y: number;
+
+    /**
      * Rounded corner radius.
      * @const
      */
@@ -3606,13 +3620,70 @@ declare module Blockly.DropDownDiv {
     /**
      * Helper to position the drop-down and the arrow, maintaining bounds.
      * See explanation of origin points in Blockly.DropDownDiv.show.
-     * @param {number} primaryX Desired origin point x, in absolute px
-     * @param {number} primaryY Desired origin point y, in absolute px
-     * @param {number} secondaryX Secondary/alternative origin point x, in absolute px
-     * @param {number} secondaryY Secondary/alternative origin point y, in absolute px
-     * @return {Object} Various final metrics, including rendered positions for drop-down and arrow.
+     * @param {number} primaryX Desired origin point x, in absolute px.
+     * @param {number} primaryY Desired origin point y, in absolute px.
+     * @param {number} secondaryX Secondary/alternative origin point x,
+     *    in absolute px.
+     * @param {number} secondaryY Secondary/alternative origin point y,
+     *    in absolute px.
+     * @return {Object} Various final metrics, including rendered positions
+     *    for drop-down and arrow.
      */
     function getPositionMetrics(primaryX: number, primaryY: number, secondaryX: number, secondaryY: number): Object;
+
+    /**
+     * Get the metrics for positioning the div below the source.
+     * @param {number} primaryX Desired origin point x, in absolute px.
+     * @param {number} primaryY Desired origin point y, in absolute px.
+     * @param {!Object} boundsInfo An object containing size information about the
+     *    bounding element (bounding box and width/height).
+     * @param {!Object} divSize An object containing information about the size
+     *    of the DropDownDiv (width & height).
+     * @return {Object} Various final metrics, including rendered positions
+     *    for drop-down and arrow.
+     */
+    function getPositionBelowMetrics(primaryX: number, primaryY: number, boundsInfo: Object, divSize: Object): Object;
+
+    /**
+     * Get the metrics for positioning the div above the source.
+     * @param {number} secondaryX Secondary/alternative origin point x,
+     *    in absolute px.
+     * @param {number} secondaryY Secondary/alternative origin point y,
+     *    in absolute px.
+     * @param {!Object} boundsInfo An object containing size information about the
+     *    bounding element (bounding box and width/height).
+     * @param {!Object} divSize An object containing information about the size
+     *    of the DropDownDiv (width & height).
+     * @return {Object} Various final metrics, including rendered positions
+     *    for drop-down and arrow.
+     */
+    function getPositionAboveMetrics(secondaryX: number, secondaryY: number, boundsInfo: Object, divSize: Object): Object;
+
+    /**
+     * Get the metrics for positioning the div at the top of the page.
+     * @param {number} sourceX Desired origin point x, in absolute px.
+     * @param {!Object} boundsInfo An object containing size information about the
+     *    bounding element (bounding box and width/height).
+     * @param {!Object} divSize An object containing information about the size
+     *    of the DropDownDiv (width & height).
+     * @return {Object} Various final metrics, including rendered positions
+     *    for drop-down and arrow.
+     */
+    function getPositionTopOfPageMetrics(sourceX: number, boundsInfo: Object, divSize: Object): Object;
+
+    /**
+     * Get the x positions for the left side of the DropDownDiv and the arrow,
+     * accounting for the bounds of the workspace.
+     * @param {number} sourceX Desired origin point x, in absolute px.
+     * @param {number} boundsLeft The left edge of the bounding element, in
+     *    absolute px.
+     * @param {number} boundsRight The right edge of the bounding element, in
+     *    absolute px.
+     * @param {number} divWidth The width of the div in px.
+     * @return {{divX: number, arrowX: number}} An object containing metrics for
+     *    the x positions of the left side of the DropDownDiv and the arrow.
+     */
+    function getPositionX(sourceX: number, boundsLeft: number, boundsRight: number, divWidth: number): { divX: number; arrowX: number };
 
     /**
      * Is the container visible?
@@ -4198,12 +4269,12 @@ declare module Blockly {
              *
              * If the function does not return anything (or returns undefined) the new
              * value is accepted as valid. This is to allow for fields using the
-             * validated founction as a field-level change event notification.
+             * validated function as a field-level change event notification.
              *
-             * @param {Function=} handler The validator
-             *     function or null to clear a previous validator.
+             * @param {Function} handler The validator function
+             *     or null to clear a previous validator.
              */
-            setValidator(handler?: Function): void;
+            setValidator(handler: Function): void;
     
             /**
              * Gets the validation function for editable fields, or null if not set.
@@ -4244,7 +4315,7 @@ declare module Blockly {
             updateColour(): void;
     
             /**
-             * Used by getSize() to move/resize any dom elements, and get the new size.
+             * Used by getSize() to move/resize any DOM elements, and get the new size.
              *
              * All rendering that has an effect on the size/shape of the block should be
              * done here, and should be triggered by getSize().
@@ -4587,11 +4658,11 @@ declare module Blockly {
     
             /**
              * Ensure that the input value is valid ('TRUE' or 'FALSE').
-             * @param {string|boolean=} newValue The input value.
+             * @param {string|boolean=} opt_newValue The input value.
              * @return {?string} A valid value ('TRUE' or 'FALSE), or null if invalid.
              * @protected
              */
-            doClassValidation_(newValue?: string|boolean): string;
+            doClassValidation_(opt_newValue?: string|boolean): string;
     
             /**
              * Update the value of the field, and update the checkElement.
@@ -4711,11 +4782,11 @@ declare module Blockly {
     
             /**
              * Ensure that the input value is a valid colour.
-             * @param {string=} newValue The input value.
+             * @param {string=} opt_newValue The input value.
              * @return {?string} A valid colour, or null if invalid.
              * @protected
              */
-            doClassValidation_(newValue?: string): string;
+            doClassValidation_(opt_newValue?: string): string;
     
             /**
              * Update the value of this colour field, and update the displayed colour.
@@ -4734,11 +4805,11 @@ declare module Blockly {
              * Set a custom colour grid for this field.
              * @param {Array.<string>} colours Array of colours for this block,
              *     or null to use default (Blockly.FieldColour.COLOURS).
-             * @param {Array.<string>} opt_titles Optional array of colour tooltips,
+             * @param {Array.<string>=} opt_titles Optional array of colour tooltips,
              *     or null to use default (Blockly.FieldColour.TITLES).
              * @return {!Blockly.FieldColour} Returns itself (for method chaining).
              */
-            setColours(colours: string[], opt_titles: string[]): Blockly.FieldColour;
+            setColours(colours: string[], opt_titles?: string[]): Blockly.FieldColour;
     
             /**
              * Set a custom grid size for this field.
@@ -4828,11 +4899,11 @@ declare module Blockly {
     
             /**
              * Ensure that the input value is a valid date.
-             * @param {string=} newValue The input value.
+             * @param {string=} opt_newValue The input value.
              * @return {?string} A valid date, or null if invalid.
              * @protected
              */
-            doClassValidation_(newValue?: string): string;
+            doClassValidation_(opt_newValue?: string): string;
     
             /**
              * Render the field. If the picker is shown make sure it has the current
@@ -4929,11 +5000,11 @@ declare module Blockly {
     
             /**
              * Ensure that the input value is a valid language-neutral option.
-             * @param {string=} newValue The input value.
+             * @param {string=} opt_newValue The input value.
              * @return {?string} A valid language-neutral option, or null if invalid.
              * @protected
              */
-            doClassValidation_(newValue?: string): string;
+            doClassValidation_(opt_newValue?: string): string;
     
             /**
              * Update the value of this dropdown field.
@@ -5040,11 +5111,11 @@ declare module Blockly {
     
             /**
              * Ensure that the input value (the source URL) is a string.
-             * @param {string=} newValue The input value
+             * @param {string=} opt_newValue The input value.
              * @return {?string} A string, or null if invalid.
              * @protected
              */
-            doClassValidation_(newValue?: string): string;
+            doClassValidation_(opt_newValue?: string): string;
     
             /**
              * Update the value of this image field, and update the displayed image.
@@ -5130,11 +5201,11 @@ declare module Blockly {
     
             /**
              * Ensure that the input value casts to a valid string.
-             * @param {string=} newValue The input value.
+             * @param {string=} opt_newValue The input value.
              * @return {?string} A valid string, or null if invalid.
              * @protected
              */
-            doClassValidation_(newValue?: string): string;
+            doClassValidation_(opt_newValue?: string): string;
     
             /**
              * Get the size of the visible field, as used in new rendering.
@@ -5241,7 +5312,7 @@ declare module Blockly {
     
             /**
              * Set the maximum, minimum and precision constraints on this field.
-             * Any of these properties may be undefiend or NaN to be disabled.
+             * Any of these properties may be undefined or NaN to be disabled.
              * Setting precision (usually a power of 10) enforces a minimum step between
              * values. That is, the user's value will rounded to the closest multiple of
              * precision. The least significant digit place is inferred from the precision.
@@ -5302,11 +5373,11 @@ declare module Blockly {
     
             /**
              * Ensure that the input value casts to a valid string.
-             * @param {string=} newValue The input value.
+             * @param {string=} opt_newValue The input value.
              * @return {?string} A valid string, or null if invalid.
              * @protected
              */
-            doClassValidation_(newValue?: string): string;
+            doClassValidation_(opt_newValue?: string): string;
     
             /**
              * Called by setValue if the text input is not valid. If the field is
@@ -8944,6 +9015,12 @@ declare module Blockly {
             cursor: Blockly.Cursor;
     
             /**
+             * The marker that shows where a user has marked while navigating blocks.
+             * @type {!Blockly.Cursor}
+             */
+            marker: Blockly.Cursor;
+    
+            /**
              * Returns `true` if the workspace is visible and `false` if it's headless.
              * @type {boolean}
              */
@@ -8974,6 +9051,12 @@ declare module Blockly {
              * @return {!Blockly.Cursor} Cursor for keyboard navigation.
              */
             createCursor(): Blockly.Cursor;
+    
+            /**
+             * Adds marker for keyboard navigation.
+             * @return {!Blockly.Cursor} Cursor for keyboard navigation.
+             */
+            createMarker(): Blockly.Cursor;
     
             /**
              * Dispose of this workspace.
@@ -9950,12 +10033,6 @@ declare module Blockly {
             constructor(options: Blockly.Options, opt_blockDragSurface?: Blockly.BlockDragSurfaceSvg, opt_wsDragSurface?: Blockly.WorkspaceDragSurfaceSvg);
     
             /**
-             * The marker that shows where a user has marked while navigating blocks.
-             * @type {!Blockly.CursorSvg}
-             */
-            marker: Blockly.CursorSvg;
-    
-            /**
              * A wrapper function called when a resize event occurs.
              * You can pass the result to `unbindEvent_`.
              * @type {Array.<!Array>}
@@ -10859,8 +10936,8 @@ declare module Blockly.Events {
             /**
              * Override the location before the move.  Use this if you don't create the
              * event until the end of the move, but you know the original location.
-             * @param {!Blockly.utils.Coordinate} xy The location before the move, in workspace
-             *     coordinates.
+             * @param {!Blockly.utils.Coordinate} xy The location before the move,
+             *     in workspace coordinates.
              */
             setOldCoordinate(xy: Blockly.utils.Coordinate): void;
     
@@ -11061,17 +11138,17 @@ declare module Blockly {
     class ASTNode__Class  { 
     
             /**
-             * Class for an ast node.
+             * Class for an AST node.
              * It is recommended that you use one of the createNode methods instead of
              * creating a node directly.
              * @constructor
              * @param {!string} type The type of the location.
              *     Must be in Bockly.ASTNode.types.
              * @param {Blockly.Block|Blockly.Connection|Blockly.Field|Blockly.Workspace}
-             *     location The position in the ast.
-             * @param {Object=} params Optional dictionary of options.
+             *     location The position in the AST.
+             * @param {!Object=} opt_params Optional dictionary of options.
              */
-            constructor(type: string, location: Blockly.Block|Blockly.Connection|Blockly.Field|Blockly.Workspace, params?: Object);
+            constructor(type: string, location: Blockly.Block|Blockly.Connection|Blockly.Field|Blockly.Workspace, opt_params?: Object);
     
             /**
              * Gets the value pointed to by this node.
@@ -11112,8 +11189,8 @@ declare module Blockly {
             isConnection(): boolean;
     
             /**
-             * Find the element to the right of the current element in the ast.
-             * @return {Blockly.ASTNode} An ast node that wraps the next field, connection,
+             * Find the element to the right of the current element in the AST.
+             * @return {Blockly.ASTNode} An AST node that wraps the next field, connection,
              *     block, or workspace. Or null if there is no node to the right.
              */
             next(): Blockly.ASTNode;
@@ -11121,14 +11198,14 @@ declare module Blockly {
             /**
              * Find the element one level below and all the way to the left of the current
              * location.
-             * @return {Blockly.ASTNode} An ast node that wraps the next field, connection,
+             * @return {Blockly.ASTNode} An AST node that wraps the next field, connection,
              * workspace, or block. Or null if there is nothing below this node.
              */
             in(): Blockly.ASTNode;
     
             /**
-             * Find the element to the left of the current element in the ast.
-             * @return {Blockly.ASTNode} An ast node that wraps the previous field,
+             * Find the element to the left of the current element in the AST.
+             * @return {Blockly.ASTNode} An AST node that wraps the previous field,
              * connection, workspace or block. Or null if no node exists to the left.
              * null.
              */
@@ -11137,7 +11214,7 @@ declare module Blockly {
             /**
              * Find the next element that is one position above and all the way to the left
              * of the current location.
-             * @return {Blockly.ASTNode} An ast node that wraps the next field, connection,
+             * @return {Blockly.ASTNode} An AST node that wraps the next field, connection,
              *     workspace or block. Or null if we are at the workspace level.
              */
             out(): Blockly.ASTNode;
@@ -11148,12 +11225,13 @@ declare module Blockly {
 declare module Blockly.ASTNode {
 
     /**
-     * Object holding different types for an ast node.
+     * Object holding different types for an AST node.
+     * @enum {string}
      */
-    var types: any /*missing*/;
+    enum types { FIELD, BLOCK, INPUT, OUTPUT, NEXT, PREVIOUS, STACK, WORKSPACE } 
 
     /**
-     * Whether an ast node of the given type points to a connection.
+     * Whether an AST node of the given type points to a connection.
      * @param {string} type The type to check.  One of Blockly.ASTNode.types.
      * @return {boolean} True if a node of the given type points to a connection.
      * @package
@@ -11161,52 +11239,52 @@ declare module Blockly.ASTNode {
     function isConnectionType(type: string): boolean;
 
     /**
-     * Create an ast node pointing to a field.
-     * @param {Blockly.Field} field The location of the ast node.
-     * @return {Blockly.ASTNode} An ast node pointing to a field.
+     * Create an AST node pointing to a field.
+     * @param {Blockly.Field} field The location of the AST node.
+     * @return {Blockly.ASTNode} An AST node pointing to a field.
      */
     function createFieldNode(field: Blockly.Field): Blockly.ASTNode;
 
     /**
-     * Creates an ast node pointing to a connection. If the connection has a parent
-     * input then create an ast node of type input that will hold the connection.
+     * Creates an AST node pointing to a connection. If the connection has a parent
+     * input then create an AST node of type input that will hold the connection.
      * @param {Blockly.Connection} connection This is the connection the node will
      *     point to.
-     * @return {Blockly.ASTNode} An ast node pointing to a connection.
+     * @return {Blockly.ASTNode} An AST node pointing to a connection.
      */
     function createConnectionNode(connection: Blockly.Connection): Blockly.ASTNode;
 
     /**
-     * Creates an ast node pointing to an input. Stores the input connection as the
+     * Creates an AST node pointing to an input. Stores the input connection as the
      *     location.
-     * @param {Blockly.Input} input The input used to create an ast node.
-     * @return {Blockly.ASTNode} An ast node pointing to a input.
+     * @param {Blockly.Input} input The input used to create an AST node.
+     * @return {Blockly.ASTNode} An AST node pointing to a input.
      */
     function createInputNode(input: Blockly.Input): Blockly.ASTNode;
 
     /**
-     * Creates an ast node pointing to a block.
-     * @param {Blockly.Block} block The block used to create an ast node.
-     * @return {Blockly.ASTNode} An ast node pointing to a block.
+     * Creates an AST node pointing to a block.
+     * @param {Blockly.Block} block The block used to create an AST node.
+     * @return {Blockly.ASTNode} An AST node pointing to a block.
      */
     function createBlockNode(block: Blockly.Block): Blockly.ASTNode;
 
     /**
-     * Create an ast node of type stack. A stack, represented by its top block, is
+     * Create an AST node of type stack. A stack, represented by its top block, is
      *     the set of all blocks connected to a top block, including the top block.
      * @param {Blockly.Block} topBlock A top block has no parent and can be found
      *     in the list returned by workspace.getTopBlocks().
-     * @return {Blockly.ASTNode} An ast node of type stack that points to the top
+     * @return {Blockly.ASTNode} An AST node of type stack that points to the top
      *     block on the stack.
      */
     function createStackNode(topBlock: Blockly.Block): Blockly.ASTNode;
 
     /**
-     * Creates an ast node pointing to a workpsace.
+     * Creates an AST node pointing to a workspace.
      * @param {Blockly.Workspace} workspace The workspace that we are on.
-     * @param {Blockly.utils.Coordinate} wsCoordinate The position on the workspace for
-     *     this node.
-     * @return {Blockly.ASTNode} An ast node pointing to a workspace and a position
+     * @param {Blockly.utils.Coordinate} wsCoordinate The position on the workspace
+     *     for this node.
+     * @return {Blockly.ASTNode} An AST node pointing to a workspace and a position
      *     on the workspace.
      */
     function createWorkspaceNode(workspace: Blockly.Workspace, wsCoordinate: Blockly.utils.Coordinate): Blockly.ASTNode;
@@ -11221,9 +11299,12 @@ declare module Blockly {
     
             /**
              * Class for a cursor.
+             * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
+             *     to save a location and is an immovable cursor. False or undefined if the
+             *     cursor is not a marker.
              * @constructor
              */
-            constructor();
+            constructor(opt_marker?: boolean);
     
             /**
              * Object holding different types for a cursor.
@@ -11292,22 +11373,23 @@ declare module Blockly {
             /**
              * Class for a cursor.
              * @param {!Blockly.Workspace} workspace The workspace to sit in.
-             * @param {?boolean} opt_isImmovable True if the cursor cannot be moved with
-             *     calls to prev/next/in/out.  This is called a marker.
+             * @param {boolean=} opt_marker True if the cursor is a marker. A marker is used
+             *     to save a location and is an immovable cursor. False or undefined if the
+             *     cursor is not a marker.
              * @extends {Blockly.Cursor}
              * @constructor
              */
-            constructor(workspace: Blockly.Workspace, opt_isImmovable: boolean);
+            constructor(workspace: Blockly.Workspace, opt_marker?: boolean);
     
             /**
-             * Parent svg element.
-             * This is generally a block's svg root, unless the cursor is on the workspace.
+             * Parent SVG element.
+             * This is generally a block's SVG root, unless the cursor is on the workspace.
              * @type {Element}
              */
             parent_: Element;
     
             /**
-             * The current svg element for the cursor.
+             * The current SVG element for the cursor.
              * @type {Element}
              */
             currentCursorSvg: Element;
@@ -11319,7 +11401,7 @@ declare module Blockly {
             getSvgRoot(): Element;
     
             /**
-             * Create the dom element for the cursor.
+             * Create the DOM element for the cursor.
              * @return {!Element} The cursor controls SVG group.
              */
             createDom(): Element;
@@ -12125,14 +12207,14 @@ declare module Blockly.utils.svgPaths {
      * These coordinates are unitless and hence in the user coordinate system.
      * @param {string} command The command to use.
      *     Should be one of: c, C, s, S, q, Q.
-     * @param {string} points  An array containing all of the points to pass to the
+     * @param {!Array.<string>} points  An array containing all of the points to pass to the
      *     curve command, in order.  The points are represented as strings of the
      *     format ' x, y '.
      * @return {string} A string defining one or more Bezier curves.  See the MDN
      *     documentation for exact format.
      * @public
      */
-    function curve(command: string, points: string): string;
+    function curve(command: string, points: string[]): string;
 
     /**
      * Move the cursor to the given position without drawing a line.
@@ -12263,10 +12345,1287 @@ declare module Blockly.utils.xml {
 
 declare module Blockly.Msg {
 
-    /**
-     * Each message is preceded with a triple-slash comment that becomes the
-     * message descriptor.  The build process extracts these descriptors, adds
-     * them to msg/json/qqq.json, and they show up in the translation console.
-     */
-    var LOGIC_HUE: any /*missing*/;
+    /** @type {string} */
+    var LOGIC_HUE: string;
+
+    /** @type {string} */
+    var LOOPS_HUE: string;
+
+    /** @type {string} */
+    var MATH_HUE: string;
+
+    /** @type {string} */
+    var TEXTS_HUE: string;
+
+    /** @type {string} */
+    var LISTS_HUE: string;
+
+    /** @type {string} */
+    var COLOUR_HUE: string;
+
+    /** @type {string} */
+    var VARIABLES_HUE: string;
+
+    /** @type {string} */
+    var VARIABLES_DYNAMIC_HUE: string;
+
+    /** @type {string} */
+    var PROCEDURES_HUE: string;
+
+    /** @type {string} */
+    var VARIABLES_DEFAULT_NAME: string;
+
+    /** @type {string} */
+    var UNNAMED_KEY: string;
+
+    /** @type {string} */
+    var TODAY: string;
+
+    /** @type {string} */
+    var DUPLICATE_BLOCK: string;
+
+    /** @type {string} */
+    var ADD_COMMENT: string;
+
+    /** @type {string} */
+    var REMOVE_COMMENT: string;
+
+    /** @type {string} */
+    var DUPLICATE_COMMENT: string;
+
+    /** @type {string} */
+    var EXTERNAL_INPUTS: string;
+
+    /** @type {string} */
+    var INLINE_INPUTS: string;
+
+    /** @type {string} */
+    var DELETE_BLOCK: string;
+
+    /** @type {string} */
+    var DELETE_X_BLOCKS: string;
+
+    /** @type {string} */
+    var DELETE_ALL_BLOCKS: string;
+
+    /** @type {string} */
+    var CLEAN_UP: string;
+
+    /** @type {string} */
+    var COLLAPSE_BLOCK: string;
+
+    /** @type {string} */
+    var COLLAPSE_ALL: string;
+
+    /** @type {string} */
+    var EXPAND_BLOCK: string;
+
+    /** @type {string} */
+    var EXPAND_ALL: string;
+
+    /** @type {string} */
+    var DISABLE_BLOCK: string;
+
+    /** @type {string} */
+    var ENABLE_BLOCK: string;
+
+    /** @type {string} */
+    var HELP: string;
+
+    /** @type {string} */
+    var UNDO: string;
+
+    /** @type {string} */
+    var REDO: string;
+
+    /** @type {string} */
+    var CHANGE_VALUE_TITLE: string;
+
+    /** @type {string} */
+    var RENAME_VARIABLE: string;
+
+    /** @type {string} */
+    var RENAME_VARIABLE_TITLE: string;
+
+    /** @type {string} */
+    var NEW_VARIABLE: string;
+
+    /** @type {string} */
+    var NEW_STRING_VARIABLE: string;
+
+    /** @type {string} */
+    var NEW_NUMBER_VARIABLE: string;
+
+    /** @type {string} */
+    var NEW_COLOUR_VARIABLE: string;
+
+    /** @type {string} */
+    var NEW_VARIABLE_TYPE_TITLE: string;
+
+    /** @type {string} */
+    var NEW_VARIABLE_TITLE: string;
+
+    /** @type {string} */
+    var VARIABLE_ALREADY_EXISTS: string;
+
+    /** @type {string} */
+    var VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE: string;
+
+    /** @type {string} */
+    var DELETE_VARIABLE_CONFIRMATION: string;
+
+    /** @type {string} */
+    var CANNOT_DELETE_VARIABLE_PROCEDURE: string;
+
+    /** @type {string} */
+    var DELETE_VARIABLE: string;
+
+    /** @type {string} */
+    var COLOUR_PICKER_HELPURL: string;
+
+    /** @type {string} */
+    var COLOUR_PICKER_TOOLTIP: string;
+
+    /** @type {string} */
+    var COLOUR_RANDOM_HELPURL: string;
+
+    /** @type {string} */
+    var COLOUR_RANDOM_TITLE: string;
+
+    /** @type {string} */
+    var COLOUR_RANDOM_TOOLTIP: string;
+
+    /** @type {string} */
+    var COLOUR_RGB_HELPURL: string;
+
+    /** @type {string} */
+    var COLOUR_RGB_TITLE: string;
+
+    /** @type {string} */
+    var COLOUR_RGB_RED: string;
+
+    /** @type {string} */
+    var COLOUR_RGB_GREEN: string;
+
+    /** @type {string} */
+    var COLOUR_RGB_BLUE: string;
+
+    /** @type {string} */
+    var COLOUR_RGB_TOOLTIP: string;
+
+    /** @type {string} */
+    var COLOUR_BLEND_HELPURL: string;
+
+    /** @type {string} */
+    var COLOUR_BLEND_TITLE: string;
+
+    /** @type {string} */
+    var COLOUR_BLEND_COLOUR1: string;
+
+    /** @type {string} */
+    var COLOUR_BLEND_COLOUR2: string;
+
+    /** @type {string} */
+    var COLOUR_BLEND_RATIO: string;
+
+    /** @type {string} */
+    var COLOUR_BLEND_TOOLTIP: string;
+
+    /** @type {string} */
+    var CONTROLS_REPEAT_HELPURL: string;
+
+    /** @type {string} */
+    var CONTROLS_REPEAT_TITLE: string;
+
+    /** @type {string} */
+    var CONTROLS_REPEAT_INPUT_DO: string;
+
+    /** @type {string} */
+    var CONTROLS_REPEAT_TOOLTIP: string;
+
+    /** @type {string} */
+    var CONTROLS_WHILEUNTIL_HELPURL: string;
+
+    /** @type {string} */
+    var CONTROLS_WHILEUNTIL_INPUT_DO: string;
+
+    /** @type {string} */
+    var CONTROLS_WHILEUNTIL_OPERATOR_WHILE: string;
+
+    /** @type {string} */
+    var CONTROLS_WHILEUNTIL_OPERATOR_UNTIL: string;
+
+    /** @type {string} */
+    var CONTROLS_WHILEUNTIL_TOOLTIP_WHILE: string;
+
+    /** @type {string} */
+    var CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL: string;
+
+    /** @type {string} */
+    var CONTROLS_FOR_HELPURL: string;
+
+    /** @type {string} */
+    var CONTROLS_FOR_TOOLTIP: string;
+
+    /** @type {string} */
+    var CONTROLS_FOR_TITLE: string;
+
+    /** @type {string} */
+    var CONTROLS_FOR_INPUT_DO: string;
+
+    /** @type {string} */
+    var CONTROLS_FOREACH_HELPURL: string;
+
+    /** @type {string} */
+    var CONTROLS_FOREACH_TITLE: string;
+
+    /** @type {string} */
+    var CONTROLS_FOREACH_INPUT_DO: string;
+
+    /** @type {string} */
+    var CONTROLS_FOREACH_TOOLTIP: string;
+
+    /** @type {string} */
+    var CONTROLS_FLOW_STATEMENTS_HELPURL: string;
+
+    /** @type {string} */
+    var CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK: string;
+
+    /** @type {string} */
+    var CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE: string;
+
+    /** @type {string} */
+    var CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK: string;
+
+    /** @type {string} */
+    var CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE: string;
+
+    /** @type {string} */
+    var CONTROLS_FLOW_STATEMENTS_WARNING: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_HELPURL: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_TOOLTIP_1: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_TOOLTIP_2: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_TOOLTIP_3: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_TOOLTIP_4: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_MSG_IF: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_MSG_ELSEIF: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_MSG_ELSE: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_MSG_THEN: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_IF_TITLE_IF: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_IF_TOOLTIP: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_ELSEIF_TITLE_ELSEIF: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_ELSEIF_TOOLTIP: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_ELSE_TITLE_ELSE: string;
+
+    /** @type {string} */
+    var CONTROLS_IF_ELSE_TOOLTIP: string;
+
+    /** @type {string} */
+    var IOS_OK: string;
+
+    /** @type {string} */
+    var IOS_CANCEL: string;
+
+    /** @type {string} */
+    var IOS_ERROR: string;
+
+    /** @type {string} */
+    var IOS_PROCEDURES_INPUTS: string;
+
+    /** @type {string} */
+    var IOS_PROCEDURES_ADD_INPUT: string;
+
+    /** @type {string} */
+    var IOS_PROCEDURES_ALLOW_STATEMENTS: string;
+
+    /** @type {string} */
+    var IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR: string;
+
+    /** @type {string} */
+    var IOS_VARIABLES_ADD_VARIABLE: string;
+
+    /** @type {string} */
+    var IOS_VARIABLES_ADD_BUTTON: string;
+
+    /** @type {string} */
+    var IOS_VARIABLES_RENAME_BUTTON: string;
+
+    /** @type {string} */
+    var IOS_VARIABLES_DELETE_BUTTON: string;
+
+    /** @type {string} */
+    var IOS_VARIABLES_VARIABLE_NAME: string;
+
+    /** @type {string} */
+    var IOS_VARIABLES_EMPTY_NAME_ERROR: string;
+
+    /** @type {string} */
+    var LOGIC_COMPARE_HELPURL: string;
+
+    /** @type {string} */
+    var LOGIC_COMPARE_TOOLTIP_EQ: string;
+
+    /** @type {string} */
+    var LOGIC_COMPARE_TOOLTIP_NEQ: string;
+
+    /** @type {string} */
+    var LOGIC_COMPARE_TOOLTIP_LT: string;
+
+    /** @type {string} */
+    var LOGIC_COMPARE_TOOLTIP_LTE: string;
+
+    /** @type {string} */
+    var LOGIC_COMPARE_TOOLTIP_GT: string;
+
+    /** @type {string} */
+    var LOGIC_COMPARE_TOOLTIP_GTE: string;
+
+    /** @type {string} */
+    var LOGIC_OPERATION_HELPURL: string;
+
+    /** @type {string} */
+    var LOGIC_OPERATION_TOOLTIP_AND: string;
+
+    /** @type {string} */
+    var LOGIC_OPERATION_AND: string;
+
+    /** @type {string} */
+    var LOGIC_OPERATION_TOOLTIP_OR: string;
+
+    /** @type {string} */
+    var LOGIC_OPERATION_OR: string;
+
+    /** @type {string} */
+    var LOGIC_NEGATE_HELPURL: string;
+
+    /** @type {string} */
+    var LOGIC_NEGATE_TITLE: string;
+
+    /** @type {string} */
+    var LOGIC_NEGATE_TOOLTIP: string;
+
+    /** @type {string} */
+    var LOGIC_BOOLEAN_HELPURL: string;
+
+    /** @type {string} */
+    var LOGIC_BOOLEAN_TRUE: string;
+
+    /** @type {string} */
+    var LOGIC_BOOLEAN_FALSE: string;
+
+    /** @type {string} */
+    var LOGIC_BOOLEAN_TOOLTIP: string;
+
+    /** @type {string} */
+    var LOGIC_NULL_HELPURL: string;
+
+    /** @type {string} */
+    var LOGIC_NULL: string;
+
+    /** @type {string} */
+    var LOGIC_NULL_TOOLTIP: string;
+
+    /** @type {string} */
+    var LOGIC_TERNARY_HELPURL: string;
+
+    /** @type {string} */
+    var LOGIC_TERNARY_CONDITION: string;
+
+    /** @type {string} */
+    var LOGIC_TERNARY_IF_TRUE: string;
+
+    /** @type {string} */
+    var LOGIC_TERNARY_IF_FALSE: string;
+
+    /** @type {string} */
+    var LOGIC_TERNARY_TOOLTIP: string;
+
+    /** @type {string} */
+    var MATH_NUMBER_HELPURL: string;
+
+    /** @type {string} */
+    var MATH_NUMBER_TOOLTIP: string;
+
+    /** @type {string} */
+    var MATH_ADDITION_SYMBOL: string;
+
+    /** @type {string} */
+    var MATH_SUBTRACTION_SYMBOL: string;
+
+    /** @type {string} */
+    var MATH_DIVISION_SYMBOL: string;
+
+    /** @type {string} */
+    var MATH_MULTIPLICATION_SYMBOL: string;
+
+    /** @type {string} */
+    var MATH_POWER_SYMBOL: string;
+
+    /** @type {string} */
+    var MATH_TRIG_SIN: string;
+
+    /** @type {string} */
+    var MATH_TRIG_COS: string;
+
+    /** @type {string} */
+    var MATH_TRIG_TAN: string;
+
+    /** @type {string} */
+    var MATH_TRIG_ASIN: string;
+
+    /** @type {string} */
+    var MATH_TRIG_ACOS: string;
+
+    /** @type {string} */
+    var MATH_TRIG_ATAN: string;
+
+    /** @type {string} */
+    var MATH_ARITHMETIC_HELPURL: string;
+
+    /** @type {string} */
+    var MATH_ARITHMETIC_TOOLTIP_ADD: string;
+
+    /** @type {string} */
+    var MATH_ARITHMETIC_TOOLTIP_MINUS: string;
+
+    /** @type {string} */
+    var MATH_ARITHMETIC_TOOLTIP_MULTIPLY: string;
+
+    /** @type {string} */
+    var MATH_ARITHMETIC_TOOLTIP_DIVIDE: string;
+
+    /** @type {string} */
+    var MATH_ARITHMETIC_TOOLTIP_POWER: string;
+
+    /** @type {string} */
+    var MATH_SINGLE_HELPURL: string;
+
+    /** @type {string} */
+    var MATH_SINGLE_OP_ROOT: string;
+
+    /** @type {string} */
+    var MATH_SINGLE_TOOLTIP_ROOT: string;
+
+    /** @type {string} */
+    var MATH_SINGLE_OP_ABSOLUTE: string;
+
+    /** @type {string} */
+    var MATH_SINGLE_TOOLTIP_ABS: string;
+
+    /** @type {string} */
+    var MATH_SINGLE_TOOLTIP_NEG: string;
+
+    /** @type {string} */
+    var MATH_SINGLE_TOOLTIP_LN: string;
+
+    /** @type {string} */
+    var MATH_SINGLE_TOOLTIP_LOG10: string;
+
+    /** @type {string} */
+    var MATH_SINGLE_TOOLTIP_EXP: string;
+
+    /** @type {string} */
+    var MATH_SINGLE_TOOLTIP_POW10: string;
+
+    /** @type {string} */
+    var MATH_TRIG_HELPURL: string;
+
+    /** @type {string} */
+    var MATH_TRIG_TOOLTIP_SIN: string;
+
+    /** @type {string} */
+    var MATH_TRIG_TOOLTIP_COS: string;
+
+    /** @type {string} */
+    var MATH_TRIG_TOOLTIP_TAN: string;
+
+    /** @type {string} */
+    var MATH_TRIG_TOOLTIP_ASIN: string;
+
+    /** @type {string} */
+    var MATH_TRIG_TOOLTIP_ACOS: string;
+
+    /** @type {string} */
+    var MATH_TRIG_TOOLTIP_ATAN: string;
+
+    /** @type {string} */
+    var MATH_CONSTANT_HELPURL: string;
+
+    /** @type {string} */
+    var MATH_CONSTANT_TOOLTIP: string;
+
+    /** @type {string} */
+    var MATH_IS_EVEN: string;
+
+    /** @type {string} */
+    var MATH_IS_ODD: string;
+
+    /** @type {string} */
+    var MATH_IS_PRIME: string;
+
+    /** @type {string} */
+    var MATH_IS_WHOLE: string;
+
+    /** @type {string} */
+    var MATH_IS_POSITIVE: string;
+
+    /** @type {string} */
+    var MATH_IS_NEGATIVE: string;
+
+    /** @type {string} */
+    var MATH_IS_DIVISIBLE_BY: string;
+
+    /** @type {string} */
+    var MATH_IS_TOOLTIP: string;
+
+    /** @type {string} */
+    var MATH_CHANGE_HELPURL: string;
+
+    /** @type {string} */
+    var MATH_CHANGE_TITLE: string;
+
+    /** @type {string} */
+    var MATH_CHANGE_TITLE_ITEM: string;
+
+    /** @type {string} */
+    var MATH_CHANGE_TOOLTIP: string;
+
+    /** @type {string} */
+    var MATH_ROUND_HELPURL: string;
+
+    /** @type {string} */
+    var MATH_ROUND_TOOLTIP: string;
+
+    /** @type {string} */
+    var MATH_ROUND_OPERATOR_ROUND: string;
+
+    /** @type {string} */
+    var MATH_ROUND_OPERATOR_ROUNDUP: string;
+
+    /** @type {string} */
+    var MATH_ROUND_OPERATOR_ROUNDDOWN: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_HELPURL: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_OPERATOR_SUM: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_TOOLTIP_SUM: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_OPERATOR_MIN: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_TOOLTIP_MIN: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_OPERATOR_MAX: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_TOOLTIP_MAX: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_OPERATOR_AVERAGE: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_TOOLTIP_AVERAGE: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_OPERATOR_MEDIAN: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_TOOLTIP_MEDIAN: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_OPERATOR_MODE: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_TOOLTIP_MODE: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_OPERATOR_STD_DEV: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_TOOLTIP_STD_DEV: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_OPERATOR_RANDOM: string;
+
+    /** @type {string} */
+    var MATH_ONLIST_TOOLTIP_RANDOM: string;
+
+    /** @type {string} */
+    var MATH_MODULO_HELPURL: string;
+
+    /** @type {string} */
+    var MATH_MODULO_TITLE: string;
+
+    /** @type {string} */
+    var MATH_MODULO_TOOLTIP: string;
+
+    /** @type {string} */
+    var MATH_CONSTRAIN_HELPURL: string;
+
+    /** @type {string} */
+    var MATH_CONSTRAIN_TITLE: string;
+
+    /** @type {string} */
+    var MATH_CONSTRAIN_TOOLTIP: string;
+
+    /** @type {string} */
+    var MATH_RANDOM_INT_HELPURL: string;
+
+    /** @type {string} */
+    var MATH_RANDOM_INT_TITLE: string;
+
+    /** @type {string} */
+    var MATH_RANDOM_INT_TOOLTIP: string;
+
+    /** @type {string} */
+    var MATH_RANDOM_FLOAT_HELPURL: string;
+
+    /** @type {string} */
+    var MATH_RANDOM_FLOAT_TITLE_RANDOM: string;
+
+    /** @type {string} */
+    var MATH_RANDOM_FLOAT_TOOLTIP: string;
+
+    /** @type {string} */
+    var MATH_ATAN2_HELPURL: string;
+
+    /** @type {string} */
+    var MATH_ATAN2_TITLE: string;
+
+    /** @type {string} */
+    var MATH_ATAN2_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_TEXT_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_TEXT_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_JOIN_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_JOIN_TITLE_CREATEWITH: string;
+
+    /** @type {string} */
+    var TEXT_JOIN_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_CREATE_JOIN_TITLE_JOIN: string;
+
+    /** @type {string} */
+    var TEXT_CREATE_JOIN_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_CREATE_JOIN_ITEM_TITLE_ITEM: string;
+
+    /** @type {string} */
+    var TEXT_CREATE_JOIN_ITEM_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_APPEND_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_APPEND_TITLE: string;
+
+    /** @type {string} */
+    var TEXT_APPEND_VARIABLE: string;
+
+    /** @type {string} */
+    var TEXT_APPEND_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_LENGTH_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_LENGTH_TITLE: string;
+
+    /** @type {string} */
+    var TEXT_LENGTH_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_ISEMPTY_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_ISEMPTY_TITLE: string;
+
+    /** @type {string} */
+    var TEXT_ISEMPTY_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_INDEXOF_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_INDEXOF_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_INDEXOF_TITLE: string;
+
+    /** @type {string} */
+    var TEXT_INDEXOF_OPERATOR_FIRST: string;
+
+    /** @type {string} */
+    var TEXT_INDEXOF_OPERATOR_LAST: string;
+
+    /** @type {string} */
+    var TEXT_CHARAT_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_CHARAT_TITLE: string;
+
+    /** @type {string} */
+    var TEXT_CHARAT_FROM_START: string;
+
+    /** @type {string} */
+    var TEXT_CHARAT_FROM_END: string;
+
+    /** @type {string} */
+    var TEXT_CHARAT_FIRST: string;
+
+    /** @type {string} */
+    var TEXT_CHARAT_LAST: string;
+
+    /** @type {string} */
+    var TEXT_CHARAT_RANDOM: string;
+
+    /** @type {string} */
+    var TEXT_CHARAT_TAIL: string;
+
+    /** @type {string} */
+    var TEXT_CHARAT_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_GET_SUBSTRING_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_GET_SUBSTRING_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_GET_SUBSTRING_INPUT_IN_TEXT: string;
+
+    /** @type {string} */
+    var TEXT_GET_SUBSTRING_START_FROM_START: string;
+
+    /** @type {string} */
+    var TEXT_GET_SUBSTRING_START_FROM_END: string;
+
+    /** @type {string} */
+    var TEXT_GET_SUBSTRING_START_FIRST: string;
+
+    /** @type {string} */
+    var TEXT_GET_SUBSTRING_END_FROM_START: string;
+
+    /** @type {string} */
+    var TEXT_GET_SUBSTRING_END_FROM_END: string;
+
+    /** @type {string} */
+    var TEXT_GET_SUBSTRING_END_LAST: string;
+
+    /** @type {string} */
+    var TEXT_GET_SUBSTRING_TAIL: string;
+
+    /** @type {string} */
+    var TEXT_CHANGECASE_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_CHANGECASE_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_CHANGECASE_OPERATOR_UPPERCASE: string;
+
+    /** @type {string} */
+    var TEXT_CHANGECASE_OPERATOR_LOWERCASE: string;
+
+    /** @type {string} */
+    var TEXT_CHANGECASE_OPERATOR_TITLECASE: string;
+
+    /** @type {string} */
+    var TEXT_TRIM_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_TRIM_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_TRIM_OPERATOR_BOTH: string;
+
+    /** @type {string} */
+    var TEXT_TRIM_OPERATOR_LEFT: string;
+
+    /** @type {string} */
+    var TEXT_TRIM_OPERATOR_RIGHT: string;
+
+    /** @type {string} */
+    var TEXT_PRINT_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_PRINT_TITLE: string;
+
+    /** @type {string} */
+    var TEXT_PRINT_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_PROMPT_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_PROMPT_TYPE_TEXT: string;
+
+    /** @type {string} */
+    var TEXT_PROMPT_TYPE_NUMBER: string;
+
+    /** @type {string} */
+    var TEXT_PROMPT_TOOLTIP_NUMBER: string;
+
+    /** @type {string} */
+    var TEXT_PROMPT_TOOLTIP_TEXT: string;
+
+    /** @type {string} */
+    var TEXT_COUNT_MESSAGE0: string;
+
+    /** @type {string} */
+    var TEXT_COUNT_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_COUNT_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_REPLACE_MESSAGE0: string;
+
+    /** @type {string} */
+    var TEXT_REPLACE_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_REPLACE_TOOLTIP: string;
+
+    /** @type {string} */
+    var TEXT_REVERSE_MESSAGE0: string;
+
+    /** @type {string} */
+    var TEXT_REVERSE_HELPURL: string;
+
+    /** @type {string} */
+    var TEXT_REVERSE_TOOLTIP: string;
+
+    /** @type {string} */
+    var LISTS_CREATE_EMPTY_HELPURL: string;
+
+    /** @type {string} */
+    var LISTS_CREATE_EMPTY_TITLE: string;
+
+    /** @type {string} */
+    var LISTS_CREATE_EMPTY_TOOLTIP: string;
+
+    /** @type {string} */
+    var LISTS_CREATE_WITH_HELPURL: string;
+
+    /** @type {string} */
+    var LISTS_CREATE_WITH_TOOLTIP: string;
+
+    /** @type {string} */
+    var LISTS_CREATE_WITH_INPUT_WITH: string;
+
+    /** @type {string} */
+    var LISTS_CREATE_WITH_CONTAINER_TITLE_ADD: string;
+
+    /** @type {string} */
+    var LISTS_CREATE_WITH_CONTAINER_TOOLTIP: string;
+
+    /** @type {string} */
+    var LISTS_CREATE_WITH_ITEM_TITLE: string;
+
+    /** @type {string} */
+    var LISTS_CREATE_WITH_ITEM_TOOLTIP: string;
+
+    /** @type {string} */
+    var LISTS_REPEAT_HELPURL: string;
+
+    /** @type {string} */
+    var LISTS_REPEAT_TOOLTIP: string;
+
+    /** @type {string} */
+    var LISTS_REPEAT_TITLE: string;
+
+    /** @type {string} */
+    var LISTS_LENGTH_HELPURL: string;
+
+    /** @type {string} */
+    var LISTS_LENGTH_TITLE: string;
+
+    /** @type {string} */
+    var LISTS_LENGTH_TOOLTIP: string;
+
+    /** @type {string} */
+    var LISTS_ISEMPTY_HELPURL: string;
+
+    /** @type {string} */
+    var LISTS_ISEMPTY_TITLE: string;
+
+    /** @type {string} */
+    var LISTS_ISEMPTY_TOOLTIP: string;
+
+    /** @type {string} */
+    var LISTS_INLIST: string;
+
+    /** @type {string} */
+    var LISTS_INDEX_OF_HELPURL: string;
+
+    /** @type {string} */
+    var LISTS_INDEX_OF_INPUT_IN_LIST: string;
+
+    /** @type {string} */
+    var LISTS_INDEX_OF_FIRST: string;
+
+    /** @type {string} */
+    var LISTS_INDEX_OF_LAST: string;
+
+    /** @type {string} */
+    var LISTS_INDEX_OF_TOOLTIP: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_HELPURL: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_GET: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_GET_REMOVE: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_REMOVE: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_FROM_START: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_FROM_END: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_FIRST: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_LAST: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_RANDOM: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_TAIL: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_INPUT_IN_LIST: string;
+
+    /** @type {string} */
+    var LISTS_INDEX_FROM_START_TOOLTIP: string;
+
+    /** @type {string} */
+    var LISTS_INDEX_FROM_END_TOOLTIP: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_TOOLTIP_GET_FROM: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_TOOLTIP_GET_FIRST: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_TOOLTIP_GET_LAST: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_TOOLTIP_GET_RANDOM: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FROM: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FIRST: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_LAST: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_RANDOM: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_TOOLTIP_REMOVE_FROM: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_TOOLTIP_REMOVE_FIRST: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_TOOLTIP_REMOVE_LAST: string;
+
+    /** @type {string} */
+    var LISTS_GET_INDEX_TOOLTIP_REMOVE_RANDOM: string;
+
+    /** @type {string} */
+    var LISTS_SET_INDEX_HELPURL: string;
+
+    /** @type {string} */
+    var LISTS_SET_INDEX_INPUT_IN_LIST: string;
+
+    /** @type {string} */
+    var LISTS_SET_INDEX_SET: string;
+
+    /** @type {string} */
+    var LISTS_SET_INDEX_INSERT: string;
+
+    /** @type {string} */
+    var LISTS_SET_INDEX_INPUT_TO: string;
+
+    /** @type {string} */
+    var LISTS_SET_INDEX_TOOLTIP_SET_FROM: string;
+
+    /** @type {string} */
+    var LISTS_SET_INDEX_TOOLTIP_SET_FIRST: string;
+
+    /** @type {string} */
+    var LISTS_SET_INDEX_TOOLTIP_SET_LAST: string;
+
+    /** @type {string} */
+    var LISTS_SET_INDEX_TOOLTIP_SET_RANDOM: string;
+
+    /** @type {string} */
+    var LISTS_SET_INDEX_TOOLTIP_INSERT_FROM: string;
+
+    /** @type {string} */
+    var LISTS_SET_INDEX_TOOLTIP_INSERT_FIRST: string;
+
+    /** @type {string} */
+    var LISTS_SET_INDEX_TOOLTIP_INSERT_LAST: string;
+
+    /** @type {string} */
+    var LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM: string;
+
+    /** @type {string} */
+    var LISTS_GET_SUBLIST_HELPURL: string;
+
+    /** @type {string} */
+    var LISTS_GET_SUBLIST_INPUT_IN_LIST: string;
+
+    /** @type {string} */
+    var LISTS_GET_SUBLIST_START_FROM_START: string;
+
+    /** @type {string} */
+    var LISTS_GET_SUBLIST_START_FROM_END: string;
+
+    /** @type {string} */
+    var LISTS_GET_SUBLIST_START_FIRST: string;
+
+    /** @type {string} */
+    var LISTS_GET_SUBLIST_END_FROM_START: string;
+
+    /** @type {string} */
+    var LISTS_GET_SUBLIST_END_FROM_END: string;
+
+    /** @type {string} */
+    var LISTS_GET_SUBLIST_END_LAST: string;
+
+    /** @type {string} */
+    var LISTS_GET_SUBLIST_TAIL: string;
+
+    /** @type {string} */
+    var LISTS_GET_SUBLIST_TOOLTIP: string;
+
+    /** @type {string} */
+    var LISTS_SORT_HELPURL: string;
+
+    /** @type {string} */
+    var LISTS_SORT_TITLE: string;
+
+    /** @type {string} */
+    var LISTS_SORT_TOOLTIP: string;
+
+    /** @type {string} */
+    var LISTS_SORT_ORDER_ASCENDING: string;
+
+    /** @type {string} */
+    var LISTS_SORT_ORDER_DESCENDING: string;
+
+    /** @type {string} */
+    var LISTS_SORT_TYPE_NUMERIC: string;
+
+    /** @type {string} */
+    var LISTS_SORT_TYPE_TEXT: string;
+
+    /** @type {string} */
+    var LISTS_SORT_TYPE_IGNORECASE: string;
+
+    /** @type {string} */
+    var LISTS_SPLIT_HELPURL: string;
+
+    /** @type {string} */
+    var LISTS_SPLIT_LIST_FROM_TEXT: string;
+
+    /** @type {string} */
+    var LISTS_SPLIT_TEXT_FROM_LIST: string;
+
+    /** @type {string} */
+    var LISTS_SPLIT_WITH_DELIMITER: string;
+
+    /** @type {string} */
+    var LISTS_SPLIT_TOOLTIP_SPLIT: string;
+
+    /** @type {string} */
+    var LISTS_SPLIT_TOOLTIP_JOIN: string;
+
+    /** @type {string} */
+    var LISTS_REVERSE_HELPURL: string;
+
+    /** @type {string} */
+    var LISTS_REVERSE_MESSAGE0: string;
+
+    /** @type {string} */
+    var LISTS_REVERSE_TOOLTIP: string;
+
+    /** @type {string} */
+    var ORDINAL_NUMBER_SUFFIX: string;
+
+    /** @type {string} */
+    var VARIABLES_GET_HELPURL: string;
+
+    /** @type {string} */
+    var VARIABLES_GET_TOOLTIP: string;
+
+    /** @type {string} */
+    var VARIABLES_GET_CREATE_SET: string;
+
+    /** @type {string} */
+    var VARIABLES_SET_HELPURL: string;
+
+    /** @type {string} */
+    var VARIABLES_SET: string;
+
+    /** @type {string} */
+    var VARIABLES_SET_TOOLTIP: string;
+
+    /** @type {string} */
+    var VARIABLES_SET_CREATE_GET: string;
+
+    /** @type {string} */
+    var PROCEDURES_DEFNORETURN_HELPURL: string;
+
+    /** @type {string} */
+    var PROCEDURES_DEFNORETURN_TITLE: string;
+
+    /** @type {string} */
+    var PROCEDURES_DEFNORETURN_PROCEDURE: string;
+
+    /** @type {string} */
+    var PROCEDURES_BEFORE_PARAMS: string;
+
+    /** @type {string} */
+    var PROCEDURES_CALL_BEFORE_PARAMS: string;
+
+    /** @type {string} */
+    var PROCEDURES_DEFNORETURN_DO: string;
+
+    /** @type {string} */
+    var PROCEDURES_DEFNORETURN_TOOLTIP: string;
+
+    /** @type {string} */
+    var PROCEDURES_DEFNORETURN_COMMENT: string;
+
+    /** @type {string} */
+    var PROCEDURES_DEFRETURN_HELPURL: string;
+
+    /** @type {string} */
+    var PROCEDURES_DEFRETURN_TITLE: string;
+
+    /** @type {string} */
+    var PROCEDURES_DEFRETURN_PROCEDURE: string;
+
+    /** @type {string} */
+    var PROCEDURES_DEFRETURN_DO: string;
+
+    /** @type {string} */
+    var PROCEDURES_DEFRETURN_COMMENT: string;
+
+    /** @type {string} */
+    var PROCEDURES_DEFRETURN_RETURN: string;
+
+    /** @type {string} */
+    var PROCEDURES_DEFRETURN_TOOLTIP: string;
+
+    /** @type {string} */
+    var PROCEDURES_ALLOW_STATEMENTS: string;
+
+    /** @type {string} */
+    var PROCEDURES_DEF_DUPLICATE_WARNING: string;
+
+    /** @type {string} */
+    var PROCEDURES_CALLNORETURN_HELPURL: string;
+
+    /** @type {string} */
+    var PROCEDURES_CALLNORETURN_TOOLTIP: string;
+
+    /** @type {string} */
+    var PROCEDURES_CALLRETURN_HELPURL: string;
+
+    /** @type {string} */
+    var PROCEDURES_CALLRETURN_TOOLTIP: string;
+
+    /** @type {string} */
+    var PROCEDURES_MUTATORCONTAINER_TITLE: string;
+
+    /** @type {string} */
+    var PROCEDURES_MUTATORCONTAINER_TOOLTIP: string;
+
+    /** @type {string} */
+    var PROCEDURES_MUTATORARG_TITLE: string;
+
+    /** @type {string} */
+    var PROCEDURES_MUTATORARG_TOOLTIP: string;
+
+    /** @type {string} */
+    var PROCEDURES_HIGHLIGHT_DEF: string;
+
+    /** @type {string} */
+    var PROCEDURES_CREATE_DO: string;
+
+    /** @type {string} */
+    var PROCEDURES_IFRETURN_TOOLTIP: string;
+
+    /** @type {string} */
+    var PROCEDURES_IFRETURN_HELPURL: string;
+
+    /** @type {string} */
+    var PROCEDURES_IFRETURN_WARNING: string;
+
+    /** @type {string} */
+    var WORKSPACE_COMMENT_DEFAULT_TEXT: string;
+
+    /** @type {string} */
+    var COLLAPSED_WARNINGS_WARNING: string;
 }

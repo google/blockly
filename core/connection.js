@@ -72,6 +72,13 @@ Blockly.Connection.REASON_SHADOW_PARENT = 6;
 Blockly.Connection.prototype.targetConnection = null;
 
 /**
+ * Has this connection been disposed of?
+ * @type {boolean}
+ * @package
+ */
+Blockly.Connection.prototype.disposed = false;
+
+/**
  * List of compatible value types.  Null if all types are compatible.
  * @type {Array}
  * @private

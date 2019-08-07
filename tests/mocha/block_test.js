@@ -190,7 +190,7 @@ suite('Blocks', function() {
     });
     suite('Dispose', function() {
       function assertDisposedNoheal(blocks) {
-        chai.assert.isNotOk(blocks.A.disposed);
+        chai.assert.isFalse(blocks.A.disposed);
         // A has nothing connected to it.
         chai.assert.equal(0, blocks.A.getChildren().length);
         // B is disposed.
@@ -199,8 +199,8 @@ suite('Blocks', function() {
         chai.assert.isTrue(blocks.C.disposed);
       }
       function assertDisposedHealed(blocks) {
-        chai.assert.isNotOk(blocks.A.disposed);
-        chai.assert.isNotOk(blocks.C.disposed);
+        chai.assert.isFalse(blocks.A.disposed);
+        chai.assert.isFalse(blocks.C.disposed);
         // A and C are connected.
         assertEquals(1, blocks.A.getChildren().length);
         assertEquals(blocks.A, blocks.C.getParent());
@@ -371,7 +371,7 @@ suite('Blocks', function() {
               .connect(blockB.outputConnection);
 
           this.blockA.removeInput('VALUE');
-          chai.assert.isNotOk(blockB.disposed);
+          chai.assert.isFalse(blockB.disposed);
           chai.assert.equal(this.blockA.getChildren().length, 0);
         });
         test('Shadow Connected', function() {
@@ -400,7 +400,7 @@ suite('Blocks', function() {
               .connect(blockB.previousConnection);
 
           this.blockA.removeInput('STATEMENT');
-          chai.assert.isNotOk(blockB.disposed);
+          chai.assert.isFalse(blockB.disposed);
           chai.assert.equal(this.blockA.getChildren().length, 0);
         });
         test('Shadow Connected', function() {

@@ -149,12 +149,20 @@ Blockly.Field.X_PADDING = 10;
  * @type {[type]}
  */
 Blockly.Field.DEFAULT_TEXT_OFFSET = Blockly.Field.X_PADDING / 2;
+
 /**
  * Name of field.  Unique within each block.
  * Static labels are usually unnamed.
  * @type {string|undefined}
  */
 Blockly.Field.prototype.name = undefined;
+
+/**
+ * Has this field been disposed of?
+ * @type {boolean}
+ * @package
+ */
+Blockly.Field.prototype.disposed = false;
 
 /**
  * Maximum characters of text to display before adding an ellipsis.

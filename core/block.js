@@ -227,6 +227,13 @@ Blockly.Block.obtain = function(workspace, prototypeName) {
 Blockly.Block.prototype.data = null;
 
 /**
+ * Has this block been disposed of?
+ * @type {boolean}
+ * @package
+ */
+Blockly.Block.prototype.disposed = false;
+
+/**
  * Colour of the block as HSV hue value (0-360)
  * This may be null if the block colour was not set via a hue number.
  * @type {?number}

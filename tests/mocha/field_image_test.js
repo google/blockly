@@ -51,17 +51,6 @@ suite('Image Fields', function() {
         new Blockly.FieldImage('src', 'bad', 'bad');
       });
     });
-    // Note: passing invalid an src path doesn't need to throw errors
-    // because the developer can see they did it incorrectly when they view
-    // the block.
-    test('With Alt', function() {
-      var imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
-      assertValue(imageField, 'src', 'alt');
-    });
-    test('Without Alt', function() {
-      var imageField = new Blockly.FieldImage('src', 1, 1);
-      assertValue(imageField, 'src', '');
-    });
   });
   suite('fromJson', function() {
     test('Empty', function() {
@@ -96,23 +85,6 @@ suite('Image Fields', function() {
         });
       });
     });
-    test('With Alt', function() {
-      var imageField = Blockly.FieldImage.fromJson({
-        src: 'src',
-        width: 1,
-        height: 1,
-        alt: 'alt'
-      });
-      assertValue(imageField, 'src', 'alt');
-    });
-    test('Without Alt', function() {
-      var imageField = Blockly.FieldImage.fromJson({
-        src: 'src',
-        width: 1,
-        height: 1
-      });
-      assertValue(imageField, 'src', '');
-    });
   });
   suite('setValue', function() {
     setup(function() {
@@ -131,43 +103,155 @@ suite('Image Fields', function() {
       assertValue(this.imageField, 'newSrc', 'alt');
     });
   });
-  suite('setAlt', function() {
-    suite('No Alt -> New Alt', function() {
-      setup(function() {
-        this.imageField = new Blockly.FieldImage('src', 1, 1);
+  suite('Backwards-Compat - Constructor', function() {
+    test('All Provided', function() {
+      var onClick = function() {
+        console.log('on click');
+      };
+      var field = new Blockly.FieldImage('scr', 10, 10, 'alt', onClick, true);
+
+      chai.assert.equal(field.text_, 'alt');
+      chai.assert.equal(field.clickHandler_, onClick);
+      chai.assert.isTrue(field.flipRtl_);
+    });
+    test('Just Alt', function() {
+      var field = new Blockly.FieldImage('scr', 10, 10, 'alt');
+      chai.assert.equal(field.text_, 'alt');
+      chai.assert.isNotOk(field.clickHandler_);
+      chai.assert.isFalse(field.flipRtl_);
+    });
+    test('Just onClick', function() {
+      var onClick = function() {
+        console.log('on click');
+      };
+      var field = new Blockly.FieldImage('scr', 10, 10, null, onClick);
+      chai.assert.equal(field.text_, '');
+      chai.assert.equal(field.clickHandler_, onClick);
+      chai.assert.isFalse(field.flipRtl_);
+    });
+    test('Just FlipRtl', function() {
+      var field = new Blockly.FieldImage('scr', 10, 10, null, null, true);
+
+      chai.assert.equal(field.text_, '');
+      chai.assert.isNotOk(field.clickHandler_);
+      chai.assert.isTrue(field.flipRtl_);
+    });
+    test('Alt & OnClick', function() {
+      var onClick = function() {
+        console.log('on click');
+      };
+      var field = new Blockly.FieldImage('scr', 10, 10, 'alt', onClick);
+
+      chai.assert.equal(field.text_, 'alt');
+      chai.assert.equal(field.clickHandler_, onClick);
+      chai.assert.isFalse(field.flipRtl_);
+    });
+    test('Alt & FlipRtl', function() {
+      var field = new Blockly.FieldImage('scr', 10, 10, 'alt', null, true);
+
+      chai.assert.equal(field.text_, 'alt');
+      chai.assert.isNotOk(field.clickHandler_);
+      chai.assert.isTrue(field.flipRtl_);
+    });
+    test('OnClick & FlipRtl', function() {
+      var onClick = function() {
+        console.log('on click');
+      };
+      var field = new Blockly.FieldImage('scr', 10, 10, null, onClick, true);
+
+      chai.assert.equal(field.text_, '');
+      chai.assert.equal(field.clickHandler_, onClick);
+      chai.assert.isTrue(field.flipRtl_);
+    });
+  });
+  suite('Customizations', function() {
+    suite('OnClick', function() {
+      test('JS Constructor', function() {
+        var onClick = function() {
+          console.log('on click');
+        };
+        var field = new Blockly.FieldImage('src', 10, 10, onClick);
+        chai.assert.equal(field.clickHandler_, onClick);
       });
-      test('Backwards Compat - setText', function() {
-        this.imageField.setText('newAlt');
-        assertValue(this.imageField, 'src', 'newAlt');
-      });
-      test('Null', function() {
-        this.imageField.setText(null);
-        assertValue(this.imageField, 'src', '');
-      });
-      test('Good Alt', function() {
-        this.imageField.setText('newAlt');
-        assertValue(this.imageField, 'src', 'newAlt');
+      test('setOnClickHandler', function() {
+        var onClick = function() {
+          console.log('on click');
+        };
+        var field = new Blockly.FieldImage('src', 10, 10);
+        field.setOnClickHandler(onClick);
+        chai.assert.equal(field.clickHandler_, onClick);
       });
     });
-    suite('Alt -> New Alt', function() {
-      setup(function() {
-        this.imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
+    suite('Alt', function() {
+      test('JS Constructor', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, null, {
+          alt: 'alt'
+        });
+        chai.assert.equal(field.text_, 'alt');
       });
-      test('Backwards Compat - setText', function() {
-        this.imageField.setText('newAlt');
-        assertValue(this.imageField, 'src', 'newAlt');
+      test('JSON Definition', function() {
+        var field = Blockly.FieldImage.fromJson({
+          src: 'src',
+          width: 10,
+          height: 10,
+          alt: 'alt'
+        });
+        chai.assert.equal(field.text_, 'alt');
       });
-      test('Null', function() {
-        this.imageField.setText(null);
-        assertValue(this.imageField, 'src', 'alt');
+      suite('No Alt -> New Alt', function() {
+        setup(function() {
+          this.imageField = new Blockly.FieldImage('src', 1, 1);
+        });
+        test('Backwards Compat - setText', function() {
+          this.imageField.setText('newAlt');
+          assertValue(this.imageField, 'src', 'newAlt');
+        });
+        test('Null', function() {
+          this.imageField.setText(null);
+          assertValue(this.imageField, 'src', '');
+        });
+        test('Good Alt', function() {
+          this.imageField.setText('newAlt');
+          assertValue(this.imageField, 'src', 'newAlt');
+        });
       });
-      test('Empty String', function() {
-        this.imageField.setText('');
-        assertValue(this.imageField, 'src', '');
+      suite('Alt -> New Alt', function() {
+        setup(function() {
+          this.imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
+        });
+        test('Backwards Compat - setText', function() {
+          this.imageField.setText('newAlt');
+          assertValue(this.imageField, 'src', 'newAlt');
+        });
+        test('Null', function() {
+          this.imageField.setText(null);
+          assertValue(this.imageField, 'src', 'alt');
+        });
+        test('Empty String', function() {
+          this.imageField.setText('');
+          assertValue(this.imageField, 'src', '');
+        });
+        test('Good Alt', function() {
+          this.imageField.setText('newAlt');
+          assertValue(this.imageField, 'src', 'newAlt');
+        });
       });
-      test('Good Alt', function() {
-        this.imageField.setText('newAlt');
-        assertValue(this.imageField, 'src', 'newAlt');
+    });
+    suite('FlipRtl', function() {
+      test('JS Constructor', function() {
+        var field = new Blockly.FieldImage('src', 10, 10, null, {
+          flipRtl: true
+        });
+        chai.assert.isTrue(field.flipRtl_);
+      });
+      test('JSON Definition', function() {
+        var field = Blockly.FieldImage.fromJson({
+          src: 'src',
+          width: 10,
+          height: 10,
+          flipRtl: true
+        });
+        chai.assert.isTrue(field.flipRtl_);
       });
     });
   });

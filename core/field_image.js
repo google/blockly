@@ -38,25 +38,26 @@ goog.require('Blockly.utils.Size');
  * @param {string} src The URL of the image. Defaults to an empty string.
  * @param {!(string|number)} width Width of the image.
  * @param {!(string|number)} height Height of the image.
- * @param {string=} opt_alt Optional alt text for when block is collapsed.
  * @param {Function=} opt_onClick Optional function to be called when the image
  *     is clicked.  If opt_onClick is defined, opt_alt must also be defined.
- * @param {boolean=} opt_flipRtl Whether to flip the icon in RTL.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the documentation for a list of properties this parameter supports.
+ *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/image
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldImage = function(src, width, height,
-    opt_alt, opt_onClick, opt_flipRtl) {
+Blockly.FieldImage = function(src, width, height, opt_onClick, opt_config) {
   this.sourceBlock_ = null;
 
   if (!src) {
     throw Error('Src value of an image field is required');
   }
-
   if (isNaN(height) || isNaN(width)) {
     throw Error('Height and width values of an image field must cast to' +
       ' numbers.');
   }
+
+  this.setValue(src);
 
   // Ensure height and width are numbers.  Strings are bad at math.
   var imageHeight = Number(height);
@@ -70,12 +71,31 @@ Blockly.FieldImage = function(src, width, height,
   this.size_ = new Blockly.utils.Size(imageWidth,
       imageHeight + Blockly.FieldImage.Y_PADDING);
 
-  this.flipRtl_ = opt_flipRtl;
-  this.text_ = opt_alt || '';
-  this.setValue(src || '');
-
+  // Deal with config options and param reordering.
+  var doOldParams = true;
+  var config = null;
   if (typeof opt_onClick == 'function') {
+    doOldParams = false;
     this.clickHandler_ = opt_onClick;
+  }
+  if (opt_config && typeof opt_config == 'object') {
+    doOldParams = false;
+    config = opt_config;
+  }
+  if (doOldParams) {
+    var config = {};
+    // opt_onClick used to be opt_alt.
+    config['alt'] = opt_onClick;
+    // opt_config used to be opt_onClick.
+    this.clickHandler_ = opt_config;
+    // flipRtl used to be a param, instead of a config option.
+    config['flipRtl'] = arguments[5];
+  }
+
+  // Actually configure.
+  if (config) {
+    this.text_ = Blockly.utils.replaceMessageReferences(config['alt']) || '';
+    this.flipRtl_ = !!config['flipRtl'];
   }
 };
 goog.inherits(Blockly.FieldImage, Blockly.Field);
@@ -90,13 +110,8 @@ goog.inherits(Blockly.FieldImage, Blockly.Field);
  * @nocollapse
  */
 Blockly.FieldImage.fromJson = function(options) {
-  var src = Blockly.utils.replaceMessageReferences(options['src']);
-  var width = Number(Blockly.utils.replaceMessageReferences(options['width']));
-  var height =
-      Number(Blockly.utils.replaceMessageReferences(options['height']));
-  var alt = Blockly.utils.replaceMessageReferences(options['alt']);
-  var flipRtl = !!options['flipRtl'];
-  return new Blockly.FieldImage(src, width, height, alt, null, flipRtl);
+  return new Blockly.FieldImage(
+      options['src'], options['width'], options['height'], null, options);
 };
 
 /**
@@ -123,6 +138,13 @@ Blockly.FieldImage.prototype.EDITABLE = false;
  * @private
  */
 Blockly.FieldImage.prototype.isDirty_ = false;
+
+/**
+ *
+ * @type {boolean}
+ * @private
+ */
+Blockly.FieldImage.prototype.flipRtl_ = false;
 
 /**
  * Create the block UI for this image.

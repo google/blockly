@@ -482,4 +482,50 @@ suite('Abstract Fields', function() {
       delete Blockly.Blocks['tooltip'];
     });
   });
+  suite('Customization', function() {
+    // All this field does is wrap the abstract field.
+    function CustomField(opt_config) {
+      CustomField.superClass_.constructor.call(
+          this, 'value', null, opt_config);
+    }
+    goog.inherits(CustomField, Blockly.Field);
+    CustomField.fromJson = function(options) {
+      return new CustomField(options);
+    };
+
+    suite('Tooltip', function() {
+      test('JS Constructor', function() {
+        var field = new Blockly.Field('value', null, {
+          tooltip: 'test tooltip',
+        });
+        chai.assert.equal(field.tooltip_, 'test tooltip');
+      });
+      test('JSON Definition', function() {
+        var field = CustomField.fromJson({
+          tooltip: "test tooltip"
+        });
+        chai.assert.equal(field.tooltip_, 'test tooltip');
+      });
+      suite('W/ Msg References', function() {
+        setup(function() {
+          Blockly.Msg['TOOLTIP'] = 'test tooltip';
+        });
+        teardown(function() {
+          delete Blockly.Msg['TOOLTIP'];
+        });
+        test('JS Constructor', function() {
+          var field = new Blockly.Field('value', null, {
+            tooltip: '%{BKY_TOOLTIP}',
+          });
+          chai.assert.equal(field.tooltip_, 'test tooltip');
+        });
+        test('JSON Definition', function() {
+          var field = CustomField.fromJson({
+            tooltip: "%{BKY_TOOLTIP}"
+          });
+          chai.assert.equal(field.tooltip_, 'test tooltip');
+        });
+      });
+    });
+  });
 });

@@ -695,10 +695,10 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
   // Performance note: this could be combined with the draw pass, if the time
   // that this takes is excessive.  But it shouldn't be, because it only
   // accesses and sets properties that already exist on the objects.
-  var yCursor = this.startY;
+  var yCursor = 0;
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
-    row.yPos = yCursor;
+    row.yPos = yCursor + this.startY;
     yCursor += row.height;
     // Add padding to the bottom row if block height is less than minimum
     if (row == this.bottomRow &&
@@ -721,5 +721,5 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
   this.blockBottom = yCursor;
 
   // Don't count the start offset in the recorded height.
-  this.height = yCursor - this.startY;
+  this.height = yCursor;
 };

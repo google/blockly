@@ -118,6 +118,11 @@ Blockly.blockRendering.RenderInfo = function(block) {
   this.topRow = null;
   this.bottomRow = null;
 
+  // The position of the start point for drawing, relative to the block's
+  // location.
+  this.startX = 0;
+  this.startY = 0;
+
   this.measure_();
 };
 
@@ -690,7 +695,7 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
   // Performance note: this could be combined with the draw pass, if the time
   // that this takes is excessive.  But it shouldn't be, because it only
   // accesses and sets properties that already exist on the objects.
-  var yCursor = 0;
+  var yCursor = this.startY;
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
     row.yPos = yCursor;
@@ -703,7 +708,8 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
       yCursor = Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT;
     }
     if (!(row.isSpacer())) {
-      var xCursor = 0;
+      // xcursor should start at startX (?)
+      var xCursor = this.startX;
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];
         elem.xPos = xCursor;
@@ -714,5 +720,6 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
   }
   this.blockBottom = yCursor;
 
-  this.height = yCursor;
+  // Don't count the start offset in the recorded height.
+  this.height = yCursor - this.startY;
 };

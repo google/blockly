@@ -135,13 +135,6 @@ Blockly.blockRendering.constants.POPULATED_STATEMENT_INPUT_WIDTH = 25;
 Blockly.blockRendering.constants.START_POINT = Blockly.utils.svgPaths.moveBy(0, 0);
 
 /**
- * SVG start point for drawing the top-left corner.
- * @const
- */
-Blockly.blockRendering.constants.TOP_LEFT_CORNER_START =
-    'm 0,' + Blockly.blockRendering.constants.CORNER_RADIUS;
-
-/**
  * Height of SVG path for jagged teeth at the end of collapsed blocks.
  * @const
  */
@@ -291,8 +284,11 @@ Blockly.blockRendering.constants.OUTSIDE_CORNERS = (function() {
    * SVG path for drawing the rounded top-left corner.
    * @const
    */
-  var topLeft = Blockly.utils.svgPaths.arc('A', '0 0,1', radius,
-      Blockly.utils.svgPaths.point(radius, 0));
+
+  var topLeft =
+      Blockly.utils.svgPaths.moveBy(0, radius) +
+      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+          Blockly.utils.svgPaths.point(radius, -radius));
 
   var bottomLeft = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
       Blockly.utils.svgPaths.point(-radius, -radius));

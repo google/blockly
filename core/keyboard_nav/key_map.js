@@ -223,14 +223,16 @@ Blockly.user.keyMap.createDefaultKeyMap = function() {
 
   //Set E
   var eAction = new Blockly.KeyAction('exit', 'Exit the toolbox', function() {
-    if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX) {
+    if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX ||
+        Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
       Blockly.Navigation.focusWorkspace();
     }
   });
 
   //Set ESC
   var escAction = new Blockly.KeyAction('escape', 'Exit the toolbox', function() {
-    if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX) {
+    if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX ||
+        Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
       Blockly.Navigation.focusWorkspace();
     }
   });

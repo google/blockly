@@ -525,8 +525,8 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   this.textElement_.setAttribute('x', Blockly.Field.DEFAULT_TEXT_OFFSET);
   // Height and width include the border rect.
   this.size_.height = Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT;
-  this.size_.width = Blockly.utils.dom.getTextWidth(this.textElement_)
-      + Blockly.Field.X_PADDING;
+  this.size_.width = Blockly.utils.dom.getTextWidth(this.textElement_) +
+      Blockly.Field.X_PADDING;
 };
 
 /**

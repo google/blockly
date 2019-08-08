@@ -19,12 +19,12 @@
  */
 
 /**
- * @fileoverview The class representing a keyboard action.
+ * @fileoverview The class representing an action.
  * Used primarily for keyboard navigation.
  */
 'use strict';
 
-goog.provide('Blockly.KeyAction');
+goog.provide('Blockly.Action');
 
 /**
  * Class for a single action.
@@ -32,10 +32,10 @@ goog.provide('Blockly.KeyAction');
  * single state (toolbox, flyout, workspace) then the function should handle this.
  * @param {string} name The name of the action.
  * @param {string} desc The description of the action.
- * @param {string} func The function to be called when the key is pressed.
+ * @param {function} func The function to be called when the key is pressed.
  * @constructor
  */
-Blockly.KeyAction = function(name, desc, func) {
+Blockly.Action = function(name, desc, func) {
   this.name = name;
   this.desc = desc;
   this.func = func;

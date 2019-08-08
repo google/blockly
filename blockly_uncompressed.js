@@ -83,9 +83,9 @@ goog.addDependency("../../../" + dir + "/core/insertion_marker_manager.js", ['Bl
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/ast_node.js", ['Blockly.ASTNode'], []);
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/cursor.js", ['Blockly.Cursor'], []);
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/cursor_svg.js", ['Blockly.CursorSvg'], ['Blockly.Cursor']);
-goog.addDependency("../../../" + dir + "/core/keyboard_nav/key_action.js", ['Blockly.KeyAction'], []);
+goog.addDependency("../../../" + dir + "/core/keyboard_nav/key_action.js", ['Blockly.Action'], []);
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/key_map.js", ['Blockly.user.keyMap'], []);
-goog.addDependency("../../../" + dir + "/core/keyboard_nav/navigation.js", ['Blockly.Navigation'], ['Blockly.ASTNode', 'Blockly.user.keyMap']);
+goog.addDependency("../../../" + dir + "/core/keyboard_nav/navigation.js", ['Blockly.Navigation'], ['Blockly.Action', 'Blockly.ASTNode', 'Blockly.user.keyMap']);
 goog.addDependency("../../../" + dir + "/core/msg.js", ['Blockly.Msg'], []);
 goog.addDependency("../../../" + dir + "/core/mutator.js", ['Blockly.Mutator'], ['Blockly.Bubble', 'Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Events.Ui', 'Blockly.Icon', 'Blockly.utils', 'Blockly.utils.dom', 'Blockly.utils.xml', 'Blockly.WorkspaceSvg', 'Blockly.Xml']);
 goog.addDependency("../../../" + dir + "/core/names.js", ['Blockly.Names'], []);
@@ -1787,6 +1787,7 @@ goog.addDependency("window/window_test.js", ['goog.windowTest'], ['goog.Promise'
 // Load Blockly.
 goog.require('Blockly');
 goog.require('Blockly.ASTNode');
+goog.require('Blockly.Action');
 goog.require('Blockly.Block');
 goog.require('Blockly.BlockDragSurfaceSvg');
 goog.require('Blockly.BlockDragger');
@@ -1849,7 +1850,6 @@ goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.Icon');
 goog.require('Blockly.Input');
 goog.require('Blockly.InsertionMarkerManager');
-goog.require('Blockly.KeyAction');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.Names');

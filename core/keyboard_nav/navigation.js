@@ -20,6 +20,7 @@
 
 goog.provide('Blockly.Navigation');
 
+goog.require('Blockly.Action');
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.user.keyMap');
 
@@ -648,12 +649,11 @@ Blockly.Navigation.handleEnterForWS = function() {
 
 
 /**
- * TODO: Revisit keycodes before releasing
  * Handler for all the keyboard navigation events.
  * @param {Event} e The keyboard event.
  * @return {!boolean} True if the key was handled false otherwise.
  */
-Blockly.Navigation.navigate = function(e) {
+Blockly.Navigation.onKeyPress = function(e) {
   var key = Blockly.user.keyMap.serializeKeyEvent(e);
   var action = Blockly.user.keyMap.getActionByKeyCode(key);
   if (action) {
@@ -718,3 +718,85 @@ Blockly.Navigation.error = function(msg) {
     console.error(msg);
   }
 };
+
+Blockly.Navigation.ACTION_PREVIOUS = new Blockly.Action('previous', 'Goes to the previous location', function() {
+  if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
+    Blockly.Navigation.cursor_.prev();
+  } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
+    Blockly.Navigation.selectPreviousBlockInFlyout();
+  } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX) {
+    Blockly.Navigation.previousCategory();
+  }
+});
+
+Blockly.Navigation.ACTION_OUT = new Blockly.Action('out', 'Goes out', function() {
+  if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
+    Blockly.Navigation.cursor_.out();
+  } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
+    Blockly.Navigation.focusToolbox();
+  } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX) {
+    Blockly.Navigation.outCategory();
+  }
+});
+
+Blockly.Navigation.ACTION_NEXT = new Blockly.Action('next', 'Goes to the next location', function() {
+  if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
+    Blockly.Navigation.cursor_.next();
+  } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
+    Blockly.Navigation.selectNextBlockInFlyout();
+  } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX) {
+    Blockly.Navigation.nextCategory();
+  }
+});
+
+Blockly.Navigation.ACTION_IN = new Blockly.Action('in', 'Goes in', function() {
+  if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
+    Blockly.Navigation.cursor_.in();
+  } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX) {
+    Blockly.Navigation.inCategory();
+  }
+});
+
+Blockly.Navigation.ACTION_INSERT = new Blockly.Action('insert',
+    'Tries to connect the current location to the marked location', function() {
+      if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
+        Blockly.Navigation.modify();
+      }
+    });
+
+Blockly.Navigation.ACTION_MARK = new Blockly.Action('mark', 'Marks the current location', function() {
+  if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
+    Blockly.Navigation.handleEnterForWS();
+  } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
+    Blockly.Navigation.insertFromFlyout();
+  }
+});
+
+Blockly.Navigation.ACTION_DISCONNECT = new Blockly.Action('disconnect', 'Disconnect the blocks', function() {
+  if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
+    Blockly.Navigation.disconnectBlocks();
+  }
+});
+
+Blockly.Navigation.ACTION_TOOLBOX = new Blockly.Action('toolbox', 'Open the toolbox', function() {
+  if (!Blockly.getMainWorkspace().getToolbox()) {
+    Blockly.Navigation.focusFlyout();
+  } else {
+    Blockly.Navigation.focusToolbox();
+  }
+});
+
+Blockly.Navigation.ACTION_EXIT = new Blockly.Action('exit', 'Exit the toolbox', function() {
+  if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX ||
+      Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
+    Blockly.Navigation.focusWorkspace();
+  }
+});
+
+Blockly.Navigation.ACTION_ESCAPE = new Blockly.Action('escape', 'Exit the toolbox', function() {
+  if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX ||
+      Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
+    Blockly.Navigation.focusWorkspace();
+  }
+});
+

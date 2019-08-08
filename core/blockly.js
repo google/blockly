@@ -218,7 +218,7 @@ Blockly.onKeyDown_ = function(e) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
     if (Blockly.keyboardAccessibilityMode) {
-      Blockly.Navigation.navigate(e);
+      Blockly.Navigation.onKeyPress(e);
     }
   } else if (e.keyCode == 8 || e.keyCode == 46) {
     // Delete or backspace.
@@ -276,7 +276,7 @@ Blockly.onKeyDown_ = function(e) {
       mainWorkspace.undo(e.shiftKey);
     }
   } else if (Blockly.keyboardAccessibilityMode &&
-      Blockly.Navigation.navigate(e)) {
+      Blockly.Navigation.onKeyPress(e)) {
     return;
   }
   // Common code for delete and cut.

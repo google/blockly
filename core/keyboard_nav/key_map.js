@@ -29,57 +29,39 @@ goog.provide('Blockly.user.keyMap');
 
 /**
  * Holds the serialized key to key action mapping.
- * @type {Object<string, Blockly.KeyAction>}
+ * @type {Object<string, Blockly.Action>}
  */
 Blockly.user.keyMap.map_ = {};
 
 /**
- * Holds the list of actions that can be executed using the keyboard.
- * @type {Array<Blockly.KeyAction>}
- */
-Blockly.user.keyMap.actions_ = [];
-
-/**
- * Update the key map and actions array to contain the new action.
+ * Update the key map to contain the new action.
  * @param {!string} keyCode The key code serialized by the serializeKeyEvent.
- * @param {!Blockly.KeyAction} action The action to be executed when the keys
+ * @param {!Blockly.Action} action The action to be executed when the keys
  *     corresponding to the serialized key code is pressed.
  * @package
  */
 Blockly.user.keyMap.setActionForKey = function(keyCode, action) {
-  var key = Blockly.user.keyMap.getKeyByActionName(action.name);
+  var oldKey = Blockly.user.keyMap.getKeyByActionName(action.name);
   // If the action already exists in the key map remove it and add the new mapping.
-  if (key) {
-    delete Blockly.user.keyMap.map_[key];
+  if (oldKey) {
+    delete Blockly.user.keyMap.map_[oldKey];
   }
   Blockly.user.keyMap.map_[keyCode] = action;
-  // If the action is not in the actions array add it.
-  if (Blockly.user.keyMap.actions_.indexOf(action) === -1) {
-    Blockly.user.keyMap.actions_.push(action);
-  }
 };
 
 /**
- * Creates a new key map and a new actions array.
- * @param {Object<string, Blockly.KeyAction>} keyMap The object holding the key
+ * Creates a new key map.
+ * @param {Object<string, Blockly.Action>} keyMap The object holding the key
  *     to action mapping.
  * @package
  */
 Blockly.user.keyMap.setKeyMap = function(keyMap) {
-  var keys = Object.keys(keyMap);
-  // Update the actions array to include any new actions found in the new key map.
-  for (var i = 0; i < keys.length; i++) {
-    var action = keyMap[keys[i]];
-    if (Blockly.user.keyMap.actions_.indexOf(action) === -1) {
-      Blockly.user.keyMap.actions_.push(action);
-    }
-  }
   Blockly.user.keyMap.map_ = keyMap;
 };
 
 /**
  * Gets the current key map.
- * @return {Object<string,Blockly.KeyAction>} The object holding the key to
+ * @return {Object<string,Blockly.Action>} The object holding the key to
  *     action mapping.
  * @package
  */
@@ -90,7 +72,7 @@ Blockly.user.keyMap.getKeyMap = function() {
 /**
  * Get the action by the serialized key code.
  * @param {string} keyCode The serialized key code.
- * @return {Blockly.KeyAction|undefined} The action holding the function to
+ * @return {Blockly.Action|undefined} The action holding the function to
  *     call when the given keyCode is used or undefined if no action exists.
  * @package
  */
@@ -123,7 +105,7 @@ Blockly.user.keyMap.getKeyByActionName = function(actionName) {
  * @return {!string} A string containing the serialized key event.
  */
 Blockly.user.keyMap.serializeKeyEvent = function(e) {
-  var key = "";
+  var key = '';
   if (e.getModifierState('Shift')) {
     key += '+';
   }
@@ -142,111 +124,20 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
 
 /**
  * Creates the default key map.
- * @return {!Object<string,Blockly.KeyAction>} An object holding the default key
+ * @return {!Object<string,Blockly.Action>} An object holding the default key
  *     to action mapping.
  */
 Blockly.user.keyMap.createDefaultKeyMap = function() {
-  //Set W
-  var wAction = new Blockly.KeyAction('previous', 'Goes to the previous location', function() {
-    if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
-      Blockly.Navigation.cursor_.prev();
-    } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
-      Blockly.Navigation.selectPreviousBlockInFlyout();
-    } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX) {
-      Blockly.Navigation.previousCategory();
-    }
-  });
-
-  //Set A
-  var aAction = new Blockly.KeyAction('out', 'Goes out', function() {
-    if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
-      Blockly.Navigation.cursor_.out();
-    } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
-      Blockly.Navigation.focusToolbox();
-    } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX) {
-      Blockly.Navigation.outCategory();
-    }
-  });
-
-  //Set S
-  var sAction = new Blockly.KeyAction('next', 'Goes to the next location', function() {
-    if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
-      Blockly.Navigation.cursor_.next();
-    } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
-      Blockly.Navigation.selectNextBlockInFlyout();
-    } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX) {
-      Blockly.Navigation.nextCategory();
-    }
-  });
-
-  //Set D
-  var dAction = new Blockly.KeyAction('in', 'Goes in', function() {
-    if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
-      Blockly.Navigation.cursor_.in();
-    } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX) {
-      Blockly.Navigation.inCategory();
-    }
-  });
-
-  //Set I
-  var iAction = new Blockly.KeyAction('insert',
-      'Tries to connect the current location to the marked location', function() {
-        if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
-          Blockly.Navigation.modify();
-        }
-      });
-
-  //Set Enter
-  var enterAction = new Blockly.KeyAction('mark', 'Marks the current location', function() {
-    if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
-      Blockly.Navigation.handleEnterForWS();
-    } else if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
-      Blockly.Navigation.insertFromFlyout();
-    }
-  });
-
-  //Set X
-  var xAction = new Blockly.KeyAction('disconnect', 'Disconnect the blocks', function() {
-    if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
-      Blockly.Navigation.disconnectBlocks();
-    }
-  });
-
-  //Set T
-  var tAction = new Blockly.KeyAction('toolbox', 'Open the toolbox', function() {
-    if (!Blockly.getMainWorkspace().getToolbox()) {
-      Blockly.Navigation.focusFlyout();
-    } else {
-      Blockly.Navigation.focusToolbox();
-    }
-  });
-
-  //Set E
-  var eAction = new Blockly.KeyAction('exit', 'Exit the toolbox', function() {
-    if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX ||
-        Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
-      Blockly.Navigation.focusWorkspace();
-    }
-  });
-
-  //Set ESC
-  var escAction = new Blockly.KeyAction('escape', 'Exit the toolbox', function() {
-    if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX ||
-        Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
-      Blockly.Navigation.focusWorkspace();
-    }
-  });
-
   var map = {};
-  map[goog.events.KeyCodes.W] = wAction;
-  map[goog.events.KeyCodes.A] = aAction;
-  map[goog.events.KeyCodes.S] = sAction;
-  map[goog.events.KeyCodes.D] = dAction;
-  map[goog.events.KeyCodes.I] = iAction;
-  map[goog.events.KeyCodes.ENTER] = enterAction;
-  map[goog.events.KeyCodes.X] = xAction;
-  map[goog.events.KeyCodes.T] = tAction;
-  map[goog.events.KeyCodes.E] = eAction;
-  map[goog.events.KeyCodes.ESC] = escAction;
+  map[goog.events.KeyCodes.W] = Blockly.Navigation.ACTION_PREVIOUS;
+  map[goog.events.KeyCodes.A] = Blockly.Navigation.ACTION_OUT;
+  map[goog.events.KeyCodes.S] = Blockly.Navigation.ACTION_NEXT;
+  map[goog.events.KeyCodes.D] = Blockly.Navigation.ACTION_IN;
+  map[goog.events.KeyCodes.I] = Blockly.Navigation.ACTION_INSERT;
+  map[goog.events.KeyCodes.ENTER] = Blockly.Navigation.ACTION_MARK;
+  map[goog.events.KeyCodes.X] = Blockly.Navigation.ACTION_DISCONNECT;
+  map[goog.events.KeyCodes.T] = Blockly.Navigation.ACTION_TOOLBOX;
+  map[goog.events.KeyCodes.E] = Blockly.Navigation.ACTION_EXIT;
+  map[goog.events.KeyCodes.ESC] = Blockly.Navigation.ACTION_ESCAPE;
   return map;
 };

@@ -19,7 +19,7 @@ suite('Navigation', function() {
     test('Focuses workspace from flyout (e)', function() {
       Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_FLYOUT;
       this.mockEvent.keyCode = goog.events.KeyCodes.E;
-      chai.assert.isTrue(Blockly.Navigation.navigate(this.mockEvent));
+      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.Navigation.currentState_,
           Blockly.Navigation.STATE_WS);
     });
@@ -27,7 +27,7 @@ suite('Navigation', function() {
     test('Focuses workspace from flyout (escape)', function() {
       Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_FLYOUT;
       this.mockEvent.keyCode = goog.events.KeyCodes.ESC;
-      chai.assert.isTrue(Blockly.Navigation.navigate(this.mockEvent));
+      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.Navigation.currentState_,
           Blockly.Navigation.STATE_WS);
     });
@@ -72,7 +72,7 @@ suite('Navigation', function() {
 
     test('Next', function() {
       this.mockEvent.keyCode = goog.events.KeyCodes.S;
-      chai.assert.isTrue(Blockly.Navigation.navigate(this.mockEvent));
+      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.Navigation.currentState_,
           Blockly.Navigation.STATE_TOOLBOX);
       chai.assert.equal(Blockly.Navigation.currentCategory_,
@@ -84,7 +84,7 @@ suite('Navigation', function() {
       Blockly.Navigation.nextCategory();
       this.mockEvent.keyCode = goog.events.KeyCodes.S;
       var startCategory = Blockly.Navigation.currentCategory_;
-      chai.assert.isTrue(Blockly.Navigation.navigate(this.mockEvent));
+      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.Navigation.currentState_,
           Blockly.Navigation.STATE_TOOLBOX);
       chai.assert.equal(Blockly.Navigation.currentCategory_,
@@ -97,7 +97,7 @@ suite('Navigation', function() {
       this.mockEvent.keyCode = goog.events.KeyCodes.W;
       chai.assert.equal(Blockly.Navigation.currentCategory_,
           this.secondCategory_);
-      chai.assert.isTrue(Blockly.Navigation.navigate(this.mockEvent));
+      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.Navigation.currentState_,
           Blockly.Navigation.STATE_TOOLBOX);
       chai.assert.equal(Blockly.Navigation.currentCategory_,
@@ -108,7 +108,7 @@ suite('Navigation', function() {
     test('Previous at start', function() {
       var startCategory = Blockly.Navigation.currentCategory_;
       this.mockEvent.keyCode = goog.events.KeyCodes.W;
-      chai.assert.isTrue(Blockly.Navigation.navigate(this.mockEvent));
+      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.Navigation.currentState_,
           Blockly.Navigation.STATE_TOOLBOX);
       chai.assert.equal(Blockly.Navigation.currentCategory_,
@@ -117,7 +117,7 @@ suite('Navigation', function() {
 
     test('Out', function() {
       this.mockEvent.keyCode = goog.events.KeyCodes.A;
-      chai.assert.isTrue(Blockly.Navigation.navigate(this.mockEvent));
+      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
       // TODO (fenichel/aschmiedt): Decide whether out should go to the
       // workspace.
       chai.assert.equal(Blockly.Navigation.currentState_,
@@ -126,7 +126,7 @@ suite('Navigation', function() {
 
     test('Go to flyout', function() {
       this.mockEvent.keyCode = goog.events.KeyCodes.D;
-      chai.assert.isTrue(Blockly.Navigation.navigate(this.mockEvent));
+      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.Navigation.currentState_,
           Blockly.Navigation.STATE_FLYOUT);
 
@@ -136,14 +136,14 @@ suite('Navigation', function() {
     test('Focuses workspace from toolbox (e)', function() {
       Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_TOOLBOX;
       this.mockEvent.keyCode = goog.events.KeyCodes.E;
-      chai.assert.isTrue(Blockly.Navigation.navigate(this.mockEvent));
+      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.Navigation.currentState_,
           Blockly.Navigation.STATE_WS);
     });
     test('Focuses workspace from toolbox (escape)', function() {
       Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_TOOLBOX;
       this.mockEvent.keyCode = goog.events.KeyCodes.E;
-      chai.assert.isTrue(Blockly.Navigation.navigate(this.mockEvent));
+      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.Navigation.currentState_,
           Blockly.Navigation.STATE_WS);
     });

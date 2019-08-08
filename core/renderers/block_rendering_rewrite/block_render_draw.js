@@ -180,7 +180,7 @@ Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
   if (this.highlighter_) {
     this.highlighter_.drawValueInput(row);
   }
-  this.steps_.push('H', row.width);
+  this.steps_.push('H', this.info_.startX + row.width);
   this.steps_.push(Blockly.blockRendering.constants.PUZZLE_TAB.pathDown);
   this.steps_.push('v', row.height - input.connectionHeight);
   this.positionExternalValueConnection_(row);
@@ -201,7 +201,7 @@ Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   var x = row.statementEdge + Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT +
     Blockly.blockRendering.constants.NOTCH.width;
 
-  this.steps_.push('H', x);
+  this.steps_.push('H', this.info_.startX + x);
 
   var innerTopLeftCorner =
       Blockly.blockRendering.constants.NOTCH.pathRight + ' h -' +
@@ -227,7 +227,7 @@ Blockly.blockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
   if (this.highlighter_) {
     this.highlighter_.drawRightSideRow(row);
   }
-  this.steps_.push('H', row.width);
+  this.steps_.push('H', this.info_.startX + row.width);
   this.steps_.push('v', row.height);
 };
 
@@ -250,7 +250,7 @@ Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
     if (elem.type === 'next connection') {
       this.steps_.push(Blockly.blockRendering.constants.NOTCH.pathRight);
     } else if (elem.type === 'square corner') {
-      this.steps_.push('H 0');
+      this.steps_.push(Blockly.utils.svgPaths.lineOnAxis('H', this.info_.startX));
     } else if (elem.type === 'round corner') {
       this.steps_.push(Blockly.blockRendering.constants.OUTSIDE_CORNERS.bottomLeft);
     } else if (elem.isSpacer()) {
@@ -380,6 +380,7 @@ Blockly.blockRendering.Drawer.prototype.positionInlineInputConnection_ = functio
   var yPos = input.centerline - input.height / 2;
   // Move the connection.
   if (input.connection) {
+    // xPos already contains info about startX
     var connX = input.xPos + input.connectionWidth +
         Blockly.blockRendering.constants.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
@@ -401,7 +402,7 @@ Blockly.blockRendering.Drawer.prototype.positionInlineInputConnection_ = functio
 Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = function(row) {
   var input = row.getLastInput();
   if (input.connection) {
-    var connX = row.statementEdge +
+    var connX = this.info_.startX + row.statementEdge +
         Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;
     if (this.info_.RTL) {
       connX *= -1;
@@ -422,7 +423,7 @@ Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = func
 Blockly.blockRendering.Drawer.prototype.positionExternalValueConnection_ = function(row) {
   var input = row.getLastInput();
   if (input.connection) {
-    var connX = row.width + Blockly.blockRendering.constants.DARK_PATH_OFFSET;
+    var connX = this.info_.startX + row.width + Blockly.blockRendering.constants.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
     }
@@ -436,7 +437,7 @@ Blockly.blockRendering.Drawer.prototype.positionExternalValueConnection_ = funct
  */
 Blockly.blockRendering.Drawer.prototype.positionPreviousConnection_ = function() {
   if (this.info_.topRow.hasPreviousConnection) {
-    var x = Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;
+    var x = this.info_.startX + Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;
     var connX = (this.info_.RTL ? -x : x);
     this.info_.topRow.connection.setOffsetInBlock(connX, this.info_.startY);
   }
@@ -451,7 +452,7 @@ Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
 
   if (bottomRow.hasNextConnection) {
     var connInfo = bottomRow.getNextConnection();
-    var x = connInfo.xPos;
+    var x = connInfo.xPos; // Alreaady contains info about startX
     var connX = (this.info_.RTL ? -x : x) + 0.5;
     bottomRow.connection.setOffsetInBlock(
         connX, this.info_.startY + this.info_.height +
@@ -466,7 +467,9 @@ Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
  */
 Blockly.blockRendering.Drawer.prototype.positionOutputConnection_ = function() {
   if (this.info_.outputConnection) {
-    this.block_.outputConnection.setOffsetInBlock(this.info_.startX,
+    var x = this.info_.startX;
+    var connX = this.info_.RTL ? -x : x;
+    this.block_.outputConnection.setOffsetInBlock(connX,
         this.info_.startY + this.info_.outputConnection.connectionOffsetY);
   }
 };

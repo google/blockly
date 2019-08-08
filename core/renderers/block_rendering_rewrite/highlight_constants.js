@@ -119,7 +119,7 @@ Blockly.blockRendering.highlightConstants.OUTSIDE_CORNER = (function() {
           Blockly.utils.svgPaths.point(radius, -radius + offset));
 
   var bottomLeftStartX = distance45inside;
-  var bottomLeftStartY = - distance45inside;
+  var bottomLeftStartY = -distance45inside;
   var bottomLeftPath = Blockly.utils.svgPaths.moveBy(
       bottomLeftStartX, bottomLeftStartY) +
           Blockly.utils.svgPaths.arc('a', '0 0,1', radius - offset,

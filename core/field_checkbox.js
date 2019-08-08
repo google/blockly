@@ -30,6 +30,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.fields');
 goog.require('Blockly.utils.Size');
 
 
@@ -210,4 +211,4 @@ Blockly.FieldCheckbox.prototype.convertValueToBool_ = function(value) {
   }
 };
 
-Blockly.Field.register('field_checkbox', Blockly.FieldCheckbox);
+Blockly.utils.fields.register('field_checkbox', Blockly.FieldCheckbox);

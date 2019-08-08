@@ -29,6 +29,7 @@ goog.provide('Blockly.FieldAngle');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.fields');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.userAgent');
 
@@ -353,4 +354,4 @@ Blockly.FieldAngle.prototype.doClassValidation_ = function(opt_newValue) {
   return n;
 };
 
-Blockly.Field.register('field_angle', Blockly.FieldAngle);
+Blockly.utils.fields.register('field_angle', Blockly.FieldAngle);

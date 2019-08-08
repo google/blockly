@@ -31,6 +31,7 @@ goog.require('Blockly.Field');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.fields');
 goog.require('Blockly.utils.Size');
 
 
@@ -100,4 +101,4 @@ Blockly.FieldLabel.prototype.doClassValidation_ = function(opt_newValue) {
   return String(opt_newValue);
 };
 
-Blockly.Field.register('field_label', Blockly.FieldLabel);
+Blockly.utils.fields.register('field_label', Blockly.FieldLabel);

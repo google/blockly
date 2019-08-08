@@ -64,6 +64,20 @@ Blockly.utils.dom.Node = {
 };
 
 /**
+ * Temporary cache of text widths.
+ * @type {Object}
+ * @private
+ */
+Blockly.utils.dom.cacheWidths_ = null;
+
+/**
+ * Number of current references to cache.
+ * @type {number}
+ * @private
+ */
+Blockly.utils.dom.cacheReference_ = 0;
+
+/**
  * Helper method for creating SVG elements.
  * @param {string} name Element's tag name.
  * @param {!Object} attrs Dictionary of attribute names and values.
@@ -196,4 +210,65 @@ Blockly.utils.dom.containsNode = function(parent, descendant) {
 Blockly.utils.dom.setCssTransform = function(element, transform) {
   element.style['transform'] = transform;
   element.style['-webkit-transform'] = transform;
+};
+
+/**
+ * Start caching text widths. Every call to this function MUST also call
+ * stopTextWidthCache. Caches must not survive between execution threads.
+ */
+Blockly.utils.dom.startTextWidthCache = function() {
+  Blockly.utils.dom.cacheReference_++;
+  if (!Blockly.utils.dom.cacheWidths_) {
+    Blockly.utils.dom.cacheWidths_ = {};
+  }
+};
+
+/**
+ * Stop caching field widths. Unless caching was already on when the
+ * corresponding call to startTextWidthCache was made.
+ */
+Blockly.utils.dom.stopTextWidthCache = function() {
+  Blockly.utils.dom.cacheReference_--;
+  if (!Blockly.utils.dom.cacheReference_) {
+    Blockly.utils.dom.cacheWidths_ = null;
+  }
+};
+
+/**
+ * Gets the width of a text element, caching it in the process.
+ * @param {!Element} textElement An SVG 'text' element.
+ * @return {number} Width of element.
+ */
+Blockly.utils.dom.getTextWidth = function(textElement) {
+  var key = textElement.textContent + '\n' + textElement.className.baseVal;
+  var width;
+
+  // Return the cached width if it exists.
+  if (Blockly.utils.dom.cacheWidths_) {
+    width = Blockly.utils.dom.cacheWidths_[key];
+    if (width) {
+      return width;
+    }
+  }
+
+  // Attempt to compute fetch the width of the SVG text element.
+  try {
+    if (Blockly.utils.userAgent.IE || Blockly.utils.userAgent.EDGE) {
+      width = textElement.getBBox().width;
+    } else {
+      width = textElement.getComputedTextLength();
+    }
+  } catch (e) {
+    // In other cases where we fail to get the computed text. Instead, use an
+    // approximation and do not cache the result. At some later point in time
+    // when the block is inserted into the visible DOM, this method will be
+    // called again and, at that point in time, will not throw an exception.
+    return textElement.textContent.length * 8;
+  }
+
+  // Cache the computed width and return.
+  if (Blockly.utils.dom.cacheWidths_) {
+    Blockly.utils.dom.cacheWidths_[key] = width;
+  }
+  return width;
 };

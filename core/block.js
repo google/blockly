@@ -39,6 +39,7 @@ goog.require('Blockly.Input');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.fields');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.Warning');
 goog.require('Blockly.Workspace');
@@ -1636,18 +1637,13 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
             default:
               // This should handle all field JSON parsing, including
               // options that can be applied to any field type.
-              field = Blockly.Field.fromJson(element);
+              field = Blockly.utils.fields.fromJson(element);
 
               // Unknown field.
               if (!field) {
                 if (element['alt']) {
                   element = element['alt'];
                   altRepeat = true;
-                } else {
-                  console.warn('Blockly could not create a field of type ' +
-                      element['type'] +
-                      '. You may need to register your custom field.  See ' +
-                      'github.com/google/blockly/issues/1584');
                 }
               }
           }

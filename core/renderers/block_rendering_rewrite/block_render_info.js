@@ -708,7 +708,6 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
       yCursor = Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT;
     }
     if (!(row.isSpacer())) {
-      // xcursor should start at startX (?)
       var xCursor = this.startX;
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];
@@ -718,8 +717,6 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
       }
     }
   }
-  this.blockBottom = yCursor;
 
-  // Don't count the start offset in the recorded height.
   this.height = yCursor;
 };

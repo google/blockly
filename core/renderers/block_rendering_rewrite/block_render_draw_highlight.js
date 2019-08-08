@@ -109,7 +109,7 @@ Blockly.blockRendering.Highlighter.prototype.drawValueInput = function(row) {
   var input = row.getLastInput();
   var steps = '';
   if (this.RTL_) {
-    var aboveTabHeight = 0;//-this.highlightOffset_;
+    var aboveTabHeight = 0;
     var belowTabHeight =
         row.height - input.connectionHeight;
 

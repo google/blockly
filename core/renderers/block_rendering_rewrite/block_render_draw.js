@@ -135,12 +135,7 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
   this.steps_.push(
       Blockly.utils.svgPaths.moveBy(this.info_.startX, this.info_.startY));
   for (var i = 0, elem; elem = elements[i]; i++) {
-    if (elem.type === 'square corner') {
-      // Do nothing?
-      //this.steps_.push(
-          //Blockly.utils.svgPaths.moveBy(this.info_.startX, this.info_.startY));
-      //this.steps_.push(Blockly.blockRendering.constants.START_POINT);
-    } else if (elem.type === 'round corner') {
+    if (elem.type === 'round corner') {
       this.steps_.push(Blockly.blockRendering.constants.OUTSIDE_CORNERS.topLeft);
     } else if (elem.type === 'previous connection') {
       this.steps_.push(Blockly.blockRendering.constants.NOTCH.pathLeft);
@@ -149,6 +144,7 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
     } else if (elem.isSpacer()) {
       this.steps_.push('h', elem.width);
     }
+    // No branch for a square corner, because it's a no-op.
   }
   this.steps_.push('v', topRow.height);
 };
@@ -452,7 +448,7 @@ Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
 
   if (bottomRow.hasNextConnection) {
     var connInfo = bottomRow.getNextConnection();
-    var x = connInfo.xPos; // Alreaady contains info about startX
+    var x = connInfo.xPos; // Already contains info about startX
     var connX = (this.info_.RTL ? -x : x) + 0.5;
     bottomRow.connection.setOffsetInBlock(
         connX, this.info_.startY + this.info_.height +

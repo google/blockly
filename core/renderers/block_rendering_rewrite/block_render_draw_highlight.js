@@ -92,7 +92,7 @@ Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
     }
   }
 
-  this.steps_.push('H', row.width - this.highlightOffset_);
+  this.steps_.push('H', this.info_.startX + row.width - this.highlightOffset_);
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawJaggedEdge_ = function(row) {

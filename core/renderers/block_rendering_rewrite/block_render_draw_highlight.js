@@ -72,6 +72,8 @@ Blockly.blockRendering.Highlighter = function(info, pathObject) {
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
+  this.steps_.push(
+      Blockly.utils.svgPaths.moveBy(this.info_.startX, this.info_.startY));
   for (var i = 0, elem; elem = row.elements[i]; i++) {
     if (elem.type === 'square corner') {
       this.steps_.push(Blockly.blockRendering.highlightConstants.START_POINT);
@@ -151,8 +153,9 @@ Blockly.blockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
   }
 };
 
-Blockly.blockRendering.Highlighter.prototype.drawBottomRow = function(_row) {
-  var height = this.info_.height;
+Blockly.blockRendering.Highlighter.prototype.drawBottomRow = function(row) {
+  var height = row.yPos + row.height;
+  //var height = this.info_.height;
 
   // Highlight the vertical edge of the bottom row on the input side.
   // Highlighting is always from the top left, both in LTR and RTL.
@@ -165,22 +168,32 @@ Blockly.blockRendering.Highlighter.prototype.drawBottomRow = function(_row) {
           Blockly.utils.svgPaths.moveTo(
               this.highlightOffset_, height - this.highlightOffset_));
     } else if (cornerElem.type === 'round corner') {
-      this.steps_.push(this.outsideCornerPaths_.bottomLeft(height));
+      this.steps_.push(Blockly.utils.svgPaths.moveTo(0, height));
+      this.steps_.push(this.outsideCornerPaths_.bottomLeft());
     }
   }
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawLeft = function() {
-  if (this.info_.outputConnection) {
+  var outputConnection = this.info_.outputConnection;
+  if (outputConnection) {
+    var tabBottom = this.info_.startY +
+        outputConnection.connectionOffsetY + outputConnection.height;
+    // Draw a line up to the bottom of the tab.
+    if (!this.RTL_) {
+      this.steps_.push('V', tabBottom);
+    } else {
+      this.steps_.push(Blockly.utils.svgPaths.moveTo(this.info_.startX, tabBottom));
+    }
     this.steps_.push(
         this.puzzleTabPaths_.pathUp(this.RTL_));
   }
 
   if (!this.RTL_) {
     if (this.info_.topRow.elements[0].isSquareCorner()) {
-      this.steps_.push('V', this.highlightOffset_);
+      this.steps_.push('V', this.info_.startY + this.highlightOffset_);
     } else {
-      this.steps_.push('V', this.outsideCornerPaths_.height);
+      this.steps_.push('V', this.info_.startY + this.outsideCornerPaths_.height);
     }
   }
 };

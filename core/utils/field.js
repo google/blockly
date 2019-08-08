@@ -53,7 +53,8 @@ Blockly.utils.fields.typeMap_ = {};
  */
 Blockly.utils.fields.register = function(type, fieldClass) {
   if ((typeof type != 'string') || (type.trim() == '')) {
-    throw Error('Invalid field type "' + type + '"');
+    throw Error('Invalid field type "' + type + '". The type must be a' +
+      ' non-empty string.');
   }
   if (!fieldClass || (typeof fieldClass.fromJson != 'function')) {
     throw Error('Field "' + fieldClass + '" must have a fromJson function');

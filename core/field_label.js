@@ -38,24 +38,37 @@ goog.require('Blockly.utils.Size');
  * Class for a non-editable, non-serializable text field.
  * @param {string=} opt_value The initial value of the field. Should cast to a
  *    string. Defaults to an empty string if null or undefined.
- * @param {string=} opt_class Optional CSS class for the field's text.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the documentation for a list of properties this parameter supports.
+ *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label#creation
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldLabel = function(opt_value, opt_class) {
+Blockly.FieldLabel = function(opt_value, opt_config) {
   this.size_ = new Blockly.utils.Size(0, Blockly.Field.TEXT_DEFAULT_HEIGHT);
-  this.class_ = opt_class;
+
+  // Handle backwards-compat.
+  if (opt_config) {
+    if (typeof opt_config == 'string') {
+      // opt_config used to be opt_class.
+      this.class_ = opt_config;
+    } else if (opt_config['class']) {
+      this.class_ = opt_config['class'];
+    }
+  }
+
   opt_value = this.doClassValidation_(opt_value);
   if (opt_value === null) {
     opt_value = '';
   }
-  this.setValue(opt_value);
+  Blockly.FieldLabel.superClass_.constructor.call(
+      this, opt_value, null, opt_config);
 };
 goog.inherits(Blockly.FieldLabel, Blockly.Field);
 
 /**
  * Construct a FieldLabel from a JSON arg object,
- * dereferencing any string table references.
+ * de-referencing any string table references.
  * @param {!Object} options A JSON object with options (text, and class).
  * @return {!Blockly.FieldLabel} The new field instance.
  * @package
@@ -63,7 +76,7 @@ goog.inherits(Blockly.FieldLabel, Blockly.Field);
  */
 Blockly.FieldLabel.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  return new Blockly.FieldLabel(text, options['class']);
+  return new Blockly.FieldLabel(text, options);
 };
 
 /**
@@ -73,6 +86,13 @@ Blockly.FieldLabel.fromJson = function(options) {
  * @const
  */
 Blockly.FieldLabel.prototype.EDITABLE = false;
+
+/**
+ * The css class name to apply to the field's textElement_.
+ * @type {?string}
+ * @private
+ */
+Blockly.FieldLabel.prototype.class_ = null;
 
 /**
  * Create block UI for this label.
@@ -98,6 +118,18 @@ Blockly.FieldLabel.prototype.doClassValidation_ = function(opt_newValue) {
     return null;
   }
   return String(opt_newValue);
+};
+
+/**
+ * Set the css class applied to the field's textElement_.
+ * @param {?string} cssClass The new css class name, or null to remove.
+ */
+Blockly.FieldLabel.prototype.setClass = function(cssClass) {
+  Blockly.utils.dom.removeClass(this.textElement_, this.class_);
+  this.class_ = cssClass;
+  if (this.class_) {
+    Blockly.utils.dom.addClass(this.textElement_, this.class_);
+  }
 };
 
 Blockly.fieldRegistry.register('field_label', Blockly.FieldLabel);

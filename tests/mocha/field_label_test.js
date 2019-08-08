@@ -28,6 +28,12 @@ suite('Label Fields', function() {
   function assertValueDefault(labelField) {
     assertValue(labelField, '');
   }
+  function assertClass(labelField, cssClass) {
+    labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
+    labelField.initView();
+    chai.assert.isTrue(Blockly.utils.dom.hasClass(
+        labelField.textElement_, cssClass));
+  }
   suite('Constructor', function() {
     test('Empty', function() {
       var labelField = new Blockly.FieldLabel();
@@ -154,6 +160,44 @@ suite('Label Fields', function() {
         this.labelField.setValue(false);
         assertValue(this.labelField, 'false');
       });
+    });
+  });
+  suite('Backwards Compat - Constructor', function() {
+    test('Class String', function() {
+      var field = new Blockly.FieldLabel('test', 'testClass');
+      assertClass(field, 'testClass');
+    });
+  });
+  suite('Customizations', function() {
+    test('JS Constructor', function() {
+      var field = new Blockly.FieldLabel('text', {
+        class: 'testClass'
+      });
+      assertClass(field, 'testClass');
+    });
+    test('JSON Definition', function() {
+      var field = Blockly.FieldLabel.fromJson({
+        class: 'testClass'
+      });
+      assertClass(field, 'testClass');
+    });
+    test('setClass', function() {
+      var field = new Blockly.FieldLabel();
+      field.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
+      field.initView();
+      field.setClass('testClass');
+      // Don't call assertCharacter b/c we don't want to re-initialize.
+      chai.assert.isTrue(Blockly.utils.dom.hasClass(
+          field.textElement_, 'testClass'));
+    });
+    test('Remove Class', function() {
+      var field = new Blockly.FieldLabel('text', {
+        class: 'testClass'
+      });
+      assertClass(field, 'testClass');
+      field.setClass(null);
+      chai.assert.isFalse(Blockly.utils.dom.hasClass(
+          field.textElement_, 'testClass'));
     });
   });
 });

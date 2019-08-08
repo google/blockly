@@ -19,21 +19,22 @@
  */
 
 /**
- * @fileoverview The class representing a cursor.
- * Used primarily for keyboard navigation.
+ * @fileoverview The namespace used to keep track of keyboard actions and the
+ * key codes used to execute those actions.
+ * This is used primarily for keyboard navigation.
  */
 'use strict';
 
 goog.provide('Blockly.user.keyMap');
 
 /**
- * Holds the key to action mapping.
- * @type {Object}
+ * Holds the serialized key to key action mapping.
+ * @type {Object<string, Blockly.KeyAction>}
  */
 Blockly.user.keyMap.map_ = {};
 
 /**
- * Holds the list of key actions.
+ * Holds the list of actions that can be executed using the keyboard.
  * @type {Array<Blockly.KeyAction>}
  */
 Blockly.user.keyMap.actions_ = [];
@@ -77,7 +78,7 @@ Blockly.user.keyMap.setKeyMap = function(keyMap) {
 };
 
 /**
- * Get the key map.
+ * Gets the current key map.
  * @return {Object<string,Blockly.KeyAction>} The object holding the key to
  *     action mapping.
  * @package
@@ -89,8 +90,8 @@ Blockly.user.keyMap.getKeyMap = function() {
 /**
  * Get the action by the serialized key code.
  * @param {string} keyCode The serialized key code.
- * @return {Blockly.KeyAction|undefined} The key action holding the function to
- *     call or undefined if no action exists.
+ * @return {Blockly.KeyAction|undefined} The action holding the function to
+ *     call when the given keyCode is used or undefined if no action exists.
  * @package
  */
 Blockly.user.keyMap.getActionByKeyCode = function(keyCode) {
@@ -141,8 +142,8 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
 
 /**
  * Creates the default key map.
- * @return {!Object<string,Blockly.KeyAction>} The key is the serialized
- *     key event and the value is a Blockly.KeyAction.
+ * @return {!Object<string,Blockly.KeyAction>} An object holding the default key
+ *     to action mapping.
  */
 Blockly.user.keyMap.createDefaultKeyMap = function() {
   //Set W

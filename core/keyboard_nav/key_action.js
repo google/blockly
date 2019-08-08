@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview The class representing a cursor.
+ * @fileoverview The class representing a keyboard action.
  * Used primarily for keyboard navigation.
  */
 'use strict';
@@ -39,8 +39,4 @@ Blockly.KeyAction = function(name, desc, func) {
   this.name = name;
   this.desc = desc;
   this.func = func;
-};
-
-Blockly.KeyAction.prototype.getFunc = function() {
-  return this.func;
 };

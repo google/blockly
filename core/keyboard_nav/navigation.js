@@ -657,7 +657,7 @@ Blockly.Navigation.navigate = function(e) {
   var key = Blockly.user.keyMap.serializeKeyEvent(e);
   var action = Blockly.user.keyMap.getActionByKeyCode(key);
   if (action) {
-    action.getFunc().call();
+    action.func.call();
     return true;
   }
   return false;

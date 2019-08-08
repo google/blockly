@@ -66,7 +66,13 @@ Blockly.user.keyMap.setKeyMap = function(keyMap) {
  * @package
  */
 Blockly.user.keyMap.getKeyMap = function() {
-  return Blockly.user.keyMap.map_;
+  var mapClone = {};
+  var keys = Object.keys(Blockly.user.keyMap.map_);
+  for (var i = 0, key; key = keys[i]; i++) {
+    var action = Blockly.user.keyMap.map_[key];
+    mapClone[key] = new Blockly.Action(action.name, action.desc, action.func);
+  }
+  return mapClone;
 };
 
 /**
@@ -138,6 +144,6 @@ Blockly.user.keyMap.createDefaultKeyMap = function() {
   map[goog.events.KeyCodes.X] = Blockly.Navigation.ACTION_DISCONNECT;
   map[goog.events.KeyCodes.T] = Blockly.Navigation.ACTION_TOOLBOX;
   map[goog.events.KeyCodes.E] = Blockly.Navigation.ACTION_EXIT;
-  map[goog.events.KeyCodes.ESC] = Blockly.Navigation.ACTION_ESCAPE;
+  map[goog.events.KeyCodes.ESC] = Blockly.Navigation.ACTION_EXIT;
   return map;
 };

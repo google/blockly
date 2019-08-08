@@ -32,7 +32,7 @@ goog.provide('Blockly.Action');
  * single state (toolbox, flyout, workspace) then the function should handle this.
  * @param {string} name The name of the action.
  * @param {string} desc The description of the action.
- * @param {function} func The function to be called when the key is pressed.
+ * @param {Function} func The function to be called when the key is pressed.
  * @constructor
  */
 Blockly.Action = function(name, desc, func) {

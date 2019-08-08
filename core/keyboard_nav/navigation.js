@@ -719,6 +719,10 @@ Blockly.Navigation.error = function(msg) {
   }
 };
 
+/**
+ * The previous action.
+ * @type Blockly.Action
+ */
 Blockly.Navigation.ACTION_PREVIOUS = new Blockly.Action('previous', 'Goes to the previous location', function() {
   if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
     Blockly.Navigation.cursor_.prev();
@@ -729,6 +733,10 @@ Blockly.Navigation.ACTION_PREVIOUS = new Blockly.Action('previous', 'Goes to the
   }
 });
 
+/**
+ * The previous action.
+ * @type Blockly.Action
+ */
 Blockly.Navigation.ACTION_OUT = new Blockly.Action('out', 'Goes out', function() {
   if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
     Blockly.Navigation.cursor_.out();
@@ -739,6 +747,10 @@ Blockly.Navigation.ACTION_OUT = new Blockly.Action('out', 'Goes out', function()
   }
 });
 
+/**
+ * The previous action.
+ * @type Blockly.Action
+ */
 Blockly.Navigation.ACTION_NEXT = new Blockly.Action('next', 'Goes to the next location', function() {
   if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
     Blockly.Navigation.cursor_.next();
@@ -749,6 +761,10 @@ Blockly.Navigation.ACTION_NEXT = new Blockly.Action('next', 'Goes to the next lo
   }
 });
 
+/**
+ * The action to go in.
+ * @type Blockly.Action
+ */
 Blockly.Navigation.ACTION_IN = new Blockly.Action('in', 'Goes in', function() {
   if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
     Blockly.Navigation.cursor_.in();
@@ -757,6 +773,10 @@ Blockly.Navigation.ACTION_IN = new Blockly.Action('in', 'Goes in', function() {
   }
 });
 
+/**
+ * The action to try to insert a block.
+ * @type Blockly.Action
+ */
 Blockly.Navigation.ACTION_INSERT = new Blockly.Action('insert',
     'Tries to connect the current location to the marked location', function() {
       if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
@@ -764,6 +784,10 @@ Blockly.Navigation.ACTION_INSERT = new Blockly.Action('insert',
       }
     });
 
+/**
+ * The action to mark a certain location.
+ * @type Blockly.Action
+ */
 Blockly.Navigation.ACTION_MARK = new Blockly.Action('mark', 'Marks the current location', function() {
   if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
     Blockly.Navigation.handleEnterForWS();
@@ -772,12 +796,20 @@ Blockly.Navigation.ACTION_MARK = new Blockly.Action('mark', 'Marks the current l
   }
 });
 
+/**
+ * The action to disconnect a block.
+ * @type Blockly.Action
+ */
 Blockly.Navigation.ACTION_DISCONNECT = new Blockly.Action('disconnect', 'Disconnect the blocks', function() {
   if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_WS) {
     Blockly.Navigation.disconnectBlocks();
   }
 });
 
+/**
+ * The action to open the toolbox.
+ * @type Blockly.Action
+ */
 Blockly.Navigation.ACTION_TOOLBOX = new Blockly.Action('toolbox', 'Open the toolbox', function() {
   if (!Blockly.getMainWorkspace().getToolbox()) {
     Blockly.Navigation.focusFlyout();
@@ -786,17 +818,13 @@ Blockly.Navigation.ACTION_TOOLBOX = new Blockly.Action('toolbox', 'Open the tool
   }
 });
 
+/**
+ * The action to exit the toolbox or flyout.
+ * @type Blockly.Action
+ */
 Blockly.Navigation.ACTION_EXIT = new Blockly.Action('exit', 'Exit the toolbox', function() {
   if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX ||
       Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
     Blockly.Navigation.focusWorkspace();
   }
 });
-
-Blockly.Navigation.ACTION_ESCAPE = new Blockly.Action('escape', 'Exit the toolbox', function() {
-  if (Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_TOOLBOX ||
-      Blockly.Navigation.currentState_ === Blockly.Navigation.STATE_FLYOUT) {
-    Blockly.Navigation.focusWorkspace();
-  }
-});
-

@@ -45,16 +45,28 @@ goog.require('Blockly.utils.Size');
  * @param {Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a colour string & returns a
  *    validated colour string ('#rrggbb' format), or null to abort the change.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the documentation for a list of properties this parameter supports.
+ *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldColour = function(opt_value, opt_validator) {
+Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
+  if (opt_config) {
+    if (opt_config['colourOptions']) {
+      this.setColours(opt_config['colourOptions'], opt_config['colourTitles']);
+    }
+    if (opt_config['columns']) {
+      this.setColumns(opt_config['columns']);
+    }
+  }
+
   opt_value = this.doClassValidation_(opt_value);
   if (opt_value === null) {
     opt_value = Blockly.FieldColour.COLOURS[0];
   }
   Blockly.FieldColour.superClass_.constructor.call(
-      this, opt_value, opt_validator);
+      this, opt_value, opt_validator, opt_config);
 };
 goog.inherits(Blockly.FieldColour, Blockly.Field);
 
@@ -66,14 +78,7 @@ goog.inherits(Blockly.FieldColour, Blockly.Field);
  * @nocollapse
  */
 Blockly.FieldColour.fromJson = function(options) {
-  var field = new Blockly.FieldColour(options['colour']);
-  if (options['colourOptions']) {
-    field.setColours(options['colourOptions'], options['colourTitles']);
-  }
-  if (options['columns']) {
-    field.setColumns(options['columns']);
-  }
-  return field;
+  return new Blockly.FieldColour(options['colour'], null, options);
 };
 
 /**

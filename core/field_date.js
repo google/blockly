@@ -116,18 +116,64 @@ Blockly.FieldDate.prototype.doClassValidation_ = function(opt_newValue) {
   return opt_newValue;
 };
 
+// Now let's see if we can implement this on a field that uses the default UI.
+// To demonstrate this I'm going to add support for showing invalid values
+// to the date field.
+
+Blockly.FieldDate.prototype.doValueUpdate_ = function(newValue) {
+  Blockly.FieldDate.superClass_.doValueUpdate_.call(this, newValue);
+
+  // This is used to tell if the borderRect should be rendered in red.
+  this.isValueValid_ = true;
+
+  // As an aside, isValueValid_ could be moved to the abstract field class if
+  // desired. Moving it there would not affect behavior because the default
+  // rendering would not take it into account. But it would be available if
+  // subclasses wanted to use it.
+};
+
+Blockly.FieldDate.prototype.doValueInvalid_ = function(invalidValue) {
+  // This is what will allow us to display invalid values.
+  this.displayValue_ = invalidValue;
+
+  // This is used to tell if the borderRect should be rendered in red.
+  this.isValueValid_ = false;
+
+  // Confirm that we want a rerender.
+  this.isDirty_ = true;
+};
+
 /**
  * Render the field. If the picker is shown make sure it has the current
  * date selected.
  * @protected
  */
 Blockly.FieldDate.prototype.render_ = function() {
+  // See final comment.
   Blockly.FieldDate.superClass_.render_.call(this);
+
+  // Update the borderRect.
+  if (!this.isValueValid_) {
+    this.borderRect_.style.fill = '#faa';
+    this.borderRect_.style.fillOpacity = 1;
+  } else {
+    this.borderRect_.style.fill = '#fff';
+    this.borderRect_.style.fillOpacity = .6;
+  }
+
   if (this.picker_) {
-    this.picker_.setDate(goog.date.Date.fromIsoString(this.getValue()));
+    // This is used to convince the date picker to display something
+    // different than what was clicked.
+    // We no longer need to tell it "hey display the old value b/c the new
+    // one is invalid" but we /do/ still need to tell it "hey display this
+    // value the validator sent me instead".
+    this.picker_.setDate(goog.date.Date.fromIsoString(this.displayValue_));
     this.updateEditor_();
   }
 };
+
+// The only problem is that the abstract field class is not yet updated to
+// handle this functionality. So let's update it!
 
 /**
  * Updates the field's colours to match those of the block.
@@ -204,7 +250,9 @@ Blockly.FieldDate.prototype.dropdownCreate_ = function() {
   picker.setShowWeekNum(false);
   picker.setUseNarrowWeekdayNames(true);
   picker.setUseSimpleNavigationMenu(true);
-  picker.setDate(goog.date.DateTime.fromIsoString(this.getValue()));
+  // Create the picker follows the same principles, always display the
+  // display value.
+  picker.setDate(goog.date.DateTime.fromIsoString(this.displayValue_));
 
   this.changeEventKey_ = goog.events.listen(
       picker,

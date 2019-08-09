@@ -35,6 +35,7 @@ goog.provide('Blockly.utils.style');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.Size');
 
+
 /**
  * Gets the height and width of an element.
  * Similar to Closure's goog.style.getSize.
@@ -42,9 +43,90 @@ goog.require('Blockly.utils.Size');
  * @return {!Blockly.utils.Size} Object with width/height properties.
  */
 Blockly.utils.style.getSize = function(element) {
+  if (Blockly.utils.style.getStyle_(element, 'display') != 'none') {
+    var offsetWidth = /** @type {!HTMLElement} */ (element).offsetWidth;
+    var offsetHeight = /** @type {!HTMLElement} */ (element).offsetHeight;
+    return new Blockly.utils.Size(offsetWidth, offsetHeight);
+  }
+
+  // Evaluate size with a temporary element.
+  var style = element.style;
+  var originalDisplay = style.display;
+  var originalVisibility = style.visibility;
+  var originalPosition = style.position;
+
+  style.visibility = 'hidden';
+  style.position = 'absolute';
+  style.display = 'inline';
+
   var offsetWidth = /** @type {!HTMLElement} */ (element).offsetWidth;
   var offsetHeight = /** @type {!HTMLElement} */ (element).offsetHeight;
+
+  style.display = originalDisplay;
+  style.position = originalPosition;
+  style.visibility = originalVisibility;
+
   return new Blockly.utils.Size(offsetWidth, offsetHeight);
+};
+
+/**
+ * Cross-browser pseudo get computed style. It returns the computed style where
+ * available. If not available it tries the cascaded style value (IE
+ * currentStyle) and in worst case the inline style value.  It shouldn't be
+ * called directly, see http://wiki/Main/ComputedStyleVsCascadedStyle for
+ * discussion.
+ *
+ * Copied from Closure's goog.ui.style
+ *
+ * @param {Element} element Element to get style of.
+ * @param {string} style Property to get (must be camelCase, not css-style.).
+ * @return {string} Style value.
+ * @private
+ */
+Blockly.utils.style.getStyle_ = function(element, style) {
+  return Blockly.utils.style.getComputedStyle(element, style) ||
+      Blockly.utils.style.getCascadedStyle(element, style) ||
+      (element.style && element.style[style]);
+};
+
+/**
+ * Retrieves a computed style value of a node. It returns empty string if the
+ * value cannot be computed (which will be the case in Internet Explorer) or
+ * "none" if the property requested is an SVG one and it has not been
+ * explicitly set (firefox and webkit).
+ *
+ * Copied from Closure's goog.ui.style
+ *
+ * @param {Element} element Element to get style of.
+ * @param {string} property Property to get (camel-case).
+ * @return {string} Style value.
+ */
+Blockly.utils.style.getComputedStyle = function(element, property) {
+  if (document.defaultView && document.defaultView.getComputedStyle) {
+    var styles = document.defaultView.getComputedStyle(element, null);
+    if (styles) {
+      // element.style[..] is undefined for browser specific styles
+      // as 'filter'.
+      return styles[property] || styles.getPropertyValue(property) || '';
+    }
+  }
+
+  return '';
+};
+
+/**
+ * Gets the cascaded style value of a node, or null if the value cannot be
+ * computed (only Internet Explorer can do this).
+ *
+ * Copied from Closure's goog.ui.style
+ *
+ * @param {Element} element Element to get style of.
+ * @param {string} style Property to get (camel-case).
+ * @return {string} Style value.
+ */
+Blockly.utils.style.getCascadedStyle = function(element, style) {
+  return /** @type {string} */ (
+      element.currentStyle ? element.currentStyle[style] : null);
 };
 
 /**

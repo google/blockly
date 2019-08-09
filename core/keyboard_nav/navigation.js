@@ -359,8 +359,8 @@ Blockly.Navigation.insertFromFlyout = function() {
   var prevConnection = newBlock.previousConnection;
   var outConnection = newBlock.outputConnection;
   var topConnection = prevConnection ? prevConnection : outConnection;
-  //TODO: This will have to be fixed when we add in a block that does not have
-  //a previous or output connection
+  // TODO: This will have to be fixed when we add in a block that does not have
+  // a previous or output connection
   var astNode = Blockly.ASTNode.createConnectionNode(topConnection);
   Blockly.Navigation.cursor_.setLocation(astNode);
   Blockly.Navigation.removeMark();
@@ -608,8 +608,8 @@ Blockly.Navigation.focusWorkspace = function() {
   if (Blockly.selected) {
     var previousConnection = Blockly.selected.previousConnection;
     var outputConnection = Blockly.selected.outputConnection;
-    //TODO: This still needs to work with blocks that have neither previous
-    //or output connection.
+    // TODO: This still needs to work with blocks that have neither previous
+    // or output connection.
     var connection = previousConnection ? previousConnection : outputConnection;
     var newAstNode = Blockly.ASTNode.createConnectionNode(connection);
     cursor.setLocation(newAstNode);

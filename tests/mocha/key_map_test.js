@@ -14,7 +14,8 @@ suite('Key Map Tests', function() {
   test('Test giving an old action a new key', function() {
     Blockly.user.keyMap.setActionForKey(goog.events.KeyCodes.F, Blockly.Navigation.ACTION_PREVIOUS);
     assertEquals(Blockly.user.keyMap.map_[goog.events.KeyCodes.W], undefined);
-    assertEquals(Blockly.user.keyMap.map_[goog.events.KeyCodes.F], Blockly.Navigation.ACTION_PREVIOUS);
+    assertEquals(Blockly.user.keyMap.map_[goog.events.KeyCodes.F],
+        Blockly.Navigation.ACTION_PREVIOUS);
   });
 
   test('Test get key by action name defined', function() {

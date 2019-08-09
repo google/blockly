@@ -134,6 +134,29 @@ Blockly.FieldTextInput.prototype.doValueInvalid_ = function(_invalidValue) {
   }
 };
 
+// Now moving the text field over to this system is a lot trickier. This is
+// because we not only need to ignore /invalid/ values, but also /changed/
+// values. This is something we haven't encountered with the previous fields.
+
+// If we don't ignore changed values, we end up with something like this:
+// https://user-images.githubusercontent.com/25440652/57113471-98ef8000-6cf9-11e9-8dd4-9bbe7d47a120.gif
+// Which I first noted in this issue:
+// https://github.com/google/blockly/issues/2435
+
+// Now that it's been established that we need to ignore changed values as
+// well as invalid ones, let's establish why the value needs to pass through
+// the setValue system anyway.
+
+// If the value does not get passed through the setValue system we break this:
+// https://i.imgur.com/P64qBsZ.gif
+// As well as any other change listeners (such as realtime code generators).
+
+// Granted, we could still apply the value at the end, but it's simple
+// enough to keep support for this functionality, so why break something cool?
+
+// Now I'm going to go through and explain why each setting of the display
+// value is important.
+
 /**
  * Called by setValue if the text input is valid. Updates the value of the
  * field, and updates the text of the field if it is not currently being
@@ -146,7 +169,17 @@ Blockly.FieldTextInput.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (!this.isBeingEdited_) {
     // This should only occur if setValue is triggered programmatically.
-    this.text_ = String(newValue);
+
+    // This call is important because it handles the case where the value is
+    // being set programmatically. If a value being set programmatically is
+    // valid we want to display it.
+
+    // But! If a value being set through user input is valid, we don't
+    // necessarily want to display it because it could be /changed/.
+
+    // That is why this only handles programmatic setting, editor-setting is
+    // handled by the onHtmlInputChanged function.
+    this.displayValue_ = newValue;
     this.isDirty_ = true;
   }
 };
@@ -278,11 +311,17 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
   this.isBeingEdited_ = false;
   // No need to call setValue because if the widget is being closed the
   // latest input text has already been validated.
-  if (this.value_ !== this.text_) {
+
+  // This handles the cleaning up of the text input editor. If the display
+  // value is currently different than the actual value, we want to rectify
+  // that now.
+  // As stated above setValue has already been called based on the final
+  // input from the user.
+  if (this.value_ !== this.displayValue_) {
     // At the end of an edit the text should be the same as the value. It
     // may not be if the input text is different than the validated text.
     // We should fix that.
-    this.text_ = String(this.value_);
+    this.displayValue_ = this.value_;
     this.isTextValid_ = true;
     this.forceRerender();
   }
@@ -365,11 +404,76 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(_e) {
     Blockly.Events.setGroup(true);
     this.setValue(text);
     // Always render the input text.
-    this.text_ = this.htmlInput_.value;
+
+    // As I mentioned in the doValueUpdate_ function, the onHtmlInputChange
+    // handler deals with setting the display value.
+    // This makes sure we get the input "straight from the horses mouth"
+    // without any validators changing, or invalidating the input.
+
+    // This also means we have no need to override the doValueInvalid_
+    // function. A nice bonus.
+    this.displayValue_ = this.htmlInput_.value;
     this.forceRerender();
     Blockly.Events.setGroup(false);
   }
 };
+
+// Now you said that you did not want a solution that just renames text_.
+// Let me go ahead and speak to that for a moment.
+
+// Most of the problems with text_ have already been fixed prior to this PR.
+//   1) Setting the text_ property (for use in collapse text) was inefficient.
+//   This has been solved by moving people to the getText property.
+//   2) Moving peoples code to getText keeps it more organized, instead of
+//   having it split between doValueUpdate, doValueInvalid_ and render_.
+// As you know I also noted these facts in my first comment:
+// https://github.com/google/blockly/issues/2720#issuecomment-515688519
+
+// Now this next bit was my bad.
+// I decided that it was safest to avoid touching text_ to make sure the
+// code was as backwards compatible as possible, a decision I still stand by.
+// The problem with this is that in doing so I decided not to change how
+// getDisplayText_ generates its text.
+// *And in doing that I inadvertently imbued text_ with a power it did not
+// deserve, the power to change the display of the block.* I then leveraged
+// this in refactoring the text input field.
+
+// The changes demonstrated here take this ability away from the text_
+// property and give it to a property that actually deserves it, namely the
+// displayValue_ property.
+
+// The changes demonstrated here also solve the other remaining problem with
+// the text_ field, that being its ambiguity.
+// In the past text_ was used both for the display, and the collapsed text.
+// Now everything is more clear:
+//  * The value_ is the value held by the field, to be used in code generation.
+//  * getText() generates a string based on the value_, to be used on the
+//    collapsed block.
+//  * The displayValue is the value being displayed by the field.
+//  * getDisplayText() generates a string based on the displayValue_, to be
+//    used on the display of the block.
+// text_ is no longer used for anything.
+
+
+/* ---------------------------------------------------------------------------*/
+
+
+// I think that this is a good way to handle disempowering text_. But I do
+// realize one flaw of this strategy is that displayValue_ will often be a
+// duplicate of value_. I wanted to note that if instead you want to do:
+
+/*
+ * doValueUpdate(newValue) {
+ *   value_ = newValue;
+ *   tempDisplayValue_ = null;
+ * }
+ *
+ * getDisplayText() {
+ *   var text = tempDisplayValue || value;
+ * }
+ */
+
+// I would support this =)
 
 /**
  * Resize the editor to fit the text.

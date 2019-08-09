@@ -34,6 +34,12 @@ goog.provide('Blockly.user.keyMap');
 Blockly.user.keyMap.map_ = {};
 
 /**
+ * List of modifier keys checked when serializing the key event.
+ * @type {Array<string>}
+ */
+Blockly.user.keyMap.modifierKeys = ['Shift','Control','Alt','Meta'];
+
+/**
  * Update the key map to contain the new action.
  * @param {!string} keyCode The key code serialized by the serializeKeyEvent.
  * @param {!Blockly.Action} action The action to be executed when the keys
@@ -111,20 +117,15 @@ Blockly.user.keyMap.getKeyByActionName = function(actionName) {
  * @return {!string} A string containing the serialized key event.
  */
 Blockly.user.keyMap.serializeKeyEvent = function(e) {
+  var modifierKeys = Blockly.user.keyMap.modifierKeys;
   var key = '';
-  if (e.getModifierState('Shift')) {
-    key += '+';
-  }
-  if (e.getModifierState('Control')) {
-    key += 'ctrl';
-  }
-  if (e.getModifierState('Alt')) {
-    key += 'alt';
-  }
-  if (e.getModifierState('Meta')) {
-    key += 'meta';
+  for (var i = 0, keyName; keyName = modifierKeys[i]; i++) {
+    if (e.getModifierState(keyName)) {
+      key += keyName;
+    }
   }
   key += e.keyCode;
+  console.log(key);
   return key;
 };
 

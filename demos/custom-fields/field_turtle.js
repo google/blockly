@@ -194,7 +194,13 @@ CustomFields.FieldTurtle.prototype.doValueUpdate_ = function(newValue) {
   // newValue, and its this.isDirty_ property to true. The isDirty_ property
   // tells the setValue function whether the field needs to be re-rendered.
   CustomFields.FieldTurtle.superClass_.doValueUpdate_.call(this, newValue);
+
+  // This is the first important place where the display value is set.
+  // The display value is the value displayed on the block (as we've already
+  // discussed).
+  // Because want to display valid values, we need to update this property here.
   this.displayValue_ = newValue;
+
   // Since this field has custom UI for invalid values, we also want to make
   // sure it knows it is now valid.
   this.isValueInvalid_ = false;
@@ -211,13 +217,24 @@ CustomFields.FieldTurtle.prototype.doValueInvalid_ = function(invalidValue) {
   // We want the value to be displayed like normal.
   // But we want to flag it as invalid, so the render_ function knows to
   // make the borderRect_ red.
+
+  // This is the second important place where the display value is set.
+  // Because we also want the field to display invalid values, we need to
+  // update this property here.
+  // Note how the value_ property does not get updated, because it should
+  // always remain valid.
   this.displayValue_ = invalidValue;
+
   this.isDirty_ = true;
   this.isValueInvalid_ = true;
 };
 
 // Updates the field's on-block display based on the current display value.
 CustomFields.FieldTurtle.prototype.render_ = function() {
+  // Observe how the rendering is always based on the display value.
+  // If the input value was valid, the display value will be that valid input.
+  // If the input value was invalid, the display value will be that invalid
+  // input.
   var value = this.displayValue_;
 
   // Always do editor updates inside render. This makes sure the editor
@@ -287,7 +304,19 @@ CustomFields.FieldTurtle.prototype.render_ = function() {
 };
 
 CustomFields.FieldTurtle.prototype.renderEditor_ = function() {
+  // Editor rendering follows the same principle as on-block rendering.
   var value = this.displayValue_;
+
+  // These four instances show how we have solved the problem by adding a single
+  // property, things are now rendered based on the displayValue_ instead of
+  // simply the value_.
+
+  // Other references to displayValue_ are either:
+  //   A) Used as a shortcut. The doClassValidation_ function allows you to
+  //   pass partially-defined values. It then fills in the undefined parts
+  //   based on the displayValue_. This is specific to the turtle field.
+  //   B) Used to initialize the editor (it follows the same principles as
+  //   rendering).
 
   // .textElement is a property assigned to the element.
   // It allows the text to be edited without destroying the warning icon.

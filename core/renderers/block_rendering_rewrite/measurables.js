@@ -337,6 +337,7 @@ Blockly.blockRendering.OutputConnection = function() {
   this.height = this.connectionShape.height;
   this.width = this.connectionShape.width;
   this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
+  this.startX = this.width;
 };
 goog.inherits(Blockly.blockRendering.OutputConnection, Blockly.blockRendering.Measurable);
 

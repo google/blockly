@@ -133,7 +133,7 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
   }
   this.positionPreviousConnection_();
   this.steps_.push(
-      Blockly.utils.svgPaths.moveBy(this.info_.startX, 0));
+      Blockly.utils.svgPaths.moveBy(this.info_.startX, this.info_.startY));
   for (var i = 0, elem; elem = elements[i]; i++) {
     if (elem.type === 'round corner') {
       this.steps_.push(Blockly.blockRendering.constants.OUTSIDE_CORNERS.topLeft);

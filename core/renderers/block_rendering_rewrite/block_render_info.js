@@ -697,6 +697,12 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
   // Performance note: this could be combined with the draw pass, if the time
   // that this takes is excessive.  But it shouldn't be, because it only
   // accesses and sets properties that already exist on the objects.
+
+  // TODO: Decide if there's a better place for this.
+  if (this.outputConnection) {
+    this.startX = this.outputConnection.startX;
+    this.width += this.outputConnection.width;
+  }
   var yCursor = 0;
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];

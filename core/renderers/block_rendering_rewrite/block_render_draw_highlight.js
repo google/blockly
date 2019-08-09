@@ -73,7 +73,7 @@ Blockly.blockRendering.Highlighter = function(info, pathObject) {
 
 Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
   this.steps_.push(
-      Blockly.utils.svgPaths.moveBy(this.info_.startX, 0));
+      Blockly.utils.svgPaths.moveBy(this.info_.startX, this.info_.startY));
   for (var i = 0, elem; elem = row.elements[i]; i++) {
     if (elem.type === 'square corner') {
       this.steps_.push(Blockly.blockRendering.highlightConstants.START_POINT);

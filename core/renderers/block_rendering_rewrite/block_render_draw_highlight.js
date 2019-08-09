@@ -84,7 +84,7 @@ Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
       this.steps_.push(this.notchPaths_.pathLeft);
     } else if (elem.type === 'hat') {
       this.steps_.push(this.startPaths_.path(this.RTL_));
-    } else if (elem.isSpacer()) {
+    } else if (elem.isSpacer() && elem.width != 0) {
       // The end point of the spacer needs to be offset by the highlight amount.
       // So instead of using the spacer's width for a relative horizontal, use
       // its width and position for an absolute horizontal move.
@@ -151,7 +151,8 @@ Blockly.blockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
   }
   if (this.RTL_) {
     this.steps_.push('H', rightEdge);
-    this.steps_.push('v', row.height - this.highlightOffset_);
+    this.steps_.push('V',
+        this.info_.startY + row.yPos + row.height - this.highlightOffset_);
   }
 };
 
@@ -195,10 +196,16 @@ Blockly.blockRendering.Highlighter.prototype.drawLeft = function() {
   }
 
   if (!this.RTL_) {
-    if (this.info_.topRow.elements[0].isSquareCorner()) {
-      this.steps_.push('V', this.info_.startY + this.highlightOffset_);
-    } else {
+    var topRow = this.info_.topRow;
+    if (topRow.elements[0].isRoundedCorner()) {
       this.steps_.push('V', this.info_.startY + this.outsideCornerPaths_.height);
+    } else if (topRow.elements.length >= 3 && topRow.elements[2].type === 'hat'){
+      this.steps_.push('V',
+          this.info_.startY +
+          Blockly.blockRendering.constants.START_HAT.height +
+          this.highlightOffset_);
+    } else {
+      this.steps_.push('V', this.info_.startY + this.highlightOffset_);
     }
   }
 };

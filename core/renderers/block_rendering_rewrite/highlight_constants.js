@@ -209,7 +209,9 @@ Blockly.blockRendering.highlightConstants.JAGGED_TEETH = (function() {
 })();
 
 Blockly.blockRendering.highlightConstants.START_HAT = (function() {
+  var hatHeight = Blockly.blockRendering.constants.START_HAT.height;
   var pathRtl =
+      Blockly.utils.svgPaths.moveBy(0, hatHeight) +
       Blockly.utils.svgPaths.moveBy(25, -8.7) +
       Blockly.utils.svgPaths.curve('c',
           [
@@ -219,13 +221,14 @@ Blockly.blockRendering.highlightConstants.START_HAT = (function() {
           ]);
 
   var pathLtr =
+      Blockly.utils.svgPaths.moveBy(0, hatHeight) +
       Blockly.utils.svgPaths.curve('c',
           [
             Blockly.utils.svgPaths.point(17.8, -9.2),
             Blockly.utils.svgPaths.point(45.3, -14.9),
             Blockly.utils.svgPaths.point(75, -8.7)
           ]) +
-      Blockly.utils.svgPaths.moveTo(100.5, 0.5);
+      Blockly.utils.svgPaths.moveTo(100.5, hatHeight + 0.5);
   return {
     path: function(rtl) {
       return rtl ? pathRtl : pathLtr;

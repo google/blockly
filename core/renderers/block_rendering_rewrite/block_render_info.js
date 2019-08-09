@@ -226,7 +226,9 @@ Blockly.blockRendering.RenderInfo.prototype.createTopRow_ = function() {
   }
 
   if (hasHat) {
-    this.topRow.elements.push(new Blockly.blockRendering.Hat());
+    var hat = new Blockly.blockRendering.Hat();
+    this.topRow.elements.push(hat);
+    //this.startY = hat.height;
   } else if (hasPrevious) {
     this.topRow.elements.push(new Blockly.blockRendering.PreviousConnection());
   }
@@ -701,11 +703,14 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
     row.yPos = yCursor + this.startY;
     yCursor += row.height;
     // Add padding to the bottom row if block height is less than minimum
+    var heightWithoutHat =
+        this.block_.hat ? yCursor - Blockly.blockRendering.constants.START_HAT.height : yCursor;
     if (row == this.bottomRow &&
-        yCursor < Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT) {
-      this.bottomRow.height +=
-          Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT - yCursor;
-      yCursor = Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT;
+        heightWithoutHat < Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT) {
+      // But the hat height shouldn't be part of this.
+      var diff = Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT - heightWithoutHat;
+      this.bottomRow.height += diff;
+      yCursor += diff;
     }
     if (!(row.isSpacer())) {
       var xCursor = this.startX;

@@ -225,7 +225,7 @@ Blockly.blockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
     this.highlighter_.drawRightSideRow(row);
   }
   this.steps_.push('H', this.info_.startX + row.width);
-  this.steps_.push('v', row.height);
+  this.steps_.push('V', this.info_.startY + row.yPos + row.height);
 };
 
 

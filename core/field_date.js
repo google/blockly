@@ -28,8 +28,8 @@ goog.provide('Blockly.FieldDate');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Field');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.fields');
 goog.require('Blockly.utils.string');
 
 goog.require('goog.date');
@@ -324,4 +324,4 @@ Blockly.FieldDate.CSS = [
   '}'
 ];
 
-Blockly.utils.fields.register('field_date', Blockly.FieldDate);
+Blockly.fieldRegistry.register('field_date', Blockly.FieldDate);

@@ -29,9 +29,9 @@ goog.provide('Blockly.FieldVariable');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.FieldDropdown');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
-goog.require('Blockly.utils.fields');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Variables');
@@ -431,4 +431,4 @@ Blockly.FieldVariable.prototype.referencesVariables = function() {
   return true;
 };
 
-Blockly.utils.fields.register('field_variable', Blockly.FieldVariable);
+Blockly.fieldRegistry.register('field_variable', Blockly.FieldVariable);

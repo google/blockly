@@ -28,10 +28,9 @@
 goog.provide('Blockly.FieldLabel');
 
 goog.require('Blockly.Field');
-goog.require('Blockly.Tooltip');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.fields');
 goog.require('Blockly.utils.Size');
 
 
@@ -101,4 +100,4 @@ Blockly.FieldLabel.prototype.doClassValidation_ = function(opt_newValue) {
   return String(opt_newValue);
 };
 
-Blockly.utils.fields.register('field_label', Blockly.FieldLabel);
+Blockly.fieldRegistry.register('field_label', Blockly.FieldLabel);

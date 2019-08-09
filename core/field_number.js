@@ -26,8 +26,8 @@
 
 goog.provide('Blockly.FieldNumber');
 
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
-goog.require('Blockly.utils.fields');
 
 
 /**
@@ -139,4 +139,4 @@ Blockly.FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
   return n;
 };
 
-Blockly.utils.fields.register('field_number', Blockly.FieldNumber);
+Blockly.fieldRegistry.register('field_number', Blockly.FieldNumber);

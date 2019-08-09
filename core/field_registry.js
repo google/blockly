@@ -18,8 +18,6 @@
  * limitations under the License.
  */
 
-// TODO: Files in this directory seem to not be specific to Blockly, yet
-//  this one is. Should it be moved to the core?
 /**
  * @fileoverview Utility methods for handling fields.
  * @author bekawestberg@gmail.com (Beka Westberg)
@@ -27,10 +25,10 @@
 'use strict';
 
 /**
- * @name Blockly.utils
+ * @name Blockly.fieldRegistry
  * @namespace
  */
-goog.provide('Blockly.utils.fields');
+goog.provide('Blockly.fieldRegistry');
 
 
 /**
@@ -39,11 +37,11 @@ goog.provide('Blockly.utils.fields');
  * @type {!Object<string, !{fromJson: Function}>}
  * @private
  */
-Blockly.utils.fields.typeMap_ = {};
+Blockly.fieldRegistry.typeMap_ = {};
 
 /**
  * Registers a field type. May also override an existing field type.
- * Blockly.utils.fields.fromJson uses this registry to
+ * Blockly.fieldRegistry.fromJson uses this registry to
  * find the appropriate field type.
  * @param {string} type The field type name as used in the JSON definition.
  * @param {!{fromJson: Function}} fieldClass The field class containing a
@@ -51,7 +49,7 @@ Blockly.utils.fields.typeMap_ = {};
  * @throws {Error} if the type name is empty, or the fieldClass is not an
  *     object containing a fromJson function.
  */
-Blockly.utils.fields.register = function(type, fieldClass) {
+Blockly.fieldRegistry.register = function(type, fieldClass) {
   if ((typeof type != 'string') || (type.trim() == '')) {
     throw Error('Invalid field type "' + type + '". The type must be a' +
       ' non-empty string.');
@@ -59,21 +57,21 @@ Blockly.utils.fields.register = function(type, fieldClass) {
   if (!fieldClass || (typeof fieldClass.fromJson != 'function')) {
     throw Error('Field "' + fieldClass + '" must have a fromJson function');
   }
-  Blockly.utils.fields.typeMap_[type] = fieldClass;
+  Blockly.fieldRegistry.typeMap_[type] = fieldClass;
 };
 
 /**
  * Construct a Field from a JSON arg object.
  * Finds the appropriate registered field by the type name as registered using
- * Blockly.utils.fields.register.
+ * Blockly.fieldRegistry.register.
  * @param {!Object} options A JSON object with a type and options specific
  *     to the field type.
  * @return {Blockly.Field} The new field instance or null if a field wasn't
  *     found with the given type name
  * @package
  */
-Blockly.utils.fields.fromJson = function(options) {
-  var fieldClass = Blockly.utils.fields.typeMap_[options['type']];
+Blockly.fieldRegistry.fromJson = function(options) {
+  var fieldClass = Blockly.fieldRegistry.typeMap_[options['type']];
   if (!fieldClass) {
     console.warn('Blockly could not create a field of type ' + options['type'] +
       '. The field is probably not being registered. This may be because the' +

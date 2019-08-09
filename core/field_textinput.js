@@ -29,12 +29,12 @@ goog.provide('Blockly.FieldTextInput');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.fields');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.userAgent');
 
@@ -449,4 +449,4 @@ Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
   return n;
 };
 
-Blockly.utils.fields.register('field_input', Blockly.FieldTextInput);
+Blockly.fieldRegistry.register('field_input', Blockly.FieldTextInput);

@@ -31,9 +31,9 @@ goog.provide('Blockly.FieldDropdown');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.fields');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.uiMenu');
@@ -566,4 +566,4 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
   }
 };
 
-Blockly.utils.fields.register('field_dropdown', Blockly.FieldDropdown);
+Blockly.fieldRegistry.register('field_dropdown', Blockly.FieldDropdown);

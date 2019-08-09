@@ -73,7 +73,7 @@ Blockly.blockRendering.Highlighter = function(info, pathObject) {
 
 Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
   this.steps_.push(
-      Blockly.utils.svgPaths.moveBy(this.info_.startX, this.info_.startY));
+      Blockly.utils.svgPaths.moveBy(this.info_.startX, 0));
   for (var i = 0, elem; elem = row.elements[i]; i++) {
     if (elem.type === 'square corner') {
       this.steps_.push(Blockly.blockRendering.highlightConstants.START_POINT);
@@ -151,8 +151,7 @@ Blockly.blockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
   }
   if (this.RTL_) {
     this.steps_.push('H', rightEdge);
-    this.steps_.push('V',
-        this.info_.startY + row.yPos + row.height - this.highlightOffset_);
+    this.steps_.push('V', row.yPos + row.height - this.highlightOffset_);
   }
 };
 
@@ -180,12 +179,12 @@ Blockly.blockRendering.Highlighter.prototype.drawBottomRow = function(row) {
 Blockly.blockRendering.Highlighter.prototype.drawLeft = function() {
   var outputConnection = this.info_.outputConnection;
   if (outputConnection) {
-    var tabBottom = this.info_.startY +
+    var tabBottom =
         outputConnection.connectionOffsetY + outputConnection.height;
     // Draw a line up to the bottom of the tab.
     if (!this.RTL_) {
       var left = this.info_.startX + this.highlightOffset_;
-      var bottom = this.info_.startY + this.info_.height - this.highlightOffset_;
+      var bottom = this.info_.height - this.highlightOffset_;
       this.steps_.push(Blockly.utils.svgPaths.moveTo(left, bottom));
       this.steps_.push('V', tabBottom);
     } else {
@@ -198,14 +197,9 @@ Blockly.blockRendering.Highlighter.prototype.drawLeft = function() {
   if (!this.RTL_) {
     var topRow = this.info_.topRow;
     if (topRow.elements[0].isRoundedCorner()) {
-      this.steps_.push('V', this.info_.startY + this.outsideCornerPaths_.height);
-    } else if (topRow.elements.length >= 3 && topRow.elements[2].type === 'hat'){
-      this.steps_.push('V',
-          this.info_.startY +
-          Blockly.blockRendering.constants.START_HAT.height +
-          this.highlightOffset_);
+      this.steps_.push('V', this.outsideCornerPaths_.height);
     } else {
-      this.steps_.push('V', this.info_.startY + this.highlightOffset_);
+      this.steps_.push('V', topRow.startY + this.highlightOffset_);
     }
   }
 };

@@ -228,7 +228,7 @@ Blockly.blockRendering.RenderInfo.prototype.createTopRow_ = function() {
   if (hasHat) {
     var hat = new Blockly.blockRendering.Hat();
     this.topRow.elements.push(hat);
-    //this.startY = hat.height;
+    this.startY = hat.startY;
   } else if (hasPrevious) {
     this.topRow.elements.push(new Blockly.blockRendering.PreviousConnection());
   }
@@ -700,11 +700,10 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
   var yCursor = 0;
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
-    row.yPos = yCursor + this.startY;
+    row.yPos = yCursor;
     yCursor += row.height;
     // Add padding to the bottom row if block height is less than minimum
-    var heightWithoutHat =
-        this.block_.hat ? yCursor - Blockly.blockRendering.constants.START_HAT.height : yCursor;
+    var heightWithoutHat = yCursor - this.topRow.startY;
     if (row == this.bottomRow &&
         heightWithoutHat < Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT) {
       // But the hat height shouldn't be part of this.

@@ -380,6 +380,7 @@ Blockly.blockRendering.Hat = function() {
   this.type = 'hat';
   this.height = Blockly.blockRendering.constants.START_HAT.height;
   this.width = Blockly.blockRendering.constants.START_HAT.width;
+  this.startY = this.height;
 
 };
 goog.inherits(Blockly.blockRendering.Hat, Blockly.blockRendering.Measurable);
@@ -512,6 +513,7 @@ Blockly.blockRendering.TopRow = function(block) {
 
   this.elements = [];
   this.type = 'top row';
+  this.startY = 0;
 
   this.hasPreviousConnection = !!block.previousConnection;
   this.connection = block.previousConnection;
@@ -543,13 +545,15 @@ Blockly.blockRendering.TopRow.prototype.measure = function() {
     this.width += elem.width;
     if (!(elem.isSpacer())) {
       if (elem.type == 'hat') {
-        this.height = elem.height + this.height;
+        this.startY = elem.startY;
+        this.height = this.height + elem.height;
       }
       this.height = Math.max(this.height, elem.height);
     }
   }
   this.widthWithConnectedBlocks = this.width;
 };
+
 Blockly.blockRendering.BottomRow = function(block) {
   Blockly.blockRendering.BottomRow.superClass_.constructor.call(this);
   this.type = 'bottom row';

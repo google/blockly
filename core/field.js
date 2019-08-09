@@ -725,7 +725,10 @@ Blockly.Field.prototype.getScaledBBox_ = function() {
  * @protected
  */
 Blockly.Field.prototype.getDisplayText_ = function() {
-  var text = this.text_;
+  // The field will now generate the display text based on the display value.
+  // The text no longer needs to be set explicitly. Booyah!
+  var text = this.displayValue_.toString();
+
   if (!text) {
     // Prevent the field from disappearing if empty.
     return Blockly.Field.NBSP;
@@ -885,6 +888,10 @@ Blockly.Field.prototype.doClassValidation_ = function(newValue) {
  * @protected
  */
 Blockly.Field.prototype.doValueUpdate_ = function(newValue) {
+  // If the value is valid that is the value we want to be displayed. So set
+  // the display value to the new value.
+  this.displayValue_ = newValue;
+
   this.value_ = newValue;
   this.isDirty_ = true;
   // For backwards compatibility.
@@ -900,7 +907,14 @@ Blockly.Field.prototype.doValueUpdate_ = function(newValue) {
  */
 Blockly.Field.prototype.doValueInvalid_ = function(_invalidValue) {
   // NOP
+
+  // This function still does nothing. This means that by default fields
+  // will still do nothing when they recieve an invalid input. Meaning that
+  // they continue to display the last valid value.
 };
+
+// Now our date picker should work as expected. And it does:
+// https://i.imgur.com/nLTyqBc.gif
 
 /**
  * Handle a mouse down event on a field.

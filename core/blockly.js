@@ -274,6 +274,9 @@ Blockly.onKeyDown_ = function(e) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
       mainWorkspace.undo(e.shiftKey);
+    } else if (Blockly.keyboardAccessibilityMode &&
+        Blockly.Navigation.onKeyPress(e)) {
+        return;
     }
   } else if (Blockly.keyboardAccessibilityMode &&
       Blockly.Navigation.onKeyPress(e)) {

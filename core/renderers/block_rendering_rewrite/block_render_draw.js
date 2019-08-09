@@ -194,10 +194,11 @@ Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
     this.highlighter_.drawStatementInput(row);
   }
   // Where to start drawing the notch, which is on the right side in LTR.
-  var x = row.statementEdge + Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT +
+  var x = this.info_.startX + row.statementEdge +
+    Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT +
     Blockly.blockRendering.constants.NOTCH.width;
 
-  this.steps_.push('H', this.info_.startX + x);
+  this.steps_.push('H', x);
 
   var innerTopLeftCorner =
       Blockly.blockRendering.constants.NOTCH.pathRight + ' h -' +

@@ -19,7 +19,9 @@
  */
 
 /**
- * @fileoverview Utility methods for handling fields.
+ * @fileoverview Fields can be created based on a JSON definition. This file
+ *    contains methods for registering those JSON definitions, and building the
+ *    fields based on JSON.
  * @author bekawestberg@gmail.com (Beka Westberg)
  */
 'use strict';
@@ -74,8 +76,8 @@ Blockly.fieldRegistry.fromJson = function(options) {
   var fieldClass = Blockly.fieldRegistry.typeMap_[options['type']];
   if (!fieldClass) {
     console.warn('Blockly could not create a field of type ' + options['type'] +
-      '. The field is probably not being registered. This may be because the' +
-      ' file is not loaded, the field does not register itself (See:' +
+      '. The field is probably not being registered. This could be because' +
+      ' the file is not loaded, the field does not register itself (See:' +
       ' github.com/google/blockly/issues/1584), or the registration is not' +
       ' being reached.');
     return null;

@@ -26,8 +26,6 @@
  * @author quachtina96 (Tina Quach)
  */
 
-goog.require('goog.dom.xml');  // Used to detect Closure
-
 /**
  * Controller for the Blockly Factory
  * @constructor
@@ -152,7 +150,7 @@ AppController.prototype.exportBlockLibraryToFile = function() {
  */
 AppController.prototype.formatBlockLibraryForExport_ = function(blockXmlMap) {
   // Create DOM for XML.
-  var xmlDom = document.createElementNS('http://www.w3.org/1999/xhtml', 'xml');
+  var xmlDom = Blockly.utils.xml.createElement('xml');
 
   // Append each block node to XML DOM.
   for (var blockType in blockXmlMap) {
@@ -187,8 +185,7 @@ AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
     // Add outer XML tag to the block for proper injection in to the
     // main workspace.
     // Create DOM for XML.
-    var editorWorkspaceXml =
-        document.createElementNS('http://www.w3.org/1999/xhtml', 'xml');
+    var editorWorkspaceXml = Blockly.utils.xml.createElement('xml');
     editorWorkspaceXml.appendChild(blockNode);
 
     xmlText = Blockly.Xml.domToText(editorWorkspaceXml);
@@ -678,20 +675,6 @@ AppController.prototype.modalName_ = null;
  * Initialize Blockly and layout.  Called on page load.
  */
 AppController.prototype.init = function() {
-  // Block Factory has a dependency on bits of Closure that core Blockly
-  // doesn't have. When you run this from file:// without a copy of Closure,
-  // it breaks it non-obvious ways.  Warning about this for now until the
-  // dependency is broken.
-  // TODO: #668.
-  if (!window.goog.dom.xml) {
-    alert('Sorry: Closure dependency not found. We are working on removing ' +
-      'this dependency.  In the meantime, you can use our hosted demo\n ' +
-      'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html' +
-      '\nor use these instructions to continue running locally:\n' +
-      'https://developers.google.com/blockly/guides/modify/web/closure');
-    return;
-  }
-
   var self = this;
   // Handle Blockly Storage with App Engine.
   if ('BlocklyStorage' in window) {
@@ -718,6 +701,8 @@ AppController.prototype.init = function() {
   BlockFactory.mainWorkspace = Blockly.inject('blockly',
       {collapse: false,
        toolbox: toolbox,
+       comments: false,
+       disable: false,
        media: '../../media/'});
 
   // Add tab handlers for switching between Block Factory and Block Exporter.

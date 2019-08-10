@@ -31,7 +31,7 @@
  * Represents a block library's storage.
  * @param {string} blockLibraryName Desired name of Block Library, also used
  *    to create the key for where it's stored in local storage.
- * @param {Object} opt_blocks Object mapping block type to XML.
+ * @param {!Object=} opt_blocks Object mapping block type to XML.
  * @constructor
  */
 function BlockLibraryStorage(blockLibraryName, opt_blocks) {
@@ -118,7 +118,7 @@ BlockLibraryStorage.prototype.getBlockXml = function(blockType) {
  * @return {!Object} Map of block type to corresponding XML.
  */
 BlockLibraryStorage.prototype.getBlockXmlMap = function(blockTypes) {
-  var blockXmlMap = {};
+  var blockXmlMap = Object.create(null);
   for (var i = 0; i < blockTypes.length; i++) {
     var blockType = blockTypes[i];
     var xml = this.getBlockXml(blockType);

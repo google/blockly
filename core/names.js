@@ -172,7 +172,7 @@ Blockly.Names.prototype.getDistinctName = function(name, type) {
  */
 Blockly.Names.prototype.safeName_ = function(name) {
   if (!name) {
-    name = 'unnamed';
+    name = Blockly.Msg['UNNAMED_KEY'] || 'unnamed';
   } else {
     // Unfortunately names in non-latin characters will look like
     // _E9_9F_B3_E4_B9_90 which is pretty meaningless.

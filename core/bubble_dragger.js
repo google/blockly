@@ -27,11 +27,11 @@
 goog.provide('Blockly.BubbleDragger');
 
 goog.require('Blockly.Bubble');
+goog.require('Blockly.Events');
 goog.require('Blockly.Events.CommentMove');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.WorkspaceCommentSvg');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -77,7 +77,7 @@ Blockly.BubbleDragger = function(bubble, workspace) {
   /**
    * The location of the top left corner of the dragging bubble's body at the
    * beginning of the drag, in workspace coordinates.
-   * @type {!goog.math.Coordinate}
+   * @type {!Blockly.utils.Coordinate}
    * @private
    */
   this.startXY_ = this.draggingBubble_.getRelativeToSurfaceXY();
@@ -85,7 +85,7 @@ Blockly.BubbleDragger = function(bubble, workspace) {
   /**
    * The drag surface to move bubbles to during a drag, or null if none should
    * be used.  Block dragging and bubble dragging use the same surface.
-   * @type {?Blockly.BlockDragSurfaceSvg}
+   * @type {Blockly.BlockDragSurfaceSvg}
    * @private
    */
   this.dragSurface_ =
@@ -132,18 +132,18 @@ Blockly.BubbleDragger.prototype.startBubbleDrag = function() {
  * Execute a step of bubble dragging, based on the given event.  Update the
  * display accordingly.
  * @param {!Event} e The most recent move event.
- * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
  * @package
  */
 Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
+  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
 
   this.draggingBubble_.moveDuringDrag(this.dragSurface_, newLoc);
 
   if (this.draggingBubble_.isDeletable()) {
-    this.deleteArea_ =  this.workspace_.isDeleteArea(e);
+    this.deleteArea_ = this.workspace_.isDeleteArea(e);
     this.updateCursorDuringBubbleDrag_();
   }
 };
@@ -151,7 +151,7 @@ Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
 /**
  * Shut the trash can and, if necessary, delete the dragging bubble.
  * Should be called at the end of a bubble drag.
- * @return {boolean} whether the bubble was deleted.
+ * @return {boolean} Whether the bubble was deleted.
  * @private
  */
 Blockly.BubbleDragger.prototype.maybeDeleteBubble_ = function() {
@@ -195,7 +195,7 @@ Blockly.BubbleDragger.prototype.updateCursorDuringBubbleDrag_ = function() {
 /**
  * Finish a bubble drag and put the bubble back on the workspace.
  * @param {!Event} e The mouseup/touchend event.
- * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
  * @package
  */
@@ -205,7 +205,7 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
   this.dragBubble(e, currentDragDeltaXY);
 
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  var newLoc = goog.math.Coordinate.sum(this.startXY_, delta);
+  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
 
   // Move the bubble to its final location.
   this.draggingBubble_.moveTo(newLoc.x, newLoc.y);
@@ -250,14 +250,14 @@ Blockly.BubbleDragger.prototype.fireMoveEvent_ = function() {
  * correction for mutator workspaces.
  * This function does not consider differing origins.  It simply scales the
  * input's x and y values.
- * @param {!goog.math.Coordinate} pixelCoord A coordinate with x and y values
- *     in css pixel units.
- * @return {!goog.math.Coordinate} The input coordinate divided by the workspace
+ * @param {!Blockly.utils.Coordinate} pixelCoord A coordinate with x and y values
+ *     in CSS pixel units.
+ * @return {!Blockly.utils.Coordinate} The input coordinate divided by the workspace
  *     scale.
  * @private
  */
 Blockly.BubbleDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
-  var result = new goog.math.Coordinate(pixelCoord.x / this.workspace_.scale,
+  var result = new Blockly.utils.Coordinate(pixelCoord.x / this.workspace_.scale,
       pixelCoord.y / this.workspace_.scale);
   if (this.workspace_.isMutator) {
     // If we're in a mutator, its scale is always 1, purely because of some
@@ -265,7 +265,7 @@ Blockly.BubbleDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
     // the scale on the parent workspace.
     // Fix that for dragging.
     var mainScale = this.workspace_.options.parentWorkspace.scale;
-    result = result.scale(1 / mainScale);
+    result.scale(1 / mainScale);
   }
   return result;
 };

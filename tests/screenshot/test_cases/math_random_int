@@ -1,0 +1,3 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="math_random_int"></block>
+</xml>

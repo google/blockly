@@ -221,14 +221,20 @@ WorkspaceFactoryView.prototype.moveTabToIndex =
  * Given a category ID and color, use that color to color the left border of the
  * tab for that category.
  * @param {string} id The ID of the category to color.
- * @param {string} color The color for to be used for the border of the tab.
- * Must be a valid CSS string.
+ * @param {?string} colour The colour for to be used for the border of the tab,
+ *   or null if none.  Must be a valid CSS string.
  */
-WorkspaceFactoryView.prototype.setBorderColor = function(id, color) {
-  var tab = this.tabMap[id];
-  tab.style.borderLeftWidth = '8px';
-  tab.style.borderLeftStyle = 'solid';
-  tab.style.borderColor = color;
+WorkspaceFactoryView.prototype.setBorderColor = function(id, colour) {
+  var style = this.tabMap[id].style;
+  if (colour) {
+    style.borderLeftWidth = '8px';
+    style.borderLeftStyle = 'solid';
+    style.borderColor = colour;
+  } else {
+    style.borderLeftWidth = '';
+    style.borderLeftStyle = '';
+    style.borderColor = '';
+  }
 };
 
 /**
@@ -320,7 +326,7 @@ WorkspaceFactoryView.prototype.markShadowBlocks = function(blocks) {
  */
 WorkspaceFactoryView.prototype.markShadowBlock = function(block) {
   // Add Blockly CSS for user-generated shadow blocks.
-  Blockly.utils.addClass(block.svgGroup_, 'shadowBlock');
+  Blockly.utils.dom.addClass(block.svgGroup_, 'shadowBlock');
   // If not a valid shadow block, add a warning message.
   if (!block.getSurroundParent()) {
       block.setWarningText('Shadow blocks must be nested inside' +
@@ -338,7 +344,7 @@ WorkspaceFactoryView.prototype.markShadowBlock = function(block) {
  */
 WorkspaceFactoryView.prototype.unmarkShadowBlock = function(block) {
   // Remove Blockly CSS for user-generated shadow blocks.
-  Blockly.utils.removeClass(block.svgGroup_, 'shadowBlock');
+  Blockly.utils.dom.removeClass(block.svgGroup_, 'shadowBlock');
 };
 
 /**

@@ -27,12 +27,12 @@
 goog.provide('Blockly.Comment');
 
 goog.require('Blockly.Bubble');
+goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
-goog.require('Blockly.utils');
-
-goog.require('goog.userAgent');
+goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.userAgent');
 
 
 /**
@@ -72,13 +72,13 @@ Blockly.Comment.prototype.height_ = 80;
  */
 Blockly.Comment.prototype.drawIcon_ = function(group) {
   // Circle.
-  Blockly.utils.createSvgElement('circle',
+  Blockly.utils.dom.createSvgElement('circle',
       {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
       group);
   // Can't use a real '?' text character since different browsers and operating
   // systems render it differently.
   // Body of question mark.
-  Blockly.utils.createSvgElement('path',
+  Blockly.utils.dom.createSvgElement('path',
       {
         'class': 'blocklyIconSymbol',
         'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405' +
@@ -86,7 +86,7 @@ Blockly.Comment.prototype.drawIcon_ = function(group) {
           '-1.201,0.998 -1.201,1.528 -1.204,2.19z'},
       group);
   // Dot of question mark.
-  Blockly.utils.createSvgElement('rect',
+  Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'blocklyIconSymbol',
         'x': '6.8',
@@ -112,13 +112,13 @@ Blockly.Comment.prototype.createEditor_ = function() {
       </body>
     </foreignObject>
   */
-  this.foreignObject_ = Blockly.utils.createSvgElement('foreignObject',
+  this.foreignObject_ = Blockly.utils.dom.createSvgElement('foreignObject',
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
-  var body = document.createElementNS(Blockly.HTML_NS, 'body');
-  body.setAttribute('xmlns', Blockly.HTML_NS);
+  var body = document.createElementNS(Blockly.utils.dom.HTML_NS, 'body');
+  body.setAttribute('xmlns', Blockly.utils.dom.HTML_NS);
   body.className = 'blocklyMinimalBody';
-  var textarea = document.createElementNS(Blockly.HTML_NS, 'textarea');
+  var textarea = document.createElementNS(Blockly.utils.dom.HTML_NS, 'textarea');
   textarea.className = 'blocklyCommentTextarea';
   textarea.setAttribute('dir', this.block_.RTL ? 'RTL' : 'LTR');
   body.appendChild(textarea);
@@ -184,10 +184,11 @@ Blockly.Comment.prototype.setVisible = function(visible) {
   }
   Blockly.Events.fire(
       new Blockly.Events.Ui(this.block_, 'commentOpen', !visible, visible));
-  if ((!this.block_.isEditable() && !this.textarea_) || goog.userAgent.IE) {
+  if ((!this.block_.isEditable() && !this.textarea_) ||
+      Blockly.utils.userAgent.IE) {
     // Steal the code from warnings to make an uneditable text bubble.
     // MSIE does not support foreignobject; textareas are impossible.
-    // http://msdn.microsoft.com/en-us/library/hh834675%28v=vs.85%29.aspx
+    // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034
     // Always treat comments in IE as uneditable.
     Blockly.Warning.prototype.setVisible.call(this, visible);
     return;

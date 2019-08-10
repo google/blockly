@@ -46,11 +46,11 @@ Blockly.PHP['text_join'] = function(block) {
     return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
   } else if (block.itemCount_ == 2) {
     var element0 = Blockly.PHP.valueToCode(block, 'ADD0',
-        Blockly.PHP.ORDER_NONE) || '\'\'';
+        Blockly.PHP.ORDER_ATOMIC) || '\'\'';
     var element1 = Blockly.PHP.valueToCode(block, 'ADD1',
-        Blockly.PHP.ORDER_NONE) || '\'\'';
+        Blockly.PHP.ORDER_ATOMIC) || '\'\'';
     var code = element0 + ' . ' + element1;
-    return [code, Blockly.PHP.ORDER_ADDITION];
+    return [code, Blockly.PHP.ORDER_STRING_CONCAT];
   } else {
     var elements = new Array(block.itemCount_);
     for (var i = 0; i < block.itemCount_; i++) {
@@ -174,7 +174,7 @@ Blockly.PHP['text_getSubstring'] = function(block) {
          '    $at1 = strlen($text) - 1 - $at1;',
          '  } else if ($where1 == \'FIRST\') {',
          '    $at1 = 0;',
-         '  } else if ($where1 != \'FROM_START\'){',
+         '  } else if ($where1 != \'FROM_START\') {',
          '    throw new Exception(\'Unhandled option (text_get_substring).\');',
          '  }',
          '  $length = 0;',

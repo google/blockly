@@ -55,19 +55,30 @@ Blockly.Python['procedures_defreturn'] = function(block) {
       Blockly.Python.INDENT + 'global ' + globals.join(', ') + '\n' : '';
   var funcName = Blockly.Python.variableDB_.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
-  var branch = Blockly.Python.statementToCode(block, 'STACK');
+  var xfix1 = '';
   if (Blockly.Python.STATEMENT_PREFIX) {
-    var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
-    branch = Blockly.Python.prefixLines(
-        Blockly.Python.STATEMENT_PREFIX.replace(
-            /%1/g, '\'' + id + '\''), Blockly.Python.INDENT) + branch;
+    xfix1 += Blockly.Python.injectId(Blockly.Python.STATEMENT_PREFIX, block);
   }
+  if (Blockly.Python.STATEMENT_SUFFIX) {
+    xfix1 += Blockly.Python.injectId(Blockly.Python.STATEMENT_SUFFIX, block);
+  }
+  if (xfix1) {
+    xfix1 = Blockly.Python.prefixLines(xfix1, Blockly.Python.INDENT);
+  }
+  var loopTrap = '';
   if (Blockly.Python.INFINITE_LOOP_TRAP) {
-    branch = Blockly.Python.INFINITE_LOOP_TRAP.replace(/%1/g,
-        '"' + block.id + '"') + branch;
+    loopTrap = Blockly.Python.prefixLines(
+        Blockly.Python.injectId(Blockly.Python.INFINITE_LOOP_TRAP, block),
+        Blockly.Python.INDENT);
   }
+  var branch = Blockly.Python.statementToCode(block, 'STACK');
   var returnValue = Blockly.Python.valueToCode(block, 'RETURN',
       Blockly.Python.ORDER_NONE) || '';
+  var xfix2 = '';
+  if (branch && returnValue) {
+    // After executing the function body, revisit this block for the return.
+    xfix2 = xfix1;
+  }
   if (returnValue) {
     returnValue = Blockly.Python.INDENT + 'return ' + returnValue + '\n';
   } else if (!branch) {
@@ -79,7 +90,7 @@ Blockly.Python['procedures_defreturn'] = function(block) {
         Blockly.Variables.NAME_TYPE);
   }
   var code = 'def ' + funcName + '(' + args.join(', ') + '):\n' +
-      globals + branch + returnValue;
+      globals + xfix1 + loopTrap + branch + xfix2 + returnValue;
   code = Blockly.Python.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
   Blockly.Python.definitions_['%' + funcName] = code;
@@ -106,15 +117,10 @@ Blockly.Python['procedures_callreturn'] = function(block) {
 
 Blockly.Python['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
-  var funcName = Blockly.Python.variableDB_.getName(block.getFieldValue('NAME'),
-      Blockly.Procedures.NAME_TYPE);
-  var args = [];
-  for (var i = 0; i < block.arguments_.length; i++) {
-    args[i] = Blockly.Python.valueToCode(block, 'ARG' + i,
-        Blockly.Python.ORDER_NONE) || 'None';
-  }
-  var code = funcName + '(' + args.join(', ') + ')\n';
-  return code;
+  // Generated code is for a function call as a statement is the same as a
+  // function call as a value, with the addition of line ending.
+  var tuple = Blockly.Python['procedures_callreturn'](block);
+  return tuple[0] + '\n';
 };
 
 Blockly.Python['procedures_ifreturn'] = function(block) {
@@ -122,6 +128,13 @@ Blockly.Python['procedures_ifreturn'] = function(block) {
   var condition = Blockly.Python.valueToCode(block, 'CONDITION',
       Blockly.Python.ORDER_NONE) || 'False';
   var code = 'if ' + condition + ':\n';
+  if (Blockly.Python.STATEMENT_SUFFIX) {
+    // Inject any statement suffix here since the regular one at the end
+    // will not get executed if the return is triggered.
+    code += Blockly.Python.prefixLines(
+        Blockly.Python.injectId(Blockly.Python.STATEMENT_SUFFIX, block),
+        Blockly.Python.INDENT);
+  }
   if (block.hasReturnValue_) {
     var value = Blockly.Python.valueToCode(block, 'VALUE',
         Blockly.Python.ORDER_NONE) || 'None';

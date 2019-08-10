@@ -150,6 +150,26 @@ Blockly.Events.COMMENT_CHANGE = 'comment_change';
 Blockly.Events.COMMENT_MOVE = 'comment_move';
 
 /**
+ * Name of event that records a workspace load.
+ */
+Blockly.Events.FINISHED_LOADING = 'finished_loading';
+
+/**
+ * List of events that cause objects to be bumped back into the visible
+ * portion of the workspace (only used for non-movable workspaces).
+ *
+ * Not to be confused with bumping so that disconnected connections to do
+ * not appear connected.
+ * @const
+ */
+Blockly.Events.BUMP_EVENTS = [
+  Blockly.Events.BLOCK_CREATE,
+  Blockly.Events.BLOCK_MOVE,
+  Blockly.Events.COMMENT_CREATE,
+  Blockly.Events.COMMENT_MOVE
+];
+
+/**
  * List of events queued for firing.
  * @private
  */
@@ -229,12 +249,11 @@ Blockly.Events.filter = function(queueIn, forward) {
           (lastEvent.element == 'commentOpen' ||
            lastEvent.element == 'mutatorOpen' ||
            lastEvent.element == 'warningOpen')) {
-        // Merge click events.
-        lastEvent.newValue = event.newValue;
+        // Drop click events caused by opening/closing bubbles.
       } else {
         // Collision: newer events should merge into this event to maintain
         // order.
-        hash[key] = { event: event, index: 1};
+        hash[key] = {event: event, index: 1};
         mergedQueue.push(event);
       }
     }
@@ -383,7 +402,7 @@ Blockly.Events.fromJson = function(json, workspace) {
  * Enable/disable a block depending on whether it is properly connected.
  * Use this on applications where all blocks should be connected to a top block.
  * Recommend setting the 'disable' option to 'false' in the config so that
- * users don't try to reenable disabled orphan blocks.
+ * users don't try to re-enable disabled orphan blocks.
  * @param {!Blockly.Events.Abstract} event Custom data for event.
  */
 Blockly.Events.disableOrphans = function(event) {
@@ -392,15 +411,16 @@ Blockly.Events.disableOrphans = function(event) {
     var workspace = Blockly.Workspace.getById(event.workspaceId);
     var block = workspace.getBlockById(event.blockId);
     if (block) {
-      if (block.getParent() && !block.getParent().disabled) {
+      var parent = block.getParent();
+      if (parent && parent.isEnabled()) {
         var children = block.getDescendants(false);
         for (var i = 0, child; child = children[i]; i++) {
-          child.setDisabled(false);
+          child.setEnabled(true);
         }
       } else if ((block.outputConnection || block.previousConnection) &&
                  !workspace.isDragging()) {
         do {
-          block.setDisabled(true);
+          block.setEnabled(false);
           block = block.getNextBlock();
         } while (block);
       }

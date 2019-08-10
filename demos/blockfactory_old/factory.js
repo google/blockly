@@ -416,17 +416,17 @@ function getFieldsJson_(block) {
           var obj = {
             type: block.type,
             name: block.getFieldValue('FIELDNAME'),
-            value: parseFloat(block.getFieldValue('VALUE'))
+            value: Number(block.getFieldValue('VALUE'))
           };
-          var min = parseFloat(block.getFieldValue('MIN'));
+          var min = Number(block.getFieldValue('MIN'));
           if (min > -Infinity) {
             obj.min = min;
           }
-          var max = parseFloat(block.getFieldValue('MAX'));
+          var max = Number(block.getFieldValue('MAX'));
           if (max < Infinity) {
             obj.max = max;
           }
-          var precision = parseFloat(block.getFieldValue('PRECISION'));
+          var precision = Number(block.getFieldValue('PRECISION'));
           if (precision) {
             obj.precision = precision;
           }
@@ -748,9 +748,9 @@ function updatePreview() {
 function injectCode(code, id) {
   var pre = document.getElementById(id);
   pre.textContent = code;
-  code = pre.textContent;
-  code = PR.prettyPrintOne(code, 'js');
-  pre.innerHTML = code;
+  // Remove the 'prettyprinted' class, so that Prettify will recalculate.
+  pre.className = pre.className.replace('prettyprinted', '');
+  PR.prettyPrint();
 }
 
 /**
@@ -829,7 +829,7 @@ function init() {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1),
                                mainWorkspace);
   } else {
-    var xml = '<xml><block type="factory_base" deletable="false" movable="false"></block></xml>';
+    var xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="factory_base" deletable="false" movable="false"></block></xml>';
     Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), mainWorkspace);
   }
   mainWorkspace.clearUndo();

@@ -16,16 +16,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Usage: build.py <0 or more of accessible, core, generators, langfiles>
+# Usage: build.py <0 or more of core, generators, langfiles>
 # build.py with no parameters builds all files.
 # core builds blockly_compressed, blockly_uncompressed, and blocks_compressed.
-# accessible builds blockly_accessible_compressed,
-#  blockly_accessible_uncompressed, and blocks_compressed.
 # generators builds every <language>_compressed.js.
 # langfiles builds every msg/js/<LANG>.js file.
 
-# This script generates four versions of Blockly's core files. The first pair
-# are:
+# This script generates two versions of Blockly's core files:
 #   blockly_compressed.js
 #   blockly_uncompressed.js
 # The compressed file is a concatenation of all of Blockly's core files which
@@ -37,12 +34,6 @@
 # been renamed.  The uncompressed file also allows for a faster development
 # cycle since there is no need to rebuild or recompile, just reload.
 #
-# The second pair are:
-#  blockly_accessible_compressed.js
-#  blockly_accessible_uncompressed.js
-# These files are analogous to blockly_compressed and blockly_uncompressed,
-# but also include the visually-impaired module for Blockly.
-#
 # This script also generates:
 #   blocks_compressed.js: The compressed Blockly language blocks.
 #   javascript_compressed.js: The compressed JavaScript generator.
@@ -53,20 +44,20 @@
 #   msg/js/<LANG>.js for every language <LANG> defined in msg/js/<LANG>.json.
 
 import sys
-if sys.version_info[0] != 2:
-  raise Exception("Blockly build only compatible with Python 2.x.\n"
-                  "You are using: " + sys.version)
 
-for arg in sys.argv[1:len(sys.argv)]:
-  if (arg != 'core' and
-      arg != 'accessible' and
-      arg != 'generators' and
-      arg != 'langfiles'):
-    raise Exception("Invalid argument: \"" + arg + "\". Usage: build.py "
-        "<0 or more of accessible, core, generators, langfiles>")
+import errno, glob, json, os, re, subprocess, threading, codecs, argparse
+from cStringIO import StringIO
 
-import errno, glob, httplib, json, os, re, subprocess, threading, urllib
+if sys.version_info[0] == 2:
+  import httplib
+  from urllib import urlencode
+else:
+  import http.client as httplib
+  from urllib.parse import urlencode
+  from importlib import reload
 
+# Read package.json and extract the current Blockly version.
+blocklyVersion = json.loads(open('package.json', 'r').read())['version']
 
 def import_path(fullpath):
   """Import a file with full path specification.
@@ -149,7 +140,7 @@ this.BLOCKLY_BOOT = function(root) {
     # used on another, even if the directory name differs.
     m = re.search('[\\/]([^\\/]+)[\\/]core[\\/]blockly.js', add_dependency)
     add_dependency = re.sub('([\\/])' + re.escape(m.group(1)) +
-        '([\\/](core|accessible)[\\/])', '\\1" + dir + "\\2', add_dependency)
+        '([\\/](core)[\\/])', '\\1" + dir + "\\2', add_dependency)
     f.write(add_dependency + '\n')
 
     provides = []
@@ -190,22 +181,20 @@ class Gen_compressed(threading.Thread):
   Uses the Closure Compiler's online API.
   Runs in a separate thread.
   """
-  def __init__(self, search_paths, bundles):
+  def __init__(self, search_paths, bundles, use_default):
     threading.Thread.__init__(self)
     self.search_paths = search_paths
     self.bundles = bundles
+    self.use_default = use_default
 
   def run(self):
-    if ('core' in self.bundles):
+    if (self.bundles.core or self.use_default):
       self.gen_core()
 
-    if ('accessible' in self.bundles):
-      self.gen_accessible()
-
-    if ('core' in self.bundles or 'accessible' in self.bundles):
+    if (self.bundles.core or self.use_default):
       self.gen_blocks()
 
-    if ('generators' in self.bundles):
+    if (self.bundles.generators or self.use_default):
       self.gen_generator("javascript")
       self.gen_generator("python")
       self.gen_generator("php")
@@ -234,37 +223,12 @@ class Gen_compressed(threading.Thread):
       # Filter out the Closure files (the compiler will add them).
       if filename.startswith(os.pardir + os.sep):  # '../'
         continue
-      f = open(filename)
-      params.append(("js_code", "".join(f.readlines())))
-      f.close()
-
-    self.do_compile(params, target_filename, filenames, "")
-
-  def gen_accessible(self):
-    target_filename = "blockly_accessible_compressed.js"
-    # Define the parameters for the POST request.
-    params = [
-        ("compilation_level", "SIMPLE_OPTIMIZATIONS"),
-        ("use_closure_library", "true"),
-        ("language_out", "ES5"),
-        ("output_format", "json"),
-        ("output_info", "compiled_code"),
-        ("output_info", "warnings"),
-        ("output_info", "errors"),
-        ("output_info", "statistics"),
-        ("warning_level", "DEFAULT"),
-      ]
-
-    # Read in all the source files.
-    filenames = calcdeps.CalculateDependencies(self.search_paths,
-        [os.path.join("accessible", "app.component.js")])
-    filenames.sort()  # Deterministic build.
-    for filename in filenames:
-      # Filter out the Closure files (the compiler will add them).
-      if filename.startswith(os.pardir + os.sep):  # '../'
-        continue
-      f = open(filename)
-      params.append(("js_code", "".join(f.readlines())))
+      f = codecs.open(filename, encoding="utf-8")
+      code = "".join(f.readlines()).encode("utf-8")
+      # Inject the Blockly version.
+      if filename == "core/blockly.js":
+        code = code.replace("Blockly.VERSION = 'uncompiled';", "Blockly.VERSION = '" + blocklyVersion + "';")
+      params.append(("js_code", code))
       f.close()
 
     self.do_compile(params, target_filename, filenames, "")
@@ -288,8 +252,8 @@ class Gen_compressed(threading.Thread):
     filenames = glob.glob(os.path.join("blocks", "*.js"))
     filenames.sort()  # Deterministic build.
     for filename in filenames:
-      f = open(filename)
-      params.append(("js_code", "".join(f.readlines())))
+      f = codecs.open(filename, encoding="utf-8")
+      params.append(("js_code", "".join(f.readlines()).encode("utf-8")))
       f.close()
 
     # Remove Blockly.Blocks to be compatible with Blockly.
@@ -310,29 +274,33 @@ class Gen_compressed(threading.Thread):
       ]
 
     # Read in all the source files.
-    # Add Blockly.Generator to be compatible with the compiler.
-    params.append(("js_code", "goog.provide('Blockly.Generator');"))
+    # Add Blockly.Generator and Blockly.utils.string to be compatible
+    # with the compiler.
+    params.append(("js_code", "goog.provide('Blockly.Generator');goog.provide('Blockly.utils.string');"))
     filenames = glob.glob(
         os.path.join("generators", language, "*.js"))
     filenames.sort()  # Deterministic build.
     filenames.insert(0, os.path.join("generators", language + ".js"))
     for filename in filenames:
-      f = open(filename)
-      params.append(("js_code", "".join(f.readlines())))
+      f = codecs.open(filename, encoding="utf-8")
+      params.append(("js_code", "".join(f.readlines()).encode("utf-8")))
       f.close()
     filenames.insert(0, "[goog.provide]")
 
-    # Remove Blockly.Generator to be compatible with Blockly.
-    remove = "var Blockly={Generator:{}};"
+    # Remove Blockly.Generator and Blockly.utils.string to be compatible
+    # with Blockly.
+    remove = "var Blockly={Generator:{},utils:{}};Blockly.utils.string={};"
     self.do_compile(params, target_filename, filenames, remove)
 
   def do_compile(self, params, target_filename, filenames, remove):
     # Send the request to Google.
     headers = {"Content-type": "application/x-www-form-urlencoded"}
     conn = httplib.HTTPSConnection("closure-compiler.appspot.com")
-    conn.request("POST", "/compile", urllib.urlencode(params), headers)
+    conn.request("POST", "/compile", urlencode(params), headers)
     response = conn.getresponse()
-    json_str = response.read()
+
+    # Decode is necessary for Python 3.4 compatibility
+    json_str = response.read().decode("utf-8")
     conn.close()
 
     # Parse the JSON response.
@@ -349,12 +317,12 @@ class Gen_compressed(threading.Thread):
       n = int(name[6:]) - 1
       return filenames[n]
 
-    if json_data.has_key("serverErrors"):
+    if "serverErrors" in json_data:
       errors = json_data["serverErrors"]
       for error in errors:
         print("SERVER ERROR: %s" % target_filename)
         print(error["error"])
-    elif json_data.has_key("errors"):
+    elif "errors" in json_data:
       errors = json_data["errors"]
       for error in errors:
         print("FATAL ERROR")
@@ -366,7 +334,7 @@ class Gen_compressed(threading.Thread):
           print((" " * error["charno"]) + "^")
         sys.exit(1)
     else:
-      if json_data.has_key("warnings"):
+      if "warnings" in json_data:
         warnings = json_data["warnings"]
         for warning in warnings:
           print("WARNING")
@@ -378,35 +346,13 @@ class Gen_compressed(threading.Thread):
             print((" " * warning["charno"]) + "^")
         print()
 
-      if not json_data.has_key("compiledCode"):
+      if not "compiledCode" in json_data:
         print("FATAL ERROR: Compiler did not return compiledCode.")
         sys.exit(1)
 
       code = HEADER + "\n" + json_data["compiledCode"]
       code = code.replace(remove, "")
-
-      # Trim down Google's (and only Google's) Apache licences.
-      # The Closure Compiler preserves these.
-      LICENSE = re.compile("""/\\*
-
- [\w ]+
-
- Copyright \\d+ Google Inc.
- https://developers.google.com/blockly/
-
- Licensed under the Apache License, Version 2.0 \(the "License"\);
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-\\*/""")
-      code = re.sub(LICENSE, "", code)
+      code = self.trim_licence(code)
 
       stats = json_data["statistics"]
       original_b = stats["originalSize"]
@@ -424,6 +370,40 @@ class Gen_compressed(threading.Thread):
             original_kb, compressed_kb, ratio))
       else:
         print("UNKNOWN ERROR")
+
+  def trim_licence(self, code):
+    """Strip out Google's and MIT's Apache licences.
+
+    JS Compiler preserves dozens of Apache licences in the Blockly code.
+    Remove these if they belong to Google or MIT.
+    MIT's permission to do this is logged in Blockly issue 2412.
+
+    Args:
+      code: Large blob of compiled source code.
+
+    Returns:
+      Code with Google's and MIT's Apache licences trimmed.
+    """
+    apache2 = re.compile("""/\\*
+
+ [\\w: ]+
+
+ (Copyright \\d+ (Google Inc.|Massachusetts Institute of Technology))
+ (https://developers.google.com/blockly/|All rights reserved.)
+
+ Licensed under the Apache License, Version 2.0 \\(the "License"\\);
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+\\*/""")
+    return re.sub(apache2, "", code)
 
 
 class Gen_langfiles(threading.Thread):
@@ -452,7 +432,7 @@ class Gen_langfiles(threading.Thread):
           # If a destination file was missing, rebuild.
           return True
       else:
-        print("Error checking file creation times: " + e)
+        print("Error checking file creation times: " + str(e))
 
   def run(self):
     # The files msg/json/{en,qqq,synonyms}.json depend on msg/messages.js.
@@ -505,9 +485,66 @@ class Gen_langfiles(threading.Thread):
       else:
         print("FAILED to create " + f)
 
+# Class to hold arguments if user passes in old argument style.
+class Arguments:
+  def __init__(self):
+    self.core = False
+    self.generators = False
+    self.langfiles = False
+    self.render_name = "block_rendering_rewrite"
+
+# Add all directories to the path list except for any extra renderers.
+def find_path(args, directories):
+  new_list = []
+  render_path = 'core/renderers/' + args.render_name
+  core_search_paths = calcdeps.ExpandDirectories(directories)
+  for path in core_search_paths:
+    # If it is the desired renderer
+    if path.find('core/renderers') > -1 and path.find(render_path) > -1:
+      new_list.append(path)
+    # If it is not a renderer
+    elif (path.find('core/renderers') == -1):
+      new_list.append(path)
+  return sorted(new_list)
+
+# Setup the argument parser.
+def setup_parser():
+  parser = argparse.ArgumentParser(description="Decide which files to build with what renderer.")
+  parser.add_argument('-renderer', dest="render_name", default="block_rendering_rewrite", help="The name of the desired renderer. The name should corresspond to the name of a folder in core/renderers")
+  parser.add_argument('-core', action="store_true", default=False, help="Build core")
+  parser.add_argument('-generators', action="store_true", default=False, help="Build the generators")
+  parser.add_argument('-langfiles', action="store_true", default=False, help="Build all the language files")
+  return parser
+
+# Gets the command line arguments.
+# If the user passes in the old style or arguments we create the arguments object
+# otherwise the argument object is created from the ArgumentParser.
+def get_args():
+  parser = setup_parser()
+  try:
+    args = parser.parse_args()
+  except SystemExit:
+    args = Arguments()
+    args.core = 'core' in sys.argv
+    args.generators = 'generators' in sys.argv
+    args.langfiles = 'langfiles' in sys.argv
+    if 'accessible' in sys.argv:
+      print("The Blockly accessibility demo has moved to https://github.com/google/blockly-experimental")
+    if '-renderer' in sys.argv:
+      print ("Please use the new arguments -core, -generators, -langfiles")
+      sys.exit()
+  verify_render_name(args.render_name)
+  return args
+
+# Verify that the passed in renderer name can be found in the renderers directory.
+def verify_render_name(render_name):
+  if (not render_name in next(os.walk('core/renderers'))[1]):
+    print (render_name + " is not a valid renderer.")
 
 if __name__ == "__main__":
   try:
+    args = get_args()
+    use_default = not args.core and not args.generators and not args.langfiles
     calcdeps = import_path(os.path.join(
         os.path.pardir, "closure-library", "closure", "bin", "calcdeps.py"))
   except ImportError:
@@ -528,31 +565,18 @@ if __name__ == "__main__":
 developers.google.com/blockly/guides/modify/web/closure""")
     sys.exit(1)
 
-  core_search_paths = calcdeps.ExpandDirectories(
-      ["core", os.path.join(os.path.pardir, "closure-library")])
-  core_search_paths.sort()  # Deterministic build.
-  full_search_paths = calcdeps.ExpandDirectories(
-      ["accessible", "core", os.path.join(os.path.pardir, "closure-library")])
-  full_search_paths.sort()  # Deterministic build.
-
-  if (len(sys.argv) == 1):
-    args = ['core', 'accessible', 'generators', 'defaultlangfiles']
-  else:
-    args = sys.argv
+  full_search_paths = find_path(args, ["core", os.path.join(os.path.pardir, "closure-library")])
 
   # Uncompressed and compressed are run in parallel threads.
   # Uncompressed is limited by processor speed.
-  if ('core' in args):
-    Gen_uncompressed(core_search_paths, 'blockly_uncompressed.js').start()
-
-  if ('accessible' in args):
-    Gen_uncompressed(full_search_paths, 'blockly_accessible_uncompressed.js').start()
+  if (args.core or use_default):
+    Gen_uncompressed(full_search_paths, 'blockly_uncompressed.js').start()
 
   # Compressed is limited by network and server speed.
-  Gen_compressed(full_search_paths, args).start()
+  Gen_compressed(full_search_paths, args, use_default).start()
 
   # This is run locally in a separate thread
   # defaultlangfiles checks for changes in the msg files, while manually asking
-  # to build langfiles will force the messages to be rebuilt.
-  if ('langfiles' in args or 'defaultlangfiles' in args):
-    Gen_langfiles('langfiles' in args).start()
+  # to build langfiles will force the messages to be rebuilt
+  if (args.langfiles or use_default):
+    Gen_langfiles(args.langfiles).start()

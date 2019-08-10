@@ -46,9 +46,9 @@ Blockly.Blocks['factory_base'] = {
         ['↑ top connection', 'TOP'],
         ['↓ bottom connection', 'BOTTOM']],
         function(option) {
-          this.sourceBlock_.updateShape_(option);
+          this.getSourceBlock().updateShape_(option);
           // Connect a shadow block to this new input.
-          this.sourceBlock_.spawnOutputShadow_(option);
+          this.getSourceBlock().spawnOutputShadow_(option);
         });
     this.appendDummyInput()
         .appendField(dropdown, 'CONNECTIONS');
@@ -67,7 +67,7 @@ Blockly.Blocks['factory_base'] = {
         'https://developers.google.com/blockly/guides/create-custom-blocks/block-factory');
   },
   mutationToDom: function() {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('connections', this.getFieldValue('CONNECTIONS'));
     return container;
   },
@@ -244,13 +244,33 @@ Blockly.Blocks['field_static'] = {
   // Text value.
   init: function() {
     this.setColour(160);
-    this.appendDummyInput()
+    this.appendDummyInput('FIRST')
         .appendField('text')
         .appendField(new Blockly.FieldTextInput(''), 'TEXT');
     this.setPreviousStatement(true, 'Field');
     this.setNextStatement(true, 'Field');
     this.setTooltip('Static text that serves as a label.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=88');
+  },
+};
+
+Blockly.Blocks['field_label_serializable'] = {
+  // Text value that is saved to XML.
+  init: function() {
+    this.setColour(160);
+    this.appendDummyInput('FIRST')
+        .appendField('text')
+        .appendField(new Blockly.FieldTextInput(''), 'TEXT')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
+    this.setTooltip('Static text that serves as a label, and is saved to' +
+      ' XML. Use only if you want to modify this label at runtime.');
+    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=88');
+  },
+  onchange: function() {
+    fieldNameCheck(this);
   }
 };
 
@@ -336,7 +356,7 @@ Blockly.Blocks['field_dropdown'] = {
   },
   mutationToDom: function(workspace) {
     // Create XML to represent menu options.
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('options', JSON.stringify(this.optionList_));
     return container;
   },
@@ -603,7 +623,9 @@ Blockly.Blocks['field_image'] = {
         .appendField('height')
         .appendField(new Blockly.FieldNumber('15', 0, NaN, 1), 'HEIGHT')
         .appendField('alt text')
-        .appendField(new Blockly.FieldTextInput('*'), 'ALT');
+        .appendField(new Blockly.FieldTextInput('*'), 'ALT')
+        .appendField('flip RTL')
+        .appendField(new Blockly.FieldCheckbox('false'), 'FLIP_RTL');
     this.setPreviousStatement(true, 'Field');
     this.setNextStatement(true, 'Field');
     this.setTooltip('Static image (JPEG, PNG, GIF, SVG, BMP).\n' +
@@ -626,7 +648,7 @@ Blockly.Blocks['type_group'] = {
   },
   mutationToDom: function(workspace) {
     // Create XML to represent a group of types.
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('types', this.typeCount_);
     return container;
   },
@@ -841,11 +863,11 @@ Blockly.Blocks['colour_hue'] = {
     // Update the current block's colour to match.
     var hue = parseInt(text, 10);
     if (!isNaN(hue)) {
-      this.sourceBlock_.setColour(hue);
+      this.getSourceBlock().setColour(hue);
     }
   },
   mutationToDom: function(workspace) {
-    var container = document.createElement('mutation');
+    var container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('colour', this.getColour());
     return container;
   },

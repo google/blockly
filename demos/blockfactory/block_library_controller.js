@@ -36,7 +36,7 @@
  * Block Library Controller Class
  * @param {string} blockLibraryName Desired name of Block Library, also used
  *    to create the key for where it's stored in local storage.
- * @param {!BlockLibraryStorage} opt_blockLibraryStorage Optional storage
+ * @param {!BlockLibraryStorage=} opt_blockLibraryStorage Optional storage
  *    object that allows user to import a block library.
  * @constructor
  */
@@ -136,7 +136,7 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
   }
 
   // Create block XML.
-  var xmlElement = document.createElement('xml');
+  var xmlElement = Blockly.utils.xml.createElement('xml');
   var block = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
   xmlElement.appendChild(Blockly.Xml.blockToDomWithXY(block));
 

@@ -34,7 +34,7 @@
 	"REDO": "Làm lại",
 	"CHANGE_VALUE_TITLE": "Thay giá trị thành:",
 	"RENAME_VARIABLE": "Thay tên biến...",
-	"RENAME_VARIABLE_TITLE": "Thay tên tất cả \"%1\" biến này thành:",
+	"RENAME_VARIABLE_TITLE": "Thay tên tất cả các biến \"%1\" thành:",
 	"NEW_VARIABLE": "Tạo biến...",
 	"NEW_STRING_VARIABLE": "Tạo một giá trị dạng chuỗi...",
 	"NEW_NUMBER_VARIABLE": "Tạo một giá trị số...",
@@ -193,6 +193,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "phân số bất kỳ",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Hoàn trả một phân số bất kỳ không nhỏ hơn 0.0 và không lớn hơn 1.0.",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 của X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Trả về arctangent của điểm (X, Y) trong khoảng từ -180 độ đến 180 độ.",
 	"TEXT_TEXT_HELPURL": "https://en.wikipedia.org/wiki/string_(computer_science)",
 	"TEXT_TEXT_TOOLTIP": "Một ký tự, một từ, hay một dòng.",
 	"TEXT_JOIN_HELPURL": "",
@@ -346,5 +349,6 @@
 	"PROCEDURES_CREATE_DO": "Tạo mảnh \"thực hiện %1\"",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Khi điều kiện đúng thì hoàn trả một giá trị.",
 	"PROCEDURES_IFRETURN_WARNING": "Chú ý: Mảnh này chỉ có thể dùng trong một thủ tục.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Hãy nói gì đó..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Hãy nói gì đó...",
+	"COLLAPSED_WARNINGS_WARNING": "Các khối bị sập có chứa cảnh báo."
 }

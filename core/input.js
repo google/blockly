@@ -72,6 +72,14 @@ Blockly.Input.prototype.align = Blockly.ALIGN_LEFT;
 Blockly.Input.prototype.visible_ = true;
 
 /**
+ * Get the source block for this input.
+ * @return {Blockly.Block} The source block, or null if there is none.
+ */
+Blockly.Input.prototype.getSourceBlock = function() {
+  return this.sourceBlock_;
+};
+
+/**
  * Add a field (or label from string), and all prefix and suffix fields, to the
  * end of the input's field row.
  * @param {string|!Blockly.Field} field Something to add as a field.
@@ -163,9 +171,10 @@ Blockly.Input.prototype.isVisible = function() {
 
 /**
  * Sets whether this input is visible or not.
- * Used to collapse/uncollapse a block.
+ * Should only be used to collapse/uncollapse a block.
  * @param {boolean} visible True if visible.
  * @return {!Array.<!Blockly.Block>} List of blocks to render.
+ * @package
  */
 Blockly.Input.prototype.setVisible = function(visible) {
   var renderList = [];

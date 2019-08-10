@@ -26,6 +26,17 @@
 
 goog.provide('Blockly.constants');
 
+/**
+ * The multiplier for scroll wheel deltas using the line delta mode.
+ * @type {number}
+ */
+Blockly.LINE_MODE_MULTIPLIER = 40;
+
+/**
+ * The multiplier for scroll wheel deltas using the page delta mode.
+ * @type {number}
+ */
+Blockly.PAGE_MODE_MULTIPLIER = 125;
 
 /**
  * Number of pixels the mouse must move before a drag starts.
@@ -42,12 +53,36 @@ Blockly.FLYOUT_DRAG_RADIUS = 10;
 /**
  * Maximum misalignment between connections for them to snap together.
  */
-Blockly.SNAP_RADIUS = 20;
+Blockly.SNAP_RADIUS = 28;
+
+/**
+ * Maximum misalignment between connections for them to snap together,
+ * when a connection is already highlighted.
+ */
+Blockly.CONNECTING_SNAP_RADIUS = Blockly.SNAP_RADIUS;
+
+/**
+ * How much to prefer staying connected to the current connection over moving to
+ * a new connection.  The current previewed connection is considered to be this
+ * much closer to the matching connection on the block than it actually is.
+ */
+Blockly.CURRENT_CONNECTION_PREFERENCE = 8;
+
+/**
+ * The main colour of insertion markers, in hex.  The block is rendered a
+ * transparent grey by changing the fill opacity in CSS.
+ */
+Blockly.INSERTION_MARKER_COLOUR = '#000000';
 
 /**
  * Delay in ms between trigger and bumping unconnected block out of alignment.
  */
 Blockly.BUMP_DELAY = 250;
+
+/**
+ * Maximum randomness in workspace units for bumping a block.
+ */
+Blockly.BUMP_RANDOMNESS = 10;
 
 /**
  * Number of characters to truncate a collapsed block to.
@@ -93,18 +128,6 @@ Blockly.SPRITE = {
 };
 
 // Constants below this point are not intended to be changed.
-
-/**
- * Required name space for SVG elements.
- * @const
- */
-Blockly.SVG_NS = 'http://www.w3.org/2000/svg';
-
-/**
- * Required name space for HTML elements.
- * @const
- */
-Blockly.HTML_NS = 'http://www.w3.org/1999/xhtml';
 
 /**
  * ENUM for a right-facing value input.  E.g. 'set item to' or 'return'.
@@ -235,14 +258,14 @@ Blockly.DELETE_AREA_TRASH = 1;
 Blockly.DELETE_AREA_TOOLBOX = 2;
 
 /**
- * String for use in the "custom" attribute of a category in toolbox xml.
+ * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
  * @const {string}
  */
 Blockly.VARIABLE_CATEGORY_NAME = 'VARIABLE';
 /**
- * String for use in the "custom" attribute of a category in toolbox xml.
+ * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
  * @const {string}
@@ -250,7 +273,7 @@ Blockly.VARIABLE_CATEGORY_NAME = 'VARIABLE';
 Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME = 'VARIABLE_DYNAMIC';
 
 /**
- * String for use in the "custom" attribute of a category in toolbox xml.
+ * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * procedure blocks.
  * @const {string}

@@ -1,0 +1,111 @@
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @fileoverview Node.js script to run generator tests in Firefox, via webdriver.
+ */
+var webdriverio = require('webdriverio');
+var fs = require('fs');
+
+module.exports = runGeneratorsInBrowser;
+
+/**
+ * Run the generator for a given language and save the results to a file.
+ * @param {Thenable} browser A Thenable managing the processing of the browser
+ *     tests.
+ * @param {string} filename Where to write the output file.
+ * @param {Function} codegenFn The function to run for code generation for this
+ *     language.
+ */
+async function runLangGeneratorInBrowser(browser, filename, codegenFn) {
+  await browser.execute(codegenFn);
+  var elem = await browser.$("#importExport");
+  var result = await elem.getValue();
+  fs.writeFile(filename, result, function(err) {
+    if (err) {
+      return console.log(err);
+    }
+  });
+}
+
+/**
+ * Runs the generator tests in Firefox. It uses webdriverio to
+ * launch Firefox and load index.html. Outputs a summary of the test results
+ * to the console and outputs files for later validation.
+ * @return the Thenable managing the processing of the browser tests.
+ */
+async function runGeneratorsInBrowser() {
+  var options = {
+      capabilities: {
+          browserName: 'firefox'
+      }
+  };
+
+  var url = 'file://' + __dirname + '/index.html';
+  var prefix = 'tests/generators/tmp/generated';
+
+  console.log('Starting webdriverio...');
+  const browser = await webdriverio.remote(options);
+  console.log('Initialized.\nLoading url: ' + url);
+  await browser.url(url);
+
+  await browser.execute(function() {
+    checkAll();
+    loadSelected();
+  });
+
+  await runLangGeneratorInBrowser(browser, prefix + '.js',
+      function() {
+        toJavaScript();
+      });
+  await runLangGeneratorInBrowser(browser, prefix + '.py',
+      function() {
+        toPython();
+      });
+  await runLangGeneratorInBrowser(browser, prefix + '.dart',
+      function() {
+        toDart();
+      });
+  await runLangGeneratorInBrowser(browser, prefix + '.lua',
+      function() {
+        toLua();
+      });
+  await runLangGeneratorInBrowser(browser, prefix + '.php',
+      function() {
+        toPhp();
+      });
+
+  await browser.deleteSession();
+}
+
+if (require.main === module) {
+  runGeneratorsInBrowser().catch(e => {
+    console.error(e);
+    process.exit(1);
+  }).then(function(result) {
+    if (result) {
+      console.log('Generator tests failed');
+      process.exit(1);
+    } else {
+      console.log('Generator tests passed');
+      process.exit(0);
+    }
+  });
+}

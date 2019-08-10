@@ -313,6 +313,112 @@ function test_isConnectionAllowed_NoNext() {
   assertTrue(two.isConnectionAllowed(one));
 }
 
+function test_canConnectToPrevious_alreadyConnected() {
+  var sharedWorkspace = {};
+  var one = helper_createConnection(0, 0, Blockly.NEXT_STATEMENT);
+  one.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+  one.sourceBlock_.nextConnection = one;
+
+  var two = helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT);
+  two.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+  two.sourceBlock_.previousConnection = two;
+
+  Blockly.Connection.connectReciprocally_(one, two);
+
+  var three = helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT);
+  three.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+  three.sourceBlock_.previousConnection = three;
+
+  // The next connection is already occupied and cannot disconnect itself
+  // mid-drag.
+  assertFalse(one.canConnectToPrevious_(three));
+}
+
+function test_canConnect_dragging() {
+  var sharedWorkspace = {};
+  var one = helper_createConnection(0, 0, Blockly.NEXT_STATEMENT);
+  one.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+  one.sourceBlock_.nextConnection = one;
+
+  var two = helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT);
+  two.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+  two.sourceBlock_.previousConnection = two;
+
+  Blockly.Connection.connectReciprocally_(one, two);
+
+  Blockly.draggingConnections_.push(one);
+  Blockly.draggingConnections_.push(two);
+
+  assertFalse(two.isConnectionAllowed(one));
+  assertFalse(one.isConnectionAllowed(two));
+}
+
+function test_canConnect_stackStart() {
+  var sharedWorkspace = {};
+  var block1Next = helper_createConnection(0, 0, Blockly.NEXT_STATEMENT);
+  var block1 = helper_makeSourceBlock(sharedWorkspace);
+  block1Next.sourceBlock_ = block1
+  block1.nextConnection = block1Next;
+
+  var block1Prev = helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT);
+  block1Prev.sourceBlock_ = block1;
+  block1.previousConnection = block1Prev
+
+  var block2Prev = helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT);
+  block2Prev.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+  block2Prev.sourceBlock_.previousConnection = block2Prev;
+
+  Blockly.Connection.connectReciprocally_(block1Next, block2Prev);
+
+  var three = helper_createConnection(0, 0, Blockly.NEXT_STATEMENT);
+  three.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+  three.sourceBlock_.nextConnection = three;
+
+  // Can connect at the beginning of the stack.
+  assertTrue(three.canConnectToPrevious_(block1Prev));
+  // But not in the middle of the stack.
+  assertFalse(three.canConnectToPrevious_(block2Prev));
+}
+
+function test_canConnect_stackStart_insertionMarker() {
+  var sharedWorkspace = {};
+  var block1Next = helper_createConnection(0, 0, Blockly.NEXT_STATEMENT);
+  var block1 = helper_makeSourceBlock(sharedWorkspace);
+  block1.isInsertionMarker = function() {
+    return true;
+  }
+  block1.getPreviousBlock = function() {
+    return false;
+  }
+  block1Next.sourceBlock_ = block1
+  block1.nextConnection = block1Next;
+
+  var block1Prev = helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT);
+  block1Prev.sourceBlock_ = block1;
+  block1.previousConnection = block1Prev
+
+  var block2Prev = helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT);
+  var block2 = helper_makeSourceBlock(sharedWorkspace);
+  block2Prev.sourceBlock_ = block2;
+  block2.previousConnection = block2Prev;
+  block2.getPreviousBlock = function() {
+    return block1;
+  }
+
+
+  Blockly.Connection.connectReciprocally_(block1Next, block2Prev);
+
+  var three = helper_createConnection(0, 0, Blockly.NEXT_STATEMENT);
+  three.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+  three.sourceBlock_.nextConnection = three;
+
+  // Can't connect to the previous connection of an insertion marker.
+  assertFalse(three.isConnectionAllowed(block1Prev));
+  // But can connect to a previous connection that is already connected to an
+  // insertion marker.
+  assertTrue(three.isConnectionAllowed(block2Prev));
+}
+
 function testCheckConnection_Okay() {
   connectionTest_setUp();
   previous.checkConnection_(next);

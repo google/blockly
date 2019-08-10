@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blockly Demo: Keyboard Navigation</title>
+  <script src="../../blockly_compressed.js"></script>
+  <script src="../../blocks_compressed.js"></script>
+  <script src="../../javascript_compressed.js"></script>
+  <script src="../../msg/js/en.js"></script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+  </style>
+</head>
+<body>
+  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Keyboard Navigation</h1>
+
+  <p>Keyboard Navigation is our first step towards an accessible Blockly.<br>
+  You can enter accessibility mode by <b>shift clicking anywhere on the
+  workspace or on a block</b>. <br>Some basic commands for moving around are below.
+  More complete documentation is still in progress.<br><br>
+    <b>Workspace Navigation</b><br>
+    W: Previous block/field/input at the same level<br>
+    A: Up one level (Field (or input) -> Block -> Input (or field) -> Block ->
+    Stack -> Workspace)<br>
+    S: Next block/field/input at the same level<br>
+    D: Down one level (Workspace -> Stack -> Block -> Input (or field) -> Block
+     -> Field (or input))<br>
+    T: Will open the toolbox. Once in there you can moving around using the WASD keys. And insert a block by hitting Enter<br>
+    X: While on a connection hit X to disconnect the block after the cursor<br><br>
+
+  <b>Pre Order Traversal</b><br>
+  Feel free to just play around in accessibility mode or hit the button below to see the demo.
+  The demo uses <a href="https://en.wikipedia.org/wiki/Tree_traversal#Pre-order_(NLR)">preorder tree traversal</a>
+  as an alternative way to navigate the blocks,
+  connections, and fields on the workspace.
+  </p>
+
+  <!-- TODO: Update when we add keyboard navigation to site -->
+  <!-- <p>&rarr; More info on <a href="">Keyboard Navigation</a>.</p> -->
+
+  <p>
+    <button onclick="preOrderDemo()">Pre-order Demo</button>
+    <button onclick="turnOnAccessibility()">Accessibility Mode</button>
+  </p>
+
+  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+    </category>
+    <category name="Loops" colour="%{BKY_LOOPS_HUE}">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+    </category>
+    <category name="Math" colour="%{BKY_MATH_HUE}">
+      <block type="math_number">
+        <field name="NUM">123</field>
+      </block>
+      <block type="math_arithmetic"></block>
+      <block type="math_single"></block>
+    </category>
+    <category name="Text" colour="%{BKY_TEXTS_HUE}">
+      <block type="text"></block>
+      <block type="text_length"></block>
+      <block type="text_print"></block>
+    </category>
+  </xml>
+
+  <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
+    <variables>
+      <variable id="~GNXm@Z(wclI]t3zTf.g">list</variable>
+      <variable id="8]s[S+Gy+%k7HoFup])m">item</variable>
+    </variables>
+    <block type="controls_if" x="37" y="162">
+      <value name="IF0">
+        <block type="logic_compare">
+          <field name="OP">EQ</field>
+          <value name="A">
+            <block type="math_arithmetic">
+              <field name="OP">ADD</field>
+              <value name="A">
+                <shadow type="math_number">
+                  <field name="NUM">1</field>
+                </shadow>
+              </value>
+              <value name="B">
+                <shadow type="math_number">
+                  <field name="NUM">1</field>
+                </shadow>
+              </value>
+            </block>
+          </value>
+          <value name="B">
+            <block type="math_single">
+              <field name="OP">ROOT</field>
+              <value name="NUM">
+                <shadow type="math_number">
+                  <field name="NUM">9</field>
+                </shadow>
+                <block type="math_number">
+                  <field name="NUM">123</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+      <statement name="DO0">
+        <block type="lists_setIndex">
+          <mutation at="true"></mutation>
+          <field name="MODE">SET</field>
+          <field name="WHERE">FROM_START</field>
+          <value name="LIST">
+            <block type="variables_get">
+              <field name="VAR" id="~GNXm@Z(wclI]t3zTf.g">list</field>
+            </block>
+          </value>
+          <next>
+            <block type="text_append">
+              <field name="VAR" id="8]s[S+Gy+%k7HoFup])m">item</field>
+              <value name="TEXT">
+                <shadow type="text">
+                  <field name="TEXT"></field>
+                </shadow>
+              </value>
+            </block>
+          </next>
+        </block>
+      </statement>
+      <next>
+        <block type="controls_repeat_ext">
+          <value name="TIMES">
+            <shadow type="math_number">
+              <field name="NUM">10</field>
+            </shadow>
+          </value>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+  <script>
+    var demoWorkspace = Blockly.inject('blocklyDiv',
+        {media: '../../media/',
+         toolbox: document.getElementById('toolbox')});
+    Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
+                               demoWorkspace);
+
+    /**
+     * Decides what nodes to traverse and which ones to skip. Currently, it
+     * skips output, stack and workspace nodes.
+     * @param {Blockly.ASTNode} node The AST node to check whether it is valid.
+     * @return {boolean} True if the node should be visited, false otherwise.
+     * @package
+     */
+    function validNode(node) {
+      var isValid = false;
+      var type = node && node.getType();
+      if (type == Blockly.ASTNode.types.BLOCK ||
+          type == Blockly.ASTNode.types.INPUT ||
+          type == Blockly.ASTNode.types.FIELD ||
+          type == Blockly.ASTNode.types.NEXT ||
+          type == Blockly.ASTNode.types.PREVIOUS) {
+        isValid = true;
+      }
+      return isValid;
+    }
+
+    /**
+     * From the given node find either the next valid sibling or parent.
+     * @param {Blockly.ASTNode} node The current position in the AST.
+     * @return {Blockly.ASTNode} The parent AST node or null if there are no
+     * valid parents.
+     * @package
+     */
+    function findSiblingOrParent(node) {
+      if (!node) {
+        return null;
+      }
+      var nextNode = node.next();
+      if (nextNode) {
+        return nextNode;
+      }
+      return findSiblingOrParent(node.out());
+    }
+
+    /**
+     * Uses pre order traversal to go navigate the Blockly AST. This will allow
+     * a user to easily navigate the entire Blockly AST without having to go in
+     * and out levels on the tree.
+     * @param {Blockly.ASTNode} node The current position in the AST.
+     * @return {Blockly.ASTNode} The next node in the traversal.
+     * @package
+     */
+    function treeTraversal(node) {
+      if (!node) {
+        return null;
+      }
+      var newNode = node.in() || node.next();
+      if (validNode(newNode)) {
+        return newNode;
+      } else if (newNode) {
+        return treeTraversal(newNode);
+      }
+      var siblingOrParent = findSiblingOrParent(node.out());
+      if (validNode(siblingOrParent)) {
+        return siblingOrParent;
+      } else if (siblingOrParent &&
+          siblingOrParent.getType() !== Blockly.ASTNode.types.WORKSPACE) {
+        return treeTraversal(siblingOrParent);
+      }
+      return null;
+    }
+
+    /**
+     * Finds the next node in the tree traversal starting at the location of
+     * the cursor.
+     * @return {Blockly.ASTNode} The next node in the traversal.
+     * @package
+     */
+    function findNext() {
+      var cursor = Blockly.Navigation.cursor_;
+      var curNode = cursor.getCurNode();
+      return treeTraversal(curNode);
+    }
+
+    /**
+     * Shows the next node in the tree traversal every second.
+     * @package
+     */
+    function demo() {
+      var doNext = function() {
+        var node = findNext();
+        Blockly.Navigation.cursor_.setLocation(node);
+        if (node) {
+          setTimeout(doNext, 1000);
+        }
+      }
+      doNext();
+    }
+
+    /**
+     * Sets up accessibility mode so that the demo can successfully run.
+     * @package
+     */
+    function preOrderDemo() {
+      Blockly.Navigation.enableKeyboardAccessibility();
+      if (!Blockly.Navigation.cursor_.getCurNode()) {
+        Blockly.Navigation.focusWorkspace();
+      }
+      demo();
+    }
+
+    /**
+    * Turn on accessibility mode.
+    * If there is a block on the workspace add the cursor to the block otherwise
+    * add the cursor to the workspace.
+    * previous connection otherwise add
+    * @package
+    */
+    function turnOnAccessibility() {
+      Blockly.Navigation.enableKeyboardAccessibility();
+      var blocks = Blockly.getMainWorkspace().getTopBlocks();
+      if (blocks.length > 0) {
+        var newNode;
+        if (blocks[0].previousConnection) {
+          newNode = Blockly.ASTNode.createConnectionNode(blocks[0].previousConnection);
+        } else {
+          newNode = Blockly.ASTNode.createBlockNode(blocks[0]);
+        }
+        Blockly.Navigation.cursor_.setLocation(newNode);
+      } else {
+        Blockly.Navigation.focusWorkspace();
+      }
+    }
+  </script>
+
+</body>
+</html>

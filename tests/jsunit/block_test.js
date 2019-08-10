@@ -22,9 +22,14 @@
  * @fileoverview Tests for Blockly.Block
  * @author fenichel@google.com (Rachel Fenichel)
  */
+
+goog.require('goog.testing');
+goog.require('goog.testing.MockControl');
+
 'use strict';
 
 var workspace;
+var mockControl_;
 
 function defineTestBlocks() {
   Blockly.defineBlocksWithJsonArray([{
@@ -53,12 +58,14 @@ function undefineTestBlocks() {
 
 function blockTest_setUp() {
   defineTestBlocks();
+  mockControl_ = new goog.testing.MockControl();
   workspace = new Blockly.Workspace();
 }
 
 function blockTest_tearDown() {
   undefineTestBlocks();
   workspace.dispose();
+  mockControl_.$tearDown();
 }
 
 function assertUnpluggedNoheal(blocks) {
@@ -94,7 +101,7 @@ function setUpRowBlocks() {
     A: blockA,
     B: blockB,
     C: blockC
-  }
+  };
 }
 
 function setUpStackBlocks() {
@@ -111,7 +118,7 @@ function setUpStackBlocks() {
     A: blockA,
     B: blockB,
     C: blockC
-  }
+  };
 }
 
 
@@ -213,7 +220,7 @@ function test_block_row_unplug_multi_inputs_parent() {
   try {
     var blocks = setUpRowBlocks();
     // Add extra input to parent
-    blocks.A.appendValueInput("INPUT").setCheck(null);
+    blocks.A.appendValueInput('INPUT').setCheck(null);
 
     // Parent block has multiple inputs.
     blocks.B.unplug(true);
@@ -228,11 +235,11 @@ function test_block_row_unplug_multi_inputs_middle() {
   try {
     var blocks = setUpRowBlocks();
     // Add extra input to middle block
-    blocks.B.appendValueInput("INPUT").setCheck(null);
+    blocks.B.appendValueInput('INPUT').setCheck(null);
 
     // Middle block has multiple inputs.
     blocks.B.unplug(true);
-    assertUnpluggedNoheal(blocks);
+    assertUnpluggedHealed(blocks);
   } finally {
     blockTest_tearDown();
   }
@@ -243,11 +250,51 @@ function test_block_row_unplug_multi_inputs_child() {
   try {
     var blocks = setUpRowBlocks();
     // Add extra input to child block
-    blocks.C.appendValueInput("INPUT").setCheck(null);
+    blocks.C.appendValueInput('INPUT').setCheck(null);
 
     // Child block input count doesn't matter.
     blocks.B.unplug(true);
     assertUnpluggedHealed(blocks);
+  } finally {
+    blockTest_tearDown();
+  }
+}
+
+function test_set_style() {
+  blockTest_setUp();
+  var styleStub = {
+    getBlockStyle: function() {
+      return {
+        "colourPrimary": "#ffffff",
+        "colourSecondary": "#aabbcc",
+        "colourTertiary": "#ddeeff"
+      }
+    }
+  };
+  setUpMockMethod(mockControl_, Blockly, 'getTheme', null, [styleStub]);
+  var blockA = workspace.newBlock('row_block');
+  blockA.setStyle('styleOne');
+
+  assertEquals('#ffffff', blockA.colour_);
+  assertEquals('#aabbcc', blockA.colourSecondary_);
+  assertEquals('#ddeeff', blockA.colourTertiary_);
+
+  blockTest_tearDown();
+}
+
+function test_set_style_throw_exception() {
+  blockTest_setUp();
+  var styleStub = {
+    getBlockStyle: function() {
+      return null;
+    }
+  };
+  setUpMockMethod(mockControl_, Blockly, 'getTheme', null, [styleStub]);
+  var blockA = workspace.newBlock('row_block');
+  try {
+    blockA.setStyle('styleOne');
+  } catch(error) {
+    assertEquals(error.message, 'Invalid style name: styleOne');
   } finally {
     blockTest_tearDown();
   }

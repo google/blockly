@@ -51,9 +51,9 @@ def main():
     try:
       with codecs.open(filename, 'r', 'utf-8') as infile:
         j = json.load(infile)
-    except ValueError, e:
+    except ValueError as e:
       print('Error reading ' + filename)
-      raise InputError(file, str(e))
+      raise InputError(filename, str(e))
 
     # Built up output strings as an array to make output of delimiters easier.
     output = []

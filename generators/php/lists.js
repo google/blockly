@@ -430,7 +430,7 @@ Blockly.PHP['lists_getSublist'] = function(block) {
          '    $at1 = count($list) - 1 - $at1;',
          '  } else if ($where1 == \'FIRST\') {',
          '    $at1 = 0;',
-         '  } else if ($where1 != \'FROM_START\'){',
+         '  } else if ($where1 != \'FROM_START\') {',
          '    throw new Exception(\'Unhandled option (lists_get_sublist).\');',
          '  }',
          '  $length = 0;',

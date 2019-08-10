@@ -81,10 +81,10 @@ Minimap.init = function(workspace, minimap) {
   this.rect = document.getElementById('mapDiv').getBoundingClientRect();
 
   // Create a svg overlay on the top of mapDiv for the minimap.
-  this.svg = Blockly.utils.createSvgElement('svg', {
-    'xmlns': 'http://www.w3.org/2000/svg',
-    'xmlns:html': 'http://www.w3.org/1999/xhtml',
-    'xmlns:xlink': 'http://www.w3.org/1999/xlink',
+  this.svg = Blockly.utils.dom.createSvgElement('svg', {
+    'xmlns': Blockly.utils.dom.SVG_NS,
+    'xmlns:html': Blockly.utils.dom.HTML_NS,
+    'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
     'version': '1.1',
     'height': this.rect.bottom-this.rect.top,
     'width': this.rect.right-this.rect.left,
@@ -94,7 +94,7 @@ Minimap.init = function(workspace, minimap) {
   this.svg.style.left = this.rect.left + 'px';
 
   // Creating a rectangle in the minimap that represents current view.
-  Blockly.utils.createSvgElement('rect', {
+  Blockly.utils.dom.createSvgElement('rect', {
     'width': 100,
     'height': 100,
     'class': 'mapDragger'

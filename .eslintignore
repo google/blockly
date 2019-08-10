@@ -8,6 +8,8 @@ gulpfile.js
 /tests/compile/*
 /tests/jsunit/*
 /tests/generators/*
+/tests/mocha/run_mocha_tests_in_browser.js
+/tests/screenshot/*
 /tests/test_runner.js
 /tests/workspace_svg/*
 /generators/*

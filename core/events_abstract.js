@@ -29,6 +29,7 @@ goog.provide('Blockly.Events.Abstract');
 
 goog.require('Blockly.Events');
 
+
 /**
  * Abstract class for an event.
  * @constructor

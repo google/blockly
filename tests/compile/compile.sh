@@ -23,8 +23,8 @@ fi
 
 # Find the Closure Compiler.
 if [ -n $NODE_MODULES ] && \
-  [ -s $NODE_MODULES/google-closure-compiler/compiler.jar ]; then
-  COMPILER=$NODE_MODULES/google-closure-compiler/compiler.jar
+  [ -s $NODE_MODULES/google-closure-compiler-java/compiler.jar ]; then
+  COMPILER=$NODE_MODULES/google-closure-compiler-java/compiler.jar
   echo "Found npm google-closure-compiler:"
   echo "  $COMPILER"
   npm list google-closure-compiler | grep google-closure-compiler
@@ -73,9 +73,54 @@ if [ -f "$BLOCKLY_ROOT/tests/compile/main_compressed.js" ]; then
   rm "$BLOCKLY_ROOT/tests/compile/main_compressed.js"
 fi
 
+# If an argument is passed and is a valid renderer name use it. Otherwise use
+# the default renderer name.
+if [[ $# == 1 ]]; then
+  if [ $(find "$BLOCKLY_ROOT/core" -name "$1") ]; then
+    renderName=$1
+  else
+    echo "A renderer with the name $1 does not exist"
+    echo "Please provide a valid renderer name"
+    exit 1
+  fi
+else
+  renderName="block_rendering_rewrite"
+fi
+
+tempPath="$BLOCKLY_ROOT/temp_core"
+corePath="$BLOCKLY_ROOT/core/*"
+mkdir $tempPath
+cp $corePath $tempPath
+
+# Copy over all files except for the extra renderers to the temp_core directory.
+for dir in ./core/*/ ; do
+  # If we are in the renderers directory
+  if [[ $dir == *"/renderers/"* ]]; then
+    renderers="$dir*"
+    # Go through all folders in the renderers direcotry
+    for renderer in $renderers ; do
+      if [[ $renderer == *"${renderName}" ]]; then
+        # Copy over all files from the desired render folder
+        find $renderer -type f -exec cp {} $tempPath \;
+      fi
+    done
+  else
+    # For all files in the directory and any subdirectories rename them to
+    # include the subirectory name and copy them to temporary directory.
+    # Ex: subdir/file.js -> temp_core/subdir_file.js
+    for file in $(find $dir -name \*.js); do
+      # Replace all / with _ and remove core
+      newName="${file//\//_}"
+      newName="${newName//._core_/}"
+      newFilePath="$tempPath/$newName"
+      cp $file $newFilePath
+    done
+  fi
+done
+
 echo "Compiling Blockly..."
 COMPILATION_COMMAND="java -jar $COMPILER --js='$BLOCKLY_ROOT/tests/compile/main.js' \
-  --js='$BLOCKLY_ROOT/core/**.js' \
+  --js='$BLOCKLY_ROOT/$tempPath/**.js' \
   --js='$BLOCKLY_ROOT/blocks/**.js' \
   --js='$BLOCKLY_ROOT/generators/**.js' \
   --js='$BLOCKLY_ROOT/msg/js/**.js' \
@@ -96,3 +141,6 @@ else
   echo "Compilation FAIL."
   exit 1
 fi
+
+# Cleanup temp_core directory
+rm -r $tempPath

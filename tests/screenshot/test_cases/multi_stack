@@ -1,0 +1,53 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="YUz?xxnE}SFx_,jmW#s;">item</variable>
+  </variables>
+  <block type="text_append">
+    <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;">item</field>
+    <value name="TEXT">
+      <shadow type="text">
+        <field name="TEXT">one</field>
+      </shadow>
+    </value>
+    <next>
+      <block type="text_append">
+        <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;">item</field>
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">two</field>
+          </shadow>
+        </value>
+        <next>
+          <block type="text_append">
+            <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;">item</field>
+            <value name="TEXT">
+              <shadow type="text">
+                <field name="TEXT">three</field>
+              </shadow>
+            </value>
+            <next>
+              <block type="text_append">
+                <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;">item</field>
+                <value name="TEXT">
+                  <shadow type="text">
+                    <field name="TEXT">four</field>
+                  </shadow>
+                </value>
+                <next>
+                  <block type="text_append">
+                    <field name="VAR" id="YUz?xxnE}SFx_,jmW#s;">item</field>
+                    <value name="TEXT">
+                      <shadow type="text">
+                        <field name="TEXT">five</field>
+                      </shadow>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

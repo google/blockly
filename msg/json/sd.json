@@ -3,18 +3,21 @@
 		"authors": [
 			"Aursani",
 			"Mehtab ahmed",
-			"Indus Asia"
+			"Indus Asia",
+			"Tweety"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "اسم",
 	"TODAY": "اڄ",
 	"DUPLICATE_BLOCK": "نقل",
-	"ADD_COMMENT": "راءِ ڏيو",
-	"REMOVE_COMMENT": "راءِ ڊاهيو",
-	"EXTERNAL_INPUTS": "ٻاهرين ڄاڻ",
+	"ADD_COMMENT": "رايو ڏيو",
+	"REMOVE_COMMENT": "رايو ڊاهيو",
+	"DUPLICATE_COMMENT": "نقل رايو",
+	"EXTERNAL_INPUTS": "ٻاهرين داخلائون",
 	"INLINE_INPUTS": "اِنلائين اِن پٽس",
 	"DELETE_BLOCK": "بلاڪ ڊاهيو",
 	"DELETE_X_BLOCKS": "1٪ بلاڪ ڊاهيو",
+	"DELETE_ALL_BLOCKS": "سڀ %1 بلاڪ ڊاھيون؟",
 	"CLEAN_UP": "بندشون هٽايو",
 	"COLLAPSE_BLOCK": "بلاڪ ڍڪيو",
 	"COLLAPSE_ALL": "بلاڪَ ڍڪيو",

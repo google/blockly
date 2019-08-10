@@ -151,11 +151,12 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
       }
     }
   }
-  // Most languages end lines with a semicolon.  Python does not.
+  // Most languages end lines with a semicolon.  Python & Lua do not.
   var lineEnd = {
     'JavaScript': ';',
     'Python': '',
     'PHP': ';',
+    'Lua': '',
     'Dart': ';'
   };
   code.push("  // TODO: Assemble " + language + " into code variable.");
@@ -406,6 +407,12 @@ FactoryUtils.getFieldsJs_ = function(block) {
           // Result: 'hello'
           fields.push(JSON.stringify(block.getFieldValue('TEXT')));
           break;
+        case 'field_label_serializable':
+          // Result: new Blockly.FieldLabelSerializable('Hello'), 'GREET'
+          fields.push('new Blockly.FieldLabelSerializable(' +
+              JSON.stringify(block.getFieldValue('TEXT')) + '), ' +
+              JSON.stringify(block.getFieldValue('FIELDNAME')));
+          break;
         case 'field_input':
           // Result: new Blockly.FieldTextInput('Hello'), 'GREET'
           fields.push('new Blockly.FieldTextInput(' +
@@ -436,7 +443,7 @@ FactoryUtils.getFieldsJs_ = function(block) {
         case 'field_angle':
           // Result: new Blockly.FieldAngle(90), 'ANGLE'
           fields.push('new Blockly.FieldAngle(' +
-              parseFloat(block.getFieldValue('ANGLE')) + '), ' +
+              Number(block.getFieldValue('ANGLE')) + '), ' +
               JSON.stringify(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_checkbox':
@@ -511,6 +518,13 @@ FactoryUtils.getFieldsJson_ = function(block) {
           // Result: 'hello'
           fields.push(block.getFieldValue('TEXT'));
           break;
+        case 'field_label_serializable':
+          fields.push({
+            type: block.type,
+            name: block.getFieldValue('FIELDNAME'),
+            text: block.getFieldValue('TEXT')
+          });
+          break;
         case 'field_input':
           fields.push({
             type: block.type,
@@ -522,17 +536,17 @@ FactoryUtils.getFieldsJson_ = function(block) {
           var obj = {
             type: block.type,
             name: block.getFieldValue('FIELDNAME'),
-            value: parseFloat(block.getFieldValue('VALUE'))
+            value: Number(block.getFieldValue('VALUE'))
           };
-          var min = parseFloat(block.getFieldValue('MIN'));
+          var min = Number(block.getFieldValue('MIN'));
           if (min > -Infinity) {
             obj.min = min;
           }
-          var max = parseFloat(block.getFieldValue('MAX'));
+          var max = Number(block.getFieldValue('MAX'));
           if (max < Infinity) {
             obj.max = max;
           }
-          var precision = parseFloat(block.getFieldValue('PRECISION'));
+          var precision = Number(block.getFieldValue('PRECISION'));
           if (precision) {
             obj.precision = precision;
           }
@@ -593,7 +607,8 @@ FactoryUtils.getFieldsJson_ = function(block) {
             src: block.getFieldValue('SRC'),
             width: Number(block.getFieldValue('WIDTH')),
             height: Number(block.getFieldValue('HEIGHT')),
-            alt: block.getFieldValue('ALT')
+            alt: block.getFieldValue('ALT'),
+            flipRtl: block.getFieldValue('FLIP_RTL') == 'TRUE'
           });
           break;
       }
@@ -765,7 +780,7 @@ FactoryUtils.getBlockTypeFromJsDefinition = function(blockDef) {
  */
 FactoryUtils.generateCategoryXml = function(blocks, categoryName) {
   // Create category DOM element.
-  var categoryElement = document.createElement('category');
+  var categoryElement = Blockly.utils.xml.createElement('category');
   categoryElement.setAttribute('name', categoryName);
 
   // For each block, add block element to category.
@@ -887,9 +902,9 @@ FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
 FactoryUtils.injectCode = function(code, id) {
   var pre = document.getElementById(id);
   pre.textContent = code;
-  code = pre.textContent;
-  code = PR.prettyPrintOne(code, 'js');
-  pre.innerHTML = code;
+  // Remove the 'prettyprinted' class, so that Prettify will recalculate.
+  pre.className = pre.className.replace('prettyprinted', '');
+  PR.prettyPrint();
 };
 
 /**

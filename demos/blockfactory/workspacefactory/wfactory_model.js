@@ -50,7 +50,7 @@ WorkspaceFactoryModel = function() {
   // Boolean for if a Procedure category has been added.
   this.hasProcedureCategory = false;
   // XML to be pre-loaded to workspace. Empty on default;
-  this.preloadXml = Blockly.Xml.textToDom('<xml></xml>');
+  this.preloadXml = Blockly.utils.xml.createElement('xml');
   // Options object to be configured for Blockly inject call.
   this.options = new Object(null);
   // Block Library block types.
@@ -288,7 +288,7 @@ WorkspaceFactoryModel.prototype.clearToolboxList = function() {
   this.hasVariableCategory = false;
   this.hasProcedureCategory = false;
   this.shadowBlocks = [];
-  this.selected.xml = Blockly.Xml.textToDom('<xml></xml>');
+  this.selected.xml = Blockly.utils.xml.createElement('xml');
 };
 
 /**
@@ -488,7 +488,7 @@ WorkspaceFactoryModel.prototype.hasDefinedBlockTypes = function(blockTypes) {
 ListElement = function(type, opt_name) {
   this.type = type;
   // XML DOM element to load the element.
-  this.xml = Blockly.Xml.textToDom('<xml></xml>');
+  this.xml = Blockly.utils.xml.createElement('xml');
   // Name of category. Can be changed by user. Null if separator.
   this.name = opt_name ? opt_name : null;
   // Unique ID of element. Does not change.
@@ -535,7 +535,8 @@ ListElement.prototype.changeName = function (name) {
 /**
  * Sets the color of a category. If tries to set the color of something other
  * than a category, returns.
- * @param {string} color The color that should be used for that category.
+ * @param {?string} color The color that should be used for that category,
+ *     or null if none.
  */
 ListElement.prototype.changeColor = function (color) {
   if (this.type != ListElement.TYPE_CATEGORY) {

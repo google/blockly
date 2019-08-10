@@ -1,17 +1,20 @@
 language: node_js
-matrix:
-  include:
-    - os: linux
-      dist: trusty
-      node_js: stable
-      sudo: required
-      addons:
-        apt:
-          packages:
-          - google-chrome-stable
-    - os: osx
-      node_js: stable
-      osx_image: xcode8.3
+os: linux
+dist: trusty
+node_js:
+  - 8
+  - 10
+addons:
+  firefox: latest
+  apt:
+    packages:
+    - google-chrome-stable
+    # TODO (#2114): reenable osx build.
+    # - os: osx
+    #   node_js: stable
+    #   osx_image: xcode8.3
+    #   addons:
+    #     firefox: latest
 
 before_script:
   # Symlink closure library used by test/jsunit

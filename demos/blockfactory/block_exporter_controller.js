@@ -253,8 +253,8 @@ BlockExporterController.prototype.selectUsedBlocks = function() {
   }
   this.view.listSelectedBlocks();
 
-  if (unstoredCustomBlockTypes.length > 0){
-    // Warn user to import block defifnitions and generator code for blocks
+  if (unstoredCustomBlockTypes.length > 0) {
+    // Warn user to import block definitions and generator code for blocks
     // not in their Block Library nor Blockly's standard library.
     var blockTypesText = unstoredCustomBlockTypes.join(', ');
     var customWarning = 'Custom blocks used in workspace factory but not ' +

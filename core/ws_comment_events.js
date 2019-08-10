@@ -32,10 +32,9 @@ goog.provide('Blockly.Events.CommentMove');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.xml');
 goog.require('Blockly.Xml');
-goog.require('Blockly.Xml.utils');
-
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -208,7 +207,7 @@ Blockly.Events.CommentCreate.prototype.toJson = function() {
  */
 Blockly.Events.CommentCreate.prototype.fromJson = function(json) {
   Blockly.Events.CommentCreate.superClass_.fromJson.call(this, json);
-  this.xml = Blockly.Xml.textToDom('<xml>' + json['xml'] + '</xml>').firstChild;
+  this.xml = Blockly.Xml.textToDom(json['xml']);
 };
 
 /**
@@ -228,7 +227,7 @@ Blockly.Events.CommentCreate.prototype.run = function(forward) {
 Blockly.Events.CommentCreateDeleteHelper = function(event, create) {
   var workspace = event.getEventWorkspace_();
   if (create) {
-    var xml = Blockly.Xml.utils.createElement('xml');
+    var xml = Blockly.utils.xml.createElement('xml');
     xml.appendChild(event.xml);
     Blockly.Xml.domToWorkspace(xml, workspace);
   } else {
@@ -306,19 +305,19 @@ Blockly.Events.CommentMove = function(comment) {
   /**
    * The comment that is being moved.  Will be cleared after recording the new
    * location.
-   * @type {?Blockly.WorkspaceComment}
+   * @type {Blockly.WorkspaceComment}
    */
   this.comment_ = comment;
 
   /**
    * The location before the move, in workspace coordinates.
-   * @type {!goog.math.Coordinate}
+   * @type {!Blockly.utils.Coordinate}
    */
   this.oldCoordinate_ = comment.getXY();
 
   /**
    * The location after the move, in workspace coordinates.
-   * @type {!goog.math.Coordinate}
+   * @type {!Blockly.utils.Coordinate}
    */
   this.newCoordinate_ = null;
 };
@@ -346,8 +345,8 @@ Blockly.Events.CommentMove.prototype.type = Blockly.Events.COMMENT_MOVE;
 /**
  * Override the location before the move.  Use this if you don't create the
  * event until the end of the move, but you know the original location.
- * @param {!goog.math.Coordinate} xy The location before the move, in workspace
- *     coordinates.
+ * @param {!Blockly.utils.Coordinate} xy The location before the move,
+ *     in workspace coordinates.
  */
 Blockly.Events.CommentMove.prototype.setOldCoordinate = function(xy) {
   this.oldCoordinate_ = xy;
@@ -377,7 +376,7 @@ Blockly.Events.CommentMove.prototype.fromJson = function(json) {
   if (json['newCoordinate']) {
     var xy = json['newCoordinate'].split(',');
     this.newCoordinate_ =
-        new goog.math.Coordinate(parseFloat(xy[0]), parseFloat(xy[1]));
+        new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
   }
 };
 
@@ -386,7 +385,8 @@ Blockly.Events.CommentMove.prototype.fromJson = function(json) {
  * @return {boolean} False if something changed.
  */
 Blockly.Events.CommentMove.prototype.isNull = function() {
-  return goog.math.Coordinate.equals(this.oldCoordinate_, this.newCoordinate_);
+  return Blockly.utils.Coordinate.equals(this.oldCoordinate_,
+      this.newCoordinate_);
 };
 
 /**

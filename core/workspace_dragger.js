@@ -26,7 +26,7 @@
 
 goog.provide('Blockly.WorkspaceDragger');
 
-goog.require('goog.math.Coordinate');
+goog.require('Blockly.utils.Coordinate');
 
 
 /**
@@ -46,21 +46,12 @@ Blockly.WorkspaceDragger = function(workspace) {
   this.workspace_ = workspace;
 
   /**
-   * The workspace's metrics object at the beginning of the drag.  Contains size
-   * and position metrics of a workspace.
-   * Coordinate system: pixel coordinates.
-   * @type {!Object}
-   * @private
-   */
-  this.startDragMetrics_ = workspace.getMetrics();
-
-  /**
    * The scroll position of the workspace at the beginning of the drag.
    * Coordinate system: pixel coordinates.
-   * @type {!goog.math.Coordinate}
+   * @type {!Blockly.utils.Coordinate}
    * @private
    */
-  this.startScrollXY_ = new goog.math.Coordinate(
+  this.startScrollXY_ = new Blockly.utils.Coordinate(
       workspace.scrollX, workspace.scrollY);
 };
 
@@ -85,7 +76,7 @@ Blockly.WorkspaceDragger.prototype.startDrag = function() {
 
 /**
  * Finish dragging the workspace and put everything back where it belongs.
- * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel coordinates.
  * @package
  */
@@ -97,35 +88,11 @@ Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
 
 /**
  * Move the workspace based on the most recent mouse movements.
- * @param {!goog.math.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel coordinates.
  * @package
  */
 Blockly.WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
-  var metrics = this.startDragMetrics_;
-  var newXY = goog.math.Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
-
-  // Bound the new XY based on workspace bounds.
-  var x = Math.min(newXY.x, -metrics.contentLeft);
-  var y = Math.min(newXY.y, -metrics.contentTop);
-  x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
-               metrics.contentWidth);
-  y = Math.max(y, metrics.viewHeight - metrics.contentTop -
-               metrics.contentHeight);
-
-  x = -x - metrics.contentLeft;
-  y = -y - metrics.contentTop;
-
-  this.updateScroll_(x, y);
-};
-
-/**
- * Move the scrollbars to drag the workspace.
- * x and y are in pixels.
- * @param {number} x The new x position to move the scrollbar to.
- * @param {number} y The new y position to move the scrollbar to.
- * @private
- */
-Blockly.WorkspaceDragger.prototype.updateScroll_ = function(x, y) {
-  this.workspace_.scrollbar.set(x, y);
+  var newXY = Blockly.utils.Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
+  this.workspace_.scroll(newXY.x, newXY.y);
 };

@@ -40,7 +40,7 @@ Blockly.PHP['controls_repeat_ext'] = function(block) {
         Blockly.PHP.ORDER_ASSIGNMENT) || '0';
   }
   var branch = Blockly.PHP.statementToCode(block, 'DO');
-  branch = Blockly.PHP.addLoopTrap(branch, block.id);
+  branch = Blockly.PHP.addLoopTrap(branch, block);
   var code = '';
   var loopVar = Blockly.PHP.variableDB_.getDistinctName(
       'count', Blockly.Variables.NAME_TYPE);
@@ -66,7 +66,7 @@ Blockly.PHP['controls_whileUntil'] = function(block) {
       until ? Blockly.PHP.ORDER_LOGICAL_NOT :
       Blockly.PHP.ORDER_NONE) || 'false';
   var branch = Blockly.PHP.statementToCode(block, 'DO');
-  branch = Blockly.PHP.addLoopTrap(branch, block.id);
+  branch = Blockly.PHP.addLoopTrap(branch, block);
   if (until) {
     argument0 = '!' + argument0;
   }
@@ -84,16 +84,16 @@ Blockly.PHP['controls_for'] = function(block) {
   var increment = Blockly.PHP.valueToCode(block, 'BY',
       Blockly.PHP.ORDER_ASSIGNMENT) || '1';
   var branch = Blockly.PHP.statementToCode(block, 'DO');
-  branch = Blockly.PHP.addLoopTrap(branch, block.id);
+  branch = Blockly.PHP.addLoopTrap(branch, block);
   var code;
   if (Blockly.isNumber(argument0) && Blockly.isNumber(argument1) &&
       Blockly.isNumber(increment)) {
     // All arguments are simple numbers.
-    var up = parseFloat(argument0) <= parseFloat(argument1);
+    var up = Number(argument0) <= Number(argument1);
     code = 'for (' + variable0 + ' = ' + argument0 + '; ' +
         variable0 + (up ? ' <= ' : ' >= ') + argument1 + '; ' +
         variable0;
-    var step = Math.abs(parseFloat(increment));
+    var step = Math.abs(Number(increment));
     if (step == 1) {
       code += up ? '++' : '--';
     } else {
@@ -145,7 +145,7 @@ Blockly.PHP['controls_forEach'] = function(block) {
   var argument0 = Blockly.PHP.valueToCode(block, 'LIST',
       Blockly.PHP.ORDER_ASSIGNMENT) || '[]';
   var branch = Blockly.PHP.statementToCode(block, 'DO');
-  branch = Blockly.PHP.addLoopTrap(branch, block.id);
+  branch = Blockly.PHP.addLoopTrap(branch, block);
   var code = '';
   code += 'foreach (' + argument0 + ' as ' + variable0 +
       ') {\n' + branch + '}\n';
@@ -154,11 +154,31 @@ Blockly.PHP['controls_forEach'] = function(block) {
 
 Blockly.PHP['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
+  var xfix = '';
+  if (Blockly.PHP.STATEMENT_PREFIX) {
+    // Automatic prefix insertion is switched off for this block.  Add manually.
+    xfix += Blockly.PHP.injectId(Blockly.PHP.STATEMENT_PREFIX, block);
+  }
+  if (Blockly.PHP.STATEMENT_SUFFIX) {
+    // Inject any statement suffix here since the regular one at the end
+    // will not get executed if the break/continue is triggered.
+    xfix += Blockly.PHP.injectId(Blockly.PHP.STATEMENT_SUFFIX, block);
+  }
+  if (Blockly.PHP.STATEMENT_PREFIX) {
+    var loop = Blockly.Constants.Loops
+        .CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.getSurroundLoop(block);
+    if (loop && !loop.suppressPrefixSuffix) {
+      // Inject loop's statement prefix here since the regular one at the end
+      // of the loop will not get executed if 'continue' is triggered.
+      // In the case of 'break', a prefix is needed due to the loop's suffix.
+      xfix += Blockly.PHP.injectId(Blockly.PHP.STATEMENT_PREFIX, loop);
+    }
+  }
   switch (block.getFieldValue('FLOW')) {
     case 'BREAK':
-      return 'break;\n';
+      return xfix + 'break;\n';
     case 'CONTINUE':
-      return 'continue;\n';
+      return xfix + 'continue;\n';
   }
   throw Error('Unknown flow statement.');
 };

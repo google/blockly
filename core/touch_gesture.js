@@ -29,8 +29,7 @@ goog.provide('Blockly.TouchGesture');
 
 goog.require('Blockly.Gesture');
 goog.require('Blockly.utils');
-
-goog.require('goog.math.Coordinate');
+goog.require('Blockly.utils.Coordinate');
 
 
 /*
@@ -58,7 +57,7 @@ Blockly.TouchGesture = function(e, creatorWorkspace) {
 
   /**
    * A map of cached points used for tracking multi-touch gestures.
-   * @type {Object<number|string, goog.math.Coordinate>}
+   * @type {Object<number|string, Blockly.utils.Coordinate>}
    * @private
    */
   this.cachedPoints_ = {};
@@ -206,7 +205,7 @@ Blockly.TouchGesture.prototype.handleUp = function(e) {
 
 /**
  * Whether this gesture is part of a multi-touch gesture.
- * @return {boolean} whether this gesture is part of a multi-touch gesture.
+ * @return {boolean} Whether this gesture is part of a multi-touch gesture.
  * @package
  */
 Blockly.TouchGesture.prototype.isMultiTouch = function() {
@@ -240,7 +239,7 @@ Blockly.TouchGesture.prototype.handleTouchStart = function(e) {
   if (pointers.length == 2) {
     var point0 = this.cachedPoints_[pointers[0]];
     var point1 = this.cachedPoints_[pointers[1]];
-    this.startDistance_ = goog.math.Coordinate.distance(point0, point1);
+    this.startDistance_ = Blockly.utils.Coordinate.distance(point0, point1);
     this.isMultiTouch_ = true;
     e.preventDefault();
   }
@@ -263,7 +262,7 @@ Blockly.TouchGesture.prototype.handleTouchMove = function(e) {
     // Calculate the distance between the two pointers
     var point0 = this.cachedPoints_[pointers[0]];
     var point1 = this.cachedPoints_[pointers[1]];
-    var moveDistance = goog.math.Coordinate.distance(point0, point1);
+    var moveDistance = Blockly.utils.Coordinate.distance(point0, point1);
     var startDistance = this.startDistance_;
     var scale = this.touchScale_ = moveDistance / startDistance;
 
@@ -301,14 +300,14 @@ Blockly.TouchGesture.prototype.handleTouchEnd = function(e) {
 /**
  * Helper function returning the current touch point coordinate.
  * @param {!Event} e A touch or pointer event.
- * @return {goog.math.Coordinate} the current touch point coordinate
+ * @return {Blockly.utils.Coordinate} The current touch point coordinate
  * @package
  */
 Blockly.TouchGesture.prototype.getTouchPoint = function(e) {
   if (!this.startWorkspace_) {
     return null;
   }
-  return new goog.math.Coordinate(
+  return new Blockly.utils.Coordinate(
       (e.pageX ? e.pageX : e.changedTouches[0].pageX),
       (e.pageY ? e.pageY : e.changedTouches[0].pageY)
   );

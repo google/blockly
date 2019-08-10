@@ -101,7 +101,8 @@ Blockly.FieldNumber.prototype.classValidator = function(text) {
   text = text.replace(/O/ig, '0');
   // Strip out thousands separators.
   text = text.replace(/,/g, '');
-  var n = parseFloat(text || 0);
+  var hex = text.match(/^0xX+$/g);
+  var n = hex ? parseInt(text, 16) : parseFloat(text || 0);
   if (isNaN(n)) {
     // Invalid number.
     return null;

@@ -45,17 +45,17 @@ suite('Field Registry', function() {
     test('Empty String Key', function() {
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register('', CustomFieldType);
-      }.bind(this), 'Invalid field type');
+      }, 'Invalid field type');
     });
     test('Class as Key', function() {
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register(CustomFieldType, '');
-      }.bind(this), 'Invalid field type');
+      }, 'Invalid field type');
     });
     test('fromJson as Key', function() {
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register(CustomFieldType.fromJson, '');
-      }.bind(this), 'Invalid field type');
+      }, 'Invalid field type');
     });
     // TODO (#2788): What do you want it to do if you overwrite a key?
     test('Overwrite a Key', function() {
@@ -66,14 +66,14 @@ suite('Field Registry', function() {
     test('Null Value', function() {
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register('field_custom_test', null);
-      }.bind(this), 'fromJson function');
+      }, 'fromJson function');
     });
     test('No fromJson', function() {
       var fromJson = CustomFieldType.fromJson;
       delete CustomFieldType.fromJson;
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
-      }.bind(this), 'fromJson function');
+      }, 'fromJson function');
       CustomFieldType.fromJson = fromJson;
     });
     test('fromJson not a function', function() {
@@ -81,7 +81,7 @@ suite('Field Registry', function() {
       CustomFieldType.fromJson = true;
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
-      }.bind(this), 'fromJson function');
+      }, 'fromJson function');
       CustomFieldType.fromJson = fromJson;
     });
   });

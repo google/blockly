@@ -449,9 +449,12 @@ Blockly.blockRendering.Row.prototype.measure = function() {
   for (var e = 0; e < this.elements.length; e++) {
     var elem = this.elements[e];
     this.width += elem.width;
-    if (elem.isInput &&
-        (elem.type == 'statement input' || elem.type == 'external value input')) {
-      connectedBlockWidths += elem.connectedBlockWidth;
+    if (elem.isInput) {
+      if (elem.type == 'statement input') {
+        connectedBlockWidths += elem.connectedBlockWidth;
+      } else if (elem.type == 'external value input') {
+        connectedBlockWidths += (elem.connectedBlockWidth - elem.connectionWidth);
+      }
     }
     if (!(elem.isSpacer())) {
       this.height = Math.max(this.height, elem.height);

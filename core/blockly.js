@@ -276,7 +276,7 @@ Blockly.onKeyDown_ = function(e) {
       mainWorkspace.undo(e.shiftKey);
     } else if (Blockly.keyboardAccessibilityMode &&
         Blockly.Navigation.onKeyPress(e)) {
-        return;
+      return;
     }
   } else if (Blockly.keyboardAccessibilityMode &&
       Blockly.Navigation.onKeyPress(e)) {

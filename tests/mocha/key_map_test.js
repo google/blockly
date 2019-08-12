@@ -51,7 +51,7 @@ suite('Key Map Tests', function() {
       keyCode: 65
     };
     var serializedKey = Blockly.user.keyMap.serializeKeyEvent(mockEvent);
-    assertEquals(serializedKey, '+ctrlaltmeta65');
+    assertEquals(serializedKey, 'ShiftControlAltMeta65');
   });
 
   test('Test serialize key code without modifiers', function() {

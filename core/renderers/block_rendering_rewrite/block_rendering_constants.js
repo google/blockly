@@ -108,13 +108,12 @@ Blockly.blockRendering.constants.SPACER_DEFAULT_HEIGHT = 15;
 
 Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT = 24;
 
-Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_WIDTH =
-    Blockly.blockRendering.constants.TAB_WIDTH + 14.5;
+Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_PADDING = 14.5;
 
 Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_HEIGHT =
     Blockly.blockRendering.constants.TAB_HEIGHT + 11;
 
-Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_WIDTH = 10;
+Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_PADDING = 2;
 
 /**
  * The height of an empty statement input.  Note that in the old rendering this

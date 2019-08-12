@@ -255,7 +255,8 @@ Blockly.blockRendering.InlineInput = function(input) {
 
   if (!this.connectedBlock) {
     this.height = Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_HEIGHT;
-    this.width = Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_WIDTH;
+    this.width = this.connectionShape.width +
+        Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_PADDING;
   } else {
     // We allow the dark path to show on the parent block so that the child
     // block looks embossed.  This takes up an extra pixel in both x and y.
@@ -315,7 +316,8 @@ Blockly.blockRendering.ExternalValueInput = function(input) {
     this.height =
         this.connectedBlockHeight - 2 * Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
   }
-  this.width = Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_WIDTH;
+  this.width = this.connectionShape.width +
+      Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_PADDING;
 
   this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
   this.connectionHeight = this.connectionShape.height;

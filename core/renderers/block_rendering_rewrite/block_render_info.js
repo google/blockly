@@ -120,7 +120,7 @@ Blockly.blockRendering.RenderInfo = function(block) {
 
   // The position of the start point for drawing, relative to the block's
   // location.
-  this.startX = 10;
+  this.startX = 0;
   this.startY = 0;
 
   this.measure_();
@@ -519,6 +519,12 @@ Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
 
   this.widthWithChildren =
       Math.max(blockWidth, widestRowWithConnectedBlocks);
+
+  if (this.outputConnection) {
+    this.startX = this.outputConnection.width;
+    this.width += this.outputConnection.width;
+    this.widthWithChildren += this.outputConnection.width;
+  }
 };
 
 /**
@@ -532,7 +538,7 @@ Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
     var row = this.rows[r];
     if (!row.hasStatement && !row.hasInlineInput) {
       var currentWidth = row.width;
-      var desiredWidth = this.width;
+      var desiredWidth = this.width - this.startX;
       if (row.type === 'bottom row' && row.hasFixedWidth) {
         desiredWidth = Blockly.blockRendering.constants.MAX_BOTTOM_WIDTH;
       }
@@ -630,7 +636,7 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, 
   if (next.type === 'bottom row' && next.hasFixedWidth) {
     return next.width;
   }
-  return this.width;
+  return this.width - this.startX;
 };
 
 /**

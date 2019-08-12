@@ -211,6 +211,27 @@ Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, curso
 };
 
 /**
+ * Draw a debug rectangle around the entire block.
+ * @param {number} width The width of the block.
+ * @param {number} height The height of the block.
+ * @param {boolean} isRtl Whether the block is rendered RTL.
+ * @package
+ */
+Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(width, height, isRtl) {
+  var xPos = isRtl ? -width : 0;
+  var yPos = 0;
+
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+      {
+        'class': 'blockBoundingBox blockRenderDebug',
+        'x': xPos,
+        'y': yPos,
+        'width': width,
+        'height': height,
+      },
+      this.svgRoot_));
+};
+/**
  * Do all of the work to draw debug information for the whole block.
  * @param {!Blockly.BlockSvg} block The block to draw debug information for.
  * @param {!Blockly.blockRendering.RenderInfo} info Rendering information about
@@ -240,4 +261,6 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
   if (block.outputConnection) {
     this.drawConnection(block.outputConnection);
   }
+
+  this.drawBoundingBox(info.width, info.height, info.isRtl);
 };

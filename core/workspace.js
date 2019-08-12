@@ -290,7 +290,7 @@ Blockly.Workspace.prototype.getBlocksByType = function(type, ordered) {
   var blocks = this.typedBlocksDB_[type].slice(0);
   if (ordered && blocks.length > 1) {
     this.sortObjects_.offset =
-        Math.sign(Blockly.utils.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
+        Math.sin(Blockly.utils.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (this.RTL) {
       this.sortObjects_.offset *= -1;
     }

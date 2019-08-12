@@ -72,7 +72,7 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'rowSpacerRect blockRenderDebug',
-        'x': isRtl ? -row.width : 0,
+        'x': isRtl ? -(row.xPos + row.width) : row.xPos,
         'y': cursorY,
         'width': row.width,
         'height': row.height,
@@ -183,7 +183,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'elemRenderingRect blockRenderDebug',
-        'x': isRtl ? -row.width : 0,
+        'x': isRtl ? -(row.xPos + row.width) : row.xPos,
         'y': cursorY ,
         'width': row.width,
         'height': row.height,
@@ -241,6 +241,7 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(width, height,
 Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
   this.clearElems();
   this.svgRoot_ = block.getSvgRoot();
+
   var cursorY = 0;
   for (var r = 0; r < info.rows.length; r++) {
     var row = info.rows[r];

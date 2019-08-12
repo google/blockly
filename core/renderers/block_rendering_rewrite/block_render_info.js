@@ -120,7 +120,7 @@ Blockly.blockRendering.RenderInfo = function(block) {
 
   // The position of the start point for drawing, relative to the block's
   // location.
-  this.startX = 0;
+  this.startX = 10;
   this.startY = 0;
 
   this.measure_();
@@ -701,6 +701,7 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
     row.yPos = yCursor;
+    row.xPos = this.startX;
     yCursor += row.height;
     // Add padding to the bottom row if block height is less than minimum
     var heightWithoutHat = yCursor - this.topRow.startY;
@@ -712,7 +713,7 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
       yCursor += diff;
     }
     if (!(row.isSpacer())) {
-      var xCursor = this.startX;
+      var xCursor = row.xPos;
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];
         elem.xPos = xCursor;

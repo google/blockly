@@ -360,7 +360,7 @@ Blockly.blockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
 
   this.inlineSteps_.push('M', connectionRight + ',' + yPos);
   this.inlineSteps_.push('v ', connectionTop);
-  this.inlineSteps_.push(Blockly.blockRendering.constants.PUZZLE_TAB.pathDown);
+  this.inlineSteps_.push(input.connectionShape.pathDown);
   this.inlineSteps_.push('v', height - connectionBottom);
   this.inlineSteps_.push('h', width - input.connectionWidth);
   this.inlineSteps_.push('v', -height);

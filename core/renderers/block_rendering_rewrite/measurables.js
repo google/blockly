@@ -260,7 +260,7 @@ Blockly.blockRendering.InlineInput = function(input) {
     // We allow the dark path to show on the parent block so that the child
     // block looks embossed.  This takes up an extra pixel in both x and y.
     this.width = this.connectedBlockWidth +
-        Blockly.blockRendering.constants.TAB_WIDTH +
+        this.connectionShape.width +
         Blockly.blockRendering.constants.DARK_PATH_OFFSET;
     this.height = this.connectedBlockHeight + Blockly.blockRendering.constants.DARK_PATH_OFFSET;
   }

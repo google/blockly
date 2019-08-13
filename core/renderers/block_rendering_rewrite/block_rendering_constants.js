@@ -174,7 +174,6 @@ Blockly.blockRendering.constants.START_HAT = (function() {
   var width = Blockly.blockRendering.constants.START_HAT_WIDTH;
 
   var mainPath =
-      Blockly.utils.svgPaths.moveBy(0, height) +
       Blockly.utils.svgPaths.curve('c',
           [
             Blockly.utils.svgPaths.point(30, -height),

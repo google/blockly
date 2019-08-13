@@ -311,7 +311,7 @@ Blockly.blockRendering.ExternalValueInput = function(input) {
   this.type = 'external value input';
 
   if (!this.connectedBlock) {
-    this.height = Blockly.blockRendering.constants.TAB_HEIGHT;
+    this.height = this.connectionShape.height;
   } else {
     this.height =
         this.connectedBlockHeight - 2 * Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
@@ -564,6 +564,7 @@ Blockly.blockRendering.BottomRow = function(block) {
   this.type = 'bottom row';
   this.hasNextConnection = !!block.nextConnection;
   this.connection = block.nextConnection;
+  this.overhangY = 0;
 
   var followsStatement =
       block.inputList.length &&
@@ -586,4 +587,19 @@ Blockly.blockRendering.BottomRow.prototype.getNextConnection = function() {
     return this.elements[2];
   }
   return null;
+};
+
+Blockly.blockRendering.BottomRow.prototype.measure = function() {
+  for (var e = 0; e < this.elements.length; e++) {
+    var elem = this.elements[e];
+    this.width += elem.width;
+    if (!(elem.isSpacer())) {
+      if (elem.type == 'next connection') {
+        this.height = this.height + elem.height;
+        this.overhangY = elem.height;
+      }
+      this.height = Math.max(this.height, elem.height);
+    }
+  }
+  this.widthWithConnectedBlocks = this.width;
 };

@@ -147,7 +147,7 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
     } else if (elem.isSpacer()) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width);
     }
-    // No branch for a square corner, because it's a no-op.
+    // No branch for a 'square corner', because it's a no-op.
   }
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('v', topRow.height);
 };
@@ -183,7 +183,7 @@ Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
 
   this.outlinePath_ +=
       Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width) +
-      Blockly.blockRendering.constants.PUZZLE_TAB.pathDown +
+      input.connectionShape.pathDown +
       Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
 };
 
@@ -248,7 +248,8 @@ Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
   }
   this.positionNextConnection_();
 
-  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('v', bottomRow.height);
+  this.outlinePath_ +=
+    Blockly.utils.svgPaths.lineOnAxis('v', bottomRow.height - bottomRow.overhangY);
 
   for (var i = elems.length - 1; i >= 0; i--) {
     var elem = elems[i];
@@ -280,8 +281,9 @@ Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
   if (outputConnection) {
     var tabBottom = outputConnection.connectionOffsetY + outputConnection.height;
     // Draw a line up to the bottom of the tab.
-    this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('V', tabBottom);
-    this.outlinePath_ += Blockly.blockRendering.constants.PUZZLE_TAB.pathUp;
+    this.outlinePath_ +=
+        Blockly.utils.svgPaths.lineOnAxis('V', tabBottom) +
+        outputConnection.connectionShape.pathUp;
   }
   // Close off the path.  This draws a vertical line up to the start of the
   // block's path, which may be either a rounded or a sharp corner.
@@ -466,7 +468,7 @@ Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
     var x = connInfo.xPos; // Already contains info about startX
     var connX = (this.info_.RTL ? -x : x) + 0.5;
     bottomRow.connection.setOffsetInBlock(
-        connX, this.info_.height +
+        connX, (connInfo.centerline - connInfo.height / 2) +
             Blockly.blockRendering.constants.DARK_PATH_OFFSET);
   }
 };

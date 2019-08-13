@@ -72,6 +72,8 @@ Blockly.blockRendering.Highlighter = function(info, pathObject) {
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
+  this.steps_.push(
+      Blockly.utils.svgPaths.moveBy(row.xPos, this.info_.startY));
   for (var i = 0, elem; elem = row.elements[i]; i++) {
     if (elem.type === 'square corner') {
       this.steps_.push(Blockly.blockRendering.highlightConstants.START_POINT);
@@ -82,7 +84,7 @@ Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
       this.steps_.push(this.notchPaths_.pathLeft);
     } else if (elem.type === 'hat') {
       this.steps_.push(this.startPaths_.path(this.RTL_));
-    } else if (elem.isSpacer()) {
+    } else if (elem.isSpacer() && elem.width != 0) {
       // The end point of the spacer needs to be offset by the highlight amount.
       // So instead of using the spacer's width for a relative horizontal, use
       // its width and position for an absolute horizontal move.
@@ -90,7 +92,8 @@ Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
     }
   }
 
-  this.steps_.push('H', row.width - this.highlightOffset_);
+  var right = row.xPos + row.width - this.highlightOffset_;
+  this.steps_.push('H', right);
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawJaggedEdge_ = function(row) {
@@ -107,17 +110,16 @@ Blockly.blockRendering.Highlighter.prototype.drawValueInput = function(row) {
   var input = row.getLastInput();
   var steps = '';
   if (this.RTL_) {
-    var aboveTabHeight = -this.highlightOffset_;
-    var belowTabHeight =
-        row.height - input.connectionHeight + this.highlightOffset_;
+    var belowTabHeight = row.height - input.connectionHeight;
 
     steps =
-        Blockly.utils.svgPaths.lineOnAxis('v', aboveTabHeight) +
+        Blockly.utils.svgPaths.moveTo(
+            row.xPos + row.width - this.highlightOffset_, row.yPos) +
         this.puzzleTabPaths_.pathDown(this.RTL_) +
         Blockly.utils.svgPaths.lineOnAxis('v', belowTabHeight);
   } else {
     steps =
-        Blockly.utils.svgPaths.moveTo(row.width, row.yPos) +
+        Blockly.utils.svgPaths.moveTo(row.xPos + row.width, row.yPos) +
         this.puzzleTabPaths_.pathDown(this.RTL_);
   }
 
@@ -126,61 +128,78 @@ Blockly.blockRendering.Highlighter.prototype.drawValueInput = function(row) {
 
 Blockly.blockRendering.Highlighter.prototype.drawStatementInput = function(row) {
   var steps = '';
+  var statementEdge = row.xPos + row.statementEdge;
   if (this.RTL_) {
     var innerHeight = row.height - (2 * this.insideCornerPaths_.height);
     steps =
-        Blockly.utils.svgPaths.moveTo(row.statementEdge, row.yPos) +
+        Blockly.utils.svgPaths.moveTo(statementEdge, row.yPos) +
         this.insideCornerPaths_.pathTop(this.RTL_) +
         Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
         this.insideCornerPaths_.pathBottom(this.RTL_);
   } else {
     steps =
-        Blockly.utils.svgPaths.moveTo(row.statementEdge, row.yPos + row.height) +
+        Blockly.utils.svgPaths.moveTo(statementEdge, row.yPos + row.height) +
         this.insideCornerPaths_.pathBottom(this.RTL_);
   }
   this.steps_.push(steps);
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
+  var rightEdge = row.xPos + row.width - this.highlightOffset_;
   if (row.followsStatement) {
-    this.steps_.push('H', row.width);
+    this.steps_.push('H', rightEdge);
   }
   if (this.RTL_) {
-    this.steps_.push('H', row.width - this.highlightOffset_);
-    this.steps_.push('v', row.height);
+    this.steps_.push('H', rightEdge);
+    this.steps_.push('V', row.yPos + row.height - this.highlightOffset_);
   }
 };
 
-Blockly.blockRendering.Highlighter.prototype.drawBottomRow = function(_row) {
-  var height = this.info_.height;
+Blockly.blockRendering.Highlighter.prototype.drawBottomRow = function(row) {
+  var height = row.yPos + row.height;
 
   // Highlight the vertical edge of the bottom row on the input side.
   // Highlighting is always from the top left, both in LTR and RTL.
   if (this.RTL_) {
-    this.steps_.push('V', height);
+    this.steps_.push('V', height - this.highlightOffset_);
   } else {
     var cornerElem = this.info_.bottomRow.elements[0];
     if (cornerElem.type === 'square corner') {
       this.steps_.push(
           Blockly.utils.svgPaths.moveTo(
-              this.highlightOffset_, height - this.highlightOffset_));
+              row.xPos + this.highlightOffset_,
+              height - this.highlightOffset_));
     } else if (cornerElem.type === 'round corner') {
-      this.steps_.push(this.outsideCornerPaths_.bottomLeft(height));
+      this.steps_.push(Blockly.utils.svgPaths.moveTo(row.xPos, height));
+      this.steps_.push(this.outsideCornerPaths_.bottomLeft());
     }
   }
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawLeft = function() {
-  if (this.info_.outputConnection) {
+  var outputConnection = this.info_.outputConnection;
+  if (outputConnection) {
+    var tabBottom =
+        outputConnection.connectionOffsetY + outputConnection.height;
+    // Draw a line up to the bottom of the tab.
+    if (!this.RTL_) {
+      var left = this.info_.startX + this.highlightOffset_;
+      var bottom = this.info_.height - this.highlightOffset_;
+      this.steps_.push(Blockly.utils.svgPaths.moveTo(left, bottom));
+      this.steps_.push('V', tabBottom);
+    } else {
+      this.steps_.push(Blockly.utils.svgPaths.moveTo(this.info_.startX, tabBottom));
+    }
     this.steps_.push(
         this.puzzleTabPaths_.pathUp(this.RTL_));
   }
 
   if (!this.RTL_) {
-    if (this.info_.topRow.elements[0].isSquareCorner()) {
-      this.steps_.push('V', this.highlightOffset_);
-    } else {
+    var topRow = this.info_.topRow;
+    if (topRow.elements[0].isRoundedCorner()) {
       this.steps_.push('V', this.outsideCornerPaths_.height);
+    } else {
+      this.steps_.push('V', topRow.startY + this.highlightOffset_);
     }
   }
 };

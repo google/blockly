@@ -118,6 +118,11 @@ Blockly.blockRendering.RenderInfo = function(block) {
   this.topRow = null;
   this.bottomRow = null;
 
+  // The position of the start point for drawing, relative to the block's
+  // location.
+  this.startX = 0;
+  this.startY = 0;
+
   this.measure_();
 };
 
@@ -221,7 +226,9 @@ Blockly.blockRendering.RenderInfo.prototype.createTopRow_ = function() {
   }
 
   if (hasHat) {
-    this.topRow.elements.push(new Blockly.blockRendering.Hat());
+    var hat = new Blockly.blockRendering.Hat();
+    this.topRow.elements.push(hat);
+    this.startY = hat.startY;
   } else if (hasPrevious) {
     this.topRow.elements.push(new Blockly.blockRendering.PreviousConnection());
   }
@@ -512,6 +519,12 @@ Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
 
   this.widthWithChildren =
       Math.max(blockWidth, widestRowWithConnectedBlocks);
+
+  if (this.outputConnection) {
+    this.startX = this.outputConnection.width;
+    this.width += this.outputConnection.width;
+    this.widthWithChildren += this.outputConnection.width;
+  }
 };
 
 /**
@@ -525,7 +538,7 @@ Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
     var row = this.rows[r];
     if (!row.hasStatement && !row.hasInlineInput) {
       var currentWidth = row.width;
-      var desiredWidth = this.width;
+      var desiredWidth = this.width - this.startX;
       if (row.type === 'bottom row' && row.hasFixedWidth) {
         desiredWidth = Blockly.blockRendering.constants.MAX_BOTTOM_WIDTH;
       }
@@ -623,7 +636,7 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, 
   if (next.type === 'bottom row' && next.hasFixedWidth) {
     return next.width;
   }
-  return this.width;
+  return this.width - this.startX;
 };
 
 /**
@@ -694,16 +707,19 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
     row.yPos = yCursor;
+    row.xPos = this.startX;
     yCursor += row.height;
     // Add padding to the bottom row if block height is less than minimum
+    var heightWithoutHat = yCursor - this.topRow.startY;
     if (row == this.bottomRow &&
-        yCursor < Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT) {
-      this.bottomRow.height +=
-          Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT - yCursor;
-      yCursor = Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT;
+        heightWithoutHat < Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT) {
+      // But the hat height shouldn't be part of this.
+      var diff = Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT - heightWithoutHat;
+      this.bottomRow.height += diff;
+      yCursor += diff;
     }
     if (!(row.isSpacer())) {
-      var xCursor = 0;
+      var xCursor = row.xPos;
       for (var e = 0; e < row.elements.length; e++) {
         var elem = row.elements[e];
         elem.xPos = xCursor;
@@ -712,7 +728,6 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
       }
     }
   }
-  this.blockBottom = yCursor;
 
   this.height = yCursor;
 };

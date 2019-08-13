@@ -255,12 +255,12 @@ Blockly.blockRendering.InlineInput = function(input) {
 
   if (!this.connectedBlock) {
     this.height = Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_HEIGHT;
-    this.width = Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_WIDTH;
+    this.width = this.connectionShape.width +
+        Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_PADDING;
   } else {
     // We allow the dark path to show on the parent block so that the child
     // block looks embossed.  This takes up an extra pixel in both x and y.
     this.width = this.connectedBlockWidth +
-        Blockly.blockRendering.constants.TAB_WIDTH +
         Blockly.blockRendering.constants.DARK_PATH_OFFSET;
     this.height = this.connectedBlockHeight + Blockly.blockRendering.constants.DARK_PATH_OFFSET;
   }
@@ -316,7 +316,8 @@ Blockly.blockRendering.ExternalValueInput = function(input) {
     this.height =
         this.connectedBlockHeight - 2 * Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
   }
-  this.width = Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_WIDTH;
+  this.width = this.connectionShape.width +
+      Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_PADDING;
 
   this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
   this.connectionHeight = this.connectionShape.height;
@@ -337,6 +338,7 @@ Blockly.blockRendering.OutputConnection = function() {
   this.height = this.connectionShape.height;
   this.width = this.connectionShape.width;
   this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
+  this.startX = this.width;
 };
 goog.inherits(Blockly.blockRendering.OutputConnection, Blockly.blockRendering.Measurable);
 
@@ -378,8 +380,9 @@ goog.inherits(Blockly.blockRendering.NextConnection, Blockly.blockRendering.Meas
 Blockly.blockRendering.Hat = function() {
   Blockly.blockRendering.Hat.superClass_.constructor.call(this);
   this.type = 'hat';
-  this.height = Blockly.blockRendering.constants.NO_PADDING;
+  this.height = Blockly.blockRendering.constants.START_HAT.height;
   this.width = Blockly.blockRendering.constants.START_HAT.width;
+  this.startY = this.height;
 
 };
 goog.inherits(Blockly.blockRendering.Hat, Blockly.blockRendering.Measurable);
@@ -448,9 +451,12 @@ Blockly.blockRendering.Row.prototype.measure = function() {
   for (var e = 0; e < this.elements.length; e++) {
     var elem = this.elements[e];
     this.width += elem.width;
-    if (elem.isInput &&
-        (elem.type == 'statement input' || elem.type == 'external value input')) {
-      connectedBlockWidths += elem.connectedBlockWidth;
+    if (elem.isInput) {
+      if (elem.type == 'statement input') {
+        connectedBlockWidths += elem.connectedBlockWidth;
+      } else if (elem.type == 'external value input') {
+        connectedBlockWidths += (elem.connectedBlockWidth - elem.connectionWidth);
+      }
     }
     if (!(elem.isSpacer())) {
       this.height = Math.max(this.height, elem.height);
@@ -512,6 +518,7 @@ Blockly.blockRendering.TopRow = function(block) {
 
   this.elements = [];
   this.type = 'top row';
+  this.startY = 0;
 
   this.hasPreviousConnection = !!block.previousConnection;
   this.connection = block.previousConnection;
@@ -535,6 +542,21 @@ Blockly.blockRendering.TopRow.prototype.getPreviousConnection = function() {
     return this.elements[2];
   }
   return null;
+};
+
+Blockly.blockRendering.TopRow.prototype.measure = function() {
+  for (var e = 0; e < this.elements.length; e++) {
+    var elem = this.elements[e];
+    this.width += elem.width;
+    if (!(elem.isSpacer())) {
+      if (elem.type == 'hat') {
+        this.startY = elem.startY;
+        this.height = this.height + elem.height;
+      }
+      this.height = Math.max(this.height, elem.height);
+    }
+  }
+  this.widthWithConnectedBlocks = this.width;
 };
 
 Blockly.blockRendering.BottomRow = function(block) {

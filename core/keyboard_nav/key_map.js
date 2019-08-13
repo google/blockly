@@ -72,13 +72,7 @@ Blockly.user.keyMap.setKeyMap = function(keyMap) {
  * @package
  */
 Blockly.user.keyMap.getKeyMap = function() {
-  var mapClone = {};
-  var keys = Object.keys(Blockly.user.keyMap.map_);
-  for (var i = 0, key; key = keys[i]; i++) {
-    var action = Blockly.user.keyMap.map_[key];
-    mapClone[key] = new Blockly.Action(action.name, action.desc, action.func);
-  }
-  return mapClone;
+  return Object.assign({}, Blockly.user.keyMap.map_);
 };
 
 /**
@@ -103,7 +97,7 @@ Blockly.user.keyMap.getActionByKeyCode = function(keyCode) {
 Blockly.user.keyMap.getKeyByAction = function(action) {
   var keys = Object.keys(Blockly.user.keyMap.map_);
   for (var i = 0, key; key = keys[i]; i++) {
-    if (Blockly.user.keyMap.map_[key] === action) {
+    if (Blockly.user.keyMap.map_[key].name === action.name) {
       return key;
     }
   }
@@ -124,7 +118,6 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
     }
   }
   key += e.keyCode;
-  console.log(key);
   return key;
 };
 

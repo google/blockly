@@ -38,9 +38,7 @@ suite('Key Map Tests', function() {
   test('Test get key map returns a clone', function() {
     var keyMap = Blockly.user.keyMap.getKeyMap();
     keyMap['randomKey'] = new Blockly.Action('test', '', null);
-    keyMap[goog.events.KeyCodes.W].name = 'test_name';
     assertEquals(Blockly.user.keyMap.map_['randomKey'], undefined);
-    assertEquals(Blockly.user.keyMap.map_[goog.events.KeyCodes.W].name, 'previous');
   });
 
   test('Test serialize key code with modifiers', function() {

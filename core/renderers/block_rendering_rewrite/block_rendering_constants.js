@@ -236,8 +236,8 @@ Blockly.blockRendering.constants.PUZZLE_TAB = (function() {
 })();
 
 Blockly.blockRendering.constants.TRIANGLE = (function() {
-  var width = 20; // Blockly.blockRendering.constants.TAB_WIDTH;
-  var height = 20; //Blockly.blockRendering.constants.TAB_HEIGHT;
+  var width = 20;
+  var height = 20;
   // The 'up' and 'down'  versions of the paths are the same, but the Y sign
   // flips.  Forward and back are the signs to use to move the cursor in the
   // direction that the path is being drawn.

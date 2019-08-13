@@ -128,15 +128,15 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
  */
 Blockly.user.keyMap.createDefaultKeyMap = function() {
   var map = {};
-  map[goog.events.KeyCodes.W] = Blockly.Navigation.ACTION_PREVIOUS;
-  map[goog.events.KeyCodes.A] = Blockly.Navigation.ACTION_OUT;
-  map[goog.events.KeyCodes.S] = Blockly.Navigation.ACTION_NEXT;
-  map[goog.events.KeyCodes.D] = Blockly.Navigation.ACTION_IN;
-  map[goog.events.KeyCodes.I] = Blockly.Navigation.ACTION_INSERT;
-  map[goog.events.KeyCodes.ENTER] = Blockly.Navigation.ACTION_MARK;
-  map[goog.events.KeyCodes.X] = Blockly.Navigation.ACTION_DISCONNECT;
-  map[goog.events.KeyCodes.T] = Blockly.Navigation.ACTION_TOOLBOX;
-  map[goog.events.KeyCodes.E] = Blockly.Navigation.ACTION_EXIT;
-  map[goog.events.KeyCodes.ESC] = Blockly.Navigation.ACTION_EXIT;
+  map[goog.events.KeyCodes.W] = Blockly.navigation.ACTION_PREVIOUS;
+  map[goog.events.KeyCodes.A] = Blockly.navigation.ACTION_OUT;
+  map[goog.events.KeyCodes.S] = Blockly.navigation.ACTION_NEXT;
+  map[goog.events.KeyCodes.D] = Blockly.navigation.ACTION_IN;
+  map[goog.events.KeyCodes.I] = Blockly.navigation.ACTION_INSERT;
+  map[goog.events.KeyCodes.ENTER] = Blockly.navigation.ACTION_MARK;
+  map[goog.events.KeyCodes.X] = Blockly.navigation.ACTION_DISCONNECT;
+  map[goog.events.KeyCodes.T] = Blockly.navigation.ACTION_TOOLBOX;
+  map[goog.events.KeyCodes.E] = Blockly.navigation.ACTION_EXIT;
+  map[goog.events.KeyCodes.ESC] = Blockly.navigation.ACTION_EXIT;
   return map;
 };

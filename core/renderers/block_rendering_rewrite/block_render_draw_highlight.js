@@ -156,7 +156,7 @@ Blockly.blockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawBottomRow = function(row) {
-  var height = row.yPos + row.height;
+  var height = row.yPos + row.height - row.overhangY;
 
   // Highlight the vertical edge of the bottom row on the input side.
   // Highlighting is always from the top left, both in LTR and RTL.

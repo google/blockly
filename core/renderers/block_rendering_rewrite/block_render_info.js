@@ -536,9 +536,14 @@ Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
 Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
-    if (!row.hasStatement && !row.hasInlineInput) {
+    if (!row.hasInlineInput) {
       var currentWidth = row.width;
-      var desiredWidth = this.width - this.startX;
+      if (row.hasStatement) {
+        var statementInput = row.getLastInput();
+        currentWidth -= statementInput.width;
+      }
+      var desiredWidth = row.hasStatement ? this.statementEdge : this.width;
+      desiredWidth -= this.startX;
       if (row.type === 'bottom row' && row.hasFixedWidth) {
         desiredWidth = Blockly.blockRendering.constants.MAX_BOTTOM_WIDTH;
       }
@@ -564,7 +569,7 @@ Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
   if (input) {
     var firstSpacer = row.getFirstSpacer();
     var lastSpacer = row.getLastSpacer();
-    if (row.hasExternalInput) {
+    if (row.hasExternalInput || row.hasStatement) {
       // Get the spacer right before the input socket.
       lastSpacer = elems[elems.length - 3];
     }

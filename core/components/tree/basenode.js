@@ -124,7 +124,6 @@ goog.inherits(Blockly.tree.BaseNode, Blockly.Component);
  */
 Blockly.tree.BaseNode.allNodes = {};
 
-
 /** @override */
 Blockly.tree.BaseNode.prototype.disposeInternal = function() {
   Blockly.tree.BaseNode.superClass_.disposeInternal.call(this);
@@ -133,7 +132,6 @@ Blockly.tree.BaseNode.prototype.disposeInternal = function() {
   }
   this.setElementInternal(null);
 };
-
 
 /**
  * Adds roles and states.
@@ -189,14 +187,12 @@ Blockly.tree.BaseNode.prototype.initAccessibility = function() {
   }
 };
 
-
 /** @override */
 Blockly.tree.BaseNode.prototype.createDom = function() {
   var element = document.createElement('div');
   element.appendChild(this.toDom());
   this.setElementInternal(/** @type {!Element} */ (element));
 };
-
 
 /** @override */
 Blockly.tree.BaseNode.prototype.enterDocument = function() {
@@ -205,13 +201,11 @@ Blockly.tree.BaseNode.prototype.enterDocument = function() {
   this.initAccessibility();
 };
 
-
 /** @override */
 Blockly.tree.BaseNode.prototype.exitDocument = function() {
   Blockly.tree.BaseNode.superClass_.exitDocument.call(this);
   delete Blockly.tree.BaseNode.allNodes[this.getId()];
 };
-
 
 /**
  * The method assumes that the child doesn't have parent node yet.
@@ -292,7 +286,6 @@ Blockly.tree.BaseNode.prototype.add = function(child, opt_before) {
       child, opt_before ? this.indexOfChild(opt_before) : this.getChildCount());
   return child;
 };
-
 
 /**
  * Returns the tree.

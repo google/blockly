@@ -74,6 +74,7 @@ Blockly.inject = function(container, opt_options) {
   var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
       workspaceDragSurface);
   Blockly.setTheme(options.theme);
+  Blockly.user.keyMap.setKeyMap(options.keyMap);
 
   Blockly.init_(workspace);
   Blockly.mainWorkspace = workspace;

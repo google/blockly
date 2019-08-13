@@ -18,13 +18,13 @@ suite('Key Map Tests', function() {
         Blockly.Navigation.ACTION_PREVIOUS);
   });
 
-  test('Test get key by action name defined', function() {
-    var key = Blockly.user.keyMap.getKeyByActionName('previous');
+  test('Test get key by action defined', function() {
+    var key = Blockly.user.keyMap.getKeyByAction(Blockly.Navigation.ACTION_PREVIOUS);
     assertEquals(key, goog.events.KeyCodes.W);
   });
 
-  test('Test get key by action name undefined', function() {
-    var key = Blockly.user.keyMap.getKeyByActionName('somethingWrong');
+  test('Test get key by action undefined', function() {
+    var key = Blockly.user.keyMap.getKeyByAction(new Blockly.Action('something'));
     assertEquals(key, undefined);
   });
 

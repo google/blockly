@@ -47,7 +47,7 @@ Blockly.user.keyMap.modifierKeys = ['Shift','Control','Alt','Meta'];
  * @package
  */
 Blockly.user.keyMap.setActionForKey = function(keyCode, action) {
-  var oldKey = Blockly.user.keyMap.getKeyByActionName(action.name);
+  var oldKey = Blockly.user.keyMap.getKeyByAction(action);
   // If the action already exists in the key map remove it and add the new mapping.
   if (oldKey) {
     delete Blockly.user.keyMap.map_[oldKey];
@@ -93,18 +93,17 @@ Blockly.user.keyMap.getActionByKeyCode = function(keyCode) {
 };
 
 /**
- * Get the serialized key that corresponds to the action name.
- * @param {!string} actionName The name of the action.
+ * Get the serialized key that corresponds to the action.
+ * @param {!Blockly.Action} action The action for which we want to get
+ *     the key.
  * @return {string} The serialized key or null if the action does not have
  *     a key mapping.
  * @package
  */
-Blockly.user.keyMap.getKeyByActionName = function(actionName) {
+Blockly.user.keyMap.getKeyByAction = function(action) {
   var keys = Object.keys(Blockly.user.keyMap.map_);
-  for (var i = 0; i < keys.length; i++) {
-    var key = keys[i];
-    var action = Blockly.user.keyMap.map_[key];
-    if (actionName === action.name) {
+  for (var i = 0, key; key = keys[i]; i++) {
+    if (Blockly.user.keyMap.map_[key] === action) {
       return key;
     }
   }

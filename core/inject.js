@@ -233,8 +233,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
     mainWorkspace.addZoomControls();
   }
 
-  Blockly.Navigation.setCursor(mainWorkspace.cursor);
-  Blockly.Navigation.setMarker(mainWorkspace.marker);
+  Blockly.navigation.setCursor(mainWorkspace.cursor);
+  Blockly.navigation.setMarker(mainWorkspace.marker);
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);

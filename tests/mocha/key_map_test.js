@@ -12,14 +12,14 @@ suite('Key Map Tests', function() {
   });
 
   test('Test giving an old action a new key', function() {
-    Blockly.user.keyMap.setActionForKey(goog.events.KeyCodes.F, Blockly.Navigation.ACTION_PREVIOUS);
+    Blockly.user.keyMap.setActionForKey(goog.events.KeyCodes.F, Blockly.navigation.ACTION_PREVIOUS);
     assertEquals(Blockly.user.keyMap.map_[goog.events.KeyCodes.W], undefined);
     assertEquals(Blockly.user.keyMap.map_[goog.events.KeyCodes.F],
-        Blockly.Navigation.ACTION_PREVIOUS);
+        Blockly.navigation.ACTION_PREVIOUS);
   });
 
   test('Test get key by action defined', function() {
-    var key = Blockly.user.keyMap.getKeyByAction(Blockly.Navigation.ACTION_PREVIOUS);
+    var key = Blockly.user.keyMap.getKeyByAction(Blockly.navigation.ACTION_PREVIOUS);
     assertEquals(key, goog.events.KeyCodes.W);
   });
 

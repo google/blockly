@@ -46,7 +46,7 @@ goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
-goog.require('Blockly.Navigation');
+goog.require('Blockly.navigation');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.Toolbox');
 goog.require('Blockly.Tooltip');
@@ -218,7 +218,7 @@ Blockly.onKeyDown_ = function(e) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
     if (Blockly.keyboardAccessibilityMode) {
-      Blockly.Navigation.onKeyPress(e);
+      Blockly.navigation.onKeyPress(e);
     }
   } else if (e.keyCode == 8 || e.keyCode == 46) {
     // Delete or backspace.
@@ -275,11 +275,11 @@ Blockly.onKeyDown_ = function(e) {
       Blockly.hideChaff();
       mainWorkspace.undo(e.shiftKey);
     } else if (Blockly.keyboardAccessibilityMode &&
-        Blockly.Navigation.onKeyPress(e)) {
+        Blockly.navigation.onKeyPress(e)) {
       return;
     }
   } else if (Blockly.keyboardAccessibilityMode &&
-      Blockly.Navigation.onKeyPress(e)) {
+      Blockly.navigation.onKeyPress(e)) {
     return;
   }
   // Common code for delete and cut.

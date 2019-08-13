@@ -17,19 +17,19 @@ suite('Navigation', function() {
     });
 
     test('Focuses workspace from flyout (e)', function() {
-      Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_FLYOUT;
+      Blockly.navigation.currentState_ = Blockly.navigation.STATE_FLYOUT;
       this.mockEvent.keyCode = goog.events.KeyCodes.E;
-      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.Navigation.currentState_,
-          Blockly.Navigation.STATE_WS);
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_WS);
     });
 
     test('Focuses workspace from flyout (escape)', function() {
-      Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_FLYOUT;
+      Blockly.navigation.currentState_ = Blockly.navigation.STATE_FLYOUT;
       this.mockEvent.keyCode = goog.events.KeyCodes.ESC;
-      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.Navigation.currentState_,
-          Blockly.Navigation.STATE_WS);
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_WS);
     });
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
@@ -53,7 +53,7 @@ suite('Navigation', function() {
       }]);
       var toolbox = document.getElementById('toolbox-categories');
       this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-      Blockly.Navigation.focusToolbox();
+      Blockly.navigation.focusToolbox();
       this.mockEvent = {
         getModifierState: function() {
           return false;
@@ -67,85 +67,85 @@ suite('Navigation', function() {
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
-      Blockly.Navigation.currentCategory_ = null;
+      Blockly.navigation.currentCategory_ = null;
     });
 
     test('Next', function() {
       this.mockEvent.keyCode = goog.events.KeyCodes.S;
-      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.Navigation.currentState_,
-          Blockly.Navigation.STATE_TOOLBOX);
-      chai.assert.equal(Blockly.Navigation.currentCategory_,
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_TOOLBOX);
+      chai.assert.equal(Blockly.navigation.currentCategory_,
           this.secondCategory_);
     });
 
     // Should be a no-op.
     test('Next at end', function() {
-      Blockly.Navigation.nextCategory();
+      Blockly.navigation.nextCategory();
       this.mockEvent.keyCode = goog.events.KeyCodes.S;
-      var startCategory = Blockly.Navigation.currentCategory_;
-      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.Navigation.currentState_,
-          Blockly.Navigation.STATE_TOOLBOX);
-      chai.assert.equal(Blockly.Navigation.currentCategory_,
+      var startCategory = Blockly.navigation.currentCategory_;
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_TOOLBOX);
+      chai.assert.equal(Blockly.navigation.currentCategory_,
           startCategory);
     });
 
     test('Previous', function() {
       // Go forward one so that we can go back one:
-      Blockly.Navigation.nextCategory();
+      Blockly.navigation.nextCategory();
       this.mockEvent.keyCode = goog.events.KeyCodes.W;
-      chai.assert.equal(Blockly.Navigation.currentCategory_,
+      chai.assert.equal(Blockly.navigation.currentCategory_,
           this.secondCategory_);
-      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.Navigation.currentState_,
-          Blockly.Navigation.STATE_TOOLBOX);
-      chai.assert.equal(Blockly.Navigation.currentCategory_,
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_TOOLBOX);
+      chai.assert.equal(Blockly.navigation.currentCategory_,
           this.firstCategory_);
     });
 
     // Should be a no-op.
     test('Previous at start', function() {
-      var startCategory = Blockly.Navigation.currentCategory_;
+      var startCategory = Blockly.navigation.currentCategory_;
       this.mockEvent.keyCode = goog.events.KeyCodes.W;
-      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.Navigation.currentState_,
-          Blockly.Navigation.STATE_TOOLBOX);
-      chai.assert.equal(Blockly.Navigation.currentCategory_,
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_TOOLBOX);
+      chai.assert.equal(Blockly.navigation.currentCategory_,
           startCategory);
     });
 
     test('Out', function() {
       this.mockEvent.keyCode = goog.events.KeyCodes.A;
-      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       // TODO (fenichel/aschmiedt): Decide whether out should go to the
       // workspace.
-      chai.assert.equal(Blockly.Navigation.currentState_,
-          Blockly.Navigation.STATE_TOOLBOX);
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_TOOLBOX);
     });
 
     test('Go to flyout', function() {
       this.mockEvent.keyCode = goog.events.KeyCodes.D;
-      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.Navigation.currentState_,
-          Blockly.Navigation.STATE_FLYOUT);
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_FLYOUT);
 
-      chai.assert.equal(Blockly.Navigation.flyoutBlock_.getFieldValue("TEXT"), "First");
+      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"), "First");
     });
 
     test('Focuses workspace from toolbox (e)', function() {
-      Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_TOOLBOX;
+      Blockly.navigation.currentState_ = Blockly.navigation.STATE_TOOLBOX;
       this.mockEvent.keyCode = goog.events.KeyCodes.E;
-      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.Navigation.currentState_,
-          Blockly.Navigation.STATE_WS);
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_WS);
     });
     test('Focuses workspace from toolbox (escape)', function() {
-      Blockly.Navigation.currentState_ = Blockly.Navigation.STATE_TOOLBOX;
+      Blockly.navigation.currentState_ = Blockly.navigation.STATE_TOOLBOX;
       this.mockEvent.keyCode = goog.events.KeyCodes.E;
-      chai.assert.isTrue(Blockly.Navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.Navigation.currentState_,
-          Blockly.Navigation.STATE_WS);
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_WS);
     });
     // More tests:
     // - nested categories
@@ -172,23 +172,23 @@ suite('Navigation', function() {
     test('Insert from flyout with a valid connection marked', function() {
       var previousConnection = this.basicBlock.previousConnection;
       var prevNode = Blockly.ASTNode.createConnectionNode(previousConnection);
-      Blockly.Navigation.marker_.setLocation(prevNode);
+      Blockly.navigation.marker_.setLocation(prevNode);
 
-      Blockly.Navigation.focusToolbox();
-      Blockly.Navigation.focusFlyout();
-      Blockly.Navigation.insertFromFlyout();
+      Blockly.navigation.focusToolbox();
+      Blockly.navigation.focusFlyout();
+      Blockly.navigation.insertFromFlyout();
 
       var insertedBlock = this.basicBlock.previousConnection.targetBlock();
 
       chai.assert.isTrue(insertedBlock !== null);
-      chai.assert.equal(Blockly.Navigation.currentState_,
-          Blockly.Navigation.STATE_WS);
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_WS);
     });
 
     test('Insert Block from flyout without marking a connection', function() {
-      Blockly.Navigation.focusToolbox();
-      Blockly.Navigation.focusFlyout();
-      Blockly.Navigation.insertFromFlyout();
+      Blockly.navigation.focusToolbox();
+      Blockly.navigation.focusFlyout();
+      Blockly.navigation.insertFromFlyout();
 
       var numBlocks = this.workspace.getTopBlocks().length;
 
@@ -198,18 +198,18 @@ suite('Navigation', function() {
 
       //Make sure that the block was added to the workspace
       chai.assert.equal(numBlocks, 3);
-      chai.assert.equal(Blockly.Navigation.currentState_,
-          Blockly.Navigation.STATE_WS);
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_WS);
     });
 
     test('Connect two blocks that are on the workspace', function() {
       var targetNode = Blockly.ASTNode.createConnectionNode(this.basicBlock.previousConnection);
-      Blockly.Navigation.marker_.setLocation(targetNode);
+      Blockly.navigation.marker_.setLocation(targetNode);
 
       var sourceNode = Blockly.ASTNode.createConnectionNode(this.basicBlock2.nextConnection);
-      Blockly.Navigation.cursor_.setLocation(sourceNode);
+      Blockly.navigation.cursor_.setLocation(sourceNode);
 
-      Blockly.Navigation.modify();
+      Blockly.navigation.modify();
       var insertedBlock = this.basicBlock.previousConnection.targetBlock();
 
       chai.assert.isNotNull(insertedBlock);
@@ -219,7 +219,7 @@ suite('Navigation', function() {
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
-      Blockly.Navigation.currentCategory_ = null;
+      Blockly.navigation.currentCategory_ = null;
     });
   });
 });

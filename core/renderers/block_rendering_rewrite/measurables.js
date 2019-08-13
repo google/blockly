@@ -19,6 +19,22 @@ Blockly.blockRendering.Measurable = function() {
   this.centerline = 0;
 };
 
+/**
+ * The shape object to use when drawing input and output connections.
+ * TODO (#2803): Formalize type annotations for these objects.
+ * @type {Object}
+ */
+Blockly.blockRendering.Measurable.prototype.connectionShape =
+    Blockly.blockRendering.constants.PUZZLE_TAB;
+
+/**
+ * The shape object to use when drawing previous and next connections.
+ * TODO (#2803): Formalize type annotations for these objects.
+ * @type {Object}
+ */
+Blockly.blockRendering.Measurable.prototype.notchShape =
+    Blockly.blockRendering.constants.NOTCH;
+
 // TODO: We may remove these helper functions if all of them end up being direct
 // checks against types.
 
@@ -250,8 +266,8 @@ Blockly.blockRendering.InlineInput = function(input) {
   }
 
   this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
-  this.connectionHeight = Blockly.blockRendering.constants.PUZZLE_TAB.height;
-  this.connectionWidth = Blockly.blockRendering.constants.PUZZLE_TAB.width;
+  this.connectionHeight = this.connectionShape.height;
+  this.connectionWidth = this.connectionShape.width;
 };
 goog.inherits(Blockly.blockRendering.InlineInput, Blockly.blockRendering.Input);
 
@@ -275,7 +291,7 @@ Blockly.blockRendering.StatementInput = function(input) {
     this.height =
         this.connectedBlockHeight + Blockly.blockRendering.constants.STATEMENT_BOTTOM_SPACER;
     if (this.connectedBlock.nextConnection) {
-      this.height -= Blockly.blockRendering.constants.NOTCH.height;
+      this.height -= this.notchShape.height;
     }
   }
 };
@@ -303,8 +319,8 @@ Blockly.blockRendering.ExternalValueInput = function(input) {
   this.width = Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_WIDTH;
 
   this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
-  this.connectionHeight = Blockly.blockRendering.constants.PUZZLE_TAB.height;
-  this.connectionWidth = Blockly.blockRendering.constants.PUZZLE_TAB.width;
+  this.connectionHeight = this.connectionShape.height;
+  this.connectionWidth = this.connectionShape.width;
 };
 goog.inherits(Blockly.blockRendering.ExternalValueInput,
     Blockly.blockRendering.Input);
@@ -318,8 +334,8 @@ goog.inherits(Blockly.blockRendering.ExternalValueInput,
 Blockly.blockRendering.OutputConnection = function() {
   Blockly.blockRendering.OutputConnection.superClass_.constructor.call(this);
   this.type = 'output connection';
-  this.height = Blockly.blockRendering.constants.PUZZLE_TAB.height;
-  this.width = Blockly.blockRendering.constants.PUZZLE_TAB.width;
+  this.height = this.connectionShape.height;
+  this.width = this.connectionShape.width;
   this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
 };
 goog.inherits(Blockly.blockRendering.OutputConnection, Blockly.blockRendering.Measurable);
@@ -333,8 +349,8 @@ goog.inherits(Blockly.blockRendering.OutputConnection, Blockly.blockRendering.Me
 Blockly.blockRendering.PreviousConnection = function() {
   Blockly.blockRendering.PreviousConnection.superClass_.constructor.call(this);
   this.type = 'previous connection';
-  this.height = Blockly.blockRendering.constants.NOTCH.height;
-  this.width = Blockly.blockRendering.constants.NOTCH.width;
+  this.height = this.notchShape.height;
+  this.width = this.notchShape.width;
 
 };
 goog.inherits(Blockly.blockRendering.PreviousConnection, Blockly.blockRendering.Measurable);
@@ -348,8 +364,8 @@ goog.inherits(Blockly.blockRendering.PreviousConnection, Blockly.blockRendering.
 Blockly.blockRendering.NextConnection = function() {
   Blockly.blockRendering.NextConnection.superClass_.constructor.call(this);
   this.type = 'next connection';
-  this.height = Blockly.blockRendering.constants.NOTCH.height;
-  this.width = Blockly.blockRendering.constants.NOTCH.width;
+  this.height = this.notchShape.height;
+  this.width = this.notchShape.width;
 };
 goog.inherits(Blockly.blockRendering.NextConnection, Blockly.blockRendering.Measurable);
 
@@ -377,7 +393,7 @@ goog.inherits(Blockly.blockRendering.Hat, Blockly.blockRendering.Measurable);
 Blockly.blockRendering.SquareCorner = function() {
   Blockly.blockRendering.SquareCorner.superClass_.constructor.call(this);
   this.type = 'square corner';
-  this.height = Blockly.blockRendering.constants.NOTCH.height;
+  this.height = this.notchShape.height;
   this.width = Blockly.blockRendering.constants.NO_PADDING;
 
 };
@@ -395,7 +411,7 @@ Blockly.blockRendering.RoundCorner = function() {
   this.width = Blockly.blockRendering.constants.CORNER_RADIUS;
   // The rounded corner extends into the next row by 4 so we only take the
   // height that is aligned with this row.
-  this.height = Blockly.blockRendering.constants.NOTCH.height;
+  this.height = this.notchShape.height;
 
 };
 goog.inherits(Blockly.blockRendering.RoundCorner, Blockly.blockRendering.Measurable);
@@ -414,6 +430,14 @@ Blockly.blockRendering.Row = function() {
   this.hasDummyInput = false;
   this.hasJaggedEdge = false;
 };
+
+/**
+ * The shape object to use when drawing previous and next connections.
+ * TODO (#2803): Formalize type annotations for these objects.
+ * @type {Object}
+ */
+Blockly.blockRendering.Row.prototype.notchShape =
+    Blockly.blockRendering.constants.NOTCH;
 
 Blockly.blockRendering.Row.prototype.isSpacer = function() {
   return false;
@@ -529,7 +553,7 @@ Blockly.blockRendering.BottomRow = function(block) {
   if (followsStatement) {
     this.height = Blockly.blockRendering.constants.LARGE_PADDING;
   } else {
-    this.height = Blockly.blockRendering.constants.NOTCH.height;
+    this.height = this.notchShape.height;
   }
 };
 goog.inherits(Blockly.blockRendering.BottomRow,

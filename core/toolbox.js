@@ -551,7 +551,7 @@ Blockly.Toolbox.prototype.updateSelectedItemColour_ = function(tree) {
  * Recursively add colours to this toolbox.
  * @param {Blockly.tree.BaseNode=} opt_tree Starting point of tree.
  *     Defaults to the root node.
- * @package
+ * @private
  */
 Blockly.Toolbox.prototype.addColour_ = function(opt_tree) {
   var tree = opt_tree || this.tree_;

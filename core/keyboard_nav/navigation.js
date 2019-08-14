@@ -41,7 +41,7 @@ Blockly.navigation.marker_ = null;
 /**
  * The current selected category if the toolbox is open or
  * last selected category if focus is on a different element.
- * @type {goog.ui.tree.BaseNode}
+ * @type {Blockly.tree.BaseNode}
  * @private
  */
 Blockly.navigation.currentCategory_ = null;
@@ -225,10 +225,10 @@ Blockly.navigation.outCategory = function() {
   } else {
     var parent = curCategory.getParent();
     var tree = curCategory.getTree();
-    if (parent && (tree.getShowRootNode() || parent != tree)) {
+    if (parent && parent != tree) {
       parent.select();
 
-      Blockly.navigation.currentCategory_ = /** @type {goog.ui.tree.BaseNode} */
+      Blockly.navigation.currentCategory_ = /** @type {Blockly.tree.BaseNode} */
         (parent);
     }
   }

@@ -487,9 +487,7 @@ Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
     row.measure();
-    if (!row.hasStatement) {
-      blockWidth = Math.max(blockWidth, row.width);
-    }
+    blockWidth = Math.max(blockWidth, row.width);
     if (row.hasStatement) {
       var statementInput = row.getLastInput();
       var innerWidth = row.width - statementInput.width;
@@ -502,13 +500,7 @@ Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
 
   this.statementEdge = widestStatementRowFields;
 
-  if (widestStatementRowFields) {
-    this.width =
-        Math.max(blockWidth,
-            widestStatementRowFields + Blockly.blockRendering.constants.NOTCH.width * 2);
-  } else {
-    this.width = blockWidth;
-  }
+  this.width = blockWidth;
 
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];

@@ -78,12 +78,7 @@ goog.inherits(Blockly.Events.CommentBase, Blockly.Events.Abstract);
  * @return {!Object} JSON representation.
  */
 Blockly.Events.CommentBase.prototype.toJson = function() {
-  var json = {
-    'type': this.type
-  };
-  if (this.group) {
-    json['group'] = this.group;
-  }
+  var json = Blockly.Events.CommentBase.superClass_.toJson.call(this);
   if (this.commentId) {
     json['commentId'] = this.commentId;
   }
@@ -95,8 +90,8 @@ Blockly.Events.CommentBase.prototype.toJson = function() {
  * @param {!Object} json JSON representation.
  */
 Blockly.Events.CommentBase.prototype.fromJson = function(json) {
+  Blockly.Events.CommentBase.superClass_.fromJson.call(this, json);
   this.commentId = json['commentId'];
-  this.group = json['group'];
 };
 
 /**

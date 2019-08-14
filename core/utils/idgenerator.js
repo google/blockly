@@ -20,8 +20,8 @@
 
 /**
  * @fileoverview Generator for unique element IDs.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
+ * For UUIDs use Blockly.utils.genUid. The ID generator should primarily be
+ * used for IDs that end up in the DOM.
  * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
@@ -57,6 +57,9 @@ Blockly.utils.IdGenerator.prototype.nextId_ = 0;
 
 /**
  * Gets the next unique ID.
+ * The difference between this and genUid is that getNextUniqueId generates
+ * IDs compatible with the HTML4 id attribute restrictions:
+ * Use only ASCII letters, digits, '_', '-' and '.'
  * @return {string} The next unique identifier.
  */
 Blockly.utils.IdGenerator.prototype.getNextUniqueId = function() {

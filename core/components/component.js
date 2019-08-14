@@ -97,7 +97,7 @@ Blockly.Component = function() {
 
 /**
  * Generator for unique IDs.
- * @type {Blockly.utils.IdGenerator}
+ * @type {!Blockly.utils.IdGenerator}
  * @private
  */
 Blockly.Component.prototype.idGenerator_ = Blockly.utils.IdGenerator.getInstance();
@@ -398,8 +398,6 @@ Blockly.Component.prototype.exitDocument = function() {
 /**
  * Disposes of the object. If the object hasn't already been disposed of, calls
  * {@link #disposeInternal}.
- *
- * @return {void} Nothing.
  * @protected
  */
 Blockly.Component.prototype.dispose = function() {
@@ -521,7 +519,6 @@ Blockly.Component.prototype.addChild = function(child, opt_render) {
  *    added; must be between 0 and the current child count (inclusive).
  * @param {boolean=} opt_render If true, the child component will be rendered
  *    into the parent.
- * @return {void} Nada.
  * @protected
  */
 Blockly.Component.prototype.addChildAt = function(child, index, opt_render) {

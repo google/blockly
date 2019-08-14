@@ -214,15 +214,17 @@ Blockly.onKeyDown_ = function(e) {
     return;
   }
 
-  // Check if keyboard accessibility wants to handle the keypress.
-  if (Blockly.keyboardAccessibilityMode && Blockly.navigation.onKeyPress(e)) {
-    return;
-  }
 
   var deleteBlock = false;
   if (e.keyCode == 27) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
+    if (Blockly.keyboardAccessibilityMode && Blockly.navigation.onKeyPress(e)) {
+      return;
+    }
+  } else if (Blockly.keyboardAccessibilityMode && Blockly.navigation.onKeyPress(e)) {
+    // If the keyboard or field handled the key press return.
+    return;
   } else if (e.keyCode == 8 || e.keyCode == 46) {
     // Delete or backspace.
     // Stop the browser from going back to the previous page.

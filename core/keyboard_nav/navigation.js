@@ -686,7 +686,7 @@ Blockly.navigation.onKeyPress = function(e) {
 /**
  * Execute any actions on the flyout, workspace, or toolbox that correspond to
  * the given action.
- * @param {Blockly.Action} action The current action.
+ * @param {!Blockly.Action} action The current action.
  * @return {boolean} True if the action has been handled, false otherwise.
  * @package
  */
@@ -703,7 +703,7 @@ Blockly.navigation.onBlocklyAction = function(action) {
 
 /**
  * Handle all actions performed on the workspace.
- * @param {Blockly.Action} action The action to handle.
+ * @param {!Blockly.Action} action The action to handle.
  * @return {boolean} True if the action has been handled, false otherwise.
  * @private
  */
@@ -744,7 +744,7 @@ Blockly.navigation.workspaceOnAction_ = function(action) {
 
 /**
  * Handle all actions performed on the flyout.
- * @param {Blockly.Action} action The action to handle.
+ * @param {!Blockly.Action} action The action to handle.
  * @return {boolean} True if the action has been handled, false otherwise.
  * @private
  */
@@ -772,7 +772,7 @@ Blockly.navigation.flyoutOnAction_ = function(action) {
 
 /**
  * Handle all actions performeed on the toolbox.
- * @param {Blockly.Action} action The action to handle.
+ * @param {!Blockly.Action} action The action to handle.
  * @return {boolean} True if the action has been handled, false otherwise.
  * @private
  */

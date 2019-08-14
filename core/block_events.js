@@ -73,7 +73,7 @@ Blockly.Events.BlockBase.prototype.toJson = function() {
  * @param {!Object} json JSON representation.
  */
 Blockly.Events.BlockBase.prototype.fromJson = function(json) {
-  Blockly.Events.BlockBase.superClass_.toJson.call(this);
+  Blockly.Events.BlockBase.superClass_.fromJson.call(this, json);
   this.blockId = json['blockId'];
 };
 

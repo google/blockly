@@ -292,7 +292,8 @@ Blockly.blockRendering.StatementInput = function(input) {
       this.height -= this.notchShape.height;
     }
   }
-  this.width = this.notchShape.width * 2;
+  this.width = Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT +
+      this.notchShape.width;
 };
 goog.inherits(Blockly.blockRendering.StatementInput,
     Blockly.blockRendering.Input);

@@ -537,13 +537,14 @@ Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
     if (!row.hasInlineInput) {
-      var currentWidth = row.width;
       if (row.hasStatement) {
         var statementInput = row.getLastInput();
-        currentWidth -= statementInput.width;
+        var currentWidth = row.width - statementInput.width;
+        var desiredWidth = this.statementEdge - this.startX;
+      } else {
+        var currentWidth = row.width;
+        var desiredWidth = this.width - this.startX;
       }
-      var desiredWidth = row.hasStatement ? this.statementEdge : this.width;
-      desiredWidth -= this.startX;
       if (row.type === 'bottom row' && row.hasFixedWidth) {
         desiredWidth = Blockly.blockRendering.constants.MAX_BOTTOM_WIDTH;
       }

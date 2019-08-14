@@ -192,11 +192,11 @@ suite('Navigation', function() {
 
       var numBlocks = this.workspace.getTopBlocks().length;
 
-      //Make sure the block was not connected to anything
+      // Make sure the block was not connected to anything
       chai.assert.isNull(this.basicBlock.previousConnection.targetConnection);
       chai.assert.isNull(this.basicBlock.nextConnection.targetConnection);
 
-      //Make sure that the block was added to the workspace
+      // Make sure that the block was added to the workspace
       chai.assert.equal(numBlocks, 3);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);

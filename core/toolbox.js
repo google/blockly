@@ -32,6 +32,7 @@ goog.require('Blockly.Flyout');
 goog.require('Blockly.HorizontalFlyout');
 goog.require('Blockly.Touch');
 goog.require('Blockly.tree.TreeControl');
+goog.require('Blockly.tree.TreeNode');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.colour');

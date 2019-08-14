@@ -83,15 +83,6 @@ declare namespace goog {
     }
   }
 
-  namespace ui.tree {
-    class BaseNode {
-    }
-    class TreeControl__Class {
-    }
-    class TreeNode__Class {
-    }
-  }
-
   namespace events {
     function listen(eventSource: Element | Listenable, eventType: EventType, listener: any, capturePhase?: boolean, handler?: Object): void;
     function unlistenByKey(key: any): void;

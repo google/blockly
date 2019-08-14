@@ -219,9 +219,7 @@ Blockly.onKeyDown_ = function(e) {
   if (e.keyCode == 27) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
-    if (Blockly.keyboardAccessibilityMode && Blockly.navigation.onKeyPress(e)) {
-      return;
-    }
+    Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_EXIT);
   } else if (Blockly.keyboardAccessibilityMode && Blockly.navigation.onKeyPress(e)) {
     // If the keyboard or field handled the key press return.
     return;

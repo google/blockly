@@ -215,40 +215,6 @@ Blockly.Component.prototype.setElementInternal = function(element) {
 };
 
 /**
- * Returns an array of all the elements in this component's DOM with the
- * provided className.
- * @param {string} className The name of the class to look for.
- * @return {!IArrayLike<!Element>} The items found with the class name provided.
- */
-Blockly.Component.prototype.getElementsByClass = function(className) {
-  return this.element_ ?
-      document.getElementsByClass(className, this.element_) :
-      [];
-};
-
-/**
- * Returns the first element in this component's DOM with the provided
- * className.
- * @param {string} className The name of the class to look for.
- * @return {Element} The first item with the class name provided.
- */
-Blockly.Component.prototype.getElementByClass = function(className) {
-  return this.element_ ? document.getElementByClass(className, this.element_) :
-                         null;
-};
-
-/**
- * Similar to `getElementByClass` except that it expects the
- * element to be present in the dom thus returning a required value. Otherwise,
- * will assert.
- * @param {string} className The name of the class to look for.
- * @return {!Element} The first item with the class name provided.
- */
-Blockly.Component.prototype.getRequiredElementByClass = function(className) {
-  return this.getElementByClass(className);
-};
-
-/**
  * Sets the parent of this component to use for event bubbling.  Throws an error
  * if the component already has a parent or if an attempt is made to add a
  * component to itself as a child.  Callers must use `removeChild`
@@ -360,7 +326,7 @@ Blockly.Component.prototype.render_ = function(
   if (opt_parentElement) {
     opt_parentElement.insertBefore(this.element_, opt_beforeNode || null);
   } else {
-    document.getDocument().body.appendChild(this.element_);
+    document.body.appendChild(this.element_);
   }
 
   // If this component has a parent component that isn't in the document yet,
@@ -413,11 +379,22 @@ Blockly.Component.prototype.exitDocument = function() {
     }
   });
 
-  if (this.googUiComponentHandler_) {
-    this.googUiComponentHandler_.removeAll();
-  }
-
   this.inDocument_ = false;
+};
+
+/**
+ * Disposes of the object. If the object hasn't already been disposed of, calls
+ * {@link #disposeInternal}.
+ *
+ * @return {void} Nothing.
+ */
+Blockly.Component.prototype.dispose = function() {
+  if (!this.disposed_) {
+    // Set disposed_ to true first, in case during the chain of disposal this
+    // gets disposed recursively.
+    this.disposed_ = true;
+    this.disposeInternal();
+  }
 };
 
 /**
@@ -425,17 +402,11 @@ Blockly.Component.prototype.exitDocument = function() {
  * remove event handlers and clean up the component.  Propagates the call to
  * the component's children, if any. Removes the component's DOM from the
  * document.
- * @override
  * @protected
  */
 Blockly.Component.prototype.disposeInternal = function() {
   if (this.inDocument_) {
     this.exitDocument();
-  }
-
-  if (this.googUiComponentHandler_) {
-    this.googUiComponentHandler_.dispose();
-    delete this.googUiComponentHandler_;
   }
 
   // Disposes of the component's children, if any.
@@ -556,9 +527,10 @@ Blockly.Component.prototype.addChildAt = function(child, index, opt_render) {
   // Moving child within component, remove old reference.
   this.childIndex_[child.getId()] = child;
   if (child.getParent() == this) {
-    var index = this.children_.indexOf(child);
-    if (index > -1) {
-      this.children_.splice(index, 1);
+    // Remove from this.children_
+    var i = this.children_.indexOf(child);
+    if (i > -1) {
+      this.children_.splice(i, 1);
     }
   }
 
@@ -586,7 +558,6 @@ Blockly.Component.prototype.addChildAt = function(child, index, opt_render) {
     }
     // Render the child into the parent at the appropriate location.  Note that
     // getChildAt(index + 1) returns undefined if inserting at the end.
-    // TODO(attila): We should have a renderer with a renderChildAt API.
     var sibling = this.getChildAt(index + 1);
     // render_() calls enterDocument() if the parent is already in the document.
     child.render_(this.getContentElement(), sibling ? sibling.element_ : null);
@@ -598,9 +569,6 @@ Blockly.Component.prototype.addChildAt = function(child, index, opt_render) {
     // We don't touch the DOM, but if the parent is in the document, and the
     // child element is in the document but not marked as such, then we call
     // enterDocument on the child.
-    // TODO(gboyer): It would be nice to move this condition entirely, but
-    // there's a large risk of breaking existing applications that manually
-    // append the child to the DOM and then call addChild.
     child.enterDocument();
   }
 };
@@ -625,7 +593,7 @@ Blockly.Component.prototype.getContentElement = function() {
 Blockly.Component.prototype.isRightToLeft = function() {
   if (this.rightToLeft_ == null) {
     this.rightToLeft_ = Blockly.utils.style.isRightToLeft(
-        this.inDocument_ ? this.element_ : document.getDocument().body);
+        this.inDocument_ ? this.element_ : document.body);
   }
   return this.rightToLeft_;
 };
@@ -711,7 +679,7 @@ Blockly.Component.prototype.getChildAt = function(index) {
 Blockly.Component.prototype.forEachChild = function(f, opt_obj) {
   if (this.children_) {
     for (var i = 0; i < this.children_.length; i++) {
-      f.call(/** @type {?} */ (opt_obj), this.children_[i]);
+      f.call(/** @type {?} */ (opt_obj), this.children_[i], i);
     }
   }
 };
@@ -750,7 +718,7 @@ Blockly.Component.prototype.removeChild = function(child, opt_unrender) {
     // Normalize child to be the object and id to be the ID string.  This also
     // ensures that the child is really ours.
     var id = (typeof child === 'string' || child instanceof String) ?
-        child : child.getId();
+        String(child) : child.getId();
     child = this.getChild(id);
 
     if (id && child) {
@@ -789,7 +757,7 @@ Blockly.Component.prototype.removeChild = function(child, opt_unrender) {
  * detailed semantics.
  *
  * @see Blockly.Component#removeChild
- * @param {number} index 0-based index of the child to remove.
+* @param {number} index 0-based index of the child to remove.
  * @param {boolean=} opt_unrender If true, calls `exitDocument` on the
  *    removed child component, and detaches its DOM from the document.
  * @return {Blockly.Component} The removed component, if any.

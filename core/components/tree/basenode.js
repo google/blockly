@@ -39,7 +39,7 @@ goog.require('Blockly.utils.style');
  *
  * @param {string} content The content of the node label treated as
  *     plain-text and will be HTML escaped.
- * @param {Object} config The configuration for the tree.
+ * @param {Blockly.tree.BaseNode.Config} config The configuration for the tree.
  * @constructor
  * @extends {Blockly.Component}
  */
@@ -48,7 +48,7 @@ Blockly.tree.BaseNode = function(content, config) {
 
   /**
    * The configuration for the tree.
-   * @type {Object}
+   * @type {Blockly.tree.BaseNode.Config}
    * @private
    */
   this.config_ = config;
@@ -66,19 +66,19 @@ Blockly.tree.BaseNode = function(content, config) {
   /** @private {string} */
   this.expandedIconClass_;
 
-  /** @protected {Blockly.TreeControl} */
+  /** @protected {Blockly.tree.TreeControl} */
   this.tree;
 
-  /** @private {Blockly.BaseNode} */
+  /** @private {Blockly.tree.BaseNode} */
   this.previousSibling_;
 
-  /** @private {Blockly.BaseNode} */
+  /** @private {Blockly.tree.BaseNode} */
   this.nextSibling_;
 
-  /** @private {Blockly.BaseNode} */
+  /** @private {Blockly.tree.BaseNode} */
   this.firstChild_;
 
-  /** @private {Blockly.BaseNode} */
+  /** @private {Blockly.tree.BaseNode} */
   this.lastChild_;
 
   /**
@@ -116,6 +116,38 @@ goog.inherits(Blockly.tree.BaseNode, Blockly.Component);
 
 
 /**
+ * The config type for the tree.
+ * @typedef {{
+ *            indentWidth:number,
+ *            cssRoot:string,
+ *            cssHideRoot:string,
+ *            cssItem:string,
+ *            cssChildren:string,
+ *            cssChildrenNoLines:string,
+ *            cssTreeRow:string,
+ *            cssItemLabel:string,
+ *            cssTreeIcon:string,
+ *            cssExpandTreeIcon:string,
+ *            cssExpandTreeIconPlus:string,
+ *            cssExpandTreeIconMinus:string,
+ *            cssExpandTreeIconTPlus:string,
+ *            cssExpandTreeIconTMinus:string,
+ *            cssExpandTreeIconLPlus:string,
+ *            cssExpandTreeIconLMinus:string,
+ *            cssExpandTreeIconT:string,
+ *            cssExpandTreeIconL:string,
+ *            cssExpandTreeIconBlank:string,
+ *            cssExpandedFolderIcon:string,
+ *            cssCollapsedFolderIcon:string,
+ *            cssFileIcon:string,
+ *            cssExpandedRootIcon:string,
+ *            cssCollapsedRootIcon:string,
+ *            cssSelectedRow:string
+ *          }}
+ */
+Blockly.tree.BaseNode.Config;
+
+/**
  * Map of nodes in existence. Needed to route events to the appropriate nodes.
  * Nodes are added to the map at {@link #enterDocument} time and removed at
  * {@link #exitDocument} time.
@@ -132,6 +164,7 @@ Blockly.tree.BaseNode.prototype.disposeInternal = function() {
   }
   this.setElementInternal(null);
 };
+
 
 /**
  * Adds roles and states.
@@ -159,16 +192,19 @@ Blockly.tree.BaseNode.prototype.initAccessibility = function() {
 
     var img = this.getIconElement();
     if (img) {
-      Blockly.utils.aria.setRole(img, 'presentation');
+      Blockly.utils.aria.setRole(img,
+          Blockly.utils.aria.Role.PRESENTATION);
     }
     var ei = this.getExpandIconElement();
     if (ei) {
-      Blockly.utils.aria.setRole(ei, 'presentation');
+      Blockly.utils.aria.setRole(ei,
+          Blockly.utils.aria.Role.PRESENTATION);
     }
 
     var ce = this.getChildrenElement();
     if (ce) {
-      Blockly.utils.aria.setRole(ce, 'group');
+      Blockly.utils.aria.setRole(ce,
+          Blockly.utils.aria.Role.GROUP);
 
       // In case the children will be created lazily.
       if (ce.hasChildNodes()) {
@@ -178,14 +214,17 @@ Blockly.tree.BaseNode.prototype.initAccessibility = function() {
         // do setsize for each child
         var count = this.getChildCount();
         for (var i = 1; i <= count; i++) {
-          var child = this.getChildAt(i - 1).getElement();
-          Blockly.utils.aria.setState(child, 'setsize', count);
-          Blockly.utils.aria.setState(child, 'posinset', i);
+          var child = /** @type {!Element} */ (this.getChildAt(i - 1).getElement());
+          Blockly.utils.aria.setState(child,
+              Blockly.utils.aria.State.SETSIZE, count);
+          Blockly.utils.aria.setState(child,
+              Blockly.utils.aria.State.POSINSET, i);
         }
       }
     }
   }
 };
+
 
 /** @override */
 Blockly.tree.BaseNode.prototype.createDom = function() {
@@ -194,6 +233,7 @@ Blockly.tree.BaseNode.prototype.createDom = function() {
   this.setElementInternal(/** @type {!Element} */ (element));
 };
 
+
 /** @override */
 Blockly.tree.BaseNode.prototype.enterDocument = function() {
   Blockly.tree.BaseNode.superClass_.enterDocument.call(this);
@@ -201,11 +241,13 @@ Blockly.tree.BaseNode.prototype.enterDocument = function() {
   this.initAccessibility();
 };
 
+
 /** @override */
 Blockly.tree.BaseNode.prototype.exitDocument = function() {
   Blockly.tree.BaseNode.superClass_.exitDocument.call(this);
   delete Blockly.tree.BaseNode.allNodes[this.getId()];
 };
+
 
 /**
  * The method assumes that the child doesn't have parent node yet.
@@ -213,6 +255,7 @@ Blockly.tree.BaseNode.prototype.exitDocument = function() {
  */
 Blockly.tree.BaseNode.prototype.addChildAt = function(
     child, index) {
+  child = /** @type {Blockly.tree.BaseNode} */ (child);
   var prevNode = this.getChildAt(index - 1);
   var nextNode = this.getChildAt(index);
 
@@ -268,7 +311,6 @@ Blockly.tree.BaseNode.prototype.addChildAt = function(
     }
   }
 };
-
 
 /**
  * Adds a node as a child to the current node.
@@ -362,13 +404,8 @@ Blockly.tree.BaseNode.prototype.contains = function(node) {
 };
 
 /**
- * An array of empty children to return for nodes that have no children.
- * @type {!Array<!Blockly.tree.BaseNode>}
- * @private
- */
-Blockly.tree.BaseNode.EMPTY_CHILDREN_ = [];
-
-/**
+ * This is re-defined here to indicate to the closure compiler the correct
+ * child return type.
  * @param {number} index 0-based index.
  * @return {Blockly.tree.BaseNode} The child at the given index; null if none.
  */
@@ -450,10 +487,11 @@ Blockly.tree.BaseNode.prototype.setSelectedInternal = function(selected) {
 
   var el = this.getElement();
   if (el) {
-    Blockly.utils.aria.setState(el, 'selected', selected);
+    Blockly.utils.aria.setState(el, Blockly.utils.aria.State.SELECTED, selected);
     if (selected) {
-      var treeElement = this.getTree().getElement();
-      Blockly.utils.aria.setState(treeElement, 'activedescendant', this.getId());
+      var treeElement = /** @type {!Element} */ (this.getTree().getElement());
+      Blockly.utils.aria.setState(treeElement,
+          Blockly.utils.aria.State.ACTIVEDESCENDANT, this.getId());
     }
   }
 };
@@ -1133,7 +1171,7 @@ Blockly.tree.BaseNode.prototype.getPreviousShownNode = function() {
 };
 
 /**
- * @return {Object} The configuration for the tree.
+ * @return {Blockly.tree.BaseNode.Config} The configuration for the tree.
  */
 Blockly.tree.BaseNode.prototype.getConfig = function() {
   return this.config_;

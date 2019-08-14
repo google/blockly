@@ -40,7 +40,7 @@ goog.require('Blockly.utils.aria');
  * Similar to Closure's goog.ui.tree.TreeControl
  *
  * @param {Blockly.Toolbox} toolbox The parent toolbox for this tree.
- * @param {Object} config The configuration for the tree.
+ * @param {Blockly.tree.BaseNode.Config} config The configuration for the tree.
  * @constructor
  * @extends {Blockly.tree.BaseNode}
  */
@@ -82,30 +82,30 @@ Blockly.tree.TreeControl.prototype.reveal = function() {
   // which is a generic component
 };
 
-
 /**
  * Handles focus on the tree.
- * @param {!Event} e The browser event.
+ * @param {!Event} _e The browser event.
  * @private
  */
-Blockly.tree.TreeControl.prototype.handleFocus_ = function(/* e */) {
+Blockly.tree.TreeControl.prototype.handleFocus_ = function(_e) {
   this.focused_ = true;
-  Blockly.utils.dom.addClass(this.getElement(), 'focused');
+  var el = /** @type {!Element} */ (this.getElement());
+  Blockly.utils.dom.addClass(el, 'focused');
 
   if (this.selectedItem_) {
     this.selectedItem_.select();
   }
 };
 
-
 /**
  * Handles blur on the tree.
- * @param {!Event} e The browser event.
+ * @param {!Event} _e The browser event.
  * @private
  */
-Blockly.tree.TreeControl.prototype.handleBlur_ = function(/* e */) {
+Blockly.tree.TreeControl.prototype.handleBlur_ = function(_e) {
   this.focused_ = false;
-  Blockly.utils.dom.removeClass(this.getElement(), 'focused');
+  var el = /** @type {!Element} */ (this.getElement());
+  Blockly.utils.dom.removeClass(el, 'focused');
 };
 
 
@@ -116,20 +116,14 @@ Blockly.tree.TreeControl.prototype.hasFocus = function() {
   return this.focused_;
 };
 
-
 /** @override */
 Blockly.tree.TreeControl.prototype.getExpanded = function() {
-  return !this.showRootNode_ ||
-      Blockly.tree.TreeControl.superClass_.getExpanded.call(this);
+  return true;
 };
 
 /** @override */
 Blockly.tree.TreeControl.prototype.setExpanded = function(expanded) {
-  if (!this.showRootNode_) {
-    this.setExpandedInternal(expanded);
-  } else {
-    Blockly.tree.TreeControl.superClass_.setExpanded.call(this, expanded);
-  }
+  this.setExpandedInternal(expanded);
 };
 
 /** @override */
@@ -151,8 +145,6 @@ Blockly.tree.TreeControl.prototype.updateExpandIcon = function() {
 
 /** @override */
 Blockly.tree.TreeControl.prototype.getRowClassName = function() {
-  // TODO: look into this
-  // return this.getConfig().cssHideRoot;
   return Blockly.tree.TreeControl.superClass_.getRowClassName.call(this) +
       ' ' + this.getConfig().cssHideRoot;
 };
@@ -204,13 +196,7 @@ Blockly.tree.TreeControl.prototype.setSelectedItem = function(node) {
   }
   var oldNode = this.getSelectedItem();
 
-  if (this.selectedItem_ == node) {
-    return;
-  }
-
-  var hadFocus = false;
   if (this.selectedItem_) {
-    hadFocus = this.selectedItem_ == this.focusedNode_;
     this.selectedItem_.setSelectedInternal(false);
   }
 
@@ -218,9 +204,6 @@ Blockly.tree.TreeControl.prototype.setSelectedItem = function(node) {
 
   if (node) {
     node.setSelectedInternal(true);
-    if (hadFocus) {
-      node.select();
-    }
   }
 
   if (node && node.blocks && node.blocks.length) {
@@ -292,12 +275,11 @@ Blockly.tree.TreeControl.prototype.updateLinesAndExpandIcons_ = function() {
 Blockly.tree.TreeControl.prototype.initAccessibility = function() {
   Blockly.tree.TreeControl.superClass_.initAccessibility.call(this);
 
-  var elt = this.getElement();
-  // goog.asserts.assert(elt, 'The DOM element for the tree cannot be null.');
-  Blockly.utils.aria.setRole(elt, 'tree');
-  Blockly.utils.aria.setState(elt, 'labelledby', this.getLabelElement().id);
+  var el = /** @type {!Element} */ (this.getElement());
+  Blockly.utils.aria.setRole(el, Blockly.utils.aria.Role.TREE);
+  Blockly.utils.aria.setState(el,
+      Blockly.utils.aria.State.LABELLEDBY, this.getLabelElement().id);
 };
-
 
 /** @override */
 Blockly.tree.TreeControl.prototype.enterDocument = function() {
@@ -401,7 +383,7 @@ Blockly.tree.TreeControl.prototype.handleKeyEvent = function(e) {
   var handled = false;
 
   // Handle navigation keystrokes.
-  handled = this.selectedItem_ && this.selectedItem_.onKeyDown(e);
+  handled = (this.selectedItem_ && this.selectedItem_.onKeyDown(e)) || handled;
 
   if (handled) {
     e.preventDefault();
@@ -438,7 +420,7 @@ Blockly.tree.TreeControl.prototype.getNodeFromEvent_ = function(e) {
 /**
  * Creates a new tree node using the same config as the root.
  * @param {string=} opt_content The content of the node label.
- * @return {!Blockly.TreeNode} The new item.
+ * @return {!Blockly.tree.TreeNode} The new item.
  */
 Blockly.tree.TreeControl.prototype.createNode = function(opt_content) {
   return new Blockly.tree.TreeNode(this.toolbox_, opt_content || '', this.getConfig());

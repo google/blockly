@@ -38,8 +38,9 @@ goog.require('Blockly.utils.KeyCodes');
  * @param {Blockly.Toolbox} toolbox The parent toolbox for this tree.
  * @param {string} content The content of the node label treated as
  *     plain-text and will be HTML escaped.
- * @param {Object} config The configuration for the tree.
+ * @param {Blockly.tree.BaseNode.Config} config The configuration for the tree.
  * @constructor
+ * @extends {Blockly.tree.BaseNode}
  */
 Blockly.tree.TreeNode = function(toolbox, content, config) {
   this.toolbox_ = toolbox;
@@ -49,7 +50,7 @@ goog.inherits(Blockly.tree.TreeNode, Blockly.tree.BaseNode);
 
 /**
  * Returns the tree.
- * @return {?Blockly.Toolbox.TreeControl} The tree.
+ * @return {?Blockly.tree.TreeControl} The tree.
  * @override
  */
 Blockly.tree.TreeNode.prototype.getTree = function() {
@@ -106,7 +107,7 @@ Blockly.tree.TreeNode.prototype.getCalculatedIconClass = function() {
  */
 Blockly.tree.TreeNode.prototype.onClick_ = function(_e) {
   // Expand icon.
-  if (this.hasChildren() && this.isUserCollapsible_) {
+  if (this.hasChildren() && this.isUserCollapsible()) {
     this.toggle();
     this.select();
   } else if (this.isSelected()) {
@@ -140,8 +141,8 @@ Blockly.tree.TreeNode.prototype.onKeyDown = function(e) {
     var map = {};
     var next = Blockly.utils.KeyCodes.DOWN;
     var prev = Blockly.utils.KeyCodes.UP;
-    map[Blockly.utils.KeyCodes.RIGHT] = this.rightToLeft_ ? prev : next;
-    map[Blockly.utils.KeyCodes.LEFT] = this.rightToLeft_ ? next : prev;
+    map[Blockly.utils.KeyCodes.RIGHT] = this.isRightToLeft() ? prev : next;
+    map[Blockly.utils.KeyCodes.LEFT] = this.isRightToLeft() ? next : prev;
     map[Blockly.utils.KeyCodes.UP] = Blockly.utils.KeyCodes.LEFT;
     map[Blockly.utils.KeyCodes.DOWN] = Blockly.utils.KeyCodes.RIGHT;
 

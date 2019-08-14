@@ -151,7 +151,9 @@ Blockly.blockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
   }
   if (this.RTL_) {
     this.steps_.push('H', rightEdge);
-    this.steps_.push('V', row.yPos + row.height - this.highlightOffset_);
+    if (row.height > this.highlightOffset_) {
+      this.steps_.push('V', row.yPos + row.height - this.highlightOffset_);
+    }
   }
 };
 

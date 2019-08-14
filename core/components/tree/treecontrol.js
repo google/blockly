@@ -27,8 +27,6 @@
 
 goog.provide('Blockly.tree.TreeControl');
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
 goog.require('Blockly.tree.TreeNode');
 goog.require('Blockly.tree.BaseNode');
 goog.require('Blockly.utils.aria');
@@ -46,12 +44,17 @@ goog.require('Blockly.utils.aria');
  */
 Blockly.tree.TreeControl = function(toolbox, config) {
   this.toolbox_ = toolbox;
+
   Blockly.tree.BaseNode.call(this, '', config);
 
   // The root is open and selected by default.
   this.setExpandedInternal(true);
   this.setSelectedInternal(true);
 
+  /**
+   * Currenty selected item.
+   * @private {Blockly.tree.BaseNode}
+   */
   this.selectedItem_ = this;
 };
 goog.inherits(Blockly.tree.TreeControl, Blockly.tree.BaseNode);
@@ -62,6 +65,15 @@ goog.inherits(Blockly.tree.TreeControl, Blockly.tree.BaseNode);
  */
 Blockly.tree.TreeControl.prototype.getTree = function() {
   return this;
+};
+
+/**
+ * Returns the assosiated toolbox.
+ * @return {Blockly.Toolbox} The toolbox.
+ * @package
+ */
+Blockly.tree.TreeControl.prototype.getToolbox = function() {
+  return this.toolbox_;
 };
 
 /**
@@ -108,9 +120,9 @@ Blockly.tree.TreeControl.prototype.handleBlur_ = function(_e) {
   Blockly.utils.dom.removeClass(el, 'focused');
 };
 
-
 /**
  * @return {boolean} Whether the tree has keyboard focus.
+ * @package
  */
 Blockly.tree.TreeControl.prototype.hasFocus = function() {
   return this.focused_;
@@ -178,22 +190,18 @@ Blockly.tree.TreeControl.prototype.getCalculatedIconClass = function() {
 /**
  * Sets the selected item.
  * @param {Blockly.tree.BaseNode} node The item to select.
+ * @package
  */
 Blockly.tree.TreeControl.prototype.setSelectedItem = function(node) {
-  var toolbox = this.toolbox_;
-  if (node == this.selectedItem_ || node == toolbox.tree_) {
+  if (node == this.selectedItem_) {
     return;
   }
-  if (toolbox.lastCategory_) {
-    toolbox.lastCategory_.getRowElement().style.backgroundColor = '';
+  
+  if (this.onBeforeSelected_ &&
+    !this.onBeforeSelected_.call(this.toolbox_, node)) {
+    return;
   }
-  if (node) {
-    var hexColour = node.hexColour || '#57e';
-    node.getRowElement().style.backgroundColor = hexColour;
-    // Add colours to child nodes which may have been collapsed and thus
-    // not rendered.
-    toolbox.addColour_(node);
-  }
+
   var oldNode = this.getSelectedItem();
 
   if (this.selectedItem_) {
@@ -206,30 +214,34 @@ Blockly.tree.TreeControl.prototype.setSelectedItem = function(node) {
     node.setSelectedInternal(true);
   }
 
-  if (node && node.blocks && node.blocks.length) {
-    toolbox.flyout_.show(node.blocks);
-    // Scroll the flyout to the top if the category has changed.
-    if (toolbox.lastCategory_ != node) {
-      toolbox.flyout_.scrollToStart();
-    }
-  } else {
-    // Hide the flyout.
-    toolbox.flyout_.hide();
+  if (this.onAfterSelected_) {
+    this.onAfterSelected_.call(this.toolbox_, oldNode, node);
   }
-  if (oldNode != node && oldNode != this) {
-    var event = new Blockly.Events.Ui(null, 'category',
-        oldNode && oldNode.getText(), node && node.getText());
-    event.workspaceId = toolbox.workspace_.id;
-    Blockly.Events.fire(event);
-  }
-  if (node) {
-    toolbox.lastCategory_ = node;
-  }
+};
+
+/**
+ * Set the handler that's triggered before a node is selected.
+ * @param {function(Blockly.tree.BaseNode):boolean} fn The handler
+ * @package
+ */
+Blockly.tree.TreeControl.prototype.onBeforeSelected = function(fn) {
+  this.onBeforeSelected_ = fn;
+};
+
+/**
+ * Set the handler that's triggered after a node is selected.
+ * @param {function(
+ *  Blockly.tree.BaseNode, Blockly.tree.BaseNode):?} fn The handler
+ * @package
+ */
+Blockly.tree.TreeControl.prototype.onAfterSelected = function(fn) {
+  this.onAfterSelected_ = fn;
 };
 
 /**
  * Returns the selected item.
  * @return {Blockly.tree.BaseNode} The currently selected item.
+ * @package
  */
 Blockly.tree.TreeControl.prototype.getSelectedItem = function() {
   return this.selectedItem_;
@@ -316,7 +328,7 @@ Blockly.tree.TreeControl.prototype.attachEvents_ = function() {
       'click', this, this.handleMouseEvent_);
   
   this.onKeydownWrapper_ = Blockly.bindEvent_(el,
-      'keydown', this, this.handleKeyEvent);
+      'keydown', this, this.handleKeyEvent_);
 
   if (Blockly.Touch.TOUCH_ENABLED) {
     this.onTouchEndWrapper_ = Blockly.bindEventWithChecks_(el,
@@ -333,7 +345,7 @@ Blockly.tree.TreeControl.prototype.detachEvents_ = function() {
   Blockly.unbindEvent_(this.onBlurWrapper_);
   Blockly.unbindEvent_(this.onMousedownWrapper_);
   Blockly.unbindEvent_(this.onClickWrapper_);
-  Blockly.unbindEvent_(this.onKeyDownWrapper_);
+  Blockly.unbindEvent_(this.onKeydownWrapper_);
   if (this.onTouchEndWrapper_) {
     Blockly.unbindEvent_(this.onTouchEndWrapper_);
   }
@@ -378,8 +390,9 @@ Blockly.tree.TreeControl.prototype.handleTouchEvent_ = function(e) {
  * Handles key down on the tree.
  * @param {!Event} e The browser event.
  * @return {boolean} The handled value.
+ * @private
  */
-Blockly.tree.TreeControl.prototype.handleKeyEvent = function(e) {
+Blockly.tree.TreeControl.prototype.handleKeyEvent_ = function(e) {
   var handled = false;
 
   // Handle navigation keystrokes.
@@ -421,7 +434,9 @@ Blockly.tree.TreeControl.prototype.getNodeFromEvent_ = function(e) {
  * Creates a new tree node using the same config as the root.
  * @param {string=} opt_content The content of the node label.
  * @return {!Blockly.tree.TreeNode} The new item.
+ * @package
  */
 Blockly.tree.TreeControl.prototype.createNode = function(opt_content) {
-  return new Blockly.tree.TreeNode(this.toolbox_, opt_content || '', this.getConfig());
+  return new Blockly.tree.TreeNode(
+      this.toolbox_, opt_content || '', this.getConfig());
 };

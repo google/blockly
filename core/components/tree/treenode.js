@@ -155,14 +155,21 @@ Blockly.tree.TreeNode.prototype.onKeyDown = function(e) {
 };
 
 /**
- * Resize the toolbox if it exists.
+ * Set the handler that's triggered when the size of node has changed.
+ * @param {function():?} fn The handler
+ * @package
+ */
+Blockly.tree.TreeNode.prototype.onSizeChanged = function(fn) {
+  this.onSizeChanged_ = fn;
+};
+
+/**
+ * Trigger a size changed event if a handler exists.
  * @private
  */
 Blockly.tree.TreeNode.prototype.resizeToolbox_ = function() {
-  if (this.toolbox_) {
-    // Even though the div hasn't changed size, the visible workspace
-    // surface of the workspace has, so we may need to reposition everything.
-    Blockly.svgResize(this.toolbox_.workspace_);
+  if (this.onSizeChanged_) {
+    this.onSizeChanged_.call(this.toolbox_);
   }
 };
 

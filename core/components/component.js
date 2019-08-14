@@ -71,7 +71,7 @@ Blockly.Component = function() {
   /**
    * Parent component to which events will be propagated.  This property is
    * strictly private and must not be accessed directly outside of this class!
-   * @private {Blockly.Component?}
+   * @private {?Blockly.Component}
    */
   this.parent_ = null;
 
@@ -157,6 +157,7 @@ Blockly.Component.Error = {
  * right to left determinations.
  * @param {?boolean} rightToLeft Whether the components should be rendered
  *     right-to-left. Null iff components should determine their directionality.
+ * @protected
  */
 Blockly.Component.setDefaultRightToLeft = function(rightToLeft) {
   Blockly.Component.defaultRightToLeft_ = rightToLeft;
@@ -166,6 +167,7 @@ Blockly.Component.setDefaultRightToLeft = function(rightToLeft) {
  * Gets the unique ID for the instance of this component.  If the instance
  * doesn't already have an ID, generates one on the fly.
  * @return {string} Unique component ID.
+ * @protected
  */
 Blockly.Component.prototype.getId = function() {
   return this.id_ || (this.id_ = this.idGenerator_.getNextUniqueId());
@@ -178,6 +180,7 @@ Blockly.Component.prototype.getId = function() {
  * new ID; this may throw an error if the parent already has a child with an ID
  * that conflicts with the new ID.
  * @param {string} id Unique component ID.
+ * @protected
  */
 Blockly.Component.prototype.setId = function(id) {
   if (this.parent_ && this.parent_.childIndex_) {
@@ -193,6 +196,7 @@ Blockly.Component.prototype.setId = function(id) {
 /**
  * Gets the component's element.
  * @return {Element} The element for the component.
+ * @package
  */
 Blockly.Component.prototype.getElement = function() {
   return this.element_;
@@ -209,6 +213,7 @@ Blockly.Component.prototype.getElement = function() {
  * This should only be used by subclasses and its associated renderers.
  *
  * @param {Element} element Root element for the component.
+ * @protected
  */
 Blockly.Component.prototype.setElementInternal = function(element) {
   this.element_ = element;
@@ -223,6 +228,7 @@ Blockly.Component.prototype.setElementInternal = function(element) {
  * @see Blockly.Component#removeChild
  * @see Blockly.Component#removeChildAt
  * @param {Blockly.Component} parent The parent component.
+ * @protected
  */
 Blockly.Component.prototype.setParent = function(parent) {
   if (this == parent) {
@@ -242,7 +248,8 @@ Blockly.Component.prototype.setParent = function(parent) {
 
 /**
  * Returns the component's parent, if any.
- * @return {Blockly.Component?} The parent component.
+ * @return {?Blockly.Component} The parent component.
+ * @protected
  */
 Blockly.Component.prototype.getParent = function() {
   return this.parent_;
@@ -251,6 +258,7 @@ Blockly.Component.prototype.getParent = function() {
 /**
  * Determines whether the component has been added to the document.
  * @return {boolean} TRUE if rendered. Otherwise, FALSE.
+ * @protected
  */
 Blockly.Component.prototype.isInDocument = function() {
   return this.inDocument_;
@@ -259,6 +267,7 @@ Blockly.Component.prototype.isInDocument = function() {
 /**
  * Creates the initial DOM representation for the component.  The default
  * implementation is to set this.element_ = div.
+ * @protected
  */
 Blockly.Component.prototype.createDom = function() {
   this.element_ = document.createElement('div');
@@ -278,6 +287,7 @@ Blockly.Component.prototype.createDom = function() {
  *
  * @param {Element=} opt_parentElement Optional parent element to render the
  *    component into.
+ * @protected
  */
 Blockly.Component.prototype.render = function(opt_parentElement) {
   this.render_(opt_parentElement);
@@ -290,6 +300,7 @@ Blockly.Component.prototype.render = function(opt_parentElement) {
  * Throws an Error if the component is already rendered.
  *
  * @param {Node} sibling Node to render the component before.
+ * @protected
  */
 Blockly.Component.prototype.renderBefore = function(sibling) {
   this.render_(/** @type {Element} */ (sibling.parentNode), sibling);
@@ -345,6 +356,7 @@ Blockly.Component.prototype.render_ = function(
  *
  * If the component contains child components, this call is propagated to its
  * children.
+ * @protected
  */
 Blockly.Component.prototype.enterDocument = function() {
   this.inDocument_ = true;
@@ -370,6 +382,7 @@ Blockly.Component.prototype.enterDocument = function() {
  *
  * It should be possible for the component to be rendered again once this method
  * has been called.
+ * @protected
  */
 Blockly.Component.prototype.exitDocument = function() {
   // Propagate exitDocument to child components that have been rendered, if any.
@@ -387,6 +400,7 @@ Blockly.Component.prototype.exitDocument = function() {
  * {@link #disposeInternal}.
  *
  * @return {void} Nothing.
+ * @protected
  */
 Blockly.Component.prototype.dispose = function() {
   if (!this.disposed_) {
@@ -429,6 +443,7 @@ Blockly.Component.prototype.disposeInternal = function() {
  * elements.
  * @param {string} idFragment A partial id.
  * @return {string} Unique element id.
+ * @protected
  */
 Blockly.Component.prototype.makeId = function(idFragment) {
   return this.getId() + '.' + idFragment;
@@ -440,6 +455,7 @@ Blockly.Component.prototype.makeId = function(idFragment) {
  * ids.  The key will remain the same.
  * @param {Object} object The object that will be used to create the ids.
  * @return {!Object<string, string>} An object of id keys to generated ids.
+ * @protected
  */
 Blockly.Component.prototype.makeIds = function(object) {
   var ids = {};
@@ -457,6 +473,7 @@ Blockly.Component.prototype.makeIds = function(object) {
  * @param {Blockly.Component} child The new child component.
  * @param {boolean=} opt_render If true, the child component will be rendered
  *    into the parent.
+ * @protected
  */
 Blockly.Component.prototype.addChild = function(child, opt_render) {
   this.addChildAt(child, this.getChildCount(), opt_render);
@@ -505,6 +522,7 @@ Blockly.Component.prototype.addChild = function(child, opt_render) {
  * @param {boolean=} opt_render If true, the child component will be rendered
  *    into the parent.
  * @return {void} Nada.
+ * @protected
  */
 Blockly.Component.prototype.addChildAt = function(child, index, opt_render) {
   if (child.inDocument_ && (opt_render || !this.inDocument_)) {
@@ -579,6 +597,7 @@ Blockly.Component.prototype.addChildAt = function(child, index, opt_render) {
  * implementation returns the component's root element.  Subclasses with
  * complex DOM structures must override this method.
  * @return {Element} Element to contain child elements (null if none).
+ * @protected
  */
 Blockly.Component.prototype.getContentElement = function() {
   return this.element_;
@@ -589,6 +608,7 @@ Blockly.Component.prototype.getContentElement = function() {
  * The first time this function is invoked, the right-to-left rendering property
  * is set if it has not been already.
  * @return {boolean} Whether the control is rendered right-to-left.
+ * @protected
  */
 Blockly.Component.prototype.isRightToLeft = function() {
   if (this.rightToLeft_ == null) {
@@ -604,6 +624,7 @@ Blockly.Component.prototype.isRightToLeft = function() {
  * {@link #enterDocument} is called and is right-to-left is set).
  * @param {boolean} rightToLeft Whether the component is rendered
  *     right-to-left.
+ * @protected
  */
 Blockly.Component.prototype.setRightToLeft = function(rightToLeft) {
   if (this.inDocument_) {
@@ -615,6 +636,7 @@ Blockly.Component.prototype.setRightToLeft = function(rightToLeft) {
 /**
  * Returns true if the component has children.
  * @return {boolean} True if the component has children.
+ * @protected
  */
 Blockly.Component.prototype.hasChildren = function() {
   return !!this.children_ && this.children_.length != 0;
@@ -623,6 +645,7 @@ Blockly.Component.prototype.hasChildren = function() {
 /**
  * Returns the number of children of this component.
  * @return {number} The number of children.
+ * @protected
  */
 Blockly.Component.prototype.getChildCount = function() {
   return this.children_ ? this.children_.length : 0;
@@ -632,6 +655,7 @@ Blockly.Component.prototype.getChildCount = function() {
  * Returns an array containing the IDs of the children of this component, or an
  * empty array if the component has no children.
  * @return {!Array<string>} Child component IDs.
+ * @protected
  */
 Blockly.Component.prototype.getChildIds = function() {
   var ids = [];
@@ -646,7 +670,8 @@ Blockly.Component.prototype.getChildIds = function() {
 /**
  * Returns the child with the given ID, or null if no such child exists.
  * @param {string} id Child component ID.
- * @return {Blockly.Component?} The child with the given ID; null if none.
+ * @return {?Blockly.Component} The child with the given ID; null if none.
+ * @protected
  */
 Blockly.Component.prototype.getChild = function(id) {
   // Use childIndex_ for O(1) access by ID.
@@ -659,7 +684,8 @@ Blockly.Component.prototype.getChild = function(id) {
 /**
  * Returns the child at the given index, or null if the index is out of bounds.
  * @param {number} index 0-based index.
- * @return {Blockly.Component?} The child at the given index; null if none.
+ * @return {?Blockly.Component} The child at the given index; null if none.
+ * @protected
  */
 Blockly.Component.prototype.getChildAt = function(index) {
   // Use children_ for access by index.
@@ -675,6 +701,7 @@ Blockly.Component.prototype.getChildAt = function(index) {
  * child component; should take 2 arguments (the child and its index).
  * @param {T=} opt_obj Used as the 'this' object in f when called.
  * @template T
+ * @protected
  */
 Blockly.Component.prototype.forEachChild = function(f, opt_obj) {
   if (this.children_) {
@@ -687,8 +714,9 @@ Blockly.Component.prototype.forEachChild = function(f, opt_obj) {
 /**
  * Returns the 0-based index of the given child component, or -1 if no such
  * child is found.
- * @param {Blockly.Component?} child The child component.
+ * @param {?Blockly.Component} child The child component.
  * @return {number} 0-based index of the child component; -1 if not found.
+ * @protected
  */
 Blockly.Component.prototype.indexOfChild = function(child) {
   return (this.children_ && child) ? this.children_.indexOf(child) :
@@ -712,6 +740,7 @@ Blockly.Component.prototype.indexOfChild = function(child) {
  * @param {boolean=} opt_unrender If true, calls `exitDocument` on the
  *    removed child component, and detaches its DOM from the document.
  * @return {Blockly.Component} The removed component, if any.
+ * @protected
  */
 Blockly.Component.prototype.removeChild = function(child, opt_unrender) {
   if (child) {
@@ -757,10 +786,11 @@ Blockly.Component.prototype.removeChild = function(child, opt_unrender) {
  * detailed semantics.
  *
  * @see Blockly.Component#removeChild
-* @param {number} index 0-based index of the child to remove.
+ * @param {number} index 0-based index of the child to remove.
  * @param {boolean=} opt_unrender If true, calls `exitDocument` on the
  *    removed child component, and detaches its DOM from the document.
  * @return {Blockly.Component} The removed component, if any.
+ * @protected
  */
 Blockly.Component.prototype.removeChildAt = function(index, opt_unrender) {
   // removeChild(null) will throw error.
@@ -774,6 +804,7 @@ Blockly.Component.prototype.removeChildAt = function(index, opt_unrender) {
  * @param {boolean=} opt_unrender If true, calls {@link #exitDocument} on the
  *    removed child components, and detaches their DOM from the document.
  * @return {!Array<Blockly.Component>} The removed components if any.
+ * @protected
  */
 Blockly.Component.prototype.removeChildren = function(opt_unrender) {
   var removedChildren = [];

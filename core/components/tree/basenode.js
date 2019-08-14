@@ -1210,6 +1210,9 @@ Blockly.tree.BaseNode.prototype.getPreviousShownNode = function() {
   }
   var parent = this.getParent();
   var tree = this.getTree();
+  if (parent == tree) {
+    return null;
+  }
   // The root is the first node.
   if (this == tree) {
     return null;

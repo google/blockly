@@ -126,11 +126,6 @@ Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_PADDING = 2;
 Blockly.blockRendering.constants.EMPTY_STATEMENT_INPUT_HEIGHT =
     Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT;
 
-Blockly.blockRendering.constants.EMPTY_STATEMENT_INPUT_WIDTH = 32;
-
-Blockly.blockRendering.constants.POPULATED_STATEMENT_INPUT_WIDTH = 25;
-
-
 Blockly.blockRendering.constants.START_POINT = Blockly.utils.svgPaths.moveBy(0, 0);
 
 /**

@@ -213,13 +213,16 @@ Blockly.onKeyDown_ = function(e) {
     // hidden.
     return;
   }
+
+  // Check if keyboard accessibility wants to handle the keypress.
+  if (Blockly.keyboardAccessibilityMode && Blockly.navigation.onKeyPress(e)) {
+    return;
+  }
+
   var deleteBlock = false;
   if (e.keyCode == 27) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
-    if (Blockly.keyboardAccessibilityMode) {
-      Blockly.navigation.onKeyPress(e);
-    }
   } else if (e.keyCode == 8 || e.keyCode == 46) {
     // Delete or backspace.
     // Stop the browser from going back to the previous page.
@@ -274,13 +277,7 @@ Blockly.onKeyDown_ = function(e) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
       mainWorkspace.undo(e.shiftKey);
-    } else if (Blockly.keyboardAccessibilityMode &&
-        Blockly.navigation.onKeyPress(e)) {
-      return;
     }
-  } else if (Blockly.keyboardAccessibilityMode &&
-      Blockly.navigation.onKeyPress(e)) {
-    return;
   }
   // Common code for delete and cut.
   // Don't delete in the flyout.

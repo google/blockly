@@ -285,15 +285,15 @@ Blockly.blockRendering.StatementInput = function(input) {
 
   if (!this.connectedBlock) {
     this.height = Blockly.blockRendering.constants.EMPTY_STATEMENT_INPUT_HEIGHT;
-    this.width = Blockly.blockRendering.constants.EMPTY_STATEMENT_INPUT_WIDTH;
   } else {
-    this.width = Blockly.blockRendering.constants.POPULATED_STATEMENT_INPUT_WIDTH;
     this.height =
         this.connectedBlockHeight + Blockly.blockRendering.constants.STATEMENT_BOTTOM_SPACER;
     if (this.connectedBlock.nextConnection) {
       this.height -= this.notchShape.height;
     }
   }
+  this.width = Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT +
+      this.notchShape.width;
 };
 goog.inherits(Blockly.blockRendering.StatementInput,
     Blockly.blockRendering.Input);

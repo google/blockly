@@ -93,6 +93,20 @@ Blockly.navigation.STATE_TOOLBOX = 3;
 Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
 
 /**
+ * Object holding default action names.
+ */
+Blockly.navigation.actionNames = {
+  PREVIOUS: 'previous',
+  NEXT: 'next',
+  IN: 'in',
+  OUT: 'out',
+  INSERT: 'insert',
+  MARK: 'mark',
+  DISCONNECT: 'disconnect',
+  TOOLBOX: 'toolbox',
+  EXIT: 'exit'
+};
+/**
  * Set the navigation cursor.
  * @param {Blockly.Cursor} cursor The cursor to navigate through blocks on a
  * workspace.
@@ -656,9 +670,109 @@ Blockly.navigation.handleEnterForWS = function() {
 Blockly.navigation.onKeyPress = function(e) {
   var key = Blockly.user.keyMap.serializeKeyEvent(e);
   var action = Blockly.user.keyMap.getActionByKeyCode(key);
+  var curNode = Blockly.navigation.cursor_.getCurNode();
+  var actionHandled = false;
+
   if (action) {
-    action.func.call();
+    if (curNode && curNode.getType() === Blockly.ASTNode.types.FIELD) {
+      actionHandled = curNode.getLocation().onBlocklyAction(action);
+    }
+    if (!actionHandled) {
+      actionHandled = Blockly.navigation.onBlocklyAction(action);
+    }
+  }
+  return actionHandled;
+};
+
+/**
+ * Execute any actions on the flyout, workspace, or toolbox that correspond to
+ * the given action.
+ * @param {Blockly.Action} action The current action.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @package
+ */
+Blockly.navigation.onBlocklyAction = function(action) {
+  if (action.name === Blockly.navigation.actionNames.PREVIOUS) {
+    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
+      Blockly.navigation.cursor_.prev();
+      return true;
+    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
+      Blockly.navigation.selectPreviousBlockInFlyout();
+      return true;
+    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
+      Blockly.navigation.previousCategory();
+      return true;
+    }
+
+  } else if (action.name === Blockly.navigation.actionNames.OUT) {
+    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
+      Blockly.navigation.cursor_.out();
+      return true;
+    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
+      Blockly.navigation.focusToolbox();
+      return true;
+    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
+      Blockly.navigation.outCategory();
+      return true;
+    }
+
+  } else if (action.name === Blockly.navigation.actionNames.NEXT) {
+    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
+      Blockly.navigation.cursor_.next();
+      return true;
+    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
+      Blockly.navigation.selectNextBlockInFlyout();
+      return true;
+    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
+      Blockly.navigation.nextCategory();
+      return true;
+    }
+
+  } else if (action.name === Blockly.navigation.actionNames.IN) {
+    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
+      Blockly.navigation.cursor_.in();
+      return true;
+    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
+      Blockly.navigation.inCategory();
+      return true;
+    }
+
+  } else if (action.name === Blockly.navigation.actionNames.INSERT) {
+    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
+      Blockly.navigation.modify();
+      return true;
+    }
+
+  } else if (action.name === Blockly.navigation.actionNames.MARK) {
+    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
+      Blockly.navigation.handleEnterForWS();
+      return true;
+    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
+      Blockly.navigation.insertFromFlyout();
+      return true;
+    }
+
+  } else if (action.name === Blockly.navigation.actionNames.DISCONNECT) {
+    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
+      Blockly.navigation.disconnectBlocks();
+      return true;
+    }
+
+  } else if (action.name === Blockly.navigation.actionNames.TOOLBOX) {
+    if (!Blockly.getMainWorkspace().getToolbox()) {
+      Blockly.navigation.focusFlyout();
+    } else {
+      Blockly.navigation.focusToolbox();
+    }
     return true;
+
+  } else if (action.name === Blockly.navigation.actionNames.EXIT) {
+    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX ||
+        Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
+      Blockly.navigation.focusWorkspace();
+      return true;
+    }
+
   }
   return false;
 };
@@ -723,108 +837,62 @@ Blockly.navigation.error = function(msg) {
  * The previous action.
  * @type Blockly.Action
  */
-Blockly.navigation.ACTION_PREVIOUS = new Blockly.Action('previous', 'Goes to the previous location', function() {
-  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    Blockly.navigation.cursor_.prev();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-    Blockly.navigation.selectPreviousBlockInFlyout();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
-    Blockly.navigation.previousCategory();
-  }
-});
+Blockly.navigation.ACTION_PREVIOUS = new Blockly.Action(
+    Blockly.navigation.actionNames.PREVIOUS, 'Goes to the previous location');
 
 /**
- * The previous action.
+ * The out action.
  * @type Blockly.Action
  */
-Blockly.navigation.ACTION_OUT = new Blockly.Action('out', 'Goes out', function() {
-  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    Blockly.navigation.cursor_.out();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-    Blockly.navigation.focusToolbox();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
-    Blockly.navigation.outCategory();
-  }
-});
+Blockly.navigation.ACTION_OUT = new Blockly.Action(
+    Blockly.navigation.actionNames.OUT, 'Goes out');
 
 /**
- * The previous action.
+ * The next action.
  * @type Blockly.Action
  */
-Blockly.navigation.ACTION_NEXT = new Blockly.Action('next', 'Goes to the next location', function() {
-  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    Blockly.navigation.cursor_.next();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-    Blockly.navigation.selectNextBlockInFlyout();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
-    Blockly.navigation.nextCategory();
-  }
-});
+Blockly.navigation.ACTION_NEXT = new Blockly.Action(
+    Blockly.navigation.actionNames.NEXT, 'Goes to the next location');
 
 /**
- * The action to go in.
+ * The in action.
  * @type Blockly.Action
  */
-Blockly.navigation.ACTION_IN = new Blockly.Action('in', 'Goes in', function() {
-  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    Blockly.navigation.cursor_.in();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
-    Blockly.navigation.inCategory();
-  }
-});
+Blockly.navigation.ACTION_IN = new Blockly.Action(
+    Blockly.navigation.actionNames.IN, 'Goes in');
 
 /**
  * The action to try to insert a block.
  * @type Blockly.Action
  */
-Blockly.navigation.ACTION_INSERT = new Blockly.Action('insert',
-    'Tries to connect the current location to the marked location', function() {
-      if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-        Blockly.navigation.modify();
-      }
-    });
+Blockly.navigation.ACTION_INSERT = new Blockly.Action(
+    Blockly.navigation.actionNames.INSERT,
+    'Tries to connect the current location to the marked location');
 
 /**
  * The action to mark a certain location.
  * @type Blockly.Action
  */
-Blockly.navigation.ACTION_MARK = new Blockly.Action('mark', 'Marks the current location', function() {
-  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    Blockly.navigation.handleEnterForWS();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-    Blockly.navigation.insertFromFlyout();
-  }
-});
+Blockly.navigation.ACTION_MARK = new Blockly.Action(
+    Blockly.navigation.actionNames.MARK, 'Marks the current location');
 
 /**
  * The action to disconnect a block.
  * @type Blockly.Action
  */
-Blockly.navigation.ACTION_DISCONNECT = new Blockly.Action('disconnect', 'Disconnect the blocks', function() {
-  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    Blockly.navigation.disconnectBlocks();
-  }
-});
+Blockly.navigation.ACTION_DISCONNECT = new Blockly.Action(
+    Blockly.navigation.actionNames.DISCONNECT, 'Disconnect the blocks');
 
 /**
  * The action to open the toolbox.
  * @type Blockly.Action
  */
-Blockly.navigation.ACTION_TOOLBOX = new Blockly.Action('toolbox', 'Open the toolbox', function() {
-  if (!Blockly.getMainWorkspace().getToolbox()) {
-    Blockly.navigation.focusFlyout();
-  } else {
-    Blockly.navigation.focusToolbox();
-  }
-});
+Blockly.navigation.ACTION_TOOLBOX = new Blockly.Action(
+    Blockly.navigation.actionNames.TOOLBOX, 'Open the toolbox');
 
 /**
  * The action to exit the toolbox or flyout.
  * @type Blockly.Action
  */
-Blockly.navigation.ACTION_EXIT = new Blockly.Action('exit', 'Exit the toolbox', function() {
-  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX ||
-      Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-    Blockly.navigation.focusWorkspace();
-  }
-});
+Blockly.navigation.ACTION_EXIT = new Blockly.Action(
+    Blockly.navigation.actionNames.EXIT, 'Exit the toolbox');

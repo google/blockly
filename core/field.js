@@ -992,3 +992,13 @@ Blockly.Field.prototype.getParentInput = function() {
   }
   return parentInput;
 };
+
+/**
+ * Handles the action given.
+ * @param {!Blockly.Action} _action The action to be handled.
+ * @return {boolean} True if the field handled the action, false otherwise.
+ * @package
+ */
+Blockly.Field.prototype.onBlocklyAction = function(_action) {
+  return false;
+};

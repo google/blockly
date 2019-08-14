@@ -79,7 +79,7 @@ Blockly.Component = function() {
    * Array of child components.  Lazily initialized on first use.  Must be kept
    * in sync with `childIndex_`.  This property is strictly private and
    * must not be accessed directly outside of this class!
-   * @private {?Array<?Blockly.Component>}
+   * @private {?Array.<?Blockly.Component>}
    */
   this.children_ = null;
 
@@ -654,7 +654,7 @@ Blockly.Component.prototype.getChildCount = function() {
 /**
  * Returns an array containing the IDs of the children of this component, or an
  * empty array if the component has no children.
- * @return {!Array<string>} Child component IDs.
+ * @return {!Array.<string>} Child component IDs.
  * @protected
  */
 Blockly.Component.prototype.getChildIds = function() {
@@ -803,7 +803,7 @@ Blockly.Component.prototype.removeChildAt = function(index, opt_unrender) {
  * @see Blockly.Component#removeChild
  * @param {boolean=} opt_unrender If true, calls {@link #exitDocument} on the
  *    removed child components, and detaches their DOM from the document.
- * @return {!Array<Blockly.Component>} The removed components if any.
+ * @return {!Array.<Blockly.Component>} The removed components if any.
  * @protected
  */
 Blockly.Component.prototype.removeChildren = function(opt_unrender) {

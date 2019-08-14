@@ -418,7 +418,7 @@ Blockly.tree.BaseNode.prototype.getChildAt;
 
 /**
  * Returns the children of this node.
- * @return {!Array<!Blockly.tree.BaseNode>} The children.
+ * @return {!Array.<!Blockly.tree.BaseNode>} The children.
  * @package
  */
 Blockly.tree.BaseNode.prototype.getChildren = function() {

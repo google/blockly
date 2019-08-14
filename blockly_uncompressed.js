@@ -88,7 +88,7 @@ goog.addDependency("../../../" + dir + "/core/keyboard_nav/ast_node.js", ['Block
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/cursor.js", ['Blockly.Cursor'], []);
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/cursor_svg.js", ['Blockly.CursorSvg'], ['Blockly.Cursor']);
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/key_action.js", ['Blockly.Action'], []);
-goog.addDependency("../../../" + dir + "/core/keyboard_nav/key_map.js", ['Blockly.user.keyMap'], []);
+goog.addDependency("../../../" + dir + "/core/keyboard_nav/key_map.js", ['Blockly.user.keyMap'], ['Blockly.utils.KeyCodes']);
 goog.addDependency("../../../" + dir + "/core/keyboard_nav/navigation.js", ['Blockly.navigation'], ['Blockly.Action', 'Blockly.ASTNode', 'Blockly.user.keyMap']);
 goog.addDependency("../../../" + dir + "/core/msg.js", ['Blockly.Msg'], []);
 goog.addDependency("../../../" + dir + "/core/mutator.js", ['Blockly.Mutator'], ['Blockly.Bubble', 'Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Events.Ui', 'Blockly.Icon', 'Blockly.utils', 'Blockly.utils.dom', 'Blockly.utils.xml', 'Blockly.WorkspaceSvg', 'Blockly.Xml']);

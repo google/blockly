@@ -211,7 +211,8 @@ Blockly.Toolbox.prototype.init = function() {
   // Trees have an implicit orientation of vertical, so we only need to set this
   // when the toolbox is in horizontal mode.
   if (this.horizontalLayout_) {
-    Blockly.utils.aria.setState(this.tree_.getElement(), 'orientation', 'horizontal');
+    Blockly.utils.aria.setState(this.tree_.getElement(),
+        Blockly.utils.aria.State.ORIENTATION, 'horizontal');
   }
 };
 

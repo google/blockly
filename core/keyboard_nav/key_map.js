@@ -27,6 +27,8 @@
 
 goog.provide('Blockly.user.keyMap');
 
+goog.require('Blockly.utils.KeyCodes');
+
 /**
  * Holds the serialized key to key action mapping.
  * @type {Object<string, Blockly.Action>}
@@ -128,15 +130,15 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
  */
 Blockly.user.keyMap.createDefaultKeyMap = function() {
   var map = {};
-  map[goog.events.KeyCodes.W] = Blockly.navigation.ACTION_PREVIOUS;
-  map[goog.events.KeyCodes.A] = Blockly.navigation.ACTION_OUT;
-  map[goog.events.KeyCodes.S] = Blockly.navigation.ACTION_NEXT;
-  map[goog.events.KeyCodes.D] = Blockly.navigation.ACTION_IN;
-  map[goog.events.KeyCodes.I] = Blockly.navigation.ACTION_INSERT;
-  map[goog.events.KeyCodes.ENTER] = Blockly.navigation.ACTION_MARK;
-  map[goog.events.KeyCodes.X] = Blockly.navigation.ACTION_DISCONNECT;
-  map[goog.events.KeyCodes.T] = Blockly.navigation.ACTION_TOOLBOX;
-  map[goog.events.KeyCodes.E] = Blockly.navigation.ACTION_EXIT;
-  map[goog.events.KeyCodes.ESC] = Blockly.navigation.ACTION_EXIT;
+  map[Blockly.utils.KeyCodes.W] = Blockly.navigation.ACTION_PREVIOUS;
+  map[Blockly.utils.KeyCodes.A] = Blockly.navigation.ACTION_OUT;
+  map[Blockly.utils.KeyCodes.S] = Blockly.navigation.ACTION_NEXT;
+  map[Blockly.utils.KeyCodes.D] = Blockly.navigation.ACTION_IN;
+  map[Blockly.utils.KeyCodes.I] = Blockly.navigation.ACTION_INSERT;
+  map[Blockly.utils.KeyCodes.ENTER] = Blockly.navigation.ACTION_MARK;
+  map[Blockly.utils.KeyCodes.X] = Blockly.navigation.ACTION_DISCONNECT;
+  map[Blockly.utils.KeyCodes.T] = Blockly.navigation.ACTION_TOOLBOX;
+  map[Blockly.utils.KeyCodes.E] = Blockly.navigation.ACTION_EXIT;
+  map[Blockly.utils.KeyCodes.ESC] = Blockly.navigation.ACTION_EXIT;
   return map;
 };

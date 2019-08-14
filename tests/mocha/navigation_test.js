@@ -18,7 +18,7 @@ suite('Navigation', function() {
 
     test('Focuses workspace from flyout (e)', function() {
       Blockly.navigation.currentState_ = Blockly.navigation.STATE_FLYOUT;
-      this.mockEvent.keyCode = goog.events.KeyCodes.E;
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.E;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
@@ -26,7 +26,7 @@ suite('Navigation', function() {
 
     test('Focuses workspace from flyout (escape)', function() {
       Blockly.navigation.currentState_ = Blockly.navigation.STATE_FLYOUT;
-      this.mockEvent.keyCode = goog.events.KeyCodes.ESC;
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.ESC;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
@@ -71,7 +71,7 @@ suite('Navigation', function() {
     });
 
     test('Next', function() {
-      this.mockEvent.keyCode = goog.events.KeyCodes.S;
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.S;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
@@ -82,7 +82,7 @@ suite('Navigation', function() {
     // Should be a no-op.
     test('Next at end', function() {
       Blockly.navigation.nextCategory();
-      this.mockEvent.keyCode = goog.events.KeyCodes.S;
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.S;
       var startCategory = Blockly.navigation.currentCategory_;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
@@ -94,7 +94,7 @@ suite('Navigation', function() {
     test('Previous', function() {
       // Go forward one so that we can go back one:
       Blockly.navigation.nextCategory();
-      this.mockEvent.keyCode = goog.events.KeyCodes.W;
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
       chai.assert.equal(Blockly.navigation.currentCategory_,
           this.secondCategory_);
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
@@ -107,7 +107,7 @@ suite('Navigation', function() {
     // Should be a no-op.
     test('Previous at start', function() {
       var startCategory = Blockly.navigation.currentCategory_;
-      this.mockEvent.keyCode = goog.events.KeyCodes.W;
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
@@ -116,7 +116,7 @@ suite('Navigation', function() {
     });
 
     test('Out', function() {
-      this.mockEvent.keyCode = goog.events.KeyCodes.A;
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.A;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       // TODO (fenichel/aschmiedt): Decide whether out should go to the
       // workspace.
@@ -125,7 +125,7 @@ suite('Navigation', function() {
     });
 
     test('Go to flyout', function() {
-      this.mockEvent.keyCode = goog.events.KeyCodes.D;
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.D;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_FLYOUT);
@@ -135,14 +135,14 @@ suite('Navigation', function() {
 
     test('Focuses workspace from toolbox (e)', function() {
       Blockly.navigation.currentState_ = Blockly.navigation.STATE_TOOLBOX;
-      this.mockEvent.keyCode = goog.events.KeyCodes.E;
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.E;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
     });
     test('Focuses workspace from toolbox (escape)', function() {
       Blockly.navigation.currentState_ = Blockly.navigation.STATE_TOOLBOX;
-      this.mockEvent.keyCode = goog.events.KeyCodes.E;
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.E;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);

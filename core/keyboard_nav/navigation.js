@@ -94,6 +94,7 @@ Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
 
 /**
  * Object holding default action names.
+ * @enum {string}
  */
 Blockly.navigation.actionNames = {
   PREVIOUS: 'previous',

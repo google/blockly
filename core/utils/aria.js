@@ -143,13 +143,13 @@ Blockly.utils.aria.Role = {
   MENUBAR: 'menubar',
 
   // ARIA role for menu item elements.
-  MENU_ITEM: 'menuitem',
+  MENUITEM: 'menuitem',
 
   // ARIA role for a checkbox box element inside a menu.
-  MENU_ITEM_CHECKBOX: 'menuitemcheckbox',
+  MENUITEMCHECKBOX: 'menuitemcheckbox',
 
   // ARIA role for a radio button element inside a menu.
-  MENU_ITEM_RADIO: 'menuitemradio',
+  MENUITEMRADIO: 'menuitemradio',
 
   // ARIA landmark role for a collection of navigation links.
   NAVIGATION: 'navigation',
@@ -207,10 +207,10 @@ Blockly.utils.aria.Role = {
   TAB: 'tab',
 
   // ARIA role for a tab bar (i.e. a list of tab buttons).
-  TAB_LIST: 'tablist',
+  TABLIST: 'tablist',
 
   // ARIA role for a tab page (i.e. the element holding tab contents).
-  TAB_PANEL: 'tabpanel',
+  TABPANEL: 'tabpanel',
 
   // ARIA role for a textbox element.
   TEXTBOX: 'textbox',

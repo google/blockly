@@ -179,57 +179,6 @@ Blockly.Search.prototype.onNewWorkspaceEvent = function(event) {
   // }
 };
 
-Blockly.Search.prototype.getAllFieldTexts = function(block) {
-  var texts = [];
-
-  for (var i = 0; i < block.inputList.length; i++) {
-    var input = block.inputList[i];
-    
-    for (var j = 0; j < input.fieldRow.length; j++) {
-      var field = input.fieldRow[j];
-      var fieldText = field.getText();
-      var splitFieldText = fieldText.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi ,'').split(' ');
-      
-      for (var k = 0; k < splitFieldText.length; k++) {
-        var text = splitFieldText[k];
-        if (text && text != '') {
-          texts.push(text);
-        }
-      }
-    }
-  }
-
-  return texts;
-};
-
-Blockly.Search.prototype.getAllKeys = function(block) {
-  var keys = [block.type].concat(this.getAllFieldTexts(block));
-
-  var tooltip;
-  if (block.tooltip) {
-    if (typeof block.tooltip === 'function') {
-      tooltip = block.tooltip();
-    } else {
-      tooltip = block.tooltip;
-    }
-
-    if (tooltip) {
-      var splitTooltip = tooltip.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi ,'').split(' ');
-
-      for (var i = 0; i < splitTooltip.length; i++) {
-        var text = splitTooltip[i];
-        if (text && text != '') {
-          keys.push(text);
-        }
-      }
-    }
-  }
-
-  return goog.array.map(keys, function (key) {
-    return key.toLowerCase();
-  });
-};
-
 Blockly.Search.prototype.addToTrie = function(key, value) {
   if (!this.blockTrie_.containsKey(key)) {
     this.blockTrie_.add(key, []);
@@ -249,7 +198,7 @@ Blockly.Search.prototype.removeFromTrie = function(key, value) {
 }
 
 Blockly.Search.prototype.onBlockAdded = function(block) {
-  var keys = this.getAllKeys(block);
+  var keys = block.keywordsList;
 
   for (var j = 0; j < keys.length; j++) {
     this.addToTrie(keys[j], block.id);
@@ -257,7 +206,7 @@ Blockly.Search.prototype.onBlockAdded = function(block) {
 };
 
 Blockly.Search.prototype.onBlockRemoved = function(block) {
-  var keys = this.getAllKeys(block);
+  var keys = block.keywordsList;
   
   for (var j = 0; j < keys.length; j++) {
     this.removeFromTrie(keys[j], block.id);

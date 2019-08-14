@@ -191,7 +191,7 @@ Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
   this.positionExternalValueConnection_(row);
 
   this.outlinePath_ +=
-      Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width) +
+      Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.width) +
       input.connectionShape.pathDown +
       Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
 };
@@ -212,15 +212,18 @@ Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   var x = input.xPos + input.width;
 
   var innerTopLeftCorner =
-      Blockly.blockRendering.constants.NOTCH.pathRight + ' h -' +
-      (Blockly.blockRendering.constants.NOTCH_WIDTH -
-          Blockly.blockRendering.constants.CORNER_RADIUS) +
+      input.notchShape.pathRight +
+      Blockly.utils.svgPaths.lineOnAxis('h',
+          -(Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT -
+              Blockly.blockRendering.constants.INSIDE_CORNERS.width)) +
       Blockly.blockRendering.constants.INSIDE_CORNERS.pathTop;
+
+  var innerHeight =
+      row.height -(2 * Blockly.blockRendering.constants.INSIDE_CORNERS.height);
 
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', x) +
       innerTopLeftCorner +
-      Blockly.utils.svgPaths.lineOnAxis('v',
-          row.height - (2 * Blockly.blockRendering.constants.INSIDE_CORNERS.height)) +
+      Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
       Blockly.blockRendering.constants.INSIDE_CORNERS.pathBottom;
 
   this.positionStatementInputConnection_(row);

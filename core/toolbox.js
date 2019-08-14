@@ -502,7 +502,7 @@ Blockly.Toolbox.prototype.setColourFromStyle_ = function(
 
 /**
  * Recursively updates all the category colours using the category style name.
- * @param {Blockly.tree.TreeNode=} opt_tree Starting point of tree.
+ * @param {Blockly.tree.BaseNode=} opt_tree Starting point of tree.
  *     Defaults to the root node.
  * @private
  */
@@ -533,7 +533,7 @@ Blockly.Toolbox.prototype.updateColourFromTheme = function() {
 
 /**
  * Updates the background colour of the selected category.
- * @param {!Blockly.tree.TreeNode} tree Starting point of tree.
+ * @param {!Blockly.tree.BaseNode} tree Starting point of tree.
  *     Defaults to the root node.
  * @private
  */
@@ -542,7 +542,7 @@ Blockly.Toolbox.prototype.updateSelectedItemColour_ = function(tree) {
   if (selectedItem) {
     var hexColour = selectedItem.hexColour || '#57e';
     selectedItem.getRowElement().style.backgroundColor = hexColour;
-    tree.getToolbox().addColour_(selectedItem);
+    this.addColour_(selectedItem);
   }
 };
 

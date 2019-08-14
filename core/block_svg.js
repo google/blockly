@@ -1542,11 +1542,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   Blockly.Field.startCache();
   this.rendered = true;
   // TODO (#2702): Choose an API for picking the renderer.
-  if (Blockly.renderMode == 'compatibility') {
-    Blockly.blockRendering.render(this);
-  } else {
-    this.renderInternal();
-  }
+  Blockly.blockRendering.render(this);
   // No matter how we rendered, connection locations should now be correct.
   this.updateConnectionLocations_();
   if (opt_bubble !== false) {

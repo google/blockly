@@ -109,7 +109,7 @@ goog.addDependency("../../../" + dir + "/core/theme.js", ['Blockly.Theme'], []);
 goog.addDependency("../../../" + dir + "/core/theme/classic.js", ['Blockly.Themes.Classic'], ['Blockly.Theme']);
 goog.addDependency("../../../" + dir + "/core/theme/highcontrast.js", ['Blockly.Themes.HighContrast'], ['Blockly.Theme']);
 goog.addDependency("../../../" + dir + "/core/theme/modern.js", ['Blockly.Themes.Modern'], ['Blockly.Theme']);
-goog.addDependency("../../../" + dir + "/core/toolbox.js", ['Blockly.Toolbox'], ['Blockly.Events', 'Blockly.Events.Ui', 'Blockly.Flyout', 'Blockly.HorizontalFlyout', 'Blockly.Touch', 'Blockly.tree.TreeControl', 'Blockly.utils', 'Blockly.utils.aria', 'Blockly.utils.colour', 'Blockly.utils.dom', 'Blockly.utils.Rect', 'Blockly.VerticalFlyout']);
+goog.addDependency("../../../" + dir + "/core/toolbox.js", ['Blockly.Toolbox'], ['Blockly.Events', 'Blockly.Events.Ui', 'Blockly.Flyout', 'Blockly.HorizontalFlyout', 'Blockly.Touch', 'Blockly.tree.TreeControl', 'Blockly.tree.TreeNode', 'Blockly.utils', 'Blockly.utils.aria', 'Blockly.utils.colour', 'Blockly.utils.dom', 'Blockly.utils.Rect', 'Blockly.VerticalFlyout']);
 goog.addDependency("../../../" + dir + "/core/tooltip.js", ['Blockly.Tooltip'], ['Blockly.utils.string']);
 goog.addDependency("../../../" + dir + "/core/touch.js", ['Blockly.Touch'], ['Blockly.utils', 'Blockly.utils.string']);
 goog.addDependency("../../../" + dir + "/core/touch_gesture.js", ['Blockly.TouchGesture'], ['Blockly.Gesture', 'Blockly.utils', 'Blockly.utils.Coordinate']);

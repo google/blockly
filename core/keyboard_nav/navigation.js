@@ -661,7 +661,6 @@ Blockly.navigation.handleEnterForWS = function() {
 /** Helper Functions **/
 /**********************/
 
-
 /**
  * Handler for all the keyboard navigation events.
  * @param {Event} e The keyboard event.
@@ -692,89 +691,111 @@ Blockly.navigation.onKeyPress = function(e) {
  * @package
  */
 Blockly.navigation.onBlocklyAction = function(action) {
-  if (action.name === Blockly.navigation.actionNames.PREVIOUS) {
-    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-      Blockly.navigation.cursor_.prev();
-      return true;
-    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-      Blockly.navigation.selectPreviousBlockInFlyout();
-      return true;
-    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
-      Blockly.navigation.previousCategory();
-      return true;
-    }
-
-  } else if (action.name === Blockly.navigation.actionNames.OUT) {
-    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-      Blockly.navigation.cursor_.out();
-      return true;
-    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-      Blockly.navigation.focusToolbox();
-      return true;
-    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
-      Blockly.navigation.outCategory();
-      return true;
-    }
-
-  } else if (action.name === Blockly.navigation.actionNames.NEXT) {
-    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-      Blockly.navigation.cursor_.next();
-      return true;
-    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-      Blockly.navigation.selectNextBlockInFlyout();
-      return true;
-    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
-      Blockly.navigation.nextCategory();
-      return true;
-    }
-
-  } else if (action.name === Blockly.navigation.actionNames.IN) {
-    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-      Blockly.navigation.cursor_.in();
-      return true;
-    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
-      Blockly.navigation.inCategory();
-      return true;
-    }
-
-  } else if (action.name === Blockly.navigation.actionNames.INSERT) {
-    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-      Blockly.navigation.modify();
-      return true;
-    }
-
-  } else if (action.name === Blockly.navigation.actionNames.MARK) {
-    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-      Blockly.navigation.handleEnterForWS();
-      return true;
-    } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-      Blockly.navigation.insertFromFlyout();
-      return true;
-    }
-
-  } else if (action.name === Blockly.navigation.actionNames.DISCONNECT) {
-    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-      Blockly.navigation.disconnectBlocks();
-      return true;
-    }
-
-  } else if (action.name === Blockly.navigation.actionNames.TOOLBOX) {
-    if (!Blockly.getMainWorkspace().getToolbox()) {
-      Blockly.navigation.focusFlyout();
-    } else {
-      Blockly.navigation.focusToolbox();
-    }
-    return true;
-
-  } else if (action.name === Blockly.navigation.actionNames.EXIT) {
-    if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX ||
-        Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-      Blockly.navigation.focusWorkspace();
-      return true;
-    }
-
+  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
+    return Blockly.navigation.workspaceOnAction_(action);
+  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
+    return Blockly.navigation.flyoutOnAction_(action);
+  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
+    return Blockly.navigation.toolboxOnAction_(action);
   }
   return false;
+};
+
+/**
+ * Handle all actions performed on the workspace.
+ * @param {Blockly.Action} action The action to handle.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @private
+ */
+Blockly.navigation.workspaceOnAction_ = function(action) {
+  switch (action.name) {
+    case Blockly.navigation.actionNames.PREVIOUS:
+      Blockly.navigation.cursor_.prev();
+      return true;
+    case Blockly.navigation.actionNames.OUT:
+      Blockly.navigation.cursor_.out();
+      return true;
+    case Blockly.navigation.actionNames.NEXT:
+      Blockly.navigation.cursor_.next();
+      return true;
+    case Blockly.navigation.actionNames.IN:
+      Blockly.navigation.cursor_.in();
+      return true;
+    case Blockly.navigation.actionNames.INSERT:
+      Blockly.navigation.modify();
+      return true;
+    case Blockly.navigation.actionNames.MARK:
+      Blockly.navigation.handleEnterForWS();
+      return true;
+    case Blockly.navigation.actionNames.DISCONNECT:
+      Blockly.navigation.disconnectBlocks();
+      return true;
+    case Blockly.navigation.actionNames.TOOLBOX:
+      if (!Blockly.getMainWorkspace().getToolbox()) {
+        Blockly.navigation.focusFlyout();
+      } else {
+        Blockly.navigation.focusToolbox();
+      }
+      return true;
+    default:
+      return false;
+  }
+};
+
+/**
+ * Handle all actions performed on the flyout.
+ * @param {Blockly.Action} action The action to handle.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @private
+ */
+Blockly.navigation.flyoutOnAction_ = function(action) {
+  switch (action.name) {
+    case Blockly.navigation.actionNames.PREVIOUS:
+      Blockly.navigation.selectPreviousBlockInFlyout();
+      return true;
+    case Blockly.navigation.actionNames.OUT:
+      Blockly.navigation.focusToolbox();
+      return true;
+    case Blockly.navigation.actionNames.NEXT:
+      Blockly.navigation.selectNextBlockInFlyout();
+      return true;
+    case Blockly.navigation.actionNames.MARK:
+      Blockly.navigation.insertFromFlyout();
+      return true;
+    case Blockly.navigation.actionNames.EXIT:
+      Blockly.navigation.focusWorkspace();
+      return true;
+    default:
+      return false;
+  }
+};
+
+/**
+ * Handle all actions performeed on the toolbox.
+ * @param {Blockly.Action} action The action to handle.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @private
+ */
+Blockly.navigation.toolboxOnAction_ = function(action) {
+  switch (action.name) {
+    case Blockly.navigation.actionNames.PREVIOUS:
+      Blockly.navigation.previousCategory();
+      return true;
+    case Blockly.navigation.actionNames.OUT:
+      Blockly.navigation.outCategory();
+      return true;
+    case Blockly.navigation.actionNames.NEXT:
+      Blockly.navigation.nextCategory();
+      return true;
+    case Blockly.navigation.actionNames.IN:
+      Blockly.navigation.inCategory();
+      return true;
+    case Blockly.navigation.actionNames.EXIT:
+      Blockly.navigation.focusWorkspace();
+      return true;
+    default:
+      return false;
+  }
 };
 
 /**

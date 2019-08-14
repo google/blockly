@@ -121,7 +121,8 @@ Blockly.tree.TreeControl.prototype.handleBlur_ = function(_e) {
 };
 
 /**
- * @return {boolean} Whether the tree has keyboard focus.
+ * Get whether this tree has focus or not.
+ * @return {boolean} True if it has focus.
  * @package
  */
 Blockly.tree.TreeControl.prototype.hasFocus = function() {

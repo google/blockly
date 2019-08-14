@@ -90,7 +90,7 @@ Blockly.Events.CommentBase.prototype.toJson = function() {
  * @param {!Object} json JSON representation.
  */
 Blockly.Events.CommentBase.prototype.fromJson = function(json) {
-  Blockly.Events.COmmentBase.superClass_.fromJson.call(this, json);
+  Blockly.Events.CommentBase.superClass_.fromJson.call(this, json);
   this.commentId = json['commentId'];
 };
 

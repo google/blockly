@@ -89,6 +89,11 @@ Blockly.FieldTextInput.prototype.SERIALIZABLE = true;
 Blockly.FieldTextInput.FONTSIZE = 11;
 
 /**
+ * Pixel size of input border radius.  Should match blocklyText's border-radius in CSS.
+ */
+Blockly.FieldTextInput.BORDERRADIUS = 4;
+
+/**
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
 Blockly.FieldTextInput.prototype.CURSOR = 'text';
@@ -252,6 +257,9 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
       (Blockly.FieldTextInput.FONTSIZE * this.workspace_.scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
+  var borderRadius =
+      (Blockly.FieldTextInput.BORDERRADIUS * this.workspace_.scale) + 'px';
+  htmlInput.style.borderRadius = borderRadius;
   div.appendChild(htmlInput);
 
   htmlInput.value = htmlInput.defaultValue = this.value_;

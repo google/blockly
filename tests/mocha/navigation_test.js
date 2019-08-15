@@ -186,7 +186,7 @@ suite('Navigation', function() {
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
-      chai.assert.equal(this.workspace.getTopBlocks().length, 1)
+      chai.assert.equal(this.workspace.getTopBlocks().length, 1);
     });
 
     test('EXIT', function() {
@@ -287,7 +287,8 @@ suite('Navigation', function() {
     });
 
     test('Mark', function() {
-      Blockly.navigation.cursor_.setLocation(Blockly.ASTNode.createConnectionNode(this.basicBlock.previousConnection));
+      Blockly.navigation.cursor_.setLocation(
+          Blockly.ASTNode.createConnectionNode(this.basicBlock.previousConnection));
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.ENTER;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       var markedNode = Blockly.navigation.marker_.getCurNode();

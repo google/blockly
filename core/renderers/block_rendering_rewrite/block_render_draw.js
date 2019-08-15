@@ -84,8 +84,6 @@ Blockly.blockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
   this.block_.height = this.info_.height + Blockly.blockRendering.constants.DARK_PATH_OFFSET;
   this.block_.width = this.info_.widthWithChildren +
       Blockly.blockRendering.constants.DARK_PATH_OFFSET;
-  // The flyout uses this information.
-  this.block_.startHat_ = this.info_.topRow.startHat;
 };
 
 /**
@@ -137,7 +135,8 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
   }
   this.positionPreviousConnection_();
   this.outlinePath_ += Blockly.utils.svgPaths.moveBy(topRow.xPos, this.info_.startY);
-  for (var i = 0, elem; elem = elements[i]; i++) {
+  for (var i = 0, elem; i < elements.length; i++) {
+    elem = elements[i];
     if (elem.type === 'round corner') {
       this.outlinePath_ += Blockly.blockRendering.constants.OUTSIDE_CORNERS.topLeft;
     } else if (elem.type === 'previous connection') {
@@ -252,11 +251,11 @@ Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
 
   for (var i = elems.length - 1; i >= 0; i--) {
     var elem = elems[i];
-    if (elem.type === 'next connection') {
+    if (elem.isNextConnection()) {
       this.outlinePath_ += bottomRow.notchShape.pathRight;
-    } else if (elem.type === 'square corner') {
+    } else if (elem.isSquareCorner()) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', bottomRow.xPos);
-    } else if (elem.type === 'round corner') {
+    } else if (elem.isRoundedCorner()) {
       this.outlinePath_ += Blockly.blockRendering.constants.OUTSIDE_CORNERS.bottomLeft;
     } else if (elem.isSpacer()) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width * -1);
@@ -317,9 +316,9 @@ Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
-  if (fieldInfo.type == 'field') {
+  if (fieldInfo.isField()) {
     var svgGroup = fieldInfo.field.getSvgRoot();
-  } else if (fieldInfo.type == 'icon') {
+  } else if (fieldInfo.isIcon()) {
     var svgGroup = fieldInfo.icon.iconGroup_;
   }
 
@@ -333,7 +332,7 @@ Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
       scale = 'scale(-1 1)';
     }
   }
-  if (fieldInfo.type == 'icon') {
+  if (fieldInfo.isIcon()) {
     svgGroup.setAttribute('display', 'block');
     svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + yPos + ')');
     fieldInfo.icon.computeIconLocation();
@@ -351,7 +350,7 @@ Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
 
 /**
  * Add steps for an inline input.
- * @param {Blockly.blockRendering.RenderableInput} input The information about the
+ * @param {Blockly.blockRendering.InlineInput} input The information about the
  * input to render.
  * @private
  */
@@ -383,7 +382,7 @@ Blockly.blockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
  * Position the connection on an inline value input, taking into account
  * RTL and the small gap between the parent block and child block which lets the
  * parent block's dark path show through.
- * @param {Blockly.blockRendering.RenderableInput} input The information about
+ * @param {Blockly.blockRendering.InlineInput} input The information about
  * the input that the connection is on.
  * @private
  */
@@ -474,7 +473,6 @@ Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
 
 /**
  * Position the output connection on a block.
- * @param {!Blockly.blockRendering.BottomRow} row The bottom row on the block.
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.positionOutputConnection_ = function() {

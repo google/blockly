@@ -299,6 +299,6 @@ Blockly.MenuItem.prototype.performActionInternal = function() {
  * @param {function(Blockly.MenuItem):?} fn The handler.
  * @package
  */
-Blockly.MenuItem.prototype.setAction = function(fn) {
+Blockly.MenuItem.prototype.onAction = function(fn) {
   this.actionHandler_ = fn;
 };

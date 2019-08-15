@@ -29,6 +29,7 @@ goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Highlighter');
 goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.Rows');
 
 /**
  * An object that renders rectangles and dots for debugging rendering code.

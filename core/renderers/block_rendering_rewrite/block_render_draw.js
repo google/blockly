@@ -31,6 +31,7 @@ goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Highlighter');
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.Rows');
 
 /**
  * An object that draws a block based on the given rendering information.

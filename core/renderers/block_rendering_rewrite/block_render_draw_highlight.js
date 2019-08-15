@@ -29,6 +29,7 @@ goog.provide('Blockly.blockRendering.Highlighter');
 goog.require('Blockly.blockRendering.highlightConstants');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.Rows');
 
 /**
  * An object that adds highlights to a block based on the given rendering

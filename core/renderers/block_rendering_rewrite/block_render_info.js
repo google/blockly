@@ -29,6 +29,7 @@ goog.provide('Blockly.blockRendering.RenderInfo');
 
 goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.Rows');
 
 /**
  * An object containing all sizing information needed to draw this block.

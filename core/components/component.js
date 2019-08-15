@@ -167,7 +167,7 @@ Blockly.Component.setDefaultRightToLeft = function(rightToLeft) {
  * Gets the unique ID for the instance of this component.  If the instance
  * doesn't already have an ID, generates one on the fly.
  * @return {string} Unique component ID.
- * @protected
+ * @package
  */
 Blockly.Component.prototype.getId = function() {
   return this.id_ || (this.id_ = this.idGenerator_.getNextUniqueId());

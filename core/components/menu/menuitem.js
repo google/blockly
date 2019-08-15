@@ -296,7 +296,7 @@ Blockly.MenuItem.prototype.performActionInternal = function() {
 /**
  * Set the handler that's triggered when the menu item is activated
  * by the user.
- * @param {function(Blockly.MenuItem):?} fn The handler.
+ * @param {function(!Blockly.MenuItem)} fn The handler.
  * @package
  */
 Blockly.MenuItem.prototype.onAction = function(fn) {

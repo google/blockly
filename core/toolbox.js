@@ -61,6 +61,12 @@ Blockly.Toolbox = function(workspace) {
   this.workspace_ = workspace;
 
   /**
+   * @type {!Blockly.Search}
+   * @private
+   */
+  this.search_ = this.workspace_.search_;
+
+  /**
    * Is RTL vs LTR.
    * @type {boolean}
    */
@@ -181,7 +187,8 @@ Blockly.Toolbox.prototype.init = function() {
     RTL: workspace.RTL,
     oneBasedIndex: workspace.options.oneBasedIndex,
     horizontalLayout: workspace.horizontalLayout,
-    toolboxPosition: workspace.options.toolboxPosition
+    toolboxPosition: workspace.options.toolboxPosition,
+    isToolbox: true
   };
   /**
    * @type {!Blockly.Flyout}
@@ -193,6 +200,9 @@ Blockly.Toolbox.prototype.init = function() {
   } else {
     this.flyout_ = new Blockly.VerticalFlyout(workspaceOptions);
   }
+
+  this.search_ = this.flyout_.workspace_.search_;
+
   // Insert the flyout after the workspace.
   Blockly.utils.insertAfter(this.flyout_.createDom('svg'),
       this.workspace_.getParentSvg());
@@ -287,10 +297,19 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
   this.tree_.blocks = [];
   this.hasColours_ = false;
 
+  this.shouldPopulateSearch_ = false;
+
+  for (var child in newTree.childNodes) { 
+      if(newTree.childNodes[child].tagName == "search") {
+          this.shouldPopulateSearch_ = true;
+          break;
+      }
+  }
+
   var openNode =
-    this.syncTrees_(newTree, this.tree_, this.workspace_.options.pathToMedia);
+    this.syncTrees_(newTree, this.tree_, this.workspace_.options.pathToMedia, this.shouldPopulateSearch_);
   
-  this.populateTrie_();
+  // this.populateTrie_();
   
   if (this.tree_.blocks.length) {
     throw Error('Toolbox cannot have both blocks and categories ' +
@@ -311,7 +330,7 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
  * @return {Node} Tree node to open at startup (or null).
  * @private
  */
-Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
+Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia, shouldAddToSearchTrie) {
   var openNode = null;
   var lastElement = null;
   for (var i = 0, childIn; childIn = treeIn.childNodes[i]; i++) {
@@ -333,7 +352,9 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
           // Variables and procedures are special dynamic categories.
           childOut.blocks = custom;
         } else {
-          var newOpenNode = this.syncTrees_(childIn, childOut, pathToMedia);
+          var isNotMostUsed = (shouldAddToSearchTrie && (childIn.getAttribute('name') != Blockly.Msg.MOST_USED));
+
+          var newOpenNode = this.syncTrees_(childIn, childOut, pathToMedia, isNotMostUsed);
           if (newOpenNode) {
             openNode = newOpenNode;
           }
@@ -384,15 +405,24 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
           }
         }
         break;
-      case 'BLOCK':
       case 'SHADOW':
       case 'LABEL':
       case 'BUTTON':
         treeOut.blocks.push(childIn);
         lastElement = childIn;
         break;
+      case 'BLOCK':
+          if (shouldAddToSearchTrie) {
+            var block_type = childIn.getAttribute('type');
+
+            this.search_.onBlockAdded(block_type, childIn);
+          }
+
+          treeOut.blocks.push(childIn);
+          lastElement = childIn;
+          break;
       case 'SEARCH':
-        var treeSearch = new Blockly.Toolbox.TreeSearch(this);
+        var treeSearch = new Blockly.Toolbox.TreeSearch(this, this.search_);
         treeSearch.hexColour = '#144bb2';
         treeOut.add(treeSearch);
         lastElement = childIn;
@@ -803,125 +833,127 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
  * @param {Blockly.Toolbox.TreeNode} opt_tree Starting point of tree.
  *     Defaults to the root node.
  * @private
- */
-Blockly.Toolbox.prototype.populateTrie_ = async function(opt_tree) {
-  var tree = opt_tree || this.tree_;
-  var workspace = this.workspace_;
-  var blockTrie = new goog.structs.Trie();
+//  */
+// Blockly.Toolbox.prototype.populateTrie_ = async function(opt_tree) {
+//   var tree = opt_tree || this.tree_;
+//   var workspace = this.workspace_;
+//   var blockTrie = new goog.structs.Trie();
 
-   var getAllFieldTexts = function(block) {
-    var texts = [];
+//    var getAllFieldTexts = function(block) {
+//     var texts = [];
 
-     for (var i = 0; i < block.inputList.length; i++) {
-      var input = block.inputList[i];
-      for (var j = 0; j < input.fieldRow.length; j++) {
-        var field = input.fieldRow[j];
-        var fieldText = field.getText();
-        var splitFieldText = fieldText.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi ,'').split(' ');
-        for (var k = 0; k < splitFieldText.length; k++) {
-          var text = splitFieldText[k];
-          if (text && text != '') {
-            texts.push(text);
-          }
-        }
-      }
-    }
+//      for (var i = 0; i < block.inputList.length; i++) {
+//       var input = block.inputList[i];
+//       for (var j = 0; j < input.fieldRow.length; j++) {
+//         var field = input.fieldRow[j];
+//         var fieldText = field.getText();
+//         var splitFieldText = fieldText.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi ,'').split(' ');
+//         for (var k = 0; k < splitFieldText.length; k++) {
+//           var text = splitFieldText[k];
+//           if (text && text != '') {
+//             texts.push(text);
+//           }
+//         }
+//       }
+//     }
 
-     return texts;
-  };
+//      return texts;
+//   };
 
-   var getAllKeys = function(block) {
-    var keys = [block.type].concat(getAllFieldTexts(block));
+//    var getAllKeys = function(block) {
+//     var keys = [block.type].concat(getAllFieldTexts(block));
 
-    var tooltip;
-    if (block.tooltip) {
-      if (typeof block.tooltip === 'function') {
-        tooltip = block.tooltip();
-      } else {
-        tooltip = block.tooltip;
-      }
+//     var tooltip;
+//     if (block.tooltip) {
+//       if (typeof block.tooltip === 'function') {
+//         tooltip = block.tooltip();
+//       } else {
+//         tooltip = block.tooltip;
+//       }
 
-      var splitTooltip = tooltip.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi ,'').split(' ');
+//       var splitTooltip = tooltip.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi ,'').split(' ');
 
-      for (var i = 0; i < splitTooltip.length; i++) {
-        var text = splitTooltip[i];
-        if (text && text != '') {
-          keys.push(text);
-        }
-      }
-    }
+//       for (var i = 0; i < splitTooltip.length; i++) {
+//         var text = splitTooltip[i];
+//         if (text && text != '') {
+//           keys.push(text);
+//         }
+//       }
+//     }
 
-     return goog.array.map(keys, function (key) {
-      return key.toLowerCase();
-    });
-  };
+//      return goog.array.map(keys, function (key) {
+//       return key.toLowerCase();
+//     });
+//   };
 
-  var addToTrie = function(key, value) {
-    if (!blockTrie.containsKey(key)) {
-      blockTrie.add(key, []);
-    }
+  // var addToTrie = function(key, value) {
+  //   if (!blockTrie.containsKey(key)) {
+  //     blockTrie.add(key, []);
+  //   }
 
-    blockTrie.set(key, blockTrie.get(key).concat(value));
-   };
+  //   blockTrie.set(key, blockTrie.get(key).concat(value));
+  //  };
 
-   var populateTrieFromBlocks = function(blocks) {
-    for (var i = 0; i < blocks.length; i++) {
-      var blockXml = blocks[i];
+  //  var populateTrieFromBlocks = function(blocks) {
+  //   for (var i = 0; i < blocks.length; i++) {
+  //     var blockXml = blocks[i];
       
-      if (blockXml.nodeName != "block" || blockXml.tagName != "block") {
-        continue;
-      }
+  //     if (blockXml.nodeName != "block" || blockXml.tagName != "block") {
+  //       continue;
+  //     }
       
-      Blockly.Events.disable();
+  //     Blockly.Events.disable();
       
-      var block = Blockly.Xml.domToBlock(blockXml, workspace);
+  //     var block = Blockly.Xml.domToBlock(blockXml, workspace);
 
-      var keys = getAllKeys(block);
-      for (var j = 0; j < keys.length; j++) {
-        addToTrie(keys[j], blockXml);
-      }
+  //     var keys = getAllKeys(block);
+  //     for (var j = 0; j < keys.length; j++) {
+  //       addToTrie(keys[j], blockXml);
+  //     }
 
-      block.dispose();
+  //     block.dispose();
 
-      Blockly.Events.enable();
-    }
-  };
+  //     Blockly.Events.enable();
+  //   }
+  // };
 
-  var populateTrieFromNode = function(node) {
-    var children = node.getChildren();
+  // var populateTrieFromNode = function(node) {
+  //   var children = node.getChildren();
 
-    for (var i = 0; i < children.length; i++) {
-      var child = children[i];
+  //   for (var i = 0; i < children.length; i++) {
+  //     var child = children[i];
       
-      //Skip the Most Used category when building the search
-      if (child.element_ && child.element_.textContent && child.element_.textContent == Blockly.Msg.MOST_USED) {
-        continue;
-      }
+  //     //Skip the Most Used category when building the search
+  //     if (child.element_ && child.element_.textContent && child.element_.textContent == Blockly.Msg.MOST_USED) {
+  //       continue;
+  //     }
 
-      if (child.blocks && (typeof child.blocks !== 'string')) {
-        populateTrieFromBlocks(child.blocks);
-      }
+  //     if (child.blocks && (typeof child.blocks !== 'string')) {
+  //       populateTrieFromBlocks(child.blocks);
+  //     }
 
-      populateTrieFromNode(child);
-    }
-  };
+  //     populateTrieFromNode(child);
+  //   }
+  // };
 
-  var promise = function(elem) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        populateTrieFromNode(tree);
-        elem.blockTrie_ = blockTrie;
-      }, 0);
-    });
-  }
+//   var promise = function(elem) {
+//     return new Promise((resolve, reject) => {
+//       setTimeout(() => {
+//         populateTrieFromNode(tree);
+//         elem.blockTrie_ = blockTrie;
+//       }, 0);
+//     });
+//   }
 
-  setTimeout(() => promise(this), 0);
-};
+//   setTimeout(() => promise(this), 0);
+// };
 
  /**
  * Set focus to the search field in the toolbox, if it exists.
  */
 Blockly.Toolbox.prototype.focusSearchField = function() {
+  this.tree_.setSelectedItem(null);
+
   var children = this.tree_.getChildren();
   for (var i = 0; i < children.length; i++) {
     var child = children[i];
@@ -929,67 +961,74 @@ Blockly.Toolbox.prototype.focusSearchField = function() {
       child.focusSearchField();
       return;
     }
-  }
-};
-
- /**
- * Find all blocks matching a given search term.
- * @param {String} term The term to search against.
- * @return {Array} The blocks that match the given term.
- */
-Blockly.Toolbox.prototype.blocksMatchingSearchTerm = function(term) {
-  if (!this.blockTrie_) {
-    return [];
-  }
-
-  var keys = this.blockTrie_.getKeys(term.toLowerCase());
-  var blocks = [];
-
-   for (var i = 0; i < keys.length; i++) {
-    var key = keys[i];
-    var blocksForKey = this.blockTrie_.get(key);
-
-     for (var j = 0; j < blocksForKey.length; j++) {
-      blocks.push(blocksForKey[j]);
+    else {
+      child.blur();
     }
   }
-
-   return blocks;
 };
 
- /**
- * Find all blocks matching ALL of the given search terms.
- * @param {Array} terms The terms to search against.
- * @return {Array} The blocks that match the given terms.
- */
-Blockly.Toolbox.prototype.blocksMatchingSearchTerms = function(terms) {
-  var intersectingMatches = null;
+//  /**
+//  * Find all blocks matching a given search term.
+//  * @param {String} term The term to search against.
+//  * @return {Array} The blocks that match the given term.
+//  */
+// Blockly.Toolbox.prototype.blocksMatchingSearchTerm = function(term) {
+//   if (!this.blockTrie_) {
+//     return [];
+//   }
 
-   for (var i = 0; i < terms.length; i++) {
-     if (terms[i].length == 0) {
-       continue;
-     }
-    var matchSet = new goog.structs.Set(this.blocksMatchingSearchTerm(terms[i]));
-    if (intersectingMatches) {
-      intersectingMatches = intersectingMatches.intersection(matchSet);
-    } else {
-      intersectingMatches = matchSet;
-    }
-  }
+//   var keys = this.blockTrie_.getKeys(term.toLowerCase());
+//   var blocks = [];
 
-   return intersectingMatches.getValues();
-};
+//    for (var i = 0; i < keys.length; i++) {
+//     var key = keys[i];
+//     var blocksForKey = this.blockTrie_.get(key);
+
+//      for (var j = 0; j < blocksForKey.length; j++) {
+//       blocks.push(blocksForKey[j]);
+//     }
+//   }
+
+//    return blocks;
+// };
+
+//  /**
+//  * Find all blocks matching ALL of the given search terms.
+//  * @param {Array} terms The terms to search against.
+//  * @return {Array} The blocks that match the given terms.
+//  */
+// Blockly.Toolbox.prototype.blocksMatchingSearchTerms = function(terms) {
+//   var intersectingMatches = null;
+
+//    for (var i = 0; i < terms.length; i++) {
+//      if (terms[i].length == 0) {
+//        continue;
+//      }
+//     var matchSet = new goog.structs.Set(this.blocksMatchingSearchTerm(terms[i]));
+//     if (intersectingMatches) {
+//       intersectingMatches = intersectingMatches.intersection(matchSet);
+//     } else {
+//       intersectingMatches = matchSet;
+//     }
+//   }
+
+//    return intersectingMatches.getValues();
+// };
 
 /**
  * A typeahead search field in the tree.
  * @constructor
  * @extends {Blockly.Toolbox.TreeNode}
  */
-Blockly.Toolbox.TreeSearch = function(toolbox) {
-  this.toolbox_ = toolbox;//TODO:
-  // var searchField = goog.html.SafeHtml.create('input', {type: "search", placeholder: Blockly.Msg.SEARCH});
-  var searchField = goog.html.SafeHtml.create('input', {id: 'blockSearchInput', type: "search", placeholder: "Search"});
+Blockly.Toolbox.TreeSearch = function(toolbox, search) {
+  this.toolbox_ = toolbox;
+  this.search_ = search;
 
+  //TODO:
+  // var searchField = goog.html.SafeHtml.create('input', {type: "search", placeholder: Blockly.Msg.SEARCH});
+  var searchField = goog.html.SafeHtml.create(
+    'input', 
+    {id: 'blockSearchInput', type: "search", placeholder: "Search"});
 
    Blockly.Toolbox.TreeNode.call(this, toolbox, searchField,
       Blockly.Toolbox.TreeSearch.CONFIG_);
@@ -1014,6 +1053,7 @@ Blockly.Toolbox.TreeSearch.prototype.enterDocument = function() {
   Blockly.Toolbox.TreeNode.prototype.enterDocument.call(this);
 
    var toolbox = this.toolbox_;
+   var search = this.search_;
 
    var searchField = this.getElement().getElementsByTagName('input')[0];
   this.searchField_ = searchField;
@@ -1028,20 +1068,19 @@ Blockly.Toolbox.TreeSearch.prototype.enterDocument = function() {
       this.blur();
       return;
     }
+    
+    var matchingBlocks = [];
 
     var searchTerms = e.target.value.trim().toLowerCase().split(/\s+/);
 
-    if (searchTerms.length == 0 || (searchTerms.length > 0 && searchTerms[0].length == 0)) {
-      return;
-    }
+    if (searchTerms.length > 0) {
+      searchTerms = goog.array.filter(searchTerms, function (term) {
+        return term.length > 0;
+      });
 
-    searchTerms = goog.array.filter(searchTerms, function (term) {
-      return term.length > 0;
-    });
-    var matchingBlocks = [];
-
-     if (searchTerms.length > 0) {
-      matchingBlocks = toolbox.blocksMatchingSearchTerms(searchTerms);
+      if (searchTerms.length > 0) {
+        matchingBlocks = search.blocksMatchingSearchTerms(searchTerms);
+      }
     }
 
     var label = Blockly.Xml.utils.createElement('label');

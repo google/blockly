@@ -73,8 +73,6 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   this.previousConnection = null;
   /** @type {!Array.<!Blockly.Input>} */
   this.inputList = [];
-  /** @type {!Array.<string>} */
-  this.keywordsList = [];
   /** @type {boolean|undefined} */
   this.inputsInline = undefined;
   /** @type {boolean} */
@@ -313,8 +311,6 @@ Blockly.Block.prototype.dispose = function(healStack) {
       input.dispose();
     }
     this.inputList.length = 0;
-    //Clear the keywords list
-    this.keywordsList.length = 0;
     // Dispose of any remaining connections (next/previous/output).
     var connections = this.getConnections_(true);
     for (var i = 0; i < connections.length; i++) {
@@ -1338,27 +1334,6 @@ Blockly.Block.prototype.appendStatementInput = function(name) {
  */
 Blockly.Block.prototype.appendDummyInput = function(opt_name) {
   return this.appendInput_(Blockly.DUMMY_INPUT, opt_name || '');
-};
-
-/**
- * Add a new term to the list of keywords associated with the block.
- * The term will be split into separate keywords.
- */
-Blockly.Block.prototype.appendSearchTerms = function(searchTerms) {
-  for (var i = 0; i < searchTerms.length; i++) {
-    let newTerm = searchTerms[i];
-
-    //Remove special characters and split by space
-    let splitText = newTerm.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi ,'').split(' ');
-        
-    for (var k = 0; k < splitText.length; k++) {
-      let text = splitText[k].toLowerCase();
-      
-      if (text && text != '') {
-        this.keywordsList.push(text);
-      }
-    }
-  }
 };
 
 /**

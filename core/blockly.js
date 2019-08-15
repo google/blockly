@@ -48,6 +48,7 @@ goog.require('Blockly.AsciiInput');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
+goog.require('Blockly.BlockKeywords');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.Toolbox');

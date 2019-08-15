@@ -29,7 +29,7 @@ goog.provide('Blockly.Workspace');
 goog.require('Blockly.utils');
 goog.require('Blockly.VariableMap');
 goog.require('Blockly.WorkspaceComment');
-goog.require('Blockly.Search');
+goog.require('Blockly.SearchWorkspace');
 
 
 /**
@@ -113,7 +113,12 @@ Blockly.Workspace = function(opt_options) {
    */
   this.potentialVariableMap_ = null;
 
-  this.search_ = new Blockly.Search(this);
+  if (!opt_options.parentWorkspace) {
+    this.search_ = new Blockly.SearchWorkspace(this);
+  }
+  else if (opt_options.isToolbox) {
+    this.search_ = new Blockly.Search(this);
+  }
 };
 
 /**

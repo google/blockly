@@ -2,7 +2,7 @@ suite('Navigation', function() {
 
   // Test that toolbox key handlers call through to the right functions and
   // transition correctly between toolbox, workspace, and flyout.
-  suite('Handles toolbox keys', function() {
+  suite('Tests toolbox keys', function() {
     setup(function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
@@ -117,7 +117,7 @@ suite('Navigation', function() {
 
   // Test that flyout key handlers call through to the right functions and
   // transition correctly between toolbox, workspace, and flyout.
-  suite('Handles flyout keys', function() {
+  suite('Tests flyout keys', function() {
     setup(function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
@@ -199,7 +199,7 @@ suite('Navigation', function() {
 
   // Test that workspace key handlers call through to the right functions and
   // transition correctly between toolbox, workspace, and flyout.
-  suite('Handles workspace keys', function() {
+  suite('Tests workspace keys', function() {
     setup(function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
@@ -303,6 +303,67 @@ suite('Navigation', function() {
       chai.assert.equal(Blockly.navigation.currentCategory_, this.firstCategory_);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_TOOLBOX);
+    });
+  });
+
+  suite('Test key press', function() {
+    setup(function() {
+      this.mockEvent = {
+        getModifierState: function() {
+          return false;
+        }
+      };
+    });
+    test('Action does not exist', function() {
+      var cursor = new Blockly.Cursor();
+      var field = new Blockly.Field('value');
+      Blockly.navigation.setCursor(cursor);
+      sinon.spy(field, 'onBlocklyAction');
+      cursor.setLocation(Blockly.ASTNode.createFieldNode(field));
+
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.N;
+      var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
+      chai.assert.isFalse(isHandled);
+      chai.assert.isFalse(field.onBlocklyAction.calledOnce);
+
+      field.onBlocklyAction.restore();
+    });
+
+    test('Action exists - field handles action', function() {
+      var cursor = new Blockly.Cursor();
+      var field = new Blockly.Field('value');
+      Blockly.navigation.setCursor(cursor);
+      sinon.spy(Blockly.navigation, 'onBlocklyAction');
+      sinon.stub(field, 'onBlocklyAction').callsFake(function(){
+        return true;
+      });
+      cursor.setLocation(Blockly.ASTNode.createFieldNode(field));
+
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.A;
+      var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
+      chai.assert.isTrue(isHandled);
+      chai.assert.isTrue(field.onBlocklyAction.calledOnce);
+      chai.assert.isFalse(Blockly.navigation.onBlocklyAction.calledOnce);
+
+      Blockly.navigation.onBlocklyAction.restore();
+      field.onBlocklyAction.restore();
+    });
+
+    test('Action exists - field does not handle action', function() {
+      var cursor = new Blockly.Cursor();
+      var field = new Blockly.Field('value');
+      Blockly.navigation.setCursor(cursor);
+      sinon.spy(field, 'onBlocklyAction');
+      sinon.spy(Blockly.navigation, 'onBlocklyAction');
+      cursor.setLocation(Blockly.ASTNode.createFieldNode(field));
+
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.A;
+      var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
+      chai.assert.isTrue(isHandled);
+      chai.assert.isTrue(field.onBlocklyAction.calledOnce);
+
+      field.onBlocklyAction.restore();
+      Blockly.navigation.onBlocklyAction.restore();
     });
   });
 

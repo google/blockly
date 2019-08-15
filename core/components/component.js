@@ -157,7 +157,7 @@ Blockly.Component.Error = {
  * right to left determinations.
  * @param {?boolean} rightToLeft Whether the components should be rendered
  *     right-to-left. Null iff components should determine their directionality.
- * @protected
+ * @package
  */
 Blockly.Component.setDefaultRightToLeft = function(rightToLeft) {
   Blockly.Component.defaultRightToLeft_ = rightToLeft;
@@ -287,7 +287,7 @@ Blockly.Component.prototype.createDom = function() {
  *
  * @param {Element=} opt_parentElement Optional parent element to render the
  *    component into.
- * @protected
+ * @package
  */
 Blockly.Component.prototype.render = function(opt_parentElement) {
   this.render_(opt_parentElement);
@@ -471,7 +471,7 @@ Blockly.Component.prototype.makeIds = function(object) {
  * @param {Blockly.Component} child The new child component.
  * @param {boolean=} opt_render If true, the child component will be rendered
  *    into the parent.
- * @protected
+ * @package
  */
 Blockly.Component.prototype.addChild = function(child, opt_render) {
   this.addChildAt(child, this.getChildCount(), opt_render);
@@ -621,7 +621,7 @@ Blockly.Component.prototype.isRightToLeft = function() {
  * {@link #enterDocument} is called and is right-to-left is set).
  * @param {boolean} rightToLeft Whether the component is rendered
  *     right-to-left.
- * @protected
+ * @package
  */
 Blockly.Component.prototype.setRightToLeft = function(rightToLeft) {
   if (this.inDocument_) {

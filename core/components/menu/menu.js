@@ -140,18 +140,18 @@ Blockly.Menu.prototype.disposeInternal = function() {
  * @private
  */
 Blockly.Menu.prototype.attachEvents_ = function() {
-  var el = this.getElement();
+  var el = /** @type {!EventTarget} */ (this.getElement());
 
-  this.mouseOverHandler_ = Blockly.bindEvent_(el,
-      'mouseover', this, this.handleMouseOver_);
-  this.mouseUpHandler_ = Blockly.bindEvent_(el,
-      'mouseup', this, this.handleMouseUp_);
-  this.mouseEnterHandler_ = Blockly.bindEvent_(el,
-      'mouseenter', this, this.handleMouseEnter_);
-  this.mouseLeaveHandler_ = Blockly.bindEvent_(el,
-      'mouseleave', this, this.handleMouseLeave_);
+  this.mouseOverHandler_ = Blockly.bindEventWithChecks_(el,
+      'mouseover', this, this.handleMouseOver_, true);
+  this.mouseUpHandler_ = Blockly.bindEventWithChecks_(el,
+      'mouseup', this, this.handleMouseUp_, true);
+  this.mouseEnterHandler_ = Blockly.bindEventWithChecks_(el,
+      'mouseenter', this, this.handleMouseEnter_, true);
+  this.mouseLeaveHandler_ = Blockly.bindEventWithChecks_(el,
+      'mouseleave', this, this.handleMouseLeave_, true);
 
-  this.onKeyDownWrapper_ = Blockly.bindEvent_(el,
+  this.onKeyDownWrapper_ = Blockly.bindEventWithChecks_(el,
       'keydown', this, this.handleKeyEvent);
 };
 

@@ -857,64 +857,65 @@ Blockly.navigation.error = function(msg) {
 
 /**
  * The previous action.
- * @type Blockly.Action
+ * @type {Blockly.Action}
  */
 Blockly.navigation.ACTION_PREVIOUS = new Blockly.Action(
-    Blockly.navigation.actionNames.PREVIOUS, 'Goes to the previous location');
+    Blockly.navigation.actionNames.PREVIOUS, 'Go to the previous location.');
 
 /**
  * The out action.
- * @type Blockly.Action
+ * @type {Blockly.Action}
  */
 Blockly.navigation.ACTION_OUT = new Blockly.Action(
-    Blockly.navigation.actionNames.OUT, 'Goes out');
+    Blockly.navigation.actionNames.OUT, 'Go to the parent of the current location.');
 
 /**
  * The next action.
- * @type Blockly.Action
+ * @type {Blockly.Action}
  */
 Blockly.navigation.ACTION_NEXT = new Blockly.Action(
-    Blockly.navigation.actionNames.NEXT, 'Goes to the next location');
+    Blockly.navigation.actionNames.NEXT, 'Go to the next location.');
 
 /**
  * The in action.
- * @type Blockly.Action
+ * @type {Blockly.Action}
  */
 Blockly.navigation.ACTION_IN = new Blockly.Action(
-    Blockly.navigation.actionNames.IN, 'Goes in');
+    Blockly.navigation.actionNames.IN, 'Go to the first child of the current location.');
 
 /**
  * The action to try to insert a block.
- * @type Blockly.Action
+ * @type {Blockly.Action}
  */
 Blockly.navigation.ACTION_INSERT = new Blockly.Action(
     Blockly.navigation.actionNames.INSERT,
-    'Tries to connect the current location to the marked location');
+    'Connect the current location to the marked location.');
 
 /**
  * The action to mark a certain location.
- * @type Blockly.Action
+ * @type {Blockly.Action}
  */
 Blockly.navigation.ACTION_MARK = new Blockly.Action(
-    Blockly.navigation.actionNames.MARK, 'Marks the current location');
+    Blockly.navigation.actionNames.MARK, 'Mark the current location.');
 
 /**
  * The action to disconnect a block.
- * @type Blockly.Action
+ * @type {Blockly.Action}
  */
 Blockly.navigation.ACTION_DISCONNECT = new Blockly.Action(
-    Blockly.navigation.actionNames.DISCONNECT, 'Disconnect the blocks');
+    Blockly.navigation.actionNames.DISCONNECT, 'Dicsonnect the block at the' +
+      'current location from its parent.');
 
 /**
  * The action to open the toolbox.
- * @type Blockly.Action
+ * @type {Blockly.Action}
  */
 Blockly.navigation.ACTION_TOOLBOX = new Blockly.Action(
-    Blockly.navigation.actionNames.TOOLBOX, 'Open the toolbox');
+    Blockly.navigation.actionNames.TOOLBOX, 'Open the toolbox.');
 
 /**
  * The action to exit the toolbox or flyout.
- * @type Blockly.Action
+ * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_EXIT = new Blockly.Action(
-    Blockly.navigation.actionNames.EXIT, 'Exit the toolbox');
+    Blockly.navigation.actionNames.EXIT, 'Close the current modal, such as a toolbox or field editor.');

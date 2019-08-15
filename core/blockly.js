@@ -218,7 +218,8 @@ Blockly.onKeyDown_ = function(e) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
     Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_EXIT);
-  } else if (Blockly.keyboardAccessibilityMode && Blockly.navigation.onKeyPress(e)) {
+  } else if (Blockly.keyboardAccessibilityMode &&
+      Blockly.navigation.onKeyPress(e)) {
     // If the keyboard or field handled the key press return.
     return;
   } else if (e.keyCode == Blockly.utils.KeyCodes.BACKSPACE ||
@@ -249,7 +250,8 @@ Blockly.onKeyDown_ = function(e) {
         // 'c' for copy.
         Blockly.hideChaff();
         Blockly.copy_(Blockly.selected);
-      } else if (e.keyCode == Blockly.utils.KeyCodes.X && !Blockly.selected.workspace.isFlyout) {
+      } else if (e.keyCode == Blockly.utils.KeyCodes.X &&
+          !Blockly.selected.workspace.isFlyout) {
         // 'x' for cut, but not in a flyout.
         // Don't even copy the selected item in the flyout.
         Blockly.copy_(Blockly.selected);

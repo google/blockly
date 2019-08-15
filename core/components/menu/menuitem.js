@@ -1,4 +1,3 @@
-
 /**
  * @license
  * Visual Blocks Editor
@@ -289,16 +288,20 @@ Blockly.MenuItem.prototype.performActionInternal = function() {
     this.setChecked(!this.checked_);
   }
   if (this.actionHandler_) {
-    this.actionHandler_.call(this, this);
+    this.actionHandler_.call(/** @type {?} */ (this.actionHandlerObj_), this);
   }
 };
 
 /**
  * Set the handler that's triggered when the menu item is activated
- * by the user.
- * @param {function(!Blockly.MenuItem)} fn The handler.
+ * by the user. If `opt_obj` is provided, it will be used as the
+ * 'this' object in the function when called.
+ * @param {function(this:T,!Blockly.MenuItem):?} fn The handler.
+ * @param {T=} opt_obj Used as the 'this' object in f when called.
+ * @template T
  * @package
  */
-Blockly.MenuItem.prototype.onAction = function(fn) {
+Blockly.MenuItem.prototype.onAction = function(fn, opt_obj) {
   this.actionHandler_ = fn;
+  this.actionHandlerObj_ = opt_obj;
 };

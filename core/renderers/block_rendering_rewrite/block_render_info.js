@@ -678,13 +678,10 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(prev,
  */
 Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
   var result = row.yPos;
-  if (elem.isField()) {
-    result += (elem.height / 2);
-    if (row.hasInlineInput || row.hasStatement) {
-      result += Blockly.blockRendering.constants.TALL_INPUT_FIELD_OFFSET_Y;
-    }
-  } else if (elem.isInlineInput()) {
-    result += elem.height / 2;
+  if (elem.isField() && row.hasStatement) {
+    var offset = Blockly.blockRendering.constants.TALL_INPUT_FIELD_OFFSET_Y +
+        elem.height / 2;
+    result += offset;
   } else if (elem.isNextConnection()) {
     result += (row.height - row.overhangY + elem.height / 2);
   } else {

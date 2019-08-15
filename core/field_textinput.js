@@ -31,6 +31,7 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Size');
@@ -174,8 +175,10 @@ Blockly.FieldTextInput.prototype.render_ = function() {
     }
     if (!this.isTextValid_) {
       Blockly.utils.dom.addClass(this.htmlInput_, 'blocklyInvalidInput');
+      Blockly.utils.aria.setState(this.htmlInput_, 'invalid', true);
     } else {
       Blockly.utils.dom.removeClass(this.htmlInput_, 'blocklyInvalidInput');
+      Blockly.utils.aria.setState(this.htmlInput_, 'invalid', false);
     }
   }
 };

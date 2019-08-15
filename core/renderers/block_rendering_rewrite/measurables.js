@@ -426,6 +426,7 @@ Blockly.blockRendering.Row = function() {
   this.elements = [];
   this.width = 0;
   this.height = 0;
+  this.widthWithConnectedBlocks = 0;
 
   this.hasExternalInput = false;
   this.hasStatement = false;
@@ -454,7 +455,8 @@ Blockly.blockRendering.Row.prototype.measure = function() {
     if (elem.isInput) {
       if (elem.type == 'statement input') {
         connectedBlockWidths += elem.connectedBlockWidth;
-      } else if (elem.type == 'external value input') {
+      } else if (elem.type == 'external value input' &&
+          elem.connectedBlockWidth != 0) {
         connectedBlockWidths += (elem.connectedBlockWidth - elem.connectionWidth);
       }
     }
@@ -494,6 +496,7 @@ Blockly.blockRendering.BetweenRowSpacer = function(height, width) {
   this.width = width;
   this.height = height;
   this.followsStatement = false;
+  this.widthWithConnectedBlocks = 0;
 };
 goog.inherits(Blockly.blockRendering.BetweenRowSpacer,
     Blockly.blockRendering.Measurable);

@@ -68,11 +68,6 @@ Blockly.BlockSvg.PathObject = function() {
 
 // UI constants for rendering blocks.
 /**
- * Horizontal space between elements.
- * @const
- */
-Blockly.BlockSvg.SEP_SPACE_X = 10;
-/**
  * Vertical space between elements.
  * @const
  */

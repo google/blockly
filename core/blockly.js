@@ -213,8 +213,6 @@ Blockly.onKeyDown_ = function(e) {
     // hidden.
     return;
   }
-
-
   var deleteBlock = false;
   if (e.keyCode == Blockly.utils.KeyCodes.ESC) {
     // Pressing esc closes the context menu.

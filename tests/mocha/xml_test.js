@@ -95,6 +95,9 @@ suite('XML', function() {
         delete Blockly.Blocks['field_colour_test_block'];
       });
       test('Date', function() {
+        if (!Blockly.FieldDate) {
+          this.skip();
+        }
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_date_test_block",
           "message0": "%1",

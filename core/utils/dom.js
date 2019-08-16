@@ -32,6 +32,8 @@
  */
 goog.provide('Blockly.utils.dom');
 
+goog.require('Blockly.utils.userAgent');
+
 
 /**
  * Required name space for SVG elements.

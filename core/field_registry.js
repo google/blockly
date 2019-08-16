@@ -26,10 +26,6 @@
  */
 'use strict';
 
-/**
- * @name Blockly.fieldRegistry
- * @namespace
- */
 goog.provide('Blockly.fieldRegistry');
 
 

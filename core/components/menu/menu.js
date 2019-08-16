@@ -223,50 +223,7 @@ Blockly.Menu.prototype.getMenuItem = function(node) {
   return null;
 };
 
-/** @override */
-Blockly.Menu.prototype.addChildAt = function(menuitem, index, opt_render) {
-
-  var srcIndex =
-      (menuitem.getParent() == this) ? this.indexOfChild(menuitem) : -1;
-
-  // Let the superclass implementation do the work.
-  Blockly.Menu.superClass_.addChildAt.call(
-      this, menuitem, index, opt_render);
-
-  if (menuitem.isInDocument() && this.isInDocument()) {
-    this.registerChildId_(menuitem);
-  }
-
-  this.updateHighlightedIndex_(srcIndex, index);
-};
-
 // Highlight management.
-
-/**
- * Updates the highlighted index when children are added or moved.
- * @param {number} fromIndex Index of the child before it was moved, or -1 if
- *     the child was added.
- * @param {number} toIndex Index of the child after it was moved or added.
- * @private
- */
-Blockly.Menu.prototype.updateHighlightedIndex_ = function(
-    fromIndex, toIndex) {
-  if (fromIndex == -1) {
-    fromIndex = this.getChildCount();
-  }
-  if (fromIndex == this.highlightedIndex_) {
-    // The highlighted element itself was moved.
-    this.highlightedIndex_ = Math.min(this.getChildCount() - 1, toIndex);
-  } else if (
-    fromIndex > this.highlightedIndex_ && toIndex <= this.highlightedIndex_) {
-    // The menuitem was added or moved behind the highlighted index.
-    this.highlightedIndex_++;
-  } else if (
-    fromIndex < this.highlightedIndex_ && toIndex > this.highlightedIndex_) {
-    // The menuitem was moved from before to behind the highlighted index.
-    this.highlightedIndex_--;
-  }
-};
 
 /**
  * Unhighlight the current highlighted item.

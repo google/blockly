@@ -334,30 +334,6 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
 };
 
 /**
- * Handle key down to the editor.
- * @param {!Event} e Keyboard event.
- * @protected
- * @override
- */
-Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
-  Blockly.FieldAngle.superClass_.onHtmlInputKeyDown_.call(this, e);
-
-  var handled = false;
-  if (e.keyCode === Blockly.utils.KeyCodes.LEFT ||
-      e.keyCode === Blockly.utils.KeyCodes.DOWN) {
-    this.setAngle(Number(this.getValue()) + Blockly.FieldAngle.ROUND);
-    handled = true;
-  } else if (e.keyCode === Blockly.utils.KeyCodes.RIGHT ||
-      e.keyCode === Blockly.utils.KeyCodes.UP) {
-    this.setAngle(Number(this.getValue()) - Blockly.FieldAngle.ROUND);
-    handled = true;
-  }
-  if (handled) {
-    e.stopPropagation();
-  }
-};
-
-/**
  * Ensure that the input value is a valid angle.
  * @param {string|number=} opt_newValue The input value.
  * @return {?number} A valid angle, or null if invalid.

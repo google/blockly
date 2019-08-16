@@ -345,7 +345,7 @@ Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
 /**
  * Handle key down to the editor.
  * @param {!Event} e Keyboard event.
- * @protected
+ * @private
  */
 Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
   var tabKey = 9, enterKey = 13, escKey = 27;

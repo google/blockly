@@ -249,7 +249,7 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
 /**
  * Create the text input editor widget.
  * @return {!HTMLInputElement} The newly created text input editor.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   var div = Blockly.WidgetDiv.DIV;

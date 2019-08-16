@@ -30,6 +30,7 @@ goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.IdGenerator');
@@ -514,4 +515,4 @@ Blockly.FieldColour.prototype.dropdownDispose_ = function() {
   Blockly.unbindEvent_(this.onKeyDownWrapper_);
 };
 
-Blockly.Field.register('field_colour', Blockly.FieldColour);
+Blockly.fieldRegistry.register('field_colour', Blockly.FieldColour);

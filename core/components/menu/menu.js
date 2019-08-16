@@ -62,7 +62,7 @@ Blockly.Menu.prototype.createDom = function() {
   element.setAttribute('class', 'goog-menu goog-menu-vertical');
   element.setAttribute('style', 'user-select: none;');
 
-  element.tabIndex = "0";
+  element.tabIndex = 0;
 
   // Initialize ARIA role.
   Blockly.utils.aria.setRole(element,
@@ -170,27 +170,26 @@ Blockly.Menu.prototype.detachEvents_ = function() {
 // Child component management.
 
 /**
- * Map of DOM IDs to child controls.  Each key is the DOM ID of a child
- * control's root element; each value is a reference to the child control
- * itself.  Used for looking up the child control corresponding to a DOM
- * node in O(1) time.
+ * Map of DOM IDs to child menuitems. Each key is the DOM ID of a child
+ * menuitems's root element; each value is a reference to the child menu
+ * item itself.
  * @type {?Object}
  * @private
  */
 Blockly.Menu.prototype.childElementIdMap_ = null;
 
 /**
- * Creates a DOM ID for the child control and registers it to an internal
+ * Creates a DOM ID for the child menuitem and registers it to an internal
  * hash table to be able to find it fast by id.
- * @param {Blockly.Component} child The child control. Its root element has
+ * @param {Blockly.Component} child The child menuitem. Its root element has
  *     to be created yet.
  * @private
  */
 Blockly.Menu.prototype.registerChildId_ = function(child) {
-  // Map the DOM ID of the control's root element to the control itself.
+  // Map the DOM ID of the menuitem's root element to the menuitem itself.
   var childElem = child.getElement();
 
-  // If the control's root element doesn't have a DOM ID assign one.
+  // If the menuitem's root element doesn't have a DOM ID assign one.
   var id = childElem.id || (childElem.id = child.getId());
 
   // Lazily create the child element ID map on first use.
@@ -201,15 +200,15 @@ Blockly.Menu.prototype.registerChildId_ = function(child) {
 };
 
 /**
- * Returns the child menu item that owns the given DOM node, or null if no such
- * menu item is found.
+ * Returns the child menuitem that owns the given DOM node, or null if no such
+ * menuitem is found.
  * @param {Node} node DOM node whose owner is to be returned.
- * @return {?Blockly.MenuItem} Menu Item for which the DOM node belongs to.
+ * @return {?Blockly.MenuItem} menuitem for which the DOM node belongs to.
  * @protected
  */
 Blockly.Menu.prototype.getMenuItem = function(node) {
-  // Ensure that this menu actually has child controls before
-  // looking up the menu item.
+  // Ensure that this menu actually has child menuitems before
+  // looking up the menuitem.
   if (this.childElementIdMap_) {
     var elem = this.getElement();
     while (node && node !== elem) {
@@ -224,20 +223,17 @@ Blockly.Menu.prototype.getMenuItem = function(node) {
 };
 
 /** @override */
-Blockly.Menu.prototype.addChildAt = function(control, index, opt_render) {
-
-  // Disable mouse event handling by child controls.
-  // control.setHandleMouseEvents(false);
+Blockly.Menu.prototype.addChildAt = function(menuitem, index, opt_render) {
 
   var srcIndex =
-      (control.getParent() == this) ? this.indexOfChild(control) : -1;
+      (menuitem.getParent() == this) ? this.indexOfChild(menuitem) : -1;
 
   // Let the superclass implementation do the work.
   Blockly.Menu.superClass_.addChildAt.call(
-      this, control, index, opt_render);
+      this, menuitem, index, opt_render);
 
-  if (control.isInDocument() && this.isInDocument()) {
-    this.registerChildId_(control);
+  if (menuitem.isInDocument() && this.isInDocument()) {
+    this.registerChildId_(menuitem);
   }
 
   this.updateHighlightedIndex_(srcIndex, index);
@@ -262,11 +258,11 @@ Blockly.Menu.prototype.updateHighlightedIndex_ = function(
     this.highlightedIndex_ = Math.min(this.getChildCount() - 1, toIndex);
   } else if (
     fromIndex > this.highlightedIndex_ && toIndex <= this.highlightedIndex_) {
-    // The control was added or moved behind the highlighted index.
+    // The menuitem was added or moved behind the highlighted index.
     this.highlightedIndex_++;
   } else if (
     fromIndex < this.highlightedIndex_ && toIndex > this.highlightedIndex_) {
-    // The control was moved from before to behind the highlighted index.
+    // The menuitem was moved from before to behind the highlighted index.
     this.highlightedIndex_--;
   }
 };
@@ -365,7 +361,7 @@ Blockly.Menu.prototype.highlightPrevious = function() {
 
 /**
  * Helper function that manages the details of moving the highlight among
- * child controls in response to keyboard events.
+ * child menuitems in response to keyboard events.
  * @param {function(this: Blockly.Component, number, number) : number} fn
  *     Function that accepts the current and maximum indices, and returns the
  *     next index to check.
@@ -405,7 +401,7 @@ Blockly.Menu.prototype.canHighlightItem = function(item) {
 };
 
 /**
- * Set the handler that's triggered when a menu item is highlighted.
+ * Set the handler that's triggered when a menuitem is highlighted.
  * @param {function(?Blockly.MenuItem)} fn The handler.
  * @package
  */
@@ -416,7 +412,7 @@ Blockly.Menu.prototype.onHighlighted = function(fn) {
 // Mouse events.
 
 /**
- * Handles mouseover events. Highlight menu items as the user
+ * Handles mouseover events. Highlight menuitems as the user
  * hovers over them.
  * @param {Event} e Mouse event to handle.
  * @private
@@ -439,7 +435,7 @@ Blockly.Menu.prototype.handleMouseOver_ = function(e) {
 
 /**
  * Handles mouse up events. Pass the event onto the child
- * menu item to handle.
+ * menuitem to handle.
  * @param {Event} e Mouse event to handle.
  * @private
  */
@@ -476,7 +472,7 @@ Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
 // Keyboard events.
 
 /**
- * Attempts to handle a keyboard event, if the control is enabled, by calling
+ * Attempts to handle a keyboard event, if the menuitem is enabled, by calling
  * {@link handleKeyEventInternal}.  Considered protected; should only be used
  * within this package and by subclasses.
  * @param {Event} e Key event to handle.
@@ -496,7 +492,7 @@ Blockly.Menu.prototype.handleKeyEvent = function(e) {
 /**
  * Attempts to handle a keyboard event; returns true if the event was handled,
  * false otherwise.  If the container is enabled, and a child is highlighted,
- * calls the child control's `handleKeyEvent` method to give the control
+ * calls the child menuitem's `handleKeyEvent` method to give the menuitem
  * a chance to handle the event first.
  * @param {Event} e Key event to handle.
  * @return {boolean} Whether the event was handled by the container (or one of
@@ -504,7 +500,7 @@ Blockly.Menu.prototype.handleKeyEvent = function(e) {
  * @protected
  */
 Blockly.Menu.prototype.handleKeyEventInternal = function(e) {
-  // Give the highlighted control the chance to handle the key event.
+  // Give the highlighted menuitem the chance to handle the key event.
   var highlighted = this.getHighlighted();
   if (highlighted && typeof highlighted.handleKeyEvent == 'function' &&
       highlighted.handleKeyEvent(e)) {
@@ -516,7 +512,7 @@ Blockly.Menu.prototype.handleKeyEventInternal = function(e) {
     return false;
   }
 
-  // Either nothing is highlighted, or the highlighted control didn't handle
+  // Either nothing is highlighted, or the highlighted menuitem didn't handle
   // the key event, so attempt to handle it here.
   switch (e.keyCode) {
     case Blockly.utils.KeyCodes.ENTER:

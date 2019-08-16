@@ -28,15 +28,12 @@ goog.provide('Blockly.Action');
 
 /**
  * Class for a single action.
- * There can be one action for each key. If the action only applies to a
- * single state (toolbox, flyout, workspace) then the function should handle this.
+ * An action describes user intent. (ex go to next or go to previous)
  * @param {string} name The name of the action.
  * @param {string} desc The description of the action.
- * @param {Function} func The function to be called when the key is pressed.
  * @constructor
  */
-Blockly.Action = function(name, desc, func) {
+Blockly.Action = function(name, desc) {
   this.name = name;
   this.desc = desc;
-  this.func = func;
 };

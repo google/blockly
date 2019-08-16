@@ -19,7 +19,7 @@
  */
 
 suite('Abstract Fields', function() {
-  suite.skip('Is Serializable', function() {
+  suite('Is Serializable', function() {
     // Both EDITABLE and SERIALIZABLE are default.
     function FieldDefault() {
       this.name = 'NAME';
@@ -72,7 +72,7 @@ suite('Abstract Fields', function() {
       assertEquals(true, field.isSerializable());
     });
   });
-  suite.skip('setValue', function() {
+  suite('setValue', function() {
     function addSpies(field) {
       if (!this.isSpying) {
         sinon.spy(field, 'doValueInvalid_');

@@ -27,7 +27,7 @@
 goog.provide('Blockly.FieldImage');
 
 goog.require('Blockly.Field');
-goog.require('Blockly.Tooltip');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Size');
@@ -222,4 +222,4 @@ Blockly.FieldImage.prototype.setOnClickHandler = function(func) {
   this.clickHandler_ = func;
 };
 
-Blockly.Field.register('field_image', Blockly.FieldImage);
+Blockly.fieldRegistry.register('field_image', Blockly.FieldImage);

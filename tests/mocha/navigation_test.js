@@ -1,44 +1,8 @@
 suite('Navigation', function() {
 
-  suite('Handles keys', function() {
-    setup(function() {
-      Blockly.defineBlocksWithJsonArray([{
-        "type": "basic_block",
-        "message0": ""
-      }]);
-
-      var toolbox = document.getElementById('toolbox-minimal');
-      this.mockEvent = {
-        getModifierState: function() {
-          return false;
-        }
-      };
-      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-    });
-
-    test('Focuses workspace from flyout (e)', function() {
-      Blockly.navigation.currentState_ = Blockly.navigation.STATE_FLYOUT;
-      this.mockEvent.keyCode = Blockly.utils.KeyCodes.E;
-      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.navigation.currentState_,
-          Blockly.navigation.STATE_WS);
-    });
-
-    test('Focuses workspace from flyout (escape)', function() {
-      Blockly.navigation.currentState_ = Blockly.navigation.STATE_FLYOUT;
-      this.mockEvent.keyCode = Blockly.utils.KeyCodes.ESC;
-      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.equal(Blockly.navigation.currentState_,
-          Blockly.navigation.STATE_WS);
-    });
-    teardown(function() {
-      delete Blockly.Blocks['basic_block'];
-      this.workspace.dispose();
-    });
-  });
   // Test that toolbox key handlers call through to the right functions and
   // transition correctly between toolbox, workspace, and flyout.
-  suite('Handles toolbox keys', function() {
+  suite('Tests toolbox keys', function() {
     setup(function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "basic_block",
@@ -130,7 +94,7 @@ suite('Navigation', function() {
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_FLYOUT);
 
-      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"), "First");
+      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"), "FirstCategory-FirstBlock");
     });
 
     test('Focuses workspace from toolbox (e)', function() {
@@ -150,6 +114,259 @@ suite('Navigation', function() {
     // More tests:
     // - nested categories
   });
+
+  // Test that flyout key handlers call through to the right functions and
+  // transition correctly between toolbox, workspace, and flyout.
+  suite('Tests flyout keys', function() {
+    setup(function() {
+      Blockly.defineBlocksWithJsonArray([{
+        "type": "basic_block",
+        "message0": "%1",
+        "args0": [
+          {
+            "type": "field_input",
+            "name": "TEXT",
+            "text": "default"
+          }
+        ]
+      }]);
+      var toolbox = document.getElementById('toolbox-categories');
+      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+      Blockly.navigation.focusToolbox();
+      Blockly.navigation.focusFlyout();
+      this.mockEvent = {
+        getModifierState: function() {
+          return false;
+        }
+      };
+    });
+
+    teardown(function() {
+      delete Blockly.Blocks['basic_block'];
+      this.workspace.dispose();
+      Blockly.navigation.currentCategory_ = null;
+    });
+
+    // Should be a no-op
+    test('Previous at beginning', function() {
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_FLYOUT);
+      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"), "FirstCategory-FirstBlock");
+    });
+
+    test('Previous', function() {
+      Blockly.navigation.selectNextBlockInFlyout();
+      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"), "FirstCategory-SecondBlock");
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_FLYOUT);
+      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"), "FirstCategory-FirstBlock");
+    });
+
+    test('Next', function() {
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.S;
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_FLYOUT);
+      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"), "FirstCategory-SecondBlock");
+    });
+
+    test('Out', function() {
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.A;
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_TOOLBOX);
+    });
+
+    test('MARK', function() {
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.ENTER;
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_WS);
+      chai.assert.equal(this.workspace.getTopBlocks().length, 1);
+    });
+
+    test('EXIT', function() {
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.ESC;
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_WS);
+    });
+  });
+
+  // Test that workspace key handlers call through to the right functions and
+  // transition correctly between toolbox, workspace, and flyout.
+  suite('Tests workspace keys', function() {
+    setup(function() {
+      Blockly.defineBlocksWithJsonArray([{
+        "type": "basic_block",
+        "message0": "%1",
+        "args0": [
+          {
+            "type": "field_input",
+            "name": "TEXT",
+            "text": "default"
+          }
+        ],
+        "previousStatement": null,
+        "nextStatement": null
+      }]);
+      var toolbox = document.getElementById('toolbox-categories');
+      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+      Blockly.navigation.focusWorkspace();
+      this.basicBlock = this.workspace.newBlock('basic_block');
+      this.firstCategory_ = this.workspace.getToolbox().tree_.firstChild_;
+      this.mockEvent = {
+        getModifierState: function() {
+          return false;
+        }
+      };
+    });
+
+    teardown(function() {
+      delete Blockly.Blocks['basic_block'];
+      this.workspace.dispose();
+      Blockly.navigation.currentCategory_ = null;
+    });
+
+    test('Previous', function() {
+      var cursor = Blockly.navigation.cursor_;
+      sinon.spy(cursor, 'prev');
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.isTrue(cursor.prev.calledOnce);
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_WS);
+      cursor.prev.restore();
+    });
+
+    test('Next', function() {
+      var cursor = Blockly.navigation.cursor_;
+      sinon.spy(cursor, 'next');
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.S;
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.isTrue(cursor.next.calledOnce);
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_WS);
+      cursor.next.restore();
+    });
+
+    test('Out', function() {
+      var cursor = Blockly.navigation.cursor_;
+      sinon.spy(cursor, 'out');
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.A;
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.isTrue(cursor.out.calledOnce);
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_WS);
+      cursor.out.restore();
+    });
+
+    test('In', function() {
+      var cursor = Blockly.navigation.cursor_;
+      sinon.spy(cursor, 'in');
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.D;
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.isTrue(cursor.in.calledOnce);
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_WS);
+      cursor.in.restore();
+    });
+
+    test('Insert', function() {
+      sinon.spy(Blockly.navigation, 'modify');
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.I;
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.isTrue(Blockly.navigation.modify.calledOnce);
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_WS);
+      Blockly.navigation.modify.restore();
+    });
+
+    test('Mark', function() {
+      Blockly.navigation.cursor_.setLocation(
+          Blockly.ASTNode.createConnectionNode(this.basicBlock.previousConnection));
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.ENTER;
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      var markedNode = Blockly.navigation.marker_.getCurNode();
+      chai.assert.equal(markedNode.getLocation(), this.basicBlock.previousConnection);
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_WS);
+    });
+
+    test('Toolbox', function() {
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.T;
+      chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      chai.assert.equal(Blockly.navigation.currentCategory_, this.firstCategory_);
+      chai.assert.equal(Blockly.navigation.currentState_,
+          Blockly.navigation.STATE_TOOLBOX);
+    });
+  });
+
+  suite('Test key press', function() {
+    setup(function() {
+      this.mockEvent = {
+        getModifierState: function() {
+          return false;
+        }
+      };
+    });
+    test('Action does not exist', function() {
+      var cursor = new Blockly.Cursor();
+      var field = new Blockly.Field('value');
+      Blockly.navigation.setCursor(cursor);
+      sinon.spy(field, 'onBlocklyAction');
+      cursor.setLocation(Blockly.ASTNode.createFieldNode(field));
+
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.N;
+      var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
+      chai.assert.isFalse(isHandled);
+      chai.assert.isFalse(field.onBlocklyAction.calledOnce);
+
+      field.onBlocklyAction.restore();
+    });
+
+    test('Action exists - field handles action', function() {
+      var cursor = new Blockly.Cursor();
+      var field = new Blockly.Field('value');
+      Blockly.navigation.setCursor(cursor);
+      sinon.spy(Blockly.navigation, 'onBlocklyAction');
+      sinon.stub(field, 'onBlocklyAction').callsFake(function(){
+        return true;
+      });
+      cursor.setLocation(Blockly.ASTNode.createFieldNode(field));
+
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.A;
+      var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
+      chai.assert.isTrue(isHandled);
+      chai.assert.isTrue(field.onBlocklyAction.calledOnce);
+      chai.assert.isFalse(Blockly.navigation.onBlocklyAction.calledOnce);
+
+      Blockly.navigation.onBlocklyAction.restore();
+      field.onBlocklyAction.restore();
+    });
+
+    test('Action exists - field does not handle action', function() {
+      var cursor = new Blockly.Cursor();
+      var field = new Blockly.Field('value');
+      Blockly.navigation.setCursor(cursor);
+      sinon.spy(field, 'onBlocklyAction');
+      sinon.spy(Blockly.navigation, 'onBlocklyAction');
+      cursor.setLocation(Blockly.ASTNode.createFieldNode(field));
+
+      this.mockEvent.keyCode = Blockly.utils.KeyCodes.A;
+      var isHandled = Blockly.navigation.onKeyPress(this.mockEvent);
+      chai.assert.isTrue(isHandled);
+      chai.assert.isTrue(field.onBlocklyAction.calledOnce);
+
+      field.onBlocklyAction.restore();
+      Blockly.navigation.onBlocklyAction.restore();
+    });
+  });
+
   suite('Insert Functions', function() {
     setup(function() {
       Blockly.defineBlocksWithJsonArray([{

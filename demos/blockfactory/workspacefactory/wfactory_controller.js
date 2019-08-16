@@ -343,6 +343,10 @@ WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
     throw new Error(msg);
   }
 
+  // Unpack self-closing tags.  These tags fail when embedded in HTML.
+  // <block name="foo"/> -> <block name="foo"></block>
+  configXml = configXml.replace(/<(\w+)([^<]*)\/>/g, '<$1$2></$1>');
+
   // Download file.
   var data = new Blob([configXml], {type: 'text/xml'});
   this.view.createAndDownloadFile(fileName, data);
@@ -391,8 +395,7 @@ WorkspaceFactoryController.prototype.printConfig = function() {
   // Capture any changes made by user before generating XML.
   this.saveStateFromWorkspace();
   // Print XML.
-  window.console.log(Blockly.Xml.domToPrettyText
-      (this.generator.generateToolboxXml()));
+  console.log(Blockly.Xml.domToPrettyText(this.generator.generateToolboxXml()));
 };
 
 /**

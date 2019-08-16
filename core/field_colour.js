@@ -453,7 +453,7 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
   // Create the palette.
   var table = document.createElement('table');
   table.className = 'blocklyColourTable';
-  table.tabIndex = "0";
+  table.tabIndex = 0;
   Blockly.utils.aria.setRole(table,
       Blockly.utils.aria.Role.TABLE);
   Blockly.utils.aria.setState(table,

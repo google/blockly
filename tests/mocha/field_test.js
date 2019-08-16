@@ -359,6 +359,15 @@ suite('Abstract Fields', function() {
         });
         chai.assert.equal(field.tooltip_, 'test tooltip');
       });
+      test('JS Constructor - Dynamic', function() {
+        var returnTooltip = function() {
+          return 'dynamic tooltip text';
+        };
+        var field = new Blockly.Field('value', null, {
+          tooltip: returnTooltip
+        });
+        chai.assert.equal(field.tooltip_, returnTooltip);
+      });
       test('JSON Definition', function() {
         var field = CustomField.fromJson({
           tooltip: "test tooltip"

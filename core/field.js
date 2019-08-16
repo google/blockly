@@ -58,7 +58,11 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   this.size_ = new Blockly.utils.Size(0, 0);
 
   if (opt_config) {
-    var tooltip = Blockly.utils.replaceMessageReferences(opt_config['tooltip']);
+    var tooltip = opt_config['tooltip'];
+    if (typeof tooltip == 'string') {
+      tooltip = Blockly.utils.replaceMessageReferences(
+          opt_config['tooltip']);
+    }
     tooltip && this.setTooltip(tooltip);
 
     // TODO: Possibly eventually add configurations like cursor and css class.

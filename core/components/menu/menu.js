@@ -41,6 +41,7 @@ Blockly.Menu = function() {
 
   /**
    * This is the element that we will listen to the real focus events on.
+   * A value of -1 means no menuitem is highlighted.
    * @type {number}
    * @private
    */

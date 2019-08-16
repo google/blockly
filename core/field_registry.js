@@ -57,6 +57,7 @@ Blockly.fieldRegistry.register = function(type, fieldClass) {
   if (!fieldClass || (typeof fieldClass.fromJson != 'function')) {
     throw Error('Field "' + fieldClass + '" must have a fromJson function');
   }
+  type = type.toLowerCase();
   Blockly.fieldRegistry.typeMap_[type] = fieldClass;
 };
 
@@ -71,7 +72,8 @@ Blockly.fieldRegistry.register = function(type, fieldClass) {
  * @package
  */
 Blockly.fieldRegistry.fromJson = function(options) {
-  var fieldClass = Blockly.fieldRegistry.typeMap_[options['type']];
+  var type = options['type'].toLowerCase();
+  var fieldClass = Blockly.fieldRegistry.typeMap_[type];
   if (!fieldClass) {
     console.warn('Blockly could not create a field of type ' + options['type'] +
       '. The field is probably not being registered. This could be because' +

@@ -110,8 +110,7 @@ suite('Field Registry', function() {
       chai.assert.isTrue(spy.called);
       spy.restore();
     });
-    // TODO: Is this supposed to be case sensitive?
-    test.skip('Case Different', function() {
+    test('Case Different', function() {
       Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
 
       var json = {

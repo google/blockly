@@ -29,7 +29,11 @@ goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Highlighter');
 goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.Rows');
+goog.require('Blockly.blockRendering.BottomRow');
+goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Row');
+goog.require('Blockly.blockRendering.SpacerRow');
+goog.require('Blockly.blockRendering.TopRow');
 
 /**
  * An object that renders rectangles and dots for debugging rendering code.
@@ -323,7 +327,7 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
   var cursorY = 0;
   for (var r = 0; r < info.rows.length; r++) {
     var row = info.rows[r];
-    if (row.isSpacer()) {
+    if (row.type == 'between-row spacer') {
       this.drawSpacerRow(row, cursorY, info.RTL);
     } else {
       this.drawRowWithElements(row, cursorY, info.RTL);

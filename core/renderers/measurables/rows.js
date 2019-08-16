@@ -24,7 +24,11 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.Rows');
+goog.provide('Blockly.blockRendering.BottomRow');
+goog.provide('Blockly.blockRendering.InputRow');
+goog.provide('Blockly.blockRendering.Row');
+goog.provide('Blockly.blockRendering.SpacerRow');
+goog.provide('Blockly.blockRendering.TopRow');
 
 goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Input');
@@ -138,40 +142,16 @@ Blockly.blockRendering.Row.prototype.notchShape =
     Blockly.blockRendering.constants.NOTCH;
 
 /**
- * Whether this is a spacer row.
- * @return {boolean} Always false.
- * @package
- */
-Blockly.blockRendering.Row.prototype.isSpacer = function() {
-  return false;
-};
-
-/**
  * Inspect all subcomponents and populate all size properties on the row.
  * @package
  */
 Blockly.blockRendering.Row.prototype.measure = function() {
-  var connectedBlockWidths = 0;
-  for (var e = 0; e < this.elements.length; e++) {
-    var elem = this.elements[e];
-    this.width += elem.width;
-    if (elem.isInput) {
-      if (elem.type == 'statement input') {
-        connectedBlockWidths += elem.connectedBlockWidth;
-      } else if (elem.type == 'external value input' &&
-          elem.connectedBlockWidth != 0) {
-        connectedBlockWidths += (elem.connectedBlockWidth - elem.connectionWidth);
-      }
-    }
-    if (!(elem.isSpacer())) {
-      this.height = Math.max(this.height, elem.height);
-    }
-  }
-  this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
+  throw Error('Unexpected attempt to measure a base Row.');
 };
 
 /**
  * Get the last input on this row, if it has one.
+ * TODO: Consider moving this to InputRow, if possible.
  * @return {Blockly.blockRendering.Input} The last input on the row, or null.
  * @package
  */
@@ -386,4 +366,66 @@ Blockly.blockRendering.BottomRow.prototype.measure = function() {
     }
   }
   this.widthWithConnectedBlocks = this.width;
+};
+/**
+ * An object containing information about a spacer between two rows.
+ * @param {number} height The height of the spacer.
+ * @param {number} width The width of the spacer.
+ * @package
+ * @constructor
+ * @extends {Blockly.blockRendering.Row}
+ */
+Blockly.blockRendering.SpacerRow = function(height, width) {
+  this.type = 'between-row spacer';
+  this.width = width;
+  this.height = height;
+  this.followsStatement = false;
+  this.widthWithConnectedBlocks = 0;
+  this.elements = [new Blockly.blockRendering.InRowSpacer(width)];
+};
+goog.inherits(Blockly.blockRendering.SpacerRow,
+    Blockly.blockRendering.Row);
+
+/**
+ * @override
+ */
+Blockly.blockRendering.SpacerRow.prototype.measure = function() {
+  // NOP.  Width and height were set at creation.
+};
+
+/**
+ * An object containing information about a row that holds one or more inputs.
+ * @package
+ * @constructor
+ * @extends {Blockly.blockRendering.Row}
+ */
+Blockly.blockRendering.InputRow = function() {
+  Blockly.blockRendering.InputRow.superClass_.constructor.call(this);
+  this.type = 'input row';
+};
+goog.inherits(Blockly.blockRendering.InputRow,
+    Blockly.blockRendering.Row);
+
+/**
+ * Inspect all subcomponents and populate all size properties on the row.
+ * @package
+ */
+Blockly.blockRendering.InputRow.prototype.measure = function() {
+  var connectedBlockWidths = 0;
+  for (var e = 0; e < this.elements.length; e++) {
+    var elem = this.elements[e];
+    this.width += elem.width;
+    if (elem.isInput) {
+      if (elem.type == 'statement input') {
+        connectedBlockWidths += elem.connectedBlockWidth;
+      } else if (elem.type == 'external value input' &&
+          elem.connectedBlockWidth != 0) {
+        connectedBlockWidths += (elem.connectedBlockWidth - elem.connectionWidth);
+      }
+    }
+    if (!(elem.isSpacer())) {
+      this.height = Math.max(this.height, elem.height);
+    }
+  }
+  this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
 };

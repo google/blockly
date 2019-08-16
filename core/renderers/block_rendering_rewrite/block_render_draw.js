@@ -31,7 +31,11 @@ goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Highlighter');
 goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.Rows');
+goog.require('Blockly.blockRendering.BottomRow');
+goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Row');
+goog.require('Blockly.blockRendering.SpacerRow');
+goog.require('Blockly.blockRendering.TopRow');
 
 /**
  * An object that draws a block based on the given rendering information.
@@ -299,14 +303,12 @@ Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
 Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
   for (var r = 0; r < this.info_.rows.length; r++) {
     var row = this.info_.rows[r];
-    if (!(row.isSpacer())) {
-      for (var e = 0; e < row.elements.length; e++) {
-        var elem = row.elements[e];
-        if (elem.isInlineInput()) {
-          this.drawInlineInput_(elem);
-        } else if (elem.isIcon() || elem.isField()) {
-          this.layoutField_(elem);
-        }
+    for (var e = 0; e < row.elements.length; e++) {
+      var elem = row.elements[e];
+      if (elem.isInlineInput()) {
+        this.drawInlineInput_(elem);
+      } else if (elem.isIcon() || elem.isField()) {
+        this.layoutField_(elem);
       }
     }
   }

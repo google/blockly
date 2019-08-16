@@ -437,24 +437,6 @@ Blockly.blockRendering.RoundCorner = function() {
 goog.inherits(Blockly.blockRendering.RoundCorner, Blockly.blockRendering.Measurable);
 
 /**
- * An object containing information about a spacer between two rows.
- * @param {number} height The height of the spacer.
- * @param {number} width The width of the spacer.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.Measurable}
- */
-Blockly.blockRendering.BetweenRowSpacer = function(height, width) {
-  this.type = 'between-row spacer';
-  this.width = width;
-  this.height = height;
-  this.followsStatement = false;
-  this.widthWithConnectedBlocks = 0;
-};
-goog.inherits(Blockly.blockRendering.BetweenRowSpacer,
-    Blockly.blockRendering.Measurable);
-
-/**
  * An object containing information about a spacer between two elements on a
  * row.
  * @param {number} width The width of the spacer.

@@ -28,6 +28,8 @@
 
 goog.provide('Blockly.fieldRegistry');
 
+goog.require('Blockly.utils');
+
 
 /**
  * The set of all registered fields, keyed by field type as used in the JSON

@@ -455,7 +455,7 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
   table.className = 'blocklyColourTable';
   table.tabIndex = "0";
   Blockly.utils.aria.setRole(table,
-      Blockly.utils.aria.ROLE.TABLE);
+      Blockly.utils.aria.Role.TABLE);
   Blockly.utils.aria.setState(table,
       Blockly.utils.aria.State.EXPANDED, true);
   Blockly.utils.aria.setState(table, 'rowcount',

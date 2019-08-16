@@ -363,7 +363,7 @@ Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
     this.setHighlightedCell_(cell, index);
   }
   if (handled || navigation) {
-    e.preventDefault();
+    e.stopPropagation();
   }
 };
 

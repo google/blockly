@@ -21,6 +21,7 @@
     "lint": "eslint .",
     "typings": "gulp typings",
     "test": "tests/run_all_tests.sh",
+    "compile": "gulp compile",
     "package": "gulp package",
     "release": "gulp release"
   },

@@ -159,6 +159,7 @@ Blockly.blockRendering.Measurable.prototype.isJaggedEdge = function() {
  * @param {!Blockly.Input} input The input to measure and store information for.
  * @package
  * @constructor
+ * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.Input = function(input) {
   Blockly.blockRendering.Input.superClass_.constructor.call(this);
@@ -191,6 +192,7 @@ goog.inherits(Blockly.blockRendering.Input, Blockly.blockRendering.Measurable);
  * @param {!Blockly.Icon} icon The icon to measure and store information for.
  * @package
  * @constructor
+ * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.Icon = function(icon) {
   Blockly.blockRendering.Icon.superClass_.constructor.call(this);
@@ -209,6 +211,7 @@ goog.inherits(Blockly.blockRendering.Icon, Blockly.blockRendering.Measurable);
  * takes up during rendering
  * @package
  * @constructor
+ * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.JaggedEdge = function() {
   Blockly.blockRendering.JaggedEdge.superClass_.constructor.call(this);
@@ -226,6 +229,7 @@ goog.inherits(Blockly.blockRendering.JaggedEdge, Blockly.blockRendering.Measurab
  * @param {!Blockly.Input} parentInput The parent input for the field.
  * @package
  * @constructor
+ * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.Field = function(field, parentInput) {
   Blockly.blockRendering.Field.superClass_.constructor.call(this);
@@ -248,6 +252,7 @@ goog.inherits(Blockly.blockRendering.Field, Blockly.blockRendering.Measurable);
  *     information for.
  * @package
  * @constructor
+ * @extends {Blockly.blockRendering.Input}
  */
 Blockly.blockRendering.InlineInput = function(input) {
   Blockly.blockRendering.InlineInput.superClass_.constructor.call(this, input);
@@ -278,6 +283,7 @@ goog.inherits(Blockly.blockRendering.InlineInput, Blockly.blockRendering.Input);
  *     information for.
  * @package
  * @constructor
+ * @extends {Blockly.blockRendering.Input}
  */
 Blockly.blockRendering.StatementInput = function(input) {
   Blockly.blockRendering.StatementInput.superClass_.constructor.call(this, input);
@@ -305,6 +311,7 @@ goog.inherits(Blockly.blockRendering.StatementInput,
  *     information for.
  * @package
  * @constructor
+ * @extends {Blockly.blockRendering.Input}
  */
 Blockly.blockRendering.ExternalValueInput = function(input) {
   Blockly.blockRendering.ExternalValueInput.superClass_.constructor.call(this, input);
@@ -331,6 +338,7 @@ goog.inherits(Blockly.blockRendering.ExternalValueInput,
  * up during rendering.
  * @package
  * @constructor
+ * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.OutputConnection = function() {
   Blockly.blockRendering.OutputConnection.superClass_.constructor.call(this);
@@ -347,6 +355,7 @@ goog.inherits(Blockly.blockRendering.OutputConnection, Blockly.blockRendering.Me
  * up during rendering.
  * @package
  * @constructor
+ * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.PreviousConnection = function() {
   Blockly.blockRendering.PreviousConnection.superClass_.constructor.call(this);
@@ -362,6 +371,7 @@ goog.inherits(Blockly.blockRendering.PreviousConnection, Blockly.blockRendering.
  * up during rendering.
  * @package
  * @constructor
+ * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.NextConnection = function() {
   Blockly.blockRendering.NextConnection.superClass_.constructor.call(this);
@@ -376,6 +386,7 @@ goog.inherits(Blockly.blockRendering.NextConnection, Blockly.blockRendering.Meas
  * rendering.
  * @package
  * @constructor
+ * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.Hat = function() {
   Blockly.blockRendering.Hat.superClass_.constructor.call(this);
@@ -392,6 +403,7 @@ goog.inherits(Blockly.blockRendering.Hat, Blockly.blockRendering.Measurable);
  * during rendering.
  * @package
  * @constructor
+ * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.SquareCorner = function() {
   Blockly.blockRendering.SquareCorner.superClass_.constructor.call(this);
@@ -407,6 +419,7 @@ goog.inherits(Blockly.blockRendering.SquareCorner, Blockly.blockRendering.Measur
  * during rendering.
  * @package
  * @constructor
+ * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.RoundCorner = function() {
   Blockly.blockRendering.RoundCorner.superClass_.constructor.call(this);

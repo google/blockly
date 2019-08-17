@@ -38,6 +38,7 @@ goog.require('Blockly.blockRendering.Measurable');
  * @param {!Blockly.blockRendering.RenderInfo} info An object containing all
  *   information needed to render this block.
  * @package
+ * @constructor
  */
 Blockly.blockRendering.Drawer = function(block, info) {
   this.block_ = block;

@@ -46,6 +46,7 @@ goog.require('Blockly.blockRendering.Measurable');
  * @param {!Blockly.BlockSvg.PathObject} pathObject An object that stores all of
  *     the block's paths before they are propagated to the page.
  * @package
+ * @constructor
  */
 Blockly.blockRendering.Highlighter = function(info, pathObject) {
   this.info_ = info;

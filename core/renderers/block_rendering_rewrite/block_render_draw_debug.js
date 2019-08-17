@@ -33,6 +33,7 @@ goog.require('Blockly.blockRendering.Measurable');
 /**
  * An object that renders rectangles and dots for debugging rendering code.
  * @package
+ * @constructor
  */
 Blockly.blockRendering.Debug = function() {
   /**

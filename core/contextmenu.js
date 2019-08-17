@@ -32,6 +32,8 @@ goog.provide('Blockly.ContextMenu');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
+goog.require('Blockly.Menu');
+goog.require('Blockly.MenuItem');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
@@ -39,10 +41,6 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.uiMenu');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Xml');
-
-goog.require('goog.events');
-goog.require('goog.ui.Menu');
-goog.require('goog.ui.MenuItem');
 
 
 /**
@@ -72,9 +70,6 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
   }
   var menu = Blockly.ContextMenu.populate_(options, rtl);
 
-  goog.events.listen(
-      menu, goog.ui.Component.EventType.ACTION, Blockly.ContextMenu.hide);
-
   Blockly.ContextMenu.position_(menu, e, rtl);
   // 1ms delay is required for focusing on context menus because some other
   // mouse event is still waiting in the queue and clears focus.
@@ -86,7 +81,7 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
  * Create the context menu object and populate it with the given options.
  * @param {!Array.<!Object>} options Array of menu options.
  * @param {boolean} rtl True if RTL, false if LTR.
- * @return {!goog.ui.Menu} The menu that will be shown on right click.
+ * @return {!Blockly.Menu} The menu that will be shown on right click.
  * @private
  */
 Blockly.ContextMenu.populate_ = function(options, rtl) {
@@ -95,20 +90,20 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
      enabled: true,
      callback: Blockly.MakeItSo}
   */
-  var menu = new goog.ui.Menu();
+  var menu = new Blockly.Menu();
   menu.setRightToLeft(rtl);
   for (var i = 0, option; option = options[i]; i++) {
-    var menuItem = new goog.ui.MenuItem(option.text);
+    var menuItem = new Blockly.MenuItem(option.text);
     menuItem.setRightToLeft(rtl);
     menu.addChild(menuItem, true);
     menuItem.setEnabled(option.enabled);
     if (option.enabled) {
-      goog.events.listen(
-          menuItem, goog.ui.Component.EventType.ACTION, option.callback);
-      menuItem.handleContextMenu = function(/* e */) {
-        // Right-clicking on menu option should count as a click.
-        goog.events.dispatchEvent(this, goog.ui.Component.EventType.ACTION);
+      var actionHandler = function() {
+        var option = this;
+        Blockly.ContextMenu.hide();
+        option.callback();
       };
+      menuItem.onAction(actionHandler, option);
     }
   }
   return menu;
@@ -116,7 +111,7 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
 
 /**
  * Add the menu to the page and position it correctly.
- * @param {!goog.ui.Menu} menu The menu to add and position.
+ * @param {!Blockly.Menu} menu The menu to add and position.
  * @param {!Event} e Mouse event for the right click that is making the context
  *     menu appear.
  * @param {boolean} rtl True if RTL, false if LTR.
@@ -150,19 +145,20 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
 
 /**
  * Create and render the menu widget inside Blockly's widget div.
- * @param {!goog.ui.Menu} menu The menu to add to the widget div.
+ * @param {!Blockly.Menu} menu The menu to add to the widget div.
  * @private
  */
 Blockly.ContextMenu.createWidget_ = function(menu) {
   var div = Blockly.WidgetDiv.DIV;
   menu.render(div);
   var menuDom = menu.getElement();
-  Blockly.utils.dom.addClass(menuDom, 'blocklyContextMenu');
+  Blockly.utils.dom.addClass(
+      /** @type {!Element} */ (menuDom), 'blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
   Blockly.bindEventWithChecks_(
-      menuDom, 'contextmenu', null, Blockly.utils.noEvent);
-  // Enable autofocus after the initial render to avoid issue #1329.
-  menu.setAllowAutoFocus(true);
+      /** @type {!EventTarget} */ (menuDom), 'contextmenu', null, Blockly.utils.noEvent);
+  // Focus only after the initial render to avoid issue #1329.
+  menu.focus();
 };
 
 /**
@@ -382,7 +378,7 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
     comment.moveBy(commentX, commentY);
     if (ws.rendered) {
       comment.initSvg();
-      comment.render(false);
+      comment.render();
       comment.select();
     }
   };

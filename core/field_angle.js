@@ -29,6 +29,7 @@ goog.provide('Blockly.FieldAngle');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.navigation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.userAgent');
@@ -262,6 +263,14 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
     angle += 360;
   }
 
+  this.setAngle(angle);
+};
+
+/**
+ * Set the angle value and update the graph.
+ * @param {number} angle New angle
+ */
+Blockly.FieldAngle.prototype.setAngle = function(angle) {
   // Do offsetting.
   if (Blockly.FieldAngle.CLOCKWISE) {
     angle = Blockly.FieldAngle.OFFSET + 360 - angle;
@@ -353,6 +362,7 @@ Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
     handled = true;
   }
   if (handled) {
+    e.preventDefault();
     e.stopPropagation();
   }
 };

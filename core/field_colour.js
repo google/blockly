@@ -305,47 +305,50 @@ Blockly.FieldColour.prototype.onClick_ = function(e) {
 };
 
 /**
+ * Handles the given action.
+ * This is only triggered when keyboard accessibility mode is enabled.
+ * @param {!Blockly.Action} action The action to be handled.
+ * @return {boolean} True if the field handled the action, false otherwise.
+ * @package
+ */
+Blockly.FieldColour.prototype.onBlocklyAction = function(action) {
+  if (action === Blockly.navigation.ACTION_PREVIOUS) {
+    this.moveHighlightBy_(0, -1);
+    return true;
+  } else if (action === Blockly.navigation.ACTION_NEXT) {
+    this.moveHighlightBy_(0, 1);
+    return true;
+  } else if (action === Blockly.navigation.ACTION_OUT) {
+    this.moveHighlightBy_(-1, 0);
+    return true;
+  } else if (action === Blockly.navigation.ACTION_IN) {
+    this.moveHighlightBy_(1, 0);
+    return true;
+  }
+  return Blockly.FieldColour.superClass_.onBlocklyAction.call(this, action);
+};
+
+/**
  * Handle a key down event. Navigate around the grid with the
  * arrow keys. Enter selects the highlighted colour.
  * @param {!KeyboardEvent} e Keyboard event.
  * @private
  */
 Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
-  var colours = this.colours_ || Blockly.FieldColour.COLOURS;
-  var columns = this.columns_ || Blockly.FieldColour.COLUMNS;
-  var x = this.highlightedIndex_ % columns;
-  var y = Math.floor(this.highlightedIndex_ / columns);
-  var handled = false, navigation = false;
-  if (e.keyCode === Blockly.utils.KeyCodes.UP && y > 0) {
-    // Move up one grid cell.
-    y--;
-    navigation = true;
-  } else if (e.keyCode === Blockly.utils.KeyCodes.DOWN &&
-      y < Math.floor(colours.length / columns) - 1) {
-    // Move down one grid cell.
-    y++;
-    navigation = true;
+  var handled = false;
+  if (e.keyCode === Blockly.utils.KeyCodes.UP) {
+    this.moveHighlightBy_(0, -1);
+    handled = true;
+  } else if (e.keyCode === Blockly.utils.KeyCodes.DOWN) {
+    this.moveHighlightBy_(0, 1);
+    handled = true;
   } else if (e.keyCode === Blockly.utils.KeyCodes.LEFT) {
     // Move left one grid cell, even in RTL.
-    x--;
-    if (x < 0 && y > 0) {
-      x = columns - 1;
-      y--;
-    } else if (x < 0) {
-      x = 0;
-    }
-    navigation = true;
+    this.moveHighlightBy_(-1, 0);
+    handled = true;
   } else if (e.keyCode === Blockly.utils.KeyCodes.RIGHT) {
-    // Move right one grid cell, even in RTL.
-    x++;
-    if (x > columns - 1 &&
-      y < Math.floor(colours.length / columns) - 1) {
-      x = 0;
-      y++;
-    } else if (x > columns - 1) {
-      x--;
-    }
-    navigation = true;
+    this.moveHighlightBy_(1, 0);
+    handled = true;
   } else if (e.keyCode === Blockly.utils.KeyCodes.ENTER) {
     // Select the highlighted colour.
     var highlighted = this.getHighlighted_();
@@ -358,14 +361,64 @@ Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
     Blockly.DropDownDiv.hideWithoutAnimation();
     handled = true;
   }
-  if (navigation) {
-    var cell = this.picker_.childNodes[y].childNodes[x];
-    var index = (y * columns) + x;
-    this.setHighlightedCell_(cell, index);
-  }
-  if (handled || navigation) {
+  if (handled) {
     e.stopPropagation();
   }
+};
+
+/**
+ * Move the currently highlighted position by dx and dy.
+ * @param {number} dx Change of x
+ * @param {number} dy Change of y
+ * @private
+ */
+Blockly.FieldColour.prototype.moveHighlightBy_ = function(dx, dy) {
+  var colours = this.colours_ || Blockly.FieldColour.COLOURS;
+  var columns = this.columns_ || Blockly.FieldColour.COLUMNS;
+
+  // Get the current x and y coordinates
+  var x = this.highlightedIndex_ % columns;
+  var y = Math.floor(this.highlightedIndex_ / columns);
+
+  // Add the offset
+  x += dx;
+  y += dy;
+
+  if (dx < 0) {
+    // Move left one grid cell, even in RTL.
+    // Loop back to the end of the previous row if we have room.
+    if (x < 0 && y > 0) {
+      x = columns - 1;
+      y--;
+    } else if (x < 0) {
+      x = 0;
+    }
+  } else if (dx > 0) {
+    // Move right one grid cell, even in RTL.
+    // Loop to the start of the next row, if there's room.
+    if (x > columns - 1 &&
+      y < Math.floor(colours.length / columns) - 1) {
+      x = 0;
+      y++;
+    } else if (x > columns - 1) {
+      x--;
+    }
+  } else if (dy < 0) {
+    // Move up one grid cell.
+    if (y < 0) {
+      y = 0;
+    }
+  } else if (dy > 0) {
+    // Move down one grid cell, if there's room.
+    if (y > Math.floor(colours.length / columns) - 1) {
+      y = Math.floor(colours.length / columns) - 1;
+    }
+  }
+
+  // Move the highlight to the new coordinates.
+  var cell = this.picker_.childNodes[y].childNodes[x];
+  var index = (y * columns) + x;
+  this.setHighlightedCell_(cell, index);
 };
 
 /**

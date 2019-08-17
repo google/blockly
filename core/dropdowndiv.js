@@ -145,6 +145,15 @@ Blockly.DropDownDiv.createDom = function() {
   Blockly.DropDownDiv.DIV_.style.transition = 'transform ' +
     Blockly.DropDownDiv.ANIMATION_TIME + 's, ' +
     'opacity ' + Blockly.DropDownDiv.ANIMATION_TIME + 's';
+
+  // Handle focusin/out events to add a visual indicator when
+  // a child is focused or blurred.
+  div.addEventListener('focusin', function() {
+    Blockly.utils.dom.addClass(div, 'focused');
+  });
+  div.addEventListener('focusout', function() {
+    Blockly.utils.dom.removeClass(div, 'focused');
+  });
 };
 
 /**

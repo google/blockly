@@ -59,7 +59,6 @@ Blockly.blockRendering.Row = function() {
    */
   this.elements = [];
 
-  // TODO: Should row extend measurable?  Some of these properties are shared.
   /**
    * The height of the row.
    * @package
@@ -172,27 +171,32 @@ Blockly.blockRendering.Row.prototype.getLastInput = function() {
 
 /**
  * Convenience method to get the first spacer element on this row.
- * TODO: I want to say that this is guaranteed to exist, but I'm not sure how.
- * I could check if it's null and throw, but that seems like overkill.
  * @return {Blockly.blockRendering.InRowSpacer} The first spacer element on
  *   this row.
  * @package
  */
 Blockly.blockRendering.Row.prototype.getFirstSpacer = function() {
-  return /** @type {Blockly.blockRendering.InRowSpacer} */ (this.elements[0]);
+  for (var i = 0, elem; elem = this.elements[i]; i++) {
+    if (elem.isSpacer) {
+      return /** @type {Blockly.blockRendering.InRowSpacer} */ (elem);
+    }
+  }
+  return null;
 };
 
 /**
  * Convenience method to get the last spacer element on this row.
- * TODO: I want to say that this is guaranteed to exist, but I'm not sure how.
- * I could check if it's null and throw, but that seems like overkill.
  * @return {Blockly.blockRendering.InRowSpacer} The last spacer element on
  *   this row.
  * @package
  */
 Blockly.blockRendering.Row.prototype.getLastSpacer = function() {
-  /* eslint-disable-next-line max-len */
-  return /** @type {Blockly.blockRendering.InRowSpacer} */ (this.elements[this.elements.length - 1]);
+  for (var i = this.elements.length - 1, elem; elem = this.elements[i]; i--) {
+    if (elem.isSpacer) {
+      return /** @type {Blockly.blockRendering.InRowSpacer} */ (elem);
+    }
+  }
+  return null;
 };
 
 /**

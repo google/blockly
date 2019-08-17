@@ -69,7 +69,8 @@ Blockly.blockRendering.Drawer.prototype.draw_ = function() {
   this.pathObject_.inlineSteps = [this.inlinePath_];
 
   this.block_.setPaths_(this.pathObject_);
-  this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
+  // Uncomment to enable debug rendering.
+  // this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   this.recordSizeOnBlock_();
 };
 

@@ -93,6 +93,21 @@ Blockly.navigation.STATE_TOOLBOX = 3;
 Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
 
 /**
+ * Object holding default action names.
+ * @enum {string}
+ */
+Blockly.navigation.actionNames = {
+  PREVIOUS: 'previous',
+  NEXT: 'next',
+  IN: 'in',
+  OUT: 'out',
+  INSERT: 'insert',
+  MARK: 'mark',
+  DISCONNECT: 'disconnect',
+  TOOLBOX: 'toolbox',
+  EXIT: 'exit'
+};
+/**
  * Set the navigation cursor.
  * @param {Blockly.Cursor} cursor The cursor to navigate through blocks on a
  * workspace.
@@ -647,7 +662,6 @@ Blockly.navigation.handleEnterForWS = function() {
 /** Helper Functions **/
 /**********************/
 
-
 /**
  * Handler for all the keyboard navigation events.
  * @param {Event} e The keyboard event.
@@ -656,11 +670,133 @@ Blockly.navigation.handleEnterForWS = function() {
 Blockly.navigation.onKeyPress = function(e) {
   var key = Blockly.user.keyMap.serializeKeyEvent(e);
   var action = Blockly.user.keyMap.getActionByKeyCode(key);
+  var curNode = Blockly.navigation.cursor_.getCurNode();
+  var actionHandled = false;
+
   if (action) {
-    action.func.call();
-    return true;
+    if (curNode && curNode.getType() === Blockly.ASTNode.types.FIELD) {
+      actionHandled = curNode.getLocation().onBlocklyAction(action);
+    }
+    if (!actionHandled) {
+      actionHandled = Blockly.navigation.onBlocklyAction(action);
+    }
+  }
+  return actionHandled;
+};
+
+/**
+ * Execute any actions on the flyout, workspace, or toolbox that correspond to
+ * the given action.
+ * @param {!Blockly.Action} action The current action.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @package
+ */
+Blockly.navigation.onBlocklyAction = function(action) {
+  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
+    return Blockly.navigation.workspaceOnAction_(action);
+  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
+    return Blockly.navigation.flyoutOnAction_(action);
+  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
+    return Blockly.navigation.toolboxOnAction_(action);
   }
   return false;
+};
+
+/**
+ * Handle all actions performed on the workspace.
+ * @param {!Blockly.Action} action The action to handle.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @private
+ */
+Blockly.navigation.workspaceOnAction_ = function(action) {
+  switch (action.name) {
+    case Blockly.navigation.actionNames.PREVIOUS:
+      Blockly.navigation.cursor_.prev();
+      return true;
+    case Blockly.navigation.actionNames.OUT:
+      Blockly.navigation.cursor_.out();
+      return true;
+    case Blockly.navigation.actionNames.NEXT:
+      Blockly.navigation.cursor_.next();
+      return true;
+    case Blockly.navigation.actionNames.IN:
+      Blockly.navigation.cursor_.in();
+      return true;
+    case Blockly.navigation.actionNames.INSERT:
+      Blockly.navigation.modify();
+      return true;
+    case Blockly.navigation.actionNames.MARK:
+      Blockly.navigation.handleEnterForWS();
+      return true;
+    case Blockly.navigation.actionNames.DISCONNECT:
+      Blockly.navigation.disconnectBlocks();
+      return true;
+    case Blockly.navigation.actionNames.TOOLBOX:
+      if (!Blockly.getMainWorkspace().getToolbox()) {
+        Blockly.navigation.focusFlyout();
+      } else {
+        Blockly.navigation.focusToolbox();
+      }
+      return true;
+    default:
+      return false;
+  }
+};
+
+/**
+ * Handle all actions performed on the flyout.
+ * @param {!Blockly.Action} action The action to handle.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @private
+ */
+Blockly.navigation.flyoutOnAction_ = function(action) {
+  switch (action.name) {
+    case Blockly.navigation.actionNames.PREVIOUS:
+      Blockly.navigation.selectPreviousBlockInFlyout();
+      return true;
+    case Blockly.navigation.actionNames.OUT:
+      Blockly.navigation.focusToolbox();
+      return true;
+    case Blockly.navigation.actionNames.NEXT:
+      Blockly.navigation.selectNextBlockInFlyout();
+      return true;
+    case Blockly.navigation.actionNames.MARK:
+      Blockly.navigation.insertFromFlyout();
+      return true;
+    case Blockly.navigation.actionNames.EXIT:
+      Blockly.navigation.focusWorkspace();
+      return true;
+    default:
+      return false;
+  }
+};
+
+/**
+ * Handle all actions performeed on the toolbox.
+ * @param {!Blockly.Action} action The action to handle.
+ * @return {boolean} True if the action has been handled, false otherwise.
+ * @private
+ */
+Blockly.navigation.toolboxOnAction_ = function(action) {
+  switch (action.name) {
+    case Blockly.navigation.actionNames.PREVIOUS:
+      Blockly.navigation.previousCategory();
+      return true;
+    case Blockly.navigation.actionNames.OUT:
+      Blockly.navigation.outCategory();
+      return true;
+    case Blockly.navigation.actionNames.NEXT:
+      Blockly.navigation.nextCategory();
+      return true;
+    case Blockly.navigation.actionNames.IN:
+      Blockly.navigation.inCategory();
+      return true;
+    case Blockly.navigation.actionNames.EXIT:
+      Blockly.navigation.focusWorkspace();
+      return true;
+    default:
+      return false;
+  }
 };
 
 /**
@@ -721,110 +857,65 @@ Blockly.navigation.error = function(msg) {
 
 /**
  * The previous action.
- * @type Blockly.Action
+ * @type {!Blockly.Action}
  */
-Blockly.navigation.ACTION_PREVIOUS = new Blockly.Action('previous', 'Goes to the previous location', function() {
-  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    Blockly.navigation.cursor_.prev();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-    Blockly.navigation.selectPreviousBlockInFlyout();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
-    Blockly.navigation.previousCategory();
-  }
-});
+Blockly.navigation.ACTION_PREVIOUS = new Blockly.Action(
+    Blockly.navigation.actionNames.PREVIOUS, 'Go to the previous location.');
 
 /**
- * The previous action.
- * @type Blockly.Action
+ * The out action.
+ * @type {!Blockly.Action}
  */
-Blockly.navigation.ACTION_OUT = new Blockly.Action('out', 'Goes out', function() {
-  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    Blockly.navigation.cursor_.out();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-    Blockly.navigation.focusToolbox();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
-    Blockly.navigation.outCategory();
-  }
-});
+Blockly.navigation.ACTION_OUT = new Blockly.Action(
+    Blockly.navigation.actionNames.OUT, 'Go to the parent of the current location.');
 
 /**
- * The previous action.
- * @type Blockly.Action
+ * The next action.
+ * @type {!Blockly.Action}
  */
-Blockly.navigation.ACTION_NEXT = new Blockly.Action('next', 'Goes to the next location', function() {
-  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    Blockly.navigation.cursor_.next();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-    Blockly.navigation.selectNextBlockInFlyout();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
-    Blockly.navigation.nextCategory();
-  }
-});
+Blockly.navigation.ACTION_NEXT = new Blockly.Action(
+    Blockly.navigation.actionNames.NEXT, 'Go to the next location.');
 
 /**
- * The action to go in.
- * @type Blockly.Action
+ * The in action.
+ * @type {!Blockly.Action}
  */
-Blockly.navigation.ACTION_IN = new Blockly.Action('in', 'Goes in', function() {
-  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    Blockly.navigation.cursor_.in();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX) {
-    Blockly.navigation.inCategory();
-  }
-});
+Blockly.navigation.ACTION_IN = new Blockly.Action(
+    Blockly.navigation.actionNames.IN, 'Go to the first child of the current location.');
 
 /**
  * The action to try to insert a block.
- * @type Blockly.Action
+ * @type {!Blockly.Action}
  */
-Blockly.navigation.ACTION_INSERT = new Blockly.Action('insert',
-    'Tries to connect the current location to the marked location', function() {
-      if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-        Blockly.navigation.modify();
-      }
-    });
+Blockly.navigation.ACTION_INSERT = new Blockly.Action(
+    Blockly.navigation.actionNames.INSERT,
+    'Connect the current location to the marked location.');
 
 /**
  * The action to mark a certain location.
- * @type Blockly.Action
+ * @type {!Blockly.Action}
  */
-Blockly.navigation.ACTION_MARK = new Blockly.Action('mark', 'Marks the current location', function() {
-  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    Blockly.navigation.handleEnterForWS();
-  } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-    Blockly.navigation.insertFromFlyout();
-  }
-});
+Blockly.navigation.ACTION_MARK = new Blockly.Action(
+    Blockly.navigation.actionNames.MARK, 'Mark the current location.');
 
 /**
  * The action to disconnect a block.
- * @type Blockly.Action
+ * @type {!Blockly.Action}
  */
-Blockly.navigation.ACTION_DISCONNECT = new Blockly.Action('disconnect', 'Disconnect the blocks', function() {
-  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
-    Blockly.navigation.disconnectBlocks();
-  }
-});
+Blockly.navigation.ACTION_DISCONNECT = new Blockly.Action(
+    Blockly.navigation.actionNames.DISCONNECT, 'Dicsonnect the block at the' +
+      'current location from its parent.');
 
 /**
  * The action to open the toolbox.
- * @type Blockly.Action
+ * @type {!Blockly.Action}
  */
-Blockly.navigation.ACTION_TOOLBOX = new Blockly.Action('toolbox', 'Open the toolbox', function() {
-  if (!Blockly.getMainWorkspace().getToolbox()) {
-    Blockly.navigation.focusFlyout();
-  } else {
-    Blockly.navigation.focusToolbox();
-  }
-});
+Blockly.navigation.ACTION_TOOLBOX = new Blockly.Action(
+    Blockly.navigation.actionNames.TOOLBOX, 'Open the toolbox.');
 
 /**
  * The action to exit the toolbox or flyout.
- * @type Blockly.Action
+ * @type {!Blockly.Action}
  */
-Blockly.navigation.ACTION_EXIT = new Blockly.Action('exit', 'Exit the toolbox', function() {
-  if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_TOOLBOX ||
-      Blockly.navigation.currentState_ === Blockly.navigation.STATE_FLYOUT) {
-    Blockly.navigation.focusWorkspace();
-  }
-});
+Blockly.navigation.ACTION_EXIT = new Blockly.Action(
+    Blockly.navigation.actionNames.EXIT, 'Close the current modal, such as a toolbox or field editor.');

@@ -156,7 +156,7 @@ Blockly.FlyoutButton.prototype.createDom = function() {
       this.svgGroup_);
   svgText.textContent = Blockly.utils.replaceMessageReferences(this.text_);
 
-  this.width = Blockly.Field.getCachedWidth(svgText);
+  this.width = Blockly.utils.dom.getTextWidth(svgText);
   this.height = 20;  // Can't compute it :(
 
   if (!this.isLabel_) {

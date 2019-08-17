@@ -565,6 +565,7 @@ Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
     if (row.hasExternalInput || row.hasStatement) {
       // Get the spacer right before the input socket.
       lastSpacer = elems[elems.length - 3];
+      row.widthWithConnectedBlocks += missingSpace;
     }
     // Decide where the extra padding goes.
     if (input.align == Blockly.ALIGN_LEFT) {
@@ -678,13 +679,10 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(prev,
  */
 Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
   var result = row.yPos;
-  if (elem.isField()) {
-    result += (elem.height / 2);
-    if (row.hasInlineInput || row.hasStatement) {
-      result += Blockly.blockRendering.constants.TALL_INPUT_FIELD_OFFSET_Y;
-    }
-  } else if (elem.isInlineInput()) {
-    result += elem.height / 2;
+  if (elem.isField() && row.hasStatement) {
+    var offset = Blockly.blockRendering.constants.TALL_INPUT_FIELD_OFFSET_Y +
+        elem.height / 2;
+    result += offset;
   } else if (elem.isNextConnection()) {
     result += (row.height - row.overhangY + elem.height / 2);
   } else {
@@ -701,12 +699,16 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
   // Performance note: this could be combined with the draw pass, if the time
   // that this takes is excessive.  But it shouldn't be, because it only
   // accesses and sets properties that already exist on the objects.
+  var widestRowWithConnectedBlocks = 0;
   var yCursor = 0;
   for (var r = 0; r < this.rows.length; r++) {
     var row = this.rows[r];
     row.yPos = yCursor;
     row.xPos = this.startX;
     yCursor += row.height;
+
+    widestRowWithConnectedBlocks =
+        Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
     // Add padding to the bottom row if block height is less than minimum
     var heightWithoutHat = yCursor - this.topRow.startY;
     if (row == this.bottomRow &&
@@ -726,6 +728,8 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
       }
     }
   }
+
+  this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;
 
   this.height = yCursor;
 };

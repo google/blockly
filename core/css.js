@@ -775,25 +775,31 @@ Blockly.Css.CONTENT = [
   /* Colour Picker Field */
   '.blocklyColourTable {',
     'border-collapse: collapse;',
+    'outline: none;',
+    'padding: 1px;',
+    'display: block;',
   '}',
 
   '.blocklyColourTable>tr>td {',
-    'border: 1px solid #666;',
     'padding: 0;',
+    'cursor: pointer;',
+    'border: 0.5px solid transparent;',
+    'height: 25px;',
+    'width: 25px;',
+    'box-sizing: border-box;',
+    'display: inline-block;',
   '}',
 
-  '.blocklyColourTable>tr>td>div {',
-    'border: 1px solid #666;',
-    'height: 13px;',
-    'width: 15px;',
-  '}',
-
-  '.blocklyColourTable>tr>td>div:hover {',
-    'border: 1px solid #fff;',
+  '.blocklyColourTable>tr>td.blocklyColourHighlighted {',
+    'border-color: #eee;',
+    'position: relative;',
+    'box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.3);',
   '}',
 
   '.blocklyColourSelected, .blocklyColourSelected:hover {',
-    'border: 1px solid #000 !important;',
+    'border-color: #eee !important;',
+    'outline: 1px solid #333;',
+    'position: relative;',
   '}',
 
   /* Copied from: goog/css/menu.css */

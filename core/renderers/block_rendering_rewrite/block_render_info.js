@@ -105,7 +105,7 @@ Blockly.blockRendering.RenderInfo = function(block) {
 
   /**
    * An array of Row objects containing sizing information.
-   * @type {Array}
+   * @type {!Array.<!Blockly.blockRendering.Row>}
    */
   this.rows = [];
 
@@ -115,8 +115,17 @@ Blockly.blockRendering.RenderInfo = function(block) {
    */
   this.hiddenIcons = [];
 
-  this.topRow = null;
-  this.bottomRow = null;
+  /**
+   * An object with rendering information about the top row of the block.
+   * @type {!Blockly.blockRendering.TopRow}
+   */
+  this.topRow = new Blockly.blockRendering.TopRow(this.block_);
+
+  /**
+   * An object with rendering information about the bottom row of the block.
+   * @type {!Blockly.blockRendering.BottomRow}
+   */
+  this.bottomRow = new Blockly.blockRendering.BottomRow(this.block_);
 
   // The position of the start point for drawing, relative to the block's
   // location.
@@ -153,7 +162,7 @@ Blockly.blockRendering.RenderInfo.prototype.measure_ = function() {
  * @private
  */
 Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
-  this.createTopRow_();
+  this.populateTopRow_();
   this.rows.push(this.topRow);
 
   var activeRow = new Blockly.blockRendering.Row();
@@ -203,7 +212,7 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
   if (activeRow.elements.length) {
     this.rows.push(activeRow);
   }
-  this.createBottomRow_();
+  this.populateBottomRow_();
   this.rows.push(this.bottomRow);
 };
 
@@ -211,13 +220,12 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
  * Create the top row and fill the elements list with all non-spacer elements
  * created.
  */
-Blockly.blockRendering.RenderInfo.prototype.createTopRow_ = function() {
+Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
   var hasHat = this.block_.hat ? this.block_.hat === 'cap' : Blockly.BlockSvg.START_HAT;
   var hasPrevious = !!this.block_.previousConnection;
   var prevBlock = this.block_.getPreviousBlock();
   var squareCorner = !!this.block_.outputConnection ||
       hasHat || (prevBlock && prevBlock.getNextBlock() == this.block_);
-  this.topRow = new Blockly.blockRendering.TopRow(this.block_);
 
   if (squareCorner) {
     this.topRow.elements.push(new Blockly.blockRendering.SquareCorner());
@@ -238,9 +246,8 @@ Blockly.blockRendering.RenderInfo.prototype.createTopRow_ = function() {
  * Create the bottom row and fill the elements list with all non-spacer elements
  * created.
  */
-Blockly.blockRendering.RenderInfo.prototype.createBottomRow_ = function() {
+Blockly.blockRendering.RenderInfo.prototype.populateBottomRow_ = function() {
   var squareCorner = !!this.block_.outputConnection || !!this.block_.getNextBlock();
-  this.bottomRow = new Blockly.blockRendering.BottomRow(this.block_);
 
   if (squareCorner) {
     this.bottomRow.elements.push(new Blockly.blockRendering.SquareCorner());

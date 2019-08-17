@@ -40,8 +40,6 @@ goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.WorkspaceSvg');
 
-goog.require('goog.ui.Component');
-
 
 /**
  * Inject a Blockly editor into the specified container element (usually a div).
@@ -97,9 +95,6 @@ Blockly.createDom_ = function(container, options) {
   // out content in RTL mode.  Therefore Blockly forces the use of LTR,
   // then manually positions content in RTL as needed.
   container.setAttribute('dir', 'LTR');
-  // TODO(samelh): Remove this once we no longer need goog.ui.Component
-  // Closure can be trusted to create HTML widgets with the proper direction.
-  goog.ui.Component.setDefaultRightToLeft(options.RTL);
   // Set the default direction for Components to use.
   Blockly.Component.setDefaultRightToLeft(options.RTL);
 

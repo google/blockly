@@ -305,6 +305,43 @@ Blockly.FieldColour.prototype.onClick_ = function(e) {
 };
 
 /**
+ * Handle a key down event. Navigate around the grid with the
+ * arrow keys. Enter selects the highlighted colour.
+ * @param {!KeyboardEvent} e Keyboard event.
+ * @private
+ */
+Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
+  var handled = false;
+  if (e.keyCode === Blockly.utils.KeyCodes.UP) {
+    this.moveHighlightBy_(0, -1);
+    handled = true;
+  } else if (e.keyCode === Blockly.utils.KeyCodes.DOWN) {
+    this.moveHighlightBy_(0, 1);
+    handled = true;
+  } else if (e.keyCode === Blockly.utils.KeyCodes.LEFT) {
+    this.moveHighlightBy_(-1, 0);
+    handled = true;
+  } else if (e.keyCode === Blockly.utils.KeyCodes.RIGHT) {
+    this.moveHighlightBy_(1, 0);
+    handled = true;
+  } else if (e.keyCode === Blockly.utils.KeyCodes.ENTER) {
+    // Select the highlighted colour.
+    var highlighted = this.getHighlighted_();
+    if (highlighted) {
+      var colour = highlighted && highlighted.label;
+      if (colour !== null) {
+        this.setValue(colour);
+      }
+    }
+    Blockly.DropDownDiv.hideWithoutAnimation();
+    handled = true;
+  }
+  if (handled) {
+    e.stopPropagation();
+  }
+};
+
+/**
  * Handles the given action.
  * This is only triggered when keyboard accessibility mode is enabled.
  * @param {!Blockly.Action} action The action to be handled.
@@ -326,44 +363,6 @@ Blockly.FieldColour.prototype.onBlocklyAction = function(action) {
     return true;
   }
   return Blockly.FieldColour.superClass_.onBlocklyAction.call(this, action);
-};
-
-/**
- * Handle a key down event. Navigate around the grid with the
- * arrow keys. Enter selects the highlighted colour.
- * @param {!KeyboardEvent} e Keyboard event.
- * @private
- */
-Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
-  var handled = false;
-  if (e.keyCode === Blockly.utils.KeyCodes.UP) {
-    this.moveHighlightBy_(0, -1);
-    handled = true;
-  } else if (e.keyCode === Blockly.utils.KeyCodes.DOWN) {
-    this.moveHighlightBy_(0, 1);
-    handled = true;
-  } else if (e.keyCode === Blockly.utils.KeyCodes.LEFT) {
-    // Move left one grid cell, even in RTL.
-    this.moveHighlightBy_(-1, 0);
-    handled = true;
-  } else if (e.keyCode === Blockly.utils.KeyCodes.RIGHT) {
-    this.moveHighlightBy_(1, 0);
-    handled = true;
-  } else if (e.keyCode === Blockly.utils.KeyCodes.ENTER) {
-    // Select the highlighted colour.
-    var highlighted = this.getHighlighted_();
-    if (highlighted) {
-      var colour = highlighted && highlighted.label;
-      if (colour !== null) {
-        this.setValue(colour);
-      }
-    }
-    Blockly.DropDownDiv.hideWithoutAnimation();
-    handled = true;
-  }
-  if (handled) {
-    e.stopPropagation();
-  }
 };
 
 /**
@@ -404,12 +403,12 @@ Blockly.FieldColour.prototype.moveHighlightBy_ = function(dx, dy) {
       x--;
     }
   } else if (dy < 0) {
-    // Move up one grid cell.
+    // Move up one grid cell, stop at the top.
     if (y < 0) {
       y = 0;
     }
   } else if (dy > 0) {
-    // Move down one grid cell, if there's room.
+    // Move down one grid cell, stop at the bottom.
     if (y > Math.floor(colours.length / columns) - 1) {
       y = Math.floor(colours.length / columns) - 1;
     }

@@ -206,6 +206,9 @@ Blockly.utils.aria.Role = {
   // ARIA role for a tab button.
   TAB: 'tab',
 
+  // ARIA role for a table.
+  TABLE: 'table',
+
   // ARIA role for a tab bar (i.e. a list of tab buttons).
   TABLIST: 'tablist',
 

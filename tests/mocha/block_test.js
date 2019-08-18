@@ -1072,4 +1072,53 @@ suite('Blocks', function() {
       });
     });
   });
+  suite('Icon Management', function() {
+    suite('Bubbles and Collapsing', function() {
+      setup(function() {
+        this.workspace.dispose();
+        // The new rendered workspace will get disposed by the parent teardown.
+        this.workspace = Blockly.inject('blocklyDiv');
+      });
+      test('Has Icon', function() {
+        var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            '<block type="statement_block"/>'
+        ), this.workspace);
+        block.setCommentText('test text');
+        block.comment.setVisible(true);
+        chai.assert.isTrue(block.comment.isVisible());
+        block.setCollapsed(true);
+        chai.assert.isFalse(block.comment.isVisible());
+      });
+      test('Child Has Icon', function() {
+        var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            '<block type="statement_block">' +
+            '  <statement name="STATEMENT">' +
+            '    <block type="statement_block"/>' +
+            '  </statement>' +
+            '</block>'
+        ), this.workspace);
+        var childBlock = block.getInputTargetBlock('STATEMENT');
+        childBlock.setCommentText('test text');
+        childBlock.comment.setVisible(true);
+        chai.assert.isTrue(childBlock.comment.isVisible());
+        block.setCollapsed(true);
+        chai.assert.isFalse(childBlock.comment.isVisible());
+      });
+      test('Next Block Has Icon', function() {
+        var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            '<block type="statement_block">' +
+            '  <next>' +
+            '    <block type="statement_block"/>' +
+            '  </next>' +
+            '</block>'
+        ), this.workspace);
+        var nextBlock = block.getNextBlock();
+        nextBlock.setCommentText('test text');
+        nextBlock.comment.setVisible(true);
+        chai.assert.isTrue(nextBlock.comment.isVisible());
+        block.setCollapsed(true);
+        chai.assert.isTrue(nextBlock.comment.isVisible());
+      })
+    });
+  });
 });

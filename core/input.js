@@ -178,6 +178,9 @@ Blockly.Input.prototype.isVisible = function() {
  * @package
  */
 Blockly.Input.prototype.setVisible = function(visible) {
+  // Note: Currently there are only unit tests for block.setCollapsed()
+  // because this function is package. If this function goes back to being a
+  // public API tests (lots of tests) should be added.
   var renderList = [];
   if (this.visible_ == visible) {
     return renderList;

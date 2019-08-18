@@ -45,13 +45,6 @@ Blockly.Connection = function(source, type) {
   this.sourceBlock_ = source;
   /** @type {number} */
   this.type = type;
-  // Shortcut for the databases for this connection's workspace.
-  if (source.workspace.connectionDBList) {
-    this.db_ = source.workspace.connectionDBList[type];
-    this.dbOpposite_ =
-        source.workspace.connectionDBList[Blockly.OPPOSITE_TYPE[type]];
-    this.hidden_ = !this.db_;
-  }
 };
 
 /**
@@ -105,35 +98,6 @@ Blockly.Connection.prototype.x_ = 0;
  * @protected
  */
 Blockly.Connection.prototype.y_ = 0;
-
-/**
- * Has this connection been added to the connection database?
- * @type {boolean}
- * @protected
- */
-Blockly.Connection.prototype.inDB_ = false;
-
-/**
- * Connection database for connections of this type on the current workspace.
- * @type {Blockly.ConnectionDB}
- * @protected
- */
-Blockly.Connection.prototype.db_ = null;
-
-/**
- * Connection database for connections compatible with this type on the
- * current workspace.
- * @type {Blockly.ConnectionDB}
- * @protected
- */
-Blockly.Connection.prototype.dbOpposite_ = null;
-
-/**
- * Whether this connections is hidden (not tracked in a database) or not.
- * @type {boolean}
- * @protected
- */
-Blockly.Connection.prototype.hidden_ = null;
 
 /**
  * Connect two connections together.  This is the connection on the superior
@@ -257,10 +221,6 @@ Blockly.Connection.prototype.dispose = function() {
       // Disconnect the attached normal block.
       targetBlock.unplug();
     }
-  }
-
-  if (this.inDB_) {
-    this.db_.removeConnection_(this);
   }
 
   this.disposed = true;

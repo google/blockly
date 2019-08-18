@@ -44,6 +44,11 @@ goog.require('Blockly.utils.object');
 Blockly.RenderedConnection = function(source, type) {
   Blockly.RenderedConnection.superClass_.constructor.call(this, source, type);
 
+  this.db_ = source.workspace.connectionDBList[type];
+  this.dbOpposite_ =
+    source.workspace.connectionDBList[Blockly.OPPOSITE_TYPE[type]];
+  this.hidden_ = !this.db_;
+
   /**
    * Workspace units, (0, 0) is top left of block.
    * @type {!Blockly.utils.Coordinate}
@@ -52,6 +57,42 @@ Blockly.RenderedConnection = function(source, type) {
   this.offsetInBlock_ = new Blockly.utils.Coordinate(0, 0);
 };
 Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
+
+/**
+ * Has this connection been added to the connection database?
+ * @type {boolean}
+ * @protected
+ */
+Blockly.RenderedConnection.prototype.inDB_ = false;
+
+/**
+ * Connection database for connections of this type on the current workspace.
+ * @type {Blockly.ConnectionDB}
+ * @private
+ */
+Blockly.RenderedConnection.prototype.db_ = null;
+
+/**
+ * Connection database for connections compatible with this type on the
+ * current workspace.
+ * @type {Blockly.ConnectionDB}
+ * @private
+ */
+Blockly.RenderedConnection.prototype.dbOpposite_ = null;
+
+/**
+ * Whether this connections is hidden (not tracked in a database) or not.
+ * @type {boolean}
+ * @private
+ */
+Blockly.RenderedConnection.prototype.hidden_ = null;
+
+Blockly.RenderedConnection.prototype.dispose = function() {
+  Blockly.RenderedConnection.superClass_.dispose.call(this);
+  if (this.inDB_) {
+    this.db_.removeConnection_(this);
+  }
+};
 
 /**
  * Returns the distance between this connection and another connection in

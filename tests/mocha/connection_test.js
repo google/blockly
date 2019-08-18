@@ -18,8 +18,7 @@
  * limitations under the License.
  */
 
-// TODO: Re-enable once headless connections ignore databases.
-suite.skip('Connections', function() {
+suite('Connections', function() {
   suite('Can Connect With Reason', function() {
     test('Target Null', function() {
       var connection = new Blockly.Connection({}, Blockly.INPUT_VALUE);

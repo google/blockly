@@ -35,6 +35,11 @@ goog.require('Blockly.blockRendering.Row');
 goog.require('Blockly.blockRendering.SpacerRow');
 goog.require('Blockly.blockRendering.TopRow');
 
+goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.NextConnection');
+goog.require('Blockly.blockRendering.OutputConnection');
+
+
 /**
  * An object containing all sizing information needed to draw this block.
  *
@@ -55,7 +60,7 @@ Blockly.blockRendering.RenderInfo = function(block) {
    * @type {Blockly.blockRendering.OutputConnection}
    */
   this.outputConnection = !block.outputConnection ? null :
-      new Blockly.blockRendering.OutputConnection();
+      new Blockly.blockRendering.OutputConnection(block.outputConnection);
 
   /**
    * Whether the block should be rendered as a single line, either because it's
@@ -124,13 +129,13 @@ Blockly.blockRendering.RenderInfo = function(block) {
    * An object with rendering information about the top row of the block.
    * @type {!Blockly.blockRendering.TopRow}
    */
-  this.topRow = new Blockly.blockRendering.TopRow(this.block_);
+  this.topRow = new Blockly.blockRendering.TopRow();
 
   /**
    * An object with rendering information about the bottom row of the block.
    * @type {!Blockly.blockRendering.BottomRow}
    */
-  this.bottomRow = new Blockly.blockRendering.BottomRow(this.block_);
+  this.bottomRow = new Blockly.blockRendering.BottomRow();
 
   // The position of the start point for drawing, relative to the block's
   // location.
@@ -163,13 +168,11 @@ Blockly.blockRendering.RenderInfo.prototype.measure_ = function() {
 /**
  * Create rows of Measurable objects representing all renderable parts of the
  * block.
- * @param {!Blockly.BlockSvg}  block The block to create rows from.
  * @private
  */
 Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
-  this.populateTopRow_();
+  this.topRow.populate(this.block_);
   this.rows.push(this.topRow);
-
   var activeRow = new Blockly.blockRendering.InputRow();
 
   // Icons always go on the first row, before anything else.
@@ -217,52 +220,8 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
   if (activeRow.elements.length) {
     this.rows.push(activeRow);
   }
-  this.populateBottomRow_();
+  this.bottomRow.populate(this.block_);
   this.rows.push(this.bottomRow);
-};
-
-/**
- * Create the top row and fill the elements list with all non-spacer elements
- * created.
- */
-Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
-  var hasHat = this.block_.hat ? this.block_.hat === 'cap' : Blockly.BlockSvg.START_HAT;
-  var hasPrevious = !!this.block_.previousConnection;
-  var prevBlock = this.block_.getPreviousBlock();
-  var squareCorner = !!this.block_.outputConnection ||
-      hasHat || (prevBlock && prevBlock.getNextBlock() == this.block_);
-
-  if (squareCorner) {
-    this.topRow.elements.push(new Blockly.blockRendering.SquareCorner());
-  } else {
-    this.topRow.elements.push(new Blockly.blockRendering.RoundCorner());
-  }
-
-  if (hasHat) {
-    var hat = new Blockly.blockRendering.Hat();
-    this.topRow.elements.push(hat);
-    this.startY = hat.startY;
-  } else if (hasPrevious) {
-    this.topRow.elements.push(new Blockly.blockRendering.PreviousConnection());
-  }
-};
-
-/**
- * Create the bottom row and fill the elements list with all non-spacer elements
- * created.
- */
-Blockly.blockRendering.RenderInfo.prototype.populateBottomRow_ = function() {
-  var squareCorner = !!this.block_.outputConnection || !!this.block_.getNextBlock();
-
-  if (squareCorner) {
-    this.bottomRow.elements.push(new Blockly.blockRendering.SquareCorner());
-  } else {
-    this.bottomRow.elements.push(new Blockly.blockRendering.RoundCorner());
-  }
-
-  if (this.bottomRow.hasNextConnection) {
-    this.bottomRow.elements.push(new Blockly.blockRendering.NextConnection());
-  }
 };
 
 
@@ -617,9 +576,9 @@ Blockly.blockRendering.RenderInfo.prototype.addRowSpacing_ = function() {
 
 /**
  * Create a spacer row to go between prev and next, and set its size.
- * @param {?Blockly.blockRendering.Measurable} prev The previous row, or null.
- * @param {?Blockly.blockRendering.Measurable} next The next row, or null.
- * @return {!Blockly.BlockSvg.SpacerRow} The newly created spacer row.
+ * @param {?Blockly.blockRendering.Row} prev The previous row, or null.
+ * @param {?Blockly.blockRendering.Row} next The next row, or null.
+ * @return {!Blockly.blockRendering.SpacerRow} The newly created spacer row.
  * @private
  */
 Blockly.blockRendering.RenderInfo.prototype.makeSpacerRow_ = function(prev, next) {
@@ -742,4 +701,5 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
   this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;
 
   this.height = yCursor;
+  this.startY = this.topRow.startY;
 };

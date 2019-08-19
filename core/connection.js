@@ -204,8 +204,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
 };
 
 /**
- * Dispose of this connection. Deal with connected blocks and remove this
- * connection from the database.
+ * Dispose of this connection and deal with connected blocks.
  * @package
  */
 Blockly.Connection.prototype.dispose = function() {

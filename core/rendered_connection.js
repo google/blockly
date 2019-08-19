@@ -77,7 +77,10 @@ Blockly.RenderedConnection = function(source, type) {
 Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
 
 /**
+ * Dispose of this connection. Remove it from the database (if it is
+ * tracked) and call the super-function to deal with connected blocks.
  * @override
+ * @package
  */
 Blockly.RenderedConnection.prototype.dispose = function() {
   if (this.tracked_) {
@@ -284,9 +287,14 @@ Blockly.RenderedConnection.prototype.unhighlight = function() {
 /**
  * Set whether this connections is tracked in the database or not.
  * @param {boolean} doTracking If true, start tracking. If false, stop tracking.
+ * @package
  */
 Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
   if (doTracking == this.tracked_) {
+    return;
+  }
+  if (this.sourceBlock_.isInFlyout) {
+    // Don't bother maintaining a database of connections in a flyout.
     return;
   }
   if (doTracking) {

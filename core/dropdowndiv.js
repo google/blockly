@@ -540,12 +540,12 @@ Blockly.DropDownDiv.hide = function() {
   // Start the animation by setting the translation and fading out.
   var div = Blockly.DropDownDiv.DIV_;
   // Reset to (initialX, initialY) - i.e., no translation.
-  div.style.transform = 'translate(0px, 0px)';
+  div.style.transform = 'translate(0, 0)';
   div.style.opacity = 0;
-  Blockly.DropDownDiv.animateOutTimer_ = setTimeout(function() {
-    // Finish animation - reset all values to default.
-    Blockly.DropDownDiv.hideWithoutAnimation();
-  }, Blockly.DropDownDiv.ANIMATION_TIME * 1000);
+  // Finish animation - reset all values to default.
+  Blockly.DropDownDiv.animateOutTimer_ =
+      setTimeout(Blockly.DropDownDiv.hideWithoutAnimation,
+          Blockly.DropDownDiv.ANIMATION_TIME * 1000);
   if (Blockly.DropDownDiv.onHide_) {
     Blockly.DropDownDiv.onHide_();
     Blockly.DropDownDiv.onHide_ = null;
@@ -616,7 +616,7 @@ Blockly.DropDownDiv.positionInternal_ = function(initialX, initialY, finalX, fin
 
 /**
  *  Repositions the dropdownDiv on window resize. If it doesn't know how to
- *  calculate the new position, it wll just hide it instead.
+ *  calculate the new position, it will just hide it instead.
  */
 Blockly.DropDownDiv.repositionForWindowResize = function() {
   // This condition mainly catches the dropdown div when it is being used as a

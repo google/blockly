@@ -22,8 +22,8 @@
  * @fileoverview Methods for graphically rendering a block as SVG.
  * @author fenichel@google.com (Rachel Fenichel)
  */
-
 'use strict';
+
 goog.provide('Blockly.blockRendering.Highlighter');
 
 goog.require('Blockly.blockRendering.highlightConstants');
@@ -34,6 +34,7 @@ goog.require('Blockly.blockRendering.InputRow');
 goog.require('Blockly.blockRendering.Row');
 goog.require('Blockly.blockRendering.SpacerRow');
 goog.require('Blockly.blockRendering.TopRow');
+
 
 /**
  * An object that adds highlights to a block based on the given rendering
@@ -81,14 +82,14 @@ Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
   this.steps_.push(
       Blockly.utils.svgPaths.moveBy(row.xPos, this.info_.startY));
   for (var i = 0, elem; elem = row.elements[i]; i++) {
-    if (elem.type === 'square corner') {
+    if (elem.type == 'square corner') {
       this.steps_.push(Blockly.blockRendering.highlightConstants.START_POINT);
-    } else if (elem.type === 'round corner') {
+    } else if (elem.type == 'round corner') {
       this.steps_.push(
           this.outsideCornerPaths_.topLeft(this.RTL_));
-    } else if (elem.type === 'previous connection') {
+    } else if (elem.type == 'previous connection') {
       this.steps_.push(this.notchPaths_.pathLeft);
-    } else if (elem.type === 'hat') {
+    } else if (elem.type == 'hat') {
       this.steps_.push(this.startPaths_.path(this.RTL_));
     } else if (elem.isSpacer() && elem.width != 0) {
       // The end point of the spacer needs to be offset by the highlight amount.
@@ -172,12 +173,12 @@ Blockly.blockRendering.Highlighter.prototype.drawBottomRow = function(row) {
     this.steps_.push('V', height - this.highlightOffset_);
   } else {
     var cornerElem = this.info_.bottomRow.elements[0];
-    if (cornerElem.type === 'square corner') {
+    if (cornerElem.type == 'square corner') {
       this.steps_.push(
           Blockly.utils.svgPaths.moveTo(
               row.xPos + this.highlightOffset_,
               height - this.highlightOffset_));
-    } else if (cornerElem.type === 'round corner') {
+    } else if (cornerElem.type == 'round corner') {
       this.steps_.push(Blockly.utils.svgPaths.moveTo(row.xPos, height));
       this.steps_.push(this.outsideCornerPaths_.bottomLeft());
     }
@@ -190,16 +191,15 @@ Blockly.blockRendering.Highlighter.prototype.drawLeft = function() {
     var tabBottom =
         outputConnection.connectionOffsetY + outputConnection.height;
     // Draw a line up to the bottom of the tab.
-    if (!this.RTL_) {
+    if (this.RTL_) {
+      this.steps_.push(Blockly.utils.svgPaths.moveTo(this.info_.startX, tabBottom));
+    } else {
       var left = this.info_.startX + this.highlightOffset_;
       var bottom = this.info_.height - this.highlightOffset_;
       this.steps_.push(Blockly.utils.svgPaths.moveTo(left, bottom));
       this.steps_.push('V', tabBottom);
-    } else {
-      this.steps_.push(Blockly.utils.svgPaths.moveTo(this.info_.startX, tabBottom));
     }
-    this.steps_.push(
-        this.puzzleTabPaths_.pathUp(this.RTL_));
+    this.steps_.push(this.puzzleTabPaths_.pathUp(this.RTL_));
   }
 
   if (!this.RTL_) {
@@ -224,8 +224,8 @@ Blockly.blockRendering.Highlighter.prototype.drawInlineInput = function(input) {
   if (this.RTL_) {
     // TODO: Check if this is different when the inline input is populated.
     var aboveTabHeight = input.connectionOffsetY - offset;
-    var belowTabHeight =
-        input.height - (input.connectionOffsetY + input.connectionHeight) + offset;
+    var belowTabHeight = input.height -
+        (input.connectionOffsetY + input.connectionHeight) + offset;
 
     var startX = connectionRight - offset;
 

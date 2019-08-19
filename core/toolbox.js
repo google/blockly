@@ -220,7 +220,7 @@ Blockly.Toolbox.prototype.init = function() {
 /**
  * Handle the before tree item selected action.
  * @param {Blockly.tree.BaseNode} node The newly selected node.
- * @returns {boolean} Whether or not to cancel selecting the node.
+ * @return {boolean} Whether or not to cancel selecting the node.
  * @private
  */
 Blockly.Toolbox.prototype.handleBeforeTreeSelected_ = function(node) {

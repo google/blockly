@@ -39,7 +39,7 @@ goog.require('Blockly.utils.Size');
 /**
  * Gets the height and width of an element.
  * Similar to Closure's goog.style.getSize
- * @param {Element} element Element to get size of.
+ * @param {!Element} element Element to get size of.
  * @return {!Blockly.utils.Size} Object with width/height properties.
  */
 Blockly.utils.style.getSize = function(element) {
@@ -69,7 +69,7 @@ Blockly.utils.style.getSize = function(element) {
 
 /**
  * Gets the height and width of an element when the display is not none.
- * @param {Element} element Element to get size of.
+ * @param {!Element} element Element to get size of.
  * @return {!goog.math.Size} Object with width/height properties.
  * @private
  */
@@ -88,7 +88,7 @@ Blockly.utils.style.getSizeWithDisplay_ = function(element) {
  *
  * Copied from Closure's goog.style.getStyle_
  *
- * @param {Element} element Element to get style of.
+ * @param {!Element} element Element to get style of.
  * @param {string} style Property to get (must be camelCase, not css-style.).
  * @return {string} Style value.
  * @private
@@ -107,7 +107,7 @@ Blockly.utils.style.getStyle_ = function(element, style) {
  *
  * Copied from Closure's goog.style.getComputedStyle
  *
- * @param {Element} element Element to get style of.
+ * @param {!Element} element Element to get style of.
  * @param {string} property Property to get (camel-case).
  * @return {string} Style value.
  */
@@ -130,7 +130,7 @@ Blockly.utils.style.getComputedStyle = function(element, property) {
  *
  * Copied from Closure's goog.style.getCascadedStyle
  *
- * @param {Element} element Element to get style of.
+ * @param {!Element} element Element to get style of.
  * @param {string} style Property to get (camel-case).
  * @return {string} Style value.
  */
@@ -142,7 +142,7 @@ Blockly.utils.style.getCascadedStyle = function(element, style) {
 /**
  * Returns a Coordinate object relative to the top-left of the HTML document.
  * Similar to Closure's goog.style.getPageOffset
- * @param {Element} el Element to get the page offset for.
+ * @param {!Element} el Element to get the page offset for.
  * @return {!Blockly.utils.Coordinate} The page offset.
  */
 Blockly.utils.style.getPageOffset = function(el) {
@@ -182,7 +182,7 @@ Blockly.utils.style.getViewportPageOffset = function() {
  * the browser's default style rules).
  * Copied from Closure's goog.style.getViewportPageOffset
  *
- * @param {Element} el Element to show or hide.
+ * @param {!Element} el Element to show or hide.
  * @param {*} isShown True to render the element in its default style,
  *     false to disable rendering the element.
  */
@@ -191,10 +191,10 @@ Blockly.utils.style.setElementShown = function(el, isShown) {
 };
 
 /**
- * Returns true if the element is using right to left (rtl) direction.
+ * Returns true if the element is using right to left (RTL) direction.
  * Copied from Closure's goog.style.isRightToLeft
  *
- * @param {Element} el  The element to test.
+ * @param {!Element} el The element to test.
  * @return {boolean} True for right to left, false for left to right.
  */
 Blockly.utils.style.isRightToLeft = function(el) {
@@ -204,7 +204,7 @@ Blockly.utils.style.isRightToLeft = function(el) {
 /**
  * Gets the computed border widths (on all sides) in pixels
  * Copied from Closure's goog.style.getBorderBox
- * @param {Element} element  The element to get the border widths for.
+ * @param {!Element} element  The element to get the border widths for.
  * @return {!Object} The computed border widths.
  */
 Blockly.utils.style.getBorderBox = function(element) {
@@ -228,8 +228,8 @@ Blockly.utils.style.getBorderBox = function(element) {
  * aligned as close to the container's top left corner as possible.
  * Copied from Closure's goog.style.scrollIntoContainerView
  *
- * @param {Element} element The element to make visible.
- * @param {Element} container The container to scroll. If not set, then the
+ * @param {!Element} element The element to make visible.
+ * @param {!Element} container The container to scroll. If not set, then the
  *     document scroll element will be used.
  * @param {boolean=} opt_center Whether to center the element in the container.
  *     Defaults to false.
@@ -250,8 +250,8 @@ Blockly.utils.style.scrollIntoContainerView = function(
  * aligned as close to the container's top left corner as possible.
  * Copied from Closure's goog.style.getContainerOffsetToScrollInto
  *
- * @param {Element} element The element to make visible.
- * @param {Element} container The container to scroll. If not set, then the
+ * @param {!Element} element The element to make visible.
+ * @param {!Element} container The container to scroll. If not set, then the
  *     document scroll element will be used.
  * @param {boolean=} opt_center Whether to center the element in the container.
  *     Defaults to false.

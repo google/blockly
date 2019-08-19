@@ -165,7 +165,8 @@ Blockly.CursorSvg.prototype.showWithCoordinates_ = function() {
   var wsCoordinate = workspaceNode.getWsCoordinate();
   this.currentCursorSvg = this.cursorSvgLine_;
   this.setParent_(this.workspace_.svgBlockCanvas_);
-  this.positionLine_(wsCoordinate.x, wsCoordinate.y, Blockly.CursorSvg.CURSOR_WIDTH);
+  this.positionLine_(wsCoordinate.x, wsCoordinate.y,
+      Blockly.CursorSvg.CURSOR_WIDTH);
   this.showCurrent_();
 };
 
@@ -191,8 +192,8 @@ Blockly.CursorSvg.prototype.showWithInputOutput_ = function() {
   var connection = /** @type {Blockly.Connection} */
       (this.getCurNode().getLocation());
   this.currentCursorSvg = this.cursorInputOutput_;
-  var path = Blockly.utils.svgPaths.moveTo(0,0) +
-    Blockly.blockRendering.constants.PUZZLE_TAB.pathDown;
+  var path = Blockly.utils.svgPaths.moveTo(0, 0) +
+      Blockly.blockRendering.constants.PUZZLE_TAB.pathDown;
   this.cursorInputOutput_.setAttribute('d', path);
   this.setParent_(connection.getSourceBlock().getSvgRoot());
   this.positionInputOutput_(connection);
@@ -313,8 +314,9 @@ Blockly.CursorSvg.prototype.positionInputOutput_ = function(connection) {
   var x = connection.getOffsetInBlock().x;
   var y = connection.getOffsetInBlock().y;
 
-  this.cursorInputOutput_.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
-            (connection.getSourceBlock().RTL ? ' scale(-1 1)' : ''));
+  this.cursorInputOutput_.setAttribute('transform',
+      'translate(' + x + ',' + y + ')' +
+      (connection.getSourceBlock().RTL ? ' scale(-1 1)' : ''));
 };
 
 /**

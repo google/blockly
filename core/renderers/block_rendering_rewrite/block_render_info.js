@@ -22,7 +22,6 @@
  * @fileoverview Methods for graphically rendering a block as SVG.
  * @author fenichel@google.com (Rachel Fenichel)
  */
-
 'use strict';
 
 goog.provide('Blockly.blockRendering.RenderInfo');
@@ -34,6 +33,7 @@ goog.require('Blockly.blockRendering.InputRow');
 goog.require('Blockly.blockRendering.Row');
 goog.require('Blockly.blockRendering.SpacerRow');
 goog.require('Blockly.blockRendering.TopRow');
+
 
 /**
  * An object containing all sizing information needed to draw this block.
@@ -115,7 +115,7 @@ Blockly.blockRendering.RenderInfo = function(block) {
   this.rows = [];
 
   /**
-   * An array of measureable objects containing hidden icons.
+   * An array of measurable objects containing hidden icons.
    * @type {!Array.<!Blockly.blockRendering.Icon>}
    */
   this.hiddenIcons = [];
@@ -175,8 +175,7 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
   // Icons always go on the first row, before anything else.
   var icons = this.block_.getIcons();
   if (icons.length) {
-    for (var i = 0; i < icons.length; i++) {
-      var icon = icons[i];
+    for (var i = 0, icon; icon = icons[i]; i++) {
       var iconInfo = new Blockly.blockRendering.Icon(icon);
       if (this.isCollapsed && icon.collapseHidden) {
         this.hiddenIcons.push(iconInfo);
@@ -189,8 +188,7 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
   var lastInput = undefined;
   // Loop across all of the inputs on the block, creating objects for anything
   // that needs to be rendered and breaking the block up into visual rows.
-  for (var i = 0; i < this.block_.inputList.length; i++) {
-    var input = this.block_.inputList[i];
+  for (var i = 0, input; input = this.block_.inputList[i]; i++) {
     if (!input.isVisible()) {
       continue;
     }
@@ -201,8 +199,7 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
     }
 
     // All of the fields in an input go on the same row.
-    for (var f = 0; f < input.fieldRow.length; f++) {
-      var field = input.fieldRow[f];
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
       activeRow.elements.push(new Blockly.blockRendering.Field(field, input));
     }
     this.addInput_(input, activeRow);
@@ -226,11 +223,11 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
  * created.
  */
 Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
-  var hasHat = this.block_.hat ? this.block_.hat === 'cap' : Blockly.BlockSvg.START_HAT;
+  var hasHat = this.block_.hat ? this.block_.hat == 'cap' : Blockly.BlockSvg.START_HAT;
   var hasPrevious = !!this.block_.previousConnection;
   var prevBlock = this.block_.getPreviousBlock();
-  var squareCorner = !!this.block_.outputConnection ||
-      hasHat || (prevBlock && prevBlock.getNextBlock() == this.block_);
+  var squareCorner = !!this.block_.outputConnection || hasHat ||
+      (prevBlock && prevBlock.getNextBlock() == this.block_);
 
   if (squareCorner) {
     this.topRow.elements.push(new Blockly.blockRendering.SquareCorner());
@@ -264,7 +261,6 @@ Blockly.blockRendering.RenderInfo.prototype.populateBottomRow_ = function() {
     this.bottomRow.elements.push(new Blockly.blockRendering.NextConnection());
   }
 };
-
 
 /**
  * Add an input element to the active row, if needed, and record the type of the
@@ -321,8 +317,7 @@ Blockly.blockRendering.RenderInfo.prototype.shouldStartNewRow_ = function(input,
  * @private
  */
 Blockly.blockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
-  for (var r = 0; r < this.rows.length; r++) {
-    var row = this.rows[r];
+  for (var i = 0, row; row = this.rows[i]; i++) {
     var oldElems = row.elements;
     row.elements = [];
     // No spacing needed before the corner on the top row or the bottom row.
@@ -496,8 +491,7 @@ Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
   var widestStatementRowFields = 0;
   var blockWidth = 0;
   var widestRowWithConnectedBlocks = 0;
-  for (var r = 0; r < this.rows.length; r++) {
-    var row = this.rows[r];
+  for (var i = 0, row; row = this.rows[i]; i++) {
     row.measure();
     blockWidth = Math.max(blockWidth, row.width);
     if (row.hasStatement) {
@@ -514,15 +508,13 @@ Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
 
   this.width = blockWidth;
 
-  for (var r = 0; r < this.rows.length; r++) {
-    var row = this.rows[r];
+  for (var i = 0, row; row = this.rows[i]; i++) {
     if (row.hasStatement) {
       row.statementEdge = this.statementEdge;
     }
   }
 
-  this.widthWithChildren =
-      Math.max(blockWidth, widestRowWithConnectedBlocks);
+  this.widthWithChildren = Math.max(blockWidth, widestRowWithConnectedBlocks);
 
   if (this.outputConnection) {
     this.startX = this.outputConnection.width;
@@ -538,8 +530,7 @@ Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
  * @private
  */
 Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
-  for (var r = 0; r < this.rows.length; r++) {
-    var row = this.rows[r];
+  for (var i = 0, row; row = this.rows[i]; i++) {
     if (!row.hasInlineInput) {
       if (row.hasStatement) {
         var statementInput = row.getLastInput();
@@ -549,7 +540,7 @@ Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
         var currentWidth = row.width;
         var desiredWidth = this.width - this.startX;
       }
-      if (row.type === 'bottom row' && row.hasFixedWidth) {
+      if (row.type == 'bottom row' && row.hasFixedWidth) {
         desiredWidth = Blockly.blockRendering.constants.MAX_BOTTOM_WIDTH;
       }
       var missingSpace = desiredWidth - currentWidth;
@@ -593,7 +584,7 @@ Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
     }
     row.width += missingSpace;
     // Top and bottom rows are always left aligned.
-  } else if (row.type === 'top row' || row.type === 'bottom row') {
+  } else if (row.type == 'top row' || row.type == 'bottom row') {
     row.getLastSpacer().width += missingSpace;
     row.width += missingSpace;
   }
@@ -609,7 +600,7 @@ Blockly.blockRendering.RenderInfo.prototype.addRowSpacing_ = function() {
 
   for (var r = 0; r < oldRows.length; r++) {
     this.rows.push(oldRows[r]);
-    if (r !== oldRows.length - 1) {
+    if (r != oldRows.length - 1) {
       this.rows.push(this.makeSpacerRow_(oldRows[r], oldRows[r + 1]));
     }
   }
@@ -644,7 +635,7 @@ Blockly.blockRendering.RenderInfo.prototype.makeSpacerRow_ = function(prev, next
 Blockly.blockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
   // The width of the spacer before the bottom row should be the same as the
   // bottom row.
-  if (next.type === 'bottom row' && next.hasFixedWidth) {
+  if (next.type == 'bottom row' && next.hasFixedWidth) {
     return next.width;
   }
   return this.width - this.startX;
@@ -658,12 +649,12 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, 
  * @private
  */
 Blockly.blockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
-  // If we have an empty block add a spacer to increase the height
-  if (prev.type === 'top row' && next.type === 'bottom row') {
+  // If we have an empty block add a spacer to increase the height.
+  if (prev.type == 'top row' && next.type == 'bottom row') {
     return Blockly.blockRendering.constants.EMPTY_BLOCK_SPACER_HEIGHT;
   }
-  // Top and bottom rows act as a spacer so we don't need any extra padding
-  if (prev.type === 'top row' || next.type === 'bottom row') {
+  // Top and bottom rows act as a spacer so we don't need any extra padding.
+  if (prev.type == 'top row' || next.type == 'bottom row') {
     return Blockly.blockRendering.constants.NO_PADDING;
   }
   if (prev.hasExternalInput && next.hasExternalInput) {
@@ -702,6 +693,7 @@ Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row, e
   }
   return result;
 };
+
 /**
  * Make any final changes to the rendering information object.  In particular,
  * store the y position of each row, and record the height of the full block.
@@ -713,8 +705,7 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
   // accesses and sets properties that already exist on the objects.
   var widestRowWithConnectedBlocks = 0;
   var yCursor = 0;
-  for (var r = 0; r < this.rows.length; r++) {
-    var row = this.rows[r];
+  for (var i = 0, row; row = this.rows[i]; i++) {
     row.yPos = yCursor;
     row.xPos = this.startX;
     yCursor += row.height;
@@ -731,8 +722,7 @@ Blockly.blockRendering.RenderInfo.prototype.finalize_ = function() {
       yCursor += diff;
     }
     var xCursor = row.xPos;
-    for (var e = 0; e < row.elements.length; e++) {
-      var elem = row.elements[e];
+    for (var j = 0, elem; elem = row.elements[j]; j++) {
       elem.xPos = xCursor;
       elem.centerline = this.getElemCenterline_(row, elem);
       xCursor += elem.width;

@@ -108,7 +108,7 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
 
 /**
  * Draw a debug rectangle for a horizontal spacer.
- * @param {!Blockly.BlockSvg.InRowSpacer} elem The spacer to render.
+ * @param {!Blockly.blockRendering.InRowSpacer} elem The spacer to render.
  * @param {number} rowHeight The height of the container row.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
@@ -137,7 +137,7 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
 
 /**
  * Draw a debug rectangle for an in-row element.
- * @param {!Blockly.BlockSvg.Measurable} elem The element to render.
+ * @param {!Blockly.blockRendering.Measurable} elem The element to render.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
@@ -212,7 +212,7 @@ Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
 
 /**
  * Draw a debug rectangle for a non-empty row.
- * @param {!Blockly.BlockSvg.Row} row The non-empty row to render.
+ * @param {!Blockly.blockRendering.Row} row The non-empty row to render.
  * @param {number} cursorY The y position of the top of the row.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
@@ -252,7 +252,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
 
 /**
  * Draw debug rectangles for a non-empty row and all of its subcomponents.
- * @param {!Blockly.BlockSvg.Row} row The non-empty row to render.
+ * @param {!Blockly.blockRendering.Row} row The non-empty row to render.
  * @param {number} cursorY The y position of the top of the row.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package

@@ -1,28 +1,6 @@
-/**
- * @license
- * Visual Blocks Editor
- *
- * Copyright 2019 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-'use strict';
-
 goog.provide('Blockly.blockRendering.Measurable');
 
 goog.require('Blockly.blockRendering.constants');
-
 
 /**
  * The base class to represent a part of a block that takes up space during
@@ -484,7 +462,8 @@ Blockly.blockRendering.Row.prototype.isSpacer = function() {
 
 Blockly.blockRendering.Row.prototype.measure = function() {
   var connectedBlockWidths = 0;
-  for (var i = 0, elem; elem = this.elements[i]; i++) {
+  for (var e = 0; e < this.elements.length; e++) {
+    var elem = this.elements[e];
     this.width += elem.width;
     if (elem.isInput) {
       if (elem.type == 'statement input') {
@@ -582,9 +561,10 @@ Blockly.blockRendering.TopRow.prototype.getPreviousConnection = function() {
 };
 
 Blockly.blockRendering.TopRow.prototype.measure = function() {
-  for (var i = 0, elem; elem = this.elements[i]; i++) {
+  for (var e = 0; e < this.elements.length; e++) {
+    var elem = this.elements[e];
     this.width += elem.width;
-    if (!elem.isSpacer()) {
+    if (!(elem.isSpacer())) {
       if (elem.type == 'hat') {
         this.startY = elem.startY;
         this.height = this.height + elem.height;
@@ -626,9 +606,10 @@ Blockly.blockRendering.BottomRow.prototype.getNextConnection = function() {
 };
 
 Blockly.blockRendering.BottomRow.prototype.measure = function() {
-  for (var i = 0, elem; elem = this.elements[i]; i++) {
+  for (var e = 0; e < this.elements.length; e++) {
+    var elem = this.elements[e];
     this.width += elem.width;
-    if (!elem.isSpacer()) {
+    if (!(elem.isSpacer())) {
       if (elem.type == 'next connection') {
         this.height = this.height + elem.height;
         this.overhangY = elem.height;

@@ -37,7 +37,7 @@ goog.require('Blockly.Connection');
  */
 Blockly.ConnectionDB = function() {
   /**
-   * Array of connections sorted by y coordinate.
+   * Array of connections sorted by y position in workspace units.
    * @type {!Array.<!Blockly.Connection>}
    * @private
    */
@@ -45,32 +45,38 @@ Blockly.ConnectionDB = function() {
 };
 
 /**
- * Add a connection to the database.  Must not already exist in DB.
+ * Add a connection to the database. Should not already exist in the database.
  * @param {!Blockly.Connection} connection The connection to be added.
+ * @param {number} yPos The y position used to decide where to insert the
+ *    connection.
+ * @package
  */
-Blockly.ConnectionDB.prototype.addConnection = function(connection) {
+Blockly.ConnectionDB.prototype.addConnection = function(connection, yPos) {
   if (connection.getSourceBlock().isInFlyout) {
     // Don't bother maintaining a database of connections in a flyout.
     return;
   }
-  var position = this.findPositionForConnection_(connection);
-  this.connections_.splice(position, 0, connection);
+  var index = this.calculateIndexForYPos_(yPos);
+  this.connections_.splice(index, 0, connection);
 };
 
 /**
- * Find the given connection.
+ * Finds the index of the given connection.
+ *
  * Starts by doing a binary search to find the approximate location, then
- *     linearly searches nearby for the exact connection.
+ * linearly searches nearby for the exact connection.
  * @param {!Blockly.Connection} conn The connection to find.
+ * @param {number} yPos The y position used to find the index of the connection.
  * @return {number} The index of the connection, or -1 if the connection was
  *     not found.
+ * @private
  */
-Blockly.ConnectionDB.prototype.findConnection = function(conn) {
+Blockly.ConnectionDB.prototype.findIndexOfConnection_ = function(conn, yPos) {
   if (!this.connections_.length) {
     return -1;
   }
 
-  var bestGuess = this.findPositionForConnection_(conn);
+  var bestGuess = this.calculateIndexForYPos_(yPos);
   if (bestGuess >= this.connections_.length) {
     // Not in list
     return -1;
@@ -98,15 +104,13 @@ Blockly.ConnectionDB.prototype.findConnection = function(conn) {
 };
 
 /**
- * Finds a candidate position for inserting this connection into the list.
- * This will be in the correct y order but makes no guarantees about ordering in
- *     the x axis.
- * @param {!Blockly.Connection} connection The connection to insert.
+ * Finds the correct index for the given y position.
+ * @param {number} yPos The y position used to decide where to
+ *    insert the connection.
  * @return {number} The candidate index.
  * @private
  */
-Blockly.ConnectionDB.prototype.findPositionForConnection_ = function(
-    connection) {
+Blockly.ConnectionDB.prototype.calculateIndexForYPos_ = function(yPos) {
   if (!this.connections_.length) {
     return 0;
   }
@@ -114,9 +118,9 @@ Blockly.ConnectionDB.prototype.findPositionForConnection_ = function(
   var pointerMax = this.connections_.length;
   while (pointerMin < pointerMax) {
     var pointerMid = Math.floor((pointerMin + pointerMax) / 2);
-    if (this.connections_[pointerMid].y_ < connection.y_) {
+    if (this.connections_[pointerMid].y_ < yPos) {
       pointerMin = pointerMid + 1;
-    } else if (this.connections_[pointerMid].y_ > connection.y_) {
+    } else if (this.connections_[pointerMid].y_ > yPos) {
       pointerMax = pointerMid;
     } else {
       pointerMin = pointerMid;
@@ -129,14 +133,15 @@ Blockly.ConnectionDB.prototype.findPositionForConnection_ = function(
 /**
  * Remove a connection from the database.  Must already exist in DB.
  * @param {!Blockly.Connection} connection The connection to be removed.
- * @private
+ * @param {number} yPos The y position used to find the index of the connection.
+ * @throws {Error} If the connection cannot be found in the database.
  */
-Blockly.ConnectionDB.prototype.removeConnection_ = function(connection) {
-  var removalIndex = this.findConnection(connection);
-  if (removalIndex == -1) {
+Blockly.ConnectionDB.prototype.removeConnection = function(connection, yPos) {
+  var index = this.findIndexOfConnection_(connection, yPos);
+  if (index == -1) {
     throw Error('Unable to find connection in connectionDB.');
   }
-  this.connections_.splice(removalIndex, 1);
+  this.connections_.splice(index, 1);
 };
 
 /**

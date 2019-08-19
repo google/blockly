@@ -82,7 +82,7 @@ Blockly.RenderedConnection.prototype.tracked_ = false;
 Blockly.RenderedConnection.prototype.dispose = function() {
   Blockly.RenderedConnection.superClass_.dispose.call(this);
   if (this.tracked_) {
-    this.db_.removeConnection_(this);
+    this.db_.removeConnection(this, this.y_);
   }
 };
 
@@ -155,8 +155,8 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom_ = function(staticConnection) 
  */
 Blockly.RenderedConnection.prototype.moveTo = function(x, y) {
   if (this.tracked_) {
-    this.db_.removeConnection_(this);
-    this.db_.addConnection(this);
+    this.db_.removeConnection(this, this.y_);
+    this.db_.addConnection(this, y);
   }
   this.x_ = x;
   this.y_ = y;
@@ -333,9 +333,9 @@ Blockly.RenderedConnection.prototype.setHidden = function(hidden) {
     return;
   }
   if (track) {
-    this.db_.addConnection(this);
+    this.db_.addConnection(this, this.y_);
   } else {
-    this.db_.removeConnection_(this);
+    this.db_.removeConnection(this, this.y_);
   }
   this.tracked_ = track;
 };

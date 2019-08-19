@@ -45,7 +45,7 @@ Blockly.blockRendering.Debug = function() {
   /**
    * The SVG root of the block that is being rendered.  Debug elements will
    * be attached to this root.
-   * @type {!SVGElement}
+   * @type {SVGElement}
    */
   this.svgRoot_ = null;
 
@@ -69,7 +69,8 @@ Blockly.blockRendering.Debug = function() {
  * @package
  */
 Blockly.blockRendering.Debug.prototype.clearElems = function() {
-  for (var i = 0, elem; elem = this.debugElements_[i]; i++) {
+  for (var i = 0, elem; i < this.debugElements_.length; i++) {
+    elem = this.debugElements_[i];
     Blockly.utils.dom.removeNode(elem);
   }
 

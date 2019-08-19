@@ -263,14 +263,6 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
     angle += 360;
   }
 
-  this.setAngle(angle);
-};
-
-/**
- * Set the angle value and update the graph.
- * @param {number} angle New angle
- */
-Blockly.FieldAngle.prototype.setAngle = function(angle) {
   // Do offsetting.
   if (Blockly.FieldAngle.CLOCKWISE) {
     angle = Blockly.FieldAngle.OFFSET + 360 - angle;
@@ -281,6 +273,14 @@ Blockly.FieldAngle.prototype.setAngle = function(angle) {
     angle -= 360;
   }
 
+  this.setAngle(angle);
+};
+
+/**
+ * Set the angle value and update the graph.
+ * @param {number} angle New angle
+ */
+Blockly.FieldAngle.prototype.setAngle = function(angle) {
   // Do rounding.
   if (Blockly.FieldAngle.ROUND) {
     angle = Math.round(angle / Blockly.FieldAngle.ROUND) *
@@ -351,17 +351,24 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
 Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
   Blockly.FieldAngle.superClass_.onHtmlInputKeyDown_.call(this, e);
 
-  var handled = false;
-  if (e.keyCode === Blockly.utils.KeyCodes.LEFT ||
-      e.keyCode === Blockly.utils.KeyCodes.DOWN) {
-    this.setAngle(Number(this.getValue()) + Blockly.FieldAngle.ROUND);
-    handled = true;
+  var multiplier;
+  if (e.keyCode === Blockly.utils.KeyCodes.LEFT) {
+    // decrement (increment in RTL)
+    multiplier = this.sourceBlock_.RTL ? 1 : -1;
   } else if (e.keyCode === Blockly.utils.KeyCodes.RIGHT ||
       e.keyCode === Blockly.utils.KeyCodes.UP) {
-    this.setAngle(Number(this.getValue()) - Blockly.FieldAngle.ROUND);
-    handled = true;
+    // increment (decrement in RTL)
+    multiplier = this.sourceBlock_.RTL ? -1 : 1;
+  } else if (e.keyCode === Blockly.utils.KeyCodes.DOWN) {
+    // decrement
+    multiplier = -1;
+  } else if (e.keyCode === Blockly.utils.KeyCodes.UP) {
+    // increment
+    multiplier = 1;
   }
-  if (handled) {
+  if (multiplier) {
+    this.setAngle(Number(this.getValue()) +
+        (multiplier * Blockly.FieldAngle.ROUND));
     e.preventDefault();
     e.stopPropagation();
   }

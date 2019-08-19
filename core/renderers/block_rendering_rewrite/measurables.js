@@ -1,4 +1,8 @@
 goog.provide('Blockly.blockRendering.Measurable');
+goog.provide('Blockly.blockRendering.Input');
+goog.provide('Blockly.blockRendering.InRowSpacer');
+goog.provide('Blockly.blockRendering.NextConnection');
+goog.provide('Blockly.blockRendering.PreviousConnection');
 
 goog.require('Blockly.blockRendering.constants');
 
@@ -432,88 +436,14 @@ Blockly.blockRendering.RoundCorner = function() {
 };
 goog.inherits(Blockly.blockRendering.RoundCorner, Blockly.blockRendering.Measurable);
 
-
-Blockly.blockRendering.Row = function() {
-  this.type = 'row';
-  this.yPos = 0;
-  this.elements = [];
-  this.width = 0;
-  this.height = 0;
-  this.widthWithConnectedBlocks = 0;
-
-  this.hasExternalInput = false;
-  this.hasStatement = false;
-  this.hasInlineInput = false;
-  this.hasDummyInput = false;
-  this.hasJaggedEdge = false;
-};
-
 /**
- * The shape object to use when drawing previous and next connections.
- * TODO (#2803): Formalize type annotations for these objects.
- * @type {Object}
+ * An object containing information about a spacer between two elements on a
+ * row.
+ * @param {number} width The width of the spacer.
+ * @package
+ * @constructor
+ * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.Row.prototype.notchShape =
-    Blockly.blockRendering.constants.NOTCH;
-
-Blockly.blockRendering.Row.prototype.isSpacer = function() {
-  return false;
-};
-
-Blockly.blockRendering.Row.prototype.measure = function() {
-  var connectedBlockWidths = 0;
-  for (var e = 0; e < this.elements.length; e++) {
-    var elem = this.elements[e];
-    this.width += elem.width;
-    if (elem.isInput) {
-      if (elem.type == 'statement input') {
-        connectedBlockWidths += elem.connectedBlockWidth;
-      } else if (elem.type == 'external value input' &&
-          elem.connectedBlockWidth != 0) {
-        connectedBlockWidths += (elem.connectedBlockWidth - elem.connectionWidth);
-      }
-    }
-    if (!(elem.isSpacer())) {
-      this.height = Math.max(this.height, elem.height);
-    }
-  }
-  this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
-};
-
-Blockly.blockRendering.Row.prototype.getLastInput = function() {
-  for (var i = this.elements.length - 1; i >= 0; i--) {
-    var elem = this.elements[i];
-    if (elem.isSpacer()) {
-      continue;
-    }
-    if (elem.isInput) {
-      return elem;
-    } else if (elem.isField()) {
-      return elem.parentInput;
-    }
-  }
-  // Return null if there are no inputs.
-  return null;
-};
-
-Blockly.blockRendering.Row.prototype.getFirstSpacer = function() {
-  return this.elements[0];
-};
-
-Blockly.blockRendering.Row.prototype.getLastSpacer = function() {
-  return this.elements[this.elements.length - 1];
-};
-
-Blockly.blockRendering.BetweenRowSpacer = function(height, width) {
-  this.type = 'between-row spacer';
-  this.width = width;
-  this.height = height;
-  this.followsStatement = false;
-  this.widthWithConnectedBlocks = 0;
-};
-goog.inherits(Blockly.blockRendering.BetweenRowSpacer,
-    Blockly.blockRendering.Measurable);
-
 Blockly.blockRendering.InRowSpacer = function(width) {
   this.type = 'in-row spacer';
   this.width = width;
@@ -522,100 +452,3 @@ Blockly.blockRendering.InRowSpacer = function(width) {
 goog.inherits(Blockly.blockRendering.InRowSpacer,
     Blockly.blockRendering.Measurable);
 
-/**
- * An object containing information about what elements are in the top row of a
- * block as well as spacing information for the top row.
- * Elements in a top row can consist of corners, hats and previous connections.
- * @param {[type]} block [description]
- * @package
- */
-Blockly.blockRendering.TopRow = function(block) {
-  Blockly.blockRendering.TopRow.superClass_.constructor.call(this);
-
-  this.elements = [];
-  this.type = 'top row';
-  this.startY = 0;
-
-  this.hasPreviousConnection = !!block.previousConnection;
-  this.connection = block.previousConnection;
-
-  var precedesStatement = block.inputList.length &&
-      block.inputList[0].type == Blockly.NEXT_STATEMENT;
-
-  // This is the minimum height for the row. If one of its elements has a greater
-  // height it will be overwritten in the compute pass.
-  if (precedesStatement && !block.isCollapsed()) {
-    this.height = Blockly.blockRendering.constants.LARGE_PADDING;
-  } else {
-    this.height = Blockly.blockRendering.constants.MEDIUM_PADDING;
-  }
-};
-goog.inherits(Blockly.blockRendering.TopRow, Blockly.blockRendering.Row);
-
-
-Blockly.blockRendering.TopRow.prototype.getPreviousConnection = function() {
-  if (this.hasPreviousConnection) {
-    return this.elements[2];
-  }
-  return null;
-};
-
-Blockly.blockRendering.TopRow.prototype.measure = function() {
-  for (var e = 0; e < this.elements.length; e++) {
-    var elem = this.elements[e];
-    this.width += elem.width;
-    if (!(elem.isSpacer())) {
-      if (elem.type == 'hat') {
-        this.startY = elem.startY;
-        this.height = this.height + elem.height;
-      }
-      this.height = Math.max(this.height, elem.height);
-    }
-  }
-  this.widthWithConnectedBlocks = this.width;
-};
-
-Blockly.blockRendering.BottomRow = function(block) {
-  Blockly.blockRendering.BottomRow.superClass_.constructor.call(this);
-  this.type = 'bottom row';
-  this.hasNextConnection = !!block.nextConnection;
-  this.connection = block.nextConnection;
-  this.overhangY = 0;
-
-  var followsStatement =
-      block.inputList.length &&
-      block.inputList[block.inputList.length - 1].type == Blockly.NEXT_STATEMENT;
-  this.hasFixedWidth = followsStatement && block.getInputsInline();
-
-  // This is the minimum height for the row. If one of its elements has a greater
-  // height it will be overwritten in the compute pass.
-  if (followsStatement) {
-    this.height = Blockly.blockRendering.constants.LARGE_PADDING;
-  } else {
-    this.height = this.notchShape.height;
-  }
-};
-goog.inherits(Blockly.blockRendering.BottomRow,
-    Blockly.blockRendering.Row);
-
-Blockly.blockRendering.BottomRow.prototype.getNextConnection = function() {
-  if (this.hasNextConnection) {
-    return this.elements[2];
-  }
-  return null;
-};
-
-Blockly.blockRendering.BottomRow.prototype.measure = function() {
-  for (var e = 0; e < this.elements.length; e++) {
-    var elem = this.elements[e];
-    this.width += elem.width;
-    if (!(elem.isSpacer())) {
-      if (elem.type == 'next connection') {
-        this.height = this.height + elem.height;
-        this.overhangY = elem.height;
-      }
-      this.height = Math.max(this.height, elem.height);
-    }
-  }
-  this.widthWithConnectedBlocks = this.width;
-};

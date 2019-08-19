@@ -307,7 +307,6 @@ Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
 Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
   for (var i = 0, row; row = this.info_.rows[i]; i++) {
     for (var j = 0, elem; elem = row.elements[j]; j++) {
-      var elem = row.elements[e];
       if (elem.isInlineInput()) {
         this.drawInlineInput_(elem);
       } else if (elem.isIcon() || elem.isField()) {

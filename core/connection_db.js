@@ -49,16 +49,12 @@ Blockly.ConnectionDB = function() {
  * @param {!Blockly.Connection} connection The connection to be added.
  */
 Blockly.ConnectionDB.prototype.addConnection = function(connection) {
-  if (connection.inDB_) {
-    throw Error('Connection already in database.');
-  }
   if (connection.getSourceBlock().isInFlyout) {
     // Don't bother maintaining a database of connections in a flyout.
     return;
   }
   var position = this.findPositionForConnection_(connection);
   this.connections_.splice(position, 0, connection);
-  connection.inDB_ = true;
 };
 
 /**
@@ -136,14 +132,10 @@ Blockly.ConnectionDB.prototype.findPositionForConnection_ = function(
  * @private
  */
 Blockly.ConnectionDB.prototype.removeConnection_ = function(connection) {
-  if (!connection.inDB_) {
-    throw Error('Connection not in database.');
-  }
   var removalIndex = this.findConnection(connection);
   if (removalIndex == -1) {
     throw Error('Unable to find connection in connectionDB.');
   }
-  connection.inDB_ = false;
   this.connections_.splice(removalIndex, 1);
 };
 
@@ -206,7 +198,6 @@ Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
 
   return neighbours;
 };
-
 
 /**
  * Is the candidate connection close to the reference connection.

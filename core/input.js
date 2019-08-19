@@ -194,9 +194,9 @@ Blockly.Input.prototype.setVisible = function(visible) {
   if (this.connection) {
     // Has a connection.
     if (visible) {
-      renderList = this.connection.unhideAll();
+      renderList = this.connection.startTrackingAll();
     } else {
-      this.connection.hideAll();
+      this.connection.stopTrackingAll();
     }
     var child = this.connection.targetBlock();
     if (child) {

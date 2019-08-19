@@ -274,17 +274,68 @@ Blockly.RenderedConnection.prototype.highlight = function() {
 };
 
 /**
- * Unhide this connection, as well as all down-stream connections on any block
- * attached to this connection.  This happens when a block is expanded.
- * Also unhides down-stream comments.
+ * Remove the highlighting around this connection.
+ */
+Blockly.RenderedConnection.prototype.unhighlight = function() {
+  Blockly.utils.dom.removeNode(Blockly.Connection.highlightedPath_);
+  delete Blockly.Connection.highlightedPath_;
+};
+
+/**
+ * Set whether this connections is tracked in the database or not.
+ * @param {boolean} doTracking If true, start tracking. If false, stop tracking.
+ */
+Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
+  if (doTracking == this.tracked_) {
+    return;
+  }
+  if (doTracking) {
+    this.db_.addConnection(this, this.y_);
+  } else {
+    this.db_.removeConnection(this, this.y_);
+  }
+  this.tracked_ = doTracking;
+};
+
+/**
+ * Stop tracking this connection, as well as all down-stream connections on
+ * any block attached to this connection. This happens when a block is
+ * collapsed.
+ *
+ * Also closes down-stream icons/bubbles.
+ * @package
+ */
+Blockly.RenderedConnection.prototype.stopTrackingAll = function() {
+  this.setTracking(false);
+  if (this.targetConnection) {
+    var blocks = this.targetBlock().getDescendants(false);
+    for (var i = 0; i < blocks.length; i++) {
+      var block = blocks[i];
+      // Stop tracking connections of all children.
+      var connections = block.getConnections_(true);
+      for (var j = 0; j < connections.length; j++) {
+        connections[j].setTracking(false);
+      }
+      // Close all bubbles of all children.
+      var icons = block.getIcons();
+      for (var j = 0; j < icons.length; j++) {
+        icons[j].setVisible(false);
+      }
+    }
+  }
+};
+
+/**
+ * Start tracking this connection, as well as all down-stream connections on
+ * any block attached to this connection. This happens when a block is expanded.
  * @return {!Array.<!Blockly.Block>} List of blocks to render.
  */
-Blockly.RenderedConnection.prototype.unhideAll = function() {
-  this.setHidden(false);
-  // All blocks that need unhiding must be unhidden before any rendering takes
-  // place, since rendering requires knowing the dimensions of lower blocks.
-  // Also, since rendering a block renders all its parents, we only need to
-  // render the leaf nodes.
+Blockly.RenderedConnection.prototype.startTrackingAll = function() {
+  this.setTracking(true);
+  // All blocks that are not tracked must start tracking before any
+  // rendering takes place, since rendering requires knowing the dimensions
+  // of lower blocks. Also, since rendering a block renders all its parents,
+  // we only need to render the leaf nodes.
   var renderList = [];
   if (this.type != Blockly.INPUT_VALUE && this.type != Blockly.NEXT_STATEMENT) {
     // Only spider down.
@@ -304,7 +355,7 @@ Blockly.RenderedConnection.prototype.unhideAll = function() {
       connections = block.getConnections_(true);
     }
     for (var i = 0; i < connections.length; i++) {
-      renderList.push.apply(renderList, connections[i].unhideAll());
+      renderList.push.apply(renderList, connections[i].startTrackingAll());
     }
     if (!renderList.length) {
       // Leaf block.
@@ -312,57 +363,6 @@ Blockly.RenderedConnection.prototype.unhideAll = function() {
     }
   }
   return renderList;
-};
-
-/**
- * Remove the highlighting around this connection.
- */
-Blockly.RenderedConnection.prototype.unhighlight = function() {
-  Blockly.utils.dom.removeNode(Blockly.Connection.highlightedPath_);
-  delete Blockly.Connection.highlightedPath_;
-};
-
-/**
- * Set whether this connections is hidden (not tracked in a database) or not.
- * @param {boolean} hidden True if connection is hidden.
- */
-Blockly.RenderedConnection.prototype.setHidden = function(hidden) {
-  // Temporary: if we're setting hidden to true we want to set tracked to false.
-  var track = !hidden;
-  if (track == this.tracked_) {
-    return;
-  }
-  if (track) {
-    this.db_.addConnection(this, this.y_);
-  } else {
-    this.db_.removeConnection(this, this.y_);
-  }
-  this.tracked_ = track;
-};
-
-/**
- * Hide this connection, as well as all down-stream connections on any block
- * attached to this connection.  This happens when a block is collapsed.
- * Also hides down-stream comments.
- */
-Blockly.RenderedConnection.prototype.hideAll = function() {
-  this.setHidden(true);
-  if (this.targetConnection) {
-    var blocks = this.targetBlock().getDescendants(false);
-    for (var i = 0; i < blocks.length; i++) {
-      var block = blocks[i];
-      // Hide all connections of all children.
-      var connections = block.getConnections_(true);
-      for (var j = 0; j < connections.length; j++) {
-        connections[j].setHidden(true);
-      }
-      // Close all bubbles of all children.
-      var icons = block.getIcons();
-      for (var j = 0; j < icons.length; j++) {
-        icons[j].setVisible(false);
-      }
-    }
-  }
 };
 
 /**

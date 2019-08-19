@@ -208,7 +208,7 @@ Blockly.navigation.insertFromFlyout = function() {
   // Connections are hidden when the block is first created.  Normally there's
   // enough time for them to become unhidden in the user's mouse movements,
   // but not here.
-  newBlock.setConnectionsHidden(false);
+  newBlock.startTrackingConnections();
   workspace.getCursor().setCurNode(
       Blockly.ASTNode.createBlockNode(newBlock));
   if (!Blockly.navigation.modify_()) {

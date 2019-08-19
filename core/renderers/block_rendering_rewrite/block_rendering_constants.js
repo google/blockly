@@ -289,6 +289,7 @@ Blockly.blockRendering.constants.INSIDE_CORNERS = (function() {
       Blockly.utils.svgPaths.point(radius, radius));
 
   return {
+    width: radius,
     height: radius,
     pathTop: innerTopLeftCorner,
     pathBottom: innerBottomLeftCorner

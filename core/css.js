@@ -194,11 +194,11 @@ Blockly.Css.CONTENT = [
     'border-radius: 2px;',
     'padding: 4px;',
     '-webkit-user-select: none;',
-    'box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, .3);',
+    'box-shadow: 0px 0px 3px 1px rgba(0,0,0,.3);',
   '}',
 
   '.blocklyDropDownDiv.focused {',
-    'box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, .3);',
+    'box-shadow: 0px 0px 6px 1px rgba(0,0,0,.3);',
   '}',
 
   '.blocklyDropDownContent {',
@@ -353,7 +353,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyReplaceable .blocklyPath {',
-    'fill-opacity: 0.5;',
+    'fill-opacity: .5;',
   '}',
 
   '.blocklyReplaceable .blocklyPathLight,',
@@ -671,7 +671,7 @@ Blockly.Css.CONTENT = [
 
   '.blocklyVerticalCursor {',
     'stroke-width: 3px;',
-    'fill: rgba(255,255,255,0.5);',
+    'fill: rgba(255,255,255,.5);',
   '}',
 
   '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-checkbox,',
@@ -806,7 +806,7 @@ Blockly.Css.CONTENT = [
   '.blocklyColourTable>tr>td {',
     'padding: 0;',
     'cursor: pointer;',
-    'border: 0.5px solid transparent;',
+    'border: .5px solid transparent;',
     'height: 25px;',
     'width: 25px;',
     'box-sizing: border-box;',
@@ -816,7 +816,7 @@ Blockly.Css.CONTENT = [
   '.blocklyColourTable>tr>td.blocklyColourHighlighted {',
     'border-color: #eee;',
     'position: relative;',
-    'box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.3);',
+    'box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);',
   '}',
 
   '.blocklyColourSelected, .blocklyColourSelected:hover {',
@@ -854,11 +854,11 @@ Blockly.Css.CONTENT = [
     'overflow-x: hidden;',
     'max-height: 100%;',
     'z-index: 20000;',  /* Arbitrary, but some apps depend on it... */
-    'box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, .3);',
+    'box-shadow: 0px 0px 3px 1px rgba(0,0,0,.3);',
   '}',
 
   '.blocklyWidgetDiv .goog-menu.focused {',
-    'box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, .3);',
+    'box-shadow: 0px 0px 6px 1px rgba(0,0,0,.3);',
   '}',
 
   '.blocklyDropDownDiv .goog-menu {',
@@ -957,7 +957,7 @@ Blockly.Css.CONTENT = [
 
   '.blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-icon, ',
   '.blocklyDropDownDiv .goog-menuitem-disabled .goog-menuitem-icon {',
-    'opacity: 0.3;',
+    'opacity: .3;',
     'filter: alpha(opacity=30);',
   '}',
 
@@ -969,7 +969,7 @@ Blockly.Css.CONTENT = [
 
   '.blocklyDropDownDiv .goog-menuitem-highlight, ',
   '.blocklyDropDownDiv .goog-menuitem-hover {',
-    'background-color: rgba(0, 0, 0, 0.2);',
+    'background-color: rgba(0,0,0,.2);',
   '}',
 
   /* State: selected/checked. */

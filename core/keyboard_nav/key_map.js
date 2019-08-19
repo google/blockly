@@ -29,6 +29,7 @@ goog.provide('Blockly.user.keyMap');
 
 goog.require('Blockly.utils.KeyCodes');
 
+
 /**
  * Holds the serialized key to key action mapping.
  * @type {Object<string, Blockly.Action>}
@@ -39,7 +40,7 @@ Blockly.user.keyMap.map_ = {};
  * List of modifier keys checked when serializing the key event.
  * @type {Array<string>}
  */
-Blockly.user.keyMap.modifierKeys = ['Shift','Control','Alt','Meta'];
+Blockly.user.keyMap.modifierKeys = ['Shift', 'Control', 'Alt', 'Meta'];
 
 /**
  * Update the key map to contain the new action.

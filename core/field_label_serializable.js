@@ -51,7 +51,7 @@ goog.inherits(Blockly.FieldLabelSerializable, Blockly.FieldLabel);
  * Construct a FieldLabelSerializable from a JSON arg object,
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (text, and class).
- * @returns {!Blockly.FieldLabelSerializable} The new field instance.
+ * @return {!Blockly.FieldLabelSerializable} The new field instance.
  * @package
  * @nocollapse
  */

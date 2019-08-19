@@ -691,7 +691,7 @@ Blockly.tree.BaseNode.prototype.isUserCollapsible = function() {
 
 /**
  * Creates HTML Element for the node.
- * @return {!Element} html element
+ * @return {!Element} HTML element
  * @protected
  */
 Blockly.tree.BaseNode.prototype.toDom = function() {
@@ -727,7 +727,7 @@ Blockly.tree.BaseNode.prototype.getPixelIndent_ = function() {
 };
 
 /**
- * @return {!Element} The html element for the row.
+ * @return {!Element} The HTML element for the row.
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getRowDom = function() {
@@ -758,7 +758,7 @@ Blockly.tree.BaseNode.prototype.getRowClassName = function() {
 };
 
 /**
- * @return {!Element} The html element for the label.
+ * @return {!Element} The HTML element for the label.
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getLabelDom = function() {
@@ -770,7 +770,7 @@ Blockly.tree.BaseNode.prototype.getLabelDom = function() {
 };
 
 /**
- * @return {!Element} The html for the icon.
+ * @return {!Element} The HTML for the icon.
  * @protected
  */
 Blockly.tree.BaseNode.prototype.getIconDom = function() {

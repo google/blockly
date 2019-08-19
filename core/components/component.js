@@ -26,6 +26,7 @@
 'use strict';
 
 goog.provide('Blockly.Component');
+
 goog.provide('Blockly.Component.Error');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.IdGenerator');

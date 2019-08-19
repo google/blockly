@@ -22,13 +22,15 @@
  * @fileoverview Methods for graphically rendering a block as SVG.
  * @author fenichel@google.com (Rachel Fenichel)
  */
-
 'use strict';
+
 goog.provide('Blockly.blockRendering.Debug');
+
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Highlighter');
 goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Measurable');
+
 
 /**
  * An object that renders rectangles and dots for debugging rendering code.
@@ -69,8 +71,7 @@ Blockly.blockRendering.Debug = function() {
  * @package
  */
 Blockly.blockRendering.Debug.prototype.clearElems = function() {
-  for (var i = 0, elem; i < this.debugElements_.length; i++) {
-    elem = this.debugElements_[i];
+  for (var i = 0, elem; elem = this.debugElements_[i]; i++) {
     Blockly.utils.dom.removeNode(elem);
   }
 
@@ -79,7 +80,7 @@ Blockly.blockRendering.Debug.prototype.clearElems = function() {
 
 /**
  * Draw a debug rectangle for a spacer (empty) row.
- * @param {!Blockly.blockRendering.Row} row The row to render
+ * @param {!Blockly.blockRendering.Row} row The row to render.
  * @param {number} cursorY The y position of the top of the row.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
@@ -102,7 +103,7 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
 
 /**
  * Draw a debug rectangle for a horizontal spacer.
- * @param {!Blockly.BlockSvg.InRowSpacer} elem The spacer to render
+ * @param {!Blockly.BlockSvg.InRowSpacer} elem The spacer to render.
  * @param {number} rowHeight The height of the container row.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
@@ -131,7 +132,7 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
 
 /**
  * Draw a debug rectangle for an in-row element.
- * @param {!Blockly.BlockSvg.Measurable} elem The element to render
+ * @param {!Blockly.BlockSvg.Measurable} elem The element to render.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
@@ -220,7 +221,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
       {
         'class': 'elemRenderingRect blockRenderDebug',
         'x': isRtl ? -(row.xPos + row.width) : row.xPos,
-        'y': cursorY ,
+        'y': cursorY,
         'width': row.width,
         'height': row.height,
       },
@@ -233,7 +234,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
       {
         'class': 'blockRenderDebug',
         'x': isRtl ? -(row.xPos + row.widthWithConnectedBlocks) : row.xPos,
-        'y': cursorY ,
+        'y': cursorY,
         'width': row.widthWithConnectedBlocks,
         'height': row.height,
         'stroke': this.randomColour_,
@@ -252,8 +253,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY, isRtl) {
-  for (var e = 0; e < row.elements.length; e++) {
-    var elem = row.elements[e];
+  for (var i = 0, elem; elem = row.elements[i]; i++) {
     if (elem.isSpacer()) {
       this.drawSpacerElem(elem, row.height, isRtl);
     } else {
@@ -320,8 +320,7 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
   this.randomColour_ = '#' + Math.floor(Math.random() * 16777215).toString(16);
 
   var cursorY = 0;
-  for (var r = 0; r < info.rows.length; r++) {
-    var row = info.rows[r];
+  for (var i = 0, row; row = info.rows[i]; i++) {
     if (row.isSpacer()) {
       this.drawSpacerRow(row, cursorY, info.RTL);
     } else {

@@ -22,8 +22,8 @@
  * @fileoverview Methods for graphically rendering a block as SVG.
  * @author fenichel@google.com (Rachel Fenichel)
  */
-
 'use strict';
+
 goog.provide('Blockly.blockRendering.constants');
 
 goog.require('Blockly.utils.svgPaths');

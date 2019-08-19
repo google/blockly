@@ -197,7 +197,7 @@ Blockly.tree.TreeControl.prototype.setSelectedItem = function(node) {
   if (node == this.selectedItem_) {
     return;
   }
-  
+
   if (this.onBeforeSelected_ &&
     !this.onBeforeSelected_.call(this.toolbox_, node)) {
     return;
@@ -327,7 +327,7 @@ Blockly.tree.TreeControl.prototype.attachEvents_ = function() {
       'mousedown', this, this.handleMouseEvent_);
   this.onClickWrapper_ = Blockly.bindEventWithChecks_(el,
       'click', this, this.handleMouseEvent_);
-  
+
   this.onKeydownWrapper_ = Blockly.bindEvent_(el,
       'keydown', this, this.handleKeyEvent_);
 
@@ -381,9 +381,8 @@ Blockly.tree.TreeControl.prototype.handleTouchEvent_ = function(e) {
   if (node && e.type === 'touchend') {
     // Fire asynchronously since onMouseDown takes long enough that the browser
     // would fire the default mouse event before this method returns.
-    setTimeout(function() {
-      node.onClick_(e);  // Same behaviour for click and touch.
-    }, 1);
+    // Same behaviour for click and touch.
+    setTimeout(node.onClick_.bind(node, e), 1);
   }
 };
 

@@ -79,6 +79,11 @@ Blockly.RenderedConnection.prototype.dbOpposite_ = null;
  */
 Blockly.RenderedConnection.prototype.tracked_ = false;
 
+/**
+ * Dispose of this connection. Remove it from the database (if it is
+ * tracked) and call the super-function to deal with connected blocks.
+ * @package
+ */
 Blockly.RenderedConnection.prototype.dispose = function() {
   Blockly.RenderedConnection.superClass_.dispose.call(this);
   if (this.tracked_) {

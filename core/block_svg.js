@@ -1447,6 +1447,14 @@ Blockly.BlockSvg.prototype.appendInput_ = function(type, name) {
   return input;
 };
 
+/**
+ * Tell the block to wait for an outside source to call
+ * startTrackingConnections, rather than starting connection
+ * tracking automatically.
+ *
+ * Also tells children of this block to wait.
+ * @package
+ */
 Blockly.BlockSvg.prototype.waitToTrackConnections = function() {
   this.waitToTrackConnections_ = true;
   var children = this.getChildren();
@@ -1455,6 +1463,15 @@ Blockly.BlockSvg.prototype.waitToTrackConnections = function() {
   }
 };
 
+/**
+ * Tell this block's connections to add themselves to the connection
+ * database (i.e. start tracking).
+ *
+ * All following/next blocks will be told to start tracking. Inner blocks
+ * (i.e. blocks attached to value/statement inputs) will be told to start
+ * tracking if this block is not collapsed.
+ * @package
+ */
 Blockly.BlockSvg.prototype.startTrackingConnections = function() {
   if (this.previousConnection) {
     this.previousConnection.setTracking(true);

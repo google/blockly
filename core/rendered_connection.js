@@ -68,18 +68,11 @@ Blockly.RenderedConnection = function(source, type) {
   this.offsetInBlock_ = new Blockly.utils.Coordinate(0, 0);
 
   /**
-   * Has this connection been added to the connection database?
+   * Whether this connections is tracked in the database or not.
    * @type {boolean}
    * @private
    */
-  this.inDB_ = false;
-
-  /**
-   * Whether this connections is hidden (not tracked in a database) or not.
-   * @type {boolean}
-   * @private
-   */
-  this.hidden_ = !this.db_;
+  this.tracked_ = false;
 };
 Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
 
@@ -87,7 +80,7 @@ Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
  * @override
  */
 Blockly.RenderedConnection.prototype.dispose = function() {
-  if (this.inDB_) {
+  if (this.tracked_) {
     this.db_.removeConnection_(this);
   }
   Blockly.RenderedConnection.superClass_.dispose.call(this);
@@ -161,16 +154,12 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom_ = function(staticConnection) 
  * @param {number} y New absolute y coordinate, in workspace coordinates.
  */
 Blockly.RenderedConnection.prototype.moveTo = function(x, y) {
-  // Remove it from its old location in the database (if already present)
-  if (this.inDB_) {
+  if (this.tracked_) {
     this.db_.removeConnection_(this);
+    this.db_.addConnection(this);
   }
   this.x_ = x;
   this.y_ = y;
-  // Insert it into its new location in the database.
-  if (!this.hidden_) {
-    this.db_.addConnection(this);
-  }
 };
 
 /**
@@ -338,12 +327,17 @@ Blockly.RenderedConnection.prototype.unhighlight = function() {
  * @param {boolean} hidden True if connection is hidden.
  */
 Blockly.RenderedConnection.prototype.setHidden = function(hidden) {
-  this.hidden_ = hidden;
-  if (hidden && this.inDB_) {
-    this.db_.removeConnection_(this);
-  } else if (!hidden && !this.inDB_) {
-    this.db_.addConnection(this);
+  // Temporary: if we're setting hidden to true we want to set tracked to false.
+  var track = !hidden;
+  if (track == this.tracked_) {
+    return;
   }
+  if (track) {
+    this.db_.addConnection(this);
+  } else {
+    this.db_.removeConnection_(this);
+  }
+  this.tracked_ = track;
 };
 
 /**

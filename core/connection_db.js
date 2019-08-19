@@ -52,10 +52,6 @@ Blockly.ConnectionDB = function() {
  * @package
  */
 Blockly.ConnectionDB.prototype.addConnection = function(connection, yPos) {
-  if (connection.getSourceBlock().isInFlyout) {
-    // Don't bother maintaining a database of connections in a flyout.
-    return;
-  }
   var index = this.calculateIndexForYPos_(yPos);
   this.connections_.splice(index, 0, connection);
 };

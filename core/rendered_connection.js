@@ -289,6 +289,10 @@ Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
   if (doTracking == this.tracked_) {
     return;
   }
+  if (this.sourceBlock_.isInFlyout) {
+    // Don't bother maintaining a database of connections in a flyout.
+    return;
+  }
   if (doTracking) {
     this.db_.addConnection(this, this.y_);
   } else {

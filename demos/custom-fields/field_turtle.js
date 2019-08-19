@@ -64,7 +64,7 @@ CustomFields.FieldTurtle = function(
   // that helps keep the code organized and DRY.
   CustomFields.FieldTurtle.superClass_.constructor.call(
       this, value, opt_validator);
-  this.size_ = new Blockly.utils.Size(72, 40);
+  this.size_ = new Blockly.utils.Size(0, 0);
 };
 goog.inherits(CustomFields.FieldTurtle, Blockly.Field);
 
@@ -87,6 +87,11 @@ CustomFields.FieldTurtle.prototype.SERIALIZABLE = true;
 // .blocklyDraggable's cursor is defined as (vis. grab). Most fields define
 // this property as 'default'.
 CustomFields.FieldTurtle.prototype.CURSOR = 'pointer';
+
+// How far to move the text to keep it to the right of the turtle.
+// May change if the turtle gets fancy enough.
+CustomFields.FieldTurtle.prototype.TEXT_OFFSET_X = 80;
+
 
 // These are the different options for our turtle. Being declared this way
 // means they are static, and not translatable. If you want to do something
@@ -236,27 +241,32 @@ CustomFields.FieldTurtle.prototype.render_ = function() {
     case 'Stovepipe':
       this.stovepipe_.style.display = '';
       this.turtleGroup_.setAttribute('transform', 'translate(0,12)');
-      this.textElement_.setAttribute('transform', 'translate(60,20)');
+      this.textElement_.setAttribute(
+          'transform', 'translate(' + this.TEXT_OFFSET_X + ',20)');
       break;
     case 'Crown':
       this.crown_.style.display = '';
       this.turtleGroup_.setAttribute('transform', 'translate(0,9)');
-      this.textElement_.setAttribute('transform', 'translate(60,16)');
+      this.textElement_.setAttribute(
+          'transform', 'translate(' + this.TEXT_OFFSET_X + ',16)');
       break;
     case 'Mask':
       this.mask_.style.display = '';
       this.turtleGroup_.setAttribute('transform', 'translate(0,1.2)');
-      this.textElement_.setAttribute('transform', 'translate(60,4)');
+      this.textElement_.setAttribute('transform',
+          'translate(' + this.TEXT_OFFSET_X + ',4)');
       break;
     case 'Propeller':
       this.propeller_.style.display = '';
       this.turtleGroup_.setAttribute('transform', 'translate(0,6)');
-      this.textElement_.setAttribute('transform', 'translate(60,12)');
+      this.textElement_.setAttribute('transform',
+          'translate(' + this.TEXT_OFFSET_X + ',12)');
       break;
     case 'Fedora':
       this.fedora_.style.display = '';
       this.turtleGroup_.setAttribute('transform', 'translate(0,6)');
-      this.textElement_.setAttribute('transform', 'translate(60,12)');
+      this.textElement_.setAttribute('transform',
+          'translate(' + this.TEXT_OFFSET_X + ',12)');
       break;
   }
 
@@ -310,14 +320,14 @@ CustomFields.FieldTurtle.prototype.renderEditor_ = function() {
 CustomFields.FieldTurtle.prototype.updateSize_ = function() {
   var size = this.movableGroup_.getBBox();
   if (this.borderRect_) {
-    this.borderRect_.setAttribute('width',
-      size.width + Blockly.BlockSvg.SEP_SPACE_X);
-    this.borderRect_.setAttribute('height', size.height + 9);
+    size.width += Blockly.Field.X_PADDING;
+    size.height += Blockly.Field.X_PADDING;
+    this.borderRect_.setAttribute('width', size.width);
+    this.borderRect_.setAttribute('height', size.height);
   }
   // Note how both the width and the height can be dynamic.
   this.size_.width = size.width;
-  this.size_.height = size.height + 10 +
-      (Blockly.BlockSvg.INLINE_PADDING_Y * 2);
+  this.size_.height = size.height;
 };
 
 // Called when the field is clicked. It is usually used to show an editor,
@@ -657,7 +667,8 @@ CustomFields.FieldTurtle.prototype.createView_ = function() {
   this.fedora_.style.display = 'none';
 
   this.movableGroup_.appendChild(this.textElement_);
-  this.textElement_.setAttribute('transform', 'translate(60,20)');
+  this.textElement_.setAttribute(
+      'transform', 'translate(' + this.TEXT_OFFSET_X + ',20)');
 
   this.defs_ = Blockly.utils.dom.createSvgElement('defs', {}, this.fieldGroup_);
   this.polkadotPattern_ = Blockly.utils.dom.createSvgElement('pattern',

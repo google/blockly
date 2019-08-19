@@ -239,10 +239,10 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
   conn.x_ = baseX + dxy.x;
   conn.y_ = baseY + dxy.y;
 
-  // findPositionForConnection finds an index for insertion, which is always
+  // calculateIndexForYPos_ finds an index for insertion, which is always
   // after any block with the same y index.  We want to search both forward
   // and back, so search on both sides of the index.
-  var closestIndex = this.findPositionForConnection_(conn);
+  var closestIndex = this.calculateIndexForYPos_(conn.y_);
 
   var bestConnection = null;
   var bestRadius = maxRadius;

@@ -30,6 +30,11 @@ goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Highlighter');
 goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.BottomRow');
+goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Row');
+goog.require('Blockly.blockRendering.SpacerRow');
+goog.require('Blockly.blockRendering.TopRow');
 
 
 /**
@@ -321,7 +326,7 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
 
   var cursorY = 0;
   for (var i = 0, row; row = info.rows[i]; i++) {
-    if (row.isSpacer()) {
+    if (row.type == 'between-row spacer') {
       this.drawSpacerRow(row, cursorY, info.RTL);
     } else {
       this.drawRowWithElements(row, cursorY, info.RTL);

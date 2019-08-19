@@ -31,6 +31,11 @@ goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Highlighter');
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.BottomRow');
+goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Row');
+goog.require('Blockly.blockRendering.SpacerRow');
+goog.require('Blockly.blockRendering.TopRow');
 
 
 /**
@@ -301,13 +306,12 @@ Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
  */
 Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
   for (var i = 0, row; row = this.info_.rows[i]; i++) {
-    if (!row.isSpacer()) {
-      for (var j = 0, elem; elem = row.elements[j]; j++) {
-        if (elem.isInlineInput()) {
-          this.drawInlineInput_(elem);
-        } else if (elem.isIcon() || elem.isField()) {
-          this.layoutField_(elem);
-        }
+    for (var j = 0, elem; elem = row.elements[j]; j++) {
+      var elem = row.elements[e];
+      if (elem.isInlineInput()) {
+        this.drawInlineInput_(elem);
+      } else if (elem.isIcon() || elem.isField()) {
+        this.layoutField_(elem);
       }
     }
   }

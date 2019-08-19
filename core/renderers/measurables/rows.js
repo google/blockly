@@ -75,6 +75,21 @@ Blockly.blockRendering.Row = function() {
   this.width = 0;
 
   /**
+   * The minimum height of the row.
+   * @package
+   * @type {number}
+   */
+  this.minHeight = 0;
+
+  /**
+   * The minimum width of the row, from the left edge of the block to the right.
+   * Does not include child blocks unless they are inline.
+   * @package
+   * @type {number}
+   */
+  this.minWidth = 0;
+
+  /**
    * The width of the row, from the left edge of the block to the edge of the
    * block or any connected child blocks.
    * @package
@@ -246,9 +261,9 @@ Blockly.blockRendering.TopRow = function(block) {
   // This is the minimum height for the row. If one of its elements has a
   // greater height it will be overwritten in the compute pass.
   if (precedesStatement && !block.isCollapsed()) {
-    this.height = Blockly.blockRendering.constants.LARGE_PADDING;
+    this.minHeight = Blockly.blockRendering.constants.LARGE_PADDING;
   } else {
-    this.height = Blockly.blockRendering.constants.MEDIUM_PADDING;
+    this.minHeight = Blockly.blockRendering.constants.MEDIUM_PADDING;
   }
 };
 goog.inherits(Blockly.blockRendering.TopRow, Blockly.blockRendering.Row);
@@ -271,8 +286,8 @@ Blockly.blockRendering.TopRow.prototype.getPreviousConnection = function() {
  * @override
  */
 Blockly.blockRendering.TopRow.prototype.measure = function() {
-  this.width = 0;
-  this.height = 0;
+  this.width = this.minWidth;
+  this.height = this.minHeight;
   for (var e = 0; e < this.elements.length; e++) {
     var elem = this.elements[e];
     this.width += elem.width;
@@ -334,9 +349,9 @@ Blockly.blockRendering.BottomRow = function(block) {
   // This is the minimum height for the row. If one of its elements has a greater
   // height it will be overwritten in the compute pass.
   if (followsStatement) {
-    this.height = Blockly.blockRendering.constants.LARGE_PADDING;
+    this.minHeight = Blockly.blockRendering.constants.LARGE_PADDING;
   } else {
-    this.height = this.notchShape.height;
+    this.minHeight = this.notchShape.height;
   }
 };
 goog.inherits(Blockly.blockRendering.BottomRow,
@@ -360,8 +375,8 @@ Blockly.blockRendering.BottomRow.prototype.getNextConnection = function() {
  * @override
  */
 Blockly.blockRendering.BottomRow.prototype.measure = function() {
-  this.width = 0;
-  this.height = 0;
+  this.width = this.minWidth;
+  this.height = this.minHeight;
   for (var e = 0; e < this.elements.length; e++) {
     var elem = this.elements[e];
     this.width += elem.width;
@@ -419,8 +434,8 @@ goog.inherits(Blockly.blockRendering.InputRow,
  * @package
  */
 Blockly.blockRendering.InputRow.prototype.measure = function() {
-  this.width = 0;
-  this.height = 0;
+  this.width = this.minWidth;
+  this.height = this.minHeight;
   var connectedBlockWidths = 0;
   for (var e = 0; e < this.elements.length; e++) {
     var elem = this.elements[e];

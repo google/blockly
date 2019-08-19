@@ -29,7 +29,6 @@ goog.provide('Blockly.FieldAngle');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
-goog.require('Blockly.navigation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.userAgent');

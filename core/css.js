@@ -194,6 +194,11 @@ Blockly.Css.CONTENT = [
     'border-radius: 2px;',
     'padding: 4px;',
     '-webkit-user-select: none;',
+    'box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, .3);',
+  '}',
+
+  '.blocklyDropDownDiv.focused {',
+    'box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, .3);',
   '}',
 
   '.blocklyDropDownContent {',
@@ -645,7 +650,23 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyDropdownMenu {',
+    'border-radius: 2px;',
     'padding: 0 !important;',
+  '}',
+
+  '.blocklyWidgetDiv .blocklyDropdownMenu .goog-menuitem, ',
+  '.blocklyDropDownDiv .blocklyDropdownMenu .goog-menuitem {',
+    /* 28px on the left for icon or checkbox. */
+    'padding-left: 28px;',
+  '}',
+
+  /* BiDi override for the resting state. */
+  /* #noflip */
+  '.blocklyWidgetDiv .blocklyDropdownMenu .goog-menuitem.goog-menuitem-rtl, ',
+  '.blocklyDropDownDiv .blocklyDropdownMenu .goog-menuitem.goog-menuitem-rtl {',
+     /* Flip left/right padding for BiDi. */
+    'padding-left: 5px;',
+    'padding-right: 28px;',
   '}',
 
   '.blocklyVerticalCursor {',
@@ -654,7 +675,9 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-checkbox,',
-  '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-icon {',
+  '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-icon,',
+  '.blocklyDropDownDiv .goog-option-selected .goog-menuitem-checkbox,',
+  '.blocklyDropDownDiv .goog-option-selected .goog-menuitem-icon {',
     'background: url(<<<PATH>>>/sprites.png) no-repeat -48px -16px;',
   '}',
 
@@ -818,7 +841,7 @@ Blockly.Css.CONTENT = [
 
   '.blocklyWidgetDiv .goog-menu {',
     'background: #fff;',
-    'border-color: #ccc #666 #666 #ccc;',
+    'border-color: transparent;',
     'border-style: solid;',
     'border-width: 1px;',
     'cursor: default;',
@@ -831,6 +854,11 @@ Blockly.Css.CONTENT = [
     'overflow-x: hidden;',
     'max-height: 100%;',
     'z-index: 20000;',  /* Arbitrary, but some apps depend on it... */
+    'box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, .3);',
+  '}',
+
+  '.blocklyWidgetDiv .goog-menu.focused {',
+    'box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, .3);',
   '}',
 
   '.blocklyDropDownDiv .goog-menu {',
@@ -875,19 +903,12 @@ Blockly.Css.CONTENT = [
     'font: normal 13px Arial, sans-serif;',
     'list-style: none;',
     'margin: 0;',
-     /* 28px on the left for icon or checkbox; 7em on the right for shortcut. */
+     /* 7em on the right for shortcut. */
     'min-width: 7em;',
-    'padding: 5px 5px 5px 28px;',
+    'border: none;',
+    'padding: 6px 15px;',
     'white-space: nowrap;',
-  '}',
-
-  /* BiDi override for the resting state. */
-  /* #noflip */
-  '.blocklyWidgetDiv .goog-menuitem.goog-menuitem-rtl, ',
-  '.blocklyDropDownDiv .goog-menuitem.goog-menuitem-rtl {',
-     /* Flip left/right padding for BiDi. */
-    'padding-left: 5px;',
-    'padding-right: 28px;',
+    'cursor: pointer;',
   '}',
 
   /* If a menu doesn't have checkable items or items with icons,
@@ -910,11 +931,23 @@ Blockly.Css.CONTENT = [
 
   '.blocklyWidgetDiv .goog-menuitem-content, ',
   '.blocklyDropDownDiv .goog-menuitem-content {',
-    'color: #000;',
     'font: normal 13px Arial, sans-serif;',
   '}',
 
+  '.blocklyWidgetDiv .goog-menuitem-content {',
+    'color: #000;',
+  '}',
+
+  '.blocklyDropDownDiv .goog-menuitem-content {',
+    'color: #fff;',
+  '}',
+
   /* State: disabled. */
+  '.blocklyWidgetDiv .goog-menuitem-disabled, ',
+  '.blocklyDropDownDiv .goog-menuitem-disabled {',
+    'cursor: inherit;',
+  '}',
+
   '.blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-accel, ',
   '.blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-content, ',
   '.blocklyDropDownDiv .goog-menuitem-disabled .goog-menuitem-accel, ',
@@ -931,14 +964,7 @@ Blockly.Css.CONTENT = [
   /* State: hover. */
   '.blocklyWidgetDiv .goog-menuitem-highlight, ',
   '.blocklyWidgetDiv .goog-menuitem-hover {',
-    'background-color: #d6e9f8;',
-     /* Use an explicit top and bottom border so that the selection is visible',
-      * in high contrast mode. */
-    'border-color: #d6e9f8;',
-    'border-style: dotted;',
-    'border-width: 1px 0;',
-    'padding-bottom: 4px;',
-    'padding-top: 4px;',
+    'background-color: #f1f3f4;',
   '}',
 
   '.blocklyDropDownDiv .goog-menuitem-highlight, ',

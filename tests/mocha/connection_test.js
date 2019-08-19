@@ -19,8 +19,31 @@
  */
 
 suite('Connections', function() {
+  suite('Can Connect With Reason', function() {
+    test('Target Null', function() {
+      var connection = new Blockly.Connection({}, Blockly.INPUT_VALUE);
+      chai.assert.equal(Blockly.Connection.REASON_TARGET_NULL,
+          connection.canConnectWithReason_(null));
+    });
+    test('Target Self', function() {
+      var block = {workspace: 1};
+      var connection1 = new Blockly.Connection(block, Blockly.INPUT_VALUE);
+      var connection2 = new Blockly.Connection(block, Blockly.OUTPUT_VALUE);
 
-  suite.skip('Rendered', function() {
+      chai.assert.equal(Blockly.Connection.REASON_SELF_CONNECTION,
+          connection1.canConnectWithReason_(connection2));
+    });
+    test('Different Workspaces', function() {
+      var connection1 = new Blockly.Connection(
+          {workspace: 1}, Blockly.INPUT_VALUE);
+      var connection2 = new Blockly.Connection(
+          {workspace: 2}, Blockly.OUTPUT_VALUE);
+
+      chai.assert.equal(Blockly.Connection.REASON_DIFFERENT_WORKSPACES,
+          connection1.canConnectWithReason_(connection2));
+    });
+  });
+  suite.skip('Hiddenness - Obsolete', function() {
     function assertAllConnectionsHiddenState(block, hidden) {
       var connections = block.getConnections_(true);
       for (var i = 0; i < connections.length; i++) {

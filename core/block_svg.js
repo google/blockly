@@ -141,6 +141,7 @@ Blockly.utils.object.inherits(Blockly.BlockSvg, Blockly.Block);
  * Height is in workspace units.
  */
 Blockly.BlockSvg.prototype.height = 0;
+
 /**
  * Width of this block, including any connected value blocks.
  * Width is in workspace units.
@@ -161,6 +162,15 @@ Blockly.BlockSvg.prototype.dragStartXY_ = null;
  * @private
  */
 Blockly.BlockSvg.prototype.warningTextDb_ = null;
+
+/**
+ * Should the block tell its connections to start tracking inside the render
+ * method? Or it should it wait for startTrackingConnections to be called
+ * separately?
+ * @type {boolean}
+ * @private
+ */
+Blockly.BlockSvg.prototype.waitToTrackConnections_ = false;
 
 /**
  * Constant for identifying rows that are to be rendered inline.
@@ -1437,35 +1447,41 @@ Blockly.BlockSvg.prototype.appendInput_ = function(type, name) {
   return input;
 };
 
-/**
- * Set whether the connections are hidden (not tracked in a database) or not.
- * Recursively walk down all child blocks (except collapsed blocks).
- * @param {boolean} hidden True if connections are hidden.
- * @package
- */
-Blockly.BlockSvg.prototype.setConnectionsHidden = function(hidden) {
-  if (!hidden && this.isCollapsed()) {
-    if (this.outputConnection) {
-      this.outputConnection.setHidden(hidden);
+Blockly.BlockSvg.prototype.waitToTrackConnections = function() {
+  this.waitToTrackConnections_ = true;
+  var children = this.getChildren();
+  for (var i = 0, child; child = children[i]; i++) {
+    child.waitToTrackConnections();
+  }
+};
+
+Blockly.BlockSvg.prototype.startTrackingConnections = function() {
+  if (this.previousConnection) {
+    this.previousConnection.setHidden(false);
+  }
+  if (this.outputConnection) {
+    this.outputConnection.setHidden(false);
+  }
+  if (this.nextConnection) {
+    this.nextConnection.setHidden(false);
+    var child = this.nextConnection.targetBlock();
+    if (child) {
+      child.startTrackingConnections();
     }
-    if (this.previousConnection) {
-      this.previousConnection.setHidden(hidden);
-    }
-    if (this.nextConnection) {
-      this.nextConnection.setHidden(hidden);
-      var child = this.nextConnection.targetBlock();
-      if (child) {
-        child.setConnectionsHidden(hidden);
-      }
-    }
-  } else {
-    var myConnections = this.getConnections_(true);
-    for (var i = 0, connection; connection = myConnections[i]; i++) {
-      connection.setHidden(hidden);
-      if (connection.isSuperior()) {
-        var child = connection.targetBlock();
-        if (child) {
-          child.setConnectionsHidden(hidden);
+  }
+
+  // If we're collapsed we want the invisible inputs' connections
+  // to remain untracked.
+  if (!this.collapsed_) {
+    for (var i = 0; i < this.inputList.length; i++) {
+      var conn = this.inputList[i].connection;
+      if (conn) {
+        conn.setHidden(false);
+
+        // Pass tracking on down the chain.
+        var block = conn.targetBlock();
+        if (block) {
+          block.startTrackingConnections();
         }
       }
     }
@@ -1616,6 +1632,9 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace)).getRenderer().render(this);
   // No matter how we rendered, connection locations should now be correct.
   this.updateConnectionLocations_();
+  if (!this.waitToTrackConnections_) {
+    this.startTrackingConnections();
+  }
   if (opt_bubble !== false) {
     // Render all blocks above this one (propagate a reflow).
     var parentBlock = this.getParent();

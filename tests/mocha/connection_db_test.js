@@ -18,299 +18,262 @@
  * limitations under the License.
  */
 
-/**
- * @fileoverview Tests for connection DB.
- * @author samelh@google.com (Sam El-Husseini)
- */
-'use strict';
+suite('Connection Database', function() {
+  setup(function() {
+    this.database = new Blockly.ConnectionDB();
 
-suite('Connection DB', function() {
-
-  function verify_DB_(msg, expected, db) {
-    var equal = (expected.length == db.connections_.length);
-    if (equal) {
-      for (var i = 0; i < expected.length; i++) {
-        if (expected[i] != db.connections_[i]) {
-          equal = false;
-          break;
-        }
+    this.assertOrder = function() {
+      var length = this.database.connections_.length;
+      for (var i = 1; i < length; i++) {
+        chai.assert.isAtMost(this.database.connections_[i - 1].y_,
+            this.database.connections_[i].y_);
       }
-    }
-    if (equal) {
-      assertTrue(msg, true);
-    } else {
-      assertEquals(msg, expected, db.connections_);
-    }
-  }
-
-  function helper_createConnection(x, y, type, opt_shared_workspace,
-      opt_rendered) {
-    var workspace = opt_shared_workspace ? opt_shared_workspace : {};
-    if (opt_rendered) {
-      var conn = new Blockly.RenderedConnection({workspace: workspace}, type);
-    } else {
-      var conn = new Blockly.Connection({workspace: workspace}, type);
-    }
-    conn.x_ = x;
-    conn.y_ = y;
-    return conn;
-  }
-
-  function helper_getNeighbours(db, x, y, radius) {
-    return db.getNeighbours(helper_createConnection(x, y, Blockly.NEXT_STATEMENT,
-        null, true), radius);
-  }
-
-  function helper_makeSourceBlock(sharedWorkspace) {
-    return {workspace: sharedWorkspace,
-      parentBlock_: null,
-      getParent: function() { return null; },
-      movable_: true,
-      isMovable: function() { return true; },
-      isShadow: function() { return false; },
-      isInsertionMarker: function() { return false; },
-      getFirstStatementConnection: function() { return null; }
     };
-  }
-
-  function helper_searchDB(db, x, y, radius, shared_workspace) {
-    var tempConn = helper_createConnection(x, y,
-        Blockly.NEXT_STATEMENT, shared_workspace, true);
-    tempConn.sourceBlock_ = helper_makeSourceBlock(shared_workspace);
-    tempConn.sourceBlock_.nextConnection = tempConn;
-    var closest = db.searchForClosest(tempConn, radius, {x: 0, y: 0});
-    return closest.connection;
-  }
-
-  test('Add connection', function() {
-    var db = new Blockly.ConnectionDB();
-    var o2 = {y_: 2, sourceBlock_: {},
-      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
-    db.addConnection(o2);
-    verify_DB_('Adding connection #2', [o2], db);
-
-    var o4 = {y_: 4, sourceBlock_: {},
-      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
-    db.addConnection(o4);
-    verify_DB_('Adding connection #4', [o2, o4], db);
-
-    var o1 = {y_: 1, sourceBlock_: {},
-      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
-    db.addConnection(o1);
-    verify_DB_('Adding connection #1', [o1, o2, o4], db);
-
-    var o3a = {y_: 3, sourceBlock_: {},
-      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
-    db.addConnection(o3a);
-    verify_DB_('Adding connection #3a', [o1, o2, o3a, o4], db);
-
-    var o3b = {y_: 3, sourceBlock_: {},
-      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
-    db.addConnection(o3b);
-    verify_DB_('Adding connection #3b', [o1, o2, o3b, o3a, o4], db);
+    this.createConnection = function(x, y, type, opt_database) {
+      var workspace = {
+        connectionDBList: []
+      };
+      workspace.connectionDBList[type] = opt_database || this.database;
+      var connection = new Blockly.RenderedConnection(
+          {workspace: workspace}, type);
+      connection.x_ = x;
+      connection.y_ = y;
+      return connection;
+    };
+    this.createSimpleTestConnections = function() {
+      for (var i = 0; i < 10; i++) {
+        var connection = this.createConnection(0, i, Blockly.PREVIOUS_STATEMENT);
+        this.database.addConnection(connection, i);
+      }
+    };
   });
-  test('Remove connection', function() {
-    var db = new Blockly.ConnectionDB();
-    var o1 = {y_: 1, sourceBlock_: {},
-      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
-    var o2 = {y_: 2, sourceBlock_: {},
-      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
-    var o3a = {y_: 3, sourceBlock_: {},
-      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
-    var o3b = {y_: 3, sourceBlock_: {},
-      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
-    var o3c = {y_: 3, sourceBlock_: {},
-      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
-    var o4 = {y_: 4, sourceBlock_: {},
-      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
-    db.addConnection(o1);
-    db.addConnection(o2);
-    db.addConnection(o3c);
-    db.addConnection(o3b);
-    db.addConnection(o3a);
-    db.addConnection(o4);
-    verify_DB_('Adding connections 1-4', [o1, o2, o3a, o3b, o3c, o4], db);
+  test('Add Connection', function() {
+    var y2 = {y_: 2};
+    var y4 = {y_: 4};
+    var y1 = {y_: 1};
+    var y3a = {y_: 3};
+    var y3b = {y_: 3};
 
-    db.removeConnection_(o2);
-    verify_DB_('Removing connection #2', [o1, o3a, o3b, o3c, o4], db);
+    this.database.addConnection(y2, 2);
+    chai.assert.sameOrderedMembers(
+        this.database.connections_, [y2]);
 
-    db.removeConnection_(o4);
-    verify_DB_('Removing connection #4', [o1, o3a, o3b, o3c], db);
+    this.database.addConnection(y4, 4);
+    chai.assert.sameOrderedMembers(
+        this.database.connections_, [y2, y4]);
 
-    db.removeConnection_(o1);
-    verify_DB_('Removing connection #1', [o3a, o3b, o3c], db);
+    this.database.addConnection(y1, 1);
+    chai.assert.sameOrderedMembers(
+        this.database.connections_, [y1, y2, y4]);
 
-    db.removeConnection_(o3a);
-    verify_DB_('Removing connection #3a', [o3b, o3c], db);
+    this.database.addConnection(y3a, 3);
+    chai.assert.sameOrderedMembers(
+        this.database.connections_, [y1, y2, y3a, y4]);
 
-    db.removeConnection_(o3c);
-    verify_DB_('Removing connection #3c', [o3b], db);
+    this.database.addConnection(y3b, 3);
+    chai.assert.sameOrderedMembers(
+        this.database.connections_, [y1, y2, y3b, y3a, y4]);
 
-    db.removeConnection_(o3b);
-    verify_DB_('Removing connection #3b', [], db);
   });
+  test('Remove Connection', function() {
+    var y2 = {y_: 2};
+    var y4 = {y_: 4};
+    var y1 = {y_: 1};
+    var y3a = {y_: 3};
+    var y3b = {y_: 3};
+    var y3c = {y_: 3};
 
-  test('get Neighbours', function() {
-    var db = new Blockly.ConnectionDB();
+    this.database.addConnection(y2, 2);
+    this.database.addConnection(y4, 4);
+    this.database.addConnection(y1, 1);
+    this.database.addConnection(y3c, 3);
+    this.database.addConnection(y3b, 3);
+    this.database.addConnection(y3a, 3);
 
-    // Search an empty list.
-    assertEquals(helper_getNeighbours(db,
-        10 /* x */, 10 /* y */, 100 /* radius */).length, 0);
+    chai.assert.sameOrderedMembers(
+        this.database.connections_, [y1, y2, y3a, y3b, y3c, y4]);
 
-    // Set up some connections.
-    for (var i = 0; i < 10; i++) {
-      db.addConnection(helper_createConnection(0, i,
-          Blockly.PREVIOUS_STATEMENT, null, true));
-    }
+    this.database.removeConnection(y2, 2);
+    chai.assert.sameOrderedMembers(
+        this.database.connections_, [y1, y3a, y3b, y3c, y4]);
 
-    // Test block belongs at beginning.
-    var result = helper_getNeighbours(db, 0, 0, 4);
-    assertEquals(5, result.length);
-    for (i = 0; i < result.length; i++) {
-      chai.assert.notEqual(result.indexOf(db.connections_[i]), -1); // contains
-    }
+    this.database.removeConnection(y4, 4);
+    chai.assert.sameOrderedMembers(
+        this.database.connections_, [y1, y3a, y3b, y3c]);
 
-    // Test block belongs at middle.
-    result = helper_getNeighbours(db, 0, 4, 2);
-    assertEquals(5, result.length);
-    for (i = 0; i < result.length; i++) {
-      chai.assert.notEqual(result.indexOf(db.connections_[i + 2]), -1); // contains
-    }
+    this.database.removeConnection(y1, 1);
+    chai.assert.sameOrderedMembers(
+        this.database.connections_, [y3a, y3b, y3c]);
 
-    // Test block belongs at end.
-    result = helper_getNeighbours(db, 0, 9, 4);
-    assertEquals(5, result.length);
-    for (i = 0; i < result.length; i++) {
-      chai.assert.notEqual(result.indexOf(db.connections_[i + 5]), -1); // contains
-    }
+    this.database.removeConnection(y3a, 3);
+    chai.assert.sameOrderedMembers(
+        this.database.connections_, [y3b, y3c]);
 
-    // Test block has no neighbours due to being out of range in the x direction.
-    result = helper_getNeighbours(db, 10, 9, 4);
-    assertEquals(result.length, 0);
+    this.database.removeConnection(y3c, 3);
+    chai.assert.sameOrderedMembers(
+        this.database.connections_, [y3b]);
 
-    // Test block has no neighbours due to being out of range in the y direction.
-    result = helper_getNeighbours(db, 0, 19, 4);
-    assertEquals(result.length, 0);
-
-    // Test block has no neighbours due to being out of range diagonally.
-    result = helper_getNeighbours(db, -2, -2, 2);
-    assertEquals(result.length, 0);
+    this.database.removeConnection(y3b, 3);
+    chai.assert.isEmpty(this.database.connections_);
   });
+  suite('Get Neighbors', function() {
+    test('Empty Database', function() {
+      var connection = this.createConnection(0, 0, Blockly.NEXT_STATEMENT,
+          new Blockly.ConnectionDB());
+      chai.assert.isEmpty(this.database.getNeighbours(connection), 100);
+    });
+    test('Block At Top', function() {
+      this.createSimpleTestConnections();
 
-  test('Find position for connection', function() {
-    var db = new Blockly.ConnectionDB();
-    db.addConnection(helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT,
-        null, true));
-    db.addConnection(helper_createConnection(0, 1, Blockly.PREVIOUS_STATEMENT,
-        null, true));
-    db.addConnection(helper_createConnection(0, 2, Blockly.PREVIOUS_STATEMENT,
-        null, true));
-    db.addConnection(helper_createConnection(0, 4, Blockly.PREVIOUS_STATEMENT,
-        null, true));
-    db.addConnection(helper_createConnection(0, 5, Blockly.PREVIOUS_STATEMENT,
-        null, true));
+      var checkConnection = this.createConnection(0, 0, Blockly.NEXT_STATEMENT,
+          new Blockly.ConnectionDB());
+      var neighbors = this.database.getNeighbours(checkConnection, 4);
+      chai.assert.sameMembers(neighbors, this.database.connections_.slice(0, 5));
+    });
+    test('Block In Middle', function() {
+      this.createSimpleTestConnections();
 
-    assertEquals(5, db.connections_.length);
-    var conn = helper_createConnection(0, 3, Blockly.PREVIOUS_STATEMENT, null,
-        true);
-    assertEquals(3, db.findPositionForConnection_(conn));
+      var checkConnection = this.createConnection(0, 4, Blockly.NEXT_STATEMENT,
+          new Blockly.ConnectionDB());
+      var neighbors = this.database.getNeighbours(checkConnection, 2);
+      chai.assert.sameMembers(neighbors, this.database.connections_.slice(2, 7));
+    });
+    test('Block At End', function() {
+      this.createSimpleTestConnections();
+
+      var checkConnection = this.createConnection(0, 9, Blockly.NEXT_STATEMENT,
+          new Blockly.ConnectionDB());
+      var neighbors = this.database.getNeighbours(checkConnection, 4);
+      chai.assert.sameMembers(neighbors, this.database.connections_.slice(5, 10));
+    });
+    test('Out of Range X', function() {
+      this.createSimpleTestConnections();
+
+      var checkConnection = this.createConnection(10, 9, Blockly.NEXT_STATEMENT,
+          new Blockly.ConnectionDB());
+      var neighbors = this.database.getNeighbours(checkConnection, 4);
+      chai.assert.isEmpty(neighbors);
+    });
+    test('Out of Range Y', function() {
+      this.createSimpleTestConnections();
+
+      var checkConnection = this.createConnection(0, 19, Blockly.NEXT_STATEMENT,
+          new Blockly.ConnectionDB());
+      var neighbors = this.database.getNeighbours(checkConnection, 4);
+      chai.assert.isEmpty(neighbors);
+    });
+    test('Out of Range Diagonal', function() {
+      this.createSimpleTestConnections();
+
+      var checkConnection = this.createConnection(-2, -2, Blockly.NEXT_STATEMENT,
+          new Blockly.ConnectionDB());
+      var neighbors = this.database.getNeighbours(checkConnection, 2);
+      chai.assert.isEmpty(neighbors);
+    });
   });
+  suite('Ordering', function() {
+    test('Simple', function() {
+      for (var i = 0; i < 10; i++) {
+        var connection = this.createConnection(0, i, Blockly.NEXT_STATEMENT);
+        this.database.addConnection(connection, i);
+      }
+      this.assertOrder();
+    });
+    test('Quasi-Random', function() {
+      var xCoords = [-29, -47, -77, 2, 43, 34, -59, -52, -90, -36, -91, 38,
+        87, -20, 60, 4, -57, 65, -37, -81, 57, 58, -96, 1, 67, -79, 34, 93,
+        -90, -99, -62, 4, 11, -36, -51, -72, 3, -50, -24, -45, -92, -38, 37,
+        24, -47, -73, 79, -20, 99, 43, -10, -87, 19, 35, -62, -36, 49, 86,
+        -24, -47, -89, 33, -44, 25, -73, -91, 85, 6, 0, 89, -94, 36, -35, 84,
+        -9, 96, -21, 52, 10, -95, 7, -67, -70, 62, 9, -40, -95, -9, -94, 55,
+        57, -96, 55, 8, -48, -57, -87, 81, 23, 65];
+      var yCoords = [-81, 82, 5, 47, 30, 57, -12, 28, 38, 92, -25, -20, 23,
+        -51, 73, -90, 8, 28, -51, -15, 81, -60, -6, -16, 77, -62, -42, -24,
+        35, 95, -46, -7, 61, -16, 14, 91, 57, -38, 27, -39, 92, 47, -98, 11,
+        -33, -72, 64, 38, -64, -88, -35, -59, -76, -94, 45, -25, -100, -95,
+        63, -97, 45, 98, 99, 34, 27, 52, -18, -45, 66, -32, -38, 70, -73,
+        -23, 5, -2, -13, -9, 48, 74, -97, -11, 35, -79, -16, -77, 83, -57,
+        -53, 35, -44, 100, -27, -15, 5, 39, 33, -19, -20, -95];
 
-  test('Find connection', function() {
-    var db = new Blockly.ConnectionDB();
-    for (var i = 0; i < 10; i++) {
-      db.addConnection(helper_createConnection(i, 0,
-          Blockly.PREVIOUS_STATEMENT, null, true));
-      db.addConnection(helper_createConnection(0, i,
-          Blockly.PREVIOUS_STATEMENT, null, true));
-    }
-
-    var conn = helper_createConnection(3, 3, Blockly.PREVIOUS_STATEMENT, null,
-        true);
-    db.addConnection(conn);
-    assertEquals(conn, db.connections_[db.findConnection(conn)]);
-
-    conn = helper_createConnection(3, 3, Blockly.PREVIOUS_STATEMENT, null, true);
-    assertEquals(-1, db.findConnection(conn));
+      var length = xCoords.length;
+      for (var i = 0; i < length; i++) {
+        var connection = this.createConnection(xCoords[i], yCoords[i],
+            Blockly.NEXT_STATEMENT);
+        this.database.addConnection(connection, yCoords[i]);
+      }
+      this.assertOrder();
+    });
   });
+  // Does not cover logic for isConnectionAllowed
+  suite('Search For Closest', function() {
+    setup(function() {
+      this.allowedStub = null;
 
-  test('Ordering', function() {
-    var db = new Blockly.ConnectionDB();
-    for (var i = 0; i < 10; i++) {
-      db.addConnection(helper_createConnection(0, 9 - i,
-          Blockly.PREVIOUS_STATEMENT), null, true);
-    }
+      this.createCheckConnection = function(x, y) {
+        var checkConnection = this.createConnection(x, y, Blockly.NEXT_STATEMENT,
+            new Blockly.ConnectionDB());
+        this.allowedStub = sinon.stub(checkConnection, 'isConnectionAllowed')
+            .callsFake(function(candidate, maxRadius) {
+              if (this.distanceFrom(candidate) > maxRadius) {
+                return false;
+              }
+              // Ignore non-distance parameters.
+              return true;
+            });
+        return checkConnection;
+      };
+    });
+    teardown(function() {
+      if (this.allowedStub) {
+        this.allowedStub.restore();
+      }
+    });
+    test('Empty Database', function() {
+      var checkConnection = this.createConnection(0, 0, Blockly.NEXT_STATEMENT,
+          new Blockly.ConnectionDB());
+      chai.assert.isNull(this.database.searchForClosest(
+          checkConnection, 100, {x: 0, y: 0}).connection);
+    });
+    test('Too Far', function() {
+      var connection = this.createConnection(0, 100, Blockly.PREVIOUS_STATEMENT);
+      this.database.addConnection(connection, 100);
 
-    for (i = 0; i < 10; i++) {
-      assertEquals(i, db.connections_[i].y_);
-    }
+      var checkConnection = this.createConnection(0, 0, Blockly.NEXT_STATEMENT,
+          new Blockly.ConnectionDB());
+      chai.assert.isNull(this.database.searchForClosest(
+          checkConnection, 50, {x: 0, y: 0}).connection);
+    });
+    test('Single in Range', function() {
+      this.createSimpleTestConnections();
 
-    // quasi-random
-    var xCoords = [-29, -47, -77, 2, 43, 34, -59, -52, -90, -36, -91, 38, 87, -20,
-      60, 4, -57, 65, -37, -81, 57, 58, -96, 1, 67, -79, 34, 93, -90, -99, -62,
-      4, 11, -36, -51, -72, 3, -50, -24, -45, -92, -38, 37, 24, -47, -73, 79,
-      -20, 99, 43, -10, -87, 19, 35, -62, -36, 49, 86, -24, -47, -89, 33, -44,
-      25, -73, -91, 85, 6, 0, 89, -94, 36, -35, 84, -9, 96, -21, 52, 10, -95, 7,
-      -67, -70, 62, 9, -40, -95, -9, -94, 55, 57, -96, 55, 8, -48, -57, -87, 81,
-      23, 65];
-    var yCoords = [-81, 82, 5, 47, 30, 57, -12, 28, 38, 92, -25, -20, 23, -51, 73,
-      -90, 8, 28, -51, -15, 81, -60, -6, -16, 77, -62, -42, -24, 35, 95, -46,
-      -7, 61, -16, 14, 91, 57, -38, 27, -39, 92, 47, -98, 11, -33, -72, 64, 38,
-      -64, -88, -35, -59, -76, -94, 45, -25, -100, -95, 63, -97, 45, 98, 99, 34,
-      27, 52, -18, -45, 66, -32, -38, 70, -73, -23, 5, -2, -13, -9, 48, 74, -97,
-      -11, 35, -79, -16, -77, 83, -57, -53, 35, -44, 100, -27, -15, 5, 39, 33,
-      -19, -20, -95];
-    for (i = 0; i < xCoords.length; i++) {
-      db.addConnection(helper_createConnection(xCoords[i], yCoords[i],
-          Blockly.PREVIOUS_STATEMENT), null, true);
-    }
+      var checkConnection = this.createCheckConnection(0, 14);
 
-    for (i = 1; i < xCoords.length; i++) {
-      assertTrue(db.connections_[i].y_ >= db.connections_[i - 1].y_);
-    }
+      var last = this.database.connections_[9];
+      var closest = this.database.searchForClosest(
+          checkConnection, 5, {x: 0, y: 0}).connection;
+      chai.assert.equal(last, closest);
+    });
+    test('Many in Range', function() {
+      this.createSimpleTestConnections();
+
+      var checkConnection = this.createCheckConnection(0, 10);
+
+      var last = this.database.connections_[9];
+      var closest = this.database.searchForClosest(
+          checkConnection, 5, {x: 0, y: 0}).connection;
+      chai.assert.equal(last, closest);
+    });
+    test('No Y-Coord Priority', function() {
+      var connection1 = this.createConnection(6, 6, Blockly.PREVIOUS_STATEMENT);
+      this.database.addConnection(connection1, 6);
+      var connection2 = this.createConnection(5, 5, Blockly.PREVIOUS_STATEMENT);
+      this.database.addConnection(connection2, 5);
+
+      var checkConnection = this.createCheckConnection(4, 6);
+
+      var closest = this.database.searchForClosest(
+          checkConnection, 3, {x: 0, y: 0}).connection;
+      chai.assert.equal(connection2, closest);
+    });
   });
-
-  test('Search for closest', function() {
-    var db = new Blockly.ConnectionDB();
-    var sharedWorkspace = {id: "Shared workspace"};
-
-    // Search an empty list.
-    assertEquals(null, helper_searchDB(db, 10 /* x */, 10 /* y */,
-        100 /* radius */));
-
-    db.addConnection(helper_createConnection(100, 0, Blockly.PREVIOUS_STATEMENT,
-        sharedWorkspace, true));
-    assertEquals(null, helper_searchDB(db, 0, 0, 5, sharedWorkspace));
-
-    db = new Blockly.ConnectionDB();
-    for (var i = 0; i < 10; i++) {
-      var tempConn = helper_createConnection(0, i, Blockly.PREVIOUS_STATEMENT,
-          sharedWorkspace, true);
-      tempConn.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
-      db.addConnection(tempConn);
-    }
-
-    // Should be at 0, 9.
-    var last = db.connections_[db.connections_.length - 1];
-    // Correct connection is last in db; many connections in radius.
-    assertEquals(last, helper_searchDB(db, 0, 10, 15, sharedWorkspace));
-    // Nothing nearby.
-    assertEquals(null, helper_searchDB(db, 100, 100, 3, sharedWorkspace));
-    // First in db, exact match.
-    assertEquals(db.connections_[0], helper_searchDB(db, 0, 0, 0, sharedWorkspace));
-
-    tempConn = helper_createConnection(6, 6, Blockly.PREVIOUS_STATEMENT,
-        sharedWorkspace, true);
-    tempConn.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
-    db.addConnection(tempConn);
-    tempConn = helper_createConnection(5, 5, Blockly.PREVIOUS_STATEMENT,
-        sharedWorkspace, true);
-    tempConn.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
-    db.addConnection(tempConn);
-
-    var result = helper_searchDB(db, 4, 6, 3, sharedWorkspace);
-    assertEquals(5, result.x_);
-    assertEquals(5, result.y_);
-  });
-
 });

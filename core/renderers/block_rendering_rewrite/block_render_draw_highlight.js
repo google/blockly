@@ -115,35 +115,39 @@ Blockly.blockRendering.Highlighter.prototype.drawJaggedEdge_ = function(row) {
 
 Blockly.blockRendering.Highlighter.prototype.drawValueInput = function(row) {
   var input = row.getLastInput();
+  var steps = '';
   if (this.RTL_) {
     var belowTabHeight = row.height - input.connectionHeight;
 
-    this.steps_.push(Blockly.utils.svgPaths.moveTo(
-        input.xPos + input.width - this.highlightOffset_, row.yPos));
-    this.steps_.push(this.puzzleTabPaths_.pathDown(this.RTL_));
-    this.steps_.push(
-        Blockly.utils.svgPaths.lineOnAxis('v', belowTabHeight));
+    steps =
+        Blockly.utils.svgPaths.moveTo(
+            input.xPos + input.width - this.highlightOffset_, row.yPos) +
+        this.puzzleTabPaths_.pathDown(this.RTL_) +
+        Blockly.utils.svgPaths.lineOnAxis('v', belowTabHeight);
   } else {
-    this.steps_.push(
-        Blockly.utils.svgPaths.moveTo(input.xPos + input.width, row.yPos));
-    this.steps_.push(this.puzzleTabPaths_.pathDown(this.RTL_));
+    steps =
+        Blockly.utils.svgPaths.moveTo(input.xPos + input.width, row.yPos) +
+        this.puzzleTabPaths_.pathDown(this.RTL_);
   }
+
+  this.steps_.push(steps);
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawStatementInput = function(row) {
-  var input = row.getLastInput();
+  var steps = '';
   if (this.RTL_) {
     var innerHeight = row.height - (2 * this.insideCornerPaths_.height);
-    this.steps_.push(Blockly.utils.svgPaths.moveTo(input.xPos, row.yPos));
-    this.steps_.push(this.insideCornerPaths_.pathTop(this.RTL_));
-    this.steps_.push(
-        Blockly.utils.svgPaths.lineOnAxis('v', innerHeight));
-    this.steps_.push(this.insideCornerPaths_.pathBottom(this.RTL_));
+    steps =
+        Blockly.utils.svgPaths.moveTo(input.xPos, row.yPos) +
+        this.insideCornerPaths_.pathTop(this.RTL_) +
+        Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
+        this.insideCornerPaths_.pathBottom(this.RTL_);
   } else {
-    this.steps_.push(
+    steps =
         Blockly.utils.svgPaths.moveTo(input.xPos, row.yPos + row.height) +
-        this.insideCornerPaths_.pathBottom(this.RTL_));
+        this.insideCornerPaths_.pathBottom(this.RTL_);
   }
+  this.steps_.push(steps);
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawRightSideRow = function(row) {

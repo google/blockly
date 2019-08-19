@@ -1457,13 +1457,13 @@ Blockly.BlockSvg.prototype.waitToTrackConnections = function() {
 
 Blockly.BlockSvg.prototype.startTrackingConnections = function() {
   if (this.previousConnection) {
-    this.previousConnection.setHidden(false);
+    this.previousConnection.setTracking(true);
   }
   if (this.outputConnection) {
-    this.outputConnection.setHidden(false);
+    this.outputConnection.setTracking(true);
   }
   if (this.nextConnection) {
-    this.nextConnection.setHidden(false);
+    this.nextConnection.setTracking(true);
     var child = this.nextConnection.targetBlock();
     if (child) {
       child.startTrackingConnections();
@@ -1476,7 +1476,7 @@ Blockly.BlockSvg.prototype.startTrackingConnections = function() {
     for (var i = 0; i < this.inputList.length; i++) {
       var conn = this.inputList[i].connection;
       if (conn) {
-        conn.setHidden(false);
+        conn.setTracking(true);
 
         // Pass tracking on down the chain.
         var block = conn.targetBlock();

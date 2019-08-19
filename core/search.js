@@ -41,7 +41,6 @@ Blockly.Search = function(workspace) {
   this.blockTrie_ = new goog.structs.Trie;
 };
 
-
 Blockly.Search.prototype.addToTrie = function(key, value) {
   if (!this.blockTrie_.containsKey(key)) {
     this.blockTrie_.add(key, []);
@@ -61,10 +60,12 @@ Blockly.Search.prototype.removeFromTrie = function(key, value) {
 }
 
 Blockly.Search.prototype.onBlockAdded = function(type, val) {
-  if (Blockly.BlockKeywords.hasLoaded_) {
-    if (Blockly.BlockKeywords[type]) {
-      var keys = Blockly.BlockKeywords[type];
-  
+  try {
+    Blockly.Blocks[type].ensureSearchKeywords();
+
+    if (Blockly.Blocks[type].SearchKeywords) {
+      var keys = Blockly.Blocks[type].SearchKeywords;
+
       for (var j = 0; j < keys.length; j++) {
         this.addToTrie(keys[j], val);
       }
@@ -73,37 +74,40 @@ Blockly.Search.prototype.onBlockAdded = function(type, val) {
       console.warn('Keywords not found for block ' + type);
     }
   }
-  else {
-    var thisObj = this;
-    let intervalId = setInterval(function() {
-      //Check if the language is loaded and the first string in populateKeywords is loaded too
-      if (Blockly.BlockKeywords.hasLoaded_) {
-          clearInterval(intervalId);
-
-          if (Blockly.BlockKeywords[type]) {
-            var keys = Blockly.BlockKeywords[type];
-
-            for (var j = 0; j < keys.length; j++) {
-              thisObj.addToTrie(keys[j], val);
-            }
-          }
-          else {
-            console.warn('Keywords not found for block ' + type);
-          }
-      }
-    }, 100);
-
+  catch (err)
+  {
+    console.log("Block " + type + " has no ensureSearchKeywords function");
   }
 };
 
 Blockly.Search.prototype.onBlockRemoved = function(type, val) {
-  if (Blockly.BlockKeywords[type]) {
-    var keys = Blockly.BlockKeywords[type];
+  if (Blockly.Blocks[type].SearchKeywords) {
+    var keys = Blockly.Blocks[type].SearchKeywords;
   
     for (var j = 0; j < keys.length; j++) {
       this.removeFromTrie(keys[j], val);
     }
   }
+};
+
+Blockly.Search.preprocessSearchKeywords = function(block_type, keyword_list) {
+  if (Blockly.Blocks[block_type].SearchKeywords) {
+    return;
+  }
+
+  Blockly.Blocks[block_type].SearchKeywords = [];
+
+  for (let i = 0; i < keyword_list.length; i++) {
+    let splitText = keyword_list[i].trim().toLowerCase().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi ,'').split(' ');
+    
+    for (let j = 0; j < splitText.length; j++) {
+        let text = splitText[j];
+  
+        if (text && text != '') {
+            Blockly.Blocks[block_type].SearchKeywords.push(text);
+        }
+    }
+}
 };
 
 Blockly.Search.prototype.blocksMatchingSearchTerm = function(term) {

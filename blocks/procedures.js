@@ -608,7 +608,6 @@ Blockly.Blocks['procedures_mutatorcontainer'] = {
   }
 };
 
-
 Blockly.Blocks['procedures_mutatorarg'] = {
   /**
    * Mutator block for procedure argument.

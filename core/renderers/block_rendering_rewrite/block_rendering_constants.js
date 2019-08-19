@@ -274,6 +274,7 @@ Blockly.blockRendering.constants.NOTCH = (function() {
   return {
     width: width,
     height: height,
+    offset: Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT,
     pathLeft: pathLeft,
     pathRight: pathRight
   };

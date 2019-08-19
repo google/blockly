@@ -445,26 +445,28 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
     }
     // Spacing between a square corner and a previous or next connection
     if (next.isPreviousConnection()) {
-      return Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;
+      return next.notchShape.offset;
     } else if (next.isNextConnection()) {
       // Next connections are shifted slightly to the left (in both LTR and RTL)
       // to make the dark path under the previous connection show through.
       var offset = (this.RTL ? 1 : -1) *
           Blockly.blockRendering.constants.DARK_PATH_OFFSET / 2;
-      return Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT + offset;
+      return next.notchShape.offset + offset;
     }
   }
 
   // Spacing between a rounded corner and a previous or next connection.
   if (prev.isRoundedCorner()) {
     if (next.isPreviousConnection()) {
-      return Blockly.blockRendering.constants.NOTCH_OFFSET_ROUNDED_CORNER_PREV;
+      return next.notchShape.offset -
+          Blockly.blockRendering.constants.CORNER_RADIUS;
     } else if (next.isNextConnection()) {
       // Next connections are shifted slightly to the left (in both LTR and RTL)
       // to make the dark path under the previous connection show through.
       var offset = (this.RTL ? 1 : -1) *
           Blockly.blockRendering.constants.DARK_PATH_OFFSET / 2;
-      return Blockly.blockRendering.constants.NOTCH_OFFSET_ROUNDED_CORNER_PREV + offset;
+      return next.notchShape.offset -
+          Blockly.blockRendering.constants.CORNER_RADIUS + offset;
     }
   }
 

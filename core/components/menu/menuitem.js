@@ -103,7 +103,7 @@ Blockly.MenuItem.prototype.createDom = function() {
 };
 
 /**
- * @return {Element} The html element for the checkbox.
+ * @return {Element} The HTML element for the checkbox.
  * @protected
  */
 Blockly.MenuItem.prototype.getCheckboxDom = function() {
@@ -117,7 +117,7 @@ Blockly.MenuItem.prototype.getCheckboxDom = function() {
 };
 
 /**
- * @return {!Element} The html for the content.
+ * @return {!Element} The HTML for the content.
  * @protected
  */
 Blockly.MenuItem.prototype.getContentDom = function() {
@@ -129,7 +129,7 @@ Blockly.MenuItem.prototype.getContentDom = function() {
 };
 
 /**
- * @return {!Element} The html for the content wrapper.
+ * @return {!Element} The HTML for the content wrapper.
  * @protected
  */
 Blockly.MenuItem.prototype.getContentWrapperDom = function() {
@@ -160,7 +160,7 @@ Blockly.MenuItem.prototype.setValue = function(value) {
 
 /**
  * Gets the value associated with the menu item.
- * @returns {*} value Value associated with the menu item.
+ * @return {*} value Value associated with the menu item.
  * @package
  */
 Blockly.MenuItem.prototype.getValue = function() {

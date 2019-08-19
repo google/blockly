@@ -172,10 +172,7 @@ Blockly.FieldTextInput.prototype.render_ = function() {
       // in RTL, we need to let the browser reflow before resizing
       // in order to get the correct bounding box of the borderRect
       // avoiding issue #2777.
-      var field = this;
-      setTimeout(function() {
-        field.resizeEditor_();
-      }, 0);
+      setTimeout(this.resizeEditor_.bind(this), 0);
     } else {
       this.resizeEditor_();
     }
@@ -270,10 +267,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   htmlInput.untypedDefaultValue_ = this.value_;
   htmlInput.oldValue_ = null;
   // Ensure the browser reflows before resizing to avoid issue #2777.
-  var field = this;
-  setTimeout(function() {
-    field.resizeEditor_();
-  }, 0);
+  setTimeout(this.resizeEditor_.bind(this), 0);
 
   this.bindInputEvents_(htmlInput);
 

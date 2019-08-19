@@ -26,12 +26,11 @@
  */
 'use strict';
 
-
 goog.provide('Blockly.utils.IdGenerator');
 
 
 /**
- * Creates a new id generator.
+ * Creates a new ID generator.
  * @constructor
  * @final
  */
@@ -39,7 +38,7 @@ Blockly.utils.IdGenerator = function() {};
 
 /**
  * Get the singleton instance of Blockly.utils.IdGenerator.
- * @returns {Blockly.utils.IdGenerator} singleton instance
+ * @return {Blockly.utils.IdGenerator} singleton instance
  */
 Blockly.utils.IdGenerator.getInstance = function() {
   if (!Blockly.utils.IdGenerator.instance_) {
@@ -49,7 +48,7 @@ Blockly.utils.IdGenerator.getInstance = function() {
 };
 
 /**
- * Next unique ID to use
+ * Next unique ID to use.
  * @type {number}
  * @private
  */

@@ -77,9 +77,8 @@ Blockly.fieldRegistry.fromJson = function(options) {
   if (!fieldClass) {
     console.warn('Blockly could not create a field of type ' + options['type'] +
       '. The field is probably not being registered. This could be because' +
-      ' the file is not loaded, the field does not register itself (See:' +
-      ' github.com/google/blockly/issues/1584), or the registration is not' +
-      ' being reached.');
+      ' the file is not loaded, the field does not register itself (Issue' +
+      ' #1584), or the registration is not being reached.');
     return null;
   }
 

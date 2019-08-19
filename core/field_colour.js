@@ -285,7 +285,7 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
 
   Blockly.DropDownDiv.showPositionedByField(
       this, this.dropdownDispose_.bind(this));
-  
+
   // Focus so we can start receiving keyboard events.
   this.picker_.focus();
 };
@@ -426,17 +426,17 @@ Blockly.FieldColour.prototype.getHighlighted_ = function() {
  * @private
  */
 Blockly.FieldColour.prototype.setHighlightedCell_ = function(cell, index) {
-  // Unhighlight the current item
+  // Unhighlight the current item.
   var highlighted = this.getHighlighted_();
   if (highlighted) {
     Blockly.utils.dom.removeClass(highlighted, 'blocklyColourHighlighted');
   }
-  // Highight new item
+  // Highight new item.
   Blockly.utils.dom.addClass(cell, 'blocklyColourHighlighted');
-  // Set new highlighted index
+  // Set new highlighted index.
   this.highlightedIndex_ = index;
 
-  // Update accessibility roles
+  // Update accessibility roles.
   Blockly.utils.aria.setState(this.picker_,
       Blockly.utils.aria.State.ACTIVEDESCENDANT, cell.getAttribute('id'));
 };

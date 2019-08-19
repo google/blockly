@@ -646,7 +646,7 @@ Blockly.BlockSvg.prototype.showHelp_ = function() {
 /**
  * Generate the context menu for this block.
  * @protected
- * @returns {Array.<!Object>} Context menu options
+ * @return {Array.<!Object>} Context menu options
  */
 Blockly.BlockSvg.prototype.generateContextMenu = function() {
   if (this.workspace.options.readOnly || !this.contextMenu) {

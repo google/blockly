@@ -271,6 +271,8 @@ Blockly.blockRendering.TopRow.prototype.getPreviousConnection = function() {
  * @override
  */
 Blockly.blockRendering.TopRow.prototype.measure = function() {
+  this.width = 0;
+  this.height = 0;
   for (var e = 0; e < this.elements.length; e++) {
     var elem = this.elements[e];
     this.width += elem.width;
@@ -358,6 +360,8 @@ Blockly.blockRendering.BottomRow.prototype.getNextConnection = function() {
  * @override
  */
 Blockly.blockRendering.BottomRow.prototype.measure = function() {
+  this.width = 0;
+  this.height = 0;
   for (var e = 0; e < this.elements.length; e++) {
     var elem = this.elements[e];
     this.width += elem.width;
@@ -415,6 +419,8 @@ goog.inherits(Blockly.blockRendering.InputRow,
  * @package
  */
 Blockly.blockRendering.InputRow.prototype.measure = function() {
+  this.width = 0;
+  this.height = 0;
   var connectedBlockWidths = 0;
   for (var e = 0; e < this.elements.length; e++) {
     var elem = this.elements[e];

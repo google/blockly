@@ -134,6 +134,7 @@ Blockly.blockRendering.Highlighter.prototype.drawValueInput = function(row) {
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawStatementInput = function(row) {
+  var input = row.getLastInput();
   var steps = '';
   if (this.RTL_) {
     var innerHeight = row.height - (2 * this.insideCornerPaths_.height);

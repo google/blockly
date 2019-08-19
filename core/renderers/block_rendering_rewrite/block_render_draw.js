@@ -219,7 +219,7 @@ Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
       Blockly.blockRendering.constants.INSIDE_CORNERS.pathTop;
 
   var innerHeight =
-      row.height -(2 * Blockly.blockRendering.constants.INSIDE_CORNERS.height);
+      row.height - (2 * Blockly.blockRendering.constants.INSIDE_CORNERS.height);
 
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', x) +
       innerTopLeftCorner +

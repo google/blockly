@@ -1,9 +1,6 @@
 
 goog.provide('Blockly.blockRendering.Input');
 goog.provide('Blockly.blockRendering.InRowSpacer');
-goog.provide('Blockly.blockRendering.NextConnection');
-goog.provide('Blockly.blockRendering.PreviousConnection');
-goog.provide('Blockly.blockRendering.OutputConnection');
 
 goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Measurable');
@@ -187,82 +184,6 @@ Blockly.blockRendering.ExternalValueInput = function(input) {
 };
 goog.inherits(Blockly.blockRendering.ExternalValueInput,
     Blockly.blockRendering.Input);
-
-/**
- * The base class to represent a connection and the space that it takes up on
- * the block.
- * @param {Blockly.RenderedConnection} connectionModel The connection object on
- *     the block that this represents.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.Measurable}
- */
-Blockly.blockRendering.Connection = function(connectionModel) {
-  Blockly.blockRendering.Connection.superClass_.constructor.call(this);
-  this.connectionModel = connectionModel;
-};
-goog.inherits(Blockly.blockRendering.Connection,
-    Blockly.blockRendering.Measurable);
-
-/**
- * An object containing information about the space an output connection takes
- * up during rendering.
- * @param {Blockly.RenderedConnection} connectionModel The connection object on
- *     the block that this represents.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.Measurable}
- */
-Blockly.blockRendering.OutputConnection = function(connectionModel) {
-  Blockly.blockRendering.OutputConnection.superClass_.constructor.call(this,
-      connectionModel);
-  this.type = 'output connection';
-  this.height = this.connectionShape.height;
-  this.width = this.connectionShape.width;
-  this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
-  this.startX = this.width;
-};
-goog.inherits(Blockly.blockRendering.OutputConnection,
-    Blockly.blockRendering.Connection);
-
-/**
- * An object containing information about the space a previous connection takes
- * up during rendering.
- * @param {Blockly.RenderedConnection} connectionModel The connection object on
- *     the block that this represents.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.Measurable}
- */
-Blockly.blockRendering.PreviousConnection = function(connectionModel) {
-  Blockly.blockRendering.PreviousConnection.superClass_.constructor.call(this,
-      connectionModel);
-  this.type = 'previous connection';
-  this.height = this.notchShape.height;
-  this.width = this.notchShape.width;
-
-};
-goog.inherits(Blockly.blockRendering.PreviousConnection,
-    Blockly.blockRendering.Connection);
-
-/**
- * An object containing information about the space a next connection takes
- * up during rendering.
- * @param {Blockly.RenderedConnection} connectionModel The connection object on
- *     the block that this represents.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.Measurable}
- */
-Blockly.blockRendering.NextConnection = function(connectionModel) {
-  Blockly.blockRendering.NextConnection.superClass_.constructor.call(this,
-      connectionModel);
-  this.type = 'next connection';
-  this.height = this.notchShape.height;
-  this.width = this.notchShape.width;
-};
-goog.inherits(Blockly.blockRendering.NextConnection,
-    Blockly.blockRendering.Connection);
 
 /**
  * An object containing information about the space a hat takes up during

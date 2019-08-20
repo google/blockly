@@ -31,7 +31,7 @@ goog.provide('Blockly.blockRendering.SpacerRow');
 goog.provide('Blockly.blockRendering.TopRow');
 
 goog.require('Blockly.blockRendering.constants');
-goog.require('Blockly.blockRendering.Input');
+goog.require('Blockly.blockRendering.InputConnection');
 goog.require('Blockly.blockRendering.InRowSpacer');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
@@ -174,7 +174,8 @@ Blockly.blockRendering.Row.prototype.measure = function() {
 /**
  * Get the last input on this row, if it has one.
  * TODO: Consider moving this to InputRow, if possible.
- * @return {Blockly.blockRendering.Input} The last input on the row, or null.
+ * @return {Blockly.blockRendering.InputConnection} The last input on the row,
+ *     or null.
  * @package
  */
 Blockly.blockRendering.Row.prototype.getLastInput = function() {
@@ -183,9 +184,9 @@ Blockly.blockRendering.Row.prototype.getLastInput = function() {
       continue;
     }
     if (elem.isInput) {
-      return /** @type {Blockly.blockRendering.Input} */ (elem);
+      return /** @type {Blockly.blockRendering.InputConnection} */ (elem);
     } else if (elem.isField()) {
-      return /** @type {Blockly.blockRendering.Input} */ (elem.parentInput);
+      return /** @type {Blockly.blockRendering.InputConnection} */ (elem.parentInput);
     }
   }
   return null;

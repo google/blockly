@@ -1,43 +1,8 @@
 
-goog.provide('Blockly.blockRendering.Input');
 goog.provide('Blockly.blockRendering.InRowSpacer');
 
 goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Measurable');
-
-
-/**
- * The base class to represent an input that takes up space on a block
- * during rendering
- * @param {!Blockly.Input} input The input to measure and store information for.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.Measurable}
- */
-Blockly.blockRendering.Input = function(input) {
-  Blockly.blockRendering.Input.superClass_.constructor.call(this);
-
-  this.isInput = true;
-  this.input = input;
-  this.align = input.align;
-  this.connectedBlock = input.connection && input.connection.targetBlock() ?
-      input.connection.targetBlock() : null;
-
-  if (this.connectedBlock) {
-    var bBox = this.connectedBlock.getHeightWidth();
-    this.connectedBlockWidth = bBox.width;
-    this.connectedBlockHeight = bBox.height;
-  } else {
-    this.connectedBlockWidth = 0;
-    this.connectedBlockHeight = 0;
-  }
-
-  this.connection = input.connection;
-  this.connectionOffsetX = 0;
-  this.connectionOffsetY = 0;
-};
-goog.inherits(Blockly.blockRendering.Input, Blockly.blockRendering.Measurable);
-
 
 /**
  * An object containing information about the space an icon takes up during
@@ -97,93 +62,6 @@ Blockly.blockRendering.Field = function(field, parentInput) {
   this.parentInput = parentInput;
 };
 goog.inherits(Blockly.blockRendering.Field, Blockly.blockRendering.Measurable);
-
-/**
- * An object containing information about the space an inline input takes up
- * during rendering
- * @param {!Blockly.Input} input The inline input to measure and store
- *     information for.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.Input}
- */
-Blockly.blockRendering.InlineInput = function(input) {
-  Blockly.blockRendering.InlineInput.superClass_.constructor.call(this, input);
-  this.type = 'inline input';
-
-  if (!this.connectedBlock) {
-    this.height = Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_HEIGHT;
-    this.width = this.connectionShape.width +
-        Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_PADDING;
-  } else {
-    // We allow the dark path to show on the parent block so that the child
-    // block looks embossed.  This takes up an extra pixel in both x and y.
-    this.width = this.connectedBlockWidth +
-        Blockly.blockRendering.constants.DARK_PATH_OFFSET;
-    this.height = this.connectedBlockHeight + Blockly.blockRendering.constants.DARK_PATH_OFFSET;
-  }
-
-  this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
-  this.connectionHeight = this.connectionShape.height;
-  this.connectionWidth = this.connectionShape.width;
-};
-goog.inherits(Blockly.blockRendering.InlineInput, Blockly.blockRendering.Input);
-
-/**
- * An object containing information about the space a statement input takes up
- * during rendering
- * @param {!Blockly.Input} input The statement input to measure and store
- *     information for.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.Input}
- */
-Blockly.blockRendering.StatementInput = function(input) {
-  Blockly.blockRendering.StatementInput.superClass_.constructor.call(this, input);
-  this.type = 'statement input';
-
-  if (!this.connectedBlock) {
-    this.height = Blockly.blockRendering.constants.EMPTY_STATEMENT_INPUT_HEIGHT;
-  } else {
-    this.height =
-        this.connectedBlockHeight + Blockly.blockRendering.constants.STATEMENT_BOTTOM_SPACER;
-    if (this.connectedBlock.nextConnection) {
-      this.height -= this.notchShape.height;
-    }
-  }
-  this.width = this.notchOffset + this.notchShape.width;
-};
-goog.inherits(Blockly.blockRendering.StatementInput,
-    Blockly.blockRendering.Input);
-
-/**
- * An object containing information about the space an external value input
- * takes up during rendering
- * @param {!Blockly.Input} input The external value input to measure and store
- *     information for.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.Input}
- */
-Blockly.blockRendering.ExternalValueInput = function(input) {
-  Blockly.blockRendering.ExternalValueInput.superClass_.constructor.call(this, input);
-  this.type = 'external value input';
-
-  if (!this.connectedBlock) {
-    this.height = this.connectionShape.height;
-  } else {
-    this.height =
-        this.connectedBlockHeight - 2 * Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
-  }
-  this.width = this.connectionShape.width +
-      Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_PADDING;
-
-  this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
-  this.connectionHeight = this.connectionShape.height;
-  this.connectionWidth = this.connectionShape.width;
-};
-goog.inherits(Blockly.blockRendering.ExternalValueInput,
-    Blockly.blockRendering.Input);
 
 /**
  * An object containing information about the space a hat takes up during

@@ -214,8 +214,7 @@ Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   var innerTopLeftCorner =
       input.notchShape.pathRight +
       Blockly.utils.svgPaths.lineOnAxis('h',
-          -(Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT -
-              Blockly.blockRendering.constants.INSIDE_CORNERS.width)) +
+          -(input.notchOffset - Blockly.blockRendering.constants.INSIDE_CORNERS.width)) +
       Blockly.blockRendering.constants.INSIDE_CORNERS.pathTop;
 
   var innerHeight =
@@ -420,8 +419,7 @@ Blockly.blockRendering.Drawer.prototype.positionInlineInputConnection_ = functio
 Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = function(row) {
   var input = row.getLastInput();
   if (input.connection) {
-    var connX = row.xPos + row.statementEdge +
-        Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;
+    var connX = row.xPos + row.statementEdge + input.notchOffset;
     if (this.info_.RTL) {
       connX *= -1;
     }
@@ -457,7 +455,7 @@ Blockly.blockRendering.Drawer.prototype.positionExternalValueConnection_ = funct
 Blockly.blockRendering.Drawer.prototype.positionPreviousConnection_ = function() {
   var topRow = this.info_.topRow;
   if (topRow.connection) {
-    var x = topRow.xPos + Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;
+    var x = topRow.xPos + topRow.notchOffset;
     var connX = (this.info_.RTL ? -x : x);
     topRow.connection.connectionModel.setOffsetInBlock(connX, 0);
   }

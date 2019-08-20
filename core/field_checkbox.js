@@ -49,6 +49,9 @@ goog.require('Blockly.utils.Size');
  * @constructor
  */
 Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
+  /** @type {?string} @private */
+  Blockly.FieldCheckbox.prototype.checkChar_ = null;
+
   if (opt_config) {
     if (opt_config['checkCharacter']) {
       this.checkChar_ = opt_config['checkCharacter'];
@@ -127,14 +130,6 @@ Blockly.FieldCheckbox.prototype.CURSOR = 'default';
 Blockly.FieldCheckbox.prototype.isDirty_ = false;
 
 /**
- * Character for the check mark. Used to apply a different check mark
- * character to individual fields.
- * @type {?string}
- * @private
- */
-Blockly.FieldCheckbox.prototype.checkChar_ = null;
-
-/**
  * Create the block UI for this checkbox.
  * @package
  */
@@ -156,7 +151,9 @@ Blockly.FieldCheckbox.prototype.initView = function() {
  */
 Blockly.FieldCheckbox.prototype.setCheckCharacter = function(character) {
   this.checkChar_ = character;
-  this.textContent_.nodeValue = character;
+  if (this.textContent_) {
+    this.textContent_.nodeValue = character;
+  }
 };
 
 /**

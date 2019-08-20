@@ -217,6 +217,11 @@ suite('Checkbox Fields', function() {
         // Don't call assertCharacter b/c we don't want to re-initialize.
         chai.assert.equal(field.textContent_.nodeValue, '\u2661');
       });
+      test('setCheckCharacter Before Init', function() {
+        var field = new Blockly.FieldCheckbox();
+        field.setCheckCharacter('\u2661');
+        assertCharacter(field, '\u2661');
+      });
     });
   });
 });

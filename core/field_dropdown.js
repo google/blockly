@@ -141,6 +141,9 @@ Blockly.FieldDropdown.prototype.imageElement_ = null;
  */
 Blockly.FieldDropdown.prototype.imageJson_ = null;
 
+
+Blockly.Field.SELECTED_ITEM_Y_POS = 0;
+
 /**
  * Create the block UI for this dropdown.
  * @package
@@ -184,6 +187,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   // Otherwise it will cause a page scroll to get the misplaced menu in
   // view. See issue #1329.
   this.menu_.setAllowAutoFocus(true);
+  this.menu_.getElement().scroll(0,Blockly.Field.SELECTED_ITEM_Y_POS);
   this.menu_.getElement().focus();
 };
 
@@ -439,9 +443,11 @@ Blockly.FieldDropdown.prototype.doValueUpdate_ = function(newValue) {
       if (typeof content == 'object') {
         this.imageJson_ = content;
         this.text_ = content.alt;
+        Blockly.Field.SELECTED_ITEM_Y_POS = content['height'] * i;
       } else {
         this.imageJson_ = null;
         this.text_ = content;
+        Blockly.Field.SELECTED_ITEM_Y_POS = this.size_.height * i;
       }
     }
   }

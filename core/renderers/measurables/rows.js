@@ -170,8 +170,7 @@ Blockly.blockRendering.Row.prototype.measure = function() {
  * @package
  */
 Blockly.blockRendering.Row.prototype.getLastInput = function() {
-  for (var i = this.elements.length - 1; i >= 0; i--) {
-    var elem = this.elements[i];
+  for (var i = this.elements.length - 1, elem; (elem = this.elements[i]); i--) {
     if (elem.isSpacer()) {
       continue;
     }
@@ -191,7 +190,7 @@ Blockly.blockRendering.Row.prototype.getLastInput = function() {
  * @package
  */
 Blockly.blockRendering.Row.prototype.getFirstSpacer = function() {
-  for (var i = 0, elem; elem = this.elements[i]; i++) {
+  for (var i = 0, elem; (elem = this.elements[i]); i++) {
     if (elem.isSpacer) {
       return /** @type {Blockly.blockRendering.InRowSpacer} */ (elem);
     }
@@ -206,7 +205,7 @@ Blockly.blockRendering.Row.prototype.getFirstSpacer = function() {
  * @package
  */
 Blockly.blockRendering.Row.prototype.getLastSpacer = function() {
-  for (var i = this.elements.length - 1, elem; elem = this.elements[i]; i--) {
+  for (var i = this.elements.length - 1, elem; (elem = this.elements[i]); i--) {
     if (elem.isSpacer) {
       return /** @type {Blockly.blockRendering.InRowSpacer} */ (elem);
     }
@@ -303,8 +302,7 @@ Blockly.blockRendering.TopRow.prototype.populate = function(block) {
 Blockly.blockRendering.TopRow.prototype.measure = function() {
   this.width = this.minWidth;
   this.height = this.minHeight;
-  for (var e = 0; e < this.elements.length; e++) {
-    var elem = this.elements[e];
+  for (var e = 0, elem; (elem = this.elements[e]); e++) {
     this.width += elem.width;
     if (!(elem.isSpacer())) {
       if (elem.type == 'hat') {
@@ -403,8 +401,7 @@ Blockly.blockRendering.BottomRow.prototype.populate = function(block) {
 Blockly.blockRendering.BottomRow.prototype.measure = function() {
   this.width = this.minWidth;
   this.height = this.minHeight;
-  for (var e = 0; e < this.elements.length; e++) {
-    var elem = this.elements[e];
+  for (var e = 0, elem; (elem = this.elements[e]); e++) {
     this.width += elem.width;
     if (!(elem.isSpacer())) {
       if (elem.type == 'next connection') {
@@ -463,8 +460,7 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
   this.width = this.minWidth;
   this.height = this.minHeight;
   var connectedBlockWidths = 0;
-  for (var e = 0; e < this.elements.length; e++) {
-    var elem = this.elements[e];
+  for (var e = 0, elem; (elem = this.elements[e]); e++) {
     this.width += elem.width;
     if (elem.isInput) {
       if (elem.type == 'statement input') {

@@ -101,7 +101,7 @@ Blockly.blockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.hideHiddenIcons_ = function() {
-  for (var i = 0, iconInfo; iconInfo = this.info_.hiddenIcons[i]; i++) {
+  for (var i = 0, iconInfo; (iconInfo = this.info_.hiddenIcons[i]); i++) {
     iconInfo.icon.iconGroup_.setAttribute('display', 'none');
   }
 };
@@ -145,7 +145,7 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
   this.positionPreviousConnection_();
   this.outlinePath_ +=
       Blockly.utils.svgPaths.moveBy(topRow.xPos, this.info_.startY);
-  for (var i = 0, elem; elem = elements[i]; i++) {
+  for (var i = 0, elem; (elem = elements[i]); i++) {
     if (elem.type == 'round corner') {
       this.outlinePath_ +=
           Blockly.blockRendering.constants.OUTSIDE_CORNERS.topLeft;
@@ -262,8 +262,7 @@ Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
   this.outlinePath_ +=
     Blockly.utils.svgPaths.lineOnAxis('v', bottomRow.height - bottomRow.overhangY);
 
-  for (var i = elems.length - 1; i >= 0; i--) {
-    var elem = elems[i];
+  for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
     if (elem.isNextConnection()) {
       this.outlinePath_ += bottomRow.notchShape.pathRight;
     } else if (elem.isSquareCorner()) {
@@ -308,8 +307,8 @@ Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
-  for (var i = 0, row; row = this.info_.rows[i]; i++) {
-    for (var j = 0, elem; elem = row.elements[j]; j++) {
+  for (var i = 0, row; (row = this.info_.rows[i]); i++) {
+    for (var j = 0, elem; (elem = row.elements[j]); j++) {
       if (elem.isInlineInput()) {
         this.drawInlineInput_(elem);
       } else if (elem.isIcon() || elem.isField()) {

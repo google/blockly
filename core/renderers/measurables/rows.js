@@ -156,6 +156,14 @@ Blockly.blockRendering.Row.prototype.notchShape =
     Blockly.blockRendering.constants.NOTCH;
 
 /**
+ * The offset from the left side of a block or the inside of a statement input
+ * to the left side of the connection notch.
+ * @type {number}
+ */
+Blockly.blockRendering.Row.prototype.notchOffset =
+    Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;
+
+/**
  * Inspect all subcomponents and populate all size properties on the row.
  * @package
  */

@@ -129,7 +129,7 @@ function test_setTheme() {
   };
   blockA.styleName_ = 'styleOne';
 
-  setUpMockMethod(mockControl_, Blockly, 'getMainWorkspace', null, [workspace]);
+  var mockControl_ = setUpMockMethod(Blockly, 'getMainWorkspace', null, [workspace]);
 
   Blockly.setTheme(blockStyles);
 
@@ -145,6 +145,8 @@ function test_setTheme() {
   assertEquals(Blockly.Events.FIRE_QUEUE_.pop().element, 'theme');
 
   undefineThemeTestBlocks();
+
+  mockControl_.restore();
 }
 
 function stringifyAndCompare(val1, val2) {

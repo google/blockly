@@ -1,4 +1,5 @@
-/* exported assertEquals, assertTrue, assertFalse, assertNull, assertNotNull,
+/* exported assertEquals, assertNotEquals, assertArrayEquals, assertTrue, assertFalse,
+   assertNull, assertNotNull, assertNotNullNorUndefined, assert,
    isEqualArrays, assertUndefined, assertNotUndefined,
    defineRowBlock, defineStackBlock */
 function _argumentsIncludeComments(expectedNumberOfNonCommentArgs, args) {
@@ -34,6 +35,17 @@ function assertEquals() {
   var var2 = _nonCommentArg(2, 2, arguments);
   var comment = _commentArg(2, arguments);
   chai.assert.equal(var1, var2, comment);
+}
+
+/**
+ * Converts from JSUnit assertNotEquals to chai.assert.notEquals.
+ */
+function assertNotEquals() {
+  _validateArguments(2, arguments);
+  var var1 = _nonCommentArg(1, 2, arguments);
+  var var2 = _nonCommentArg(2, 2, arguments);
+  var comment = _commentArg(2, arguments);
+  chai.assert.notEqual(var1, var2, comment);
 }
 
 /**
@@ -82,6 +94,14 @@ function assertNotNull() {
   chai.assert.isNotNull(val, commentArg);
 }
 
+function assertNotNullNorUndefined() {
+  assertNotNull(arguments);
+}
+
+function assert() {
+  chai.assert(arguments);
+}
+
 /**
  * Check that two arrays have the same content.
  * @param {!Array.<string>} array1 The first array.
@@ -106,6 +126,13 @@ function assertNotUndefined() {
   var commentArg = _commentArg(1, arguments);
   var val = _nonCommentArg(1, 1, arguments);
   chai.assert.isDefined(val, commentArg);
+}
+
+function assertArrayEquals() {
+  _validateArguments(2, arguments);
+  var var1 = _nonCommentArg(1, 2, arguments);
+  var var2 = _nonCommentArg(2, 2, arguments);
+  isEqualArrays(var1, var2);
 }
 
 function defineStackBlock() {

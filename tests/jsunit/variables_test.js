@@ -24,8 +24,6 @@
  */
 'use strict';
 
-goog.require('goog.testing');
-
 function variablesTest_setUp() {
   defineGetVarBlock();
   var workspace = new Blockly.Workspace();

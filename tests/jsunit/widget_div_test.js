@@ -19,7 +19,6 @@
  */
 'use strict';
 
-goog.require('goog.testing');
 
 function widgetdiv_testHelper_makeBBox(left, top, width, height) {
   return {

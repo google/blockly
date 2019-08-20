@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <title>Blockly Workspace SVG testing</title>
 <script src="../../blockly_uncompressed.js"></script>
-<script>goog.require('goog.testing.jsunit');</script>
 <script src="../../msg/messages.js"></script>
 <script src="../../blocks/logic.js"></script>
 <script src="../../blocks/loops.js"></script>
@@ -51,12 +50,20 @@ h1 {
   <div id="blocklyDiv"></div>
 
   <h1>Blockly Workspace testing</h1>
+
+  <script src="https://unpkg.com/chai/chai.js"></script>
+  <script src="https://unpkg.com/mocha@5.2.0/mocha.js"></script>
+  <script src="https://unpkg.com/sinon/pkg/sinon.js"></script>
+  <script src="../mocha/test_helpers.js"></script>
+  
   <script src="../jsunit/test_utilities.js"></script>
   <script src="workspace_svg_test.js"></script>
   <script src="procedure_svg_test.js"></script>
   <!-- TODO (#1960): Uncomment once comment deletion is fixed. -->
   <!--<script src="event_svg_test.js"></script>-->
-
+  
+  <script src="../jsunit/mocha_jsunit_test_runner.js"></script>
+  
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
     <block type="controls_ifelse"></block>
     <block type="logic_compare"></block>

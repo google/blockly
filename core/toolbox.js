@@ -306,6 +306,10 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
       }
   }
 
+  if (this.shouldPopulateSearch_) {
+    this.search_.clearAll();
+  }
+
   var openNode =
     this.syncTrees_(newTree, this.tree_, this.workspace_.options.pathToMedia, this.shouldPopulateSearch_);
   

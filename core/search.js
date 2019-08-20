@@ -155,3 +155,9 @@ Blockly.Search.prototype.blocksMatchingSearchTerms = function(terms) {
 
     return intersectingMatches.getValues();
 };
+
+Blockly.Search.prototype.clearAll = function() {
+  delete this.blockTrie_;
+
+  this.blockTrie_ = new goog.structs.Trie;
+}

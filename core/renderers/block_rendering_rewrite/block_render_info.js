@@ -38,6 +38,7 @@ goog.require('Blockly.blockRendering.PreviousConnection');
 goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.OutputConnection');
 
+goog.require('Blockly.RenderedConnection');
 
 /**
  * An object containing all sizing information needed to draw this block.

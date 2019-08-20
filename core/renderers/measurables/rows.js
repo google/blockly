@@ -221,8 +221,6 @@ Blockly.blockRendering.Row.prototype.getLastSpacer = function() {
  * connections.
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
- * @param {!Blockly.BlockSvg} block The block for which this represents the top
- *     row.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Row}
@@ -250,7 +248,7 @@ Blockly.blockRendering.TopRow = function() {
 
   /**
    * The previous connection on the block, if any.
-   * @type {Blockly.BlockRendering.PreviousConnection}
+   * @type {Blockly.blockRendering.PreviousConnection}
    */
   this.connection = null;
 };
@@ -321,8 +319,6 @@ Blockly.blockRendering.TopRow.prototype.measure = function() {
  * An object containing information about what elements are in the bottom row of
  * a block as well as spacing information for the top row.
  * Elements in a bottom row can consist of corners, spacers and next connections.
- * @param {!Blockly.BlockSvg} block The block for which this represents the
- *     bottom row.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Row}

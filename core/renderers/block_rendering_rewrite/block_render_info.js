@@ -59,7 +59,8 @@ Blockly.blockRendering.RenderInfo = function(block) {
    * @type {Blockly.blockRendering.OutputConnection}
    */
   this.outputConnection = !block.outputConnection ? null :
-      new Blockly.blockRendering.OutputConnection(block.outputConnection);
+      new Blockly.blockRendering.OutputConnection(
+          /** @type {Blockly.RenderedConnection} */(block.outputConnection));
 
   /**
    * Whether the block should be rendered as a single line, either because it's
@@ -152,7 +153,6 @@ Blockly.blockRendering.RenderInfo = function(block) {
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
  *
- * @param {!Blockly.BlockSvg} block The block to measure.
  * @private
  */
 Blockly.blockRendering.RenderInfo.prototype.measure_ = function() {

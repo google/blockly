@@ -289,6 +289,8 @@ Blockly.FieldAngle.prototype.setAngle = function(angle) {
   // Do wrapping.
   if (angle > Blockly.FieldAngle.WRAP) {
     angle -= 360;
+  } else if (angle < 0) {
+    angle += 360;
   }
 
   // Update value.
@@ -354,8 +356,7 @@ Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
   if (e.keyCode === Blockly.utils.KeyCodes.LEFT) {
     // decrement (increment in RTL)
     multiplier = this.sourceBlock_.RTL ? 1 : -1;
-  } else if (e.keyCode === Blockly.utils.KeyCodes.RIGHT ||
-      e.keyCode === Blockly.utils.KeyCodes.UP) {
+  } else if (e.keyCode === Blockly.utils.KeyCodes.RIGHT) {
     // increment (decrement in RTL)
     multiplier = this.sourceBlock_.RTL ? -1 : 1;
   } else if (e.keyCode === Blockly.utils.KeyCodes.DOWN) {

@@ -137,6 +137,8 @@ this.BLOCKLY_BOOT = function(root) {
     f.write(add_dependency + '\n')
 
     provides = []
+    # Exclude field_date.js as it still has a dependency on the closure library
+    # see issue #2890. 
     for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
       if not dep.filename.startswith('core/field_date.js'):
         provides.extend(dep.provides)

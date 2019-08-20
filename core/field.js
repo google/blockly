@@ -65,7 +65,8 @@ Blockly.Field = function(value, opt_validator, opt_config) {
     }
     tooltip && this.setTooltip(tooltip);
 
-    // TODO: Possibly eventually add configurations like cursor and css class.
+    // TODO (#2884): Possibly add CSS class config option.
+    // TODO (#2885): Possibly add cursor config option.
   }
 
   this.setValue(value);

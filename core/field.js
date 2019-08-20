@@ -31,6 +31,7 @@ goog.provide('Blockly.Field');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
+goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.userAgent');
@@ -44,83 +45,33 @@ goog.require('Blockly.utils.style');
  * @param {Function=} opt_validator  A function that is called to validate
  *    changes to the field's value. Takes in a value & returns a validated
  *    value, or null to abort the change.
+ * @param {Object=} opt_config A map of options used to configure the field. See
+ *    the individual field's documentation for a list of properties this
+ *    parameter supports.
  * @constructor
  */
-Blockly.Field = function(value, opt_validator) {
+Blockly.Field = function(value, opt_validator, opt_config) {
   /**
    * The size of the area rendered by the field.
    * @type {Blockly.utils.Size}
    */
   this.size_ = new Blockly.utils.Size(0, 0);
 
+  if (opt_config) {
+    var tooltip = opt_config['tooltip'];
+    if (typeof tooltip == 'string') {
+      tooltip = Blockly.utils.replaceMessageReferences(
+          opt_config['tooltip']);
+    }
+    tooltip && this.setTooltip(tooltip);
+
+    // TODO (#2884): Possibly add CSS class config option.
+    // TODO (#2885): Possibly add cursor config option.
+  }
+
   this.setValue(value);
   opt_validator && this.setValidator(opt_validator);
 };
-
-/**
- * The set of all registered fields, keyed by field type as used in the JSON
- * definition of a block.
- * @type {!Object<string, !{fromJson: Function}>}
- * @private
- */
-Blockly.Field.TYPE_MAP_ = {};
-
-/**
- * Registers a field type. May also override an existing field type.
- * Blockly.Field.fromJson uses this registry to find the appropriate field.
- * @param {string} type The field type name as used in the JSON definition.
- * @param {!{fromJson: Function}} fieldClass The field class containing a
- *     fromJson function that can construct an instance of the field.
- * @throws {Error} if the type name is empty, or the fieldClass is not an
- *     object containing a fromJson function.
- */
-Blockly.Field.register = function(type, fieldClass) {
-  if ((typeof type != 'string') || (type.trim() == '')) {
-    throw Error('Invalid field type "' + type + '"');
-  }
-  if (!fieldClass || (typeof fieldClass.fromJson != 'function')) {
-    throw Error('Field "' + fieldClass + '" must have a fromJson function');
-  }
-  Blockly.Field.TYPE_MAP_[type] = fieldClass;
-};
-
-/**
- * Construct a Field from a JSON arg object.
- * Finds the appropriate registered field by the type name as registered using
- * Blockly.Field.register.
- * @param {!Object} options A JSON object with a type and options specific
- *     to the field type.
- * @return {Blockly.Field} The new field instance or null if a field wasn't
- *     found with the given type name
- * @package
- */
-Blockly.Field.fromJson = function(options) {
-  var fieldClass = Blockly.Field.TYPE_MAP_[options['type']];
-  if (fieldClass) {
-    var field = fieldClass.fromJson(options);
-    if (options['tooltip'] !== undefined) {
-      var rawValue = options['tooltip'];
-      var localizedText = Blockly.utils.replaceMessageReferences(rawValue);
-      field.setTooltip(localizedText);
-    }
-    return field;
-  }
-  return null;
-};
-
-/**
- * Temporary cache of text widths.
- * @type {Object}
- * @private
- */
-Blockly.Field.cacheWidths_ = null;
-
-/**
- * Number of current references to cache.
- * @type {number}
- * @private
- */
-Blockly.Field.cacheReference_ = 0;
 
 /**
  * The default height of the border rect on any field.
@@ -588,14 +539,14 @@ Blockly.Field.prototype.render_ = function() {
 /**
  * Updates the width of the field. Redirects to updateSize_().
  * @deprecated May 2019  Use Blockly.Field.updateSize_() to force an update
- * to the size of the field, or Blockly.Field.getCachedWidth() to check the
- * size of the field..
+ * to the size of the field, or Blockly.utils.dom.getTextWidth() to
+ * check the size of the field.
  */
 Blockly.Field.prototype.updateWidth = function() {
   console.warn('Deprecated call to updateWidth, call' +
     ' Blockly.Field.updateSize_ to force an update to the size of the' +
-    ' field, or Blockly.Field.getCachedWidth() to check the size of the' +
-    ' field.');
+    ' field, or Blockly.utils.dom.getTextWidth() to check the size' +
+    ' of the field.');
   this.updateSize_();
 };
 
@@ -604,74 +555,13 @@ Blockly.Field.prototype.updateWidth = function() {
  * @protected
  */
 Blockly.Field.prototype.updateSize_ = function() {
-  var textWidth = Blockly.Field.getCachedWidth(this.textElement_);
+  var textWidth = Blockly.utils.dom.getTextWidth(this.textElement_);
   var totalWidth = textWidth;
   if (this.borderRect_) {
     totalWidth += Blockly.Field.X_PADDING;
     this.borderRect_.setAttribute('width', totalWidth);
   }
   this.size_.width = totalWidth;
-};
-
-/**
- * Gets the width of a text element, caching it in the process.
- * @param {!Element} textElement An SVG 'text' element.
- * @return {number} Width of element.
- */
-Blockly.Field.getCachedWidth = function(textElement) {
-  var key = textElement.textContent + '\n' + textElement.className.baseVal;
-  var width;
-
-  // Return the cached width if it exists.
-  if (Blockly.Field.cacheWidths_) {
-    width = Blockly.Field.cacheWidths_[key];
-    if (width) {
-      return width;
-    }
-  }
-
-  // Attempt to compute fetch the width of the SVG text element.
-  try {
-    if (Blockly.utils.userAgent.IE || Blockly.utils.userAgent.EDGE) {
-      width = textElement.getBBox().width;
-    } else {
-      width = textElement.getComputedTextLength();
-    }
-  } catch (e) {
-    // In other cases where we fail to geth the computed text. Instead, use an
-    // approximation and do not cache the result. At some later point in time
-    // when the block is inserted into the visible DOM, this method will be
-    // called again and, at that point in time, will not throw an exception.
-    return textElement.textContent.length * 8;
-  }
-
-  // Cache the computed width and return.
-  if (Blockly.Field.cacheWidths_) {
-    Blockly.Field.cacheWidths_[key] = width;
-  }
-  return width;
-};
-
-/**
- * Start caching field widths.  Every call to this function MUST also call
- * stopCache.  Caches must not survive between execution threads.
- */
-Blockly.Field.startCache = function() {
-  Blockly.Field.cacheReference_++;
-  if (!Blockly.Field.cacheWidths_) {
-    Blockly.Field.cacheWidths_ = {};
-  }
-};
-
-/**
- * Stop caching field widths.  Unless caching was already on when the
- * corresponding call to startCache was made.
- */
-Blockly.Field.stopCache = function() {
-  Blockly.Field.cacheReference_--;
-  if (!Blockly.Field.cacheReference_) {
-    Blockly.Field.cacheWidths_ = null;
-  }
 };
 
 /**
@@ -991,4 +881,15 @@ Blockly.Field.prototype.getParentInput = function() {
     }
   }
   return parentInput;
+};
+
+/**
+ * Handles the given action.
+ * This is only triggered when keyboard accessibility mode is enabled.
+ * @param {!Blockly.Action} _action The action to be handled.
+ * @return {boolean} True if the field handled the action, false otherwise.
+ * @package
+ */
+Blockly.Field.prototype.onBlocklyAction = function(_action) {
+  return false;
 };

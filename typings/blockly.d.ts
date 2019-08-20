@@ -87,404 +87,8 @@ declare module Blockly {
 declare namespace goog {
   function require(name: string): void;
   function provide(name: string): void;
+  function inherits(child: any, parent: any): void;
   function isFunction(f: any): boolean;
-  function isString(s: any): boolean;
-
-  class Disposable {
-    dispose(): void;
-  }
-
-  namespace dom {
-    function createDom(tagName: string, opt_attributes?: Object, ...var_args: Object[]): Element;
-    function createDom(name: string, ns?: string, children?: any): HTMLElement;
-    function removeChildren(el: Element): void;
-    function removeNode(node: Node): void;
-    function getViewportSize(): any;
-
-    namespace classlist {
-      function add(el: Element, className: string): void;
-    }
-
-    class DomHelper {
-    }
-  }
-
-  namespace ui {
-    class Control extends Component {
-      getChildCount(): number;
-      getContent(): string | Node | Array<Node>;
-      getContentElement(): Element;
-      setChecked(checked: boolean): void;
-      setContent(content: string | Node | Array<Node>): void;
-      setVisible(visible: boolean, opt_force?: boolean): boolean;
-    }
-    class Component {
-      static EventType: {
-        BEFORE_SHOW: string;
-        SHOW: string;
-        HIDE: string;
-        DISABLE: string;
-        ENABLE: string;
-        HIGHLIGHT: string;
-        UNHIGHLIGHT: string;
-        ACTIVATE: string;
-        DEACTIVATE: string;
-        SELECT: string;
-        UNSELECT: string;
-        CHECK: string;
-        UNCHECK: string;
-        FOCUS: string;
-        BLUR: string;
-        OPEN: string;
-        CLOSE: string;
-        ENTER: string;
-        LEAVE: string;
-        ACTION: string;
-        CHANGE: string;
-      };
-      getHandler<T>(): events.EventHandler<T>;
-      getElement(): Element;
-      render(opt_parentElement?: Element): void;
-      setId(id: string): void;
-      setRightToLeft(rightToLeft: boolean): void;
-      addChild(child: Component, opt_render?: boolean): void;
-      getChildAt(index: number): Component;
-      removeChildren(opt_unrender: boolean): void;
-    }
-    class Container extends Component {
-    }
-    class Menu extends Container implements events.Listenable {
-      listen: () => events.ListenableKey;
-      setAllowAutoFocus(allow: boolean): void;
-    }
-    class MenuItem extends Control {
-      constructor(content: (string | Node));
-      setCheckable(checkable: boolean): void;
-      setValue(value: any): void;
-      getValue(): any;
-      addClassName(className: string): void;
-    }
-    class DatePicker extends Component {
-
-    }
-  }
-
-  namespace ui.tree {
-    class BaseNode {
-    }
-    class TreeControl__Class {
-    }
-    class TreeNode__Class {
-    }
-  }
-
-  namespace events {
-    function listen(eventSource: Element | Listenable, eventType: EventType, listener: any, capturePhase?: boolean, handler?: Object): void;
-    function unlistenByKey(key: any): void;
-    interface ListenableKey {
-      key: number;
-    }
-    interface Listenable {
-      listen: () => ListenableKey;
-    }
-    type EventType = string;
-    let EventType: {
-      CLICK: EventType;
-      RIGHTCLICK: EventType;
-      DBLCLICK: EventType;
-      MOUSEDOWN: EventType;
-      MOUSEUP: EventType;
-      MOUSEOVER: EventType;
-      MOUSEOUT: EventType;
-      MOUSEMOVE: EventType;
-      MOUSEENTER: EventType;
-      MOUSELEAVE: EventType;
-      SELECTSTART: EventType;
-      WHEEL: EventType;
-      KEYPRESS: EventType;
-      KEYDOWN: EventType;
-      KEYUP: EventType;
-      BLUR: EventType;
-      FOCUS: EventType;
-      DEACTIVATE: EventType;
-      FOCUSIN: EventType;
-      FOCUSOUT: EventType;
-      CHANGE: EventType;
-      SELECT: EventType;
-      SUBMIT: EventType;
-      INPUT: EventType;
-      PROPERTYCHANGE: EventType;
-      DRAGSTART: EventType;
-      DRAG: EventType;
-      DRAGENTER: EventType;
-      DRAGOVER: EventType;
-      DRAGLEAVE: EventType;
-      DROP: EventType;
-      DRAGEND: EventType;
-      TOUCHSTART: EventType;
-      TOUCHMOVE: EventType;
-      TOUCHEND: EventType;
-      TOUCHCANCEL: EventType;
-      BEFOREUNLOAD: EventType;
-      CONSOLEMESSAGE: EventType;
-      CONTEXTMENU: EventType;
-      DOMCONTENTLOADED: EventType;
-      ERROR: EventType;
-      HELP: EventType;
-      LOAD: EventType;
-      LOSECAPTURE: EventType;
-      ORIENTATIONCHANGE: EventType;
-      READYSTATECHANGE: EventType;
-      RESIZE: EventType;
-      SCROLL: EventType;
-      UNLOAD: EventType;
-      HASHCHANGE: EventType;
-      PAGEHIDE: EventType;
-      PAGESHOW: EventType;
-      POPSTATE: EventType;
-      COPY: EventType;
-      PASTE: EventType;
-      CUT: EventType;
-      BEFORECOPY: EventType;
-      BEFORECUT: EventType;
-      BEFOREPASTE: EventType;
-      ONLINE: EventType;
-      OFFLINE: EventType;
-      MESSAGE: EventType;
-      CONNECT: EventType;
-      ANIMATIONSTART: EventType;
-      ANIMATIONEND: EventType;
-      ANIMATIONITERATION: EventType;
-      TRANSITIONEND: EventType;
-      POINTERDOWN: EventType;
-      POINTERUP: EventType;
-      POINTERCANCEL: EventType;
-      POINTERMOVE: EventType;
-      POINTEROVER: EventType;
-      POINTEROUT: EventType;
-      POINTERENTER: EventType;
-      POINTERLEAVE: EventType;
-      GOTPOINTERCAPTURE: EventType;
-      LOSTPOINTERCAPTURE: EventType;
-      MSGESTURECHANGE: EventType;
-      MSGESTUREEND: EventType;
-      MSGESTUREHOLD: EventType;
-      MSGESTURESTART: EventType;
-      MSGESTURETAP: EventType;
-      MSGOTPOINTERCAPTURE: EventType;
-      MSINERTIASTART: EventType;
-      MSLOSTPOINTERCAPTURE: EventType;
-      MSPOINTERCANCEL: EventType;
-      MSPOINTERDOWN: EventType;
-      MSPOINTERENTER: EventType;
-      MSPOINTERHOVER: EventType;
-      MSPOINTERLEAVE: EventType;
-      MSPOINTERMOVE: EventType;
-      MSPOINTEROUT: EventType;
-      MSPOINTEROVER: EventType;
-      MSPOINTERUP: EventType;
-      TEXT: EventType;
-      TEXTINPUT: EventType;
-      COMPOSITIONSTART: EventType;
-      COMPOSITIONUPDATE: EventType;
-      COMPOSITIONEND: EventType;
-      EXIT: EventType;
-      LOADABORT: EventType;
-      LOADCOMMIT: EventType;
-      LOADREDIRECT: EventType;
-      LOADSTART: EventType;
-      LOADSTOP: EventType;
-      RESPONSIVE: EventType;
-      SIZECHANGED: EventType;
-      UNRESPONSIVE: EventType;
-      VISIBILITYCHANGE: EventType;
-      STORAGE: EventType;
-      DOMSUBTREEMODIFIED: EventType;
-      DOMNODEINSERTED: EventType;
-      DOMNODEREMOVED: EventType;
-      DOMNODEREMOVEDFROMDOCUMENT: EventType;
-      DOMNODEINSERTEDINTODOCUMENT: EventType;
-      DOMATTRMODIFIED: EventType;
-      DOMCHARACTERDATAMODIFIED: EventType;
-    };
-    let KeyCodes: {
-      A: number,
-      ALT: number,
-      APOSTROPHE: number,
-      AT_SIGN: number,
-      B: number,
-      BACKSLASH: number,
-      BACKSPACE: number,
-      C: number,
-      CAPS_LOCK: number,
-      CLOSE_SQUARE_BRACKET: number,
-      COMMA: number,
-      CONTEXT_MENU: number,
-      CTRL: number,
-      D: number,
-      DASH: number,
-      DELETE: number,
-      DOWN: number,
-      E: number,
-      EIGHT: number,
-      END: number,
-      ENTER: number,
-      EQUALS: number,
-      ESC: number,
-      F: number,
-      F1: number,
-      F10: number,
-      F11: number,
-      F12: number,
-      F2: number,
-      F3: number,
-      F4: number,
-      F5: number,
-      F6: number,
-      F7: number,
-      F8: number,
-      F9: number,
-      FF_DASH: number,
-      FF_EQUALS: number,
-      FF_SEMICOLON: number,
-      FIRST_MEDIA_KEY: number,
-      FIVE: number,
-      FOUR: number,
-      G: number,
-      H: number,
-      HOME: number,
-      I: number,
-      INSERT: number,
-      J: number,
-      K: number,
-      L: number,
-      LAST_MEDIA_KEY: number,
-      LEFT: number,
-      M: number,
-      MAC_ENTER: number,
-      MAC_FF_META: number,
-      MAC_WK_CMD_LEFT: number,
-      MAC_WK_CMD_RIGHT: number,
-      META: number,
-      N: number,
-      NINE: number,
-      NUMLOCK: number,
-      NUM_CENTER: number,
-      NUM_DIVISION: number,
-      NUM_EIGHT: number,
-      NUM_FIVE: number,
-      NUM_FOUR: number,
-      NUM_MINUS: number,
-      NUM_MULTIPLY: number,
-      NUM_NINE: number,
-      NUM_ONE: number,
-      NUM_PERIOD: number,
-      NUM_PLUS: number,
-      NUM_SEVEN: number,
-      NUM_SIX: number,
-      NUM_THREE: number,
-      NUM_TWO: number,
-      NUM_ZERO: number,
-      O: number,
-      ONE: number,
-      OPEN_SQUARE_BRACKET: number,
-      P: number,
-      PAGE_DOWN: number,
-      PAGE_UP: number,
-      PAUSE: number,
-      PERIOD: number,
-      PHANTOM: number,
-      PLUS_SIGN: number,
-      PRINT_SCREEN: number,
-      Q: number,
-      QUESTION_MARK: number,
-      R: number,
-      RIGHT: number,
-      S: number,
-      SCROLL_LOCK: number,
-      SEMICOLON: number,
-      SEVEN: number,
-      SHIFT: number,
-      SINGLE_QUOTE: number,
-      SIX: number,
-      SLASH: number,
-      SPACE: number,
-      T: number,
-      TAB: number,
-      THREE: number,
-      TILDE: number,
-      TWO: number,
-      U: number,
-      UP: number,
-      V: number,
-      VK_NONAME: number,
-      W: number,
-      WIN_IME: number,
-      WIN_KEY: number,
-      WIN_KEY_FF_LINUX: number,
-      WIN_KEY_RIGHT: number,
-      X: number,
-      Y: number,
-      Z: number,
-      ZERO: number
-    }
-    class EventTarget extends Disposable {
-    }
-    class EventHandler<T> {
-      handleEvent(e: any): void;
-      listen(src: Element | Listenable, type: string, opt_fn?: any): EventHandler<T>;
-    }
-
-    /**
-    * Accepts a browser event object and creates a patched, cross browser event
-    * object.
-    * The content of this object will not be initialized if no event object is
-    * provided. If this is the case, init() needs to be invoked separately.
-    * @param {Event=} opt_e Browser event object.
-    * @param {EventTarget=} opt_currentTarget Current target for event.
-    */
-    class BrowserEvent {
-      constructor(opt_e?: Event, opt_currentTarget?: EventTarget);
-    }
-  }
-  namespace userAgent {
-    /**
-     * Whether the user agent is running on a mobile device.
-     *
-     * TODO(nnaze): Consider deprecating MOBILE when labs.userAgent
-     *   is promoted as the gecko/webkit logic is likely inaccurate.
-     *
-     * @type {boolean}
-     */
-    var MOBILE: boolean;
-
-    /**
-     * Whether the user agent is running on Android.
-     * @type {boolean}
-     */
-    var ANDROID: boolean;
-
-    /**
-     * Whether the user agent is running on an iPhone.
-     * @type {boolean}
-     */
-    var IPHONE: boolean;
-
-    /**
-     * Whether the user agent is running on an iPad.
-     * @type {boolean}
-     */
-    var IPAD: boolean;
-  }
-  namespace html {
-    class SafeHtml {
-    }
-  }
-  namespace positioning {
-    class ClientPosition {
-      constructor(x: number, y: number);
-    }
-  }
 }
 
 
@@ -503,7 +107,7 @@ declare module Blockly {
              * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
              *     create a new ID.
              * @constructor
-             * @throw When block is not valid or block name is not allowed.
+             * @throws When block is not valid or block name is not allowed.
              */
             constructor(workspace: Blockly.Workspace, prototypeName: string, opt_id?: string);
     
@@ -589,6 +193,13 @@ declare module Blockly {
              * @type {?string}
              */
             data: string;
+    
+            /**
+             * Has this block been disposed of?
+             * @type {boolean}
+             * @package
+             */
+            disposed: boolean;
     
             /**
              * Dispose of this block.
@@ -1677,22 +1288,10 @@ declare module Blockly.BlockSvg {
     
 
     /**
-     * Horizontal space between elements.
-     * @const
-     */
-    var SEP_SPACE_X: any /*missing*/;
-
-    /**
      * Vertical space between elements.
      * @const
      */
     var SEP_SPACE_Y: any /*missing*/;
-
-    /**
-     * Vertical padding around inline elements.
-     * @const
-     */
-    var INLINE_PADDING_Y: any /*missing*/;
 
     /**
      * Minimum height of a block.
@@ -1701,201 +1300,16 @@ declare module Blockly.BlockSvg {
     var MIN_BLOCK_Y: any /*missing*/;
 
     /**
-     * Height of horizontal puzzle tab.
-     * @const
-     */
-    var TAB_HEIGHT: any /*missing*/;
-
-    /**
      * Width of horizontal puzzle tab.
      * @const
      */
     var TAB_WIDTH: any /*missing*/;
 
     /**
-     * Width of vertical tab (inc left margin).
-     * @const
-     */
-    var NOTCH_WIDTH: any /*missing*/;
-
-    /**
-     * Offset of the notch from the left side of the block.
-     * @type {number}
-     * @const
-     */
-    var NOTCH_OFFSET_X: number;
-
-    /**
-     * Offset of the puzzle tab from the top of the block.
-     * @type {number}
-     * @const
-     */
-    var TAB_OFFSET_Y: number;
-
-    /**
-     * Rounded corner radius.
-     * @const
-     */
-    var CORNER_RADIUS: any /*missing*/;
-
-    /**
      * Do blocks with no previous or output connections have a 'hat' on top?
      * @const
      */
     var START_HAT: any /*missing*/;
-
-    /**
-     * Height of the top hat.
-     * @const
-     */
-    var START_HAT_HEIGHT: any /*missing*/;
-
-    /**
-     * Path of the top hat's curve.
-     * @const
-     */
-    var START_HAT_PATH: any /*missing*/;
-
-    /**
-     * Path of the top hat's curve's highlight in LTR.
-     * @const
-     */
-    var START_HAT_HIGHLIGHT_LTR: any /*missing*/;
-
-    /**
-     * Path of the top hat's curve's highlight in RTL.
-     * @const
-     */
-    var START_HAT_HIGHLIGHT_RTL: any /*missing*/;
-
-    /**
-     * Distance from shape edge to intersect with a curved corner at 45 degrees.
-     * Applies to highlighting on around the inside of a curve.
-     * @const
-     */
-    var DISTANCE_45_INSIDE: any /*missing*/;
-
-    /**
-     * Distance from shape edge to intersect with a curved corner at 45 degrees.
-     * Applies to highlighting on around the outside of a curve.
-     * @const
-     */
-    var DISTANCE_45_OUTSIDE: any /*missing*/;
-
-    /**
-     * SVG path for drawing next/previous notch from left to right.
-     * @const
-     */
-    var NOTCH_PATH_LEFT: any /*missing*/;
-
-    /**
-     * SVG path for drawing next/previous notch from left to right with
-     * highlighting.
-     * @const
-     */
-    var NOTCH_PATH_LEFT_HIGHLIGHT: any /*missing*/;
-
-    /**
-     * SVG path for drawing next/previous notch from right to left.
-     * @const
-     */
-    var NOTCH_PATH_RIGHT: any /*missing*/;
-
-    /**
-     * SVG path for drawing jagged teeth at the end of collapsed blocks.
-     * @const
-     */
-    var JAGGED_TEETH: any /*missing*/;
-
-    /**
-     * Height of SVG path for jagged teeth at the end of collapsed blocks.
-     * @const
-     */
-    var JAGGED_TEETH_HEIGHT: any /*missing*/;
-
-    /**
-     * Width of SVG path for jagged teeth at the end of collapsed blocks.
-     * @const
-     */
-    var JAGGED_TEETH_WIDTH: any /*missing*/;
-
-    /**
-     * SVG path for drawing a horizontal puzzle tab from top to bottom.
-     * @const
-     */
-    var TAB_PATH_DOWN: any /*missing*/;
-
-    /**
-     * SVG path for drawing a horizontal puzzle tab from top to bottom with
-     * highlighting from the upper-right.
-     * @const
-     */
-    var TAB_PATH_DOWN_HIGHLIGHT_RTL: any /*missing*/;
-
-    /**
-     * SVG start point for drawing the top-left corner.
-     * @const
-     */
-    var TOP_LEFT_CORNER_START: any /*missing*/;
-
-    /**
-     * SVG start point for drawing the top-left corner's highlight in RTL.
-     * @const
-     */
-    var TOP_LEFT_CORNER_START_HIGHLIGHT_RTL: any /*missing*/;
-
-    /**
-     * SVG start point for drawing the top-left corner's highlight in LTR.
-     * @const
-     */
-    var TOP_LEFT_CORNER_START_HIGHLIGHT_LTR: any /*missing*/;
-
-    /**
-     * SVG path for drawing the rounded top-left corner.
-     * @const
-     */
-    var TOP_LEFT_CORNER: any /*missing*/;
-
-    /**
-     * SVG path for drawing the highlight on the rounded top-left corner.
-     * @const
-     */
-    var TOP_LEFT_CORNER_HIGHLIGHT: any /*missing*/;
-
-    /**
-     * SVG path for drawing the top-left corner of a statement input.
-     * Includes the top notch, a horizontal space, and the rounded inside corner.
-     * @const
-     */
-    var INNER_TOP_LEFT_CORNER: any /*missing*/;
-
-    /**
-     * SVG path for drawing the bottom-left corner of a statement input.
-     * Includes the rounded inside corner.
-     * @const
-     */
-    var INNER_BOTTOM_LEFT_CORNER: any /*missing*/;
-
-    /**
-     * SVG path for drawing highlight on the top-left corner of a statement
-     * input in RTL.
-     * @const
-     */
-    var INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL: any /*missing*/;
-
-    /**
-     * SVG path for drawing highlight on the bottom-left corner of a statement
-     * input in RTL.
-     * @const
-     */
-    var INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL: any /*missing*/;
-
-    /**
-     * SVG path for drawing highlight on the bottom-left corner of a statement
-     * input in LTR.
-     * @const
-     */
-    var INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR: any /*missing*/;
 }
 
 
@@ -2784,6 +2198,13 @@ declare module Blockly {
             targetConnection: Blockly.Connection;
     
             /**
+             * Has this connection been disposed of?
+             * @type {boolean}
+             * @package
+             */
+            disposed: boolean;
+    
+            /**
              * Horizontal location of this connection.
              * @type {number}
              * @protected
@@ -2835,7 +2256,9 @@ declare module Blockly {
             connect_(childConnection: Blockly.Connection): void;
     
             /**
-             * Sever all links to this connection (not including from the source object).
+             * Dispose of this connection. Deal with connected blocks and remove this
+             * connection from the database.
+             * @package
              */
             dispose(): void;
     
@@ -4094,6 +3517,13 @@ declare module Blockly {
             name: string|any /*undefined*/;
     
             /**
+             * Has this field been disposed of?
+             * @type {boolean}
+             * @package
+             */
+            disposed: boolean;
+    
+            /**
              * Maximum characters of text to display before adding an ellipsis.
              * @type {number}
              */
@@ -4342,8 +3772,8 @@ declare module Blockly {
             /**
              * Updates the width of the field. Redirects to updateSize_().
              * @deprecated May 2019  Use Blockly.Field.updateSize_() to force an update
-             * to the size of the field, or Blockly.Field.getCachedWidth() to check the
-             * size of the field..
+             * to the size of the field, or Blockly.utils.dom.getTextWidth() to
+             * check the size of the field.
              */
             updateWidth(): void;
     
@@ -4470,34 +3900,20 @@ declare module Blockly {
              * @package
              */
             getParentInput(): Blockly.Input;
+    
+            /**
+             * Handles the given action.
+             * This is only triggered when keyboard accessibility mode is enabled.
+             * @param {!Blockly.Action} _action The action to be handled.
+             * @return {boolean} True if the field handled the action, false otherwise.
+             * @package
+             */
+            onBlocklyAction(_action: Blockly.Action): boolean;
     } 
     
 }
 
 declare module Blockly.Field {
-
-    /**
-     * Registers a field type. May also override an existing field type.
-     * Blockly.Field.fromJson uses this registry to find the appropriate field.
-     * @param {string} type The field type name as used in the JSON definition.
-     * @param {!{fromJson: Function}} fieldClass The field class containing a
-     *     fromJson function that can construct an instance of the field.
-     * @throws {Error} if the type name is empty, or the fieldClass is not an
-     *     object containing a fromJson function.
-     */
-    function register(type: string, fieldClass: { fromJson: Function }): void;
-
-    /**
-     * Construct a Field from a JSON arg object.
-     * Finds the appropriate registered field by the type name as registered using
-     * Blockly.Field.register.
-     * @param {!Object} options A JSON object with a type and options specific
-     *     to the field type.
-     * @return {Blockly.Field} The new field instance or null if a field wasn't
-     *     found with the given type name
-     * @package
-     */
-    function fromJson(options: Object): Blockly.Field;
 
     /**
      * The default height of the border rect on any field.
@@ -4532,25 +3948,6 @@ declare module Blockly.Field {
      * @const
      */
     var NBSP: any /*missing*/;
-
-    /**
-     * Gets the width of a text element, caching it in the process.
-     * @param {!Element} textElement An SVG 'text' element.
-     * @return {number} Width of element.
-     */
-    function getCachedWidth(textElement: Element): number;
-
-    /**
-     * Start caching field widths.  Every call to this function MUST also call
-     * stopCache.  Caches must not survive between execution threads.
-     */
-    function startCache(): void;
-
-    /**
-     * Stop caching field widths.  Unless caching was already on when the
-     * corresponding call to startCache was made.
-     */
-    function stopCache(): void;
 }
 
 
@@ -4991,10 +4388,10 @@ declare module Blockly {
     
             /**
              * Handle the selection of an item in the dropdown menu.
-             * @param {!goog.ui.Menu} menu The Menu component clicked.
-             * @param {!goog.ui.MenuItem} menuItem The MenuItem selected within menu.
+             * @param {!Blockly.Menu} menu The Menu component clicked.
+             * @param {!Blockly.MenuItem} menuItem The MenuItem selected within menu.
              */
-            onItemSelected(menu: goog.ui.Menu, menuItem: goog.ui.MenuItem): void;
+            onItemSelected(menu: Blockly.Menu, menuItem: Blockly.MenuItem): void;
     
             /**
              * @return {boolean} True if the option list is generated by a function.
@@ -5331,6 +4728,34 @@ declare module Blockly.FieldNumber {
 }
 
 
+declare module Blockly.fieldRegistry {
+
+    /**
+     * Registers a field type. May also override an existing field type.
+     * Blockly.fieldRegistry.fromJson uses this registry to
+     * find the appropriate field type.
+     * @param {string} type The field type name as used in the JSON definition.
+     * @param {!{fromJson: Function}} fieldClass The field class containing a
+     *     fromJson function that can construct an instance of the field.
+     * @throws {Error} if the type name is empty, or the fieldClass is not an
+     *     object containing a fromJson function.
+     */
+    function register(type: string, fieldClass: { fromJson: Function }): void;
+
+    /**
+     * Construct a Field from a JSON arg object.
+     * Finds the appropriate registered field by the type name as registered using
+     * Blockly.fieldRegistry.register.
+     * @param {!Object} options A JSON object with a type and options specific
+     *     to the field type.
+     * @return {Blockly.Field} The new field instance or null if a field wasn't
+     *     found with the given type name
+     * @package
+     */
+    function fromJson(options: Object): Blockly.Field;
+}
+
+
 declare module Blockly {
 
     class FieldTextInput extends FieldTextInput__Class { }
@@ -5412,6 +4837,13 @@ declare module Blockly {
             showEditor_(opt_quietInput?: boolean): void;
     
             /**
+             * Create the text input editor widget.
+             * @return {!HTMLInputElement} The newly created text input editor.
+             * @protected
+             */
+            widgetCreate_(): HTMLInputElement;
+    
+            /**
              * Resize the editor to fit the text.
              * @protected
              */
@@ -5437,6 +4869,11 @@ declare module Blockly.FieldTextInput {
      * Point size of text.  Should match blocklyText's font-size in CSS.
      */
     var FONTSIZE: any /*missing*/;
+
+    /**
+     * Pixel size of input border radius.  Should match blocklyText's border-radius in CSS.
+     */
+    var BORDERRADIUS: any /*missing*/;
 
     /**
      * Ensure that only a number may be entered.
@@ -5577,10 +5014,10 @@ declare module Blockly {
              * Handle the selection of an item in the variable dropdown menu.
              * Special case the 'Rename variable...' and 'Delete variable...' options.
              * In the rename case, prompt the user for a new name.
-             * @param {!goog.ui.Menu} menu The Menu component clicked.
-             * @param {!goog.ui.MenuItem} menuItem The MenuItem selected within menu.
+             * @param {!Blockly.Menu} menu The Menu component clicked.
+             * @param {!Blockly.MenuItem} menuItem The MenuItem selected within menu.
              */
-            onItemSelected(menu: goog.ui.Menu, menuItem: goog.ui.MenuItem): void;
+            onItemSelected(menu: Blockly.Menu, menuItem: Blockly.MenuItem): void;
     } 
     
 }
@@ -6603,13 +6040,6 @@ declare module Blockly {
             updateColour(): void;
     
             /**
-             * Render the icon.
-             * @param {number} cursorX Horizontal offset at which to position the icon.
-             * @return {number} Horizontal offset for next item to draw.
-             */
-            renderIcon(cursorX: number): number;
-    
-            /**
              * Notification that the icon has moved.  Update the arrow accordingly.
              * @param {!Blockly.utils.Coordinate} xy Absolute location in workspace coordinates.
              */
@@ -7625,10 +7055,10 @@ declare module Blockly {
              * Retrieves and sets the colour for the category using the style name.
              * The category colour is set from the colour style attribute.
              * @param {string} styleName Name of the style.
-             * @param {!Blockly.Toolbox.TreeNode} childOut The child to set the hexColour on.
+             * @param {!Blockly.tree.TreeNode} childOut The child to set the hexColour on.
              * @param {string} categoryName Name of the toolbox category.
              */
-            setColourFromStyle_(styleName: string, childOut: Blockly.Toolbox.TreeNode, categoryName: string): void;
+            setColourFromStyle_(styleName: string, childOut: Blockly.tree.TreeNode, categoryName: string): void;
     
             /**
              * Updates the category colours and background colour of selected categories.
@@ -7672,53 +7102,17 @@ declare module Blockly {
 
 declare module Blockly.Toolbox {
 
-    class TreeControl extends TreeControl__Class { }
-    /** Fake class which should be extended to avoid inheriting static properties */
-    class TreeControl__Class extends goog.ui.tree.TreeControl__Class  { 
-    
-            /**
-             * Extension of a TreeControl object that uses a custom tree node.
-             * @param {Blockly.Toolbox} toolbox The parent toolbox for this tree.
-             * @param {Object} config The configuration for the tree. See
-             *    goog.ui.tree.TreeControl.DefaultConfig.
-             * @constructor
-             * @extends {goog.ui.tree.TreeControl}
-             */
-            constructor(toolbox: Blockly.Toolbox, config: Object);
-    } 
-    
-
-    class TreeNode extends TreeNode__Class { }
-    /** Fake class which should be extended to avoid inheriting static properties */
-    class TreeNode__Class extends goog.ui.tree.TreeNode__Class  { 
-    
-            /**
-             * A single node in the tree, customized for Blockly's UI.
-             * @param {Blockly.Toolbox} toolbox The parent toolbox for this tree.
-             * @param {!goog.html.SafeHtml} html The HTML content of the node label.
-             * @param {Object|undefined} config The configuration for the tree.
-             *    See goog.ui.tree.TreeControl.DefaultConfig.
-             *    If not specified, a default config will be used.
-             * @constructor
-             * @extends {goog.ui.tree.TreeNode}
-             */
-            constructor(toolbox: Blockly.Toolbox, html: goog.html.SafeHtml, config: Object|any /*undefined*/);
-    } 
-    
-
     class TreeSeparator extends TreeSeparator__Class { }
     /** Fake class which should be extended to avoid inheriting static properties */
-    class TreeSeparator__Class extends Blockly.Toolbox.TreeNode__Class  { 
+    class TreeSeparator__Class extends Blockly.tree.TreeNode__Class  { 
     
             /**
              * A blank separator node in the tree.
-             * @param {Object|undefined} config The configuration for the tree.
-             *    See goog.ui.tree.TreeControl.DefaultConfig
-             *    If not specified, a default config will be used.
+             * @param {Blockly.tree.BaseNode.Config} config The configuration for the tree.
              * @constructor
-             * @extends {Blockly.Toolbox.TreeNode}
+             * @extends {Blockly.tree.TreeNode}
              */
-            constructor(config: Object|any /*undefined*/);
+            constructor(config: Blockly.tree.BaseNode.Config);
     } 
     
 }
@@ -8121,11 +7515,11 @@ declare module Blockly.utils.uiMenu {
 
     /**
      * Get the size of a rendered goog.ui.Menu.
-     * @param {!goog.ui.Menu} menu The menu to measure.
+     * @param {!Blockly.Menu} menu The menu to measure.
      * @return {!Blockly.utils.Size} Object with width and height properties.
      * @package
      */
-    function getSize(menu: goog.ui.Menu): Blockly.utils.Size;
+    function getSize(menu: Blockly.Menu): Blockly.utils.Size;
 
     /**
      * Adjust the bounding boxes used to position the widget div to deal with RTL
@@ -11117,6 +10511,421 @@ declare module Blockly {
 
 declare module Blockly {
 
+    class Component extends Component__Class { }
+    /** Fake class which should be extended to avoid inheriting static properties */
+    class Component__Class  { 
+    
+            /**
+             * Default implementation of a UI component.
+             * Similar to Closure's goog.ui.Component.
+             *
+             * @constructor
+             */
+            constructor();
+    
+            /**
+             * Gets the unique ID for the instance of this component.  If the instance
+             * doesn't already have an ID, generates one on the fly.
+             * @return {string} Unique component ID.
+             * @package
+             */
+            getId(): string;
+    
+            /**
+             * Assigns an ID to this component instance.  It is the caller's responsibility
+             * to guarantee that the ID is unique.  If the component is a child of a parent
+             * component, then the parent component's child index is updated to reflect the
+             * new ID; this may throw an error if the parent already has a child with an ID
+             * that conflicts with the new ID.
+             * @param {string} id Unique component ID.
+             * @protected
+             */
+            setId(id: string): void;
+    
+            /**
+             * Gets the component's element.
+             * @return {Element} The element for the component.
+             * @package
+             */
+            getElement(): Element;
+    
+            /**
+             * Sets the component's root element to the given element.  Considered
+             * protected and final.
+             *
+             * This should generally only be called during createDom. Setting the element
+             * does not actually change which element is rendered, only the element that is
+             * associated with this UI component.
+             *
+             * This should only be used by subclasses and its associated renderers.
+             *
+             * @param {Element} element Root element for the component.
+             * @protected
+             */
+            setElementInternal(element: Element): void;
+    
+            /**
+             * Sets the parent of this component to use for event bubbling.  Throws an error
+             * if the component already has a parent or if an attempt is made to add a
+             * component to itself as a child.  Callers must use `removeChild`
+             * or `removeChildAt` to remove components from their containers before
+             * calling this method.
+             * @see Blockly.Component#removeChild
+             * @see Blockly.Component#removeChildAt
+             * @param {Blockly.Component} parent The parent component.
+             * @protected
+             */
+            setParent(parent: Blockly.Component): void;
+    
+            /**
+             * Returns the component's parent, if any.
+             * @return {?Blockly.Component} The parent component.
+             * @protected
+             */
+            getParent(): Blockly.Component;
+    
+            /**
+             * Determines whether the component has been added to the document.
+             * @return {boolean} TRUE if rendered. Otherwise, FALSE.
+             * @protected
+             */
+            isInDocument(): boolean;
+    
+            /**
+             * Creates the initial DOM representation for the component.  The default
+             * implementation is to set this.element_ = div.
+             * @protected
+             */
+            createDom(): void;
+    
+            /**
+             * Renders the component.  If a parent element is supplied, the component's
+             * element will be appended to it.  If there is no optional parent element and
+             * the element doesn't have a parentNode then it will be appended to the
+             * document body.
+             *
+             * If this component has a parent component, and the parent component is
+             * not in the document already, then this will not call `enterDocument`
+             * on this component.
+             *
+             * Throws an Error if the component is already rendered.
+             *
+             * @param {Element=} opt_parentElement Optional parent element to render the
+             *    component into.
+             * @package
+             */
+            render(opt_parentElement?: Element): void;
+    
+            /**
+             * Renders the component before another element. The other element should be in
+             * the document already.
+             *
+             * Throws an Error if the component is already rendered.
+             *
+             * @param {Node} sibling Node to render the component before.
+             * @protected
+             */
+            renderBefore(sibling: Node): void;
+    
+            /**
+             * Called when the component's element is known to be in the document. Anything
+             * using document.getElementById etc. should be done at this stage.
+             *
+             * If the component contains child components, this call is propagated to its
+             * children.
+             * @protected
+             */
+            enterDocument(): void;
+    
+            /**
+             * Called by dispose to clean up the elements and listeners created by a
+             * component, or by a parent component/application who has removed the
+             * component from the document but wants to reuse it later.
+             *
+             * If the component contains child components, this call is propagated to its
+             * children.
+             *
+             * It should be possible for the component to be rendered again once this method
+             * has been called.
+             * @protected
+             */
+            exitDocument(): void;
+    
+            /**
+             * Disposes of the object. If the object hasn't already been disposed of, calls
+             * {@link #disposeInternal}.
+             * @protected
+             */
+            dispose(): void;
+    
+            /**
+             * Disposes of the component.  Calls `exitDocument`, which is expected to
+             * remove event handlers and clean up the component.  Propagates the call to
+             * the component's children, if any. Removes the component's DOM from the
+             * document.
+             * @protected
+             */
+            disposeInternal(): void;
+    
+            /**
+             * Helper function for subclasses that gets a unique id for a given fragment,
+             * this can be used by components to generate unique string ids for DOM
+             * elements.
+             * @param {string} idFragment A partial id.
+             * @return {string} Unique element id.
+             * @protected
+             */
+            makeId(idFragment: string): string;
+    
+            /**
+             * Makes a collection of ids.  This is a convenience method for makeId.  The
+             * object's values are the id fragments and the new values are the generated
+             * ids.  The key will remain the same.
+             * @param {Object} object The object that will be used to create the ids.
+             * @return {!Object<string, string>} An object of id keys to generated ids.
+             * @protected
+             */
+            makeIds(object: Object): { [key: string]: string };
+    
+            /**
+             * Adds the specified component as the last child of this component.  See
+             * {@link Blockly.Component#addChildAt} for detailed semantics.
+             *
+             * @see Blockly.Component#addChildAt
+             * @param {Blockly.Component} child The new child component.
+             * @param {boolean=} opt_render If true, the child component will be rendered
+             *    into the parent.
+             * @package
+             */
+            addChild(child: Blockly.Component, opt_render?: boolean): void;
+    
+            /**
+             * Adds the specified component as a child of this component at the given
+             * 0-based index.
+             *
+             * Both `addChild` and `addChildAt` assume the following contract
+             * between parent and child components:
+             *  <ul>
+             *    <li>the child component's element must be a descendant of the parent
+             *        component's element, and
+             *    <li>the DOM state of the child component must be consistent with the DOM
+             *        state of the parent component (see `isInDocument`) in the
+             *        steady state -- the exception is to addChildAt(child, i, false) and
+             *        then immediately decorate/render the child.
+             *  </ul>
+             *
+             * In particular, `parent.addChild(child)` will throw an error if the
+             * child component is already in the document, but the parent isn't.
+             *
+             * Clients of this API may call `addChild` and `addChildAt` with
+             * `opt_render` set to true.  If `opt_render` is true, calling these
+             * methods will automatically render the child component's element into the
+             * parent component's element. If the parent does not yet have an element, then
+             * `createDom` will automatically be invoked on the parent before
+             * rendering the child.
+             *
+             * Invoking {@code parent.addChild(child, true)} will throw an error if the
+             * child component is already in the document, regardless of the parent's DOM
+             * state.
+             *
+             * If `opt_render` is true and the parent component is not already
+             * in the document, `enterDocument` will not be called on this component
+             * at this point.
+             *
+             * Finally, this method also throws an error if the new child already has a
+             * different parent, or the given index is out of bounds.
+             *
+             * @see Blockly.Component#addChild
+             * @param {Blockly.Component} child The new child component.
+             * @param {number} index 0-based index at which the new child component is to be
+             *    added; must be between 0 and the current child count (inclusive).
+             * @param {boolean=} opt_render If true, the child component will be rendered
+             *    into the parent.
+             * @protected
+             */
+            addChildAt(child: Blockly.Component, index: number, opt_render?: boolean): void;
+    
+            /**
+             * Returns the DOM element into which child components are to be rendered,
+             * or null if the component itself hasn't been rendered yet.  This default
+             * implementation returns the component's root element.  Subclasses with
+             * complex DOM structures must override this method.
+             * @return {Element} Element to contain child elements (null if none).
+             * @protected
+             */
+            getContentElement(): Element;
+    
+            /**
+             * Returns true if the component is rendered right-to-left, false otherwise.
+             * The first time this function is invoked, the right-to-left rendering property
+             * is set if it has not been already.
+             * @return {boolean} Whether the control is rendered right-to-left.
+             * @protected
+             */
+            isRightToLeft(): boolean;
+    
+            /**
+             * Set is right-to-left. This function should be used if the component needs
+             * to know the rendering direction during dom creation (i.e. before
+             * {@link #enterDocument} is called and is right-to-left is set).
+             * @param {boolean} rightToLeft Whether the component is rendered
+             *     right-to-left.
+             * @package
+             */
+            setRightToLeft(rightToLeft: boolean): void;
+    
+            /**
+             * Returns true if the component has children.
+             * @return {boolean} True if the component has children.
+             * @protected
+             */
+            hasChildren(): boolean;
+    
+            /**
+             * Returns the number of children of this component.
+             * @return {number} The number of children.
+             * @protected
+             */
+            getChildCount(): number;
+    
+            /**
+             * Returns an array containing the IDs of the children of this component, or an
+             * empty array if the component has no children.
+             * @return {!Array.<string>} Child component IDs.
+             * @protected
+             */
+            getChildIds(): string[];
+    
+            /**
+             * Returns the child with the given ID, or null if no such child exists.
+             * @param {string} id Child component ID.
+             * @return {?Blockly.Component} The child with the given ID; null if none.
+             * @protected
+             */
+            getChild(id: string): Blockly.Component;
+    
+            /**
+             * Returns the child at the given index, or null if the index is out of bounds.
+             * @param {number} index 0-based index.
+             * @return {?Blockly.Component} The child at the given index; null if none.
+             * @protected
+             */
+            getChildAt(index: number): Blockly.Component;
+    
+            /**
+             * Calls the given function on each of this component's children in order.  If
+             * `opt_obj` is provided, it will be used as the 'this' object in the
+             * function when called.  The function should take two arguments:  the child
+             * component and its 0-based index.  The return value is ignored.
+             * @param {function(this:T,?,number):?} f The function to call for every
+             * child component; should take 2 arguments (the child and its index).
+             * @param {T=} opt_obj Used as the 'this' object in f when called.
+             * @template T
+             * @protected
+             */
+            forEachChild<T>(f: { (_0: any, _1: number): any }, opt_obj?: T): void;
+    
+            /**
+             * Returns the 0-based index of the given child component, or -1 if no such
+             * child is found.
+             * @param {?Blockly.Component} child The child component.
+             * @return {number} 0-based index of the child component; -1 if not found.
+             * @protected
+             */
+            indexOfChild(child: Blockly.Component): number;
+    
+            /**
+             * Removes the given child from this component, and returns it.  Throws an error
+             * if the argument is invalid or if the specified child isn't found in the
+             * parent component.  The argument can either be a string (interpreted as the
+             * ID of the child component to remove) or the child component itself.
+             *
+             * If `opt_unrender` is true, calls {@link Blockly.Component#exitDocument}
+             * on the removed child, and subsequently detaches the child's DOM from the
+             * document.  Otherwise it is the caller's responsibility to clean up the child
+             * component's DOM.
+             *
+             * @see Blockly.Component#removeChildAt
+             * @param {string|Blockly.Component|null} child The ID of the child to remove,
+             *    or the child component itself.
+             * @param {boolean=} opt_unrender If true, calls `exitDocument` on the
+             *    removed child component, and detaches its DOM from the document.
+             * @return {Blockly.Component} The removed component, if any.
+             * @protected
+             */
+            removeChild(child: string|Blockly.Component|any /*null*/, opt_unrender?: boolean): Blockly.Component;
+    
+            /**
+             * Removes the child at the given index from this component, and returns it.
+             * Throws an error if the argument is out of bounds, or if the specified child
+             * isn't found in the parent.  See {@link Blockly.Component#removeChild} for
+             * detailed semantics.
+             *
+             * @see Blockly.Component#removeChild
+             * @param {number} index 0-based index of the child to remove.
+             * @param {boolean=} opt_unrender If true, calls `exitDocument` on the
+             *    removed child component, and detaches its DOM from the document.
+             * @return {Blockly.Component} The removed component, if any.
+             * @protected
+             */
+            removeChildAt(index: number, opt_unrender?: boolean): Blockly.Component;
+    
+            /**
+             * Removes every child component attached to this one and returns them.
+             *
+             * @see Blockly.Component#removeChild
+             * @param {boolean=} opt_unrender If true, calls {@link #exitDocument} on the
+             *    removed child components, and detaches their DOM from the document.
+             * @return {!Array.<Blockly.Component>} The removed components if any.
+             * @protected
+             */
+            removeChildren(opt_unrender?: boolean): Blockly.Component[];
+    } 
+    
+}
+
+declare module Blockly.Component {
+
+    /**
+     * Errors thrown by the component.
+     * @enum {string}
+     */
+    enum Error { NOT_SUPPORTED, ALREADY_RENDERED, PARENT_UNABLE_TO_BE_SET, CHILD_INDEX_OUT_OF_BOUNDS, NOT_OUR_CHILD, NOT_IN_DOCUMENT } 
+
+    /**
+     * Set the default right-to-left value. This causes all component's created from
+     * this point forward to have the given value. This is useful for cases where
+     * a given page is always in one directionality, avoiding unnecessary
+     * right to left determinations.
+     * @param {?boolean} rightToLeft Whether the components should be rendered
+     *     right-to-left. Null iff components should determine their directionality.
+     * @package
+     */
+    function setDefaultRightToLeft(rightToLeft: boolean): void;
+}
+
+
+declare module Blockly {
+
+    class Action extends Action__Class { }
+    /** Fake class which should be extended to avoid inheriting static properties */
+    class Action__Class  { 
+    
+            /**
+             * Class for a single action.
+             * An action describes user intent. (ex go to next or go to previous)
+             * @param {string} name The name of the action.
+             * @param {string} desc The description of the action.
+             * @constructor
+             */
+            constructor(name: string, desc: string);
+    } 
+    
+}
+
+
+declare module Blockly {
+
     class ASTNode extends ASTNode__Class { }
     /** Fake class which should be extended to avoid inheriting static properties */
     class ASTNode__Class  { 
@@ -11210,8 +11019,9 @@ declare module Blockly.ASTNode {
 
     /**
      * Object holding different types for an AST node.
+     * @enum {string}
      */
-    var types: any /*missing*/;
+    enum types { FIELD, BLOCK, INPUT, OUTPUT, NEXT, PREVIOUS, STACK, WORKSPACE } 
 
     /**
      * Whether an AST node of the given type points to a connection.
@@ -11493,7 +11303,81 @@ declare module Blockly.CursorSvg {
 }
 
 
-declare module Blockly.Navigation {
+declare module Blockly.user.keyMap {
+
+    /**
+     * Holds the serialized key to key action mapping.
+     * @type {Object<string, Blockly.Action>}
+     */
+    var map_: { [key: string]: Blockly.Action };
+
+    /**
+     * List of modifier keys checked when serializing the key event.
+     * @type {Array<string>}
+     */
+    var modifierKeys: string[];
+
+    /**
+     * Update the key map to contain the new action.
+     * @param {!string} keyCode The key code serialized by the serializeKeyEvent.
+     * @param {!Blockly.Action} action The action to be executed when the keys
+     *     corresponding to the serialized key code is pressed.
+     * @package
+     */
+    function setActionForKey(keyCode: string, action: Blockly.Action): void;
+
+    /**
+     * Creates a new key map.
+     * @param {Object<string, Blockly.Action>} keyMap The object holding the key
+     *     to action mapping.
+     * @package
+     */
+    function setKeyMap(keyMap: { [key: string]: Blockly.Action }): void;
+
+    /**
+     * Gets the current key map.
+     * @return {Object<string,Blockly.Action>} The object holding the key to
+     *     action mapping.
+     * @package
+     */
+    function getKeyMap(): { [key: string]: Blockly.Action };
+
+    /**
+     * Get the action by the serialized key code.
+     * @param {string} keyCode The serialized key code.
+     * @return {Blockly.Action|undefined} The action holding the function to
+     *     call when the given keyCode is used or undefined if no action exists.
+     * @package
+     */
+    function getActionByKeyCode(keyCode: string): Blockly.Action|any /*undefined*/;
+
+    /**
+     * Get the serialized key that corresponds to the action.
+     * @param {!Blockly.Action} action The action for which we want to get
+     *     the key.
+     * @return {string} The serialized key or null if the action does not have
+     *     a key mapping.
+     * @package
+     */
+    function getKeyByAction(action: Blockly.Action): string;
+
+    /**
+     * Serialize the key event.
+     * @param {!Event} e A key up event holding the key code.
+     * @return {!string} A string containing the serialized key event.
+     */
+    function serializeKeyEvent(e: Event): string;
+
+    /**
+     * Creates the default key map.
+     * @return {!Object<string,Blockly.Action>} An object holding the default key
+     *     to action mapping.
+     */
+    function createDefaultKeyMap(): { [key: string]: Blockly.Action };
+}
+
+
+declare module Blockly.navigation {
 
     /**
      * The marker that shows where a user has marked while navigating blocks.
@@ -11530,6 +11414,12 @@ declare module Blockly.Navigation {
      * @type {number}
      */
     var STATE_TOOLBOX: number;
+
+    /**
+     * Object holding default action names.
+     * @enum {string}
+     */
+    enum actionNames { PREVIOUS, NEXT, IN, OUT, INSERT, MARK, DISCONNECT, TOOLBOX, EXIT } 
 
     /**
      * Set the navigation cursor.
@@ -11683,33 +11573,20 @@ declare module Blockly.Navigation {
     function handleEnterForWS(): void;
 
     /**
-     * TODO: Revisit keycodes before releasing
      * Handler for all the keyboard navigation events.
      * @param {Event} e The keyboard event.
      * @return {!boolean} True if the key was handled false otherwise.
      */
-    function navigate(e: Event): boolean;
+    function onKeyPress(e: Event): boolean;
 
     /**
-     * Handles all keyboard events when the user is focused on the flyout.
-     * @param {Event} e The keyboard event.
-     * @return {!boolean} True if the key was handled false otherwise.
+     * Execute any actions on the flyout, workspace, or toolbox that correspond to
+     * the given action.
+     * @param {!Blockly.Action} action The current action.
+     * @return {boolean} True if the action has been handled, false otherwise.
+     * @package
      */
-    function flyoutKeyHandler(e: Event): boolean;
-
-    /**
-     * Handles all keyboard events when the user is focused on the toolbox.
-     * @param {Event} e The keyboard event.
-     * @return {!boolean} True if the key was handled false otherwise.
-     */
-    function toolboxKeyHandler(e: Event): boolean;
-
-    /**
-     * Handles all keyboard events when the user is focused on the workspace.
-     * @param {Event} e The keyboard event.
-     * @return {!boolean} True if the key was handled false otherwise.
-     */
-    function workspaceKeyHandler(e: Event): boolean;
+    function onBlocklyAction(action: Blockly.Action): boolean;
 
     /**
      * Enable accessibility mode.
@@ -11731,7 +11608,7 @@ declare module Blockly.Navigation {
 
     /**
      * Navigation warning handler. If loggingCallback is defined, use it.
-     * Otherwise call Blockly.Navigation.warn.
+     * Otherwise call Blockly.navigation.warn.
      * @param {string} msg The warning message.
      * @package
      */
@@ -11744,10 +11621,124 @@ declare module Blockly.Navigation {
      * @package
      */
     function error(msg: string): void;
+
+    /**
+     * The previous action.
+     * @type {!Blockly.Action}
+     */
+    var ACTION_PREVIOUS: Blockly.Action;
+
+    /**
+     * The out action.
+     * @type {!Blockly.Action}
+     */
+    var ACTION_OUT: Blockly.Action;
+
+    /**
+     * The next action.
+     * @type {!Blockly.Action}
+     */
+    var ACTION_NEXT: Blockly.Action;
+
+    /**
+     * The in action.
+     * @type {!Blockly.Action}
+     */
+    var ACTION_IN: Blockly.Action;
+
+    /**
+     * The action to try to insert a block.
+     * @type {!Blockly.Action}
+     */
+    var ACTION_INSERT: Blockly.Action;
+
+    /**
+     * The action to mark a certain location.
+     * @type {!Blockly.Action}
+     */
+    var ACTION_MARK: Blockly.Action;
+
+    /**
+     * The action to disconnect a block.
+     * @type {!Blockly.Action}
+     */
+    var ACTION_DISCONNECT: Blockly.Action;
+
+    /**
+     * The action to open the toolbox.
+     * @type {!Blockly.Action}
+     */
+    var ACTION_TOOLBOX: Blockly.Action;
+
+    /**
+     * The action to exit the toolbox or flyout.
+     * @type {!Blockly.Action}
+     */
+    var ACTION_EXIT: Blockly.Action;
 }
 
 
 
+
+
+declare module Blockly.utils.aria {
+
+    /**
+     * ARIA role values.
+     * Copied from Closure's goog.a11y.aria.Role
+     * @enum {string}
+     */
+    enum Role { ALERT, ALERTDIALOG, APPLICATION, ARTICLE, BANNER, BUTTON, CHECKBOX, COLUMNHEADER, COMBOBOX, COMPLEMENTARY, CONTENTINFO, DEFINITION, DIALOG, DIRECTORY, DOCUMENT, FORM, GRID, GRIDCELL, GROUP, HEADING, IMG, LINK, LIST, LISTBOX, LISTITEM, LOG, MAIN, MARQUEE, MATH, MENU, MENUBAR, MENUITEM, MENUITEMCHECKBOX, MENUITEMRADIO, NAVIGATION, NOTE, OPTION, PRESENTATION, PROGRESSBAR, RADIO, RADIOGROUP, REGION, ROW, ROWGROUP, ROWHEADER, SCROLLBAR, SEARCH, SEPARATOR, SLIDER, SPINBUTTON, STATUS, TAB, TABLE, TABLIST, TABPANEL, TEXTBOX, TEXTINFO, TIMER, TOOLBAR, TOOLTIP, TREE, TREEGRID, TREEITEM } 
+
+    /**
+     * ARIA states and properties.
+     * Copied from Closure's goog.a11y.aria.State
+     * @enum {string}
+     */
+    enum State { ACTIVEDESCENDANT, ATOMIC, AUTOCOMPLETE, BUSY, CHECKED, COLINDEX, CONTROLS, DESCRIBEDBY, DISABLED, DROPEFFECT, EXPANDED, FLOWTO, GRABBED, HASPOPUP, HIDDEN, INVALID, LABEL, LABELLEDBY, LEVEL, LIVE, MULTILINE, MULTISELECTABLE, ORIENTATION, OWNS, POSINSET, PRESSED, READONLY, RELEVANT, REQUIRED, ROWINDEX, SELECTED, SETSIZE, SORT, VALUEMAX, VALUEMIN, VALUENOW, VALUETEXT } 
+
+    /**
+     * Sets the role of an element. If the roleName is
+     * empty string or null, the role for the element is removed.
+     * We encourage clients to call the goog.a11y.aria.removeRole
+     * method instead of setting null and empty string values.
+     * Special handling for this case is added to ensure
+     * backword compatibility with existing code.
+     *
+     * Similar to Closure's goog.a11y.aria
+     *
+     * @param {!Element} element DOM node to set role of.
+     * @param {!Blockly.utils.aria.Role|string} roleName role name(s).
+     */
+    function setRole(element: Element, roleName: Blockly.utils.aria.Role|string): void;
+
+    /**
+     * Gets role of an element.
+     * Copied from Closure's goog.a11y.aria
+     * @param {!Element} element DOM element to get role of.
+     * @return {?Blockly.utils.aria.Role} ARIA Role name.
+     */
+    function getRole(element: Element): Blockly.utils.aria.Role;
+
+    /**
+     * Removes role of an element.
+     * Copied from Closure's goog.a11y.aria
+     * @param {!Element} element DOM element to remove the role from.
+     */
+    function removeRole(element: Element): void;
+
+    /**
+     * Sets the state or property of an element.
+     * Copied from Closure's goog.a11y.aria
+     * @param {!Element} element DOM node where we set state.
+     * @param {!(Blockly.utils.aria.State|string)} stateName State attribute being set.
+     *     Automatically adds prefix 'aria-' to the state name if the attribute is
+     *     not an extra attribute.
+     * @param {string|boolean|number|!Array<string>} value Value
+     * for the state attribute.
+     */
+    function setState(element: Element, stateName: Blockly.utils.aria.State|string, value: string|boolean|number|string[]): void;
+}
 
 
 declare module Blockly.utils {
@@ -12007,6 +11998,76 @@ declare module Blockly.utils.dom {
      * @param {string} transform The value of the CSS `transform` property.
      */
     function setCssTransform(element: Element, transform: string): void;
+
+    /**
+     * Start caching text widths. Every call to this function MUST also call
+     * stopTextWidthCache. Caches must not survive between execution threads.
+     */
+    function startTextWidthCache(): void;
+
+    /**
+     * Stop caching field widths. Unless caching was already on when the
+     * corresponding call to startTextWidthCache was made.
+     */
+    function stopTextWidthCache(): void;
+
+    /**
+     * Gets the width of a text element, caching it in the process.
+     * @param {!Element} textElement An SVG 'text' element.
+     * @return {number} Width of element.
+     */
+    function getTextWidth(textElement: Element): number;
+}
+
+
+declare module Blockly.utils {
+
+    class IdGenerator extends IdGenerator__Class { }
+    /** Fake class which should be extended to avoid inheriting static properties */
+    class IdGenerator__Class  { 
+    
+            /**
+             * Creates a new id generator.
+             * @constructor
+             * @final
+             */
+            constructor();
+    
+            /**
+             * Gets the next unique ID.
+             * The difference between this and genUid is that getNextUniqueId generates
+             * IDs compatible with the HTML4 id attribute restrictions:
+             * Use only ASCII letters, digits, '_', '-' and '.'
+             * @return {string} The next unique identifier.
+             */
+            getNextUniqueId(): string;
+    } 
+    
+}
+
+declare module Blockly.utils.IdGenerator {
+
+    /**
+     * Get the singleton instance of Blockly.utils.IdGenerator.
+     * @returns {Blockly.utils.IdGenerator} singleton instance
+     */
+    function getInstance(): Blockly.utils.IdGenerator;
+}
+
+
+declare module Blockly.utils {
+
+    /**
+     * Key codes for common characters.
+     *
+     * Copied from Closure's goog.events.KeyCodes
+     *
+     * This list is not localized and therefore some of the key codes are not
+     * correct for non US keyboard layouts. See comments below.
+     *
+     * @enum {number}
+     */
+    enum KeyCodes { WIN_KEY_FF_LINUX, MAC_ENTER, BACKSPACE, TAB, NUM_CENTER, ENTER, SHIFT, CTRL, ALT, PAUSE, CAPS_LOCK, ESC, SPACE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT, UP, RIGHT, DOWN, PLUS_SIGN, PRINT_SCREEN, INSERT, DELETE, ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, FF_SEMICOLON, FF_EQUALS, FF_DASH, FF_HASH, QUESTION_MARK, AT_SIGN, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, META, WIN_KEY_RIGHT, CONTEXT_MENU, NUM_ZERO, NUM_ONE, NUM_TWO, NUM_THREE, NUM_FOUR, NUM_FIVE, NUM_SIX, NUM_SEVEN, NUM_EIGHT, NUM_NINE, NUM_MULTIPLY, NUM_PLUS, NUM_MINUS, NUM_PERIOD, NUM_DIVISION, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, NUMLOCK, SCROLL_LOCK, FIRST_MEDIA_KEY, LAST_MEDIA_KEY, SEMICOLON, DASH, EQUALS, COMMA, PERIOD, SLASH, APOSTROPHE, TILDE, SINGLE_QUOTE, OPEN_SQUARE_BRACKET, BACKSLASH, CLOSE_SQUARE_BRACKET, WIN_KEY, MAC_FF_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, WIN_IME, VK_NONAME, PHANTOM } 
 }
 
 
@@ -12174,15 +12235,41 @@ declare module Blockly.utils.style {
 
     /**
      * Gets the height and width of an element.
-     * Similar to Closure's goog.style.getSize.
+     * Similar to Closure's goog.style.getSize
      * @param {Element} element Element to get size of.
      * @return {!Blockly.utils.Size} Object with width/height properties.
      */
     function getSize(element: Element): Blockly.utils.Size;
 
     /**
+     * Retrieves a computed style value of a node. It returns empty string if the
+     * value cannot be computed (which will be the case in Internet Explorer) or
+     * "none" if the property requested is an SVG one and it has not been
+     * explicitly set (firefox and webkit).
+     *
+     * Copied from Closure's goog.style.getComputedStyle
+     *
+     * @param {Element} element Element to get style of.
+     * @param {string} property Property to get (camel-case).
+     * @return {string} Style value.
+     */
+    function getComputedStyle(element: Element, property: string): string;
+
+    /**
+     * Gets the cascaded style value of a node, or null if the value cannot be
+     * computed (only Internet Explorer can do this).
+     *
+     * Copied from Closure's goog.style.getCascadedStyle
+     *
+     * @param {Element} element Element to get style of.
+     * @param {string} style Property to get (camel-case).
+     * @return {string} Style value.
+     */
+    function getCascadedStyle(element: Element, style: string): string;
+
+    /**
      * Returns a Coordinate object relative to the top-left of the HTML document.
-     * Similar to Closure's goog.style.getPageOffset.
+     * Similar to Closure's goog.style.getPageOffset
      * @param {Element} el Element to get the page offset for.
      * @return {!Blockly.utils.Coordinate} The page offset.
      */
@@ -12190,10 +12277,73 @@ declare module Blockly.utils.style {
 
     /**
      * Calculates the viewport coordinates relative to the document.
-     * Similar to Closure's goog.style.getViewportPageOffset.
+     * Similar to Closure's goog.style.getViewportPageOffset
      * @return {!Blockly.utils.Coordinate} The page offset of the viewport.
      */
     function getViewportPageOffset(): Blockly.utils.Coordinate;
+
+    /**
+     * Shows or hides an element from the page. Hiding the element is done by
+     * setting the display property to "none", removing the element from the
+     * rendering hierarchy so it takes up no space. To show the element, the default
+     * inherited display property is restored (defined either in stylesheets or by
+     * the browser's default style rules).
+     * Copied from Closure's goog.style.getViewportPageOffset
+     *
+     * @param {Element} el Element to show or hide.
+     * @param {*} isShown True to render the element in its default style,
+     *     false to disable rendering the element.
+     */
+    function setElementShown(el: Element, isShown: any): void;
+
+    /**
+     * Returns true if the element is using right to left (rtl) direction.
+     * Copied from Closure's goog.style.isRightToLeft
+     *
+     * @param {Element} el  The element to test.
+     * @return {boolean} True for right to left, false for left to right.
+     */
+    function isRightToLeft(el: Element): boolean;
+
+    /**
+     * Gets the computed border widths (on all sides) in pixels
+     * Copied from Closure's goog.style.getBorderBox
+     * @param {Element} element  The element to get the border widths for.
+     * @return {!Object} The computed border widths.
+     */
+    function getBorderBox(element: Element): Object;
+
+    /**
+     * Changes the scroll position of `container` with the minimum amount so
+     * that the content and the borders of the given `element` become visible.
+     * If the element is bigger than the container, its top left corner will be
+     * aligned as close to the container's top left corner as possible.
+     * Copied from Closure's goog.style.scrollIntoContainerView
+     *
+     * @param {Element} element The element to make visible.
+     * @param {Element} container The container to scroll. If not set, then the
+     *     document scroll element will be used.
+     * @param {boolean=} opt_center Whether to center the element in the container.
+     *     Defaults to false.
+     */
+    function scrollIntoContainerView(element: Element, container: Element, opt_center?: boolean): void;
+
+    /**
+     * Calculate the scroll position of `container` with the minimum amount so
+     * that the content and the borders of the given `element` become visible.
+     * If the element is bigger than the container, its top left corner will be
+     * aligned as close to the container's top left corner as possible.
+     * Copied from Closure's goog.style.getContainerOffsetToScrollInto
+     *
+     * @param {Element} element The element to make visible.
+     * @param {Element} container The container to scroll. If not set, then the
+     *     document scroll element will be used.
+     * @param {boolean=} opt_center Whether to center the element in the container.
+     *     Defaults to false.
+     * @return {!Blockly.utils.Coordinate} The new scroll position of the container,
+     *     in form of goog.math.Coordinate(scrollLeft, scrollTop).
+     */
+    function getContainerOffsetToScrollInto(element: Element, container: Element, opt_center?: boolean): Blockly.utils.Coordinate;
 }
 
 
@@ -12350,6 +12500,913 @@ declare module Blockly.utils.xml {
      * @public
      */
     function domToText(dom: Element): string;
+}
+
+
+declare module Blockly.tree {
+
+    class BaseNode extends BaseNode__Class { }
+    /** Fake class which should be extended to avoid inheriting static properties */
+    class BaseNode__Class extends Blockly.Component__Class  { 
+    
+            /**
+             * An abstract base class for a node in the tree.
+             * Similar to goog.ui.tree.BaseNode
+             *
+             * @param {string} content The content of the node label treated as
+             *     plain-text and will be HTML escaped.
+             * @param {Blockly.tree.BaseNode.Config} config The configuration for the tree.
+             * @constructor
+             * @extends {Blockly.Component}
+             */
+            constructor(content: string, config: Blockly.tree.BaseNode.Config);
+    
+            /** @protected {Blockly.tree.TreeControl} */
+            tree: any /*missing*/;
+    
+            /**
+             * Adds roles and states.
+             * @protected
+             */
+            initAccessibility(): void;
+    
+            /**
+             * Adds a node as a child to the current node.
+             * @param {Blockly.tree.BaseNode} child The child to add.
+             * @param {Blockly.tree.BaseNode=} opt_before If specified, the new child is
+             *    added as a child before this one. If not specified, it's appended to the
+             *    end.
+             * @return {!Blockly.tree.BaseNode} The added child.
+             * @package
+             */
+            add(child: Blockly.tree.BaseNode, opt_before?: Blockly.tree.BaseNode): Blockly.tree.BaseNode;
+    
+            /**
+             * Returns the tree.
+             * @return {?Blockly.tree.TreeControl} tree
+             * @protected
+             */
+            getTree(): Blockly.tree.TreeControl;
+    
+            /**
+             * Returns the depth of the node in the tree. Should not be overridden.
+             * @return {number} The non-negative depth of this node (the root is zero).
+             * @protected
+             */
+            getDepth(): number;
+    
+            /**
+             * Returns true if the node is a descendant of this node
+             * @param {Blockly.tree.BaseNode} node The node to check.
+             * @return {boolean} True if the node is a descendant of this node, false
+             *    otherwise.
+             * @protected
+             */
+            contains(node: Blockly.tree.BaseNode): boolean;
+    
+            /**
+             * This is re-defined here to indicate to the closure compiler the correct
+             * child return type.
+             * @param {number} index 0-based index.
+             * @return {Blockly.tree.BaseNode} The child at the given index; null if none.
+             * @protected
+             */
+            getChildAt(index: number): Blockly.tree.BaseNode;
+    
+            /**
+             * Returns the children of this node.
+             * @return {!Array.<!Blockly.tree.BaseNode>} The children.
+             * @package
+             */
+            getChildren(): Blockly.tree.BaseNode[];
+    
+            /**
+             * @return {Blockly.tree.BaseNode} The first child of this node.
+             * @protected
+             */
+            getFirstChild(): Blockly.tree.BaseNode;
+    
+            /**
+             * @return {Blockly.tree.BaseNode} The last child of this node.
+             * @protected
+             */
+            getLastChild(): Blockly.tree.BaseNode;
+    
+            /**
+             * @return {Blockly.tree.BaseNode} The previous sibling of this node.
+             * @protected
+             */
+            getPreviousSibling(): Blockly.tree.BaseNode;
+    
+            /**
+             * @return {Blockly.tree.BaseNode} The next sibling of this node.
+             * @protected
+             */
+            getNextSibling(): Blockly.tree.BaseNode;
+    
+            /**
+             * @return {boolean} Whether the node is the last sibling.
+             * @protected
+             */
+            isLastSibling(): boolean;
+    
+            /**
+             * @return {boolean} Whether the node is selected.
+             * @protected
+             */
+            isSelected(): boolean;
+    
+            /**
+             * Selects the node.
+             * @protected
+             */
+            select(): void;
+    
+            /**
+             * Called from the tree to instruct the node change its selection state.
+             * @param {boolean} selected The new selection state.
+             * @protected
+             */
+            setSelectedInternal(selected: boolean): void;
+    
+            /**
+             * @return {boolean} Whether the node is expanded.
+             * @protected
+             */
+            getExpanded(): boolean;
+    
+            /**
+             * Sets the node to be expanded internally, without state change events.
+             * @param {boolean} expanded Whether to expand or close the node.
+             * @protected
+             */
+            setExpandedInternal(expanded: boolean): void;
+    
+            /**
+             * Sets the node to be expanded.
+             * @param {boolean} expanded Whether to expand or close the node.
+             * @package
+             */
+            setExpanded(expanded: boolean): void;
+    
+            /**
+             * Used to notify a node of that we have expanded it.
+             * Can be overidden by subclasses, see Blockly.tree.TreeNode.
+             * @protected
+             */
+            doNodeExpanded(): void;
+    
+            /**
+             * Used to notify a node that we have collapsed it.
+             * Can be overidden by subclasses, see Blockly.tree.TreeNode.
+             * @protected
+             */
+            doNodeCollapsed(): void;
+    
+            /**
+             * Toggles the expanded state of the node.
+             * @protected
+             */
+            toggle(): void;
+    
+            /**
+             * Expands the node.
+             * @protected
+             */
+            expand(): void;
+    
+            /**
+             * Collapses the node.
+             * @protected
+             */
+            collapse(): void;
+    
+            /**
+             * Collapses the children of the node.
+             * @protected
+             */
+            collapseChildren(): void;
+    
+            /**
+             * Collapses the children and the node.
+             * @protected
+             */
+            collapseAll(): void;
+    
+            /**
+             * Expands the children of the node.
+             * @protected
+             */
+            expandChildren(): void;
+    
+            /**
+             * Expands the children and the node.
+             * @protected
+             */
+            expandAll(): void;
+    
+            /**
+             * Expands the parent chain of this node so that it is visible.
+             * @protected
+             */
+            reveal(): void;
+    
+            /**
+             * Sets whether the node will allow the user to collapse it.
+             * @param {boolean} isCollapsible Whether to allow node collapse.
+             * @protected
+             */
+            setIsUserCollapsible(isCollapsible: boolean): void;
+    
+            /**
+             * @return {boolean} Whether the node is collapsible by user actions.
+             * @protected
+             */
+            isUserCollapsible(): boolean;
+    
+            /**
+             * Creates HTML Element for the node.
+             * @return {!Element} html element
+             * @protected
+             */
+            toDom(): Element;
+    
+            /**
+             * @return {!Element} The html element for the row.
+             * @protected
+             */
+            getRowDom(): Element;
+    
+            /**
+             * @return {string} The class name for the row.
+             * @protected
+             */
+            getRowClassName(): string;
+    
+            /**
+             * @return {!Element} The html element for the label.
+             * @protected
+             */
+            getLabelDom(): Element;
+    
+            /**
+             * @return {!Element} The html for the icon.
+             * @protected
+             */
+            getIconDom(): Element;
+    
+            /**
+             * Gets the calculated icon class.
+             * @protected
+             */
+            getCalculatedIconClass(): void;
+    
+            /**
+             * @return {!Element} The source for the icon.
+             * @protected
+             */
+            getExpandIconDom(): Element;
+    
+            /**
+             * @return {string} The class names of the icon used for expanding the node.
+             * @protected
+             */
+            getExpandIconClass(): string;
+    
+            /**
+             * @return {string} The line style.
+             * @protected
+             */
+            getLineStyle(): string;
+    
+            /**
+             * @return {string} The background position style value.
+             * @protected
+             */
+            getBackgroundPosition(): string;
+    
+            /**
+             * @return {Element} The row is the div that is used to draw the node without
+             *     the children.
+             * @protected
+             */
+            getRowElement(): Element;
+    
+            /**
+             * @return {Element} The expanded icon element.
+             * @protected
+             */
+            getExpandIconElement(): Element;
+    
+            /**
+             * @return {Element} The icon element.
+             * @protected
+             */
+            getIconElement(): Element;
+    
+            /**
+             * @return {Element} The label element.
+             * @protected
+             */
+            getLabelElement(): Element;
+    
+            /**
+             * @return {Element} The element after the label.
+             * @protected
+             */
+            getAfterLabelElement(): Element;
+    
+            /**
+             * @return {Element} The div containing the children.
+             * @protected
+             */
+            getChildrenElement(): Element;
+    
+            /**
+             * Sets the icon class for the node.
+             * @param {string} s The icon class.
+             * @protected
+             */
+            setIconClass(s: string): void;
+    
+            /**
+             * Gets the icon class for the node.
+             * @return {string} s The icon source.
+             * @protected
+             */
+            getIconClass(): string;
+    
+            /**
+             * Sets the icon class for when the node is expanded.
+             * @param {string} s The expanded icon class.
+             * @protected
+             */
+            setExpandedIconClass(s: string): void;
+    
+            /**
+             * Gets the icon class for when the node is expanded.
+             * @return {string} The class.
+             * @protected
+             */
+            getExpandedIconClass(): string;
+    
+            /**
+             * Sets the text of the label.
+             * @param {string} s The plain text of the label.
+             * @protected
+             */
+            setText(s: string): void;
+    
+            /**
+             * Returns the text of the label. If the text was originally set as HTML, the
+             * return value is unspecified.
+             * @return {string} The plain text of the label.
+             * @package
+             */
+            getText(): string;
+    
+            /**
+             * Sets the text of the tooltip.
+             * @param {string} s The tooltip text to set.
+             * @protected
+             */
+            setToolTip(s: string): void;
+    
+            /**
+             * Returns the text of the tooltip.
+             * @return {?string} The tooltip text.
+             * @protected
+             */
+            getToolTip(): string;
+    
+            /**
+             * Updates the row styles.
+             * @protected
+             */
+            updateRow(): void;
+    
+            /**
+             * Updates the expand icon of the node.
+             * @protected
+             */
+            updateExpandIcon(): void;
+    
+            /**
+             * Handles mouse down event.
+             * @param {!Event} e The browser event.
+             * @protected
+             */
+            onMouseDown(e: Event): void;
+    
+            /**
+             * Handles a click event.
+             * @param {!Event} e The browser event.
+             * @protected
+             */
+            onClick_(e: Event): void;
+    
+            /**
+             * Handles a double click event.
+             * @param {!Event} e The browser event.
+             * @protected
+             */
+            onDoubleClick_(e: Event): void;
+    
+            /**
+             * Handles a key down event.
+             * @param {!Event} e The browser event.
+             * @return {boolean} The handled value.
+             * @protected
+             */
+            onKeyDown(e: Event): boolean;
+    
+            /**
+             * @return {Blockly.tree.BaseNode} The last shown descendant.
+             * @protected
+             */
+            getLastShownDescendant(): Blockly.tree.BaseNode;
+    
+            /**
+             * @return {Blockly.tree.BaseNode} The next node to show or null if there isn't
+             *     a next node to show.
+             * @protected
+             */
+            getNextShownNode(): Blockly.tree.BaseNode;
+    
+            /**
+             * @return {Blockly.tree.BaseNode} The previous node to show.
+             * @protected
+             */
+            getPreviousShownNode(): Blockly.tree.BaseNode;
+    
+            /**
+             * @return {Blockly.tree.BaseNode.Config} The configuration for the tree.
+             * @protected
+             */
+            getConfig(): Blockly.tree.BaseNode.Config;
+    
+            /**
+             * Internal method that is used to set the tree control on the node.
+             * @param {Blockly.tree.TreeControl} tree The tree control.
+             * @protected
+             */
+            setTreeInternal(tree: Blockly.tree.TreeControl): void;
+    } 
+    
+}
+
+declare module Blockly.tree.BaseNode {
+
+    /**
+     * The config type for the tree.
+     * @typedef {{
+     *            indentWidth:number,
+     *            cssRoot:string,
+     *            cssHideRoot:string,
+     *            cssItem:string,
+     *            cssChildren:string,
+     *            cssChildrenNoLines:string,
+     *            cssTreeRow:string,
+     *            cssItemLabel:string,
+     *            cssTreeIcon:string,
+     *            cssExpandTreeIcon:string,
+     *            cssExpandTreeIconPlus:string,
+     *            cssExpandTreeIconMinus:string,
+     *            cssExpandTreeIconTPlus:string,
+     *            cssExpandTreeIconTMinus:string,
+     *            cssExpandTreeIconLPlus:string,
+     *            cssExpandTreeIconLMinus:string,
+     *            cssExpandTreeIconT:string,
+     *            cssExpandTreeIconL:string,
+     *            cssExpandTreeIconBlank:string,
+     *            cssExpandedFolderIcon:string,
+     *            cssCollapsedFolderIcon:string,
+     *            cssFileIcon:string,
+     *            cssExpandedRootIcon:string,
+     *            cssCollapsedRootIcon:string,
+     *            cssSelectedRow:string
+     *          }}
+     */
+    interface Config {
+        indentWidth: number;
+        cssRoot: string;
+        cssHideRoot: string;
+        cssItem: string;
+        cssChildren: string;
+        cssChildrenNoLines: string;
+        cssTreeRow: string;
+        cssItemLabel: string;
+        cssTreeIcon: string;
+        cssExpandTreeIcon: string;
+        cssExpandTreeIconPlus: string;
+        cssExpandTreeIconMinus: string;
+        cssExpandTreeIconTPlus: string;
+        cssExpandTreeIconTMinus: string;
+        cssExpandTreeIconLPlus: string;
+        cssExpandTreeIconLMinus: string;
+        cssExpandTreeIconT: string;
+        cssExpandTreeIconL: string;
+        cssExpandTreeIconBlank: string;
+        cssExpandedFolderIcon: string;
+        cssCollapsedFolderIcon: string;
+        cssFileIcon: string;
+        cssExpandedRootIcon: string;
+        cssCollapsedRootIcon: string;
+        cssSelectedRow: string
+    }
+
+    /**
+     * Map of nodes in existence. Needed to route events to the appropriate nodes.
+     * Nodes are added to the map at {@link #enterDocument} time and removed at
+     * {@link #exitDocument} time.
+     * @type {Object}
+     * @protected
+     */
+    var allNodes: Object;
+}
+
+
+declare module Blockly.tree {
+
+    class TreeControl extends TreeControl__Class { }
+    /** Fake class which should be extended to avoid inheriting static properties */
+    class TreeControl__Class extends Blockly.tree.BaseNode__Class  { 
+    
+            /**
+             * An extension of the TreeControl object in closure that provides
+             * a way to view a hierarchical set of data.
+             * Similar to Closure's goog.ui.tree.TreeControl
+             *
+             * @param {Blockly.Toolbox} toolbox The parent toolbox for this tree.
+             * @param {Blockly.tree.BaseNode.Config} config The configuration for the tree.
+             * @constructor
+             * @extends {Blockly.tree.BaseNode}
+             */
+            constructor(toolbox: Blockly.Toolbox, config: Blockly.tree.BaseNode.Config);
+    
+            /**
+             * Returns the assosiated toolbox.
+             * @return {Blockly.Toolbox} The toolbox.
+             * @package
+             */
+            getToolbox(): Blockly.Toolbox;
+    
+            /**
+             * Get whether this tree has focus or not.
+             * @return {boolean} True if it has focus.
+             * @package
+             */
+            hasFocus(): boolean;
+    
+            /**
+             * Sets the selected item.
+             * @param {Blockly.tree.BaseNode} node The item to select.
+             * @package
+             */
+            setSelectedItem(node: Blockly.tree.BaseNode): void;
+    
+            /**
+             * Set the handler that's triggered before a node is selected.
+             * @param {function(Blockly.tree.BaseNode):boolean} fn The handler
+             * @package
+             */
+            onBeforeSelected(fn: { (_0: Blockly.tree.BaseNode): boolean }): void;
+    
+            /**
+             * Set the handler that's triggered after a node is selected.
+             * @param {function(
+             *  Blockly.tree.BaseNode, Blockly.tree.BaseNode):?} fn The handler
+             * @package
+             */
+            onAfterSelected(fn: { (_0: Blockly.tree.BaseNode, _1: Blockly.tree.BaseNode): any }): void;
+    
+            /**
+             * Returns the selected item.
+             * @return {Blockly.tree.BaseNode} The currently selected item.
+             * @package
+             */
+            getSelectedItem(): Blockly.tree.BaseNode;
+    
+            /**
+             * Creates a new tree node using the same config as the root.
+             * @param {string=} opt_content The content of the node label.
+             * @return {!Blockly.tree.TreeNode} The new item.
+             * @package
+             */
+            createNode(opt_content?: string): Blockly.tree.TreeNode;
+    } 
+    
+}
+
+
+declare module Blockly.tree {
+
+    class TreeNode extends TreeNode__Class { }
+    /** Fake class which should be extended to avoid inheriting static properties */
+    class TreeNode__Class extends Blockly.tree.BaseNode__Class  { 
+    
+            /**
+             * A single node in the tree, customized for Blockly's UI.
+             * Similar to Closure's goog.ui.tree.TreeNode
+             *
+             * @param {Blockly.Toolbox} toolbox The parent toolbox for this tree.
+             * @param {string} content The content of the node label treated as
+             *     plain-text and will be HTML escaped.
+             * @param {Blockly.tree.BaseNode.Config} config The configuration for the tree.
+             * @constructor
+             * @extends {Blockly.tree.BaseNode}
+             */
+            constructor(toolbox: Blockly.Toolbox, content: string, config: Blockly.tree.BaseNode.Config);
+    
+            /**
+             * Set the handler that's triggered when the size of node has changed.
+             * @param {function():?} fn The handler
+             * @package
+             */
+            onSizeChanged(fn: { (): any }): void;
+    } 
+    
+}
+
+
+declare module Blockly {
+
+    class Menu extends Menu__Class { }
+    /** Fake class which should be extended to avoid inheriting static properties */
+    class Menu__Class extends Blockly.Component__Class  { 
+    
+            /**
+             * A basic menu class.
+             * @constructor
+             * @extends {Blockly.Component}
+             */
+            constructor();
+    
+            /**
+             * Focus the menu element.
+             * @package
+             */
+            focus(): void;
+    
+            /**
+             * Blur the menu element.
+             * @package
+             */
+            blur(): void;
+    
+            /**
+             * Set the menu accessibility role.
+             * @param {!Blockly.utils.aria.Role|string} roleName role name.
+             * @package
+             */
+            setRole(roleName: Blockly.utils.aria.Role|string): void;
+    
+            /**
+             * Returns the child menuitem that owns the given DOM node, or null if no such
+             * menuitem is found.
+             * @param {Node} node DOM node whose owner is to be returned.
+             * @return {?Blockly.MenuItem} menuitem for which the DOM node belongs to.
+             * @protected
+             */
+            getMenuItem(node: Node): Blockly.MenuItem;
+    
+            /**
+             * Unhighlight the current highlighted item.
+             * @protected
+             */
+            unhighlightCurrent(): void;
+    
+            /**
+             * Clears the currently highlighted item.
+             * @protected
+             */
+            clearHighlighted(): void;
+    
+            /**
+             * Returns the currently highlighted item (if any).
+             * @return {?Blockly.Component} Highlighted item (null if none).
+             * @protected
+             */
+            getHighlighted(): Blockly.Component;
+    
+            /**
+             * Highlights the item at the given 0-based index (if any). If another item
+             * was previously highlighted, it is un-highlighted.
+             * @param {number} index Index of item to highlight (-1 removes the current
+             *     highlight).
+             * @protected
+             */
+            setHighlightedIndex(index: number): void;
+    
+            /**
+             * Highlights the given item if it exists and is a child of the container;
+             * otherwise un-highlights the currently highlighted item.
+             * @param {Blockly.MenuItem} item Item to highlight.
+             * @protected
+             */
+            setHighlighted(item: Blockly.MenuItem): void;
+    
+            /**
+             * Highlights the next highlightable item (or the first if nothing is currently
+             * highlighted).
+             * @protected
+             */
+            highlightNext(): void;
+    
+            /**
+             * Highlights the previous highlightable item (or the last if nothing is
+             * currently highlighted).
+             * @protected
+             */
+            highlightPrevious(): void;
+    
+            /**
+             * Helper function that manages the details of moving the highlight among
+             * child menuitems in response to keyboard events.
+             * @param {function(this: Blockly.Component, number, number) : number} fn
+             *     Function that accepts the current and maximum indices, and returns the
+             *     next index to check.
+             * @param {number} startIndex Start index.
+             * @return {boolean} Whether the highlight has changed.
+             * @protected
+             */
+            highlightHelper(fn: { (_0: number, _1: number): number }, startIndex: number): boolean;
+    
+            /**
+             * Returns whether the given item can be highlighted.
+             * @param {Blockly.MenuItem} item The item to check.
+             * @return {boolean} Whether the item can be highlighted.
+             * @protected
+             */
+            canHighlightItem(item: Blockly.MenuItem): boolean;
+    
+            /**
+             * Set the handler that's triggered when a menuitem is highlighted.
+             * @param {function(?Blockly.MenuItem)} fn The handler.
+             * @package
+             */
+            onHighlighted(fn: { (_0: Blockly.MenuItem): any /*missing*/ }): void;
+    
+            /**
+             * Attempts to handle a keyboard event, if the menuitem is enabled, by calling
+             * {@link handleKeyEventInternal}.  Considered protected; should only be used
+             * within this package and by subclasses.
+             * @param {Event} e Key event to handle.
+             * @return {boolean} Whether the key event was handled.
+             * @protected
+             */
+            handleKeyEvent(e: Event): boolean;
+    
+            /**
+             * Attempts to handle a keyboard event; returns true if the event was handled,
+             * false otherwise.  If the container is enabled, and a child is highlighted,
+             * calls the child menuitem's `handleKeyEvent` method to give the menuitem
+             * a chance to handle the event first.
+             * @param {Event} e Key event to handle.
+             * @return {boolean} Whether the event was handled by the container (or one of
+             *     its children).
+             * @protected
+             */
+            handleKeyEventInternal(e: Event): boolean;
+    } 
+    
+}
+
+
+declare module Blockly {
+
+    class MenuItem extends MenuItem__Class { }
+    /** Fake class which should be extended to avoid inheriting static properties */
+    class MenuItem__Class extends Blockly.Component__Class  { 
+    
+            /**
+             * Class representing an item in a menu.
+             *
+             * @param {string} content Text caption to display as the content of
+             *     the item.
+             * @param {string=} opt_value Data/model associated with the menu item.
+             * @constructor
+             * @extends {Blockly.Component}
+             */
+            constructor(content: string, opt_value?: string);
+    
+            /**
+             * @return {Element} The html element for the checkbox.
+             * @protected
+             */
+            getCheckboxDom(): Element;
+    
+            /**
+             * @return {!Element} The html for the content.
+             * @protected
+             */
+            getContentDom(): Element;
+    
+            /**
+             * @return {!Element} The html for the content wrapper.
+             * @protected
+             */
+            getContentWrapperDom(): Element;
+    
+            /**
+             * Sets the content associated with the menu item.
+             * @param {string} content Text caption to set as the
+             *    menuitem's contents.
+             * @protected
+             */
+            setContentInternal(content: string): void;
+    
+            /**
+             * Sets the value associated with the menu item.
+             * @param {*} value Value to be associated with the menu item.
+             * @package
+             */
+            setValue(value: any): void;
+    
+            /**
+             * Gets the value associated with the menu item.
+             * @returns {*} value Value associated with the menu item.
+             * @package
+             */
+            getValue(): any;
+    
+            /**
+             * Set the menu accessibility role.
+             * @param {!Blockly.utils.aria.Role|string} roleName role name.
+             * @package
+             */
+            setRole(roleName: Blockly.utils.aria.Role|string): void;
+    
+            /**
+             * Sets the menu item to be checkable or not. Set to true for menu items
+             * that represent checkable options.
+             * @param {boolean} checkable Whether the menu item is checkable.
+             * @package
+             */
+            setCheckable(checkable: boolean): void;
+    
+            /**
+             * Checks or unchecks the component.
+             * @param {boolean} checked Whether to check or uncheck the component.
+             * @package
+             */
+            setChecked(checked: boolean): void;
+    
+            /**
+             * Returns true if the component is currently highlighted, false otherwise.
+             * @return {boolean} Whether the component is highlighted.
+             * @package
+             */
+            isHighlighted(): boolean;
+    
+            /**
+             * Highlights or unhighlights the component.
+             * @param {boolean} highlight Whether to highlight or unhighlight the component.
+             * @package
+             */
+            setHighlighted(highlight: boolean): void;
+    
+            /**
+             * Returns true if the menu item is enabled, false otherwise.
+             * @return {boolean} Whether the menu item is enabled.
+             * @package
+             */
+            isEnabled(): boolean;
+    
+            /**
+             * Enables or disables the menu item.
+             * @param {boolean} enabled Whether to enable or disable the menu item.
+             * @package
+             */
+            setEnabled(enabled: boolean): void;
+    
+            /**
+             * Handles mouseup events. If the component is enabled, trigger
+             * the action assosiated with this menu item.
+             * @param {Event} _e Mouse event to handle.
+             * @package
+             */
+            handleMouseUp(_e: Event): void;
+    
+            /**
+             * Performs the appropriate action when the menu item is activated
+             * by the user.
+             * @protected
+             */
+            performActionInternal(): void;
+    
+            /**
+             * Set the handler that's triggered when the menu item is activated
+             * by the user. If `opt_obj` is provided, it will be used as the
+             * 'this' object in the function when called.
+             * @param {function(this:T,!Blockly.MenuItem):?} fn The handler.
+             * @param {T=} opt_obj Used as the 'this' object in f when called.
+             * @template T
+             * @package
+             */
+            onAction<T>(fn: { (_0: Blockly.MenuItem): any }, opt_obj?: T): void;
+    } 
+    
 }
 
 

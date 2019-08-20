@@ -137,9 +137,7 @@ Blockly.Comment.prototype.createEditor_ = function() {
       this.text_ = textarea.value;
     }
   });
-  setTimeout(function() {
-    textarea.focus();
-  }, 0);
+  setTimeout(textarea.focus.bind(textarea), 0);
   return this.foreignObject_;
 };
 

@@ -22,8 +22,8 @@
  * @fileoverview Methods for graphically rendering a block as SVG.
  * @author fenichel@google.com (Rachel Fenichel)
  */
-
 'use strict';
+
 goog.provide('Blockly.blockRendering.constants');
 
 goog.require('Blockly.utils.svgPaths');
@@ -74,14 +74,6 @@ Blockly.blockRendering.constants.CORNER_RADIUS = 8;
 Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT =
     Blockly.blockRendering.constants.NOTCH_WIDTH;
 
-// This is the width from where a rounded corner ends to where a previous
-// connection starts.
-// The position of the notch should not change as the rounded corner decreases
-// in radius.
-Blockly.blockRendering.constants.NOTCH_OFFSET_ROUNDED_CORNER_PREV =
-    Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT -
-    Blockly.blockRendering.constants.CORNER_RADIUS;
-
 Blockly.blockRendering.constants.STATEMENT_BOTTOM_SPACER = 5;
 Blockly.blockRendering.constants.STATEMENT_INPUT_PADDING_LEFT = 20;
 Blockly.blockRendering.constants.BETWEEN_STATEMENT_PADDING_Y = 4;
@@ -108,13 +100,12 @@ Blockly.blockRendering.constants.SPACER_DEFAULT_HEIGHT = 15;
 
 Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT = 24;
 
-Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_WIDTH =
-    Blockly.blockRendering.constants.TAB_WIDTH + 14.5;
+Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_PADDING = 14.5;
 
 Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_HEIGHT =
     Blockly.blockRendering.constants.TAB_HEIGHT + 11;
 
-Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_WIDTH = 10;
+Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_PADDING = 2;
 
 /**
  * The height of an empty statement input.  Note that in the old rendering this
@@ -127,19 +118,7 @@ Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_WIDTH = 10;
 Blockly.blockRendering.constants.EMPTY_STATEMENT_INPUT_HEIGHT =
     Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT;
 
-Blockly.blockRendering.constants.EMPTY_STATEMENT_INPUT_WIDTH = 32;
-
-Blockly.blockRendering.constants.POPULATED_STATEMENT_INPUT_WIDTH = 25;
-
-
 Blockly.blockRendering.constants.START_POINT = Blockly.utils.svgPaths.moveBy(0, 0);
-
-/**
- * SVG start point for drawing the top-left corner.
- * @const
- */
-Blockly.blockRendering.constants.TOP_LEFT_CORNER_START =
-    'm 0,' + Blockly.blockRendering.constants.CORNER_RADIUS;
 
 /**
  * Height of SVG path for jagged teeth at the end of collapsed blocks.
@@ -178,7 +157,6 @@ Blockly.blockRendering.constants.JAGGED_TEETH = (function() {
  * Information about the hat on a start block.
  */
 Blockly.blockRendering.constants.START_HAT = (function() {
-  // It's really minus 15, which is super unfortunate.
   var height = Blockly.blockRendering.constants.START_HAT_HEIGHT;
   var width = Blockly.blockRendering.constants.START_HAT_WIDTH;
 
@@ -244,6 +222,30 @@ Blockly.blockRendering.constants.PUZZLE_TAB = (function() {
   };
 })();
 
+Blockly.blockRendering.constants.TRIANGLE = (function() {
+  var width = 20;
+  var height = 20;
+  // The 'up' and 'down'  versions of the paths are the same, but the Y sign
+  // flips.  Forward and back are the signs to use to move the cursor in the
+  // direction that the path is being drawn.
+  function makeMainPath(up) {
+    var forward = up ? -1 : 1;
+
+    return Blockly.utils.svgPaths.lineTo(-width, forward * height / 2) +
+        Blockly.utils.svgPaths.lineTo(width, forward * height / 2);
+  }
+
+  var pathUp = makeMainPath(true);
+  var pathDown = makeMainPath(false);
+
+  return {
+    width: width,
+    height: height,
+    pathDown: pathDown,
+    pathUp: pathUp
+  };
+})();
+
 Blockly.blockRendering.constants.NOTCH = (function() {
   var width = Blockly.blockRendering.constants.NOTCH_WIDTH;
   var height = Blockly.blockRendering.constants.NOTCH_HEIGHT;
@@ -279,6 +281,7 @@ Blockly.blockRendering.constants.INSIDE_CORNERS = (function() {
       Blockly.utils.svgPaths.point(radius, radius));
 
   return {
+    width: radius,
     height: radius,
     pathTop: innerTopLeftCorner,
     pathBottom: innerBottomLeftCorner
@@ -291,8 +294,10 @@ Blockly.blockRendering.constants.OUTSIDE_CORNERS = (function() {
    * SVG path for drawing the rounded top-left corner.
    * @const
    */
-  var topLeft = Blockly.utils.svgPaths.arc('A', '0 0,1', radius,
-      Blockly.utils.svgPaths.point(radius, 0));
+  var topLeft =
+      Blockly.utils.svgPaths.moveBy(0, radius) +
+      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+          Blockly.utils.svgPaths.point(radius, -radius));
 
   var bottomLeft = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
       Blockly.utils.svgPaths.point(-radius, -radius));

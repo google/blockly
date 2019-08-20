@@ -270,9 +270,9 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
     return;
   }
 
-  Blockly.Field.startCache();
+  Blockly.utils.dom.startTextWidthCache();
   Blockly.BlockSvg.superClass_.setParent.call(this, newParent);
-  Blockly.Field.stopCache();
+  Blockly.utils.dom.stopTextWidthCache();
 
   var svgRoot = this.getSvgRoot();
 
@@ -646,7 +646,7 @@ Blockly.BlockSvg.prototype.showHelp_ = function() {
 /**
  * Generate the context menu for this block.
  * @protected
- * @returns {Array.<!Object>} Context menu options
+ * @return {Array.<!Object>} Context menu options
  */
 Blockly.BlockSvg.prototype.generateContextMenu = function() {
   if (this.workspace.options.readOnly || !this.contextMenu) {
@@ -893,7 +893,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     return;
   }
   Blockly.Tooltip.hide();
-  Blockly.Field.startCache();
+  Blockly.utils.dom.startTextWidthCache();
   // Save the block's workspace temporarily so we can resize the
   // contents once the block is disposed.
   var blockWorkspace = this.workspace;
@@ -952,7 +952,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   this.svgPath_ = null;
   this.svgPathLight_ = null;
   this.svgPathDark_ = null;
-  Blockly.Field.stopCache();
+  Blockly.utils.dom.stopTextWidthCache();
 };
 
 /**
@@ -1539,14 +1539,10 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
  *   If true, also render block's parent, grandparent, etc.  Defaults to true.
  */
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
-  Blockly.Field.startCache();
+  Blockly.utils.dom.startTextWidthCache();
   this.rendered = true;
   // TODO (#2702): Choose an API for picking the renderer.
-  if (Blockly.renderMode == 'compatibility') {
-    Blockly.blockRendering.render(this);
-  } else {
-    this.renderInternal();
-  }
+  Blockly.blockRendering.render(this);
   // No matter how we rendered, connection locations should now be correct.
   this.updateConnectionLocations_();
   if (opt_bubble !== false) {
@@ -1559,7 +1555,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
       this.workspace.resizeContents();
     }
   }
-  Blockly.Field.stopCache();
+  Blockly.utils.dom.stopTextWidthCache();
 };
 
 /**

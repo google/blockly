@@ -27,6 +27,7 @@
 goog.provide('Blockly.inject');
 
 goog.require('Blockly.BlockDragSurfaceSvg');
+goog.require('Blockly.Component');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
@@ -38,8 +39,6 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.WorkspaceSvg');
-
-goog.require('goog.ui.Component');
 
 
 /**
@@ -74,6 +73,7 @@ Blockly.inject = function(container, opt_options) {
   var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
       workspaceDragSurface);
   Blockly.setTheme(options.theme);
+  Blockly.user.keyMap.setKeyMap(options.keyMap);
 
   Blockly.init_(workspace);
   Blockly.mainWorkspace = workspace;
@@ -95,8 +95,8 @@ Blockly.createDom_ = function(container, options) {
   // out content in RTL mode.  Therefore Blockly forces the use of LTR,
   // then manually positions content in RTL as needed.
   container.setAttribute('dir', 'LTR');
-  // Closure can be trusted to create HTML widgets with the proper direction.
-  goog.ui.Component.setDefaultRightToLeft(options.RTL);
+  // Set the default direction for Components to use.
+  Blockly.Component.setDefaultRightToLeft(options.RTL);
 
   // Load CSS.
   Blockly.Css.inject(options.hasCss, options.pathToMedia);
@@ -232,8 +232,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
     mainWorkspace.addZoomControls();
   }
 
-  Blockly.Navigation.setCursor(mainWorkspace.cursor);
-  Blockly.Navigation.setMarker(mainWorkspace.marker);
+  Blockly.navigation.setCursor(mainWorkspace.cursor);
+  Blockly.navigation.setMarker(mainWorkspace.marker);
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);

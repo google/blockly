@@ -16,6 +16,10 @@
       font-weight: normal;
       font-size: 140%;
     }
+
+    .blockRenderDebug {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -238,7 +242,7 @@
      * @package
      */
     function findNext() {
-      var cursor = Blockly.Navigation.cursor_;
+      var cursor = Blockly.navigation.cursor_;
       var curNode = cursor.getCurNode();
       return treeTraversal(curNode);
     }
@@ -250,7 +254,7 @@
     function demo() {
       var doNext = function() {
         var node = findNext();
-        Blockly.Navigation.cursor_.setLocation(node);
+        Blockly.navigation.cursor_.setLocation(node);
         if (node) {
           setTimeout(doNext, 1000);
         }
@@ -263,9 +267,9 @@
      * @package
      */
     function preOrderDemo() {
-      Blockly.Navigation.enableKeyboardAccessibility();
-      if (!Blockly.Navigation.cursor_.getCurNode()) {
-        Blockly.Navigation.focusWorkspace();
+      Blockly.navigation.enableKeyboardAccessibility();
+      if (!Blockly.navigation.cursor_.getCurNode()) {
+        Blockly.navigation.focusWorkspace();
       }
       demo();
     }
@@ -274,11 +278,10 @@
     * Turn on accessibility mode.
     * If there is a block on the workspace add the cursor to the block otherwise
     * add the cursor to the workspace.
-    * previous connection otherwise add
     * @package
     */
     function turnOnAccessibility() {
-      Blockly.Navigation.enableKeyboardAccessibility();
+      Blockly.navigation.enableKeyboardAccessibility();
       var blocks = Blockly.getMainWorkspace().getTopBlocks();
       if (blocks.length > 0) {
         var newNode;
@@ -287,9 +290,9 @@
         } else {
           newNode = Blockly.ASTNode.createBlockNode(blocks[0]);
         }
-        Blockly.Navigation.cursor_.setLocation(newNode);
+        Blockly.navigation.cursor_.setLocation(newNode);
       } else {
-        Blockly.Navigation.focusWorkspace();
+        Blockly.navigation.focusWorkspace();
       }
     }
   </script>

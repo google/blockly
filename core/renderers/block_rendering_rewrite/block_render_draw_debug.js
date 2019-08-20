@@ -22,17 +22,25 @@
  * @fileoverview Methods for graphically rendering a block as SVG.
  * @author fenichel@google.com (Rachel Fenichel)
  */
-
 'use strict';
+
 goog.provide('Blockly.blockRendering.Debug');
+
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Highlighter');
 goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.BottomRow');
+goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Row');
+goog.require('Blockly.blockRendering.SpacerRow');
+goog.require('Blockly.blockRendering.TopRow');
+
 
 /**
  * An object that renders rectangles and dots for debugging rendering code.
  * @package
+ * @constructor
  */
 Blockly.blockRendering.Debug = function() {
   /**
@@ -44,17 +52,31 @@ Blockly.blockRendering.Debug = function() {
   /**
    * The SVG root of the block that is being rendered.  Debug elements will
    * be attached to this root.
-   * @type {!SVGElement}
+   * @type {SVGElement}
    */
   this.svgRoot_ = null;
+
+  /**
+   * @type {Object} Configuration object containing booleans to enable and
+   *     disable debug rendering of specific rendering components.
+   */
+  this.config_ = {
+    rowSpacers: true,
+    elemSpacers: true,
+    rows: true,
+    elems: true,
+    connections: true,
+    blockBounds: true
+  };
 };
+
 
 /**
  * Remove all elements the this object created on the last pass.
  * @package
  */
 Blockly.blockRendering.Debug.prototype.clearElems = function() {
-  for (var i = 0, elem; elem = this.debugElements_[i]; i++) {
+  for (var i = 0, elem; (elem = this.debugElements_[i]); i++) {
     Blockly.utils.dom.removeNode(elem);
   }
 
@@ -63,16 +85,20 @@ Blockly.blockRendering.Debug.prototype.clearElems = function() {
 
 /**
  * Draw a debug rectangle for a spacer (empty) row.
- * @param {!Blockly.blockRendering.Row} row The row to render
+ * @param {!Blockly.blockRendering.Row} row The row to render.
  * @param {number} cursorY The y position of the top of the row.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, isRtl) {
+  if (!this.config_.rowSpacers) {
+    return;
+  }
+
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'rowSpacerRect blockRenderDebug',
-        'x': isRtl ? -row.width : 0,
+        'x': isRtl ? -(row.xPos + row.width) : row.xPos,
         'y': cursorY,
         'width': row.width,
         'height': row.height,
@@ -82,12 +108,16 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
 
 /**
  * Draw a debug rectangle for a horizontal spacer.
- * @param {!Blockly.BlockSvg.InRowSpacer} elem The spacer to render
+ * @param {!Blockly.blockRendering.InRowSpacer} elem The spacer to render.
  * @param {number} rowHeight The height of the container row.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight, isRtl) {
+  if (!this.config_.elemSpacers) {
+    return;
+  }
+
   var xPos = elem.xPos;
   if (isRtl) {
     xPos = -(xPos + elem.width);
@@ -107,11 +137,15 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
 
 /**
  * Draw a debug rectangle for an in-row element.
- * @param {!Blockly.BlockSvg.Measurable} elem The element to render
+ * @param {!Blockly.blockRendering.Measurable} elem The element to render.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) {
+  if (!this.config_.elems) {
+    return;
+  }
+
   var xPos = elem.xPos;
   if (isRtl) {
     xPos = -(xPos + elem.width);
@@ -140,6 +174,10 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
+  if (!this.config_.connections) {
+    return;
+  }
+
   var colour;
   var size;
   var fill;
@@ -174,33 +212,53 @@ Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
 
 /**
  * Draw a debug rectangle for a non-empty row.
- * @param {!Blockly.BlockSvg.Row} row The non-empty row to render.
+ * @param {!Blockly.blockRendering.Row} row The non-empty row to render.
  * @param {number} cursorY The y position of the top of the row.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, isRtl) {
+  if (!this.config_.rows) {
+    return;
+  }
+
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'elemRenderingRect blockRenderDebug',
-        'x': isRtl ? -row.width : 0,
-        'y': cursorY ,
+        'x': isRtl ? -(row.xPos + row.width) : row.xPos,
+        'y': cursorY,
         'width': row.width,
         'height': row.height,
+      },
+      this.svgRoot_));
+
+  if (row.type == 'top row' || row.type == 'bottom row') {
+    return;
+  }
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+      {
+        'class': 'blockRenderDebug',
+        'x': isRtl ? -(row.xPos + row.widthWithConnectedBlocks) : row.xPos,
+        'y': cursorY,
+        'width': row.widthWithConnectedBlocks,
+        'height': row.height,
+        'stroke': this.randomColour_,
+        'fill': 'none',
+        'stroke-width': '1px',
+        'stroke-dasharray': '3,3'
       },
       this.svgRoot_));
 };
 
 /**
  * Draw debug rectangles for a non-empty row and all of its subcomponents.
- * @param {!Blockly.BlockSvg.Row} row The non-empty row to render.
+ * @param {!Blockly.blockRendering.Row} row The non-empty row to render.
  * @param {number} cursorY The y position of the top of the row.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY, isRtl) {
-  for (var e = 0; e < row.elements.length; e++) {
-    var elem = row.elements[e];
+  for (var i = 0, elem; (elem = row.elements[i]); i++) {
     if (elem.isSpacer()) {
       this.drawSpacerElem(elem, row.height, isRtl);
     } else {
@@ -211,6 +269,48 @@ Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, curso
 };
 
 /**
+ * Draw a debug rectangle around the entire block.
+ * @param {!Blockly.blockRendering.RenderInfo} info Rendering information about
+ *     the block to debug.
+ * @package
+ */
+Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
+  if (!this.config_.blockBounds) {
+    return;
+  }
+
+  // Bounding box without children.
+  var xPos = info.RTL ? -info.width : 0;
+  var yPos = 0;
+
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+      {
+        'class': 'blockBoundingBox blockRenderDebug',
+        'x': xPos,
+        'y': yPos,
+        'width': info.width,
+        'height': info.height,
+      },
+      this.svgRoot_));
+
+  // Bounding box with children.
+  xPos = info.RTL ? -info.widthWithChildren : 0;
+  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+      {
+        'class': 'blockRenderDebug',
+        'x': xPos,
+        'y': yPos,
+        'width': info.widthWithChildren,
+        'height': info.height,
+        'stroke': '#DF57BC',
+        'fill': 'none',
+        'stroke-width': '1px',
+        'stroke-dasharray': '3,3'
+      },
+      this.svgRoot_));
+};
+
+/**
  * Do all of the work to draw debug information for the whole block.
  * @param {!Blockly.BlockSvg} block The block to draw debug information for.
  * @param {!Blockly.blockRendering.RenderInfo} info Rendering information about
@@ -218,12 +318,15 @@ Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, curso
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
+  this.config_.rowSpacers = false;
   this.clearElems();
   this.svgRoot_ = block.getSvgRoot();
+
+  this.randomColour_ = '#' + Math.floor(Math.random() * 16777215).toString(16);
+
   var cursorY = 0;
-  for (var r = 0; r < info.rows.length; r++) {
-    var row = info.rows[r];
-    if (row.isSpacer()) {
+  for (var i = 0, row; (row = info.rows[i]); i++) {
+    if (row.type == 'between-row spacer') {
       this.drawSpacerRow(row, cursorY, info.RTL);
     } else {
       this.drawRowWithElements(row, cursorY, info.RTL);
@@ -240,4 +343,6 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
   if (block.outputConnection) {
     this.drawConnection(block.outputConnection);
   }
+
+  this.drawBoundingBox(info);
 };

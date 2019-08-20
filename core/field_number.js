@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.FieldNumber');
 
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
 
 
@@ -138,4 +139,25 @@ Blockly.FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
   return n;
 };
 
-Blockly.Field.register('field_number', Blockly.FieldNumber);
+/**
+ * Create the number input editor widget.
+ * @return {!HTMLInputElement} The newly created number input editor.
+ * @protected
+ * @override
+ */
+Blockly.FieldNumber.prototype.widgetCreate_ = function() {
+  var htmlInput = Blockly.FieldNumber.superClass_.widgetCreate_.call(this);
+
+  // Set the accessibility state
+  if (this.min_ > -Infinity) {
+    Blockly.utils.aria.setState(htmlInput,
+        Blockly.utils.aria.State.VALUEMIN, this.min_);
+  }
+  if (this.max_ < Infinity) {
+    Blockly.utils.aria.setState(htmlInput,
+        Blockly.utils.aria.State.VALUEMAX, this.max_);
+  }
+  return htmlInput;
+};
+
+Blockly.fieldRegistry.register('field_number', Blockly.FieldNumber);

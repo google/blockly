@@ -46,7 +46,7 @@ goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
-goog.require('Blockly.Navigation');
+goog.require('Blockly.navigation');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.Toolbox');
 goog.require('Blockly.Tooltip');
@@ -214,13 +214,16 @@ Blockly.onKeyDown_ = function(e) {
     return;
   }
   var deleteBlock = false;
-  if (e.keyCode == 27) {
+  if (e.keyCode == Blockly.utils.KeyCodes.ESC) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
-    if (Blockly.keyboardAccessibilityMode) {
-      Blockly.Navigation.navigate(e);
-    }
-  } else if (e.keyCode == 8 || e.keyCode == 46) {
+    Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_EXIT);
+  } else if (Blockly.keyboardAccessibilityMode &&
+      Blockly.navigation.onKeyPress(e)) {
+    // If the keyboard or field handled the key press return.
+    return;
+  } else if (e.keyCode == Blockly.utils.KeyCodes.BACKSPACE ||
+      e.keyCode == Blockly.utils.KeyCodes.DELETE) {
     // Delete or backspace.
     // Stop the browser from going back to the previous page.
     // Do this first to prevent an error in the delete code from resulting in
@@ -243,18 +246,19 @@ Blockly.onKeyDown_ = function(e) {
       // Don't allow copying immovable or undeletable blocks. The next step
       // would be to paste, which would create additional undeletable/immovable
       // blocks on the workspace.
-      if (e.keyCode == 67) {
+      if (e.keyCode == Blockly.utils.KeyCodes.C) {
         // 'c' for copy.
         Blockly.hideChaff();
         Blockly.copy_(Blockly.selected);
-      } else if (e.keyCode == 88 && !Blockly.selected.workspace.isFlyout) {
+      } else if (e.keyCode == Blockly.utils.KeyCodes.X &&
+          !Blockly.selected.workspace.isFlyout) {
         // 'x' for cut, but not in a flyout.
         // Don't even copy the selected item in the flyout.
         Blockly.copy_(Blockly.selected);
         deleteBlock = true;
       }
     }
-    if (e.keyCode == 86) {
+    if (e.keyCode == Blockly.utils.KeyCodes.V) {
       // 'v' for paste.
       if (Blockly.clipboardXml_) {
         // Pasting always pastes to the main workspace, even if the copy
@@ -270,14 +274,11 @@ Blockly.onKeyDown_ = function(e) {
           Blockly.Events.setGroup(false);
         }
       }
-    } else if (e.keyCode == 90) {
+    } else if (e.keyCode == Blockly.utils.KeyCodes.Z) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
       mainWorkspace.undo(e.shiftKey);
     }
-  } else if (Blockly.keyboardAccessibilityMode &&
-      Blockly.Navigation.navigate(e)) {
-    return;
   }
   // Common code for delete and cut.
   // Don't delete in the flyout.

@@ -29,8 +29,10 @@ goog.provide('Blockly.FieldTextInput');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Size');
@@ -87,6 +89,11 @@ Blockly.FieldTextInput.prototype.SERIALIZABLE = true;
  * Point size of text.  Should match blocklyText's font-size in CSS.
  */
 Blockly.FieldTextInput.FONTSIZE = 11;
+
+/**
+ * Pixel size of input border radius.  Should match blocklyText's border-radius in CSS.
+ */
+Blockly.FieldTextInput.BORDERRADIUS = 4;
 
 /**
  * Mouse cursor style when over the hotspot that initiates the editor.
@@ -165,17 +172,16 @@ Blockly.FieldTextInput.prototype.render_ = function() {
       // in RTL, we need to let the browser reflow before resizing
       // in order to get the correct bounding box of the borderRect
       // avoiding issue #2777.
-      var field = this;
-      setTimeout(function() {
-        field.resizeEditor_();
-      }, 0);
+      setTimeout(this.resizeEditor_.bind(this), 0);
     } else {
       this.resizeEditor_();
     }
     if (!this.isTextValid_) {
       Blockly.utils.dom.addClass(this.htmlInput_, 'blocklyInvalidInput');
+      Blockly.utils.aria.setState(this.htmlInput_, 'invalid', true);
     } else {
       Blockly.utils.dom.removeClass(this.htmlInput_, 'blocklyInvalidInput');
+      Blockly.utils.aria.setState(this.htmlInput_, 'invalid', false);
     }
   }
 };
@@ -240,7 +246,7 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
 /**
  * Create the text input editor widget.
  * @return {!HTMLInputElement} The newly created text input editor.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   var div = Blockly.WidgetDiv.DIV;
@@ -252,16 +258,16 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
       (Blockly.FieldTextInput.FONTSIZE * this.workspace_.scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
+  var borderRadius =
+      (Blockly.FieldTextInput.BORDERRADIUS * this.workspace_.scale) + 'px';
+  htmlInput.style.borderRadius = borderRadius;
   div.appendChild(htmlInput);
 
   htmlInput.value = htmlInput.defaultValue = this.value_;
   htmlInput.untypedDefaultValue_ = this.value_;
   htmlInput.oldValue_ = null;
   // Ensure the browser reflows before resizing to avoid issue #2777.
-  var field = this;
-  setTimeout(function() {
-    field.resizeEditor_();
-  }, 0);
+  setTimeout(this.resizeEditor_.bind(this), 0);
 
   this.bindInputEvents_(htmlInput);
 
@@ -437,4 +443,4 @@ Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
   return n;
 };
 
-Blockly.Field.register('field_input', Blockly.FieldTextInput);
+Blockly.fieldRegistry.register('field_input', Blockly.FieldTextInput);

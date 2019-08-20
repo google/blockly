@@ -34,7 +34,6 @@
     "./blockly-node.js": "./blockly.js"
   },
   "license": "Apache-2.0",
-  "private": true,
   "devDependencies": {
     "chai": "^4.2.0",
     "eslint": "^5.13.0",

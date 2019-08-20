@@ -22,12 +22,13 @@
  * @fileoverview Objects for rendering highlights on blocks.
  * @author fenichel@google.com (Rachel Fenichel)
  */
-
 'use strict';
+
 goog.provide('Blockly.blockRendering.highlightConstants');
 
 goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.utils.svgPaths');
+
 
 /**
  * Some highlights are simple offsets of the parent paths and can be generated
@@ -103,39 +104,36 @@ Blockly.blockRendering.highlightConstants.OUTSIDE_CORNER = (function() {
    */
   var distance45inside = (1 - Math.SQRT1_2) * (radius - offset) + offset;
 
-  /**
-   * SVG start point for drawing the top-left corner's highlight in RTL.
-   * @const
-   */
-  var topLeftCornerStartRtl =
-      Blockly.utils.svgPaths.moveBy(distance45inside, distance45inside);
-
-  /**
-   * SVG start point for drawing the top-left corner's highlight in LTR.
-   * @const
-   */
-  var topLeftCornerStartLtr =
-      Blockly.utils.svgPaths.moveBy(offset, radius - offset);
-
+  var topLeftStartX = distance45inside;
+  var topLeftStartY = distance45inside;
+  var topLeftCornerHighlightRtl =
+      Blockly.utils.svgPaths.moveBy(topLeftStartX, topLeftStartY) +
+      Blockly.utils.svgPaths.arc('a', '0 0,1', radius - offset,
+          Blockly.utils.svgPaths.point(radius - topLeftStartX, -topLeftStartY + offset));
   /**
    * SVG path for drawing the highlight on the rounded top-left corner.
    * @const
    */
-  var topLeftCornerHighlight =
-      Blockly.utils.svgPaths.arc('A', '0 0,1', radius - offset,
-          Blockly.utils.svgPaths.point(radius, offset));
+  var topLeftCornerHighlightLtr =
+      Blockly.utils.svgPaths.moveBy(offset, radius) +
+      Blockly.utils.svgPaths.arc('a', '0 0,1', radius - offset,
+          Blockly.utils.svgPaths.point(radius, -radius + offset));
+
+  var bottomLeftStartX = distance45inside;
+  var bottomLeftStartY = -distance45inside;
+  var bottomLeftPath = Blockly.utils.svgPaths.moveBy(
+      bottomLeftStartX, bottomLeftStartY) +
+          Blockly.utils.svgPaths.arc('a', '0 0,1', radius - offset,
+              Blockly.utils.svgPaths.point(-bottomLeftStartX + offset,
+                  -bottomLeftStartY - radius));
 
   return {
     height: radius,
     topLeft: function(rtl) {
-      var start = rtl ? topLeftCornerStartRtl : topLeftCornerStartLtr;
-      return start + topLeftCornerHighlight;
+      return rtl ? topLeftCornerHighlightRtl : topLeftCornerHighlightLtr;
     },
-    bottomLeft: function(yPos) {
-      return Blockly.utils.svgPaths.moveTo(
-          distance45inside + offset, yPos - distance45inside) +
-          Blockly.utils.svgPaths.arc('A', '0 0,1', radius - offset,
-              Blockly.utils.svgPaths.point(offset, yPos - radius));
+    bottomLeft: function() {
+      return bottomLeftPath;
     }
   };
 })();
@@ -150,7 +148,7 @@ Blockly.blockRendering.highlightConstants.PUZZLE_TAB = (function() {
   var verticalOverlap = 2.5;
 
   var highlightRtlUp =
-      Blockly.utils.svgPaths.moveTo(width * -0.25, 8.4) +
+      Blockly.utils.svgPaths.moveBy(-2, -height + verticalOverlap + 0.9) +
       Blockly.utils.svgPaths.lineTo(width * -0.45, -2.1);
 
   var highlightRtlDown =
@@ -165,18 +163,14 @@ Blockly.blockRendering.highlightConstants.PUZZLE_TAB = (function() {
       Blockly.utils.svgPaths.lineOnAxis('v', verticalOverlap);
 
   var highlightLtrUp =
-      // TODO: Move this 'V' out.
-      Blockly.utils.svgPaths.lineOnAxis('V',
-          height + Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP - 1.5) +
+      Blockly.utils.svgPaths.lineOnAxis('v', -1.5) +
       Blockly.utils.svgPaths.moveBy(width * -0.92, -0.5) +
       Blockly.utils.svgPaths.curve('q',
           [
             Blockly.utils.svgPaths.point(width * -0.19, -5.5),
             Blockly.utils.svgPaths.point(0,-11)
           ]) +
-      Blockly.utils.svgPaths.moveBy(width * 0.92, 1) +
-      Blockly.utils.svgPaths.lineOnAxis('V', 0.5) +
-      Blockly.utils.svgPaths.lineOnAxis('H', 1);
+      Blockly.utils.svgPaths.moveBy(width * 0.92, 1);
 
   var highlightLtrDown =
       Blockly.utils.svgPaths.moveBy(-5, height - 0.7) +
@@ -216,6 +210,7 @@ Blockly.blockRendering.highlightConstants.JAGGED_TEETH = (function() {
 })();
 
 Blockly.blockRendering.highlightConstants.START_HAT = (function() {
+  var hatHeight = Blockly.blockRendering.constants.START_HAT.height;
   var pathRtl =
       Blockly.utils.svgPaths.moveBy(25, -8.7) +
       Blockly.utils.svgPaths.curve('c',
@@ -232,7 +227,7 @@ Blockly.blockRendering.highlightConstants.START_HAT = (function() {
             Blockly.utils.svgPaths.point(45.3, -14.9),
             Blockly.utils.svgPaths.point(75, -8.7)
           ]) +
-      Blockly.utils.svgPaths.moveTo(100.5, 0.5);
+      Blockly.utils.svgPaths.moveTo(100.5, hatHeight + 0.5);
   return {
     path: function(rtl) {
       return rtl ? pathRtl : pathLtr;

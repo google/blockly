@@ -457,10 +457,10 @@ Blockly.blockRendering.Drawer.prototype.positionExternalValueConnection_ = funct
  */
 Blockly.blockRendering.Drawer.prototype.positionPreviousConnection_ = function() {
   var topRow = this.info_.topRow;
-  if (topRow.hasPreviousConnection) {
+  if (topRow.connection) {
     var x = topRow.xPos + Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;
     var connX = (this.info_.RTL ? -x : x);
-    topRow.connection.setOffsetInBlock(connX, 0);
+    topRow.connection.connectionModel.setOffsetInBlock(connX, 0);
   }
 };
 
@@ -471,11 +471,11 @@ Blockly.blockRendering.Drawer.prototype.positionPreviousConnection_ = function()
 Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
   var bottomRow = this.info_.bottomRow;
 
-  if (bottomRow.hasNextConnection) {
-    var connInfo = bottomRow.getNextConnection();
+  if (bottomRow.connection) {
+    var connInfo = bottomRow.connection;
     var x = connInfo.xPos; // Already contains info about startX
     var connX = (this.info_.RTL ? -x : x) + 0.5;
-    bottomRow.connection.setOffsetInBlock(
+    connInfo.connectionModel.setOffsetInBlock(
         connX, (connInfo.centerline - connInfo.height / 2) +
             Blockly.blockRendering.constants.DARK_PATH_OFFSET);
   }

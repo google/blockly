@@ -74,14 +74,6 @@ Blockly.blockRendering.constants.CORNER_RADIUS = 8;
 Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT =
     Blockly.blockRendering.constants.NOTCH_WIDTH;
 
-// This is the width from where a rounded corner ends to where a previous
-// connection starts.
-// The position of the notch should not change as the rounded corner decreases
-// in radius.
-Blockly.blockRendering.constants.NOTCH_OFFSET_ROUNDED_CORNER_PREV =
-    Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT -
-    Blockly.blockRendering.constants.CORNER_RADIUS;
-
 Blockly.blockRendering.constants.STATEMENT_BOTTOM_SPACER = 5;
 Blockly.blockRendering.constants.STATEMENT_INPUT_PADDING_LEFT = 20;
 Blockly.blockRendering.constants.BETWEEN_STATEMENT_PADDING_Y = 4;

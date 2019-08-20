@@ -141,7 +141,11 @@ Blockly.FieldDropdown.prototype.imageElement_ = null;
  */
 Blockly.FieldDropdown.prototype.imageJson_ = null;
 
-
+/** 
+ * Height of the selected item to adjust the scroll position.
+ * @type {number}
+ * @private
+ */
 Blockly.Field.SELECTED_ITEM_Y_POS = 0;
 
 /**
@@ -187,6 +191,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   // Otherwise it will cause a page scroll to get the misplaced menu in
   // view. See issue #1329.
   this.menu_.setAllowAutoFocus(true);
+  // Scrolls HTML div to the selected item.
   this.menu_.getElement().scroll(0,Blockly.Field.SELECTED_ITEM_Y_POS);
   this.menu_.getElement().focus();
 };

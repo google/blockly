@@ -250,9 +250,6 @@ Blockly.blockRendering.TopRow = function() {
 
   /**
    * The previous connection on the block, if any.
-   * TODO: Should this be the connection measurable instead? It would add some
-   * indirection but would mean we aren't mixing connections and connection
-   * measurables.
    * @type {Blockly.BlockRendering.PreviousConnection}
    */
   this.connection = null;

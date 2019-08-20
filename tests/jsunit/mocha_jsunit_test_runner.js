@@ -44,7 +44,7 @@ document.head.appendChild(mochaCss);
 
 /**
  * Begin by discovering all of the test methods, test methods are any
- * method on the window object that begins with the prefix `test_`
+ * function on the window object that begins with the prefix `test`
  */
 var allMethods = Object.getOwnPropertyNames(window);
 var allTests = [];
@@ -71,6 +71,7 @@ for (var i = 0, method; i < allTests.length, method = allTests[i]; i++) {
   }
   suites[suiteName].push(method);
 }
+
 
 /**
  * Setup chai fail method

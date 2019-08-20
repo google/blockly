@@ -120,6 +120,8 @@ Blockly.WorkspaceSvg = function(options,
     this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
   }
+
+  //TODO: Add Most Used here.
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 

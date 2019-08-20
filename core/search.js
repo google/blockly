@@ -98,7 +98,13 @@ Blockly.Search.preprocessSearchKeywords = function(block_type, keyword_list) {
   Blockly.Blocks[block_type].SearchKeywords = [];
 
   for (let i = 0; i < keyword_list.length; i++) {
-    let splitText = keyword_list[i].trim().toLowerCase().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi ,'').split(' ');
+    let interpolizedMessage = Blockly.utils.tokenizeInterpolation(keyword_list[i])[0];
+
+    if (!interpolizedMessage) {
+      continue;
+    }
+    
+    let splitText = interpolizedMessage.trim().toLowerCase().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi ,'').split(' ');
     
     for (let j = 0; j < splitText.length; j++) {
         let text = splitText[j];

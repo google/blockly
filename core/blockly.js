@@ -434,6 +434,12 @@ Blockly.jsonInitFactory_ = function(jsonDef) {
   };
 };
 
+Blockly.evaluateSearchJson_ = function(type, keyword_list) {
+  return function() {
+      Blockly.Search.preprocessSearchKeywords(type, keyword_list);
+  };
+};
+
 /**
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
@@ -459,7 +465,8 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
               ' overwrites prior definition of "' + typename + '".');
         }
         Blockly.Blocks[typename] = {
-          init: Blockly.jsonInitFactory_(elem)
+          init: Blockly.jsonInitFactory_(elem),
+          ensureSearchKeywords: Blockly.evaluateSearchJson_(elem["type"], elem["search_keywords"]),
         };
       }
     }

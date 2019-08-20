@@ -53,7 +53,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output": "Array",
     "style": "list_blocks",
     "tooltip": "%{BKY_LISTS_CREATE_EMPTY_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_CREATE_EMPTY_HELPURL}"
+    "helpUrl": "%{BKY_LISTS_CREATE_EMPTY_HELPURL}",
+    "search_keywords": [
+        "%{BKY_LISTS_CREATE_EMPTY_TITLE}"
+    ]
   },
   // Block for creating a list with one element repeated.
   {
@@ -73,7 +76,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output": "Array",
     "style": "list_blocks",
     "tooltip": "%{BKY_LISTS_REPEAT_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_REPEAT_HELPURL}"
+    "helpUrl": "%{BKY_LISTS_REPEAT_HELPURL}",
+    "search_keywords": [
+        "%{BKY_LISTS_REPEAT_TITLE}"
+    ]
   },
   // Block for reversing a list.
   {
@@ -90,7 +96,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "inputsInline": true,
     "style": "list_blocks",
     "tooltip": "%{BKY_LISTS_REVERSE_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_REVERSE_HELPURL}"
+    "helpUrl": "%{BKY_LISTS_REVERSE_HELPURL}",
+    "search_keywords": [
+        "%{BKY_LISTS_REVERSE_MESSAGE0}"
+    ]
   },
   // Block for checking if a list is empty
   {
@@ -106,7 +115,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output": "Boolean",
     "style": "list_blocks",
     "tooltip": "%{BKY_LISTS_ISEMPTY_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_ISEMPTY_HELPURL}"
+    "helpUrl": "%{BKY_LISTS_ISEMPTY_HELPURL}",
+    "search_keywords": [
+        "%{BKY_LISTS_ISEMPTY_TITLE}"
+    ]
   },
   // Block for getting the list length
   {
@@ -122,7 +134,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output": "Number",
     "style": "list_blocks",
     "tooltip": "%{BKY_LISTS_LENGTH_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_LENGTH_HELPURL}"
+    "helpUrl": "%{BKY_LISTS_LENGTH_HELPURL}",
+    "search_keywords": [
+        "%{BKY_LISTS_LENGTH_TITLE}"
+    ]
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
@@ -141,7 +156,15 @@ Blockly.Blocks['lists_create_with'] = {
     this.setTooltip(Blockly.Msg['LISTS_CREATE_WITH_TOOLTIP']);
     this.child_disconnected_ = [];      //SHAPE: References to disconnected block children.
     this.add_shadow = false;            //SHAPE: Flag to control the addition of a shadow block on new 'item'.
-   },
+  },
+  ensureSearchKeywords: function() {
+       var keywords = [
+           Blockly.Msg.LISTS_CREATE_EMPTY_TITLE,
+           Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH
+       ];
+
+       Blockly.Search.preprocessSearchKeywords("lists_create_with", keywords);
+  },
   /**
    * Create XML to represent list inputs.
    * @return {!Element} XML storage element.
@@ -304,6 +327,13 @@ Blockly.Blocks['lists_create_with_container'] = {
     this.appendStatementInput('STACK');
     this.setTooltip(Blockly.Msg['LISTS_CREATE_WITH_CONTAINER_TOOLTIP']);
     this.contextMenu = false;
+  },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD
+      ];
+
+      Blockly.Search.preprocessSearchKeywords("lists_create_with_container", keywords);
   }
 };
 
@@ -320,6 +350,13 @@ Blockly.Blocks['lists_create_with_item'] = {
     this.setNextStatement(true);
     this.setTooltip(Blockly.Msg['LISTS_CREATE_WITH_ITEM_TOOLTIP']);
     this.contextMenu = false;
+  },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_CREATE_WITH_ITEM_TITLE
+      ];
+
+      Blockly.Search.preprocessSearchKeywords("lists_create_with_item", keywords);
   }
 };
 
@@ -349,6 +386,15 @@ Blockly.Blocks['lists_indexOf'] = {
       return Blockly.Msg['LISTS_INDEX_OF_TOOLTIP'].replace('%1',
           thisBlock.workspace.options.oneBasedIndex ? '0' : '-1');
     });
+  },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_INDEX_OF_FIRST,
+          Blockly.Msg.LISTS_INDEX_OF_LAST,
+          Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST
+      ];
+
+      Blockly.Search.preprocessSearchKeywords("lists_indexOf", keywords);
   }
 };
 
@@ -448,6 +494,22 @@ Blockly.Blocks['lists_getIndex'] = {
       }
       return tooltip;
     });
+  },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_GET_INDEX_GET,
+          Blockly.Msg.LISTS_GET_INDEX_GET_REMOVE,
+          Blockly.Msg.LISTS_GET_INDEX_REMOVE,
+          Blockly.Msg.LISTS_GET_INDEX_FROM_START,
+          Blockly.Msg.LISTS_GET_INDEX_FROM_END,
+          Blockly.Msg.LISTS_GET_INDEX_FIRST,
+          Blockly.Msg.LISTS_GET_INDEX_LAST,
+          Blockly.Msg.LISTS_GET_INDEX_RANDOM,
+          Blockly.Msg.LISTS_GET_INDEX_INPUT_IN_LIST,
+          Blockly.Msg.LISTS_GET_INDEX_TAIL,
+      ];
+
+      Blockly.Search.preprocessSearchKeywords("lists_getIndex", keywords);
   },
   /**
    * Create XML to represent whether the block is a statement or a value.
@@ -614,6 +676,21 @@ Blockly.Blocks['lists_setIndex'] = {
       return tooltip;
     });
   },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_SET_INDEX_SET,
+          Blockly.Msg.LISTS_SET_INDEX_INSERT,
+          Blockly.Msg.LISTS_GET_INDEX_FROM_START,
+          Blockly.Msg.LISTS_GET_INDEX_FROM_END,
+          Blockly.Msg.LISTS_GET_INDEX_FIRST,
+          Blockly.Msg.LISTS_GET_INDEX_LAST,
+          Blockly.Msg.LISTS_GET_INDEX_RANDOM,
+          Blockly.Msg.LISTS_SET_INDEX_INPUT_IN_LIST,
+          Blockly.Msg.LISTS_SET_INDEX_INPUT_TO
+      ];
+
+      Blockly.Search.preprocessSearchKeywords("lists_setIndex", keywords);
+  },
   /**
    * Create XML to represent whether there is an 'AT' input.
    * @return {Element} XML storage element.
@@ -711,6 +788,20 @@ Blockly.Blocks['lists_getSublist'] = {
     this.updateAt_(1, true);
     this.updateAt_(2, true);
     this.setTooltip(Blockly.Msg['LISTS_GET_SUBLIST_TOOLTIP']);
+  },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_START,
+          Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_END,
+          Blockly.Msg.LISTS_GET_SUBLIST_START_FIRST,
+          Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_START,
+          Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_END,
+          Blockly.Msg.LISTS_GET_SUBLIST_END_LAST,
+          Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST,
+          Blockly.Msg.LISTS_GET_SUBLIST_TAIL,
+      ];
+
+      Blockly.Search.preprocessSearchKeywords("lists_getSublist", keywords);
   },
   /**
    * Create XML to represent whether there are 'AT' inputs.
@@ -825,6 +916,18 @@ Blockly.Blocks['lists_sort'] = {
       "tooltip": Blockly.Msg['LISTS_SORT_TOOLTIP'],
       "helpUrl": Blockly.Msg['LISTS_SORT_HELPURL']
     });
+  },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_SORT_TITLE,
+          Blockly.Msg.LISTS_SORT_TYPE_NUMERIC,
+          Blockly.Msg.LISTS_SORT_TYPE_TEXT,
+          Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE,
+          Blockly.Msg.LISTS_SORT_ORDER_ASCENDING,
+          Blockly.Msg.LISTS_SORT_ORDER_DESCENDING,
+      ];
+
+      Blockly.Search.preprocessSearchKeywords("lists_sort", keywords);
   }
 };
 
@@ -863,6 +966,14 @@ Blockly.Blocks['lists_split'] = {
       }
       throw Error('Unknown mode: ' + mode);
     });
+  },
+  ensureSearchKeywords: function() {
+      var keywords = [
+          Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT,
+          Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST,
+          Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER,
+      ];
+      Blockly.Search.preprocessSearchKeywords("lists_split", keywords);
   },
   /**
    * Modify this block to have the correct input and output types.

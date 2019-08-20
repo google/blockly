@@ -61,7 +61,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "nextStatement": null,
     "style": "loop_blocks",
     "tooltip": "%{BKY_CONTROLS_REPEAT_TOOLTIP}",
-    "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}"
+    "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}",
+    "search_keywords": [
+        "%{BKY_CONTROLS_REPEAT_TITLE}",
+        "%{BKY_CONTROLS_REPEAT_INPUT_DO}"
+    ]
   },
   // Block for repeat n times (internal number).
   // The 'controls_repeat_ext' block is preferred as it is more flexible.
@@ -84,7 +88,11 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "nextStatement": null,
     "style": "loop_blocks",
     "tooltip": "%{BKY_CONTROLS_REPEAT_TOOLTIP}",
-    "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}"
+    "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}",
+    "search_keywords": [
+        "%{BKY_CONTROLS_REPEAT_TITLE}",
+        "%{BKY_CONTROLS_REPEAT_INPUT_DO}"
+    ]
   },
   // Block for 'do while/until' loop.
   {
@@ -114,7 +122,12 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "nextStatement": null,
     "style": "loop_blocks",
     "helpUrl": "%{BKY_CONTROLS_WHILEUNTIL_HELPURL}",
-    "extensions": ["controls_whileUntil_tooltip"]
+    "extensions": ["controls_whileUntil_tooltip"],
+    "search_keywords": [
+        "%{BKY_CONTROLS_WHILEUNTIL_OPERATOR_WHILE}",
+        "%{BKY_CONTROLS_WHILEUNTIL_OPERATOR_UNTIL}",
+        "%{BKY_CONTROLS_REPEAT_INPUT_DO}"
+    ]
   },
   // Block for 'for' loop.
   {
@@ -158,6 +171,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "extensions": [
       "contextMenu_newGetVariableBlock",
       "controls_for_tooltip"
+    ],
+    "search_keywords": [
+        "%{BKY_CONTROLS_FOR_TITLE}",
+        "%{BKY_CONTROLS_REPEAT_INPUT_DO}"
     ]
   },
   // Block for 'for each' loop.
@@ -188,6 +205,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "extensions": [
       "contextMenu_newGetVariableBlock",
       "controls_forEach_tooltip"
+    ],
+    "search_keywords": [
+        "%{BKY_CONTROLS_FOREACH_TITLE}",
+        "%{BKY_CONTROLS_REPEAT_INPUT_DO}"
     ]
   },
   // Block for flow statements: continue, break.
@@ -208,6 +229,10 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "extensions": [
       "controls_flow_tooltip",
       "controls_flow_in_loop_check"
+    ],
+    "search_keywords": [
+        "%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK}",
+        "%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE}"
     ]
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)

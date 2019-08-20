@@ -351,6 +351,13 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia, sh
         if (custom) {
           // Variables and procedures are special dynamic categories.
           childOut.blocks = custom;
+
+          //TODO:
+          // if (shouldAddToSearchTrie) {
+          //   var blocksFunction = this.workspace_.getToolboxCategoryCallback("PROCEDURE");
+
+
+          // }
         } else {
           var isNotMostUsed = (shouldAddToSearchTrie && (childIn.getAttribute('name') != Blockly.Msg.MOST_USED));
 

@@ -386,6 +386,12 @@ suite('Navigation', function() {
       this.basicBlock2 = basicBlock2;
     });
 
+    teardown(function() {
+      delete Blockly.Blocks['basic_block'];
+      this.workspace.dispose();
+      Blockly.navigation.currentCategory_ = null;
+    });
+
     test('Insert from flyout with a valid connection marked', function() {
       var previousConnection = this.basicBlock.previousConnection;
       var prevNode = Blockly.ASTNode.createConnectionNode(previousConnection);
@@ -431,12 +437,54 @@ suite('Navigation', function() {
 
       chai.assert.isNotNull(insertedBlock);
     });
+  });
 
+  suite('Test cursor move on block delete', function() {
+    setup(function() {
+      Blockly.defineBlocksWithJsonArray([{
+        "type": "basic_block",
+        "message0": "",
+        "previousStatement": null,
+        "nextStatement": null,
+      }]);
+      var toolbox = document.getElementById('toolbox-categories');
+      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+      Blockly.navigation.focusWorkspace();
+      this.basicBlockA = this.workspace.newBlock('basic_block');
+      this.basicBlockB = this.workspace.newBlock('basic_block');
+      Blockly.keyboardAccessibilityMode = true;
+    });
 
     teardown(function() {
       delete Blockly.Blocks['basic_block'];
       this.workspace.dispose();
-      Blockly.navigation.currentCategory_ = null;
+    });
+
+    test('Delete block - has parent ', function() {
+      this.basicBlockA.nextConnection.connect(this.basicBlockB.previousConnection);
+      var astNode = Blockly.ASTNode.createBlockNode(this.basicBlockB);
+      // Set the cursor to be on the child block
+      this.workspace.cursor.setLocation(astNode);
+      // Remove the child block
+      this.basicBlockB.dispose();
+      chai.assert.equal(this.workspace.cursor.getCurNode().getType(), Blockly.ASTNode.types.NEXT);
+    });
+
+    test('Delete block - no parent ', function() {
+      var astNode = Blockly.ASTNode.createBlockNode(this.basicBlockB);
+      this.workspace.cursor.setLocation(astNode);
+      this.basicBlockB.dispose();
+      chai.assert.equal(this.workspace.cursor.getCurNode().getType(), Blockly.ASTNode.types.WORKSPACE);
+    });
+
+    test('Delete parent block', function() {
+      this.basicBlockA.nextConnection.connect(this.basicBlockB.previousConnection);
+      var astNode = Blockly.ASTNode.createBlockNode(this.basicBlockB);
+      // Set the cursor to be on the child block
+      this.workspace.cursor.setLocation(astNode);
+      // Remove the parent block
+      this.basicBlockA.dispose();
+      chai.assert.equal(this.workspace.cursor.getCurNode().getType(), Blockly.ASTNode.types.WORKSPACE);
     });
   });
 });

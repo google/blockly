@@ -49,6 +49,15 @@ goog.require('Blockly.utils.Size');
  * @constructor
  */
 Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
+  opt_value = this.doClassValidation_(opt_value);
+  if (opt_value === null) {
+    opt_value = 'FALSE';
+  }
+  Blockly.FieldCheckbox.superClass_.constructor.call(
+      this, opt_value, opt_validator, opt_config);
+
+  this.size_.width = Blockly.FieldCheckbox.WIDTH;
+
   /**
    * Character for the check mark. Used to apply a different check mark
    * character to individual fields.
@@ -57,19 +66,7 @@ Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
    */
   this.checkChar_ = null;
 
-  if (opt_config) {
-    if (opt_config['checkCharacter']) {
-      this.checkChar_ = opt_config['checkCharacter'];
-    }
-  }
-
-  opt_value = this.doClassValidation_(opt_value);
-  if (opt_value === null) {
-    opt_value = 'FALSE';
-  }
-  Blockly.FieldCheckbox.superClass_.constructor.call(
-      this, opt_value, opt_validator, opt_config);
-  this.size_.width = Blockly.FieldCheckbox.WIDTH;
+  this.configure_(opt_config);
 };
 goog.inherits(Blockly.FieldCheckbox, Blockly.Field);
 
@@ -133,6 +130,19 @@ Blockly.FieldCheckbox.prototype.CURSOR = 'default';
  * @private
  */
 Blockly.FieldCheckbox.prototype.isDirty_ = false;
+
+/**
+ * Configure the field based on the given map of options.
+ * @param {Object} opt_config A map of options to configure the field based on.
+ * @private
+ */
+Blockly.FieldCheckbox.prototype.configure_ = function(opt_config) {
+  if (opt_config) {
+    if (opt_config['checkCharacter']) {
+      this.checkChar_ = opt_config['checkCharacter'];
+    }
+  }
+};
 
 /**
  * Create the block UI for this checkbox.

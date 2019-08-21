@@ -491,26 +491,10 @@ class Arguments:
     self.core = False
     self.generators = False
     self.langfiles = False
-    self.render_name = "block_rendering_rewrite"
-
-# Add all directories to the path list except for any extra renderers.
-def find_path(args, directories):
-  new_list = []
-  render_path = 'core/renderers/' + args.render_name
-  core_search_paths = calcdeps.ExpandDirectories(directories)
-  for path in core_search_paths:
-    # If it is the desired renderer
-    if path.find('core/renderers') > -1 and path.find(render_path) > -1:
-      new_list.append(path)
-    # If it is not a renderer
-    elif (path.find('core/renderers') == -1):
-      new_list.append(path)
-  return sorted(new_list)
 
 # Setup the argument parser.
 def setup_parser():
-  parser = argparse.ArgumentParser(description="Decide which files to build with what renderer.")
-  parser.add_argument('-renderer', dest="render_name", default="block_rendering_rewrite", help="The name of the desired renderer. The name should corresspond to the name of a folder in core/renderers")
+  parser = argparse.ArgumentParser(description="Decide which files to build.")
   parser.add_argument('-core', action="store_true", default=False, help="Build core")
   parser.add_argument('-generators', action="store_true", default=False, help="Build the generators")
   parser.add_argument('-langfiles', action="store_true", default=False, help="Build all the language files")
@@ -530,16 +514,7 @@ def get_args():
     args.langfiles = 'langfiles' in sys.argv
     if 'accessible' in sys.argv:
       print("The Blockly accessibility demo has moved to https://github.com/google/blockly-experimental")
-    if '-renderer' in sys.argv:
-      print ("Please use the new arguments -core, -generators, -langfiles")
-      sys.exit()
-  verify_render_name(args.render_name)
   return args
-
-# Verify that the passed in renderer name can be found in the renderers directory.
-def verify_render_name(render_name):
-  if (not render_name in next(os.walk('core/renderers'))[1]):
-    print (render_name + " is not a valid renderer.")
 
 if __name__ == "__main__":
   try:
@@ -565,7 +540,9 @@ if __name__ == "__main__":
 developers.google.com/blockly/guides/modify/web/closure""")
     sys.exit(1)
 
-  full_search_paths = find_path(args, ["core", os.path.join(os.path.pardir, "closure-library")])
+  full_search_paths = calcdeps.ExpandDirectories(
+      ["core", os.path.join(os.path.pardir, "closure-library")])
+  full_search_paths = sorted(full_search_paths)  # Deterministic build.
 
   # Uncompressed and compressed are run in parallel threads.
   # Uncompressed is limited by processor speed.

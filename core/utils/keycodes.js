@@ -28,6 +28,7 @@
 
 goog.provide('Blockly.utils.KeyCodes');
 
+
 /**
  * Key codes for common characters.
  *

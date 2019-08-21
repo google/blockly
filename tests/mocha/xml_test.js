@@ -94,7 +94,11 @@ suite('XML', function() {
         assertSimpleField(resultFieldDom, 'COLOUR', '#000099');
         delete Blockly.Blocks['field_colour_test_block'];
       });
-      test('Date', function() {
+      /* If you want to run date tests add the date picker here:
+       * https://github.com/google/blockly/blob/master/core/blockly.js#L41
+       * before unskipping.
+       */
+      test.skip('Date', function() {
         Blockly.defineBlocksWithJsonArray([{
           "type": "field_date_test_block",
           "message0": "%1",

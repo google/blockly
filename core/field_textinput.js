@@ -29,6 +29,7 @@ goog.provide('Blockly.FieldTextInput');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
@@ -171,10 +172,7 @@ Blockly.FieldTextInput.prototype.render_ = function() {
       // in RTL, we need to let the browser reflow before resizing
       // in order to get the correct bounding box of the borderRect
       // avoiding issue #2777.
-      var field = this;
-      setTimeout(function() {
-        field.resizeEditor_();
-      }, 0);
+      setTimeout(this.resizeEditor_.bind(this), 0);
     } else {
       this.resizeEditor_();
     }
@@ -248,7 +246,7 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
 /**
  * Create the text input editor widget.
  * @return {!HTMLInputElement} The newly created text input editor.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   var div = Blockly.WidgetDiv.DIV;
@@ -269,10 +267,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   htmlInput.untypedDefaultValue_ = this.value_;
   htmlInput.oldValue_ = null;
   // Ensure the browser reflows before resizing to avoid issue #2777.
-  var field = this;
-  setTimeout(function() {
-    field.resizeEditor_();
-  }, 0);
+  setTimeout(this.resizeEditor_.bind(this), 0);
 
   this.bindInputEvents_(htmlInput);
 
@@ -344,7 +339,7 @@ Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
 /**
  * Handle key down to the editor.
  * @param {!Event} e Keyboard event.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
   var tabKey = 9, enterKey = 13, escKey = 27;
@@ -448,4 +443,4 @@ Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
   return n;
 };
 
-Blockly.Field.register('field_input', Blockly.FieldTextInput);
+Blockly.fieldRegistry.register('field_input', Blockly.FieldTextInput);

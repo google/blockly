@@ -22,7 +22,6 @@
  * @fileoverview Namespace for block rendering functionality.
  * @author fenichel@google.com (Rachel Fenichel)
  */
-
 'use strict';
 
 /**
@@ -34,6 +33,7 @@ goog.provide('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.RenderInfo');
+
 
 /**
  * Render the given block, using the new rendering.

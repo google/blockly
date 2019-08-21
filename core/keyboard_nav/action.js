@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Action');
 
+
 /**
  * Class for a single action.
  * An action describes user intent. (ex go to next or go to previous)

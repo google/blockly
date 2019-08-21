@@ -18,7 +18,11 @@
  * limitations under the License.
  */
 
-suite('Date Fields', function() {
+/* If you want to run date tests add the date picker here:
+ * https://github.com/google/blockly/blob/master/core/blockly.js#L41
+ * before unskipping.
+ */
+suite.skip('Date Fields', function() {
   function assertValue(dateField, expectedValue) {
     var actualValue = dateField.getValue();
     var actualText = dateField.getText();

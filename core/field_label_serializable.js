@@ -28,6 +28,7 @@
 goog.provide('Blockly.FieldLabelSerializable');
 
 goog.require('Blockly.FieldLabel');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 
 
@@ -50,7 +51,7 @@ goog.inherits(Blockly.FieldLabelSerializable, Blockly.FieldLabel);
  * Construct a FieldLabelSerializable from a JSON arg object,
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (text, and class).
- * @returns {!Blockly.FieldLabelSerializable} The new field instance.
+ * @return {!Blockly.FieldLabelSerializable} The new field instance.
  * @package
  * @nocollapse
  */
@@ -75,5 +76,5 @@ Blockly.FieldLabelSerializable.prototype.EDITABLE = false;
  */
 Blockly.FieldLabelSerializable.prototype.SERIALIZABLE = true;
 
-Blockly.Field.register(
+Blockly.fieldRegistry.register(
     'field_label_serializable', Blockly.FieldLabelSerializable);

@@ -22,8 +22,8 @@
  * @fileoverview Methods for graphically rendering a block as SVG.
  * @author fenichel@google.com (Rachel Fenichel)
  */
-
 'use strict';
+
 goog.provide('Blockly.blockRendering.Drawer');
 
 goog.require('Blockly.blockRendering.constants');
@@ -31,13 +31,20 @@ goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Highlighter');
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.BottomRow');
+goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Row');
+goog.require('Blockly.blockRendering.SpacerRow');
+goog.require('Blockly.blockRendering.TopRow');
+
 
 /**
  * An object that draws a block based on the given rendering information.
- * @param {!Blockly.BlockSvg} block The block to render
+ * @param {!Blockly.BlockSvg} block The block to render.
  * @param {!Blockly.blockRendering.RenderInfo} info An object containing all
  *   information needed to render this block.
  * @package
+ * @constructor
  */
 Blockly.blockRendering.Drawer = function(block, info) {
   this.block_ = block;
@@ -46,7 +53,8 @@ Blockly.blockRendering.Drawer = function(block, info) {
   this.outlinePath_ = '';
   this.inlinePath_ = '';
   this.pathObject_ = new Blockly.BlockSvg.PathObject();
-  this.highlighter_ = new Blockly.blockRendering.Highlighter(this.info_, this.pathObject_);
+  this.highlighter_ =
+      new Blockly.blockRendering.Highlighter(this.info_, this.pathObject_);
 };
 
 /**
@@ -68,7 +76,8 @@ Blockly.blockRendering.Drawer.prototype.draw_ = function() {
   this.pathObject_.inlineSteps = [this.inlinePath_];
 
   this.block_.setPaths_(this.pathObject_);
-  this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
+  // Uncomment to enable debug rendering.
+  // this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   this.recordSizeOnBlock_();
 };
 
@@ -81,11 +90,10 @@ Blockly.blockRendering.Drawer.prototype.draw_ = function() {
 Blockly.blockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
   // This is used when the block is reporting its size to anyone else.
   // The dark path adds to the size of the block in both X and Y.
-  this.block_.height = this.info_.height + Blockly.blockRendering.constants.DARK_PATH_OFFSET;
+  this.block_.height = this.info_.height +
+      Blockly.blockRendering.constants.DARK_PATH_OFFSET;
   this.block_.width = this.info_.widthWithChildren +
       Blockly.blockRendering.constants.DARK_PATH_OFFSET;
-  // The flyout uses this information.
-  this.block_.startHat_ = this.info_.topRow.startHat;
 };
 
 /**
@@ -93,8 +101,7 @@ Blockly.blockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.hideHiddenIcons_ = function() {
-  for (var i = 0; i < this.info_.hiddenIcons.length; i++) {
-    var iconInfo = this.info_.hiddenIcons[i];
+  for (var i = 0, iconInfo; (iconInfo = this.info_.hiddenIcons[i]); i++) {
     iconInfo.icon.iconGroup_.setAttribute('display', 'none');
   }
 };
@@ -136,13 +143,15 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
     this.highlighter_.drawRightSideRow(topRow);
   }
   this.positionPreviousConnection_();
-  this.outlinePath_ += Blockly.utils.svgPaths.moveBy(topRow.xPos, this.info_.startY);
-  for (var i = 0, elem; elem = elements[i]; i++) {
-    if (elem.type === 'round corner') {
-      this.outlinePath_ += Blockly.blockRendering.constants.OUTSIDE_CORNERS.topLeft;
-    } else if (elem.type === 'previous connection') {
+  this.outlinePath_ +=
+      Blockly.utils.svgPaths.moveBy(topRow.xPos, this.info_.startY);
+  for (var i = 0, elem; (elem = elements[i]); i++) {
+    if (elem.type == 'round corner') {
+      this.outlinePath_ +=
+          Blockly.blockRendering.constants.OUTSIDE_CORNERS.topLeft;
+    } else if (elem.type == 'previous connection') {
       this.outlinePath_ += topRow.notchShape.pathLeft;
-    } else if (elem.type === 'hat') {
+    } else if (elem.type == 'hat') {
       this.outlinePath_ += Blockly.blockRendering.constants.START_HAT.path;
     } else if (elem.isSpacer()) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width);
@@ -182,7 +191,7 @@ Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
   this.positionExternalValueConnection_(row);
 
   this.outlinePath_ +=
-      Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width) +
+      Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.width) +
       input.connectionShape.pathDown +
       Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
 };
@@ -203,15 +212,17 @@ Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   var x = input.xPos + input.width;
 
   var innerTopLeftCorner =
-      Blockly.blockRendering.constants.NOTCH.pathRight + ' h -' +
-      (Blockly.blockRendering.constants.NOTCH_WIDTH -
-          Blockly.blockRendering.constants.CORNER_RADIUS) +
+      input.notchShape.pathRight +
+      Blockly.utils.svgPaths.lineOnAxis('h',
+          -(input.notchOffset - Blockly.blockRendering.constants.INSIDE_CORNERS.width)) +
       Blockly.blockRendering.constants.INSIDE_CORNERS.pathTop;
+
+  var innerHeight =
+      row.height - (2 * Blockly.blockRendering.constants.INSIDE_CORNERS.height);
 
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', x) +
       innerTopLeftCorner +
-      Blockly.utils.svgPaths.lineOnAxis('v',
-          row.height - (2 * Blockly.blockRendering.constants.INSIDE_CORNERS.height)) +
+      Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
       Blockly.blockRendering.constants.INSIDE_CORNERS.pathBottom;
 
   this.positionStatementInputConnection_(row);
@@ -250,13 +261,12 @@ Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
   this.outlinePath_ +=
     Blockly.utils.svgPaths.lineOnAxis('v', bottomRow.height - bottomRow.overhangY);
 
-  for (var i = elems.length - 1; i >= 0; i--) {
-    var elem = elems[i];
-    if (elem.type === 'next connection') {
+  for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
+    if (elem.isNextConnection()) {
       this.outlinePath_ += bottomRow.notchShape.pathRight;
-    } else if (elem.type === 'square corner') {
+    } else if (elem.isSquareCorner()) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', bottomRow.xPos);
-    } else if (elem.type === 'round corner') {
+    } else if (elem.isRoundedCorner()) {
       this.outlinePath_ += Blockly.blockRendering.constants.OUTSIDE_CORNERS.bottomLeft;
     } else if (elem.isSpacer()) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width * -1);
@@ -278,7 +288,8 @@ Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
   this.positionOutputConnection_();
 
   if (outputConnection) {
-    var tabBottom = outputConnection.connectionOffsetY + outputConnection.height;
+    var tabBottom = outputConnection.connectionOffsetY +
+        outputConnection.height;
     // Draw a line up to the bottom of the tab.
     this.outlinePath_ +=
         Blockly.utils.svgPaths.lineOnAxis('V', tabBottom) +
@@ -295,16 +306,12 @@ Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
-  for (var r = 0; r < this.info_.rows.length; r++) {
-    var row = this.info_.rows[r];
-    if (!(row.isSpacer())) {
-      for (var e = 0; e < row.elements.length; e++) {
-        var elem = row.elements[e];
-        if (elem.isInlineInput()) {
-          this.drawInlineInput_(elem);
-        } else if (elem.isIcon() || elem.isField()) {
-          this.layoutField_(elem);
-        }
+  for (var i = 0, row; (row = this.info_.rows[i]); i++) {
+    for (var j = 0, elem; (elem = row.elements[j]); j++) {
+      if (elem.isInlineInput()) {
+        this.drawInlineInput_(elem);
+      } else if (elem.isIcon() || elem.isField()) {
+        this.layoutField_(elem);
       }
     }
   }
@@ -317,9 +324,9 @@ Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
-  if (fieldInfo.type == 'field') {
+  if (fieldInfo.isField()) {
     var svgGroup = fieldInfo.field.getSvgRoot();
-  } else if (fieldInfo.type == 'icon') {
+  } else if (fieldInfo.isIcon()) {
     var svgGroup = fieldInfo.icon.iconGroup_;
   }
 
@@ -333,7 +340,7 @@ Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
       scale = 'scale(-1 1)';
     }
   }
-  if (fieldInfo.type == 'icon') {
+  if (fieldInfo.isIcon()) {
     svgGroup.setAttribute('display', 'block');
     svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + yPos + ')');
     fieldInfo.icon.computeIconLocation();
@@ -351,7 +358,7 @@ Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
 
 /**
  * Add steps for an inline input.
- * @param {Blockly.blockRendering.RenderableInput} input The information about the
+ * @param {Blockly.blockRendering.InlineInput} input The information about the
  * input to render.
  * @private
  */
@@ -376,14 +383,13 @@ Blockly.blockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
       'z';
 
   this.positionInlineInputConnection_(input);
-
 };
 
 /**
  * Position the connection on an inline value input, taking into account
  * RTL and the small gap between the parent block and child block which lets the
  * parent block's dark path show through.
- * @param {Blockly.blockRendering.RenderableInput} input The information about
+ * @param {Blockly.blockRendering.InlineInput} input The information about
  * the input that the connection is on.
  * @private
  */
@@ -413,8 +419,7 @@ Blockly.blockRendering.Drawer.prototype.positionInlineInputConnection_ = functio
 Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = function(row) {
   var input = row.getLastInput();
   if (input.connection) {
-    var connX = row.xPos + row.statementEdge +
-        Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;
+    var connX = row.xPos + row.statementEdge + input.notchOffset;
     if (this.info_.RTL) {
       connX *= -1;
     }
@@ -434,7 +439,8 @@ Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = func
 Blockly.blockRendering.Drawer.prototype.positionExternalValueConnection_ = function(row) {
   var input = row.getLastInput();
   if (input.connection) {
-    var connX = row.xPos + row.width + Blockly.blockRendering.constants.DARK_PATH_OFFSET;
+    var connX = row.xPos + row.width +
+        Blockly.blockRendering.constants.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
     }
@@ -448,10 +454,10 @@ Blockly.blockRendering.Drawer.prototype.positionExternalValueConnection_ = funct
  */
 Blockly.blockRendering.Drawer.prototype.positionPreviousConnection_ = function() {
   var topRow = this.info_.topRow;
-  if (topRow.hasPreviousConnection) {
-    var x = topRow.xPos + Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;
+  if (topRow.connection) {
+    var x = topRow.xPos + topRow.notchOffset;
     var connX = (this.info_.RTL ? -x : x);
-    topRow.connection.setOffsetInBlock(connX, 0);
+    topRow.connection.connectionModel.setOffsetInBlock(connX, 0);
   }
 };
 
@@ -462,11 +468,11 @@ Blockly.blockRendering.Drawer.prototype.positionPreviousConnection_ = function()
 Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
   var bottomRow = this.info_.bottomRow;
 
-  if (bottomRow.hasNextConnection) {
-    var connInfo = bottomRow.getNextConnection();
+  if (bottomRow.connection) {
+    var connInfo = bottomRow.connection;
     var x = connInfo.xPos; // Already contains info about startX
     var connX = (this.info_.RTL ? -x : x) + 0.5;
-    bottomRow.connection.setOffsetInBlock(
+    connInfo.connectionModel.setOffsetInBlock(
         connX, (connInfo.centerline - connInfo.height / 2) +
             Blockly.blockRendering.constants.DARK_PATH_OFFSET);
   }
@@ -474,7 +480,6 @@ Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
 
 /**
  * Position the output connection on a block.
- * @param {!Blockly.blockRendering.BottomRow} row The bottom row on the block.
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.positionOutputConnection_ = function() {

@@ -22,12 +22,13 @@
  * @fileoverview Objects for rendering highlights on blocks.
  * @author fenichel@google.com (Rachel Fenichel)
  */
-
 'use strict';
+
 goog.provide('Blockly.blockRendering.highlightConstants');
 
 goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.utils.svgPaths');
+
 
 /**
  * Some highlights are simple offsets of the parent paths and can be generated

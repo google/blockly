@@ -663,6 +663,79 @@ Blockly.navigation.handleEnterForWS = function() {
 /**********************/
 
 /**
+ * Finds the source block of the location on a given node.
+ * @param {Blockly.ASTNode} node The node to find the source block on.
+ * @return {Blockly.Block} The source block of the location on the given node,
+ * or null if the node is of type workspace.
+ * @private
+ */
+Blockly.navigation.getSourceBlock_ = function(node) {
+  if (!node) {
+    return null;
+  }
+  if (node.getType() === Blockly.ASTNode.types.BLOCK) {
+    return node.getLocation();
+  } else if (node.getType() === Blockly.ASTNode.types.WORKSPACE ||
+      node.getType() === Blockly.ASTNode.types.STACK) {
+    return null;
+  } else {
+    return node.getLocation().getSourceBlock();
+  }
+};
+
+/**
+ * Before a block is deleted move the cursor to the appropriate position.
+ * @param {!Blockly.Block} deletedBlock The block that is being deleted.
+ * @package
+ */
+Blockly.navigation.moveCursorOnBlockDelete = function(deletedBlock) {
+  var cursor = Blockly.navigation.cursor_;
+  if (cursor) {
+    var curNode = cursor.getCurNode();
+    var block = Blockly.navigation.getSourceBlock_(curNode);
+
+    if (block === deletedBlock) {
+      // If the block has a parent move the cursor to their connection point.
+      if (block.getParent()) {
+        var topConnection = block.previousConnection ?
+          block.previousConnection : block.outputConnection;
+        if (topConnection) {
+          cursor.setLocation(
+              Blockly.ASTNode.createConnectionNode(topConnection.targetConnection));
+        }
+      } else {
+        // If the block is by itself move the cursor to the workspace.
+        cursor.setLocation(Blockly.ASTNode.createWorkspaceNode(block.workspace,
+            block.getRelativeToSurfaceXY()));
+      }
+    // If the cursor is on a block whose parent is being deleted, move the
+    // cursor to the workspace.
+    } else if (deletedBlock.getChildren().indexOf(block) > -1) {
+      cursor.setLocation(Blockly.ASTNode.createWorkspaceNode(block.workspace,
+          block.getRelativeToSurfaceXY()));
+    }
+  }
+};
+
+/**
+ * When a block that the cursor is on is mutated move the cursor to the block
+ * level.
+ * @param {!Blockly.Block} mutatedBlock The block that is being mutated.
+ * @package
+ */
+Blockly.navigation.moveCursorOnBlockMutation = function(mutatedBlock) {
+  var cursor = Blockly.navigation.cursor_;
+  if (cursor) {
+    var curNode = cursor.getCurNode();
+    var block = Blockly.navigation.getSourceBlock_(curNode);
+
+    if (block === mutatedBlock) {
+      cursor.setLocation(Blockly.ASTNode.createBlockNode(block));
+    }
+  }
+};
+
+/**
  * Handler for all the keyboard navigation events.
  * @param {Event} e The keyboard event.
  * @return {!boolean} True if the key was handled false otherwise.

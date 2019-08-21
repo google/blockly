@@ -138,18 +138,12 @@ Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
   if (newParent == oldParent) {
     return;
   }
-
   var svgRoot = this.getSvgRoot();
 
   if (newParent) {
     newParent.appendChild(svgRoot);
+    this.parent_ = newParent;
   }
-  // If we are losing a parent, we want to move our DOM element to the
-  // root of the workspace.
-  else if (oldParent) {
-    this.workspace_.getCanvas().appendChild(svgRoot);
-  }
-  this.parent_ = newParent;
 };
 
 /**************************/

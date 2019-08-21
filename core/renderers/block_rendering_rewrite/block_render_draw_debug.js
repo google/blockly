@@ -76,7 +76,7 @@ Blockly.blockRendering.Debug = function() {
  * @package
  */
 Blockly.blockRendering.Debug.prototype.clearElems = function() {
-  for (var i = 0, elem; elem = this.debugElements_[i]; i++) {
+  for (var i = 0, elem; (elem = this.debugElements_[i]); i++) {
     Blockly.utils.dom.removeNode(elem);
   }
 
@@ -258,7 +258,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY, isRtl) {
-  for (var i = 0, elem; elem = row.elements[i]; i++) {
+  for (var i = 0, elem; (elem = row.elements[i]); i++) {
     if (elem.isSpacer()) {
       this.drawSpacerElem(elem, row.height, isRtl);
     } else {
@@ -325,7 +325,7 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
   this.randomColour_ = '#' + Math.floor(Math.random() * 16777215).toString(16);
 
   var cursorY = 0;
-  for (var i = 0, row; row = info.rows[i]; i++) {
+  for (var i = 0, row; (row = info.rows[i]); i++) {
     if (row.type == 'between-row spacer') {
       this.drawSpacerRow(row, cursorY, info.RTL);
     } else {

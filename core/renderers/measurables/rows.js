@@ -31,7 +31,7 @@ goog.provide('Blockly.blockRendering.SpacerRow');
 goog.provide('Blockly.blockRendering.TopRow');
 
 goog.require('Blockly.blockRendering.constants');
-goog.require('Blockly.blockRendering.Input');
+goog.require('Blockly.blockRendering.InputConnection');
 goog.require('Blockly.blockRendering.InRowSpacer');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
@@ -156,6 +156,14 @@ Blockly.blockRendering.Row.prototype.notchShape =
     Blockly.blockRendering.constants.NOTCH;
 
 /**
+ * The offset from the left side of a block or the inside of a statement input
+ * to the left side of the connection notch.
+ * @type {number}
+ */
+Blockly.blockRendering.Row.prototype.notchOffset =
+    Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;
+
+/**
  * Inspect all subcomponents and populate all size properties on the row.
  * @package
  */
@@ -166,19 +174,19 @@ Blockly.blockRendering.Row.prototype.measure = function() {
 /**
  * Get the last input on this row, if it has one.
  * TODO: Consider moving this to InputRow, if possible.
- * @return {Blockly.blockRendering.Input} The last input on the row, or null.
+ * @return {Blockly.blockRendering.InputConnection} The last input on the row,
+ *     or null.
  * @package
  */
 Blockly.blockRendering.Row.prototype.getLastInput = function() {
-  for (var i = this.elements.length - 1; i >= 0; i--) {
-    var elem = this.elements[i];
+  for (var i = this.elements.length - 1, elem; (elem = this.elements[i]); i--) {
     if (elem.isSpacer()) {
       continue;
     }
     if (elem.isInput) {
-      return /** @type {Blockly.blockRendering.Input} */ (elem);
+      return /** @type {Blockly.blockRendering.InputConnection} */ (elem);
     } else if (elem.isField()) {
-      return /** @type {Blockly.blockRendering.Input} */ (elem.parentInput);
+      return /** @type {Blockly.blockRendering.InputConnection} */ (elem.parentInput);
     }
   }
   return null;
@@ -191,7 +199,7 @@ Blockly.blockRendering.Row.prototype.getLastInput = function() {
  * @package
  */
 Blockly.blockRendering.Row.prototype.getFirstSpacer = function() {
-  for (var i = 0, elem; elem = this.elements[i]; i++) {
+  for (var i = 0, elem; (elem = this.elements[i]); i++) {
     if (elem.isSpacer) {
       return /** @type {Blockly.blockRendering.InRowSpacer} */ (elem);
     }
@@ -206,7 +214,7 @@ Blockly.blockRendering.Row.prototype.getFirstSpacer = function() {
  * @package
  */
 Blockly.blockRendering.Row.prototype.getLastSpacer = function() {
-  for (var i = this.elements.length - 1, elem; elem = this.elements[i]; i--) {
+  for (var i = this.elements.length - 1, elem; (elem = this.elements[i]); i--) {
     if (elem.isSpacer) {
       return /** @type {Blockly.blockRendering.InRowSpacer} */ (elem);
     }
@@ -219,13 +227,13 @@ Blockly.blockRendering.Row.prototype.getLastSpacer = function() {
  * block as well as sizing information for the top row.
  * Elements in a top row can consist of corners, hats, spacers, and previous
  * connections.
- * @param {!Blockly.BlockSvg} block The block for which this represents the top
- *     row.
+ * After this constructor is called, the row will contain all non-spacer
+ * elements it needs.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Row}
  */
-Blockly.blockRendering.TopRow = function(block) {
+Blockly.blockRendering.TopRow = function() {
   Blockly.blockRendering.TopRow.superClass_.constructor.call(this);
 
   this.type = 'top row';
@@ -244,16 +252,44 @@ Blockly.blockRendering.TopRow = function(block) {
    * @package
    * @type {boolean}
    */
-  this.hasPreviousConnection = !!block.previousConnection;
+  this.hasPreviousConnection = false;
 
   /**
    * The previous connection on the block, if any.
-   * TODO: Should this be the connection measurable instead? It would add some
-   * indirection but would mean we aren't mixing connections and connection
-   * measurables.
-   * @type {Blockly.RenderedConnection}
+   * @type {Blockly.blockRendering.PreviousConnection}
    */
-  this.connection = block.previousConnection;
+  this.connection = null;
+};
+goog.inherits(Blockly.blockRendering.TopRow, Blockly.blockRendering.Row);
+
+/**
+ * Create all non-spacer elements that belong on the top row.
+ * @param {!Blockly.BlockSvg} block The block whose top row this represents.
+ * @package
+ */
+Blockly.blockRendering.TopRow.prototype.populate = function(block) {
+  var hasHat = block.hat ? block.hat === 'cap' : Blockly.BlockSvg.START_HAT;
+  var hasPrevious = !!block.previousConnection;
+  var prevBlock = block.getPreviousBlock();
+  var squareCorner = !!block.outputConnection ||
+      hasHat || (prevBlock && prevBlock.getNextBlock() == block);
+
+  if (squareCorner) {
+    this.elements.push(new Blockly.blockRendering.SquareCorner());
+  } else {
+    this.elements.push(new Blockly.blockRendering.RoundCorner());
+  }
+
+  if (hasHat) {
+    var hat = new Blockly.blockRendering.Hat();
+    this.elements.push(hat);
+    this.startY = hat.startY;
+  } else if (hasPrevious) {
+    this.hasPreviousConnection = true;
+    this.connection = new Blockly.blockRendering.PreviousConnection(
+        /** @type {Blockly.RenderedConnection} */ (block.previousConnection));
+    this.elements.push(this.connection);
+  }
 
   var precedesStatement = block.inputList.length &&
       block.inputList[0].type == Blockly.NEXT_STATEMENT;
@@ -266,21 +302,6 @@ Blockly.blockRendering.TopRow = function(block) {
     this.minHeight = Blockly.blockRendering.constants.MEDIUM_PADDING;
   }
 };
-goog.inherits(Blockly.blockRendering.TopRow, Blockly.blockRendering.Row);
-
-/**
- * Convenience method to get the measurable representing the previous
- * connection, if one exists.
- * @return {Blockly.blockRendering.PreviousConnection} The measurable that
- *     represents the previous connection on this block, or null.
- * @package
- */
-Blockly.blockRendering.TopRow.prototype.getPreviousConnection = function() {
-  if (this.hasPreviousConnection) {
-    return /** @type {Blockly.blockRendering.PreviousConnection} */ (this.elements[2]);
-  }
-  return null;
-};
 
 /**
  * @override
@@ -288,8 +309,7 @@ Blockly.blockRendering.TopRow.prototype.getPreviousConnection = function() {
 Blockly.blockRendering.TopRow.prototype.measure = function() {
   this.width = this.minWidth;
   this.height = this.minHeight;
-  for (var e = 0; e < this.elements.length; e++) {
-    var elem = this.elements[e];
+  for (var e = 0, elem; (elem = this.elements[e]); e++) {
     this.width += elem.width;
     if (!(elem.isSpacer())) {
       if (elem.type == 'hat') {
@@ -306,32 +326,27 @@ Blockly.blockRendering.TopRow.prototype.measure = function() {
  * An object containing information about what elements are in the bottom row of
  * a block as well as spacing information for the top row.
  * Elements in a bottom row can consist of corners, spacers and next connections.
- * @param {!Blockly.BlockSvg} block The block for which this represents the
- *     bottom row.
  * @package
  * @constructor
  * @extends {Blockly.blockRendering.Row}
  */
-Blockly.blockRendering.BottomRow = function(block) {
+Blockly.blockRendering.BottomRow = function() {
   Blockly.blockRendering.BottomRow.superClass_.constructor.call(this);
   this.type = 'bottom row';
 
   /**
-   * Whether the block has a next connection.
+   * Whether this row has a next connection.
    * @package
    * @type {boolean}
    */
-  this.hasNextConnection = !!block.nextConnection;
+  this.hasNextConnection = false;
 
   /**
-   * The next connection on the block, if any.
-   * TODO: Should this be the connection measurable instead?  It would add some
-   * indirection but would mean we aren't mixing connections and connection
-   * measurables.
+   * The next connection on the row, if any.
    * @package
-   * @type {Blockly.RenderedConnection}
+   * @type {Blockly.blockRendering.NextConnection}
    */
-  this.connection = block.nextConnection;
+  this.connection = null;
 
   /**
    * The amount that the bottom of the block extends below the horizontal edge,
@@ -340,6 +355,22 @@ Blockly.blockRendering.BottomRow = function(block) {
    * @type {number}
    */
   this.overhangY = 0;
+
+  /**
+   * True if the width of this row does not depend on its contents.
+   * @type {boolean}
+   */
+  this.hasFixedWidth = false;
+};
+goog.inherits(Blockly.blockRendering.BottomRow, Blockly.blockRendering.Row);
+
+/**
+ * Create all non-spacer elements that belong on the bottom row.
+ * @param {!Blockly.BlockSvg} block The block whose bottom row this represents.
+ * @package
+ */
+Blockly.blockRendering.BottomRow.prototype.populate = function(block) {
+  this.hasNextConnection = !!block.nextConnection;
 
   var followsStatement =
       block.inputList.length &&
@@ -353,22 +384,20 @@ Blockly.blockRendering.BottomRow = function(block) {
   } else {
     this.minHeight = this.notchShape.height;
   }
-};
-goog.inherits(Blockly.blockRendering.BottomRow,
-    Blockly.blockRendering.Row);
 
-/**
- * Convenience method to get the measurable representing the next
- * connection, if one exists.
- * @return {Blockly.blockRendering.NextConnection} The measurable that
- *     represents the next connection on this block, or null.
- * @package
- */
-Blockly.blockRendering.BottomRow.prototype.getNextConnection = function() {
-  if (this.hasNextConnection) {
-    return /** @type {Blockly.blockRendering.NextConnection} */ (this.elements[2]);
+  var squareCorner = !!block.outputConnection || !!block.getNextBlock();
+
+  if (squareCorner) {
+    this.elements.push(new Blockly.blockRendering.SquareCorner());
+  } else {
+    this.elements.push(new Blockly.blockRendering.RoundCorner());
   }
-  return null;
+
+  if (this.hasNextConnection) {
+    this.connection = new Blockly.blockRendering.NextConnection(
+        /** @type {Blockly.RenderedConnection} */ (block.nextConnection));
+    this.elements.push(this.connection);
+  }
 };
 
 /**
@@ -377,8 +406,7 @@ Blockly.blockRendering.BottomRow.prototype.getNextConnection = function() {
 Blockly.blockRendering.BottomRow.prototype.measure = function() {
   this.width = this.minWidth;
   this.height = this.minHeight;
-  for (var e = 0; e < this.elements.length; e++) {
-    var elem = this.elements[e];
+  for (var e = 0, elem; (elem = this.elements[e]); e++) {
     this.width += elem.width;
     if (!(elem.isSpacer())) {
       if (elem.type == 'next connection') {
@@ -437,8 +465,7 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
   this.width = this.minWidth;
   this.height = this.minHeight;
   var connectedBlockWidths = 0;
-  for (var e = 0; e < this.elements.length; e++) {
-    var elem = this.elements[e];
+  for (var e = 0, elem; (elem = this.elements[e]); e++) {
     this.width += elem.width;
     if (elem.isInput) {
       if (elem.type == 'statement input') {

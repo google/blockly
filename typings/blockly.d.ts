@@ -87,395 +87,8 @@ declare module Blockly {
 declare namespace goog {
   function require(name: string): void;
   function provide(name: string): void;
+  function inherits(child: any, parent: any): void;
   function isFunction(f: any): boolean;
-  function isString(s: any): boolean;
-
-  class Disposable {
-    dispose(): void;
-  }
-
-  namespace dom {
-    function createDom(tagName: string, opt_attributes?: Object, ...var_args: Object[]): Element;
-    function createDom(name: string, ns?: string, children?: any): HTMLElement;
-    function removeChildren(el: Element): void;
-    function removeNode(node: Node): void;
-    function getViewportSize(): any;
-
-    namespace classlist {
-      function add(el: Element, className: string): void;
-    }
-
-    class DomHelper {
-    }
-  }
-
-  namespace ui {
-    class Control extends Component {
-      getChildCount(): number;
-      getContent(): string | Node | Array<Node>;
-      getContentElement(): Element;
-      setChecked(checked: boolean): void;
-      setContent(content: string | Node | Array<Node>): void;
-      setVisible(visible: boolean, opt_force?: boolean): boolean;
-    }
-    class Component {
-      static EventType: {
-        BEFORE_SHOW: string;
-        SHOW: string;
-        HIDE: string;
-        DISABLE: string;
-        ENABLE: string;
-        HIGHLIGHT: string;
-        UNHIGHLIGHT: string;
-        ACTIVATE: string;
-        DEACTIVATE: string;
-        SELECT: string;
-        UNSELECT: string;
-        CHECK: string;
-        UNCHECK: string;
-        FOCUS: string;
-        BLUR: string;
-        OPEN: string;
-        CLOSE: string;
-        ENTER: string;
-        LEAVE: string;
-        ACTION: string;
-        CHANGE: string;
-      };
-      getHandler<T>(): events.EventHandler<T>;
-      getElement(): Element;
-      render(opt_parentElement?: Element): void;
-      setId(id: string): void;
-      setRightToLeft(rightToLeft: boolean): void;
-      addChild(child: Component, opt_render?: boolean): void;
-      getChildAt(index: number): Component;
-      removeChildren(opt_unrender: boolean): void;
-    }
-    class Container extends Component {
-    }
-    class Menu extends Container implements events.Listenable {
-      listen: () => events.ListenableKey;
-      setAllowAutoFocus(allow: boolean): void;
-    }
-    class MenuItem extends Control {
-      constructor(content: (string | Node));
-      setCheckable(checkable: boolean): void;
-      setValue(value: any): void;
-      getValue(): any;
-      addClassName(className: string): void;
-    }
-    class DatePicker extends Component {
-
-    }
-  }
-
-  namespace events {
-    function listen(eventSource: Element | Listenable, eventType: EventType, listener: any, capturePhase?: boolean, handler?: Object): void;
-    function unlistenByKey(key: any): void;
-    interface ListenableKey {
-      key: number;
-    }
-    interface Listenable {
-      listen: () => ListenableKey;
-    }
-    type EventType = string;
-    let EventType: {
-      CLICK: EventType;
-      RIGHTCLICK: EventType;
-      DBLCLICK: EventType;
-      MOUSEDOWN: EventType;
-      MOUSEUP: EventType;
-      MOUSEOVER: EventType;
-      MOUSEOUT: EventType;
-      MOUSEMOVE: EventType;
-      MOUSEENTER: EventType;
-      MOUSELEAVE: EventType;
-      SELECTSTART: EventType;
-      WHEEL: EventType;
-      KEYPRESS: EventType;
-      KEYDOWN: EventType;
-      KEYUP: EventType;
-      BLUR: EventType;
-      FOCUS: EventType;
-      DEACTIVATE: EventType;
-      FOCUSIN: EventType;
-      FOCUSOUT: EventType;
-      CHANGE: EventType;
-      SELECT: EventType;
-      SUBMIT: EventType;
-      INPUT: EventType;
-      PROPERTYCHANGE: EventType;
-      DRAGSTART: EventType;
-      DRAG: EventType;
-      DRAGENTER: EventType;
-      DRAGOVER: EventType;
-      DRAGLEAVE: EventType;
-      DROP: EventType;
-      DRAGEND: EventType;
-      TOUCHSTART: EventType;
-      TOUCHMOVE: EventType;
-      TOUCHEND: EventType;
-      TOUCHCANCEL: EventType;
-      BEFOREUNLOAD: EventType;
-      CONSOLEMESSAGE: EventType;
-      CONTEXTMENU: EventType;
-      DOMCONTENTLOADED: EventType;
-      ERROR: EventType;
-      HELP: EventType;
-      LOAD: EventType;
-      LOSECAPTURE: EventType;
-      ORIENTATIONCHANGE: EventType;
-      READYSTATECHANGE: EventType;
-      RESIZE: EventType;
-      SCROLL: EventType;
-      UNLOAD: EventType;
-      HASHCHANGE: EventType;
-      PAGEHIDE: EventType;
-      PAGESHOW: EventType;
-      POPSTATE: EventType;
-      COPY: EventType;
-      PASTE: EventType;
-      CUT: EventType;
-      BEFORECOPY: EventType;
-      BEFORECUT: EventType;
-      BEFOREPASTE: EventType;
-      ONLINE: EventType;
-      OFFLINE: EventType;
-      MESSAGE: EventType;
-      CONNECT: EventType;
-      ANIMATIONSTART: EventType;
-      ANIMATIONEND: EventType;
-      ANIMATIONITERATION: EventType;
-      TRANSITIONEND: EventType;
-      POINTERDOWN: EventType;
-      POINTERUP: EventType;
-      POINTERCANCEL: EventType;
-      POINTERMOVE: EventType;
-      POINTEROVER: EventType;
-      POINTEROUT: EventType;
-      POINTERENTER: EventType;
-      POINTERLEAVE: EventType;
-      GOTPOINTERCAPTURE: EventType;
-      LOSTPOINTERCAPTURE: EventType;
-      MSGESTURECHANGE: EventType;
-      MSGESTUREEND: EventType;
-      MSGESTUREHOLD: EventType;
-      MSGESTURESTART: EventType;
-      MSGESTURETAP: EventType;
-      MSGOTPOINTERCAPTURE: EventType;
-      MSINERTIASTART: EventType;
-      MSLOSTPOINTERCAPTURE: EventType;
-      MSPOINTERCANCEL: EventType;
-      MSPOINTERDOWN: EventType;
-      MSPOINTERENTER: EventType;
-      MSPOINTERHOVER: EventType;
-      MSPOINTERLEAVE: EventType;
-      MSPOINTERMOVE: EventType;
-      MSPOINTEROUT: EventType;
-      MSPOINTEROVER: EventType;
-      MSPOINTERUP: EventType;
-      TEXT: EventType;
-      TEXTINPUT: EventType;
-      COMPOSITIONSTART: EventType;
-      COMPOSITIONUPDATE: EventType;
-      COMPOSITIONEND: EventType;
-      EXIT: EventType;
-      LOADABORT: EventType;
-      LOADCOMMIT: EventType;
-      LOADREDIRECT: EventType;
-      LOADSTART: EventType;
-      LOADSTOP: EventType;
-      RESPONSIVE: EventType;
-      SIZECHANGED: EventType;
-      UNRESPONSIVE: EventType;
-      VISIBILITYCHANGE: EventType;
-      STORAGE: EventType;
-      DOMSUBTREEMODIFIED: EventType;
-      DOMNODEINSERTED: EventType;
-      DOMNODEREMOVED: EventType;
-      DOMNODEREMOVEDFROMDOCUMENT: EventType;
-      DOMNODEINSERTEDINTODOCUMENT: EventType;
-      DOMATTRMODIFIED: EventType;
-      DOMCHARACTERDATAMODIFIED: EventType;
-    };
-    let KeyCodes: {
-      A: number,
-      ALT: number,
-      APOSTROPHE: number,
-      AT_SIGN: number,
-      B: number,
-      BACKSLASH: number,
-      BACKSPACE: number,
-      C: number,
-      CAPS_LOCK: number,
-      CLOSE_SQUARE_BRACKET: number,
-      COMMA: number,
-      CONTEXT_MENU: number,
-      CTRL: number,
-      D: number,
-      DASH: number,
-      DELETE: number,
-      DOWN: number,
-      E: number,
-      EIGHT: number,
-      END: number,
-      ENTER: number,
-      EQUALS: number,
-      ESC: number,
-      F: number,
-      F1: number,
-      F10: number,
-      F11: number,
-      F12: number,
-      F2: number,
-      F3: number,
-      F4: number,
-      F5: number,
-      F6: number,
-      F7: number,
-      F8: number,
-      F9: number,
-      FF_DASH: number,
-      FF_EQUALS: number,
-      FF_SEMICOLON: number,
-      FIRST_MEDIA_KEY: number,
-      FIVE: number,
-      FOUR: number,
-      G: number,
-      H: number,
-      HOME: number,
-      I: number,
-      INSERT: number,
-      J: number,
-      K: number,
-      L: number,
-      LAST_MEDIA_KEY: number,
-      LEFT: number,
-      M: number,
-      MAC_ENTER: number,
-      MAC_FF_META: number,
-      MAC_WK_CMD_LEFT: number,
-      MAC_WK_CMD_RIGHT: number,
-      META: number,
-      N: number,
-      NINE: number,
-      NUMLOCK: number,
-      NUM_CENTER: number,
-      NUM_DIVISION: number,
-      NUM_EIGHT: number,
-      NUM_FIVE: number,
-      NUM_FOUR: number,
-      NUM_MINUS: number,
-      NUM_MULTIPLY: number,
-      NUM_NINE: number,
-      NUM_ONE: number,
-      NUM_PERIOD: number,
-      NUM_PLUS: number,
-      NUM_SEVEN: number,
-      NUM_SIX: number,
-      NUM_THREE: number,
-      NUM_TWO: number,
-      NUM_ZERO: number,
-      O: number,
-      ONE: number,
-      OPEN_SQUARE_BRACKET: number,
-      P: number,
-      PAGE_DOWN: number,
-      PAGE_UP: number,
-      PAUSE: number,
-      PERIOD: number,
-      PHANTOM: number,
-      PLUS_SIGN: number,
-      PRINT_SCREEN: number,
-      Q: number,
-      QUESTION_MARK: number,
-      R: number,
-      RIGHT: number,
-      S: number,
-      SCROLL_LOCK: number,
-      SEMICOLON: number,
-      SEVEN: number,
-      SHIFT: number,
-      SINGLE_QUOTE: number,
-      SIX: number,
-      SLASH: number,
-      SPACE: number,
-      T: number,
-      TAB: number,
-      THREE: number,
-      TILDE: number,
-      TWO: number,
-      U: number,
-      UP: number,
-      V: number,
-      VK_NONAME: number,
-      W: number,
-      WIN_IME: number,
-      WIN_KEY: number,
-      WIN_KEY_FF_LINUX: number,
-      WIN_KEY_RIGHT: number,
-      X: number,
-      Y: number,
-      Z: number,
-      ZERO: number
-    }
-    class EventTarget extends Disposable {
-    }
-    class EventHandler<T> {
-      handleEvent(e: any): void;
-      listen(src: Element | Listenable, type: string, opt_fn?: any): EventHandler<T>;
-    }
-
-    /**
-    * Accepts a browser event object and creates a patched, cross browser event
-    * object.
-    * The content of this object will not be initialized if no event object is
-    * provided. If this is the case, init() needs to be invoked separately.
-    * @param {Event=} opt_e Browser event object.
-    * @param {EventTarget=} opt_currentTarget Current target for event.
-    */
-    class BrowserEvent {
-      constructor(opt_e?: Event, opt_currentTarget?: EventTarget);
-    }
-  }
-  namespace userAgent {
-    /**
-     * Whether the user agent is running on a mobile device.
-     *
-     * TODO(nnaze): Consider deprecating MOBILE when labs.userAgent
-     *   is promoted as the gecko/webkit logic is likely inaccurate.
-     *
-     * @type {boolean}
-     */
-    var MOBILE: boolean;
-
-    /**
-     * Whether the user agent is running on Android.
-     * @type {boolean}
-     */
-    var ANDROID: boolean;
-
-    /**
-     * Whether the user agent is running on an iPhone.
-     * @type {boolean}
-     */
-    var IPHONE: boolean;
-
-    /**
-     * Whether the user agent is running on an iPad.
-     * @type {boolean}
-     */
-    var IPAD: boolean;
-  }
-  namespace html {
-    class SafeHtml {
-    }
-  }
-  namespace positioning {
-    class ClientPosition {
-      constructor(x: number, y: number);
-    }
-  }
 }
 
 
@@ -494,7 +107,7 @@ declare module Blockly {
              * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
              *     create a new ID.
              * @constructor
-             * @throw When block is not valid or block name is not allowed.
+             * @throws When block is not valid or block name is not allowed.
              */
             constructor(workspace: Blockly.Workspace, prototypeName: string, opt_id?: string);
     
@@ -1675,22 +1288,10 @@ declare module Blockly.BlockSvg {
     
 
     /**
-     * Horizontal space between elements.
-     * @const
-     */
-    var SEP_SPACE_X: any /*missing*/;
-
-    /**
      * Vertical space between elements.
      * @const
      */
     var SEP_SPACE_Y: any /*missing*/;
-
-    /**
-     * Vertical padding around inline elements.
-     * @const
-     */
-    var INLINE_PADDING_Y: any /*missing*/;
 
     /**
      * Minimum height of a block.
@@ -1699,201 +1300,16 @@ declare module Blockly.BlockSvg {
     var MIN_BLOCK_Y: any /*missing*/;
 
     /**
-     * Height of horizontal puzzle tab.
-     * @const
-     */
-    var TAB_HEIGHT: any /*missing*/;
-
-    /**
      * Width of horizontal puzzle tab.
      * @const
      */
     var TAB_WIDTH: any /*missing*/;
 
     /**
-     * Width of vertical tab (inc left margin).
-     * @const
-     */
-    var NOTCH_WIDTH: any /*missing*/;
-
-    /**
-     * Offset of the notch from the left side of the block.
-     * @type {number}
-     * @const
-     */
-    var NOTCH_OFFSET_X: number;
-
-    /**
-     * Offset of the puzzle tab from the top of the block.
-     * @type {number}
-     * @const
-     */
-    var TAB_OFFSET_Y: number;
-
-    /**
-     * Rounded corner radius.
-     * @const
-     */
-    var CORNER_RADIUS: any /*missing*/;
-
-    /**
      * Do blocks with no previous or output connections have a 'hat' on top?
      * @const
      */
     var START_HAT: any /*missing*/;
-
-    /**
-     * Height of the top hat.
-     * @const
-     */
-    var START_HAT_HEIGHT: any /*missing*/;
-
-    /**
-     * Path of the top hat's curve.
-     * @const
-     */
-    var START_HAT_PATH: any /*missing*/;
-
-    /**
-     * Path of the top hat's curve's highlight in LTR.
-     * @const
-     */
-    var START_HAT_HIGHLIGHT_LTR: any /*missing*/;
-
-    /**
-     * Path of the top hat's curve's highlight in RTL.
-     * @const
-     */
-    var START_HAT_HIGHLIGHT_RTL: any /*missing*/;
-
-    /**
-     * Distance from shape edge to intersect with a curved corner at 45 degrees.
-     * Applies to highlighting on around the inside of a curve.
-     * @const
-     */
-    var DISTANCE_45_INSIDE: any /*missing*/;
-
-    /**
-     * Distance from shape edge to intersect with a curved corner at 45 degrees.
-     * Applies to highlighting on around the outside of a curve.
-     * @const
-     */
-    var DISTANCE_45_OUTSIDE: any /*missing*/;
-
-    /**
-     * SVG path for drawing next/previous notch from left to right.
-     * @const
-     */
-    var NOTCH_PATH_LEFT: any /*missing*/;
-
-    /**
-     * SVG path for drawing next/previous notch from left to right with
-     * highlighting.
-     * @const
-     */
-    var NOTCH_PATH_LEFT_HIGHLIGHT: any /*missing*/;
-
-    /**
-     * SVG path for drawing next/previous notch from right to left.
-     * @const
-     */
-    var NOTCH_PATH_RIGHT: any /*missing*/;
-
-    /**
-     * SVG path for drawing jagged teeth at the end of collapsed blocks.
-     * @const
-     */
-    var JAGGED_TEETH: any /*missing*/;
-
-    /**
-     * Height of SVG path for jagged teeth at the end of collapsed blocks.
-     * @const
-     */
-    var JAGGED_TEETH_HEIGHT: any /*missing*/;
-
-    /**
-     * Width of SVG path for jagged teeth at the end of collapsed blocks.
-     * @const
-     */
-    var JAGGED_TEETH_WIDTH: any /*missing*/;
-
-    /**
-     * SVG path for drawing a horizontal puzzle tab from top to bottom.
-     * @const
-     */
-    var TAB_PATH_DOWN: any /*missing*/;
-
-    /**
-     * SVG path for drawing a horizontal puzzle tab from top to bottom with
-     * highlighting from the upper-right.
-     * @const
-     */
-    var TAB_PATH_DOWN_HIGHLIGHT_RTL: any /*missing*/;
-
-    /**
-     * SVG start point for drawing the top-left corner.
-     * @const
-     */
-    var TOP_LEFT_CORNER_START: any /*missing*/;
-
-    /**
-     * SVG start point for drawing the top-left corner's highlight in RTL.
-     * @const
-     */
-    var TOP_LEFT_CORNER_START_HIGHLIGHT_RTL: any /*missing*/;
-
-    /**
-     * SVG start point for drawing the top-left corner's highlight in LTR.
-     * @const
-     */
-    var TOP_LEFT_CORNER_START_HIGHLIGHT_LTR: any /*missing*/;
-
-    /**
-     * SVG path for drawing the rounded top-left corner.
-     * @const
-     */
-    var TOP_LEFT_CORNER: any /*missing*/;
-
-    /**
-     * SVG path for drawing the highlight on the rounded top-left corner.
-     * @const
-     */
-    var TOP_LEFT_CORNER_HIGHLIGHT: any /*missing*/;
-
-    /**
-     * SVG path for drawing the top-left corner of a statement input.
-     * Includes the top notch, a horizontal space, and the rounded inside corner.
-     * @const
-     */
-    var INNER_TOP_LEFT_CORNER: any /*missing*/;
-
-    /**
-     * SVG path for drawing the bottom-left corner of a statement input.
-     * Includes the rounded inside corner.
-     * @const
-     */
-    var INNER_BOTTOM_LEFT_CORNER: any /*missing*/;
-
-    /**
-     * SVG path for drawing highlight on the top-left corner of a statement
-     * input in RTL.
-     * @const
-     */
-    var INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL: any /*missing*/;
-
-    /**
-     * SVG path for drawing highlight on the bottom-left corner of a statement
-     * input in RTL.
-     * @const
-     */
-    var INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL: any /*missing*/;
-
-    /**
-     * SVG path for drawing highlight on the bottom-left corner of a statement
-     * input in LTR.
-     * @const
-     */
-    var INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR: any /*missing*/;
 }
 
 
@@ -4356,8 +3772,8 @@ declare module Blockly {
             /**
              * Updates the width of the field. Redirects to updateSize_().
              * @deprecated May 2019  Use Blockly.Field.updateSize_() to force an update
-             * to the size of the field, or Blockly.Field.getCachedWidth() to check the
-             * size of the field..
+             * to the size of the field, or Blockly.utils.dom.getTextWidth() to
+             * check the size of the field.
              */
             updateWidth(): void;
     
@@ -4484,34 +3900,20 @@ declare module Blockly {
              * @package
              */
             getParentInput(): Blockly.Input;
+    
+            /**
+             * Handles the given action.
+             * This is only triggered when keyboard accessibility mode is enabled.
+             * @param {!Blockly.Action} _action The action to be handled.
+             * @return {boolean} True if the field handled the action, false otherwise.
+             * @package
+             */
+            onBlocklyAction(_action: Blockly.Action): boolean;
     } 
     
 }
 
 declare module Blockly.Field {
-
-    /**
-     * Registers a field type. May also override an existing field type.
-     * Blockly.Field.fromJson uses this registry to find the appropriate field.
-     * @param {string} type The field type name as used in the JSON definition.
-     * @param {!{fromJson: Function}} fieldClass The field class containing a
-     *     fromJson function that can construct an instance of the field.
-     * @throws {Error} if the type name is empty, or the fieldClass is not an
-     *     object containing a fromJson function.
-     */
-    function register(type: string, fieldClass: { fromJson: Function }): void;
-
-    /**
-     * Construct a Field from a JSON arg object.
-     * Finds the appropriate registered field by the type name as registered using
-     * Blockly.Field.register.
-     * @param {!Object} options A JSON object with a type and options specific
-     *     to the field type.
-     * @return {Blockly.Field} The new field instance or null if a field wasn't
-     *     found with the given type name
-     * @package
-     */
-    function fromJson(options: Object): Blockly.Field;
 
     /**
      * The default height of the border rect on any field.
@@ -4546,25 +3948,6 @@ declare module Blockly.Field {
      * @const
      */
     var NBSP: any /*missing*/;
-
-    /**
-     * Gets the width of a text element, caching it in the process.
-     * @param {!Element} textElement An SVG 'text' element.
-     * @return {number} Width of element.
-     */
-    function getCachedWidth(textElement: Element): number;
-
-    /**
-     * Start caching field widths.  Every call to this function MUST also call
-     * stopCache.  Caches must not survive between execution threads.
-     */
-    function startCache(): void;
-
-    /**
-     * Stop caching field widths.  Unless caching was already on when the
-     * corresponding call to startCache was made.
-     */
-    function stopCache(): void;
 }
 
 
@@ -5005,10 +4388,10 @@ declare module Blockly {
     
             /**
              * Handle the selection of an item in the dropdown menu.
-             * @param {!goog.ui.Menu} menu The Menu component clicked.
-             * @param {!goog.ui.MenuItem} menuItem The MenuItem selected within menu.
+             * @param {!Blockly.Menu} menu The Menu component clicked.
+             * @param {!Blockly.MenuItem} menuItem The MenuItem selected within menu.
              */
-            onItemSelected(menu: goog.ui.Menu, menuItem: goog.ui.MenuItem): void;
+            onItemSelected(menu: Blockly.Menu, menuItem: Blockly.MenuItem): void;
     
             /**
              * @return {boolean} True if the option list is generated by a function.
@@ -5345,6 +4728,34 @@ declare module Blockly.FieldNumber {
 }
 
 
+declare module Blockly.fieldRegistry {
+
+    /**
+     * Registers a field type. May also override an existing field type.
+     * Blockly.fieldRegistry.fromJson uses this registry to
+     * find the appropriate field type.
+     * @param {string} type The field type name as used in the JSON definition.
+     * @param {!{fromJson: Function}} fieldClass The field class containing a
+     *     fromJson function that can construct an instance of the field.
+     * @throws {Error} if the type name is empty, or the fieldClass is not an
+     *     object containing a fromJson function.
+     */
+    function register(type: string, fieldClass: { fromJson: Function }): void;
+
+    /**
+     * Construct a Field from a JSON arg object.
+     * Finds the appropriate registered field by the type name as registered using
+     * Blockly.fieldRegistry.register.
+     * @param {!Object} options A JSON object with a type and options specific
+     *     to the field type.
+     * @return {Blockly.Field} The new field instance or null if a field wasn't
+     *     found with the given type name
+     * @package
+     */
+    function fromJson(options: Object): Blockly.Field;
+}
+
+
 declare module Blockly {
 
     class FieldTextInput extends FieldTextInput__Class { }
@@ -5426,6 +4837,13 @@ declare module Blockly {
             showEditor_(opt_quietInput?: boolean): void;
     
             /**
+             * Create the text input editor widget.
+             * @return {!HTMLInputElement} The newly created text input editor.
+             * @protected
+             */
+            widgetCreate_(): HTMLInputElement;
+    
+            /**
              * Resize the editor to fit the text.
              * @protected
              */
@@ -5451,6 +4869,11 @@ declare module Blockly.FieldTextInput {
      * Point size of text.  Should match blocklyText's font-size in CSS.
      */
     var FONTSIZE: any /*missing*/;
+
+    /**
+     * Pixel size of input border radius.  Should match blocklyText's border-radius in CSS.
+     */
+    var BORDERRADIUS: any /*missing*/;
 
     /**
      * Ensure that only a number may be entered.
@@ -5591,10 +5014,10 @@ declare module Blockly {
              * Handle the selection of an item in the variable dropdown menu.
              * Special case the 'Rename variable...' and 'Delete variable...' options.
              * In the rename case, prompt the user for a new name.
-             * @param {!goog.ui.Menu} menu The Menu component clicked.
-             * @param {!goog.ui.MenuItem} menuItem The MenuItem selected within menu.
+             * @param {!Blockly.Menu} menu The Menu component clicked.
+             * @param {!Blockly.MenuItem} menuItem The MenuItem selected within menu.
              */
-            onItemSelected(menu: goog.ui.Menu, menuItem: goog.ui.MenuItem): void;
+            onItemSelected(menu: Blockly.Menu, menuItem: Blockly.MenuItem): void;
     } 
     
 }
@@ -6615,13 +6038,6 @@ declare module Blockly {
              * Change the colour of the associated bubble to match its block.
              */
             updateColour(): void;
-    
-            /**
-             * Render the icon.
-             * @param {number} cursorX Horizontal offset at which to position the icon.
-             * @return {number} Horizontal offset for next item to draw.
-             */
-            renderIcon(cursorX: number): number;
     
             /**
              * Notification that the icon has moved.  Update the arrow accordingly.
@@ -8099,11 +7515,11 @@ declare module Blockly.utils.uiMenu {
 
     /**
      * Get the size of a rendered goog.ui.Menu.
-     * @param {!goog.ui.Menu} menu The menu to measure.
+     * @param {!Blockly.Menu} menu The menu to measure.
      * @return {!Blockly.utils.Size} Object with width and height properties.
      * @package
      */
-    function getSize(menu: goog.ui.Menu): Blockly.utils.Size;
+    function getSize(menu: Blockly.Menu): Blockly.utils.Size;
 
     /**
      * Adjust the bounding boxes used to position the widget div to deal with RTL
@@ -11111,7 +10527,7 @@ declare module Blockly {
              * Gets the unique ID for the instance of this component.  If the instance
              * doesn't already have an ID, generates one on the fly.
              * @return {string} Unique component ID.
-             * @protected
+             * @package
              */
             getId(): string;
     
@@ -11196,7 +10612,7 @@ declare module Blockly {
              *
              * @param {Element=} opt_parentElement Optional parent element to render the
              *    component into.
-             * @protected
+             * @package
              */
             render(opt_parentElement?: Element): void;
     
@@ -11279,7 +10695,7 @@ declare module Blockly {
              * @param {Blockly.Component} child The new child component.
              * @param {boolean=} opt_render If true, the child component will be rendered
              *    into the parent.
-             * @protected
+             * @package
              */
             addChild(child: Blockly.Component, opt_render?: boolean): void;
     
@@ -11354,7 +10770,7 @@ declare module Blockly {
              * {@link #enterDocument} is called and is right-to-left is set).
              * @param {boolean} rightToLeft Whether the component is rendered
              *     right-to-left.
-             * @protected
+             * @package
              */
             setRightToLeft(rightToLeft: boolean): void;
     
@@ -11483,9 +10899,28 @@ declare module Blockly.Component {
      * right to left determinations.
      * @param {?boolean} rightToLeft Whether the components should be rendered
      *     right-to-left. Null iff components should determine their directionality.
-     * @protected
+     * @package
      */
     function setDefaultRightToLeft(rightToLeft: boolean): void;
+}
+
+
+declare module Blockly {
+
+    class Action extends Action__Class { }
+    /** Fake class which should be extended to avoid inheriting static properties */
+    class Action__Class  { 
+    
+            /**
+             * Class for a single action.
+             * An action describes user intent. (ex go to next or go to previous)
+             * @param {string} name The name of the action.
+             * @param {string} desc The description of the action.
+             * @constructor
+             */
+            constructor(name: string, desc: string);
+    } 
+    
 }
 
 
@@ -11584,8 +11019,9 @@ declare module Blockly.ASTNode {
 
     /**
      * Object holding different types for an AST node.
+     * @enum {string}
      */
-    var types: any /*missing*/;
+    enum types { FIELD, BLOCK, INPUT, OUTPUT, NEXT, PREVIOUS, STACK, WORKSPACE } 
 
     /**
      * Whether an AST node of the given type points to a connection.
@@ -11867,27 +11303,6 @@ declare module Blockly.CursorSvg {
 }
 
 
-declare module Blockly {
-
-    class Action extends Action__Class { }
-    /** Fake class which should be extended to avoid inheriting static properties */
-    class Action__Class  { 
-    
-            /**
-             * Class for a single action.
-             * There can be one action for each key. If the action only applies to a
-             * single state (toolbox, flyout, workspace) then the function should handle this.
-             * @param {string} name The name of the action.
-             * @param {string} desc The description of the action.
-             * @param {Function} func The function to be called when the key is pressed.
-             * @constructor
-             */
-            constructor(name: string, desc: string, func: Function);
-    } 
-    
-}
-
-
 declare module Blockly.user.keyMap {
 
     /**
@@ -11999,6 +11414,12 @@ declare module Blockly.navigation {
      * @type {number}
      */
     var STATE_TOOLBOX: number;
+
+    /**
+     * Object holding default action names.
+     * @enum {string}
+     */
+    enum actionNames { PREVIOUS, NEXT, IN, OUT, INSERT, MARK, DISCONNECT, TOOLBOX, EXIT } 
 
     /**
      * Set the navigation cursor.
@@ -12159,6 +11580,15 @@ declare module Blockly.navigation {
     function onKeyPress(e: Event): boolean;
 
     /**
+     * Execute any actions on the flyout, workspace, or toolbox that correspond to
+     * the given action.
+     * @param {!Blockly.Action} action The current action.
+     * @return {boolean} True if the action has been handled, false otherwise.
+     * @package
+     */
+    function onBlocklyAction(action: Blockly.Action): boolean;
+
+    /**
      * Enable accessibility mode.
      */
     function enableKeyboardAccessibility(): void;
@@ -12194,57 +11624,57 @@ declare module Blockly.navigation {
 
     /**
      * The previous action.
-     * @type Blockly.Action
+     * @type {!Blockly.Action}
      */
-    var ACTION_PREVIOUS: any /*missing*/;
+    var ACTION_PREVIOUS: Blockly.Action;
 
     /**
-     * The previous action.
-     * @type Blockly.Action
+     * The out action.
+     * @type {!Blockly.Action}
      */
-    var ACTION_OUT: any /*missing*/;
+    var ACTION_OUT: Blockly.Action;
 
     /**
-     * The previous action.
-     * @type Blockly.Action
+     * The next action.
+     * @type {!Blockly.Action}
      */
-    var ACTION_NEXT: any /*missing*/;
+    var ACTION_NEXT: Blockly.Action;
 
     /**
-     * The action to go in.
-     * @type Blockly.Action
+     * The in action.
+     * @type {!Blockly.Action}
      */
-    var ACTION_IN: any /*missing*/;
+    var ACTION_IN: Blockly.Action;
 
     /**
      * The action to try to insert a block.
-     * @type Blockly.Action
+     * @type {!Blockly.Action}
      */
-    var ACTION_INSERT: any /*missing*/;
+    var ACTION_INSERT: Blockly.Action;
 
     /**
      * The action to mark a certain location.
-     * @type Blockly.Action
+     * @type {!Blockly.Action}
      */
-    var ACTION_MARK: any /*missing*/;
+    var ACTION_MARK: Blockly.Action;
 
     /**
      * The action to disconnect a block.
-     * @type Blockly.Action
+     * @type {!Blockly.Action}
      */
-    var ACTION_DISCONNECT: any /*missing*/;
+    var ACTION_DISCONNECT: Blockly.Action;
 
     /**
      * The action to open the toolbox.
-     * @type Blockly.Action
+     * @type {!Blockly.Action}
      */
-    var ACTION_TOOLBOX: any /*missing*/;
+    var ACTION_TOOLBOX: Blockly.Action;
 
     /**
      * The action to exit the toolbox or flyout.
-     * @type Blockly.Action
+     * @type {!Blockly.Action}
      */
-    var ACTION_EXIT: any /*missing*/;
+    var ACTION_EXIT: Blockly.Action;
 }
 
 
@@ -12258,7 +11688,7 @@ declare module Blockly.utils.aria {
      * Copied from Closure's goog.a11y.aria.Role
      * @enum {string}
      */
-    enum Role { ALERT, ALERTDIALOG, APPLICATION, ARTICLE, BANNER, BUTTON, CHECKBOX, COLUMNHEADER, COMBOBOX, COMPLEMENTARY, CONTENTINFO, DEFINITION, DIALOG, DIRECTORY, DOCUMENT, FORM, GRID, GRIDCELL, GROUP, HEADING, IMG, LINK, LIST, LISTBOX, LISTITEM, LOG, MAIN, MARQUEE, MATH, MENU, MENUBAR, MENUITEM, MENUITEMCHECKBOX, MENUITEMRADIO, NAVIGATION, NOTE, OPTION, PRESENTATION, PROGRESSBAR, RADIO, RADIOGROUP, REGION, ROW, ROWGROUP, ROWHEADER, SCROLLBAR, SEARCH, SEPARATOR, SLIDER, SPINBUTTON, STATUS, TAB, TABLIST, TABPANEL, TEXTBOX, TEXTINFO, TIMER, TOOLBAR, TOOLTIP, TREE, TREEGRID, TREEITEM } 
+    enum Role { ALERT, ALERTDIALOG, APPLICATION, ARTICLE, BANNER, BUTTON, CHECKBOX, COLUMNHEADER, COMBOBOX, COMPLEMENTARY, CONTENTINFO, DEFINITION, DIALOG, DIRECTORY, DOCUMENT, FORM, GRID, GRIDCELL, GROUP, HEADING, IMG, LINK, LIST, LISTBOX, LISTITEM, LOG, MAIN, MARQUEE, MATH, MENU, MENUBAR, MENUITEM, MENUITEMCHECKBOX, MENUITEMRADIO, NAVIGATION, NOTE, OPTION, PRESENTATION, PROGRESSBAR, RADIO, RADIOGROUP, REGION, ROW, ROWGROUP, ROWHEADER, SCROLLBAR, SEARCH, SEPARATOR, SLIDER, SPINBUTTON, STATUS, TAB, TABLE, TABLIST, TABPANEL, TEXTBOX, TEXTINFO, TIMER, TOOLBAR, TOOLTIP, TREE, TREEGRID, TREEITEM } 
 
     /**
      * ARIA states and properties.
@@ -12568,6 +11998,25 @@ declare module Blockly.utils.dom {
      * @param {string} transform The value of the CSS `transform` property.
      */
     function setCssTransform(element: Element, transform: string): void;
+
+    /**
+     * Start caching text widths. Every call to this function MUST also call
+     * stopTextWidthCache. Caches must not survive between execution threads.
+     */
+    function startTextWidthCache(): void;
+
+    /**
+     * Stop caching field widths. Unless caching was already on when the
+     * corresponding call to startTextWidthCache was made.
+     */
+    function stopTextWidthCache(): void;
+
+    /**
+     * Gets the width of a text element, caching it in the process.
+     * @param {!Element} textElement An SVG 'text' element.
+     * @return {number} Width of element.
+     */
+    function getTextWidth(textElement: Element): number;
 }
 
 
@@ -13675,6 +13124,287 @@ declare module Blockly.tree {
              * @package
              */
             onSizeChanged(fn: { (): any }): void;
+    } 
+    
+}
+
+
+declare module Blockly {
+
+    class Menu extends Menu__Class { }
+    /** Fake class which should be extended to avoid inheriting static properties */
+    class Menu__Class extends Blockly.Component__Class  { 
+    
+            /**
+             * A basic menu class.
+             * @constructor
+             * @extends {Blockly.Component}
+             */
+            constructor();
+    
+            /**
+             * Focus the menu element.
+             * @package
+             */
+            focus(): void;
+    
+            /**
+             * Blur the menu element.
+             * @package
+             */
+            blur(): void;
+    
+            /**
+             * Set the menu accessibility role.
+             * @param {!Blockly.utils.aria.Role|string} roleName role name.
+             * @package
+             */
+            setRole(roleName: Blockly.utils.aria.Role|string): void;
+    
+            /**
+             * Returns the child menuitem that owns the given DOM node, or null if no such
+             * menuitem is found.
+             * @param {Node} node DOM node whose owner is to be returned.
+             * @return {?Blockly.MenuItem} menuitem for which the DOM node belongs to.
+             * @protected
+             */
+            getMenuItem(node: Node): Blockly.MenuItem;
+    
+            /**
+             * Unhighlight the current highlighted item.
+             * @protected
+             */
+            unhighlightCurrent(): void;
+    
+            /**
+             * Clears the currently highlighted item.
+             * @protected
+             */
+            clearHighlighted(): void;
+    
+            /**
+             * Returns the currently highlighted item (if any).
+             * @return {?Blockly.Component} Highlighted item (null if none).
+             * @protected
+             */
+            getHighlighted(): Blockly.Component;
+    
+            /**
+             * Highlights the item at the given 0-based index (if any). If another item
+             * was previously highlighted, it is un-highlighted.
+             * @param {number} index Index of item to highlight (-1 removes the current
+             *     highlight).
+             * @protected
+             */
+            setHighlightedIndex(index: number): void;
+    
+            /**
+             * Highlights the given item if it exists and is a child of the container;
+             * otherwise un-highlights the currently highlighted item.
+             * @param {Blockly.MenuItem} item Item to highlight.
+             * @protected
+             */
+            setHighlighted(item: Blockly.MenuItem): void;
+    
+            /**
+             * Highlights the next highlightable item (or the first if nothing is currently
+             * highlighted).
+             * @protected
+             */
+            highlightNext(): void;
+    
+            /**
+             * Highlights the previous highlightable item (or the last if nothing is
+             * currently highlighted).
+             * @protected
+             */
+            highlightPrevious(): void;
+    
+            /**
+             * Helper function that manages the details of moving the highlight among
+             * child menuitems in response to keyboard events.
+             * @param {function(this: Blockly.Component, number, number) : number} fn
+             *     Function that accepts the current and maximum indices, and returns the
+             *     next index to check.
+             * @param {number} startIndex Start index.
+             * @return {boolean} Whether the highlight has changed.
+             * @protected
+             */
+            highlightHelper(fn: { (_0: number, _1: number): number }, startIndex: number): boolean;
+    
+            /**
+             * Returns whether the given item can be highlighted.
+             * @param {Blockly.MenuItem} item The item to check.
+             * @return {boolean} Whether the item can be highlighted.
+             * @protected
+             */
+            canHighlightItem(item: Blockly.MenuItem): boolean;
+    
+            /**
+             * Set the handler that's triggered when a menuitem is highlighted.
+             * @param {function(?Blockly.MenuItem)} fn The handler.
+             * @package
+             */
+            onHighlighted(fn: { (_0: Blockly.MenuItem): any /*missing*/ }): void;
+    
+            /**
+             * Attempts to handle a keyboard event, if the menuitem is enabled, by calling
+             * {@link handleKeyEventInternal}.  Considered protected; should only be used
+             * within this package and by subclasses.
+             * @param {Event} e Key event to handle.
+             * @return {boolean} Whether the key event was handled.
+             * @protected
+             */
+            handleKeyEvent(e: Event): boolean;
+    
+            /**
+             * Attempts to handle a keyboard event; returns true if the event was handled,
+             * false otherwise.  If the container is enabled, and a child is highlighted,
+             * calls the child menuitem's `handleKeyEvent` method to give the menuitem
+             * a chance to handle the event first.
+             * @param {Event} e Key event to handle.
+             * @return {boolean} Whether the event was handled by the container (or one of
+             *     its children).
+             * @protected
+             */
+            handleKeyEventInternal(e: Event): boolean;
+    } 
+    
+}
+
+
+declare module Blockly {
+
+    class MenuItem extends MenuItem__Class { }
+    /** Fake class which should be extended to avoid inheriting static properties */
+    class MenuItem__Class extends Blockly.Component__Class  { 
+    
+            /**
+             * Class representing an item in a menu.
+             *
+             * @param {string} content Text caption to display as the content of
+             *     the item.
+             * @param {string=} opt_value Data/model associated with the menu item.
+             * @constructor
+             * @extends {Blockly.Component}
+             */
+            constructor(content: string, opt_value?: string);
+    
+            /**
+             * @return {Element} The html element for the checkbox.
+             * @protected
+             */
+            getCheckboxDom(): Element;
+    
+            /**
+             * @return {!Element} The html for the content.
+             * @protected
+             */
+            getContentDom(): Element;
+    
+            /**
+             * @return {!Element} The html for the content wrapper.
+             * @protected
+             */
+            getContentWrapperDom(): Element;
+    
+            /**
+             * Sets the content associated with the menu item.
+             * @param {string} content Text caption to set as the
+             *    menuitem's contents.
+             * @protected
+             */
+            setContentInternal(content: string): void;
+    
+            /**
+             * Sets the value associated with the menu item.
+             * @param {*} value Value to be associated with the menu item.
+             * @package
+             */
+            setValue(value: any): void;
+    
+            /**
+             * Gets the value associated with the menu item.
+             * @returns {*} value Value associated with the menu item.
+             * @package
+             */
+            getValue(): any;
+    
+            /**
+             * Set the menu accessibility role.
+             * @param {!Blockly.utils.aria.Role|string} roleName role name.
+             * @package
+             */
+            setRole(roleName: Blockly.utils.aria.Role|string): void;
+    
+            /**
+             * Sets the menu item to be checkable or not. Set to true for menu items
+             * that represent checkable options.
+             * @param {boolean} checkable Whether the menu item is checkable.
+             * @package
+             */
+            setCheckable(checkable: boolean): void;
+    
+            /**
+             * Checks or unchecks the component.
+             * @param {boolean} checked Whether to check or uncheck the component.
+             * @package
+             */
+            setChecked(checked: boolean): void;
+    
+            /**
+             * Returns true if the component is currently highlighted, false otherwise.
+             * @return {boolean} Whether the component is highlighted.
+             * @package
+             */
+            isHighlighted(): boolean;
+    
+            /**
+             * Highlights or unhighlights the component.
+             * @param {boolean} highlight Whether to highlight or unhighlight the component.
+             * @package
+             */
+            setHighlighted(highlight: boolean): void;
+    
+            /**
+             * Returns true if the menu item is enabled, false otherwise.
+             * @return {boolean} Whether the menu item is enabled.
+             * @package
+             */
+            isEnabled(): boolean;
+    
+            /**
+             * Enables or disables the menu item.
+             * @param {boolean} enabled Whether to enable or disable the menu item.
+             * @package
+             */
+            setEnabled(enabled: boolean): void;
+    
+            /**
+             * Handles mouseup events. If the component is enabled, trigger
+             * the action assosiated with this menu item.
+             * @param {Event} _e Mouse event to handle.
+             * @package
+             */
+            handleMouseUp(_e: Event): void;
+    
+            /**
+             * Performs the appropriate action when the menu item is activated
+             * by the user.
+             * @protected
+             */
+            performActionInternal(): void;
+    
+            /**
+             * Set the handler that's triggered when the menu item is activated
+             * by the user. If `opt_obj` is provided, it will be used as the
+             * 'this' object in the function when called.
+             * @param {function(this:T,!Blockly.MenuItem):?} fn The handler.
+             * @param {T=} opt_obj Used as the 'this' object in f when called.
+             * @template T
+             * @package
+             */
+            onAction<T>(fn: { (_0: Blockly.MenuItem): any }, opt_obj?: T): void;
     } 
     
 }

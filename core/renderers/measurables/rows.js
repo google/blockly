@@ -481,3 +481,12 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
   }
   this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
 };
+
+
+Blockly.blockRendering.InputRow.prototype.getLastSpacer = function() {
+  if (this.hasExternalInput || this.hasStatement) {
+    var spacer = this.elements[this.elements.length - 3];
+    return /** @type {Blockly.blockRendering.InRowSpacer} */ (spacer);
+  }
+  return Blockly.blockRendering.InputRow.superClass_.getLastSpacer.call(this);
+};

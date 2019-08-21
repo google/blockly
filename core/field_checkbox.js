@@ -49,8 +49,13 @@ goog.require('Blockly.utils.Size');
  * @constructor
  */
 Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
-  /** @type {?string} @private */
-  Blockly.FieldCheckbox.prototype.checkChar_ = null;
+  /**
+   * Character for the check mark. Used to apply a different check mark
+   * character to individual fields.
+   * @type {?string}
+   * @private
+   */
+  this.checkChar_ = null;
 
   if (opt_config) {
     if (opt_config['checkCharacter']) {

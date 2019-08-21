@@ -17,13 +17,13 @@
     "name": "Neil Fraser"
   },
   "scripts": {
-    "prepare": "gulp blockly_node_javascript_en",
+    "build": "gulp build",
     "lint": "eslint .",
-    "typings": "gulp typings",
-    "test": "tests/run_all_tests.sh",
-    "compile": "gulp compile",
     "package": "gulp package",
-    "release": "gulp release"
+    "prepare": "gulp blockly_node_javascript_en",
+    "release": "gulp release",
+    "test": "tests/run_all_tests.sh",
+    "typings": "gulp typings"
   },
   "main": "./index.js",
   "umd": "./blockly.min.js",

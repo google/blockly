@@ -327,7 +327,7 @@ Blockly.geras.RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
  */
 Blockly.geras.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
   var result = row.yPos;
-  if (elem.isField()) {
+  if (elem.isField() || elem.isIcon()) {
     result += (elem.height / 2);
     if (row.hasInlineInput || row.hasStatement) {
       result += Blockly.blockRendering.constants.TALL_INPUT_FIELD_OFFSET_Y;

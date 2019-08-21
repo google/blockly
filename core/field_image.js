@@ -147,7 +147,7 @@ Blockly.FieldImage.prototype.configure_ = function(
     config = opt_config;
   }
   if (doOldParams) {
-    var config = {};
+    config = {};
     // opt_onClick used to be opt_alt.
     config['alt'] = opt_onClick;
     // opt_config used to be opt_onClick.

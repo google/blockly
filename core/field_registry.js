@@ -28,8 +28,6 @@
 
 goog.provide('Blockly.fieldRegistry');
 
-goog.require('Blockly.utils');
-
 
 /**
  * The set of all registered fields, keyed by field type as used in the JSON
@@ -81,12 +79,5 @@ Blockly.fieldRegistry.fromJson = function(options) {
       ' #1584), or the registration is not being reached.');
     return null;
   }
-
-  var field = fieldClass.fromJson(options);
-  if (options['tooltip'] !== undefined) {
-    var rawValue = options['tooltip'];
-    var localizedText = Blockly.utils.replaceMessageReferences(rawValue);
-    field.setTooltip(localizedText);
-  }
-  return field;
+  return fieldClass.fromJson(options);
 };

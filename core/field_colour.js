@@ -45,16 +45,28 @@ goog.require('Blockly.utils.Size');
  * @param {Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a colour string & returns a
  *    validated colour string ('#rrggbb' format), or null to abort the change.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the documentation for a list of properties this parameter supports.
+ *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldColour = function(opt_value, opt_validator) {
+Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
+  if (opt_config) {
+    if (opt_config['colourOptions']) {
+      this.setColours(opt_config['colourOptions'], opt_config['colourTitles']);
+    }
+    if (opt_config['columns']) {
+      this.setColumns(opt_config['columns']);
+    }
+  }
+
   opt_value = this.doClassValidation_(opt_value);
   if (opt_value === null) {
     opt_value = Blockly.FieldColour.COLOURS[0];
   }
   Blockly.FieldColour.superClass_.constructor.call(
-      this, opt_value, opt_validator);
+      this, opt_value, opt_validator, opt_config);
 };
 goog.inherits(Blockly.FieldColour, Blockly.Field);
 
@@ -66,14 +78,7 @@ goog.inherits(Blockly.FieldColour, Blockly.Field);
  * @nocollapse
  */
 Blockly.FieldColour.fromJson = function(options) {
-  var field = new Blockly.FieldColour(options['colour']);
-  if (options['colourOptions']) {
-    field.setColours(options['colourOptions'], options['colourTitles']);
-  }
-  if (options['columns']) {
-    field.setColumns(options['columns']);
-  }
-  return field;
+  return new Blockly.FieldColour(options['colour'], null, options);
 };
 
 /**
@@ -311,41 +316,19 @@ Blockly.FieldColour.prototype.onClick_ = function(e) {
  * @private
  */
 Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
-  var colours = this.colours_ || Blockly.FieldColour.COLOURS;
-  var columns = this.columns_ || Blockly.FieldColour.COLUMNS;
-  var x = this.highlightedIndex_ % columns;
-  var y = Math.floor(this.highlightedIndex_ / columns);
-  var handled = false, navigation = false;
-  if (e.keyCode === Blockly.utils.KeyCodes.UP && y > 0) {
-    // Move up one grid cell.
-    y--;
-    navigation = true;
-  } else if (e.keyCode === Blockly.utils.KeyCodes.DOWN &&
-      y < Math.floor(colours.length / columns) - 1) {
-    // Move down one grid cell.
-    y++;
-    navigation = true;
+  var handled = false;
+  if (e.keyCode === Blockly.utils.KeyCodes.UP) {
+    this.moveHighlightBy_(0, -1);
+    handled = true;
+  } else if (e.keyCode === Blockly.utils.KeyCodes.DOWN) {
+    this.moveHighlightBy_(0, 1);
+    handled = true;
   } else if (e.keyCode === Blockly.utils.KeyCodes.LEFT) {
-    // Move left one grid cell, even in RTL.
-    x--;
-    if (x < 0 && y > 0) {
-      x = columns - 1;
-      y--;
-    } else if (x < 0) {
-      x = 0;
-    }
-    navigation = true;
+    this.moveHighlightBy_(-1, 0);
+    handled = true;
   } else if (e.keyCode === Blockly.utils.KeyCodes.RIGHT) {
-    // Move right one grid cell, even in RTL.
-    x++;
-    if (x > columns - 1 &&
-      y < Math.floor(colours.length / columns) - 1) {
-      x = 0;
-      y++;
-    } else if (x > columns - 1) {
-      x--;
-    }
-    navigation = true;
+    this.moveHighlightBy_(1, 0);
+    handled = true;
   } else if (e.keyCode === Blockly.utils.KeyCodes.ENTER) {
     // Select the highlighted colour.
     var highlighted = this.getHighlighted_();
@@ -358,14 +341,88 @@ Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
     Blockly.DropDownDiv.hideWithoutAnimation();
     handled = true;
   }
-  if (navigation) {
-    var cell = this.picker_.childNodes[y].childNodes[x];
-    var index = (y * columns) + x;
-    this.setHighlightedCell_(cell, index);
-  }
-  if (handled || navigation) {
+  if (handled) {
     e.stopPropagation();
   }
+};
+
+/**
+ * Handles the given action.
+ * This is only triggered when keyboard accessibility mode is enabled.
+ * @param {!Blockly.Action} action The action to be handled.
+ * @return {boolean} True if the field handled the action, false otherwise.
+ * @package
+ */
+Blockly.FieldColour.prototype.onBlocklyAction = function(action) {
+  if (action === Blockly.navigation.ACTION_PREVIOUS) {
+    this.moveHighlightBy_(0, -1);
+    return true;
+  } else if (action === Blockly.navigation.ACTION_NEXT) {
+    this.moveHighlightBy_(0, 1);
+    return true;
+  } else if (action === Blockly.navigation.ACTION_OUT) {
+    this.moveHighlightBy_(-1, 0);
+    return true;
+  } else if (action === Blockly.navigation.ACTION_IN) {
+    this.moveHighlightBy_(1, 0);
+    return true;
+  }
+  return Blockly.FieldColour.superClass_.onBlocklyAction.call(this, action);
+};
+
+/**
+ * Move the currently highlighted position by dx and dy.
+ * @param {number} dx Change of x
+ * @param {number} dy Change of y
+ * @private
+ */
+Blockly.FieldColour.prototype.moveHighlightBy_ = function(dx, dy) {
+  var colours = this.colours_ || Blockly.FieldColour.COLOURS;
+  var columns = this.columns_ || Blockly.FieldColour.COLUMNS;
+
+  // Get the current x and y coordinates
+  var x = this.highlightedIndex_ % columns;
+  var y = Math.floor(this.highlightedIndex_ / columns);
+
+  // Add the offset
+  x += dx;
+  y += dy;
+
+  if (dx < 0) {
+    // Move left one grid cell, even in RTL.
+    // Loop back to the end of the previous row if we have room.
+    if (x < 0 && y > 0) {
+      x = columns - 1;
+      y--;
+    } else if (x < 0) {
+      x = 0;
+    }
+  } else if (dx > 0) {
+    // Move right one grid cell, even in RTL.
+    // Loop to the start of the next row, if there's room.
+    if (x > columns - 1 &&
+      y < Math.floor(colours.length / columns) - 1) {
+      x = 0;
+      y++;
+    } else if (x > columns - 1) {
+      x--;
+    }
+  } else if (dy < 0) {
+    // Move up one grid cell, stop at the top.
+    if (y < 0) {
+      y = 0;
+    }
+  } else if (dy > 0) {
+    // Move down one grid cell, stop at the bottom.
+    if (y > Math.floor(colours.length / columns) - 1) {
+      y = Math.floor(colours.length / columns) - 1;
+    }
+  }
+
+  // Move the highlight to the new coordinates.
+  var cell = this.picker_.childNodes[y].childNodes[x];
+  var index = (y * columns) + x;
+  this.setHighlightedCell_(cell, index);
 };
 
 /**

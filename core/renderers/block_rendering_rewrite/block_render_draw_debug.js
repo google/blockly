@@ -76,7 +76,7 @@ Blockly.blockRendering.Debug = function() {
  * @package
  */
 Blockly.blockRendering.Debug.prototype.clearElems = function() {
-  for (var i = 0, elem; elem = this.debugElements_[i]; i++) {
+  for (var i = 0, elem; (elem = this.debugElements_[i]); i++) {
     Blockly.utils.dom.removeNode(elem);
   }
 
@@ -108,7 +108,7 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
 
 /**
  * Draw a debug rectangle for a horizontal spacer.
- * @param {!Blockly.BlockSvg.InRowSpacer} elem The spacer to render.
+ * @param {!Blockly.blockRendering.InRowSpacer} elem The spacer to render.
  * @param {number} rowHeight The height of the container row.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
@@ -137,7 +137,7 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
 
 /**
  * Draw a debug rectangle for an in-row element.
- * @param {!Blockly.BlockSvg.Measurable} elem The element to render.
+ * @param {!Blockly.blockRendering.Measurable} elem The element to render.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
@@ -212,7 +212,7 @@ Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
 
 /**
  * Draw a debug rectangle for a non-empty row.
- * @param {!Blockly.BlockSvg.Row} row The non-empty row to render.
+ * @param {!Blockly.blockRendering.Row} row The non-empty row to render.
  * @param {number} cursorY The y position of the top of the row.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
@@ -252,13 +252,13 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
 
 /**
  * Draw debug rectangles for a non-empty row and all of its subcomponents.
- * @param {!Blockly.BlockSvg.Row} row The non-empty row to render.
+ * @param {!Blockly.blockRendering.Row} row The non-empty row to render.
  * @param {number} cursorY The y position of the top of the row.
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY, isRtl) {
-  for (var i = 0, elem; elem = row.elements[i]; i++) {
+  for (var i = 0, elem; (elem = row.elements[i]); i++) {
     if (elem.isSpacer()) {
       this.drawSpacerElem(elem, row.height, isRtl);
     } else {
@@ -325,7 +325,7 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
   this.randomColour_ = '#' + Math.floor(Math.random() * 16777215).toString(16);
 
   var cursorY = 0;
-  for (var i = 0, row; row = info.rows[i]; i++) {
+  for (var i = 0, row; (row = info.rows[i]); i++) {
     if (row.type == 'between-row spacer') {
       this.drawSpacerRow(row, cursorY, info.RTL);
     } else {

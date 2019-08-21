@@ -31,6 +31,7 @@ goog.provide('Blockly.Field');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Gesture');
+goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.userAgent');
@@ -44,14 +45,29 @@ goog.require('Blockly.utils.style');
  * @param {Function=} opt_validator  A function that is called to validate
  *    changes to the field's value. Takes in a value & returns a validated
  *    value, or null to abort the change.
+ * @param {Object=} opt_config A map of options used to configure the field. See
+ *    the individual field's documentation for a list of properties this
+ *    parameter supports.
  * @constructor
  */
-Blockly.Field = function(value, opt_validator) {
+Blockly.Field = function(value, opt_validator, opt_config) {
   /**
    * The size of the area rendered by the field.
    * @type {Blockly.utils.Size}
    */
   this.size_ = new Blockly.utils.Size(0, 0);
+
+  if (opt_config) {
+    var tooltip = opt_config['tooltip'];
+    if (typeof tooltip == 'string') {
+      tooltip = Blockly.utils.replaceMessageReferences(
+          opt_config['tooltip']);
+    }
+    tooltip && this.setTooltip(tooltip);
+
+    // TODO (#2884): Possibly add CSS class config option.
+    // TODO (#2885): Possibly add cursor config option.
+  }
 
   this.setValue(value);
   opt_validator && this.setValidator(opt_validator);

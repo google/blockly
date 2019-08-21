@@ -63,6 +63,14 @@ Blockly.blockRendering.Measurable.prototype.connectionShape =
 Blockly.blockRendering.Measurable.prototype.notchShape =
     Blockly.blockRendering.constants.NOTCH;
 
+/**
+ * The offset from the left side of a block or the inside of a statement input
+ * to the left side of the connection notch.
+ * @type {number}
+ */
+Blockly.blockRendering.Measurable.prototype.notchOffset =
+    Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;
+
 // TODO: We may remove these helper functions if all of them end up being direct
 // checks against types.
 

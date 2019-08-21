@@ -482,11 +482,24 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
   this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
 };
 
-
+/**
+ * @override
+ */
 Blockly.blockRendering.InputRow.prototype.getLastSpacer = function() {
+  // Adding spacing after the input connection would look weird.  Find the
+  // before the last input connection and add it there instead.
   if (this.hasExternalInput || this.hasStatement) {
-    var spacer = this.elements[this.elements.length - 3];
-    return /** @type {Blockly.blockRendering.InRowSpacer} */ (spacer);
+    var elems = this.elements;
+    for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
+      if (elem.isSpacer()) {
+        continue;
+      }
+      if (elem.isInput) {
+        var spacer = elems[i - 1];
+        return /** @type {Blockly.blockRendering.InRowSpacer} */ (spacer);
+      }
+    }
+
   }
   return Blockly.blockRendering.InputRow.superClass_.getLastSpacer.call(this);
 };

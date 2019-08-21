@@ -27,6 +27,7 @@
 goog.provide('Blockly.FieldAngle');
 
 goog.require('Blockly.DropDownDiv');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
@@ -271,6 +272,14 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
     angle -= 360;
   }
 
+  this.setAngle(angle);
+};
+
+/**
+ * Set the angle value and update the graph.
+ * @param {number} angle New angle
+ */
+Blockly.FieldAngle.prototype.setAngle = function(angle) {
   // Do rounding.
   if (Blockly.FieldAngle.ROUND) {
     angle = Math.round(angle / Blockly.FieldAngle.ROUND) *
@@ -280,6 +289,8 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
   // Do wrapping.
   if (angle > Blockly.FieldAngle.WRAP) {
     angle -= 360;
+  } else if (angle < 0) {
+    angle += 360;
   }
 
   // Update value.
@@ -333,6 +344,37 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
 };
 
 /**
+ * Handle key down to the editor.
+ * @param {!Event} e Keyboard event.
+ * @protected
+ * @override
+ */
+Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
+  Blockly.FieldAngle.superClass_.onHtmlInputKeyDown_.call(this, e);
+
+  var multiplier;
+  if (e.keyCode === Blockly.utils.KeyCodes.LEFT) {
+    // decrement (increment in RTL)
+    multiplier = this.sourceBlock_.RTL ? 1 : -1;
+  } else if (e.keyCode === Blockly.utils.KeyCodes.RIGHT) {
+    // increment (decrement in RTL)
+    multiplier = this.sourceBlock_.RTL ? -1 : 1;
+  } else if (e.keyCode === Blockly.utils.KeyCodes.DOWN) {
+    // decrement
+    multiplier = -1;
+  } else if (e.keyCode === Blockly.utils.KeyCodes.UP) {
+    // increment
+    multiplier = 1;
+  }
+  if (multiplier) {
+    this.setAngle(Number(this.getValue()) +
+        (multiplier * Blockly.FieldAngle.ROUND));
+    e.preventDefault();
+    e.stopPropagation();
+  }
+};
+
+/**
  * Ensure that the input value is a valid angle.
  * @param {string|number=} opt_newValue The input value.
  * @return {?number} A valid angle, or null if invalid.
@@ -353,4 +395,4 @@ Blockly.FieldAngle.prototype.doClassValidation_ = function(opt_newValue) {
   return n;
 };
 
-Blockly.Field.register('field_angle', Blockly.FieldAngle);
+Blockly.fieldRegistry.register('field_angle', Blockly.FieldAngle);

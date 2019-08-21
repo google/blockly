@@ -28,7 +28,7 @@
 goog.provide('Blockly.FieldLabel');
 
 goog.require('Blockly.Field');
-goog.require('Blockly.Tooltip');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Size');
@@ -80,7 +80,7 @@ Blockly.FieldLabel.prototype.EDITABLE = false;
  */
 Blockly.FieldLabel.prototype.initView = function() {
   this.createTextElement_();
-  // The y attribute of an svg text element is the baseline.
+  // The y attribute of an SVG text element is the baseline.
   this.textElement_.setAttribute('y', this.size_.height);
   if (this.class_) {
     Blockly.utils.dom.addClass(this.textElement_, this.class_);
@@ -100,4 +100,4 @@ Blockly.FieldLabel.prototype.doClassValidation_ = function(opt_newValue) {
   return String(opt_newValue);
 };
 
-Blockly.Field.register('field_label', Blockly.FieldLabel);
+Blockly.fieldRegistry.register('field_label', Blockly.FieldLabel);

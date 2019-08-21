@@ -165,7 +165,8 @@ Blockly.CursorSvg.prototype.showWithCoordinates_ = function() {
   var wsCoordinate = workspaceNode.getWsCoordinate();
   this.currentCursorSvg = this.cursorSvgLine_;
   this.setParent_(this.workspace_.svgBlockCanvas_);
-  this.positionLine_(wsCoordinate.x, wsCoordinate.y, Blockly.CursorSvg.CURSOR_WIDTH);
+  this.positionLine_(wsCoordinate.x, wsCoordinate.y,
+      Blockly.CursorSvg.CURSOR_WIDTH);
   this.showCurrent_();
 };
 
@@ -191,6 +192,9 @@ Blockly.CursorSvg.prototype.showWithInputOutput_ = function() {
   var connection = /** @type {Blockly.Connection} */
       (this.getCurNode().getLocation());
   this.currentCursorSvg = this.cursorInputOutput_;
+  var path = Blockly.utils.svgPaths.moveTo(0, 0) +
+      Blockly.blockRendering.constants.PUZZLE_TAB.pathDown;
+  this.cursorInputOutput_.setAttribute('d', path);
   this.setParent_(connection.getSourceBlock().getSvgRoot());
   this.positionInputOutput_(connection);
   this.showCurrent_();
@@ -261,11 +265,6 @@ Blockly.CursorSvg.prototype.showWithStack_ = function() {
   var x = -1 * Blockly.CursorSvg.STACK_PADDING / 2;
   var y = -1 * Blockly.CursorSvg.STACK_PADDING / 2;
 
-  // If the block has an output connection it needs more padding.
-  if (block.outputConnection) {
-    x -= Blockly.BlockSvg.TAB_WIDTH;
-  }
-
   this.currentCursorSvg = this.cursorSvgRect_;
   this.setParent_(block.getSvgRoot());
 
@@ -315,8 +314,9 @@ Blockly.CursorSvg.prototype.positionInputOutput_ = function(connection) {
   var x = connection.getOffsetInBlock().x;
   var y = connection.getOffsetInBlock().y;
 
-  this.cursorInputOutput_.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
-            (connection.getSourceBlock().RTL ? ' scale(-1 1)' : ''));
+  this.cursorInputOutput_.setAttribute('transform',
+      'translate(' + x + ',' + y + ')' +
+      (connection.getSourceBlock().RTL ? ' scale(-1 1)' : ''));
 };
 
 /**
@@ -416,7 +416,6 @@ Blockly.CursorSvg.prototype.createCursorSvg_ = function() {
       {
         'width': Blockly.CursorSvg.CURSOR_WIDTH,
         'height': Blockly.CursorSvg.CURSOR_HEIGHT,
-        'd': 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 5',
         'transform':'',
         'style':'display: none;',
         'fill': colour

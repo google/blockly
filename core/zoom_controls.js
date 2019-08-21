@@ -330,9 +330,7 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
     ws.setScale(ws.options.zoomOptions.startScale);
     ws.beginCanvasTransition();
     ws.scrollCenter();
-    setTimeout(function() {
-      ws.endCanvasTransition();
-    }, 500);
+    setTimeout(ws.endCanvasTransition.bind(ws), 500);
     Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
     e.stopPropagation();  // Don't start a workspace scroll.
     e.preventDefault();  // Stop double-clicking from selecting text.

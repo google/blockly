@@ -36,7 +36,7 @@ goog.require('Blockly.utils.style');
 
 /**
  * Get the size of a rendered goog.ui.Menu.
- * @param {!goog.ui.Menu} menu The menu to measure.
+ * @param {!Blockly.Menu} menu The menu to measure.
  * @return {!Blockly.utils.Size} Object with width and height properties.
  * @package
  */

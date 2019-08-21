@@ -22,8 +22,8 @@
  * @fileoverview Methods for graphically rendering a block as SVG.
  * @author fenichel@google.com (Rachel Fenichel)
  */
-
 'use strict';
+
 goog.provide('Blockly.blockRendering.constants');
 
 goog.require('Blockly.utils.svgPaths');
@@ -73,14 +73,6 @@ Blockly.blockRendering.constants.CORNER_RADIUS = 8;
 // the left side of the notch.
 Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT =
     Blockly.blockRendering.constants.NOTCH_WIDTH;
-
-// This is the width from where a rounded corner ends to where a previous
-// connection starts.
-// The position of the notch should not change as the rounded corner decreases
-// in radius.
-Blockly.blockRendering.constants.NOTCH_OFFSET_ROUNDED_CORNER_PREV =
-    Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT -
-    Blockly.blockRendering.constants.CORNER_RADIUS;
 
 Blockly.blockRendering.constants.STATEMENT_BOTTOM_SPACER = 5;
 Blockly.blockRendering.constants.STATEMENT_INPUT_PADDING_LEFT = 20;
@@ -289,6 +281,7 @@ Blockly.blockRendering.constants.INSIDE_CORNERS = (function() {
       Blockly.utils.svgPaths.point(radius, radius));
 
   return {
+    width: radius,
     height: radius,
     pathTop: innerTopLeftCorner,
     pathBottom: innerBottomLeftCorner

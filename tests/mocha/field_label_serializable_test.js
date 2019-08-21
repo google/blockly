@@ -197,9 +197,14 @@ suite('Label Serializable Fields', function() {
       field.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
       field.initView();
       field.setClass('testClass');
-      // Don't call assertCharacter b/c we don't want to re-initialize.
+      // Don't call assertClass b/c we don't want to re-initialize.
       chai.assert.isTrue(Blockly.utils.dom.hasClass(
           field.textElement_, 'testClass'));
+    });
+    test('setClass Before Initialization', function() {
+      var field = new Blockly.FieldLabelSerializable();
+      field.setClass('testClass');
+      assertClass(field, 'testClass');
     });
     test('Remove Class', function() {
       var field = new Blockly.FieldLabelSerializable('text', {

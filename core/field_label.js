@@ -47,6 +47,13 @@ goog.require('Blockly.utils.Size');
 Blockly.FieldLabel = function(opt_value, opt_config) {
   this.size_ = new Blockly.utils.Size(0, Blockly.Field.TEXT_DEFAULT_HEIGHT);
 
+  /**
+   * The css class name to apply to the field's textElement_.
+   * @type {?string}
+   * @private
+   */
+  this.class_ = null;
+
   // Handle backwards-compat.
   if (opt_config) {
     if (typeof opt_config == 'string') {
@@ -68,7 +75,7 @@ goog.inherits(Blockly.FieldLabel, Blockly.Field);
 
 /**
  * Construct a FieldLabel from a JSON arg object,
- * de-referencing any string table references.
+ * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (text, and class).
  * @return {!Blockly.FieldLabel} The new field instance.
  * @package
@@ -86,13 +93,6 @@ Blockly.FieldLabel.fromJson = function(options) {
  * @const
  */
 Blockly.FieldLabel.prototype.EDITABLE = false;
-
-/**
- * The css class name to apply to the field's textElement_.
- * @type {?string}
- * @private
- */
-Blockly.FieldLabel.prototype.class_ = null;
 
 /**
  * Create block UI for this label.
@@ -125,11 +125,17 @@ Blockly.FieldLabel.prototype.doClassValidation_ = function(opt_newValue) {
  * @param {?string} cssClass The new css class name, or null to remove.
  */
 Blockly.FieldLabel.prototype.setClass = function(cssClass) {
-  Blockly.utils.dom.removeClass(this.textElement_, this.class_);
-  this.class_ = cssClass;
-  if (this.class_) {
-    Blockly.utils.dom.addClass(this.textElement_, this.class_);
+  if (this.textElement_) {
+    // This check isn't necessary, but it's faster than letting removeClass
+    // figure it out.
+    if (this.class_) {
+      Blockly.utils.dom.removeClass(this.textElement_, this.class_);
+    }
+    if (cssClass) {
+      Blockly.utils.dom.addClass(this.textElement_, cssClass);
+    }
   }
+  this.class_ = cssClass;
 };
 
 Blockly.fieldRegistry.register('field_label', Blockly.FieldLabel);

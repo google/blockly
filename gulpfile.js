@@ -36,8 +36,10 @@ var fs = require('fs');
 var rimraf = require('rimraf');
 var execSync = require('child_process').execSync;
 
-const closureCompiler = require('google-closure-compiler').gulp();
-const packageJson = require('./package.json');
+var closureCompiler = require('google-closure-compiler').gulp();
+var packageJson = require('./package.json');
+var argv = require('yargs').argv;
+
 
 ////////////////////////////////////////////////////////////
 //                        Compile                         //
@@ -84,11 +86,12 @@ function prependHeader() {
 /**
  * Helper method for calling the Closure compiler.
  * @param {*} compilerOptions 
+ * @param {boolean=} opt_verbose Optional option for verbose logging
  */
-function compile(compilerOptions) {
+function compile(compilerOptions, opt_verbose) {
   if (!compilerOptions) compilerOptions = {};
   compilerOptions.compilation_level = 'SIMPLE_OPTIMIZATIONS';
-  compilerOptions.warning_level = 'DEFAULT'; // VERBOSE
+  compilerOptions.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
   compilerOptions.language_out = 'ECMASCRIPT5_STRICT';
   compilerOptions.rewrite_polyfills = false;
   compilerOptions.generate_exports = true;
@@ -126,7 +129,7 @@ gulp.task('compile-core', function () {
       js_output_file: 'blockly_compressed.js',
       externs: './externs/svg-externs.js',
       define: defines
-    }))
+    }, argv.verbose))
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
 });
@@ -135,7 +138,7 @@ gulp.task('compile-core', function () {
  * This task compiles the Blockly blocks.
  */
 gulp.task('compile-blocks', function () {
-  var provides = `goog.provide('Blockly');\ngoog.provide('Blockly.Blocks');\n`;  
+  const provides = `goog.provide('Blockly');\ngoog.provide('Blockly.Blocks');\n`;
   return gulp.src('blocks/*.js', {base: './'})
     // Add Blockly.Blocks to be compatible with the compiler.
     .pipe(gulp.replace(`goog.provide('Blockly.Constants.Colour');`,
@@ -144,7 +147,7 @@ gulp.task('compile-blocks', function () {
     .pipe(compile({
       dependency_mode: 'NONE',
       js_output_file: 'blocks_compressed.js'
-    }))
+    }, argv.verbose))
     .pipe(gulp.replace('\'use strict\';', '\'use strict\';\n\n\n'))
     // Remove Blockly.Blocks to be compatible with Blockly.
     .pipe(gulp.replace('var Blockly={Blocks:{}};', ''))
@@ -167,7 +170,7 @@ function compileGenerator(language, namespace) {
     .pipe(compile({
       dependency_mode: 'NONE',
       js_output_file: `${language}_compressed.js`
-    }))
+    }, argv.verbose))
     .pipe(gulp.replace('\'use strict\';', '\'use strict\';\n\n\n'))
     // Remove Blockly.Generator and Blockly.utils.string to be compatible with Blockly.
     .pipe(gulp.replace('var Blockly={Generator:{},utils:{}};Blockly.utils.string={};', ''))

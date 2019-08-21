@@ -58,6 +58,7 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
     Blockly.FieldDropdown.validateOptions_(menuGenerator);
   }
   this.menuGenerator_ = menuGenerator;
+  this.selectedMenuItem_ = this.getOptions()[0];
 
   this.trimOptions_();
   var firstTuple = this.getOptions()[0];
@@ -179,7 +180,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
       /** @type {!Element} */ (this.menu_.getElement()), 'blocklyDropdownMenu');
 
   this.positionMenu_(this.menu_);
-
+  Blockly.utils.style.scrollIntoContainerView(this.selectedMenuItem_.getElement(), this.menu_.getElement());
   // Focusing needs to be handled after the menu is rendered and positioned.
   // Otherwise it will cause a page scroll to get the misplaced menu in
   // view. See issue #1329.
@@ -217,6 +218,7 @@ Blockly.FieldDropdown.prototype.widgetCreate_ = function() {
     menuItem.setChecked(value == this.value_);
     if (value == this.value_) {
       selectedMenuItem = menuItem;
+      this.selectedMenuItem_ = menuItem;
     }
     menuItem.onAction(this.handleMenuActionEvent_, this);
   }

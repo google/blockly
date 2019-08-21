@@ -150,6 +150,7 @@ goog.addDependency("../../../" + dir + "/core/workspace_svg.js", ['Blockly.Works
 goog.addDependency("../../../" + dir + "/core/ws_comment_events.js", ['Blockly.Events.CommentBase', 'Blockly.Events.CommentChange', 'Blockly.Events.CommentCreate', 'Blockly.Events.CommentDelete', 'Blockly.Events.CommentMove'], ['Blockly.Events', 'Blockly.Events.Abstract', 'Blockly.utils.Coordinate', 'Blockly.utils.xml', 'Blockly.Xml']);
 goog.addDependency("../../../" + dir + "/core/xml.js", ['Blockly.Xml'], ['Blockly.Events', 'Blockly.Events.BlockCreate', 'Blockly.Events.FinishedLoading', 'Blockly.Events.VarCreate', 'Blockly.utils', 'Blockly.utils.dom', 'Blockly.utils.xml']);
 goog.addDependency("../../../" + dir + "/core/zoom_controls.js", ['Blockly.ZoomControls'], ['Blockly.Touch', 'Blockly.utils.dom']);
+goog.addDependency("base.js", [], []);
 
 // Load Blockly.
 goog.require('Blockly');

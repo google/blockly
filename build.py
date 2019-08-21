@@ -123,7 +123,7 @@ this.BLOCKLY_BOOT = function(root) {
   // Execute after Closure has loaded.
 """)
     add_dependency = []
-    base_path = './closure/goog/base.js'
+    base_path = calcdeps.FindClosureBasePath(self.search_paths)
     for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
       add_dependency.append(calcdeps.GetDepsLine(dep, base_path))
     add_dependency.sort()  # Deterministic build.
@@ -140,7 +140,7 @@ this.BLOCKLY_BOOT = function(root) {
     # Exclude field_date.js as it still has a dependency on the closure library
     # see issue #2890. 
     for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
-      if not dep.filename.startswith('core/field_date.js'):
+      if not dep.filename.startswith('closure') and not dep.filename.startswith('core/field_date.js'):
         provides.extend(dep.provides)
     provides.sort()  # Deterministic build.
     f.write('\n')
@@ -216,7 +216,7 @@ class Gen_compressed(threading.Thread):
     filenames.sort()  # Deterministic build.
     for filename in filenames:
       # Filter out the Closure files (the compiler will add them).
-      if filename.startswith(os.pardir + os.sep):  # '../'
+      if filename.startswith("closure"):
         continue
       f = codecs.open(filename, encoding="utf-8")
       code = "".join(f.readlines()).encode("utf-8")
@@ -515,7 +515,7 @@ if __name__ == "__main__":
   args = get_args()
   use_default = not args.core and not args.generators and not args.langfiles
   calcdeps = import_path(os.path.join("closure", "bin", "calcdeps.py"))
-  full_search_paths = calcdeps.ExpandDirectories(["core"])
+  full_search_paths = calcdeps.ExpandDirectories(["core", "closure"])
   full_search_paths = sorted(full_search_paths)  # Deterministic build.
 
   # Uncompressed and compressed are run in parallel threads.

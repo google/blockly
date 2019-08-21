@@ -158,7 +158,7 @@ gulp.task('build-blocks', function () {
 });
 
 /**
- * A helper method for compiling a Blockly code generator.
+ * A helper method for building a Blockly code generator.
  * @param {string} language Generator language.
  * @param {string} namespace Language namespace.
  */

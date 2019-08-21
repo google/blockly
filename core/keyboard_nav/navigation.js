@@ -675,7 +675,8 @@ Blockly.navigation.getSourceBlock_ = function(node) {
   }
   if (node.getType() === Blockly.ASTNode.types.BLOCK) {
     return node.getLocation();
-  } else if (node.getType() === Blockly.ASTNode.types.WORKSPACE) {
+  } else if (node.getType() === Blockly.ASTNode.types.WORKSPACE ||
+      node.getType() === Blockly.ASTNode.types.STACK) {
     return null;
   } else {
     return node.getLocation().getSourceBlock();
@@ -696,22 +697,22 @@ Blockly.navigation.moveCursorOnBlockDelete = function(deletedBlock) {
     if (block === deletedBlock) {
       // If the block has a parent move the cursor to their connection point.
       if (block.getParent()) {
-        var topConnection = block.previousConnection
-          ? block.previousConnection : block.outputConnection;
+        var topConnection = block.previousConnection ?
+          block.previousConnection : block.outputConnection;
         if (topConnection) {
-          cursor.setLocation(Blockly.ASTNode
-            .createConnectionNode(topConnection.targetConnection));
+          cursor.setLocation(
+              Blockly.ASTNode.createConnectionNode(topConnection.targetConnection));
         }
       } else {
         // If the block is by itself move the cursor to the workspace.
         cursor.setLocation(Blockly.ASTNode.createWorkspaceNode(block.workspace,
-          block.getRelativeToSurfaceXY()));
+            block.getRelativeToSurfaceXY()));
       }
     // If the cursor is on a block whose parent is being deleted, move the
     // cursor to the workspace.
     } else if (deletedBlock.getChildren().indexOf(block) > -1) {
       cursor.setLocation(Blockly.ASTNode.createWorkspaceNode(block.workspace,
-        block.getRelativeToSurfaceXY()));
+          block.getRelativeToSurfaceXY()));
     }
   }
 };

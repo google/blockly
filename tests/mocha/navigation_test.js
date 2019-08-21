@@ -94,7 +94,8 @@ suite('Navigation', function() {
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_FLYOUT);
 
-      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"), "FirstCategory-FirstBlock");
+      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"),
+          "FirstCategory-FirstBlock");
     });
 
     test('Focuses workspace from toolbox (e)', function() {
@@ -153,17 +154,20 @@ suite('Navigation', function() {
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_FLYOUT);
-      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"), "FirstCategory-FirstBlock");
+      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"),
+          "FirstCategory-FirstBlock");
     });
 
     test('Previous', function() {
       Blockly.navigation.selectNextBlockInFlyout();
-      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"), "FirstCategory-SecondBlock");
+      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"),
+          "FirstCategory-SecondBlock");
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.W;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_FLYOUT);
-      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"), "FirstCategory-FirstBlock");
+      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"),
+          "FirstCategory-FirstBlock");
     });
 
     test('Next', function() {
@@ -171,7 +175,8 @@ suite('Navigation', function() {
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_FLYOUT);
-      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"), "FirstCategory-SecondBlock");
+      chai.assert.equal(Blockly.navigation.flyoutBlock_.getFieldValue("TEXT"),
+          "FirstCategory-SecondBlock");
     });
 
     test('Out', function() {
@@ -467,14 +472,16 @@ suite('Navigation', function() {
       this.workspace.cursor.setLocation(astNode);
       // Remove the child block
       this.basicBlockB.dispose();
-      chai.assert.equal(this.workspace.cursor.getCurNode().getType(), Blockly.ASTNode.types.NEXT);
+      chai.assert.equal(this.workspace.cursor.getCurNode().getType(),
+          Blockly.ASTNode.types.NEXT);
     });
 
     test('Delete block - no parent ', function() {
       var astNode = Blockly.ASTNode.createBlockNode(this.basicBlockB);
       this.workspace.cursor.setLocation(astNode);
       this.basicBlockB.dispose();
-      chai.assert.equal(this.workspace.cursor.getCurNode().getType(), Blockly.ASTNode.types.WORKSPACE);
+      chai.assert.equal(this.workspace.cursor.getCurNode().getType(),
+          Blockly.ASTNode.types.WORKSPACE);
     });
 
     test('Delete parent block', function() {
@@ -484,7 +491,8 @@ suite('Navigation', function() {
       this.workspace.cursor.setLocation(astNode);
       // Remove the parent block
       this.basicBlockA.dispose();
-      chai.assert.equal(this.workspace.cursor.getCurNode().getType(), Blockly.ASTNode.types.WORKSPACE);
+      chai.assert.equal(this.workspace.cursor.getCurNode().getType(),
+          Blockly.ASTNode.types.WORKSPACE);
     });
   });
 });

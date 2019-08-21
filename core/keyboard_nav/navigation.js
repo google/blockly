@@ -718,6 +718,24 @@ Blockly.navigation.moveCursorOnBlockDelete = function(deletedBlock) {
 };
 
 /**
+ * When a block that the cursor is on is mutated move the cursor to the block
+ * level.
+ * @param {!Blockly.Block} mutatedBlock The block that is being mutated.
+ * @package
+ */
+Blockly.navigation.moveCursorOnBlockMutation = function(mutatedBlock) {
+  var cursor = Blockly.navigation.cursor_;
+  if (cursor) {
+    var curNode = cursor.getCurNode();
+    var block = Blockly.navigation.getSourceBlock_(curNode);
+
+    if (block === mutatedBlock) {
+      cursor.setLocation(Blockly.ASTNode.createBlockNode(block));
+    }
+  }
+};
+
+/**
  * Handler for all the keyboard navigation events.
  * @param {Event} e The keyboard event.
  * @return {!boolean} True if the key was handled false otherwise.

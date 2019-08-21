@@ -921,7 +921,7 @@ FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
   // Each XML element should contain a single child element with a 'block' tag
   if (blockXml1.tagName.toLowerCase() != 'xml' ||
       blockXml2.tagName.toLowerCase() != 'xml') {
-    throw new Error('Expected two XML elements, recieved elements with tag ' +
+    throw new Error('Expected two XML elements, received elements with tag ' +
         'names: ' + blockXml1.tagName + ' and ' + blockXml2.tagName + '.');
   }
 
@@ -948,6 +948,12 @@ FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
   return blockXmlText1 == blockXmlText2;
 };
 
+/**
+ * Strips the provided xml of any attributes that don't describe the
+ * 'structure' of the blocks (i.e. block order, field values, etc).
+ * @param {Node} xml The xml to clean.
+ * @return {Node}
+ */
 FactoryUtils.cleanXml = function(xml) {
   var newXml = xml.cloneNode(true);
   var node = newXml;

@@ -397,7 +397,8 @@ Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
  * @param {number} missingSpace How much padding to add.
  * @protected
  */
-Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row, missingSpace) {
+Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
+    missingSpace) {
   var lastSpacer = row.getLastSpacer();
   if (lastSpacer) {
     lastSpacer.width += missingSpace;
@@ -458,24 +459,26 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, 
 
 /**
  * Calculate the height of a spacer row.
- * @param {Blockly.blockRendering.Row} prev The row before the spacer.
- * @param {Blockly.blockRendering.Row} next The row after the spacer.
+ * @param {Blockly.blockRendering.Row} _prev The row before the spacer.
+ * @param {Blockly.blockRendering.Row} _next The row after the spacer.
  * @return {number} The desired height of the spacer row between these two rows.
  * @protected
  */
-Blockly.blockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
+Blockly.blockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(
+    _prev, _next) {
   return Blockly.blockRendering.constants.MEDIUM_PADDING;
 };
 
 /**
  * Calculate the centerline of an element in a rendered row.
  * @param {Blockly.blockRendering.Row} row The row containing the element.
- * @param {Blockly.blockRendering.Measurable} elem The element to place.
+ * @param {Blockly.blockRendering.Measurable} _elem The element to place.
  * @return {number} The desired centerline of the given element, as an offset
  *     from the top left of the block.
  * @protected
  */
-Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
+Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row,
+    _elem) {
   return row.yPos + row.height / 2;
 };
 

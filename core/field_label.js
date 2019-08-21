@@ -39,8 +39,8 @@ goog.require('Blockly.utils.Size');
  * @param {string=} opt_value The initial value of the field. Should cast to a
  *    string. Defaults to an empty string if null or undefined.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the documentation for a list of properties this parameter supports.
- *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label#creation
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label#creation}
+ *    for a list of properties this parameter supports.
  * @extends {Blockly.Field}
  * @constructor
  */

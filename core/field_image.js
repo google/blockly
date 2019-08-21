@@ -47,16 +47,17 @@ goog.require('Blockly.utils.Size');
  * @constructor
  */
 Blockly.FieldImage = function(src, width, height, opt_onClick, opt_config) {
-  this.sourceBlock_ = null;
-
   if (!src) {
     throw Error('Src value of an image field is required');
   }
+  width = Blockly.utils.replaceMessageReferences(width);
+  height = Blockly.utils.replaceMessageReferences(height);
   if (isNaN(height) || isNaN(width)) {
     throw Error('Height and width values of an image field must cast to' +
       ' numbers.');
   }
 
+  src = Blockly.utils.replaceMessageReferences(src);
   this.setValue(src);
 
   // Ensure height and width are numbers.  Strings are bad at math.
@@ -71,32 +72,14 @@ Blockly.FieldImage = function(src, width, height, opt_onClick, opt_config) {
   this.size_ = new Blockly.utils.Size(imageWidth,
       imageHeight + Blockly.FieldImage.Y_PADDING);
 
-  // Deal with config options and param reordering.
-  var doOldParams = true;
-  var config = null;
-  if (typeof opt_onClick == 'function') {
-    doOldParams = false;
-    this.clickHandler_ = opt_onClick;
-  }
-  if (opt_config && typeof opt_config == 'object') {
-    doOldParams = false;
-    config = opt_config;
-  }
-  if (doOldParams) {
-    var config = {};
-    // opt_onClick used to be opt_alt.
-    config['alt'] = opt_onClick;
-    // opt_config used to be opt_onClick.
-    this.clickHandler_ = opt_config;
-    // flipRtl used to be a param, instead of a config option.
-    config['flipRtl'] = arguments[5];
-  }
+  /**
+   * Should the image be flipped across the vertical axis when in RTL mode?
+   * @type {boolean}
+   * @private
+   */
+  this.flipRtl_ = false;
 
-  // Actually configure.
-  if (config) {
-    this.text_ = Blockly.utils.replaceMessageReferences(config['alt']) || '';
-    this.flipRtl_ = !!config['flipRtl'];
-  }
+  this.configure_(opt_onClick, opt_config, arguments[5]);
 };
 goog.inherits(Blockly.FieldImage, Blockly.Field);
 
@@ -140,11 +123,45 @@ Blockly.FieldImage.prototype.EDITABLE = false;
 Blockly.FieldImage.prototype.isDirty_ = false;
 
 /**
- *
- * @type {boolean}
+ * Configure this field's customization options. Taking into account old
+ * parameter ordering on the constructor.
+ * @param {Function|string|null} opt_onClick Option function to be called
+ *    when the image is clicked. Or alt text.
+ * @param {Object|Function|null} opt_config A map of options used to
+ *    configure the field. Or a function to be called when the image is clicked.
+ * @param {?boolean} dep_flipRtl Should the image be flipped in RTL mode? Or
+ *    this is included on the opt_config.
  * @private
  */
-Blockly.FieldImage.prototype.flipRtl_ = false;
+Blockly.FieldImage.prototype.configure_ = function(
+    opt_onClick, opt_config, dep_flipRtl) {
+  // Deal with config options and param reordering.
+  var doOldParams = true;
+  var config = null;
+  if (typeof opt_onClick == 'function') {
+    doOldParams = false;
+    this.clickHandler_ = opt_onClick;
+  }
+  if (opt_config && typeof opt_config == 'object') {
+    doOldParams = false;
+    config = opt_config;
+  }
+  if (doOldParams) {
+    var config = {};
+    // opt_onClick used to be opt_alt.
+    config['alt'] = opt_onClick;
+    // opt_config used to be opt_onClick.
+    this.clickHandler_ = opt_config;
+    // flipRtl used to be a param, instead of a config option.
+    config['flipRtl'] = dep_flipRtl;
+  }
+
+  // Actually configure.
+  if (config) {
+    this.text_ = Blockly.utils.replaceMessageReferences(config['alt']) || '';
+    this.flipRtl_ = !!config['flipRtl'];
+  }
+};
 
 /**
  * Create the block UI for this image.

@@ -76,7 +76,6 @@ for (var i = 0, method; i < allTests.length, method = allTests[i]; i++) {
 /**
  * Setup chai fail method
  */
-
 function fail() {
   chai.fail();
 }

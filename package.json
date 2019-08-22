@@ -53,9 +53,9 @@
     "mocha": "^6.1.4",
     "pixelmatch": "^4.0.2",
     "pngjs": "^3.4.0",
-    "webdriverio": "^5.11.5",
     "rimraf": "^2.6.3",
     "typescript-closure-tools": "^0.0.7",
+    "webdriverio": "^5.11.5",
     "yargs": "^14.0.0"
   },
   "jshintConfig": {

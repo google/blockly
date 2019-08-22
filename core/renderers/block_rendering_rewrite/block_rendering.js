@@ -34,6 +34,9 @@ goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.RenderInfo');
 
+goog.require('Blockly.geras.RenderInfo');
+goog.require('Blockly.thrasos.RenderInfo');
+goog.require('Blockly.zelos.RenderInfo');
 
 /**
  * Render the given block, using the new rendering.
@@ -45,6 +48,6 @@ Blockly.blockRendering.render = function(block) {
   if (!block.renderingDebugger) {
     block.renderingDebugger = new Blockly.blockRendering.Debug();
   }
-  var info = new Blockly.blockRendering.RenderInfo(block);
+  var info = new Blockly.geras.RenderInfo(block);
   new Blockly.blockRendering.Drawer(block, info).draw_();
 };

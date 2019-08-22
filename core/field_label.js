@@ -54,22 +54,14 @@ Blockly.FieldLabel = function(opt_value, opt_config) {
    */
   this.class_ = null;
 
-  // Handle backwards-compat.
-  if (opt_config) {
-    if (typeof opt_config == 'string') {
-      // opt_config used to be opt_class.
-      this.class_ = opt_config;
-    } else if (opt_config['class']) {
-      this.class_ = opt_config['class'];
-    }
-  }
-
   opt_value = this.doClassValidation_(opt_value);
   if (opt_value === null) {
     opt_value = '';
   }
   Blockly.FieldLabel.superClass_.constructor.call(
       this, opt_value, null, opt_config);
+
+  this.configure_(opt_config);
 };
 goog.inherits(Blockly.FieldLabel, Blockly.Field);
 
@@ -93,6 +85,23 @@ Blockly.FieldLabel.fromJson = function(options) {
  * @const
  */
 Blockly.FieldLabel.prototype.EDITABLE = false;
+
+/**
+ * Configure the field based on the given map of options.
+ * @param {Object} opt_config A map of options to configure the field based on.
+ * @private
+ */
+Blockly.FieldLabel.prototype.configure_ = function(opt_config) {
+  // Handle backwards-compat.
+  if (opt_config) {
+    if (typeof opt_config == 'string') {
+      // opt_config used to be opt_class.
+      this.class_ = opt_config;
+    } else if (opt_config['class']) {
+      this.class_ = opt_config['class'];
+    }
+  }
+};
 
 /**
  * Create block UI for this label.

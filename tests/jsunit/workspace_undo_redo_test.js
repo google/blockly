@@ -24,11 +24,6 @@
  */
 'use strict';
 
-goog.require('goog.events.EventHandler');
-goog.require('goog.testing');
-goog.require('goog.testing.events');
-goog.require('goog.testing.MockControl');
-
 
 var workspace;
 var mockControl_;
@@ -45,13 +40,14 @@ function temporary_fireEvent(event) {
 function undoRedoTest_setUp() {
   defineGetVarBlock();
   workspace = new Blockly.Workspace();
-  mockControl_ = new goog.testing.MockControl();
   Blockly.Events.fire = temporary_fireEvent;
 }
 
 function undoRedoTest_tearDown() {
   undefineGetVarBlock();
-  mockControl_.$tearDown();
+  if (mockControl_) {
+    mockControl_.restore();
+  }
   workspace.dispose();
   Blockly.Events.fire = savedFireFunc;
 }

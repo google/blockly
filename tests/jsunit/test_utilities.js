@@ -24,18 +24,12 @@
  */
 'use strict';
 
-goog.require('goog.testing');
-
 
 /**
  * The normal blockly event fire function.  We sometimes override this.  This
  * handle lets us reset after an override.
  */
 var savedFireFunc = Blockly.Events.fire;
-
-// Asserts must be disabled or else errors can't be shown when running on
-// file:// URLs.
-goog.asserts.ENABLE_ASSERTS = false;
 
 /**
  * A helper function to replace Blockly.Events.fire in tests.
@@ -61,26 +55,23 @@ function isEqualArrays(array1, array2) {
 }
 
 /**
- * Creates a controlled MethodMock. Sets the expected return values and
- *     the parameters if any exist. Sets the method to replay.
- * @param {!goog.testing.MockControl} mockControl Object that holds a set
- *    of mocks for this test.
+ * Creates a new method stub. Sets the expected return values and
+ *     the parameters if any exist.
  * @param {!Object} scope The scope of the method to be mocked out.
  * @param {!string} funcName The name of the function we're going to mock.
  * @param {Array<Object>} parameters The parameters to call the mock with.
  * @param {Array<!Object>} return_values The values to return when called.
- * @return {!goog.testing.MockInterface} The mocked method.
+ * @return {!sinon.SinonStub} The stub method.
  */
-function setUpMockMethod(mockControl, scope, funcName, parameters,
-	return_values) {
-  var mockMethod = mockControl.createMethodMock(scope, funcName);
+function setUpMockMethod(scope, funcName, parameters, return_values) {
+  var stub = sinon.stub(scope, funcName);
   if (return_values) {
     for (var i = 0, return_value; return_value = return_values[i]; i++) {
       if (parameters && i < parameters.length) {
-        mockMethod(parameters[i]).$returns(return_value);
+        stub(parameters[i]).returns(return_value);
       }
       else {
-        mockMethod().$returns(return_value);
+        stub.onCall(i).returns(return_value);
       }
     }
   }
@@ -88,11 +79,10 @@ function setUpMockMethod(mockControl, scope, funcName, parameters,
   // recording specific method calls.
   else if (parameters) {
     for (var i = 0; i < parameters.length; i++) {
-      mockMethod(parameters[i]);
+      stub(parameters[i]);
     }
   }
-  mockMethod.$replay();
-  return mockMethod;
+  return stub;
 }
 
 /**

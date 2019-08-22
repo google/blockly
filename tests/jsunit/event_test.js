@@ -24,15 +24,11 @@
  */
 'use strict';
 
-goog.require('goog.testing');
-goog.require('goog.testing.MockControl');
-
 var mockControl_;
 var workspace;
 
 function eventTest_setUp() {
   workspace = new Blockly.Workspace();
-  mockControl_ = new goog.testing.MockControl();
 }
 
 function eventTest_setUpWithMockBlocks() {
@@ -58,7 +54,9 @@ function eventTest_setUpWithMockBlocks() {
 function eventTest_tearDown() {
   delete Blockly.Blocks['field_variable_test_block'];
   delete Blockly.Blocks['simple_test_block'];
-  mockControl_.$tearDown();
+  if (mockControl_) {
+    mockControl_.restore();
+  }
   workspace.dispose();
 }
 
@@ -69,7 +67,7 @@ function eventTest_tearDownWithMockBlocks() {
 
 function test_block_base_constructor() {
   eventTest_setUpWithMockBlocks();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, '1');
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, '1');
   try {
     var block = createSimpleTestBlock(workspace);
 
@@ -85,7 +83,7 @@ function test_block_base_constructor() {
 
 function test_var_base_constructor() {
   eventTest_setUpWithMockBlocks();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, '1');
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, '1');
   try {
     var variable = workspace.createVariable('name1', 'type1', 'id1');
 
@@ -149,7 +147,7 @@ function createSimpleTestBlock(workspace) {
 
 function test_create_constructor() {
   eventTest_setUpWithMockBlocks();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1']);
   try {
     var block = createSimpleTestBlock(workspace);
 
@@ -163,7 +161,7 @@ function test_create_constructor() {
 function test_blockCreate_constructor() {
   // expect that blockCreate behaves the same as create.
   eventTest_setUpWithMockBlocks();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1']);
   try {
     var block = createSimpleTestBlock(workspace);
 
@@ -176,7 +174,7 @@ function test_blockCreate_constructor() {
 
 function test_delete_constructor() {
   eventTest_setUpWithMockBlocks();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1']);
   try {
     var block = createSimpleTestBlock(workspace);
     var event = new Blockly.Events.Delete(block);
@@ -188,7 +186,7 @@ function test_delete_constructor() {
 
 function test_blockDelete_constructor() {
   eventTest_setUpWithMockBlocks();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1']);
   try {
     var block = createSimpleTestBlock(workspace);
     block.setCommentText('test comment');
@@ -201,7 +199,7 @@ function test_blockDelete_constructor() {
 
 function test_change_constructor() {
   eventTest_setUpWithMockBlocks();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1']);
   try {
     Blockly.Events.disable();
     var block = new Blockly.Block(workspace, 'field_variable_test_block');
@@ -217,7 +215,7 @@ function test_change_constructor() {
 
 function test_blockChange_constructor() {
   eventTest_setUpWithMockBlocks();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1']);
   try {
     Blockly.Events.disable();
     var block = new Blockly.Block(workspace, 'field_variable_test_block');
@@ -235,7 +233,7 @@ function test_blockChange_constructor() {
 function test_move_constructorCoordinate() {
   // Expect the oldCoordinate to be set.
   eventTest_setUpWithMockBlocks();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '2']);
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1', '2']);
   try {
     var block1 = createSimpleTestBlock(workspace);
     var coordinate = new Blockly.utils.Coordinate(3, 4);
@@ -252,7 +250,7 @@ function test_move_constructorCoordinate() {
 function test_move_constructoroldParentId() {
   // Expect the oldParentId to be set but not the oldCoordinate to be set.
   eventTest_setUpWithMockBlocks();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '2']);
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1', '2']);
   try {
     var block1 = createSimpleTestBlock(workspace);
     var block2 = createSimpleTestBlock(workspace);
@@ -271,7 +269,7 @@ function test_move_constructoroldParentId() {
 function test_blockMove_constructorCoordinate() {
   // Expect the oldCoordinate to be set.
   eventTest_setUpWithMockBlocks();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '2']);
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1', '2']);
   try {
     var block1 = createSimpleTestBlock(workspace);
     var coordinate = new Blockly.utils.Coordinate(3, 4);
@@ -288,7 +286,7 @@ function test_blockMove_constructorCoordinate() {
 function test_blockMove_constructoroldParentId() {
   // Expect the oldParentId to be set but not the oldCoordinate to be set.
   eventTest_setUpWithMockBlocks();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '2']);
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1', '2']);
   try {
     var block1 = createSimpleTestBlock(workspace);
     var block2 = createSimpleTestBlock(workspace);
@@ -327,7 +325,7 @@ function test_uiEvent_constructor_null() {
 
 function test_uiEvent_constructor_block() {
   eventTest_setUpWithMockBlocks();
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1']);
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1']);
   try {
     var block1 = createSimpleTestBlock(workspace);
     Blockly.Events.setGroup('testGroup');
@@ -718,7 +716,7 @@ function test_events_newblock_newvar() {
   temporary_fireEvent.firedEvents_ = [];
   // Expect three calls to genUid: one to set the block's ID, one for the event
   // group's id, and one for the variable's ID.
-  setUpMockMethod(mockControl_, Blockly.utils, 'genUid', null, ['1', '2', '3']);
+  mockControl_ = setUpMockMethod(Blockly.utils, 'genUid', null, ['1', '2', '3']);
   try {
     var block = workspace.newBlock('field_variable_test_block');
 

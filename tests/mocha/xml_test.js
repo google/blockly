@@ -19,12 +19,6 @@
  */
 
 suite('XML', function() {
-  setup(function() {
-    this.workspace = new Blockly.Workspace();
-  });
-  teardown(function() {
-    this.workspace.dispose();
-  });
   var assertSimpleField = function(fieldDom, name, text) {
     assertEquals(text, fieldDom.textContent);
     assertEquals(name, fieldDom.getAttribute('name'));
@@ -39,6 +33,12 @@ suite('XML', function() {
     assertEquals(text, fieldDom.textContent);
   };
   suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+    });
+    teardown(function() {
+      this.workspace.dispose();
+    });
     suite('Fields', function() {
       test('Angle', function() {
         Blockly.defineBlocksWithJsonArray([{
@@ -201,7 +201,6 @@ suite('XML', function() {
         var block = new Blockly.Block(this.workspace,
             'field_label_serializable_test_block');
         var resultFieldDom = Blockly.Xml.blockToDom(block).childNodes[0];
-        console.log(resultFieldDom);
         assertSimpleField(resultFieldDom, 'LABEL', 'default');
         delete Blockly.Blocks['field_label_serializable_test_block'];
       });
@@ -289,8 +288,72 @@ suite('XML', function() {
         });
       });
     });
+    suite('Comments', function() {
+      setup(function() {
+        Blockly.defineBlocksWithJsonArray([
+          {
+            "type": "empty_block",
+            "message0": "",
+            "args0": []
+          },
+        ]);
+
+        // Let the parent teardown dispose of it.
+        this.workspace = Blockly.inject('blocklyDiv', {comments: true});
+        this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            '<block type="empty_block"/>'
+        ), this.workspace);
+        this.comment = new Blockly.Comment(this.block);
+        this.comment.computeIconLocation();
+        this.block.comment = this.comment;
+      });
+      teardown(function() {
+        delete Blockly.Blocks['empty_block'];
+      });
+      test('Text', function() {
+        this.comment.setText('test text');
+        var xml = Blockly.Xml.blockToDom(this.block);
+        var commentXml = xml.firstChild;
+        chai.assert.equal(commentXml.tagName, 'comment');
+        chai.assert.equal(commentXml.innerHTML, 'test text');
+      });
+      test('No Text', function() {
+        var xml = Blockly.Xml.blockToDom(this.block);
+        chai.assert.isNull(xml.firstChild);
+      });
+      test('Size', function() {
+        this.comment.setText('test text');
+        this.comment.setBubbleSize(100, 200);
+        var xml = Blockly.Xml.blockToDom(this.block);
+        var commentXml = xml.firstChild;
+        chai.assert.equal(commentXml.tagName, 'comment');
+        chai.assert.equal(commentXml.getAttribute('w'), 100);
+        chai.assert.equal(commentXml.getAttribute('h'), 200);
+      });
+      test('Pinned True', function() {
+        this.comment.setText('test text');
+        this.comment.setVisible(true);
+        var xml = Blockly.Xml.blockToDom(this.block);
+        var commentXml = xml.firstChild;
+        chai.assert.equal(commentXml.tagName, 'comment');
+        chai.assert.equal(commentXml.getAttribute('pinned'), 'true');
+      });
+      test('Pinned False', function() {
+        this.comment.setText('test text');
+        var xml = Blockly.Xml.blockToDom(this.block);
+        var commentXml = xml.firstChild;
+        chai.assert.equal(commentXml.tagName, 'comment');
+        chai.assert.equal(commentXml.getAttribute('pinned'), 'false');
+      });
+    });
   });
   suite('Deserialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+    });
+    teardown(function() {
+      this.workspace.dispose();
+    });
     suite('Dynamic Category Blocks', function() {
       test('Untyped Variables', function() {
         Blockly.defineBlocksWithJsonArray([{
@@ -423,6 +486,46 @@ suite('XML', function() {
           delete Blockly.Blocks['math_number'];
         }
       });
+    });
+  });
+  suite('Round Tripping from Rendered -> Headless', function() {
+    setup(function() {
+      var options = {
+        comments: true
+      };
+      this.renderedWorkspace = Blockly.inject('blocklyDiv', options);
+      this.headlessWorkspace = new Blockly.Workspace(options);
+
+      this.assertRoundTrip = function() {
+        var renderedXml = Blockly.Xml.workspaceToDom(this.renderedWorkspace);
+        Blockly.Xml.domToWorkspace(renderedXml, this.headlessWorkspace);
+        var headlessXml = Blockly.Xml.workspaceToDom(this.headlessWorkspace);
+
+        chai.assert.equal(renderedXml, headlessXml);
+      };
+    });
+    teardown(function() {
+      this.renderedWorkspace.dispose();
+      this.headlessWorkspace.dispose();
+    });
+    test.skip('Comment', function() {
+      Blockly.defineBlocksWithJsonArray([
+        {
+          "type": "empty_block",
+          "message0": "",
+          "args0": []
+        },
+      ]);
+      var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          '<block type="empty_block"/>'
+      ), this.renderedWorkspace);
+      block.setCommentText('test text');
+      block.comment.setBubbleSize(100, 100);
+      block.comment.setVisible(true);
+
+      this.assertRoundTrip();
+
+      delete Blockly.Blocks['empty_block'];
     });
   });
 });

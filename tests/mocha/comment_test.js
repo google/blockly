@@ -36,6 +36,7 @@ suite('Comments', function() {
     this.comment.computeIconLocation();
   });
   teardown(function() {
+    delete Blockly.Blocks['empty_block'];
     this.workspace.dispose();
   });
   suite('Set/Get Bubble Size', function() {

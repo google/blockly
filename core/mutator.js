@@ -201,7 +201,7 @@ Blockly.Mutator.prototype.updateEditable = function() {
     }
   }
   // Default behaviour for an icon.
-  Blockly.Icon.prototype.updateEditable.call(this);
+  Blockly.Mutator.superClass_.updateEditable.call(this);
 };
 
 /**

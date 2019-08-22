@@ -153,7 +153,7 @@ Blockly.Comment.prototype.updateEditable = function() {
     this.setVisible(true);
   }
   // Allow the icon to update.
-  Blockly.Icon.prototype.updateEditable.call(this);
+  Blockly.Comment.superClass_.updateEditable.call(this);
 };
 
 /**

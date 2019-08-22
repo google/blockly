@@ -108,6 +108,7 @@ Blockly.Icon.prototype.dispose = function() {
  * Add or remove the UI indicating if this icon may be clicked or not.
  */
 Blockly.Icon.prototype.updateEditable = function() {
+  // No-op on the base class.
 };
 
 /**

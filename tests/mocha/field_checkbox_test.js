@@ -222,6 +222,15 @@ suite('Checkbox Fields', function() {
         field.setCheckCharacter('\u2661');
         assertCharacter(field, '\u2661');
       });
+      test('Remove Custom Character', function() {
+        var field = new Blockly.FieldCheckbox(true, null, {
+          'checkCharacter': '\u2661'
+        });
+        assertCharacter(field, '\u2661');
+        field.setCheckCharacter(null);
+        chai.assert(field.textContent_.nodeValue,
+            Blockly.FieldCheckbox.CHECK_CHAR);
+      });
     });
   });
 });

@@ -162,7 +162,8 @@ Blockly.FieldCheckbox.prototype.initView = function() {
 
 /**
  * Set the character used for the check mark.
- * @param {string} character The character to use for the check mark.
+ * @param {?string} character The character to use for the check mark, or
+ *    null to use the default.
  */
 Blockly.FieldCheckbox.prototype.setCheckCharacter = function(character) {
   this.checkChar_ = character;

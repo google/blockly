@@ -359,6 +359,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     var name = this.getFieldValue('NAME');
 
     //Add an option to export the block to a .fabfunc file
+    //TODO: Localization
     var exportOption = {
       text: "Export '%1' to a file".replace('%1', name),
       enabled: true,
@@ -392,14 +393,16 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     }
 
     //Add "Save for future use" option
+    //TODO: Localization
     var savingOption = {
       text: isSaved ? "Overwrite/Update stored '%1' function".replace('%1', name) : "Store '%1' for use in future projects".replace('%1', name),
       enabled: true,
       callback: function() {
-
+        //If the function was saved before, then we need to overwrite it. SHow a confirmation prompt
         if (isSaved) {
           Blockly.confirm(
             "Are you sure? You will lose your old '%1' function in the process.".replace('%1', name),
+            
             function(ok) {
               if (ok) {
                 var xml = Blockly.Xml.blockToDom(block, true);
@@ -411,6 +414,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
             });
         }
         else {
+          //The function was never saved before, so just parse the contents of the block and save it.
           var xml = Blockly.Xml.blockToDom(block, true);
           let definitionString = (new XMLSerializer()).serializeToString(xml);
           definitionString = definitionString.replace(/xmlns=\"(.*?)\" /g, '');
@@ -423,6 +427,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     options.push(savingOption);
 
     //Add "Delete function forever" option
+    //TODO: Localization
     var deleteOption = {
       text: "Delete stored function '%1'".replace('%1', name),
       enabled: isSaved,

@@ -113,6 +113,9 @@ Blockly.Workspace = function(opt_options) {
    */
   this.potentialVariableMap_ = null;
 
+  //Instantiate the search handlers
+  //SearchWorkspace is the handler for the blocks added to a workspace. Created when the initial workspace is created.
+  //Search is the default handler. Used in the toolbox search, since that has no special GUI (uses the toolbox GUI)
   if (!opt_options.parentWorkspace) {
     this.search_ = new Blockly.SearchWorkspace(this);
   }

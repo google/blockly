@@ -266,6 +266,7 @@ Blockly.onKeyDown_ = function(e) {
     else if (e.keyCode == 70) {
       // 'f' for focusing the workspace search,
       // 'F' for focusing the toolbox search
+      // Both need to be triggered with the Ctrl/Cmd key - Ctrl + F, Ctrl + Shift + F
       workspace.focusSearch(e.shiftKey);
     }
   }
@@ -434,6 +435,15 @@ Blockly.jsonInitFactory_ = function(jsonDef) {
   };
 };
 
+/**
+ * Helper function for defining a block's associated keywords from JSON. The 
+ * resulting function will send a list of keywords to the Search handler.
+ * 
+ * @param {!String} type The Type ID of the block
+ * @param {!Array<String>} keyword_list The list of keywords that this block can be found with
+ * @return {function()} A function that calls the Search handler and gives it the list of keywords
+ * @private
+ */
 Blockly.evaluateSearchJson_ = function(type, keyword_list) {
   return function() {
       Blockly.Search.preprocessSearchKeywords(type, keyword_list);

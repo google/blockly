@@ -19,7 +19,8 @@
  */
 
 /**
- * @fileoverview Methods for graphically rendering a block as SVG.
+ * @fileoverview An object that provides constants for rendering blocks in Zelos
+ * mode
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
@@ -30,12 +31,7 @@ goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.utils.svgPaths');
 
 /**
- * An object containing all sizing information needed to draw this block.
- *
- * This measure pass does not propagate changes to the block (although fields
- * may choose to rerender when getSize() is called).  However, calling it
- * repeatedly may be expensive.
- *
+ * An object that provides constants for rendering blocks in Zelos mode.
  * @constructor
  * @package
  * @extends {Blockly.blockRendering.ConstantProvider}

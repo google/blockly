@@ -444,6 +444,72 @@ suite('Navigation', function() {
     });
   });
 
+  suite('Connect Blocks', function() {
+    setup(function() {
+      Blockly.defineBlocksWithJsonArray([{
+        "type": "basic_block",
+        "message0": "",
+        "previousStatement": null,
+        "nextStatement": null,
+      }]);
+
+      var toolbox = document.getElementById('toolbox-categories');
+      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+
+      var basicBlock = this.workspace.newBlock('basic_block');
+      var basicBlock2 = this.workspace.newBlock('basic_block');
+      var basicBlock3 = this.workspace.newBlock('basic_block');
+      var basicBlock4 = this.workspace.newBlock('basic_block');
+
+      this.basicBlock = basicBlock;
+      this.basicBlock2 = basicBlock2;
+      this.basicBlock3 = basicBlock3;
+      this.basicBlock4 = basicBlock4;
+
+      this.basicBlock.nextConnection.connect(this.basicBlock2.previousConnection);
+
+      this.basicBlock3.nextConnection.connect(this.basicBlock4.previousConnection);
+    });
+
+    teardown(function() {
+      delete Blockly.Blocks['basic_block'];
+      this.workspace.dispose();
+      Blockly.navigation.currentCategory_ = null;
+    });
+
+    test('Connect cursor on previous into stack', function() {
+      var markedLocation = this.basicBlock2.previousConnection;
+      var cursorLocation = this.basicBlock3.previousConnection;
+
+      Blockly.navigation.connect(cursorLocation, markedLocation);
+
+      chai.assert.equal(this.basicBlock.nextConnection.targetBlock(), this.basicBlock3);
+      chai.assert.equal(this.basicBlock2.previousConnection.targetBlock(), this.basicBlock4);
+    });
+
+    test('Connect marker on previous into stack', function() {
+      var markedLocation = this.basicBlock3.previousConnection;
+      var cursorLocation = this.basicBlock2.previousConnection;
+
+      Blockly.navigation.connect(cursorLocation, markedLocation);
+
+      chai.assert.equal(this.basicBlock.nextConnection.targetBlock(), this.basicBlock3);
+      chai.assert.equal(this.basicBlock2.previousConnection.targetBlock(), this.basicBlock4);
+
+    });
+
+    test('Connect cursor on next into stack', function() {
+      var markedLocation = this.basicBlock2.previousConnection;
+      var cursorLocation = this.basicBlock4.nextConnection;
+
+      Blockly.navigation.connect(cursorLocation, markedLocation);
+
+      chai.assert.equal(this.basicBlock.nextConnection.targetBlock(), this.basicBlock4);
+      chai.assert.equal(this.basicBlock3.nextConnection.targetConnection, null);
+    });
+  });
+
+
   suite('Test cursor move on block delete', function() {
     setup(function() {
       Blockly.defineBlocksWithJsonArray([{

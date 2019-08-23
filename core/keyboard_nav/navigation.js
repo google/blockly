@@ -484,34 +484,77 @@ Blockly.navigation.modify = function() {
 };
 
 /**
- * Connect the moving connection to the targetConnection.  Disconnect the moving
- * connection if necessary, and and position the blocks so that the target
- * connection does not move.
- * @param {Blockly.RenderedConnection} movingConnection The connection to move.
- * @param {Blockly.RenderedConnection} targetConnection The connection that
- *     stays stationary as the movingConnection attaches to it.
- * @return {boolean} Whether the connection was successful.
- * @package
+ * If the two blocks are compatible move the moving connection to the target
+ * connection and connect them.
+ * @param {Blockly.Connection} movingConnection The connection that is being
+ *     moved.
+ * @param {Blockly.Connection} targetConnection The connection to be moved to.
+ * @return {boolean} True if the connections were connected, false otherwise.
+ * @private
  */
-Blockly.navigation.connect = function(movingConnection, targetConnection) {
-  if (movingConnection) {
-    var movingBlock = movingConnection.getSourceBlock();
+Blockly.navigation.moveAndConnect_ = function(movingConnection, targetConnection) {
+  var movingBlock = movingConnection.getSourceBlock();
+
+  if (targetConnection.canConnectWithReason_(movingConnection) ==
+      Blockly.Connection.CAN_CONNECT) {
     if (targetConnection.type == Blockly.PREVIOUS_STATEMENT ||
         targetConnection.type == Blockly.OUTPUT_VALUE) {
       movingBlock.positionNearConnection(movingConnection, targetConnection);
     }
+    targetConnection.connect(movingConnection);
+    return true;
+  }
+  return false;
+};
+
+/**
+ * Tries to connect the  given connections.
+ *
+ * We use the cursor to represent both the current connection and the target
+ * connection. If the given connections are not compatible try connecting their
+ * target connections.
+ * @param {Blockly.Connection} movingConnection The connection that is being
+ *     moved.
+ * @param {Blockly.Connection} targetConnection The connection to be moved to.
+ * @return {boolean} True if the two connections or their target connections
+ *     were connected, false otherwise.
+ * @package
+ */
+Blockly.navigation.connect = function(movingConnection, targetConnection) {
+  if (!movingConnection || !targetConnection) {
+    return false;
+  }
+  var markerTarget = targetConnection.targetConnection;
+  var cursorTarget = movingConnection.targetConnection;
+  var cursorBlock = movingConnection.getSourceBlock();
+
+  // When connecting a next and previous connection try inserting the moving
+  // connection into the stack before trying to connect them.
+  if (markerTarget &&
+      movingConnection.type == Blockly.NEXT_STATEMENT &&
+      cursorBlock.previousConnection &&
+      Blockly.navigation.moveAndConnect_(cursorBlock.previousConnection, markerTarget)) {
+    return true;
+  } else if (Blockly.navigation.moveAndConnect_(movingConnection, targetConnection)) {
+    return true;
+  // If you can't connect the given connections try connecting their targets.
+  } else if (markerTarget &&
+      Blockly.navigation.moveAndConnect_(movingConnection, markerTarget)){
+    return true;
+  } else if (cursorTarget &&
+      Blockly.navigation.moveAndConnect_(cursorTarget, targetConnection)) {
+    return true;
+  } else {
+    // If none of the connections worked print out the error for the original
+    // connection.
     try {
-      targetConnection.connect(movingConnection);
-      return true;
+      targetConnection.checkConnection_(movingConnection);
     }
     catch (e) {
-      // TODO: Is there anything else useful to do at this catch?
-      // Perhaps position the block near the target connection?
       Blockly.navigation.warn('Connection failed with error: ' + e);
       return false;
     }
   }
-  return false;
 };
 
 /**

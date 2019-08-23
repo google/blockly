@@ -26,7 +26,6 @@
 
 goog.provide('Blockly.blockRendering.Drawer');
 
-goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Highlighter');
@@ -55,6 +54,8 @@ Blockly.blockRendering.Drawer = function(block, info) {
   this.pathObject_ = new Blockly.BlockSvg.PathObject();
   this.highlighter_ =
       new Blockly.blockRendering.Highlighter(this.info_, this.pathObject_);
+
+  this.constants_ = Blockly.blockRendering.getConstants();
 };
 
 /**
@@ -91,9 +92,9 @@ Blockly.blockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
   // This is used when the block is reporting its size to anyone else.
   // The dark path adds to the size of the block in both X and Y.
   this.block_.height = this.info_.height +
-      Blockly.blockRendering.constants.DARK_PATH_OFFSET;
+      this.constants_.DARK_PATH_OFFSET;
   this.block_.width = this.info_.widthWithChildren +
-      Blockly.blockRendering.constants.DARK_PATH_OFFSET;
+      this.constants_.DARK_PATH_OFFSET;
 };
 
 /**
@@ -148,11 +149,11 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
   for (var i = 0, elem; (elem = elements[i]); i++) {
     if (elem.type == 'round corner') {
       this.outlinePath_ +=
-          Blockly.blockRendering.constants.OUTSIDE_CORNERS.topLeft;
+          this.constants_.OUTSIDE_CORNERS.topLeft;
     } else if (elem.type == 'previous connection') {
       this.outlinePath_ += topRow.notchShape.pathLeft;
     } else if (elem.type == 'hat') {
-      this.outlinePath_ += Blockly.blockRendering.constants.START_HAT.path;
+      this.outlinePath_ += this.constants_.START_HAT.path;
     } else if (elem.isSpacer()) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width);
     }
@@ -171,8 +172,8 @@ Blockly.blockRendering.Drawer.prototype.drawJaggedEdge_ = function(row) {
     this.highlighter_.drawJaggedEdge_(row);
   }
   var remainder =
-      row.height - Blockly.blockRendering.constants.JAGGED_TEETH.height;
-  this.outlinePath_ += Blockly.blockRendering.constants.JAGGED_TEETH.path +
+      row.height - this.constants_.JAGGED_TEETH.height;
+  this.outlinePath_ += this.constants_.JAGGED_TEETH.path +
       Blockly.utils.svgPaths.lineOnAxis('v', remainder);
 };
 
@@ -214,16 +215,16 @@ Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   var innerTopLeftCorner =
       input.notchShape.pathRight +
       Blockly.utils.svgPaths.lineOnAxis('h',
-          -(input.notchOffset - Blockly.blockRendering.constants.INSIDE_CORNERS.width)) +
-      Blockly.blockRendering.constants.INSIDE_CORNERS.pathTop;
+          -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
+      this.constants_.INSIDE_CORNERS.pathTop;
 
   var innerHeight =
-      row.height - (2 * Blockly.blockRendering.constants.INSIDE_CORNERS.height);
+      row.height - (2 * this.constants_.INSIDE_CORNERS.height);
 
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', x) +
       innerTopLeftCorner +
       Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
-      Blockly.blockRendering.constants.INSIDE_CORNERS.pathBottom;
+      this.constants_.INSIDE_CORNERS.pathBottom;
 
   this.positionStatementInputConnection_(row);
 };
@@ -267,7 +268,7 @@ Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
     } else if (elem.isSquareCorner()) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', bottomRow.xPos);
     } else if (elem.isRoundedCorner()) {
-      this.outlinePath_ += Blockly.blockRendering.constants.OUTSIDE_CORNERS.bottomLeft;
+      this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.bottomLeft;
     } else if (elem.isSpacer()) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width * -1);
     }
@@ -399,13 +400,13 @@ Blockly.blockRendering.Drawer.prototype.positionInlineInputConnection_ = functio
   if (input.connection) {
     // xPos already contains info about startX
     var connX = input.xPos + input.connectionWidth +
-        Blockly.blockRendering.constants.DARK_PATH_OFFSET;
+        this.constants_.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
     }
     input.connection.setOffsetInBlock(
         connX, yPos + input.connectionOffsetY +
-        Blockly.blockRendering.constants.DARK_PATH_OFFSET);
+        this.constants_.DARK_PATH_OFFSET);
   }
 };
 
@@ -425,7 +426,7 @@ Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = func
     }
     connX += 0.5;
     input.connection.setOffsetInBlock(connX,
-        row.yPos + Blockly.blockRendering.constants.DARK_PATH_OFFSET);
+        row.yPos + this.constants_.DARK_PATH_OFFSET);
   }
 };
 
@@ -440,7 +441,7 @@ Blockly.blockRendering.Drawer.prototype.positionExternalValueConnection_ = funct
   var input = row.getLastInput();
   if (input.connection) {
     var connX = row.xPos + row.width +
-        Blockly.blockRendering.constants.DARK_PATH_OFFSET;
+        this.constants_.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
     }
@@ -474,7 +475,7 @@ Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
     var connX = (this.info_.RTL ? -x : x) + 0.5;
     connInfo.connectionModel.setOffsetInBlock(
         connX, (connInfo.centerline - connInfo.height / 2) +
-            Blockly.blockRendering.constants.DARK_PATH_OFFSET);
+            this.constants_.DARK_PATH_OFFSET);
   }
 };
 

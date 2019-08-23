@@ -26,7 +26,6 @@
 
 goog.provide('Blockly.blockRendering.RenderInfo');
 
-goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.InputRow');
@@ -147,6 +146,7 @@ Blockly.blockRendering.RenderInfo = function(block) {
   this.startX = 0;
   this.startY = 0;
 
+  this.constants_ = Blockly.blockRendering.getConstants();
   this.measure_();
 };
 
@@ -311,15 +311,15 @@ Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, ne
   // Between inputs and the end of the row.
   if (prev && prev.isInput && !next) {
     if (prev.isExternalInput()) {
-      return Blockly.blockRendering.constants.NO_PADDING;
+      return this.constants_.NO_PADDING;
     } else if (prev.isInlineInput()) {
-      return Blockly.blockRendering.constants.LARGE_PADDING;
+      return this.constants_.LARGE_PADDING;
     } else if (prev.isStatementInput()) {
-      return Blockly.blockRendering.constants.NO_PADDING;
+      return this.constants_.NO_PADDING;
     }
   }
 
-  return Blockly.blockRendering.constants.MEDIUM_PADDING;
+  return this.constants_.MEDIUM_PADDING;
 };
 
 /**
@@ -466,7 +466,7 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, 
  */
 Blockly.blockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(
     _prev, _next) {
-  return Blockly.blockRendering.constants.MEDIUM_PADDING;
+  return this.constants_.MEDIUM_PADDING;
 };
 
 /**

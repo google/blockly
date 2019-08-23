@@ -1,7 +1,6 @@
 
 goog.provide('Blockly.blockRendering.InRowSpacer');
 
-goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Measurable');
 
 /**
@@ -34,8 +33,8 @@ goog.inherits(Blockly.blockRendering.Icon, Blockly.blockRendering.Measurable);
 Blockly.blockRendering.JaggedEdge = function() {
   Blockly.blockRendering.JaggedEdge.superClass_.constructor.call(this);
   this.type = 'jagged edge';
-  this.height = Blockly.blockRendering.constants.JAGGED_TEETH.height;
-  this.width = Blockly.blockRendering.constants.JAGGED_TEETH.width;
+  this.height = this.constants_.JAGGED_TEETH.height;
+  this.width = this.constants_.JAGGED_TEETH.width;
 };
 goog.inherits(Blockly.blockRendering.JaggedEdge, Blockly.blockRendering.Measurable);
 
@@ -73,8 +72,8 @@ goog.inherits(Blockly.blockRendering.Field, Blockly.blockRendering.Measurable);
 Blockly.blockRendering.Hat = function() {
   Blockly.blockRendering.Hat.superClass_.constructor.call(this);
   this.type = 'hat';
-  this.height = Blockly.blockRendering.constants.START_HAT.height;
-  this.width = Blockly.blockRendering.constants.START_HAT.width;
+  this.height = this.constants_.START_HAT.height;
+  this.width = this.constants_.START_HAT.width;
   this.startY = this.height;
 
 };
@@ -91,7 +90,7 @@ Blockly.blockRendering.SquareCorner = function() {
   Blockly.blockRendering.SquareCorner.superClass_.constructor.call(this);
   this.type = 'square corner';
   this.height = this.notchShape.height;
-  this.width = Blockly.blockRendering.constants.NO_PADDING;
+  this.width = this.constants_.NO_PADDING;
 
 };
 goog.inherits(Blockly.blockRendering.SquareCorner, Blockly.blockRendering.Measurable);
@@ -106,7 +105,7 @@ goog.inherits(Blockly.blockRendering.SquareCorner, Blockly.blockRendering.Measur
 Blockly.blockRendering.RoundCorner = function() {
   Blockly.blockRendering.RoundCorner.superClass_.constructor.call(this);
   this.type = 'round corner';
-  this.width = Blockly.blockRendering.constants.CORNER_RADIUS;
+  this.width = this.constants_.CORNER_RADIUS;
   // The rounded corner extends into the next row by 4 so we only take the
   // height that is aligned with this row.
   this.height = this.notchShape.height;
@@ -123,9 +122,10 @@ goog.inherits(Blockly.blockRendering.RoundCorner, Blockly.blockRendering.Measura
  * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.InRowSpacer = function(width) {
+  Blockly.blockRendering.InRowSpacer.superClass_.constructor.call(this);
   this.type = 'in-row spacer';
   this.width = width;
-  this.height = Blockly.blockRendering.constants.SPACER_DEFAULT_HEIGHT;
+  this.height = this.constants_.SPACER_DEFAULT_HEIGHT;
 };
 goog.inherits(Blockly.blockRendering.InRowSpacer,
     Blockly.blockRendering.Measurable);

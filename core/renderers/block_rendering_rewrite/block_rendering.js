@@ -51,3 +51,7 @@ Blockly.blockRendering.render = function(block) {
   var info = new Blockly.geras.RenderInfo(block);
   new Blockly.blockRendering.Drawer(block, info).draw_();
 };
+
+Blockly.blockRendering.getConstants = function() {
+  return Blockly.blockRendering.constants;
+};

@@ -28,7 +28,6 @@ goog.provide('Blockly.blockRendering.Drawer');
 
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Highlighter');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.InputRow');
@@ -52,9 +51,6 @@ Blockly.blockRendering.Drawer = function(block, info) {
   this.outlinePath_ = '';
   this.inlinePath_ = '';
   this.pathObject_ = new Blockly.BlockSvg.PathObject();
-  this.highlighter_ =
-      new Blockly.blockRendering.Highlighter(this.info_, this.pathObject_);
-
   this.constants_ = Blockly.blockRendering.getConstants();
 };
 
@@ -139,10 +135,6 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
   var topRow = this.info_.topRow;
   var elements = topRow.elements;
 
-  if (this.highlighter_) {
-    this.highlighter_.drawTopCorner(topRow);
-    this.highlighter_.drawRightSideRow(topRow);
-  }
   this.positionPreviousConnection_();
   this.outlinePath_ +=
       Blockly.utils.svgPaths.moveBy(topRow.xPos, this.info_.startY);
@@ -168,9 +160,6 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.drawJaggedEdge_ = function(row) {
-  if (this.highlighter_) {
-    this.highlighter_.drawJaggedEdge_(row);
-  }
   var remainder =
       row.height - this.constants_.JAGGED_TEETH.height;
   this.outlinePath_ += this.constants_.JAGGED_TEETH.path +
@@ -186,9 +175,6 @@ Blockly.blockRendering.Drawer.prototype.drawJaggedEdge_ = function(row) {
  */
 Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
   var input = row.getLastInput();
-  if (this.highlighter_) {
-    this.highlighter_.drawValueInput(row);
-  }
   this.positionExternalValueConnection_(row);
 
   this.outlinePath_ +=
@@ -205,9 +191,6 @@ Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
-  if (this.highlighter_) {
-    this.highlighter_.drawStatementInput(row);
-  }
   var input = row.getLastInput();
   // Where to start drawing the notch, which is on the right side in LTR.
   var x = input.xPos + input.width;
@@ -237,9 +220,6 @@ Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
-  if (this.highlighter_) {
-    this.highlighter_.drawRightSideRow(row);
-  }
   this.outlinePath_ +=
       Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width) +
       Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);
@@ -254,9 +234,6 @@ Blockly.blockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
 Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
   var bottomRow = this.info_.bottomRow;
   var elems = bottomRow.elements;
-  if (this.highlighter_) {
-    this.highlighter_.drawBottomRow(bottomRow);
-  }
   this.positionNextConnection_();
 
   this.outlinePath_ +=
@@ -281,10 +258,6 @@ Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
-  if (this.highlighter_) {
-    this.highlighter_.drawLeft();
-  }
-
   var outputConnection = this.info_.outputConnection;
   this.positionOutputConnection_();
 
@@ -364,9 +337,6 @@ Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
  * @private
  */
 Blockly.blockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
-  if (this.highlighter_) {
-    this.highlighter_.drawInlineInput(input);
-  }
   var width = input.width;
   var height = input.height;
   var yPos = input.centerline - height / 2;

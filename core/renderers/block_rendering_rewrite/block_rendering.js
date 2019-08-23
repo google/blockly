@@ -34,11 +34,14 @@ goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.blockRendering.HighlightConstantProvider');
+goog.require('Blockly.geras.HighlightConstantProvider');
 
 goog.require('Blockly.geras.RenderInfo');
 goog.require('Blockly.thrasos.RenderInfo');
 goog.require('Blockly.zelos.RenderInfo');
+
+// TODO (#2702): Pick an API for choosing a renderer.
+Blockly.blockRendering.rendererName = 'geras';
 
 /**
  * Initialize anything needed for rendering (constants, etc).
@@ -47,8 +50,10 @@ goog.require('Blockly.zelos.RenderInfo');
 Blockly.blockRendering.init = function() {
   Blockly.blockRendering.constants =
       new Blockly.blockRendering.ConstantProvider();
+  // No one else has a highlight provider.  It's possible this should only be
+  // created if we're rendering with geras.
   Blockly.blockRendering.highlightConstants =
-      new Blockly.blockRendering.HighlightConstantProvider();
+      new Blockly.geras.HighlightConstantProvider();
 };
 
 /**
@@ -61,8 +66,16 @@ Blockly.blockRendering.render = function(block) {
   if (!block.renderingDebugger) {
     block.renderingDebugger = new Blockly.blockRendering.Debug();
   }
-  var info = new Blockly.geras.RenderInfo(block);
-  new Blockly.blockRendering.Drawer(block, info).draw_();
+  if (Blockly.blockRendering.rendererName == 'geras') {
+    var info = new Blockly.geras.RenderInfo(block);
+    new Blockly.geras.Drawer(block, info).draw_();
+  } else if (Blockly.blockRendering.rendererName == 'thrasos') {
+    var info = new Blockly.thrasos.RenderInfo(block);
+    new Blockly.blockRendering.Drawer(block, info).draw_();
+  } else if (Blockly.blockRendering.rendererName == 'zelos') {
+    var info = new Blockly.zelos.RenderInfo(block);
+    new Blockly.blockRendering.Drawer(block, info).draw_();
+  }
 };
 
 Blockly.blockRendering.getConstants = function() {

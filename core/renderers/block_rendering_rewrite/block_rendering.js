@@ -37,6 +37,7 @@ goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.geras.HighlightConstantProvider');
 
 goog.require('Blockly.geras.RenderInfo');
+goog.require('Blockly.geras.Drawer');
 goog.require('Blockly.thrasos.RenderInfo');
 goog.require('Blockly.zelos.RenderInfo');
 
@@ -68,13 +69,13 @@ Blockly.blockRendering.render = function(block) {
   }
   if (Blockly.blockRendering.rendererName == 'geras') {
     var info = new Blockly.geras.RenderInfo(block);
-    new Blockly.geras.Drawer(block, info).draw_();
+    new Blockly.geras.Drawer(block, info).draw();
   } else if (Blockly.blockRendering.rendererName == 'thrasos') {
     var info = new Blockly.thrasos.RenderInfo(block);
-    new Blockly.blockRendering.Drawer(block, info).draw_();
+    new Blockly.blockRendering.Drawer(block, info).draw();
   } else if (Blockly.blockRendering.rendererName == 'zelos') {
     var info = new Blockly.zelos.RenderInfo(block);
-    new Blockly.blockRendering.Drawer(block, info).draw_();
+    new Blockly.blockRendering.Drawer(block, info).draw();
   }
 };
 

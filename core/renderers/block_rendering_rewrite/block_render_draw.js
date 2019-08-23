@@ -62,9 +62,9 @@ Blockly.blockRendering.Drawer = function(block, info) {
  * joined with spaces and set directly on the block.  This guarantees that
  * the steps are separated by spaces for improved readability, but isn't
  * required.
- * @private
+ * @package
  */
-Blockly.blockRendering.Drawer.prototype.draw_ = function() {
+Blockly.blockRendering.Drawer.prototype.draw = function() {
   this.hideHiddenIcons_();
   this.drawOutline_();
   this.drawInternals_();
@@ -82,7 +82,7 @@ Blockly.blockRendering.Drawer.prototype.draw_ = function() {
  * Save sizing information back to the block
  * Most of the rendering information can be thrown away at the end of the render.
  * Anything that needs to be kept around should be set in this function.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
   // This is used when the block is reporting its size to anyone else.
@@ -95,7 +95,7 @@ Blockly.blockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
 
 /**
  * Hide icons that were marked as hidden.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.hideHiddenIcons_ = function() {
   for (var i = 0, iconInfo; (iconInfo = this.info_.hiddenIcons[i]); i++) {
@@ -105,7 +105,7 @@ Blockly.blockRendering.Drawer.prototype.hideHiddenIcons_ = function() {
 
 /**
  * Create the outline of the block.  This is a single continuous path.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.drawOutline_ = function() {
   this.drawTop_();
@@ -129,7 +129,7 @@ Blockly.blockRendering.Drawer.prototype.drawOutline_ = function() {
 /**
  * Add steps for the top corner of the block, taking into account
  * details such as hats and rounded corners.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
   var topRow = this.info_.topRow;
@@ -157,7 +157,7 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
 /**
  * Add steps for the jagged edge of a row on a collapsed block.
  * @param {!Blockly.blockRendering.Row} row The row to draw the side of.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.drawJaggedEdge_ = function(row) {
   var remainder =
@@ -171,7 +171,7 @@ Blockly.blockRendering.Drawer.prototype.drawJaggedEdge_ = function(row) {
  * of the block.
  * @param {!Blockly.blockRendering.Row} row The row that this input
  *     belongs to.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
   var input = row.getLastInput();
@@ -188,7 +188,7 @@ Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
  * Add steps for a statement input.
  * @param {!Blockly.blockRendering.Row} row The row that this input
  *     belongs to.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   var input = row.getLastInput();
@@ -217,7 +217,7 @@ Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
  * statement input connections.
  * @param {!Blockly.blockRendering.Row} row The row to draw the
  *     side of.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
   this.outlinePath_ +=
@@ -229,7 +229,7 @@ Blockly.blockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
 /**
  * Add steps for the bottom edge of a block, possibly including a notch
  * for the next connection
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
   var bottomRow = this.info_.bottomRow;
@@ -255,7 +255,7 @@ Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
 /**
  * Add steps for the left side of the block, which may include an output
  * connection
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
   var outputConnection = this.info_.outputConnection;
@@ -277,7 +277,7 @@ Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
 /**
  * Draw the internals of the block: inline inputs, fields, and icons.  These do
  * not depend on the outer path for placement.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
   for (var i = 0, row; (row = this.info_.rows[i]); i++) {
@@ -295,7 +295,7 @@ Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
  * Push a field or icon's new position to its SVG root.
  * @param {!Blockly.blockRendering.Icon|!Blockly.blockRendering.Field} fieldInfo
  *     The rendering information for the field or icon.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
   if (fieldInfo.isField()) {
@@ -334,7 +334,7 @@ Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
  * Add steps for an inline input.
  * @param {Blockly.blockRendering.InlineInput} input The information about the
  * input to render.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
   var width = input.width;
@@ -362,7 +362,7 @@ Blockly.blockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
  * parent block's dark path show through.
  * @param {Blockly.blockRendering.InlineInput} input The information about
  * the input that the connection is on.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.positionInlineInputConnection_ = function(input) {
   var yPos = input.centerline - input.height / 2;
@@ -385,7 +385,7 @@ Blockly.blockRendering.Drawer.prototype.positionInlineInputConnection_ = functio
  * RTL and the small gap between the parent block and child block which lets the
  * parent block's dark path show through.
  * @param {!Blockly.blockRendering.Row} row The row that the connection is on.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = function(row) {
   var input = row.getLastInput();
@@ -405,7 +405,7 @@ Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = func
  * RTL and the small gap between the parent block and child block which lets the
  * parent block's dark path show through.
  * @param {!Blockly.blockRendering.Row} row The row that the connection is on.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.positionExternalValueConnection_ = function(row) {
   var input = row.getLastInput();
@@ -421,7 +421,7 @@ Blockly.blockRendering.Drawer.prototype.positionExternalValueConnection_ = funct
 
 /**
  * Position the previous connection on a block.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.positionPreviousConnection_ = function() {
   var topRow = this.info_.topRow;
@@ -434,7 +434,7 @@ Blockly.blockRendering.Drawer.prototype.positionPreviousConnection_ = function()
 
 /**
  * Position the next connection on a block.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
   var bottomRow = this.info_.bottomRow;
@@ -451,7 +451,7 @@ Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
 
 /**
  * Position the output connection on a block.
- * @private
+ * @protected
  */
 Blockly.blockRendering.Drawer.prototype.positionOutputConnection_ = function() {
   if (this.info_.outputConnection) {

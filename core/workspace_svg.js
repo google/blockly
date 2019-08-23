@@ -28,6 +28,7 @@ goog.provide('Blockly.WorkspaceSvg');
 
 // TODO(scr): Fix circular dependencies
 //goog.require('Blockly.BlockSvg');
+goog.require('Blockly.blockRendering');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
 goog.require('Blockly.CursorSvg');
@@ -123,6 +124,8 @@ Blockly.WorkspaceSvg = function(options,
     this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
   }
+
+  Blockly.blockRendering.init();
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 

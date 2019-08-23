@@ -33,12 +33,23 @@ goog.provide('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.constants');
-goog.require('Blockly.blockRendering.highlightConstants');
+goog.require('Blockly.blockRendering.ConstantProvider');
+goog.require('Blockly.blockRendering.HighlightConstantProvider');
 
 goog.require('Blockly.geras.RenderInfo');
 goog.require('Blockly.thrasos.RenderInfo');
 goog.require('Blockly.zelos.RenderInfo');
+
+/**
+ * Initialize anything needed for rendering (constants, etc).
+ * @package
+ */
+Blockly.blockRendering.init = function() {
+  Blockly.blockRendering.constants =
+      new Blockly.blockRendering.ConstantProvider();
+  Blockly.blockRendering.highlightConstants =
+      new Blockly.blockRendering.HighlightConstantProvider();
+};
 
 /**
  * Render the given block, using the new rendering.

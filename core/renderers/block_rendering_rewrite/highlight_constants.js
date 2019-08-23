@@ -24,38 +24,89 @@
  */
 'use strict';
 
-goog.provide('Blockly.blockRendering.highlightConstants');
+goog.provide('Blockly.blockRendering.HighlightConstantProvider');
 
-goog.require('Blockly.blockRendering.constants');
+goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.utils.svgPaths');
 
-
 /**
+ * An object that provides constants for rendering highlights on blocks.
  * Some highlights are simple offsets of the parent paths and can be generated
  * programmatically.  Others, especially on curves, are just made out of piles
  * of constants and are hard to tweak.
- */
-
-/**
- * The offset between the block's main path and highlight path.
- * @type {number}
+ * @constructor
  * @package
  */
-Blockly.blockRendering.highlightConstants.OFFSET = 0.5;
+Blockly.blockRendering.HighlightConstantProvider = function() {
+  /**
+   * An object that provides the constants used for base block rendering.
+   * @type {!Blockly.blockRendering.ConstantProvider}
+   */
+  this.constantProvider = Blockly.blockRendering.getConstants();
 
-Blockly.blockRendering.highlightConstants.START_POINT =
-    Blockly.utils.svgPaths.moveBy(
-        Blockly.blockRendering.highlightConstants.OFFSET,
-        Blockly.blockRendering.highlightConstants.OFFSET);
+  /**
+   * The offset between the block's main path and highlight path.
+   * @type {number}
+   * @package
+   */
+  this.OFFSET = 0.5;
+
+  /**
+   * The start point, which is offset in both X and Y, as an SVG path chunk.
+   * @type {string}
+   */
+  this.START_POINT = Blockly.utils.svgPaths.moveBy(this.OFFSET, this.OFFSET);
+
+  /**
+   * An object containing sizing and path information about inside corner
+   * highlights.
+   * @type {!Object}
+   */
+  this.INSIDE_CORNER = this.makeInsideCorner();
+
+  /**
+   * An object containing sizing and path information about outside corner
+   * highlights.
+   * @type {!Object}
+   */
+  this.OUTSIDE_CORNER = this.makeOutsideCorner();
+
+  /**
+   * An object containing sizing and path information about puzzle tab
+   * highlights.
+   * @type {!Object}
+   */
+  this.PUZZLE_TAB = this.makePuzzleTab();
+
+  /**
+   * An object containing sizing and path information about notch highlights.
+   * @type {!Object}
+   */
+  this.NOTCH = this.makeNotch();
+
+  /**
+   * An object containing sizing and path information about highlights for
+   * collapsed block indicators.
+   * @type {!Object}
+   */
+  this.JAGGED_TEETH = this.makeJaggedTeeth();
+
+  /**
+   * An object containing sizing and path information about start hat
+   * highlights.
+   * @type {!Object}
+   */
+  this.START_HAT = this.makeStartHat();
+};
 
 /**
- * Highlight paths for drawing the inside corners of a statement input.
- * RTL and LTR refer to the rendering of the block as a whole.  However, the top
- * of the statement input is drawn from right to left in LTR mode.
+ * @return {!Object} An object containing sizing and path information about
+ *     inside corner highlights.
+ * @package
  */
-Blockly.blockRendering.highlightConstants.INSIDE_CORNER = (function() {
-  var radius = Blockly.blockRendering.constants.CORNER_RADIUS;
-  var offset = Blockly.blockRendering.highlightConstants.OFFSET;
+Blockly.blockRendering.HighlightConstantProvider.prototype.makeInsideCorner = function() {
+  var radius = this.constantProvider.CORNER_RADIUS;
+  var offset = this.OFFSET;
 
   /**
    * Distance from shape edge to intersect with a curved corner at 45 degrees.
@@ -91,11 +142,16 @@ Blockly.blockRendering.highlightConstants.INSIDE_CORNER = (function() {
       return rtl ? pathBottomRtl : pathBottomLtr;
     },
   };
-})();
+};
 
-Blockly.blockRendering.highlightConstants.OUTSIDE_CORNER = (function() {
-  var radius = Blockly.blockRendering.constants.CORNER_RADIUS;
-  var offset = Blockly.blockRendering.highlightConstants.OFFSET;
+/**
+ * @return {!Object} An object containing sizing and path information about
+ *     outside corner highlights.
+ * @package
+ */
+Blockly.blockRendering.HighlightConstantProvider.prototype.makeOutsideCorner = function() {
+  var radius = this.constantProvider.CORNER_RADIUS;
+  var offset = this.OFFSET;
 
   /**
    * Distance from shape edge to intersect with a curved corner at 45 degrees.
@@ -136,12 +192,16 @@ Blockly.blockRendering.highlightConstants.OUTSIDE_CORNER = (function() {
       return bottomLeftPath;
     }
   };
-})();
+};
 
-
-Blockly.blockRendering.highlightConstants.PUZZLE_TAB = (function() {
-  var width = Blockly.blockRendering.constants.TAB_WIDTH;
-  var height = Blockly.blockRendering.constants.TAB_HEIGHT;
+/**
+ * @return {!Object} An object containing sizing and path information about
+ *     puzzle tab highlights.
+ * @package
+ */
+Blockly.blockRendering.HighlightConstantProvider.prototype.makePuzzleTab = function() {
+  var width = this.constantProvider.TAB_WIDTH;
+  var height = this.constantProvider.TAB_HEIGHT;
 
   // This is how much of the vertical block edge is actually drawn by the puzzle
   // tab.
@@ -186,20 +246,30 @@ Blockly.blockRendering.highlightConstants.PUZZLE_TAB = (function() {
       return rtl ? highlightRtlDown : highlightLtrDown;
     }
   };
-})();
+};
 
-Blockly.blockRendering.highlightConstants.NOTCH = (function() {
+/**
+ * @return {!Object} An object containing sizing and path information about
+ *     notch highlights.
+ * @package
+ */
+Blockly.blockRendering.HighlightConstantProvider.prototype.makeNotch = function() {
   // This is only for the previous connection.
   var pathLeft =
       Blockly.utils.svgPaths.lineOnAxis(
-          'h', Blockly.blockRendering.highlightConstants.OFFSET) +
-      Blockly.blockRendering.constants.NOTCH.pathLeft;
+          'h', this.OFFSET) +
+      this.constantProvider.NOTCH.pathLeft;
   return {
     pathLeft: pathLeft
   };
-})();
+};
 
-Blockly.blockRendering.highlightConstants.JAGGED_TEETH = (function() {
+/**
+ * @return {!Object} An object containing sizing and path information about
+ *     collapsed block edge highlights.
+ * @package
+ */
+Blockly.blockRendering.HighlightConstantProvider.prototype.makeJaggedTeeth = function() {
   var pathLeft =
       Blockly.utils.svgPaths.lineTo(5.1, 2.6) +
       Blockly.utils.svgPaths.moveBy(-10.2, 6.8) +
@@ -207,10 +277,15 @@ Blockly.blockRendering.highlightConstants.JAGGED_TEETH = (function() {
   return {
     pathLeft: pathLeft
   };
-})();
+};
 
-Blockly.blockRendering.highlightConstants.START_HAT = (function() {
-  var hatHeight = Blockly.blockRendering.constants.START_HAT.height;
+/**
+ * @return {!Object} An object containing sizing and path information about
+ *     start highlights.
+ * @package
+ */
+Blockly.blockRendering.HighlightConstantProvider.prototype.makeStartHat = function() {
+  var hatHeight = this.constantProvider.START_HAT.height;
   var pathRtl =
       Blockly.utils.svgPaths.moveBy(25, -8.7) +
       Blockly.utils.svgPaths.curve('c',
@@ -233,4 +308,4 @@ Blockly.blockRendering.highlightConstants.START_HAT = (function() {
       return rtl ? pathRtl : pathLtr;
     }
   };
-})();
+};

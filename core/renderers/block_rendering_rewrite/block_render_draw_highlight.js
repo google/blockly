@@ -26,7 +26,6 @@
 
 goog.provide('Blockly.blockRendering.Highlighter');
 
-goog.require('Blockly.blockRendering.highlightConstants');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.BottomRow');
@@ -63,20 +62,21 @@ Blockly.blockRendering.Highlighter = function(info, pathObject) {
   this.RTL_ = this.info_.RTL;
 
   this.constants_ = Blockly.blockRendering.getConstants();
+  this.highlightConstants_ = Blockly.blockRendering.getHighlightConstants();
   /**
    * The offset between the block's main path and highlight path.
    * @type {number}
    * @private
    */
-  this.highlightOffset_ = Blockly.blockRendering.highlightConstants.OFFSET;
+  this.highlightOffset_ = this.highlightConstants_.OFFSET;
 
-  this.outsideCornerPaths_ = Blockly.blockRendering.highlightConstants.OUTSIDE_CORNER;
-  this.insideCornerPaths_ = Blockly.blockRendering.highlightConstants.INSIDE_CORNER;
-  this.puzzleTabPaths_ = Blockly.blockRendering.highlightConstants.PUZZLE_TAB;
-  this.notchPaths_ = Blockly.blockRendering.highlightConstants.NOTCH;
-  this.startPaths_ = Blockly.blockRendering.highlightConstants.START_HAT;
+  this.outsideCornerPaths_ = this.highlightConstants_.OUTSIDE_CORNER;
+  this.insideCornerPaths_ = this.highlightConstants_.INSIDE_CORNER;
+  this.puzzleTabPaths_ = this.highlightConstants_.PUZZLE_TAB;
+  this.notchPaths_ = this.highlightConstants_.NOTCH;
+  this.startPaths_ = this.highlightConstants_.START_HAT;
   this.jaggedTeethPaths_ =
-      Blockly.blockRendering.highlightConstants.JAGGED_TEETH;
+      this.highlightConstants_.JAGGED_TEETH;
 };
 
 Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
@@ -84,7 +84,7 @@ Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
       Blockly.utils.svgPaths.moveBy(row.xPos, this.info_.startY));
   for (var i = 0, elem; (elem = row.elements[i]); i++) {
     if (elem.type == 'square corner') {
-      this.steps_.push(Blockly.blockRendering.highlightConstants.START_POINT);
+      this.steps_.push(this.highlightConstants_.START_POINT);
     } else if (elem.type == 'round corner') {
       this.steps_.push(
           this.outsideCornerPaths_.topLeft(this.RTL_));

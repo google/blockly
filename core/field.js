@@ -54,6 +54,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   /**
    * The size of the area rendered by the field.
    * @type {Blockly.utils.Size}
+   * @protected
    */
   this.size_ = new Blockly.utils.Size(0, 0);
   this.setValue(value);
@@ -118,15 +119,6 @@ Blockly.Field.prototype.maxDisplayLength = 50;
 Blockly.Field.prototype.value_ = null;
 
 /**
- * Text representation of the field's value. Maintained for backwards
- * compatibility reasons.
- * @type {string}
- * @protected
- * @deprecated Use or override getText instead.
- */
-Blockly.Field.prototype.text_ = '';
-
-/**
  * Used to cache the field's tooltip value if setTooltip is called when the
  * field is not yet initialized. Is *not* guaranteed to be accurate.
  * @type {?string}
@@ -168,6 +160,15 @@ Blockly.Field.prototype.validator_ = null;
  * @private
  */
 Blockly.Field.prototype.clickTarget_ = null;
+
+/**
+ * A developer hook to override the returned text of this field.
+ * Override if the text representation of the value of this field
+ * is not just a string cast of its value.
+ * @return {?string} Current text. Return null to resort to a string cast.
+ * @protected
+ */
+Blockly.Field.prototype.hookGetText_;
 
 /**
  * Non-breaking space.
@@ -542,7 +543,7 @@ Blockly.Field.prototype.updateColour = function() {
  * @protected
  */
 Blockly.Field.prototype.render_ = function() {
-  this.textContent_.nodeValue = this.getDisplayText_();
+  this.textContent_.nodeValue = this.getDisplayText();
   this.updateSize_();
 };
 
@@ -619,13 +620,13 @@ Blockly.Field.prototype.getScaledBBox_ = function() {
 };
 
 /**
- * Get the text from this field as displayed on screen.  May differ from getText
- * due to ellipsis, and other formatting.
- * @return {string} Currently displayed text.
+ * Gets the text from this field to display on the block. May differ from
+ * ``getText`` due to ellipsis, and other formatting.
+ * @return {string} Text to display.
  * @protected
  */
-Blockly.Field.prototype.getDisplayText_ = function() {
-  var text = this.text_;
+Blockly.Field.prototype.getDisplayText = function() {
+  var text = this.getText();
   if (!text) {
     // Prevent the field from disappearing if empty.
     return Blockly.Field.NBSP;
@@ -636,7 +637,7 @@ Blockly.Field.prototype.getDisplayText_ = function() {
   }
   // Replace whitespace with non-breaking spaces so the text doesn't collapse.
   text = text.replace(/\s/g, Blockly.Field.NBSP);
-  if (this.sourceBlock_.RTL) {
+  if (this.sourceBlock_ && this.sourceBlock_.RTL) {
     // The SVG is LTR, force text to be RTL.
     text += '\u200F';
   }
@@ -648,26 +649,22 @@ Blockly.Field.prototype.getDisplayText_ = function() {
  * @return {string} Current text.
  */
 Blockly.Field.prototype.getText = function() {
-  return this.text_;
+  if (this.hookGetText_) {
+    var text = this.hookGetText_.call(this);
+    if (text) {
+      return String(text);
+    }
+  }
+  return String(this.getValue());
 };
 
 /**
  * Set the text in this field.  Trigger a rerender of the source block.
- * @param {*} newText New text.
+ * @param {*} _newText New text.
  * @deprecated 2019 setText should not be used directly. Use setValue instead.
  */
-Blockly.Field.prototype.setText = function(newText) {
-  if (newText === null) {
-    // No change if null.
-    return;
-  }
-  newText = String(newText);
-  if (newText === this.text_) {
-    // No change.
-    return;
-  }
-  this.text_ = newText;
-  this.forceRerender();
+Blockly.Field.prototype.setText = function(_newText) {
+  throw new Error('setText method is deprecated');
 };
 
 /**
@@ -787,8 +784,6 @@ Blockly.Field.prototype.doClassValidation_ = function(newValue) {
 Blockly.Field.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   this.isDirty_ = true;
-  // For backwards compatibility.
-  this.text_ = String(newValue);
 };
 
 /**

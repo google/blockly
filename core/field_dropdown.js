@@ -62,6 +62,13 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
   this.trimOptions_();
   var firstTuple = this.getOptions()[0];
 
+  /**
+   * The currently selected option.
+   * @type {string|Object}
+   * @private
+   */
+  this.selectedOption_ = null;
+
   // Call parent's constructor.
   Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[1],
       opt_validator);
@@ -438,14 +445,7 @@ Blockly.FieldDropdown.prototype.doValueUpdate_ = function(newValue) {
   var options = this.getOptions();
   for (var i = 0, option; option = options[i]; i++) {
     if (option[1] == this.value_) {
-      var content = option[0];
-      if (typeof content == 'object') {
-        this.imageJson_ = content;
-        this.text_ = content.alt;
-      } else {
-        this.imageJson_ = null;
-        this.text_ = content;
-      }
+      this.setSelectedValue_(option[0]);
     }
   }
 };
@@ -475,7 +475,7 @@ Blockly.FieldDropdown.prototype.render_ = function() {
   this.imageElement_.style.display = 'none';
 
   // Show correct element.
-  if (this.imageJson_) {
+  if (typeof this.selectedOption_ == 'object') {
     this.renderSelectedImage_();
   } else {
     this.renderSelectedText_();
@@ -489,16 +489,17 @@ Blockly.FieldDropdown.prototype.render_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
+  var imageJson = this.selectedOption_;
   this.imageElement_.style.display = '';
   this.imageElement_.setAttributeNS(
-      Blockly.utils.dom.XLINK_NS, 'xlink:href', this.imageJson_.src);
-  this.imageElement_.setAttribute('height', this.imageJson_.height);
-  this.imageElement_.setAttribute('width', this.imageJson_.width);
+      Blockly.utils.dom.XLINK_NS, 'xlink:href', imageJson.src);
+  this.imageElement_.setAttribute('height', imageJson.height);
+  this.imageElement_.setAttribute('width', imageJson.width);
 
   var arrowWidth = Blockly.utils.dom.getTextWidth(this.arrow_);
 
-  var imageHeight = Number(this.imageJson_.height);
-  var imageWidth = Number(this.imageJson_.width);
+  var imageHeight = Number(imageJson.height);
+  var imageWidth = Number(imageJson.width);
 
   // Height and width include the border rect.
   this.size_.height = imageHeight + Blockly.FieldDropdown.IMAGE_Y_PADDING;
@@ -522,13 +523,35 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
-  this.textContent_.nodeValue = this.getDisplayText_();
+  this.textContent_.nodeValue = this.getDisplayText();
   this.textElement_.setAttribute('text-anchor', 'start');
   this.textElement_.setAttribute('x', Blockly.Field.DEFAULT_TEXT_OFFSET);
   // Height and width include the border rect.
   this.size_.height = Blockly.Field.BORDER_RECT_DEFAULT_HEIGHT;
   this.size_.width = Blockly.utils.dom.getTextWidth(this.textElement_) +
       Blockly.Field.X_PADDING;
+};
+
+/**
+ * @override
+ */
+Blockly.FieldDropdown.prototype.hookGetText_ = function() {
+  if (this.selectedOption_) {
+    if (typeof this.selectedOption_ == 'object') {
+      return this.selectedOption_['alt'];
+    }
+    return this.selectedOption_;
+  }
+  return null;
+};
+
+/**
+ * Set the selected option on this dropdown.
+ * @param {string|Object} option The option to select.
+ * @protected
+ */
+Blockly.FieldDropdown.prototype.setSelectedValue_ = function(option) {
+  this.selectedOption_ = option;
 };
 
 /**

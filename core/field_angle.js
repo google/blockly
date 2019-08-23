@@ -295,12 +295,9 @@ Blockly.FieldAngle.prototype.setAngle = function(angle) {
 
   // Update value.
   var angleString = String(angle);
-  if (angleString != this.text_) {
-    this.htmlInput_.value = angle;
-    this.setValue(angle);
-    // Always render the input angle.
-    this.text_ = angleString;
-    this.forceRerender();
+  if (angleString != this.angleString_) {
+    this.angleString_ = angleString;
+    this.setEditorValue_(angle);
   }
 };
 
@@ -313,7 +310,7 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
     return;
   }
   // Always display the input (i.e. getText) even if it is invalid.
-  var angleDegrees = Number(this.getText()) + Blockly.FieldAngle.OFFSET;
+  var angleDegrees = Number(this.getDisplayText()) + Blockly.FieldAngle.OFFSET;
   angleDegrees %= 360;
   var angleRadians = Blockly.utils.math.toRadians(angleDegrees);
   var path = ['M ', Blockly.FieldAngle.HALF, ',', Blockly.FieldAngle.HALF];

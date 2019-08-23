@@ -44,8 +44,7 @@ goog.require('Blockly.geras.RenderInfo');
 Blockly.geras.Drawer = function(block, info) {
   Blockly.geras.Drawer.superClass_.constructor.call(this, block, info);
   // Unlike Thrasos, Geras has highlights and drop shadows.
-  this.highlighter_ = new Blockly.geras.Highlighter(
-      /** @type {!Blockly.geras.RenderInfo} */ (this.info_), this.pathObject_);
+  this.highlighter_ = new Blockly.geras.Highlighter(info, this.pathObject_);
 };
 goog.inherits(Blockly.geras.Drawer, Blockly.blockRendering.Drawer);
 

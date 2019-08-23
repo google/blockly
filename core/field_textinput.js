@@ -116,10 +116,7 @@ Blockly.FieldTextInput.prototype.configure_ = function(opt_config) {
   if (!opt_config) {
     return;
   }
-  if (typeof opt_config == 'boolean') {
-    // opt_config used to be spellcheck.
-    this.setSpellcheck(opt_config);
-  } else if (typeof opt_config['spellcheck'] == 'boolean') {
+  if (typeof opt_config['spellcheck'] == 'boolean') {
     this.setSpellcheck(opt_config['spellcheck']);
   }
 };

@@ -75,8 +75,7 @@ Blockly.blockRendering.ConstantProvider = function() {
 
   // Offset from the left side of a block or the inside of a statement input to
   // the left side of the notch.
-  this.NOTCH_OFFSET_LEFT =
-      this.NOTCH_WIDTH;
+  this.NOTCH_OFFSET_LEFT = 15;
 
   this.STATEMENT_BOTTOM_SPACER = 5;
   this.STATEMENT_INPUT_PADDING_LEFT = 20;
@@ -133,6 +132,13 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @const
    */
   this.JAGGED_TEETH_WIDTH = 6;
+};
+
+/**
+ * Initialize shape objects based on the constants set in the constructor.
+ * @package
+ */
+Blockly.blockRendering.ConstantProvider.prototype.init = function() {
 
   /**
    * An object containing sizing and path information about collapsed block

@@ -27,6 +27,7 @@
 goog.provide('Blockly.inject');
 
 goog.require('Blockly.BlockDragSurfaceSvg');
+goog.require('Blockly.blockRendering');
 goog.require('Blockly.Component');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
@@ -70,6 +71,7 @@ Blockly.inject = function(container, opt_options) {
   var blockDragSurface = new Blockly.BlockDragSurfaceSvg(subContainer);
   var workspaceDragSurface = new Blockly.WorkspaceDragSurfaceSvg(subContainer);
 
+  Blockly.blockRendering.init();
   var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
       workspaceDragSurface);
   Blockly.setTheme(options.theme);

@@ -41,6 +41,14 @@ goog.require('Blockly.thrasos.RenderInfo');
 goog.require('Blockly.zelos.RenderInfo');
 
 /**
+ * Initialize anything needed for rendering (constants, etc).
+ * @package
+ */
+Blockly.blockRendering.init = function() {
+  // Currently a no-op.
+};
+
+/**
  * Render the given block, using the new rendering.
  * Developers should not call this directly.  Instead, call block.render().
  * @param {!Blockly.BlockSvg} block The block to render

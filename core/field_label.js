@@ -45,8 +45,6 @@ goog.require('Blockly.utils.Size');
  * @constructor
  */
 Blockly.FieldLabel = function(opt_value, opt_config) {
-  this.size_ = new Blockly.utils.Size(0, Blockly.Field.TEXT_DEFAULT_HEIGHT);
-
   /**
    * The css class name to apply to the field's textElement_.
    * @type {?string}
@@ -62,6 +60,8 @@ Blockly.FieldLabel = function(opt_value, opt_config) {
       this, opt_value, null, opt_config);
 
   this.configure_(opt_config);
+
+  this.size_ = new Blockly.utils.Size(0, Blockly.Field.TEXT_DEFAULT_HEIGHT);
 };
 goog.inherits(Blockly.FieldLabel, Blockly.Field);
 

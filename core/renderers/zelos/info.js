@@ -29,7 +29,6 @@ goog.provide('Blockly.zelos');
 goog.provide('Blockly.zelos.RenderInfo');
 
 goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.InputRow');

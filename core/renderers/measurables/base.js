@@ -45,31 +45,12 @@ Blockly.blockRendering.Measurable = function() {
 
   this.xPos = 0;
   this.centerline = 0;
+
+  this.constants_ = Blockly.blockRendering.getConstants();
+  this.connectionShape = this.constants_.PUZZLE_TAB;
+  this.notchShape = this.constants_.NOTCH;
+  this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
 };
-
-/**
- * The shape object to use when drawing input and output connections.
- * TODO (#2803): Formalize type annotations for these objects.
- * @type {Object}
- */
-Blockly.blockRendering.Measurable.prototype.connectionShape =
-    Blockly.blockRendering.constants.PUZZLE_TAB;
-
-/**
- * The shape object to use when drawing previous and next connections.
- * TODO (#2803): Formalize type annotations for these objects.
- * @type {Object}
- */
-Blockly.blockRendering.Measurable.prototype.notchShape =
-    Blockly.blockRendering.constants.NOTCH;
-
-/**
- * The offset from the left side of a block or the inside of a statement input
- * to the left side of the connection notch.
- * @type {number}
- */
-Blockly.blockRendering.Measurable.prototype.notchOffset =
-    Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;
 
 // TODO: We may remove these helper functions if all of them end up being direct
 // checks against types.

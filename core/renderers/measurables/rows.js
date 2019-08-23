@@ -30,7 +30,6 @@ goog.provide('Blockly.blockRendering.Row');
 goog.provide('Blockly.blockRendering.SpacerRow');
 goog.provide('Blockly.blockRendering.TopRow');
 
-goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.InputConnection');
 goog.require('Blockly.blockRendering.InRowSpacer');
 goog.require('Blockly.blockRendering.Measurable');
@@ -145,23 +144,12 @@ Blockly.blockRendering.Row = function() {
    * @type {boolean}
    */
   this.hasJaggedEdge = false;
+
+  this.constants_ = Blockly.blockRendering.getConstants();
+  this.connectionShape = this.constants_.PUZZLE_TAB;
+  this.notchShape = this.constants_.NOTCH;
+  this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
 };
-
-/**
- * The shape object to use when drawing previous and next connections.
- * TODO (#2803): Formalize type annotations for these objects.
- * @type {Object}
- */
-Blockly.blockRendering.Row.prototype.notchShape =
-    Blockly.blockRendering.constants.NOTCH;
-
-/**
- * The offset from the left side of a block or the inside of a statement input
- * to the left side of the connection notch.
- * @type {number}
- */
-Blockly.blockRendering.Row.prototype.notchOffset =
-    Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT;
 
 /**
  * Inspect all subcomponents and populate all size properties on the row.
@@ -297,9 +285,9 @@ Blockly.blockRendering.TopRow.prototype.populate = function(block) {
   // This is the minimum height for the row. If one of its elements has a
   // greater height it will be overwritten in the compute pass.
   if (precedesStatement && !block.isCollapsed()) {
-    this.minHeight = Blockly.blockRendering.constants.LARGE_PADDING;
+    this.minHeight = this.constants_.LARGE_PADDING;
   } else {
-    this.minHeight = Blockly.blockRendering.constants.MEDIUM_PADDING;
+    this.minHeight = this.constants_.MEDIUM_PADDING;
   }
 };
 
@@ -380,7 +368,7 @@ Blockly.blockRendering.BottomRow.prototype.populate = function(block) {
   // This is the minimum height for the row. If one of its elements has a greater
   // height it will be overwritten in the compute pass.
   if (followsStatement) {
-    this.minHeight = Blockly.blockRendering.constants.LARGE_PADDING;
+    this.minHeight = this.constants_.LARGE_PADDING;
   } else {
     this.minHeight = this.notchShape.height;
   }

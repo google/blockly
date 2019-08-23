@@ -29,7 +29,6 @@ goog.provide('Blockly.blockRendering.OutputConnection');
 goog.provide('Blockly.blockRendering.PreviousConnection');
 
 goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.RenderedConnection');
 
 /**
@@ -63,7 +62,7 @@ Blockly.blockRendering.OutputConnection = function(connectionModel) {
   this.type = 'output connection';
   this.height = this.connectionShape.height;
   this.width = this.connectionShape.width;
-  this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
+  this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
   this.startX = this.width;
 };
 goog.inherits(Blockly.blockRendering.OutputConnection,

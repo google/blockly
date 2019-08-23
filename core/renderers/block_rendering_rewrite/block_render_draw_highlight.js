@@ -62,6 +62,7 @@ Blockly.blockRendering.Highlighter = function(info, pathObject) {
 
   this.RTL_ = this.info_.RTL;
 
+  this.constants_ = Blockly.blockRendering.getConstants();
   /**
    * The offset between the block's main path and highlight path.
    * @type {number}

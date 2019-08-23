@@ -28,7 +28,6 @@ goog.provide('Blockly.blockRendering.Debug');
 
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Highlighter');
-goog.require('Blockly.blockRendering.constants');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.InputRow');

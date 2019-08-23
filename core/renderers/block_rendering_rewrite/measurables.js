@@ -123,6 +123,7 @@ goog.inherits(Blockly.blockRendering.RoundCorner, Blockly.blockRendering.Measura
  * @extends {Blockly.blockRendering.Measurable}
  */
 Blockly.blockRendering.InRowSpacer = function(width) {
+  Blockly.blockRendering.InRowSpacer.superClass_.constructor.call(this);
   this.type = 'in-row spacer';
   this.width = width;
   this.height = Blockly.blockRendering.constants.SPACER_DEFAULT_HEIGHT;

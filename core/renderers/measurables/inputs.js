@@ -31,7 +31,6 @@ goog.provide('Blockly.blockRendering.ExternalValueInput');
 
 goog.require('Blockly.blockRendering.Connection');
 goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.constants');
 
 
 /**
@@ -84,18 +83,18 @@ Blockly.blockRendering.InlineInput = function(input) {
   this.type = 'inline input';
 
   if (!this.connectedBlock) {
-    this.height = Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_HEIGHT;
+    this.height = this.constants_.EMPTY_INLINE_INPUT_HEIGHT;
     this.width = this.connectionShape.width +
-        Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_PADDING;
+        this.constants_.EMPTY_INLINE_INPUT_PADDING;
   } else {
     // We allow the dark path to show on the parent block so that the child
     // block looks embossed.  This takes up an extra pixel in both x and y.
     this.width = this.connectedBlockWidth +
-        Blockly.blockRendering.constants.DARK_PATH_OFFSET;
-    this.height = this.connectedBlockHeight + Blockly.blockRendering.constants.DARK_PATH_OFFSET;
+        this.constants_.DARK_PATH_OFFSET;
+    this.height = this.connectedBlockHeight + this.constants_.DARK_PATH_OFFSET;
   }
 
-  this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
+  this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
   this.connectionHeight = this.connectionShape.height;
   this.connectionWidth = this.connectionShape.width;
 };
@@ -117,15 +116,15 @@ Blockly.blockRendering.StatementInput = function(input) {
   this.type = 'statement input';
 
   if (!this.connectedBlock) {
-    this.height = Blockly.blockRendering.constants.EMPTY_STATEMENT_INPUT_HEIGHT;
+    this.height = this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT;
   } else {
     this.height =
-        this.connectedBlockHeight + Blockly.blockRendering.constants.STATEMENT_BOTTOM_SPACER;
+        this.connectedBlockHeight + this.constants_.STATEMENT_BOTTOM_SPACER;
     if (this.connectedBlock.nextConnection) {
       this.height -= this.notchShape.height;
     }
   }
-  this.width = Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT +
+  this.width = this.constants_.NOTCH_OFFSET_LEFT +
       this.notchShape.width;
 };
 goog.inherits(Blockly.blockRendering.StatementInput,
@@ -149,12 +148,12 @@ Blockly.blockRendering.ExternalValueInput = function(input) {
     this.height = this.connectionShape.height;
   } else {
     this.height =
-        this.connectedBlockHeight - 2 * Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
+        this.connectedBlockHeight - 2 * this.constants_.TAB_OFFSET_FROM_TOP;
   }
   this.width = this.connectionShape.width +
-      Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_PADDING;
+      this.constants_.EXTERNAL_VALUE_INPUT_PADDING;
 
-  this.connectionOffsetY = Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP;
+  this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
   this.connectionHeight = this.connectionShape.height;
   this.connectionWidth = this.connectionShape.width;
 };

@@ -33,6 +33,8 @@ goog.provide('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.blockRendering.constants');
+goog.require('Blockly.blockRendering.highlightConstants');
 
 goog.require('Blockly.geras.RenderInfo');
 goog.require('Blockly.thrasos.RenderInfo');
@@ -54,4 +56,8 @@ Blockly.blockRendering.render = function(block) {
 
 Blockly.blockRendering.getConstants = function() {
   return Blockly.blockRendering.constants;
+};
+
+Blockly.blockRendering.getHighlightConstants = function() {
+  return Blockly.blockRendering.highlightConstants;
 };

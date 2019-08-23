@@ -56,21 +56,9 @@ Blockly.Field = function(value, opt_validator, opt_config) {
    * @type {Blockly.utils.Size}
    */
   this.size_ = new Blockly.utils.Size(0, 0);
-
-  if (opt_config) {
-    var tooltip = opt_config['tooltip'];
-    if (typeof tooltip == 'string') {
-      tooltip = Blockly.utils.replaceMessageReferences(
-          opt_config['tooltip']);
-    }
-    tooltip && this.setTooltip(tooltip);
-
-    // TODO (#2884): Possibly add CSS class config option.
-    // TODO (#2885): Possibly add cursor config option.
-  }
-
   this.setValue(value);
-  opt_validator && this.setValidator(opt_validator);
+  this.setValidator(opt_validator);
+  this.configure_(opt_config);
 };
 
 /**
@@ -205,6 +193,28 @@ Blockly.Field.prototype.EDITABLE = true;
  * @default
  */
 Blockly.Field.prototype.SERIALIZABLE = false;
+
+/**
+ * Configure the field based on the given map of options.
+ * @param {Object} opt_config The map of options to configure the field
+ *    based on.
+ * @private
+ */
+Blockly.Field.prototype.configure_ = function(opt_config) {
+  if (!opt_config) {
+    return;
+  }
+
+  var tooltip = opt_config['tooltip'];
+  if (typeof tooltip == 'string') {
+    tooltip = Blockly.utils.replaceMessageReferences(
+        opt_config['tooltip']);
+  }
+  tooltip && this.setTooltip(tooltip);
+
+  // TODO (#2884): Possibly add CSS class config option.
+  // TODO (#2885): Possibly add cursor config option.
+};
 
 /**
  * Attach this field to a block.

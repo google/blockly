@@ -19,125 +19,167 @@
  */
 
 /**
- * @fileoverview Methods for graphically rendering a block as SVG.
+ * @fileoverview Namespace for block rendering functionality.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
-goog.provide('Blockly.blockRendering.constants');
+goog.provide('Blockly.blockRendering.ConstantProvider');
 
 goog.require('Blockly.utils.svgPaths');
 
+/**
+ * An object that provides constants for rendering blocks.
+ * @constructor
+ * @package
+ */
+Blockly.blockRendering.ConstantProvider = function() {
+  this.NO_PADDING = 0;
+  this.SMALL_PADDING = 3;
+  this.MEDIUM_PADDING = 5;
+  this.MEDIUM_LARGE_PADDING = 8;
+  this.LARGE_PADDING = 10;
 
-Blockly.blockRendering.constants.NO_PADDING = 0;
-Blockly.blockRendering.constants.SMALL_PADDING = 3;
-Blockly.blockRendering.constants.MEDIUM_PADDING = 5;
-Blockly.blockRendering.constants.MEDIUM_LARGE_PADDING = 8;
-Blockly.blockRendering.constants.LARGE_PADDING = 10;
-
-// Offset from the top of the row for placing fields on inline input rows
-// and statement input rows.
-// Matches existing rendering (in 2019).
-Blockly.blockRendering.constants.TALL_INPUT_FIELD_OFFSET_Y =
-    Blockly.blockRendering.constants.MEDIUM_PADDING;
+  // Offset from the top of the row for placing fields on inline input rows
+  // and statement input rows.
+  // Matches existing rendering (in 2019).
+  this.TALL_INPUT_FIELD_OFFSET_Y = this.MEDIUM_PADDING;
 
 
-// The dark/shadow path in classic rendering is the same as the normal block
-// path, but translated down one and right one.
-Blockly.blockRendering.constants.DARK_PATH_OFFSET = 1;
+  // The dark/shadow path in classic rendering is the same as the normal block
+  // path, but translated down one and right one.
+  this.DARK_PATH_OFFSET = 1;
 
-Blockly.blockRendering.constants.TAB_HEIGHT = 15;
+  this.TAB_HEIGHT = 15;
 
-Blockly.blockRendering.constants.TAB_OFFSET_FROM_TOP = 5;
+  this.TAB_OFFSET_FROM_TOP = 5;
 
-Blockly.blockRendering.constants.TAB_VERTICAL_OVERLAP = 2.5;
+  this.TAB_VERTICAL_OVERLAP = 2.5;
 
-Blockly.blockRendering.constants.TAB_WIDTH = 8;
+  this.TAB_WIDTH = 8;
 
-Blockly.blockRendering.constants.NOTCH_WIDTH = 15;
-Blockly.blockRendering.constants.NOTCH_HEIGHT = 4;
+  this.NOTCH_WIDTH = 15;
+  this.NOTCH_HEIGHT = 4;
 
-// This is the minimum width of a block measuring from the end of a rounded
-// corner
-Blockly.blockRendering.constants.MIN_BLOCK_WIDTH = 12;
+  // This is the minimum width of a block measuring from the end of a rounded
+  // corner
+  this.MIN_BLOCK_WIDTH = 12;
 
-Blockly.blockRendering.constants.EMPTY_BLOCK_SPACER_HEIGHT = 16;
+  this.EMPTY_BLOCK_SPACER_HEIGHT = 16;
+
+  /**
+   * Rounded corner radius.
+   * @const
+   */
+  this.CORNER_RADIUS = 8;
+
+  // Offset from the left side of a block or the inside of a statement input to
+  // the left side of the notch.
+  this.NOTCH_OFFSET_LEFT =
+      this.NOTCH_WIDTH;
+
+  this.STATEMENT_BOTTOM_SPACER = 5;
+  this.STATEMENT_INPUT_PADDING_LEFT = 20;
+  this.BETWEEN_STATEMENT_PADDING_Y = 4;
+
+  // This is the max width of a bottom row that follows a statement input and
+  // has inputs inline.
+  this.MAX_BOTTOM_WIDTH = 66.5;
+
+  /**
+   * Height of the top hat.
+   * @const
+   * @private
+   */
+  this.START_HAT_HEIGHT = 15;
+
+  /**
+   * Width of the top hat.
+   * @const
+   * @private
+   */
+  this.START_HAT_WIDTH = 100;
+
+  this.SPACER_DEFAULT_HEIGHT = 15;
+
+  this.MIN_BLOCK_HEIGHT = 24;
+
+  this.EMPTY_INLINE_INPUT_PADDING = 14.5;
+
+  this.EMPTY_INLINE_INPUT_HEIGHT = this.TAB_HEIGHT + 11;
+
+  this.EXTERNAL_VALUE_INPUT_PADDING = 2;
+
+  /**
+   * The height of an empty statement input.  Note that in the old rendering this
+   * varies slightly depending on whether the block has external or inline inputs.
+   * In the new rendering this is consistent.  It seems unlikely that the old
+   * behaviour was intentional.
+   * @const
+   * @type {number}
+   */
+  this.EMPTY_STATEMENT_INPUT_HEIGHT = this.MIN_BLOCK_HEIGHT;
+
+  this.START_POINT = Blockly.utils.svgPaths.moveBy(0, 0);
+
+  /**
+   * Height of SVG path for jagged teeth at the end of collapsed blocks.
+   * @const
+   */
+  this.JAGGED_TEETH_HEIGHT = 12;
+
+  /**
+   * Width of SVG path for jagged teeth at the end of collapsed blocks.
+   * @const
+   */
+  this.JAGGED_TEETH_WIDTH = 6;
+
+  /**
+   * An object containing sizing and path information about collapsed block
+   * indicators.
+   * @type {!Object}
+   */
+  this.JAGGED_TEETH = this.makeJaggedTeeth();
+
+  /**
+   * An object containing sizing and path information about notches.
+   * @type {!Object}
+   */
+  this.NOTCH = this.makeNotch();
+
+  /**
+   * An object containing sizing and path information about start hats
+   * @type {!Object}
+   */
+  this.START_HAT = this.makeStartHat();
+
+  /**
+   * An object containing sizing and path information about puzzle tabs.
+   * @type {!Object}
+   */
+  this.PUZZLE_TAB = this.makePuzzleTab();
+
+  /**
+   * An object containing sizing and path information about inside corners
+   * @type {!Object}
+   */
+  this.INSIDE_CORNERS = this.makeInsideCorners();
+
+  /**
+   * An object containing sizing and path information about outside corners.
+   * @type {!Object}
+   */
+  this.OUTSIDE_CORNERS = this.makeOutsideCorners();
+};
 
 /**
- * Rounded corner radius.
- * @const
+ * @return {!Object} An object containing sizing and path information about
+ *     collapsed block indicators.
+ * @package
  */
-Blockly.blockRendering.constants.CORNER_RADIUS = 8;
-
-// Offset from the left side of a block or the inside of a statement input to
-// the left side of the notch.
-Blockly.blockRendering.constants.NOTCH_OFFSET_LEFT =
-    Blockly.blockRendering.constants.NOTCH_WIDTH;
-
-Blockly.blockRendering.constants.STATEMENT_BOTTOM_SPACER = 5;
-Blockly.blockRendering.constants.STATEMENT_INPUT_PADDING_LEFT = 20;
-Blockly.blockRendering.constants.BETWEEN_STATEMENT_PADDING_Y = 4;
-
-// This is the max width of a bottom row that follows a statement input and
-// has inputs inline.
-Blockly.blockRendering.constants.MAX_BOTTOM_WIDTH = 66.5;
-
-/**
- * Height of the top hat.
- * @const
- * @private
- */
-Blockly.blockRendering.constants.START_HAT_HEIGHT = 15;
-
-/**
- * Width of the top hat.
- * @const
- * @private
- */
-Blockly.blockRendering.constants.START_HAT_WIDTH = 100;
-
-Blockly.blockRendering.constants.SPACER_DEFAULT_HEIGHT = 15;
-
-Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT = 24;
-
-Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_PADDING = 14.5;
-
-Blockly.blockRendering.constants.EMPTY_INLINE_INPUT_HEIGHT =
-    Blockly.blockRendering.constants.TAB_HEIGHT + 11;
-
-Blockly.blockRendering.constants.EXTERNAL_VALUE_INPUT_PADDING = 2;
-
-/**
- * The height of an empty statement input.  Note that in the old rendering this
- * varies slightly depending on whether the block has external or inline inputs.
- * In the new rendering this is consistent.  It seems unlikely that the old
- * behaviour was intentional.
- * @const
- * @type {number}
- */
-Blockly.blockRendering.constants.EMPTY_STATEMENT_INPUT_HEIGHT =
-    Blockly.blockRendering.constants.MIN_BLOCK_HEIGHT;
-
-Blockly.blockRendering.constants.START_POINT = Blockly.utils.svgPaths.moveBy(0, 0);
-
-/**
- * Height of SVG path for jagged teeth at the end of collapsed blocks.
- * @const
- */
-Blockly.blockRendering.constants.JAGGED_TEETH_HEIGHT = 12;
-/**
- * Width of SVG path for jagged teeth at the end of collapsed blocks.
- * @const
- */
-Blockly.blockRendering.constants.JAGGED_TEETH_WIDTH = 6;
-
-/**
- * SVG path for drawing jagged teeth at the end of collapsed blocks.
- * @const
- */
-Blockly.blockRendering.constants.JAGGED_TEETH = (function() {
-  var height = Blockly.blockRendering.constants.JAGGED_TEETH_HEIGHT;
-  var width = Blockly.blockRendering.constants.JAGGED_TEETH_WIDTH;
+Blockly.blockRendering.ConstantProvider.prototype.makeJaggedTeeth = function() {
+  var height = this.JAGGED_TEETH_HEIGHT;
+  var width = this.JAGGED_TEETH_WIDTH;
 
   var mainPath =
       Blockly.utils.svgPaths.line(
@@ -151,14 +193,16 @@ Blockly.blockRendering.constants.JAGGED_TEETH = (function() {
     width: width,
     path: mainPath
   };
-})();
+};
 
 /**
- * Information about the hat on a start block.
+ * @return {!Object} An object containing sizing and path information about
+ *     start hats.
+ * @package
  */
-Blockly.blockRendering.constants.START_HAT = (function() {
-  var height = Blockly.blockRendering.constants.START_HAT_HEIGHT;
-  var width = Blockly.blockRendering.constants.START_HAT_WIDTH;
+Blockly.blockRendering.ConstantProvider.prototype.makeStartHat = function() {
+  var height = this.START_HAT_HEIGHT;
+  var width = this.START_HAT_WIDTH;
 
   var mainPath =
       Blockly.utils.svgPaths.curve('c',
@@ -172,11 +216,16 @@ Blockly.blockRendering.constants.START_HAT = (function() {
     width: width,
     path: mainPath
   };
-})();
+};
 
-Blockly.blockRendering.constants.PUZZLE_TAB = (function() {
-  var width = Blockly.blockRendering.constants.TAB_WIDTH;
-  var height = Blockly.blockRendering.constants.TAB_HEIGHT;
+/**
+ * @return {!Object} An object containing sizing and path information about
+ *     puzzle tabs.
+ * @package
+ */
+Blockly.blockRendering.ConstantProvider.prototype.makePuzzleTab = function() {
+  var width = this.TAB_WIDTH;
+  var height = this.TAB_HEIGHT;
 
   // The main path for the puzzle tab is made out of a few curves (c and s).
   // Those curves are defined with relative positions.  The 'up' and 'down'
@@ -220,35 +269,16 @@ Blockly.blockRendering.constants.PUZZLE_TAB = (function() {
     pathDown: pathDown,
     pathUp: pathUp
   };
-})();
+};
 
-Blockly.blockRendering.constants.TRIANGLE = (function() {
-  var width = 20;
-  var height = 20;
-  // The 'up' and 'down'  versions of the paths are the same, but the Y sign
-  // flips.  Forward and back are the signs to use to move the cursor in the
-  // direction that the path is being drawn.
-  function makeMainPath(up) {
-    var forward = up ? -1 : 1;
-
-    return Blockly.utils.svgPaths.lineTo(-width, forward * height / 2) +
-        Blockly.utils.svgPaths.lineTo(width, forward * height / 2);
-  }
-
-  var pathUp = makeMainPath(true);
-  var pathDown = makeMainPath(false);
-
-  return {
-    width: width,
-    height: height,
-    pathDown: pathDown,
-    pathUp: pathUp
-  };
-})();
-
-Blockly.blockRendering.constants.NOTCH = (function() {
-  var width = Blockly.blockRendering.constants.NOTCH_WIDTH;
-  var height = Blockly.blockRendering.constants.NOTCH_HEIGHT;
+/**
+ * @return {!Object} An object containing sizing and path information about
+ *     notches.
+ * @package
+ */
+Blockly.blockRendering.ConstantProvider.prototype.makeNotch = function() {
+  var width = this.NOTCH_WIDTH;
+  var height = this.NOTCH_HEIGHT;
   var innerWidth = 3;
   var outerWidth = (width - innerWidth) / 2;
   function makeMainPath(dir) {
@@ -269,10 +299,15 @@ Blockly.blockRendering.constants.NOTCH = (function() {
     pathLeft: pathLeft,
     pathRight: pathRight
   };
-})();
+};
 
-Blockly.blockRendering.constants.INSIDE_CORNERS = (function() {
-  var radius = Blockly.blockRendering.constants.CORNER_RADIUS;
+/**
+ * @return {!Object} An object containing sizing and path information about
+ *     inside corners.
+ * @package
+ */
+Blockly.blockRendering.ConstantProvider.prototype.makeInsideCorners = function() {
+  var radius = this.CORNER_RADIUS;
 
   var innerTopLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
       Blockly.utils.svgPaths.point(-radius, radius));
@@ -286,10 +321,15 @@ Blockly.blockRendering.constants.INSIDE_CORNERS = (function() {
     pathTop: innerTopLeftCorner,
     pathBottom: innerBottomLeftCorner
   };
-})();
+};
 
-Blockly.blockRendering.constants.OUTSIDE_CORNERS = (function() {
-  var radius = Blockly.blockRendering.constants.CORNER_RADIUS;
+/**
+ * @return {!Object} An object containing sizing and path information about
+ *     outside corners.
+ * @package
+ */
+Blockly.blockRendering.ConstantProvider.prototype.makeOutsideCorners = function() {
+  var radius = this.CORNER_RADIUS;
   /**
    * SVG path for drawing the rounded top-left corner.
    * @const
@@ -306,4 +346,6 @@ Blockly.blockRendering.constants.OUTSIDE_CORNERS = (function() {
     topLeft: topLeft,
     bottomLeft: bottomLeft
   };
-})();
+};
+
+

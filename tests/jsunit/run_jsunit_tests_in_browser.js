@@ -44,19 +44,18 @@ async function runJsUnitTestsInBrowser() {
   console.log('Initialized.\nLoading url: ' + url);
   await browser.url(url);
 
-  const elem = await browser.$('#closureTestRunnerLog')
-  const result = await elem.getHTML();
+  await browser.waitUntil(async () => {
+    var elem = await browser.$('#failureCount');
+    var text = await elem.getAttribute('tests_failed');
+    return text != 'unset';
+  }, 6000);
 
-  // call js to parse html
-  var regex = /[\d]+\spassed,\s([\d]+)\sfailed./i;
-  var numOfFailure = regex.exec(result)[1];
-  var regex2 = /Unit Tests for Blockly .*]/;
-  var testStatus = regex2.exec(result)[0];
+  const elem = await browser.$('#failureCount');
+  const numOfFailure = await elem.getAttribute('tests_failed');
+
   console.log('============Blockly Unit Test Summary=================');
-  console.log(testStatus);
-  var regex3 = /\d+ passed,\s\d+ failed/;
-  var detail = regex3.exec(result)[0];
-  console.log(detail);
+  console.log(numOfFailure);
+  console.log(numOfFailure + ' tests failed');
   console.log('============Blockly Unit Test Summary=================');
   if (parseInt(numOfFailure) !== 0) {
     await browser.deleteSession();

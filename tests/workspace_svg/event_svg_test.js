@@ -19,8 +19,6 @@
  */
 'use strict';
 
-goog.require('goog.testing');
-goog.require('goog.testing.MockControl');
 
 function eventSvg_setUpMockBlocks() {
   // TODO: Replace with defineGetVarBlock();

@@ -23,9 +23,6 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.require('goog.testing');
-goog.require('goog.testing.MockControl');
-
 'use strict';
 
 var workspace;
@@ -58,14 +55,15 @@ function undefineTestBlocks() {
 
 function blockTest_setUp() {
   defineTestBlocks();
-  mockControl_ = new goog.testing.MockControl();
   workspace = new Blockly.Workspace();
 }
 
 function blockTest_tearDown() {
   undefineTestBlocks();
   workspace.dispose();
-  mockControl_.$tearDown();
+  if (mockControl_) {
+    mockControl_.restore();
+  }
 }
 
 function assertUnpluggedNoheal(blocks) {
@@ -268,10 +266,10 @@ function test_set_style() {
         "colourPrimary": "#ffffff",
         "colourSecondary": "#aabbcc",
         "colourTertiary": "#ddeeff"
-      }
+      };
     }
   };
-  setUpMockMethod(mockControl_, Blockly, 'getTheme', null, [styleStub]);
+  mockControl_ = setUpMockMethod(Blockly, 'getTheme', null, [styleStub]);
   var blockA = workspace.newBlock('row_block');
   blockA.setStyle('styleOne');
 
@@ -289,11 +287,11 @@ function test_set_style_throw_exception() {
       return null;
     }
   };
-  setUpMockMethod(mockControl_, Blockly, 'getTheme', null, [styleStub]);
+  mockControl_ = setUpMockMethod(Blockly, 'getTheme', null, [styleStub]);
   var blockA = workspace.newBlock('row_block');
   try {
     blockA.setStyle('styleOne');
-  } catch(error) {
+  } catch (error) {
     assertEquals(error.message, 'Invalid style name: styleOne');
   } finally {
     blockTest_tearDown();

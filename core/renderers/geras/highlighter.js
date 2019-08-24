@@ -19,14 +19,14 @@
  */
 
 /**
- * @fileoverview Methods for graphically rendering a block as SVG.
+ * @fileoverview Methods for adding highlights on block, for rendering in
+ * compatibility mode.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
-goog.provide('Blockly.blockRendering.Highlighter');
+goog.provide('Blockly.geras.Highlighter');
 
-goog.require('Blockly.blockRendering.highlightConstants');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.BottomRow');
@@ -47,14 +47,14 @@ goog.require('Blockly.blockRendering.TopRow');
  * or closed paths.  The highlights for tabs and notches are loosely based on
  * tab and notch shapes, but are not exactly the same.
  *
- * @param {!Blockly.blockRendering.RenderInfo} info An object containing all
+ * @param {!Blockly.geras.RenderInfo} info An object containing all
  *     information needed to render this block.
  * @param {!Blockly.BlockSvg.PathObject} pathObject An object that stores all of
  *     the block's paths before they are propagated to the page.
  * @package
  * @constructor
  */
-Blockly.blockRendering.Highlighter = function(info, pathObject) {
+Blockly.geras.Highlighter = function(info, pathObject) {
   this.info_ = info;
   this.pathObject_ = pathObject;
   this.steps_ = this.pathObject_.highlightSteps;
@@ -62,28 +62,30 @@ Blockly.blockRendering.Highlighter = function(info, pathObject) {
 
   this.RTL_ = this.info_.RTL;
 
+  this.constants_ = Blockly.blockRendering.getConstants();
+  this.highlightConstants_ = Blockly.blockRendering.getHighlightConstants();
   /**
    * The offset between the block's main path and highlight path.
    * @type {number}
    * @private
    */
-  this.highlightOffset_ = Blockly.blockRendering.highlightConstants.OFFSET;
+  this.highlightOffset_ = this.highlightConstants_.OFFSET;
 
-  this.outsideCornerPaths_ = Blockly.blockRendering.highlightConstants.OUTSIDE_CORNER;
-  this.insideCornerPaths_ = Blockly.blockRendering.highlightConstants.INSIDE_CORNER;
-  this.puzzleTabPaths_ = Blockly.blockRendering.highlightConstants.PUZZLE_TAB;
-  this.notchPaths_ = Blockly.blockRendering.highlightConstants.NOTCH;
-  this.startPaths_ = Blockly.blockRendering.highlightConstants.START_HAT;
+  this.outsideCornerPaths_ = this.highlightConstants_.OUTSIDE_CORNER;
+  this.insideCornerPaths_ = this.highlightConstants_.INSIDE_CORNER;
+  this.puzzleTabPaths_ = this.highlightConstants_.PUZZLE_TAB;
+  this.notchPaths_ = this.highlightConstants_.NOTCH;
+  this.startPaths_ = this.highlightConstants_.START_HAT;
   this.jaggedTeethPaths_ =
-      Blockly.blockRendering.highlightConstants.JAGGED_TEETH;
+      this.highlightConstants_.JAGGED_TEETH;
 };
 
-Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
+Blockly.geras.Highlighter.prototype.drawTopCorner = function(row) {
   this.steps_.push(
       Blockly.utils.svgPaths.moveBy(row.xPos, this.info_.startY));
   for (var i = 0, elem; (elem = row.elements[i]); i++) {
     if (elem.type == 'square corner') {
-      this.steps_.push(Blockly.blockRendering.highlightConstants.START_POINT);
+      this.steps_.push(this.highlightConstants_.START_POINT);
     } else if (elem.type == 'round corner') {
       this.steps_.push(
           this.outsideCornerPaths_.topLeft(this.RTL_));
@@ -103,7 +105,7 @@ Blockly.blockRendering.Highlighter.prototype.drawTopCorner = function(row) {
   this.steps_.push('H', right);
 };
 
-Blockly.blockRendering.Highlighter.prototype.drawJaggedEdge_ = function(row) {
+Blockly.geras.Highlighter.prototype.drawJaggedEdge_ = function(row) {
   if (this.info_.RTL) {
     this.steps_.push('H', row.width - this.highlightOffset_);
     this.steps_.push(this.jaggedTeethPaths_.pathLeft);
@@ -113,7 +115,7 @@ Blockly.blockRendering.Highlighter.prototype.drawJaggedEdge_ = function(row) {
   }
 };
 
-Blockly.blockRendering.Highlighter.prototype.drawValueInput = function(row) {
+Blockly.geras.Highlighter.prototype.drawValueInput = function(row) {
   var input = row.getLastInput();
   var steps = '';
   if (this.RTL_) {
@@ -133,7 +135,7 @@ Blockly.blockRendering.Highlighter.prototype.drawValueInput = function(row) {
   this.steps_.push(steps);
 };
 
-Blockly.blockRendering.Highlighter.prototype.drawStatementInput = function(row) {
+Blockly.geras.Highlighter.prototype.drawStatementInput = function(row) {
   var input = row.getLastInput();
   var steps = '';
   if (this.RTL_) {
@@ -151,7 +153,7 @@ Blockly.blockRendering.Highlighter.prototype.drawStatementInput = function(row) 
   this.steps_.push(steps);
 };
 
-Blockly.blockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
+Blockly.geras.Highlighter.prototype.drawRightSideRow = function(row) {
   var rightEdge = row.xPos + row.width - this.highlightOffset_;
   if (row.followsStatement) {
     this.steps_.push('H', rightEdge);
@@ -164,7 +166,7 @@ Blockly.blockRendering.Highlighter.prototype.drawRightSideRow = function(row) {
   }
 };
 
-Blockly.blockRendering.Highlighter.prototype.drawBottomRow = function(row) {
+Blockly.geras.Highlighter.prototype.drawBottomRow = function(row) {
   var height = row.yPos + row.height - row.overhangY;
 
   // Highlight the vertical edge of the bottom row on the input side.
@@ -185,7 +187,7 @@ Blockly.blockRendering.Highlighter.prototype.drawBottomRow = function(row) {
   }
 };
 
-Blockly.blockRendering.Highlighter.prototype.drawLeft = function() {
+Blockly.geras.Highlighter.prototype.drawLeft = function() {
   var outputConnection = this.info_.outputConnection;
   if (outputConnection) {
     var tabBottom =
@@ -212,7 +214,7 @@ Blockly.blockRendering.Highlighter.prototype.drawLeft = function() {
   }
 };
 
-Blockly.blockRendering.Highlighter.prototype.drawInlineInput = function(input) {
+Blockly.geras.Highlighter.prototype.drawInlineInput = function(input) {
   var offset = this.highlightOffset_;
 
   // Relative to the block's left.

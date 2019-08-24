@@ -17,3 +17,4 @@ gulpfile.js
 /accessible/*
 /appengine/*
 /externs/*
+/closure/*

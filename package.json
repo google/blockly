@@ -17,12 +17,13 @@
     "name": "Neil Fraser"
   },
   "scripts": {
-    "prepare": "gulp blockly_node_javascript_en",
+    "build": "gulp build",
     "lint": "eslint .",
-    "typings": "gulp typings",
-    "test": "tests/run_all_tests.sh",
     "package": "gulp package",
-    "release": "gulp release"
+    "prepare": "gulp blockly_node_javascript_en",
+    "release": "gulp release",
+    "test": "tests/run_all_tests.sh",
+    "typings": "gulp typings"
   },
   "main": "./index.js",
   "umd": "./blockly.min.js",
@@ -52,9 +53,10 @@
     "mocha": "^6.1.4",
     "pixelmatch": "^4.0.2",
     "pngjs": "^3.4.0",
-    "webdriverio": "^5.11.5",
     "rimraf": "^2.6.3",
-    "typescript-closure-tools": "^0.0.7"
+    "typescript-closure-tools": "^0.0.7",
+    "webdriverio": "^5.11.5",
+    "yargs": "^14.0.0"
   },
   "jshintConfig": {
     "globalstrict": true,

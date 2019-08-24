@@ -182,4 +182,55 @@ suite('Checkbox Fields', function() {
       });
     });
   });
+  suite('Customizations', function() {
+    suite('Check Character', function() {
+      function assertCharacter(field, char) {
+        field.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
+        field.initView();
+        chai.assert(field.textContent_.nodeValue, char);
+      }
+      test('Constant', function() {
+        var checkChar = Blockly.FieldCheckbox.CHECK_CHAR;
+        // Note: Developers shouldn't actually do this. IMO they should change
+        // the file and then recompile. But this is fine for testing.
+        Blockly.FieldCheckbox.CHECK_CHAR = '\u2661';
+        var field = new Blockly.FieldCheckbox(true);
+        assertCharacter(field, '\u2661');
+        Blockly.FieldCheckbox.CHECK_CHAR = checkChar;
+      });
+      test('JS Constructor', function() {
+        var field = new Blockly.FieldCheckbox(true, null, {
+          checkCharacter: '\u2661'
+        });
+        assertCharacter(field, '\u2661');
+      });
+      test('JSON Definition', function() {
+        var field = Blockly.FieldCheckbox.fromJson({
+          checkCharacter: '\u2661'
+        });
+        assertCharacter(field, '\u2661');
+      });
+      test('setCheckCharacter', function() {
+        var field = new Blockly.FieldCheckbox();
+        assertCharacter(field, Blockly.FieldCheckbox.CHECK_CHAR);
+        field.setCheckCharacter('\u2661');
+        // Don't call assertCharacter b/c we don't want to re-initialize.
+        chai.assert.equal(field.textContent_.nodeValue, '\u2661');
+      });
+      test('setCheckCharacter Before Init', function() {
+        var field = new Blockly.FieldCheckbox();
+        field.setCheckCharacter('\u2661');
+        assertCharacter(field, '\u2661');
+      });
+      test('Remove Custom Character', function() {
+        var field = new Blockly.FieldCheckbox(true, null, {
+          'checkCharacter': '\u2661'
+        });
+        assertCharacter(field, '\u2661');
+        field.setCheckCharacter(null);
+        chai.assert(field.textContent_.nodeValue,
+            Blockly.FieldCheckbox.CHECK_CHAR);
+      });
+    });
+  });
 });

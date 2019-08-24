@@ -114,13 +114,6 @@ this.BLOCKLY_DIR = (function(root) {
 })(this);
 
 this.BLOCKLY_BOOT = function(root) {
-  if (root.IS_NODE_JS) {
-    require('google-closure-library');
-  } else if (typeof goog == 'undefined') {
-    alert('Error: Closure not found.  Read this:\\n' +
-          'developers.google.com/blockly/guides/modify/web/closure');
-  }
-
   var dir = '';
   if (root.IS_NODE_JS) {
     dir = 'blockly';
@@ -140,12 +133,14 @@ this.BLOCKLY_BOOT = function(root) {
     # used on another, even if the directory name differs.
     m = re.search('[\\/]([^\\/]+)[\\/]core[\\/]blockly.js', add_dependency)
     add_dependency = re.sub('([\\/])' + re.escape(m.group(1)) +
-        '([\\/](core)[\\/])', '\\1" + dir + "\\2', add_dependency)
+        '([\\/](core)[\\/])', '\\1../../" + dir + "\\2', add_dependency)
     f.write(add_dependency + '\n')
 
     provides = []
+    # Exclude field_date.js as it still has a dependency on the closure library
+    # see issue #2890. 
     for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
-      if not dep.filename.startswith(os.pardir + os.sep):  # '../'
+      if not dep.filename.startswith('closure') and not dep.filename.startswith('core/field_date.js'):
         provides.extend(dep.provides)
     provides.sort()  # Deterministic build.
     f.write('\n')
@@ -167,7 +162,7 @@ if (this.IS_NODE_JS) {
   document.write('<script>var goog = undefined;</script>');
   // Load fresh Closure Library.
   document.write('<script src="' + this.BLOCKLY_DIR +
-      '/../closure-library/closure/goog/base.js"></script>');
+      '/closure/goog/base.js"></script>');
   document.write('<script>this.BLOCKLY_BOOT(this);</script>');
 }
 """)
@@ -221,7 +216,7 @@ class Gen_compressed(threading.Thread):
     filenames.sort()  # Deterministic build.
     for filename in filenames:
       # Filter out the Closure files (the compiler will add them).
-      if filename.startswith(os.pardir + os.sep):  # '../'
+      if filename.startswith("closure"):
         continue
       f = codecs.open(filename, encoding="utf-8")
       code = "".join(f.readlines()).encode("utf-8")
@@ -517,31 +512,10 @@ def get_args():
   return args
 
 if __name__ == "__main__":
-  try:
-    args = get_args()
-    use_default = not args.core and not args.generators and not args.langfiles
-    calcdeps = import_path(os.path.join(
-        os.path.pardir, "closure-library", "closure", "bin", "calcdeps.py"))
-  except ImportError:
-    if os.path.isdir(os.path.join(os.path.pardir, "closure-library-read-only")):
-      # Dir got renamed when Closure moved from Google Code to GitHub in 2014.
-      print("Error: Closure directory needs to be renamed from"
-            "'closure-library-read-only' to 'closure-library'.\n"
-            "Please rename this directory.")
-    elif os.path.isdir(os.path.join(os.path.pardir, "google-closure-library")):
-      # When Closure is installed by npm, it is named "google-closure-library".
-      #calcdeps = import_path(os.path.join(
-      # os.path.pardir, "google-closure-library", "closure", "bin", "calcdeps.py"))
-      print("Error: Closure directory needs to be renamed from"
-           "'google-closure-library' to 'closure-library'.\n"
-           "Please rename this directory.")
-    else:
-      print("""Error: Closure not found.  Read this:
-developers.google.com/blockly/guides/modify/web/closure""")
-    sys.exit(1)
-
-  full_search_paths = calcdeps.ExpandDirectories(
-      ["core", os.path.join(os.path.pardir, "closure-library")])
+  args = get_args()
+  use_default = not args.core and not args.generators and not args.langfiles
+  calcdeps = import_path(os.path.join("closure", "bin", "calcdeps.py"))
+  full_search_paths = calcdeps.ExpandDirectories(["core", "closure"])
   full_search_paths = sorted(full_search_paths)  # Deterministic build.
 
   # Uncompressed and compressed are run in parallel threads.

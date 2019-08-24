@@ -46,27 +46,20 @@ goog.require('Blockly.utils.Size');
  *    changes to the field's value. Takes in a colour string & returns a
  *    validated colour string ('#rrggbb' format), or null to abort the change.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the documentation for a list of properties this parameter supports.
- *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour}
+ *    for a list of properties this parameter supports.
  * @extends {Blockly.Field}
  * @constructor
  */
 Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
-  if (opt_config) {
-    if (opt_config['colourOptions']) {
-      this.setColours(opt_config['colourOptions'], opt_config['colourTitles']);
-    }
-    if (opt_config['columns']) {
-      this.setColumns(opt_config['columns']);
-    }
-  }
-
   opt_value = this.doClassValidation_(opt_value);
   if (opt_value === null) {
     opt_value = Blockly.FieldColour.COLOURS[0];
   }
   Blockly.FieldColour.superClass_.constructor.call(
       this, opt_value, opt_validator, opt_config);
+
+  this.configure_(opt_config);
 };
 goog.inherits(Blockly.FieldColour, Blockly.Field);
 
@@ -156,6 +149,24 @@ Blockly.FieldColour.prototype.DROPDOWN_BORDER_COLOUR = '#dadce0';
  * @private
  */
 Blockly.FieldColour.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
+
+/**
+ * Configure the field based on the given map of options.
+ * @param {Object} opt_config A map of options to configure the field based on.
+ * @private
+ */
+Blockly.FieldColour.prototype.configure_ = function(opt_config) {
+  if (!opt_config) {
+    return;
+  }
+
+  if (opt_config['colourOptions']) {
+    this.setColours(opt_config['colourOptions'], opt_config['colourTitles']);
+  }
+  if (opt_config['columns']) {
+    this.setColumns(opt_config['columns']);
+  }
+};
 
 /**
  * Create the block UI for this colour field.

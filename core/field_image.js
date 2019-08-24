@@ -228,7 +228,7 @@ Blockly.FieldImage.prototype.setOnClickHandler = function(func) {
 /**
  * @override
  */
-Blockly.FieldImage.prototype.hookGetText_ = function() {
+Blockly.FieldImage.prototype.getText_ = function() {
   return this.altText_;
 };
 

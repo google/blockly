@@ -168,7 +168,7 @@ Blockly.Field.prototype.clickTarget_ = null;
  * @return {?string} Current text. Return null to resort to a string cast.
  * @protected
  */
-Blockly.Field.prototype.hookGetText_;
+Blockly.Field.prototype.getText_;
 
 /**
  * Non-breaking space.
@@ -649,8 +649,8 @@ Blockly.Field.prototype.getDisplayText = function() {
  * @return {string} Current text.
  */
 Blockly.Field.prototype.getText = function() {
-  if (this.hookGetText_) {
-    var text = this.hookGetText_.call(this);
+  if (this.getText_) {
+    var text = this.getText_.call(this);
     if (text) {
       return String(text);
     }

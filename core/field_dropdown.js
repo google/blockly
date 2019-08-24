@@ -535,7 +535,7 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
 /**
  * @override
  */
-Blockly.FieldDropdown.prototype.hookGetText_ = function() {
+Blockly.FieldDropdown.prototype.getText_ = function() {
   if (this.selectedOption_) {
     if (typeof this.selectedOption_ == 'object') {
       return this.selectedOption_['alt'];

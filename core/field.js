@@ -620,7 +620,7 @@ Blockly.Field.prototype.getScaledBBox_ = function() {
 };
 
 /**
- * Gets the text from this field to display on the block. May differ from
+ * Get the text from this field to display on the block. May differ from
  * ``getText`` due to ellipsis, and other formatting.
  * @return {string} Text to display.
  * @protected

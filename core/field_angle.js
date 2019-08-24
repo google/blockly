@@ -308,7 +308,7 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
     return;
   }
   // Always display the input (i.e. getText) even if it is invalid.
-  var angleDegrees = Number(this.getDisplayText_()) + Blockly.FieldAngle.OFFSET;
+  var angleDegrees = Number(this.getText()) + Blockly.FieldAngle.OFFSET;
   angleDegrees %= 360;
   var angleRadians = Blockly.utils.math.toRadians(angleDegrees);
   var path = ['M ', Blockly.FieldAngle.HALF, ',', Blockly.FieldAngle.HALF];

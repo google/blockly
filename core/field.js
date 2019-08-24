@@ -651,7 +651,7 @@ Blockly.Field.prototype.getDisplayText_ = function() {
 Blockly.Field.prototype.getText = function() {
   if (this.getText_) {
     var text = this.getText_.call(this);
-    if (text) {
+    if (text !== null) {
       return String(text);
     }
   }

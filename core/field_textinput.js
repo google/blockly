@@ -56,6 +56,12 @@ Blockly.FieldTextInput = function(opt_value, opt_validator) {
   }
   Blockly.FieldTextInput.superClass_.constructor.call(this, opt_value,
       opt_validator);
+  /**
+   * A cache of the last value in the html input.
+   * @type {string}
+   * @private
+   */
+  this.htmlInputValue_ = null;
 };
 goog.inherits(Blockly.FieldTextInput, Blockly.Field);
 
@@ -281,13 +287,17 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
 Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
   // Finalize value.
   this.isBeingEdited_ = false;
+  this.isTextValid_ = true;
   // No need to call setValue because if the widget is being closed the
   // latest input text has already been validated.
-  if (!this.isTextValid_) {
+  if (this.value_ != this.htmlInputValue_) {
     // At the end of an edit the text should be the same as the value. It
     // may not be if the input text is different than the validated text.
+    // There are two scenarios where that is the case:
+    // - The text in the input was invalid.
+    // - The text in the input is different to that returned by a validator.
     // Re-render to fix that.
-    this.isTextValid_ = true;
+    this.htmlInputValue_ = null;
     this.forceRerender();
   }
   // Otherwise don't rerender.
@@ -386,6 +396,9 @@ Blockly.FieldTextInput.prototype.setEditorValue_ = function(newValue) {
   this.setValue(newValue);
   if (this.isBeingEdited_) {
     this.htmlInput_.value = newValue;
+    // This cache is stored in order to determine if we must re-render when
+    // disposing of the widget div.
+    this.htmlInputValue_ = newValue;
     this.forceRerender();
   }
 };

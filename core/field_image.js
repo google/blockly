@@ -195,13 +195,13 @@ Blockly.FieldImage.prototype.getFlipRtl = function() {
  * @public
  */
 Blockly.FieldImage.prototype.setAlt = function(alt) {
-  if (alt === null) {
-    // No change if null.
+  if (alt === this.altText_) {
+    // No change.
     return;
   }
-  this.altText_ = alt;
+  this.altText_ = alt || '';
   if (this.imageElement_) {
-    this.imageElement_.setAttribute('alt', alt || '');
+    this.imageElement_.setAttribute('alt', this.altText_);
   }
 };
 
@@ -229,7 +229,7 @@ Blockly.FieldImage.prototype.setOnClickHandler = function(func) {
  * @override
  */
 Blockly.FieldImage.prototype.getText_ = function() {
-  return this.altText_;
+  return this.altText_ || '';
 };
 
 Blockly.fieldRegistry.register('field_image', Blockly.FieldImage);

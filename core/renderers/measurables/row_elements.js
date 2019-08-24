@@ -1,5 +1,11 @@
 
+goog.provide('Blockly.blockRendering.Field');
+goog.provide('Blockly.blockRendering.Hat');
+goog.provide('Blockly.blockRendering.Icon');
 goog.provide('Blockly.blockRendering.InRowSpacer');
+goog.provide('Blockly.blockRendering.JaggedEdge');
+goog.provide('Blockly.blockRendering.RoundCorner');
+goog.provide('Blockly.blockRendering.SquareCorner');
 
 goog.require('Blockly.blockRendering.Measurable');
 

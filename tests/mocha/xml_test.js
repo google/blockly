@@ -501,7 +501,10 @@ suite('XML', function() {
         Blockly.Xml.domToWorkspace(renderedXml, this.headlessWorkspace);
         var headlessXml = Blockly.Xml.workspaceToDom(this.headlessWorkspace);
 
-        chai.assert.equal(renderedXml, headlessXml);
+        var renderedText = Blockly.Xml.domToText(renderedXml);
+        var headlessText = Blockly.Xml.domToText(headlessXml);
+
+        chai.assert.equal(renderedText, headlessText);
       };
     });
     teardown(function() {

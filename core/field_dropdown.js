@@ -445,7 +445,7 @@ Blockly.FieldDropdown.prototype.doValueUpdate_ = function(newValue) {
   var options = this.getOptions();
   for (var i = 0, option; option = options[i]; i++) {
     if (option[1] == this.value_) {
-      this.setSelectedValue_(option[0]);
+      this.setSelectedOption_(option[0]);
     }
   }
 };
@@ -550,7 +550,7 @@ Blockly.FieldDropdown.prototype.hookGetText_ = function() {
  * @param {string|Object} option The option to select.
  * @protected
  */
-Blockly.FieldDropdown.prototype.setSelectedValue_ = function(option) {
+Blockly.FieldDropdown.prototype.setSelectedOption_ = function(option) {
   this.selectedOption_ = option;
 };
 

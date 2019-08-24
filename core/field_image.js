@@ -71,7 +71,7 @@ Blockly.FieldImage = function(src, width, height,
       imageHeight + Blockly.FieldImage.Y_PADDING);
 
   /**
-   * Alt text shown on the image.
+   * Whether to flip this image in RTL.
    *
    * @type {boolean}
    * @private
@@ -79,7 +79,7 @@ Blockly.FieldImage = function(src, width, height,
   this.flipRtl_ = opt_flipRtl;
 
   /**
-   * Alt text shown on the image.
+   * Alt text of this image.
    *
    * @type {string}
    * @private

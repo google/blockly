@@ -20,7 +20,7 @@
 
 /**
  * @fileoverview An object that provides constants for rendering blocks in Zelos
- * mode
+ * mode.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
@@ -52,10 +52,15 @@ Blockly.zelos.ConstantProvider.prototype.makePuzzleTab = function() {
   return this.makeTriangle();
 };
 
+/**
+ * @return {!Object} An object containing sizing and path information about
+ *     a triangle shape for connections.
+ * @package
+ */
 Blockly.zelos.ConstantProvider.prototype.makeTriangle = function() {
   var width = 20;
   var height = 20;
-  // The 'up' and 'down'  versions of the paths are the same, but the Y sign
+  // The 'up' and 'down' versions of the paths are the same, but the Y sign
   // flips.  Forward and back are the signs to use to move the cursor in the
   // direction that the path is being drawn.
   function makeMainPath(up) {

@@ -548,6 +548,9 @@ Blockly.Css.CONTENT = [
   '}',
 
 
+  /* Edge and IE introduce a close icon when the input is longer than certain
+     size. This close icon shifts the text in the input field and that messes
+     with our sizing calculations. Hiding the close icon. */
   '.blocklyHtmlInput::-ms-clear {',
     'display: none;',
   '}',

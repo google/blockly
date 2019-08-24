@@ -543,7 +543,7 @@ Blockly.Field.prototype.updateColour = function() {
  * @protected
  */
 Blockly.Field.prototype.render_ = function() {
-  this.textContent_.nodeValue = this.getDisplayText();
+  this.textContent_.nodeValue = this.getDisplayText_();
   this.updateSize_();
 };
 
@@ -625,7 +625,7 @@ Blockly.Field.prototype.getScaledBBox_ = function() {
  * @return {string} Text to display.
  * @protected
  */
-Blockly.Field.prototype.getDisplayText = function() {
+Blockly.Field.prototype.getDisplayText_ = function() {
   var text = this.getText();
   if (!text) {
     // Prevent the field from disappearing if empty.

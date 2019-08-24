@@ -294,9 +294,7 @@ Blockly.FieldAngle.prototype.setAngle = function(angle) {
   }
 
   // Update value.
-  var angleString = String(angle);
-  if (angleString != this.angleString_) {
-    this.angleString_ = angleString;
+  if (angle != this.value_) {
     this.setEditorValue_(angle);
   }
 };

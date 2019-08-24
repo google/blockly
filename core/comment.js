@@ -44,27 +44,17 @@ goog.require('Blockly.utils.userAgent');
  */
 Blockly.Comment = function(block) {
   Blockly.Comment.superClass_.constructor.call(this, block);
+
+  /**
+   * The model for this comment.
+   * @type {TextBubbleModel}
+   * @private
+   */
+  this.model_ = block.commentModel;
+
   this.createIcon();
 };
 Blockly.utils.object.inherits(Blockly.Comment, Blockly.Icon);
-
-/**
- * Comment text (if bubble is not visible).
- * @private
- */
-Blockly.Comment.prototype.text_ = '';
-
-/**
- * Width of bubble.
- * @private
- */
-Blockly.Comment.prototype.width_ = 160;
-
-/**
- * Height of bubble.
- * @private
- */
-Blockly.Comment.prototype.height_ = 80;
 
 /**
  * Draw the comment icon.
@@ -132,10 +122,10 @@ Blockly.Comment.prototype.createEditor_ = function() {
     e.stopPropagation();
   });
   Blockly.bindEventWithChecks_(textarea, 'change', this, function(_e) {
-    if (this.text_ != textarea.value) {
+    if (this.model_.text != textarea.value) {
       Blockly.Events.fire(new Blockly.Events.BlockChange(
-          this.block_, 'comment', null, this.text_, textarea.value));
-      this.text_ = textarea.value;
+          this.block_, 'comment', null, this.model_.text, textarea.value));
+      this.model_.text = textarea.value;
     }
   });
   setTimeout(textarea.focus.bind(textarea), 0);
@@ -200,7 +190,7 @@ Blockly.Comment.prototype.setVisible = function(visible) {
     this.bubble_ = new Blockly.Bubble(
         /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
         this.createEditor_(), this.block_.svgPath_,
-        this.iconXY_, this.width_, this.height_);
+        this.iconXY_, this.model_.size.width, this.model_.size.height);
     // Expose this comment's block's ID on its top-level SVG group.
     this.bubble_.setSvgId(this.block_.id);
     this.bubble_.registerResizeEvent(this.resizeBubble_.bind(this));
@@ -241,7 +231,7 @@ Blockly.Comment.prototype.getBubbleSize = function() {
   if (this.isVisible()) {
     return this.bubble_.getBubbleSize();
   } else {
-    return {width: this.width_, height: this.height_};
+    return this.model_.size;
   }
 };
 
@@ -254,8 +244,8 @@ Blockly.Comment.prototype.setBubbleSize = function(width, height) {
   if (this.textarea_) {
     this.bubble_.setBubbleSize(width, height);
   } else {
-    this.width_ = width;
-    this.height_ = height;
+    this.model_.size.width = width;
+    this.model_.size.height = height;
   }
 };
 
@@ -264,7 +254,7 @@ Blockly.Comment.prototype.setBubbleSize = function(width, height) {
  * @return {string} Comment text.
  */
 Blockly.Comment.prototype.getText = function() {
-  return this.textarea_ ? this.textarea_.value : this.text_;
+  return this.textarea_ ? this.textarea_.value : this.model_.text;
 };
 
 /**
@@ -272,11 +262,11 @@ Blockly.Comment.prototype.getText = function() {
  * @param {string} text Comment text.
  */
 Blockly.Comment.prototype.setText = function(text) {
-  if (this.text_ != text) {
+  if (this.model_.text != text) {
     Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this.block_, 'comment', null, this.text_, text));
-    this.text_ = text;
+        this.block_, 'comment', null, this.model_.text, text));
   }
+  this.model_.text = text;
   if (this.textarea_) {
     this.textarea_.value = text;
   }

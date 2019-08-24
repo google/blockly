@@ -128,8 +128,33 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    */
   this.collapsed_ = false;
 
-  /** @type {string|Blockly.Comment} */
+  /**
+   * A string/Blockly.Comment representing the comment attached to this block.
+   * @type {string|Blockly.Comment}
+   * @deprecated August 2019. Use getCommentText or getCommentIcon instead.
+   */
   this.comment = null;
+
+  // TODO: There may be a better place for this typedef, or it could simply
+  //  be removed.
+  /**
+   * A model of a comment.
+   * @typedef {Object} TextBubbleModel
+   * @property {?string} text - The text of the comment.
+   * @property {boolean} pinned - Whether the comment is open or not.
+   * @property {Blockly.utils.Size} size - The height and width of the bubble.
+   */
+
+  /**
+   * A model of the comment attached to this block.
+   * @type {TextBubbleModel}
+   * @package
+   */
+  this.commentModel = {
+    text: null,
+    pinned: false,
+    size: new Blockly.utils.Size(160, 80)
+  };
 
   /**
    * The block's position in workspace units.  (0, 0) is at the workspace's
@@ -1795,11 +1820,13 @@ Blockly.Block.prototype.getCommentText = function() {
  * @param {?string} text The text, or null to delete.
  */
 Blockly.Block.prototype.setCommentText = function(text) {
-  if (this.comment != text) {
-    Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this, 'comment', null, this.comment, text || ''));
-    this.comment = text;
+  if (this.commentModel.text == text) {
+    return;
   }
+  Blockly.Events.fire(new Blockly.Events.BlockChange(
+      this, 'comment', null, this.commentModel.text, text || ''));
+  this.commentModel.text = text;
+  this.comment = text;  // For backwards compatibility.
 };
 
 /**

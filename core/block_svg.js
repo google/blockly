@@ -258,8 +258,16 @@ Blockly.BlockSvg.prototype.mutator = null;
 /**
  * Block's comment icon (if any).
  * @type {Blockly.Comment}
+ * @deprecated August 2019. Use getCommentIcon instead.
  */
 Blockly.BlockSvg.prototype.comment = null;
+
+/**
+ * Block's comment icon (if any).
+ * @type {Blockly.Comment}
+ * @private
+ */
+Blockly.BlockSvg.prototype.commentIcon_ = null;
 
 /**
  * Block's warning icon (if any).
@@ -1089,23 +1097,27 @@ Blockly.BlockSvg.prototype.getCommentText = function() {
  * @param {?string} text The text, or null to delete.
  */
 Blockly.BlockSvg.prototype.setCommentText = function(text) {
-  var changedState = false;
-  if (typeof text == 'string') {
-    if (!this.comment) {
-      if (!Blockly.Comment) {
-        throw Error('Missing require for Blockly.Comment');
-      }
-      this.comment = new Blockly.Comment(this);
-      changedState = true;
-    }
-    this.comment.setText(/** @type {string} */ (text));
-  } else {
-    if (this.comment) {
-      this.comment.dispose();
-      changedState = true;
-    }
+  if (this.commentModel.text == text) {
+    return;
   }
-  if (changedState && this.rendered) {
+  Blockly.BlockSvg.superClass_.setCommentText.call(this, text);
+
+  var shouldHaveComment = text != null;
+  if (!!this.commentIcon_ == shouldHaveComment) {
+    // If the comment's state of existence is correct, but the text is new
+    // that means we're just updating a comment.
+    // TODO: Tell comment to update itself.
+    return;
+  }
+  if (shouldHaveComment) {
+    this.commentIcon_ = new Blockly.Comment(this);
+    this.comment = this.commentIcon_; // For backwards compatibility.
+  } else {
+    this.commentIcon_.dispose();
+    this.commentIcon_ = null;
+    this.comment = null;  // For backwards compatibility.
+  }
+  if (this.rendered) {
     this.render();
     // Adding or removing a comment icon will cause the block to change shape.
     this.bumpNeighbours_();

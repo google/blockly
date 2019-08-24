@@ -354,4 +354,24 @@ Blockly.blockRendering.ConstantProvider.prototype.makeOutsideCorners = function(
   };
 };
 
-
+/**
+ * Get an object with connection shape and sizing information based on the type
+ * of the connection.
+ * @param {!Blockly.RenderedConnection} connection The connection to find a
+ *     shape object for
+ * @return {!Object} The shape object for the connection.
+ * @package
+ */
+Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
+    connection) {
+  switch (connection.type) {
+    case Blockly.INPUT_VALUE:
+    case Blockly.OUTPUT_VALUE:
+      return this.PUZZLE_TAB;
+    case Blockly.PREVIOUS_STATEMENT:
+    case Blockly.NEXT_STATEMENT:
+      return this.NOTCH;
+    default:
+      throw new Error('Unknown type');
+  }
+};

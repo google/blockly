@@ -45,11 +45,9 @@ goog.inherits(Blockly.zelos.ConstantProvider,
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.makePuzzleTab = function() {
-  // Example replacement of one connection shape with another.
-  // Eventually this will be replaced by a lookup based on connection type.
-  // For now this just makes Zelos visibly different from Thrasos.
-  return this.makeTriangle();
+Blockly.zelos.ConstantProvider.prototype.init = function() {
+  Blockly.zelos.ConstantProvider.superClass_.init.call(this);
+  this.TRIANGLE = this.makeTriangle();
 };
 
 /**
@@ -79,4 +77,26 @@ Blockly.zelos.ConstantProvider.prototype.makeTriangle = function() {
     pathDown: pathDown,
     pathUp: pathUp
   };
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
+    connection) {
+  var checks = connection.getCheck();
+  switch (connection.type) {
+    case Blockly.INPUT_VALUE:
+    case Blockly.OUTPUT_VALUE:
+      // Includes doesn't work in IE.
+      if (checks && checks.indexOf('Boolean') != -1) {
+        return Blockly.blockRendering.constants.TRIANGLE;
+      }
+      return Blockly.blockRendering.constants.PUZZLE_TAB;
+    case Blockly.PREVIOUS_STATEMENT:
+    case Blockly.NEXT_STATEMENT:
+      return this.NOTCH;
+    default:
+      throw new Error('Unknown type');
+  }
 };

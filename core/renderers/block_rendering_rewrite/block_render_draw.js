@@ -143,7 +143,7 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
       this.outlinePath_ +=
           this.constants_.OUTSIDE_CORNERS.topLeft;
     } else if (elem.type == 'previous connection') {
-      this.outlinePath_ += topRow.notchShape.pathLeft;
+      this.outlinePath_ += elem.shape.pathLeft;
     } else if (elem.type == 'hat') {
       this.outlinePath_ += this.constants_.START_HAT.path;
     } else if (elem.isSpacer()) {
@@ -179,7 +179,7 @@ Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
 
   this.outlinePath_ +=
       Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.width) +
-      input.connectionShape.pathDown +
+      input.shape.pathDown +
       Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
 };
 
@@ -196,7 +196,7 @@ Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   var x = input.xPos + input.width;
 
   var innerTopLeftCorner =
-      input.notchShape.pathRight +
+      input.shape.pathRight +
       Blockly.utils.svgPaths.lineOnAxis('h',
           -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
       this.constants_.INSIDE_CORNERS.pathTop;
@@ -241,7 +241,7 @@ Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
 
   for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
     if (elem.isNextConnection()) {
-      this.outlinePath_ += bottomRow.notchShape.pathRight;
+      this.outlinePath_ += elem.shape.pathRight;
     } else if (elem.isSquareCorner()) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', bottomRow.xPos);
     } else if (elem.isRoundedCorner()) {
@@ -267,7 +267,7 @@ Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
     // Draw a line up to the bottom of the tab.
     this.outlinePath_ +=
         Blockly.utils.svgPaths.lineOnAxis('V', tabBottom) +
-        outputConnection.connectionShape.pathUp;
+        outputConnection.shape.pathUp;
   }
   // Close off the path.  This draws a vertical line up to the start of the
   // block's path, which may be either a rounded or a sharp corner.
@@ -347,7 +347,7 @@ Blockly.blockRendering.Drawer.prototype.drawInlineInput_ = function(input) {
 
   this.inlinePath_ += Blockly.utils.svgPaths.moveTo(connectionRight, yPos) +
       Blockly.utils.svgPaths.lineOnAxis('v', connectionTop) +
-      input.connectionShape.pathDown +
+      input.shape.pathDown +
       Blockly.utils.svgPaths.lineOnAxis('v', height - connectionBottom) +
       Blockly.utils.svgPaths.lineOnAxis('h', width - input.connectionWidth) +
       Blockly.utils.svgPaths.lineOnAxis('v', -height) +

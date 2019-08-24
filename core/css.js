@@ -547,6 +547,11 @@ Blockly.Css.CONTENT = [
     'text-align: center;',
   '}',
 
+
+  '.blocklyHtmlInput::-ms-clear {',
+    'display: none;',
+  '}',
+
   '.blocklyMainBackground {',
     'stroke-width: 1;',
     'stroke: #c6c6c6;',  /* Equates to #ddd due to border being off-pixel. */

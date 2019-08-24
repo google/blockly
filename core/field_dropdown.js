@@ -57,6 +57,14 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
   if (typeof menuGenerator != 'function') {
     Blockly.FieldDropdown.validateOptions_(menuGenerator);
   }
+  
+  /**
+   * A reference to the currently selected menu item.
+   * @type {Blockly.MenuItem}
+   * @private
+   */
+  this.selectedMenuItem_ = null;
+
   this.menuGenerator_ = menuGenerator;
 
   this.trimOptions_();
@@ -139,13 +147,6 @@ Blockly.FieldDropdown.prototype.imageElement_ = null;
  * @private
  */
 Blockly.FieldDropdown.prototype.imageJson_ = null;
-
-/**
- * A reference to the currently selected menu item.
- * @type {Blockly.MenuItem}
- * @private
- */
-this.selectedMenuItem_ = null;
 
 /**
  * Create the block UI for this dropdown.

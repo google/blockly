@@ -107,5 +107,12 @@ suite('Comments', function() {
 
       eventSpy.restore();
     });
+    test('Get Text While Editing', function() {
+      this.comment.setVisible(true);
+      this.comment.textarea_.value = 'test text';
+      this.comment.textarea_.dispatchEvent(new Event('input'));
+
+      chai.assert.equal(this.comment.getText(), 'test text');
+    });
   });
 });

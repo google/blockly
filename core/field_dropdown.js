@@ -64,7 +64,7 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
 
   /**
    * The currently selected option.
-   * @type {string|Blockly.FieldDropdown.ImageProperties}
+   * @type {?string|Blockly.FieldDropdown.ImageProperties}
    * @private
    */
   this.selectedOption_ = null;
@@ -130,7 +130,8 @@ Blockly.FieldDropdown.IMAGE_Y_OFFSET = 5;
  * @const
  * @private
  */
-Blockly.FieldDropdown.IMAGE_Y_PADDING = Blockly.FieldDropdown.IMAGE_Y_OFFSET * 2;
+Blockly.FieldDropdown.IMAGE_Y_PADDING =
+    Blockly.FieldDropdown.IMAGE_Y_OFFSET * 2;
 
 /**
  * Android can't (in 2014) display "▾", so use "▼" instead.
@@ -514,7 +515,8 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
     this.imageElement_.setAttribute('x', imageX);
     this.textElement_.setAttribute('x', arrowX);
   } else {
-    var arrowX = imageWidth + arrowWidth + Blockly.Field.DEFAULT_TEXT_OFFSET + 1;
+    var arrowX =
+        imageWidth + arrowWidth + Blockly.Field.DEFAULT_TEXT_OFFSET + 1;
     this.textElement_.setAttribute('text-anchor', 'end');
     this.textElement_.setAttribute('x', arrowX);
     this.imageElement_.setAttribute('x', Blockly.Field.DEFAULT_TEXT_OFFSET);
@@ -549,7 +551,7 @@ Blockly.FieldDropdown.prototype.getText_ = function() {
 };
 
 /**
- * Set the selected option on this dropdown.
+ * Set the selected valid language-neutral option of this dropdown.
  * @param {string|Blockly.FieldDropdown.ImageProperties} option The option
  *   to select, a human-readable text or image.
  * @protected

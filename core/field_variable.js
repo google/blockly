@@ -253,9 +253,7 @@ Blockly.FieldVariable.prototype.doClassValidation_ = function(newId) {
  */
 Blockly.FieldVariable.prototype.doValueUpdate_ = function(newId) {
   this.variable_ = Blockly.Variables.getVariable(this.workspace_, newId);
-  this.value_ = newId;
-  this.setSelectedOption_(this.variable_.name);
-  this.isDirty_ = true;
+  Blockly.FieldVariable.superClass_.doValueUpdate_.call(this, newId);
 };
 
 /**

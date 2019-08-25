@@ -64,7 +64,7 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
 
   /**
    * The currently selected option.
-   * @type {string|Object}
+   * @type {string|Blockly.FieldDropdown.ImageProperties}
    * @private
    */
   this.selectedOption_ = null;
@@ -74,6 +74,17 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
       opt_validator);
 };
 goog.inherits(Blockly.FieldDropdown, Blockly.Field);
+
+/**
+ * Dropdown image properties.
+ * @typedef {{
+  *            src:string,
+  *            alt:string,
+  *            width:number,
+  *            height:number
+  *          }}
+  */
+Blockly.FieldDropdown.ImageProperties;
 
 /**
  * Construct a FieldDropdown from a JSON arg object.
@@ -138,14 +149,6 @@ Blockly.FieldDropdown.prototype.CURSOR = 'default';
  * @private
  */
 Blockly.FieldDropdown.prototype.imageElement_ = null;
-
-/**
- * Object with src, height, width, and alt attributes if currently selected
- * option is an image, or null.
- * @type {Object}
- * @private
- */
-Blockly.FieldDropdown.prototype.imageJson_ = null;
 
 /**
  * Create the block UI for this dropdown.
@@ -547,7 +550,8 @@ Blockly.FieldDropdown.prototype.getText_ = function() {
 
 /**
  * Set the selected option on this dropdown.
- * @param {string|Object} option The option to select.
+ * @param {string|Blockly.FieldDropdown.ImageProperties} option The option
+ *   to select, a human-readable text or image.
  * @protected
  */
 Blockly.FieldDropdown.prototype.setSelectedOption_ = function(option) {

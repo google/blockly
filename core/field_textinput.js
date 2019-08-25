@@ -58,7 +58,7 @@ Blockly.FieldTextInput = function(opt_value, opt_validator) {
       opt_validator);
   /**
    * A cache of the last value in the html input.
-   * @type {string}
+   * @type {*}
    * @private
    */
   this.htmlInputValue_ = null;
@@ -269,7 +269,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   div.appendChild(htmlInput);
 
   htmlInput.value = htmlInput.defaultValue = String(this.value_);
-  htmlInput.untypedDefaultValue_ = String(this.value_);
+  htmlInput.untypedDefaultValue_ = this.value_;
   htmlInput.oldValue_ = null;
   // Ensure the browser reflows before resizing to avoid issue #2777.
   setTimeout(this.resizeEditor_.bind(this), 0);
@@ -387,7 +387,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(_e) {
 
 /**
  * Set the html input value and the field's internal value. The difference
- * between this and ``setValue`` is that his also updates the html input
+ * between this and ``setValue`` is that this also updates the html input
  * value whilst editing.
  * @param {*} newValue New value.
  * @protected

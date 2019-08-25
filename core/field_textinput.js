@@ -117,7 +117,7 @@ Blockly.FieldTextInput.prototype.configure_ = function(opt_config) {
     return;
   }
   if (typeof opt_config['spellcheck'] == 'boolean') {
-    this.setSpellcheck(opt_config['spellcheck']);
+    this.spellcheck_ = opt_config['spellcheck'];
   }
 };
 

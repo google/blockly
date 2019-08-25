@@ -54,7 +54,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   /**
    * The size of the area rendered by the field.
    * @type {Blockly.utils.Size}
-   * @private
+   * @protected
    */
   this.size_ = new Blockly.utils.Size(0, 0);
   this.setValue(value);

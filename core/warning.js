@@ -141,9 +141,6 @@ Blockly.Warning.prototype.setVisible = function(visible) {
       }
     }
     this.updateColour();
-    // Bump the warning into the right location.
-    var size = this.bubble_.getBubbleSize();
-    this.bubble_.setBubbleSize(size.width, size.height);
   } else {
     // Dispose of the bubble.
     this.bubble_.dispose();

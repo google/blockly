@@ -657,13 +657,12 @@ Blockly.Bubble.prototype.setBubbleSize = function(width, height) {
           (height - doubleBorderWidth) + ')');
     }
   }
-  if (this.rendered_) {
-    if (this.autoLayout_) {
-      this.layoutBubble_();
-    }
-    this.positionBubble_();
-    this.renderArrow_();
+  if (this.autoLayout_) {
+    this.layoutBubble_();
   }
+  this.positionBubble_();
+  this.renderArrow_();
+
   // Allow the contents to resize.
   if (this.resizeCallback_) {
     this.resizeCallback_();

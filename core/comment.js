@@ -187,7 +187,6 @@ Blockly.Comment.prototype.setVisible = function(visible) {
   }
   // Save the bubble stats before the visibility switch.
   var text = this.getText();
-  var size = this.getBubbleSize();
   if (visible) {
     // Create the bubble.
     this.bubble_ = new Blockly.Bubble(
@@ -207,7 +206,6 @@ Blockly.Comment.prototype.setVisible = function(visible) {
   }
   // Restore the bubble stats after the visibility switch.
   this.setText(text);
-  this.setBubbleSize(size.width, size.height);
 };
 
 /**

@@ -297,7 +297,6 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
       };
       this.block_.workspace.addChangeListener(this.sourceListener_);
     }
-    this.resizeBubble_();
     // When the mutator's workspace changes, update the source block.
     this.workspace_.addChangeListener(this.workspaceChanged_.bind(this));
     this.updateColour();

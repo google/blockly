@@ -266,8 +266,12 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   htmlInput.value = htmlInput.defaultValue = this.value_;
   htmlInput.untypedDefaultValue_ = this.value_;
   htmlInput.oldValue_ = null;
-  // Ensure the browser reflows before resizing to avoid issue #2777.
-  setTimeout(this.resizeEditor_.bind(this), 0);
+  if (Blockly.utils.userAgent.GECKO) {
+    // In FF, ensure the browser reflows before resizing to avoid issue #2777.
+    setTimeout(this.resizeEditor_.bind(this), 0);
+  } else {
+    this.resizeEditor_();
+  }
 
   this.bindInputEvents_(htmlInput);
 

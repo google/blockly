@@ -55,8 +55,10 @@ suite('Insert/Modify', function() {
         Blockly.navigation.cursor_.setLocation(
             Blockly.ASTNode.createConnectionNode(
                 this.stack_block_2.nextConnection));
-        chai.assert.isFalse(Blockly.navigation.modify());
-        chai.assert.isNull(this.stack_block_1.getNextBlock());
+        // Connect method will try to find a way to connect blocks with
+        // incompatible types.
+        chai.assert.isTrue(Blockly.navigation.modify());
+        chai.assert.equal(this.stack_block_1.getNextBlock(), this.stack_block_2);
       });
       test('Cursor on really incompatible connection', function() {
         Blockly.navigation.cursor_.setLocation(
@@ -134,7 +136,11 @@ suite('Insert/Modify', function() {
         Blockly.navigation.cursor_.setLocation(
             Blockly.ASTNode.createConnectionNode(
                 this.row_block_2.inputList[0].connection));
-        chai.assert.isFalse(Blockly.navigation.modify());
+        // Connect method will try to find a way to connect blocks with
+        // incompatible types.
+        chai.assert.isTrue(Blockly.navigation.modify());
+        chai.assert.equal(this.row_block_1.inputList[0].connection.targetBlock(),
+            this.row_block_2);
       });
       test('Cursor on really incompatible connection', function() {
         Blockly.navigation.cursor_.setLocation(

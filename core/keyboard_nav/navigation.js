@@ -484,34 +484,107 @@ Blockly.navigation.modify = function() {
 };
 
 /**
- * Connect the moving connection to the targetConnection.  Disconnect the moving
- * connection if necessary, and and position the blocks so that the target
- * connection does not move.
- * @param {Blockly.RenderedConnection} movingConnection The connection to move.
- * @param {Blockly.RenderedConnection} targetConnection The connection that
- *     stays stationary as the movingConnection attaches to it.
- * @return {boolean} Whether the connection was successful.
+ * If the two blocks are compatible move the moving connection to the target
+ * connection and connect them.
+ * @param {Blockly.Connection} movingConnection The connection that is being
+ *     moved.
+ * @param {Blockly.Connection} destConnection The connection to be moved to.
+ * @return {boolean} True if the connections were connected, false otherwise.
+ * @private
+ */
+Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) {
+  var movingBlock = movingConnection.getSourceBlock();
+
+  if (destConnection.canConnectWithReason_(movingConnection) ==
+      Blockly.Connection.CAN_CONNECT) {
+    if (destConnection.type == Blockly.PREVIOUS_STATEMENT ||
+        destConnection.type == Blockly.OUTPUT_VALUE) {
+      movingBlock.positionNearConnection(movingConnection, destConnection);
+    }
+    destConnection.connect(movingConnection);
+    return true;
+  }
+  return false;
+};
+
+/**
+ * If the given connection is superior find the inferior connection on the
+ * source block.
+ * @param {Blockly.Connection} connection The connection trying to be connected.
+ * @return {Blockly.Connection} The inferior connection or null if none exists.
+ * @private
+ */
+Blockly.navigation.getInferiorConnection_ = function(connection) {
+  var block = connection.getSourceBlock();
+  if (!connection.isSuperior()) {
+    return connection;
+  } else if (block.previousConnection) {
+    return block.previousConnection;
+  } else if (block.outputConnection) {
+    return block.outputConnection;
+  } else {
+    return null;
+  }
+};
+
+/**
+ * If the given connection is inferior tries to find a superior connection to
+ * connect to.
+ * @param {Blockly.Connection} connection The connection trying to be connected.
+ * @return {Blockly.Connection} The superior connection or null if none exists.
+ * @private
+ */
+Blockly.navigation.getSuperiorConnection_ = function(connection) {
+  if (connection.isSuperior()) {
+    return connection;
+  } else if (connection.targetConnection) {
+    return connection.targetConnection;
+  }
+  return null;
+};
+
+/**
+ * Tries to connect the  given connections.
+ *
+ * If the given connections are not compatible try finding compatible connections
+ * on the source blocks of the given connections.
+ *
+ * @param {Blockly.Connection} movingConnection The connection that is being
+ *     moved.
+ * @param {Blockly.Connection} destConnection The connection to be moved to.
+ * @return {boolean} True if the two connections or their target connections
+ *     were connected, false otherwise.
  * @package
  */
-Blockly.navigation.connect = function(movingConnection, targetConnection) {
-  if (movingConnection) {
-    var movingBlock = movingConnection.getSourceBlock();
-    if (targetConnection.type == Blockly.PREVIOUS_STATEMENT ||
-        targetConnection.type == Blockly.OUTPUT_VALUE) {
-      movingBlock.positionNearConnection(movingConnection, targetConnection);
-    }
+Blockly.navigation.connect = function(movingConnection, destConnection) {
+  if (!movingConnection || !destConnection) {
+    return false;
+  }
+
+  var movingInferior = Blockly.navigation.getInferiorConnection_(movingConnection);
+  var destSuperior = Blockly.navigation.getSuperiorConnection_(destConnection);
+
+  var movingSuperior = Blockly.navigation.getSuperiorConnection_(movingConnection);
+  var destInferior = Blockly.navigation.getInferiorConnection_(destConnection);
+
+  if (movingInferior && destSuperior &&
+      Blockly.navigation.moveAndConnect_(movingInferior, destSuperior)) {
+    return true;
+  // Try swapping the inferior and superior connections on the blocks.
+  } else if (movingSuperior && destInferior &&
+      Blockly.navigation.moveAndConnect_(movingSuperior, destInferior)) {
+    return true;
+  // If nothing else worked try connecting the given connections and report
+  // any errors.
+  } else {
     try {
-      targetConnection.connect(movingConnection);
-      return true;
+      destConnection.connect(movingConnection);
     }
     catch (e) {
-      // TODO: Is there anything else useful to do at this catch?
-      // Perhaps position the block near the target connection?
       Blockly.navigation.warn('Connection failed with error: ' + e);
       return false;
     }
   }
-  return false;
 };
 
 /**

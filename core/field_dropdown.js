@@ -63,11 +63,12 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
   var firstTuple = this.getOptions()[0];
 
   /**
-   * The currently selected option.
-   * @type {?string|Blockly.FieldDropdown.ImageProperties}
+   * The currently selected index. A value of -1 indicates no option
+   * has been selected.
+   * @type {number}
    * @private
    */
-  this.selectedOption_ = null;
+  this.selectedIndex_ = -1;
 
   // Call parent's constructor.
   Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[1],
@@ -449,7 +450,7 @@ Blockly.FieldDropdown.prototype.doValueUpdate_ = function(newValue) {
   var options = this.getOptions();
   for (var i = 0, option; option = options[i]; i++) {
     if (option[1] == this.value_) {
-      this.setSelectedOption_(option[0]);
+      this.selectedIndex_ = i;
     }
   }
 };
@@ -479,8 +480,11 @@ Blockly.FieldDropdown.prototype.render_ = function() {
   this.imageElement_.style.display = 'none';
 
   // Show correct element.
-  if (typeof this.selectedOption_ == 'object') {
-    this.renderSelectedImage_();
+  var options = this.getOptions();
+  var selectedOption = this.selectedIndex_ >= 0 &&
+      options[this.selectedIndex_][0];
+  if (selectedOption && typeof selectedOption == 'object') {
+    this.renderSelectedImage_(selectedOption);
   } else {
     this.renderSelectedText_();
   }
@@ -490,10 +494,11 @@ Blockly.FieldDropdown.prototype.render_ = function() {
 
 /**
  * Renders the selected option, which must be an image.
+ * @param {!Blockly.FieldDropdown.ImageProperties} imageJson Selected
+ *   option that must be an image.
  * @private
  */
-Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
-  var imageJson = this.selectedOption_;
+Blockly.FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
   this.imageElement_.style.display = '';
   this.imageElement_.setAttributeNS(
       Blockly.utils.dom.XLINK_NS, 'xlink:href', imageJson.src);
@@ -528,6 +533,7 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
+  // Retrieves the selected option to display through getText_.
   this.textContent_.nodeValue = this.getDisplayText_();
   this.textElement_.setAttribute('text-anchor', 'start');
   this.textElement_.setAttribute('x', Blockly.Field.DEFAULT_TEXT_OFFSET);
@@ -538,26 +544,21 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
 };
 
 /**
+ * Get the selected option text. If the selected option is an image
+ * we return the image alt text.
+ * @return {?string} Selected option text.
  * @override
  */
 Blockly.FieldDropdown.prototype.getText_ = function() {
-  if (this.selectedOption_) {
-    if (typeof this.selectedOption_ == 'object') {
-      return this.selectedOption_['alt'];
-    }
-    return this.selectedOption_;
+  if (this.selectedIndex_ < 0) {
+    return null;
   }
-  return null;
-};
-
-/**
- * Set the selected valid language-neutral option of this dropdown.
- * @param {string|Blockly.FieldDropdown.ImageProperties} option The option
- *   to select, a human-readable text or image.
- * @protected
- */
-Blockly.FieldDropdown.prototype.setSelectedOption_ = function(option) {
-  this.selectedOption_ = option;
+  var options = this.getOptions();
+  var selectedOption = options[this.selectedIndex_][0];
+  if (typeof selectedOption == 'object') {
+    return selectedOption['alt'];
+  }
+  return selectedOption;
 };
 
 /**
@@ -583,8 +584,9 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
       console.error(
           'Invalid option[' + i + ']: Each FieldDropdown option id must be ' +
           'a string. Found ' + tuple[1] + ' in: ', tuple);
-    } else if ((typeof tuple[0] != 'string') &&
-               (typeof tuple[0].src != 'string')) {
+    } else if (tuple[0] &&
+              (typeof tuple[0] != 'string') &&
+              (typeof tuple[0].src != 'string')) {
       foundError = true;
       console.error(
           'Invalid option[' + i + ']: Each FieldDropdown option must have a ' +

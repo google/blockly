@@ -146,8 +146,6 @@ Blockly.blockRendering.Row = function() {
   this.hasJaggedEdge = false;
 
   this.constants_ = Blockly.blockRendering.getConstants();
-  this.connectionShape = this.constants_.PUZZLE_TAB;
-  this.notchShape = this.constants_.NOTCH;
   this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
 };
 
@@ -370,7 +368,7 @@ Blockly.blockRendering.BottomRow.prototype.populate = function(block) {
   if (followsStatement) {
     this.minHeight = this.constants_.LARGE_PADDING;
   } else {
-    this.minHeight = this.notchShape.height;
+    this.minHeight = this.constants_.NOTCH.height;
   }
 
   var squareCorner = !!block.outputConnection || !!block.getNextBlock();

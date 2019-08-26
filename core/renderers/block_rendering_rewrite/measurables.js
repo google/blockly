@@ -89,7 +89,7 @@ goog.inherits(Blockly.blockRendering.Hat, Blockly.blockRendering.Measurable);
 Blockly.blockRendering.SquareCorner = function() {
   Blockly.blockRendering.SquareCorner.superClass_.constructor.call(this);
   this.type = 'square corner';
-  this.height = this.notchShape.height;
+  this.height = this.constants_.NOTCH.height;
   this.width = this.constants_.NO_PADDING;
 
 };
@@ -108,7 +108,7 @@ Blockly.blockRendering.RoundCorner = function() {
   this.width = this.constants_.CORNER_RADIUS;
   // The rounded corner extends into the next row by 4 so we only take the
   // height that is aligned with this row.
-  this.height = this.notchShape.height;
+  this.height = this.constants_.NOTCH.height;
 
 };
 goog.inherits(Blockly.blockRendering.RoundCorner, Blockly.blockRendering.Measurable);

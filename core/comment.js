@@ -181,6 +181,7 @@ Blockly.Comment.prototype.setVisible = function(visible) {
     // MSIE does not support foreignobject; textareas are impossible.
     // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034
     // Always treat comments in IE as uneditable.
+    // TODO (#2917): It would be great if this could support line breaks.
     Blockly.Warning.prototype.setVisible.call(this, visible);
     return;
   }
@@ -281,6 +282,10 @@ Blockly.Comment.prototype.setText = function(text) {
 Blockly.Comment.prototype.updateText = function() {
   if (this.textarea_) {
     this.textarea_.value = this.model_.text;
+  } else if (this.paragraphElement_) {
+    // Non-Editable mode.
+    // TODO (#2917): If 2917 gets added this will probably need to be updated.
+    this.paragraphElement_.firstChild.textContent = this.model_.text;
   }
 };
 

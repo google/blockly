@@ -123,17 +123,19 @@ Blockly.Warning.prototype.setVisible = function(visible) {
       new Blockly.Events.Ui(this.block_, 'warningOpen', !visible, visible));
   if (visible) {
     // Create the bubble to display all warnings.
-    var paragraph = Blockly.Warning.textToDom_(this.getText());
+    this.paragraphElement_ = Blockly.Warning.textToDom_(this.getText());
     this.bubble_ = new Blockly.Bubble(
         /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
-        paragraph, this.block_.svgPath_, this.iconXY_, null, null);
+        this.paragraphElement_, this.block_.svgPath_, this.iconXY_, null, null);
     // Expose this warning's block's ID on its top-level SVG group.
     this.bubble_.setSvgId(this.block_.id);
     if (this.block_.RTL) {
       // Right-align the paragraph.
       // This cannot be done until the bubble is rendered on screen.
-      var maxWidth = paragraph.getBBox().width;
-      for (var i = 0, textElement; textElement = paragraph.childNodes[i]; i++) {
+      var maxWidth = this.paragraphElement_.getBBox().width;
+      for (var i = 0, textElement;
+        textElement = this.paragraphElement_.childNodes[i]; i++) {
+
         textElement.setAttribute('text-anchor', 'end');
         textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);
       }
@@ -162,7 +164,8 @@ Blockly.Warning.prototype.bodyFocus_ = function(_e) {
 
 /**
  * Set this warning's text.
- * @param {string} text Warning text (or '' to delete).
+ * @param {string} text Warning text (or '' to delete). This supports
+ *    linebreaks.
  * @param {string} id An ID for this text entry to be able to maintain
  *     multiple warnings.
  */

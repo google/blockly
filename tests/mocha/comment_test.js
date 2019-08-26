@@ -76,7 +76,8 @@ suite('Comments', function() {
       this.comment.setVisible(true);
       var eventSpy = sinon.spy(Blockly.Events, 'fire');
 
-      chai.assert.equal(this.comment.getText(), '');
+      // Going with initially null for now.
+      chai.assert.equal(this.comment.getText(), null);
       this.comment.setText('test text');
       chai.assert.equal(this.comment.getText(), 'test text');
       chai.assert(eventSpy.calledOnce);
@@ -93,7 +94,8 @@ suite('Comments', function() {
     test('Set Text While Invisible', function() {
       var eventSpy = sinon.spy(Blockly.Events, 'fire');
 
-      chai.assert.equal(this.comment.getText(), '');
+      // Going with initially null for now.
+      chai.assert.equal(this.comment.getText(), null);
       this.comment.setText('test text');
       chai.assert.equal(this.comment.getText(), 'test text');
       chai.assert(eventSpy.calledOnce);

@@ -426,7 +426,10 @@ suite('Blocks', function() {
         },
       ]);
       this.headlessWorkspace = this.workspace;
-      this.renderedWorkspace = Blockly.inject('blocklyDiv', {comments: true});
+      this.renderedWorkspace = Blockly.inject('blocklyDiv', {
+        comments: true,
+        scrollbars: true
+      });
 
       this.headlessBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
           '<block type="empty_block"/>'
@@ -469,14 +472,15 @@ suite('Blocks', function() {
       });
       test('Set Text While Visible', function() {
         this.renderedBlock.setCommentText('first text');
-        this.renderedBlock.comment.setVisible(true);
+        this.renderedBlock.getCommentIcon().setVisible(true);
 
         this.renderedBlock.setCommentText('test text');
         chai.assert.equal(this.renderedBlock.getCommentText(), 'test text');
-        chai.assert(this.eventSpy.calledTwice);
+        // First text set, Visible, Second text set.
+        chai.assert(this.eventSpy.calledThrice);
         assertEvent(this.eventSpy, 'test text');
 
-        this.renderedBlock.comment.setVisible(false);
+        this.renderedBlock.getCommentIcon().setVisible(false);
         chai.assert.equal(this.renderedBlock.getCommentText(), 'test text');
       });
       test('Set Text While Invisible', function() {
@@ -488,7 +492,7 @@ suite('Blocks', function() {
         chai.assert(this.eventSpy.calledTwice);
         assertEvent(this.eventSpy, 'test text');
 
-        this.renderedBlock.comment.setVisible(true);
+        this.renderedBlock.getCommentIcon().setVisible(true);
         chai.assert.equal(this.renderedBlock.getCommentText(), 'test text');
       });
       test('Rendered Null', function() {
@@ -501,10 +505,7 @@ suite('Blocks', function() {
 
         this.renderedBlock.setCommentText(null);
         chai.assert.equal(this.renderedBlock.getCommentText(), '');
-        chai.assert.isNull(this.renderedBlock.commentIcon_);
-        console.log(this.eventSpy.getCall(0));
-        console.log(this.eventSpy.getCall(1));
-        console.log(this.eventSpy.getCall(2));
+        chai.assert.isNull(this.renderedBlock.getCommentIcon());
         chai.assert(this.eventSpy.calledTwice);
         assertEvent(this.eventSpy, '');
       });

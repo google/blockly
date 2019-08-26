@@ -1812,7 +1812,7 @@ Blockly.Block.prototype.getInputTargetBlock = function(name) {
  * @return {string} Block's comment.
  */
 Blockly.Block.prototype.getCommentText = function() {
-  return this.comment || '';
+  return this.commentModel.text || '';
 };
 
 /**

@@ -125,8 +125,10 @@ Blockly.Comment.prototype.createEditor_ = function() {
     if (this.model_.text != textarea.value) {
       Blockly.Events.fire(new Blockly.Events.BlockChange(
           this.block_, 'comment', null, this.model_.text, textarea.value));
-      this.model_.text = textarea.value;
     }
+  });
+  Blockly.bindEventWithChecks_(textarea, 'input', this, function(_e) {
+    this.model_.text = textarea.value;
   });
   setTimeout(textarea.focus.bind(textarea), 0);
   return this.foreignObject_;
@@ -254,7 +256,7 @@ Blockly.Comment.prototype.setBubbleSize = function(width, height) {
  * @return {string} Comment text.
  */
 Blockly.Comment.prototype.getText = function() {
-  return this.textarea_ ? this.textarea_.value : this.model_.text;
+  return this.model_.text;
 };
 
 /**
@@ -274,11 +276,11 @@ Blockly.Comment.prototype.setText = function(text) {
 
 /**
  * Dispose of this comment.
+ *
+ * If you want to get the event, then this should not be called directly.
+ * Instead call block.setCommentText(null);
  */
 Blockly.Comment.prototype.dispose = function() {
-  if (Blockly.Events.isEnabled()) {
-    this.setText('');  // Fire event to delete comment.
-  }
   this.block_.comment = null;
   Blockly.Icon.prototype.dispose.call(this);
 };

@@ -284,8 +284,8 @@ Blockly.BlockSvg.prototype.getIcons = function() {
   if (this.mutator) {
     icons.push(this.mutator);
   }
-  if (this.comment) {
-    icons.push(this.comment);
+  if (this.commentIcon_) {
+    icons.push(this.commentIcon_);
   }
   if (this.warning) {
     icons.push(this.warning);
@@ -1079,18 +1079,9 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
   }
 };
 
-/**
- * Returns the comment on this block (or '' if none).
- * @return {string} Block's comment.
- */
-Blockly.BlockSvg.prototype.getCommentText = function() {
-  if (this.comment) {
-    var comment = this.comment.getText();
-    // Trim off trailing whitespace.
-    return comment.replace(/\s+$/, '').replace(/ +\n/g, '\n');
-  }
-  return '';
-};
+Blockly.BlockSvg.prototype.getCommentIcon = function() {
+  return this.commentIcon_;
+}
 
 /**
  * Set this block's comment text.

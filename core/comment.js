@@ -103,22 +103,30 @@ Blockly.Comment.prototype.createEditor_ = function() {
       </body>
     </foreignObject>
   */
+
   this.foreignObject_ = Blockly.utils.dom.createSvgElement('foreignObject',
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
+
   var body = document.createElementNS(Blockly.utils.dom.HTML_NS, 'body');
   body.setAttribute('xmlns', Blockly.utils.dom.HTML_NS);
   body.className = 'blocklyMinimalBody';
-  var textarea = document.createElementNS(Blockly.utils.dom.HTML_NS, 'textarea');
+
+  this.textarea_ = document.createElementNS(
+      Blockly.utils.dom.HTML_NS, 'textarea');
+  var textarea = this.textarea_;
   textarea.className = 'blocklyCommentTextarea';
   textarea.setAttribute('dir', this.block_.RTL ? 'RTL' : 'LTR');
+  textarea.value = this.model_.text;
+  this.resizeTextarea_();
+
   body.appendChild(textarea);
-  this.textarea_ = textarea;
   this.foreignObject_.appendChild(body);
+
   Blockly.bindEventWithChecks_(textarea, 'mouseup', this, this.textareaFocus_,
       true, true);
-  // Don't zoom with mousewheel.
   Blockly.bindEventWithChecks_(textarea, 'wheel', this, function(e) {
+    // Don't zoom with mousewheel.
     e.stopPropagation();
   });
   Blockly.bindEventWithChecks_(textarea, 'change', this, function(_e) {
@@ -130,7 +138,9 @@ Blockly.Comment.prototype.createEditor_ = function() {
   Blockly.bindEventWithChecks_(textarea, 'input', this, function(_e) {
     this.model_.text = textarea.value;
   });
+
   setTimeout(textarea.focus.bind(textarea), 0);
+
   return this.foreignObject_;
 };
 
@@ -153,15 +163,21 @@ Blockly.Comment.prototype.updateEditable = function() {
  * Resize the text area accordingly.
  * @private
  */
-Blockly.Comment.prototype.resizeBubble_ = function() {
-  if (this.isVisible()) {
-    var size = this.bubble_.getBubbleSize();
-    var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
-    this.foreignObject_.setAttribute('width', size.width - doubleBorderWidth);
-    this.foreignObject_.setAttribute('height', size.height - doubleBorderWidth);
-    this.textarea_.style.width = (size.width - doubleBorderWidth - 4) + 'px';
-    this.textarea_.style.height = (size.height - doubleBorderWidth - 4) + 'px';
+Blockly.Comment.prototype.onBubbleResize_ = function() {
+  if (!this.isVisible()) {
+    return;
   }
+  this.model_.size = this.bubble_.getBubbleSize();
+  this.resizeTextarea_();
+};
+
+Blockly.Comment.prototype.resizeTextarea_ = function() {
+  var size = this.model_.size;
+  var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
+  this.foreignObject_.setAttribute('width', size.width - doubleBorderWidth);
+  this.foreignObject_.setAttribute('height', size.height - doubleBorderWidth);
+  this.textarea_.style.width = (size.width - doubleBorderWidth - 4) + 'px';
+  this.textarea_.style.height = (size.height - doubleBorderWidth - 4) + 'px';
 };
 
 /**
@@ -185,8 +201,6 @@ Blockly.Comment.prototype.setVisible = function(visible) {
     Blockly.Warning.prototype.setVisible.call(this, visible);
     return;
   }
-  // Save the bubble stats before the visibility switch.
-  var text = this.getText();
   if (visible) {
     // Create the bubble.
     this.bubble_ = new Blockly.Bubble(
@@ -195,7 +209,7 @@ Blockly.Comment.prototype.setVisible = function(visible) {
         this.iconXY_, this.model_.size.width, this.model_.size.height);
     // Expose this comment's block's ID on its top-level SVG group.
     this.bubble_.setSvgId(this.block_.id);
-    this.bubble_.registerResizeEvent(this.resizeBubble_.bind(this));
+    this.bubble_.registerResizeEvent(this.onBubbleResize_.bind(this));
     this.updateColour();
   } else {
     // Dispose of the bubble.
@@ -204,8 +218,6 @@ Blockly.Comment.prototype.setVisible = function(visible) {
     this.textarea_ = null;
     this.foreignObject_ = null;
   }
-  // Restore the bubble stats after the visibility switch.
-  this.setText(text);
 };
 
 /**

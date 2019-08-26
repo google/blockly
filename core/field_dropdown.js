@@ -208,7 +208,8 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   // Scroll the dropdown to show the selected menu item.
   if (this.selectedMenuItem_) {
     Blockly.utils.style.scrollIntoContainerView(
-        this.selectedMenuItem_.getElement(), this.menu_.getElement());
+        /** @type {!Element} */ (this.selectedMenuItem_.getElement()),
+        /** @type {!Element} */ (this.menu_.getElement()));
   }
 };
 
@@ -561,6 +562,7 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
  * Get the selected option text. If the selected option is an image
  * we return the image alt text.
  * @return {?string} Selected option text.
+ * @protected
  * @override
  */
 Blockly.FieldDropdown.prototype.getText_ = function() {

@@ -75,7 +75,7 @@ Blockly.FieldImage = function(src, width, height,
    * @type {boolean}
    * @private
    */
-  this.flipRtl_ = opt_flipRtl;
+  this.flipRtl_ = opt_flipRtl || false;
 
   /**
    * Alt text of this image.
@@ -227,6 +227,7 @@ Blockly.FieldImage.prototype.setOnClickHandler = function(func) {
  * Use the `getText_` developer hook to override the field's text represenation.
  * Return the image alt text instead.
  * @return {?string} The image alt text.
+ * @protected
  * @override
  */
 Blockly.FieldImage.prototype.getText_ = function() {

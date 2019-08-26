@@ -261,16 +261,26 @@ Blockly.Comment.prototype.getText = function() {
 
 /**
  * Set this comment's text.
+ *
+ * If you want to get the event, then this should not be called directly.
+ * Instead call block.setCommentText();
  * @param {string} text Comment text.
  */
 Blockly.Comment.prototype.setText = function(text) {
-  if (this.model_.text != text) {
-    Blockly.Events.fire(new Blockly.Events.BlockChange(
-        this.block_, 'comment', null, this.model_.text, text));
+  if (this.model_ == text) {
+    return;
   }
   this.model_.text = text;
+  this.updateText();
+};
+
+/**
+ * Update the comment's view to match the model.
+ * @package
+ */
+Blockly.Comment.prototype.updateText = function() {
   if (this.textarea_) {
-    this.textarea_.value = text;
+    this.textarea_.value = this.model_.text;
   }
 };
 

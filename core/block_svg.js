@@ -1097,7 +1097,7 @@ Blockly.BlockSvg.prototype.setCommentText = function(text) {
   if (!!this.commentIcon_ == shouldHaveComment) {
     // If the comment's state of existence is correct, but the text is new
     // that means we're just updating a comment.
-    // TODO: Tell comment to update itself.
+    this.commentIcon_.updateText();
     return;
   }
   if (shouldHaveComment) {

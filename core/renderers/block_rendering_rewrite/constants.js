@@ -372,6 +372,6 @@ Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
     case Blockly.NEXT_STATEMENT:
       return this.NOTCH;
     default:
-      throw new Error('Unknown type');
+      throw new Error('Unknown connection type');
   }
 };

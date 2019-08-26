@@ -557,6 +557,7 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
 };
 
 /**
+ * Use the `getText_` developer hook to override the field's text represenation.
  * Get the selected option text. If the selected option is an image
  * we return the image alt text.
  * @return {?string} Selected option text.

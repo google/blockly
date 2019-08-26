@@ -474,6 +474,11 @@ Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
 };
 
 /**
+ * Use the `getText_` developer hook to override the field's text represenation.
+ * When we're currently editing, return the current html value instead.
+ * Otherwise, return null which tells the field to use the default behaviour
+ * (which is a string cast of the field's value).
+ * @return {?string} The html value if we're editing, otherwise null.
  * @override
  */
 Blockly.FieldTextInput.prototype.getText_ = function() {

@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Namespace for block rendering functionality.
+ * @fileoverview An object that provides constants for rendering blocks.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
@@ -75,8 +75,7 @@ Blockly.blockRendering.ConstantProvider = function() {
 
   // Offset from the left side of a block or the inside of a statement input to
   // the left side of the notch.
-  this.NOTCH_OFFSET_LEFT =
-      this.NOTCH_WIDTH;
+  this.NOTCH_OFFSET_LEFT = 15;
 
   this.STATEMENT_BOTTOM_SPACER = 5;
   this.STATEMENT_INPUT_PADDING_LEFT = 20;
@@ -133,6 +132,13 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @const
    */
   this.JAGGED_TEETH_WIDTH = 6;
+};
+
+/**
+ * Initialize shape objects based on the constants set in the constructor.
+ * @package
+ */
+Blockly.blockRendering.ConstantProvider.prototype.init = function() {
 
   /**
    * An object containing sizing and path information about collapsed block
@@ -348,4 +354,24 @@ Blockly.blockRendering.ConstantProvider.prototype.makeOutsideCorners = function(
   };
 };
 
-
+/**
+ * Get an object with connection shape and sizing information based on the type
+ * of the connection.
+ * @param {!Blockly.RenderedConnection} connection The connection to find a
+ *     shape object for
+ * @return {!Object} The shape object for the connection.
+ * @package
+ */
+Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
+    connection) {
+  switch (connection.type) {
+    case Blockly.INPUT_VALUE:
+    case Blockly.OUTPUT_VALUE:
+      return this.PUZZLE_TAB;
+    case Blockly.PREVIOUS_STATEMENT:
+    case Blockly.NEXT_STATEMENT:
+      return this.NOTCH;
+    default:
+      throw new Error('Unknown connection type');
+  }
+};

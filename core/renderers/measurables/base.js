@@ -45,8 +45,6 @@ Blockly.blockRendering.Measurable = function() {
   this.centerline = 0;
 
   this.constants_ = Blockly.blockRendering.getConstants();
-  this.connectionShape = this.constants_.PUZZLE_TAB;
-  this.notchShape = this.constants_.NOTCH;
   this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
 };
 

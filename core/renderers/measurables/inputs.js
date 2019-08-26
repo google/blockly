@@ -84,7 +84,7 @@ Blockly.blockRendering.InlineInput = function(input) {
 
   if (!this.connectedBlock) {
     this.height = this.constants_.EMPTY_INLINE_INPUT_HEIGHT;
-    this.width = this.connectionShape.width +
+    this.width = this.shape.width +
         this.constants_.EMPTY_INLINE_INPUT_PADDING;
   } else {
     // We allow the dark path to show on the parent block so that the child
@@ -95,8 +95,8 @@ Blockly.blockRendering.InlineInput = function(input) {
   }
 
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
-  this.connectionHeight = this.connectionShape.height;
-  this.connectionWidth = this.connectionShape.width;
+  this.connectionHeight = this.shape.height;
+  this.connectionWidth = this.shape.width;
 };
 goog.inherits(Blockly.blockRendering.InlineInput,
     Blockly.blockRendering.InputConnection);
@@ -121,11 +121,11 @@ Blockly.blockRendering.StatementInput = function(input) {
     this.height =
         this.connectedBlockHeight + this.constants_.STATEMENT_BOTTOM_SPACER;
     if (this.connectedBlock.nextConnection) {
-      this.height -= this.notchShape.height;
+      this.height -= this.shape.height;
     }
   }
   this.width = this.constants_.NOTCH_OFFSET_LEFT +
-      this.notchShape.width;
+      this.shape.width;
 };
 goog.inherits(Blockly.blockRendering.StatementInput,
     Blockly.blockRendering.InputConnection);
@@ -145,17 +145,17 @@ Blockly.blockRendering.ExternalValueInput = function(input) {
   this.type = 'external value input';
 
   if (!this.connectedBlock) {
-    this.height = this.connectionShape.height;
+    this.height = this.shape.height;
   } else {
     this.height =
         this.connectedBlockHeight - 2 * this.constants_.TAB_OFFSET_FROM_TOP;
   }
-  this.width = this.connectionShape.width +
+  this.width = this.shape.width +
       this.constants_.EXTERNAL_VALUE_INPUT_PADDING;
 
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
-  this.connectionHeight = this.connectionShape.height;
-  this.connectionWidth = this.connectionShape.width;
+  this.connectionHeight = this.shape.height;
+  this.connectionWidth = this.shape.width;
 };
 goog.inherits(Blockly.blockRendering.ExternalValueInput,
     Blockly.blockRendering.InputConnection);

@@ -71,16 +71,16 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
    */
   this.selectedIndex_ = -1;
 
+  // Call parent's constructor.
+  Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[1],
+      opt_validator);
+
   /**
    * A reference to the currently selected menu item.
    * @type {Blockly.MenuItem}
    * @private
    */
   this.selectedMenuItem_ = null;
-
-  // Call parent's constructor.
-  Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[1],
-      opt_validator);
 };
 goog.inherits(Blockly.FieldDropdown, Blockly.Field);
 

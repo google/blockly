@@ -625,10 +625,10 @@ Blockly.Bubble.prototype.moveTo = function(x, y) {
 
 /**
  * Get the dimensions of this bubble.
- * @return {!Object} Object with width and height properties.
+ * @return {!Blockly.utils.Size} The height and width of the bubble.
  */
 Blockly.Bubble.prototype.getBubbleSize = function() {
-  return {width: this.width_, height: this.height_};
+  return new Blockly.utils.Size(this.width_, this.height_);
 };
 
 /**

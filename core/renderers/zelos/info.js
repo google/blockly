@@ -180,17 +180,15 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 
   // Spacing between a rounded corner and a previous or next connection.
   if (prev.isRoundedCorner()) {
-    // if (next.isPreviousConnection()) {
-      
-    // } else
-    if (next.isNextConnection()) {
+    if (next.isPreviousConnection()) {
+      return next.notchOffset - this.constants_.CORNER_RADIUS;
+    } else if (next.isNextConnection()) {
       // Next connections are shifted slightly to the left (in both LTR and RTL)
       // to make the dark path under the previous connection show through.
       var offset = (this.RTL ? 1 : -1) *
           this.constants_.DARK_PATH_OFFSET / 2;
       return next.notchOffset - this.constants_.CORNER_RADIUS + offset;
     }
-    return next.notchOffset - this.constants_.CORNER_RADIUS;
   }
 
   // Spacing between two fields of the same editability.

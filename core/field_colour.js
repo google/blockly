@@ -58,8 +58,6 @@ Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
   }
   Blockly.FieldColour.superClass_.constructor.call(
       this, opt_value, opt_validator, opt_config);
-
-  this.configure_(opt_config);
 };
 goog.inherits(Blockly.FieldColour, Blockly.Field);
 
@@ -152,19 +150,16 @@ Blockly.FieldColour.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
 
 /**
  * Configure the field based on the given map of options.
- * @param {Object} opt_config A map of options to configure the field based on.
+ * @param {!Object} config A map of options to configure the field based on.
  * @private
  */
-Blockly.FieldColour.prototype.configure_ = function(opt_config) {
-  if (!opt_config) {
-    return;
+Blockly.FieldColour.prototype.configure_ = function(config) {
+  if (config['colourOptions']) {
+    this.columns_ = config['columns'];
+    this.titles_ = config['colourTitles'];
   }
-
-  if (opt_config['colourOptions']) {
-    this.setColours(opt_config['colourOptions'], opt_config['colourTitles']);
-  }
-  if (opt_config['columns']) {
-    this.setColumns(opt_config['columns']);
+  if (config['columns']) {
+    this.columns_ = config['columns'];
   }
 };
 

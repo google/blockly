@@ -59,7 +59,13 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   this.size_ = new Blockly.utils.Size(0, 0);
   this.setValue(value);
   this.setValidator(opt_validator);
-  this.configure_(opt_config);
+
+  /**
+   * A map of options used to configure this field when initialized.
+   * @type {Object}
+   * @private
+   */
+  this.config_ = opt_config;
 };
 
 /**
@@ -163,12 +169,20 @@ Blockly.Field.prototype.clickTarget_ = null;
 
 /**
  * A developer hook to override the returned text of this field.
- * Override if the text representation of the value of this field
- * is not just a string cast of its value.
- * @return {?string} Current text. Return null to resort to a string cast.
+ * Override if the text representation of the value of this field is not
+ * just a string cast of its value. Return null to restort to a string cast.
+ * @type {function():?string}
+ * @this Blockly.Field
  * @protected
  */
 Blockly.Field.prototype.getText_;
+
+/**
+ * A developer hook to configure the field based on a given map of options.
+ * @type {function(!Object)}
+ * @protected
+ */
+Blockly.Field.prototype.configure_;
 
 /**
  * Non-breaking space.
@@ -196,25 +210,28 @@ Blockly.Field.prototype.EDITABLE = true;
 Blockly.Field.prototype.SERIALIZABLE = false;
 
 /**
- * Configure the field based on the given map of options.
- * @param {Object} opt_config The map of options to configure the field
- *    based on.
+ * Process the configuration map passed to the field.
  * @private
  */
-Blockly.Field.prototype.configure_ = function(opt_config) {
-  if (!opt_config) {
+Blockly.Field.prototype.processConfig_ = function() {
+  var config = this.config_;
+  if (!config) {
     return;
   }
 
-  var tooltip = opt_config['tooltip'];
+  var tooltip = config['tooltip'];
   if (typeof tooltip == 'string') {
     tooltip = Blockly.utils.replaceMessageReferences(
-        opt_config['tooltip']);
+        config['tooltip']);
   }
   tooltip && this.setTooltip(tooltip);
 
   // TODO (#2884): Possibly add CSS class config option.
   // TODO (#2885): Possibly add cursor config option.
+
+  if (this.configure_) {
+    this.configure_.call(this, config);
+  }
 };
 
 /**
@@ -251,6 +268,7 @@ Blockly.Field.prototype.init = function() {
     this.fieldGroup_.style.display = 'none';
   }
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
+  this.processConfig_();
   this.initView();
   this.updateEditable();
   this.setTooltip(this.tooltip_);

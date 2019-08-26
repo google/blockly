@@ -66,7 +66,6 @@ Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
    */
   this.checkChar_ = null;
 
-  this.configure_(opt_config);
 };
 goog.inherits(Blockly.FieldCheckbox, Blockly.Field);
 
@@ -133,14 +132,12 @@ Blockly.FieldCheckbox.prototype.isDirty_ = false;
 
 /**
  * Configure the field based on the given map of options.
- * @param {Object} opt_config A map of options to configure the field based on.
+ * @param {!Object} config A map of options to configure the field based on.
  * @private
  */
-Blockly.FieldCheckbox.prototype.configure_ = function(opt_config) {
-  if (opt_config) {
-    if (opt_config['checkCharacter']) {
-      this.checkChar_ = opt_config['checkCharacter'];
-    }
+Blockly.FieldCheckbox.prototype.configure_ = function(config) {
+  if (config['checkCharacter']) {
+    this.checkChar_ = config['checkCharacter'];
   }
 };
 

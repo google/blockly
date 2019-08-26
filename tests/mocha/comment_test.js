@@ -115,4 +115,63 @@ suite('Comments', function() {
       chai.assert.equal(this.comment.getText(), 'test text');
     });
   });
+  suite('Editability', function() {
+    setup(function() {
+      this.editableStub = sinon.stub(this.block, 'isEditable').returns(true);
+    });
+    teardown(function() {
+      this.editableStub.restore();
+    });
+    function assertEditable(comment) {
+      chai.assert.isOk(comment.textarea_);
+      chai.assert.equal(comment.textarea_.value, 'test text');
+    }
+    function assertNonEditable(comment) {
+      chai.assert.isOk(comment.bubble_);
+      var displayText = comment.bubble_.content_
+          .firstChild.firstChild.nodeValue;
+      chai.assert.equal(displayText, 'test text');
+    }
+    test('Editable', function() {
+      this.comment.setText('test text');
+      this.comment.setVisible(true);
+      assertEditable(this.comment);
+    });
+    test('Non-Editable', function() {
+      this.editableStub.returns(false);
+      this.comment.setText('test text');
+      this.comment.setVisible(true);
+    });
+    test('True -> False While Open', function() {
+      this.comment.setText('test text');
+      this.comment.setVisible(true);
+      assertEditable(this.comment);
+
+      this.editableStub.returns(false);
+      this.comment.updateEditable();
+      assertNonEditable(this.comment);
+    });
+    test('False -> True While Open', function() {
+      this.editableStub.returns(false);
+      this.comment.setText('test text');
+      this.comment.setVisible(true);
+      assertNonEditable(this.comment);
+
+      this.editableStub.returns(true);
+
+      this.comment.setText('test text');
+      this.comment.updateEditable();
+      assertEditable(this.comment);
+    });
+    test('True -> False While Editing', function() {
+      this.comment.setVisible(true);
+      this.comment.textarea_.value = 'test text';
+      this.comment.textarea_.dispatchEvent(new Event('input'));
+      assertEditable(this.comment);
+
+      this.editableStub.returns(false);
+      this.comment.updateEditable();
+      assertNonEditable(this.comment);
+    });
+  });
 });

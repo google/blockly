@@ -70,8 +70,20 @@ Blockly.FieldImage = function(src, width, height,
   this.size_ = new Blockly.utils.Size(imageWidth,
       imageHeight + Blockly.FieldImage.Y_PADDING);
 
-  this.flipRtl_ = opt_flipRtl;
-  this.text_ = opt_alt || '';
+  /**
+   * Whether to flip this image in RTL.
+   * @type {boolean}
+   * @private
+   */
+  this.flipRtl_ = opt_flipRtl || false;
+
+  /**
+   * Alt text of this image.
+   * @type {string}
+   * @private
+   */
+  this.altText_ = opt_alt || '';
+
   this.setValue(src || '');
 
   if (typeof opt_onClick == 'function') {
@@ -134,7 +146,7 @@ Blockly.FieldImage.prototype.initView = function() {
       {
         'height': this.imageHeight_ + 'px',
         'width': this.size_.width + 'px',
-        'alt': this.text_
+        'alt': this.altText_
       },
       this.fieldGroup_);
   this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
@@ -178,27 +190,16 @@ Blockly.FieldImage.prototype.getFlipRtl = function() {
 /**
  * Set the alt text of this image.
  * @param {?string} alt New alt text.
- * @override
- * @deprecated 2019 setText has been deprecated for all fields. Instead use
- *    setAlt to set the alt text of the field.
- */
-Blockly.FieldImage.prototype.setText = function(alt) {
-  this.setAlt(alt);
-};
-
-/**
- * Set the alt text of this image.
- * @param {?string} alt New alt text.
  * @public
  */
 Blockly.FieldImage.prototype.setAlt = function(alt) {
-  if (alt === null) {
-    // No change if null.
+  if (alt === this.altText_) {
+    // No change.
     return;
   }
-  this.text_ = alt;
+  this.altText_ = alt || '';
   if (this.imageElement_) {
-    this.imageElement_.setAttribute('alt', alt || '');
+    this.imageElement_.setAttribute('alt', this.altText_);
   }
 };
 
@@ -220,6 +221,17 @@ Blockly.FieldImage.prototype.showEditor_ = function() {
  */
 Blockly.FieldImage.prototype.setOnClickHandler = function(func) {
   this.clickHandler_ = func;
+};
+
+/**
+ * Use the `getText_` developer hook to override the field's text represenation.
+ * Return the image alt text instead.
+ * @return {?string} The image alt text.
+ * @protected
+ * @override
+ */
+Blockly.FieldImage.prototype.getText_ = function() {
+  return this.altText_;
 };
 
 Blockly.fieldRegistry.register('field_image', Blockly.FieldImage);

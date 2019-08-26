@@ -132,41 +132,25 @@ suite('Image Fields', function() {
     });
   });
   suite('setAlt', function() {
-    suite('No Alt -> New Alt', function() {
-      setup(function() {
-        this.imageField = new Blockly.FieldImage('src', 1, 1);
-      });
-      test('Backwards Compat - setText', function() {
-        this.imageField.setText('newAlt');
-        assertValue(this.imageField, 'src', 'newAlt');
-      });
-      test('Null', function() {
-        this.imageField.setText(null);
-        assertValue(this.imageField, 'src', '');
-      });
-      test('Good Alt', function() {
-        this.imageField.setText('newAlt');
-        assertValue(this.imageField, 'src', 'newAlt');
-      });
-    });
-    suite('Alt -> New Alt', function() {
+    suite('Alt', function() {
       setup(function() {
         this.imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
       });
-      test('Backwards Compat - setText', function() {
-        this.imageField.setText('newAlt');
-        assertValue(this.imageField, 'src', 'newAlt');
+      test('Deprecated - setText', function() {
+        chai.assert.throws(function() {
+          this.imageField.setText('newAlt');
+        });
       });
       test('Null', function() {
-        this.imageField.setText(null);
-        assertValue(this.imageField, 'src', 'alt');
+        this.imageField.setAlt(null);
+        assertValue(this.imageField, 'src', '');
       });
       test('Empty String', function() {
-        this.imageField.setText('');
+        this.imageField.setAlt('');
         assertValue(this.imageField, 'src', '');
       });
       test('Good Alt', function() {
-        this.imageField.setText('newAlt');
+        this.imageField.setAlt('newAlt');
         assertValue(this.imageField, 'src', 'newAlt');
       });
     });

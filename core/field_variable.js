@@ -253,9 +253,7 @@ Blockly.FieldVariable.prototype.doClassValidation_ = function(newId) {
  */
 Blockly.FieldVariable.prototype.doValueUpdate_ = function(newId) {
   this.variable_ = Blockly.Variables.getVariable(this.workspace_, newId);
-  this.value_ = newId;
-  this.text_ = this.variable_.name;
-  this.isDirty_ = true;
+  Blockly.FieldVariable.superClass_.doValueUpdate_.call(this, newId);
 };
 
 /**
@@ -349,14 +347,13 @@ Blockly.FieldVariable.prototype.setTypes_ = function(opt_variableTypes,
  * @package
  */
 Blockly.FieldVariable.prototype.refreshVariableName = function() {
-  this.text_ = this.variable_.name;
   this.forceRerender();
 };
 
 /**
  * Return a sorted list of variable names for variable dropdown menus.
  * Include a special option at the end for creating a new variable name.
- * @return {!Array.<string>} Array of variable names.
+ * @return {!Array.<!Array>} Array of variable names/id tuples.
  * @this {Blockly.FieldVariable}
  */
 Blockly.FieldVariable.dropdownCreate = function() {

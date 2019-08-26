@@ -36,9 +36,10 @@ goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.geras.HighlightConstantProvider');
 
-goog.require('Blockly.geras.RenderInfo');
 goog.require('Blockly.geras.Drawer');
+goog.require('Blockly.geras.RenderInfo');
 goog.require('Blockly.thrasos.RenderInfo');
+goog.require('Blockly.zelos.Drawer');
 goog.require('Blockly.zelos.RenderInfo');
 goog.require('Blockly.zelos.ConstantProvider');
 
@@ -86,7 +87,7 @@ Blockly.blockRendering.render = function(block) {
     new Blockly.blockRendering.Drawer(block, info).draw();
   } else if (Blockly.blockRendering.rendererName == 'zelos') {
     var info = new Blockly.zelos.RenderInfo(block);
-    new Blockly.blockRendering.Drawer(block, info).draw();
+    new Blockly.zelos.Drawer(block, info).draw();
   }
 };
 

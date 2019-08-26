@@ -38,6 +38,14 @@ goog.require('Blockly.utils.svgPaths');
  */
 Blockly.zelos.ConstantProvider = function() {
   Blockly.zelos.ConstantProvider.superClass_.constructor.call(this);
+
+  this.CORNER_RADIUS = 4;
+
+  this.NOTCH_WIDTH = 36;
+
+  this.NOTCH_HEIGHT = 8;
+
+  this.NOTCH_OFFSET_LEFT = 12;
 };
 goog.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
@@ -99,4 +107,61 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
     default:
       throw new Error('Unknown type');
   }
+};
+
+/**
+ * @override
+ */
+Blockly.blockRendering.ConstantProvider.prototype.makeNotch = function() {
+  var width = this.NOTCH_WIDTH;
+  var height = this.NOTCH_HEIGHT;
+
+  var innerWidth = width / 3;
+  var curveWidth = innerWidth / 3;
+
+  var halfHeight = height / 2;
+  var quarterHeight = halfHeight / 2;
+
+  function makeMainPath(dir) {
+    return [
+      Blockly.utils.svgPaths.curve('c', [
+        Blockly.utils.svgPaths.point(dir * curveWidth / 2, 0),
+        Blockly.utils.svgPaths.point(dir * curveWidth * 3 / 4, quarterHeight / 2),
+        Blockly.utils.svgPaths.point(dir * curveWidth, quarterHeight)
+      ]),
+      Blockly.utils.svgPaths.line([
+        Blockly.utils.svgPaths.point(dir * curveWidth, halfHeight)
+      ]),
+      Blockly.utils.svgPaths.curve('c', [
+        Blockly.utils.svgPaths.point(dir * curveWidth / 4, quarterHeight / 2),
+        Blockly.utils.svgPaths.point(dir * curveWidth / 2, quarterHeight),
+        Blockly.utils.svgPaths.point(dir * curveWidth, quarterHeight)
+      ]),
+      Blockly.utils.svgPaths.lineOnAxis('h', dir * innerWidth),
+      Blockly.utils.svgPaths.curve('c', [
+        Blockly.utils.svgPaths.point(dir * curveWidth / 2, 0),
+        Blockly.utils.svgPaths.point(dir * curveWidth * 3 / 4, -(quarterHeight / 2)),
+        Blockly.utils.svgPaths.point(dir * curveWidth, -quarterHeight)
+      ]),
+      Blockly.utils.svgPaths.line([
+        Blockly.utils.svgPaths.point(dir * curveWidth, -halfHeight)
+      ]),
+      Blockly.utils.svgPaths.curve('c', [
+        Blockly.utils.svgPaths.point(dir * curveWidth / 4, -(quarterHeight / 2)),
+        Blockly.utils.svgPaths.point(dir * curveWidth / 2, -quarterHeight),
+        Blockly.utils.svgPaths.point(dir * curveWidth, -quarterHeight)
+      ])
+    ].join('');
+  }
+
+  // TODO: Find a relationship between width and path
+  var pathLeft = makeMainPath(1);
+  var pathRight = makeMainPath(-1);
+
+  return {
+    width: width,
+    height: height,
+    pathLeft: pathLeft,
+    pathRight: pathRight
+  };
 };

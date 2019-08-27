@@ -77,7 +77,7 @@ Blockly.blockRendering.ConstantProvider = function() {
   // the left side of the notch.
   this.NOTCH_OFFSET_LEFT = 15;
 
-  this.STATEMENT_BOTTOM_SPACER = 5;
+  this.STATEMENT_BOTTOM_SPACER = 0;
   this.STATEMENT_INPUT_PADDING_LEFT = 20;
   this.BETWEEN_STATEMENT_PADDING_Y = 4;
 

@@ -120,9 +120,6 @@ Blockly.blockRendering.StatementInput = function(input) {
   } else {
     this.height =
         this.connectedBlockHeight + this.constants_.STATEMENT_BOTTOM_SPACER;
-    if (this.connectedBlock.nextConnection) {
-      this.height -= this.shape.height;
-    }
   }
   this.width = this.constants_.NOTCH_OFFSET_LEFT +
       this.shape.width;

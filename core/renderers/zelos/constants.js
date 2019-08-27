@@ -123,35 +123,35 @@ Blockly.blockRendering.ConstantProvider.prototype.makeNotch = function() {
   var quarterHeight = halfHeight / 2;
 
   function makeMainPath(dir) {
-    return [
+    return (
       Blockly.utils.svgPaths.curve('c', [
         Blockly.utils.svgPaths.point(dir * curveWidth / 2, 0),
         Blockly.utils.svgPaths.point(dir * curveWidth * 3 / 4, quarterHeight / 2),
         Blockly.utils.svgPaths.point(dir * curveWidth, quarterHeight)
-      ]),
+      ]) +
       Blockly.utils.svgPaths.line([
         Blockly.utils.svgPaths.point(dir * curveWidth, halfHeight)
-      ]),
+      ]) +
       Blockly.utils.svgPaths.curve('c', [
         Blockly.utils.svgPaths.point(dir * curveWidth / 4, quarterHeight / 2),
         Blockly.utils.svgPaths.point(dir * curveWidth / 2, quarterHeight),
         Blockly.utils.svgPaths.point(dir * curveWidth, quarterHeight)
-      ]),
-      Blockly.utils.svgPaths.lineOnAxis('h', dir * innerWidth),
+      ]) +
+      Blockly.utils.svgPaths.lineOnAxis('h', dir * innerWidth) +
       Blockly.utils.svgPaths.curve('c', [
         Blockly.utils.svgPaths.point(dir * curveWidth / 2, 0),
         Blockly.utils.svgPaths.point(dir * curveWidth * 3 / 4, -(quarterHeight / 2)),
         Blockly.utils.svgPaths.point(dir * curveWidth, -quarterHeight)
-      ]),
+      ]) +
       Blockly.utils.svgPaths.line([
         Blockly.utils.svgPaths.point(dir * curveWidth, -halfHeight)
-      ]),
+      ]) +
       Blockly.utils.svgPaths.curve('c', [
         Blockly.utils.svgPaths.point(dir * curveWidth / 4, -(quarterHeight / 2)),
         Blockly.utils.svgPaths.point(dir * curveWidth / 2, -quarterHeight),
         Blockly.utils.svgPaths.point(dir * curveWidth, -quarterHeight)
       ])
-    ].join('');
+    );
   }
 
   // TODO: Find a relationship between width and path

@@ -511,7 +511,7 @@ suite('XML', function() {
       this.renderedWorkspace.dispose();
       this.headlessWorkspace.dispose();
     });
-    test.skip('Comment', function() {
+    test('Comment', function() {
       Blockly.defineBlocksWithJsonArray([
         {
           "type": "empty_block",

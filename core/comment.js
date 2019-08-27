@@ -212,6 +212,7 @@ Blockly.Comment.prototype.setVisible = function(visible) {
   }
   Blockly.Events.fire(
       new Blockly.Events.Ui(this.block_, 'commentOpen', !visible, visible));
+  this.model_.pinned = visible;
   if (visible) {
     this.createBubble_();
   } else {

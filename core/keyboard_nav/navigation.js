@@ -486,9 +486,9 @@ Blockly.navigation.modify = function() {
 /**
  * If the two blocks are compatible move the moving connection to the target
  * connection and connect them.
- * @param {Blockly.Connection} movingConnection The connection that is being
+ * @param {!Blockly.Connection} movingConnection The connection that is being
  *     moved.
- * @param {Blockly.Connection} destConnection The connection to be moved to.
+ * @param {!Blockly.Connection} destConnection The connection to be moved to.
  * @return {boolean} True if the connections were connected, false otherwise.
  * @private
  */
@@ -497,9 +497,9 @@ Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) 
 
   if (destConnection.canConnectWithReason_(movingConnection) ==
       Blockly.Connection.CAN_CONNECT) {
-    if (destConnection.type == Blockly.PREVIOUS_STATEMENT ||
-        destConnection.type == Blockly.OUTPUT_VALUE) {
-      movingBlock.positionNearConnection(movingConnection, destConnection);
+    if (!destConnection.isSuperior()) {
+      var rootBlock = movingBlock.getRootBlock();
+      rootBlock.positionNearConnection(movingConnection, destConnection);
     }
     destConnection.connect(movingConnection);
     return true;

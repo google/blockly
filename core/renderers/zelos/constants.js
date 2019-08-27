@@ -112,7 +112,7 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
 /**
  * @override
  */
-Blockly.blockRendering.ConstantProvider.prototype.makeNotch = function() {
+Blockly.zelos.ConstantProvider.prototype.makeNotch = function() {
   var width = this.NOTCH_WIDTH;
   var height = this.NOTCH_HEIGHT;
 

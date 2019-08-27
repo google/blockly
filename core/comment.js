@@ -52,6 +52,14 @@ Blockly.Comment = function(block) {
    */
   this.model_ = block.commentModel;
 
+  /**
+   * The model's text value at the start of an edit.
+   * Used to tell if an event should be fired at the end of an edit.
+   * @type {string}
+   * @private
+   */
+  this.cachedText_ = '';
+
   this.createIcon();
 };
 Blockly.utils.object.inherits(Blockly.Comment, Blockly.Icon);
@@ -123,16 +131,16 @@ Blockly.Comment.prototype.createEditor_ = function() {
   body.appendChild(textarea);
   this.foreignObject_.appendChild(body);
 
-  Blockly.bindEventWithChecks_(textarea, 'mouseup', this, this.textareaFocus_,
+  Blockly.bindEventWithChecks_(textarea, 'mouseup', this, this.startEdit_,
       true, true);
   Blockly.bindEventWithChecks_(textarea, 'wheel', this, function(e) {
     // Don't zoom with mousewheel.
     e.stopPropagation();
   });
   Blockly.bindEventWithChecks_(textarea, 'change', this, function(_e) {
-    if (this.model_.text != textarea.value) {
+    if (this.cachedText_ != this.model_.text) {
       Blockly.Events.fire(new Blockly.Events.BlockChange(
-          this.block_, 'comment', null, this.model_.text, textarea.value));
+          this.block_, 'comment', null, this.cachedText_, this.model_.text));
     }
   });
   Blockly.bindEventWithChecks_(textarea, 'input', this, function(_e) {
@@ -222,10 +230,11 @@ Blockly.Comment.prototype.setVisible = function(visible) {
 
 /**
  * Bring the comment to the top of the stack when clicked on.
+ * Also cache the current text so it can be used to fire a change event.
  * @param {!Event} _e Mouse up event.
  * @private
  */
-Blockly.Comment.prototype.textareaFocus_ = function(_e) {
+Blockly.Comment.prototype.startEdit_ = function(_e) {
   // Ideally this would be hooked to the focus event for the comment.
   // However doing so in Firefox swallows the cursor for unknown reasons.
   // So this is hooked to mouseup instead.  No big deal.
@@ -234,6 +243,8 @@ Blockly.Comment.prototype.textareaFocus_ = function(_e) {
     // we need to reapply the focus.
     this.textarea_.focus();
   }
+
+  this.cachedText_ = this.model_.text;
 };
 
 /**

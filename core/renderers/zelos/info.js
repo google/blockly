@@ -62,3 +62,144 @@ Blockly.zelos.RenderInfo = function(block) {
   Blockly.zelos.RenderInfo.superClass_.constructor.call(this, block);
 };
 goog.inherits(Blockly.zelos.RenderInfo, Blockly.blockRendering.RenderInfo);
+
+
+/**
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
+  if (!prev) {
+    // Between an editable field and the beginning of the row.
+    if (next.isField() && next.isEditable) {
+      return this.constants_.MEDIUM_PADDING;
+    }
+    // Inline input at the beginning of the row.
+    if (next.isInput && next.isInlineInput()) {
+      return this.constants_.MEDIUM_LARGE_PADDING;
+    }
+    if (next.isStatementInput()) {
+      return this.constants_.STATEMENT_INPUT_PADDING_LEFT;
+    }
+    // Anything else at the beginning of the row.
+    return this.constants_.LARGE_PADDING;
+  }
+
+  // Spacing between a non-input and the end of the row.
+  if (!prev.isInput && !next) {
+    // Between an editable field and the end of the row.
+    if (prev.isField() && prev.isEditable) {
+      return this.constants_.MEDIUM_PADDING;
+    }
+    // Padding at the end of an icon-only row to make the block shape clearer.
+    if (prev.isIcon()) {
+      return (this.constants_.LARGE_PADDING * 2) + 1;
+    }
+    if (prev.isHat()) {
+      return this.constants_.NO_PADDING;
+    }
+    // Establish a minimum width for a block with a previous or next connection.
+    if (prev.isPreviousConnection() || prev.isNextConnection()) {
+      return this.constants_.LARGE_PADDING;
+    }
+    // Between rounded corner and the end of the row.
+    if (prev.isRoundedCorner()) {
+      return this.constants_.MIN_BLOCK_WIDTH;
+    }
+    // Between a jagged edge and the end of the row.
+    if (prev.isJaggedEdge()) {
+      return this.constants_.NO_PADDING;
+    }
+    // Between noneditable fields and icons and the end of the row.
+    return this.constants_.LARGE_PADDING;
+  }
+
+  // Between inputs and the end of the row.
+  if (prev.isInput && !next) {
+    if (prev.isExternalInput()) {
+      return this.constants_.NO_PADDING;
+    } else if (prev.isInlineInput()) {
+      return this.constants_.LARGE_PADDING;
+    } else if (prev.isStatementInput()) {
+      return this.constants_.NO_PADDING;
+    }
+  }
+
+  // Spacing between a non-input and an input.
+  if (!prev.isInput && next.isInput) {
+    // Between an editable field and an input.
+    if (prev.isEditable) {
+      if (next.isInlineInput()) {
+        return this.constants_.SMALL_PADDING;
+      } else if (next.isExternalInput()) {
+        return this.constants_.SMALL_PADDING;
+      }
+    } else {
+      if (next.isInlineInput()) {
+        return this.constants_.MEDIUM_LARGE_PADDING;
+      } else if (next.isExternalInput()) {
+        return this.constants_.MEDIUM_LARGE_PADDING;
+      } else if (next.isStatementInput()) {
+        return this.constants_.LARGE_PADDING;
+      }
+    }
+    return this.constants_.LARGE_PADDING - 1;
+  }
+
+  // Spacing between an icon and an icon or field.
+  if (prev.isIcon() && !next.isInput) {
+    return this.constants_.LARGE_PADDING;
+  }
+
+  // Spacing between an inline input and a field.
+  if (prev.isInlineInput() && !next.isInput) {
+    // Editable field after inline input.
+    if (next.isEditable) {
+      return this.constants_.MEDIUM_PADDING;
+    } else {
+      // Noneditable field after inline input.
+      return this.constants_.LARGE_PADDING;
+    }
+  }
+
+  if (prev.isSquareCorner()) {
+    // Spacing between a hat and a corner
+    if (next.isHat()) {
+      return this.constants_.NO_PADDING;
+    }
+    // Spacing between a square corner and a previous or next connection
+    if (next.isPreviousConnection()) {
+      return next.notchOffset;
+    } else if (next.isNextConnection()) {
+      // Next connections are shifted slightly to the left (in both LTR and RTL)
+      // to make the dark path under the previous connection show through.
+      var offset = (this.RTL ? 1 : -1) *
+          this.constants_.DARK_PATH_OFFSET / 2;
+      return next.notchOffset + offset;
+    }
+  }
+
+  // Spacing between a rounded corner and a previous or next connection.
+  if (prev.isRoundedCorner()) {
+    if (next.isPreviousConnection()) {
+      return next.notchOffset - this.constants_.CORNER_RADIUS;
+    } else if (next.isNextConnection()) {
+      // Next connections are shifted slightly to the left (in both LTR and RTL)
+      // to make the dark path under the previous connection show through.
+      var offset = (this.RTL ? 1 : -1) *
+          this.constants_.DARK_PATH_OFFSET / 2;
+      return next.notchOffset - this.constants_.CORNER_RADIUS + offset;
+    }
+  }
+
+  // Spacing between two fields of the same editability.
+  if (!prev.isInput && !next.isInput && (prev.isEditable == next.isEditable)) {
+    return this.constants_.LARGE_PADDING;
+  }
+
+  // Spacing between anything and a jagged edge.
+  if (next.isJaggedEdge()) {
+    return this.constants_.LARGE_PADDING;
+  }
+
+  return this.constants_.MEDIUM_PADDING;
+};

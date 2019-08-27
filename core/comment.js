@@ -164,9 +164,9 @@ Blockly.Comment.prototype.createEditor_ = function() {
 Blockly.Comment.prototype.updateEditable = function() {
   Blockly.Comment.superClass_.updateEditable.call(this);
   if (this.isVisible()) {
-    // Toggling visibility will force a rerendering.
-    this.setVisible(false);
-    this.setVisible(true);
+    // Recreate the bubble with the correct UI.
+    this.disposeBubble_();
+    this.createBubble_();
   }
 };
 
@@ -205,38 +205,72 @@ Blockly.Comment.prototype.resizeTextarea_ = function() {
  */
 Blockly.Comment.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
-    // No change.
     return;
   }
   Blockly.Events.fire(
       new Blockly.Events.Ui(this.block_, 'commentOpen', !visible, visible));
-  if ((!this.block_.isEditable() && !this.textarea_) ||
-      Blockly.utils.userAgent.IE) {
-    // Steal the code from warnings to make an uneditable text bubble.
-    // MSIE does not support foreignobject; textareas are impossible.
-    // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034
-    // Always treat comments in IE as uneditable.
-    // TODO (#2917): It would be great if the comment could support line breaks.
-    Blockly.Warning.prototype.setVisible.call(this, visible);
+  if (visible) {
+    this.createBubble_();
+  } else {
+    this.disposeBubble_();
+  }
+};
+
+/**
+ * Show the bubble. Handles deciding if it should be editable or not.
+ * @private
+ */
+Blockly.Comment.prototype.createBubble_ = function() {
+  if (!this.block_.isEditable() || Blockly.utils.userAgent.IE) {
+    this.createNonEditableBubble_();
+  } else {
+    this.createEditableBubble_();
+  }
+};
+
+/**
+ * Show an editable bubble.
+ * @private
+ */
+Blockly.Comment.prototype.createEditableBubble_ = function() {
+  this.bubble_ = new Blockly.Bubble(
+      /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
+      this.createEditor_(), this.block_.svgPath_,
+      this.iconXY_, this.model_.size.width, this.model_.size.height);
+  // Expose this comment's block's ID on its top-level SVG group.
+  this.bubble_.setSvgId(this.block_.id);
+  this.bubble_.registerResizeEvent(this.onBubbleResize_.bind(this));
+  this.updateColour();
+};
+
+/**
+ * Show a non-editable bubble.
+ * @private
+ */
+Blockly.Comment.prototype.createNonEditableBubble_ = function() {
+  // Steal the code from warnings to make an uneditable text bubble.
+  // MSIE does not support foreignobject; textareas are impossible.
+  // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034
+  // Always treat comments in IE as uneditable.
+  // TODO (#2917): It would be great if the comment could support line breaks.
+  Blockly.Warning.prototype.createBubble.call(this, true);
+};
+
+/**
+ * Dispose of the bubble.
+ * @private
+ */
+Blockly.Comment.prototype.disposeBubble_ = function() {
+  if (!this.block_.isEditable() || Blockly.utils.userAgent.IE) {
+    // We're using the warning UI so we have to let it dispose.
+    Blockly.Warning.prototype.disposeBubble.call(this);
     return;
   }
-  if (visible) {
-    // Create the bubble.
-    this.bubble_ = new Blockly.Bubble(
-        /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
-        this.createEditor_(), this.block_.svgPath_,
-        this.iconXY_, this.model_.size.width, this.model_.size.height);
-    // Expose this comment's block's ID on its top-level SVG group.
-    this.bubble_.setSvgId(this.block_.id);
-    this.bubble_.registerResizeEvent(this.onBubbleResize_.bind(this));
-    this.updateColour();
-  } else {
-    // Dispose of the bubble.
-    this.bubble_.dispose();
-    this.bubble_ = null;
-    this.textarea_ = null;
-    this.foreignObject_ = null;
-  }
+
+  this.bubble_.dispose();
+  this.bubble_ = null;
+  this.textarea_ = null;
+  this.foreignObject_ = null;
 };
 
 /**

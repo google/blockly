@@ -51,6 +51,9 @@ Blockly.Comment = function(block) {
    * @private
    */
   this.model_ = block.commentModel;
+  // If someone creates the comment directly instead of calling
+  // block.setCommentText we want to make sure the text is non-null;
+  this.model_.text = this.model_.text || '';
 
   /**
    * The model's text value at the start of an edit.

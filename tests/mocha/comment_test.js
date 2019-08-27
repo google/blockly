@@ -28,7 +28,10 @@ suite('Comments', function() {
       },
     ]);
 
-    this.workspace = Blockly.inject('blocklyDiv', {comments: true});
+    this.workspace = Blockly.inject('blocklyDiv', {
+      comments: true,
+      scrollbars: true
+    });
     this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
         '<block type="empty_block"/>'
     ), this.workspace);
@@ -74,40 +77,21 @@ suite('Comments', function() {
   suite('Set/Get Text', function() {
     test('Set Text While Visible', function() {
       this.comment.setVisible(true);
-      var eventSpy = sinon.spy(Blockly.Events, 'fire');
 
-      // Going with initially null for now.
-      chai.assert.equal(this.comment.getText(), null);
+      chai.assert.equal(this.comment.getText(), '');
       this.comment.setText('test text');
       chai.assert.equal(this.comment.getText(), 'test text');
-      chai.assert(eventSpy.calledOnce);
-      var event = eventSpy.getCall(0).args[0];
-      chai.assert.equal(event.type, Blockly.Events.BLOCK_CHANGE);
-      chai.assert.equal(event.element, 'comment');
-      chai.assert.equal(event.newValue, 'test text');
 
       this.comment.setVisible(false);
       chai.assert.equal(this.comment.getText(), 'test text');
-
-      eventSpy.restore();
     });
     test('Set Text While Invisible', function() {
-      var eventSpy = sinon.spy(Blockly.Events, 'fire');
-
-      // Going with initially null for now.
-      chai.assert.equal(this.comment.getText(), null);
+      chai.assert.equal(this.comment.getText(), '');
       this.comment.setText('test text');
       chai.assert.equal(this.comment.getText(), 'test text');
-      chai.assert(eventSpy.calledOnce);
-      var event = eventSpy.getCall(0).args[0];
-      chai.assert.equal(event.type, Blockly.Events.BLOCK_CHANGE);
-      chai.assert.equal(event.element, 'comment');
-      chai.assert.equal(event.newValue, 'test text');
 
       this.comment.setVisible(true);
       chai.assert.equal(this.comment.getText(), 'test text');
-
-      eventSpy.restore();
     });
     test('Get Text While Editing', function() {
       this.comment.setVisible(true);

@@ -484,25 +484,11 @@ Blockly.navigation.modify = function() {
 };
 
 /**
- * Finds the top block in the same stack as the given block.
- * @param {!Blockly.Block} block A block in the stack.
- * @return {!Blockly.Block} The top block in the stack.
- * @private
- */
-Blockly.navigation.getTopBlockInStack_ = function(block) {
-  var parentBlock = block;
-  while (parentBlock && parentBlock.getParent()) {
-    parentBlock = parentBlock.getParent();
-  }
-  return parentBlock;
-};
-
-/**
  * If the two blocks are compatible move the moving connection to the target
  * connection and connect them.
- * @param {Blockly.Connection} movingConnection The connection that is being
+ * @param {!Blockly.Connection} movingConnection The connection that is being
  *     moved.
- * @param {Blockly.Connection} destConnection The connection to be moved to.
+ * @param {!Blockly.Connection} destConnection The connection to be moved to.
  * @return {boolean} True if the connections were connected, false otherwise.
  * @private
  */
@@ -512,8 +498,8 @@ Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) 
   if (destConnection.canConnectWithReason_(movingConnection) ==
       Blockly.Connection.CAN_CONNECT) {
     if (!destConnection.isSuperior()) {
-      var topBlock = Blockly.navigation.getTopBlockInStack_(movingBlock);
-      topBlock.positionNearConnection(movingConnection, destConnection);
+      var rootBlock = movingBlock.getRootBlock();
+      rootBlock.positionNearConnection(movingConnection, destConnection);
     }
     destConnection.connect(movingConnection);
     return true;

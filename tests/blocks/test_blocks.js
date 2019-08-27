@@ -104,6 +104,30 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "math_blocks"
   },
   {
+    "type": "test_basic_javascript",
+    "message0": "function %1(%2) { %3 %4 return %5 }",
+    "args0": [
+      "foo",
+      "args",
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_statement",
+        "name": "STACK"
+      },
+      {
+        "type": "input_value",
+        "check": "number",
+        "align": "right",
+        "name": "RETURN"
+      }
+    ],
+    "inputsInline": true,
+    "colour": 200,
+    "tooltip": "Hello world."
+  },
+  {
     "type": "test_dropdowns_long",
     "message0": "long: %1",
     "args0": [

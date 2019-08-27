@@ -133,10 +133,13 @@ Blockly.Comment.prototype.createEditor_ = function() {
   body.appendChild(textarea);
   this.foreignObject_.appendChild(body);
 
+  // Ideally this would be hooked to the focus event for the comment.
+  // However doing so in Firefox swallows the cursor for unknown reasons.
+  // So this is hooked to mouseup instead.  No big deal.
   Blockly.bindEventWithChecks_(textarea, 'mouseup', this, this.startEdit_,
       true, true);
+  // Don't zoom with mousewheel.
   Blockly.bindEventWithChecks_(textarea, 'wheel', this, function(e) {
-    // Don't zoom with mousewheel.
     e.stopPropagation();
   });
   Blockly.bindEventWithChecks_(textarea, 'change', this, function(_e) {
@@ -159,13 +162,12 @@ Blockly.Comment.prototype.createEditor_ = function() {
  * @override
  */
 Blockly.Comment.prototype.updateEditable = function() {
+  Blockly.Comment.superClass_.updateEditable.call(this);
   if (this.isVisible()) {
     // Toggling visibility will force a rerendering.
     this.setVisible(false);
     this.setVisible(true);
   }
-  // Allow the icon to update.
-  Blockly.Comment.superClass_.updateEditable.call(this);
 };
 
 /**
@@ -181,13 +183,20 @@ Blockly.Comment.prototype.onBubbleResize_ = function() {
   this.resizeTextarea_();
 };
 
+/**
+ * Resizes the text area to match the size defined on the model (which is
+ * the size of the bubble).
+ * @private
+ */
 Blockly.Comment.prototype.resizeTextarea_ = function() {
   var size = this.model_.size;
   var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
-  this.foreignObject_.setAttribute('width', size.width - doubleBorderWidth);
-  this.foreignObject_.setAttribute('height', size.height - doubleBorderWidth);
-  this.textarea_.style.width = (size.width - doubleBorderWidth - 4) + 'px';
-  this.textarea_.style.height = (size.height - doubleBorderWidth - 4) + 'px';
+  var widthMinusBorder = size.width - doubleBorderWidth;
+  var heightMinusBorder = size.height - doubleBorderWidth;
+  this.foreignObject_.setAttribute('width', widthMinusBorder);
+  this.foreignObject_.setAttribute('height', heightMinusBorder);
+  this.textarea_.style.width = (widthMinusBorder - 4) + 'px';
+  this.textarea_.style.height = (heightMinusBorder - 4) + 'px';
 };
 
 /**
@@ -231,15 +240,14 @@ Blockly.Comment.prototype.setVisible = function(visible) {
 };
 
 /**
- * Bring the comment to the top of the stack when clicked on.
- * Also cache the current text so it can be used to fire a change event.
+ * Callback fired when an edit starts.
+ *
+ * Bring the comment to the top of the stack when clicked on. Also cache the
+ * current text so it can be used to fire a change event.
  * @param {!Event} _e Mouse up event.
  * @private
  */
 Blockly.Comment.prototype.startEdit_ = function(_e) {
-  // Ideally this would be hooked to the focus event for the comment.
-  // However doing so in Firefox swallows the cursor for unknown reasons.
-  // So this is hooked to mouseup instead.  No big deal.
   if (this.bubble_.promote_()) {
     // Since the act of moving this node within the DOM causes a loss of focus,
     // we need to reapply the focus.
@@ -251,14 +259,10 @@ Blockly.Comment.prototype.startEdit_ = function(_e) {
 
 /**
  * Get the dimensions of this comment's bubble.
- * @return {!Object} Object with width and height properties.
+ * @return {Blockly.utils.Size} Object with width and height properties.
  */
 Blockly.Comment.prototype.getBubbleSize = function() {
-  if (this.isVisible()) {
-    return this.bubble_.getBubbleSize();
-  } else {
-    return this.model_.size;
-  }
+  return this.model_.size;
 };
 
 /**
@@ -267,7 +271,7 @@ Blockly.Comment.prototype.getBubbleSize = function() {
  * @param {number} height Height of the bubble.
  */
 Blockly.Comment.prototype.setBubbleSize = function(width, height) {
-  if (this.textarea_) {
+  if (this.bubble_) {
     this.bubble_.setBubbleSize(width, height);
   } else {
     this.model_.size.width = width;
@@ -291,7 +295,7 @@ Blockly.Comment.prototype.getText = function() {
  * @param {string} text Comment text.
  */
 Blockly.Comment.prototype.setText = function(text) {
-  if (this.model_ == text) {
+  if (this.model_.text == text) {
     return;
   }
   this.model_.text = text;

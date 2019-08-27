@@ -42,6 +42,73 @@ suite('Comments', function() {
     delete Blockly.Blocks['empty_block'];
     this.workspace.dispose();
   });
+  suite('Visibility and Editability', function() {
+    setup(function() {
+      this.comment.setText('test text');
+      this.eventSpy = sinon.stub(Blockly.Events, 'fire');
+    });
+    teardown(function() {
+      this.eventSpy.restore();
+    });
+    function assertEvent(eventSpy, type, element, oldValue, newValue) {
+      var calls = eventSpy.getCalls();
+      var event = calls[calls.length - 1].args[0];
+      chai.assert.equal(event.type, type);
+      chai.assert.equal(event.element, element);
+      chai.assert.equal(event.oldValue, oldValue);
+      chai.assert.equal(event.newValue, newValue);
+    }
+    function assertEditable(comment) {
+      chai.assert.isNotOk(comment.paragraphElement_);
+      chai.assert.isOk(comment.textarea_);
+      chai.assert.equal(comment.textarea_.value, 'test text');
+    }
+    function assertNotEditable(comment) {
+      chai.assert.isNotOk(comment.textarea_);
+      chai.assert.isOk(comment.paragraphElement_);
+      chai.assert.equal(comment.paragraphElement_.firstChild.textContent,
+          'test text');
+    }
+    test('Editable', function() {
+      this.comment.setVisible(true);
+      chai.assert.isTrue(this.comment.isVisible());
+      assertEditable(this.comment);
+      assertEvent(this.eventSpy, Blockly.Events.UI, 'commentOpen', false, true);
+    });
+    test('Not Editable', function() {
+      var editableStub = sinon.stub(this.block, 'isEditable').returns(false);
+
+      this.comment.setVisible(true);
+      chai.assert.isTrue(this.comment.isVisible());
+      assertNotEditable(this.comment);
+      assertEvent(this.eventSpy, Blockly.Events.UI, 'commentOpen', false, true);
+
+      editableStub.restore();
+    });
+    test('Editable -> Not Editable', function() {
+      this.comment.setVisible(true);
+      var editableStub = sinon.stub(this.block, 'isEditable').returns(false);
+
+      this.comment.updateEditable();
+      chai.assert.isTrue(this.comment.isVisible());
+      assertNotEditable(this.comment);
+      assertEvent(this.eventSpy, Blockly.Events.UI, 'commentOpen', false, true);
+
+      editableStub.restore();
+    });
+    test('Not Editable -> Editable', function() {
+      var editableStub = sinon.stub(this.block, 'isEditable').returns(false);
+      this.comment.setVisible(true);
+      editableStub.returns(true);
+
+      this.comment.updateEditable();
+      chai.assert.isTrue(this.comment.isVisible());
+      assertEditable(this.comment);
+      assertEvent(this.eventSpy, Blockly.Events.UI, 'commentOpen', false, true);
+
+      editableStub.restore();
+    });
+  });
   suite('Set/Get Bubble Size', function() {
     function assertBubbleSize(comment, height, width) {
       var size = comment.getBubbleSize();
@@ -72,92 +139,6 @@ suite('Comments', function() {
 
       this.comment.setVisible(true);
       assertBubbleSize(this.comment, 100, 100);
-    });
-  });
-  suite('Set/Get Text', function() {
-    test('Set Text While Visible', function() {
-      this.comment.setVisible(true);
-
-      chai.assert.equal(this.comment.getText(), '');
-      this.comment.setText('test text');
-      chai.assert.equal(this.comment.getText(), 'test text');
-
-      this.comment.setVisible(false);
-      chai.assert.equal(this.comment.getText(), 'test text');
-    });
-    test('Set Text While Invisible', function() {
-      chai.assert.equal(this.comment.getText(), '');
-      this.comment.setText('test text');
-      chai.assert.equal(this.comment.getText(), 'test text');
-
-      this.comment.setVisible(true);
-      chai.assert.equal(this.comment.getText(), 'test text');
-    });
-    test('Get Text While Editing', function() {
-      this.comment.setVisible(true);
-      this.comment.textarea_.value = 'test text';
-      this.comment.textarea_.dispatchEvent(new Event('input'));
-
-      chai.assert.equal(this.comment.getText(), 'test text');
-    });
-  });
-  suite('Editability', function() {
-    setup(function() {
-      this.editableStub = sinon.stub(this.block, 'isEditable').returns(true);
-    });
-    teardown(function() {
-      this.editableStub.restore();
-    });
-    function assertEditable(comment) {
-      chai.assert.isOk(comment.textarea_);
-      chai.assert.equal(comment.textarea_.value, 'test text');
-    }
-    function assertNonEditable(comment) {
-      chai.assert.isOk(comment.bubble_);
-      var displayText = comment.bubble_.content_
-          .firstChild.firstChild.nodeValue;
-      chai.assert.equal(displayText, 'test text');
-    }
-    test('Editable', function() {
-      this.comment.setText('test text');
-      this.comment.setVisible(true);
-      assertEditable(this.comment);
-    });
-    test('Non-Editable', function() {
-      this.editableStub.returns(false);
-      this.comment.setText('test text');
-      this.comment.setVisible(true);
-    });
-    test('True -> False While Open', function() {
-      this.comment.setText('test text');
-      this.comment.setVisible(true);
-      assertEditable(this.comment);
-
-      this.editableStub.returns(false);
-      this.comment.updateEditable();
-      assertNonEditable(this.comment);
-    });
-    test('False -> True While Open', function() {
-      this.editableStub.returns(false);
-      this.comment.setText('test text');
-      this.comment.setVisible(true);
-      assertNonEditable(this.comment);
-
-      this.editableStub.returns(true);
-
-      this.comment.setText('test text');
-      this.comment.updateEditable();
-      assertEditable(this.comment);
-    });
-    test('True -> False While Editing', function() {
-      this.comment.setVisible(true);
-      this.comment.textarea_.value = 'test text';
-      this.comment.textarea_.dispatchEvent(new Event('input'));
-      assertEditable(this.comment);
-
-      this.editableStub.returns(false);
-      this.comment.updateEditable();
-      assertNonEditable(this.comment);
     });
   });
 });

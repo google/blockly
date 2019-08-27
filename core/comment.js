@@ -265,7 +265,7 @@ Blockly.Comment.prototype.createNonEditableBubble_ = function() {
  * @private
  */
 Blockly.Comment.prototype.disposeBubble_ = function() {
-  if (!this.block_.isEditable() || Blockly.utils.userAgent.IE) {
+  if (this.paragraphElement_) {
     // We're using the warning UI so we have to let it dispose.
     Blockly.Warning.prototype.disposeBubble.call(this);
     return;
@@ -320,6 +320,7 @@ Blockly.Comment.prototype.setBubbleSize = function(width, height) {
 /**
  * Returns this comment's text.
  * @return {string} Comment text.
+ * @deprecated August 2019 Use block.getCommentText() instead.
  */
 Blockly.Comment.prototype.getText = function() {
   return this.model_.text;
@@ -331,6 +332,7 @@ Blockly.Comment.prototype.getText = function() {
  * If you want to get the event, then this should not be called directly.
  * Instead call block.setCommentText();
  * @param {string} text Comment text.
+ * @deprecated August 2019 Use block.setCommentText() instead.
  */
 Blockly.Comment.prototype.setText = function(text) {
   if (this.model_.text == text) {

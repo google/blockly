@@ -102,7 +102,8 @@ Blockly.Comment.prototype.drawIcon_ = function(group) {
  * @private
  */
 Blockly.Comment.prototype.createEditor_ = function() {
-  /* Create the editor.  Here's the markup that will be generated:
+  /* Create the editor.  Here's the markup that will be generated in
+   * editable mode:
     <foreignObject x="8" y="8" width="164" height="164">
       <body xmlns="http://www.w3.org/1999/xhtml" class="blocklyMinimalBody">
         <textarea xmlns="http://www.w3.org/1999/xhtml"
@@ -110,7 +111,8 @@ Blockly.Comment.prototype.createEditor_ = function() {
             style="height: 164px; width: 164px;"></textarea>
       </body>
     </foreignObject>
-  */
+   * For non-editable mode see Warning.textToDom_.
+   */
 
   this.foreignObject_ = Blockly.utils.dom.createSvgElement('foreignObject',
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
@@ -205,7 +207,7 @@ Blockly.Comment.prototype.setVisible = function(visible) {
     // MSIE does not support foreignobject; textareas are impossible.
     // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034
     // Always treat comments in IE as uneditable.
-    // TODO (#2917): It would be great if this could support line breaks.
+    // TODO (#2917): It would be great if the comment could support line breaks.
     Blockly.Warning.prototype.setVisible.call(this, visible);
     return;
   }

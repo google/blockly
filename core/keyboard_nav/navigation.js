@@ -484,6 +484,59 @@ Blockly.navigation.modify = function() {
 };
 
 /**
+ * If the given connections are an input and output, checks whether the value
+ * input block is a child of the output block.
+ * @param {!Blockly.Connection} movingConnection The connection that is being
+ *     moved.
+ * @param {!Blockly.Connection} destConnection The connection to be moved to.
+ * @return {boolean} True if the value input block is not the child of the
+ *     output block. False otherwise.
+ * @package
+ */
+Blockly.navigation.canConnectValueInput_ = function(movingConnection, destConnection) {
+  var valueBlock = null;
+  var otherBlock = null;
+
+  // Find the value input if it exists
+  if (movingConnection.type == Blockly.INPUT_VALUE &&
+      destConnection.type == Blockly.OUTPUT_VALUE) {
+    valueBlock = movingConnection.getSourceBlock();
+    otherBlock = destConnection.getSourceBlock();
+  } else if (destConnection.type == Blockly.INPUT_VALUE &&
+      movingConnection.type == Blockly.OUTPUT_VALUE) {
+    valueBlock = destConnection.getSourceBlock();
+    otherBlock = movingConnection.getSourceBlock();
+  }
+
+  // If there is a value input and it is a descendant of an inline block
+  // don't allow them to connect.
+  if (valueBlock && otherBlock &&
+    otherBlock.getInputsInline() &&
+    otherBlock.getDescendants().indexOf(valueBlock) > -1) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * Checks whether the two given connections can be connected.
+ * @param {!Blockly.Connection} movingConnection The connection that is being
+ *     moved.
+ * @param {!Blockly.Connection} destConnection The connection to be moved to.
+ * @return {boolean} True if the two connections can be connected, false
+ *     otherwise.
+ * @package
+ */
+Blockly.navigation.canConnect_ = function(movingConnection, destConnection) {
+  if (destConnection.canConnectWithReason_(movingConnection) ==
+    Blockly.Connection.CAN_CONNECT &&
+    Blockly.navigation.canConnectValueInput_(movingConnection, destConnection)) {
+    return true;
+  }
+  return false;
+};
+
+/**
  * If the two blocks are compatible move the moving connection to the target
  * connection and connect them.
  * @param {!Blockly.Connection} movingConnection The connection that is being
@@ -495,8 +548,7 @@ Blockly.navigation.modify = function() {
 Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) {
   var movingBlock = movingConnection.getSourceBlock();
 
-  if (destConnection.canConnectWithReason_(movingConnection) ==
-      Blockly.Connection.CAN_CONNECT) {
+  if (Blockly.navigation.canConnect_(movingConnection, destConnection)) {
     if (!destConnection.isSuperior()) {
       var rootBlock = movingBlock.getRootBlock();
       rootBlock.positionNearConnection(movingConnection, destConnection);
@@ -578,7 +630,13 @@ Blockly.navigation.connect = function(movingConnection, destConnection) {
   // any errors.
   } else {
     try {
-      destConnection.connect(movingConnection);
+      if (!Blockly.navigation.canConnectValueInput_(movingConnection, destConnection)) {
+        Blockly.navigation.warn('Connection failed with error: Can not connect' +
+            ' a nested block to its parent');
+        return false;
+      } else {
+        destConnection.connect(movingConnection);
+      }
     }
     catch (e) {
       Blockly.navigation.warn('Connection failed with error: ' + e);

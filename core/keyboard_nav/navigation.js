@@ -489,7 +489,7 @@ Blockly.navigation.modify = function() {
  * @return {!Blockly.Block} The top block in the stack.
  * @private
  */
-Blockly.navigation.getTopOfStack_ = function(block) {
+Blockly.navigation.getTopBlockInStack_ = function(block) {
   var parentBlock = block;
   while (parentBlock && parentBlock.getParent()) {
     parentBlock = parentBlock.getParent();
@@ -512,7 +512,7 @@ Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) 
   if (destConnection.canConnectWithReason_(movingConnection) ==
       Blockly.Connection.CAN_CONNECT) {
     if (!destConnection.isSuperior()) {
-      var topBlock = Blockly.navigation.getTopOfStack_(movingBlock);
+      var topBlock = Blockly.navigation.getTopBlockInStack_(movingBlock);
       topBlock.positionNearConnection(movingConnection, destConnection);
     }
     destConnection.connect(movingConnection);

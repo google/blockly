@@ -507,6 +507,16 @@ suite('Navigation', function() {
       chai.assert.equal(this.basicBlock.nextConnection.targetBlock(), this.basicBlock4);
       chai.assert.equal(this.basicBlock3.nextConnection.targetConnection, null);
     });
+
+    test('Connect cursor with parents', function() {
+      var markedLocation = this.basicBlock3.previousConnection;
+      var cursorLocation = this.basicBlock2.nextConnection;
+
+      Blockly.navigation.connect(cursorLocation, markedLocation);
+
+      chai.assert.equal(this.basicBlock3.previousConnection.targetBlock(), this.basicBlock2);
+    });
+
   });
 
 

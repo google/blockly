@@ -484,6 +484,20 @@ Blockly.navigation.modify = function() {
 };
 
 /**
+ * Finds the top block in the same stack as the given block.
+ * @param {!Blockly.Block} block A block in the stack.
+ * @return {!Blockly.Block} The top block in the stack.
+ * @private
+ */
+Blockly.navigation.getTopOfStack_ = function(block) {
+  var parentBlock = block;
+  while (parentBlock && parentBlock.getParent()) {
+    parentBlock = parentBlock.getParent();
+  }
+  return parentBlock;
+};
+
+/**
  * If the two blocks are compatible move the moving connection to the target
  * connection and connect them.
  * @param {Blockly.Connection} movingConnection The connection that is being
@@ -497,9 +511,9 @@ Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) 
 
   if (destConnection.canConnectWithReason_(movingConnection) ==
       Blockly.Connection.CAN_CONNECT) {
-    if (destConnection.type == Blockly.PREVIOUS_STATEMENT ||
-        destConnection.type == Blockly.OUTPUT_VALUE) {
-      movingBlock.positionNearConnection(movingConnection, destConnection);
+    if (!destConnection.isSuperior()) {
+      var topBlock = Blockly.navigation.getTopOfStack_(movingBlock);
+      topBlock.positionNearConnection(movingConnection, destConnection);
     }
     destConnection.connect(movingConnection);
     return true;

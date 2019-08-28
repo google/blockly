@@ -118,11 +118,11 @@ Blockly.blockRendering.StatementInput = function(input) {
   if (!this.connectedBlock) {
     this.height = this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT;
   } else {
+    // We allow the dark path to show on the parent block so that the child
+    // block looks embossed.  This takes up an extra pixel in both x and y.
     this.height =
-        this.connectedBlockHeight + this.constants_.STATEMENT_BOTTOM_SPACER;
-    if (this.connectedBlock.nextConnection) {
-      this.height -= this.shape.height;
-    }
+        this.connectedBlockHeight + this.constants_.DARK_PATH_OFFSET +
+        this.constants_.STATEMENT_BOTTOM_SPACER;
   }
   this.width = this.constants_.NOTCH_OFFSET_LEFT +
       this.shape.width;

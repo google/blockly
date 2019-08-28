@@ -41,6 +41,8 @@ goog.require('Blockly.Cursor');
 Blockly.CursorSvg = function(workspace, opt_marker) {
   Blockly.CursorSvg.superClass_.constructor.call(this, opt_marker);
   this.workspace_ = workspace;
+  this.constants = new Blockly.blockRendering.ConstantProvider();
+  this.constants.init();
 };
 goog.inherits(Blockly.CursorSvg, Blockly.Cursor);
 
@@ -187,7 +189,7 @@ Blockly.CursorSvg.prototype.showWithInputOutput_ = function() {
       (this.getCurNode().getLocation());
   this.currentCursorSvg = this.cursorInputOutput_;
   var path = Blockly.utils.svgPaths.moveTo(0, 0) +
-      Blockly.blockRendering.constants.PUZZLE_TAB.pathDown;
+      this.constants.shapeFor(connection).pathDown;
   this.cursorInputOutput_.setAttribute('d', path);
   this.setParent_(connection.getSourceBlock().getSvgRoot());
   this.positionInputOutput_(connection);

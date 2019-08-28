@@ -451,6 +451,24 @@ suite('Navigation', function() {
         "message0": "",
         "previousStatement": null,
         "nextStatement": null,
+      },
+      {
+        "type": "inline_block",
+        "message0": "%1 %2",
+        "args0": [
+          {
+            "type": "input_value",
+            "name": "NAME"
+          },
+          {
+            "type": "input_value",
+            "name": "NAME"
+          }
+        ],
+        "inputsInline": true,
+        "output": null,
+        "tooltip": "",
+        "helpUrl": ""
       }]);
 
       var toolbox = document.getElementById('toolbox-categories');
@@ -461,14 +479,23 @@ suite('Navigation', function() {
       var basicBlock3 = this.workspace.newBlock('basic_block');
       var basicBlock4 = this.workspace.newBlock('basic_block');
 
+      var inlineBlock1 = this.workspace.newBlock('inline_block');
+      var inlineBlock2 = this.workspace.newBlock('inline_block');
+
+
       this.basicBlock = basicBlock;
       this.basicBlock2 = basicBlock2;
       this.basicBlock3 = basicBlock3;
       this.basicBlock4 = basicBlock4;
 
+      this.inlineBlock1 = inlineBlock1;
+      this.inlineBlock2 = inlineBlock2;
+
       this.basicBlock.nextConnection.connect(this.basicBlock2.previousConnection);
 
       this.basicBlock3.nextConnection.connect(this.basicBlock4.previousConnection);
+
+      this.inlineBlock1.inputList[0].connection.connect(this.inlineBlock2.outputConnection);
     });
 
     teardown(function() {
@@ -517,6 +544,15 @@ suite('Navigation', function() {
       chai.assert.equal(this.basicBlock3.previousConnection.targetBlock(), this.basicBlock2);
     });
 
+    test('Try to connect input that is descendant of output', function() {
+      var markedLocation = this.inlineBlock2.inputList[0].connection;
+      var cursorLocation = this.inlineBlock1.outputConnection;
+
+      Blockly.navigation.connect(cursorLocation, markedLocation);
+
+      chai.assert.equal(this.inlineBlock2.outputConnection.targetBlock(), null);
+      chai.assert.equal(this.inlineBlock1.outputConnection.targetBlock(), this.inlineBlock2);
+    });
   });
 
 

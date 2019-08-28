@@ -25,6 +25,7 @@
 'use strict';
 
 goog.provide('Blockly.Block');
+goog.provide('Blockly.Block.CommentModel');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Connection');
@@ -218,8 +219,6 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
     this.setOnChange(this.onchange);
   }
 };
-
-/**
 
 /**
  * A model of a comment.

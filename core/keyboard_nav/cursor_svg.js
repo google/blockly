@@ -118,9 +118,10 @@ Blockly.CursorSvg.prototype.getSvgRoot = function() {
  * @return {!Element} The cursor controls SVG group.
  */
 Blockly.CursorSvg.prototype.createDom = function() {
+  var className = this.isMarker_ ? 'blocklyMarker' : 'blocklyCursor';
   this.svgGroup_ =
       Blockly.utils.dom.createSvgElement('g', {
-        'class': 'blocklyCursor'
+        'class': className
       }, null);
 
   this.createCursorSvg_();
@@ -169,7 +170,6 @@ Blockly.CursorSvg.prototype.showWithCoordinates_ = function() {
  * @private
  */
 Blockly.CursorSvg.prototype.showWithBlock_ = function() {
-  //TODO: Change this from getLocation to something else
   var block = this.getCurNode().getLocation();
 
   this.currentCursorSvg = this.cursorSvgRect_;

@@ -1062,9 +1062,14 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
   }
 };
 
+/**
+ * Get the comment icon attached to this block, or null if the block has no
+ * comment.
+ * @return {Blockly.Comment} The comment icon attached to this block, or null.
+ */
 Blockly.BlockSvg.prototype.getCommentIcon = function() {
   return this.commentIcon_;
-}
+};
 
 /**
  * Set this block's comment text.

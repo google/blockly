@@ -134,20 +134,9 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    * @deprecated August 2019. Use getCommentText or getCommentIcon instead.
    */
   this.comment = null;
-
-  // TODO: There may be a better place for this typedef, or it could simply
-  //  be removed.
-  /**
-   * A model of a comment.
-   * @typedef {Object} TextBubbleModel
-   * @property {?string} text - The text of the comment.
-   * @property {boolean} pinned - Whether the comment is open or not.
-   * @property {Blockly.utils.Size} size - The height and width of the bubble.
-   */
-
   /**
    * A model of the comment attached to this block.
-   * @type {TextBubbleModel}
+   * @type {!Blockly.Block.CommentModel}
    * @package
    */
   this.commentModel = {
@@ -229,6 +218,18 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
     this.setOnChange(this.onchange);
   }
 };
+
+/**
+
+/**
+ * A model of a comment.
+ * @typedef {{
+ *            text:?string,
+ *            pinned:boolean
+ *            size:Blockly.utils.Size
+ *          }}
+ */
+Blockly.Block.CommentModel;
 
 /**
  * Optional text data that round-trips between blocks and XML.

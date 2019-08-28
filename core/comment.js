@@ -47,7 +47,7 @@ Blockly.Comment = function(block) {
 
   /**
    * The model for this comment.
-   * @type {TextBubbleModel}
+   * @type {Blockly.Block.CommentModel}
    * @private
    */
   this.model_ = block.commentModel;

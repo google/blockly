@@ -58,7 +58,11 @@ Blockly.blockRendering.Debug = function() {
    * @type {Object} Configuration object containing booleans to enable and
    *     disable debug rendering of specific rendering components.
    */
-  this.config_ = {
+  this.config_ = Blockly.blockRendering.Debug.getDebugConfig();
+};
+
+Blockly.blockRendering.Debug.getDebugConfig = function() {
+  return {
     rowSpacers: true,
     elemSpacers: true,
     rows: true,
@@ -67,7 +71,6 @@ Blockly.blockRendering.Debug = function() {
     blockBounds: true
   };
 };
-
 
 /**
  * Remove all elements the this object created on the last pass.
@@ -100,6 +103,10 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
         'y': cursorY,
         'width': row.width,
         'height': row.height,
+        'stroke': 'blue',
+        'fill': 'blue',
+        'fill-opacity': '0.5',
+        'stroke-width': '1px'
       },
       this.svgRoot_));
 };
@@ -129,6 +136,10 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
         'y': yPos,
         'width': elem.width,
         'height': debugRenderedHeight,
+        'stroke': 'pink',
+        'fill': 'pink',
+        'fill-opacity': '0.5',
+        'stroke-width': '1px'
       },
       this.svgRoot_));
 };
@@ -156,6 +167,9 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
         'y': yPos,
         'width': elem.width,
         'height': elem.height,
+        'stroke': 'black',
+        'fill': 'none',
+        'stroke-width': '1px'
       },
       this.svgRoot_));
 
@@ -227,6 +241,9 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
         'y': cursorY,
         'width': row.width,
         'height': row.height,
+        'stroke': 'red',
+        'fill': 'none',
+        'stroke-width': '1px'
       },
       this.svgRoot_));
 
@@ -235,7 +252,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
   }
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
-        'class': 'blockRenderDebug',
+        'class': 'connectedBlockWidth blockRenderDebug',
         'x': isRtl ? -(row.xPos + row.widthWithConnectedBlocks) : row.xPos,
         'y': cursorY,
         'width': row.widthWithConnectedBlocks,
@@ -288,6 +305,10 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
         'y': yPos,
         'width': info.width,
         'height': info.height,
+        'stroke': 'black',
+        'fill': 'none',
+        'stroke-width': '1px',
+        'stroke-dasharray': '5,5'
       },
       this.svgRoot_));
 
@@ -316,7 +337,6 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
-  this.config_.rowSpacers = false;
   this.clearElems();
   this.svgRoot_ = block.getSvgRoot();
 

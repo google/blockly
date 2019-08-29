@@ -160,8 +160,9 @@ Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
 
   if (newParent) {
     if (this.isMarker_) {
+      // Put the marker before the cursor so the cursor does not get covered.
       for (var i = 0, childNode; childNode = newParent.childNodes[i]; i++) {
-        if (childNode.className.baseVal == Blockly.CursorSvg.CURSOR_CLASS) {
+        if (Blockly.utils.dom.hasClass(childNode , Blockly.CursorSvg.CURSOR_CLASS)) {
           cursorNode = childNode;
         }
       }

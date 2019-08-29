@@ -96,13 +96,13 @@ Blockly.CursorSvg.MARKER_COLOR = '#4286f4';
 
 /**
  * The name of the css class for a cursor.
- * @type {string}
+ * @const {string}
  */
 Blockly.CursorSvg.CURSOR_CLASS = 'blocklyCursor';
 
 /**
  * The name of the css class for a marker.
- * @type {string}
+ * @const {string}
  */
 Blockly.CursorSvg.MARKER_CLASS = 'blocklyMarker';
 

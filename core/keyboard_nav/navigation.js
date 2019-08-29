@@ -146,6 +146,27 @@ Blockly.navigation.removeMark = function() {
   Blockly.navigation.marker_.hide();
 };
 
+/**
+ * Gets the top node on a block.
+ * This is either the previous connection, output connection or the block.
+ * @param {Blockly.Block} block The block to find the top most ast node on.
+ * @return {Blockly.ASTNode} The ast node holding the top most node on the
+ *     block.
+ * @package
+ */
+Blockly.navigation.getTopNode_ = function(block) {
+  var prevConnection = block.previousConnection;
+  var outConnection = block.outputConnection;
+  var topConnection = prevConnection ? prevConnection : outConnection;
+  var astNode = null;
+  if (topConnection) {
+    astNode = Blockly.ASTNode.createConnectionNode(topConnection);
+  } else {
+    astNode = Blockly.ASTNode.createBlockNode(block);
+  }
+  return astNode;
+};
+
 /************************/
 /** Toolbox Navigation **/
 /************************/
@@ -369,15 +390,8 @@ Blockly.navigation.insertFromFlyout = function() {
     Blockly.navigation.warn('Something went wrong while inserting a block from the flyout.');
   }
 
-  // Move the cursor to the right place on the inserted block.
   Blockly.navigation.focusWorkspace();
-  var prevConnection = newBlock.previousConnection;
-  var outConnection = newBlock.outputConnection;
-  var topConnection = prevConnection ? prevConnection : outConnection;
-  // TODO: This will have to be fixed when we add in a block that does not have
-  // a previous or output connection
-  var astNode = Blockly.ASTNode.createConnectionNode(topConnection);
-  Blockly.navigation.cursor_.setLocation(astNode);
+  Blockly.navigation.cursor_.setLocation(Blockly.navigation.getTopNode_(newBlock));
   Blockly.navigation.removeMark();
 };
 
@@ -694,13 +708,7 @@ Blockly.navigation.focusWorkspace = function() {
   Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
   Blockly.navigation.enableKeyboardAccessibility();
   if (Blockly.selected) {
-    var previousConnection = Blockly.selected.previousConnection;
-    var outputConnection = Blockly.selected.outputConnection;
-    // TODO: This still needs to work with blocks that have neither previous
-    // or output connection.
-    var connection = previousConnection ? previousConnection : outputConnection;
-    var newAstNode = Blockly.ASTNode.createConnectionNode(connection);
-    cursor.setLocation(newAstNode);
+    cursor.setLocation(Blockly.navigation.getTopNode_(Blockly.selected));
     Blockly.selected.unselect();
   } else {
     var ws = cursor.workspace_;

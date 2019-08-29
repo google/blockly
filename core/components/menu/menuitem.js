@@ -266,12 +266,12 @@ Blockly.MenuItem.prototype.setEnabled = function(enabled) {
 };
 
 /**
- * Handles mouseup events. If the component is enabled, trigger
+ * Handles click events. If the component is enabled, trigger
  * the action assosiated with this menu item.
- * @param {Event} _e Mouse event to handle.
+ * @param {Event} _e Click event to handle.
  * @package
  */
-Blockly.MenuItem.prototype.handleMouseUp = function(_e) {
+Blockly.MenuItem.prototype.handleClick = function(_e) {
   if (this.isEnabled()) {
     this.setHighlighted(true);
     this.performActionInternal();

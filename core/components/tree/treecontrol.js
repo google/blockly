@@ -30,6 +30,7 @@ goog.provide('Blockly.tree.TreeControl');
 goog.require('Blockly.tree.TreeNode');
 goog.require('Blockly.tree.BaseNode');
 goog.require('Blockly.utils.aria');
+goog.require('Blockly.utils.style');
 
 
 /**
@@ -323,18 +324,11 @@ Blockly.tree.TreeControl.prototype.attachEvents_ = function() {
   this.onBlurWrapper_ = Blockly.bindEvent_(el,
       'blur', this, this.handleBlur_);
 
-  this.onMousedownWrapper_ = Blockly.bindEventWithChecks_(el,
-      'mousedown', this, this.handleMouseEvent_);
   this.onClickWrapper_ = Blockly.bindEventWithChecks_(el,
       'click', this, this.handleMouseEvent_);
 
   this.onKeydownWrapper_ = Blockly.bindEvent_(el,
       'keydown', this, this.handleKeyEvent_);
-
-  if (Blockly.Touch.TOUCH_ENABLED) {
-    this.onTouchEndWrapper_ = Blockly.bindEventWithChecks_(el,
-        'touchend', this, this.handleTouchEvent_);
-  }
 };
 
 /**
@@ -372,21 +366,6 @@ Blockly.tree.TreeControl.prototype.handleMouseEvent_ = function(e) {
 };
 
 /**
- * Handles touch events.
- * @param {!Event} e The browser event.
- * @private
- */
-Blockly.tree.TreeControl.prototype.handleTouchEvent_ = function(e) {
-  var node = this.getNodeFromEvent_(e);
-  if (node && e.type === 'touchend') {
-    // Fire asynchronously since onMouseDown takes long enough that the browser
-    // would fire the default mouse event before this method returns.
-    // Same behaviour for click and touch.
-    setTimeout(node.onClick_.bind(node, e), 1);
-  }
-};
-
-/**
  * Handles key down on the tree.
  * @param {!Event} e The browser event.
  * @return {boolean} The handled value.
@@ -399,6 +378,9 @@ Blockly.tree.TreeControl.prototype.handleKeyEvent_ = function(e) {
   handled = (this.selectedItem_ && this.selectedItem_.onKeyDown(e)) || handled;
 
   if (handled) {
+    Blockly.utils.style.scrollIntoContainerView(
+        /** @type {!Element} */ (this.selectedItem_.getElement()),
+        /** @type {!Element} */ (this.getElement().parentNode));
     e.preventDefault();
   }
 

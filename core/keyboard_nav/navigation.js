@@ -516,8 +516,6 @@ Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) 
       rootBlock.positionNearConnection(movingConnection, destConnection);
     }
     destConnection.connect(movingConnection);
-    Blockly.navigation.cursor_.update_();
-    Blockly.navigation.marker_.update_();
     return true;
   }
   return false;

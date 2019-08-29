@@ -372,6 +372,7 @@ Blockly.blockRendering.RenderInfo.prototype.computeBounds_ = function() {
  */
 Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
   for (var i = 0, row; (row = this.rows[i]); i++) {
+    // TODO (#2921): this still doesn't handle the row having an inline input.
     if (!row.hasInlineInput) {
       if (row.hasStatement) {
         var statementInput = row.getLastInput();
@@ -440,20 +441,14 @@ Blockly.blockRendering.RenderInfo.prototype.makeSpacerRow_ = function(prev, next
 };
 
 /**
- * Calculate the width of a spacer row.  Almost all spacers will be the full
- * width of the block, but there are some exceptions (e.g. the small spacer row
- * after a statement input)
- * @param {Blockly.blockRendering.Row} prev The row before the spacer.
- * @param {Blockly.blockRendering.Row} next The row after the spacer.
+ * Calculate the width of a spacer row.
+ * @param {Blockly.blockRendering.Row} _prev The row before the spacer.
+ * @param {Blockly.blockRendering.Row} _next The row after the spacer.
  * @return {number} The desired width of the spacer row between these two rows.
  * @protected
  */
-Blockly.blockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
-  // The width of the spacer before the bottom row should be the same as the
-  // bottom row.
-  if (next.type == 'bottom row' && next.hasFixedWidth) {
-    return next.width;
-  }
+Blockly.blockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(
+    _prev, _next) {
   return this.width - this.startX;
 };
 

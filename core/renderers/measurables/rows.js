@@ -166,13 +166,8 @@ Blockly.blockRendering.Row.prototype.measure = function() {
  */
 Blockly.blockRendering.Row.prototype.getLastInput = function() {
   for (var i = this.elements.length - 1, elem; (elem = this.elements[i]); i--) {
-    if (elem.isSpacer()) {
-      continue;
-    }
     if (elem.isInput) {
       return /** @type {Blockly.blockRendering.InputConnection} */ (elem);
-    } else if (elem.isField()) {
-      return /** @type {Blockly.blockRendering.InputConnection} */ (elem.parentInput);
     }
   }
   return null;
@@ -341,12 +336,6 @@ Blockly.blockRendering.BottomRow = function() {
    * @type {number}
    */
   this.overhangY = 0;
-
-  /**
-   * True if the width of this row does not depend on its contents.
-   * @type {boolean}
-   */
-  this.hasFixedWidth = false;
 };
 goog.inherits(Blockly.blockRendering.BottomRow, Blockly.blockRendering.Row);
 
@@ -361,7 +350,6 @@ Blockly.blockRendering.BottomRow.prototype.populate = function(block) {
   var followsStatement =
       block.inputList.length &&
       block.inputList[block.inputList.length - 1].type == Blockly.NEXT_STATEMENT;
-  this.hasFixedWidth = followsStatement && block.getInputsInline();
 
   // This is the minimum height for the row. If one of its elements has a greater
   // height it will be overwritten in the compute pass.

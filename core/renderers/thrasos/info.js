@@ -226,31 +226,6 @@ Blockly.thrasos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 /**
  * @override
  */
-Blockly.thrasos.RenderInfo.prototype.alignRowElements_ = function() {
-  for (var i = 0, row; (row = this.rows[i]); i++) {
-    if (!row.hasInlineInput) {
-      if (row.hasStatement) {
-        var statementInput = row.getLastInput();
-        var currentWidth = row.width - statementInput.width;
-        var desiredWidth = this.statementEdge - this.startX;
-      } else {
-        var currentWidth = row.width;
-        var desiredWidth = this.width - this.startX;
-      }
-      if (row.type == 'bottom row' && row.hasFixedWidth) {
-        desiredWidth = this.constants_.MAX_BOTTOM_WIDTH;
-      }
-      var missingSpace = desiredWidth - currentWidth;
-      if (missingSpace) {
-        this.addAlignmentPadding_(row, missingSpace);
-      }
-    }
-  }
-};
-
-/**
- * @override
- */
 Blockly.thrasos.RenderInfo.prototype.addAlignmentPadding_ = function(row, missingSpace) {
   var input = row.getLastInput();
   if (input) {
@@ -278,18 +253,6 @@ Blockly.thrasos.RenderInfo.prototype.addAlignmentPadding_ = function(row, missin
     row.getLastSpacer().width += missingSpace;
     row.width += missingSpace;
   }
-};
-
-/**
- * @override
- */
-Blockly.thrasos.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
-  // The width of the spacer before the bottom row should be the same as the
-  // bottom row.
-  if (next.type == 'bottom row' && next.hasFixedWidth) {
-    return next.width;
-  }
-  return this.width - this.startX;
 };
 
 /**

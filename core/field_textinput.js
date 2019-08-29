@@ -495,6 +495,7 @@ Blockly.FieldTextInput.prototype.getText_ = function() {
  * `getValueFromEditorText_`.
  * @param {*} value The value stored in this field.
  * @returns {string} The text to show on the html input.
+ * @protected
  */
 Blockly.FieldTextInput.prototype.getEditorText_ = function(value) {
   return String(value);
@@ -508,6 +509,7 @@ Blockly.FieldTextInput.prototype.getEditorText_ = function(value) {
  * `getEditorText_`.
  * @param {string} text Text received from the html input.
  * @returns {string} The value to store.
+ * @protected
  */
 Blockly.FieldTextInput.prototype.getValueFromEditorText_ = function(text) {
   return text;

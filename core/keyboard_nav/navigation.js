@@ -132,7 +132,6 @@ Blockly.navigation.setMarker = function(marker) {
  * @package
  */
 Blockly.navigation.markAtCursor = function() {
-  // TODO: bring the cursor (blinking) in front of the marker (solid)
   Blockly.navigation.marker_.setLocation(
       Blockly.navigation.cursor_.getCurNode());
 };

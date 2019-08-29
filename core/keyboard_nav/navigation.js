@@ -498,6 +498,27 @@ Blockly.navigation.modify = function() {
 };
 
 /**
+ * If one of the connections source blocks is a child of the other, disconnect
+ * the child.
+ * @param {!Blockly.Connection} movingConnection The connection that is being
+ *     moved.
+ * @param {!Blockly.Connection} destConnection The connection to be moved to.
+ * @private
+ */
+Blockly.navigation.disconnectChild_ = function(movingConnection, destConnection) {
+  var movingBlock = movingConnection.getSourceBlock();
+  var destBlock = destConnection.getSourceBlock();
+
+  if (movingBlock.getRootBlock() == destBlock.getRootBlock()) {
+    if (movingBlock.getDescendants().indexOf(destBlock) > -1) {
+      Blockly.navigation.getInferiorConnection_(destConnection).disconnect();
+    } else {
+      Blockly.navigation.getInferiorConnection_(movingConnection).disconnect();
+    }
+  }
+};
+
+/**
  * If the two blocks are compatible move the moving connection to the target
  * connection and connect them.
  * @param {!Blockly.Connection} movingConnection The connection that is being
@@ -511,6 +532,9 @@ Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) 
 
   if (destConnection.canConnectWithReason_(movingConnection) ==
       Blockly.Connection.CAN_CONNECT) {
+
+    Blockly.navigation.disconnectChild_(movingConnection, destConnection);
+
     if (!destConnection.isSuperior()) {
       var rootBlock = movingBlock.getRootBlock();
       rootBlock.positionNearConnection(movingConnection, destConnection);
@@ -588,16 +612,17 @@ Blockly.navigation.connect = function(movingConnection, destConnection) {
   } else if (movingSuperior && destInferior &&
       Blockly.navigation.moveAndConnect_(movingSuperior, destInferior)) {
     return true;
-  // If nothing else worked try connecting the given connections and report
-  // any errors.
+  } else if (Blockly.navigation.moveAndConnect_(movingConnection, destConnection)){
+    return true;
   } else {
     try {
-      destConnection.connect(movingConnection);
+      destConnection.checkConnection_(movingConnection);
     }
     catch (e) {
+      // If nothing worked report the error from the original connections.
       Blockly.navigation.warn('Connection failed with error: ' + e);
-      return false;
     }
+    return false;
   }
 };
 

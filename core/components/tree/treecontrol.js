@@ -338,12 +338,8 @@ Blockly.tree.TreeControl.prototype.attachEvents_ = function() {
 Blockly.tree.TreeControl.prototype.detachEvents_ = function() {
   Blockly.unbindEvent_(this.onFocusWrapper_);
   Blockly.unbindEvent_(this.onBlurWrapper_);
-  Blockly.unbindEvent_(this.onMousedownWrapper_);
   Blockly.unbindEvent_(this.onClickWrapper_);
   Blockly.unbindEvent_(this.onKeydownWrapper_);
-  if (this.onTouchEndWrapper_) {
-    Blockly.unbindEvent_(this.onTouchEndWrapper_);
-  }
 };
 
 /**

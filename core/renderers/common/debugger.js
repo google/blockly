@@ -63,12 +63,13 @@ Blockly.blockRendering.Debug = function() {
 
 Blockly.blockRendering.Debug.getDebugConfig = function() {
   return {
-    rowSpacers: true,
-    elemSpacers: true,
-    rows: true,
+    // rowSpacers: true,
+    // elemSpacers: true,
+    // rows: true,
     elems: true,
-    connections: true,
-    blockBounds: true
+    // connections: true,
+    blockBounds: true,
+    // connectedBlockBounds: true
   };
 };
 
@@ -151,29 +152,28 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) {
-  if (!this.config_.elems) {
-    return;
+  if (this.config_.elems) {
+    var xPos = elem.xPos;
+    if (isRtl) {
+      xPos = -(xPos + elem.width);
+    }
+    var yPos = elem.centerline - elem.height / 2;
+    this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+        {
+          'class': 'rowRenderingRect blockRenderDebug',
+          'x': xPos,
+          'y': yPos,
+          'width': elem.width,
+          'height': elem.height,
+          'stroke': 'black',
+          'fill': 'none',
+          'stroke-width': '1px'
+        },
+        this.svgRoot_));
   }
 
-  var xPos = elem.xPos;
-  if (isRtl) {
-    xPos = -(xPos + elem.width);
-  }
-  var yPos = elem.centerline - elem.height / 2;
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-      {
-        'class': 'rowRenderingRect blockRenderDebug',
-        'x': xPos,
-        'y': yPos,
-        'width': elem.width,
-        'height': elem.height,
-        'stroke': 'black',
-        'fill': 'none',
-        'stroke-width': '1px'
-      },
-      this.svgRoot_));
 
-  if (elem.isInput) {
+  if (elem.isInput && this.config_.connections) {
     this.drawConnection(elem.connection);
   }
 };
@@ -233,7 +233,6 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
   if (!this.config_.rows) {
     return;
   }
-
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'elemRenderingRect blockRenderDebug',
@@ -250,19 +249,22 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
   if (row.type == 'top row' || row.type == 'bottom row') {
     return;
   }
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-      {
-        'class': 'connectedBlockWidth blockRenderDebug',
-        'x': isRtl ? -(row.xPos + row.widthWithConnectedBlocks) : row.xPos,
-        'y': cursorY,
-        'width': row.widthWithConnectedBlocks,
-        'height': row.height,
-        'stroke': this.randomColour_,
-        'fill': 'none',
-        'stroke-width': '1px',
-        'stroke-dasharray': '3,3'
-      },
-      this.svgRoot_));
+
+  if (this.config_.connectedBlockBounds) {
+    this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+        {
+          'class': 'connectedBlockWidth blockRenderDebug',
+          'x': isRtl ? -(row.xPos + row.widthWithConnectedBlocks) : row.xPos,
+          'y': cursorY,
+          'width': row.widthWithConnectedBlocks,
+          'height': row.height,
+          'stroke': this.randomColour_,
+          'fill': 'none',
+          'stroke-width': '1px',
+          'stroke-dasharray': '3,3'
+        },
+        this.svgRoot_));
+  }
 };
 
 /**
@@ -293,11 +295,9 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
   if (!this.config_.blockBounds) {
     return;
   }
-
   // Bounding box without children.
   var xPos = info.RTL ? -info.width : 0;
   var yPos = 0;
-
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'blockBoundingBox blockRenderDebug',
@@ -312,21 +312,23 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
       },
       this.svgRoot_));
 
-  // Bounding box with children.
-  xPos = info.RTL ? -info.widthWithChildren : 0;
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-      {
-        'class': 'blockRenderDebug',
-        'x': xPos,
-        'y': yPos,
-        'width': info.widthWithChildren,
-        'height': info.height,
-        'stroke': '#DF57BC',
-        'fill': 'none',
-        'stroke-width': '1px',
-        'stroke-dasharray': '3,3'
-      },
-      this.svgRoot_));
+  if (this.config_.connectedBlockBounds) {
+    // Bounding box with children.
+    xPos = info.RTL ? -info.widthWithChildren : 0;
+    this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+        {
+          'class': 'blockRenderDebug',
+          'x': xPos,
+          'y': yPos,
+          'width': info.widthWithChildren,
+          'height': info.height,
+          'stroke': '#DF57BC',
+          'fill': 'none',
+          'stroke-width': '1px',
+          'stroke-dasharray': '3,3'
+        },
+        this.svgRoot_));
+  }
 };
 
 /**

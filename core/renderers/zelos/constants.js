@@ -125,31 +125,45 @@ Blockly.zelos.ConstantProvider.prototype.makeNotch = function() {
   function makeMainPath(dir) {
     return (
       Blockly.utils.svgPaths.curve('c', [
-        Blockly.utils.svgPaths.point(dir * curveWidth / 2, 0),
-        Blockly.utils.svgPaths.point(dir * curveWidth * 3 / 4, quarterHeight / 2),
-        Blockly.utils.svgPaths.point(dir * curveWidth, quarterHeight)
+        Blockly.utils.svgPaths.point(dir * curveWidth / 2,
+            0),
+        Blockly.utils.svgPaths.point(dir * curveWidth * 3 / 4,
+            quarterHeight / 2),
+        Blockly.utils.svgPaths.point(dir * curveWidth,
+            quarterHeight)
       ]) +
       Blockly.utils.svgPaths.line([
-        Blockly.utils.svgPaths.point(dir * curveWidth, halfHeight)
+        Blockly.utils.svgPaths.point(dir * curveWidth,
+            halfHeight)
       ]) +
       Blockly.utils.svgPaths.curve('c', [
-        Blockly.utils.svgPaths.point(dir * curveWidth / 4, quarterHeight / 2),
-        Blockly.utils.svgPaths.point(dir * curveWidth / 2, quarterHeight),
-        Blockly.utils.svgPaths.point(dir * curveWidth, quarterHeight)
+        Blockly.utils.svgPaths.point(dir * curveWidth / 4,
+            quarterHeight / 2),
+        Blockly.utils.svgPaths.point(dir * curveWidth / 2,
+            quarterHeight),
+        Blockly.utils.svgPaths.point(dir * curveWidth,
+            quarterHeight)
       ]) +
       Blockly.utils.svgPaths.lineOnAxis('h', dir * innerWidth) +
       Blockly.utils.svgPaths.curve('c', [
-        Blockly.utils.svgPaths.point(dir * curveWidth / 2, 0),
-        Blockly.utils.svgPaths.point(dir * curveWidth * 3 / 4, -(quarterHeight / 2)),
-        Blockly.utils.svgPaths.point(dir * curveWidth, -quarterHeight)
+        Blockly.utils.svgPaths.point(dir * curveWidth / 2,
+            0),
+        Blockly.utils.svgPaths.point(dir * curveWidth * 3 / 4,
+            -(quarterHeight / 2)),
+        Blockly.utils.svgPaths.point(dir * curveWidth,
+            -quarterHeight)
       ]) +
       Blockly.utils.svgPaths.line([
-        Blockly.utils.svgPaths.point(dir * curveWidth, -halfHeight)
+        Blockly.utils.svgPaths.point(dir * curveWidth,
+            -halfHeight)
       ]) +
       Blockly.utils.svgPaths.curve('c', [
-        Blockly.utils.svgPaths.point(dir * curveWidth / 4, -(quarterHeight / 2)),
-        Blockly.utils.svgPaths.point(dir * curveWidth / 2, -quarterHeight),
-        Blockly.utils.svgPaths.point(dir * curveWidth, -quarterHeight)
+        Blockly.utils.svgPaths.point(dir * curveWidth / 4,
+            -(quarterHeight / 2)),
+        Blockly.utils.svgPaths.point(dir * curveWidth / 2,
+            -quarterHeight),
+        Blockly.utils.svgPaths.point(dir * curveWidth,
+            -quarterHeight)
       ])
     );
   }
@@ -163,5 +177,51 @@ Blockly.zelos.ConstantProvider.prototype.makeNotch = function() {
     height: height,
     pathLeft: pathLeft,
     pathRight: pathRight
+  };
+};
+
+/**
+ * @return {!Object} An object containing sizing and path information about
+ *     outside corners.
+ * @package
+ */
+Blockly.zelos.ConstantProvider.prototype.makeOutsideCorners = function() {
+  var radius = this.CORNER_RADIUS;
+  /**
+   * SVG path for drawing the rounded top-left corner.
+   * @const
+   */
+  var topLeft =
+      Blockly.utils.svgPaths.moveBy(0, radius) +
+      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+          Blockly.utils.svgPaths.point(radius, -radius));
+
+  /**
+   * SVG path for drawing the rounded top-right corner.
+   * @const
+   */
+  var topRight =
+      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+          Blockly.utils.svgPaths.point(radius, radius));
+    
+  /**
+   * SVG path for drawing the rounded bottom-left corner.
+   * @const
+   */
+  var bottomLeft = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+      Blockly.utils.svgPaths.point(-radius, -radius));
+
+  /**
+   * SVG path for drawing the rounded bottom-right corner.
+   * @const
+   */
+  var bottomRight = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+      Blockly.utils.svgPaths.point(-radius, radius));
+
+  return {
+    topLeft: topLeft,
+    topRight: topRight,
+    bottomRight: bottomRight,
+    bottomLeft: bottomLeft
   };
 };

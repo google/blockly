@@ -46,6 +46,9 @@ goog.require('Blockly.blockRendering.OutputConnection');
 
 goog.require('Blockly.RenderedConnection');
 
+goog.require('Blockly.zelos.BottomRow');
+goog.require('Blockly.zelos.TopRow');
+
 /**
  * An object containing all sizing information needed to draw this block.
  *
@@ -60,6 +63,20 @@ goog.require('Blockly.RenderedConnection');
  */
 Blockly.zelos.RenderInfo = function(block) {
   Blockly.zelos.RenderInfo.superClass_.constructor.call(this, block);
+
+  /**
+   * An object with rendering information about the top row of the block.
+   * @type {!Blockly.zelos.TopRow}
+   * @override
+   */
+  this.topRow = new Blockly.zelos.TopRow();
+
+  /**
+   * An object with rendering information about the bottom row of the block.
+   * @type {!Blockly.zelos.BottomRow}
+   * @override
+   */
+  this.bottomRow = new Blockly.zelos.BottomRow();
 };
 goog.inherits(Blockly.zelos.RenderInfo, Blockly.blockRendering.RenderInfo);
 
@@ -104,6 +121,10 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
     // Between rounded corner and the end of the row.
     if (prev.isRoundedCorner()) {
       return this.constants_.MIN_BLOCK_WIDTH;
+    }
+    // Between a right rounded corner and the end of the row.
+    if (prev.type == 'round corner right') {
+      return this.constants_.NO_PADDING;
     }
     // Between a jagged edge and the end of the row.
     if (prev.isJaggedEdge()) {
@@ -202,4 +223,26 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   return this.constants_.MEDIUM_PADDING;
+};
+
+/**
+ * Modify the given row to add the given amount of padding around its fields.
+ * The exact location of the padding is based on the alignment property of the
+ * last input in the field.
+ * @param {Blockly.blockRendering.Row} row The row to add padding to.
+ * @param {number} missingSpace How much padding to add.
+ * @protected
+ */
+Blockly.zelos.RenderInfo.prototype.addAlignmentPadding_ = function(row,
+    missingSpace) {
+  var lastSpacer = row.getLastSpacer();
+  // Skip the right corner element on the top and bottom row, so we don't have
+  // any spacing after the right corner element.
+  if (row.type == 'top row' || row.type == 'bottom row') {
+    lastSpacer = row.elements[row.elements.length - 3];
+  }
+  if (lastSpacer) {
+    lastSpacer.width += missingSpace;
+    row.width += missingSpace;
+  }
 };

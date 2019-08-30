@@ -147,7 +147,6 @@ Blockly.blockRendering.RenderInfo = function(block) {
   this.startY = 0;
 
   this.constants_ = Blockly.blockRendering.getConstants();
-  this.measure_();
 };
 
 /**
@@ -158,9 +157,9 @@ Blockly.blockRendering.RenderInfo = function(block) {
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
  *
- * @protected
+ * @package
  */
-Blockly.blockRendering.RenderInfo.prototype.measure_ = function() {
+Blockly.blockRendering.RenderInfo.prototype.measure = function() {
   this.createRows_();
   this.addElemSpacing_();
   this.computeBounds_();

@@ -83,12 +83,15 @@ Blockly.blockRendering.render = function(block) {
   }
   if (Blockly.blockRendering.rendererName == 'geras') {
     var info = new Blockly.geras.RenderInfo(block);
+    info.measure();
     new Blockly.geras.Drawer(block, info).draw();
   } else if (Blockly.blockRendering.rendererName == 'thrasos') {
     var info = new Blockly.thrasos.RenderInfo(block);
+    info.measure();
     new Blockly.blockRendering.Drawer(block, info).draw();
   } else if (Blockly.blockRendering.rendererName == 'zelos') {
     var info = new Blockly.zelos.RenderInfo(block);
+    info.measure();
     new Blockly.zelos.Drawer(block, info).draw();
   }
 };

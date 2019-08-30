@@ -45,3 +45,63 @@ Blockly.zelos.Drawer = function(block, info) {
 };
 goog.inherits(Blockly.zelos.Drawer, Blockly.blockRendering.Drawer);
 
+
+/**
+ * Add steps for the top corner of the block, taking into account
+ * details such as hats and rounded corners.
+ * @protected
+ */
+Blockly.zelos.Drawer.prototype.drawTop_ = function() {
+  var topRow = this.info_.topRow;
+  var elements = topRow.elements;
+
+  this.positionPreviousConnection_();
+  this.outlinePath_ +=
+      Blockly.utils.svgPaths.moveBy(topRow.xPos, this.info_.startY);
+  for (var i = 0, elem; (elem = elements[i]); i++) {
+    if (elem.type == 'round corner') {
+      this.outlinePath_ +=
+          this.constants_.OUTSIDE_CORNERS.topLeft;
+    } else if (elem.type == 'round corner right') {
+      this.outlinePath_ +=
+          this.constants_.OUTSIDE_CORNERS.topRight;
+    } else if (elem.type == 'previous connection') {
+      this.outlinePath_ += elem.shape.pathLeft;
+    } else if (elem.type == 'hat') {
+      this.outlinePath_ += this.constants_.START_HAT.path;
+    } else if (elem.isSpacer()) {
+      this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width);
+    }
+    // No branch for a 'square corner', because it's a no-op.
+  }
+  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('v', topRow.height);
+};
+
+
+/**
+ * Add steps for the bottom edge of a block, possibly including a notch
+ * for the next connection
+ * @protected
+ */
+Blockly.zelos.Drawer.prototype.drawBottom_ = function() {
+  var bottomRow = this.info_.bottomRow;
+  var elems = bottomRow.elements;
+  this.positionNextConnection_();
+
+  this.outlinePath_ +=
+    Blockly.utils.svgPaths.lineOnAxis('v', bottomRow.height - bottomRow.overhangY);
+
+  for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
+    if (elem.isNextConnection()) {
+      this.outlinePath_ += elem.shape.pathRight;
+    } else if (elem.isSquareCorner()) {
+      this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', bottomRow.xPos);
+    } else if (elem.isRoundedCorner()) {
+      this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.bottomLeft;
+    } else if (elem.type == 'round corner right') {
+      this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.bottomRight;
+    } else if (elem.isSpacer()) {
+      this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width * -1);
+    }
+  }
+};

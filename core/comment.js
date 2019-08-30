@@ -330,8 +330,8 @@ Blockly.Comment.prototype.getText = function() {
 /**
  * Set this comment's text.
  *
- * If you want to get the event, then this should not be called directly.
- * Instead call block.setCommentText();
+ * If you want to receive a comment change event, then this should not be called
+ * directly. Instead call block.setCommentText();
  * @param {string} text Comment text.
  * @deprecated August 2019 Use block.setCommentText() instead.
  */
@@ -360,8 +360,8 @@ Blockly.Comment.prototype.updateText = function() {
 /**
  * Dispose of this comment.
  *
- * If you want to get the event, then this should not be called directly.
- * Instead call block.setCommentText(null);
+ * If you want to receive a comment "delete" event (newValue: null), then this
+ * should not be called directly. Instead call block.setCommentText(null);
  */
 Blockly.Comment.prototype.dispose = function() {
   this.block_.comment = null;

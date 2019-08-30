@@ -132,8 +132,8 @@ Blockly.Warning.prototype.setVisible = function(visible) {
  * @package
  */
 Blockly.Warning.prototype.createBubble = function() {
-  // TODO: This is package because comments steal this UI for non-editable
-  //  comments, but really this should be private.
+  // TODO (#2943): This is package because comments steal this UI for
+  //  non-editable comments, but really this should be private.
   this.paragraphElement_ = Blockly.Warning.textToDom_(this.getText());
   this.bubble_ = new Blockly.Bubble(
       /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
@@ -159,8 +159,8 @@ Blockly.Warning.prototype.createBubble = function() {
  * @package
  */
 Blockly.Warning.prototype.disposeBubble = function() {
-  // TODO: This is package because comments steal this UI for non-editable
-  //  comments, but really this should be private.
+  // TODO (#2943): This is package because comments steal this UI for
+  //  non-editable comments, but really this should be private.
   this.bubble_.dispose();
   this.bubble_ = null;
   this.body_ = null;

@@ -428,6 +428,7 @@ suite('Blocks', function() {
       this.eventSpy = sinon.spy(Blockly.Events, 'fire');
     });
     teardown(function() {
+      delete Blockly.Blocks['empty_block'];
       this.eventSpy.restore();
     });
     suite('Set/Get Text', function() {

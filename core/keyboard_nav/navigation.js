@@ -521,9 +521,9 @@ Blockly.navigation.disconnectChild_ = function(movingConnection, destConnection)
 /**
  * If the two blocks are compatible move the moving connection to the target
  * connection and connect them.
- * @param {!Blockly.Connection} movingConnection The connection that is being
+ * @param {Blockly.Connection} movingConnection The connection that is being
  *     moved.
- * @param {!Blockly.Connection} destConnection The connection to be moved to.
+ * @param {Blockly.Connection} destConnection The connection to be moved to.
  * @return {boolean} True if the connections were connected, false otherwise.
  * @private
  */
@@ -630,7 +630,7 @@ Blockly.navigation.connect = function(movingConnection, destConnection) {
 };
 
 /**
- * Tries to connect the given block to the target connection, making an
+ * Tries to connect the given block to the destination connection, making an
  * intelligent guess about which connection to use to on the moving block.
  * @param {!Blockly.Block} block The block to move.
  * @param {Blockly.Connection} destConnection The connection to connect to.

@@ -466,14 +466,20 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(
 /**
  * Calculate the centerline of an element in a rendered row.
  * @param {Blockly.blockRendering.Row} row The row containing the element.
- * @param {Blockly.blockRendering.Measurable} _elem The element to place.
+ * @param {Blockly.blockRendering.Measurable} elem The element to place.
  * @return {number} The desired centerline of the given element, as an offset
  *     from the top left of the block.
  * @protected
  */
 Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row,
-    _elem) {
-  return row.yPos + row.height / 2;
+    elem) {
+  var result = row.yPos;
+  if (elem.isNextConnection()) {
+    result += (row.height - row.overhangY + elem.height / 2);
+  } else {
+    result += (row.height / 2);
+  }
+  return result;
 };
 
 /**

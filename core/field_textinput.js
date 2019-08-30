@@ -286,18 +286,11 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
   // Finalize value.
   this.isBeingEdited_ = false;
   this.isTextValid_ = true;
-  // No need to call setValue because if the widget is being closed the
-  // latest input text has already been validated.
-  if (this.value_ != this.getValueFromEditorText_(this.htmlInput_.value)) {
-    // At the end of an edit the text should be the same as the value. It
-    // may not be if the input text is different than the validated text.
-    // There are two scenarios where that is the case:
-    // - The text in the input was invalid.
-    // - The text in the input is different to that returned by a validator.
-    // Re-render to fix that.
-    this.forceRerender();
-  }
-  // Otherwise don't rerender.
+
+  // Always re-render when the we close the editor as value
+  // set on the field's node may be inconsistent with the field's
+  // internal value.
+  this.forceRerender();
 
   // Call onFinishEditing
   // TODO: Get rid of this or make it less of a hack.
@@ -387,21 +380,20 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(_e) {
 /**
  * Set the html input value and the field's internal value. The difference
  * between this and ``setValue`` is that this also updates the html input
- * value whilst editing. This is meant to be triggered programatically.
+ * value whilst editing.
  * @param {*} newValue New value.
  * @protected
  */
 Blockly.FieldTextInput.prototype.setEditorValue_ = function(newValue) {
   this.isDirty_ = true;
-  this.setValue(newValue);
   if (this.isBeingEdited_) {
     // In the case this method is passed an invalid value, we still
     // pass it through the transformation method `getEditorText` to deal
     // with. Otherwise, the internal field's state will be inconsistent
     // with what's shown to the user.
     this.htmlInput_.value = this.getEditorText_(newValue);
-    this.forceRerender();
   }
+  this.setValue(newValue);
 };
 
 /**
@@ -488,8 +480,7 @@ Blockly.FieldTextInput.prototype.getText_ = function() {
 };
 
 /**
- * Transform the value stored in this field into a text to show in the html
- * input.
+ * Transform the provided value into a text to show in the html input.
  * Override this method if the field's html input representation is different
  * than the field's value. This should be coupled with an override of
  * `getValueFromEditorText_`.
@@ -508,7 +499,7 @@ Blockly.FieldTextInput.prototype.getEditorText_ = function(value) {
  * than the field's value. This should be coupled with an override of
  * `getEditorText_`.
  * @param {string} text Text received from the html input.
- * @returns {string} The value to store.
+ * @returns {*} The value to store.
  * @protected
  */
 Blockly.FieldTextInput.prototype.getValueFromEditorText_ = function(text) {

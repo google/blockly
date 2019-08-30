@@ -132,18 +132,12 @@ Blockly.FieldAngle.prototype.initView = function() {
 };
 
 /**
+ * Updates the graph when the field rerenders.
+ * @private
  * @override
  */
-Blockly.FieldAngle.prototype.doValueUpdate_ = function(newValue) {
-  Blockly.FieldAngle.superClass_.doValueUpdate_.call(this, newValue);
-  this.updateGraph_();
-};
-
-/**
- * @override
- */
-Blockly.FieldAngle.prototype.doValueInvalid_ = function(_invalidValue) {
-  Blockly.FieldAngle.superClass_.doValueInvalid_.call(this, _invalidValue);
+Blockly.FieldAngle.prototype.render_ = function() {
+  Blockly.FieldAngle.superClass_.render_.call(this);
   this.updateGraph_();
 };
 

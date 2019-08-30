@@ -43,9 +43,9 @@ Blockly.FieldPitch = function(text) {
 goog.inherits(Blockly.FieldPitch, Blockly.FieldTextInput);
 
 /**
- * Construct a FieldAngle from a JSON arg object.
- * @param {!Object} options A JSON object with options (angle).
- * @return {!Blockly.FieldAngle} The new field instance.
+ * Construct a FieldPitch from a JSON arg object.
+ * @param {!Object} options A JSON object with options (pitch).
+ * @return {!Blockly.FieldPitch} The new field instance.
  * @package
  * @nocollapse
  */
@@ -59,35 +59,11 @@ Blockly.FieldPitch.fromJson = function(options) {
 Blockly.FieldPitch.NOTES = 'C3 D3 E3 F3 G3 A3 B3 C4 D4 E4 F4 G4 A4'.split(/ /);
 
 /**
- * Clean up this FieldPitch, as well as the inherited FieldTextInput.
- * @return {!Function} Closure to call on destruction of the WidgetDiv.
- * @private
- */
-Blockly.FieldPitch.prototype.dispose_ = function() {
-  var thisField = this;
-  return function() {
-    Blockly.FieldPitch.superClass_.dispose_.call(thisField)();
-    thisField.imageElement_ = null;
-    if (thisField.clickWrapper_) {
-      Blockly.unbindEvent_(thisField.clickWrapper_);
-    }
-    if (thisField.moveWrapper_) {
-      Blockly.unbindEvent_(thisField.moveWrapper_);
-    }
-  };
-};
-
-/**
  * Show the inline free-text editor on top of the text and the note picker.
  * @private
  */
 Blockly.FieldPitch.prototype.showEditor_ = function() {
-  var noFocus =
-      Blockly.utils.userAgent.MOBILE ||
-      Blockly.utils.userAgent.ANDROID ||
-      Blockly.utils.userAgent.IPAD;
-  // Mobile browsers have issues with in-line textareas (focus & keyboards).
-  Blockly.FieldPitch.superClass_.showEditor_.call(this, noFocus);
+  Blockly.FieldPitch.superClass_.showEditor_.call(this);
 
   var div = Blockly.WidgetDiv.DIV;
   if (!div.firstChild) {
@@ -132,11 +108,12 @@ Blockly.FieldPitch.prototype.dropdownCreate_ = function() {
 };
 
 /**
- * Dispose of events belonging to the angle editor.
+ * Dispose of events belonging to the pitch editor.
  * @private
  */
 Blockly.FieldPitch.prototype.dropdownDispose_ = function() {
-  this.forceRerender();
+  Blockly.unbindEvent_(this.clickWrapper_);
+  Blockly.unbindEvent_(this.moveWrapper_);
 };
 
 /**
@@ -160,17 +137,27 @@ Blockly.FieldPitch.prototype.onMouseMove = function(e) {
   this.setEditorValue_(note);
 };
 
+/**
+ * Convert a provided value to a note.
+ * @param {number|string} newValue The provided value.
+ * @return {string} The respective note.
+ */
 Blockly.FieldPitch.prototype.valueToNote = function(newValue) {
   var note = Blockly.FieldPitch.NOTES[Number(newValue)];
   return note;
 };
 
+/**
+ * Convert a note to a value that can be stored in the field.
+ * @param {string} newText The provided note.
+ * @return {number} The respective value.
+ */
 Blockly.FieldPitch.prototype.noteToValue = function(newText) {
   var i = Blockly.FieldPitch.NOTES.indexOf(newText);
   return i;
 };
 
-/** 
+/**
  * Get the text to be displayed on the field node.
  * @return {?string} The html value if we're editing, otherwise null. Null means
  *   the super class will handle it, likely a string cast of value.
@@ -184,48 +171,31 @@ Blockly.FieldPitch.prototype.getText_ = function() {
 };
 
 /**
- * Transform the value stored in this field into a text to show
- *    in the html input.
+ * Transform the provided value into a text to show in the html input.
  * @param {*} value The value stored in this field.
  * @returns {string} The text to show on the html input.
  */
 Blockly.FieldPitch.prototype.getEditorText_ = function(value) {
-  return this.valueToNote(value) || '';
+  return this.valueToNote(value);
 };
 
 /**
  * Transform the text received from the html input (note) into a value
  *    to store in this field.
  * @param {string} text Text received from the html input.
- * @returns {string} The value to store.
+ * @returns {*} The value to store.
  */
 Blockly.FieldPitch.prototype.getValueFromEditorText_ = function(text) {
-  return this.noteToValue(text) || '';
+  return this.noteToValue(text);
 };
 
 /**
- * Called by setValue if the text input is valid. Updates the value of the
- * field, and updates the text of the field if it is not currently being
- * edited (i.e. handled by the htmlInput_).
- * @param {string} newValue The new validated value of the field.
- * @protected
+ * Updates the graph when the field rerenders.
+ * @private
+ * @override
  */
-Blockly.FieldPitch.prototype.doValueUpdate_ = function(newValue) {
-  Blockly.FieldPitch.superClass_.doValueUpdate_.call(this, newValue);
-  this.updateGraph_();
-};
-
-/**
- * Called by setValue if the text input is not valid. If the field is
- * currently being edited it reverts value of the field to the previous
- * value while allowing the display text to be handled by the htmlInput_.
- * @param {*} _invalidValue The input value that was determined to be invalid.
- *    This is not used by the text input because its display value is stored on
- *    the htmlInput_.
- * @protected
- */
-Blockly.FieldPitch.prototype.doValueInvalid_ = function(_invalidValue) {
-  Blockly.FieldPitch.superClass_.doValueInvalid_.call(this, _invalidValue);
+Blockly.FieldPitch.prototype.render_ = function() {
+  Blockly.FieldPitch.superClass_.render_.call(this);
   this.updateGraph_();
 };
 
@@ -242,14 +212,17 @@ Blockly.FieldPitch.prototype.updateGraph_ = function() {
 };
 
 /**
- * Ensure that only a valid note may be entered.
- * @param {string} text The user's text.
- * @return {?string} A string representing a valid note, or null if invalid.
+ * Ensure that only a valid value may be entered.
+ * @param {*} opt_newValue The input value.
+ * @return {*} A valid value, or null if invalid.
  */
-Blockly.FieldPitch.prototype.doClassValidation_ = function(value) {
-  var note = this.valueToNote(value);
+Blockly.FieldPitch.prototype.doClassValidation_ = function(opt_newValue) {
+  if (opt_newValue === null || opt_newValue === undefined) {
+    return null;
+  }
+  var note = this.valueToNote(opt_newValue);
   if (note) {
-    return value;
+    return opt_newValue;
   }
   return null;
 };

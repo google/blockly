@@ -59,44 +59,6 @@
         Blockly.Xml.domToWorkspace(xml, workspace);
       }
 
-      function setRandomStyle() {
-        var blocks = workspace.getAllBlocks();
-        var styles = Object.keys(Blockly.getTheme().getAllBlockStyles());
-        styles.splice(styles.indexOf(blocks[0].getStyleName()), 1);
-        var style = styles[Math.floor(Math.random() * styles.length)];
-        for(var i = 0, block; block = blocks[i]; i++) {
-          block.setStyle(style);
-        }
-      }
-
-      function toggleShadow() {
-        var blocks = workspace.getAllBlocks();
-        for(var i = 0, block; block = blocks[i]; i++) {
-          block.setShadow(!block.isShadow());
-        }
-      }
-
-      function toggleEnabled() {
-        var blocks = workspace.getAllBlocks();
-        for(var i = 0, block; block = blocks[i]; i++) {
-          block.setEnabled(!block.isEnabled());
-        }
-      }
-
-      function toggleEditable() {
-        var blocks = workspace.getAllBlocks();
-        for(var i = 0, block; block = blocks[i]; i++) {
-          block.setEditable(!block.isEditable());
-        }
-      }
-
-      function toggleCollapsed() {
-        var blocks = workspace.getAllBlocks();
-        for(var i = 0, block; block = blocks[i]; i++) {
-          block.setCollapsed(!block.isCollapsed());
-        }
-      }
-
       function appendDom() {
         var blocks = document.getElementById('workspace-blocks');
         if (blocks.firstElementChild) {

@@ -60,11 +60,11 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   this.value_ = null;
 
   /**
-   * Whether or not the field has been initialized.
+   * Whether or not the field's value has been initialized.
    * @type {!boolean}
    * @private
    */
-  this.initialized_ = false;
+  this.valueInitialized_ = false;
 
   /**
    * The initial value to be set when the field is initialized.
@@ -288,13 +288,13 @@ Blockly.Field.prototype.init = function() {
  * @package
  */
 Blockly.Field.prototype.initValue = function() {
-  if (this.initialized_) {
+  if (this.valueInitialized_) {
     return;
   }
   this.config_ && this.configure_(this.config_);
   this.setValue(this.initialValue_);
   this.setValidator(this.initialValidator_);
-  this.initialized_ = true;
+  this.valueInitialized_ = true;
 };
 
 /**

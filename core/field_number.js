@@ -28,7 +28,6 @@ goog.provide('Blockly.FieldNumber');
 
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
-goog.require('Blockly.utils.object');
 
 
 /**
@@ -41,39 +40,49 @@ goog.require('Blockly.utils.object');
  * @param {Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a number & returns a validated
  *    number, or null to abort the change.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/number#creation}
+ *    for a list of properties this parameter supports.
  * @extends {Blockly.FieldTextInput}
  * @constructor
  */
 Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
-    opt_validator) {
-  
+    opt_validator, opt_config) {
+  Blockly.FieldNumber.superClass_.constructor.call(
+      this, opt_value || 0, opt_validator, opt_config);
+
   /**
-   * The minimum value constraint.
+   * The minimum value this number field can contain.
    * @type {number}
-   * @protected
+   * @private
    */
   this.min_ = -Infinity;
 
   /**
-   * The maximum value constraint.
+   * The maximum value this number field can contain.
    * @type {number}
-   * @protected
+   * @private
    */
   this.max_ = Infinity;
 
   /**
-   * The precision constraint for the value.
+   * The multiple to which this fields value is rounded.
    * @type {number}
-   * @protected
+   * @private
    */
   this.precision_ = 0;
 
-  Blockly.FieldNumber.superClass_.constructor.call(
-      this, opt_value || 0, opt_validator);
+  /**
+   * The number of decimal places to allow, or null to allow any number of
+   * decimal digits.
+   * @type {?number}
+   * @private
+   */
+  this.decimalPlaces_ = null;
 
   this.setConstraints(opt_min, opt_max, opt_precision);
 };
-Blockly.utils.object.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
+goog.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
 
 /**
  * Construct a FieldNumber from a JSON arg object.
@@ -85,7 +94,7 @@ Blockly.utils.object.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
  */
 Blockly.FieldNumber.fromJson = function(options) {
   return new Blockly.FieldNumber(options['value'],
-      options['min'], options['max'], options['precision']);
+      options['min'], options['max'], options['precision'], null, options);
 };
 
 /**
@@ -95,6 +104,16 @@ Blockly.FieldNumber.fromJson = function(options) {
  * @const
  */
 Blockly.FieldNumber.prototype.SERIALIZABLE = true;
+
+/**
+ * Configure the field based on the given map of options.
+ * @param {!Object} config A map of options to configure the field based on.
+ * @private
+ */
+Blockly.FieldNumber.prototype.configure_ = function(config) {
+  Blockly.FieldNumber.superClass_.configure_.call(this, config);
+  this.setConstraints(config['min'], config['max'], config['precision']);
+};
 
 /**
  * Set the maximum, minimum and precision constraints on this field.
@@ -108,23 +127,36 @@ Blockly.FieldNumber.prototype.SERIALIZABLE = true;
  * @param {number|string|undefined} precision Precision for value.
  */
 Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
-  precision = Number(precision);
-  if (!isNaN(precision)) {
-    this.precision_ = precision;
-  }
+  this.min_ = isNaN(min) ? -Infinity : Number(min);
+  this.max_ = isNaN(max) ? Infinity : Number(max);
+  this.precision_ = isNaN(precision) ? 0 : Number(precision);
+
   var precisionString = this.precision_.toString();
   var decimalIndex = precisionString.indexOf('.');
-  this.fractionalDigits_ = (decimalIndex == -1) ? -1 :
-      precisionString.length - (decimalIndex + 1);
-  min = Number(min);
-  if (!isNaN(min)) {
-    this.min_ = min;
+  if (decimalIndex == -1) {
+    // If the precision is 0 (float) allow any number of decimals,
+    // otherwise allow none.
+    this.decimalPlaces_ = precision ? 0 : null;
+  } else {
+    this.decimalPlaces_ = precisionString.length - decimalIndex - 1;
   }
-  max = Number(max);
-  if (!isNaN(max)) {
-    this.max_ = max;
+
+  if (this.valueInitialized_) {
+    this.setValue(this.getValue());
   }
-  this.setValue(this.getValue());
+};
+
+/**
+ * Get the value constraints on this number field.
+ * @return {{min: number, max: number, precision: number}} The constraints
+ *    on the number field.
+ */
+Blockly.FieldNumber.prototype.getConstraints = function() {
+  return {
+    min: this.min_,
+    max: this.max_,
+    precision: this.precision_
+  };
 };
 
 /**
@@ -160,8 +192,9 @@ Blockly.FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
     n = Math.round(n / this.precision_) * this.precision_;
   }
   // Clean up floating point errors.
-  n = (this.fractionalDigits_ == -1) ? n :
-      Number(n.toFixed(this.fractionalDigits_));
+  if (this.decimalPlaces_ != null) {
+    n = Number(n.toFixed(this.decimalPlaces_));
+  }
   return n;
 };
 

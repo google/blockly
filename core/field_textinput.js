@@ -50,12 +50,12 @@ goog.require('Blockly.utils.userAgent');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldTextInput = function(opt_value, opt_validator) {
+Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
   if (opt_value == null) {
     opt_value = '';
   }
   Blockly.FieldTextInput.superClass_.constructor.call(this,
-      opt_value, opt_validator);
+      opt_value, opt_validator, opt_config);
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 

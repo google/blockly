@@ -528,6 +528,9 @@ Blockly.navigation.disconnectChild_ = function(movingConnection, destConnection)
  * @private
  */
 Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) {
+  if (!movingConnection || ! destConnection) {
+    return false;
+  }
   var movingBlock = movingConnection.getSourceBlock();
 
   if (destConnection.canConnectWithReason_(movingConnection) ==
@@ -627,56 +630,41 @@ Blockly.navigation.connect = function(movingConnection, destConnection) {
 };
 
 /**
- * Finds our best guess of what connection point on the given block the user is
- * trying to connect to given a target connection.
- * @param {Blockly.Block} block The block to be connected.
- * @param {Blockly.Connection} connection The connection to connect to.
- * @return {Blockly.Connection} blockConnection The best connection we can
- *     determine for the block, or null if the block doesn't have a matching
- *     connection for the given target connection.
- */
-Blockly.navigation.findBestConnection = function(block, connection) {
-  if (!block || !connection) {
-    return null;
-  }
-
-  // TODO: Possibly check types and return null if the types don't match.
-  if (connection.type === Blockly.PREVIOUS_STATEMENT) {
-    return block.nextConnection;
-  } else if (connection.type === Blockly.NEXT_STATEMENT) {
-    return block.previousConnection;
-  } else if (connection.type === Blockly.INPUT_VALUE) {
-    return block.outputConnection;
-  } else if (connection.type === Blockly.OUTPUT_VALUE) {
-    // Select the first input that has a connection.
-    for (var i = 0; i < block.inputList.length; i++) {
-      var inputConnection = block.inputList[i].connection;
-      if (inputConnection.type === Blockly.INPUT_VALUE) {
-        return inputConnection;
-      }
-    }
-  }
-  return null;
-};
-
-/**
  * Tries to connect the given block to the target connection, making an
  * intelligent guess about which connection to use to on the moving block.
  * @param {!Blockly.Block} block The block to move.
- * @param {Blockly.Connection} targetConnection The connection to connect to.
+ * @param {Blockly.Connection} destConnection The connection to connect to.
  * @return {boolean} Whether the connection was successful.
  */
-Blockly.navigation.insertBlock = function(block, targetConnection) {
-  var bestConnection =
-      Blockly.navigation.findBestConnection(block, targetConnection);
-  if (bestConnection && bestConnection.isConnected() &&
-      !bestConnection.targetBlock().isShadow()) {
-    bestConnection.disconnect();
-  } else if (!bestConnection) {
-    Blockly.navigation.warn(
-        'This block can not be inserted at the marked location.');
+Blockly.navigation.insertBlock = function(block, destConnection) {
+  switch (destConnection.type) {
+    case Blockly.PREVIOUS_STATEMENT:
+      if (Blockly.navigation.moveAndConnect_(block.nextConnection, destConnection)) {
+        return true;
+      }
+      break;
+    case Blockly.NEXT_STATEMENT:
+      if (Blockly.navigation.moveAndConnect_(block.previousConnection, destConnection)) {
+        return true;
+      }
+      break;
+    case Blockly.INPUT_VALUE:
+      if (Blockly.navigation.moveAndConnect_(block.outputConnection, destConnection)) {
+        return true;
+      }
+      break;
+    case Blockly.OUTPUT_VALUE:
+      for (var i = 0; i < block.inputList.length; i++) {
+        var inputConnection = block.inputList[i].connection;
+        if (inputConnection.type === Blockly.INPUT_VALUE &&
+            Blockly.navigation.moveAndConnect_(inputConnection, destConnection)) {
+          return true;
+        }
+      }
+      break;
   }
-  return Blockly.navigation.connect(bestConnection, targetConnection);
+  Blockly.navigation.warn('This block can not be inserted at the marked location.');
+  return false;
 };
 
 /**

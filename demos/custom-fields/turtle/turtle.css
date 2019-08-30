@@ -18,10 +18,45 @@
  * limitations under the License.
  */
 
+.customFieldsTurtleWidget {
+  width: 150px;
+}
 
- #notePicker {
-    background-image: url(media/notes.png);
-    border: 1px solid #ccc;
-    height: 109px;
-    width: 46px;
+.customFieldsTurtleWidget button {
+  border-radius: 4px;
+  border: none;
+  background-color: #fff;
+  opacity: .6;
+  color: #000;
+}
+
+.customFieldsTurtleWidget .table {
+  width: 100%;
+}
+
+.customFieldsTurtleWidget .row {
+  width: 100%;
+  display: flex;
+}
+
+.customFieldsTurtleWidget .arrow {
+  text-align: center;
+  padding: 0;
+  flex-grow: 0;
+}
+
+.customFieldsTurtleWidget .text {
+  height: 20px;
+  color: #fff;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.customFieldsTurtleWidget .randomize {
+  width: 100%;
+}
+
+.blocklyNonEditableText text,
+.blocklyEditableText text {
+  fill: #000;
 }

@@ -28,7 +28,6 @@ goog.provide('Blockly.FieldPitch');
 
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils.math');
-goog.require('Blockly.utils.userAgent');
 
 
 /**
@@ -138,28 +137,30 @@ Blockly.FieldPitch.prototype.onMouseMove = function(e) {
 };
 
 /**
- * Convert a provided value to a note.
- * @param {number|string} newValue The provided value.
+ * Convert the machine-readable value (0-12) to human-readable
+ *   text (C3-A4).
+ * @param {number|string} value The provided value.
  * @return {string} The respective note.
  */
-Blockly.FieldPitch.prototype.valueToNote = function(newValue) {
-  var note = Blockly.FieldPitch.NOTES[Number(newValue)];
+Blockly.FieldPitch.prototype.valueToNote = function(value) {
+  var note = Blockly.FieldPitch.NOTES[Number(value)];
   return note;
 };
 
 /**
- * Convert a note to a value that can be stored in the field.
- * @param {string} newText The provided note.
+ * Convert the human-readable text (C3-A4) to machine-readable
+ *   value (0-12).
+ * @param {string} text The provided note.
  * @return {number} The respective value.
  */
-Blockly.FieldPitch.prototype.noteToValue = function(newText) {
-  var i = Blockly.FieldPitch.NOTES.indexOf(newText);
+Blockly.FieldPitch.prototype.noteToValue = function(text) {
+  var i = Blockly.FieldPitch.NOTES.indexOf(text);
   return i;
 };
 
 /**
  * Get the text to be displayed on the field node.
- * @return {?string} The html value if we're editing, otherwise null. Null means
+ * @return {?string} The HTML value if we're editing, otherwise null. Null means
  *   the super class will handle it, likely a string cast of value.
  * @protected
  */
@@ -171,18 +172,18 @@ Blockly.FieldPitch.prototype.getText_ = function() {
 };
 
 /**
- * Transform the provided value into a text to show in the html input.
+ * Transform the provided value into a text to show in the HTML input.
  * @param {*} value The value stored in this field.
- * @returns {string} The text to show on the html input.
+ * @returns {string} The text to show on the HTML input.
  */
 Blockly.FieldPitch.prototype.getEditorText_ = function(value) {
   return this.valueToNote(value);
 };
 
 /**
- * Transform the text received from the html input (note) into a value
+ * Transform the text received from the HTML input (note) into a value
  *    to store in this field.
- * @param {string} text Text received from the html input.
+ * @param {string} text Text received from the HTML input.
  * @returns {*} The value to store.
  */
 Blockly.FieldPitch.prototype.getValueFromEditorText_ = function(text) {

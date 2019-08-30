@@ -145,8 +145,8 @@ Blockly.Menu.prototype.attachEvents_ = function() {
 
   this.mouseOverHandler_ = Blockly.bindEventWithChecks_(el,
       'mouseover', this, this.handleMouseOver_, true);
-  this.mouseUpHandler_ = Blockly.bindEventWithChecks_(el,
-      'mouseup', this, this.handleMouseUp_, true);
+  this.clickHandler_ = Blockly.bindEventWithChecks_(el,
+      'click', this, this.handleClick_, true);
   this.mouseEnterHandler_ = Blockly.bindEventWithChecks_(el,
       'mouseenter', this, this.handleMouseEnter_, true);
   this.mouseLeaveHandler_ = Blockly.bindEventWithChecks_(el,
@@ -162,7 +162,7 @@ Blockly.Menu.prototype.attachEvents_ = function() {
  */
 Blockly.Menu.prototype.detachEvents_ = function() {
   Blockly.unbindEvent_(this.mouseOverHandler_);
-  Blockly.unbindEvent_(this.mouseUpHandler_);
+  Blockly.unbindEvent_(this.clickHandler_);
   Blockly.unbindEvent_(this.mouseEnterHandler_);
   Blockly.unbindEvent_(this.mouseLeaveHandler_);
   Blockly.unbindEvent_(this.onKeyDownWrapper_);
@@ -392,15 +392,15 @@ Blockly.Menu.prototype.handleMouseOver_ = function(e) {
 };
 
 /**
- * Handles mouse up events. Pass the event onto the child
+ * Handles click events. Pass the event onto the child
  * menuitem to handle.
- * @param {Event} e Mouse event to handle.
+ * @param {Event} e Click to handle.
  * @private
  */
-Blockly.Menu.prototype.handleMouseUp_ = function(e) {
+Blockly.Menu.prototype.handleClick_ = function(e) {
   var menuItem = this.getMenuItem(/** @type {Node} */ (e.target));
 
-  if (menuItem && menuItem.handleMouseUp(e)) {
+  if (menuItem && menuItem.handleClick(e)) {
     e.preventDefault();
   }
 };

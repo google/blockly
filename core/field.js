@@ -67,7 +67,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   this.valueInitialized_ = false;
 
   /**
-   * The initial value to be set when the field is initialized.
+   * The initial value to be set when the field's value is initialized.
    * @type {*}
    * @private
    */
@@ -76,16 +76,17 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   /**
    * Validation function called when user edits an editable field.
    * @type {Function}
-   * @private
-   */
-  this.initialValidator_ = opt_validator;
-
-  /**
-   * Validation function called when user edits an editable field.
-   * @type {Function}
    * @protected
    */
   this.validator_ = null;
+
+  /**
+   * The initial validator function to be set when the field's value
+   * is initialized.
+   * @type {Function}
+   * @private
+   */
+  this.initialValidator_ = opt_validator;
 
   /**
    * A map of options used to configure this field when initialized.

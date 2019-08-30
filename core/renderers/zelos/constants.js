@@ -50,6 +50,8 @@ Blockly.zelos.ConstantProvider = function() {
   this.NOTCH_OFFSET_LEFT = 3 * GRID_UNIT;
 
   this.MIN_BLOCK_HEIGHT = 12 * GRID_UNIT;
+
+  this.DARK_PATH_OFFSET = 0;
 };
 goog.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);

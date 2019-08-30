@@ -25,7 +25,6 @@
 'use strict';
 
 goog.provide('Blockly.Block');
-goog.provide('Blockly.Block.CommentModel');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Connection');
@@ -135,6 +134,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    * @deprecated August 2019. Use getCommentText or getCommentIcon instead.
    */
   this.comment = null;
+
   /**
    * A model of the comment attached to this block.
    * @type {!Blockly.Block.CommentModel}
@@ -221,7 +221,6 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 };
 
 /**
- * A model of a comment.
  * @typedef {{
  *            text:?string,
  *            pinned:boolean

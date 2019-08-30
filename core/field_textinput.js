@@ -50,12 +50,12 @@ goog.require('Blockly.utils.userAgent');
  * @constructor
  */
 Blockly.FieldTextInput = function(opt_value, opt_validator) {
-  opt_value = this.doClassValidation_(opt_value);
-  if (opt_value === null) {
+  if (opt_value == null) {
     opt_value = '';
   }
-  Blockly.FieldTextInput.superClass_.constructor.call(this, opt_value,
-      opt_validator);
+  Blockly.FieldTextInput.superClass_.constructor.call(this,
+      opt_value, opt_validator);
+
   /**
    * A cache of the last value in the html input.
    * @type {*}
@@ -97,7 +97,8 @@ Blockly.FieldTextInput.prototype.SERIALIZABLE = true;
 Blockly.FieldTextInput.FONTSIZE = 11;
 
 /**
- * Pixel size of input border radius.  Should match blocklyText's border-radius in CSS.
+ * Pixel size of input border radius.
+ * Should match blocklyText's border-radius in CSS.
  */
 Blockly.FieldTextInput.BORDERRADIUS = 4;
 

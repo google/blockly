@@ -56,10 +56,12 @@ suite('Image Fields', function() {
     // the block.
     test('With Alt', function() {
       var imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
+      imageField.initValue();
       assertValue(imageField, 'src', 'alt');
     });
     test('Without Alt', function() {
       var imageField = new Blockly.FieldImage('src', 1, 1);
+      imageField.initValue();
       assertValue(imageField, 'src', '');
     });
   });
@@ -103,6 +105,7 @@ suite('Image Fields', function() {
         height: 1,
         alt: 'alt'
       });
+      imageField.initValue();
       assertValue(imageField, 'src', 'alt');
     });
     test('Without Alt', function() {
@@ -111,12 +114,14 @@ suite('Image Fields', function() {
         width: 1,
         height: 1
       });
+      imageField.initValue();
       assertValue(imageField, 'src', '');
     });
   });
   suite('setValue', function() {
     setup(function() {
       this.imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
+      this.imageField.initValue();
     });
     test('Null', function() {
       this.imageField.setValue(null);
@@ -135,6 +140,7 @@ suite('Image Fields', function() {
     suite('Alt', function() {
       setup(function() {
         this.imageField = new Blockly.FieldImage('src', 1, 1, 'alt');
+        this.imageField.initValue();
       });
       test('Deprecated - setText', function() {
         chai.assert.throws(function() {

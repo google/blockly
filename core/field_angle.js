@@ -45,12 +45,8 @@ goog.require('Blockly.utils.userAgent');
  * @constructor
  */
 Blockly.FieldAngle = function(opt_value, opt_validator) {
-  opt_value = this.doClassValidation_(opt_value);
-  if (opt_value === null) {
-    opt_value = 0;
-  }
   Blockly.FieldAngle.superClass_.constructor.call(
-      this, opt_value, opt_validator);
+      this, opt_value || 0, opt_validator);
 };
 goog.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 

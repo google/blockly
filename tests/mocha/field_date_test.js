@@ -118,6 +118,7 @@ suite.skip('Date Fields', function() {
     suite('Value -> New Value', function() {
       setup(function() {
         this.dateField = new Blockly.FieldDate('2020-02-20');
+        this.dateField.initValue();
       });
       test('Null', function() {
         this.dateField.setValue(null);
@@ -148,6 +149,7 @@ suite.skip('Date Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.dateField = new Blockly.FieldDate('2020-02-20');
+      this.dateField.initValue();
     });
     teardown(function() {
       this.dateField.setValidator(null);

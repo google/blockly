@@ -58,12 +58,18 @@ Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes,
   // The FieldDropdown constructor would call setValue, which might create a
   // spurious variable.  Just do the relevant parts of the constructor.
   this.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;
-  this.size_ = new Blockly.utils.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
   opt_validator && this.setValidator(opt_validator);
   this.defaultVariableName = varname || '';
 
   this.setTypes_(opt_variableTypes, opt_defaultType);
-  this.value_ = null;
+
+  /**
+   * The size of the area rendered by the field.
+   * @type {Blockly.utils.Size}
+   * @protected
+   * @override
+   */
+  this.size_ = new Blockly.utils.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
 };
 goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
 
@@ -97,6 +103,15 @@ Blockly.FieldVariable.prototype.workspace_ = null;
  * @const
  */
 Blockly.FieldVariable.prototype.SERIALIZABLE = true;
+
+/**
+ * Initializes the value of this field.
+ * @package
+ * @override
+ */
+Blockly.FieldVariable.prototype.initValue = function() {
+  // NOP
+};
 
 /**
  * Initialize the model for this field if it has not already been initialized.

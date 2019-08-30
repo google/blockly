@@ -52,12 +52,18 @@ goog.require('Blockly.utils.Size');
  * @constructor
  */
 Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
-  opt_value = this.doClassValidation_(opt_value);
-  if (opt_value === null) {
-    opt_value = Blockly.FieldColour.COLOURS[0];
-  }
   Blockly.FieldColour.superClass_.constructor.call(
-      this, opt_value, opt_validator, opt_config);
+      this, opt_value || Blockly.FieldColour.COLOURS[0],
+      opt_validator, opt_config);
+
+  /**
+   * The size of the area rendered by the field.
+   * @type {Blockly.utils.Size}
+   * @protected
+   * @override
+   */
+  this.size_ = new Blockly.utils.Size(Blockly.FieldColour.DEFAULT_WIDTH,
+      Blockly.FieldColour.DEFAULT_HEIGHT);
 };
 goog.inherits(Blockly.FieldColour, Blockly.Field);
 
@@ -154,8 +160,9 @@ Blockly.FieldColour.prototype.DROPDOWN_BACKGROUND_COLOUR = 'white';
  * @private
  */
 Blockly.FieldColour.prototype.configure_ = function(config) {
+  Blockly.FieldColour.superClass_.configure_.call(this, config);
   if (config['colourOptions']) {
-    this.columns_ = config['columns'];
+    this.colours_ = config['colourOptions'];
     this.titles_ = config['colourTitles'];
   }
   if (config['columns']) {
@@ -168,8 +175,6 @@ Blockly.FieldColour.prototype.configure_ = function(config) {
  * @package
  */
 Blockly.FieldColour.prototype.initView = function() {
-  this.size_ = new Blockly.utils.Size(Blockly.FieldColour.DEFAULT_WIDTH,
-      Blockly.FieldColour.DEFAULT_HEIGHT);
   this.createBorderRect_();
   this.borderRect_.style['fillOpacity'] = 1;
   this.borderRect_.style.fill = this.value_;

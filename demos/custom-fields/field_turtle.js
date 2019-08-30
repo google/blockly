@@ -46,24 +46,21 @@ CustomFields.FieldTurtle = function(
   // The turtle field contains an object as its value, so we need to compile
   // the parameters into an object.
   var value = {};
-  value.pattern = opt_pattern;
-  value.hat = opt_hat;
-  value.turtleName = opt_turtleName;
-
-  var valid = this.doClassValidation_(value);
-  if (valid === null) {
-    // See the doClassValidation_ function for information on the
-    // cachedValidatedValue_ property.
-    value = this.cachedValidatedValue_;
-    value.pattern = value.pattern || CustomFields.FieldTurtle.PATTERNS[0];
-    value.hat = value.hat || CustomFields.FieldTurtle.HATS[0];
-    value.turtleName = value.turtleName || CustomFields.FieldTurtle.NAMES[0];
-  }  // Else the original value is fine.
+  value.pattern = opt_pattern || CustomFields.FieldTurtle.PATTERNS[0];
+  value.hat = opt_hat || CustomFields.FieldTurtle.HATS[0];
+  value.turtleName = opt_turtleName || CustomFields.FieldTurtle.NAMES[0];
 
   // A field constructor should always call its parent constructor, because
   // that helps keep the code organized and DRY.
   CustomFields.FieldTurtle.superClass_.constructor.call(
       this, value, opt_validator);
+
+  /**
+   * The size of the area rendered by the field.
+   * @type {Blockly.utils.Size}
+   * @protected
+   * @override
+   */
   this.size_ = new Blockly.utils.Size(0, 0);
 };
 goog.inherits(CustomFields.FieldTurtle, Blockly.Field);

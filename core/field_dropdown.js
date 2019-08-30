@@ -63,6 +63,10 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
   this.trimOptions_();
   var firstTuple = this.getOptions()[0];
 
+  // Call parent's constructor.
+  Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[1],
+      opt_validator);
+
   /**
    * The currently selected index. A value of -1 indicates no option
    * has been selected.
@@ -70,10 +74,6 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
    * @private
    */
   this.selectedIndex_ = -1;
-
-  // Call parent's constructor.
-  Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[1],
-      opt_validator);
 
   /**
    * A reference to the currently selected menu item.

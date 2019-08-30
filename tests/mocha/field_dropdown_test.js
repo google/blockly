@@ -63,6 +63,7 @@ suite('Dropdown Fields', function() {
     test('Text Dropdown', function() {
       var dropdownField = new Blockly.FieldDropdown(
           [['a', 'A'], ['b', 'B'], ['c', 'C']]);
+      dropdownField.initValue();
       assertValue(dropdownField, 'A', 'a');
     });
     test('Image Dropdown', function() {
@@ -70,6 +71,7 @@ suite('Dropdown Fields', function() {
         [{ src:'scrA', alt:'a' }, 'A'],
         [{ src:'scrB', alt:'b' }, 'B'],
         [{ src:'scrC', alt:'c' }, 'C']]);
+      dropdownField.initValue();
       assertValue(dropdownField, 'A', 'a');
     });
     test('Dynamic Dropdown Text', function() {
@@ -77,6 +79,7 @@ suite('Dropdown Fields', function() {
         return [['a', 'A'], ['b', 'B'], ['c', 'C']];
       };
       var dropdownField = new Blockly.FieldDropdown(dynamicDropdownFunc);
+      dropdownField.initValue();
       assertValue(dropdownField, 'A', 'a');
     });
     test('Dynamic Dropdown Image', function() {
@@ -88,6 +91,7 @@ suite('Dropdown Fields', function() {
         ];
       };
       var dropdownField = new Blockly.FieldDropdown(dynamicDropdownFunc);
+      dropdownField.initValue();
       assertValue(dropdownField, 'A', 'a');
     });
   });
@@ -131,6 +135,7 @@ suite('Dropdown Fields', function() {
     test('Text Dropdown', function() {
       var dropdownField = Blockly.FieldDropdown.fromJson(
           { options:[['a', 'A'], ['b', 'B'], ['c', 'C']] });
+      dropdownField.initValue();
       assertValue(dropdownField, 'A', 'a');
     });
     test('Image Dropdown', function() {
@@ -138,6 +143,7 @@ suite('Dropdown Fields', function() {
         [{ src:'scrA', alt:'a' }, 'A'],
         [{ src:'scrB', alt:'b' }, 'B'],
         [{ src:'scrC', alt:'c' }, 'C']] });
+      dropdownField.initValue();
       assertValue(dropdownField, 'A', 'a');
     });
   });
@@ -145,6 +151,7 @@ suite('Dropdown Fields', function() {
     setup(function() {
       this.dropdownField = new Blockly.FieldDropdown(
           [['a', 'A'], ['b', 'B'], ['c', 'C']]);
+      this.dropdownField.initValue();
     });
     test('Null', function() {
       this.dropdownField.setValue(null);
@@ -168,6 +175,7 @@ suite('Dropdown Fields', function() {
       this.dropdownField = new Blockly.FieldDropdown([
         ["1a","1A"], ["1b","1B"], ["1c","1C"],
         ["2a","2A"], ["2b","2B"], ["2c","2C"]]);
+      this.dropdownField.initValue();
     });
     teardown(function() {
       this.dropdownField.setValidator(null);

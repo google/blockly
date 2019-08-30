@@ -47,6 +47,9 @@ goog.require('Blockly.utils.Size');
  */
 Blockly.FieldImage = function(src, width, height,
     opt_alt, opt_onClick, opt_flipRtl) {
+  Blockly.FieldImage.superClass_.constructor.call(
+      this, src || '', null);
+
   this.sourceBlock_ = null;
 
   if (!src) {
@@ -65,8 +68,20 @@ Blockly.FieldImage = function(src, width, height,
     throw Error('Height and width values of an image field must be greater' +
       ' than 0.');
   }
-  // Store the image height, since it is different from the field height.
+
+  /**
+   * Store the image height, since it is different from the field height.
+   * @type {number}
+   * @private
+   */
   this.imageHeight_ = imageHeight;
+
+  /**
+   * The size of the area rendered by the field.
+   * @type {Blockly.utils.Size}
+   * @protected
+   * @override
+   */
   this.size_ = new Blockly.utils.Size(imageWidth,
       imageHeight + Blockly.FieldImage.Y_PADDING);
 
@@ -83,8 +98,6 @@ Blockly.FieldImage = function(src, width, height,
    * @private
    */
   this.altText_ = opt_alt || '';
-
-  this.setValue(src || '');
 
   if (typeof opt_onClick == 'function') {
     this.clickHandler_ = opt_onClick;

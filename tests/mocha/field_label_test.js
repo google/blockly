@@ -31,60 +31,74 @@ suite('Label Fields', function() {
   suite('Constructor', function() {
     test('Empty', function() {
       var labelField = new Blockly.FieldLabel();
+      labelField.initValue();
       assertValueDefault(labelField);
     });
     test('Undefined', function() {
       var labelField = new Blockly.FieldLabel(undefined);
+      labelField.initValue();
       assertValueDefault(labelField);
     });
     test('String', function() {
       var labelField = new Blockly.FieldLabel('value');
+      labelField.initValue();
       assertValue(labelField, 'value');
     });
     test('Number (Truthy)', function() {
       var labelField = new Blockly.FieldLabel(1);
+      labelField.initValue();
       assertValue(labelField, '1');
     });
     test('Number (Falsy)', function() {
       var labelField = new Blockly.FieldLabel(0);
+      labelField.initValue();
       assertValue(labelField, '0');
     });
     test('Boolean True', function() {
       var labelField = new Blockly.FieldLabel(true);
+      labelField.initValue();
       assertValue(labelField, 'true');
     });
     test('Boolean False', function() {
       var labelField = new Blockly.FieldLabel(false);
+      labelField.initValue();
       assertValue(labelField, 'false');
     });
   });
   suite('fromJson', function() {
     test('Empty', function() {
       var labelField = new Blockly.FieldLabel.fromJson({});
+      labelField.initValue();
       assertValueDefault(labelField);
     });
     test('Undefined', function() {
       var labelField = new Blockly.FieldLabel.fromJson({ text:undefined });
+      labelField.initValue();
       assertValueDefault(labelField);
     });
     test('String', function() {
       var labelField = Blockly.FieldLabel.fromJson({ text:'value' });
+      labelField.initValue();
       assertValue(labelField, 'value');
     });
     test('Number (Truthy)', function() {
       var labelField = Blockly.FieldLabel.fromJson({ text:1 });
+      labelField.initValue();
       assertValue(labelField, '1');
     });
     test('Number (Falsy)', function() {
       var labelField = Blockly.FieldLabel.fromJson({ text:0 });
+      labelField.initValue();
       assertValue(labelField, '0');
     });
     test('Boolean True', function() {
       var labelField = Blockly.FieldLabel.fromJson({ text:true });
+      labelField.initValue();
       assertValue(labelField, 'true');
     });
     test('Boolean False', function() {
       var labelField = Blockly.FieldLabel.fromJson({ text:false });
+      labelField.initValue();
       assertValue(labelField, 'false');
     });
   });
@@ -92,6 +106,7 @@ suite('Label Fields', function() {
     suite('Empty -> New Value', function() {
       setup(function() {
         this.labelField = new Blockly.FieldLabel();
+        this.labelField.initValue();
       });
       test('Null', function() {
         this.labelField.setValue(null);
@@ -125,6 +140,7 @@ suite('Label Fields', function() {
     suite('Value -> New Value', function() {
       setup(function() {
         this.labelField = new Blockly.FieldLabel('value');
+        this.labelField.initValue();
       });
       test('Null', function() {
         this.labelField.setValue(null);

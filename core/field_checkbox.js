@@ -49,8 +49,7 @@ goog.require('Blockly.utils.Size');
  * @constructor
  */
 Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
-  opt_value = this.doClassValidation_(opt_value);
-  if (opt_value === null) {
+  if (opt_value == null) {
     opt_value = 'FALSE';
   }
   Blockly.FieldCheckbox.superClass_.constructor.call(
@@ -136,6 +135,7 @@ Blockly.FieldCheckbox.prototype.isDirty_ = false;
  * @private
  */
 Blockly.FieldCheckbox.prototype.configure_ = function(config) {
+  Blockly.FieldCheckbox.superClass_.configure_.call(this, config);
   if (config['checkCharacter']) {
     this.checkChar_ = config['checkCharacter'];
   }

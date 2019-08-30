@@ -52,13 +52,40 @@ goog.require('Blockly.utils.style');
  */
 Blockly.Field = function(value, opt_validator, opt_config) {
   /**
-   * The size of the area rendered by the field.
-   * @type {Blockly.utils.Size}
+   * A generic value possessed by the field.
+   * Should generally be non-null, only null when the field is created.
+   * @type {*}
    * @protected
    */
-  this.size_ = new Blockly.utils.Size(0, 0);
-  this.setValue(value);
-  this.setValidator(opt_validator);
+  this.value_ = null;
+
+  /**
+   * Whether or not the field has been initialized.
+   * @type {!boolean}
+   * @private
+   */
+  this.initialized_ = false;
+
+  /**
+   * The initial value to be set when the field is initialized.
+   * @type {*}
+   * @private
+   */
+  this.initialValue_ = value;
+
+  /**
+   * Validation function called when user edits an editable field.
+   * @type {Function}
+   * @private
+   */
+  this.initialValidator_ = opt_validator;
+
+  /**
+   * Validation function called when user edits an editable field.
+   * @type {Function}
+   * @protected
+   */
+  this.validator_ = null;
 
   /**
    * A map of options used to configure this field when initialized.
@@ -66,6 +93,13 @@ Blockly.Field = function(value, opt_validator, opt_config) {
    * @private
    */
   this.config_ = opt_config;
+
+  /**
+   * The size of the area rendered by the field.
+   * @type {Blockly.utils.Size}
+   * @protected
+   */
+  this.size_ = new Blockly.utils.Size(0, 0);
 };
 
 /**
@@ -117,14 +151,6 @@ Blockly.Field.prototype.disposed = false;
 Blockly.Field.prototype.maxDisplayLength = 50;
 
 /**
- * A generic value possessed by the field.
- * Should generally be non-null, only null when the field is created.
- * @type {*}
- * @protected
- */
-Blockly.Field.prototype.value_ = null;
-
-/**
  * Used to cache the field's tooltip value if setTooltip is called when the
  * field is not yet initialized. Is *not* guaranteed to be accurate.
  * @type {?string}
@@ -154,13 +180,6 @@ Blockly.Field.prototype.isDirty_ = true;
 Blockly.Field.prototype.visible_ = true;
 
 /**
- * Validation function called when user edits an editable field.
- * @type {Function}
- * @protected
- */
-Blockly.Field.prototype.validator_ = null;
-
-/**
  * The element the click handler is bound to.
  * @type {!Element}
  * @private
@@ -176,13 +195,6 @@ Blockly.Field.prototype.clickTarget_ = null;
  * @protected
  */
 Blockly.Field.prototype.getText_;
-
-/**
- * A developer hook to configure the field based on a given map of options.
- * @type {function(!Object)}
- * @protected
- */
-Blockly.Field.prototype.configure_;
 
 /**
  * Non-breaking space.
@@ -211,14 +223,12 @@ Blockly.Field.prototype.SERIALIZABLE = false;
 
 /**
  * Process the configuration map passed to the field.
- * @private
+ * @param {Object} config A map of options used to configure the field. See
+ *    the individual field's documentation for a list of properties this
+ *    parameter supports.
+ * @protected
  */
-Blockly.Field.prototype.processConfig_ = function() {
-  var config = this.config_;
-  if (!config) {
-    return;
-  }
-
+Blockly.Field.prototype.configure_ = function(config) {
   var tooltip = config['tooltip'];
   if (typeof tooltip == 'string') {
     tooltip = Blockly.utils.replaceMessageReferences(
@@ -228,10 +238,6 @@ Blockly.Field.prototype.processConfig_ = function() {
 
   // TODO (#2884): Possibly add CSS class config option.
   // TODO (#2885): Possibly add cursor config option.
-
-  if (this.configure_) {
-    this.configure_.call(this, config);
-  }
 };
 
 /**
@@ -268,12 +274,35 @@ Blockly.Field.prototype.init = function() {
     this.fieldGroup_.style.display = 'none';
   }
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
-  this.processConfig_();
+  this.initValue();
   this.initView();
   this.updateEditable();
   this.setTooltip(this.tooltip_);
   this.bindEvents_();
   this.initModel();
+};
+
+
+/**
+ * Initializes the value of this field.
+ * @package
+ */
+Blockly.Field.prototype.initValue = function() {
+  if (this.initialized_) {
+    return;
+  }
+  this.config_ && this.configure_(this.config_);
+  this.setValue(this.initialValue_);
+  this.setValidator(this.initialValidator_);
+  this.initialized_ = true;
+};
+
+/**
+ * Initializes the model of the field after it has been installed on a block.
+ * No-op by default.
+ * @package
+ */
+Blockly.Field.prototype.initModel = function() {
 };
 
 /**
@@ -336,14 +365,6 @@ Blockly.Field.prototype.bindEvents_ = function() {
   this.mouseDownWrapper_ =
       Blockly.bindEventWithChecks_(
           this.getClickTarget_(), 'mousedown', this, this.onMouseDown_);
-};
-
-/**
- * Initializes the model of the field after it has been installed on a block.
- * No-op by default.
- * @package
- */
-Blockly.Field.prototype.initModel = function() {
 };
 
 /**

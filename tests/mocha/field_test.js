@@ -357,6 +357,7 @@ suite('Abstract Fields', function() {
         var field = new Blockly.Field('value', null, {
           tooltip: 'test tooltip',
         });
+        field.initValue();
         chai.assert.equal(field.tooltip_, 'test tooltip');
       });
       test('JS Constructor - Dynamic', function() {
@@ -366,12 +367,14 @@ suite('Abstract Fields', function() {
         var field = new Blockly.Field('value', null, {
           tooltip: returnTooltip
         });
+        field.initValue();
         chai.assert.equal(field.tooltip_, returnTooltip);
       });
       test('JSON Definition', function() {
         var field = CustomField.fromJson({
           tooltip: "test tooltip"
         });
+        field.initValue();
         chai.assert.equal(field.tooltip_, 'test tooltip');
       });
       suite('W/ Msg References', function() {
@@ -385,12 +388,14 @@ suite('Abstract Fields', function() {
           var field = new Blockly.Field('value', null, {
             tooltip: '%{BKY_TOOLTIP}',
           });
+          field.initValue();
           chai.assert.equal(field.tooltip_, 'test tooltip');
         });
         test('JSON Definition', function() {
           var field = CustomField.fromJson({
             tooltip: "%{BKY_TOOLTIP}"
           });
+          field.initValue();
           chai.assert.equal(field.tooltip_, 'test tooltip');
         });
       });

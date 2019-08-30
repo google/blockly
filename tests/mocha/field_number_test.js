@@ -53,84 +53,94 @@ suite('Number Fields', function() {
   suite('Constructor', function() {
     test('Empty', function() {
       var numberField = new Blockly.FieldNumber();
+      numberField.initValue();
       assertNumberFieldDefault(numberField);
     });
     test('Undefined', function() {
       var numberField = createNumberFieldSameValuesConstructor(undefined);
-      assertNumberFieldDefault(numberField);
-    });
-    test('Non-Parsable String', function() {
-      var numberField = createNumberFieldSameValuesConstructor('bad');
+      numberField.initValue();
       assertNumberFieldDefault(numberField);
     });
     test('NaN', function() {
       var numberField = createNumberFieldSameValuesConstructor(NaN);
+      numberField.initValue();
       assertNumberFieldDefault(numberField);
     });
     test('Integer', function() {
       var numberField = createNumberFieldSameValuesConstructor(1);
+      numberField.initValue();
       assertNumberFieldSameValues(numberField, 1);
     });
     test('Float', function() {
       var numberField = createNumberFieldSameValuesConstructor(1.5);
+      numberField.initValue();
       assertNumberFieldSameValues(numberField, 1.5);
     });
     test('Integer String', function() {
       var numberField = createNumberFieldSameValuesConstructor('1');
+      numberField.initValue();
       assertNumberFieldSameValues(numberField, 1);
     });
     test('Float String', function() {
       var numberField = createNumberFieldSameValuesConstructor('1.5');
+      numberField.initValue();
       assertNumberFieldSameValues(numberField, 1.5);
     });
     test('Infinity', function() {
       var numberField = createNumberFieldSameValuesConstructor('Infinity');
+      numberField.initValue();
       assertNumberFieldSameValues(numberField, Infinity);
     });
     test('Negative Infinity String', function() {
       var numberField = createNumberFieldSameValuesConstructor('-Infinity');
+      numberField.initValue();
       assertNumberFieldSameValues(numberField, -Infinity);
     });
   });
   suite('fromJson', function() {
     test('Empty', function() {
       var numberField = Blockly.FieldNumber.fromJson({});
+      numberField.initValue();
       assertNumberFieldDefault(numberField);
     });
     test('Undefined', function() {
       var numberField = createNumberFieldSameValuesJson(undefined);
-      assertNumberFieldDefault(numberField);
-    });
-    test('Non-Parsable String', function() {
-      var numberField = createNumberFieldSameValuesJson('bad');
+      numberField.initValue();
       assertNumberFieldDefault(numberField);
     });
     test('NaN', function() {
       var numberField = createNumberFieldSameValuesJson(NaN);
+      numberField.initValue();
       assertNumberFieldDefault(numberField);
     });
     test('Integer', function() {
       var numberField = createNumberFieldSameValuesJson(1);
+      numberField.initValue();
       assertNumberFieldSameValues(numberField, 1);
     });
     test('Float', function() {
       var numberField = createNumberFieldSameValuesJson(1.5);
+      numberField.initValue();
       assertNumberFieldSameValues(numberField, 1.5);
     });
     test('Integer String', function() {
       var numberField = createNumberFieldSameValuesJson('1');
+      numberField.initValue();
       assertNumberFieldSameValues(numberField, 1);
     });
     test('Float String', function() {
       var numberField = createNumberFieldSameValuesJson('1.5');
+      numberField.initValue();
       assertNumberFieldSameValues(numberField, 1.5);
     });
     test('Infinity', function() {
       var numberField = createNumberFieldSameValuesJson('Infinity');
+      numberField.initValue();
       assertNumberFieldSameValues(numberField, Infinity);
     });
     test('Negative Infinity String', function() {
       var numberField = createNumberFieldSameValuesJson('-Infinity');
+      numberField.initValue();
       assertNumberFieldSameValues(numberField, -Infinity);
     });
   });
@@ -139,6 +149,7 @@ suite('Number Fields', function() {
       suite('Empty -> New Value', function() {
         setup(function() {
           this.numberField = new Blockly.FieldNumber();
+          this.numberField.initValue();
         });
         test('Null', function() {
           this.numberField.setValue(null);
@@ -184,6 +195,7 @@ suite('Number Fields', function() {
       suite('Value -> New Value', function() {
         setup(function() {
           this.numberField = new Blockly.FieldNumber(1);
+          this.numberField.initValue();
         });
         test('Null', function() {
           this.numberField.setValue(null);
@@ -322,6 +334,7 @@ suite('Number Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.numberField = new Blockly.FieldNumber(1);
+      this.numberField.initValue();
       this.numberField.htmlInput_ = Object.create(null);
       this.numberField.htmlInput_.oldValue_ = '1';
       this.numberField.htmlInput_.untypedDefaultValue_ = 1;

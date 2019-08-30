@@ -194,7 +194,7 @@ Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
 Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   var input = row.getLastInput();
   // Where to start drawing the notch, which is on the right side in LTR.
-  var x = input.xPos + input.width;
+  var x = input.xPos + input.notchOffset + input.shape.width;
 
   var innerTopLeftCorner =
       input.shape.pathRight +
@@ -208,7 +208,8 @@ Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', x) +
       innerTopLeftCorner +
       Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
-      this.constants_.INSIDE_CORNERS.pathBottom;
+      this.constants_.INSIDE_CORNERS.pathBottom +
+      Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width)
 
   this.positionStatementInputConnection_(row);
 };
@@ -222,7 +223,6 @@ Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
  */
 Blockly.blockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
   this.outlinePath_ +=
-      Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width) +
       Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);
 };
 

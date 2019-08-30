@@ -427,6 +427,13 @@ Blockly.blockRendering.SpacerRow.prototype.measure = function() {
 Blockly.blockRendering.InputRow = function() {
   Blockly.blockRendering.InputRow.superClass_.constructor.call(this);
   this.type = 'input row';
+
+  /**
+   * The total width of all blocks connected to this row.
+   * @type {number}
+   * @package
+   */
+  this.connectedBlockWidths = 0;
 };
 goog.inherits(Blockly.blockRendering.InputRow,
     Blockly.blockRendering.Row);
@@ -453,6 +460,7 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
       this.height = Math.max(this.height, elem.height);
     }
   }
+  this.connectedBlockWidths = connectedBlockWidths;
   this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
 };
 

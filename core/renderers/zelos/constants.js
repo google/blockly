@@ -38,14 +38,18 @@ goog.require('Blockly.utils.svgPaths');
  */
 Blockly.zelos.ConstantProvider = function() {
   Blockly.zelos.ConstantProvider.superClass_.constructor.call(this);
+  
+  var GRID_UNIT = 4;
 
-  this.CORNER_RADIUS = 4;
+  this.CORNER_RADIUS = 1 * GRID_UNIT;
 
-  this.NOTCH_WIDTH = 36;
+  this.NOTCH_WIDTH = 9 * GRID_UNIT;
 
-  this.NOTCH_HEIGHT = 8;
+  this.NOTCH_HEIGHT = 2 * GRID_UNIT;
 
-  this.NOTCH_OFFSET_LEFT = 12;
+  this.NOTCH_OFFSET_LEFT = 3 * GRID_UNIT;
+
+  this.MIN_BLOCK_HEIGHT = 12 * GRID_UNIT;
 };
 goog.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);

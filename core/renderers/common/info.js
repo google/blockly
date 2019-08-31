@@ -375,16 +375,15 @@ Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function() {
     // TODO (#2921): this still doesn't handle the row having an inline input.
     if (!row.hasInlineInput) {
       if (row.hasStatement) {
-        var statementInput = row.getLastInput();
-        var currentWidth = row.width - statementInput.width;
-        var desiredWidth = this.statementEdge - this.startX;
+        this.alignStatementRow_(
+            /** @type {Blockly.RenderedConnection} */ (row));
       } else {
         var currentWidth = row.width;
         var desiredWidth = this.width - this.startX;
-      }
-      var missingSpace = desiredWidth - currentWidth;
-      if (missingSpace) {
-        this.addAlignmentPadding_(row, missingSpace);
+        var missingSpace = desiredWidth - currentWidth;
+        if (missingSpace) {
+          this.addAlignmentPadding_(row, missingSpace);
+        }
       }
     }
   }
@@ -405,6 +404,31 @@ Blockly.blockRendering.RenderInfo.prototype.addAlignmentPadding_ = function(row,
     lastSpacer.width += missingSpace;
     row.width += missingSpace;
   }
+};
+
+/**
+ * Align the elements of a statement row based on computed bounds.
+ * Unlike other types of rows, statement rows add space in multiple places.
+ * @param {!Blockly.blockRendering.InputRow} row The statement row to resize.
+ * @protected
+ */
+Blockly.blockRendering.RenderInfo.prototype.alignStatementRow_ = function(row) {
+  var statementInput = row.getLastInput();
+  var currentWidth = row.width - statementInput.width;
+  var desiredWidth = this.statementEdge - this.startX;
+  // Add padding before the statement input.
+  var missingSpace = desiredWidth - currentWidth;
+  if (missingSpace) {
+    this.addAlignmentPadding_(row, missingSpace);
+  }
+  // Also widen the statement input to reach to the right side of the
+  // block. Note that this does not add padding.
+  currentWidth = row.width;
+  desiredWidth = this.width - this.startX;
+  statementInput.width += (desiredWidth - currentWidth);
+  row.width += (desiredWidth - currentWidth);
+  row.widthWithConnectedBlocks = Math.max(row.width,
+      this.statementEdge + row.connectedBlockWidths);
 };
 
 /**

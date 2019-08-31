@@ -499,7 +499,7 @@ Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row,
     elem) {
   var result = row.yPos;
   if (elem.isNextConnection()) {
-    result += (row.height - row.overhangY + row.height / 2);
+    result += (row.height - row.overhangY + elem.height / 2);
   } else {
     result += (row.height / 2);
   }

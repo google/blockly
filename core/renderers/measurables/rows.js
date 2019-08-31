@@ -251,11 +251,9 @@ goog.inherits(Blockly.blockRendering.TopRow, Blockly.blockRendering.Row);
 Blockly.blockRendering.TopRow.prototype.populate = function(block) {
   var hasHat = block.hat ? block.hat === 'cap' : Blockly.BlockSvg.START_HAT;
   var hasPrevious = !!block.previousConnection;
-  var prevBlock = block.getPreviousBlock();
-  var squareCorner = !!block.outputConnection ||
-      hasHat || (prevBlock && prevBlock.getNextBlock() == block);
+  var leftSquareCorner = this.hasLeftSquareCorner(block);
 
-  if (squareCorner) {
+  if (leftSquareCorner) {
     this.elements.push(new Blockly.blockRendering.SquareCorner());
   } else {
     this.elements.push(new Blockly.blockRendering.RoundCorner());
@@ -282,6 +280,19 @@ Blockly.blockRendering.TopRow.prototype.populate = function(block) {
   } else {
     this.minHeight = this.constants_.MEDIUM_PADDING;
   }
+};
+
+/**
+ * Returns whether or not the top row has a left square corner.
+ * @param {!Blockly.BlockSvg} block The block whose top row this represents.
+ * @returns {boolean} Whether or not the top row has a left square corner.
+ */
+Blockly.blockRendering.TopRow.prototype.hasLeftSquareCorner = function(block) {
+  var hasHat = block.hat ? block.hat === 'cap' : Blockly.BlockSvg.START_HAT;
+  var prevBlock = block.getPreviousBlock();
+
+  return !!block.outputConnection ||
+      hasHat || (prevBlock && prevBlock.getNextBlock() == block);
 };
 
 /**
@@ -351,17 +362,17 @@ Blockly.blockRendering.BottomRow.prototype.populate = function(block) {
       block.inputList.length &&
       block.inputList[block.inputList.length - 1].type == Blockly.NEXT_STATEMENT;
 
-  // This is the minimum height for the row. If one of its elements has a greater
-  // height it will be overwritten in the compute pass.
+  // This is the minimum height for the row. If one of its elements has a
+  // greater height it will be overwritten in the compute pass.
   if (followsStatement) {
     this.minHeight = this.constants_.LARGE_PADDING;
   } else {
     this.minHeight = this.constants_.NOTCH.height;
   }
 
-  var squareCorner = !!block.outputConnection || !!block.getNextBlock();
+  var leftSquareCorner = this.hasLeftSquareCorner(block);
 
-  if (squareCorner) {
+  if (leftSquareCorner) {
     this.elements.push(new Blockly.blockRendering.SquareCorner());
   } else {
     this.elements.push(new Blockly.blockRendering.RoundCorner());
@@ -372,6 +383,16 @@ Blockly.blockRendering.BottomRow.prototype.populate = function(block) {
         /** @type {Blockly.RenderedConnection} */ (block.nextConnection));
     this.elements.push(this.connection);
   }
+};
+
+/**
+ * Returns whether or not the bottom row has a left square corner.
+ * @param {!Blockly.BlockSvg} block The block whose bottom row this represents.
+ * @returns {boolean} Whether or not the bottom row has a left square corner.
+ */
+Blockly.blockRendering.BottomRow.prototype.hasLeftSquareCorner = function(
+    block) {
+  return !!block.outputConnection || !!block.getNextBlock();
 };
 
 /**

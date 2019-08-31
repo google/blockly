@@ -109,7 +109,8 @@ goog.addDependency("../../../" + dir + "/core/renderers/measurables/rows.js", ['
 goog.addDependency("../../../" + dir + "/core/renderers/thrasos/info.js", ['Blockly.thrasos', 'Blockly.thrasos.RenderInfo'], ['Blockly.blockRendering.RenderInfo', 'Blockly.blockRendering.Measurable', 'Blockly.blockRendering.BottomRow', 'Blockly.blockRendering.InputRow', 'Blockly.blockRendering.Row', 'Blockly.blockRendering.SpacerRow', 'Blockly.blockRendering.TopRow', 'Blockly.blockRendering.InlineInput', 'Blockly.blockRendering.ExternalValueInput', 'Blockly.blockRendering.StatementInput', 'Blockly.blockRendering.PreviousConnection', 'Blockly.blockRendering.NextConnection', 'Blockly.blockRendering.OutputConnection', 'Blockly.RenderedConnection']);
 goog.addDependency("../../../" + dir + "/core/renderers/zelos/constants.js", ['Blockly.zelos.ConstantProvider'], ['Blockly.blockRendering.ConstantProvider', 'Blockly.utils.svgPaths']);
 goog.addDependency("../../../" + dir + "/core/renderers/zelos/drawer.js", ['Blockly.zelos.Drawer'], ['Blockly.blockRendering.ConstantProvider', 'Blockly.blockRendering.Drawer', 'Blockly.zelos.RenderInfo']);
-goog.addDependency("../../../" + dir + "/core/renderers/zelos/info.js", ['Blockly.zelos', 'Blockly.zelos.RenderInfo'], ['Blockly.blockRendering.RenderInfo', 'Blockly.blockRendering.Measurable', 'Blockly.blockRendering.BottomRow', 'Blockly.blockRendering.InputRow', 'Blockly.blockRendering.Row', 'Blockly.blockRendering.SpacerRow', 'Blockly.blockRendering.TopRow', 'Blockly.blockRendering.InlineInput', 'Blockly.blockRendering.ExternalValueInput', 'Blockly.blockRendering.StatementInput', 'Blockly.blockRendering.PreviousConnection', 'Blockly.blockRendering.NextConnection', 'Blockly.blockRendering.OutputConnection', 'Blockly.RenderedConnection']);
+goog.addDependency("../../../" + dir + "/core/renderers/zelos/info.js", ['Blockly.zelos', 'Blockly.zelos.RenderInfo'], ['Blockly.blockRendering.RenderInfo', 'Blockly.blockRendering.Measurable', 'Blockly.blockRendering.BottomRow', 'Blockly.blockRendering.InputRow', 'Blockly.blockRendering.Row', 'Blockly.blockRendering.SpacerRow', 'Blockly.blockRendering.TopRow', 'Blockly.blockRendering.InlineInput', 'Blockly.blockRendering.ExternalValueInput', 'Blockly.blockRendering.StatementInput', 'Blockly.blockRendering.PreviousConnection', 'Blockly.blockRendering.NextConnection', 'Blockly.blockRendering.OutputConnection', 'Blockly.RenderedConnection', 'Blockly.zelos.BottomRow', 'Blockly.zelos.TopRow']);
+goog.addDependency("../../../" + dir + "/core/renderers/zelos/measurables/rows.js", ['Blockly.zelos.BottomRow', 'Blockly.zelos.TopRow'], ['Blockly.blockRendering.BottomRow', 'Blockly.blockRendering.TopRow']);
 goog.addDependency("../../../" + dir + "/core/scrollbar.js", ['Blockly.Scrollbar', 'Blockly.ScrollbarPair'], ['Blockly.Touch', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.dom']);
 goog.addDependency("../../../" + dir + "/core/theme.js", ['Blockly.Theme'], []);
 goog.addDependency("../../../" + dir + "/core/theme/classic.js", ['Blockly.Themes.Classic'], ['Blockly.Theme']);
@@ -322,9 +323,11 @@ goog.require('Blockly.utils.uiMenu');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.zelos');
+goog.require('Blockly.zelos.BottomRow');
 goog.require('Blockly.zelos.ConstantProvider');
 goog.require('Blockly.zelos.Drawer');
 goog.require('Blockly.zelos.RenderInfo');
+goog.require('Blockly.zelos.TopRow');
 
 delete root.BLOCKLY_DIR;
 delete root.BLOCKLY_BOOT;

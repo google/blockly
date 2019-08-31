@@ -209,7 +209,7 @@ Blockly.blockRendering.Drawer.prototype.drawStatementInput_ = function(row) {
       innerTopLeftCorner +
       Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
       this.constants_.INSIDE_CORNERS.pathBottom +
-      Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width)
+      Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width);
 
   this.positionStatementInputConnection_(row);
 };

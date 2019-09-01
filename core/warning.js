@@ -121,9 +121,9 @@ Blockly.Warning.prototype.setVisible = function(visible) {
   Blockly.Events.fire(
       new Blockly.Events.Ui(this.block_, 'warningOpen', !visible, visible));
   if (visible) {
-    this.createBubble_();
+    this.createBubble();
   } else {
-    this.disposeBubble_();
+    this.disposeBubble();
   }
 };
 

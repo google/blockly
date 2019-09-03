@@ -144,11 +144,15 @@ Blockly.geras.Highlighter.prototype.drawStatementInput = function(row) {
         Blockly.utils.svgPaths.moveTo(input.xPos, row.yPos) +
         this.insideCornerPaths_.pathTop(this.RTL_) +
         Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
-        this.insideCornerPaths_.pathBottom(this.RTL_);
+        this.insideCornerPaths_.pathBottom(this.RTL_) +
+        Blockly.utils.svgPaths.lineTo(
+            row.width - input.xPos - this.insideCornerPaths_.width, 0);
   } else {
     steps =
         Blockly.utils.svgPaths.moveTo(input.xPos, row.yPos + row.height) +
-        this.insideCornerPaths_.pathBottom(this.RTL_);
+        this.insideCornerPaths_.pathBottom(this.RTL_) +
+        Blockly.utils.svgPaths.lineTo(
+            row.width - input.xPos - this.insideCornerPaths_.width, 0);
   }
   this.steps_.push(steps);
 };

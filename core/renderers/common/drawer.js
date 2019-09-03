@@ -394,8 +394,9 @@ Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = func
     var connX = row.xPos + row.statementEdge + input.notchOffset;
     if (this.info_.RTL) {
       connX *= -1;
+    } else {
+      connX += this.constants_.DARK_PATH_OFFSET;
     }
-    connX += 0.5;
     input.connection.setOffsetInBlock(connX,
         row.yPos + this.constants_.DARK_PATH_OFFSET);
   }
@@ -443,7 +444,8 @@ Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
   if (bottomRow.connection) {
     var connInfo = bottomRow.connection;
     var x = connInfo.xPos; // Already contains info about startX
-    var connX = (this.info_.RTL ? -x : x) + 0.5;
+    var connX = (this.info_.RTL ? -x : x) +
+        (this.constants_.DARK_PATH_OFFSET / 2);
     connInfo.connectionModel.setOffsetInBlock(
         connX, (connInfo.centerline - connInfo.height / 2) +
             this.constants_.DARK_PATH_OFFSET);

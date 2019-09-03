@@ -134,6 +134,7 @@ Blockly.geras.HighlightConstantProvider.prototype.makeInsideCorner = function() 
               distance45outside + offset));
 
   return {
+    width: radius + offset,
     height: radius,
     pathTop: function(rtl) {
       return rtl ? pathTopRtl : '';

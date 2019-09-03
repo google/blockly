@@ -35,7 +35,7 @@ goog.require('Blockly.blockRendering.InRowSpacer');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.PreviousConnection');
-goog.provide('Blockly.blockRendering.Types');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
 
 /**

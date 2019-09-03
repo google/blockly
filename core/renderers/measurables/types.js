@@ -29,8 +29,7 @@ goog.provide('Blockly.blockRendering.Types');
 
 
 /**
- * Types for rendering elements.
- *
+ * Types of rendering elements.
  * @enum {number}
  */
 Blockly.blockRendering.Types = {
@@ -80,32 +79,25 @@ Blockly.blockRendering.Types.RIGHT_CORNER =
     Blockly.blockRendering.Types.RIGHT_ROUND_CORNER;
 
 /**
- * Map of all types.
- * @type {Object}
- * @private
- */
-Blockly.blockRendering.Types.allTypes_ = {};
-
-/**
- * Next unique ID to use.
+ * Next flag value to use for custom rendering element types.
  * @type {number}
  * @private
  */
 Blockly.blockRendering.Types.nextTypeValue_ = 1 << 24;
 
 /**
- * Get an existing type or register a new type.
+ * Get the enum flag value of an existing type or register a new type.
  * @param {!string} type The name of the type.
- * @return {!number} The value assosiated with that type.
+ * @return {!number} The enum flag value assosiated with that type.
  * @package
  */
 Blockly.blockRendering.Types.getType = function(type) {
-  if (!Blockly.blockRendering.Types.allTypes_.hasOwnProperty(type)) {
-    Blockly.blockRendering.Types.allTypes_[type] =
+  if (!Blockly.blockRendering.Types.hasOwnProperty(type)) {
+    Blockly.blockRendering.Types[type] =
       Blockly.blockRendering.Types.nextTypeValue_;
     Blockly.blockRendering.Types.nextTypeValue_ <<= 1;
   }
-  return Blockly.blockRendering.Types.allTypes_[type];
+  return Blockly.blockRendering.Types[type];
 };
 
 /**
@@ -300,6 +292,16 @@ Blockly.blockRendering.Types.isCorner = function(elem) {
  */
 Blockly.blockRendering.Types.isJaggedEdge = function(elem) {
   return elem.type & Blockly.blockRendering.Types.JAGGED_EDGE;
+};
+
+/**
+ * Whether a measurable stores information about a row.
+ * @param {!Blockly.blockRendering.Measurable} elem The element to check.
+ * @return {boolean} True if the object stores information about a row.
+ * @package
+ */
+Blockly.blockRendering.Types.isRow = function(elem) {
+  return elem.type & Blockly.blockRendering.Types.ROW;
 };
 
 /**

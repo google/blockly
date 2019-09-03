@@ -44,7 +44,7 @@ goog.require('Blockly.zelos.RenderInfo');
 goog.require('Blockly.zelos.ConstantProvider');
 
 // TODO (#2702): Pick an API for choosing a renderer.
-Blockly.blockRendering.rendererName = 'zelos';
+Blockly.blockRendering.rendererName = 'geras';
 
 Blockly.blockRendering.useDebugger = false;
 

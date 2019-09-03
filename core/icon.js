@@ -26,7 +26,7 @@
 
 goog.provide('Blockly.Icon');
 
-goog.require('Blockly.BlockSvg');
+goog.forwardDeclare('Blockly.BlockSvg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');

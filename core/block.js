@@ -130,7 +130,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 
   /**
    * A string representing the comment attached to this block.
-   * @type {string}
+   * @type {string|Blockly.Comment}
    * @deprecated August 2019. Use getCommentText instead.
    */
   this.comment = null;

@@ -31,6 +31,7 @@
 goog.provide('Blockly.Touch');
 
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.string');
 
 

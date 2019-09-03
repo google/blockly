@@ -25,10 +25,10 @@
 'use strict';
 
 /**
- * @name Blockly.utils.base
+ * @name Blockly.utils.global
  * @namespace
  */
-goog.provide('Blockly.utils.base');
+goog.provide('Blockly.utils.global');
 
 
 /**

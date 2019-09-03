@@ -85,7 +85,7 @@ Blockly.blockRendering.Types.RIGHT_CORNER =
  * Next flag value to use for custom rendering element types.
  * This must be updated to reflect the next enum flag value
  * to use if additional elements are added to
- * `Blockly.blockRendering.Types`. 
+ * `Blockly.blockRendering.Types`.
  * @type {number}
  * @private
  */

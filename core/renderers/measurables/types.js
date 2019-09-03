@@ -31,6 +31,7 @@ goog.provide('Blockly.blockRendering.Types');
 /**
  * Types of rendering elements.
  * @enum {number}
+ * @package
  */
 Blockly.blockRendering.Types = {
   NONE: 0, // None
@@ -64,6 +65,7 @@ Blockly.blockRendering.Types = {
  * A Left Corner Union Type.
  * @type {number}
  * @const
+ * @package
  */
 Blockly.blockRendering.Types.LEFT_CORNER =
     Blockly.blockRendering.Types.LEFT_SQUARE_CORNER |
@@ -73,6 +75,7 @@ Blockly.blockRendering.Types.LEFT_CORNER =
  * A Right Corner Union Type.
  * @type {number}
  * @const
+ * @package
  */
 Blockly.blockRendering.Types.RIGHT_CORNER =
     Blockly.blockRendering.Types.RIGHT_SQUARE_CORNER |
@@ -80,6 +83,9 @@ Blockly.blockRendering.Types.RIGHT_CORNER =
 
 /**
  * Next flag value to use for custom rendering element types.
+ * This must be updated to reflect the next enum flag value
+ * to use if additional elements are added to
+ * `Blockly.blockRendering.Types`. 
  * @type {number}
  * @private
  */

@@ -233,14 +233,17 @@ Blockly.thrasos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
  * @override
  */
 Blockly.thrasos.RenderInfo.prototype.addAlignmentPadding_ = function(row, missingSpace) {
+  var elems = row.elements;
+  var firstSpacer = row.getFirstSpacer();
+  var lastSpacer = row.getLastSpacer();
+  if (row.hasExternalInput || row.hasStatement) {
+    // Get the spacer right before the input socket.
+    lastSpacer = elems[elems.length - 3];
+    row.widthWithConnectedBlocks += missingSpace;
+  }
+
   var input = row.getLastInput();
   if (input) {
-    var firstSpacer = row.getFirstSpacer();
-    var lastSpacer = row.getLastSpacer();
-    if (row.hasExternalInput || row.hasStatement) {
-      // Get the spacer right before the input socket.
-      row.widthWithConnectedBlocks += missingSpace;
-    }
     // Decide where the extra padding goes.
     if (input.align == Blockly.ALIGN_LEFT) {
       // Add padding to the end of the row.
@@ -253,12 +256,11 @@ Blockly.thrasos.RenderInfo.prototype.addAlignmentPadding_ = function(row, missin
       // Add padding at the beginning of the row.
       firstSpacer.width += missingSpace;
     }
-    row.width += missingSpace;
-    // Top and bottom rows are always left aligned.
-  } else if (Blockly.blockRendering.Types.isTopOrBottomRow(row)) {
-    row.getLastSpacer().width += missingSpace;
-    row.width += missingSpace;
+  } else {
+    // Default to left-aligning if there's no input to say where to align.
+    lastSpacer.width += missingSpace;
   }
+  row.width += missingSpace;
 };
 
 /**

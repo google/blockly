@@ -1092,8 +1092,8 @@ Blockly.navigation.ACTION_EXIT = new Blockly.Action(
     Blockly.navigation.actionNames.EXIT, 'Close the current modal, such as a toolbox or field editor.');
 
 /**
- * List of valid actions for read only mode.
- * @type {!Array}
+ * List of actions that can be performed in read only mode.
+ * @type {!Array<!Blockly.Action>}
  */
 Blockly.navigation.READONLY_ACTION_LIST = [
   Blockly.navigation.ACTION_PREVIOUS,

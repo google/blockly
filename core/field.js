@@ -224,7 +224,7 @@ Blockly.Field.prototype.SERIALIZABLE = false;
 
 /**
  * Process the configuration map passed to the field.
- * @param {Object} config A map of options used to configure the field. See
+ * @param {!Object} config A map of options used to configure the field. See
  *    the individual field's documentation for a list of properties this
  *    parameter supports.
  * @protected

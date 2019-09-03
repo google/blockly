@@ -59,7 +59,7 @@ Blockly.Comment = function(block) {
   /**
    * The model's text value at the start of an edit.
    * Used to tell if an event should be fired at the end of an edit.
-   * @type {string}
+   * @type {?string}
    * @private
    */
   this.cachedText_ = '';
@@ -258,7 +258,7 @@ Blockly.Comment.prototype.createNonEditableBubble_ = function() {
   // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034
   // Always treat comments in IE as uneditable.
   // TODO (#2917): It would be great if the comment could support line breaks.
-  Blockly.Warning.prototype.createBubble.call(this, true);
+  Blockly.Warning.prototype.createBubble.call(this);
 };
 
 /**

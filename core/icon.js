@@ -42,7 +42,7 @@ Blockly.Icon = function(block) {
   /**
    * The block this icon is attached to.
    * @type {Blockly.BlockSvg}
-   * @private
+   * @protected
    */
   this.block_ = block;
 };

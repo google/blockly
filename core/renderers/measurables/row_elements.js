@@ -22,7 +22,7 @@ Blockly.blockRendering.Icon = function(icon) {
   Blockly.blockRendering.Icon.superClass_.constructor.call(this);
   this.icon = icon;
   this.isVisible = icon.isVisible();
-  this.type = Blockly.blockRendering.Types.ICON;
+  this.type |= Blockly.blockRendering.Types.ICON;
 
   var size = icon.getCorrectedSize();
   this.height = size.height;
@@ -39,7 +39,7 @@ goog.inherits(Blockly.blockRendering.Icon, Blockly.blockRendering.Measurable);
  */
 Blockly.blockRendering.JaggedEdge = function() {
   Blockly.blockRendering.JaggedEdge.superClass_.constructor.call(this);
-  this.type = Blockly.blockRendering.Types.JAGGED_EDGE;
+  this.type |= Blockly.blockRendering.Types.JAGGED_EDGE;
   this.height = this.constants_.JAGGED_TEETH.height;
   this.width = this.constants_.JAGGED_TEETH.width;
 };
@@ -61,7 +61,7 @@ Blockly.blockRendering.Field = function(field, parentInput) {
   this.field = field;
   this.isEditable = field.isCurrentlyEditable();
   this.flipRtl = field instanceof Blockly.FieldImage && field.getFlipRtl();
-  this.type = Blockly.blockRendering.Types.FIELD;
+  this.type |= Blockly.blockRendering.Types.FIELD;
 
   var size = this.field.getSize();
   this.height = size.height;
@@ -79,7 +79,7 @@ goog.inherits(Blockly.blockRendering.Field, Blockly.blockRendering.Measurable);
  */
 Blockly.blockRendering.Hat = function() {
   Blockly.blockRendering.Hat.superClass_.constructor.call(this);
-  this.type = Blockly.blockRendering.Types.HAT;
+  this.type |= Blockly.blockRendering.Types.HAT;
   this.height = this.constants_.START_HAT.height;
   this.width = this.constants_.START_HAT.width;
   this.startY = this.height;
@@ -141,7 +141,7 @@ goog.inherits(Blockly.blockRendering.RoundCorner,
  */
 Blockly.blockRendering.InRowSpacer = function(width) {
   Blockly.blockRendering.InRowSpacer.superClass_.constructor.call(this);
-  this.type = Blockly.blockRendering.Types.SPACER |
+  this.type |= Blockly.blockRendering.Types.SPACER |
       Blockly.blockRendering.Types.IN_ROW_SPACER;
   this.width = width;
   this.height = this.constants_.SPACER_DEFAULT_HEIGHT;

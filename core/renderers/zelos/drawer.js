@@ -60,10 +60,10 @@ Blockly.zelos.Drawer.prototype.drawTop_ = function() {
   this.outlinePath_ +=
       Blockly.utils.svgPaths.moveBy(topRow.xPos, this.info_.startY);
   for (var i = 0, elem; (elem = elements[i]); i++) {
-    if (elem.type & Blockly.blockRendering.Types.LEFT_ROUND_CORNER) {
+    if (Blockly.blockRendering.Types.isLeftRoundedCorner(elem)) {
       this.outlinePath_ +=
           this.constants_.OUTSIDE_CORNERS.topLeft;
-    } else if (elem.type & Blockly.blockRendering.Types.RIGHT_ROUND_CORNER) {
+    } else if (Blockly.blockRendering.Types.isRightRoundCorner(elem.type)) {
       this.outlinePath_ +=
           this.constants_.OUTSIDE_CORNERS.topRight;
     } else if (Blockly.blockRendering.Types.isPreviousConnection(elem)) {

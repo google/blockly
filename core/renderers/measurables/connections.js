@@ -29,6 +29,7 @@ goog.provide('Blockly.blockRendering.OutputConnection');
 goog.provide('Blockly.blockRendering.PreviousConnection');
 
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
 
 /**
@@ -44,6 +45,7 @@ Blockly.blockRendering.Connection = function(connectionModel) {
   Blockly.blockRendering.Connection.superClass_.constructor.call(this);
   this.connectionModel = connectionModel;
   this.shape = this.constants_.shapeFor(connectionModel);
+  this.type |= Blockly.blockRendering.Types.CONNECTION;
 };
 goog.inherits(Blockly.blockRendering.Connection,
     Blockly.blockRendering.Measurable);
@@ -60,7 +62,7 @@ goog.inherits(Blockly.blockRendering.Connection,
 Blockly.blockRendering.OutputConnection = function(connectionModel) {
   Blockly.blockRendering.OutputConnection.superClass_.constructor.call(this,
       connectionModel);
-  this.type = 'output connection';
+  this.type |= Blockly.blockRendering.Types.OUTPUT_CONNECTION;
   this.height = this.shape.height;
   this.width = this.shape.width;
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
@@ -81,7 +83,7 @@ goog.inherits(Blockly.blockRendering.OutputConnection,
 Blockly.blockRendering.PreviousConnection = function(connectionModel) {
   Blockly.blockRendering.PreviousConnection.superClass_.constructor.call(this,
       connectionModel);
-  this.type = 'previous connection';
+  this.type |= Blockly.blockRendering.Types.PREVIOUS_CONNECTION;
   this.height = this.shape.height;
   this.width = this.shape.width;
 
@@ -101,7 +103,7 @@ goog.inherits(Blockly.blockRendering.PreviousConnection,
 Blockly.blockRendering.NextConnection = function(connectionModel) {
   Blockly.blockRendering.NextConnection.superClass_.constructor.call(this,
       connectionModel);
-  this.type = 'next connection';
+  this.type |= Blockly.blockRendering.Types.NEXT_CONNECTION;
   this.height = this.shape.height;
   this.width = this.shape.width;
 };

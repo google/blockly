@@ -28,6 +28,7 @@ goog.provide('Blockly.blockRendering.Debug');
 
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.InputRow');
 goog.require('Blockly.blockRendering.Row');
@@ -173,7 +174,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
   }
 
 
-  if (elem.isInput && this.config_.connections) {
+  if (Blockly.blockRendering.Types.isInput(elem) && this.config_.connections) {
     this.drawConnection(elem.connection);
   }
 };
@@ -246,7 +247,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
       },
       this.svgRoot_));
 
-  if (row.type == 'top row' || row.type == 'bottom row') {
+  if (Blockly.blockRendering.Types.isTopOrBottomRow(row)) {
     return;
   }
 
@@ -276,7 +277,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
  */
 Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY, isRtl) {
   for (var i = 0, elem; (elem = row.elements[i]); i++) {
-    if (elem.isSpacer()) {
+    if (Blockly.blockRendering.Types.isSpacer(elem)) {
       this.drawSpacerElem(elem, row.height, isRtl);
     } else {
       this.drawRenderedElem(elem, isRtl);
@@ -346,7 +347,7 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
 
   var cursorY = 0;
   for (var i = 0, row; (row = info.rows[i]); i++) {
-    if (row.type == 'between-row spacer') {
+    if (Blockly.blockRendering.Types.isBetweenRowSpacer(row)) {
       this.drawSpacerRow(row, cursorY, info.RTL);
     } else {
       this.drawRowWithElements(row, cursorY, info.RTL);

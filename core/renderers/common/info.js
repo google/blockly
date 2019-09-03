@@ -27,6 +27,7 @@
 goog.provide('Blockly.blockRendering.RenderInfo');
 
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.InputRow');
 goog.require('Blockly.blockRendering.Row');
@@ -283,7 +284,8 @@ Blockly.blockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
     var oldElems = row.elements;
     row.elements = [];
     // No spacing needed before the corner on the top row or the bottom row.
-    if (row.type != 'top row' && row.type != 'bottom row') {
+    if (!Blockly.blockRendering.Types.isTopRow(row) &&
+        !Blockly.blockRendering.Types.isBottomRow(row)) {
       // There's a spacer before the first element in the row.
       row.elements.push(new Blockly.blockRendering.InRowSpacer(
           this.getInRowSpacing_(null, oldElems[0])));
@@ -308,12 +310,12 @@ Blockly.blockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
  */
 Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   // Between inputs and the end of the row.
-  if (prev && prev.isInput && !next) {
-    if (prev.isExternalInput()) {
+  if (prev && Blockly.blockRendering.Types.isInput(prev) && !next) {
+    if (Blockly.blockRendering.Types.isExternalInput(prev)) {
       return this.constants_.NO_PADDING;
-    } else if (prev.isInlineInput()) {
+    } else if (Blockly.blockRendering.Types.isInlineInput(prev)) {
       return this.constants_.LARGE_PADDING;
-    } else if (prev.isStatementInput()) {
+    } else if (Blockly.blockRendering.Types.isStatementInput(prev)) {
       return this.constants_.NO_PADDING;
     }
   }
@@ -448,8 +450,8 @@ Blockly.blockRendering.RenderInfo.prototype.addRowSpacing_ = function() {
 
 /**
  * Create a spacer row to go between prev and next, and set its size.
- * @param {?Blockly.blockRendering.Row} prev The previous row, or null.
- * @param {?Blockly.blockRendering.Row} next The next row, or null.
+ * @param {!Blockly.blockRendering.Row} prev The previous row.
+ * @param {!Blockly.blockRendering.Row} next The next row.
  * @return {!Blockly.blockRendering.SpacerRow} The newly created spacer row.
  * @protected
  */
@@ -465,8 +467,8 @@ Blockly.blockRendering.RenderInfo.prototype.makeSpacerRow_ = function(prev, next
 
 /**
  * Calculate the width of a spacer row.
- * @param {Blockly.blockRendering.Row} _prev The row before the spacer.
- * @param {Blockly.blockRendering.Row} _next The row after the spacer.
+ * @param {!Blockly.blockRendering.Row} _prev The row before the spacer.
+ * @param {!Blockly.blockRendering.Row} _next The row after the spacer.
  * @return {number} The desired width of the spacer row between these two rows.
  * @protected
  */
@@ -477,8 +479,8 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(
 
 /**
  * Calculate the height of a spacer row.
- * @param {Blockly.blockRendering.Row} _prev The row before the spacer.
- * @param {Blockly.blockRendering.Row} _next The row after the spacer.
+ * @param {!Blockly.blockRendering.Row} _prev The row before the spacer.
+ * @param {!Blockly.blockRendering.Row} _next The row after the spacer.
  * @return {number} The desired height of the spacer row between these two rows.
  * @protected
  */
@@ -489,8 +491,8 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(
 
 /**
  * Calculate the centerline of an element in a rendered row.
- * @param {Blockly.blockRendering.Row} row The row containing the element.
- * @param {Blockly.blockRendering.Measurable} elem The element to place.
+ * @param {!Blockly.blockRendering.Row} row The row containing the element.
+ * @param {!Blockly.blockRendering.Measurable} elem The element to place.
  * @return {number} The desired centerline of the given element, as an offset
  *     from the top left of the block.
  * @protected
@@ -498,7 +500,7 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(
 Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row,
     elem) {
   var result = row.yPos;
-  if (elem.isNextConnection()) {
+  if (Blockly.blockRendering.Types.isNextConnection(elem)) {
     result += (row.height - row.overhangY + elem.height / 2);
   } else {
     result += (row.height / 2);

@@ -31,6 +31,7 @@ goog.provide('Blockly.blockRendering.ExternalValueInput');
 
 goog.require('Blockly.blockRendering.Connection');
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -45,7 +46,7 @@ Blockly.blockRendering.InputConnection = function(input) {
   Blockly.blockRendering.InputConnection.superClass_.constructor.call(this,
       input.connection);
 
-  this.isInput = true;
+  this.type |= Blockly.blockRendering.Types.INPUT;
   this.input = input;
   this.align = input.align;
   this.connectedBlock = input.connection && input.connection.targetBlock() ?
@@ -80,7 +81,7 @@ goog.inherits(Blockly.blockRendering.InputConnection,
 Blockly.blockRendering.InlineInput = function(input) {
   Blockly.blockRendering.InlineInput.superClass_.constructor.call(this,
       input);
-  this.type = 'inline input';
+  this.type |= Blockly.blockRendering.Types.INLINE_INPUT;
 
   if (!this.connectedBlock) {
     this.height = this.constants_.EMPTY_INLINE_INPUT_HEIGHT;
@@ -113,7 +114,7 @@ goog.inherits(Blockly.blockRendering.InlineInput,
 Blockly.blockRendering.StatementInput = function(input) {
   Blockly.blockRendering.StatementInput.superClass_.constructor.call(this,
       input);
-  this.type = 'statement input';
+  this.type |= Blockly.blockRendering.Types.STATEMENT_INPUT;
 
   if (!this.connectedBlock) {
     this.height = this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT;
@@ -142,7 +143,7 @@ goog.inherits(Blockly.blockRendering.StatementInput,
 Blockly.blockRendering.ExternalValueInput = function(input) {
   Blockly.blockRendering.ExternalValueInput.superClass_.constructor.call(this,
       input);
-  this.type = 'external value input';
+  this.type |= Blockly.blockRendering.Types.EXTERNAL_VALUE_INPUT;
 
   if (!this.connectedBlock) {
     this.height = this.shape.height;

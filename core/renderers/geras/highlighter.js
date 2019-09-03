@@ -29,6 +29,7 @@ goog.provide('Blockly.geras.Highlighter');
 
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.InputRow');
 goog.require('Blockly.blockRendering.Row');
@@ -84,16 +85,16 @@ Blockly.geras.Highlighter.prototype.drawTopCorner = function(row) {
   this.steps_.push(
       Blockly.utils.svgPaths.moveBy(row.xPos, this.info_.startY));
   for (var i = 0, elem; (elem = row.elements[i]); i++) {
-    if (elem.type == 'square corner') {
+    if (Blockly.blockRendering.Types.isLeftSquareCorner(elem)) {
       this.steps_.push(this.highlightConstants_.START_POINT);
-    } else if (elem.type == 'round corner') {
+    } else if (Blockly.blockRendering.Types.isLeftRoundedCorner(elem)) {
       this.steps_.push(
           this.outsideCornerPaths_.topLeft(this.RTL_));
-    } else if (elem.type == 'previous connection') {
+    } else if (Blockly.blockRendering.Types.isPreviousConnection(elem)) {
       this.steps_.push(this.notchPaths_.pathLeft);
-    } else if (elem.type == 'hat') {
+    } else if (Blockly.blockRendering.Types.isHat(elem)) {
       this.steps_.push(this.startPaths_.path(this.RTL_));
-    } else if (elem.isSpacer() && elem.width != 0) {
+    } else if (Blockly.blockRendering.Types.isSpacer(elem) && elem.width != 0) {
       // The end point of the spacer needs to be offset by the highlight amount.
       // So instead of using the spacer's width for a relative horizontal, use
       // its width and position for an absolute horizontal move.
@@ -179,12 +180,12 @@ Blockly.geras.Highlighter.prototype.drawBottomRow = function(row) {
     this.steps_.push('V', height - this.highlightOffset_);
   } else {
     var cornerElem = this.info_.bottomRow.elements[0];
-    if (cornerElem.type == 'square corner') {
+    if (Blockly.blockRendering.Types.isLeftSquareCorner(cornerElem)) {
       this.steps_.push(
           Blockly.utils.svgPaths.moveTo(
               row.xPos + this.highlightOffset_,
               height - this.highlightOffset_));
-    } else if (cornerElem.type == 'round corner') {
+    } else if (Blockly.blockRendering.Types.isLeftRoundedCorner(cornerElem)) {
       this.steps_.push(Blockly.utils.svgPaths.moveTo(row.xPos, height));
       this.steps_.push(this.outsideCornerPaths_.bottomLeft());
     }
@@ -210,7 +211,7 @@ Blockly.geras.Highlighter.prototype.drawLeft = function() {
 
   if (!this.RTL_) {
     var topRow = this.info_.topRow;
-    if (topRow.elements[0].isRoundedCorner()) {
+    if (Blockly.blockRendering.Types.isLeftRoundedCorner(topRow.elements[0])) {
       this.steps_.push('V', this.outsideCornerPaths_.height);
     } else {
       this.steps_.push('V', topRow.startY + this.highlightOffset_);

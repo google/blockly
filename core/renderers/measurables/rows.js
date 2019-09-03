@@ -474,7 +474,7 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
     if (elem.isInput) {
       if (Blockly.blockRendering.Types.isStatementInput(elem)) {
         connectedBlockWidths += elem.connectedBlockWidth;
-      } else if (elem.type == 'external value input' &&
+      } else if (Blockly.blockRendering.Types.isExternalInput(elem) &&
           elem.connectedBlockWidth != 0) {
         connectedBlockWidths += (elem.connectedBlockWidth - elem.connectionWidth);
       }

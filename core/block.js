@@ -223,7 +223,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 /**
  * @typedef {{
  *            text:?string,
- *            pinned:boolean
+ *            pinned:boolean,
  *            size:Blockly.utils.Size
  *          }}
  */

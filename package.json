@@ -18,6 +18,7 @@
   },
   "scripts": {
     "build": "gulp build",
+    "build:debug": "gulp build-core --verbose > build-debug.log 2>&1",
     "lint": "eslint .",
     "package": "gulp package",
     "prepare": "gulp blockly_node_javascript_en",

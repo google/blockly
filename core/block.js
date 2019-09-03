@@ -129,9 +129,9 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   this.collapsed_ = false;
 
   /**
-   * A string/Blockly.Comment representing the comment attached to this block.
-   * @type {string|Blockly.Comment}
-   * @deprecated August 2019. Use getCommentText or getCommentIcon instead.
+   * A string representing the comment attached to this block.
+   * @type {string}
+   * @deprecated August 2019. Use getCommentText instead.
    */
   this.comment = null;
 

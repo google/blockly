@@ -206,7 +206,9 @@ Blockly.svgResize = function(workspace) {
 Blockly.onKeyDown_ = function(e) {
   var mainWorkspace = Blockly.mainWorkspace;
 
-  if (mainWorkspace.options.readOnly && Blockly.navigation.onKeyPress(e)) {
+  if (mainWorkspace.options.readOnly &&
+      Blockly.keyboardAccessibilityMode &&
+      Blockly.navigation.onKeyPress(e)) {
     return true;
   }
 

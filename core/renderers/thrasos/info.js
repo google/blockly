@@ -145,8 +145,8 @@ Blockly.thrasos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   // Spacing between a non-input and an input.
-  if (!Blockly.blockRendering.Types.isInput(prev)
-      && next && Blockly.blockRendering.Types.isInput(next)) {
+  if (!Blockly.blockRendering.Types.isInput(prev) &&
+      next && Blockly.blockRendering.Types.isInput(next)) {
     // Between an editable field and an input.
     if (prev.isEditable) {
       if (Blockly.blockRendering.Types.isInlineInput(next)) {

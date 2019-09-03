@@ -83,21 +83,21 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   /**
    * The initial validator function to be set when the field's value
    * is initialized.
-   * @type {Function}
+   * @type {Function|undefined}
    * @private
    */
   this.initialValidator_ = opt_validator;
 
   /**
    * A map of options used to configure this field when initialized.
-   * @type {Object}
+   * @type {Object|undefined}
    * @private
    */
   this.config_ = opt_config;
 
   /**
    * The size of the area rendered by the field.
-   * @type {Blockly.utils.Size}
+   * @type {!Blockly.utils.Size}
    * @protected
    */
   this.size_ = new Blockly.utils.Size(0, 0);
@@ -192,7 +192,6 @@ Blockly.Field.prototype.clickTarget_ = null;
  * Override if the text representation of the value of this field is not
  * just a string cast of its value. Return null to restort to a string cast.
  * @type {function():?string}
- * @this Blockly.Field
  * @protected
  */
 Blockly.Field.prototype.getText_;
@@ -294,7 +293,7 @@ Blockly.Field.prototype.initValue = function() {
   }
   this.config_ && this.configure_(this.config_);
   this.setValue(this.initialValue_);
-  this.setValidator(this.initialValidator_);
+  this.initialValidator_ && this.setValidator(this.initialValidator_);
   this.valueInitialized_ = true;
 };
 

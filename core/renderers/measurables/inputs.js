@@ -47,7 +47,6 @@ Blockly.blockRendering.InputConnection = function(input) {
       input.connection);
 
   this.type |= Blockly.blockRendering.Types.INPUT;
-  this.isInput = true;
   this.input = input;
   this.align = input.align;
   this.connectedBlock = input.connection && input.connection.targetBlock() ?

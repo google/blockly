@@ -63,7 +63,7 @@ Blockly.zelos.Drawer.prototype.drawTop_ = function() {
     if (Blockly.blockRendering.Types.isLeftRoundedCorner(elem)) {
       this.outlinePath_ +=
           this.constants_.OUTSIDE_CORNERS.topLeft;
-    } else if (Blockly.blockRendering.Types.isRightRoundCorner(elem.type)) {
+    } else if (Blockly.blockRendering.Types.isRightRoundedCorner(elem)) {
       this.outlinePath_ +=
           this.constants_.OUTSIDE_CORNERS.topRight;
     } else if (Blockly.blockRendering.Types.isPreviousConnection(elem)) {

@@ -37,7 +37,6 @@ goog.require('Blockly.blockRendering.Types');
  * @constructor
  */
 Blockly.blockRendering.Measurable = function() {
-  this.isInput = false;
   this.width = 0;
   this.height = 0;
   this.type = Blockly.blockRendering.Types.NONE;

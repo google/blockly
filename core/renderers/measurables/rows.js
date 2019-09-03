@@ -167,7 +167,7 @@ Blockly.blockRendering.Row.prototype.measure = function() {
  */
 Blockly.blockRendering.Row.prototype.getLastInput = function() {
   for (var i = this.elements.length - 1, elem; (elem = this.elements[i]); i--) {
-    if (elem.isInput) {
+    if (Blockly.blockRendering.Types.isInput(elem)) {
       return /** @type {Blockly.blockRendering.InputConnection} */ (elem);
     }
   }
@@ -471,7 +471,7 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
   var connectedBlockWidths = 0;
   for (var e = 0, elem; (elem = this.elements[e]); e++) {
     this.width += elem.width;
-    if (elem.isInput) {
+    if (Blockly.blockRendering.Types.isInput(elem)) {
       if (Blockly.blockRendering.Types.isStatementInput(elem)) {
         connectedBlockWidths += elem.connectedBlockWidth;
       } else if (Blockly.blockRendering.Types.isExternalInput(elem) &&
@@ -499,7 +499,7 @@ Blockly.blockRendering.InputRow.prototype.getLastSpacer = function() {
       if (Blockly.blockRendering.Types.isSpacer(elem)) {
         continue;
       }
-      if (elem.isInput) {
+      if (Blockly.blockRendering.Types.isInput(elem)) {
         var spacer = elems[i - 1];
         return /** @type {Blockly.blockRendering.InRowSpacer} */ (spacer);
       }

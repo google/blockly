@@ -310,7 +310,7 @@ Blockly.blockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
  */
 Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   // Between inputs and the end of the row.
-  if (prev && prev.isInput && !next) {
+  if (prev && Blockly.blockRendering.Types.isInput(prev) && !next) {
     if (Blockly.blockRendering.Types.isExternalInput(prev)) {
       return this.constants_.NO_PADDING;
     } else if (Blockly.blockRendering.Types.isInlineInput(prev)) {

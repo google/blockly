@@ -158,6 +158,16 @@ Blockly.blockRendering.Types.isInRowSpacer = function(elem) {
 };
 
 /**
+ * Whether a measurable stores information about an input.
+ * @param {!Blockly.blockRendering.Measurable} elem The element to check.
+ * @return {number} 1 if the object stores information about an input.
+ * @package
+ */
+Blockly.blockRendering.Types.isInput = function(elem) {
+  return elem.type & Blockly.blockRendering.Types.INPUT;
+};
+
+/**
  * Whether a measurable stores information about an external input.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
  * @return {number} 1 if the object stores information about an

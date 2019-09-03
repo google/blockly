@@ -28,6 +28,7 @@ goog.provide('Blockly.zelos.Drawer');
 
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Drawer');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.zelos.RenderInfo');
 
 
@@ -59,20 +60,20 @@ Blockly.zelos.Drawer.prototype.drawTop_ = function() {
   this.outlinePath_ +=
       Blockly.utils.svgPaths.moveBy(topRow.xPos, this.info_.startY);
   for (var i = 0, elem; (elem = elements[i]); i++) {
-    if (elem.type == 'round corner') {
+    if (elem.type & Blockly.blockRendering.Types.LEFT_ROUND_CORNER) {
       this.outlinePath_ +=
           this.constants_.OUTSIDE_CORNERS.topLeft;
-    } else if (elem.type == 'round corner right') {
+    } else if (elem.type & Blockly.blockRendering.Types.RIGHT_ROUND_CORNER) {
       this.outlinePath_ +=
           this.constants_.OUTSIDE_CORNERS.topRight;
-    } else if (elem.type == 'previous connection') {
+    } else if (Blockly.blockRendering.Types.isPreviousConnection(elem)) {
       this.outlinePath_ += elem.shape.pathLeft;
-    } else if (elem.type == 'hat') {
+    } else if (Blockly.blockRendering.Types.isHat(elem)) {
       this.outlinePath_ += this.constants_.START_HAT.path;
-    } else if (elem.isSpacer()) {
+    } else if (Blockly.blockRendering.Types.isSpacer(elem)) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width);
     }
-    // No branch for a 'square corner', because it's a no-op.
+    // No branch for a square corner because it's a no-op.
   }
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('v', topRow.height);
 };
@@ -92,15 +93,15 @@ Blockly.zelos.Drawer.prototype.drawBottom_ = function() {
     Blockly.utils.svgPaths.lineOnAxis('v', bottomRow.height - bottomRow.overhangY);
 
   for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
-    if (elem.isNextConnection()) {
+    if (Blockly.blockRendering.Types.isNextConnection(elem)) {
       this.outlinePath_ += elem.shape.pathRight;
-    } else if (elem.isSquareCorner()) {
+    } else if (Blockly.blockRendering.Types.isLeftSquareCorner(elem)) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', bottomRow.xPos);
-    } else if (elem.isRoundedCorner()) {
+    } else if (Blockly.blockRendering.Types.isLeftRoundedCorner(elem)) {
       this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.bottomLeft;
-    } else if (elem.type == 'round corner right') {
+    } else if (Blockly.blockRendering.Types.isRightRoundedCorner(elem)) {
       this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.bottomRight;
-    } else if (elem.isSpacer()) {
+    } else if (Blockly.blockRendering.Types.isSpacer(elem)) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width * -1);
     }
   }

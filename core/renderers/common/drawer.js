@@ -29,6 +29,7 @@ goog.provide('Blockly.blockRendering.Drawer');
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.InputRow');
 goog.require('Blockly.blockRendering.Row');
@@ -140,17 +141,17 @@ Blockly.blockRendering.Drawer.prototype.drawTop_ = function() {
   this.outlinePath_ +=
       Blockly.utils.svgPaths.moveBy(topRow.xPos, this.info_.startY);
   for (var i = 0, elem; (elem = elements[i]); i++) {
-    if (elem.type == 'round corner') {
+    if (Blockly.blockRendering.Types.isLeftRoundedCorner(elem)) {
       this.outlinePath_ +=
           this.constants_.OUTSIDE_CORNERS.topLeft;
-    } else if (elem.type == 'previous connection') {
+    } else if (Blockly.blockRendering.Types.isPreviousConnection(elem)) {
       this.outlinePath_ += elem.shape.pathLeft;
-    } else if (elem.type == 'hat') {
+    } else if (Blockly.blockRendering.Types.isHat(elem)) {
       this.outlinePath_ += this.constants_.START_HAT.path;
-    } else if (elem.isSpacer()) {
+    } else if (Blockly.blockRendering.Types.isSpacer(elem)) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width);
     }
-    // No branch for a 'square corner', because it's a no-op.
+    // No branch for a square corner, because it's a no-op.
   }
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('v', topRow.height);
 };
@@ -241,13 +242,13 @@ Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
     Blockly.utils.svgPaths.lineOnAxis('v', bottomRow.height - bottomRow.overhangY);
 
   for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
-    if (elem.isNextConnection()) {
+    if (Blockly.blockRendering.Types.isNextConnection(elem)) {
       this.outlinePath_ += elem.shape.pathRight;
-    } else if (elem.isSquareCorner()) {
+    } else if (Blockly.blockRendering.Types.isLeftSquareCorner(elem)) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', bottomRow.xPos);
-    } else if (elem.isRoundedCorner()) {
+    } else if (Blockly.blockRendering.Types.isLeftRoundedCorner(elem)) {
       this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.bottomLeft;
-    } else if (elem.isSpacer()) {
+    } else if (Blockly.blockRendering.Types.isSpacer(elem)) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width * -1);
     }
   }
@@ -283,9 +284,10 @@ Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
 Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
   for (var i = 0, row; (row = this.info_.rows[i]); i++) {
     for (var j = 0, elem; (elem = row.elements[j]); j++) {
-      if (elem.isInlineInput()) {
+      if (Blockly.blockRendering.Types.isInlineInput(elem)) {
         this.drawInlineInput_(elem);
-      } else if (elem.isIcon() || elem.isField()) {
+      } else if (Blockly.blockRendering.Types.isIcon(elem) ||
+          Blockly.blockRendering.Types.isField(elem)) {
         this.layoutField_(elem);
       }
     }
@@ -299,9 +301,9 @@ Blockly.blockRendering.Drawer.prototype.drawInternals_ = function() {
  * @protected
  */
 Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
-  if (fieldInfo.isField()) {
+  if (Blockly.blockRendering.Types.isField(fieldInfo)) {
     var svgGroup = fieldInfo.field.getSvgRoot();
-  } else if (fieldInfo.isIcon()) {
+  } else if (Blockly.blockRendering.Types.isIcon(fieldInfo)) {
     var svgGroup = fieldInfo.icon.iconGroup_;
   }
 
@@ -315,7 +317,7 @@ Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
       scale = 'scale(-1 1)';
     }
   }
-  if (fieldInfo.isIcon()) {
+  if (Blockly.blockRendering.Types.isIcon(fieldInfo)) {
     svgGroup.setAttribute('display', 'block');
     svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + yPos + ')');
     fieldInfo.icon.computeIconLocation();

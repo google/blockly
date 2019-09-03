@@ -27,6 +27,7 @@
 goog.provide('Blockly.blockRendering.RenderInfo');
 
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.InputRow');
 goog.require('Blockly.blockRendering.Row');
@@ -283,7 +284,8 @@ Blockly.blockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
     var oldElems = row.elements;
     row.elements = [];
     // No spacing needed before the corner on the top row or the bottom row.
-    if (row.type != 'top row' && row.type != 'bottom row') {
+    if (!Blockly.blockRendering.Types.isTopRow(row) &&
+        !Blockly.blockRendering.Types.isBottomRow(row)) {
       // There's a spacer before the first element in the row.
       row.elements.push(new Blockly.blockRendering.InRowSpacer(
           this.getInRowSpacing_(null, oldElems[0])));
@@ -309,11 +311,11 @@ Blockly.blockRendering.RenderInfo.prototype.addElemSpacing_ = function() {
 Blockly.blockRendering.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   // Between inputs and the end of the row.
   if (prev && prev.isInput && !next) {
-    if (prev.isExternalInput()) {
+    if (Blockly.blockRendering.Types.isExternalInput(prev)) {
       return this.constants_.NO_PADDING;
-    } else if (prev.isInlineInput()) {
+    } else if (Blockly.blockRendering.Types.isInlineInput(prev)) {
       return this.constants_.LARGE_PADDING;
-    } else if (prev.isStatementInput()) {
+    } else if (Blockly.blockRendering.Types.isStatementInput(prev)) {
       return this.constants_.NO_PADDING;
     }
   }
@@ -498,7 +500,7 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(
 Blockly.blockRendering.RenderInfo.prototype.getElemCenterline_ = function(row,
     elem) {
   var result = row.yPos;
-  if (elem.isNextConnection()) {
+  if (Blockly.blockRendering.Types.isNextConnection(elem)) {
     result += (row.height - row.overhangY + elem.height / 2);
   } else {
     result += (row.height / 2);

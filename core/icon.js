@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Icon');
 
+goog.require('Blockly.BlockSvg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
@@ -34,10 +35,15 @@ goog.require('Blockly.utils.Size');
 
 /**
  * Class for an icon.
- * @param {Blockly.Block} block The block associated with this icon.
+ * @param {Blockly.BlockSvg} block The block associated with this icon.
  * @constructor
  */
 Blockly.Icon = function(block) {
+  /**
+   * The block this icon is attached to.
+   * @type {Blockly.BlockSvg}
+   * @private
+   */
   this.block_ = block;
 };
 

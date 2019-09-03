@@ -837,14 +837,19 @@ Blockly.navigation.onKeyPress = function(e) {
   var key = Blockly.user.keyMap.serializeKeyEvent(e);
   var action = Blockly.user.keyMap.getActionByKeyCode(key);
   var curNode = Blockly.navigation.cursor_.getCurNode();
+  var readOnly = Blockly.getMainWorkspace().options.readOnly;
   var actionHandled = false;
 
   if (action) {
-    if (curNode && curNode.getType() === Blockly.ASTNode.types.FIELD) {
-      actionHandled = curNode.getLocation().onBlocklyAction(action);
-    }
-    if (!actionHandled) {
+    if (readOnly && Blockly.navigation.READONLY_ACTION_LIST.indexOf(action) > -1) {
       actionHandled = Blockly.navigation.onBlocklyAction(action);
+    } else if (!readOnly) {
+      if (curNode && curNode.getType() === Blockly.ASTNode.types.FIELD) {
+        actionHandled = curNode.getLocation().onBlocklyAction(action);
+      }
+      if (!actionHandled) {
+        actionHandled = Blockly.navigation.onBlocklyAction(action);
+      }
     }
   }
   return actionHandled;
@@ -1085,3 +1090,14 @@ Blockly.navigation.ACTION_TOOLBOX = new Blockly.Action(
  */
 Blockly.navigation.ACTION_EXIT = new Blockly.Action(
     Blockly.navigation.actionNames.EXIT, 'Close the current modal, such as a toolbox or field editor.');
+
+/**
+ * List of valid actions for read only mode.
+ * @type {!Array}
+ */
+Blockly.navigation.READONLY_ACTION_LIST = [
+  Blockly.navigation.ACTION_PREVIOUS,
+  Blockly.navigation.ACTION_OUT,
+  Blockly.navigation.ACTION_IN,
+  Blockly.navigation.ACTION_NEXT
+];

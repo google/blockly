@@ -205,6 +205,11 @@ Blockly.svgResize = function(workspace) {
 // are multiple workspaces and non-main workspaces are able to accept input.
 Blockly.onKeyDown_ = function(e) {
   var mainWorkspace = Blockly.mainWorkspace;
+
+  if (mainWorkspace.options.readOnly && Blockly.navigation.onKeyPress(e)) {
+    return true;
+  }
+
   if (mainWorkspace.options.readOnly || Blockly.utils.isTargetInput(e) ||
       (mainWorkspace.rendered && !mainWorkspace.isVisible())) {
     // No key actions on readonly workspaces.

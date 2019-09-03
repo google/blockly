@@ -394,8 +394,9 @@ Blockly.blockRendering.Drawer.prototype.positionStatementInputConnection_ = func
     var connX = row.xPos + row.statementEdge + input.notchOffset;
     if (this.info_.RTL) {
       connX *= -1;
+    } else {
+      connX += this.constants_.DARK_PATH_OFFSET;
     }
-    connX += this.constants_.DARK_PATH_OFFSET;
     input.connection.setOffsetInBlock(connX,
         row.yPos + this.constants_.DARK_PATH_OFFSET);
   }

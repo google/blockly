@@ -130,6 +130,7 @@ Blockly.FieldAngle.prototype.initView = function() {
 /**
  * Updates the graph when the field rerenders.
  * @private
+ * @override
  */
 Blockly.FieldAngle.prototype.render_ = function() {
   Blockly.FieldAngle.superClass_.render_.call(this);

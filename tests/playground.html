@@ -340,8 +340,10 @@ function toggleRenderingDebug(state) {
   }
   if (state) {
     document.getElementById('blocklyDiv').className = 'renderingDebug';
+    Blockly.blockRendering.useDebugger = true;
   } else {
     document.getElementById('blocklyDiv').className = '';
+    Blockly.blockRendering.useDebugger = false;
   }
 }
 
@@ -444,39 +446,6 @@ h1 {
 
 .blockRenderDebug {
   display: none;
-}
-
-.rowRenderingRect {
-  stroke: black;
-  fill: none;
-  stroke-width: 1px;
-}
-
-.elemRenderingRect {
-  stroke: red;
-  fill: none;
-  stroke-width: 1px;
-}
-
-.rowSpacerRect {
-  stroke: blue;
-  fill-opacity: 0.5;
-  fill: blue;
-  stroke-width: 1px;
-}
-
-.elemSpacerRect {
-  stroke: pink;
-  fill-opacity: 0.5;
-  fill: pink;
-  stroke-width: 1px;
-}
-
-.blockBoundingBox {
-  stroke: black;
-  stroke-dasharray: 5,5;
-  fill: none;
-  stroke-width: 1px;
 }
 
 </style>
@@ -1274,6 +1243,7 @@ h1 {
       <block type="test_basic_value_to_statement"></block>
       <block type="test_basic_limit_instances"></block>
       <block type="test_basic_tooltips"></block>
+      <block type="test_basic_javascript"></block>
     </category>
     <category name="Drag">
       <label text="Drag each to the workspace"></label>

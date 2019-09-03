@@ -28,6 +28,7 @@ goog.provide('Blockly.blockRendering.Debug');
 
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Measurable');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.InputRow');
 goog.require('Blockly.blockRendering.Row');
@@ -58,16 +59,20 @@ Blockly.blockRendering.Debug = function() {
    * @type {Object} Configuration object containing booleans to enable and
    *     disable debug rendering of specific rendering components.
    */
-  this.config_ = {
-    rowSpacers: true,
-    elemSpacers: true,
-    rows: true,
-    elems: true,
-    connections: true,
-    blockBounds: true
-  };
+  this.config_ = Blockly.blockRendering.Debug.getDebugConfig();
 };
 
+Blockly.blockRendering.Debug.getDebugConfig = function() {
+  return {
+    // rowSpacers: true,
+    // elemSpacers: true,
+    // rows: true,
+    elems: true,
+    // connections: true,
+    blockBounds: true,
+    // connectedBlockBounds: true
+  };
+};
 
 /**
  * Remove all elements the this object created on the last pass.
@@ -100,6 +105,10 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
         'y': cursorY,
         'width': row.width,
         'height': row.height,
+        'stroke': 'blue',
+        'fill': 'blue',
+        'fill-opacity': '0.5',
+        'stroke-width': '1px'
       },
       this.svgRoot_));
 };
@@ -129,6 +138,10 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
         'y': yPos,
         'width': elem.width,
         'height': debugRenderedHeight,
+        'stroke': 'pink',
+        'fill': 'pink',
+        'fill-opacity': '0.5',
+        'stroke-width': '1px'
       },
       this.svgRoot_));
 };
@@ -140,26 +153,28 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) {
-  if (!this.config_.elems) {
-    return;
+  if (this.config_.elems) {
+    var xPos = elem.xPos;
+    if (isRtl) {
+      xPos = -(xPos + elem.width);
+    }
+    var yPos = elem.centerline - elem.height / 2;
+    this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+        {
+          'class': 'rowRenderingRect blockRenderDebug',
+          'x': xPos,
+          'y': yPos,
+          'width': elem.width,
+          'height': elem.height,
+          'stroke': 'black',
+          'fill': 'none',
+          'stroke-width': '1px'
+        },
+        this.svgRoot_));
   }
 
-  var xPos = elem.xPos;
-  if (isRtl) {
-    xPos = -(xPos + elem.width);
-  }
-  var yPos = elem.centerline - elem.height / 2;
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-      {
-        'class': 'rowRenderingRect blockRenderDebug',
-        'x': xPos,
-        'y': yPos,
-        'width': elem.width,
-        'height': elem.height,
-      },
-      this.svgRoot_));
 
-  if (elem.isInput) {
+  if (Blockly.blockRendering.Types.isInput(elem) && this.config_.connections) {
     this.drawConnection(elem.connection);
   }
 };
@@ -219,7 +234,6 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
   if (!this.config_.rows) {
     return;
   }
-
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'elemRenderingRect blockRenderDebug',
@@ -227,25 +241,31 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
         'y': cursorY,
         'width': row.width,
         'height': row.height,
+        'stroke': 'red',
+        'fill': 'none',
+        'stroke-width': '1px'
       },
       this.svgRoot_));
 
-  if (row.type == 'top row' || row.type == 'bottom row') {
+  if (Blockly.blockRendering.Types.isTopOrBottomRow(row)) {
     return;
   }
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-      {
-        'class': 'blockRenderDebug',
-        'x': isRtl ? -(row.xPos + row.widthWithConnectedBlocks) : row.xPos,
-        'y': cursorY,
-        'width': row.widthWithConnectedBlocks,
-        'height': row.height,
-        'stroke': this.randomColour_,
-        'fill': 'none',
-        'stroke-width': '1px',
-        'stroke-dasharray': '3,3'
-      },
-      this.svgRoot_));
+
+  if (this.config_.connectedBlockBounds) {
+    this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+        {
+          'class': 'connectedBlockWidth blockRenderDebug',
+          'x': isRtl ? -(row.xPos + row.widthWithConnectedBlocks) : row.xPos,
+          'y': cursorY,
+          'width': row.widthWithConnectedBlocks,
+          'height': row.height,
+          'stroke': this.randomColour_,
+          'fill': 'none',
+          'stroke-width': '1px',
+          'stroke-dasharray': '3,3'
+        },
+        this.svgRoot_));
+  }
 };
 
 /**
@@ -257,7 +277,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
  */
 Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY, isRtl) {
   for (var i = 0, elem; (elem = row.elements[i]); i++) {
-    if (elem.isSpacer()) {
+    if (Blockly.blockRendering.Types.isSpacer(elem)) {
       this.drawSpacerElem(elem, row.height, isRtl);
     } else {
       this.drawRenderedElem(elem, isRtl);
@@ -276,11 +296,9 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
   if (!this.config_.blockBounds) {
     return;
   }
-
   // Bounding box without children.
   var xPos = info.RTL ? -info.width : 0;
   var yPos = 0;
-
   this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
       {
         'class': 'blockBoundingBox blockRenderDebug',
@@ -288,24 +306,30 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
         'y': yPos,
         'width': info.width,
         'height': info.height,
+        'stroke': 'black',
+        'fill': 'none',
+        'stroke-width': '1px',
+        'stroke-dasharray': '5,5'
       },
       this.svgRoot_));
 
-  // Bounding box with children.
-  xPos = info.RTL ? -info.widthWithChildren : 0;
-  this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
-      {
-        'class': 'blockRenderDebug',
-        'x': xPos,
-        'y': yPos,
-        'width': info.widthWithChildren,
-        'height': info.height,
-        'stroke': '#DF57BC',
-        'fill': 'none',
-        'stroke-width': '1px',
-        'stroke-dasharray': '3,3'
-      },
-      this.svgRoot_));
+  if (this.config_.connectedBlockBounds) {
+    // Bounding box with children.
+    xPos = info.RTL ? -info.widthWithChildren : 0;
+    this.debugElements_.push(Blockly.utils.dom.createSvgElement('rect',
+        {
+          'class': 'blockRenderDebug',
+          'x': xPos,
+          'y': yPos,
+          'width': info.widthWithChildren,
+          'height': info.height,
+          'stroke': '#DF57BC',
+          'fill': 'none',
+          'stroke-width': '1px',
+          'stroke-dasharray': '3,3'
+        },
+        this.svgRoot_));
+  }
 };
 
 /**
@@ -316,7 +340,6 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
-  this.config_.rowSpacers = false;
   this.clearElems();
   this.svgRoot_ = block.getSvgRoot();
 
@@ -324,7 +347,7 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
 
   var cursorY = 0;
   for (var i = 0, row; (row = info.rows[i]); i++) {
-    if (row.type == 'between-row spacer') {
+    if (Blockly.blockRendering.Types.isBetweenRowSpacer(row)) {
       this.drawSpacerRow(row, cursorY, info.RTL);
     } else {
       this.drawRowWithElements(row, cursorY, info.RTL);

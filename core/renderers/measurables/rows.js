@@ -35,6 +35,7 @@ goog.require('Blockly.blockRendering.InRowSpacer');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
 
 /**
@@ -47,9 +48,9 @@ Blockly.blockRendering.Row = function() {
   /**
    * The type of this rendering object.
    * @package
-   * @type {string}
+   * @type {number}
    */
-  this.type = 'row';
+  this.type = Blockly.blockRendering.Types.ROW;
 
   /**
    * An array of elements contained in this row.
@@ -166,13 +167,8 @@ Blockly.blockRendering.Row.prototype.measure = function() {
  */
 Blockly.blockRendering.Row.prototype.getLastInput = function() {
   for (var i = this.elements.length - 1, elem; (elem = this.elements[i]); i--) {
-    if (elem.isSpacer()) {
-      continue;
-    }
-    if (elem.isInput) {
+    if (Blockly.blockRendering.Types.isInput(elem)) {
       return /** @type {Blockly.blockRendering.InputConnection} */ (elem);
-    } else if (elem.isField()) {
-      return /** @type {Blockly.blockRendering.InputConnection} */ (elem.parentInput);
     }
   }
   return null;
@@ -186,7 +182,7 @@ Blockly.blockRendering.Row.prototype.getLastInput = function() {
  */
 Blockly.blockRendering.Row.prototype.getFirstSpacer = function() {
   for (var i = 0, elem; (elem = this.elements[i]); i++) {
-    if (elem.isSpacer) {
+    if (Blockly.blockRendering.Types.isSpacer(elem)) {
       return /** @type {Blockly.blockRendering.InRowSpacer} */ (elem);
     }
   }
@@ -201,7 +197,7 @@ Blockly.blockRendering.Row.prototype.getFirstSpacer = function() {
  */
 Blockly.blockRendering.Row.prototype.getLastSpacer = function() {
   for (var i = this.elements.length - 1, elem; (elem = this.elements[i]); i--) {
-    if (elem.isSpacer) {
+    if (Blockly.blockRendering.Types.isSpacer(elem)) {
       return /** @type {Blockly.blockRendering.InRowSpacer} */ (elem);
     }
   }
@@ -222,7 +218,7 @@ Blockly.blockRendering.Row.prototype.getLastSpacer = function() {
 Blockly.blockRendering.TopRow = function() {
   Blockly.blockRendering.TopRow.superClass_.constructor.call(this);
 
-  this.type = 'top row';
+  this.type |= Blockly.blockRendering.Types.TOP_ROW;
 
   /**
    * The starting point for drawing the row, in the y direction.
@@ -256,11 +252,9 @@ goog.inherits(Blockly.blockRendering.TopRow, Blockly.blockRendering.Row);
 Blockly.blockRendering.TopRow.prototype.populate = function(block) {
   var hasHat = block.hat ? block.hat === 'cap' : Blockly.BlockSvg.START_HAT;
   var hasPrevious = !!block.previousConnection;
-  var prevBlock = block.getPreviousBlock();
-  var squareCorner = !!block.outputConnection ||
-      hasHat || (prevBlock && prevBlock.getNextBlock() == block);
+  var leftSquareCorner = this.hasLeftSquareCorner(block);
 
-  if (squareCorner) {
+  if (leftSquareCorner) {
     this.elements.push(new Blockly.blockRendering.SquareCorner());
   } else {
     this.elements.push(new Blockly.blockRendering.RoundCorner());
@@ -290,6 +284,19 @@ Blockly.blockRendering.TopRow.prototype.populate = function(block) {
 };
 
 /**
+ * Returns whether or not the top row has a left square corner.
+ * @param {!Blockly.BlockSvg} block The block whose top row this represents.
+ * @returns {boolean} Whether or not the top row has a left square corner.
+ */
+Blockly.blockRendering.TopRow.prototype.hasLeftSquareCorner = function(block) {
+  var hasHat = block.hat ? block.hat === 'cap' : Blockly.BlockSvg.START_HAT;
+  var prevBlock = block.getPreviousBlock();
+
+  return !!block.outputConnection ||
+      hasHat || (prevBlock && prevBlock.getNextBlock() == block);
+};
+
+/**
  * @override
  */
 Blockly.blockRendering.TopRow.prototype.measure = function() {
@@ -297,8 +304,8 @@ Blockly.blockRendering.TopRow.prototype.measure = function() {
   this.height = this.minHeight;
   for (var e = 0, elem; (elem = this.elements[e]); e++) {
     this.width += elem.width;
-    if (!(elem.isSpacer())) {
-      if (elem.type == 'hat') {
+    if (!(Blockly.blockRendering.Types.isSpacer(elem))) {
+      if (Blockly.blockRendering.Types.isHat(elem)) {
         this.startY = elem.startY;
         this.height = this.height + elem.height;
       }
@@ -318,7 +325,7 @@ Blockly.blockRendering.TopRow.prototype.measure = function() {
  */
 Blockly.blockRendering.BottomRow = function() {
   Blockly.blockRendering.BottomRow.superClass_.constructor.call(this);
-  this.type = 'bottom row';
+  this.type |= Blockly.blockRendering.Types.BOTTOM_ROW;
 
   /**
    * Whether this row has a next connection.
@@ -341,12 +348,6 @@ Blockly.blockRendering.BottomRow = function() {
    * @type {number}
    */
   this.overhangY = 0;
-
-  /**
-   * True if the width of this row does not depend on its contents.
-   * @type {boolean}
-   */
-  this.hasFixedWidth = false;
 };
 goog.inherits(Blockly.blockRendering.BottomRow, Blockly.blockRendering.Row);
 
@@ -361,19 +362,18 @@ Blockly.blockRendering.BottomRow.prototype.populate = function(block) {
   var followsStatement =
       block.inputList.length &&
       block.inputList[block.inputList.length - 1].type == Blockly.NEXT_STATEMENT;
-  this.hasFixedWidth = followsStatement && block.getInputsInline();
 
-  // This is the minimum height for the row. If one of its elements has a greater
-  // height it will be overwritten in the compute pass.
+  // This is the minimum height for the row. If one of its elements has a
+  // greater height it will be overwritten in the compute pass.
   if (followsStatement) {
     this.minHeight = this.constants_.LARGE_PADDING;
   } else {
     this.minHeight = this.constants_.NOTCH.height;
   }
 
-  var squareCorner = !!block.outputConnection || !!block.getNextBlock();
+  var leftSquareCorner = this.hasLeftSquareCorner(block);
 
-  if (squareCorner) {
+  if (leftSquareCorner) {
     this.elements.push(new Blockly.blockRendering.SquareCorner());
   } else {
     this.elements.push(new Blockly.blockRendering.RoundCorner());
@@ -387,6 +387,16 @@ Blockly.blockRendering.BottomRow.prototype.populate = function(block) {
 };
 
 /**
+ * Returns whether or not the bottom row has a left square corner.
+ * @param {!Blockly.BlockSvg} block The block whose bottom row this represents.
+ * @returns {boolean} Whether or not the bottom row has a left square corner.
+ */
+Blockly.blockRendering.BottomRow.prototype.hasLeftSquareCorner = function(
+    block) {
+  return !!block.outputConnection || !!block.getNextBlock();
+};
+
+/**
  * @override
  */
 Blockly.blockRendering.BottomRow.prototype.measure = function() {
@@ -394,8 +404,8 @@ Blockly.blockRendering.BottomRow.prototype.measure = function() {
   this.height = this.minHeight;
   for (var e = 0, elem; (elem = this.elements[e]); e++) {
     this.width += elem.width;
-    if (!(elem.isSpacer())) {
-      if (elem.type == 'next connection') {
+    if (!(Blockly.blockRendering.Types.isSpacer(elem))) {
+      if (Blockly.blockRendering.Types.isNextConnection(elem)) {
         this.height = this.height + elem.height;
         this.overhangY = elem.height;
       }
@@ -413,7 +423,8 @@ Blockly.blockRendering.BottomRow.prototype.measure = function() {
  * @extends {Blockly.blockRendering.Row}
  */
 Blockly.blockRendering.SpacerRow = function(height, width) {
-  this.type = 'between-row spacer';
+  this.type |= Blockly.blockRendering.Types.SPACER |
+      Blockly.blockRendering.Types.BETWEEN_ROW_SPACER;
   this.width = width;
   this.height = height;
   this.followsStatement = false;
@@ -438,7 +449,14 @@ Blockly.blockRendering.SpacerRow.prototype.measure = function() {
  */
 Blockly.blockRendering.InputRow = function() {
   Blockly.blockRendering.InputRow.superClass_.constructor.call(this);
-  this.type = 'input row';
+  this.type |= Blockly.blockRendering.Types.INPUT_ROW;
+
+  /**
+   * The total width of all blocks connected to this row.
+   * @type {number}
+   * @package
+   */
+  this.connectedBlockWidths = 0;
 };
 goog.inherits(Blockly.blockRendering.InputRow,
     Blockly.blockRendering.Row);
@@ -453,18 +471,19 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
   var connectedBlockWidths = 0;
   for (var e = 0, elem; (elem = this.elements[e]); e++) {
     this.width += elem.width;
-    if (elem.isInput) {
-      if (elem.type == 'statement input') {
+    if (Blockly.blockRendering.Types.isInput(elem)) {
+      if (Blockly.blockRendering.Types.isStatementInput(elem)) {
         connectedBlockWidths += elem.connectedBlockWidth;
-      } else if (elem.type == 'external value input' &&
+      } else if (Blockly.blockRendering.Types.isExternalInput(elem) &&
           elem.connectedBlockWidth != 0) {
         connectedBlockWidths += (elem.connectedBlockWidth - elem.connectionWidth);
       }
     }
-    if (!(elem.isSpacer())) {
+    if (!(Blockly.blockRendering.Types.isSpacer(elem))) {
       this.height = Math.max(this.height, elem.height);
     }
   }
+  this.connectedBlockWidths = connectedBlockWidths;
   this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
 };
 
@@ -477,10 +496,10 @@ Blockly.blockRendering.InputRow.prototype.getLastSpacer = function() {
   if (this.hasExternalInput || this.hasStatement) {
     var elems = this.elements;
     for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
-      if (elem.isSpacer()) {
+      if (Blockly.blockRendering.Types.isSpacer(elem)) {
         continue;
       }
-      if (elem.isInput) {
+      if (Blockly.blockRendering.Types.isInput(elem)) {
         var spacer = elems[i - 1];
         return /** @type {Blockly.blockRendering.InRowSpacer} */ (spacer);
       }

@@ -132,7 +132,6 @@ Blockly.navigation.setMarker = function(marker) {
  * @package
  */
 Blockly.navigation.markAtCursor = function() {
-  // TODO: bring the cursor (blinking) in front of the marker (solid)
   Blockly.navigation.marker_.setLocation(
       Blockly.navigation.cursor_.getCurNode());
 };
@@ -144,6 +143,27 @@ Blockly.navigation.markAtCursor = function() {
 Blockly.navigation.removeMark = function() {
   Blockly.navigation.marker_.setLocation(null);
   Blockly.navigation.marker_.hide();
+};
+
+/**
+ * Gets the top node on a block.
+ * This is either the previous connection, output connection or the block.
+ * @param {Blockly.Block} block The block to find the top most ast node on.
+ * @return {Blockly.ASTNode} The ast node holding the top most node on the
+ *     block.
+ * @package
+ */
+Blockly.navigation.getTopNode_ = function(block) {
+  var prevConnection = block.previousConnection;
+  var outConnection = block.outputConnection;
+  var topConnection = prevConnection ? prevConnection : outConnection;
+  var astNode = null;
+  if (topConnection) {
+    astNode = Blockly.ASTNode.createConnectionNode(topConnection);
+  } else {
+    astNode = Blockly.ASTNode.createBlockNode(block);
+  }
+  return astNode;
 };
 
 /************************/
@@ -369,15 +389,8 @@ Blockly.navigation.insertFromFlyout = function() {
     Blockly.navigation.warn('Something went wrong while inserting a block from the flyout.');
   }
 
-  // Move the cursor to the right place on the inserted block.
   Blockly.navigation.focusWorkspace();
-  var prevConnection = newBlock.previousConnection;
-  var outConnection = newBlock.outputConnection;
-  var topConnection = prevConnection ? prevConnection : outConnection;
-  // TODO: This will have to be fixed when we add in a block that does not have
-  // a previous or output connection
-  var astNode = Blockly.ASTNode.createConnectionNode(topConnection);
-  Blockly.navigation.cursor_.setLocation(astNode);
+  Blockly.navigation.cursor_.setLocation(Blockly.navigation.getTopNode_(newBlock));
   Blockly.navigation.removeMark();
 };
 
@@ -484,6 +497,27 @@ Blockly.navigation.modify = function() {
 };
 
 /**
+ * If one of the connections source blocks is a child of the other, disconnect
+ * the child.
+ * @param {!Blockly.Connection} movingConnection The connection that is being
+ *     moved.
+ * @param {!Blockly.Connection} destConnection The connection to be moved to.
+ * @private
+ */
+Blockly.navigation.disconnectChild_ = function(movingConnection, destConnection) {
+  var movingBlock = movingConnection.getSourceBlock();
+  var destBlock = destConnection.getSourceBlock();
+
+  if (movingBlock.getRootBlock() == destBlock.getRootBlock()) {
+    if (movingBlock.getDescendants().indexOf(destBlock) > -1) {
+      Blockly.navigation.getInferiorConnection_(destConnection).disconnect();
+    } else {
+      Blockly.navigation.getInferiorConnection_(movingConnection).disconnect();
+    }
+  }
+};
+
+/**
  * If the two blocks are compatible move the moving connection to the target
  * connection and connect them.
  * @param {Blockly.Connection} movingConnection The connection that is being
@@ -493,13 +527,19 @@ Blockly.navigation.modify = function() {
  * @private
  */
 Blockly.navigation.moveAndConnect_ = function(movingConnection, destConnection) {
+  if (!movingConnection || ! destConnection) {
+    return false;
+  }
   var movingBlock = movingConnection.getSourceBlock();
 
   if (destConnection.canConnectWithReason_(movingConnection) ==
       Blockly.Connection.CAN_CONNECT) {
-    if (destConnection.type == Blockly.PREVIOUS_STATEMENT ||
-        destConnection.type == Blockly.OUTPUT_VALUE) {
-      movingBlock.positionNearConnection(movingConnection, destConnection);
+
+    Blockly.navigation.disconnectChild_(movingConnection, destConnection);
+
+    if (!destConnection.isSuperior()) {
+      var rootBlock = movingBlock.getRootBlock();
+      rootBlock.positionNearConnection(movingConnection, destConnection);
     }
     destConnection.connect(movingConnection);
     return true;
@@ -574,70 +614,56 @@ Blockly.navigation.connect = function(movingConnection, destConnection) {
   } else if (movingSuperior && destInferior &&
       Blockly.navigation.moveAndConnect_(movingSuperior, destInferior)) {
     return true;
-  // If nothing else worked try connecting the given connections and report
-  // any errors.
+  } else if (Blockly.navigation.moveAndConnect_(movingConnection, destConnection)){
+    return true;
   } else {
     try {
-      destConnection.connect(movingConnection);
+      destConnection.checkConnection_(movingConnection);
     }
     catch (e) {
+      // If nothing worked report the error from the original connections.
       Blockly.navigation.warn('Connection failed with error: ' + e);
-      return false;
     }
+    return false;
   }
 };
 
 /**
- * Finds our best guess of what connection point on the given block the user is
- * trying to connect to given a target connection.
- * @param {Blockly.Block} block The block to be connected.
- * @param {Blockly.Connection} connection The connection to connect to.
- * @return {Blockly.Connection} blockConnection The best connection we can
- *     determine for the block, or null if the block doesn't have a matching
- *     connection for the given target connection.
- */
-Blockly.navigation.findBestConnection = function(block, connection) {
-  if (!block || !connection) {
-    return null;
-  }
-
-  // TODO: Possibly check types and return null if the types don't match.
-  if (connection.type === Blockly.PREVIOUS_STATEMENT) {
-    return block.nextConnection;
-  } else if (connection.type === Blockly.NEXT_STATEMENT) {
-    return block.previousConnection;
-  } else if (connection.type === Blockly.INPUT_VALUE) {
-    return block.outputConnection;
-  } else if (connection.type === Blockly.OUTPUT_VALUE) {
-    // Select the first input that has a connection.
-    for (var i = 0; i < block.inputList.length; i++) {
-      var inputConnection = block.inputList[i].connection;
-      if (inputConnection.type === Blockly.INPUT_VALUE) {
-        return inputConnection;
-      }
-    }
-  }
-  return null;
-};
-
-/**
- * Tries to connect the given block to the target connection, making an
+ * Tries to connect the given block to the destination connection, making an
  * intelligent guess about which connection to use to on the moving block.
  * @param {!Blockly.Block} block The block to move.
- * @param {Blockly.Connection} targetConnection The connection to connect to.
+ * @param {Blockly.Connection} destConnection The connection to connect to.
  * @return {boolean} Whether the connection was successful.
  */
-Blockly.navigation.insertBlock = function(block, targetConnection) {
-  var bestConnection =
-      Blockly.navigation.findBestConnection(block, targetConnection);
-  if (bestConnection && bestConnection.isConnected() &&
-      !bestConnection.targetBlock().isShadow()) {
-    bestConnection.disconnect();
-  } else if (!bestConnection) {
-    Blockly.navigation.warn(
-        'This block can not be inserted at the marked location.');
+Blockly.navigation.insertBlock = function(block, destConnection) {
+  switch (destConnection.type) {
+    case Blockly.PREVIOUS_STATEMENT:
+      if (Blockly.navigation.moveAndConnect_(block.nextConnection, destConnection)) {
+        return true;
+      }
+      break;
+    case Blockly.NEXT_STATEMENT:
+      if (Blockly.navigation.moveAndConnect_(block.previousConnection, destConnection)) {
+        return true;
+      }
+      break;
+    case Blockly.INPUT_VALUE:
+      if (Blockly.navigation.moveAndConnect_(block.outputConnection, destConnection)) {
+        return true;
+      }
+      break;
+    case Blockly.OUTPUT_VALUE:
+      for (var i = 0; i < block.inputList.length; i++) {
+        var inputConnection = block.inputList[i].connection;
+        if (inputConnection.type === Blockly.INPUT_VALUE &&
+            Blockly.navigation.moveAndConnect_(inputConnection, destConnection)) {
+          return true;
+        }
+      }
+      break;
   }
-  return Blockly.navigation.connect(bestConnection, targetConnection);
+  Blockly.navigation.warn('This block can not be inserted at the marked location.');
+  return false;
 };
 
 /**
@@ -694,13 +720,7 @@ Blockly.navigation.focusWorkspace = function() {
   Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
   Blockly.navigation.enableKeyboardAccessibility();
   if (Blockly.selected) {
-    var previousConnection = Blockly.selected.previousConnection;
-    var outputConnection = Blockly.selected.outputConnection;
-    // TODO: This still needs to work with blocks that have neither previous
-    // or output connection.
-    var connection = previousConnection ? previousConnection : outputConnection;
-    var newAstNode = Blockly.ASTNode.createConnectionNode(connection);
-    cursor.setLocation(newAstNode);
+    cursor.setLocation(Blockly.navigation.getTopNode_(Blockly.selected));
     Blockly.selected.unselect();
   } else {
     var ws = cursor.workspace_;

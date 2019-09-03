@@ -41,6 +41,8 @@ goog.require('Blockly.Cursor');
 Blockly.CursorSvg = function(workspace, opt_marker) {
   Blockly.CursorSvg.superClass_.constructor.call(this, opt_marker);
   this.workspace_ = workspace;
+  this.constants = new Blockly.blockRendering.ConstantProvider();
+  this.constants.init();
 };
 goog.inherits(Blockly.CursorSvg, Blockly.Cursor);
 
@@ -93,6 +95,18 @@ Blockly.CursorSvg.CURSOR_COLOR = '#cc0a0a';
 Blockly.CursorSvg.MARKER_COLOR = '#4286f4';
 
 /**
+ * The name of the css class for a cursor.
+ * @const {string}
+ */
+Blockly.CursorSvg.CURSOR_CLASS = 'blocklyCursor';
+
+/**
+ * The name of the css class for a marker.
+ * @const {string}
+ */
+Blockly.CursorSvg.MARKER_CLASS = 'blocklyMarker';
+
+/**
  * Parent SVG element.
  * This is generally a block's SVG root, unless the cursor is on the workspace.
  * @type {Element}
@@ -118,9 +132,12 @@ Blockly.CursorSvg.prototype.getSvgRoot = function() {
  * @return {!Element} The cursor controls SVG group.
  */
 Blockly.CursorSvg.prototype.createDom = function() {
+  var className = this.isMarker_ ?
+      Blockly.CursorSvg.MARKER_CLASS : Blockly.CursorSvg.CURSOR_CLASS;
+
   this.svgGroup_ =
       Blockly.utils.dom.createSvgElement('g', {
-        'class': 'blocklyCursor'
+        'class': className
       }, null);
 
   this.createCursorSvg_();
@@ -139,9 +156,20 @@ Blockly.CursorSvg.prototype.setParent_ = function(newParent) {
     return;
   }
   var svgRoot = this.getSvgRoot();
+  var cursorNode = null;
 
   if (newParent) {
-    newParent.appendChild(svgRoot);
+    if (this.isMarker_) {
+      // Put the marker before the cursor so the cursor does not get covered.
+      for (var i = 0, childNode; childNode = newParent.childNodes[i]; i++) {
+        if (Blockly.utils.dom.hasClass(childNode , Blockly.CursorSvg.CURSOR_CLASS)) {
+          cursorNode = childNode;
+        }
+      }
+      newParent.insertBefore(svgRoot, cursorNode);
+    } else {
+      newParent.appendChild(svgRoot);
+    }
     this.parent_ = newParent;
   }
 };
@@ -169,7 +197,6 @@ Blockly.CursorSvg.prototype.showWithCoordinates_ = function() {
  * @private
  */
 Blockly.CursorSvg.prototype.showWithBlock_ = function() {
-  //TODO: Change this from getLocation to something else
   var block = this.getCurNode().getLocation();
 
   this.currentCursorSvg = this.cursorSvgRect_;
@@ -187,7 +214,7 @@ Blockly.CursorSvg.prototype.showWithInputOutput_ = function() {
       (this.getCurNode().getLocation());
   this.currentCursorSvg = this.cursorInputOutput_;
   var path = Blockly.utils.svgPaths.moveTo(0, 0) +
-      Blockly.blockRendering.constants.PUZZLE_TAB.pathDown;
+      this.constants.shapeFor(connection).pathDown;
   this.cursorInputOutput_.setAttribute('d', path);
   this.setParent_(connection.getSourceBlock().getSvgRoot());
   this.positionInputOutput_(connection);

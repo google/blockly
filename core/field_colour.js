@@ -557,8 +557,8 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
   }
 
   // Configure event handler on the table to listen for any event in a cell.
-  this.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(table,
-      'mouseup', this, this.onClick_, true);
+  this.onClickWrapper_ = Blockly.bindEventWithChecks_(table,
+      'click', this, this.onClick_, true);
   this.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(table,
       'mousemove', this, this.onMouseMove_, true);
   this.onMouseEnterWrapper_ = Blockly.bindEventWithChecks_(table,
@@ -576,7 +576,7 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
  * @private
  */
 Blockly.FieldColour.prototype.dropdownDispose_ = function() {
-  Blockly.unbindEvent_(this.onMouseUpWrapper_);
+  Blockly.unbindEvent_(this.onClickWrapper_);
   Blockly.unbindEvent_(this.onMouseMoveWrapper_);
   Blockly.unbindEvent_(this.onMouseEnterWrapper_);
   Blockly.unbindEvent_(this.onMouseLeaveWrapper_);

@@ -125,10 +125,10 @@ goog.addDependency("../../../" + dir + "/core/ui_events.js", ['Blockly.Events.Ui
 goog.addDependency("../../../" + dir + "/core/ui_menu_utils.js", ['Blockly.utils.uiMenu'], ['Blockly.utils.style']);
 goog.addDependency("../../../" + dir + "/core/utils.js", ['Blockly.utils'], ['Blockly.Msg', 'Blockly.utils.Coordinate', 'Blockly.utils.global', 'Blockly.utils.string', 'Blockly.utils.userAgent', 'Blockly.utils.style']);
 goog.addDependency("../../../" + dir + "/core/utils/aria.js", ['Blockly.utils.aria'], []);
-goog.addDependency("../../../" + dir + "/core/utils/base.js", ['Blockly.utils.global'], []);
 goog.addDependency("../../../" + dir + "/core/utils/colour.js", ['Blockly.utils.colour'], ['Blockly.utils']);
 goog.addDependency("../../../" + dir + "/core/utils/coordinate.js", ['Blockly.utils.Coordinate'], []);
 goog.addDependency("../../../" + dir + "/core/utils/dom.js", ['Blockly.utils.dom'], ['Blockly.utils.userAgent']);
+goog.addDependency("../../../" + dir + "/core/utils/global.js", ['Blockly.utils.global'], []);
 goog.addDependency("../../../" + dir + "/core/utils/idgenerator.js", ['Blockly.utils.IdGenerator'], []);
 goog.addDependency("../../../" + dir + "/core/utils/keycodes.js", ['Blockly.utils.KeyCodes'], []);
 goog.addDependency("../../../" + dir + "/core/utils/math.js", ['Blockly.utils.math'], []);

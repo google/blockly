@@ -137,25 +137,23 @@ Blockly.FieldPitch.prototype.onMouseMove = function(e) {
 };
 
 /**
- * Convert the machine-readable value (0-12) to human-readable
- *   text (C3-A4).
+ * Convert the machine-readable value (0-12) to human-readable text (C3-A4).
  * @param {number|string} value The provided value.
- * @return {string} The respective note.
+ * @return {string|undefined} The respective note, or undefined if invalid.
  */
 Blockly.FieldPitch.prototype.valueToNote = function(value) {
-  var note = Blockly.FieldPitch.NOTES[Number(value)];
-  return note;
+  return Blockly.FieldPitch.NOTES[Number(value)];
 };
 
 /**
- * Convert the human-readable text (C3-A4) to machine-readable
- *   value (0-12).
+ * Convert the human-readable text (C3-A4) to machine-readable value (0-12).
  * @param {string} text The provided note.
- * @return {number} The respective value.
+ * @return {number|undefined} The respective value, or undefined if invalid.
  */
 Blockly.FieldPitch.prototype.noteToValue = function(text) {
-  var i = Blockly.FieldPitch.NOTES.indexOf(text);
-  return i;
+  var normalizedText = text.trim().toUpperCase();
+  var i = Blockly.FieldPitch.NOTES.indexOf(normalizedText);
+  return i > -1 ? i : undefined;
 };
 
 /**
@@ -182,7 +180,7 @@ Blockly.FieldPitch.prototype.getEditorText_ = function(value) {
 
 /**
  * Transform the text received from the HTML input (note) into a value
- *    to store in this field.
+ * to store in this field.
  * @param {string} text Text received from the HTML input.
  * @returns {*} The value to store.
  */

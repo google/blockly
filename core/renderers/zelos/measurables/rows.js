@@ -75,10 +75,12 @@ Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(_block) {
 };
 
 /**
- * Never render a right square corner. Always round.
- * @override
+ * Returns whether or not the top row has a right square corner.
+ * @param {!Blockly.BlockSvg} _block The block whose top row this represents.
+ * @returns {boolean} Whether or not the top row has a left square corner.
  */
 Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(_block) {
+  // Never render a right square corner. Always round.
   return false;
 };
 
@@ -123,9 +125,11 @@ Blockly.zelos.BottomRow.prototype.hasLeftSquareCorner = function(_block) {
 };
 
 /**
- * Never render a right square corner. Always round.
- * @override
+ * Returns whether or not the bottom row has a right square corner.
+ * @param {!Blockly.BlockSvg} _block The block whose bottom row this represents.
+ * @returns {boolean} Whether or not the bottom row has a left square corner.
  */
 Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(_block) {
+  // Never render a right square corner. Always round.
   return false;
 };

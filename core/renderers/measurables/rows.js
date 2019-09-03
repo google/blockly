@@ -48,7 +48,7 @@ Blockly.blockRendering.Row = function() {
   /**
    * The type of this rendering object.
    * @package
-   * @type {string}
+   * @type {number}
    */
   this.type = Blockly.blockRendering.Types.ROW;
 

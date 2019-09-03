@@ -450,8 +450,8 @@ Blockly.blockRendering.RenderInfo.prototype.addRowSpacing_ = function() {
 
 /**
  * Create a spacer row to go between prev and next, and set its size.
- * @param {?Blockly.blockRendering.Row} prev The previous row, or null.
- * @param {?Blockly.blockRendering.Row} next The next row, or null.
+ * @param {!Blockly.blockRendering.Row} prev The previous row.
+ * @param {!Blockly.blockRendering.Row} next The next row.
  * @return {!Blockly.blockRendering.SpacerRow} The newly created spacer row.
  * @protected
  */
@@ -467,8 +467,8 @@ Blockly.blockRendering.RenderInfo.prototype.makeSpacerRow_ = function(prev, next
 
 /**
  * Calculate the width of a spacer row.
- * @param {Blockly.blockRendering.Row} _prev The row before the spacer.
- * @param {Blockly.blockRendering.Row} _next The row after the spacer.
+ * @param {!Blockly.blockRendering.Row} _prev The row before the spacer.
+ * @param {!Blockly.blockRendering.Row} _next The row after the spacer.
  * @return {number} The desired width of the spacer row between these two rows.
  * @protected
  */
@@ -479,8 +479,8 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowWidth_ = function(
 
 /**
  * Calculate the height of a spacer row.
- * @param {Blockly.blockRendering.Row} _prev The row before the spacer.
- * @param {Blockly.blockRendering.Row} _next The row after the spacer.
+ * @param {!Blockly.blockRendering.Row} _prev The row before the spacer.
+ * @param {!Blockly.blockRendering.Row} _next The row after the spacer.
  * @return {number} The desired height of the spacer row between these two rows.
  * @protected
  */
@@ -491,8 +491,8 @@ Blockly.blockRendering.RenderInfo.prototype.getSpacerRowHeight_ = function(
 
 /**
  * Calculate the centerline of an element in a rendered row.
- * @param {Blockly.blockRendering.Row} row The row containing the element.
- * @param {Blockly.blockRendering.Measurable} elem The element to place.
+ * @param {!Blockly.blockRendering.Row} row The row containing the element.
+ * @param {!Blockly.blockRendering.Measurable} elem The element to place.
  * @return {number} The desired centerline of the given element, as an offset
  *     from the top left of the block.
  * @protected

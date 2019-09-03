@@ -88,14 +88,14 @@ goog.inherits(Blockly.zelos.RenderInfo, Blockly.blockRendering.RenderInfo);
 Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev) {
     // Between an editable field and the beginning of the row.
-    if (Blockly.blockRendering.Types.isField(next) && next.isEditable) {
+    if (next && Blockly.blockRendering.Types.isField(next) && next.isEditable) {
       return this.constants_.MEDIUM_PADDING;
     }
     // Inline input at the beginning of the row.
-    if (next.isInput && Blockly.blockRendering.Types.isInlineInput(next)) {
+    if (next && next.isInput && Blockly.blockRendering.Types.isInlineInput(next)) {
       return this.constants_.MEDIUM_LARGE_PADDING;
     }
-    if (Blockly.blockRendering.Types.isStatementInput(next)) {
+    if (next && Blockly.blockRendering.Types.isStatementInput(next)) {
       return this.constants_.STATEMENT_INPUT_PADDING_LEFT;
     }
     // Anything else at the beginning of the row.
@@ -147,7 +147,7 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   // Spacing between a non-input and an input.
-  if (!prev.isInput && next.isInput) {
+  if (!prev.isInput && next && next.isInput) {
     // Between an editable field and an input.
     if (prev.isEditable) {
       if (Blockly.blockRendering.Types.isInlineInput(next)) {
@@ -183,7 +183,7 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
     }
   }
 
-  if (Blockly.blockRendering.Types.isLeftSquareCorner(prev)) {
+  if (Blockly.blockRendering.Types.isLeftSquareCorner(prev) && next) {
     // Spacing between a hat and a corner
     if (Blockly.blockRendering.Types.isHat(next)) {
       return this.constants_.NO_PADDING;
@@ -201,7 +201,7 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   // Spacing between a rounded corner and a previous or next connection.
-  if (Blockly.blockRendering.Types.isLeftRoundedCorner(prev)) {
+  if (Blockly.blockRendering.Types.isLeftRoundedCorner(prev) && next) {
     if (Blockly.blockRendering.Types.isPreviousConnection(next)) {
       return next.notchOffset - this.constants_.CORNER_RADIUS;
     } else if (Blockly.blockRendering.Types.isNextConnection(next)) {
@@ -219,7 +219,7 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   // Spacing between anything and a jagged edge.
-  if (Blockly.blockRendering.Types.isJaggedEdge(next)) {
+  if (next && Blockly.blockRendering.Types.isJaggedEdge(next)) {
     return this.constants_.LARGE_PADDING;
   }
 

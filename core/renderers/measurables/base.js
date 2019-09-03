@@ -40,7 +40,7 @@ Blockly.blockRendering.Measurable = function() {
   this.isInput = false;
   this.width = 0;
   this.height = 0;
-  this.type = Blockly.blockRendering.Types.None;
+  this.type = Blockly.blockRendering.Types.NONE;
 
   this.xPos = 0;
   this.centerline = 0;

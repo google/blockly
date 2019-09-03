@@ -109,7 +109,7 @@ Blockly.blockRendering.Types.getType = function(type) {
 /**
  * Whether a measurable stores information about a field.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a field.
+ * @return {number} 1 if the object stores information about a field.
  * @package
  */
 Blockly.blockRendering.Types.isField = function(elem) {
@@ -119,7 +119,7 @@ Blockly.blockRendering.Types.isField = function(elem) {
 /**
  * Whether a measurable stores information about a hat.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a hat.
+ * @return {number} 1 if the object stores information about a hat.
  * @package
  */
 Blockly.blockRendering.Types.isHat = function(elem) {
@@ -129,7 +129,7 @@ Blockly.blockRendering.Types.isHat = function(elem) {
 /**
  * Whether a measurable stores information about an icon.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about an icon.
+ * @return {number} 1 if the object stores information about an icon.
  * @package
  */
 Blockly.blockRendering.Types.isIcon = function(elem) {
@@ -139,7 +139,7 @@ Blockly.blockRendering.Types.isIcon = function(elem) {
 /**
  * Whether a measurable stores information about a spacer.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a spacer.
+ * @return {number} 1 if the object stores information about a spacer.
  * @package
  */
 Blockly.blockRendering.Types.isSpacer = function(elem) {
@@ -147,20 +147,9 @@ Blockly.blockRendering.Types.isSpacer = function(elem) {
 };
 
 /**
- * Whether a measurable stores information about a between-row spacer.
- * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a
- *   between-row spacer.
- * @package
- */
-Blockly.blockRendering.Types.isBetweenRowSpacer = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.BETWEEN_ROW_SPACER;
-};
-
-/**
  * Whether a measurable stores information about an in-row spacer.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about an
+ * @return {number} 1 if the object stores information about an
  *   in-row spacer.
  * @package
  */
@@ -171,7 +160,7 @@ Blockly.blockRendering.Types.isInRowSpacer = function(elem) {
 /**
  * Whether a measurable stores information about an external input.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about an
+ * @return {number} 1 if the object stores information about an
  *   external input.
  * @package
  */
@@ -182,7 +171,7 @@ Blockly.blockRendering.Types.isExternalInput = function(elem) {
 /**
  * Whether a measurable stores information about an inline input.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about an
+ * @return {number} 1 if the object stores information about an
  *   inline input.
  * @package
  */
@@ -193,7 +182,7 @@ Blockly.blockRendering.Types.isInlineInput = function(elem) {
 /**
  * Whether a measurable stores information about a statement input.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a
+ * @return {number} 1 if the object stores information about a
  *   statement input.
  * @package
  */
@@ -204,7 +193,7 @@ Blockly.blockRendering.Types.isStatementInput = function(elem) {
 /**
  * Whether a measurable stores information about a previous connection.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a
+ * @return {number} 1 if the object stores information about a
  *   previous connection.
  * @package
  */
@@ -215,7 +204,7 @@ Blockly.blockRendering.Types.isPreviousConnection = function(elem) {
 /**
  * Whether a measurable stores information about a next connection.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a
+ * @return {number} 1 if the object stores information about a
  *   next connection.
  * @package
  */
@@ -226,7 +215,7 @@ Blockly.blockRendering.Types.isNextConnection = function(elem) {
 /**
  * Whether a measurable stores information about a previous or next connection.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a previous or
+ * @return {number} 1 if the object stores information about a previous or
  *   next connection.
  * @package
  */
@@ -238,7 +227,7 @@ Blockly.blockRendering.Types.isPreviousOrNextConnection = function(elem) {
 /**
  * Whether a measurable stores information about a left round corner.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a
+ * @return {number} 1 if the object stores information about a
  *   left round corner.
  * @package
  */
@@ -249,7 +238,7 @@ Blockly.blockRendering.Types.isLeftRoundedCorner = function(elem) {
 /**
  * Whether a measurable stores information about a right round corner.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a
+ * @return {number} 1 if the object stores information about a
  *   right round corner.
  * @package
  */
@@ -260,7 +249,7 @@ Blockly.blockRendering.Types.isRightRoundedCorner = function(elem) {
 /**
  * Whether a measurable stores information about a left square corner.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a
+ * @return {number} 1 if the object stores information about a
  *   left square corner.
  * @package
  */
@@ -271,7 +260,7 @@ Blockly.blockRendering.Types.isLeftSquareCorner = function(elem) {
 /**
  * Whether a measurable stores information about a right square corner.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a
+ * @return {number} 1 if the object stores information about a
  *   right square corner.
  * @package
  */
@@ -282,7 +271,7 @@ Blockly.blockRendering.Types.isRightSquareCorner = function(elem) {
 /**
  * Whether a measurable stores information about a corner.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a
+ * @return {number} 1 if the object stores information about a
  *   corner.
  * @package
  */
@@ -293,7 +282,7 @@ Blockly.blockRendering.Types.isCorner = function(elem) {
 /**
  * Whether a measurable stores information about a jagged edge.
  * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a jagged edge.
+ * @return {number} 1 if the object stores information about a jagged edge.
  * @package
  */
 Blockly.blockRendering.Types.isJaggedEdge = function(elem) {
@@ -302,52 +291,63 @@ Blockly.blockRendering.Types.isJaggedEdge = function(elem) {
 
 /**
  * Whether a measurable stores information about a row.
- * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a row.
+ * @param {!Blockly.blockRendering.Row} row The row to check.
+ * @return {number} 1 if the object stores information about a row.
  * @package
  */
-Blockly.blockRendering.Types.isRow = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.ROW;
+Blockly.blockRendering.Types.isRow = function(row) {
+  return row.type & Blockly.blockRendering.Types.ROW;
+};
+
+/**
+ * Whether a measurable stores information about a between-row spacer.
+ * @param {!Blockly.blockRendering.Row} row The row to check.
+ * @return {number} 1 if the object stores information about a
+ *   between-row spacer.
+ * @package
+ */
+Blockly.blockRendering.Types.isBetweenRowSpacer = function(row) {
+  return row.type & Blockly.blockRendering.Types.BETWEEN_ROW_SPACER;
 };
 
 /**
  * Whether a measurable stores information about a top row.
- * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a top row.
+ * @param {!Blockly.blockRendering.Row} row The row to check.
+ * @return {number} 1 if the object stores information about a top row.
  * @package
  */
-Blockly.blockRendering.Types.isTopRow = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.TOP_ROW;
+Blockly.blockRendering.Types.isTopRow = function(row) {
+  return row.type & Blockly.blockRendering.Types.TOP_ROW;
 };
 
 /**
  * Whether a measurable stores information about a bottom row.
- * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a bottom row.
+ * @param {!Blockly.blockRendering.Row} row The row to check.
+ * @return {number} 1 if the object stores information about a bottom row.
  * @package
  */
-Blockly.blockRendering.Types.isBottomRow = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.BOTTOM_ROW;
+Blockly.blockRendering.Types.isBottomRow = function(row) {
+  return row.type & Blockly.blockRendering.Types.BOTTOM_ROW;
 };
 
 /**
  * Whether a measurable stores information about a top or bottom row.
- * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about a top or
+ * @param {!Blockly.blockRendering.Row} row The row to check.
+ * @return {number} 1 if the object stores information about a top or
  *   bottom row.
  * @package
  */
-Blockly.blockRendering.Types.isTopOrBottomRow = function(elem) {
-  return elem.type & (Blockly.blockRendering.Types.TOP_ROW |
+Blockly.blockRendering.Types.isTopOrBottomRow = function(row) {
+  return row.type & (Blockly.blockRendering.Types.TOP_ROW |
       Blockly.blockRendering.Types.BOTTOM_ROW);
 };
 
 /**
  * Whether a measurable stores information about an input row.
- * @param {!Blockly.blockRendering.Measurable} elem The element to check.
- * @return {boolean} True if the object stores information about an input row.
+ * @param {!Blockly.blockRendering.Row} row The row to check.
+ * @return {number} 1 if the object stores information about an input row.
  * @package
  */
-Blockly.blockRendering.Types.isInputRow = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.INPUT_ROW;
+Blockly.blockRendering.Types.isInputRow = function(row) {
+  return row.type & Blockly.blockRendering.Types.INPUT_ROW;
 };

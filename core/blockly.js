@@ -216,9 +216,8 @@ Blockly.onKeyDown_ = function(e) {
 
   if (mainWorkspace.options.readOnly) {
     // When in read only mode handle key actions for keyboard navigation.
-    if (Blockly.keyboardAccessibilityMode &&
-      Blockly.navigation.onKeyPress(e)) {
-      return true;
+    if (Blockly.keyboardAccessibilityMode) {
+      Blockly.navigation.onKeyPress(e);
     }
     return;
   }

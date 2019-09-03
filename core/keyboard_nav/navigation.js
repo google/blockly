@@ -841,15 +841,15 @@ Blockly.navigation.onKeyPress = function(e) {
   var actionHandled = false;
 
   if (action) {
-    if (readOnly && Blockly.navigation.READONLY_ACTION_LIST.indexOf(action) > -1) {
-      actionHandled = Blockly.navigation.onBlocklyAction(action);
-    } else if (!readOnly) {
+    if (!readOnly) {
       if (curNode && curNode.getType() === Blockly.ASTNode.types.FIELD) {
         actionHandled = curNode.getLocation().onBlocklyAction(action);
       }
       if (!actionHandled) {
         actionHandled = Blockly.navigation.onBlocklyAction(action);
       }
+    } else if (Blockly.navigation.READONLY_ACTION_LIST.indexOf(action) > -1) {
+      actionHandled = Blockly.navigation.onBlocklyAction(action);
     }
   }
   return actionHandled;

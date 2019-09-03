@@ -487,7 +487,7 @@ Blockly.navigation.moveBlockToWorkspace_ = function(block, wsNode) {
 Blockly.navigation.modify_ = function() {
   var markerNode = Blockly.navigation.marker_.getCurNode();
   var cursorNode = Blockly.navigation.cursor_.getCurNode();
-  if (!Blockly.navigation.modifyWarn()) {
+  if (!Blockly.navigation.modifyWarn_()) {
     return false;
   }
 

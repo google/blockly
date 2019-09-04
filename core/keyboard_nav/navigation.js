@@ -459,8 +459,9 @@ Blockly.navigation.modifyWarn_ = function() {
 /**
  * Disconnect the block from its parent and move to the position of the
  * workspace node.
- * @param {!Blockly.Block} block [description]
- * @param {!Blockly.ASTNode} wsNode [description]
+ * @param {!Blockly.Block} block The block to be moved to the workspace.
+ * @param {!Blockly.ASTNode} wsNode The workspace node holding the position the
+ *     block will be moved to.
  * @return {boolean} True if the block can be moved to the workspace,
  *     false otherwise.
  * @private

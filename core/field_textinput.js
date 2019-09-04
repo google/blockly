@@ -59,6 +59,13 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
   }
   Blockly.FieldTextInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
+
+  /**
+   * Allow browser to spellcheck this field.
+   * @type {boolean}
+   * @private
+   */
+  this.spellcheck_ = true;
 };
 Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 
@@ -73,11 +80,7 @@ Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
  */
 Blockly.FieldTextInput.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  var field = new Blockly.FieldTextInput(text);
-  if (typeof options['spellcheck'] === 'boolean') {
-    field.setSpellcheck(options['spellcheck']);
-  }
-  return field;
+  return new Blockly.FieldTextInput(text, null, options);
 };
 
 /**
@@ -105,10 +108,14 @@ Blockly.FieldTextInput.BORDERRADIUS = 4;
 Blockly.FieldTextInput.prototype.CURSOR = 'text';
 
 /**
- * Allow browser to spellcheck this field.
- * @protected
+ * @override
  */
-Blockly.FieldTextInput.prototype.spellcheck_ = true;
+Blockly.FieldTextInput.prototype.configure_ = function(config) {
+  Blockly.FieldTextInput.superClass_.configure_.call(this, config);
+  if (typeof config['spellcheck'] == 'boolean') {
+    this.spellcheck_ = config['spellcheck'];
+  }
+};
 
 /**
  * Ensure that the input value casts to a valid string.
@@ -194,7 +201,13 @@ Blockly.FieldTextInput.prototype.render_ = function() {
  * @param {boolean} check True if checked.
  */
 Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
+  if (check == this.spellcheck_) {
+    return;
+  }
   this.spellcheck_ = check;
+  if (this.htmlInput_) {
+    this.htmlInput_.setAttribute('spellcheck', this.spellcheck_);
+  }
 };
 
 /**

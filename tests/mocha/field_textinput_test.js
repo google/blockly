@@ -222,4 +222,65 @@ suite('Text Input Fields', function() {
       });
     });
   });
+  suite('Customization', function() {
+    suite('Spellcheck', function() {
+      setup(function() {
+        this.prepField = function(field) {
+          field.sourceBlock_ = {
+            workspace: {
+              scale: 1
+            }
+          };
+          Blockly.WidgetDiv.DIV = document.createElement('div');
+          this.stub = sinon.stub(field, 'resizeEditor_');
+        };
+
+        this.assertSpellcheck = function(field, value) {
+          this.prepField(field);
+          field.showEditor_();
+          chai.assert.equal(field.htmlInput_.getAttribute('spellcheck'),
+              value.toString());
+        };
+      });
+      teardown(function() {
+        if (this.stub) {
+          this.stub.restore();
+        }
+      });
+      test('Default', function() {
+        var field = new Blockly.FieldTextInput('test');
+        field.initValue();
+        this.assertSpellcheck(field, true);
+      });
+      test('JS Constructor', function() {
+        var field = new Blockly.FieldTextInput('test', null, {
+          spellcheck: false
+        });
+        field.initValue();
+        this.assertSpellcheck(field, false);
+      });
+      test('JSON Definition', function() {
+        var field = Blockly.FieldTextInput.fromJson({
+          text: 'test',
+          spellcheck: false
+        });
+        field.initValue();
+        this.assertSpellcheck(field, false);
+      });
+      test('setSpellcheck Editor Hidden', function() {
+        var field = new Blockly.FieldTextInput('test');
+        field.initValue();
+        field.setSpellcheck(false);
+        this.assertSpellcheck(field, false);
+      });
+      test('setSpellcheck Editor Shown', function() {
+        var field = new Blockly.FieldTextInput('test');
+        field.initValue();
+        this.prepField(field);
+        field.showEditor_();
+        field.setSpellcheck(false);
+        chai.assert.equal(field.htmlInput_.getAttribute('spellcheck'), 'false');
+      });
+    });
+  });
 });

@@ -227,7 +227,9 @@ Blockly.blockRendering.TopRow = function() {
    * @package
    * @type {number}
    */
-  this.startY = 0;
+  this.capline = 0;
+
+  this.ascenderHeight = 0;
 
   /**
    * Whether the block has a previous connection.
@@ -263,7 +265,7 @@ Blockly.blockRendering.TopRow.prototype.populate = function(block) {
   if (hasHat) {
     var hat = new Blockly.blockRendering.Hat();
     this.elements.push(hat);
-    this.startY = hat.startY;
+    this.capline = hat.ascenderHeight;
   } else if (hasPrevious) {
     this.hasPreviousConnection = true;
     this.connection = new Blockly.blockRendering.PreviousConnection(
@@ -300,18 +302,23 @@ Blockly.blockRendering.TopRow.prototype.hasLeftSquareCorner = function(block) {
  * @override
  */
 Blockly.blockRendering.TopRow.prototype.measure = function() {
-  this.width = this.minWidth;
-  this.height = this.minHeight;
+  var height = 0;
+  var width = 0;
+  var ascenderHeight = 0;
   for (var e = 0, elem; (elem = this.elements[e]); e++) {
-    this.width += elem.width;
+    width += elem.width;
     if (!(Blockly.blockRendering.Types.isSpacer(elem))) {
       if (Blockly.blockRendering.Types.isHat(elem)) {
-        this.startY = elem.startY;
-        this.height = this.height + elem.height;
+        ascenderHeight = Math.max(ascenderHeight, elem.ascenderHeight);
+      } else {
+        height = Math.max(height, elem.height);
       }
-      this.height = Math.max(this.height, elem.height);
     }
   }
+  this.width = Math.max(this.minWidth, width);
+  this.height = Math.max(this.minHeight, height) + ascenderHeight;
+  this.ascenderHeight = ascenderHeight;
+  this.capline = this.ascenderHeight;
   this.widthWithConnectedBlocks = this.width;
 };
 
@@ -347,7 +354,9 @@ Blockly.blockRendering.BottomRow = function() {
    * @package
    * @type {number}
    */
-  this.overhangY = 0;
+  this.descenderHeight = 0;
+
+  this.baseline = 0;
 };
 goog.inherits(Blockly.blockRendering.BottomRow, Blockly.blockRendering.Row);
 
@@ -368,7 +377,7 @@ Blockly.blockRendering.BottomRow.prototype.populate = function(block) {
   if (followsStatement) {
     this.minHeight = this.constants_.LARGE_PADDING;
   } else {
-    this.minHeight = this.constants_.NOTCH.height;
+    this.minHeight = this.constants_.MEDIUM_PADDING - 1;
   }
 
   var leftSquareCorner = this.hasLeftSquareCorner(block);
@@ -400,18 +409,24 @@ Blockly.blockRendering.BottomRow.prototype.hasLeftSquareCorner = function(
  * @override
  */
 Blockly.blockRendering.BottomRow.prototype.measure = function() {
-  this.width = this.minWidth;
-  this.height = this.minHeight;
+  var height = 0;
+  var width = 0;
+  var descenderHeight = 0;
   for (var e = 0, elem; (elem = this.elements[e]); e++) {
-    this.width += elem.width;
+    width += elem.width;
     if (!(Blockly.blockRendering.Types.isSpacer(elem))) {
+      // Note: this assumes that next connections have *only* descenderHeight,
+      // with no height above the baseline.
       if (Blockly.blockRendering.Types.isNextConnection(elem)) {
-        this.height = this.height + elem.height;
-        this.overhangY = elem.height;
+        descenderHeight = Math.max(descenderHeight, elem.height);
+      } else {
+        height = Math.max(height, elem.height);
       }
-      this.height = Math.max(this.height, elem.height);
     }
   }
+  this.width = Math.max(this.minWidth, width);
+  this.height = Math.max(this.minHeight, height) + descenderHeight;
+  this.descenderHeight = descenderHeight;
   this.widthWithConnectedBlocks = this.width;
 };
 /**

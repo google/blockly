@@ -172,21 +172,21 @@ Blockly.geras.Highlighter.prototype.drawRightSideRow = function(row) {
 };
 
 Blockly.geras.Highlighter.prototype.drawBottomRow = function(row) {
-  var height = row.yPos + row.height - row.overhangY;
+  var baseline = row.baseline;
 
   // Highlight the vertical edge of the bottom row on the input side.
   // Highlighting is always from the top left, both in LTR and RTL.
   if (this.RTL_) {
-    this.steps_.push('V', height - this.highlightOffset_);
+    this.steps_.push('V', baseline - this.highlightOffset_);
   } else {
     var cornerElem = this.info_.bottomRow.elements[0];
     if (Blockly.blockRendering.Types.isLeftSquareCorner(cornerElem)) {
       this.steps_.push(
           Blockly.utils.svgPaths.moveTo(
               row.xPos + this.highlightOffset_,
-              height - this.highlightOffset_));
+              baseline - this.highlightOffset_));
     } else if (Blockly.blockRendering.Types.isLeftRoundedCorner(cornerElem)) {
-      this.steps_.push(Blockly.utils.svgPaths.moveTo(row.xPos, height));
+      this.steps_.push(Blockly.utils.svgPaths.moveTo(row.xPos, baseline));
       this.steps_.push(this.outsideCornerPaths_.bottomLeft());
     }
   }
@@ -214,7 +214,7 @@ Blockly.geras.Highlighter.prototype.drawLeft = function() {
     if (Blockly.blockRendering.Types.isLeftRoundedCorner(topRow.elements[0])) {
       this.steps_.push('V', this.outsideCornerPaths_.height);
     } else {
-      this.steps_.push('V', topRow.startY + this.highlightOffset_);
+      this.steps_.push('V', topRow.capline + this.highlightOffset_);
     }
   }
 };

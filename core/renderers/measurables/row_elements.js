@@ -82,7 +82,7 @@ Blockly.blockRendering.Hat = function() {
   this.type |= Blockly.blockRendering.Types.HAT;
   this.height = this.constants_.START_HAT.height;
   this.width = this.constants_.START_HAT.width;
-  this.startY = this.height;
+  this.ascenderHeight = this.height;
 
 };
 goog.inherits(Blockly.blockRendering.Hat, Blockly.blockRendering.Measurable);
@@ -101,7 +101,7 @@ Blockly.blockRendering.SquareCorner = function(opt_position) {
       Blockly.blockRendering.Types.LEFT_SQUARE_CORNER :
       Blockly.blockRendering.Types.RIGHT_SQUARE_CORNER) |
           Blockly.blockRendering.Types.CORNER;
-  this.height = this.constants_.NOTCH.height;
+  this.height = this.constants_.NO_PADDING;
   this.width = this.constants_.NO_PADDING;
 
 };
@@ -125,7 +125,7 @@ Blockly.blockRendering.RoundCorner = function(opt_position) {
   this.width = this.constants_.CORNER_RADIUS;
   // The rounded corner extends into the next row by 4 so we only take the
   // height that is aligned with this row.
-  this.height = this.constants_.NOTCH.height;
+  this.height = this.constants_.CORNER_RADIUS / 2;
 
 };
 goog.inherits(Blockly.blockRendering.RoundCorner,

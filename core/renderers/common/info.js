@@ -425,7 +425,8 @@ Blockly.blockRendering.RenderInfo.prototype.alignStatementRow_ = function(row) {
   // Also widen the statement input to reach to the right side of the
   // block. Note that this does not add padding.
   currentWidth = row.width;
-  desiredWidth = this.width - this.startX;
+  var rightCornerWidth = this.constants_.INSIDE_CORNERS.rightWidth || 0;
+  desiredWidth = this.width - this.startX - rightCornerWidth;
   statementInput.width += (desiredWidth - currentWidth);
   row.width += (desiredWidth - currentWidth);
   row.widthWithConnectedBlocks = Math.max(row.width,

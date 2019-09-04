@@ -231,3 +231,33 @@ Blockly.zelos.ConstantProvider.prototype.makeOutsideCorners = function() {
     bottomLeft: bottomLeft
   };
 };
+
+/**
+ * @override
+ */
+Blockly.zelos.ConstantProvider.prototype.makeInsideCorners = function() {
+  var radius = this.CORNER_RADIUS;
+
+  var innerTopLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
+      Blockly.utils.svgPaths.point(-radius, radius));
+
+  var innerTopRightCorner = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+      Blockly.utils.svgPaths.point(-radius, radius));
+
+  var innerBottomLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
+      Blockly.utils.svgPaths.point(radius, radius));
+
+  var innerBottomRightCorner = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+      Blockly.utils.svgPaths.point(radius, radius));
+
+  return {
+    width: radius,
+    height: radius,
+    pathTop: innerTopLeftCorner,
+    pathBottom: innerBottomLeftCorner,
+    rightWidth: radius,
+    rightHeight: radius,
+    pathTopRight: innerTopRightCorner,
+    pathBottomRight: innerBottomRightCorner
+  };
+};

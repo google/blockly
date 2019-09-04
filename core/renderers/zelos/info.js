@@ -47,6 +47,8 @@ goog.require('Blockly.blockRendering.OutputConnection');
 
 goog.require('Blockly.RenderedConnection');
 
+goog.require('Blockly.zelos.AfterStatementSpacerRow');
+goog.require('Blockly.zelos.BeforeStatementSpacerRow');
 goog.require('Blockly.zelos.BottomRow');
 goog.require('Blockly.zelos.TopRow');
 
@@ -228,6 +230,56 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
     return this.constants_.LARGE_PADDING;
   }
 
+  return this.constants_.MEDIUM_PADDING;
+};
+
+/**
+ * Create a spacer row to go between prev and next, and set its size.
+ * @param {?Blockly.blockRendering.Row} prev The previous row, or null.
+ * @param {?Blockly.blockRendering.Row} next The next row, or null.
+ * @return {!Blockly.blockRendering.SpacerRow} The newly created spacer row.
+ * @protected
+ */
+Blockly.zelos.RenderInfo.prototype.makeSpacerRow_ = function(prev, next) {
+  var height = this.getSpacerRowHeight_(prev, next);
+  var width = this.getSpacerRowWidth_(prev, next);
+  if (Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement) {
+    var spacer =
+        new Blockly.zelos.BeforeStatementSpacerRow(
+            Math.max(height, this.constants_.INSIDE_CORNERS.rightHeight || 0),
+            width);
+  } else if (Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement) {
+    var spacer =
+        new Blockly.zelos.AfterStatementSpacerRow(
+            Math.max(height, this.constants_.INSIDE_CORNERS.rightHeight || 0),
+            width);
+  } else {
+    var spacer = new Blockly.blockRendering.SpacerRow(height, width);
+  }
+  if (prev.hasStatement) {
+    spacer.followsStatement = true;
+  }
+  return spacer;
+};
+
+
+/**
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
+    prev, next) {
+  // If we have an empty block add a spacer to increase the height.
+  if (Blockly.blockRendering.Types.isTopRow(prev) &&
+      Blockly.blockRendering.Types.isBottomRow(next)) {
+    return this.constants_.EMPTY_BLOCK_SPACER_HEIGHT;
+  }
+  // Top and bottom rows act as a spacer so we don't need any extra padding.
+  if ((Blockly.blockRendering.Types.isTopRow(prev) && !prev.hasPreviousConnection)) {
+    return this.constants_.NO_PADDING;
+  }
+  if ((Blockly.blockRendering.Types.isBottomRow(next) && !next.hasNextConnection)) {
+    return this.constants_.NO_PADDING;
+  }
   return this.constants_.MEDIUM_PADDING;
 };
 

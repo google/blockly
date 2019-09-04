@@ -284,6 +284,27 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
 };
 
 /**
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row,
+    elem) {
+  if (Blockly.blockRendering.Types.isBottomRow(row)) {
+    var baseline = row.yPos + row.height - row.descenderHeight;
+    if (Blockly.blockRendering.Types.isNextConnection(elem)) {
+      return baseline + elem.height / 2;
+    }
+    return baseline - elem.height / 2;
+  }
+  if (Blockly.blockRendering.Types.isTopRow(row)) {
+    if (Blockly.blockRendering.Types.isHat(elem)) {
+      return row.capline - elem.height / 2;
+    }
+    return row.capline + elem.height / 2;
+  }
+  return row.yPos + row.height / 2;
+};
+
+/**
  * Modify the given row to add the given amount of padding around its fields.
  * The exact location of the padding is based on the alignment property of the
  * last input in the field.

@@ -239,7 +239,7 @@ Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
   this.positionNextConnection_();
 
   this.outlinePath_ +=
-    Blockly.utils.svgPaths.lineOnAxis('v', bottomRow.height - bottomRow.overhangY);
+    Blockly.utils.svgPaths.lineOnAxis('V', bottomRow.baseline);
 
   for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
     if (Blockly.blockRendering.Types.isNextConnection(elem)) {

@@ -764,11 +764,11 @@ Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
   var ws = this.creatorWorkspace_;
   ws.cursor.hide();
   if (e.shiftKey) {
+    Blockly.enableKeyboardAccessibility();
     var screenCoord = new Blockly.utils.Coordinate(e.clientX, e.clientY);
     var wsCoord = Blockly.utils.screenToWsCoordinates(ws, screenCoord);
     var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);
     ws.cursor.setLocation(wsNode);
-    Blockly.navigation.enableKeyboardAccessibility();
   } else if (Blockly.selected) {
     Blockly.selected.unselect();
   }

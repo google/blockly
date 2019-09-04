@@ -19,7 +19,6 @@ suite('Insert/Modify', function() {
     this.row_block_2 = this.workspace.getBlockById('row_block_2');
 
     Blockly.navigation.enableKeyboardAccessibility();
-    Blockly.navigation.focusWorkspace();
   });
 
   teardown(function() {

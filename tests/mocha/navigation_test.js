@@ -221,7 +221,7 @@ suite('Navigation', function() {
       }]);
       var toolbox = document.getElementById('toolbox-categories');
       this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-      Blockly.navigation.focusWorkspace();
+      Blockly.navigation.enableKeyboardAccessibility();
       this.basicBlock = this.workspace.newBlock('basic_block');
       this.firstCategory_ = this.workspace.getToolbox().tree_.firstChild_;
       this.mockEvent = {
@@ -401,7 +401,7 @@ suite('Navigation', function() {
         Blockly.navigation.setCursor(this.workspace.cursor);
         Blockly.mainWorkspace = this.workspace;
         this.fieldBlock1 = this.workspace.newBlock('field_block');
-        Blockly.keyboardAccessibilityMode = true;
+        Blockly.navigation.enableKeyboardAccessibility();
         this.mockEvent = {
           getModifierState: function() {
             return false;
@@ -633,10 +633,10 @@ suite('Navigation', function() {
       }]);
       var toolbox = document.getElementById('toolbox-categories');
       this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
-      Blockly.navigation.focusWorkspace();
+      Blockly.navigation.enableKeyboardAccessibility();
       this.basicBlockA = this.workspace.newBlock('basic_block');
       this.basicBlockB = this.workspace.newBlock('basic_block');
-      Blockly.keyboardAccessibilityMode = true;
+      Blockly.navigation.enableKeyboardAccessibility();
     });
 
     teardown(function() {

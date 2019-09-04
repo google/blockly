@@ -34,7 +34,7 @@ Blockly.navigation.cursor_ = null;
 
 /**
  * The marker that shows where a user has marked while navigating blocks.
- * @type {!Blockly.CursorSvg}
+ * @type {!Blockly.Cursor}
  */
 Blockly.navigation.marker_ = null;
 
@@ -715,13 +715,15 @@ Blockly.navigation.disconnectBlocks = function() {
 Blockly.navigation.focusWorkspace = function() {
   var cursor = Blockly.navigation.cursor_;
   var reset = Blockly.getMainWorkspace().getToolbox() ? true : false;
+  var topBlocks = Blockly.getMainWorkspace().getTopBlocks();
 
   Blockly.navigation.resetFlyout(reset);
   Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
-  Blockly.navigation.enableKeyboardAccessibility();
   if (Blockly.selected) {
     cursor.setLocation(Blockly.navigation.getTopNode_(Blockly.selected));
     Blockly.selected.unselect();
+  } else if (topBlocks.length > 0) {
+    cursor.setLocation(Blockly.navigation.getTopNode_(topBlocks[0]));
   } else {
     var ws = cursor.workspace_;
     // TODO: Find the center of the visible workspace.
@@ -975,6 +977,7 @@ Blockly.navigation.toolboxOnAction_ = function(action) {
  */
 Blockly.navigation.enableKeyboardAccessibility = function() {
   Blockly.keyboardAccessibilityMode = true;
+  Blockly.navigation.focusWorkspace();
 };
 
 /**
@@ -982,6 +985,7 @@ Blockly.navigation.enableKeyboardAccessibility = function() {
  */
 Blockly.navigation.disableKeyboardAccessibility = function() {
   Blockly.keyboardAccessibilityMode = false;
+  Blockly.navigation.cursor_.hide();
 };
 
 /**

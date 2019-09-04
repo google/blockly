@@ -135,6 +135,7 @@ goog.addDependency("../../../" + dir + "/core/utils/keycodes.js", ['Blockly.util
 goog.addDependency("../../../" + dir + "/core/utils/math.js", ['Blockly.utils.math'], []);
 goog.addDependency("../../../" + dir + "/core/utils/rect.js", ['Blockly.utils.Rect'], []);
 goog.addDependency("../../../" + dir + "/core/utils/size.js", ['Blockly.utils.Size'], []);
+goog.addDependency("../../../" + dir + "/core/utils/something/something.js", [], []);
 goog.addDependency("../../../" + dir + "/core/utils/string.js", ['Blockly.utils.string'], []);
 goog.addDependency("../../../" + dir + "/core/utils/style.js", ['Blockly.utils.style'], ['Blockly.utils.Coordinate', 'Blockly.utils.Size']);
 goog.addDependency("../../../" + dir + "/core/utils/svg_paths.js", ['Blockly.utils.svgPaths'], []);

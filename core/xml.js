@@ -36,6 +36,7 @@ goog.require('Blockly.Events.FinishedLoading');
 goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.xml');
 
 

@@ -304,11 +304,10 @@ Blockly.geras.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
     return baseline - elem.height / 2;
   }
   if (Blockly.blockRendering.Types.isTopRow(row)) {
-    var capline = row.capline;
     if (Blockly.blockRendering.Types.isHat(elem)) {
-      return capline - elem.height / 2;
+      return row.capline - elem.height / 2;
     }
-    return capline + elem.height / 2;
+    return row.capline + elem.height / 2;
   }
 
   var result = row.yPos;

@@ -282,13 +282,13 @@ suite('Navigation', function() {
     });
 
     test('Insert', function() {
-      sinon.spy(Blockly.navigation, 'modify');
+      sinon.spy(Blockly.navigation, 'modify_');
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.I;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.isTrue(Blockly.navigation.modify.calledOnce);
+      chai.assert.isTrue(Blockly.navigation.modify_.calledOnce);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
-      Blockly.navigation.modify.restore();
+      Blockly.navigation.modify_.restore();
     });
 
     test('Mark', function() {
@@ -504,7 +504,7 @@ suite('Navigation', function() {
       var sourceNode = Blockly.ASTNode.createConnectionNode(this.basicBlock2.nextConnection);
       Blockly.navigation.cursor_.setLocation(sourceNode);
 
-      Blockly.navigation.modify();
+      Blockly.navigation.modify_();
       var insertedBlock = this.basicBlock.previousConnection.targetBlock();
 
       chai.assert.isNotNull(insertedBlock);
@@ -669,6 +669,17 @@ suite('Navigation', function() {
       // Set the cursor to be on the child block
       this.workspace.cursor.setLocation(astNode);
       // Remove the parent block
+      this.basicBlockA.dispose();
+      chai.assert.equal(this.workspace.cursor.getCurNode().getType(),
+          Blockly.ASTNode.types.WORKSPACE);
+    });
+
+    test('Delete top block in stack', function() {
+      this.basicBlockA.nextConnection.connect(this.basicBlockB.previousConnection);
+      var astNode = Blockly.ASTNode.createStackNode(this.basicBlockA);
+      // Set the cursor to be on the stack
+      this.workspace.cursor.setLocation(astNode);
+      // Remove the top block in the stack
       this.basicBlockA.dispose();
       chai.assert.equal(this.workspace.cursor.getCurNode().getType(),
           Blockly.ASTNode.types.WORKSPACE);

@@ -15,7 +15,8 @@
         "assertUndefined": true,
         "assertNotUndefined": true,
         "defineStackBlock": true,
-        "defineRowBlock": true
+        "defineRowBlock": true,
+        "defineStatementBlock": true
 
     },
     "extends": "../../.eslintrc.json"

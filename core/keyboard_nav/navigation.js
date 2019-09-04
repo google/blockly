@@ -385,7 +385,7 @@ Blockly.navigation.insertFromFlyout = function() {
   newBlock.setConnectionsHidden(false);
   Blockly.navigation.cursor_.setLocation(
       Blockly.ASTNode.createBlockNode(newBlock));
-  if (!Blockly.navigation.modify()) {
+  if (!Blockly.navigation.modify_()) {
     Blockly.navigation.warn('Something went wrong while inserting a block from the flyout.');
   }
 
@@ -412,11 +412,12 @@ Blockly.navigation.resetFlyout = function(shouldHide) {
 /************/
 
 /**
- * Handle the modifier key (currently I for Insert).
- * @return {boolean} True if the key was handled; false if something went wrong.
- * @package
+ * Warns the user if the cursor or marker is on a type that can not be connected.
+ * @return {boolean} True if the marker and cursor are valid types, false
+ *     otherwise.
+ * @private
  */
-Blockly.navigation.modify = function() {
+Blockly.navigation.modifyWarn_ = function() {
   var markerNode = Blockly.navigation.marker_.getCurNode();
   var cursorNode = Blockly.navigation.cursor_.getCurNode();
 
@@ -432,68 +433,83 @@ Blockly.navigation.modify = function() {
   var markerType = markerNode.getType();
   var cursorType = cursorNode.getType();
 
+  // Check the marker for invalid types.
   if (markerType == Blockly.ASTNode.types.FIELD) {
     Blockly.navigation.warn('Should not have been able to mark a field.');
     return false;
-  }
-  if (markerType == Blockly.ASTNode.types.BLOCK) {
+  } else if (markerType == Blockly.ASTNode.types.BLOCK) {
     Blockly.navigation.warn('Should not have been able to mark a block.');
     return false;
-  }
-  if (markerType == Blockly.ASTNode.types.STACK) {
+  } else if (markerType == Blockly.ASTNode.types.STACK) {
     Blockly.navigation.warn('Should not have been able to mark a stack.');
     return false;
   }
 
+  // Check the cursor for invalid types.
   if (cursorType == Blockly.ASTNode.types.FIELD) {
     Blockly.navigation.warn('Cannot attach a field to anything else.');
     return false;
-  }
-
-  if (cursorType == Blockly.ASTNode.types.WORKSPACE) {
+  } else if (cursorType == Blockly.ASTNode.types.WORKSPACE) {
     Blockly.navigation.warn('Cannot attach a workspace to anything else.');
     return false;
   }
+  return true;
+};
+
+/**
+ * Disconnect the block from its parent and move to the position of the
+ * workspace node.
+ * @param {!Blockly.Block} block The block to be moved to the workspace.
+ * @param {!Blockly.ASTNode} wsNode The workspace node holding the position the
+ *     block will be moved to.
+ * @return {boolean} True if the block can be moved to the workspace,
+ *     false otherwise.
+ * @private
+ */
+Blockly.navigation.moveBlockToWorkspace_ = function(block, wsNode) {
+  if (block.isShadow()) {
+    Blockly.navigation.warn('Cannot move a shadow block to the workspace.');
+    return false;
+  }
+  if (block.getParent()) {
+    block.unplug(false);
+  }
+  block.moveTo(wsNode.getWsCoordinate());
+  return true;
+};
+
+/**
+ * Handle the modifier key (currently I for Insert).
+ * Tries to connect the current marker and cursor location. Warns the user if
+ * the two locations can not be connected.
+ * @return {boolean} True if the key was handled; false if something went wrong.
+ * @private
+ */
+Blockly.navigation.modify_ = function() {
+  var markerNode = Blockly.navigation.marker_.getCurNode();
+  var cursorNode = Blockly.navigation.cursor_.getCurNode();
+  if (!Blockly.navigation.modifyWarn_()) {
+    return false;
+  }
+
+  var markerType = markerNode.getType();
+  var cursorType = cursorNode.getType();
 
   var cursorLoc = cursorNode.getLocation();
   var markerLoc = markerNode.getLocation();
 
-  if (markerNode.isConnection()) {
-    // TODO: Handle the case when one or both are already connected.
-    if (cursorNode.isConnection()) {
-      return Blockly.navigation.connect(cursorLoc, markerLoc);
-    } else if (cursorType == Blockly.ASTNode.types.BLOCK ||
-        cursorType == Blockly.ASTNode.types.STACK) {
-      return Blockly.navigation.insertBlock(cursorLoc, markerLoc);
-    }
+  if (markerNode.isConnection() && cursorNode.isConnection()) {
+    return Blockly.navigation.connect(cursorLoc, markerLoc);
+  } else if (markerNode.isConnection() &&
+        (cursorType == Blockly.ASTNode.types.BLOCK ||
+        cursorType == Blockly.ASTNode.types.STACK)) {
+    return Blockly.navigation.insertBlock(cursorLoc, markerLoc);
   } else if (markerType == Blockly.ASTNode.types.WORKSPACE) {
-    if (cursorNode.isConnection()) {
-      if (cursorType == Blockly.ASTNode.types.INPUT ||
-          cursorType == Blockly.ASTNode.types.NEXT) {
-        Blockly.navigation.warn(
-            'Cannot move a next or input connection to the workspace.');
-        return false;
-      }
-      var block = cursorLoc.getSourceBlock();
-    } else if (cursorType == Blockly.ASTNode.types.BLOCK ||
-        cursorType == Blockly.ASTNode.types.STACK) {
-      var block = cursorLoc;
-    } else {
-      return false;
-    }
-    if (block.isShadow()) {
-      Blockly.navigation.warn('Cannot move a shadow block to the workspace.');
-      return false;
-    }
-    if (block.getParent()) {
-      block.unplug(false);
-    }
-    block.moveTo(markerNode.getWsCoordinate());
-    return true;
+    var block = Blockly.navigation.getSourceBlock_(cursorNode);
+    return Blockly.navigation.moveBlockToWorkspace_(block, markerNode);
   }
-  Blockly.navigation.warn('Unexpected state in Blockly.navigation.modify.');
+  Blockly.navigation.warn('Unexpected state in Blockly.navigation.modify_.');
   return false;
-  // TODO: Make sure the cursor and marker end up in the right places.
 };
 
 /**
@@ -768,8 +784,9 @@ Blockly.navigation.getSourceBlock_ = function(node) {
   }
   if (node.getType() === Blockly.ASTNode.types.BLOCK) {
     return node.getLocation();
-  } else if (node.getType() === Blockly.ASTNode.types.WORKSPACE ||
-      node.getType() === Blockly.ASTNode.types.STACK) {
+  } else if (node.getType() === Blockly.ASTNode.types.STACK) {
+    return node.getLocation();
+  } else if (node.getType() === Blockly.ASTNode.types.WORKSPACE) {
     return null;
   } else {
     return node.getLocation().getSourceBlock();
@@ -894,7 +911,7 @@ Blockly.navigation.workspaceOnAction_ = function(action) {
       Blockly.navigation.cursor_.in();
       return true;
     case Blockly.navigation.actionNames.INSERT:
-      Blockly.navigation.modify();
+      Blockly.navigation.modify_();
       return true;
     case Blockly.navigation.actionNames.MARK:
       Blockly.navigation.handleEnterForWS();

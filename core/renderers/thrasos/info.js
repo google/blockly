@@ -316,8 +316,6 @@ Blockly.thrasos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
     var offset = this.constants_.TALL_INPUT_FIELD_OFFSET_Y +
         elem.height / 2;
     result += offset;
-  } else if (Blockly.blockRendering.Types.isNextConnection(elem)) {
-    result += (row.height - row.descenderHeight + elem.height / 2);
   } else {
     result += (row.height / 2);
   }

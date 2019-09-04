@@ -172,21 +172,19 @@ Blockly.geras.Highlighter.prototype.drawRightSideRow = function(row) {
 };
 
 Blockly.geras.Highlighter.prototype.drawBottomRow = function(row) {
-  var baseline = row.baseline;
-
   // Highlight the vertical edge of the bottom row on the input side.
   // Highlighting is always from the top left, both in LTR and RTL.
   if (this.RTL_) {
-    this.steps_.push('V', baseline - this.highlightOffset_);
+    this.steps_.push('V', row.baseline - this.highlightOffset_);
   } else {
     var cornerElem = this.info_.bottomRow.elements[0];
     if (Blockly.blockRendering.Types.isLeftSquareCorner(cornerElem)) {
       this.steps_.push(
           Blockly.utils.svgPaths.moveTo(
               row.xPos + this.highlightOffset_,
-              baseline - this.highlightOffset_));
+              row.baseline - this.highlightOffset_));
     } else if (Blockly.blockRendering.Types.isLeftRoundedCorner(cornerElem)) {
-      this.steps_.push(Blockly.utils.svgPaths.moveTo(row.xPos, baseline));
+      this.steps_.push(Blockly.utils.svgPaths.moveTo(row.xPos, row.baseline));
       this.steps_.push(this.outsideCornerPaths_.bottomLeft());
     }
   }

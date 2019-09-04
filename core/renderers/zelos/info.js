@@ -301,14 +301,7 @@ Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row,
     }
     return row.capline + elem.height / 2;
   }
-
-  var result = row.yPos;
-  if (Blockly.blockRendering.Types.isNextConnection(elem)) {
-    result += (row.height - row.descenderHeight + elem.height / 2);
-  } else {
-    result += (row.height / 2);
-  }
-  return result;
+  return row.yPos + row.height / 2;
 };
 
 /**

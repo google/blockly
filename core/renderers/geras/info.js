@@ -319,8 +319,6 @@ Blockly.geras.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
     }
   } else if (Blockly.blockRendering.Types.isInlineInput(elem)) {
     result += elem.height / 2;
-  } else if (Blockly.blockRendering.Types.isNextConnection(elem)) {
-    result += (row.height - row.descenderHeight + elem.height / 2);
   } else {
     result += (row.height / 2);
   }

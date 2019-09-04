@@ -222,13 +222,17 @@ Blockly.blockRendering.TopRow = function() {
 
   /**
    * The starting point for drawing the row, in the y direction.
-   * This allows us to draw hats and simliar shapes that don't start at the
+   * This allows us to draw hats and similar shapes that don't start at the
    * origin. Must be non-negative (see #2820).
    * @package
    * @type {number}
    */
   this.capline = 0;
 
+  /**
+   * How much the row extends up above its capline.
+   * @type {number}
+   */
   this.ascenderHeight = 0;
 
   /**
@@ -356,6 +360,11 @@ Blockly.blockRendering.BottomRow = function() {
    */
   this.descenderHeight = 0;
 
+  /**
+   * The Y position of the bottom edge of the block, relative to the origin
+   * of the block rendering.
+   * @type {number}
+   */
   this.baseline = 0;
 };
 goog.inherits(Blockly.blockRendering.BottomRow, Blockly.blockRendering.Row);

@@ -401,7 +401,7 @@ suite('Navigation', function() {
         Blockly.navigation.setCursor(this.workspace.cursor);
         Blockly.mainWorkspace = this.workspace;
         this.fieldBlock1 = this.workspace.newBlock('field_block');
-        Blockly.keyboardAccessibility = true;
+        Blockly.keyboardAccessibilityMode = true;
         this.mockEvent = {
           getModifierState: function() {
             return false;
@@ -636,7 +636,6 @@ suite('Navigation', function() {
       Blockly.navigation.enableKeyboardAccessibility();
       this.basicBlockA = this.workspace.newBlock('basic_block');
       this.basicBlockB = this.workspace.newBlock('basic_block');
-      Blockly.navigation.enableKeyboardAccessibility();
     });
 
     teardown(function() {

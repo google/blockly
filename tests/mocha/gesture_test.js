@@ -83,5 +83,15 @@ suite('Gesture', function() {
     flyout.autoClose = false;
     gestureIsFieldClick_InFlyoutHelper.call(this, flyout, true);
   });
-  
+
+  test('Workspace click - Shift click enters accessibility mode', function() {
+    var event = {
+      shiftKey : true,
+
+    };
+    var gesture = new Blockly.Gesture(this.e, this.workspace);
+    assertFalse(Blockly.keyboardAccessibilityMode);
+    gesture.doWorkspaceClick_(event);
+    assertTrue(Blockly.keyboardAccessibilityMode);
+  });
 });

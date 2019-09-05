@@ -976,16 +976,20 @@ Blockly.navigation.toolboxOnAction_ = function(action) {
  * Enable accessibility mode.
  */
 Blockly.navigation.enableKeyboardAccessibility = function() {
-  Blockly.keyboardAccessibilityMode = true;
-  Blockly.navigation.focusWorkspace();
+  if (!Blockly.keyboardAccessibilityMode) {
+    Blockly.keyboardAccessibilityMode = true;
+    Blockly.navigation.focusWorkspace();
+  }
 };
 
 /**
  * Disable accessibility mode.
  */
 Blockly.navigation.disableKeyboardAccessibility = function() {
-  Blockly.keyboardAccessibilityMode = false;
-  Blockly.navigation.cursor_.hide();
+  if (Blockly.keyboardAccessibilityMode) {
+    Blockly.keyboardAccessibilityMode = false;
+    Blockly.navigation.cursor_.hide();
+  }
 };
 
 /**

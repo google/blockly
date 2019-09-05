@@ -762,9 +762,8 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
 Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
   Blockly.navigation.disableKeyboardAccessibility();
   var ws = this.creatorWorkspace_;
-  ws.cursor.hide();
   if (e.shiftKey) {
-    Blockly.enableKeyboardAccessibility();
+    Blockly.navigation.enableKeyboardAccessibility();
     var screenCoord = new Blockly.utils.Coordinate(e.clientX, e.clientY);
     var wsCoord = Blockly.utils.screenToWsCoordinates(ws, screenCoord);
     var wsNode = Blockly.ASTNode.createWorkspaceNode(ws, wsCoord);

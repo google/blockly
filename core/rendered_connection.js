@@ -216,14 +216,14 @@ Blockly.RenderedConnection.prototype.highlight = function() {
     var yLen = 5;
     steps = Blockly.utils.svgPaths.moveBy(0, -yLen) +
         Blockly.utils.svgPaths.lineOnAxis('v', yLen) +
-        Blockly.blockRendering.constants.PUZZLE_TAB.pathDown +
+        Blockly.blockRendering.getConstants().PUZZLE_TAB.pathDown +
         Blockly.utils.svgPaths.lineOnAxis('v', yLen);
   } else {
     var xLen = 5;
     // Horizontal line, notch, horizontal line.
     steps = Blockly.utils.svgPaths.moveBy(-xLen, 0) +
         Blockly.utils.svgPaths.lineOnAxis('h', xLen) +
-        Blockly.blockRendering.constants.NOTCH.pathLeft +
+        Blockly.blockRendering.getConstants().NOTCH.pathLeft +
         Blockly.utils.svgPaths.lineOnAxis('h', xLen);
   }
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();

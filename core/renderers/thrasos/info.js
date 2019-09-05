@@ -190,28 +190,15 @@ Blockly.thrasos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
       return this.constants_.NO_PADDING;
     }
     // Spacing between a square corner and a previous or next connection
-    if (Blockly.blockRendering.Types.isPreviousConnection(next)) {
+    if (Blockly.blockRendering.Types.isPreviousConnection(next) ||
+        Blockly.blockRendering.Types.isNextConnection(next)) {
       return next.notchOffset;
-    } else if (Blockly.blockRendering.Types.isNextConnection(next)) {
-      // Next connections are shifted slightly to the left (in both LTR and RTL)
-      // to make the dark path under the previous connection show through.
-      var offset = (this.RTL ? 1 : -1) *
-          this.constants_.DARK_PATH_OFFSET / 2;
-      return next.notchOffset + offset;
     }
   }
 
   // Spacing between a rounded corner and a previous or next connection.
   if (Blockly.blockRendering.Types.isLeftRoundedCorner(prev) && next) {
-    if (Blockly.blockRendering.Types.isPreviousConnection(next)) {
-      return next.notchOffset - this.constants_.CORNER_RADIUS;
-    } else if (Blockly.blockRendering.Types.isNextConnection(next)) {
-      // Next connections are shifted slightly to the left (in both LTR and RTL)
-      // to make the dark path under the previous connection show through.
-      var offset = (this.RTL ? 1 : -1) *
-          this.constants_.DARK_PATH_OFFSET / 2;
-      return next.notchOffset - this.constants_.CORNER_RADIUS + offset;
-    }
+    return next.notchOffset - this.constants_.CORNER_RADIUS;
   }
 
   // Spacing between two fields of the same editability.

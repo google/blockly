@@ -30,7 +30,7 @@
 'use strict';
 
 goog.provide('Blockly.Blocks.lists');  // Deprecated
-goog.provide('Blockly.Constants.Lists');  // deprecated, 2018 April 5
+goog.provide('Blockly.Constants.Lists');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly');

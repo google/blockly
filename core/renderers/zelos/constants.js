@@ -38,7 +38,7 @@ goog.require('Blockly.utils.svgPaths');
  */
 Blockly.zelos.ConstantProvider = function() {
   Blockly.zelos.ConstantProvider.superClass_.constructor.call(this);
-  
+
   var GRID_UNIT = 4;
 
   this.CORNER_RADIUS = 1 * GRID_UNIT;
@@ -104,9 +104,9 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
     case Blockly.OUTPUT_VALUE:
       // Includes doesn't work in IE.
       if (checks && checks.indexOf('Boolean') != -1) {
-        return Blockly.blockRendering.constants.TRIANGLE;
+        return this.TRIANGLE;
       }
-      return Blockly.blockRendering.constants.PUZZLE_TAB;
+      return this.PUZZLE_TAB;
     case Blockly.PREVIOUS_STATEMENT:
     case Blockly.NEXT_STATEMENT:
       return this.NOTCH;
@@ -209,7 +209,7 @@ Blockly.zelos.ConstantProvider.prototype.makeOutsideCorners = function() {
   var topRight =
       Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
           Blockly.utils.svgPaths.point(radius, radius));
-    
+
   /**
    * SVG path for drawing the rounded bottom-left corner.
    * @const

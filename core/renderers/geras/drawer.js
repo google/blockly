@@ -30,6 +30,7 @@ goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.geras.Highlighter');
 goog.require('Blockly.geras.RenderInfo');
+goog.require('Blockly.utils.svgPaths');
 
 
 /**
@@ -44,9 +45,30 @@ goog.require('Blockly.geras.RenderInfo');
 Blockly.geras.Drawer = function(block, info) {
   Blockly.geras.Drawer.superClass_.constructor.call(this, block, info);
   // Unlike Thrasos, Geras has highlights and drop shadows.
-  this.highlighter_ = new Blockly.geras.Highlighter(info, this.pathObject_);
+  this.highlighter_ = new Blockly.geras.Highlighter(info);
 };
 goog.inherits(Blockly.geras.Drawer, Blockly.blockRendering.Drawer);
+
+/**
+ * @override
+ */
+Blockly.geras.Drawer.prototype.draw = function() {
+  this.hideHiddenIcons_();
+  this.drawOutline_();
+  this.drawInternals_();
+
+  var pathObject = new Blockly.BlockSvg.PathObject();
+  pathObject.steps = [this.outlinePath_];
+  pathObject.inlineSteps = [this.inlinePath_];
+  pathObject.highlightSteps = [this.highlighter_.getSteps()];
+  pathObject.highlightInlineSteps = [this.highlighter_.getInlineSteps()];
+
+  this.block_.setPaths_(pathObject);
+  if (Blockly.blockRendering.useDebugger) {
+    this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
+  }
+  this.recordSizeOnBlock_();
+};
 
 /**
  * @override

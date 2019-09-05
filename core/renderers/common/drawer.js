@@ -35,6 +35,7 @@ goog.require('Blockly.blockRendering.InputRow');
 goog.require('Blockly.blockRendering.Row');
 goog.require('Blockly.blockRendering.SpacerRow');
 goog.require('Blockly.blockRendering.TopRow');
+goog.require('Blockly.utils.svgPaths');
 
 
 /**
@@ -51,7 +52,6 @@ Blockly.blockRendering.Drawer = function(block, info) {
   this.topLeft_ = block.getRelativeToSurfaceXY();
   this.outlinePath_ = '';
   this.inlinePath_ = '';
-  this.pathObject_ = new Blockly.BlockSvg.PathObject();
   this.constants_ = Blockly.blockRendering.getConstants();
 };
 
@@ -70,10 +70,13 @@ Blockly.blockRendering.Drawer.prototype.draw = function() {
   this.drawOutline_();
   this.drawInternals_();
 
-  this.pathObject_.steps = [this.outlinePath_];
-  this.pathObject_.inlineSteps = [this.inlinePath_];
 
-  this.block_.setPaths_(this.pathObject_);
+  var pathObject = new Blockly.BlockSvg.PathObject();
+
+  pathObject.steps = [this.outlinePath_];
+  pathObject.inlineSteps = [this.inlinePath_];
+
+  this.block_.setPaths_(pathObject);
   if (Blockly.blockRendering.useDebugger) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }

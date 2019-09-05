@@ -79,10 +79,20 @@ Blockly.geras.Highlighter = function(info) {
       this.highlightConstants_.JAGGED_TEETH;
 };
 
+/**
+ * Get the steps for the main highlight path.
+ * @return {string} The steps for the main highlight path.
+ * @package
+ */
 Blockly.geras.Highlighter.prototype.getSteps = function() {
   return this.steps_;
 };
 
+/**
+ * Get the steps for the inline highlight path.
+ * @return {string} The steps for the inline highlight path.
+ * @package
+ */
 Blockly.geras.Highlighter.prototype.getInlineSteps = function() {
   return this.inlineSteps_;
 };

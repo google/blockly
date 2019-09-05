@@ -24,7 +24,6 @@ suite('Insert/Modify', function() {
     this.statement_block_2 = this.workspace.getBlockById('statement_block_2');
 
     Blockly.navigation.enableKeyboardAccessibility();
-    Blockly.navigation.focusWorkspace();
   });
 
   teardown(function() {

@@ -28,6 +28,13 @@ suite('Label Fields', function() {
   function assertValueDefault(labelField) {
     assertValue(labelField, '');
   }
+  function assertClass(labelField, cssClass) {
+    labelField.initValue();
+    labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
+    labelField.initView();
+    chai.assert.isTrue(Blockly.utils.dom.hasClass(
+        labelField.textElement_, cssClass));
+  }
   suite('Constructor', function() {
     test('Empty', function() {
       var labelField = new Blockly.FieldLabel();
@@ -153,6 +160,56 @@ suite('Label Fields', function() {
       test('Boolean False', function() {
         this.labelField.setValue(false);
         assertValue(this.labelField, 'false');
+      });
+    });
+  });
+  suite('Customizations', function() {
+    test('JS Constructor', function() {
+      var field = new Blockly.FieldLabel('text', 'testClass');
+      assertClass(field, 'testClass');
+    });
+    test('JSON Definition', function() {
+      var field = Blockly.FieldLabel.fromJson({
+        class: 'testClass'
+      });
+      assertClass(field, 'testClass');
+    });
+    test('JS Configuration - Simple', function() {
+      var field = new Blockly.FieldLabel('text', null, {
+        class: 'testClass'
+      });
+      assertClass(field, 'testClass');
+    });
+    test('JS Configuration - Override', function() {
+      var field = new Blockly.FieldLabel('text', 'oldClass', {
+        class: 'testClass'
+      });
+      assertClass(field, 'testClass');
+    });
+    suite('setClass', function() {
+      test('setClass', function() {
+        var field = new Blockly.FieldLabel();
+        field.initValue();
+        field.fieldGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
+        field.initView();
+        field.setClass('testClass');
+        // Don't call assertClass b/c we don't want to re-initialize.
+        chai.assert.isTrue(Blockly.utils.dom.hasClass(
+            field.textElement_, 'testClass'));
+      });
+      test('setClass Before Initialization', function() {
+        var field = new Blockly.FieldLabel();
+        field.setClass('testClass');
+        assertClass(field, 'testClass');
+      });
+      test('Remove Class', function() {
+        var field = new Blockly.FieldLabel('text', null, {
+          class: 'testClass'
+        });
+        assertClass(field, 'testClass');
+        field.setClass(null);
+        chai.assert.isFalse(Blockly.utils.dom.hasClass(
+            field.textElement_, 'testClass'));
       });
     });
   });

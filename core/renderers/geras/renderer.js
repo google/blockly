@@ -26,9 +26,9 @@
 
 goog.provide('Blockly.geras.Renderer');
 
-goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Debug');
+goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.geras.Drawer');
 goog.require('Blockly.geras.RenderInfo');
 

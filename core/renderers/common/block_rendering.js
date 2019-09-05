@@ -30,21 +30,10 @@
  */
 goog.provide('Blockly.blockRendering');
 
-goog.require('Blockly.blockRendering.Debug');
-goog.require('Blockly.blockRendering.Drawer');
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.geras.HighlightConstantProvider');
-
 goog.require('Blockly.geras.Renderer');
-goog.require('Blockly.geras.RenderInfo');
 goog.require('Blockly.thrasos.Renderer');
 goog.require('Blockly.zelos.Renderer');
-goog.require('Blockly.zelos.RenderInfo');
-goog.require('Blockly.zelos.ConstantProvider');
 
-// TODO (#2702): Pick an API for choosing a renderer.
-Blockly.blockRendering.rendererName = Blockly.thrasos;
 
 Blockly.blockRendering.useDebugger = false;
 
@@ -53,8 +42,8 @@ Blockly.blockRendering.useDebugger = false;
  * @package
  */
 Blockly.blockRendering.init = function() {
-  Blockly.blockRendering.renderer =
-      new Blockly.blockRendering.rendererName.Renderer();
+  // TODO (#2702): Pick an API for choosing a renderer.
+  Blockly.blockRendering.renderer = new Blockly.geras.Renderer();
   Blockly.blockRendering.renderer.init();
 };
 

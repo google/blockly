@@ -26,9 +26,9 @@
 
 goog.provide('Blockly.zelos.Renderer');
 
+goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.zelos.ConstantProvider');
-goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.zelos.Drawer');
 goog.require('Blockly.zelos.RenderInfo');
 

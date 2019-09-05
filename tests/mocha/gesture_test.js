@@ -89,7 +89,8 @@ suite('Gesture', function() {
       shiftKey : true,
 
     };
-    var gesture = new Blockly.Gesture(this.e, this.workspace);
+    var ws = Blockly.inject('blocklyDiv', {});
+    var gesture = new Blockly.Gesture(this.e, ws);
     assertFalse(Blockly.keyboardAccessibilityMode);
     gesture.doWorkspaceClick_(event);
     assertTrue(Blockly.keyboardAccessibilityMode);

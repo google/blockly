@@ -216,9 +216,7 @@ Blockly.onKeyDown_ = function(e) {
 
   if (mainWorkspace.options.readOnly) {
     // When in read only mode handle key actions for keyboard navigation.
-    if (Blockly.keyboardAccessibilityMode) {
-      Blockly.navigation.onKeyPress(e);
-    }
+    Blockly.navigation.onKeyPress(e);
     return;
   }
 
@@ -227,8 +225,7 @@ Blockly.onKeyDown_ = function(e) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
     Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_EXIT);
-  } else if (Blockly.keyboardAccessibilityMode &&
-      Blockly.navigation.onKeyPress(e)) {
+  } else if (Blockly.navigation.onKeyPress(e)) {
     // If the keyboard or field handled the key press return.
     return;
   } else if (e.keyCode == Blockly.utils.KeyCodes.BACKSPACE ||

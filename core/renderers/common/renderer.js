@@ -29,6 +29,7 @@ goog.provide('Blockly.blockRendering.Renderer');
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Drawer');
+goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
 
 /**
@@ -41,6 +42,7 @@ Blockly.blockRendering.Renderer = function() {
   this.renderInfo = Blockly.blockRendering.RenderInfo;
   this.drawer = Blockly.blockRendering.Drawer;
   this.debugger = Blockly.blockRendering.Debug;
+  this.pathObject = Blockly.blockRendering.PathObject;
 };
 
 /**
@@ -64,4 +66,8 @@ Blockly.blockRendering.Renderer.prototype.render = function(block) {
   var info = new this.renderInfo(block);
   info.measure();
   new this.drawer(block, info).draw();
+};
+
+Blockly.blockRendering.Renderer.prototype.makePathObject = function(block) {
+  return new this.pathObject(block);
 };

@@ -57,13 +57,9 @@ Blockly.geras.Drawer.prototype.draw = function() {
   this.drawOutline_();
   this.drawInternals_();
 
-  var pathObject = new Blockly.BlockSvg.PathObject();
-  pathObject.steps = [this.outlinePath_];
-  pathObject.inlineSteps = [this.inlinePath_];
-  pathObject.highlightSteps = [this.highlighter_.getSteps()];
-  pathObject.highlightInlineSteps = [this.highlighter_.getInlineSteps()];
+  this.block_.pathObject.setPaths(this.outlinePath_ + '\n' + this.inlinePath_,
+      this.highlighter_.getPath());
 
-  this.block_.setPaths_(pathObject);
   if (Blockly.blockRendering.useDebugger) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }

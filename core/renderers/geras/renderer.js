@@ -31,6 +31,7 @@ goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.geras.Drawer');
 goog.require('Blockly.geras.HighlightConstantProvider');
+goog.require('Blockly.geras.PathObject');
 goog.require('Blockly.geras.RenderInfo');
 
 /**
@@ -44,6 +45,7 @@ Blockly.geras.Renderer = function() {
   this.renderInfo = Blockly.geras.RenderInfo;
   this.drawer = Blockly.geras.Drawer;
   this.debugger = Blockly.blockRendering.Debug;
+  this.pathObject = Blockly.geras.PathObject;
 };
 goog.inherits(Blockly.geras.Renderer, Blockly.blockRendering.Renderer);
 

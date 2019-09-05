@@ -70,13 +70,7 @@ Blockly.blockRendering.Drawer.prototype.draw = function() {
   this.drawOutline_();
   this.drawInternals_();
 
-
-  var pathObject = new Blockly.BlockSvg.PathObject();
-
-  pathObject.steps = [this.outlinePath_];
-  pathObject.inlineSteps = [this.inlinePath_];
-
-  this.block_.setPaths_(pathObject);
+  this.block_.pathObject.setPaths(this.outlinePath_ + '\n' + this.inlinePath_);
   if (Blockly.blockRendering.useDebugger) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }

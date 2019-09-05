@@ -43,7 +43,7 @@ Blockly.blockRendering.useDebugger = false;
  */
 Blockly.blockRendering.init = function() {
   // TODO (#2702): Pick an API for choosing a renderer.
-  Blockly.blockRendering.renderer = new Blockly.geras.Renderer();
+  Blockly.blockRendering.renderer = new Blockly.thrasos.Renderer();
   Blockly.blockRendering.renderer.init();
 };
 

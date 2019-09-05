@@ -40,7 +40,7 @@ Blockly.blockRendering.Renderer = function() {
   this.constantProvider = Blockly.blockRendering.ConstantProvider;
   this.renderInfo = Blockly.blockRendering.RenderInfo;
   this.drawer = Blockly.blockRendering.Drawer;
-  this.debugger = Blockly.blockRendering.Debugger;
+  this.debugger = Blockly.blockRendering.Debug;
 };
 
 /**

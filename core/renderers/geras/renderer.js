@@ -30,6 +30,7 @@ goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.geras.Drawer');
+goog.require('Blockly.geras.HighlightConstantProvider');
 goog.require('Blockly.geras.RenderInfo');
 
 /**
@@ -53,6 +54,5 @@ goog.inherits(Blockly.geras.Renderer, Blockly.blockRendering.Renderer);
  */
 Blockly.geras.Renderer.prototype.init = function() {
   Blockly.geras.Renderer.superClass_.init.call(this);
-  this.highlightConstants =
-      new Blockly.geras.HighlightConstantProvider(this.constants);
+  this.highlightConstants = new Blockly.geras.HighlightConstantProvider();
 };

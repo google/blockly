@@ -111,7 +111,7 @@ Blockly.blockRendering.Drawer.prototype.hideHiddenIcons_ = function() {
  */
 Blockly.blockRendering.Drawer.prototype.drawOutline_ = function() {
   this.drawTop_();
-  for (var r = 1; r < this.info_.rows.length - 2; r++) {
+  for (var r = 1; r < this.info_.rows.length - 1; r++) {
     var row = this.info_.rows[r];
     if (row.hasJaggedEdge) {
       this.drawJaggedEdge_(row);
@@ -239,7 +239,7 @@ Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
   this.positionNextConnection_();
 
   this.outlinePath_ +=
-    Blockly.utils.svgPaths.lineOnAxis('v', bottomRow.height - bottomRow.overhangY);
+    Blockly.utils.svgPaths.lineOnAxis('V', bottomRow.baseline);
 
   for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
     if (Blockly.blockRendering.Types.isNextConnection(elem)) {

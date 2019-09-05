@@ -205,14 +205,23 @@ Blockly.svgResize = function(workspace) {
 // are multiple workspaces and non-main workspaces are able to accept input.
 Blockly.onKeyDown_ = function(e) {
   var mainWorkspace = Blockly.mainWorkspace;
-  if (mainWorkspace.options.readOnly || Blockly.utils.isTargetInput(e) ||
+
+  if (Blockly.utils.isTargetInput(e) ||
       (mainWorkspace.rendered && !mainWorkspace.isVisible())) {
-    // No key actions on readonly workspaces.
     // When focused on an HTML text input widget, don't trap any keys.
     // Ignore keypresses on rendered workspaces that have been explicitly
     // hidden.
     return;
   }
+
+  if (mainWorkspace.options.readOnly) {
+    // When in read only mode handle key actions for keyboard navigation.
+    if (Blockly.keyboardAccessibilityMode) {
+      Blockly.navigation.onKeyPress(e);
+    }
+    return;
+  }
+
   var deleteBlock = false;
   if (e.keyCode == Blockly.utils.KeyCodes.ESC) {
     // Pressing esc closes the context menu.

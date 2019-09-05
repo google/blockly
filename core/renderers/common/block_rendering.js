@@ -30,21 +30,10 @@
  */
 goog.provide('Blockly.blockRendering');
 
-goog.require('Blockly.blockRendering.Debug');
-goog.require('Blockly.blockRendering.Drawer');
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.geras.HighlightConstantProvider');
+goog.require('Blockly.geras.Renderer');
+goog.require('Blockly.thrasos.Renderer');
+goog.require('Blockly.zelos.Renderer');
 
-goog.require('Blockly.geras.Drawer');
-goog.require('Blockly.geras.RenderInfo');
-goog.require('Blockly.thrasos.RenderInfo');
-goog.require('Blockly.zelos.Drawer');
-goog.require('Blockly.zelos.RenderInfo');
-goog.require('Blockly.zelos.ConstantProvider');
-
-// TODO (#2702): Pick an API for choosing a renderer.
-Blockly.blockRendering.rendererName = 'zelos';
 
 Blockly.blockRendering.useDebugger = false;
 
@@ -53,22 +42,9 @@ Blockly.blockRendering.useDebugger = false;
  * @package
  */
 Blockly.blockRendering.init = function() {
-  if (Blockly.blockRendering.rendererName == 'geras') {
-    Blockly.blockRendering.constants =
-      new Blockly.blockRendering.ConstantProvider();
-    Blockly.blockRendering.constants.init();
-    // No one else has a highlight provider.
-    Blockly.blockRendering.highlightConstants =
-        new Blockly.geras.HighlightConstantProvider();
-  } else if (Blockly.blockRendering.rendererName == 'thrasos') {
-    Blockly.blockRendering.constants =
-      new Blockly.blockRendering.ConstantProvider();
-    Blockly.blockRendering.constants.init();
-  } else if (Blockly.blockRendering.rendererName == 'zelos') {
-    Blockly.blockRendering.constants =
-      new Blockly.zelos.ConstantProvider();
-    Blockly.blockRendering.constants.init();
-  }
+  // TODO (#2702): Pick an API for choosing a renderer.
+  Blockly.blockRendering.renderer = new Blockly.geras.Renderer();
+  Blockly.blockRendering.renderer.init();
 };
 
 /**
@@ -78,28 +54,13 @@ Blockly.blockRendering.init = function() {
  * @public
  */
 Blockly.blockRendering.render = function(block) {
-  if (!block.renderingDebugger) {
-    block.renderingDebugger = new Blockly.blockRendering.Debug();
-  }
-  if (Blockly.blockRendering.rendererName == 'geras') {
-    var info = new Blockly.geras.RenderInfo(block);
-    info.measure();
-    new Blockly.geras.Drawer(block, info).draw();
-  } else if (Blockly.blockRendering.rendererName == 'thrasos') {
-    var info = new Blockly.thrasos.RenderInfo(block);
-    info.measure();
-    new Blockly.blockRendering.Drawer(block, info).draw();
-  } else if (Blockly.blockRendering.rendererName == 'zelos') {
-    var info = new Blockly.zelos.RenderInfo(block);
-    info.measure();
-    new Blockly.zelos.Drawer(block, info).draw();
-  }
+  Blockly.blockRendering.renderer.render(block);
 };
 
 Blockly.blockRendering.getConstants = function() {
-  return Blockly.blockRendering.constants;
+  return Blockly.blockRendering.renderer.constants;
 };
 
 Blockly.blockRendering.getHighlightConstants = function() {
-  return Blockly.blockRendering.highlightConstants;
+  return Blockly.blockRendering.renderer.highlightConstants;
 };

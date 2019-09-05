@@ -282,13 +282,13 @@ suite('Navigation', function() {
     });
 
     test('Insert', function() {
-      sinon.spy(Blockly.navigation, 'modify');
+      sinon.spy(Blockly.navigation, 'modify_');
       this.mockEvent.keyCode = Blockly.utils.KeyCodes.I;
       chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
-      chai.assert.isTrue(Blockly.navigation.modify.calledOnce);
+      chai.assert.isTrue(Blockly.navigation.modify_.calledOnce);
       chai.assert.equal(Blockly.navigation.currentState_,
           Blockly.navigation.STATE_WS);
-      Blockly.navigation.modify.restore();
+      Blockly.navigation.modify_.restore();
     });
 
     test('Mark', function() {
@@ -370,6 +370,73 @@ suite('Navigation', function() {
       field.onBlocklyAction.restore();
       Blockly.navigation.onBlocklyAction.restore();
     });
+    suite('Test key press in read only mode', function() {
+      setup(function() {
+        Blockly.defineBlocksWithJsonArray([{
+          "type": "field_block",
+          "message0": "%1 %2",
+          "args0": [
+            {
+              "type": "field_dropdown",
+              "name": "NAME",
+              "options": [
+                [
+                  "a",
+                  "optionA"
+                ]
+              ]
+            },
+            {
+              "type": "input_value",
+              "name": "NAME"
+            }
+          ],
+          "previousStatement": null,
+          "nextStatement": null,
+          "colour": 230,
+          "tooltip": "",
+          "helpUrl": ""
+        }]);
+        this.workspace = new Blockly.Workspace({readOnly: true});
+        Blockly.navigation.setCursor(this.workspace.cursor);
+        Blockly.mainWorkspace = this.workspace;
+        this.fieldBlock1 = this.workspace.newBlock('field_block');
+        Blockly.keyboardAccessibilityMode = true;
+        this.mockEvent = {
+          getModifierState: function() {
+            return false;
+          }
+        };
+      });
+
+      teardown(function() {
+        delete Blockly.Blocks['field_block'];
+        Blockly.mainWorkspace = null;
+        this.workspace.dispose();
+      });
+
+      test('Perform valid action for read only', function() {
+        var astNode = Blockly.ASTNode.createBlockNode(this.fieldBlock1);
+        this.workspace.cursor.setLocation(astNode);
+        this.mockEvent.keyCode = Blockly.utils.KeyCodes.S;
+        chai.assert.isTrue(Blockly.navigation.onKeyPress(this.mockEvent));
+      });
+
+      test('Perform invalid action for read only', function() {
+        var astNode = Blockly.ASTNode.createBlockNode(this.fieldBlock1);
+        this.workspace.cursor.setLocation(astNode);
+        this.mockEvent.keyCode = Blockly.utils.KeyCodes.I;
+        chai.assert.isFalse(Blockly.navigation.onKeyPress(this.mockEvent));
+      });
+
+      test('Try to perform action on a field', function() {
+        var field = this.fieldBlock1.inputList[0].fieldRow[0];
+        var astNode = Blockly.ASTNode.createFieldNode(field);
+        this.workspace.cursor.setLocation(astNode);
+        this.mockEvent.keyCode = Blockly.utils.KeyCodes.ENTER;
+        chai.assert.isFalse(Blockly.navigation.onKeyPress(this.mockEvent));
+      });
+    });
   });
 
   suite('Insert Functions', function() {
@@ -437,7 +504,7 @@ suite('Navigation', function() {
       var sourceNode = Blockly.ASTNode.createConnectionNode(this.basicBlock2.nextConnection);
       Blockly.navigation.cursor_.setLocation(sourceNode);
 
-      Blockly.navigation.modify();
+      Blockly.navigation.modify_();
       var insertedBlock = this.basicBlock.previousConnection.targetBlock();
 
       chai.assert.isNotNull(insertedBlock);
@@ -602,6 +669,17 @@ suite('Navigation', function() {
       // Set the cursor to be on the child block
       this.workspace.cursor.setLocation(astNode);
       // Remove the parent block
+      this.basicBlockA.dispose();
+      chai.assert.equal(this.workspace.cursor.getCurNode().getType(),
+          Blockly.ASTNode.types.WORKSPACE);
+    });
+
+    test('Delete top block in stack', function() {
+      this.basicBlockA.nextConnection.connect(this.basicBlockB.previousConnection);
+      var astNode = Blockly.ASTNode.createStackNode(this.basicBlockA);
+      // Set the cursor to be on the stack
+      this.workspace.cursor.setLocation(astNode);
+      // Remove the top block in the stack
       this.basicBlockA.dispose();
       chai.assert.equal(this.workspace.cursor.getCurNode().getType(),
           Blockly.ASTNode.types.WORKSPACE);

@@ -1,7 +1,7 @@
 /* exported assertEquals, assertNotEquals, assertArrayEquals, assertTrue, assertFalse,
    assertNull, assertNotNull, assertNotNullNorUndefined, assert,
    isEqualArrays, assertUndefined, assertNotUndefined,
-   defineRowBlock, defineStackBlock */
+   defineRowBlock, defineStackBlock, defineStatementBlock */
 function _argumentsIncludeComments(expectedNumberOfNonCommentArgs, args) {
   return args.length == expectedNumberOfNonCommentArgs + 1;
 }
@@ -155,6 +155,24 @@ function defineRowBlock() {
       }
     ],
     "output": null
+  }]);
+}
+
+function defineStatementBlock() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "statement_block",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_statement",
+        "name": "NAME"
+      }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
   }]);
 }
 

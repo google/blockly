@@ -32,7 +32,7 @@
  */
 goog.provide('Blockly.utils.userAgent');
 
-goog.require('Blockly.utils.base');
+goog.require('Blockly.utils.global');
 
 (function(raw) {
   Blockly.utils.userAgent.raw = raw;

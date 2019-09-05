@@ -288,7 +288,7 @@ Blockly.ASTNode.prototype.findPreviousEditableField_ = function(location,
   var previousField = null;
   var startIdx = opt_last ? fieldRow.length - 1 : fieldIdx - 1;
   for (var i = startIdx, field; field = fieldRow[i]; i--) {
-    if (field.isCurrentlyEditable()) {
+    if (field.EDITABLE) {
       previousField = field;
       return Blockly.ASTNode.createFieldNode(previousField);
     }
@@ -312,7 +312,7 @@ Blockly.ASTNode.prototype.findNextForInput_ = function() {
   for (var i = curIdx + 1, input; input = block.inputList[i]; i++) {
     var fieldRow = input.fieldRow;
     for (var j = 0, field; field = fieldRow[j]; j++) {
-      if (field.isCurrentlyEditable()) {
+      if (field.EDITABLE) {
         return Blockly.ASTNode.createFieldNode(field);
       }
     }
@@ -340,7 +340,7 @@ Blockly.ASTNode.prototype.findNextForField_ = function() {
   for (var i = curIdx, input; input = block.inputList[i]; i++) {
     var fieldRow = input.fieldRow;
     while (fieldIdx < fieldRow.length) {
-      if (fieldRow[fieldIdx].isCurrentlyEditable()) {
+      if (fieldRow[fieldIdx].EDITABLE) {
         return Blockly.ASTNode.createFieldNode(fieldRow[fieldIdx]);
       }
       fieldIdx++;
@@ -371,7 +371,7 @@ Blockly.ASTNode.prototype.findPrevForInput_ = function() {
     }
     var fieldRow = input.fieldRow;
     for (var j = fieldRow.length - 1, field; field = fieldRow[j]; j--) {
-      if (field.isCurrentlyEditable()) {
+      if (field.EDITABLE) {
         return Blockly.ASTNode.createFieldNode(field);
       }
     }
@@ -397,7 +397,7 @@ Blockly.ASTNode.prototype.findPrevForField_ = function() {
     }
     var fieldRow = input.fieldRow;
     while (fieldIdx > -1) {
-      if (fieldRow[fieldIdx].isCurrentlyEditable()) {
+      if (fieldRow[fieldIdx].EDITABLE) {
         return Blockly.ASTNode.createFieldNode(fieldRow[fieldIdx]);
       }
       fieldIdx--;
@@ -501,7 +501,7 @@ Blockly.ASTNode.prototype.findFirstFieldOrInput_ = function(block) {
   for (var i = 0, input; input = inputs[i]; i++) {
     var fieldRow = input.fieldRow;
     for (var j = 0, field; field = fieldRow[j]; j++) {
-      if (field.isCurrentlyEditable()) {
+      if (field.EDITABLE) {
         return Blockly.ASTNode.createFieldNode(field);
       }
     }

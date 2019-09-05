@@ -297,13 +297,25 @@ Blockly.thrasos.RenderInfo.prototype.getSpacerRowHeight_ = function(
  * @override
  */
 Blockly.thrasos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
+  if (Blockly.blockRendering.Types.isBottomRow(row)) {
+    var baseline = row.yPos + row.height - row.descenderHeight;
+    if (Blockly.blockRendering.Types.isNextConnection(elem)) {
+      return baseline + elem.height / 2;
+    }
+    return baseline - elem.height / 2;
+  }
+  if (Blockly.blockRendering.Types.isTopRow(row)) {
+    if (Blockly.blockRendering.Types.isHat(elem)) {
+      return row.capline - elem.height / 2;
+    }
+    return row.capline + elem.height / 2;
+  }
+
   var result = row.yPos;
   if (Blockly.blockRendering.Types.isField(elem) && row.hasStatement) {
     var offset = this.constants_.TALL_INPUT_FIELD_OFFSET_Y +
         elem.height / 2;
     result += offset;
-  } else if (Blockly.blockRendering.Types.isNextConnection(elem)) {
-    result += (row.height - row.overhangY + elem.height / 2);
   } else {
     result += (row.height / 2);
   }
@@ -327,7 +339,7 @@ Blockly.thrasos.RenderInfo.prototype.finalize_ = function() {
     widestRowWithConnectedBlocks =
         Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
     // Add padding to the bottom row if block height is less than minimum
-    var heightWithoutHat = yCursor - this.topRow.startY;
+    var heightWithoutHat = yCursor - this.topRow.ascenderHeight;
     if (row == this.bottomRow &&
         heightWithoutHat < this.constants_.MIN_BLOCK_HEIGHT) {
       // But the hat height shouldn't be part of this.
@@ -343,8 +355,9 @@ Blockly.thrasos.RenderInfo.prototype.finalize_ = function() {
     }
   }
 
+  this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
   this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;
 
   this.height = yCursor;
-  this.startY = this.topRow.startY;
+  this.startY = this.topRow.capline;
 };

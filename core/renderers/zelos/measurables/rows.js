@@ -27,9 +27,12 @@
 
 goog.provide('Blockly.zelos.BottomRow');
 goog.provide('Blockly.zelos.TopRow');
+goog.provide('Blockly.zelos.AfterStatementSpacerRow');
+goog.provide('Blockly.zelos.BeforeStatementSpacerRow');
 
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.TopRow');
+goog.require('Blockly.blockRendering.SpacerRow');
 
 
 /**
@@ -133,3 +136,39 @@ Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(_block) {
   // Never render a right square corner. Always round.
   return false;
 };
+
+/**
+ * An object containing information about a row spacer that comes right
+ *   before a statement input.
+ * @param {number} height The height of the spacer.
+ * @param {number} width The width of the spacer.
+ * @package
+ * @constructor
+ * @extends {Blockly.blockRendering.SpacerRow}
+ */
+Blockly.zelos.BeforeStatementSpacerRow = function(height, width) {
+  Blockly.zelos.BeforeStatementSpacerRow.superClass_.constructor.call(
+      this, height, width);
+  this.type |=
+      Blockly.blockRendering.Types.getType('BEFORE_STATEMENT_SPACER_ROW');
+};
+goog.inherits(Blockly.zelos.BeforeStatementSpacerRow,
+    Blockly.blockRendering.SpacerRow);
+
+/**
+ * An object containing information about a row spacer that comes right
+ *   after a statement input.
+ * @param {number} height The height of the spacer.
+ * @param {number} width The width of the spacer.
+ * @package
+ * @constructor
+ * @extends {Blockly.blockRendering.SpacerRow}
+ */
+Blockly.zelos.AfterStatementSpacerRow = function(height, width) {
+  Blockly.zelos.AfterStatementSpacerRow.superClass_.constructor.call(
+      this, height, width);
+  this.type |=
+      Blockly.blockRendering.Types.getType('AFTER_STATEMENT_SPACER_ROW');
+};
+goog.inherits(Blockly.zelos.AfterStatementSpacerRow,
+    Blockly.blockRendering.SpacerRow);

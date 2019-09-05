@@ -90,7 +90,9 @@ Blockly.zelos.Drawer.prototype.drawBottom_ = function() {
   this.positionNextConnection_();
 
   this.outlinePath_ +=
-    Blockly.utils.svgPaths.lineOnAxis('v', bottomRow.height - bottomRow.overhangY);
+    Blockly.utils.svgPaths.lineOnAxis('v',
+        bottomRow.height - bottomRow.descenderHeight -
+        this.constants_.INSIDE_CORNERS.rightHeight);
 
   for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
     if (Blockly.blockRendering.Types.isNextConnection(elem)) {
@@ -104,5 +106,31 @@ Blockly.zelos.Drawer.prototype.drawBottom_ = function() {
     } else if (Blockly.blockRendering.Types.isSpacer(elem)) {
       this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width * -1);
     }
+  }
+};
+
+/**
+ * Add steps for the right side of a row that does not have value or
+ * statement input connections.
+ * @param {!Blockly.blockRendering.Row} row The row to draw the
+ *     side of.
+ * @protected
+ */
+Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
+  if (row.type & Blockly.blockRendering.Types.getType('BEFORE_STATEMENT_SPACER_ROW')) {
+    var remainingHeight = row.height - this.constants_.INSIDE_CORNERS.rightWidth;
+    this.outlinePath_ +=
+        (remainingHeight > 0 ?
+            Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + remainingHeight) : '') +
+        this.constants_.INSIDE_CORNERS.pathTopRight;
+  } else if (row.type & Blockly.blockRendering.Types.getType('AFTER_STATEMENT_SPACER_ROW')) {
+    var remainingHeight = row.height - this.constants_.INSIDE_CORNERS.rightWidth;
+    this.outlinePath_ +=
+        this.constants_.INSIDE_CORNERS.pathBottomRight +
+        (remainingHeight > 0 ?
+            Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height) : '');
+  } else {
+    this.outlinePath_ +=
+        Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);
   }
 };

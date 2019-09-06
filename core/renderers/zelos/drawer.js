@@ -48,6 +48,21 @@ goog.inherits(Blockly.zelos.Drawer, Blockly.blockRendering.Drawer);
 
 
 /**
+ * @override
+ */
+Blockly.zelos.Drawer.prototype.drawOutline_ = function() {
+  if (this.info_.outputConnection &&
+      this.info_.outputConnection.isDynamic()) {
+    this.drawFlatTop_();
+    this.drawRightDynamicConnection_();
+    this.drawFlatBottom_();
+    this.drawLeftDynamicConnection_();
+  } else {
+    Blockly.zelos.Drawer.superClass_.drawOutline_.call(this);
+  }
+};
+
+/**
  * Add steps for the top corner of the block, taking into account
  * details such as hats and rounded corners.
  * @protected
@@ -76,10 +91,7 @@ Blockly.zelos.Drawer.prototype.drawTop_ = function() {
     // No branch for a square corner because it's a no-op.
   }
 
-  if (!this.info_.outputConnection ||
-      !this.info_.outputConnection.isDynamic()) {
-    this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('v', topRow.height);
-  }
+  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('v', topRow.height);
 };
 
 
@@ -110,12 +122,9 @@ Blockly.zelos.Drawer.prototype.drawBottom_ = function() {
     }
   }
 
-  if (!this.info_.outputConnection ||
-      !this.info_.outputConnection.isDynamic()) {
-    this.outlinePath_ +=
+  this.outlinePath_ +=
         Blockly.utils.svgPaths.lineOnAxis('V',
             bottomRow.baseline - rightCornerYOffset);
-  }
   this.outlinePath_ += outlinePath;
 };
 
@@ -127,10 +136,6 @@ Blockly.zelos.Drawer.prototype.drawBottom_ = function() {
  * @protected
  */
 Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
-  if (this.info_.outputConnection && this.info_.outputConnection.isDynamic()) {
-    this.drawRightConnection_(row);
-    return;
-  }
   if (row.type & Blockly.blockRendering.Types.getType('BEFORE_STATEMENT_SPACER_ROW')) {
     var remainingHeight = row.height - this.constants_.INSIDE_CORNERS.rightWidth;
     this.outlinePath_ +=
@@ -150,19 +155,55 @@ Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
 };
 
 /**
- * Add steps to draw the right side of an output connection.
- * @param {!Blockly.blockRendering.Row} row The row to draw the
- *     side of.
+ * Add steps to draw the right side of an output with a dynamic connection.
  * @protected
  */
-Blockly.zelos.Drawer.prototype.drawRightConnection_ = function(row) {
-  // We only want to draw this once, so determine if this is the first row.
-  var index = this.info_.rows.indexOf(row);
-  if (index === 1) {
-    var height = this.info_.outputConnection.height;
-    var pathRightDown = this.info_.outputConnection.shape.pathRightDown(height);
-    this.outlinePath_ += pathRightDown;
-  }
+Blockly.zelos.Drawer.prototype.drawRightDynamicConnection_ = function() {
+  this.outlinePath_ += this.info_.outputConnection.shape.pathRightDown(
+      this.info_.outputConnection.height);
+};
+
+/**
+ * Add steps to draw the left side of an output with a dynamic connection.
+ * @protected
+ */
+Blockly.zelos.Drawer.prototype.drawLeftDynamicConnection_ = function() {
+  this.positionOutputConnection_();
+
+  this.outlinePath_ += this.info_.outputConnection.shape.pathUp(
+      this.info_.outputConnection.height);
+
+  // Close off the path.  This draws a vertical line up to the start of the
+  // block's path, which may be either a rounded or a sharp corner.
+  this.outlinePath_ += 'z';
+};
+
+/**
+ * Add steps to draw a flat top row.
+ * @protected
+ */
+Blockly.zelos.Drawer.prototype.drawFlatTop_ = function() {
+  var topRow = this.info_.topRow;
+  this.positionPreviousConnection_();
+
+  this.outlinePath_ +=
+      Blockly.utils.svgPaths.moveBy(topRow.xPos, this.info_.startY);
+
+  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', topRow.width);
+};
+
+/**
+ * Add steps to draw a flat bottom row.
+ * @protected
+ */
+Blockly.zelos.Drawer.prototype.drawFlatBottom_ = function() {
+  var bottomRow = this.info_.bottomRow;
+  this.positionNextConnection_();
+
+  this.outlinePath_ +=
+    Blockly.utils.svgPaths.lineOnAxis('V', bottomRow.baseline);
+  
+  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', -bottomRow.width);
 };
 
 /**

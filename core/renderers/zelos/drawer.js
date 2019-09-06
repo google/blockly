@@ -172,22 +172,3 @@ Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
   // Don't draw an inline input.
   this.positionInlineInputConnection_(input);
 };
-
-/**
- * @override
- */
-Blockly.zelos.Drawer.prototype.positionInlineInputConnection_ = function(input) {
-  var yPos = input.centerline - input.height / 2;
-  // Move the connection.
-  if (input.connection) {
-    // xPos already contains info about startX
-    var connX = input.xPos + input.connectionWidth +
-        this.constants_.DARK_PATH_OFFSET;
-    if (this.info_.RTL) {
-      connX *= -1;
-    }
-    input.connection.setOffsetInBlock(
-        connX, yPos + input.connectionOffsetY +
-        this.constants_.DARK_PATH_OFFSET);
-  }
-};

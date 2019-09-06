@@ -72,6 +72,15 @@ goog.inherits(Blockly.blockRendering.OutputConnection,
     Blockly.blockRendering.Connection);
 
 /**
+ * Whether or not the connection shape is dynamic. Dynamic shapes get their
+ * height from the block.
+ * @return {boolean} True if the connection shape is dynamic.
+ */
+Blockly.blockRendering.OutputConnection.prototype.isDynamic = function() {
+  return this.shape.isDynamic;
+};
+
+/**
  * An object containing information about the space a previous connection takes
  * up during rendering.
  * @param {Blockly.RenderedConnection} connectionModel The connection object on

@@ -180,9 +180,13 @@ Blockly.blockRendering.Drawer.prototype.drawValueInput_ = function(row) {
   var input = row.getLastInput();
   this.positionExternalValueConnection_(row);
 
+  var pathDown = (typeof input.shape.pathDown == "function") ?
+      input.shape.pathDown(input.height) :
+      input.shape.pathDown;
+
   this.outlinePath_ +=
       Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.width) +
-      input.shape.pathDown +
+      pathDown +
       Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
 };
 
@@ -267,10 +271,14 @@ Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
   if (outputConnection) {
     var tabBottom = outputConnection.connectionOffsetY +
         outputConnection.height;
+    var pathUp = (typeof outputConnection.shape.pathUp == "function") ?
+        outputConnection.shape.pathUp(outputConnection.height) :
+        outputConnection.shape.pathUp;
+
     // Draw a line up to the bottom of the tab.
     this.outlinePath_ +=
         Blockly.utils.svgPaths.lineOnAxis('V', tabBottom) +
-        outputConnection.shape.pathUp;
+        pathUp;
   }
   // Close off the path.  This draws a vertical line up to the start of the
   // block's path, which may be either a rounded or a sharp corner.

@@ -70,21 +70,21 @@ Blockly.zelos.TopRow.prototype.populate = function(block) {
 };
 
 /**
- * Never render a left square corner. Always round.
+ * Render a round corner unless the block has an output connection.
  * @override
  */
-Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(_block) {
-  return false;
+Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(block) {
+  return !!block.outputConnection;
 };
 
 /**
  * Returns whether or not the top row has a right square corner.
- * @param {!Blockly.BlockSvg} _block The block whose top row this represents.
+ * @param {!Blockly.BlockSvg} block The block whose top row this represents.
  * @returns {boolean} Whether or not the top row has a left square corner.
  */
-Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(_block) {
-  // Never render a right square corner. Always round.
-  return false;
+Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(block) {
+  // Render a round corner unless the block has an output connection.
+  return !!block.outputConnection;
 };
 
 /**
@@ -120,21 +120,21 @@ Blockly.zelos.BottomRow.prototype.populate = function(block) {
 };
 
 /**
- * Never render a left square corner. Always round.
+ * Render a round corner unless the block has an output connection.
  * @override
  */
-Blockly.zelos.BottomRow.prototype.hasLeftSquareCorner = function(_block) {
-  return false;
+Blockly.zelos.BottomRow.prototype.hasLeftSquareCorner = function(block) {
+  return !!block.outputConnection;
 };
 
 /**
  * Returns whether or not the bottom row has a right square corner.
- * @param {!Blockly.BlockSvg} _block The block whose bottom row this represents.
+ * @param {!Blockly.BlockSvg} block The block whose bottom row this represents.
  * @returns {boolean} Whether or not the bottom row has a left square corner.
  */
-Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(_block) {
-  // Never render a right square corner. Always round.
-  return false;
+Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(block) {
+  // Render a round corner unless the block has an output connection.
+  return !!block.outputConnection;
 };
 
 /**

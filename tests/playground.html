@@ -91,6 +91,7 @@ function start() {
   match = location.search.match(/side=([^&]+)/);
   var side = match ? match[1] : 'start';
   document.forms.options.elements.side.value = side;
+  var autoimport = !!location.search.match(/autoimport=([^&]+)/);
   // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
       {
@@ -146,6 +147,9 @@ function start() {
     logEvents(false);
   }
   taChange();
+  if (autoimport) {
+    fromXml();
+  }
 }
 
 function addToolboxButtonCallbacks() {

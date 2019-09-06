@@ -636,7 +636,6 @@ Blockly.utils.exportSymbol = function(name, opt_object) {
 
   for (var part; parts.length && (part = parts.shift());) {
     if (!parts.length && opt_object !== void 0) {
-      // last part and we have an object; use it
       cur[part] = opt_object;
     } else if (cur[part] && cur[part] !== Object.prototype[part]) {
       cur = cur[part];

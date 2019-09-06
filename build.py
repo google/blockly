@@ -201,7 +201,7 @@ class Gen_compressed(threading.Thread):
     # Define the parameters for the POST request.
     params = [
         ("compilation_level", "SIMPLE_OPTIMIZATIONS"),
-        ("use_closure_library", "true"),
+        ("use_closure_library", "false"),
         ("output_format", "json"),
         ("output_info", "compiled_code"),
         ("output_info", "warnings"),
@@ -209,6 +209,12 @@ class Gen_compressed(threading.Thread):
         ("output_info", "statistics"),
         ("warning_level", "DEFAULT"),
       ]
+
+    # Read in the Google closure minified base file which consists of
+    # closure methods used in Blockly (eg: goog.inherits).
+    b = codecs.open(os.path.join("closure", "goog", "base.min.js"), encoding="utf-8")
+    baseCode = "".join(b.readlines()).encode("utf-8")
+    params.append(("js_code", baseCode))
 
     # Read in all the source files.
     filenames = calcdeps.CalculateDependencies(self.search_paths,
@@ -515,7 +521,8 @@ if __name__ == "__main__":
   args = get_args()
   use_default = not args.core and not args.generators and not args.langfiles
   calcdeps = import_path(os.path.join("closure", "bin", "calcdeps.py"))
-  full_search_paths = calcdeps.ExpandDirectories(["core", "closure"])
+  full_search_paths = calcdeps.ExpandDirectories(["core"])
+  full_search_paths.append(os.path.join("closure", "goog", "base.js"))
   full_search_paths = sorted(full_search_paths)  # Deterministic build.
 
   # Uncompressed and compressed are run in parallel threads.

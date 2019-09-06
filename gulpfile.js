@@ -84,6 +84,14 @@ function prependHeader() {
 }
 
 /**
+ * Helper method for prepending Google closure methods used in Blockly.
+ */
+function prependGoogBase() {
+  const baseMin = fs.readFileSync('closure/goog/base.min.js', 'utf8');
+  return gulp.insert.prepend(baseMin);
+}
+
+/**
  * Helper method for calling the Closure compiler.
  * @param {*} compilerOptions 
  * @param {boolean=} opt_verbose Optional option for verbose logging
@@ -110,7 +118,6 @@ gulp.task('build-core', function () {
   const defines = 'Blockly.VERSION="' + packageJson.version + '"';
   return gulp.src([
       'core/**/**/*.js',
-      './node_modules/google-closure-library/closure/goog/base.js'
     ], {base: './'})
     // Directories in Blockly are used to group similar files together
     // but are not used to limit access with @package, instead the
@@ -131,6 +138,7 @@ gulp.task('build-core', function () {
       externs: './externs/svg-externs.js',
       define: defines
     }, argv.verbose))
+    .pipe(prependGoogBase())
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
 });

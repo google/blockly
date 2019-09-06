@@ -74,7 +74,7 @@ Blockly.zelos.TopRow.prototype.populate = function(block) {
  * @override
  */
 Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(block) {
-  return block.outputConnection;
+  return !!block.outputConnection;
 };
 
 /**
@@ -84,7 +84,7 @@ Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(block) {
  */
 Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(block) {
   // Render a round corner unless the block has an output connection.
-  return block.outputConnection;
+  return !!block.outputConnection;
 };
 
 /**
@@ -124,7 +124,7 @@ Blockly.zelos.BottomRow.prototype.populate = function(block) {
  * @override
  */
 Blockly.zelos.BottomRow.prototype.hasLeftSquareCorner = function(block) {
-  return block.outputConnection;
+  return !!block.outputConnection;
 };
 
 /**
@@ -134,7 +134,7 @@ Blockly.zelos.BottomRow.prototype.hasLeftSquareCorner = function(block) {
  */
 Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(block) {
   // Render a round corner unless the block has an output connection.
-  return block.outputConnection;
+  return !!block.outputConnection;
 };
 
 /**

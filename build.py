@@ -519,8 +519,7 @@ if __name__ == "__main__":
   args = get_args()
   use_default = not args.core and not args.generators and not args.langfiles
   calcdeps = import_path(os.path.join("closure", "bin", "calcdeps.py"))
-  full_search_paths = calcdeps.ExpandDirectories(["core"])
-  full_search_paths.append(os.path.join("closure", "goog", "base.js"))
+  full_search_paths = calcdeps.ExpandDirectories(["core", "closure"])
   full_search_paths = sorted(full_search_paths)  # Deterministic build.
 
   # Uncompressed and compressed are run in parallel threads.

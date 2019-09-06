@@ -88,6 +88,13 @@ goog.inherits(Blockly.zelos.RenderInfo, Blockly.blockRendering.RenderInfo);
  * @override
  */
 Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
+  if (!prev || !next) {
+    // No need for padding at the beginning or end of the row if the
+    // output shape is dyanmic.
+    if (this.outputConnection && this.outputConnection.shape.isDynamic) {
+      return this.constants_.NO_PADDING;
+    }
+  }
   if (!prev) {
     // Between an editable field and the beginning of the row.
     if (next && Blockly.blockRendering.Types.isField(next) && next.isEditable) {
@@ -328,14 +335,16 @@ Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
     row.yPos = yCursor;
     yCursor += row.height;
   }
-  // // Dynamic output.
+  // Dynamic output connections depend on the height of the block. Adjust the
+  // height and width of the connection, and then adjust the startX and width of the
+  // block accordingly.
   var outputConnectionWidth = 0;
   if (this.outputConnection && !this.outputConnection.height) {
     this.outputConnection.height = yCursor;
-    outputConnectionWidth = yCursor / 2;
-    this.outputConnection.width = outputConnectionWidth;
+    outputConnectionWidth = yCursor; // Twice the width to account for the right side.
+    this.outputConnection.width = outputConnectionWidth / 2;
   }
-  this.startX += outputConnectionWidth;
+  this.startX += outputConnectionWidth / 2;
   this.width += outputConnectionWidth;
 
   var widestRowWithConnectedBlocks = 0;
@@ -349,10 +358,6 @@ Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
       elem.xPos = xCursor;
       elem.centerline = this.getElemCenterline_(row, elem);
       xCursor += elem.width;
-      // if (this.isInline && Blockly.blockRendering.Types.isInlineInput(elem)) {
-      //   elem.connectionWidth = outputConnectionWidth;
-      //   elem.connectedBlockWidth += outputConnectionWidth;
-      // }
     }
   }
 

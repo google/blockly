@@ -315,3 +315,50 @@ Blockly.zelos.RenderInfo.prototype.addAlignmentPadding_ = function(row,
     row.width += missingSpace;
   }
 };
+
+/**
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
+  // Performance note: this could be combined with the draw pass, if the time
+  // that this takes is excessive.  But it shouldn't be, because it only
+  // accesses and sets properties that already exist on the objects.
+  var yCursor = 0;
+  for (var i = 0, row; (row = this.rows[i]); i++) {
+    row.yPos = yCursor;
+    yCursor += row.height;
+  }
+  // // Dynamic output.
+  var outputConnectionWidth = 0;
+  if (this.outputConnection && !this.outputConnection.height) {
+    this.outputConnection.height = yCursor;
+    outputConnectionWidth = yCursor / 2;
+    this.outputConnection.width = outputConnectionWidth;
+  }
+  this.startX += outputConnectionWidth;
+  this.width += outputConnectionWidth;
+
+  var widestRowWithConnectedBlocks = 0;
+  for (var i = 0, row; (row = this.rows[i]); i++) {
+    row.xPos = this.startX;
+    
+    widestRowWithConnectedBlocks =
+        Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
+    var xCursor = row.xPos;
+    for (var j = 0, elem; (elem = row.elements[j]); j++) {
+      elem.xPos = xCursor;
+      elem.centerline = this.getElemCenterline_(row, elem);
+      xCursor += elem.width;
+      // if (this.isInline && Blockly.blockRendering.Types.isInlineInput(elem)) {
+      //   elem.connectionWidth = outputConnectionWidth;
+      //   elem.connectedBlockWidth += outputConnectionWidth;
+      // }
+    }
+  }
+
+  this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;
+
+  this.height = yCursor;
+  this.startY = this.topRow.capline;
+  this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
+};

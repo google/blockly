@@ -75,7 +75,10 @@ Blockly.zelos.Drawer.prototype.drawTop_ = function() {
     }
     // No branch for a square corner because it's a no-op.
   }
-  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('v', topRow.height);
+  if (!this.info_.outputConnection ||
+      !this.info_.outputConnection.shape.isDynamic) {
+    this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('v', topRow.height);
+  }
 };
 
 
@@ -89,24 +92,31 @@ Blockly.zelos.Drawer.prototype.drawBottom_ = function() {
   var elems = bottomRow.elements;
   this.positionNextConnection_();
 
-  this.outlinePath_ +=
-    Blockly.utils.svgPaths.lineOnAxis('v',
-        bottomRow.height - bottomRow.descenderHeight -
-        this.constants_.INSIDE_CORNERS.rightHeight);
-
+  var rightCornerYOffset = 0;
+  var outlinePath = '';
   for (var i = elems.length - 1, elem; (elem = elems[i]); i--) {
     if (Blockly.blockRendering.Types.isNextConnection(elem)) {
-      this.outlinePath_ += elem.shape.pathRight;
+      outlinePath += elem.shape.pathRight;
     } else if (Blockly.blockRendering.Types.isLeftSquareCorner(elem)) {
-      this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', bottomRow.xPos);
+      outlinePath += Blockly.utils.svgPaths.lineOnAxis('H', bottomRow.xPos);
     } else if (Blockly.blockRendering.Types.isLeftRoundedCorner(elem)) {
-      this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.bottomLeft;
+      outlinePath += this.constants_.OUTSIDE_CORNERS.bottomLeft;
     } else if (Blockly.blockRendering.Types.isRightRoundedCorner(elem)) {
-      this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.bottomRight;
+      outlinePath += this.constants_.OUTSIDE_CORNERS.bottomRight;
+      rightCornerYOffset = this.constants_.INSIDE_CORNERS.rightHeight;
     } else if (Blockly.blockRendering.Types.isSpacer(elem)) {
-      this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width * -1);
+      outlinePath += Blockly.utils.svgPaths.lineOnAxis('h', elem.width * -1);
     }
   }
+
+  if (!this.info_.outputConnection ||
+      !this.info_.outputConnection.shape.isDynamic) {
+    this.outlinePath_ +=
+        Blockly.utils.svgPaths.lineOnAxis('V',
+            bottomRow.baseline -
+            rightCornerYOffset);
+  }
+  this.outlinePath_ += outlinePath;
 };
 
 /**
@@ -129,8 +139,46 @@ Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
         this.constants_.INSIDE_CORNERS.pathBottomRight +
         (remainingHeight > 0 ?
             Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height) : '');
+  } else if (Blockly.blockRendering.Types.isInputRow(row) &&
+      this.info_.outputConnection &&
+      (typeof this.info_.outputConnection.shape.pathRightDown == "function")) {
+    // Draw right side of an output connection
+    this.outlinePath_ += this.info_.outputConnection.shape.pathRightDown(
+        this.info_.outputConnection.height);
   } else {
-    this.outlinePath_ +=
-        Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);
+    if (!this.info_.outputConnection ||
+      !this.info_.outputConnection.shape.isDynamic) {
+      // Don't draw spacers when drawing the right side of outputs.
+      this.outlinePath_ +=
+          Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);
+    }
+  }
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
+  // Don't draw an inline input.
+  // TODO:
+  this.positionInlineInputConnection_(input);
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.Drawer.prototype.positionInlineInputConnection_ = function(input) {
+  var yPos = input.centerline - input.height / 2;
+  // Move the connection.
+  if (input.connection) {
+    // xPos already contains info about startX
+    var connX = input.xPos + input.connectionWidth +
+        this.constants_.DARK_PATH_OFFSET;
+    if (this.info_.RTL) {
+      connX *= -1;
+    }
+    input.connection.setOffsetInBlock(
+        connX, yPos + input.connectionOffsetY +
+        this.constants_.DARK_PATH_OFFSET);
   }
 };

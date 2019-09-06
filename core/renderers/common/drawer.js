@@ -92,10 +92,8 @@ Blockly.blockRendering.Drawer.prototype.draw = function() {
 Blockly.blockRendering.Drawer.prototype.recordSizeOnBlock_ = function() {
   // This is used when the block is reporting its size to anyone else.
   // The dark path adds to the size of the block in both X and Y.
-  this.block_.height = this.info_.height +
-      this.constants_.DARK_PATH_OFFSET;
-  this.block_.width = this.info_.widthWithChildren +
-      this.constants_.DARK_PATH_OFFSET;
+  this.block_.height = this.info_.height;
+  this.block_.width = this.info_.widthWithChildren;
 };
 
 /**

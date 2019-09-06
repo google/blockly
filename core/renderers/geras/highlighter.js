@@ -211,7 +211,7 @@ Blockly.geras.Highlighter.prototype.drawLeft = function() {
       this.steps_ += Blockly.utils.svgPaths.moveTo(this.info_.startX, tabBottom);
     } else {
       var left = this.info_.startX + this.highlightOffset_;
-      var bottom = this.info_.height - this.highlightOffset_;
+      var bottom = this.info_.bottomRow.baseline - this.highlightOffset_;
       this.steps_ += Blockly.utils.svgPaths.moveTo(left, bottom);
       this.steps_ += Blockly.utils.svgPaths.lineOnAxis('V', tabBottom);
     }

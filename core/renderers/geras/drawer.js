@@ -73,18 +73,6 @@ Blockly.geras.Drawer.prototype.draw = function() {
 /**
  * @override
  */
-Blockly.geras.Drawer.prototype.recordSizeOnBlock_ = function() {
-  // This is used when the block is reporting its size to anyone else.
-  // The dark path adds to the size of the block in both X and Y.
-  this.block_.height = this.info_.height +
-      this.constants_.DARK_PATH_OFFSET;
-  this.block_.width = this.info_.widthWithChildren +
-      this.constants_.DARK_PATH_OFFSET;
-};
-
-/**
- * @override
- */
 Blockly.geras.Drawer.prototype.drawTop_ = function() {
   this.highlighter_.drawTopCorner(this.info_.topRow);
   this.highlighter_.drawRightSideRow(this.info_.topRow);

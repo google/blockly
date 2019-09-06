@@ -359,8 +359,10 @@ Blockly.geras.RenderInfo.prototype.finalize_ = function() {
   }
   this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
 
-  this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;
-
-  this.height = yCursor;
+  // The dark (lowlight) adds to the size of the block in both x and y.
+  this.widthWithChildren = widestRowWithConnectedBlocks +
+      this.startX + this.constants_.DARK_PATH_OFFSET;
+  this.width += this.constants_.DARK_PATH_OFFSET;
+  this.height = yCursor + this.constants_.DARK_PATH_OFFSET;
   this.startY = this.topRow.capline;
 };

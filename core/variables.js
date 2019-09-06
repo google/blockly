@@ -316,6 +316,7 @@ Blockly.Variables.createVariableButtonHandler = function(
   };
   promptAndCheckWithAlert('');
 };
+// Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.utils.exportSymbol('Blockly.Variables.createVariableButtonHandler',
     Blockly.Variables.createVariableButtonHandler);
 
@@ -333,6 +334,7 @@ Blockly.utils.exportSymbol('Blockly.Variables.createVariableButtonHandler',
  */
 Blockly.Variables.createVariable =
     Blockly.Variables.createVariableButtonHandler;
+// Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.utils.exportSymbol('Blockly.Variables.createVariable',
     Blockly.Variables.createVariable);
 

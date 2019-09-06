@@ -488,11 +488,4 @@ Blockly.Mutator.findParentWs = function(workspace) {
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
-if (!Blockly.utils.global['Blockly']) {
-  Blockly.utils.global['Blockly'] = {};
-}
-if (!Blockly.utils.global['Blockly']['Mutator']) {
-  Blockly.utils.global['Blockly']['Mutator'] = {};
-}
-Blockly.utils.global['Blockly']['Mutator']['reconnect'] =
-    Blockly.Mutator.reconnect;
+Blockly.utils.exportSymbol('Blockly.Mutator.reconnect', Blockly.Mutator.reconnect);

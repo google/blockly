@@ -2418,5 +2418,5 @@ Blockly.WorkspaceSvg.prototype.getGrid = function() {
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
-Blockly.WorkspaceSvg.prototype['setVisible'] =
-    Blockly.WorkspaceSvg.prototype.setVisible;
+Blockly.utils.exportSymbol('Blockly.WorkspaceSvg.prototype.setVisible',
+    Blockly.WorkspaceSvg.prototype.setVisible);

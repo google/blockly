@@ -648,8 +648,8 @@ Blockly.utils.exportSymbol = function(name, opt_object) {
 
 /**
  * Copies all the members of a source object to a target object.
- * @param {Object} target Target.
- * @param {Object} source Source.
+ * @param {!Object} target Target.
+ * @param {!Object} source Source.
  */
 Blockly.utils.mixin = function(target, source) {
   for (var x in source) {

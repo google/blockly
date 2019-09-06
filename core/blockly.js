@@ -791,9 +791,5 @@ Blockly.getTheme = function() {
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
-if (!Blockly.utils.global['Blockly']) {
-  Blockly.utils.global['Blockly'] = {};
-}
-Blockly.utils.global['Blockly']['getMainWorkspace'] = Blockly.getMainWorkspace;
-Blockly.utils.global['Blockly']['addChangeListener'] =
-    Blockly.addChangeListener;
+Blockly.utils.exportSymbol('Blockly.getMainWorkspace', Blockly.getMainWorkspace);
+Blockly.utils.exportSymbol('Blockly.addChangeListener', Blockly.addChangeListener);

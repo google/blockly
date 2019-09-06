@@ -791,10 +791,11 @@ Blockly.Workspace.getAll = function() {
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
-Blockly.Workspace.prototype['clear'] = Blockly.Workspace.prototype.clear;
-Blockly.Workspace.prototype['clearUndo'] =
-    Blockly.Workspace.prototype.clearUndo;
-Blockly.Workspace.prototype['addChangeListener'] =
-    Blockly.Workspace.prototype.addChangeListener;
-Blockly.Workspace.prototype['removeChangeListener'] =
-    Blockly.Workspace.prototype.removeChangeListener;
+Blockly.utils.exportSymbol('Blockly.Workspace.prototype.clear',
+    Blockly.Workspace.prototype.clear);
+Blockly.utils.exportSymbol('Blockly.Workspace.prototype.clearUndo',
+    Blockly.Workspace.prototype.clearUndo);
+Blockly.utils.exportSymbol('Blockly.Workspace.prototype.addChangeListener',
+    Blockly.Workspace.prototype.addChangeListener);
+Blockly.utils.exportSymbol('Blockly.Workspace.prototype.removeChangeListener',
+    Blockly.Workspace.prototype.removeChangeListener);

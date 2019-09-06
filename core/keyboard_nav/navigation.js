@@ -870,7 +870,7 @@ Blockly.navigation.onKeyPress = function(e) {
         actionHandled = Blockly.navigation.onBlocklyAction(action);
       }
     // If not in accessibility mode only hanlde turning on keyboard navigation.
-    } else if (action.name == Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
+    } else if (action.name === Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
       Blockly.navigation.enableKeyboardAccessibility();
       actionHandled = true;
     }
@@ -886,7 +886,7 @@ Blockly.navigation.onKeyPress = function(e) {
  * @package
  */
 Blockly.navigation.onBlocklyAction = function(action) {
-  if (action.name == Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
+  if (action.name === Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
     Blockly.navigation.disableKeyboardAccessibility();
     return true;
   } else if (Blockly.navigation.currentState_ === Blockly.navigation.STATE_WS) {
@@ -1125,6 +1125,7 @@ Blockly.navigation.ACTION_EXIT = new Blockly.Action(
 
 /**
  * The action to toggle keyboard navigation mode on and off.
+ * @type {!Blockly.Action}
  */
 Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV = new Blockly.Action(
     Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV, 'Turns on and off keyboard navigation.');

@@ -37,10 +37,15 @@ goog.require('Blockly.utils.KeyCodes');
 Blockly.user.keyMap.map_ = {};
 
 /**
- * List of modifier keys checked when serializing the key event.
- * @type {Array<string>}
+ * Object holding valid modifiers.
+ * @enum {string}
  */
-Blockly.user.keyMap.modifierKeys = ['Shift', 'Control', 'Alt', 'Meta'];
+Blockly.user.keyMap.modifierKeys = {
+  SHIFT: 'Shift',
+  CONTROL: 'Control',
+  ALT: 'Alt',
+  META: 'Meta'
+};
 
 /**
  * Update the key map to contain the new action.
@@ -113,9 +118,9 @@ Blockly.user.keyMap.getKeyByAction = function(action) {
  * @return {!string} A string containing the serialized key event.
  */
 Blockly.user.keyMap.serializeKeyEvent = function(e) {
-  var modifierKeys = Blockly.user.keyMap.modifierKeys;
+  var modifiers = Object.values(Blockly.user.keyMap.modifierKeys);
   var key = '';
-  for (var i = 0, keyName; keyName = modifierKeys[i]; i++) {
+  for (var i = 0, keyName; keyName = modifiers[i]; i++) {
     if (e.getModifierState(keyName)) {
       key += keyName;
     }
@@ -128,13 +133,14 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
  * Create the serialized key code that will be used in the key map.
  * @param {!number} keyCode Number code representing the key.
  * @param {!Array<string>} modifiers List of modifiers to be used with the key.
- *     All valid modifiers can be found in the Blockly.user.keyMap.modifiers list.
+ *     All valid modifiers can be found in the Blockly.user.keyMap.modifierKeys.
  * @return {string} The serialized key code for the given modifiers and key.
  */
 Blockly.user.keyMap.createSerializeKey = function(keyCode, modifiers) {
   var key = '';
+  var validModifiers = Object.values(Blockly.user.keyMap.modifierKeys);
   for (var i = 0, keyName; keyName = modifiers[i]; i++) {
-    if (Blockly.user.keyMap.modifierKeys.indexOf(keyName) > -1) {
+    if (validModifiers.indexOf(keyName) > -1) {
       key += keyName;
     } else {
       throw Error(keyName + ' is not a valid modifier key.');
@@ -151,7 +157,8 @@ Blockly.user.keyMap.createSerializeKey = function(keyCode, modifiers) {
  */
 Blockly.user.keyMap.createDefaultKeyMap = function() {
   var map = {};
-  var controlK = Blockly.user.keyMap.createSerializeKey(Blockly.utils.KeyCodes.K, ['Control']);
+  var controlK = Blockly.user.keyMap.createSerializeKey(
+      Blockly.utils.KeyCodes.K, [Blockly.user.keyMap.modifierKeys.CONTROL]);
 
   map[Blockly.utils.KeyCodes.W] = Blockly.navigation.ACTION_PREVIOUS;
   map[Blockly.utils.KeyCodes.A] = Blockly.navigation.ACTION_OUT;

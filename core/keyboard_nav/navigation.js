@@ -154,7 +154,7 @@ Blockly.navigation.removeMark = function() {
  *     block.
  * @package
  */
-Blockly.navigation.getTopNode_ = function(block) {
+Blockly.navigation.getTopNode = function(block) {
   var prevConnection = block.previousConnection;
   var outConnection = block.outputConnection;
   var topConnection = prevConnection ? prevConnection : outConnection;
@@ -391,7 +391,7 @@ Blockly.navigation.insertFromFlyout = function() {
   }
 
   Blockly.navigation.focusWorkspace();
-  Blockly.navigation.cursor_.setLocation(Blockly.navigation.getTopNode_(newBlock));
+  Blockly.navigation.cursor_.setLocation(Blockly.navigation.getTopNode(newBlock));
   Blockly.navigation.removeMark();
 };
 
@@ -725,9 +725,8 @@ Blockly.navigation.disconnectBlocks = function() {
 /*************************/
 
 /**
- * Sets the cursor to the previous or output connection of the selected block
- * on the workspace.
- * If no block is selected, places the cursor at a fixed point on the workspace.
+ * Finds where the cursor should go on the workspace. This is either the top
+ * block or a set position on the workspace.
  */
 Blockly.navigation.focusWorkspace = function() {
   var cursor = Blockly.navigation.cursor_;
@@ -736,11 +735,8 @@ Blockly.navigation.focusWorkspace = function() {
 
   Blockly.navigation.resetFlyout(reset);
   Blockly.navigation.currentState_ = Blockly.navigation.STATE_WS;
-  if (Blockly.selected) {
-    cursor.setLocation(Blockly.navigation.getTopNode_(Blockly.selected));
-    Blockly.selected.unselect();
-  } else if (topBlocks.length > 0) {
-    cursor.setLocation(Blockly.navigation.getTopNode_(topBlocks[0]));
+  if (topBlocks.length > 0) {
+    cursor.setLocation(Blockly.navigation.getTopNode(topBlocks[0]));
   } else {
     var ws = cursor.workspace_;
     // TODO: Find the center of the visible workspace.
@@ -859,7 +855,7 @@ Blockly.navigation.onKeyPress = function(e) {
   var curNode = Blockly.navigation.cursor_.getCurNode();
   var readOnly = Blockly.getMainWorkspace().options.readOnly;
   var actionHandled = false;
-  console.log(key);
+
   if (action) {
     if (Blockly.keyboardAccessibilityMode) {
       if (!readOnly) {
@@ -873,7 +869,7 @@ Blockly.navigation.onKeyPress = function(e) {
       } else if (Blockly.navigation.READONLY_ACTION_LIST.indexOf(action) > -1) {
         actionHandled = Blockly.navigation.onBlocklyAction(action);
       }
-    // If not in accessibility mode only hanlde enable keyboard action.
+    // If not in accessibility mode only hanlde turning on keyboard navigation.
     } else if (action.name == Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
       Blockly.navigation.enableKeyboardAccessibility();
     }
@@ -1127,7 +1123,7 @@ Blockly.navigation.ACTION_EXIT = new Blockly.Action(
     Blockly.navigation.actionNames.EXIT, 'Close the current modal, such as a toolbox or field editor.');
 
 /**
- * The action to enable keyboard navigation mode.
+ * The action to toggle keyboard navigation mode on and off.
  */
 Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV = new Blockly.Action(
     Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV, 'Turns on and off keyboard navigation.');

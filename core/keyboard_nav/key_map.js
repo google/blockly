@@ -125,9 +125,10 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
 };
 
 /**
- * Create the serialized code that will be used in the key map.
- * @param {!string} keyCode Code for the key to use
- * @param {!Array<string>} modifiers List of modifiers.
+ * Create the serialized key code that will be used in the key map.
+ * @param {!number} keyCode Number code representing the key.
+ * @param {!Array<string>} modifiers List of modifiers to be used with the key.
+ *     All valid modifiers can be found in the Blockly.user.keyMap.modifiers list.
  * @return {string} The serialized key code for the given modifiers and key.
  */
 Blockly.user.keyMap.createSerializeKey = function(keyCode, modifiers) {
@@ -150,6 +151,8 @@ Blockly.user.keyMap.createSerializeKey = function(keyCode, modifiers) {
  */
 Blockly.user.keyMap.createDefaultKeyMap = function() {
   var map = {};
+  var controlK = Blockly.user.keyMap.createSerializeKey(Blockly.utils.KeyCodes.K, ['Control']);
+
   map[Blockly.utils.KeyCodes.W] = Blockly.navigation.ACTION_PREVIOUS;
   map[Blockly.utils.KeyCodes.A] = Blockly.navigation.ACTION_OUT;
   map[Blockly.utils.KeyCodes.S] = Blockly.navigation.ACTION_NEXT;
@@ -160,6 +163,6 @@ Blockly.user.keyMap.createDefaultKeyMap = function() {
   map[Blockly.utils.KeyCodes.T] = Blockly.navigation.ACTION_TOOLBOX;
   map[Blockly.utils.KeyCodes.E] = Blockly.navigation.ACTION_EXIT;
   map[Blockly.utils.KeyCodes.ESC] = Blockly.navigation.ACTION_EXIT;
-  map[Blockly.user.keyMap.createSerializeKey(Blockly.utils.KeyCodes.K, ['Control'])] = Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV;
+  map[controlK] = Blockly.navigation.ACTION_TOGGLE_KEYBOARD_NAV;
   return map;
 };

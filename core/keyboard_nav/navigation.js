@@ -872,6 +872,7 @@ Blockly.navigation.onKeyPress = function(e) {
     // If not in accessibility mode only hanlde turning on keyboard navigation.
     } else if (action.name == Blockly.navigation.actionNames.TOGGLE_KEYBOARD_NAV) {
       Blockly.navigation.enableKeyboardAccessibility();
+      actionHandled = true;
     }
   }
   return actionHandled;

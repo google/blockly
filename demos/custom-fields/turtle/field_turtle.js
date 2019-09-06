@@ -34,6 +34,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Size');
 
+var CustomFields = {};
 
 // Generally field's values should be optional, and have logical defaults.
 // If this is not possible (for example image fields can't have logical

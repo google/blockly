@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Methods for graphically rendering a block as SVG.
+ * @fileoverview TODO
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
@@ -27,27 +27,14 @@
 
 goog.provide('Blockly.geras.PathObject');
 
-goog.require('Blockly.BlockSvg');
 goog.require('Blockly.utils.dom');
 
 
-/**
- * An object that holds information about the paths that are used to render the
- * block.  Each path is built up as an array of steps during the render process.
- * The arrays are then turned into strings, which are set in the block's SVG.
- * @constructor
- * @struct
- * @private
- */
-Blockly.geras.PathObject = function(block) {
-  this.svgRoot = block.getSvgRoot();
+Blockly.geras.PathObject = function(root) {
+  this.svgRoot = root;
 
-  /**
-   * @type {SVGElement}
-   * @package
-   */
-  this.svgPath = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPath'}, this.svgGroup_);
+  // The order of creation for these next three matters, because that
+  // effectively sets their z-indices.
 
   /**
    * @type {SVGElement}
@@ -55,23 +42,24 @@ Blockly.geras.PathObject = function(block) {
    */
   this.svgPathDark = Blockly.utils.dom.createSvgElement('path',
       {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
-      this.svgGroup_);
+      this.svgRoot);
+
+  /**
+   * @type {SVGElement}
+   * @package
+   */
+  this.svgPath = Blockly.utils.dom.createSvgElement('path',
+      {'class': 'blocklyPath'}, this.svgRoot);
+
 
   /**
    * @type {SVGElement}
    * @package
    */
   this.svgPathLight = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPathLight'}, this.svgGroup_);
+      {'class': 'blocklyPathLight'}, this.svgRoot);
 };
 
-/**
- * Update the block's SVG paths based on the paths that were computed during
- * this render pass.
- * @param {!Blockly.BlockSvg.PathObject} pathObject The object containing
- *     partially constructed SVG paths, which will be modified by this function.
- * @private
- */
 Blockly.geras.PathObject.prototype.setPaths = function(mainPath, highlightPath) {
   this.svgPath.setAttribute('d', mainPath);
   this.svgPathDark.setAttribute('d', mainPath);

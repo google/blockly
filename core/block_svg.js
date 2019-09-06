@@ -41,6 +41,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.blockRendering.PathObject');
 
 
 /**
@@ -63,7 +64,8 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   this.svgGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
   this.svgGroup_.translate_ = '';
 
-  this.pathObject = Blockly.blockRendering.renderer.makePathObject(this);
+  this.pathObject =
+      Blockly.blockRendering.renderer.makePathObject(this.svgGroup_);
 
   // The next three paths are set only for backwards compatibility reasons.
   /**

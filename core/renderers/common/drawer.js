@@ -27,6 +27,7 @@
 goog.provide('Blockly.blockRendering.Drawer');
 
 goog.require('Blockly.blockRendering.Debug');
+goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');

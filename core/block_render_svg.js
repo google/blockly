@@ -32,40 +32,6 @@ goog.require('Blockly.BlockSvg');
 goog.require('Blockly.utils.dom');
 
 
-/**
- * An object that holds information about the paths that are used to render the
- * block.  Each path is built up as an array of steps during the render process.
- * The arrays are then turned into strings, which are set in the block's SVG.
- * @constructor
- * @struct
- * @private
- */
-Blockly.BlockSvg.PathObject = function() {
-  /**
-   * The primary outline of the block.
-   * @type {!Array.<string|number>}
-   */
-  this.steps = [];
-
-  /**
-   * The highlight on the primary outline of the block.
-   * @type {!Array.<string|number>}
-   */
-  this.highlightSteps = [];
-
-  /**
-   * The holes in the block for inline inputs.
-   * @type {!Array.<string|number>}
-   */
-  this.inlineSteps = [];
-
-  /**
-   * The highlights on holes in the block for inline inputs.
-   * @type {!Array.<string|number>}
-   */
-  this.highlightInlineSteps = [];
-};
-
 // UI constants for rendering blocks.
 /**
  * Vertical space between elements.

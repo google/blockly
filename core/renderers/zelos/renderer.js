@@ -43,6 +43,7 @@ Blockly.zelos.Renderer = function() {
   this.renderInfo = Blockly.zelos.RenderInfo;
   this.drawer = Blockly.zelos.Drawer;
   this.debugger = Blockly.blockRendering.Debug;
+  this.pathObject = Blockly.blockRendering.PathObject;
 };
 goog.inherits(Blockly.zelos.Renderer, Blockly.blockRendering.Renderer);
 

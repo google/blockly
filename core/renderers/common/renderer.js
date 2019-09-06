@@ -68,6 +68,6 @@ Blockly.blockRendering.Renderer.prototype.render = function(block) {
   new this.drawer(block, info).draw();
 };
 
-Blockly.blockRendering.Renderer.prototype.makePathObject = function(block) {
-  return new this.pathObject(block);
+Blockly.blockRendering.Renderer.prototype.makePathObject = function(root) {
+  return new this.pathObject(root);
 };

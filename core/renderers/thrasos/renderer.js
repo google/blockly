@@ -43,5 +43,6 @@ Blockly.thrasos.Renderer = function() {
   this.renderInfo = Blockly.thrasos.RenderInfo;
   this.drawer = Blockly.blockRendering.Drawer;
   this.debugger = Blockly.blockRendering.Debug;
+  this.pathObject = Blockly.blockRendering.PathObject;
 };
 goog.inherits(Blockly.thrasos.Renderer, Blockly.blockRendering.Renderer);

@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Methods for graphically rendering a block as SVG.
+ * @fileoverview TODO
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
@@ -27,40 +27,46 @@
 
 goog.provide('Blockly.blockRendering.PathObject');
 
-goog.require('Blockly.BlockSvg');
 goog.require('Blockly.utils.dom');
 
 
-/**
- * An object that holds information about the paths that are used to render the
- * block.  Each path is built up as an array of steps during the render process.
- * The arrays are then turned into strings, which are set in the block's SVG.
- * @constructor
- * @struct
- * @private
- */
-Blockly.blockRendering.PathObject = function(block) {
-  this.svgRoot = block.getSvgRoot();
+Blockly.blockRendering.PathObject = function(root) {
+  this.svgRoot = root;
 
   /**
    * @type {SVGElement}
-   * @private
+   * @package
    */
   this.svgPath = Blockly.utils.dom.createSvgElement('path',
-      {'class': 'blocklyPath'}, this.svgGroup_);
+      {'class': 'blocklyPath'}, this.svgRoot);
+
+  // The light and dark paths need to exist (for now) because there is colouring
+  // code in block_svg that depends on them.  But we will always set them to
+  // display: none, and eventually we want to remove them entirely.
+
+  /**
+   * @type {SVGElement}
+   * @package
+   */
+  this.svgPathLight = Blockly.utils.dom.createSvgElement('path',
+      {'class': 'blocklyPathLight'}, this.svgRoot);
+
+  /**
+   * @type {SVGElement}
+   * @package
+   */
+  this.svgPathDark = Blockly.utils.dom.createSvgElement('path',
+      {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
+      this.svgRoot);
 };
 
-/**
- * Update the block's SVG paths based on the paths that were computed during
- * this render pass.
- * @param {!Blockly.BlockSvg.PathObject} pathObject The object containing
- *     partially constructed SVG paths, which will be modified by this function.
- * @private
- */
 Blockly.blockRendering.PathObject.prototype.setPaths = function(pathString) {
   this.svgPath.setAttribute('d', pathString);
   if (this.RTL) {
     // Mirror the block's path.
     this.svgPath.setAttribute('transform', 'scale(-1 1)');
   }
+
+  this.svgPathLight.style.display = 'none';
+  this.svgPathDark.style.display = 'none';
 };

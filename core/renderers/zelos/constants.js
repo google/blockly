@@ -155,6 +155,9 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
       if (checks && checks.indexOf('Number') != -1) {
         return this.CIRCLE;
       }
+      if (checks && checks.indexOf('String') != -1) {
+        return this.CIRCLE;
+      }
       return this.PUZZLE_TAB;
     case Blockly.PREVIOUS_STATEMENT:
     case Blockly.NEXT_STATEMENT:

@@ -76,7 +76,7 @@ Blockly.zelos.Drawer.prototype.drawTop_ = function() {
     // No branch for a square corner because it's a no-op.
   }
   if (!this.info_.outputConnection ||
-      !this.info_.outputConnection.shape.isDynamic) {
+      !this.info_.outputConnection.isDynamic()) {
     this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('v', topRow.height);
   }
 };
@@ -110,7 +110,7 @@ Blockly.zelos.Drawer.prototype.drawBottom_ = function() {
   }
 
   if (!this.info_.outputConnection ||
-      !this.info_.outputConnection.shape.isDynamic) {
+      !this.info_.outputConnection.isDynamic()) {
     this.outlinePath_ +=
         Blockly.utils.svgPaths.lineOnAxis('V',
             bottomRow.baseline -
@@ -147,7 +147,7 @@ Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
         this.info_.outputConnection.height);
   } else {
     if (!this.info_.outputConnection ||
-      !this.info_.outputConnection.shape.isDynamic) {
+        !this.info_.outputConnection.isDynamic()) {
       // Don't draw spacers when drawing the right side of outputs.
       this.outlinePath_ +=
           Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);

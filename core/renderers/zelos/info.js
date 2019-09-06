@@ -91,7 +91,7 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev || !next) {
     // No need for padding at the beginning or end of the row if the
     // output shape is dyanmic.
-    if (this.outputConnection && this.outputConnection.shape.isDynamic) {
+    if (this.outputConnection && this.outputConnection.isDynamic()) {
       return this.constants_.NO_PADDING;
     }
   }

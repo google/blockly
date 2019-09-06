@@ -273,14 +273,14 @@ Blockly.blockRendering.Drawer.prototype.drawLeft_ = function() {
   if (outputConnection) {
     var tabBottom = outputConnection.connectionOffsetY +
         outputConnection.height;
-    var connectionPath = (typeof outputConnection.shape.pathUp == "function") ?
+    var pathUp = (typeof outputConnection.shape.pathUp == "function") ?
         outputConnection.shape.pathUp(outputConnection.height) :
         outputConnection.shape.pathUp;
 
     // Draw a line up to the bottom of the tab.
     this.outlinePath_ +=
         Blockly.utils.svgPaths.lineOnAxis('V', tabBottom) +
-        connectionPath;
+        pathUp;
   }
   // Close off the path.  This draws a vertical line up to the start of the
   // block's path, which may be either a rounded or a sharp corner.

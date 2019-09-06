@@ -75,6 +75,7 @@ Blockly.zelos.Drawer.prototype.drawTop_ = function() {
     }
     // No branch for a square corner because it's a no-op.
   }
+
   if (!this.info_.outputConnection ||
       !this.info_.outputConnection.isDynamic()) {
     this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('v', topRow.height);
@@ -113,8 +114,7 @@ Blockly.zelos.Drawer.prototype.drawBottom_ = function() {
       !this.info_.outputConnection.isDynamic()) {
     this.outlinePath_ +=
         Blockly.utils.svgPaths.lineOnAxis('V',
-            bottomRow.baseline -
-            rightCornerYOffset);
+            bottomRow.baseline - rightCornerYOffset);
   }
   this.outlinePath_ += outlinePath;
 };

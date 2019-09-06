@@ -87,8 +87,8 @@ function prependHeader() {
  * Helper method for prepending Google closure methods used in Blockly.
  */
 function prependGoogBase() {
-  const baseMin = fs.readFileSync('closure/goog/base.min.js', 'utf8');
-  return gulp.insert.prepend(baseMin);
+  return gulp.insert.prepend(`'use strict';var goog=goog||{};goog.provide=function(){};goog.require=function(){};
+goog.inherits=function(a,b){function c(){}c.prototype=b.prototype;a.superClass_=b.prototype;a.prototype=new c;a.prototype.constructor=a;};`);
 }
 
 /**

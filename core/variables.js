@@ -32,6 +32,7 @@ goog.provide('Blockly.Variables');
 
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Msg');
+goog.require('Blockly.utils');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Xml');
@@ -315,7 +316,7 @@ Blockly.Variables.createVariableButtonHandler = function(
   };
   promptAndCheckWithAlert('');
 };
-goog.exportSymbol('Blockly.Variables.createVariableButtonHandler',
+Blockly.utils.exportSymbol('Blockly.Variables.createVariableButtonHandler',
     Blockly.Variables.createVariableButtonHandler);
 
 /**
@@ -332,7 +333,7 @@ goog.exportSymbol('Blockly.Variables.createVariableButtonHandler',
  */
 Blockly.Variables.createVariable =
     Blockly.Variables.createVariableButtonHandler;
-goog.exportSymbol('Blockly.Variables.createVariable',
+Blockly.utils.exportSymbol('Blockly.Variables.createVariable',
     Blockly.Variables.createVariable);
 
 /**

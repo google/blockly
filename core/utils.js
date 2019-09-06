@@ -622,3 +622,38 @@ Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {
   var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
   return finalOffsetMainWs;
 };
+
+/**
+ * Builds an object structure for the provided namespace path, ensuring that
+ * names that already exist are not overwritten. For example:
+ * "a.b.c" -> a = {};a.b={};a.b.c={}
+ * @param {string} name name of the object that this file defines.
+ * @param {*=} opt_object the object to expose at the end of the path.
+ */
+Blockly.utils.exportSymbol = function(name, opt_object) {
+  var parts = name.split('.');
+  var cur = Blockly.utils.global;
+
+  for (var part; parts.length && (part = parts.shift());) {
+    if (!parts.length && opt_object !== void 0) {
+      // last part and we have an object; use it
+      cur[part] = opt_object;
+    } else if (cur[part] && cur[part] !== Object.prototype[part]) {
+      cur = cur[part];
+    } else {
+      cur = cur[part] = {};
+    }
+  }
+};
+
+
+/**
+ * Copies all the members of a source object to a target object.
+ * @param {Object} target Target.
+ * @param {Object} source Source.
+ */
+Blockly.utils.mixin = function(target, source) {
+  for (var x in source) {
+    target[x] = source[x];
+  }
+};

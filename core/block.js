@@ -171,7 +171,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
     if (!prototype || typeof prototype != 'object') {
       throw TypeError('Unknown block type: ' + prototypeName);
     }
-    goog.mixin(this, prototype);
+    Blockly.utils.mixin(this, prototype);
   }
 
   workspace.addTopBlock(this);
@@ -1557,7 +1557,7 @@ Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
           JSON.stringify(overwrites));
     }
   }
-  goog.mixin(this, mixinObj);
+  Blockly.utils.mixin(this, mixinObj);
 };
 
 /**

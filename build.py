@@ -210,11 +210,9 @@ class Gen_compressed(threading.Thread):
         ("warning_level", "DEFAULT"),
       ]
 
-    # Read in the Google closure minified base file which consists of
-    # closure methods used in Blockly (eg: goog.inherits).
-    b = codecs.open(os.path.join("closure", "goog", "base.min.js"), encoding="utf-8")
-    baseCode = "".join(b.readlines()).encode("utf-8")
-    params.append(("js_code", baseCode))
+    # Add Closure provide, require and inherits methods.
+    params.append(("js_code", """var goog=goog||{};goog.provide=function(){};goog.require=function(){};
+goog.inherits=function(a,b){function c(){}c.prototype=b.prototype;a.superClass_=b.prototype;a.prototype=new c;a.prototype.constructor=a;};"""))
 
     # Read in all the source files.
     filenames = calcdeps.CalculateDependencies(self.search_paths,

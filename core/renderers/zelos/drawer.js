@@ -127,6 +127,10 @@ Blockly.zelos.Drawer.prototype.drawBottom_ = function() {
  * @protected
  */
 Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
+  if (this.info_.outputConnection && this.info_.outputConnection.isDynamic()) {
+    this.drawRightConnection_(row);
+    return;
+  }
   if (row.type & Blockly.blockRendering.Types.getType('BEFORE_STATEMENT_SPACER_ROW')) {
     var remainingHeight = row.height - this.constants_.INSIDE_CORNERS.rightWidth;
     this.outlinePath_ +=
@@ -139,19 +143,25 @@ Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
         this.constants_.INSIDE_CORNERS.pathBottomRight +
         (remainingHeight > 0 ?
             Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height) : '');
-  } else if (Blockly.blockRendering.Types.isInputRow(row) &&
-      this.info_.outputConnection &&
-      (typeof this.info_.outputConnection.shape.pathRightDown == "function")) {
-    // Draw right side of an output connection
-    this.outlinePath_ += this.info_.outputConnection.shape.pathRightDown(
-        this.info_.outputConnection.height);
   } else {
-    if (!this.info_.outputConnection ||
-        !this.info_.outputConnection.isDynamic()) {
-      // Don't draw spacers when drawing the right side of outputs.
-      this.outlinePath_ +=
-          Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);
-    }
+    this.outlinePath_ +=
+        Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);
+  }
+};
+
+/**
+ * Add steps to draw the right side of an output connection.
+ * @param {!Blockly.blockRendering.Row} row The row to draw the
+ *     side of.
+ * @protected
+ */
+Blockly.zelos.Drawer.prototype.drawRightConnection_ = function(row) {
+  // We only want to draw this once, so determine if this is the first row.
+  var index = this.info_.rows.indexOf(row);
+  if (index === 1) {
+    var height = this.info_.outputConnection.height;
+    var pathRightDown = this.info_.outputConnection.shape.pathRightDown(height);
+    this.outlinePath_ += pathRightDown;
   }
 };
 
@@ -160,7 +170,6 @@ Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
  */
 Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
   // Don't draw an inline input.
-  // TODO:
   this.positionInlineInputConnection_(input);
 };
 

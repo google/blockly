@@ -64,16 +64,16 @@ goog.inherits(Blockly.zelos.ConstantProvider,
  */
 Blockly.zelos.ConstantProvider.prototype.init = function() {
   Blockly.zelos.ConstantProvider.superClass_.init.call(this);
-  this.TRIANGLE = this.makeTriangle();
-  this.CIRCLE = this.makeCircle();
+  this.HEXAGONAL = this.makeHexagonal();
+  this.ROUNDED = this.makeRounded();
 };
 
 /**
  * @return {!Object} An object containing sizing and path information about
- *     a triangle shape for connections.
+ *     a hexagonal shape for connections.
  * @package
  */
-Blockly.zelos.ConstantProvider.prototype.makeTriangle = function() {
+Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
   // The 'up' and 'down' versions of the paths are the same, but the Y sign
   // flips.  Forward and back are the signs to use to move the cursor in the
   // direction that the path is being drawn.
@@ -107,10 +107,10 @@ Blockly.zelos.ConstantProvider.prototype.makeTriangle = function() {
 
 /**
  * @return {!Object} An object containing sizing and path information about
- *     a triangle shape for connections.
+ *     a rounded shape for connections.
  * @package
  */
-Blockly.zelos.ConstantProvider.prototype.makeCircle = function() {
+Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
   // The 'up' and 'down' versions of the paths are the same, but the Y sign
   // flips.  Forward and back are the signs to use to move the cursor in the
   // direction that the path is being drawn.
@@ -150,13 +150,13 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
     case Blockly.OUTPUT_VALUE:
       // Includes doesn't work in IE.
       if (checks && checks.indexOf('Boolean') != -1) {
-        return this.TRIANGLE;
+        return this.HEXAGONAL;
       }
       if (checks && checks.indexOf('Number') != -1) {
-        return this.CIRCLE;
+        return this.ROUNDED;
       }
       if (checks && checks.indexOf('String') != -1) {
-        return this.CIRCLE;
+        return this.ROUNDED;
       }
       return this.PUZZLE_TAB;
     case Blockly.PREVIOUS_STATEMENT:

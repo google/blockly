@@ -90,7 +90,7 @@ goog.inherits(Blockly.zelos.RenderInfo, Blockly.blockRendering.RenderInfo);
 Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev || !next) {
     // No need for padding at the beginning or end of the row if the
-    // output shape is dyanmic.
+    // output shape is dynamic.
     if (this.outputConnection && this.outputConnection.isDynamic()) {
       return this.constants_.NO_PADDING;
     }

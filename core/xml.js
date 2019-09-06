@@ -791,11 +791,7 @@ Blockly.Xml.deleteNext = function(xmlBlock) {
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
-Blockly.utils.exportSymbol('Blockly.Xml.domToText',
-    Blockly.Xml.domToText);
-Blockly.utils.exportSymbol('Blockly.Xml.domToWorkspace',
-    Blockly.Xml.domToWorkspace);
-Blockly.utils.exportSymbol('Blockly.Xml.textToDom',
-    Blockly.Xml.textToDom);
-Blockly.utils.exportSymbol('Blockly.Xml.workspaceToDom',
-    Blockly.Xml.workspaceToDom);
+Blockly.utils.exportSymbol('Blockly.Xml.domToText', Blockly.Xml.domToText);
+Blockly.utils.exportSymbol('Blockly.Xml.domToWorkspace', Blockly.Xml.domToWorkspace);
+Blockly.utils.exportSymbol('Blockly.Xml.textToDom', Blockly.Xml.textToDom);
+Blockly.utils.exportSymbol('Blockly.Xml.workspaceToDom', Blockly.Xml.workspaceToDom);

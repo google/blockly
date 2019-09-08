@@ -270,7 +270,6 @@ Blockly.Connection.prototype.canConnectWithReason_ = function(target) {
     var blockA = target.getSourceBlock();
   }
   if (blockA && blockA == blockB) {
-    console.log(!!blockA, !!blockB, blockA == blockB);
     return Blockly.Connection.REASON_SELF_CONNECTION;
   } else if (target.type != Blockly.OPPOSITE_TYPE[this.type]) {
     return Blockly.Connection.REASON_WRONG_TYPE;

@@ -270,6 +270,7 @@ Blockly.Connection.prototype.canConnectWithReason_ = function(target) {
     var blockA = target.getSourceBlock();
   }
   if (blockA && blockA == blockB) {
+    console.log(!!blockA, !!blockB, blockA == blockB);
     return Blockly.Connection.REASON_SELF_CONNECTION;
   } else if (target.type != Blockly.OPPOSITE_TYPE[this.type]) {
     return Blockly.Connection.REASON_WRONG_TYPE;
@@ -640,8 +641,8 @@ Blockly.Connection.prototype.onCheckChanged_ = function() {
 
 /**
  * Change a connection's compatibility.
- * @param {*} check Compatible value type or list of value types.
- *     Null if all types are compatible.
+ * @param {string|!Array<string>} check Compatible value type or list of value
+ *    types. Null if all types are compatible.
  * @return {!Blockly.Connection} The connection being modified
  *     (to allow chaining).
  */

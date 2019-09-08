@@ -22,16 +22,16 @@ suite('Connections', function() {
   suite('Can Connect With Reason', function() {
     test('Target Null', function() {
       var connection = new Blockly.Connection({}, Blockly.INPUT_VALUE);
-      chai.assert.equal(Blockly.Connection.REASON_TARGET_NULL,
-          connection.canConnectWithReason_(null));
+      chai.assert.equal(connection.canConnectWithReason_(null),
+          Blockly.Connection.REASON_TARGET_NULL);
     });
     test('Target Self', function() {
       var block = {workspace: 1};
       var connection1 = new Blockly.Connection(block, Blockly.INPUT_VALUE);
       var connection2 = new Blockly.Connection(block, Blockly.OUTPUT_VALUE);
 
-      chai.assert.equal(Blockly.Connection.REASON_SELF_CONNECTION,
-          connection1.canConnectWithReason_(connection2));
+      chai.assert.equal(connection1.canConnectWithReason_(connection2),
+          Blockly.Connection.REASON_SELF_CONNECTION);
     });
     test('Different Workspaces', function() {
       var connection1 = new Blockly.Connection(
@@ -39,325 +39,163 @@ suite('Connections', function() {
       var connection2 = new Blockly.Connection(
           {workspace: 2}, Blockly.OUTPUT_VALUE);
 
-      chai.assert.equal(Blockly.Connection.REASON_DIFFERENT_WORKSPACES,
-          connection1.canConnectWithReason_(connection2));
+      chai.assert.equal(connection1.canConnectWithReason_(connection2),
+          Blockly.Connection.REASON_DIFFERENT_WORKSPACES);
+    });
+    suite('Types', function() {
+      setup(function() {
+        // We have to declare each separately so that the connections belong
+        // on different blocks.
+        var prevBlock = { isShadow: function() {}};
+        var nextBlock = { isShadow: function() {}};
+        var outBlock = { isShadow: function() {}};
+        var inBlock = { isShadow: function() {}};
+        this.previous = new Blockly.Connection(
+            prevBlock, Blockly.PREVIOUS_STATEMENT);
+        this.next = new Blockly.Connection(
+            nextBlock, Blockly.NEXT_STATEMENT);
+        this.output = new Blockly.Connection(
+            outBlock, Blockly.OUTPUT_VALUE);
+        this.input = new Blockly.Connection(
+            inBlock, Blockly.INPUT_VALUE);
+      });
+      test('Previous, Next', function() {
+        chai.assert.equal(this.previous.canConnectWithReason_(this.next),
+            Blockly.Connection.CAN_CONNECT);
+      });
+      test('Previous, Output', function() {
+        chai.assert.equal(this.previous.canConnectWithReason_(this.output),
+            Blockly.Connection.REASON_WRONG_TYPE);
+      });
+      test('Previous, Input', function() {
+        chai.assert.equal(this.previous.canConnectWithReason_(this.input),
+            Blockly.Connection.REASON_WRONG_TYPE);
+      });
+      test('Next, Previous', function() {
+        chai.assert.equal(this.next.canConnectWithReason_(this.previous),
+            Blockly.Connection.CAN_CONNECT);
+      });
+      test('Next, Output', function() {
+        chai.assert.equal(this.next.canConnectWithReason_(this.output),
+            Blockly.Connection.REASON_WRONG_TYPE);
+      });
+      test('Next, Input', function() {
+        chai.assert.equal(this.next.canConnectWithReason_(this.input),
+            Blockly.Connection.REASON_WRONG_TYPE);
+      });
+      test('Output, Previous', function() {
+        chai.assert.equal(this.output.canConnectWithReason_(this.previous),
+            Blockly.Connection.REASON_WRONG_TYPE);
+      });
+      test('Output, Next', function() {
+        chai.assert.equal(this.output.canConnectWithReason_(this.next),
+            Blockly.Connection.REASON_WRONG_TYPE);
+      });
+      test('Output, Input', function() {
+        chai.assert.equal(this.output.canConnectWithReason_(this.input),
+            Blockly.Connection.CAN_CONNECT);
+      });
+      test('Input, Previous', function() {
+        chai.assert.equal(this.input.canConnectWithReason_(this.previous),
+            Blockly.Connection.REASON_WRONG_TYPE);
+      });
+      test('Input, Next', function() {
+        chai.assert.equal(this.input.canConnectWithReason_(this.next),
+            Blockly.Connection.REASON_WRONG_TYPE);
+      });
+      test('Input, Output', function() {
+        chai.assert.equal(this.input.canConnectWithReason_(this.output),
+            Blockly.Connection.CAN_CONNECT);
+      });
+    });
+    suite('Shadows', function() {
+      test('Previous Shadow', function() {
+        var prevBlock = { isShadow: function() { return true; }};
+        var nextBlock = { isShadow: function() { return false; }};
+        var prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
+        var next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
+
+        chai.assert.equal(prev.canConnectWithReason_(next),
+            Blockly.Connection.CAN_CONNECT);
+      });
+      test('Next Shadow', function() {
+        var prevBlock = { isShadow: function() { return false; }};
+        var nextBlock = { isShadow: function() { return true; }};
+        var prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
+        var next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
+
+        chai.assert.equal(prev.canConnectWithReason_(next),
+            Blockly.Connection.REASON_SHADOW_PARENT);
+      });
+      test('Prev and Next Shadow', function() {
+        var prevBlock = { isShadow: function() { return true; }};
+        var nextBlock = { isShadow: function() { return true; }};
+        var prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
+        var next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
+
+        chai.assert.equal(prev.canConnectWithReason_(next),
+            Blockly.Connection.CAN_CONNECT);
+      });
+      test('Output Shadow', function() {
+        var outBlock = { isShadow: function() { return true; }};
+        var inBlock = { isShadow: function() { return false; }};
+        var outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
+        var inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
+
+        chai.assert.equal(outCon.canConnectWithReason_(inCon),
+            Blockly.Connection.CAN_CONNECT);
+      });
+      test('Input Shadow', function() {
+        var outBlock = { isShadow: function() { return false; }};
+        var inBlock = { isShadow: function() { return true; }};
+        var outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
+        var inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
+
+        chai.assert.equal(outCon.canConnectWithReason_(inCon),
+            Blockly.Connection.REASON_SHADOW_PARENT);
+      });
+      test('Output and Input Shadow', function() {
+        var outBlock = { isShadow: function() { return true; }};
+        var inBlock = { isShadow: function() { return true; }};
+        var outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
+        var inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
+
+        chai.assert.equal(outCon.canConnectWithReason_(inCon),
+            Blockly.Connection.CAN_CONNECT);
+      });
     });
   });
-  suite.skip('Hiddenness - Obsolete', function() {
-    function assertAllConnectionsHiddenState(block, hidden) {
-      var connections = block.getConnections_(true);
-      for (var i = 0; i < connections.length; i++) {
-        var connection = connections[i];
-        if (connection.type == Blockly.PREVIOUS_STATEMENT ||
-          connection.type == Blockly.OUTPUT_VALUE) {
-          // Only superior connections on inputs get hidden
-          continue;
-        }
-        if (block.nextConnection && connection === block.nextConnection) {
-          // The next connection is not hidden when collapsed
-          continue;
-        }
-        assertEquals('Connection ' + i + ' failed', hidden, connections[i].hidden_);
-      }
-    }
-    function assertAllConnectionsHidden(block) {
-      assertAllConnectionsHiddenState(block, true);
-    }
-    function assertAllConnectionsVisible(block) {
-      assertAllConnectionsHiddenState(block, false);
-    }
-
+  suite('Check Types', function() {
     setup(function() {
-      Blockly.defineBlocksWithJsonArray([{
-        "type": "stack_block",
-        "message0": "",
-        "previousStatement": null,
-        "nextStatement": null
-      },
-      {
-        "type": "row_block",
-        "message0": "%1",
-        "args0": [
-          {
-            "type": "input_value",
-            "name": "INPUT"
-          }
-        ],
-        "output": null
-      },
-      {
-        "type": "inputs_block",
-        "message0": "%1 %2",
-        "args0": [
-          {
-            "type": "input_value",
-            "name": "INPUT"
-          },
-          {
-            "type": "input_statement",
-            "name": "STATEMENT"
-          }
-        ],
-        "previousStatement": null,
-        "nextStatement": null
-      },]);
-
-      var toolbox = document.getElementById('toolbox-connections');
-      this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+      this.con1 = new Blockly.Connection({}, Blockly.PREVIOUS_STATEMENT);
+      this.con2 = new Blockly.Connection({}, Blockly.NEXT_STATEMENT);
     });
-
-    teardown(function() {
-      delete Blockly.Blocks['stack_block'];
-      delete Blockly.Blocks['row_block'];
-      delete Blockly.Blocks['inputs_block'];
-
-      this.workspace.dispose();
+    test('No Types', function() {
+      chai.assert.isTrue(this.con1.checkType_(this.con2));
     });
-
-    suite('Row collapsing', function() {
-      setup(function() {
-        var blockA = this.workspace.newBlock('row_block');
-        var blockB = this.workspace.newBlock('row_block');
-        var blockC = this.workspace.newBlock('row_block');
-
-        blockA.inputList[0].connection.connect(blockB.outputConnection);
-        blockA.setCollapsed(true);
-
-        assertEquals(blockA, blockB.getParent());
-        assertNull(blockC.getParent());
-        assertTrue(blockA.isCollapsed());
-        assertAllConnectionsHidden(blockA);
-        assertAllConnectionsHidden(blockB);
-        assertAllConnectionsVisible(blockC);
-
-        this.blocks = {
-          A: blockA,
-          B: blockB,
-          C: blockC
-        };
-      });
-
-      test('Add to end', function() {
-        var blocks = this.blocks;
-        blocks.B.inputList[0].connection.connect(blocks.C.outputConnection);
-        assertAllConnectionsHidden(blocks.C);
-      });
-
-      test('Add to end w/inferior', function() {
-        var blocks = this.blocks;
-        blocks.C.outputConnection.connect(blocks.B.inputList[0].connection);
-        assertAllConnectionsHidden(blocks.C);
-      });
-
-      test('Add to middle', function() {
-        var blocks = this.blocks;
-        blocks.A.inputList[0].connection.connect(blocks.C.outputConnection);
-        assertAllConnectionsHidden(blocks.C);
-      });
-
-      test('Add to middle w/inferior', function() {
-        var blocks = this.blocks;
-        blocks.C.outputConnection.connect(blocks.A.inputList[0].connection);
-        assertAllConnectionsHidden(blocks.C);
-      });
-
-      test('Remove simple', function() {
-        var blocks = this.blocks;
-        blocks.B.unplug();
-        assertAllConnectionsVisible(blocks.B);
-      });
-
-      test('Remove middle', function() {
-        var blocks = this.blocks;
-        blocks.B.inputList[0].connection.connect(blocks.C.outputConnection);
-        blocks.B.unplug(false);
-        assertAllConnectionsVisible(blocks.B);
-        assertAllConnectionsVisible(blocks.C);
-      });
-
-      test('Remove middle healing', function() {
-        var blocks = this.blocks;
-        blocks.B.inputList[0].connection.connect(blocks.C.outputConnection);
-        blocks.B.unplug(true);
-        assertAllConnectionsVisible(blocks.B);
-        assertAllConnectionsHidden(blocks.C);
-      });
-
-      test('Add before', function() {
-        var blocks = this.blocks;
-        blocks.C.inputList[0].connection.connect(blocks.A.outputConnection);
-        // Connecting a collapsed block to another block doesn't change any hidden state
-        assertAllConnectionsHidden(blocks.A);
-        assertAllConnectionsVisible(blocks.C);
-      });
-
-      test('Remove front', function() {
-        var blocks = this.blocks;
-        blocks.B.inputList[0].connection.connect(blocks.C.outputConnection);
-        blocks.A.inputList[0].connection.disconnect();
-        assertTrue(blocks.A.isCollapsed());
-        assertAllConnectionsHidden(blocks.A);
-        assertAllConnectionsVisible(blocks.B);
-        assertAllConnectionsVisible(blocks.C);
-      });
-
-      test('Uncollapse', function() {
-        var blocks = this.blocks;
-        blocks.B.inputList[0].connection.connect(blocks.C.outputConnection);
-        blocks.A.setCollapsed(false);
-        assertFalse(blocks.A.isCollapsed());
-        assertAllConnectionsVisible(blocks.A);
-        assertAllConnectionsVisible(blocks.B);
-        assertAllConnectionsVisible(blocks.C);
-      });
+    test('Same Type', function() {
+      this.con1.setCheck('type1');
+      this.con2.setCheck('type1');
+      chai.assert.isTrue(this.con1.checkType_(this.con2));
     });
-    suite('Statement collapsing', function() {
-      setup(function() {
-        var blockA = this.workspace.newBlock('inputs_block');
-        var blockB = this.workspace.newBlock('inputs_block');
-        var blockC = this.workspace.newBlock('inputs_block');
-
-        blockA.getInput('STATEMENT').connection.connect(blockB.previousConnection);
-        blockA.setCollapsed(true);
-
-        assertEquals(blockA, blockB.getParent());
-        assertNull(blockC.getParent());
-        assertTrue(blockA.isCollapsed());
-        assertAllConnectionsHidden(blockA);
-        assertAllConnectionsHidden(blockB);
-        assertAllConnectionsVisible(blockC);
-
-        this.blocks = {
-          A: blockA,
-          B: blockB,
-          C: blockC
-        };
-      });
-
-      test('Add to statement', function() {
-        var blocks = this.blocks;
-        blocks.B.getInput('STATEMENT').connection.connect(blocks.C.previousConnection);
-        assertAllConnectionsHidden(blocks.C);
-      });
-
-      test('Insert in statement', function() {
-        var blocks = this.blocks;
-        blocks.A.getInput('STATEMENT').connection.connect(blocks.C.previousConnection);
-        assertAllConnectionsHidden(blocks.C);
-      });
-
-      test('Add to hidden next', function() {
-        var blocks = this.blocks;
-        blocks.B.nextConnection.connect(blocks.C.previousConnection);
-        assertAllConnectionsHidden(blocks.C);
-      });
-
-      test('Remove simple', function() {
-        var blocks = this.blocks;
-        blocks.B.unplug();
-        assertAllConnectionsVisible(blocks.B);
-      });
-
-      test('Remove middle', function() {
-        var blocks = this.blocks;
-        blocks.B.nextConnection.connect(blocks.C.previousConnection);
-        blocks.B.unplug(false);
-        assertAllConnectionsVisible(blocks.B);
-        assertAllConnectionsVisible(blocks.C);
-      });
-
-      test('Remove middle healing', function() {
-        var blocks = this.blocks;
-        blocks.B.nextConnection.connect(blocks.C.previousConnection);
-        blocks.B.unplug(true);
-        assertAllConnectionsVisible(blocks.B);
-        assertAllConnectionsHidden(blocks.C);
-      });
-
-      test('Add before', function() {
-        var blocks = this.blocks;
-        blocks.C.getInput('STATEMENT').connection.connect(blocks.A.previousConnection);
-        assertAllConnectionsHidden(blocks.A);
-        assertAllConnectionsHidden(blocks.B);
-        assertAllConnectionsVisible(blocks.C);
-      });
-
-      test('Remove front', function() {
-        var blocks = this.blocks;
-        blocks.B.nextConnection.connect(blocks.C.previousConnection);
-        blocks.A.getInput('STATEMENT').connection.disconnect();
-        assertTrue(blocks.A.isCollapsed());
-        assertAllConnectionsHidden(blocks.A);
-        assertAllConnectionsVisible(blocks.B);
-        assertAllConnectionsVisible(blocks.C);
-      });
-
-      test('Uncollapse', function() {
-        var blocks = this.blocks;
-        blocks.B.nextConnection.connect(blocks.C.previousConnection);
-        blocks.A.setCollapsed(false);
-        assertFalse(blocks.A.isCollapsed());
-        assertAllConnectionsVisible(blocks.A);
-        assertAllConnectionsVisible(blocks.B);
-        assertAllConnectionsVisible(blocks.C);
-      });
+    test('Same Types', function() {
+      this.con1.setCheck(['type1', 'type2']);
+      this.con2.setCheck(['type1', 'type2']);
+      chai.assert.isTrue(this.con1.checkType_(this.con2));
     });
-
-    suite('Collapsing with shadows', function() {
-      setup(function() {
-        var blockA = this.workspace.newBlock('inputs_block');
-        var blockB = this.workspace.newBlock('inputs_block');
-        var blockC = this.workspace.newBlock('inputs_block');
-        var blockD = this.workspace.newBlock('row_block');
-
-        blockB.setShadow(true);
-        var shadowStatement = Blockly.Xml.blockToDom(blockB, true /*noid*/);
-        blockB.setShadow(false);
-
-        blockD.setShadow(true);
-        var shadowValue = Blockly.Xml.blockToDom(blockD, true /*noid*/);
-        blockD.setShadow(false);
-
-        var connection = blockA.getInput('STATEMENT').connection;
-        connection.setShadowDom(shadowStatement);
-        connection.connect(blockB.previousConnection);
-        connection = blockA.getInput('INPUT').connection;
-        connection.setShadowDom(shadowValue);
-        connection.connect(blockD.outputConnection);
-        blockA.setCollapsed(true);
-
-        assertEquals(blockA, blockB.getParent());
-        assertNull(blockC.getParent());
-        assertTrue(blockA.isCollapsed());
-        assertAllConnectionsHidden(blockA);
-        assertAllConnectionsHidden(blockB);
-        assertAllConnectionsVisible(blockC);
-
-        this.blocks = {
-          A: blockA,
-          B: blockB,
-          C: blockC,
-          D: blockD
-        };
-      });
-
-      test('Reveal shadow statement', function() {
-        var blocks = this.blocks;
-        var connection = blocks.A.getInput('STATEMENT').connection;
-        connection.disconnect();
-        var shadowBlock = connection.targetBlock();
-        assertTrue(shadowBlock.isShadow());
-        assertAllConnectionsHidden(shadowBlock);
-      });
-
-      test('Reveal shadow value', function() {
-        var blocks = this.blocks;
-        var connection = blocks.A.getInput('INPUT').connection;
-        connection.disconnect();
-        var shadowBlock = connection.targetBlock();
-        assertTrue(shadowBlock.isShadow());
-        assertAllConnectionsHidden(shadowBlock);
-      });
+    test('Single Same Type', function() {
+      this.con1.setCheck(['type1', 'type2']);
+      this.con2.setCheck(['type1', 'type3']);
+      chai.assert.isTrue(this.con1.checkType_(this.con2));
+    });
+    test('One Typed, One Promiscuous', function() {
+      this.con1.setCheck('type1');
+      chai.assert.isTrue(this.con1.checkType_(this.con2));
+    });
+    test('No Compatible Types', function() {
+      this.con1.setCheck('type1');
+      this.con2.setCheck('type2');
+      chai.assert.isFalse(this.con1.checkType_(this.con2));
     });
   });
 });

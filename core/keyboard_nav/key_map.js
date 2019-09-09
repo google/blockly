@@ -136,7 +136,7 @@ Blockly.user.keyMap.serializeKeyEvent = function(e) {
  *     All valid modifiers can be found in the Blockly.user.keyMap.modifierKeys.
  * @return {string} The serialized key code for the given modifiers and key.
  */
-Blockly.user.keyMap.createSerializeKey = function(keyCode, modifiers) {
+Blockly.user.keyMap.createSerializedKey = function(keyCode, modifiers) {
   var key = '';
   var validModifiers = Object.values(Blockly.user.keyMap.modifierKeys);
   for (var i = 0, keyName; keyName = modifiers[i]; i++) {
@@ -157,7 +157,7 @@ Blockly.user.keyMap.createSerializeKey = function(keyCode, modifiers) {
  */
 Blockly.user.keyMap.createDefaultKeyMap = function() {
   var map = {};
-  var controlK = Blockly.user.keyMap.createSerializeKey(
+  var controlK = Blockly.user.keyMap.createSerializedKey(
       Blockly.utils.KeyCodes.K, [Blockly.user.keyMap.modifierKeys.CONTROL]);
 
   map[Blockly.utils.KeyCodes.W] = Blockly.navigation.ACTION_PREVIOUS;

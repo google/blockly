@@ -39,6 +39,7 @@ goog.require('Blockly.Input');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.Warning');
 goog.require('Blockly.Workspace');
@@ -53,7 +54,7 @@ goog.require('Blockly.Workspace');
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @constructor
- * @throw When block is not valid or block name is not allowed.
+ * @throws When block is not valid or block name is not allowed.
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {
   if (typeof Blockly.Generator.prototype[prototypeName] !== 'undefined') {
@@ -227,6 +228,13 @@ Blockly.Block.obtain = function(workspace, prototypeName) {
 Blockly.Block.prototype.data = null;
 
 /**
+ * Has this block been disposed of?
+ * @type {boolean}
+ * @package
+ */
+Blockly.Block.prototype.disposed = false;
+
+/**
  * Colour of the block as HSV hue value (0-360)
  * This may be null if the block colour was not set via a hue number.
  * @type {?number}
@@ -279,6 +287,12 @@ Blockly.Block.prototype.dispose = function(healStack) {
   if (this.onchangeWrapper_) {
     this.workspace.removeChangeListener(this.onchangeWrapper_);
   }
+
+  if (Blockly.keyboardAccessibilityMode) {
+    // No-op if this is called from the block_svg class.
+    Blockly.navigation.moveCursorOnBlockDelete(this);
+  }
+
   this.unplug(healStack);
   if (Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.BlockDelete(this));
@@ -316,15 +330,12 @@ Blockly.Block.prototype.dispose = function(healStack) {
     this.inputList.length = 0;
     // Dispose of any remaining connections (next/previous/output).
     var connections = this.getConnections_(true);
-    for (var i = 0; i < connections.length; i++) {
-      var connection = connections[i];
-      if (connection.isConnected()) {
-        connection.disconnect();
-      }
-      connections[i].dispose();
+    for (var i = 0, connection; connection = connections[i]; i++) {
+      connection.dispose();
     }
   } finally {
     Blockly.Events.enable();
+    this.disposed = true;
   }
 };
 
@@ -413,8 +424,8 @@ Blockly.Block.prototype.getOnlyValueConnection_ = function() {
   var connection = null;
   for (var i = 0; i < this.inputList.length; i++) {
     var thisConnection = this.inputList[i].connection;
-    if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE
-        && thisConnection.targetConnection) {
+    if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE &&
+        thisConnection.targetConnection) {
       if (connection) {
         return null; // More than one value input found.
       }
@@ -914,7 +925,7 @@ Blockly.Block.prototype.getColourBorder = function() {
   var colour = this.getColour();
   return {
     colourBorder: null,
-    colourLight: Blockly.utils.colour.blend('white',colour,  0.3),
+    colourLight: Blockly.utils.colour.blend('white', colour, 0.3),
     colourDark: Blockly.utils.colour.blend('black', colour, 0.2)
   };
 };
@@ -1078,7 +1089,7 @@ Blockly.Block.prototype.updateVarName = function(variable) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
       if (field.referencesVariables() &&
           variable.getId() == field.getValue()) {
-        field.setText(variable.name);
+        field.refreshVariableName();
       }
     }
   }
@@ -1630,18 +1641,15 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
               input = this.appendDummyInput(element['name']);
               break;
             default:
-              field = Blockly.Field.fromJson(element);
+              // This should handle all field JSON parsing, including
+              // options that can be applied to any field type.
+              field = Blockly.fieldRegistry.fromJson(element);
 
               // Unknown field.
               if (!field) {
                 if (element['alt']) {
                   element = element['alt'];
                   altRepeat = true;
-                } else {
-                  console.warn('Blockly could not create a field of type ' +
-                      element['type'] +
-                      '. You may need to register your custom field.  See ' +
-                      'github.com/google/blockly/issues/1584');
                 }
               }
           }
@@ -1757,17 +1765,6 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
 Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     if (input.name == name) {
-      if (input.connection && input.connection.isConnected()) {
-        input.connection.setShadowDom(null);
-        var block = input.connection.targetBlock();
-        if (block.isShadow()) {
-          // Destroy any attached shadow block.
-          block.dispose();
-        } else {
-          // Disconnect any attached normal block.
-          block.unplug();
-        }
-      }
       input.dispose();
       this.inputList.splice(i, 1);
       return;

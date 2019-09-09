@@ -34,7 +34,6 @@
 # been renamed.  The uncompressed file also allows for a faster development
 # cycle since there is no need to rebuild or recompile, just reload.
 #
-#
 # This script also generates:
 #   blocks_compressed.js: The compressed Blockly language blocks.
 #   javascript_compressed.js: The compressed JavaScript generator.
@@ -46,15 +45,8 @@
 
 import sys
 
-for arg in sys.argv[1:len(sys.argv)]:
-  if (arg != 'core' and
-      arg != 'accessible' and
-      arg != 'generators' and
-      arg != 'langfiles'):
-    raise Exception("Invalid argument: \"" + arg + "\". Usage: build.py "
-        "<0 or more of core, generators, langfiles>")
-
-import errno, glob, json, os, re, subprocess, threading, codecs
+import errno, glob, json, os, re, subprocess, threading, codecs, argparse
+from cStringIO import StringIO
 
 if sys.version_info[0] == 2:
   import httplib
@@ -63,6 +55,9 @@ else:
   import http.client as httplib
   from urllib.parse import urlencode
   from importlib import reload
+
+# Read package.json and extract the current Blockly version.
+blocklyVersion = json.loads(open('package.json', 'r').read())['version']
 
 def import_path(fullpath):
   """Import a file with full path specification.
@@ -119,13 +114,6 @@ this.BLOCKLY_DIR = (function(root) {
 })(this);
 
 this.BLOCKLY_BOOT = function(root) {
-  if (root.IS_NODE_JS) {
-    require('google-closure-library');
-  } else if (typeof goog == 'undefined') {
-    alert('Error: Closure not found.  Read this:\\n' +
-          'developers.google.com/blockly/guides/modify/web/closure');
-  }
-
   var dir = '';
   if (root.IS_NODE_JS) {
     dir = 'blockly';
@@ -145,12 +133,14 @@ this.BLOCKLY_BOOT = function(root) {
     # used on another, even if the directory name differs.
     m = re.search('[\\/]([^\\/]+)[\\/]core[\\/]blockly.js', add_dependency)
     add_dependency = re.sub('([\\/])' + re.escape(m.group(1)) +
-        '([\\/](core)[\\/])', '\\1" + dir + "\\2', add_dependency)
+        '([\\/](core)[\\/])', '\\1../../" + dir + "\\2', add_dependency)
     f.write(add_dependency + '\n')
 
     provides = []
+    # Exclude field_date.js as it still has a dependency on the closure library
+    # see issue #2890. 
     for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
-      if not dep.filename.startswith(os.pardir + os.sep):  # '../'
+      if not dep.filename.startswith('closure') and not dep.filename.startswith('core/field_date.js'):
         provides.extend(dep.provides)
     provides.sort()  # Deterministic build.
     f.write('\n')
@@ -172,7 +162,7 @@ if (this.IS_NODE_JS) {
   document.write('<script>var goog = undefined;</script>');
   // Load fresh Closure Library.
   document.write('<script src="' + this.BLOCKLY_DIR +
-      '/../closure-library/closure/goog/base.js"></script>');
+      '/closure/goog/base.js"></script>');
   document.write('<script>this.BLOCKLY_BOOT(this);</script>');
 }
 """)
@@ -186,23 +176,20 @@ class Gen_compressed(threading.Thread):
   Uses the Closure Compiler's online API.
   Runs in a separate thread.
   """
-  def __init__(self, search_paths, bundles):
+  def __init__(self, search_paths, bundles, use_default):
     threading.Thread.__init__(self)
     self.search_paths = search_paths
     self.bundles = bundles
+    self.use_default = use_default
 
   def run(self):
-    if ('core' in self.bundles):
+    if (self.bundles.core or self.use_default):
       self.gen_core()
 
-    if ('accessible' in self.bundles):
-      print("The Blockly accessibility demo has moved to https://github.com/google/blockly-experimental")
-      return
-
-    if ('core' in self.bundles):
+    if (self.bundles.core or self.use_default):
       self.gen_blocks()
 
-    if ('generators' in self.bundles):
+    if (self.bundles.generators or self.use_default):
       self.gen_generator("javascript")
       self.gen_generator("python")
       self.gen_generator("php")
@@ -229,10 +216,14 @@ class Gen_compressed(threading.Thread):
     filenames.sort()  # Deterministic build.
     for filename in filenames:
       # Filter out the Closure files (the compiler will add them).
-      if filename.startswith(os.pardir + os.sep):  # '../'
+      if filename.startswith("closure"):
         continue
       f = codecs.open(filename, encoding="utf-8")
-      params.append(("js_code", "".join(f.readlines()).encode("utf-8")))
+      code = "".join(f.readlines()).encode("utf-8")
+      # Inject the Blockly version.
+      if filename == "core/blockly.js":
+        code = code.replace("Blockly.VERSION = 'uncompiled';", "Blockly.VERSION = '" + blocklyVersion + "';")
+      params.append(("js_code", code))
       f.close()
 
     self.do_compile(params, target_filename, filenames, "")
@@ -489,51 +480,54 @@ class Gen_langfiles(threading.Thread):
       else:
         print("FAILED to create " + f)
 
+# Class to hold arguments if user passes in old argument style.
+class Arguments:
+  def __init__(self):
+    self.core = False
+    self.generators = False
+    self.langfiles = False
+
+# Setup the argument parser.
+def setup_parser():
+  parser = argparse.ArgumentParser(description="Decide which files to build.")
+  parser.add_argument('-core', action="store_true", default=False, help="Build core")
+  parser.add_argument('-generators', action="store_true", default=False, help="Build the generators")
+  parser.add_argument('-langfiles', action="store_true", default=False, help="Build all the language files")
+  return parser
+
+# Gets the command line arguments.
+# If the user passes in the old style or arguments we create the arguments object
+# otherwise the argument object is created from the ArgumentParser.
+def get_args():
+  parser = setup_parser()
+  try:
+    args = parser.parse_args()
+  except SystemExit:
+    args = Arguments()
+    args.core = 'core' in sys.argv
+    args.generators = 'generators' in sys.argv
+    args.langfiles = 'langfiles' in sys.argv
+    if 'accessible' in sys.argv:
+      print("The Blockly accessibility demo has moved to https://github.com/google/blockly-experimental")
+  return args
 
 if __name__ == "__main__":
-  try:
-    calcdeps = import_path(os.path.join(
-        os.path.pardir, "closure-library", "closure", "bin", "calcdeps.py"))
-  except ImportError:
-    if os.path.isdir(os.path.join(os.path.pardir, "closure-library-read-only")):
-      # Dir got renamed when Closure moved from Google Code to GitHub in 2014.
-      print("Error: Closure directory needs to be renamed from"
-            "'closure-library-read-only' to 'closure-library'.\n"
-            "Please rename this directory.")
-    elif os.path.isdir(os.path.join(os.path.pardir, "google-closure-library")):
-      # When Closure is installed by npm, it is named "google-closure-library".
-      #calcdeps = import_path(os.path.join(
-      # os.path.pardir, "google-closure-library", "closure", "bin", "calcdeps.py"))
-      print("Error: Closure directory needs to be renamed from"
-           "'google-closure-library' to 'closure-library'.\n"
-           "Please rename this directory.")
-    else:
-      print("""Error: Closure not found.  Read this:
-developers.google.com/blockly/guides/modify/web/closure""")
-    sys.exit(1)
-
-  core_search_paths = calcdeps.ExpandDirectories(
-      ["core", os.path.join(os.path.pardir, "closure-library")])
-  core_search_paths = sorted(core_search_paths)  # Deterministic build.
-  full_search_paths = calcdeps.ExpandDirectories(
-      ["core", os.path.join(os.path.pardir, "closure-library")])
+  args = get_args()
+  use_default = not args.core and not args.generators and not args.langfiles
+  calcdeps = import_path(os.path.join("closure", "bin", "calcdeps.py"))
+  full_search_paths = calcdeps.ExpandDirectories(["core", "closure"])
   full_search_paths = sorted(full_search_paths)  # Deterministic build.
-
-  if (len(sys.argv) == 1):
-    args = ['core', 'generators', 'defaultlangfiles']
-  else:
-    args = sys.argv
 
   # Uncompressed and compressed are run in parallel threads.
   # Uncompressed is limited by processor speed.
-  if ('core' in args):
-    Gen_uncompressed(core_search_paths, 'blockly_uncompressed.js').start()
+  if (args.core or use_default):
+    Gen_uncompressed(full_search_paths, 'blockly_uncompressed.js').start()
 
   # Compressed is limited by network and server speed.
-  Gen_compressed(full_search_paths, args).start()
+  Gen_compressed(full_search_paths, args, use_default).start()
 
   # This is run locally in a separate thread
   # defaultlangfiles checks for changes in the msg files, while manually asking
-  # to build langfiles will force the messages to be rebuilt.
-  if ('langfiles' in args or 'defaultlangfiles' in args):
-    Gen_langfiles('langfiles' in args).start()
+  # to build langfiles will force the messages to be rebuilt
+  if (args.langfiles or use_default):
+    Gen_langfiles(args.langfiles).start()

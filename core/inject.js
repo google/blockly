@@ -27,6 +27,7 @@
 goog.provide('Blockly.inject');
 
 goog.require('Blockly.BlockDragSurfaceSvg');
+goog.require('Blockly.Component');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
@@ -38,8 +39,6 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.WorkspaceSvg');
-
-goog.require('goog.ui.Component');
 
 
 /**
@@ -74,6 +73,7 @@ Blockly.inject = function(container, opt_options) {
   var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
       workspaceDragSurface);
   Blockly.setTheme(options.theme);
+  Blockly.user.keyMap.setKeyMap(options.keyMap);
 
   Blockly.init_(workspace);
   Blockly.mainWorkspace = workspace;
@@ -95,8 +95,8 @@ Blockly.createDom_ = function(container, options) {
   // out content in RTL mode.  Therefore Blockly forces the use of LTR,
   // then manually positions content in RTL as needed.
   container.setAttribute('dir', 'LTR');
-  // Closure can be trusted to create HTML widgets with the proper direction.
-  goog.ui.Component.setDefaultRightToLeft(options.RTL);
+  // Set the default direction for Components to use.
+  Blockly.Component.setDefaultRightToLeft(options.RTL);
 
   // Load CSS.
   Blockly.Css.inject(options.hasCss, options.pathToMedia);
@@ -232,6 +232,9 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
     mainWorkspace.addZoomControls();
   }
 
+  Blockly.navigation.setCursor(mainWorkspace.cursor);
+  Blockly.navigation.setMarker(mainWorkspace.marker);
+
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
   Blockly.mainWorkspace = mainWorkspace;
@@ -243,6 +246,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       var workspaceMetrics = Object.create(null);
       var defaultMetrics = mainWorkspace.getMetrics();
       var scale = mainWorkspace.scale;
+
+      workspaceMetrics.RTL = mainWorkspace.RTL;
 
       // Get the view metrics in workspace units.
       workspaceMetrics.viewLeft = defaultMetrics.viewLeft / scale;
@@ -271,6 +276,13 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       }
 
       return workspaceMetrics;
+    };
+
+    var getObjectMetrics = function(object) {
+      var objectMetrics = object.getBoundingRectangle();
+      objectMetrics.height = objectMetrics.bottom - objectMetrics.top;
+      objectMetrics.width = objectMetrics.right - objectMetrics.left;
+      return objectMetrics;
     };
 
     var bumpObjects = function(e) {
@@ -303,31 +315,54 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
               break;
           }
           if (object) {
-            var objectMetrics = object.getBoundingRectangle();
+            var objectMetrics = getObjectMetrics(object);
 
-            // Bump any object that's above the top back inside.
-            var overflowTop = metrics.viewTop - objectMetrics.top;
-            if (overflowTop > 0) {
-              object.moveBy(0, overflowTop);
+            // The idea is to find the region of valid coordinates for the top
+            // left corner of the object, and then clamp the object's
+            // top left corner within that region.
+
+            // The top of the object should always be at or below the top of
+            // the workspace.
+            var topClamp = metrics.viewTop;
+            // The top of the object should ideally be positioned so that
+            // the bottom of the object is not below the bottom of the
+            // workspace.
+            var bottomClamp = metrics.viewBottom - objectMetrics.height;
+            // If the object is taller than the workspace we want to
+            // top-align the block, which means setting the bottom clamp to
+            // match.
+            bottomClamp = Math.max(topClamp, bottomClamp);
+
+            var newYPosition = Blockly.utils.math.clamp(
+                topClamp, objectMetrics.top, bottomClamp);
+            var deltaY = newYPosition - objectMetrics.top;
+
+            // Note: Even in RTL mode the "anchor" of the object is the
+            // top-left corner of the object.
+
+            // The left edge of the object should ideally be positioned at
+            // or to the right of the left edge of the workspace.
+            var leftClamp = metrics.viewLeft;
+            // The left edge of the object should ideally be positioned so
+            // that the right of the object is not outside the workspace bounds.
+            var rightClamp = metrics.viewRight - objectMetrics.width;
+            if (metrics.RTL) {
+              // If the object is wider than the workspace and we're in RTL
+              // mode we want to right-align the block, which means setting
+              // the left clamp to match.
+              leftClamp = Math.min(rightClamp, leftClamp);
+            } else {
+              // If the object is wider than the workspace and we're in LTR
+              // mode we want to left-align the block, which means setting
+              // the right clamp to match.
+              rightClamp = Math.max(leftClamp, rightClamp);
             }
 
-            // Bump any object that's below the bottom back inside.
-            var overflowBottom = metrics.viewBottom - objectMetrics.bottom;
-            if (overflowBottom < 0) {
-              object.moveBy(0, overflowBottom);
-            }
+            var newXPosition = Blockly.utils.math.clamp(
+                leftClamp, objectMetrics.left, rightClamp);
+            var deltaX = newXPosition - objectMetrics.left;
 
-            // Bump any object that's off the left back inside.
-            var overflowLeft = metrics.viewLeft - objectMetrics.left;
-            if (overflowLeft > 0) {
-              object.moveBy(overflowLeft, 0);
-            }
-
-            // Bump any object that's off the right back inside.
-            var overflowRight = metrics.viewRight - objectMetrics.right;
-            if (overflowRight < 0) {
-              object.moveBy(overflowRight, 0);
-            }
+            object.moveBy(deltaX, deltaY);
           }
           if (e) {
             if (!e.group) {

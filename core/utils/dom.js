@@ -32,6 +32,8 @@
  */
 goog.provide('Blockly.utils.dom');
 
+goog.require('Blockly.utils.userAgent');
+
 
 /**
  * Required name space for SVG elements.
@@ -50,6 +52,32 @@ Blockly.utils.dom.HTML_NS = 'http://www.w3.org/1999/xhtml';
  * @const
  */
 Blockly.utils.dom.XLINK_NS = 'http://www.w3.org/1999/xlink';
+
+/**
+ * Node type constants.
+ * https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
+ * @enum {number}
+ */
+Blockly.utils.dom.Node = {
+  ELEMENT_NODE: 1,
+  TEXT_NODE: 3,
+  COMMENT_NODE: 8,
+  DOCUMENT_POSITION_CONTAINED_BY: 16
+};
+
+/**
+ * Temporary cache of text widths.
+ * @type {Object}
+ * @private
+ */
+Blockly.utils.dom.cacheWidths_ = null;
+
+/**
+ * Number of current references to cache.
+ * @type {number}
+ * @private
+ */
+Blockly.utils.dom.cacheReference_ = 0;
 
 /**
  * Helper method for creating SVG elements.
@@ -171,7 +199,7 @@ Blockly.utils.dom.insertAfter = function(newNode, refNode) {
  */
 Blockly.utils.dom.containsNode = function(parent, descendant) {
   return !!(parent.compareDocumentPosition(descendant) &
-            Node.DOCUMENT_POSITION_CONTAINED_BY);
+            Blockly.utils.dom.Node.DOCUMENT_POSITION_CONTAINED_BY);
 };
 
 /**
@@ -184,4 +212,65 @@ Blockly.utils.dom.containsNode = function(parent, descendant) {
 Blockly.utils.dom.setCssTransform = function(element, transform) {
   element.style['transform'] = transform;
   element.style['-webkit-transform'] = transform;
+};
+
+/**
+ * Start caching text widths. Every call to this function MUST also call
+ * stopTextWidthCache. Caches must not survive between execution threads.
+ */
+Blockly.utils.dom.startTextWidthCache = function() {
+  Blockly.utils.dom.cacheReference_++;
+  if (!Blockly.utils.dom.cacheWidths_) {
+    Blockly.utils.dom.cacheWidths_ = {};
+  }
+};
+
+/**
+ * Stop caching field widths. Unless caching was already on when the
+ * corresponding call to startTextWidthCache was made.
+ */
+Blockly.utils.dom.stopTextWidthCache = function() {
+  Blockly.utils.dom.cacheReference_--;
+  if (!Blockly.utils.dom.cacheReference_) {
+    Blockly.utils.dom.cacheWidths_ = null;
+  }
+};
+
+/**
+ * Gets the width of a text element, caching it in the process.
+ * @param {!Element} textElement An SVG 'text' element.
+ * @return {number} Width of element.
+ */
+Blockly.utils.dom.getTextWidth = function(textElement) {
+  var key = textElement.textContent + '\n' + textElement.className.baseVal;
+  var width;
+
+  // Return the cached width if it exists.
+  if (Blockly.utils.dom.cacheWidths_) {
+    width = Blockly.utils.dom.cacheWidths_[key];
+    if (width) {
+      return width;
+    }
+  }
+
+  // Attempt to compute fetch the width of the SVG text element.
+  try {
+    if (Blockly.utils.userAgent.IE || Blockly.utils.userAgent.EDGE) {
+      width = textElement.getBBox().width;
+    } else {
+      width = textElement.getComputedTextLength();
+    }
+  } catch (e) {
+    // In other cases where we fail to get the computed text. Instead, use an
+    // approximation and do not cache the result. At some later point in time
+    // when the block is inserted into the visible DOM, this method will be
+    // called again and, at that point in time, will not throw an exception.
+    return textElement.textContent.length * 8;
+  }
+
+  // Cache the computed width and return.
+  if (Blockly.utils.dom.cacheWidths_) {
+    Blockly.utils.dom.cacheWidths_[key] = width;
+  }
+  return width;
 };

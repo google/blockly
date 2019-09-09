@@ -262,6 +262,7 @@ Blockly.BlockSvg.prototype.getIcons = function() {
 /**
  * Set parent of this block to be a new block or null.
  * @param {Blockly.BlockSvg} newParent New parent block.
+ * @override
  */
 Blockly.BlockSvg.prototype.setParent = function(newParent) {
   var oldParent = this.parentBlock_;
@@ -269,9 +270,9 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
     return;
   }
 
-  Blockly.Field.startCache();
+  Blockly.utils.dom.startTextWidthCache();
   Blockly.BlockSvg.superClass_.setParent.call(this, newParent);
-  Blockly.Field.stopCache();
+  Blockly.utils.dom.stopTextWidthCache();
 
   var svgRoot = this.getSvgRoot();
 
@@ -388,6 +389,15 @@ Blockly.BlockSvg.prototype.moveToDragSurface_ = function() {
   this.workspace.blockDragSurface_.translateSurface(xy.x, xy.y);
   // Execute the move on the top-level SVG component
   this.workspace.blockDragSurface_.setBlocksAndShow(this.getSvgRoot());
+};
+
+/**
+ * Move a block to a position.
+ * @param {Blockly.utils.Coordinate} xy The position to move to in workspace units.
+ */
+Blockly.BlockSvg.prototype.moveTo = function(xy) {
+  var curXY = this.getRelativeToSurfaceXY();
+  this.moveBy(xy.x - curXY.x, xy.y - curXY.y);
 };
 
 /**
@@ -595,7 +605,7 @@ Blockly.BlockSvg.prototype.createTabList_ = function() {
   var list = [];
   for (var i = 0, input; input = this.inputList[i]; i++) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
-      if (field instanceof Blockly.FieldTextInput) {
+      if (field instanceof Blockly.FieldTextInput && field.isVisible()) {
         // TODO (#1276): Also support dropdown fields.
         list.push(field);
       }
@@ -636,7 +646,7 @@ Blockly.BlockSvg.prototype.showHelp_ = function() {
 /**
  * Generate the context menu for this block.
  * @protected
- * @returns {Array.<!Object>} Context menu options
+ * @return {Array.<!Object>} Context menu options
  */
 Blockly.BlockSvg.prototype.generateContextMenu = function() {
   if (this.workspace.options.readOnly || !this.contextMenu) {
@@ -872,10 +882,10 @@ Blockly.BlockSvg.prototype.getSvgRoot = function() {
 
 /**
  * Dispose of this block.
- * @param {boolean} healStack If true, then try to heal any gap by connecting
+ * @param {boolean=} healStack If true, then try to heal any gap by connecting
  *     the next statement with the previous statement.  Otherwise, dispose of
  *     all children of this block.
- * @param {boolean} animate If true, show a disposal animation and sound.
+ * @param {boolean=} animate If true, show a disposal animation and sound.
  */
 Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   if (!this.workspace) {
@@ -883,7 +893,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     return;
   }
   Blockly.Tooltip.hide();
-  Blockly.Field.startCache();
+  Blockly.utils.dom.startTextWidthCache();
   // Save the block's workspace temporarily so we can resize the
   // contents once the block is disposed.
   var blockWorkspace = this.workspace;
@@ -895,6 +905,10 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   // If this block has a context menu open, close it.
   if (Blockly.ContextMenu.currentBlock == this) {
     Blockly.ContextMenu.hide();
+  }
+
+  if (Blockly.keyboardAccessibilityMode) {
+    Blockly.navigation.moveCursorOnBlockDelete(this);
   }
 
   if (animate && this.rendered) {
@@ -942,7 +956,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   this.svgPath_ = null;
   this.svgPathLight_ = null;
   this.svgPathDark_ = null;
-  Blockly.Field.stopCache();
+  Blockly.utils.dom.stopTextWidthCache();
 };
 
 /**
@@ -1498,4 +1512,87 @@ Blockly.BlockSvg.prototype.scheduleSnapAndBump = function() {
     block.bumpNeighbours_();
     Blockly.Events.setGroup(false);
   }, Blockly.BUMP_DELAY);
+};
+
+/**
+ * Position a block so that it doesn't move the target block when connected.
+ * The block to position is usually either the first block in a dragged stack or
+ * an insertion marker.
+ * @param {!Blockly.Connection} sourceConnection The connection on the moving
+ *     block's stack.
+ * @param {!Blockly.Connection} targetConnection The connection that should stay
+ *     stationary as this block is positioned.
+ */
+Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
+    targetConnection) {
+  // We only need to position the new block if it's before the existing one,
+  // otherwise its position is set by the previous block.
+  if (sourceConnection.type == Blockly.NEXT_STATEMENT ||
+      sourceConnection.type == Blockly.INPUT_VALUE) {
+    var dx = targetConnection.x_ - sourceConnection.x_;
+    var dy = targetConnection.y_ - sourceConnection.y_;
+
+    this.moveBy(dx, dy);
+  }
+};
+
+/*
+ * Render the block.
+ * Lays out and reflows a block based on its contents and settings.
+ * @param {boolean=} opt_bubble If false, just render this block.
+ *   If true, also render block's parent, grandparent, etc.  Defaults to true.
+ */
+Blockly.BlockSvg.prototype.render = function(opt_bubble) {
+  Blockly.utils.dom.startTextWidthCache();
+  this.rendered = true;
+  // TODO (#2702): Choose an API for picking the renderer.
+  Blockly.blockRendering.render(this);
+  // No matter how we rendered, connection locations should now be correct.
+  this.updateConnectionLocations_();
+  if (opt_bubble !== false) {
+    // Render all blocks above this one (propagate a reflow).
+    var parentBlock = this.getParent();
+    if (parentBlock) {
+      parentBlock.render(true);
+    } else {
+      // Top-most block.  Fire an event to allow scrollbars to resize.
+      this.workspace.resizeContents();
+    }
+  }
+  Blockly.utils.dom.stopTextWidthCache();
+};
+
+/**
+ * Update all of the connections on this block with the new locations calculated
+ * during rendering.  Also move all of the connected blocks based on the new
+ * connection locations.
+ * @private
+ */
+Blockly.BlockSvg.prototype.updateConnectionLocations_ = function() {
+  var blockTL = this.getRelativeToSurfaceXY();
+  // Don't tighten previous or output connections because they are inferior
+  // connections.
+  if (this.previousConnection) {
+    this.previousConnection.moveToOffset(blockTL);
+  }
+  if (this.outputConnection) {
+    this.outputConnection.moveToOffset(blockTL);
+  }
+
+  for (var i = 0; i < this.inputList.length; i++) {
+    var conn = this.inputList[i].connection;
+    if (conn) {
+      conn.moveToOffset(blockTL);
+      if (conn.isConnected()) {
+        conn.tighten_();
+      }
+    }
+  }
+
+  if (this.nextConnection) {
+    this.nextConnection.moveToOffset(blockTL);
+    if (this.nextConnection.isConnected()) {
+      this.nextConnection.tighten_();
+    }
+  }
 };

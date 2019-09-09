@@ -18,7 +18,11 @@
  * limitations under the License.
  */
 
-suite ('Date Fields', function() {
+/* If you want to run date tests add the date picker here:
+ * https://github.com/google/blockly/blob/master/core/blockly.js#L41
+ * before unskipping.
+ */
+suite.skip('Date Fields', function() {
   function assertValue(dateField, expectedValue) {
     var actualValue = dateField.getValue();
     var actualText = dateField.getText();
@@ -32,10 +36,6 @@ suite ('Date Fields', function() {
   suite('Constructor', function() {
     test('Empty', function() {
       var dateField = new Blockly.FieldDate();
-      assertValueDefault(dateField);
-    });
-    test('Null', function() {
-      var dateField = new Blockly.FieldDate(null);
       assertValueDefault(dateField);
     });
     test('Undefined', function() {
@@ -62,10 +62,6 @@ suite ('Date Fields', function() {
   suite('fromJson', function() {
     test('Empty', function() {
       var dateField = Blockly.FieldDate.fromJson({});
-      assertValueDefault(dateField);
-    });
-    test('Null', function() {
-      var dateField = Blockly.FieldDate.fromJson({ date: null });
       assertValueDefault(dateField);
     });
     test('Undefined', function() {

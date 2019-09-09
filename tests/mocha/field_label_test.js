@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-suite ('Label Fields', function() {
+suite('Label Fields', function() {
   function assertValue(labelField, expectedValue) {
     var actualValue = labelField.getValue();
     var actualText = labelField.getText();
@@ -31,10 +31,6 @@ suite ('Label Fields', function() {
   suite('Constructor', function() {
     test('Empty', function() {
       var labelField = new Blockly.FieldLabel();
-      assertValueDefault(labelField);
-    });
-    test('Null', function() {
-      var labelField = new Blockly.FieldLabel(null);
       assertValueDefault(labelField);
     });
     test('Undefined', function() {
@@ -65,10 +61,6 @@ suite ('Label Fields', function() {
   suite('fromJson', function() {
     test('Empty', function() {
       var labelField = new Blockly.FieldLabel.fromJson({});
-      assertValueDefault(labelField);
-    });
-    test('Null', function() {
-      var labelField = new Blockly.FieldLabel.fromJson({ text:null });
       assertValueDefault(labelField);
     });
     test('Undefined', function() {

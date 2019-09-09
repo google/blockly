@@ -71,6 +71,8 @@
 var workspace = null;
 
 function start() {
+  // TODO (#2702): Choose an API for picking the renderer.
+  Blockly.renderMode = 'compatibility';
   setBackgroundColour();
 
   // Parse the URL arguments.
@@ -89,6 +91,7 @@ function start() {
   match = location.search.match(/side=([^&]+)/);
   var side = match ? match[1] : 'start';
   document.forms.options.elements.side.value = side;
+  var autoimport = !!location.search.match(/autoimport=([^&]+)/);
   // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
       {
@@ -136,11 +139,17 @@ function start() {
     // Restore event logging state.
     var state = sessionStorage.getItem('logEvents');
     logEvents(Boolean(Number(state)));
+    // Restore render debug state.
+    var renderDebugState = sessionStorage.getItem('blockRenderDebug');
+    toggleRenderingDebug(Boolean(Number(renderDebugState)));
   } else {
     // MSIE 11 does not support sessionStorage on file:// URLs.
     logEvents(false);
   }
   taChange();
+  if (autoimport) {
+    fromXml();
+  }
 }
 
 function addToolboxButtonCallbacks() {
@@ -327,6 +336,21 @@ function logEvents(state) {
   }
 }
 
+function toggleRenderingDebug(state) {
+  var checkbox = document.getElementById('blockRenderDebugCheck');
+  checkbox.checked = state;
+  if (sessionStorage) {
+    sessionStorage.setItem('blockRenderDebug', Number(state));
+  }
+  if (state) {
+    document.getElementById('blocklyDiv').className = 'renderingDebug';
+    Blockly.blockRendering.useDebugger = true;
+  } else {
+    document.getElementById('blocklyDiv').className = '';
+    Blockly.blockRendering.useDebugger = false;
+  }
+}
+
 function logger(e) {
   console.log(e);
 }
@@ -420,6 +444,14 @@ h1 {
   font-style: italic;
 }
 
+#blocklyDiv.renderingDebug .blockRenderDebug {
+  display: block;
+}
+
+.blockRenderDebug {
+  display: none;
+}
+
 </style>
 </head>
 <body onload="start()">
@@ -481,6 +513,11 @@ h1 {
   <p>
     Log events: &nbsp;
     <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
+  </p>
+
+  <p>
+    Block rendering debug: &nbsp;
+    <input type="checkbox" onclick="toggleRenderingDebug(this.checked)" id="blockRenderDebugCheck">
   </p>
 
   <!-- The next three blocks of XML are sample toolboxes for testing basic
@@ -1206,9 +1243,13 @@ h1 {
     <category name="Basic">
       <block type="test_basic_empty"></block>
       <block type="test_basic_empty_with_mutator"></block>
+      <block type="test_basic_stack"></block>
+      <block type="test_basic_row"></block>
       <block type="test_basic_value_to_stack"></block>
       <block type="test_basic_value_to_statement"></block>
       <block type="test_basic_limit_instances"></block>
+      <block type="test_basic_tooltips"></block>
+      <block type="test_basic_javascript"></block>
     </category>
     <category name="Drag">
       <label text="Drag each to the workspace"></label>
@@ -1246,14 +1287,14 @@ h1 {
       <block type="text_print">
         <value name="TEXT">
           <block type="variables_get">
-            <field name="VAR" id="item" variabletype="">item</field>
+            <field name="VAR" id="item">item</field>
           </block>
         </value>
         <next>
           <block type="text_print">
             <value name="TEXT">
               <block type="variables_get">
-                <field name="VAR" id="item" variabletype="">item</field>
+                <field name="VAR" id="item">item</field>
               </block>
             </value>
           </block>
@@ -1303,9 +1344,9 @@ h1 {
         <sep gap="8"></sep>
         <button text="toggle collapsed" callbackKey="toggleCollapsed"></button>
         <block type="test_fields_angle"></block>
-        <block type="test_fields_date"></block>
         <block type="test_fields_checkbox"></block>
         <block type="test_fields_colour"></block>
+        <block type="test_fields_colour_options"></block>
         <block type="test_fields_text_input"></block>
         <block type="test_fields_variable"></block>
         <button text="randomize label text" callbackKey="randomizeLabelText"></button>

@@ -1440,7 +1440,7 @@ function test_split() {
 function listsGetSortCompare(type, direction) {
   var compareFuncs = {
     "NUMERIC": function(a, b) {
-        return parseFloat(a) - parseFloat(b); },
+        return Number(a) - Number(b); },
     "TEXT": function(a, b) {
         return a.toString() > b.toString() ? 1 : -1; },
     "IGNORE_CASE": function(a, b) {

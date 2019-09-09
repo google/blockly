@@ -325,7 +325,7 @@ Blockly.JavaScript['text_prompt_ext'] = function(block) {
   var code = 'window.prompt(' + msg + ')';
   var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
   if (toNumber) {
-    code = 'parseFloat(' + code + ')';
+    code = 'Number(' + code + ')';
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };

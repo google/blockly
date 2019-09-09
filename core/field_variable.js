@@ -29,13 +29,14 @@ goog.provide('Blockly.FieldVariable');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.FieldDropdown');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Variables');
 goog.require('Blockly.Xml');
 
-goog.require('goog.math.Size');
 
 
 /**
@@ -57,9 +58,9 @@ Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes,
   // The FieldDropdown constructor would call setValue, which might create a
   // spurious variable.  Just do the relevant parts of the constructor.
   this.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;
-  this.size_ = new goog.math.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
-  this.setValidator(opt_validator);
-  this.defaultVariableName = (varname || '');
+  this.size_ = new Blockly.utils.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
+  opt_validator && this.setValidator(opt_validator);
+  this.defaultVariableName = varname || '';
 
   this.setTypes_(opt_variableTypes, opt_defaultType);
   this.value_ = null;
@@ -252,9 +253,7 @@ Blockly.FieldVariable.prototype.doClassValidation_ = function(newId) {
  */
 Blockly.FieldVariable.prototype.doValueUpdate_ = function(newId) {
   this.variable_ = Blockly.Variables.getVariable(this.workspace_, newId);
-  this.value_ = newId;
-  this.text_ = (this.variable_.name);
-  this.isDirty_ = true;
+  Blockly.FieldVariable.superClass_.doValueUpdate_.call(this, newId);
 };
 
 /**
@@ -337,14 +336,24 @@ Blockly.FieldVariable.prototype.setTypes_ = function(opt_variableTypes,
         'a FieldVariable');
   }
   // Only update the field once all checks pass.
-  this.defaultType_ =  defaultType;
+  this.defaultType_ = defaultType;
   this.variableTypes = variableTypes;
+};
+
+/**
+ * Refreshes the name of the variable by grabbing the name of the model.
+ * Used when a variable gets renamed, but the ID stays the same. Should only
+ * be called by the block.
+ * @package
+ */
+Blockly.FieldVariable.prototype.refreshVariableName = function() {
+  this.forceRerender();
 };
 
 /**
  * Return a sorted list of variable names for variable dropdown menus.
  * Include a special option at the end for creating a new variable name.
- * @return {!Array.<string>} Array of variable names.
+ * @return {!Array.<!Array>} Array of variable names/id tuples.
  * @this {Blockly.FieldVariable}
  */
 Blockly.FieldVariable.dropdownCreate = function() {
@@ -388,8 +397,8 @@ Blockly.FieldVariable.dropdownCreate = function() {
  * Handle the selection of an item in the variable dropdown menu.
  * Special case the 'Rename variable...' and 'Delete variable...' options.
  * In the rename case, prompt the user for a new name.
- * @param {!goog.ui.Menu} menu The Menu component clicked.
- * @param {!goog.ui.MenuItem} menuItem The MenuItem selected within menu.
+ * @param {!Blockly.Menu} menu The Menu component clicked.
+ * @param {!Blockly.MenuItem} menuItem The MenuItem selected within menu.
  */
 Blockly.FieldVariable.prototype.onItemSelected = function(menu, menuItem) {
   var id = menuItem.getValue();
@@ -419,4 +428,4 @@ Blockly.FieldVariable.prototype.referencesVariables = function() {
   return true;
 };
 
-Blockly.Field.register('field_variable', Blockly.FieldVariable);
+Blockly.fieldRegistry.register('field_variable', Blockly.FieldVariable);

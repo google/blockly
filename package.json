@@ -1,8 +1,7 @@
 {
   "name": "blockly",
-  "version": "1.20190419.0-develop",
+  "version": "2.20190722.0-develop",
   "description": "Blockly is a library for building visual programming editors.",
-  "main": "blockly_node_javascript_en.js",
   "keywords": [
     "blockly"
   ],
@@ -18,14 +17,29 @@
     "name": "Neil Fraser"
   },
   "scripts": {
-    "prepare": "gulp blockly_javascript_en",
+    "build": "gulp build",
+    "build:debug": "gulp build-core --verbose > build-debug.log 2>&1",
     "lint": "eslint .",
-    "test": "tests/run_all_tests.sh"
+    "package": "gulp package",
+    "prepare": "gulp blockly_node_javascript_en",
+    "release": "gulp release",
+    "test": "tests/run_all_tests.sh",
+    "typings": "gulp typings"
+  },
+  "main": "./index.js",
+  "umd": "./blockly.min.js",
+  "unpkg": "./blockly.min.js",
+  "types": "./blockly.d.ts",
+  "browser": {
+    "./node.js": "./browser.js",
+    "./core.js": "./core-browser.js",
+    "./blockly-node.js": "./blockly.js"
   },
   "license": "Apache-2.0",
-  "private": true,
   "devDependencies": {
+    "chai": "^4.2.0",
     "eslint": "^5.13.0",
+    "fs": "0.0.1-security",
     "google-closure-compiler": "^20190618.0.0",
     "google-closure-library": "^20190618.0.0",
     "gulp": "^4.0.2",
@@ -33,8 +47,17 @@
     "gulp-insert": "^0.5.0",
     "gulp-series": "^1.0.2",
     "gulp-shell": "^0.7.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-replace": "^1.0.0",
+    "gulp-umd": "^2.0.0",
     "jshint": "^2.10.2",
-    "webdriverio": "^5.11.5"
+    "mocha": "^6.1.4",
+    "pixelmatch": "^4.0.2",
+    "pngjs": "^3.4.0",
+    "rimraf": "^2.6.3",
+    "typescript-closure-tools": "^0.0.7",
+    "webdriverio": "^5.11.5",
+    "yargs": "^14.0.0"
   },
   "jshintConfig": {
     "globalstrict": true,

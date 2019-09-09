@@ -34,7 +34,7 @@ goog.provide('Blockly.WidgetDiv');
 
 goog.require('Blockly.Css');
 
-goog.require('goog.style');
+goog.require('Blockly.utils.style');
 
 
 /**
@@ -83,7 +83,7 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   Blockly.WidgetDiv.dispose_ = dispose;
   // Temporarily move the widget to the top of the screen so that it does not
   // cause a scrollbar jump in Firefox when displayed.
-  var xy = goog.style.getViewportPageOffset(document);
+  var xy = Blockly.utils.style.getViewportPageOffset();
   Blockly.WidgetDiv.DIV.style.top = xy.y + 'px';
   Blockly.WidgetDiv.DIV.style.direction = rtl ? 'rtl' : 'ltr';
   Blockly.WidgetDiv.DIV.style.display = 'block';
@@ -146,7 +146,7 @@ Blockly.WidgetDiv.positionInternal_ = function(x, y, height) {
  *     in window coordinates.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
- * @param {!goog.math.Size} widgetSize The size of the widget that is inside the
+ * @param {!Blockly.utils.Size} widgetSize The size of the widget that is inside the
  *     widget div, in window coordinates.
  * @param {boolean} rtl Whether the workspace is in RTL mode.  This determines
  *     horizontal alignment.
@@ -172,7 +172,7 @@ Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
  *     in window coordinates.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
- * @param {goog.math.Size} widgetSize The dimensions of the widget inside the
+ * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
  *     widget div.
  * @param {boolean} rtl Whether the Blockly workspace is in RTL mode.
  * @return {number} A valid x-coordinate for the top left corner of the widget
@@ -204,7 +204,7 @@ Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
  *     in window coordinates.
  * @param {!Object} anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
- * @param {goog.math.Size} widgetSize The dimensions of the widget inside the
+ * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
  *     widget div.
  * @return {number} A valid y-coordinate for the top left corner of the widget
  *     div, in window coordinates.

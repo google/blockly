@@ -47,6 +47,7 @@ goog.require('Blockly.FieldMultilineText');
 goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
+goog.require('Blockly.navigation');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.Toolbox');
 goog.require('Blockly.Tooltip');
@@ -66,6 +67,16 @@ var CLOSURE_DEFINES = {'goog.DEBUG': false};
 /* eslint-enable no-unused-vars */
 
 /**
+ * Blockly core version.
+ * This constant is overriden by the build script (build.py) to the value of the version
+ * in package.json. This is done during the gen_core build step.
+ * For local builds, you can pass --define='Blockly.VERSION=X.Y.Z' to the compiler
+ * to override this constant.
+ * @define {string}
+ */
+Blockly.VERSION = 'uncompiled';
+
+/**
  * The main workspace most recently used.
  * Set by Blockly.WorkspaceSvg.prototype.markFocused
  * @type {Blockly.Workspace}
@@ -77,6 +88,18 @@ Blockly.mainWorkspace = null;
  * @type {Blockly.Block}
  */
 Blockly.selected = null;
+
+/**
+ * Current cursor.
+ * @type {Blockly.Cursor}
+ */
+Blockly.cursor = null;
+
+/**
+ * Whether or not we're currently in keyboard accessibility mode.
+ * @type {boolean}
+ */
+Blockly.keyboardAccessibilityMode = false;
 
 /**
  * All of the connections on blocks that are currently being dragged.
@@ -183,19 +206,34 @@ Blockly.svgResize = function(workspace) {
 // are multiple workspaces and non-main workspaces are able to accept input.
 Blockly.onKeyDown_ = function(e) {
   var mainWorkspace = Blockly.mainWorkspace;
-  if (mainWorkspace.options.readOnly || Blockly.utils.isTargetInput(e) ||
+
+  if (Blockly.utils.isTargetInput(e) ||
       (mainWorkspace.rendered && !mainWorkspace.isVisible())) {
-    // No key actions on readonly workspaces.
     // When focused on an HTML text input widget, don't trap any keys.
     // Ignore keypresses on rendered workspaces that have been explicitly
     // hidden.
     return;
   }
+
+  if (mainWorkspace.options.readOnly) {
+    // When in read only mode handle key actions for keyboard navigation.
+    if (Blockly.keyboardAccessibilityMode) {
+      Blockly.navigation.onKeyPress(e);
+    }
+    return;
+  }
+
   var deleteBlock = false;
-  if (e.keyCode == 27) {
+  if (e.keyCode == Blockly.utils.KeyCodes.ESC) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
-  } else if (e.keyCode == 8 || e.keyCode == 46) {
+    Blockly.navigation.onBlocklyAction(Blockly.navigation.ACTION_EXIT);
+  } else if (Blockly.keyboardAccessibilityMode &&
+      Blockly.navigation.onKeyPress(e)) {
+    // If the keyboard or field handled the key press return.
+    return;
+  } else if (e.keyCode == Blockly.utils.KeyCodes.BACKSPACE ||
+      e.keyCode == Blockly.utils.KeyCodes.DELETE) {
     // Delete or backspace.
     // Stop the browser from going back to the previous page.
     // Do this first to prevent an error in the delete code from resulting in
@@ -218,18 +256,19 @@ Blockly.onKeyDown_ = function(e) {
       // Don't allow copying immovable or undeletable blocks. The next step
       // would be to paste, which would create additional undeletable/immovable
       // blocks on the workspace.
-      if (e.keyCode == 67) {
+      if (e.keyCode == Blockly.utils.KeyCodes.C) {
         // 'c' for copy.
         Blockly.hideChaff();
         Blockly.copy_(Blockly.selected);
-      } else if (e.keyCode == 88 && !Blockly.selected.workspace.isFlyout) {
+      } else if (e.keyCode == Blockly.utils.KeyCodes.X &&
+          !Blockly.selected.workspace.isFlyout) {
         // 'x' for cut, but not in a flyout.
         // Don't even copy the selected item in the flyout.
         Blockly.copy_(Blockly.selected);
         deleteBlock = true;
       }
     }
-    if (e.keyCode == 86) {
+    if (e.keyCode == Blockly.utils.KeyCodes.V) {
       // 'v' for paste.
       if (Blockly.clipboardXml_) {
         // Pasting always pastes to the main workspace, even if the copy
@@ -245,7 +284,7 @@ Blockly.onKeyDown_ = function(e) {
           Blockly.Events.setGroup(false);
         }
       }
-    } else if (e.keyCode == 90) {
+    } else if (e.keyCode == Blockly.utils.KeyCodes.Z) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
       mainWorkspace.undo(e.shiftKey);

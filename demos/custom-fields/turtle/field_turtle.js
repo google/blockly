@@ -29,8 +29,10 @@ goog.provide('CustomFields.FieldTurtle');
 
 // You must require the abstract field class to inherit from.
 goog.require('Blockly.Field');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Size');
 
 
 // Generally field's values should be optional, and have logical defaults.
@@ -62,7 +64,7 @@ CustomFields.FieldTurtle = function(
   // that helps keep the code organized and DRY.
   CustomFields.FieldTurtle.superClass_.constructor.call(
       this, value, opt_validator);
-  this.size_ = new goog.math.Size(72, 40);
+  this.size_ = new Blockly.utils.Size(0, 0);
 };
 goog.inherits(CustomFields.FieldTurtle, Blockly.Field);
 
@@ -85,6 +87,13 @@ CustomFields.FieldTurtle.prototype.SERIALIZABLE = true;
 // .blocklyDraggable's cursor is defined as (vis. grab). Most fields define
 // this property as 'default'.
 CustomFields.FieldTurtle.prototype.CURSOR = 'pointer';
+
+// How far to move the text to keep it to the right of the turtle.
+// May change if the turtle gets fancy enough.
+CustomFields.FieldTurtle.prototype.TEXT_OFFSET_X = 80;
+
+// Padding that the border rect adds around the turtle and its name.
+CustomFields.FieldTurtle.prototype.PADDING = Blockly.Field.X_PADDING;
 
 // These are the different options for our turtle. Being declared this way
 // means they are static, and not translatable. If you want to do something
@@ -172,15 +181,16 @@ CustomFields.FieldTurtle.prototype.doClassValidation_ = function(newValue) {
     newValue.turtleName = null;
   }
 
+  // This is a strategy for dealing with defaults on multi-part values.
+  // The class validator sets individual properties of the object to null
+  // to indicate that they are invalid, and then caches that object to the
+  // cachedValidatedValue_ property. This way the field can, for
+  // example, properly handle an invalid pattern, combined with a valid hat.
+  // This can also be done with local validators.
+  this.cachedValidatedValue_ = newValue;
+
   // Always be sure to return!
   if (!newValue.pattern || !newValue.hat || !newValue.turtleName) {
-    // This is a strategy for dealing with defaults on multi-part values.
-    // The class validator sets individual properties of the object to null
-    // to indicate that they are invalid, and then caches that object to the
-    // cachedValidatedValue_ property. This way the field can, for
-    // example, properly handle an invalid pattern, combined with a valid hat.
-    // This can also be done with local validators.
-    this.cachedValidatedValue_ = newValue;
     return null;
   }
   return newValue;
@@ -221,9 +231,7 @@ CustomFields.FieldTurtle.prototype.render_ = function() {
   // Always do editor updates inside render. This makes sure the editor
   // always displays the correct value, even if a validator changes it.
   if (this.editor_) {
-    this.editor_.patternText.textContent = value.pattern;
-    this.editor_.hatText.textContent = value.hat;
-    this.editor_.turtleNameText.textContent = value.turtleName;
+    this.renderEditor_();
   }
 
   this.stovepipe_.style.display = 'none';
@@ -235,27 +243,32 @@ CustomFields.FieldTurtle.prototype.render_ = function() {
     case 'Stovepipe':
       this.stovepipe_.style.display = '';
       this.turtleGroup_.setAttribute('transform', 'translate(0,12)');
-      this.textElement_.setAttribute('transform', 'translate(60,20)');
+      this.textElement_.setAttribute(
+          'transform', 'translate(' + this.TEXT_OFFSET_X + ',20)');
       break;
     case 'Crown':
       this.crown_.style.display = '';
       this.turtleGroup_.setAttribute('transform', 'translate(0,9)');
-      this.textElement_.setAttribute('transform', 'translate(60,16)');
+      this.textElement_.setAttribute(
+          'transform', 'translate(' + this.TEXT_OFFSET_X + ',16)');
       break;
     case 'Mask':
       this.mask_.style.display = '';
       this.turtleGroup_.setAttribute('transform', 'translate(0,1.2)');
-      this.textElement_.setAttribute('transform', 'translate(60,4)');
+      this.textElement_.setAttribute('transform',
+          'translate(' + this.TEXT_OFFSET_X + ',4)');
       break;
     case 'Propeller':
       this.propeller_.style.display = '';
       this.turtleGroup_.setAttribute('transform', 'translate(0,6)');
-      this.textElement_.setAttribute('transform', 'translate(60,12)');
+      this.textElement_.setAttribute('transform',
+          'translate(' + this.TEXT_OFFSET_X + ',12)');
       break;
     case 'Fedora':
       this.fedora_.style.display = '';
       this.turtleGroup_.setAttribute('transform', 'translate(0,6)');
-      this.textElement_.setAttribute('transform', 'translate(60,12)');
+      this.textElement_.setAttribute('transform',
+          'translate(' + this.TEXT_OFFSET_X + ',12)');
       break;
   }
 
@@ -286,20 +299,37 @@ CustomFields.FieldTurtle.prototype.render_ = function() {
   this.updateSize_();
 };
 
+CustomFields.FieldTurtle.prototype.renderEditor_ = function() {
+  var value = this.displayValue_;
+
+  // .textElement is a property assigned to the element.
+  // It allows the text to be edited without destroying the warning icon.
+  this.editor_.patternText.textElement.nodeValue = value.pattern;
+  this.editor_.hatText.textElement.nodeValue = value.hat;
+  this.editor_.turtleNameText.textElement.nodeValue = value.turtleName;
+
+  this.editor_.patternText.warningIcon.style.display =
+    this.cachedValidatedValue_.pattern ? 'none' : '';
+  this.editor_.hatText.warningIcon.style.display =
+    this.cachedValidatedValue_.hat ? 'none' : '';
+  this.editor_.turtleNameText.warningIcon.style.display =
+    this.cachedValidatedValue_.turtleName ? 'none' : '';
+};
+
 // Used to update the size of the field. This function's logic could be simply
 // included inside render_ (it is not called anywhere else), but it is
 // usually separated to keep code more organized.
 CustomFields.FieldTurtle.prototype.updateSize_ = function() {
   var size = this.movableGroup_.getBBox();
   if (this.borderRect_) {
-    this.borderRect_.setAttribute('width',
-      size.width + Blockly.BlockSvg.SEP_SPACE_X);
-    this.borderRect_.setAttribute('height', size.height + 9);
+    size.width += this.PADDING;
+    size.height += this.PADDING;
+    this.borderRect_.setAttribute('width', size.width);
+    this.borderRect_.setAttribute('height', size.height);
   }
   // Note how both the width and the height can be dynamic.
   this.size_.width = size.width;
-  this.size_.height = size.height + 10 +
-      (Blockly.BlockSvg.INLINE_PADDING_Y * 2);
+  this.size_.height = size.height;
 };
 
 // Called when the field is clicked. It is usually used to show an editor,
@@ -307,6 +337,7 @@ CustomFields.FieldTurtle.prototype.updateSize_ = function() {
 // this function to check/uncheck itself.
 CustomFields.FieldTurtle.prototype.showEditor_ = function() {
   this.editor_ = this.dropdownCreate_();
+  this.renderEditor_();
   Blockly.DropDownDiv.getContentDiv().appendChild(this.editor_);
 
   // These allow us to have the editor match the block's colour.
@@ -344,6 +375,14 @@ CustomFields.FieldTurtle.prototype.dropdownCreate_ = function() {
     cell.className = 'text';
     var text = document.createTextNode(text);
     cell.appendChild(text);
+    cell.textElement = text;
+    var warning = document.createElement('img');
+    warning.setAttribute('src', 'media/warning.svg');
+    warning.setAttribute('height', '16px');
+    warning.setAttribute('width', '16px');
+    warning.style.marginLeft = '4px';
+    cell.appendChild(warning);
+    cell.warningIcon = warning;
     row.appendChild(cell);
     return cell;
   };
@@ -455,11 +494,18 @@ CustomFields.FieldTurtle.prototype.updateColour = function() {
 
   var child = this.turtleGroup_.firstChild;
   while(child) {
-    // If it is a text node, or a non-turtle node.
-    if (child.nodeType == 3 || !child.classList.contains('turtleBody')) {
+    // If it is a text node, continue.
+    if (child.nodeType == 3) {
       child = child.nextSibling;
       continue;
     }
+    // Or if it is a non-turtle node, continue.
+    var className = child.getAttribute('class');
+    if (!className || className.indexOf('turtleBody') == -1) {
+      child = child.nextSibling;
+      continue;
+    }
+
     child.style.fill = fillColour;
     child.style.stroke = borderColour;
     child = child.nextSibling;
@@ -500,7 +546,7 @@ CustomFields.FieldTurtle.prototype.fromXml = function(fieldElement) {
 
 // Blockly needs to know the JSON name of this field. Usually this is
 // registered at the bottom of the field class.
-Blockly.Field.register('field_turtle', CustomFields.FieldTurtle);
+Blockly.fieldRegistry.register('field_turtle', CustomFields.FieldTurtle);
 
 // Called by initView to create all of the SVGs. This is just used to keep
 // the code more organized.
@@ -623,7 +669,8 @@ CustomFields.FieldTurtle.prototype.createView_ = function() {
   this.fedora_.style.display = 'none';
 
   this.movableGroup_.appendChild(this.textElement_);
-  this.textElement_.setAttribute('transform', 'translate(60,20)');
+  this.textElement_.setAttribute(
+      'transform', 'translate(' + this.TEXT_OFFSET_X + ',20)');
 
   this.defs_ = Blockly.utils.dom.createSvgElement('defs', {}, this.fieldGroup_);
   this.polkadotPattern_ = Blockly.utils.dom.createSvgElement('pattern',
@@ -709,4 +756,4 @@ CustomFields.FieldTurtle.prototype.createView_ = function() {
       'stroke': '#000',
       'stroke-opacity': .3
     }, this.stripesPattern_);
-}
+};

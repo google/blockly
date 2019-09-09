@@ -36,7 +36,7 @@
  * Block Library Controller Class
  * @param {string} blockLibraryName Desired name of Block Library, also used
  *    to create the key for where it's stored in local storage.
- * @param {!BlockLibraryStorage} opt_blockLibraryStorage Optional storage
+ * @param {!BlockLibraryStorage=} opt_blockLibraryStorage Optional storage
  *    object that allows user to import a block library.
  * @constructor
  */

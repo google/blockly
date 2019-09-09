@@ -19,7 +19,7 @@
  */
 
 suite('Abstract Fields', function() {
-  suite.skip('Is Serializable', function() {
+  suite('Is Serializable', function() {
     // Both EDITABLE and SERIALIZABLE are default.
     function FieldDefault() {
       this.name = 'NAME';
@@ -72,7 +72,7 @@ suite('Abstract Fields', function() {
       assertEquals(true, field.isSerializable());
     });
   });
-  suite.skip('setValue', function() {
+  suite('setValue', function() {
     function addSpies(field) {
       if (!this.isSpying) {
         sinon.spy(field, 'doValueInvalid_');
@@ -341,145 +341,200 @@ suite('Abstract Fields', function() {
       chai.assert(this.field.doValueUpdate_.calledOnce);
     });
   });
-  suite('setTooltip', function() {
-    setup(function() {
-      this.workspace = new Blockly.WorkspaceSvg({});
-      this.workspace.createDom();
-    });
-    teardown(function() {
-      this.workspace = null;
-    });
-    test('Before Append', function() {
-      Blockly.Blocks['tooltip'] = {
-        init: function() {
-          var field = new Blockly.FieldTextInput('default');
-          field.setTooltip('tooltip');
-          this.appendDummyInput()
-              .appendField(field, 'TOOLTIP');
-        },
-      };
-      var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-          '<xml xmlns="https://developers.google.com/blockly/xml">' +
-          '  <block type="tooltip"></block>' +
-          '</xml>'
-      ).children[0], this.workspace);
-      var field = block.getField('TOOLTIP');
-      chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
-      delete Blockly.Blocks['tooltip'];
-    });
-    test('After Append', function() {
-      Blockly.Blocks['tooltip'] = {
-        init: function() {
-          var field = new Blockly.FieldTextInput('default');
-          this.appendDummyInput()
-              .appendField(field, 'TOOLTIP');
-          field.setTooltip('tooltip');
-        },
-      };
-      var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-          '<xml xmlns="https://developers.google.com/blockly/xml">' +
-          '  <block type="tooltip"></block>' +
-          '</xml>'
-      ).children[0], this.workspace);
-      var field = block.getField('TOOLTIP');
-      chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
-      delete Blockly.Blocks['tooltip'];
-    });
-    test('After Block Creation', function() {
-      Blockly.Blocks['tooltip'] = {
-        init: function() {
-          var field = new Blockly.FieldTextInput('default');
-          this.appendDummyInput()
-              .appendField(field, 'TOOLTIP');
-        },
-      };
-      var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-          '<xml xmlns="https://developers.google.com/blockly/xml">' +
-          '  <block type="tooltip"></block>' +
-          '</xml>'
-      ).children[0], this.workspace);
-      var field = block.getField('TOOLTIP');
-      field.setTooltip('tooltip');
-      chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
-      delete Blockly.Blocks['tooltip'];
-    });
-    test('Dynamic Function', function() {
-      Blockly.Blocks['tooltip'] = {
-        init: function() {
-          var field = new Blockly.FieldTextInput('default');
-          field.setTooltip(this.tooltipFunc);
-          this.appendDummyInput()
-              .appendField(field, 'TOOLTIP');
-        },
+  suite('Customization', function() {
+    // All this field does is wrap the abstract field.
+    function CustomField(opt_config) {
+      CustomField.superClass_.constructor.call(
+          this, 'value', null, opt_config);
+    }
+    goog.inherits(CustomField, Blockly.Field);
+    CustomField.fromJson = function(options) {
+      return new CustomField(options);
+    };
 
-        tooltipFunc: function() {
-          return this.getFieldValue('TOOLTIP');
-        }
-      };
-      var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-          '<xml xmlns="https://developers.google.com/blockly/xml">' +
-          '  <block type="tooltip"></block>' +
-          '</xml>'
-      ).children[0], this.workspace);
-      var field = block.getField('TOOLTIP');
-      chai.assert.equal(field.getClickTarget_().tooltip, block.tooltipFunc);
-      delete Blockly.Blocks['tooltip'];
-    });
-    test('Element', function() {
-      Blockly.Blocks['tooltip'] = {
-        init: function() {
-          var field = new Blockly.FieldTextInput('default');
-          field.setTooltip(this.element);
-          this.appendDummyInput()
-              .appendField(field, 'TOOLTIP');
-        },
-        element: {
-          tooltip: 'tooltip'
-        }
-      };
-      var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-          '<xml xmlns="https://developers.google.com/blockly/xml">' +
-          '  <block type="tooltip"></block>' +
-          '</xml>'
-      ).children[0], this.workspace);
-      var field = block.getField('TOOLTIP');
-      chai.assert.equal(field.getClickTarget_().tooltip, block.element);
-      delete Blockly.Blocks['tooltip'];
-    });
-    test('Null', function() {
-      Blockly.Blocks['tooltip'] = {
-        init: function() {
-          var field = new Blockly.FieldTextInput('default');
-          field.setTooltip(null);
-          this.appendDummyInput()
-              .appendField(field, 'TOOLTIP');
-        },
-      };
-      var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-          '<xml xmlns="https://developers.google.com/blockly/xml">' +
-          '  <block type="tooltip"></block>' +
-          '</xml>'
-      ).children[0], this.workspace);
-      var field = block.getField('TOOLTIP');
-      chai.assert.equal(field.getClickTarget_().tooltip, block);
-      delete Blockly.Blocks['tooltip'];
-    });
-    test('Undefined', function() {
-      Blockly.Blocks['tooltip'] = {
-        init: function() {
-          var field = new Blockly.FieldTextInput('default');
-          this.appendDummyInput()
-              .appendField(field, 'TOOLTIP');
-        },
-      };
-      var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-          '<xml xmlns="https://developers.google.com/blockly/xml">' +
-          '  <block type="tooltip"></block>' +
-          '</xml>'
-      ).children[0], this.workspace);
-      var field = block.getField('TOOLTIP');
-      chai.assert.equal(field.getClickTarget_().tooltip, block);
-      delete Blockly.Blocks['tooltip'];
+    suite('Tooltip', function() {
+      test('JS Constructor', function() {
+        var field = new Blockly.Field('value', null, {
+          tooltip: 'test tooltip',
+        });
+        chai.assert.equal(field.tooltip_, 'test tooltip');
+      });
+      test('JS Constructor - Dynamic', function() {
+        var returnTooltip = function() {
+          return 'dynamic tooltip text';
+        };
+        var field = new Blockly.Field('value', null, {
+          tooltip: returnTooltip
+        });
+        chai.assert.equal(field.tooltip_, returnTooltip);
+      });
+      test('JSON Definition', function() {
+        var field = CustomField.fromJson({
+          tooltip: "test tooltip"
+        });
+        chai.assert.equal(field.tooltip_, 'test tooltip');
+      });
+      suite('W/ Msg References', function() {
+        setup(function() {
+          Blockly.Msg['TOOLTIP'] = 'test tooltip';
+        });
+        teardown(function() {
+          delete Blockly.Msg['TOOLTIP'];
+        });
+        test('JS Constructor', function() {
+          var field = new Blockly.Field('value', null, {
+            tooltip: '%{BKY_TOOLTIP}',
+          });
+          chai.assert.equal(field.tooltip_, 'test tooltip');
+        });
+        test('JSON Definition', function() {
+          var field = CustomField.fromJson({
+            tooltip: "%{BKY_TOOLTIP}"
+          });
+          chai.assert.equal(field.tooltip_, 'test tooltip');
+        });
+      });
+      suite('setTooltip', function() {
+        setup(function() {
+          this.workspace = new Blockly.WorkspaceSvg({});
+          this.workspace.createDom();
+        });
+        teardown(function() {
+          this.workspace = null;
+        });
+        test('Before Append', function() {
+          Blockly.Blocks['tooltip'] = {
+            init: function() {
+              var field = new Blockly.FieldTextInput('default');
+              field.setTooltip('tooltip');
+              this.appendDummyInput()
+                  .appendField(field, 'TOOLTIP');
+            },
+          };
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<xml xmlns="https://developers.google.com/blockly/xml">' +
+              '  <block type="tooltip"></block>' +
+              '</xml>'
+          ).children[0], this.workspace);
+          var field = block.getField('TOOLTIP');
+          chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
+          delete Blockly.Blocks['tooltip'];
+        });
+        test('After Append', function() {
+          Blockly.Blocks['tooltip'] = {
+            init: function() {
+              var field = new Blockly.FieldTextInput('default');
+              this.appendDummyInput()
+                  .appendField(field, 'TOOLTIP');
+              field.setTooltip('tooltip');
+            },
+          };
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<xml xmlns="https://developers.google.com/blockly/xml">' +
+              '  <block type="tooltip"></block>' +
+              '</xml>'
+          ).children[0], this.workspace);
+          var field = block.getField('TOOLTIP');
+          chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
+          delete Blockly.Blocks['tooltip'];
+        });
+        test('After Block Creation', function() {
+          Blockly.Blocks['tooltip'] = {
+            init: function() {
+              var field = new Blockly.FieldTextInput('default');
+              this.appendDummyInput()
+                  .appendField(field, 'TOOLTIP');
+            },
+          };
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<xml xmlns="https://developers.google.com/blockly/xml">' +
+              '  <block type="tooltip"></block>' +
+              '</xml>'
+          ).children[0], this.workspace);
+          var field = block.getField('TOOLTIP');
+          field.setTooltip('tooltip');
+          chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
+          delete Blockly.Blocks['tooltip'];
+        });
+        test('Dynamic Function', function() {
+          Blockly.Blocks['tooltip'] = {
+            init: function() {
+              var field = new Blockly.FieldTextInput('default');
+              field.setTooltip(this.tooltipFunc);
+              this.appendDummyInput()
+                  .appendField(field, 'TOOLTIP');
+            },
+
+            tooltipFunc: function() {
+              return this.getFieldValue('TOOLTIP');
+            }
+          };
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<xml xmlns="https://developers.google.com/blockly/xml">' +
+              '  <block type="tooltip"></block>' +
+              '</xml>'
+          ).children[0], this.workspace);
+          var field = block.getField('TOOLTIP');
+          chai.assert.equal(field.getClickTarget_().tooltip, block.tooltipFunc);
+          delete Blockly.Blocks['tooltip'];
+        });
+        test('Element', function() {
+          Blockly.Blocks['tooltip'] = {
+            init: function() {
+              var field = new Blockly.FieldTextInput('default');
+              field.setTooltip(this.element);
+              this.appendDummyInput()
+                  .appendField(field, 'TOOLTIP');
+            },
+            element: {
+              tooltip: 'tooltip'
+            }
+          };
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<xml xmlns="https://developers.google.com/blockly/xml">' +
+              '  <block type="tooltip"></block>' +
+              '</xml>'
+          ).children[0], this.workspace);
+          var field = block.getField('TOOLTIP');
+          chai.assert.equal(field.getClickTarget_().tooltip, block.element);
+          delete Blockly.Blocks['tooltip'];
+        });
+        test('Null', function() {
+          Blockly.Blocks['tooltip'] = {
+            init: function() {
+              var field = new Blockly.FieldTextInput('default');
+              field.setTooltip(null);
+              this.appendDummyInput()
+                  .appendField(field, 'TOOLTIP');
+            },
+          };
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<xml xmlns="https://developers.google.com/blockly/xml">' +
+              '  <block type="tooltip"></block>' +
+              '</xml>'
+          ).children[0], this.workspace);
+          var field = block.getField('TOOLTIP');
+          chai.assert.equal(field.getClickTarget_().tooltip, block);
+          delete Blockly.Blocks['tooltip'];
+        });
+        test('Undefined', function() {
+          Blockly.Blocks['tooltip'] = {
+            init: function() {
+              var field = new Blockly.FieldTextInput('default');
+              this.appendDummyInput()
+                  .appendField(field, 'TOOLTIP');
+            },
+          };
+          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+              '<xml xmlns="https://developers.google.com/blockly/xml">' +
+              '  <block type="tooltip"></block>' +
+              '</xml>'
+          ).children[0], this.workspace);
+          var field = block.getField('TOOLTIP');
+          chai.assert.equal(field.getClickTarget_().tooltip, block);
+          delete Blockly.Blocks['tooltip'];
+        });
+      });
     });
   });
 });

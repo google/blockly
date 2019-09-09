@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-suite ('Colour Fields', function() {
+suite('Colour Fields', function() {
   function assertValue(colourField, expectedValue, expectedText) {
     var actualValue = colourField.getValue();
     var actualText = colourField.getText();
@@ -47,10 +47,6 @@ suite ('Colour Fields', function() {
   suite('Constructor', function() {
     test('Empty', function() {
       var colourField = new Blockly.FieldColour();
-      assertValueDefault(colourField);
-    });
-    test('Null', function() {
-      var colourField = new Blockly.FieldColour(null);
       assertValueDefault(colourField);
     });
     test('Undefined', function() {
@@ -105,10 +101,6 @@ suite ('Colour Fields', function() {
   suite('fromJson', function() {
     test('Empty', function() {
       var colourField = new Blockly.FieldColour.fromJson({});
-      assertValueDefault(colourField);
-    });
-    test('Null', function() {
-      var colourField = new Blockly.FieldColour.fromJson({ colour:null });
       assertValueDefault(colourField);
     });
     test('Undefined', function() {
@@ -274,6 +266,121 @@ suite ('Colour Fields', function() {
       test('New Value', function() {
         this.colourField.setValue('#000000');
         assertValue(this.colourField, '#000000', '#000');
+      });
+    });
+  });
+  suite('Customizations', function() {
+    suite('Colours and Titles', function() {
+      function assertColoursAndTitles(field, colours, titles) {
+        var editor = field.dropdownCreate_();
+        var index = 0;
+        var node = editor.firstChild.firstChild;
+        while (node) {
+          chai.assert.equal(node.getAttribute('title'), titles[index]);
+          chai.assert.equal(
+              Blockly.utils.colour.parse(
+                  node.style.backgroundColor),
+              colours[index]);
+
+          var nextNode = node.nextSibling;
+          if (!nextNode) {
+            nextNode = node.parentElement.nextSibling;
+            if (!nextNode) {
+              break;
+            }
+            nextNode = nextNode.firstChild;
+          }
+          node = nextNode;
+
+          index++;
+        }
+      }
+      test('Constants', function() {
+        var colours = Blockly.FieldColour.COLOURS;
+        var titles = Blockly.FieldColour.TITLES;
+        // Note: Developers shouldn't actually do this. IMO they should
+        // change the file and then recompile. But this is fine for testing.
+        Blockly.FieldColour.COLOURS = ['#aaaaaa'];
+        Blockly.FieldColour.TITLES = ['grey'];
+        var field = new Blockly.FieldColour();
+
+        assertColoursAndTitles(field, ['#aaaaaa'], ['grey']);
+
+        Blockly.FieldColour.COLOURS = colours;
+        Blockly.FieldColour.TITLES = titles;
+      });
+      test('JS Constructor', function() {
+        var field = new Blockly.FieldColour('#aaaaaa', null, {
+          colourOptions: ['#aaaaaa'],
+          colourTitles: ['grey']
+        });
+        assertColoursAndTitles(field, ['#aaaaaa'], ['grey']);
+      });
+      test('JSON Definition', function() {
+        var field = Blockly.FieldColour.fromJson({
+          colour: '#aaaaaa',
+          colourOptions: ['#aaaaaa'],
+          colourTitles: ['grey']
+        });
+        assertColoursAndTitles(field, ['#aaaaaa'], ['grey']);
+      });
+      test('setColours', function() {
+        var field = new Blockly.FieldColour();
+        field.setColours(['#aaaaaa'], ['grey']);
+        assertColoursAndTitles(field, ['#aaaaaa'], ['grey']);
+      });
+      test('Titles Undefined', function() {
+        var field = new Blockly.FieldColour();
+        field.setColours(['#aaaaaa']);
+        assertColoursAndTitles(field, ['#aaaaaa'], ['#aaaaaa']);
+      });
+      test('Some Titles Undefined', function() {
+        var field = new Blockly.FieldColour();
+        field.setColours(['#aaaaaa', '#ff0000'], ['grey']);
+        assertColoursAndTitles(field,
+            ['#aaaaaa', '#ff0000'], ['grey', '#ff0000']);
+      });
+      // This is kinda derpy behavior, but I wanted to document it.
+      test('Overwriting Colours While Leaving Titles', function() {
+        var field = new Blockly.FieldColour();
+        field.setColours(['#aaaaaa'], ['grey']);
+        field.setColours(['#ff0000']);
+        assertColoursAndTitles(field, ['#ff0000'], ['grey']);
+      });
+    });
+    suite('Columns', function() {
+      function assertColumns(field, columns) {
+        var editor = field.dropdownCreate_();
+        chai.assert.equal(editor.firstChild.children.length, columns);
+      }
+      test('Constants', function() {
+        var columns = Blockly.FieldColour.COLUMNS;
+        // Note: Developers shouldn't actually do this. IMO they should edit
+        // the file and tehn recompile. But this is fine for testing.
+        Blockly.FieldColour.COLUMNS = 3;
+        var field = new Blockly.FieldColour();
+
+        assertColumns(field, 3);
+
+        Blockly.FieldColour.COLUMNS = columns;
+      });
+      test('JS Constructor', function() {
+        var field = new Blockly.FieldColour('#ffffff', null, {
+          columns: 3
+        });
+        assertColumns(field, 3);
+      });
+      test('JSON Definition', function() {
+        var field = Blockly.FieldColour.fromJson({
+          'colour': '#ffffff',
+          'columns': 3
+        });
+        assertColumns(field, 3);
+      });
+      test('setColumns', function() {
+        var field = new Blockly.FieldColour();
+        field.setColumns(3);
+        assertColumns(field, 3);
       });
     });
   });

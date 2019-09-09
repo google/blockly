@@ -27,16 +27,15 @@
 goog.provide('Blockly.FieldImage');
 
 goog.require('Blockly.Field');
-goog.require('Blockly.Tooltip');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
-
-goog.require('goog.math.Size');
+goog.require('Blockly.utils.Size');
 
 
 /**
  * Class for an image on a block.
- * @param {string=} src The URL of the image. Defaults to an empty string.
+ * @param {string} src The URL of the image. Defaults to an empty string.
  * @param {!(string|number)} width Width of the image.
  * @param {!(string|number)} height Height of the image.
  * @param {string=} opt_alt Optional alt text for when block is collapsed.
@@ -50,6 +49,9 @@ Blockly.FieldImage = function(src, width, height,
     opt_alt, opt_onClick, opt_flipRtl) {
   this.sourceBlock_ = null;
 
+  if (!src) {
+    throw Error('Src value of an image field is required');
+  }
 
   if (isNaN(height) || isNaN(width)) {
     throw Error('Height and width values of an image field must cast to' +
@@ -57,17 +59,31 @@ Blockly.FieldImage = function(src, width, height,
   }
 
   // Ensure height and width are numbers.  Strings are bad at math.
-  this.height_ = Number(height);
-  this.width_ = Number(width);
-  if (this.height_ <= 0 || this.width_ <= 0) {
+  var imageHeight = Number(height);
+  var imageWidth = Number(width);
+  if (imageHeight <= 0 || imageWidth <= 0) {
     throw Error('Height and width values of an image field must be greater' +
       ' than 0.');
   }
-  this.size_ = new goog.math.Size(this.width_,
-      this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
+  // Store the image height, since it is different from the field height.
+  this.imageHeight_ = imageHeight;
+  this.size_ = new Blockly.utils.Size(imageWidth,
+      imageHeight + Blockly.FieldImage.Y_PADDING);
 
-  this.flipRtl_ = opt_flipRtl;
-  this.text_ = opt_alt || '';
+  /**
+   * Whether to flip this image in RTL.
+   * @type {boolean}
+   * @private
+   */
+  this.flipRtl_ = opt_flipRtl || false;
+
+  /**
+   * Alt text of this image.
+   * @type {string}
+   * @private
+   */
+  this.altText_ = opt_alt || '';
+
   this.setValue(src || '');
 
   if (typeof opt_onClick == 'function') {
@@ -96,6 +112,14 @@ Blockly.FieldImage.fromJson = function(options) {
 };
 
 /**
+ * Vertical padding below the image, which is included in the reported height of
+ * the field.
+ * @type {number}
+ * @private
+ */
+Blockly.FieldImage.Y_PADDING = 1;
+
+/**
  * Editable fields usually show some sort of UI indicating they are
  * editable. This field should not.
  * @type {boolean}
@@ -120,9 +144,9 @@ Blockly.FieldImage.prototype.initView = function() {
   this.imageElement_ = Blockly.utils.dom.createSvgElement(
       'image',
       {
-        'height': this.height_ + 'px',
-        'width': this.width_ + 'px',
-        'alt': this.text_
+        'height': this.imageHeight_ + 'px',
+        'width': this.size_.width + 'px',
+        'alt': this.altText_
       },
       this.fieldGroup_);
   this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
@@ -131,15 +155,15 @@ Blockly.FieldImage.prototype.initView = function() {
 
 /**
  * Ensure that the input value (the source URL) is a string.
- * @param {string=} newValue The input value
+ * @param {string=} opt_newValue The input value.
  * @return {?string} A string, or null if invalid.
  * @protected
  */
-Blockly.FieldImage.prototype.doClassValidation_ = function(newValue) {
-  if (typeof newValue != 'string') {
+Blockly.FieldImage.prototype.doClassValidation_ = function(opt_newValue) {
+  if (typeof opt_newValue != 'string') {
     return null;
   }
-  return newValue;
+  return opt_newValue;
 };
 
 /**
@@ -166,16 +190,16 @@ Blockly.FieldImage.prototype.getFlipRtl = function() {
 /**
  * Set the alt text of this image.
  * @param {?string} alt New alt text.
- * @override
+ * @public
  */
-Blockly.FieldImage.prototype.setText = function(alt) {
-  if (alt === null) {
-    // No change if null.
+Blockly.FieldImage.prototype.setAlt = function(alt) {
+  if (alt === this.altText_) {
+    // No change.
     return;
   }
-  this.text_ = alt;
+  this.altText_ = alt || '';
   if (this.imageElement_) {
-    this.imageElement_.setAttribute('alt', alt || '');
+    this.imageElement_.setAttribute('alt', this.altText_);
   }
 };
 
@@ -189,4 +213,25 @@ Blockly.FieldImage.prototype.showEditor_ = function() {
   }
 };
 
-Blockly.Field.register('field_image', Blockly.FieldImage);
+/**
+ * Set the function that is called when this image  is clicked.
+ * @param {Function} func The function that is called when the image
+ *    is clicked. It will receive the image field as a parameter.
+ * @public
+ */
+Blockly.FieldImage.prototype.setOnClickHandler = function(func) {
+  this.clickHandler_ = func;
+};
+
+/**
+ * Use the `getText_` developer hook to override the field's text represenation.
+ * Return the image alt text instead.
+ * @return {?string} The image alt text.
+ * @protected
+ * @override
+ */
+Blockly.FieldImage.prototype.getText_ = function() {
+  return this.altText_;
+};
+
+Blockly.fieldRegistry.register('field_image', Blockly.FieldImage);

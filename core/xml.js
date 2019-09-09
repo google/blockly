@@ -36,6 +36,7 @@ goog.require('Blockly.Events.FinishedLoading');
 goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.xml');
 
 
@@ -263,7 +264,7 @@ Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {
       while (node && !node.nextSibling) {
         textNode = node;
         node = node.parentNode;
-        if (textNode.nodeType == Node.TEXT_NODE &&
+        if (textNode.nodeType == Blockly.utils.dom.Node.TEXT_NODE &&
             textNode.data.trim() == '' && node.firstChild != textNode) {
           // Prune whitespace after a tag.
           Blockly.utils.dom.removeNode(textNode);
@@ -272,7 +273,7 @@ Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {
       if (node) {
         textNode = node;
         node = node.nextSibling;
-        if (textNode.nodeType == Node.TEXT_NODE && textNode.data.trim() == '') {
+        if (textNode.nodeType == Blockly.utils.dom.Node.TEXT_NODE && textNode.data.trim() == '') {
           // Prune whitespace before a tag.
           Blockly.utils.dom.removeNode(textNode);
         }
@@ -389,7 +390,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     width = workspace.getWidth();
   }
   var newBlockIds = [];  // A list of block IDs added by this call.
-  Blockly.Field.startCache();
+  Blockly.utils.dom.startTextWidthCache();
   // Safari 7.1.3 is known to provide node lists with extra references to
   // children beyond the lists' length.  Trust the length, do not use the
   // looping pattern of checking the index for an object.
@@ -446,7 +447,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     if (!existingGroup) {
       Blockly.Events.setGroup(false);
     }
-    Blockly.Field.stopCache();
+    Blockly.utils.dom.stopTextWidthCache();
   }
   // Re-enable workspace resizing.
   if (workspace.setResizesEnabled) {
@@ -492,7 +493,7 @@ Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
       if (blockXY.y < newY) {
         newY = blockXY.y;
       }
-      if (blockXY.x  < newX) {  // if we align also on x
+      if (blockXY.x < newX) {  // if we align also on x
         newX = blockXY.x;
       }
     }
@@ -523,7 +524,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     var swap = xmlBlock;
     // Closure Compiler complains here because the arguments are reversed.
     /** @suppress {checkTypes} */
-    xmlBlock = workspace;
+    xmlBlock = /** @type {!Element} */ (workspace);
     workspace = swap;
     console.warn('Deprecated call to Blockly.Xml.domToBlock, ' +
                  'swap the arguments.');
@@ -588,7 +589,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
  */
 Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
   for (var i = 0, xmlChild; xmlChild = xmlVariables.childNodes[i]; i++) {
-    if (xmlChild.nodeType != Node.ELEMENT_NODE) {
+    if (xmlChild.nodeType != Blockly.utils.dom.Node.ELEMENT_NODE) {
       continue;  // Skip text nodes.
     }
     var type = xmlChild.getAttribute('type');
@@ -618,7 +619,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
 
   var blockChild = null;
   for (var i = 0, xmlChild; xmlChild = xmlBlock.childNodes[i]; i++) {
-    if (xmlChild.nodeType == Node.TEXT_NODE) {
+    if (xmlChild.nodeType == Blockly.utils.dom.Node.TEXT_NODE) {
       // Ignore any text at the <block> level.  It's all whitespace anyway.
       continue;
     }
@@ -628,7 +629,7 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     var childBlockElement = null;
     var childShadowElement = null;
     for (var j = 0, grandchild; grandchild = xmlChild.childNodes[j]; j++) {
-      if (grandchild.nodeType == Node.ELEMENT_NODE) {
+      if (grandchild.nodeType == Blockly.utils.dom.Node.ELEMENT_NODE) {
         if (grandchild.nodeName.toLowerCase() == 'block') {
           childBlockElement = /** @type {!Element} */ (grandchild);
         } else if (grandchild.nodeName.toLowerCase() == 'shadow') {

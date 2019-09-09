@@ -19,9 +19,6 @@
  */
 'use strict';
 
-goog.require('goog.testing');
-goog.require('goog.testing.MockControl');
-
 var savedFireFunc = Blockly.Events.fire;
 var workspace;
 

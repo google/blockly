@@ -1,6 +1,7 @@
 blockly_node_javascript_en.js
 node_modules
 npm-debug.log
+build-debug.log
 .DS_Store
 .settings
 .project
@@ -10,5 +11,9 @@ npm-debug.log
 
 tests/compile/main_compressed.js
 tests/compile/*compiler*.jar
+tests/screenshot/outputs/*
 local_build/*compiler*.jar
 local_build/local_*_compressed.js
+chromedriver
+typings/tmp/*
+dist/

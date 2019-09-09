@@ -23,8 +23,8 @@ fi
 
 # Find the Closure Compiler.
 if [ -n $NODE_MODULES ] && \
-  [ -s $NODE_MODULES/google-closure-compiler/compiler.jar ]; then
-  COMPILER=$NODE_MODULES/google-closure-compiler/compiler.jar
+  [ -s $NODE_MODULES/google-closure-compiler-java/compiler.jar ]; then
+  COMPILER=$NODE_MODULES/google-closure-compiler-java/compiler.jar
   echo "Found npm google-closure-compiler:"
   echo "  $COMPILER"
   npm list google-closure-compiler | grep google-closure-compiler
@@ -73,9 +73,28 @@ if [ -f "$BLOCKLY_ROOT/tests/compile/main_compressed.js" ]; then
   rm "$BLOCKLY_ROOT/tests/compile/main_compressed.js"
 fi
 
+tempPath="$BLOCKLY_ROOT/temp_core"
+corePath="$BLOCKLY_ROOT/core/*"
+mkdir $tempPath
+cp $corePath $tempPath
+
+# Copy over all files in core and any subdirectories to the temp_core directory.
+for dir in "$corePath/" ; do
+  # For all files in the directory and any subdirectories rename them to
+  # include the subirectory name and copy them to temporary directory.
+  # Ex: subdir/file.js -> temp_core/subdir_file.js
+  for file in $(find $dir -name \*.js); do
+    # Replace all / with _ and remove core
+    newName="${file//\//_}"
+    newName="${newName//._core_/}"
+    newFilePath="$tempPath/$newName"
+    cp $file $newFilePath
+  done
+done
+
 echo "Compiling Blockly..."
 COMPILATION_COMMAND="java -jar $COMPILER --js='$BLOCKLY_ROOT/tests/compile/main.js' \
-  --js='$BLOCKLY_ROOT/core/**.js' \
+  --js='$tempPath/**.js' \
   --js='$BLOCKLY_ROOT/blocks/**.js' \
   --js='$BLOCKLY_ROOT/generators/**.js' \
   --js='$BLOCKLY_ROOT/msg/js/**.js' \
@@ -96,3 +115,6 @@ else
   echo "Compilation FAIL."
   exit 1
 fi
+
+# Cleanup temp_core directory
+rm -r $tempPath

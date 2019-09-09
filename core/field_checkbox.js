@@ -29,7 +29,9 @@ goog.provide('Blockly.FieldCheckbox');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Size');
 
 
 /**
@@ -40,16 +42,31 @@ goog.require('Blockly.utils.dom');
  *    changes to the field's value. Takes in a value ('TRUE' or 'FALSE') &
  *    returns a validated value ('TRUE' or 'FALSE'), or null to abort the
  *    change.
+ * @param {Object=} opt_config A map of options used to configure the field.
+ *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/checkbox#creation}
+ *    for a list of properties this parameter supports.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldCheckbox = function(opt_value, opt_validator) {
+Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
   opt_value = this.doClassValidation_(opt_value);
   if (opt_value === null) {
     opt_value = 'FALSE';
   }
-  Blockly.FieldCheckbox.superClass_.constructor.call(this, opt_value, opt_validator);
+  Blockly.FieldCheckbox.superClass_.constructor.call(
+      this, opt_value, opt_validator, opt_config);
+
   this.size_.width = Blockly.FieldCheckbox.WIDTH;
+
+  /**
+   * Character for the check mark. Used to apply a different check mark
+   * character to individual fields.
+   * @type {?string}
+   * @private
+   */
+  this.checkChar_ = null;
+
+  this.configure_(opt_config);
 };
 goog.inherits(Blockly.FieldCheckbox, Blockly.Field);
 
@@ -61,7 +78,7 @@ goog.inherits(Blockly.FieldCheckbox, Blockly.Field);
  * @nocollapse
  */
 Blockly.FieldCheckbox.fromJson = function(options) {
-  return new Blockly.FieldCheckbox(options['checked']);
+  return new Blockly.FieldCheckbox(options['checked'], null, options);
 };
 
 /**
@@ -69,10 +86,10 @@ Blockly.FieldCheckbox.fromJson = function(options) {
  * @type {number}
  * @const
  */
-Blockly.FieldCheckbox.WIDTH = 5;
+Blockly.FieldCheckbox.WIDTH = 15;
 
 /**
- * Character for the checkmark.
+ * Default character for the checkmark.
  * @type {string}
  * @const
  */
@@ -83,7 +100,7 @@ Blockly.FieldCheckbox.CHECK_CHAR = '\u2713';
  * @type {number}
  * @const
  */
-Blockly.FieldCheckbox.CHECK_X_OFFSET = -3;
+Blockly.FieldCheckbox.CHECK_X_OFFSET = Blockly.Field.DEFAULT_TEXT_OFFSET - 3;
 
 /**
  * Used to correctly position the check mark.
@@ -115,6 +132,19 @@ Blockly.FieldCheckbox.prototype.CURSOR = 'default';
 Blockly.FieldCheckbox.prototype.isDirty_ = false;
 
 /**
+ * Configure the field based on the given map of options.
+ * @param {Object} opt_config A map of options to configure the field based on.
+ * @private
+ */
+Blockly.FieldCheckbox.prototype.configure_ = function(opt_config) {
+  if (opt_config) {
+    if (opt_config['checkCharacter']) {
+      this.checkChar_ = opt_config['checkCharacter'];
+    }
+  }
+};
+
+/**
  * Create the block UI for this checkbox.
  * @package
  */
@@ -125,9 +155,21 @@ Blockly.FieldCheckbox.prototype.initView = function() {
   this.textElement_.setAttribute('y', Blockly.FieldCheckbox.CHECK_Y_OFFSET);
   Blockly.utils.dom.addClass(this.textElement_, 'blocklyCheckbox');
 
-  var textNode = document.createTextNode(Blockly.FieldCheckbox.CHECK_CHAR);
-  this.textElement_.appendChild(textNode);
+  this.textContent_.nodeValue =
+      this.checkChar_ || Blockly.FieldCheckbox.CHECK_CHAR;
   this.textElement_.style.display = this.value_ ? 'block' : 'none';
+};
+
+/**
+ * Set the character used for the check mark.
+ * @param {?string} character The character to use for the check mark, or
+ *    null to use the default.
+ */
+Blockly.FieldCheckbox.prototype.setCheckCharacter = function(character) {
+  this.checkChar_ = character;
+  if (this.textContent_) {
+    this.textContent_.nodeValue = character || Blockly.FieldCheckbox.CHECK_CHAR;
+  }
 };
 
 /**
@@ -140,15 +182,15 @@ Blockly.FieldCheckbox.prototype.showEditor_ = function() {
 
 /**
  * Ensure that the input value is valid ('TRUE' or 'FALSE').
- * @param {string|boolean=} newValue The input value.
+ * @param {string|boolean=} opt_newValue The input value.
  * @return {?string} A valid value ('TRUE' or 'FALSE), or null if invalid.
  * @protected
  */
-Blockly.FieldCheckbox.prototype.doClassValidation_ = function(newValue) {
-  if (newValue === true || newValue === 'TRUE') {
+Blockly.FieldCheckbox.prototype.doClassValidation_ = function(opt_newValue) {
+  if (opt_newValue === true || opt_newValue === 'TRUE') {
     return 'TRUE';
   }
-  if (newValue === false || newValue === 'FALSE') {
+  if (opt_newValue === false || opt_newValue === 'FALSE') {
     return 'FALSE';
   }
   return null;
@@ -209,4 +251,4 @@ Blockly.FieldCheckbox.prototype.convertValueToBool_ = function(value) {
   }
 };
 
-Blockly.Field.register('field_checkbox', Blockly.FieldCheckbox);
+Blockly.fieldRegistry.register('field_checkbox', Blockly.FieldCheckbox);

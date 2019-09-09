@@ -79,7 +79,9 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
    * @type {string}
    * @private
    */
-  this.callbackKey_ = xml.getAttribute('callbackKey');
+  this.callbackKey_ = xml.getAttribute('callbackKey') ||
+  /* Check the lower case version too to satisfy IE */
+                      xml.getAttribute('callbackkey');
 
   /**
    * If specified, a CSS class to add to this button.
@@ -154,7 +156,7 @@ Blockly.FlyoutButton.prototype.createDom = function() {
       this.svgGroup_);
   svgText.textContent = Blockly.utils.replaceMessageReferences(this.text_);
 
-  this.width = Blockly.Field.getCachedWidth(svgText);
+  this.width = Blockly.utils.dom.getTextWidth(svgText);
   this.height = 20;  // Can't compute it :(
 
   if (!this.isLabel_) {

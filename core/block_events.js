@@ -73,7 +73,7 @@ Blockly.Events.BlockBase.prototype.toJson = function() {
  * @param {!Object} json JSON representation.
  */
 Blockly.Events.BlockBase.prototype.fromJson = function(json) {
-  Blockly.Events.BlockBase.superClass_.toJson.call(this);
+  Blockly.Events.BlockBase.superClass_.fromJson.call(this, json);
   this.blockId = json['blockId'];
 };
 
@@ -170,9 +170,6 @@ Blockly.Events.Change.prototype.run = function(forward) {
     case 'field':
       var field = block.getField(this.name);
       if (field) {
-        // Run the validator for any side-effects it may have.
-        // The validator's opinion on validity is ignored.
-        field.callValidator(value);
         field.setValue(value);
       } else {
         console.warn("Can't set non-existent field: " + this.name);
@@ -429,7 +426,7 @@ Blockly.Events.Move.prototype.fromJson = function(json) {
   if (json['newCoordinate']) {
     var xy = json['newCoordinate'].split(',');
     this.newCoordinate =
-        new Blockly.utils.Coordinate(parseFloat(xy[0]), parseFloat(xy[1]));
+        new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
   }
 };
 

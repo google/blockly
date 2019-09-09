@@ -1,5 +1,7 @@
-/* exported assertEquals, assertTrue, assertFalse, assertNull, assertNotNull,
-   isEqualArrays, assertUndefined, assertNotUndefined */
+/* exported assertEquals, assertNotEquals, assertArrayEquals, assertTrue, assertFalse,
+   assertNull, assertNotNull, assertNotNullNorUndefined, assert,
+   isEqualArrays, assertUndefined, assertNotUndefined,
+   defineRowBlock, defineStackBlock, defineStatementBlock */
 function _argumentsIncludeComments(expectedNumberOfNonCommentArgs, args) {
   return args.length == expectedNumberOfNonCommentArgs + 1;
 }
@@ -33,6 +35,17 @@ function assertEquals() {
   var var2 = _nonCommentArg(2, 2, arguments);
   var comment = _commentArg(2, arguments);
   chai.assert.equal(var1, var2, comment);
+}
+
+/**
+ * Converts from JSUnit assertNotEquals to chai.assert.notEquals.
+ */
+function assertNotEquals() {
+  _validateArguments(2, arguments);
+  var var1 = _nonCommentArg(1, 2, arguments);
+  var var2 = _nonCommentArg(2, 2, arguments);
+  var comment = _commentArg(2, arguments);
+  chai.assert.notEqual(var1, var2, comment);
 }
 
 /**
@@ -81,6 +94,14 @@ function assertNotNull() {
   chai.assert.isNotNull(val, commentArg);
 }
 
+function assertNotNullNorUndefined() {
+  assertNotNull(arguments);
+}
+
+function assert() {
+  chai.assert(arguments);
+}
+
 /**
  * Check that two arrays have the same content.
  * @param {!Array.<string>} array1 The first array.
@@ -106,3 +127,52 @@ function assertNotUndefined() {
   var val = _nonCommentArg(1, 1, arguments);
   chai.assert.isDefined(val, commentArg);
 }
+
+function assertArrayEquals() {
+  _validateArguments(2, arguments);
+  var var1 = _nonCommentArg(1, 2, arguments);
+  var var2 = _nonCommentArg(2, 2, arguments);
+  isEqualArrays(var1, var2);
+}
+
+function defineStackBlock() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "stack_block",
+    "message0": "",
+    "previousStatement": null,
+    "nextStatement": null
+  }]);
+}
+
+function defineRowBlock() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "row_block",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "INPUT"
+      }
+    ],
+    "output": null
+  }]);
+}
+
+function defineStatementBlock() {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": "statement_block",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "input_statement",
+        "name": "NAME"
+      }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": ""
+  }]);
+}
+

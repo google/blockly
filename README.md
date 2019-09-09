@@ -20,7 +20,7 @@ Want to contribute? Great! First, read [our guidelines for contributors](https:/
 
 ## Releases
 
-We release by pushing the latest code to the master branch, followed by updating our [docs](developers.google.com/blockly) and [demo pages](https://blockly-demo.appspot.com). We typically release a new version of Blockly once a quarter (every 3 months). If there are breaking bugs, such as a crash when performing a standard action or a rendering issue that makes Blockly unusable, we will cherry-pick fixes to master between releases to fix them. The [releases page](https://github.com/google/blockly/releases) has a list of all releases.
+We release by pushing the latest code to the master branch, followed by updating our [docs](https://developers.google.com/blockly) and [demo pages](https://blockly-demo.appspot.com). We typically release a new version of Blockly once a quarter (every 3 months). If there are breaking bugs, such as a crash when performing a standard action or a rendering issue that makes Blockly unusable, we will cherry-pick fixes to master between releases to fix them. The [releases page](https://github.com/google/blockly/releases) has a list of all releases.
 
 Releases are tagged by the release date (YYYYMMDD) with a leading '1.' and a trailing '.0' in case we ever need a major or minor version (such as [1.20190419.0](https://github.com/google/blockly/tree/1.20190419.0)). If you're using npm, a specific release can be installed by using its tag: `npm install git://github.com/google/blockly.git#1.20181219.0`
 

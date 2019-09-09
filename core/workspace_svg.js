@@ -28,8 +28,10 @@ goog.provide('Blockly.WorkspaceSvg');
 
 // TODO(scr): Fix circular dependencies
 //goog.require('Blockly.BlockSvg');
+goog.require('Blockly.blockRendering');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
+goog.require('Blockly.CursorSvg');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Gesture');
@@ -122,6 +124,8 @@ Blockly.WorkspaceSvg = function(options,
     this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
   }
+
+  Blockly.blockRendering.init();
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -391,6 +395,22 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
 Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
 
 /**
+ * Adds cursor for keyboard navigation.
+ * @return {!Blockly.CursorSvg} Cursor for keyboard navigation.
+ */
+Blockly.WorkspaceSvg.prototype.createCursor = function() {
+  return new Blockly.CursorSvg(this);
+};
+
+/**
+ * Adds marker for keyboard navigation.
+ * @return {!Blockly.CursorSvg} Marker for keyboard navigation.
+ */
+Blockly.WorkspaceSvg.prototype.createMarker = function() {
+  return new Blockly.CursorSvg(this, true);
+};
+
+/**
  * Getter for the inverted screen CTM.
  * @return {SVGMatrix} The matrix to use in mouseToSvg
  */
@@ -556,6 +576,13 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     this.grid_.update(this.scale);
   }
   this.recordDeleteAreas();
+
+  var svgCursor = this.cursor.createDom();
+  this.svgGroup_.appendChild(svgCursor);
+
+  var svgMarker = this.marker.createDom();
+  this.svgGroup_.appendChild(svgMarker);
+
   return this.svgGroup_;
 };
 
@@ -597,6 +624,14 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.zoomControls_ = null;
   }
 
+  if (this.marker) {
+    this.marker.dispose();
+  }
+
+  if (this.cursor) {
+    this.cursor.dispose();
+  }
+
   if (this.audioManager_) {
     this.audioManager_.dispose();
     this.audioManager_ = null;
@@ -633,6 +668,7 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @return {!Blockly.BlockSvg} The created block.
+ * @override
  */
 Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {
   return new Blockly.BlockSvg(this, prototypeName, opt_id);
@@ -1042,6 +1078,14 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
   Blockly.Events.disable();
   try {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
+
+    // Handle paste for keyboard navigation
+    var markedNode = Blockly.navigation.marker_.getCurNode();
+    if (Blockly.keyboardAccessibilityMode && markedNode) {
+      Blockly.navigation.insertBlock(block, markedNode.getLocation());
+      return;
+    }
+
     // Move the duplicate to original position.
     var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
     var blockY = parseInt(xmlBlock.getAttribute('y'), 10);
@@ -1649,6 +1693,12 @@ Blockly.WorkspaceSvg.prototype.setBrowserFocus = function() {
  *     amount values zoom in.
  */
 Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
+  // TODO (#2782): Consider removing once pinch understands zoom configuration
+  // Mutators and flyouts don't support zooming, and pinch doesn't understand
+  // that.
+  if (this.isFlyout || this.isMutator) {
+    return;
+  }
   // Scale factor.
   var speed = this.options.zoomOptions.scaleSpeed;
   var scaleChange = Math.pow(speed, amount);

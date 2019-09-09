@@ -29,6 +29,7 @@ goog.provide('Blockly.Icon');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Size');
 
 
 /**
@@ -142,35 +143,6 @@ Blockly.Icon.prototype.updateColour = function() {
 };
 
 /**
- * Render the icon.
- * @param {number} cursorX Horizontal offset at which to position the icon.
- * @return {number} Horizontal offset for next item to draw.
- */
-Blockly.Icon.prototype.renderIcon = function(cursorX) {
-  if ((this.collapseHidden && this.block_.isCollapsed()) ||
-      this.block_.isInsertionMarker()) {
-    this.iconGroup_.setAttribute('display', 'none');
-    return cursorX;
-  }
-  this.iconGroup_.setAttribute('display', 'block');
-
-  var TOP_MARGIN = 5;
-  var width = this.SIZE;
-  if (this.block_.RTL) {
-    cursorX -= width;
-  }
-  this.iconGroup_.setAttribute('transform',
-      'translate(' + cursorX + ',' + TOP_MARGIN + ')');
-  this.computeIconLocation();
-  if (this.block_.RTL) {
-    cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
-  } else {
-    cursorX += width + Blockly.BlockSvg.SEP_SPACE_X;
-  }
-  return cursorX;
-};
-
-/**
  * Notification that the icon has moved.  Update the arrow accordingly.
  * @param {!Blockly.utils.Coordinate} xy Absolute location in workspace coordinates.
  */
@@ -204,4 +176,16 @@ Blockly.Icon.prototype.computeIconLocation = function() {
  */
 Blockly.Icon.prototype.getIconLocation = function() {
   return this.iconXY_;
+};
+
+/**
+ * Get the size of the icon as used for rendering.
+ * This differs from the actual size of the icon, because it bulges slightly
+ * out of its row rather than increasing the height of its row.
+ * TODO (#2562): Remove getCorrectedSize.
+ * @return {!Blockly.utils.Size} Height and width.
+ */
+Blockly.Icon.prototype.getCorrectedSize = function() {
+  return new Blockly.utils.Size(
+      Blockly.Icon.prototype.SIZE, Blockly.Icon.prototype.SIZE - 2);
 };

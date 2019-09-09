@@ -9,16 +9,19 @@
     <script src="../../generators/lua.js"></script>
     <script src="../../generators/php.js"></script>
     <script src="../../generators/python.js"></script>
-    <script>goog.require('goog.testing.jsunit');</script>
   </head>
   <body>
+    <script src="https://unpkg.com/chai/chai.js"></script>
+    <script src="https://unpkg.com/mocha@5.2.0/mocha.js"></script>
+    <script src="https://unpkg.com/sinon/pkg/sinon.js"></script>
+    <script src="../mocha/test_helpers.js"></script>
+
     <script src="test_utilities.js"></script>
     <script src="block_test.js"></script>
     <script src="connection_db_test.js"></script>
     <script src="connection_test.js"></script>
     <script src="event_test.js"></script>
     <script src="extensions_test.js"></script>
-    <script src="field_test.js"></script>
     <script src="generator_test.js"></script>
     <script src="gesture_test.js"></script>
     <script src="input_test.js"></script>
@@ -38,5 +41,7 @@
     <script src="workspace_test.js"></script>
     <script src="workspace_undo_redo_test.js"></script>
     <script src="xml_test.js"></script>
+
+    <script src="mocha_jsunit_test_runner.js"></script>
   </body>
 </html>

@@ -18,44 +18,21 @@
  * limitations under the License.
  */
 
-.customFieldsTurtleWidget {
-    width: 150px;
-}
+/**
+ * @fileoverview Core utility methods for Blockly
+ * @author samelh@google.com (Sam El-Husseini)
+ */
+'use strict';
 
-.customFieldsTurtleWidget button {
-    border-radius: 4px;
-    border: none;
-    background-color: #fff;
-    opacity: .6;
-    color: #000;
-}
+/**
+ * @name Blockly.utils.global
+ * @namespace
+ */
+goog.provide('Blockly.utils.global');
 
-.customFieldsTurtleWidget .table {
-    width: 100%;
-}
 
-.customFieldsTurtleWidget .row {
-    width: 100%;
-    display: flex;
-}
+/**
+ * Reference to the global object.
+ */
+Blockly.utils.global = this || self;
 
-.customFieldsTurtleWidget .arrow {
-    text-align: center;
-    padding: 0;
-    flex-grow: 0;
-}
-
-.customFieldsTurtleWidget .text {
-    color: #fff;
-    flex-grow: 1;
-    text-align: center;
-}
-
-.customFieldsTurtleWidget .randomize {
-    width: 100%;
-}
-
-.blocklyNonEditableText text,
-.blocklyEditableText text {
-    fill: #000;
-}

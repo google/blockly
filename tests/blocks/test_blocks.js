@@ -28,6 +28,25 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "args0": []
   },
   {
+    "type": "test_basic_stack",
+    "message0": "stack block",
+    "previousStatement": null,
+    "nextStatement": null,
+    "style": "math_blocks"
+  },
+  {
+    "type": "test_basic_row",
+    "message0": "row block %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "INPUT"
+      }
+    ],
+    "output": null,
+    "style": "math_blocks"
+  },
+  {
     "type": "test_basic_value_to_stack",
     "message0": "value to stack",
     "nextStatement": null,
@@ -61,6 +80,52 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "previousStatement": null,
     "nextStatement": null,
     "style": "math_blocks",
+  },
+  {
+    "type": "test_basic_tooltips",
+    "message0": "%1 %2 %3",
+    "args0": [
+      {
+        "type": "field_label",
+        "name": "NAME",
+        "text": "field tooltip",
+        "tooltip": "This is a JSON tooltip for the *field*."
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "name": "NAME",
+        "text": "block tooltip"
+      }
+    ],
+    "tooltip": "This is a JSON tooltip for the *block*.",
+    "style": "math_blocks"
+  },
+  {
+    "type": "test_basic_javascript",
+    "message0": "function %1(%2) { %3 %4 return %5 }",
+    "args0": [
+      "foo",
+      "args",
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_statement",
+        "name": "STACK"
+      },
+      {
+        "type": "input_value",
+        "check": "number",
+        "align": "right",
+        "name": "RETURN"
+      }
+    ],
+    "inputsInline": true,
+    "colour": 200,
+    "tooltip": "Hello world."
   },
   {
     "type": "test_dropdowns_long",
@@ -234,6 +299,26 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "math_blocks",
     "tooltip": "",
     "helpUrl": ""
+  },
+  {
+    "type": "test_fields_colour_options",
+    "message0": "colour options %1",
+    "args0": [
+      {
+        "type": "field_colour",
+        "name": "COLOUR",
+        "colour": "#ff4040",
+        "colourOptions":
+          ['#ff4040', '#ff8080', '#ffc0c0',
+            '#4040ff', '#8080ff', '#c0c0ff'],
+        "colourTitles":
+          ['dark pink', 'pink', 'light pink',
+            'dark blue', 'blue', 'light blue'],
+        "columns": 3
+      }
+    ],
+    "style": "math_blocks",
+    "tooltip": "test tooltip"
   },
   {
     "type": "test_fields_variable",

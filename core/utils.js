@@ -34,10 +34,11 @@ goog.provide('Blockly.utils');
 
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.userAgent');
 
-goog.require('goog.style');
+goog.require('Blockly.utils.style');
 
 
 /**
@@ -84,9 +85,9 @@ Blockly.utils.getRelativeXY = function(element) {
   var transform = element.getAttribute('transform');
   var r = transform && transform.match(Blockly.utils.getRelativeXY.XY_REGEX_);
   if (r) {
-    xy.x += parseFloat(r[1]);
+    xy.x += Number(r[1]);
     if (r[3]) {
-      xy.y += parseFloat(r[3]);
+      xy.y += Number(r[3]);
     }
   }
 
@@ -96,9 +97,9 @@ Blockly.utils.getRelativeXY = function(element) {
     var styleComponents =
         style.match(Blockly.utils.getRelativeXY.XY_STYLE_REGEX_);
     if (styleComponents) {
-      xy.x += parseFloat(styleComponents[1]);
+      xy.x += Number(styleComponents[1]);
       if (styleComponents[3]) {
-        xy.y += parseFloat(styleComponents[3]);
+        xy.y += Number(styleComponents[3]);
       }
     }
   }
@@ -338,7 +339,7 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
         state = 0;  // and parse as string literal.
       } else if (c != '}') {
         buffer.push(c);
-      } else  {
+      } else {
         var rawKey = buffer.join('');
         if (/[A-Z]\w*/i.test(rawKey)) {  // Strict matching
           // Found a valid string key. Attempt case insensitive match.
@@ -513,7 +514,7 @@ Blockly.utils.runAfterPageLoad = function(fn) {
  */
 Blockly.utils.getViewportBBox = function() {
   // Pixels, in window coordinates.
-  var scrollOffset = goog.style.getViewportPageOffset(document);
+  var scrollOffset = Blockly.utils.style.getViewportPageOffset();
   return {
     right: document.documentElement.clientWidth + scrollOffset.x,
     bottom: document.documentElement.clientHeight + scrollOffset.y,
@@ -587,6 +588,37 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
 };
 
 /**
- * Reference to the global object.
+ * Converts screen coordinates to workspace coordinates.
+ * @param {Blockly.WorkspaceSvg} ws The workspace to find the coordinates on.
+ * @param {Blockly.utils.Coordinate} screenCoordinates The screen coordinates to be
+ * converted to workspace coordintaes
+ * @return {Blockly.utils.Coordinate} The workspace coordinates.
+ * @package
  */
-Blockly.utils.global = this || self;
+Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {
+  var screenX = screenCoordinates.x;
+  var screenY = screenCoordinates.y;
+
+  var injectionDiv = ws.getInjectionDiv();
+  // Bounding rect coordinates are in client coordinates, meaning that they
+  // are in pixels relative to the upper left corner of the visible browser
+  // window.  These coordinates change when you scroll the browser window.
+  var boundingRect = injectionDiv.getBoundingClientRect();
+
+  // The client coordinates offset by the injection div's upper left corner.
+  var clientOffsetPixels = new Blockly.utils.Coordinate(
+      screenX - boundingRect.left, screenY - boundingRect.top);
+
+  // The offset in pixels between the main workspace's origin and the upper
+  // left corner of the injection div.
+  var mainOffsetPixels = ws.getOriginOffsetInPixels();
+
+  // The position of the new comment in pixels relative to the origin of the
+  // main workspace.
+  var finalOffsetPixels = Blockly.utils.Coordinate.difference(clientOffsetPixels,
+      mainOffsetPixels);
+
+  // The position in main workspace coordinates.
+  var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
+  return finalOffsetMainWs;
+};

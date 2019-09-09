@@ -34,6 +34,7 @@ goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
@@ -165,7 +166,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   // a top level svg. Instead of handling scale themselves, mutators
   // inherit scale from the parent workspace.
   // To fix this, scale needs to be applied at a different level in the dom.
-  var flyoutSvg =  this.workspace_.addFlyout_('g');
+  var flyoutSvg = this.workspace_.addFlyout_('g');
   var background = this.workspace_.createDom('blocklyMutatorBackground');
 
   // Insert the flyout after the <rect> but before the block canvas so that
@@ -372,6 +373,10 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     }
     if (block.rendered) {
       block.render();
+    }
+
+    if (oldMutation != newMutation && Blockly.keyboardAccessibilityMode) {
+      Blockly.navigation.moveCursorOnBlockMutation(block);
     }
     // Don't update the bubble until the drag has ended, to avoid moving blocks
     // under the cursor.

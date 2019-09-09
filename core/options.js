@@ -119,6 +119,7 @@ Blockly.Options = function(options) {
     var oneBasedIndex = !!options['oneBasedIndex'];
   }
   var theme = options['theme'] || Blockly.Themes.Classic;
+  var keyMap = options['keyMap'] || Blockly.user.keyMap.createDefaultKeyMap();
 
   this.RTL = rtl;
   this.oneBasedIndex = oneBasedIndex;
@@ -143,6 +144,7 @@ Blockly.Options = function(options) {
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
   this.toolboxPosition = toolboxPosition;
   this.theme = theme;
+  this.keyMap = keyMap;
 };
 
 /**
@@ -219,22 +221,22 @@ Blockly.Options.parseZoomOptions_ = function(options) {
   if (zoom['startScale'] === undefined) {
     zoomOptions.startScale = 1;
   } else {
-    zoomOptions.startScale = parseFloat(zoom['startScale']);
+    zoomOptions.startScale = Number(zoom['startScale']);
   }
   if (zoom['maxScale'] === undefined) {
     zoomOptions.maxScale = 3;
   } else {
-    zoomOptions.maxScale = parseFloat(zoom['maxScale']);
+    zoomOptions.maxScale = Number(zoom['maxScale']);
   }
   if (zoom['minScale'] === undefined) {
     zoomOptions.minScale = 0.3;
   } else {
-    zoomOptions.minScale = parseFloat(zoom['minScale']);
+    zoomOptions.minScale = Number(zoom['minScale']);
   }
   if (zoom['scaleSpeed'] === undefined) {
     zoomOptions.scaleSpeed = 1.2;
   } else {
-    zoomOptions.scaleSpeed = parseFloat(zoom['scaleSpeed']);
+    zoomOptions.scaleSpeed = Number(zoom['scaleSpeed']);
   }
   return zoomOptions;
 };
@@ -250,9 +252,9 @@ Blockly.Options.parseZoomOptions_ = function(options) {
 Blockly.Options.parseGridOptions_ = function(options) {
   var grid = options['grid'] || {};
   var gridOptions = {};
-  gridOptions.spacing = parseFloat(grid['spacing']) || 0;
+  gridOptions.spacing = Number(grid['spacing']) || 0;
   gridOptions.colour = grid['colour'] || '#888';
-  gridOptions.length = parseFloat(grid['length']) || 1;
+  gridOptions.length = Number(grid['length']) || 1;
   gridOptions.snap = gridOptions.spacing > 0 && !!grid['snap'];
   return gridOptions;
 };

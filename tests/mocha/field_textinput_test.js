@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-suite ('Text Input Fields', function() {
+suite('Text Input Fields', function() {
   function assertValue(textInputField, expectedValue, opt_expectedText) {
     var actualValue = textInputField.getValue();
     var actualText = textInputField.getText();
@@ -32,10 +32,6 @@ suite ('Text Input Fields', function() {
   suite('Constructor', function() {
     test('Empty', function() {
       var textInputField = new Blockly.FieldTextInput();
-      assertValueDefault(textInputField);
-    });
-    test('Null', function() {
-      var textInputField = new Blockly.FieldTextInput(null);
       assertValueDefault(textInputField);
     });
     test('Undefined', function() {
@@ -66,10 +62,6 @@ suite ('Text Input Fields', function() {
   suite('fromJson', function() {
     test('Empty', function() {
       var textInputField = new Blockly.FieldTextInput.fromJson({});
-      assertValueDefault(textInputField);
-    });
-    test('Null', function() {
-      var textInputField = new Blockly.FieldTextInput.fromJson({ text: null});
       assertValueDefault(textInputField);
     });
     test('Undefined', function() {

@@ -26,10 +26,10 @@
 'use strict';
 
 /**
- * @name Blockly.utils.Paths
+ * @name Blockly.utils.svgPaths
  * @namespace
  */
-goog.provide('Blockly.utils.Paths');
+goog.provide('Blockly.utils.svgPaths');
 
 
 /**
@@ -42,7 +42,7 @@ goog.provide('Blockly.utils.Paths');
  * @return {string} A string of the format ' x,y '
  * @public
  */
-Blockly.utils.Paths.point = function(x, y) {
+Blockly.utils.svgPaths.point = function(x, y) {
   return ' ' + x + ',' + y + ' ';
 };
 
@@ -52,14 +52,14 @@ Blockly.utils.Paths.point = function(x, y) {
  * These coordinates are unitless and hence in the user coordinate system.
  * @param {string} command The command to use.
  *     Should be one of: c, C, s, S, q, Q.
- * @param {string} points  An array containing all of the points to pass to the
+ * @param {!Array.<string>} points  An array containing all of the points to pass to the
  *     curve command, in order.  The points are represented as strings of the
  *     format ' x, y '.
  * @return {string} A string defining one or more Bezier curves.  See the MDN
  *     documentation for exact format.
  * @public
  */
-Blockly.utils.Paths.curve = function(command, points) {
+Blockly.utils.svgPaths.curve = function(command, points) {
   return ' ' + command + points.join('');
 };
 
@@ -73,7 +73,7 @@ Blockly.utils.Paths.curve = function(command, points) {
  * @return {string} A string of the format ' M x,y '
  * @public
  */
-Blockly.utils.Paths.moveTo = function(x, y) {
+Blockly.utils.svgPaths.moveTo = function(x, y) {
   return ' M ' + x + ',' + y + ' ';
 };
 
@@ -87,7 +87,7 @@ Blockly.utils.Paths.moveTo = function(x, y) {
  * @return {string} A string of the format ' m dx,dy '
  * @public
  */
-Blockly.utils.Paths.moveBy = function(dx, dy) {
+Blockly.utils.svgPaths.moveBy = function(dx, dy) {
   return ' m ' + dx + ',' + dy + ' ';
 };
 
@@ -101,7 +101,7 @@ Blockly.utils.Paths.moveBy = function(dx, dy) {
  * @return {string} A string of the format ' l dx,dy '
  * @public
  */
-Blockly.utils.Paths.lineTo = function(dx, dy) {
+Blockly.utils.svgPaths.lineTo = function(dx, dy) {
   return ' l ' + dx + ',' + dy + ' ';
 };
 
@@ -116,7 +116,7 @@ Blockly.utils.Paths.lineTo = function(dx, dy) {
  * @return {string} A string of the format ' l (dx,dy)+ '
  * @public
  */
-Blockly.utils.Paths.line = function(points) {
+Blockly.utils.svgPaths.line = function(points) {
   return ' l' + points.join('');
 };
 
@@ -133,7 +133,7 @@ Blockly.utils.Paths.line = function(points) {
  * @return {string} A string of the format ' command val '
  * @public
  */
-Blockly.utils.Paths.lineOnAxis = function(command, val) {
+Blockly.utils.svgPaths.lineOnAxis = function(command, val) {
   return ' ' + command + ' ' + val + ' ';
 };
 
@@ -151,6 +151,6 @@ Blockly.utils.Paths.lineOnAxis = function(command, val) {
  * @return {string} A string of the format 'command radius radius flags point'
  * @public
  */
-Blockly.utils.Paths.arc = function(command, flags, radius, point) {
+Blockly.utils.svgPaths.arc = function(command, flags, radius, point) {
   return command + ' ' + radius + ' ' + radius + ' ' + flags + point;
 };

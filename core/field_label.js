@@ -28,11 +28,10 @@
 goog.provide('Blockly.FieldLabel');
 
 goog.require('Blockly.Field');
-goog.require('Blockly.Tooltip');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
-
-goog.require('goog.math.Size');
+goog.require('Blockly.utils.Size');
 
 
 /**
@@ -44,7 +43,7 @@ goog.require('goog.math.Size');
  * @constructor
  */
 Blockly.FieldLabel = function(opt_value, opt_class) {
-  this.size_ = new goog.math.Size(0, 17.5);
+  this.size_ = new Blockly.utils.Size(0, Blockly.Field.TEXT_DEFAULT_HEIGHT);
   this.class_ = opt_class;
   opt_value = this.doClassValidation_(opt_value);
   if (opt_value === null) {
@@ -81,7 +80,8 @@ Blockly.FieldLabel.prototype.EDITABLE = false;
  */
 Blockly.FieldLabel.prototype.initView = function() {
   this.createTextElement_();
-  this.textElement_.setAttribute('y', this.size_.height - 5);
+  // The y attribute of an SVG text element is the baseline.
+  this.textElement_.setAttribute('y', this.size_.height);
   if (this.class_) {
     Blockly.utils.dom.addClass(this.textElement_, this.class_);
   }
@@ -89,15 +89,15 @@ Blockly.FieldLabel.prototype.initView = function() {
 
 /**
  * Ensure that the input value casts to a valid string.
- * @param {string=} newValue The input value.
+ * @param {string=} opt_newValue The input value.
  * @return {?string} A valid string, or null if invalid.
  * @protected
  */
-Blockly.FieldLabel.prototype.doClassValidation_ = function(newValue) {
-  if (newValue === null || newValue === undefined) {
+Blockly.FieldLabel.prototype.doClassValidation_ = function(opt_newValue) {
+  if (opt_newValue === null || opt_newValue === undefined) {
     return null;
   }
-  return String(newValue);
+  return String(opt_newValue);
 };
 
-Blockly.Field.register('field_label', Blockly.FieldLabel);
+Blockly.fieldRegistry.register('field_label', Blockly.FieldLabel);

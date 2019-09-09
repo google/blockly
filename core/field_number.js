@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.FieldNumber');
 
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
 
 
@@ -39,6 +40,7 @@ goog.require('Blockly.FieldTextInput');
  * @param {Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a number & returns a validated
  *    number, or null to abort the change.
+ * @extends {Blockly.FieldTextInput}
  * @constructor
  */
 Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
@@ -76,7 +78,7 @@ Blockly.FieldNumber.prototype.SERIALIZABLE = true;
 
 /**
  * Set the maximum, minimum and precision constraints on this field.
- * Any of these properties may be undefiend or NaN to be disabled.
+ * Any of these properties may be undefined or NaN to be disabled.
  * Setting precision (usually a power of 10) enforces a minimum step between
  * values. That is, the user's value will rounded to the closest multiple of
  * precision. The least significant digit place is inferred from the precision.
@@ -86,44 +88,33 @@ Blockly.FieldNumber.prototype.SERIALIZABLE = true;
  * @param {number|string|undefined} precision Precision for value.
  */
 Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
-  precision = parseFloat(precision);
+  precision = Number(precision);
   this.precision_ = isNaN(precision) ? 0 : precision;
   var precisionString = this.precision_.toString();
   var decimalIndex = precisionString.indexOf('.');
   this.fractionalDigits_ = (decimalIndex == -1) ? -1 :
       precisionString.length - (decimalIndex + 1);
-  min = parseFloat(min);
+  min = Number(min);
   this.min_ = isNaN(min) ? -Infinity : min;
-  max = parseFloat(max);
+  max = Number(max);
   this.max_ = isNaN(max) ? Infinity : max;
   this.setValue(this.getValue());
 };
 
 /**
- * Show the inline free-text editor on top of the text.
- * @param {boolean=} opt_quietInput True if editor should be created without
- *     focus.  Defaults to false.
- * @protected
- */
-Blockly.FieldNumber.prototype.showEditor_ = function(opt_quietInput) {
-  this.setSpellcheck(false);
-  Blockly.FieldNumber.superClass_.showEditor_.call(this, opt_quietInput);
-  this.htmlInput_.type = "number";
-};
-
-/**
  * Ensure that the input value is a valid number (must fulfill the
  * constraints placed on the field).
- * @param {string|number=} newValue The input value.
+ * @param {string|number=} opt_newValue The input value.
  * @return {?number} A valid number, or null if invalid.
  * @protected
+ * @override
  */
-Blockly.FieldNumber.prototype.doClassValidation_ = function(newValue) {
-  if (newValue === null || newValue === undefined) {
+Blockly.FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
+  if (opt_newValue === null || opt_newValue === undefined) {
     return null;
   }
   // Clean up text.
-  newValue = String(newValue);
+  var newValue = String(opt_newValue);
   // TODO: Handle cases like 'ten', '1.203,14', etc.
   // 'O' is sometimes mistaken for '0' by inexperienced users.
   newValue = newValue.replace(/O/ig, '0');
@@ -131,7 +122,7 @@ Blockly.FieldNumber.prototype.doClassValidation_ = function(newValue) {
   newValue = newValue.replace(/,/g, '');
 
   // Clean up number.
-  var n = parseFloat(newValue || 0);
+  var n = Number(newValue || 0);
   if (isNaN(n)) {
     // Invalid number.
     return null;
@@ -148,4 +139,25 @@ Blockly.FieldNumber.prototype.doClassValidation_ = function(newValue) {
   return n;
 };
 
-Blockly.Field.register('field_number', Blockly.FieldNumber);
+/**
+ * Create the number input editor widget.
+ * @return {!HTMLInputElement} The newly created number input editor.
+ * @protected
+ * @override
+ */
+Blockly.FieldNumber.prototype.widgetCreate_ = function() {
+  var htmlInput = Blockly.FieldNumber.superClass_.widgetCreate_.call(this);
+
+  // Set the accessibility state
+  if (this.min_ > -Infinity) {
+    Blockly.utils.aria.setState(htmlInput,
+        Blockly.utils.aria.State.VALUEMIN, this.min_);
+  }
+  if (this.max_ < Infinity) {
+    Blockly.utils.aria.setState(htmlInput,
+        Blockly.utils.aria.State.VALUEMAX, this.max_);
+  }
+  return htmlInput;
+};
+
+Blockly.fieldRegistry.register('field_number', Blockly.FieldNumber);

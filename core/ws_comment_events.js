@@ -78,12 +78,7 @@ goog.inherits(Blockly.Events.CommentBase, Blockly.Events.Abstract);
  * @return {!Object} JSON representation.
  */
 Blockly.Events.CommentBase.prototype.toJson = function() {
-  var json = {
-    'type': this.type
-  };
-  if (this.group) {
-    json['group'] = this.group;
-  }
+  var json = Blockly.Events.CommentBase.superClass_.toJson.call(this);
   if (this.commentId) {
     json['commentId'] = this.commentId;
   }
@@ -95,8 +90,8 @@ Blockly.Events.CommentBase.prototype.toJson = function() {
  * @param {!Object} json JSON representation.
  */
 Blockly.Events.CommentBase.prototype.fromJson = function(json) {
+  Blockly.Events.CommentBase.superClass_.fromJson.call(this, json);
   this.commentId = json['commentId'];
-  this.group = json['group'];
 };
 
 /**
@@ -345,8 +340,8 @@ Blockly.Events.CommentMove.prototype.type = Blockly.Events.COMMENT_MOVE;
 /**
  * Override the location before the move.  Use this if you don't create the
  * event until the end of the move, but you know the original location.
- * @param {!Blockly.utils.Coordinate} xy The location before the move, in workspace
- *     coordinates.
+ * @param {!Blockly.utils.Coordinate} xy The location before the move,
+ *     in workspace coordinates.
  */
 Blockly.Events.CommentMove.prototype.setOldCoordinate = function(xy) {
   this.oldCoordinate_ = xy;
@@ -376,7 +371,7 @@ Blockly.Events.CommentMove.prototype.fromJson = function(json) {
   if (json['newCoordinate']) {
     var xy = json['newCoordinate'].split(',');
     this.newCoordinate_ =
-        new Blockly.utils.Coordinate(parseFloat(xy[0]), parseFloat(xy[1]));
+        new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
   }
 };
 
@@ -385,7 +380,8 @@ Blockly.Events.CommentMove.prototype.fromJson = function(json) {
  * @return {boolean} False if something changed.
  */
 Blockly.Events.CommentMove.prototype.isNull = function() {
-  return Blockly.utils.Coordinate.equals(this.oldCoordinate_, this.newCoordinate_);
+  return Blockly.utils.Coordinate.equals(this.oldCoordinate_,
+      this.newCoordinate_);
 };
 
 /**

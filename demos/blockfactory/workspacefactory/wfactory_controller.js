@@ -343,6 +343,10 @@ WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
     throw new Error(msg);
   }
 
+  // Unpack self-closing tags.  These tags fail when embedded in HTML.
+  // <block name="foo"/> -> <block name="foo"></block>
+  configXml = configXml.replace(/<(\w+)([^<]*)\/>/g, '<$1$2></$1>');
+
   // Download file.
   var data = new Blob([configXml], {type: 'text/xml'});
   this.view.createAndDownloadFile(fileName, data);
@@ -391,8 +395,7 @@ WorkspaceFactoryController.prototype.printConfig = function() {
   // Capture any changes made by user before generating XML.
   this.saveStateFromWorkspace();
   // Print XML.
-  window.console.log(Blockly.Xml.domToPrettyText
-      (this.generator.generateToolboxXml()));
+  console.log(Blockly.Xml.domToPrettyText(this.generator.generateToolboxXml()));
 };
 
 /**
@@ -1179,19 +1182,19 @@ WorkspaceFactoryController.prototype.readOptions_ = function() {
     var startScaleValue =
         document.getElementById('zoomOption_startScale_number').value;
     zoom['startScale'] = typeof startScaleValue == 'string' ?
-        parseFloat(startScaleValue) : startScaleValue;
+        Number(startScaleValue) : startScaleValue;
     var maxScaleValue =
         document.getElementById('zoomOption_maxScale_number').value;
     zoom['maxScale'] = typeof maxScaleValue == 'string' ?
-        parseFloat(maxScaleValue) : maxScaleValue;
+        Number(maxScaleValue) : maxScaleValue;
     var minScaleValue =
         document.getElementById('zoomOption_minScale_number').value;
     zoom['minScale'] = typeof minScaleValue == 'string' ?
-        parseFloat(minScaleValue) : minScaleValue;
+        Number(minScaleValue) : minScaleValue;
     var scaleSpeedValue =
         document.getElementById('zoomOption_scaleSpeed_number').value;
     zoom['scaleSpeed'] = typeof scaleSpeedValue == 'string' ?
-        parseFloat(scaleSpeedValue) : scaleSpeedValue;
+        Number(scaleSpeedValue) : scaleSpeedValue;
     optionsObj['zoom'] = zoom;
   }
 

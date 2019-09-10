@@ -48,26 +48,6 @@ else
   fi
 fi
 
-# Find the Closure Library.
-if [ -n $NODE_MODULES ] && \
-  [ -d "$NODE_MODULES/google-closure-library" ]; then
-  CLOSURE_LIB_ROOT="$NODE_MODULES/google-closure-library"
-  echo "Found npm google-closure-library:"
-  echo "  $CLOSURE_LIB_ROOT"
-  npm list google-closure-library | grep google-closure-library
-elif [ -d "$BLOCKLY_ROOT/../closure-library" ]; then
-  CLOSURE_LIB_ROOT="$BLOCKLY_ROOT/../closure-library"
-  echo "Found local Closure library:"
-  echo "  $CLOSURE_LIB_ROOT"
-  cat $CLOSURE_LIB_ROOT/package.json | grep version
-else
-  echo "ERROR: Closure library not found." 1>&2;
-  echo "Either npm install google-closure-library" 1>&2;
-  echo "Or clone the repo from GitHub in a directory next to Blockly." 1>&2;
-  echo "cd $BLOCKLY_ROOT/..; git clone https://github.com/google/closure-library.git" 1>&2;
-  exit 1
-fi
-
 if [ -f "$BLOCKLY_ROOT/tests/compile/main_compressed.js" ]; then
   echo "Removing previous output."
   rm "$BLOCKLY_ROOT/tests/compile/main_compressed.js"
@@ -98,8 +78,6 @@ COMPILATION_COMMAND="java -jar $COMPILER --js='$BLOCKLY_ROOT/tests/compile/main.
   --js='$BLOCKLY_ROOT/blocks/**.js' \
   --js='$BLOCKLY_ROOT/generators/**.js' \
   --js='$BLOCKLY_ROOT/msg/js/**.js' \
-  --js='$CLOSURE_LIB_ROOT/closure/goog/**.js' \
-  --js='$CLOSURE_LIB_ROOT/third_party/closure/goog/**.js' \
   --generate_exports \
   --externs $BLOCKLY_ROOT/externs/svg-externs.js \
   --compilation_level ADVANCED_OPTIMIZATIONS \

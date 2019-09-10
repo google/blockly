@@ -28,6 +28,7 @@ goog.provide('CustomFields.FieldPitch');
 
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils.math');
+goog.require('Blockly.utils.object');
 
 var CustomFields = CustomFields || {};
 
@@ -40,7 +41,7 @@ var CustomFields = CustomFields || {};
 CustomFields.FieldPitch = function(text) {
   CustomFields.FieldPitch.superClass_.constructor.call(this, text);
 };
-goog.inherits(CustomFields.FieldPitch, Blockly.FieldTextInput);
+Blockly.utils.object.inherits(CustomFields.FieldPitch, Blockly.FieldTextInput);
 
 /**
  * Construct a FieldPitch from a JSON arg object.

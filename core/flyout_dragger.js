@@ -37,6 +37,7 @@ goog.require('Blockly.WorkspaceDragger');
  * and how to do translations based on that.  This simply passes the right
  * commands based on events.
  * @param {!Blockly.Flyout} flyout The flyout to drag.
+ * @extends {Blockly.WorkspaceDragger}
  * @constructor
  */
 Blockly.FlyoutDragger = function(flyout) {

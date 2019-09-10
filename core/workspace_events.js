@@ -38,6 +38,7 @@ goog.require('Blockly.utils.object');
  * Finished loading events do not record undo or redo.
  * @param {!Blockly.Workspace} workspace The workspace that has finished
  *    loading.
+ * @extends {Blockly.Events.Abstract}
  * @constructor
  */
 Blockly.Events.FinishedLoading = function(workspace) {

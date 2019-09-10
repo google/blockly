@@ -28,7 +28,9 @@
 goog.provide('Blockly.zelos.ConstantProvider');
 
 goog.require('Blockly.blockRendering.ConstantProvider');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.svgPaths');
+
 
 /**
  * An object that provides constants for rendering blocks in Zelos mode.
@@ -53,7 +55,7 @@ Blockly.zelos.ConstantProvider = function() {
 
   this.DARK_PATH_OFFSET = 0;
 };
-goog.inherits(Blockly.zelos.ConstantProvider,
+Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
 
 /**

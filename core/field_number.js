@@ -28,6 +28,7 @@ goog.provide('Blockly.FieldNumber');
 
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -53,7 +54,7 @@ Blockly.FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
   Blockly.FieldNumber.superClass_.constructor.call(
       this, opt_value, opt_validator);
 };
-goog.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
+Blockly.utils.object.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
 
 /**
  * Construct a FieldNumber from a JSON arg object.

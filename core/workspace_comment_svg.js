@@ -34,6 +34,7 @@ goog.require('Blockly.Events.Ui');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.WorkspaceComment');
 
@@ -91,7 +92,9 @@ Blockly.WorkspaceCommentSvg = function(workspace, content, height, width,
       workspace, content, height, width, opt_id);
 
   this.render();
-}; goog.inherits(Blockly.WorkspaceCommentSvg, Blockly.WorkspaceComment);
+};
+Blockly.utils.object.inherits(Blockly.WorkspaceCommentSvg,
+    Blockly.WorkspaceComment);
 
 /**
  * The width and height to use to size a workspace comment when it is first

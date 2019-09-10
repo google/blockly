@@ -36,9 +36,8 @@ goog.require('Blockly.Msg');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.string');
-goog.require('Blockly.utils.userAgent');
-
 goog.require('Blockly.utils.style');
+goog.require('Blockly.utils.userAgent');
 
 
 /**
@@ -590,8 +589,8 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
 /**
  * Converts screen coordinates to workspace coordinates.
  * @param {Blockly.WorkspaceSvg} ws The workspace to find the coordinates on.
- * @param {Blockly.utils.Coordinate} screenCoordinates The screen coordinates to be
- * converted to workspace coordintaes
+ * @param {Blockly.utils.Coordinate} screenCoordinates The screen coordinates to
+ * be converted to workspace coordintaes
  * @return {Blockly.utils.Coordinate} The workspace coordinates.
  * @package
  */
@@ -615,44 +614,10 @@ Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {
 
   // The position of the new comment in pixels relative to the origin of the
   // main workspace.
-  var finalOffsetPixels = Blockly.utils.Coordinate.difference(clientOffsetPixels,
-      mainOffsetPixels);
+  var finalOffsetPixels = Blockly.utils.Coordinate.difference(
+      clientOffsetPixels, mainOffsetPixels);
 
   // The position in main workspace coordinates.
   var finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
   return finalOffsetMainWs;
-};
-
-/**
- * Builds an object structure for the provided namespace path, ensuring that
- * names that already exist are not overwritten. For example:
- * "a.b.c" -> a = {};a.b={};a.b.c={}
- * @param {string} name name of the object that this file defines.
- * @param {*} obj the object to expose at the end of the path.
- */
-Blockly.utils.exportSymbol = function(name, obj) {
-  var parts = name.split('.');
-  var cur = Blockly.utils.global;
-
-  for (var part; parts.length && (part = parts.shift());) {
-    if (!parts.length) {
-      cur[part] = obj;
-    } else if (cur[part] && cur[part] !== Object.prototype[part]) {
-      cur = cur[part];
-    } else {
-      cur = cur[part] = {};
-    }
-  }
-};
-
-
-/**
- * Copies all the members of a source object to a target object.
- * @param {!Object} target Target.
- * @param {!Object} source Source.
- */
-Blockly.utils.mixin = function(target, source) {
-  for (var x in source) {
-    target[x] = source[x];
-  }
 };

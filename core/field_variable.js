@@ -32,6 +32,7 @@ goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Variables');
@@ -65,7 +66,7 @@ Blockly.FieldVariable = function(varname, opt_validator, opt_variableTypes,
   this.setTypes_(opt_variableTypes, opt_defaultType);
   this.value_ = null;
 };
-goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
+Blockly.utils.object.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
 
 /**
  * Construct a FieldVariable from a JSON arg object,

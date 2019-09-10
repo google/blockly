@@ -32,6 +32,7 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Icon');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.userAgent');
 
 
@@ -45,7 +46,7 @@ Blockly.Comment = function(block) {
   Blockly.Comment.superClass_.constructor.call(this, block);
   this.createIcon();
 };
-goog.inherits(Blockly.Comment, Blockly.Icon);
+Blockly.utils.object.inherits(Blockly.Comment, Blockly.Icon);
 
 /**
  * Comment text (if bubble is not visible).

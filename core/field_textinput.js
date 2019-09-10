@@ -35,6 +35,7 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.userAgent');
 
@@ -57,7 +58,7 @@ Blockly.FieldTextInput = function(opt_value, opt_validator) {
   Blockly.FieldTextInput.superClass_.constructor.call(this, opt_value,
       opt_validator);
 };
-goog.inherits(Blockly.FieldTextInput, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.FieldTextInput, Blockly.Field);
 
 /**
  * Construct a FieldTextInput from a JSON arg object,

@@ -210,10 +210,6 @@ class Gen_compressed(threading.Thread):
         ("warning_level", "DEFAULT"),
       ]
 
-    # Add Closure provide, require and inherits methods.
-    params.append(("js_code", """var goog=goog||{};goog.provide=function(){};goog.require=function(){};
-goog.inherits=function(a,b){function c(){}c.prototype=b.prototype;a.superClass_=b.prototype;a.prototype=new c;a.prototype.constructor=a;};"""))
-
     # Read in all the source files.
     filenames = calcdeps.CalculateDependencies(self.search_paths,
         [os.path.join("core", "blockly.js")])

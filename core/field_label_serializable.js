@@ -30,6 +30,7 @@ goog.provide('Blockly.FieldLabelSerializable');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -45,7 +46,8 @@ Blockly.FieldLabelSerializable = function(opt_value, opt_class) {
   Blockly.FieldLabelSerializable.superClass_.constructor.call(this, opt_value,
       opt_class);
 };
-goog.inherits(Blockly.FieldLabelSerializable, Blockly.FieldLabel);
+Blockly.utils.object.inherits(Blockly.FieldLabelSerializable,
+    Blockly.FieldLabel);
 
 /**
  * Construct a FieldLabelSerializable from a JSON arg object,

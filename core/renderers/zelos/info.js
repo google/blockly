@@ -47,6 +47,7 @@ goog.require('Blockly.blockRendering.OutputConnection');
 
 goog.require('Blockly.RenderedConnection');
 
+goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.AfterStatementSpacerRow');
 goog.require('Blockly.zelos.BeforeStatementSpacerRow');
 goog.require('Blockly.zelos.BottomRow');
@@ -81,7 +82,8 @@ Blockly.zelos.RenderInfo = function(block) {
    */
   this.bottomRow = new Blockly.zelos.BottomRow();
 };
-goog.inherits(Blockly.zelos.RenderInfo, Blockly.blockRendering.RenderInfo);
+Blockly.utils.object.inherits(Blockly.zelos.RenderInfo,
+    Blockly.blockRendering.RenderInfo);
 
 
 /**

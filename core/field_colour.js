@@ -32,9 +32,10 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.aria');
+goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.IdGenerator');
-goog.require('Blockly.utils.colour');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 
 
@@ -61,7 +62,7 @@ Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
 
   this.configure_(opt_config);
 };
-goog.inherits(Blockly.FieldColour, Blockly.Field);
+Blockly.utils.object.inherits(Blockly.FieldColour, Blockly.Field);
 
 /**
  * Construct a FieldColour from a JSON arg object.

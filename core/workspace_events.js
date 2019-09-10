@@ -28,6 +28,7 @@ goog.provide('Blockly.Events.FinishedLoading');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.utils.object');
 
 
 /**
@@ -57,7 +58,8 @@ Blockly.Events.FinishedLoading = function(workspace) {
   // Workspace events do not undo or redo.
   this.recordUndo = false;
 };
-goog.inherits(Blockly.Events.FinishedLoading, Blockly.Events.Abstract);
+Blockly.utils.object.inherits(Blockly.Events.FinishedLoading,
+    Blockly.Events.Abstract);
 
 /**
  * Type of this event.

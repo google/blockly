@@ -274,6 +274,7 @@ Blockly.Variables.generateUniqueName = function(workspace) {
  *     button), or undefined if an existing variable was chosen.
  * @param {string=} opt_type The type of the variable like 'int', 'string', or
  *     ''. This will default to '', which is a specific type.
+ * @export
  */
 Blockly.Variables.createVariableButtonHandler = function(
     workspace, opt_callback, opt_type) {
@@ -316,9 +317,6 @@ Blockly.Variables.createVariableButtonHandler = function(
   };
   promptAndCheckWithAlert('');
 };
-// Export symbols that would otherwise be renamed by Closure compiler.
-Blockly.utils.exportSymbol('Blockly.Variables.createVariableButtonHandler',
-    Blockly.Variables.createVariableButtonHandler);
 
 /**
  * Original name of Blockly.Variables.createVariableButtonHandler(..).
@@ -331,12 +329,10 @@ Blockly.utils.exportSymbol('Blockly.Variables.createVariableButtonHandler',
  *     button), or undefined if an existing variable was chosen.
  * @param {string=} opt_type The type of the variable like 'int', 'string', or
  *     ''. This will default to '', which is a specific type.
+ * @export
  */
 Blockly.Variables.createVariable =
     Blockly.Variables.createVariableButtonHandler;
-// Export symbols that would otherwise be renamed by Closure compiler.
-Blockly.utils.exportSymbol('Blockly.Variables.createVariable',
-    Blockly.Variables.createVariable);
 
 /**
  * Rename a variable with the given workspace, variableType, and oldName.

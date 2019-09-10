@@ -84,14 +84,6 @@ function prependHeader() {
 }
 
 /**
- * Helper method for prepending Google Closure methods used in Blockly.
- */
-function prependGoogBase() {
-  return gulp.insert.prepend(`'use strict';var goog=goog||{};goog.provide=function(){};goog.require=function(){};
-goog.inherits=function(a,b){function c(){}c.prototype=b.prototype;a.superClass_=b.prototype;a.prototype=new c;a.prototype.constructor=a;};`);
-}
-
-/**
  * Helper method for calling the Closure compiler.
  * @param {*} compilerOptions 
  * @param {boolean=} opt_verbose Optional option for verbose logging
@@ -138,7 +130,6 @@ gulp.task('build-core', function () {
       externs: './externs/svg-externs.js',
       define: defines
     }, argv.verbose))
-    .pipe(prependGoogBase())
     .pipe(prependHeader())
     .pipe(gulp.dest('./'));
 });

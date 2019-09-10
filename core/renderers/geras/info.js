@@ -46,6 +46,7 @@ goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.OutputConnection');
 
 goog.require('Blockly.RenderedConnection');
+goog.require('Blockly.utils.object');
 
 /**
  * An object containing all sizing information needed to draw this block.
@@ -62,7 +63,8 @@ goog.require('Blockly.RenderedConnection');
 Blockly.geras.RenderInfo = function(block) {
   Blockly.geras.RenderInfo.superClass_.constructor.call(this, block);
 };
-goog.inherits(Blockly.geras.RenderInfo, Blockly.blockRendering.RenderInfo);
+Blockly.utils.object.inherits(Blockly.geras.RenderInfo,
+    Blockly.blockRendering.RenderInfo);
 
 /**
  * @override

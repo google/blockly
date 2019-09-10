@@ -39,6 +39,7 @@ goog.require('Blockly.Input');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.Warning');
@@ -171,7 +172,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
     if (!prototype || typeof prototype != 'object') {
       throw TypeError('Unknown block type: ' + prototypeName);
     }
-    Blockly.utils.mixin(this, prototype);
+    Blockly.utils.object.mixin(this, prototype);
   }
 
   workspace.addTopBlock(this);
@@ -1557,7 +1558,7 @@ Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
           JSON.stringify(overwrites));
     }
   }
-  Blockly.utils.mixin(this, mixinObj);
+  Blockly.utils.object.mixin(this, mixinObj);
 };
 
 /**

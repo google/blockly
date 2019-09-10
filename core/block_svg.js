@@ -40,6 +40,7 @@ goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
 
 
@@ -107,7 +108,7 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
     this.svgGroup_.dataset.id = this.id;
   }
 };
-goog.inherits(Blockly.BlockSvg, Blockly.Block);
+Blockly.utils.object.inherits(Blockly.BlockSvg, Blockly.Block);
 
 /**
  * Height of this block, not including any statement blocks above or below.

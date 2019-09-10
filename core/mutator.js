@@ -35,6 +35,7 @@ goog.require('Blockly.Icon');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.global');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
@@ -50,7 +51,7 @@ Blockly.Mutator = function(quarkNames) {
   Blockly.Mutator.superClass_.constructor.call(this, null);
   this.quarkNames_ = quarkNames;
 };
-goog.inherits(Blockly.Mutator, Blockly.Icon);
+Blockly.utils.object.inherits(Blockly.Mutator, Blockly.Icon);
 
 /**
  * Width of workspace.
@@ -444,6 +445,7 @@ Blockly.Mutator.prototype.updateBlockStyle = function() {
  * @param {!Blockly.Block} block Parent block.
  * @param {string} inputName Name of input on parent block.
  * @return {boolean} True iff a reconnection was made, false otherwise.
+ * @export
  */
 Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
   if (!connectionChild || !connectionChild.getSourceBlock().workspace) {
@@ -486,6 +488,3 @@ Blockly.Mutator.findParentWs = function(workspace) {
   }
   return outerWs;
 };
-
-// Export symbols that would otherwise be renamed by Closure compiler.
-Blockly.utils.exportSymbol('Blockly.Mutator.reconnect', Blockly.Mutator.reconnect);

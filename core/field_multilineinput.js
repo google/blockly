@@ -34,6 +34,7 @@ goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.userAgent');
 
 
@@ -88,7 +89,7 @@ Blockly.FieldMultilineInput.fromJson = function(options) {
  * @package
  */
 Blockly.FieldMultilineInput.prototype.initView = function() {
-  Blockly.FieldMultilineInput.superClass_.initView.call(this);
+  this.createBorderRect_();
   this.textGroup_ = Blockly.utils.dom.createSvgElement('g',
       {
         'class': 'blocklyEditableText',
@@ -135,13 +136,13 @@ Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
  * @protected
  */
 Blockly.FieldMultilineInput.prototype.render_ = function() {
-  // Remove all tspan children.
+  // Remove all text group children.
   var currentChild;
   while (currentChild = this.textGroup_.firstChild) {
     this.textGroup_.removeChild(currentChild);
   }
 
-  // Add in new tspan lines
+  // Add in text elements into the group.
   var lines = this.getDisplayText_().split('\n');
   var yOffset = Blockly.Field.Y_PADDING / 2;
   var y = 0;
@@ -152,7 +153,7 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
       y: y + yOffset,
       dy: Blockly.FieldMultilineInput.LINE_HEIGHT / 2
     }, this.textGroup_);
-    span.textContent = lines[i];
+    span.appendChild(document.createTextNode(lines[i]));
     y += Blockly.FieldMultilineInput.LINE_HEIGHT;
   }
 
@@ -270,16 +271,8 @@ Blockly.FieldMultilineInput.prototype.widgetCreate_ = function() {
  * @protected
  */
 Blockly.FieldMultilineInput.prototype.onHtmlInputKeyDown_ = function(e) {
-  var tabKey = 9, escKey = 27;
-  if (e.keyCode == escKey) {
-    this.htmlInput_.value = this.htmlInput_.defaultValue;
-    Blockly.WidgetDiv.hide();
-    Blockly.DropDownDiv.hideWithoutAnimation();
-  } else if (e.keyCode == tabKey) {
-    Blockly.WidgetDiv.hide();
-    Blockly.DropDownDiv.hideWithoutAnimation();
-    this.sourceBlock_.tab(this, !e.shiftKey);
-    e.preventDefault();
+  if (e.keyCode !== Blockly.utils.KeyCodes.ENTER) {
+    Blockly.FieldMultilineInput.superClass_.onHtmlInputKeyDown_.call(this, e);
   }
 };
 

@@ -165,12 +165,11 @@ Blockly.BlockSvg.prototype.warningTextDb_ = null;
 
 /**
  * Should the block tell its connections to start tracking inside the render
- * method? Or it should it wait for startTrackingConnections to be called
- * separately?
+ * method?
  * @type {boolean}
  * @private
  */
-Blockly.BlockSvg.prototype.waitToTrackConnections_ = false;
+Blockly.BlockSvg.prototype.doNotCallTrackConnections_ = false;
 
 /**
  * Constant for identifying rows that are to be rendered inline.
@@ -1456,7 +1455,7 @@ Blockly.BlockSvg.prototype.appendInput_ = function(type, name) {
  * @package
  */
 Blockly.BlockSvg.prototype.waitToTrackConnections = function() {
-  this.waitToTrackConnections_ = true;
+  this.doNotCallTrackConnections_ = true;
   var children = this.getChildren();
   for (var i = 0, child; child = children[i]; i++) {
     child.waitToTrackConnections();
@@ -1487,19 +1486,19 @@ Blockly.BlockSvg.prototype.startTrackingConnections = function() {
     }
   }
 
-  // If we're collapsed we want the invisible inputs' connections
-  // to remain untracked.
-  if (!this.collapsed_) {
-    for (var i = 0; i < this.inputList.length; i++) {
-      var conn = this.inputList[i].connection;
-      if (conn) {
-        conn.setTracking(true);
+  if (this.collapsed_) {
+    return;
+  }
 
-        // Pass tracking on down the chain.
-        var block = conn.targetBlock();
-        if (block) {
-          block.startTrackingConnections();
-        }
+  for (var i = 0; i < this.inputList.length; i++) {
+    var conn = this.inputList[i].connection;
+    if (conn) {
+      conn.setTracking(true);
+
+      // Pass tracking on down the chain.
+      var block = conn.targetBlock();
+      if (block) {
+        block.startTrackingConnections();
       }
     }
   }
@@ -1649,8 +1648,12 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   (/** @type {!Blockly.WorkspaceSvg} */ (this.workspace)).getRenderer().render(this);
   // No matter how we rendered, connection locations should now be correct.
   this.updateConnectionLocations_();
-  if (!this.waitToTrackConnections_) {
+  // TODO: This should be handled inside a robust init method, because it would
+  //  make it a lot cleaner, but for now it's handled here for backwards
+  //  compatibility.
+  if (!this.doNotCallTrackConnections_) {
     this.startTrackingConnections();
+    this.doNotCallTrackConnections_ = true;
   }
   if (opt_bubble !== false) {
     // Render all blocks above this one (propagate a reflow).

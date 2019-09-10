@@ -57,27 +57,29 @@ Blockly.RenderedConnection = function(source, type) {
 };
 Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
 
-/**
- * Connection database for connections of this type on the current workspace.
- * @type {Blockly.ConnectionDB}
- * @private
- */
-Blockly.RenderedConnection.prototype.db_ = null;
+  /**
+   * Connection database for connections of this type on the current workspace.
+   * @type {Blockly.ConnectionDB}
+   * @private
+   */
+  this.db_ = null;
 
-/**
- * Connection database for connections compatible with this type on the
- * current workspace.
- * @type {Blockly.ConnectionDB}
- * @private
- */
-Blockly.RenderedConnection.prototype.dbOpposite_ = null;
+  /**
+   * Connection database for connections compatible with this type on the
+   * current workspace.
+   * @type {Blockly.ConnectionDB}
+   * @private
+   */
+  this.dbOpposite_ = null;
 
-/**
- * Whether this connections is tracked in the database or not.
- * @type {boolean}
- * @private
- */
-Blockly.RenderedConnection.prototype.tracked_ = false;
+  /**
+   * Whether this connections is tracked in the database or not.
+   * @type {boolean}
+   * @private
+   */
+  this.tracked_ = false;
+};
+goog.inherits(Blockly.RenderedConnection, Blockly.Connection);
 
 /**
  * Dispose of this connection. Remove it from the database (if it is

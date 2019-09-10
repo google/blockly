@@ -28,6 +28,7 @@ goog.provide('Blockly.blockRendering.ConstantProvider');
 
 goog.require('Blockly.utils.svgPaths');
 
+
 /**
  * An object that provides constants for rendering blocks.
  * @constructor

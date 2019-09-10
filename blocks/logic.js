@@ -430,6 +430,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Reconstructs the block with all child blocks attached.
+   * @this {Blockly.Block}
    */
   rebuildShape_: function() {
     var valueConnections = [null];
@@ -488,6 +489,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
    * statement connections for do input.
    * @param {?Blockly.RenderedConnection} elseStatementConnection Statement
    * connection for else input.
+   * @this {Blockly.Block}
    */
   reconnectChildBlocks_: function(valueConnections, statementConnections,
       elseStatementConnection) {

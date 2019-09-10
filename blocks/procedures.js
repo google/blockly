@@ -345,6 +345,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @param {string} oldName The old display name of the argument.
    * @param {string} newName The new display name of the argument.
    * @private
+   * @this {Blockly.Block}
    */
   displayRenamedVar_: function(oldName, newName) {
     this.updateParams_();

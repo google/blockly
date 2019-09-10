@@ -297,7 +297,7 @@ Blockly.Xml.domToText = function(dom) {
   // Do not replace line breaks between tags.
   // E.g. ...</foo>\n</bar> is unchanged.
   // Can't use global flag on regexp since backtracking is needed.
-  var regexp = /(<[^/][^<]*>[^<]*)\n([^<]*<\/)/;
+  var regexp = /(<[^/](?:[^>]*[^/])?>[^<]*)\n([^<]*<\/)/;
   var oldText;
   do {
     oldText = text;

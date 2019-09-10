@@ -552,7 +552,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
       // Populating the connection database may be deferred until after the
       // blocks have rendered.
       setTimeout(function() {
-        if (!topBlock.disposed) {  // Check that the block hasn't been deleted.
+        if (!topBlock.disposed) {
           topBlock.startTrackingConnections();
         }
       }, 1);

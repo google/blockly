@@ -19,14 +19,16 @@
  */
 
 /**
- * @fileoverview Components for managing connections between blocks.
+ * @fileoverview A database of all the rendered connections that could
+ *    possibly be connected to (i.e. not collapsed, etc).
+ *    Sorted by y coordinate.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
 goog.provide('Blockly.ConnectionDB');
 
-goog.require('Blockly.Connection');
+goog.require('Blockly.RenderedConnection');
 
 
 /**
@@ -38,7 +40,7 @@ goog.require('Blockly.Connection');
 Blockly.ConnectionDB = function() {
   /**
    * Array of connections sorted by y position in workspace units.
-   * @type {!Array.<!Blockly.Connection>}
+   * @type {!Array.<!Blockly.RenderedConnection>}
    * @private
    */
   this.connections_ = [];
@@ -46,7 +48,7 @@ Blockly.ConnectionDB = function() {
 
 /**
  * Add a connection to the database. Should not already exist in the database.
- * @param {!Blockly.Connection} connection The connection to be added.
+ * @param {!Blockly.RenderedConnection} connection The connection to be added.
  * @param {number} yPos The y position used to decide where to insert the
  *    connection.
  * @package
@@ -61,7 +63,7 @@ Blockly.ConnectionDB.prototype.addConnection = function(connection, yPos) {
  *
  * Starts by doing a binary search to find the approximate location, then
  * linearly searches nearby for the exact connection.
- * @param {!Blockly.Connection} conn The connection to find.
+ * @param {!Blockly.RenderedConnection} conn The connection to find.
  * @param {number} yPos The y position used to find the index of the connection.
  * @return {number} The index of the connection, or -1 if the connection was
  *     not found.
@@ -128,7 +130,7 @@ Blockly.ConnectionDB.prototype.calculateIndexForYPos_ = function(yPos) {
 
 /**
  * Remove a connection from the database.  Must already exist in DB.
- * @param {!Blockly.Connection} connection The connection to be removed.
+ * @param {!Blockly.RenderedConnection} connection The connection to be removed.
  * @param {number} yPos The y position used to find the index of the connection.
  * @throws {Error} If the connection cannot be found in the database.
  */
@@ -143,10 +145,10 @@ Blockly.ConnectionDB.prototype.removeConnection = function(connection, yPos) {
 /**
  * Find all nearby connections to the given connection.
  * Type checking does not apply, since this function is used for bumping.
- * @param {!Blockly.Connection} connection The connection whose neighbours
- *     should be returned.
+ * @param {!Blockly.RenderedConnection} connection The connection whose
+ *     neighbours should be returned.
  * @param {number} maxRadius The maximum radius to another connection.
- * @return {!Array.<!Blockly.Connection>} List of connections.
+ * @return {!Array.<!Blockly.RenderedConnection>} List of connections.
  */
 Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
   var db = this.connections_;
@@ -215,15 +217,15 @@ Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
 
 /**
  * Find the closest compatible connection to this connection.
- * @param {!Blockly.Connection} conn The connection searching for a compatible
+ * @param {!Blockly.RenderedConnection} conn The connection searching for a compatible
  *     mate.
  * @param {number} maxRadius The maximum radius to another connection.
  * @param {!Blockly.utils.Coordinate} dxy Offset between this connection's
  *     location in the database and the current location (as a result of
  *     dragging).
- * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
- *     properties:' connection' which is either another connection or null,
- *     and 'radius' which is the distance.
+ * @return {!{connection: Blockly.RenderedConnection, radius: number}}
+ *     Contains two properties: 'connection' which is either another
+ *     connection or null, and 'radius' which is the distance.
  */
 Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
     dxy) {

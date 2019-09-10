@@ -291,6 +291,7 @@ Blockly.RenderedConnection.prototype.unhighlight = function() {
 /**
  * Set whether this connections is tracked in the database or not.
  * @param {boolean} doTracking If true, start tracking. If false, stop tracking.
+ * @package
  */
 Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
   if (doTracking == this.tracked_) {

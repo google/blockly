@@ -368,7 +368,7 @@ Blockly.Css.CONTENT = [
     'font-size: 11pt;',
   '}',
   
-  '.blocklyTextCode {',
+  '.blocklyMultilineText {',
   '  font-family: monospace;',
   '}',
 
@@ -834,6 +834,15 @@ Blockly.Css.CONTENT = [
     'border-color: #eee !important;',
     'outline: 1px solid #333;',
     'position: relative;',
+  '}',
+
+  /* Multiline (Textarea) Field */
+  '.blocklyHtmlTextAreaInput {',
+    'font-family: monospace;',
+    'resize: none;',
+    'overflow: hidden;',
+    'height: 100%;',
+    'text-align: left;',
   '}',
 
   /* Copied from: goog/css/menu.css */

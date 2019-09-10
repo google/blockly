@@ -102,7 +102,7 @@ Blockly.FieldTextInput.prototype.CURSOR = 'text';
 
 /**
  * Allow browser to spellcheck this field.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.spellcheck_ = true;
 
@@ -244,7 +244,7 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
 
 /**
  * Create the text input editor widget.
- * @return {!HTMLInputElement} The newly created text input editor.
+ * @return {!HTMLElement} The newly created text input editor.
  * @protected
  */
 Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
@@ -310,9 +310,9 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
 
 /**
  * Bind handlers for user input on the text input field's editor.
- * @param {!HTMLInputElement} htmlInput The htmlInput to which event
+ * @param {!HTMLElement} htmlInput The htmlInput to which event
  *    handlers will be bound.
- * @private
+ * @protected
  */
 Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
   // Trap Enter without IME and Esc to hide.

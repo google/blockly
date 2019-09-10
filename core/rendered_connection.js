@@ -44,25 +44,12 @@ goog.require('Blockly.utils.object');
 Blockly.RenderedConnection = function(source, type) {
   Blockly.RenderedConnection.superClass_.constructor.call(this, source, type);
 
-  this.db_ = source.workspace.connectionDBList[type];
-  this.dbOpposite_ =
-    source.workspace.connectionDBList[Blockly.OPPOSITE_TYPE[type]];
-
-  /**
-   * Workspace units, (0, 0) is top left of block.
-   * @type {!Blockly.utils.Coordinate}
-   * @private
-   */
-  this.offsetInBlock_ = new Blockly.utils.Coordinate(0, 0);
-};
-Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
-
   /**
    * Connection database for connections of this type on the current workspace.
    * @type {Blockly.ConnectionDB}
    * @private
    */
-  this.db_ = null;
+  this.db_ = source.workspace.connectionDBList[type];
 
   /**
    * Connection database for connections compatible with this type on the
@@ -70,7 +57,8 @@ Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
    * @type {Blockly.ConnectionDB}
    * @private
    */
-  this.dbOpposite_ = null;
+  this.dbOpposite_ =
+    source.workspace.connectionDBList[Blockly.OPPOSITE_TYPE[type]];
 
   /**
    * Whether this connections is tracked in the database or not.
@@ -78,6 +66,13 @@ Blockly.utils.object.inherits(Blockly.RenderedConnection, Blockly.Connection);
    * @private
    */
   this.tracked_ = false;
+
+  /**
+   * Workspace units, (0, 0) is top left of block.
+   * @type {!Blockly.utils.Coordinate}
+   * @private
+   */
+  this.offsetInBlock_ = new Blockly.utils.Coordinate(0, 0);
 };
 goog.inherits(Blockly.RenderedConnection, Blockly.Connection);
 

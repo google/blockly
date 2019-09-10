@@ -29,6 +29,7 @@ goog.provide('Blockly.blockRendering.Measurable');
 
 goog.require('Blockly.blockRendering.Types');
 
+
 /**
  * The base class to represent a part of a block that takes up space during
  * rendering.  The constructor for each non-spacer Measurable records the size

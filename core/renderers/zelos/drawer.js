@@ -201,7 +201,7 @@ Blockly.zelos.Drawer.prototype.drawFlatBottom_ = function() {
 
   this.outlinePath_ +=
     Blockly.utils.svgPaths.lineOnAxis('V', bottomRow.baseline);
-  
+
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', -bottomRow.width);
 };
 

@@ -628,15 +628,15 @@ Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {
  * names that already exist are not overwritten. For example:
  * "a.b.c" -> a = {};a.b={};a.b.c={}
  * @param {string} name name of the object that this file defines.
- * @param {*=} opt_object the object to expose at the end of the path.
+ * @param {*} obj the object to expose at the end of the path.
  */
-Blockly.utils.exportSymbol = function(name, opt_object) {
+Blockly.utils.exportSymbol = function(name, obj) {
   var parts = name.split('.');
   var cur = Blockly.utils.global;
 
   for (var part; parts.length && (part = parts.shift());) {
-    if (!parts.length && opt_object !== void 0) {
-      cur[part] = opt_object;
+    if (!parts.length) {
+      cur[part] = obj;
     } else if (cur[part] && cur[part] !== Object.prototype[part]) {
       cur = cur[part];
     } else {

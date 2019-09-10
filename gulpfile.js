@@ -84,7 +84,7 @@ function prependHeader() {
 }
 
 /**
- * Helper method for prepending Google closure methods used in Blockly.
+ * Helper method for prepending Google Closure methods used in Blockly.
  */
 function prependGoogBase() {
   return gulp.insert.prepend(`'use strict';var goog=goog||{};goog.provide=function(){};goog.require=function(){};

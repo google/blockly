@@ -29,7 +29,7 @@ goog.provide('CustomFields.FieldPitch');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils.math');
 
-var CustomFields = {};
+var CustomFields = CustomFields || {};
 
 /**
  * Class for an editable pitch field.

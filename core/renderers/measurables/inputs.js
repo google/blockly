@@ -24,10 +24,10 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.InputConnection');
-goog.provide('Blockly.blockRendering.InlineInput');
-goog.provide('Blockly.blockRendering.StatementInput');
 goog.provide('Blockly.blockRendering.ExternalValueInput');
+goog.provide('Blockly.blockRendering.InlineInput');
+goog.provide('Blockly.blockRendering.InputConnection');
+goog.provide('Blockly.blockRendering.StatementInput');
 
 goog.require('Blockly.blockRendering.Connection');
 goog.require('Blockly.blockRendering.Measurable');

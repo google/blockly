@@ -34,6 +34,7 @@ goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.utils.object');
 
 
+
 /**
  * The base class to represent a connection and the space that it takes up on
  * the block.
@@ -72,6 +73,15 @@ Blockly.blockRendering.OutputConnection = function(connectionModel) {
 };
 Blockly.utils.object.inherits(Blockly.blockRendering.OutputConnection,
     Blockly.blockRendering.Connection);
+
+/**
+ * Whether or not the connection shape is dynamic. Dynamic shapes get their
+ * height from the block.
+ * @return {boolean} True if the connection shape is dynamic.
+ */
+Blockly.blockRendering.OutputConnection.prototype.isDynamic = function() {
+  return this.shape.isDynamic;
+};
 
 /**
  * An object containing information about the space a previous connection takes

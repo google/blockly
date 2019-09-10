@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview An object representing a single row on a rendered block and all
+ * @fileoverview Objects representing a single row on a rendered block and all
  * of its subcomponents.
  * @author fenichel@google.com (Rachel Fenichel)
  */
@@ -38,6 +38,7 @@ goog.require('Blockly.blockRendering.PreviousConnection');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.utils.object');
+
 
 /**
  * An object representing a single row on a rendered block and all of its

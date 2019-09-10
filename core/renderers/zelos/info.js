@@ -28,30 +28,27 @@
 goog.provide('Blockly.zelos');
 goog.provide('Blockly.zelos.RenderInfo');
 
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.InputRow');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.TopRow');
-goog.require('Blockly.blockRendering.Types');
-
-goog.require('Blockly.blockRendering.InlineInput');
 goog.require('Blockly.blockRendering.ExternalValueInput');
-goog.require('Blockly.blockRendering.StatementInput');
-
-goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.InlineInput');
+goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.OutputConnection');
-
+goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.blockRendering.Row');
+goog.require('Blockly.blockRendering.SpacerRow');
+goog.require('Blockly.blockRendering.StatementInput');
+goog.require('Blockly.blockRendering.TopRow');
+goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.RenderedConnection');
-
 goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.AfterStatementSpacerRow');
 goog.require('Blockly.zelos.BeforeStatementSpacerRow');
 goog.require('Blockly.zelos.BottomRow');
 goog.require('Blockly.zelos.TopRow');
+
 
 /**
  * An object containing all sizing information needed to draw this block.
@@ -90,6 +87,13 @@ Blockly.utils.object.inherits(Blockly.zelos.RenderInfo,
  * @override
  */
 Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
+  if (!prev || !next) {
+    // No need for padding at the beginning or end of the row if the
+    // output shape is dynamic.
+    if (this.outputConnection && this.outputConnection.isDynamic()) {
+      return this.constants_.NO_PADDING;
+    }
+  }
   if (!prev) {
     // Between an editable field and the beginning of the row.
     if (next && Blockly.blockRendering.Types.isField(next) && next.isEditable) {
@@ -316,4 +320,49 @@ Blockly.zelos.RenderInfo.prototype.addAlignmentPadding_ = function(row,
     lastSpacer.width += missingSpace;
     row.width += missingSpace;
   }
+};
+
+/**
+ * @override
+ */
+Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
+  // Performance note: this could be combined with the draw pass, if the time
+  // that this takes is excessive.  But it shouldn't be, because it only
+  // accesses and sets properties that already exist on the objects.
+  var yCursor = 0;
+  for (var i = 0, row; (row = this.rows[i]); i++) {
+    row.yPos = yCursor;
+    yCursor += row.height;
+  }
+  // Dynamic output connections depend on the height of the block. Adjust the
+  // height and width of the connection, and then adjust the startX and width of the
+  // block accordingly.
+  var outputConnectionWidth = 0;
+  if (this.outputConnection && !this.outputConnection.height) {
+    this.outputConnection.height = yCursor;
+    outputConnectionWidth = yCursor; // Twice the width to account for the right side.
+    this.outputConnection.width = outputConnectionWidth / 2;
+  }
+  this.startX += outputConnectionWidth / 2;
+  this.width += outputConnectionWidth;
+
+  var widestRowWithConnectedBlocks = 0;
+  for (var i = 0, row; (row = this.rows[i]); i++) {
+    row.xPos = this.startX;
+
+    widestRowWithConnectedBlocks =
+        Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
+    var xCursor = row.xPos;
+    for (var j = 0, elem; (elem = row.elements[j]); j++) {
+      elem.xPos = xCursor;
+      elem.centerline = this.getElemCenterline_(row, elem);
+      xCursor += elem.width;
+    }
+  }
+
+  this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;
+
+  this.height = yCursor;
+  this.startY = this.topRow.capline;
+  this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
 };

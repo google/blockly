@@ -91,6 +91,7 @@ function start() {
   match = location.search.match(/side=([^&]+)/);
   var side = match ? match[1] : 'start';
   document.forms.options.elements.side.value = side;
+  var autoimport = !!location.search.match(/autoimport=([^&]+)/);
   // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
       {
@@ -146,6 +147,9 @@ function start() {
     logEvents(false);
   }
   taChange();
+  if (autoimport) {
+    fromXml();
+  }
 }
 
 function addToolboxButtonCallbacks() {
@@ -347,6 +351,14 @@ function toggleRenderingDebug(state) {
   }
 }
 
+function toggleAccessibilityMode(state) {
+  if (state) {
+    Blockly.navigation.enableKeyboardAccessibility();
+  } else {
+    Blockly.navigation.disableKeyboardAccessibility();
+  }
+}
+
 function logger(e) {
   console.log(e);
 }
@@ -515,6 +527,12 @@ h1 {
     Block rendering debug: &nbsp;
     <input type="checkbox" onclick="toggleRenderingDebug(this.checked)" id="blockRenderDebugCheck">
   </p>
+
+  <p>
+    Enable Accessibility Mode: &nbsp;
+    <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
+  </p>
+
 
   <!-- The next three blocks of XML are sample toolboxes for testing basic
   configurations.  For more information on building toolboxes, see https://developers.google.com/blockly/guides/configure/web/toolbox -->

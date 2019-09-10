@@ -34,6 +34,7 @@ goog.require('Blockly.geras.HighlightConstantProvider');
 goog.require('Blockly.geras.RenderInfo');
 goog.require('Blockly.utils.object');
 
+
 /**
  * The geras renderer.
  * @package

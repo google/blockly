@@ -498,9 +498,12 @@ Blockly.Gesture.prototype.doStart = function(e) {
   Blockly.Tooltip.block();
 
   if (this.targetBlock_) {
-    this.targetBlock_.select();
     if (!this.targetBlock_.isInFlyout && e.shiftKey) {
       Blockly.navigation.enableKeyboardAccessibility();
+      this.creatorWorkspace_.cursor.setLocation(
+          Blockly.navigation.getTopNode(this.targetBlock_));
+    } else {
+      this.targetBlock_.select();
     }
   }
 
@@ -760,7 +763,6 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.doWorkspaceClick_ = function(e) {
-  Blockly.navigation.disableKeyboardAccessibility();
   var ws = this.creatorWorkspace_;
   if (e.shiftKey) {
     Blockly.navigation.enableKeyboardAccessibility();

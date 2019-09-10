@@ -255,7 +255,7 @@ Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
    * Add context menu option to create getter block for the loop's variable.
    * (customContextMenu support limited to web BlockSvg.)
    * @param {!Array} options List of menu options to add to.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   customContextMenu: function(options) {
     if (this.isInFlyout) {
@@ -337,7 +337,7 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
    * Called whenever anything on the workspace changes.
    * Add warning if this flow block is not nested inside a loop.
    * @param {!Blockly.Events.Abstract} _e Change event.
-   * @this Blockly.Block
+   * @this {Blockly.Block}
    */
   onchange: function(_e) {
     if (!this.workspace.isDragging || this.workspace.isDragging()) {

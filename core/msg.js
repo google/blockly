@@ -29,3 +29,10 @@
  * Msg gets populated in the message files.
  */
 goog.provide('Blockly.Msg');
+
+/**
+ * Exported so that if Blockly is compiled with ADVANCED_COMPILATION,
+ * the Blockly.Msg object exists for message files included in script tags.
+ * @export
+ */
+Blockly.Msg = {};

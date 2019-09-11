@@ -109,10 +109,12 @@ async function cleanUp(browser_new, browser_old) {
 async function buildBrowser(url, isRtl) {
   var options = {
     capabilities: {
-      browserName: 'chrome'
+      browserName: 'chrome',
+      'goog:chromeOptions': {
+        args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage'],
+      }
     },
-    logLevel: 'warn',
-    services: ['selenium-standalone']
+    logLevel: 'warn'
   };
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);

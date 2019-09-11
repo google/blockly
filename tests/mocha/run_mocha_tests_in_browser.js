@@ -34,9 +34,11 @@ module.exports = runMochaTestsInBrowser;
 async function runMochaTestsInBrowser() {
   var options = {
       capabilities: {
-          browserName: 'chrome'
-      },
-      services: ['selenium-standalone']
+          browserName: 'chrome',
+          'goog:chromeOptions': {
+            args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage'],
+          }
+      }
   };
 
   var url = 'file://' + __dirname + '/index.html';

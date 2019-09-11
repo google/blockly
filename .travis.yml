@@ -8,8 +8,7 @@ sudo: required
 addons:
   firefox: latest
   apt:
-    sources:
-      - google-chrome
+    update: true
     packages:
       - google-chrome-stable
     # TODO (#2114): reenable osx build.

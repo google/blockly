@@ -30,10 +30,10 @@ goog.require('Blockly.Block');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.FlyoutButton');
 goog.require('Blockly.Scrollbar');
-goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.WidgetDiv');
 
 
 /**

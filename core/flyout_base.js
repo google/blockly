@@ -27,6 +27,7 @@
 goog.provide('Blockly.Flyout');
 
 goog.require('Blockly.Block');
+goog.require('Blockly.blockRendering');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.VarCreate');
@@ -37,7 +38,6 @@ goog.require('Blockly.MarkerCursor');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
-goog.require('Blockly.blockRendering');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');

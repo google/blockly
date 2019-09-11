@@ -113,6 +113,7 @@
       }
 
       function toggleEditable() {
+        Blockly.hideChaff();
         var blocks = workspace.getAllBlocks();
         for(var i = 0, block; block = blocks[i]; i++) {
           block.setEditable(!block.isEditable());
@@ -120,6 +121,7 @@
       }
 
       function toggleCollapsed() {
+        Blockly.hideChaff();
         var blocks = workspace.getAllBlocks();
         for(var i = 0, block; block = blocks[i]; i++) {
           block.setCollapsed(!block.isCollapsed());

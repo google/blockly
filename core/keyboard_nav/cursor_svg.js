@@ -40,7 +40,6 @@ Blockly.CursorSvg = function(workspace, opt_marker) {
    * @type {!Blockly.Workspace}
    * @private
    */
-
   this.workspace_ = workspace;
 
   /**

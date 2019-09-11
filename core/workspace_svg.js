@@ -399,8 +399,14 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
  * @param {!Blockly.CursorSvg} cursor The cursor used to move around this workspace.
  */
 Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
-  cursor.setDrawer(new Blockly.CursorSvg(this, false));
+  if (this.cursor) {
+    this.cursor.getDrawer().dispose();
+  }
   this.cursor = cursor;
+  this.cursor.setDrawer(new Blockly.CursorSvg(this, false));
+  if (this.svgGroup_) {
+    this.svgGroup_.appendChild(this.cursor.getDrawer().createDom());
+  }
 };
 
 /**
@@ -409,8 +415,14 @@ Blockly.WorkspaceSvg.prototype.setCursor = function(cursor) {
  *     location on the workspace.
  */
 Blockly.WorkspaceSvg.prototype.setMarker = function(marker) {
-  marker.setDrawer(new Blockly.CursorSvg(this, true));
+  if (this.marker) {
+    this.marker.getDrawer().dispose();
+  }
   this.marker = marker;
+  this.marker.setDrawer(new Blockly.CursorSvg(this, true));
+  if (this.svgGroup_) {
+    this.svgGroup_.appendChild(this.marker.getDrawer().createDom());
+  }
 };
 
 /**

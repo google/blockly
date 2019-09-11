@@ -5,11 +5,8 @@ node_js:
   - 8
   - 10
 addons:
+  chrome: stable
   firefox: latest
-  apt:
-    update: true
-    packages:
-    - google-chrome-stable
     # TODO (#2114): reenable osx build.
     # - os: osx
     #   node_js: stable

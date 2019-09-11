@@ -23,7 +23,7 @@
     "package": "gulp package",
     "prepare": "gulp blockly_node_javascript_en",
     "release": "gulp release",
-    "test": "npm-run-all test:prepare test:run",
+    "test": "npm-run-all --parallel test:prepare test:run",
     "test:run": "tests/run_all_tests.sh",
     "test:prepare": "npm run test:setupselenium && npm run test:startselenium",
     "test:setupselenium": "selenium-standalone install --config=./tests/scripts/selenium-config.js",

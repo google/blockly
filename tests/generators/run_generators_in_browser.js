@@ -55,7 +55,8 @@ async function runGeneratorsInBrowser() {
   var options = {
       capabilities: {
           browserName: 'firefox'
-      }
+      },
+      services: ['selenium-standalone']
   };
 
   var url = 'file://' + __dirname + '/index.html';

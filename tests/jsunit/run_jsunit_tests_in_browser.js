@@ -34,11 +34,9 @@ module.exports = runJsUnitTestsInBrowser;
 async function runJsUnitTestsInBrowser() {
   var options = {
       capabilities: {
-          browserName: 'chrome',
-          'goog:chromeOptions': {
-            args: ['--no-sandbox', '--disable-dev-shm-usage'],
-          }
-      }
+          browserName: 'chrome'
+      },
+      services: ['selenium-standalone']
   };
 
   var url = 'file://' + __dirname + '/index.html';

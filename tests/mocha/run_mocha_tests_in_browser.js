@@ -35,7 +35,8 @@ async function runMochaTestsInBrowser() {
   var options = {
       capabilities: {
           browserName: 'chrome'
-      }
+      },
+      services: ['selenium-standalone']
   };
 
   var url = 'file://' + __dirname + '/index.html';

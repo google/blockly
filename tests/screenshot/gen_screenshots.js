@@ -111,7 +111,8 @@ async function buildBrowser(url, isRtl) {
     capabilities: {
       browserName: 'chrome'
     },
-    logLevel: 'warn'
+    logLevel: 'warn',
+    services: ['selenium-standalone']
   };
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);

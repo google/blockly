@@ -23,4 +23,5 @@ before_script:
   - sleep 2
 
 script:
+  - npm run test:prepare
   - npm run test
